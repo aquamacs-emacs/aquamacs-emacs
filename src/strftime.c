@@ -1,7 +1,7 @@
 /* Copyright (C) 1991,92,93,94,95,96,97,98 Free Software Foundation, Inc.
 
    NOTE: The canonical source of this file is maintained with the GNU C Library.
-   Bugs can be reported to bug-glibc@prep.ai.mit.edu.
+   Bugs can be reported to bug-glibc@gnu.org.
 
    This program is free software; you can redistribute it and/or modify it
    under the terms of the GNU General Public License as published by the
@@ -742,8 +742,9 @@ my_strftime (s, maxsize, format, tp)
 	      *u++ = modifier;
 	    *u++ = format_char;
 	    *u = '\0';
+	    ubuf[0] = '\1';
 	    len = strftime (ubuf, sizeof ubuf, ufmt, tp);
-	    if (len == 0)
+	    if (len == 0 && ubuf[0] != '\0')
 	      return 0;
 	    cpy (len, ubuf);
 	  }
