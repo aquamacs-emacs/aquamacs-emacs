@@ -253,7 +253,7 @@ If you quit, the process is killed with SIGINT, or SIGKILL if you quit again.")
 #ifndef subprocesses
   /* Without asynchronous processes we cannot have BUFFER == 0.  */
   if (nargs >= 3 
-      && (INTEGERP (CONSP (args[2]) ? XCAR (args[2]) : args[2])))
+      && (FIXNUMP (CONSP (args[2]) ? XCAR (args[2]) : args[2])))
     error ("Operating system cannot handle asynchronous subprocesses");
 #endif /* subprocesses */
 
@@ -327,7 +327,7 @@ If you quit, the process is killed with SIGINT, or SIGKILL if you quit again.")
 
       if (!(EQ (buffer, Qnil)
 	    || EQ (buffer, Qt)
-	    || INTEGERP (buffer)))
+	    || FIXNUMP (buffer)))
 	{
 	  Lisp_Object spec_buffer;
 	  spec_buffer = buffer;
@@ -459,7 +459,7 @@ If you quit, the process is killed with SIGINT, or SIGKILL if you quit again.")
   fd[1] = outfilefd;
 #endif /* macintosh */
 
-  if (INTEGERP (buffer))
+  if (FIXNUMP (buffer))
     fd[1] = emacs_open (NULL_DEVICE, O_WRONLY, 0), fd[0] = -1;
   else
     {
@@ -647,7 +647,7 @@ If you quit, the process is killed with SIGINT, or SIGKILL if you quit again.")
       report_file_error ("Doing vfork", Qnil);
     }
 
-  if (INTEGERP (buffer))
+  if (FIXNUMP (buffer))
     {
       if (fd[0] >= 0)
 	emacs_close (fd[0]);
@@ -666,10 +666,10 @@ If you quit, the process is killed with SIGINT, or SIGKILL if you quit again.")
 #if defined(MSDOS) || defined(macintosh)
   /* MSDOS needs different cleanup information.  */
   record_unwind_protect (call_process_cleanup,
-			 Fcons (make_number (fd[0]), build_string (tempfile)));
+			 Fcons (make_fixnum (fd[0]), build_string (tempfile)));
 #else
   record_unwind_protect (call_process_cleanup,
-			 Fcons (make_number (fd[0]), make_number (pid)));
+			 Fcons (make_fixnum (fd[0]), make_fixnum (pid)));
 #endif /* not MSDOS and not macintosh */
 
 
@@ -922,7 +922,7 @@ If you quit, the process is killed with SIGINT, or SIGKILL if you quit again.")
       TEMP_SET_PT_BOTH (pt_orig, pt_byte_orig);
       if (SYMBOLP (process_coding.post_read_conversion)
 	  && !NILP (Ffboundp (process_coding.post_read_conversion)))
-	call1 (process_coding.post_read_conversion, make_number (inserted));
+	call1 (process_coding.post_read_conversion, make_fixnum (inserted));
 
       Vlast_coding_system_used = process_coding.symbol;
 
@@ -930,7 +930,7 @@ If you quit, the process is killed with SIGINT, or SIGKILL if you quit again.")
 	 coding-system used to decode the process output.  */
       if (inherit_process_coding_system)
 	call1 (intern ("after-insert-file-set-buffer-file-coding-system"),
-	       make_number (total_read));
+	       make_fixnum (total_read));
 
       unbind_to (post_read_count, Qnil);
     }
@@ -952,7 +952,7 @@ If you quit, the process is killed with SIGINT, or SIGKILL if you quit again.")
   if (synch_process_death)
     return code_convert_string_norecord (build_string (synch_process_death),
 					 Vlocale_coding_system, 0);
-  return make_number (synch_process_retcode);
+  return make_fixnum (synch_process_retcode);
 }
 #endif
 
