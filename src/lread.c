@@ -388,7 +388,7 @@ unreadchar (readcharfun, c)
   else if (EQ (readcharfun, Qget_file_char))
     ungetc (c, instream);
   else
-    call1 (readcharfun, make_number (c));
+    call1 (readcharfun, make_fixnum (c));
 }
 
 static Lisp_Object read0 (), read1 (), read_list (), read_vector ();
@@ -473,7 +473,7 @@ read_filtered_event (no_switch_frame, ascii_required, error_nonascii,
 	}
 	  
       /* If we don't have a character now, deal with it appropriately.  */
-      if (!INTEGERP (val))
+      if (!FIXNUMP (val))
 	{
 	  if (error_nonascii)
 	    {
@@ -723,7 +723,7 @@ Return t if file exists.")
 
      Also, just loading a file recursively is not always an error in
      the general case; the second load may do something different.  */
-  if (INTEGERP (Vrecursive_load_depth_limit)
+  if (FIXNUMP (Vrecursive_load_depth_limit)
       && XINT (Vrecursive_load_depth_limit) > 0)
     {
       Lisp_Object len = Flength (Vloads_in_progress);
@@ -829,7 +829,7 @@ Return t if file exists.")
   specbind (Qload_file_name, found);
   specbind (Qinhibit_file_name_operation, Qnil);
   load_descriptor_list
-    = Fcons (make_number (fileno (stream)), load_descriptor_list);
+    = Fcons (make_fixnum (fileno (stream)), load_descriptor_list);
   load_in_progress++;
   readevalloop (Qget_file_char, stream, file, Feval, 0, Qnil, Qnil);
   unbind_to (count, Qnil);
@@ -1383,7 +1383,7 @@ This function does not move point.")
 
   /* This both uses start and checks its type.  */
   Fgoto_char (start);
-  Fnarrow_to_region (make_number (BEGV), end);
+  Fnarrow_to_region (make_fixnum (BEGV), end);
   readevalloop (cbuf, 0, XBUFFER (cbuf)->filename, Feval,
 		!NILP (printflag), Qnil, read_function);
 
@@ -1466,7 +1466,7 @@ START and END optionally delimit a substring of STRING from which to read;\n\
   read_objects = Qnil;
 
   tem = read0 (string);
-  return Fcons (tem, make_number (read_from_string_index));
+  return Fcons (tem, make_fixnum (read_from_string_index));
 }
 
 /* Use this for recursive reads, in contexts where internal tokens
@@ -1481,8 +1481,8 @@ read0 (readcharfun)
 
   val = read1 (readcharfun, &c, 0);
   if (c)
-    Fsignal (Qinvalid_read_syntax, Fcons (Fmake_string (make_number (1),
-							make_number (c)),
+    Fsignal (Qinvalid_read_syntax, Fcons (Fmake_string (make_fixnum (1),
+							make_fixnum (c)),
 					  Qnil));
 
   return val;
@@ -1690,6 +1690,59 @@ read_escape (readcharfun, stringp)
 }
 
 
+#ifdef HAVE_LIBGMP
+
+static Lisp_Object
+read_bigint (readcharfun, radix, number, sign)
+     Lisp_Object readcharfun;
+     EMACS_INT number;
+     int sign, radix;
+{
+  mpz_t val;
+  Lisp_Object bigint;
+  int c, invalid_p = 0;
+
+  mpz_init_set_si (val, number);
+  
+  for (c = READCHAR; c >= 0; c = READCHAR)
+    {
+      int digit;
+      
+      if (c >= '0' && c <= '9')
+	digit = c - '0';
+      else if (c >= 'a' && c <= 'z')
+	digit = c - 'a' + 10;
+      else if (c >= 'A' && c <= 'Z')
+	digit = c - 'A' + 10;
+      else
+	{
+	  UNREAD (c);
+	  break;
+	}
+      
+      if (digit < 0 || digit >= radix)
+	invalid_p = 1;
+
+      mpz_mul_ui (val, val, radix);
+      mpz_add_ui (val, val, digit);
+    }
+
+  if (invalid_p)
+    bigint = Qnil;
+  else 
+    {
+      if (sign < 0)      
+	mpz_neg (val, val);
+      bigint = make_bigint (val);
+    }
+
+  mpz_clear (val);
+  return bigint;
+}
+
+#endif /* HAVE_LIBGMP */
+
+
 /* Read an integer in radix RADIX using READCHARFUN to read
    characters.  RADIX must be in the interval [2..36]; if it isn't, a
    read error is signaled .  Value is the integer read.  Signals an
@@ -1703,7 +1756,10 @@ read_integer (readcharfun, radix)
 {
   int ndigits = 0, invalid_p, c, sign = 0;
   EMACS_INT number = 0;
-
+#ifdef HAVE_LIBGMP
+  Lisp_Object result = Qnil;
+#endif
+  
   if (radix < 2 || radix > 36)
     invalid_p = 1;
   else
@@ -1740,6 +1796,16 @@ read_integer (readcharfun, radix)
 	    invalid_p = 1;
 
 	  number = radix * number + digit;
+
+#ifdef HAVE_LIBGMP
+	  if (number >= MOST_POSITIVE_FIXNUM)
+	    {
+	      result = read_bigint (readcharfun, radix, number, sign);
+	      invalid_p = !BIGNUMP (result);
+	      break;
+	    }
+#endif
+	  
 	  ++ndigits;
 	  c = READCHAR;
 	}
@@ -1752,7 +1818,12 @@ read_integer (readcharfun, radix)
       Fsignal (Qinvalid_read_syntax, Fcons (build_string (buf), Qnil));
     }
 
-  return make_number (sign * number);
+#ifdef HAVE_LIBGMP
+  if (BIGNUMP (result))
+    return result;
+#endif
+
+  return make_fixnum (sign * number);
 }
 
 
@@ -2008,7 +2079,7 @@ read1 (readcharfun, pch, first_in_list)
 	      Lisp_Object cell;
 
 	      placeholder = Fcons(Qnil, Qnil);
-	      cell = Fcons (make_number (n), placeholder);
+	      cell = Fcons (make_fixnum (n), placeholder);
 	      read_objects = Fcons (cell, read_objects);
 
 	      /* Read the object itself. */
@@ -2025,7 +2096,7 @@ read1 (readcharfun, pch, first_in_list)
 	  /* #n# returns a previously read object.  */
 	  if (c == '#')
 	    {
-	      tem = Fassq (make_number (n), read_objects);
+	      tem = Fassq (make_fixnum (n), read_objects);
 	      if (CONSP (tem))
 		return XCDR (tem);
 	      /* Fall through to error message.  */
@@ -2104,7 +2175,7 @@ read1 (readcharfun, pch, first_in_list)
 	else if (BASE_LEADING_CODE_P (c))
 	  c = read_multibyte (c, readcharfun);
 
-	return make_number (c);
+	return make_fixnum (c);
       }
 
     case '"':
@@ -2192,7 +2263,7 @@ read1 (readcharfun, pch, first_in_list)
 	   return zero instead.  This is for doc strings
 	   that we are really going to find in etc/DOC.nn.nn  */
 	if (!NILP (Vpurify_flag) && NILP (Vdoc_file_name) && cancel)
-	  return make_number (0);
+	  return make_fixnum (0);
 
 	if (force_multibyte)
 	  p = read_buffer + str_as_multibyte (read_buffer, end - read_buffer,
@@ -2312,23 +2383,34 @@ read1 (readcharfun, pch, first_in_list)
 	    /* Is it an integer? */
 	    if (p1 != p)
 	      {
-		while (p1 != p && (c = *p1) >= '0' && c <= '9') p1++;
+		while (p1 != p && (c = *p1) >= '0' && c <= '9')
+		  p1++;
 		/* Integers can have trailing decimal points.  */
-		if (p1 > read_buffer && p1 < p && *p1 == '.') p1++;
+		if (p1 > read_buffer && p1 < p && *p1 == '.')
+		  p1++;
 		if (p1 == p)
-		  /* It is an integer. */
 		  {
+		    /* It is an integer. */
+		    long value;
+
 		    if (p1[-1] == '.')
 		      p1[-1] = '\0';
-		    if (sizeof (int) == sizeof (EMACS_INT))
-		      XSETINT (val, atoi (read_buffer));
-		    else if (sizeof (long) == sizeof (EMACS_INT))
-		      XSETINT (val, atol (read_buffer));
-		    else
-		      abort ();
+		    
+		    errno = 0;
+		    value = strtol (read_buffer, NULL, 10);
+		    val = make_fixnum (value);
+		    
+#ifdef HAVE_LIBGMP
+		    if (errno == ERANGE
+			|| value > MOST_POSITIVE_FIXNUM
+			|| value < MOST_NEGATIVE_FIXNUM)
+		      val = make_bigint_from_string (read_buffer, 10);
+#endif
+		    
 		    return val;
 		  }
 	      }
+	    
 	    if (isfloat_string (read_buffer))
 	      {
 		/* Compute NaN and infinities using 0.0 in a variable,
@@ -2443,7 +2525,7 @@ substitute_object_recurse (object, placeholder, subtree)
 	int length = XINT (Flength(subtree));
 	for (i = 0; i < length; i++)
 	  {
-	    Lisp_Object idx = make_number (i);
+	    Lisp_Object idx = make_fixnum (i);
 	    SUBSTITUTE (Faref (subtree, idx),
 			Faset (subtree, idx, true_value)); 
 	  }
@@ -2719,7 +2801,7 @@ read_list (flag, readcharfun)
 	      if (ch == ')')
 		{
 		  if (doc_reference == 1)
-		    return make_number (0);
+		    return make_fixnum (0);
 		  if (doc_reference == 2)
 		    {
 		      /* Get a doc string from the file we are loading.
@@ -2893,7 +2975,7 @@ it defaults to the value of `obarray'.")
   tem = oblookup (obarray, XSTRING (string)->data,
 		  XSTRING (string)->size,
 		  STRING_BYTES (XSTRING (string)));
-  if (!INTEGERP (tem))
+  if (!FIXNUMP (tem))
     return tem;
 
   if (!NILP (Vpurify_flag))
@@ -2938,7 +3020,7 @@ it defaults to the value of `obarray'.")
     string = XSYMBOL (name)->name;
 
   tem = oblookup (obarray, string->data, string->size, STRING_BYTES (string));
-  if (INTEGERP (tem) || (SYMBOLP (name) && !EQ (name, tem)))
+  if (FIXNUMP (tem) || (SYMBOLP (name) && !EQ (name, tem)))
     return Qnil;
   else
     return tem;
@@ -2970,7 +3052,7 @@ OBARRAY defaults to the value of the variable `obarray'.")
   tem = oblookup (obarray, XSTRING (string)->data,
 		  XSTRING (string)->size,
 		  STRING_BYTES (XSTRING (string)));
-  if (INTEGERP (tem))
+  if (FIXNUMP (tem))
     return Qnil;
   /* If arg was a symbol, don't delete anything but that symbol itself.  */
   if (SYMBOLP (name) && !EQ (name, tem))
@@ -3129,7 +3211,7 @@ init_obarray ()
   XSETFASTINT (oblength, OBARRAY_SIZE);
 
   Qnil = Fmake_symbol (make_pure_string ("nil", 3, 3, 0));
-  Vobarray = Fmake_vector (oblength, make_number (0));
+  Vobarray = Fmake_vector (oblength, make_fixnum (0));
   initial_obarray = Vobarray;
   staticpro (&initial_obarray);
   /* Intern nil in the obarray */
@@ -3617,7 +3699,7 @@ to load.  See also `load-dangerous-libraries'.");
     "Limit for depth of recursive loads.\n\
 Value should be either an integer > 0 specifying the limit, or nil for\n\
 no limit.");
-  Vrecursive_load_depth_limit = make_number (10);
+  Vrecursive_load_depth_limit = make_fixnum (10);
 
   /* Vsource_directory was initialized in init_lread.  */
 
