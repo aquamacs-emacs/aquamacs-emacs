@@ -995,7 +995,7 @@ No argument or nil as argument means use current buffer as BUFFER.")
       buf = XBUFFER (buffer);
     }
 
-  return make_number (BUF_MODIFF (buf));
+  return make_fixnum (BUF_MODIFF (buf));
 }
 
 DEFUN ("rename-buffer", Frename_buffer, Srename_buffer, 1, 2,
@@ -2025,7 +2025,7 @@ but the contents viewed as characters do change.")
 	    }
 	}
       if (narrowed)
-	Fnarrow_to_region (make_number (begv), make_number (zv));
+	Fnarrow_to_region (make_fixnum (begv), make_fixnum (zv));
     }
   else
     {
@@ -2096,7 +2096,7 @@ but the contents viewed as characters do change.")
 	TEMP_SET_PT (pt);
 
       if (narrowed)
-	Fnarrow_to_region (make_number (begv), make_number (zv));
+	Fnarrow_to_region (make_fixnum (begv), make_fixnum (zv));
 
       /* Do this first, so that chars_in_text asks the right question.
 	 set_intervals_multibyte needs it too.  */
@@ -2701,7 +2701,7 @@ sort_overlays (overlay_vec, noverlays, w)
 	  sortvec[j].beg = OVERLAY_POSITION (OVERLAY_START (overlay));
 	  sortvec[j].end = OVERLAY_POSITION (OVERLAY_END (overlay));
 	  tem = Foverlay_get (overlay, Qpriority);
-	  if (INTEGERP (tem))
+	  if (FIXNUMP (tem))
 	    sortvec[j].priority = XINT (tem);
 	  else
 	    sortvec[j].priority = 0;
@@ -2779,7 +2779,7 @@ record_overlay_string (ssl, str, str2, pri, size)
   ssl->buf[ssl->used].string = str;
   ssl->buf[ssl->used].string2 = str2;
   ssl->buf[ssl->used].size = size;
-  ssl->buf[ssl->used].priority = (INTEGERP (pri) ? XINT (pri) : 0);
+  ssl->buf[ssl->used].priority = (FIXNUMP (pri) ? XINT (pri) : 0);
   ssl->used++;
 
   if (NILP (current_buffer->enable_multibyte_characters))
@@ -3173,9 +3173,9 @@ fix_overlays_in_range (start, end)
 	  if (startpos > endpos)
 	    {
 	      int tem;
-	      Fset_marker (OVERLAY_START (overlay), make_number (endpos),
+	      Fset_marker (OVERLAY_START (overlay), make_fixnum (endpos),
 			   Qnil);
-	      Fset_marker (OVERLAY_END (overlay), make_number (startpos),
+	      Fset_marker (OVERLAY_END (overlay), make_fixnum (startpos),
 			   Qnil);
 	      tem = startpos; startpos = endpos; endpos = tem;
 	    }
@@ -3209,9 +3209,9 @@ fix_overlays_in_range (start, end)
 	  if (startpos > endpos)
 	    {
 	      int tem;
-	      Fset_marker (OVERLAY_START (overlay), make_number (endpos),
+	      Fset_marker (OVERLAY_START (overlay), make_fixnum (endpos),
 			   Qnil);
-	      Fset_marker (OVERLAY_END (overlay), make_number (startpos),
+	      Fset_marker (OVERLAY_END (overlay), make_fixnum (startpos),
 			   Qnil);
 	      tem = startpos; startpos = endpos; endpos = tem;
 	    }
@@ -3706,7 +3706,7 @@ If there are no more overlay boundaries after POS, return (point-max).")
     }
 
   xfree (overlay_vec);
-  return make_number (endpos);
+  return make_fixnum (endpos);
 }
 
 DEFUN ("previous-overlay-change", Fprevious_overlay_change,
@@ -3738,7 +3738,7 @@ If there are no more overlay boundaries before POS, return (point-min).")
 			   (int *) 0, &prevpos, 1);
 
   xfree (overlay_vec);
-  return make_number (prevpos);
+  return make_fixnum (prevpos);
 }
 
 /* These functions are for debugging overlays.  */
@@ -3873,7 +3873,7 @@ add_overlay_mod_hooklist (functionlist, overlay)
       Lisp_Object old;
       old = last_overlay_modification_hooks;
       last_overlay_modification_hooks
-	= Fmake_vector (make_number (oldsize * 2), Qnil);
+	= Fmake_vector (make_fixnum (oldsize * 2), Qnil);
       bcopy (XVECTOR (old)->contents,
 	     XVECTOR (last_overlay_modification_hooks)->contents,
 	     sizeof (Lisp_Object) * oldsize);
@@ -4935,7 +4935,7 @@ syms_of_buffer ()
 {
   staticpro (&last_overlay_modification_hooks);
   last_overlay_modification_hooks
-    = Fmake_vector (make_number (10), Qnil);
+    = Fmake_vector (make_fixnum (10), Qnil);
 
   staticpro (&Vbuffer_defaults);
   staticpro (&Vbuffer_local_symbols);
@@ -5145,11 +5145,11 @@ Decimal digits after the % specify field width to which to pad.");
 nil here means use current buffer's major mode.");
 
   DEFVAR_PER_BUFFER ("major-mode", &current_buffer->major_mode,
-		     make_number (Lisp_Symbol),
+		     make_fixnum (Lisp_Symbol),
     "Symbol for current buffer's major mode.");
 
   DEFVAR_PER_BUFFER ("mode-name", &current_buffer->mode_name,
-                     make_number (Lisp_String),
+                     make_fixnum (Lisp_String),
     "Pretty name of current buffer's major mode (a string).");
 
   DEFVAR_PER_BUFFER ("abbrev-mode", &current_buffer->abbrev_mode, Qnil, 
@@ -5162,18 +5162,18 @@ Automatically becomes buffer-local when set in any fashion.");
 Automatically becomes buffer-local when set in any fashion.");
 
   DEFVAR_PER_BUFFER ("fill-column", &current_buffer->fill_column,
-		     make_number (Lisp_Int),
+		     make_fixnum (Lisp_Int),
     "*Column beyond which automatic line-wrapping should happen.\n\
 Automatically becomes buffer-local when set in any fashion.");
 
   DEFVAR_PER_BUFFER ("left-margin", &current_buffer->left_margin,
-		     make_number (Lisp_Int),
+		     make_fixnum (Lisp_Int),
     "*Column for the default indent-line-function to indent to.\n\
 Linefeed indents to this column in Fundamental mode.\n\
 Automatically becomes buffer-local when set in any fashion.");
 
   DEFVAR_PER_BUFFER ("tab-width", &current_buffer->tab_width,
-		     make_number (Lisp_Int),
+		     make_fixnum (Lisp_Int),
     "*Distance between tab stops (for display of tab characters), in columns.\n\
 Automatically becomes buffer-local when set in any fashion.");
 
@@ -5186,7 +5186,7 @@ in the current display table (if there is one).");
 
   DEFVAR_PER_BUFFER ("enable-multibyte-characters",
 		     &current_buffer->enable_multibyte_characters,
-		     make_number (-1),
+		     make_fixnum (-1),
     "Non-nil means the buffer contents are regarded as multi-byte characters.\n\
 Otherwise they are regarded as unibyte.  This affects the display,\n\
 file I/O and the behavior of various editing commands.\n\
@@ -5236,7 +5236,7 @@ On other systems, this variable is normally always nil.");
 #endif
 
   DEFVAR_PER_BUFFER ("default-directory", &current_buffer->directory,
-		     make_number (Lisp_String),
+		     make_fixnum (Lisp_String),
     "Name of default directory of current buffer.  Should end with slash.\n\
 Each buffer has its own value of this variable.");
 
@@ -5250,12 +5250,12 @@ NOTE: This variable is not a hook;\n\
 its value may not be a list of functions.");
 
   DEFVAR_PER_BUFFER ("buffer-file-name", &current_buffer->filename,
-		     make_number (Lisp_String),
+		     make_fixnum (Lisp_String),
     "Name of file visited in current buffer, or nil if not visiting a file.\n\
 Each buffer has its own value of this variable.");
 
   DEFVAR_PER_BUFFER ("buffer-file-truename", &current_buffer->file_truename,
-		     make_number (Lisp_String),
+		     make_fixnum (Lisp_String),
     "Abbreviated truename of file visited in current buffer, or nil if none.\n\
 The truename of a file is calculated by `file-truename'\n\
 and then abbreviated with `abbreviate-file-name'.\n\
@@ -5263,7 +5263,7 @@ Each buffer has its own value of this variable.");
 
   DEFVAR_PER_BUFFER ("buffer-auto-save-file-name",
 		     &current_buffer->auto_save_file_name,
-		     make_number (Lisp_String),
+		     make_fixnum (Lisp_String),
     "Name of file for auto-saving current buffer,\n\
 or nil if buffer should not be auto-saved.\n\
 Each buffer has its own value of this variable.");
@@ -5278,7 +5278,7 @@ Backing up is done before the first time the file is saved.\n\
 Each buffer has its own value of this variable.");
 
   DEFVAR_PER_BUFFER ("buffer-saved-size", &current_buffer->save_length,
-		     make_number (Lisp_Int),
+		     make_fixnum (Lisp_Int),
     "Length of current buffer when last read in, saved or auto-saved.\n\
 0 initially.\n\
 Each buffer has its own value of this variable.");

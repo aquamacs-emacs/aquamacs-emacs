@@ -231,7 +231,7 @@ init_casetab_once ()
 
   /* Now we are ready to set up this property, so we can
      create char tables.  */
-  Fput (Qcase_table, Qchar_table_extra_slots, make_number (3));
+  Fput (Qcase_table, Qchar_table_extra_slots, make_fixnum (3));
 
   down = Fmake_char_table (Qcase_table, Qnil);
   Vascii_downcase_table = down;
