@@ -1,4 +1,4 @@
-;;; emacs-lock.el --- Prevents you from exiting emacs if a buffer is locked
+;;; emacs-lock.el --- prevents you from exiting emacs if a buffer is locked
 ;; Copyright (C) 1994 Free Software Foundation, Inc
 ;;
 ;; Author: Tom Wurgler <twurgler@goodyear.com>
@@ -28,7 +28,7 @@
 ;; yourself from yourself.  For example, if you have a shell running a big
 ;; program and exiting emacs would abort that program, you may want to lock
 ;; that buffer, then if you forget about it after a while, you won't
-;; accidently exit emacs.  To unlock the buffer, just goto the buffer and
+;; accidentally exit emacs.  To unlock the buffer, just goto the buffer and
 ;; run toggle-emacs-lock again.
 
 (defvar lock-emacs-from-exiting nil
