@@ -1297,7 +1297,15 @@ Un-customize all values in this buffer.  They get their standard settings."
   (widget-insert "   ")
   (widget-create 'push-button
 		 :tag "Finish"
-		 :help-echo "Bury or kill the buffer."
+		 :help-echo
+		 (lambda (&rest ignore)
+		   (cond
+		    ((eq custom-buffer-done-function
+			 'custom-bury-buffer)
+		     "Bury this buffer")
+		    ((eq custom-buffer-done-function 'kill-buffer)
+		     "Kill this buffer")
+		    (t "Finish with this buffer")))
 		 :action #'Custom-buffer-done)
   (widget-insert "\n\n")
   (message "Creating customization items...")
@@ -1315,18 +1323,18 @@ Un-customize all values in this buffer.  They get their standard settings."
 	  (let ((count 0)
 		(length (length options)))
 	    (mapcar (lambda (entry)
-			(prog2
-			    (message "Creating customization items ...%2d%%"
-				     (/ (* 100.0 count) length))
-			    (widget-create (nth 1 entry)
+		      (prog2
+			  (message "Creating customization items ...%2d%%"
+				   (/ (* 100.0 count) length))
+			  (widget-create (nth 1 entry)
 					 :tag (custom-unlispify-tag-name
 					       (nth 0 entry))
 					 :value (nth 0 entry))
-			  (setq count (1+ count))
-			  (unless (eq (preceding-char) ?\n)
-			    (widget-insert "\n"))
-			  (widget-insert "\n")))
-		      options))))
+			(setq count (1+ count))
+			(unless (eq (preceding-char) ?\n)
+			  (widget-insert "\n"))
+			(widget-insert "\n")))
+		    options))))
   (unless (eq (preceding-char) ?\n)
     (widget-insert "\n"))
   (message "Creating customization items ...%2d%%done" 100)
@@ -2386,7 +2394,7 @@ Optional EVENT is the location for the menu."
 	   (error "Cannot set hidden variable"))
 	  ((setq val (widget-apply child :validate))
 	   (goto-char (widget-get val :from))
-	   (error "%s" (widget-get val :error)))
+	   (error "Saving %s: %s" symbol (widget-get val :error)))
 	  ((memq form '(lisp mismatch))
 	   (when (equal comment "")
 	     (setq comment nil)
@@ -2617,6 +2625,57 @@ Match frames with dark backgrounds.")
 (defconst custom-face-selected (widget-convert 'custom-face-selected)
   "Converted version of the `custom-face-selected' widget.")
 
+(defun custom-filter-face-spec (spec filter-index default-filter)
+  "Return a canonicalized version of SPEC using.
+FILTER-INDEX is the index in the entry for each attribute in
+`custom-face-attributes' at which the appropriate filter function can be
+found, and DEFAULT-FILTER is the filter to apply for attributes that
+don't specify one."
+  (mapcar (lambda (entry)
+	    ;; Filter a single face-spec entry
+	    (let ((tests (car entry))
+		  (unfiltered-attrs
+		   ;; Handle both old- and new-style attribute syntax
+		   (if (listp (car (cdr entry)))
+		       (car (cdr entry))
+		     (cdr entry)))
+		  (filtered-attrs nil))
+	      ;; Filter each face attribute
+	      (while unfiltered-attrs
+		(let* ((attr (pop unfiltered-attrs))
+		       (pre-filtered-value (pop unfiltered-attrs))
+		       (filter
+			(or (nth filter-index (assq attr custom-face-attributes))
+			    default-filter))
+		       (filtered-value
+			(if filter
+			    (funcall filter pre-filtered-value)
+			  pre-filtered-value)))
+		  (push filtered-value filtered-attrs)
+		  (push attr filtered-attrs)))
+	      ;;
+	      (list tests filtered-attrs)))
+	  spec))
+
+(defun custom-pre-filter-face-spec (spec)
+  "Return SPEC changed as necessary for editing by the face customization widget.
+SPEC must be a full face spec."
+  (custom-filter-face-spec
+   spec 2
+   (lambda (value)
+     (cond ((eq value 'unspecified) nil)
+	   ((eq value nil) 'off)
+	   (t value)))))
+
+(defun custom-post-filter-face-spec (spec)
+  "Return the customized SPEC in a form suitable for setting the face."
+  (custom-filter-face-spec
+   spec 3
+   (lambda (value)
+     (cond ((eq value nil) 'unspecified)
+	   ((eq value 'off) nil)
+	   (t value)))))
+
 (defun custom-face-value-create (widget)
   "Create a list of the display specifications for WIDGET."
   (let ((buttons (widget-get widget :buttons))
@@ -2639,10 +2698,12 @@ Match frames with dark backgrounds.")
 	  (t
 	   ;; Create tag.
 	   (insert tag)
+	   (widget-specify-sample widget begin (point))
 	   (if (eq custom-buffer-style 'face)
 	       (insert " ")
-	     (widget-specify-sample widget begin (point))
-	     (insert ": "))
+	     (if (string-match "face\\'" tag)
+		 (insert ":")
+	       (insert " face: ")))
 	   ;; Sample.
 	   (push (widget-create-child-and-convert widget 'item
 						  :format "(%{%t%})"
@@ -2703,6 +2764,7 @@ Match frames with dark backgrounds.")
 	       ;; edit it as the user has specified it.
 	       (if (not (face-spec-match-p symbol spec (selected-frame)))
 		   (setq spec (list (list t (face-attr-construct symbol (selected-frame))))))
+	       (setq spec (custom-pre-filter-face-spec spec))
 	       (setq edit (widget-create-child-and-convert
 			   widget
 			   (cond ((and (eq form 'selected)
@@ -2816,7 +2878,7 @@ Optional EVENT is the location for the menu."
   "Make the face attributes in WIDGET take effect."
   (let* ((symbol (widget-value widget))
 	 (child (car (widget-get widget :children)))
-	 (value (widget-value child))
+	 (value (custom-post-filter-face-spec (widget-value child)))
 	 (comment-widget (widget-get widget :comment-widget))
 	 (comment (widget-value comment-widget)))
     (when (equal comment "")
@@ -2824,7 +2886,11 @@ Optional EVENT is the location for the menu."
       ;; Make the comment invisible by hand if it's empty
       (custom-comment-hide comment-widget))
     (put symbol 'customized-face value)
-    (face-spec-set symbol value)
+    (if (face-spec-choose value)
+	(face-spec-set symbol value)
+      ;; face-set-spec ignores empty attribute lists, so just give it
+      ;; something harmless instead.
+      (face-spec-set symbol '((t :foreground unspecified))))
     (put symbol 'customized-face-comment comment)
     (put symbol 'face-comment comment)
     (custom-face-state-set widget)
@@ -2911,7 +2977,7 @@ restoring it to the state of a face that has never been customized."
   :convert-widget 'widget-value-convert-widget
   :button-prefix 'widget-push-button-prefix
   :button-suffix 'widget-push-button-suffix
-  :format "%t: %[select face%] %v"
+  :format "%{%t%}: %[select face%] %v"
   :tag "Face"
   :value 'default
   :value-create 'widget-face-value-create
@@ -3487,7 +3553,7 @@ or (if there were none) at the end of the buffer."
 	(princ "\n"))
       (princ "(custom-set-variables
   ;; custom-set-variables was added by Custom -- don't edit or cut/paste it!
-  ;; Your init file must only contain one such instance.\n")
+  ;; Your init file should contain only one such instance.\n")
       (mapcar
        (lambda (symbol)
 	 (let ((spec (car-safe (get symbol 'theme-value)))
@@ -3558,7 +3624,7 @@ or (if there were none) at the end of the buffer."
 	(princ "\n"))
       (princ "(custom-set-faces
   ;; custom-set-faces was added by Custom -- don't edit or cut/paste it!
-  ;; Your init file must only contain one such instance.\n")
+  ;; Your init file should contain only one such instance.\n")
       (mapcar
        (lambda (symbol)
 	 (let ((theme-spec (car-safe (get symbol 'theme-face)))
@@ -3757,14 +3823,9 @@ Otherwise the menu will be named `Customize'.
 The format is suitable for use with `easy-menu-define'."
   (unless name
     (setq name "Customize"))
-  ;; Fixme: sort out use of :filter in Emacs 21.
-  (if nil ;(string-match "XEmacs" emacs-version)
-      ;; We can delay it under XEmacs.
-      `(,name
-	:filter (lambda (&rest junk)
-		  (cdr (custom-menu-create ',symbol))))
-    ;; But we must create it now under Emacs.
-    (cons name (cdr (custom-menu-create symbol)))))
+  `(,name
+    :filter (lambda (&rest junk)
+	      (custom-menu-create ',symbol))))
 
 ;;; The Custom Mode.
 

@@ -1,6 +1,6 @@
 ;;; cus-face.el -- customization support for faces.
 ;;
-;; Copyright (C) 1996, 1997, 1999, 2001 Free Software Foundation, Inc.
+;; Copyright (C) 1996, 1997, 1999, 2000, 2001 Free Software Foundation, Inc.
 ;;
 ;; Author: Per Abrahamsen <abraham@dina.kvl.dk>
 ;; Maintainer: FSF
@@ -73,12 +73,7 @@
      (choice :tag "Font family"
 	     :help-echo "Font family or fontset alias name."
 	     (const :tag "*" nil)
-	     (string :tag "Family"))
-     (lambda (face value &optional frame)
-       (set-face-attribute face frame :family (or value 'unspecified)))
-     (lambda (face &optional frame)
-       (let ((family (face-attribute face :family frame)))
-	 (if (eq family 'unspecified) nil family))))
+	     (string :tag "Family")))
     
     (:width
      (choice :tag "Width"
@@ -98,18 +93,14 @@
 	     (const :tag "semiexpanded" semi-expanded)
 	     (const :tag "ultracondensed" ultra-condensed)
 	     (const :tag "ultraexpanded" ultra-expanded)
-	     (const :tag "wide" extra-expanded))
-     (lambda (face value &optional frame)
-       (set-face-attribute face frame :width (or value 'unspecified)))
-     (lambda (face &optional frame)
-       (let ((width (face-attribute face :width frame)))
-	 (if (eq width 'unspecified) nil width))))
+	     (const :tag "wide" extra-expanded)))
     
     (:height
      (choice :tag "Height"
 	     :help-echo "Face's font height."
 	     (const :tag "*" nil)
-	     (integer :tag "Height in 1/10 pt"))
+	     (integer :tag "Height in 1/10 pt")
+	     (number :tag "Scale" 1.0))
      (lambda (face value &optional frame)
        (set-face-attribute face frame :height (or value 'unspecified)))
      (lambda (face &optional frame)
@@ -134,12 +125,7 @@
 	     (const :tag "semibold" semi-bold)
 	     (const :tag "semilight" semi-light)
 	     (const :tag "ultralight" ultra-light)
-	     (const :tag "ultrabold" ultra-bold))
-     (lambda (face value &optional frame)
-       (set-face-attribute face frame :weight (or value 'unspecified)))
-     (lambda (face &optional frame)
-       (let ((weight (face-attribute face :weight frame)))
-	 (if (eq weight 'unspecified) nil weight))))
+	     (const :tag "ultrabold" ultra-bold)))
     
     (:slant
      (choice :tag "Slant"
@@ -147,12 +133,7 @@
 	     (const :tag "*" nil)
 	     (const :tag "italic" italic)
 	     (const :tag "oblique" oblique)
-	     (const :tag "normal" normal))
-     (lambda (face value &optional frame)
-       (set-face-attribute face frame :slant (or value 'unspecified)))
-     (lambda (face &optional frame)
-       (let ((slant (face-attribute face :slant frame)))
-	 (if (eq slant 'unspecified) nil slant))))
+	     (const :tag "normal" normal)))
     
     (:underline
      (choice :tag "Underline"
@@ -160,15 +141,7 @@
 	     (const :tag "*" nil)
 	     (const :tag "On" t)
 	     (const :tag "Off" off)
-	     (color :tag "Colored"))
-     (lambda (face value &optional frame)
-       (cond ((eq value 'off) (setq value nil))
-	     ((null value) (setq value 'unspecified)))
-       (set-face-attribute face frame :underline value))
-     (lambda (face &optional frame)
-       (let ((underline (face-attribute face :underline frame)))
-	 (cond ((eq underline 'unspecified) nil)
-	       ((null underline) 'off)))))
+	     (color :tag "Colored")))
     
     (:overline
      (choice :tag "Overline"
@@ -176,15 +149,7 @@
 	     (const :tag "*" nil)
 	     (const :tag "On" t)
 	     (const :tag "Off" off)
-	     (color :tag "Colored"))
-     (lambda (face value &optional frame)
-       (cond ((eq value 'off) (setq value nil))
-	     ((null value) (setq value 'unspecified)))
-       (set-face-attribute face frame :overline value))
-     (lambda (face &optional frame)
-       (let ((overline (face-attribute face :overline frame)))
-	 (cond ((eq overline 'unspecified) nil)
-	       ((null overline) 'off)))))
+	     (color :tag "Colored")))
     
     (:strike-through
      (choice :tag "Strike-through"
@@ -192,26 +157,16 @@
 	     (const :tag "*" nil)
 	     (const :tag "On" t)
 	     (const :tag "Off" off)
-	     (color :tag "Colored"))
-     (lambda (face value &optional frame)
-       (cond ((eq value 'off) (setq value nil))
-	     ((null value) (setq value 'unspecified)))
-       (set-face-attribute face frame :strike-through value))
-     (lambda (face &optional frame)
-       (let ((value (face-attribute face :strike-through frame)))
-	 (cond ((eq value 'unspecified) (setq value nil))
-	       ((null value) (setq value 'off)))
-	 value)))
+	     (color :tag "Colored")))
     
     (:box
      ;; Fixme: this can probably be done better.
      (choice :tag "Box around text"
 	     :help-echo "Control box around text."
-	     (const :tag "*" t)
-	     (const :tag "Off" nil)
+	     (const :tag "*" nil)
+	     (const :tag "Off" off)
 	     (list :tag "Box"
-		   :value (:line-width 2 :color "grey75"
-				       :style released-button)
+		   :value (:line-width 2 :color "grey75" :style released-button)
 		   (const :format "" :value :line-width)
 		   (integer :tag "Width")
 		   (const :format "" :value :color)
@@ -221,75 +176,104 @@
 			   (const :tag "Raised" released-button)
 			   (const :tag "Sunken" pressed-button)
 			   (const :tag "None" nil))))
-     (lambda (face value &optional frame)
-       (set-face-attribute face frame :box value))
-     (lambda (face &optional frame)
-       (let ((value (face-attribute face :box frame)))
-	 (if (consp value)
-	     (list :line-width (or (plist-get value :line-width) 1)
-		   :color (plist-get value :color)
-		   :style (plist-get value :style))
-	   value))))
+     ;; filter to make value suitable for customize
+     (lambda (real-value)
+       (if (null real-value)
+	   'off
+	 (let ((lwidth
+		(or (and (consp real-value) (plist-get real-value :line-width))
+		    (and (integerp real-value) real-value)
+		    1))
+	       (color
+		(or (and (consp real-value) (plist-get real-value :color))
+		    (and (stringp real-value) real-value)
+		    nil))
+	       (style
+		(and (consp real-value) (plist-get real-value :style))))
+	   (list :line-width lwidth :color color :style style))))
+     ;; filter to make customized-value suitable for storing
+     (lambda (cus-value)
+       (cond ((null cus-value)
+	      'unspecified)
+	     ((eq cus-value 'off)
+	      nil)
+	     (t
+	      (let ((lwidth (plist-get cus-value :line-width))
+		    (color (plist-get cus-value :color))
+		    (style (plist-get cus-value :style)))
+		(cond ((and (null color) (null style))
+		       lwidth)
+		      ((and (null lwidth) (null style))
+		       ;; actually can't happen, because LWIDTH is always an int
+		       color)
+		      (t
+		       ;; Keep as a plist, but remove null entries
+		       (nconc (and lwidth `(:line-width ,lwidth))
+			      (and color  `(:color ,color))
+			      (and style  `(:style ,style))))))))))
     
     (:inverse-video
      (choice :tag "Inverse-video"
 	     :help-echo "Control whether text should be in inverse-video."
 	     (const :tag "*" nil)
 	     (const :tag "On" t)
-	     (const :tag "Off" off))
-     (lambda (face value &optional frame)
-       (cond ((eq value 'off) (setq value nil))
-	     ((null value) (setq value 'unspecified)))
-       (set-face-attribute face frame :inverse-video value))
-     (lambda (face &optional frame)
-       (let ((value (face-attribute face :inverse-video frame)))
-	 (cond ((eq value 'unspecified)
-		nil)
-	       ((null value)'off)))))
+	     (const :tag "Off" off)))
     
     (:foreground
      (choice :tag "Foreground"
 	     :help-echo "Set foreground color."
 	     (const :tag "*" nil)
-	     (color :tag "Color"))
-     (lambda (face value &optional frame)
-       (set-face-attribute face frame :foreground (or value 'unspecified)))
-     (lambda (face &optional frame)
-       (let ((value (face-attribute face :foreground frame)))
-	 (if (eq value 'unspecified) nil value))))
+	     (color :tag "Color")))
     
     (:background
      (choice :tag "Background"
 	     :help-echo "Set background color."
 	     (const :tag "*" nil)
-	     (color :tag "Color"))
-     (lambda (face value &optional frame)
-       (set-face-attribute face frame :background (or value 'unspecified)))
-     (lambda (face &optional frame)
-       (let ((value (face-attribute face :background frame)))
-	 (if (eq value 'unspecified) nil value))))
+	     (color :tag "Color")))
     
     (:stipple
      (choice :tag "Stipple"
-	     :help-echo "Name of background bitmap file."
+	     :help-echo "Background bit-mask"
 	     (const :tag "*" nil)
-	     (file :tag "File" :must-match t))
-     (lambda (face value &optional frame)
-       (set-face-attribute face frame :stipple (or value 'unspecified)))
-     (lambda (face &optional frame)
-       (let ((value (face-attribute face :stipple frame)))
-	 (if (eq value 'unspecified) nil value)))))
+	     (const :tag "None" off)
+	     (file :tag "File"
+		   :help-echo "Name of bitmap file."
+		   :must-match t)))
+
+    (:inherit
+     (repeat :tag "Inherit"
+	     :help-echo "List of faces to inherit attributes from."
+	     (face :Tag "Face" default))
+     ;; filter to make value suitable for customize
+     (lambda (real-value)
+       (cond ((or (null real-value) (eq real-value 'unspecified))
+	      nil)
+	     ((symbolp real-value)
+	      (list real-value))
+	     (t
+	      real-value)))
+     ;; filter to make customized-value suitable for storing
+     (lambda (cus-value)
+       (if (and (consp cus-value) (null (cdr cus-value)))
+	   (car cus-value)
+	 cus-value))))
        
   "Alist of face attributes.
 
-The elements are of the form (KEY TYPE SET GET), where KEY is the name
-of the attribute, TYPE is a widget type for editing the attibute, SET
-is a function for setting the attribute value, and GET is a function
-for getting the attribute value.
+The elements are of the form (KEY TYPE PRE-FILTER POST-FILTER),
+where KEY is the name of the attribute, TYPE is a widget type for
+editing the attribute, PRE-FILTER is a function to make the attribute's
+value suitable for the customization widget, and POST-FILTER is a
+function to make the customized value suitable for storing.  PRE-FILTER
+and POST-FILTER are optional.
 
-The SET function should take three arguments, the face to modify, the
-value of the attribute, and optionally the frame where the face should
-be changed.
+The PRE-FILTER should take a single argument, the attribute value as
+stored, and should return a value for customization (using the
+customization type TYPE).
+
+The POST-FILTER should also take a single argument, the value after
+being customized, and should return a value suitable for setting the
+given face attribute.")
 
 The GET function should take two arguments, the face to examine, and
 optionally the frame where the face should be examined.")
