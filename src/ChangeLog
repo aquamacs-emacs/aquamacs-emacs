@@ -1,3 +1,51 @@
+2001-10-16  Gerd Moellmann  <gerd@gnu.org>
+
+	* print.c (print_object) [HAVE_LIBGMP]: Print bignums.
+
+	* lread.c (read_bigint) [HAVE_LIBGMP]: New function.
+	(read_integer, read1) [HAVE_LIBGMP]: Read bigints.
+
+	* lisp.h [HAVE_LIBGMP]: Add bignums.
+	(make_fixnum): Renamed from make_number. 
+
+	* floatfns.c (extract_float, Fabs, Ffloat) [HAVE_LIBGMP]: Handle
+	bigints.
+
+	* data.c (Qbignum, Qfixnum): New variables.
+	(wrong_type_argument, Fchar_or_string_p): Use FIXNUMP instead of
+	INTEGERP.
+	(Ftype_of) [HAVE_LIBGMP]: Return `fixnum' for Lisp_Int, `bignum'
+	for Lisp_Bignum.
+	(Fintegerp) [HAVE_LIBGMP]: Return t for bignums.
+	(fixnump, bignump, bitint_arith_driver) [HAVE_LIBGMP]: New functions.
+	(arith_driver) [HAVE_LIBGMP]: Handle implicit coercion to big ints.
+	(float_arith_driver) [HAVE_LIBGMP]: Handle coercion of bigints to
+	floats.
+	(Fadd1, Fsub1, Flognot) [HAVE_LIBGMP]: Handle bigints.
+	(syms_of_data): Initialize Qbignum and Qfixnum, defsubr bignump
+	and fixnump.
+
+	* config.in (HAVE_LIBGMP): Add.
+
+	* alloc.c [HAVE_LIBGMP]: Add bignum functionality.
+	(enum mem_type): Add MEM_TYPE_BIGNUM.
+	(make_fixnum): Renamed from make_number.
+
+	* abbrev.c, buffer.c, bytecode.c, callint.c, callproc.c 
+	* casefiddle.c, casetab.c, category.c, category.h, ccl.c: 
+	* charset.c, cmds.c, coding.c, composite.c, composite.h:
+	* dired.c, dispnew.c, disptab.h, doc.c, editfns.c, emacs.c:
+	* eval.c, fileio.c, fns.c, fontset.c, frame.c, frame.h:
+	* indent.c, insdel.c, intervals.c, intervals.h, keyboard.c:
+	* keymap.c, macros.c, marker.c, minibuf.c, mocklisp.c:
+	* msdos.c, process.c, search.c, sound.c, sunfns.c, syntax.c:
+	* syntax.h, sysdep.c, term.c, textprop.c, undo.c, w32console.c:
+	* w32fns.c, w32menu.c, w32proc.c, w32term.c, window.c, xdisp.c:
+	* xfaces.c, xfns.c, xmenu.c, xrdb.c, xselect.c:
+	Use make_fixnum instead of make_number, FIXNUMP instead of INTEGERP.
+
+	* Makefile.in: Link with libgmp if HAVE_LIBGMP.
+
 2001-05-29  Gerd Moellmann  <gerd@gnu.org>
 
 	* xmenu.c (single_submenu, xmenu_show) [!HAVE_MULTILINGUAL_MENU]:
