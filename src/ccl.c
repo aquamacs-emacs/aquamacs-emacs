@@ -1876,7 +1876,7 @@ resolve_symbol_ccl_program (ccl)
   for (i = 0; i < veclen; i++)
     {
       contents = XVECTOR (result)->contents[i];
-      if (INTEGERP (contents))
+      if (FIXNUMP (contents))
 	continue;
       else if (CONSP (contents)
 	       && SYMBOLP (XCAR (contents))
@@ -2061,7 +2061,7 @@ programs.")
     error ("Length of vector REGISTERS is not 8");
 
   for (i = 0; i < 8; i++)
-    ccl.reg[i] = (INTEGERP (XVECTOR (reg)->contents[i])
+    ccl.reg[i] = (FIXNUMP (XVECTOR (reg)->contents[i])
 		  ? XINT (XVECTOR (reg)->contents[i])
 		  : 0);
 
@@ -2125,10 +2125,10 @@ See the documentation of `define-ccl-program' for the detail of CCL program.")
     {
       if (NILP (XVECTOR (status)->contents[i]))
 	XSETINT (XVECTOR (status)->contents[i], 0);
-      if (INTEGERP (XVECTOR (status)->contents[i]))
+      if (FIXNUMP (XVECTOR (status)->contents[i]))
 	ccl.reg[i] = XINT (XVECTOR (status)->contents[i]);
     }
-  if (INTEGERP (XVECTOR (status)->contents[i]))
+  if (FIXNUMP (XVECTOR (status)->contents[i]))
     {
       i = XFASTINT (XVECTOR (status)->contents[8]);
       if (ccl.ic < i && i < ccl.size)
@@ -2209,7 +2209,7 @@ Return index number of the registered CCL program.")
 	  /* Update this slot.  */
 	  XVECTOR (slot)->contents[1] = ccl_prog;
 	  XVECTOR (slot)->contents[2] = resolved;
-	  return make_number (idx);
+	  return make_fixnum (idx);
 	}
     }
 
@@ -2219,7 +2219,7 @@ Return index number of the registered CCL program.")
       Lisp_Object new_table;
       int j;
 
-      new_table = Fmake_vector (make_number (len * 2), Qnil);
+      new_table = Fmake_vector (make_fixnum (len * 2), Qnil);
       for (j = 0; j < len; j++)
 	XVECTOR (new_table)->contents[j]
 	  = XVECTOR (Vccl_program_table)->contents[j];
@@ -2229,15 +2229,15 @@ Return index number of the registered CCL program.")
   {
     Lisp_Object elt;
 
-    elt = Fmake_vector (make_number (3), Qnil);
+    elt = Fmake_vector (make_fixnum (3), Qnil);
     XVECTOR (elt)->contents[0] = name;
     XVECTOR (elt)->contents[1] = ccl_prog;
     XVECTOR (elt)->contents[2] = resolved;
     XVECTOR (Vccl_program_table)->contents[idx] = elt;
   }
 
-  Fput (name, Qccl_program_idx, make_number (idx));
-  return make_number (idx);
+  Fput (name, Qccl_program_idx, make_fixnum (idx));
+  return make_fixnum (idx);
 }
 
 /* Register code conversion map.
@@ -2273,7 +2273,7 @@ Return index number of the registered map.")
 
       if (EQ (symbol, XCAR (slot)))
 	{
-	  index = make_number (i);
+	  index = make_fixnum (i);
 	  XCDR (slot) = map;
 	  Fput (symbol, Qcode_conversion_map, map);
 	  Fput (symbol, Qcode_conversion_map_id, index);
@@ -2283,7 +2283,7 @@ Return index number of the registered map.")
 
   if (i == len)
     {
-      Lisp_Object new_vector = Fmake_vector (make_number (len * 2), Qnil);
+      Lisp_Object new_vector = Fmake_vector (make_fixnum (len * 2), Qnil);
       int j;
 
       for (j = 0; j < len; j++)
@@ -2292,7 +2292,7 @@ Return index number of the registered map.")
       Vcode_conversion_map_vector = new_vector;
     }
 
-  index = make_number (i);
+  index = make_fixnum (i);
   Fput (symbol, Qcode_conversion_map, map);
   Fput (symbol, Qcode_conversion_map_id, index);
   XVECTOR (Vcode_conversion_map_vector)->contents[i] = Fcons (symbol, map);
@@ -2304,7 +2304,7 @@ void
 syms_of_ccl ()
 {
   staticpro (&Vccl_program_table);
-  Vccl_program_table = Fmake_vector (make_number (32), Qnil);
+  Vccl_program_table = Fmake_vector (make_fixnum (32), Qnil);
 
   Qccl_program = intern ("ccl-program");
   staticpro (&Qccl_program);
@@ -2320,7 +2320,7 @@ syms_of_ccl ()
 
   DEFVAR_LISP ("code-conversion-map-vector", &Vcode_conversion_map_vector,
     "Vector of code conversion maps.");
-  Vcode_conversion_map_vector = Fmake_vector (make_number (16), Qnil);
+  Vcode_conversion_map_vector = Fmake_vector (make_fixnum (16), Qnil);
 
   DEFVAR_LISP ("font-ccl-encoder-alist", &Vfont_ccl_encoder_alist,
     "Alist of fontname patterns vs corresponding CCL program.\n\
