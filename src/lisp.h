@@ -124,6 +124,7 @@ enum Lisp_Type
     Lisp_Cons,
 
     Lisp_Float,
+    Lisp_Bignum,
 
     /* This is not a type code.  It is for range checking.  */
     Lisp_Type_Limit
@@ -384,7 +385,7 @@ extern int pure_size;
 
 /* Convert a C integer into a Lisp_Object integer.  */
 
-#define make_number(N)		\
+#define make_fixnum(N)		\
   ((((EMACS_INT) (N)) & VALMASK) | ((EMACS_INT) Lisp_Int) << VALBITS)
 
 /* During garbage collection, XGCTYPE must be used for extracting types
@@ -448,10 +449,10 @@ extern int pure_size;
    (((var).s.val = ((EMACS_INT) (ptr))), ((var).s.type = ((char) (vartype))))
 
 #if __GNUC__ >= 2 && defined (__OPTIMIZE__)
-#define make_number(N) \
+#define make_fixnum(N) \
   (__extension__ ({ Lisp_Object _l; _l.s.val = (N); _l.s.type = Lisp_Int; _l; }))
 #else
-extern Lisp_Object make_number ();
+extern Lisp_Object make_fixnum ();
 #endif
 
 /* During garbage collection, XGCTYPE must be used for extracting types
@@ -718,7 +719,7 @@ struct Lisp_Vector
    ? (!NILP (XCHAR_TABLE (CT)->contents[IDX])		\
       ? XCHAR_TABLE (CT)->contents[IDX]			\
       : XCHAR_TABLE (CT)->defalt)			\
-   : Faref (CT, make_number (IDX)))
+   : Faref (CT, make_fixnum (IDX)))
 
 /* Almost equivalent to Faref (CT, IDX) with optimization for ASCII
    and 8-bit Europeans characters.  However, if the result is nil,
@@ -817,6 +818,67 @@ struct Lisp_Subr
     char *prompt;
     char *doc;
   };
+
+
+/***********************************************************************
+			       Bignums
+ ***********************************************************************/
+
+#ifdef HAVE_LIBGMP
+
+#include <gmp.h>
+
+enum bignum_type
+  {
+    BIG_INTEGER,
+    BIG_FLOAT,			/* Not yet */
+    BIG_RATIONAL,		/* Not yet */
+    BIG_DEAD
+  };
+
+struct Lisp_Bignum
+{
+  enum bignum_type type : 8;
+
+  /* 1 = marked during GC.  */
+  unsigned marked : 1;
+  
+  union
+  {
+    /* Multi-precision integer if type is BIG_INTEGER.  */
+    mpz_t i;
+    
+    /* Multi-precision float if type is BIG_FLOAT.  */
+    mpf_t f;
+    
+    /* Multi-precision rational number if type is BIG_RATIONAL.  */
+    mpq_t r;
+
+    /* Next in list of free Lisp_Bignum structures.  Free bignums have
+       type BIG_DEAD.  */
+    struct Lisp_Bignum *next_free;
+  } u;
+};
+
+#define XBIGNUM(obj)		((struct Lisp_Bignum *) XPNTR (obj))
+#define XSETBIGNUM(obj, p)	XSET (obj, Lisp_Bignum, p)
+#define XBIGNUMTYPE(obj)	XBIGNUM (obj)->type
+
+#define BIGNUMP(obj)	(XTYPE (obj) == Lisp_Bignum)
+#define BIGINTP(obj)	(BIGNUMP (obj) && XBIGNUMTYPE (obj) == BIG_INTEGER)
+#define BIGFLOATP(obj)  (BIGNUMP (obj) && XBIGNUMTYPE (obj) == BIG_FLOAT)
+#define BIGRATP(obj)	(BIGNUMP (obj) && XBIGNUMTYPE (obj) == BIG_RATIONAL)
+     
+extern Lisp_Object make_bigint P_ ((mpz_t));
+extern Lisp_Object make_bigint_from_string P_ ((char *, int));
+extern Lisp_Object make_bigint_from_int P_ ((EMACS_INT));
+
+/* ??? Check these.  */
+#define MOST_NEGATIVE_FIXNUM	(- (((EMACS_INT) 1 << (VALBITS - 1))) - 1)
+#define MOST_POSITIVE_FIXNUM	((EMACS_INT) 1 << (VALBITS - 1))
+
+#endif /* HAVE_LIBGMP */
+
 
 
 /***********************************************************************
@@ -1232,13 +1294,13 @@ typedef unsigned char UCHAR;
 #define NILP(x)  (XFASTINT (x) == XFASTINT (Qnil))
 #define GC_NILP(x) GC_EQ (x, Qnil)
 
-#define NUMBERP(x) (INTEGERP (x) || FLOATP (x))
-#define GC_NUMBERP(x) (GC_INTEGERP (x) || GC_FLOATP (x))
-#define NATNUMP(x) (INTEGERP (x) && XINT (x) >= 0)
-#define GC_NATNUMP(x) (GC_INTEGERP (x) && XINT (x) >= 0)
+#define NUMBERP(x) (FIXNUMP (x) || FLOATP (x))
+#define GC_NUMBERP(x) (GC_FIXNUMP (x) || GC_FLOATP (x))
+#define NATNUMP(x) (FIXNUMP (x) && XINT (x) >= 0)
+#define GC_NATNUMP(x) (GC_FIXNUMP (x) && XINT (x) >= 0)
 
-#define INTEGERP(x) (XTYPE ((x)) == Lisp_Int)
-#define GC_INTEGERP(x) (XGCTYPE ((x)) == Lisp_Int)
+#define FIXNUMP(x) (XTYPE ((x)) == Lisp_Int)
+#define GC_FIXNUMP(x) (XGCTYPE ((x)) == Lisp_Int)
 #define SYMBOLP(x) (XTYPE ((x)) == Lisp_Symbol)
 #define GC_SYMBOLP(x) (XGCTYPE ((x)) == Lisp_Symbol)
 #define MISCP(x) (XTYPE ((x)) == Lisp_Misc)
@@ -1360,7 +1422,7 @@ typedef unsigned char UCHAR;
   do { if (!PROCESSP ((x))) x = wrong_type_argument (Qprocessp, (x)); } while (0)
 
 #define CHECK_NUMBER(x, i) \
-  do { if (!INTEGERP ((x))) x = wrong_type_argument (Qintegerp, (x)); } while (0)
+  do { if (!FIXNUMP ((x))) x = wrong_type_argument (Qintegerp, (x)); } while (0)
 
 #define CHECK_NATNUM(x, i) \
   do { if (!NATNUMP (x)) x = wrong_type_argument (Qwholenump, (x)); } while (0)
@@ -1370,7 +1432,7 @@ typedef unsigned char UCHAR;
 
 #define CHECK_NUMBER_COERCE_MARKER(x, i) \
   do { if (MARKERP ((x))) XSETFASTINT (x, marker_position (x)); \
-    else if (!INTEGERP ((x))) x = wrong_type_argument (Qinteger_or_marker_p, (x)); } while (0)
+    else if (!FIXNUMP ((x))) x = wrong_type_argument (Qinteger_or_marker_p, (x)); } while (0)
 
 #define XFLOATINT(n) extract_float((n))
 
@@ -1379,12 +1441,12 @@ typedef unsigned char UCHAR;
     x = wrong_type_argument (Qfloatp, (x)); } while (0)
 
 #define CHECK_NUMBER_OR_FLOAT(x, i)	\
-  do { if (!FLOATP (x) && !INTEGERP (x))	\
+  do { if (!FLOATP (x) && !FIXNUMP (x))	\
     x = wrong_type_argument (Qnumberp, (x)); } while (0)
 
 #define CHECK_NUMBER_OR_FLOAT_COERCE_MARKER(x, i) \
   do { if (MARKERP (x)) XSETFASTINT (x, marker_position (x));	\
-  else if (!INTEGERP (x) && !FLOATP (x))		\
+  else if (!FIXNUMP (x) && !FLOATP (x))		\
     x = wrong_type_argument (Qnumber_or_marker_p, (x)); } while (0)
 
 #define CHECK_OVERLAY(x, i) \
