@@ -31,6 +31,10 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #include <ssdef.h>
 #endif
 
+#ifdef USG5
+#include <fcntl.h>
+#endif
+
 #ifdef BSD
 #include <sys/ioctl.h>
 #endif
@@ -48,7 +52,7 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #include "lisp.h"
 #include "commands.h"
 
-#include "systty.h"
+#include "systerm.h"
 
 #ifndef O_RDWR
 #define O_RDWR 2
@@ -73,11 +77,6 @@ Lisp_Object Vsystem_type;
 /* If non-zero, emacs should not attempt to use an window-specific code,
    but instead should use the virtual terminal under which it was started */
 int inhibit_window_system;
-
-/* If nonzero, set Emacs to run at this priority.  This is also used
-   in child_setup and sys_suspend to make sure subshells run at normal
-   priority; Those functions have their own extern declaration.  */
-int emacs_priority;
 
 #ifdef HAVE_X_WINDOWS
 /* If non-zero, -d was specified, meaning we're using some window system. */
@@ -188,23 +187,6 @@ extern noshare char **environ;
 #endif /* LINK_CRTL_SHARE */
 #endif /* VMS */
 
-/* We don't include crtbegin.o and crtend.o in the link,
-   so these functions and variables might be missed.
-   Provide dummy definitions to avoid error.
-   (We don't have any real constructors or destructors.)  */
-#ifdef __GNUC__
-__do_global_ctors ()
-{}
-__do_global_ctors_aux ()
-{}
-__do_global_dtors ()
-{}
-char * __CTOR_LIST__[2] = { (char *) (-1), 0 };
-char * __DTOR_LIST__[2] = { (char *) (-1), 0 };
-__main ()
-{}
-#endif /* __GNUC__ */
-
 /* ARGSUSED */
 main (argc, argv, envp)
      int argc;
@@ -303,11 +285,10 @@ main (argc, argv, envp)
     malloc_init (0, malloc_warning);
 #endif	/* not SYSTEM_MALLOC */
 
-#ifdef PRIO_PROCESS
-  if (emacs_priority)
-    nice (emacs_priority);
+#ifdef HIGHPRI
+  setpriority (PRIO_PROCESS, getpid (), HIGHPRI);
   setuid (getuid ());
-#endif /* PRIO_PROCESS */
+#endif /* HIGHPRI */
 
 #ifdef BSD
   /* interrupt_input has trouble if we aren't in a separate process group.  */
@@ -513,7 +494,9 @@ main (argc, argv, envp)
       syms_of_mocklisp ();
       syms_of_process ();
       syms_of_search ();
+#ifdef MULTI_FRAME
       syms_of_frame ();
+#endif
       syms_of_syntax ();
       syms_of_undo ();
 #ifdef VMS
@@ -527,10 +510,8 @@ main (argc, argv, envp)
 #ifdef HAVE_X11
       syms_of_xselect ();
 #endif
-#ifdef HAVE_X_WINDOW
-#ifndef NO_X_MENU
+#ifdef HAVE_X_MENU
       syms_of_xmenu ();
-#endif /* not NO_X_MENU */
 #endif /* HAVE_X_MENU */
 #endif /* HAVE_X_WINDOWS */
 
@@ -583,7 +564,7 @@ main (argc, argv, envp)
 }
 
 DEFUN ("kill-emacs", Fkill_emacs, Skill_emacs, 0, 1, "P",
-  "Exit the Emacs job and kill it.\n\
+  "Exit the Emacs job and kill it.  Ask for confirmation, without argument.\n\
 If ARG is an integer, return ARG as the exit program code.\n\
 If ARG is a  string, stuff it as keyboard input.\n\n\
 The value of `kill-emacs-hook', if not void,\n\
@@ -793,17 +774,8 @@ syms_of_emacs ()
   DEFVAR_BOOL ("noninteractive", &noninteractive1,
     "Non-nil means Emacs is running without interactive terminal.");
 
-  DEFVAR_LISP ("kill-emacs-hook", &Vkill_emacs_hook,
-    "Hook to be run whenever kill-emacs is called.\n\
-Since kill-emacs may be invoked when the terminal is disconnected (or\n\
-in other similar situations), functions placed on this hook should not\n\
-not expect to be able to interact with the user.");
   Vkill_emacs_hook = Qnil;
 
-  DEFVAR_INT ("emacs-priority", &emacs_priority,
-    "Priority for Emacs to run at.\n\
-This value is effective only if set before Emacs is dumped,\n\
-and only if the Emacs executable is installed with setuid to permit\n\
-it to change priority.  (Emacs sets its uid back to the real uid.)");
-  emacs_priority = 0;
+  DEFVAR_LISP ("kill-emacs-hook", &Vkill_emacs_hook,
+    "Hook to be run whenever kill-emacs is called.");
 }
