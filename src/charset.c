@@ -221,7 +221,7 @@ char_to_string (c, str)
 	  *p++ = c + 0x20;
 	}
     }
-  else if (CHAR_VALID_P (c, 0))
+  else if (CHAR_VALID_P (c))
     {
       int charset, c1, c2;
 
