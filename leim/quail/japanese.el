@@ -309,11 +309,11 @@ current phrase.
 
 SPC, C-n	kkc-next
 	Show the next candidate for the current phrase.
-	If successively typed `kkc-show-conversion-list-count' times,
+	If typed `kkc-show-conversion-list-count' counts successively,
 	conversion candidates are shown in the echo area.
 C-p		kkc-prev
 	Show the previous candidate for the current phrase.
-	If successively typed `kkc-show-conversion-list-count' times,
+	If typed `kkc-show-conversion-list-count' counts successively,
 	conversion candidates are shown in the echo area.
 l		kkc-show-conversion-list-or-next-group
 	Show at most 10  candidates for the current phrase in echo area.
