@@ -705,7 +705,7 @@ If the third argument is incorrect, Emacs may crash.")
 
 		v1 = TOP;
 		v2 = Fget (v1, Qbyte_code_meter);
-		if (INTEGERP (v2)
+		if (FIXNUMP (v2)
 		    && XINT (v2) != ((1<<VALBITS)-1))
 		  {
 		    XSETINT (v2, XINT (v2) + 1);
@@ -1126,7 +1126,7 @@ If the third argument is incorrect, Emacs may crash.")
 	  {
 	    Lisp_Object v1;
 	    v1 = TOP;
-	    if (INTEGERP (v1))
+	    if (FIXNUMP (v1))
 	      {
 		XSETINT (v1, XINT (v1) - 1);
 		TOP = v1;
@@ -1140,7 +1140,7 @@ If the third argument is incorrect, Emacs may crash.")
 	  {
 	    Lisp_Object v1;
 	    v1 = TOP;
-	    if (INTEGERP (v1))
+	    if (FIXNUMP (v1))
 	      {
 		XSETINT (v1, XINT (v1) + 1);
 		TOP = v1;
@@ -1226,7 +1226,7 @@ If the third argument is incorrect, Emacs may crash.")
 	  {
 	    Lisp_Object v1;
 	    v1 = TOP;
-	    if (INTEGERP (v1))
+	    if (FIXNUMP (v1))
 	      {
 		XSETINT (v1, - XINT (v1));
 		TOP = v1;
@@ -1690,7 +1690,7 @@ If the third argument is incorrect, Emacs may crash.")
 	  break;
 
 	case Bintegerp:
-	  TOP = INTEGERP (TOP) ? Qt : Qnil;
+	  TOP = FIXNUMP (TOP) ? Qt : Qnil;
 	  break;
 
 #ifdef BYTE_CODE_SAFE
@@ -1766,14 +1766,14 @@ If a symbol has a property named `byte-code-meter' whose value is an\n\
 integer, it is incremented each time that symbol's function is called.");
 
   byte_metering_on = 0;
-  Vbyte_code_meter = Fmake_vector (make_number (256), make_number (0));
+  Vbyte_code_meter = Fmake_vector (make_fixnum (256), make_fixnum (0));
   Qbyte_code_meter = intern ("byte-code-meter");
   staticpro (&Qbyte_code_meter);
   {
     int i = 256;
     while (i--)
       XVECTOR (Vbyte_code_meter)->contents[i] =
-	Fmake_vector (make_number (256), make_number (0));
+	Fmake_vector (make_fixnum (256), make_fixnum (0));
   }
 #endif
 }

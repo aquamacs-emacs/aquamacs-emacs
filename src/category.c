@@ -131,7 +131,7 @@ to modify; it defaults to the current buffer's category table.")
 
   for (i = ' '; i <= '~'; i++)
     if (NILP (CATEGORY_DOCSTRING (table, i)))
-      return make_number (i);
+      return make_fixnum (i);
 
   return Qnil;
 }
@@ -211,8 +211,8 @@ copy_category_table (table)
       /* Also copy the first (and sole) extra slot.  It is a vector
          containing docstring of each category.  */
       Fset_char_table_extra_slot
-	(table, make_number (0),
-	 Fcopy_sequence (Fchar_table_extra_slot (table, make_number (0))));
+	(table, make_fixnum (0),
+	 Fcopy_sequence (Fchar_table_extra_slot (table, make_fixnum (0))));
     }
   else
     {
@@ -259,8 +259,8 @@ DEFUN ("make-category-table", Fmake_category_table, Smake_category_table,
 
   val = Fmake_char_table (Qcategory_table, Qnil);
   XCHAR_TABLE (val)->defalt = MAKE_CATEGORY_SET;
-  Fset_char_table_extra_slot (val, make_number (0),
-			      Fmake_vector (make_number (95), Qnil));
+  Fset_char_table_extra_slot (val, make_fixnum (0),
+			      Fmake_vector (make_fixnum (95), Qnil));
   return val;
 }
 
@@ -477,7 +477,7 @@ describe_category (value)
 {
   Lisp_Object mnemonics;
 
-  Findent_to (make_number (16), make_number (1));
+  Findent_to (make_fixnum (16), make_fixnum (1));
 
   if (NILP (value))
     {
@@ -622,13 +622,13 @@ init_category_once ()
 
   /* Now we are ready to set up this property, so we can
      create category tables.  */
-  Fput (Qcategory_table, Qchar_table_extra_slots, make_number (2));
+  Fput (Qcategory_table, Qchar_table_extra_slots, make_fixnum (2));
 
   Vstandard_category_table = Fmake_char_table (Qcategory_table, Qnil);
   /* Set a category set which contains nothing to the default.  */ 
   XCHAR_TABLE (Vstandard_category_table)->defalt = MAKE_CATEGORY_SET;
-  Fset_char_table_extra_slot (Vstandard_category_table, make_number (0),
-			      Fmake_vector (make_number (95), Qnil));
+  Fset_char_table_extra_slot (Vstandard_category_table, make_fixnum (0),
+			      Fmake_vector (make_fixnum (95), Qnil));
 }
 
 void
