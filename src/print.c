@@ -311,7 +311,7 @@ printchar (ch, fun)
 #endif /* MAX_PRINT_CHARS */
 
   if (!NILP (fun) && !EQ (fun, Qt))
-    call1 (fun, make_number (ch));
+    call1 (fun, make_fixnum (ch));
   else
     {
       unsigned char str[MAX_MULTIBYTE_LENGTH];
@@ -1215,14 +1215,14 @@ print_preprocess (obj)
 	  if (print_number_index == 0)
 	    {
 	      /* Initialize the table.  */
-	      Vprint_number_table = Fmake_vector (make_number (40), Qnil);
+	      Vprint_number_table = Fmake_vector (make_fixnum (40), Qnil);
 	    }
 	  else if (XVECTOR (Vprint_number_table)->size == print_number_index * 2)
 	    {
 	      /* Reallocate the table.  */
 	      int i = print_number_index * 4;
 	      Lisp_Object old_table = Vprint_number_table;
-	      Vprint_number_table = Fmake_vector (make_number (i), Qnil);
+	      Vprint_number_table = Fmake_vector (make_fixnum (i), Qnil);
 	      for (i = 0; i < print_number_index; i++)
 		{
 		  PRINT_NUMBER_OBJECT (Vprint_number_table, i)
@@ -1354,6 +1354,42 @@ print_object (obj, printcharfun, escapeflag)
 	abort ();
       strout (buf, -1, -1, printcharfun, 0);
       break;
+
+#ifdef HAVE_LIBGMP
+    case Lisp_Bignum:
+      {
+	char *s;
+	
+	switch (XBIGNUMTYPE (obj))
+	  {
+	  case BIG_INTEGER:
+	    s = mpz_get_str (NULL, 10, XBIGNUM (obj)->u.i);
+	    strout (s, -1, -1, printcharfun, 0);
+	    xfree (s);
+	    break;
+	    
+	  case BIG_FLOAT:
+	    s = mpf_get_str (NULL, NULL, 10, 0, XBIGNUM (obj)->u.f);
+	    strout (s, -1, -1, printcharfun, 0);
+	    xfree (s);
+	    break;
+
+	  case BIG_RATIONAL:
+	    s = mpz_get_str (NULL, 10, mpq_numref (XBIGNUM (obj)->u.r));
+	    strout (s, -1, -1, printcharfun, 0);
+	    xfree (s);
+	    strout ("/", -1, -1, printcharfun, 0);
+	    s = mpz_get_str (NULL, 10, mpq_denref (XBIGNUM (obj)->u.r));
+	    strout (s, -1, -1, printcharfun, 0);
+	    xfree (s);
+	    break;
+	    
+	  default:
+	    abort ();
+	  }
+      }
+      break;
+#endif
 
     case Lisp_Float:
       {
@@ -1536,7 +1572,7 @@ print_object (obj, printcharfun, escapeflag)
 
     case Lisp_Cons:
       /* If deeper than spec'd depth, print placeholder.  */
-      if (INTEGERP (Vprint_level)
+      if (FIXNUMP (Vprint_level)
 	  && print_depth > XINT (Vprint_level))
 	strout ("...", -1, -1, printcharfun, 0);
       else if (print_quoted && CONSP (XCDR (obj)) && NILP (XCDR (XCDR (obj)))
@@ -1958,9 +1994,9 @@ print_interval (interval, printcharfun)
      Lisp_Object printcharfun;
 {
   PRINTCHAR (' ');
-  print_object (make_number (interval->position), printcharfun, 1);
+  print_object (make_fixnum (interval->position), printcharfun, 1);
   PRINTCHAR (' ');
-  print_object (make_number (interval->position + LENGTH (interval)),
+  print_object (make_fixnum (interval->position + LENGTH (interval)),
 	 printcharfun, 1);
   PRINTCHAR (' ');
   print_object (interval->plist, printcharfun, 1);
