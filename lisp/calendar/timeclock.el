@@ -4,7 +4,7 @@
 
 ;; Author: John Wiegley <johnw@gnu.org>
 ;; Created: 25 Mar 1999
-;; Version: 2.5
+;; Version: 2.6
 ;; Keywords: calendar data
 
 ;; This file is part of GNU Emacs.
@@ -1080,7 +1080,7 @@ See the documentation for the given function if more info is needed."
     (unless timeclock-last-event-workday
       (setq timeclock-last-event-workday timeclock-workday))
     (setq accum timeclock-discrepancy
-	  elapsed timeclock-elapsed)
+	  elapsed (or timeclock-elapsed elapsed))
     (if timeclock-last-event
 	(if (equal (car timeclock-last-event) "i")
 	    (let ((last-period (timeclock-last-period now)))
