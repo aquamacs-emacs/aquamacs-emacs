@@ -3,7 +3,6 @@
 ;; Copyright (C) 1996, 1997, 1999, 2000, 2001 Free Software Foundation, Inc.
 ;;
 ;; Author: Per Abrahamsen <abraham@dina.kvl.dk>
-;; Maintainer: FSF
 ;; Keywords: help, faces
 
 ;; This file is part of GNU Emacs.
@@ -290,7 +289,8 @@ If FRAME is nil, use the global defaults for FACE."
       (let* ((attribute (car (car attrs)))
 	     (value (face-attribute face attribute frame)))
 	(setq attrs (cdr attrs))
-	(unless (eq value 'unspecified)
+	(unless (or (eq value 'unspecified)
+		    (and (null value) (memq attribute '(:inherit))))
 	  (setq plist (cons attribute (cons value plist))))))
     plist))
 

@@ -145,8 +145,8 @@ set to nil, as the value is no longer rogue."
 		((eq keyword :options)
 		 (if (get symbol 'custom-options)
 		     ;; Slow safe code to avoid duplicates.
-		     (mapcar (lambda (option)
-			       (custom-add-option symbol option))
+		     (mapc (lambda (option)
+			     (custom-add-option symbol option))
 			     value)
 		   ;; Fast code for the common case.
 		   (put symbol 'custom-options (copy-sequence value))))
@@ -649,24 +649,26 @@ in SYMBOL's list property `theme-value' \(using `custom-push-theme')."
 		   (now (nth 2 entry))
 		   (requests (nth 3 entry))
 		   (comment (nth 4 entry))
-                   (set (or (get symbol 'custom-set) 'set-default)))
+                   set)
 	      (when requests
 		(put symbol 'custom-requests requests)
-		(mapcar 'require requests))
+		(mapc 'require requests))
+	      (setq set (or (get symbol 'custom-set) 'custom-set-default))
 	      (put symbol 'saved-value (list value))
 	      (put symbol 'saved-variable-comment comment)
               (custom-push-theme 'theme-value symbol theme 'set value)
 	      ;; Allow for errors in the case where the setter has
-	      ;; changed between versions, say.
-	      (condition-case nil
-		  (cond ((or now immediate)
-			 ;; Rogue variable, set it now.
-			 (put symbol 'force-value (if now 'rogue 'immediate))
-			 (funcall set symbol (eval value)))
-			((default-boundp symbol)
-			 ;; Something already set this, overwrite it.
-			 (funcall set symbol (eval value))))
-		(error nil))
+	    ;; changed between versions, say, but let the user know.
+	    (condition-case data
+		(cond (now
+		       ;; Rogue variable, set it now.
+		       (put symbol 'force-value t)
+		       (funcall set symbol (eval value)))
+		      ((default-boundp symbol)
+		       ;; Something already set this, overwrite it.
+		       (funcall set symbol (eval value))))
+	      (error 
+	       (message "Error setting %s: %s" symbol data)))
 	      (setq args (cdr args))
 	      (and (or now (default-boundp symbol))
 		   (put symbol 'variable-comment comment)))
@@ -680,7 +682,6 @@ in SYMBOL's list property `theme-value' \(using `custom-push-theme')."
             (custom-push-theme 'theme-value symbol theme 'set value))
 	  (setq args (cdr (cdr args))))))))
 
-;; FIXME: This function is never used?
 (defun custom-set-default (variable value)
   "Default :set function for a customizable variable.
 Normally, this sets the default value of VARIABLE to VALUE,
