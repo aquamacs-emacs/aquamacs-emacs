@@ -2,6 +2,7 @@
 
 ;; Maintainer: FSF
 ;; Last-Modified: 24 Apr 1992
+;; Keywords: mail
 
 ;; Copyright (C) 1985, 1986, 1987, 1988, 1991, 1992 Free Software Foundation, Inc.
 
@@ -1213,17 +1214,12 @@ and reverse search is specified by a negative numeric arg."
 (defun rmail-delete-forward (&optional backward)
   "Delete this message and move to next nondeleted one.
 Deleted messages stay in the file until the \\[rmail-expunge] command is given.
-With prefix argument, delete and move backward.  If there is no nondeleted
-message to move to in the preferred or specified direction, move in the
-other direction."
+With prefix argument, delete and move backward."
   (interactive "P")
   (rmail-set-attribute "deleted" t)
   (condition-case ()
       (rmail-next-undeleted-message (if backward -1 1))
-    (error
-     (condition-case ()
-	 (rmail-previous-undeleted-message (if backward -1 1))
-       (error nil)))))
+    (error nil)))
 
 (defun rmail-delete-backward ()
   "Delete this message and move to previous nondeleted one.
