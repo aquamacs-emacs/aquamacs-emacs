@@ -85,7 +85,7 @@ DEFUN ("make-abbrev-table", Fmake_abbrev_table, Smake_abbrev_table, 0, 0, 0,
   "Create a new, empty abbrev table object.")
   ()
 {
-  return Fmake_vector (make_number (59), make_number (0));
+  return Fmake_vector (make_fixnum (59), make_fixnum (0));
 }
 
 DEFUN ("clear-abbrev-table", Fclear_abbrev_table, Sclear_abbrev_table, 1, 1, 0,
@@ -99,7 +99,7 @@ DEFUN ("clear-abbrev-table", Fclear_abbrev_table, Sclear_abbrev_table, 1, 1, 0,
   size = XVECTOR (table)->size;
   abbrevs_changed = 1;
   for (i = 0; i < size; i++)
-    XVECTOR (table)->contents[i] = make_number (0);
+    XVECTOR (table)->contents[i] = make_fixnum (0);
   return Qnil;
 }
 
@@ -122,7 +122,7 @@ which is incremented each time the abbrev is used.")
   CHECK_STRING (name, 1);
 
   if (NILP (count))
-    count = make_number (0);
+    count = make_fixnum (0);
   else
     CHECK_NUMBER (count, 0);
 
@@ -152,7 +152,7 @@ DEFUN ("define-global-abbrev", Fdefine_global_abbrev, Sdefine_global_abbrev, 2, 
      Lisp_Object abbrev, expansion;
 {
   Fdefine_abbrev (Vglobal_abbrev_table, Fdowncase (abbrev),
-		  expansion, Qnil, make_number (0));
+		  expansion, Qnil, make_fixnum (0));
   return abbrev;
 }
 
@@ -166,7 +166,7 @@ DEFUN ("define-mode-abbrev", Fdefine_mode_abbrev, Sdefine_mode_abbrev, 2, 2,
     error ("Major mode has no abbrev table");
 
   Fdefine_abbrev (current_buffer->abbrev_table, Fdowncase (abbrev),
-		  expansion, Qnil, make_number (0));
+		  expansion, Qnil, make_fixnum (0));
   return abbrev;
 }
 
@@ -290,10 +290,10 @@ Returns the abbrev symbol, if expansion took place.")
 		    wordend - wordstart, wordend_byte - wordstart_byte);
   else
     XSETFASTINT (sym, 0);
-  if (INTEGERP (sym) || NILP (XSYMBOL (sym)->value))
+  if (FIXNUMP (sym) || NILP (XSYMBOL (sym)->value))
     sym = oblookup (Vglobal_abbrev_table, buffer,
 		    wordend - wordstart, wordend_byte - wordstart_byte);
-  if (INTEGERP (sym) || NILP (XSYMBOL (sym)->value))
+  if (FIXNUMP (sym) || NILP (XSYMBOL (sym)->value))
     return value;
 
   if (INTERACTIVE && !EQ (minibuf_window, selected_window))
@@ -305,14 +305,14 @@ Returns the abbrev symbol, if expansion took place.")
     }
 
   Vlast_abbrev_text
-    = Fbuffer_substring (make_number (wordstart), make_number (wordend));
+    = Fbuffer_substring (make_fixnum (wordstart), make_fixnum (wordend));
 
   /* Now sym is the abbrev symbol.  */
   Vlast_abbrev = sym;
   value = sym;
   last_abbrev_point = wordstart;
 
-  if (INTEGERP (XSYMBOL (sym)->plist))
+  if (FIXNUMP (XSYMBOL (sym)->plist))
     XSETINT (XSYMBOL (sym)->plist,
 	     XINT (XSYMBOL (sym)->plist) + 1);	/* Increment use count */
 
@@ -338,12 +338,12 @@ Returns the abbrev symbol, if expansion took place.")
 	  if (!abbrev_all_caps)
 	    if (scan_words (PT, -1) > scan_words (wordstart, 1))
 	      {
-		Fupcase_initials_region (make_number (wordstart),
-					 make_number (PT));
+		Fupcase_initials_region (make_fixnum (wordstart),
+					 make_fixnum (PT));
 		goto caped;
 	      }
 	  /* If expansion is one word, or if user says so, upcase it all. */
-	  Fupcase_region (make_number (wordstart), make_number (PT));
+	  Fupcase_region (make_fixnum (wordstart), make_fixnum (PT));
 	caped: ;
 	}
       else if (uccount)
@@ -358,7 +358,7 @@ Returns the abbrev symbol, if expansion took place.")
 
 	  /* Change just that.  */
 	  pos = BYTE_TO_CHAR (pos);
-	  Fupcase_initials_region (make_number (pos), make_number (pos + 1));
+	  Fupcase_initials_region (make_fixnum (pos), make_fixnum (pos + 1));
 	}
     }
 
@@ -448,15 +448,15 @@ describe_abbrev (sym, stream)
 
   if (NILP (XSYMBOL (sym)->value))
     return;
-  one = make_number (1);
+  one = make_fixnum (1);
   Fprin1 (Fsymbol_name (sym), stream);
-  Findent_to (make_number (15), one);
+  Findent_to (make_fixnum (15), one);
   Fprin1 (XSYMBOL (sym)->plist, stream);
-  Findent_to (make_number (20), one);
+  Findent_to (make_fixnum (20), one);
   Fprin1 (XSYMBOL (sym)->value, stream);
   if (!NILP (XSYMBOL (sym)->function))
     {
-      Findent_to (make_number (45), one);
+      Findent_to (make_fixnum (45), one);
       Fprin1 (XSYMBOL (sym)->function, stream);
     }
   Fterpri (stream);
