@@ -138,7 +138,7 @@ Lisp_Object
 quotify_arg (exp)
      register Lisp_Object exp;
 {
-  if (!INTEGERP (exp) && !STRINGP (exp)
+  if (!FIXNUMP (exp) && !STRINGP (exp)
       && !NILP (exp) && !EQ (exp, Qt))
     return Fcons (Qquote, Fcons (exp, Qnil));
 
@@ -559,7 +559,7 @@ supply if the command inquires which events were used to invoke it.")
 
 	    /* If the key sequence ends with a down-event,
 	       discard the following up-event.  */
-	    teml = Faref (args[i], make_number (XINT (Flength (args[i])) - 1));
+	    teml = Faref (args[i], make_fixnum (XINT (Flength (args[i])) - 1));
 	    if (CONSP (teml))
 	      teml = XCAR (teml);
 	    if (SYMBOLP (teml))
@@ -587,7 +587,7 @@ supply if the command inquires which events were used to invoke it.")
 
 	    /* If the key sequence ends with a down-event,
 	       discard the following up-event.  */
-	    teml = Faref (args[i], make_number (XINT (Flength (args[i])) - 1));
+	    teml = Faref (args[i], make_fixnum (XINT (Flength (args[i])) - 1));
 	    if (CONSP (teml))
 	      teml = XCAR (teml);
 	    if (SYMBOLP (teml))
@@ -814,9 +814,9 @@ Its numeric meaning is what you would get from `(interactive \"p\")'.")
     XSETFASTINT (val, 1);
   else if (EQ (raw, Qminus))
     XSETINT (val, -1);
-  else if (CONSP (raw) && INTEGERP (XCAR (raw)))
+  else if (CONSP (raw) && FIXNUMP (XCAR (raw)))
     XSETINT (val, XINT (XCAR (raw)));
-  else if (INTEGERP (raw))
+  else if (FIXNUMP (raw))
     val = raw;
   else
     XSETFASTINT (val, 1);
