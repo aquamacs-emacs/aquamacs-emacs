@@ -1,8 +1,9 @@
 ;;; cus-edit.el --- Tools for customizing Emacs and Lisp packages.
 ;;
-;; Copyright (C) 1996, 1997, 1999, 2000 Free Software Foundation, Inc.
+;; Copyright (C) 1996, 1997, 1999, 2000, 2001 Free Software Foundation, Inc.
 ;;
 ;; Author: Per Abrahamsen <abraham@dina.kvl.dk>
+;; Maintainer: FSF
 ;; Keywords: help, faces
 
 ;; This file is part of GNU Emacs.
@@ -25,7 +26,7 @@
 ;;; Commentary:
 ;;
 ;; This file implements the code to create and edit customize buffers.
-;; 
+;;
 ;; See `custom.el'.
 
 ;; No commands should have names starting with `custom-' because
@@ -760,7 +761,7 @@ If given a prefix (or a COMMENT argument), also prompt for a comment."
   (interactive (custom-prompt-variable "Set variable: "
 				       "Set %s to value: "
 				       current-prefix-arg))
-   
+
   (set var val)
   (cond ((string= comment "")
  	 (put var 'variable-comment nil))
@@ -817,6 +818,7 @@ If given a prefix (or a COMMENT argument), also prompt for a comment."
 				       current-prefix-arg))
   (funcall (or (get var 'custom-set) 'set-default) var value)
   (put var 'saved-value (list (custom-quote value)))
+  (custom-push-theme 'theme-value var 'user 'set (list (custom-quote val)))
   (cond ((string= comment "")
  	 (put var 'variable-comment nil)
  	 (put var 'saved-variable-comment nil))
@@ -1012,7 +1014,7 @@ version."
     (or (< major1 major2)
 	(and (= major1 major2)
 	     (< minor1 minor2)))))
-  
+
 ;;;###autoload
 (defalias 'customize-variable-other-window 'customize-option-other-window)
 
@@ -1295,16 +1297,7 @@ Un-customize all values in this buffer.  They get their standard settings."
   (widget-insert "   ")
   (widget-create 'push-button
 		 :tag "Finish"
-		 :help-echo
-		 (lambda (&rest ignore)
-		   (concat (cond
-			    ((eq custom-buffer-done-function
-				 'custom-bury-buffer)
-			     "Bury")
-			    ((eq custom-buffer-done-function 'kill-buffer)
-			     "Kill")
-			    (t "Finish with"))		    
-			   " the buffer."))
+		 :help-echo "Bury or kill the buffer."
 		 :action #'Custom-buffer-done)
   (widget-insert "\n\n")
   (message "Creating customization items...")
@@ -1705,7 +1698,10 @@ and `face'."
 ;;; The `custom' Widget.
 
 (defface custom-button-face
-  '((((type x w32 mac) (class color))		; Like default modeline
+  '((((type x) (class color))		; Like default modeline
+     (:box (:line-width 2 :style released-button)
+	   :background "lightgrey" :foreground "black"))
+    (((type w32) (class color))		; Like default modeline
      (:box (:line-width 2 :style released-button)
 	   :background "lightgrey" :foreground "black"))
     (t
@@ -1715,7 +1711,10 @@ and `face'."
   :group 'custom-faces)
 
 (defface custom-button-pressed-face
-  '((((type x w32 mac) (class color))
+  '((((type x) (class color))
+     (:box (:line-width 2 :style pressed-button)
+	   :background "lightgrey" :foreground "black"))
+    (((type w32) (class color))
      (:box (:line-width 2 :style pressed-button)
 	   :background "lightgrey" :foreground "black"))
     (t
@@ -2009,10 +2008,18 @@ If INITIAL-STRING is non-nil, use that rather than \"Parent groups:\"."
 (defface custom-variable-tag-face
   `((((class color)
       (background dark))
-     (:foreground "light blue" :bold t :height 1.2 :inherit variable-pitch))
+     (:foreground "light blue" :bold t :family "helv"
+		  :height ,(let ((height (face-attribute 'default :height)))
+			     (if (numberp height)
+				 (floor height 0.9)
+			       height))))
     (((class color)
       (background light))
-     (:foreground "blue" :bold t :height 1.2 :inherit variable-pitch))
+     (:foreground "blue" :family "helv" :bold t
+		  :height ,(let ((height (face-attribute 'default :height)))
+			     (if (numberp height)
+				 (floor height 0.9)
+			       height))))
     (t (:bold t)))
   "Face used for unpushable variable tags."
   :group 'custom-faces)
@@ -2386,6 +2393,8 @@ Optional EVENT is the location for the menu."
 	     ;; Make the comment invisible by hand if it's empty
 	     (custom-comment-hide comment-widget))
 	   (put symbol 'saved-value (list (widget-value child)))
+	   (custom-push-theme 'theme-value symbol 'user
+			      'set (list (widget-value child)))
 	   (funcall set symbol (eval (widget-value child)))
 	   (put symbol 'variable-comment comment)
 	   (put symbol 'saved-variable-comment comment))
@@ -2396,6 +2405,9 @@ Optional EVENT is the location for the menu."
 	     (custom-comment-hide comment-widget))
 	   (put symbol 'saved-value
 		(list (custom-quote (widget-value child))))
+	   (custom-push-theme 'theme-value symbol 'user
+			      'set (list (custom-quote (widget-value
+						  child))))
 	   (funcall set symbol (widget-value child))
 	   (put symbol 'variable-comment comment)
 	   (put symbol 'saved-variable-comment comment)))
@@ -2409,6 +2421,7 @@ Optional EVENT is the location for the menu."
   "Restore the saved value for the variable being edited by WIDGET."
   (let* ((symbol (widget-value widget))
 	 (set (or (get symbol 'custom-set) 'set-default))
+	 (comment-widget (widget-get widget :comment-widget))
 	 (value (get symbol 'saved-value))
 	 (comment (get symbol 'saved-variable-comment)))
     (cond ((or value comment)
@@ -2429,7 +2442,8 @@ Optional EVENT is the location for the menu."
 This operation eliminates any saved setting for the variable,
 restoring it to the state of a variable that has never been customized."
   (let* ((symbol (widget-value widget))
-	 (set (or (get symbol 'custom-set) 'set-default)))
+	 (set (or (get symbol 'custom-set) 'set-default))
+	 (comment-widget (widget-get widget :comment-widget)))
     (if (get symbol 'standard-value)
 	(funcall set symbol (eval (car (get symbol 'standard-value))))
       (error "No standard setting known for %S" symbol))
@@ -2438,6 +2452,11 @@ restoring it to the state of a variable that has never been customized."
     (put symbol 'customized-variable-comment nil)
     (when (or (get symbol 'saved-value) (get symbol 'saved-variable-comment))
       (put symbol 'saved-value nil)
+      (custom-push-theme 'theme-value symbol 'user 'reset 'standard)
+      ;; As a special optimizations we do not (explictly)
+      ;; save resets to standard when no theme set the value.
+      (if (null (cdr (get symbol 'theme-value)))
+	  (put symbol 'theme-value nil))
       (put symbol 'saved-variable-comment nil)
       (custom-save-all))
     (widget-put widget :custom-state 'unknown)
@@ -2534,7 +2553,11 @@ Match frames with dark backgrounds.")
 ;;; The `custom-face' Widget.
 
 (defface custom-face-tag-face
-  `((t (:bold t :height 1.2 :inherit variable-pitch)))
+  `((t (:bold t :family "helv"
+	      :height ,(let ((height (face-attribute 'default :height)))
+			     (if (numberp height)
+				 (floor height 0.9)
+			       height)))))
   "Face used for face tags."
   :group 'custom-faces)
 
@@ -2619,9 +2642,7 @@ Match frames with dark backgrounds.")
 	   (if (eq custom-buffer-style 'face)
 	       (insert " ")
 	     (widget-specify-sample widget begin (point))
-	     (if (string-match "face\\'" tag)
-		 (insert ":")
-	       (insert " face: ")))
+	     (insert ": "))
 	   ;; Sample.
 	   (push (widget-create-child-and-convert widget 'item
 						  :format "(%{%t%})"
@@ -2827,6 +2848,7 @@ Optional EVENT is the location for the menu."
       (custom-comment-hide comment-widget))
     (face-spec-set symbol value)
     (put symbol 'saved-face value)
+    (custom-push-theme 'theme-face symbol 'user 'set value)
     (put symbol 'customized-face nil)
     (put symbol 'face-comment comment)
     (put symbol 'customized-face-comment nil)
@@ -2868,6 +2890,10 @@ restoring it to the state of a face that has never been customized."
     (put symbol 'customized-face-comment nil)
     (when (or (get symbol 'saved-face) (get symbol 'saved-face-comment))
       (put symbol 'saved-face nil)
+      (custom-push-theme 'theme-face symbol 'user 'reset 'standard)
+      ;; Do not explictly save resets to standards without themes.
+      (if (null (cdr (get symbol 'theme-face)))
+	  (put symbol  'theme-face nil))
       (put symbol 'saved-face-comment nil)
       (custom-save-all))
     (face-spec-set symbol value)
@@ -2991,10 +3017,19 @@ and so forth.  The remaining group tags are shown with
 (defface custom-group-tag-face-1
   `((((class color)
       (background dark))
-     (:foreground "pink" :bold t :height 1.2 :inherit variable-pitch))
+     (:foreground "pink" :family "helv"
+		  :height ,(let ((height (face-attribute 'default :height)))
+			     (if (numberp height)
+				 (floor height 0.9)
+			       height))
+		  :bold t))
     (((class color)
       (background light))
-     (:foreground "red" :bold t :height 1.2 :inherit variable-pitch))
+     (:foreground "red" :bold t
+		  :height ,(let ((height (face-attribute 'default :height)))
+			     (if (numberp height)
+				 (floor height 0.9)
+			       height))))
     (t (:bold t)))
   "Face used for group tags."
   :group 'custom-faces)
@@ -3002,10 +3037,18 @@ and so forth.  The remaining group tags are shown with
 (defface custom-group-tag-face
   `((((class color)
       (background dark))
-     (:foreground "light blue" :bold t :height 1.2))
+     (:foreground "light blue" :bold t
+		  :height ,(let ((height (face-attribute 'default :height)))
+			     (if (numberp height)
+				 (floor height 0.9)
+			       height))))
     (((class color)
       (background light))
-     (:foreground "blue" :bold t :height 1.2))
+     (:foreground "blue" :bold t
+		  :height ,(let ((height (face-attribute 'default :height)))
+			     (if (numberp height)
+				 (floor height 0.9)
+			       height))))
     (t (:bold t)))
   "Face used for low level group tags."
   :group 'custom-faces)
@@ -3426,7 +3469,11 @@ or (if there were none) at the end of the buffer."
 (defun custom-save-variables ()
   "Save all customized variables in `custom-file'."
   (save-excursion
+    (custom-save-delete 'custom-load-themes)
+    (custom-save-delete 'custom-reset-variables)
     (custom-save-delete 'custom-set-variables)
+    (custom-save-loaded-themes)
+    (custom-save-resets 'theme-value 'custom-reset-variables nil)
     (let ((standard-output (current-buffer))
 	  (saved-list (make-list 1 0))
 	  sort-fold-case)
@@ -3443,14 +3490,19 @@ or (if there were none) at the end of the buffer."
   ;; Your init file must only contain one such instance.\n")
       (mapcar
        (lambda (symbol)
-	 (let ((value (get symbol 'saved-value))
+	 (let ((spec (car-safe (get symbol 'theme-value)))
+	       (value (get symbol 'saved-value))
 	       (requests (get symbol 'custom-requests))
 	       (now (not (or (get symbol 'standard-value)
 			     (and (not (boundp symbol))
-				  (not (get symbol 'force-value))))))
+				  (not (eq (get symbol 'force-value)
+					   'rogue))))))
 	       (comment (get symbol 'saved-variable-comment))
 	       sep)
-	   (when (or value comment)
+	   (when (or (and spec
+			  (eq (nth 0 spec) 'user)
+			  (eq (nth 1 spec) 'set))
+		     comment)
 	     (unless (bolp)
 	       (princ "\n"))
 	     (princ " '(")
@@ -3487,7 +3539,9 @@ or (if there were none) at the end of the buffer."
 (defun custom-save-faces ()
   "Save all customized faces in `custom-file'."
   (save-excursion
+    (custom-save-delete 'custom-reset-faces)
     (custom-save-delete 'custom-set-faces)
+    (custom-save-resets 'theme-face 'custom-reset-faces '(default))
     (let ((standard-output (current-buffer))
 	  (saved-list (make-list 1 0))
 	  sort-fold-case)
@@ -3507,38 +3561,79 @@ or (if there were none) at the end of the buffer."
   ;; Your init file must only contain one such instance.\n")
       (mapcar
        (lambda (symbol)
-	 (let ((value (get symbol 'saved-face))
-	       (now (not (or (get 'default 'face-defface-spec)
-			     (and (not (custom-facep 'default))
-				  (not (get 'default 'force-face))))))
-	       (comment (get 'default 'saved-face-comment)))
-	   (unless (eq symbol 'default))
-	   ;; Don't print default face here.
-	   (unless (bolp)
-	     (princ "\n"))
-	   (princ " '(")
-	   (prin1 symbol)
-	   (princ " ")
-	   (prin1 value)
-	   (cond ((or now comment)
-		  (princ " ")
-		  (if now
-		      (princ "t")
-		    (princ "nil"))
-		  (cond (comment
-			 (princ " ")
-			 (prin1 comment)
-			 (princ ")"))
-			(t
-			 (princ ")"))))
-		 (t
-		  (princ ")")))))
+	 (let ((theme-spec (car-safe (get symbol 'theme-face)))
+	       (value (get symbol 'saved-face))
+	       (now (not (or (get symbol 'face-defface-spec)
+			     (and (not (custom-facep symbol))
+				  (not (eq (get symbol 'force-face) 'rogue))))))
+	       (comment (get symbol 'saved-face-comment)))
+	   (when (or (and theme-spec
+			  (eq (nth 0 theme-spec) 'user)
+			  (eq (nth 1 theme-spec) 'set))
+		     comment)
+	     (unless (bolp)
+	       (princ "\n"))
+	     (princ " '(")
+	     (prin1 symbol)
+	     (princ " ")
+	     (prin1 value)
+	     (cond ((or now comment)
+		    (princ " ")
+		    (if now
+			(princ "t")
+		      (princ "nil"))
+		    (cond (comment
+			   (princ " ")
+			   (prin1 comment)
+			   (princ ")"))
+			  (t
+			   (princ ")"))))
+		   (t
+		    (princ ")"))))))
        saved-list)
       (if (bolp)
 	  (princ " "))
       (princ ")")
       (unless (looking-at "\n")
 	(princ "\n")))))
+
+(defun custom-save-resets (property setter special)
+  (let (started-writing ignored-special)
+    ;; (custom-save-delete setter) Done by caller
+    (let ((standard-output (current-buffer))
+	  (mapper `(lambda (object)
+		    (let ((spec (car-safe (get object (quote ,property)))))
+		      (when (and (not (memq object ignored-special))
+				 (eq (nth 0 spec) 'user)
+				 (eq (nth 1 spec) 'reset))
+			;; Do not write reset statements unless necessary.
+			(unless started-writing
+			  (setq started-writing t)
+			  (unless (bolp)
+			    (princ "\n"))
+			(princ "(")
+			(princ (quote ,setter))
+			(princ "\n '(")
+			(prin1 object)
+			(princ " ")
+			(prin1 (nth 3 spec))
+			(princ ")")))))))
+      (mapc mapper special)
+      (setq ignored-special special)
+      (mapatoms mapper)
+      (when started-writing
+	(princ ")\n")))))
+			
+(defun custom-save-loaded-themes ()
+  (let ((themes (reverse (get 'user 'theme-loads-themes)))
+	(standard-output (current-buffer)))
+    (when themes
+      (unless (bolp) (princ "\n"))
+      (princ "(custom-load-themes")
+      (mapc (lambda (theme)
+	      (princ "\n   '")
+	      (prin1 theme)) themes)
+      (princ " )\n"))))	
 
 ;;;###autoload
 (defun customize-save-customized ()
@@ -3552,9 +3647,11 @@ or (if there were none) at the end of the buffer."
 		     (get symbol 'customized-variable-comment)))
 		(when face
 		  (put symbol 'saved-face face)
+		  (custom-push-theme 'theme-face symbol 'user 'set value)
 		  (put symbol 'customized-face nil))
 		(when value
 		  (put symbol 'saved-value value)
+		  (custom-push-theme 'theme-value symbol 'user 'set value)
 		  (put symbol 'customized-value nil))
 		(when variable-comment
 		  (put symbol 'saved-variable-comment variable-comment)
@@ -3610,11 +3707,20 @@ or (if there were none) at the end of the buffer."
 				   ':style 'toggle
 				   ':selected symbol)))
 
-(defun custom-group-menu-create (widget symbol)
-  "Ignoring WIDGET, create a menu entry for customization group SYMBOL."
-  `( ,(custom-unlispify-menu-entry symbol t)
-     :filter (lambda (&rest junk)
-	       (cdr (custom-menu-create ',symbol)))))
+;; Fixme: sort out use of :filter in Emacs 21.
+(if nil ; (string-match "XEmacs" emacs-version)
+    ;; XEmacs can create menus dynamically.
+    (defun custom-group-menu-create (widget symbol)
+      "Ignoring WIDGET, create a menu entry for customization group SYMBOL."
+      `( ,(custom-unlispify-menu-entry symbol t)
+	 :filter (lambda (&rest junk)
+		   (cdr (custom-menu-create ',symbol)))))
+  ;; But emacs can't.
+  (defun custom-group-menu-create (widget symbol)
+    "Ignoring WIDGET, create a menu entry for customization group SYMBOL."
+    ;; Limit the nesting.
+    (let ((custom-menu-nesting (1- custom-menu-nesting)))
+      (custom-menu-create symbol))))
 
 ;;;###autoload
 (defun custom-menu-create (symbol)
@@ -3651,9 +3757,14 @@ Otherwise the menu will be named `Customize'.
 The format is suitable for use with `easy-menu-define'."
   (unless name
     (setq name "Customize"))
-  `(,name
-    :filter (lambda (&rest junk)
-	      (cdr (custom-menu-create ',symbol)))))
+  ;; Fixme: sort out use of :filter in Emacs 21.
+  (if nil ;(string-match "XEmacs" emacs-version)
+      ;; We can delay it under XEmacs.
+      `(,name
+	:filter (lambda (&rest junk)
+		  (cdr (custom-menu-create ',symbol))))
+    ;; But we must create it now under Emacs.
+    (cons name (cdr (custom-menu-create symbol)))))
 
 ;;; The Custom Mode.
 
@@ -3661,8 +3772,6 @@ The format is suitable for use with `easy-menu-define'."
   "Keymap for `custom-mode'.")
 
 (unless custom-mode-map
-  ;; This keymap should be dense, but a dense keymap would prevent inheriting
-  ;; "\r" bindings from the parent map.
   (setq custom-mode-map (make-sparse-keymap))
   (set-keymap-parent custom-mode-map widget-keymap)
   (suppress-keymap custom-mode-map)
@@ -3757,10 +3866,9 @@ if that value is non-nil."
     (set (make-local-variable 'widget-push-button-suffix) "")
     (set (make-local-variable 'widget-link-prefix) "")
     (set (make-local-variable 'widget-link-suffix) ""))
+  (make-local-hook 'widget-edit-functions)
   (add-hook 'widget-edit-functions 'custom-state-buffer-message nil t)
   (run-hooks 'custom-mode-hook))
-
-(put 'custom-mode 'mode-class 'special)
 
 (add-to-list
  'debug-ignored-errors

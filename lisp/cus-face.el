@@ -1,10 +1,10 @@
 ;;; cus-face.el -- customization support for faces.
 ;;
-;; Copyright (C) 1996, 1997, 1999 Free Software Foundation, Inc.
+;; Copyright (C) 1996, 1997, 1999, 2001 Free Software Foundation, Inc.
 ;;
 ;; Author: Per Abrahamsen <abraham@dina.kvl.dk>
+;; Maintainer: FSF
 ;; Keywords: help, faces
-;; Version: Emacs
 
 ;; This file is part of GNU Emacs.
 
@@ -109,14 +109,13 @@
      (choice :tag "Height"
 	     :help-echo "Face's font height."
 	     (const :tag "*" nil)
-	     (integer :tag "Height in 1/10 pt")
-	     (number :tag "Scale" 1.0))
+	     (integer :tag "Height in 1/10 pt"))
      (lambda (face value &optional frame)
        (set-face-attribute face frame :height (or value 'unspecified)))
      (lambda (face &optional frame)
        (let ((height (face-attribute face :height frame)))
 	 (if (eq height 'unspecified) nil height))))
-
+    
     (:weight
      (choice :tag "Weight"
 	     :help-echo "Font weight."
@@ -279,33 +278,14 @@
        (set-face-attribute face frame :stipple (or value 'unspecified)))
      (lambda (face &optional frame)
        (let ((value (face-attribute face :stipple frame)))
-	 (if (eq value 'unspecified) nil value))))
-
-    (:inherit
-     (repeat :tag "Inherit"
-	     :help-echo "List of faces to inherit attributes from."
-	     (face :Tag "Face" default))
-     (lambda (face value &optional frame)
-       (message "Setting to: <%s>" value)
-       (set-face-attribute face frame :inherit
-			   (if (and (consp value) (null (cdr value)))
-			       (car value)
-			     value)))
-     (lambda (face &optional frame)
-       (let ((value (face-attribute face :inherit frame)))
-	 (cond ((or (null value) (eq value 'unspecified))
-		nil)
-	       ((symbolp value)
-		(list value))
-	       (t
-		value))))))
+	 (if (eq value 'unspecified) nil value)))))
        
   "Alist of face attributes.
 
 The elements are of the form (KEY TYPE SET GET), where KEY is the name
 of the attribute, TYPE is a widget type for editing the attibute, SET
 is a function for setting the attribute value, and GET is a function
-for getiing the attribute value.
+for getting the attribute value.
 
 The SET function should take three arguments, the face to modify, the
 value of the attribute, and optionally the frame where the face should
@@ -313,7 +293,6 @@ be changed.
 
 The GET function should take two arguments, the face to examine, and
 optionally the frame where the face should be examined.")
-
 
 (defun custom-face-attributes-get (face frame)
   "For FACE on FRAME, return an alternating list describing its attributes.
@@ -327,8 +306,7 @@ If FRAME is nil, use the global defaults for FACE."
       (let* ((attribute (car (car attrs)))
 	     (value (face-attribute face attribute frame)))
 	(setq attrs (cdr attrs))
-	(unless (or (eq value 'unspecified)
-		    (and (null value) (memq attribute '(:inherit))))
+	(unless (eq value 'unspecified)
 	  (setq plist (cons attribute (cons value plist))))))
     plist))
 
@@ -337,36 +315,125 @@ If FRAME is nil, use the global defaults for FACE."
 ;;;###autoload
 (defun custom-set-faces (&rest args)
   "Initialize faces according to user preferences.
+This asociates the setting with the USER theme.
 The arguments should be a list where each entry has the form:
 
   (FACE SPEC [NOW [COMMENT]])
 
-SPEC is stored as the saved value for FACE.
+SPEC is stored as the saved value for FACE, as well as the value for the
+user theme.  The user theme is one of the default themes known to Emacs.
+See `custom-known-themes' for more information on the known themes.
+See `custom-theme-set-faces' for more information on the interplay
+between themes and faces.
+See `defface' for the format of SPEC.
+
+If NOW is present and non-nil, FACE is created now, according to SPEC.
+COMMENT is a string comment about FACE."
+  (apply 'custom-theme-set-faces 'user args))
+
+(defun custom-theme-set-faces (theme &rest args)
+  "Initialize faces for theme THEME.
+The arguments should be a list where each entry has the form:
+
+  (FACE SPEC [NOW [COMMENT]])
+
+SPEC is stored as the saved value for FACE, as well as the value for the
+user theme.  The user theme is one of the default themes known to Emacs.
+See `custom-known-themes' for more information on the known themes.
+See `custom-theme-set-faces' for more information on the interplay
+between themes and faces.
+See `defface' for the format of SPEC.
+
 If NOW is present and non-nil, FACE is created now, according to SPEC.
 COMMENT is a string comment about FACE.
 
-See `defface' for the format of SPEC."
-  (while args
-    (let ((entry (car args)))
-      (if (listp entry)
-	  (let ((face (nth 0 entry))
-		(spec (nth 1 entry))
-		(now (nth 2 entry))
-		(comment (nth 3 entry)))
-	    (put face 'saved-face spec)
-	    (put face 'saved-face-comment comment)
-	    (when now
-	      (put face 'force-face t))
-	    (when (or now (facep face))
-	      (put face 'face-comment comment)
-	      (make-empty-face face)
-	      (face-spec-set face spec))
+Several properties of THEME and FACE are used in the process:
+
+If THEME property `theme-immediate' is non-nil, this is equivalent of
+providing the NOW argument to all faces in the argument list: FACE is
+created now.  The only difference is FACE property `force-face': if NOW
+is non-nil, FACE property force-face is set to the symbol `rogue', else
+if THEME property theme-immediate is non-nil, FACE property force-face
+is set to the symbol `immediate'.
+
+SPEC itself is saved in FACE property `saved-face' and it is stored in
+FACE's list property `theme-face' \(using `custom-push-theme')."
+  (custom-check-theme theme)
+  (let ((immediate (get theme 'theme-immediate)))
+    (while args
+      (let ((entry (car args)))
+	(if (listp entry)
+	    (let ((face (nth 0 entry))
+		  (spec (nth 1 entry))
+		  (now (nth 2 entry))
+		  (comment (nth 3 entry)))
+	      (put face 'saved-face spec)
+	      (put face 'saved-face-comment comment)
+	      (custom-push-theme 'theme-face face theme 'set spec)
+	      (when (or now immediate)
+		(put face 'force-face (if now 'rogue 'immediate)))
+	      (when (or now immediate (facep face))
+		(unless (facep face)
+		  (make-empty-face face))
+		(put face 'face-comment comment)
+		(face-spec-set face spec))
 	    (setq args (cdr args)))
 	;; Old format, a plist of FACE SPEC pairs.
 	(let ((face (nth 0 args))
 	      (spec (nth 1 args)))
-	  (put face 'saved-face spec))
-	(setq args (cdr (cdr args)))))))
+	  (put face 'saved-face spec)
+	  (custom-push-theme 'theme-face face theme 'set spec))
+	(setq args (cdr (cdr args))))))))
+
+;;;###autoload
+(defun custom-theme-face-value (face theme)
+  "Return spec of FACE in THEME if THEME modifies FACE.
+Nil otherwise.  The associations between theme and spec for FACE
+is stored in FACE's property `theme-face'.  The appropriate face
+is retrieved using `custom-theme-value'."
+  ;; Returns car because the value is stored inside a one element list
+  (car-safe (custom-theme-value theme (get face 'theme-face))))
+
+(defun custom-theme-reset-internal-face (face to-theme)
+  "Reset FACE to the value defined by TO-THEME.
+If FACE is not defined in TO-THEME, reset FACE to the standard
+value.  See `custom-theme-face-value'.  The standard value is
+stored in SYMBOL's property `face-defface-spec' by `defface'."
+  (let ((spec (custom-theme-face-value face to-theme))
+	was-in-theme)
+    (setq was-in-theme spec)
+    (setq spec (or spec (get face 'face-defface-spec)))
+    (when spec
+      (put face 'save-face was-in-theme)
+      (when (or (get face 'force-face) (facep face))
+	      (unless (facep face)
+		(make-empty-face face))
+	      (face-spec-set face spec)))
+    spec))
+
+;;;###autoload
+(defun custom-theme-reset-faces (theme &rest args)
+  "Reset the value of the face to values previously defined.
+Associate this setting with THEME.
+
+ARGS is a list of lists of the form
+
+    (FACE TO-THEME)
+
+This means reset FACE to its value in TO-THEME."
+  (custom-check-theme theme)
+  (mapcar '(lambda (arg)
+	     (apply 'custom-theme-reset-internal-face arg)
+	     (custom-push-theme 'theme-face (car arg) theme 'reset (cadr arg)))
+	  args))
+
+;;;###autoload
+(defun custom-reset-faces (&rest args)
+  "Reset the value of the face to values previously saved.
+This is the setting assosiated the `user' theme.
+
+ARGS is defined as for `custom-theme-reset-faces'"
+  (apply 'custom-theme-reset-faces 'user args))
 
 ;;; The End.
 
