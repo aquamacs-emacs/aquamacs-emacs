@@ -462,7 +462,7 @@ run_composition_function (from, to, prop)
       && find_composition (to, -1, &start, &end, &prop, Qnil)
       && !COMPOSITION_VALID_P (start, end, prop))
     to = end;
-  if (!NILP (Ffbounpd (func)))
+  if (!NILP (Ffboundp (func)))
     call2 (func, make_number (from), make_number (to));
   else if (!NILP (Ffboundp (Vcompose_chars_after_function)))
     call3 (Vcompose_chars_after_function,
@@ -715,7 +715,7 @@ DEFUN ("compose-region-internal", Fcompose_region_internal,
 
 Compose text in the region between START and END.
 Optional 3rd and 4th arguments are COMPONENTS and MODIFICATION-FUNC
-for the composition.   See `compose-region' for more detail. */)
+for the composition.  See `compose-region' for more detail.  */)
      (start, end, components, mod_func)
      Lisp_Object start, end, components, mod_func;
 {
@@ -736,7 +736,7 @@ DEFUN ("compose-string-internal", Fcompose_string_internal,
 
 Compose text between indices START and END of STRING.
 Optional 4th and 5th arguments are COMPONENTS and MODIFICATION-FUNC
-for the composition.   See `compose-string' for more detail.  */)
+for the composition.  See `compose-string' for more detail.  */)
      (string, start, end, components, mod_func)
      Lisp_Object string, start, end, components, mod_func;
 {
