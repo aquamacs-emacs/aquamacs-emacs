@@ -147,7 +147,7 @@ init_editfns ()
   /* If the user name claimed in the environment vars differs from
      the real uid, use the claimed name to find the full name.  */
   tem = Fstring_equal (Vuser_login_name, Vuser_real_login_name);
-  Vuser_full_name = Fuser_full_name (NILP (tem)? make_number (geteuid())
+  Vuser_full_name = Fuser_full_name (NILP (tem)? make_fixnum (geteuid())
 				     : Vuser_login_name);
 
   p = (unsigned char *) getenv ("NAME");
@@ -288,7 +288,7 @@ region_limit (beginningp)
     error ("There is no region now");
   
   if ((PT < XFASTINT (m)) == beginningp)
-    m = make_number (PT);
+    m = make_fixnum (PT);
   return m;
 }
 
@@ -353,7 +353,7 @@ text_property_stickiness (prop, pos)
     {
       Lisp_Object prev_pos, rear_non_sticky;
 
-      prev_pos = make_number (XINT (pos) - 1);
+      prev_pos = make_fixnum (XINT (pos) - 1);
       rear_non_sticky = Fget_text_property (prev_pos, Qrear_nonsticky, Qnil);
 
       if (EQ (rear_non_sticky, Qnil)
@@ -420,7 +420,7 @@ find_field (pos, merge_at_boundary, beg, end)
     = get_char_property_and_overlay (pos, Qfield, Qnil, &after_overlay);
   before_field
     = (XFASTINT (pos) > BEGV
-       ? get_char_property_and_overlay (make_number (XINT (pos) - 1),
+       ? get_char_property_and_overlay (make_fixnum (XINT (pos) - 1),
 					Qfield, Qnil,
 					&before_overlay)
        : Qnil);
@@ -598,7 +598,7 @@ field, then the beginning of the *previous* field is returned.")
 {
   int beg;
   find_field (pos, escape_from_edge, &beg, 0);
-  return make_number (beg);
+  return make_fixnum (beg);
 }
 
 DEFUN ("field-end", Ffield_end, Sfield_end, 0, 2, 0,
@@ -612,7 +612,7 @@ then the end of the *following* field is returned.")
 {
   int end;
   find_field (pos, escape_from_edge, 0, &end);
-  return make_number (end);
+  return make_fixnum (end);
 }
 
 DEFUN ("constrain-to-field", Fconstrain_to_field, Sconstrain_to_field, 2, 5, 0,
@@ -730,13 +730,13 @@ This function does not move point.")
 
   orig = PT;
   orig_byte = PT_BYTE;
-  Fforward_line (make_number (XINT (n) - 1));
+  Fforward_line (make_fixnum (XINT (n) - 1));
   end = PT;
 
   SET_PT_BOTH (orig, orig_byte);
 
   /* Return END constrained to the current input field.  */
-  return Fconstrain_to_field (make_number (end), make_number (orig),
+  return Fconstrain_to_field (make_fixnum (end), make_fixnum (orig),
 			      XINT (n) != 1 ? Qt : Qnil,
 			      Qt, Qnil);
 }
@@ -761,7 +761,7 @@ This function does not move point.")
   end_pos = find_before_next_newline (orig, 0, XINT (n) - (XINT (n) <= 0));
 
   /* Return END_POS constrained to the current input field.  */
-  return Fconstrain_to_field (make_number (end_pos), make_number (orig),
+  return Fconstrain_to_field (make_fixnum (end_pos), make_fixnum (orig),
 			      Qnil, Qt, Qnil);
 }
 
@@ -857,7 +857,7 @@ save_excursion_restore (info)
 	   BUFFERP (tem1)
 	   /* ...and it shows the current buffer.  */
 	   && XBUFFER (tem1) == current_buffer)))
-    Fset_window_point (tem, make_number (PT));
+    Fset_window_point (tem, make_fixnum (PT));
 
   UNGCPRO;
   return Qnil;
@@ -908,11 +908,11 @@ If BUFFER, return the number of characters in that buffer instead.")
      Lisp_Object buffer;
 {
   if (NILP (buffer))
-    return make_number (Z - BEG);
+    return make_fixnum (Z - BEG);
   else
     {
       CHECK_BUFFER (buffer, 1);
-      return make_number (BUF_Z (XBUFFER (buffer))
+      return make_fixnum (BUF_Z (XBUFFER (buffer))
 			  - BUF_BEG (XBUFFER (buffer)));
     }
 }
@@ -984,7 +984,7 @@ If POSITION is out of range, the value is nil.")
   CHECK_NUMBER_COERCE_MARKER (position, 1);
   if (XINT (position) < BEG || XINT (position) > Z)
     return Qnil;
-  return make_number (CHAR_TO_BYTE (XINT (position)));
+  return make_fixnum (CHAR_TO_BYTE (XINT (position)));
 }
 
 DEFUN ("byte-to-position", Fbyte_to_position, Sbyte_to_position, 1, 1, 0,
@@ -996,7 +996,7 @@ If BYTEPOS is out of range, the value is nil.")
   CHECK_NUMBER (bytepos, 1);
   if (XINT (bytepos) < BEG_BYTE || XINT (bytepos) > Z_BYTE)
     return Qnil;
-  return make_number (BYTE_TO_CHAR (XINT (bytepos)));
+  return make_fixnum (BYTE_TO_CHAR (XINT (bytepos)));
 }
 
 DEFUN ("following-char", Ffollowing_char, Sfollowing_char, 0, 0, 0,
@@ -1100,7 +1100,7 @@ If POS is out of range, the value is nil.")
       pos_byte = CHAR_TO_BYTE (XINT (pos));
     }
 
-  return make_number (FETCH_CHAR (pos_byte));
+  return make_fixnum (FETCH_CHAR (pos_byte));
 }
 
 DEFUN ("char-before", Fchar_before, Schar_before, 0, 1, 0,
@@ -1164,7 +1164,7 @@ with that uid, or nil if there is no such user.")
   /* Set up the user name info if we didn't do it before.
      (That can happen if Emacs is dumpable
      but you decide to run `temacs -l loadup' and not dump.  */
-  if (INTEGERP (Vuser_login_name))
+  if (FIXNUMP (Vuser_login_name))
     init_editfns ();
 
   if (NILP (uid))
@@ -1185,7 +1185,7 @@ This ignores the environment variables LOGNAME and USER, so it differs from\n\
   /* Set up the user name info if we didn't do it before.
      (That can happen if Emacs is dumpable
      but you decide to run `temacs -l loadup' and not dump.  */
-  if (INTEGERP (Vuser_login_name))
+  if (FIXNUMP (Vuser_login_name))
     init_editfns ();
   return Vuser_real_login_name;
 }
@@ -1194,14 +1194,14 @@ DEFUN ("user-uid", Fuser_uid, Suser_uid, 0, 0, 0,
   "Return the effective uid of Emacs, as an integer.")
   ()
 {
-  return make_number (geteuid ());
+  return make_fixnum (geteuid ());
 }
 
 DEFUN ("user-real-uid", Fuser_real_uid, Suser_real_uid, 0, 0, 0,
   "Return the real uid of Emacs, as an integer.")
   ()
 {
-  return make_number (getuid ());
+  return make_fixnum (getuid ());
 }
 
 DEFUN ("user-full-name", Fuser_full_name, Suser_full_name, 0, 1, 0,
@@ -1246,7 +1246,7 @@ name, or nil if there is no such user.")
       register unsigned char *r;
       Lisp_Object login;
 
-      login = Fuser_login_name (make_number (pw->pw_uid));
+      login = Fuser_login_name (make_fixnum (pw->pw_uid));
       r = (unsigned char *) alloca (strlen (p) + XSTRING (login)->size + 1);
       bcopy (p, r, q - p);
       r[q - p] = 0;
@@ -1282,7 +1282,7 @@ DEFUN ("emacs-pid", Femacs_pid, Semacs_pid, 0, 0, 0,
   "Return the process ID of Emacs, as an integer.")
   ()
 {
-  return make_number (getpid ());
+  return make_fixnum (getpid ());
 }
 
 DEFUN ("current-time", Fcurrent_time, Scurrent_time, 0, 0, 0,
@@ -1638,7 +1638,7 @@ If you want them to stand for years in this century, you must do that yourself."
 	tzstring = "UTC0";
       else if (STRINGP (zone))
 	tzstring = (char *) XSTRING (zone)->data;
-      else if (INTEGERP (zone))
+      else if (FIXNUMP (zone))
 	{
 	  int abszone = abs (XINT (zone));
 	  sprintf (tzbuf, "XXX%s%d:%02d:%02d", "-" + (XINT (zone) < 0),
@@ -1788,10 +1788,10 @@ the data it can't find.")
 	  sprintf (buf, "%c%02d%02d", (offset < 0 ? '-' : '+'), am/60, am%60);
 	  s = buf;
 	}
-      return Fcons (make_number (offset), Fcons (build_string (s), Qnil));
+      return Fcons (make_fixnum (offset), Fcons (build_string (s), Qnil));
     }
   else
-    return Fmake_list (make_number (2), Qnil);
+    return Fmake_list (make_fixnum (2), Qnil);
 }
 
 /* This holds the value of `environ' produced by the previous
@@ -1942,7 +1942,7 @@ general_insert_function (insert_func, insert_from_string_func,
     {
       val = args[argnum];
     retry:
-      if (INTEGERP (val))
+      if (FIXNUMP (val))
 	{
 	  unsigned char str[MAX_MULTIBYTE_LENGTH];
 	  int len;
@@ -2173,8 +2173,8 @@ make_buffer_string_both (start, start_byte, end, end_byte, props)
     {
       update_buffer_properties (start, end);
 
-      tem = Fnext_property_change (make_number (start), Qnil, make_number (end));
-      tem1 = Ftext_properties_at (make_number (start), Qnil);
+      tem = Fnext_property_change (make_fixnum (start), Qnil, make_fixnum (end));
+      tem1 = Ftext_properties_at (make_fixnum (start), Qnil);
 
       if (XINT (tem) != end || !NILP (tem1))
 	copy_intervals_to_string (result, current_buffer, start,
@@ -2453,9 +2453,9 @@ determines whether case is significant or ignored.")
 	  c2 = XINT (trt[c2]);
 	}
       if (c1 < c2)
-	return make_number (- 1 - chars);
+	return make_fixnum (- 1 - chars);
       if (c1 > c2)
-	return make_number (chars + 1);
+	return make_fixnum (chars + 1);
 
       chars++;
     }
@@ -2463,12 +2463,12 @@ determines whether case is significant or ignored.")
   /* The strings match as far as they go.
      If one is shorter, that one is less.  */
   if (chars < endp1 - begp1)
-    return make_number (chars + 1);
+    return make_fixnum (chars + 1);
   else if (chars < endp2 - begp2)
-    return make_number (- chars - 1);
+    return make_fixnum (- chars - 1);
 
   /* Same length too => they are equal.  */
-  return make_number (0);
+  return make_fixnum (0);
 }
 
 static Lisp_Object
@@ -2739,7 +2739,7 @@ It returns the number of characters changed.")
       pos++;
     }
 
-  return make_number (cnt);
+  return make_fixnum (cnt);
 }
 
 DEFUN ("delete-region", Fdelete_region, Sdelete_region, 2, 2, "r",
@@ -3065,8 +3065,8 @@ properties to add to the result ")
       properties = Fcons (args[i], Fcons (args[i + 1], properties));
     }
 
-  Fadd_text_properties (make_number (0),
-			make_number (XSTRING (string)->size),
+  Fadd_text_properties (make_fixnum (0),
+			make_fixnum (XSTRING (string)->size),
 			properties, string);
   RETURN_UNGCPRO (string);
 }
@@ -3235,7 +3235,7 @@ Use %% to put a single % into the output.")
 	    thissize = CONVERTED_BYTE_SIZE (multibyte, args[n]);
 	  }
 	/* Would get MPV otherwise, since Lisp_Int's `point' to low memory.  */
-	else if (INTEGERP (args[n]) && *format != 's')
+	else if (FIXNUMP (args[n]) && *format != 's')
 	  {
 	    /* The following loop assumes the Lisp type indicates
 	       the proper way to pass the argument.
@@ -3388,7 +3388,7 @@ Use %% to put a single % into the output.")
 		  info[n].end = end;
 		}
 	    }
-	  else if (INTEGERP (args[n]) || FLOATP (args[n]))
+	  else if (FIXNUMP (args[n]) || FLOATP (args[n]))
 	    {
 	      int this_nchars;
 
@@ -3396,7 +3396,7 @@ Use %% to put a single % into the output.")
 		     format - this_format_start);
 	      this_format[format - this_format_start] = 0;
 
-	      if (INTEGERP (args[n]))
+	      if (FIXNUMP (args[n]))
 		sprintf (p, this_format, XINT (args[n]));
 	      else
 		sprintf (p, this_format, XFLOAT_DATA (args[n]));
@@ -3460,15 +3460,15 @@ Use %% to put a single % into the output.")
       struct gcpro gcpro1;
 
       /* Add text properties from the format string.  */
-      len = make_number (XSTRING (args[0])->size);
-      props = text_property_list (args[0], make_number (0), len, Qnil);
+      len = make_fixnum (XSTRING (args[0])->size);
+      props = text_property_list (args[0], make_fixnum (0), len, Qnil);
       GCPRO1 (props);
 
       if (CONSP (props))
 	{
-	  new_len = make_number (XSTRING (val)->size);
+	  new_len = make_fixnum (XSTRING (val)->size);
 	  extend_property_ranges (props, len, new_len);
-	  add_text_properties_from_list (val, props, make_number (0));
+	  add_text_properties_from_list (val, props, make_fixnum (0));
 	}
 
       /* Add text properties from arguments.  */
@@ -3476,16 +3476,16 @@ Use %% to put a single % into the output.")
 	for (n = 1; n < nargs; ++n)
 	  if (info[n].end)
 	    {
-	      len = make_number (XSTRING (args[n])->size);
-	      new_len = make_number (info[n].end - info[n].start);
-	      props = text_property_list (args[n], make_number (0), len, Qnil);
+	      len = make_fixnum (XSTRING (args[n])->size);
+	      new_len = make_fixnum (info[n].end - info[n].start);
+	      props = text_property_list (args[n], make_fixnum (0), len, Qnil);
 	      extend_property_ranges (props, len, new_len);
 	      /* If successive arguments have properites, be sure that
 		 the value of `composition' property be the copy.  */
 	      if (n > 1 && info[n - 1].end)
 		make_composition_value_copy (props);
 	      add_text_properties_from_list (val, props,
-					     make_number (info[n].start));
+					     make_fixnum (info[n].start));
 	    }
 
       UNGCPRO;
@@ -3753,7 +3753,7 @@ Transposing beyond buffer boundaries is an error.")
 
       tmp_interval1 = copy_intervals (cur_intv, start1, len1);
       tmp_interval2 = copy_intervals (cur_intv, start2, len2);
-      Fset_text_properties (make_number (start1), make_number (end2),
+      Fset_text_properties (make_fixnum (start1), make_fixnum (end2),
 			    Qnil, Qnil);
 
       /* First region smaller than second.  */
@@ -3814,9 +3814,9 @@ Transposing beyond buffer boundaries is an error.")
           record_change (start2, len2);
           tmp_interval1 = copy_intervals (cur_intv, start1, len1);
           tmp_interval2 = copy_intervals (cur_intv, start2, len2);
-          Fset_text_properties (make_number (start1), make_number (end1),
+          Fset_text_properties (make_fixnum (start1), make_fixnum (end1),
 				Qnil, Qnil);
-          Fset_text_properties (make_number (start2), make_number (end2),
+          Fset_text_properties (make_fixnum (start2), make_fixnum (end2),
 				Qnil, Qnil);
 
 	  if (len1_byte > 20000)
@@ -3844,7 +3844,7 @@ Transposing beyond buffer boundaries is an error.")
           tmp_interval1 = copy_intervals (cur_intv, start1, len1);
           tmp_interval_mid = copy_intervals (cur_intv, end1, len_mid);
           tmp_interval2 = copy_intervals (cur_intv, start2, len2);
-          Fset_text_properties (make_number (start1), make_number (end2),
+          Fset_text_properties (make_fixnum (start1), make_fixnum (end2),
 				Qnil, Qnil);
 
 	  /* holds region 2 */
@@ -3876,7 +3876,7 @@ Transposing beyond buffer boundaries is an error.")
           tmp_interval1 = copy_intervals (cur_intv, start1, len1);
           tmp_interval_mid = copy_intervals (cur_intv, end1, len_mid);
           tmp_interval2 = copy_intervals (cur_intv, start2, len2);
-          Fset_text_properties (make_number (start1), make_number (end2),
+          Fset_text_properties (make_fixnum (start1), make_fixnum (end2),
 				Qnil, Qnil);
 
 	  /* holds region 1 */

@@ -111,7 +111,7 @@ this begins by re-executing that macro as if you typed it again.")
 	}
       for (i = 0; i < len; i++)
 	current_kboard->kbd_macro_buffer[i]
-	  = Faref (current_kboard->Vlast_kbd_macro, make_number (i));
+	  = Faref (current_kboard->Vlast_kbd_macro, make_fixnum (i));
 
       current_kboard->kbd_macro_ptr = current_kboard->kbd_macro_buffer + len;
       current_kboard->kbd_macro_end = current_kboard->kbd_macro_ptr;
@@ -119,7 +119,7 @@ this begins by re-executing that macro as if you typed it again.")
       /* Re-execute the macro we are appending to,
 	 for consistency of behavior.  */
       Fexecute_kbd_macro (current_kboard->Vlast_kbd_macro,
-			  make_number (1));
+			  make_fixnum (1));
 
       message ("Appending to kbd macro...");
     }
@@ -304,7 +304,7 @@ COUNT is a repeat count, or nil for once, or 0 for infinite loop.")
     error ("Keyboard macros must be strings or vectors");
 
   tem = Fcons (Vexecuting_macro,
-	       Fcons (make_number (executing_macro_index),
+	       Fcons (make_fixnum (executing_macro_index),
 		      real_this_command));
   record_unwind_protect (pop_kbd_macro, tem);
 

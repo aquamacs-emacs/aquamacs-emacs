@@ -240,7 +240,7 @@ init_menu_items ()
   if (NILP (menu_items))
     {
       menu_items_allocated = 60;
-      menu_items = Fmake_vector (make_number (menu_items_allocated), Qnil);
+      menu_items = Fmake_vector (make_fixnum (menu_items_allocated), Qnil);
     }
 
   menu_items_used = 0;
@@ -281,7 +281,7 @@ grow_menu_items ()
   old = menu_items;
 
   menu_items_allocated *= 2;
-  menu_items = Fmake_vector (make_number (menu_items_allocated), Qnil);
+  menu_items = Fmake_vector (make_fixnum (menu_items_allocated), Qnil);
   bcopy (XVECTOR (old)->contents, XVECTOR (menu_items)->contents,
 	 old_size * sizeof (Lisp_Object));
 }
@@ -2543,9 +2543,9 @@ menu_help_callback (help_string, pane, item)
   /* (menu-item MENU-NAME PANE-NUMBER)  */
   menu_object = Fcons (Qmenu_item,
  		       Fcons (pane_name,
- 			      Fcons (make_number (pane), Qnil)));
+ 			      Fcons (make_fixnum (pane), Qnil)));
   show_help_echo (help_string ? build_string (help_string) : Qnil,
- 		  Qnil, menu_object, make_number (item), 1);
+ 		  Qnil, menu_object, make_fixnum (item), 1);
 }
   
 
@@ -2696,7 +2696,7 @@ xmenu_show (f, x, y, for_click, keymaps, title, error)
 	      int gap = maxwidth - STRING_BYTES (XSTRING (item_name));
 #ifdef C_ALLOCA
 	      Lisp_Object spacer;
-	      spacer = Fmake_string (make_number (gap), make_number (' '));
+	      spacer = Fmake_string (make_fixnum (gap), make_fixnum (' '));
 	      item_name = concat2 (item_name, spacer);
 	      item_name = concat2 (item_name, descrip);
 	      item_data = XSTRING (item_name)->data;

@@ -254,7 +254,7 @@ init_menu_items ()
   if (NILP (menu_items))
     {
       menu_items_allocated = 60;
-      menu_items = Fmake_vector (make_number (menu_items_allocated), Qnil);
+      menu_items = Fmake_vector (make_fixnum (menu_items_allocated), Qnil);
     }
 
   menu_items_used = 0;
@@ -295,7 +295,7 @@ grow_menu_items ()
   old = menu_items;
 
   menu_items_allocated *= 2;
-  menu_items = Fmake_vector (make_number (menu_items_allocated), Qnil);
+  menu_items = Fmake_vector (make_fixnum (menu_items_allocated), Qnil);
   bcopy (XVECTOR (old)->contents, XVECTOR (menu_items)->contents,
 	 old_size * sizeof (Lisp_Object));
 }
@@ -2187,11 +2187,11 @@ w32_menu_display_help (HMENU menu, UINT item, UINT flags)
       /* (menu-item MENU-NAME PANE-NUMBER)  */
       menu_object = Fcons (Qmenu_item,
                            Fcons (pane_name,
-                                  Fcons (make_number (pane), Qnil)));
+                                  Fcons (make_fixnum (pane), Qnil)));
 
       show_help_echo (info.dwItemData ?
 		      build_string ((char *) info.dwItemData) : Qnil,
-                      Qnil, menu_object, make_number (item), 1);
+                      Qnil, menu_object, make_fixnum (item), 1);
     }
 }
 

@@ -750,7 +750,7 @@ extern Lisp_Object selected_frame;
    float.  Value is a C integer.  */
      
 #define PIXEL_X_FROM_CANON_X(F, X)			\
-     (INTEGERP (X)					\
+     (FIXNUMP (X)					\
       ? XINT (X) * CANON_X_UNIT (F)			\
       : (int) (XFLOAT_DATA (X) * CANON_X_UNIT (F)))
       
@@ -759,7 +759,7 @@ extern Lisp_Object selected_frame;
    or float.  Value is a C integer.  */
      
 #define PIXEL_Y_FROM_CANON_Y(F, Y)			\
-     (INTEGERP (Y)					\
+     (FIXNUMP (Y)					\
       ? XINT (Y) * CANON_Y_UNIT (F)			\
       : (int) (XFLOAT_DATA (Y) * CANON_Y_UNIT (F)))
 
@@ -771,7 +771,7 @@ extern Lisp_Object selected_frame;
 #define CANON_X_FROM_PIXEL_X(F, X)			\
      ((X) % CANON_X_UNIT (F) != 0			\
       ? make_float ((double) (X) / CANON_X_UNIT (F))	\
-      : make_number ((X) / CANON_X_UNIT (F)))
+      : make_fixnum ((X) / CANON_X_UNIT (F)))
 
 /* Convert pixel-value Y to canonical units.  F is the frame whose
    canonical character height is to be used.  Y is a C integer.
@@ -781,6 +781,6 @@ extern Lisp_Object selected_frame;
 #define CANON_Y_FROM_PIXEL_Y(F, Y)			\
      ((Y) % CANON_Y_UNIT (F) 				\
       ? make_float ((double) (Y) / CANON_Y_UNIT (F))	\
-      : make_number ((Y) / CANON_Y_UNIT (F)))	
+      : make_fixnum ((Y) / CANON_Y_UNIT (F)))	
 			     
 #endif /* not EMACS_FRAME_H */

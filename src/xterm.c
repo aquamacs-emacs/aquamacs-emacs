@@ -1639,7 +1639,7 @@ x_append_stretch_glyph (it, object, width, height, ascent)
    ASCENT must be in the range 0 <= ASCENT <= 100.  */
 
 #define NUMVAL(X)				\
-     ((INTEGERP (X) || FLOATP (X))		\
+     ((FIXNUMP (X) || FLOATP (X))		\
       ? XFLOATINT (X)				\
       : - 1)
 
@@ -2151,7 +2151,7 @@ x_produce_glyphs (it)
 	      && font_info->default_ascent
 	      && CHAR_TABLE_P (Vuse_default_ascent)
 	      && !NILP (Faref (Vuse_default_ascent,
-			       make_number (it->char_to_display))))
+			       make_fixnum (it->char_to_display))))
 	    highest = font_info->default_ascent + boff;
 
 	  /* Draw the first glyph at the normal position.  It may be
@@ -2209,7 +2209,7 @@ x_produce_glyphs (it)
 		  if (font_info && font_info->relative_compose
 		      && (! CHAR_TABLE_P (Vignore_relative_composition)
 			  || NILP (Faref (Vignore_relative_composition,
-					  make_number (ch)))))
+					  make_fixnum (ch)))))
 		    {
 
 		      if (- descent >= font_info->relative_compose)
@@ -6761,7 +6761,7 @@ note_mode_line_highlight (w, x, mode_line_p)
 	  /* If we're on a string with `help-echo' text property,
 	     arrange for the help to be displayed.  This is done by
 	     setting the global variable help_echo to the help string.  */
-	  help = Fget_text_property (make_number (glyph->charpos),
+	  help = Fget_text_property (make_fixnum (glyph->charpos),
 				     Qhelp_echo, glyph->object);
 	  if (!NILP (help))
 	    {
@@ -6772,13 +6772,13 @@ note_mode_line_highlight (w, x, mode_line_p)
 	    }
 
 	  /* Change the mouse pointer according to what is under X/Y.  */
-	  map = Fget_text_property (make_number (glyph->charpos),
+	  map = Fget_text_property (make_fixnum (glyph->charpos),
 				    Qlocal_map, glyph->object);
 	  if (KEYMAPP (map))
 	    cursor = f->output_data.x->nontext_cursor;
 	  else
 	    {
-	      map = Fget_text_property (make_number (glyph->charpos),
+	      map = Fget_text_property (make_fixnum (glyph->charpos),
 					Qkeymap, glyph->object);
 	      if (KEYMAPP (map))
 		cursor = f->output_data.x->nontext_cursor;
@@ -6915,7 +6915,7 @@ note_mouse_highlight (f, x, y)
       ZV = Z;
 
       /* Is this char mouse-active or does it have help-echo?  */
-      position = make_number (pos);
+      position = make_fixnum (pos);
 
       if (BUFFERP (object))
 	{
@@ -7018,10 +7018,10 @@ note_mouse_highlight (f, x, y)
 	      int ignore;
 
 	      beginning = Fmarker_position (w->start);
-	      end = make_number (BUF_Z (XBUFFER (object))
+	      end = make_fixnum (BUF_Z (XBUFFER (object))
 				 - XFASTINT (w->window_end_pos));
 	      before
-		= Fprevious_single_property_change (make_number (pos + 1),
+		= Fprevious_single_property_change (make_fixnum (pos + 1),
 						    Qmouse_face,
 						    object, beginning);
 	      after
@@ -7056,15 +7056,15 @@ note_mouse_highlight (f, x, y)
 	      Lisp_Object b, e;
 	      int ignore;
 		
-	      b = Fprevious_single_property_change (make_number (pos + 1),
+	      b = Fprevious_single_property_change (make_fixnum (pos + 1),
 						    Qmouse_face,
 						    object, Qnil);
 	      e = Fnext_single_property_change (position, Qmouse_face,
 						object, Qnil);
 	      if (NILP (b))
-		b = make_number (0);
+		b = make_fixnum (0);
 	      if (NILP (e))
-		e = make_number (XSTRING (object)->size - 1);
+		e = make_fixnum (XSTRING (object)->size - 1);
 	      fast_find_string_pos (w, XINT (b), object,
 				    &dpyinfo->mouse_face_beg_col,
 				    &dpyinfo->mouse_face_beg_row,
@@ -7114,7 +7114,7 @@ note_mouse_highlight (f, x, y)
 		&& charpos >= 0
 		&& charpos < XSTRING (object)->size)
 	      {
-		help = Fget_text_property (make_number (charpos),
+		help = Fget_text_property (make_fixnum (charpos),
 					   Qhelp_echo, object);
 		if (NILP (help))
 		  {
@@ -7126,7 +7126,7 @@ note_mouse_highlight (f, x, y)
 		    int pos = string_buffer_position (w, object, start);
 		    if (pos > 0)
 		      {
-			help = Fget_text_property (make_number (pos),
+			help = Fget_text_property (make_fixnum (pos),
 						   Qhelp_echo, w->buffer);
 			if (!NILP (help))
 			  {
@@ -7139,7 +7139,7 @@ note_mouse_highlight (f, x, y)
 	    else if (BUFFERP (object)
 		     && charpos >= BEGV
 		     && charpos < ZV)
-	      help = Fget_text_property (make_number (charpos), Qhelp_echo,
+	      help = Fget_text_property (make_fixnum (charpos), Qhelp_echo,
 					 object);
 	    
 	    if (!NILP (help))
@@ -8275,8 +8275,8 @@ x_scroll_bar_to_input_event (event, ievent)
   ievent->timestamp = XtLastTimestampProcessed (FRAME_X_DISPLAY (f));
   ievent->part = ev->data.l[1];
   ievent->code = ev->data.l[2];
-  ievent->x = make_number ((int) ev->data.l[3]);
-  ievent->y = make_number ((int) ev->data.l[4]);
+  ievent->x = make_fixnum ((int) ev->data.l[3]);
+  ievent->y = make_fixnum ((int) ev->data.l[4]);
   ievent->modifiers = 0;
 }
 
@@ -8339,7 +8339,7 @@ xm_scroll_callback (widget, client_data, call_data)
     case XmCR_DRAG:
       {
 	int slider_size;
-	int dragging_down_p = (INTEGERP (bar->dragging)
+	int dragging_down_p = (FIXNUMP (bar->dragging)
 			       && XINT (bar->dragging) <= cs->value);
 
 	/* Get the slider size.  */
@@ -8370,7 +8370,7 @@ xm_scroll_callback (widget, client_data, call_data)
 	    whole = XM_SB_RANGE;
 	    portion = min (cs->value - XM_SB_MIN, XM_SB_MAX - slider_size);
 	    part = scroll_bar_handle;
-	    bar->dragging = make_number (cs->value);
+	    bar->dragging = make_fixnum (cs->value);
 	  }
       }
       break;
@@ -8426,7 +8426,7 @@ xaw_jump_callback (widget, client_data, call_data)
     part = scroll_bar_handle;
 
   window_being_scrolled = bar->window;
-  bar->dragging = make_number (portion);
+  bar->dragging = make_fixnum (portion);
   last_scroll_bar_part = part;
   x_send_scroll_bar_event (bar->window, part, portion, whole);
 }
@@ -8747,7 +8747,7 @@ x_scroll_bar_create (w, top, left, width, height)
 {
   struct frame *f = XFRAME (w->frame);
   struct scroll_bar *bar
-    = XSCROLL_BAR (Fmake_vector (make_number (SCROLL_BAR_VEC_SIZE), Qnil));
+    = XSCROLL_BAR (Fmake_vector (make_fixnum (SCROLL_BAR_VEC_SIZE), Qnil));
 
   BLOCK_INPUT;
 
@@ -13304,7 +13304,7 @@ x_list_fonts (f, pattern, size, maxnames)
          The cache is an alist of the form:
 	 ((((PATTERN . MAXNAMES) . SCALABLE) (FONTNAME . WIDTH) ...) ...)  */
       tem = XCDR (dpyinfo->name_list_element);
-      key = Fcons (Fcons (pattern, make_number (maxnames)),
+      key = Fcons (Fcons (pattern, make_fixnum (maxnames)),
 		   allow_scalable_fonts_p ? Qt : Qnil);
       list = Fassoc (key, tem);
       if (!NILP (list))
@@ -13420,7 +13420,7 @@ x_list_fonts (f, pattern, size, maxnames)
 			      >= 0))
 			/* We can set the value of PIXEL_SIZE to the
 			  width of this font.  */
-			list = Fcons (Fcons (tem, make_number (width)), list);
+			list = Fcons (Fcons (tem, make_fixnum (width)), list);
 		      else
 			/* For the moment, width is not known.  */
 			list = Fcons (Fcons (tem, Qnil), list);
@@ -13454,7 +13454,7 @@ x_list_fonts (f, pattern, size, maxnames)
 	      continue;
 	    }
 
-	  if (!INTEGERP (XCDR (tem)))
+	  if (!FIXNUMP (XCDR (tem)))
 	    {
 	      /* Since we have not yet known the size of this font, we
 		 must try slow function call XLoadQueryFont.  */
@@ -13478,15 +13478,15 @@ x_list_fonts (f, pattern, size, maxnames)
 		{
 		  XCDR (tem)
 		    = (thisinfo->min_bounds.width == 0
-		       ? make_number (0)
-		       : make_number (thisinfo->max_bounds.width));
+		       ? make_fixnum (0)
+		       : make_fixnum (thisinfo->max_bounds.width));
 		  XFreeFont (dpy, thisinfo);
 		}
 	      else
 		/* For unknown reason, the previous call of XListFont had
 		  returned a font which can't be opened.  Record the size
 		  as 0 not to try to open it again.  */
-		XCDR (tem) = make_number (0);
+		XCDR (tem) = make_fixnum (0);
 	    }
 
 	  found_size = XINT (XCDR (tem));
@@ -13749,23 +13749,23 @@ x_load_font (f, fontname, size)
 	   the cache for x_list_fonts.  */
 	Lisp_Object lispy_name = build_string (fontname);
 	Lisp_Object lispy_full_name = build_string (fontp->full_name);
-	Lisp_Object key = Fcons (Fcons (lispy_name, make_number (256)),
+	Lisp_Object key = Fcons (Fcons (lispy_name, make_fixnum (256)),
 				 Qnil);
 
 	XCDR (dpyinfo->name_list_element)
 	  = Fcons (Fcons (key,
 			  Fcons (Fcons (lispy_full_name,
-					make_number (fontp->size)),
+					make_fixnum (fontp->size)),
 				 Qnil)),
 		   XCDR (dpyinfo->name_list_element));
 	if (full_name)
 	  {
-	    key = Fcons (Fcons (lispy_full_name, make_number (256)),
+	    key = Fcons (Fcons (lispy_full_name, make_fixnum (256)),
 			 Qnil);
 	    XCDR (dpyinfo->name_list_element)
 	      = Fcons (Fcons (key,
 			      Fcons (Fcons (lispy_full_name,
-					    make_number (fontp->size)),
+					    make_fixnum (fontp->size)),
 				     Qnil)),
 		       XCDR (dpyinfo->name_list_element));
 	  }

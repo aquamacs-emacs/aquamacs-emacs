@@ -382,16 +382,16 @@ x_get_local_selection (selection_symbol, target_type)
   if (STRINGP (check)
       || VECTORP (check)
       || SYMBOLP (check)
-      || INTEGERP (check)
+      || FIXNUMP (check)
       || NILP (value))
     return value;
   /* Check for a value that cons_to_long could handle.  */
   else if (CONSP (check)
-	   && INTEGERP (XCAR (check))
-	   && (INTEGERP (XCDR (check))
+	   && FIXNUMP (XCAR (check))
+	   && (FIXNUMP (XCDR (check))
 	       ||
 	       (CONSP (XCDR (check))
-		&& INTEGERP (XCAR (XCDR (check)))
+		&& FIXNUMP (XCAR (XCDR (check)))
 		&& NILP (XCDR (XCDR (check))))))
     return value;
   else
@@ -1577,10 +1577,10 @@ selection_data_to_lisp_data (display, data, size, type, format)
 	return x_atom_to_symbol (dpyinfo, display, *((Atom *) data));
       else
 	{
-	  Lisp_Object v = Fmake_vector (make_number (size / sizeof (Atom)),
-					make_number (0));
+	  Lisp_Object v = Fmake_vector (make_fixnum (size / sizeof (Atom)),
+					make_fixnum (0));
 	  for (i = 0; i < size / sizeof (Atom); i++)
-	    Faset (v, make_number (i),
+	    Faset (v, make_fixnum (i),
 		   x_atom_to_symbol (dpyinfo, display, ((Atom *) data) [i]));
 	  return v;
 	}
@@ -1593,7 +1593,7 @@ selection_data_to_lisp_data (display, data, size, type, format)
   else if (format == 32 && size == sizeof (long))
     return long_to_cons (((unsigned long *) data) [0]);
   else if (format == 16 && size == sizeof (short))
-    return make_number ((int) (((unsigned short *) data) [0]));
+    return make_fixnum ((int) (((unsigned short *) data) [0]));
 
   /* Convert any other kind of data to a vector of numbers, represented
      as above (as an integer, or a cons of two 16 bit integers.)
@@ -1602,22 +1602,22 @@ selection_data_to_lisp_data (display, data, size, type, format)
     {
       int i;
       Lisp_Object v;
-      v = Fmake_vector (make_number (size / 2), make_number (0));
+      v = Fmake_vector (make_fixnum (size / 2), make_fixnum (0));
       for (i = 0; i < size / 2; i++)
 	{
 	  int j = (int) ((unsigned short *) data) [i];
-	  Faset (v, make_number (i), make_number (j));
+	  Faset (v, make_fixnum (i), make_fixnum (j));
 	}
       return v;
     }
   else
     {
       int i;
-      Lisp_Object v = Fmake_vector (make_number (size / 4), make_number (0));
+      Lisp_Object v = Fmake_vector (make_fixnum (size / 4), make_fixnum (0));
       for (i = 0; i < size / 4; i++)
 	{
 	  unsigned long j = ((unsigned long *) data) [i];
-	  Faset (v, make_number (i), long_to_cons (j));
+	  Faset (v, make_fixnum (i), long_to_cons (j));
 	}
       return v;
     }
@@ -1687,7 +1687,7 @@ lisp_data_to_selection_data (display, obj,
       (*(Atom **) data_ret) [0] = symbol_to_x_atom (dpyinfo, display, obj);
       if (NILP (type)) type = QATOM;
     }
-  else if (INTEGERP (obj)
+  else if (FIXNUMP (obj)
 	   && XINT (obj) < 0xFFFF
 	   && XINT (obj) > -0xFFFF)
     {
@@ -1698,11 +1698,11 @@ lisp_data_to_selection_data (display, obj,
       (*(short **) data_ret) [0] = (short) XINT (obj);
       if (NILP (type)) type = QINTEGER;
     }
-  else if (INTEGERP (obj)
-	   || (CONSP (obj) && INTEGERP (XCAR (obj))
-	       && (INTEGERP (XCDR (obj))
+  else if (FIXNUMP (obj)
+	   || (CONSP (obj) && FIXNUMP (XCAR (obj))
+	       && (FIXNUMP (XCDR (obj))
 		   || (CONSP (XCDR (obj))
-		       && INTEGERP (XCAR (XCDR (obj)))))))
+		       && FIXNUMP (XCAR (XCDR (obj)))))))
     {
       *format_ret = 32;
       *size_ret = 1;
@@ -1779,7 +1779,7 @@ lisp_data_to_selection_data (display, obj,
 	  for (i = 0; i < *size_ret; i++)
 	    if (CONSP (XVECTOR (obj)->contents [i]))
 	      *format_ret = 32;
-	    else if (!INTEGERP (XVECTOR (obj)->contents [i]))
+	    else if (!FIXNUMP (XVECTOR (obj)->contents [i]))
 	      Fsignal (Qerror, /* Qselection_error */
 		       Fcons (build_string
 	("elements of selection vector must be integers or conses of integers"),
@@ -1808,20 +1808,20 @@ clean_local_selection_data (obj)
      Lisp_Object obj;
 {
   if (CONSP (obj)
-      && INTEGERP (XCAR (obj))
+      && FIXNUMP (XCAR (obj))
       && CONSP (XCDR (obj))
-      && INTEGERP (XCAR (XCDR (obj)))
+      && FIXNUMP (XCAR (XCDR (obj)))
       && NILP (XCDR (XCDR (obj))))
     obj = Fcons (XCAR (obj), XCDR (obj));
 
   if (CONSP (obj)
-      && INTEGERP (XCAR (obj))
-      && INTEGERP (XCDR (obj)))
+      && FIXNUMP (XCAR (obj))
+      && FIXNUMP (XCDR (obj)))
     {
       if (XINT (XCAR (obj)) == 0)
 	return XCDR (obj);
       if (XINT (XCAR (obj)) == -1)
-	return make_number (- XINT (XCDR (obj)));
+	return make_fixnum (- XINT (XCDR (obj)));
     }
   if (VECTORP (obj))
     {
@@ -1830,7 +1830,7 @@ clean_local_selection_data (obj)
       Lisp_Object copy;
       if (size == 1)
 	return clean_local_selection_data (XVECTOR (obj)->contents [0]);
-      copy = Fmake_vector (make_number (size), Qnil);
+      copy = Fmake_vector (make_fixnum (size), Qnil);
       for (i = 0; i < size; i++)
 	XVECTOR (copy)->contents [i]
 	  = clean_local_selection_data (XVECTOR (obj)->contents [i]);
@@ -2122,7 +2122,7 @@ DEFUN ("x-get-cut-buffer-internal", Fx_get_cut_buffer_internal,
     Fsignal (Qerror,
 	     Fcons (build_string ("cut buffer doesn't contain 8-bit data"),
 		    Fcons (x_atom_to_symbol (dpyinfo, display, type),
-			   Fcons (make_number (format), Qnil))));
+			   Fcons (make_fixnum (format), Qnil))));
 
   ret = (bytes ? make_string ((char *) data, bytes) : Qnil);
   /* Use xfree, not XFree, because x_get_window_property

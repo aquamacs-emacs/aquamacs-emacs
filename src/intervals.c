@@ -1672,8 +1672,8 @@ graft_intervals_into_buffer (source, position, length, buffer, inherit)
 	  int saved_inhibit_modification_hooks = inhibit_modification_hooks;
 	  XSETBUFFER (buf, buffer);
 	  inhibit_modification_hooks = 1;
-	  Fset_text_properties (make_number (position),
-				make_number (position + length),
+	  Fset_text_properties (make_fixnum (position),
+				make_fixnum (position + length),
 				Qnil, buf);
 	  inhibit_modification_hooks = saved_inhibit_modification_hooks;
 	}
@@ -1967,21 +1967,21 @@ set_point_both (buffer, charpos, bytepos)
 
       if (backwards)
 	{
-	  intangible_propval = Fget_char_property (make_number (charpos),
+	  intangible_propval = Fget_char_property (make_fixnum (charpos),
 						   Qintangible, Qnil);
 
 	  /* If following char is intangible,
 	     skip back over all chars with matching intangible property.  */
 	  if (! NILP (intangible_propval))
 	    while (XINT (pos) > BUF_BEGV (buffer)
-		   && EQ (Fget_char_property (make_number (XINT (pos) - 1),
+		   && EQ (Fget_char_property (make_fixnum (XINT (pos) - 1),
 					      Qintangible, Qnil),
 			  intangible_propval))
 	      pos = Fprevious_char_property_change (pos, Qnil);
 	}
       else
 	{
-	  intangible_propval = Fget_char_property (make_number (charpos - 1),
+	  intangible_propval = Fget_char_property (make_fixnum (charpos - 1),
 						   Qintangible, Qnil);
 
 	  /* If following char is intangible,
@@ -2046,18 +2046,18 @@ set_point_both (buffer, charpos, bytepos)
 	enter_before = Qnil;
 
       if (! EQ (leave_before, enter_before) && !NILP (leave_before))
-	call2 (leave_before, make_number (old_position),
-	       make_number (charpos));
+	call2 (leave_before, make_fixnum (old_position),
+	       make_fixnum (charpos));
       if (! EQ (leave_after, enter_after) && !NILP (leave_after))
-	call2 (leave_after, make_number (old_position),
-	       make_number (charpos));
+	call2 (leave_after, make_fixnum (old_position),
+	       make_fixnum (charpos));
 
       if (! EQ (enter_before, leave_before) && !NILP (enter_before))
-	call2 (enter_before, make_number (old_position),
-	       make_number (charpos));
+	call2 (enter_before, make_fixnum (old_position),
+	       make_fixnum (charpos));
       if (! EQ (enter_after, leave_after) && !NILP (enter_after))
-	call2 (enter_after, make_number (old_position),
-	       make_number (charpos));
+	call2 (enter_after, make_fixnum (old_position),
+	       make_fixnum (charpos));
     }
 }
 
@@ -2087,7 +2087,7 @@ move_if_not_intangible (position)
 	 skip back over all chars with matching intangible property.  */
       if (! NILP (intangible_propval))
 	while (XINT (pos) > BEGV
-	       && EQ (Fget_char_property (make_number (XINT (pos) - 1),
+	       && EQ (Fget_char_property (make_fixnum (XINT (pos) - 1),
 					  Qintangible, Qnil),
 		      intangible_propval))
 	  pos = Fprevious_char_property_change (pos, Qnil);
@@ -2096,7 +2096,7 @@ move_if_not_intangible (position)
     {
       /* We want to move backward, so check the text after POSITION.  */
 
-      intangible_propval = Fget_char_property (make_number (XINT (pos) - 1),
+      intangible_propval = Fget_char_property (make_fixnum (XINT (pos) - 1),
 					       Qintangible, Qnil);
 
       /* If following char is intangible,

@@ -353,7 +353,7 @@ translate_char (table, c, charset, c1, c2)
 
   if (c < 0) c = MAKE_CHAR (charset, (c1 & 0x7F) , (c2 & 0x7F));
   if (!CHAR_TABLE_P (table)
-      || (ch = Faref (table, make_number (c)), !NATNUMP (ch)))
+      || (ch = Faref (table, make_fixnum (c)), !NATNUMP (ch)))
     return c;
 
   SPLIT_CHAR (XFASTINT (ch), alt_charset, alt_c1, alt_c2);
@@ -387,7 +387,7 @@ unibyte_char_to_multibyte (c)
 
       if (! NILP (Vnonascii_translation_table))
 	{
-	  c = XINT (Faref (Vnonascii_translation_table, make_number (c)));
+	  c = XINT (Faref (Vnonascii_translation_table, make_fixnum (c)));
 	  if (c >= 0400 && ! char_valid_p (c, 0))
 	    c = c_save + DEFAULT_NONASCII_INSERT_OFFSET;
 	}
@@ -408,7 +408,7 @@ unibyte_char_to_multibyte (c)
    on Vnonascii_translation_table or nonascii_insert_offset.  If
    REV_TBL is non-nil, it should be a reverse table of
    Vnonascii_translation_table, i.e. what given by:
-     Fchar_table_extra_slot (Vnonascii_translation_table, make_number (0))  */
+     Fchar_table_extra_slot (Vnonascii_translation_table, make_fixnum (0))  */
 
 int
 multibyte_char_to_unibyte (c, rev_tbl)
@@ -422,12 +422,12 @@ multibyte_char_to_unibyte (c, rev_tbl)
       if (! CHAR_TABLE_P (rev_tbl)
 	  && CHAR_TABLE_P (Vnonascii_translation_table))
 	rev_tbl = Fchar_table_extra_slot (Vnonascii_translation_table,
-					  make_number (0));
+					  make_fixnum (0));
       if (CHAR_TABLE_P (rev_tbl))
 	{
 	  Lisp_Object temp;
-	  temp = Faref (rev_tbl, make_number (c));
-	  if (INTEGERP (temp))
+	  temp = Faref (rev_tbl, make_fixnum (c));
+	  if (FIXNUMP (temp))
 	    c = XINT (temp);
 	  if (c >= 256)
 	    c = (c_save & 0177) + 0200;
@@ -465,7 +465,7 @@ update_charset_table (charset_id, dimension, chars, width, direction,
 
   if (NILP (CHARSET_TABLE_ENTRY (charset)))
     CHARSET_TABLE_ENTRY (charset)
-      = Fmake_vector (make_number (CHARSET_MAX_IDX), Qnil);
+      = Fmake_vector (make_fixnum (CHARSET_MAX_IDX), Qnil);
 
   if (NILP (long_name))
     long_name = short_name;
@@ -502,15 +502,15 @@ update_charset_table (charset_id, dimension, chars, width, direction,
     }
 
   CHARSET_TABLE_INFO (charset, CHARSET_ID_IDX) = charset_id;
-  CHARSET_TABLE_INFO (charset, CHARSET_BYTES_IDX) = make_number (bytes);
+  CHARSET_TABLE_INFO (charset, CHARSET_BYTES_IDX) = make_fixnum (bytes);
   CHARSET_TABLE_INFO (charset, CHARSET_DIMENSION_IDX) = dimension;
   CHARSET_TABLE_INFO (charset, CHARSET_CHARS_IDX) = chars;
   CHARSET_TABLE_INFO (charset, CHARSET_WIDTH_IDX) = width;
   CHARSET_TABLE_INFO (charset, CHARSET_DIRECTION_IDX) = direction;
   CHARSET_TABLE_INFO (charset, CHARSET_LEADING_CODE_BASE_IDX)
-    = make_number (leading_code_base);
+    = make_fixnum (leading_code_base);
   CHARSET_TABLE_INFO (charset, CHARSET_LEADING_CODE_EXT_IDX)
-    = make_number (leading_code_ext);
+    = make_fixnum (leading_code_ext);
   CHARSET_TABLE_INFO (charset, CHARSET_ISO_FINAL_CHAR_IDX) = iso_final_char;
   CHARSET_TABLE_INFO (charset, CHARSET_ISO_GRAPHIC_PLANE_IDX)
     = iso_graphic_plane;
@@ -536,7 +536,7 @@ update_charset_table (charset_id, dimension, chars, width, direction,
 	      && CHARSET_DIRECTION (i) != XINT (direction))
 	    {
 	      CHARSET_TABLE_INFO (charset, CHARSET_REVERSE_CHARSET_IDX)
-		= make_number (i);
+		= make_fixnum (i);
 	      CHARSET_TABLE_INFO (i, CHARSET_REVERSE_CHARSET_IDX) = charset_id;
 	      break;
 	    }
@@ -544,7 +544,7 @@ update_charset_table (charset_id, dimension, chars, width, direction,
     if (i > MAX_CHARSET)
       /* No such a charset.  */
       CHARSET_TABLE_INFO (charset, CHARSET_REVERSE_CHARSET_IDX)
-	= make_number (-1);
+	= make_fixnum (-1);
   }
 
   if (charset != CHARSET_ASCII && charset != CHARSET_8_BIT_GRAPHIC
@@ -608,7 +608,7 @@ get_new_private_charset_id (dimension, width)
   for (charset = from; charset < to; charset++)
     if (!CHARSET_DEFINED_P (charset)) break;
 
-  return make_number (charset < to ? charset : 0);
+  return make_fixnum (charset < to ? charset : 0);
 }
 
 DEFUN ("define-charset", Fdefine_charset, Sdefine_charset, 3, 3, 0,
@@ -662,13 +662,13 @@ DESCRIPTION (string) is the description string of the charset.")
 
   vec = XVECTOR (info_vector)->contents;
   if (XVECTOR (info_vector)->size != 9
-      || !INTEGERP (vec[0]) || !(XINT (vec[0]) == 1 || XINT (vec[0]) == 2)
-      || !INTEGERP (vec[1]) || !(XINT (vec[1]) == 94 || XINT (vec[1]) == 96)
-      || !INTEGERP (vec[2]) || !(XINT (vec[2]) == 1 || XINT (vec[2]) == 2)
-      || !INTEGERP (vec[3]) || !(XINT (vec[3]) == 0 || XINT (vec[3]) == 1)
-      || !INTEGERP (vec[4])
+      || !FIXNUMP (vec[0]) || !(XINT (vec[0]) == 1 || XINT (vec[0]) == 2)
+      || !FIXNUMP (vec[1]) || !(XINT (vec[1]) == 94 || XINT (vec[1]) == 96)
+      || !FIXNUMP (vec[2]) || !(XINT (vec[2]) == 1 || XINT (vec[2]) == 2)
+      || !FIXNUMP (vec[3]) || !(XINT (vec[3]) == 0 || XINT (vec[3]) == 1)
+      || !FIXNUMP (vec[4])
       || !(XINT (vec[4]) == -1 || XINT (vec[4]) >= '0' && XINT (vec[4]) <= '~')
-      || !INTEGERP (vec[5])
+      || !FIXNUMP (vec[5])
       || !(XINT (vec[5]) == -1 || XINT (vec[5]) == 0 || XINT (vec[5]) == 1)
       || !STRINGP (vec[6])
       || !STRINGP (vec[7])
@@ -725,10 +725,10 @@ return nil.")
 	   XINT (chars));
   for (final_char = '0'; final_char <= '?'; final_char++)
     {
-      if (ISO_CHARSET_TABLE (dimension, chars, make_number (final_char)) < 0)
+      if (ISO_CHARSET_TABLE (dimension, chars, make_fixnum (final_char)) < 0)
 	break;
     }
-  return (final_char <= '?' ? make_number (final_char) : Qnil);
+  return (final_char <= '?' ? make_fixnum (final_char) : Qnil);
 }
 
 DEFUN ("declare-equiv-charset", Fdeclare_equiv_charset, Sdeclare_equiv_charset,
@@ -962,7 +962,7 @@ DEFUN ("make-char-internal", Fmake_char_internal, Smake_char_internal, 1, 3, 0,
     {
       if (c1 < 0 || c1 > 0x7F)
 	goto invalid_code_posints;
-      return make_number (c1);
+      return make_fixnum (c1);
     }
   else if (charset_id == CHARSET_8_BIT_CONTROL)
     {
@@ -970,7 +970,7 @@ DEFUN ("make-char-internal", Fmake_char_internal, Smake_char_internal, 1, 3, 0,
 	c1 = 0x80;
       else if (c1 < 0x80 || c1 > 0x9F)
 	goto invalid_code_posints;
-      return make_number (c1);
+      return make_fixnum (c1);
     }
   else if (charset_id == CHARSET_8_BIT_GRAPHIC)
     {
@@ -978,7 +978,7 @@ DEFUN ("make-char-internal", Fmake_char_internal, Smake_char_internal, 1, 3, 0,
 	c1 = 0xA0;
       else if (c1 < 0xA0 || c1 > 0xFF)
 	goto invalid_code_posints;
-      return make_number (c1);
+      return make_fixnum (c1);
     }
   else if (c1 < 0 || c1 > 0xFF || c2 < 0 || c2 > 0xFF)
     goto invalid_code_posints;
@@ -990,7 +990,7 @@ DEFUN ("make-char-internal", Fmake_char_internal, Smake_char_internal, 1, 3, 0,
 	 ? !CHAR_COMPONENTS_VALID_P (charset_id, c1, 0x20)
 	 : !CHAR_COMPONENTS_VALID_P (charset_id, c1, c2)))
     goto invalid_code_posints;
-  return make_number (MAKE_CHAR (charset_id, c1, c2));
+  return make_fixnum (MAKE_CHAR (charset_id, c1, c2));
 
  invalid_code_posints:
   error ("Invalid code points for charset ID %d: %d %d", charset_id, c1, c2);
@@ -1012,8 +1012,8 @@ return a list of symbol `unknown' and CHAR.")
   SPLIT_CHAR (XFASTINT (ch), charset, c1, c2);
   return (c2 >= 0
 	  ? Fcons (CHARSET_SYMBOL (charset),
-		   Fcons (make_number (c1), Fcons (make_number (c2), Qnil)))
-	  : Fcons (CHARSET_SYMBOL (charset), Fcons (make_number (c1), Qnil)));
+		   Fcons (make_fixnum (c1), Fcons (make_fixnum (c2), Qnil)))
+	  : Fcons (CHARSET_SYMBOL (charset), Fcons (make_fixnum (c1), Qnil)));
 }
 
 DEFUN ("char-charset", Fchar_charset, Schar_charset, 1, 1, 0,
@@ -1037,7 +1037,7 @@ If POS is out of range, the value is nil.")
   int charset;
 
   ch = Fchar_after (pos);
-  if (! INTEGERP (ch))
+  if (! FIXNUMP (ch))
     return ch;
   charset = CHAR_CHARSET (XINT (ch));
   return CHARSET_SYMBOL (charset);
@@ -1124,7 +1124,7 @@ The conversion is done based on `nonascii-translation-table' (which see)\n\
   c = unibyte_char_to_multibyte (c);
   if (c < 0)
     error ("Can't convert to multibyte character: %d", XINT (ch));
-  return make_number (c);
+  return make_fixnum (c);
 }
 
 DEFUN ("multibyte-char-to-unibyte", Fmultibyte_char_to_unibyte,
@@ -1144,7 +1144,7 @@ The conversion is done based on `nonascii-translation-table' (which see)\n\
   c = multibyte_char_to_unibyte (c, Qnil);
   if (c < 0)
     error ("Can't convert to unibyte character: %d", XINT (ch));
-  return make_number (c);
+  return make_fixnum (c);
 }
 
 DEFUN ("char-bytes", Fchar_bytes, Schar_bytes, 1, 1, 0,
@@ -1154,7 +1154,7 @@ This is now an obsolete function.  We keep it just for backward compatibility.")
      Lisp_Object ch;
 {
   CHECK_NUMBER (ch, 0);
-  return make_number (1);
+  return make_fixnum (1);
 }
 
 /* Return how many bytes C will occupy in a multibyte buffer.
@@ -1414,7 +1414,7 @@ DEFUN ("chars-in-region", Fchars_in_region, Schars_in_region, 2, 2, 0,
   from = min (XFASTINT (beg), XFASTINT (end));
   to = max (XFASTINT (beg), XFASTINT (end));
 
-  return make_number (to - from);
+  return make_fixnum (to - from);
 }
 
 /* Return the number of characters in the NBYTES bytes at PTR.
@@ -1688,12 +1688,12 @@ init_charset_once ()
 
   /* Now we are ready to set up this property, so we can
      create the charset table.  */
-  Fput (Qcharset_table, Qchar_table_extra_slots, make_number (0));
+  Fput (Qcharset_table, Qchar_table_extra_slots, make_fixnum (0));
   Vcharset_table = Fmake_char_table (Qcharset_table, Qnil);
 
   Qunknown = intern ("unknown");
   staticpro (&Qunknown);
-  Vcharset_symbol_table = Fmake_vector (make_number (MAX_CHARSET + 1),
+  Vcharset_symbol_table = Fmake_vector (make_fixnum (MAX_CHARSET + 1),
 					Qunknown);
 
   /* Setup tables.  */
@@ -1723,13 +1723,13 @@ init_charset_once ()
 
     val = Qnil;
     for (i = 0x81; i < 0x90; i++)
-      val = Fcons (make_number ((i - 0x70) << 7), val);
+      val = Fcons (make_fixnum ((i - 0x70) << 7), val);
     for (; i < 0x9A; i++)
-      val = Fcons (make_number ((i - 0x8F) << 14), val);
+      val = Fcons (make_fixnum ((i - 0x8F) << 14), val);
     for (i = 0xA0; i < 0xF0; i++)
-      val = Fcons (make_number ((i - 0x70) << 7), val);
+      val = Fcons (make_fixnum ((i - 0x70) << 7), val);
     for (; i < 0xFF; i++)
-      val = Fcons (make_number ((i - 0xE0) << 14), val);
+      val = Fcons (make_fixnum ((i - 0xE0) << 14), val);
     Vgeneric_character_list = Fnreverse (val);
   }
 
@@ -1756,24 +1756,24 @@ syms_of_charset ()
 
   /* Define special charsets ascii, eight-bit-control, and
      eight-bit-graphic.  */
-  update_charset_table (make_number (CHARSET_ASCII),
-			make_number (1), make_number (94),
-			make_number (1),
-			make_number (0),
-			make_number ('B'),
-			make_number (0),
+  update_charset_table (make_fixnum (CHARSET_ASCII),
+			make_fixnum (1), make_fixnum (94),
+			make_fixnum (1),
+			make_fixnum (0),
+			make_fixnum ('B'),
+			make_fixnum (0),
 			build_string ("ASCII"),
 			Qnil,	/* same as above */
 			build_string ("ASCII (ISO646 IRV)"));
   CHARSET_SYMBOL (CHARSET_ASCII) = Qascii;
   Fput (Qascii, Qcharset, CHARSET_TABLE_ENTRY (CHARSET_ASCII));
 
-  update_charset_table (make_number (CHARSET_8_BIT_CONTROL),
-			make_number (1), make_number (96),
-			make_number (4),
-			make_number (0),
-			make_number (-1),
-			make_number (-1),
+  update_charset_table (make_fixnum (CHARSET_8_BIT_CONTROL),
+			make_fixnum (1), make_fixnum (96),
+			make_fixnum (4),
+			make_fixnum (0),
+			make_fixnum (-1),
+			make_fixnum (-1),
 			build_string ("8-bit control code (0x80..0x9F)"),
 			Qnil,	/* same as above */
 			Qnil);	/* same as above */
@@ -1781,12 +1781,12 @@ syms_of_charset ()
   Fput (Qeight_bit_control, Qcharset,
 	CHARSET_TABLE_ENTRY (CHARSET_8_BIT_CONTROL));
 
-  update_charset_table (make_number (CHARSET_8_BIT_GRAPHIC),
-			make_number (1), make_number (96),
-			make_number (4),
-			make_number (0),
-			make_number (-1),
-			make_number (-1),
+  update_charset_table (make_fixnum (CHARSET_8_BIT_GRAPHIC),
+			make_fixnum (1), make_fixnum (96),
+			make_fixnum (4),
+			make_fixnum (0),
+			make_fixnum (-1),
+			make_fixnum (-1),
 			build_string ("8-bit graphic char (0xA0..0xFF)"),
 			Qnil,	/* same as above */
 			Qnil);	/* same as above */
@@ -1796,7 +1796,7 @@ syms_of_charset ()
 
   Qauto_fill_chars = intern ("auto-fill-chars");
   staticpro (&Qauto_fill_chars);
-  Fput (Qauto_fill_chars, Qchar_table_extra_slots, make_number (0));
+  Fput (Qauto_fill_chars, Qchar_table_extra_slots, make_fixnum (0));
 
   defsubr (&Sdefine_charset);
   defsubr (&Sgeneric_character_list);
@@ -1828,7 +1828,7 @@ syms_of_charset ()
   DEFVAR_LISP ("translation-table-vector",  &Vtranslation_table_vector,
     "Vector of cons cell of a symbol and translation table ever defined.\n\
 An ID of a translation table is an index of this vector.");
-  Vtranslation_table_vector = Fmake_vector (make_number (16), Qnil);
+  Vtranslation_table_vector = Fmake_vector (make_fixnum (16), Qnil);
 
   DEFVAR_INT ("leading-code-private-11", &leading_code_private_11,
     "Leading-code of private TYPE9N charset of column-width 1.");
@@ -1872,8 +1872,8 @@ See also the docstring of `make-translation-table'.");
     "A char-table for characters which invoke auto-filling.\n\
 Such characters have value t in this table.");
   Vauto_fill_chars = Fmake_char_table (Qauto_fill_chars, Qnil);
-  CHAR_TABLE_SET (Vauto_fill_chars, make_number (' '), Qt);
-  CHAR_TABLE_SET (Vauto_fill_chars, make_number ('\n'), Qt);
+  CHAR_TABLE_SET (Vauto_fill_chars, make_fixnum (' '), Qt);
+  CHAR_TABLE_SET (Vauto_fill_chars, make_fixnum ('\n'), Qt);
 }
 
 #endif /* emacs */

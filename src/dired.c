@@ -196,8 +196,8 @@ directory_files_internal (directory, full, match, nosort, attrs)
      file-attributes on filenames, both of which can throw, so we must
      do a proper unwind-protect.  */
   record_unwind_protect (directory_files_internal_unwind,
-			 Fcons (make_number (((unsigned long) d) >> 16),
-				make_number (((unsigned long) d) & 0xffff)));
+			 Fcons (make_fixnum (((unsigned long) d) >> 16),
+				make_fixnum (((unsigned long) d) & 0xffff)));
 
   directory_nbytes = STRING_BYTES (XSTRING (directory));
   re_match_object = Qt;
@@ -693,8 +693,8 @@ file_name_completion (file, dirname, all_flag, ver_flag)
     }
   if (matchcount == 1 && bestmatchsize == XSTRING (file)->size)
     return Qt;
-  bestmatch = Fsubstring (bestmatch, make_number (0),
-			  make_number (bestmatchsize));
+  bestmatch = Fsubstring (bestmatch, make_fixnum (0),
+			  make_fixnum (bestmatchsize));
   /* Now that we got the right initial segment of BESTMATCH,
      decode it from the coding system in use.  */
   bestmatch = DECODE_FILE (bestmatch);
@@ -793,7 +793,7 @@ Returns nil if the file cannot be opened or if there is no version limit.")
   if (xabfhc.xab$w_verlimit == 32767)
     return Qnil;		/* No version limit */
   else
-    return make_number (xabfhc.xab$w_verlimit);
+    return make_fixnum (xabfhc.xab$w_verlimit);
 }
 
 #endif /* VMS */
@@ -802,8 +802,8 @@ Lisp_Object
 make_time (time)
      time_t time;
 {
-  return Fcons (make_number (time >> 16),
-		Fcons (make_number (time & 0177777), Qnil));
+  return Fcons (make_fixnum (time >> 16),
+		Fcons (make_fixnum (time & 0177777), Qnil));
 }
 
 DEFUN ("file-attributes", Ffile_attributes, Sfile_attributes, 1, 1, 0,
@@ -865,13 +865,13 @@ If file does not exist, returns nil.")
       values[0] = Ffile_symlink_p (filename); break;
 #endif
     }
-  values[1] = make_number (s.st_nlink);
-  values[2] = make_number (s.st_uid);
-  values[3] = make_number (s.st_gid);
+  values[1] = make_fixnum (s.st_nlink);
+  values[2] = make_fixnum (s.st_uid);
+  values[3] = make_fixnum (s.st_gid);
   values[4] = make_time (s.st_atime);
   values[5] = make_time (s.st_mtime);
   values[6] = make_time (s.st_ctime);
-  values[7] = make_number (s.st_size);
+  values[7] = make_fixnum (s.st_size);
   /* If the size is out of range for an integer, return a float.  */
   if (XINT (values[7]) != s.st_size)
     values[7] = make_float ((double)s.st_size);
@@ -892,18 +892,18 @@ If file does not exist, returns nil.")
   if (s.st_ino & (((EMACS_INT) (-1)) << VALBITS))
     /* To allow inode numbers larger than VALBITS, separate the bottom
        16 bits.  */
-    values[10] = Fcons (make_number (s.st_ino >> 16),
-			make_number (s.st_ino & 0xffff));
+    values[10] = Fcons (make_fixnum (s.st_ino >> 16),
+			make_fixnum (s.st_ino & 0xffff));
   else
     /* But keep the most common cases as integers.  */
-    values[10] = make_number (s.st_ino);
+    values[10] = make_fixnum (s.st_ino);
 
   /* Likewise for device.  */
   if (s.st_dev & (((EMACS_INT) (-1)) << VALBITS))
-    values[11] = Fcons (make_number (s.st_dev >> 16),
-			make_number (s.st_dev & 0xffff));
+    values[11] = Fcons (make_fixnum (s.st_dev >> 16),
+			make_fixnum (s.st_dev & 0xffff));
   else
-    values[11] = make_number (s.st_dev);
+    values[11] = make_fixnum (s.st_dev);
 
   return Flist (sizeof(values) / sizeof(values[0]), values);
 }

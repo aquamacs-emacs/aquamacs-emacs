@@ -1835,7 +1835,7 @@ x_append_stretch_glyph (it, object, width, height, ascent)
    ASCENT must be in the range 0 <= ASCENT <= 100.  */
 
 #define NUMVAL(X)				\
-     ((INTEGERP (X) || FLOATP (X))		\
+     ((FIXNUMP (X) || FLOATP (X))		\
       ? XFLOATINT (X)				\
       : - 1)
 
@@ -2364,7 +2364,7 @@ x_produce_glyphs (it)
 	      && font_info->default_ascent
 	      && CHAR_TABLE_P (Vuse_default_ascent)
 	      && !NILP (Faref (Vuse_default_ascent,
-			       make_number (it->char_to_display))))
+			       make_fixnum (it->char_to_display))))
 	    highest = font_info->default_ascent + boff;
 
 	  /* Draw the first glyph at the normal position.  It may be
@@ -2429,7 +2429,7 @@ x_produce_glyphs (it)
 		  if (font_info && font_info->relative_compose
 		      && (! CHAR_TABLE_P (Vignore_relative_composition)
 			  || NILP (Faref (Vignore_relative_composition,
-					  make_number (ch)))))
+					  make_fixnum (ch)))))
 		    {
 
 		      if (- descent >= font_info->relative_compose)
@@ -6371,7 +6371,7 @@ note_mode_line_highlight (w, x, mode_line_p)
 	  /* If we're on a string with `help-echo' text property,
 	     arrange for the help to be displayed.  This is done by
 	     setting the global variable help_echo to the help string.  */
-	  help = Fget_text_property (make_number (glyph->charpos),
+	  help = Fget_text_property (make_fixnum (glyph->charpos),
 				     Qhelp_echo, glyph->object);
 	  if (!NILP (help))
             {
@@ -6382,13 +6382,13 @@ note_mode_line_highlight (w, x, mode_line_p)
             }
 
 	  /* Change the mouse pointer according to what is under X/Y.  */
-	  map = Fget_text_property (make_number (glyph->charpos),
+	  map = Fget_text_property (make_fixnum (glyph->charpos),
 				    Qlocal_map, glyph->object);
 	  if (KEYMAPP (map))
 	    cursor = f->output_data.w32->nontext_cursor;
 	  else
 	    {
-	      map = Fget_text_property (make_number (glyph->charpos),
+	      map = Fget_text_property (make_fixnum (glyph->charpos),
 					Qkeymap, glyph->object);
 	      if (KEYMAPP (map))
 		cursor = f->output_data.w32->nontext_cursor;
@@ -6614,7 +6614,7 @@ note_mouse_highlight (f, x, y)
                 XSETINT (end, (BUF_Z (XBUFFER (w->buffer))
                                - XFASTINT (w->window_end_pos)));
                 before
-                  = Fprevious_single_property_change (make_number (pos + 1),
+                  = Fprevious_single_property_change (make_fixnum (pos + 1),
                                                       Qmouse_face,
                                                       w->buffer, beginning);
                 after
@@ -6670,7 +6670,7 @@ note_mouse_highlight (f, x, y)
 		  || (BUFFERP (glyph->object)
 		      && glyph->charpos >= BEGV
 		      && glyph->charpos < ZV))
-                help = Fget_text_property (make_number (glyph->charpos),
+                help = Fget_text_property (make_fixnum (glyph->charpos),
                                            Qhelp_echo, glyph->object);
 	    
               if (!NILP (help))
@@ -7497,7 +7497,7 @@ x_scroll_bar_create (w, top, left, width, height)
   struct frame *f = XFRAME (WINDOW_FRAME (w));
   HWND hwnd;
   struct scroll_bar *bar
-    = XSCROLL_BAR (Fmake_vector (make_number (SCROLL_BAR_VEC_SIZE), Qnil));
+    = XSCROLL_BAR (Fmake_vector (make_fixnum (SCROLL_BAR_VEC_SIZE), Qnil));
 
   BLOCK_INPUT;
 
@@ -10367,7 +10367,7 @@ w32_initialize ()
 
   /* Initialize input mode: interrupt_input off, no flow control, allow
      8 bit character input, standard quit char.  */
-  Fset_input_mode (Qnil, Qnil, make_number (2), Qnil);
+  Fset_input_mode (Qnil, Qnil, make_fixnum (2), Qnil);
 
   /* Create the window thread - it will terminate itself or when the app terminates */
 

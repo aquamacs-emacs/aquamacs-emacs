@@ -112,7 +112,7 @@ DEFUN ("ml-nargs", Fml_nargs, Sml_nargs, 0, 0, 0,
   ()
 {
   if (EQ (Vmocklisp_arguments, Qinteractive))
-    return make_number (0);
+    return make_fixnum (0);
   return Flength (Vmocklisp_arguments);
 }
 
@@ -213,7 +213,7 @@ is converted into a string by expressing it in decimal.")
     {
       tem = args[argnum];
     retry:
-      if (INTEGERP (tem))
+      if (FIXNUMP (tem))
 	tem = Fnumber_to_string (tem);
       if (STRINGP (tem))
 	insert1 (tem);

@@ -114,7 +114,7 @@ Boston, MA 02111-1307, USA.  */
    casts to get around this, it will break some development work in
    progress.  */
 #define SET_INTERVAL_PARENT(i,p) (eassert (!INT_LISPLIKE (p)),(i)->up_obj = 0, (i)->up.interval = (p))
-#define SET_INTERVAL_OBJECT(i,o) (eassert (!INTEGERP (o)), eassert (BUFFERP (o) || STRINGP (o)),(i)->up_obj = 1, (i)->up.obj = (o))
+#define SET_INTERVAL_OBJECT(i,o) (eassert (!FIXNUMP (o)), eassert (BUFFERP (o) || STRINGP (o)),(i)->up_obj = 1, (i)->up.obj = (o))
 #define INTERVAL_PARENT(i) (eassert((i) != 0 && (i)->up_obj == 0),(i)->up.interval)
 #define GET_INTERVAL_OBJECT(d,s) (eassert((s)->up_obj == 1), (d) = (s)->up.obj)
 

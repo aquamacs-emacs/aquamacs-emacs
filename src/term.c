@@ -1686,7 +1686,7 @@ term_get_fkeys_1 ()
       char *sequence = tgetstr (keys[i].cap, address);
       if (sequence)
 	Fdefine_key (Vfunction_key_map, build_string (sequence),
-		     Fmake_vector (make_number (1),
+		     Fmake_vector (make_fixnum (1),
 				   intern (keys[i].name)));
     }
 
@@ -1703,13 +1703,13 @@ term_get_fkeys_1 ()
     if (k_semi)
       {
 	Fdefine_key (Vfunction_key_map, build_string (k_semi),
-		     Fmake_vector (make_number (1), intern ("f10")));
+		     Fmake_vector (make_fixnum (1), intern ("f10")));
 	k0_name = "f0";
       }
 
     if (k0)
       Fdefine_key (Vfunction_key_map, build_string (k0),
-		   Fmake_vector (make_number (1), intern (k0_name)));
+		   Fmake_vector (make_fixnum (1), intern (k0_name)));
   }
 
   /* Set up cookies for numbered function keys above f10. */
@@ -1732,7 +1732,7 @@ term_get_fkeys_1 ()
 	    {
 	      sprintf (fkey, "f%d", i);
 	      Fdefine_key (Vfunction_key_map, build_string (sequence),
-			   Fmake_vector (make_number (1),
+			   Fmake_vector (make_fixnum (1),
 					 intern (fkey)));
 	    }
 	}
@@ -1749,7 +1749,7 @@ term_get_fkeys_1 ()
 	  char *sequence = tgetstr (cap2, address);			\
 	  if (sequence)							\
 	    Fdefine_key (Vfunction_key_map, build_string (sequence),	\
-			 Fmake_vector (make_number (1),	\
+			 Fmake_vector (make_fixnum (1),	\
 				       intern (sym)));	\
 	}
 	  
@@ -1938,14 +1938,14 @@ produce_special_glyphs (it, what)
   temp_it.dp = NULL;
   temp_it.what = IT_CHARACTER;
   temp_it.len = 1;
-  temp_it.object = make_number (0);
+  temp_it.object = make_fixnum (0);
   bzero (&temp_it.current, sizeof temp_it.current);
 
   if (what == IT_CONTINUATION)
     {
       /* Continuation glyph.  */
       if (it->dp
-	  && INTEGERP (DISP_CONTINUE_GLYPH (it->dp))
+	  && FIXNUMP (DISP_CONTINUE_GLYPH (it->dp))
 	  && GLYPH_CHAR_VALID_P (XINT (DISP_CONTINUE_GLYPH (it->dp))))
 	{
 	  temp_it.c = FAST_GLYPH_CHAR (XINT (DISP_CONTINUE_GLYPH (it->dp)));
@@ -1962,7 +1962,7 @@ produce_special_glyphs (it, what)
     {
       /* Truncation glyph.  */
       if (it->dp
-	  && INTEGERP (DISP_TRUNC_GLYPH (it->dp))
+	  && FIXNUMP (DISP_TRUNC_GLYPH (it->dp))
 	  && GLYPH_CHAR_VALID_P (XINT (DISP_TRUNC_GLYPH (it->dp))))
 	{
 	  temp_it.c = FAST_GLYPH_CHAR (XINT (DISP_TRUNC_GLYPH (it->dp)));

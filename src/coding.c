@@ -1556,9 +1556,9 @@ detect_coding_iso2022 (src, src_end, multibytep)
     									   \
     if (final_char < '0' || final_char >= 128)				   \
       goto label_invalid_code;						   \
-    charset = ISO_CHARSET_TABLE (make_number (dimension),		   \
-				 make_number (chars),			   \
-				 make_number (final_char));		   \
+    charset = ISO_CHARSET_TABLE (make_fixnum (dimension),		   \
+				 make_fixnum (chars),			   \
+				 make_fixnum (final_char));		   \
     c = MAKE_CHAR (charset, 0, 0);					   \
     if (charset >= 0							   \
 	&& (CODING_SPEC_ISO_REQUESTED_DESIGNATION (coding, charset) == reg \
@@ -3473,7 +3473,7 @@ setup_coding_system (coding_system, coding)
   if (!NILP (val))
     {
       val = Fget (val, Qcoding_category_index);
-      if (INTEGERP (val))
+      if (FIXNUMP (val))
 	coding->category_idx = XINT (val);
       else
 	goto label_invalid_coding_system;
@@ -3554,7 +3554,7 @@ setup_coding_system (coding_system, coding)
 	  {
 	    charset = get_charset_id (Fcar_safe (XCAR (val)));
 	    if (charset >= 0
-		&& (temp = Fcdr_safe (XCAR (val)), INTEGERP (temp))
+		&& (temp = Fcdr_safe (XCAR (val)), FIXNUMP (temp))
 		&& (i = XINT (temp), (i >= 0 && (i + '@') < 128)))
 	      CODING_SPEC_ISO_REVISION_NUMBER (coding, charset) = i;
 	    val = XCDR (val);
@@ -3575,7 +3575,7 @@ setup_coding_system (coding_system, coding)
 	    = CODING_SPEC_ISO_NO_REQUESTED_DESIGNATION;
 	for (i = 0; i < 4; i++)
 	  {
-	    if (INTEGERP (flags[i])
+	    if (FIXNUMP (flags[i])
 		&& (charset = XINT (flags[i]), CHARSET_VALID_P (charset))
 		|| (charset = get_charset_id (flags[i])) >= 0)
 	      {
@@ -3594,7 +3594,7 @@ setup_coding_system (coding_system, coding)
 		tail = flags[i];
 
 		coding->flags |= CODING_FLAG_ISO_DESIGNATION;
-		if (INTEGERP (XCAR (tail))
+		if (FIXNUMP (XCAR (tail))
 		    && (charset = XINT (XCAR (tail)),
 			CHARSET_VALID_P (charset))
 		    || (charset = get_charset_id (XCAR (tail))) >= 0)
@@ -3607,7 +3607,7 @@ setup_coding_system (coding_system, coding)
 		tail = XCDR (tail);
 		while (CONSP (tail))
 		  {
-		    if (INTEGERP (XCAR (tail))
+		    if (FIXNUMP (XCAR (tail))
 			&& (charset = XINT (XCAR (tail)),
 			    CHARSET_VALID_P (charset))
 			|| (charset = get_charset_id (XCAR (tail))) >= 0)
@@ -3694,12 +3694,12 @@ setup_coding_system (coding_system, coding)
 	    for (; CONSP (val); val = XCDR (val))
 	      {
 		this = XCAR (val);
-		if (INTEGERP (this)
+		if (FIXNUMP (this)
 		    && XINT (this) >= 0 && XINT (this) < 256)
 		  coding->spec.ccl.valid_codes[XINT (this)] = 1;
 		else if (CONSP (this)
-			 && INTEGERP (XCAR (this))
-			 && INTEGERP (XCDR (this)))
+			 && FIXNUMP (XCAR (this))
+			 && FIXNUMP (XCDR (this)))
 		  {
 		    int start = XINT (XCAR (this));
 		    int end = XINT (XCDR (this));
@@ -5215,12 +5215,12 @@ coding_save_composition (coding, from, to, obj)
 		  for (i = 0; i < len; i++)
 		    {
 		      ch = (STRINGP (val)
-			    ? Faref (val, make_number (i))
+			    ? Faref (val, make_fixnum (i))
 			    : XVECTOR (val)->contents[i]);
 		      CODING_ADD_COMPOSITION_COMPONENT (coding, XINT (ch));
 		    }
 		}
-	      else		/* INTEGERP (val) */
+	      else		/* FIXNUMP (val) */
 		CODING_ADD_COMPOSITION_COMPONENT (coding, XINT (val));
 	    }
 	  CODING_ADD_COMPOSITION_END (coding, end - from);
@@ -5273,7 +5273,7 @@ coding_restore_composition (coding, obj)
 	      Lisp_Object args[MAX_COMPOSITION_COMPONENTS * 2 - 1];
 
 	      for (j = 0; j < len; j++)
-		args[j] = make_number (data[4 + j]);
+		args[j] = make_fixnum (data[4 + j]);
 	      components = (method == COMPOSITION_WITH_ALTCHARS
 			    ? Fstring (len, args) : Fvector (len, args));
 	    }
@@ -5342,7 +5342,7 @@ code_convert_region (from, from_byte, to, to_byte, coding, encodep, replace)
 	 region.  Here, we must suppress all modification hooks.  */
       saved_inhibit_modification_hooks = inhibit_modification_hooks;
       inhibit_modification_hooks = 1;
-      Fset_text_properties (make_number (from), make_number (to), Qnil, Qnil);
+      Fset_text_properties (make_fixnum (from), make_fixnum (to), Qnil, Qnil);
       inhibit_modification_hooks = saved_inhibit_modification_hooks;
     }
 
@@ -5400,7 +5400,7 @@ code_convert_region (from, from_byte, to, to_byte, coding, encodep, replace)
          functions while this pre-write-conversion is running.  */
       inhibit_pre_post_conversion = 1;
       call2 (coding->pre_write_conversion,
-	     make_number (from), make_number (to));
+	     make_fixnum (from), make_fixnum (to));
       inhibit_pre_post_conversion = 0;
       /* Discard the unwind protect.  */
       specpdl_ptr--;
@@ -5720,7 +5720,7 @@ code_convert_region (from, from_byte, to, to_byte, coding, encodep, replace)
       /* We should not call any more pre-write/post-read-conversion
          functions while this post-read-conversion is running.  */
       inhibit_pre_post_conversion = 1;
-      val = call1 (coding->post_read_conversion, make_number (inserted));
+      val = call1 (coding->post_read_conversion, make_fixnum (inserted));
       inhibit_pre_post_conversion = 0;
       /* Discard the unwind protect.  */
       specpdl_ptr--;
@@ -5778,11 +5778,11 @@ run_pre_post_conversion_on_str (str, coding, encodep)
   UNGCPRO;
   inhibit_pre_post_conversion = 1;
   if (encodep)
-    call2 (coding->pre_write_conversion, make_number (BEG), make_number (Z));
+    call2 (coding->pre_write_conversion, make_fixnum (BEG), make_fixnum (Z));
   else
     {
       TEMP_SET_PT_BOTH (BEG, BEG_BYTE);
-      call1 (coding->post_read_conversion, make_number (Z - BEG));
+      call1 (coding->post_read_conversion, make_fixnum (Z - BEG));
     }
   inhibit_pre_post_conversion = 0;
   str = make_buffer_string (BEG, Z, 1);
@@ -6327,7 +6327,7 @@ find_safe_codings (p, pend, safe_codings, work_table, single_byte_char_found)
 	/* This element was already checked.  Ignore it.  */
 	continue;
       /* Remember that we checked this element.  */
-      CHAR_TABLE_SET (work_table, make_number (idx), Qt);
+      CHAR_TABLE_SET (work_table, make_fixnum (idx), Qt);
 
       /* If there are some safe coding systems for C and we have
 	 already found the other set of coding systems for the
@@ -6415,7 +6415,7 @@ DEFUN ("find-coding-systems-region-internal",
       Lisp_Object args[2];
       args[0] = safe_codings;
       args[1] = Fchar_table_extra_slot (Vchar_coding_system_table,
-					make_number (0));
+					make_fixnum (0));
       safe_codings = Fappend (2, args);
     }
   else
@@ -6443,7 +6443,7 @@ code_convert_region1 (start, end, coding_system, encodep)
   to = XFASTINT (end);
 
   if (NILP (coding_system))
-    return make_number (to - from);
+    return make_fixnum (to - from);
 
   if (setup_coding_system (Fcheck_coding_system (coding_system), &coding) < 0)
     error ("Invalid coding system: %s", XSYMBOL (coding_system)->name->data);
@@ -6454,7 +6454,7 @@ code_convert_region1 (start, end, coding_system, encodep)
   code_convert_region (from, CHAR_TO_BYTE (from), to, CHAR_TO_BYTE (to),
 		       &coding, encodep, 1);
   Vlast_coding_system_used = coding.symbol;
-  return make_number (coding.produced_char);
+  return make_fixnum (coding.produced_char);
 }
 
 DEFUN ("decode-coding-region", Fdecode_coding_region, Sdecode_coding_region,
@@ -6796,14 +6796,14 @@ which is a list of all the arguments given to this function.")
     error ("Too few arguments");
   operation = args[0];
   if (!SYMBOLP (operation)
-      || !INTEGERP (target_idx = Fget (operation, Qtarget_idx)))
+      || !FIXNUMP (target_idx = Fget (operation, Qtarget_idx)))
     error ("Invalid first argument");
   if (nargs < 1 + XINT (target_idx))
     error ("Too few arguments for operation: %s",
 	   XSYMBOL (operation)->name->data);
   target = args[XINT (target_idx) + 1];
   if (!(STRINGP (target)
-	|| (EQ (operation, Qopen_network_stream) && INTEGERP (target))))
+	|| (EQ (operation, Qopen_network_stream) && FIXNUMP (target))))
     error ("Invalid argument %d", XINT (target_idx) + 1);
 
   chain = ((EQ (operation, Qinsert_file_contents)
@@ -6824,7 +6824,7 @@ which is a list of all the arguments given to this function.")
 	  && ((STRINGP (target)
 	       && STRINGP (XCAR (elt))
 	       && fast_string_match (XCAR (elt), target) >= 0)
-	      || (INTEGERP (target) && EQ (target, XCAR (elt)))))
+	      || (FIXNUMP (target) && EQ (target, XCAR (elt)))))
 	{
 	  val = XCDR (elt);
 	  /* Here, if VAL is both a valid coding system and a valid
@@ -6988,29 +6988,29 @@ syms_of_coding ()
   Fset (Qcoding_system_history, Qnil);
 
   /* Target FILENAME is the first argument.  */
-  Fput (Qinsert_file_contents, Qtarget_idx, make_number (0));
+  Fput (Qinsert_file_contents, Qtarget_idx, make_fixnum (0));
   /* Target FILENAME is the third argument.  */
-  Fput (Qwrite_region, Qtarget_idx, make_number (2));
+  Fput (Qwrite_region, Qtarget_idx, make_fixnum (2));
 
   Qcall_process = intern ("call-process");
   staticpro (&Qcall_process);
   /* Target PROGRAM is the first argument.  */
-  Fput (Qcall_process, Qtarget_idx, make_number (0));
+  Fput (Qcall_process, Qtarget_idx, make_fixnum (0));
 
   Qcall_process_region = intern ("call-process-region");
   staticpro (&Qcall_process_region);
   /* Target PROGRAM is the third argument.  */
-  Fput (Qcall_process_region, Qtarget_idx, make_number (2));
+  Fput (Qcall_process_region, Qtarget_idx, make_fixnum (2));
 
   Qstart_process = intern ("start-process");
   staticpro (&Qstart_process);
   /* Target PROGRAM is the third argument.  */
-  Fput (Qstart_process, Qtarget_idx, make_number (2));
+  Fput (Qstart_process, Qtarget_idx, make_fixnum (2));
 
   Qopen_network_stream = intern ("open-network-stream");
   staticpro (&Qopen_network_stream);
   /* Target SERVICE is the fourth argument.  */
-  Fput (Qopen_network_stream, Qtarget_idx, make_number (3));
+  Fput (Qopen_network_stream, Qtarget_idx, make_fixnum (3));
 
   Qcoding_system = intern ("coding-system");
   staticpro (&Qcoding_system);
@@ -7050,7 +7050,7 @@ syms_of_coding ()
   staticpro (&Qcoding_category_index);
 
   Vcoding_category_table
-    = Fmake_vector (make_number (CODING_CATEGORY_IDX_MAX), Qnil);
+    = Fmake_vector (make_fixnum (CODING_CATEGORY_IDX_MAX), Qnil);
   staticpro (&Vcoding_category_table);
   {
     int i;
@@ -7059,13 +7059,13 @@ syms_of_coding ()
 	XVECTOR (Vcoding_category_table)->contents[i]
 	  = intern (coding_category_name[i]);
 	Fput (XVECTOR (Vcoding_category_table)->contents[i],
-	      Qcoding_category_index, make_number (i));
+	      Qcoding_category_index, make_fixnum (i));
       }
   }
 
   Qtranslation_table = intern ("translation-table");
   staticpro (&Qtranslation_table);
-  Fput (Qtranslation_table, Qchar_table_extra_slots, make_number (1));
+  Fput (Qtranslation_table, Qchar_table_extra_slots, make_fixnum (1));
 
   Qtranslation_table_id = intern ("translation-table-id");
   staticpro (&Qtranslation_table_id);
@@ -7086,8 +7086,8 @@ syms_of_coding ()
      Setting this variable twice is harmless.
      But don't staticpro it here--that is done in alloc.c.  */
   Qchar_table_extra_slots = intern ("char-table-extra-slots");
-  Fput (Qsafe_chars, Qchar_table_extra_slots, make_number (0));
-  Fput (Qchar_coding_system, Qchar_table_extra_slots, make_number (1));
+  Fput (Qsafe_chars, Qchar_table_extra_slots, make_fixnum (0));
+  Fput (Qchar_coding_system, Qchar_table_extra_slots, make_fixnum (1));
 
   Qvalid_codes = intern ("valid-codes");
   staticpro (&Qvalid_codes);
@@ -7300,7 +7300,7 @@ a coding system of ISO 2022 variant which has a flag\n\
 `accept-latin-extra-code' t (e.g. iso-latin-1) on reading a file\n\
 or reading output of a subprocess.\n\
 Only 128th through 159th elements has a meaning.");
-  Vlatin_extra_code_table = Fmake_vector (make_number (256), Qnil);
+  Vlatin_extra_code_table = Fmake_vector (make_fixnum (256), Qnil);
 
   DEFVAR_LISP ("select-safe-coding-system-function",
 	       &Vselect_safe_coding_system_function,

@@ -69,8 +69,8 @@ record_insert (beg, length)
       Lisp_Object elt;
       elt = XCAR (current_buffer->undo_list);
       if (CONSP (elt)
-	  && INTEGERP (XCAR (elt))
-	  && INTEGERP (XCDR (elt))
+	  && FIXNUMP (XCAR (elt))
+	  && FIXNUMP (XCDR (elt))
 	  && XINT (XCDR (elt)) == beg)
 	{
 	  XSETINT (XCDR (elt), beg + length);
@@ -145,7 +145,7 @@ record_delete (beg, string)
       && BUFFERP (last_point_position_buffer)
       && current_buffer == XBUFFER (last_point_position_buffer))
     current_buffer->undo_list
-      = Fcons (make_number (last_point_position), current_buffer->undo_list);
+      = Fcons (make_fixnum (last_point_position), current_buffer->undo_list);
 
   current_buffer->undo_list
     = Fcons (Fcons (string, sbeg), current_buffer->undo_list);
@@ -174,7 +174,7 @@ record_marker_adjustment (marker, adjustment)
   XSETBUFFER (last_undo_buffer, current_buffer);
 
   current_buffer->undo_list
-    = Fcons (Fcons (marker, make_number (adjustment)),
+    = Fcons (Fcons (marker, make_fixnum (adjustment)),
 	     current_buffer->undo_list);
 }
 
@@ -430,7 +430,7 @@ Return what remains of the list.")
 	  if (NILP (next))
 	    break;
 	  /* Handle an integer by setting point to that value.  */
-	  if (INTEGERP (next))
+	  if (FIXNUMP (next))
 	    SET_PT (clip_to_bounds (BEGV, XINT (next), ZV));
 	  else if (CONSP (next))
 	    {
@@ -476,7 +476,7 @@ Return what remains of the list.")
 
 		  Fput_text_property (beg, end, prop, val, Qnil);
 		}
-	      else if (INTEGERP (car) && INTEGERP (cdr))
+	      else if (FIXNUMP (car) && FIXNUMP (cdr))
 		{
 		  /* Element (BEG . END) means range was inserted.  */
 
@@ -488,7 +488,7 @@ Return what remains of the list.")
 		  Fgoto_char (car);
 		  Fdelete_region (car, cdr);
 		}
-	      else if (STRINGP (car) && INTEGERP (cdr))
+	      else if (STRINGP (car) && FIXNUMP (cdr))
 		{
 		  /* Element (STRING . POS) means STRING was deleted.  */
 		  Lisp_Object membuf;
@@ -517,13 +517,13 @@ Return what remains of the list.")
 		      SET_PT (pos);
 		    }
 		}
-	      else if (MARKERP (car) && INTEGERP (cdr))
+	      else if (MARKERP (car) && FIXNUMP (cdr))
 		{
 		  /* (MARKER . INTEGER) means a marker MARKER
 		     was adjusted by INTEGER.  */
 		  if (XMARKER (car)->buffer)
 		    Fset_marker (car,
-				 make_number (marker_position (car) - XINT (cdr)),
+				 make_fixnum (marker_position (car) - XINT (cdr)),
 				 Fmarker_buffer (car));
 		}
 	    }

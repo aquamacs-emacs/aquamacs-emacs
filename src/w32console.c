@@ -525,7 +525,7 @@ set_terminal_modes (void)
 
   /* Initialize input mode: interrupt_input off, no flow control, allow
      8 bit character input, standard quit char.  */
-  Fset_input_mode (Qnil, Qnil, make_number (2), Qnil);
+  Fset_input_mode (Qnil, Qnil, make_fixnum (2), Qnil);
 }
 
 /* hmmm... perhaps these let us bracket screen changes so that we can flush

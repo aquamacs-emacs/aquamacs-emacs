@@ -165,7 +165,7 @@ To get the number of bytes, use `string-bytes'")
       if (!NILP (sequence))
 	wrong_type_argument (Qlistp, sequence);
 
-      val = make_number (i);
+      val = make_fixnum (i);
     }
   else if (NILP (sequence))
     XSETFASTINT (val, 0);
@@ -213,7 +213,7 @@ If STRING is a multibyte string, this is greater than the length of STRING.")
      Lisp_Object string;
 {
   CHECK_STRING (string, 1);
-  return make_number (STRING_BYTES (XSTRING (string)));
+  return make_fixnum (STRING_BYTES (XSTRING (string)));
 }
 
 DEFUN ("string-equal", Fstring_equal, Sstring_equal, 2, 2, 0,
@@ -261,9 +261,9 @@ If string STR1 is greater, the value is a positive number N;\n\
   CHECK_STRING (str1, 0);
   CHECK_STRING (str2, 1);
   if (NILP (start1))
-    start1 = make_number (0);
+    start1 = make_fixnum (0);
   if (NILP (start2))
-    start2 = make_number (0);
+    start2 = make_fixnum (0);
   CHECK_NATNUM (start1, 2);
   CHECK_NATNUM (start2, 3);
   if (! NILP (end1))
@@ -314,9 +314,9 @@ If string STR1 is greater, the value is a positive number N;\n\
 	{
 	  Lisp_Object tem;
 
-	  tem = Fupcase (make_number (c1));
+	  tem = Fupcase (make_fixnum (c1));
 	  c1 = XINT (tem);
-	  tem = Fupcase (make_number (c2));
+	  tem = Fupcase (make_fixnum (c2));
 	  c2 = XINT (tem);
 	}
 
@@ -327,15 +327,15 @@ If string STR1 is greater, the value is a positive number N;\n\
 	 past the character that we are comparing;
 	 hence we don't add or subtract 1 here.  */
       if (c1 < c2)
-	return make_number (- i1 + XINT (start1));
+	return make_fixnum (- i1 + XINT (start1));
       else
-	return make_number (i1 - XINT (start1));
+	return make_fixnum (i1 - XINT (start1));
     }
 
   if (i1 < end1_char)
-    return make_number (i1 - XINT (start1) + 1);
+    return make_fixnum (i1 - XINT (start1) + 1);
   if (i2 < end2_char)
-    return make_number (- i1 + XINT (start1) - 1);
+    return make_fixnum (- i1 + XINT (start1) - 1);
 
   return Qt;
 }
@@ -618,7 +618,7 @@ concat (nargs, args, target_type, last_special)
 	    for (i = 0; i < len; i++)
 	      {
 		ch = XVECTOR (this)->contents[i];
-		if (! INTEGERP (ch))
+		if (! FIXNUMP (ch))
 		  wrong_type_argument (Qintegerp, ch);
 		this_len_byte = CHAR_BYTES (XINT (ch));
 		result_len_byte += this_len_byte;
@@ -626,12 +626,12 @@ concat (nargs, args, target_type, last_special)
 		  some_multibyte = 1;
 	      }
 	  else if (BOOL_VECTOR_P (this) && XBOOL_VECTOR (this)->size > 0)
-	    wrong_type_argument (Qintegerp, Faref (this, make_number (0)));
+	    wrong_type_argument (Qintegerp, Faref (this, make_fixnum (0)));
 	  else if (CONSP (this))
 	    for (; CONSP (this); this = XCDR (this))
 	      {
 		ch = XCAR (this);
-		if (! INTEGERP (ch))
+		if (! FIXNUMP (ch))
 		  wrong_type_argument (Qintegerp, ch);
 		this_len_byte = CHAR_BYTES (XINT (ch));
 		result_len_byte += this_len_byte;
@@ -659,9 +659,9 @@ concat (nargs, args, target_type, last_special)
 
   /* Create the output object.  */
   if (target_type == Lisp_Cons)
-    val = Fmake_list (make_number (result_len), Qnil);
+    val = Fmake_list (make_fixnum (result_len), Qnil);
   else if (target_type == Lisp_Vectorlike)
-    val = Fmake_vector (make_number (result_len), Qnil);
+    val = Fmake_vector (make_fixnum (result_len), Qnil);
   else if (some_multibyte)
     val = make_uninit_multibyte_string (result_len, result_len_byte);
   else
@@ -837,15 +837,15 @@ concat (nargs, args, target_type, last_special)
 	{
 	  this = args[textprops[argnum].argnum];
 	  props = text_property_list (this,
-				      make_number (0),
-				      make_number (XSTRING (this)->size),
+				      make_fixnum (0),
+				      make_fixnum (XSTRING (this)->size),
 				      Qnil);
 	  /* If successive arguments have properites, be sure that the
 	     value of `composition' property be the copy.  */
 	  if (last_to_end == textprops[argnum].to)
 	    make_composition_value_copy (props);
 	  add_text_properties_from_list (val, props,
-					 make_number (textprops[argnum].to));
+					 make_fixnum (textprops[argnum].to));
 	  last_to_end = textprops[argnum].to + XSTRING (this)->size;
 	}
     }
@@ -1220,16 +1220,16 @@ This function allows vectors as well as strings.")
     from_byte = string_char_to_byte (string, from_char);
 
   if (!(0 <= from_char && from_char <= to_char && to_char <= size))
-    args_out_of_range_3 (string, make_number (from_char),
-			 make_number (to_char));
+    args_out_of_range_3 (string, make_fixnum (from_char),
+			 make_fixnum (to_char));
 
   if (STRINGP (string))
     {
       res = make_specified_string (XSTRING (string)->data + from_byte,
 				   to_char - from_char, to_byte - from_byte,
 				   STRING_MULTIBYTE (string));
-      copy_text_properties (make_number (from_char), make_number (to_char),
-			    string, make_number (0), res, Qnil);
+      copy_text_properties (make_fixnum (from_char), make_fixnum (to_char),
+			    string, make_fixnum (0), res, Qnil);
     }
   else
     res = Fvector (to_char - from_char,
@@ -1262,15 +1262,15 @@ substring_both (string, from, from_byte, to, to_byte)
     size = XVECTOR (string)->size;
 
   if (!(0 <= from && from <= to && to <= size))
-    args_out_of_range_3 (string, make_number (from), make_number (to));
+    args_out_of_range_3 (string, make_fixnum (from), make_fixnum (to));
 
   if (STRINGP (string))
     {
       res = make_specified_string (XSTRING (string)->data + from_byte,
 				   to - from, to_byte - from_byte,
 				   STRING_MULTIBYTE (string));
-      copy_text_properties (make_number (from), make_number (to),
-			    string, make_number (0), res, Qnil);
+      copy_text_properties (make_fixnum (from), make_fixnum (to),
+			    string, make_fixnum (0), res, Qnil);
     }
   else
     res = Fvector (to - from,
@@ -1649,7 +1649,7 @@ to be sure of changing the value of `foo'.")
 	      cbytes = 1;
 	    }
 
-	  if (!INTEGERP (elt) || c != XINT (elt))
+	  if (!FIXNUMP (elt) || c != XINT (elt))
 	    {
 	      ++nchars;
 	      nbytes += cbytes;
@@ -1680,7 +1680,7 @@ to be sure of changing the value of `foo'.")
 		  cbytes = 1;
 		}
 
-	      if (!INTEGERP (elt) || c != XINT (elt))
+	      if (!FIXNUMP (elt) || c != XINT (elt))
 		{
 		  unsigned char *from = &XSTRING (seq)->data[ibyte];
 		  unsigned char *to   = &XSTRING (tem)->data[nbytes];
@@ -2238,7 +2238,7 @@ a character set name, or a character code.")
 
   if (EQ (range, Qnil))
     return XCHAR_TABLE (char_table)->defalt;
-  else if (INTEGERP (range))
+  else if (FIXNUMP (range))
     return Faref (char_table, range);
   else if (SYMBOLP (range))
     {
@@ -2248,14 +2248,14 @@ a character set name, or a character code.")
       CHECK_VECTOR (charset_info, 0);
 
       return Faref (char_table,
-		    make_number (XINT (XVECTOR (charset_info)->contents[0])
+		    make_fixnum (XINT (XVECTOR (charset_info)->contents[0])
 				 + 128));
     }
   else if (VECTORP (range))
     {
       if (XVECTOR (range)->size == 1)
 	return Faref (char_table,
-		      make_number (XINT (XVECTOR (range)->contents[0]) + 128));
+		      make_fixnum (XINT (XVECTOR (range)->contents[0]) + 128));
       else
 	{
 	  int size = XVECTOR (range)->size;
@@ -2297,17 +2297,17 @@ a coding system, or a character code.")
       CHECK_VECTOR (charset_info, 0);
 
       return Faset (char_table,
-		    make_number (XINT (XVECTOR (charset_info)->contents[0])
+		    make_fixnum (XINT (XVECTOR (charset_info)->contents[0])
 				 + 128),
 		    value);
     }
-  else if (INTEGERP (range))
+  else if (FIXNUMP (range))
     Faset (char_table, range, value);
   else if (VECTORP (range))
     {
       if (XVECTOR (range)->size == 1)
 	return Faset (char_table,
-		      make_number (XINT (XVECTOR (range)->contents[0]) + 128),
+		      make_fixnum (XINT (XVECTOR (range)->contents[0]) + 128),
 		      value);
       else
 	{
@@ -2388,8 +2388,8 @@ char_table_translate (table, ch)
      int ch;
 {
   Lisp_Object value;
-  value = Faref (table, make_number (ch));
-  if (! INTEGERP (value))
+  value = Faref (table, make_fixnum (ch));
+  if (! FIXNUMP (value))
     return ch;
   return XINT (value);
 }
@@ -2466,9 +2466,9 @@ map_char_table (c_function, function, subtable, arg, depth, indices)
 	{
 	  Lisp_Object elt = XCHAR_TABLE (subtable)->contents[i];
 	  if (c_function)
-	    (*c_function) (arg, make_number (i), elt);
+	    (*c_function) (arg, make_fixnum (i), elt);
 	  else
-	    call2 (function, make_number (i), elt);
+	    call2 (function, make_fixnum (i), elt);
 	}
 #if 0 /* If the char table has entries for higher characters,
 	 we should report them.  */
@@ -2517,9 +2517,9 @@ map_char_table (c_function, function, subtable, arg, depth, indices)
 	  c2 = depth >= 2 ? XFASTINT (indices[2]) : 0;
 	  c = MAKE_CHAR (charset, c1, c2);
 	  if (c_function)
-	    (*c_function) (arg, make_number (c), elt);
+	    (*c_function) (arg, make_fixnum (c), elt);
 	  else
-	    call2 (function, make_number (c), elt);
+	    call2 (function, make_fixnum (c), elt);
   	}
     }
 }
@@ -2864,7 +2864,7 @@ is nil and `use-dialog-box' is non-nil.")
       /* If we need to quit, quit with cursor_in_echo_area = 0.  */
       QUIT;
 
-      key = Fmake_vector (make_number (1), obj);
+      key = Fmake_vector (make_fixnum (1), obj);
       def = Flookup_key (map, key, Qt);
 
       if (EQ (def, intern ("skip")))
@@ -2993,7 +2993,7 @@ is nil, and `use-dialog-box' is non-nil.")
       Fding (Qnil);
       Fdiscard_input ();
       message ("Please answer yes or no.");
-      Fsleep_for (make_number (2), Qnil);
+      Fsleep_for (make_fixnum (2), Qnil);
     }
 }
 
@@ -3018,7 +3018,7 @@ shortened list, containing only those averages which are available.")
   while (loads-- > 0)
     {
       Lisp_Object load = (NILP (use_floats) ?
-			  make_number ((int) (100.0 * load_ave[loads]))
+			  make_fixnum ((int) (100.0 * load_ave[loads]))
 			  : make_float (load_ave[loads]));
       ret = Fcons (load, ret);
     }
@@ -3337,7 +3337,7 @@ into shorter lines.")
   SET_PT (old_pos);
 
   /* We return the length of the encoded text. */
-  return make_number (encoded_length);
+  return make_fixnum (encoded_length);
 }
 
 DEFUN ("base64-encode-string", Fbase64_encode_string, Sbase64_encode_string,
@@ -3545,7 +3545,7 @@ If the region can't be decoded, signal an error and don't modify the buffer.")
     old_pos = XFASTINT (beg);
   SET_PT (old_pos > ZV ? ZV : old_pos);
 
-  return make_number (inserted_chars);
+  return make_fixnum (inserted_chars);
 }
 
 DEFUN ("base64-decode-string", Fbase64_decode_string, Sbase64_decode_string,
@@ -3968,7 +3968,7 @@ hashfn_user_defined (h, key)
   args[0] = h->user_hash_function;
   args[1] = key;
   hash = Ffuncall (2, args);
-  if (!INTEGERP (hash))
+  if (!FIXNUMP (hash))
     Fsignal (Qerror,
 	     list2 (build_string ("Invalid hash code returned from \
 user-supplied hash function"),
@@ -4011,15 +4011,15 @@ make_hash_table (test, size, rehash_size, rehash_threshold, weak,
 
   /* Preconditions.  */
   xassert (SYMBOLP (test));
-  xassert (INTEGERP (size) && XINT (size) >= 0);
-  xassert ((INTEGERP (rehash_size) && XINT (rehash_size) > 0)
+  xassert (FIXNUMP (size) && XINT (size) >= 0);
+  xassert ((FIXNUMP (rehash_size) && XINT (rehash_size) > 0)
 	   || (FLOATP (rehash_size) && XFLOATINT (rehash_size) > 1.0));
   xassert (FLOATP (rehash_threshold)
 	   && XFLOATINT (rehash_threshold) > 0
 	   && XFLOATINT (rehash_threshold) <= 1.0);
 
   if (XFASTINT (size) == 0)
-    size = make_number (1);
+    size = make_fixnum (1);
 
   /* Allocate a table and initialize it.  */
   h = allocate_hash_table ();
@@ -4054,18 +4054,18 @@ make_hash_table (test, size, rehash_size, rehash_threshold, weak,
   h->weak = weak;
   h->rehash_threshold = rehash_threshold;
   h->rehash_size = rehash_size;
-  h->count = make_number (0);
-  h->key_and_value = Fmake_vector (make_number (2 * sz), Qnil);
+  h->count = make_fixnum (0);
+  h->key_and_value = Fmake_vector (make_fixnum (2 * sz), Qnil);
   h->hash = Fmake_vector (size, Qnil);
   h->next = Fmake_vector (size, Qnil);
   /* Cast to int here avoids losing with gcc 2.95 on Tru64/Alpha...  */
   index_size = next_almost_prime ((int) (sz / XFLOATINT (rehash_threshold)));
-  h->index = Fmake_vector (make_number (index_size), Qnil);
+  h->index = Fmake_vector (make_fixnum (index_size), Qnil);
 
   /* Set up the free list.  */
   for (i = 0; i < sz - 1; ++i)
-    HASH_NEXT (h, i) = make_number (i + 1);
-  h->next_free = make_number (0);
+    HASH_NEXT (h, i) = make_fixnum (i + 1);
+  h->next_free = make_fixnum (0);
 
   XSET_HASH_TABLE (table, h);
   xassert (HASH_TABLE_P (table));
@@ -4128,7 +4128,7 @@ maybe_resize_hash_table (h)
       int old_size = HASH_TABLE_SIZE (h);
       int i, new_size, index_size;
 
-      if (INTEGERP (h->rehash_size))
+      if (FIXNUMP (h->rehash_size))
 	new_size = old_size + XFASTINT (h->rehash_size);
       else
 	new_size = old_size * XFLOATINT (h->rehash_size);
@@ -4142,13 +4142,13 @@ maybe_resize_hash_table (h)
       h->key_and_value = larger_vector (h->key_and_value, 2 * new_size, Qnil);
       h->next = larger_vector (h->next, new_size, Qnil);
       h->hash = larger_vector (h->hash, new_size, Qnil);
-      h->index = Fmake_vector (make_number (index_size), Qnil);
+      h->index = Fmake_vector (make_fixnum (index_size), Qnil);
 
       /* Update the free list.  Do it so that new entries are added at
          the end of the free list.  This makes some operations like
          maphash faster.  */
       for (i = old_size; i < new_size - 1; ++i)
-	HASH_NEXT (h, i) = make_number (i + 1);
+	HASH_NEXT (h, i) = make_fixnum (i + 1);
 
       if (!NILP (h->next_free))
 	{
@@ -4159,7 +4159,7 @@ maybe_resize_hash_table (h)
 		 !NILP (next))
 	    last = next;
 
-	  HASH_NEXT (h, XFASTINT (last)) = make_number (old_size);
+	  HASH_NEXT (h, XFASTINT (last)) = make_fixnum (old_size);
 	}
       else
 	XSETFASTINT (h->next_free, old_size);
@@ -4171,7 +4171,7 @@ maybe_resize_hash_table (h)
 	    unsigned hash_code = XUINT (HASH_HASH (h, i));
 	    int start_of_bucket = hash_code % XVECTOR (h->index)->size;
 	    HASH_NEXT (h, i) = HASH_INDEX (h, start_of_bucket);
-	    HASH_INDEX (h, start_of_bucket) = make_number (i);
+	    HASH_INDEX (h, start_of_bucket) = make_fixnum (i);
 	  }
     }
 }
@@ -4230,7 +4230,7 @@ hash_put (h, key, value, hash)
 
   /* Increment count after resizing because resizing may fail.  */
   maybe_resize_hash_table (h);
-  h->count = make_number (XFASTINT (h->count) + 1);
+  h->count = make_fixnum (XFASTINT (h->count) + 1);
 
   /* Store key/value in the key_and_value vector.  */
   i = XFASTINT (h->next_free);
@@ -4239,12 +4239,12 @@ hash_put (h, key, value, hash)
   HASH_VALUE (h, i) = value;
 
   /* Remember its hash code.  */
-  HASH_HASH (h, i) = make_number (hash);
+  HASH_HASH (h, i) = make_fixnum (hash);
 
   /* Add new entry to its collision chain.  */
   start_of_bucket = hash % XVECTOR (h->index)->size;
   HASH_NEXT (h, i) = HASH_INDEX (h, start_of_bucket);
-  HASH_INDEX (h, start_of_bucket) = make_number (i);
+  HASH_INDEX (h, start_of_bucket) = make_fixnum (i);
   return i;
 }
 
@@ -4285,8 +4285,8 @@ hash_remove (h, key)
 	     the free list.  */
 	  HASH_KEY (h, i) = HASH_VALUE (h, i) = HASH_HASH (h, i) = Qnil;
 	  HASH_NEXT (h, i) = h->next_free;
-	  h->next_free = make_number (i);
-	  h->count = make_number (XFASTINT (h->count) - 1);
+	  h->next_free = make_fixnum (i);
+	  h->count = make_fixnum (XFASTINT (h->count) - 1);
 	  xassert (XINT (h->count) >= 0);
 	  break;
 	}
@@ -4311,7 +4311,7 @@ hash_clear (h)
 
       for (i = 0; i < size; ++i)
 	{
-	  HASH_NEXT (h, i) = i < size - 1 ? make_number (i + 1) : Qnil;
+	  HASH_NEXT (h, i) = i < size - 1 ? make_fixnum (i + 1) : Qnil;
 	  HASH_KEY (h, i) = Qnil;
 	  HASH_VALUE (h, i) = Qnil;
 	  HASH_HASH (h, i) = Qnil;
@@ -4320,8 +4320,8 @@ hash_clear (h)
       for (i = 0; i < XVECTOR (h->index)->size; ++i)
 	XVECTOR (h->index)->contents[i] = Qnil;
 
-      h->next_free = make_number (0);
-      h->count = make_number (0);
+      h->next_free = make_fixnum (0);
+      h->count = make_fixnum (0);
     }
 }
 
@@ -4391,7 +4391,7 @@ sweep_weak_table (h, remove_entries_p)
 		  HASH_KEY (h, i) = HASH_VALUE (h, i) = Qnil;
 		  HASH_HASH (h, i) = Qnil;
 
-		  h->count = make_number (XFASTINT (h->count) - 1);
+		  h->count = make_fixnum (XFASTINT (h->count) - 1);
 		}
 	    }
 	  else
@@ -4659,7 +4659,7 @@ DEFUN ("sxhash", Fsxhash, Ssxhash, 1, 1, 0,
      Lisp_Object obj;
 {
   unsigned hash = sxhash (obj, 0);;
-  return make_number (hash);
+  return make_fixnum (hash);
 }
 
 
@@ -4717,16 +4717,16 @@ to `key-and-value'.  Default value of WEAK is nil.")
       if (!CONSP (prop) || XFASTINT (Flength (prop)) < 2)
 	Fsignal (Qerror, list2 (build_string ("Invalid hash table test"),
 				test));
-      user_test = Fnth (make_number (0), prop);
-      user_hash = Fnth (make_number (1), prop);
+      user_test = Fnth (make_fixnum (0), prop);
+      user_hash = Fnth (make_fixnum (1), prop);
     }
   else
     user_test = user_hash = Qnil;
 
   /* See if there's a `:size SIZE' argument.  */
   i = get_key_arg (QCsize, nargs, args, used);
-  size = i < 0 ? make_number (DEFAULT_HASH_SIZE) : args[i];
-  if (!INTEGERP (size) || XINT (size) < 0)
+  size = i < 0 ? make_fixnum (DEFAULT_HASH_SIZE) : args[i];
+  if (!FIXNUMP (size) || XINT (size) < 0)
     Fsignal (Qerror,
 	     list2 (build_string ("Invalid hash table size"),
 		    size));
@@ -4735,7 +4735,7 @@ to `key-and-value'.  Default value of WEAK is nil.")
   i = get_key_arg (QCrehash_size, nargs, args, used);
   rehash_size = i < 0 ? make_float (DEFAULT_REHASH_SIZE) : args[i];
   if (!NUMBERP (rehash_size)
-      || (INTEGERP (rehash_size) && XINT (rehash_size) <= 0)
+      || (FIXNUMP (rehash_size) && XINT (rehash_size) <= 0)
       || XFLOATINT (rehash_size) <= 1.0)
     Fsignal (Qerror,
 	     list2 (build_string ("Invalid hash table rehash size"),
@@ -4837,7 +4837,7 @@ without need for resizing.")
        Lisp_Object table;
 {
   struct Lisp_Hash_Table *h = check_hash_table (table);
-  return make_number (HASH_TABLE_SIZE (h));
+  return make_fixnum (HASH_TABLE_SIZE (h));
 }
 
 
@@ -5072,8 +5072,8 @@ guesswork fails.  Normally, an error is signaled in such case.")
 	}
       
       if (!(0 <= start_char && start_char <= end_char && end_char <= size))
-	args_out_of_range_3 (object, make_number (start_char),
-			     make_number (end_char));
+	args_out_of_range_3 (object, make_fixnum (start_char),
+			     make_fixnum (end_char));
     }
   else
     {
@@ -5147,7 +5147,7 @@ guesswork fails.  Normally, an error is signaled in such case.")
 		  && !NILP (Ffboundp (Vselect_safe_coding_system_function)))
 		/* Confirm that VAL can surely encode the current region.  */
 		coding_system = call3 (Vselect_safe_coding_system_function,
-				       make_number (b), make_number (e),
+				       make_fixnum (b), make_fixnum (e),
 				       coding_system);
 
 	      if (force_raw_text)

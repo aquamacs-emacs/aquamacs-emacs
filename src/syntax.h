@@ -60,7 +60,7 @@ enum syntaxcode
 #define SET_RAW_SYNTAX_ENTRY(table, c, val)				\
   ((c) < CHAR_TABLE_SINGLE_BYTE_SLOTS					\
    ? (XCHAR_TABLE (table)->contents[(unsigned char) (c)] = (val))	\
-   : Faset ((table), make_number (c), (val)))
+   : Faset ((table), make_fixnum (c), (val)))
 
 /* Fetch the syntax entry for char C in syntax table TABLE.
    This macro is called only when C is less than CHAR_TABLE_ORDINARY_SLOTS.
@@ -110,7 +110,7 @@ extern Lisp_Object syntax_parent_lookup P_ ((Lisp_Object, int));
    ? SYNTAX_ENTRY_FOLLOW_PARENT (CURRENT_SYNTAX_TABLE,	\
 				 (unsigned char) (c))	\
    : Faref (CURRENT_SYNTAX_TABLE,			\
-	    make_number (c)))
+	    make_fixnum (c)))
 
 /* Extract the information from the entry for character C
    in the current syntax table.  */

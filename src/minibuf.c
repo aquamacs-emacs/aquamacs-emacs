@@ -438,7 +438,7 @@ read_minibuf (map, initial, prompt, backup_n, expflag,
 	     Fcons (minibuf_window, minibuf_save_list));
   minibuf_save_list
     = Fcons (minibuf_prompt,
-	     Fcons (make_number (minibuf_prompt_width),
+	     Fcons (make_fixnum (minibuf_prompt_width),
 		    Fcons (Vhelp_form,
 			   Fcons (Vcurrent_prefix_arg,
 				  Fcons (Vminibuffer_history_position,
@@ -525,13 +525,13 @@ read_minibuf (map, initial, prompt, backup_n, expflag,
   Finsert (1, &minibuf_prompt);
   if (PT > BEG)
     {
-      Fput_text_property (make_number (BEG), make_number (PT),
+      Fput_text_property (make_fixnum (BEG), make_fixnum (PT),
 			  Qfront_sticky, Qt, Qnil);
-      Fput_text_property (make_number (BEG), make_number (PT),
+      Fput_text_property (make_fixnum (BEG), make_fixnum (PT),
 			  Qrear_nonsticky, Qt, Qnil);
-      Fput_text_property (make_number (BEG), make_number (PT),
+      Fput_text_property (make_fixnum (BEG), make_fixnum (PT),
 			  Qfield, Qt, Qnil);
-      Fadd_text_properties (make_number (BEG), make_number (PT),
+      Fadd_text_properties (make_fixnum (BEG), make_fixnum (PT),
 			    Vminibuffer_prompt_properties, Qnil);
     }
   
@@ -545,7 +545,7 @@ read_minibuf (map, initial, prompt, backup_n, expflag,
   if (!NILP (initial))
     {
       Finsert (1, &initial);
-      if (INTEGERP (backup_n))
+      if (FIXNUMP (backup_n))
 	Fforward_char (backup_n);
     }
 
@@ -584,9 +584,9 @@ read_minibuf (map, initial, prompt, backup_n, expflag,
   /* Make minibuffer contents into a string.  */
   Fset_buffer (minibuffer);
   if (allow_props)
-    val = Ffield_string (make_number (ZV));
+    val = Ffield_string (make_fixnum (ZV));
   else
-    val = Ffield_string_no_properties (make_number (ZV));
+    val = Ffield_string_no_properties (make_fixnum (ZV));
 
   /* VAL is the string of minibuffer text.  */
 
@@ -620,7 +620,7 @@ read_minibuf (map, initial, prompt, backup_n, expflag,
 	  /* Truncate if requested.  */
 	  length = Fget (Vminibuffer_history_variable, Qhistory_length);
 	  if (NILP (length)) length = Vhistory_length;
-	  if (INTEGERP (length))
+	  if (FIXNUMP (length))
 	    {
 	      if (XINT (length) <= 0)
 		Fset (Vminibuffer_history_variable, Qnil);
@@ -849,7 +849,7 @@ DEFUN ("read-from-minibuffer", Fread_from_minibuffer, Sread_from_minibuffer, 1, 
 
   GCPRO1 (default_value);
   val = read_minibuf (keymap, initial_contents, prompt,
-		      make_number (pos), !NILP (read),
+		      make_fixnum (pos), !NILP (read),
 		      histvar, histpos, default_value,
 		      minibuffer_allow_text_properties,
 		      !NILP (inherit_input_method));
@@ -869,7 +869,7 @@ is a string to insert in the minibuffer before reading.")
     CHECK_STRING (initial_contents, 1);
   return read_minibuf (Vminibuffer_local_map, initial_contents,
 		       prompt, Qnil, 1, Qminibuffer_history,
-		       make_number (0), Qnil, 0, 0);
+		       make_fixnum (0), Qnil, 0, 0);
 }
 
 DEFUN ("eval-minibuffer", Feval_minibuffer, Seval_minibuffer, 1, 2, 0,
@@ -921,7 +921,7 @@ the current input method and the setting of enable-multibyte-characters.")
     CHECK_STRING (initial, 1);
 
   return read_minibuf (Vminibuffer_local_ns_map, initial, prompt, Qnil,
-		       0, Qminibuffer_history, make_number (0), Qnil, 0,
+		       0, Qminibuffer_history, make_fixnum (0), Qnil, 0,
 		       !NILP (inherit_input_method));
 }
 
@@ -1123,9 +1123,9 @@ is used to further constrain the set of candidates.")
 
       if (STRINGP (eltstring)
 	  && XSTRING (string)->size <= XSTRING (eltstring)->size
-	  && (tem = Fcompare_strings (eltstring, make_number (0),
-				      make_number (XSTRING (string)->size),
-				      string, make_number (0), Qnil,
+	  && (tem = Fcompare_strings (eltstring, make_fixnum (0),
+				      make_fixnum (XSTRING (string)->size),
+				      string, make_fixnum (0), Qnil,
 				      completion_ignore_case ?Qt : Qnil),
 	      EQ (Qt, tem)))
 	{
@@ -1172,10 +1172,10 @@ is used to further constrain the set of candidates.")
 	  else
 	    {
 	      compare = min (bestmatchsize, XSTRING (eltstring)->size);
-	      tem = Fcompare_strings (bestmatch, make_number (0),
-				      make_number (compare),
-				      eltstring, make_number (0),
-				      make_number (compare),
+	      tem = Fcompare_strings (bestmatch, make_fixnum (0),
+				      make_fixnum (compare),
+				      eltstring, make_fixnum (0),
+				      make_fixnum (compare),
 				      completion_ignore_case ? Qt : Qnil);
 	      if (EQ (tem, Qt))
 		matchsize = compare;
@@ -1204,15 +1204,15 @@ is used to further constrain the set of candidates.")
 		      ((matchsize == XSTRING (eltstring)->size)
 		       ==
 		       (matchsize == XSTRING (bestmatch)->size)
-		       && (tem = Fcompare_strings (eltstring, make_number (0),
-						   make_number (XSTRING (string)->size),
-						   string, make_number (0),
+		       && (tem = Fcompare_strings (eltstring, make_fixnum (0),
+						   make_fixnum (XSTRING (string)->size),
+						   string, make_fixnum (0),
 						   Qnil,
 						   Qnil),
 			   EQ (Qt, tem))
-		       && (tem = Fcompare_strings (bestmatch, make_number (0),
-						   make_number (XSTRING (string)->size),
-						   string, make_number (0),
+		       && (tem = Fcompare_strings (bestmatch, make_fixnum (0),
+						   make_fixnum (XSTRING (string)->size),
+						   string, make_fixnum (0),
 						   Qnil,
 						   Qnil),
 			   ! EQ (Qt, tem))))
@@ -1235,10 +1235,10 @@ is used to further constrain the set of candidates.")
   /* Return t if the supplied string is an exact match (counting case);
      it does not require any change to be made.  */
   if (matchcount == 1 && bestmatchsize == XSTRING (string)->size
-      && (tem = Fcompare_strings (bestmatch, make_number (0),
-				  make_number (bestmatchsize),
-				  string, make_number (0),
-				  make_number (bestmatchsize),
+      && (tem = Fcompare_strings (bestmatch, make_fixnum (0),
+				  make_fixnum (bestmatchsize),
+				  string, make_fixnum (0),
+				  make_fixnum (bestmatchsize),
 				  Qnil),
 	  EQ (Qt, tem)))
     return Qt;
@@ -1378,10 +1378,10 @@ are ignored unless STRING itself starts with a space.")
 	       && XSTRING (string)->data[0] == ' ')
 	      || XSTRING (eltstring)->data[0] != ' '
 	      || NILP (hide_spaces))
-	  && (tem = Fcompare_strings (eltstring, make_number (0),
-				      make_number (XSTRING (string)->size),
-				      string, make_number (0),
-				      make_number (XSTRING (string)->size),
+	  && (tem = Fcompare_strings (eltstring, make_fixnum (0),
+				      make_fixnum (XSTRING (string)->size),
+				      string, make_fixnum (0),
+				      make_fixnum (XSTRING (string)->size),
 				      completion_ignore_case ? Qt : Qnil),
 	      EQ (Qt, tem)))
 	{
@@ -1523,7 +1523,7 @@ DEFUN ("completing-read", Fcompleting_read, Scompleting_read, 2, 8, 0,
   val = read_minibuf (NILP (require_match)
 		      ? Vminibuffer_local_completion_map
 		      : Vminibuffer_local_must_match_map,
-		      init, prompt, make_number (pos), 0,
+		      init, prompt, make_fixnum (pos), 0,
 		      histvar, histpos, def, 0,
 		      !NILP (inherit_input_method));
 
@@ -1593,7 +1593,7 @@ do_completion ()
   Lisp_Object last;
   struct gcpro gcpro1, gcpro2;
 
-  completion = Ftry_completion (Ffield_string (make_number (ZV)),
+  completion = Ftry_completion (Ffield_string (make_fixnum (ZV)),
 				Vminibuffer_completion_table,
 				Vminibuffer_completion_predicate);
   last = last_exact_completion;
@@ -1615,7 +1615,7 @@ do_completion ()
       return 1;
     }
 
-  string = Ffield_string (make_number (ZV));
+  string = Ffield_string (make_fixnum (ZV));
 
   /* COMPLETEDP should be true if some completion was done, which
      doesn't include simply changing the case of the entered string.
@@ -1628,7 +1628,7 @@ do_completion ()
   if (!EQ (tem, Qt))
     /* Rewrite the user's input.  */
     {
-      Fdelete_field (make_number (ZV)); /* Some completion happened */
+      Fdelete_field (make_fixnum (ZV)); /* Some completion happened */
       Finsert (1, &completion);
 
       if (! completedp)
@@ -1644,7 +1644,7 @@ do_completion ()
     }
 
   /* It did find a match.  Do we match some possibility exactly now? */
-  tem = test_completion (Ffield_string (make_number (ZV)));
+  tem = test_completion (Ffield_string (make_fixnum (ZV)));
   if (NILP (tem))
     {
       /* not an exact match */
@@ -1668,7 +1668,7 @@ do_completion ()
   last_exact_completion = completion;
   if (!NILP (last))
     {
-      tem = Ffield_string (make_number (ZV));
+      tem = Ffield_string (make_fixnum (ZV));
       if (!NILP (Fequal (tem, last)))
 	Fminibuffer_completion_help ();
     }
@@ -1693,8 +1693,8 @@ assoc_for_completion (key, list)
       thiscar = Fcar (elt);
       if (!STRINGP (thiscar))
 	continue;
-      tem = Fcompare_strings (thiscar, make_number (0), Qnil,
-			      key, make_number (0), Qnil,
+      tem = Fcompare_strings (thiscar, make_fixnum (0), Qnil,
+			      key, make_fixnum (0), Qnil,
 			      completion_ignore_case ? Qt : Qnil);
       if (EQ (tem, Qt))
 	return elt;
@@ -1728,10 +1728,10 @@ scroll the window of possible completions.")
       struct buffer *obuf = current_buffer;
 
       Fset_buffer (XWINDOW (window)->buffer);
-      tem = Fpos_visible_in_window_p (make_number (ZV), window, Qnil);
+      tem = Fpos_visible_in_window_p (make_fixnum (ZV), window, Qnil);
       if (! NILP (tem))
 	/* If end is in view, scroll up to the beginning.  */
-	Fset_window_start (window, make_number (BEGV), Qnil);
+	Fset_window_start (window, make_fixnum (BEGV), Qnil);
       else
 	/* Else scroll down one screen.  */
 	Fscroll_other_window (Qnil);
@@ -1748,13 +1748,13 @@ scroll the window of possible completions.")
 
     case 1:
       if (PT != ZV)
-	Fgoto_char (make_number (ZV));
+	Fgoto_char (make_fixnum (ZV));
       temp_echo_area_glyphs (" [Sole completion]");
       break;
 
     case 3:
       if (PT != ZV)
-	Fgoto_char (make_number (ZV));
+	Fgoto_char (make_fixnum (ZV));
       temp_echo_area_glyphs (" [Complete, but not unique]");
       break;
     }
@@ -1769,7 +1769,7 @@ scroll the window of possible completions.")
 Lisp_Object
 complete_and_exit_1 ()
 {
-  return make_number (do_completion ());
+  return make_fixnum (do_completion ());
 }
 
 /* This one is called by internal_condition_case if an error happens.
@@ -1779,7 +1779,7 @@ Lisp_Object
 complete_and_exit_2 (ignore)
      Lisp_Object ignore;
 {
-  return make_number (1);
+  return make_fixnum (1);
 }
 
 DEFUN ("minibuffer-complete-and-exit", Fminibuffer_complete_and_exit,
@@ -1793,10 +1793,10 @@ a repetition of this command will exit.")
   Lisp_Object val;
 
   /* Allow user to specify null string */
-  if (XINT (Ffield_beginning (make_number (ZV), Qnil)) == ZV)
+  if (XINT (Ffield_beginning (make_fixnum (ZV), Qnil)) == ZV)
     goto exit;
 
-  if (!NILP (test_completion (Ffield_string (make_number (ZV)))))
+  if (!NILP (test_completion (Ffield_string (make_fixnum (ZV)))))
     goto exit;
 
   /* Call do_completion, but ignore errors.  */
@@ -1844,7 +1844,7 @@ Return nil if there is no valid completion, else t.")
   /* We keep calling Fbuffer_string rather than arrange for GC to
      hold onto a pointer to one of the strings thus made.  */
 
-  completion = Ftry_completion (Ffield_string (make_number (ZV)),
+  completion = Ftry_completion (Ffield_string (make_fixnum (ZV)),
 				Vminibuffer_completion_table,
 				Vminibuffer_completion_predicate);
   if (NILP (completion))
@@ -1857,7 +1857,7 @@ Return nil if there is no valid completion, else t.")
     return Qnil;
 
 #if 0 /* How the below code used to look, for reference. */
-  tem = Ffield_string (make_number (ZV));
+  tem = Ffield_string (make_fixnum (ZV));
   b = XSTRING (tem)->data;
   i = ZV - 1 - XSTRING (completion)->size;
   p = XSTRING (completion)->data;
@@ -1876,7 +1876,7 @@ Return nil if there is no valid completion, else t.")
     int buffer_nchars, completion_nchars;
 
     CHECK_STRING (completion, 0);
-    tem = Ffield_string (make_number (ZV));
+    tem = Ffield_string (make_fixnum (ZV));
     GCPRO2 (completion, tem);
     /* If reading a file name,
        expand any $ENVVAR refs in the buffer and in TEM.  */
@@ -1887,7 +1887,7 @@ Return nil if there is no valid completion, else t.")
 	if (! EQ (substituted, tem))
 	  {
 	    tem = substituted;
-	    Fdelete_field (make_number (ZV));
+	    Fdelete_field (make_fixnum (ZV));
 	    insert_from_string (tem, 0, 0, XSTRING (tem)->size,
 				STRING_BYTES (XSTRING (tem)), 0);
 	  }
@@ -1897,10 +1897,10 @@ Return nil if there is no valid completion, else t.")
     i = buffer_nchars - completion_nchars;
     if (i > 0
 	||
-	(tem1 = Fcompare_strings (tem, make_number (0),
-				  make_number (buffer_nchars),
-				  completion, make_number (0),
-				  make_number (buffer_nchars),
+	(tem1 = Fcompare_strings (tem, make_fixnum (0),
+				  make_fixnum (buffer_nchars),
+				  completion, make_fixnum (0),
+				  make_fixnum (buffer_nchars),
 				  completion_ignore_case ? Qt : Qnil),
 	 ! EQ (tem1, Qt)))
       {
@@ -1912,9 +1912,9 @@ Return nil if there is no valid completion, else t.")
 	buffer_nchars -= i;
 	while (i > 0)
 	  {
-	    tem1 = Fcompare_strings (tem, make_number (start_pos), Qnil,
-				     completion, make_number (0),
-				     make_number (buffer_nchars),
+	    tem1 = Fcompare_strings (tem, make_fixnum (start_pos), Qnil,
+				     completion, make_fixnum (0),
+				     make_fixnum (buffer_nchars),
 				     completion_ignore_case ? Qt : Qnil);
 	    start_pos++;
 	    if (EQ (tem1, Qt))
@@ -1929,7 +1929,7 @@ Return nil if there is no valid completion, else t.")
   }
 #endif /* Rewritten code */
   
-  prompt_end_charpos = XINT (Ffield_beginning (make_number (ZV), Qnil));
+  prompt_end_charpos = XINT (Ffield_beginning (make_fixnum (ZV), Qnil));
 
   {
     int prompt_end_bytepos;
@@ -1943,7 +1943,7 @@ Return nil if there is no valid completion, else t.")
   if (i == XSTRING (completion)->size)
     {
       GCPRO1 (completion);
-      tem = Ftry_completion (concat2 (Ffield_string (make_number (ZV)), build_string (" ")),
+      tem = Ftry_completion (concat2 (Ffield_string (make_fixnum (ZV)), build_string (" ")),
 			     Vminibuffer_completion_table,
 			     Vminibuffer_completion_predicate);
       UNGCPRO;
@@ -1954,7 +1954,7 @@ Return nil if there is no valid completion, else t.")
 	{
 	  GCPRO1 (completion);
 	  tem =
-	    Ftry_completion (concat2 (Ffield_string (make_number (ZV)), build_string ("-")),
+	    Ftry_completion (concat2 (Ffield_string (make_fixnum (ZV)), build_string ("-")),
 			     Vminibuffer_completion_table,
 			     Vminibuffer_completion_predicate);
 	  UNGCPRO;
@@ -1995,7 +1995,7 @@ Return nil if there is no valid completion, else t.")
 
   /* Otherwise insert in minibuffer the chars we got */
 
-  Fdelete_field (make_number (ZV));
+  Fdelete_field (make_fixnum (ZV));
   insert_from_string (completion, 0, 0, i, i_byte, 1);
   return Qt;
 }
@@ -2084,7 +2084,7 @@ It can find the completion buffer in `standard-output'.")
 	    {
 	      if (BUFFERP (Vstandard_output))
 		{
-		  tem = Findent_to (make_number (35), make_number (2));
+		  tem = Findent_to (make_fixnum (35), make_fixnum (2));
 		  
 		  column = XINT (tem);
 		}
@@ -2191,7 +2191,7 @@ DEFUN ("minibuffer-completion-help", Fminibuffer_completion_help, Sminibuffer_co
   Lisp_Object completions;
 
   message ("Making completion list...");
-  completions = Fall_completions (Ffield_string (make_number (ZV)),
+  completions = Fall_completions (Ffield_string (make_fixnum (ZV)),
 				  Vminibuffer_completion_table,
 				  Vminibuffer_completion_predicate,
 				  Qt);
@@ -2213,7 +2213,7 @@ DEFUN ("self-insert-and-exit", Fself_insert_and_exit, Sself_insert_and_exit, 0, 
   "Terminate minibuffer input.")
   ()
 {
-  if (INTEGERP (last_command_char))
+  if (FIXNUMP (last_command_char))
     internal_self_insert (XINT (last_command_char), 0);
   else
     bitch_at_user ();
@@ -2232,7 +2232,7 @@ DEFUN ("minibuffer-depth", Fminibuffer_depth, Sminibuffer_depth, 0, 0, 0,
   "Return current depth of activations of minibuffer, a nonnegative integer.")
   ()
 {
-  return make_number (minibuf_level);
+  return make_fixnum (minibuf_level);
 }
 
 DEFUN ("minibuffer-prompt", Fminibuffer_prompt, Sminibuffer_prompt, 0, 0, 0,
@@ -2268,13 +2268,13 @@ temp_echo_area_glyphs (m)
   insert_string (m);
   SET_PT_BOTH (opoint, opoint_byte);
   Vinhibit_quit = Qt;
-  Fsit_for (make_number (2), Qnil, Qnil);
+  Fsit_for (make_fixnum (2), Qnil, Qnil);
   del_range_both (osize, osize_byte, ZV, ZV_BYTE, 1);
   SET_PT_BOTH (opoint, opoint_byte);
   if (!NILP (Vquit_flag))
     {
       Vquit_flag = Qnil;
-      Vunread_command_events = Fcons (make_number (quit_char), Qnil);
+      Vunread_command_events = Fcons (make_fixnum (quit_char), Qnil);
     }
   Vinhibit_quit = oinhibit;
 }

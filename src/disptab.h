@@ -71,7 +71,7 @@ extern Lisp_Object Vglyph_table;
 
 /* Given BASE and LEN returned by the two previous macros,
    return nonzero if GLYPH code G is aliased to a different code.  */
-#define GLYPH_ALIAS_P(base,len,g) ((g) < (len) && INTEGERP (base[g]))
+#define GLYPH_ALIAS_P(base,len,g) ((g) < (len) && FIXNUMP (base[g]))
 
 /* Assuming that GLYPH_SIMPLE_P (BASE, LEN, G) is 1,
    return the alias for G.  */

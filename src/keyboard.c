@@ -155,7 +155,7 @@ if (raw_keybuf_count == XVECTOR (raw_keybuf)->size)			\
   {									\
     int newsize = 2 * XVECTOR (raw_keybuf)->size;			\
     Lisp_Object new;							\
-    new = Fmake_vector (make_number (newsize), Qnil);			\
+    new = Fmake_vector (make_fixnum (newsize), Qnil);			\
     bcopy (XVECTOR (raw_keybuf)->contents, XVECTOR (new)->contents,	\
 	   raw_keybuf_count * sizeof (Lisp_Object));			\
     raw_keybuf = new;							\
@@ -745,7 +745,7 @@ echo_char (c)
       /* If someone has passed us a composite event, use its head symbol.  */
       c = EVENT_HEAD (c);
 
-      if (INTEGERP (c))
+      if (FIXNUMP (c))
 	{
 	  int ch = XINT (c);
 
@@ -896,7 +896,7 @@ add_command_key (key)
     {
       Lisp_Object new_keys;
 
-      new_keys = Fmake_vector (make_number (size * 2), Qnil);
+      new_keys = Fmake_vector (make_fixnum (size * 2), Qnil);
       bcopy (XVECTOR (this_command_keys)->contents,
 	     XVECTOR (new_keys)->contents,
 	     size * sizeof (Lisp_Object));
@@ -1117,7 +1117,7 @@ cmd_error (data)
   any_kboard_state ();
 #endif
 
-  return make_number (0);
+  return make_fixnum (0);
 }
 
 /* Take actions on handling an error.  DATA is the data that describes
@@ -1172,7 +1172,7 @@ cmd_error_internal (data, context)
   if (kill_emacs_p)
     {
       Fterpri (stream);
-      Fkill_emacs (make_number (-1));
+      Fkill_emacs (make_fixnum (-1));
     }
 }
 
@@ -1383,7 +1383,7 @@ command_loop_1 ()
 	  if (!NILP (Vquit_flag))
 	    {
 	      Vquit_flag = Qnil;
-	      Vunread_command_events = Fcons (make_number (quit_char), Qnil);
+	      Vunread_command_events = Fcons (make_fixnum (quit_char), Qnil);
 	    }
 	}
 
@@ -1566,7 +1566,7 @@ command_loop_1 ()
 		}
 	      else if (EQ (Vthis_command, Qself_insert_command)
 		       /* Try this optimization only on ascii keystrokes.  */
-		       && INTEGERP (last_command_char))
+		       && FIXNUMP (last_command_char))
 		{
 		  unsigned int c = XINT (last_command_char);
 		  int value;
@@ -1923,7 +1923,7 @@ bind_polling_period (n)
 
   stop_other_atimers (poll_timer);
   stop_polling ();
-  specbind (Qpolling_period, make_number (new));
+  specbind (Qpolling_period, make_fixnum (new));
   /* Start a new alarm with the new period.  */
   start_polling ();
 #endif
@@ -2117,7 +2117,7 @@ read_char (commandflag, nmaps, maps, prev_event, used_mouse_menu)
       /* Undo what read_char_x_menu_prompt did when it unread
 	 additional keys returned by Fx_popup_menu.  */
       if (CONSP (c)
-	  && (SYMBOLP (XCAR (c)) || INTEGERP (XCAR (c)))
+	  && (SYMBOLP (XCAR (c)) || FIXNUMP (XCAR (c)))
 	  && NILP (XCDR (c)))
 	c = XCAR (c);
 
@@ -2142,7 +2142,7 @@ read_char (commandflag, nmaps, maps, prev_event, used_mouse_menu)
       /* Undo what read_char_x_menu_prompt did when it unread
 	 additional keys returned by Fx_popup_menu.  */
       if (CONSP (c)
-	  && (SYMBOLP (XCAR (c)) || INTEGERP (XCAR (c)))
+	  && (SYMBOLP (XCAR (c)) || FIXNUMP (XCAR (c)))
 	  && NILP (XCDR (c)))
 	c = XCAR (c);
 
@@ -2164,7 +2164,7 @@ read_char (commandflag, nmaps, maps, prev_event, used_mouse_menu)
       /* Undo what read_char_x_menu_prompt did when it unread
 	 additional keys returned by Fx_popup_menu.  */
       if (CONSP (c)
-	  && (SYMBOLP (XCAR (c)) || INTEGERP (XCAR (c)))
+	  && (SYMBOLP (XCAR (c)) || FIXNUMP (XCAR (c)))
 	  && NILP (XCDR (c)))
 	c = XCAR (c);
       reread = 1;
@@ -2199,7 +2199,7 @@ read_char (commandflag, nmaps, maps, prev_event, used_mouse_menu)
 	  RETURN_UNGCPRO (c);
 	}
 
-      c = Faref (Vexecuting_macro, make_number (executing_macro_index));
+      c = Faref (Vexecuting_macro, make_fixnum (executing_macro_index));
       if (STRINGP (Vexecuting_macro)
 	  && (XINT (c) & 0x80))
 	XSETFASTINT (c, CHAR_META | (XINT (c) & ~0x80));
@@ -2356,7 +2356,7 @@ read_char (commandflag, nmaps, maps, prev_event, used_mouse_menu)
       && !current_kboard->immediate_echo
       && this_command_key_count > 0
       && ! noninteractive
-      && (FLOATP (Vecho_keystrokes) || INTEGERP (Vecho_keystrokes))
+      && (FLOATP (Vecho_keystrokes) || FIXNUMP (Vecho_keystrokes))
       && NILP (Fzerop (Vecho_keystrokes))
       && (/* No message.  */
 	  NILP (echo_area_buffer[0])
@@ -2446,7 +2446,7 @@ read_char (commandflag, nmaps, maps, prev_event, used_mouse_menu)
       /* Auto save if enough time goes by without input.  */
       if (commandflag != 0
 	  && num_nonmacro_input_events > last_auto_save
-	  && INTEGERP (Vauto_save_timeout)
+	  && FIXNUMP (Vauto_save_timeout)
 	  && XINT (Vauto_save_timeout) > 0)
 	{
 	  Lisp_Object tem0;
@@ -2569,10 +2569,10 @@ read_char (commandflag, nmaps, maps, prev_event, used_mouse_menu)
     }
 
   /* Terminate Emacs in batch mode if at eof.  */
-  if (noninteractive && INTEGERP (c) && XINT (c) < 0)
-    Fkill_emacs (make_number (1));
+  if (noninteractive && FIXNUMP (c) && XINT (c) < 0)
+    Fkill_emacs (make_fixnum (1));
 
-  if (INTEGERP (c))
+  if (FIXNUMP (c))
     {
       /* Add in any extra modifiers, where appropriate.  */
       if ((extra_keyboard_modifiers & CHAR_CTL)
@@ -2630,7 +2630,7 @@ read_char (commandflag, nmaps, maps, prev_event, used_mouse_menu)
     }
 
   /* Handle things that only apply to characters.  */
-  if (INTEGERP (c))
+  if (FIXNUMP (c))
     {
       /* If kbd_buffer_get_event gave us an EOF, return that.  */
       if (XINT (c) == -1)
@@ -2684,7 +2684,7 @@ read_char (commandflag, nmaps, maps, prev_event, used_mouse_menu)
   /* Wipe the echo area.
      But first, if we are about to use an input method,
      save the echo area contents for it to refer to.  */
-  if (INTEGERP (c)
+  if (FIXNUMP (c)
       && ! NILP (Vinput_method_function)
       && (unsigned) XINT (c) >= ' '
       && (unsigned) XINT (c) != 127
@@ -2706,7 +2706,7 @@ read_char (commandflag, nmaps, maps, prev_event, used_mouse_menu)
  reread_for_input_method:
  from_macro:
   /* Pass this to the input method, if appropriate.  */
-  if (INTEGERP (c)
+  if (FIXNUMP (c)
       && ! NILP (Vinput_method_function)
       /* Don't run the input method within a key sequence,
 	 after the first event of the key sequence.  */
@@ -2799,10 +2799,10 @@ read_char (commandflag, nmaps, maps, prev_event, used_mouse_menu)
     {
       /* (help-echo FRAME HELP WINDOW OBJECT POS).  */
       Lisp_Object help, object, position, window;
-      help = Fnth (make_number (2), c);
-      window = Fnth (make_number (3), c);
-      object = Fnth (make_number (4), c);
-      position = Fnth (make_number (5), c);
+      help = Fnth (make_fixnum (2), c);
+      window = Fnth (make_fixnum (3), c);
+      object = Fnth (make_fixnum (4), c);
+      position = Fnth (make_fixnum (5), c);
       show_help_echo (help, window, object, position, 0);
       goto retry;
     }
@@ -2813,7 +2813,7 @@ read_char (commandflag, nmaps, maps, prev_event, used_mouse_menu)
       before_command_echo_length = echo_length ();
 
       /* Don't echo mouse motion events.  */
-      if ((FLOATP (Vecho_keystrokes) || INTEGERP (Vecho_keystrokes))
+      if ((FLOATP (Vecho_keystrokes) || FIXNUMP (Vecho_keystrokes))
 	  && NILP (Fzerop (Vecho_keystrokes))
 	  && ! (EVENT_HAS_PARAMETERS (c)
 		&& EQ (EVENT_HEAD_KIND (EVENT_HEAD (c)), Qmouse_movement)))
@@ -2856,7 +2856,7 @@ read_char (commandflag, nmaps, maps, prev_event, used_mouse_menu)
       unbind_to (count, Qnil);
 
       redisplay ();
-      if (EQ (c, make_number (040)))
+      if (EQ (c, make_fixnum (040)))
 	{
 	  cancel_echoing ();
 	  do
@@ -2884,7 +2884,7 @@ record_menu_key (c)
   before_command_echo_length = echo_length ();
 
   /* Don't echo mouse motion events.  */
-  if ((FLOATP (Vecho_keystrokes) || INTEGERP (Vecho_keystrokes))
+  if ((FLOATP (Vecho_keystrokes) || FIXNUMP (Vecho_keystrokes))
       && NILP (Fzerop (Vecho_keystrokes)))
     {
       echo_char (c);
@@ -2931,7 +2931,7 @@ record_char (c)
     {
       Lisp_Object help;
 
-      help = Fnth (make_number (2), c);
+      help = Fnth (make_fixnum (2), c);
       if (STRINGP (help))
 	{
 	  int last_idx;
@@ -2944,7 +2944,7 @@ record_char (c)
 	  
 	  if (!CONSP (last_c)
 	      || !EQ (XCAR (last_c), Qhelp_echo)
-	      || (last_help = Fnth (make_number (2), last_c),
+	      || (last_help = Fnth (make_fixnum (2), last_c),
 		  !EQ (last_help, help)))
 	    {
 	      total_keys++;
@@ -2967,7 +2967,7 @@ record_char (c)
      If you, dear reader, have a better idea, you've got the source.  :-) */
   if (dribble)
     {
-      if (INTEGERP (c))
+      if (FIXNUMP (c))
 	{
 	  if (XUINT (c) < 0x100)
 	    putc (XINT (c), dribble);
@@ -3187,7 +3187,7 @@ kbd_buffer_store_event (event)
 	    {
 	      kb->kbd_queue
 		= Fcons (make_lispy_switch_frame (event->frame_or_window),
-			 Fcons (make_number (c), Qnil));
+			 Fcons (make_fixnum (c), Qnil));
 	      kb->kbd_queue_has_data = 1;
 	      for (sp = kbd_fetch_ptr; sp != kbd_store_ptr; sp++)
 		{
@@ -3311,7 +3311,7 @@ gen_help_event (bufp, size, help, frame, window, object, pos)
       bufp->kind = HELP_EVENT;
       bufp->frame_or_window = frame;
       bufp->arg = object;
-      bufp->x = make_number (pos);
+      bufp->x = make_fixnum (pos);
       bufp->code = 0;
 
       ++bufp;
@@ -3337,14 +3337,14 @@ kbd_buffer_store_help_event (frame, help)
   event.kind = HELP_EVENT;
   event.frame_or_window = frame;
   event.arg = Qnil;
-  event.x = make_number (0);
+  event.x = make_fixnum (0);
   event.code = 0;
   kbd_buffer_store_event (&event);
   
   event.kind = HELP_EVENT;
   event.frame_or_window = frame;
   event.arg = help;
-  event.x = make_number (0);
+  event.x = make_fixnum (0);
   event.code = 1;
   kbd_buffer_store_event (&event);
 }
@@ -3925,8 +3925,8 @@ timer_check (do_it_now)
 	    }
 	  vector = XVECTOR (timer)->contents;
 
-	  if (!INTEGERP (vector[1]) || !INTEGERP (vector[2])
-	      || !INTEGERP (vector[3])
+	  if (!FIXNUMP (vector[1]) || !FIXNUMP (vector[2])
+	      || !FIXNUMP (vector[3])
 	      || ! NILP (vector[0]))
 	    {
 	      timers = XCDR (timers);
@@ -3943,8 +3943,8 @@ timer_check (do_it_now)
 	    }
 	  vector = XVECTOR (timer)->contents;
 
-	  if (!INTEGERP (vector[1]) || !INTEGERP (vector[2])
-	      || !INTEGERP (vector[3])
+	  if (!FIXNUMP (vector[1]) || !FIXNUMP (vector[2])
+	      || !FIXNUMP (vector[3])
 	      || ! NILP (vector[0]))
 	    {
 	      idle_timers = XCDR (idle_timers);
@@ -4735,7 +4735,7 @@ make_lispy_event (event)
 		  = Fcons (event->frame_or_window,
 			   Fcons (Qmenu_bar,
 				  Fcons (Fcons (event->x, event->y),
-					 Fcons (make_number (event->timestamp),
+					 Fcons (make_fixnum (event->timestamp),
 						Qnil))));
 
 		return Fcons (item, Fcons (position, Qnil));
@@ -4778,7 +4778,7 @@ make_lispy_event (event)
 		    posn = part == 1 ? Qmode_line : Qheader_line;
 		    string = mode_line_string (w, wx, wy, part == 1, &charpos);
 		    if (STRINGP (string))
-		      string_info = Fcons (string, make_number (charpos));
+		      string_info = Fcons (string, make_fixnum (charpos));
 		  }
 		else if (part == 2)
 		  posn = Qvertical_line;
@@ -4787,11 +4787,11 @@ make_lispy_event (event)
 		    Lisp_Object object;
 		    struct display_pos p;
 		    buffer_posn_from_coords (w, &wx, &wy, &object, &p);
-		    posn = make_number (CHARPOS (p.pos));
+		    posn = make_fixnum (CHARPOS (p.pos));
 		    if (STRINGP (object))
 		      string_info
 			= Fcons (object,
-				 make_number (CHARPOS (p.string_pos)));
+				 make_fixnum (CHARPOS (p.string_pos)));
 		  }
 	      }
 
@@ -4799,7 +4799,7 @@ make_lispy_event (event)
 	      = Fcons (window,
 		       Fcons (posn,
 			      Fcons (Fcons (event->x, event->y),
-				     Fcons (make_number (event->timestamp),
+				     Fcons (make_fixnum (event->timestamp),
 					    (NILP (string_info)
 					     ? Qnil
 					     : Fcons (string_info, Qnil))))));
@@ -4820,7 +4820,7 @@ make_lispy_event (event)
 	      = Fcons (window,
 		       Fcons (Qvertical_scroll_bar,
 			      Fcons (portion_whole,
-				     Fcons (make_number (event->timestamp),
+				     Fcons (make_fixnum (event->timestamp),
 					    Fcons (part, Qnil)))));
 	  }
 #endif /* not USE_TOOLKIT_SCROLL_BARS */
@@ -4841,7 +4841,7 @@ make_lispy_event (event)
 		     && XINT (event->y) == last_mouse_y
 		     && button_down_time != 0
 		     && (EQ (Vdouble_click_time, Qt)
-			 || (INTEGERP (Vdouble_click_time)
+			 || (FIXNUMP (Vdouble_click_time)
 			     && ((int)(event->timestamp - button_down_time)
 				 < XINT (Vdouble_click_time)))));
 	last_mouse_button = button;
@@ -4889,7 +4889,7 @@ make_lispy_event (event)
 		   pair.  */
 		Lisp_Object down;
 
-		down = Fnth (make_number (2), start_pos);
+		down = Fnth (make_fixnum (2), start_pos);
 		if (EQ (event->x, XCAR (down)) && EQ (event->y, XCDR (down)))
 		  /* Mouse hasn't moved.  */
 		  event->modifiers |= click_modifier;
@@ -4899,10 +4899,10 @@ make_lispy_event (event)
 
 		    /* Avoid generating a drag event if the mouse
 		       hasn't actually moved off the buffer position.  */
-		    window1 = Fnth (make_number (0), position);
-		    posn1 = Fnth (make_number (1), position);
-		    window2 = Fnth (make_number (0), start_pos);
-		    posn2 = Fnth (make_number (1), start_pos);
+		    window1 = Fnth (make_fixnum (0), position);
+		    posn1 = Fnth (make_fixnum (1), position);
+		    window2 = Fnth (make_fixnum (0), start_pos);
+		    posn2 = Fnth (make_fixnum (1), start_pos);
 
 		    if (EQ (window1, window2) && EQ (posn1, posn2))
 		      event->modifiers |= click_modifier;
@@ -4944,7 +4944,7 @@ make_lispy_event (event)
 	  else if (event->modifiers & (double_modifier | triple_modifier))
 	    return Fcons (head,
 			  Fcons (position,
-				 Fcons (make_number (double_click_count),
+				 Fcons (make_fixnum (double_click_count),
 					Qnil)));
 	  else
 	    return Fcons (head,
@@ -4984,7 +4984,7 @@ make_lispy_event (event)
 	  = Fcons (window,
 		   Fcons (Qvertical_scroll_bar,
 			  Fcons (portion_whole,
-				 Fcons (make_number (event->timestamp),
+				 Fcons (make_fixnum (event->timestamp),
 					Fcons (part, Qnil)))));
 
 	/* Always treat scroll bar events as clicks. */
@@ -5024,7 +5024,7 @@ make_lispy_event (event)
 	    = Fcons (window,
 		     Fcons (Qvertical_scroll_bar,
 			    Fcons (portion_whole,
-				   Fcons (make_number (event->timestamp),
+				   Fcons (make_fixnum (event->timestamp),
 					  Fcons (part, Qnil)))));
 	}
 
@@ -5091,7 +5091,7 @@ make_lispy_event (event)
 		struct display_pos p;
 		buffer_posn_from_coords (XWINDOW (window), &column, &row,
 					 &object, &p);
-		posn = make_number (CHARPOS (p.pos));
+		posn = make_fixnum (CHARPOS (p.pos));
 	      }
 	  }
 
@@ -5102,7 +5102,7 @@ make_lispy_event (event)
 	    = Fcons (window,
 		     Fcons (posn,
 			    Fcons (Fcons (event->x, event->y),
-				   Fcons (make_number (event->timestamp),
+				   Fcons (make_fixnum (event->timestamp),
 					  Qnil))));
 
 	  head = modify_event_symbol (0, event->modifiers,
@@ -5111,7 +5111,7 @@ make_lispy_event (event)
 				      &mouse_wheel_syms, 1);
 	  return Fcons (head,
 			Fcons (position,
-			       Fcons (make_number (event->code),
+			       Fcons (make_fixnum (event->code),
 				      Qnil)));
 	}
       }
@@ -5173,7 +5173,7 @@ make_lispy_event (event)
 		Lisp_Object object;
 		struct display_pos p;
 		buffer_posn_from_coords (w, &wx, &wy, &object, &p);
-		posn = make_number (CHARPOS (p.pos));
+		posn = make_fixnum (CHARPOS (p.pos));
 	      }
 	  }
 
@@ -5184,7 +5184,7 @@ make_lispy_event (event)
 	    = Fcons (window,
 		     Fcons (posn,
 			    Fcons (Fcons (event->x, event->y),
-				   Fcons (make_number (event->timestamp),
+				   Fcons (make_fixnum (event->timestamp),
 					  Qnil))));
 
 	  head = modify_event_symbol (0, event->modifiers,
@@ -5249,7 +5249,7 @@ make_lispy_movement (frame, bar_window, part, x, y, time)
 		    (Fcons (Fcons (bar_window,
 				   Fcons (Qvertical_scroll_bar,
 					  Fcons (Fcons (x, y),
-						 Fcons (make_number (time),
+						 Fcons (make_fixnum (time),
 							Fcons (part_sym,
 							       Qnil))))),
 			    Qnil)));
@@ -5290,7 +5290,7 @@ make_lispy_movement (frame, bar_window, part, x, y, time)
 	      Lisp_Object object;
 	      struct display_pos p;
 	      buffer_posn_from_coords (w, &wx, &wy, &object, &p);
-	      posn = make_number (CHARPOS (p.pos));
+	      posn = make_fixnum (CHARPOS (p.pos));
 	    }
 	}
       else if (frame != 0)
@@ -5310,7 +5310,7 @@ make_lispy_movement (frame, bar_window, part, x, y, time)
 		    Fcons (Fcons (window,
 				  Fcons (posn,
 					 Fcons (Fcons (x, y),
-						Fcons (make_number (time),
+						Fcons (make_fixnum (time),
 						       Qnil)))),
 			   Qnil));
     }
@@ -5805,7 +5805,7 @@ has the same base event type and all the specified modifiers.")
   if (SYMBOLP (base) && XSYMBOL (base)->name->size == 1)
     XSETINT (base, XSYMBOL (base)->name->data[0]);
 
-  if (INTEGERP (base))
+  if (FIXNUMP (base))
     {
       /* Turn (shift a) into A.  */
       if ((modifiers & shift_modifier) != 0
@@ -5817,10 +5817,10 @@ has the same base event type and all the specified modifiers.")
 
       /* Turn (control a) into C-a.  */
       if (modifiers & ctrl_modifier)
-	return make_number ((modifiers & ~ctrl_modifier)
+	return make_fixnum ((modifiers & ~ctrl_modifier)
 			    | make_ctrl_char (XINT (base)));
       else
-	return make_number (modifiers | XINT (base));
+	return make_fixnum (modifiers | XINT (base));
     }
   else if (SYMBOLP (base))
     return apply_modifiers (modifiers, base);
@@ -5934,7 +5934,7 @@ lucid_event_type_list_p (object)
     {
       Lisp_Object elt;
       elt = XCAR (tail);
-      if (! (INTEGERP (elt) || SYMBOLP (elt)))
+      if (! (FIXNUMP (elt) || SYMBOLP (elt)))
 	return 0;
     }
 
@@ -6321,7 +6321,7 @@ menu_bar_items (old)
   if (!NILP (old))
     menu_bar_items_vector = old;
   else
-    menu_bar_items_vector = Fmake_vector (make_number (24), Qnil);
+    menu_bar_items_vector = Fmake_vector (make_fixnum (24), Qnil);
   menu_bar_items_index = 0;
 
   GCPRO1 (menu_bar_items_vector);
@@ -6410,7 +6410,7 @@ menu_bar_items (old)
   if (i + 4 > XVECTOR (menu_bar_items_vector)->size)
     {
       Lisp_Object tem;
-      tem = Fmake_vector (make_number (2 * i), Qnil);
+      tem = Fmake_vector (make_fixnum (2 * i), Qnil);
       bcopy (XVECTOR (menu_bar_items_vector)->contents,
 	     XVECTOR (tem)->contents, i * sizeof (Lisp_Object));
       menu_bar_items_vector = tem;
@@ -6522,7 +6522,7 @@ menu_bar_item (key, item)
       if (i + 4 > XVECTOR (menu_bar_items_vector)->size)
 	{
 	  Lisp_Object tem;
-	  tem = Fmake_vector (make_number (2 * i), Qnil);
+	  tem = Fmake_vector (make_fixnum (2 * i), Qnil);
 	  bcopy (XVECTOR (menu_bar_items_vector)->contents,
 		 XVECTOR (tem)->contents, i * sizeof (Lisp_Object));
 	  menu_bar_items_vector = tem;
@@ -6533,7 +6533,7 @@ menu_bar_item (key, item)
       XVECTOR (menu_bar_items_vector)->contents[i++]
 	= XVECTOR (item_properties)->contents[ITEM_PROPERTY_NAME];
       XVECTOR (menu_bar_items_vector)->contents[i++] = Fcons (item, Qnil);
-      XVECTOR (menu_bar_items_vector)->contents[i++] = make_number (0);
+      XVECTOR (menu_bar_items_vector)->contents[i++] = make_fixnum (0);
       menu_bar_items_index = i;
     }
   /* We did find an item for this KEY.  Add ITEM to its list of maps.  */
@@ -6605,7 +6605,7 @@ parse_menu_item (item, notreal, inmenubar)
   /* Create item_properties vector if necessary.  */
   if (NILP (item_properties))
     item_properties
-      = Fmake_vector (make_number (ITEM_PROPERTY_ENABLE + 1), Qnil);
+      = Fmake_vector (make_fixnum (ITEM_PROPERTY_ENABLE + 1), Qnil);
 
   /* Initialize optional entries.  */
   for (i = ITEM_PROPERTY_DEF; i < ITEM_PROPERTY_ENABLE; i++)
@@ -7160,7 +7160,7 @@ parse_tool_bar_item (key, item)
     }
   else
     tool_bar_item_properties
-      = Fmake_vector (make_number (TOOL_BAR_ITEM_NSLOTS), Qnil);
+      = Fmake_vector (make_fixnum (TOOL_BAR_ITEM_NSLOTS), Qnil);
   
   /* Set defaults.  */
   PROP (TOOL_BAR_ITEM_KEY) = key;
@@ -7273,7 +7273,7 @@ init_tool_bar_items (reuse)
   if (VECTORP (reuse))
     tool_bar_items_vector = reuse;
   else
-    tool_bar_items_vector = Fmake_vector (make_number (64), Qnil);
+    tool_bar_items_vector = Fmake_vector (make_fixnum (64), Qnil);
   ntool_bar_items = 0;
 }
 
@@ -7293,7 +7293,7 @@ append_tool_bar_item ()
       Lisp_Object new_vector;
       int old_size = XVECTOR (tool_bar_items_vector)->size;
 
-      new_vector = Fmake_vector (make_number (2 * old_size), Qnil);
+      new_vector = Fmake_vector (make_fixnum (2 * old_size), Qnil);
       bcopy (XVECTOR (tool_bar_items_vector)->contents,
 	     XVECTOR (new_vector)->contents,
 	     old_size * sizeof (Lisp_Object));
@@ -7407,7 +7407,7 @@ read_char_x_menu_prompt (nmaps, maps, prev_event, used_mouse_menu)
 	    {
 	      record_menu_key (XCAR (tem));
 	      if (SYMBOLP (XCAR (tem))
-		  || INTEGERP (XCAR (tem)))
+		  || FIXNUMP (XCAR (tem)))
 		XCAR (tem)
 		  = Fcons (XCAR (tem), Qnil);
 	    }
@@ -7550,7 +7550,7 @@ read_char_minibuf_menu_prompt (commandflag, nmaps, maps)
 		}
 
 	      /* Ignore the element if it has no prompt string.  */
-	      if (INTEGERP (event) && parse_menu_item (elt, 0, -1))
+	      if (FIXNUMP (event) && parse_menu_item (elt, 0, -1))
 		{
 		  /* 1 if the char to type matches the string.  */
 		  int char_matches;
@@ -7662,14 +7662,14 @@ read_char_minibuf_menu_prompt (commandflag, nmaps, maps)
       while (BUFFERP (obj));
       current_kboard->defining_kbd_macro = orig_defn_macro;
 
-      if (!INTEGERP (obj))
+      if (!FIXNUMP (obj))
 	return obj;
       else
 	ch = XINT (obj);
 
       if (! EQ (obj, menu_prompt_more_char)
-	  && (!INTEGERP (menu_prompt_more_char)
-	      || ! EQ (obj, make_number (Ctl (XINT (menu_prompt_more_char))))))
+	  && (!FIXNUMP (menu_prompt_more_char)
+	      || ! EQ (obj, make_fixnum (Ctl (XINT (menu_prompt_more_char))))))
 	{
 	  if (!NILP (current_kboard->defining_kbd_macro))
 	    store_kbd_macro_char (obj);
@@ -7912,7 +7912,7 @@ read_key_sequence (keybuf, bufsize, prompt, dont_downcase_last,
       if (!NILP (prompt))
 	echo_prompt (prompt);
       else if (cursor_in_echo_area
-	       && (FLOATP (Vecho_keystrokes) || INTEGERP (Vecho_keystrokes))
+	       && (FLOATP (Vecho_keystrokes) || FIXNUMP (Vecho_keystrokes))
 	       && NILP (Fzerop (Vecho_keystrokes)))
 	/* This doesn't put in a dash if the echo buffer is empty, so
 	   you don't always see a dash hanging out in the minibuffer.  */
@@ -8068,7 +8068,7 @@ read_key_sequence (keybuf, bufsize, prompt, dont_downcase_last,
 	{
 	  key = keybuf[t];
 	  add_command_key (key);
-	  if ((FLOATP (Vecho_keystrokes) || INTEGERP (Vecho_keystrokes))
+	  if ((FLOATP (Vecho_keystrokes) || FIXNUMP (Vecho_keystrokes))
 	      && NILP (Fzerop (Vecho_keystrokes)))
 	    echo_char (key);
 	}
@@ -8130,7 +8130,7 @@ read_key_sequence (keybuf, bufsize, prompt, dont_downcase_last,
 	  /* read_char returns -1 at the end of a macro.
 	     Emacs 18 handles this by returning immediately with a
 	     zero, so that's what we'll do.  */
-	  if (INTEGERP (key) && XINT (key) == -1)
+	  if (FIXNUMP (key) && XINT (key) == -1)
 	    {
 	      t = 0;
 	      /* The Microsoft C compiler can't handle the goto that
@@ -8280,7 +8280,7 @@ read_key_sequence (keybuf, bufsize, prompt, dont_downcase_last,
 		  if (CONSP (start) && CONSP (XCDR (start)))
 		    {
 		      pos = POSN_BUFFER_POSN (start);
-		      if (INTEGERP (pos)
+		      if (FIXNUMP (pos)
 			  && XINT (pos) >= BEG && XINT (pos) <= Z)
 			{
 			  map_here = get_local_map (XINT (pos),
@@ -8787,7 +8787,7 @@ read_key_sequence (keybuf, bufsize, prompt, dont_downcase_last,
 	 use the corresponding lower-case letter instead.  */
       if (first_binding == nmaps && ! function_key_possible
 	  && ! key_translation_possible
-	  && INTEGERP (key)
+	  && FIXNUMP (key)
 	  && ((((XINT (key) & 0x3ffff)
 		< XCHAR_TABLE (current_buffer->downcase_table)->size)
 	       && UPPERCASEP (XINT (key) & 0x3ffff))
@@ -8885,7 +8885,7 @@ read_key_sequence (keybuf, bufsize, prompt, dont_downcase_last,
      Better ideas?  */
   for (; t < mock_input; t++)
     {
-      if ((FLOATP (Vecho_keystrokes) || INTEGERP (Vecho_keystrokes))
+      if ((FLOATP (Vecho_keystrokes) || FIXNUMP (Vecho_keystrokes))
 	  && NILP (Fzerop (Vecho_keystrokes)))
 	echo_char (keybuf[t]);
       add_command_key (keybuf[t]);
@@ -9183,7 +9183,7 @@ DEFUN ("execute-extended-command", Fexecute_extended_command, Sexecute_extended_
     strcpy (buf, "- ");
   else if (CONSP (prefixarg) && XINT (XCAR (prefixarg)) == 4)
     strcpy (buf, "C-u ");
-  else if (CONSP (prefixarg) && INTEGERP (XCAR (prefixarg)))
+  else if (CONSP (prefixarg) && FIXNUMP (XCAR (prefixarg)))
     {
       if (sizeof (int) == sizeof (EMACS_INT))
 	sprintf (buf, "%d ", XINT (XCAR (prefixarg)));
@@ -9192,7 +9192,7 @@ DEFUN ("execute-extended-command", Fexecute_extended_command, Sexecute_extended_
       else
 	abort ();
     }
-  else if (INTEGERP (prefixarg))
+  else if (FIXNUMP (prefixarg))
     {
       if (sizeof (int) == sizeof (EMACS_INT))
 	sprintf (buf, "%d ", XINT (prefixarg));
@@ -9235,9 +9235,9 @@ DEFUN ("execute-extended-command", Fexecute_extended_command, Sexecute_extended_
 
     str = XSTRING (function);
     for (i = 0; i < str->size; i++)
-      add_command_key (Faref (function, make_number (i)));
+      add_command_key (Faref (function, make_fixnum (i)));
 
-    add_command_key (make_number ('\015'));
+    add_command_key (make_fixnum ('\015'));
   }
 
   UNGCPRO;
@@ -9262,7 +9262,7 @@ DEFUN ("execute-extended-command", Fexecute_extended_command, Sexecute_extended_
 
   /* If the command has a key binding, print it now.  */
   if (!NILP (bindings)
-      && ! (VECTORP (bindings) && EQ (Faref (bindings, make_number (0)),
+      && ! (VECTORP (bindings) && EQ (Faref (bindings, make_fixnum (0)),
 				      Qmouse_movement)))
     {
       /* But first wait, and skip the message if there is input.  */
@@ -9277,7 +9277,7 @@ DEFUN ("execute-extended-command", Fexecute_extended_command, Sexecute_extended_
 	   so display our message immediately.  */
 	delay_time = 0;
 
-      if (!NILP (Fsit_for (make_number (delay_time), Qnil, Qnil))
+      if (!NILP (Fsit_for (make_fixnum (delay_time), Qnil, Qnil))
 	  && ! CONSP (Vunread_command_events))
 	{
 	  Lisp_Object binding;
@@ -9299,7 +9299,7 @@ DEFUN ("execute-extended-command", Fexecute_extended_command, Sexecute_extended_
 			  strlen (newmessage),
 			  STRING_MULTIBYTE (binding));
 	  if (!NILP (Fsit_for ((NUMBERP (Vsuggest_key_bindings)
-				? Vsuggest_key_bindings : make_number (2)),
+				? Vsuggest_key_bindings : make_fixnum (2)),
 			       Qnil, Qnil))
 	      && message_p)
 	    restore_message ();
@@ -9906,7 +9906,7 @@ See also `current-input-mode'.")
      Lisp_Object interrupt, flow, meta, quit;
 {
   if (!NILP (quit)
-      && (!INTEGERP (quit) || XINT (quit) < 0 || XINT (quit) > 0400))
+      && (!FIXNUMP (quit) || XINT (quit) < 0 || XINT (quit) > 0400))
     error ("set-input-mode: QUIT must be an ASCII character");
 
 #ifdef POLL_FOR_INPUT
@@ -9983,7 +9983,7 @@ The elements of this list correspond to the arguments of\n\
 
   val[0] = interrupt_input ? Qt : Qnil;
   val[1] = flow_control ? Qt : Qnil;
-  val[2] = meta_key == 2 ? make_number (0) : meta_key == 1 ? Qt : Qnil;
+  val[2] = meta_key == 2 ? make_fixnum (0) : meta_key == 1 ? Qt : Qnil;
   XSETFASTINT (val[3], quit_char);
 
   return Flist (sizeof (val) / sizeof (val[0]), val);
@@ -10075,7 +10075,7 @@ init_keyboard ()
   recent_keys_index = 0;
   kbd_fetch_ptr = kbd_buffer;
   kbd_store_ptr = kbd_buffer;
-  kbd_buffer_gcpro = Fmake_vector (make_number (2 * KBD_BUFFER_SIZE), Qnil);
+  kbd_buffer_gcpro = Fmake_vector (make_fixnum (2 * KBD_BUFFER_SIZE), Qnil);
 #ifdef HAVE_MOUSE
   do_mouse_tracking = Qnil;
 #endif
@@ -10323,36 +10323,36 @@ syms_of_keyboard ()
       }
   }
 
-  button_down_location = Fmake_vector (make_number (1), Qnil);
+  button_down_location = Fmake_vector (make_fixnum (1), Qnil);
   staticpro (&button_down_location);
-  mouse_syms = Fmake_vector (make_number (1), Qnil);
+  mouse_syms = Fmake_vector (make_fixnum (1), Qnil);
   staticpro (&mouse_syms);
 
   {
     int i;
     int len = sizeof (modifier_names) / sizeof (modifier_names[0]);
 
-    modifier_symbols = Fmake_vector (make_number (len), Qnil);
+    modifier_symbols = Fmake_vector (make_fixnum (len), Qnil);
     for (i = 0; i < len; i++)
       if (modifier_names[i])
 	XVECTOR (modifier_symbols)->contents[i] = intern (modifier_names[i]);
     staticpro (&modifier_symbols);
   }
 
-  recent_keys = Fmake_vector (make_number (NUM_RECENT_KEYS), Qnil);
+  recent_keys = Fmake_vector (make_fixnum (NUM_RECENT_KEYS), Qnil);
   staticpro (&recent_keys);
 
-  this_command_keys = Fmake_vector (make_number (40), Qnil);
+  this_command_keys = Fmake_vector (make_fixnum (40), Qnil);
   staticpro (&this_command_keys);
 
-  raw_keybuf = Fmake_vector (make_number (30), Qnil);
+  raw_keybuf = Fmake_vector (make_fixnum (30), Qnil);
   staticpro (&raw_keybuf);
 
   Qextended_command_history = intern ("extended-command-history");
   Fset (Qextended_command_history, Qnil);
   staticpro (&Qextended_command_history);
 
-  kbd_buffer_gcpro = Fmake_vector (make_number (2 * KBD_BUFFER_SIZE), Qnil);
+  kbd_buffer_gcpro = Fmake_vector (make_fixnum (2 * KBD_BUFFER_SIZE), Qnil);
   staticpro (&kbd_buffer_gcpro);
 
   accent_key_syms = Qnil;
@@ -10489,7 +10489,7 @@ Emacs also does a garbage collection if that seems to be warranted.");
   DEFVAR_LISP ("echo-keystrokes", &Vecho_keystrokes,
     "*Nonzero means echo unfinished commands after this many seconds of pause.\n\
 The value may be integer or floating point.");
-  Vecho_keystrokes = make_number (1);
+  Vecho_keystrokes = make_fixnum (1);
 
   DEFVAR_INT ("polling-period", &polling_period,
     "*Interval between polling for input during Lisp execution.\n\
@@ -10503,7 +10503,7 @@ Polling is automatically disabled in all other cases.");
 Measured in milliseconds.  nil means disable double-click recognition;\n\
 t means double-clicks have no time limit and are detected\n\
 by position only.");
-  Vdouble_click_time = make_number (500);
+  Vdouble_click_time = make_fixnum (500);
 
   DEFVAR_BOOL ("inhibit-local-menu-bar-menus", &inhibit_local_menu_bar_menus,
     "*Non-nil means inhibit local map menu bar menus.");
@@ -10772,7 +10772,7 @@ Used during Emacs' startup.");
   DEFVAR_LISP ("minibuffer-message-timeout", &Vminibuffer_message_timeout,
     "*How long to display an echo-area message when the minibuffer is active.\n\
 If the value is not a number, such messages don't time out.");
-  Vminibuffer_message_timeout = make_number (2);
+  Vminibuffer_message_timeout = make_fixnum (2);
 }
 
 void

@@ -805,7 +805,7 @@ adjust_glyph_matrix (w, matrix, x, y, dim)
 
 	      /* Window end is invalid, if inside of the rows that
 		 are invalidated.  */
-	      if (INTEGERP (w->window_end_vpos)
+	      if (FIXNUMP (w->window_end_vpos)
 		  && XFASTINT (w->window_end_vpos) >= i)
 		w->window_end_valid = Qnil;
 	  
@@ -2694,7 +2694,7 @@ build_frame_matrix_from_leaf_window (frame_matrix, w)
       if (!WINDOW_RIGHTMOST_P (w))
 	{
 	  struct Lisp_Char_Table *dp = window_display_table (w);
-	  right_border_glyph = (dp && INTEGERP (DISP_BORDER_GLYPH (dp))
+	  right_border_glyph = (dp && FIXNUMP (DISP_BORDER_GLYPH (dp))
 				? XINT (DISP_BORDER_GLYPH (dp))
 				: '|');
 	}
@@ -3575,7 +3575,7 @@ direct_output_for_insert (g)
     |= it.glyph_row->contains_overlapping_glyphs_p;
 
   glyph_row->displays_text_p = 1;
-  w->window_end_vpos = make_number (max (w->cursor.vpos,
+  w->window_end_vpos = make_fixnum (max (w->cursor.vpos,
 					 XFASTINT (w->window_end_vpos)));
 
   if (!NILP (Vshow_trailing_whitespace))
@@ -3623,7 +3623,7 @@ direct_output_for_insert (g)
     {
       int x, y;
       x = (WINDOW_TO_FRAME_HPOS (w, w->cursor.hpos)
-	   + (INTEGERP (w->left_margin_width)
+	   + (FIXNUMP (w->left_margin_width)
 	      ? XFASTINT (w->left_margin_width)
 	      : 0));
       y = WINDOW_TO_FRAME_VPOS (w, w->cursor.vpos);
@@ -3725,7 +3725,7 @@ direct_output_forward_char (n)
     {
       int x, y;
       x = (WINDOW_TO_FRAME_HPOS (w, w->cursor.hpos)
-	   + (INTEGERP (w->left_margin_width)
+	   + (FIXNUMP (w->left_margin_width)
 	      ? XFASTINT (w->left_margin_width)
 	      : 0));
       y = WINDOW_TO_FRAME_VPOS (w, w->cursor.vpos);
@@ -5187,7 +5187,7 @@ update_frame_1 (f, force_p, inhibit_id_p)
 	      int x = WINDOW_TO_FRAME_HPOS (w, w->cursor.hpos);
 	      int y = WINDOW_TO_FRAME_VPOS (w, w->cursor.vpos);
 
-	      if (INTEGERP (w->left_margin_width))
+	      if (FIXNUMP (w->left_margin_width))
 		x += XFASTINT (w->left_margin_width);
 	      
 	      /* x = max (min (x, FRAME_WINDOW_WIDTH (f) - 1), 0); */
@@ -6309,7 +6309,7 @@ the current state.\n")
   if (n > XVECTOR (frame_and_buffer_state)->size
       || n + 20 < XVECTOR (frame_and_buffer_state)->size / 2)
     /* Add 20 extra so we grow it less often.  */
-    frame_and_buffer_state = Fmake_vector (make_number (n + 20), Qlambda);
+    frame_and_buffer_state = Fmake_vector (make_fixnum (n + 20), Qlambda);
   vecp = XVECTOR (frame_and_buffer_state)->contents;
   FOR_EACH_FRAME (tail, frame)
     {
@@ -6400,9 +6400,9 @@ init_display ()
     {
       Vwindow_system = intern ("x");
 #ifdef HAVE_X11
-      Vwindow_system_version = make_number (11);
+      Vwindow_system_version = make_fixnum (11);
 #else
-      Vwindow_system_version = make_number (10);
+      Vwindow_system_version = make_fixnum (10);
 #endif
 #if defined (LINUX) && defined (HAVE_LIBNCURSES)
       /* In some versions of ncurses,
@@ -6419,7 +6419,7 @@ init_display ()
   if (!inhibit_window_system) 
     {
       Vwindow_system = intern ("w32");
-      Vwindow_system_version = make_number (1);
+      Vwindow_system_version = make_fixnum (1);
       adjust_frame_glyphs_initially ();
       return;
     }
@@ -6429,7 +6429,7 @@ init_display ()
   if (!inhibit_window_system) 
     {
       Vwindow_system = intern ("mac");
-      Vwindow_system_version = make_number (1);
+      Vwindow_system_version = make_fixnum (1);
       adjust_frame_glyphs_initially ();
       return;
     }
@@ -6593,7 +6593,7 @@ syms_of_display ()
   defsubr (&Sdump_redisplay_history);
 #endif
 
-  frame_and_buffer_state = Fmake_vector (make_number (20), Qlambda);
+  frame_and_buffer_state = Fmake_vector (make_fixnum (20), Qlambda);
   staticpro (&frame_and_buffer_state);
 
   Qdisplay_table = intern ("display-table");

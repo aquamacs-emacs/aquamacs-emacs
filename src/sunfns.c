@@ -141,7 +141,7 @@ or -1 if can not open it.")
 #endif
       }
   }
-  return(make_number(win_fd));
+  return(make_fixnum(win_fd));
 }
 
 /*

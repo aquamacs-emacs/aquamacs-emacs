@@ -524,7 +524,7 @@ interval_of (position, object)
     }
 
   if (!(beg <= position && position <= end))
-    args_out_of_range (make_number (position), make_number (position));
+    args_out_of_range (make_fixnum (position), make_fixnum (position));
   if (beg == end || NULL_INTERVAL_P (i))
     return NULL_INTERVAL;
     
@@ -738,7 +738,7 @@ past position LIMIT; return LIMIT if nothing is found before LIMIT.")
       if (NILP (position))
 	{
 	  if (NILP (limit))
-	    position = make_number (XSTRING (object)->size);
+	    position = make_fixnum (XSTRING (object)->size);
 	  else
 	    position = limit;
 	}
@@ -804,7 +804,7 @@ back past position LIMIT; return LIMIT if nothing is found before LIMIT.")
       if (NILP (position))
 	{
 	  if (NILP (limit))
-	    position = make_number (XSTRING (object)->size);
+	    position = make_fixnum (XSTRING (object)->size);
 	  else
 	    position = limit;
 	}
@@ -832,7 +832,7 @@ back past position LIMIT; return LIMIT if nothing is found before LIMIT.")
       else
 	{
 	  Lisp_Object initial_value =
-	    Fget_char_property (make_number (XFASTINT (position) - 1),
+	    Fget_char_property (make_fixnum (XFASTINT (position) - 1),
 				prop, object);
       
 	  for (;;)
@@ -847,7 +847,7 @@ back past position LIMIT; return LIMIT if nothing is found before LIMIT.")
 	      else
 		{
 		  Lisp_Object value =
-		    Fget_char_property (make_number (XFASTINT (position) - 1),
+		    Fget_char_property (make_fixnum (XFASTINT (position) - 1),
 					prop, object);
 
 		  if (!EQ (value, initial_value))
@@ -992,7 +992,7 @@ past position LIMIT; return LIMIT if nothing is found before LIMIT.")
   if (! NILP (limit) && !(next->position < XFASTINT (limit)))
     return limit;
 
-  return make_number (next->position);
+  return make_fixnum (next->position);
 }
 
 DEFUN ("previous-property-change", Fprevious_property_change,
@@ -1035,7 +1035,7 @@ back past position LIMIT; return LIMIT if nothing is found until LIMIT.")
       && !(previous->position + LENGTH (previous) > XFASTINT (limit)))
     return limit;
 
-  return make_number (previous->position + LENGTH (previous));
+  return make_fixnum (previous->position + LENGTH (previous));
 }
 
 DEFUN ("previous-single-property-change", Fprevious_single_property_change,
@@ -1083,7 +1083,7 @@ back past position LIMIT; return LIMIT if nothing is found until LIMIT.")
       && !(previous->position + LENGTH (previous) > XFASTINT (limit)))
     return limit;
 
-  return make_number (previous->position + LENGTH (previous));
+  return make_fixnum (previous->position + LENGTH (previous));
 }
 
 /* Callers note, this can GC when OBJECT is a buffer (or nil).  */
@@ -1482,7 +1482,7 @@ containing the text.")
 	  pos = i->position;
 	  if (pos < XINT (start))
 	    pos = XINT (start);
-	  return make_number (pos);
+	  return make_fixnum (pos);
 	}
       i = next_interval (i);
     }
@@ -1518,7 +1518,7 @@ containing the text.")
 	{
 	  if (i->position > s)
 	    s = i->position;
-	  return make_number (s);
+	  return make_fixnum (s);
 	}
       i = next_interval (i);
     }
@@ -1595,8 +1595,8 @@ copy_text_properties (start, end, src, pos, dest, prop)
 	{
 	  /* Must defer modifications to the interval tree in case src
 	     and dest refer to the same string or buffer.  */
-	  stuff = Fcons (Fcons (make_number (p),
-				Fcons (make_number (p + len),
+	  stuff = Fcons (Fcons (make_fixnum (p),
+				Fcons (make_fixnum (p + len),
 				       Fcons (plist, Qnil))),
 			stuff);
 	}
@@ -1670,8 +1670,8 @@ text_property_list (object, start, end, prop)
 		}
 
 	  if (!NILP (plist))
-	    result = Fcons (Fcons (make_number (s),
-				   Fcons (make_number (s + len),
+	    result = Fcons (Fcons (make_fixnum (s),
+				   Fcons (make_fixnum (s + len),
 					  Fcons (plist, Qnil))),
 			    result);
 	  
@@ -1706,8 +1706,8 @@ add_text_properties_from_list (object, list, delta)
       Lisp_Object item, start, end, plist, tem;
       
       item = XCAR (list);
-      start = make_number (XINT (XCAR (item)) + XINT (delta));
-      end = make_number (XINT (XCAR (XCDR (item))) + XINT (delta));
+      start = make_fixnum (XINT (XCAR (item)) + XINT (delta));
+      end = make_fixnum (XINT (XCAR (XCDR (item))) + XINT (delta));
       plist = XCAR (XCDR (XCDR (item)));
       
       tem = Fadd_text_properties (start, end, plist, object);
@@ -1928,8 +1928,8 @@ verify_interval_modification (buf, start, end)
       hooks = Fnreverse (hooks);
       while (! EQ (hooks, Qnil))
 	{
-	  call_mod_hooks (Fcar (hooks), make_number (start),
-			  make_number (end));
+	  call_mod_hooks (Fcar (hooks), make_fixnum (start),
+			  make_fixnum (end));
 	  hooks = Fcdr (hooks);
 	}
       UNGCPRO;

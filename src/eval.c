@@ -412,7 +412,7 @@ DEFUN ("progn", Fprogn, Sprogn, 0, UNEVALLED, 0,
    are to be bound to zero. */
   if (!EQ (Vmocklisp_arguments, Qt))
     {
-      val = make_number (0);
+      val = make_fixnum (0);
       while (!NILP (args) && (tem = Fcar (args), SYMBOLP (tem)))
 	{
 	  QUIT;
@@ -762,7 +762,7 @@ on its property list).")
       return Qnil;
 
   documentation = Fget (variable, Qvariable_documentation);
-  if (INTEGERP (documentation) && XINT (documentation) < 0)
+  if (FIXNUMP (documentation) && XINT (documentation) < 0)
     return Qt;
   if (STRINGP (documentation)
       && ((unsigned char) XSTRING (documentation)->data[0] == '*'))
@@ -770,7 +770,7 @@ on its property list).")
   /* If it is (STRING . INTEGER), a negative integer means a user variable.  */
   if (CONSP (documentation)
       && STRINGP (XCAR (documentation))
-      && INTEGERP (XCDR (documentation))
+      && FIXNUMP (XCDR (documentation))
       && XINT (XCDR (documentation)) < 0)
     return Qt;
   /* Customizable?  */
@@ -951,7 +951,7 @@ definitions to shadow the loaded ones for use in file byte-compilation.")
 	  if (EQ (XCAR (def), Qautoload))
 	    {
 	      /* Autoloading function: will it be a macro when loaded?  */
-	      tem = Fnth (make_number (4), def);
+	      tem = Fnth (make_fixnum (4), def);
 	      if (EQ (tem, Qt) || EQ (tem, Qmacro))
 		/* Yes, load it and try again.  */
 		{
@@ -2825,7 +2825,7 @@ funcall_lambda (fun, nargs, arg_vector)
 	specbind (next, arg_vector[i++]);
       else if (!optional)
 	return Fsignal (Qwrong_number_of_arguments,
-			Fcons (fun, Fcons (make_number (nargs), Qnil)));
+			Fcons (fun, Fcons (make_fixnum (nargs), Qnil)));
       else
 	specbind (next, Qnil);
     }
@@ -2834,7 +2834,7 @@ funcall_lambda (fun, nargs, arg_vector)
     return Fsignal (Qinvalid_function, Fcons (fun, Qnil));
   else if (i < nargs)
     return Fsignal (Qwrong_number_of_arguments,
-		    Fcons (fun, Fcons (make_number (nargs), Qnil)));
+		    Fcons (fun, Fcons (make_fixnum (nargs), Qnil)));
 
   if (CONSP (fun))
     val = Fprogn (XCDR (XCDR (fun)));

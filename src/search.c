@@ -157,7 +157,7 @@ compile_pattern_1 (cp, pattern, translate, regp, posix, multibyte)
     }
 
   cp->regexp = Qnil;
-  cp->buf.translate = (! NILP (translate) ? translate : make_number (0));
+  cp->buf.translate = (! NILP (translate) ? translate : make_fixnum (0));
   cp->posix = posix;
   cp->buf.multibyte = multibyte;
   BLOCK_INPUT;
@@ -223,7 +223,7 @@ compile_pattern (pattern, regp, translate, posix, multibyte)
       if (XSTRING (cp->regexp)->size == XSTRING (pattern)->size
 	  && STRING_MULTIBYTE (cp->regexp) == STRING_MULTIBYTE (pattern)
 	  && !NILP (Fstring_equal (cp->regexp, pattern))
-	  && EQ (cp->buf.translate, (! NILP (translate) ? translate : make_number (0)))
+	  && EQ (cp->buf.translate, (! NILP (translate) ? translate : make_fixnum (0)))
 	  && cp->posix == posix
 	  && cp->buf.multibyte == multibyte)
 	break;
@@ -413,7 +413,7 @@ string_match_1 (regexp, string, start, posix)
 	  = string_byte_to_char (string, search_regs.end[i]);
       }
 
-  return make_number (string_byte_to_char (string, val));
+  return make_fixnum (string_byte_to_char (string, val));
 }
 
 DEFUN ("string-match", Fstring_match, Sstring_match, 2, 3, 0,
@@ -758,7 +758,7 @@ scan_newline (start, start_byte, limit, limit_byte, count, allow_quit)
   /* If we are not in selective display mode,
      check only for newlines.  */
   int selective_display = (!NILP (current_buffer->selective_display)
-			   && !INTEGERP (current_buffer->selective_display));
+			   && !FIXNUMP (current_buffer->selective_display));
 
   /* The code that follows is like scan_buffer
      but checks for either newline or carriage return.  */
@@ -938,7 +938,7 @@ search_command (string, bound, noerror, count, direction, RE, posix)
 
   SET_PT (np);
 
-  return make_number (np);
+  return make_fixnum (np);
 }
 
 /* Return 1 if REGEXP it matches just one constant string.  */
@@ -994,8 +994,8 @@ do						\
     if (! NILP (trt))				\
       {						\
 	Lisp_Object temp;			\
-	temp = Faref (trt, make_number (d));	\
-	if (INTEGERP (temp))			\
+	temp = Faref (trt, make_fixnum (d));	\
+	if (FIXNUMP (temp))			\
 	  out = XINT (temp);			\
 	else					\
 	  out = d;				\
@@ -2222,7 +2222,7 @@ since only regular expressions have distinguished subexpressions.")
       CHECK_NUMBER (subexp, 3);
       sub = XINT (subexp);
       if (sub < 0 || sub >= search_regs.num_regs)
-	args_out_of_range (subexp, make_number (search_regs.num_regs));
+	args_out_of_range (subexp, make_fixnum (search_regs.num_regs));
     }
 
   if (NILP (string))
@@ -2230,16 +2230,16 @@ since only regular expressions have distinguished subexpressions.")
       if (search_regs.start[sub] < BEGV
 	  || search_regs.start[sub] > search_regs.end[sub]
 	  || search_regs.end[sub] > ZV)
-	args_out_of_range (make_number (search_regs.start[sub]),
-			   make_number (search_regs.end[sub]));
+	args_out_of_range (make_fixnum (search_regs.start[sub]),
+			   make_fixnum (search_regs.end[sub]));
     }
   else
     {
       if (search_regs.start[sub] < 0
 	  || search_regs.start[sub] > search_regs.end[sub]
 	  || search_regs.end[sub] > XSTRING (string)->size)
-	args_out_of_range (make_number (search_regs.start[sub]),
-			   make_number (search_regs.end[sub]));
+	args_out_of_range (make_fixnum (search_regs.start[sub]),
+			   make_fixnum (search_regs.end[sub]));
     }
 
   if (NILP (fixedcase))
@@ -2324,9 +2324,9 @@ since only regular expressions have distinguished subexpressions.")
     {
       Lisp_Object before, after;
 
-      before = Fsubstring (string, make_number (0),
-			   make_number (search_regs.start[sub]));
-      after = Fsubstring (string, make_number (search_regs.end[sub]), Qnil);
+      before = Fsubstring (string, make_fixnum (0),
+			   make_fixnum (search_regs.start[sub]));
+      after = Fsubstring (string, make_fixnum (search_regs.end[sub]), Qnil);
 
       /* Substitute parts of the match into NEWTEXT
 	 if desired.  */
@@ -2381,8 +2381,8 @@ since only regular expressions have distinguished subexpressions.")
 		    middle = Qnil;
 		  accum = concat3 (accum, middle,
 				   Fsubstring (string,
-					       make_number (substart),
-					       make_number (subend)));
+					       make_fixnum (substart),
+					       make_fixnum (subend)));
 		  lastpos = pos;
 		  lastpos_byte = pos_byte;
 		}
@@ -2444,7 +2444,7 @@ since only regular expressions have distinguished subexpressions.")
 
       rev_tbl= (!buf_multibyte && CHAR_TABLE_P (Vnonascii_translation_table)
 		? Fchar_table_extra_slot (Vnonascii_translation_table,
-					  make_number (0))
+					  make_fixnum (0))
 		: Qnil);
 
       substed_alloc_size = length * 2 + 100;
@@ -2557,9 +2557,9 @@ since only regular expressions have distinguished subexpressions.")
   del_range (search_regs.start[sub] + inslen, search_regs.end[sub] + inslen);
 
   if (case_action == all_caps)
-    Fupcase_region (make_number (PT - inslen), make_number (PT));
+    Fupcase_region (make_fixnum (PT - inslen), make_fixnum (PT));
   else if (case_action == cap_initial)
-    Fupcase_initials_region (make_number (PT - inslen), make_number (PT));
+    Fupcase_initials_region (make_fixnum (PT - inslen), make_fixnum (PT));
 
   newpoint = PT;
 
@@ -2585,11 +2585,11 @@ match_limit (num, beginningp)
   CHECK_NUMBER (num, 0);
   n = XINT (num);
   if (n < 0 || n >= search_regs.num_regs)
-    args_out_of_range (num, make_number (search_regs.num_regs));
+    args_out_of_range (num, make_fixnum (search_regs.num_regs));
   if (search_regs.num_regs <= 0
       || search_regs.start[n] < 0)
     return Qnil;
-  return (make_number ((beginningp) ? search_regs.start[n]
+  return (make_fixnum ((beginningp) ? search_regs.start[n]
 		                    : search_regs.end[n]));
 }
 
@@ -2661,11 +2661,11 @@ to hold all the values, and if INTEGERS is non-nil, no consing is done.")
 	    {
 	      data[2 * i] = Fmake_marker ();
 	      Fset_marker (data[2 * i],
-			   make_number (start),
+			   make_fixnum (start),
 			   last_thing_searched);
 	      data[2 * i + 1] = Fmake_marker ();
 	      Fset_marker (data[2 * i + 1],
-			   make_number (search_regs.end[i]), 
+			   make_fixnum (search_regs.end[i]), 
 			   last_thing_searched);
 	    }
 	  else

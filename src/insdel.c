@@ -600,7 +600,7 @@ copy_text (from_addr, to_addr, nbytes,
       if (CHAR_TABLE_P (Vnonascii_translation_table))
 	{
 	  tbl = Fchar_table_extra_slot (Vnonascii_translation_table,
-					make_number (0));
+					make_fixnum (0));
 	  if (!CHAR_TABLE_P (tbl))
 	    tbl = Qnil;
 	}
@@ -962,7 +962,7 @@ insert_1_both (string, nchars, nbytes, inherit, prepare, before_markers)
     offset_intervals (current_buffer, PT, nchars);
 
   if (!inherit && BUF_INTERVALS (current_buffer) != 0)
-    set_text_properties (make_number (PT), make_number (PT + nchars),
+    set_text_properties (make_fixnum (PT), make_fixnum (PT + nchars),
 			 Qnil, Qnil, Qnil);
 
   adjust_point (nchars, nbytes);
@@ -1792,7 +1792,7 @@ prepare_to_modify_buffer (start, end, preserve_ptr)
 	{
 	  Lisp_Object preserve_marker;
 	  struct gcpro gcpro1;
-	  preserve_marker = Fcopy_marker (make_number (*preserve_ptr), Qnil);
+	  preserve_marker = Fcopy_marker (make_fixnum (*preserve_ptr), Qnil);
 	  GCPRO1 (preserve_marker);
 	  verify_interval_modification (current_buffer, start, end);
 	  *preserve_ptr = marker_position (preserve_marker);
@@ -1838,7 +1838,7 @@ prepare_to_modify_buffer (start, end, preserve_ptr)
 
 #define PRESERVE_VALUE							\
   if (preserve_ptr && NILP (preserve_marker))				\
-    preserve_marker = Fcopy_marker (make_number (*preserve_ptr), Qnil)
+    preserve_marker = Fcopy_marker (make_fixnum (*preserve_ptr), Qnil)
 
 #define RESTORE_VALUE						\
   if (! NILP (preserve_marker))					\
@@ -1878,8 +1878,8 @@ signal_before_change (start_int, end_int, preserve_ptr)
   if (inhibit_modification_hooks)
     return;
 
-  start = make_number (start_int);
-  end = make_number (end_int);
+  start = make_fixnum (start_int);
+  end = make_fixnum (end_int);
   preserve_marker = Qnil;
   start_marker = Qnil;
   end_marker = Qnil;
@@ -1985,9 +1985,9 @@ signal_after_change (charpos, lendel, lenins)
 	  && current_buffer != XBUFFER (combine_after_change_buffer))
 	Fcombine_after_change_execute ();
 
-      elt = Fcons (make_number (charpos - BEG),
-		   Fcons (make_number (Z - (charpos - lendel + lenins)),
-			  Fcons (make_number (lenins - lendel), Qnil)));
+      elt = Fcons (make_fixnum (charpos - BEG),
+		   Fcons (make_fixnum (Z - (charpos - lendel + lenins)),
+			  Fcons (make_fixnum (lenins - lendel), Qnil)));
       combine_after_change_list
 	= Fcons (elt, combine_after_change_list);
       combine_after_change_buffer = Fcurrent_buffer ();
@@ -2044,18 +2044,18 @@ signal_after_change (charpos, lendel, lenins)
 
   if (!NILP (current_buffer->overlays_before)
       || !NILP (current_buffer->overlays_after))
-    report_overlay_modification (make_number (charpos),
-				 make_number (charpos + lenins),
+    report_overlay_modification (make_fixnum (charpos),
+				 make_fixnum (charpos + lenins),
 				 1,
-				 make_number (charpos),
-				 make_number (charpos + lenins),
-				 make_number (lendel));
+				 make_fixnum (charpos),
+				 make_fixnum (charpos + lenins),
+				 make_fixnum (lendel));
 
   /* After an insertion, call the text properties
      insert-behind-hooks or insert-in-front-hooks.  */
   if (lendel == 0)
-    report_interval_modification (make_number (charpos),
-				  make_number (charpos + lenins));
+    report_interval_modification (make_fixnum (charpos),
+				  make_fixnum (charpos + lenins));
 }
 
 Lisp_Object

@@ -310,7 +310,7 @@ parse_sound (sound, attrs)
   /* Volume must be in the range 0..100 or unspecified.  */
   if (!NILP (attrs[SOUND_VOLUME]))
     {
-      if (INTEGERP (attrs[SOUND_VOLUME]))
+      if (FIXNUMP (attrs[SOUND_VOLUME]))
 	{
 	  if (XINT (attrs[SOUND_VOLUME]) < 0
 	      || XINT (attrs[SOUND_VOLUME]) > 100)
@@ -438,7 +438,7 @@ a system-dependent default device name is used.")
       strcpy (sd.file, XSTRING (attrs[SOUND_DEVICE])->data);
     }
   
-  if (INTEGERP (attrs[SOUND_VOLUME]))
+  if (FIXNUMP (attrs[SOUND_VOLUME]))
     sd.volume = XFASTINT (attrs[SOUND_VOLUME]);
   else if (FLOATP (attrs[SOUND_VOLUME]))
     sd.volume = XFLOAT_DATA (attrs[SOUND_VOLUME]) * 100;

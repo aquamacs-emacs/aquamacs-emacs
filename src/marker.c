@@ -452,7 +452,7 @@ DEFUN ("marker-position", Fmarker_position, Smarker_position, 1, 1, 0,
 {
   CHECK_MARKER (marker, 0);
   if (XMARKER (marker)->buffer)
-    return make_number (XMARKER (marker)->charpos);
+    return make_fixnum (XMARKER (marker)->charpos);
 
   return Qnil;
 }
@@ -826,7 +826,7 @@ see `marker-insertion-type'.")
 {
   register Lisp_Object new;
 
-  if (! (INTEGERP (marker) || MARKERP (marker)))
+  if (! (FIXNUMP (marker) || MARKERP (marker)))
     marker = wrong_type_argument (Qinteger_or_marker_p, marker);
 
   new = Fmake_marker ();

@@ -2328,9 +2328,9 @@ A prefix arg makes KEEP-TIME non-nil.")
   encoded_newname = ENCODE_FILE (newname);
 
   if (NILP (ok_if_already_exists)
-      || INTEGERP (ok_if_already_exists))
+      || FIXNUMP (ok_if_already_exists))
     barf_or_query_if_file_exists (encoded_newname, "copy to it",
-				  INTEGERP (ok_if_already_exists), &out_st, 0);
+				  FIXNUMP (ok_if_already_exists), &out_st, 0);
   else if (stat (XSTRING (encoded_newname)->data, &out_st) < 0)
     out_st.st_mode = 0;
 
@@ -2354,7 +2354,7 @@ A prefix arg makes KEEP-TIME non-nil.")
   if (ifd < 0)
     report_file_error ("Opening input file", Fcons (file, Qnil));
 
-  record_unwind_protect (close_file_unwind, make_number (ifd));
+  record_unwind_protect (close_file_unwind, make_fixnum (ifd));
 
   /* We can only copy regular files and symbolic links.  Other files are not
      copyable by us. */
@@ -2398,7 +2398,7 @@ A prefix arg makes KEEP-TIME non-nil.")
   if (ofd < 0)
     report_file_error ("Opening output file", Fcons (newname, Qnil));
 
-  record_unwind_protect (close_file_unwind, make_number (ofd));
+  record_unwind_protect (close_file_unwind, make_fixnum (ofd));
 
   immediate_quit = 1;
   QUIT;
@@ -2589,9 +2589,9 @@ This is what happens in interactive use with M-x.")
   if (NILP (Fstring_equal (Fdowncase (file), Fdowncase (newname))))
 #endif
   if (NILP (ok_if_already_exists)
-      || INTEGERP (ok_if_already_exists))
+      || FIXNUMP (ok_if_already_exists))
     barf_or_query_if_file_exists (encoded_newname, "rename to it",
-				  INTEGERP (ok_if_already_exists), 0, 0);
+				  FIXNUMP (ok_if_already_exists), 0, 0);
 #ifndef BSD4_1
   if (0 > rename (XSTRING (encoded_file)->data, XSTRING (encoded_newname)->data))
 #else
@@ -2664,9 +2664,9 @@ This is what happens in interactive use with M-x.")
   encoded_newname = ENCODE_FILE (newname);
 
   if (NILP (ok_if_already_exists)
-      || INTEGERP (ok_if_already_exists))
+      || FIXNUMP (ok_if_already_exists))
     barf_or_query_if_file_exists (encoded_newname, "make it a new name",
-				  INTEGERP (ok_if_already_exists), 0, 0);
+				  FIXNUMP (ok_if_already_exists), 0, 0);
 
   unlink (XSTRING (newname)->data);
   if (0 > link (XSTRING (encoded_file)->data, XSTRING (encoded_newname)->data))
@@ -2731,9 +2731,9 @@ This happens for interactive use with M-x.")
   encoded_linkname = ENCODE_FILE (linkname);
 
   if (NILP (ok_if_already_exists)
-      || INTEGERP (ok_if_already_exists))
+      || FIXNUMP (ok_if_already_exists))
     barf_or_query_if_file_exists (encoded_linkname, "make it a link",
-				  INTEGERP (ok_if_already_exists), 0, 0);
+				  FIXNUMP (ok_if_already_exists), 0, 0);
   if (0 > symlink (XSTRING (encoded_filename)->data,
 		   XSTRING (encoded_linkname)->data))
     {
@@ -3248,7 +3248,7 @@ DEFUN ("file-modes", Ffile_modes, Sfile_modes, 1, 1, 0,
     st.st_mode |= S_IEXEC;
 #endif /* MSDOS && __DJGPP__ < 2 */
 
-  return make_number (st.st_mode & 07777);
+  return make_fixnum (st.st_mode & 07777);
 }
 
 DEFUN ("set-file-modes", Fset_file_modes, Sset_file_modes, 2, 2, 0,
@@ -3552,7 +3552,7 @@ actually used.")
   if (!NILP (replace))
     record_unwind_protect (restore_point_unwind, Fpoint_marker ());
 
-  record_unwind_protect (close_file_unwind, make_number (fd));
+  record_unwind_protect (close_file_unwind, make_fixnum (fd));
 
   /* Supposedly happens on VMS.  */
   if (! not_regular && st.st_size < 0)
@@ -3659,7 +3659,7 @@ actually used.")
 		  insert_1_both (read_buf, nread, nread, 0, 0, 0);
 		  TEMP_SET_PT_BOTH (BEG, BEG_BYTE);
 		  val = call2 (Vset_auto_coding_function,
-			       filename, make_number (nread));
+			       filename, make_fixnum (nread));
 		  set_buffer_internal (prev);
 
 		  /* Remove the binding for standard-output.  */
@@ -4215,7 +4215,7 @@ actually used.")
 	  if (inserted > 0 && ! NILP (Vset_auto_coding_function))
 	    {
 	      val = call2 (Vset_auto_coding_function,
-			   filename, make_number (inserted));
+			   filename, make_fixnum (inserted));
 	    }
 
 	  if (NILP (val))
@@ -4340,7 +4340,7 @@ actually used.")
 	}
 	  
       insval = call3 (Qformat_decode,
-		      Qnil, make_number (inserted), visit);
+		      Qnil, make_fixnum (inserted), visit);
       CHECK_NUMBER (insval, 0);
       inserted = XFASTINT (insval);
       
@@ -4364,7 +4364,7 @@ actually used.")
   p = Vafter_insert_file_functions;
   while (!NILP (p))
     {
-      insval = call1 (Fcar (p), make_number (inserted));
+      insval = call1 (Fcar (p), make_fixnum (inserted));
       if (!NILP (insval))
 	{
 	  CHECK_NUMBER (insval, 0);
@@ -4384,7 +4384,7 @@ actually used.")
   /* ??? Retval needs to be dealt with in all cases consistently.  */
   if (NILP (val))
     val = Fcons (orig_filename,
-		 Fcons (make_number (inserted),
+		 Fcons (make_fixnum (inserted),
 			Qnil));
 
   RETURN_UNGCPRO (unbind_to (count, val));
@@ -4728,7 +4728,7 @@ This does code conversion according to the value of\n\
       report_file_error ("Opening output file", Fcons (filename, Qnil));
     }
 
-  record_unwind_protect (close_file_unwind, make_number (desc));
+  record_unwind_protect (close_file_unwind, make_fixnum (desc));
 
   if (!NILP (append) && !NILP (Ffile_regular_p (filename)))
     {
@@ -4771,7 +4771,7 @@ This does code conversion according to the value of\n\
 #else
   /* Whether VMS or not, we must move the gap to the next of newline
      when we must put designation sequences at beginning of line.  */
-  if (INTEGERP (start)
+  if (FIXNUMP (start)
       && coding.type == coding_type_iso2022
       && coding.flags & CODING_FLAG_ISO_DESIGNATE_AT_BOL
       && GPT > BEG && GPT_ADDR[-1] != '\n')
@@ -4986,7 +4986,7 @@ build_annotations (start, end, pre_write_conversion)
          has written annotations to a temporary buffer, which is now
          current.  */
       res = call5 (Qformat_annotate_function, Fcar (p), start, end,
-		   original_buffer, make_number (i));
+		   original_buffer, make_fixnum (i));
       if (current_buffer != given_buffer)
 	{
 	  XSETFASTINT (start, BEGV);
@@ -5042,7 +5042,7 @@ a_write (desc, string, pos, nchars, annot, coding)
     {
       tem = Fcar_safe (Fcar (*annot));
       nextpos = pos - 1;
-      if (INTEGERP (tem))
+      if (FIXNUMP (tem))
 	nextpos = XFASTINT (tem);
 
       /* If there are no more annotations in this range,
@@ -5284,7 +5284,7 @@ auto_save_error (error)
 	message2 (XSTRING (msg)->data, nbytes, STRING_MULTIBYTE (msg));
       else
 	message2_nolog (XSTRING (msg)->data, nbytes, STRING_MULTIBYTE (msg));
-      Fsleep_for (make_number (1), Qnil);
+      Fsleep_for (make_fixnum (1), Qnil);
     }
 
   UNGCPRO;
@@ -5398,7 +5398,7 @@ A non-nil CURRENT-ONLY argument means save only current buffer.")
 
   record_unwind_protect (do_auto_save_unwind, lispstream);
   record_unwind_protect (do_auto_save_unwind_1,
-			 make_number (minibuffer_auto_raise));
+			 make_fixnum (minibuffer_auto_raise));
   minibuffer_auto_raise = 0;
   auto_saving = 1;
 
@@ -5477,7 +5477,7 @@ A non-nil CURRENT-ONLY argument means save only current buffer.")
 		/* Turn off auto-saving until there's a real save,
 		   and prevent any more warnings.  */
 		XSETINT (b->save_length, -1);
-		Fsleep_for (make_number (1), Qnil);
+		Fsleep_for (make_fixnum (1), Qnil);
 		continue;
 	      }
 	    set_buffer_internal (b);
@@ -5740,14 +5740,14 @@ provides a file dialog box..")
 	  args[0] = insdef;
 	  args[1] = initial;
 	  insdef = Fconcat (2, args);
-	  pos = make_number (XSTRING (double_dollars (dir))->size);
+	  pos = make_fixnum (XSTRING (double_dollars (dir))->size);
 	  insdef = Fcons (double_dollars (insdef), pos);
 	}
       else
 	insdef = double_dollars (insdef);
     }
   else if (STRINGP (initial))
-    insdef = Fcons (double_dollars (initial), make_number (0));
+    insdef = Fcons (double_dollars (initial), make_fixnum (0));
   else
     insdef = Qnil;
 

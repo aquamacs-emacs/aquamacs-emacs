@@ -2360,7 +2360,7 @@ init_system_name ()
 	      break;
 	    if (count >= 5)
 	      break;
-	    Fsleep_for (make_number (1), Qnil);
+	    Fsleep_for (make_fixnum (1), Qnil);
 	  }
 	if (hp)
 	  {

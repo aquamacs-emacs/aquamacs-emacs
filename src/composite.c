@@ -192,7 +192,7 @@ get_composition_id (charpos, bytepos, nchars, prop, string)
     goto invalid_composition;
 
   id = XCAR (prop);
-  if (INTEGERP (id))
+  if (FIXNUMP (id))
     {
       /* PROP should be Form-B.  */
       if (XINT (id) < 0 || XINT (id) >= n_compositions)
@@ -205,7 +205,7 @@ get_composition_id (charpos, bytepos, nchars, prop, string)
   if (!CONSP (id))
     goto invalid_composition;
   length = XCAR (id);
-  if (!INTEGERP (length) || XINT (length) != nchars)
+  if (!FIXNUMP (length) || XINT (length) != nchars)
     goto invalid_composition;
 
   components = XCDR (id);
@@ -214,26 +214,26 @@ get_composition_id (charpos, bytepos, nchars, prop, string)
      by consulting composition_hash_table.  The key for this table is
      COMPONENTS (converted to a vector COMPONENTS-VEC) or, if it is
      nil, vector of characters in the composition range.  */
-  if (INTEGERP (components))
-    key = Fmake_vector (make_number (1), components);
+  if (FIXNUMP (components))
+    key = Fmake_vector (make_fixnum (1), components);
   else if (STRINGP (components) || CONSP (components))
     key = Fvconcat (1, &components);
   else if (VECTORP (components))
     key = components;
   else if (NILP (components))
     {
-      key = Fmake_vector (make_number (nchars), Qnil);
+      key = Fmake_vector (make_fixnum (nchars), Qnil);
       if (STRINGP (string))
 	for (i = 0; i < nchars; i++)
 	  {
 	    FETCH_STRING_CHAR_ADVANCE (ch, string, charpos, bytepos);
-	    XVECTOR (key)->contents[i] = make_number (ch);
+	    XVECTOR (key)->contents[i] = make_fixnum (ch);
 	  }
       else
 	for (i = 0; i < nchars; i++)
 	  {
 	    FETCH_CHAR_ADVANCE (ch, charpos, bytepos);
-	    XVECTOR (key)->contents[i] = make_number (ch);
+	    XVECTOR (key)->contents[i] = make_fixnum (ch);
 	  }
     }
   else
@@ -249,7 +249,7 @@ get_composition_id (charpos, bytepos, nchars, prop, string)
       key = HASH_KEY (hash_table, hash_index);
       id = HASH_VALUE (hash_table, hash_index);
       XCAR (prop) = id;
-      XCDR (prop) = Fcons (make_number (nchars), Fcons (key, XCDR (prop)));
+      XCDR (prop) = Fcons (make_fixnum (nchars), Fcons (key, XCDR (prop)));
       return XINT (id);
     }
 
@@ -288,7 +288,7 @@ get_composition_id (charpos, bytepos, nchars, prop, string)
          composition rule).  */
       for (i = 0; i < len; i++)
 	{
-	  if (!INTEGERP (key_contents[i]))
+	  if (!FIXNUMP (key_contents[i]))
 	    goto invalid_composition;
 	}
     }
@@ -297,7 +297,7 @@ get_composition_id (charpos, bytepos, nchars, prop, string)
      the cons cell of PROP because it is not shared.  */
   XSETFASTINT (id, n_compositions);
   XCAR (prop) = id;
-  XCDR (prop) = Fcons (make_number (nchars), Fcons (key, XCDR (prop)));
+  XCDR (prop) = Fcons (make_fixnum (nchars), Fcons (key, XCDR (prop)));
 
   /* Register the composition in composition_hash_table.  */
   hash_index = hash_put (hash_table, key, id, hash_code);
@@ -307,7 +307,7 @@ get_composition_id (charpos, bytepos, nchars, prop, string)
 
   cmp->method = (NILP (components)
 		 ? COMPOSITION_RELATIVE
-		 : ((INTEGERP (components) || STRINGP (components))
+		 : ((FIXNUMP (components) || STRINGP (components))
 		    ? COMPOSITION_WITH_ALTCHARS
 		    : COMPOSITION_WITH_RULE_ALTCHARS));
   cmp->hash_index = hash_index;
@@ -423,8 +423,8 @@ find_composition (pos, limit, start, end, prop, object)
 
   if (limit > pos)		/* search forward */
     {
-      val = Fnext_single_property_change (make_number (pos), Qcomposition,
-					  object, make_number (limit));
+      val = Fnext_single_property_change (make_fixnum (pos), Qcomposition,
+					  object, make_fixnum (limit));
       pos = XINT (val);
       if (pos == limit)
 	return 0;
@@ -434,8 +434,8 @@ find_composition (pos, limit, start, end, prop, object)
       if (get_property_and_range (pos - 1, Qcomposition, prop, start, end,
 				  object))
 	return 1;
-      val = Fprevious_single_property_change (make_number (pos), Qcomposition,
-					      object, make_number (limit));
+      val = Fprevious_single_property_change (make_fixnum (pos), Qcomposition,
+					      object, make_fixnum (limit));
       pos = XINT (val);
       if (pos == limit)
 	return 0;
@@ -468,10 +468,10 @@ run_composition_function (from, to, prop)
       && !COMPOSITION_VALID_P (start, end, prop))
     to = end;
   if (!NILP (func))
-    call2 (func, make_number (from), make_number (to));
+    call2 (func, make_fixnum (from), make_fixnum (to));
   else if (!NILP (Ffboundp (Vcompose_chars_after_function)))
     call3 (Vcompose_chars_after_function,
-	   make_number (from), make_number (to), Qnil);
+	   make_fixnum (from), make_fixnum (to), Qnil);
 }
 
 /* Make invalid compositions adjacent to or inside FROM and TO valid.
@@ -503,7 +503,7 @@ update_compositions (from, to, check_mask)
 	  && find_composition (from - 1, -1, &start, &end, &prop, Qnil))
 	{
 	  if (from < end)
-	    Fput_text_property (make_number (from), make_number (end),
+	    Fput_text_property (make_fixnum (from), make_fixnum (end),
 				Qcomposition,
 				Fcons (XCAR (prop), XCDR (prop)), Qnil);
 	  run_composition_function (start, end, prop);
@@ -536,7 +536,7 @@ update_compositions (from, to, check_mask)
 	     To avoid it, in such a case, we change the property of
 	     the former to the copy of it.  */
 	  if (to < end)
-	    Fput_text_property (make_number (start), make_number (to),
+	    Fput_text_property (make_fixnum (start), make_fixnum (to),
 				Qcomposition,
 				Fcons (XCAR (prop), XCDR (prop)), Qnil);
 	  run_composition_function (start, end, prop);
@@ -585,9 +585,9 @@ compose_text (start, end, components, modification_func, string)
 {
   Lisp_Object prop;
 
-  prop = Fcons (Fcons (make_number (end - start), components),
+  prop = Fcons (Fcons (make_fixnum (end - start), components),
 		modification_func);
-  Fput_text_property  (make_number (start), make_number (end),
+  Fput_text_property  (make_fixnum (start), make_fixnum (end),
 		       Qcomposition, prop, string);
 }
 
@@ -667,18 +667,18 @@ compose_chars_in_text (start, end, string)
 	      && !NILP (Ffboundp (XCDR (elt))))
 	    {
 	      if (STRINGP (string))
-		val = Fstring_match (XCAR (elt), string, make_number (start));
+		val = Fstring_match (XCAR (elt), string, make_fixnum (start));
 	      else
 		{
 		  val = Flooking_at (XCAR (elt));
 		  if (!NILP (val))
-		    val = make_number (start);
+		    val = make_fixnum (start);
 		}
-	      if (INTEGERP (val) && XFASTINT (val) == start)
+	      if (FIXNUMP (val) && XFASTINT (val) == start)
 		{
-		  to = Fmatch_end (make_number (0));
+		  to = Fmatch_end (make_fixnum (0));
 		  val = call4 (XCDR (elt), val, to, XCAR (elt), string);
-		  if (INTEGERP (val) && XINT (val) > 1)
+		  if (FIXNUMP (val) && XINT (val) > 1)
 		    {
 		      start += XINT (val);
 		      if (STRINGP (string))
@@ -723,7 +723,7 @@ for the composition.   See `compose-region' for more detial.")
 {
   validate_region (&start, &end);
   if (!NILP (components)
-      && !INTEGERP (components)
+      && !FIXNUMP (components)
       && !CONSP (components)
       && !STRINGP (components))
     CHECK_VECTOR (components, 2);
@@ -783,10 +783,10 @@ See `find-composition' for more detail.")
   if (!find_composition (start, end, &start, &end, &prop, string))
     return Qnil;
   if (!COMPOSITION_VALID_P (start, end, prop))
-    return Fcons (make_number (start), Fcons (make_number (end),
+    return Fcons (make_fixnum (start), Fcons (make_fixnum (end),
 					      Fcons (Qnil, Qnil)));
   if (NILP (detail_p))
-    return Fcons (make_number (start), Fcons (make_number (end),
+    return Fcons (make_fixnum (start), Fcons (make_fixnum (end),
 					      Fcons (Qt, Qnil)));
 
   if (COMPOSITION_REGISTERD_P (prop))
@@ -812,12 +812,12 @@ See `find-composition' for more detail.")
       tail = Fcons (components,
 		    Fcons (relative_p,
 			   Fcons (mod_func,
-				  Fcons (make_number (width), Qnil))));
+				  Fcons (make_fixnum (width), Qnil))));
     }
   else
     tail = Qnil;
 
-  return Fcons (make_number (start), Fcons (make_number (end), tail));
+  return Fcons (make_fixnum (start), Fcons (make_fixnum (end), tail));
 }
 
 
@@ -837,7 +837,7 @@ syms_of_composite ()
     args[2] = QCweakness;
     args[3] = Qnil;
     args[4] = QCsize;
-    args[5] = make_number (311);
+    args[5] = make_fixnum (311);
     composition_hash_table = Fmake_hash_table (6, args);
     staticpro (&composition_hash_table);
   }
@@ -868,7 +868,7 @@ The default value is the function `compose-chars-after'.");
      But don't staticpro it here--that is done in alloc.c.  */
   Qchar_table_extra_slots = intern ("char-table-extra-slots");
 
-  Fput (Qcomposition_function_table, Qchar_table_extra_slots, make_number (0));
+  Fput (Qcomposition_function_table, Qchar_table_extra_slots, make_fixnum (0));
 
   DEFVAR_LISP ("composition-function-table", &Vcomposition_function_table,
     "Char table of patterns and functions to make a composition.\n\

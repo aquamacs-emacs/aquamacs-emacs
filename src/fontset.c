@@ -329,7 +329,7 @@ make_fontset (frame, name, base)
       Lisp_Object tem;
       int i; 
 
-      tem = Fmake_vector (make_number (size + 8), Qnil);
+      tem = Fmake_vector (make_fixnum (size + 8), Qnil);
       for (i = 0; i < size; i++)
 	AREF (tem, i) = AREF (Vfontset_table, i);
       Vfontset_table = tem;
@@ -337,7 +337,7 @@ make_fontset (frame, name, base)
 
   fontset = Fmake_char_table (Qfontset, Qnil);
 
-  FONTSET_ID (fontset) = make_number (id);
+  FONTSET_ID (fontset) = make_fixnum (id);
   FONTSET_NAME (fontset) = name;
   FONTSET_FRAME (fontset) = frame;
   FONTSET_BASE (fontset) = base;
@@ -486,7 +486,7 @@ face_for_char (f, face, c)
   
   /* Record the face ID in FONTSET at the same index as the
      information in the base fontset.  */
-  FONTSET_SET (fontset, c, make_number (face_id));
+  FONTSET_SET (fontset, c, make_fixnum (face_id));
   return face_id;
 }
 
@@ -672,7 +672,7 @@ fs_load_font (f, c, fontname, id, face)
 		if (CONSP (XCAR (tmp))
 		    && ((i = get_charset_id (XCAR (XCAR (tmp))))
 			>= 0)
-		    && INTEGERP (XCDR (XCAR (tmp)))
+		    && FIXNUMP (XCDR (XCAR (tmp)))
 		    && XFASTINT (XCDR (XCAR (tmp))) < 4)
 		  fontp->encoding[i]
 		    = XFASTINT (XCDR (XCAR (tmp)));
@@ -690,7 +690,7 @@ fs_load_font (f, c, fontname, id, face)
   if (face
       && !NILP (fontset)
       && !BASE_FONTSET_P (fontset))
-    FONTSET_SET (fontset, c, make_number (face->id));
+    FONTSET_SET (fontset, c, make_fixnum (face->id));
   return fontp;
 }
 
@@ -912,7 +912,7 @@ FONTLIST is an alist of charsets vs corresponding font name patterns.")
       else
 	{
 	  c = MAKE_CHAR (charset, 0, 0);
-	  elements = Fcons (Fcons (make_number (c), tem), elements);
+	  elements = Fcons (Fcons (make_fixnum (c), tem), elements);
 	}
     }
 
@@ -920,7 +920,7 @@ FONTLIST is an alist of charsets vs corresponding font name patterns.")
     error ("No ASCII font in the fontlist");
 
   fontset = make_fontset (Qnil, name, Qnil);
-  FONTSET_ASCII (fontset) = Fcons (make_number (0), ascii_font);
+  FONTSET_ASCII (fontset) = Fcons (make_fixnum (0), ascii_font);
   for (; CONSP (elements); elements = XCDR (elements))
     {
       elt = XCAR (elements);
@@ -1033,7 +1033,7 @@ name of a font, REGSITRY is a registry name of a font.")
   if (STRINGP (fontname))
     {
       fontname = Fdowncase (fontname);
-      elt = Fcons (make_number (from), font_family_registry (fontname, 0));
+      elt = Fcons (make_fixnum (from), font_family_registry (fontname, 0));
     }
   else
     {
@@ -1050,7 +1050,7 @@ name of a font, REGSITRY is a registry name of a font.")
 	  CHECK_STRING (registry, 2);
 	  registry = Fdowncase (registry);
 	}
-      elt = Fcons (make_number (from), Fcons (family, registry));
+      elt = Fcons (make_fixnum (from), Fcons (family, registry));
     }
 
   /* The arg FRAME is kept for backward compatibility.  We only check
@@ -1119,15 +1119,15 @@ If the named font is not yet loaded, return nil.")
   if (!fontp)
     return Qnil;
 
-  info = Fmake_vector (make_number (7), Qnil);
+  info = Fmake_vector (make_fixnum (7), Qnil);
 
   XVECTOR (info)->contents[0] = build_string (fontp->name);
   XVECTOR (info)->contents[1] = build_string (fontp->full_name);
-  XVECTOR (info)->contents[2] = make_number (fontp->size);
-  XVECTOR (info)->contents[3] = make_number (fontp->height);
-  XVECTOR (info)->contents[4] = make_number (fontp->baseline_offset);
-  XVECTOR (info)->contents[5] = make_number (fontp->relative_compose);
-  XVECTOR (info)->contents[6] = make_number (fontp->default_ascent);
+  XVECTOR (info)->contents[2] = make_fixnum (fontp->size);
+  XVECTOR (info)->contents[3] = make_fixnum (fontp->height);
+  XVECTOR (info)->contents[4] = make_fixnum (fontp->baseline_offset);
+  XVECTOR (info)->contents[5] = make_fixnum (fontp->relative_compose);
+  XVECTOR (info)->contents[6] = make_fixnum (fontp->default_ascent);
 
   return info;
 }
@@ -1165,7 +1165,7 @@ DEFUN ("internal-char-font", Finternal_char_font, Sinternal_char_font, 1, 1, 0,
   CHECK_NUMBER_COERCE_MARKER (position, 0);
   pos = XINT (position);
   if (pos < BEGV || pos >= ZV)
-    args_out_of_range_3 (position, make_number (BEGV), make_number (ZV));
+    args_out_of_range_3 (position, make_fixnum (BEGV), make_fixnum (ZV));
   pos_byte = CHAR_TO_BYTE (pos);
   c = FETCH_CHAR (pos_byte);
   if (! CHAR_VALID_P (c, 0))
@@ -1285,7 +1285,7 @@ If FRAME is omitted, it defaults to the currently selected frame.")
      (LAST FONT-INFO FONT-INFO ...), where FONT-INFO is (CHAR-OR-RANGE
      FONT-SPEC).  See the comment for accumulate_font_info for the
      detail.  */
-  val = Fcons (Fcons (make_number (0),
+  val = Fcons (Fcons (make_fixnum (0),
 		      Fcons (XCDR (FONTSET_ASCII (fontset)), Qnil)),
 	       Qnil);
   val = Fcons (val, val);
@@ -1300,7 +1300,7 @@ If FRAME is omitted, it defaults to the currently selected frame.")
     {
       int c;
       elt = XCAR (tail);
-      if (INTEGERP (XCAR (elt)))
+      if (FIXNUMP (XCAR (elt)))
 	{
 	  int charset, c1, c2;
 	  c = XINT (XCAR (elt));
@@ -1316,7 +1316,7 @@ If FRAME is omitted, it defaults to the currently selected frame.")
 	  struct face *face;
 
 	  face_id = FONTSET_REF_VIA_BASE (realized[i], c);
-	  if (INTEGERP (face_id))
+	  if (FIXNUMP (face_id))
 	    {
 	      face = FACE_FROM_ID (f, XINT (face_id));
 	      if (face && face->font && face->font_name)
@@ -1335,9 +1335,9 @@ If FRAME is omitted, it defaults to the currently selected frame.")
       elt = XCAR (elt);
       fontp = (*query_font_func) (f, XSTRING (elt)->data);
     }
-  val = Fmake_vector (make_number (3), val);
-  AREF (val, 0) = fontp ? make_number (fontp->size) : make_number (0);
-  AREF (val, 1) = fontp ? make_number (fontp->height) : make_number (0);
+  val = Fmake_vector (make_fixnum (3), val);
+  AREF (val, 0) = fontp ? make_fixnum (fontp->size) : make_fixnum (0);
+  AREF (val, 1) = fontp ? make_fixnum (fontp->height) : make_fixnum (0);
   return val;
 }
 
@@ -1393,30 +1393,30 @@ syms_of_fontset ()
 
   Qfontset = intern ("fontset");
   staticpro (&Qfontset);
-  Fput (Qfontset, Qchar_table_extra_slots, make_number (3));
+  Fput (Qfontset, Qchar_table_extra_slots, make_fixnum (3));
 
   Vcached_fontset_data = Qnil;
   staticpro (&Vcached_fontset_data);
 
-  Vfontset_table = Fmake_vector (make_number (32), Qnil);
+  Vfontset_table = Fmake_vector (make_fixnum (32), Qnil);
   staticpro (&Vfontset_table);
 
   Vdefault_fontset = Fmake_char_table (Qfontset, Qnil);
   staticpro (&Vdefault_fontset);
-  FONTSET_ID (Vdefault_fontset) = make_number (0);
+  FONTSET_ID (Vdefault_fontset) = make_fixnum (0);
   FONTSET_NAME (Vdefault_fontset)
     = build_string ("-*-*-*-*-*-*-*-*-*-*-*-*-fontset-default");
 #if defined (macintosh)
   FONTSET_ASCII (Vdefault_fontset)
-    = Fcons (make_number (0),
+    = Fcons (make_fixnum (0),
 	     build_string ("-apple-monaco-medium-r-*--*-120-*-*-*-*-mac-roman"));
 #elif defined (WINDOWSNT)
   FONTSET_ASCII (Vdefault_fontset)
-    = Fcons (make_number (0),
+    = Fcons (make_fixnum (0),
 	     build_string ("-*-courier new-normal-r-*-*-*-100-*-*-*-*-iso8859-1"));
 #else
   FONTSET_ASCII (Vdefault_fontset)
-    = Fcons (make_number (0),
+    = Fcons (make_fixnum (0),
 	     build_string ("-adobe-courier-medium-r-*-*-*-120-*-*-*-*-iso8859-1"));
 #endif
   AREF (Vfontset_table, 0) = Vdefault_fontset;

@@ -725,7 +725,7 @@ init_x_parm_symbols ()
 
   for (i = 0; i < sizeof (x_frame_parms) / sizeof (x_frame_parms[0]); i++)
     Fput (intern (x_frame_parms[i].name), Qx_frame_parameter,
-	  make_number (i));
+	  make_fixnum (i));
 }
 
 /* Change the parameters of frame F as specified by ALIST.
@@ -866,7 +866,7 @@ x_set_frame_parameters (f, alist)
     {
       left_no_change = 1;
       if (f->output_data.w32->left_pos < 0)
-	left = Fcons (Qplus, Fcons (make_number (f->output_data.w32->left_pos), Qnil));
+	left = Fcons (Qplus, Fcons (make_fixnum (f->output_data.w32->left_pos), Qnil));
       else
 	XSETINT (left, f->output_data.w32->left_pos);
     }
@@ -874,20 +874,20 @@ x_set_frame_parameters (f, alist)
     {
       top_no_change = 1;
       if (f->output_data.w32->top_pos < 0)
-	top = Fcons (Qplus, Fcons (make_number (f->output_data.w32->top_pos), Qnil));
+	top = Fcons (Qplus, Fcons (make_fixnum (f->output_data.w32->top_pos), Qnil));
       else
 	XSETINT (top, f->output_data.w32->top_pos);
     }
 
   /* If one of the icon positions was not set, preserve or default it.  */
-  if (EQ (icon_left, Qunbound) || ! INTEGERP (icon_left))
+  if (EQ (icon_left, Qunbound) || ! FIXNUMP (icon_left))
     {
       icon_left_no_change = 1;
       icon_left = Fcdr (Fassq (Qicon_left, f->param_alist));
       if (NILP (icon_left))
 	XSETINT (icon_left, 0);
     }
-  if (EQ (icon_top, Qunbound) || ! INTEGERP (icon_top))
+  if (EQ (icon_top, Qunbound) || ! FIXNUMP (icon_top))
     {
       icon_top_no_change = 1;
       icon_top = Fcdr (Fassq (Qicon_top, f->param_alist));
@@ -913,7 +913,7 @@ x_set_frame_parameters (f, alist)
     if (width != FRAME_WIDTH (f)
 	|| height != FRAME_HEIGHT (f)
 	|| FRAME_NEW_HEIGHT (f) || FRAME_NEW_WIDTH (f))
-      Fset_frame_size (frame, make_number (width), make_number (height));
+      Fset_frame_size (frame, make_fixnum (width), make_fixnum (height));
 
     if ((!NILP (left) || !NILP (top))
 	&& ! (left_no_change && top_no_change)
@@ -927,7 +927,7 @@ x_set_frame_parameters (f, alist)
 	f->output_data.w32->size_hint_flags &= ~ (XNegative | YNegative);
 	if (EQ (left, Qminus))
 	  f->output_data.w32->size_hint_flags |= XNegative;
-	else if (INTEGERP (left))
+	else if (FIXNUMP (left))
 	  {
 	    leftpos = XINT (left);
 	    if (leftpos < 0)
@@ -935,21 +935,21 @@ x_set_frame_parameters (f, alist)
 	  }
 	else if (CONSP (left) && EQ (XCAR (left), Qminus)
 		 && CONSP (XCDR (left))
-		 && INTEGERP (XCAR (XCDR (left))))
+		 && FIXNUMP (XCAR (XCDR (left))))
 	  {
 	    leftpos = - XINT (XCAR (XCDR (left)));
 	    f->output_data.w32->size_hint_flags |= XNegative;
 	  }
 	else if (CONSP (left) && EQ (XCAR (left), Qplus)
 		 && CONSP (XCDR (left))
-		 && INTEGERP (XCAR (XCDR (left))))
+		 && FIXNUMP (XCAR (XCDR (left))))
 	  {
 	    leftpos = XINT (XCAR (XCDR (left)));
 	  }
 
 	if (EQ (top, Qminus))
 	  f->output_data.w32->size_hint_flags |= YNegative;
-	else if (INTEGERP (top))
+	else if (FIXNUMP (top))
 	  {
 	    toppos = XINT (top);
 	    if (toppos < 0)
@@ -957,14 +957,14 @@ x_set_frame_parameters (f, alist)
 	  }
 	else if (CONSP (top) && EQ (XCAR (top), Qminus)
 		 && CONSP (XCDR (top))
-		 && INTEGERP (XCAR (XCDR (top))))
+		 && FIXNUMP (XCAR (XCDR (top))))
 	  {
 	    toppos = - XINT (XCAR (XCDR (top)));
 	    f->output_data.w32->size_hint_flags |= YNegative;
 	  }
 	else if (CONSP (top) && EQ (XCAR (top), Qplus)
 		 && CONSP (XCDR (top))
-		 && INTEGERP (XCAR (XCDR (top))))
+		 && FIXNUMP (XCAR (XCDR (top))))
 	  {
 	    toppos = XINT (XCAR (XCDR (top)));
 	  }
@@ -1044,9 +1044,9 @@ x_report_frame_params (f, alistptr)
     store_in_alist (alistptr, Qtop, Fcons (Qplus, Fcons (tem, Qnil)));
 
   store_in_alist (alistptr, Qborder_width,
-       	   make_number (f->output_data.w32->border_width));
+       	   make_fixnum (f->output_data.w32->border_width));
   store_in_alist (alistptr, Qinternal_border_width,
-       	   make_number (f->output_data.w32->internal_border_width));
+       	   make_fixnum (f->output_data.w32->internal_border_width));
   sprintf (buf, "%ld", (long) FRAME_W32_WINDOW (f));
   store_in_alist (alistptr, Qwindow_id,
        	   build_string (buf));
@@ -1132,7 +1132,7 @@ where R,G,B are numbers between 0 and 255 and name is an arbitrary string.")
 	    if (name[num] == '\n')
 	      name[num] = 0;
 	    cmap = Fcons (Fcons (build_string (name),
-				 make_number (RGB (red, green, blue))),
+				 make_fixnum (RGB (red, green, blue))),
 			  cmap);
 	  }
       }
@@ -1410,7 +1410,7 @@ DEFUN ("w32-default-color-map", Fw32_default_color_map, Sw32_default_color_map,
   for (i = 0; i < sizeof (w32_color_map) / sizeof (w32_color_map[0]); 
        pc++, i++)
     cmap = Fcons (Fcons (build_string (pc->name),
-			 make_number (pc->colorref)),
+			 make_fixnum (pc->colorref)),
 		  cmap);
   
   UNBLOCK_INPUT;
@@ -2231,7 +2231,7 @@ x_specified_cursor_type (arg, width)
     }
   else if (CONSP (arg)
 	   && EQ (XCAR (arg), Qbar)
-	   && INTEGERP (XCDR (arg))
+	   && FIXNUMP (XCDR (arg))
 	   && XINT (XCDR (arg)) >= 0)
     {
       type = BAR_CURSOR;
@@ -2474,9 +2474,9 @@ x_change_window_heights (window, n)
   XSETFASTINT (w->top, XFASTINT (w->top) + n);
   XSETFASTINT (w->height, XFASTINT (w->height) - n);
 
-  if (INTEGERP (w->orig_top))
+  if (FIXNUMP (w->orig_top))
     XSETFASTINT (w->orig_top, XFASTINT (w->orig_top) + n);
-  if (INTEGERP (w->orig_height))
+  if (FIXNUMP (w->orig_height))
     XSETFASTINT (w->orig_height, XFASTINT (w->orig_height) - n);
 
   /* Handle just the top child in a vertical split.  */
@@ -2506,7 +2506,7 @@ x_set_menu_bar_lines (f, value, oldval)
   if (FRAME_MINIBUF_ONLY_P (f))
     return;
 
-  if (INTEGERP (value))
+  if (FIXNUMP (value))
     nlines = XINT (value);
   else
     nlines = 0;
@@ -2549,7 +2549,7 @@ x_set_tool_bar_lines (f, value, oldval)
     return;
 
   /* Use VALUE only if an integer >= 0.  */
-  if (INTEGERP (value) && XINT (value) >= 0)
+  if (FIXNUMP (value) && XINT (value) >= 0)
     nlines = XFASTINT (value);
   else
     nlines = 0;
@@ -2800,7 +2800,7 @@ x_set_scroll_bar_width (f, arg, oldval)
 	x_set_window_size (f, 0, FRAME_WIDTH (f), FRAME_HEIGHT (f));
       do_pending_window_change (0);
     }
-  else if (INTEGERP (arg) && XINT (arg) > 0
+  else if (FIXNUMP (arg) && XINT (arg) > 0
 	   && XFASTINT (arg) != FRAME_SCROLL_BAR_PIXEL_WIDTH (f))
     {
       FRAME_SCROLL_BAR_PIXEL_WIDTH (f) = XFASTINT (arg);
@@ -3032,7 +3032,7 @@ w32_get_arg (alist, param, attribute, class, type)
 	  switch (type)
 	    {
 	    case RES_TYPE_NUMBER:
-	      return make_number (atoi (XSTRING (tem)->data));
+	      return make_fixnum (atoi (XSTRING (tem)->data));
 
 	    case RES_TYPE_FLOAT:
 	      return make_float (atof (XSTRING (tem)->data));
@@ -3124,11 +3124,11 @@ or a list (- N) meaning -N pixels relative to bottom/right corner.")
       Lisp_Object element;
 
       if (x >= 0 && (geometry & XNegative))
-	element = Fcons (Qleft, Fcons (Qminus, Fcons (make_number (-x), Qnil)));
+	element = Fcons (Qleft, Fcons (Qminus, Fcons (make_fixnum (-x), Qnil)));
       else if (x < 0 && ! (geometry & XNegative))
-	element = Fcons (Qleft, Fcons (Qplus, Fcons (make_number (x), Qnil)));
+	element = Fcons (Qleft, Fcons (Qplus, Fcons (make_fixnum (x), Qnil)));
       else
-	element = Fcons (Qleft, make_number (x));
+	element = Fcons (Qleft, make_fixnum (x));
       result = Fcons (element, result);
     }
 
@@ -3137,18 +3137,18 @@ or a list (- N) meaning -N pixels relative to bottom/right corner.")
       Lisp_Object element;
 
       if (y >= 0 && (geometry & YNegative))
-	element = Fcons (Qtop, Fcons (Qminus, Fcons (make_number (-y), Qnil)));
+	element = Fcons (Qtop, Fcons (Qminus, Fcons (make_fixnum (-y), Qnil)));
       else if (y < 0 && ! (geometry & YNegative))
-	element = Fcons (Qtop, Fcons (Qplus, Fcons (make_number (y), Qnil)));
+	element = Fcons (Qtop, Fcons (Qplus, Fcons (make_fixnum (y), Qnil)));
       else
-	element = Fcons (Qtop, make_number (y));
+	element = Fcons (Qtop, make_fixnum (y));
       result = Fcons (element, result);
     }
 
   if (geometry & WidthValue)
-    result = Fcons (Fcons (Qwidth, make_number (width)), result);
+    result = Fcons (Fcons (Qwidth, make_fixnum (width)), result);
   if (geometry & HeightValue)
-    result = Fcons (Fcons (Qheight, make_number (height)), result);
+    result = Fcons (Fcons (Qheight, make_fixnum (height)), result);
 
   return result;
 }
@@ -3228,14 +3228,14 @@ x_figure_window_size (f, parms)
 	}
       else if (CONSP (tem0) && EQ (XCAR (tem0), Qminus)
 	       && CONSP (XCDR (tem0))
-	       && INTEGERP (XCAR (XCDR (tem0))))
+	       && FIXNUMP (XCAR (XCDR (tem0))))
 	{
 	  f->output_data.w32->top_pos = - XINT (XCAR (XCDR (tem0)));
 	  window_prompting |= YNegative;
 	}
       else if (CONSP (tem0) && EQ (XCAR (tem0), Qplus)
 	       && CONSP (XCDR (tem0))
-	       && INTEGERP (XCAR (XCDR (tem0))))
+	       && FIXNUMP (XCAR (XCDR (tem0))))
 	{
 	  f->output_data.w32->top_pos = XINT (XCAR (XCDR (tem0)));
 	}
@@ -3256,14 +3256,14 @@ x_figure_window_size (f, parms)
 	}
       else if (CONSP (tem1) && EQ (XCAR (tem1), Qminus)
 	       && CONSP (XCDR (tem1))
-	       && INTEGERP (XCAR (XCDR (tem1))))
+	       && FIXNUMP (XCAR (XCDR (tem1))))
 	{
 	  f->output_data.w32->left_pos = - XINT (XCAR (XCDR (tem1)));
 	  window_prompting |= XNegative;
 	}
       else if (CONSP (tem1) && EQ (XCAR (tem1), Qplus)
 	       && CONSP (XCDR (tem1))
-	       && INTEGERP (XCAR (XCDR (tem1))))
+	       && FIXNUMP (XCAR (XCDR (tem1))))
 	{
 	  f->output_data.w32->left_pos = XINT (XCAR (XCDR (tem1)));
 	}
@@ -3685,7 +3685,7 @@ map_keypad_keys (unsigned int virt_key, unsigned int extended)
    key code and modifier combination to capture.  */
 Lisp_Object w32_grabbed_keys;
 
-#define HOTKEY(vk,mods)       make_number (((vk) & 255) | ((mods) << 8))
+#define HOTKEY(vk,mods)       make_fixnum (((vk) & 255) | ((mods) << 8))
 #define HOTKEY_ID(k)          (XFASTINT (k) & 0xbfff)
 #define HOTKEY_VK_CODE(k)     (XFASTINT (k) & 255)
 #define HOTKEY_MODIFIERS(k)   (XFASTINT (k) >> 8)
@@ -3706,7 +3706,7 @@ register_hot_keys (hwnd)
       Lisp_Object key = XCAR (keylist);
 
       /* Deleted entries get set to nil.  */
-      if (!INTEGERP (key))
+      if (!FIXNUMP (key))
 	continue;
 
       RegisterHotKey (hwnd, HOTKEY_ID (key),
@@ -3725,7 +3725,7 @@ unregister_hot_keys (hwnd)
     {
       Lisp_Object key = XCAR (keylist);
 
-      if (!INTEGERP (key))
+      if (!FIXNUMP (key))
 	continue;
 
       UnregisterHotKey (hwnd, HOTKEY_ID (key));
@@ -5288,7 +5288,7 @@ This function is an internal primitive--use `make-frame' instead.")
 			 "font", "Font", RES_TYPE_STRING);
   }
 
-  x_default_parameter (f, parms, Qborder_width, make_number (2),
+  x_default_parameter (f, parms, Qborder_width, make_fixnum (2),
 		       "borderWidth", "BorderWidth", RES_TYPE_NUMBER);
   /* This defaults to 2 in order to match xterm.  We recognize either
      internalBorderWidth or internalBorder (which is what xterm calls
@@ -5304,7 +5304,7 @@ This function is an internal primitive--use `make-frame' instead.")
 		       parms);
     }
   /* Default internalBorderWidth to 0 on Windows to match other programs.  */
-  x_default_parameter (f, parms, Qinternal_border_width, make_number (0),
+  x_default_parameter (f, parms, Qinternal_border_width, make_fixnum (0),
 		       "internalBorderWidth", "InternalBorder", RES_TYPE_NUMBER);
   x_default_parameter (f, parms, Qvertical_scroll_bars, Qright,
 		       "verticalScrollBars", "ScrollBars", RES_TYPE_SYMBOL);
@@ -5334,9 +5334,9 @@ This function is an internal primitive--use `make-frame' instead.")
      happen.  */
   init_frame_faces (f);
   
-  x_default_parameter (f, parms, Qmenu_bar_lines, make_number (1),
+  x_default_parameter (f, parms, Qmenu_bar_lines, make_fixnum (1),
 		       "menuBar", "MenuBar", RES_TYPE_NUMBER);
-  x_default_parameter (f, parms, Qtool_bar_lines, make_number (0),
+  x_default_parameter (f, parms, Qtool_bar_lines, make_fixnum (0),
                        "toolBar", "ToolBar", RES_TYPE_NUMBER);
   x_default_parameter (f, parms, Qbuffer_predicate, Qnil,
 		       "bufferPredicate", "BufferPredicate", RES_TYPE_SYMBOL);
@@ -5410,11 +5410,11 @@ This function is an internal primitive--use `make-frame' instead.")
 		? tool_bar_button_relief
 		: DEFAULT_TOOL_BAR_BUTTON_RELIEF);
 
-      if (INTEGERP (Vtool_bar_button_margin)
+      if (FIXNUMP (Vtool_bar_button_margin)
 	  && XINT (Vtool_bar_button_margin) > 0)
 	margin = XFASTINT (Vtool_bar_button_margin);
       else if (CONSP (Vtool_bar_button_margin)
-	       && INTEGERP (XCDR (Vtool_bar_button_margin))
+	       && FIXNUMP (XCDR (Vtool_bar_button_margin))
 	       && XINT (XCDR (Vtool_bar_button_margin)) > 0)
 	margin = XFASTINT (XCDR (Vtool_bar_button_margin));
       else
@@ -6021,7 +6021,7 @@ w32_to_x_charset (fncharset)
         /* Look for Same charset and a valid codepage (or non-int
            which means ignore).  */
         if (w32_charset == charset_type
-            && (!INTEGERP (codepage) || codepage == CP_DEFAULT
+            && (!FIXNUMP (codepage) || codepage == CP_DEFAULT
                 || IsValidCodePage (XINT (codepage))))
           {
             /* If we don't have a match already, then this is the
@@ -6105,7 +6105,7 @@ w32_codepage_for_font (char *fontname)
     return CP_8BIT;
   else if (XFASTINT (codepage) == XFASTINT (Qt))
     return CP_UNICODE;
-  else if (INTEGERP (codepage))
+  else if (FIXNUMP (codepage))
     return XINT (codepage);
   else
     return CP_UNKNOWN;
@@ -6588,7 +6588,7 @@ enum_font_cb2 (lplf, lptm, FontType, lpef)
 	    /* Scalable fonts are as big as you want them to be.  */
 	    lplf->elfLogFont.lfHeight = lpef->logfont.lfHeight;
 	    lplf->elfLogFont.lfWidth = lpef->logfont.lfWidth;
-	    width = make_number (lpef->logfont.lfWidth);
+	    width = make_fixnum (lpef->logfont.lfWidth);
 	  }
 	else
 	  {
@@ -6843,7 +6843,7 @@ w32_list_fonts (f, pattern, size, maxnames)
               else
                 continue;
             }
-          if (!INTEGERP (XCDR (tem)))
+          if (!FIXNUMP (XCDR (tem)))
             {
               /* Since we don't yet know the size of the font, we must
                  load it and try GetTextMetrics.  */
@@ -6864,9 +6864,9 @@ w32_list_fonts (f, pattern, size, maxnames)
               hdc = GetDC (dpyinfo->root_window);
               oldobj = SelectObject (hdc, thisinfo.hfont);
               if (GetTextMetrics (hdc, &thisinfo.tm))
-                XCDR (tem) = make_number (FONT_WIDTH (&thisinfo));
+                XCDR (tem) = make_fixnum (FONT_WIDTH (&thisinfo));
               else
-                XCDR (tem) = make_number (0);
+                XCDR (tem) = make_fixnum (0);
               SelectObject (hdc, oldobj);
               ReleaseDC (dpyinfo->root_window, hdc);
               DeleteObject(thisinfo.hfont);
@@ -7122,11 +7122,11 @@ DEFUN ("xw-color-values", Fxw_color_values, Sxw_color_values, 1, 2, 0,
     {
       Lisp_Object rgb[3];
 
-      rgb[0] = make_number ((GetRValue (foo.pixel) << 8)
+      rgb[0] = make_fixnum ((GetRValue (foo.pixel) << 8)
                             | GetRValue (foo.pixel));
-      rgb[1] = make_number ((GetGValue (foo.pixel) << 8)
+      rgb[1] = make_fixnum ((GetGValue (foo.pixel) << 8)
                             | GetGValue (foo.pixel));
-      rgb[2] = make_number ((GetBValue (foo.pixel) << 8)
+      rgb[2] = make_fixnum ((GetBValue (foo.pixel) << 8)
                             | GetBValue (foo.pixel));
       return Flist (3, rgb);
     }
@@ -7176,7 +7176,7 @@ If omitted or nil, that stands for the selected frame's display.")
 {
   struct w32_display_info *dpyinfo = check_x_display_info (display);
 
-  return make_number (dpyinfo->width);
+  return make_fixnum (dpyinfo->width);
 }
 
 DEFUN ("x-display-pixel-height", Fx_display_pixel_height,
@@ -7190,7 +7190,7 @@ If omitted or nil, that stands for the selected frame's display.")
 {
   struct w32_display_info *dpyinfo = check_x_display_info (display);
 
-  return make_number (dpyinfo->height);
+  return make_fixnum (dpyinfo->height);
 }
 
 DEFUN ("x-display-planes", Fx_display_planes, Sx_display_planes,
@@ -7204,7 +7204,7 @@ If omitted or nil, that stands for the selected frame's display.")
 {
   struct w32_display_info *dpyinfo = check_x_display_info (display);
 
-  return make_number (dpyinfo->n_planes * dpyinfo->n_cbits);
+  return make_fixnum (dpyinfo->n_planes * dpyinfo->n_cbits);
 }
 
 DEFUN ("x-display-color-cells", Fx_display_color_cells, Sx_display_color_cells,
@@ -7231,7 +7231,7 @@ If omitted or nil, that stands for the selected frame's display.")
   
   ReleaseDC (dpyinfo->root_window, hdc);
   
-  return make_number (cap);
+  return make_fixnum (cap);
 }
 
 DEFUN ("x-server-max-request-size", Fx_server_max_request_size,
@@ -7246,7 +7246,7 @@ If omitted or nil, that stands for the selected frame's display.")
 {
   struct w32_display_info *dpyinfo = check_x_display_info (display);
 
-  return make_number (1);
+  return make_fixnum (1);
 }
 
 DEFUN ("x-server-vendor", Fx_server_vendor, Sx_server_vendor, 0, 1, 0,
@@ -7271,9 +7271,9 @@ If omitted or nil, that stands for the selected frame's display.")
   (display)
      Lisp_Object display;
 {
-  return Fcons (make_number (w32_major_version),
-		Fcons (make_number (w32_minor_version),
-		       Fcons (make_number (w32_build_number), Qnil)));
+  return Fcons (make_fixnum (w32_major_version),
+		Fcons (make_fixnum (w32_minor_version),
+		       Fcons (make_fixnum (w32_build_number), Qnil)));
 }
 
 DEFUN ("x-display-screens", Fx_display_screens, Sx_display_screens, 0, 1, 0,
@@ -7284,7 +7284,7 @@ If omitted or nil, that stands for the selected frame's display.")
   (display)
      Lisp_Object display;
 {
-  return make_number (1);
+  return make_fixnum (1);
 }
 
 DEFUN ("x-display-mm-height", Fx_display_mm_height, Sx_display_mm_height, 0, 1, 0,
@@ -7305,7 +7305,7 @@ If omitted or nil, that stands for the selected frame's display.")
   
   ReleaseDC (dpyinfo->root_window, hdc);
   
-  return make_number (cap);
+  return make_fixnum (cap);
 }
 
 DEFUN ("x-display-mm-width", Fx_display_mm_width, Sx_display_mm_width, 0, 1, 0,
@@ -7327,7 +7327,7 @@ If omitted or nil, that stands for the selected frame's display.")
   
   ReleaseDC (dpyinfo->root_window, hdc);
   
-  return make_number (cap);
+  return make_fixnum (cap);
 }
 
 DEFUN ("x-display-backing-store", Fx_display_backing_store,
@@ -7831,15 +7831,15 @@ parse_image_spec (spec, keywords, nkeywords, type)
 	  break;
 
 	case IMAGE_POSITIVE_INTEGER_VALUE:
-	  if (!INTEGERP (value) || XINT (value) <= 0)
+	  if (!FIXNUMP (value) || XINT (value) <= 0)
 	    return 0;
 	  break;
 
 	case IMAGE_POSITIVE_INTEGER_VALUE_OR_PAIR:
-	  if (INTEGERP (value) && XINT (value) >= 0)
+	  if (FIXNUMP (value) && XINT (value) >= 0)
 	    break;
 	  if (CONSP (value)
-	      && INTEGERP (XCAR (value)) && INTEGERP (XCDR (value))
+	      && FIXNUMP (XCAR (value)) && FIXNUMP (XCDR (value))
 	      && XINT (XCAR (value)) >= 0 && XINT (XCDR (value)) >= 0)
 	    break;
 	  return 0;
@@ -7847,14 +7847,14 @@ parse_image_spec (spec, keywords, nkeywords, type)
         case IMAGE_ASCENT_VALUE:
 	  if (SYMBOLP (value) && EQ (value, Qcenter))
 	    break;
-	  else if (INTEGERP (value)
+	  else if (FIXNUMP (value)
 		   && XINT (value) >= 0
 		   && XINT (value) <= 100)
 	    break;
 	  return 0;
 
 	case IMAGE_NON_NEGATIVE_INTEGER_VALUE:
-	  if (!INTEGERP (value) || XINT (value) < 0)
+	  if (!FIXNUMP (value) || XINT (value) < 0)
 	    return 0;
 	  break;
 
@@ -7870,12 +7870,12 @@ parse_image_spec (spec, keywords, nkeywords, type)
 	  return 0;
 
 	case IMAGE_NUMBER_VALUE:
-	  if (!INTEGERP (value) && !FLOATP (value))
+	  if (!FIXNUMP (value) && !FLOATP (value))
 	    return 0;
 	  break;
 
 	case IMAGE_INTEGER_VALUE:
-	  if (!INTEGERP (value))
+	  if (!FIXNUMP (value))
 	    return 0;
 	  break;
 
@@ -8198,7 +8198,7 @@ clear_image_cache (f, force_p)
 {
   struct image_cache *c = FRAME_X_IMAGE_CACHE (f);
 
-  if (c && INTEGERP (Vimage_cache_eviction_delay))
+  if (c && FIXNUMP (Vimage_cache_eviction_delay))
     {
       EMACS_TIME t;
       unsigned long old;
@@ -8301,10 +8301,10 @@ lookup_image (f, spec)
 	  Lisp_Object value;
 
 	  value = image_spec_value (spec, QCwidth, NULL);
-	  img->width = (INTEGERP (value)
+	  img->width = (FIXNUMP (value)
 			? XFASTINT (value) : DEFAULT_IMAGE_WIDTH);
 	  value = image_spec_value (spec, QCheight, NULL);
-	  img->height = (INTEGERP (value)
+	  img->height = (FIXNUMP (value)
 			 ? XFASTINT (value) : DEFAULT_IMAGE_HEIGHT);
 	}
       else
@@ -8314,16 +8314,16 @@ lookup_image (f, spec)
 	  Lisp_Object ascent, margin, relief;
 
 	  ascent = image_spec_value (spec, QCascent, NULL);
-	  if (INTEGERP (ascent))
+	  if (FIXNUMP (ascent))
 	    img->ascent = XFASTINT (ascent);
 	  else if (EQ (ascent, Qcenter))
             img->ascent = CENTERED_IMAGE_ASCENT;
 
 	  margin = image_spec_value (spec, QCmargin, NULL);
-	  if (INTEGERP (margin) && XINT (margin) >= 0)
+	  if (FIXNUMP (margin) && XINT (margin) >= 0)
 	    img->vmargin = img->hmargin = XFASTINT (margin);
-	  else if (CONSP (margin) && INTEGERP (XCAR (margin))
-		   && INTEGERP (XCDR (margin)))
+	  else if (CONSP (margin) && FIXNUMP (XCAR (margin))
+		   && FIXNUMP (XCDR (margin)))
 	    {
 	      if (XINT (XCAR (margin)) > 0)
 		img->hmargin = XFASTINT (XCAR (margin));
@@ -8332,7 +8332,7 @@ lookup_image (f, spec)
 	    }
 	  
 	  relief = image_spec_value (spec, QCrelief, NULL);
-	  if (INTEGERP (relief))
+	  if (FIXNUMP (relief))
 	    {
 	      img->relief = XINT (relief);
 	      img->hmargin += abs (img->relief);
@@ -11606,7 +11606,7 @@ gif_load (f, img)
     }
 
   image = image_spec_value (img->spec, QCindex, NULL);
-  ino = INTEGERP (image) ? XFASTINT (image) : 0;
+  ino = FIXNUMP (image) ? XFASTINT (image) : 0;
   if (ino >= gif->ImageCount)
     {
       image_error ("Invalid image number `%s' in image `%s'",
@@ -11833,7 +11833,7 @@ gs_image_p (object)
   if (CONSP (tem))
     {
       for (i = 0; i < 4; ++i, tem = XCDR (tem))
-	if (!CONSP (tem) || !INTEGERP (XCAR (tem)))
+	if (!CONSP (tem) || !FIXNUMP (XCAR (tem)))
 	  return 0;
       if (!NILP (tem))
 	return 0;
@@ -11843,7 +11843,7 @@ gs_image_p (object)
       if (XVECTOR (tem)->size != 4)
 	return 0;
       for (i = 0; i < 4; ++i)
-	if (!INTEGERP (XVECTOR (tem)->contents[i]))
+	if (!FIXNUMP (XVECTOR (tem)->contents[i]))
 	  return 0;
     }
   else
@@ -11915,8 +11915,8 @@ gs_load (f, img)
     loader = intern ("gs-load-image");
 
   img->data.lisp_val = call6 (loader, frame, img->spec,
-			      make_number (img->width),
-			      make_number (img->height),
+			      make_fixnum (img->width),
+			      make_fixnum (img->height),
 			      window_and_pixmap_id,
 			      pixel_colors);
   UNGCPRO;
@@ -12166,7 +12166,7 @@ start_hourglass ()
   
   cancel_hourglass ();
 
-  if (INTEGERP (Vhourglass_delay)
+  if (FIXNUMP (Vhourglass_delay)
       && XINT (Vhourglass_delay) > 0)
     secs = XFASTINT (Vhourglass_delay);
   else if (FLOATP (Vhourglass_delay)
@@ -12458,7 +12458,7 @@ x_create_tip_frame (dpyinfo, parms)
 			 "font", "Font", RES_TYPE_STRING);
   }
 
-  x_default_parameter (f, parms, Qborder_width, make_number (2),
+  x_default_parameter (f, parms, Qborder_width, make_fixnum (2),
 		       "borderWidth", "BorderWidth", RES_TYPE_NUMBER);
   
   /* This defaults to 2 in order to match xterm.  We recognize either
@@ -12475,7 +12475,7 @@ x_create_tip_frame (dpyinfo, parms)
 		       parms);
     }
 
-  x_default_parameter (f, parms, Qinternal_border_width, make_number (1),
+  x_default_parameter (f, parms, Qinternal_border_width, make_fixnum (1),
 		       "internalBorderWidth", "internalBorderWidth",
 		       RES_TYPE_NUMBER);
 
@@ -12625,22 +12625,22 @@ DY added (default is 10).")
   CHECK_STRING (string, 0);
   f = check_x_frame (frame);
   if (NILP (timeout))
-    timeout = make_number (5);
+    timeout = make_fixnum (5);
   else
     CHECK_NATNUM (timeout, 2);
 
   if (NILP (dx))
-    dx = make_number (5);
+    dx = make_fixnum (5);
   else
     CHECK_NUMBER (dx, 5);
   
   if (NILP (dy))
-    dy = make_number (-10);
+    dy = make_fixnum (-10);
   else
     CHECK_NUMBER (dy, 6);
 
   if (NILP (last_show_tip_args))
-    last_show_tip_args = Fmake_vector (make_number (3), Qnil);
+    last_show_tip_args = Fmake_vector (make_fixnum (3), Qnil);
 
   if (!NILP (tip_frame))
     {
@@ -12682,9 +12682,9 @@ DY added (default is 10).")
   if (NILP (Fassq (Qname, parms)))
     parms = Fcons (Fcons (Qname, build_string ("tooltip")), parms);
   if (NILP (Fassq (Qinternal_border_width, parms)))
-    parms = Fcons (Fcons (Qinternal_border_width, make_number (3)), parms);
+    parms = Fcons (Fcons (Qinternal_border_width, make_fixnum (3)), parms);
   if (NILP (Fassq (Qborder_width, parms)))
-    parms = Fcons (Fcons (Qborder_width, make_number (1)), parms);
+    parms = Fcons (Fcons (Qborder_width, make_fixnum (1)), parms);
   if (NILP (Fassq (Qborder_color, parms)))
     parms = Fcons (Fcons (Qborder_color, build_string ("lightyellow")), parms);
   if (NILP (Fassq (Qbackground_color, parms)))
@@ -12700,9 +12700,9 @@ DY added (default is 10).")
      columns x 40 lines.  If someone wants to show a larger tip, he
      will loose.  I don't think this is a realistic case.  */
   w = XWINDOW (FRAME_ROOT_WINDOW (f));
-  w->left = w->top = make_number (0);
-  w->width = make_number (80);
-  w->height = make_number (40);
+  w->left = w->top = make_fixnum (0);
+  w->width = make_fixnum (80);
+  w->height = make_fixnum (40);
   adjust_glyphs (f);
   w->pseudo_window_p = 1;
 
@@ -12955,7 +12955,7 @@ DEFUN ("lookup-image", Flookup_image, Slookup_image, 1, 1, 0, "")
     id = lookup_image (SELECTED_FRAME (), spec);
 
   debug_print (spec);
-  return make_number (id);
+  return make_fixnum (id);
 }
 
 #endif /* GLYPH_DEBUG != 0 */
@@ -13068,7 +13068,7 @@ otherwise it is an integer representing a ShowWindow flag:\n\
 			  (STRINGP (parameters) ?
 			   XSTRING (parameters)->data : NULL),
 			  XSTRING (current_dir)->data,
-			  (INTEGERP (show_flag) ?
+			  (FIXNUMP (show_flag) ?
 			   XINT (show_flag) : SW_SHOWDEFAULT))
       > 32)
     return Qt;
@@ -13111,14 +13111,14 @@ w32_parse_hot_key (key)
 
   GCPRO1 (key);
 
-  c = Faref (key, make_number (0));
+  c = Faref (key, make_fixnum (0));
 
   if (CONSP (c) && lucid_event_type_list_p (c))
     c = Fevent_convert_list (c);
 
   UNGCPRO;
 
-  if (! INTEGERP (c) && ! SYMBOLP (c))
+  if (! FIXNUMP (c) && ! SYMBOLP (c))
     error ("Key definition is invalid");
 
   /* Work out the base key and the modifiers.  */
@@ -13131,7 +13131,7 @@ w32_parse_hot_key (key)
 	abort ();
       vk_code = lookup_vk_code (XSYMBOL (c)->name->data);
     }
-  else if (INTEGERP (c))
+  else if (FIXNUMP (c))
     {
       lisp_modifiers = XINT (c) & ~CHARACTERBITS;
       /* Many ascii characters are their own virtual key code.  */
@@ -13207,7 +13207,7 @@ DEFUN ("w32-unregister-hot-key", Fw32_unregister_hot_key, Sw32_unregister_hot_ke
 {
   Lisp_Object item;
 
-  if (!INTEGERP (key))
+  if (!FIXNUMP (key))
     key = w32_parse_hot_key (key);
 
   item = Fmemq (key, w32_grabbed_keys);
@@ -13250,7 +13250,7 @@ DEFUN ("w32-reconstruct-hot-key", Fw32_reconstruct_hot_key, Sw32_reconstruct_hot
   if (lispy_function_keys[vk_code])
     key = intern (lispy_function_keys[vk_code]);
   else
-    key = make_number (vk_code);
+    key = make_fixnum (vk_code);
 
   key = Fcons (key, Qnil);
   if (w32_modifiers & MOD_SHIFT)
@@ -13285,14 +13285,14 @@ is set to off if the low bit of NEW-STATE is zero, otherwise on.")
     return Qnil;
 
   if (!dwWindowsThreadId)
-    return make_number (w32_console_toggle_lock_key (vk_code, new_state));
+    return make_fixnum (w32_console_toggle_lock_key (vk_code, new_state));
 
   if (PostThreadMessage (dwWindowsThreadId, WM_EMACS_TOGGLE_LOCK_KEY,
 			 (WPARAM) vk_code, (LPARAM) new_state))
     {
       MSG msg;
       GetMessage (&msg, NULL, WM_EMACS_DONE, WM_EMACS_DONE);
-      return make_number (msg.wParam);
+      return make_fixnum (msg.wParam);
     }
   return Qnil;
 }
@@ -13652,7 +13652,7 @@ or when you set the mouse color.");
   DEFVAR_LISP ("hourglass-delay", &Vhourglass_delay,
      "*Seconds to wait before displaying an hourglass pointer.\n\
 Value must be an integer or float.");
-  Vhourglass_delay = make_number (DEFAULT_HOURGLASS_DELAY);
+  Vhourglass_delay = make_fixnum (DEFAULT_HOURGLASS_DELAY);
 
   DEFVAR_LISP ("x-sensitive-text-pointer-shape",
 	      &Vx_sensitive_text_pointer_shape,
@@ -13695,7 +13695,7 @@ Chinese, Japanese, and Korean.");
 When an image has not been displayed this many seconds, remove it\n\
 from the image cache.  Value must be an integer or nil with nil\n\
 meaning don't clear the cache.");
-  Vimage_cache_eviction_delay = make_number (30 * 60);
+  Vimage_cache_eviction_delay = make_fixnum (30 * 60);
 
   DEFVAR_LISP ("w32-bdf-filename-alist",
                &Vw32_bdf_filename_alist,

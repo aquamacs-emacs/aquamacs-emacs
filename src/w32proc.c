@@ -811,7 +811,7 @@ sys_spawnve (int mode, char *cmdname, char **argv, char **envp)
       do_quoting = 1;
       /* Override escape char by binding w32-quote-process-args to
 	 desired character, or use t for auto-selection.  */
-      if (INTEGERP (Vw32_quote_process_args))
+      if (FIXNUMP (Vw32_quote_process_args))
 	escape_char = XINT (Vw32_quote_process_args);
       else
 	escape_char = is_cygnus_app ? '"' : '\\';
@@ -1855,7 +1855,7 @@ This is a numerical value; use `w32-get-locale-info' to convert to a\n\
 human-readable form.")
      ()
 {
-  return make_number (GetThreadLocale ());
+  return make_fixnum (GetThreadLocale ());
 }
 
 DWORD int_from_hex (char * s)
@@ -1882,7 +1882,7 @@ Lisp_Object Vw32_valid_locale_ids;
 BOOL CALLBACK enum_locale_fn (LPTSTR localeNum)
 {
   DWORD id = int_from_hex (localeNum);
-  Vw32_valid_locale_ids = Fcons (make_number (id), Vw32_valid_locale_ids);
+  Vw32_valid_locale_ids = Fcons (make_fixnum (id), Vw32_valid_locale_ids);
   return TRUE;
 }
 
@@ -1911,8 +1911,8 @@ human-readable form.")
      Lisp_Object userp;
 {
   if (NILP (userp))
-    return make_number (GetSystemDefaultLCID ());
-  return make_number (GetUserDefaultLCID ());
+    return make_fixnum (GetSystemDefaultLCID ());
+  return make_fixnum (GetUserDefaultLCID ());
 }
 
   
@@ -1935,7 +1935,7 @@ If successful, the new locale id is returned, otherwise nil.")
     /* Reply is not needed.  */
     PostThreadMessage (dwWindowsThreadId, WM_EMACS_SETLOCALE, XINT (lcid), 0);
 
-  return make_number (GetThreadLocale ());
+  return make_fixnum (GetThreadLocale ());
 }
 
 
@@ -1946,7 +1946,7 @@ Lisp_Object Vw32_valid_codepages;
 BOOL CALLBACK enum_codepage_fn (LPTSTR codepageNum)
 {
   DWORD id = atoi (codepageNum);
-  Vw32_valid_codepages = Fcons (make_number (id), Vw32_valid_codepages);
+  Vw32_valid_codepages = Fcons (make_fixnum (id), Vw32_valid_codepages);
   return TRUE;
 }
 
@@ -1967,7 +1967,7 @@ DEFUN ("w32-get-console-codepage", Fw32_get_console_codepage, Sw32_get_console_c
   "Return current Windows codepage for console input.")
      ()
 {
-  return make_number (GetConsoleCP ());
+  return make_fixnum (GetConsoleCP ());
 }
 
   
@@ -1986,7 +1986,7 @@ If successful, the new CP is returned, otherwise nil.")
   if (!SetConsoleCP (XINT (cp)))
     return Qnil;
 
-  return make_number (GetConsoleCP ());
+  return make_fixnum (GetConsoleCP ());
 }
 
 
@@ -1994,7 +1994,7 @@ DEFUN ("w32-get-console-output-codepage", Fw32_get_console_output_codepage, Sw32
   "Return current Windows codepage for console output.")
      ()
 {
-  return make_number (GetConsoleOutputCP ());
+  return make_fixnum (GetConsoleOutputCP ());
 }
 
   
@@ -2013,7 +2013,7 @@ If successful, the new CP is returned, otherwise nil.")
   if (!SetConsoleOutputCP (XINT (cp)))
     return Qnil;
 
-  return make_number (GetConsoleOutputCP ());
+  return make_fixnum (GetConsoleOutputCP ());
 }
 
 
@@ -2031,7 +2031,7 @@ Returns nil if the codepage is not valid.")
     return Qnil;
 
   if (TranslateCharsetInfo ((DWORD *) XINT (cp), &info, TCI_SRCCODEPAGE))
-    return make_number (info.ciCharset);
+    return make_fixnum (info.ciCharset);
 
   return Qnil;
 }
@@ -2052,8 +2052,8 @@ The return value is a list of pairs of language id and layout id.")
 	{
 	  DWORD kl = (DWORD) layouts[num_layouts];
 
-	  obj = Fcons (Fcons (make_number (kl & 0xffff),
-			      make_number ((kl >> 16) & 0xffff)),
+	  obj = Fcons (Fcons (make_fixnum (kl & 0xffff),
+			      make_fixnum ((kl >> 16) & 0xffff)),
 		       obj);
 	}
     }
@@ -2069,8 +2069,8 @@ The return value is the cons of the language id and the layout id.")
 {
   DWORD kl = (DWORD) GetKeyboardLayout (dwWindowsThreadId);
 
-  return Fcons (make_number (kl & 0xffff),
-		make_number ((kl >> 16) & 0xffff));
+  return Fcons (make_fixnum (kl & 0xffff),
+		make_fixnum ((kl >> 16) & 0xffff));
 }
 
   

@@ -875,7 +875,7 @@ are listed in the documentation of `modify-syntax-entry'.")
   gl_state.use_global = 0;
   CHECK_NUMBER (character, 0);
   char_int = XINT (character);
-  return make_number (syntax_code_spec[(int) SYNTAX (char_int)]);
+  return make_fixnum (syntax_code_spec[(int) SYNTAX (char_int)]);
 }
 
 DEFUN ("matching-paren", Fmatching_paren, Smatching_paren, 1, 1, 0,
@@ -968,7 +968,7 @@ text property.")
     return XVECTOR (Vsyntax_code_object)->contents[val];
   else
     /* Since we can't use a shared object, let's make a new one.  */
-    return Fcons (make_number (val), match);
+    return Fcons (make_fixnum (val), match);
 }
 
 /* This comment supplies the doc string for modify-syntax-entry,
@@ -1045,7 +1045,7 @@ describe_syntax (value)
   char str[2];
   Lisp_Object first, match_lisp;
 
-  Findent_to (make_number (16), make_number (1));
+  Findent_to (make_fixnum (16), make_fixnum (1));
 
   if (NILP (value))
     {
@@ -1068,7 +1068,7 @@ describe_syntax (value)
   first = XCAR (value);
   match_lisp = XCDR (value);
 
-  if (!INTEGERP (first) || !(NILP (match_lisp) || INTEGERP (match_lisp)))
+  if (!FIXNUMP (first) || !(NILP (match_lisp) || FIXNUMP (match_lisp)))
     {
       insert_string ("invalid\n");
       return;
@@ -1333,7 +1333,7 @@ and the function returns nil.  Field boundaries are not noticed if\n\
     val = XINT (count) > 0 ? ZV : BEGV;
 
   /* Avoid jumping out of an input field.  */
-  val = XFASTINT (Fconstrain_to_field (make_number (val), make_number (PT),
+  val = XFASTINT (Fconstrain_to_field (make_fixnum (val), make_fixnum (PT),
 				       Qt, Qnil, Qnil));
   
   SET_PT (val);
@@ -1689,7 +1689,7 @@ skip_chars (forwardp, syntaxp, string, lim)
     SET_PT_BOTH (pos, pos_byte);
     immediate_quit = 0;
 
-    return make_number (PT - start_point);
+    return make_fixnum (PT - start_point);
   }
 }
 
@@ -2178,8 +2178,8 @@ scan_lists (from, count, depth, sexpflag)
 	      if (depth < min_depth)
 		Fsignal (Qscan_error,
 			 Fcons (build_string ("Containing expression ends prematurely"),
-				Fcons (make_number (last_good),
-				       Fcons (make_number (from), Qnil))));
+				Fcons (make_fixnum (last_good),
+				       Fcons (make_fixnum (from), Qnil))));
 	      break;
 
 	    case Sstring:
@@ -2324,8 +2324,8 @@ scan_lists (from, count, depth, sexpflag)
 	      if (depth < min_depth)
 		Fsignal (Qscan_error,
 			 Fcons (build_string ("Containing expression ends prematurely"),
-				Fcons (make_number (last_good),
-				       Fcons (make_number (from), Qnil))));
+				Fcons (make_fixnum (last_good),
+				       Fcons (make_fixnum (from), Qnil))));
 	      break;
 
 	    case Sendcomment:
@@ -2399,8 +2399,8 @@ scan_lists (from, count, depth, sexpflag)
  lose:
   Fsignal (Qscan_error,
 	   Fcons (build_string ("Unbalanced parentheses"),
-		  Fcons (make_number (last_good),
-			 Fcons (make_number (from), Qnil))));
+		  Fcons (make_fixnum (last_good),
+			 Fcons (make_fixnum (from), Qnil))));
 
   /* NOTREACHED */
 }
@@ -2571,13 +2571,13 @@ do { prev_from = from;				\
       tem = Fcar (oldstate);
       /* Check whether we are inside string_fence-style string: */
       state.instring = (!NILP (tem) 
-			? (INTEGERP (tem) ? XINT (tem) : ST_STRING_STYLE) 
+			? (FIXNUMP (tem) ? XINT (tem) : ST_STRING_STYLE) 
 			: -1);
 
       oldstate = Fcdr (oldstate);
       tem = Fcar (oldstate);
       state.incomment = (!NILP (tem)
-			 ? (INTEGERP (tem) ? XINT (tem) : -1)
+			 ? (FIXNUMP (tem) ? XINT (tem) : -1)
 			 : 0);
 
       oldstate = Fcdr (oldstate);
@@ -2836,7 +2836,7 @@ do { prev_from = from;				\
   state.location = from;
   state.levelstarts = Qnil;
   while (--curlevel >= levelstart)
-      state.levelstarts = Fcons (make_number (curlevel->last),
+      state.levelstarts = Fcons (make_fixnum (curlevel->last),
 				 state.levelstarts);
   immediate_quit = 0;
 
@@ -2906,24 +2906,24 @@ DEFUN ("parse-partial-sexp", Fparse_partial_sexp, Sparse_partial_sexp, 2, 6, 0,
 
   SET_PT (state.location);
   
-  return Fcons (make_number (state.depth),
-	   Fcons (state.prevlevelstart < 0 ? Qnil : make_number (state.prevlevelstart),
-	     Fcons (state.thislevelstart < 0 ? Qnil : make_number (state.thislevelstart),
+  return Fcons (make_fixnum (state.depth),
+	   Fcons (state.prevlevelstart < 0 ? Qnil : make_fixnum (state.prevlevelstart),
+	     Fcons (state.thislevelstart < 0 ? Qnil : make_fixnum (state.thislevelstart),
 	       Fcons (state.instring >= 0 
 		      ? (state.instring == ST_STRING_STYLE 
-			 ? Qt : make_number (state.instring)) : Qnil,
+			 ? Qt : make_fixnum (state.instring)) : Qnil,
 		 Fcons (state.incomment < 0 ? Qt :
 			(state.incomment == 0 ? Qnil :
-			 make_number (state.incomment)),
+			 make_fixnum (state.incomment)),
 		   Fcons (state.quoted ? Qt : Qnil,
-		     Fcons (make_number (state.mindepth),
+		     Fcons (make_fixnum (state.mindepth),
 		       Fcons ((state.comstyle 
 			       ? (state.comstyle == ST_COMMENT_STYLE
 				  ? Qsyntax_table : Qt) :
 			       Qnil),
 			      Fcons (((state.incomment
 				       || (state.instring >= 0))
-				      ? make_number (state.comstr_start)
+				      ? make_fixnum (state.comstr_start)
 				      : Qnil),
 				     Fcons (state.levelstarts, Qnil))))))))));
 }
@@ -2944,14 +2944,14 @@ init_syntax_once ()
   Qchar_table_extra_slots = intern ("char-table-extra-slots");
 
   /* Create objects which can be shared among syntax tables.  */
-  Vsyntax_code_object = Fmake_vector (make_number (Smax), Qnil);
+  Vsyntax_code_object = Fmake_vector (make_fixnum (Smax), Qnil);
   for (i = 0; i < XVECTOR (Vsyntax_code_object)->size; i++)
     XVECTOR (Vsyntax_code_object)->contents[i]
-      = Fcons (make_number (i), Qnil);
+      = Fcons (make_fixnum (i), Qnil);
 
   /* Now we are ready to set up this property, so we can
      create syntax tables.  */
-  Fput (Qsyntax_table, Qchar_table_extra_slots, make_number (0));
+  Fput (Qsyntax_table, Qchar_table_extra_slots, make_fixnum (0));
 
   temp = XVECTOR (Vsyntax_code_object)->contents[(int) Swhitespace];
 
@@ -2969,21 +2969,21 @@ init_syntax_once ()
   SET_RAW_SYNTAX_ENTRY (Vstandard_syntax_table, '%', temp);
 
   SET_RAW_SYNTAX_ENTRY (Vstandard_syntax_table, '(',
-			Fcons (make_number (Sopen), make_number (')')));
+			Fcons (make_fixnum (Sopen), make_fixnum (')')));
   SET_RAW_SYNTAX_ENTRY (Vstandard_syntax_table, ')',
-			Fcons (make_number (Sclose), make_number ('(')));
+			Fcons (make_fixnum (Sclose), make_fixnum ('(')));
   SET_RAW_SYNTAX_ENTRY (Vstandard_syntax_table, '[',
-			Fcons (make_number (Sopen), make_number (']')));
+			Fcons (make_fixnum (Sopen), make_fixnum (']')));
   SET_RAW_SYNTAX_ENTRY (Vstandard_syntax_table, ']',
-			Fcons (make_number (Sclose), make_number ('[')));
+			Fcons (make_fixnum (Sclose), make_fixnum ('[')));
   SET_RAW_SYNTAX_ENTRY (Vstandard_syntax_table, '{',
-			Fcons (make_number (Sopen), make_number ('}')));
+			Fcons (make_fixnum (Sopen), make_fixnum ('}')));
   SET_RAW_SYNTAX_ENTRY (Vstandard_syntax_table, '}',
-			Fcons (make_number (Sclose), make_number ('{')));
+			Fcons (make_fixnum (Sclose), make_fixnum ('{')));
   SET_RAW_SYNTAX_ENTRY (Vstandard_syntax_table, '"',
-			Fcons (make_number ((int) Sstring), Qnil));
+			Fcons (make_fixnum ((int) Sstring), Qnil));
   SET_RAW_SYNTAX_ENTRY (Vstandard_syntax_table, '\\',
-			Fcons (make_number ((int) Sescape), Qnil));
+			Fcons (make_fixnum ((int) Sescape), Qnil));
 
   temp = XVECTOR (Vsyntax_code_object)->contents[(int) Ssymbol];
   for (i = 0; i < 10; i++)

@@ -54,7 +54,7 @@ enum composition_method {
 extern Lisp_Object composition_temp;
 
 /* Return 1 iff the composition is already registered.  */
-#define COMPOSITION_REGISTERD_P(prop) INTEGERP (XCAR (prop))
+#define COMPOSITION_REGISTERD_P(prop) FIXNUMP (XCAR (prop))
 
 /* Return ID number of the already registered composition.  */
 #define COMPOSITION_ID(prop) XINT (XCAR (prop))
@@ -84,7 +84,7 @@ extern Lisp_Object composition_temp;
    : (composition_temp = XCDR (XCAR (prop)),				\
       (NILP (composition_temp)						\
        ? COMPOSITION_RELATIVE						\
-       : ((INTEGERP (composition_temp) || STRINGP (composition_temp))	\
+       : ((FIXNUMP (composition_temp) || STRINGP (composition_temp))	\
 	  ? COMPOSITION_WITH_ALTCHARS					\
 	  : COMPOSITION_WITH_RULE_ALTCHARS))))
 
@@ -102,7 +102,7 @@ extern Lisp_Object composition_temp;
 	       (NILP (composition_temp)				\
 		|| STRINGP (composition_temp)			\
 		|| VECTORP (composition_temp)			\
-		|| INTEGERP (composition_temp)			\
+		|| FIXNUMP (composition_temp)			\
 		|| CONSP (composition_temp))))))		\
    && (end - start) == COMPOSITION_LENGTH (prop))
 

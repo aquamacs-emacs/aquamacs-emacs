@@ -1390,7 +1390,7 @@ tty_color_name (f, idx)
       Lisp_Object coldesc;
 
       XSETFRAME (frame, f);
-      coldesc = call2 (Qtty_color_by_index, make_number (idx), frame);
+      coldesc = call2 (Qtty_color_by_index, make_fixnum (idx), frame);
 
       if (!NILP (coldesc))
 	return XCAR (coldesc);
@@ -2470,7 +2470,7 @@ sorted_font_list (f, pattern, cmpfn, fonts)
 
   /* Get the list of fonts matching pattern.  100 should suffice.  */
   nfonts = DEFAULT_FONT_LIST_LIMIT;
-  if (INTEGERP (Vfont_list_limit) && XINT (Vfont_list_limit) > 0)
+  if (FIXNUMP (Vfont_list_limit) && XINT (Vfont_list_limit) > 0)
     nfonts = XFASTINT (Vfont_list_limit);
 
   *fonts = (struct font_name *) xmalloc (nfonts * sizeof **fonts);
@@ -2706,12 +2706,12 @@ the face font sort order.")
   nfonts = font_list (f, Qnil, family, Qnil, &fonts);
   for (i = nfonts - 1; i >= 0; --i)
     {
-      Lisp_Object v = Fmake_vector (make_number (8), Qnil);
+      Lisp_Object v = Fmake_vector (make_fixnum (8), Qnil);
       char *tem;
 
       ASET (v, 0, build_string (fonts[i].fields[XLFD_FAMILY]));
       ASET (v, 1, xlfd_symbolic_swidth (fonts + i));
-      ASET (v, 2, make_number (xlfd_point_size (f, fonts + i)));
+      ASET (v, 2, make_fixnum (xlfd_point_size (f, fonts + i)));
       ASET (v, 3, xlfd_symbolic_weight (fonts + i));
       ASET (v, 4, xlfd_symbolic_slant (fonts + i));
       ASET (v, 5, xlfd_fixed_p (fonts + i) ? Qt : Qnil);
@@ -2754,7 +2754,7 @@ are fixed-pitch.")
      fonts until we have them all.  */
   for (limit = 500;;)
     {
-      specbind (intern ("font-list-limit"), make_number (limit));
+      specbind (intern ("font-list-limit"), make_fixnum (limit));
       nfonts = font_list (f, Qnil, Qnil, Qnil, &fonts);
 
       if (nfonts == limit)
@@ -2914,9 +2914,9 @@ check_lface_attrs (attrs)
   xassert (UNSPECIFIEDP (attrs[LFACE_SWIDTH_INDEX])
 	   || SYMBOLP (attrs[LFACE_SWIDTH_INDEX]));
   xassert (UNSPECIFIEDP (attrs[LFACE_AVGWIDTH_INDEX])
-	   || INTEGERP (attrs[LFACE_AVGWIDTH_INDEX]));
+	   || FIXNUMP (attrs[LFACE_AVGWIDTH_INDEX]));
   xassert (UNSPECIFIEDP (attrs[LFACE_HEIGHT_INDEX])
-	   || INTEGERP (attrs[LFACE_HEIGHT_INDEX])
+	   || FIXNUMP (attrs[LFACE_HEIGHT_INDEX])
 	   || FLOATP (attrs[LFACE_HEIGHT_INDEX])
 	   || FUNCTIONP (attrs[LFACE_HEIGHT_INDEX]));
   xassert (UNSPECIFIEDP (attrs[LFACE_WEIGHT_INDEX])
@@ -2935,7 +2935,7 @@ check_lface_attrs (attrs)
   xassert (UNSPECIFIEDP (attrs[LFACE_BOX_INDEX])
 	   || SYMBOLP (attrs[LFACE_BOX_INDEX])
 	   || STRINGP (attrs[LFACE_BOX_INDEX])
-	   || INTEGERP (attrs[LFACE_BOX_INDEX])
+	   || FIXNUMP (attrs[LFACE_BOX_INDEX])
 	   || CONSP (attrs[LFACE_BOX_INDEX]));
   xassert (UNSPECIFIEDP (attrs[LFACE_INVERSE_INDEX])
 	   || SYMBOLP (attrs[LFACE_INVERSE_INDEX]));
@@ -3168,7 +3168,7 @@ set_lface_from_font_name (f, lface, fontname, force_p, may_fail_p)
       else
 	pt = pixel_point_size (f, font_info->height * 10);
       xassert (pt > 0);
-      LFACE_HEIGHT (lface) = make_number (pt);
+      LFACE_HEIGHT (lface) = make_fixnum (pt);
     }
 
   if (force_p || UNSPECIFIEDP (LFACE_SWIDTH (lface)))
@@ -3178,7 +3178,7 @@ set_lface_from_font_name (f, lface, fontname, force_p, may_fail_p)
   if (force_p || UNSPECIFIEDP (LFACE_AVGWIDTH (lface)))
     LFACE_AVGWIDTH (lface)
       = (have_xlfd_p
-	 ? make_number (font.numeric[XLFD_AVGWIDTH])
+	 ? make_fixnum (font.numeric[XLFD_AVGWIDTH])
 	 : Qunspecified);
 
   if (force_p || UNSPECIFIEDP (LFACE_WEIGHT (lface)))
@@ -3211,7 +3211,7 @@ merge_face_heights (from, to, invalid, gcpro)
 {
   int result = 0;
 
-  if (INTEGERP (from))
+  if (FIXNUMP (from))
     result = XINT (from);
   else if (NUMBERP (from))
     result = XFLOATINT (from) * XINT (to);
@@ -3220,7 +3220,7 @@ merge_face_heights (from, to, invalid, gcpro)
     {
       if (EQ (XCAR(from), Qplus) || EQ (XCAR(from), Qminus))
 	{
-	  if (INTEGERP (XCAR (XCDR (from))))
+	  if (FIXNUMP (XCAR (XCDR (from))))
 	    {
 	      int inc = XINT (XCAR (XCDR (from)));
 	      if (EQ (XCAR (from), Qminus))
@@ -3256,7 +3256,7 @@ merge_face_heights (from, to, invalid, gcpro)
     }
 
   if (result > 0)
-    return make_number (result);
+    return make_fixnum (result);
   else
     return invalid;
 }
@@ -3302,7 +3302,7 @@ merge_face_vectors (f, from, to, cycle_check)
 
   for (i = 1; i < LFACE_VECTOR_SIZE; ++i)
     if (!UNSPECIFIEDP (from[i]))
-      if (i == LFACE_HEIGHT_INDEX && !INTEGERP (from[i]))
+      if (i == LFACE_HEIGHT_INDEX && !FIXNUMP (from[i]))
 	to[i] = merge_face_heights (from[i], to[i], to[i], cycle_check);
       else
 	to[i] = from[i];
@@ -3328,10 +3328,10 @@ merge_face_vectors (f, from, to, cycle_check)
 
 #define CYCLE_CHECK(check, el, suspicious)	\
   (NILP (check)					\
-   ? make_number (0)				\
-   : (INTEGERP (check)				\
+   ? make_fixnum (0)				\
+   : (FIXNUMP (check)				\
       ? (XFASTINT (check) < (suspicious)	\
-	 ? make_number (XFASTINT (check) + 1)	\
+	 ? make_fixnum (XFASTINT (check) + 1)	\
 	 : Fcons (el, Qnil))			\
       : (!NILP (Fmemq ((el), (check)))		\
 	 ? Qnil					\
@@ -3508,8 +3508,8 @@ merge_face_vector_with_property (f, to, prop)
 	      else if (EQ (keyword, QCbox))
 		{
 		  if (EQ (value, Qt))
-		    value = make_number (1);
-		  if (INTEGERP (value)
+		    value = make_fixnum (1);
+		  if (FIXNUMP (value)
 		      || STRINGP (value)
 		      || CONSP (value)
 		      || NILP (value))
@@ -3633,7 +3633,7 @@ Value is a vector of face attributes.")
   /* Add a global definition if there is none.  */
   if (NILP (global_lface))
     {
-      global_lface = Fmake_vector (make_number (LFACE_VECTOR_SIZE),
+      global_lface = Fmake_vector (make_fixnum (LFACE_VECTOR_SIZE),
 				   Qunspecified);
       AREF (global_lface, 0) = Qface;
       Vface_new_frame_defaults = Fcons (Fcons (face, global_lface),
@@ -3652,7 +3652,7 @@ Value is a vector of face attributes.")
 	}
 
       lface_id_to_name[next_lface_id] = face;
-      Fput (face, Qface, make_number (next_lface_id));
+      Fput (face, Qface, make_fixnum (next_lface_id));
       ++next_lface_id;
     }
   else if (f == NULL)
@@ -3664,7 +3664,7 @@ Value is a vector of face attributes.")
     {
       if (NILP (lface))
 	{
-	  lface = Fmake_vector (make_number (LFACE_VECTOR_SIZE),
+	  lface = Fmake_vector (make_fixnum (LFACE_VECTOR_SIZE),
 				Qunspecified);
 	  AREF (lface, 0) = Qface;
 	  f->face_alist = Fcons (Fcons (face, lface), f->face_alist);
@@ -3772,7 +3772,7 @@ FRAME 0 means change the face on all frames, and change the default\n\
 
   /* If FRAME is 0, change face on all frames, and change the
      default for new frames.  */
-  if (INTEGERP (frame) && XINT (frame) == 0)
+  if (FIXNUMP (frame) && XINT (frame) == 0)
     {
       Lisp_Object tail;
       Finternal_set_lisp_face_attribute (face, attr, value, Qt);
@@ -3817,9 +3817,9 @@ FRAME 0 means change the face on all frames, and change the default\n\
 	    (EQ (face, Qdefault) ? value :
 	     /* The default face must have an absolute size, otherwise, we do
 		a test merge with a random height to see if VALUE's ok. */
-	     merge_face_heights (value, make_number(10), Qnil, Qnil));
+	     merge_face_heights (value, make_fixnum(10), Qnil, Qnil));
 
-	  if (!INTEGERP(test) || XINT(test) <= 0)
+	  if (!FIXNUMP(test) || XINT(test) <= 0)
 	    signal_error ("Invalid face height", value);
 	}
 
@@ -3900,13 +3900,13 @@ FRAME 0 means change the face on all frames, and change the default\n\
       /* Allow t meaning a simple box of width 1 in foreground color
          of the face.  */
       if (EQ (value, Qt))
-	value = make_number (1);
+	value = make_fixnum (1);
 
       if (UNSPECIFIEDP (value))
 	valid_p = 1;
       else if (NILP (value))
 	valid_p = 1;
-      else if (INTEGERP (value))
+      else if (FIXNUMP (value))
 	valid_p = XINT (value) != 0;
       else if (STRINGP (value))
 	valid_p = XSTRING (value)->size > 0;
@@ -3928,7 +3928,7 @@ FRAME 0 means change the face on all frames, and change the default\n\
 
 	      if (EQ (k, QCline_width))
 		{
-		  if (!INTEGERP (v) || XINT (v) == 0)
+		  if (!FIXNUMP (v) || XINT (v) == 0)
 		    break;
 		}
 	      else if (EQ (k, QCcolor))
@@ -4308,7 +4308,7 @@ face_boolean_x_resource_value (value, signal_p)
      Lisp_Object value;
      int signal_p;
 {
-  Lisp_Object result = make_number (0);
+  Lisp_Object result = make_fixnum (0);
 
   xassert (STRINGP (value));
 
@@ -4342,7 +4342,7 @@ DEFUN ("internal-set-lisp-face-attribute-from-resource",
     value = Qunspecified;
   else if (EQ (attr, QCheight))
     {
-      value = Fstring_to_number (value, make_number (10));
+      value = Fstring_to_number (value, make_fixnum (10));
       if (XINT (value) <= 0)
 	signal_error ("Invalid face height from X resource", value);
     }
@@ -5351,7 +5351,7 @@ smaller_face (f, face_id, steps)
     {
       /* Look up a face for a slightly smaller/larger font.  */
       pt += delta;
-      attrs[LFACE_HEIGHT_INDEX] = make_number (pt);
+      attrs[LFACE_HEIGHT_INDEX] = make_fixnum (pt);
       new_face_id = lookup_face (f, attrs, 0, NULL);
       new_face = FACE_FROM_ID (f, new_face_id);
 
@@ -5394,7 +5394,7 @@ face_with_height (f, face_id, height)
 
   face = FACE_FROM_ID (f, face_id);
   bcopy (face->lface, attrs, sizeof attrs);
-  attrs[LFACE_HEIGHT_INDEX] = make_number (height);
+  attrs[LFACE_HEIGHT_INDEX] = make_fixnum (height);
   face_id = lookup_face (f, attrs, 0, NULL);
 #endif /* HAVE_WINDOW_SYSTEM */
 
@@ -6093,7 +6093,7 @@ realize_default_face (f)
     {
       LFACE_FAMILY (lface) = build_string ("default");
       LFACE_SWIDTH (lface) = Qnormal;
-      LFACE_HEIGHT (lface) = make_number (1);
+      LFACE_HEIGHT (lface) = make_fixnum (1);
       LFACE_WEIGHT (lface) = Qnormal;
       LFACE_SLANT (lface) = Qnormal;
       LFACE_AVGWIDTH (lface) = Qunspecified;
@@ -6356,7 +6356,7 @@ realize_x_face (cache, attrs, c, base_face)
       face->box = FACE_SIMPLE_BOX;
       face->box_line_width = 1;
     }
-  else if (INTEGERP (box))
+  else if (FIXNUMP (box))
     {
       /* Simple box of specified line width in foreground color of the
          face.  */
@@ -6389,7 +6389,7 @@ realize_x_face (cache, attrs, c, base_face)
 
 	  if (EQ (keyword, QCline_width))
 	    {
-	      if (INTEGERP (value) && XINT (value) != 0)
+	      if (FIXNUMP (value) && XINT (value) != 0)
 		face->box_line_width = XINT (value);
 	    }
 	  else if (EQ (keyword, QCcolor))
@@ -6730,7 +6730,7 @@ face_at_buffer_position (w, pos, region_beg, region_end,
   prop = Fget_text_property (position, propname, w->buffer);
   XSETFASTINT (limit1, (limit < endpos ? limit : endpos));
   end = Fnext_single_property_change (position, propname, w->buffer, limit1);
-  if (INTEGERP (end))
+  if (FIXNUMP (end))
     endpos = XINT (end);
 
   /* Look at properties from overlays.  */
@@ -6862,7 +6862,7 @@ face_at_string_position (w, string, pos, bufpos, region_beg,
      short, so set the limit to the end of the string.  */
   XSETFASTINT (limit, XSTRING (string)->size);
   end = Fnext_single_property_change (position, prop_name, string, limit);
-  if (INTEGERP (end))
+  if (FIXNUMP (end))
     *endptr = XFASTINT (end);
   else
     *endptr = -1;
@@ -6966,7 +6966,7 @@ DEFUN ("dump-face", Fdump_face, Sdump_face, 0, 1, 0, "")
       fprintf (stderr, "\n");
 
       for (i = 0; i < FRAME_FACE_CACHE (SELECTED_FRAME ())->used; ++i)
-	Fdump_face (make_number (i));
+	Fdump_face (make_fixnum (i));
     }
   else
     {
@@ -7180,7 +7180,7 @@ syms_of_xfaces ()
     "*Limit for font matching.\n\
 If an integer > 0, font matching functions won't load more than\n\
 that number of fonts when searching for a matching font.");
-  Vfont_list_limit = make_number (DEFAULT_FONT_LIST_LIMIT);
+  Vfont_list_limit = make_fixnum (DEFAULT_FONT_LIST_LIMIT);
 
   DEFVAR_LISP ("face-new-frame-defaults", &Vface_new_frame_defaults,
     "List of global face definitions (for internal use only.)");

@@ -415,7 +415,7 @@ use  (let ((edges (window-edges))) (- (nth 2 edges) (nth 0 edges))).")
   (window)
      Lisp_Object window;
 {
-  return make_number (window_internal_width (decode_window (window)));
+  return make_fixnum (window_internal_width (decode_window (window)));
 }
 
 DEFUN ("window-hscroll", Fwindow_hscroll, Swindow_hscroll, 0, 1, 0,
@@ -442,7 +442,7 @@ NCOL should be zero or positive.")
   if (XINT (w->hscroll) != hscroll)
     XBUFFER (w->buffer)->prevent_redisplay_optimizations_p = 1;
   
-  w->hscroll = make_number (hscroll);
+  w->hscroll = make_fixnum (hscroll);
   return ncol;
 }
 
@@ -486,8 +486,8 @@ and BOTTOM is one more than the bottommost row used by WINDOW\n\
   register struct window *w = decode_window (window);
 
   return Fcons (w->left, Fcons (w->top,
-           Fcons (make_number (WINDOW_RIGHT_EDGE (w)),
-		  Fcons (make_number (XFASTINT (w->top)
+           Fcons (make_fixnum (WINDOW_RIGHT_EDGE (w)),
+		  Fcons (make_fixnum (XFASTINT (w->top)
 				      + XFASTINT (w->height)),
 			 Qnil))));
 }
@@ -933,7 +933,7 @@ if it isn't already recorded.")
       move_it_vertically (&it, window_box_height (w));
       if (it.current_y < it.last_visible_y)
 	move_it_past_eol (&it);
-      value = make_number (IT_CHARPOS (it));
+      value = make_fixnum (IT_CHARPOS (it));
       
       if (old_buffer)
 	set_buffer_internal (old_buffer);
@@ -1426,7 +1426,7 @@ candidate_window_p (window, owindow, minibuf, all_frames)
       FRAME_SAMPLE_VISIBILITY (f);
       candidate_p = FRAME_VISIBLE_P (f);
     }
-  else if (INTEGERP (all_frames) && XINT (all_frames) == 0)
+  else if (FIXNUMP (all_frames) && XINT (all_frames) == 0)
     {
       FRAME_SAMPLE_VISIBILITY (f);
       candidate_p = FRAME_VISIBLE_P (f) || FRAME_ICONIFIED_P (f);
@@ -2448,8 +2448,8 @@ size_window (window, size, width_p, nodelete_p)
     }
 
   /* Set redisplay hints.  */
-  w->last_modified = make_number (0);
-  w->last_overlay_modified = make_number (0);
+  w->last_modified = make_fixnum (0);
+  w->last_overlay_modified = make_fixnum (0);
   windows_or_buffers_changed++;
   FRAME_WINDOW_SIZES_CHANGED (XFRAME (w->frame)) = 1;
 
@@ -2457,13 +2457,13 @@ size_window (window, size, width_p, nodelete_p)
     {
       sideward = &w->vchild;
       forward = &w->hchild;
-      w->width = make_number (size);
+      w->width = make_fixnum (size);
     }
   else
     {
       sideward = &w->hchild;
       forward = &w->vchild;
-      w->height = make_number (size);
+      w->height = make_fixnum (size);
       w->orig_height = Qnil;
     }
 
@@ -2528,9 +2528,9 @@ size_window (window, size, width_p, nodelete_p)
 	  /* The top or left edge position of this child equals the
 	     bottom or right edge of its predecessor.  */
 	  if (width_p)
-	    c->left = make_number (last_pos);
+	    c->left = make_fixnum (last_pos);
 	  else
-	    c->top = make_number (last_pos);
+	    c->top = make_fixnum (last_pos);
 
 	  /* If this child can be resized, do it.  */
 	  if (resize_fixed_p || !window_fixed_size_p (c, width_p, 0))
@@ -2624,7 +2624,7 @@ set_window_buffer (window, buffer, run_hooks_p)
     b->last_selected_window = window;
 
   /* Update time stamps of buffer display.  */
-  if (INTEGERP (b->display_count))
+  if (FIXNUMP (b->display_count))
     XSETINT (b->display_count, XINT (b->display_count) + 1);
   b->display_time = Fcurrent_time ();
 
@@ -2632,11 +2632,11 @@ set_window_buffer (window, buffer, run_hooks_p)
   XSETFASTINT (w->window_end_vpos, 0);
   bzero (&w->last_cursor, sizeof w->last_cursor);
   w->window_end_valid = Qnil;
-  w->hscroll = w->min_hscroll = make_number (0);
+  w->hscroll = w->min_hscroll = make_fixnum (0);
   w->vscroll = 0;
   set_marker_both (w->pointm, buffer, BUF_PT (b), BUF_PT_BYTE (b));
   set_marker_restricted (w->start,
-			 make_number (b->last_window_start),
+			 make_fixnum (b->last_window_start),
 			 buffer);
   w->start_at_line_beg = Qnil;
   w->force_start = Qnil;
@@ -3008,7 +3008,7 @@ displayed.")
 	  window = Fget_largest_window (Qvisible);
 	  /* If that didn't work, try iconified frames.  */
 	  if (NILP (window))
-	    window = Fget_largest_window (make_number (0));
+	    window = Fget_largest_window (make_fixnum (0));
 	  if (NILP (window))
 	    window = Fget_largest_window (Qt);
 	}
@@ -3044,9 +3044,9 @@ displayed.")
 	    window = Fget_largest_window (Qvisible);
 	  /* If that didn't work, try iconified frames.  */
 	  if (NILP (window))
-	    window = Fget_buffer_window (buffer, make_number (0));
+	    window = Fget_buffer_window (buffer, make_fixnum (0));
 	  if (NILP (window))
-	    window = Fget_largest_window (make_number (0));
+	    window = Fget_largest_window (make_fixnum (0));
 	  /* Try invisible frames.  */
 	  if (NILP (window))
 	    window = Fget_buffer_window (buffer, Qt);
@@ -3679,7 +3679,7 @@ shrink_window_lowest_first (w, height)
       for (child = w->vchild; !NILP (child); child = c->next)
 	{
 	  c = XWINDOW (child);
-	  c->top = make_number (last_top);
+	  c->top = make_fixnum (last_top);
 	  shrink_window_lowest_first (c, XFASTINT (c->height));
 	  last_top += XFASTINT (c->height);
 	}
@@ -3723,7 +3723,7 @@ save_restore_orig_size (w, action)
       switch (action)
 	{
 	case CHECK_ORIG_SIZES:
-	  if (!INTEGERP (w->orig_top) || !INTEGERP (w->orig_height))
+	  if (!FIXNUMP (w->orig_top) || !FIXNUMP (w->orig_height))
 	    return 0;
 	  break;
 
@@ -3735,7 +3735,7 @@ save_restore_orig_size (w, action)
 	  break;
 
 	case RESTORE_ORIG_SIZES:
-	  xassert (INTEGERP (w->orig_top) && INTEGERP (w->orig_height));
+	  xassert (FIXNUMP (w->orig_top) && FIXNUMP (w->orig_height));
 	  w->top = w->orig_top;
 	  w->height = w->orig_height;
 	  w->orig_height = w->orig_top = Qnil;
@@ -3792,8 +3792,8 @@ grow_mini_window (w, delta)
       shrink_window_lowest_first (root, XFASTINT (root->height) - delta);
 
       /* Grow the mini-window.  */
-      w->top = make_number (XFASTINT (root->top) + XFASTINT (root->height));
-      w->height = make_number (XFASTINT (w->height) + delta);
+      w->top = make_fixnum (XFASTINT (root->top) + XFASTINT (root->height));
+      w->height = make_fixnum (XFASTINT (w->height) + delta);
       XSETFASTINT (w->last_modified, 0);
       XSETFASTINT (w->last_overlay_modified, 0);
       
@@ -3961,7 +3961,7 @@ window_scroll_pixel_based (window, n, whole, noerror)
   
   /* If PT is not visible in WINDOW, move back one half of
      the screen.  */
-  tem = Fpos_visible_in_window_p (make_number (PT), window, Qnil);
+  tem = Fpos_visible_in_window_p (make_fixnum (PT), window, Qnil);
   if (NILP (tem))
     {
       /* Move backward half the height of the window.  Performance note:
@@ -4061,7 +4061,7 @@ window_scroll_pixel_based (window, n, whole, noerror)
   if (! vscrolled)
     {
       /* Set the window start, and set up the window for redisplay.  */
-      set_marker_restricted (w->start, make_number (IT_CHARPOS (it)),
+      set_marker_restricted (w->start, make_fixnum (IT_CHARPOS (it)),
 			     w->buffer);
       w->start_at_line_beg = Fbolp ();
       w->update_mode_line = Qt;
@@ -4166,13 +4166,13 @@ window_scroll_line_based (window, n, whole, noerror)
 
   if (NILP (tem))
     {
-      Fvertical_motion (make_number (- (ht / 2)), window);
+      Fvertical_motion (make_fixnum (- (ht / 2)), window);
       startpos = PT;
     }
 
   SET_PT (startpos);
   lose = n < 0 && PT == BEGV;
-  Fvertical_motion (make_number (n), window);
+  Fvertical_motion (make_fixnum (n), window);
   pos = PT;
   pos_byte = PT_BYTE;
   bolp = Fbolp ();
@@ -4209,7 +4209,7 @@ window_scroll_line_based (window, n, whole, noerror)
       if (whole && !NILP (Vscroll_preserve_screen_position))
 	{
 	  SET_PT_BOTH (pos, pos_byte);
-	  Fvertical_motion (make_number (original_vpos), window);
+	  Fvertical_motion (make_fixnum (original_vpos), window);
 	}
       /* If we scrolled forward, put point enough lines down
 	 that it is outside the scroll margin.  */
@@ -4220,7 +4220,7 @@ window_scroll_line_based (window, n, whole, noerror)
 	  if (this_scroll_margin > 0)
 	    {
 	      SET_PT_BOTH (pos, pos_byte);
-	      Fvertical_motion (make_number (this_scroll_margin), window);
+	      Fvertical_motion (make_fixnum (this_scroll_margin), window);
 	      top_margin = PT;
 	    }
 	  else
@@ -4231,7 +4231,7 @@ window_scroll_line_based (window, n, whole, noerror)
 	  else if (!NILP (Vscroll_preserve_screen_position))
 	    {
 	      SET_PT_BOTH (pos, pos_byte);
-	      Fvertical_motion (make_number (original_vpos), window);
+	      Fvertical_motion (make_fixnum (original_vpos), window);
 	    }
 	  else
 	    SET_PT (top_margin);
@@ -4243,7 +4243,7 @@ window_scroll_line_based (window, n, whole, noerror)
 	  /* If we scrolled backward, put point near the end of the window
 	     but not within the scroll margin.  */
 	  SET_PT_BOTH (pos, pos_byte);
-	  tem = Fvertical_motion (make_number (ht - this_scroll_margin), window);
+	  tem = Fvertical_motion (make_fixnum (ht - this_scroll_margin), window);
 	  if (XFASTINT (tem) == ht - this_scroll_margin)
 	    bottom_margin = PT;
 	  else
@@ -4256,10 +4256,10 @@ window_scroll_line_based (window, n, whole, noerror)
 	      if (!NILP (Vscroll_preserve_screen_position))
 		{
 		  SET_PT_BOTH (pos, pos_byte);
-		  Fvertical_motion (make_number (original_vpos), window);
+		  Fvertical_motion (make_fixnum (original_vpos), window);
 		}
 	      else
-		Fvertical_motion (make_number (-1), window);
+		Fvertical_motion (make_fixnum (-1), window);
 	    }
 	}
     }
@@ -4444,7 +4444,7 @@ Default for ARG is window width minus 2.")
     arg = Fprefix_numeric_value (arg);
 
   hscroll = XINT (w->hscroll) + XINT (arg);
-  result = Fset_window_hscroll (selected_window, make_number (hscroll));
+  result = Fset_window_hscroll (selected_window, make_fixnum (hscroll));
 
   if (interactive_p (0))
     w->min_hscroll = w->hscroll;
@@ -4468,7 +4468,7 @@ Default for ARG is window width minus 2.")
     arg = Fprefix_numeric_value (arg);
 
   hscroll = XINT (w->hscroll) - XINT (arg);
-  result = Fset_window_hscroll (selected_window, make_number (hscroll));
+  result = Fset_window_hscroll (selected_window, make_fixnum (hscroll));
   
   if (interactive_p (0))
     w->min_hscroll = w->hscroll;
@@ -4619,9 +4619,9 @@ and redisplay normally--don't erase and redraw the frame.")
       int ht = window_internal_height (w);
 
       if (center_p)
-	arg = make_number (ht / 2);
+	arg = make_fixnum (ht / 2);
       else if (XINT (arg) < 0)
-	arg = make_number (XINT (arg) + ht);
+	arg = make_fixnum (XINT (arg) + ht);
       
       pos = *vmotion (PT, - XINT (arg), w);
       charpos = pos.bufpos;
@@ -4653,7 +4653,7 @@ partial-height lines in the text display area.")
   struct window *w = decode_window (window);
   int pixel_height = window_box_height (w);
   int line_height = pixel_height / CANON_Y_UNIT (XFRAME (w->frame));
-  return make_number (line_height);
+  return make_fixnum (line_height);
 }
 
 
@@ -4676,7 +4676,7 @@ zero means top of window, negative means relative to bottom of window.")
   if (start < BEGV || start > ZV)
     {
       int height = window_internal_height (w);
-      Fvertical_motion (make_number (- (height / 2)), window);
+      Fvertical_motion (make_fixnum (- (height / 2)), window);
       set_marker_both (w->start, w->buffer, PT, PT_BYTE);
       w->start_at_line_beg = Fbolp ();
       w->force_start = Qt;
@@ -4841,11 +4841,11 @@ the return value is nil.  Otherwise the value is t.")
 #if defined (HAVE_WINDOW_SYSTEM) || defined (MSDOS)
       if (XFASTINT (data->frame_menu_bar_lines)
 	  != previous_frame_menu_bar_lines)
-	x_set_menu_bar_lines (f, data->frame_menu_bar_lines, make_number (0));
+	x_set_menu_bar_lines (f, data->frame_menu_bar_lines, make_fixnum (0));
 #ifdef HAVE_WINDOW_SYSTEM
       if (XFASTINT (data->frame_tool_bar_lines)
 	  != previous_frame_tool_bar_lines)
-	x_set_tool_bar_lines (f, data->frame_tool_bar_lines, make_number (0));
+	x_set_tool_bar_lines (f, data->frame_tool_bar_lines, make_fixnum (0));
 #endif
 #endif
 
@@ -4969,8 +4969,8 @@ the return value is nil.  Otherwise the value is t.")
 		  w->buffer = Fcdr (Fcar (Vbuffer_alist));
 		  /* This will set the markers to beginning of visible
 		     range.  */
-		  set_marker_restricted (w->start, make_number (0), w->buffer);
-		  set_marker_restricted (w->pointm, make_number (0),w->buffer);
+		  set_marker_restricted (w->start, make_fixnum (0), w->buffer);
+		  set_marker_restricted (w->pointm, make_fixnum (0),w->buffer);
 		  w->start_at_line_beg = Qt;
 		}
 	      else
@@ -4979,7 +4979,7 @@ the return value is nil.  Otherwise the value is t.")
 		{
 		  /* Set window markers at start of visible range.  */
 		  if (XMARKER (w->start)->buffer == 0)
-		    set_marker_restricted (w->start, make_number (0),
+		    set_marker_restricted (w->start, make_fixnum (0),
 					   w->buffer);
 		  if (XMARKER (w->pointm)->buffer == 0)
 		    set_marker_restricted_both (w->pointm, w->buffer,
@@ -5019,12 +5019,12 @@ the return value is nil.  Otherwise the value is t.")
 			   0, 0, 0);
 #if defined (HAVE_WINDOW_SYSTEM) || defined (MSDOS)
       if (previous_frame_menu_bar_lines != FRAME_MENU_BAR_LINES (f))
-	x_set_menu_bar_lines (f, make_number (previous_frame_menu_bar_lines),
-			      make_number (0));
+	x_set_menu_bar_lines (f, make_fixnum (previous_frame_menu_bar_lines),
+			      make_fixnum (0));
 #ifdef HAVE_WINDOW_SYSTEM
       if (previous_frame_tool_bar_lines != FRAME_TOOL_BAR_LINES (f))
-	x_set_tool_bar_lines (f, make_number (previous_frame_tool_bar_lines),
-			      make_number (0));
+	x_set_tool_bar_lines (f, make_fixnum (previous_frame_tool_bar_lines),
+			      make_fixnum (0));
 #endif
 #endif
 
@@ -5294,11 +5294,11 @@ redirection (see `redirect-frame-focus').")
   data->focus_frame = FRAME_FOCUS_FRAME (f);
   XSETINT (data->min_height, window_min_height);
   XSETINT (data->min_width, window_min_width);
-  tem = Fmake_vector (make_number (n_windows), Qnil);
+  tem = Fmake_vector (make_fixnum (n_windows), Qnil);
   data->saved_windows = tem;
   for (i = 0; i < n_windows; i++)
     XVECTOR (tem)->contents[i]
-      = Fmake_vector (make_number (SAVED_WINDOW_VECTOR_SIZE), Qnil);
+      = Fmake_vector (make_fixnum (SAVED_WINDOW_VECTOR_SIZE), Qnil);
   save_window_save (FRAME_ROOT_WINDOW (f), XVECTOR (tem), 0);
   XSETWINDOW_CONFIGURATION (tem, data);
   return (tem);
@@ -5349,16 +5349,16 @@ A nil width parameter means no margin.")
 
   /* Check widths < 0 and translate a zero width to nil.
      Margins that are too wide have to be checked elsewhere.  */
-  if ((INTEGERP (left) && XINT (left) < 0)
+  if ((FIXNUMP (left) && XINT (left) < 0)
       || (FLOATP (left) && XFLOAT_DATA (left) <= 0))
      XSETFASTINT (left, 0);
-  if (INTEGERP (left) && XFASTINT (left) == 0)
+  if (FIXNUMP (left) && XFASTINT (left) == 0)
     left = Qnil;
   
-  if ((INTEGERP (right) && XINT (right) < 0)
+  if ((FIXNUMP (right) && XINT (right) < 0)
       || (FLOATP (right) && XFLOAT_DATA (right) <= 0))
     XSETFASTINT (right, 0);
-  if (INTEGERP (right) && XFASTINT (right) == 0)
+  if (FIXNUMP (right) && XFASTINT (right) == 0)
     right = Qnil;
 
   w->left_margin_width = left;
@@ -5411,7 +5411,7 @@ Value is a multiple of the canonical character height of WINDOW.")
   if (FRAME_WINDOW_P (f))
     result = CANON_Y_FROM_PIXEL_Y (f, -w->vscroll);
   else
-    result = make_number (0);
+    result = make_fixnum (0);
   return result;
 }
 

@@ -49,7 +49,7 @@ DEFUN ("forward-point", Fforward_point, Sforward_point, 1, 1, 0,
 {
   CHECK_NUMBER (n, 0);
 
-  return make_number (PT + XINT (n));
+  return make_fixnum (PT + XINT (n));
 }
 
 DEFUN ("forward-char", Fforward_char, Sforward_char, 0, 1, "p",
@@ -146,7 +146,7 @@ With positive N, a non-empty line at the end counts as one line\n\
 	      && (FETCH_BYTE (PT_BYTE - 1) != '\n'))))
     shortage--;
 
-  return make_number (count <= 0 ? - shortage : shortage);
+  return make_fixnum (count <= 0 ? - shortage : shortage);
 }
 
 DEFUN ("beginning-of-line", Fbeginning_of_line, Sbeginning_of_line,
@@ -268,14 +268,14 @@ N was explicitly specified.")
     {
       int column = current_column ();
 
-      value = Fdelete_char (make_number (-XINT (n)), killflag);
+      value = Fdelete_char (make_fixnum (-XINT (n)), killflag);
       i = column - current_column ();
-      Finsert_char (make_number (' '), make_number (i), Qnil);
+      Finsert_char (make_fixnum (' '), make_fixnum (i), Qnil);
       /* Whitespace chars are ASCII chars, so we can simply subtract.  */
       SET_PT_BOTH (PT - i, PT_BYTE - i);
     }
   else
-    value = Fdelete_char (make_number (-XINT (n)), killflag);
+    value = Fdelete_char (make_fixnum (-XINT (n)), killflag);
 
   return value;
 }
@@ -291,7 +291,7 @@ Whichever character you type to run this command is inserted.")
   CHECK_NUMBER (n, 0);
 
   /* Barf if the key that invoked this was not a character.  */
-  if (!INTEGERP (last_command_char))
+  if (!FIXNUMP (last_command_char))
     bitch_at_user ();
   else if (XINT (n) >= 2 && NILP (current_buffer->overwrite_mode))
     {
@@ -308,7 +308,7 @@ Whichever character you type to run this command is inserted.")
       /* The bulk of the copies of this char can be inserted simply.
 	 We don't have to handle a user-specified face specially
 	 because it will get inherited from the first char inserted.  */
-      Finsert_char (make_number (modified_char), n, Qt);
+      Finsert_char (make_fixnum (modified_char), n, Qt);
       /* The last one might want to auto-fill.  */
       internal_self_insert (character, 0);
     }
@@ -399,7 +399,7 @@ internal_self_insert (c, noautofill)
 		    && XINT (current_buffer->tab_width) > 0
 		    && XFASTINT (current_buffer->tab_width) < 20
 		    && (target_clm = (current_column () 
-				      + XINT (Fchar_width (make_number (c)))),
+				      + XINT (Fchar_width (make_fixnum (c)))),
 			target_clm % XFASTINT (current_buffer->tab_width)))))
 	{
 	  int pos = PT;
@@ -415,7 +415,7 @@ internal_self_insert (c, noautofill)
 		 character.  In that case, the new point is set after
 		 that character.  */
 	      int actual_clm
-		= XFASTINT (Fmove_to_column (make_number (target_clm), Qnil));
+		= XFASTINT (Fmove_to_column (make_fixnum (target_clm), Qnil));
 
 	      chars_to_delete = PT - pos;
 
@@ -462,13 +462,13 @@ internal_self_insert (c, noautofill)
       string = make_string_from_bytes (str, 1, len);
       if (spaces_to_insert)
 	{
-	  tem = Fmake_string (make_number (spaces_to_insert),
-			      make_number (' '));
+	  tem = Fmake_string (make_fixnum (spaces_to_insert),
+			      make_fixnum (' '));
 	  string = concat2 (tem, string);
 	}
 
       replace_range (PT, PT + chars_to_delete, string, 1, 1, 1);
-      Fforward_char (make_number (1 + spaces_to_insert));
+      Fforward_char (make_fixnum (1 + spaces_to_insert));
     }
   else
     insert_and_inherit (str, len);
@@ -497,7 +497,7 @@ internal_self_insert (c, noautofill)
   if (!NILP (Vself_insert_face)
       && EQ (current_kboard->Vlast_command, Vself_insert_face_command))
     {
-      Fput_text_property (make_number (PT - 1), make_number (PT),
+      Fput_text_property (make_fixnum (PT - 1), make_fixnum (PT),
 			  Qface, Vself_insert_face, Qnil);
       Vself_insert_face = Qnil;
     }

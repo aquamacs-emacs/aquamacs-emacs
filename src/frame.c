@@ -88,9 +88,9 @@ set_menu_bar_lines_1 (window, n)
   XSETFASTINT (w->top, XFASTINT (w->top) + n);
   XSETFASTINT (w->height, XFASTINT (w->height) - n);
   
-  if (INTEGERP (w->orig_top))
+  if (FIXNUMP (w->orig_top))
     XSETFASTINT (w->orig_top, XFASTINT (w->orig_top) + n);
-  if (INTEGERP (w->orig_height))
+  if (FIXNUMP (w->orig_height))
     XSETFASTINT (w->orig_height, XFASTINT (w->orig_height) - n);
 
   /* Handle just the top child in a vertical split.  */
@@ -120,7 +120,7 @@ set_menu_bar_lines (f, value, oldval)
   if (FRAME_MINIBUF_ONLY_P (f))
     return;
 
-  if (INTEGERP (value))
+  if (FIXNUMP (value))
     nlines = XINT (value);
   else
     nlines = 0;
@@ -869,7 +869,7 @@ next_frame (frame, minibuf)
 		if (FRAME_VISIBLE_P (XFRAME (f)))
 		  return f;
 	      }
-	    else if (INTEGERP (minibuf) && XINT (minibuf) == 0)
+	    else if (FIXNUMP (minibuf) && XINT (minibuf) == 0)
 	      {
 		FRAME_SAMPLE_VISIBILITY (XFRAME (f));
 		if (FRAME_VISIBLE_P (XFRAME (f))
@@ -1938,7 +1938,7 @@ store_frame_param (f, prop, val)
   if (! FRAME_WINDOW_P (f))
     {
       if (EQ (prop, Qmenu_bar_lines))
-	set_menu_bar_lines (f, val, make_number (FRAME_MENU_BAR_LINES (f)));
+	set_menu_bar_lines (f, val, make_fixnum (FRAME_MENU_BAR_LINES (f)));
       else if (EQ (prop, Qname))
 	set_term_frame_name (f, val);
     }
@@ -2027,9 +2027,9 @@ If FRAME is omitted, return information on the currently selected frame.")
     }
   store_in_alist (&alist, Qname, f->name);
   height = (FRAME_NEW_HEIGHT (f) ? FRAME_NEW_HEIGHT (f) : FRAME_HEIGHT (f));
-  store_in_alist (&alist, Qheight, make_number (height));
+  store_in_alist (&alist, Qheight, make_fixnum (height));
   width = (FRAME_NEW_WIDTH (f) ? FRAME_NEW_WIDTH (f) : FRAME_WIDTH (f));
-  store_in_alist (&alist, Qwidth, make_number (width));
+  store_in_alist (&alist, Qwidth, make_fixnum (width));
   store_in_alist (&alist, Qmodeline, (FRAME_WANTS_MODELINE_P (f) ? Qt : Qnil));
   store_in_alist (&alist, Qminibuffer,
 		  (! FRAME_HAS_MINIBUF_P (f) ? Qnil
@@ -2225,10 +2225,10 @@ For a terminal frame, the value is always 1.")
 
 #ifdef HAVE_WINDOW_SYSTEM
   if (FRAME_WINDOW_P (f))
-    return make_number (x_char_height (f));
+    return make_fixnum (x_char_height (f));
   else
 #endif
-    return make_number (1);
+    return make_fixnum (1);
 }
 
 
@@ -2251,10 +2251,10 @@ For a terminal screen, the value is always 1.")
 
 #ifdef HAVE_WINDOW_SYSTEM
   if (FRAME_WINDOW_P (f))
-    return make_number (x_char_width (f));
+    return make_fixnum (x_char_width (f));
   else
 #endif
-    return make_number (1);
+    return make_fixnum (1);
 }
 
 DEFUN ("frame-pixel-height", Fframe_pixel_height, 
@@ -2276,10 +2276,10 @@ If FRAME is omitted, the selected frame is used.")
 
 #ifdef HAVE_WINDOW_SYSTEM
   if (FRAME_WINDOW_P (f))
-    return make_number (x_pixel_height (f));
+    return make_fixnum (x_pixel_height (f));
   else
 #endif
-    return make_number (FRAME_HEIGHT (f));
+    return make_fixnum (FRAME_HEIGHT (f));
 }
 
 DEFUN ("frame-pixel-width", Fframe_pixel_width, 
@@ -2299,10 +2299,10 @@ If FRAME is omitted, the selected frame is used.")
 
 #ifdef HAVE_WINDOW_SYSTEM
   if (FRAME_WINDOW_P (f))
-    return make_number (x_pixel_width (f));
+    return make_fixnum (x_pixel_width (f));
   else
 #endif
-    return make_number (FRAME_WIDTH (f));
+    return make_fixnum (FRAME_WIDTH (f));
 }
 
 DEFUN ("set-frame-height", Fset_frame_height, Sset_frame_height, 2, 3, 0,

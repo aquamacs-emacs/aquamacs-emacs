@@ -124,7 +124,7 @@ get_doc_string (filepos, unibyte, definition)
   int offset, position;
   Lisp_Object file, tem;
 
-  if (INTEGERP (filepos))
+  if (FIXNUMP (filepos))
     {
       file = Vdoc_file_name;
       position = XINT (filepos);
@@ -328,7 +328,7 @@ string is passed through `substitute-command-keys'.")
       else if ((EMACS_INT) XSUBR (fun)->doc >= 0)
 	doc = build_string (XSUBR (fun)->doc);
       else
-	doc = get_doc_string (make_number (- (EMACS_INT) XSUBR (fun)->doc),
+	doc = get_doc_string (make_fixnum (- (EMACS_INT) XSUBR (fun)->doc),
 			      0, 0);
       if (! NILP (tem = Fassq (function, Vhelp_manyarg_func_alist)))
 	doc = concat3 (doc, build_string ("\n"), Fcdr (tem));
@@ -405,9 +405,9 @@ aren't strings.")
   Lisp_Object tem;
 
   tem = Fget (symbol, prop);
-  if (INTEGERP (tem))
-    tem = get_doc_string (XINT (tem) > 0 ? tem : make_number (- XINT (tem)), 0, 0);
-  else if (CONSP (tem) && INTEGERP (XCDR (tem)))
+  if (FIXNUMP (tem))
+    tem = get_doc_string (XINT (tem) > 0 ? tem : make_fixnum (- XINT (tem)), 0, 0);
+  else if (CONSP (tem) && FIXNUMP (XCDR (tem)))
     tem = get_doc_string (tem, 0, 0);
   else if (!STRINGP (tem))
     /* Feval protects its argument.  */
@@ -443,7 +443,7 @@ store_function_docstring (fun, offset)
       if (EQ (tem, Qlambda) || EQ (tem, Qautoload))
 	{
 	  tem = Fcdr (Fcdr (fun));
-	  if (CONSP (tem) && INTEGERP (XCAR (tem)))
+	  if (CONSP (tem) && FIXNUMP (XCAR (tem)))
 	    XSETFASTINT (XCAR (tem), offset);
 	}
       else if (EQ (tem, Qmacro))
@@ -548,7 +548,7 @@ when doc strings are referred to later in the dumped Emacs.")
 		     and make it negative for a user-variable
 		     (doc starts with a `*').  */
 		  Fput (sym, Qvariable_documentation,
-			make_number ((pos + end + 1 - buf)
+			make_fixnum ((pos + end + 1 - buf)
 				     * (end[1] == '*' ? -1 : 1)));
 		}
 
@@ -680,7 +680,7 @@ thus, \\=\\=\\=\\= puts \\=\\= into the output, and \\=\\=\\=\\[ puts \\=\\[ int
 	     useful even when there is a menu bar.  */
 	  if (!NILP (tem))
 	    {
-	      firstkey = Faref (tem, make_number (0));
+	      firstkey = Faref (tem, make_fixnum (0));
 	      if (EQ (firstkey, Qmenu_bar))
 		tem = Qnil;
 	    }

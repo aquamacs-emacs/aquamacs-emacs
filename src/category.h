@@ -51,7 +51,7 @@ Boston, MA 02111-1307, USA.  */
    But, for the moment, we are not using this slot.  */
 
 #define CATEGORYP(x) \
-  (INTEGERP ((x)) && XFASTINT ((x)) >= 0x20 && XFASTINT ((x)) <= 0x7E)
+  (FIXNUMP ((x)) && XFASTINT ((x)) >= 0x20 && XFASTINT ((x)) <= 0x7E)
 
 #define CHECK_CATEGORY(x, i)						\
   do {									\
@@ -64,7 +64,7 @@ Boston, MA 02111-1307, USA.  */
   (BOOL_VECTOR_P ((x)) && (EMACS_INT) (XBOOL_VECTOR ((x))->size) == 128)
 
 /* Return a new empty category set.  */
-#define MAKE_CATEGORY_SET (Fmake_bool_vector (make_number (128), Qnil))
+#define MAKE_CATEGORY_SET (Fmake_bool_vector (make_fixnum (128), Qnil))
 
 /* Make CATEGORY_SET includes (if VAL is t) or excludes (if VAL is
    nil) CATEGORY.  */
@@ -104,21 +104,21 @@ extern Lisp_Object _temp_category_set;
 	      && NILP (temp = XCHAR_TABLE (table)->defalt))		     \
 	 table = XCHAR_TABLE (table)->parent;				     \
      else								     \
-       temp = Faref (table, make_number (c));				     \
+       temp = Faref (table, make_fixnum (c));				     \
      temp; })
 #else
 #define CATEGORY_SET(c) \
-  Faref (current_buffer->category_table, make_number (c))
+  Faref (current_buffer->category_table, make_fixnum (c))
 #endif   
 
 /* Return the doc string of CATEGORY in category table TABLE.  */
 #define CATEGORY_DOCSTRING(table, category) \
-  XVECTOR (Fchar_table_extra_slot (table, make_number (0)))->contents[(category) - ' ']
+  XVECTOR (Fchar_table_extra_slot (table, make_fixnum (0)))->contents[(category) - ' ']
 
 /* Return the version number of category table TABLE.  Not used for
    the moment.  */
 #define CATEGORY_TABLE_VERSION (table) \
-  Fchar_table_extra_slot (table, make_number (1))
+  Fchar_table_extra_slot (table, make_fixnum (1))
 
 /* Return 1 if there is a word boundary between two word-constituent
    characters C1 and C2 if they appear in this order, else return 0.

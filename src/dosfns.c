@@ -84,14 +84,14 @@ REGISTERS should be a vector produced by `make-register' and\n\
 
   int86 (no, &inregs, &outregs);
 
-  XVECTOR (registers)->contents[0] = make_number (outregs.x.ax);
-  XVECTOR (registers)->contents[1] = make_number (outregs.x.bx);
-  XVECTOR (registers)->contents[2] = make_number (outregs.x.cx);
-  XVECTOR (registers)->contents[3] = make_number (outregs.x.dx);
-  XVECTOR (registers)->contents[4] = make_number (outregs.x.si);
-  XVECTOR (registers)->contents[5] = make_number (outregs.x.di);
-  XVECTOR (registers)->contents[6] = make_number (outregs.x.cflag);
-  XVECTOR (registers)->contents[7] = make_number (outregs.x.flags);
+  XVECTOR (registers)->contents[0] = make_fixnum (outregs.x.ax);
+  XVECTOR (registers)->contents[1] = make_fixnum (outregs.x.bx);
+  XVECTOR (registers)->contents[2] = make_fixnum (outregs.x.cx);
+  XVECTOR (registers)->contents[3] = make_fixnum (outregs.x.dx);
+  XVECTOR (registers)->contents[4] = make_fixnum (outregs.x.si);
+  XVECTOR (registers)->contents[5] = make_fixnum (outregs.x.di);
+  XVECTOR (registers)->contents[6] = make_fixnum (outregs.x.cflag);
+  XVECTOR (registers)->contents[7] = make_fixnum (outregs.x.flags);
 
   return registers;
 }
@@ -117,7 +117,7 @@ Return the updated VECTOR.")
   dosmemget (offs, len, buf);
   
   for (i = 0; i < len; i++)
-    XVECTOR (vector)->contents[i] = make_number (buf[i]);
+    XVECTOR (vector)->contents[i] = make_fixnum (buf[i]);
 
   return vector;
 }
@@ -299,7 +299,7 @@ init_dosfns ()
 
   regs.x.ax = 0x3000;
   intdos (&regs, &regs);
-  Vdos_version = Fcons (make_number (regs.h.al), make_number (regs.h.ah));
+  Vdos_version = Fcons (make_fixnum (regs.h.al), make_fixnum (regs.h.ah));
 
   /* Obtain the country code via DPMI, use DJGPP transfer buffer.  */
   dpmiregs.x.ax = 0x3800;
@@ -360,7 +360,7 @@ init_dosfns ()
     {
       dos_windows_version = dpmiregs.x.ax;
       Vdos_windows_version =
-	Fcons (make_number (dpmiregs.h.al), make_number (dpmiregs.h.ah));
+	Fcons (make_fixnum (dpmiregs.h.al), make_fixnum (dpmiregs.h.ah));
 
       /* Save the current title of this virtual machine, so we can restore
 	 it before exiting.  Otherwise, Windows 95 will continue to use

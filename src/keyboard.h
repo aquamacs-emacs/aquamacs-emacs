@@ -252,7 +252,7 @@ extern Lisp_Object item_properties;
 #define EVENT_END(event) (XCAR (XCDR (XCDR (event))))
 
 /* Extract the click count from a multi-click event.  */
-#define EVENT_CLICK_COUNT(event) (Fnth ((event), make_number (2)))
+#define EVENT_CLICK_COUNT(event) (Fnth ((event), make_fixnum (2)))
 
 /* Extract the fields of a position.  */
 #define POSN_WINDOW(posn) (XCAR (posn))
@@ -260,12 +260,12 @@ extern Lisp_Object item_properties;
 #define POSN_WINDOW_POSN(posn) (XCAR (XCDR (XCDR (posn))))
 #define POSN_TIMESTAMP(posn) \
   (XCAR (XCDR (XCDR (XCDR (posn)))))
-#define POSN_SCROLLBAR_PART(posn)	(Fnth ((posn), make_number (4)))
+#define POSN_SCROLLBAR_PART(posn)	(Fnth ((posn), make_fixnum (4)))
 
 /* A cons (STRING . STRING-CHARPOS), or nil in mouse-click events.
    It's a cons if the click is over a string in the mode line.  */
 
-#define POSN_STRING(POSN) Fnth (make_number (4), (POSN))
+#define POSN_STRING(POSN) Fnth (make_fixnum (4), (POSN))
 
 /* Some of the event heads.  */
 extern Lisp_Object Qswitch_frame;

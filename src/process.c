@@ -265,12 +265,12 @@ status_convert (w)
      WAITTYPE w;
 {
   if (WIFSTOPPED (w))
-    return Fcons (Qstop, Fcons (make_number (WSTOPSIG (w)), Qnil));
+    return Fcons (Qstop, Fcons (make_fixnum (WSTOPSIG (w)), Qnil));
   else if (WIFEXITED (w))
-    return Fcons (Qexit, Fcons (make_number (WRETCODE (w)),
+    return Fcons (Qexit, Fcons (make_fixnum (WRETCODE (w)),
 				WCOREDUMP (w) ? Qt : Qnil));
   else if (WIFSIGNALED (w))
-    return Fcons (Qsignal, Fcons (make_number (WTERMSIG (w)),
+    return Fcons (Qsignal, Fcons (make_fixnum (WTERMSIG (w)),
 				  WCOREDUMP (w) ? Qt : Qnil));
   else
     return Qrun;
@@ -332,7 +332,7 @@ status_message (status)
     {
       if (code == 0)
 	return build_string ("finished\n");
-      string = Fnumber_to_string (make_number (code));
+      string = Fnumber_to_string (make_fixnum (code));
       string2 = build_string (coredump ? " (core dumped)\n" : "\n");
       return concat2 (build_string ("exited abnormally with code "),
 		      concat2 (string, string2));
@@ -571,7 +571,7 @@ nil, indicating the current buffer's process.")
   XPROCESS (process)->raw_status_high = Qnil;
   if (NETCONN_P (process))
     {
-      XPROCESS (process)->status = Fcons (Qexit, Fcons (make_number (0), Qnil));
+      XPROCESS (process)->status = Fcons (Qexit, Fcons (make_fixnum (0), Qnil));
       XSETINT (XPROCESS (process)->tick, ++process_tick);
     }
   else if (XINT (XPROCESS (process)->infd) >= 0)
@@ -579,7 +579,7 @@ nil, indicating the current buffer's process.")
       Fkill_process (process, Qnil);
       /* Do this now, since remove_process will make sigchld_handler do nothing.  */
       XPROCESS (process)->status 
-	= Fcons (Qsignal, Fcons (make_number (SIGKILL), Qnil));
+	= Fcons (Qsignal, Fcons (make_fixnum (SIGKILL), Qnil));
       XSETINT (XPROCESS (process)->tick, ++process_tick);
       status_notify ();
     }
@@ -641,7 +641,7 @@ If PROCESS has not yet exited or died, return 0.")
     update_status (XPROCESS (process));
   if (CONSP (XPROCESS (process)->status))
     return XCAR (XCDR (XPROCESS (process)->status));
-  return make_number (0);
+  return make_fixnum (0);
 }
 
 DEFUN ("process-id", Fprocess_id, Sprocess_id, 1, 1, 0,
@@ -927,7 +927,7 @@ Proc         Status   Buffer         Tty         Command\n\
 	continue;
 
       Finsert (1, &p->name);
-      Findent_to (make_number (13), minspace);
+      Findent_to (make_fixnum (13), minspace);
 
       if (!NILP (p->raw_status_low))
 	update_status (p);
@@ -973,7 +973,7 @@ Proc         Status   Buffer         Tty         Command\n\
       if (EQ (symbol, Qsignal) || EQ (symbol, Qexit))
 	remove_process (proc);
 
-      Findent_to (make_number (22), minspace);
+      Findent_to (make_fixnum (22), minspace);
       if (NILP (p->buffer))
 	insert_string ("(none)");
       else if (NILP (XBUFFER (p->buffer)->name))
@@ -981,14 +981,14 @@ Proc         Status   Buffer         Tty         Command\n\
       else
 	Finsert (1, &XBUFFER (p->buffer)->name);
 
-      Findent_to (make_number (37), minspace);
+      Findent_to (make_fixnum (37), minspace);
 
       if (STRINGP (p->tty_name))
 	Finsert (1, &p->tty_name);
       else
 	insert_string ("(none)");
 
-      Findent_to (make_number (49), minspace);
+      Findent_to (make_fixnum (49), minspace);
 
       if (NETCONN_P (proc))
         {
@@ -1231,9 +1231,9 @@ Remaining arguments are strings to give program as arguments.")
 #endif /* not VMS */
 
   XPROCESS (proc)->decoding_buf = make_uninit_string (0);
-  XPROCESS (proc)->decoding_carryover = make_number (0);
+  XPROCESS (proc)->decoding_carryover = make_fixnum (0);
   XPROCESS (proc)->encoding_buf = make_uninit_string (0);
-  XPROCESS (proc)->encoding_carryover = make_number (0);
+  XPROCESS (proc)->encoding_carryover = make_fixnum (0);
 
   XPROCESS (proc)->inherit_coding_system_flag
     = (NILP (buffer) || !inherit_process_coding_system
@@ -1792,7 +1792,7 @@ Fourth arg SERVICE is name of the service desired, or an integer\n\
 #ifdef HAVE_GETADDRINFO
   /* SERVICE can either be a string or int.
      Convert to a C string for later use by getaddrinfo.  */
-  if (INTEGERP (service))
+  if (FIXNUMP (service))
     {
       sprintf (portbuf, "%ld", (long) XINT (service));
       portstring = portbuf;
@@ -1803,7 +1803,7 @@ Fourth arg SERVICE is name of the service desired, or an integer\n\
       portstring = XSTRING (service)->data;
     }
 #else /* HAVE_GETADDRINFO */
-  if (INTEGERP (service))
+  if (FIXNUMP (service))
     port = htons ((unsigned short) XINT (service));
   else
     {
@@ -1867,7 +1867,7 @@ Fourth arg SERVICE is name of the service desired, or an integer\n\
 
       /* Make us close S if quit.  */
       count1 = specpdl_ptr - specpdl;
-      record_unwind_protect (close_file_unwind, make_number (s));
+      record_unwind_protect (close_file_unwind, make_fixnum (s));
 
     loop:
 
@@ -1900,7 +1900,7 @@ Fourth arg SERVICE is name of the service desired, or an integer\n\
 	  /* A delay here is needed on some FreeBSD systems,
 	     and it is harmless, since this retrying takes time anyway
 	     and should be infrequent.  */
-	  Fsleep_for (make_number (1), Qnil);
+	  Fsleep_for (make_fixnum (1), Qnil);
 	  retry++;
 	  goto loop;
 	}
@@ -1943,7 +1943,7 @@ Fourth arg SERVICE is name of the service desired, or an integer\n\
 #endif
 #endif
 	break;
-      Fsleep_for (make_number (1), Qnil);
+      Fsleep_for (make_fixnum (1), Qnil);
     }
   
   if (host_info_ptr == 0)
@@ -1980,7 +1980,7 @@ Fourth arg SERVICE is name of the service desired, or an integer\n\
     report_file_error ("error creating socket", Fcons (name, Qnil));
 
   count1 = specpdl_ptr - specpdl;
-  record_unwind_protect (close_file_unwind, make_number (s));
+  record_unwind_protect (close_file_unwind, make_fixnum (s));
 
   /* Kernel bugs (on Ultrix at least) cause lossage (not just EINTR)
      when connect is interrupted.  So let's not let it get interrupted.
@@ -2010,7 +2010,7 @@ Fourth arg SERVICE is name of the service desired, or an integer\n\
 	  /* A delay here is needed on some FreeBSD systems,
 	     and it is harmless, since this retrying takes time anyway
 	     and should be infrequent.  */
-	  Fsleep_for (make_number (1), Qnil);
+	  Fsleep_for (make_fixnum (1), Qnil);
 	  retry++;
 	  goto loop;
 	}
@@ -2150,9 +2150,9 @@ Fourth arg SERVICE is name of the service desired, or an integer\n\
 		       proc_encode_coding_system[outch]);
 
   XPROCESS (proc)->decoding_buf = make_uninit_string (0);
-  XPROCESS (proc)->decoding_carryover = make_number (0);
+  XPROCESS (proc)->decoding_carryover = make_fixnum (0);
   XPROCESS (proc)->encoding_buf = make_uninit_string (0);
-  XPROCESS (proc)->encoding_carryover = make_number (0);
+  XPROCESS (proc)->encoding_carryover = make_fixnum (0);
 
   XPROCESS (proc)->inherit_coding_system_flag
     = (NILP (buffer) || !inherit_process_coding_system
@@ -2258,7 +2258,7 @@ Return non-nil iff we received any output before the timeout expired.")
     {
       CHECK_NUMBER (timeout_msecs, 2);
       useconds = XINT (timeout_msecs);
-      if (!INTEGERP (timeout))
+      if (!FIXNUMP (timeout))
 	XSETINT (timeout, 0);
 
       {
@@ -2834,7 +2834,7 @@ wait_reading_process_input (time_limit, microsecs, read_kbd, do_display)
 		    update_status (XPROCESS (proc));
 		  if (EQ (XPROCESS (proc)->status, Qrun))
 		    XPROCESS (proc)->status
-		      = Fcons (Qexit, Fcons (make_number (256), Qnil));
+		      = Fcons (Qexit, Fcons (make_fixnum (256), Qnil));
 		}
 	    }
 	}			/* end for each file descriptor */
@@ -2879,7 +2879,7 @@ read_process_output_error_handler (error)
   cmd_error_internal (error, "error in process filter: ");
   Vinhibit_quit = Qt;
   update_echo_area ();
-  Fsleep_for (make_number (2), Qnil);
+  Fsleep_for (make_fixnum (2), Qnil);
   return Qt;
 }
 
@@ -3191,7 +3191,7 @@ read_process_output (proc, channel)
 
       /* If the restriction isn't what it should be, set it.  */
       if (old_begv != BEGV || old_zv != ZV)
-	Fnarrow_to_region (make_number (old_begv), make_number (old_zv));
+	Fnarrow_to_region (make_fixnum (old_begv), make_fixnum (old_zv));
 
       /* Handling the process output should not deactivate the mark.  */
       Vdeactivate_mark = odeactivate;
@@ -3500,7 +3500,7 @@ send_process (proc, buf, len, object)
 #endif
       XPROCESS (proc)->raw_status_low = Qnil;
       XPROCESS (proc)->raw_status_high = Qnil;
-      XPROCESS (proc)->status = Fcons (Qexit, Fcons (make_number (256), Qnil));
+      XPROCESS (proc)->status = Fcons (Qexit, Fcons (make_fixnum (256), Qnil));
       XSETINT (XPROCESS (proc)->tick, ++process_tick);
       deactivate_process (proc);
 #ifdef VMS
@@ -3905,7 +3905,7 @@ SIGCODE may be an integer, or a symbol whose name is a signal name.")
   else if (!strcmp (name, NAME))		\
     XSETINT (sigcode, VALUE)
 
-  if (INTEGERP (sigcode))
+  if (FIXNUMP (sigcode))
     ;
   else
     {
@@ -4012,7 +4012,7 @@ SIGCODE may be an integer, or a symbol whose name is a signal name.")
 
 #undef handle_signal
 
-  return make_number (kill (XINT (pid), XINT (sigcode)));
+  return make_fixnum (kill (XINT (pid), XINT (sigcode)));
 }
 
 DEFUN ("process-send-eof", Fprocess_send_eof, Sprocess_send_eof, 0, 1, 0,
@@ -4200,7 +4200,7 @@ sigchld_handler (signo)
 	  {
 	    proc = XCDR (XCAR (tail));
 	    p = XPROCESS (proc);
-	    if (INTEGERP (p->pid) && XINT (p->pid) == -1)
+	    if (FIXNUMP (p->pid) && XINT (p->pid) == -1)
 	      break;
 	    p = 0;
 	  }
@@ -4294,7 +4294,7 @@ exec_sentinel_error_handler (error)
   cmd_error_internal (error, "error in process sentinel: ");
   Vinhibit_quit = Qt;
   update_echo_area ();
-  Fsleep_for (make_number (2), Qnil);
+  Fsleep_for (make_fixnum (2), Qnil);
   return Qt;
 }
 
