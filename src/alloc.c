@@ -277,6 +277,7 @@ enum mem_type
   MEM_TYPE_MISC,
   MEM_TYPE_SYMBOL,
   MEM_TYPE_FLOAT,
+  MEM_TYPE_BIGNUM,
   /* Keep the following vector-like types together, with
      MEM_TYPE_WINDOW being the last, and MEM_TYPE_VECTOR the
      first.  Or change the code of live_vector_p, for instance.  */
@@ -998,9 +999,9 @@ mark_interval_tree (tree)
 
 /* Number support.  If NO_UNION_TYPE isn't in effect, we
    can't create number objects in macros.  */
-#ifndef make_number
+#ifndef make_fixnum
 Lisp_Object
-make_number (n)
+make_fixnum (n)
      int n;
 {
   Lisp_Object obj;
@@ -1718,7 +1719,7 @@ LENGTH must be a number.  INIT matters only in whether it is t or nil.")
 
   /* We must allocate one more elements than LENGTH_IN_ELTS for the
      slot `size' of the struct Lisp_Bool_Vector.  */
-  val = Fmake_vector (make_number (length_in_elts + 1), Qnil);
+  val = Fmake_vector (make_fixnum (length_in_elts + 1), Qnil);
   p = XBOOL_VECTOR (val);
   
   /* Get rid of any bits that would cause confusion.  */
@@ -1872,6 +1873,186 @@ make_uninit_multibyte_string (nchars, nbytes)
   string_chars_consed += nbytes;
   return string;
 }
+
+
+
+/***********************************************************************
+			   Bignum Allocation
+ ***********************************************************************/
+
+#ifdef HAVE_LIBGMP
+
+#define BIGNUMS_PER_BLOCK \
+  ((1020 - sizeof (struct bignum_block *)) / sizeof (struct Lisp_Bignum))
+
+struct bignum_block
+{
+  struct bignum_block *next;
+  struct Lisp_Bignum bignums[BIGNUMS_PER_BLOCK];
+};
+
+static struct bignum_block *bignum_blocks;
+static struct Lisp_Bignum *free_bignums;
+static int n_live_bignums, n_free_bignums;
+
+static Lisp_Object allocate_bignum P_ ((enum bignum_type));
+static void sweep_bignums P_ ((void));
+static int live_bignum_p P_ ((struct mem_node *, void *));
+static void init_bignums P_ ((void));
+
+
+static Lisp_Object
+allocate_bignum (type)
+     enum bignum_type type;
+{
+  Lisp_Object result;
+  struct Lisp_Bignum *bignum;
+  
+  if (free_bignums == NULL)
+    {
+      struct bignum_block *b =
+	(struct bignum_block *) lisp_malloc (sizeof *b, MEM_TYPE_BIGNUM);
+      int i;
+
+      for (i = 0; i < BIGNUMS_PER_BLOCK; ++i)
+	{
+	  b->bignums[i].u.next_free = free_bignums;
+	  free_bignums = &b->bignums[i];
+	}
+    }
+
+  bignum = free_bignums;
+  free_bignums = bignum->u.next_free;
+  bignum->type = type;
+  bignum->marked = 0;
+  XSETBIGNUM (result, bignum);
+  return result;
+}
+
+
+static void
+sweep_bignums ()
+{
+  struct bignum_block *b, *next, *live_blocks;
+  struct Lisp_Bignum *free;
+  int nfree, nused;
+
+  live_blocks = NULL;
+  free = NULL;
+  nfree = nused = 0;
+  
+  for (b = bignum_blocks; b; b = next)
+    {
+      struct Lisp_Bignum *old_free = free;
+      int i, n;
+
+      next = b->next;
+      
+      for (i = n = 0; i < BIGNUMS_PER_BLOCK; ++i)
+	{
+	  if (b->bignums[i].marked == 0)
+	    {
+	      if (b->bignums[i].type == BIG_INTEGER)
+		mpz_clear (b->bignums[i].u.i);
+	      else if (b->bignums[i].type == BIG_FLOAT)
+		mpf_clear (b->bignums[i].u.f);
+	      else if (b->bignums[i].type == BIG_RATIONAL)
+		mpq_clear (b->bignums[i].u.r);
+	      
+	      b->bignums[i].u.next_free = free;
+	      b->bignums[i].type = BIG_DEAD;
+	      free = &b->bignums[i];
+	      ++n;
+	    }
+	  else
+	    {
+	      ++nused;
+	      b->bignums[i].marked = 0;
+	    }
+	}
+      
+      if (n == BIGNUMS_PER_BLOCK && nfree > BIGNUMS_PER_BLOCK)
+	{
+	  free = old_free;
+	  lisp_free (b);
+	}
+      else
+	{
+	  nfree += n;
+	  b->next = live_blocks;
+	  live_blocks = b;
+	}
+    }
+  
+  n_live_bignums = nused;
+  n_free_bignums = nfree;
+  free_bignums = free;
+  bignum_blocks = live_blocks;
+}
+
+
+static INLINE int
+live_bignum_p (m, p)
+     struct mem_node *m;
+     void *p;
+{
+  if (m->type == MEM_TYPE_BIGNUM)
+    {
+      struct bignum_block *b = (struct bignum_block *) m->start;
+      int offset = (char *) p - (char *) &b->bignums[0];
+      
+      /* P must point to the start of a Lisp_Float, not be
+	 one of the unused cells in the current float block,
+	 and not be on the free-list.  */
+      return (offset >= 0
+	      && offset % sizeof b->bignums[0] == 0
+	      && ((struct Lisp_Bignum *) p)->type != BIG_DEAD);
+    }
+  else
+    return 0;
+}
+
+
+static void
+init_bignums ()
+{
+}
+
+
+Lisp_Object
+make_bigint (val)
+     mpz_t val;
+{
+  Lisp_Object result;
+  result = allocate_bignum (BIG_INTEGER);
+  mpz_init_set (XBIGNUM (result)->u.i, val);
+  return result;
+}
+
+
+Lisp_Object
+make_bigint_from_string (s, radix)
+     char *s;
+     int radix;
+{
+  Lisp_Object result;
+  result = allocate_bignum (BIG_INTEGER);
+  mpz_init_set_str (XBIGNUM (result)->u.i, s, radix);
+  return result;
+}
+
+
+Lisp_Object
+make_bigint_from_int (val)
+     EMACS_INT val;
+{
+  Lisp_Object result;
+  result = allocate_bignum (BIG_INTEGER);
+  mpz_init_set_si (XBIGNUM (result)->u.i, val);
+  return result;
+}
+
+#endif /* HAVE_LIBGMP */
 
 
 
@@ -2295,7 +2476,7 @@ allocate_frame ()
   EMACS_INT i;
   
   for (i = 0; i < len; ++i)
-    v->contents[i] = make_number (0);
+    v->contents[i] = make_fixnum (0);
   v->size = len;
   return (struct frame *) v;
 }
@@ -2370,7 +2551,7 @@ The property's value should be an integer between 0 and 10.")
   if (XINT (n) < 0 || XINT (n) > 10)
     args_out_of_range (n, Qnil);
   /* Add 2 to the size for the defalt and parent slots.  */
-  vector = Fmake_vector (make_number (CHAR_TABLE_STANDARD_SLOTS + XINT (n)),
+  vector = Fmake_vector (make_fixnum (CHAR_TABLE_STANDARD_SLOTS + XINT (n)),
 			 init);
   XCHAR_TABLE (vector)->top = Qt;
   XCHAR_TABLE (vector)->parent = Qnil;
@@ -2389,7 +2570,7 @@ make_sub_char_table (defalt)
      Lisp_Object defalt;
 {
   Lisp_Object vector
-    = Fmake_vector (make_number (SUB_CHAR_TABLE_STANDARD_SLOTS), Qnil);
+    = Fmake_vector (make_fixnum (SUB_CHAR_TABLE_STANDARD_SLOTS), Qnil);
   XCHAR_TABLE (vector)->top = Qnil;
   XCHAR_TABLE (vector)->defalt = defalt;
   XSETCHAR_TABLE (vector, XCHAR_TABLE (vector));
@@ -2672,7 +2853,7 @@ make_event_array (nargs, args)
     /* The things that fit in a string
        are characters that are in 0...127,
        after discarding the meta bit and all the bits above it.  */
-    if (!INTEGERP (args[i])
+    if (!FIXNUMP (args[i])
 	|| (XUINT (args[i]) & ~(-CHAR_META)) >= 0200)
       return Fvector (nargs, args);
 
@@ -2681,7 +2862,7 @@ make_event_array (nargs, args)
   {
     Lisp_Object result;
     
-    result = Fmake_string (make_number (nargs), make_number (0));
+    result = Fmake_string (make_fixnum (nargs), make_fixnum (0));
     for (i = 0; i < nargs; i++)
       {
 	XSTRING (result)->data[i] = XINT (args[i]);
@@ -3298,12 +3479,12 @@ DEFUN ("gc-status", Fgc_status, Sgc_status, 0, 0, "",
 {
   Lisp_Object args[7];
   args[0] = build_string ("%d GCs, avg live/zombies = %.2f/%.2f (%f%%), max %d/%d");
-  args[1] = make_number (ngcs);
+  args[1] = make_fixnum (ngcs);
   args[2] = make_float (avg_live);
   args[3] = make_float (avg_zombies);
   args[4] = make_float (avg_zombies / avg_live / 100);
-  args[5] = make_number (max_live);
-  args[6] = make_number (max_zombies);
+  args[5] = make_fixnum (max_live);
+  args[6] = make_fixnum (max_zombies);
   return Fmessage (7, args);
 }
 
@@ -3380,6 +3561,13 @@ mark_maybe_object (obj)
 	case Lisp_Int:
 	case Lisp_Type_Limit:
 	  break;
+
+#ifdef HAVE_LIBGMP
+	case Lisp_Bignum:
+	  if (live_bignum_p (m, po))
+	    mark_p = XBIGNUM (obj)->marked == 0;
+	  break;
+#endif
 	}
 
       if (mark_p)
@@ -3491,6 +3679,14 @@ mark_maybe_pointer (p)
 		obj = tem;
 	    }
 	  break;
+
+#ifdef HAVE_LIBGMP
+	case MEM_TYPE_BIGNUM:
+	  if (live_bignum_p (m, p)
+	      && ((struct Lisp_Bignum *) p)->marked == 0)
+	    XSETBIGNUM (obj, p);
+	  break;
+#endif
 
 	default:
 	  abort ();
@@ -3894,6 +4090,43 @@ make_pure_vector (len)
 }
 
 
+#ifdef HAVE_LIBGMP
+
+Lisp_Object
+make_pure_bignum (obj)
+     Lisp_Object obj;
+{
+  struct Lisp_Bignum *p
+    = (struct Lisp_Bignum *) pure_alloc (sizeof *p, Lisp_Bignum);
+  struct Lisp_Bignum *old = XBIGNUM (obj);
+
+  p->type = old->type;
+  switch (old->type)
+    {
+    case BIG_INTEGER:
+      mpz_init_set (p->u.i, old->u.i);
+      break;
+      
+    case BIG_FLOAT:
+      mpf_init_set (p->u.f, old->u.f);
+      break;
+      
+    case BIG_RATIONAL:
+      mpq_init (p->u.r);
+      mpq_set (p->u.r, old->u.r);
+      break;
+
+    default:
+      abort ();
+    }
+
+  XSETBIGNUM (obj, p);
+  return obj;
+}
+
+#endif  /* HAVE_LIBGMP */
+
+
 DEFUN ("purecopy", Fpurecopy, Spurecopy, 1, 1, 0,
   "Make a copy of OBJECT in pure storage.\n\
 Recursively copies contents of vectors and cons cells.\n\
@@ -3934,6 +4167,10 @@ Does not copy symbols.  Copies strings without text properties.")
     }
   else if (MARKERP (obj))
     error ("Attempt to copy a marker to pure storage");
+#ifdef HAVE_LIBGMP
+  else if (BIGNUMP (obj))
+    obj = make_pure_bignum (obj);
+#endif
 
   return obj;
 }
@@ -4232,20 +4469,20 @@ Garbage collection happens automatically if you cons more than\n\
 
   unbind_to (count, Qnil);
 
-  total[0] = Fcons (make_number (total_conses),
-		    make_number (total_free_conses));
-  total[1] = Fcons (make_number (total_symbols),
-		    make_number (total_free_symbols));
-  total[2] = Fcons (make_number (total_markers),
-		    make_number (total_free_markers));
-  total[3] = make_number (total_string_size);
-  total[4] = make_number (total_vector_size);
-  total[5] = Fcons (make_number (total_floats),
-		    make_number (total_free_floats));
-  total[6] = Fcons (make_number (total_intervals),
-		    make_number (total_free_intervals));
-  total[7] = Fcons (make_number (total_strings),
-		    make_number (total_free_strings));
+  total[0] = Fcons (make_fixnum (total_conses),
+		    make_fixnum (total_free_conses));
+  total[1] = Fcons (make_fixnum (total_symbols),
+		    make_fixnum (total_free_symbols));
+  total[2] = Fcons (make_fixnum (total_markers),
+		    make_fixnum (total_free_markers));
+  total[3] = make_fixnum (total_string_size);
+  total[4] = make_fixnum (total_vector_size);
+  total[5] = Fcons (make_fixnum (total_floats),
+		    make_fixnum (total_free_floats));
+  total[6] = Fcons (make_fixnum (total_intervals),
+		    make_fixnum (total_free_intervals));
+  total[7] = Fcons (make_fixnum (total_strings),
+		    make_fixnum (total_free_strings));
 
 #if GC_MARK_STACK == GC_USE_GCPROS_CHECK_ZOMBIES
   {
@@ -4729,6 +4966,12 @@ mark_object (argptr)
     case Lisp_Int:
       break;
 
+#ifdef HAVE_LIBGMP
+    case Lisp_Bignum:
+      XBIGNUM (obj)->marked = 1;
+      break;
+#endif
+
     default:
       abort ();
     }
@@ -4919,6 +5162,11 @@ gc_sweep ()
   sweep_weak_hash_tables ();
 
   sweep_strings ();
+
+#ifdef HAVE_LIBGMP
+  sweep_bignums ();
+#endif
+  
 #ifdef GC_CHECK_STRING_BYTES
   if (!noninteractive)
     check_string_bytes (1);
@@ -5376,6 +5624,10 @@ init_alloc_once ()
   init_marker ();
   init_float ();
   init_intervals ();
+
+#ifdef HAVE_LIBGMP
+  init_bignums ();
+#endif
 
 #ifdef REL_ALLOC
   malloc_hysteresis = 32;
