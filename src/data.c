@@ -76,7 +76,7 @@ Lisp_Object Qchar_or_string_p, Qmarkerp, Qinteger_or_marker_p, Qvectorp;
 Lisp_Object Qbuffer_or_string_p, Qkeywordp;
 Lisp_Object Qboundp, Qfboundp;
 Lisp_Object Qchar_table_p, Qvector_or_char_table_p;
-
+Lisp_Object Qbignum, Qfixnum;
 Lisp_Object Qcdr;
 Lisp_Object Qad_advice_info, Qad_activate_internal;
 
@@ -107,7 +107,7 @@ wrong_type_argument (predicate, value)
 	 if (STRINGP (value) &&
 	     (EQ (predicate, Qintegerp) || EQ (predicate, Qinteger_or_marker_p)))
 	   return Fstring_to_number (value, Qnil);
-	 if (INTEGERP (value) && EQ (predicate, Qstringp))
+	 if (FIXNUMP (value) && EQ (predicate, Qstringp))
 	   return Fnumber_to_string (value);
 	}
 
@@ -193,7 +193,11 @@ for example, (type-of 1) returns `integer'.")
   switch (XGCTYPE (object))
     {
     case Lisp_Int:
+#ifdef HAVE_LIBGMP
+      return Qfixnum;
+#else
       return Qinteger;
+#endif
 
     case Lisp_Symbol:
       return Qsymbol;
@@ -241,6 +245,11 @@ for example, (type-of 1) returns `integer'.")
 
     case Lisp_Float:
       return Qfloat;
+
+#ifdef HAVE_LIBGMP
+    case Lisp_Bignum:
+      return Qbignum;
+#endif
 
     default:
       abort ();
@@ -435,7 +444,7 @@ DEFUN ("char-or-string-p", Fchar_or_string_p, Schar_or_string_p, 1, 1, 0,
   (object)
      register Lisp_Object object;
 {
-  if (INTEGERP (object) || STRINGP (object))
+  if (FIXNUMP (object) || STRINGP (object))
     return Qt;
   return Qnil;
 }
@@ -444,17 +453,39 @@ DEFUN ("integerp", Fintegerp, Sintegerp, 1, 1, 0, "Return t if OBJECT is an inte
   (object)
      Lisp_Object object;
 {
-  if (INTEGERP (object))
-    return Qt;
-  return Qnil;
+#ifdef HAVE_LIBGMP
+  return FIXNUMP (object) || BIGINTP (object) ? Qt : Qnil;
+#else
+  return FIXNUMP (object) ? Qt : Qnil;
+#endif
 }
+
+#ifdef HAVE_LIBGMP
+
+DEFUN ("bignump", Fbignump, Sbignump, 1, 1, 0,
+       "Return t if OBJECT is a big number.")
+  (object)
+     Lisp_Object object;
+{
+  return BIGNUMP (object) ? Qt : Qnil;
+}
+
+DEFUN ("fixnump", Ffixnump, Sfixnump, 1, 1, 0,
+       "Return t if OBJECT is a fixnum.")
+  (object)
+     Lisp_Object object;
+{
+  return FIXNUMP (object) ? Qt : Qnil;
+}
+
+#endif
 
 DEFUN ("integer-or-marker-p", Finteger_or_marker_p, Sinteger_or_marker_p, 1, 1, 0,
   "Return t if OBJECT is an integer or a marker (editor pointer).")
   (object)
      register Lisp_Object object;
 {
-  if (MARKERP (object) || INTEGERP (object))
+  if (MARKERP (object) || FIXNUMP (object))
     return Qt;
   return Qnil;
 }
@@ -724,11 +755,11 @@ function with `&rest' args, or `unevalled' for a special form.")
   minargs = XSUBR (subr)->min_args;
   maxargs = XSUBR (subr)->max_args;
   if (maxargs == MANY)
-    return Fcons (make_number (minargs), Qmany);
+    return Fcons (make_fixnum (minargs), Qmany);
   else if (maxargs == UNEVALLED)
-    return Fcons (make_number (minargs), Qunevalled);
+    return Fcons (make_fixnum (minargs), Qunevalled);
   else
-    return Fcons (make_number (minargs), make_number (maxargs));
+    return Fcons (make_fixnum (minargs), make_fixnum (maxargs));
 }
 
 DEFUN ("subr-interactive-form", Fsubr_interactive_form, Ssubr_interactive_form, 1, 1, 0,
@@ -1751,12 +1782,12 @@ or a byte-code object.  IDX starts at 0.")
       if (idxval < 0 || idxval >= XSTRING (array)->size)
 	args_out_of_range (array, idx);
       if (! STRING_MULTIBYTE (array))
-	return make_number ((unsigned char) XSTRING (array)->data[idxval]);
+	return make_fixnum ((unsigned char) XSTRING (array)->data[idxval]);
       idxval_byte = string_char_to_byte (array, idxval);
 
       c = STRING_CHAR (&XSTRING (array)->data[idxval_byte],
 		       STRING_BYTES (XSTRING (array)) - idxval_byte);
-      return make_number (c);
+      return make_fixnum (c);
     }
   else if (BOOL_VECTOR_P (array))
     {
@@ -2160,10 +2191,10 @@ long_to_cons (i)
   unsigned int top = i >> 16;
   unsigned int bot = i & 0xFFFF;
   if (top == 0)
-    return make_number (bot);
+    return make_fixnum (bot);
   if (top == (unsigned long)-1 >> 16)
-    return Fcons (make_number (-1), make_number (bot));
-  return Fcons (make_number (top), make_number (bot));
+    return Fcons (make_fixnum (-1), make_fixnum (bot));
+  return Fcons (make_fixnum (top), make_fixnum (bot));
 }
 
 unsigned long
@@ -2171,7 +2202,7 @@ cons_to_long (c)
      Lisp_Object c;
 {
   Lisp_Object top, bot;
-  if (INTEGERP (c))
+  if (FIXNUMP (c))
     return XINT (c);
   top = XCAR (c);
   bot = XCDR (c);
@@ -2288,7 +2319,7 @@ If the base used is not 10, floating point is not recognized.")
       if (v > (EMACS_UINT) (VALMASK >> 1))
 	val = make_float (sign * v);
       else
-	val = make_number (sign * (int) v);
+	val = make_fixnum (sign * (int) v);
     }
 
   return val;
@@ -2311,6 +2342,122 @@ enum arithop
 static Lisp_Object float_arith_driver P_ ((double, int, enum arithop,
 					   int, Lisp_Object *));
 extern Lisp_Object fmod_float ();
+
+#ifdef HAVE_LIBGMP
+
+Lisp_Object
+bigint_arith_driver (start_value, argnum, code, nargs, args)
+     EMACS_INT start_value;
+     enum arithop code;
+     int nargs, argnum;
+     register Lisp_Object *args;
+{
+  Lisp_Object val;
+  mpz_t lhs, rhs;
+
+  mpz_init_set_si (lhs, start_value);
+  mpz_init (rhs);
+
+  for (; argnum < nargs; ++argnum)
+    {
+      val = args[argnum];
+
+      if (FIXNUMP (val))
+	mpz_set_si (rhs, XINT (val));
+      else if (MARKERP (val))
+	mpz_set_si (rhs, marker_position (val));
+      else if (FLOATP (val))
+	{
+	  double value = mpz_get_d (lhs);
+	  mpz_clear (lhs);
+	  mpz_clear (rhs);
+	  return float_arith_driver (value, argnum, code, nargs, args);
+	}
+      else if (BIGINTP (val))
+	mpz_set (rhs, XBIGNUM (val)->u.i);
+      else
+	val = wrong_type_argument (Qnumber_or_marker_p, val);
+
+      switch (code)
+	{
+	case Aadd:
+	  mpz_add (lhs, lhs, rhs);
+	  break;
+	  
+	case Asub:
+	  if (nargs > 1 && argnum == 0)
+	    mpz_set (lhs, rhs);
+	  else
+	    mpz_sub (lhs, lhs, rhs);
+	  break;
+	  
+	case Amult:
+	  mpz_mul (lhs, lhs, rhs);
+	  break;
+	  
+	case Adiv:
+	  if (argnum == 0)
+	    mpz_set (lhs, rhs);
+	  else
+	    {
+	      if (mpz_cmp_ui (rhs, 0) == 0)
+		Fsignal (Qarith_error, Qnil);
+	      mpz_div (lhs, lhs, rhs);
+	    }
+	  break;
+	  
+	case Alogand:
+	  mpz_and (lhs, lhs, rhs);
+	  break;
+	  
+	case Alogior:
+	  mpz_ior (lhs, lhs, rhs);
+	  break;
+	  
+	case Alogxor:
+	  {
+	    /* (a | b) & ~(a & b) */
+	    mpz_t t1, t2;
+
+	    mpz_init_set (t1, lhs);
+	    mpz_ior (t1, t1, rhs);
+	    mpz_init_set (t2, lhs);
+	    mpz_and (t2, t2, rhs);
+	    mpz_com (t2, t2);
+	    mpz_and (lhs, t1, t2);
+	    mpz_clear (t1);
+	    mpz_clear (t2);
+	  }
+	  break;
+	  
+	case Amax:
+	  if (argnum == 0 || mpz_cmp (rhs, lhs) > 0)
+	    mpz_set (lhs, rhs);
+	  break;
+	  
+	case Amin:
+	  if (argnum == 0 || mpz_cmp (rhs, lhs) < 0)
+	    mpz_set (lhs, rhs);
+	  break;
+	}
+    }
+
+  /* If value fits in a fixnum, use that.  */
+  if (mpz_cmp_si (lhs, MOST_POSITIVE_FIXNUM) <= 0
+      && mpz_cmp_si (lhs, MOST_NEGATIVE_FIXNUM >= 0))
+    {
+      EMACS_INT value = mpz_get_si (lhs);
+      val = make_fixnum (value);
+    }
+  else
+    val = make_bigint (lhs);
+	       
+  mpz_clear (lhs);
+  mpz_clear (rhs);
+  return val;
+}
+
+#endif
 
 Lisp_Object
 arith_driver (code, nargs, args)
@@ -2345,24 +2492,60 @@ arith_driver (code, nargs, args)
     {
       /* Using args[argnum] as argument to CHECK_NUMBER_... */
       val = args[argnum];
-      CHECK_NUMBER_OR_FLOAT_COERCE_MARKER (val, argnum);
 
-      if (FLOATP (val))
-	return float_arith_driver ((double) accum, argnum, code,
-				   nargs, args);
+      if (FIXNUMP (val))
+	;
+      else if (MARKERP (val))
+	val = make_fixnum (marker_position (val));
+#ifdef HAVE_LIBGMP
+      else if (BIGINTP (val))
+	return bigint_arith_driver (accum, argnum, code, nargs, args);
+#endif
+      else if (FLOATP (val))
+	return float_arith_driver ((double) accum, argnum, code, nargs, args);
+      else
+	val = wrong_type_argument (Qnumber_or_marker_p, val);
+      
       args[argnum] = val;
       next = XINT (args[argnum]);
       switch (SWITCH_ENUM_CAST (code))
 	{
 	case Aadd:
+#ifdef HAVE_LIBGMP
+	  if (accum + next > MOST_POSITIVE_FIXNUM)
+	    return bigint_arith_driver (accum, argnum, code, nargs, args);
+#endif
 	  accum += next;
 	  break;
+	  
 	case Asub:
+#ifdef HAVE_LIBGMP
+	  if (accum - next < MOST_NEGATIVE_FIXNUM)
+	    return bigint_arith_driver (accum, argnum, code, nargs, args);
+#endif
 	  accum = argnum ? accum - next : nargs == 1 ? - next : next;
 	  break;
+	  
 	case Amult:
+#ifdef HAVE_LIBGMP
+	  {
+	    mpz_t tem;
+	    mpz_init_set_si (tem, accum);
+	    mpz_mul_ui (tem, tem, next);
+	    if (next < 0)
+	      mpz_neg (tem, tem);
+	    if (mpz_cmp_si (tem, MOST_POSITIVE_FIXNUM) > 0
+		|| mpz_cmp_si (tem, MOST_NEGATIVE_FIXNUM) < 0)
+	      {
+		mpz_clear (tem);
+		return bigint_arith_driver (accum, argnum, code, nargs, args);
+	      }
+	    mpz_clear (tem);
+	  }
+#endif
 	  accum *= next;
 	  break;
+	  
 	case Adiv:
 	  if (!argnum)
 	    accum = next;
@@ -2373,19 +2556,24 @@ arith_driver (code, nargs, args)
 	      accum /= next;
 	    }
 	  break;
+	  
 	case Alogand:
 	  accum &= next;
 	  break;
+	  
 	case Alogior:
 	  accum |= next;
 	  break;
+	  
 	case Alogxor:
 	  accum ^= next;
 	  break;
+	  
 	case Amax:
 	  if (!argnum || next > accum)
 	    accum = next;
 	  break;
+	  
 	case Amin:
 	  if (!argnum || next < accum)
 	    accum = next;
@@ -2414,7 +2602,22 @@ float_arith_driver (accum, argnum, code, nargs, args)
   for (; argnum < nargs; argnum++)
     {
       val = args[argnum];    /* using args[argnum] as argument to CHECK_NUMBER_... */
+
+#ifdef HAVE_LIBGMP
+      if (FIXNUMP (val) || FLOATP (val))
+	;
+      else if (MARKERP (val))
+	val = make_fixnum (marker_position (val));
+      else if (BIGINTP (val))
+	{
+	  double d = mpz_get_d (XBIGNUM (val)->u.i);
+	  val = make_float (d);
+	}
+      else
+	val = wrong_type_argument (Qnumber_or_marker_p, val);
+#else
       CHECK_NUMBER_OR_FLOAT_COERCE_MARKER (val, argnum);
+#endif
 
       if (FLOATP (val))
 	{
@@ -2679,12 +2882,36 @@ Markers are converted to integers.")
   (number)
      register Lisp_Object number;
 {
+#ifdef HAVE_LIBGMP
+  if (FIXNUMP (number))
+    {
+      EMACS_INT val = XINT (number) + 1;
+      if (val < MOST_POSITIVE_FIXNUM)
+	number = make_fixnum (val);
+      else
+	number = make_bigint_from_int (val);
+    }
+  else if (MARKERP (number))
+    number = make_fixnum (marker_position (number) + 1);
+  else if (FLOATP (number))
+    number = make_float (1.0 + XFLOAT_DATA (number));
+  else if (BIGINTP (number))
+    {
+      number = make_bigint (XBIGNUM (number)->u.i);
+      mpz_add_ui (XBIGNUM (number)->u.i, XBIGNUM (number)->u.i, 1);
+    }
+  else
+    number = wrong_type_argument (Qnumber_or_marker_p, number);
+  
+#else
   CHECK_NUMBER_OR_FLOAT_COERCE_MARKER (number, 0);
 
   if (FLOATP (number))
     return (make_float (1.0 + XFLOAT_DATA (number)));
 
   XSETINT (number, XINT (number) + 1);
+#endif
+  
   return number;
 }
 
@@ -2694,12 +2921,36 @@ Markers are converted to integers.")
   (number)
      register Lisp_Object number;
 {
+#ifdef HAVE_LIBGMP
+  if (FIXNUMP (number))
+    {
+      EMACS_INT val = XINT (number) - 1;
+      if (val > MOST_NEGATIVE_FIXNUM)
+	number = make_fixnum (val);
+      else
+	number = make_bigint_from_int (val);
+    }
+  else if (MARKERP (number))
+    number = make_fixnum (marker_position (number) - 1);
+  else if (FLOATP (number))
+    number = make_float (-1.0 + XFLOAT_DATA (number));
+  else if (BIGINTP (number))
+    {
+      number = make_bigint (XBIGNUM (number)->u.i);
+      mpz_sub_ui (XBIGNUM (number)->u.i, XBIGNUM (number)->u.i, 1);
+    }
+  else
+    number = wrong_type_argument (Qnumber_or_marker_p, number);
+  
+#else
   CHECK_NUMBER_OR_FLOAT_COERCE_MARKER (number, 0);
 
   if (FLOATP (number))
     return (make_float (-1.0 + XFLOAT_DATA (number)));
 
   XSETINT (number, XINT (number) - 1);
+#endif
+  
   return number;
 }
 
@@ -2708,9 +2959,20 @@ DEFUN ("lognot", Flognot, Slognot, 1, 1, 0,
   (number)
      register Lisp_Object number;
 {
+#ifdef HAVE_LIBGMP
+  if (FIXNUMP (number))
+    number = make_fixnum (~XINT (number));
+  else if (BIGINTP (number))
+    {
+      number = make_bigint (XBIGNUM (number)->u.i);
+      mpz_com (XBIGNUM (number)->u.i, XBIGNUM (number)->u.i);
+    }
+#else
   CHECK_NUMBER (number, 0);
   XSETINT (number, ~XINT (number));
+#endif
   return number;
+  
 }
 
 void
@@ -2994,6 +3256,10 @@ syms_of_data ()
   Qchar_table = intern ("char-table");
   Qbool_vector = intern ("bool-vector");
   Qhash_table = intern ("hash-table");
+  Qbignum = intern ("bignum");
+  staticpro (&Qbignum);
+  Qfixnum = intern ("fixnum");
+  staticpro (&Qfixnum);
 
   staticpro (&Qinteger);
   staticpro (&Qsymbol);
@@ -3023,6 +3289,8 @@ syms_of_data ()
   defsubr (&Sconsp);
   defsubr (&Satom);
   defsubr (&Sintegerp);
+  defsubr (&Sbignump);
+  defsubr (&Sfixnump);
   defsubr (&Sinteger_or_marker_p);
   defsubr (&Snumberp);
   defsubr (&Snumber_or_marker_p);
