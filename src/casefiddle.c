@@ -45,7 +45,7 @@ casify_object (flag, obj)
 
   while (1)
     {
-      if (INTEGERP (obj))
+      if (FIXNUMP (obj))
 	{
 	  int flagbits = (CHAR_ALT | CHAR_SUPER | CHAR_HYPER
 			  | CHAR_SHIFT | CHAR_CTL | CHAR_META);
