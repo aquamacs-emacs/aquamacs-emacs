@@ -5,7 +5,7 @@
 ;; Author: Carsten Dominik <dominik at science dot uva dot nl>
 ;; Keywords: outlines, hypermedia, calendar
 ;; Homepage: http://www.astro.uva.nl/~dominik/Tools/org/
-;; Version: 3.06  (internal CVS version is $Revision: 1.128 $)
+;; Version: 3.06
 ;;
 ;; This file is part of GNU Emacs.
 ;;
@@ -8403,7 +8403,7 @@ If INVISIBLE-OK is non-nil, an invisible heading line is ok too."
 This function considers both visible and invisible heading lines.
 With argument, move up ARG levels."
   (if org-noutline-p
-      (outline-up-heading-all arg)
+      (outline-up-heading arg t)
     (org-back-to-heading t)
     (looking-at outline-regexp)
     (if (<= (- (match-end 0) (match-beginning 0)) arg)
