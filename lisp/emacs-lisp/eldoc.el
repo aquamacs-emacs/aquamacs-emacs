@@ -45,7 +45,7 @@
 
 ;; Major modes for other languages may use Eldoc by defining an
 ;; appropriate function as the buffer-local value of
-;; `eldoc-print-current-symbol-info-function'.
+;; `eldoc-documentation-function'.
 
 ;;; Code:
 
@@ -229,6 +229,7 @@ With prefix ARG, turn ElDoc mode on if and only if ARG is positive."
        (not (eq (selected-window) (minibuffer-window)))))
 
 
+;;;###autoload
 (defvar eldoc-documentation-function nil
   "If non-nil, function to call to return doc string.
 The function of no args should return a one-line string for displaying
