@@ -1,0 +1,28 @@
+#!/bin/sh
+ 
+mkdir /tmp/emanual
+curl -o /tmp/manual.tgz http://www.gnu.org/software/emacs/manual/emacs_html_node.tar.gz 
+
+cd /tmp/emanual
+tar xvzf /tmp/manual.tgz  
+
+cp ~/Projects/Aquamacs/manual-sources/aquamacs.css /tmp/emanual/
+
+cp ~/Projects/Aquamacs/manual-sources/gnu-head-sm.jpg /tmp/emanual/
+
+curl -o /tmp/manual.html http://www.gnu.org/software/emacs/manual/
+
+rm /tmp/emanual/Mac-*.html /tmp/emanual/Windows-*.html
+
+perl -i -p -e 's/<\/head>/<link rel="stylesheet" href="aquamacs.css" type="text\/css" \/><\/head>/i' /tmp/emanual/*.html
+ 
+
+~/Projects/Aquamacs/convert-emacs-manual-pages /tmp/emanual/*.html
+~/Projects/Aquamacs/convert-emacs-manual-title /tmp/emanual/index.html 
+
+rm -r /Applications/Emacs.app/Contents/Resources/Emacs\ Manual
+mv /tmp/emanual /Applications/Emacs.app/Contents/Resources/Emacs\ Manual
+
+open /Applications/Emacs.app/Contents/Resources/Emacs\ Manual/
+
+echo "Now go ahead and run the Help Indexer on this folder!"

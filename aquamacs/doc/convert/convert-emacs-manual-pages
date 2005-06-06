@@ -1,0 +1,20 @@
+#!/usr/bin/perl
+
+foreach my $f (@ARGV) 
+{ open F, $f; 
+$x=join("", <F>); 
+close F; 
+# [34] needed for a bug in the manuals
+ if ( $x =~ /Untitled(.*?<h[1234][^>]+>(.*?)<\/h[123456]>)/ism)
+{
+  my $r = $2;
+  $r =~ s/<\/?[a-z]+>//isg;
+  $x =~ s/Untitled/$r/isg; 
+}
+
+   
+
+open F, ">$f"; 
+print F $x; 
+close F; 
+}
