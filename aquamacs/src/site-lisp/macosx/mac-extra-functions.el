@@ -1,0 +1,145 @@
+; Mac extra functions
+;; File Open / Save
+;; TO DO: these should be replaced with the file menu item 
+;; can't do this because the internal find-file function will
+;; display a file dialogue only if menu was used w/ mouse
+ 
+(defun mac-key-open-file (filename &optional wildcards)
+  "Open a file using standard file open dialog."
+  (interactive
+   (let ((last-nonmenu-event nil))
+     (find-file-read-args "Find existing file: " t)))
+  (find-file-existing filename wildcards)
+  )
+
+(defun mac-key-save-file-as (filename &optional wildcards)
+  "Open a file using standard file open dialog."
+  (interactive
+   (let ((last-nonmenu-event nil))
+     (write-file)))   
+)
+
+ 
+
+ (defun mac-save-file-as ()
+   (interactive)
+   (let ((file (do-applescript "try
+ POSIX path of (choose file name with prompt \"Save As...\")
+ end try")))
+     (if (> (length file) 3)
+         (setq file
+               (substring file 1 (- (length file) 1))
+               ))
+     (if (not (equal file ""))
+         (write-file file)
+       (beep))
+     ))
+  
+
+
+;; copied here from osx-key-mode.el by Seiji Zenitani
+;; modified to work with OS X 10.4 by David Reitter
+(defun mac-key-show-in-finder ()
+  "Show the open buffer in Finder"
+  (interactive)
+  (if (stringp (buffer-file-name))
+      (do-applescript
+       (format "
+tell application \"Finder\"
+  activate
+  try
+    select file \"%s\" of startup disk
+  on error
+    beep
+  end try
+end tell" 
+               (if (eq selection-coding-system 'sjis-mac)
+                   (replace-regexp-in-string
+                    "\\\\" "\\\\\\\\"
+                    (encode-coding-string
+                     (posix-file-name-to-mac (buffer-file-name))
+                     selection-coding-system))
+                 (encode-coding-string
+                  (posix-file-name-to-mac (buffer-file-name))
+                  selection-coding-system))
+               ))
+    (message "No existing file shown in buffer!")
+    ))
+
+
+
+(defun mac-add-standard-directories ()
+;; Add standard directories and automatically add their subdirectories.
+; this idea blatantly copied and adapted from Martin Schwenke (meltin.net)
+(mapcar '(lambda (dir)
+	   (let* ((xdir (expand-file-name dir)  )
+		  (default-directory xdir)) 
+	     (and xdir
+		  (add-to-list 'load-path xdir)
+		  ;; Now add subdirectories.
+		  (condition-case nil	    
+		      (normal-top-level-add-subdirs-to-load-path)
+		    (error nil))
+		  )
+	     )
+	   )
+
+	'("/Library/Application Support/Emacs"
+	  ;"/Library/Application Support/Emacs/site-lisp"
+	  "/Library/Application Support/Aquamacs Emacs"
+	  "~/Library/Application Support/Emacs"
+	  ;"~/Library/Application Support/Emacs/site-lisp"
+	  "~/Library/Application Support/Aquamacs Emacs"
+	  "/Library/Preferences/Emacs"	; for all Emacsen
+	  "/Library/Preferences/Aquamacs Emacs"	; for Aquamacs
+	  "~/Library/Preferences/Emacs"	; for all Emacsen (user-specific):
+	  "~/Library/Preferences/Aquamacs Emacs" ; for Aquamacs (user-specific)
+	  )
+)
+)
+
+(defun mac-read-environment-vars-from-shell ()
+
+; Get the environment from the default shell
+; this helps to get apps to run under 10.3
+; and under 10.4 if ~/.bash_profile is changed before restart
+    (with-temp-buffer
+      ;; execute 'set' with bash. bash is invoked from the 
+      ;; user's default shell (whatever that is - probably bash as well)
+      ;; so it should get all the environment variables.
+      (setq default-directory "~/")	; ensure it can be executed
+      (shell-command "/bin/bash -l -c printenv" t)
+
+	   ; the following is elegant, but insecure
+	   ; (query-replace-regexp "^\\([A-Za-z_0-9]+\\)=\\(.*\\)$" 
+           ;   "(setenv \"\\1\" \"\\2\")")
+	   ; (eval-buffer)
+
+      (while (search-forward-regexp "^\\([A-Za-z_0-9]+\\)=\\(.*\\)$" nil t)
+	;(print (format "%s=%s" (match-string 1) (match-string 2)) )
+	(setenv
+	 (match-string 1)
+	 (if (equal (match-string 1) "PATH")
+	     (concat (getenv "PATH") ":" (match-string 2))
+	     (match-string 2)
+	     )
+	 )
+	) 
+      )
+    
+)
+
+(defun new-frame-with-new-scratch  ()
+  "Opens a new frame containing an empty buffer in ``text-mode'' and ``filladapt-mode''."
+  (interactive)				 				
+  (switch-to-buffer-other-frame (generate-new-buffer "New document"))
+  (text-mode)
+  (filladapt-mode t)
+  
+  (setq buffer-offer-save t)
+(set-buffer-modified-p nil)
+  )
+
+
+(provide 'mac-extra-functions)
+

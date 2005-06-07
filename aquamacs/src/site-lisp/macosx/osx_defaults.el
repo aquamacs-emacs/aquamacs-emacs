@@ -46,34 +46,9 @@
 
 (require 'aquamacs-tools)
 
+(require 'mac-extra-functions)
 
-;; Add standard directories and automatically add their subdirectories.
-; this idea blatantly copied and adapted from Martin Schwenke (meltin.net)
-(mapcar '(lambda (dir)
-	   (let* ((xdir (expand-file-name dir)  )
-		  (default-directory xdir)) 
-	     (and xdir
-		  (add-to-list 'load-path xdir)
-		  ;; Now add subdirectories.
-		  (condition-case nil	    
-		      (normal-top-level-add-subdirs-to-load-path)
-		    (error nil))
-		  )
-	     )
-	   )
-
-	'("/Library/Application Support/Emacs"
-	  ;"/Library/Application Support/Emacs/site-lisp"
-	  "/Library/Application Support/Aquamacs Emacs"
-	  "~/Library/Application Support/Emacs"
-	  ;"~/Library/Application Support/Emacs/site-lisp"
-	  "~/Library/Application Support/Aquamacs Emacs"
-	  "/Library/Preferences/Emacs"	; for all Emacsen
-	  "/Library/Preferences/Aquamacs Emacs"	; for Aquamacs
-	  "~/Library/Preferences/Emacs"	; for all Emacsen (user-specific):
-	  "~/Library/Preferences/Aquamacs Emacs" ; for Aquamacs (user-specific)
-	  )
-)
+(mac-add-standard-directories)
 
  
 ; load files (give full paths and load all files)
@@ -85,34 +60,8 @@
 (load "~/Library/Preferences/Aquamacs Emacs/Preferences" t) 
  ))
 
+(mac-read-environment-vars-from-shell)
 
-; Get the environment from the default shell
-; this helps to get apps to run under 10.3
-; and under 10.4 if ~/.bash_profile is changed before restart
-    (with-temp-buffer
-      ;; execute 'set' with bash. bash is invoked from the 
-      ;; user's default shell (whatever that is - probably bash as well)
-      ;; so it should get all the environment variables.
-      (setq default-directory "~/")	; ensure it can be executed
-      (shell-command "/bin/bash -l -c printenv" t)
-
-	   ; the following is elegant, but insecure
-	   ; (query-replace-regexp "^\\([A-Za-z_0-9]+\\)=\\(.*\\)$" 
-           ;   "(setenv \"\\1\" \"\\2\")")
-	   ; (eval-buffer)
-
-      (while (search-forward-regexp "^\\([A-Za-z_0-9]+\\)=\\(.*\\)$" nil t)
-	;(print (format "%s=%s" (match-string 1) (match-string 2)) )
-	(setenv
-	 (match-string 1)
-	 (if (equal (match-string 1) "PATH")
-	     (concat (getenv "PATH") ":" (match-string 2))
-	     (match-string 2)
-	     )
-	 )
-	) 
-      )
-    
  (setenv "INFOPATH" (concat (getenv "INFOPATH") 
                 ":~/Library/Application Support/Emacs/info"
                 ":/Library/Application Support/Emacs/info"))
@@ -168,9 +117,13 @@
   (interactive)
   (setq color-theme-target-frame (selected-frame))
    
+  (let ((one-buffer-one-frame t))	
+; always open in new frame
+; because we've redefined bury->kill-buffer-and window in color-theme
     (color-theme-select)
+    )
  
-)
+  )
 
 (easy-menu-add-item  nil '("Options")
   ["-" nil nil] 'mouse-set-font)
@@ -244,9 +197,6 @@
 ; especially necessary during 0.9.1 -> 0.9.2 transition, because
 ; scalable fonts have different names now
 (add-hook 'after-init-hook 'filter-missing-fonts t) 
-; (print aquamacs-mode-specific-default-themes)
-
-;; /Applications/Emacs.app/Contents/Resources/site-lisp/macosx/osx_defaults.el
 
 (require 'easymenu) 
 
@@ -667,7 +617,32 @@
 			) 'edit-options-separator)
 )
 
-(add-hook 'after-init-hook (lambda () (setq pop-up-frames one-buffer-one-frame)))
+(add-hook 'after-init-hook (lambda () (setq pop-up-frames one-buffer-one-frame)) t)
+
+
+(require 'view)
+;; redefine view-buffer
+(defun view-buffer (buffer &optional exit-action)
+  "View BUFFER in View mode, returning to previous buffer when done.
+Emacs commands editing the buffer contents are not available; instead,
+a special set of commands (mostly letters and punctuation)
+are defined for moving around in the buffer.
+Space scrolls forward, Delete scrolls backward.
+For list of all View commands, type H or h while viewing.
+
+This command runs the normal hook `view-mode-hook'.
+
+Optional argument EXIT-ACTION is either nil or a function with buffer as
+argument.  This function is called when finished viewing buffer.
+Use this argument instead of explicitly setting `view-exit-action'."
+
+  (interactive "bView buffer: ")
+  (let ((undo-window (list (window-buffer) (window-start) (window-point))))
+    (switch-to-buffer buffer)
+    (view-mode-enter (cons (selected-window) (cons (cons nil undo-window) one-buffer-one-frame))
+		     exit-action)))
+
+
 
 ;; Make sure it's saved to .emacs when necessary
 ;; we need to redefine this here - this is copied and modified from menu-bar.el
@@ -793,7 +768,6 @@ whenever the mode MODE-NAME is activated.")
 	      'aquamacs-mode-specific-default-themes)
     )
   )
-;(setq  aquamacs-mode-specific-default-themes (assq-delete-all 'help-mode aquamacs-mode-specific-default-themes) )   
 
 
    
@@ -802,41 +776,84 @@ whenever the mode MODE-NAME is activated.")
 	'append) ;; move to the end: after loading customizations
 	
 	
- 
+;;  (defun set-theme ()
+;;    (interactive)
+;; (debug)
+;;    (set-mode-specific-theme)
+;;  )
+; 
+; (frame-parameter (selected-frame) 'frame-configured-for-buffer)
+
 (defun set-mode-specific-theme (&optional frame)
   (unless frame (setq frame (selected-frame)))
-  (let ((theme (get-mode-specific-theme major-mode)))
-  (when theme
-    ; make sure we don't move the whole frame -
-    ; it is already shown on screen, and 
-    ; the position is determined by "smart-frame-positioning",
-    ; that is per file name and according to the 'smart' heuristic
-    (setq theme 
-	  (assq-delete-all 'top
-	  (assq-delete-all 'left
-	  (assq-delete-all 'height 
-          (assq-delete-all 'width theme)))))
-    (modify-frame-parameters frame theme)
+  (if (frame-live-p frame)
+
+      (condition-case err		; (otherwise, Emacs hangs)
+      
+	  ; frame-configured-for-buffer stores for which buffer the frame configuration
+	  ; is for, so we don't have to apply the theme again. 
+	  ; This is also vedry important because setting the theme in itself
+	  ; will cause another menu-bar-update-hook call, so we can end up
+	  ; with this function called again and again...
+
+	  (let ((buffer (window-buffer (frame-first-window frame))))
+	    (unless (eq (frame-parameter frame 'frame-configured-for-buffer)
+			buffer)
+	      (save-excursion
+		(set-buffer buffer)
+
+
+		(let ((theme (get-mode-specific-theme major-mode))
+		      )
+
+					; (print default-frame-alist)
+		  (dolist (th (if (special-display-p (buffer-name)) 
+				  special-display-frame-alist 
+				default-frame-alist
+				)
+			      )
+      
+		    (unless (assq (car th) theme)
+		      (setq theme (cons th theme))
+		      )
+		    )
+					; make sure we don't move the whole frame -
+					; it is already shown on screen, and 
+					; the position is determined by "smart-frame-positioning",
+					; that is per file name and according to the 'smart' heuristic
+		  (setq theme
+			(assq-delete-all 'user-position
+					 (assq-delete-all 'menu-bar-lines 
+							  (assq-delete-all 'user-position 
+									   (assq-delete-all 'top (assq-delete-all
+												  'left (assq-delete-all 'height (assq-delete-all 'width
+																		  theme))))))))
+					;(print theme)
+		  (modify-frame-parameters frame (cons (cons 'frame-configured-for-buffer buffer) theme))
+		  )
+		)
+	      )
+	    )
+	(error (print err))  
+	)
     )
   )
-  
-)
+
+
 
 (defun get-mode-specific-theme (mode) 
   (cdr (assq mode aquamacs-mode-specific-default-themes)) 
 )
- 
-;; Issue with this:
-;; when following a link from a help buffer,
-;; this hook is called before the buffer is assigned a window.
-	     ;; somehow, the window doesn't exist at this point :(
-	     ;; the current-buffer is correct
-;; this seems to be a bug/deficiency in Emacs
 
-(defun set-mode-theme-after-change-major-mode ()
-  (mapcar 'set-mode-specific-theme (find-all-frames-internal (current-buffer)))
+(defun set-mode-theme-after-change-major-mode ()       			      
+; delete the configuration cache parameter
+  (dolist (f (find-all-frames-internal (current-buffer)))
+    (modify-frame-parameters f '((frame-configured-for-buffer)))
+; update the theme
+    (set-mode-specific-theme f)
+    )  
 )
-
+ 
 (add-hook 'after-change-major-mode-hook	
 	  'set-mode-theme-after-change-major-mode
 	  )
@@ -853,9 +870,36 @@ whenever the mode MODE-NAME is activated.")
 		  ) 
 	      )
 	    )
-(add-hook 'after-make-frame-functions	
-	  'set-mode-theme-after-make-frame
-	  )
+;(add-hook 'after-make-frame-functions	
+;	  'set-mode-theme-after-make-frame
+;	  )
+
+;(setq last-major-mode-theme-in-this-frame nil)
+
+(setq update-mode-theme-busy nil) ;; needed as workaround probably for some obscure bug
+;; crashes otherwise
+(defun update-mode-theme ()
+  "Update the theme (colors, font) of the selected frame 
+to be appropriate for its first buffer"
+  
+      (condition-case nil
+					; we must catch errors here, because
+					; otherwise Emacs would clear menu-bar-update-hook
+					; which would be not good at all.
+	  (unless
+	      (minibuffer-window-active-p (selected-window))
+					;(make-variable-frame-local 'last-major-mode-theme-in-this-frame)
+					;(setq last-major-mode-theme-in-this-frame major-mode)
+					; can't call ->crash
+	    (set-mode-specific-theme)
+	    )
+	(error nil)
+	)
+  )
+(add-hook 'menu-bar-update-hook 'update-mode-theme)
+
+; menu-bar-update-hook
+
 
 ; (setq after-make-frame-functions nil) 
 
@@ -1141,12 +1185,16 @@ we put it on this frame."
 ; e.g. in dired. we want to delete the window then.        
  (defadvice quit-window (around always-dedicated (&rest args) activate)
    (interactive)
-   (let (save (window-dedicated-p (selected-window)))
-	(set-window-dedicated-p (selected-window) t)
-	ad-do-it
-	(set-window-dedicated-p (selected-window) save)
-	)
-)
+   (if one-buffer-one-frame
+       (let (save (window-dedicated-p (selected-window)))
+	 (set-window-dedicated-p (selected-window) t)
+	 ad-do-it
+	 (set-window-dedicated-p (selected-window) save)
+	 )
+; else
+     ad-do-it
+     )
+   )
 
 
  
@@ -1179,9 +1227,7 @@ we put it on this frame."
   
 
 ; the following makes sure that we don't input text
-; into a hidden frame
-;; THIS IS PROBLEMATIC -CAN'T DISTINGUISH CHANGES FROM
-;; MERELY OPENING A NEW FILE, ETC ETC. 
+; into a hidden frame 
 (defun aquamacs-popup-frame-on-change (beg end len) 
  
 					; this seems to be called even when you
@@ -1213,6 +1259,7 @@ we put it on this frame."
 					; used by osxkeys, too
 					; as of now, we're always forcing the deletion of a window if the user requests it.
 					; 
+ 
   (let ((elt (car (member (cons win buf) aquamacs-newly-opened-frames))))
     (if (or force elt (window-dedicated-p win) )
 	(progn
@@ -1247,13 +1294,15 @@ we put it on this frame."
       )
     
   )
-(if (string= "mac" window-system)
-    (add-hook 'kill-buffer-hook 'delete-window-if-created-for-buffer t)
+(defun delete-window-if-one-buffer-one-frame ()
+ (if one-buffer-one-frame
+     (delete-window-if-created-for-buffer)
 )
-
-
-
-
+)
+(if (string= "mac" window-system)
+    (add-hook 'kill-buffer-hook 'delete-window-if-one-buffer-one-frame t)
+)
+ 
 ;; redefine this from frame.el
 ;; (why advise it when we don't call it anyways?)
 (require 'osxkeys)
@@ -1396,47 +1445,10 @@ we put it on this frame."
  
 (text-mode)
  
-;; File Open / Save
-;; TO DO: these should be replaced with the file menu item 
-;; can't do this because the internal find-file function will
-;; display a file dialogue only if menu was used w/ mouse
- 
-(defun mac-key-open-file (filename &optional wildcards)
-  "Open a file using standard file open dialog."
-  (interactive
-   (let ((last-nonmenu-event nil))
-     (find-file-read-args "Find existing file: " t)))
-  (find-file-existing filename wildcards)
-  )
 
-(defun mac-key-save-file-as (filename &optional wildcards)
-  "Open a file using standard file open dialog."
-  (interactive
-   (let ((last-nonmenu-event nil))
-     (write-file)))   
-)
+(require 'mac-extra-functions)
 
- 
-
- (defun mac-save-file-as ()
-   (interactive)
-   (let ((file (do-applescript "try
- POSIX path of (choose file name with prompt \"Save As...\")
- end try")))
-     (if (> (length file) 3)
-         (setq file
-               (substring file 1 (- (length file) 1))
-               ))
-     (if (not (equal file ""))
-         (write-file file)
-       (beep))
-     ))
-  
-  
-  
-  
-
-; while pc selection mode will be turned on, we don't
+   ; while pc selection mode will be turned on, we don't
 ; want it to override Emacs like key bindings. 
 ; we need to fill the following variable with something
 ; that is non-nil.

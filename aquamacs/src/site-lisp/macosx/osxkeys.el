@@ -101,7 +101,6 @@
 		      )      )
 	      )
   
-	;; some strange errors seem to occur sometimes. ???
 
 	
 	  ;; only if not a *special* buffer
@@ -114,8 +113,11 @@
 	    )
 	  ; always delete in this situation
 	    ; unless user said "no"
-	  (delete-window-if-created-for-this-buffer wind (window-buffer) t)
-	       )	
+	    (progn
+	      (message "") ; we don't want a message in the echo area of the next window!
+	      (delete-window-if-created-for-this-buffer wind (window-buffer) t)
+	      )
+	  )	
 	)
    t 
   ) 
@@ -126,44 +128,8 @@
  
 
 (require 'filladapt)
-(defun new-frame-with-new-scratch  ()
-  "Opens a new frame containing an empty buffer in ``text-mode'' and ``filladapt-mode''."
-  (interactive)				 				
-  (switch-to-buffer-other-frame (generate-new-buffer "New document"))
-  (text-mode)
-  (filladapt-mode t)
-  )
 
-
-;; copied here from osx-key-mode.el by Seiji Zenitani
-;; modified to work with OS X 10.4 by David Reitter
-(defun mac-key-show-in-finder ()
-  "Show the open buffer in Finder"
-  (interactive)
-  (if (stringp (buffer-file-name))
-      (do-applescript
-       (format "
-tell application \"Finder\"
-  activate
-  try
-    select file \"%s\" of startup disk
-  on error
-    beep
-  end try
-end tell" 
-               (if (eq selection-coding-system 'sjis-mac)
-                   (replace-regexp-in-string
-                    "\\\\" "\\\\\\\\"
-                    (encode-coding-string
-                     (posix-file-name-to-mac (buffer-file-name))
-                     selection-coding-system))
-                 (encode-coding-string
-                  (posix-file-name-to-mac (buffer-file-name))
-                  selection-coding-system))
-               ))
-    (message "No existing file shown in buffer!")
-    ))
-
+(require 'mac-extra-functions)
 
 (defun switch-to-next-frame ()
   (interactive)
