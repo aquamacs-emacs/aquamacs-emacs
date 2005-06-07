@@ -264,7 +264,7 @@ Nota bene: This is not an exact science."
   "Association list with buffer names and frame positions / sizes, so these
 can be remembered. This is part of Aquamacs Emacs."
 )
-
+ 
 (defun store-frame-position-for-buffer (f)
  "Store position of frame F associated with current buffer for later retrieval. (Part of Aquamacs)"
 

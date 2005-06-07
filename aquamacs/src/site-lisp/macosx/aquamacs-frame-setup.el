@@ -59,9 +59,9 @@
  (require 'fit-frame)
  (require 'mac-default-fontsets)
 
-(defvar 1on1-default-frame-font "default")
-(defvar 1on1-special-display-frame-font "default")
-(defvar 1on1-minibuffer-frame-font "default")
+(defvar 1on1-default-frame-font "fontset-mac")
+(defvar 1on1-special-display-frame-font "fontset-mac")
+(defvar 1on1-minibuffer-frame-font "fontset-mac")
 
 
 (setq 1on1-default-frame-upper-left-corner '(80 . 60))
@@ -77,14 +77,13 @@
 ( 1on1-*Completions*-frame-flag nil)
 ( 1on1-minibuffer-frame-flag nil)
 ))
-
+ 
 ; (setq autofit-frames-flag nil)
  
 
 (remove-hook 'same-window-regexps "\\*info\\*\\(\\|<[0-9]+>\\)")
 (remove-hook 'same-window-regexps "\\`\\*Customiz.*\\*\\'")
-
-
+ 
 ;;; UNCOMMENT AND CHANGE *ONE* OF THESE, IF DEFAULT FRAME HEIGHT IS INAPPROPRIATE.
 ;;; Maximum height for new frames.
 ;;; (defvar create-frame-max-height-percent 82) ; no more than 82% of display height.

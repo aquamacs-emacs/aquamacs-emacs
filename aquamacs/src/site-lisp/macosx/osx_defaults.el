@@ -970,7 +970,8 @@ to be appropriate for its first buffer"
 (aquamacs-set-defaults 
  '((smart-frame-positioning-mode t)
    ( smart-frame-positioning-enforce t) ; and enforce it
-))
+   )
+ )
 
 (smart-frame-positioning-mode t) ; and turn on!
 
@@ -1003,13 +1004,14 @@ to be appropriate for its first buffer"
   
   (let ( (bufname (get-bufname buf))
 	 )
- 
+     
     (if one-buffer-one-frame 	 
 	(if
 	    (member bufname
 		    '(
 		      "\*Completions\*" 
-		      " SPEEDBAR" ; speedbar opens its own frame
+		      "\*Apropos\*" 
+		      " SPEEDBAR" ; speedbar package opens its own frame
 		      )
 		    )
 	    nil
@@ -1024,23 +1026,23 @@ to be appropriate for its first buffer"
 
 (defun killable-buffer-p (buf)
   
-   (let ( (bufname (get-bufname buf))
+  (let ( (bufname (get-bufname buf))
 	 )
  
-  (if one-buffer-one-frame
-      (if (or (equal "\*Messages\*" bufname) 
+    (if one-buffer-one-frame
+	(if (or (equal "\*Messages\*" bufname) 
 	      
-	      (equal  "\*scratch\*" bufname) 
-	      (equal  "\*Help\*" bufname) 
+		(equal  "\*scratch\*" bufname) 
+		(equal  "\*Help\*" bufname) 
 	      
-	      )
-	  nil
+		)
+	    nil
       
-       t
-	) nil 
-	  )
-)
-)
+	  t
+	  ) nil 
+	    )
+    )
+  )
 
 
 ; init
@@ -1052,7 +1054,8 @@ to be appropriate for its first buffer"
 
 (if (string= "mac" window-system)
 (defadvice switch-to-buffer (around sw-force-other-frame (&rest args) activate)
-   
+    
+  
 					; is buffer shown in a frame?
   (if (and one-buffer-one-frame
 	   (walk-windows
@@ -1068,7 +1071,6 @@ to be appropriate for its first buffer"
 	   )
       t
   
-
     (if (or (not (visible-frame-list))
 	    (not (frame-visible-p (selected-frame)))
 	    (open-in-other-frame-p (car args))
@@ -1119,50 +1121,6 @@ to be appropriate for its first buffer"
       )
   )
 ;;; 
-
-
-;; make sure that C-mouse-1 menu acts locally
-(defadvice mouse-buffer-menu (around select-buffer-same-frame (&rest args) activate) 
- (let ((one-buffer-one-frame nil))
-   ad-do-it
-) 
-)
-  
-
-;; as a bugfix, we're redefining this
-;; in order to create a new frame if all frames are invisible
-(defun fancy-splash-frame ()
-  "Return the frame to use for the fancy splash screen.
-Returning non-nil does not mean we should necessarily
-use the fancy splash screen, but if we do use it,
-we put it on this frame."
-  (let (chosen-frame)
-   
-    (dolist (frame (append (frame-list) (list (selected-frame))))
-      (if (and (frame-visible-p frame)
-	       (not (window-minibuffer-p (frame-selected-window frame))))
-	  (setq chosen-frame frame))) 
-    (if chosen-frame
-	chosen-frame
-      
-      (or
-       ;; make visible
-       (select-frame (car (frame-list))) 
-       ;; or create a new one
-       (make-frame)
-       )
-      )
-    )
-)
-; no tool-bars, always white 
-(defadvice fancy-splash-screens (around modify-frame (&rest args) activate)
-
-  (let ( (default-frame-alist '( (tool-bar-lines . 0) (minibuffer . nil ) ) ) )
-    ad-do-it
-    )
-  (message "") ;; workaround ("wrong argument")
-)
-
 
 
   
@@ -1224,35 +1182,42 @@ we put it on this frame."
 				
    ) 
 )
-  
-
-; the following makes sure that we don't input text
-; into a hidden frame 
-(defun aquamacs-popup-frame-on-change (beg end len) 
- 
-					; this seems to be called even when you
-					; just select a menu
-  (if (and last-nonmenu-event	   ; (or (not (eq beg end)) (> len 0))
-	   (not (visible-frame-list)))
-
-      
-      (unless (equal (buffer-name) "*Messages*")
-	(let ((f (car (find-all-frames-internal (current-buffer)))))
- 
-	  (if f  ; make sure that we don't just raise _some_ frame
-	  (raise-frame f)
-	  )
-	  (remove-hook 'after-change-functions 
-		       'aquamacs-popup-frame-on-change t)
-	  )
-	)
-    )
-  )
-
+   
 ; make sure that when a minibuffer is ready to take input, 
 ; the appropriate frame is raised (made visible)
 (setq minibuffer-auto-raise t)
 
+
+; in the following, we make sure that we don't pop up a frame
+; for stuff that is related to the minibuffer, that is,
+; *Completion* frames and the like.
+
+(defun dont-pop-up-frames ()
+
+;  (if one-buffer-one-frame
+;      (progn
+; the following needs to be done even 
+; in case one-buffer-one-frame is off
+; because otherwise, if *completions* etc.
+; are opened from a special frame (*help*),
+; it'll go find SOME other frame for this.
+
+       (make-local-variable 'pop-up-frames)
+       (setq pop-up-frames nil)
+
+       ; allow splitting here
+       ; ToDo: this doesn't work for special frames such as *help*
+       ; (window is not split!)
+       (make-local-variable 'pop-up-windows)
+       (setq pop-up-windows t)
+       (modify-frame-parameters (selected-frame) '((pop-up-windows . t)))
+   ; un-dedicate the main window
+       (set-window-dedicated-p (frame-first-window) nil)
+;       )
+;    )
+
+)
+(add-hook 'minibuffer-setup-hook 'dont-pop-up-frames)
 
 
 (defun delete-window-if-created-for-this-buffer (win buf force)
@@ -1274,7 +1239,6 @@ we put it on this frame."
 		  (delete-window win) ;; only get rid of that current window
 		)
 	    (error   
-					;	  (add-hook 'after-change-functions 'aquamacs-popup-frame-on-change t) 
 		   
 	     (make-frame-invisible (selected-frame) t) 
 	     (if (find-all-frames-internal (get-buffer "*Messages*"))
@@ -1295,13 +1259,13 @@ we put it on this frame."
     
   )
 (defun delete-window-if-one-buffer-one-frame ()
- (if one-buffer-one-frame
-     (delete-window-if-created-for-buffer)
-)
-)
+  (if one-buffer-one-frame
+      (delete-window-if-created-for-buffer)
+    )
+  )
 (if (string= "mac" window-system)
     (add-hook 'kill-buffer-hook 'delete-window-if-one-buffer-one-frame t)
-)
+  )
  
 ;; redefine this from frame.el
 ;; (why advise it when we don't call it anyways?)
@@ -1329,6 +1293,55 @@ we put it on this frame."
     )
   )  
  
+
+
+
+;; make sure that C-mouse-1 menu acts locally
+(defadvice mouse-buffer-menu (around select-buffer-same-frame (&rest args) activate) 
+ (let ((one-buffer-one-frame nil))
+   ad-do-it
+) 
+)
+  
+
+;; as a bugfix, we're redefining this
+;; in order to create a new frame if all frames are invisible
+(defun fancy-splash-frame ()
+  "Return the frame to use for the fancy splash screen.
+Returning non-nil does not mean we should necessarily
+use the fancy splash screen, but if we do use it,
+we put it on this frame."
+  (let (chosen-frame)
+   
+    (dolist (frame (append (frame-list) (list (selected-frame))))
+      (if (and (frame-visible-p frame)
+	       (not (window-minibuffer-p (frame-selected-window frame))))
+	  (setq chosen-frame frame))) 
+    (if chosen-frame
+	chosen-frame
+      
+      (or
+       ;; make visible
+       (select-frame (car (frame-list))) 
+       ;; or create a new one
+       (make-frame)
+       )
+      )
+    )
+)
+; no tool-bars, always white 
+(defadvice fancy-splash-screens (around modify-frame (&rest args) activate)
+
+  (let ( (default-frame-alist '( (tool-bar-lines . 0) (minibuffer . nil ) ) ) )
+    ad-do-it
+    )
+  (message "") ;; workaround ("wrong argument")
+)
+
+
+
+
+
 ; ----------- MISC STUFF ----------------
 
 
