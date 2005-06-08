@@ -149,7 +149,6 @@
 
 (defconst special-display-regexps '( "[ ]?\\*info.*\\*[ ]?"  "[ ]?\\*Help\\*[ ]?" 
 				     "[ ]?\\*Messages\\*[ ]?"   "[ ]*Customize*"
-				      
 				     ))
 ;; If we make Backtrace dedicated,
 ;; the frame gets iconified all the time

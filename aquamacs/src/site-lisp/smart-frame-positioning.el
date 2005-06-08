@@ -18,8 +18,9 @@
 ;; (require 'smart-frame-positioning)
 ;; (smart-frame-positioning-mode t)
 ;;
-;;
-;;
+;; To Do:
+;; The origin of the display is not necessarily 0. 
+;; How to check?
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 
@@ -123,21 +124,23 @@ pixels apart if possible."
       (let ((preassigned (get-frame-position-assigned-to-buffer-name)))
 	
 	(or
-	   ; ( progn 
-					; OS X ensures that frames are not opened outside the visible area of the screen
-					; untested for other systems - the following might have to be enabled
-					; to guard cases when the available screen size gets smaller
-					; (if (> (cdr (assq 'top preassigned)) (- (display-pixel-width) 40)
-	      ;(dolist (pair preassigned)
-	;	(assq-set (car pair) (cdr pair) 'new-frame-parameters))
-	     ;new-frame-parameters
+	 ;; ( progn 
+	 ;; OS X ensures that frames are not opened outside the visible area of the screen
+	 ;; untested for other systems - the following might have to be enabled
+	 ;; to guard cases when the available screen size gets smaller
+	 ;; (if (> (cdr (assq 'top preassigned)) (- (display-pixel-width) 40)
+	 ;;(dolist (pair preassigned)
+	 ;;	(assq-set (car pair) (cdr pair) 'new-frame-parameters))
+	 ;;new-frame-parameters
 	 preassigned ; if preassigned, return it
-	    ;  )
-					;else
+	 ;;  )
+	 ;;else
 	  (let
 	      ( 
-	       ( y (frame-parameter old-frame 'top) )
-	       ( x (frame-parameter old-frame 'left) )
+	       ;; eval is necessary, because left can be (+ -1000)
+	       ;; which is not an integer!
+	       ( y (eval (frame-parameter old-frame 'top)) )
+	       ( x (eval (frame-parameter old-frame 'left)) )
 	       ( w (frame-pixel-width old-frame) )
 	       ( h (frame-total-pixel-height old-frame) )
         
@@ -146,12 +149,12 @@ pixels apart if possible."
 	       (margin smart-frame-positioning-margin)
        
 	       ) 
-					; return:
+	    ;; return:
  
 	    (unless (frame-visible-p old-frame)
-	      ; if we're given an invisible frame (probably no
-	      ; frame visible then!), assume a sensible standard
-	      ; 3 * margin for y because of menu bar (on OS X)
+	      ;; if we're given an invisible frame (probably no
+	      ;; frame visible then!), assume a sensible standard
+	      ;; 3 * margin for y because of menu bar (on OS X)
 	      (setq x margin y (* 3 margin) w 0 h 0))
 	     
 	    (let (
@@ -193,8 +196,8 @@ pixels apart if possible."
 		    (dolist (f (visible-frame-list) )
 		    
 		      (if (or (> (abs (- (frame-parameter f 'top) ny)) 10) ; different height
-			      (or (> next-x (+ (frame-parameter f 'left) (frame-parameter f 'width))) ;or no overlap
-				  (< (+ next-x next-w) (frame-parameter f 'left)))
+			      (or (> next-x (+ (eval (frame-parameter f 'left)) (frame-parameter f 'width))) ;or no overlap
+				  (< (+ next-x next-w) (eval (frame-parameter f 'left))))
 			      )
 			  nil		; fine
 			(setq samerow nil)
@@ -275,8 +278,8 @@ can be remembered. This is part of Aquamacs Emacs."
 
   (assq-set-equal (buffer-name) 
 	     ( list 
-		    (cons 'left (frame-parameter f 'left))
-		    (cons 'top (frame-parameter f 'top))
+		    (cons 'left (eval (frame-parameter f 'left)))
+		    (cons 'top (eval (frame-parameter f 'top)))
 		    (cons 'width (frame-parameter f 'width))
 		    (cons 'height (frame-parameter f 'height))
 		    ) 

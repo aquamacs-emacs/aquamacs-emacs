@@ -71,15 +71,19 @@ end tell"
 (defun mac-add-standard-directories ()
 ;; Add standard directories and automatically add their subdirectories.
 ; this idea blatantly copied and adapted from Martin Schwenke (meltin.net)
+(let ((ddir default-directory))
 (mapcar '(lambda (dir)
 	   (let* ((xdir (expand-file-name dir)  )
 		  (default-directory xdir)) 
 	     (and xdir
 		  (add-to-list 'load-path xdir)
 		  ;; Now add subdirectories.
-		  (condition-case nil	    
+		  
+		  (condition-case nil
+		      (progn
+			(cd xdir)
 		      (normal-top-level-add-subdirs-to-load-path)
-		    (error nil))
+		      )		    (error nil))
 		  )
 	     )
 	   )
@@ -95,6 +99,8 @@ end tell"
 	  "~/Library/Preferences/Emacs"	; for all Emacsen (user-specific):
 	  "~/Library/Preferences/Aquamacs Emacs" ; for Aquamacs (user-specific)
 	  )
+)
+(setq default-directory ddir) ; restore
 )
 )
 

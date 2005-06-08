@@ -25,7 +25,7 @@
 	ascii:-apple-monaco*-medium-r-normal--9-90-75-75-m-90-mac-*,
 	latin-iso8859-1:-apple-monaco*-medium-r-normal--9-90-75-75-m-90-mac-*,
 	latin-iso8859-9:-apple-monaco*-medium-r-normal--9-90-75-75-m-90-mac-*" nil t)
-  (error (print (list "Warning: Font not found" e))))
+  (error (print (list "Warning: " e))))
 
 
 (condition-case e
@@ -34,8 +34,20 @@
 	ascii:-apple-monaco*-medium-r-normal--10-100-75-75-m-100-mac-*,
 	latin-iso8859-1:-apple-monaco*-medium-r-normal--10-100-75-75-m-100-mac-*,
 	latin-iso8859-9:-apple-monaco*-medium-r-normal--10-100-75-75-m-100-mac-*" nil t)
-  (error (print (list "Warning: Font not found" e))))
+  (error (print (list "Warning: " e))))
 
+
+
+(condition-case e
+    (create-fontset-from-fontset-spec
+     "-apple-monaco*-medium-r-normal--11-*-*-*-*-*-fontset-monaco11,
+	ascii:-apple-monaco*-medium-r-normal--11-110-75-75-m-120-mac-*,
+	latin-iso8859-1:-apple-monaco*-medium-r-normal--11-110-75-75-m-120-mac-*,
+	latin-iso8859-9:-apple-monaco*-medium-r-normal--11-110-75-75-m-120-mac-*,
+	utf-8:-apple-monaco*-medium-r-normal--11-110-75-75-m-120-mac-*,
+	" nil t)
+  (error (print (list "Warning: " e))))
+	
 
 (condition-case e
     (create-fontset-from-fontset-spec
@@ -45,7 +57,7 @@
 	latin-iso8859-9:-apple-monaco*-medium-r-normal--12-120-75-75-m-120-mac-*,
 	utf-8:-apple-monaco*-medium-r-normal--12-120-75-75-m-120-mac-*,
 	" nil t)
-  (error (print (list "Warning: Font not found" e))))
+  (error (print (list "Warning: " e))))
 	
 
 (condition-case e
@@ -54,7 +66,7 @@
 	ascii:-apple-monaco*-medium-r-normal--14-140-75-75-m-140-mac-*,
 	latin-iso8859-1:-apple-monaco*-medium-r-normal--14-140-75-75-m-140-mac-*,
 	latin-iso8859-9:-apple-monaco*-medium-r-normal--14-140-75-75-m-140-mac-*" nil t)
-  (error (print (list "Warning: Font not found" e))))
+  (error (print (list "Warning: " e))))
 	
 
 (condition-case e 
@@ -82,28 +94,40 @@
 	iso10646-1:-*-lucida grande*-medium-r-normal--0-0-0-0-m-0-mac-*,
 	ascii:-*-lucida grande*-medium-r-normal--0-0-0-0-m-0-mac-*" t ignore-font-errors)
 
-  (error (print (list "Warning: Font not found" e))))
- 
-	
+  (error (print (list "Warning: " e))))
+
+;; only the following function is able to scale scalable fonts.
+;; it only seems to find ASCII fonts, though.
+(condition-case e 
+(progn
+ (create-fontset-from-mac-roman-font "-*-lucida grande*-medium-r-*-*-9-*-*-*-*-*-mac-roman" nil "Lucida Grande Roman 9")
+ (create-fontset-from-mac-roman-font "-*-lucida grande*-medium-r-*-*-10-*-*-*-*-*-mac-roman" nil "Lucida Grande Roman 10")
+ (create-fontset-from-mac-roman-font "-*-lucida grande*-medium-r-*-*-11-*-*-*-*-*-mac-roman" nil "Lucida Grande Roman 11")
+ (create-fontset-from-mac-roman-font "-*-lucida grande*-medium-r-*-*-12-*-*-*-*-*-mac-roman" nil "Lucida Grande Roman 12")
+ (create-fontset-from-mac-roman-font "-*-lucida grande*-medium-r-*-*-13-*-*-*-*-*-mac-roman" nil "Lucida Grande Roman 13")
+ (create-fontset-from-mac-roman-font "-*-lucida grande*-medium-r-*-*-14-*-*-*-*-*-mac-roman" nil "Lucida Grande Roman 14")
+ (create-fontset-from-mac-roman-font "-*-lucida grande*-medium-r-*-*-16-*-*-*-*-*-mac-roman" nil "Lucida Grande Roman 16")
+ (create-fontset-from-mac-roman-font "-*-lucida grande*-medium-r-*-*-18-*-*-*-*-*-mac-roman" nil "Lucida Grande Roman 18")
+)
+	  (error (print (list "Warning: " e))))
+
 	
 ;; some other default fonts
 
 
 (condition-case e 
-    (create-fontset-from-mac-roman-font "-apple-lucida sans typewrite*-medium-r-normal--10-100-75-75-m-100-mac-*")
-  (error (print (list "Warning: Font not found" e))))
-	
-(condition-case e
-    (create-fontset-from-mac-roman-font "-apple-lucida sans typewrite*-medium-r-normal--12-120-75-75-m-120-mac-*")
-  (error (print (list "Warning: Font not found" e))))
+    (create-fontset-from-mac-roman-font "-apple-lucida sans typewrite*-medium-r-normal--10-*-*-*-*-*-mac-*" 
+					nil "Lucida Sans Typewrite Roman 10")
+    (create-fontset-from-mac-roman-font "-apple-lucida sans typewrite*-medium-r-normal--12-*-*-*-*-*-mac-*" 
+					nil "Lucida Sans Typewrite Roman 12")
+    (create-fontset-from-mac-roman-font "-apple-lucida sans typewrite*-medium-r-normal--14-*-*-*-*-*-mac-*" 
+					nil "Lucida Sans Typewrite Roman 14")
+    (create-fontset-from-mac-roman-font "-apple-lucida sans typewrite*-medium-r-normal--9-*-*-*-*-*-mac-*" 
+					nil "Lucida Sans Typewrite Roman 9")
+  (error (print (list "Warning: " e))))
+	  
 
-
-(condition-case e
-    (create-fontset-from-mac-roman-font "-apple-lucida sans typewrite*-medium-r-normal--14-140-75-75-m-140-mac-*")
-  (error (print (list "Warning: Font not found" e))))
-
-
-
+;; leaving this one in for now
 (condition-case e 
     (create-fontset-from-fontset-spec
      "-*-lucida sans type*-medium-r-*-*-11-*-*-*-*-*-fontset-11pt_lucida_sans_typewriter,
@@ -129,7 +153,7 @@
 	iso10646-1:-*-lucida sans type*-medium-r-normal--11-110-75-75-m-110-mac-*,
 	ascii:-*-lucida sans type*-medium-r-normal--11-110-75-75-m-110-mac-*" t ignore-font-errors)
 
-  (error (print (list "Warning: Font not found" e))))
+  (error (print (list "Warning: " e))))
 
 
 (condition-case e 
@@ -157,7 +181,7 @@
 	iso10646-1:-*-lucida console*-medium-r-normal--11-110-75-75-m-110-mac-roman,
 	ascii:-*-lucida console*-medium-r-normal--11-110-75-75-m-110-mac-roman" t ignore-font-errors)
 
-  (error (print (list "Warning: Font not found" e))))
+  (error (print (list "Warning: " e))))
 
 (condition-case e 
     (create-fontset-from-fontset-spec
@@ -183,7 +207,7 @@
 	mule-unicode-e000-ffff:-*-courier*-medium-r-normal--11-110-75-75-m-110-mac-roman,
 	iso10646-1:-*-courier*-medium-r-normal--11-110-75-75-m-110-mac-roman,
 	ascii:-*-courier*-medium-r-normal--11-110-75-75-m-110-mac-roman" t ignore-font-errors)
-  (error (print (list "Warning: Font not found" e))))
+  (error (print (list "Warning: " e))))
 
 (condition-case e 
 (create-fontset-from-fontset-spec
@@ -209,7 +233,7 @@
       mule-unicode-e000-ffff:-*-bitstream vera sans mono-medium-r-normal--*-*-75-75-m-120-mac-roman,
                   iso10646-1:-*-bitstream vera sans mono-medium-r-normal--*-*-75-75-m-120-mac-roman,
                        ascii:-*-bitstream vera sans mono-medium-r-normal--*-*-75-75-m-120-mac-roman" t ignore-font-errors )
- (error (print (list "Warning: Font not found" e))))
+ (error (print (list "Warning: " e))))
 
 
 ; if you'd like to increase the font size, you need to check if the fonts

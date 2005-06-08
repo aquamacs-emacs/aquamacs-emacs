@@ -612,12 +612,12 @@
 		 
 			(not (setq one-buffer-one-frame
 			      (not one-buffer-one-frame)))
-			(setq pop-up-frames one-buffer-one-frame)
 			
+	;; (setq pop-up-frames one-buffer-one-frame)		
 			) 'edit-options-separator)
 )
 
-(add-hook 'after-init-hook (lambda () (setq pop-up-frames one-buffer-one-frame)) t)
+;(add-hook 'after-init-hook (lambda () (setq pop-up-frames one-buffer-one-frame)) t)
 
 
 (require 'view)
@@ -1101,7 +1101,11 @@ to be appropriate for its first buffer"
 )
 
 
-;; ;; we'd like to open new frames for some stuff
+;; make sure that when a minibuffer is ready to take input, 
+;; the appropriate frame is raised (made visible)
+(setq minibuffer-auto-raise t)
+
+;; we'd like to open new frames for some stuff
 
 
 (if (string= "mac" window-system)
@@ -1182,48 +1186,45 @@ to be appropriate for its first buffer"
 				
    ) 
 )
-   
-; make sure that when a minibuffer is ready to take input, 
-; the appropriate frame is raised (made visible)
-(setq minibuffer-auto-raise t)
+    
 
 
-; in the following, we make sure that we don't pop up a frame
-; for stuff that is related to the minibuffer, that is,
-; *Completion* frames and the like.
+(setq pop-up-frames nil)
+(setq pop-up-windows t)
+(setq display-buffer-reuse-frames t)
 
-(defun dont-pop-up-frames ()
+(defadvice pop-to-buffer (around always-dedicated (buf &rest args) protect activate) 
 
-;  (if one-buffer-one-frame
-;      (progn
-; the following needs to be done even 
-; in case one-buffer-one-frame is off
-; because otherwise, if *completions* etc.
-; are opened from a special frame (*help*),
-; it'll go find SOME other frame for this.
+  (if one-buffer-one-frame
+      (let ((puf pop-up-frames)
+	    (sw (selected-window))
+	    (wd (window-dedicated-p (selected-window)))
+	    )
+ 
+	(setq pop-up-frames (not 
+			     (string-match "[ ]*\*(Completions|Apropos)\*" 
+					   (get-bufname buf))
+				 )
+	      )
+ 
+	(set-window-dedicated-p sw nil) 
+	ad-do-it
+	(set-window-dedicated-p sw wd)
+	(setq pop-up-frames puf)
 
-       (make-local-variable 'pop-up-frames)
-       (setq pop-up-frames nil)
+	)
+    ;; else
+    ad-do-it
 
-       ; allow splitting here
-       ; ToDo: this doesn't work for special frames such as *help*
-       ; (window is not split!)
-       (make-local-variable 'pop-up-windows)
-       (setq pop-up-windows t)
-       (modify-frame-parameters (selected-frame) '((pop-up-windows . t)))
-   ; un-dedicate the main window
-       (set-window-dedicated-p (frame-first-window) nil)
-;       )
-;    )
+    )
+  )
 
-)
-(add-hook 'minibuffer-setup-hook 'dont-pop-up-frames)
-
+; make sure that push-button does not lead to reusing of 
 
 (defun delete-window-if-created-for-this-buffer (win buf force)
-					; used by osxkeys, too
-					; as of now, we're always forcing the deletion of a window if the user requests it.
-					; 
+  ;; used by osxkeys, too
+  ;; as of now, we're always forcing the deletion of a window if the user requests it.
+  ;; 
  
   (let ((elt (car (member (cons win buf) aquamacs-newly-opened-frames))))
     (if (or force elt (window-dedicated-p win) )
@@ -1239,7 +1240,8 @@ to be appropriate for its first buffer"
 		  (delete-window win) ;; only get rid of that current window
 		)
 	    (error   
-		   
+	     
+
 	     (make-frame-invisible (selected-frame) t) 
 	     (if (find-all-frames-internal (get-buffer "*Messages*"))
 		 (select-frame (car (find-all-frames-internal (get-buffer "*Messages*"))) 
@@ -1249,9 +1251,9 @@ to be appropriate for its first buffer"
 	     ) 
 	    )
 )
-					; else:
-					; decide not to delete / make invisible
-					; then switch buffer
+      ;; else:
+      ;; decide not to delete / make invisible
+      ;; then switch buffer
 	  (next-buffer)
 	   
 	  )
