@@ -1,5 +1,4 @@
-; Aquamacs Emacs OS X defaults
-
+;; Aquamacs Emacs OS X defaults
 ;; these defaults attempt to turn Emacs into a nice application for 
 ;; Mac OS X that adheres to at least some of the user interface 
 ;; standards on the Mac
@@ -8,33 +7,31 @@
 ;; here deals with the "one buffer, one frame" feature, and
 ;; with updating the menus to show better-conforming entries.
 ;;
-;; Author: David Reitter, david.reitter@gmail.com, 
-;; http://www.reitter-it-media.de/
+;; Author: David Reitter, david.reitter@gmail.com
+;; Maintainer: David Reitter
+;; Keywords: aquamacs
+ 
+;; Last change: $Id: osx_defaults.el,v 1.6 2005/06/09 19:52:50 davidswelt Exp $
 
-;; This file is part of Aquamacs.
-;; http://aquamacs.sourceforge.net/
+;; This file is part of Aquamacs Emacs
+;; http://www.aquamacs.org/
 
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
-;; This program is free software; you can redistribute it and/or modify
+;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; version 2.
-;;
-;; In addition, I ask that you acknowledge the original author, as 
-;; done in the header of the present file.
-;;
-;; This program is distributed in the hope that it will be useful,
+;; the Free Software Foundation; either version 2, or (at your option)
+;; any later version.
+
+;; GNU Emacs is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; see the file COPYING.  If not, write to the
+;; along with GNU Emacs; see the file COPYING.  If not, write to the
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ 
+;; Copyright (C) 2005, David Reitter
 
  
 
@@ -47,6 +44,9 @@
 ;; hide the frame
  
 
+; this file needs cleaning up!
+; move menu stuff to extra package
+; move one-buffer-one-frame to extra mode
 
 (require 'aquamacs-tools)
 
@@ -821,16 +821,16 @@ whenever the mode MODE-NAME is activated.")
 	  ; with this function called again and again...
 
 	  (let ((buffer (window-buffer (frame-first-window frame))))
-	    (unless (and 
-		     (eq (frame-parameter frame 'frame-configured-for-buffer)
-			buffer)
-		     (not force))
+	    (if (or 
+		    (not (eq (frame-parameter frame 
+					     'frame-configured-for-buffer)
+			     buffer))
+		     force)
 	      (save-excursion
 		(set-buffer buffer)
 
 		(let ((theme (get-mode-specific-theme major-mode))
 		      )
-		  (print theme)
 					; (print default-frame-alist)
 		  (dolist (th (if (special-display-p (buffer-name)) 
 				  special-display-frame-alist 

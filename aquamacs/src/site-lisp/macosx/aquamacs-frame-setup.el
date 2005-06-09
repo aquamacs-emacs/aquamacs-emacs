@@ -1,57 +1,35 @@
-;;; aquamacs-frame-setup --- This has been adapted from Drew Adams' Emacs init file. 
+;;; aquamacs-frame-setup
+;;  --- This has been adapted from Drew Adams' Emacs init file. 
 ;; 
 ;; Filename: aquamacs-frame-setup.el
 ;; Description: Emacs init file for use with libraries from Drew Adams
 ;; Author: Drew Adams
 ;; Maintainer: David Reitter
-;; Copyright (C) 1995-2004, Drew Adams, all rights reserved.
-;; Copyright (C) 2005, David Reitter, all rights reserved.
-;; Created: Tue Sep 12 15:54:33 1995
-;; Version: 4B
-;; Last-Updated: 20 May 2005
-;;           By: dreitter
-;;      
 ;; Keywords: aquamacs
-;; Compatibility: GNU Emacs 22.x
-;; 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
-;;; Commentary: 
-;;
-;;    Emacs init file that uses Drew Adams' Emacs libraries.
-;;    This file and Drew's libraries can be used with Emacs 22.
-;; 
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
-;;; Change log:
-;; 
-;; 2005/05/20 dreitter
-;; 2005/05/15 dreitter
-;;     Deleted stuff inapropriate for Aquamacs
-;; 2004/11/26 dadams
-;;     Removed ;;;###autoload's.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
-;; This program is free software; you can redistribute it and/or modify
+ 
+;; Last change: $Id: aquamacs-frame-setup.el,v 1.4 2005/06/09 19:52:50 davidswelt Exp $
+
+;; This file is part of Aquamacs Emacs
+;; http://www.aquamacs.org/
+
+;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation; either version 2, or (at your option)
 ;; any later version.
 
-;; This program is distributed in the hope that it will be useful,
+;; GNU Emacs is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; see the file COPYING.  If not, write to the
+;; along with GNU Emacs; see the file COPYING.  If not, write to the
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Code:
+
+;; Copyright (C) 1995-2004, Drew Adams, all rights reserved.
+;; Copyright (C) 2005, David Reitter, all rights reserved.
+
 
 
 (provide 'aquamacs-frame-setup) ;; added by dr. 12/2004

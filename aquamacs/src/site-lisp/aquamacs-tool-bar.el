@@ -1,34 +1,37 @@
-; aquamacs-tool-bar-mode
+;; aquamacs-tool-bar-mode
 
 ;; This minor mode displays the tool bar only in default frames, 
 ;; but not in special display frames  
 ;;
-;; Author: David Reitter, david.reitter@gmail.com, 
-;; http://www.reitter-it-media.de/
 
-;; This file is part of Aquamacs Emacs.
-;; http://aquamacs.sourceforge.net
+;; Author: David Reitter, david.reitter@gmail.com
+;; Maintainer: David Reitter
+;; Keywords: tool-bar
+ 
+;; Last change: $Id: aquamacs-tool-bar.el,v 1.2 2005/06/09 19:52:49 davidswelt Exp $
 
-;; Licensed under the GNU General Public License (GPL).
-;; Copy, change, redistribute. Please acknowledge the original author.
+;; This file is part of Aquamacs Emacs
+;; http://www.aquamacs.org/
 
-;; This file is free software; you can redistribute it and/or modify
+
+;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation; either version 2, or (at your option)
 ;; any later version.
 
-;; This file is distributed in the hope that it will be useful,
+;; GNU Emacs is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs; see the file COPYING.  If not, write to
-;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+;; along with GNU Emacs; see the file COPYING.  If not, write to the
+;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
+ 
+;; Copyright (C) 2005, David Reitter
 
-
-;; 
+ 
 
 (define-minor-mode aquamacs-tool-bar-mode
  "Turn on toolbars in default frames, but not in special display frames.

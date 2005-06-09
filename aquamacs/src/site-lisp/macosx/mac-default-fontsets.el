@@ -2,17 +2,35 @@
 
 ;; specify some default fontsets that should work on the Mac
 ;; some fonts might not be found - a warning is issues
-
 ;; this should eventually be replaced by a complete font selection
 ;; dialog
 
+;; Author: David Reitter, david.reitter@gmail.com
+;; Maintainer: David Reitter
+;; Keywords: aquamacs fonts
+ 
+;; Last change: $Id: mac-default-fontsets.el,v 1.3 2005/06/09 19:52:50 davidswelt Exp $
 
-;; Author: David Reitter, http://www.reitter-it-media.de/
-;;                        http://www.davids-world.com/
-;;
-;; This file is part of Aquamacs Emacs.
-;; Released under the GNU General Public License.
+;; This file is part of Aquamacs Emacs
+;; http://www.aquamacs.org/
 
+
+;; GNU Emacs is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation; either version 2, or (at your option)
+;; any later version.
+
+;; GNU Emacs is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with GNU Emacs; see the file COPYING.  If not, write to the
+;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+;; Boston, MA 02111-1307, USA.
+ 
+;; Copyright (C) 2005, David Reitter
 
 ;;; FONT DEFAULTS 
 

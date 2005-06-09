@@ -1,19 +1,11 @@
 ;;; Smart-frame-positioning.el 
-;; 
-;; Filename: smart-frame-positioning.el
-;; Description: Position frames so that they don't overlap
-;; Author: David Reitter
-;; Maintainer: David Reitter, david.reitter@gmail.com
-;; Copyright (C) 2005, David Reitter, all rights reserved.
-;; Emacs Version: 22.0
-;; Last-Updated: 29-May-2005
-;;           By: dr
-;;     Update #:
-;; Keywords: frames position
-;; Compatibility: GNU Emacs 22.x
-;; 
-;; This file is part of Aquamacs Emacs.
-;;
+
+;; Smart Frame Positioning Mode: Aquamacs frames (because there are
+;;  usually many) are opened in useful positions on the screen, so they
+;;  don't overlap. Aquamacs associates positions with buffer names, so
+;;  that frames displaying the same buffer (and file name) are always
+;;  opened in the same position.
+
 ;; to activate:
 ;; (require 'smart-frame-positioning)
 ;; (smart-frame-positioning-mode t)
@@ -21,27 +13,37 @@
 ;; To Do:
 ;; The origin of the display is not necessarily 0. 
 ;; How to check?
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 
-;; This program is free software; you can redistribute it and/or modify
+ 
+;; Emacs Version: 22.0
+
+;; Author: David Reitter, david.reitter@gmail.com
+;; Maintainer: David Reitter
+;; Keywords: aquamacs
+ 
+;; Last change: $Id: smart-frame-positioning.el,v 1.5 2005/06/09 19:52:50 davidswelt Exp $
+
+;; This file is part of Aquamacs Emacs
+;; http://www.aquamacs.org/
+
+;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; version 2.
-;;
-;; In addition, I ask that you acknowledge the original author, as 
-;; done in the header of the present file.
-;;
-;; This program is distributed in the hope that it will be useful,
+;; the Free Software Foundation; either version 2, or (at your option)
+;; any later version.
+
+;; GNU Emacs is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; see the file COPYING.  If not, write to the
+;; along with GNU Emacs; see the file COPYING.  If not, write to the
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ 
+;; Copyright (C) 2005, David Reitter
+
+
 
 (defun smart-position-and-create-frame (&optional parameters) 
  

@@ -2,35 +2,34 @@
 ;;
 ;; Functions specific to use of Emacs on Mac OS X
 ;;
-;; Author: David Reitter, david.reitter@gmail.com, 
-;; http://www.reitter-it-media.de/
 
-;; This file is part of Aquamacs.
-;; http://aquamacs.sourceforge.net/
+;; Author: David Reitter, david.reitter@gmail.com
+;; Maintainer: David Reitter
+;; Keywords: aquamacs
+ 
+;; Last change: $Id: mac-extra-functions.el,v 1.4 2005/06/09 19:52:50 davidswelt Exp $
 
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
-;; This program is free software; you can redistribute it and/or modify
+;; This file is part of Aquamacs Emacs
+;; http://www.aquamacs.org/
+
+
+;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; version 2.
-;;
-;; In addition, I ask that you acknowledge the original author, as 
-;; done in the header of the present file.
-;;
-;; This program is distributed in the hope that it will be useful,
+;; the Free Software Foundation; either version 2, or (at your option)
+;; any later version.
+
+;; GNU Emacs is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; see the file COPYING.  If not, write to the
+;; along with GNU Emacs; see the file COPYING.  If not, write to the
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  
+;; Copyright (C) 2005, David Reitter
+
 
 
 

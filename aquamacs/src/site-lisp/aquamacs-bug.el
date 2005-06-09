@@ -1,11 +1,12 @@
-;; Copyright (C) 1985, 1994, 1997, 1998, 2000, 2001, 2002
-;; Free Software Foundation, Inc.
 
-;; Author: D Reitter - adapted from emacsbug.el by K. Shane Hartman
-;; Maintainer:  
-;; Keywords:  
+;; Author: adapted from emacsbug.el by K. Shane Hartman
+;; Maintainer: David Reitter
+;; Keywords: mac bug report
  
+;; Last change: $Id: aquamacs-bug.el,v 1.2 2005/06/09 19:52:49 davidswelt Exp $
+
 ;; This file is part of Aquamacs Emacs
+;; http://www.aquamacs.org/
 
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -22,6 +23,10 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
 
+;; Copyright (C) 1985, 1994, 1997, 1998, 2000, 2001, 2002
+;; Free Software Foundation, Inc.
+
+;; Copyright (C) 2005, David Reitter
 
 
 (setq report-aquamacs-bug-address "aquamacs-bugs@lists.sourceforge.net")

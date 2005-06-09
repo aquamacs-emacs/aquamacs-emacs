@@ -1,46 +1,36 @@
 ;; check-for-updates.el
-;; 
-;; Filename: check-for-updates.el
-;; Description: Check for updates 
-;; Author: David Reitter
+;; Checks for updates to Aquamacs - queries a remote server every 3 days.
+;; If new version found, a new check will be forced next time 
+;; (to show message again!)
+;; Stores file .id in a folder 
+
+;; Author: David Reitter, david.reitter@gmail.com
 ;; Maintainer: David Reitter
-;; Copyright (C) 2005, David Reitter, all rights reserved.
+;; Keywords: aquamacs version check
+ 
+;; Last change: $Id: check-for-updates.el,v 1.2 2005/06/09 19:52:49 davidswelt Exp $
+
+;; This file is part of Aquamacs Emacs
+;; http://www.aquamacs.org/
 ;; Emacs Version: 22.0
-;; Last-Updated: 29-May-2005
-;;           By: dr
-;;     Update #:
-;; Keywords: version updates
-;; Compatibility: GNU Emacs 22.x
-;; 
-;; This file is part of Aquamacs Emacs.
-;; 
-;; 
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
-;; This program is free software; you can redistribute it and/or modify
+
+;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; version 2.
-;;
-;; In addition, I ask that you acknowledge the original author, as 
-;; done in the header of the present file.
-;;
-;; This program is distributed in the hope that it will be useful,
+;; the Free Software Foundation; either version 2, or (at your option)
+;; any later version.
+
+;; GNU Emacs is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; see the file COPYING.  If not, write to the
+;; along with GNU Emacs; see the file COPYING.  If not, write to the
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;
-;
-; If new version found, a new check will be forced next time 
-; (to show message again!)
-; Stores file .id in Library folder 
+ 
+;; Copyright (C) 2005, David Reitter
+
 ;
 ;
 ; the following is user-settable (to "")
