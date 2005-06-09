@@ -4,6 +4,10 @@
 ;; Mac OS X that adheres to at least some of the user interface 
 ;; standards on the Mac
 ;;
+;; This is the central configuration file. Most of the code
+;; here deals with the "one buffer, one frame" feature, and
+;; with updating the menus to show better-conforming entries.
+;;
 ;; Author: David Reitter, david.reitter@gmail.com, 
 ;; http://www.reitter-it-media.de/
 
@@ -152,7 +156,10 @@
   (error t)) 
 
 (setq custom-file "~/Library/Preferences/Aquamacs Emacs/customizations.el")
-(add-hook 'after-init-hook (lambda () (condition-case nil (load custom-file) (error t))) t)
+(add-hook 'after-init-hook (lambda () 
+		    (condition-case nil (load custom-file) (error t))
+		    (aquamacs-activate-features-new-in-this-version)
+		    ) 'append)
 
 (defun font-exists-p (fontorfontset)
   (condition-case nil
@@ -519,6 +526,7 @@
  
 ;;   ((window-id) (buffer-list) (name) (title) (icon-name))
 (add-to-list 'frame-parameters-to-exclude '(minibuffer))
+(add-to-list 'frame-parameters-to-exclude '(frame-configured-for-buffer))
 (defun aquamacs-set-theme-as-default () 
   "Activate current frame settings (theme) as default. Sets default-frame-alist."
   (interactive)
@@ -651,8 +659,29 @@ Use this argument instead of explicitly setting `view-exit-action'."
 
 ; this is initialized to the customization version BEFORE
 ; this versioning system was introduced in 0.9.2b5
+; it'll be overwritten by whatever is in the customization file
 (defvar aquamacs-customization-version-id 092.4)
 
+; write the aquamacs-version to end of customizations.el
+; warning: bug - this will add to the file
+; so the file will grow over time
+; because the last (setq is what actually counts,
+; this shouldn't cause any problems.
+(defadvice custom-save-all  
+  (after save-aquamacs-customization-version (&rest args) activate)
+ 
+  (write-region
+   (with-output-to-string
+     (print `(setq aquamacs-customization-version-id
+     ,aquamacs-customization-version-id))
+     )
+   nil ;end
+   custom-file
+   'append
+   'quiet
+   )
+)
+ 
 (defun menu-bar-options-save ()
   "Save current values of Options menu items using Custom."
   (interactive)
@@ -732,17 +761,11 @@ Each element of LIST has to be of the form (symbol . fontset)."
 
 
 (defcustom aquamacs-mode-specific-default-themes
-  (filter-fonts (list 
-   '(text-mode  (font . "fontset-lucida14")) 
-   '(emacs-lisp-mode  (font . "fontset-monaco12")) 
-   '(lisp-interaction-mode  (font . "fontset-monaco12"))
-   '(lisp-mode  (font . "fontset-monaco12")) 
-   '(dired-mode  (font . "fontset-monaco12" )) 
-   '(completion-list-mode  (font . "fontset-monaco12")) 
-   '(c-mode  (font . "fontset-monaco12"))
-   '(cperl-mode  (font . "fontset-monaco12"))
-   '(python-mode  (font . "fontset-monaco12"))
-   '(sh-mode  (font . "fontset-monaco12"))
+  (filter-fonts '(
+   (text-mode  (font . "fontset-lucida14")) 
+   (change-log-mode  (font . "fontset-lucida14"))
+   (tex-mode  (font . "fontset-lucida14"))
+   (paragraph-indent-text-mode  (font . "fontset-lucida14"))
    ))
   "Association list to set mode-specific themes. Each element 
 is a list of elements of the form (mode-name theme), where
@@ -784,8 +807,9 @@ whenever the mode MODE-NAME is activated.")
 ; 
 ; (frame-parameter (selected-frame) 'frame-configured-for-buffer)
 
-(defun set-mode-specific-theme (&optional frame)
+(defun set-mode-specific-theme (&optional frame force)
   (unless frame (setq frame (selected-frame)))
+
   (if (frame-live-p frame)
 
       (condition-case err		; (otherwise, Emacs hangs)
@@ -797,15 +821,16 @@ whenever the mode MODE-NAME is activated.")
 	  ; with this function called again and again...
 
 	  (let ((buffer (window-buffer (frame-first-window frame))))
-	    (unless (eq (frame-parameter frame 'frame-configured-for-buffer)
+	    (unless (and 
+		     (eq (frame-parameter frame 'frame-configured-for-buffer)
 			buffer)
+		     (not force))
 	      (save-excursion
 		(set-buffer buffer)
 
-
 		(let ((theme (get-mode-specific-theme major-mode))
 		      )
-
+		  (print theme)
 					; (print default-frame-alist)
 		  (dolist (th (if (special-display-p (buffer-name)) 
 				  special-display-frame-alist 
@@ -848,9 +873,9 @@ whenever the mode MODE-NAME is activated.")
 (defun set-mode-theme-after-change-major-mode ()       			      
 ; delete the configuration cache parameter
   (dolist (f (find-all-frames-internal (current-buffer)))
-    (modify-frame-parameters f '((frame-configured-for-buffer)))
+     
 ; update the theme
-    (set-mode-specific-theme f)
+    (set-mode-specific-theme f t)
     )  
 )
  
@@ -910,10 +935,26 @@ to be appropriate for its first buffer"
 (add-hook 'after-init-hook   
 	  '(lambda () 
 	     (set-mode-specific-theme)
-	     (setq initial-frame-alist default-frame-alist) 
+	     
+	     ;; because we don't want the first frame to dance around
+	     ;; more than necessary, we set height + width to whatever
+	     ;; it is initially.
+	     ;; we also ensure that the attributes for text mode
+	     ;; are set, because otherwise, default-frame-alist
+	     ;; is assumed by Emacs.
+	     (setq initial-frame-alist 
+		   (append 
+		    (cdr (assq major-mode 
+			       aquamacs-mode-specific-default-themes))
+		    (list
+		     (cons 'height (frame-parameter (selected-frame) 'height))
+		     (cons 'width (frame-parameter (selected-frame) 'width))
+		     )
+		    )
+		   )
 	     ;; this is for the initial frame   
 	     ;; but probably doesn't make sense at this point
-; at this point, the toolbar exists - everything is fine
+	     ;; at this point, the toolbar exists - everything is fine
   
 	     )
 'append
@@ -931,13 +972,13 @@ to be appropriate for its first buffer"
 
 ;; set default fonts - after aquamacs-frame-setup has initialized things
 
-(if (fontset-exist-p "fontset-lucida14") 
-    (assq-set 'font "fontset-lucida14" 'default-frame-alist)
+(if (fontset-exist-p "fontset-monaco12") 
+    (assq-set 'font "fontset-monaco12" 'default-frame-alist)
   (if (fontset-exist-p "fontset-mac_roman_12") 
       (assq-set 'font "fontset-mac_roman_12" 'default-frame-alist)
 
-    (if (fontset-exist-p "fontset-monaco12") 
-	(assq-set 'font "fontset-monaco12" 'default-frame-alist)
+    (if (fontset-exist-p "fontset-lucida14") 
+	(assq-set 'font "fontset-lucida14" 'default-frame-alist)
       )
     )
   )
@@ -976,27 +1017,42 @@ to be appropriate for its first buffer"
 (smart-frame-positioning-mode t) ; and turn on!
 
 ; make sure there are no old customizations around
-
+; N.B.: if no customization file is present, 
+; aquamacs-customization-version-id is 0924
 (defun aquamacs-activate-features-new-in-this-version ()
 
-  
   ; aquamacs-customization-version-id contains the version id
   ; of aquamacs when the customization file was written
 
-  (if (< aquamacs-customization-version-id 0925)
+  (if (< aquamacs-customization-version-id 092.5)
 
       ; make sure we fit frames
       (assq-set 'user-position nil 'default-frame-alist)
 
       )
 
-)
+  (if (< aquamacs-customization-version-id 092.8)
+      ;; bring the lucida font back because
+      ;; we have switched over to monaco as the default
+      (dolist (th (filter-fonts '(
+				  (text-mode  
+				   (font . "fontset-lucida14")) 
+				  (change-log-mode  
+				   (font . "fontset-lucida14"))
+				  (tex-mode  
+				   (font . "fontset-lucida14"))
+				  (paragraph-indent-text-mode  
+				   (font . "fontset-lucida14"))
+				  )))
 
-(add-hook 'after-init-hook
-	  'aquamacs-activate-features-new-in-this-version
-	  'append  ; do this AFTER customization are loaded
+	(unless (assq (car th) aquamacs-mode-specific-default-themes)
+	  (assq-set (car th) 
+		    (cdr th)
+		    'aquamacs-mode-specific-default-themes)
+	  )
+	)
+    )
 )
-
 
 
 
@@ -1453,13 +1509,11 @@ we put it on this frame."
  
        
     
- ;; FRAME POSITIONING
-
+;; INITIAL FRAME 
 ;; Place first frame in the location (80, 80) on screen 
 (setq initial-frame-alist   default-frame-alist)
- 
-(text-mode)
- 
+;; no effect - the first frame is already there at this point!
+(text-mode) 
 
 (require 'mac-extra-functions)
 
@@ -1470,8 +1524,6 @@ we put it on this frame."
 (setq pc-select-default-key-bindings '(([home]      . beginning-of-buffer)
 				       ([end]      . end-of-buffer)
 				       ))
-
-
 
     (aquamacs-set-defaults '( 
 			     (mouse-wheel-progessive-speed nil)

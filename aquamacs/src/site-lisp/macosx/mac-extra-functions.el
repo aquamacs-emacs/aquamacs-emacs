@@ -1,4 +1,41 @@
 ; Mac extra functions
+;;
+;; Functions specific to use of Emacs on Mac OS X
+;;
+;; Author: David Reitter, david.reitter@gmail.com, 
+;; http://www.reitter-it-media.de/
+
+;; This file is part of Aquamacs.
+;; http://aquamacs.sourceforge.net/
+
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation; version 2.
+;;
+;; In addition, I ask that you acknowledge the original author, as 
+;; done in the header of the present file.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program; see the file COPYING.  If not, write to the
+;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+;; Boston, MA 02111-1307, USA.
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+ 
+
+
+
+
+
 ;; File Open / Save
 ;; TO DO: these should be replaced with the file menu item 
 ;; can't do this because the internal find-file function will
@@ -137,14 +174,24 @@ end tell"
 
 (defun new-frame-with-new-scratch  ()
   "Opens a new frame containing an empty buffer in ``text-mode'' and ``filladapt-mode''."
-  (interactive)				 				
-  (switch-to-buffer-other-frame (generate-new-buffer "New document"))
-  (text-mode)
-  (filladapt-mode t)
+  (interactive)			
+  (let ((buf (generate-new-buffer "New document")))
+
+    ;; setting mode is done before showing the new frame
+    ;; because otherwise, we get a nasty animation effect
+    (save-excursion
+      (set-buffer buf)
+      (text-mode)
+      (filladapt-mode t)
+     )
+
+  (switch-to-buffer-other-frame buf)
+ 
   
   (setq buffer-offer-save t)
-(set-buffer-modified-p nil)
+  (set-buffer-modified-p nil)
   )
+)
 
 
 (provide 'mac-extra-functions)

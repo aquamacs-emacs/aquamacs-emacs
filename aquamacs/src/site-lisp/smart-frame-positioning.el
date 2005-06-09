@@ -75,7 +75,6 @@
     ; make sure we don't make it visible prematurely
     (setq newpos (assq-delete-all 'visibility newpos))
     (modify-frame-parameters f newpos)
-    
     (make-frame-visible f)
     f					; return the frame
     )
