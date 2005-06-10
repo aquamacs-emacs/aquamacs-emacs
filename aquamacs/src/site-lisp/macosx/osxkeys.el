@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.3 2005/06/09 19:52:50 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.4 2005/06/10 22:13:39 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -71,7 +71,7 @@
 )
 
 (defun close-current-window-asktosave ()
-  "Delete currently window (and its frame), ask to save file if necessary."
+  "Delete current window (and its frame), ask to save file if necessary."
   (interactive)
   (select-frame-set-input-focus (selected-frame))
  
@@ -193,7 +193,7 @@
     (define-key map `[(,osxkeys-command-key n)] 'new-frame-with-new-scratch) ;open new frame empty
     (define-key map `[(,osxkeys-command-key o)] 'mac-key-open-file) ;open new frame with a file
 
-    (define-key map `[(,osxkeys-command-key shift s)] 'mac-key-save-file-as)
+    (define-key map `[(,osxkeys-command-key shift s)] 'write-file)
     (define-key map `[(,osxkeys-command-key shift o)] 'find-file-other-frame) ;open new frame with a file
     (define-key map `[(,osxkeys-command-key a)] 'mark-whole-buffer)
     (define-key map `[(,osxkeys-command-key v)] 'clipboard-yank) 
