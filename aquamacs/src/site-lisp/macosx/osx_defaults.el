@@ -11,7 +11,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.6 2005/06/09 19:52:50 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.7 2005/06/10 22:12:56 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -492,7 +492,7 @@
  
 ; scroll just one line when hitting the bottom of the window
 			 (scroll-step 1)
-
+			 (scroll-conservatively 10000)
 ;; Start scrolling when 2 lines from top/bottom 
 			 (scroll-margin 1)
 
@@ -1487,6 +1487,7 @@ we put it on this frame."
  
      
 ; applications on OS X don't display a splash screen 
+ 
 (setq command-line-args  (append command-line-args (list "--no-splash")))
 (setq inhibit-startup-message t)
 
