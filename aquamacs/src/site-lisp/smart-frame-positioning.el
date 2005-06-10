@@ -21,7 +21,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.5 2005/06/09 19:52:50 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.6 2005/06/10 07:58:47 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -93,6 +93,7 @@ position in ``default-frame-alist''."
   :type 'boolean
   :require 'smart-frame-positioning
   :version 22.0
+  :group 'frames
 )
 
 (defcustom smart-frame-positioning-margin 20
@@ -101,6 +102,7 @@ pixels apart if possible."
   :type 'integer
   :require 'smart-frame-positioning
   :version 22.0
+  :group 'frames
 )
 
 (defun frame-total-pixel-height (f)

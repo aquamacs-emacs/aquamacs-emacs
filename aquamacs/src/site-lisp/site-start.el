@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: site-start.el,v 1.2 2005/06/09 19:52:50 davidswelt Exp $
+;; Last change: $Id: site-start.el,v 1.3 2005/06/10 07:58:47 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -27,8 +27,7 @@
 ;; Boston, MA 02111-1307, USA.
  
 ;; Copyright (C) 2005, David Reitter
-
-
+ 
 (require 'osx_defaults)
  
 ;; load auctex if present 

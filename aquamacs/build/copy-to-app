@@ -1,0 +1,37 @@
+#!/bin/sh
+
+# installs files into Emacs.app to make it Aquamacs
+
+dest=$2
+projdir=$1
+em=$dest/Contents/MacOS/Emacs
+ 
+
+mkdir $dest/Contents/Resources/site-lisp 2>/dev/null
+mkdir $dest/Contents/Resources/site-lisp/oneonone 2>/dev/null
+mkdir $dest/Contents/Resources/site-lisp/macosx 2>/dev/null
+
+
+cp -r $projdir/Emacs.icns $dest/Contents/Resources/Emacs.icns
+
+cp -r $projdir/aquamacs-splash-screen.jpg $dest/Contents/Resources/etc/
+
+cp -r $projdir/aquamacs/Info.plist $dest/Contents/
+
+cp -Rvp src/site-lisp/*.el $dest/Contents/Resources/site-lisp/
+cp -Rvp src/site-lisp/macosx/*.el $dest/Contents/Resources/site-lisp/macosx/
+cp -Rvp src/site-lisp/oneonone/*.el $dest/Contents/Resources/site-lisp/oneonone/
+
+$em -batch -f batch-byte-compile $dest/Contents/Resources/site-lisp/*.el $dest/Contents/Resources/site-lisp/macosx/*.el $dest/Contents/Resources/site-lisp/oneonone/*.el
+  
+# .el is too large
+gzip $dest/Contents/Resources/site-lisp/color-theme.el
+
+
+# replace hardlinks
+
+rm $dest/Contents/MacOS/bin/emacs
+rm $dest/Contents/MacOS/bin/emacs-22.0.50
+cd $dest/Contents/MacOS/bin/
+ln -s ../Emacs emacs
+ln -s ../Emacs emacs-22.0.50

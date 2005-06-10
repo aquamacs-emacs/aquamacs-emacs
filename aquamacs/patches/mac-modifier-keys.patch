@@ -1,0 +1,561 @@
+Index: macterm.c
+===================================================================
+RCS file: /cvsroot/emacs/emacs/src/macterm.c,v
+retrieving revision 1.115
+diff -c -r1.115 macterm.c
+*** macterm.c	13 May 2005 08:42:38 -0000	1.115
+--- macterm.c	29 May 2005 16:41:27 -0000
+***************
+*** 86,101 ****
+  #include "composite.h"
+  #include "coding.h"
+  
+! /* Set of macros that handle mapping of Mac modifier keys to emacs.  */
+! #define macCtrlKey     (NILP (Vmac_reverse_ctrl_meta) ? controlKey :	\
+! 			(NILP (Vmac_command_key_is_meta) ? optionKey : cmdKey))
+  #define macShiftKey    (shiftKey)
+! #define macMetaKey     (NILP (Vmac_reverse_ctrl_meta) ?			\
+! 			(NILP (Vmac_command_key_is_meta) ? optionKey : cmdKey) \
+! 			: controlKey)
+! #define macAltKey      (NILP (Vmac_command_key_is_meta) ? cmdKey : optionKey)
+  
+  #define mac_window_to_frame(wp) (((mac_output *) GetWRefCon (wp))->mFP)
+  
+  
+  /* Non-nil means Emacs uses toolkit scroll bars.  */
+--- 86,115 ----
+  #include "composite.h"
+  #include "coding.h"
+  
+! /* Set of macros that handle mapping of Mac modifier keys to emacs.  
+!    If any of the newer-style mac_*_modifier variables is set, these macros are basically out of function,
+!    they just map to the normal keys - except for Meta, which is then (ESC or) command-control-option.
+! */
+! 
+! #define macOldModifierSetting   (  NILP(Vmac_control_modifier) && NILP(Vmac_option_modifier) && NILP(Vmac_command_modifier)   )
+! 
+! #define macCtrlKey     (macOldModifierSetting ? \
+! 			(NILP(Vmac_reverse_ctrl_meta) ? controlKey :	\
+! 			       (NILP(Vmac_command_key_is_meta) ? optionKey : cmdKey)) : \
+! 			controlKey)
+  #define macShiftKey    (shiftKey)
+! 
+! #define macMetaKey     (macOldModifierSetting ? \
+! 			(NILP(Vmac_reverse_ctrl_meta) ?		\
+! 			 (NILP(Vmac_command_key_is_meta) ? optionKey : cmdKey) : controlKey) : \
+! 			(cmdKey | controlKey | optionKey))
+! 
+! #define macAltKey     (macOldModifierSetting ?  (NILP(Vmac_command_key_is_meta) ? cmdKey : optionKey) : optionKey)
+! 
+! #define macCmdKey (cmdKey)
+  
+  #define mac_window_to_frame(wp) (((mac_output *) GetWRefCon (wp))->mFP)
++ 
+  
+  
+  /* Non-nil means Emacs uses toolkit scroll bars.  */
+***************
+*** 234,240 ****
+  
+  /* The keysyms to use for the various modifiers.  */
+  
+! static Lisp_Object Qalt, Qhyper, Qsuper, Qmodifier_value;
+  
+  static Lisp_Object Qvendor_specific_keysyms;
+  
+--- 248,254 ----
+  
+  /* The keysyms to use for the various modifiers.  */
+  
+! static Lisp_Object Qalt, Qhyper, Qsuper, Qctrl, Qmeta, Qmodifier_value;
+  
+  static Lisp_Object Qvendor_specific_keysyms;
+  
+***************
+*** 4175,4193 ****
+  		     kEventAttributeNone, &event);
+    if (err == noErr)
+      {
+!       Point mouse_pos;
+  
+!       GetMouse (&mouse_pos);
+!       LocalToGlobal (&mouse_pos);
+        err = SetEventParameter (event, kEventParamMouseLocation, typeQDPoint,
+! 			       sizeof (Point), &mouse_pos);
+      }
+    if (err == noErr)
+      {
+        UInt32 modifiers = GetCurrentKeyModifiers ();
+  
+        err = SetEventParameter (event, kEventParamKeyModifiers, typeUInt32,
+! 			       sizeof (UInt32), &modifiers);
+      }
+    if (err == noErr)
+      err = PostEventToQueue (GetCurrentEventQueue (), event,
+--- 4189,4207 ----
+  		     kEventAttributeNone, &event);
+    if (err == noErr)
+      {
+!   Point mouse_pos;
+  
+!   GetMouse (&mouse_pos);
+!   LocalToGlobal (&mouse_pos);
+        err = SetEventParameter (event, kEventParamMouseLocation, typeQDPoint,
+! 		     sizeof (Point), &mouse_pos);
+      }
+    if (err == noErr)
+      {
+        UInt32 modifiers = GetCurrentKeyModifiers ();
+  
+        err = SetEventParameter (event, kEventParamKeyModifiers, typeUInt32,
+! 		     sizeof (UInt32), &modifiers);
+      }
+    if (err == noErr)
+      err = PostEventToQueue (GetCurrentEventQueue (), event,
+***************
+*** 4196,4202 ****
+      scroll_bar_timer_event_posted_p = 1;
+  
+    if (event)
+!     ReleaseEvent (event);
+  }
+  
+  static OSStatus
+--- 4210,4216 ----
+      scroll_bar_timer_event_posted_p = 1;
+  
+    if (event)
+!   ReleaseEvent (event);
+  }
+  
+  static OSStatus
+***************
+*** 4342,4348 ****
+  			       kControlIndicatorPart, &r);
+  
+        if (GC_NILP (bar->dragging))
+! 	XSETINT (bar->dragging, mouse_pos.v - r.top);
+  
+        top = mouse_pos.v - XINT (bar->dragging) - XINT (bar->track_top);
+        top_range = (XINT (bar->track_height) - (r.bottom - r.top)) *
+--- 4356,4362 ----
+  			       kControlIndicatorPart, &r);
+  
+        if (GC_NILP (bar->dragging))
+! 	  XSETINT (bar->dragging, mouse_pos.v - r.top);
+  
+        top = mouse_pos.v - XINT (bar->dragging) - XINT (bar->track_top);
+        top_range = (XINT (bar->track_height) - (r.bottom - r.top)) *
+***************
+*** 4388,4402 ****
+  	}
+  
+        if (unhilite_p)
+! 	HiliteControl (SCROLL_BAR_CONTROL_HANDLE (bar), 0);
+        else if (part != last_scroll_bar_part
+! 	       || scroll_bar_timer_event_posted_p)
+! 	{
+! 	  construct_scroll_bar_click (bar, part, timestamp, bufp);
+! 	  last_scroll_bar_part = part;
+! 	  HiliteControl (SCROLL_BAR_CONTROL_HANDLE (bar), part_code);
+! 	  set_scroll_bar_timer (SCROLL_BAR_CONTINUOUS_DELAY);
+! 	}
+      }
+  }
+  
+--- 4402,4416 ----
+  	}
+  
+        if (unhilite_p)
+! 	    HiliteControl (SCROLL_BAR_CONTROL_HANDLE (bar), 0);
+        else if (part != last_scroll_bar_part
+! 		   || scroll_bar_timer_event_posted_p)
+! 	    {
+! 	      construct_scroll_bar_click (bar, part, timestamp, bufp);
+! 	      last_scroll_bar_part = part;
+! 	      HiliteControl (SCROLL_BAR_CONTROL_HANDLE (bar), part_code);
+! 	      set_scroll_bar_timer (SCROLL_BAR_CONTINUOUS_DELAY);
+! 	    }
+      }
+  }
+  
+***************
+*** 7443,7455 ****
+  /* Contains the string "reverse", which is a constant for mouse button emu.*/
+  Lisp_Object Qreverse;
+  
+! /* True if using command key as meta key.  */
+  Lisp_Object Vmac_command_key_is_meta;
+  
+  /* Modifier associated with the option key, or nil for normal behavior. */
+  Lisp_Object Vmac_option_modifier;
+  
+! /* True if the ctrl and meta keys should be reversed.  */
+  Lisp_Object Vmac_reverse_ctrl_meta;
+  
+  /* True if the option and command modifiers should be used to emulate
+--- 7457,7477 ----
+  /* Contains the string "reverse", which is a constant for mouse button emu.*/
+  Lisp_Object Qreverse;
+  
+! /* True if using command key as meta key.  
+!    Deprecated; only use if macOldModifierSetting evaluates to true. */
+  Lisp_Object Vmac_command_key_is_meta;
+  
++ /* Modifier associated with the control key, or nil for normal behavior. */
++ Lisp_Object Vmac_control_modifier;
++ 
+  /* Modifier associated with the option key, or nil for normal behavior. */
+  Lisp_Object Vmac_option_modifier;
+  
+! /* Modifier associated with the command key, or nil for normal behavior. */
+! Lisp_Object Vmac_command_modifier;
+! 
+! /* True if the ctrl and meta keys should be reversed. 
+! 	Deprecated; only use if macOldModifierSetting evaluates to true. */
+  Lisp_Object Vmac_reverse_ctrl_meta;
+  
+  /* True if the option and command modifiers should be used to emulate
+***************
+*** 7468,7473 ****
+--- 7490,7502 ----
+  /* If Non-nil, the Mac "Control" key is passed on to the Mac Toolbox
+     for processing before Emacs sees it.  */
+  Lisp_Object Vmac_pass_control_to_system;
++ 
++ /* If  non-nil, the Mac \"Option\" key can be used to compose
++       characters as handled by the system and depending on the
++       keyboard layout chosen. Only if the Mac \"Command\" or \"Ctrl\" key
++       is depressed at the same time, Emacs evaluates the combination using
++       whatever modifier is set in mac-option-modifier.  */
++ Lisp_Object Vmac_pass_option_to_system;
+  #endif
+  
+  /* Set in term/mac-win.el to indicate that event loop can now generate
+***************
+*** 7523,7539 ****
+    unsigned int result = 0;
+    if (mods & macShiftKey)
+      result |= shift_modifier;
+!   if (mods & macCtrlKey)
+!     result |= ctrl_modifier;
+!   if (mods & macMetaKey)
+!     result |= meta_modifier;
+!   if (NILP (Vmac_command_key_is_meta) && (mods & macAltKey))
+!     result |= alt_modifier;
+!   if (!NILP (Vmac_option_modifier) && (mods & optionKey)) {
+!       Lisp_Object val = Fget(Vmac_option_modifier, Qmodifier_value);
+!       if (!NILP(val))
+            result |= XUINT(val);
+!   }
+  
+    return result;
+  }
+--- 7552,7626 ----
+    unsigned int result = 0;
+    if (mods & macShiftKey)
+      result |= shift_modifier;
+! 
+!   if (macOldModifierSetting)   /* compatibility with old-style modifier keys */
+!     {
+!       if (mods & macCtrlKey)
+! 	result |= ctrl_modifier;
+!       if (mods & macMetaKey)
+! 	result |= meta_modifier;
+! 
+!       if ( ( NILP(Vmac_pass_option_to_system) || 
+! 	     ( /* only for ctrl/cmd combos if option is handled by system */
+! 	      (mods & cmdKey) || (mods & controlKey) 
+! 	       )
+! 	     ) &&
+! 	   !NILP (Vmac_command_key_is_meta) &&
+! 	   (mods & macAltKey) 
+! 	)
+! 	result |= alt_modifier;
+!     } else
+!     {
+!       /* new-style modifier keys */ 
+! 
+!       /* if Vmac_pass_option_to_system is NIL, we fully process the Option
+! 	 key. Otherwise, we only process it if an additional Ctrl or Command
+! 	 is pressed. That way the system may convert the character to a 
+! 	 composed one.
+!       */
+! 
+!       if (
+! 	  (mods & optionKey) &&
+! 	  (
+! 	   ( NILP(Vmac_pass_option_to_system) || 
+! 	     ( 
+! 	      (mods & cmdKey) || (mods & controlKey) 
+! 	       )
+! 	     )
+! 	   )
+! 	  )
+! 	{
+! 	  if (!NILP (Vmac_option_modifier)) {
+! 	    Lisp_Object val = Fget(Vmac_option_modifier, Qmodifier_value);
+! 	    if (!NILP(val))
+! 	      result |= XUINT(val);
+! 	  } else { /* default behavior if modifier variable is set to nil: 
+! 		      do NOT assume alt modifier, because the OS already 
+! 		      sends a modified key (e.g. option-l -> @ 
+! 		      on German keyboard) */
+! 	      
+! 	      result |= alt_modifier;  
+! 	  }
+! 
+! 	}
+!       if (!NILP (Vmac_command_modifier) && (mods & cmdKey)) {
+! 	Lisp_Object val = Fget(Vmac_command_modifier, Qmodifier_value);
+! 	if (!NILP(val))
+            result |= XUINT(val);
+!       } else { /* default behavior if modifier variable is not set: 
+! 		  assign hyper*/
+! 	if (mods & macCmdKey)
+! 	  result |= hyper_modifier;
+!       }
+!       if (!NILP (Vmac_control_modifier) && (mods & controlKey)) {
+! 	Lisp_Object val = Fget(Vmac_control_modifier, Qmodifier_value);
+! 	if (!NILP(val))
+!           result |= XUINT(val);
+!       } else { /* default behavior if modifier variable is not set */
+! 	if (mods & macCtrlKey)
+! 	  result |= ctrl_modifier;
+!       }
+!     }
+  
+    return result;
+  }
+***************
+*** 9409,9418 ****
+  		inev.kind = NON_ASCII_KEYSTROKE_EVENT;
+  	      }
+  	    else
+! 	      {
+! 		if (er.modifiers & (controlKey |
+! 				    (NILP (Vmac_command_key_is_meta) ? optionKey
+! 				     : cmdKey)))
+  		  {
+  		    /* This code comes from Keyboard Resource,
+  		       Appendix C of IM - Text.  This is necessary
+--- 9496,9514 ----
+  		inev.kind = NON_ASCII_KEYSTROKE_EVENT;
+  	      }
+  	    else
+! 	      { 
+! 		if  (er.modifiers & (controlKey | 
+! 				     (NILP (Vmac_pass_option_to_system) ? optionKey : 0) | 
+!  				     (
+!  				      (macOldModifierSetting ?  
+!  				       (NILP (Vmac_command_key_is_meta) ? 
+!  					optionKey : cmdKey
+!  					) 
+!  				       : cmdKey
+!  				       )
+!  				      )  
+!  				     )
+!  		     )
+  		  {
+  		    /* This code comes from Keyboard Resource,
+  		       Appendix C of IM - Text.  This is necessary
+***************
+*** 9420,9426 ****
+  		       translation when option or command is pressed.
+  		       It also does not translate correctly
+  		       control-shift chars like C-% so mask off shift
+! 		       here also */
+  		    int new_modifiers = er.modifiers & 0xe600;
+  		    /* mask off option and command */
+  		    int new_keycode = keycode | new_modifiers;
+--- 9516,9529 ----
+  		       translation when option or command is pressed.
+  		       It also does not translate correctly
+  		       control-shift chars like C-% so mask off shift
+! 		       here also.
+! 
+! 		       For combinations with the option key (alt), this is only
+! 		       done if either command or control are used additionally,
+! 		       in which case this isn't handled 
+! 		       or if mac-pass-option-to-system is nil  -- in order
+! 		       to preserve key combinations translated by the OS, such as Alt-3.
+! 		    */
+  		    int new_modifiers = er.modifiers & 0xe600;
+  		    /* mask off option and command */
+  		    int new_keycode = keycode | new_modifiers;
+***************
+*** 9428,9458 ****
+  		    unsigned long some_state = 0;
+  		    inev.code = KeyTranslate (kchr_ptr, new_keycode,
+  					      &some_state) & 0xff;
+  		  }
+! 		else if (!NILP (Vmac_option_modifier)
+! 			 && (er.modifiers & optionKey))
+! 		  {
+! 		    /* When using the option key as an emacs modifier,
+! 		       convert the pressed key code back to one
+! 		       without the Mac option modifier applied. */
+! 		    int new_modifiers = er.modifiers & ~optionKey;
+! 		    int new_keycode = keycode | new_modifiers;
+! 		    Ptr kchr_ptr = (Ptr) GetScriptManagerVariable (smKCHRCache);
+! 		    unsigned long some_state = 0;
+! 		    inev.code = KeyTranslate (kchr_ptr, new_keycode,
+! 					      &some_state) & 0xff;
+! 		  }
+! 		else
+  		  inev.code = er.message & charCodeMask;
+! 		inev.kind = ASCII_KEYSTROKE_EVENT;
+  	      }
+  	  }
+! 
+  #if USE_CARBON_EVENTS
+  	  inev.modifiers = mac_event_to_emacs_modifiers (eventRef);
+  #else
+  	  inev.modifiers = mac_to_emacs_modifiers (er.modifiers);
+  #endif
+  	  XSETFRAME (inev.frame_or_window, mac_focus_frame (dpyinfo));
+  	  inev.timestamp = er.when * (1000 / 60);  /* ticks to milliseconds */
+  	  break;
+--- 9531,9552 ----
+  		    unsigned long some_state = 0;
+  		    inev.code = KeyTranslate (kchr_ptr, new_keycode,
+  					      &some_state) & 0xff;
++  
+  		  }
+! 		 else 
+  		  inev.code = er.message & charCodeMask;
+! 
+! 		inev.kind = ASCII_KEYSTROKE_EVENT; 
+  	      }
+  	  }
+! 	  
+  #if USE_CARBON_EVENTS
+  	  inev.modifiers = mac_event_to_emacs_modifiers (eventRef);
+  #else
+  	  inev.modifiers = mac_to_emacs_modifiers (er.modifiers);
+  #endif
++  
++ 
+  	  XSETFRAME (inev.frame_or_window, mac_focus_frame (dpyinfo));
+  	  inev.timestamp = er.when * (1000 / 60);  /* ticks to milliseconds */
+  	  break;
+***************
+*** 10101,10106 ****
+--- 10195,10204 ----
+  #if TARGET_API_MAC_CARBON
+    init_required_apple_events ();
+  
++   Qctrl = intern ("ctrl");
++   Fput (Qctrl, Qmodifier_value, make_number (ctrl_modifier));
++   Qmeta = intern ("meta");
++   Fput (Qmeta, Qmodifier_value, make_number (meta_modifier)); 
+  #if USE_CARBON_EVENTS
+  #ifdef MAC_OSX
+    init_service_handler ();
+***************
+*** 10151,10156 ****
+--- 10249,10257 ----
+  #ifdef MAC_OSX
+    Fprovide (intern ("mac-carbon"), Qnil);
+  #endif
++ /* Deprecated variables to configure modifier key assignment.
++ 	Retained for backward-compatibility. */
++ 	
+  
+    staticpro (&Qreverse);
+    Qreverse = intern ("reverse");
+***************
+*** 10191,10209 ****
+  
+    DEFVAR_LISP ("mac-command-key-is-meta", &Vmac_command_key_is_meta,
+      doc: /* Non-nil means that the command key is used as the Emacs meta key.
+! Otherwise the option key is used.  */);
+    Vmac_command_key_is_meta = Qt;
+  
+    DEFVAR_LISP ("mac-option-modifier", &Vmac_option_modifier,
+      doc: /* Modifier to use for the Mac alt/option key.  The value can
+  be alt, hyper, or super for the respective modifier.  If the value is
+! nil then the key will act as the normal Mac option modifier.  */);
+    Vmac_option_modifier = Qnil;
+  
+!   DEFVAR_LISP ("mac-reverse-ctrl-meta", &Vmac_reverse_ctrl_meta,
+!     doc: /* Non-nil means that the control and meta keys are reversed.  This is
+! useful for non-standard keyboard layouts.  */);
+!   Vmac_reverse_ctrl_meta = Qnil;
+  
+    DEFVAR_LISP ("mac-emulate-three-button-mouse",
+  	       &Vmac_emulate_three_button_mouse,
+--- 10292,10347 ----
+  
+    DEFVAR_LISP ("mac-command-key-is-meta", &Vmac_command_key_is_meta,
+      doc: /* Non-nil means that the command key is used as the Emacs meta key.
+! Otherwise the option key is used. This variable is DEPRECATED. 
+! It is only in effect if all of the variables mac-*-modifier are nil. */);
+    Vmac_command_key_is_meta = Qt;
++   
++   DEFVAR_LISP ("mac-reverse-ctrl-meta", &Vmac_reverse_ctrl_meta,
++     doc: /* Non-nil means that the control and meta keys are reversed.  This is
++ useful for non-standard keyboard layouts. This variable is DEPRECATED. 
++ Backwards-compatibility: It is only in effect if none of the variables 
++ mac-{command|control|option}-modifier is non-nil. */);
++   Vmac_reverse_ctrl_meta = Qnil;
++ 
++ 
++ /* Variables to configure modifier key assignment.  */
++ 	
++   DEFVAR_LISP ("mac-control-modifier", &Vmac_control_modifier,
++     doc: /* Modifier to use for the Mac control key.  The value can
++ be alt, hyper, or super for the respective modifier.  If the value is
++ nil then the key will act as the normal Mac control modifier.  
++ Backwards-compatibility: If all values of 
++ mac-{command|control|option}-modifier are nil, the deprecated
++ default assignment determined by mac-command-key-is-meta and
++ mac-reverse-ctrl-meta is used. */);
++   Vmac_control_modifier = Qnil;
+  
+    DEFVAR_LISP ("mac-option-modifier", &Vmac_option_modifier,
+      doc: /* Modifier to use for the Mac alt/option key.  The value can
+  be alt, hyper, or super for the respective modifier.  If the value is
+! nil then the key will act as the normal Mac option modifier, and the option
+! key can be used to compose characters depending on the chosen Mac keyboard
+! setting. 
+! Note that mac-pass-option-to-system takes precedence over this setting. If 
+! mac-pass-option-to-system is non-nil, simple key combinations with Option
+! will be handled by the system in order to produce characters, and only
+! combinations in conjunction with Command or Control will let Emacs see
+! the modifier that is assigned to the Option key. 
+! Backwards-compatibility: If all values of 
+! mac-{command|control|option}-modifier are nil, the deprecated default 
+! assignment determined by mac-command-key-is-meta and
+! mac-reverse-ctrl-meta is used.  */);
+    Vmac_option_modifier = Qnil;
+  
+!   DEFVAR_LISP ("mac-command-modifier", &Vmac_command_modifier,
+!     doc: /* Modifier to use for the Mac command key.  The value can
+! be alt, hyper, or super for the respective modifier. If the value is
+! nil then the key will act as the Emacs 'hyper' modifier. 
+! Backwards-compatibility: If all values of 
+! mac-{command|control|option}-modifier are nil, the deprecated
+! default assignment determined by mac-command-key-is-meta and
+! mac-reverse-ctrl-meta is used.  */);
+!   Vmac_command_modifier = Qnil;
+  
+    DEFVAR_LISP ("mac-emulate-three-button-mouse",
+  	       &Vmac_emulate_three_button_mouse,
+***************
+*** 10233,10238 ****
+--- 10371,10384 ----
+  Toolbox for processing before Emacs sees it.  */);
+    Vmac_pass_control_to_system = Qt;
+  
++   DEFVAR_LISP ("mac-pass-option-to-system", &Vmac_pass_option_to_system,
++    doc: /* If  non-nil, the Mac \"Option\" key can be used to compose
++       characters as handled by the system and depending on the
++       keyboard layout chosen. Only if the Mac \"Command\" or \"Ctrl\" key
++       is depressed at the same time, Emacs evaluates the combination using
++       whatever modifier is set in mac-option-modifier.  */);
++   Vmac_pass_option_to_system = Qt;
++ 
+  #endif
+  
+    DEFVAR_LISP ("mac-allow-anti-aliasing", &Vmac_use_core_graphics,
