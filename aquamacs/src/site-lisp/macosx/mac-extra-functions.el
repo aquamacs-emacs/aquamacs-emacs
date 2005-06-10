@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.4 2005/06/09 19:52:50 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.5 2005/06/10 22:12:23 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -49,10 +49,10 @@
   )
 
 (defun mac-key-save-file-as (filename &optional wildcards)
-  "Open a file using standard file open dialog."
-  (interactive
-   (let ((last-nonmenu-event nil))
-     (write-file)))   
+  "Save the buffer to a specific file."
+  (interactive "G")
+   
+  (write-file filename)
 )
 
  
