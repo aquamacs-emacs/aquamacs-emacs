@@ -11,7 +11,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.7 2005/06/10 22:12:56 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.8 2005/06/13 22:47:22 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -70,26 +70,46 @@
                 ":~/Library/Application Support/Emacs/info"
                 ":/Library/Application Support/Emacs/info"))
  
-
-
-
+ 
 
 
 ;; emulate a three button mouse with Option / Control modifiers 
 ; (setq mac-emulate-three-button-mouse t)
 ; seems to prevent setting the secondary selection, so turned off for now
 
-;; Stop Emacs from asking for "y-e-s", when a "y" will do.
-(fset 'yes-or-no-p 'y-or-n-p)
+;; Stop Emacs from asking for "y-e-s", when a "y" will do. 
+
+(fset 'old-yes-or-no-p (symbol-function 'yes-or-no-p))
+
+(defvar aquamacs-quick-yes-or-no-prompt t
+  "If non-nil, the user does not have to type in yes or no at
+yes-or-no prompts - y or n will do."
+  :group 'Aquamacs
+  )
+(defun aquamacs-yes-or-no-p (arg)
+  (if aquamacs-quick-yes-or-no-prompt
+      (y-or-n-p arg)
+    (old-yes-or-no-p arg)
+    )
+  )
+(fset 'yes-or-no-p 'aquamacs-yes-or-no-p)
 
 ;; No more annoying bells all the time
 
 (aquamacs-set-defaults 
  '((ring-bell-function (lambda () (message "")))
-  (visible-bell nil)
   )
 )
-
+;; but please ring the bell when there is a real error
+(defadvice error (around ring-bell (&rest args) activate)
+ 
+  (let ((ring-bell-function nil)
+	)
+    (ding)
+    ad-do-it
+    )
+  ) 
+ 
 
 ; do this early, so we can override settings
 (require 'aquamacs-frame-setup)
@@ -102,7 +122,7 @@
 (global-set-key `[(control ,osxkeys-command-key left)] 'shrink-frame-horizontally)
     
 
-(require 'mac-default-fontsets)
+(require 'aquamacs-mac-fontsets)
  
 (setq mac-allow-anti-aliasing t) 
 
@@ -249,235 +269,11 @@
  
 
 
-;; this is a big hack like most other things
-(defun change-menu-text (keymap key str)
- 
 
-  (if (eq 'string (type-of (car (cdr (assq key (lookup-key global-map keymap))))))
-    
-      (setcar (cdr (assq key (lookup-key global-map keymap)))
-	      str
-	      )
-    (if (eq 'string (type-of (car (cdr (cdr (assq key (lookup-key global-map keymap)))))))
-	(setcar (cdr (cdr (assq key (lookup-key global-map keymap))))
-	      str
-	      )
-
-    (setcar (cdr (assq key (lookup-key global-map keymap)))
-	    str
-	    )
-
-)
-    )
-  (define-key global-map (vconcat (append keymap (list key)))
-    (cdr (assq key (lookup-key global-map keymap)))
-    )
-
-  )
-
- 
-;; apple command character is unicode x2318  
-;; 
-(setq apple-char (string (decode-char 'ucs #X2318)))
-
-;; The following is a big hack. The mac port can't currently cope 
-;; with putting the command key combos in the menu, for various 
-;; reasons (1. they are just secondary alternatives, 2. command is defined
-;; as 'hyper' and only known as such)
-
-; redefine New
-; (define-key menu-bar-edit-menu [mark-whole-buffer] (cdr (assq 'mark-whole-buffer (lookup-key global-map [menu-bar edit]))))
-
-(define-key menu-bar-file-menu [new-file]
-  '(menu-item (format  "New                            %sN"  apple-char)  new-frame-with-new-scratch
-	      :enable (not (window-minibuffer-p
-			    (frame-selected-window menu-updating-frame)))
-	      :help "Read or create a file and edit it"))
- 
-
-;(change-menu-text-2 [menu-bar application] 'quit (format  "Quit Emacs                %sQ"  apple-char))
-(change-menu-text [menu-bar file] 'open-file (format  "Open File...                 %sO"  apple-char)) 
-(change-menu-text [menu-bar file] 'exit-emacs (format  "Quit Emacs                %sQ"  apple-char))
-;(change-menu-text [menu-bar application] 'quit (format  "Quit Emacs                %sQ"  apple-char))
-(change-menu-text [menu-bar edit] 'copy (format  "Copy                 %sC"  apple-char))
-(change-menu-text [menu-bar edit] 'paste (format  "Paste                 %sV"  apple-char))
-(change-menu-text [menu-bar edit] 'undo (format  "Undo                 %sZ"  apple-char))
-(easy-menu-add-item  nil '("Edit")
-  (vector (format "Redo                 %s-S-Z" apple-char) 'redo) 'cut)
-(easy-menu-add-item  nil '("Edit")
-  ["-" nil nil] 'cut)
-
-(change-menu-text [menu-bar edit] 'cut (format  "Cut                    %sX"  apple-char))
-
-;; still a problem with this
-(change-menu-text [menu-bar edit] 'mark-whole-buffer (format  "Select All           %sA"  apple-char))
-(change-menu-text [menu-bar edit search] 'search-forward (format  "Search forward              %sF"  apple-char))
-(change-menu-text [menu-bar edit search] 'repeat-search-fwd (format  "Repeat forward              %s"  apple-char))
-
-(change-menu-text [menu-bar edit] 'fill "Reformat (fill)") 
-
-;; this needs an extension to show the keyboard shortcut 
-;; interesting extensions to menu-item: (:visible nil), (:key-sequence)
-
-
-;; we will set the CUA mode directly (below).
-;; the existing menu item is badly worded and the C-c/v/x don't apply anyways
-(easy-menu-remove-item global-map  '("menu-bar" "options") 'cua-mode)
-
-
-(change-menu-text [menu-bar options] 'mouse-set-font "Set Font...")
-
-
-;; Quit entry shouldnt be there
-(easy-menu-remove-item global-map  '("menu-bar" "file") 'separator-exit)
-(easy-menu-remove-item global-map  '("menu-bar" "file") 'exit-emacs)
-
-;; About entry is now in application menu
-(easy-menu-remove-item global-map  '("menu-bar" "Help") 'about)
-
-;; this is to set the action for the "Quit" function (Emacs menu)
-(global-set-key [mac-application-quit] 'save-buffers-kill-emacs)
- 
-
-
-;; HELP MENU
-
-; these problems here are for X-based systems etc. and not relevant
-; for Aquamacs users
-(easy-menu-remove-item global-map  '("menu-bar" "Help") 'emacs-problems)
- 
- 
-;; register the help manuals
-(defun init-user-help ()
-  (if (condition-case nil 
-	  (file-exists-p (car command-line-args)) 
-	(error nil))
-      (shell-command (concat "python -c \"from Carbon import AH; AH.AHRegisterHelpBook('" (substring (car command-line-args) 0 -21) "')\" >/dev/null 2>/dev/null") t t) 
-    ; else
-    (message "Emacs.app has been moved or renamed. Please restart Emacs!")
-  )
-)
-
-;; it's imporant to make sure that the following are in the Info.plist file:
-;; 	<key>CFBundleHelpBookFolder</key>
-;; 	 <array>
-;; 	   <string>Aquamacs Help</string>
-;; 	   <string>Emacs Manual</string>
-;; 	</array>
-;; 	 <key>CFBundleHelpBookName</key>
-;; 	 <array>
-;; 	   <string>Aquamacs Help</string>
-;; 	   <string>Emacs Manual</string>
-;; 	</array>
-;; it is vital that the folder name ("Aquamacs Help") is the same as
-;; given above, and that it is also in a META tag in the help file.
-;; spelling of the META tag (upper case) might be important.
-
-; Call up help book
-(defun aquamacs-user-help ()
-  (interactive)
-
-  (init-user-help) ; make sure it's registered
- 
-  (or (shell-command "python -c \"from Carbon import AH; AH.AHGotoPage('Aquamacs Help', None, None)\"  >/dev/null 2>/dev/null" t t)
-      (message "Sorry, help function unavailable (python, OS problem?)")
-  )
-)
-(defun aquamacs-emacs-manual ()
-  (interactive)
-
-  (init-user-help) ; make sure it's registered
- 
-  (or (shell-command "python -c \"from Carbon import AH; AH.AHGotoPage('Emacs Manual', None, None)\"  >/dev/null 2>/dev/null" t t)
-      (message "Sorry, help function unavailable (python, OS problem?)")
-  )
-)
- 
- (defun aquamacs-user-wiki ()
-  (interactive)
-  (browse-url "http://aquamacs.sourceforge.net/wiki/")
-) 
- (defun aquamacs-homepage ()
-  (interactive)
-  (browse-url "http://aquamacs.sourceforge.net/")
-) 
-
-(easy-menu-add-item  nil '("Help")
-  (vector (format "Aquamacs Help                    %s?"  apple-char) 'aquamacs-user-help) 'emacs-tutorial)
-
-(easy-menu-add-item  nil '("Help")
-  (vector (format "Aquamacs Tips Wiki Online"  apple-char) 'aquamacs-user-wiki) 'emacs-tutorial)
- 
-
-(easy-menu-add-item  nil '("Help")
-  (vector "Aquamacs Homepage" 'aquamacs-homepage) 'emacs-tutorial)
- 
-(easy-menu-add-item  nil '("Help")
-  (vector (format "Emacs Manual                   %s-S-?"  apple-char) 'aquamacs-emacs-manual) 'emacs-tutorial)
- 
-
- (defun emacs-user-wiki ()
-  (interactive)
-  (browse-url "http://www.emacswiki.org/")
-) 
-
-
-(easy-menu-add-item  nil '("Help")
-  (vector "Emacs Wiki Online" 'emacs-user-wiki) 'emacs-tutorial)
- 
-
-(easy-menu-add-item  nil '("Help")
-  ["-" nil nil] 'emacs-tutorial)
-  
-
- 
-
+(require 'aquamacs-menu)
 (require 'aquamacs-bug) ;; successfully send bug reports on the Mac
 
 
-;; ---------------------------------------------------------
-;; PERL EDITING and other modes
-
-(autoload 'perl-mode "cperl-mode" "alternate mode for editing Perl programs" t)
-;(setq cperl-hairy t)
-(defalias 'perl-mode 'cperl-mode)
- (setq cperl-invalid-face nil) ;(uherbst)
-
-; (setq cperl-electric-keywords nil)   
-; (setq cperl-font-lock t)                   ;; Turns on font lock in CPerl mode -- which colors text
-; (setq cperl-electric-lbrace-space t)       ;; *Non-nil (and non-null) means { after $ in CPerl 
-                                            ;; buffers should be preceded by ` '.
-                                            ;; Can be overwritten by 'cperl-hairy' if nil.
-; (setq cperl-electric-parens nil)             ;; *Non-nil (and non-null) means parentheses should 
-                                            ;; be electric in CPerl.  Can be overwritten by 
-                                            ;; 'cperl-hairy' if nil.
-; (setq cperl-electric-linefeed t)
-; (setq cperl-electric-keywords nil)
-; (setq cperl-info-on-command-no-prompt t)
-; (setq cperl-clobber-lisp-bindings t)
-; (setq cperl-lazy-help-time t)
- (setq cperl-highlight-variables-indiscriminately t)
-
-
-
-;; both prolog and perl files are often called .pl;
-;; this tries to do the right thing.
-(defun prolog-or-perl-mode () (interactive)
-  (if
-      (or (string-match "/perl\\b" (buffer-string)) ; file with perl header
-          (= 1 (point-max)))            ; new file
-      (progn    
-        (cperl-mode)
-        (message "Ambiguous suffix .pl resolved to perl mode."))
-    (progn 
-      (prolog-mode)
-      (message "Ambiguous suffix .pl resolved to prolog mode.")))
-  (sit-for 1))
- 
-(autoload 'applescript-mode "applescript-mode" "major mode for editing AppleScript source." t)
-(setq auto-mode-alist
-      (cons '("\\.applescript$" . applescript-mode) auto-mode-alist)
-      )
 
 (aquamacs-set-defaults '(
 
@@ -766,6 +562,7 @@ Each element of LIST has to be of the form (symbol . fontset)."
    (change-log-mode  (font . "fontset-lucida14"))
    (tex-mode  (font . "fontset-lucida14"))
    (paragraph-indent-text-mode  (font . "fontset-lucida14"))
+   (speedbar-mode (minibuffer-auto-raise . nil))
    ))
   "Association list to set mode-specific themes. Each element 
 is a list of elements of the form (mode-name theme), where
@@ -1159,7 +956,29 @@ to be appropriate for its first buffer"
 
 ;; make sure that when a minibuffer is ready to take input, 
 ;; the appropriate frame is raised (made visible)
-(setq minibuffer-auto-raise t)
+;; using minibuffer-auto-raise globally has unpleasant results,
+;; with frames losing focus all the time. speedbar doesn't work either.
+(defun auto-raise-if-all-hidden ()
+  (setq minibuffer-auto-raise (not (visible-frame-list))) 
+)
+(add-hook 'menu-bar-update-hook 'auto-raise-if-all-hidden)
+
+
+;; the following doesn't work
+;; (defun autoraise-off-if-no-minibuffer (frame)
+;;   (print (frame-parameter frame 'minibuffer))
+;;   (and 
+;;    (not (memq (frame-parameter frame 'minibuffer)
+;; 	      (list 'only t)
+;; 	      )
+;; 	)
+;;    (make-variable-frame-local 'minibuffer-auto-raise)
+;;    (modify-frame-parameters frame '((minibuffer-auto-raise)))
+;;    )
+;;   )
+;; (add-hook 'after-make-frame-functions 'autoraise-off-if-no-minibuffer)
+
+
 
 ;; we'd like to open new frames for some stuff
 
