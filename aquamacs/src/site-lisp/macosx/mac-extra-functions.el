@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.5 2005/06/10 22:12:23 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.6 2005/06/13 22:47:16 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -47,14 +47,6 @@
      (find-file-read-args "Find existing file: " t)))
   (find-file-existing filename wildcards)
   )
-
-(defun mac-key-save-file-as (filename &optional wildcards)
-  "Save the buffer to a specific file."
-  (interactive "G")
-   
-  (write-file filename)
-)
-
  
 
  (defun mac-save-file-as ()
@@ -72,6 +64,34 @@
      ))
   
 
+;; when saving a file, set its creator code
+
+(defcustom aquamacs-set-creator-codes-after-writing-files t
+  "If t, the creator code of a file is set after it is written.
+This way, Emacs will open the files it writes when opened per
+double-click in Finder."
+:type 'boolean
+:group 'Aquamacs
+;; :require mac-extra-functions
+;; no require, because if set in customizations, it's set to nil
+;; in which case not loading this package doesn't have a negative
+;; effect
+)
+
+(defun mac-set-creator-code ()
+  (if aquamacs-set-creator-codes-after-writing-files
+      (if buffer-file-name ;; added security
+	  (do-applescript (format "try
+tell application \"Finder\"
+set the creator type of POSIX file \"%s\" to \"EMAx\"
+end tell
+end try" buffer-file-name)
+			  )
+	t
+	)
+    )
+  )
+(add-hook 'after-save-hook 'mac-set-creator-code)
 
 ;; copied here from osx-key-mode.el by Seiji Zenitani
 ;; modified to work with OS X 10.4 by David Reitter
