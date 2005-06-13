@@ -1,0 +1,355 @@
+--- lisp/frame.el.orig	2005-06-09 15:02:01.265625000 +0900
++++ lisp/frame.el	2005-06-13 10:51:46.874250000 +0900
+@@ -927,6 +927,22 @@
+   (modify-frame-parameters (selected-frame)
+ 			   (list (cons 'border-color color-name))))
+ 
++(when (frame-parameter nil 'active-alpha)
++  (defun set-active-alpha (alpha-value)
++    "Set the opacity of the selected frame in active state to ALPHA.
++When called interactively, prompt for the value of the opacity to set.
++To get the frame's current active alpha value state, use `frame-parameters'."
++    (interactive "nactive alpha: ")
++    (modify-frame-parameters (selected-frame)
++                             (list (cons 'active-alpha alpha-value))))
++  (defun set-inactive-alpha (alpha-value)
++    "Set the opacity of the selected frame in inactive state to ALPHA.
++When called interactively, prompt for the value of the opacity to set.
++To get the frame's current inactive alpha value state, use `frame-parameters'."
++    (interactive "ninactive alpha: ")
++    (modify-frame-parameters (selected-frame)
++                             (list (cons 'inactive-alpha alpha-value)))))
++
+ (defun auto-raise-mode (arg)
+   "Toggle whether or not the selected frame should auto-raise.
+ With arg, turn auto-raise mode on if and only if arg is positive.
+--- src/frame.c.orig	2005-06-09 15:02:01.515625000 +0900
++++ src/frame.c	2005-06-09 15:25:13.796875000 +0900
+@@ -106,6 +106,12 @@
+ Lisp_Object Qleft_fringe, Qright_fringe;
+ Lisp_Object Qbuffer_predicate, Qbuffer_list;
+ Lisp_Object Qtty_color_mode;
++#if (MAC_OS_X_VERSION_MAX_ALLOWED >= 1020) || defined (USE_TRANSPARENCY)
++#if defined (HAVE_CARBON) || defined (WINDOWSNT)
++Lisp_Object Qactive_alpha;
++Lisp_Object Qinactive_alpha;
++#endif
++#endif /* USE_TRANSPARENCY */
+ 
+ Lisp_Object Qfullscreen, Qfullwidth, Qfullheight, Qfullboth;
+ 
+@@ -2575,6 +2581,12 @@
+   {"right-fringe",		&Qright_fringe},
+   {"wait-for-wm",		&Qwait_for_wm},
+   {"fullscreen",                &Qfullscreen},
++#if (MAC_OS_X_VERSION_MAX_ALLOWED >= 1020) || defined (USE_TRANSPARENCY)
++#if defined (HAVE_CARBON) || defined (WINDOWSNT)
++  {"active-alpha",		&Qactive_alpha},
++  {"inactive-alpha",		&Qinactive_alpha},
++#endif
++#endif /* USE_TRANSPARENCY */
+ };
+ 
+ #ifdef HAVE_WINDOW_SYSTEM
+--- src/frame.h.orig	2005-06-09 15:02:01.671875000 +0900
++++ src/frame.h	2005-06-09 15:25:14.062500000 +0900
+@@ -451,6 +451,13 @@
+   /* Additional space to put between text lines on this frame.  */
+   int extra_line_spacing;
+ 
++#if (MAC_OS_X_VERSION_MAX_ALLOWED >= 1020) || defined (USE_TRANSPARENCY)
++#if defined (HAVE_CARBON) || defined (WINDOWSNT)
++  /* Opacity of the Frame, which should be a number between 0.0 and 1.0  */
++  float active_alpha, inactive_alpha;
++#endif
++
++#endif /* USE_TRANSPARENCY */
+   /* Set to non-zero in change_frame_size when size of frame changed
+      Clear the frame in clear_garbaged_frames if set.  */
+   unsigned resized_p : 1;
+@@ -1003,6 +1010,12 @@
+ extern Lisp_Object Qline_spacing;
+ extern Lisp_Object Qwait_for_wm;
+ extern Lisp_Object Qfullscreen;
++#if (MAC_OS_X_VERSION_MAX_ALLOWED >= 1020) || defined (USE_TRANSPARENCY)
++#if defined (HAVE_CARBON) || defined (WINDOWSNT)
++extern Lisp_Object Qactive_alpha;
++extern Lisp_Object Qinactive_alpha;
++#endif
++#endif /* USE_TRANSPARENCY */
+ 
+ extern Lisp_Object Qleft_fringe, Qright_fringe;
+ extern Lisp_Object Qheight, Qwidth;
+@@ -1074,6 +1087,12 @@
+ 					    Lisp_Object));
+ extern void x_set_scroll_bar_width P_ ((struct frame *, Lisp_Object,
+ 					Lisp_Object));
++#if (MAC_OS_X_VERSION_MAX_ALLOWED >= 1020) || defined (USE_TRANSPARENCY)
++#if defined (HAVE_CARBON) || defined (WINDOWSNT)
++extern void x_set_active_alpha P_ ((struct frame *, Lisp_Object, Lisp_Object));
++extern void x_set_inactive_alpha P_ ((struct frame *, Lisp_Object, Lisp_Object));
++#endif
++#endif /* USE_TRANSPARENCY */
+ 
+ extern Lisp_Object x_icon_type P_ ((struct frame *));
+ 
+--- src/macfns.c.orig	2005-06-09 15:02:01.968750000 +0900
++++ src/macfns.c	2005-06-09 15:25:14.468750000 +0900
+@@ -2026,6 +2026,61 @@
+ #endif /* not MAC_OSX */
+ }
+ 
++#if (MAC_OS_X_VERSION_MAX_ALLOWED >= 1020)
++/* Change the opecity of frame F to ALPHA.
++   ALPHA must be a number between 0.0 and 1.0
++
++   The frame will become completely invisible If ALPHA is 0.0,
++   while the value of 1.0 makes it completely opaque.  */
++
++void
++x_set_active_alpha (f, alpha, old_alpha)
++     struct frame *f;
++     Lisp_Object alpha, old_alpha;
++{
++  /* Don't change the alpha if it's already ALPHA.  */
++  if (EQ (alpha, f->active_alpha))
++    return;
++
++  if (NILP (alpha))
++    return;
++
++  if (FLOATP (alpha))
++  {
++    f->active_alpha = XFLOAT_DATA (alpha);
++
++#if TARGET_API_MAC_CARBON
++    BLOCK_INPUT;
++
++    SetWindowAlpha (f->output_data.mac->mWP, f->active_alpha);
++
++    UNBLOCK_INPUT;
++#endif
++  }
++
++  return;
++}
++
++void
++x_set_inactive_alpha (f, alpha, old_alpha)
++     struct frame *f;
++     Lisp_Object alpha, old_alpha;
++{
++  /* Don't change the alpha if it's already ALPHA.  */
++  if (EQ (alpha, f->inactive_alpha))
++    return;
++
++  if (NILP (alpha))
++    return;
++
++  if (FLOATP (alpha))
++  {
++    f->inactive_alpha = XFLOAT_DATA (alpha);
++  }
++
++  return;
++}
++#endif /* USE_TRANSPARENCY */
+ 
+ /* Subroutines of creating a frame.  */
+ 
+@@ -2736,6 +2791,12 @@
+   x_default_parameter (f, parms, Qscroll_bar_width, Qnil,
+ 		       "scrollBarWidth", "ScrollBarWidth",
+ 		       RES_TYPE_NUMBER);
++#if (MAC_OS_X_VERSION_MAX_ALLOWED >= 1020)
++  x_default_parameter (f, parms, Qactive_alpha, make_float(1.0),
++		       "activeAlpha", "ActiveAlpha", RES_TYPE_FLOAT);
++  x_default_parameter (f, parms, Qinactive_alpha, make_float(1.0),
++		       "inactiveAlpha", "InactiveAlpha", RES_TYPE_FLOAT);
++#endif /* USE_TRANSPARENCY */
+ 
+   /* Dimensions, especially FRAME_LINES (f), must be done via change_frame_size.
+      Change will not be effected unless different from the current
+@@ -4444,6 +4505,10 @@
+   x_set_fringe_width,
+   0, /* x_set_wait_for_wm, */
+   x_set_fullscreen,
++#if (MAC_OS_X_VERSION_MAX_ALLOWED >= 1020)
++  x_set_active_alpha,
++  x_set_inactive_alpha,
++#endif /* USE_TRANSPARENCY */
+ };
+ 
+ void
+--- src/macterm.c.orig	2005-06-09 15:02:02.421875000 +0900
++++ src/macterm.c	2005-06-09 15:25:15.171875000 +0900
+@@ -1771,6 +1771,15 @@
+   return FONT_TYPE_UNKNOWN;
+ }
+ 
++#if (MAC_OS_X_VERSION_MAX_ALLOWED >= 1020)
++static void
++x_set_frame_alpha (f, activate_p)
++     struct frame *f;
++     int activate_p;
++{
++  SetWindowAlpha (f->output_data.mac->mWP, activate_p? f->active_alpha: f->inactive_alpha);
++}
++#endif /* USE_TRANSPARENCY */
+ 
+ 
+ /***********************************************************************
+@@ -3489,6 +3498,9 @@
+     ActivateControl (root_control);
+   UNBLOCK_INPUT;
+   x_update_cursor (f, 1);
++#if (MAC_OS_X_VERSION_MAX_ALLOWED >= 1020) 
++  x_set_frame_alpha (f, 1);
++#endif /* USE_TRANSPARENCY */
+ }
+ 
+ static void
+@@ -3504,6 +3516,9 @@
+     DeactivateControl (root_control);
+   UNBLOCK_INPUT;
+   x_update_cursor (f, 1);
++#if (MAC_OS_X_VERSION_MAX_ALLOWED >= 1020) 
++  x_set_frame_alpha (f, 0);
++#endif /* USE_TRANSPARENCY */
+ }
+ 
+ /* The focus has changed.  Update the frames as necessary to reflect
+--- src/w32fns.c.orig	2005-06-09 15:02:02.984375000 +0900
++++ src/w32fns.c	2005-06-09 15:25:15.703125000 +0900
+@@ -1978,6 +1978,64 @@
+ 				      wid - 1) / wid;
+ }
+ 
++#if defined (USE_TRANSPARENCY)
++/* Change the opecity of frame F to ALPHA.
++   ALPHA must be a number between 0.0 and 1.0
++
++   The frame will become completely invisible If ALPHA is 0.0,
++   while the value of 1.0 makes it completely opaque.  */
++
++void
++x_set_active_alpha (f, alpha, old_alpha)
++     struct frame *f;
++     Lisp_Object alpha, old_alpha;
++{
++  /* Don't change the alpha if it's already ALPHA.  */
++  if (EQ (alpha, f->active_alpha))
++    return;
++
++  if (NILP (alpha))
++    return;
++
++  if (FLOATP (alpha))
++  {
++    f->active_alpha = XFLOAT_DATA (alpha);
++
++    BLOCK_INPUT;
++
++    SetWindowLong(FRAME_W32_WINDOW (f),GWL_EXSTYLE,
++                  GetWindowLong(FRAME_W32_WINDOW (f),GWL_EXSTYLE)|WS_EX_LAYERED);
++    SetLayeredWindowAttributes(FRAME_W32_WINDOW (f),
++                               RGB(255, 255, 255),
++                               (int)((f->active_alpha) * 255.0),
++                               LWA_ALPHA);
++
++    UNBLOCK_INPUT;
++  }
++
++  return;
++}
++
++void
++x_set_inactive_alpha (f, alpha, old_alpha)
++     struct frame *f;
++     Lisp_Object alpha, old_alpha;
++{
++  /* Don't change the alpha if it's already ALPHA.  */
++  if (EQ (alpha, f->inactive_alpha))
++    return;
++
++  if (NILP (alpha))
++    return;
++
++  if (FLOATP (alpha))
++  {
++    f->inactive_alpha = XFLOAT_DATA (alpha);
++  }
++
++  return;
++}
++#endif /* USE_TRANSPARENCY */
+ 
+ /* Subroutines of creating a frame.  */
+ 
+@@ -4321,6 +4379,12 @@
+ 		       "cursorType", "CursorType", RES_TYPE_SYMBOL);
+   x_default_parameter (f, parameters, Qscroll_bar_width, Qnil,
+ 		       "scrollBarWidth", "ScrollBarWidth", RES_TYPE_NUMBER);
++#if defined (USE_TRANSPARENCY)
++  x_default_parameter (f, parameters, Qactive_alpha, make_float(1.0),
++		       "activeAlpha", "ActiveAlpha", RES_TYPE_FLOAT);
++  x_default_parameter (f, parameters, Qinactive_alpha, make_float(1.0),
++		       "inactiveAlpha", "InactiveAlpha", RES_TYPE_FLOAT);
++#endif /* USE_TRANSPARENCY */
+ 
+   /* Dimensions, especially FRAME_LINES (f), must be done via change_frame_size.
+      Change will not be effected unless different from the current
+@@ -8442,6 +8506,10 @@
+   x_set_fringe_width,
+   0, /* x_set_wait_for_wm, */
+   x_set_fullscreen,
++#if defined (USE_TRANSPARENCY)
++  x_set_active_alpha,
++  x_set_inactive_alpha,
++#endif /* USE_TRANSPARENCY */
+ };
+ 
+ void
+--- src/w32term.c.orig	2005-06-09 15:02:03.390625000 +0900
++++ src/w32term.c	2005-06-09 15:25:16.171875000 +0900
+@@ -1183,6 +1183,20 @@
+     return ANSI_FONT;
+ }
+ 
++#if defined (USE_TRANSPARENCY)
++static void
++x_set_frame_alpha (f, activate_p)
++     struct frame *f;
++     int activate_p;
++{
++  SetWindowLong(FRAME_W32_WINDOW (f),GWL_EXSTYLE,
++                GetWindowLong(FRAME_W32_WINDOW (f),GWL_EXSTYLE)|WS_EX_LAYERED);
++  SetLayeredWindowAttributes(FRAME_W32_WINDOW (f),
++                             RGB(255, 255, 255),
++                             (int)((activate_p? f->active_alpha: f->inactive_alpha) * 255.0),
++                             LWA_ALPHA);
++}
++#endif /* USE_TRANSPARENCY */
+ 
+ 
+ /***********************************************************************
+@@ -2780,6 +2794,9 @@
+      struct frame *f;
+ {
+   x_update_cursor (f, 1);
++#if defined (USE_TRANSPARENCY)
++  x_set_frame_alpha (f, 1);
++#endif /* USE_TRANSPARENCY */
+ }
+ 
+ static void
+@@ -2787,6 +2804,9 @@
+      struct frame *f;
+ {
+   x_update_cursor (f, 1);
++#if defined (USE_TRANSPARENCY)
++  x_set_frame_alpha (f, 0);
++#endif /* USE_TRANSPARENCY */
+ }
+ 
+ /* The focus has changed.  Update the frames as necessary to reflect
