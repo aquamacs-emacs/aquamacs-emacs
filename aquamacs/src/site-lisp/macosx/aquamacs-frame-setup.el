@@ -7,7 +7,8 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-frame-setup.el,v 1.4 2005/06/09 19:52:50 davidswelt Exp $
+
+;; Last change: $Id: aquamacs-frame-setup.el,v 1.5 2005/06/13 22:46:10 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -35,7 +36,7 @@
 (provide 'aquamacs-frame-setup) ;; added by dr. 12/2004
  
  (require 'fit-frame)
- (require 'mac-default-fontsets)
+ (require 'aquamacs-mac-fontsets)
 
 (defvar 1on1-default-frame-font "fontset-mac")
 (defvar 1on1-special-display-frame-font "fontset-mac")
@@ -127,6 +128,7 @@
 
 (defconst special-display-regexps '( "[ ]?\\*info.*\\*[ ]?"  "[ ]?\\*Help\\*[ ]?" 
 				     "[ ]?\\*Messages\\*[ ]?"   "[ ]*Customize*"
+				     ".*SPEEDBAR.*"
 				     ))
 ;; If we make Backtrace dedicated,
 ;; the frame gets iconified all the time
