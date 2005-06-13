@@ -11,7 +11,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.8 2005/06/13 22:47:22 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.9 2005/06/13 22:49:05 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -79,20 +79,23 @@
 
 ;; Stop Emacs from asking for "y-e-s", when a "y" will do. 
 
-(fset 'old-yes-or-no-p (symbol-function 'yes-or-no-p))
+;(fset 'old-yes-or-no-p (symbol-function 'yes-or-no-p))
 
-(defvar aquamacs-quick-yes-or-no-prompt t
-  "If non-nil, the user does not have to type in yes or no at
-yes-or-no prompts - y or n will do."
-  :group 'Aquamacs
-  )
-(defun aquamacs-yes-or-no-p (arg)
-  (if aquamacs-quick-yes-or-no-prompt
-      (y-or-n-p arg)
-    (old-yes-or-no-p arg)
-    )
-  )
-(fset 'yes-or-no-p 'aquamacs-yes-or-no-p)
+;; the following causes some "too many arugments" error on startup
+;; (defvar aquamacs-quick-yes-or-no-prompt t
+;;   "If non-nil, the user does not have to type in yes or no at
+;; yes-or-no prompts - y or n will do."
+;;   :group 'Aquamacs
+;;   )
+;; (defun aquamacs-yes-or-no-p (arg)
+;;   (if aquamacs-quick-yes-or-no-prompt
+;;       (y-or-n-p arg)
+;;     (old-yes-or-no-p arg)
+;;     )
+;;   )
+;(fset 'yes-or-no-p 'aquamacs-yes-or-no-p)
+
+(fset 'yes-or-no-p 'y-or-n-p)
 
 ;; No more annoying bells all the time
 
