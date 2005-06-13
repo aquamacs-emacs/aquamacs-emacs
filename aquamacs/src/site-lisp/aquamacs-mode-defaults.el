@@ -1,11 +1,11 @@
-;; Site startup file
-;; loads osx_defaults and auctex defaults 
-
+; Aquamacs
+; Mode & Package defaults
+ 
 ;; Author: David Reitter, david.reitter@gmail.com
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: site-start.el,v 1.5 2005/06/13 22:44:36 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-defaults.el,v 1.1 2005/06/13 22:44:28 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -27,7 +27,33 @@
 ;; Boston, MA 02111-1307, USA.
  
 ;; Copyright (C) 2005, David Reitter
- 
-(require 'osx_defaults)
 
-(require 'aquamacs-mode-defaults)
+
+;; load auctex if present 
+(ignore-errors (require 'auctex-config nil t))
+
+
+
+
+(autoload 'css-mode "css-mode" "major mode for editing CSS source." t)
+(setq auto-mode-alist
+      (cons '("\\.css$" . css-mode) auto-mode-alist)
+      )
+
+(autoload 'applescript-mode "applescript-mode" "major mode for editing AppleScript source." t)
+(setq auto-mode-alist
+      (cons '("\\.applescript$" . applescript-mode) auto-mode-alist)
+      )
+ 
+;; ---------------------------------------------------------
+;; PERL EDITING and other modes
+
+(autoload 'perl-mode "cperl-mode" "alternate mode for editing Perl programs" t)
+;(setq cperl-hairy t)
+(defalias 'perl-mode 'cperl-mode)
+ (setq cperl-invalid-face nil) ;(uherbst)
+ 
+ (setq cperl-highlight-variables-indiscriminately t)
+
+
+(provide 'aquamacs-mode-defaults)
