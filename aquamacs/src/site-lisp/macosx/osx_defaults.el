@@ -11,7 +11,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.9 2005/06/13 22:49:05 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.10 2005/06/16 11:37:49 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -79,23 +79,28 @@
 
 ;; Stop Emacs from asking for "y-e-s", when a "y" will do. 
 
-;(fset 'old-yes-or-no-p (symbol-function 'yes-or-no-p))
 
-;; the following causes some "too many arugments" error on startup
-;; (defvar aquamacs-quick-yes-or-no-prompt t
+;; the following seems to result in an endless loop sometimes
+;; maybe because we're fsetting a C-function?
+
+;; (fset 'old-yes-or-no-p (symbol-function 'yes-or-no-p))
+;; (defcustom aquamacs-quick-yes-or-no-prompt t
 ;;   "If non-nil, the user does not have to type in yes or no at
 ;; yes-or-no prompts - y or n will do."
 ;;   :group 'Aquamacs
+;;   :version "22.0"
 ;;   )
 ;; (defun aquamacs-yes-or-no-p (arg)
+;;   (debug)
 ;;   (if aquamacs-quick-yes-or-no-prompt
 ;;       (y-or-n-p arg)
 ;;     (old-yes-or-no-p arg)
 ;;     )
 ;;   )
-;(fset 'yes-or-no-p 'aquamacs-yes-or-no-p)
+;;(fset 'yes-or-no-p 'aquamacs-yes-or-no-p)
 
 (fset 'yes-or-no-p 'y-or-n-p)
+
 
 ;; No more annoying bells all the time
 
@@ -103,16 +108,31 @@
  '((ring-bell-function (lambda () (message "")))
   )
 )
+
+;; this can be turned off in .emacs via
+;; (setq ring-bell-function nil)
+
+(defcustom aquamacs-ring-bell-on-error t
+  "If non-nil, Aquamacs gives an audio signal in cases of error, regardless of ``ring-bell-function''."
+  :group 'Aquamacs
+  :version "22.0"
+  )
+
 ;; but please ring the bell when there is a real error
 (defadvice error (around ring-bell (&rest args) activate)
  
+(if aquamacs-ring-bell-on-error
   (let ((ring-bell-function nil)
 	)
     (ding)
     ad-do-it
     )
+  ; else
+  ad-do-it
   ) 
- 
+ ) 
+
+
 
 ; do this early, so we can override settings
 (require 'aquamacs-frame-setup)
@@ -419,12 +439,8 @@
 		 
 			(not (setq one-buffer-one-frame
 			      (not one-buffer-one-frame)))
-			
-	;; (setq pop-up-frames one-buffer-one-frame)		
 			) 'edit-options-separator)
 )
-
-;(add-hook 'after-init-hook (lambda () (setq pop-up-frames one-buffer-one-frame)) t)
 
 
 (require 'view)
