@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.1 2005/06/13 22:46:56 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.2 2005/06/16 11:36:29 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -106,6 +106,25 @@
 ;; the existing menu item is badly worded and the C-c/v/x don't apply anyways
 (easy-menu-remove-item global-map  '("menu-bar" "options") 'cua-mode) 
 (easy-menu-remove-item global-map  '("menu-bar" "options") 'uniquify)
+(easy-menu-remove-item global-map  '("menu-bar" "options") 'transient-mark-mode)
+
+
+
+
+(if (boundp 'mac-pass-option-to-system) 
+    (define-key-after menu-bar-options-menu [option-to-system]
+      (menu-bar-make-toggle toggle-pass-option-to-system mac-pass-option-to-system
+			    "Option key produces only special characters"
+			    "Option key produces only special characters: %s"
+			    "Let Option key produce special characters (passing the key to the system),
+rather than behaving as Meta"
+			    
+			    (setq mac-pass-option-to-system
+				       (not mac-pass-option-to-system))
+			
+			    ) 'edit-options-separator)
+
+  )
 
 
 (change-menu-text [menu-bar options] 'mouse-set-font "Set Font...")
