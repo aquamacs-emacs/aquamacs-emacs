@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs fonts
  
-;; Last change: $Id: aquamacs-mac-fontsets.el,v 1.1 2005/06/13 22:46:05 davidswelt Exp $
+;; Last change: $Id: aquamacs-mac-fontsets.el,v 1.2 2005/06/16 11:37:01 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -34,15 +34,17 @@
 
 ;;; FONT DEFAULTS 
 
-(setq ignore-font-errors nil)
-; (setq scalable-fonts-allowed t) ; this is default anyway
- 
+(setq ignore-font-errors t)
+(setq aquamacs-ring-bell-on-error-saved aquamacs-ring-bell-on-error)
+(setq aquamacs-ring-bell-on-error nil)
+
+
 (condition-case e
     (create-fontset-from-fontset-spec
      "-apple-monaco*-medium-r-normal--9-*-*-*-*-*-fontset-monaco9,
 	ascii:-apple-monaco*-medium-r-normal--9-90-75-75-m-90-mac-*,
 	latin-iso8859-1:-apple-monaco*-medium-r-normal--9-90-75-75-m-90-mac-*,
-	latin-iso8859-9:-apple-monaco*-medium-r-normal--9-90-75-75-m-90-mac-*" nil t)
+	latin-iso8859-9:-apple-monaco*-medium-r-normal--9-90-75-75-m-90-mac-*" nil ignore-font-errors)
   (error (print (list "Warning: " e))))
 
 
@@ -51,7 +53,7 @@
      "-apple-monaco*-medium-r-normal--10-*-*-*-*-*-fontset-monaco10,
 	ascii:-apple-monaco*-medium-r-normal--10-100-75-75-m-100-mac-*,
 	latin-iso8859-1:-apple-monaco*-medium-r-normal--10-100-75-75-m-100-mac-*,
-	latin-iso8859-9:-apple-monaco*-medium-r-normal--10-100-75-75-m-100-mac-*" nil t)
+	latin-iso8859-9:-apple-monaco*-medium-r-normal--10-100-75-75-m-100-mac-*" nil ignore-font-errors)
   (error (print (list "Warning: " e))))
 
 
@@ -63,7 +65,7 @@
 	latin-iso8859-1:-apple-monaco*-medium-r-normal--11-110-75-75-m-120-mac-*,
 	latin-iso8859-9:-apple-monaco*-medium-r-normal--11-110-75-75-m-120-mac-*,
 	utf-8:-apple-monaco*-medium-r-normal--11-110-75-75-m-120-mac-*,
-	" nil t)
+	" nil ignore-font-errors)
   (error (print (list "Warning: " e))))
 	
 
@@ -74,7 +76,7 @@
 	latin-iso8859-1:-apple-monaco*-medium-r-normal--12-120-75-75-m-120-mac-*,
 	latin-iso8859-9:-apple-monaco*-medium-r-normal--12-120-75-75-m-120-mac-*,
 	utf-8:-apple-monaco*-medium-r-normal--12-120-75-75-m-120-mac-*,
-	" nil t)
+	" nil ignore-font-errors)
   (error (print (list "Warning: " e))))
 	
 
@@ -83,7 +85,7 @@
      "-apple-monaco*-medium-r-normal--14-*-*-*-*-*-fontset-monaco14,
 	ascii:-apple-monaco*-medium-r-normal--14-140-75-75-m-140-mac-*,
 	latin-iso8859-1:-apple-monaco*-medium-r-normal--14-140-75-75-m-140-mac-*,
-	latin-iso8859-9:-apple-monaco*-medium-r-normal--14-140-75-75-m-140-mac-*" nil t)
+	latin-iso8859-9:-apple-monaco*-medium-r-normal--14-140-75-75-m-140-mac-*" nil ignore-font-errors)
   (error (print (list "Warning: " e))))
 	
 
@@ -110,7 +112,7 @@
 	mule-unicode-2500-33ff:-*-lucida grande*-medium-r-normal--0-0-0-0-m-0-mac-*,
 	mule-unicode-e000-ffff:-*-lucida grande*-medium-r-normal--0-0-0-0-m-0-mac-*,
 	iso10646-1:-*-lucida grande*-medium-r-normal--0-0-0-0-m-0-mac-*,
-	ascii:-*-lucida grande*-medium-r-normal--0-0-0-0-m-0-mac-*" t ignore-font-errors)
+	ascii:-*-lucida grande*-medium-r-normal--0-0-0-0-m-0-mac-*" nil ignore-font-errors)
 
   (error (print (list "Warning: " e))))
 
@@ -197,9 +199,9 @@
 	mule-unicode-2500-33ff:-*-lucida console*-medium-r-normal--11-110-75-75-m-110-mac-roman,
 	mule-unicode-e000-ffff:-*-lucida console*-medium-r-normal--11-110-75-75-m-110-mac-roman,
 	iso10646-1:-*-lucida console*-medium-r-normal--11-110-75-75-m-110-mac-roman,
-	ascii:-*-lucida console*-medium-r-normal--11-110-75-75-m-110-mac-roman" t ignore-font-errors)
+	ascii:-*-lucida console*-medium-r-normal--11-110-75-75-m-110-mac-roman" nil ignore-font-errors)
 
-  (error (print (list "Warning: " e))))
+  (error (print (list "Warning: " e)))) ;
 
 (condition-case e 
     (create-fontset-from-fontset-spec
@@ -286,6 +288,6 @@
       '("--- Font menu" ("Misc" () ))) 
 
 (require 'carbon-font)
-(require 'carbon-font-andale)
 
+(setq aquamacs-ring-bell-on-error aquamacs-ring-bell-on-error-saved)
 (provide 'aquamacs-mac-fontsets)
