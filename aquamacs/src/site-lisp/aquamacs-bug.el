@@ -3,7 +3,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: mac bug report
  
-;; Last change: $Id: aquamacs-bug.el,v 1.3 2005/06/10 07:58:47 davidswelt Exp $
+;; Last change: $Id: aquamacs-bug.el,v 1.4 2005/06/19 14:23:33 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -29,166 +29,243 @@
 ;; Copyright (C) 2005, David Reitter
 
 
-(setq report-aquamacs-bug-address "aquamacs-bugs@lists.sourceforge.net")
+(setq report-emacs-bug-cc-list "aquamacs-bugs@lists.sourceforge.net")
 
 
 (require 'emacsbug)
 
+(provide 'aquamacs-bug)
 
-(defun report-aquamacs-emacs-bug ( &optional recent-keys)
-  "Report a bug in Aquamacs on OS X using the default mail agent. The standard report-emacs-bug function doesn't work unless sendmail/postfix is enabled."
-   
-  (interactive)	 
-  (let ((pretest-p (string-match "\\..*\\..*\\." emacs-version))
-	(from-buffer (current-buffer))
+
+(defvar report-emacs-bug-cc-list nil
+  "List of e-mail addresses to cc when reporting bugs.")
+
+(defun report-emacs-bug-externally-p ()
+"Returns non-nil if an external mail client is to be used in 
+order to report bugs. The decision is based on the browse-url 
+function used, because we leave it to the underlying system or 
+the HTML to bring up the appropriate mail client."
+ 
+  (member browse-url-browser-function
+	  '(browse-url-mozilla 
+	    browse-url-netscape 
+	    browse-url-galeon 
+	    browse-url-epiphany 
+	    browse-url-netscape 
+	    browse-url-kde 
+	    browse-url-default-windows-browser 
+	    browse-url-default-macosx-browser 
+	    browse-url-gnome-moz 
+	    )
+	  )
+  )
+
+
+(defun report-emacs-bug-print-preamble (address)
+  (unless report-emacs-bug-no-explanations
+    ;; Insert warnings for novice users.
+    (insert "This bug report will be sent to the Free Software Foundation,\n")
+    (let ((pos (point)))
+      (insert "not to your local site managers!")
+      (put-text-property pos (point) 'face 'highlight))
+    (insert "\nPlease write in ")
+    (let ((pos (point)))
+      (insert "English")
+      (put-text-property pos (point) 'face 'highlight))
+    (insert " if possible, because the Emacs maintainers
+usually do not have translators to read other languages for them.\n\n")
+    (insert (format "Your bug report will be posted to the %s mailing list"
+		    address))
+    (insert " and possibly to the gnu.emacs.bug news group.\n\n")
+    )
+
+  (insert "Please describe exactly what actions triggered the bug\n"
+	  "and the precise symptoms of the bug:")
+  )
+
+
+(defun report-emacs-bug-print-debug-log (&optional recent-keys)
+  (insert "In " (emacs-version) "\n")
+  (if (fboundp 'x-server-vendor)
+      (condition-case nil
+	  (insert "Distributor `" (x-server-vendor) "', version "
+		  (mapconcat 'number-to-string (x-server-version) ".") "\n")
+	(error t)))
+  (if (and system-configuration-options
+	   (not (equal system-configuration-options "")))
+      (insert "configured using `configure "
+	      system-configuration-options "'\n\n"))
+  (insert "Important settings:\n")
+  (mapcar
+   '(lambda (var)
+      (insert (format "  value of $%s: %s\n" var (getenv var))))
+   '("LC_ALL" "LC_COLLATE" "LC_CTYPE" "LC_MESSAGES"
+     "LC_MONETARY" "LC_NUMERIC" "LC_TIME" "LANG"))
+  (insert (format "  locale-coding-system: %s\n" locale-coding-system))
+  (insert (format "  default-enable-multibyte-characters: %s\n"
+		  default-enable-multibyte-characters))
+  (insert "\n")
+  (insert (format "Major mode: %s\n"
+		  (buffer-local-value 'mode-name from-buffer)))
+  (insert "\n")
+  (insert "Minor modes in effect:\n")
+  (dolist (mode minor-mode-list)
+    (and (boundp mode) (buffer-local-value mode from-buffer)
+	 (insert (format "  %s: %s\n" mode
+			 (buffer-local-value mode from-buffer)))))
+  (insert "\n")
+  (insert "Recent input:\n")
+  (let ((before-keys (point)))
+    (insert (mapconcat (lambda (key)
+			 (if (or (integerp key)
+				 (symbolp key)
+				 (listp key))
+			     (single-key-description key)
+			   (prin1-to-string key nil)))
+		       (or recent-keys (recent-keys))
+		       " "))
+    (save-restriction
+      (narrow-to-region before-keys (point))
+      (goto-char before-keys)
+      (while (progn (move-to-column 50) (not (eobp)))
+	(search-forward " " nil t)
+	(insert "\n"))))
+  (let ((message-buf (get-buffer "*Messages*")))
+    (if message-buf
+	(let (beg-pos
+	      (end-pos message-end-point))
+	  (with-current-buffer message-buf
+	    (goto-char end-pos)
+	    (forward-line -10)
+	    (setq beg-pos (point)))
+	  (insert "\n\nRecent messages:\n")
+	  (insert-buffer-substring message-buf beg-pos end-pos))
+      )
+    )
+  )
+
+ 
+
+(defun report-emacs-bug-externally ( topic recent-keys address)
+  "Report a bug using the default mail agent. "
+    
+  (let ( (from-buffer (current-buffer))
 	user-point prompt-beg-point message-end-point)
       
     (setq message-end-point
 	  (with-current-buffer (get-buffer-create "*Messages*")
 	    (point-max-marker)))
-    (let ((str (with-output-to-string  
+    
+      (with-temp-buffer  
  
-	 
+		 
+		 (setq prompt-beg-point (point)) 
+		 (report-emacs-bug-print-preamble address)
+    
+		 (setq report-emacs-bug-text-prompt
+		       (buffer-substring prompt-beg-point (point)))
 
-					;   (compose-mail (if pretest-p
-					;	      report-emacs-bug-pretest-address
-					;    report-emacs-bug-address)
-					; topic)
-		 ;; The rest of this does not execute
-		 ;; if the user was asked to confirm and said no.
-					;(rfc822-goto-eoh)
-					;(forward-line 1)
+		 (insert "\n\n\n\n\n\n\n\n\n(insert your text here)\n\n\n\n\n\n\n\n\n")
 
-		 (let ((signature (buffer-substring (point) (point-max))))
-					;(delete-region (point) (point-max))
-					;(princ signature)
-					; (backward-char (length signature)))
-					;  (setq prompt-beg-point (point))
-		   (unless report-emacs-bug-no-explanations
-		     ;; Insert warnings for novice users.
-		     (princ "This bug report will be sent to the Free Software Foundation, not to your local site managers! Please write in English if possible, because the Emacs maintainers usually do not have translators to read other languages for them.\n\n")
-		     (princ (format "Your bug report will be posted to the %s mailing list"
-				    (if pretest-p
-					report-emacs-bug-pretest-address
-				      report-emacs-bug-address)))
-		     (if pretest-p
-			 (princ ".\n\n")
-		       (princ ",\nand to the gnu.emacs.bug news group.\n\n")))
-
-		   (princ "Please give this e-mail an appropriate subject line!\n\n")
-
-		   (princ "Please describe exactly what actions triggered the bug and the precise symptoms of the bug:\n\n\n\n\n\n\n")
-		   ;; (setq report-emacs-bug-text-prompt
-		   ;;	  (buffer-substring prompt-beg-point (point)))
-
-		   ;;  (princ "\n\n")
-		   ;;  (setq user-point (point))
-		   ;;  (princ "\n\n\n")
-
-		   (princ (format "In %s \n" (emacs-version)))
-		   (if (fboundp 'x-server-vendor)
-		       (condition-case nil
-			   (princ (format "Distributor `%s' version %s .\n"
-					  (x-server-vendor)
-					  (x-server-version) ))
-			 (error t)))
-		   (if (and system-configuration-options
-			    (not (equal system-configuration-options "")))
-		       (princ (format "configured using `configure %s' \n\n"
-				      system-configuration-options))) 
-
-		   (princ "Important settings:\n")
-		   (mapcar
-		    '(lambda (var)
-		       (princ (format "  value of $%s: %s\n" var (getenv var))))
-		    '("LC_ALL" "LC_COLLATE" "LC_CTYPE" "LC_MESSAGES"
-		      "LC_MONETARY" "LC_NUMERIC" "LC_TIME" "LANG"))
-		   (princ (format "  locale-coding-system: %s\n" locale-coding-system))
-		   (princ (format "  default-enable-multibyte-characters: %s\n"
-				  default-enable-multibyte-characters))
-		   (princ "\n")
-		   (princ (format "Major mode: %s\n"
-				  (buffer-local-value 'mode-name from-buffer)))
-		   (princ "\n")
-		   (princ "Minor modes in effect:\n")
-		   (dolist (mode minor-mode-list)
-		     (and (boundp mode) (buffer-local-value mode from-buffer)
-			  (princ (format "  %s: %s\n" mode
-					 (buffer-local-value mode from-buffer)))))
-		   (princ "\n")
-		   (princ "Recent input:\n")
-		   (let ((before-keys (point)))
-		     (princ (mapconcat (lambda (key)
-					 (if (or (integerp key)
-						 (symbolp key)
-						 (listp key))
-					     (single-key-description key)
-					   (prin1-to-string key nil)))
-				       (or recent-keys (recent-keys))
-				       " "))
-		     )
-		   (let ((message-buf (get-buffer "*Messages*")))
-		     (if message-buf
-			 (let (beg-pos
-			       (end-pos message-end-point))
-			   (princ "\n\nRecent messages:\n")
-			   (with-current-buffer message-buf
-			     (goto-char end-pos)
-			     (forward-line -10)
-			     (setq beg-pos (point))
-				   
-			     (princ (buffer-substring-no-properties  beg-pos end-pos))
-
-			     )
-			   )
-		       )
-		     )
-		   ;; This is so the user has to type something
-		   ;; in order to send easily.
-		   (use-local-map (nconc (make-sparse-keymap) (current-local-map)))
-     
-     
-		   )
-		 )))			; let
-	  
-
-
-  
+		 (report-emacs-bug-print-debug-log recent-keys)
+ 	       
+	   
       ;; open in mail program
       ;; from here on, we have no control over what's going to happen.
-      ;; but at least the messages are getting through.
 
-      (browse-url (format "mailto:%s\?cc=%s&body=%s" 
-			  (if pretest-p
-			      report-emacs-bug-pretest-address
-			    report-emacs-bug-address)
-			  report-aquamacs-bug-address
-			  (url-encode-string str) ))
-
+      (browse-url (format "mailto:%s\?body=%s%s" 
+			  address
+			  (url-encode-string (buffer-string))
+			  (apply 'concat (mapcar 
+			   (lambda (a) (concat "&cc=" a))
+			   report-emacs-bug-cc-list))
+			   )
       )
     )
   )
-
-(require 'aquamacs-tools)
-
-
-(defcustom use-emacs-bugreporting nil
-  "If non-nil, the original emacs bugreporting tool is used.
-This expects a preconfigured e-mail sending mechanism, 
-e.g. sendmail/postfix or smtp server)."
-  :group 'emacsbug
-  :type 'boolean)
-
-
-
-;; we'll advice the bugreporting function for better transparency
-  
-(defadvice report-emacs-bug (around wrap-report-emacs-bug (&rest args) activate)
- (interactive)
-  (if use-emacs-bugreporting
-      ad-do-it
-      (apply #'report-aquamacs-emacs-bug args)
-      ) 
 )
 
-(provide 'aquamacs-bug)
+
+(defun report-emacs-bug-internally (topic recent-keys address)
+"Report a bug using the internal mail system via ``compose-mail''"
+ 
+  (let ((from-buffer (current-buffer))
+	user-point prompt-beg-point message-end-point)
+    (setq message-end-point
+	  (with-current-buffer (get-buffer-create "*Messages*")
+	    (point-max-marker)))
+    (compose-mail address
+		  topic)
+    ;; The rest of this does not execute
+    ;; if the user was asked to confirm and said no.
+    (rfc822-goto-eoh)
+    (forward-line 1)
+
+    (let ((signature (buffer-substring (point) (point-max))))
+      (delete-region (point) (point-max))
+      (insert signature)
+      (backward-char (length signature)))
+    (setq prompt-beg-point (point))
+
+    (report-emacs-bug-print-preamble address)
+    
+    (setq report-emacs-bug-text-prompt
+	  (buffer-substring prompt-beg-point (point)))
+
+    (insert "\n\n")
+    (setq user-point (point))
+    (insert "\n\n\n")
+
+    (report-emacs-bug-print-debug-log recent-keys)
+
+    ;; This is so the user has to type something
+    ;; in order to send easily.
+    (use-local-map (nconc (make-sparse-keymap) (current-local-map)))
+    (define-key (current-local-map) "\C-c\C-i" 'report-emacs-bug-info)
+    (unless report-emacs-bug-no-explanations
+      (with-output-to-temp-buffer "*Bug Help*"
+	(if (eq mail-user-agent 'sendmail-user-agent)
+	    (princ (substitute-command-keys
+		    "Type \\[mail-send-and-exit] to send the bug report.\n")))
+	(princ (substitute-command-keys
+		"Type \\[kill-buffer] RET to cancel (don't send it).\n"))
+	(terpri)
+	(princ (substitute-command-keys
+		"Type \\[report-emacs-bug-info] to visit in Info the Emacs Manual section
+about when and how to write a bug report,
+and what information to supply so that the bug can be fixed.
+Type SPC to scroll through this section and its subsections."))))
+    ;; Make it less likely people will send empty messages.
+    (make-local-variable 'mail-send-hook)
+    (add-hook 'mail-send-hook 'report-emacs-bug-hook)
+    (save-excursion
+      (goto-char (point-max))
+      (skip-chars-backward " \t\n")
+      (make-local-variable 'report-emacs-bug-orig-text)
+      (setq report-emacs-bug-orig-text (buffer-substring (point-min) (point))))
+    (goto-char user-point)))
+
+
+(defun report-emacs-bug (topic &optional recent-keys)
+  "Report a bug in GNU Emacs.
+Prompts for bug subject. Either leaves you in a mail buffer 
+or brings up an external mail client."
+
+  ;; This strange form ensures that (recent-keys) is the value before
+  ;; the bug subject string is read.
+  (interactive (reverse (list (recent-keys) (read-string "Bug Subject: "))))
+
+  (let ((address
+	 ;; If there are four numbers in emacs-version, this is a pretest
+	 ;; version.
+	 (if (string-match "\\..*\\..*\\." emacs-version)
+	     report-emacs-bug-pretest-address
+	   report-emacs-bug-address)
+	 )
+	)
+    (if (report-emacs-bug-externally-p)
+	(report-emacs-bug-externally topic recent-keys address)
+      (report-emacs-bug-internally topic recent-keys address)
+      )
+    )
+  )  
