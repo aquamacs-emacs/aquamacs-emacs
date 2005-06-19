@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs fonts
  
-;; Last change: $Id: aquamacs-mac-fontsets.el,v 1.2 2005/06/16 11:37:01 davidswelt Exp $
+;; Last change: $Id: aquamacs-mac-fontsets.el,v 1.3 2005/06/19 14:24:39 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -287,7 +287,9 @@
 (setq x-fixed-font-alist
       '("--- Font menu" ("Misc" () ))) 
 
-(require 'carbon-font)
+(if (string= "mac" window-system)
+    (require 'carbon-font)
+)
 
 (setq aquamacs-ring-bell-on-error aquamacs-ring-bell-on-error-saved)
 (provide 'aquamacs-mac-fontsets)
