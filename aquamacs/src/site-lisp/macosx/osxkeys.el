@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.4 2005/06/10 22:13:39 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.5 2005/06/19 14:25:43 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -248,13 +248,7 @@ When Mac Key mode is enabled, mac-style key bindings are provided."
 ;	(setq pc-select-selection-keys-only t) ;; disaple M-backspace = undo    	
 ;	(pc-selection-mode t)
 
-        (define-key-after menu-bar-file-menu [my-file-separator]
-          '("--" . nil) 'recover-session)
-        (define-key-after menu-bar-file-menu [mac-show-in-finder]
-          '("Show In Finder" . mac-key-show-in-finder) 'my-file-separator)
-;        (define-key-after menu-bar-file-menu [mac-open-terminal]
-;          '("Open Terminal" . mac-key-open-terminal) 'mac-show-in-finder)
-
+       
 					;    (when (file-exists-p osx-key-mode-gs-command)
 					;      (defalias 'ps-mule-header-string-charsets 'ignore) ;;*
 					;      (ad-enable-regexp "osx-key-mode-preview*")
