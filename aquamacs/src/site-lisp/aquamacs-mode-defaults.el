@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-mode-defaults.el,v 1.1 2005/06/13 22:44:28 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-defaults.el,v 1.2 2005/06/19 16:52:13 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -44,6 +44,23 @@
 (setq auto-mode-alist
       (cons '("\\.applescript$" . applescript-mode) auto-mode-alist)
       )
+ 
+
+(autoload 'php-mode "php-mode" "major mode for editing PHP source." t)
+(setq auto-mode-alist
+      (cons '("\\.php$" . php-mode) auto-mode-alist)
+      )
+
+
+
+(autoload 'ruby-mode "ruby-mode" "major mode for editing Ruby source." t)
+(setq auto-mode-alist
+      (cons '("\\.rb$" . ruby-mode) auto-mode-alist)
+      ) 
+;; watch out - .rb is also used for realbasic
+;; do we need to distinguish?
+;; we don't have a REALBasic mode yet
+
  
 ;; ---------------------------------------------------------
 ;; PERL EDITING and other modes
