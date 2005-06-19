@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: auctex
  
-;; Last change: $Id: auctex-config.el,v 1.5 2005/06/09 19:52:49 davidswelt Exp $
+;; Last change: $Id: auctex-config.el,v 1.6 2005/06/19 14:24:17 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -65,6 +65,7 @@
 (autoload 'turn-on-bib-cite "bib-cite")
 (load "preview-latex.el" nil t t)
 
+(if (boundp 'LaTeX-mode-hook)
 (add-hook 'LaTeX-mode-hook '(lambda ()
 			      (turn-on-reftex)
 			      (turn-on-bib-cite)
@@ -73,6 +74,7 @@
 			      (flyspell-mode)
 			      (abbrev-mode)
 			      (LaTeX-install-toolbar)))
+)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Customize LaTeX parameters
@@ -148,7 +150,9 @@
 ; the following doesn't seem to work
 ; why?
 
-(TeX-global-PDF-mode t)
 
+(if (fboundp 'TeX-global-PDF-mode)
+    (TeX-global-PDF-mode t)
+)
 
 (provide 'auctex-config)
