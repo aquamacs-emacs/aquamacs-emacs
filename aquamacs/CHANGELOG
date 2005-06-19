@@ -1,0 +1,548 @@
+Aquamacs Change Log
+
+	Aquamacs is an Emacs distribution for Mac OS X 
+	by David Reitter and Kevin Walzer
+	http://aquamacs.org/
+
+Users and Developers should contact us on the Emacs-OS X mailing list 
+hosted by Penn State University. The easiest way to subscribe is 
+to send a message to: macosx-emacs-on@email.esm.psu.edu
+Please use this list for bug reports or feature requests.
+
+Have a patch or ideas about the future development of Aquamacs?
+Send your patch to the developers list:
+aquamacs-devel@lists.aquamacs.org
+
+Please use "Send Bug Report"  (Help menu) to report bugs.
+
+0.9.3
+
+-	"Recursive Minibuffers" are enabled. 
+-	"Subscribe to mailing list" in Help menu
+-	BUGFIX: initial-frame-alist is respected
+
+0.9.2 beta-8
+	
+-	Some key-bindings are more like the original Emacs ones - in
+	particular M-w, which does kill-ring-save again. 
+	(Idea: Joe Davison)
+	Also, Home and End keys work as expected.
+
+-	Slightly faster startup.
+
+-	New fonts available - Chinese & Japanese support thanks to the
+	carbon-font package.
+	
+-	Emacs now sets the file creator information of files it
+	writes. This helps to open the file from Finder with Emacs when
+	you double-click it. Feature can be turned off via customization
+	option "aquamacs-set-creator-codes-after-writing-files".  Also,
+	Emacs will appear in the Finder's context menu under "Open With"
+	for a lot of files that it is commonly used to edit.
+
+-	Better Drag&Drop: For example, you can drag&drop a graphics
+        file into your LaTeX document now from the Finder, and
+        Aquamacs will insert an appropriate reference. (This is Seiji
+        Zenitani's mac-drag-N-drop package.)
+
+-	BUGFIX: Two-finger-scrolling on new Powerbooks works.
+	(Thanks: Yamamoto M.)
+	
+- 	BUGFIX: When modified files existed, but no frame was visible and
+	one tried to quit Emacs, the application seemed to hang while
+	prompting for keyboard input (Save file? y/n) in an invisible
+	window.   
+ 	
+-	BUGFIX: If no frame is visible and you input text, the frame is made
+	visible so you can see what you are doing.	
+
+-	BUGFIX: Closing windows with the mouse didn't always work
+
+-	BUGFIX: Clicking on links to source files in help buffers properly
+	opens a new frame (if "open buffers in separate frames" is on).
+
+-	BUGFIX: When the buffer shown in a frame changes, sometimes the
+	color theme and font weren't set correctly. This could happen when
+	"Show Buffers in Separate Frames" was off, and one killed a
+	buffer. (Reported by Peter Dyballa.)
+
+-	BUGFIX: When "Show Buffers in Separate Frames" was off, and one killed a
+	buffer (kill-buffer, C-x k), the frame was deleted.
+	
+-	BUGFIX: You're offered to save newly created buffers (Command-N)
+	that haven't been saved yet when you quit Emacs.
+
+-	FEATURE: Lucida Grande is now available in a range of sizes, and
+	we have a Monaco 11pt now, as well. 
+
+-	The default font for all modes is now the monospaced
+	"Monaco". That means that you'll get properly formatted text in a
+	lot of very specialized modes for which you haven't defined a
+	mode-specific default theme. Note that for text modes (including
+	tex-mode), we still have Lucida. You can override that, of course,
+	with the functions in the Options menu (Set .. as default, Save
+	Options).
+
+-	BUGFIX: Less frame-dancing (resizing) on startup.
+	
+-	BUGFIX: AUCTeX uses the standard commands again. The menu is
+	pretty unstructured for this reason. 
+	(Reported by Robert Sloan.)
+
+- 	BUGFIX: No frames could be opened when using a two-screen setup
+	with the menu bar on the right screen, and a currently selected
+	frame on the left screen. Pretty obscure, eh?
+	(Reported by George W. Gilchrist.)
+
+-	We make sure that the *Completions* buffer (and similar things)
+	open as a window inside the frame directly above the Minibuffer,
+	and not in a new frame.
+
+-	Sound signal (ding) on error, but not on non-errors and
+	traditional dings. Turn off via customization function
+	aquamacs-ring-bell-on-error.
+
+-	Some left-over customizations (re Prolog, Perl, turn-on-auto-fill) removed.
+
+
+0.9.2 beta-7
+
+-	Runs on OS X 10.3.9, 10.4.0 and 10.4.1 - tested.
+
+	
+0.9.2 beta-6
+
+-	10.4.1 only
+
+-	Should not complain about missing fonts any more when
+	you've upgraded from earlier versions and set scalable fonts as
+	default fonts for modes or all frames. The get filtered automatically.
+
+-	Users with certain setups (cyrillic Lucida Grande) should not get
+	a "default font not found" error any more
+
+	
+0.9.2 beta-5
+
+-	10.4.1 only
+	
+- 	All newly opened frames open in a somewhat useful position, so
+	they're not in the way. (If you don't like this, I suggest you set
+	your own static frame positions via "set current theme as default"
+	and also add this to your file ~/Library/Preferences/Aquamacs
+	Emacs/Preferences.el:
+
+	(setq smart-frame-positioning-enforce nil)
+
+	Or, if you'd like to go with the default position all the time,
+	turn the global minor mode off:
+
+	(smart-frame-positioning-mode nil)
+
+-	The secondary selection is back: use the Command (Apple) key
+	together with clicking/dragging the mouse cursor over text in
+	order to select text that is not related to the point
+	(cursor). This way, you can select text and then scroll somewhere
+	else. Extend your selection with shift-command-mouse1.
+	To copy/cut the text in the secondary selection to the clipboard, use
+	Shift-Command-C/X, respectively.
+
+- 	Aquamacs got a whole lot snappier:
+	After two sleepless nights, newly opened frames don't dance around
+	on the screen any more. (Thanks to Drew Adams for advice.)
+	
+- 	Aquamacs automatically checks for updates and notifies the user
+	if there's something new.
+
+	This function communicates with an internet server; it does not
+	transmit any information identifying the user. If you'd like to
+	know more about what is transmitted, use M-x
+	aquamacs-check-version-information. 
+	
+	If you like to turn this check off, add this to your file
+	~/Library/Preferences/Aquamacs Emacs/Preferences.el:
+
+	(setq aquamacs-version-check-url nil)
+
+- 	FEATURE: The Speedbar is back. Activate in Options/ Show/Hide. 
+	
+- 	BUGFIX: customizing a theme for a special display frame (e.g. help or
+	customization) works now
+
+- 	The redo function is in the Edit menu now.
+
+- 	HACK: You can start Aquamacs in a terminal (by running
+	/Applications/Emacs.app/Contents/MacOS/Emacs) with parameter -nw
+	and it'll show up in the terminal rather than as Carbon
+	application. Basic file editing and all traditional commands
+	work. However, Aquamacs-specific keyboard commands (with the
+	Command key) won't work and other functionality may be limited,
+	too. This mode of use, which may break in future versions, is not
+	supported by the Aquamacs team - you're on your own!
+
+-	New buffers (File / New) open in Text Adapt Fill mode now. 
+	
+-	More tuning to the way Emacs opens frames for buffers and closes
+	them (i.e. kills the buffers) when you press Command-W or close
+	the frame with the mouse. Buffers are not killed if the option
+	"Open Buffers in Separate Frames" is deselected so that the old
+	school Emacs semantics are preserved in this case. 
+
+-	When you close a frame you get asked whether you'd like to save
+	the buffer. Now you won't get asked twice (really? really!)
+	
+-	CVS compile 2005-06-01. Please note that you may need to update
+	your custom fontsets in case you have any, since the size of
+	scalable fonts is set to 0 now.
+
+	
+	0.9.2 beta-4
+
+- 	We have two great manuals available comfortably via Apple Help now, 
+	directly from within Aquamacs Emacs (Help menu). There is a
+	brand-new Aquamacs manual written by Kevin, and there is Richard
+	Stallman's original Emacs manual. They can be searched (e.g. via
+	Spotlight on OS X 10.4).
+	We also provide direct access to the online configuration Wiki, 
+	which has been filling up with content nicely. 
+	Please contribute - everybody has write access!
+	
+-  	No more annoying system 'ding' (bell ringing) all the time. The bell is
+	turned off completely, until Emacs developers eliminate the use of
+	the bell on user-initiated abort actions (such as ESC ESC ESC when
+	in minibuffer, of pressing 'Cancel' in the file selection dialog).
+	
+- 	The tool-bar is only displayed in normal frames, but not
+	in frames that show help/info buffers. (tool-bar+ and
+	aquamacs-tool-bar packages). Turn such toolbars on/off in
+	Options/Show/Hide menu.
+	
+- 	Aquamacs can now read the environment, including the PATH variable,
+	from the shell. That means that if you have set up installed
+	applications to be available from the Terminal (shell) directly,
+	they will also work from within Emacs. This should make installing
+	and accessing software much easier. You do not need special
+	settings in ~/.MacOSX/environment.plist any more.
+	
+- 	Adding Emacs packages is easier now: Emacs automatically finds
+	packages in subdirectories within the [~]/Library/{Preferences|Application
+	Support}/{Emacs|Aquamacs Emacs}/ paths.
+	
+- 	The "About Emacs" dialogue has been improved
+	
+- 	BUGFIX: Recent Files/Clear Menu works again
+	
+- 	.save-places and customizations.el don't show up in the recent files list
+	any more.
+	
+- 	auto-save-files (in ~/.emacs.d) are now saved to ~/Library/Prefs...
+
+- 	"Save Place in Files in between sessions" will not generate files in the
+	user's home folder any more - instead, the files goes into
+	~/Library/Preferences/Aquamacs Emacs/ where it belongs.
+
+- 	BUGFIX: remove menu item "Open Frame on Display" as it didn't work
+	anyways in Carbon Emacs 
+
+-	BUGFIX: "Show in Finder" works in OS X 10.4 now
+
+-	BUGFIX: Paths and other environment variables are now taken over
+	from the shell (as defined in ~/.bash_profile and elsewhere) when
+	you start Emacs.
+	
+- 	BUGFIXes: more changes to "Display Buffers in Separate Frames"
+	handling. Opens frames more reliably when no frames are visible,
+	and deletes frames (created for specific buffers) when their
+	buffers are killed. 
+	
+0.9.2 beta-3
+
+CONFIGURATION
+
+- FEATURE: Color Themes: The color-themes package has been integrated in
+	Aquamacs. Use the Option/Color Theme... menu command to choose a
+	set of predefined colors for editing source code or writing
+	texts. This applies to the current frame only, but you can make it
+	the default for all new frames or for all frames in a specific
+	mode with the according menu commands. 
+	
+- FEATURE: There is a new customization group called 'Aquamacs' that
+	allows you to modify the customizations introduced by Aquamacs.
+	This is fairly untested - unexpected results may occur. If so, try
+	to locate and fix the bug and send us a patch. If you couldn't
+	find the problem, please report via Help/Send Bug Report... 
+	PLEASE NOTE that a lot of customization variables have changed
+	their names - usually, you just need to prepend 1on1- to them.
+	
+- BUGFIX: Your settings for highlight parens, "Blinking Cursor" etc. are now
+	persistent. The function Options/Save Options
+	(menu-bar-option-save) now correctly saves such settings. This
+	should include most customization settings except some that
+	Aquamacs relies on for proper clipboard copy/paste functionality.
+
+- FEATURE:
+	Aquamacs will load YOUR configuration files not just from
+	~/.emacs, but also from the location that is appropriate for a Mac
+	OS X installation:
+
+	/Library/Preferences/Aquamacs Emacs/Preferences.el
+	~/Library/Preferences/Aquamacs Emacs/Preferences.el
+	/Library/Preferences/Emacs/Preferences.el
+	~/Library/Preferences/Emacs/Preferences.el
+
+	It is recommended to use these instead of ~/.emacs on OS X-only 
+	installations. The first two files should be used for the
+	host-wide and user-specific Aquamacs configs, the latter two for
+	general Emacs configurations. 
+
+- FEATURE:
+	Fringes (margins next to a window) are displayed for normal
+	buffers now (but not in special buffers such as *Help* etc.)
+
+- BUGFIX: Changes in the way buffers are killed and windows are
+	closed. You should not notice anything, except that this should be
+	more compatible with additional Emacs packages.
+- BUGFIX: The font menu (Options) doesn't contain all those non-existing fonts any more
+- BUGFIX: Option/Show-Hide/Speedbar is gone because the speedbar doesn't work.
+- BUGFIX: Option/Show-Hide/Menu Bar is gone because you can't turn of the
+	menu bar on OS X.
+	
+USABILITY:
+	
+- FEATURE: Command-` now cycles between different windows (suggested by Joseph Kiniry)
+- FEATURE/BUGFIX: Send Emacs Bug Report now uses the OS X 
+	default mail program to compose
+	a message. This ensures that bug reports actually go through -
+	before they did not, unless you were running a local SMTP server
+	(sendmail/postfix) which is not enabled by default.
+- BUGFIX: Fixed loading of files when file names contain certain Kanji characters,
+	due to a bug in AppleScript.  
+
+MISC:
+
+- Some large .el files and a 700K termcap.src file deleted from the distribution.
+	
+0.9.2 beta-2
+
+USABILITY:
+- FEATURE: 
+	A further improvement. Key combinations with the option key that involve
+	another modifier (that is, ctrl or command) will now work, even
+	though simple option combinations are handled by the system to
+	produce special characters. 
+
+	Option is mapped to Meta by default, allowing you to enter key
+	combinations such as C-M-\ easily. If you'd like to map it to
+	alt instead, just add this to your .emacs:
+
+	(setq mac-option-modifier 'alt)
+	
+- FEATURE:
+	There is a new configuration option that gives you more fine-grained
+	control over how the option modifier key is handled.
+
+	If mac-pass-option-to system is nil, your Aquamacs will get all key
+	combinations. If you press option-3, Aquamacs will see "M-3" (or,
+	depending on mac-option-modifier "A-3"). If it is non-nil, you
+	will simply get the pound sign (£) on a US keyboard.
+
+- FEATURE:
+	Aquamacs will load packaged configuration files residing in
+
+	/Library/Application Support/Aquamacs Emacs
+	~/Library/Application Support/Aquamacs Emacs
+	/Library/Application Support/Emacs
+	~/Library/Application Support/Emacs
+	
+	in addition to those in the 'Emacs' directories. These function
+	just like any .emacs file in ~/. 
+	Use of these directories is recommended only for configurations
+	installed by add-on-packages. 
+
+- FEATURE:
+	TeXniScope support in LaTeX mode (if installed in /Applications)
+
+- FEATURE:
+	Command-backspace deletes the whole line now. Useful e.g. 
+	when you're loading a file with C-x C-f and you need to delete 
+	the given path.
+
+- BUGFIX:
+	Fails more gracefully if a font is not present: defaults are never set 
+	to a non-existing font, so no error message is given. 
+
+- BUGFIX:
+	menu shortcut entries corrected
+
+	
+0.9.2 beta-1
+
+- BUGFIX:
+	characters that require the use of the option key work again - for
+	example, Alt-3 produces the pound sign (£) on a US keyboard, 
+	Alt-L the 'at' sign @ and Alt-Shift-7 the backslash \ on a 
+	German one. Inputting the Euro sign works, too.
+	However, that means that the option key is not used to emulate
+	the 'meta' modifier - you will have to use Esc to do that.
+	Alternatively, you can map the option key to meta in your .emacs
+	file:
+
+	(setq mac-option-modifier 'meta)
+
+- BUGFIX:
+	Improvements in the fontset selection allow you to display the Euro sign
+	with the default font.
+
+- FEATURE:
+	Cursor is a bar now, following the general trend in most OS X
+	editors. This seems to make marking text with the mouse a little
+	easier and makes sense conceptually. This will be modified further
+	to accomodate overwrite-mode.
+	You can turn it off easily in your .emacs:
+
+	(set-default 'cursor-type 'box)
+
+- FEATURE:
+	Customization settings and a list of recent files are now saved into 
+	~/Library/Preferences/Aquamacs Emacs/
+	
+	Settings you may have kept in .emacs are still read. You should
+	save the settings once (after making some change!) and then delete
+	the appropriate section manually from your .emacs file.
+
+	Note that this only applies to the settings saved with 'Save
+	Options', not your individual .emacs configuration.
+	
+- FEATURE:
+	the Perl mode (CPerl) it comes with is less aggressive with respect to
+	'electric' keywords and parens - this was just too annoying.
+	Turn it back on, for example with the cperl-hairy variable in your .emacs.
+
+
+0.9.1
+
+- This version has been reported to work on OS X 10.4 "Tiger" 
+	and on OS X 10.3 "Panther."
+	(Thanks Nozomu Ando, Yamamoto Mitsuharu)
+
+LATEX
+- AUCTeX support: install Norm Gall's AucTeX package 
+	(into /Library/Application Support/Emacs), available here:
+	https://sourceforge.net/project/showfiles.php?group_id=132323&package_id=150263&release_id=325255
+- Elisp load-path now inludes the directories under
+	/Library/Application Support/Emacs/
+
+FONTS
+- Nicer font thanks to  anti-aliasing (finally) - the font now looks just
+	like in other Mac applications (lucida, mac fontsets. Other
+	fontsets without anti-aliasing available - just switch to fontset
+	'default'.
+- The available fixed-width Monaco fontsets have been improved: there are
+	nice 12 and 14-point versions available now besides the 10pt one.
+- More non-proportional default fonts for specific modes set
+	(Python, Perl, C etc.)
+- Set current fontset as a default for new frames with the new function in the
+	Options menu.
+- The default font is saved to .emacs with "Save Options".
+	So if you don't like Lucida as normal font, just switch to another
+	font in the font menu (Options/Set Font/Fontset), then do "Set
+	current Fontset as default" and then "Save Options". Voilà!
+- Some additional fontsets are available now.
+	The mac_roman* fontsets allow you to display
+	the Euro sign. (Note that ENTERING the Euro sign is a different
+	matter and depends on your input method / language environment.
+	Further work in this area to do things Mac-like needs to be done.)
+- You can also set fonts specific to the mode. By default, you'll get a
+	proportional font (Lucida Grande) for text modes, but the
+	non-proportional font for the elisp mode.
+- You may now set a default font in your ~/.emacs file by adding
+
+	(setq default-frame-font "fontset-monaco12")
+	(set-default-frame-alist)
+	
+	Of course, you don't have to use one of the predefined fontsets.
+
+HANDLING WINDOWS / FRAMES
+- Aquamacs is slightly more conservative when opening new frames for new
+	buffers. Stuff like backtraces, completion buffers and the like
+	always appear in the same window now. 
+	Special modes that rely on windows inside the frames should
+	work much better now.
+- Newly created frames (windows) are deleted (removed) when necessary,
+	that is, when their buffer is killed - for
+	example when you do C-x C-r to get a list of the recent files but
+	then get rid of the display by pressing q. This should lead to
+	more graceful behavior in many places.
+- New frames (windows) don't appear low on the screen any more
+- Pressing Apple-W will now kill the buffer (i.e. close the file)
+	along with deleting the window (closing the window) that the point
+	(cursor) was in. (Special buffers such as *Messages* or *scratch*
+	are never killed!)
+- "New" entry in the menu bar now just opens a new frame&buffer
+- Aquamacs Emacs should not quit any more when you close the last frame.
+	(Standard OS X behavior)
+
+MISCELLANEOUS
+- Fringe and toolbar settings can be customized (Options menu) and saved
+	to .emacs.
+- No toolbars any more for help windows and other special frames.
+- The most common keyboard commands (Apple-A/C/X/V/Q/F/G/N) are 
+	displayed in the menus as you expect it - alongside their
+	traditional Emacs equivalents
+- Copy/Paste from other applications and from within Emacs have been
+	modified and should be more stable now.
+- Apple-O file dialogs don't display hidden files any more (use
+	the old C-x C-f  to open special files).	
+- Apple-C (copy) doesn't remove the selection any more
+- CUA mode is on, but without C-* shortcuts (thanks: Lawrence Akka)
+	[Note that Apple-C/X/V is not handled by cua-mode at this point.]
+- Mac keyboard commands can now be turned off by switching off the minor
+	mode osx-key-mode
+	(thanks to Seiji Zenitani for a code snippet from his mac-key-mode.el)
+	Do people want an extra option in the menu for this?
+- Better frame opening/file-handling behavior.
+- Applescript-mode provided (courtesy of Sakito, Harlex Gorrell, Fujimoto
+	Hisakuni, MacEmacs JP project)
+	(please submit bugs to the MacEmacs JP project)
+- Apple (Command) shortcuts like Apple-C or Apple-W
+	will not override any A- (Option/Alt) shortcuts any
+	more. You may assign a modifier key to the option key by saying
+
+	(setq mac-option-modifier 'meta)  ;; or 'ctrl or 'alt
+
+	in your .emacs file.  Similarly, you can set the variables
+	mac-control-modifier. Do not use mac-command-key-is-meta or 
+	mac-reverse-ctrl-meta any more - they are deprecated in Aquamacs.
+
+	If you need the Command to be meta, you can set the variable
+	mac-command-modifier to 'meta. Obviously, you will lose the
+	Command shortcuts - you can't have it all. It is recommended,
+	however, to use ESC as the Meta key, which is the default.
+
+	Note that these variables are only available in Aquamacs at this
+	point.
+
+- Transparency settings included, do a
+
+	(setq mac-transparency-alpha 80)
+
+	and open a frame to check it out. (Thanks: T. Hiromatsu)
+- Shift-Click extends the region (selection) to where you click. (This
+	also means that you won't get the font menu this way; but it
+	wasn't very useful anyways, and very non-standard.)
+	(Thanks: Lawrence Akka)
+- Tramp mode (in particular: calling ssh) should work - a patch that
+	disabled this is no longer needed. You will need OS X >=10.3
+	though to avoid a little problem with the output of external processes!
+	(Thanks: Lawrence Akka)
+- Some special packages (prolog mode) do not come with Aquamacs any more.
+- Whether you want to open new buffers in extra frames can be customized
+	now. There is an option in the Options menu that can be saved
+	with the "Save Options" function.
+- Various text input method improvements
+- (based on emacs 22.0.50.1 CVS May-2005 plus patches)
+
+Thanks to all of the mentioned people and to 
+Stefan Monnier, Steven Tamm, Drew Adams for their helpful hints. 
+
+0.9 - initial public release
