@@ -11,7 +11,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.10 2005/06/16 11:37:49 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.11 2005/06/19 14:25:16 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -133,6 +133,10 @@
  ) 
 
 
+; Mac Drag-N-Drop
+
+(require 'mac-drag-N-drop)
+(global-set-key [drag-n-drop] 'mac-drag-N-drop)
 
 ; do this early, so we can override settings
 (require 'aquamacs-frame-setup)
@@ -328,11 +332,13 @@
 ;; Show directories in buffer names when needed
 			 (buffers-menu-show-directories t)
 
+;; Do not complain when a minibuffer is still open somewhere
 
+			 (enable-recursive-minibuffers t)
 			 )
 )
  
-(add-hook 'text-mode-hook 'turn-on-auto-fill)
+; (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
 ; activate the modes now
 (global-font-lock-mode t) 
@@ -759,9 +765,11 @@ to be appropriate for its first buffer"
 	     ;; are set, because otherwise, default-frame-alist
 	     ;; is assumed by Emacs.
 	     (setq initial-frame-alist 
-		   (append 
+		   (append
+		    
 		    (cdr (assq major-mode 
 			       aquamacs-mode-specific-default-themes))
+		    initial-frame-alist
 		    (list
 		     (cons 'height (frame-parameter (selected-frame) 'height))
 		     (cons 'width (frame-parameter (selected-frame) 'width))
@@ -1350,7 +1358,7 @@ we put it on this frame."
     
 ;; INITIAL FRAME 
 ;; Place first frame in the location (80, 80) on screen 
-(setq initial-frame-alist   default-frame-alist)
+(setq initial-frame-alist   nil)
 ;; no effect - the first frame is already there at this point!
 (text-mode) 
 
@@ -1366,7 +1374,7 @@ we put it on this frame."
 
     (aquamacs-set-defaults '( 
 			     (mouse-wheel-progessive-speed nil)
-			     (mouse-wheel-scroll-amount (1 (shift . 1) (control . 0.9) ))
+			     (mouse-wheel-scroll-amount (1 (shift . 0.5) (control . 0.2) ))
 
 			     (pc-select-meta-moves-sexps t)
 			     (pc-select-selection-keys-only t)
@@ -1434,8 +1442,8 @@ we put it on this frame."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; this is for the About dialog
-(setq aquamacs-version "0.9.2 beta-8")
-(setq aquamacs-version-id 092.8)
+(setq aquamacs-version "0.9.2 beta-9")
+(setq aquamacs-version-id 092.9)
 (setq emacs-build-system (concat emacs-build-system " - Aquamacs Distribution " aquamacs-version))
 
 (require 'check-for-updates)
