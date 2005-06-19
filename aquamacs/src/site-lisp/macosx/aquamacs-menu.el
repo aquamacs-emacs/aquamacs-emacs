@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.2 2005/06/16 11:36:29 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.3 2005/06/19 14:25:05 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -100,16 +100,21 @@
 ;; this needs an extension to show the keyboard shortcut 
 ;; interesting extensions to menu-item: (:visible nil), (:key-sequence)
 
+ (define-key-after menu-bar-file-menu [my-file-separator]
+          '(menu-item "--") 'recover-session)
+ (define-key-after menu-bar-file-menu [mac-show-in-finder]
+          '(menu-item "Show In Finder" mac-key-show-in-finder
 
+		      :enable buffer-file-number
+		      ) 'my-file-separator)
+; 
 ;; we will set the following ones directly
 ;; customization is always possible
 ;; the existing menu item is badly worded and the C-c/v/x don't apply anyways
 (easy-menu-remove-item global-map  '("menu-bar" "options") 'cua-mode) 
 (easy-menu-remove-item global-map  '("menu-bar" "options") 'uniquify)
 (easy-menu-remove-item global-map  '("menu-bar" "options") 'transient-mark-mode)
-
-
-
+ 
 
 (if (boundp 'mac-pass-option-to-system) 
     (define-key-after menu-bar-options-menu [option-to-system]
@@ -197,11 +202,15 @@ rather than behaving as Meta"
  
  (defun aquamacs-user-wiki ()
   (interactive)
-  (browse-url "http://aquamacs.sourceforge.net/wiki/")
+  (browse-url "http://aquamacs.org/wiki/")
 ) 
  (defun aquamacs-homepage ()
   (interactive)
-  (browse-url "http://aquamacs.sourceforge.net/")
+  (browse-url "http://aquamacs.org/")
+) 
+(defun emacsosx-mailing-list-subscribe ()
+  (interactive)
+  (browse-url "mailto:macosx-emacs-on@email.esm.psu.edu?subject=subscribe%20macosx-emacs&body=Send%20off%20this%20e-mail%20to%20subscrube%20to%20the%20Emacs-on-MacOSX%20mailing%20list.")
 ) 
 
 (easy-menu-add-item  nil '("Help")
@@ -209,6 +218,7 @@ rather than behaving as Meta"
 
 (easy-menu-add-item  nil '("Help")
   (vector (format "Aquamacs Tips Wiki Online"  apple-char) 'aquamacs-user-wiki) 'emacs-tutorial)
+ 
  
 
 (easy-menu-add-item  nil '("Help")
@@ -227,6 +237,8 @@ rather than behaving as Meta"
 (easy-menu-add-item  nil '("Help")
   (vector "Emacs Wiki Online" 'emacs-user-wiki) 'emacs-tutorial)
  
+(easy-menu-add-item  nil '("Help")
+  (vector (format "Subscribe to mailing list..."  apple-char) 'emacsosx-mailing-list-subscribe) 'emacs-tutorial)
 
 (easy-menu-add-item  nil '("Help")
   ["-" nil nil] 'emacs-tutorial)
