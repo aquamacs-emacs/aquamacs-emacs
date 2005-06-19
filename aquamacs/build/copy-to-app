@@ -42,7 +42,8 @@ cp -Rvp $projdir/aquamacs/src/site-lisp/edit-modes/*.el $dest/Contents/Resources
 cp -Rvp $projdir/aquamacs/src/site-lisp/macosx/*.el $dest/Contents/Resources/site-lisp/macosx/
 cp -Rvp $projdir/aquamacs/src/site-lisp/oneonone/*.el $dest/Contents/Resources/site-lisp/oneonone/
 
-$em -batch -f batch-byte-compile $dest/Contents/Resources/site-lisp/*.el $dest/Contents/Resources/site-lisp/macosx/*.el $dest/Contents/Resources/site-lisp/oneonone/*.el
+$em -batch -f batch-byte-compile $dest/Contents/Resources/site-lisp/*.el $dest/Contents/Resources/site-lisp/macosx/*.el 
+$em -batch -f batch-byte-compile $dest/Contents/Resources/site-lisp/oneonone/*.el
   
 # .el is too large
 gzip $dest/Contents/Resources/site-lisp/color-theme.el
@@ -52,6 +53,4 @@ gzip $dest/Contents/Resources/site-lisp/color-theme.el
 
 rm $dest/Contents/MacOS/bin/emacs
 rm $dest/Contents/MacOS/bin/emacs-22.0.50
-cd $dest/Contents/MacOS/bin/
-ln -s ../Emacs emacs
-ln -s ../Emacs emacs-22.0.50
+cd $dest/Contents/MacOS/bin/ ; ln -s ../Emacs emacs ; ln -s ../Emacs emacs-22.0.50
