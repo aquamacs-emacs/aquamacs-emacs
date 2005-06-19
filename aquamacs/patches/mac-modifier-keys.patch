@@ -1,10 +1,10 @@
 Index: macterm.c
 ===================================================================
 RCS file: /cvsroot/emacs/emacs/src/macterm.c,v
-retrieving revision 1.115
-diff -c -r1.115 macterm.c
-*** macterm.c	13 May 2005 08:42:38 -0000	1.115
---- macterm.c	29 May 2005 16:41:27 -0000
+retrieving revision 1.118
+diff -c -r1.118 macterm.c
+*** macterm.c	15 Jun 2005 02:29:29 -0000	1.118
+--- macterm.c	17 Jun 2005 21:08:41 -0000
 ***************
 *** 86,101 ****
   #include "composite.h"
@@ -72,7 +72,7 @@ diff -c -r1.115 macterm.c
   static Lisp_Object Qvendor_specific_keysyms;
   
 ***************
-*** 4175,4193 ****
+*** 4179,4197 ****
   		     kEventAttributeNone, &event);
     if (err == noErr)
       {
@@ -92,7 +92,7 @@ diff -c -r1.115 macterm.c
       }
     if (err == noErr)
       err = PostEventToQueue (GetCurrentEventQueue (), event,
---- 4189,4207 ----
+--- 4193,4211 ----
   		     kEventAttributeNone, &event);
     if (err == noErr)
       {
@@ -113,7 +113,7 @@ diff -c -r1.115 macterm.c
     if (err == noErr)
       err = PostEventToQueue (GetCurrentEventQueue (), event,
 ***************
-*** 4196,4202 ****
+*** 4200,4206 ****
       scroll_bar_timer_event_posted_p = 1;
   
     if (event)
@@ -121,7 +121,7 @@ diff -c -r1.115 macterm.c
   }
   
   static OSStatus
---- 4210,4216 ----
+--- 4214,4220 ----
       scroll_bar_timer_event_posted_p = 1;
   
     if (event)
@@ -130,7 +130,7 @@ diff -c -r1.115 macterm.c
   
   static OSStatus
 ***************
-*** 4342,4348 ****
+*** 4346,4352 ****
   			       kControlIndicatorPart, &r);
   
         if (GC_NILP (bar->dragging))
@@ -138,7 +138,7 @@ diff -c -r1.115 macterm.c
   
         top = mouse_pos.v - XINT (bar->dragging) - XINT (bar->track_top);
         top_range = (XINT (bar->track_height) - (r.bottom - r.top)) *
---- 4356,4362 ----
+--- 4360,4366 ----
   			       kControlIndicatorPart, &r);
   
         if (GC_NILP (bar->dragging))
@@ -147,7 +147,7 @@ diff -c -r1.115 macterm.c
         top = mouse_pos.v - XINT (bar->dragging) - XINT (bar->track_top);
         top_range = (XINT (bar->track_height) - (r.bottom - r.top)) *
 ***************
-*** 4388,4402 ****
+*** 4392,4406 ****
   	}
   
         if (unhilite_p)
@@ -163,7 +163,7 @@ diff -c -r1.115 macterm.c
       }
   }
   
---- 4402,4416 ----
+--- 4406,4420 ----
   	}
   
         if (unhilite_p)
@@ -180,7 +180,7 @@ diff -c -r1.115 macterm.c
   }
   
 ***************
-*** 7443,7455 ****
+*** 7448,7460 ****
   /* Contains the string "reverse", which is a constant for mouse button emu.*/
   Lisp_Object Qreverse;
   
@@ -194,7 +194,7 @@ diff -c -r1.115 macterm.c
   Lisp_Object Vmac_reverse_ctrl_meta;
   
   /* True if the option and command modifiers should be used to emulate
---- 7457,7477 ----
+--- 7462,7482 ----
   /* Contains the string "reverse", which is a constant for mouse button emu.*/
   Lisp_Object Qreverse;
   
@@ -217,23 +217,23 @@ diff -c -r1.115 macterm.c
   
   /* True if the option and command modifiers should be used to emulate
 ***************
-*** 7468,7473 ****
---- 7490,7502 ----
-  /* If Non-nil, the Mac "Control" key is passed on to the Mac Toolbox
+*** 7474,7479 ****
+--- 7496,7508 ----
      for processing before Emacs sees it.  */
   Lisp_Object Vmac_pass_control_to_system;
-+ 
-+ /* If  non-nil, the Mac \"Option\" key can be used to compose
-+       characters as handled by the system and depending on the
-+       keyboard layout chosen. Only if the Mac \"Command\" or \"Ctrl\" key
-+       is depressed at the same time, Emacs evaluates the combination using
-+       whatever modifier is set in mac-option-modifier.  */
-+ Lisp_Object Vmac_pass_option_to_system;
-  #endif
   
-  /* Set in term/mac-win.el to indicate that event loop can now generate
++ /* If  non-nil, the Mac \"Option\" key can be used to compose
++        characters as handled by the system and depending on the
++        keyboard layout chosen. Only if the Mac \"Command\" or \"Ctrl\" key
++        is depressed at the same time, Emacs evaluates the combination using
++        whatever modifier is set in mac-option-modifier.  */
++ Lisp_Object Vmac_pass_option_to_system;
++ 
+  /* Points to the variable `inev' in the function XTread_socket.  It is
+     used for passing an input event to the function back from a Carbon
+     event handler.  */
 ***************
-*** 7523,7539 ****
+*** 7533,7549 ****
     unsigned int result = 0;
     if (mods & macShiftKey)
       result |= shift_modifier;
@@ -251,7 +251,7 @@ diff -c -r1.115 macterm.c
   
     return result;
   }
---- 7552,7626 ----
+--- 7562,7636 ----
     unsigned int result = 0;
     if (mods & macShiftKey)
       result |= shift_modifier;
@@ -328,7 +328,7 @@ diff -c -r1.115 macterm.c
     return result;
   }
 ***************
-*** 9409,9418 ****
+*** 9476,9485 ****
   		inev.kind = NON_ASCII_KEYSTROKE_EVENT;
   	      }
   	    else
@@ -339,7 +339,7 @@ diff -c -r1.115 macterm.c
   		  {
   		    /* This code comes from Keyboard Resource,
   		       Appendix C of IM - Text.  This is necessary
---- 9496,9514 ----
+--- 9563,9581 ----
   		inev.kind = NON_ASCII_KEYSTROKE_EVENT;
   	      }
   	    else
@@ -360,7 +360,7 @@ diff -c -r1.115 macterm.c
   		    /* This code comes from Keyboard Resource,
   		       Appendix C of IM - Text.  This is necessary
 ***************
-*** 9420,9426 ****
+*** 9487,9493 ****
   		       translation when option or command is pressed.
   		       It also does not translate correctly
   		       control-shift chars like C-% so mask off shift
@@ -368,7 +368,7 @@ diff -c -r1.115 macterm.c
   		    int new_modifiers = er.modifiers & 0xe600;
   		    /* mask off option and command */
   		    int new_keycode = keycode | new_modifiers;
---- 9516,9529 ----
+--- 9583,9596 ----
   		       translation when option or command is pressed.
   		       It also does not translate correctly
   		       control-shift chars like C-% so mask off shift
@@ -384,7 +384,7 @@ diff -c -r1.115 macterm.c
   		    /* mask off option and command */
   		    int new_keycode = keycode | new_modifiers;
 ***************
-*** 9428,9458 ****
+*** 9495,9525 ****
   		    unsigned long some_state = 0;
   		    inev.code = KeyTranslate (kchr_ptr, new_keycode,
   					      &some_state) & 0xff;
@@ -416,7 +416,7 @@ diff -c -r1.115 macterm.c
   	  XSETFRAME (inev.frame_or_window, mac_focus_frame (dpyinfo));
   	  inev.timestamp = er.when * (1000 / 60);  /* ticks to milliseconds */
   	  break;
---- 9531,9552 ----
+--- 9598,9619 ----
   		    unsigned long some_state = 0;
   		    inev.code = KeyTranslate (kchr_ptr, new_keycode,
   					      &some_state) & 0xff;
@@ -440,8 +440,8 @@ diff -c -r1.115 macterm.c
   	  inev.timestamp = er.when * (1000 / 60);  /* ticks to milliseconds */
   	  break;
 ***************
-*** 10101,10106 ****
---- 10195,10204 ----
+*** 10168,10173 ****
+--- 10262,10271 ----
   #if TARGET_API_MAC_CARBON
     init_required_apple_events ();
   
@@ -453,8 +453,8 @@ diff -c -r1.115 macterm.c
   #ifdef MAC_OSX
     init_service_handler ();
 ***************
-*** 10151,10156 ****
---- 10249,10257 ----
+*** 10218,10223 ****
+--- 10316,10324 ----
   #ifdef MAC_OSX
     Fprovide (intern ("mac-carbon"), Qnil);
   #endif
@@ -465,7 +465,7 @@ diff -c -r1.115 macterm.c
     staticpro (&Qreverse);
     Qreverse = intern ("reverse");
 ***************
-*** 10191,10209 ****
+*** 10258,10276 ****
   
     DEFVAR_LISP ("mac-command-key-is-meta", &Vmac_command_key_is_meta,
       doc: /* Non-nil means that the command key is used as the Emacs meta key.
@@ -485,7 +485,7 @@ diff -c -r1.115 macterm.c
   
     DEFVAR_LISP ("mac-emulate-three-button-mouse",
   	       &Vmac_emulate_three_button_mouse,
---- 10292,10347 ----
+--- 10359,10414 ----
   
     DEFVAR_LISP ("mac-command-key-is-meta", &Vmac_command_key_is_meta,
       doc: /* Non-nil means that the command key is used as the Emacs meta key.
@@ -543,8 +543,8 @@ diff -c -r1.115 macterm.c
     DEFVAR_LISP ("mac-emulate-three-button-mouse",
   	       &Vmac_emulate_three_button_mouse,
 ***************
-*** 10233,10238 ****
---- 10371,10384 ----
+*** 10300,10305 ****
+--- 10438,10451 ----
   Toolbox for processing before Emacs sees it.  */);
     Vmac_pass_control_to_system = Qt;
   
