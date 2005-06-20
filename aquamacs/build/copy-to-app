@@ -2,8 +2,17 @@
 
 # installs files into Emacs.app to make it Aquamacs
 
-dest=$2
-projdir=$1
+if [ $1 == "-n" ]; then
+
+    dest=$3
+    projdir=$2
+else 
+    compile=1
+    dest=$2
+    projdir=$1
+
+fi
+
 
 if [ ! $dest ]; then
 
@@ -42,11 +51,14 @@ cp -Rvp $projdir/aquamacs/src/site-lisp/edit-modes/*.el $dest/Contents/Resources
 cp -Rvp $projdir/aquamacs/src/site-lisp/macosx/*.el $dest/Contents/Resources/site-lisp/macosx/
 cp -Rvp $projdir/aquamacs/src/site-lisp/oneonone/*.el $dest/Contents/Resources/site-lisp/oneonone/
 
-$em -batch -f batch-byte-compile $dest/Contents/Resources/site-lisp/*.el $dest/Contents/Resources/site-lisp/macosx/*.el 
-$em -batch -f batch-byte-compile $dest/Contents/Resources/site-lisp/oneonone/*.el
+if [ $compile ]; then
+    $em -batch -f batch-byte-compile $dest/Contents/Resources/site-lisp/*.el $dest/Contents/Resources/site-lisp/macosx/*.el 
+    $em -batch -f batch-byte-compile $dest/Contents/Resources/site-lisp/oneonone/*.el
   
+
 # .el is too large
-gzip $dest/Contents/Resources/site-lisp/color-theme.el
+    gzip $dest/Contents/Resources/site-lisp/color-theme.el
+fi
 
 
 # replace hardlinks
