@@ -11,7 +11,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.12 2005/06/20 00:10:12 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.13 2005/06/20 22:20:15 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -133,7 +133,8 @@ yes-or-no prompts - y or n will do."
 ; Mac Drag-N-Drop
 
 (require 'mac-drag-N-drop)
-(global-set-key [drag-n-drop] 'mac-drag-N-drop)
+; this will disturb x-dnd... :-(
+ (global-set-key [drag-n-drop] 'mac-drag-N-drop)
 
 ; do this early, so we can override settings
 (require 'aquamacs-frame-setup)
@@ -617,15 +618,7 @@ whenever the mode MODE-NAME is activated.")
 	'make-help-mode-use-frame-fitting
 	'append) ;; move to the end: after loading customizations
 	
-	
-;;  (defun set-theme ()
-;;    (interactive)
-;; (debug)
-;;    (set-mode-specific-theme)
-;;  )
-; 
-; (frame-parameter (selected-frame) 'frame-configured-for-buffer)
-
+	 
 (defun set-mode-specific-theme (&optional frame force)
   (unless frame (setq frame (selected-frame)))
 
@@ -633,24 +626,28 @@ whenever the mode MODE-NAME is activated.")
 
       (condition-case err		; (otherwise, Emacs hangs)
       
-	  ; frame-configured-for-buffer stores for which buffer the frame configuration
+	  ; frame-configured-for-buffer stores for which buffer
+	  ; and which major-mode the frame configuration
 	  ; is for, so we don't have to apply the theme again. 
-	  ; This is also vedry important because setting the theme in itself
+	  ; This is also very important because setting the theme in itself
 	  ; will cause another menu-bar-update-hook call, so we can end up
 	  ; with this function called again and again...
 
 	  (let ((buffer (window-buffer (frame-first-window frame))))
+	    
 	    (if (or 
-		    (not (eq (frame-parameter frame 
+		    (not (equal (frame-parameter frame 
 					     'frame-configured-for-buffer)
-			     buffer))
+			     ;(cons 
+			      buffer 
+			     ; major-mode)
+			     ))
 		     force)
-	      (save-excursion
-		(set-buffer buffer)
 
+		(save-excursion
+		  (set-buffer buffer)
 		(let ((theme (get-mode-specific-theme major-mode))
 		      )
-					; (print default-frame-alist)
 		  (dolist (th (if (special-display-p (buffer-name)) 
 				  special-display-frame-alist 
 				default-frame-alist
@@ -672,8 +669,11 @@ whenever the mode MODE-NAME is activated.")
 									   (assq-delete-all 'top (assq-delete-all
 												  'left (assq-delete-all 'height (assq-delete-all 'width
 																		  theme))))))))
-					;(print theme)
-		  (modify-frame-parameters frame (cons (cons 'frame-configured-for-buffer buffer) theme))
+		  (modify-frame-parameters frame (cons (cons 'frame-configured-for-buffer 
+							     ; (cons 
+							      buffer 
+							     ; major-mode)
+							     ) theme))
 		  )
 		)
 	      )
@@ -691,8 +691,10 @@ whenever the mode MODE-NAME is activated.")
 
 (defun set-mode-theme-after-change-major-mode ()       			      
 ; delete the configuration cache parameter
+; sometimes, this will be called for the buffer, but before
+; the target frame has been switched to the new buffer.
+; that's bad luck then. 
   (dolist (f (find-all-frames-internal (current-buffer)))
-     
 ; update the theme
     (set-mode-specific-theme f t)
     )  
@@ -720,8 +722,6 @@ whenever the mode MODE-NAME is activated.")
 
 ;(setq last-major-mode-theme-in-this-frame nil)
 
-(setq update-mode-theme-busy nil) ;; needed as workaround probably for some obscure bug
-;; crashes otherwise
 (defun update-mode-theme ()
   "Update the theme (colors, font) of the selected frame 
 to be appropriate for its first buffer"
@@ -753,7 +753,6 @@ to be appropriate for its first buffer"
 
 (add-hook 'after-init-hook   
 	  '(lambda () 
-	     (set-mode-specific-theme)
 	     
 	     ;; because we don't want the first frame to dance around
 	     ;; more than necessary, we set height + width to whatever
@@ -763,9 +762,12 @@ to be appropriate for its first buffer"
 	     ;; is assumed by Emacs.
 	     (setq initial-frame-alist 
 		   (append
-		    
+		    ;; ensure that frame is configured again in case a file is loaded
+		    ;; (because change-major-mode hook wouldn't pick it up otherwise)
+		    (list '(frame-configured-for-buffer))
 		    (cdr (assq major-mode 
 			       aquamacs-mode-specific-default-themes))
+
 		    initial-frame-alist
 		    (list
 		     (cons 'height (frame-parameter (selected-frame) 'height))
@@ -773,10 +775,6 @@ to be appropriate for its first buffer"
 		     )
 		    )
 		   )
-	     ;; this is for the initial frame   
-	     ;; but probably doesn't make sense at this point
-	     ;; at this point, the toolbar exists - everything is fine
-  
 	     )
 'append
 	  )
@@ -882,7 +880,9 @@ to be appropriate for its first buffer"
   (let ( (bufname (get-bufname buf))
 	 )
      
-    (if one-buffer-one-frame 	 
+    (if (and one-buffer-one-frame 
+	     (> (buffer-size) 0)
+	     )
 	(if
 	    (member bufname
 		    '(
@@ -987,42 +987,28 @@ to be appropriate for its first buffer"
 )
 (add-hook 'menu-bar-update-hook 'auto-raise-if-all-hidden)
 
-
-;; the following doesn't work
-;; (defun autoraise-off-if-no-minibuffer (frame)
-;;   (print (frame-parameter frame 'minibuffer))
-;;   (and 
-;;    (not (memq (frame-parameter frame 'minibuffer)
-;; 	      (list 'only t)
-;; 	      )
-;; 	)
-;;    (make-variable-frame-local 'minibuffer-auto-raise)
-;;    (modify-frame-parameters frame '((minibuffer-auto-raise)))
-;;    )
-;;   )
-;; (add-hook 'after-make-frame-functions 'autoraise-off-if-no-minibuffer)
-
-
-
+ 
 ;; we'd like to open new frames for some stuff
 
-
-(if (string= "mac" window-system)
-    (defadvice find-file (around force-other-frame (&rest args) activate)
-					; (interactive nil)
-      (if one-buffer-one-frame  
-   
-	  (progn 
-	    ;; (select-frame (make-frame))
-	    ;;(apply #'find-file (find-file-read-args "Find file: " nil)) 
-	    (apply #'find-file-other-frame args)
-	    (add-to-list 'aquamacs-newly-opened-frames (cons (selected-window) (current-buffer)))
-	    )
+;; not needed any more
+;; (if (string= "mac" window-system)
+;;     (defadvice find-file (around force-other-frame (&rest args) activate)
+;; 					; (interactive nil)
+;;       (print "asdasd")
+;;       (print (buffer-size))
+;;       (if (and one-buffer-one-frame
+;; 	       (> (buffer-size) 0) ; don't open new frame if one is already visible
+;; 	       )
+;; 	  (progn 
+;; 	    (print (buffer-size))
+;; 	    (apply #'find-file-other-frame args)
+;; 	    (add-to-list 'aquamacs-newly-opened-frames (cons (selected-window) (current-buffer)))
+;; 	    )
          
-	ad-do-it 
-	)
-      )
-  )
+;; 	ad-do-it 
+;; 	)
+;;       )
+;;   )
 ;;; 
 
 
