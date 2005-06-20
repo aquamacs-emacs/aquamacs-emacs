@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.6 2005/06/13 22:47:16 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.7 2005/06/20 22:18:11 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -78,20 +78,25 @@ double-click in Finder."
 ;; effect
 )
 
-(defun mac-set-creator-code ()
-  (if aquamacs-set-creator-codes-after-writing-files
-      (if buffer-file-name ;; added security
-	  (do-applescript (format "try
-tell application \"Finder\"
-set the creator type of POSIX file \"%s\" to \"EMAx\"
-end tell
-end try" buffer-file-name)
-			  )
-	t
-	)
+;; the following requires the non-standard function
+;; mac-set-creator to be compiled in
+(defun mac-set-creator-code-for-file ()
+  (if (and aquamacs-set-creator-codes-after-writing-files
+	   buffer-file-name
+	   (fboundp 'mac-set-creator)
+	   )
+      (mac-set-creator buffer-file-name)
     )
   )
-(add-hook 'after-save-hook 'mac-set-creator-code)
+
+(add-hook 'after-save-hook 'mac-set-creator-code-for-file)
+
+;; (do-applescript (format "try
+;; tell application \"Finder\"
+;; set the creator type of POSIX file \"%s\" to \"EMAx\"
+;; end tell
+;; end try" buffer-file-name)
+
 
 ;; copied here from osx-key-mode.el by Seiji Zenitani
 ;; modified to work with OS X 10.4 by David Reitter
