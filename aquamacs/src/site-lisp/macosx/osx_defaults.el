@@ -11,7 +11,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.11 2005/06/19 14:25:16 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.12 2005/06/20 00:10:12 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -80,26 +80,23 @@
 ;; Stop Emacs from asking for "y-e-s", when a "y" will do. 
 
 
-;; the following seems to result in an endless loop sometimes
-;; maybe because we're fsetting a C-function?
+(fset 'old-yes-or-no-p (symbol-function 'yes-or-no-p))
+(defcustom aquamacs-quick-yes-or-no-prompt t
+  "If non-nil, the user does not have to type in yes or no at
+yes-or-no prompts - y or n will do."
+  :group 'Aquamacs
+  :version "22.0"
+  )
+(defun aquamacs-repl-yes-or-no-p (arg)
+  (interactive)
+  (if aquamacs-quick-yes-or-no-prompt
+      (y-or-n-p arg)
+    (old-yes-or-no-p arg)
+    )
+  )
+(fset 'yes-or-no-p 'aquamacs-repl-yes-or-no-p)
 
-;; (fset 'old-yes-or-no-p (symbol-function 'yes-or-no-p))
-;; (defcustom aquamacs-quick-yes-or-no-prompt t
-;;   "If non-nil, the user does not have to type in yes or no at
-;; yes-or-no prompts - y or n will do."
-;;   :group 'Aquamacs
-;;   :version "22.0"
-;;   )
-;; (defun aquamacs-yes-or-no-p (arg)
-;;   (debug)
-;;   (if aquamacs-quick-yes-or-no-prompt
-;;       (y-or-n-p arg)
-;;     (old-yes-or-no-p arg)
-;;     )
-;;   )
-;;(fset 'yes-or-no-p 'aquamacs-yes-or-no-p)
-
-(fset 'yes-or-no-p 'y-or-n-p)
+;;(fset 'yes-or-no-p 'y-or-n-p)
 
 
 ;; No more annoying bells all the time
@@ -1393,9 +1390,15 @@ we put it on this frame."
 (pc-selection-mode t) 
 (show-paren-mode t) 
 (blink-cursor-mode t)
- 
+
 (set-default 'cursor-type '(bar . 2))
- 
+
+
+; Default for soft wrap
+; (set-default 'longlines-mode t)
+;; and turn on in current buffer
+; (longlines-mode t)
+
 
 
 ;; Define customization group

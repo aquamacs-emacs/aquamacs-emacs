@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.5 2005/06/19 14:25:43 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.6 2005/06/20 00:10:12 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -61,7 +61,6 @@
 
   (raise-frame f) ; make sure frame is visible
   (let ((y (- (display-pixel-height) (frame-total-pixel-height f) 30 ))) ; extra 30 pix for typical Dock
-    (print y)
     (if (< y (frame-parameter f 'top))
 	(modify-frame-parameters f (list (cons 'top y)))
     )

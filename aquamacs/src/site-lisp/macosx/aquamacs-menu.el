@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.3 2005/06/19 14:25:05 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.4 2005/06/20 00:10:12 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -114,7 +114,32 @@
 (easy-menu-remove-item global-map  '("menu-bar" "options") 'cua-mode) 
 (easy-menu-remove-item global-map  '("menu-bar" "options") 'uniquify)
 (easy-menu-remove-item global-map  '("menu-bar" "options") 'transient-mark-mode)
- 
+(easy-menu-remove-item global-map  '("menu-bar" "options") 'case-fold-search)
+
+(require 'longlines) 
+
+;; must use the menu-item syntax here because longlines-mode
+;; is a buffer-local variable
+(define-key-after menu-bar-options-menu [longlines-on]
+  '(menu-item "Soft word wrap in this Buffer"
+	      longlines-mode
+	      :help "Wrap long lines without inserting carriage returns"
+	      :button (:toggle . longlines-mode))
+  'auto-fill-mode
+  )
+
+;; in edit menu
+
+(define-key menu-bar-search-menu [case-fold-search]
+  (menu-bar-make-toggle toggle-case-fold-search case-fold-search
+			"Case-Insensitive Search"
+			"Case-Insensitive Search %s"
+			"Ignore letter-case in search"))
+
+
+
+
+
 
 (if (boundp 'mac-pass-option-to-system) 
     (define-key-after menu-bar-options-menu [option-to-system]
