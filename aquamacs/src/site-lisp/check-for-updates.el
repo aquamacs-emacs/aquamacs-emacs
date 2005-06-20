@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs version check
  
-;; Last change: $Id: check-for-updates.el,v 1.2 2005/06/09 19:52:49 davidswelt Exp $
+;; Last change: $Id: check-for-updates.el,v 1.3 2005/06/20 22:24:49 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -126,12 +126,10 @@ and show user a message if there is."
 	( last-update-check 0) )
 
     (if (file-exists-p aquamacs-id-file)
-	(let (
-	    (buf (find-file-noselect aquamacs-id-file t t nil))
-	    )
-	  (save-excursion
-	    (set-buffer buf)
-	    (buffer-string)
+	(with-temp-buffer
+	  (insert-file-contents-literally aquamacs-id-file)
+	    ; (set-buffer buf)
+	    ; (buffer-string)
 	    (goto-char (point-min)) 
 	    (setq call-number (number-at-point) )
 	    (goto-line 2)
@@ -142,9 +140,9 @@ and show user a message if there is."
 	    (setq aquamacs-user-likes-beta (number-at-point))
 	    (goto-line 5)
 	    (setq force-check (eq 888 (number-at-point))) ;; contains 888 if new version previously found
-	    (kill-buffer buf)
+	    ; (kill-buffer buf)
 	    )
-	  )
+	  
       )
   
     (if (string-match "beta"  aquamacs-version)
