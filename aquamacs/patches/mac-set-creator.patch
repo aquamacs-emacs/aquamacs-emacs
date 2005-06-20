@@ -1,0 +1,310 @@
+Index: macfns.c
+===================================================================
+RCS file: /cvsroot/emacs/emacs/src/macfns.c,v
+retrieving revision 1.59
+diff -c -r1.59 macfns.c
+*** macfns.c	13 May 2005 08:43:18 -0000	1.59
+--- macfns.c	20 Jun 2005 22:10:49 -0000
+***************
+*** 2026,2031 ****
+--- 2026,2086 ----
+  #endif /* not MAC_OSX */
+  }
+  
++ #if (MAC_OS_X_VERSION_MAX_ALLOWED >= 1020)
++ /* Change the opecity of frame F to ALPHA.
++    ALPHA must be a number between 0.0 and 1.0
++ 
++    The frame will become completely invisible If ALPHA is 0.0,
++    while the value of 1.0 makes it completely opaque.  */
++ 
++ void
++ x_set_active_alpha (f, alpha, old_alpha)
++      struct frame *f;
++      Lisp_Object alpha, old_alpha;
++ {
++   /* Don't change the alpha if it's already ALPHA.  */
++   if (EQ (alpha, f->active_alpha))
++     return;
++ 
++   if (NILP (alpha))
++     return;
++ 
++   if (FLOATP (alpha))
++   {
++     f->active_alpha = XFLOAT_DATA (alpha);
++ 
++ #if TARGET_API_MAC_CARBON
++     BLOCK_INPUT;
++ 
++     SetWindowAlpha (f->output_data.mac->mWP, f->active_alpha);
++ 
++     UNBLOCK_INPUT;
++ #endif
++   }
++ 
++   return;
++ }
++ 
++ void
++ x_set_inactive_alpha (f, alpha, old_alpha)
++      struct frame *f;
++      Lisp_Object alpha, old_alpha;
++ {
++   /* Don't change the alpha if it's already ALPHA.  */
++   if (EQ (alpha, f->inactive_alpha))
++     return;
++ 
++   if (NILP (alpha))
++     return;
++ 
++   if (FLOATP (alpha))
++   {
++     f->inactive_alpha = XFLOAT_DATA (alpha);
++   }
++ 
++   return;
++ }
++ #endif /* USE_TRANSPARENCY */
+  
+  /* Subroutines of creating a frame.  */
+  
+***************
+*** 2736,2741 ****
+--- 2791,2802 ----
+    x_default_parameter (f, parms, Qscroll_bar_width, Qnil,
+  		       "scrollBarWidth", "ScrollBarWidth",
+  		       RES_TYPE_NUMBER);
++ #if (MAC_OS_X_VERSION_MAX_ALLOWED >= 1020)
++   x_default_parameter (f, parms, Qactive_alpha, make_float(1.0),
++ 		       "activeAlpha", "ActiveAlpha", RES_TYPE_FLOAT);
++   x_default_parameter (f, parms, Qinactive_alpha, make_float(1.0),
++ 		       "inactiveAlpha", "InactiveAlpha", RES_TYPE_FLOAT);
++ #endif /* USE_TRANSPARENCY */
+  
+    /* Dimensions, especially FRAME_LINES (f), must be done via change_frame_size.
+       Change will not be effected unless different from the current
+***************
+*** 4375,4388 ****
+  	  break;
+  	}
+        NavDialogDispose(dialogRef);
+      }
+      else {
+        /* Fall back on minibuffer if there was a problem */
+        file = Fcompleting_read (prompt, intern ("read-file-name-internal"),
+  			       dir, mustmatch, dir, Qfile_name_history,
+  			       default_filename, Qnil);
+      }
+-     UNBLOCK_INPUT;
+    }
+  
+    UNGCPRO;
+--- 4436,4450 ----
+  	  break;
+  	}
+        NavDialogDispose(dialogRef);
++       UNBLOCK_INPUT;
+      }
+      else {
++       UNBLOCK_INPUT;
+        /* Fall back on minibuffer if there was a problem */
+        file = Fcompleting_read (prompt, intern ("read-file-name-internal"),
+  			       dir, mustmatch, dir, Qfile_name_history,
+  			       default_filename, Qnil);
+      }
+    }
+  
+    UNGCPRO;
+***************
+*** 4405,4410 ****
+--- 4467,4630 ----
+  {
+  }
+  #endif
++  
++ 
++ #ifdef MAC_OSX
++ 
++ 
++ /* The code for the following two functions is taken from MoreFilesX.c
++    (Apple Sample Code), authored by Jim Luther / Apple 
++    and released for free use. 
++    The code has been modified.
++ */
++ 
++ OSErr
++ FSBumpDate(
++ 	const FSRef *ref)
++ {
++ 	OSStatus		result;
++ 	FSCatalogInfo	catalogInfo;
++ 	UTCDateTime		oldDateTime;
++ #if MAC_OSX
++ 	FSRef			parentRef;
++ 	Boolean			notifyParent;
++ #endif
++ 
++ #if MAC_OSX
++ 	/* Get the node flags, the content modification date and time, and the parent ref */
++ 	result = FSGetCatalogInfo(ref, kFSCatInfoNodeFlags + kFSCatInfoContentMod, &catalogInfo, NULL, NULL, &parentRef);
++ 	require_noerr(result, FSGetCatalogInfo);
++ 	
++ 	/* Notify the parent if this is a file */
++ 	notifyParent = (0 == (catalogInfo.nodeFlags & kFSNodeIsDirectoryMask));
++ #else
++ 	/* Get the content modification date and time */
++ 	result = FSGetCatalogInfo(ref, kFSCatInfoContentMod, &catalogInfo, NULL, NULL, NULL);
++ 	require_noerr(result, FSGetCatalogInfo);
++ #endif
++ 	
++ 	oldDateTime = catalogInfo.contentModDate;
++ 
++ 	/* Get the current date and time */
++ 	result = GetUTCDateTime(&catalogInfo.contentModDate, kUTCDefaultOptions);
++ 	require_noerr(result, GetUTCDateTime);
++ 	
++ 	/* if the old date and time is the the same as the current, bump the seconds by one */
++ 	if ( (catalogInfo.contentModDate.fraction == oldDateTime.fraction) &&
++ 		 (catalogInfo.contentModDate.lowSeconds == oldDateTime.lowSeconds) &&
++ 		 (catalogInfo.contentModDate.highSeconds == oldDateTime.highSeconds) )
++ 	{
++ 		++catalogInfo.contentModDate.lowSeconds;
++ 		if ( 0 == catalogInfo.contentModDate.lowSeconds )
++ 		{
++ 			++catalogInfo.contentModDate.highSeconds;
++ 		}
++ 	}
++ 	
++ 	/* Bump the content modification date and time */
++ 	result = FSSetCatalogInfo(ref, kFSCatInfoContentMod, &catalogInfo);
++ 	require_noerr(result, FSSetCatalogInfo);
++ 
++ #if MAC_OSX
++ 	/*
++ 	 * The problem with FNNotify is that it is not available under Mac OS 9
++ 	 * and there's no way to test for that except for looking for the symbol
++ 	 * or something. So, I'll just conditionalize this for those who care
++ 	 * to send a notification.
++ 	 */
++ 	
++ 	/* Send a notification for the parent of the file, or for the directory */
++ 	result = FNNotify(notifyParent ? &parentRef : ref, kFNDirectoryModifiedMessage, kNilOptions);
++ 	require_noerr(result, FNNotify);
++ #endif
++ 
++ 	/* ignore errors from FSSetCatalogInfo (volume might be write protected) and FNNotify */
++ FNNotify:
++ FSSetCatalogInfo:
++ 	
++ 	return ( noErr );
++ 	
++ 	/**********************/
++ 	
++ GetUTCDateTime:
++ FSGetCatalogInfo:
++ 
++ 	return ( result );
++ }
++ 
++ 
++ OSErr
++ FSChangeCreator(
++ 	const FSRef *ref,
++ 	OSType fileCreator)
++ {
++ 	OSErr			result;
++ 	FSCatalogInfo	catalogInfo;
++ 	FSRef			parentRef;
++ 	
++ 	/* get nodeFlags, finder info, and parent FSRef */
++ 	result = FSGetCatalogInfo(ref, kFSCatInfoNodeFlags + 
++ 				  kFSCatInfoFinderInfo, &catalogInfo , 
++ 				  NULL, NULL, &parentRef);
++ 	require_noerr(result, FSGetCatalogInfo);
++ 	
++ 	/* make sure FSRef was to a file */
++ 	require_action(0 == (catalogInfo.nodeFlags & kFSNodeIsDirectoryMask),
++ 		       FSRefNotFile, result = notAFileErr);
++ 	
++ 	
++ 	/* If creator not 0x00000000, change creator */
++ 	if ( fileCreator != (OSType)0x00000000 )
++ 	{
++ 	  ((FileInfo *)&catalogInfo.finderInfo)->fileCreator = fileCreator;
++ 	}
++ 	
++ 	/* now, save the new information back to disk */
++ 	result = FSSetCatalogInfo(ref, kFSCatInfoFinderInfo, &catalogInfo);
++ 	require_noerr(result, FSSetCatalogInfo);
++ 	
++ 	/* and attempt to bump the parent directory's mod date to wake up */
++ 	/* the Finder to the change we just made (ignore errors from this) */
++ 	verify_noerr(FSBumpDate(&parentRef));
++ 	
++ FSSetCatalogInfo:
++ FSRefNotFile:
++ FSGetCatalogInfo:
++ 
++ 	return ( result );
++ }
++ 
++ 
++ DEFUN ("mac-set-creator", Fmac_set_creator, Smac_set_creator, 1, 1, 0,
++        doc: /* Set creator code of file PATH to 'EMAx'.
++ PATH must be a fully qualified file name.
++ Return non-nil if successful.
++    */)
++   (path)
++      Lisp_Object path;
++ {
++   CHECK_STRING (path);
++ 
++   OSErr	status;
++   FSRef defLoc;
++   status = FSPathMakeRef(SDATA(ENCODE_FILE(path)), &defLoc, NULL);
++ 
++   if (status == noErr)
++     {
++       status = FSChangeCreator(&defLoc, (OSType) 'EMAx');
++ 	
++ 	if (status == noErr)
++ 	  return Qt;
++     }
++   return Qnil;
++ }
++  
++ 
++ 
++ #endif
++ 
++ 
++ 
+  
+  /***********************************************************************
+  			    Initialization
+***************
+*** 4444,4449 ****
+--- 4664,4673 ----
+    x_set_fringe_width,
+    0, /* x_set_wait_for_wm, */
+    x_set_fullscreen,
++ #if (MAC_OS_X_VERSION_MAX_ALLOWED >= 1020)
++   x_set_active_alpha,
++   x_set_inactive_alpha,
++ #endif /* USE_TRANSPARENCY */
+  };
+  
+  void
+***************
+*** 4616,4621 ****
+--- 4840,4848 ----
+  #if TARGET_API_MAC_CARBON
+    defsubr (&Sx_file_dialog);
+  #endif
++ #if MAC_OSX
++   defsubr (&Smac_set_creator);
++ #endif
+  }
+  
+  /* arch-tag: d7591289-f374-4377-b245-12f5dbbb8edc
