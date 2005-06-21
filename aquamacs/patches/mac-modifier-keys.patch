@@ -4,7 +4,7 @@ RCS file: /cvsroot/emacs/emacs/src/macterm.c,v
 retrieving revision 1.118
 diff -c -r1.118 macterm.c
 *** macterm.c	15 Jun 2005 02:29:29 -0000	1.118
---- macterm.c	17 Jun 2005 21:08:41 -0000
+--- macterm.c	21 Jun 2005 22:05:06 -0000
 ***************
 *** 86,101 ****
   #include "composite.h"
@@ -328,6 +328,32 @@ diff -c -r1.118 macterm.c
     return result;
   }
 ***************
+*** 9426,9434 ****
+  		 || !(er.modifiers & cmdKey))
+  		&& (!NILP (Vmac_pass_control_to_system)
+  		    || !(er.modifiers & controlKey))
+! 		&& (!NILP (Vmac_command_key_is_meta)
+! 		    && NILP (Vmac_option_modifier)
+! 		    || !(er.modifiers & optionKey)))
+  	      if (SendEventToEventTarget (eventRef, toolbox_dispatcher)
+  		  != eventNotHandledErr)
+  		break;
+--- 9513,9526 ----
+  		 || !(er.modifiers & cmdKey))
+  		&& (!NILP (Vmac_pass_control_to_system)
+  		    || !(er.modifiers & controlKey))
+! 		&& (macOldModifierSetting ?
+! 		    ((!NILP (Vmac_command_key_is_meta)
+! 		      && NILP (Vmac_option_modifier)
+! 		      || !(er.modifiers & optionKey)))
+! 		    : (!NILP (Vmac_pass_option_to_system)
+! 		    || !(er.modifiers & optionKey))
+! 		    )
+! 		)
+  	      if (SendEventToEventTarget (eventRef, toolbox_dispatcher)
+  		  != eventNotHandledErr)
+  		break;
+***************
 *** 9476,9485 ****
   		inev.kind = NON_ASCII_KEYSTROKE_EVENT;
   	      }
@@ -339,7 +365,7 @@ diff -c -r1.118 macterm.c
   		  {
   		    /* This code comes from Keyboard Resource,
   		       Appendix C of IM - Text.  This is necessary
---- 9563,9581 ----
+--- 9568,9586 ----
   		inev.kind = NON_ASCII_KEYSTROKE_EVENT;
   	      }
   	    else
@@ -368,7 +394,7 @@ diff -c -r1.118 macterm.c
   		    int new_modifiers = er.modifiers & 0xe600;
   		    /* mask off option and command */
   		    int new_keycode = keycode | new_modifiers;
---- 9583,9596 ----
+--- 9588,9601 ----
   		       translation when option or command is pressed.
   		       It also does not translate correctly
   		       control-shift chars like C-% so mask off shift
@@ -416,7 +442,7 @@ diff -c -r1.118 macterm.c
   	  XSETFRAME (inev.frame_or_window, mac_focus_frame (dpyinfo));
   	  inev.timestamp = er.when * (1000 / 60);  /* ticks to milliseconds */
   	  break;
---- 9598,9619 ----
+--- 9603,9624 ----
   		    unsigned long some_state = 0;
   		    inev.code = KeyTranslate (kchr_ptr, new_keycode,
   					      &some_state) & 0xff;
@@ -441,7 +467,7 @@ diff -c -r1.118 macterm.c
   	  break;
 ***************
 *** 10168,10173 ****
---- 10262,10271 ----
+--- 10267,10276 ----
   #if TARGET_API_MAC_CARBON
     init_required_apple_events ();
   
@@ -454,7 +480,7 @@ diff -c -r1.118 macterm.c
     init_service_handler ();
 ***************
 *** 10218,10223 ****
---- 10316,10324 ----
+--- 10321,10329 ----
   #ifdef MAC_OSX
     Fprovide (intern ("mac-carbon"), Qnil);
   #endif
@@ -485,7 +511,7 @@ diff -c -r1.118 macterm.c
   
     DEFVAR_LISP ("mac-emulate-three-button-mouse",
   	       &Vmac_emulate_three_button_mouse,
---- 10359,10414 ----
+--- 10364,10419 ----
   
     DEFVAR_LISP ("mac-command-key-is-meta", &Vmac_command_key_is_meta,
       doc: /* Non-nil means that the command key is used as the Emacs meta key.
@@ -544,7 +570,7 @@ diff -c -r1.118 macterm.c
   	       &Vmac_emulate_three_button_mouse,
 ***************
 *** 10300,10305 ****
---- 10438,10451 ----
+--- 10443,10456 ----
   Toolbox for processing before Emacs sees it.  */);
     Vmac_pass_control_to_system = Qt;
   
