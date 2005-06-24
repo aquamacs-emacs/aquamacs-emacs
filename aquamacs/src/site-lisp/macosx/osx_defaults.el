@@ -11,7 +11,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.13 2005/06/20 22:20:15 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.14 2005/06/24 23:29:19 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -300,6 +300,7 @@ yes-or-no prompts - y or n will do."
 
 
 
+(require 'longlines) 
 (aquamacs-set-defaults '(
 
 ; Colorized fonts
@@ -333,6 +334,8 @@ yes-or-no prompts - y or n will do."
 ;; Do not complain when a minibuffer is still open somewhere
 
 			 (enable-recursive-minibuffers t)
+ 
+			 (longlines-wrap-follows-window-size t)
 			 )
 )
  
