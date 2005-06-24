@@ -4,7 +4,7 @@ RCS file: /cvsroot/emacs/emacs/src/macterm.c,v
 retrieving revision 1.118
 diff -c -r1.118 macterm.c
 *** macterm.c	15 Jun 2005 02:29:29 -0000	1.118
---- macterm.c	21 Jun 2005 22:05:06 -0000
+--- macterm.c	24 Jun 2005 23:25:25 -0000
 ***************
 *** 86,101 ****
   #include "composite.h"
@@ -342,12 +342,12 @@ diff -c -r1.118 macterm.c
   		 || !(er.modifiers & cmdKey))
   		&& (!NILP (Vmac_pass_control_to_system)
   		    || !(er.modifiers & controlKey))
-! 		&& (macOldModifierSetting ?
+! 		&& (!NILP (Vmac_pass_option_to_system)
+! 		    || (macOldModifierSetting ?
 ! 		    ((!NILP (Vmac_command_key_is_meta)
 ! 		      && NILP (Vmac_option_modifier)
 ! 		      || !(er.modifiers & optionKey)))
-! 		    : (!NILP (Vmac_pass_option_to_system)
-! 		    || !(er.modifiers & optionKey))
+! 			:  !(er.modifiers & optionKey))
 ! 		    )
 ! 		)
   	      if (SendEventToEventTarget (eventRef, toolbox_dispatcher)
