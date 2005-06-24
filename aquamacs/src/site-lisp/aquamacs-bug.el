@@ -3,7 +3,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: mac bug report
  
-;; Last change: $Id: aquamacs-bug.el,v 1.4 2005/06/19 14:23:33 davidswelt Exp $
+;; Last change: $Id: aquamacs-bug.el,v 1.5 2005/06/24 23:27:34 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -29,13 +29,18 @@
 ;; Copyright (C) 2005, David Reitter
 
 
-(setq report-emacs-bug-cc-list "aquamacs-bugs@lists.sourceforge.net")
+(setq report-emacs-bug-cc-list nil)
 
 
 (require 'emacsbug)
 
 (provide 'aquamacs-bug)
 
+;; Request by RMS 06/2005: do not report Aquamacs bugs 
+;; to the Emacs mailing lists.
+
+(setq report-emacs-bug-address "aquamacs-bugs@aquamacs.org")
+(setq report-emacs-bug-pretest-address "aquamacs-bugs@aquamacs.org")
 
 (defvar report-emacs-bug-cc-list nil
   "List of e-mail addresses to cc when reporting bugs.")
