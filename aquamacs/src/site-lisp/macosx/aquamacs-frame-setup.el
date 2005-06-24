@@ -8,7 +8,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-frame-setup.el,v 1.5 2005/06/13 22:46:10 davidswelt Exp $
+;; Last change: $Id: aquamacs-frame-setup.el,v 1.6 2005/06/24 23:28:17 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -127,7 +127,7 @@
  ; (defconst special-display-regexps '("[ ]?[*][^sC][^c][^r][^*]+[*]" ))
 
 (defconst special-display-regexps '( "[ ]?\\*info.*\\*[ ]?"  "[ ]?\\*Help\\*[ ]?" 
-				     "[ ]?\\*Messages\\*[ ]?"   "[ ]*Customize*"
+				     "[ ]?\\*Messages\\*[ ]?"   "[ ]*Customize*""[ ]?\\*Open Recent\\*[ ]?"
 				     ".*SPEEDBAR.*"
 				     ))
 ;; If we make Backtrace dedicated,
