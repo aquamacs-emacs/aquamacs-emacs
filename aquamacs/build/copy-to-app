@@ -2,7 +2,7 @@
 
 # installs files into Emacs.app to make it Aquamacs
 
-if [ $1 eq "-n" ]; then
+if [ "$1" == "-n" ]; then
 
     dest=$3
     projdir=$2
@@ -37,7 +37,8 @@ mkdir $dest/Contents/Resources/site-lisp/oneonone 2>/dev/null
 mkdir $dest/Contents/Resources/site-lisp/macosx 2>/dev/null
 mkdir $dest/Contents/Resources/site-lisp/edit-modes 2>/dev/null
 
-
+rm -r $dest/Contents/Resources/Aquamacs\ Help
+cp -r $projdir/aquamacs/doc/AquamacsHelp $dest/Contents/Resources/Aquamacs\ Help
 cp -r $projdir/aquamacs/src/Emacs.icns $dest/Contents/Resources/Emacs.icns
 
 cp -r $projdir/aquamacs/src/etc/aquamacs-splash-screen.jpg $dest/Contents/Resources/etc/
