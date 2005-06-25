@@ -1,0 +1,52 @@
+Index: recentf.el
+===================================================================
+RCS file: /cvsroot/emacs/emacs/lisp/recentf.el,v
+retrieving revision 1.38
+diff -c -r1.38 recentf.el
+*** recentf.el	14 Jun 2005 12:02:42 -0000	1.38
+--- recentf.el	25 Jun 2005 10:37:10 -0000
+***************
+*** 1112,1131 ****
+      ;; Insert the dialog header
+      (widget-insert "Click on a file to open it. ")
+      (widget-insert "Click on Cancel or type \"q\" to quit.\n\n" )
+!     ;; Insert the list of files as buttons
+!     (let ((recentf-open-files-item-shift ""))
+!       (mapc 'recentf-open-files-item
+!             (recentf-apply-menu-filter
+!              recentf-menu-filter
+!              (mapcar 'recentf-make-default-menu-element files))))
+!     (widget-insert "\n")
+!     ;; Insert the Cancel button
+!     (widget-create
+!      'push-button
+!      :notify 'recentf-cancel-dialog
+!      "Cancel")
+!     (widget-setup)
+!     (goto-char (point-min))))
+  
+  (defun recentf-open-more-files ()
+    "Show a dialog buffer to open a recent file that is not in the menu."
+--- 1112,1133 ----
+      ;; Insert the dialog header
+      (widget-insert "Click on a file to open it. ")
+      (widget-insert "Click on Cancel or type \"q\" to quit.\n\n" )
+!     (let ((point-start (point)))
+!       ;; Insert the list of files as buttons
+!       (let ((recentf-open-files-item-shift ""))
+! 	(mapc 'recentf-open-files-item
+! 	      (recentf-apply-menu-filter
+! 	       recentf-menu-filter
+! 	       (mapcar 'recentf-make-default-menu-element files))))
+!       (widget-insert "\n")
+!       ;; Insert the Cancel button
+!       (widget-create
+!        'push-button
+!        :notify 'recentf-cancel-dialog
+!        "Cancel")
+!       (widget-setup)
+!       (goto-char point-start)
+!       (hl-line-mode t))))
+  
+  (defun recentf-open-more-files ()
+    "Show a dialog buffer to open a recent file that is not in the menu."
