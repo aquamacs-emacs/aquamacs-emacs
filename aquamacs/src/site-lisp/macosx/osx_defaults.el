@@ -11,7 +11,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.14 2005/06/24 23:29:19 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.15 2005/06/25 10:47:20 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -884,7 +884,7 @@ to be appropriate for its first buffer"
 	 )
      
     (if (and one-buffer-one-frame 
-	     (> (buffer-size) 0)
+	     (> (buffer-size (window-buffer (frame-first-window))) 0)
 	     )
 	(if
 	    (member bufname
@@ -992,32 +992,7 @@ to be appropriate for its first buffer"
 
  
 ;; we'd like to open new frames for some stuff
-
-;; not needed any more
-;; (if (string= "mac" window-system)
-;;     (defadvice find-file (around force-other-frame (&rest args) activate)
-;; 					; (interactive nil)
-;;       (print "asdasd")
-;;       (print (buffer-size))
-;;       (if (and one-buffer-one-frame
-;; 	       (> (buffer-size) 0) ; don't open new frame if one is already visible
-;; 	       )
-;; 	  (progn 
-;; 	    (print (buffer-size))
-;; 	    (apply #'find-file-other-frame args)
-;; 	    (add-to-list 'aquamacs-newly-opened-frames (cons (selected-window) (current-buffer)))
-;; 	    )
-         
-;; 	ad-do-it 
-;; 	)
-;;       )
-;;   )
-;;; 
-
-
-  
-; would like to get rid of frames -- this needs more testing.
-; however, it doesn't work for various reasons
+   
 ; one could make h-W just kill the buffer and then handle things here
 ; however, kill-buffer is called a lot for buffers that are not associated
 ; with a frame and we would need to make sure that only buffers for
@@ -1025,9 +1000,7 @@ to be appropriate for its first buffer"
 ; them when they are killed!
 ; maybe the previous force-other-frame should keep track of
 ; newly opened frames!
-
-
-
+ 
 
 
 
