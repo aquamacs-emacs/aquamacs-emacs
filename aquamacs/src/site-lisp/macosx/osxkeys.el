@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.6 2005/06/20 00:10:12 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.7 2005/06/25 10:46:25 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -44,7 +44,7 @@
 
 ;;; MacOS X specific stuff
 
-(setq osxkeys-command-key 'hyper)
+(defvar osxkeys-command-key mac-command-modifier)
 
 ;; Define the return key to avoid problems on MacOS X
 (define-key function-key-map [return] [13])
@@ -183,9 +183,17 @@
      )
 )
 
-
-(defvar osx-key-mode-map
-  (let ((map (make-sparse-keymap)))
+(defun make-osx-key-mode-map (&optional command-key)
+"Create a mode map for OSX key mode. COMMAND-KEY specifies
+which key is mapped to command. mac-command-modifier is the
+default."
+(if command-key
+    (setq osxkeys-command-key command-key)
+  (if mac-command-modifier
+      (setq osxkeys-command-key mac-command-modifier)
+    )
+)
+(let ((map (make-sparse-keymap)))
     (define-key map `[(,osxkeys-command-key \?)] 'aquamacs-user-help)
     (define-key map `[(,osxkeys-command-key shift \?)] 'aquamacs-emacs-manual)
 
@@ -227,6 +235,11 @@
     (define-key map `[(,osxkeys-command-key shift z)] 'redo)
     (define-key map `[(,osxkeys-command-key \`)] 'switch-to-next-frame)
     map)
+)
+
+
+(defvar osx-key-mode-map
+  (make-osx-key-mode-map)
   "Keymap for `osx-key-mode'.")
 
 (define-minor-mode osx-key-mode
@@ -234,41 +247,17 @@
 With arg, turn Mac Key mode on iff arg is positive.
 When Mac Key mode is enabled, mac-style key bindings are provided."
   :global t
-  :group 'osx-key-mode
-					;  :lighter " M"
-  :keymap 'osx-key-mode-map
-  (if osx-key-mode
-      (progn
+  :group 'osx-key-mode 
+  :keymap 'osx-key-mode-map  ;; probably not needed
 
-;        (setq osx-key-mode-backup-command-key-is-meta mac-command-key-is-meta
-;	      osx-key-mode-backup-pc-selection-mode pc-selection-mode)
-;	(setq mac-command-key-is-meta nil)
+  ; create up-to-date keymap
+  (setq osx-key-mode-map  (make-osx-key-mode-map))
+) 
+; unfortunately, it doesn't pick up changes in the keymap,
+; so users can't change mac-command-modifier and then redefine
+; the keymap at this point. 
 
-;	(setq pc-select-selection-keys-only t) ;; disaple M-backspace = undo    	
-;	(pc-selection-mode t)
-
-       
-					;    (when (file-exists-p osx-key-mode-gs-command)
-					;      (defalias 'ps-mule-header-string-charsets 'ignore) ;;*
-					;      (ad-enable-regexp "osx-key-mode-preview*")
-					;      )
-        )
-    (progn
-
- ;     (setq mac-command-key-is-meta osx-key-mode-backup-command-key-is-meta)
-  ;    (pc-selection-mode osx-key-mode-backup-pc-selection-mode)
-
-      (define-key global-map [menu-bar file my-file-separator] nil)
-      (define-key global-map [menu-bar file mac-show-in-finder] nil)
-;      (define-key global-map [menu-bar file mac-open-terminal] nil)
-
-					;      (when (file-exists-p osx-key-mode-gs-command)
-					;        (ad-disable-regexp "osx-key-mode-preview*")
-					;        )
-      ))
-  ) 
-
-;; change encoding so you can use alt-e and alt-u accents (and others) 
+;; Change encoding so you can use alt-e and alt-u accents (and others) 
 (set-terminal-coding-system 'iso-8859-1) 
 (set-keyboard-coding-system				  'mac-roman) ;; keyboard
 (set-selection-coding-system			  'mac-roman) ;; copy'n'paste
