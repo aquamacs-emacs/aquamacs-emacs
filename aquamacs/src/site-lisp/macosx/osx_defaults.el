@@ -11,7 +11,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.16 2005/06/25 16:33:09 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.17 2005/06/26 13:04:30 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -535,6 +535,7 @@ Use this argument instead of explicitly setting `view-exit-action'."
 		   blink-cursor-mode
 		   ;; added dr. 04/2005
 		   one-buffer-one-frame 
+		   mac-pass-option-to-system
 		   default-frame-alist
 		   special-display-frame-alist
 		   aquamacs-mode-specific-default-themes
@@ -1409,7 +1410,8 @@ we put it on this frame."
 ;; this is for the About dialog
 (setq aquamacs-version "0.9.3")
 (setq aquamacs-version-id 093.0)
-(setq emacs-build-system (concat emacs-build-system " - Aquamacs Distribution " aquamacs-version))
+(setq aquamacs-minor-version "a")
+(setq emacs-build-system (concat emacs-build-system " - Aquamacs Distribution " aquamacs-version aquamacs-minor-version))
 
 (require 'check-for-updates)
 ; via hook so it can be turned off
