@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs version check
  
-;; Last change: $Id: check-for-updates.el,v 1.4 2005/06/20 22:43:51 davidswelt Exp $
+;; Last change: $Id: check-for-updates.el,v 1.5 2005/06/26 14:25:34 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -71,7 +71,7 @@ nil
 
 ; the following is internal - shouldn't be set 
 (setq aquamacs-id-file "~/Library/Preferences/Aquamacs Emacs/.id")
-(setq aquamacs-user-likes-beta nil)
+(setq aquamacs-user-likes-beta 0) ;; this is 0 or 1, not nil / t
 (setq aquamacs-version-check-buffer nil) 
 (setq url-show-status nil) ;;don't annoy user
 (defun aquamacs-compare-version ()
@@ -158,7 +158,7 @@ and show user a message if there is."
         (write-region (concat (number-to-string (+ 1 call-number)) "\n"
 			  (number-to-string last-update-check) "\n"
 			  (number-to-string session-id) "\n"
-			   (number-to-string aquamacs-user-likes-beta ) "\n"
+			   (if (> aquamacs-user-likes-beta 0) "1" "0") "\n"
 			  )
  
 		  nil
@@ -190,7 +190,7 @@ and show user a message if there is."
 				 "?sess=" (number-to-string session-id) 
 				 "&seq=" (number-to-string calls)
 				 "&beta=" (number-to-string aquamacs-user-likes-beta) 
-				 "&ver=" (url-encode-string aquamacs-version)
+				 "&ver=" (url-encode-string (concat aquamacs-version aquamacs-minor-version))
 				 ) 
 			 )))
 	; HTTP-GET
