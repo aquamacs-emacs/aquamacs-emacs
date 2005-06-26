@@ -1,0 +1,68 @@
+<html lang="en">
+<head>
+<title>Auto-Save Files</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Auto-Save Files">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Auto%20Save%20Files">Auto Save Files</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Auto-Save-Control.html#Auto%20Save%20Control">Auto Save Control</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Auto-Save.html#Auto%20Save">Auto Save</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Auto-Save Files</h4>
+
+<p>Auto-saving does not normally save in the files that you visited, because
+it can be very undesirable to save a program that is in an inconsistent
+state when you have made half of a planned change.  Instead, auto-saving
+is done in a different file called the <dfn>auto-save file</dfn>, and the
+visited file is changed only when you request saving explicitly (such as
+with <kbd>C-x C-s</kbd>).
+
+   <p>Normally, the auto-save file name is made by appending <code>#</code> to the
+front and rear of the visited file name.  Thus, a buffer visiting file
+<code>foo.c</code> is auto-saved in a file <code>#foo.c#</code>.  Most buffers that
+are not visiting files are auto-saved only if you request it explicitly;
+when they are auto-saved, the auto-save file name is made by appending
+<code>#%</code> to the front and <code>#</code> to the rear of buffer name.  For
+example, the <code>*mail*</code> buffer in which you compose messages to be
+sent is auto-saved in a file named <code>#%*mail*#</code>.  Auto-save file
+names are made this way unless you reprogram parts of Emacs to do
+something different (the functions <code>make-auto-save-file-name</code> and
+<code>auto-save-file-name-p</code>).  The file name to be used for auto-saving
+in a buffer is calculated when auto-saving is turned on in that buffer.
+
+   <p>When you delete a substantial part of the text in a large buffer, auto
+save turns off temporarily in that buffer.  This is because if you
+deleted the text unintentionally, you might find the auto-save file more
+useful if it contains the deleted text.  To reenable auto-saving after
+this happens, save the buffer with <kbd>C-x C-s</kbd>, or use <kbd>C-u 1 M-x
+auto-save</kbd>.
+
+   <p>If you want auto-saving to be done in the visited file rather than
+in a separate auto-save file, set the variable
+<code>auto-save-visited-file-name</code> to a non-<code>nil</code> value.  In this
+mode, there is no real difference between auto-saving and explicit
+saving.
+
+   <p>A buffer's auto-save file is deleted when you save the buffer in its
+visited file.  To inhibit this, set the variable <code>delete-auto-save-files</code>
+to <code>nil</code>.  Changing the visited file name with <kbd>C-x C-w</kbd> or
+<code>set-visited-file-name</code> renames any auto-save file to go with
+the new visited name.
+
+   </body></html>
+

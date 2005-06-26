@@ -1,0 +1,65 @@
+<html lang="en">
+<head>
+<title>Emacs Terminal Emulator</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Emacs Terminal Emulator">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Terminal%20emulator">Terminal emulator</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Term-Mode.html#Term%20Mode">Term Mode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Shell-Options.html#Shell%20Options">Shell Options</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Shell.html#Shell">Shell</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Emacs Terminal Emulator</h4>
+
+<p>To run a subshell in a terminal emulator, putting its typescript in
+an Emacs buffer, use <kbd>M-x term</kbd>.  This creates (or reuses) a
+buffer named <code>*terminal*</code>, and runs a subshell with input coming
+from your keyboard, and output going to that buffer.
+
+   <p>The terminal emulator uses Term mode, which has two input modes.  In
+line mode, Term basically acts like Shell mode; see <a href="Shell-Mode.html#Shell%20Mode">Shell Mode</a>.
+
+   <p>In char mode, each character is sent directly to the inferior
+subshell, as "terminal input."  Any "echoing" of your input is the
+responsibility of the subshell.  The sole exception is the terminal
+escape character, which by default is <kbd>C-c</kbd> (see <a href="Term-Mode.html#Term%20Mode">Term Mode</a>). 
+Any "terminal output" from the subshell goes into the buffer,
+advancing point.
+
+   <p>Some programs (such as Emacs itself) need to control the appearance
+on the terminal screen in detail.  They do this by sending special
+control codes.  The exact control codes needed vary from terminal to
+terminal, but nowadays most terminals and terminal emulators
+(including <code>xterm</code>) understand the ANSI-standard (VT100-style)
+escape sequences.  Term mode recognizes these escape sequences, and
+handles each one appropriately, changing the buffer so that the
+appearance of the window matches what it would be on a real terminal. 
+You can actually run Emacs inside an Emacs Term window.
+
+   <p>The file name used to load the subshell is determined the same way
+as for Shell mode.  To make multiple terminal emulators, rename the
+buffer <code>*terminal*</code> to something different using <kbd>M-x
+rename-uniquely</kbd>, just as with Shell mode.
+
+   <p>Unlike Shell mode, Term mode does not track the current directory by
+examining your input.  But some shells can tell Term what the current
+directory is.  This is done automatically by <code>bash</code> version 1.15
+and later.
+
+   </body></html>
+

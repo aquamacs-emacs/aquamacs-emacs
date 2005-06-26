@@ -1,0 +1,75 @@
+<html lang="en">
+<head>
+<title>Backup Files</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Backup Files">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Backup">Backup</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Interlocking.html#Interlocking">Interlocking</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Saving.html#Saving">Saving</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Backup Files</h4>
+
+<p>On most operating systems, rewriting a file automatically destroys all
+record of what the file used to contain.  Thus, saving a file from Emacs
+throws away the old contents of the file--or it would, except that
+Emacs carefully copies the old contents to another file, called the
+<dfn>backup</dfn> file, before actually saving.
+
+   <p>For most files, the variable <code>make-backup-files</code> determines
+whether to make backup files.  On most operating systems, its default
+value is <code>t</code>, so that Emacs does write backup files.
+
+   <p>For files managed by a version control system (see <a href="Version-Control.html#Version%20Control">Version Control</a>), the variable <code>vc-make-backup-files</code> determines whether
+to make backup files.  By default it is <code>nil</code>, since backup files
+are redundant when you store all the previous versions in a version
+control system.  See <a href="General-VC-Options.html#General%20VC%20Options">General VC Options</a>.
+
+   <p>The default value of the <code>backup-enable-predicate</code> variable
+prevents backup files being written for files in the directories used
+for temporary files, specified by <code>temporary-file-directory</code> or
+<code>small-temporary-file-directory</code>.
+
+   <p>At your option, Emacs can keep either a single backup file or a series of
+numbered backup files for each file that you edit.
+
+   <p>Emacs makes a backup for a file only the first time the file is saved
+from one buffer.  No matter how many times you save a file, its backup file
+continues to contain the contents from before the file was visited. 
+Normally this means that the backup file contains the contents from before
+the current editing session; however, if you kill the buffer and then visit
+the file again, a new backup file will be made by the next save.
+
+   <p>You can also explicitly request making another backup file from a
+buffer even though it has already been saved at least once.  If you save
+the buffer with <kbd>C-u C-x C-s</kbd>, the version thus saved will be made
+into a backup file if you save the buffer again.  <kbd>C-u C-u C-x C-s</kbd>
+saves the buffer, but first makes the previous file contents into a new
+backup file.  <kbd>C-u C-u C-u C-x C-s</kbd> does both things: it makes a
+backup from the previous contents, and arranges to make another from the
+newly saved contents if you save again.
+
+<ul class="menu">
+<li><a accesskey="1" href="Backup-Names.html#Backup%20Names">Names</a>: 		How backup files are named;
+				  choosing single or numbered backup files. 
+<li><a accesskey="2" href="Backup-Deletion.html#Backup%20Deletion">Deletion</a>: 	Emacs deletes excess numbered backups. 
+<li><a accesskey="3" href="Backup-Copying.html#Backup%20Copying">Copying</a>: 	Backups can be made by copying or renaming. 
+</ul>
+
+   </body></html>
+

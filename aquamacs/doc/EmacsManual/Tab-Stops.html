@@ -1,0 +1,66 @@
+<html lang="en">
+<head>
+<title>Tab Stops</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Tab Stops">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Tab%20Stops">Tab Stops</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Just-Spaces.html#Just%20Spaces">Just Spaces</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Indentation-Commands.html#Indentation%20Commands">Indentation Commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Indentation.html#Indentation">Indentation</a>
+<hr><br>
+</div>
+
+<h3 class="section">Tab Stops</h3>
+
+<p>For typing in tables, you can use Text mode's definition of &lt;TAB&gt;,
+<code>tab-to-tab-stop</code>.  This command inserts indentation before point,
+enough to reach the next tab stop column.  If you are not in Text mode,
+this command can be found on the key <kbd>M-i</kbd>.
+
+   <p>You can specify the tab stops used by <kbd>M-i</kbd>.  They are stored in a
+variable called <code>tab-stop-list</code>, as a list of column-numbers in
+increasing order.
+
+   <p>The convenient way to set the tab stops is with <kbd>M-x
+edit-tab-stops</kbd>, which creates and selects a buffer containing a
+description of the tab stop settings.  You can edit this buffer to
+specify different tab stops, and then type <kbd>C-c C-c</kbd> to make those
+new tab stops take effect.  <code>edit-tab-stops</code> records which buffer
+was current when you invoked it, and stores the tab stops back in that
+buffer; normally all buffers share the same tab stops and changing them
+in one buffer affects all, but if you happen to make
+<code>tab-stop-list</code> local in one buffer then <code>edit-tab-stops</code> in
+that buffer will edit the local settings.
+
+   <p>Here is what the text representing the tab stops looks like for ordinary
+tab stops every eight columns.
+
+<pre class="example">             :       :       :       :       :       :
+     0         1         2         3         4
+     0123456789012345678901234567890123456789012345678
+     To install changes, type C-c C-c
+     </pre>
+
+   <p>The first line contains a colon at each tab stop.  The remaining lines
+are present just to help you see where the colons are and know what to do.
+
+   <p>Note that the tab stops that control <code>tab-to-tab-stop</code> have nothing
+to do with displaying tab characters in the buffer.  See <a href="Display-Custom.html#Display%20Custom">Display Custom</a>,
+for more information on that.
+
+   </body></html>
+

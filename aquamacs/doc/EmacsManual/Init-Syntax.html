@@ -1,0 +1,88 @@
+<html lang="en">
+<head>
+<title>Init File Syntax</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Init File Syntax">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Init%20Syntax">Init Syntax</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Init-Examples.html#Init%20Examples">Init Examples</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Init-File.html#Init%20File">Init File</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Init File Syntax</h4>
+
+<p>The <code>.emacs</code> file contains one or more Lisp function call
+expressions.  Each of these consists of a function name followed by
+arguments, all surrounded by parentheses.  For example, <code>(setq
+fill-column 60)</code> calls the function <code>setq</code> to set the variable
+<code>fill-column</code> (see <a href="Filling.html#Filling">Filling</a>) to 60.
+
+   <p>The second argument to <code>setq</code> is an expression for the new value of
+the variable.  This can be a constant, a variable, or a function call
+expression.  In <code>.emacs</code>, constants are used most of the time.  They can be:
+
+     <dl>
+<dt>Numbers:
+     <dd>Numbers are written in decimal, with an optional initial minus sign.
+
+     <br><dt>Strings:
+     <dd>Lisp string syntax is the same as C string syntax with a few extra
+features.  Use a double-quote character to begin and end a string constant.
+
+     <p>In a string, you can include newlines and special characters literally. 
+But often it is cleaner to use backslash sequences for them: <code>\n</code>
+for newline, <code>\b</code> for backspace, <code>\r</code> for carriage return,
+<code>\t</code> for tab, <code>\f</code> for formfeed (control-L), <code>\e</code> for
+escape, <code>\\</code> for a backslash, <code>\"</code> for a double-quote, or
+<code>\</code><var>ooo</var><code></code> for the character whose octal code is <var>ooo</var>. 
+Backslash and double-quote are the only characters for which backslash
+sequences are mandatory.
+
+     <p><code>\C-</code> can be used as a prefix for a control character, as in
+<code>\C-s</code> for ASCII control-S, and <code>\M-</code> can be used as a prefix for
+a Meta character, as in <code>\M-a</code> for <kbd>Meta-A</kbd> or <code>\M-\C-a</code> for
+<kbd>Control-Meta-A</kbd>.
+
+     <p>If you want to include non-ASCII characters in strings in your init
+file, you should consider putting a <code>-*-coding:&nbsp;</code><var>coding-system</var><code>-*-</code> tag on the first line which states the coding
+system used to save your <code>.emacs</code>, as explained in <a href="Recognize-Coding.html#Recognize%20Coding">Recognize Coding</a>.  This is because the defaults for decoding non-ASCII text might
+not yet be set up by the time Emacs reads those parts of your init file
+which use such strings, possibly leading Emacs to decode those strings
+incorrectly.
+
+     <br><dt>Characters:
+     <dd>Lisp character constant syntax consists of a <code>?</code> followed by
+either a character or an escape sequence starting with <code>\</code>. 
+Examples: <code>?x</code>, <code>?\n</code>, <code>?\"</code>, <code>?\)</code>.  Note that
+strings and characters are not interchangeable in Lisp; some contexts
+require one and some contexts require the other.
+
+     <p>See <a href="Non-ASCII-Rebinding.html#Non-ASCII%20Rebinding">Non-ASCII Rebinding</a>, for information about binding commands to
+keys which send non-ASCII characters.
+
+     <br><dt>True:
+     <dd><code>t</code> stands for `true'.
+
+     <br><dt>False:
+     <dd><code>nil</code> stands for `false'.
+
+     <br><dt>Other Lisp objects:
+     <dd>Write a single-quote (<code>'</code>) followed by the Lisp object you want. 
+</dl>
+
+   </body></html>
+

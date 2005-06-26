@@ -1,0 +1,110 @@
+<html lang="en">
+<head>
+<title>Copying Messages Out to Files</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Copying Messages Out to Files">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Rmail%20Output">Rmail Output</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Rmail-Labels.html#Rmail%20Labels">Rmail Labels</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Rmail-Files.html#Rmail%20Files">Rmail Files</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Rmail.html#Rmail">Rmail</a>
+<hr><br>
+</div>
+
+<h3 class="section">Copying Messages Out to Files</h3>
+
+<p>These commands copy messages from an Rmail file into another file.
+
+     <dl>
+<dt><kbd>o </kbd><var>file</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Append a copy of the current message to the file <var>file</var>, using Rmail
+file format by default (<code>rmail-output-to-rmail-file</code>).
+
+     <br><dt><kbd>C-o </kbd><var>file</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Append a copy of the current message to the file <var>file</var>, using
+system inbox file format by default (<code>rmail-output</code>).
+
+     <br><dt><kbd>w </kbd><var>file</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Output just the message body to the file <var>file</var>, taking the default
+file name from the message <code>Subject</code> header. 
+</dl>
+
+   <p>The commands <kbd>o</kbd> and <kbd>C-o</kbd> copy the current message into a
+specified file.  This file may be an Rmail file or it may be in system
+inbox format; the output commands ascertain the file's format and write
+the copied message in that format.
+
+   <p>The <kbd>o</kbd> and <kbd>C-o</kbd> commands differ in two ways: each has its
+own separate default file name, and each specifies a choice of format to
+use when the file does not already exist.  The <kbd>o</kbd> command uses
+Rmail format when it creates a new file, while <kbd>C-o</kbd> uses system
+inbox format for a new file.  The default file name for <kbd>o</kbd> is the
+file name used last with <kbd>o</kbd>, and the default file name for
+<kbd>C-o</kbd> is the file name used last with <kbd>C-o</kbd>.
+
+   <p>If the output file is an Rmail file currently visited in an Emacs buffer,
+the output commands copy the message into that buffer.  It is up to you
+to save the buffer eventually in its file.
+
+   <p>Sometimes you may receive a message whose body holds the contents of a
+file.  You can save the body to a file (excluding the message header)
+with the <kbd>w</kbd> command (<code>rmail-output-body-to-file</code>).  Often
+these messages contain the intended file name in the <code>Subject</code>
+field, so the <kbd>w</kbd> command uses the <code>Subject</code> field as the
+default for the output file name.  However, the file name is read using
+the minibuffer, so you can specify a different name if you wish.
+
+   <p>You can also output a message to an Rmail file chosen with a menu. 
+Choose first the menu bar Classify item, then from the Classify menu
+choose the Output Rmail File menu item; then choose the Rmail file you want. 
+This outputs the current message to that file, like the <kbd>o</kbd> command. 
+The variables <code>rmail-secondary-file-directory</code> and
+<code>rmail-secondary-file-regexp</code> specify which files to offer in the
+menu: the first variable says which directory to find them in; the
+second says which files in that directory to offer (all those that match
+the regular expression).
+
+   <p>Copying a message gives the original copy of the message the
+<code>filed</code> attribute, so that <code>filed</code> appears in the mode line
+when such a message is current.  If you like to keep just a single copy
+of every mail message, set the variable <code>rmail-delete-after-output</code>
+to <code>t</code>; then the <kbd>o</kbd> and <kbd>C-o</kbd> commands delete the original
+message after copying it.  (You can undelete the original afterward if
+you wish.)
+
+   <p>Copying messages into files in system inbox format uses the header
+fields that are displayed in Rmail at the time.  Thus, if you use the
+<kbd>t</kbd> command to view the entire header and then copy the message, the
+entire header is copied.  See <a href="Rmail-Display.html#Rmail%20Display">Rmail Display</a>.
+
+   <p>The variable <code>rmail-output-file-alist</code> lets you specify
+intelligent defaults for the output file, based on the contents of the
+current message.  The value should be a list whose elements have this
+form:
+
+<pre class="example">     (<var>regexp</var> . <var>name-exp</var>)
+     </pre>
+
+<p>If there's a match for <var>regexp</var> in the current message, then the
+default file name for output is <var>name-exp</var>.  If multiple elements
+match the message, the first matching element decides the default file
+name.  The subexpression <var>name-exp</var> may be a string constant giving
+the file name to use, or more generally it may be any Lisp expression
+that returns a file name as a string.  <code>rmail-output-file-alist</code>
+applies to both <kbd>o</kbd> and <kbd>C-o</kbd>.
+
+   </body></html>
+

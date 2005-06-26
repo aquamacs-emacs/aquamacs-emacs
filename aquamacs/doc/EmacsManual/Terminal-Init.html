@@ -1,0 +1,64 @@
+<html lang="en">
+<head>
+<title>Terminal-specific Initialization</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Terminal-specific Initialization">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Terminal%20Init">Terminal Init</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Find-Init.html#Find%20Init">Find Init</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Init-Examples.html#Init%20Examples">Init Examples</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Init-File.html#Init%20File">Init File</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Terminal-specific Initialization</h4>
+
+<p>Each terminal type can have a Lisp library to be loaded into Emacs when
+it is run on that type of terminal.  For a terminal type named
+<var>termtype</var>, the library is called <code>term/</code><var>termtype</var><code></code> and it is
+found by searching the directories <code>load-path</code> as usual and trying the
+suffixes <code>.elc</code> and <code>.el</code>.  Normally it appears in the
+subdirectory <code>term</code> of the directory where most Emacs libraries are
+kept.
+
+   <p>The usual purpose of the terminal-specific library is to map the
+escape sequences used by the terminal's function keys onto more
+meaningful names, using <code>function-key-map</code>.  See the file
+<code>term/lk201.el</code> for an example of how this is done.  Many function
+keys are mapped automatically according to the information in the
+Termcap data base; the terminal-specific library needs to map only the
+function keys that Termcap does not specify.
+
+   <p>When the terminal type contains a hyphen, only the part of the name
+before the first hyphen is significant in choosing the library name. 
+Thus, terminal types <code>aaa-48</code> and <code>aaa-30-rv</code> both use
+the library <code>term/aaa</code>.  The code in the library can use
+<code>(getenv "TERM")</code> to find the full terminal type name.
+
+   <p>The library's name is constructed by concatenating the value of the
+variable <code>term-file-prefix</code> and the terminal type.  Your <code>.emacs</code>
+file can prevent the loading of the terminal-specific library by setting
+<code>term-file-prefix</code> to <code>nil</code>.
+
+   <p>Emacs runs the hook <code>term-setup-hook</code> at the end of
+initialization, after both your <code>.emacs</code> file and any
+terminal-specific library have been read in.  Add hook functions to this
+hook if you wish to override part of any of the terminal-specific
+libraries and to define initializations for terminals that do not have a
+library.  See <a href="Hooks.html#Hooks">Hooks</a>.
+
+   </body></html>
+

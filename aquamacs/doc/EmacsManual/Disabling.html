@@ -1,0 +1,67 @@
+<html lang="en">
+<head>
+<title>Disabling Commands</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Disabling Commands">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Disabling">Disabling</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Mouse-Buttons.html#Mouse%20Buttons">Mouse Buttons</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Key-Bindings.html#Key%20Bindings">Key Bindings</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Disabling Commands</h4>
+
+<p>Disabling a command marks the command as requiring confirmation before it
+can be executed.  The purpose of disabling a command is to prevent
+beginning users from executing it by accident and being confused.
+
+   <p>An attempt to invoke a disabled command interactively in Emacs
+displays a window containing the command's name, its documentation, and
+some instructions on what to do immediately; then Emacs asks for input
+saying whether to execute the command as requested, enable it and
+execute it, or cancel.  If you decide to enable the command, you are
+asked whether to do this permanently or just for the current session. 
+(Enabling permanently works by automatically editing your <code>.emacs</code>
+file.)  You can also type <kbd>!</kbd> to enable <em>all</em> commands,
+for the current session only.
+
+   <p>The direct mechanism for disabling a command is to put a
+non-<code>nil</code> <code>disabled</code> property on the Lisp symbol for the
+command.  Here is the Lisp program to do this:
+
+<pre class="example">     (put 'delete-region 'disabled t)
+     </pre>
+
+   <p>If the value of the <code>disabled</code> property is a string, that string
+is included in the message displayed when the command is used:
+
+<pre class="example">     (put 'delete-region 'disabled
+          "It's better to use `kill-region' instead.\n")
+     </pre>
+
+   <p>You can make a command disabled either by editing the <code>.emacs</code>
+file directly or with the command <kbd>M-x disable-command</kbd>, which edits
+the <code>.emacs</code> file for you.  Likewise, <kbd>M-x enable-command</kbd>
+edits <code>.emacs</code> to enable a command permanently.  See <a href="Init-File.html#Init%20File">Init File</a>.
+
+   <p>Whether a command is disabled is independent of what key is used to
+invoke it; disabling also applies if the command is invoked using
+<kbd>M-x</kbd>.  Disabling a command has no effect on calling it as a
+function from Lisp programs.
+
+   </body></html>
+

@@ -1,0 +1,65 @@
+<html lang="en">
+<head>
+<title>Concepts of Emacs Windows</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Concepts of Emacs Windows">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Basic%20Window">Basic Window</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Split-Window.html#Split%20Window">Split Window</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
+<hr><br>
+</div>
+
+<h3 class="section">Concepts of Emacs Windows</h3>
+
+<p>Each Emacs window displays one Emacs buffer at any time.  A single
+buffer may appear in more than one window; if it does, any changes in
+its text are displayed in all the windows where it appears.  But the
+windows showing the same buffer can show different parts of it, because
+each window has its own value of point.
+
+   <p>At any time, one of the windows is the <dfn>selected window</dfn>; the
+buffer this window is displaying is the current buffer.  The terminal's
+cursor shows the location of point in this window.  Each other window
+has a location of point as well, but since the terminal has only one
+cursor there is no way to show where those locations are.  When multiple
+frames are visible in X, each frame has a cursor which appears in the
+frame's selected window.  The cursor in the selected frame is solid; the
+cursor in other frames is a hollow box.
+
+   <p>Commands to move point affect the value of point for the selected Emacs
+window only.  They do not change the value of point in any other Emacs
+window, even one showing the same buffer.  The same is true for commands
+such as <kbd>C-x b</kbd> to change the current buffer in the selected window;
+they do not affect other windows at all.  However, there are other commands
+such as <kbd>C-x 4 b</kbd> that select a different window and switch buffers in
+it.  Also, all commands that display information in a window, including
+(for example) <kbd>C-h f</kbd> (<code>describe-function</code>) and <kbd>C-x C-b</kbd>
+(<code>list-buffers</code>), work by switching buffers in a nonselected window
+without affecting the selected window.
+
+   <p>When multiple windows show the same buffer, they can have different
+regions, because they can have different values of point.  However,
+they all have the same value for the mark, because each buffer has
+only one mark position.
+
+   <p>Each window has its own mode line, which displays the buffer name,
+modification status and major and minor modes of the buffer that is
+displayed in the window.  See <a href="Mode-Line.html#Mode%20Line">Mode Line</a>, for full details on the mode
+line.
+
+   </body></html>
+

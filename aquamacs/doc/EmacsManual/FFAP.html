@@ -1,0 +1,68 @@
+<html lang="en">
+<head>
+<title>Finding Files and URLs at Point</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Finding Files and URLs at Point">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="FFAP">FFAP</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Find-func.html#Find-func">Find-func</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Goto-address.html#Goto-address">Goto-address</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Hyperlinking.html#Hyperlinking">Hyperlinking</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Finding Files and URLs at Point</h4>
+
+<p>FFAP mode replaces certain key bindings for finding files, including
+<kbd>C-x C-f</kbd>, with commands that provide more sensitive defaults. 
+These commands behave like the ordinary ones when given a prefix
+argument.  Otherwise, they get the default file name or URL from the
+text around point.  If what is found in the buffer has the form of a
+URL rather than a file name, the commands use <code>browse-url</code> to
+view it.
+
+   <p>This feature is useful for following references in mail or news
+buffers, <code>README</code> files, <code>MANIFEST</code> files, and so on.  The
+<code>ffap</code> package's commentary available via <kbd>C-h p</kbd> and the
+<code>ffap</code> Custom group provide details.
+
+   <p>You can turn on FFAP minor mode to make the following key bindings
+and to install hooks for using <code>ffap</code> in Rmail, Gnus and VM
+article buffers.
+
+     <dl>
+<dt><kbd>C-x C-f </kbd><var>filename</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Find <var>filename</var>, guessing a default from text around point
+(<code>find-file-at-point</code>). 
+<br><dt><kbd>C-x 4 f</kbd>
+     <dd><code>ffap-other-window</code>, analogous to <code>find-file-other-window</code>. 
+<br><dt><kbd>C-x 5 f</kbd>
+     <dd><code>ffap-other-frame</code>, analogous to <code>find-file-other-frame</code>. 
+<br><dt><kbd>M-x ffap-next</kbd>
+     <dd>Search buffer for next file name or URL, then find that file or URL. 
+<br><dt><kbd>C-x d </kbd><var>directory</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Start Dired on <var>directory</var>, defaulting to the directory name at
+point (<code>ffap-dired-at-point</code>). 
+<br><dt><kbd>S-Mouse-3</kbd>
+     <dd><code>ffap-at-mouse</code> finds the file guessed from text around the position
+of a mouse click. 
+<br><dt><kbd>C-S-Mouse-3</kbd>
+     <dd>Display a menu of files and URLs mentioned in current buffer, then
+find the one you select (<code>ffap-menu</code>). 
+</dl>
+
+   </body></html>
+

@@ -1,0 +1,71 @@
+<html lang="en">
+<head>
+<title>Non-ASCII Characters on the Keyboard</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Non-ASCII Characters on the Keyboard">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Non-ASCII%20Rebinding">Non-ASCII Rebinding</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Mouse-Buttons.html#Mouse%20Buttons">Mouse Buttons</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Named-ASCII-Chars.html#Named%20ASCII%20Chars">Named ASCII Chars</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Key-Bindings.html#Key%20Bindings">Key Bindings</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Non-ASCII Characters on the Keyboard</h4>
+
+<p>If your keyboard has keys that send non-ASCII characters, such as
+accented letters, rebinding these keys is a bit tricky.  There are two
+solutions you can use.  One is to specify a keyboard coding system,
+using <code>set-keyboard-coding-system</code> (see <a href="Specify-Coding.html#Specify%20Coding">Specify Coding</a>). 
+Then you can bind these keys in the usual way<a rel="footnote" href="#fn-1"><sup>1</sup></a>, like this:
+
+<pre class="example">     (global-set-key [?<var>char</var>] 'some-function)
+     </pre>
+
+<p>Type <kbd>C-q</kbd> followed by the key you want to bind, to insert <var>char</var>.
+
+   <p>If you don't specify the keyboard coding system, that approach won't
+work.  Instead, you need to find out the actual code that the terminal
+sends.  The easiest way to do this in Emacs is to create an empty buffer
+with <kbd>C-x b temp &lt;RET&gt;</kbd>, make it unibyte with <kbd>M-x
+toggle-enable-multibyte-characters &lt;RET&gt;</kbd>, then type the key to
+insert the character into this buffer.
+
+   <p>Move point before the character, then type <kbd>C-x =</kbd>.  This
+displays a message in the minibuffer, showing the character code in
+three ways, octal, decimal and hexadecimal, all within a set of
+parentheses.  Use the second of the three numbers, the decimal one,
+inside the vector to bind:
+
+<pre class="example">     (global-set-key [<var>decimal-code</var>] 'some-function)
+     </pre>
+
+   <p>If you bind 8-bit characters like this in your init file, you may find it
+convenient to specify that it is unibyte.  See <a href="Enabling-Multibyte.html#Enabling%20Multibyte">Enabling Multibyte</a>.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4>
+<ol type="1">
+<li><a name="fn-1"></a>
+<p>Note that you
+should avoid the string syntax for binding 8-bit characters, since
+they will be interpreted as meta keys.  See <a href="../elisp/Strings-of-Events.html#Strings%20of%20Events">Strings of Events</a>.</p>
+
+   </ol><hr></div>
+
+   </body></html>
+

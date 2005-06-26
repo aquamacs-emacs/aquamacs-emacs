@@ -1,0 +1,75 @@
+<html lang="en">
+<head>
+<title>Indenting Several Lines</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Indenting Several Lines">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Multi-line%20Indent">Multi-line Indent</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Lisp-Indent.html#Lisp%20Indent">Lisp Indent</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Basic-Indent.html#Basic%20Indent">Basic Indent</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Program-Indent.html#Program%20Indent">Program Indent</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Indenting Several Lines</h4>
+
+<p>When you wish to reindent several lines of code which have been
+altered or moved to a different level in the parenthesis structure,
+you have several commands available.
+
+     <dl>
+<dt><kbd>C-M-q</kbd>
+     <dd>Reindent all the lines within one parenthetical grouping(<code>indent-sexp</code>). 
+<br><dt><kbd>C-M-\</kbd>
+     <dd>Reindent all lines in the region (<code>indent-region</code>). 
+<br><dt><kbd>C-u &lt;TAB&gt;</kbd>
+     <dd>Shift an entire parenthetical grouping rigidly sideways so that its
+first line is properly indented. 
+<br><dt><kbd>M-x indent-code-rigidly</kbd>
+     <dd>Shift all the lines in the region rigidly sideways, but do not alter
+lines that start inside comments and strings. 
+</dl>
+
+   <p>You can reindent the contents of a single parenthetical grouping by
+positioning point before the beginning of it and typing <kbd>C-M-q</kbd>
+(<code>indent-sexp</code> in Lisp mode, <code>c-indent-exp</code> in C mode; also
+bound to other suitable commands in other modes).  The indentation of
+the line where the grouping starts is not changed; therefore, this
+changes only the relative indentation within the grouping, not its
+overall indentation.  To correct that as well, type &lt;TAB&gt; first.
+
+   <p>Another way to specify the range to be reindented is with the
+region.  The command <kbd>C-M-\</kbd> (<code>indent-region</code>) applies
+&lt;TAB&gt; to every line whose first character is between point and
+mark.
+
+   <p>If you like the relative indentation within a grouping, but not the
+indentation of its first line, you can type <kbd>C-u &lt;TAB&gt;</kbd> to
+reindent the whole grouping as a rigid unit.  (This works in Lisp
+modes and C and related modes.)  &lt;TAB&gt; with a numeric argument
+reindents the current line as usual, then reindents by the same amount
+all the lines in the parenthetical grouping starting on the current
+line.  It is clever, though, and does not alter lines that start
+inside strings, or C preprocessor lines when in C mode.
+
+   <p>You can also perform this operation on the region, using the command
+<kbd>M-x indent-code-rigidly</kbd>.  It rigidly shifts all the lines in the
+region sideways, like <code>indent-rigidly</code> does (see <a href="Indentation-Commands.html#Indentation%20Commands">Indentation Commands</a>).  It doesn't alter the indentation of lines that start
+inside a comment or a string, unless the region starts inside that
+comment or string.
+
+   </body></html>
+

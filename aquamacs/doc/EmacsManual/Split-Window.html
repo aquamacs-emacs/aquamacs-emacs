@@ -1,0 +1,83 @@
+<html lang="en">
+<head>
+<title>Splitting Windows</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Splitting Windows">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Split%20Window">Split Window</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Other-Window.html#Other%20Window">Other Window</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Basic-Window.html#Basic%20Window">Basic Window</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
+<hr><br>
+</div>
+
+<h3 class="section">Splitting Windows</h3>
+
+     <dl>
+<dt><kbd>C-x 2</kbd>
+     <dd>Split the selected window into two windows, one above the other
+(<code>split-window-vertically</code>). 
+<br><dt><kbd>C-x 3</kbd>
+     <dd>Split the selected window into two windows positioned side by side
+(<code>split-window-horizontally</code>). 
+<br><dt><kbd>C-Mouse-2</kbd>
+     <dd>In the mode line or scroll bar of a window, split that window. 
+</dl>
+
+   <p>The command <kbd>C-x 2</kbd> (<code>split-window-vertically</code>) breaks the
+selected window into two windows, one above the other.  Both windows start
+out displaying the same buffer, with the same value of point.  By default
+the two windows each get half the height of the window that was split; a
+numeric argument specifies how many lines to give to the top window.
+
+   <p><kbd>C-x 3</kbd> (<code>split-window-horizontally</code>) breaks the selected
+window into two side-by-side windows.  A numeric argument specifies how
+many columns to give the one on the left.  A line of vertical bars
+separates the two windows.  Windows that are not the full width of the
+screen have mode lines, but they are truncated.  On terminals where
+Emacs does not support highlighting, truncated mode lines sometimes do
+not appear in inverse video.
+
+   <p>You can split a window horizontally or vertically by clicking
+<kbd>C-Mouse-2</kbd> in the mode line or the scroll bar.  (This does not
+work in scroll bars implemented by X toolkits.)  The line of splitting
+goes through the place where you click: if you click on the mode line,
+the new scroll bar goes above the spot; if you click in the scroll
+bar, the mode line of the split window is side by side with your
+click.
+
+   <p>When a window is less than the full width, text lines too long to fit are
+frequent.  Continuing all those lines might be confusing.  The variable
+<code>truncate-partial-width-windows</code> can be set non-<code>nil</code> to force
+truncation in all windows less than the full width of the screen,
+independent of the buffer being displayed and its value for
+<code>truncate-lines</code>.  See <a href="Continuation-Lines.html#Continuation%20Lines">Continuation Lines</a>.
+
+   <p>Horizontal scrolling is often used in side-by-side windows. 
+See <a href="Display.html#Display">Display</a>.
+
+   <p>If <code>split-window-keep-point</code> is non-<code>nil</code>, the default,
+both of the windows resulting from <kbd>C-x 2</kbd> inherit the value of
+point from the window that was split.  This means that scrolling is
+inevitable.  If this variable is <code>nil</code>, then <kbd>C-x 2</kbd> tries to
+avoid scrolling the text currently visible on the screen, by putting
+point in each window at a position already visible in the window.  It
+also selects whichever window contain the screen line that the cursor
+was previously on.  Some users prefer the latter mode on slow
+terminals.
+
+   </body></html>
+

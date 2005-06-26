@@ -1,0 +1,82 @@
+<html lang="en">
+<head>
+<title>Keys</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Keys">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Keys">Keys</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Commands.html#Commands">Commands</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="User-Input.html#User%20Input">User Input</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr><br>
+</div>
+
+<h3 class="section">Keys</h3>
+
+<p>A <dfn>key sequence</dfn> (<dfn>key</dfn>, for short) is a sequence of input
+events that are meaningful as a unit--as "a single command."  Some
+Emacs command sequences are just one character or one event; for
+example, just <kbd>C-f</kbd> is enough to move forward one character in the
+buffer.  But Emacs also has commands that take two or more events to
+invoke.
+
+   <p>If a sequence of events is enough to invoke a command, it is a
+<dfn>complete key</dfn>.  Examples of complete keys include <kbd>C-a</kbd>,
+<kbd>X</kbd>, &lt;RET&gt;, &lt;NEXT&gt; (a function key), &lt;DOWN&gt; (an arrow
+key), <kbd>C-x C-f</kbd>, and <kbd>C-x 4 C-f</kbd>.  If it isn't long enough to be
+complete, we call it a <dfn>prefix key</dfn>.  The above examples show that
+<kbd>C-x</kbd> and <kbd>C-x 4</kbd> are prefix keys.  Every key sequence is either
+a complete key or a prefix key.
+
+   <p>Most single characters constitute complete keys in the standard Emacs
+command bindings.  A few of them are prefix keys.  A prefix key combines
+with the following input event to make a longer key sequence, which may
+itself be complete or a prefix.  For example, <kbd>C-x</kbd> is a prefix key,
+so <kbd>C-x</kbd> and the next input event combine to make a two-event
+key sequence.  Most of these key sequences are complete keys, including
+<kbd>C-x C-f</kbd> and <kbd>C-x b</kbd>.  A few, such as <kbd>C-x 4</kbd> and <kbd>C-x
+r</kbd>, are themselves prefix keys that lead to three-event key
+sequences.  There's no limit to the length of a key sequence, but in
+practice people rarely use sequences longer than four events.
+
+   <p>By contrast, you can't add more events onto a complete key.  For
+example, the two-event sequence <kbd>C-f C-k</kbd> is not a key, because
+the <kbd>C-f</kbd> is a complete key in itself.  It's impossible to give
+<kbd>C-f C-k</kbd> an independent meaning as a command.  <kbd>C-f C-k</kbd> is two
+key sequences, not one.
+
+   <p>All told, the prefix keys in Emacs are <kbd>C-c</kbd>, <kbd>C-h</kbd>,
+<kbd>C-x</kbd>, <kbd>C-x &lt;RET&gt;</kbd>, <kbd>C-x @</kbd>, <kbd>C-x a</kbd>, <kbd>C-x n</kbd>, <kbd>C-x&nbsp;r</kbd>, <kbd>C-x v</kbd>, <kbd>C-x 4</kbd>, <kbd>C-x 5</kbd>, <kbd>C-x 6</kbd>, &lt;ESC&gt;, and
+<kbd>M-g</kbd>.  But this list is not cast in concrete; it is
+just a matter of Emacs's standard key bindings.  If you customize Emacs,
+you can make new prefix keys, or eliminate these.  See <a href="Key-Bindings.html#Key%20Bindings">Key Bindings</a>.
+
+   <p>If you do make or eliminate prefix keys, that changes the set of
+possible key sequences.  For example, if you redefine <kbd>C-f</kbd> as a
+prefix, <kbd>C-f C-k</kbd> automatically becomes a key (complete, unless you
+define that too as a prefix).  Conversely, if you remove the prefix
+definition of <kbd>C-x 4</kbd>, then <kbd>C-x 4 f</kbd> (or <kbd>C-x 4
+</kbd><var>anything</var><kbd></kbd>) is no longer a key.
+
+   <p>Typing the help character (<kbd>C-h</kbd> or &lt;F1&gt;) after a prefix
+key displays a list of the commands starting with that prefix. 
+There are a few prefix keys for which <kbd>C-h</kbd> does not
+work--for historical reasons, they have other meanings for <kbd>C-h</kbd>
+which are not easy to change.  But &lt;F1&gt; should work for all prefix
+keys.
+
+   </body></html>
+

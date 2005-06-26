@@ -1,0 +1,51 @@
+<html lang="en">
+<head>
+<title>Features of the Log Entry Buffer</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Features of the Log Entry Buffer">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Log%20Buffer">Log Buffer</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Advanced-C-x-C-q.html#Advanced%20C-x%20C-q">Advanced C-x C-q</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Basic-VC-Editing.html#Basic%20VC%20Editing">Basic VC Editing</a>
+<hr><br>
+</div>
+
+<h3 class="subsubsection">Features of the Log Entry Buffer</h5>
+
+<p>When you check in changes, <kbd>C-x C-q</kbd> first reads a log entry.  It
+pops up a buffer called <code>*VC-Log*</code> for you to enter the log entry. 
+When you are finished, type <kbd>C-c C-c</kbd> in the <code>*VC-Log*</code> buffer. 
+That is when check-in really happens.
+
+   <p>To abort check-in, just <strong>don't</strong> type <kbd>C-c C-c</kbd> in that
+buffer.  You can switch buffers and do other editing.  As long as you
+don't try to check in another file, the entry you were editing remains
+in the <code>*VC-Log*</code> buffer, and you can go back to that buffer at any
+time to complete the check-in.
+
+   <p>If you change several source files for the same reason, it is often
+convenient to specify the same log entry for many of the files.  To do
+this, use the history of previous log entries.  The commands <kbd>M-n</kbd>,
+<kbd>M-p</kbd>, <kbd>M-s</kbd> and <kbd>M-r</kbd> for doing this work just like the
+minibuffer history commands (except that these versions are used outside
+the minibuffer).
+
+   <p>Each time you check in a file, the log entry buffer is put into VC Log
+mode, which involves running two hooks: <code>text-mode-hook</code> and
+<code>vc-log-mode-hook</code>.  See <a href="Hooks.html#Hooks">Hooks</a>.
+
+   </body></html>
+

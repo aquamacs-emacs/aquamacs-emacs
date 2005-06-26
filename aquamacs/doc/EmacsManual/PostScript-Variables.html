@@ -1,0 +1,101 @@
+<html lang="en">
+<head>
+<title>Variables for PostScript Hardcopy</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Variables for PostScript Hardcopy">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="PostScript%20Variables">PostScript Variables</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Sorting.html#Sorting">Sorting</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="PostScript.html#PostScript">PostScript</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr><br>
+</div>
+
+<h3 class="section">Variables for PostScript Hardcopy</h3>
+
+<p>All the PostScript hardcopy commands use the variables
+<code>ps-lpr-command</code> and <code>ps-lpr-switches</code> to specify how to print
+the output.  <code>ps-lpr-command</code> specifies the command name to run,
+<code>ps-lpr-switches</code> specifies command line options to use, and
+<code>ps-printer-name</code> specifies the printer.  If you don't set the
+first two variables yourself, they take their initial values from
+<code>lpr-command</code> and <code>lpr-switches</code>.  If <code>ps-printer-name</code>
+is <code>nil</code>, <code>printer-name</code> is used.
+
+   <p>The variable <code>ps-print-header</code> controls whether these commands
+add header lines to each page--set it to <code>nil</code> to turn headers
+off.
+
+   <p>If your printer doesn't support colors, you should turn off color
+processing by setting <code>ps-print-color-p</code> to <code>nil</code>.  By
+default, if the display supports colors, Emacs produces hardcopy output
+with color information; on black-and-white printers, colors are emulated
+with shades of gray.  This might produce illegible output, even if your
+screen colors only use shades of gray.
+
+   <p>By default, PostScript printing ignores the background colors of the
+faces, unless the variable <code>ps-use-face-background</code> is
+non-<code>nil</code>.  This is to avoid unwanted interference with the zebra
+stripes and background image/text.
+
+   <p>The variable <code>ps-paper-type</code> specifies which size of paper to
+format for; legitimate values include <code>a4</code>, <code>a3</code>,
+<code>a4small</code>, <code>b4</code>, <code>b5</code>, <code>executive</code>, <code>ledger</code>,
+<code>legal</code>, <code>letter</code>, <code>letter-small</code>, <code>statement</code>,
+<code>tabloid</code>.  The default is <code>letter</code>.  You can define
+additional paper sizes by changing the variable
+<code>ps-page-dimensions-database</code>.
+
+   <p>The variable <code>ps-landscape-mode</code> specifies the orientation of
+printing on the page.  The default is <code>nil</code>, which stands for
+"portrait" mode.  Any non-<code>nil</code> value specifies "landscape"
+mode.
+
+   <p>The variable <code>ps-number-of-columns</code> specifies the number of
+columns; it takes effect in both landscape and portrait mode.  The
+default is 1.
+
+   <p>The variable <code>ps-font-family</code> specifies which font family to use
+for printing ordinary text.  Legitimate values include <code>Courier</code>,
+<code>Helvetica</code>, <code>NewCenturySchlbk</code>, <code>Palatino</code> and
+<code>Times</code>.  The variable <code>ps-font-size</code> specifies the size of
+the font for ordinary text.  It defaults to 8.5 points.
+
+   <p>Emacs supports more scripts and characters than a typical PostScript
+printer.  Thus, some of the characters in your buffer might not be
+printable using the fonts built into your printer.  You can augment
+the fonts supplied with the printer with those from the GNU Intlfonts
+package, or you can instruct Emacs to use Intlfonts exclusively.  The
+variable <code>ps-multibyte-buffer</code> controls this: the default value,
+<code>nil</code>, is appropriate for printing ASCII and Latin-1
+characters; a value of <code>non-latin-printer</code> is for printers which
+have the fonts for ASCII, Latin-1, Japanese, and Korean
+characters built into them.  A value of <code>bdf-font</code> arranges for
+the BDF fonts from the Intlfonts package to be used for <em>all</em>
+characters.  Finally, a value of <code>bdf-font-except-latin</code>
+instructs the printer to use built-in fonts for ASCII and Latin-1
+characters, and Intlfonts BDF fonts for the rest.
+
+   <p>To be able to use the BDF fonts, Emacs needs to know where to find
+them.  The variable <code>bdf-directory-list</code> holds the list of
+directories where Emacs should look for the fonts; the default value
+includes a single directory <code>/usr/local/share/emacs/fonts/bdf</code>.
+
+   <p>Many other customization variables for these commands are defined and
+described in the Lisp files <code>ps-print.el</code> and <code>ps-mule.el</code>.
+
+   </body></html>
+

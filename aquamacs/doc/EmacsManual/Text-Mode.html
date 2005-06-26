@@ -1,0 +1,71 @@
+<html lang="en">
+<head>
+<title>Text Mode</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Text Mode">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Text%20Mode">Text Mode</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Outline-Mode.html#Outline%20Mode">Outline Mode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Case.html#Case">Case</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
+<hr><br>
+</div>
+
+<h3 class="section">Text Mode</h3>
+
+<p>When you edit files of text in a human language, it's more convenient
+to use Text mode rather than Fundamental mode.  To enter Text mode, type
+<kbd>M-x text-mode</kbd>.
+
+   <p>In Text mode, only blank lines and page delimiters separate
+paragraphs.  As a result, paragraphs can be indented, and adaptive
+filling determines what indentation to use when filling a paragraph. 
+See <a href="Adaptive-Fill.html#Adaptive%20Fill">Adaptive Fill</a>.
+
+   <p>Text mode defines &lt;TAB&gt; to run <code>indent-relative</code>
+(see <a href="Indentation.html#Indentation">Indentation</a>), so that you can conveniently indent a line like
+the previous line.  When the previous line is not indented,
+<code>indent-relative</code> runs <code>tab-to-tab-stop</code>, which uses Emacs tab
+stops that you can set (see <a href="Tab-Stops.html#Tab%20Stops">Tab Stops</a>).
+
+   <p>Text mode turns off the features concerned with comments except when
+you explicitly invoke them.  It changes the syntax table so that periods
+are not considered part of a word, while apostrophes, backspaces and
+underlines are considered part of words.
+
+   <p>If you indent the first lines of paragraphs, then you should use
+Paragraph-Indent Text mode rather than Text mode.  In this mode, you do
+not need to have blank lines between paragraphs, because the first-line
+indentation is sufficient to start a paragraph; however paragraphs in
+which every line is indented are not supported.  Use <kbd>M-x
+paragraph-indent-text-mode</kbd> to enter this mode.  Use <kbd>M-x
+paragraph-indent-minor-mode</kbd> to enter an equivalent minor mode, for
+instance during mail composition.
+
+   <p>Text mode, and all the modes based on it, define <kbd>M-&lt;TAB&gt;</kbd> as
+the command <code>ispell-complete-word</code>, which performs completion of
+the partial word in the buffer before point, using the spelling
+dictionary as the space of possible words.  See <a href="Spelling.html#Spelling">Spelling</a>.
+
+   <p>Entering Text mode runs the hook <code>text-mode-hook</code>.  Other major
+modes related to Text mode also run this hook, followed by hooks of
+their own; this includes Paragraph-Indent Text mode, Nroff mode, TeX
+mode, Outline mode, and Mail mode.  Hook functions on
+<code>text-mode-hook</code> can look at the value of <code>major-mode</code> to see
+which of these modes is actually being entered.  See <a href="Hooks.html#Hooks">Hooks</a>.
+
+   </body></html>
+

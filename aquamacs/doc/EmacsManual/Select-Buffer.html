@@ -1,0 +1,86 @@
+<html lang="en">
+<head>
+<title>Creating and Selecting Buffers</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Creating and Selecting Buffers">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Select%20Buffer">Select Buffer</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="List-Buffers.html#List%20Buffers">List Buffers</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Buffers.html#Buffers">Buffers</a>
+<hr><br>
+</div>
+
+<h3 class="section">Creating and Selecting Buffers</h3>
+
+     <dl>
+<dt><kbd>C-x b </kbd><var>buffer</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Select or create a buffer named <var>buffer</var> (<code>switch-to-buffer</code>). 
+<br><dt><kbd>C-x 4 b </kbd><var>buffer</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Similar, but select <var>buffer</var> in another window
+(<code>switch-to-buffer-other-window</code>). 
+<br><dt><kbd>C-x 5 b </kbd><var>buffer</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Similar, but select <var>buffer</var> in a separate frame
+(<code>switch-to-buffer-other-frame</code>). 
+</dl>
+
+   <p>To select the buffer named <var>bufname</var>, type <kbd>C-x b </kbd><var>bufname</var><kbd>
+&lt;RET&gt;</kbd>.  This runs the command <code>switch-to-buffer</code> with argument
+<var>bufname</var>.  You can use completion on an abbreviation for the buffer
+name you want (see <a href="Completion.html#Completion">Completion</a>).  An empty argument to <kbd>C-x b</kbd>
+specifies the buffer that was current most recently among those not
+now displayed in any window.
+
+   <p>To select a buffer in a window other than the current one, type
+<kbd>C-x 4 b </kbd><var>bufname</var><kbd> &lt;RET&gt;</kbd>.  This runs the command
+<code>switch-to-buffer-other-window</code> which displays the buffer
+<var>bufname</var> in another window.  By default, if displaying the buffer
+causes two vertically adjacent windows to be displayed, the heights of
+those windows are evened out; to countermand that and preserve the
+window configuration, set the variable <code>even-window-heights</code> to
+<code>nil</code>.
+
+   <p>Similarly, <kbd>C-x 5 b </kbd><var>buffer</var><kbd> &lt;RET&gt;</kbd> runs the command
+<code>switch-to-buffer-other-frame</code> which selects a buffer in another
+frame.
+
+   <p>You can control how certain buffers are handled by these commands by
+customizing the variables <code>special-display-buffer-names</code>,
+<code>special-display-regexps</code>, <code>same-window-buffer-names</code>, and
+<code>same-window-regexps</code>.  See <a href="Force-Same-Window.html#Force%20Same%20Window">Force Same Window</a>, and
+<a href="Special-Buffer-Frames.html#Special%20Buffer%20Frames">Special Buffer Frames</a>, for more about these variables.  In
+addition, if the value of <code>display-buffer-reuse-frames</code> is
+non-<code>nil</code>, and the buffer you want to switch to is already
+displayed in some frame, Emacs will raise that frame.
+
+   <p>Most buffers are created by visiting files, or by Emacs commands that
+want to display some text, but you can also create a buffer explicitly
+by typing <kbd>C-x b </kbd><var>bufname</var><kbd> &lt;RET&gt;</kbd>.  This makes a new, empty
+buffer that is not visiting any file, and selects it for editing.  Such
+buffers are used for making notes to yourself.  If you try to save one,
+you are asked for the file name to use.  The new buffer's major mode is
+determined by the value of <code>default-major-mode</code> (see <a href="Major-Modes.html#Major%20Modes">Major Modes</a>).
+
+   <p>Note that <kbd>C-x C-f</kbd>, and any other command for visiting a file,
+can also be used to switch to an existing file-visiting buffer. 
+See <a href="Visiting.html#Visiting">Visiting</a>.
+
+   <p>Emacs uses buffer names that start with a space for internal purposes. 
+It treats these buffers specially in minor ways--for example, by
+default they do not record undo information.  It is best to avoid using
+such buffer names yourself.
+
+   </body></html>
+

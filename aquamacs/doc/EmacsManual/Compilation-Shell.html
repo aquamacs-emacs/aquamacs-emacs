@@ -1,0 +1,61 @@
+<html lang="en">
+<head>
+<title>Subshells for Compilation</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Subshells for Compilation">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Compilation%20Shell">Compilation Shell</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Debuggers.html#Debuggers">Debuggers</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Compilation-Mode.html#Compilation%20Mode">Compilation Mode</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Building.html#Building">Building</a>
+<hr><br>
+</div>
+
+<h3 class="section">Subshells for Compilation</h3>
+
+<p>Emacs uses a shell to run the compilation command, but specifies
+the option for a noninteractive shell.  This means, in particular, that
+the shell should start with no prompt.  If you find your usual shell
+prompt making an unsightly appearance in the <code>*compilation*</code>
+buffer, it means you have made a mistake in your shell's init file by
+setting the prompt unconditionally.  (This init file's name may be
+<code>.bashrc</code>, <code>.profile</code>, <code>.cshrc</code>, <code>.shrc</code>, or various
+other things, depending on the shell you use.)  The shell init file
+should set the prompt only if there already is a prompt.  In csh, here
+is how to do it:
+
+<pre class="example">     if ($?prompt) set prompt = ...
+     </pre>
+
+<p>And here's how to do it in bash:
+
+<pre class="example">     if [ "${PS1+set}" = set ]
+     then PS1=...
+     fi
+     </pre>
+
+   <p>There may well be other things that your shell's init file
+ought to do only for an interactive shell.  You can use the same
+method to conditionalize them.
+
+   <p>The MS-DOS "operating system" does not support asynchronous
+subprocesses; to work around this lack, <kbd>M-x compile</kbd> runs the
+compilation command synchronously on MS-DOS.  As a consequence, you must
+wait until the command finishes before you can do anything else in
+Emacs.  See <a href="MS-DOS.html#MS-DOS">MS-DOS</a>.
+
+   </body></html>
+

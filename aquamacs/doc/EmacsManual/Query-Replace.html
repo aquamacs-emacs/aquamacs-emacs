@@ -1,0 +1,132 @@
+<html lang="en">
+<head>
+<title>Query Replace</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Query Replace">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Query%20Replace">Query Replace</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Replacement-and-Case.html#Replacement%20and%20Case">Replacement and Case</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Replace.html#Replace">Replace</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Query Replace</h4>
+
+     <dl>
+<dt><kbd>M-% </kbd><var>string</var><kbd> &lt;RET&gt; </kbd><var>newstring</var><kbd> &lt;RET&gt;</kbd>
+     <dd><dt><kbd>M-x query-replace &lt;RET&gt; </kbd><var>string</var><kbd> &lt;RET&gt; </kbd><var>newstring</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Replace some occurrences of <var>string</var> with <var>newstring</var>. 
+<br><dt><kbd>C-M-% </kbd><var>regexp</var><kbd> &lt;RET&gt; </kbd><var>newstring</var><kbd> &lt;RET&gt;</kbd>
+     <dd><dt><kbd>M-x query-replace-regexp &lt;RET&gt; </kbd><var>regexp</var><kbd> &lt;RET&gt; </kbd><var>newstring</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Replace some matches for <var>regexp</var> with <var>newstring</var>. 
+</dl>
+
+   <p>If you want to change only some of the occurrences of <code>foo</code> to
+<code>bar</code>, not all of them, then you cannot use an ordinary
+<code>replace-string</code>.  Instead, use <kbd>M-%</kbd> (<code>query-replace</code>). 
+This command finds occurrences of <code>foo</code> one by one, displays each
+occurrence and asks you whether to replace it.  Aside from querying,
+<code>query-replace</code> works just like <code>replace-string</code>.  It
+preserves case, like <code>replace-string</code>, provided
+<code>case-replace</code> is non-<code>nil</code>, as it normally is.  A numeric
+argument means consider only occurrences that are bounded by
+word-delimiter characters.
+
+   <p><kbd>C-M-%</kbd> performs regexp search and replace (<code>query-replace-regexp</code>).
+
+   <p>The characters you can type when you are shown a match for the string
+or regexp are:
+
+     <dl>
+<dt><kbd>&lt;SPC&gt;</kbd>
+     <dd>to replace the occurrence with <var>newstring</var>.
+
+     <br><dt><kbd>&lt;DEL&gt;</kbd>
+     <dd>to skip to the next occurrence without replacing this one.
+
+     <br><dt><kbd>, </kbd>(Comma)<kbd></kbd>
+     <dd>to replace this occurrence and display the result.  You are then asked
+for another input character to say what to do next.  Since the
+replacement has already been made, &lt;DEL&gt; and &lt;SPC&gt; are
+equivalent in this situation; both move to the next occurrence.
+
+     <p>You can type <kbd>C-r</kbd> at this point (see below) to alter the replaced
+text.  You can also type <kbd>C-x u</kbd> to undo the replacement; this exits
+the <code>query-replace</code>, so if you want to do further replacement you
+must use <kbd>C-x &lt;ESC&gt; &lt;ESC&gt; &lt;RET&gt;</kbd> to restart
+(see <a href="Repetition.html#Repetition">Repetition</a>).
+
+     <br><dt><kbd>&lt;RET&gt;</kbd>
+     <dd>to exit without doing any more replacements.
+
+     <br><dt><kbd>. </kbd>(Period)<kbd></kbd>
+     <dd>to replace this occurrence and then exit without searching for more
+occurrences.
+
+     <br><dt><kbd>!</kbd>
+     <dd>to replace all remaining occurrences without asking again.
+
+     <br><dt><kbd>^</kbd>
+     <dd>to go back to the position of the previous occurrence (or what used to
+be an occurrence), in case you changed it by mistake.  This works by
+popping the mark ring.  Only one <kbd>^</kbd> in a row is meaningful, because
+only one previous replacement position is kept during <code>query-replace</code>.
+
+     <br><dt><kbd>C-r</kbd>
+     <dd>to enter a recursive editing level, in case the occurrence needs to be
+edited rather than just replaced with <var>newstring</var>.  When you are
+done, exit the recursive editing level with <kbd>C-M-c</kbd> to proceed to
+the next occurrence.  See <a href="Recursive-Edit.html#Recursive%20Edit">Recursive Edit</a>.
+
+     <br><dt><kbd>C-w</kbd>
+     <dd>to delete the occurrence, and then enter a recursive editing level as in
+<kbd>C-r</kbd>.  Use the recursive edit to insert text to replace the deleted
+occurrence of <var>string</var>.  When done, exit the recursive editing level
+with <kbd>C-M-c</kbd> to proceed to the next occurrence.
+
+     <br><dt><kbd>e</kbd>
+     <dd>to edit the replacement string in the minibuffer.  When you exit the
+minibuffer by typing &lt;RET&gt;, the minibuffer contents replace the
+current occurrence of the pattern.  They also become the new
+replacement string for any further occurrences.
+
+     <br><dt><kbd>C-l</kbd>
+     <dd>to redisplay the screen.  Then you must type another character to
+specify what to do with this occurrence.
+
+     <br><dt><kbd>C-h</kbd>
+     <dd>to display a message summarizing these options.  Then you must type
+another character to specify what to do with this occurrence. 
+</dl>
+
+   <p>Some other characters are aliases for the ones listed above: <kbd>y</kbd>,
+<kbd>n</kbd> and <kbd>q</kbd> are equivalent to &lt;SPC&gt;, &lt;DEL&gt; and
+&lt;RET&gt;.
+
+   <p>Aside from this, any other character exits the <code>query-replace</code>,
+and is then reread as part of a key sequence.  Thus, if you type
+<kbd>C-k</kbd>, it exits the <code>query-replace</code> and then kills to end of
+line.
+
+   <p>To restart a <code>query-replace</code> once it is exited, use <kbd>C-x
+&lt;ESC&gt; &lt;ESC&gt;</kbd>, which repeats the <code>query-replace</code> because it
+used the minibuffer to read its arguments.  See <a href="Repetition.html#Repetition">C-x ESC ESC</a>.
+
+   <p>See also <a href="Transforming-File-Names.html#Transforming%20File%20Names">Transforming File Names</a>, for Dired commands to rename,
+copy, or link files by replacing regexp matches in file names.
+
+   </body></html>
+

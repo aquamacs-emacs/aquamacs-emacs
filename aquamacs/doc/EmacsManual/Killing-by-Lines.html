@@ -1,0 +1,61 @@
+<html lang="en">
+<head>
+<title>Killing by Lines</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Killing by Lines">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Killing%20by%20Lines">Killing by Lines</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Other-Kill-Commands.html#Other%20Kill%20Commands">Other Kill Commands</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Deletion.html#Deletion">Deletion</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Killing.html#Killing">Killing</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Killing by Lines</h4>
+
+     <dl>
+<dt><kbd>C-k</kbd>
+     <dd>Kill rest of line or one or more lines (<code>kill-line</code>). 
+</dl>
+
+   <p>The simplest kill command is <kbd>C-k</kbd>.  If given at the beginning of
+a line, it kills all the text on the line, leaving it blank.  When used
+on a blank line, it kills the whole line including its newline.  To kill
+an entire non-blank line, go to the beginning and type <kbd>C-k</kbd> twice.
+
+   <p>More generally, <kbd>C-k</kbd> kills from point up to the end of the line,
+unless it is at the end of a line.  In that case it kills the newline
+following point, thus merging the next line into the current one. 
+Spaces and tabs that you can't see at the end of the line are ignored
+when deciding which case applies, so if point appears to be at the end
+of the line, you can be sure <kbd>C-k</kbd> will kill the newline.
+
+   <p>When <kbd>C-k</kbd> is given a positive argument, it kills that many lines
+and the newlines that follow them (however, text on the current line
+before point is not killed).  With a negative argument -<var>n</var>, it
+kills <var>n</var> lines preceding the current line (together with the text
+on the current line before point).  Thus, <kbd>C-u - 2 C-k</kbd> at the front
+of a line kills the two previous lines.
+
+   <p><kbd>C-k</kbd> with an argument of zero kills the text before point on the
+current line.
+
+   <p>If the variable <code>kill-whole-line</code> is non-<code>nil</code>, <kbd>C-k</kbd> at
+the very beginning of a line kills the entire line including the
+following newline.  This variable is normally <code>nil</code>.
+
+   </body></html>
+

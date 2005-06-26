@@ -1,0 +1,59 @@
+<html lang="en">
+<head>
+<title>Spontaneous Entry to Incremental Search</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Spontaneous Entry to Incremental Search">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Unasked-for%20Search">Unasked-for Search</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Memory-Full.html#Memory%20Full">Memory Full</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Text-Garbled.html#Text%20Garbled">Text Garbled</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Lossage.html#Lossage">Lossage</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Spontaneous Entry to Incremental Search</h4>
+
+<p>If Emacs spontaneously displays <code>I-search:</code> at the bottom of the
+screen, it means that the terminal is sending <kbd>C-s</kbd> and <kbd>C-q</kbd>
+according to the poorly designed xon/xoff "flow control" protocol.
+
+   <p>If this happens to you, your best recourse is to put the terminal in a
+mode where it will not use flow control, or give it so much padding that
+it will never send a <kbd>C-s</kbd>.  (One way to increase the amount of
+padding is to set the variable <code>baud-rate</code> to a larger value.  Its
+value is the terminal output speed, measured in the conventional units
+of baud.)
+
+   <p>If you don't succeed in turning off flow control, the next best thing
+is to tell Emacs to cope with it.  To do this, call the function
+<code>enable-flow-control</code>.
+
+   <p>Typically there are particular terminal types with which you must use
+flow control.  You can conveniently ask for flow control on those
+terminal types only, using <code>enable-flow-control-on</code>.  For example,
+if you find you must use flow control on VT-100 and H19 terminals, put
+the following in your <code>.emacs</code> file:
+
+<pre class="example">     (enable-flow-control-on "vt100" "h19")
+     </pre>
+
+   <p>When flow control is enabled, you must type <kbd>C-\</kbd> to get the
+effect of a <kbd>C-s</kbd>, and type <kbd>C-^</kbd> to get the effect of a
+<kbd>C-q</kbd>.  (These aliases work by means of keyboard translations; see
+<a href="Keyboard-Translations.html#Keyboard%20Translations">Keyboard Translations</a>.)
+
+   </body></html>
+

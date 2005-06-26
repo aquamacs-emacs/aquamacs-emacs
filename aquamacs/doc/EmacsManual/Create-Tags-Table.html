@@ -1,0 +1,108 @@
+<html lang="en">
+<head>
+<title>Creating Tags Tables</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Creating Tags Tables">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Create%20Tags%20Table">Create Tags Table</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Etags-Regexps.html#Etags%20Regexps">Etags Regexps</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Tag-Syntax.html#Tag%20Syntax">Tag Syntax</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Tags.html#Tags">Tags</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Creating Tags Tables</h4>
+
+<p>The <code>etags</code> program is used to create a tags table file.  It knows
+the syntax of several languages, as described in
+Here is how to run <code>etags</code>:
+
+<pre class="example">     etags <var>inputfiles</var>...
+     </pre>
+
+<p>The <code>etags</code> program reads the specified files, and writes a tags
+table named <code>TAGS</code> in the current working directory.
+
+   <p>If the specified files don't exist, <code>etags</code> looks for
+compressed versions of them and uncompresses them to read them.  Under
+MS-DOS, <code>etags</code> also looks for file names like <code>mycode.cgz</code>
+if it is given <code>mycode.c</code> on the command line and <code>mycode.c</code>
+does not exist.
+
+   <p><code>etags</code> recognizes the language used in an input file based on
+its file name and contents.  You can specify the language with the
+<code>--language=</code><var>name</var><code></code> option, described below.
+
+   <p>If the tags table data become outdated due to changes in the files
+described in the table, the way to update the tags table is the same
+way it was made in the first place.  If the tags table fails to record
+a tag, or records it for the wrong file, then Emacs cannot possibly
+find its definition until you update the tags table.  However, if the
+position recorded in the tags table becomes a little bit wrong (due to
+other editing), the only consequence is a slight delay in finding the
+tag.  Even if the stored position is very far wrong, Emacs will still
+find the tag, after searching most of the file for it.  Even that
+delay is hardly noticeable with today's computers.
+
+   <p>So you should update a tags table when you define new tags that you want
+to have listed, or when you move tag definitions from one file to another,
+or when changes become substantial.  Normally there is no need to update
+the tags table after each edit, or even every day.
+
+   <p>One tags table can virtually include another.  Specify the included
+tags file name with the <code>--include=</code><var>file</var><code></code> option when
+creating the file that is to include it.  The latter file then acts as
+if it covered all the source files specified in the included file, as
+well as the files it directly contains.
+
+   <p>If you specify the source files with relative file names when you run
+<code>etags</code>, the tags file will contain file names relative to the
+directory where the tags file was initially written.  This way, you can
+move an entire directory tree containing both the tags file and the
+source files, and the tags file will still refer correctly to the source
+files.
+
+   <p>If you specify absolute file names as arguments to <code>etags</code>, then
+the tags file will contain absolute file names.  This way, the tags file
+will still refer to the same files even if you move it, as long as the
+source files remain in the same place.  Absolute file names start with
+<code>/</code>, or with <code></code><var>device</var><code>:/</code> on MS-DOS and MS-Windows.
+
+   <p>When you want to make a tags table from a great number of files, you
+may have problems listing them on the command line, because some systems
+have a limit on its length.  The simplest way to circumvent this limit
+is to tell <code>etags</code> to read the file names from its standard input,
+by typing a dash in place of the file names, like this:
+
+<pre class="smallexample">     find . -name "*.[chCH]" -print | etags -
+     </pre>
+
+   <p>Use the option <code>--language=</code><var>name</var><code></code> to specify the language
+explicitly.  You can intermix these options with file names; each one
+applies to the file names that follow it.  Specify
+<code>--language=auto</code> to tell <code>etags</code> to resume guessing the
+language from the file names and file contents.  Specify
+<code>--language=none</code> to turn off language-specific processing
+entirely; then <code>etags</code> recognizes tags by regexp matching alone
+(see <a href="Etags-Regexps.html#Etags%20Regexps">Etags Regexps</a>).
+
+   <p><code>etags --help</code> prints the list of the languages <code>etags</code>
+knows, and the file name rules for guessing the language.  It also prints
+a list of all the available <code>etags</code> options, together with a short
+explanation.
+
+   </body></html>
+

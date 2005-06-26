@@ -1,0 +1,84 @@
+<html lang="en">
+<head>
+<title>State of a Difference</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="State of a Difference">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="State%20of%20Difference">State of Difference</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Merge-Commands.html#Merge%20Commands">Merge Commands</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Submodes-of-Emerge.html#Submodes%20of%20Emerge">Submodes of Emerge</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Emerge.html#Emerge">Emerge</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">State of a Difference</h4>
+
+<p>In the merge buffer, a difference is marked with lines of <code>v</code> and
+<code>^</code> characters.  Each difference has one of these seven states:
+
+     <dl>
+<dt>A
+     <dd>The difference is showing the A version.  The <kbd>a</kbd> command always
+produces this state; the mode line indicates it with <code>A</code>.
+
+     <br><dt>B
+     <dd>The difference is showing the B version.  The <kbd>b</kbd> command always
+produces this state; the mode line indicates it with <code>B</code>.
+
+     <br><dt>default-A
+     <dd><dt>default-B
+     <dd>The difference is showing the A or the B state by default, because you
+haven't made a choice.  All differences start in the default-A state
+(and thus the merge buffer is a copy of the A buffer), except those for
+which one alternative is "preferred" (see below).
+
+     <p>When you select a difference, its state changes from default-A or
+default-B to plain A or B.  Thus, the selected difference never has
+state default-A or default-B, and these states are never displayed in
+the mode line.
+
+     <p>The command <kbd>d a</kbd> chooses default-A as the default state, and <kbd>d
+b</kbd> chooses default-B.  This chosen default applies to all differences
+which you haven't ever selected and for which no alternative is preferred. 
+If you are moving through the merge sequentially, the differences you
+haven't selected are those following the selected one.  Thus, while
+moving sequentially, you can effectively make the A version the default
+for some sections of the merge buffer and the B version the default for
+others by using <kbd>d a</kbd> and <kbd>d b</kbd> between sections.
+
+     <br><dt>prefer-A
+     <dd><dt>prefer-B
+     <dd>The difference is showing the A or B state because it is
+<dfn>preferred</dfn>.  This means that you haven't made an explicit choice,
+but one alternative seems likely to be right because the other
+alternative agrees with the common ancestor.  Thus, where the A buffer
+agrees with the common ancestor, the B version is preferred, because
+chances are it is the one that was actually changed.
+
+     <p>These two states are displayed in the mode line as <code>A*</code> and <code>B*</code>.
+
+     <br><dt>combined
+     <dd>The difference is showing a combination of the A and B states, as a
+result of the <kbd>x c</kbd> or <kbd>x C</kbd> commands.
+
+     <p>Once a difference is in this state, the <kbd>a</kbd> and <kbd>b</kbd> commands
+don't do anything to it unless you give them a numeric argument.
+
+     <p>The mode line displays this state as <code>comb</code>. 
+</dl>
+
+   </body></html>
+

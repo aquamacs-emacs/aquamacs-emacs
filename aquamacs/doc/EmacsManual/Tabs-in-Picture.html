@@ -1,0 +1,61 @@
+<html lang="en">
+<head>
+<title>Picture Mode Tabs</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Picture Mode Tabs">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Tabs%20in%20Picture">Tabs in Picture</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Rectangles-in-Picture.html#Rectangles%20in%20Picture">Rectangles in Picture</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Insert-in-Picture.html#Insert%20in%20Picture">Insert in Picture</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Picture.html#Picture">Picture</a>
+<hr><br>
+</div>
+
+<h3 class="section">Picture Mode Tabs</h3>
+
+<p>Two kinds of tab-like action are provided in Picture mode.  Use
+<kbd>M-&lt;TAB&gt;</kbd> (<code>picture-tab-search</code>) for context-based tabbing. 
+With no argument, it moves to a point underneath the next
+"interesting" character that follows whitespace in the previous
+nonblank line.  "Next" here means "appearing at a horizontal position
+greater than the one point starts out at."  With an argument, as in
+<kbd>C-u M-&lt;TAB&gt;</kbd>, this command moves to the next such interesting
+character in the current line.  <kbd>M-&lt;TAB&gt;</kbd> does not change the
+text; it only moves point.  "Interesting" characters are defined by
+the variable <code>picture-tab-chars</code>, which should define a set of
+characters.  The syntax for this variable is like the syntax used inside
+of <code>[...]</code> in a regular expression--but without the <code>[</code>
+and the <code>]</code>.  Its default value is <code>"!-~"</code>.
+
+   <p>&lt;TAB&gt; itself runs <code>picture-tab</code>, which operates based on the
+current tab stop settings; it is the Picture mode equivalent of
+<code>tab-to-tab-stop</code>.  Normally it just moves point, but with a numeric
+argument it clears the text that it moves over.
+
+   <p>The context-based and tab-stop-based forms of tabbing are brought
+together by the command <kbd>C-c &lt;TAB&gt;</kbd> (<code>picture-set-tab-stops</code>). 
+This command sets the tab stops to the positions which <kbd>M-&lt;TAB&gt;</kbd>
+would consider significant in the current line.  The use of this command,
+together with &lt;TAB&gt;, can get the effect of context-based tabbing.  But
+<kbd>M-&lt;TAB&gt;</kbd> is more convenient in the cases where it is sufficient.
+
+   <p>It may be convenient to prevent use of actual tab characters in
+pictures.  For example, this prevents <kbd>C-x &lt;TAB&gt;</kbd> from messing
+up the picture.  You can do this by setting the variable
+<code>indent-tabs-mode</code> to <code>nil</code>.  See <a href="Just-Spaces.html#Just%20Spaces">Just Spaces</a>.
+
+   </body></html>
+

@@ -1,0 +1,76 @@
+<html lang="en">
+<head>
+<title>Starting GUD</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Starting GUD">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Starting%20GUD">Starting GUD</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Debugger-Operation.html#Debugger%20Operation">Debugger Operation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Debuggers.html#Debuggers">Debuggers</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Starting GUD</h4>
+
+<p>There are several commands for starting a debugger, each corresponding
+to a particular debugger program.
+
+     <dl>
+<dt><kbd>M-x gdb &lt;RET&gt; </kbd><var>file</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Run GDB as a subprocess of Emacs.  This command creates a buffer
+for input and output to GDB, and switches to it.  If a GDB buffer
+already exists, it just switches to that buffer.
+
+     <br><dt><kbd>M-x dbx &lt;RET&gt; </kbd><var>file</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Similar, but run DBX instead of GDB.
+
+     <br><dt><kbd>M-x xdb &lt;RET&gt; </kbd><var>file</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Similar, but run XDB instead of GDB.  Use the variable
+<code>gud-xdb-directories</code> to specify directories to search for source
+files.
+
+     <br><dt><kbd>M-x sdb &lt;RET&gt; </kbd><var>file</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Similar, but run SDB instead of GDB.
+
+     <p>Some versions of SDB do not mention source file names in their
+messages.  When you use them, you need to have a valid tags table
+(see <a href="Tags.html#Tags">Tags</a>) in order for GUD to find functions in the source code. 
+If you have not visited a tags table or the tags table doesn't list one
+of the functions, you get a message saying <code>The sdb support
+requires a valid tags table to work</code>.  If this happens, generate a valid
+tags table in the working directory and try again.
+
+     <br><dt><kbd>M-x perldb &lt;RET&gt; </kbd><var>file</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Run the Perl interpreter in debug mode to debug <var>file</var>, a Perl program.
+
+     <br><dt><kbd>M-x jdb &lt;RET&gt; </kbd><var>file</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Run the Java debugger to debug <var>file</var>.
+
+     <br><dt><kbd>M-x pdb &lt;RET&gt; </kbd><var>file</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Run the Python debugger to debug <var>file</var>. 
+</dl>
+
+   <p>Each of these commands takes one argument: a command line to invoke
+the debugger.  In the simplest case, specify just the name of the
+executable file you want to debug.  You may also use options that the
+debugger supports.  However, shell wildcards and variables are not
+allowed.  GUD assumes that the first argument not starting with a
+<code>-</code> is the executable file name.
+
+   <p>Emacs can only run one debugger process at a time.
+
+   </body></html>
+

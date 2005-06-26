@@ -1,0 +1,72 @@
+<html lang="en">
+<head>
+<title>Shadowing Files</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Shadowing Files">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="File%20Shadowing">File Shadowing</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Time-Stamps.html#Time%20Stamps">Time Stamps</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Interlocking.html#Interlocking">Interlocking</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Saving.html#Saving">Saving</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Shadowing Files</h4>
+
+     <dl>
+<dt><kbd>M-x shadow-initialize</kbd>
+     <dd>Set up file shadowing. 
+<br><dt><kbd>M-x shadow-define-literal-group</kbd>
+     <dd>Declare a single file to be shared between sites. 
+<br><dt><kbd>M-x shadow-define-regexp-group</kbd>
+     <dd>Make all files that match each of a group of files be shared between hosts. 
+<br><dt><kbd>M-x shadow-define-cluster &lt;RET&gt; </kbd><var>name</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Define a shadow file cluster <var>name</var>. 
+<br><dt><kbd>M-x shadow-copy-files</kbd>
+     <dd>Copy all pending shadow files. 
+<br><dt><kbd>M-x shadow-cancel</kbd>
+     <dd>Cancel the instruction to shadow some files. 
+</dl>
+
+   <p>You can arrange to keep identical <dfn>shadow</dfn> copies of certain files
+in more than one place--possibly on different machines.  To do this,
+first you must set up a <dfn>shadow file group</dfn>, which is a set of
+identically-named files shared between a list of sites.  The file
+group is permanent and applies to further Emacs sessions as well as
+the current one.  Once the group is set up, every time you exit Emacs,
+it will copy the file you edited to the other files in its group.  You
+can also do the copying without exiting Emacs, by typing <kbd>M-x
+shadow-copy-files</kbd>.
+
+   <p>To set up a shadow file group, use <kbd>M-x
+shadow-define-literal-group</kbd> or <kbd>M-x shadow-define-regexp-group</kbd>. 
+See their documentation strings for further information.
+
+   <p>Before copying a file to its shadows, Emacs asks for confirmation. 
+You can answer "no" to bypass copying of this file, this time.  If
+you want to cancel the shadowing permanently for a certain file, use
+<kbd>M-x shadow-cancel</kbd> to eliminate or change the shadow file group.
+
+   <p>A <dfn>shadow cluster</dfn> is a group of hosts that share directories, so
+that copying to or from one of them is sufficient to update the file
+on all of them.  Each shadow cluster has a name, and specifies the
+network address of a primary host (the one we copy files to), and a
+regular expression that matches the host names of all the other hosts
+in the cluster.  You can define a shadow cluster with <kbd>M-x
+shadow-define-cluster</kbd>.
+
+   </body></html>
+

@@ -1,0 +1,96 @@
+<html lang="en">
+<head>
+<title>Dired under VC</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Dired under VC">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="VC%20Dired%20Mode">VC Dired Mode</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="VC-Dired-Commands.html#VC%20Dired%20Commands">VC Dired Commands</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="VC-Undo.html#VC%20Undo">VC Undo</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Secondary-VC-Commands.html#Secondary%20VC%20Commands">Secondary VC Commands</a>
+<hr><br>
+</div>
+
+<h3 class="subsubsection">Dired under VC</h5>
+
+<p>The VC Dired Mode described here works with all the version control
+systems that VC supports.  Another more powerful facility, designed
+specifically for CVS, is called PCL-CVS.  See <a href="../pcl-cvs/index.html#Top">About PCL-CVS</a>.
+
+   <p>When you are working on a large program, it is often useful to find
+out which files have changed within an entire directory tree, or to view
+the status of all files under version control at once, and to perform
+version control operations on collections of files.  You can use the
+command <kbd>C-x v d</kbd> (<code>vc-directory</code>) to make a directory listing
+that includes only files relevant for version control.
+
+   <p><kbd>C-x v d</kbd> creates a buffer which uses VC Dired Mode.  This looks
+much like an ordinary Dired buffer (see <a href="Dired.html#Dired">Dired</a>); however, normally it
+shows only the noteworthy files (those locked or not up-to-date).  This
+is called <dfn>terse display</dfn>.  If you set the variable
+<code>vc-dired-terse-display</code> to <code>nil</code>, then VC Dired shows all
+relevant files--those managed under version control, plus all
+subdirectories (<dfn>full display</dfn>).  The command <kbd>v t</kbd> in a VC
+Dired buffer toggles between terse display and full display (see <a href="VC-Dired-Commands.html#VC%20Dired%20Commands">VC Dired Commands</a>).
+
+   <p>By default, VC Dired produces a recursive listing of noteworthy or
+relevant files at or below the given directory.  You can change this by
+setting the variable <code>vc-dired-recurse</code> to <code>nil</code>; then VC
+Dired shows only the files in the given directory.
+
+   <p>The line for an individual file shows the version control state in the
+place of the hard link count, owner, group, and size of the file.  If
+the file is unmodified, in sync with the master file, the version
+control state shown is blank.  Otherwise it consists of text in
+parentheses.  Under RCS and SCCS, the name of the user locking the file
+is shown; under CVS, an abbreviated version of the <code>cvs status</code>
+output is used.  Here is an example using RCS:
+
+<pre class="smallexample">       /home/jim/project:
+     
+       -rw-r--r-- (jim)      Apr  2 23:39 file1
+       -r--r--r--            Apr  5 20:21 file2
+     </pre>
+
+<p>The files <code>file1</code> and <code>file2</code> are under version control,
+<code>file1</code> is locked by user jim, and <code>file2</code> is unlocked.
+
+   <p>Here is an example using CVS:
+
+<pre class="smallexample">       /home/joe/develop:
+     
+       -rw-r--r-- (modified) Aug  2  1997 file1.c
+       -rw-r--r--            Apr  4 20:09 file2.c
+       -rw-r--r-- (merge)    Sep 13  1996 file3.c
+     </pre>
+
+   <p>Here <code>file1.c</code> is modified with respect to the repository, and
+<code>file2.c</code> is not.  <code>file3.c</code> is modified, but other changes
+have also been checked in to the repository--you need to merge them
+with the work file before you can check it in.
+
+   <p>When VC Dired displays subdirectories (in the "full" display mode),
+it omits some that should never contain any files under version control. 
+By default, this includes Version Control subdirectories such as
+<code>RCS</code> and <code>CVS</code>; you can customize this by setting the
+variable <code>vc-directory-exclusion-list</code>.
+
+   <p>You can fine-tune VC Dired's format by typing <kbd>C-u C-x v d</kbd>--as in
+ordinary Dired, that allows you to specify additional switches for the
+<code>ls</code> command.
+
+   </body></html>
+

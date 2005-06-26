@@ -1,0 +1,94 @@
+<html lang="en">
+<head>
+<title>Enabling Multibyte Characters</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Enabling Multibyte Characters">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Enabling%20Multibyte">Enabling Multibyte</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Language-Environments.html#Language%20Environments">Language Environments</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="International-Chars.html#International%20Chars">International Chars</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="International.html#International">International</a>
+<hr><br>
+</div>
+
+<h3 class="section">Enabling Multibyte Characters</h3>
+
+<p>You can enable or disable multibyte character support, either for
+Emacs as a whole, or for a single buffer.  When multibyte characters are
+disabled in a buffer, then each byte in that buffer represents a
+character, even codes 0200 through 0377.  The old features for
+supporting the European character sets, ISO Latin-1 and ISO Latin-2,
+work as they did in Emacs 19 and also work for the other ISO 8859
+character sets.
+
+   <p>However, there is no need to turn off multibyte character support to
+use ISO Latin; the Emacs multibyte character set includes all the
+characters in these character sets, and Emacs can translate
+automatically to and from the ISO codes.
+
+   <p>By default, Emacs starts in multibyte mode, because that allows you to
+use all the supported languages and scripts without limitations.
+
+   <p>To edit a particular file in unibyte representation, visit it using
+<code>find-file-literally</code>.  See <a href="Visiting.html#Visiting">Visiting</a>.  To convert a buffer in
+multibyte representation into a single-byte representation of the same
+characters, the easiest way is to save the contents in a file, kill the
+buffer, and find the file again with <code>find-file-literally</code>.  You
+can also use <kbd>C-x &lt;RET&gt; c</kbd>
+(<code>universal-coding-system-argument</code>) and specify <code>raw-text</code> as
+the coding system with which to find or save a file.  See <a href="Specify-Coding.html#Specify%20Coding">Specify Coding</a>.  Finding a file as <code>raw-text</code> doesn't disable format
+conversion, uncompression and auto mode selection as
+<code>find-file-literally</code> does.
+
+   <p>To turn off multibyte character support by default, start Emacs with
+the <code>--unibyte</code> option (see <a href="Initial-Options.html#Initial%20Options">Initial Options</a>), or set the
+environment variable <code>EMACS_UNIBYTE</code>.  You can also customize
+<code>enable-multibyte-characters</code> or, equivalently, directly set the
+variable <code>default-enable-multibyte-characters</code> to <code>nil</code> in
+your init file to have basically the same effect as <code>--unibyte</code>.
+
+   <p>To convert a unibyte session to a multibyte session, set
+<code>default-enable-multibyte-characters</code> to <code>t</code>.  Buffers which
+were created in the unibyte session before you turn on multibyte support
+will stay unibyte.  You can turn on multibyte support in a specific
+buffer by invoking the command <code>toggle-enable-multibyte-characters</code>
+in that buffer.
+
+   <p>With <code>--unibyte</code>, multibyte strings are not created during
+initialization from the values of environment variables,
+<code>/etc/passwd</code> entries etc. that contain non-ASCII 8-bit
+characters.
+
+   <p>Emacs normally loads Lisp files as multibyte, regardless of whether
+you used <code>--unibyte</code>.  This includes the Emacs initialization
+file, <code>.emacs</code>, and the initialization files of Emacs packages
+such as Gnus.  However, you can specify unibyte loading for a
+particular Lisp file, by putting <code>-*-unibyte:&nbsp;t;-*-</code> in a
+comment on the first line.  Then that file is always loaded as unibyte
+text, even if you did not start Emacs with <code>--unibyte</code>.  The
+motivation for these conventions is that it is more reliable to always
+load any particular Lisp file in the same way.  However, you can load
+a Lisp file as unibyte, on any one occasion, by typing <kbd>C-x
+&lt;RET&gt; c raw-text &lt;RET&gt;</kbd> immediately before loading it.
+
+   <p>The mode line indicates whether multibyte character support is enabled
+in the current buffer.  If it is, there are two or more characters (most
+often two dashes) before the colon near the beginning of the mode line. 
+When multibyte characters are not enabled, just one dash precedes the
+colon.
+
+   </body></html>
+

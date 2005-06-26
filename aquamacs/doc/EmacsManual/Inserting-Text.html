@@ -1,0 +1,120 @@
+<html lang="en">
+<head>
+<title>Inserting Text</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Inserting Text">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Inserting%20Text">Inserting Text</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Moving-Point.html#Moving%20Point">Moving Point</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Basic.html#Basic">Basic</a>
+<hr><br>
+</div>
+
+<h3 class="section">Inserting Text</h3>
+
+<p>To insert printing characters into the text you are editing, just type
+them.  This inserts the characters you type into the buffer at the
+cursor (that is, at <dfn>point</dfn>; see <a href="Point.html#Point">Point</a>).  The cursor moves
+forward, and any text after the cursor moves forward too.  If the text
+in the buffer is <code>FOOBAR</code>, with the cursor before the <code>B</code>,
+then if you type <kbd>XX</kbd>, you get <code>FOOXXBAR</code>, with the cursor
+still before the <code>B</code>.
+
+   <p>To <dfn>delete</dfn> text you have just inserted, use the large key
+labeled &lt;DEL&gt;, &lt;BACKSPACE&gt; or &lt;DELETE&gt; which is a short
+distance above the &lt;RET&gt; or &lt;ENTER&gt; key.  This is the key you
+normally use, outside Emacs, for erasing the last character that you
+typed.  Regardless of the label on that key, Emacs thinks of it as
+&lt;DEL&gt;, and that's what we call it in this manual.
+
+   <p>The &lt;DEL&gt; key deletes the character <em>before</em> the cursor. 
+As a consequence, the cursor and all the characters after it move
+backwards.  If you type a printing character and then type &lt;DEL&gt;,
+they cancel out.
+
+   <p>On most computers, Emacs recognizes automatically which key ought to
+be &lt;DEL&gt;, and sets it up that way.  But in some cases, especially
+with text-only terminals, you will need to tell Emacs which key to use
+for that purpose.  If the large key not far above the &lt;RET&gt; or
+&lt;ENTER&gt; key doesn't delete backwards, you need to do this. 
+See <a href="DEL-Does-Not-Delete.html#DEL%20Does%20Not%20Delete">DEL Does Not Delete</a>, for an explanation of how.
+
+   <p>Most PC keyboards have both a &lt;BACKSPACE&gt; key a short ways above
+&lt;RET&gt; or &lt;ENTER&gt;, and a &lt;DELETE&gt; key elsewhere.  On these
+keyboards, Emacs supports when possible the usual convention that the
+&lt;BACKSPACE&gt; key deletes backwards (it is &lt;DEL&gt;), while the
+&lt;DELETE&gt; key deletes "forwards," deleting the character after
+point, the one underneath the cursor, like <kbd>C-d</kbd> (see below).
+
+   <p>To end a line and start typing a new one, type &lt;RET&gt;.  This
+inserts a newline character in the buffer.  If point is in the middle of
+a line, &lt;RET&gt; splits the line.  Typing &lt;DEL&gt; when the cursor is
+at the beginning of a line deletes the preceding newline, thus joining
+the line with the preceding line.
+
+   <p>Emacs can split lines automatically when they become too long, if you
+turn on a special minor mode called <dfn>Auto Fill</dfn> mode. 
+See <a href="Filling.html#Filling">Filling</a>, for how to use Auto Fill mode.
+
+   <p>If you prefer to have text characters replace (overwrite) existing
+text rather than shove it to the right, you can enable Overwrite mode,
+a minor mode.  See <a href="Minor-Modes.html#Minor%20Modes">Minor Modes</a>.
+
+   <p>Direct insertion works for printing characters and &lt;SPC&gt;, but other
+characters act as editing commands and do not insert themselves.  If you
+need to insert a control character or a character whose code is above 200
+octal, you must <dfn>quote</dfn> it by typing the character <kbd>Control-q</kbd>
+(<code>quoted-insert</code>) first.  (This character's name is normally written
+<kbd>C-q</kbd> for short.)  There are two ways to use <kbd>C-q</kbd>:
+
+     <ul>
+<li><kbd>C-q</kbd> followed by any non-graphic character (even <kbd>C-g</kbd>)
+inserts that character.
+
+     <li><kbd>C-q</kbd> followed by a sequence of octal digits inserts the character
+with the specified octal character code.  You can use any number of
+octal digits; any non-digit terminates the sequence.  If the
+terminating character is &lt;RET&gt;, it serves only to terminate the
+sequence.  Any other non-digit terminates the sequence and then acts
+as normal input--thus, <kbd>C-q 1 0 1 B</kbd> inserts <code>AB</code>.
+
+     <p>The use of octal sequences is disabled in ordinary non-binary
+Overwrite mode, to give you a convenient way to insert a digit instead
+of overwriting with it. 
+</ul>
+
+<p>When multibyte characters are enabled, if you specify a code in the
+range 0200 through 0377 octal, <kbd>C-q</kbd> assumes that you intend to
+use some ISO 8859-<var>n</var> character set, and converts the specified
+code to the corresponding Emacs character code.  See <a href="Enabling-Multibyte.html#Enabling%20Multibyte">Enabling Multibyte</a>.  You select <em>which</em> of the ISO 8859 character sets to
+use through your choice of language environment (see <a href="Language-Environments.html#Language%20Environments">Language Environments</a>).
+
+   <p>To use decimal or hexadecimal instead of octal, set the variable
+<code>read-quoted-char-radix</code> to 10 or 16.  If the radix is greater than
+10, some letters starting with <kbd>a</kbd> serve as part of a character
+code, just like digits.
+
+   <p>A numeric argument to <kbd>C-q</kbd> specifies how many copies of the
+quoted character should be inserted (see <a href="Arguments.html#Arguments">Arguments</a>).
+
+   <p>Customization information: &lt;DEL&gt; in most modes runs the command
+<code>delete-backward-char</code>; &lt;RET&gt; runs the command <code>newline</code>, and
+self-inserting printing characters run the command <code>self-insert</code>,
+which inserts whatever character was typed to invoke it.  Some major modes
+rebind &lt;DEL&gt; to other commands.
+
+   </body></html>
+

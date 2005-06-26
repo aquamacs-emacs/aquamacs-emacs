@@ -1,0 +1,68 @@
+<html lang="en">
+<head>
+<title>Imenu</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Imenu">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Imenu">Imenu</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Which-Function.html#Which%20Function">Which Function</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Moving-by-Defuns.html#Moving%20by%20Defuns">Moving by Defuns</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Defuns.html#Defuns">Defuns</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Imenu</h4>
+
+<p>The Imenu facility offers a way to find the the major definitions in
+a file by name.  It is also useful in text formatter major modes,
+where it treats each chapter, section, etc., as a definition. 
+(See <a href="Tags.html#Tags">Tags</a>, for a more powerful feature that handles multiple files
+together.)
+
+   <p>If you type <kbd>M-x imenu</kbd>, it reads the name of a definition using
+the minibuffer, then moves point to that definition.  You can use
+completion to specify the name; the command always displays the whole
+list of valid names.
+
+   <p>Alternatively, you can bind the command <code>imenu</code> to a mouse
+click.  Then it displays mouse menus for you to select a definition
+name.  You can also add the buffer's index to the menu bar by calling
+<code>imenu-add-menubar-index</code>.  If you want to have this menu bar
+item available for all buffers in a certain major mode, you can do
+this by adding <code>imenu-add-menubar-index</code> to its mode hook.  But
+if you have done that, you will have to wait each time you visit a
+file in that mode, while Emacs finds all the definitions in that
+buffer.
+
+   <p>When you change the contents of a buffer, if you add or delete
+definitions, you can update the buffer's index based on the
+new contents by invoking the <code>*Rescan*</code> item in the menu. 
+Rescanning happens automatically if you set <code>imenu-auto-rescan</code> to
+a non-<code>nil</code> value.  There is no need to rescan because of small
+changes in the text.
+
+   <p>You can customize the way the menus are sorted by setting the
+variable <code>imenu-sort-function</code>.  By default, names are ordered as
+they occur in the buffer; if you want alphabetic sorting, use the
+symbol <code>imenu--sort-by-name</code> as the value.  You can also
+define your own comparison function by writing Lisp code.
+
+   <p>Imenu provides the information to guide Which Function mode
+(see <a href="Which-Function.html#Which%20Function">Which Function</a>). 
+The Speedbar can also use it (see <a href="Speedbar.html#Speedbar">Speedbar</a>).
+
+   </body></html>
+

@@ -1,0 +1,125 @@
+<html lang="en">
+<head>
+<title>Change Logs and VC</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Change Logs and VC">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Change%20Logs%20and%20VC">Change Logs and VC</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Renaming-and-VC.html#Renaming%20and%20VC">Renaming and VC</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Miscellaneous-VC.html#Miscellaneous%20VC">Miscellaneous VC</a>
+<hr><br>
+</div>
+
+<h3 class="subsubsection">Change Logs and VC</h5>
+
+<p>If you use RCS or CVS for a program and also maintain a change log
+file for it (see <a href="Change-Log.html#Change%20Log">Change Log</a>), you can generate change log entries
+automatically from the version control log entries:
+
+     <dl>
+<dt><kbd>C-x v a</kbd>
+     <dd>Visit the current directory's change log file and, for registered files
+in that directory, create new entries for versions checked in since the
+most recent entry in the change log file. 
+(<code>vc-update-change-log</code>).
+
+     <p>This command works with RCS or CVS only, not with SCCS.
+
+     <br><dt><kbd>C-u C-x v a</kbd>
+     <dd>As above, but only find entries for the current buffer's file.
+
+     <br><dt><kbd>M-1 C-x v a</kbd>
+     <dd>As above, but find entries for all the currently visited files that are
+maintained with version control.  This works only with RCS, and it puts
+all entries in the log for the default directory, which may not be
+appropriate. 
+</dl>
+
+   <p>For example, suppose the first line of <code>ChangeLog</code> is dated
+1999-04-10, and that the only check-in since then was by Nathaniel
+Bowditch to <code>rcs2log</code> on 1999-05-22 with log text <code>Ignore log
+messages that start with `#'.</code>.  Then <kbd>C-x v a</kbd> visits
+<code>ChangeLog</code> and inserts text like this:
+
+<pre class="smallexample">     1999-05-22  Nathaniel Bowditch  &lt;nat@apn.org&gt;
+     
+             * rcs2log: Ignore log messages that start with `#'.
+     </pre>
+
+<p>You can then edit the new change log entry further as you wish.
+
+   <p>Some of the new change log entries may duplicate what's already in
+ChangeLog.  You will have to remove these duplicates by hand.
+
+   <p>Normally, the log entry for file <code>foo</code> is displayed as <code>*
+foo: </code><var>text of log entry</var><code></code>.  The <code>:</code> after <code>foo</code> is omitted
+if the text of the log entry starts with <code>(</code><var>functionname</var><code>):&nbsp;</code>.  For example, if the log entry for <code>vc.el</code> is
+<code>(vc-do-command): Check call-process status.</code>, then the text in
+<code>ChangeLog</code> looks like this:
+
+<pre class="smallexample">     1999-05-06  Nathaniel Bowditch  &lt;nat@apn.org&gt;
+     
+             * vc.el (vc-do-command): Check call-process status.
+     </pre>
+
+   <p>When <kbd>C-x v a</kbd> adds several change log entries at once, it groups
+related log entries together if they all are checked in by the same
+author at nearly the same time.  If the log entries for several such
+files all have the same text, it coalesces them into a single entry. 
+For example, suppose the most recent check-ins have the following log
+entries:
+
+<div align="left">&#149; For <code>vc.texinfo</code>: <code>Fix expansion typos.</code>
+&#149; For <code>vc.el</code>: <code>Don't call expand-file-name.</code>
+&#149; For <code>vc-hooks.el</code>: <code>Don't call expand-file-name.</code>
+</div>
+
+<p>They appear like this in <code>ChangeLog</code>:
+
+<pre class="smallexample">     1999-04-01  Nathaniel Bowditch  &lt;nat@apn.org&gt;
+     
+             * vc.texinfo: Fix expansion typos.
+     
+             * vc.el, vc-hooks.el: Don't call expand-file-name.
+     </pre>
+
+   <p>Normally, <kbd>C-x v a</kbd> separates log entries by a blank line, but you
+can mark several related log entries to be clumped together (without an
+intervening blank line) by starting the text of each related log entry
+with a label of the form <code>{</code><var>clumpname</var><code>}&nbsp;</code>.  The label
+itself is not copied to <code>ChangeLog</code>.  For example, suppose the log
+entries are:
+
+<div align="left">&#149; For <code>vc.texinfo</code>: <code>{expand} Fix expansion typos.</code>
+&#149; For <code>vc.el</code>: <code>{expand} Don't call expand-file-name.</code>
+&#149; For <code>vc-hooks.el</code>: <code>{expand} Don't call expand-file-name.</code>
+</div>
+
+<p>Then the text in <code>ChangeLog</code> looks like this:
+
+<pre class="smallexample">     1999-04-01  Nathaniel Bowditch  &lt;nat@apn.org&gt;
+     
+             * vc.texinfo: Fix expansion typos.
+             * vc.el, vc-hooks.el: Don't call expand-file-name.
+     </pre>
+
+   <p>A log entry whose text begins with <code>#</code> is not copied to
+<code>ChangeLog</code>.  For example, if you merely fix some misspellings in
+comments, you can log the change with an entry beginning with <code>#</code>
+to avoid putting such trivia into <code>ChangeLog</code>.
+
+   </body></html>
+

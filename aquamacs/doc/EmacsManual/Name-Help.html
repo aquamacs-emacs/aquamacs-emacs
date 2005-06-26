@@ -1,0 +1,83 @@
+<html lang="en">
+<head>
+<title>Help by Command or Variable Name</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Help by Command or Variable Name">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Name%20Help">Name Help</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Apropos.html#Apropos">Apropos</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Key-Help.html#Key%20Help">Key Help</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Help.html#Help">Help</a>
+<hr><br>
+</div>
+
+<h3 class="section">Help by Command or Variable Name</h3>
+
+<p><kbd>C-h f</kbd> (<code>describe-function</code>) reads the name of a Lisp function
+using the minibuffer, then displays that function's documentation string
+in a window.  Since commands are Lisp functions, you can use this to get
+the documentation of a command that you know by name.  For example,
+
+<pre class="example">     C-h f auto-fill-mode &lt;RET&gt;
+     </pre>
+
+<p>displays the documentation of <code>auto-fill-mode</code>.  This is the only
+way to get the documentation of a command that is not bound to any key
+(one which you would normally run using <kbd>M-x</kbd>).
+
+   <p><kbd>C-h f</kbd> is also useful for Lisp functions that you are planning to
+use in a Lisp program.  For example, if you have just written the
+expression <code>(make-vector len)</code> and want to check that you are using
+<code>make-vector</code> properly, type <kbd>C-h f make-vector &lt;RET&gt;</kbd>. 
+Because <kbd>C-h f</kbd> allows all function names, not just command names,
+you may find that some of your favorite abbreviations that work in
+<kbd>M-x</kbd> don't work in <kbd>C-h f</kbd>.  An abbreviation may be unique
+among command names yet fail to be unique when other function names are
+allowed.
+
+   <p>The default function name for <kbd>C-h f</kbd> to describe, if you type
+just &lt;RET&gt;, is the name of the function called by the innermost Lisp
+expression in the buffer around point, <em>provided</em> that is a valid,
+defined Lisp function name.  For example, if point is located following
+the text <code>(make-vector (car x)</code>, the innermost list containing
+point is the one that starts with <code>(make-vector</code>, so the default is
+to describe the function <code>make-vector</code>.
+
+   <p><kbd>C-h f</kbd> is often useful just to verify that you have the right
+spelling for the function name.  If <kbd>C-h f</kbd> mentions a name from the
+buffer as the default, that name must be defined as a Lisp function.  If
+that is all you want to know, just type <kbd>C-g</kbd> to cancel the <kbd>C-h
+f</kbd> command, then go on editing.
+
+   <p><kbd>C-h w </kbd><var>command</var><kbd> &lt;RET&gt;</kbd> tells you what keys are bound to
+<var>command</var>.  It displays a list of the keys in the echo area.  If it
+says the command is not on any key, you must use <kbd>M-x</kbd> to run it. 
+<kbd>C-h w</kbd> runs the command <code>where-is</code>.
+
+   <p><kbd>C-h v</kbd> (<code>describe-variable</code>) is like <kbd>C-h f</kbd> but describes
+Lisp variables instead of Lisp functions.  Its default is the Lisp symbol
+around or before point, but only if that is the name of a known Lisp
+variable.  See <a href="Variables.html#Variables">Variables</a>.
+
+   <p>Help buffers describing variables or functions defined in Lisp
+normally have hyperlinks to the Lisp definition, if you have the Lisp
+source files installed.  If you know Lisp, this provides the ultimate
+documentation.  If you don't know Lisp, you should learn it.  If you
+are treating Emacs as an object file, then you are just <em>using</em>
+Emacs.  For real intimacy with Emacs, you must read the source code.
+
+   </body></html>
+

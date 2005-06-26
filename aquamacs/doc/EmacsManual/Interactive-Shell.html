@@ -1,0 +1,81 @@
+<html lang="en">
+<head>
+<title>Interactive Inferior Shell</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Interactive Inferior Shell">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Interactive%20Shell">Interactive Shell</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Shell-Mode.html#Shell%20Mode">Shell Mode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Single-Shell.html#Single%20Shell">Single Shell</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Shell.html#Shell">Shell</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Interactive Inferior Shell</h4>
+
+<p>To run a subshell interactively, putting its typescript in an Emacs
+buffer, use <kbd>M-x shell</kbd>.  This creates (or reuses) a buffer named
+<code>*shell*</code> and runs a subshell with input coming from and output going
+to that buffer.  That is to say, any "terminal output" from the subshell
+goes into the buffer, advancing point, and any "terminal input" for
+the subshell comes from text in the buffer.  To give input to the subshell,
+go to the end of the buffer and type the input, terminated by &lt;RET&gt;.
+
+   <p>Emacs does not wait for the subshell to do anything.  You can switch
+windows or buffers and edit them while the shell is waiting, or while it is
+running a command.  Output from the subshell waits until Emacs has time to
+process it; this happens whenever Emacs is waiting for keyboard input or
+for time to elapse.
+
+   <p>Input lines, once you submit them, are displayed using the face
+<code>comint-highlight-input</code>, and prompts are displayed using the
+face <code>comint-highlight-prompt</code>.  This makes it easier to see
+previous input lines in the buffer.  See <a href="Faces.html#Faces">Faces</a>.
+
+   <p>To make multiple subshells, you can invoke <kbd>M-x shell</kbd> with a
+prefix argument (e.g. <kbd>C-u M-x shell</kbd>), which will read a buffer
+name and create (or reuse) a subshell in that buffer.  You can also
+rename the <code>*shell*</code> buffer using <kbd>M-x rename-uniquely</kbd>, then
+create a new <code>*shell*</code> buffer using plain <kbd>M-x shell</kbd>.  All the
+subshells in different buffers run independently and in parallel.
+
+   <p>The file name used to load the subshell is the value of the variable
+<code>explicit-shell-file-name</code>, if that is non-<code>nil</code>.  Otherwise,
+the environment variable <code>ESHELL</code> is used, or the environment
+variable <code>SHELL</code> if there is no <code>ESHELL</code>.  If the file name
+specified is relative, the directories in the list <code>exec-path</code> are
+searched; this list is initialized based on the environment variable
+<code>PATH</code> when Emacs is started.  Your <code>.emacs</code> file can override
+either or both of these default initializations.
+
+   <p>Emacs sends the new shell the contents of the file
+<code>~/.emacs_</code><var>shellname</var><code></code> as input, if it exists, where
+<var>shellname</var> is the name of the file that the shell was loaded
+from.  For example, if you use bash, the file sent to it is
+<code>~/.emacs_bash</code>.
+
+   <p>To specify a coding system for the shell, you can use the command
+<kbd>C-x &lt;RET&gt; c</kbd> immediately before <kbd>M-x shell</kbd>.  You can also
+specify a coding system after starting the shell by using <kbd>C-x
+&lt;RET&gt; p</kbd> in the shell buffer.  See <a href="Specify-Coding.html#Specify%20Coding">Specify Coding</a>.
+
+   <p>Unless the environment variable <code>EMACS</code> is already defined,
+Emacs defines it in the subshell, with value <code>t</code>.  A shell script
+can check this variable to determine whether it has been run from an
+Emacs subshell.
+
+   </body></html>
+

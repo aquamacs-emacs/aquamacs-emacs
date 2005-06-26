@@ -1,0 +1,67 @@
+<html lang="en">
+<head>
+<title>Minibuffers for File Names</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Minibuffers for File Names">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Minibuffer%20File">Minibuffer File</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Minibuffer-Edit.html#Minibuffer%20Edit">Minibuffer Edit</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Minibuffer.html#Minibuffer">Minibuffer</a>
+<hr><br>
+</div>
+
+<h3 class="section">Minibuffers for File Names</h3>
+
+<p>Sometimes the minibuffer starts out with text in it.  For example, when
+you are supposed to give a file name, the minibuffer starts out containing
+the <dfn>default directory</dfn>, which ends with a slash.  This is to inform
+you which directory the file will be found in if you do not specify a
+directory.
+
+   <p>For example, the minibuffer might start out with these contents:
+
+<pre class="example">     Find File: /u2/emacs/src/
+     </pre>
+
+<p>where <code>Find File: </code> is the prompt.  Typing <kbd>buffer.c</kbd>
+specifies the file <code>/u2/emacs/src/buffer.c</code>.  To find files in
+nearby directories, use <kbd>..</kbd>; thus, if you type
+<kbd>../lisp/simple.el</kbd>, you will get the file named
+<code>/u2/emacs/lisp/simple.el</code>.  Alternatively, you can kill with
+<kbd>M-&lt;DEL&gt;</kbd> the directory names you don't want (see <a href="Words.html#Words">Words</a>).
+
+   <p>If you don't want any of the default, you can kill it with <kbd>C-a
+C-k</kbd>.  But you don't need to kill the default; you can simply ignore it. 
+Insert an absolute file name, one starting with a slash or a tilde,
+after the default directory.  For example, to specify the file
+<code>/etc/termcap</code>, just insert that name, giving these minibuffer
+contents:
+
+<pre class="example">     Find File: /u2/emacs/src//etc/termcap
+     </pre>
+
+<p>GNU Emacs gives a special meaning to a double slash (which is not
+normally a useful thing to write): it means, "ignore everything before
+the second slash in the pair."  Thus, <code>/u2/emacs/src/</code> is ignored
+in the example above, and you get the file <code>/etc/termcap</code>.
+
+   <p>If you set <code>insert-default-directory</code> to <code>nil</code>, the default
+directory is not inserted in the minibuffer.  This way, the minibuffer
+starts out empty.  But the name you type, if relative, is still
+interpreted with respect to the same default directory.
+
+   </body></html>
+

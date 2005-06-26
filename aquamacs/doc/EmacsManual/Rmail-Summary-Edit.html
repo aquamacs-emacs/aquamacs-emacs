@@ -1,0 +1,86 @@
+<html lang="en">
+<head>
+<title>Editing in Summaries</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Editing in Summaries">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Rmail%20Summary%20Edit">Rmail Summary Edit</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Rmail-Make-Summary.html#Rmail%20Make%20Summary">Rmail Make Summary</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Rmail-Summary.html#Rmail%20Summary">Rmail Summary</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Editing in Summaries</h4>
+
+<p>You can use the Rmail summary buffer to do almost anything you can do
+in the Rmail buffer itself.  In fact, once you have a summary buffer,
+there's no need to switch back to the Rmail buffer.
+
+   <p>You can select and display various messages in the Rmail buffer, from
+the summary buffer, just by moving point in the summary buffer to
+different lines.  It doesn't matter what Emacs command you use to move
+point; whichever line point is on at the end of the command, that
+message is selected in the Rmail buffer.
+
+   <p>Almost all Rmail commands work in the summary buffer as well as in the
+Rmail buffer.  Thus, <kbd>d</kbd> in the summary buffer deletes the current
+message, <kbd>u</kbd> undeletes, and <kbd>x</kbd> expunges.  <kbd>o</kbd> and <kbd>C-o</kbd>
+output the current message to a file; <kbd>r</kbd> starts a reply to it.  You
+can scroll the current message while remaining in the summary buffer
+using &lt;SPC&gt; and &lt;DEL&gt;.
+
+   <p>The Rmail commands to move between messages also work in the summary
+buffer, but with a twist: they move through the set of messages included
+in the summary.  They also ensure the Rmail buffer appears on the screen
+(unlike cursor motion commands, which update the contents of the Rmail
+buffer but don't display it in a window unless it already appears). 
+Here is a list of these commands:
+
+     <dl>
+<dt><kbd>n</kbd>
+     <dd>Move to next line, skipping lines saying `deleted', and select its
+message. 
+<br><dt><kbd>p</kbd>
+     <dd>Move to previous line, skipping lines saying `deleted', and select
+its message. 
+<br><dt><kbd>M-n</kbd>
+     <dd>Move to next line and select its message. 
+<br><dt><kbd>M-p</kbd>
+     <dd>Move to previous line and select its message. 
+<br><dt><kbd>&gt;</kbd>
+     <dd>Move to the last line, and select its message. 
+<br><dt><kbd>&lt;</kbd>
+     <dd>Move to the first line, and select its message. 
+<br><dt><kbd>M-s </kbd><var>pattern</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Search through messages for <var>pattern</var> starting with the current
+message; select the message found, and move point in the summary buffer
+to that message's line. 
+</dl>
+
+   <p>Deletion, undeletion, and getting new mail, and even selection of a
+different message all update the summary buffer when you do them in the
+Rmail buffer.  If the variable <code>rmail-redisplay-summary</code> is
+non-<code>nil</code>, these actions also bring the summary buffer back onto
+the screen.
+
+   <p>When you are finished using the summary, type <kbd>Q</kbd>
+(<code>rmail-summary-wipe</code>) to delete the summary buffer's window.  You
+can also exit Rmail while in the summary: <kbd>q</kbd>
+(<code>rmail-summary-quit</code>) deletes the summary window, then exits from
+Rmail by saving the Rmail file and switching to another buffer.
+
+   </body></html>
+

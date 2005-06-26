@@ -1,0 +1,66 @@
+<html lang="en">
+<head>
+<title>Nroff Mode</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Nroff Mode">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Nroff%20Mode">Nroff Mode</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Formatted-Text.html#Formatted%20Text">Formatted Text</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="TeX-Mode.html#TeX%20Mode">TeX Mode</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
+<hr><br>
+</div>
+
+<h3 class="section">Nroff Mode</h3>
+
+<p>Nroff mode is a mode like Text mode but modified to handle nroff commands
+present in the text.  Invoke <kbd>M-x nroff-mode</kbd> to enter this mode.  It
+differs from Text mode in only a few ways.  All nroff command lines are
+considered paragraph separators, so that filling will never garble the
+nroff commands.  Pages are separated by <code>.bp</code> commands.  Comments
+start with backslash-doublequote.  Also, three special commands are
+provided that are not in Text mode:
+
+     <dl>
+<dt><kbd>M-n</kbd>
+     <dd>Move to the beginning of the next line that isn't an nroff command
+(<code>forward-text-line</code>).  An argument is a repeat count. 
+<br><dt><kbd>M-p</kbd>
+     <dd>Like <kbd>M-n</kbd> but move up (<code>backward-text-line</code>). 
+<br><dt><kbd>M-?</kbd>
+     <dd>Displays in the echo area the number of text lines (lines that are not
+nroff commands) in the region (<code>count-text-lines</code>). 
+</dl>
+
+   <p>The other feature of Nroff mode is that you can turn on Electric Nroff
+mode.  This is a minor mode that you can turn on or off with <kbd>M-x
+electric-nroff-mode</kbd> (see <a href="Minor-Modes.html#Minor%20Modes">Minor Modes</a>).  When the mode is on, each
+time you use &lt;RET&gt; to end a line that contains an nroff command that
+opens a kind of grouping, the matching nroff command to close that
+grouping is automatically inserted on the following line.  For example,
+if you are at the beginning of a line and type <kbd>. ( b &lt;RET&gt;</kbd>,
+this inserts the matching command <code>.)b</code> on a new line following
+point.
+
+   <p>If you use Outline minor mode with Nroff mode (see <a href="Outline-Mode.html#Outline%20Mode">Outline Mode</a>),
+heading lines are lines of the form <code>.H</code> followed by a number (the
+header level).
+
+   <p>Entering Nroff mode runs the hook <code>text-mode-hook</code>, followed by
+the hook <code>nroff-mode-hook</code> (see <a href="Hooks.html#Hooks">Hooks</a>).
+
+   </body></html>
+

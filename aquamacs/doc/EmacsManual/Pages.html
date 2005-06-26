@@ -1,0 +1,89 @@
+<html lang="en">
+<head>
+<title>Pages</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Pages">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Pages">Pages</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Filling.html#Filling">Filling</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Paragraphs.html#Paragraphs">Paragraphs</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
+<hr><br>
+</div>
+
+<h3 class="section">Pages</h3>
+
+<p>Files are often thought of as divided into <dfn>pages</dfn> by the
+<dfn>formfeed</dfn> character (ASCII control-L, octal code 014).  When you
+print hardcopy for a file, this character forces a page break; thus,
+each page of the file goes on a separate page on paper.  Most Emacs
+commands treat the page-separator character just like any other
+character: you can insert it with <kbd>C-q C-l</kbd>, and delete it with
+&lt;DEL&gt;.  Thus, you are free to paginate your file or not.  However,
+since pages are often meaningful divisions of the file, Emacs provides
+commands to move over them and operate on them.
+
+     <dl>
+<dt><kbd>C-x [</kbd>
+     <dd>Move point to previous page boundary (<code>backward-page</code>). 
+<br><dt><kbd>C-x ]</kbd>
+     <dd>Move point to next page boundary (<code>forward-page</code>). 
+<br><dt><kbd>C-x C-p</kbd>
+     <dd>Put point and mark around this page (or another page) (<code>mark-page</code>). 
+<br><dt><kbd>C-x l</kbd>
+     <dd>Count the lines in this page (<code>count-lines-page</code>). 
+</dl>
+
+   <p>The <kbd>C-x [</kbd> (<code>backward-page</code>) command moves point to immediately
+after the previous page delimiter.  If point is already right after a page
+delimiter, it skips that one and stops at the previous one.  A numeric
+argument serves as a repeat count.  The <kbd>C-x ]</kbd> (<code>forward-page</code>)
+command moves forward past the next page delimiter.
+
+   <p>The <kbd>C-x C-p</kbd> command (<code>mark-page</code>) puts point at the
+beginning of the current page and the mark at the end.  The page
+delimiter at the end is included (the mark follows it).  The page
+delimiter at the front is excluded (point follows it).  In Transient
+Mark mode, this command activates the mark.
+
+   <p><kbd>C-x C-p C-w</kbd> is a handy way to kill a page to move it
+elsewhere.  If you move to another page delimiter with <kbd>C-x [</kbd> and
+<kbd>C-x ]</kbd>, then yank the killed page, all the pages will be properly
+delimited once again.  The reason <kbd>C-x C-p</kbd> includes only the
+following page delimiter in the region is to ensure that.
+
+   <p>A numeric argument to <kbd>C-x C-p</kbd> is used to specify which page to go
+to, relative to the current one.  Zero means the current page.  One means
+the next page, and -1 means the previous one.
+
+   <p>The <kbd>C-x l</kbd> command (<code>count-lines-page</code>) is good for deciding
+where to break a page in two.  It displays in the echo area the total number
+of lines in the current page, and then divides it up into those preceding
+the current line and those following, as in
+
+<pre class="example">     Page has 96 (72+25) lines
+     </pre>
+
+<p>Notice that the sum is off by one; this is correct if point is not at the
+beginning of a line.
+
+   <p>The variable <code>page-delimiter</code> controls where pages begin.  Its
+value is a regexp that matches the beginning of a line that separates
+pages.  The normal value of this variable is <code>"^\f"</code>, which
+matches a formfeed character at the beginning of a line.
+
+   </body></html>
+

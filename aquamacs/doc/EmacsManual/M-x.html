@@ -1,0 +1,93 @@
+<html lang="en">
+<head>
+<title>Running Commands by Name</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Running Commands by Name">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="M-x">M-x</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Help.html#Help">Help</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Minibuffer.html#Minibuffer">Minibuffer</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr><br>
+</div>
+
+<h2 class="chapter">Running Commands by Name</h2>
+
+<p>Every Emacs command has a name that you can use to run it.  Commands
+that are used often, or that must be quick to type, are also bound to
+keys--short sequences of characters--for convenient use.  You can
+run them by name if you don't remember the keys.  Other Emacs commands
+that do not need to be quick are not bound to keys; the only way to
+run them is by name.  See <a href="Key-Bindings.html#Key%20Bindings">Key Bindings</a>, for the description of
+how to bind commands to keys.
+
+   <p>By convention, a command name consists of one or more words,
+separated by hyphens; for example, <code>auto-fill-mode</code> or
+<code>manual-entry</code>.  The use of English words makes the command name
+easier to remember than a key made up of obscure characters, even
+though it is more characters to type.
+
+   <p>The way to run a command by name is to start with <kbd>M-x</kbd>, type the
+command name, and finish it with &lt;RET&gt;.  <kbd>M-x</kbd> uses the
+minibuffer to read the command name.  &lt;RET&gt; exits the minibuffer and
+runs the command.  The string <code>M-x</code> appears at the beginning of the
+minibuffer as a <dfn>prompt</dfn> to remind you to enter the name of a
+command to be run.  See <a href="Minibuffer.html#Minibuffer">Minibuffer</a>, for full information on the
+features of the minibuffer.
+
+   <p>You can use completion to enter the command name.  For example, you
+can invoke the command <code>forward-char</code> by name by typing either
+
+<pre class="example">     M-x forward-char &lt;RET&gt;
+     </pre>
+
+<p>or
+
+<pre class="example">     M-x forw &lt;TAB&gt; c &lt;RET&gt;
+     </pre>
+
+<p>Note that <code>forward-char</code> is the same command that you invoke with
+the key <kbd>C-f</kbd>.  You can run any Emacs command by name using
+<kbd>M-x</kbd>, whether or not any keys are bound to it.
+
+   <p>If you type <kbd>C-g</kbd> while the command name is being read, you cancel
+the <kbd>M-x</kbd> command and get out of the minibuffer, ending up at top level.
+
+   <p>To pass a numeric argument to the command you are invoking with
+<kbd>M-x</kbd>, specify the numeric argument before the <kbd>M-x</kbd>.  <kbd>M-x</kbd>
+passes the argument along to the command it runs.  The argument value
+appears in the prompt while the command name is being read.
+
+   <p>If the command you type has a key binding of its own, Emacs mentions
+this in the echo area, two seconds after the command finishes (if you
+don't type anything else first).  For example, if you type <kbd>M-x
+forward-word</kbd>, the message says that you can run the same command more
+easily by typing <kbd>M-f</kbd>.  You can turn off these messages by setting
+<code>suggest-key-bindings</code> to <code>nil</code>.
+
+   <p>Normally, when describing in this manual a command that is run by
+name, we omit the &lt;RET&gt; that is needed to terminate the name.  Thus
+we might speak of <kbd>M-x auto-fill-mode</kbd> rather than <kbd>M-x
+auto-fill-mode &lt;RET&gt;</kbd>.  We mention the &lt;RET&gt; only when there is
+a need to emphasize its presence, such as when we show the command
+together with following arguments.
+
+   <p><kbd>M-x</kbd> works by running the command
+<code>execute-extended-command</code>, which is responsible for reading the
+name of another command and invoking it.
+
+   </body></html>
+

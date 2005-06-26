@@ -1,0 +1,144 @@
+<html lang="en">
+<head>
+<title>Cursor Position Information</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Cursor Position Information">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Position%20Info">Position Info</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Arguments.html#Arguments">Arguments</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Continuation-Lines.html#Continuation%20Lines">Continuation Lines</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Basic.html#Basic">Basic</a>
+<hr><br>
+</div>
+
+<h3 class="section">Cursor Position Information</h3>
+
+<p>Here are commands to get information about the size and position of
+parts of the buffer, and to count lines.
+
+     <dl>
+<dt><kbd>M-x what-page</kbd>
+     <dd>Display the page number of point, and the line number within the page. 
+<br><dt><kbd>M-x what-line</kbd>
+     <dd>Display the line number of point in the buffer. 
+<br><dt><kbd>M-x line-number-mode</kbd>
+     <dd><dt><kbd>M-x column-number-mode</kbd>
+     <dd>Toggle automatic display of current line number or column number. 
+See <a href="Optional-Mode-Line.html#Optional%20Mode%20Line">Optional Mode Line</a>. 
+<br><dt><kbd>M-=</kbd>
+     <dd>Display the number of lines in the current region (<code>count-lines-region</code>). 
+See <a href="Mark.html#Mark">Mark</a>, for information about the region. 
+<br><dt><kbd>C-x =</kbd>
+     <dd>Display the character code of character after point, character position of
+point, and column of point (<code>what-cursor-position</code>). 
+<br><dt><kbd>M-x hl-line-mode</kbd>
+     <dd>Enable or disable highlighting of the current line.  See <a href="Cursor-Display.html#Cursor%20Display">Cursor Display</a>. 
+</dl>
+
+   <p>There are two commands for working with line numbers.  <kbd>M-x
+what-line</kbd> computes the current line number and displays it in the echo
+area.  To go to a given line by number, use <kbd>M-x goto-line</kbd>; it
+prompts you for the number.  These line numbers count from one at the
+beginning of the buffer.
+
+   <p>You can also see the current line number in the mode line; see <a href="Mode-Line.html#Mode%20Line">Mode Line</a>.  If you narrow the buffer, then the line number in the mode line
+is relative to the accessible portion (see <a href="Narrowing.html#Narrowing">Narrowing</a>).  By contrast,
+<code>what-line</code> shows both the line number relative to the narrowed
+region and the line number relative to the whole buffer.
+
+   <p><kbd>M-x what-page</kbd> counts pages from the beginning of the file, and
+counts lines within the page, showing both numbers in the echo area. 
+See <a href="Pages.html#Pages">Pages</a>.
+
+   <p>While on this subject, we might as well mention <kbd>M-=</kbd> (<code>count-lines-region</code>),
+which displays the number of lines in the region (see <a href="Mark.html#Mark">Mark</a>). 
+See <a href="Pages.html#Pages">Pages</a>, for the command <kbd>C-x l</kbd> which counts the lines in the
+current page.
+
+   <p>The command <kbd>C-x =</kbd> (<code>what-cursor-position</code>) can be used to find out
+the column that the cursor is in, and other miscellaneous information about
+point.  It displays a line in the echo area that looks like this:
+
+<pre class="smallexample">     Char: c (0143, 99, 0x63)  point=21044 of 26883(78%)  column 53
+     </pre>
+
+<p>(In fact, this is the output produced when point is before the
+<code>column</code> in the example.)
+
+   <p>The four values after <code>Char:</code> describe the character that follows
+point, first by showing it and then by giving its character code in
+octal, decimal and hex.  For a non-ASCII multibyte character, these are
+followed by <code>ext</code> and the character's representation, in hex, in
+the buffer's coding system, if that coding system encodes the character
+safely and with a single byte (see <a href="Coding-Systems.html#Coding%20Systems">Coding Systems</a>).  If the
+character's encoding is longer than one byte, Emacs shows <code>ext ...</code>.
+
+   <p><code>point=</code> is followed by the position of point expressed as a character
+count.  The front of the buffer counts as position 1, one character later
+as 2, and so on.  The next, larger, number is the total number of characters
+in the buffer.  Afterward in parentheses comes the position expressed as a
+percentage of the total size.
+
+   <p><code>column</code> is followed by the horizontal position of point, in
+columns from the left edge of the window.
+
+   <p>If the buffer has been narrowed, making some of the text at the
+beginning and the end temporarily inaccessible, <kbd>C-x =</kbd> displays
+additional text describing the currently accessible range.  For example, it
+might display this:
+
+<pre class="smallexample">     Char: C (0103, 67, 0x43)  point=252 of 889(28%) &lt;231 - 599&gt;  column 0
+     </pre>
+
+<p>where the two extra numbers give the smallest and largest character
+position that point is allowed to assume.  The characters between those
+two positions are the accessible ones.  See <a href="Narrowing.html#Narrowing">Narrowing</a>.
+
+   <p>If point is at the end of the buffer (or the end of the accessible
+part), the <kbd>C-x&nbsp;=</kbd> output does not describe a character after
+point.  The output might look like this:
+
+<pre class="smallexample">     point=26957 of 26956(100%)  column 0
+     </pre>
+
+   <p><kbd>C-u&nbsp;C-x&nbsp;=</kbd> displays additional information about a character,
+in place of the buffer coordinates and column: the character set name
+and the codes that identify the character within that character set;
+ASCII characters are identified as belonging to the <code>ASCII</code>
+character set.  In addition, the full character encoding, even if it
+takes more than a single byte, is shown after <code>ext</code>.  Here's an
+example for a Latin-1 character A with a grave accent in a buffer whose
+coding system is iso-2022-7bit<a rel="footnote" href="#fn-1"><sup>1</sup></a>:
+
+<pre class="smallexample">     Char: &Agrave; (04300, 2240, 0x8c0, ext ESC , A @) (latin-iso8859-1 64)
+     </pre>
+
+<p>In addition, <kbd>C-u&nbsp;C-x&nbsp;=</kbd> shows the font used to display the
+character (if the terminal supports more than one font).
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4>
+<ol type="1">
+<li><a name="fn-1"></a>
+<p>On terminals that support
+Latin-1 characters, the character shown after <code>Char:</code> is displayed
+as the actual glyph of A with grave accent.</p>
+
+   </ol><hr></div>
+
+   </body></html>
+

@@ -1,0 +1,52 @@
+<html lang="en">
+<head>
+<title>Syntactic Conventions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Syntactic Conventions">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="ForIndent%20Conv">ForIndent Conv</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="ForIndent-Vars.html#ForIndent%20Vars">ForIndent Vars</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="ForIndent-Num.html#ForIndent%20Num">ForIndent Num</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Fortran-Indent.html#Fortran%20Indent">Fortran Indent</a>
+<hr><br>
+</div>
+
+<h3 class="subsubsection">Syntactic Conventions</h5>
+
+<p>Fortran mode assumes that you follow certain conventions that simplify
+the task of understanding a Fortran program well enough to indent it
+properly:
+
+     <ul>
+<li>Two nested <code>do</code> loops never share a <code>continue</code> statement.
+
+     <li>Fortran keywords such as <code>if</code>, <code>else</code>, <code>then</code>, <code>do</code>
+and others are written without embedded whitespace or line breaks.
+
+     <p>Fortran compilers generally ignore whitespace outside of string
+constants, but Fortran mode does not recognize these keywords if they
+are not contiguous.  Constructs such as <code>else if</code> or <code>end do</code>
+are acceptable, but the second word should be on the same line as the
+first and not on a continuation line. 
+</ul>
+
+<p>If you fail to follow these conventions, the indentation commands may
+indent some lines unaesthetically.  However, a correct Fortran program
+retains its meaning when reindented even if the conventions are not
+followed.
+
+   </body></html>
+

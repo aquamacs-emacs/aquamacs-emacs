@@ -1,0 +1,102 @@
+<html lang="en">
+<head>
+<title>Basic Use</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Basic Use">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Basic%20Kbd%20Macro">Basic Kbd Macro</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Save-Kbd-Macro.html#Save%20Kbd%20Macro">Save Kbd Macro</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Keyboard-Macros.html#Keyboard%20Macros">Keyboard Macros</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Basic Use</h4>
+
+<p>To start defining a keyboard macro, type the <kbd>C-x (</kbd> command
+(<code>start-kbd-macro</code>).  From then on, your keys continue to be
+executed, but also become part of the definition of the macro.  <code>Def</code>
+appears in the mode line to remind you of what is going on.  When you are
+finished, the <kbd>C-x )</kbd> command (<code>end-kbd-macro</code>) terminates the
+definition (without becoming part of it!).  For example,
+
+<pre class="example">     C-x ( M-f foo C-x )
+     </pre>
+
+<p>defines a macro to move forward a word and then insert <code>foo</code>.
+
+   <p>The macro thus defined can be invoked again with the <kbd>C-x e</kbd>
+command (<code>call-last-kbd-macro</code>), which may be given a repeat count
+as a numeric argument to execute the macro many times.  <kbd>C-x )</kbd> can
+also be given a repeat count as an argument, in which case it repeats
+the macro that many times right after defining it, but defining the
+macro counts as the first repetition (since it is executed as you define
+it).  Therefore, giving <kbd>C-x )</kbd> an argument of 4 executes the macro
+immediately 3 additional times.  An argument of zero to <kbd>C-x e</kbd> or
+<kbd>C-x )</kbd> means repeat the macro indefinitely (until it gets an error
+or you type <kbd>C-g</kbd> or, on MS-DOS, <kbd>C-&lt;BREAK&gt;</kbd>).
+
+   <p>If you wish to repeat an operation at regularly spaced places in the
+text, define a macro and include as part of the macro the commands to move
+to the next place you want to use it.  For example, if you want to change
+each line, you should position point at the start of a line, and define a
+macro to change that line and leave point at the start of the next line. 
+Then repeating the macro will operate on successive lines.
+
+   <p>When a command reads an argument with the minibuffer, your
+minibuffer input becomes part of the macro along with the command.  So
+when you replay the macro, the command gets the same argument as
+when you entered the macro.  For example,
+
+<pre class="example">     C-x ( C-a C-&lt;SPC&gt; C-n M-w C-x b f o o &lt;RET&gt; C-y C-x b &lt;RET&gt; C-x )
+     </pre>
+
+<p>defines a macro that copies the current line into the buffer
+<code>foo</code>, then returns to the original buffer.
+
+   <p>You can use function keys in a keyboard macro, just like keyboard
+keys.  You can even use mouse events, but be careful about that: when
+the macro replays the mouse event, it uses the original mouse position
+of that event, the position that the mouse had while you were defining
+the macro.  The effect of this may be hard to predict.  (Using the
+current mouse position would be even less predictable.)
+
+   <p>One thing that doesn't always work well in a keyboard macro is the
+command <kbd>C-M-c</kbd> (<code>exit-recursive-edit</code>).  When this command
+exits a recursive edit that started within the macro, it works as you'd
+expect.  But if it exits a recursive edit that started before you
+invoked the keyboard macro, it also necessarily exits the keyboard macro
+as part of the process.
+
+   <p>After you have terminated the definition of a keyboard macro, you can add
+to the end of its definition by typing <kbd>C-u C-x (</kbd>.  This is equivalent
+to plain <kbd>C-x (</kbd> followed by retyping the whole definition so far.  As
+a consequence it re-executes the macro as previously defined.
+
+   <p>You can edit a keyboard macro already defined by typing <kbd>C-x C-k</kbd>
+(<code>edit-kbd-macro</code>).  Follow that with the keyboard input that you
+would use to invoke the macro--<kbd>C-x e</kbd> or <kbd>M-x </kbd><var>name</var><kbd></kbd> or
+some other key sequence.  This formats the macro definition in a buffer
+and enters a specialized major mode for editing it.  Type <kbd>C-h m</kbd>
+once in that buffer to display details of how to edit the macro.  When
+you are finished editing, type <kbd>C-c C-c</kbd>.
+
+   <p>The command <kbd>M-x apply-macro-to-region-lines</kbd> repeats the last
+defined keyboard macro on each complete line within the current region. 
+It does this line by line, by moving point to the beginning of the line
+and then executing the macro.
+
+   </body></html>
+

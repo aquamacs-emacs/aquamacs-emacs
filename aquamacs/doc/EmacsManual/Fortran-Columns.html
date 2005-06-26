@@ -1,0 +1,79 @@
+<html lang="en">
+<head>
+<title>Checking Columns in Fortran</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Checking Columns in Fortran">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Fortran%20Columns">Fortran Columns</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Fortran-Abbrev.html#Fortran%20Abbrev">Fortran Abbrev</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Fortran-Autofill.html#Fortran%20Autofill">Fortran Autofill</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Fortran.html#Fortran">Fortran</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Checking Columns in Fortran</h4>
+
+     <dl>
+<dt><kbd>C-c C-r</kbd>
+     <dd>Display a "column ruler" momentarily above the current line
+(<code>fortran-column-ruler</code>). 
+<br><dt><kbd>C-c C-w</kbd>
+     <dd>Split the current window horizontally temporarily so that it is 72
+columns wide (<code>fortran-window-create-momentarily</code>).  This may
+help you avoid making lines longer than the 72-character limit that
+some Fortran compilers impose. 
+<br><dt><kbd>C-u C-c C-w</kbd>
+     <dd>Split the current window horizontally so that it is 72 columns wide
+(<code>fortran-window-create</code>).  You can then continue editing. 
+<br><dt><kbd>M-x fortran-strip-sequence-nos</kbd>
+     <dd>Delete all text in column 72 and beyond. 
+</dl>
+
+   <p>The command <kbd>C-c C-r</kbd> (<code>fortran-column-ruler</code>) shows a column
+ruler momentarily above the current line.  The comment ruler is two lines
+of text that show you the locations of columns with special significance in
+Fortran programs.  Square brackets show the limits of the columns for line
+numbers, and curly brackets show the limits of the columns for the
+statement body.  Column numbers appear above them.
+
+   <p>Note that the column numbers count from zero, as always in GNU Emacs. 
+As a result, the numbers may be one less than those you are familiar
+with; but the positions they indicate in the line are standard for
+Fortran.
+
+   <p>The text used to display the column ruler depends on the value of
+the variable <code>indent-tabs-mode</code>.  If <code>indent-tabs-mode</code> is
+<code>nil</code>, then the value of the variable
+<code>fortran-column-ruler-fixed</code> is used as the column ruler. 
+Otherwise, the variable <code>fortran-column-ruler-tab</code> is displayed. 
+By changing these variables, you can change the column ruler display.
+
+   <p><kbd>C-c C-w</kbd> (<code>fortran-window-create-momentarily</code>) temporarily
+splits the current window horizontally, making a window 72 columns
+wide, so you can see which lines that is too long.  Type a space to
+restore the normal width.
+
+   <p>You can also split the window horizontally and continue editing with
+the split in place.  To do this, use <kbd>C-u C-c C-w</kbd> (<code>M-x
+fortran-window-create</code>).  By editing in this window you can
+immediately see when you make a line too wide to be correct Fortran.
+
+   <p>The command <kbd>M-x fortran-strip-sequence-nos</kbd> deletes all text in
+column 72 and beyond, on all lines in the current buffer.  This is the
+easiest way to get rid of old sequence numbers.
+
+   </body></html>
+

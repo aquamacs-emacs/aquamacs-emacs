@@ -1,0 +1,101 @@
+<html lang="en">
+<head>
+<title>Keymaps</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Keymaps">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Keymaps">Keymaps</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Prefix-Keymaps.html#Prefix%20Keymaps">Prefix Keymaps</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Key-Bindings.html#Key%20Bindings">Key Bindings</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Keymaps</h4>
+
+<p>The bindings between key sequences and command functions are recorded
+in data structures called <dfn>keymaps</dfn>.  Emacs has many of these, each
+used on particular occasions.
+
+   <p>Recall that a <dfn>key sequence</dfn> (<dfn>key</dfn>, for short) is a sequence
+of <dfn>input events</dfn> that have a meaning as a unit.  Input events
+include characters, function keys and mouse buttons--all the inputs
+that you can send to the computer with your terminal.  A key sequence
+gets its meaning from its <dfn>binding</dfn>, which says what command it
+runs.  The function of keymaps is to record these bindings.
+
+   <p>The <dfn>global</dfn> keymap is the most important keymap because it is
+always in effect.  The global keymap defines keys for Fundamental mode;
+most of these definitions are common to most or all major modes.  Each
+major or minor mode can have its own keymap which overrides the global
+definitions of some keys.
+
+   <p>For example, a self-inserting character such as <kbd>g</kbd> is
+self-inserting because the global keymap binds it to the command
+<code>self-insert-command</code>.  The standard Emacs editing characters such
+as <kbd>C-a</kbd> also get their standard meanings from the global keymap. 
+Commands to rebind keys, such as <kbd>M-x global-set-key</kbd>, actually work
+by storing the new binding in the proper place in the global map. 
+See <a href="Rebinding.html#Rebinding">Rebinding</a>.
+
+   <p>Meta characters work differently; Emacs translates each Meta
+character into a pair of characters starting with &lt;ESC&gt;.  When you
+type the character <kbd>M-a</kbd> in a key sequence, Emacs replaces it with
+<kbd>&lt;ESC&gt; a</kbd>.  A meta key comes in as a single input event, but
+becomes two events for purposes of key bindings.  The reason for this is
+historical, and we might change it someday.
+
+   <p>Most modern keyboards have function keys as well as character keys. 
+Function keys send input events just as character keys do, and keymaps
+can have bindings for them.
+
+   <p>On many terminals, typing a function key actually sends the computer a
+sequence of characters; the precise details of the sequence depends on
+which function key and on the model of terminal you are using.  (Often
+the sequence starts with <kbd>&lt;ESC&gt; [</kbd>.)  If Emacs understands your
+terminal type properly, it recognizes the character sequences forming
+function keys wherever they occur in a key sequence (not just at the
+beginning).  Thus, for most purposes, you can pretend the function keys
+reach Emacs directly and ignore their encoding as character sequences.
+
+   <p>Mouse buttons also produce input events.  These events come with other
+data--the window and position where you pressed or released the button,
+and a time stamp.  But only the choice of button matters for key
+bindings; the other data matters only if a command looks at it. 
+(Commands designed for mouse invocation usually do look at the other
+data.)
+
+   <p>A keymap records definitions for single events.  Interpreting a key
+sequence of multiple events involves a chain of keymaps.  The first
+keymap gives a definition for the first event; this definition is
+another keymap, which is used to look up the second event in the
+sequence, and so on.
+
+   <p>Key sequences can mix function keys and characters.  For example,
+<kbd>C-x &lt;SELECT&gt;</kbd> is meaningful.  If you make &lt;SELECT&gt; a prefix
+key, then <kbd>&lt;SELECT&gt; C-n</kbd> makes sense.  You can even mix mouse
+events with keyboard events, but we recommend against it, because such
+key sequences are inconvenient to use.
+
+   <p>As a user, you can redefine any key; but it is usually best to stick
+to key sequences that consist of <kbd>C-c</kbd> followed by a letter. 
+These keys are "reserved for users," so they won't conflict with any
+properly designed Emacs extension.  The function keys &lt;F5&gt; through
+&lt;F9&gt; are also reserved for users.  If you redefine some other key,
+your definition may be overridden by certain extensions or major modes
+which redefine the same key.
+
+   </body></html>
+

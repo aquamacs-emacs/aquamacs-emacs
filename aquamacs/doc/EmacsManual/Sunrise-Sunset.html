@@ -1,0 +1,97 @@
+<html lang="en">
+<head>
+<title>Times of Sunrise and Sunset</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Times of Sunrise and Sunset">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Sunrise%2fSunset">Sunrise/Sunset</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Lunar-Phases.html#Lunar%20Phases">Lunar Phases</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Holidays.html#Holidays">Holidays</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Calendar-Diary.html#Calendar%2fDiary">Calendar/Diary</a>
+<hr><br>
+</div>
+
+<h3 class="section">Times of Sunrise and Sunset</h3>
+
+<p>Special calendar commands can tell you, to within a minute or two, the
+times of sunrise and sunset for any date.
+
+     <dl>
+<dt><kbd>S</kbd>
+     <dd>Display times of sunrise and sunset for the selected date
+(<code>calendar-sunrise-sunset</code>). 
+<br><dt><kbd>Mouse-2 Sunrise/sunset</kbd>
+     <dd>Display times of sunrise and sunset for the date you click on. 
+<br><dt><kbd>M-x sunrise-sunset</kbd>
+     <dd>Display times of sunrise and sunset for today's date. 
+<br><dt><kbd>C-u M-x sunrise-sunset</kbd>
+     <dd>Display times of sunrise and sunset for a specified date. 
+</dl>
+
+   <p>Within the calendar, to display the <em>local times</em> of sunrise and
+sunset in the echo area, move point to the date you want, and type
+<kbd>S</kbd>.  Alternatively, click <kbd>Mouse-2</kbd> on the date, then choose
+<code>Sunrise/sunset</code> from the menu that appears.  The command <kbd>M-x
+sunrise-sunset</kbd> is available outside the calendar to display this
+information for today's date or a specified date.  To specify a date
+other than today, use <kbd>C-u M-x sunrise-sunset</kbd>, which prompts for
+the year, month, and day.
+
+   <p>You can display the times of sunrise and sunset for any location and
+any date with <kbd>C-u C-u M-x sunrise-sunset</kbd>.  This asks you for a
+longitude, latitude, number of minutes difference from Coordinated
+Universal Time, and date, and then tells you the times of sunrise and
+sunset for that location on that date.
+
+   <p>Because the times of sunrise and sunset depend on the location on
+earth, you need to tell Emacs your latitude, longitude, and location
+name before using these commands.  Here is an example of what to set:
+
+<pre class="example">     (setq calendar-latitude 40.1)
+     (setq calendar-longitude -88.2)
+     (setq calendar-location-name "Urbana, IL")
+     </pre>
+
+<p>Use one decimal place in the values of <code>calendar-latitude</code> and
+<code>calendar-longitude</code>.
+
+   <p>Your time zone also affects the local time of sunrise and sunset. 
+Emacs usually gets time zone information from the operating system, but
+if these values are not what you want (or if the operating system does
+not supply them), you must set them yourself.  Here is an example:
+
+<pre class="example">     (setq calendar-time-zone -360)
+     (setq calendar-standard-time-zone-name "CST")
+     (setq calendar-daylight-time-zone-name "CDT")
+     </pre>
+
+<p>The value of <code>calendar-time-zone</code> is the number of minutes
+difference between your local standard time and Coordinated Universal
+Time (Greenwich time).  The values of
+<code>calendar-standard-time-zone-name</code> and
+<code>calendar-daylight-time-zone-name</code> are the abbreviations used in
+your time zone.  Emacs displays the times of sunrise and sunset
+<em>corrected for daylight savings time</em>.  See <a href="Daylight-Savings.html#Daylight%20Savings">Daylight Savings</a>,
+for how daylight savings time is determined.
+
+   <p>As a user, you might find it convenient to set the calendar location
+variables for your usual physical location in your <code>.emacs</code> file. 
+And when you install Emacs on a machine, you can create a
+<code>default.el</code> file which sets them properly for the typical location
+of most users of that machine.  See <a href="Init-File.html#Init%20File">Init File</a>.
+
+   </body></html>
+

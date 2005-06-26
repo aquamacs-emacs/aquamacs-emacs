@@ -1,0 +1,85 @@
+<html lang="en">
+<head>
+<title>C Mode Motion Commands</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="C Mode Motion Commands">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Motion%20in%20C">Motion in C</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Electric-C.html#Electric%20C">Electric C</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="C-Modes.html#C%20Modes">C Modes</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">C Mode Motion Commands</h4>
+
+<p>This section describes commands for moving point, in C mode and
+related modes.
+
+     <dl>
+<dt><code>C-c C-u</code>
+     <dd>Move point back to the containing preprocessor conditional, leaving the
+mark behind.  A prefix argument acts as a repeat count.  With a negative
+argument, move point forward to the end of the containing
+preprocessor conditional.  When going backwards, <code>#elif</code> is treated
+like <code>#else</code> followed by <code>#if</code>.  When going forwards,
+<code>#elif</code> is ignored.
+
+     <br><dt><code>C-c C-p</code>
+     <dd>Move point back over a preprocessor conditional, leaving the mark
+behind.  A prefix argument acts as a repeat count.  With a negative
+argument, move forward.
+
+     <br><dt><code>C-c C-n</code>
+     <dd>Move point forward across a preprocessor conditional, leaving the mark
+behind.  A prefix argument acts as a repeat count.  With a negative
+argument, move backward.
+
+     <br><dt><code>M-a</code>
+     <dd>Move point to the beginning of the innermost C statement
+(<code>c-beginning-of-statement</code>).  If point is already at the beginning
+of a statement, move to the beginning of the preceding statement.  With
+prefix argument <var>n</var>, move back <var>n</var> - 1 statements.
+
+     <p>If point is within a string or comment, or next to a comment (only
+whitespace between them), this command moves by sentences instead of
+statements.
+
+     <p>When called from a program, this function takes three optional
+arguments: the numeric prefix argument, a buffer position limit
+(don't move back before that place), and a flag that controls whether
+to do sentence motion when inside of a comment.
+
+     <br><dt><code>M-e</code>
+     <dd>Move point to the end of the innermost C statement; like <kbd>M-a</kbd>
+except that it moves in the other direction (<code>c-end-of-statement</code>).
+
+     <br><dt><code>M-x c-backward-into-nomenclature</code>
+     <dd>Move point backward to beginning of a C++ nomenclature section or word. 
+With prefix argument <var>n</var>, move <var>n</var> times.  If <var>n</var> is
+negative, move forward.  C++ nomenclature means a symbol name in the
+style of NamingSymbolsWithMixedCaseAndNoUnderlines; each capital letter
+begins a section or word.
+
+     <p>In the GNU project, we recommend using underscores to separate words
+within an identifier in C or C++, rather than using case distinctions.
+
+     <br><dt><code>M-x c-forward-into-nomenclature</code>
+     <dd>Move point forward to end of a C++ nomenclature section or word. 
+With prefix argument <var>n</var>, move <var>n</var> times. 
+</dl>
+
+   </body></html>
+

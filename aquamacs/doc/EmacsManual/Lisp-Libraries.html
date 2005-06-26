@@ -1,0 +1,92 @@
+<html lang="en">
+<head>
+<title>Libraries of Lisp Code for Emacs</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Libraries of Lisp Code for Emacs">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Lisp%20Libraries">Lisp Libraries</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Lisp-Interaction.html#Lisp%20Interaction">Lisp Interaction</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Executing-Lisp.html#Executing%20Lisp">Executing Lisp</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Building.html#Building">Building</a>
+<hr><br>
+</div>
+
+<h3 class="section">Libraries of Lisp Code for Emacs</h3>
+
+<p>Lisp code for Emacs editing commands is stored in files whose names
+conventionally end in <code>.el</code>.  This ending tells Emacs to edit them in
+Emacs-Lisp mode (see <a href="Executing-Lisp.html#Executing%20Lisp">Executing Lisp</a>).
+
+   <p>To execute a file of Emacs Lisp code, use <kbd>M-x load-file</kbd>.  This
+command reads a file name using the minibuffer and then executes the
+contents of that file as Lisp code.  It is not necessary to visit the
+file first; in any case, this command reads the file as found on disk,
+not text in an Emacs buffer.
+
+   <p>Once a file of Lisp code is installed in the Emacs Lisp library
+directories, users can load it using <kbd>M-x load-library</kbd>.  Programs can
+load it by calling <code>load-library</code>, or with <code>load</code>, a more primitive
+function that is similar but accepts some additional arguments.
+
+   <p><kbd>M-x load-library</kbd> differs from <kbd>M-x load-file</kbd> in that it
+searches a sequence of directories and tries three file names in each
+directory.  Suppose your argument is <var>lib</var>; the three names are
+<code></code><var>lib</var><code>.elc</code>, <code></code><var>lib</var><code>.el</code>, and lastly just
+<code></code><var>lib</var><code></code>.  If <code></code><var>lib</var><code>.elc</code> exists, it is by convention
+the result of compiling <code></code><var>lib</var><code>.el</code>; it is better to load the
+compiled file, since it will load and run faster.
+
+   <p>If <code>load-library</code> finds that <code></code><var>lib</var><code>.el</code> is newer than
+<code></code><var>lib</var><code>.elc</code> file, it issues a warning, because it's likely that
+somebody made changes to the <code>.el</code> file and forgot to recompile
+it.
+
+   <p>Because the argument to <code>load-library</code> is usually not in itself
+a valid file name, file name completion is not available.  Indeed, when
+using this command, you usually do not know exactly what file name
+will be used.
+
+   <p>The sequence of directories searched by <kbd>M-x load-library</kbd> is
+specified by the variable <code>load-path</code>, a list of strings that are
+directory names.  The default value of the list contains the directory where
+the Lisp code for Emacs itself is stored.  If you have libraries of
+your own, put them in a single directory and add that directory
+to <code>load-path</code>.  <code>nil</code> in this list stands for the current default
+directory, but it is probably not a good idea to put <code>nil</code> in the
+list.  If you find yourself wishing that <code>nil</code> were in the list,
+most likely what you really want to do is use <kbd>M-x load-file</kbd>
+this once.
+
+   <p>Often you do not have to give any command to load a library, because
+the commands defined in the library are set up to <dfn>autoload</dfn> that
+library.  Trying to run any of those commands calls <code>load</code> to load
+the library; this replaces the autoload definitions with the real ones
+from the library.
+
+   <p>Emacs Lisp code can be compiled into byte-code which loads faster,
+takes up less space when loaded, and executes faster.  See <a href="../elisp/Byte-Compilation.html#Byte%20Compilation">Byte Compilation</a>. 
+By convention, the compiled code for a library goes in a separate file
+whose name consists of the library source file with <code>c</code> appended. 
+Thus, the compiled code for <code>foo.el</code> goes in <code>foo.elc</code>. 
+That's why <code>load-library</code> searches for <code>.elc</code> files first.
+
+   <p>By default, Emacs refuses to load compiled Lisp files which were
+compiled with XEmacs, a modified versions of Emacs--they can cause
+Emacs to crash.  Set the variable <code>load-dangerous-libraries</code> to
+<code>t</code> if you want to try loading them.
+
+   </body></html>
+

@@ -1,0 +1,93 @@
+<html lang="en">
+<head>
+<title>Controlling Abbrev Expansion</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Controlling Abbrev Expansion">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Expanding%20Abbrevs">Expanding Abbrevs</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Editing-Abbrevs.html#Editing%20Abbrevs">Editing Abbrevs</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Defining-Abbrevs.html#Defining%20Abbrevs">Defining Abbrevs</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Abbrevs.html#Abbrevs">Abbrevs</a>
+<hr><br>
+</div>
+
+<h3 class="section">Controlling Abbrev Expansion</h3>
+
+<p>An abbrev expands whenever it is present in the buffer just before
+point and you type a self-inserting whitespace or punctuation character
+(&lt;SPC&gt;, comma, etc.).  More precisely, any character that is not a
+word constituent expands an abbrev, and any word-constituent character
+can be part of an abbrev.  The most common way to use an abbrev is to
+insert it and then insert a punctuation character to expand it.
+
+   <p>Abbrev expansion preserves case; thus, <code>foo</code> expands into <code>find
+outer otter</code>; <code>Foo</code> into <code>Find outer otter</code>, and <code>FOO</code> into
+<code>FIND OUTER OTTER</code> or <code>Find Outer Otter</code> according to the
+variable <code>abbrev-all-caps</code> (a non-<code>nil</code> value chooses the first
+of the two expansions).
+
+   <p>These commands are used to control abbrev expansion:
+
+     <dl>
+<dt><kbd>M-'</kbd>
+     <dd>Separate a prefix from a following abbrev to be expanded
+(<code>abbrev-prefix-mark</code>). 
+<br><dt><kbd>C-x a e</kbd>
+     <dd>Expand the abbrev before point (<code>expand-abbrev</code>). 
+This is effective even when Abbrev mode is not enabled. 
+<br><dt><kbd>M-x expand-region-abbrevs</kbd>
+     <dd>Expand some or all abbrevs found in the region. 
+</dl>
+
+   <p>You may wish to expand an abbrev with a prefix attached; for example,
+if <code>cnst</code> expands into <code>construction</code>, you might want to use
+it to enter <code>reconstruction</code>.  It does not work to type
+<kbd>recnst</kbd>, because that is not necessarily a defined abbrev.  What
+you can do is use the command <kbd>M-'</kbd> (<code>abbrev-prefix-mark</code>) in
+between the prefix <code>re</code> and the abbrev <code>cnst</code>.  First, insert
+<code>re</code>.  Then type <kbd>M-'</kbd>; this inserts a hyphen in the buffer to
+indicate that it has done its work.  Then insert the abbrev <code>cnst</code>;
+the buffer now contains <code>re-cnst</code>.  Now insert a non-word character
+to expand the abbrev <code>cnst</code> into <code>construction</code>.  This
+expansion step also deletes the hyphen that indicated <kbd>M-'</kbd> had been
+used.  The result is the desired <code>reconstruction</code>.
+
+   <p>If you actually want the text of the abbrev in the buffer, rather than
+its expansion, you can accomplish this by inserting the following
+punctuation with <kbd>C-q</kbd>.  Thus, <kbd>foo C-q ,</kbd> leaves <code>foo,</code> in
+the buffer.
+
+   <p>If you expand an abbrev by mistake, you can undo the expansion and
+bring back the abbrev itself by typing <kbd>C-_</kbd> to undo (see <a href="Undo.html#Undo">Undo</a>). 
+This also undoes the insertion of the non-word character that expanded
+the abbrev.  If the result you want is the terminating non-word
+character plus the unexpanded abbrev, you must reinsert the terminating
+character, quoting it with <kbd>C-q</kbd>.  You can also use the command
+<kbd>M-x unexpand-abbrev</kbd> to cancel the last expansion without
+deleting the terminating character.
+
+   <p><kbd>M-x expand-region-abbrevs</kbd> searches through the region for defined
+abbrevs, and for each one found offers to replace it with its expansion. 
+This command is useful if you have typed in text using abbrevs but forgot
+to turn on Abbrev mode first.  It may also be useful together with a
+special set of abbrev definitions for making several global replacements at
+once.  This command is effective even if Abbrev mode is not enabled.
+
+   <p>Expanding an abbrev runs the hook <code>pre-abbrev-expand-hook</code>
+(see <a href="Hooks.html#Hooks">Hooks</a>).
+
+   </body></html>
+

@@ -1,0 +1,68 @@
+<html lang="en">
+<head>
+<title>Executing Macros with Variations</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Executing Macros with Variations">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Kbd%20Macro%20Query">Kbd Macro Query</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Save-Kbd-Macro.html#Save%20Kbd%20Macro">Save Kbd Macro</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Keyboard-Macros.html#Keyboard%20Macros">Keyboard Macros</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Executing Macros with Variations</h4>
+
+<p>Using <kbd>C-x q</kbd> (<code>kbd-macro-query</code>), you can get an effect
+similar to that of <code>query-replace</code>, where the macro asks you each
+time around whether to make a change.  While defining the macro,
+type <kbd>C-x q</kbd> at the point where you want the query to occur.  During
+macro definition, the <kbd>C-x q</kbd> does nothing, but when you run the
+macro later, <kbd>C-x q</kbd> asks you interactively whether to continue.
+
+   <p>The valid responses when <kbd>C-x q</kbd> asks are &lt;SPC&gt; (or <kbd>y</kbd>),
+&lt;DEL&gt; (or <kbd>n</kbd>), &lt;RET&gt; (or <kbd>q</kbd>), <kbd>C-l</kbd> and <kbd>C-r</kbd>. 
+The answers are the same as in <code>query-replace</code>, though not all of
+the <code>query-replace</code> options are meaningful.
+
+   <p>These responses include &lt;SPC&gt; to continue, and &lt;DEL&gt; to skip
+the remainder of this repetition of the macro and start right away with
+the next repetition.  &lt;RET&gt; means to skip the remainder of this
+repetition and cancel further repetitions.  <kbd>C-l</kbd> redraws the screen
+and asks you again for a character to say what to do.
+
+   <p><kbd>C-r</kbd> enters a recursive editing level, in which you can perform
+editing which is not part of the macro.  When you exit the recursive
+edit using <kbd>C-M-c</kbd>, you are asked again how to continue with the
+keyboard macro.  If you type a &lt;SPC&gt; at this time, the rest of the
+macro definition is executed.  It is up to you to leave point and the
+text in a state such that the rest of the macro will do what you
+want.
+
+   <p><kbd>C-u C-x q</kbd>, which is <kbd>C-x q</kbd> with a numeric argument,
+performs a completely different function.  It enters a recursive edit
+reading input from the keyboard, both when you type it during the
+definition of the macro, and when it is executed from the macro.  During
+definition, the editing you do inside the recursive edit does not become
+part of the macro.  During macro execution, the recursive edit gives you
+a chance to do some particularized editing on each repetition. 
+See <a href="Recursive-Edit.html#Recursive%20Edit">Recursive Edit</a>.
+
+   <p>Another way to vary the behavior of a keyboard macro is to use a
+register as a counter, incrementing it on each repetition of the macro. 
+See <a href="RegNumbers.html#RegNumbers">RegNumbers</a>.
+
+   </body></html>
+

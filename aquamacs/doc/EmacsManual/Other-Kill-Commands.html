@@ -1,0 +1,70 @@
+<html lang="en">
+<head>
+<title>Other Kill Commands</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Other Kill Commands">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Other%20Kill%20Commands">Other Kill Commands</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Killing-by-Lines.html#Killing%20by%20Lines">Killing by Lines</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Killing.html#Killing">Killing</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Other Kill Commands</h4>
+
+     <dl>
+<dt><kbd>C-w</kbd>
+     <dd>Kill region (from point to the mark) (<code>kill-region</code>). 
+<br><dt><kbd>M-d</kbd>
+     <dd>Kill word (<code>kill-word</code>).  See <a href="Words.html#Words">Words</a>. 
+<br><dt><kbd>M-&lt;DEL&gt;</kbd>
+     <dd>Kill word backwards (<code>backward-kill-word</code>). 
+<br><dt><kbd>C-x &lt;DEL&gt;</kbd>
+     <dd>Kill back to beginning of sentence (<code>backward-kill-sentence</code>). 
+See <a href="Sentences.html#Sentences">Sentences</a>. 
+<br><dt><kbd>M-k</kbd>
+     <dd>Kill to end of sentence (<code>kill-sentence</code>). 
+<br><dt><kbd>C-M-k</kbd>
+     <dd>Kill the following balanced expression (<code>kill-sexp</code>).  See <a href="Expressions.html#Expressions">Expressions</a>. 
+<br><dt><kbd>M-z </kbd><var>char</var><kbd></kbd>
+     <dd>Kill through the next occurrence of <var>char</var> (<code>zap-to-char</code>). 
+</dl>
+
+   <p>A kill command which is very general is <kbd>C-w</kbd>
+(<code>kill-region</code>), which kills everything between point and the
+mark.  With this command, you can kill any contiguous sequence of
+characters, if you first set the region around them.
+
+   <p>A convenient way of killing is combined with searching: <kbd>M-z</kbd>
+(<code>zap-to-char</code>) reads a character and kills from point up to (and
+including) the next occurrence of that character in the buffer.  A
+numeric argument acts as a repeat count.  A negative argument means to
+search backward and kill text before point.
+
+   <p>Other syntactic units can be killed: words, with <kbd>M-&lt;DEL&gt;</kbd>
+and <kbd>M-d</kbd> (see <a href="Words.html#Words">Words</a>); balanced expressions, with <kbd>C-M-k</kbd>
+(see <a href="Expressions.html#Expressions">Expressions</a>); and sentences, with <kbd>C-x &lt;DEL&gt;</kbd> and
+<kbd>M-k</kbd> (see <a href="Sentences.html#Sentences">Sentences</a>).
+
+   <p>You can use kill commands in read-only buffers.  They don't actually
+change the buffer, and they beep to warn you of that, but they do copy
+the text you tried to kill into the kill ring, so you can yank it into
+other buffers.  Most of the kill commands move point across the text
+they copy in this way, so that successive kill commands build up a
+single kill ring entry as usual.
+
+   </body></html>
+

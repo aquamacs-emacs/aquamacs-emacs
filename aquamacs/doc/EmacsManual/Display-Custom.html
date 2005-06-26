@@ -1,0 +1,119 @@
+<html lang="en">
+<head>
+<title>Customization of Display</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Customization of Display">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Display%20Custom">Display Custom</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Cursor-Display.html#Cursor%20Display">Cursor Display</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Text-Display.html#Text%20Display">Text Display</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
+<hr><br>
+</div>
+
+<h3 class="section">Customization of Display</h3>
+
+<p>This section contains information for customization only.  Beginning
+users should skip it.
+
+   <p>The variable <code>mode-line-inverse-video</code> is an obsolete way of
+controlling whether the mode line is displayed in inverse video; the
+preferred way of doing this is to change the <code>mode-line</code> face. 
+See <a href="Mode-Line.html#Mode%20Line">Mode Line</a>.  However, if <code>mode-line-inverse-video</code> has a
+value of <code>nil</code>, then the <code>mode-line</code> face will be ignored,
+and mode-lines will be drawn using the default text face. 
+See <a href="Faces.html#Faces">Faces</a>.
+
+   <p>If the variable <code>inverse-video</code> is non-<code>nil</code>, Emacs attempts
+to invert all the lines of the display from what they normally are.
+
+   <p>If the variable <code>visible-bell</code> is non-<code>nil</code>, Emacs attempts
+to make the whole screen blink when it would normally make an audible bell
+sound.  This variable has no effect if your terminal does not have a way
+to make the screen blink.
+
+   <p>When you reenter Emacs after suspending, Emacs normally clears the
+screen and redraws the entire display.  On some terminals with more than
+one page of memory, it is possible to arrange the termcap entry so that
+the <code>ti</code> and <code>te</code> strings (output to the terminal when Emacs
+is entered and exited, respectively) switch between pages of memory so
+as to use one page for Emacs and another page for other output.  Then
+you might want to set the variable <code>no-redraw-on-reenter</code>
+non-<code>nil</code>; this tells Emacs to assume, when resumed, that the
+screen page it is using still contains what Emacs last wrote there.
+
+   <p>The variable <code>echo-keystrokes</code> controls the echoing of multi-character
+keys; its value is the number of seconds of pause required to cause echoing
+to start, or zero meaning don't echo at all.  See <a href="Echo-Area.html#Echo%20Area">Echo Area</a>.
+
+   <p>If the variable <code>ctl-arrow</code> is <code>nil</code>, all control characters in
+the buffer are displayed with octal escape sequences, except for newline
+and tab.  Altering the value of <code>ctl-arrow</code> makes it local to the
+current buffer; until that time, the default value is in effect.  The
+default is initially <code>t</code>.  See <a href="../elisp/Display-Tables.html#Display%20Tables">Display Tables</a>.
+
+   <p>Normally, a tab character in the buffer is displayed as whitespace which
+extends to the next display tab stop position, and display tab stops come
+at intervals equal to eight spaces.  The number of spaces per tab is
+controlled by the variable <code>tab-width</code>, which is made local by
+changing it, just like <code>ctl-arrow</code>.  Note that how the tab character
+in the buffer is displayed has nothing to do with the definition of
+&lt;TAB&gt; as a command.  The variable <code>tab-width</code> must have an
+integer value between 1 and 1000, inclusive.
+
+   <p>If the variable <code>truncate-lines</code> is non-<code>nil</code>, then each
+line of text gets just one screen line for display; if the text line is
+too long, display shows only the part that fits.  If
+<code>truncate-lines</code> is <code>nil</code>, then long text lines display as
+more than one screen line, enough to show the whole text of the line. 
+See <a href="Continuation-Lines.html#Continuation%20Lines">Continuation Lines</a>.  Altering the value of <code>truncate-lines</code>
+makes it local to the current buffer; until that time, the default value
+is in effect.  The default is initially <code>nil</code>.
+
+   <p>If the variable <code>truncate-partial-width-windows</code> is
+non-<code>nil</code>, it forces truncation rather than continuation in any
+window less than the full width of the screen or frame, regardless of
+the value of <code>truncate-lines</code>.  For information about side-by-side
+windows, see <a href="Split-Window.html#Split%20Window">Split Window</a>.  See also <a href="../elisp/Display.html#Display">Display</a>.
+
+   <p>The variable <code>baud-rate</code> holds the output speed of the
+terminal, as far as Emacs knows.  Setting this variable does not
+change the speed of actual data transmission, but the value is used
+for calculations.  On terminals, it affects padding, and decisions
+about whether to scroll part of the screen or redraw it instead. 
+It also affects the behavior of incremental search.
+
+   <p>On window-systems, <code>baud-rate</code> is only used to determine how
+frequently to look for pending input during display updating.  A
+higher value of <code>baud-rate</code> means that check for pending input
+will be done less frequently.
+
+   <p>You can customize the way any particular character code is displayed
+by means of a display table.  See <a href="../elisp/Display-Tables.html#Display%20Tables">Display Tables</a>.
+
+   <p>On a window system, Emacs can optionally display the mouse pointer
+in a special shape to say that Emacs is busy.  To turn this feature on
+or off, customize the group <code>cursor</code>.  You can also control the
+amount of time Emacs must remain busy before the busy indicator is
+displayed, by setting the variable <code>hourglass-delay</code>.
+
+   <p>On some text-only terminals, bold face and inverse video together
+result in text that is hard to read.  Call the function
+<code>tty-suppress-bold-inverse-default-colors</code> with a non-<code>nil</code>
+argument to suppress the effect of bold-face in this case.
+
+   </body></html>
+

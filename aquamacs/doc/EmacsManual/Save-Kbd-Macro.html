@@ -1,0 +1,59 @@
+<html lang="en">
+<head>
+<title>Naming and Saving Keyboard Macros</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Naming and Saving Keyboard Macros">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Save%20Kbd%20Macro">Save Kbd Macro</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Kbd-Macro-Query.html#Kbd%20Macro%20Query">Kbd Macro Query</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Basic-Kbd-Macro.html#Basic%20Kbd%20Macro">Basic Kbd Macro</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Keyboard-Macros.html#Keyboard%20Macros">Keyboard Macros</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Naming and Saving Keyboard Macros</h4>
+
+<p>If you wish to save a keyboard macro for longer than until you define the
+next one, you must give it a name using <kbd>M-x name-last-kbd-macro</kbd>. 
+This reads a name as an argument using the minibuffer and defines that name
+to execute the macro.  The macro name is a Lisp symbol, and defining it in
+this way makes it a valid command name for calling with <kbd>M-x</kbd> or for
+binding a key to with <code>global-set-key</code> (see <a href="Keymaps.html#Keymaps">Keymaps</a>).  If you
+specify a name that has a prior definition other than another keyboard
+macro, an error message is shown and nothing is changed.
+
+   <p>Once a macro has a command name, you can save its definition in a file. 
+Then it can be used in another editing session.  First, visit the file
+you want to save the definition in.  Then use this command:
+
+<pre class="example">     M-x insert-kbd-macro &lt;RET&gt; <var>macroname</var> &lt;RET&gt;
+     </pre>
+
+<p>This inserts some Lisp code that, when executed later, will define the
+same macro with the same definition it has now.  (You need not
+understand Lisp code to do this, because <code>insert-kbd-macro</code> writes
+the Lisp code for you.)  Then save the file.  You can load the file
+later with <code>load-file</code> (see <a href="Lisp-Libraries.html#Lisp%20Libraries">Lisp Libraries</a>).  If the file you
+save in is your init file <code>~/.emacs</code> (see <a href="Init-File.html#Init%20File">Init File</a>) then the
+macro will be defined each time you run Emacs.
+
+   <p>If you give <code>insert-kbd-macro</code> a numeric argument, it makes
+additional Lisp code to record the keys (if any) that you have bound to the
+keyboard macro, so that the macro will be reassigned the same keys when you
+load the file.
+
+   </body></html>
+

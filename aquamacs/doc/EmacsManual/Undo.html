@@ -1,0 +1,120 @@
+<html lang="en">
+<head>
+<title>Undoing Changes</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Undoing Changes">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Undo">Undo</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Basic-Files.html#Basic%20Files">Basic Files</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Erasing.html#Erasing">Erasing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Basic.html#Basic">Basic</a>
+<hr><br>
+</div>
+
+<h3 class="section">Undoing Changes</h3>
+
+<p>You can undo all the recent changes in the buffer text, up to a
+certain point.  Each buffer records changes individually, and the undo
+command always applies to the current buffer.  Usually each editing
+command makes a separate entry in the undo records, but some commands
+such as <code>query-replace</code> make many entries, and very simple commands
+such as self-inserting characters are often grouped to make undoing less
+tedious.
+
+     <dl>
+<dt><kbd>C-x u</kbd>
+     <dd>Undo one batch of changes--usually, one command worth (<code>undo</code>). 
+<br><dt><kbd>C-_</kbd>
+     <dd>The same. 
+<br><dt><kbd>C-u C-x u</kbd>
+     <dd>Undo one batch of changes in the region. 
+</dl>
+
+   <p>The command <kbd>C-x u</kbd> or <kbd>C-_</kbd> is how you undo.  The first time
+you give this command, it undoes the last change.  Point moves back to
+where it was before the command that made the change.
+
+   <p>Consecutive repetitions of <kbd>C-_</kbd> or <kbd>C-x u</kbd> undo earlier and
+earlier changes, back to the limit of the undo information available. 
+If all recorded changes have already been undone, the undo command
+displays an error message and does nothing.
+
+   <p>Any command other than an undo command breaks the sequence of undo
+commands.  Starting from that moment, the previous undo commands become
+ordinary changes that you can undo.  Thus, to redo changes you have
+undone, type <kbd>C-f</kbd> or any other command that will harmlessly break
+the sequence of undoing, then type more undo commands.
+
+   <p>Ordinary undo applies to all changes made in the current buffer.  You
+can also perform <dfn>selective undo</dfn>, limited to the current region. 
+To do this, specify the region you want, then run the <code>undo</code>
+command with a prefix argument (the value does not matter): <kbd>C-u C-x
+u</kbd> or <kbd>C-u C-_</kbd>.  This undoes the most recent change in the region. 
+To undo further changes in the same region, repeat the <code>undo</code>
+command (no prefix argument is needed).  In Transient Mark mode, any use
+of <code>undo</code> when there is an active region performs selective undo;
+you do not need a prefix argument.
+
+   <p>If you notice that a buffer has been modified accidentally, the
+easiest way to recover is to type <kbd>C-_</kbd> repeatedly until the stars
+disappear from the front of the mode line.  At this time, all the
+modifications you made have been canceled.  Whenever an undo command
+makes the stars disappear from the mode line, it means that the buffer
+contents are the same as they were when the file was last read in or
+saved.
+
+   <p>If you do not remember whether you changed the buffer deliberately,
+type <kbd>C-_</kbd> once.  When you see the last change you made undone, you
+will see whether it was an intentional change.  If it was an accident,
+leave it undone.  If it was deliberate, redo the change as described
+above.
+
+   <p>Not all buffers record undo information.  Buffers whose names start with
+spaces don't; these buffers are used internally by Emacs and its extensions
+to hold text that users don't normally look at or edit.
+
+   <p>You cannot undo mere cursor motion; only changes in the buffer
+contents save undo information.  However, some cursor motion commands
+set the mark, so if you use these commands from time to time, you can
+move back to the neighborhoods you have moved through by popping the
+mark ring (see <a href="Mark-Ring.html#Mark%20Ring">Mark Ring</a>).
+
+   <p>When the undo information for a buffer becomes too large, Emacs
+discards the oldest undo information from time to time (during garbage
+collection).  You can specify how much undo information to keep by
+setting two variables: <code>undo-limit</code> and <code>undo-strong-limit</code>. 
+Their values are expressed in units of bytes of space.
+
+   <p>The variable <code>undo-limit</code> sets a soft limit: Emacs keeps undo
+data for enough commands to reach this size, and perhaps exceed it, but
+does not keep data for any earlier commands beyond that.  Its default
+value is 20000.  The variable <code>undo-strong-limit</code> sets a stricter
+limit: the command which pushes the size past this amount is itself
+forgotten.  Its default value is 30000.
+
+   <p>Regardless of the values of those variables, the most recent change is
+never discarded, so there is no danger that garbage collection occurring
+right after an unintentional large change might prevent you from undoing
+it.
+
+   <p>The reason the <code>undo</code> command has two keys, <kbd>C-x u</kbd> and
+<kbd>C-_</kbd>, set up to run it is that it is worthy of a single-character
+key, but on some keyboards it is not obvious how to type <kbd>C-_</kbd>. 
+<kbd>C-x u</kbd> is an alternative you can type straightforwardly on any
+terminal.
+
+   </body></html>
+

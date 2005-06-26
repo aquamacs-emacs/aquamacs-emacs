@@ -1,0 +1,99 @@
+<html lang="en">
+<head>
+<title>Explicit Fill Commands</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Explicit Fill Commands">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Fill%20Commands">Fill Commands</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Fill-Prefix.html#Fill%20Prefix">Fill Prefix</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Refill.html#Refill">Refill</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Filling.html#Filling">Filling</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Explicit Fill Commands</h4>
+
+     <dl>
+<dt><kbd>M-q</kbd>
+     <dd>Fill current paragraph (<code>fill-paragraph</code>). 
+<br><dt><kbd>C-x f</kbd>
+     <dd>Set the fill column (<code>set-fill-column</code>). 
+<br><dt><kbd>M-x fill-region</kbd>
+     <dd>Fill each paragraph in the region (<code>fill-region</code>). 
+<br><dt><kbd>M-x fill-region-as-paragraph</kbd>
+     <dd>Fill the region, considering it as one paragraph. 
+<br><dt><kbd>M-s</kbd>
+     <dd>Center a line. 
+</dl>
+
+   <p>To refill a paragraph, use the command <kbd>M-q</kbd>
+(<code>fill-paragraph</code>).  This operates on the paragraph that point is
+inside, or the one after point if point is between paragraphs. 
+Refilling works by removing all the line-breaks, then inserting new ones
+where necessary.
+
+   <p>To refill many paragraphs, use <kbd>M-x fill-region</kbd>, which
+divides the region into paragraphs and fills each of them.
+
+   <p><kbd>M-q</kbd> and <code>fill-region</code> use the same criteria as <kbd>M-h</kbd>
+for finding paragraph boundaries (see <a href="Paragraphs.html#Paragraphs">Paragraphs</a>).  For more
+control, you can use <kbd>M-x fill-region-as-paragraph</kbd>, which refills
+everything between point and mark.  This command deletes any blank lines
+within the region, so separate blocks of text end up combined into one
+block.
+
+   <p>A numeric argument to <kbd>M-q</kbd> causes it to <dfn>justify</dfn> the text as
+well as filling it.  This means that extra spaces are inserted to make
+the right margin line up exactly at the fill column.  To remove the
+extra spaces, use <kbd>M-q</kbd> with no argument.  (Likewise for
+<code>fill-region</code>.)  Another way to control justification, and choose
+other styles of filling, is with the <code>justification</code> text property;
+see <a href="Format-Justification.html#Format%20Justification">Format Justification</a>.
+
+   <p>The command <kbd>M-s</kbd> (<code>center-line</code>) centers the current line
+within the current fill column.  With an argument <var>n</var>, it centers
+<var>n</var> lines individually and moves past them.
+
+   <p>The maximum line width for filling is in the variable
+<code>fill-column</code>.  Altering the value of <code>fill-column</code> makes it
+local to the current buffer; until that time, the default value is in
+effect.  The default is initially 70.  See <a href="Locals.html#Locals">Locals</a>.  The easiest way
+to set <code>fill-column</code> is to use the command <kbd>C-x f</kbd>
+(<code>set-fill-column</code>).  With a numeric argument, it uses that as the
+new fill column.  With just <kbd>C-u</kbd> as argument, it sets
+<code>fill-column</code> to the current horizontal position of point.
+
+   <p>Emacs commands normally consider a period followed by two spaces or by
+a newline as the end of a sentence; a period followed by just one space
+indicates an abbreviation and not the end of a sentence.  To preserve
+the distinction between these two ways of using a period, the fill
+commands do not break a line after a period followed by just one space.
+
+   <p>If the variable <code>sentence-end-double-space</code> is <code>nil</code>, the
+fill commands expect and leave just one space at the end of a sentence. 
+Ordinarily this variable is <code>t</code>, so the fill commands insist on
+two spaces for the end of a sentence, as explained above.  See <a href="Sentences.html#Sentences">Sentences</a>.
+
+   <p>If the variable <code>colon-double-space</code> is non-<code>nil</code>, the
+fill commands put two spaces after a colon.
+
+   <p>Some languages do not use period to indicate end of sentence.  For
+example, a sentence in Thai text ends with double space but without a
+period.  Set the variable <code>sentence-end-without-period</code> to
+<code>t</code> to tell the sentence commands that a period is not necessary.
+
+   </body></html>
+

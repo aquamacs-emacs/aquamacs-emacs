@@ -1,0 +1,54 @@
+<html lang="en">
+<head>
+<title>Multiple Lines of Comments</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Multiple Lines of Comments">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Multi-Line%20Comments">Multi-Line Comments</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Options-for-Comments.html#Options%20for%20Comments">Options for Comments</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Comment-Commands.html#Comment%20Commands">Comment Commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Comments.html#Comments">Comments</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Multiple Lines of Comments</h4>
+
+<p>If you are typing a comment and wish to continue it on another line,
+you can use the command <kbd>C-M-j</kbd> (<code>comment-indent-new-line</code>). 
+This terminates the comment you are typing, creates a new blank line
+afterward, and begins a new comment indented under the old one.  When
+Auto Fill mode is on, going past the fill column while typing a comment
+causes the comment to be continued in just this fashion.  If point is
+not at the end of the line when <kbd>C-M-j</kbd> is typed, the text on
+the rest of the line becomes part of the new comment line.
+
+   <p>To turn existing lines into comment lines, use the <kbd>M-x
+comment-region</kbd> command.  It adds comment delimiters to the lines that start
+in the region, thus commenting them out.  With a negative argument, it
+does the opposite--it deletes comment delimiters from the lines in the
+region.
+
+   <p>With a positive argument, <code>comment-region</code> duplicates the last
+character of the comment start sequence it adds; the argument specifies
+how many copies of the character to insert.  Thus, in Lisp mode,
+<kbd>C-u 2 M-x comment-region</kbd> adds <code>;;</code> to each line.  Duplicating
+the comment delimiter is a way of calling attention to the comment.  It
+can also affect how the comment is indented.  In Lisp, for proper
+indentation, you should use an argument of two or three, if between defuns;
+if within a defun, it must be three.
+
+   </body></html>
+

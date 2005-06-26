@@ -1,0 +1,71 @@
+<html lang="en">
+<head>
+<title>Reverting a Buffer</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Reverting a Buffer">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Reverting">Reverting</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Auto-Save.html#Auto%20Save">Auto Save</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Saving.html#Saving">Saving</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
+<hr><br>
+</div>
+
+<h3 class="section">Reverting a Buffer</h3>
+
+<p>If you have made extensive changes to a file and then change your mind
+about them, you can get rid of them by reading in the previous version
+of the file.  To do this, use <kbd>M-x revert-buffer</kbd>, which operates on
+the current buffer.  Since reverting a buffer unintentionally could lose
+a lot of work, you must confirm this command with <kbd>yes</kbd>.
+
+   <p><code>revert-buffer</code> keeps point at the same distance (measured in
+characters) from the beginning of the file.  If the file was edited only
+slightly, you will be at approximately the same piece of text after
+reverting as before.  If you have made drastic changes, the same value of
+point in the old file may address a totally different piece of text.
+
+   <p>Reverting marks the buffer as "not modified" until another change is
+made.
+
+   <p>Some kinds of buffers whose contents reflect data bases other than files,
+such as Dired buffers, can also be reverted.  For them, reverting means
+recalculating their contents from the appropriate data base.  Buffers
+created explicitly with <kbd>C-x b</kbd> cannot be reverted; <code>revert-buffer</code>
+reports an error when asked to do so.
+
+   <p>When you edit a file that changes automatically and frequently--for
+example, a log of output from a process that continues to run--it may be
+useful for Emacs to revert the file without querying you, whenever you
+visit the file again with <kbd>C-x C-f</kbd>.
+
+   <p>To request this behavior, set the variable <code>revert-without-query</code>
+to a list of regular expressions.  When a file name matches one of these
+regular expressions, <code>find-file</code> and <code>revert-buffer</code> will
+revert it automatically if it has changed--provided the buffer itself
+is not modified.  (If you have edited the text, it would be wrong to
+discard your changes.)
+
+   <p>You may find it useful to have Emacs revert files automatically when
+they change.  Two minor modes are available to do this.  In Global
+Auto-Revert mode, Emacs periodically checks all file buffers and
+reverts any when the corresponding file has changed.  The local
+variant, Auto-Revert mode, applies only to buffers in which it was
+activated.  Checking the files is done at intervals determined by the
+variable <code>auto-revert-interval</code>.
+
+   </body></html>
+

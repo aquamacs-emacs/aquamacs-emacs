@@ -1,0 +1,66 @@
+<html lang="en">
+<head>
+<title>Requesting to Edit Formatted Text</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Requesting to Edit Formatted Text">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Requesting%20Formatted%20Text">Requesting Formatted Text</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Hard-and-Soft-Newlines.html#Hard%20and%20Soft%20Newlines">Hard and Soft Newlines</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Formatted-Text.html#Formatted%20Text">Formatted Text</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Requesting to Edit Formatted Text</h4>
+
+<p>Whenever you visit a file that Emacs saved in the text/enriched format,
+Emacs automatically converts the formatting information in the file into
+Emacs's own internal format (text properties), and turns on Enriched
+mode.
+
+   <p>To create a new file of formatted text, first visit the nonexistent
+file, then type <kbd>M-x enriched-mode</kbd> before you start inserting text. 
+This command turns on Enriched mode.  Do this before you begin inserting
+text, to ensure that the text you insert is handled properly.
+
+   <p>More generally, the command <code>enriched-mode</code> turns Enriched mode
+on if it was off, and off if it was on.  With a prefix argument, this
+command turns Enriched mode on if the argument is positive, and turns
+the mode off otherwise.
+
+   <p>When you save a buffer while Enriched mode is enabled in it, Emacs
+automatically converts the text to text/enriched format while writing it
+into the file.  When you visit the file again, Emacs will automatically
+recognize the format, reconvert the text, and turn on Enriched mode
+again.
+
+   <p>Normally, after visiting a file in text/enriched format, Emacs refills
+each paragraph to fit the specified right margin.  You can turn off this
+refilling, to save time, by setting the variable
+<code>enriched-fill-after-visiting</code> to <code>nil</code> or to <code>ask</code>.
+
+   <p>However, when visiting a file that was saved from Enriched mode, there
+is no need for refilling, because Emacs saves the right margin settings
+along with the text.
+
+   <p>You can add annotations for saving additional text properties, which
+Emacs normally does not save, by adding to <code>enriched-translations</code>. 
+Note that the text/enriched standard requires any non-standard
+annotations to have names starting with <code>x-</code>, as in
+<code>x-read-only</code>.  This ensures that they will not conflict with
+standard annotations that may be added later.
+
+   </body></html>
+

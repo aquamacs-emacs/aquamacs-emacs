@@ -1,0 +1,94 @@
+<html lang="en">
+<head>
+<title>Optional Mode Line Features</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Optional Mode Line Features">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Optional%20Mode%20Line">Optional Mode Line</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Text-Display.html#Text%20Display">Text Display</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Selective-Display.html#Selective%20Display">Selective Display</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
+<hr><br>
+</div>
+
+<h3 class="section">Optional Mode Line Features</h3>
+
+<p>The current line number of point appears in the mode line when Line
+Number mode is enabled.  Use the command <kbd>M-x line-number-mode</kbd> to
+turn this mode on and off; normally it is on.  The line number appears
+before the buffer percentage <var>pos</var>, with the letter <code>L</code> to
+indicate what it is.  See <a href="Minor-Modes.html#Minor%20Modes">Minor Modes</a>, for more information about
+minor modes and about how to use this command.
+
+   <p>If you have narrowed the buffer (see <a href="Narrowing.html#Narrowing">Narrowing</a>), the displayed
+line number is relative to the accessible portion of the buffer.
+
+   <p>If the buffer is very large (larger than the value of
+<code>line-number-display-limit</code>), then the line number doesn't appear. 
+Emacs doesn't compute the line number when the buffer is large, because
+that would be too slow.  Set it to <code>nil</code> to remove the limit.
+
+   <p>Line-number computation can also be slow if the lines in the buffer
+are too long.  For this reason, Emacs normally doesn't display line
+numbers if the average width, in characters, of lines near point is
+larger than the value of the variable
+<code>line-number-display-limit-width</code>.  The default value is 200
+characters.
+
+   <p>You can also display the current column number by turning on Column
+Number mode.  It displays the current column number preceded by the
+letter <code>C</code>.  Type <kbd>M-x column-number-mode</kbd> to toggle this mode.
+
+   <p>Emacs can optionally display the time and system load in all mode
+lines.  To enable this feature, type <kbd>M-x display-time</kbd> or customize
+the option <code>display-time-mode</code>.  The information added to the mode
+line usually appears after the buffer name, before the mode names and
+their parentheses.  It looks like this:
+
+<pre class="example">     <var>hh</var>:<var>mm</var>pm <var>l.ll</var>
+     </pre>
+
+<p>Here <var>hh</var> and <var>mm</var> are the hour and minute, followed always by
+<code>am</code> or <code>pm</code>.  <var>l.ll</var> is the average number of running
+processes in the whole system recently.  (Some fields may be missing if
+your operating system cannot support them.)  If you prefer time display
+in 24-hour format, set the variable <code>display-time-24hr-format</code>
+to <code>t</code>.
+
+   <p>The word <code>Mail</code> appears after the load level if there is mail
+for you that you have not read yet.  On a graphical display you can use
+an icon instead of <code>Mail</code> by customizing
+<code>display-time-use-mail-icon</code>; this may save some space on the mode
+line.  You can customize <code>display-time-mail-face</code> to make the mail
+indicator prominent.
+
+   <p>By default, the mode line is drawn on graphics displays with
+3D-style highlighting, like that of a button when it is not being
+pressed.  If you don't like this effect, you can disable the 3D
+highlighting of the mode line, by customizing the attributes of the
+<code>mode-line</code> face in your <code>.emacs</code> init file, like this:
+
+<pre class="example">     (set-face-attribute 'mode-line nil :box nil)
+     </pre>
+
+<p>Alternatively, you can turn off the box attribute in your
+<code>.Xdefaults</code> file:
+
+<pre class="example">     Emacs.mode-line.AttributeBox: off
+     </pre>
+
+   </body></html>
+

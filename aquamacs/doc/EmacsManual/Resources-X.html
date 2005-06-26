@@ -1,0 +1,265 @@
+<html lang="en">
+<head>
+<title>X Resources</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="X Resources">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Resources%20X">Resources X</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Lucid-Resources.html#Lucid%20Resources">Lucid Resources</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Icons-X.html#Icons%20X">Icons X</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Command-Arguments.html#Command%20Arguments">Command Arguments</a>
+<hr><br>
+</div>
+
+<h3 class="appendixsec">X Resources</h3>
+
+<p>Programs running under the X Window System organize their user options
+under a hierarchy of classes and resources.  You can specify default
+values for these options in your X resources file, usually named
+<code>~/.Xdefaults</code>.
+
+   <p>Each line in the file specifies a value for one option or for a
+collection of related options, for one program or for several programs
+(optionally even for all programs).
+
+   <p>MS-Windows systems don't support <code>~/.Xdefaults</code> files, but
+Emacs compiled for Windows looks for X resources in the Windows
+Registry, under the keys <code>HKEY_CURRENT_USER\SOFTWARE\GNU\Emacs</code>
+and <code>HKEY_LOCAL_MACHINE\SOFTWARE\GNU\Emacs</code>.
+
+   <p>Programs define named resources with particular meanings.  They also
+define how to group resources into named classes.  For instance, in
+Emacs, the <code>internalBorder</code> resource controls the width of the
+internal border, and the <code>borderWidth</code> resource controls the width
+of the external border.  Both of these resources are part of the
+<code>BorderWidth</code> class.  Case distinctions are significant in these
+names.
+
+   <p>In <code>~/.Xdefaults</code>, you can specify a value for a single resource
+on one line, like this:
+
+<pre class="example">     emacs.borderWidth: 2
+     </pre>
+
+<p>Or you can use a class name to specify the same value for all resources
+in that class.  Here's an example:
+
+<pre class="example">     emacs.BorderWidth: 2
+     </pre>
+
+   <p>If you specify a value for a class, it becomes the default for all
+resources in that class.  You can specify values for individual
+resources as well; these override the class value, for those particular
+resources.  Thus, this example specifies 2 as the default width for all
+borders, but overrides this value with 4 for the external border:
+
+<pre class="example">     emacs.BorderWidth: 2
+     emacs.borderWidth: 4
+     </pre>
+
+   <p>The order in which the lines appear in the file does not matter. 
+Also, command-line options always override the X resources file.
+
+   <p>The string <code>emacs</code> in the examples above is also a resource
+name.  It actually represents the name of the executable file that you
+invoke to run Emacs.  If Emacs is installed under a different name, it
+looks for resources under that name instead of <code>emacs</code>.
+
+     <dl>
+<dt><code>-name </code><var>name</var><code></code>
+     <dd><dt><code>--name=</code><var>name</var><code></code>
+     <dd>Use <var>name</var> as the resource name (and the title) for the initial
+Emacs frame.  This option does not affect subsequent frames, but Lisp
+programs can specify frame names when they create frames.
+
+     <p>If you don't specify this option, the default is to use the Emacs
+executable's name as the resource name.
+
+     <br><dt><code>-xrm </code><var>resource-values</var><code></code>
+     <dd><dt><code>--xrm=</code><var>resource-values</var><code></code>
+     <dd>Specify X resource values for this Emacs job (see below). 
+</dl>
+
+   <p>For consistency, <code>-name</code> also specifies the name to use for
+other resource values that do not belong to any particular frame.
+
+   <p>The resources that name Emacs invocations also belong to a class; its
+name is <code>Emacs</code>.  If you write <code>Emacs</code> instead of
+<code>emacs</code>, the resource applies to all frames in all Emacs jobs,
+regardless of frame titles and regardless of the name of the executable
+file.  Here is an example:
+
+<pre class="example">     Emacs.BorderWidth: 2
+     Emacs.borderWidth: 4
+     </pre>
+
+   <p>You can specify a string of additional resource values for Emacs to
+use with the command line option <code>-xrm </code><var>resources</var><code></code>.  The text
+<var>resources</var> should have the same format that you would use inside a file
+of X resources.  To include multiple resource specifications in
+<var>resources</var>, put a newline between them, just as you would in a file. 
+You can also use <code>#include "</code><var>filename</var><code>"</code> to include a file full
+of resource specifications.  Resource values specified with <code>-xrm</code>
+take precedence over all other resource specifications.
+
+   <p>The following table lists the resource names that designate options
+for Emacs, each with the class that it belongs to:
+
+     <dl>
+<dt><code>background</code> (class <code>Background</code>)
+     <dd>Background color name.
+
+     <br><dt><code>bitmapIcon</code> (class <code>BitmapIcon</code>)
+     <dd>Use a bitmap icon (a picture of a gnu) if <code>on</code>, let the window
+manager choose an icon if <code>off</code>.
+
+     <br><dt><code>borderColor</code> (class <code>BorderColor</code>)
+     <dd>Color name for the external border.
+
+     <br><dt><code>borderWidth</code> (class <code>BorderWidth</code>)
+     <dd>Width in pixels of the external border.
+
+     <br><dt><code>cursorColor</code> (class <code>Foreground</code>)
+     <dd>Color name for text cursor (point).
+
+     <br><dt><code>font</code> (class <code>Font</code>)
+     <dd>Font name for text (or fontset name, see <a href="Fontsets.html#Fontsets">Fontsets</a>).
+
+     <br><dt><code>foreground</code> (class <code>Foreground</code>)
+     <dd>Color name for text.
+
+     <br><dt><code>geometry</code> (class <code>Geometry</code>)
+     <dd>Window size and position.  Be careful not to specify this resource as
+<code>emacs*geometry</code>, because that may affect individual menus as well
+as the Emacs frame itself.
+
+     <p>If this resource specifies a position, that position applies only to the
+initial Emacs frame (or, in the case of a resource for a specific frame
+name, only that frame).  However, the size, if specified here, applies to
+all frames.
+
+     <br><dt><code>iconName</code> (class <code>Title</code>)
+     <dd>Name to display in the icon.
+
+     <br><dt><code>internalBorder</code> (class <code>BorderWidth</code>)
+     <dd>Width in pixels of the internal border.
+
+     <br><dt><code>lineSpacing</code> (class <code>LineSpacing</code>)
+     <dd>Additional space (<dfn>leading</dfn>) between lines, in pixels.
+
+     <br><dt><code>menuBar</code> (class <code>MenuBar</code>)
+     <dd>Give frames menu bars if <code>on</code>; don't have menu bars if <code>off</code>.
+
+     <br><dt><code>toolBar</code> (class <code>ToolBar</code>)
+     <dd>Number of lines to reserve for the tool bar.  A zero value suppresses
+the tool bar.  If the value is non-zero and
+<code>auto-resize-tool-bars</code> is non-<code>nil</code>, the tool bar's size
+will be changed automatically so that all tool bar items are visible.
+
+     <br><dt><code>minibuffer</code> (class <code>Minibuffer</code>)
+     <dd>If <code>none</code>, don't make a minibuffer in this frame. 
+It will use a separate minibuffer frame instead.
+
+     <br><dt><code>paneFont</code> (class <code>Font</code>)
+     <dd>Font name for menu pane titles, in non-toolkit versions of Emacs.
+
+     <br><dt><code>pointerColor</code> (class <code>Foreground</code>)
+     <dd>Color of the mouse cursor.
+
+     <br><dt><code>reverseVideo</code> (class <code>ReverseVideo</code>)
+     <dd>Switch foreground and background default colors if <code>on</code>, use colors as
+specified if <code>off</code>.
+
+     <br><dt><code>screenGamma</code> (class <code>ScreenGamma</code>)
+     <dd>Gamma correction for colors, equivalent to the frame parameter
+<code>screen-gamma</code>.
+
+     <br><dt><code>selectionFont</code> (class <code>Font</code>)
+     <dd>Font name for pop-up menu items, in non-toolkit versions of Emacs.  (For
+toolkit versions, see <a href="Lucid-Resources.html#Lucid%20Resources">Lucid Resources</a>, also see <a href="LessTif-Resources.html#LessTif%20Resources">LessTif Resources</a>.)
+
+     <br><dt><code>synchronous</code> (class <code>Synchronous</code>)
+     <dd>Run Emacs in synchronous mode if <code>on</code>.  Synchronous mode is
+useful for debugging X problems.
+
+     <br><dt><code>title</code> (class <code>Title</code>)
+     <dd>Name to display in the title bar of the initial Emacs frame.
+
+     <br><dt><code>verticalScrollBars</code> (class <code>ScrollBars</code>)
+     <dd>Give frames scroll bars if <code>on</code>; don't have scroll bars if
+<code>off</code>. 
+</dl>
+
+   <p>Here are resources for controlling the appearance of particular faces
+(see <a href="Faces.html#Faces">Faces</a>):
+
+     <dl>
+<dt><code></code><var>face</var><code>.attributeFont</code>
+     <dd>Font for face <var>face</var>. 
+<br><dt><code></code><var>face</var><code>.attributeForeground</code>
+     <dd>Foreground color for face <var>face</var>. 
+<br><dt><code></code><var>face</var><code>.attributeBackground</code>
+     <dd>Background color for face <var>face</var>. 
+<br><dt><code></code><var>face</var><code>.attributeUnderline</code>
+     <dd>Underline flag for face <var>face</var>.  Use <code>on</code> or <code>true</code> for
+yes. 
+<br><dt><code></code><var>face</var><code>.attributeFamily</code>
+     <dd>Font family for face <var>face</var>. 
+<br><dt><code></code><var>face</var><code>.attributeWidth</code>
+     <dd>Relative proportional width of the font to use for face <var>face</var>. 
+It should be one of <code>ultra-condensed</code>, <code>extra-condensed</code>,
+<code>condensed</code>, <code>semi-condensed</code>, <code>normal</code>,
+<code>semi-expanded</code>, <code>expanded</code>, <code>extra-expanded</code>, or
+<code>ultra-expanded</code>. 
+<br><dt><code></code><var>face</var><code>.attributeHeight</code>
+     <dd>Height of the font to use for face <var>face</var>: either an integer
+specifying the height in units of 1/10pt, or a floating point
+number that specifies a scale factor to scale the underlying face's
+default font, or a function to be called with the default height which
+will return a new height. 
+<br><dt><code></code><var>face</var><code>.attributeWeight</code>
+     <dd>A weight to use for the face <var>face</var>.  It must be one of
+<code>ultra-bold</code>, <code>extra-bold</code>, <code>bold</code>,
+<code>semi-bold</code>, <code>normal</code>, <code>semi-light</code>, <code>light</code>,
+<code>extra-light</code>, <code>ultra-light</code>. 
+<br><dt><code></code><var>face</var><code>.attributeSlant</code>
+     <dd>The slant to use for the font of face <var>face</var>.  It must be one of
+<code>italic</code>, <code>oblique</code>, <code>normal</code>,
+<code>reverse-italic</code>, or <code>reverse-oblique</code>. 
+<br><dt><code></code><var>face</var><code>.attributeStrikeThrough</code>
+     <dd>Whether the face <var>face</var> should be drawn with a line striking
+through the characters. 
+<br><dt><code></code><var>face</var><code>.attributeOverline</code>
+     <dd>Whether the characters in the face <var>face</var> should be overlined. 
+<br><dt><code></code><var>face</var><code>.attributeBox</code>
+     <dd>Whether to draw a box around the characters in face <var>face</var>. 
+<br><dt><code></code><var>face</var><code>.attributeInverse</code>
+     <dd>Whether to display the characters in face <var>face</var> in inverse
+video. 
+<br><dt><code></code><var>face</var><code>.attributeStipple</code>
+     <dd>The name of a pixmap data file to use for the stipple pattern, or
+<code>false</code> to not use stipple for the face <var>face</var>. 
+<br><dt><code></code><var>face</var><code>.attributeBackgroundPixmap</code>
+     <dd>The background pixmap for the face <var>face</var>.  Should be a name of a
+pixmap file or <code>false</code>. 
+<br><dt><code></code><var>face</var><code>.attributeBold</code>
+     <dd>Whether to draw the characters in the face <var>face</var> as bold. 
+<br><dt><code></code><var>face</var><code>.attributeItalic</code>
+     <dd>Whether to draw the characters in the face <var>face</var> as italic. 
+</dl>
+
+   </body></html>
+

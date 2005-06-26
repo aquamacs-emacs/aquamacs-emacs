@@ -1,0 +1,106 @@
+<html lang="en">
+<head>
+<title>Evaluating Emacs-Lisp Expressions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Evaluating Emacs-Lisp Expressions">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Lisp%20Eval">Lisp Eval</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="External-Lisp.html#External%20Lisp">External Lisp</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Lisp-Interaction.html#Lisp%20Interaction">Lisp Interaction</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Building.html#Building">Building</a>
+<hr><br>
+</div>
+
+<h3 class="section">Evaluating Emacs-Lisp Expressions</h3>
+
+<p>Lisp programs intended to be run in Emacs should be edited in
+Emacs-Lisp mode; this happens automatically for file names ending in
+<code>.el</code>.  By contrast, Lisp mode itself is used for editing Lisp
+programs intended for other Lisp systems.  To switch to Emacs-Lisp mode
+explicitly, use the command <kbd>M-x emacs-lisp-mode</kbd>.
+
+   <p>For testing of Lisp programs to run in Emacs, it is often useful to
+evaluate part of the program as it is found in the Emacs buffer.  For
+example, after changing the text of a Lisp function definition,
+evaluating the definition installs the change for future calls to the
+function.  Evaluation of Lisp expressions is also useful in any kind of
+editing, for invoking noninteractive functions (functions that are
+not commands).
+
+     <dl>
+<dt><kbd>M-:</kbd>
+     <dd>Read a single Lisp expression in the minibuffer, evaluate it, and print
+the value in the echo area (<code>eval-expression</code>). 
+<br><dt><kbd>C-x C-e</kbd>
+     <dd>Evaluate the Lisp expression before point, and print the value in the
+echo area (<code>eval-last-sexp</code>). 
+<br><dt><kbd>C-M-x</kbd>
+     <dd>Evaluate the defun containing or after point, and print the value in
+the echo area (<code>eval-defun</code>). 
+<br><dt><kbd>M-x eval-region</kbd>
+     <dd>Evaluate all the Lisp expressions in the region. 
+<br><dt><kbd>M-x eval-current-buffer</kbd>
+     <dd>Evaluate all the Lisp expressions in the buffer. 
+</dl>
+
+   <p><kbd>M-:</kbd> (<code>eval-expression</code>) is the most basic command for evaluating
+a Lisp expression interactively.  It reads the expression using the
+minibuffer, so you can execute any expression on a buffer regardless of
+what the buffer contains.  When the expression is evaluated, the current
+buffer is once again the buffer that was current when <kbd>M-:</kbd> was
+typed.
+
+   <p>In Emacs-Lisp mode, the key <kbd>C-M-x</kbd> is bound to the command
+<code>eval-defun</code>, which parses the defun containing or following point
+as a Lisp expression and evaluates it.  The value is printed in the echo
+area.  This command is convenient for installing in the Lisp environment
+changes that you have just made in the text of a function definition.
+
+   <p><kbd>C-M-x</kbd> treats <code>defvar</code> expressions specially.  Normally,
+evaluating a <code>defvar</code> expression does nothing if the variable it
+defines already has a value.  But <kbd>C-M-x</kbd> unconditionally resets the
+variable to the initial value specified in the <code>defvar</code> expression. 
+<code>defcustom</code> expressions are treated similarly. 
+This special feature is convenient for debugging Lisp programs.
+
+   <p>The command <kbd>C-x C-e</kbd> (<code>eval-last-sexp</code>) evaluates the Lisp
+expression preceding point in the buffer, and displays the value in the
+echo area.  It is available in all major modes, not just Emacs-Lisp
+mode.  It does not treat <code>defvar</code> specially.
+
+   <p>If <kbd>C-M-x</kbd>, <kbd>C-x C-e</kbd>, or <kbd>M-:</kbd> is given a numeric
+argument, it inserts the value into the current buffer at point, rather
+than displaying it in the echo area.  The argument's value does not
+matter.
+
+   <p>The most general command for evaluating Lisp expressions from a buffer
+is <code>eval-region</code>.  <kbd>M-x eval-region</kbd> parses the text of the
+region as one or more Lisp expressions, evaluating them one by one. 
+<kbd>M-x eval-current-buffer</kbd> is similar but evaluates the entire
+buffer.  This is a reasonable way to install the contents of a file of
+Lisp code that you are ready to test.  Later, as you find bugs and
+change individual functions, use <kbd>C-M-x</kbd> on each function that you
+change.  This keeps the Lisp world in step with the source file.
+
+   <p>The customizable variables <code>eval-expression-print-level</code> and
+<code>eval-expression-print-length</code> control the maximum depth and length
+of lists to print in the result of the evaluation commands before
+abbreviating them.  <code>eval-expression-debug-on-error</code> controls
+whether evaluation errors invoke the debugger when these commands are
+used.
+
+   </body></html>
+

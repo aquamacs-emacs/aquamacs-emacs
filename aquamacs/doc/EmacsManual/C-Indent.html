@@ -1,0 +1,66 @@
+<html lang="en">
+<head>
+<title>Commands for C Indentation</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Commands for C Indentation">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="C%20Indent">C Indent</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Custom-C-Indent.html#Custom%20C%20Indent">Custom C Indent</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Lisp-Indent.html#Lisp%20Indent">Lisp Indent</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Program-Indent.html#Program%20Indent">Program Indent</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Commands for C Indentation</h4>
+
+<p>Here are special features for indentation in C mode and related modes:
+
+     <dl>
+<dt><code>C-c C-q</code>
+     <dd>Reindent the current top-level function definition or aggregate type
+declaration (<code>c-indent-defun</code>).
+
+     <br><dt><code>C-M-q</code>
+     <dd>Reindent each line in the balanced expression that follows point
+(<code>c-indent-exp</code>).  A prefix argument inhibits error checking and
+warning messages about invalid syntax.
+
+     <br><dt><code>&lt;TAB&gt;</code>
+     <dd>Reindent the current line, and/or in some cases insert a tab character
+(<code>c-indent-command</code>).
+
+     <p>If <code>c-tab-always-indent</code> is <code>t</code>, this command always reindents
+the current line and does nothing else.  This is the default.
+
+     <p>If that variable is <code>nil</code>, this command reindents the current line
+only if point is at the left margin or in the line's indentation;
+otherwise, it inserts a tab (or the equivalent number of spaces,
+if <code>indent-tabs-mode</code> is <code>nil</code>).
+
+     <p>Any other value (not <code>nil</code> or <code>t</code>) means always reindent the
+line, and also insert a tab if within a comment, a string, or a
+preprocessor directive. 
+</dl>
+
+   <p>To reindent the whole current buffer, type <kbd>C-x h C-M-\</kbd>.  This
+first selects the whole buffer as the region, then reindents that
+region.
+
+   <p>To reindent the current block, use <kbd>C-M-u C-M-q</kbd>.  This moves
+to the front of the block and then reindents it all.
+
+   </body></html>
+

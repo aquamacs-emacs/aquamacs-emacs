@@ -1,0 +1,61 @@
+<html lang="en">
+<head>
+<title>Nonincremental Search</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Nonincremental Search">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Nonincremental%20Search">Nonincremental Search</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Word-Search.html#Word%20Search">Word Search</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Incremental-Search.html#Incremental%20Search">Incremental Search</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Search.html#Search">Search</a>
+<hr><br>
+</div>
+
+<h3 class="section">Nonincremental Search</h3>
+
+<p>Emacs also has conventional nonincremental search commands, which require
+you to type the entire search string before searching begins.
+
+     <dl>
+<dt><kbd>C-s &lt;RET&gt; </kbd><var>string</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Search for <var>string</var>. 
+<br><dt><kbd>C-r &lt;RET&gt; </kbd><var>string</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Search backward for <var>string</var>. 
+</dl>
+
+   <p>To do a nonincremental search, first type <kbd>C-s &lt;RET&gt;</kbd>.  This
+enters the minibuffer to read the search string; terminate the string
+with &lt;RET&gt;, and then the search takes place.  If the string is not
+found, the search command signals an error.
+
+   <p>When you type <kbd>C-s &lt;RET&gt;</kbd>, the <kbd>C-s</kbd> invokes incremental
+search as usual.  That command is specially programmed to invoke
+nonincremental search, <code>search-forward</code>, if the string you
+specify is empty.  (Such an empty argument would otherwise be
+useless.)  But it does not call <code>search-forward</code> right away.  First
+it checks the next input character to see if is <kbd>C-w</kbd>,
+which specifies a word search. 
+<kbd>C-r &lt;RET&gt;</kbd> does likewise, for a reverse incremental search.
+
+   <p>Forward and backward nonincremental searches are implemented by the
+commands <code>search-forward</code> and <code>search-backward</code>.  These
+commands may be bound to keys in the usual manner.  The feature that you
+can get to them via the incremental search commands exists for
+historical reasons, and to avoid the need to find key sequences
+for them.
+
+   </body></html>
+

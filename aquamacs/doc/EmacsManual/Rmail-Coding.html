@@ -1,0 +1,70 @@
+<html lang="en">
+<head>
+<title>Rmail and Coding Systems</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Rmail and Coding Systems">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Rmail%20Coding">Rmail Coding</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Rmail-Editing.html#Rmail%20Editing">Rmail Editing</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Rmail-Display.html#Rmail%20Display">Rmail Display</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Rmail.html#Rmail">Rmail</a>
+<hr><br>
+</div>
+
+<h3 class="section">Rmail and Coding Systems</h3>
+
+<p>Rmail automatically decodes messages which contain non-ASCII
+characters, just as Emacs does with files you visit and with subprocess
+output.  Rmail uses the standard <code>charset=</code><var>charset</var><code></code> header in
+the message, if any, to determine how the message was encoded by the
+sender.  It maps <var>charset</var> into the corresponding Emacs coding
+system (see <a href="Coding-Systems.html#Coding%20Systems">Coding Systems</a>), and uses that coding system to decode
+message text.  If the message header doesn't have the <code>charset</code>
+specification, or if <var>charset</var> is not recognized,
+Rmail chooses the coding system with the usual Emacs heuristics and
+defaults (see <a href="Recognize-Coding.html#Recognize%20Coding">Recognize Coding</a>).
+
+   <p>Occasionally, a message is decoded incorrectly, either because Emacs
+guessed the wrong coding system in the absence of the <code>charset</code>
+specification, or because the specification was inaccurate.  For
+example, a misconfigured mailer could send a message with a
+<code>charset=iso-8859-1</code> header when the message is actually encoded
+in <code>koi8-r</code>.  When you see the message text garbled, or some of
+its characters displayed as empty boxes, this may have happened.
+
+   <p>You can correct the problem by decoding the message again using the
+right coding system, if you can figure out or guess which one is
+right.  To do this, invoke the <kbd>M-x rmail-redecode-body</kbd> command. 
+It reads the name of a coding system, encodes the message body using
+whichever coding system was used to decode it before, then redecodes
+it using the coding system you specified.  If you specified the right
+coding system, the result should be readable.
+
+   <p>Decoding and encoding using the wrong coding system is lossless for
+most encodings, in particular with 8-bit encodings such as iso-8859 or
+koi8.  So, if the initial attempt to redecode the message didn't
+result in a legible text, you can try other coding systems until you
+succeed.
+
+   <p>With some coding systems, notably those from the iso-2022 family,
+information can be lost in decoding, so that encoding the message
+again won't bring back the original incoming text.  In such a case,
+<code>rmail-redecode-body</code> cannot work.  However, the problems that
+call for use of <code>rmail-redecode-body</code> rarely occur with those
+coding systems.  So in practice the command works when you need it.
+
+   </body></html>
+

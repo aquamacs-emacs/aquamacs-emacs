@@ -1,0 +1,72 @@
+<html lang="en">
+<head>
+<title>Horizontal Scrolling</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Horizontal Scrolling">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Horizontal%20Scrolling">Horizontal Scrolling</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Follow-Mode.html#Follow%20Mode">Follow Mode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Scrolling.html#Scrolling">Scrolling</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
+<hr><br>
+</div>
+
+<h3 class="section">Horizontal Scrolling</h3>
+
+<p><dfn>Horizontal scrolling</dfn> means shifting all the lines sideways
+within a window--so that some of the text near the left margin is not
+displayed at all.  Emacs does this automatically in any window that
+uses line truncation rather than continuation: whenever point moves
+off the left or right edge of the screen, Emacs scrolls the buffer
+horizontally to make point visible.
+
+   <p>When a window has been scrolled horizontally, text lines are truncated
+rather than continued (see <a href="Continuation-Lines.html#Continuation%20Lines">Continuation Lines</a>), with a <code>$</code>
+appearing in the first column when there is text truncated to the left,
+and in the last column when there is text truncated to the right.
+
+   <p>You can use these commands to do explicit horizontal scrolling.
+
+     <dl>
+<dt><kbd>C-x &lt;</kbd>
+     <dd>Scroll text in current window to the left (<code>scroll-left</code>). 
+<br><dt><kbd>C-x &gt;</kbd>
+     <dd>Scroll to the right (<code>scroll-right</code>). 
+</dl>
+
+   <p>The command <kbd>C-x &lt;</kbd> (<code>scroll-left</code>) scrolls the selected
+window to the left by <var>n</var> columns with argument <var>n</var>.  This moves
+part of the beginning of each line off the left edge of the window. 
+With no argument, it scrolls by almost the full width of the window (two
+columns less, to be precise).
+
+   <p><kbd>C-x &gt;</kbd> (<code>scroll-right</code>) scrolls similarly to the right.  The
+window cannot be scrolled any farther to the right once it is displayed
+normally (with each line starting at the window's left margin);
+attempting to do so has no effect.  This means that you don't have to
+calculate the argument precisely for <kbd>C-x&nbsp;&gt;</kbd>; any sufficiently large
+argument will restore the normal display.
+
+   <p>If you scroll a window horizontally by hand, that sets a lower bound
+for automatic horizontal scrolling.  Automatic scrolling will continue
+to scroll the window, but never farther to the right than the amount
+you previously set by <code>scroll-left</code>.
+
+   <p>To disable automatic horizontal scrolling, set the variable
+<code>automatic-hscrolling</code> to <code>nil</code>.
+
+   </body></html>
+

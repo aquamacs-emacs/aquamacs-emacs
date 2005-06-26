@@ -1,0 +1,130 @@
+<html lang="en">
+<head>
+<title>Font Lock mode</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Font Lock mode">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Font%20Lock">Font Lock</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Highlight-Changes.html#Highlight%20Changes">Highlight Changes</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Faces.html#Faces">Faces</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
+<hr><br>
+</div>
+
+<h3 class="section">Font Lock mode</h3>
+
+<p>Font Lock mode is a minor mode, always local to a particular
+buffer, which highlights (or "fontifies") using various faces
+according to the syntax of the text you are editing.  It can
+recognize comments and strings in most languages; in several
+languages, it can also recognize and properly highlight various other
+important constructs--for example, names of functions being defined
+or reserved keywords.
+
+   <p>The command <kbd>M-x font-lock-mode</kbd> turns Font Lock mode on or off
+according to the argument, and toggles the mode when it has no argument. 
+The function <code>turn-on-font-lock</code> unconditionally enables Font Lock
+mode.  This is useful in mode-hook functions.  For example, to enable
+Font Lock mode whenever you edit a C file, you can do this:
+
+<pre class="example">     (add-hook 'c-mode-hook 'turn-on-font-lock)
+     </pre>
+
+   <p>To turn on Font Lock mode automatically in all modes which support
+it, customize the user option <code>global-font-lock-mode</code> or use the
+function <code>global-font-lock-mode</code> in your <code>.emacs</code> file, like
+this:
+
+<pre class="example">     (global-font-lock-mode 1)
+     </pre>
+
+   <p>Font Lock mode uses several specifically named faces to do its job,
+including <code>font-lock-string-face</code>, <code>font-lock-comment-face</code>,
+and others.  The easiest way to find them all is to use completion
+on the face name in <code>set-face-foreground</code>.
+
+   <p>To change the colors or the fonts used by Font Lock mode to fontify
+different parts of text, just change these faces.  There are
+two ways to do it:
+
+     <ul>
+<li>Invoke <kbd>M-x set-face-foreground</kbd> or <kbd>M-x set-face-background</kbd>
+to change the colors of a particular face used by Font Lock. 
+See <a href="Faces.html#Faces">Faces</a>.  The command <kbd>M-x list-faces-display</kbd> displays all
+the faces currently known to Emacs, including those used by Font Lock.
+
+     <li>Customize the faces interactively with <kbd>M-x customize-face</kbd>, as
+described in <a href="Face-Customization.html#Face%20Customization">Face Customization</a>. 
+</ul>
+
+   <p>To get the full benefit of Font Lock mode, you need to choose a
+default font which has bold, italic, and bold-italic variants; or else
+you need to have a color or gray-scale screen.
+
+   <p>The variable <code>font-lock-maximum-decoration</code> specifies the
+preferred level of fontification, for modes that provide multiple
+levels.  Level 1 is the least amount of fontification; some modes
+support levels as high as 3.  The normal default is "as high as
+possible."  You can specify an integer, which applies to all modes, or
+you can specify different numbers for particular major modes; for
+example, to use level 1 for C/C++ modes, and the default level
+otherwise, use this:
+
+<pre class="example">     (setq font-lock-maximum-decoration
+           '((c-mode . 1) (c++-mode . 1)))
+     </pre>
+
+   <p>Fontification can be too slow for large buffers, so you can suppress
+it.  The variable <code>font-lock-maximum-size</code> specifies a buffer size,
+beyond which buffer fontification is suppressed.
+
+   <p>Comment and string fontification (or "syntactic" fontification)
+relies on analysis of the syntactic structure of the buffer text.  For
+the sake of speed, some modes, including C mode and Lisp mode,
+rely on a special convention: an open-parenthesis or open-brace in the
+leftmost column always defines the beginning of a defun, and is
+thus always outside any string or comment.  (See <a href="Left-Margin-Paren.html#Left%20Margin%20Paren">Left Margin Paren</a>.)  If you don't follow this convention, Font Lock mode can
+misfontify the text that follows an open-parenthesis or open-brace in
+the leftmost column that is inside a string or comment.
+
+   <p>The variable <code>font-lock-beginning-of-syntax-function</code> (always
+buffer-local) specifies how Font Lock mode can find a position
+guaranteed to be outside any comment or string.  In modes which use the
+leftmost column parenthesis convention, the default value of the variable
+is <code>beginning-of-defun</code>--that tells Font Lock mode to use the
+convention.  If you set this variable to <code>nil</code>, Font Lock no longer
+relies on the convention.  This avoids incorrect results, but the price
+is that, in some cases, fontification for a changed text must rescan
+buffer text from the beginning of the buffer.  This can considerably
+slow down redisplay while scrolling, particularly if you are close to
+the end of a large buffer.
+
+   <p>Font Lock highlighting patterns already exist for many modes, but you
+may want to fontify additional patterns.  You can use the function
+<code>font-lock-add-keywords</code>, to add your own highlighting patterns for
+a particular mode.  For example, to highlight <code>FIXME:</code> words in C
+comments, use this:
+
+<pre class="example">     (font-lock-add-keywords
+      'c-mode
+      '(("\\&lt;\\(FIXME\\):" 1 font-lock-warning-face t)))
+     </pre>
+
+   <p>To remove keywords from the font-lock highlighting patterns, use the
+function <code>font-lock-remove-keywords</code>.
+
+   </body></html>
+
