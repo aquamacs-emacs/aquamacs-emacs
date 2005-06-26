@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs fonts
  
-;; Last change: $Id: aquamacs-mac-fontsets.el,v 1.3 2005/06/19 14:24:39 davidswelt Exp $
+;; Last change: $Id: aquamacs-mac-fontsets.el,v 1.4 2005/06/26 09:59:13 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -87,7 +87,16 @@
 	latin-iso8859-1:-apple-monaco*-medium-r-normal--14-140-75-75-m-140-mac-*,
 	latin-iso8859-9:-apple-monaco*-medium-r-normal--14-140-75-75-m-140-mac-*" nil ignore-font-errors)
   (error (print (list "Warning: " e))))
-	
+
+
+(condition-case e
+    (create-fontset-from-fontset-spec
+     "-apple-monaco*-medium-r-normal--18-*-*-*-*-*-fontset-monaco18,
+	ascii:-apple-monaco*-medium-r-normal--18-180-75-75-m-180-mac-*,
+	latin-iso8859-1:-apple-monaco*-medium-r-normal--18-180-75-75-m-180-mac-*,
+	latin-iso8859-9:-apple-monaco*-medium-r-normal--18-180-75-75-m-180-mac-*" nil ignore-font-errors)
+  (error (print (list "Warning: " e))))
+		
 
 (condition-case e 
     (create-fontset-from-fontset-spec
