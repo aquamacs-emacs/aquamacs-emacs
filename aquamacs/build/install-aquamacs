@@ -1,0 +1,53 @@
+#!/bin/sh
+
+# copies build from Aquamacs-Raw folder
+# should be called AFTER building in order to install Aquamacs
+ 
+# this takes three arguments   
+
+projdir=$1   # project-dir (Aquamacs CVS)
+dest=$2      # destination, e.g. /Applications/Emacs.app
+SRC=$3       # Emacs build, e.g. /Users/dr/Projects/emacs/mac/Aquamacs-Raw/Emacs.app
+
+
+if [ ! $dest ]; then
+
+    dest=/Applications/Emacs.app
+
+fi
+
+if [ ! $projdir ]; then
+
+    # project directory (out of Aquamacs CVS)
+    projdir=$HOME/Projects/Aquamacs/aquamacs
+
+fi
+
+
+if [ ! $SRC ]; then
+
+# where the Emacs build is
+    SRC=$HOME/Projects/emacs/mac/Aquamacs-Raw/Emacs.app
+
+fi
+
+ 
+# copy-to-app script
+CSCRIPT=$projdir/build/copy-to-app
+
+
+# install elisp files etc in $SRC
+$CSCRIPT $projdir $SRC
+
+bak=/tmp/aquamacs-backup.`date +"%H%M%S"`
+mkdir $bak
+mv $dest $bak/ 
+
+
+# move to Applications
+mv $SRC $dest
+
+
+
+
+
