@@ -2,8 +2,16 @@
 
 # installs files into Emacs.app to make it Aquamacs
 
-if [ "$1" == "-n" ]; then
+# this takes two arguments   
 
+# project-dir (Aquamacs CVS)
+# destination .app bundle, e.g. /Applications/Emacs.app
+
+# you can also give -n as first argument if you do not want to compile the .el scripts.
+
+
+if [ "$1" == "-n" ]; then
+    # do NOT compile the scripts
     dest=$3
     projdir=$2
 else 
@@ -22,7 +30,7 @@ fi
 
 if [ ! $projdir ]; then
 
-    projdir=/Users/dr/Projects/Aquamacs
+    projdir=$HOME/Projects/Aquamacs/aquamacs
 
 fi
 
@@ -38,20 +46,20 @@ mkdir $dest/Contents/Resources/site-lisp/macosx 2>/dev/null
 mkdir $dest/Contents/Resources/site-lisp/edit-modes 2>/dev/null
 
 rm -r $dest/Contents/Resources/Aquamacs\ Help
-cp -r $projdir/aquamacs/doc/AquamacsHelp $dest/Contents/Resources/Aquamacs\ Help
-cp -r $projdir/aquamacs/doc/EmacsManual $dest/Contents/Resources/Emacs\ Manual
-cp -r $projdir/aquamacs/src/Emacs.icns $dest/Contents/Resources/Emacs.icns
+cp -r $projdir/doc/AquamacsHelp $dest/Contents/Resources/Aquamacs\ Help
+cp -r $projdir/doc/EmacsManual $dest/Contents/Resources/Emacs\ Manual
+cp -r $projdir/src/Emacs.icns $dest/Contents/Resources/Emacs.icns
 
-cp -r $projdir/aquamacs/src/etc/aquamacs-splash-screen.jpg $dest/Contents/Resources/etc/
+cp -r $projdir/src/etc/aquamacs-splash-screen.jpg $dest/Contents/Resources/etc/
 
-cp -r $projdir/aquamacs/src/Info.plist $dest/Contents/
+cp -r $projdir/src/Info.plist $dest/Contents/
 
-cp -Rvp $projdir/aquamacs/src/site-lisp/*.el $dest/Contents/Resources/site-lisp/
+cp -Rvp $projdir/src/site-lisp/*.el $dest/Contents/Resources/site-lisp/
 
-cp -Rvp $projdir/aquamacs/src/site-lisp/edit-modes/*.el $dest/Contents/Resources/site-lisp/edit-modes/
+cp -Rvp $projdir/src/site-lisp/edit-modes/*.el $dest/Contents/Resources/site-lisp/edit-modes/
 
-cp -Rvp $projdir/aquamacs/src/site-lisp/macosx/*.el $dest/Contents/Resources/site-lisp/macosx/
-cp -Rvp $projdir/aquamacs/src/site-lisp/oneonone/*.el $dest/Contents/Resources/site-lisp/oneonone/
+cp -Rvp $projdir/src/site-lisp/macosx/*.el $dest/Contents/Resources/site-lisp/macosx/
+cp -Rvp $projdir/src/site-lisp/oneonone/*.el $dest/Contents/Resources/site-lisp/oneonone/
 
 if [ $compile ]; then
     $em -batch -f batch-byte-compile $dest/Contents/Resources/site-lisp/*.el $dest/Contents/Resources/site-lisp/macosx/*.el 
