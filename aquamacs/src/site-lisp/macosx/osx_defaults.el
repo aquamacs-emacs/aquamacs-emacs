@@ -11,7 +11,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.17 2005/06/26 13:04:30 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.18 2005/06/27 11:43:35 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -1410,7 +1410,7 @@ we put it on this frame."
 ;; this is for the About dialog
 (setq aquamacs-version "0.9.3")
 (setq aquamacs-version-id 093.0)
-(setq aquamacs-minor-version "a")
+(setq aquamacs-minor-version "b")
 (setq emacs-build-system (concat emacs-build-system " - Aquamacs Distribution " aquamacs-version aquamacs-minor-version))
 
 (require 'check-for-updates)
