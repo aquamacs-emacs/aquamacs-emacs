@@ -3,7 +3,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: mac bug report
  
-;; Last change: $Id: aquamacs-bug.el,v 1.5 2005/06/24 23:27:34 davidswelt Exp $
+;; Last change: $Id: aquamacs-bug.el,v 1.6 2005/06/27 11:43:03 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -178,12 +178,14 @@ usually do not have translators to read other languages for them.\n\n")
       ;; open in mail program
       ;; from here on, we have no control over what's going to happen.
 
-      (browse-url (format "mailto:%s\?body=%s%s" 
+      (browse-url (format "mailto:%s\?&subject=%s&body=%s%s" 
 			  address
+			  (if topic (url-encode-string topic) "")
 			  (url-encode-string (buffer-string))
 			  (apply 'concat (mapcar 
 			   (lambda (a) (concat "&cc=" a))
 			   report-emacs-bug-cc-list))
+			  
 			   )
       )
     )
