@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs fonts
  
-;; Last change: $Id: aquamacs-mac-fontsets.el,v 1.4 2005/06/26 09:59:13 davidswelt Exp $
+;; Last change: $Id: aquamacs-mac-fontsets.el,v 1.5 2005/06/28 14:19:01 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -38,6 +38,11 @@
 (setq aquamacs-ring-bell-on-error-saved aquamacs-ring-bell-on-error)
 (setq aquamacs-ring-bell-on-error nil)
 
+(defun signal-font-error (arg)
+  (unless ignore-font-errors
+    (print arg)
+    )
+)
 
 (condition-case e
     (create-fontset-from-fontset-spec
@@ -45,7 +50,7 @@
 	ascii:-apple-monaco*-medium-r-normal--9-90-75-75-m-90-mac-*,
 	latin-iso8859-1:-apple-monaco*-medium-r-normal--9-90-75-75-m-90-mac-*,
 	latin-iso8859-9:-apple-monaco*-medium-r-normal--9-90-75-75-m-90-mac-*" nil ignore-font-errors)
-  (error (print (list "Warning: " e))))
+  (error (signal-font-error e)))
 
 
 (condition-case e
@@ -54,7 +59,7 @@
 	ascii:-apple-monaco*-medium-r-normal--10-100-75-75-m-100-mac-*,
 	latin-iso8859-1:-apple-monaco*-medium-r-normal--10-100-75-75-m-100-mac-*,
 	latin-iso8859-9:-apple-monaco*-medium-r-normal--10-100-75-75-m-100-mac-*" nil ignore-font-errors)
-  (error (print (list "Warning: " e))))
+  (error (signal-font-error e)))
 
 
 
@@ -66,7 +71,7 @@
 	latin-iso8859-9:-apple-monaco*-medium-r-normal--11-110-75-75-m-120-mac-*,
 	utf-8:-apple-monaco*-medium-r-normal--11-110-75-75-m-120-mac-*,
 	" nil ignore-font-errors)
-  (error (print (list "Warning: " e))))
+  (error (signal-font-error e)))
 	
 
 (condition-case e
@@ -77,7 +82,7 @@
 	latin-iso8859-9:-apple-monaco*-medium-r-normal--12-120-75-75-m-120-mac-*,
 	utf-8:-apple-monaco*-medium-r-normal--12-120-75-75-m-120-mac-*,
 	" nil ignore-font-errors)
-  (error (print (list "Warning: " e))))
+  (error (signal-font-error e)))
 	
 
 (condition-case e
@@ -86,7 +91,7 @@
 	ascii:-apple-monaco*-medium-r-normal--14-140-75-75-m-140-mac-*,
 	latin-iso8859-1:-apple-monaco*-medium-r-normal--14-140-75-75-m-140-mac-*,
 	latin-iso8859-9:-apple-monaco*-medium-r-normal--14-140-75-75-m-140-mac-*" nil ignore-font-errors)
-  (error (print (list "Warning: " e))))
+  (error (signal-font-error e)))
 
 
 (condition-case e
@@ -95,7 +100,7 @@
 	ascii:-apple-monaco*-medium-r-normal--18-180-75-75-m-180-mac-*,
 	latin-iso8859-1:-apple-monaco*-medium-r-normal--18-180-75-75-m-180-mac-*,
 	latin-iso8859-9:-apple-monaco*-medium-r-normal--18-180-75-75-m-180-mac-*" nil ignore-font-errors)
-  (error (print (list "Warning: " e))))
+  (error (signal-font-error e)))
 		
 
 (condition-case e 
@@ -123,7 +128,7 @@
 	iso10646-1:-*-lucida grande*-medium-r-normal--0-0-0-0-m-0-mac-*,
 	ascii:-*-lucida grande*-medium-r-normal--0-0-0-0-m-0-mac-*" nil ignore-font-errors)
 
-  (error (print (list "Warning: " e))))
+  (error (signal-font-error e)))
 
 ;; only the following function is able to scale scalable fonts.
 ;; it only seems to find ASCII fonts, though.
@@ -138,7 +143,7 @@
  (create-fontset-from-mac-roman-font "-*-lucida grande*-medium-r-*-*-16-*-*-*-*-*-mac-roman" nil "Lucida Grande Roman 16")
  (create-fontset-from-mac-roman-font "-*-lucida grande*-medium-r-*-*-18-*-*-*-*-*-mac-roman" nil "Lucida Grande Roman 18")
 )
-	  (error (print (list "Warning: " e))))
+	  (error (signal-font-error e)))
 
 	
 ;; some other default fonts
@@ -153,7 +158,7 @@
 					nil "Lucida Sans Typewrite Roman 14")
     (create-fontset-from-mac-roman-font "-apple-lucida sans typewrite*-medium-r-normal--9-*-*-*-*-*-mac-*" 
 					nil "Lucida Sans Typewrite Roman 9")
-  (error (print (list "Warning: " e))))
+  (error (signal-font-error e)))
 	  
 
 ;; leaving this one in for now
@@ -182,7 +187,7 @@
 	iso10646-1:-*-lucida sans type*-medium-r-normal--11-110-75-75-m-110-mac-*,
 	ascii:-*-lucida sans type*-medium-r-normal--11-110-75-75-m-110-mac-*" t ignore-font-errors)
 
-  (error (print (list "Warning: " e))))
+  (error (signal-font-error e)))
 
 
 (condition-case e 
@@ -210,7 +215,7 @@
 	iso10646-1:-*-lucida console*-medium-r-normal--11-110-75-75-m-110-mac-roman,
 	ascii:-*-lucida console*-medium-r-normal--11-110-75-75-m-110-mac-roman" nil ignore-font-errors)
 
-  (error (print (list "Warning: " e)))) ;
+  (error (signal-font-error e))) ;
 
 (condition-case e 
     (create-fontset-from-fontset-spec
@@ -236,7 +241,7 @@
 	mule-unicode-e000-ffff:-*-courier*-medium-r-normal--11-110-75-75-m-110-mac-roman,
 	iso10646-1:-*-courier*-medium-r-normal--11-110-75-75-m-110-mac-roman,
 	ascii:-*-courier*-medium-r-normal--11-110-75-75-m-110-mac-roman" t ignore-font-errors)
-  (error (print (list "Warning: " e))))
+  (error (signal-font-error e)))
 
 (condition-case e 
 (create-fontset-from-fontset-spec
@@ -262,7 +267,7 @@
       mule-unicode-e000-ffff:-*-bitstream vera sans mono-medium-r-normal--*-*-75-75-m-120-mac-roman,
                   iso10646-1:-*-bitstream vera sans mono-medium-r-normal--*-*-75-75-m-120-mac-roman,
                        ascii:-*-bitstream vera sans mono-medium-r-normal--*-*-75-75-m-120-mac-roman" t ignore-font-errors )
- (error (print (list "Warning: " e))))
+ (error (signal-font-error e)))
 
 
 ; if you'd like to increase the font size, you need to check if the fonts
