@@ -11,7 +11,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.18 2005/06/27 11:43:35 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.19 2005/06/28 14:22:12 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -252,6 +252,12 @@ yes-or-no prompts - y or n will do."
 
 (require 'easymenu) 
 
+(require 'recentf)
+
+(defun mac-is-mounted-volume-p (file)
+  (if (string-match "/Volumes/.*" file ) t nil)
+)
+
 (aquamacs-set-defaults '(
 			
      (auto-save-list-file-prefix 
@@ -260,9 +266,10 @@ yes-or-no prompts - y or n will do."
      ( recentf-save-file "~/Library/Preferences/Aquamacs Emacs/Recent Files.el")
      ( recentf-max-menu-items 25)
      (recentf-menu-before "Insert File...")
+     (recentf-keep ( mac-is-mounted-volume-p file-remote-p file-readable-p))
      )
-)
-
+)  
+  
 ;; define a single command to be included in the recentf menu
 (defun recentf-clearlist ()
   "Remove all files from the recent list."
@@ -270,16 +277,17 @@ yes-or-no prompts - y or n will do."
   (setq recentf-list ())
   )
 
-(defvar recentf-menu-items-for-commands
+(setq recentf-menu-items-for-commands
  (list ["Clear Menu"
          recentf-clearlist
          :help "Remove all excluded and non-kept files from the recent list"
          :active t]
         
-       )
-  "List of menu items for recentf commands.")
-  
-(recentf-mode 1) 
+       ) 
+)
+
+(recentf-mode 1)  
+
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)  
 
 
@@ -588,6 +596,7 @@ Each element of LIST has to be of the form (symbol . fontset)."
    (text-mode  (font . "fontset-lucida14")) 
    (change-log-mode  (font . "fontset-lucida14"))
    (tex-mode  (font . "fontset-lucida14"))
+   (outline-mode  (font . "fontset-lucida14"))
    (paragraph-indent-text-mode  (font . "fontset-lucida14"))
    (speedbar-mode (minibuffer-auto-raise . nil))
    ))
@@ -595,7 +604,9 @@ Each element of LIST has to be of the form (symbol . fontset)."
 is a list of elements of the form (mode-name theme), where
 THEME is an association list giving frame parameters as
 in default-frame-alist or (frame-parameters). The fontset is set
-whenever the mode MODE-NAME is activated.")
+whenever the mode MODE-NAME is activated."
+:group 'Aquamacs
+)
  
  
  
@@ -885,7 +896,7 @@ to be appropriate for its first buffer"
 	 )
      
     (if (and one-buffer-one-frame 
-	     (> (buffer-size (window-buffer (frame-first-window))) 0)
+	     (> (buffer-size (window-buffer)) 0)
 	     )
 	(if
 	    (member bufname
