@@ -45,12 +45,12 @@ $key = q/buffers.jpg/;
 $external_latex_labels{$key} = q|4.4|; 
 $noresave{$key} = "$nosave";
 
-$key = q/aquamacs-tex.jpg/;
-$external_latex_labels{$key} = q|5.3|; 
-$noresave{$key} = "$nosave";
-
 $key = q/tab:prefs/;
 $external_latex_labels{$key} = q|4|; 
+$noresave{$key} = "$nosave";
+
+$key = q/aquamacs-tex.jpg/;
+$external_latex_labels{$key} = q|5.3|; 
 $noresave{$key} = "$nosave";
 
 $key = q/tab:command/;
@@ -63,10 +63,6 @@ $noresave{$key} = "$nosave";
 
 $key = q/aquamacs-screenshot.jpg/;
 $external_latex_labels{$key} = q|1|; 
-$noresave{$key} = "$nosave";
-
-$key = q/RF1/;
-$external_latex_labels{$key} = q|5.2|; 
 $noresave{$key} = "$nosave";
 
 $key = q/tab:terms/;
