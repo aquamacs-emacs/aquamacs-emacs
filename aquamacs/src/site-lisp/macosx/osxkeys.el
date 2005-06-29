@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.7 2005/06/25 10:46:25 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.8 2005/06/29 13:38:05 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -27,6 +27,7 @@
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
+
  
 ;; Copyright (C) 2005, David Reitter
 
@@ -76,7 +77,7 @@
  
       (let ((wind (selected-window))
 	      (killable (and (killable-buffer-p (window-buffer))
-			     (eq (length (find-all-frames-internal 
+			     (eq (length (find-all-windows-internal 
 					  (window-buffer) 
 					  'only_visible_ones)) 
 				 1)
