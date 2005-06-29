@@ -12,6 +12,7 @@
 
 if [ "$1" == "-n" ]; then
     # do NOT compile the scripts
+    compile=0
     dest=$3
     projdir=$2
 else 
@@ -62,7 +63,8 @@ cp -Rvp $projdir/src/site-lisp/macosx/*.el $dest/Contents/Resources/site-lisp/ma
 cp -Rvp $projdir/src/site-lisp/oneonone/*.el $dest/Contents/Resources/site-lisp/oneonone/
 
 if [ $compile ]; then
-    $em -batch -f batch-byte-compile $dest/Contents/Resources/site-lisp/*.el $dest/Contents/Resources/site-lisp/macosx/*.el 
+    $em -batch -f batch-byte-compile $dest/Contents/Resources/site-lisp/*.el
+    $em -batch -f batch-byte-compile $dest/Contents/Resources/site-lisp/macosx/*.el 
     $em -batch -f batch-byte-compile $dest/Contents/Resources/site-lisp/oneonone/*.el
   
 
