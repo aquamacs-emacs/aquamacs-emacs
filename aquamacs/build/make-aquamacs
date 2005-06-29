@@ -1,5 +1,7 @@
 #!/bin/sh
 
+projdir=$HOME/Projects/Aquamacs/aquamacs
+
 # make-aquamacs: customized make-package script
 # produces a self-contained binary in a folder Aquamacs-Raw
 # call with -no-conf to avoid running configure to speed up
@@ -56,6 +58,7 @@
 
 rm EmacsInstaller.dmg 2>/dev/null
 
+aquamacsprecompile=0 # set to 1 to include some core files via site-load
 progname="$0"
 
 srcdir="`pwd`/.."
@@ -182,6 +185,21 @@ fi
 
 ### Print out each line we read, for debugging's sake.
 #set -v
+
+
+# copy over the aquamacs stuff
+
+# causes confusion later on - add paths in site-load instead
+#mkdir $srcdir/lisp/aquamacs 2>/dev/null
+#find $projdir/src/site-lisp -name '*.el' -exec cp {} $srcdir/lisp/aquamacs/ \;
+
+#find $srcdir/lisp/aquamacs -name '*.el' -exec echo "(load \""{}"\")" \; >$srcdir/lisp/aquamacs-load.el
+
+if [ aquamacsprecompile ]; then
+    cp $projdir/src/site-load.el $srcdir/lisp/site-load.el
+else
+    rm $srcdir/lisp/site-load.el 2>/dev/null
+fi
 
 LANGUAGE=C
 LC_ALL=C
