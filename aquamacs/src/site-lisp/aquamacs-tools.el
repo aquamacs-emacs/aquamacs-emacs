@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.2 2005/06/09 19:52:49 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.3 2005/06/30 00:14:48 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -104,13 +104,13 @@ Elements of ALIST that are not conses are ignored."
 	
 )
 
-(defun find-all-windows-internal (buffer)
-  "Find all windows that display a buffer."
+(defun find-all-windows-internal (buffer &optional onlyvis)
+  "Find all windows that display a buffer." 
   (let ((windows nil))
     (walk-windows (lambda (wind)
                      
 		     (if (eq (window-buffer wind) buffer) 
-			 (push wind windows))) t t)
+			 (push wind windows))) t (if onlyvis 'visible t))
     windows 
     )
 )
@@ -140,8 +140,11 @@ Elements of ALIST that are not conses are ignored."
 		  (value (car (cdr elt))))
 	      (set symbol value)
 
-; make sure that user customizations get saved to customizations.el (.emacs)
-	      (put symbol 'standard-value (list (eval symbol)))
+	      ;; make sure that user customizations get 
+	      ;; saved to customizations.el (.emacs)
+	      ;; and that this appears as the new default.
+
+	      (put symbol 'standard-value `((quote  ,(eval symbol))))
 	    )
 	  )
 
