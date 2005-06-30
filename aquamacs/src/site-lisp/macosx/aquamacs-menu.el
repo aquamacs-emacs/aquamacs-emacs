@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.4 2005/06/20 00:10:12 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.5 2005/06/30 00:13:44 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -170,6 +170,10 @@ rather than behaving as Meta"
 ;; this is to set the action for the "Quit" function (Emacs menu)
 (global-set-key [mac-application-quit] 'save-buffers-kill-emacs)
  
+
+;; SENDMAIL doesn't usually work on OS X
+;; unless postfix is set up
+(easy-menu-remove-item global-map  '("menu-bar" "tools") 'compose-mail)
 
 
 ;; HELP MENU
