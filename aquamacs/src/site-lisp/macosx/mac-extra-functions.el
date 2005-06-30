@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.7 2005/06/20 22:18:11 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.8 2005/06/30 00:15:34 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -205,8 +205,7 @@ end tell"
     ;; because otherwise, we get a nasty animation effect
     (save-excursion
       (set-buffer buf)
-      (text-mode)
-      (filladapt-mode t)
+      (if default-major-mode (funcall  default-major-mode))
      )
 
   (switch-to-buffer-other-frame buf)
