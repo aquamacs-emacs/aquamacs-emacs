@@ -1,0 +1,63 @@
+Index: fontset.c
+===================================================================
+RCS file: /cvsroot/emacs/emacs/src/fontset.c,v
+retrieving revision 1.95
+diff -c -r1.95 fontset.c
+*** fontset.c	25 Apr 2005 06:50:38 -0000	1.95
+--- fontset.c	30 Jun 2005 09:42:11 -0000
+***************
+*** 1207,1212 ****
+--- 1207,1249 ----
+    return Qnil;
+  }
+  
++ 
++ DEFUN ("set-fontset-font-fast", Fset_fontset_font_fast, Sset_fontset_font_fast, 3, 4, 0,
++        doc: /* Modify fontset NAME to use FONTNAME for CHARACTER.
++ 
++ If NAME is nil, modify the default fontset.
++ CHARACTER must be an integer.
++ 
++ FONTNAME may be a cons; (FAMILY . REGISTRY), where FAMILY is a family
++ name of a font, REGISTRY is a registry name of a font.  
++ 
++ No checks, no fontset optimization. You should call ``set-fontset-font'' 
++ at least once after a series of calls to this function with the same
++ fontset.
++ 
++ This is a hack introduced for Aquamacs. */)
++      (name, character, fontname, frame)
++      Lisp_Object name, character, fontname, frame;
++ {
++   Lisp_Object fontset, elt;
++   int from;
++ 
++   /* fontset = check_fontset_name (name);
++    */
++ 
++   fontset = check_fontset_name (name);
++ 
++   CHECK_NUMBER (character);
++   from = XINT (character); 
++   
++   elt = Fcons (make_number (from), regularize_fontname (fontname));
++  
++   FONTSET_SET (fontset, from, elt);
++ 
++   return Qnil;
++ }
++ 
++ 
+  DEFUN ("font-info", Ffont_info, Sfont_info, 1, 2, 0,
+         doc: /* Return information about a font named NAME on frame FRAME.
+  If FRAME is omitted or nil, use the selected frame.
+***************
+*** 1714,1719 ****
+--- 1751,1757 ----
+    defsubr (&Squery_fontset);
+    defsubr (&Snew_fontset);
+    defsubr (&Sset_fontset_font);
++   defsubr (&Sset_fontset_font_fast);
+    defsubr (&Sfont_info);
+    defsubr (&Sinternal_char_font);
+    defsubr (&Sfontset_info);
