@@ -11,7 +11,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.20 2005/06/30 00:15:22 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.21 2005/06/30 09:44:29 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -360,7 +360,7 @@ yes-or-no prompts - y or n will do."
 
 
 ;; set a nntp server if there's none
-(if (gnus-getenv-nntpserver)
+(if (getenv "NNTPSERVER")  ;; (gnus-getenv-nntpserver)
     nil
   (aquamacs-set-defaults '(
 
