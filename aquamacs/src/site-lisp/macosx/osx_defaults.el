@@ -11,7 +11,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.19 2005/06/28 14:22:12 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.20 2005/06/30 00:15:22 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -319,7 +319,12 @@ yes-or-no prompts - y or n will do."
 ; Make Text mode the default mode for new buffers
 ; turn on Auto Fill mode automatically in Text mode  
 			 (default-major-mode text-mode)
- 
+			 (initial-major-mode text-mode)
+
+; initial-frame-alist -- do not change frame
+
+			 (initial-frame-alist nil)
+
 ; scroll just one line when hitting the bottom of the window
 			 (scroll-step 1)
 			 (scroll-conservatively 10000)
@@ -344,10 +349,26 @@ yes-or-no prompts - y or n will do."
 			 (enable-recursive-minibuffers t)
  
 			 (longlines-wrap-follows-window-size t)
+
+;; a free news server
+
+			 
+
+
 			 )
 )
- 
-; (add-hook 'text-mode-hook 'turn-on-auto-fill)
+
+
+;; set a nntp server if there's none
+(if (gnus-getenv-nntpserver)
+    nil
+  (aquamacs-set-defaults '(
+
+			   (setq gnus-select-method 
+				 '(nntp "news.readfreenews.net"))
+			   )
+			 )
+  )
 
 ; activate the modes now
 (global-font-lock-mode t) 
@@ -904,6 +925,8 @@ to be appropriate for its first buffer"
 		      "\*Completions\*" 
 		      "\*Apropos\*" 
 		      " SPEEDBAR" ; speedbar package opens its own frame
+		      "\*Article\*" ; gnus
+		      
 		      )
 		    )
 	    nil
@@ -1325,14 +1348,7 @@ we put it on this frame."
 			       )
 			   )
  
-       
     
-;; INITIAL FRAME 
-;; Place first frame in the location (80, 80) on screen 
-(setq initial-frame-alist   nil)
-;; no effect - the first frame is already there at this point!
-(text-mode) 
-
 (require 'mac-extra-functions)
 
    ; while pc selection mode will be turned on, we don't
