@@ -1,16 +1,97 @@
-*** /Users/dr/Projects/emacs/lisp/term/mac-win.el	Mon May 23 08:46:44 2005
---- ./mac-win.el	Mon Jun 13 19:57:12 2005
+Index: mac-win.el
+===================================================================
+RCS file: /cvsroot/emacs/emacs/lisp/term/mac-win.el,v
+retrieving revision 1.47
+diff -c -r1.47 mac-win.el
+*** mac-win.el	16 May 2005 11:27:56 -0000	1.47
+--- mac-win.el	30 Jun 2005 21:26:05 -0000
 ***************
-*** 1660,1665 ****
---- 1660,1670 ----
+*** 1603,1609 ****
+  	       mac-font-encoder-list)
+         font-ccl-encoder-alist))
+  
+! (defun fontset-add-mac-fonts (fontset &optional base-family)
+    (if base-family
+        (setq base-family (downcase base-family))
+      (let ((ascii-font
+--- 1603,1609 ----
+  	       mac-font-encoder-list)
+         font-ccl-encoder-alist))
+  
+! (defun fontset-add-mac-fonts (fontset &optional base-family fast)
+    (if base-family
+        (setq base-family (downcase base-family))
+      (let ((ascii-font
+***************
+*** 1630,1640 ****
+  	     (generic-char-p key)
+  	     (memq (char-charset key)
+  		   '(ascii eight-bit-control eight-bit-graphic))
+! 	     (set-fontset-font fontset key font)))
+         (get encoder 'translation-table)))))
+  
+  (defun create-fontset-from-mac-roman-font (font &optional resolved-font
+! 						fontset-name)
+    "Create a fontset from a Mac roman font FONT.
+  
+  Optional 1st arg RESOLVED-FONT is a resolved name of FONT.  If
+--- 1630,1644 ----
+  	     (generic-char-p key)
+  	     (memq (char-charset key)
+  		   '(ascii eight-bit-control eight-bit-graphic))
+! 	     (if fast
+! 		 (set-fontset-font-fast fontset key font)
+! 	       (set-fontset-font fontset key font)
+! 	      )
+! 	     ))
+         (get encoder 'translation-table)))))
+  
+  (defun create-fontset-from-mac-roman-font (font &optional resolved-font
+! 						fontset-name fast)
+    "Create a fontset from a Mac roman font FONT.
+  
+  Optional 1st arg RESOLVED-FONT is a resolved name of FONT.  If
+***************
+*** 1648,1654 ****
+  It returns a name of the created fontset."
+    (let ((fontset
+  	 (create-fontset-from-ascii-font font resolved-font fontset-name)))
+!     (fontset-add-mac-fonts fontset)
+      fontset))
+  
+  ;; Setup the default fontset.
+--- 1652,1658 ----
+  It returns a name of the created fontset."
+    (let ((fontset
+  	 (create-fontset-from-ascii-font font resolved-font fontset-name)))
+!     (fontset-add-mac-fonts fontset nil fast)
+      fontset))
+  
+  ;; Setup the default fontset.
+***************
+*** 1660,1666 ****
   (create-fontset-from-fontset-spec
    "-etl-fixed-medium-r-normal-*-16-*-*-*-*-*-fontset-mac,
   ascii:-*-Monaco-*-*-*-*-12-*-*-*-*-*-mac-roman")
-+ (create-fontset-from-fontset-spec 
-+ "-etl-variable-medium-r-normal-*-*-*-*-*-*-*-fontset-lucida,
-+ ascii:-*-lucida grande*-medium-r-*-*-*-*-*-*-*-*-mac-roman")
-+ (setq initial-frame-alist (cons (cons 'font "fontset-lucida") initial-frame-alist))
-+ 
-  (fontset-add-mac-fonts "fontset-mac")
+! (fontset-add-mac-fonts "fontset-mac")
   
   ;; Create fontset specified in X resources "Fontset-N" (N is 0, 1, ...).
+  (create-fontset-from-x-resource)
+--- 1664,1680 ----
+  (create-fontset-from-fontset-spec
+   "-etl-fixed-medium-r-normal-*-16-*-*-*-*-*-fontset-mac,
+  ascii:-*-Monaco-*-*-*-*-12-*-*-*-*-*-mac-roman")
+! 
+! (create-fontset-from-mac-roman-font 
+!  "-apple-lucida grande*-medium-r-*-*-13-*-*-*-*-*-mac-roman"
+!  nil
+!  "lucida"
+!  'fast
+!  )
+! 
+! (setq initial-frame-alist (cons (cons 'font "fontset-lucida") initial-frame-alist))
+! 
+! (fontset-add-mac-fonts "fontset-mac" nil 'fast)
+  
+  ;; Create fontset specified in X resources "Fontset-N" (N is 0, 1, ...).
+  (create-fontset-from-x-resource)
