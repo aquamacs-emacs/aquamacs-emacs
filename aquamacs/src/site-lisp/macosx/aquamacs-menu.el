@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.5 2005/06/30 00:13:44 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.6 2005/07/01 07:00:37 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -139,7 +139,18 @@
 
 
 
-
+(if (string= "mac" window-system)
+(define-key-after menu-bar-options-menu [oneonone]
+  (menu-bar-make-toggle toggle-oneonone one-buffer-one-frame
+			"Display Buffers in Separate Frames"
+			"Display Buffers in Separate Frames: %s"
+			"Open a new Frame (window) for each new buffer."
+			(require 'aquamacs-frame-setup)
+		 
+		        (setq one-buffer-one-frame
+			      (not one-buffer-one-frame))
+			) 'edit-options-separator)
+)
 
 (if (boundp 'mac-pass-option-to-system) 
     (define-key-after menu-bar-options-menu [option-to-system]
