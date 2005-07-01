@@ -11,10 +11,10 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.21 2005/06/30 09:44:29 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.22 2005/07/01 07:03:47 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
-;; http://www.aquamacs.org/
+;; http://aquamacs.org/
 
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -47,6 +47,14 @@
 ; this file needs cleaning up!
 ; move menu stuff to extra package
 ; move one-buffer-one-frame to extra mode
+
+
+
+
+(defvar aquamacs-version "0.9.4")
+(defvar aquamacs-version-id 094.0)
+(defvar aquamacs-minor-version "")
+
 
 (require 'aquamacs-tools)
 
@@ -166,7 +174,7 @@ yes-or-no prompts - y or n will do."
   (interactive)
   (setq color-theme-target-frame (selected-frame))
    
-  (let ((one-buffer-one-frame t))	
+  (let ((one-buffer-one-frame-force t))	
 ; always open in new frame
 ; because we've redefined bury->kill-buffer-and window in color-theme
     (color-theme-select)
@@ -309,8 +317,8 @@ yes-or-no prompts - y or n will do."
 
 
 (require 'longlines) 
-(aquamacs-set-defaults '(
-
+(aquamacs-set-defaults `(
+ 
 ; Colorized fonts
 ; Turn on font-lock in all modes that support it
 			 (global-font-lock-mode t)
@@ -321,9 +329,6 @@ yes-or-no prompts - y or n will do."
 			 (default-major-mode text-mode)
 			 (initial-major-mode text-mode)
 
-; initial-frame-alist -- do not change frame
-
-			 (initial-frame-alist nil)
 
 ; scroll just one line when hitting the bottom of the window
 			 (scroll-step 1)
@@ -448,7 +453,8 @@ yes-or-no prompts - y or n will do."
 		(const :tag "standard Emacs behavior (nil)" nil))
   :require 'aquamacs-frame-setup)
  
-
+(defvar one-buffer-one-frame-force nil 
+  "Enforce one-buffer-one-frame - should be set only temporarily.")
 
 ;; ;; add a menu item to the Options menu
 ;; (define-key-after menu-bar-options-menu [inhibitfitframe]
@@ -465,18 +471,7 @@ yes-or-no prompts - y or n will do."
 
 ;; add a menu item to the Options menu
 
-(if (string= "mac" window-system)
-(define-key-after menu-bar-options-menu [oneonone]
-  (menu-bar-make-toggle toggle-oneonone one-buffer-one-frame
-			"Display Buffers in Separate Frames"
-			"Display Buffers in Separate Frames: %s"
-			"Open a new Frame (window) for each new buffer."
-			(require 'aquamacs-frame-setup)
-		 
-			(not (setq one-buffer-one-frame
-			      (not one-buffer-one-frame)))
-			) 'edit-options-separator)
-)
+
 
 
 (require 'view)
@@ -508,31 +503,35 @@ Use this argument instead of explicitly setting `view-exit-action'."
 ;; there is no method to mark a customize-variable to save _and_ to 
 ;; set need-save so that it will be saved to .emacs. 
 
-; this is initialized to the customization version BEFORE
-; this versioning system was introduced in 0.9.2b5
-; it'll be overwritten by whatever is in the customization file
-(defvar aquamacs-customization-version-id 092.4)
 
 ; write the aquamacs-version to end of customizations.el
 ; warning: bug - this will add to the file
 ; so the file will grow over time
 ; because the last (setq is what actually counts,
 ; this shouldn't cause any problems.
-(defadvice custom-save-all  
-  (after save-aquamacs-customization-version (&rest args) activate)
+;; (defadvice custom-save-all  
+;;   (after save-aquamacs-customization-version (&rest args) activate)
  
-  (write-region
-   (with-output-to-string
-     (print `(setq aquamacs-customization-version-id
-     ,aquamacs-customization-version-id))
-     )
-   nil ;end
-   custom-file
-   'append
-   'quiet
-   )
-)
+;;   (write-region
+;;    (with-output-to-string
+;;      (print `(setq aquamacs-customization-version-id
+;;      ,aquamacs-customization-version-id))
+;;      )
+;;    nil ;end
+;;    custom-file
+;;    'append
+;;    'quiet
+;;    )
+;; )
  
+; this is initialized to the current version 
+; it'll be overwritten by whatever is in the customization file
+(defvar aquamacs-customization-version-id 0)
+;; the following ensures that it gets saved
+;; as customized variable.
+(customize-set-variable 'aquamacs-customization-version-id 
+			aquamacs-customization-version-id)
+
 (defun menu-bar-options-save ()
   "Save current values of Options menu items using Custom."
   (interactive)
@@ -567,8 +566,7 @@ Use this argument instead of explicitly setting `view-exit-action'."
 		   mac-pass-option-to-system
 		   default-frame-alist
 		   special-display-frame-alist
-		   aquamacs-mode-specific-default-themes
-		   smart-frame-prior-positions
+		   aquamacs-mode-specific-default-themes 
 		   aquamacs-customization-version-id
 		   ))
       (and (get elt 'customized-value) 
@@ -597,7 +595,7 @@ Each element of LIST has to be of the form (symbol . fontset)."
 					; else
 	(filter-fonts (cdr list))
 	) 
-					; else
+    ;; else
     nil)
 
   )
@@ -614,20 +612,25 @@ Each element of LIST has to be of the form (symbol . fontset)."
 
 (defcustom aquamacs-mode-specific-default-themes
   (filter-fonts '(
-   (text-mode  (font . "fontset-lucida14")) 
-   (change-log-mode  (font . "fontset-lucida14"))
-   (tex-mode  (font . "fontset-lucida14"))
-   (outline-mode  (font . "fontset-lucida14"))
-   (paragraph-indent-text-mode  (font . "fontset-lucida14"))
-   (speedbar-mode (minibuffer-auto-raise . nil))
-   ))
+		  (text-mode  (font . "fontset-lucida13")) 
+		  (change-log-mode  (font . "fontset-lucida13"))
+		  (tex-mode  (font . "fontset-lucida13"))
+		  (outline-mode  (font . "fontset-lucida13"))
+		  (paragraph-indent-text-mode  (font . "fontset-lucida13"))
+		  (speedbar-mode (minibuffer-auto-raise . nil))
+		  ))
   "Association list to set mode-specific themes. Each element 
 is a list of elements of the form (mode-name theme), where
 THEME is an association list giving frame parameters as
 in default-frame-alist or (frame-parameters). The fontset is set
 whenever the mode MODE-NAME is activated."
-:group 'Aquamacs
-)
+  :type '(repeat (cons :format "%v"
+		       (symbol :tag "Mode-name")
+		       (repeat (cons :format "%v"
+				     (symbol :tag "Frame-Parameter")
+				     (sexp :tag "Value")))))
+  :group 'Aquamacs
+  )
  
  
  
@@ -654,7 +657,24 @@ whenever the mode MODE-NAME is activated."
 	'make-help-mode-use-frame-fitting
 	'append) ;; move to the end: after loading customizations
 	
-	 
+	
+(defun aquamacs-combined-mode-specific-settings (default-alist theme)
+
+  (dolist (th default-alist )
+     
+    (unless (assq (car th) theme)
+      (setq theme (cons th theme))
+      )
+    )
+  (setq theme (assq-delete-all 'user-position theme))
+  (setq theme (assq-delete-all 'menu-bar-lines theme))
+  (setq theme (assq-delete-all 'top theme))
+  (setq theme (assq-delete-all 'height theme))
+  (setq theme (assq-delete-all 'left theme))
+  (setq theme (assq-delete-all 'width theme))
+  (setq theme (assq-delete-all 'user-position theme))
+  theme
+) 
 (defun set-mode-specific-theme (&optional frame force)
   (unless frame (setq frame (selected-frame)))
 
@@ -682,36 +702,31 @@ whenever the mode MODE-NAME is activated."
 
 		(save-excursion
 		  (set-buffer buffer)
-		(let ((theme (get-mode-specific-theme major-mode))
-		      )
-		  (dolist (th (if (special-display-p (buffer-name)) 
-				  special-display-frame-alist 
-				default-frame-alist
+		  (let ((theme (aquamacs-combined-mode-specific-settings 
+				(if (special-display-p (buffer-name)) 
+				    special-display-frame-alist 
+				  default-frame-alist
+				  )
+				(get-mode-specific-theme major-mode)
+		      
 				)
-			      )
-      
-		    (unless (assq (car th) theme)
-		      (setq theme (cons th theme))
-		      )
+			       )
+			)
+		    
+		   
+		    ;; make sure we don't move the whole frame -
+		    ;; it is already shown on screen, and 
+		    ;; the position is determined by "smart-frame-positioning",
+		    ;; that is per file name and according to the 'smart' heuristic
+		    
+		 
+		    (modify-frame-parameters frame (cons (cons 'frame-configured-for-buffer 
+				 
+							       buffer 
+				 
+							       ) theme))
 		    )
-					; make sure we don't move the whole frame -
-					; it is already shown on screen, and 
-					; the position is determined by "smart-frame-positioning",
-					; that is per file name and according to the 'smart' heuristic
-		  (setq theme
-			(assq-delete-all 'user-position
-					 (assq-delete-all 'menu-bar-lines 
-							  (assq-delete-all 'user-position 
-									   (assq-delete-all 'top (assq-delete-all
-												  'left (assq-delete-all 'height (assq-delete-all 'width
-																		  theme))))))))
-		  (modify-frame-parameters frame (cons (cons 'frame-configured-for-buffer 
-							     ; (cons 
-							      buffer 
-							     ; major-mode)
-							     ) theme))
 		  )
-		)
 	      )
 	    )
 	(error (print err))  
@@ -730,8 +745,9 @@ whenever the mode MODE-NAME is activated."
 ; sometimes, this will be called for the buffer, but before
 ; the target frame has been switched to the new buffer.
 ; that's bad luck then. 
+   
   (dolist (f (find-all-frames-internal (current-buffer)))
-; update the theme
+; update the theme 
     (set-mode-specific-theme f t)
     )  
 )
@@ -786,35 +802,8 @@ to be appropriate for its first buffer"
  
 ;; need to copy frame settings (font) into default-frame-alist (using setup-frames library)
 ;; avoids popping up frames and then resizing them
-
-(add-hook 'after-init-hook   
-	  '(lambda () 
-	     
-	     ;; because we don't want the first frame to dance around
-	     ;; more than necessary, we set height + width to whatever
-	     ;; it is initially.
-	     ;; we also ensure that the attributes for text mode
-	     ;; are set, because otherwise, default-frame-alist
-	     ;; is assumed by Emacs.
-	     (setq initial-frame-alist 
-		   (append
-		    ;; ensure that frame is configured again in case a file is loaded
-		    ;; (because change-major-mode hook wouldn't pick it up otherwise)
-		    (list '(frame-configured-for-buffer))
-		    (cdr (assq major-mode 
-			       aquamacs-mode-specific-default-themes))
-
-		    initial-frame-alist
-		    (list
-		     (cons 'height (frame-parameter (selected-frame) 'height))
-		     (cons 'width (frame-parameter (selected-frame) 'width))
-		     )
-		    )
-		   )
-	     )
-'append
-	  )
-
+ 
+  
 ;; this is to set the default font from what has been specified 
 ;; in the customization variables
 ;; the following doesn't work - even though the hook is run, set-frame-font doesnt set the font for the first frame.
@@ -848,9 +837,11 @@ to be appropriate for its first buffer"
 ; automatic positioning please  
 ; for normal windows
 ; for special windows, the user can set and save things
+; also, we don't want the initial frame to move around
 (setq default-frame-alist (assq-delete-all 'top default-frame-alist))
-(setq default-frame-alist (assq-delete-all 'left default-frame-alist))
-
+(setq default-frame-alist (assq-delete-all 'left default-frame-alist)) 
+(setq default-frame-alist (assq-delete-all 'width default-frame-alist))
+(setq default-frame-alist (assq-delete-all 'height default-frame-alist))
 ; sensible defaults for the position of the special windows
 ; (in case user turns them off)
 (assq-set 'top 30 'special-display-frame-alist)
@@ -913,31 +904,33 @@ to be appropriate for its first buffer"
 
 (defun open-in-other-frame-p (buf)
   
-  (let ( (bufname (get-bufname buf))
-	 )
-     
-    (if (and one-buffer-one-frame 
-	     (> (buffer-size (window-buffer)) 0)
-	     )
-	(if
-	    (member bufname
-		    '(
-		      "\*Completions\*" 
-		      "\*Apropos\*" 
-		      " SPEEDBAR" ; speedbar package opens its own frame
-		      "\*Article\*" ; gnus
-		      
-		      )
-		    )
-	    nil
-	  t 				
+ (or one-buffer-one-frame-force	;; set by color-theme
+     (let ( (bufname (get-bufname buf))
+	    )
    
-	  )
+       (if (and one-buffer-one-frame 
+		(> (buffer-size (window-buffer)) 0)
+		)
+	   (if 
+	       (member bufname
+		       '(
+			 "\*Completions\*" 
+			 "\*Apropos\*" 
+			 " SPEEDBAR" ; speedbar package opens its own frame
+			 "\*Article\*"	; gnus
+		      
+			 )
+		       )
+	       nil
+	     t 				
+   
+	     )
 					; else --> not one-buffer-one-frame
-      (special-display-p (get-bufname (car args))) ; return nil if not special-display buffer 
-      )
-    )
-  )
+	 (special-display-p (get-bufname (car args))) ; return nil if not special-display buffer 
+	 )
+       )
+     )
+ )
 
 (defun killable-buffer-p (buf)
   
@@ -1383,12 +1376,58 @@ we put it on this frame."
 
 (set-default 'cursor-type '(bar . 2))
 
+(if nil 
+(aquamacs-set-defaults `(
+
+			 ;; initial-frame-alist -- do not change frame, just set position to current position
+			 ;; so we don't move the frame somewhere else unless 
+
+			 (initial-frame-alist 
+
+			  ( 
+			   ( height . ,(frame-parameter (selected-frame) 'height))
+			   ( width . ,(frame-parameter (selected-frame) 'width))
+		; no further configuration
+			  
+			   )
+
+			  )
+			 )
+		       )
+)
+
+;; advise frame-notice-user-settings (from frame.el)
+;; to integrate the mode-specific frame settings
+;; which supersede the default-frame-alist, but not
+;; the initial-frame-alist
+
+  
+(defadvice frame-notice-user-settings 
+  (around aquamacs-respect-mode-defaults () activate)
+
+  (let ((default-frame-alist  
+	  (aquamacs-combined-mode-specific-settings 
+	   default-frame-alist
+				  
+	   (get-mode-specific-theme major-mode)
+		      
+	   )
+	  ))
+    
+    ad-do-it
+    
+    )
+)
+
+
+
+
+
 
 ; Default for soft wrap
 ; (set-default 'longlines-mode t)
 ;; and turn on in current buffer
 ; (longlines-mode t)
-
 
 
 ;; Define customization group
@@ -1435,13 +1474,10 @@ we put it on this frame."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; this is for the About dialog
-(setq aquamacs-version "0.9.3")
-(setq aquamacs-version-id 093.0)
-(setq aquamacs-minor-version "b")
+
 (setq emacs-build-system (concat emacs-build-system " - Aquamacs Distribution " aquamacs-version aquamacs-minor-version))
 
 (require 'check-for-updates)
 ; via hook so it can be turned off
 (add-hook 'after-init-hook 'aquamacs-check-for-updates-if-necessary 'append)
- 
 (provide 'osx_defaults)
