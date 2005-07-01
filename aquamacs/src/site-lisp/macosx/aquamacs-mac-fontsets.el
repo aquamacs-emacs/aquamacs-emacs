@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs fonts
  
-;; Last change: $Id: aquamacs-mac-fontsets.el,v 1.6 2005/06/30 09:43:52 davidswelt Exp $
+;; Last change: $Id: aquamacs-mac-fontsets.el,v 1.7 2005/07/01 06:52:11 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -50,38 +50,43 @@
   (if base-family
       (setq base-family (downcase base-family))
     (let ( 
-	   (ascii-font
+	  (ascii-font
 	   (downcase (x-resolve-font-name
 		      (fontset-font fontset (charset-id 'ascii))))))
       (setq base-family (aref (x-decompose-font-name ascii-font)
 			      xlfd-regexp-family-subnum))))
-;;  (if (not (string-match "^fontset-" fontset))
-;;      (setq fontset
-;;	    (concat "fontset-" (aref (x-decompose-font-name fontset)
-;;				     xlfd-regexp-encoding-subnum))))
-  (dolist
-      (font-encoder
-       (nreverse
-	(mapcar (lambda (lst)
-		  (cons (cons (format (nth 3 lst) base-family) (nth 0 lst))
-			(nth 1 lst)))
-		mac-font-encoder-list)))
-    (let ((font (car font-encoder))
-	  (encoder (cdr font-encoder))
+  ;;  (if (not (string-match "^fontset-" fontset))
+  ;;      (setq fontset
+  ;;	    (concat "fontset-" (aref (x-decompose-font-name fontset)
+  ;;				     xlfd-regexp-encoding-subnum))))
+  (let ( (  last-key  )
+	 (  last-font  ) )
+    (dolist
+	(font-encoder
+	 (nreverse
+	  (mapcar (lambda (lst)
+		    (cons (cons (format (nth 3 lst) base-family) (nth 0 lst))
+			  (nth 1 lst)))
+		  mac-font-encoder-list)))
+      (let ((font (car font-encoder))
+	    (encoder (cdr font-encoder))
 
-	  )
-      (map-char-table
-       (lambda (key val)
-	 (or (null val)
-	     (generic-char-p key)
-	     (memq (char-charset key)
-		   '(ascii eight-bit-control eight-bit-graphic))
-	     (set-fontset-font-fast fontset key font)
-	     (setq last-key key)
-	     (setq last-font font)
-	     ))
-       (get encoder 'translation-table))))
-)
+	    )
+	(map-char-table
+	 (lambda (key val)
+	   (or (null val)
+	       (generic-char-p key)
+	       (memq (char-charset key)
+		     '(ascii eight-bit-control eight-bit-graphic))
+	       (set-fontset-font-fast fontset key font)
+	       (setq last-key key)
+	       (setq last-font font)
+	       ))
+	 (get encoder 'translation-table))))
+    ;; now call slow version to update things
+    (set-fontset-font fontset last-key last-font)
+    )
+  )
 (defun create-fontset-from-mac-roman-font-fast (font &optional resolved-font
 						fontset-name)
   "Create a fontset from a Mac roman font FONT.
@@ -104,11 +109,15 @@ This is an optimized (fast) and possibly incompatible version for Aquamacs."
 
  
 (defun create-aquamacs-fontset (maker name weight variety style sizes  &optional fontsetname)
-  (message (concat "Defining " (or fontsetname name)))
+  "Create a mac fontset with the given properties (leave nil to under-specify).
+SIZES is a list of integers, indicating the desired font sizes in points.
+Errors are signalled with ``signal-font-error'', unless ''ignore-font-errors'' 
+is non-nil. (This function is part of Aquamacs and subject to change.)"
+  (message (concat "Defining fontset: " (or fontsetname name)))
   (condition-case e
       (dolist (size sizes)
 	 
-	(create-fontset-from-mac-roman-font-fast
+	(create-fontset-from-mac-roman-font
 	 (format "-%s-%s*-%s-%s-%s-*-%s-*-*-*-*-*-mac-roman"
 		 (or maker "*")
 		 (or name "*")
@@ -119,6 +128,7 @@ This is an optimized (fast) and possibly incompatible version for Aquamacs."
 		 )
 	 nil
 	 (concat (or fontsetname name) (int-to-string size))
+	 'fast
 	 )
 	) 
     (error (signal-font-error e)))
@@ -144,51 +154,10 @@ This is an optimized (fast) and possibly incompatible version for Aquamacs."
 (create-aquamacs-fontset
  nil "bitstream vera sans mono" "medium" "r" "normal" '(10 12 14) "vera_mono" )
  
-
-;; (create-fontset-from-mac-roman-font-in-size
   
-;;  "-apple-monaco*-medium-r-normal--%s-*-*-*-*-*-mac-roman" 
-;;  '(9 10 11 12 13 14 16 18)
-;;  "monaco%s")
-
- 
-
-;; (create-fontset-from-mac-roman-font-in-sizes 
-;;  "-apple-lucida grande*-medium-r-*-*-%s-*-*-*-*-*-mac-roman" 
-;;  '(9 10 11 12 13 14 16 18)
-;;  "lucida%s")
- 
-
-;; (create-fontset-from-mac-roman-font-in-sizes 
-;;  "-apple-lucida sans typewrite*-medium-r-normal-*-%s-*-*-*-*-*-mac-roman" 
-;;  '(9 10 12 14)
-;;  "lucida_typewrite%s") 
-
-
-;; (create-fontset-from-mac-roman-font-in-sizes 
-      
-;;  "-apple-lucida console*-medium-r-*-*-%s-*-*-*-*-*-mac-roman" 
-;;  '(11)
-;;  "lucida_console%s") 
-
-;; (create-fontset-from-mac-roman-font-in-sizes 
-;;  "-*-courier*-medium-r-*-*-%s-*-*-*-*-*-mac-roman" 
-   
- ;;  '(11 13)
-;;  "courier%s") 
-
-;; (create-fontset-from-mac-roman-font-in-sizes 
-;;  "-*-bitstream vera sans mono-medium-r-normal-*-%s-*-*-*-*-*-mac-roman" 
-;;  '(10 12 14)
-;;  "vera_mono%s") 
-
-   
- 
 ;; want more fonts? 
+;; (print-elements-of-list (x-list-fonts "*arial*"))
 
- 
-;; want more fonts? 
-;; (print-elements-of-list (x-list-fonts "*lucida grande*")) 
 
  
 ;; interesting thread about fonts:
