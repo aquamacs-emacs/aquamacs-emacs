@@ -1,0 +1,72 @@
+<html lang="en">
+<head>
+<title>Copying vs. Renaming</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Copying vs. Renaming">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Backup%20Copying">Backup Copying</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Backup-Deletion.html#Backup%20Deletion">Backup Deletion</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Backup.html#Backup">Backup</a>
+<hr><br>
+</div>
+
+<h3 class="subsubsection">Copying vs. Renaming</h5>
+
+<p>Backup files can be made by copying the old file or by renaming it. 
+This makes a difference when the old file has multiple names (hard
+links).  If the old file is renamed into the backup file, then the
+alternate names become names for the backup file.  If the old file is
+copied instead, then the alternate names remain names for the file
+that you are editing, and the contents accessed by those names will be
+the new contents.
+
+   <p>The method of making a backup file may also affect the file's owner
+and group.  If copying is used, these do not change.  If renaming is used,
+you become the file's owner, and the file's group becomes the default
+(different operating systems have different defaults for the group).
+
+   <p>Having the owner change is usually a good idea, because then the owner
+always shows who last edited the file.  Also, the owners of the backups
+show who produced those versions.  Occasionally there is a file whose
+owner should not change; it is a good idea for such files to contain
+local variable lists to set <code>backup-by-copying-when-mismatch</code>
+locally (see <a href="File-Variables.html#File%20Variables">File Variables</a>).
+
+   <p>The choice of renaming or copying is controlled by four variables. 
+Renaming is the default choice.  If the variable
+<code>backup-by-copying</code> is non-<code>nil</code>, copying is used.  Otherwise,
+if the variable <code>backup-by-copying-when-linked</code> is non-<code>nil</code>,
+then copying is used for files that have multiple names, but renaming
+may still be used when the file being edited has only one name.  If the
+variable <code>backup-by-copying-when-mismatch</code> is non-<code>nil</code>, then
+copying is used if renaming would cause the file's owner or group to
+change.  <code>backup-by-copying-when-mismatch</code> is <code>t</code> by default
+if you start Emacs as the superuser.  The fourth variable,
+<code>backup-by-copying-when-privileged-mismatch</code>, gives the highest
+numeric user-id for which <code>backup-by-copying-when-mismatch</code> will be
+forced on.  This is useful when low-numbered user-ids are assigned to
+special system users, such as <code>root</code>, <code>bin</code>, <code>daemon</code>,
+etc., which must maintain ownership of files.
+
+   <p>When a file is managed with a version control system (see <a href="Version-Control.html#Version%20Control">Version Control</a>), Emacs does not normally make backups in the usual way for
+that file.  But check-in and check-out are similar in some ways to
+making backups.  One unfortunate similarity is that these operations
+typically break hard links, disconnecting the file name you visited from
+any alternate names for the same file.  This has nothing to do with
+Emacs--the version control system does it.
+
+   </body></html>
+

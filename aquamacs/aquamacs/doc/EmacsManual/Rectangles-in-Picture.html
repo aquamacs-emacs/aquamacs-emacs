@@ -1,0 +1,69 @@
+<html lang="en">
+<head>
+<title>Picture Mode Rectangle Commands</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Picture Mode Rectangle Commands">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Rectangles%20in%20Picture">Rectangles in Picture</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Tabs-in-Picture.html#Tabs%20in%20Picture">Tabs in Picture</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Picture.html#Picture">Picture</a>
+<hr><br>
+</div>
+
+<h3 class="section">Picture Mode Rectangle Commands</h3>
+
+<p>Picture mode defines commands for working on rectangular pieces of the
+text in ways that fit with the quarter-plane model.  The standard rectangle
+commands may also be useful (see <a href="Rectangles.html#Rectangles">Rectangles</a>).
+
+     <dl>
+<dt><kbd>C-c C-k</kbd>
+     <dd>Clear out the region-rectangle with spaces
+(<code>picture-clear-rectangle</code>).  With argument, delete the text. 
+<br><dt><kbd>C-c C-w </kbd><var>r</var><kbd></kbd>
+     <dd>Similar, but save rectangle contents in register <var>r</var> first
+(<code>picture-clear-rectangle-to-register</code>). 
+<br><dt><kbd>C-c C-y</kbd>
+     <dd>Copy last killed rectangle into the buffer by overwriting, with upper
+left corner at point (<code>picture-yank-rectangle</code>).  With argument,
+insert instead. 
+<br><dt><kbd>C-c C-x </kbd><var>r</var><kbd></kbd>
+     <dd>Similar, but use the rectangle in register <var>r</var>
+(<code>picture-yank-rectangle-from-register</code>). 
+</dl>
+
+   <p>The picture rectangle commands <kbd>C-c C-k</kbd>
+(<code>picture-clear-rectangle</code>) and <kbd>C-c C-w</kbd>
+(<code>picture-clear-rectangle-to-register</code>) differ from the standard
+rectangle commands in that they normally clear the rectangle instead of
+deleting it; this is analogous with the way <kbd>C-d</kbd> is changed in Picture
+mode.
+
+   <p>However, deletion of rectangles can be useful in Picture mode, so
+these commands delete the rectangle if given a numeric argument. 
+<kbd>C-c C-k</kbd> either with or without a numeric argument saves the
+rectangle for <kbd>C-c C-y</kbd>.
+
+   <p>The Picture mode commands for yanking rectangles differ from the
+standard ones in that they overwrite instead of inserting.  This is
+the same way that Picture mode insertion of other text differs from
+other modes.  <kbd>C-c C-y</kbd> (<code>picture-yank-rectangle</code>) inserts
+(by overwriting) the rectangle that was most recently killed, while
+<kbd>C-c C-x</kbd> (<code>picture-yank-rectangle-from-register</code>) does
+likewise for the rectangle found in a specified register.
+
+   </body></html>
+

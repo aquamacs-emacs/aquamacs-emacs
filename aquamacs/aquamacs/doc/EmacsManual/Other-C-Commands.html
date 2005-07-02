@@ -1,0 +1,105 @@
+<html lang="en">
+<head>
+<title>Other Commands for C Mode</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Other Commands for C Mode">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Other%20C%20Commands">Other C Commands</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Comments-in-C.html#Comments%20in%20C">Comments in C</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Hungry-Delete.html#Hungry%20Delete">Hungry Delete</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="C-Modes.html#C%20Modes">C Modes</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Other Commands for C Mode</h4>
+
+     <dl>
+<dt><kbd>C-M-h</kbd>
+     <dd>Put mark at the end of a function definition, and put point at the
+beginning (<code>c-mark-function</code>).
+
+     <br><dt><kbd>M-q</kbd>
+     <dd>Fill a paragraph, handling C and C++ comments (<code>c-fill-paragraph</code>). 
+If any part of the current line is a comment or within a comment, this
+command fills the comment or the paragraph of it that point is in,
+preserving the comment indentation and comment delimiters.
+
+     <br><dt><kbd>C-c C-e</kbd>
+     <dd>Run the C preprocessor on the text in the region, and show the result,
+which includes the expansion of all the macro calls
+(<code>c-macro-expand</code>).  The buffer text before the region is also
+included in preprocessing, for the sake of macros defined there, but the
+output from this part isn't shown.
+
+     <p>When you are debugging C code that uses macros, sometimes it is hard to
+figure out precisely how the macros expand.  With this command, you
+don't have to figure it out; you can see the expansions.
+
+     <br><dt><kbd>C-c C-\</kbd>
+     <dd>Insert or align <code>\</code> characters at the ends of the lines of the
+region (<code>c-backslash-region</code>).  This is useful after writing or
+editing a C macro definition.
+
+     <p>If a line already ends in <code>\</code>, this command adjusts the amount of
+whitespace before it.  Otherwise, it inserts a new <code>\</code>.  However,
+the last line in the region is treated specially; no <code>\</code> is
+inserted on that line, and any <code>\</code> there is deleted.
+
+     <br><dt><kbd>M-x cpp-highlight-buffer</kbd>
+     <dd>Highlight parts of the text according to its preprocessor conditionals. 
+This command displays another buffer named <code>*CPP Edit*</code>, which
+serves as a graphic menu for selecting how to display particular kinds
+of conditionals and their contents.  After changing various settings,
+click on <code>[A]pply these settings</code> (or go to that buffer and type
+<kbd>a</kbd>) to rehighlight the C mode buffer accordingly.
+
+     <br><dt><kbd>C-c C-s</kbd>
+     <dd>Display the syntactic information about the current source line
+(<code>c-show-syntactic-information</code>).  This is the information that
+directs how the line is indented.
+
+     <br><dt><kbd>M-x cwarn-mode</kbd>
+     <dd><dt><kbd>M-x global-cwarn-mode</kbd>
+     <dd>CWarn minor mode highlights certain suspicious C and C++ constructions:
+
+          <ul>
+<li>Assignments inside expressions. 
+<li>Semicolon following immediately after <code>if</code>, <code>for</code>, and <code>while</code>
+(except after a <code>do ... while</code> statement);
+<li>C++ functions with reference parameters. 
+</ul>
+
+     <p>You can enable the mode for one buffer with the command <kbd>M-x
+cwarn-mode</kbd>, or for all suitable buffers with the command <kbd>M-x
+global-cwarn-mode</kbd> or by customizing the variable
+<code>global-cwarn-mode</code>.  You must also enable Font Lock mode to make
+it work.
+
+     <br><dt><kbd>M-x hide-ifdef-mode</kbd>
+     <dd>Hide-ifdef minor mode hides selected code within <code>#if</code> and
+<code>#ifdef</code> preprocessor blocks.  See the documentation string of
+<code>hide-ifdef-mode</code> for more information.
+
+     <br><dt><kbd>M-x ff-find-related-file</kbd>
+     <dd>Find a file "related" in a special way to the file visited by the
+current buffer.  Typically this will be the header file corresponding
+to a C/C++ source file, or vice versa.  The variable
+<code>ff-related-file-alist</code> specifies how to compute related file
+names. 
+</dl>
+
+   </body></html>
+

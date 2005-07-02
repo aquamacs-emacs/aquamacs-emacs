@@ -1,0 +1,110 @@
+<html lang="en">
+<head>
+<title>Rebinding Function Keys</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Rebinding Function Keys">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Function%20Keys">Function Keys</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Named-ASCII-Chars.html#Named%20ASCII%20Chars">Named ASCII Chars</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Init-Rebinding.html#Init%20Rebinding">Init Rebinding</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Key-Bindings.html#Key%20Bindings">Key Bindings</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Rebinding Function Keys</h4>
+
+<p>Key sequences can contain function keys as well as ordinary
+characters.  Just as Lisp characters (actually integers) represent
+keyboard characters, Lisp symbols represent function keys.  If the
+function key has a word as its label, then that word is also the name of
+the corresponding Lisp symbol.  Here are the conventional Lisp names for
+common function keys:
+
+     <dl>
+<dt><code>left</code>, <code>up</code>, <code>right</code>, <code>down</code>
+     <dd>Cursor arrow keys.
+
+     <br><dt><code>begin</code>, <code>end</code>, <code>home</code>, <code>next</code>, <code>prior</code>
+     <dd>Other cursor repositioning keys.
+
+     <br><dt><code>select</code>, <code>print</code>, <code>execute</code>, <code>backtab</code>
+     <dd><dt><code>insert</code>, <code>undo</code>, <code>redo</code>, <code>clearline</code>
+     <dd><dt><code>insertline</code>, <code>deleteline</code>, <code>insertchar</code>, <code>deletechar</code>
+     <dd>Miscellaneous function keys.
+
+     <br><dt><code>f1</code>, <code>f2</code>, <small class="dots">...</small> <code>f35</code>
+     <dd>Numbered function keys (across the top of the keyboard).
+
+     <br><dt><code>kp-add</code>, <code>kp-subtract</code>, <code>kp-multiply</code>, <code>kp-divide</code>
+     <dd><dt><code>kp-backtab</code>, <code>kp-space</code>, <code>kp-tab</code>, <code>kp-enter</code>
+     <dd><dt><code>kp-separator</code>, <code>kp-decimal</code>, <code>kp-equal</code>
+     <dd>Keypad keys (to the right of the regular keyboard), with names or punctuation.
+
+     <br><dt><code>kp-0</code>, <code>kp-1</code>, <small class="dots">...</small> <code>kp-9</code>
+     <dd>Keypad keys with digits.
+
+     <br><dt><code>kp-f1</code>, <code>kp-f2</code>, <code>kp-f3</code>, <code>kp-f4</code>
+     <dd>Keypad PF keys. 
+</dl>
+
+   <p>These names are conventional, but some systems (especially when using
+X) may use different names.  To make certain what symbol is used for a
+given function key on your terminal, type <kbd>C-h c</kbd> followed by that
+key.
+
+   <p>A key sequence which contains function key symbols (or anything but
+ASCII characters) must be a vector rather than a string.  The vector
+syntax uses spaces between the elements, and square brackets around the
+whole vector.  Thus, to bind function key <code>f1</code> to the command
+<code>rmail</code>, write the following:
+
+<pre class="example">     (global-set-key [f1] 'rmail)
+     </pre>
+
+<p>To bind the right-arrow key to the command <code>forward-char</code>, you can
+use this expression:
+
+<pre class="example">     (global-set-key [right] 'forward-char)
+     </pre>
+
+<p>This uses the Lisp syntax for a vector containing the symbol
+<code>right</code>.  (This binding is present in Emacs by default.)
+
+   <p>See <a href="Init-Rebinding.html#Init%20Rebinding">Init Rebinding</a>, for more information about using vectors for
+rebinding.
+
+   <p>You can mix function keys and characters in a key sequence.  This
+example binds <kbd>C-x &lt;NEXT&gt;</kbd> to the command <code>forward-page</code>.
+
+<pre class="example">     (global-set-key [?\C-x next] 'forward-page)
+     </pre>
+
+<p>where <code>?\C-x</code> is the Lisp character constant for the character
+<kbd>C-x</kbd>.  The vector element <code>next</code> is a symbol and therefore
+does not take a question mark.
+
+   <p>You can use the modifier keys &lt;CTRL&gt;, &lt;META&gt;, &lt;HYPER&gt;,
+&lt;SUPER&gt;, &lt;ALT&gt; and &lt;SHIFT&gt; with function keys.  To represent
+these modifiers, add the strings <code>C-</code>, <code>M-</code>, <code>H-</code>,
+<code>s-</code>, <code>A-</code> and <code>S-</code> at the front of the symbol name. 
+Thus, here is how to make <kbd>Hyper-Meta-&lt;RIGHT&gt;</kbd> move forward a
+word:
+
+<pre class="example">     (global-set-key [H-M-right] 'forward-word)
+     </pre>
+
+   </body></html>
+

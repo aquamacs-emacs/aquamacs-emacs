@@ -1,0 +1,78 @@
+<html lang="en">
+<head>
+<title>File Names on MS-DOS</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="File Names on MS-DOS">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="MS-DOS%20File%20Names">MS-DOS File Names</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Text-and-Binary.html#Text%20and%20Binary">Text and Binary</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="MS-DOS-Display.html#MS-DOS%20Display">MS-DOS Display</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="MS-DOS.html#MS-DOS">MS-DOS</a>
+<hr><br>
+</div>
+
+<h3 class="section">File Names on MS-DOS</h3>
+
+<p>MS-DOS normally uses a backslash, <code>\</code>, to separate name units
+within a file name, instead of the slash used on other systems.  Emacs
+on MS-DOS permits use of either slash or backslash, and also knows
+about drive letters in file names.
+
+   <p>On MS-DOS, file names are case-insensitive and limited to eight
+characters, plus optionally a period and three more characters.  Emacs
+knows enough about these limitations to handle file names that were
+meant for other operating systems.  For instance, leading dots <code>.</code>
+in file names are invalid in MS-DOS, so Emacs transparently converts
+them to underscores <code>_</code>; thus your default init file (see <a href="Init-File.html#Init%20File">Init File</a>) is called <code>_emacs</code> on MS-DOS.  Excess characters before or
+after the period are generally ignored by MS-DOS itself; thus, if you
+visit the file <code>LongFileName.EvenLongerExtension</code>, you will
+silently get <code>longfile.eve</code>, but Emacs will still display the long
+file name on the mode line.  Other than that, it's up to you to specify
+file names which are valid under MS-DOS; the transparent conversion as
+described above only works on file names built into Emacs.
+
+   <p>The above restrictions on the file names on MS-DOS make it almost
+impossible to construct the name of a backup file (see <a href="Backup-Names.html#Backup%20Names">Backup Names</a>) without losing some of the original file name characters.  For
+example, the name of a backup file for <code>docs.txt</code> is
+<code>docs.tx~</code> even if single backup is used.
+
+   <p>If you run Emacs as a DOS application under Windows 9X, Windows ME, or
+Windows 2000, you can turn on support for long file names.  If you do
+that, Emacs doesn't truncate file names or convert them to lower case;
+instead, it uses the file names that you specify, verbatim.  To enable
+long file name support, set the environment variable <code>LFN</code> to
+<code>y</code> before starting Emacs.  Unfortunately, Windows NT doesn't allow
+DOS programs to access long file names, so Emacs built for MS-DOS will
+only see their short 8+3 aliases.
+
+   <p>MS-DOS has no notion of home directory, so Emacs on MS-DOS pretends
+that the directory where it is installed is the value of <code>HOME</code>
+environment variable.  That is, if your Emacs binary,
+<code>emacs.exe</code>, is in the directory <code>c:/utils/emacs/bin</code>, then
+Emacs acts as if <code>HOME</code> were set to <code>c:/utils/emacs</code>.  In
+particular, that is where Emacs looks for the init file <code>_emacs</code>. 
+With this in mind, you can use <code>~</code> in file names as an alias for
+the home directory, as you would on GNU or Unix.  You can also set
+<code>HOME</code> variable in the environment before starting Emacs; its
+value will then override the above default behavior.
+
+   <p>Emacs on MS-DOS handles the directory name <code>/dev</code> specially,
+because of a feature in the emulator libraries of DJGPP that pretends
+I/O devices have names in that directory.  We recommend that you avoid
+using an actual directory named <code>/dev</code> on any disk.
+
+   </body></html>
+

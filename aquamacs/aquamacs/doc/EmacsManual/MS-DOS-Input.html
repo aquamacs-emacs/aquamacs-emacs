@@ -1,0 +1,117 @@
+<html lang="en">
+<head>
+<title>Keyboard and Mouse on MS-DOS</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Keyboard and Mouse on MS-DOS">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="MS-DOS%20Input">MS-DOS Input</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="MS-DOS-Display.html#MS-DOS%20Display">MS-DOS Display</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="MS-DOS.html#MS-DOS">MS-DOS</a>
+<hr><br>
+</div>
+
+<h3 class="section">Keyboard and Mouse on MS-DOS</h3>
+
+<p>The PC keyboard maps use the left &lt;ALT&gt; key as the &lt;META&gt; key. 
+You have two choices for emulating the &lt;SUPER&gt; and &lt;HYPER&gt; keys:
+choose either the right &lt;CTRL&gt; key or the right &lt;ALT&gt; key by
+setting the variables <code>dos-hyper-key</code> and <code>dos-super-key</code> to 1
+or 2 respectively.  If neither <code>dos-super-key</code> nor
+<code>dos-hyper-key</code> is 1, then by default the right &lt;ALT&gt; key is
+also mapped to the &lt;META&gt; key.  However, if the MS-DOS international
+keyboard support program <code>KEYB.COM</code> is installed, Emacs will
+<em>not</em> map the right &lt;ALT&gt; to &lt;META&gt;, since it is used for
+accessing characters like <kbd>~</kbd> and <kbd>@</kbd> on non-US keyboard
+layouts; in this case, you may only use the left &lt;ALT&gt; as &lt;META&gt;
+key.
+
+   <p>The variable <code>dos-keypad-mode</code> is a flag variable that controls
+what key codes are returned by keys in the numeric keypad.  You can also
+define the keypad &lt;ENTER&gt; key to act like <kbd>C-j</kbd>, by putting the
+following line into your <code>_emacs</code> file:
+
+<pre class="smallexample">     ;; Make the &lt;ENTER&gt; key from the numeric keypad act as <kbd>C-j</kbd>.
+     (define-key function-key-map [kp-enter] [?\C-j])
+     </pre>
+
+   <p>The key that is called &lt;DEL&gt; in Emacs (because that's how it is
+designated on most workstations) is known as &lt;BS&gt; (backspace) on a
+PC.  That is why the PC-specific terminal initialization remaps the
+&lt;BS&gt; key to act as &lt;DEL&gt;; the &lt;DEL&gt; key is remapped to act
+as <kbd>C-d</kbd> for the same reasons.
+
+   <p>Emacs built for MS-DOS recognizes <kbd>C-&lt;BREAK&gt;</kbd> as a quit
+character, just like <kbd>C-g</kbd>.  This is because Emacs cannot detect
+that you have typed <kbd>C-g</kbd> until it is ready for more input.  As a
+consequence, you cannot use <kbd>C-g</kbd> to stop a running command
+(see <a href="Quitting.html#Quitting">Quitting</a>).  By contrast, <kbd>C-&lt;BREAK&gt;</kbd> <em>is</em> detected
+as soon as you type it (as <kbd>C-g</kbd> is on other systems), so it can be
+used to stop a running command and for emergency escape
+(see <a href="Emergency-Escape.html#Emergency%20Escape">Emergency Escape</a>).
+
+   <p>Emacs on MS-DOS supports a mouse (on the default terminal only). 
+The mouse commands work as documented, including those that use menus
+and the menu bar (see <a href="Menu-Bar.html#Menu%20Bar">Menu Bar</a>).  Scroll bars don't work in
+MS-DOS Emacs.  PC mice usually have only two buttons; these act as
+<kbd>Mouse-1</kbd> and <kbd>Mouse-2</kbd>, but if you press both of them
+together, that has the effect of <kbd>Mouse-3</kbd>.  If the mouse does have
+3 buttons, Emacs detects that at startup, and all the 3 buttons function
+normally, as on X.
+
+   <p>Help strings for menu-bar and pop-up menus are displayed in the echo
+area when the mouse pointer moves across the menu items. 
+Highlighting of mouse-sensitive text (see <a href="Mouse-References.html#Mouse%20References">Mouse References</a>) is also
+supported.
+
+   <p>Some versions of mouse drivers don't report the number of mouse
+buttons correctly.  For example, mice with a wheel report that they
+have 3 buttons, but only 2 of them are passed to Emacs; the clicks on
+the wheel, which serves as the middle button, are not passed.  In
+these cases, you can use the <kbd>M-x msdos-set-mouse-buttons</kbd> command
+to tell Emacs how many mouse buttons to expect.  You could make such a
+setting permanent by adding this fragment to your <code>_emacs</code> init
+file:
+
+<pre class="example">     ;; Treat the mouse like a 2-button mouse.
+     (msdos-set-mouse-buttons 2)
+     </pre>
+
+   <p>Emacs built for MS-DOS supports clipboard operations when it runs on
+Windows.  Commands that put text on the kill ring, or yank text from the
+ring, check the Windows clipboard first, just as Emacs does on the X
+Window System (see <a href="Mouse-Commands.html#Mouse%20Commands">Mouse Commands</a>).  Only the primary selection and
+the cut buffer are supported by MS-DOS Emacs on Windows; the secondary
+selection always appears as empty.
+
+   <p>Due to the way clipboard access is implemented by Windows, the
+length of text you can put into the clipboard is limited by the amount
+of free DOS memory that is available to Emacs.  Usually, up to 620KB of
+text can be put into the clipboard, but this limit depends on the system
+configuration and is lower if you run Emacs as a subprocess of
+another program.  If the killed text does not fit, Emacs outputs a
+message saying so, and does not put the text into the clipboard.
+
+   <p>Null characters also cannot be put into the Windows clipboard.  If the
+killed text includes null characters, Emacs does not put such text into
+the clipboard, and displays in the echo area a message to that effect.
+
+   <p>The variable <code>dos-display-scancodes</code>, when non-<code>nil</code>,
+directs Emacs to display the ASCII value and the keyboard scan code of
+each keystroke; this feature serves as a complement to the
+<code>view-lossage</code> command, for debugging.
+
+   </body></html>
+

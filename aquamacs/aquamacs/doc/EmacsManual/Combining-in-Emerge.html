@@ -1,0 +1,51 @@
+<html lang="en">
+<head>
+<title>Combining the Two Versions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Combining the Two Versions">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Combining%20in%20Emerge">Combining in Emerge</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Fine-Points-of-Emerge.html#Fine%20Points%20of%20Emerge">Fine Points of Emerge</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Exiting-Emerge.html#Exiting%20Emerge">Exiting Emerge</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Emerge.html#Emerge">Emerge</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Combining the Two Versions</h4>
+
+<p>Sometimes you want to keep <em>both</em> alternatives for a particular
+difference.  To do this, use <kbd>x c</kbd>, which edits the merge buffer
+like this:
+
+<pre class="example">     #ifdef NEW
+     <var>version from A buffer</var>
+     #else /* not NEW */
+     <var>version from B buffer</var>
+     #endif /* not NEW */
+     </pre>
+
+<p>While this example shows C preprocessor conditionals delimiting the two
+alternative versions, you can specify the strings to use by setting
+the variable <code>emerge-combine-versions-template</code> to a string of your
+choice.  In the string, <code>%a</code> says where to put version A, and
+<code>%b</code> says where to put version B.  The default setting, which
+produces the results shown above, looks like this:
+
+<pre class="example">     "#ifdef NEW\n%a#else /* not NEW */\n%b#endif /* not NEW */\n"
+     </pre>
+
+   </body></html>
+

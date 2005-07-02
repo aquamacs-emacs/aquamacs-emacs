@@ -1,0 +1,54 @@
+<html lang="en">
+<head>
+<title>Searching with Grep under Emacs</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Searching with Grep under Emacs">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Grep%20Searching">Grep Searching</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Compilation-Mode.html#Compilation%20Mode">Compilation Mode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Compilation.html#Compilation">Compilation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Building.html#Building">Building</a>
+<hr><br>
+</div>
+
+<h3 class="section">Searching with Grep under Emacs</h3>
+
+<p>Just as you can run a compiler from Emacs and then visit the lines
+where there were compilation errors, you can also run <code>grep</code> and
+then visit the lines on which matches were found.  This works by
+treating the matches reported by <code>grep</code> as if they were "errors."
+
+   <p>To do this, type <kbd>M-x grep</kbd>, then enter a command line that
+specifies how to run <code>grep</code>.  Use the same arguments you would give
+<code>grep</code> when running it normally: a <code>grep</code>-style regexp
+(usually in single-quotes to quote the shell's special characters)
+followed by file names, which may use wildcards.  The output from
+<code>grep</code> goes in the <code>*grep*</code> buffer.  You can find the
+corresponding lines in the original files using <kbd>C-x `</kbd> and
+&lt;RET&gt;, as with compilation errors.
+
+   <p>If you specify a prefix argument for <kbd>M-x grep</kbd>, it figures out
+the tag (see <a href="Tags.html#Tags">Tags</a>) around point, and puts that into the default
+<code>grep</code> command.
+
+   <p>The command <kbd>M-x grep-find</kbd> is similar to <kbd>M-x grep</kbd>, but it
+supplies a different initial default for the command--one that runs
+both <code>find</code> and <code>grep</code>, so as to search every file in a
+directory tree.  See also the <code>find-grep-dired</code> command,
+in <a href="Dired-and-Find.html#Dired%20and%20Find">Dired and Find</a>.
+
+   </body></html>
+

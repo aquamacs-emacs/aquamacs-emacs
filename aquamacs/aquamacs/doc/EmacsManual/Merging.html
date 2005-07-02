@@ -1,0 +1,98 @@
+<html lang="en">
+<head>
+<title>Merging Branches</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Merging Branches">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Merging">Merging</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Multi-User-Branching.html#Multi-User%20Branching">Multi-User Branching</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Creating-Branches.html#Creating%20Branches">Creating Branches</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Branches.html#Branches">Branches</a>
+<hr><br>
+</div>
+
+<h3 class="subsubsection">Merging Branches</h5>
+
+<p>When you have finished the changes on a certain branch, you will
+often want to incorporate them into the file's main line of development
+(the trunk).  This is not a trivial operation, because development might
+also have proceeded on the trunk, so that you must <dfn>merge</dfn> the
+changes into a file that has already been changed otherwise.  VC allows
+you to do this (and other things) with the <code>vc-merge</code> command.
+
+     <dl>
+<dt><kbd>C-x v m (vc-merge)</kbd>
+     <dd>Merge changes into the work file. 
+</dl>
+
+   <p><kbd>C-x v m</kbd> (<code>vc-merge</code>) takes a set of changes and merges it
+into the current version of the work file.  It firsts asks you in the
+minibuffer where the changes should come from.  If you just type
+&lt;RET&gt;, Emacs merges any changes that were made on the same branch
+since you checked the file out (we call this <dfn>merging the news</dfn>). 
+This is the common way to pick up recent changes from the repository,
+regardless of whether you have already changed the file yourself.
+
+   <p>You can also enter a branch number or a pair of version numbers in
+the minibuffer.  Then <kbd>C-x v m</kbd> finds the changes from that
+branch, or the differences between the two versions you specified, and
+merges them into the current version of the current file.
+
+   <p>As an example, suppose that you have finished a certain feature on
+branch 1.3.1.  In the meantime, development on the trunk has proceeded
+to version 1.5.  To merge the changes from the branch to the trunk,
+first go to the head version of the trunk, by typing <kbd>C-u C-x C-q
+&lt;RET&gt;</kbd>.  Version 1.5 is now current.  If locking is used for the file,
+type <kbd>C-x C-q</kbd> to lock version 1.5 so that you can change it.  Next,
+type <kbd>C-x v m 1.3.1 &lt;RET&gt;</kbd>.  This takes the entire set of changes on
+branch 1.3.1 (relative to version 1.3, where the branch started, up to
+the last version on the branch) and merges it into the current version
+of the work file.  You can now check in the changed file, thus creating
+version 1.6 containing the changes from the branch.
+
+   <p>It is possible to do further editing after merging the branch, before
+the next check-in.  But it is usually wiser to check in the merged
+version, then lock it and make the further changes.  This will keep
+a better record of the history of changes.
+
+   <p>When you merge changes into a file that has itself been modified, the
+changes might overlap.  We call this situation a <dfn>conflict</dfn>, and
+reconciling the conflicting changes is called <dfn>resolving a
+conflict</dfn>.
+
+   <p>Whenever conflicts occur during merging, VC detects them, tells you
+about them in the echo area, and asks whether you want help in merging. 
+If you say yes, it starts an Ediff session (see <a href="../ediff/index.html#Top">Ediff</a>).
+
+   <p>If you say no, the conflicting changes are both inserted into the
+file, surrounded by <dfn>conflict markers</dfn>.  The example below shows how
+a conflict region looks; the file is called <code>name</code> and the current
+master file version with user B's changes in it is 1.11.
+
+<pre class="smallexample">     &lt;&lt;&lt;&lt;&lt;&lt;&lt; name
+       <var>User A's version</var>
+     =======
+       <var>User B's version</var>
+     &gt;&gt;&gt;&gt;&gt;&gt;&gt; 1.11
+     </pre>
+
+   <p>Then you can resolve the conflicts by editing the file manually.  Or
+you can type <code>M-x vc-resolve-conflicts</code> after visiting the file. 
+This starts an Ediff session, as described above.  Don't forget to
+check in the merged version afterwards.
+
+   </body></html>
+

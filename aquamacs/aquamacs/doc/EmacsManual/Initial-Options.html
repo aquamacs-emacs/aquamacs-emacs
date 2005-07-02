@@ -1,0 +1,109 @@
+<html lang="en">
+<head>
+<title>Initial Options</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Initial Options">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Initial%20Options">Initial Options</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Command-Example.html#Command%20Example">Command Example</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Action-Arguments.html#Action%20Arguments">Action Arguments</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Command-Arguments.html#Command%20Arguments">Command Arguments</a>
+<hr><br>
+</div>
+
+<h3 class="appendixsec">Initial Options</h3>
+
+<p>The initial options specify parameters for the Emacs session.  This
+section describes the more general initial options; some other options
+specifically related to the X Window System appear in the following
+sections.
+
+   <p>Some initial options affect the loading of init files.  The normal
+actions of Emacs are to first load <code>site-start.el</code> if it exists,
+then your own init file <code>~/.emacs</code> if it exists, and finally
+<code>default.el</code> if it exists; certain options prevent loading of some
+of these files or substitute other files for them.
+
+     <dl>
+<dt><code>-t </code><var>device</var><code></code>
+     <dd><dt><code>--terminal=</code><var>device</var><code></code>
+     <dd>Use <var>device</var> as the device for terminal input and output.
+
+     <br><dt><code>-d </code><var>display</var><code></code>
+     <dd><dt><code>--display=</code><var>display</var><code></code>
+     <dd>Use the X Window System and use the display named <var>display</var> to open
+the initial Emacs frame.  See <a href="Display-X.html#Display%20X">Display X</a>, for more details.
+
+     <br><dt><code>-nw</code>
+     <dd><dt><code>--no-windows</code>
+     <dd>Don't communicate directly with the window system, disregarding the
+<code>DISPLAY</code> environment variable even if it is set.  This forces Emacs
+to run as if the display were a text-only terminal.
+
+     <br><dt><code>-batch</code>
+     <dd><dt><code>--batch</code>
+     <dd>Run Emacs in <dfn>batch mode</dfn>, which means that the text being edited is
+not displayed and the standard terminal interrupt characters such as
+<kbd>C-z</kbd> and <kbd>C-c</kbd> continue to have their normal effect.  Emacs in
+batch mode outputs to <code>stderr</code> only what would normally be displayed
+in the echo area under program control, and functions which would
+normally read from the minibuffer take their input from <code>stdin</code>.
+
+     <p>Batch mode is used for running programs written in Emacs Lisp from
+shell scripts, makefiles, and so on.  Normally the <code>-l</code> option
+or <code>-f</code> option will be used as well, to invoke a Lisp program
+to do the batch processing.
+
+     <p><code>-batch</code> implies <code>-q</code> (do not load an init file).  It also
+causes Emacs to exit after processing all the command options.  In
+addition, it disables auto-saving except in buffers for which it has
+been explicitly requested.
+
+     <br><dt><code>-q</code>
+     <dd><dt><code>--no-init-file</code>
+     <dd>Do not load your Emacs init file <code>~/.emacs</code>, or <code>default.el</code>
+either.  When invoked like this, Emacs does not allow saving options
+changed with the <kbd>M-x customize</kbd> command and its variants. 
+See <a href="Easy-Customization.html#Easy%20Customization">Easy Customization</a>.
+
+     <br><dt><code>--no-site-file</code>
+     <dd>Do not load <code>site-start.el</code>.  The options <code>-q</code>, <code>-u</code>
+and <code>-batch</code> have no effect on the loading of this file--this is
+the only option that blocks it.
+
+     <br><dt><code>-u </code><var>user</var><code></code>
+     <dd><dt><code>--user=</code><var>user</var><code></code>
+     <dd>Load <var>user</var>'s Emacs init file <code>~</code><var>user</var><code>/.emacs</code> instead of
+your own.
+
+     <br><dt><code>--debug-init</code>
+     <dd>Enable the Emacs Lisp debugger for errors in the init file.
+
+     <br><dt><code>--unibyte</code>
+     <dd>Do almost everything with single-byte buffers and strings. 
+All buffers and strings are unibyte unless you (or a Lisp program)
+explicitly ask for a multibyte buffer or string.  (Note that Emacs
+always loads Lisp files in multibyte mode, even if <code>--unibyte</code> is
+specified; see <a href="Enabling-Multibyte.html#Enabling%20Multibyte">Enabling Multibyte</a>.)  Setting the environment
+variable <code>EMACS_UNIBYTE</code> has the same effect.
+
+     <br><dt><code>--multibyte</code>
+     <dd>Inhibit the effect of <code>EMACS_UNIBYTE</code>, so that Emacs
+uses multibyte characters by default, as usual. 
+</dl>
+
+   </body></html>
+

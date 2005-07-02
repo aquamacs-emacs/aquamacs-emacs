@@ -1,0 +1,70 @@
+<html lang="en">
+<head>
+<title>Keyboard Translations</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Keyboard Translations">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Keyboard%20Translations">Keyboard Translations</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Syntax.html#Syntax">Syntax</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Key-Bindings.html#Key%20Bindings">Key Bindings</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customization.html#Customization">Customization</a>
+<hr><br>
+</div>
+
+<h3 class="section">Keyboard Translations</h3>
+
+<p>Some keyboards do not make it convenient to send all the special
+characters that Emacs uses.  The most common problem case is the
+&lt;DEL&gt; character.  Some keyboards provide no convenient way to type
+this very important character--usually because they were designed to
+expect the character <kbd>C-h</kbd> to be used for deletion.  On these
+keyboards, if you press the key normally used for deletion, Emacs handles
+the <kbd>C-h</kbd> as a prefix character and offers you a list of help
+options, which is not what you want.
+
+   <p>You can work around this problem within Emacs by setting up keyboard
+translations to turn <kbd>C-h</kbd> into &lt;DEL&gt; and &lt;DEL&gt; into
+<kbd>C-h</kbd>, as follows:
+
+<pre class="example">     ;; Translate <kbd>C-h</kbd> to &lt;DEL&gt;.
+     (keyboard-translate ?\C-h ?\C-?)
+     
+     ;; Translate &lt;DEL&gt; to <kbd>C-h</kbd>.
+     (keyboard-translate ?\C-? ?\C-h)
+     </pre>
+
+   <p>Keyboard translations are not the same as key bindings in keymaps
+(see <a href="Keymaps.html#Keymaps">Keymaps</a>).  Emacs contains numerous keymaps that apply in
+different situations, but there is only one set of keyboard
+translations, and it applies to every character that Emacs reads from
+the terminal.  Keyboard translations take place at the lowest level of
+input processing; the keys that are looked up in keymaps contain the
+characters that result from keyboard translation.
+
+   <p>On a window system, the keyboard key named &lt;DELETE&gt; is a function
+key and is distinct from the ASCII character named &lt;DEL&gt;. 
+See <a href="Named-ASCII-Chars.html#Named%20ASCII%20Chars">Named ASCII Chars</a>.  Keyboard translations affect only ASCII
+character input, not function keys; thus, the above example used on a
+window system does not affect the &lt;DELETE&gt; key.  However, the
+translation above isn't necessary on window systems, because Emacs can
+also distinguish between the &lt;BACKSPACE&gt; key and <kbd>C-h</kbd>; and it
+normally treats &lt;BACKSPACE&gt; as &lt;DEL&gt;.
+
+   <p>For full information about how to use keyboard translations, see
+<a href="../elisp/Translating-Input.html#Translating%20Input">Translating Input</a>.
+
+   </body></html>
+

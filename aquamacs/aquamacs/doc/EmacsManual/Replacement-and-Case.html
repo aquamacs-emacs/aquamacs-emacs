@@ -1,0 +1,56 @@
+<html lang="en">
+<head>
+<title>Replace Commands and Case</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Replace Commands and Case">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Replacement%20and%20Case">Replacement and Case</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Query-Replace.html#Query%20Replace">Query Replace</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Regexp-Replace.html#Regexp%20Replace">Regexp Replace</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Replace.html#Replace">Replace</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Replace Commands and Case</h4>
+
+<p>If the first argument of a replace command is all lower case, the
+command ignores case while searching for occurrences to
+replace--provided <code>case-fold-search</code> is non-<code>nil</code>.  If
+<code>case-fold-search</code> is set to <code>nil</code>, case is always significant
+in all searches.
+
+   <p>In addition, when the <var>newstring</var> argument is all or partly lower
+case, replacement commands try to preserve the case pattern of each
+occurrence.  Thus, the command
+
+<pre class="example">     M-x replace-string &lt;RET&gt; foo &lt;RET&gt; bar &lt;RET&gt;
+     </pre>
+
+<p>replaces a lower case <code>foo</code> with a lower case <code>bar</code>, an
+all-caps <code>FOO</code> with <code>BAR</code>, and a capitalized <code>Foo</code> with
+<code>Bar</code>.  (These three alternatives--lower case, all caps, and
+capitalized, are the only ones that <code>replace-string</code> can
+distinguish.)
+
+   <p>If upper-case letters are used in the replacement string, they remain
+upper case every time that text is inserted.  If upper-case letters are
+used in the first argument, the second argument is always substituted
+exactly as given, with no case conversion.  Likewise, if either
+<code>case-replace</code> or <code>case-fold-search</code> is set to <code>nil</code>,
+replacement is done without case conversion.
+
+   </body></html>
+

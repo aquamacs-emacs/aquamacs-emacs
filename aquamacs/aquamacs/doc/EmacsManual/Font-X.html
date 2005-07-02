@@ -1,0 +1,129 @@
+<html lang="en">
+<head>
+<title>Font Specification Options</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Font Specification Options">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Font%20X">Font X</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Colors-X.html#Colors%20X">Colors X</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Display-X.html#Display%20X">Display X</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Command-Arguments.html#Command%20Arguments">Command Arguments</a>
+<hr><br>
+</div>
+
+<h3 class="appendixsec">Font Specification Options</h3>
+
+<p>By default, Emacs displays text in the font named <code>9x15</code>, which
+makes each character nine pixels wide and fifteen pixels high.  You can
+specify a different font on your command line through the option
+<code>-fn </code><var>name</var><code></code> (or <code>--font</code>, which is an alias for
+<code>-fn</code>).
+
+     <dl>
+<dt><code>-fn </code><var>name</var><code></code>
+     <dd><dt><code>--font=</code><var>name</var><code></code>
+     <dd>Use font <var>name</var> as the default font. 
+</dl>
+
+   <p>Under X, each font has a long name which consists of eleven words or
+numbers, separated by dashes.  Some fonts also have shorter
+nicknames--<code>9x15</code> is such a nickname.  You can use either kind of
+name.  You can use wildcard patterns for the font name; then Emacs lets
+X choose one of the fonts that match the pattern.  Here is an example,
+which happens to specify the font whose nickname is <code>6x13</code>:
+
+<pre class="smallexample">     emacs -fn "-misc-fixed-medium-r-semicondensed--13-*-*-*-c-60-iso8859-1" &amp;
+     </pre>
+
+<p>You can also specify the font in your <code>.Xdefaults</code> file:
+
+<pre class="smallexample">     emacs.font: -misc-fixed-medium-r-semicondensed--13-*-*-*-c-60-iso8859-1
+     </pre>
+
+   <p>A long font name has the following form:
+
+<pre class="smallexample">     -<var>maker</var>-<var>family</var>-<var>weight</var>-<var>slant</var>-<var>widthtype</var>-<var>style</var>...
+     ...-<var>pixels</var>-<var>height</var>-<var>horiz</var>-<var>vert</var>-<var>spacing</var>-<var>width</var>-<var>charset</var>
+     </pre>
+
+     <dl>
+<dt><var>maker</var>
+     <dd>This is the name of the font manufacturer. 
+<br><dt><var>family</var>
+     <dd>This is the name of the font family--for example, <code>courier</code>. 
+<br><dt><var>weight</var>
+     <dd>This is normally <code>bold</code>, <code>medium</code> or <code>light</code>.  Other
+words may appear here in some font names. 
+<br><dt><var>slant</var>
+     <dd>This is <code>r</code> (roman), <code>i</code> (italic), <code>o</code> (oblique),
+<code>ri</code> (reverse italic), or <code>ot</code> (other). 
+<br><dt><var>widthtype</var>
+     <dd>This is normally <code>condensed</code>, <code>extended</code>, <code>semicondensed</code>
+or <code>normal</code>.  Other words may appear here in some font names. 
+<br><dt><var>style</var>
+     <dd>This is an optional additional style name.  Usually it is empty--most
+long font names have two hyphens in a row at this point. 
+<br><dt><var>pixels</var>
+     <dd>This is the font height, in pixels. 
+<br><dt><var>height</var>
+     <dd>This is the font height on the screen, measured in tenths of a printer's
+point--approximately 1/720 of an inch.  In other words, it is the point
+size of the font, times ten.  For a given vertical resolution,
+<var>height</var> and <var>pixels</var> are proportional; therefore, it is common
+to specify just one of them and use <code>*</code> for the other. 
+<br><dt><var>horiz</var>
+     <dd>This is the horizontal resolution, in pixels per inch, of the screen for
+which the font is intended. 
+<br><dt><var>vert</var>
+     <dd>This is the vertical resolution, in pixels per inch, of the screen for
+which the font is intended.  Normally the resolution of the fonts on
+your system is the right value for your screen; therefore, you normally
+specify <code>*</code> for this and <var>horiz</var>. 
+<br><dt><var>spacing</var>
+     <dd>This is <code>m</code> (monospace), <code>p</code> (proportional) or <code>c</code>
+(character cell). 
+<br><dt><var>width</var>
+     <dd>This is the average character width, in pixels, multiplied by ten. 
+<br><dt><var>charset</var>
+     <dd>This is the character set that the font depicts. 
+Normally you should use <code>iso8859-1</code>. 
+</dl>
+
+   <p>You will probably want to use a fixed-width default font--that is,
+a font in which all characters have the same width.  Any font with
+<code>m</code> or <code>c</code> in the <var>spacing</var> field of the long name is a
+fixed-width font.  Here's how to use the <code>xlsfonts</code> program to
+list all the fixed-width fonts available on your system:
+
+<pre class="example">     xlsfonts -fn '*x*' | egrep "^[0-9]+x[0-9]+"
+     xlsfonts -fn '*-*-*-*-*-*-*-*-*-*-*-m*'
+     xlsfonts -fn '*-*-*-*-*-*-*-*-*-*-*-c*'
+     </pre>
+
+<p>To see what a particular font looks like, use the <code>xfd</code> command. 
+For example:
+
+<pre class="example">     xfd -fn 6x13
+     </pre>
+
+<p>displays the entire font <code>6x13</code>.
+
+   <p>While running Emacs, you can set the font of the current frame
+(see <a href="Frame-Parameters.html#Frame%20Parameters">Frame Parameters</a>) or for a specific kind of text
+(see <a href="Faces.html#Faces">Faces</a>).
+
+   </body></html>
+

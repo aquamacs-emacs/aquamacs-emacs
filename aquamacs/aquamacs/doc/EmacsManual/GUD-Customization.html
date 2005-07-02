@@ -1,0 +1,82 @@
+<html lang="en">
+<head>
+<title>GUD Customization</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GUD Customization">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="GUD%20Customization">GUD Customization</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="GUD-Tooltips.html#GUD%20Tooltips">GUD Tooltips</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Commands-of-GUD.html#Commands%20of%20GUD">Commands of GUD</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Debuggers.html#Debuggers">Debuggers</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">GUD Customization</h4>
+
+<p>On startup, GUD runs one of the following hooks: <code>gdb-mode-hook</code>,
+if you are using GDB; <code>dbx-mode-hook</code>, if you are using DBX;
+<code>sdb-mode-hook</code>, if you are using SDB; <code>xdb-mode-hook</code>, if you
+are using XDB; <code>perldb-mode-hook</code>, for Perl debugging mode;
+<code>pdb-mode-hook</code>, for PDB; <code>jdb-mode-hook</code>, for JDB.  You can
+use these hooks to define custom key bindings for the debugger
+interaction buffer.  See <a href="Hooks.html#Hooks">Hooks</a>.
+
+   <p>Here is a convenient way to define a command that sends a particular
+command string to the debugger, and set up a key binding for it in the
+debugger interaction buffer:
+
+<pre class="example">     (gud-def <var>function</var> <var>cmdstring</var> <var>binding</var> <var>docstring</var>)
+     </pre>
+
+   <p>This defines a command named <var>function</var> which sends
+<var>cmdstring</var> to the debugger process, and gives it the documentation
+string <var>docstring</var>.  You can then use the command <var>function</var> in any
+buffer.  If <var>binding</var> is non-<code>nil</code>, <code>gud-def</code> also binds
+the command to <kbd>C-c </kbd><var>binding</var><kbd></kbd> in the GUD buffer's mode and to
+<kbd>C-x C-a </kbd><var>binding</var><kbd></kbd> generally.
+
+   <p>The command string <var>cmdstring</var> may contain certain
+<code>%</code>-sequences that stand for data to be filled in at the time
+<var>function</var> is called:
+
+     <dl>
+<dt><code>%f</code>
+     <dd>The name of the current source file.  If the current buffer is the GUD
+buffer, then the "current source file" is the file that the program
+stopped in.
+
+     <br><dt><code>%l</code>
+     <dd>The number of the current source line.  If the current buffer is the GUD
+buffer, then the "current source line" is the line that the program
+stopped in.
+
+     <br><dt><code>%e</code>
+     <dd>The text of the C lvalue or function-call expression at or adjacent to point.
+
+     <br><dt><code>%a</code>
+     <dd>The text of the hexadecimal address at or adjacent to point.
+
+     <br><dt><code>%p</code>
+     <dd>The numeric argument of the called function, as a decimal number.  If
+the command is used without a numeric argument, <code>%p</code> stands for the
+empty string.
+
+     <p>If you don't use <code>%p</code> in the command string, the command you define
+ignores any numeric argument. 
+</dl>
+
+   </body></html>
+

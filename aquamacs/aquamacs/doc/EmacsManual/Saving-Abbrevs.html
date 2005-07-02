@@ -1,0 +1,72 @@
+<html lang="en">
+<head>
+<title>Saving Abbrevs</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Saving Abbrevs">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Saving%20Abbrevs">Saving Abbrevs</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Dynamic-Abbrevs.html#Dynamic%20Abbrevs">Dynamic Abbrevs</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Editing-Abbrevs.html#Editing%20Abbrevs">Editing Abbrevs</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Abbrevs.html#Abbrevs">Abbrevs</a>
+<hr><br>
+</div>
+
+<h3 class="section">Saving Abbrevs</h3>
+
+<p>These commands allow you to keep abbrev definitions between editing
+sessions.
+
+     <dl>
+<dt><kbd>M-x write-abbrev-file &lt;RET&gt; </kbd><var>file</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Write a file <var>file</var> describing all defined abbrevs. 
+<br><dt><kbd>M-x read-abbrev-file &lt;RET&gt; </kbd><var>file</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Read the file <var>file</var> and define abbrevs as specified therein. 
+<br><dt><kbd>M-x quietly-read-abbrev-file &lt;RET&gt; </kbd><var>file</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Similar but do not display a message about what is going on. 
+<br><dt><kbd>M-x define-abbrevs</kbd>
+     <dd>Define abbrevs from definitions in current buffer. 
+<br><dt><kbd>M-x insert-abbrevs</kbd>
+     <dd>Insert all abbrevs and their expansions into current buffer. 
+</dl>
+
+   <p><kbd>M-x write-abbrev-file</kbd> reads a file name using the minibuffer and
+then writes a description of all current abbrev definitions into that
+file.  This is used to save abbrev definitions for use in a later
+session.  The text stored in the file is a series of Lisp expressions
+that, when executed, define the same abbrevs that you currently have.
+
+   <p><kbd>M-x read-abbrev-file</kbd> reads a file name using the minibuffer and
+then reads the file, defining abbrevs according to the contents of the
+file.  <kbd>M-x quietly-read-abbrev-file</kbd> is the same except that it
+does not display a message in the echo area saying that it is doing its
+work; it is actually useful primarily in the <code>.emacs</code> file.  If an
+empty argument is given to either of these functions, they use the file
+name specified in the variable <code>abbrev-file-name</code>, which is by
+default <code>"~/.abbrev_defs"</code>.
+
+   <p>Emacs will offer to save abbrevs automatically if you have changed any of
+them, whenever it offers to save all files (for <kbd>C-x s</kbd> or <kbd>C-x
+C-c</kbd>).  This feature can be inhibited by setting the variable
+<code>save-abbrevs</code> to <code>nil</code>.
+
+   <p>The commands <kbd>M-x insert-abbrevs</kbd> and <kbd>M-x define-abbrevs</kbd> are
+similar to the previous commands but work on text in an Emacs buffer. 
+<kbd>M-x insert-abbrevs</kbd> inserts text into the current buffer before point,
+describing all current abbrev definitions; <kbd>M-x define-abbrevs</kbd> parses
+the entire current buffer and defines abbrevs accordingly.
+
+   </body></html>
+

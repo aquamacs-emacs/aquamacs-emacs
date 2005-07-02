@@ -1,0 +1,65 @@
+<html lang="en">
+<head>
+<title>Subdirectories in Dired</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Subdirectories in Dired">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Subdirectories%20in%20Dired">Subdirectories in Dired</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Subdirectory-Motion.html#Subdirectory%20Motion">Subdirectory Motion</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Comparison-in-Dired.html#Comparison%20in%20Dired">Comparison in Dired</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Dired.html#Dired">Dired</a>
+<hr><br>
+</div>
+
+<h3 class="section">Subdirectories in Dired</h3>
+
+<p>A Dired buffer displays just one directory in the normal case;
+but you can optionally include its subdirectories as well.
+
+   <p>The simplest way to include multiple directories in one Dired buffer is
+to specify the options <code>-lR</code> for running <code>ls</code>.  (If you give a
+numeric argument when you run Dired, then you can specify these options
+in the minibuffer.)  That produces a recursive directory listing showing
+all subdirectories at all levels.
+
+   <p>But usually all the subdirectories are too many; usually you will
+prefer to include specific subdirectories only.  You can do this with
+the <kbd>i</kbd> command:
+
+     <dl>
+<dt><kbd>i</kbd>
+     <dd>Insert the contents of a subdirectory later in the buffer. 
+</dl>
+
+   <p>Use the <kbd>i</kbd> (<code>dired-maybe-insert-subdir</code>) command on a line
+that describes a file which is a directory.  It inserts the contents of
+that directory into the same Dired buffer, and moves there.  Inserted
+subdirectory contents follow the top-level directory of the Dired
+buffer, just as they do in <code>ls -lR</code> output.
+
+   <p>If the subdirectory's contents are already present in the buffer, the
+<kbd>i</kbd> command just moves to it.
+
+   <p>In either case, <kbd>i</kbd> sets the Emacs mark before moving, so <kbd>C-u
+C-&lt;SPC&gt;</kbd> takes you back to the old position in the buffer (the line
+describing that subdirectory).
+
+   <p>Use the <kbd>l</kbd> command (<code>dired-do-redisplay</code>) to update the
+subdirectory's contents.  Use <kbd>C-u k</kbd> on the subdirectory header
+line to delete the subdirectory.  See <a href="Dired-Updating.html#Dired%20Updating">Dired Updating</a>.
+
+   </body></html>
+

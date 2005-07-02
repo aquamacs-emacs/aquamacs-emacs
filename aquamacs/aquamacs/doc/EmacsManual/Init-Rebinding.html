@@ -1,0 +1,110 @@
+<html lang="en">
+<head>
+<title>Rebinding Keys in Your Init File</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Rebinding Keys in Your Init File">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Init%20Rebinding">Init Rebinding</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Function-Keys.html#Function%20Keys">Function Keys</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Rebinding.html#Rebinding">Rebinding</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Key-Bindings.html#Key%20Bindings">Key Bindings</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Rebinding Keys in Your Init File</h4>
+
+<p>If you have a set of key bindings that you like to use all the time,
+you can specify them in your <code>.emacs</code> file by using their Lisp
+syntax.  (See <a href="Init-File.html#Init%20File">Init File</a>.)
+
+   <p>The simplest method for doing this works for ASCII characters and
+Meta-modified ASCII characters only.  This method uses a string to
+represent the key sequence you want to rebind.  For example, here's how
+to bind <kbd>C-z</kbd> to <code>shell</code>:
+
+<pre class="example">     (global-set-key "\C-z" 'shell)
+     </pre>
+
+<p>This example uses a string constant containing one character, <kbd>C-z</kbd>. 
+The single-quote before the command name, <code>shell</code>, marks it as a
+constant symbol rather than a variable.  If you omit the quote, Emacs
+would try to evaluate <code>shell</code> immediately as a variable.  This
+probably causes an error; it certainly isn't what you want.
+
+   <p>Here is another example that binds a key sequence two characters long:
+
+<pre class="example">     (global-set-key "\C-xl" 'make-symbolic-link)
+     </pre>
+
+   <p>To put &lt;TAB&gt;, &lt;RET&gt;, &lt;ESC&gt;, or &lt;DEL&gt; in the
+string, you can use the Emacs Lisp escape sequences, <code>\t</code>,
+<code>\r</code>, <code>\e</code>, and <code>\d</code>.  Here is an example which binds
+<kbd>C-x &lt;TAB&gt;</kbd>:
+
+<pre class="example">     (global-set-key "\C-x\t" 'indent-rigidly)
+     </pre>
+
+   <p>These examples show how to write some other special ASCII characters
+in strings for key bindings:
+
+<pre class="example">     (global-set-key "\r" 'newline)               ;; &lt;RET&gt;
+     (global-set-key "\d" 'delete-backward-char)  ;; &lt;DEL&gt;
+     (global-set-key "\C-x\e\e" 'repeat-complex-command)  ;; &lt;ESC&gt;
+     </pre>
+
+   <p>When the key sequence includes function keys or mouse button events,
+or non-ASCII characters such as <code>C-=</code> or <code>H-a</code>, you must use
+the more general method of rebinding, which uses a vector to specify the
+key sequence.
+
+   <p>The way to write a vector in Emacs Lisp is with square brackets around
+the vector elements.  Use spaces to separate the elements.  If an
+element is a symbol, simply write the symbol's name--no other
+delimiters or punctuation are needed.  If a vector element is a
+character, write it as a Lisp character constant: <code>?</code> followed by
+the character as it would appear in a string.
+
+   <p>Here are examples of using vectors to rebind <kbd>C-=</kbd> (a control
+character not in ASCII), <kbd>C-M-=</kbd> (not in ASCII because <kbd>C-=</kbd>
+is not), <kbd>H-a</kbd> (a Hyper character; ASCII doesn't have Hyper at
+all), &lt;F7&gt; (a function key), and <kbd>C-Mouse-1</kbd> (a
+keyboard-modified mouse button):
+
+<pre class="example">     (global-set-key [?\C-=] 'make-symbolic-link)
+     (global-set-key [?\M-\C-=] 'make-symbolic-link)
+     (global-set-key [?\H-a] 'make-symbolic-link)
+     (global-set-key [f7] 'make-symbolic-link)
+     (global-set-key [C-mouse-1] 'make-symbolic-link)
+     </pre>
+
+   <p>You can use a vector for the simple cases too.  Here's how to
+rewrite the first three examples above, using vectors to bind
+<kbd>C-z</kbd>, <kbd>C-x l</kbd>, and <kbd>C-x &lt;TAB&gt;</kbd>:
+
+<pre class="example">     (global-set-key [?\C-z] 'shell)
+     (global-set-key [?\C-x ?l] 'make-symbolic-link)
+     (global-set-key [?\C-x ?\t] 'indent-rigidly)
+     (global-set-key [?\r] 'newline)
+     (global-set-key [?\d] 'delete-backward-char)
+     (global-set-key [?\C-x ?\e ?\e] 'repeat-complex-command)
+     </pre>
+
+<p>As you see, you represent a multi-character key sequence with a vector
+by listing each of the characters within the square brackets that
+delimit the vector.
+
+   </body></html>
+

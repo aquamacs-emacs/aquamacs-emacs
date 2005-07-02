@@ -1,0 +1,86 @@
+<html lang="en">
+<head>
+<title>Indentation</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Indentation">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Indentation">Indentation</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Text.html#Text">Text</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Major-Modes.html#Major%20Modes">Major Modes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr><br>
+</div>
+
+<h2 class="chapter">Indentation</h2>
+
+<p>This chapter describes the Emacs commands that add, remove, or
+adjust indentation.
+
+     <dl>
+<dt><kbd>&lt;TAB&gt;</kbd>
+     <dd>Indent the current line "appropriately" in a mode-dependent fashion. 
+<br><dt><kbd>C-j</kbd>
+     <dd>Perform &lt;RET&gt; followed by &lt;TAB&gt; (<code>newline-and-indent</code>). 
+<br><dt><kbd>M-^</kbd>
+     <dd>Merge the previous and the current line (<code>delete-indentation</code>). 
+This would cancel out the effect of <kbd>C-j</kbd>. 
+<br><dt><kbd>C-M-o</kbd>
+     <dd>Split the current line at point; text on the line after point becomes a
+new line indented to the same column where point is located
+(<code>split-line</code>). 
+<br><dt><kbd>M-m</kbd>
+     <dd>Move (forward or back) to the first nonblank character on the current
+line (<code>back-to-indentation</code>). 
+<br><dt><kbd>C-M-\</kbd>
+     <dd>Indent several lines to the same column (<code>indent-region</code>). 
+<br><dt><kbd>C-x &lt;TAB&gt;</kbd>
+     <dd>Shift a block of lines rigidly right or left (<code>indent-rigidly</code>). 
+<br><dt><kbd>M-i</kbd>
+     <dd>Indent from point to the next prespecified tab stop column
+(<code>tab-to-tab-stop</code>). 
+<br><dt><kbd>M-x indent-relative</kbd>
+     <dd>Indent from point to under an indentation point in the previous line. 
+</dl>
+
+   <p>Most programming languages have some indentation convention.  For Lisp
+code, lines are indented according to their nesting in parentheses.  The
+same general idea is used for C code, though many details are different.
+
+   <p>Whatever the language, to indent a line, use the &lt;TAB&gt; command.  Each
+major mode defines this command to perform the sort of indentation
+appropriate for the particular language.  In Lisp mode, &lt;TAB&gt; aligns
+the line according to its depth in parentheses.  No matter where in the
+line you are when you type &lt;TAB&gt;, it aligns the line as a whole.  In C
+mode, &lt;TAB&gt; implements a subtle and sophisticated indentation style that
+knows about many aspects of C syntax.
+
+   <p>In Text mode, &lt;TAB&gt; runs the command <code>tab-to-tab-stop</code>, which
+indents to the next tab stop column.  You can set the tab stops with
+<kbd>M-x edit-tab-stops</kbd>.
+
+   <p>Normally, &lt;TAB&gt; inserts an optimal mix of tabs and spaces for
+the intended indentation.  See <a href="Just-Spaces.html#Just%20Spaces">Just Spaces</a>, for how to prevent use
+of tabs.
+
+<ul class="menu">
+<li><a accesskey="1" href="Indentation-Commands.html#Indentation%20Commands">Indentation Commands</a>:   Various commands and techniques for indentation. 
+<li><a accesskey="2" href="Tab-Stops.html#Tab%20Stops">Tab Stops</a>:              You can set arbitrary "tab stops" and then
+                            indent to the next tab stop when you want to. 
+<li><a accesskey="3" href="Just-Spaces.html#Just%20Spaces">Just Spaces</a>:            You can request indentation using just spaces. 
+</ul>
+
+   </body></html>
+

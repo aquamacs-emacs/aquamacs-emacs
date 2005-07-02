@@ -1,0 +1,83 @@
+<html lang="en">
+<head>
+<title>Creating Frames</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Creating Frames">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Creating%20Frames">Creating Frames</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Frame-Commands.html#Frame%20Commands">Frame Commands</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Mode-Line-Mouse.html#Mode%20Line%20Mouse">Mode Line Mouse</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
+<hr><br>
+</div>
+
+<h3 class="section">Creating Frames</h3>
+
+<p>The prefix key <kbd>C-x 5</kbd> is analogous to <kbd>C-x 4</kbd>, with parallel
+subcommands.  The difference is that <kbd>C-x 5</kbd> commands create a new
+frame rather than just a new window in the selected frame (see <a href="Pop-Up-Window.html#Pop%20Up%20Window">Pop Up Window</a>).  If an existing visible or iconified frame already displays
+the requested material, these commands use the existing frame, after
+raising or deiconifying as necessary.
+
+   <p>The various <kbd>C-x 5</kbd> commands differ in how they find or create the
+buffer to select:
+
+     <dl>
+<dt><kbd>C-x 5 2</kbd>
+     <dd>Create a new frame (<code>make-frame-command</code>). 
+<br><dt><kbd>C-x 5 b </kbd><var>bufname</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Select buffer <var>bufname</var> in another frame.  This runs
+<code>switch-to-buffer-other-frame</code>. 
+<br><dt><kbd>C-x 5 f </kbd><var>filename</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Visit file <var>filename</var> and select its buffer in another frame.  This
+runs <code>find-file-other-frame</code>.  See <a href="Visiting.html#Visiting">Visiting</a>. 
+<br><dt><kbd>C-x 5 d </kbd><var>directory</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Select a Dired buffer for directory <var>directory</var> in another frame. 
+This runs <code>dired-other-frame</code>.  See <a href="Dired.html#Dired">Dired</a>. 
+<br><dt><kbd>C-x 5 m</kbd>
+     <dd>Start composing a mail message in another frame.  This runs
+<code>mail-other-frame</code>.  It is the other-frame variant of <kbd>C-x m</kbd>. 
+See <a href="Sending-Mail.html#Sending%20Mail">Sending Mail</a>. 
+<br><dt><kbd>C-x 5 .</kbd>
+     <dd>Find a tag in the current tag table in another frame.  This runs
+<code>find-tag-other-frame</code>, the multiple-frame variant of <kbd>M-.</kbd>. 
+See <a href="Tags.html#Tags">Tags</a>. 
+<br><dt><kbd>C-x 5 r </kbd><var>filename</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Visit file <var>filename</var> read-only, and select its buffer in another
+frame.  This runs <code>find-file-read-only-other-frame</code>. 
+See <a href="Visiting.html#Visiting">Visiting</a>. 
+</dl>
+
+   <p>You can control the appearance of new frames you create by setting the
+frame parameters in <code>default-frame-alist</code>.  You can use the
+variable <code>initial-frame-alist</code> to specify parameters that affect
+only the initial frame.  See <a href="../elisp/Initial-Parameters.html#Initial%20Parameters">Initial Parameters</a>, for more information.
+
+   <p>The easiest way to specify the principal font for all your Emacs
+frames is with an X resource (see <a href="Font-X.html#Font%20X">Font X</a>), but you can also do it by
+modifying <code>default-frame-alist</code> to specify the <code>font</code>
+parameter, as shown here:
+
+<pre class="example">     (add-to-list 'default-frame-alist '(font . "10x20"))
+     </pre>
+
+<p>Here's a similar example for specifying a foreground color:
+
+<pre class="example">     (add-to-list 'default-frame-alist '(background-color . "blue"))
+     </pre>
+
+   </body></html>
+

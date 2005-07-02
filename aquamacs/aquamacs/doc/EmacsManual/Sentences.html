@@ -1,0 +1,95 @@
+<html lang="en">
+<head>
+<title>Sentences</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Sentences">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Sentences">Sentences</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Paragraphs.html#Paragraphs">Paragraphs</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Words.html#Words">Words</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
+<hr><br>
+</div>
+
+<h3 class="section">Sentences</h3>
+
+<p>The Emacs commands for manipulating sentences and paragraphs are mostly
+on Meta keys, so as to be like the word-handling commands.
+
+     <dl>
+<dt><kbd>M-a</kbd>
+     <dd>Move back to the beginning of the sentence (<code>backward-sentence</code>). 
+<br><dt><kbd>M-e</kbd>
+     <dd>Move forward to the end of the sentence (<code>forward-sentence</code>). 
+<br><dt><kbd>M-k</kbd>
+     <dd>Kill forward to the end of the sentence (<code>kill-sentence</code>). 
+<br><dt><kbd>C-x &lt;DEL&gt;</kbd>
+     <dd>Kill back to the beginning of the sentence (<code>backward-kill-sentence</code>). 
+</dl>
+
+   <p>The commands <kbd>M-a</kbd> and <kbd>M-e</kbd> (<code>backward-sentence</code> and
+<code>forward-sentence</code>) move to the beginning and end of the current
+sentence, respectively.  They were chosen to resemble <kbd>C-a</kbd> and
+<kbd>C-e</kbd>, which move to the beginning and end of a line.  Unlike them,
+<kbd>M-a</kbd> and <kbd>M-e</kbd> if repeated or given numeric arguments move over
+successive sentences.
+
+   <p>Moving backward over a sentence places point just before the first
+character of the sentence; moving forward places point right after the
+punctuation that ends the sentence.  Neither one moves over the
+whitespace at the sentence boundary.
+
+   <p>Just as <kbd>C-a</kbd> and <kbd>C-e</kbd> have a kill command, <kbd>C-k</kbd>, to go
+with them, so <kbd>M-a</kbd> and <kbd>M-e</kbd> have a corresponding kill command
+<kbd>M-k</kbd> (<code>kill-sentence</code>) which kills from point to the end of
+the sentence.  With minus one as an argument it kills back to the
+beginning of the sentence.  Larger arguments serve as a repeat count. 
+There is also a command, <kbd>C-x &lt;DEL&gt;</kbd>
+(<code>backward-kill-sentence</code>), for killing back to the beginning of a
+sentence.  This command is useful when you change your mind in the
+middle of composing text.
+
+   <p>The sentence commands assume that you follow the American typist's
+convention of putting two spaces at the end of a sentence; they consider
+a sentence to end wherever there is a <code>.</code>, <code>?</code> or <code>!</code>
+followed by the end of a line or two spaces, with any number of
+<code>)</code>, <code>]</code>, <code>'</code>, or <code>"</code> characters allowed in between. 
+A sentence also begins or ends wherever a paragraph begins or ends.
+
+   <p>The variable <code>sentence-end</code> controls recognition of the end of a
+sentence.  It is a regexp that matches the last few characters of a
+sentence, together with the whitespace following the sentence.  Its
+normal value is
+
+<pre class="example">     "[.?!][]\"')]*\\($\\| $\\|\t\\|  \\)[ \t\n]*"
+     </pre>
+
+<p>This example is explained in the section on regexps.  See <a href="Regexps.html#Regexps">Regexps</a>.
+
+   <p>If you want to use just one space between sentences, you should
+set <code>sentence-end</code> to this value:
+
+<pre class="example">     "[.?!][]\"')]*\\($\\|\t\\| \\)[ \t\n]*"
+     </pre>
+
+<p>You should also set the variable <code>sentence-end-double-space</code> to
+<code>nil</code> so that the fill commands expect and leave just one space at
+the end of a sentence.  Note that this makes it impossible to
+distinguish between periods that end sentences and those that indicate
+abbreviations.
+
+   </body></html>
+

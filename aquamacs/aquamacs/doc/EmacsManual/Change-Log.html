@@ -1,0 +1,123 @@
+<html lang="en">
+<head>
+<title>Change Logs</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Change Logs">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Change%20Log">Change Log</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Tags.html#Tags">Tags</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Maintaining.html#Maintaining">Maintaining</a>
+<hr><br>
+</div>
+
+<h3 class="section">Change Logs</h3>
+
+<p>The Emacs command <kbd>C-x 4 a</kbd> adds a new entry to the change log
+file for the file you are editing
+(<code>add-change-log-entry-other-window</code>).  If that file is actually
+a backup file, it makes an entry appropriate for the file's
+parent--that is useful for making log entries for functions that
+have been deleted in the current version.
+
+   <p>A change log file contains a chronological record of when and why you
+have changed a program, consisting of a sequence of entries describing
+individual changes.  Normally it is kept in a file called
+<code>ChangeLog</code> in the same directory as the file you are editing, or
+one of its parent directories.  A single <code>ChangeLog</code> file can
+record changes for all the files in its directory and all its
+subdirectories.
+
+   <p>You should put a copyright notice and permission notice at the
+end of the change log file.  Here is an example:
+
+<pre class="example">     Copyright 1997, 1998 Free Software Foundation, Inc.
+     Copying and distribution of this file, with or without modification, are
+     permitted provided the copyright notice and this notice are preserved.
+     </pre>
+
+<p>Of course, you should substitute the proper years and copyright holder.
+
+   <p>A change log entry starts with a header line that contains the
+current date, your name, and your email address (taken from the
+variable <code>user-mail-address</code>).  Aside from these header lines,
+every line in the change log starts with a space or a tab.  The bulk
+of the entry consists of <dfn>items</dfn>, each of which starts with a line
+starting with whitespace and a star.  Here are two entries, both dated
+in May 1993, each with two items:
+
+<pre class="smallexample">     1993-05-25  Richard Stallman  &lt;rms@gnu.org&gt;
+     
+             * man.el: Rename symbols `man-*' to `Man-*'.
+             (manual-entry): Make prompt string clearer.
+     
+             * simple.el (blink-matching-paren-distance):
+             Change default to 12,000.
+     
+     1993-05-24  Richard Stallman  &lt;rms@gnu.org&gt;
+     
+             * vc.el (minor-mode-map-alist): Don't use it if it's void.
+             (vc-cancel-version): Doc fix.
+     </pre>
+
+   <p>One entry can describe several changes; each change should have its
+own item.  Normally there should be a blank line between items.  When
+items are related (parts of the same change, in different places), group
+them by leaving no blank line between them.  The second entry above
+contains two items grouped in this way.
+
+   <p><kbd>C-x 4 a</kbd> visits the change log file and creates a new entry
+unless the most recent entry is for today's date and your name.  It
+also creates a new item for the current file.  For many languages, it
+can even guess the name of the function or other object that was
+changed.
+
+   <p>When the option <code>add-log-keep-changes-together</code> is
+non-<code>nil</code>, <kbd>C-x 4 a</kbd> adds to any existing entry for the file
+rather than starting a new entry.
+
+   <p>If the value of the variable <code>change-log-version-info-enabled</code>
+is non-<code>nil</code>, <kbd>C-x 4 a</kbd> adds the file's version number to the
+change log entry.  It finds the version number by searching the first
+ten percent of the file, using regular expressions from the variable
+<code>change-log-version-number-regexp-list</code>.
+
+   <p>The change log file is visited in Change Log mode.  In this major
+mode, each bunch of grouped items counts as one paragraph, and each
+entry is considered a page.  This facilitates editing the entries. 
+<kbd>C-j</kbd> and auto-fill indent each new line like the previous line;
+this is convenient for entering the contents of an entry.
+
+   <p>You can use the command <kbd>M-x change-log-merge</kbd> to merge other
+log files into a buffer in Change Log Mode, preserving the date
+ordering of entries.
+
+   <p>Versions of Emacs before 20.1 used a different format for the time of
+the change log entry:
+
+<pre class="smallexample">     Fri May 25 11:23:23 1993 Richard Stallman  &lt;rms@gnu.org&gt;
+     </pre>
+
+<p>The <kbd>M-x change-log-redate</kbd> command converts all the old-style
+date entries in the change log file visited in the current buffer to
+the new format, to make the file uniform in style.  This is handy when
+entries are contributed by many different people, some of whom use old
+versions of Emacs.
+
+   <p>Version control systems are another way to keep track of changes in your
+program and keep a change log.  See <a href="Log-Buffer.html#Log%20Buffer">Log Buffer</a>.
+
+   </body></html>
+

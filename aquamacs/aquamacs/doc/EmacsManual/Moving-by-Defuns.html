@@ -1,0 +1,73 @@
+<html lang="en">
+<head>
+<title>Moving by Defuns</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Moving by Defuns">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Moving%20by%20Defuns">Moving by Defuns</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Imenu.html#Imenu">Imenu</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Left-Margin-Paren.html#Left%20Margin%20Paren">Left Margin Paren</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Defuns.html#Defuns">Defuns</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Moving by Defuns</h4>
+
+<p>These commands move point or set up the region based on top-level
+major definitions, also called <dfn>defuns</dfn>.
+
+     <dl>
+<dt><kbd>C-M-a</kbd>
+     <dd>Move to beginning of current or preceding defun
+(<code>beginning-of-defun</code>). 
+<br><dt><kbd>C-M-e</kbd>
+     <dd>Move to end of current or following defun (<code>end-of-defun</code>). 
+<br><dt><kbd>C-M-h</kbd>
+     <dd>Put region around whole current or following defun (<code>mark-defun</code>). 
+</dl>
+
+   <p>The commands to move to the beginning and end of the current defun
+are <kbd>C-M-a</kbd> (<code>beginning-of-defun</code>) and <kbd>C-M-e</kbd>
+(<code>end-of-defun</code>).  If you repeat one of these commands, or use a
+positive numeric argument, each repetition moves to the next defun in
+the direction of motion.
+
+   <p><kbd>C-M-a</kbd> with a negative argument -<var>n</var> moves forward
+<var>n</var> times to the next beginning of a defun.  This is not exactly
+the same place that <kbd>C-M-e</kbd> with argument <var>n</var> would move to;
+the end of this defun is not usually exactly the same place as the
+beginning of the following defun.  (Whitespace, comments, and perhaps
+declarations can separate them.)  Likewise, <kbd>C-M-e</kbd> with a
+negative argument moves back to an end of a defun, which is not quite
+the same as <kbd>C-M-a</kbd> with a positive argument.
+
+   <p>To operate on the current defun, use <kbd>C-M-h</kbd> (<code>mark-defun</code>)
+which puts point at the beginning and mark at the end of the current
+defun.  This is the easiest way to get ready to kill the defun in
+order to move it to a different place in the file.  If you use the
+command while point is between defuns, it uses the following defun.
+
+   <p>In C mode, <kbd>C-M-h</kbd> runs the function <code>c-mark-function</code>,
+which is almost the same as <code>mark-defun</code>; the difference is that
+it backs up over the argument declarations, function name and returned
+data type so that the entire C function is inside the region.  This is
+an example of how major modes adjust the standard key bindings so that
+they do their standard jobs in a way better fitting a particular
+language.  Other major modes may replace any or all of these key
+bindings for that purpose.
+
+   </body></html>
+

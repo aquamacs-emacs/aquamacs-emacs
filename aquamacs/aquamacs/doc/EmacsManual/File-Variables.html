@@ -1,0 +1,155 @@
+<html lang="en">
+<head>
+<title>Local Variables in Files</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Local Variables in Files">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="File%20Variables">File Variables</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Locals.html#Locals">Locals</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Local Variables in Files</h4>
+
+<p>A file can specify local variable values for use when you edit the
+file with Emacs.  Visiting the file checks for local variable
+specifications; it automatically makes these variables local to the
+buffer, and sets them to the values specified in the file.
+
+   <p>There are two ways to specify local variable values: in the first
+line, or with a local variables list.  Here's how to specify them in the
+first line:
+
+<pre class="example">     -*- mode: <var>modename</var>; <var>var</var>: <var>value</var>; ... -*-
+     </pre>
+
+<p>You can specify any number of variables/value pairs in this way, each
+pair with a colon and semicolon as shown above.  <code>mode:
+</code><var>modename</var><code>;</code> specifies the major mode; this should come first in the
+line.  The <var>value</var>s are not evaluated; they are used literally. 
+Here is an example that specifies Lisp mode and sets two variables with
+numeric values:
+
+<pre class="smallexample">     ;; -*- mode: Lisp; fill-column: 75; comment-column: 50; -*-
+     </pre>
+
+   <p>You can also specify the coding system for a file in this way: just
+specify a value for the "variable" named <code>coding</code>.  The "value"
+must be a coding system name that Emacs recognizes.  See <a href="Coding-Systems.html#Coding%20Systems">Coding Systems</a>.
+
+   <p>The <code>eval</code> pseudo-variable, described below, can be specified in
+the first line as well.
+
+   <p>In shell scripts, the first line is used to identify the script
+interpreter, so you cannot put any local variables there.  To accommodate
+for this, when Emacs visits a shell script, it looks for local variable
+specifications in the <em>second</em> line.
+
+   <p>A <dfn>local variables list</dfn> goes near the end of the file, in the
+last page.  (It is often best to put it on a page by itself.)  The local
+variables list starts with a line containing the string <code>Local
+Variables:</code>, and ends with a line containing the string <code>End:</code>.  In
+between come the variable names and values, one set per line, as
+<code></code><var>variable</var><code>: </code><var>value</var><code></code>.  The <var>value</var>s are not
+evaluated; they are used literally.  If a file has both a local
+variables list and a <code>-*-</code> line, Emacs processes <em>everything</em>
+in the <code>-*-</code> line first, and <em>everything</em> in the local
+variables list afterward.
+
+   <p>Here is an example of a local variables list:
+
+<pre class="example">     ;;; Local Variables: ***
+     ;;; mode:lisp ***
+     ;;; comment-column:0 ***
+     ;;; comment-start: ";;; "  ***
+     ;;; comment-end:"***" ***
+     ;;; End: ***
+     </pre>
+
+   <p>As you see, each line starts with the prefix <code>;;; </code> and each line
+ends with the suffix <code> ***</code>.  Emacs recognizes these as the prefix
+and suffix based on the first line of the list, by finding them
+surrounding the magic string <code>Local Variables:</code>; then it
+automatically discards them from the other lines of the list.
+
+   <p>The usual reason for using a prefix and/or suffix is to embed the
+local variables list in a comment, so it won't confuse other programs
+that the file is intended as input for.  The example above is for a
+language where comment lines start with <code>;;; </code> and end with
+<code>***</code>; the local values for <code>comment-start</code> and
+<code>comment-end</code> customize the rest of Emacs for this unusual syntax. 
+Don't use a prefix (or a suffix) if you don't need one.
+
+   <p>Two "variable names" have special meanings in a local variables
+list: a value for the variable <code>mode</code> really sets the major mode,
+and a value for the variable <code>eval</code> is simply evaluated as an
+expression and the value is ignored.  <code>mode</code> and <code>eval</code> are
+not real variables; setting variables named <code>mode</code> and <code>eval</code>
+in any other context has no special meaning.  <em>If </em><code>mode</code><em> is
+used to set a major mode, it should be the first "variable" in the
+list.</em>  Otherwise, the entries that precede it in the list of the local
+variables are likely to be ignored, since most modes kill all local
+variables as part of their initialization.
+
+   <p>You can use the <code>mode</code> "variable" to set minor modes as well as
+major modes; in fact, you can use it more than once, first to set the
+major mode and then to set minor modes which are specific to particular
+buffers.  But most minor modes should not be specified in the file in
+any fashion, because they represent user preferences.
+
+   <p>For example, you may be tempted to try to turn on Auto Fill mode with
+a local variable list.  That is a mistake.  The choice of Auto Fill mode
+or not is a matter of individual taste, not a matter of the contents of
+particular files.  If you want to use Auto Fill, set up major mode hooks
+with your <code>.emacs</code> file to turn it on (when appropriate) for you
+alone (see <a href="Init-File.html#Init%20File">Init File</a>).  Don't use a local variable list to impose
+your taste on everyone.
+
+   <p>The start of the local variables list must be no more than 3000
+characters from the end of the file, and must be in the last page if the
+file is divided into pages.  Otherwise, Emacs will not notice it is
+there.  The purpose of this rule is so that a stray <code>Local
+Variables:</code> not in the last page does not confuse Emacs, and so that
+visiting a long file that is all one page and has no local variables
+list need not take the time to search the whole file.
+
+   <p>Use the command <code>normal-mode</code> to reset the local variables and
+major mode of a buffer according to the file name and contents,
+including the local variables list if any.  See <a href="Choosing-Modes.html#Choosing%20Modes">Choosing Modes</a>.
+
+   <p>The variable <code>enable-local-variables</code> controls whether to process
+local variables in files, and thus gives you a chance to override them. 
+Its default value is <code>t</code>, which means do process local variables in
+files.  If you set the value to <code>nil</code>, Emacs simply ignores local
+variables in files.  Any other value says to query you about each file
+that has local variables, showing you the local variable specifications
+so you can judge.
+
+   <p>The <code>eval</code> "variable," and certain actual variables, create a
+special risk; when you visit someone else's file, local variable
+specifications for these could affect your Emacs in arbitrary ways. 
+Therefore, the option <code>enable-local-eval</code> controls whether Emacs
+processes <code>eval</code> variables, as well variables with names that end
+in <code>-hook</code>, <code>-hooks</code>, <code>-function</code> or <code>-functions</code>,
+and certain other variables.  The three possibilities for the option's
+value are <code>t</code>, <code>nil</code>, and anything else, just as for
+<code>enable-local-variables</code>.  The default is <code>maybe</code>, which is
+neither <code>t</code> nor <code>nil</code>, so normally Emacs does ask for
+confirmation about file settings for these variables.
+
+   </body></html>
+

@@ -1,0 +1,91 @@
+<html lang="en">
+<head>
+<title>Apropos</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Apropos">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Apropos">Apropos</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Library-Keywords.html#Library%20Keywords">Library Keywords</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Name-Help.html#Name%20Help">Name Help</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Help.html#Help">Help</a>
+<hr><br>
+</div>
+
+<h3 class="section">Apropos</h3>
+
+<p>A more sophisticated sort of question to ask is, "What are the
+commands for working with files?"  To ask this question, type <kbd>C-h
+a file &lt;RET&gt;</kbd>, which displays a list of all command names that
+contain <code>file</code>, including <code>copy-file</code>, <code>find-file</code>, and
+so on.  With each command name appears a brief description of how to use
+the command, and what keys you can currently invoke it with.  For
+example, it would say that you can invoke <code>find-file</code> by typing
+<kbd>C-x C-f</kbd>.  The <kbd>a</kbd> in <kbd>C-h a</kbd> stands for "Apropos";
+<kbd>C-h a</kbd> runs the command <code>apropos-command</code>.  This command
+normally checks only commands (interactive functions); if you specify a
+prefix argument, it checks noninteractive functions as well.
+
+   <p>Because <kbd>C-h a</kbd> looks only for functions whose names contain the
+string you specify, you must use ingenuity in choosing the
+string.  If you are looking for commands for killing backwards and
+<kbd>C-h a kill-backwards &lt;RET&gt;</kbd> doesn't reveal any, don't give up. 
+Try just <kbd>kill</kbd>, or just <kbd>backwards</kbd>, or just <kbd>back</kbd>.  Be
+persistent.  Also note that you can use a regular expression as the
+argument, for more flexibility (see <a href="Regexps.html#Regexps">Regexps</a>).
+
+   <p>Here is a set of arguments to give to <kbd>C-h a</kbd> that covers many
+classes of Emacs commands, since there are strong conventions for naming
+the standard Emacs commands.  By giving you a feel for the naming
+conventions, this set should also serve to aid you in developing a
+technique for picking <code>apropos</code> strings.
+
+   <blockquote>
+char, line, word, sentence, paragraph, region, page, sexp, list, defun,
+rect, buffer, frame, window, face, file, dir, register, mode, beginning, end,
+forward, backward, next, previous, up, down, search, goto, kill, delete,
+mark, insert, yank, fill, indent, case, change, set, what, list, find,
+view, describe, default. 
+</blockquote>
+
+   <p>To list all user variables that match a regexp, use the command
+<kbd>M-x apropos-variable</kbd>. This command shows only user variables and
+customization options by default; if you specify a prefix argument, it
+checks all variables.
+
+   <p>To list all Lisp symbols that contain a match for a regexp, not just
+the ones that are defined as commands, use the command <kbd>M-x apropos</kbd>
+instead of <kbd>C-h a</kbd>.  This command does not check key bindings by
+default; specify a numeric argument if you want it to check them.
+
+   <p>The <code>apropos-documentation</code> command is like <code>apropos</code> except
+that it searches documentation strings as well as symbol names for
+matches for the specified regular expression.
+
+   <p>The <code>apropos-value</code> command is like <code>apropos</code> except that it
+searches symbols' values for matches for the specified regular
+expression.  This command does not check function definitions or
+property lists by default; specify a numeric argument if you want it to
+check them.
+
+   <p>If the variable <code>apropos-do-all</code> is non-<code>nil</code>, the commands
+above all behave as if they had been given a prefix argument.
+
+   <p>If you want more information about a function definition, variable or
+symbol property listed in the Apropos buffer, you can click on it with
+<kbd>Mouse-2</kbd> or move there and type &lt;RET&gt;.
+
+   </body></html>
+

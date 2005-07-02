@@ -1,0 +1,137 @@
+<html lang="en">
+<head>
+<title>LessTif Menu X Resources</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="LessTif Menu X Resources">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="LessTif%20Resources">LessTif Resources</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Lucid-Resources.html#Lucid%20Resources">Lucid Resources</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Command-Arguments.html#Command%20Arguments">Command Arguments</a>
+<hr><br>
+</div>
+
+<h3 class="appendixsec">LessTif Menu X Resources</h3>
+
+<p>If the Emacs installed at your site was built to use the X toolkit
+with the LessTif or Motif widgets, then the menu bar, the dialog
+boxes, the pop-up menus, and the file-selection box are separate
+widgets and have their own resources.
+
+   <p>The resource names for the menu bar contain <code>pane.menubar</code>
+(following, as always, the name of the Emacs invocation, or
+<code>Emacs</code>, which stands for all Emacs invocations).  Specify them
+like this:
+
+<pre class="smallexample">     Emacs.pane.menubar.<var>subwidget</var>.<var>resource</var>:  <var>value</var>
+     </pre>
+
+   <p>Each individual string in the menu bar is a subwidget; the subwidget's
+name is the same as the menu item string.  For example, the word
+<code>File</code> in the menu bar is part of a subwidget named
+<code>emacs.pane.menubar.File</code>.  Most likely, you want to specify the
+same resources for the whole menu bar.  To do this, use <code>*</code> instead
+of a specific subwidget name.  For example, to specify the font
+<code>8x16</code> for the menu-bar items, write this:
+
+<pre class="smallexample">     Emacs.pane.menubar.*.fontList:  8x16
+     </pre>
+
+<p>This also specifies the resource value for submenus.
+
+   <p>Each item in a submenu in the menu bar also has its own name for X
+resources; for example, the <code>File</code> submenu has an item named
+<code>Save (current buffer)</code>.  A resource specification for a submenu
+item looks like this:
+
+<pre class="smallexample">     Emacs.pane.menubar.popup_*.<var>menu</var>.<var>item</var>.<var>resource</var>: <var>value</var>
+     </pre>
+
+<p>For example, here's how to specify the font for the <code>Save (current
+buffer)</code> item:
+
+<pre class="smallexample">     Emacs.pane.menubar.popup_*.File.Save (current buffer).fontList: 8x16
+     </pre>
+
+<p>For an item in a second-level submenu, such as <code>Complete Word</code>
+under <code>Spell Checking</code> under <code>Tools</code>, the resource fits this
+template:
+
+<pre class="smallexample">     Emacs.pane.menubar.popup_*.popup_*.<var>menu</var>.<var>resource</var>: <var>value</var>
+     </pre>
+
+<p>For example,
+
+<pre class="smallexample">     Emacs.pane.menubar.popup_*.popup_*.Spell Checking.Complete Word: <var>value</var>
+     </pre>
+
+<p>(This should be one long line.)
+
+   <p>It's impossible to specify a resource for all the menu-bar items
+without also specifying it for the submenus as well.  So if you want the
+submenu items to look different from the menu bar itself, you must ask
+for that in two steps.  First, specify the resource for all of them;
+then, override the value for submenus alone.  Here is an example:
+
+<pre class="smallexample">     Emacs.pane.menubar.*.fontList:  8x16
+     Emacs.pane.menubar.popup_*.fontList: 8x16
+     </pre>
+
+<p>For LessTif pop-up menus, use <code>menu*</code> instead of
+<code>pane.menubar</code>.  For example, to specify the font <code>8x16</code> for
+the pop-up menu items, write this:
+
+<pre class="smallexample">     Emacs.menu*.fontList:  8x16
+     </pre>
+
+<p>For LessTif dialog boxes, use <code>dialog</code> instead of <code>menu</code>:
+
+<pre class="example">     Emacs.dialog*.fontList: 8x16
+     Emacs.dialog*.foreground: hotpink
+     </pre>
+
+   <p>To specify resources for the LessTif file-selection box, use
+<code>fsb*</code>, like this:
+
+<pre class="example">     Emacs.fsb*.fontList: 8x16
+     </pre>
+
+   <p>Here is a list of the specific resources for LessTif menu bars and
+pop-up menus:
+
+     <dl>
+<dt><code>armColor</code>
+     <dd>The color to show in an armed button. 
+<br><dt><code>fontList</code>
+     <dd>The font to use. 
+<br><dt><code>marginBottom</code>
+     <dd><dt><code>marginHeight</code>
+     <dd><dt><code>marginLeft</code>
+     <dd><dt><code>marginRight</code>
+     <dd><dt><code>marginTop</code>
+     <dd><dt><code>marginWidth</code>
+     <dd>Amount of space to leave around the item, within the border. 
+<br><dt><code>borderWidth</code>
+     <dd>The width of the border around the menu item, on all sides. 
+<br><dt><code>shadowThickness</code>
+     <dd>The width of the border shadow. 
+<br><dt><code>bottomShadowColor</code>
+     <dd>The color for the border shadow, on the bottom and the right. 
+<br><dt><code>topShadowColor</code>
+     <dd>The color for the border shadow, on the top and the left. 
+</dl>
+
+   </body></html>
+

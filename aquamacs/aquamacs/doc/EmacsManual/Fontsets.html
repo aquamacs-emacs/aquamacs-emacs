@@ -1,0 +1,79 @@
+<html lang="en">
+<head>
+<title>Fontsets</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Fontsets">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Fontsets">Fontsets</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Defining-Fontsets.html#Defining%20Fontsets">Defining Fontsets</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Specify-Coding.html#Specify%20Coding">Specify Coding</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="International.html#International">International</a>
+<hr><br>
+</div>
+
+<h3 class="section">Fontsets</h3>
+
+<p>A font for X typically defines shapes for a single alphabet or script. 
+Therefore, displaying the entire range of scripts that Emacs supports
+requires a collection of many fonts.  In Emacs, such a collection is
+called a <dfn>fontset</dfn>.  A fontset is defined by a list of fonts, each
+assigned to handle a range of character codes.
+
+   <p>Each fontset has a name, like a font.  The available X fonts are
+defined by the X server; fontsets, however, are defined within Emacs
+itself.  Once you have defined a fontset, you can use it within Emacs by
+specifying its name, anywhere that you could use a single font.  Of
+course, Emacs fontsets can use only the fonts that the X server
+supports; if certain characters appear on the screen as hollow boxes,
+this means that the fontset in use for them has no font for those
+characters.<a rel="footnote" href="#fn-1"><sup>1</sup></a>
+
+   <p>Emacs creates two fontsets automatically: the <dfn>standard fontset</dfn>
+and the <dfn>startup fontset</dfn>.  The standard fontset is most likely to
+have fonts for a wide variety of non-ASCII characters; however, this is
+not the default for Emacs to use.  (By default, Emacs tries to find a
+font that has bold and italic variants.)  You can specify use of the
+standard fontset with the <code>-fn</code> option, or with the <code>Font</code> X
+resource (see <a href="Font-X.html#Font%20X">Font X</a>).  For example,
+
+<pre class="example">     emacs -fn fontset-standard
+     </pre>
+
+   <p>A fontset does not necessarily specify a font for every character
+code.  If a fontset specifies no font for a certain character, or if it
+specifies a font that does not exist on your system, then it cannot
+display that character properly.  It will display that character as an
+empty box instead.
+
+   <p>The fontset height and width are determined by the ASCII characters
+(that is, by the font used for ASCII characters in that fontset).  If
+another font in the fontset has a different height, or a different
+width, then characters assigned to that font are clipped to the
+fontset's size.  If <code>highlight-wrong-size-font</code> is non-<code>nil</code>,
+a box is displayed around these wrong-size characters as well.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4>
+<ol type="1">
+<li><a name="fn-1"></a>
+<p>The Emacs installation instructions have information on
+additional font support.</p>
+
+   </ol><hr></div>
+
+   </body></html>
+

@@ -1,0 +1,78 @@
+<html lang="en">
+<head>
+<title>Subprocesses on MS-DOS</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Subprocesses on MS-DOS">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="MS-DOS%20Processes">MS-DOS Processes</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Windows-Processes.html#Windows%20Processes">Windows Processes</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="MS-DOS-and-MULE.html#MS-DOS%20and%20MULE">MS-DOS and MULE</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="MS-DOS.html#MS-DOS">MS-DOS</a>
+<hr><br>
+</div>
+
+<h3 class="section">Subprocesses on MS-DOS</h3>
+
+<p>Because MS-DOS is a single-process "operating system,"
+asynchronous subprocesses are not available.  In particular, Shell
+mode and its variants do not work.  Most Emacs features that use
+asynchronous subprocesses also don't work on MS-DOS, including
+Shell mode and GUD.  When in doubt, try and see; commands that
+don't work output an error message saying that asynchronous processes
+aren't supported.
+
+   <p>Compilation under Emacs with <kbd>M-x compile</kbd>, searching files with
+<kbd>M-x grep</kbd> and displaying differences between files with <kbd>M-x
+diff</kbd> do work, by running the inferior processes synchronously.  This
+means you cannot do any more editing until the inferior process
+finishes.
+
+   <p>Spell checking also works, by means of special support for synchronous
+invocation of the <code>ispell</code> program.  This is slower than the
+asynchronous invocation on other platforms
+
+   <p>Instead of the Shell mode, which doesn't work on MS-DOS, you can use
+the <kbd>M-x eshell</kbd> command.  This invokes the Eshell package that
+implements a Posix-like shell entirely in Emacs Lisp.
+
+   <p>By contrast, Emacs compiled as native Windows application
+<strong>does</strong> support asynchronous subprocesses.  See <a href="Windows-Processes.html#Windows%20Processes">Windows Processes</a>.
+
+   <p>Printing commands, such as <code>lpr-buffer</code> (see <a href="Hardcopy.html#Hardcopy">Hardcopy</a>) and
+<code>ps-print-buffer</code> (see <a href="PostScript.html#PostScript">PostScript</a>), work in MS-DOS by sending
+the output to one of the printer ports.  See <a href="MS-DOS-Printing.html#MS-DOS%20Printing">MS-DOS Printing</a>.
+
+   <p>When you run a subprocess synchronously on MS-DOS, make sure the
+program terminates and does not try to read keyboard input.  If the
+program does not terminate on its own, you will be unable to terminate
+it, because MS-DOS provides no general way to terminate a process. 
+Pressing <kbd>C-c</kbd> or <kbd>C-&lt;BREAK&gt;</kbd> might sometimes help in these
+cases.
+
+   <p>Accessing files on other machines is not supported on MS-DOS.  Other
+network-oriented commands such as sending mail, Web browsing, remote
+login, etc., don't work either, unless network access is built into
+MS-DOS with some network redirector.
+
+   <p>Dired on MS-DOS uses the <code>ls-lisp</code> package where other
+platforms use the system <code>ls</code> command.  Therefore, Dired on
+MS-DOS supports only some of the possible options you can mention in
+the <code>dired-listing-switches</code> variable.  The options that work are
+<code>-A</code>, <code>-a</code>, <code>-c</code>, <code>-i</code>, <code>-r</code>, <code>-S</code>,
+<code>-s</code>, <code>-t</code>, and <code>-u</code>.
+
+   </body></html>
+

@@ -1,0 +1,73 @@
+<html lang="en">
+<head>
+<title>Basic Editing in Picture Mode</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Basic Editing in Picture Mode">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Basic%20Picture">Basic Picture</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Insert-in-Picture.html#Insert%20in%20Picture">Insert in Picture</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Picture.html#Picture">Picture</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Picture.html#Picture">Picture</a>
+<hr><br>
+</div>
+
+<h3 class="section">Basic Editing in Picture Mode</h3>
+
+<p>Most keys do the same thing in Picture mode that they usually do, but
+do it in a quarter-plane style.  For example, <kbd>C-f</kbd> is rebound to
+run <code>picture-forward-column</code>, a command which moves point one
+column to the right, inserting a space if necessary so that the actual
+end of the line makes no difference.  <kbd>C-b</kbd> is rebound to run
+<code>picture-backward-column</code>, which always moves point left one
+column, converting a tab to multiple spaces if necessary.  <kbd>C-n</kbd> and
+<kbd>C-p</kbd> are rebound to run <code>picture-move-down</code> and
+<code>picture-move-up</code>, which can either insert spaces or convert tabs
+as necessary to make sure that point stays in exactly the same column. 
+<kbd>C-e</kbd> runs <code>picture-end-of-line</code>, which moves to after the last
+nonblank character on the line.  There is no need to change <kbd>C-a</kbd>,
+as the choice of screen model does not affect beginnings of
+lines.
+
+   <p>Insertion of text is adapted to the quarter-plane screen model through
+the use of Overwrite mode (see <a href="Minor-Modes.html#Minor%20Modes">Minor Modes</a>).  Self-inserting characters
+replace existing text, column by column, rather than pushing existing text
+to the right.  &lt;RET&gt; runs <code>picture-newline</code>, which just moves to
+the beginning of the following line so that new text will replace that
+line.
+
+   <p>Picture mode provides erasure instead of deletion and killing of
+text.  &lt;DEL&gt; (<code>picture-backward-clear-column</code>) replaces the
+preceding character with a space rather than removing it; this moves
+point backwards.  <kbd>C-d</kbd> (<code>picture-clear-column</code>) replaces the
+next character or characters with spaces, but does not move point.  (If
+you want to clear characters to spaces and move forward over them, use
+&lt;SPC&gt;.)  <kbd>C-k</kbd> (<code>picture-clear-line</code>) really kills the
+contents of lines, but does not delete the newlines from the
+buffer.
+
+   <p>To do actual insertion, you must use special commands.  <kbd>C-o</kbd>
+(<code>picture-open-line</code>) creates a blank line after the current line;
+it never splits a line.  <kbd>C-M-o</kbd> (<code>split-line</code>) makes sense in
+Picture mode, so it is not changed.  <kbd>C-j</kbd>
+(<code>picture-duplicate-line</code>) inserts below the current line another
+line with the same contents.
+
+   <p>To do actual deletion in Picture mode, use <kbd>C-w</kbd>, <kbd>C-c C-d</kbd>
+(which is defined as <code>delete-char</code>, as <kbd>C-d</kbd> is in other
+modes), or one of the picture rectangle commands (see <a href="Rectangles-in-Picture.html#Rectangles%20in%20Picture">Rectangles in Picture</a>).
+
+   </body></html>
+

@@ -1,0 +1,103 @@
+<html lang="en">
+<head>
+<title>Commands Displaying Diary Entries</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Commands Displaying Diary Entries">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Diary%20Commands">Diary Commands</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Format-of-Diary-File.html#Format%20of%20Diary%20File">Format of Diary File</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Diary.html#Diary">Diary</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Commands Displaying Diary Entries</h4>
+
+<p>Once you have created a <code>~/diary</code> file, you can use the calendar
+to view it.  You can also view today's events outside of Calendar mode.
+
+     <dl>
+<dt><kbd>d</kbd>
+     <dd>Display all diary entries for the selected date
+(<code>view-diary-entries</code>). 
+<br><dt><kbd>Mouse-2 Diary</kbd>
+     <dd>Display all diary entries for the date you click on. 
+<br><dt><kbd>s</kbd>
+     <dd>Display the entire diary file (<code>show-all-diary-entries</code>). 
+<br><dt><kbd>m</kbd>
+     <dd>Mark all visible dates that have diary entries
+(<code>mark-diary-entries</code>). 
+<br><dt><kbd>u</kbd>
+     <dd>Unmark the calendar window (<code>calendar-unmark</code>). 
+<br><dt><kbd>M-x print-diary-entries</kbd>
+     <dd>Print hard copy of the diary display as it appears. 
+<br><dt><kbd>M-x diary</kbd>
+     <dd>Display all diary entries for today's date. 
+<br><dt><kbd>M-x diary-mail-entries</kbd>
+     <dd>Mail yourself email reminders about upcoming diary entries. 
+</dl>
+
+   <p>Displaying the diary entries with <kbd>d</kbd> shows in a separate window
+the diary entries for the selected date in the calendar.  The mode line
+of the new window shows the date of the diary entries and any holidays
+that fall on that date.  If you specify a numeric argument with <kbd>d</kbd>,
+it shows all the diary entries for that many successive days.  Thus,
+<kbd>2 d</kbd> displays all the entries for the selected date and for the
+following day.
+
+   <p>Another way to display the diary entries for a date is to click
+<kbd>Mouse-2</kbd> on the date, and then choose <kbd>Diary entries</kbd> from
+the menu that appears.
+
+   <p>To get a broader view of which days are mentioned in the diary, use
+the <kbd>m</kbd> command.  This displays the dates that have diary entries
+in a different face (or places a <code>+</code> after these dates, if
+display with multiple faces is not available).  The command applies both
+to the currently visible months and to other months that subsequently
+become visible by scrolling.  To turn marking off and erase the current
+marks, type <kbd>u</kbd>, which also turns off holiday marks
+(see <a href="Holidays.html#Holidays">Holidays</a>).
+
+   <p>To see the full diary file, rather than just some of the entries, use
+the <kbd>s</kbd> command.
+
+   <p>Display of selected diary entries uses the selective display feature
+to hide entries that don't apply.
+
+   <p>The diary buffer as you see it is an illusion, so simply printing the
+buffer does not print what you see on your screen.  There is a special
+command to print hard copy of the diary buffer <em>as it appears</em>;
+this command is <kbd>M-x print-diary-entries</kbd>.  It sends the data
+directly to the printer.  You can customize it like <code>lpr-region</code>
+(see <a href="Hardcopy.html#Hardcopy">Hardcopy</a>).
+
+   <p>The command <kbd>M-x diary</kbd> displays the diary entries for the current
+date, independently of the calendar display, and optionally for the next
+few days as well; the variable <code>number-of-diary-entries</code> specifies
+how many days to include.  See <a href="../elisp/Calendar.html#Calendar">Customizing the Calendar and Diary</a>.
+
+   <p>If you put <code>(diary)</code> in your <code>.emacs</code> file, this
+automatically displays a window with the day's diary entries, when you
+enter Emacs.  The mode line of the displayed window shows the date and
+any holidays that fall on that date.
+
+   <p>Many users like to receive notice of events in their diary as email. 
+To send such mail to yourself, use the command <kbd>M-x
+diary-mail-entries</kbd>.  A prefix argument specifies how many days
+(starting with today) to check; otherwise, the variable
+<code>diary-mail-days</code> says how many days.
+
+   </body></html>
+

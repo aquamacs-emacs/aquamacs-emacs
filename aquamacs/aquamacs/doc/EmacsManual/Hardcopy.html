@@ -1,0 +1,70 @@
+<html lang="en">
+<head>
+<title>Hardcopy Output</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Hardcopy Output">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Hardcopy">Hardcopy</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="PostScript.html#PostScript">PostScript</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Emacs-Server.html#Emacs%20Server">Emacs Server</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr><br>
+</div>
+
+<h3 class="section">Hardcopy Output</h3>
+
+<p>The Emacs commands for making hardcopy let you print either an entire
+buffer or just part of one, either with or without page headers. 
+See also the hardcopy commands of Dired (see <a href="Misc-File-Ops.html#Misc%20File%20Ops">Misc File Ops</a>)
+and the diary (see <a href="Diary-Commands.html#Diary%20Commands">Diary Commands</a>).
+
+     <dl>
+<dt><kbd>M-x print-buffer</kbd>
+     <dd>Print hardcopy of current buffer with page headings containing the file
+name and page number. 
+<br><dt><kbd>M-x lpr-buffer</kbd>
+     <dd>Print hardcopy of current buffer without page headings. 
+<br><dt><kbd>M-x print-region</kbd>
+     <dd>Like <code>print-buffer</code> but print only the current region. 
+<br><dt><kbd>M-x lpr-region</kbd>
+     <dd>Like <code>lpr-buffer</code> but print only the current region. 
+</dl>
+
+   <p>The hardcopy commands (aside from the Postscript commands) pass extra
+switches to the <code>lpr</code> program based on the value of the variable
+<code>lpr-switches</code>.  Its value should be a list of strings, each string
+an option starting with <code>-</code>.  For example, to specify a line width
+of 80 columns for all the printing you do in Emacs, set
+<code>lpr-switches</code> like this:
+
+<pre class="example">     (setq lpr-switches '("-w80"))
+     </pre>
+
+   <p>You can specify the printer to use by setting the variable
+<code>printer-name</code>.
+
+   <p>The variable <code>lpr-command</code> specifies the name of the printer
+program to run; the default value depends on your operating system type. 
+On most systems, the default is <code>"lpr"</code>.  The variable
+<code>lpr-headers-switches</code> similarly specifies the extra switches to
+use to make page headers.  The variable <code>lpr-add-switches</code> controls
+whether to supply <code>-T</code> and <code>-J</code> options (suitable for
+<code>lpr</code>) to the printer program: <code>nil</code> means don't add them. 
+<code>lpr-add-switches</code> should be <code>nil</code> if your printer program is
+not compatible with <code>lpr</code>.
+
+   </body></html>
+

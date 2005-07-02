@@ -1,0 +1,94 @@
+<html lang="en">
+<head>
+<title>If &lt;DEL&gt; Fails to Delete</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="If &lt;DEL&gt; Fails to Delete">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="DEL%20Does%20Not%20Delete">DEL Does Not Delete</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Stuck-Recursive.html#Stuck%20Recursive">Stuck Recursive</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Lossage.html#Lossage">Lossage</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">If &lt;DEL&gt; Fails to Delete</h4>
+
+<p>Every keyboard has a large key, a little ways above the &lt;RET&gt; or
+&lt;ENTER&gt; key, which you normally use outside Emacs to erase the
+last character that you typed.  We call this key <dfn>the usual
+erasure key</dfn>.  In Emacs, it is supposed to be equivalent to &lt;DEL&gt;,
+and when Emacs is properly configured for your terminal, it translates
+that key into the character &lt;DEL&gt;.
+
+   <p>When Emacs starts up using a window system, it determines
+automatically which key should be &lt;DEL&gt;.  In some unusual cases
+Emacs gets the wrong information from the system.  If the usual
+erasure key deletes forwards instead of backwards, that is probably
+what happened--Emacs ought to be treating the &lt;DELETE&gt; key as
+&lt;DEL&gt;, but it isn't.
+
+   <p>With a window system, if the usual erasure key is labeled
+&lt;BACKSPACE&gt; and there is a &lt;DELETE&gt; key elsewhere, but the
+&lt;DELETE&gt; key deletes backward instead of forward, that too
+suggests Emacs got the wrong information--but in the opposite sense. 
+It ought to be treating the &lt;BACKSPACE&gt; key as &lt;DEL&gt;, and
+treating &lt;DELETE&gt; differently, but it isn't.
+
+   <p>On a text-only terminal, if you find the usual erasure key prompts
+for a Help command, like <kbd>Control-h</kbd>, instead of deleting a
+character, it means that key is actually sending the &lt;BS&gt;
+character.  Emacs ought to be treating &lt;BS&gt; as &lt;DEL&gt;, but it
+isn't.
+
+   <p>In all of those cases, the immediate remedy is the same: use the
+command <kbd>M-x normal-erase-is-backspace-mode</kbd>.  This toggles
+between the two modes that Emacs supports for handling &lt;DEL&gt;, so
+if Emacs starts in the wrong mode, it should switch to the right mode. 
+On a text-only terminal, if you want to ask for help when &lt;BS&gt; is
+treated as &lt;DEL&gt;, use &lt;F1&gt;; <kbd>C-?</kbd> may also work, if it
+sends character code 127.
+
+   <p>To fix the problem automatically for every Emacs session, you can
+put one of the following lines into your <code>.emacs</code> file
+(see <a href="Init-File.html#Init%20File">Init File</a>).  For the first case above, where &lt;DELETE&gt;
+deletes forwards instead of backwards, use this line to make
+&lt;DELETE&gt; act as &lt;DEL&gt; (resulting in behavior compatible
+with Emacs 20 and previous versions):
+
+<pre class="lisp">     (normal-erase-is-backspace-mode 0)
+     </pre>
+
+<p>For the other two cases, where &lt;BACKSPACE&gt; ought to act as
+&lt;DEL&gt;, use this line:
+
+<pre class="lisp">     (normal-erase-is-backspace-mode 1)
+     </pre>
+
+   <p>Another way to fix the problem for every Emacs session is to
+customize the variable <code>normal-erase-is-backspace</code>: the value
+<code>t</code> specifies the mode where &lt;BS&gt; or &lt;BACKSPACE&gt; is
+&lt;DEL&gt;, and <code>nil</code> specifies the other mode.  See <a href="Easy-Customization.html#Easy%20Customization">Easy Customization</a>.
+
+   <p>With a window system, it can also happen that the usual erasure key
+is labeled &lt;BACKSPACE&gt;, there is a &lt;DELETE&gt; key elsewhere, and
+both keys delete forward.  This probably means that someone has
+redefined your &lt;BACKSPACE&gt; key as a &lt;DELETE&gt; key.  With X,
+this is typically done with a command to the <code>xmodmap</code> program
+when you start the server or log in.  The most likely motive for this
+customization was to support old versions of Emacs, so we recommend
+you simply remove it now.
+
+   </body></html>
+

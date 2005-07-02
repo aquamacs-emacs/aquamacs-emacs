@@ -1,0 +1,104 @@
+BUILDING AQUAMACS
+
+Aquamacs differs from standard Carbon Emacs (CVS) in the following
+points:
+
+1. C core: Several mac-specific patches are applied to the C core
+   before building. These patches are in the 'patches' directory.
+
+2. Elisp extensions
+   These go in the site-lisp directory of the app-bundle.
+
+3. Additional files
+   - an image in etc/, 
+   - emacs manual & aquamacs manual
+   - new Info.plist
+
+4. Build
+   We only distribute a self-contained build.
+   At this point, official Aquamacs releases have to be built on 10.3.9
+   to ensure compatibility!
+
+5. Installer
+   There is no .pkg installer: for good reasons, we distribute a DMG.
+
+
+
+
+BUILDING
+
+0)
+GET EMACS
+
+Check out Emacs from the Emacs CVS. 
+Instructions on the gnu.org website.
+
+Recommended folder structure:
+
+~/Projects/emacs  (the Emacs CVS checkout)
+~/Projects/aquamacs (the Aquamacs CVS checkout)
+
+Installation target:
+
+/Applications/Emacs.app
+
+The above directories are set as defaults in the various installation
+scripts. You can give different paths as arguments, of course.
+
+
+A) 
+COMPILING
+
+There is no completely automated build process at this time. However,
+you can use the script make-aquamacs (instead of make-package) to
+compile a self-contained build without making a .pkg package.
+
+Copy build/make-aquamacs into the mac/ directory of a CVS checkout of 
+GNU Emacs. Important arguments are:
+
+-no-conf    (do not run configure script again)
+
+This creates an .app bundle which sits in mac/Aquamacs.Raw/Emacs.app
+
+BUILDING MANUALS
+
+Compiled manuals reside in doc directory. The scripts in 'convert' help
+build the Emacs Manual. Better documentation to come.
+
+
+
+
+B) INTEGRATION / INSTALLATION
+
+The script build/install-aquamacs combines files from the build (step A)
+with files from the Aquamacs CVS, in particular manuals, graphics, Info.plist
+and elisp files from src/. Elisp files are compiled.
+You will need to supply arguments with the correct paths - sensible
+defaults are assumed (~/Projects/Aquamacs/aquamacs, ~/Projects/emacs and 
+/Applications/Emacs.app as target) if no arguments are given. See the script
+for details about arguments. 
+
+QUICK-INSTALL
+
+If you did not make a new build, you can just run build/copy-to-app to avoid
+copying the whole build over.  
+You will need to supply arguments with the correct paths - sensible
+defaults are assumed (~/Projects/Aquamacs/aquamacs and 
+/Applications/Emacs.app as target) if no arguments are given. See the script
+for details about arguments. 
+
+
+
+Scripts to do the rest will be distributed later on, once they are
+sufficiently complete!
+
+
+FINAL NOTE
+
+PLEASE: DO NOT PUBLISH BINARIES OF AQUAMACS. Building is is intricate
+at this point, and you may miss out on files / features /
+compatibility. 
+
+
+David Reitter,
+27 June 2005

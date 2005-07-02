@@ -1,0 +1,84 @@
+<html lang="en">
+<head>
+<title>The Echo Area</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Echo Area">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Echo%20Area">Echo Area</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Mode-Line.html#Mode%20Line">Mode Line</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Point.html#Point">Point</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Screen.html#Screen">Screen</a>
+<hr><br>
+</div>
+
+<h3 class="section">The Echo Area</h3>
+
+<p>The line at the bottom of the frame (below the mode line) is the
+<dfn>echo area</dfn>.  It is used to display small amounts of text for
+several purposes.
+
+   <p><dfn>Echoing</dfn> means displaying the characters that you type.  Outside
+Emacs, the operating system normally echoes all your input.  Emacs
+handles echoing differently.
+
+   <p>Single-character commands do not echo in Emacs, and multi-character
+commands echo only if you pause while typing them.  As soon as you pause
+for more than a second in the middle of a command, Emacs echoes all the
+characters of the command so far.  This is to <dfn>prompt</dfn> you for the
+rest of the command.  Once echoing has started, the rest of the command
+echoes immediately as you type it.  This behavior is designed to give
+confident users fast response, while giving hesitant users maximum
+feedback.  You can change this behavior by setting a variable
+(see <a href="Display-Custom.html#Display%20Custom">Display Custom</a>).
+
+   <p>If a command cannot be executed, it may display an <dfn>error message</dfn>
+in the echo area.  Error messages are accompanied by beeping or by
+flashing the screen.  The error also discards any input you have typed
+ahead.
+
+   <p>Some commands display informative messages in the echo area.  These
+messages look much like error messages, but they are not announced with
+a beep and do not throw away input.  Sometimes the message tells you
+what the command has done, when this is not obvious from looking at the
+text being edited.  Sometimes the sole purpose of a command is to show
+you a message giving you specific information--for example, <kbd>C-x =</kbd>
+displays a message describing the character position of point in the text
+and its current column in the window.  Commands that take a long time
+often display messages ending in <code>...</code> while they are working, and
+add <code>done</code> at the end when they are finished.
+
+   <p>Echo-area informative messages are saved in an editor buffer named
+<code>*Messages*</code>.  (We have not explained buffers yet; see
+<a href="Buffers.html#Buffers">Buffers</a>, for more information about them.)  If you miss a message
+that appears briefly on the screen, you can switch to the
+<code>*Messages*</code> buffer to see it again.  (Successive progress messages
+are often collapsed into one in that buffer.)
+
+   <p>The size of <code>*Messages*</code> is limited to a certain number of lines. 
+The variable <code>message-log-max</code> specifies how many lines.  Once the
+buffer has that many lines, each line added at the end deletes one line
+from the beginning.  See <a href="Variables.html#Variables">Variables</a>, for how to set variables such as
+<code>message-log-max</code>.
+
+   <p>The echo area is also used to display the <dfn>minibuffer</dfn>, a window that
+is used for reading arguments to commands, such as the name of a file to be
+edited.  When the minibuffer is in use, the echo area begins with a prompt
+string that usually ends with a colon; also, the cursor appears in that line
+because it is the selected window.  You can always get out of the
+minibuffer by typing <kbd>C-g</kbd>.  See <a href="Minibuffer.html#Minibuffer">Minibuffer</a>.
+
+   </body></html>
+

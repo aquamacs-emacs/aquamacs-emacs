@@ -1,0 +1,88 @@
+<html lang="en">
+<head>
+<title>Mail Mode Miscellany</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Mail Mode Miscellany">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Mail%20Mode%20Misc">Mail Mode Misc</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Citing-Mail.html#Citing%20Mail">Citing Mail</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Mail-Mode.html#Mail%20Mode">Mail Mode</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Mail Mode Miscellany</h4>
+
+     <dl>
+<dt><kbd>C-c C-t</kbd>
+     <dd>Move to the beginning of the message body text (<code>mail-text</code>). 
+<br><dt><kbd>C-c C-w</kbd>
+     <dd>Insert the file <code>~/.signature</code> at the end of the message text
+(<code>mail-signature</code>). 
+<br><dt><kbd>C-c C-i </kbd><var>file</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Insert the contents of <var>file</var> at the end of the outgoing message
+(<code>mail-attach-file</code>). 
+<br><dt><kbd>M-x ispell-message</kbd>
+     <dd>Perform spelling correction on the message text, but not on citations from
+other messages. 
+</dl>
+
+   <p><kbd>C-c C-t</kbd> (<code>mail-text</code>) moves point to just after the header
+separator line--that is, to the beginning of the message body text.
+
+   <p><kbd>C-c C-w</kbd> (<code>mail-signature</code>) adds a standard piece of text at
+the end of the message to say more about who you are.  The text comes
+from the file <code>~/.signature</code> in your home directory.  To insert
+your signature automatically, set the variable <code>mail-signature</code> to
+<code>t</code>; after that, starting a mail message automatically inserts the
+contents of your <code>~/.signature</code> file.  If you want to omit your
+signature from a particular message, delete it from the buffer before
+you send the message.
+
+   <p>You can also set <code>mail-signature</code> to a string; then that string
+is inserted automatically as your signature when you start editing a
+message to send.  If you set it to some other Lisp expression, the
+expression is evaluated each time, and its value (which should be a
+string) specifies the signature.
+
+   <p>You can do spelling correction on the message text you have written
+with the command <kbd>M-x ispell-message</kbd>.  If you have yanked an
+incoming message into the outgoing draft, this command skips what was
+yanked, but it checks the text that you yourself inserted.  (It looks
+for indentation or <code>mail-yank-prefix</code> to distinguish the cited
+lines from your input.)  See <a href="Spelling.html#Spelling">Spelling</a>.
+
+   <p>To include a file in the outgoing message, you can use <kbd>C-x i</kbd>,
+the usual command to insert a file in the current buffer.  But it is
+often more convenient to use a special command, <kbd>C-c C-i</kbd>
+(<code>mail-attach-file</code>).  This command inserts the file contents at
+the end of the buffer, after your signature if any, with a delimiter
+line that includes the file name.
+
+   <p>Turning on Mail mode (which <kbd>C-x m</kbd> does automatically) runs the
+normal hooks <code>text-mode-hook</code> and <code>mail-mode-hook</code>. 
+Initializing a new outgoing message runs the normal hook
+<code>mail-setup-hook</code>; if you want to add special fields to your mail
+header or make other changes to the appearance of the mail buffer, use
+that hook.  See <a href="Hooks.html#Hooks">Hooks</a>.
+
+   <p>The main difference between these hooks is just when they are
+invoked.  Whenever you type <kbd>M-x mail</kbd>, <code>mail-mode-hook</code> runs
+as soon as the <code>*mail*</code> buffer is created.  Then the
+<code>mail-setup</code> function inserts the default contents of the buffer. 
+After these default contents are inserted, <code>mail-setup-hook</code> runs.
+
+   </body></html>
+

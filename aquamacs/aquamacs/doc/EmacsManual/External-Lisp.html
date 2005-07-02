@@ -1,0 +1,70 @@
+<html lang="en">
+<head>
+<title>Running an External Lisp</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Running an External Lisp">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="External%20Lisp">External Lisp</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Lisp-Eval.html#Lisp%20Eval">Lisp Eval</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Building.html#Building">Building</a>
+<hr><br>
+</div>
+
+<h3 class="section">Running an External Lisp</h3>
+
+<p>Emacs has facilities for running programs in other Lisp systems.  You can
+run a Lisp process as an inferior of Emacs, and pass expressions to it to
+be evaluated.  You can also pass changed function definitions directly from
+the Emacs buffers in which you edit the Lisp programs to the inferior Lisp
+process.
+
+   <p>To run an inferior Lisp process, type <kbd>M-x run-lisp</kbd>.  This runs
+the program named <code>lisp</code>, the same program you would run by typing
+<code>lisp</code> as a shell command, with both input and output going through
+an Emacs buffer named <code>*lisp*</code>.  That is to say, any "terminal
+output" from Lisp will go into the buffer, advancing point, and any
+"terminal input" for Lisp comes from text in the buffer.  (You can
+change the name of the Lisp executable file by setting the variable
+<code>inferior-lisp-program</code>.)
+
+   <p>To give input to Lisp, go to the end of the buffer and type the input,
+terminated by &lt;RET&gt;.  The <code>*lisp*</code> buffer is in Inferior Lisp
+mode, which combines the special characteristics of Lisp mode with most
+of the features of Shell mode (see <a href="Shell-Mode.html#Shell%20Mode">Shell Mode</a>).  The definition of
+&lt;RET&gt; to send a line to a subprocess is one of the features of Shell
+mode.
+
+   <p>For the source files of programs to run in external Lisps, use Lisp
+mode.  This mode can be selected with <kbd>M-x lisp-mode</kbd>, and is used
+automatically for files whose names end in <code>.l</code>, <code>.lsp</code>, or
+<code>.lisp</code>, as most Lisp systems usually expect.
+
+   <p>When you edit a function in a Lisp program you are running, the easiest
+way to send the changed definition to the inferior Lisp process is the key
+<kbd>C-M-x</kbd>.  In Lisp mode, this runs the function <code>lisp-eval-defun</code>,
+which finds the defun around or following point and sends it as input to
+the Lisp process.  (Emacs can send input to any inferior process regardless
+of what buffer is current.)
+
+   <p>Contrast the meanings of <kbd>C-M-x</kbd> in Lisp mode (for editing programs
+to be run in another Lisp system) and Emacs-Lisp mode (for editing Lisp
+programs to be run in Emacs): in both modes it has the effect of installing
+the function definition that point is in, but the way of doing so is
+different according to where the relevant Lisp environment is found. 
+See <a href="Executing-Lisp.html#Executing%20Lisp">Executing Lisp</a>.
+
+   </body></html>
+

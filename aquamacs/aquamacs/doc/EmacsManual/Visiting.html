@@ -1,0 +1,204 @@
+<html lang="en">
+<head>
+<title>Visiting Files</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Visiting Files">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Visiting">Visiting</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Saving.html#Saving">Saving</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="File-Names.html#File%20Names">File Names</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
+<hr><br>
+</div>
+
+<h3 class="section">Visiting Files</h3>
+
+     <dl>
+<dt><kbd>C-x C-f</kbd>
+     <dd>Visit a file (<code>find-file</code>). 
+<br><dt><kbd>C-x C-r</kbd>
+     <dd>Visit a file for viewing, without allowing changes to it
+(<code>find-file-read-only</code>). 
+<br><dt><kbd>C-x C-v</kbd>
+     <dd>Visit a different file instead of the one visited last
+(<code>find-alternate-file</code>). 
+<br><dt><kbd>C-x 4 f</kbd>
+     <dd>Visit a file, in another window (<code>find-file-other-window</code>).  Don't
+alter what is displayed in the selected window. 
+<br><dt><kbd>C-x 5 f</kbd>
+     <dd>Visit a file, in a new frame (<code>find-file-other-frame</code>).  Don't
+alter what is displayed in the selected frame. 
+<br><dt><kbd>M-x find-file-literally</kbd>
+     <dd>Visit a file with no conversion of the contents. 
+</dl>
+
+   <p><dfn>Visiting</dfn> a file means copying its contents into an Emacs
+buffer so you can edit them.  Emacs makes a new buffer for each file
+that you visit.  We often say that this buffer "is visiting" that
+file, or that the buffer's "visited file" is that file.  Emacs
+constructs the buffer name from the file name by throwing away the
+directory, keeping just the name proper.  For example, a file named
+<code>/usr/rms/emacs.tex</code> would get a buffer named <code>emacs.tex</code>. 
+If there is already a buffer with that name, Emacs constructs a unique
+name--the normal method is to append <code>&lt;2&gt;</code>, <code>&lt;3&gt;</code>, and so
+on, but you can select other methods (see <a href="Uniquify.html#Uniquify">Uniquify</a>).
+
+   <p>Each window's mode line shows the name of the buffer that is being displayed
+in that window, so you can always tell what buffer you are editing.
+
+   <p>The changes you make with editing commands are made in the Emacs
+buffer.  They do not take effect in the file that you visited, or any
+place permanent, until you <dfn>save</dfn> the buffer.  Saving the buffer
+means that Emacs writes the current contents of the buffer into its
+visited file.  See <a href="Saving.html#Saving">Saving</a>.
+
+   <p>If a buffer contains changes that have not been saved, we say the
+buffer is <dfn>modified</dfn>.  This is important because it implies that
+some changes will be lost if the buffer is not saved.  The mode line
+displays two stars near the left margin to indicate that the buffer is
+modified.
+
+   <p>To visit a file, use the command <kbd>C-x C-f</kbd> (<code>find-file</code>).  Follow
+the command with the name of the file you wish to visit, terminated by a
+&lt;RET&gt;.
+
+   <p>The file name is read using the minibuffer (see <a href="Minibuffer.html#Minibuffer">Minibuffer</a>), with
+defaulting and completion in the standard manner (see <a href="File-Names.html#File%20Names">File Names</a>). 
+While in the minibuffer, you can abort <kbd>C-x C-f</kbd> by typing
+<kbd>C-g</kbd>.  File-name completion ignores certain filenames; for more
+about this, see <a href="Completion-Options.html#Completion%20Options">Completion Options</a>.
+
+   <p>When Emacs is built with a suitable GUI toolkit, it pops up the
+standard File Selection dialog of that toolkit instead of prompting for
+the file name in the minibuffer.  On Unix and GNU/Linux platforms, Emacs
+does that when built with LessTif and Motif toolkits; on MS-Windows, the
+GUI version does that by default.
+
+   <p>Your confirmation that <kbd>C-x C-f</kbd> has completed successfully is the
+appearance of new text on the screen and a new buffer name in the mode
+line.  If the specified file does not exist and could not be created, or
+cannot be read, then you get an error, with an error message displayed
+in the echo area.
+
+   <p>If you visit a file that is already in Emacs, <kbd>C-x C-f</kbd> does not make
+another copy.  It selects the existing buffer containing that file. 
+However, before doing so, it checks that the file itself has not changed
+since you visited or saved it last.  If the file has changed, a warning
+message is shown.  See <a href="Interlocking.html#Interlocking">Simultaneous Editing</a>.
+
+   <p>Since Emacs reads the visited file in its entirety, files whose size
+is larger than the maximum Emacs buffer size (see <a href="Buffers.html#Buffers">Buffers</a>) cannot be
+visited; if you try, Emacs will display an error message saying that the
+maximum buffer size has been exceeded.
+
+   <p>What if you want to create a new file?  Just visit it.  Emacs displays
+<code>(New file)</code> in the echo area, but in other respects behaves as if
+you had visited an existing empty file.  If you make any changes and
+save them, the file is created.
+
+   <p>Emacs recognizes from the contents of a file which convention it uses
+to separate lines--newline (used on GNU/Linux and on Unix),
+carriage-return linefeed (used on Microsoft systems), or just
+carriage-return (used on the Macintosh)--and automatically converts the
+contents to the normal Emacs convention, which is that the newline
+character separates lines.  This is a part of the general feature of
+coding system conversion (see <a href="Coding-Systems.html#Coding%20Systems">Coding Systems</a>), and makes it possible
+to edit files imported from different operating systems with
+equal convenience.  If you change the text and save the file, Emacs
+performs the inverse conversion, changing newlines back into
+carriage-return linefeed or just carriage-return if appropriate.
+
+   <p>If the file you specify is actually a directory, <kbd>C-x C-f</kbd> invokes
+Dired, the Emacs directory browser, so that you can "edit" the contents
+of the directory (see <a href="Dired.html#Dired">Dired</a>).  Dired is a convenient way to delete,
+look at, or operate on the files in the directory.  However, if the
+variable <code>find-file-run-dired</code> is <code>nil</code>, then it is an error
+to try to visit a directory.
+
+   <p>Files which are actually collections of other files, or <dfn>file
+archives</dfn>, are visited in special modes which invoke a Dired-like
+environment to allow operations on archive members.  See <a href="File-Archives.html#File%20Archives">File Archives</a>, for more about these features.
+
+   <p>If the file name you specify contains shell-style wildcard characters,
+Emacs visits all the files that match it.  Wildcards include <code>?</code>,
+<code>*</code>, and <code>[...]</code> sequences.  See <a href="Quoted-File-Names.html#Quoted%20File%20Names">Quoted File Names</a>, for
+information on how to visit a file whose name actually contains wildcard
+characters.  You can disable the wildcard feature by customizing
+<code>find-file-wildcards</code>.
+
+   <p>If you visit a file that the operating system won't let you modify,
+Emacs makes the buffer read-only, so that you won't go ahead and make
+changes that you'll have trouble saving afterward.  You can make the
+buffer writable with <kbd>C-x C-q</kbd> (<code>vc-toggle-read-only</code>). 
+See <a href="Misc-Buffer.html#Misc%20Buffer">Misc Buffer</a>.
+
+   <p>Occasionally you might want to visit a file as read-only in order to
+protect yourself from entering changes accidentally; do so by visiting
+the file with the command <kbd>C-x C-r</kbd> (<code>find-file-read-only</code>).
+
+   <p>If you visit a nonexistent file unintentionally (because you typed the
+wrong file name), use the <kbd>C-x C-v</kbd> command
+(<code>find-alternate-file</code>) to visit the file you really wanted. 
+<kbd>C-x C-v</kbd> is similar to <kbd>C-x C-f</kbd>, but it kills the current
+buffer (after first offering to save it if it is modified).  When
+<kbd>C-x C-v</kbd> reads the file name to visit, it inserts the entire
+default file name in the buffer, with point just after the directory
+part; this is convenient if you made a slight error in typing the name.
+
+   <p>If you find a file which exists but cannot be read, <kbd>C-x C-f</kbd>
+signals an error.
+
+   <p><kbd>C-x 4 f</kbd> (<code>find-file-other-window</code>) is like <kbd>C-x C-f</kbd>
+except that the buffer containing the specified file is selected in another
+window.  The window that was selected before <kbd>C-x 4 f</kbd> continues to
+show the same buffer it was already showing.  If this command is used when
+only one window is being displayed, that window is split in two, with one
+window showing the same buffer as before, and the other one showing the
+newly requested file.  See <a href="Windows.html#Windows">Windows</a>.
+
+   <p><kbd>C-x 5 f</kbd> (<code>find-file-other-frame</code>) is similar, but opens a
+new frame, or makes visible any existing frame showing the file you
+seek.  This feature is available only when you are using a window
+system.  See <a href="Frames.html#Frames">Frames</a>.
+
+   <p>If you wish to edit a file as a sequence of ASCII characters with no special
+encoding or conversion, use the <kbd>M-x find-file-literally</kbd> command. 
+It visits a file, like <kbd>C-x C-f</kbd>, but does not do format conversion
+(see <a href="Formatted-Text.html#Formatted%20Text">Formatted Text</a>), character code conversion (see <a href="Coding-Systems.html#Coding%20Systems">Coding Systems</a>), or automatic uncompression (see <a href="Compressed-Files.html#Compressed%20Files">Compressed Files</a>), and
+does not add a final newline because of <code>require-final-newline</code>. 
+If you already have visited the same file in the usual (non-literal)
+manner, this command asks you whether to visit it literally instead.
+
+   <p>Two special hook variables allow extensions to modify the operation of
+visiting files.  Visiting a file that does not exist runs the functions
+in the list <code>find-file-not-found-hooks</code>; this variable holds a list
+of functions, and the functions are called one by one (with no
+arguments) until one of them returns non-<code>nil</code>.  This is not a
+normal hook, and the name ends in <code>-hooks</code> rather than <code>-hook</code>
+to indicate that fact.
+
+   <p>Successful visiting of any file, whether existing or not, calls the
+functions in the list <code>find-file-hooks</code>, with no arguments. 
+This variable is really a normal hook, but it has an abnormal name for
+historical compatibility.  In the case of a nonexistent file, the
+<code>find-file-not-found-hooks</code> are run first.  See <a href="Hooks.html#Hooks">Hooks</a>.
+
+   <p>There are several ways to specify automatically the major mode for
+editing the file (see <a href="Choosing-Modes.html#Choosing%20Modes">Choosing Modes</a>), and to specify local
+variables defined for that file (see <a href="File-Variables.html#File%20Variables">File Variables</a>).
+
+   </body></html>
+

@@ -1,0 +1,86 @@
+<html lang="en">
+<head>
+<title>The Diary File</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Diary File">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Format%20of%20Diary%20File">Format of Diary File</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Date-Formats.html#Date%20Formats">Date Formats</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Diary-Commands.html#Diary%20Commands">Diary Commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Diary.html#Diary">Diary</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">The Diary File</h4>
+
+<p>Your <dfn>diary file</dfn> is a file that records events associated with
+particular dates.  The name of the diary file is specified by the
+variable <code>diary-file</code>; <code>~/diary</code> is the default.  The
+<code>calendar</code> utility program supports a subset of the format allowed
+by the Emacs diary facilities, so you can use that utility to view the
+diary file, with reasonable results aside from the entries it cannot
+understand.
+
+   <p>Each entry in the diary file describes one event and consists of one
+or more lines.  An entry always begins with a date specification at the
+left margin.  The rest of the entry is simply text to describe the
+event.  If the entry has more than one line, then the lines after the
+first must begin with whitespace to indicate they continue a previous
+entry.  Lines that do not begin with valid dates and do not continue a
+preceding entry are ignored.
+
+   <p>You can inhibit the marking of certain diary entries in the calendar
+window; to do this, insert an ampersand (<code>&amp;</code>) at the beginning of
+the entry, before the date.  This has no effect on display of the entry
+in the diary window; it affects only marks on dates in the calendar
+window.  Nonmarking entries are especially useful for generic entries
+that would otherwise mark many different dates.
+
+   <p>If the first line of a diary entry consists only of the date or day
+name with no following blanks or punctuation, then the diary window
+display doesn't include that line; only the continuation lines appear. 
+For example, this entry:
+
+<pre class="example">     02/11/1989
+           Bill B. visits Princeton today
+           2pm Cognitive Studies Committee meeting
+           2:30-5:30 Liz at Lawrenceville
+           4:00pm Dentist appt
+           7:30pm Dinner at George's
+           8:00-10:00pm concert
+     </pre>
+
+<p>appears in the diary window without the date line at the beginning. 
+This style of entry looks neater when you display just a single day's
+entries, but can cause confusion if you ask for more than one day's
+entries.
+
+   <p>You can edit the diary entries as they appear in the window, but it is
+important to remember that the buffer displayed contains the <em>entire</em>
+diary file, with portions of it concealed from view.  This means, for
+instance, that the <kbd>C-f</kbd> (<code>forward-char</code>) command can put point
+at what appears to be the end of the line, but what is in reality the
+middle of some concealed line.
+
+   <p><em>Be careful when editing the diary entries!</em>  Inserting
+additional lines or adding/deleting characters in the middle of a
+visible line cannot cause problems, but editing at the end of a line may
+not do what you expect.  Deleting a line may delete other invisible
+entries that follow it.  Before editing the diary, it is best to display
+the entire file with <kbd>s</kbd> (<code>show-all-diary-entries</code>).
+
+   </body></html>
+

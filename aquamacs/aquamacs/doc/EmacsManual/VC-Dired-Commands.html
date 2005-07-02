@@ -1,0 +1,55 @@
+<html lang="en">
+<head>
+<title>VC Dired Commands</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="VC Dired Commands">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="VC%20Dired%20Commands">VC Dired Commands</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="VC-Dired-Mode.html#VC%20Dired%20Mode">VC Dired Mode</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Secondary-VC-Commands.html#Secondary%20VC%20Commands">Secondary VC Commands</a>
+<hr><br>
+</div>
+
+<h3 class="subsubsection">VC Dired Commands</h5>
+
+<p>All the usual Dired commands work normally in VC Dired mode, except
+for <kbd>v</kbd>, which is redefined as the version control prefix.  You can
+invoke VC commands such as <code>vc-diff</code> and <code>vc-print-log</code> by
+typing <kbd>v =</kbd>, or <kbd>v l</kbd>, and so on.  Most of these commands apply
+to the file name on the current line.
+
+   <p>The command <kbd>v v</kbd> (<code>vc-next-action</code>) operates on all the
+marked files, so that you can lock or check in several files at once. 
+If it operates on more than one file, it handles each file according to
+its current state; thus, it might lock one file, but check in another
+file.  This could be confusing; it is up to you to avoid confusing
+behavior by marking a set of files that are in a similar state.
+
+   <p>If any files call for check-in, <kbd>v v</kbd> reads a single log entry,
+then uses it for all the files being checked in.  This is convenient for
+registering or checking in several files at once, as part of the same
+change.
+
+   <p>You can toggle between terse display (only locked files, or files not
+up-to-date) and full display at any time by typing <kbd>v t</kbd>
+(<code>vc-dired-toggle-terse-mode</code>).  There is also a special command
+<kbd>* l</kbd> (<code>vc-dired-mark-locked</code>), which marks all files currently
+locked (or, with CVS, all files not up-to-date).  Thus, typing <kbd>* l
+t k</kbd> is another way to delete from the buffer all files except those
+currently locked.
+
+   </body></html>
+

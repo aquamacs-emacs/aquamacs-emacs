@@ -1,0 +1,103 @@
+<html lang="en">
+<head>
+<title>Moving Among Messages</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Moving Among Messages">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Rmail%20Motion">Rmail Motion</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Rmail-Deletion.html#Rmail%20Deletion">Rmail Deletion</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Rmail-Scrolling.html#Rmail%20Scrolling">Rmail Scrolling</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Rmail.html#Rmail">Rmail</a>
+<hr><br>
+</div>
+
+<h3 class="section">Moving Among Messages</h3>
+
+<p>The most basic thing to do with a message is to read it.  The way to
+do this in Rmail is to make the message current.  The usual practice is
+to move sequentially through the file, since this is the order of
+receipt of messages.  When you enter Rmail, you are positioned at the
+first message that you have not yet made current (that is, the first one
+that has the <code>unseen</code> attribute; see <a href="Rmail-Attributes.html#Rmail%20Attributes">Rmail Attributes</a>).  Move
+forward to see the other new messages; move backward to re-examine old
+messages.
+
+     <dl>
+<dt><kbd>n</kbd>
+     <dd>Move to the next nondeleted message, skipping any intervening deleted
+messages (<code>rmail-next-undeleted-message</code>). 
+<br><dt><kbd>p</kbd>
+     <dd>Move to the previous nondeleted message
+(<code>rmail-previous-undeleted-message</code>). 
+<br><dt><kbd>M-n</kbd>
+     <dd>Move to the next message, including deleted messages
+(<code>rmail-next-message</code>). 
+<br><dt><kbd>M-p</kbd>
+     <dd>Move to the previous message, including deleted messages
+(<code>rmail-previous-message</code>). 
+<br><dt><kbd>j</kbd>
+     <dd>Move to the first message.  With argument <var>n</var>, move to
+message number <var>n</var> (<code>rmail-show-message</code>). 
+<br><dt><kbd>&gt;</kbd>
+     <dd>Move to the last message (<code>rmail-last-message</code>). 
+<br><dt><kbd>&lt;</kbd>
+     <dd>Move to the first message (<code>rmail-first-message</code>).
+
+     <br><dt><kbd>M-s </kbd><var>regexp</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Move to the next message containing a match for <var>regexp</var>
+(<code>rmail-search</code>).
+
+     <br><dt><kbd>- M-s </kbd><var>regexp</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Move to the previous message containing a match for <var>regexp</var>. 
+</dl>
+
+   <p><kbd>n</kbd> and <kbd>p</kbd> are the usual way of moving among messages in
+Rmail.  They move through the messages sequentially, but skip over
+deleted messages, which is usually what you want to do.  Their command
+definitions are named <code>rmail-next-undeleted-message</code> and
+<code>rmail-previous-undeleted-message</code>.  If you do not want to skip
+deleted messages--for example, if you want to move to a message to
+undelete it--use the variants <kbd>M-n</kbd> and <kbd>M-p</kbd>
+(<code>rmail-next-message</code> and <code>rmail-previous-message</code>).  A
+numeric argument to any of these commands serves as a repeat
+count.
+
+   <p>In Rmail, you can specify a numeric argument by typing just the
+digits.  You don't need to type <kbd>C-u</kbd> first.
+
+   <p>The <kbd>M-s</kbd> (<code>rmail-search</code>) command is Rmail's version of
+search.  The usual incremental search command <kbd>C-s</kbd> works in Rmail,
+but it searches only within the current message.  The purpose of
+<kbd>M-s</kbd> is to search for another message.  It reads a regular
+expression (see <a href="Regexps.html#Regexps">Regexps</a>) nonincrementally, then searches starting at
+the beginning of the following message for a match.  It then selects
+that message.  If <var>regexp</var> is empty, <kbd>M-s</kbd> reuses the regexp
+used the previous time.
+
+   <p>To search backward in the file for another message, give <kbd>M-s</kbd> a
+negative argument.  In Rmail you can do this with <kbd>- M-s</kbd>.
+
+   <p>It is also possible to search for a message based on labels. 
+See <a href="Rmail-Labels.html#Rmail%20Labels">Rmail Labels</a>.
+
+   <p>To move to a message specified by absolute message number, use <kbd>j</kbd>
+(<code>rmail-show-message</code>) with the message number as argument.  With
+no argument, <kbd>j</kbd> selects the first message.  <kbd>&lt;</kbd>
+(<code>rmail-first-message</code>) also selects the first message.  <kbd>&gt;</kbd>
+(<code>rmail-last-message</code>) selects the last message.
+
+   </body></html>
+

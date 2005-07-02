@@ -1,0 +1,69 @@
+<html lang="en">
+<head>
+<title>Automatic Display Of Matching Parentheses</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Automatic Display Of Matching Parentheses">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Matching">Matching</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Moving-by-Parens.html#Moving%20by%20Parens">Moving by Parens</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Parentheses.html#Parentheses">Parentheses</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Automatic Display Of Matching Parentheses</h4>
+
+<p>The Emacs parenthesis-matching feature is designed to show
+automatically how parentheses (and other matching delimiters) match in
+the text.  Whenever you type a self-inserting character that is a
+closing delimiter, the cursor moves momentarily to the location of the
+matching opening delimiter, provided that is on the screen.  If it is
+not on the screen, Emacs displays some of the text near it in the echo
+area.  Either way, you can tell which grouping you are closing off.
+
+   <p>If the opening delimiter and closing delimiter are mismatched--such
+as in <code>[x)</code>--a warning message is displayed in the echo area.
+
+   <p>Three variables control parenthesis match display. 
+<code>blink-matching-paren</code> turns the feature on or off: <code>nil</code>
+disables it, but the default is <code>t</code> to enable match display.
+
+   <p><code>blink-matching-delay</code> says how many seconds to leave the
+cursor on the matching opening delimiter, before bringing it back to
+the real location of point; the default is 1, but on some systems it
+is useful to specify a fraction of a second.
+
+   <p><code>blink-matching-paren-distance</code> specifies how many characters
+back to search to find the matching opening delimiter.  If the match
+is not found in that distance, scanning stops, and nothing is displayed. 
+This is to prevent the scan for the matching delimiter from wasting
+lots of time when there is no match.  The default is 25600.
+
+   <p>Show Paren mode provides a more powerful kind of automatic matching. 
+Whenever point is after a closing delimiter, that delimiter and its
+matching opening delimiter are both highlighted; otherwise, if point
+is before an opening delimiter, the matching closing delimiter is
+highlighted.  (There is no need to highlight the opening delimiter in
+that case, because the cursor appears on top of that character.)  Use
+the command <kbd>M-x show-paren-mode</kbd> to enable or disable this mode.
+
+   <p>By default, <code>show-paren-mode</code> uses colors to highlight the
+parentheses.  However, if your display doesn't support colors, you can
+customize the faces <code>show-paren-match-face</code> and
+<code>show-paren-mismatch-face</code> to use other attributes, such as bold or
+underline.  See <a href="Face-Customization.html#Face%20Customization">Face Customization</a>.
+
+   </body></html>
+

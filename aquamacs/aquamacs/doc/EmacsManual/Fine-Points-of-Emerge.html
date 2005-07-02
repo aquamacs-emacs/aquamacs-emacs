@@ -1,0 +1,47 @@
+<html lang="en">
+<head>
+<title>Fine Points of Emerge</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Fine Points of Emerge">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Fine%20Points%20of%20Emerge">Fine Points of Emerge</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Combining-in-Emerge.html#Combining%20in%20Emerge">Combining in Emerge</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Emerge.html#Emerge">Emerge</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Fine Points of Emerge</h4>
+
+<p>During the merge, you mustn't try to edit the A and B buffers yourself. 
+Emerge modifies them temporarily, but ultimately puts them back the way
+they were.
+
+   <p>You can have any number of merges going at once--just don't use any one
+buffer as input to more than one merge at once, since the temporary
+changes made in these buffers would get in each other's way.
+
+   <p>Starting Emerge can take a long time because it needs to compare the
+files fully.  Emacs can't do anything else until <code>diff</code> finishes. 
+Perhaps in the future someone will change Emerge to do the comparison in
+the background when the input files are large--then you could keep on
+doing other things with Emacs until Emerge is ready to accept
+commands.
+
+   <p>After setting up the merge, Emerge runs the hook
+<code>emerge-startup-hook</code> (see <a href="Hooks.html#Hooks">Hooks</a>).
+
+   </body></html>
+

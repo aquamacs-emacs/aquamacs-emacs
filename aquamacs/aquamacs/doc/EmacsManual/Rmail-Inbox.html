@@ -1,0 +1,73 @@
+<html lang="en">
+<head>
+<title>Rmail Files and Inboxes</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Rmail Files and Inboxes">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Rmail%20Inbox">Rmail Inbox</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Rmail-Files.html#Rmail%20Files">Rmail Files</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Rmail-Deletion.html#Rmail%20Deletion">Rmail Deletion</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Rmail.html#Rmail">Rmail</a>
+<hr><br>
+</div>
+
+<h3 class="section">Rmail Files and Inboxes</h3>
+
+<p>The operating system places incoming mail for you in a file that we
+call your <dfn>inbox</dfn>.  When you start up Rmail, it runs a C program
+called <code>movemail</code> to copy the new messages from your inbox into
+your primary Rmail file, which also contains other messages saved from
+previous Rmail sessions.  It is in this file that you actually read the
+mail with Rmail.  This operation is called <dfn>getting new mail</dfn>.  You
+can get new mail at any time in Rmail by typing <kbd>g</kbd>.
+
+   <p>The variable <code>rmail-primary-inbox-list</code> contains a list of the
+files which are inboxes for your primary Rmail file.  If you don't set
+this variable explicitly, it is initialized from the <code>MAIL</code>
+environment variable, or, as a last resort, set to <code>nil</code>, which
+means to use the default inbox.  The default inbox is
+<code>/var/mail/</code><var>username</var><code></code>, <code>/usr/spool/mail/</code><var>username</var><code></code>,
+or <code>/usr/mail/</code><var>username</var><code></code>, depending on your operating system.
+
+   <p>To see what the default is on your system, use <kbd>C-h v
+rmail-primary-inbox &lt;RET&gt;</kbd>.  You can specify the inbox file(s) for
+any Rmail file with the command <code>set-rmail-inbox-list</code>; see
+<a href="Rmail-Files.html#Rmail%20Files">Rmail Files</a>.
+
+   <p>There are two reasons for having separate Rmail files and inboxes.
+
+     <ol type=1 start=1>
+<li>The inbox file format varies between operating systems and according to
+the other mail software in use.  Only one part of Rmail needs to know
+about the alternatives, and it need only understand how to convert all
+of them to Rmail's own format.
+
+     <li>It is very cumbersome to access an inbox file without danger of losing
+mail, because it is necessary to interlock with mail delivery. 
+Moreover, different operating systems use different interlocking
+techniques.  The strategy of moving mail out of the inbox once and for
+all into a separate Rmail file avoids the need for interlocking in all
+the rest of Rmail, since only Rmail operates on the Rmail file.
+        </ol>
+
+   <p>Rmail was written to use Babyl format as its internal format.  Since
+then, we have recognized that the usual inbox format on Unix and GNU
+systems is adequate for the job, and we plan to change Rmail to use that
+as its internal format.  However, the Rmail file will still be separate
+from the inbox file, even on systems where their format is the same.
+
+   </body></html>
+

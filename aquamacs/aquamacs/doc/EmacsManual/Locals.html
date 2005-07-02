@@ -1,0 +1,107 @@
+<html lang="en">
+<head>
+<title>Local Variables</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Local Variables">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Locals">Locals</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="File-Variables.html#File%20Variables">File Variables</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Hooks.html#Hooks">Hooks</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Local Variables</h4>
+
+     <dl>
+<dt><kbd>M-x make-local-variable &lt;RET&gt; </kbd><var>var</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Make variable <var>var</var> have a local value in the current buffer. 
+<br><dt><kbd>M-x kill-local-variable &lt;RET&gt; </kbd><var>var</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Make variable <var>var</var> use its global value in the current buffer. 
+<br><dt><kbd>M-x make-variable-buffer-local &lt;RET&gt; </kbd><var>var</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Mark variable <var>var</var> so that setting it will make it local to the
+buffer that is current at that time. 
+</dl>
+
+   <p>Almost any variable can be made <dfn>local</dfn> to a specific Emacs
+buffer.  This means that its value in that buffer is independent of its
+value in other buffers.  A few variables are always local in every
+buffer.  Every other Emacs variable has a <dfn>global</dfn> value which is in
+effect in all buffers that have not made the variable local.
+
+   <p><kbd>M-x make-local-variable</kbd> reads the name of a variable and makes it
+local to the current buffer.  Further changes in this buffer will not
+affect others, and further changes in the global value will not affect this
+buffer.
+
+   <p><kbd>M-x make-variable-buffer-local</kbd> reads the name of a variable and
+changes the future behavior of the variable so that it will become local
+automatically when it is set.  More precisely, once a variable has been
+marked in this way, the usual ways of setting the variable automatically
+do <code>make-local-variable</code> first.  We call such variables
+<dfn>per-buffer</dfn> variables.
+
+   <p>Major modes (see <a href="Major-Modes.html#Major%20Modes">Major Modes</a>) always make variables local to the
+buffer before setting the variables.  This is why changing major modes
+in one buffer has no effect on other buffers.  Minor modes also work by
+setting variables--normally, each minor mode has one controlling
+variable which is non-<code>nil</code> when the mode is enabled (see <a href="Minor-Modes.html#Minor%20Modes">Minor Modes</a>).  For most minor modes, the controlling variable is per buffer.
+
+   <p>Emacs contains a number of variables that are always per-buffer. 
+These include <code>abbrev-mode</code>, <code>auto-fill-function</code>,
+<code>case-fold-search</code>, <code>comment-column</code>, <code>ctl-arrow</code>,
+<code>fill-column</code>, <code>fill-prefix</code>, <code>indent-tabs-mode</code>,
+<code>left-margin</code>, <code>mode-line-format</code>, <code>overwrite-mode</code>,
+<code>selective-display-ellipses</code>, <code>selective-display</code>,
+<code>tab-width</code>, and <code>truncate-lines</code>.  Some other variables are
+always local in every buffer, but they are used for internal
+purposes.
+
+   <p>A few variables cannot be local to a buffer because they are always
+local to each display instead (see <a href="Multiple-Displays.html#Multiple%20Displays">Multiple Displays</a>).  If you try to
+make one of these variables buffer-local, you'll get an error message.
+
+   <p><kbd>M-x kill-local-variable</kbd> reads the name of a variable and makes
+it cease to be local to the current buffer.  The global value of the
+variable henceforth is in effect in this buffer.  Setting the major mode
+kills all the local variables of the buffer except for a few variables
+specially marked as <dfn>permanent locals</dfn>.
+
+   <p>To set the global value of a variable, regardless of whether the
+variable has a local value in the current buffer, you can use the Lisp
+construct <code>setq-default</code>.  This construct is used just like
+<code>setq</code>, but it sets variables' global values instead of their local
+values (if any).  When the current buffer does have a local value, the
+new global value may not be visible until you switch to another buffer. 
+Here is an example:
+
+<pre class="example">     (setq-default fill-column 75)
+     </pre>
+
+<p><code>setq-default</code> is the only way to set the global value of a variable
+that has been marked with <code>make-variable-buffer-local</code>.
+
+   <p>Lisp programs can use <code>default-value</code> to look at a variable's
+default value.  This function takes a symbol as argument and returns its
+default value.  The argument is evaluated; usually you must quote it
+explicitly.  For example, here's how to obtain the default value of
+<code>fill-column</code>:
+
+<pre class="example">     (default-value 'fill-column)
+     </pre>
+
+   </body></html>
+

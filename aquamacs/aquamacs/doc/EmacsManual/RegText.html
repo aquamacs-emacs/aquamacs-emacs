@@ -1,0 +1,64 @@
+<html lang="en">
+<head>
+<title>Saving Text in Registers</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Saving Text in Registers">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="RegText">RegText</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="RegRect.html#RegRect">RegRect</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="RegPos.html#RegPos">RegPos</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Registers.html#Registers">Registers</a>
+<hr><br>
+</div>
+
+<h3 class="section">Saving Text in Registers</h3>
+
+<p>When you want to insert a copy of the same piece of text several
+times, it may be inconvenient to yank it from the kill ring, since each
+subsequent kill moves that entry further down the ring.  An alternative
+is to store the text in a register and later retrieve it.
+
+     <dl>
+<dt><kbd>C-x r s </kbd><var>r</var><kbd></kbd>
+     <dd>Copy region into register <var>r</var> (<code>copy-to-register</code>). 
+<br><dt><kbd>C-x r i </kbd><var>r</var><kbd></kbd>
+     <dd>Insert text from register <var>r</var> (<code>insert-register</code>). 
+<br><dt><kbd>M-x append-to-register &lt;RET&gt; </kbd><var>r</var><kbd></kbd>
+     <dd>Append region to text in register <var>r</var>. 
+<br><dt><kbd>M-x prepend-to-register &lt;RET&gt; </kbd><var>r</var><kbd></kbd>
+     <dd>Prepend region to text in register <var>r</var>. 
+</dl>
+
+   <p><kbd>C-x r s </kbd><var>r</var><kbd></kbd> stores a copy of the text of the region into
+the register named <var>r</var>.  <kbd>C-u C-x r s </kbd><var>r</var><kbd></kbd>, the same
+command with a numeric argument, deletes the text from the buffer as
+well; you can think of this as "moving" the region text into the register.
+
+   <p><kbd>M-x append-to-register &lt;RET&gt; </kbd><var>r</var><kbd></kbd> appends the copy of
+the text in the region to the text already stored in the register
+named <var>r</var>.  If invoked with a numeric argument, it deletes the
+region after appending it to the register.  A similar command
+<code>prepend-to-register</code> works the same, except that it
+<em>prepends</em> the region text to the text in the register, rather
+than <em>appending</em> it.
+
+   <p><kbd>C-x r i </kbd><var>r</var><kbd></kbd> inserts in the buffer the text from register
+<var>r</var>.  Normally it leaves point before the text and places the mark
+after, but with a numeric argument (<kbd>C-u</kbd>) it puts point after the
+text and the mark before.
+
+   </body></html>
+

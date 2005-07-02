@@ -1,0 +1,69 @@
+<html lang="en">
+<head>
+<title>Basic Version Control without Locking</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Basic Version Control without Locking">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Without%20Locking">Without Locking</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Advanced-C-x-C-q.html#Advanced%20C-x%20C-q">Advanced C-x C-q</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="VC-with-Locking.html#VC%20with%20Locking">VC with Locking</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Basic-VC-Editing.html#Basic%20VC%20Editing">Basic VC Editing</a>
+<hr><br>
+</div>
+
+<h3 class="subsubsection">Basic Version Control without Locking</h5>
+
+<p>When there is no locking--the default for CVS--work files are always
+writable; you do not need to do anything before you begin to edit a
+file.  The status indicator on the mode line is <code>-</code> if the file is
+unmodified; it flips to <code>:</code> as soon as you save any changes in the
+work file.
+
+   <p>Here is what <kbd>C-x C-q</kbd> does when using CVS:
+
+     <ul>
+<li>If some other user has checked in changes into the master file, Emacs
+asks you whether you want to merge those changes into your own work
+file.  You must do this before you can check in your own changes.  (To
+pick up any recent changes from the master file <em>without</em> trying
+to commit your own changes, type <kbd>C-x v m &lt;RET&gt;</kbd>.) 
+See <a href="Merging.html#Merging">Merging</a>.
+
+     <li>If there are no new changes in the master file, but you have made
+modifications in your work file, <kbd>C-x C-q</kbd> checks in your changes. 
+In order to do this, it first reads the log entry for the new version. 
+See <a href="Log-Buffer.html#Log%20Buffer">Log Buffer</a>.
+
+     <li>If the file is not modified, the <kbd>C-x C-q</kbd> does nothing. 
+</ul>
+
+   <p>These rules also apply when you use RCS in the mode that does not
+require locking, except that automatic merging of changes from the
+master file is not implemented.  Unfortunately, this means that nothing
+informs you if another user has checked in changes in the same file
+since you began editing it, and when this happens, his changes will be
+effectively removed when you check in your version (though they will
+remain in the master file, so they will not be entirely lost).  You must
+therefore verify the current version is unchanged, before you check in your
+changes.  We hope to eliminate this risk and provide automatic merging
+with RCS in a future Emacs version.
+
+   <p>In addition, locking is possible with RCS even in this mode, although
+it is not required; <kbd>C-x C-q</kbd> with an unmodified file locks the
+file, just as it does with RCS in its normal (locking) mode.
+
+   </body></html>
+

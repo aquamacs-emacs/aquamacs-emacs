@@ -1,0 +1,93 @@
+<html lang="en">
+<head>
+<title>Multiple Rmail Files</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Multiple Rmail Files">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Rmail%20Files">Rmail Files</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Rmail-Output.html#Rmail%20Output">Rmail Output</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Rmail-Inbox.html#Rmail%20Inbox">Rmail Inbox</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Rmail.html#Rmail">Rmail</a>
+<hr><br>
+</div>
+
+<h3 class="section">Multiple Rmail Files</h3>
+
+<p>Rmail operates by default on your <dfn>primary Rmail file</dfn>, which is named
+<code>~/RMAIL</code> and receives your incoming mail from your system inbox file. 
+But you can also have other Rmail files and edit them with Rmail.  These
+files can receive mail through their own inboxes, or you can move messages
+into them with explicit Rmail commands (see <a href="Rmail-Output.html#Rmail%20Output">Rmail Output</a>).
+
+     <dl>
+<dt><kbd>i </kbd><var>file</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Read <var>file</var> into Emacs and run Rmail on it (<code>rmail-input</code>).
+
+     <br><dt><kbd>M-x set-rmail-inbox-list &lt;RET&gt; </kbd><var>files</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Specify inbox file names for current Rmail file to get mail from.
+
+     <br><dt><kbd>g</kbd>
+     <dd>Merge new mail from current Rmail file's inboxes
+(<code>rmail-get-new-mail</code>).
+
+     <br><dt><kbd>C-u g </kbd><var>file</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Merge new mail from inbox file <var>file</var>. 
+</dl>
+
+   <p>To run Rmail on a file other than your primary Rmail file, you may use
+the <kbd>i</kbd> (<code>rmail-input</code>) command in Rmail.  This visits the file
+in Rmail mode.  You can use <kbd>M-x rmail-input</kbd> even when not in
+Rmail.
+
+   <p>The file you read with <kbd>i</kbd> should normally be a valid Rmail file. 
+If it is not, Rmail tries to decompose it into a stream of messages in
+various known formats.  If it succeeds, it converts the whole file to an
+Rmail file.  If you specify a file name that doesn't exist, <kbd>i</kbd>
+initializes a new buffer for creating a new Rmail file.
+
+   <p>You can also select an Rmail file from a menu.  Choose first the menu
+bar Classify item, then from the Classify menu choose the Input Rmail
+File item; then choose the Rmail file you want.  The variables
+<code>rmail-secondary-file-directory</code> and
+<code>rmail-secondary-file-regexp</code> specify which files to offer in the
+menu: the first variable says which directory to find them in; the
+second says which files in that directory to offer (all those that match
+the regular expression).  These variables also apply to choosing a file
+for output (see <a href="Rmail-Output.html#Rmail%20Output">Rmail Output</a>).
+
+   <p>Each Rmail file can contain a list of inbox file names; you can specify
+this list with <kbd>M-x set-rmail-inbox-list &lt;RET&gt; </kbd><var>files</var><kbd>
+&lt;RET&gt;</kbd>.  The argument can contain any number of file names, separated
+by commas.  It can also be empty, which specifies that this file should
+have no inboxes.  Once a list of inboxes is specified, the Rmail file
+remembers it permanently until you specify a different list.
+
+   <p>As a special exception, if your primary Rmail file does not specify any
+inbox files, it uses your standard system inbox.
+
+   <p>The <kbd>g</kbd> command (<code>rmail-get-new-mail</code>) merges mail into the
+current Rmail file from its specified inboxes.  If the Rmail file
+has no inboxes, <kbd>g</kbd> does nothing.  The command <kbd>M-x rmail</kbd>
+also merges new mail into your primary Rmail file.
+
+   <p>To merge mail from a file that is not the usual inbox, give the
+<kbd>g</kbd> key a numeric argument, as in <kbd>C-u g</kbd>.  Then it reads a file
+name and merges mail from that file.  The inbox file is not deleted or
+changed in any way when <kbd>g</kbd> with an argument is used.  This is,
+therefore, a general way of merging one file of messages into another.
+
+   </body></html>
+

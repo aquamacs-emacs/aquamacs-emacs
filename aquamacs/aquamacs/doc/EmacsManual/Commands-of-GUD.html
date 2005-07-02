@@ -1,0 +1,127 @@
+<html lang="en">
+<head>
+<title>Commands of GUD</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Commands of GUD">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Commands%20of%20GUD">Commands of GUD</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="GUD-Customization.html#GUD%20Customization">GUD Customization</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Debugger-Operation.html#Debugger%20Operation">Debugger Operation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Debuggers.html#Debuggers">Debuggers</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Commands of GUD</h4>
+
+<p>The GUD interaction buffer uses a variant of Shell mode, so the
+commands of Shell mode are available (see <a href="Shell-Mode.html#Shell%20Mode">Shell Mode</a>).  GUD mode
+also provides commands for setting and clearing breakpoints, for
+selecting stack frames, and for stepping through the program.  These
+commands are available both in the GUD buffer and globally, but with
+different key bindings.
+
+   <p>The breakpoint commands are normally used in source file buffers,
+because that is the easiest way to specify where to set or clear the
+breakpoint.  Here's the global command to set a breakpoint:
+
+     <dl>
+<dt><kbd>C-x &lt;SPC&gt;</kbd>
+     <dd>Set a breakpoint on the source line that point is on. 
+</dl>
+
+   <p>Here are the other special commands provided by GUD.  The keys
+starting with <kbd>C-c</kbd> are available only in the GUD interaction
+buffer.  The key bindings that start with <kbd>C-x C-a</kbd> are available in
+the GUD interaction buffer and also in source files.
+
+     <dl>
+<dt><kbd>C-c C-l</kbd>
+     <dd><dt><kbd>C-x C-a C-l</kbd>
+     <dd>Display in another window the last line referred to in the GUD
+buffer (that is, the line indicated in the last location message). 
+This runs the command <code>gud-refresh</code>.
+
+     <br><dt><kbd>C-c C-s</kbd>
+     <dd><dt><kbd>C-x C-a C-s</kbd>
+     <dd>Execute a single line of code (<code>gud-step</code>).  If the line contains
+a function call, execution stops after entering the called function.
+
+     <br><dt><kbd>C-c C-n</kbd>
+     <dd><dt><kbd>C-x C-a C-n</kbd>
+     <dd>Execute a single line of code, stepping across entire function calls
+at full speed (<code>gud-next</code>).
+
+     <br><dt><kbd>C-c C-i</kbd>
+     <dd><dt><kbd>C-x C-a C-i</kbd>
+     <dd>Execute a single machine instruction (<code>gud-stepi</code>).
+
+     <br><dt><kbd>C-c C-r</kbd>
+     <dd><dt><kbd>C-x C-a C-r</kbd>
+     <dd>Continue execution without specifying any stopping point.  The program
+will run until it hits a breakpoint, terminates, or gets a signal that
+the debugger is checking for (<code>gud-cont</code>).
+
+     <br><dt><kbd>C-c C-d</kbd>
+     <dd><dt><kbd>C-x C-a C-d</kbd>
+     <dd>Delete the breakpoint(s) on the current source line, if any
+(<code>gud-remove</code>).  If you use this command in the GUD interaction
+buffer, it applies to the line where the program last stopped.
+
+     <br><dt><kbd>C-c C-t</kbd>
+     <dd><dt><kbd>C-x C-a C-t</kbd>
+     <dd>Set a temporary breakpoint on the current source line, if any. 
+If you use this command in the GUD interaction buffer,
+it applies to the line where the program last stopped. 
+</dl>
+
+   <p>The above commands are common to all supported debuggers.  If you are
+using GDB or (some versions of) DBX, these additional commands are available:
+
+     <dl>
+<dt><kbd>C-c &lt;</kbd>
+     <dd><dt><kbd>C-x C-a &lt;</kbd>
+     <dd>Select the next enclosing stack frame (<code>gud-up</code>).  This is
+equivalent to the <code>up</code> command.
+
+     <br><dt><kbd>C-c &gt;</kbd>
+     <dd><dt><kbd>C-x C-a &gt;</kbd>
+     <dd>Select the next inner stack frame (<code>gud-down</code>).  This is
+equivalent to the <code>down</code> command. 
+</dl>
+
+   <p>If you are using GDB, these additional key bindings are available:
+
+     <dl>
+<dt><kbd>&lt;TAB&gt;</kbd>
+     <dd>With GDB, complete a symbol name (<code>gud-gdb-complete-command</code>). 
+This key is available only in the GUD interaction buffer, and requires
+GDB versions 4.13 and later.
+
+     <br><dt><kbd>C-c C-f</kbd>
+     <dd><dt><kbd>C-x C-a C-f</kbd>
+     <dd>Run the program until the selected stack frame returns (or until it
+stops for some other reason). 
+</dl>
+
+   <p>These commands interpret a numeric argument as a repeat count, when
+that makes sense.
+
+   <p>Because &lt;TAB&gt; serves as a completion command, you can't use it to
+enter a tab as input to the program you are debugging with GDB. 
+Instead, type <kbd>C-q &lt;TAB&gt;</kbd> to enter a tab.
+
+   </body></html>
+

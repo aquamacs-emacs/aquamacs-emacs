@@ -1,0 +1,53 @@
+<html lang="en">
+<head>
+<title>Regexp Replacement</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Regexp Replacement">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Regexp%20Replace">Regexp Replace</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Replacement-and-Case.html#Replacement%20and%20Case">Replacement and Case</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Unconditional-Replace.html#Unconditional%20Replace">Unconditional Replace</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Replace.html#Replace">Replace</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Regexp Replacement</h4>
+
+<p>The <kbd>M-x replace-string</kbd> command replaces exact matches for a
+single string.  The similar command <kbd>M-x replace-regexp</kbd> replaces
+any match for a specified pattern.
+
+   <p>In <code>replace-regexp</code>, the <var>newstring</var> need not be constant: it
+can refer to all or part of what is matched by the <var>regexp</var>. 
+<code>\&amp;</code> in <var>newstring</var> stands for the entire match being replaced. 
+<code>\</code><var>d</var><code></code> in <var>newstring</var>, where <var>d</var> is a digit, stands for
+whatever matched the <var>d</var>th parenthesized grouping in <var>regexp</var>. 
+To include a <code>\</code> in the text to replace with, you must enter
+<code>\\</code>.  For example,
+
+<pre class="example">     M-x replace-regexp &lt;RET&gt; c[ad]+r &lt;RET&gt; \&amp;-safe &lt;RET&gt;
+     </pre>
+
+<p>replaces (for example) <code>cadr</code> with <code>cadr-safe</code> and <code>cddr</code>
+with <code>cddr-safe</code>.
+
+<pre class="example">     M-x replace-regexp &lt;RET&gt; \(c[ad]+r\)-safe &lt;RET&gt; \1 &lt;RET&gt;
+     </pre>
+
+<p>performs the inverse transformation.
+
+   </body></html>
+

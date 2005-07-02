@@ -1,0 +1,58 @@
+<html lang="en">
+<head>
+<title>Shell History References</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Shell History References">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="History%20References">History References</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Shell-History-Copying.html#Shell%20History%20Copying">Shell History Copying</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Shell-History.html#Shell%20History">Shell History</a>
+<hr><br>
+</div>
+
+<h3 class="subsubsection">Shell History References</h5>
+
+<p>Various shells including csh and bash support <dfn>history
+references</dfn> that begin with <code>!</code> and <code>^</code>.  Shell mode
+recognizes these constructs, and can perform the history substitution
+for you.
+
+   <p>If you insert a history reference and type &lt;TAB&gt;, this searches
+the input history for a matching command, performs substitution if
+necessary, and places the result in the buffer in place of the history
+reference.  For example, you can fetch the most recent command
+beginning with <code>mv</code> with <kbd>! m v &lt;TAB&gt;</kbd>.  You can edit the
+command if you wish, and then resubmit the command to the shell by
+typing &lt;RET&gt;.
+
+   <p>Shell mode can optionally expand history references in the buffer
+when you send them to the shell.  To request this, set the variable
+<code>comint-input-autoexpand</code> to <code>input</code>.  You can make
+&lt;SPC&gt; perform history expansion by binding &lt;SPC&gt; to the
+command <code>comint-magic-space</code>.
+
+   <p>Shell mode recognizes history references when they follow a prompt. 
+Normally, any text output by a program at the beginning of an input
+line is considered a prompt.  However, if the variable
+<code>comint-use-prompt-regexp-instead-of-fields</code> is non-<code>nil</code>,
+then Comint mode uses a regular expression to recognize prompts.  In
+general, the variable <code>comint-prompt-regexp</code> specifies the
+regular expression; Shell mode uses the variable
+<code>shell-prompt-pattern</code> to set up <code>comint-prompt-regexp</code> in
+the shell buffer.
+
+   </body></html>
+

@@ -1,0 +1,70 @@
+<html lang="en">
+<head>
+<title>Recovering Data from Auto-Saves</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Recovering Data from Auto-Saves">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Recover">Recover</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Auto-Save-Control.html#Auto%20Save%20Control">Auto Save Control</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Auto-Save.html#Auto%20Save">Auto Save</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Recovering Data from Auto-Saves</h4>
+
+<p>You can use the contents of an auto-save file to recover from a loss
+of data with the command <kbd>M-x recover-file &lt;RET&gt; </kbd><var>file</var><kbd>
+&lt;RET&gt;</kbd>.  This visits <var>file</var> and then (after your confirmation)
+restores the contents from its auto-save file <code>#</code><var>file</var><code>#</code>. 
+You can then save with <kbd>C-x C-s</kbd> to put the recovered text into
+<var>file</var> itself.  For example, to recover file <code>foo.c</code> from its
+auto-save file <code>#foo.c#</code>, do:
+
+<pre class="example">     M-x recover-file &lt;RET&gt; foo.c &lt;RET&gt;
+     yes &lt;RET&gt;
+     C-x C-s
+     </pre>
+
+   <p>Before asking for confirmation, <kbd>M-x recover-file</kbd> displays a
+directory listing describing the specified file and the auto-save file,
+so you can compare their sizes and dates.  If the auto-save file
+is older, <kbd>M-x recover-file</kbd> does not offer to read it.
+
+   <p>If Emacs or the computer crashes, you can recover all the files you
+were editing from their auto save files with the command <kbd>M-x
+recover-session</kbd>.  This first shows you a list of recorded interrupted
+sessions.  Move point to the one you choose, and type <kbd>C-c C-c</kbd>.
+
+   <p>Then <code>recover-session</code> asks about each of the files that were
+being edited during that session, asking whether to recover that file. 
+If you answer <kbd>y</kbd>, it calls <code>recover-file</code>, which works in its
+normal fashion.  It shows the dates of the original file and its
+auto-save file, and asks once again whether to recover that file.
+
+   <p>When <code>recover-session</code> is done, the files you've chosen to
+recover are present in Emacs buffers.  You should then save them.  Only
+this--saving them--updates the files themselves.
+
+   <p>Emacs records interrupted sessions for later recovery in files named
+<code>~/.emacs.d/auto-save-list/.saves-</code><var>pid</var><code>-</code><var>hostname</var><code></code>.  The
+<code>~/.emacs.d/auto-save-list/.saves-</code> portion of these names comes
+from the value of <code>auto-save-list-file-prefix</code>.  You can record
+sessions in a different place by customizing that variable.  If you
+set <code>auto-save-list-file-prefix</code> to <code>nil</code> in your
+<code>.emacs</code> file, sessions are not recorded for recovery.
+
+   </body></html>
+

@@ -1,0 +1,62 @@
+<html lang="en">
+<head>
+<title>Controlling Auto-Saving</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Controlling Auto-Saving">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Auto%20Save%20Control">Auto Save Control</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Recover.html#Recover">Recover</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Auto-Save-Files.html#Auto%20Save%20Files">Auto Save Files</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Auto-Save.html#Auto%20Save">Auto Save</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Controlling Auto-Saving</h4>
+
+<p>Each time you visit a file, auto-saving is turned on for that file's
+buffer if the variable <code>auto-save-default</code> is non-<code>nil</code> (but not
+in batch mode; see <a href="Entering-Emacs.html#Entering%20Emacs">Entering Emacs</a>).  The default for this variable is
+<code>t</code>, so auto-saving is the usual practice for file-visiting buffers. 
+Auto-saving can be turned on or off for any existing buffer with the
+command <kbd>M-x auto-save-mode</kbd>.  Like other minor mode commands, <kbd>M-x
+auto-save-mode</kbd> turns auto-saving on with a positive argument, off with a
+zero or negative argument; with no argument, it toggles.
+
+   <p>Emacs does auto-saving periodically based on counting how many characters
+you have typed since the last time auto-saving was done.  The variable
+<code>auto-save-interval</code> specifies how many characters there are between
+auto-saves.  By default, it is 300.
+
+   <p>Auto-saving also takes place when you stop typing for a while.  The
+variable <code>auto-save-timeout</code> says how many seconds Emacs should
+wait before it does an auto save (and perhaps also a garbage
+collection).  (The actual time period is longer if the current buffer is
+long; this is a heuristic which aims to keep out of your way when you
+are editing long buffers, in which auto-save takes an appreciable amount
+of time.)  Auto-saving during idle periods accomplishes two things:
+first, it makes sure all your work is saved if you go away from the
+terminal for a while; second, it may avoid some auto-saving while you
+are actually typing.
+
+   <p>Emacs also does auto-saving whenever it gets a fatal error.  This
+includes killing the Emacs job with a shell command such as <code>kill
+%emacs</code>, or disconnecting a phone line or network connection.
+
+   <p>You can request an auto-save explicitly with the command <kbd>M-x
+do-auto-save</kbd>.
+
+   </body></html>
+

@@ -1,0 +1,55 @@
+<html lang="en">
+<head>
+<title>Quoted File Names</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Quoted File Names">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Quoted%20File%20Names">Quoted File Names</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="File-Name-Cache.html#File%20Name%20Cache">File Name Cache</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Remote-Files.html#Remote%20Files">Remote Files</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
+<hr><br>
+</div>
+
+<h3 class="section">Quoted File Names</h3>
+
+<p>You can <dfn>quote</dfn> an absolute file name to prevent special
+characters and syntax in it from having their special effects. 
+The way to do this is to add <code>/:</code> at the beginning.
+
+   <p>For example, you can quote a local file name which appears remote, to
+prevent it from being treated as a remote file name.  Thus, if you have
+a directory named <code>/foo:</code> and a file named <code>bar</code> in it, you
+can refer to that file in Emacs as <code>/:/foo:/bar</code>.
+
+   <p><code>/:</code> can also prevent <code>~</code> from being treated as a special
+character for a user's home directory.  For example, <code>/:/tmp/~hack</code>
+refers to a file whose name is <code>~hack</code> in directory <code>/tmp</code>.
+
+   <p>Likewise, quoting with <code>/:</code> is one way to enter in the minibuffer
+a file name that contains <code>$</code>.  However, the <code>/:</code> must be at
+the beginning of the minibuffer in order to quote <code>$</code>.
+
+   <p>You can also quote wildcard characters with <code>/:</code>, for visiting. 
+For example, <code>/:/tmp/foo*bar</code> visits the file <code>/tmp/foo*bar</code>. 
+However, in most cases you can simply type the wildcard characters for
+themselves.  For example, if the only file name in <code>/tmp</code> that
+starts with <code>foo</code> and ends with <code>bar</code> is <code>foo*bar</code>, then
+specifying <code>/tmp/foo*bar</code> will visit just <code>/tmp/foo*bar</code>. 
+Another way is to specify <code>/tmp/foo[*]bar</code>.
+
+   </body></html>
+

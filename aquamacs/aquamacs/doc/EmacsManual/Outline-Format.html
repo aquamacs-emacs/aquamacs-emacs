@@ -1,0 +1,84 @@
+<html lang="en">
+<head>
+<title>Format of Outlines</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Format of Outlines">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Outline%20Format">Outline Format</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Outline-Motion.html#Outline%20Motion">Outline Motion</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Outline-Mode.html#Outline%20Mode">Outline Mode</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Format of Outlines</h4>
+
+<p>Outline mode assumes that the lines in the buffer are of two types:
+<dfn>heading lines</dfn> and <dfn>body lines</dfn>.  A heading line represents a
+topic in the outline.  Heading lines start with one or more stars; the
+number of stars determines the depth of the heading in the outline
+structure.  Thus, a heading line with one star is a major topic; all the
+heading lines with two stars between it and the next one-star heading
+are its subtopics; and so on.  Any line that is not a heading line is a
+body line.  Body lines belong with the preceding heading line.  Here is
+an example:
+
+<pre class="example">     * Food
+     This is the body,
+     which says something about the topic of food.
+     
+     ** Delicious Food
+     This is the body of the second-level header.
+     
+     ** Distasteful Food
+     This could have
+     a body too, with
+     several lines.
+     
+     *** Dormitory Food
+     
+     * Shelter
+     Another first-level topic with its header line.
+     </pre>
+
+   <p>A heading line together with all following body lines is called
+collectively an <dfn>entry</dfn>.  A heading line together with all following
+deeper heading lines and their body lines is called a <dfn>subtree</dfn>.
+
+   <p>You can customize the criterion for distinguishing heading lines
+by setting the variable <code>outline-regexp</code>.  Any line whose
+beginning has a match for this regexp is considered a heading line. 
+Matches that start within a line (not at the left margin) do not count. 
+The length of the matching text determines the level of the heading;
+longer matches make a more deeply nested level.  Thus, for example,
+if a text formatter has commands <code>@chapter</code>, <code>@section</code>
+and <code>@subsection</code> to divide the document into chapters and
+sections, you could make those lines count as heading lines by
+setting <code>outline-regexp</code> to <code>"@chap\\|@\\(sub\\)*section"</code>. 
+Note the trick: the two words <code>chapter</code> and <code>section</code> are equally
+long, but by defining the regexp to match only <code>chap</code> we ensure
+that the length of the text matched on a chapter heading is shorter,
+so that Outline mode will know that sections are contained in chapters. 
+This works as long as no other command starts with <code>@chap</code>.
+
+   <p>You can change the rule for calculating the level of a heading line
+by setting the variable <code>outline-level</code>.  The value of
+<code>outline-level</code> should be a function that takes no arguments and
+returns the level of the current heading.  Some major modes such as C,
+Nroff, and Emacs Lisp mode set this variable and <code>outline-regexp</code>
+in order to work with Outline minor mode.
+
+   </body></html>
+

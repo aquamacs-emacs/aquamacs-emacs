@@ -1,0 +1,63 @@
+<html lang="en">
+<head>
+<title>Summing Time Intervals</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Summing Time Intervals">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Time%20Intervals">Time Intervals</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Daylight-Savings.html#Daylight%20Savings">Daylight Savings</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Calendar-Diary.html#Calendar%2fDiary">Calendar/Diary</a>
+<hr><br>
+</div>
+
+<h3 class="section">Summing Time Intervals</h3>
+
+<p>The timeclock feature adds up time intervals, so you can (for
+instance) keep track of how much time you spend working.
+
+   <p>Use the <kbd>M-x timeclock-in</kbd> command when you start working on a
+project, and <kbd>M-x timeclock-out</kbd> command when you're done.  Each
+time you do this, it adds one time interval to the record of the project.
+
+   <p>Once you've collected data from a number of time intervals, you can use
+<kbd>M-x timeclock-workday-remaining</kbd> to see how much time is left to
+work today (assuming a typical average of 8 hours a day), and <kbd>M-x
+timeclock-when-to-leave</kbd> which will calculate when you're "done."
+
+   <p>If you want Emacs to display the amount of time "left" of your
+workday in the mode line, either customize the
+<code>timeclock-modeline-display</code> variable and set its value to
+<code>t</code>, or invoke the <kbd>M-x timeclock-modeline-display</kbd> command.
+
+   <p>Terminating the current Emacs session might or might not mean that
+you have stopped working on the project.  If you'd like Emacs to ask
+you about this, set the value of the variable
+<code>timeclock-ask-before-exiting</code> to <code>t</code> (via <kbd>M-x
+customize</kbd>).  By default, only an explicit <kbd>M-x timeclock-out</kbd>
+tells Emacs that the current interval is over.
+
+   <p>The timeclock functions work by accumulating the data in a file
+called <code>.timelog</code> in your home directory.  (On MS-DOS, this file
+is called <code>_timelog</code>, since an initial period is not allowed in
+file names on MS-DOS.)  You can specify a different name for this file
+by customizing the variable <code>timeclock-file</code>.  If you edit the
+timeclock file manually, or if you change the value of any of
+timeclock's customizable variables, you should run the command
+<kbd>M-x timeclock-reread-log</kbd> to update the data in Emacs from the
+file.
+
+   </body></html>
+

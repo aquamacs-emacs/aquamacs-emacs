@@ -1,0 +1,96 @@
+<html lang="en">
+<head>
+<title>Two-Column Editing</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Two-Column Editing">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Two-Column">Two-Column</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Editing-Binary-Files.html#Editing%20Binary%20Files">Editing Binary Files</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Narrowing.html#Narrowing">Narrowing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr><br>
+</div>
+
+<h3 class="section">Two-Column Editing</h3>
+
+<p>Two-column mode lets you conveniently edit two side-by-side columns of
+text.  It uses two side-by-side windows, each showing its own
+buffer.
+
+   <p>There are three ways to enter two-column mode:
+
+     <dl>
+<dt><kbd>&lt;F2&gt; 2</kbd> or <kbd>C-x 6 2</kbd>
+     <dd>Enter two-column mode with the current buffer on the left, and on the
+right, a buffer whose name is based on the current buffer's name
+(<code>2C-two-columns</code>).  If the right-hand buffer doesn't already
+exist, it starts out empty; the current buffer's contents are not
+changed.
+
+     <p>This command is appropriate when the current buffer is empty or contains
+just one column and you want to add another column.
+
+     <br><dt><kbd>&lt;F2&gt; s</kbd> or <kbd>C-x 6 s</kbd>
+     <dd>Split the current buffer, which contains two-column text, into two
+buffers, and display them side by side (<code>2C-split</code>).  The current
+buffer becomes the left-hand buffer, but the text in the right-hand
+column is moved into the right-hand buffer.  The current column
+specifies the split point.  Splitting starts with the current line and
+continues to the end of the buffer.
+
+     <p>This command is appropriate when you have a buffer that already contains
+two-column text, and you wish to separate the columns temporarily.
+
+     <br><dt><kbd>&lt;F2&gt; b </kbd><var>buffer</var><kbd> &lt;RET&gt;</kbd>
+     <dd><dt><kbd>C-x 6 b </kbd><var>buffer</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Enter two-column mode using the current buffer as the left-hand buffer,
+and using buffer <var>buffer</var> as the right-hand buffer
+(<code>2C-associate-buffer</code>). 
+</dl>
+
+   <p><kbd>&lt;F2&gt; s</kbd> or <kbd>C-x 6 s</kbd> looks for a column separator, which
+is a string that appears on each line between the two columns.  You can
+specify the width of the separator with a numeric argument to
+<kbd>&lt;F2&gt; s</kbd>; that many characters, before point, constitute the
+separator string.  By default, the width is 1, so the column separator
+is the character before point.
+
+   <p>When a line has the separator at the proper place, <kbd>&lt;F2&gt; s</kbd>
+puts the text after the separator into the right-hand buffer, and
+deletes the separator.  Lines that don't have the column separator at
+the proper place remain unsplit; they stay in the left-hand buffer, and
+the right-hand buffer gets an empty line to correspond.  (This is the
+way to write a line that "spans both columns while in two-column
+mode": write it in the left-hand buffer, and put an empty line in the
+right-hand buffer.)
+
+   <p>The command <kbd>C-x 6 &lt;RET&gt;</kbd> or <kbd>&lt;F2&gt; &lt;RET&gt;</kbd>
+(<code>2C-newline</code>) inserts a newline in each of the two buffers at
+corresponding positions.  This is the easiest way to add a new line to
+the two-column text while editing it in split buffers.
+
+   <p>When you have edited both buffers as you wish, merge them with
+<kbd>&lt;F2&gt; 1</kbd> or <kbd>C-x 6 1</kbd> (<code>2C-merge</code>).  This copies the
+text from the right-hand buffer as a second column in the other buffer. 
+To go back to two-column editing, use <kbd>&lt;F2&gt; s</kbd>.
+
+   <p>Use <kbd>&lt;F2&gt; d</kbd> or <kbd>C-x 6 d</kbd> to dissociate the two buffers,
+leaving each as it stands (<code>2C-dissociate</code>).  If the other buffer,
+the one not current when you type <kbd>&lt;F2&gt; d</kbd>, is empty,
+<kbd>&lt;F2&gt; d</kbd> kills it.
+
+   </body></html>
+

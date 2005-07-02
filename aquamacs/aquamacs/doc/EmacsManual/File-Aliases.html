@@ -1,0 +1,59 @@
+<html lang="en">
+<head>
+<title>File Name Aliases</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="File Name Aliases">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="File%20Aliases">File Aliases</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Version-Control.html#Version%20Control">Version Control</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Auto-Save.html#Auto%20Save">Auto Save</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
+<hr><br>
+</div>
+
+<h3 class="section">File Name Aliases</h3>
+
+<p>Symbolic links and hard links both make it possible for several file
+names to refer to the same file.  Hard links are alternate names that
+refer directly to the file; all the names are equally valid, and no one
+of them is preferred.  By contrast, a symbolic link is a kind of defined
+alias: when <code>foo</code> is a symbolic link to <code>bar</code>, you can use
+either name to refer to the file, but <code>bar</code> is the real name, while
+<code>foo</code> is just an alias.  More complex cases occur when symbolic
+links point to directories.
+
+   <p>If you visit two names for the same file, normally Emacs makes
+two different buffers, but it warns you about the situation.
+
+   <p>Normally, if you visit a file which Emacs is already visiting under
+a different name, Emacs displays a message in the echo area and uses
+the existing buffer visiting that file.  This can happen on systems
+that support symbolic links, or if you use a long file name on a
+system that truncates long file names.  You can suppress the message by
+setting the variable <code>find-file-suppress-same-file-warnings</code> to a
+non-<code>nil</code> value.  You can disable this feature entirely by setting
+the variable <code>find-file-existing-other-name</code> to <code>nil</code>: then
+if you visit the same file under two different names, you get a separate
+buffer for each file name.
+
+   <p>If the variable <code>find-file-visit-truename</code> is non-<code>nil</code>,
+then the file name recorded for a buffer is the file's <dfn>truename</dfn>
+(made by replacing all symbolic links with their target names), rather
+than the name you specify.  Setting <code>find-file-visit-truename</code> also
+implies the effect of <code>find-file-existing-other-name</code>.
+
+   </body></html>
+

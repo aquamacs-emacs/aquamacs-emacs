@@ -1,0 +1,73 @@
+<html lang="en">
+<head>
+<title>The Init File, ~/.emacs</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Init File, ~/.emacs">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Init%20File">Init File</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Syntax.html#Syntax">Syntax</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customization.html#Customization">Customization</a>
+<hr><br>
+</div>
+
+<h3 class="section">The Init File, <code>~/.emacs</code></h3>
+
+<p>When Emacs is started, it normally loads a Lisp program from the file
+<code>.emacs</code> or <code>.emacs.el</code> in your home directory.  We call this
+file your <dfn>init file</dfn> because it specifies how to initialize Emacs
+for you.  You can use the command line switch <code>-q</code> to prevent
+loading your init file, and <code>-u</code> (or <code>--user</code>) to specify a
+different user's init file (see <a href="Entering-Emacs.html#Entering%20Emacs">Entering Emacs</a>).
+
+   <p>There can also be a <dfn>default init file</dfn>, which is the library
+named <code>default.el</code>, found via the standard search path for
+libraries.  The Emacs distribution contains no such library; your site
+may create one for local customizations.  If this library exists, it is
+loaded whenever you start Emacs (except when you specify <code>-q</code>). 
+But your init file, if any, is loaded first; if it sets
+<code>inhibit-default-init</code> non-<code>nil</code>, then <code>default</code> is not
+loaded.
+
+   <p>Your site may also have a <dfn>site startup file</dfn>; this is named
+<code>site-start.el</code>, if it exists.  Like <code>default.el</code>, Emacs
+finds this file via the standard search path for Lisp libraries. 
+Emacs loads this library before it loads your init file.  To inhibit
+loading of this library, use the option <code>-no-site-file</code>. 
+See <a href="Initial-Options.html#Initial%20Options">Initial Options</a>.
+
+   <p>You can place <code>default.el</code> and <code>site-start.el</code> in any of
+the directories which Emacs searches for Lisp libraries.  The variable
+<code>load-path</code> (see <a href="Lisp-Libraries.html#Lisp%20Libraries">Lisp Libraries</a>) specifies these directories. 
+Many sites put these files in the <code>site-lisp</code> subdirectory of the
+Emacs installation directory, typically
+<code>/usr/local/share/emacs/site-lisp</code>.
+
+   <p>If you have a large amount of code in your <code>.emacs</code> file, you
+should rename it to <code>~/.emacs.el</code>, and byte-compile it.  See <a href="../elisp/Byte-Compilation.html#Byte%20Compilation">Byte Compilation</a>,
+for more information about compiling Emacs Lisp programs.
+
+   <p>If you are going to write actual Emacs Lisp programs that go beyond
+minor customization, you should read the <cite>Emacs Lisp Reference Manual</cite>.
+
+<ul class="menu">
+<li><a accesskey="1" href="Init-Syntax.html#Init%20Syntax">Init Syntax</a>: 	        Syntax of constants in Emacs Lisp. 
+<li><a accesskey="2" href="Init-Examples.html#Init%20Examples">Init Examples</a>:        How to do some things with an init file. 
+<li><a accesskey="3" href="Terminal-Init.html#Terminal%20Init">Terminal Init</a>:        Each terminal type can have an init file. 
+<li><a accesskey="4" href="Find-Init.html#Find%20Init">Find Init</a>: 	        How Emacs finds the init file. 
+</ul>
+
+   </body></html>
+

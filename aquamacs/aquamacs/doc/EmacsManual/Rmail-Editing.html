@@ -1,0 +1,58 @@
+<html lang="en">
+<head>
+<title>Editing Within a Message</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Editing Within a Message">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Rmail%20Editing">Rmail Editing</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Rmail-Digest.html#Rmail%20Digest">Rmail Digest</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Rmail-Coding.html#Rmail%20Coding">Rmail Coding</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Rmail.html#Rmail">Rmail</a>
+<hr><br>
+</div>
+
+<h3 class="section">Editing Within a Message</h3>
+
+<p>Most of the usual Emacs commands are available in Rmail mode, though a
+few, such as <kbd>C-M-n</kbd> and <kbd>C-M-h</kbd>, are redefined by Rmail for
+other purposes.  However, the Rmail buffer is normally read only, and
+most of the letters are redefined as Rmail commands.  If you want to
+edit the text of a message, you must use the Rmail command <kbd>e</kbd>.
+
+     <dl>
+<dt><kbd>e</kbd>
+     <dd>Edit the current message as ordinary text. 
+</dl>
+
+   <p>The <kbd>e</kbd> command (<code>rmail-edit-current-message</code>) switches from
+Rmail mode into Rmail Edit mode, another major mode which is nearly the
+same as Text mode.  The mode line indicates this change.
+
+   <p>In Rmail Edit mode, letters insert themselves as usual and the Rmail
+commands are not available.  When you are finished editing the message and
+are ready to go back to Rmail, type <kbd>C-c C-c</kbd>, which switches back to
+Rmail mode.  Alternatively, you can return to Rmail mode but cancel all the
+editing that you have done, by typing <kbd>C-c C-]</kbd>.
+
+   <p>Entering Rmail Edit mode runs the hook <code>text-mode-hook</code>; then it
+runs the hook <code>rmail-edit-mode-hook</code> (see <a href="Hooks.html#Hooks">Hooks</a>).  It adds the
+attribute <code>edited</code> to the message.  It also displays the full
+headers of the message, so that you can edit the headers as well as the
+body of the message, and your changes in the headers will be
+permanent.
+
+   </body></html>
+

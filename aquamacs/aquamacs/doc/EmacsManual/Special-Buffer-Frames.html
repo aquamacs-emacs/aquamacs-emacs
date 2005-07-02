@@ -1,0 +1,82 @@
+<html lang="en">
+<head>
+<title>Special Buffer Frames</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Special Buffer Frames">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Special%20Buffer%20Frames">Special Buffer Frames</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Frame-Parameters.html#Frame%20Parameters">Frame Parameters</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Multiple-Displays.html#Multiple%20Displays">Multiple Displays</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
+<hr><br>
+</div>
+
+<h3 class="section">Special Buffer Frames</h3>
+
+<p>You can make certain chosen buffers, for which Emacs normally creates
+a second window when you have just one window, appear in special frames
+of their own.  To do this, set the variable
+<code>special-display-buffer-names</code> to a list of buffer names; any
+buffer whose name is in that list automatically gets a special frame,
+when an Emacs command wants to display it "in another window."
+
+   <p>For example, if you set the variable this way,
+
+<pre class="example">     (setq special-display-buffer-names
+           '("*Completions*" "*grep*" "*tex-shell*"))
+     </pre>
+
+<p>then completion lists, <code>grep</code> output and the TeX mode shell
+buffer get individual frames of their own.  These frames, and the
+windows in them, are never automatically split or reused for any other
+buffers.  They continue to show the buffers they were created for,
+unless you alter them by hand.  Killing the special buffer deletes its
+frame automatically.
+
+   <p>More generally, you can set <code>special-display-regexps</code> to a list
+of regular expressions; then a buffer gets its own frame if its name
+matches any of those regular expressions.  (Once again, this applies only
+to buffers that normally get displayed for you in a separate window.)
+
+   <p>The variable <code>special-display-frame-alist</code> specifies the frame
+parameters for these frames.  It has a default value, so you don't need
+to set it.
+
+   <p>For those who know Lisp, an element of
+<code>special-display-buffer-names</code> or <code>special-display-regexps</code>
+can also be a list.  Then the first element is the buffer name or
+regular expression; the rest of the list specifies how to create the
+frame.  It can be an association list specifying frame parameter values;
+these values take precedence over parameter values specified in
+<code>special-display-frame-alist</code>.  Alternatively, it can have this
+form:
+
+<pre class="example">     (<var>function</var> <var>args</var>...)
+     </pre>
+
+<p>where <var>function</var> is a symbol.  Then the frame is constructed by
+calling <var>function</var>; its first argument is the buffer, and its
+remaining arguments are <var>args</var>.
+
+   <p>An analogous feature lets you specify buffers which should be
+displayed in the selected window.  See <a href="Force-Same-Window.html#Force%20Same%20Window">Force Same Window</a>.  The
+same-window feature takes precedence over the special-frame feature;
+therefore, if you add a buffer name to
+<code>special-display-buffer-names</code> and it has no effect, check to see
+whether that feature is also in use for the same buffer name.
+
+   </body></html>
+

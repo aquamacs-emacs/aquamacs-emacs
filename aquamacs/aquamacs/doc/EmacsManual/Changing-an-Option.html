@@ -1,0 +1,203 @@
+<html lang="en">
+<head>
+<title>Changing an Option</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Changing an Option">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Changing%20an%20Option">Changing an Option</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Face-Customization.html#Face%20Customization">Face Customization</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Customization-Groups.html#Customization%20Groups">Customization Groups</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Easy-Customization.html#Easy%20Customization">Easy Customization</a>
+<hr><br>
+</div>
+
+<h3 class="subsubsection">Changing an Option</h5>
+
+<p>Here is an example of what a user option looks like in the
+customization buffer:
+
+<pre class="smallexample">     Kill Ring Max: [Hide] 60
+        [State]: this option is unchanged from its standard setting.
+     Maximum length of kill ring before oldest elements are thrown away.
+     </pre>
+
+   <p>The text following <code>[Hide]</code>, <code>60</code> in this case, indicates
+the current value of the option.  If you see <code>[Show]</code> instead of
+<code>[Hide]</code>, it means that the value is hidden; the customization
+buffer initially hides values that take up several lines.  Invoke
+<code>[Show]</code> to show the value.
+
+   <p>The line after the option name indicates the <dfn>customization state</dfn>
+of the option: in the example above, it says you have not changed the
+option yet.  The word <code>[State]</code> at the beginning of this line is
+active; you can get a menu of various operations by invoking it with
+<kbd>Mouse-1</kbd> or &lt;RET&gt;.  These operations are essential for
+customizing the variable.
+
+   <p>The line after the <code>[State]</code> line displays the beginning of the
+option's documentation string.  If there are more lines of
+documentation, this line ends with <code>[More]</code>; invoke this to show
+the full documentation string.
+
+   <p>To enter a new value for <code>Kill Ring Max</code>, move point to the value
+and edit it textually.  For example, you can type <kbd>M-d</kbd>, then insert
+another number.
+
+   <p>When you begin to alter the text, you will see the <code>[State]</code> line
+change to say that you have edited the value:
+
+<pre class="smallexample">     [State]: you have edited the value as text, but not set the option.
+     </pre>
+
+   <p>Editing the value does not actually set the option variable.  To do
+that, you must <dfn>set</dfn> the option.  To do this, invoke the word
+<code>[State]</code> and choose <code>Set for Current Session</code>.
+
+   <p>The state of the option changes visibly when you set it:
+
+<pre class="smallexample">     [State]: you have set this option, but not saved it for future sessions.
+     </pre>
+
+   <p>You don't have to worry about specifying a value that is not valid;
+setting the option checks for validity and will not really install an
+unacceptable value.
+
+   <p>While editing a value or field that is a file name, directory name,
+command name, or anything else for which completion is defined, you can
+type <kbd>M-&lt;TAB&gt;</kbd> (<code>widget-complete</code>) to do completion.
+
+   <p>Some options have a small fixed set of possible legitimate values. 
+These options don't let you edit the value textually.  Instead, an
+active field <code>[Value Menu]</code> appears before the value; invoke this
+field to edit the value.  For a boolean "on or off" value, the active
+field says <code>[Toggle]</code>, and it changes to the other value. 
+<code>[Value Menu]</code> and <code>[Toggle]</code> edit the buffer; the changes
+take effect when you use the <code>Set for Current Session</code> operation.
+
+   <p>Some options have values with complex structure.  For example, the
+value of <code>file-coding-system-alist</code> is an association list.  Here
+is how it appears in the customization buffer:
+
+<pre class="smallexample">     File Coding System Alist: [Hide]
+     [INS] [DEL] File regexp: \.elc\'
+                 Choice: [Value Menu] Encoding/decoding pair:
+                 Decoding: emacs-mule
+                 Encoding: emacs-mule
+     [INS] [DEL] File regexp: \(\`\|/\)loaddefs.el\'
+                 Choice: [Value Menu] Encoding/decoding pair:
+                 Decoding: raw-text
+                 Encoding: raw-text-unix
+     [INS] [DEL] File regexp: \.tar\'
+                 Choice: [Value Menu] Encoding/decoding pair:
+                 Decoding: no-conversion
+                 Encoding: no-conversion
+     [INS] [DEL] File regexp:
+                 Choice: [Value Menu] Encoding/decoding pair:
+                 Decoding: undecided
+                 Encoding: nil
+     [INS]
+        [State]: this option is unchanged from its standard setting.
+     Alist to decide a coding system to use for a file I/O operation. [Hide]
+     The format is ((PATTERN . VAL) ...),
+     where PATTERN is a regular expression matching a file name,
+     [<small class="dots">...</small>more lines of documentation<small class="dots">...</small>]
+     </pre>
+
+<p>Each association in the list appears on four lines, with several
+editable or "active" fields.  You can edit the regexps and coding
+systems using ordinary editing commands.  You can also invoke
+<code>[Value Menu]</code> to switch to a kind of value--for instance, to
+specify a function instead of a pair of coding systems.
+
+   <p>To delete an association from the list, invoke the <code>[DEL]</code> button
+for that item.  To add an association, invoke <code>[INS]</code> at the
+position where you want to add it.  There is an <code>[INS]</code> button
+between each pair of association, another at the beginning and another
+at the end, so you can add the new association at any position in the
+list.
+
+   <p>Two special commands, &lt;TAB&gt; and <kbd>S-&lt;TAB&gt;</kbd>, are useful for
+moving through the customization buffer.  &lt;TAB&gt;
+(<code>widget-forward</code>) moves forward to the next active or editable
+field; <kbd>S-&lt;TAB&gt;</kbd> (<code>widget-backward</code>) moves backward to the
+previous active or editable field.
+
+   <p>Typing &lt;RET&gt; on an editable field also moves forward, just like
+&lt;TAB&gt;.  We set it up this way because people often type &lt;RET&gt;
+when they are finished editing a field.  To insert a newline within an
+editable field, use <kbd>C-o</kbd> or <kbd>C-q C-j</kbd>.
+
+   <p>Setting the option changes its value in the current Emacs session;
+<dfn>saving</dfn> the value changes it for future sessions as well.  This
+works by writing code into your <code>~/.emacs</code> file so as to set the
+option variable again each time you start Emacs.  To save the option,
+invoke <code>[State]</code> and select the <code>Save for Future Sessions</code>
+operation.
+
+   <p>If Emacs was invoked with the <code>-q</code> or <code>--no-init-file</code>
+options (see <a href="Initial-Options.html#Initial%20Options">Initial Options</a>), it will not let you save your
+customizations in your <code>~/.emacs</code> init file.  This is because
+saving customizations from such a session would wipe out all the other
+customizations you might have on your init file.
+
+   <p>You can also restore the option to its standard value by invoking
+<code>[State]</code> and selecting the <code>Erase Customization</code>
+operation.  There are actually three reset operations:
+
+     <dl>
+<dt><code>Reset</code>
+     <dd>If you have made some modifications and not yet set the option,
+this restores the text in the customization buffer to match
+the actual value.
+
+     <br><dt><code>Reset to Saved</code>
+     <dd>This restores the value of the option to the last saved value,
+and updates the text accordingly.
+
+     <br><dt><code>Erase Customization</code>
+     <dd>This sets the option to its standard value, and updates the text
+accordingly.  This also eliminates any saved value for the option,
+so that you will get the standard value in future Emacs sessions. 
+</dl>
+
+   <p>Sometimes it is useful to record a comment about a specific
+customization.  Use the <code>Add Comment</code> item from the
+<code>[State]</code> menu to create a field for entering the comment.  The
+comment you enter will be saved, and displayed again if you again view
+the same option in a customization buffer, even in another session.
+
+   <p>The state of a group indicates whether anything in that group has been
+edited, set or saved.  You can select <code>Set for Current Session</code>,
+<code>Save for Future Sessions</code> and the various kinds of <code>Reset</code>
+operation for the group; these operations on the group apply to all
+options in the group and its subgroups.
+
+   <p>Near the top of the customization buffer there are two lines
+containing several active fields:
+
+<pre class="smallexample">      [Set for Current Session] [Save for Future Sessions]
+      [Reset] [Reset to Saved] [Erase Customization]   [Finish]
+     </pre>
+
+<p>Invoking <code>[Finish]</code> either buries or kills this customization
+buffer according to the setting of the option
+<code>custom-buffer-done-function</code>; the default is to bury the buffer. 
+Each of the other fields performs an operation--set, save or
+reset--on each of the items in the buffer that could meaningfully be
+set, saved or reset.
+
+   </body></html>
+

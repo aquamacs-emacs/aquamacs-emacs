@@ -1,0 +1,76 @@
+<html lang="en">
+<head>
+<title>Options specific for CVS</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Options specific for CVS">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="CVS%20Options">CVS Options</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="RCS-and-SCCS.html#RCS%20and%20SCCS">RCS and SCCS</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customizing-VC.html#Customizing%20VC">Customizing VC</a>
+<hr><br>
+</div>
+
+<h3 class="subsubsection">Options specific for CVS</h5>
+
+<p>By default, CVS does not use locking to coordinate the activities of
+several users; anyone can change a work file at any time.  However,
+there are ways to restrict this, resulting in behavior that resembles
+locking.
+
+   <p>For one thing, you can set the <code>CVSREAD</code> environment variable
+(the value you use makes no difference).  If this variable is defined,
+CVS makes your work files read-only by default.  In Emacs, you must
+type <kbd>C-x C-q</kbd> to make the file writable, so that editing works
+in fact similar as if locking was used.  Note however, that no actual
+locking is performed, so several users can make their files writable
+at the same time.  When setting <code>CVSREAD</code> for the first time, make
+sure to check out all your modules anew, so that the file protections
+are set correctly.
+
+   <p>Another way to achieve something similar to locking is to use the
+<dfn>watch</dfn> feature of CVS.  If a file is being watched, CVS makes it
+read-only by default, and you must also use <kbd>C-x C-q</kbd> in Emacs to
+make it writable.  VC calls <code>cvs edit</code> to make the file writable,
+and CVS takes care to notify other developers of the fact that you
+intend to change the file.  See the CVS documentation for details on
+using the watch feature.
+
+   <p>When a file's repository is on a remote machine, VC tries to keep
+network interactions to a minimum.  This is controlled by the variable
+<code>vc-cvs-stay-local</code>.  If it is <code>t</code> (the default), then VC uses
+only the entry in the local CVS subdirectory to determine the file's
+state (and possibly information returned by previous CVS commands).  One
+consequence of this is that when you have modified a file, and somebody
+else has already checked in other changes to the file, you are not
+notified of it until you actually try to commit.  (But you can try to
+pick up any recent changes from the repository first, using <kbd>C-x v m
+&lt;RET&gt;</kbd>, see <a href="Merging.html#Merging">Merging</a>).
+
+   <p>When <code>vc-cvs-stay-local</code> is <code>t</code>, VC also makes local
+version backups, so that simple diff and revert operations are
+completely local (see <a href="Version-Backups.html#Version%20Backups">Version Backups</a>).
+
+   <p>On the other hand, if you set <code>vc-cvs-stay-local</code> to <code>nil</code>,
+then VC queries the remote repository <em>before</em> it decides what to
+do in <code>vc-next-action</code> (<kbd>C-x v v</kbd>), just as it does for local
+repositories.  It also does not make any version backups.
+
+   <p>You can also set <code>vc-cvs-stay-local</code> to a regular expression
+that is matched against the repository host name; VC then stays local
+only for repositories from hosts that match the pattern.
+
+   </body></html>
+

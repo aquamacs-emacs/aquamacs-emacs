@@ -1,0 +1,80 @@
+<html lang="en">
+<head>
+<title>Yanking Earlier Kills</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Yanking Earlier Kills">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Earlier%20Kills">Earlier Kills</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Appending-Kills.html#Appending%20Kills">Appending Kills</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Yanking.html#Yanking">Yanking</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Yanking Earlier Kills</h4>
+
+<p>To recover killed text that is no longer the most recent kill, use the
+<kbd>M-y</kbd> command (<code>yank-pop</code>).  It takes the text previously
+yanked and replaces it with the text from an earlier kill.  So, to
+recover the text of the next-to-the-last kill, first use <kbd>C-y</kbd> to
+yank the last kill, and then use <kbd>M-y</kbd> to replace it with the
+previous kill.  <kbd>M-y</kbd> is allowed only after a <kbd>C-y</kbd> or another
+<kbd>M-y</kbd>.
+
+   <p>You can understand <kbd>M-y</kbd> in terms of a "last yank" pointer which
+points at an entry in the kill ring.  Each time you kill, the "last
+yank" pointer moves to the newly made entry at the front of the ring. 
+<kbd>C-y</kbd> yanks the entry which the "last yank" pointer points to. 
+<kbd>M-y</kbd> moves the "last yank" pointer to a different entry, and the
+text in the buffer changes to match.  Enough <kbd>M-y</kbd> commands can move
+the pointer to any entry in the ring, so you can get any entry into the
+buffer.  Eventually the pointer reaches the end of the ring; the next
+<kbd>M-y</kbd> loops back around to the first entry again.
+
+   <p><kbd>M-y</kbd> moves the "last yank" pointer around the ring, but it does
+not change the order of the entries in the ring, which always runs from
+the most recent kill at the front to the oldest one still remembered.
+
+   <p><kbd>M-y</kbd> can take a numeric argument, which tells it how many entries
+to advance the "last yank" pointer by.  A negative argument moves the
+pointer toward the front of the ring; from the front of the ring, it
+moves "around" to the last entry and continues forward from there.
+
+   <p>Once the text you are looking for is brought into the buffer, you can
+stop doing <kbd>M-y</kbd> commands and it will stay there.  It's just a copy
+of the kill ring entry, so editing it in the buffer does not change
+what's in the ring.  As long as no new killing is done, the "last
+yank" pointer remains at the same place in the kill ring, so repeating
+<kbd>C-y</kbd> will yank another copy of the same previous kill.
+
+   <p>If you know how many <kbd>M-y</kbd> commands it would take to find the
+text you want, you can yank that text in one step using <kbd>C-y</kbd> with
+a numeric argument.  <kbd>C-y</kbd> with an argument restores the text from
+the specified kill ring entry, counting back from the most recent as
+1.  Thus, <kbd>C-u 2 C-y</kbd> gets the next-to-the-last block of killed
+text--it is equivalent to <kbd>C-y M-y</kbd>.  <kbd>C-y</kbd> with a numeric
+argument starts counting from the "last yank" pointer, and sets the
+"last yank" pointer to the entry that it yanks.
+
+   <p>The length of the kill ring is controlled by the variable
+<code>kill-ring-max</code>; no more than that many blocks of killed text are
+saved.
+
+   <p>The actual contents of the kill ring are stored in a variable named
+<code>kill-ring</code>; you can view the entire contents of the kill ring with
+the command <kbd>C-h v kill-ring</kbd>.
+
+   </body></html>
+

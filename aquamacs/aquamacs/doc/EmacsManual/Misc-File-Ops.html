@@ -1,0 +1,92 @@
+<html lang="en">
+<head>
+<title>Miscellaneous File Operations</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Miscellaneous File Operations">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Misc%20File%20Ops">Misc File Ops</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Compressed-Files.html#Compressed%20Files">Compressed Files</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Comparing-Files.html#Comparing%20Files">Comparing Files</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
+<hr><br>
+</div>
+
+<h3 class="section">Miscellaneous File Operations</h3>
+
+<p>Emacs has commands for performing many other operations on files. 
+All operate on one file; they do not accept wildcard file names.
+
+   <p><kbd>M-x view-file</kbd> allows you to scan or read a file by sequential
+screenfuls.  It reads a file name argument using the minibuffer.  After
+reading the file into an Emacs buffer, <code>view-file</code> displays the
+beginning.  You can then type &lt;SPC&gt; to scroll forward one windowful,
+or &lt;DEL&gt; to scroll backward.  Various other commands are provided
+for moving around in the file, but none for changing it; type <kbd>?</kbd>
+while viewing for a list of them.  They are mostly the same as normal
+Emacs cursor motion commands.  To exit from viewing, type <kbd>q</kbd>. 
+The commands for viewing are defined by a special major mode called View
+mode.
+
+   <p>A related command, <kbd>M-x view-buffer</kbd>, views a buffer already present
+in Emacs.  See <a href="Misc-Buffer.html#Misc%20Buffer">Misc Buffer</a>.
+
+   <p><kbd>M-x insert-file</kbd> (also <kbd>C-x i</kbd>) inserts a copy of the
+contents of the specified file into the current buffer at point,
+leaving point unchanged before the contents and the mark after them.
+
+   <p><kbd>M-x write-region</kbd> is the inverse of <kbd>M-x insert-file</kbd>; it
+copies the contents of the region into the specified file.  <kbd>M-x
+append-to-file</kbd> adds the text of the region to the end of the specified
+file.  See <a href="Accumulating-Text.html#Accumulating%20Text">Accumulating Text</a>.
+
+   <p><kbd>M-x delete-file</kbd> deletes the specified file, like the <code>rm</code>
+command in the shell.  If you are deleting many files in one directory, it
+may be more convenient to use Dired (see <a href="Dired.html#Dired">Dired</a>).
+
+   <p><kbd>M-x rename-file</kbd> reads two file names <var>old</var> and <var>new</var> using
+the minibuffer, then renames file <var>old</var> as <var>new</var>.  If the file name
+<var>new</var> already exists, you must confirm with <kbd>yes</kbd> or renaming is not
+done; this is because renaming causes the old meaning of the name <var>new</var>
+to be lost.  If <var>old</var> and <var>new</var> are on different file systems, the
+file <var>old</var> is copied and deleted.
+
+   <p>The similar command <kbd>M-x add-name-to-file</kbd> is used to add an
+additional name to an existing file without removing its old name. 
+The new name is created as a "hard link" to the existing file. 
+The new name must belong on the same file system that the file is on. 
+On Windows, this command works only if the file resides in an NTFS
+file system.  On MS-DOS, it works by copying the file.
+
+   <p><kbd>M-x copy-file</kbd> reads the file <var>old</var> and writes a new file named
+<var>new</var> with the same contents.  Confirmation is required if a file named
+<var>new</var> already exists, because copying has the consequence of overwriting
+the old contents of the file <var>new</var>.
+
+   <p><kbd>M-x make-symbolic-link</kbd> reads two file names <var>target</var> and
+<var>linkname</var>, then creates a symbolic link named <var>linkname</var>, which
+points at <var>target</var>.  The effect is that future attempts to open file
+<var>linkname</var> will refer to whatever file is named <var>target</var> at the
+time the opening is done, or will get an error if the name <var>target</var> is
+not in use at that time.  This command does not expand the argument
+<var>target</var>, so that it allows you to specify a relative name
+as the target of the link.
+
+   <p>Confirmation is required when creating the link if <var>linkname</var> is
+in use.  Note that not all systems support symbolic links; on systems
+that don't support them, this command is not defined.
+
+   </body></html>
+

@@ -1,0 +1,74 @@
+<html lang="en">
+<head>
+<title>Concepts of Version Control</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Concepts of Version Control">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="VC%20Concepts">VC Concepts</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Version-Systems.html#Version%20Systems">Version Systems</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Introduction-to-VC.html#Introduction%20to%20VC">Introduction to VC</a>
+<hr><br>
+</div>
+
+<h3 class="subsubsection">Concepts of Version Control</h5>
+
+<p>When a file is under version control, we also say that it is
+<dfn>registered</dfn> in the version control system.  Each registered file
+has a corresponding <dfn>master file</dfn> which represents the file's
+present state plus its change history--enough to reconstruct the
+current version or any earlier version.  Usually the master file also
+records a <dfn>log entry</dfn> for each version, describing in words what was
+changed in that version.
+
+   <p>The file that is maintained under version control is sometimes called
+the <dfn>work file</dfn> corresponding to its master file.  You edit the work
+file and make changes in it, as you would with an ordinary file.  (With
+SCCS and RCS, you must <dfn>lock</dfn> the file before you start to edit it.) 
+After you are done with a set of changes, you <dfn>check the file in</dfn>,
+which records the changes in the master file, along with a log entry for
+them.
+
+   <p>With CVS, there are usually multiple work files corresponding to a
+single master file--often each user has his own copy.  It is also
+possible to use RCS in this way, but this is not the usual way to use
+RCS.
+
+   <p>A version control system typically has some mechanism to coordinate
+between users who want to change the same file.  One method is
+<dfn>locking</dfn> (analogous to the locking that Emacs uses to detect
+simultaneous editing of a file, but distinct from it).  The other method
+is to merge your changes with other people's changes when you check them
+in.
+
+   <p>With version control locking, work files are normally read-only so
+that you cannot change them.  You ask the version control system to make
+a work file writable for you by locking it; only one user can do
+this at any given time.  When you check in your changes, that unlocks
+the file, making the work file read-only again.  This allows other users
+to lock the file to make further changes.  SCCS always uses locking, and
+RCS normally does.
+
+   <p>The other alternative for RCS is to let each user modify the work file
+at any time.  In this mode, locking is not required, but it is
+permitted; check-in is still the way to record a new version.
+
+   <p>CVS normally allows each user to modify his own copy of the work file
+at any time, but requires merging with changes from other users at
+check-in time.  However, CVS can also be set up to require locking. 
+(see <a href="CVS-Options.html#CVS%20Options">CVS Options</a>).
+
+   </body></html>
+
