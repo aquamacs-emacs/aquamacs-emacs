@@ -11,7 +11,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.23 2005/07/02 09:10:29 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.24 2005/07/02 21:59:46 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -1482,3 +1482,5 @@ we put it on this frame."
 ; via hook so it can be turned off
 (add-hook 'after-init-hook 'aquamacs-check-for-updates-if-necessary 'append)
 (provide 'osx_defaults)
+
+(load-sitestart-files)

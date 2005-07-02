@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.3 2005/06/30 00:14:48 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.4 2005/07/02 21:59:02 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -173,4 +173,14 @@ Optional CODING is used for encoding coding-system."
 					    file-name-coding-system))
 		  nil))))
 
+
+(defun load-sitestart-files ()
+  (mapcar 
+    (lambda (p) (load (concat p "/site-start") 'noerror))
+    load-path
+    )
+  t
+)
+
 (provide 'aquamacs-tools)
+
