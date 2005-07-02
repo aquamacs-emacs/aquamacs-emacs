@@ -3,23 +3,23 @@
 
 
 $key = q/buffers.jpg/;
-$external_labels{$key} = "$URL/" . q|node21.html|; 
+$external_labels{$key} = "$URL/" . q|node24.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/tab:prefs/;
-$external_labels{$key} = "$URL/" . q|node26.html|; 
+$external_labels{$key} = "$URL/" . q|node29.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/aquamacs-tex.jpg/;
-$external_labels{$key} = "$URL/" . q|node27.html|; 
+$external_labels{$key} = "$URL/" . q|node30.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/tab:command/;
-$external_labels{$key} = "$URL/" . q|node25.html|; 
+$external_labels{$key} = "$URL/" . q|node28.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/tab:shortcuts/;
-$external_labels{$key} = "$URL/" . q|node25.html|; 
+$external_labels{$key} = "$URL/" . q|node28.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/aquamacs-screenshot.jpg/;
@@ -27,11 +27,11 @@ $external_labels{$key} = "$URL/" . q|node2.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/tab:terms/;
-$external_labels{$key} = "$URL/" . q|node16.html|; 
+$external_labels{$key} = "$URL/" . q|node19.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/theme.jpg/;
-$external_labels{$key} = "$URL/" . q|node26.html|; 
+$external_labels{$key} = "$URL/" . q|node29.html|; 
 $noresave{$key} = "$nosave";
 
 1;
@@ -45,12 +45,12 @@ $key = q/buffers.jpg/;
 $external_latex_labels{$key} = q|4.4|; 
 $noresave{$key} = "$nosave";
 
-$key = q/tab:prefs/;
-$external_latex_labels{$key} = q|4|; 
-$noresave{$key} = "$nosave";
-
 $key = q/aquamacs-tex.jpg/;
 $external_latex_labels{$key} = q|5.3|; 
+$noresave{$key} = "$nosave";
+
+$key = q/tab:prefs/;
+$external_latex_labels{$key} = q|4|; 
 $noresave{$key} = "$nosave";
 
 $key = q/tab:command/;
@@ -63,6 +63,10 @@ $noresave{$key} = "$nosave";
 
 $key = q/aquamacs-screenshot.jpg/;
 $external_latex_labels{$key} = q|1|; 
+$noresave{$key} = "$nosave";
+
+$key = q/RF1/;
+$external_latex_labels{$key} = q|5.2|; 
 $noresave{$key} = "$nosave";
 
 $key = q/tab:terms/;

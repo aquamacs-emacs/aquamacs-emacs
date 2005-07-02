@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Running Aquamacs</TITLE>
-<META NAME="description" CONTENT="Running Aquamacs">
+<TITLE>Bug Fixes--0.9.3</TITLE>
+<META NAME="description" CONTENT="Bug Fixes--0.9.3">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,89 +21,176 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="node8.html">
 <LINK REL="previous" HREF="node6.html">
-<LINK REL="up" HREF="node5.html">
+<LINK REL="up" HREF="node3.html">
 <LINK REL="next" HREF="node8.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html179"
+<A NAME="tex2html184"
   HREF="node8.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html175"
-  HREF="node5.html">
+<A NAME="tex2html180"
+  HREF="node3.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html169"
+<A NAME="tex2html174"
   HREF="node6.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html177"
+<A NAME="tex2html182"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html180"
-  HREF="node8.html">Frame and Window Operations</A>
-<B> Up:</B> <A NAME="tex2html176"
-  HREF="node5.html">Features and Changes</A>
-<B> Previous:</B> <A NAME="tex2html170"
-  HREF="node6.html">New Address</A>
- &nbsp; <B>  <A NAME="tex2html178"
+<B> Next:</B> <A NAME="tex2html185"
+  HREF="node8.html">Features and Changes: 0.9.3</A>
+<B> Up:</B> <A NAME="tex2html181"
+  HREF="node3.html">What's New in This</A>
+<B> Previous:</B> <A NAME="tex2html175"
+  HREF="node6.html">Bug Fixes 0.9.3a and</A>
+ &nbsp; <B>  <A NAME="tex2html183"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION00032200000000000000">
-Running Aquamacs</A>
-</H3>
+<H2><A NAME="SECTION00034000000000000000">
+Bug Fixes--0.9.3</A>
+</H2>
 
 <P>
 
 <UL>
-<LI>Slightly faster startup.
+<LI>Initial-frame-alist is respected. (Reported by Alastair Rankine)
 
 <P>
 </LI>
-<LI>Runs on OS X 10.3.9, 10.4.0 and 10.4.--tested.
+<LI>When saving a buffer and the Finder is not running, 
+	the Finder is not opened any more. (Reported by George W. Gilchrist.)
 
 <P>
 </LI>
-<LI>Aquamacs automatically checks for updates and notifies the user
-    if there is something new. This function communicates with an internet server; it does not
-    transmit any information identifying the user. If you would like to
-    know more about what is transmitted, use M-x
-    aquamacs-check-version-information. If you like to turn this check off, add this to your file
- /Users/ yourname / Library /Preferences /Aquamacs Emacs/ Preferences.el:
-
-<P>
-<TT>(setq aquamacs-version-check-url nil)</TT>
+<LI>Using dead-keys (like Option-u or Option-n on most
+	keyboards) works again. (Reported by Howard Melman and Pierre Albarede
+</LI>
+<LI>When modified files existed, but no frame was visible and
+    one tried to quit Aquamacs, the application seemed to hang while
+    prompting for keyboard input (Save file? y/n) in an invisible
+    window. This has been fixed. 
 
 <P>
 </LI>
-<LI>Adding Emacs packages is easier now: Emacs automatically finds
-    packages in subdirectories within the /Library/Preferences| Application
-    Support/Emacs|Aquamacs Emacs/ paths.
+<LI>If no frame is visible and you input text, the frame is  made
+    visible so you can see what you are doing.
 
 <P>
 </LI>
-<LI>Aquamacs now sets the file creator information of files it
-    writes. This helps to open the file from Finder with Aquamacs when
-    you double-click it. Feature can be turned off via customization
-    option ``aquamacs-set-creator-codes-after-writing-files.''  Also,
-    Emacs will appear in the Finder's context menu under ``Open With''
-    for a lot of files that it is commonly used to edit.
+<LI>Closing windows consistently with the mouse now works properly. 
 
 <P>
 </LI>
-<LI>You can start Aquamacs in a terminal (by running
-    /Applications/ Emacs.app /Contents/ MacOS/ Emacs) with parameter -nw
-    and will show up in the terminal rather than as a  Carbon
-    application. Basic file editing and all traditional commands
-    work. However, Aquamacs-specific keyboard commands (with the
-    Command key) will not work and other functionality may be limited,
-    too. <SPAN  CLASS="textit">Warning: </SPAN>This mode of use, which may break in future versions, is not
-    supported by the Aquamacs team.
-    
+<LI>Clicking on links to source files in help buffers properly
+    opens a new frame (if ``open buffers in separate frames" is on).
+
+<P>
+</LI>
+<LI>When the buffer shown in a frame changes, sometimes the
+    color theme and font were not set correctly; this has been addressed. This could happen when
+    ``Show Buffers in Separate Frames'' was off, and one killed a
+    buffer. (Reported by Peter Dyballa.)
+
+<P>
+</LI>
+<LI>When ``Show Buffers in Separate Frames'' was off, and one killed a
+    buffer (kill-buffer, C-x k), the frame was deleted.
+
+<P>
+</LI>
+<LI>You have the option to save newly created buffers (Command-N)
+    that have not been saved yet when you quit Aquamacs.
+
+<P>
+</LI>
+<LI>Less frame-dancing (resizing) on startup.
+
+<P>
+</LI>
+<LI>AUC<SPAN CLASS="logo-TeX">T<SMALL>E</SMALL>X</SPAN> uses the standard commands again. The menu is
+  unstructured for this reason. (Reported by Robert Sloan.)
+
+<P>
+</LI>
+<LI>No frames could be opened when using a two-screen setup
+    with the menu bar on the right screen, and a currently selected
+    frame on the left screen. This has been addressed.  (Reported by George W. Gilchrist.)
+
+<P>
+</LI>
+<LI>Customizing a theme for a special display frame (e.g.  help or
+    customization) works now.
+
+<P>
+</LI>
+<LI>Recent Files/Clear Menu works again.
+
+<P>
+</LI>
+<LI>Paths and other environment variables are now derived
+    from the shell  when
+    you start Aquamacs. 
+
+<P>
+</LI>
+<LI>Your settings for highlight parens,``Blinking Cursor," etc.  are now
+    persistent. The function Options/Save Options
+    (menu-bar-option-save) now correctly saves such settings. This
+    should include most customization settings except some that
+    Aquamacs relies on for proper clipboard copy/paste functionality.
+
+<P>
+</LI>
+<LI>The font menu (Options) no longer includes non-existent fonts. 
+
+<P>
+</LI>
+<LI>Option/Show-Hide/Menu Bar is gone because you cannot turn off  the
+    menu bar on OS X.
+
+<P>
+</LI>
+<LI>``Send Emacs Bug Report'' now uses the OS X
+    default mail program to compose
+    a message. This ensures that bug reports actually go through.
+    Before, they did not, unless you were running a local SMTP server
+    (sendmail/postfix), which is not enabled by default.
+
+<P>
+</LI>
+<LI>Fixed loading of files when file names contain certain  Kanji characters,
+    due to a bug in AppleScript.
+
+<P>
+</LI>
+<LI>The menu shortcut entries were corrected.
+
+<P>
+</LI>
+<LI>Characters that require the use of the option key work again. For
+    example, Alt-3 produces the pound sign (å£) on a US keyboard,
+    Alt-L the `at' sign @ and Alt-Shift-7 the backslash  on a
+    German one. Inputting the Euro sign works, too. However, that means that the option key is not used to emulate
+    the `meta' modifier;  you will have to use Esc to do that.
+    Alternatively, you can map the option key to meta in your .emacs
+    file:
+
+<P>
+<TT>    (setq mac-option-modifier 'meta)</TT>
+
+<P>
+</LI>
+<LI>Improvements in the fontset selection allow you to display the  Euro sign
+    with the default font.
+
+<P>
 </LI>
 </UL>
 
@@ -111,31 +198,31 @@ Running Aquamacs</A>
 
 <DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
-<A NAME="tex2html179"
+<A NAME="tex2html184"
   HREF="node8.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html175"
-  HREF="node5.html">
+<A NAME="tex2html180"
+  HREF="node3.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html169"
+<A NAME="tex2html174"
   HREF="node6.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html177"
+<A NAME="tex2html182"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html180"
-  HREF="node8.html">Frame and Window Operations</A>
-<B> Up:</B> <A NAME="tex2html176"
-  HREF="node5.html">Features and Changes</A>
-<B> Previous:</B> <A NAME="tex2html170"
-  HREF="node6.html">New Address</A>
- &nbsp; <B>  <A NAME="tex2html178"
+<B> Next:</B> <A NAME="tex2html185"
+  HREF="node8.html">Features and Changes: 0.9.3</A>
+<B> Up:</B> <A NAME="tex2html181"
+  HREF="node3.html">What's New in This</A>
+<B> Previous:</B> <A NAME="tex2html175"
+  HREF="node6.html">Bug Fixes 0.9.3a and</A>
+ &nbsp; <B>  <A NAME="tex2html183"
   HREF="node1.html">Contents</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
 Kevin  Walzer
-2005-06-28
+2005-07-02
 </ADDRESS>
 </BODY>
 </HTML>
