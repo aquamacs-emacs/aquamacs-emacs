@@ -11,7 +11,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.22 2005/07/01 07:03:47 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.23 2005/07/02 09:10:29 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -355,10 +355,11 @@ yes-or-no prompts - y or n will do."
  
 			 (longlines-wrap-follows-window-size t)
 
-;; a free news server
+;; do not allow user to mess with minibuffer prompt
 
-			 
-
+			 (minibuffer-prompt-properties
+			  ,(plist-put minibuffer-prompt-properties
+				     'point-entered 'minibuffer-avoid-prompt))
 
 			 )
 )
