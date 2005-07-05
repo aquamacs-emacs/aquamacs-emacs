@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.8 2005/06/30 00:15:34 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.9 2005/07/05 13:36:32 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -217,5 +217,37 @@ end tell"
 )
 
 
+;; register the help manuals
+(defun aquamacs-init-user-help ()
+  (if (condition-case nil 
+	  (file-exists-p (car command-line-args)) 
+	(error nil))
+      (shell-command (concat "python -c \"from Carbon import AH; AH.AHRegisterHelpBook('" (substring (car command-line-args) 0 -21) "')\" >/dev/null 2>/dev/null") t t) 
+    ; else
+    (message "Emacs.app has been moved or renamed. Please restart Emacs!")
+  )
+)
+
+
+; Call up help book
+(defun aquamacs-user-help ()
+  (interactive)
+
+  (aquamacs-init-user-help) ; make sure it's registered
+ 
+  (or (shell-command "python -c \"from Carbon import AH; AH.AHGotoPage('Aquamacs Help', None, None)\"  >/dev/null 2>/dev/null" t t)
+      (message "Sorry, help function unavailable (python, OS problem?)")
+  )
+)
+(defun aquamacs-emacs-manual ()
+  (interactive)
+
+  (aquamacs-init-user-help) ; make sure it's registered
+ 
+  (or (shell-command "python -c \"from Carbon import AH; AH.AHGotoPage('Emacs Manual', None, None)\"  >/dev/null 2>/dev/null" t t)
+      (message "Sorry, help function unavailable (python, OS problem?)")
+  )
+)
+ 
 (provide 'mac-extra-functions)
 
