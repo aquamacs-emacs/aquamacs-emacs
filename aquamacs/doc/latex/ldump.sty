@@ -1,0 +1,180 @@
+%% 
+%% This is file `ldump.sty', 
+%% 
+%% for creating dumps of LaTeX formats, with all packages 
+%% loaded and most package options activated.
+%%
+%% by Ross Moore  <ross@mpce.mq.edu.au>
+%% version 1.0 created: 95/09/16 
+%%
+%% version 1.1 revised: 97/08/23 
+%%   for compatibility with LaTeX-2e, up to 1997/02/21
+%%
+%% version 1.2 revised: 97/09/25
+%%    has pre-loading of math-fonts information 
+%% 
+%% version 1.3 revised: 97/10/02
+%%    relax 2nd + later occurrences of \latexdump 
+%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{ldump} [1997/10/02 v1.3
+     LaTeX environment dumps]
+\DeclareOption{nodump}{\AtBeginDocument{\let\dump=\relax}}
+
+%
+%  Designed for versions up to {1997/02/21}
+%
+%  compatibility with version {1994/06/01}
+%  ...
+\ifx\every@math@size\undefined
+  \let\every@math@size=\every@size \fi
+%
+%
+%  compatibility with version {1994/12/01}
+%  ...
+\ifx\G@refundefinedfalse\undefined
+  \def\G@refundefinedfalse{\let\@refundefined\relax}\fi
+\ifx\@multiplelabelsfalse\undefined
+  \def\@multiplelabelsfalse{\let\@multiplelabels\relax}\fi
+%
+%
+%  This is the replacement for \document
+%
+\def\ldump@document{\endgroup
+  \ifx\@unusedoptionlist\@empty\else
+    \@latex@warning@no@line{Unused global option(s):^^J%
+            \@spaces[\@unusedoptionlist]}%
+  \fi
+  \@colht\textheight
+  \@colroom\textheight \vsize\textheight
+  \columnwidth\textwidth
+  \@clubpenalty\clubpenalty
+  \if@twocolumn
+    \advance\columnwidth -\columnsep
+    \divide\columnwidth\tw@ \hsize\columnwidth \@firstcolumntrue
+  \fi
+  \hsize\columnwidth \linewidth\hsize
+%
+% Check the fonts now if there's no  \latexdump  command
+% Nevertheless there is a 2nd check later for 
+% any new fonts added subsequently.
+%
+\ifx\has@ldump\relax\else\expandafter\process@table\fi
+%
+%  copy the reference to \@begindocumenthook
+%  empty \@begindocumenthook and use the copy.
+%  kill them both when done.
+%
+  \let\@begindocumenthook@=\@begindocumenthook
+%%% Why \global ? (versions 1995+ )
+  \global\let\@begindocumenthook\@empty
+  \@begindocumenthook@
+%%% Why \global ? (versions 1995+ )
+  \global\let\@begindocumenthook\@undefined
+  \let\@begindocumenthook@\@undefined
+%
+  \begingroup\@floatplacement\@dblfloatplacement
+   \makeatletter\let\@writefile\@gobbletwo
+%%  \global \let \@multiplelabels \relax
+   \global\@multiplelabelsfalse
+   \@input{\jobname.aux}%
+  \endgroup
+  \if@filesw
+    \immediate\openout\@mainaux\jobname.aux
+    \immediate\write\@mainaux{\relax}%
+  \fi
+%
+% 2nd font check if there's no  \latexdump  command
+%
+\ifx\has@ldump\relax\else\expandafter\process@table\fi
+%
+  \let\glb@currsize\@empty  %% Force math initialisation.
+  \normalsize \the\every@math@size
+  \everypar{}%
+%%
+%% this part is for compatibility with a 
+%% patchlevel of LaTeX (1997/02/21)
+%%%%%%%%%%
+  \ifx\normalsfcodes\@empty
+    \ifnum\sfcode`\.=\@m
+      \let\normalsfcodes\frenchspacing
+    \else
+      \let\normalsfcodes\nonfrenchspacing
+    \fi
+  \fi
+%%%%%%%%%%
+  \@noskipsecfalse
+%% \let \@refundefined \relax
+  \G@refundefinedfalse
+  \let\AtBeginDocument\@firstofone
+%
+%  execute the code in  \@fterbegindocumenthook
+%  then kill the hook
+%
+%%  \@begindocumenthook
+%%% Why \global ? (versions 1995+ )
+%%  \global\let\@begindocumenthook\@undefined
+  \@fterbegindocumenthook
+%%% Why \global ? (versions 1995+ )
+  \global\let\@fterbegindocumenthook\@undefined
+%
+%
+  \ifdim\topskip<1sp \global\topskip1sp\relax\fi
+  \ifx\@maxdepth\undefined
+  \else \global\@maxdepth\maxdepth \fi
+%
+  \ifx\@listfiles\@undefined
+    \global\let\@filelist\relax
+    \global\let\@addtofilelist\@gobble
+  \fi
+%%% Why \global ? (version (1997/02/21) )
+  \gdef\do##1{\global\let ##1\@notprerr}%
+  \@preamblecmds
+  \global\let \@nodocument \relax
+  \global\let\do\noexpand
+  \ignorespaces}
+%
+%  establish the hook, and its user-interface.
+%
+\let\@fterbegindocumenthook=\@empty
+\def\AfterBeginDocument{\g@addto@macro\@fterbegindocumenthook}
+%
+%
+%  This is the replacement for |\documentclass| on reruns...
+%
+\long\def\ldump@skiptobegin#1\latexdump{%
+ \let\latexdump=\relax}
+%
+% ...and this installs it all on the first run
+%
+\def\latexdump{%
+ \let\has@ldump=\relax
+ \let\latexdump=\relax
+ \let\document=\ldump@document
+ \let\documentclass=\ldump@skiptobegin 
+ \let\documentstyle=\ldump@skiptobegin
+ \ifx\AtBeginDocument\@notprerr\expandafter\dump
+ \else
+	 \AtBeginDocument{\ldump@checkfonts\csname dump\endcsname}%
+	 \AfterBeginDocument{}%
+ \fi }
+%
+%  This initiates the main font-loading, just prior to \dump
+%
+\def\ldump@checkfonts{\process@table
+ \let\cdp@list=\@empty
+ \check@mathfonts\relax }
+%
+% 
+%
+\@onlypreamble\ldump@skiptobegin
+\@onlypreamble\ldump@document
+\@onlypreamble\latexdump
+\@onlypreamble\ldump@checkfonts
+%
+%
+\ProcessOptions*
+\endinput
+%% 
+%% End of file `ldump.sty'.
