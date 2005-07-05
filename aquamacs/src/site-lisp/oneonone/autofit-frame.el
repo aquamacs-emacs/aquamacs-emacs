@@ -1,5 +1,5 @@
 ;;; autofit-frame.el --- Automatically resize one-window frames to fit
-;; 
+;;
 ;; Filename: autofit-frame.el
 ;; Description: Automatically resize one-window frames to fit.
 ;; Author: Drew Adams
@@ -7,23 +7,23 @@
 ;; Copyright (C) 2000-2005, Drew Adams, all rights reserved.
 ;; Created: Thu Dec  7 10:06:18 2000
 ;; Version: 21.0
-;; Last-Updated: Sat Jan 08 17:31:37 2005
+;; Last-Updated: Mon Jul 04 11:37:14 2005
 ;;           By: dradams
-;;     Update #: 340
+;;     Update #: 374
 ;; Keywords: internal, extensions, convenience, local
-;; Compatibility: GNU Emacs 20.x, GNU Emacs 21.x
-;; 
+;; Compatibility: GNU Emacs 20.x, GNU Emacs 21.x, GNU Emacs 22.x
+;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
-;;; Commentary: 
-;; 
+;;
+;;; Commentary:
+;;
 ;;    Automatically resize one-window frames to fit.
-;; 
+;;
 ;;  Functions are provided here to automatically resize each frame to
 ;;  fit its selected window, when there is no other window in the
 ;;  frame.  Standard Emacs primitive functions are redefined to do
 ;;  this: `display-buffer' and `switch-to-buffer'.
-;; 
+;;
 ;;  Automatic frame resizing is also provided here implicitly for
 ;;  functions `pop-to-buffer', `switch-to-buffer-other-window', and
 ;;  `switch-to-buffer-other-frame', since they ultimately use
@@ -37,7 +37,7 @@
 ;;    (add-hook 'after-make-frame-functions 'fit-frame)
 ;;
 ;;  The second line here causes newly created frames to be fitted to
-;;  their buffer (window). Even if you load `auto-fit-frames.el', you
+;;  their buffer (window).  Even if you load `auto-fit-frames.el', you
 ;;  will still need to do this, because `display-buffer' and
 ;;  `switch-to-buffer' are not called when a new frame is created.
 ;;
@@ -64,20 +64,20 @@
 ;;
 ;;  ***** NOTE: The following EMACS PRIMITIVES are REDEFINED HERE:
 ;;
-;;  `display-buffer' - 
+;;  `display-buffer' -
 ;;     1) Uses `read-buffer' in interactive spec.
 ;;     2) Resizes frame to fit sole window if `autofit-frames-flag'.
 ;;
 ;;     ***************************************************************
 ;;     NOTE: It would be better to rewrite the C code of
 ;;           `display-buffer' so that the frame is _not_ resized if an
-;;           existing frame is simply raised. This is because the user
-;;           may have manually resized the frame, and we don't want to
-;;           override this. The code here unfortunately does _not_
-;;           respect the user in this regard.
+;;           existing frame is simply raised.  This is because the
+;;           user may have manually resized the frame, and we don't
+;;           want to override this.  The code here unfortunately does
+;;           _not_ respect the user in this regard.
 ;;     ***************************************************************
 ;;
-;;  `switch-to-buffer' - 
+;;  `switch-to-buffer' -
 ;;     1) Uses `read-buffer' in interactive spec.
 ;;     2) If current window is dedicated, then use another window.
 ;;     3) Resizes frame to fit sole window if `autofit-frames-flag'
@@ -99,7 +99,7 @@
 ;;  The reason for separating the code here from that in
 ;;  `fit-frame.el' is to let you load that code but not load the code
 ;;  here, if you do not want to redefine Emacs primitives.
-;; 
+;;
 ;;  This file was formerly called `shrink-fit-all.el', then
 ;;  `auto-resize-frames.el'.
 ;;
@@ -121,30 +121,34 @@
 ;;  Library `autofit-frame' requires these libraries:
 ;;
 ;;    `avoid', `fit-frame', `frame-cmds', `frame-fns', `icomplete',
-;;    `icomplete+', `strings', `thingatpt', `thingatpt+'.
+;;    `icomplete+', `misc-fns', `strings', `thingatpt', `thingatpt+'.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
+;;
 ;;; Change log:
 ;;
+;; 2005/05/28 dadams
+;;      autofit-frames-flag: defvar -> defcustom.  Added defgroup fit-frame.
+;;      switch-to-buffer: Use explicit default in read-buffer.
+;;        Require misc-fns.el.
 ;; 2004/10/07 dadams
 ;;      Renamed resize-* to fit-*, per RMS.
 ;;      Renamed automatically-resize-frames-p to autofit-frames-flag.
 ;; 2004/09/21 dadams
-;;      Commented-out redefinition of pop-to-buffer. Removed it from intro.
+;;      Commented-out redefinition of pop-to-buffer.  Removed it from intro.
 ;; 2004/06/01 dadams
 ;;      1. Replaced fit-frame-when-display-p, fit-frame-when-pop-to-p,
 ;;         and fit-frame-when-switch-to-p by
 ;;         automatically-resize-frames-p.
 ;;      2. Removed pop-to-buffer and
 ;;         resize-frame-if-one-window-and-cond.
-;;      3. Renamed fit-frame-* to resize-frame-*. Renamed file.
+;;      3. Renamed fit-frame-* to resize-frame-*.  Renamed file.
 ;;      4. switch-to-buffer: Don't resize if buffer is already current.
 ;; 2004/05/07 dadams
 ;;      Updated to work with Emacs 21:
 ;;        pop-to-buffer has additional arg and doc-string changes
 ;;        display-buffer has doc-string changes
-;; 
+;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; This program is free software; you can redistribute it and/or modify
@@ -163,29 +167,36 @@
 ;; Boston, MA 02111-1307, USA.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
+;;
 ;;; Code:
 
 (and (< emacs-major-version 20) (eval-when-compile (require 'cl))) ;; when
-(require 'strings nil t) ;; read-buffer
 (require 'fit-frame) ;; fit-frame
+(require 'strings nil t) ;; (no error if not found) read-buffer
+(require 'misc-fns nil t) ;; (no error if not found) another-buffer
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 
 
 
 
-;;; User option ---------------------------------------------------
+;;; User options ---------------------------------------------------
 
 ;;;###autoload
-(defvar autofit-frames-flag t
-  "*Non-nil means automatically resize one-window frames to fit buffer.")
+(defgroup fit-frame nil
+  "Resize a frame to fit its selected window, or resize it incrementally."
+  :version "22.1" :group 'frames :group 'convenience)
+
+;;;###autoload
+(defcustom autofit-frames-flag t
+  "*Non-nil means automatically resize one-window frames to fit buffer."
+  :type 'boolean :group 'fit-frame)
 
 
 
 ;;; Non-interactive functions ---------------------------------
 
-;; This is not used here. It is useful as a `temp-buffer-show-hook':
+;; This is not used here.  It is useful as a `temp-buffer-show-hook':
 ;;   (add-hook 'temp-buffer-show-hook 'fit-frame-if-one-window 'append)
 ;;;###autoload
 (defun fit-frame-if-one-window ()
@@ -195,7 +206,7 @@ This does nothing if `autofit-frames-flag' is nil."
   (and (one-window-p t) autofit-frames-flag (fit-frame)))
 
 
-;; ;; REPLACES ORIGINAL (built-in) - prior to Emacs 20 only: 
+;; ;; REPLACES ORIGINAL (built-in) - prior to Emacs 20 only:
 ;; ;; Resizes frame to fit sole window if `autofit-frames-flag'.
 ;; ;;
 ;; ;; Prior to Emacs 20, `pop-to-buffer' did not call `display-buffer',
@@ -238,7 +249,7 @@ If BUFFER is shown already in some window, just use that one,
 unless the window is the selected window and the optional second
 argument NOT-THIS-WINDOW is non-nil (interactively, with prefix arg).
 If `pop-up-frames' is non-nil, make a new frame if no window shows BUFFER.
-Returns the window displaying BUFFER.
+Return the window displaying BUFFER.
 
 Emacs 21 only:
   If `display-buffer-reuse-frames' is non-nil, and another frame is
@@ -297,13 +308,16 @@ Optional second arg NORECORD non-nil =>
 
 *WARNING*: This is NOT the way to work on another buffer temporarily
 within a Lisp program!  Use `set-buffer' instead, to avoid messing
-with window-buffer correspondences.
+with correspondences between windows and buffers.
 
 Resizes frame to fit sole window if `autofit-frames-flag'
 \(unless BUFFER is already the `current-buffer')."
   (interactive
-   (list (read-buffer "Switch to buffer: " 
-		      (other-buffer (current-buffer)) 'existing)))
+   (list (read-buffer "Switch to buffer: "
+                      (if (fboundp 'another-buffer) ; Defined in `misc-fns.el'.
+                          (another-buffer nil t)
+                        (other-buffer (current-buffer)))
+                      'existing)))
   (setq buffer (get-buffer-create buffer)) ; If arg is a string, convert it to a buffer.
   (let ((orig-buf (current-buffer)))
     (if (window-dedicated-p (selected-window))
@@ -313,7 +327,6 @@ Resizes frame to fit sole window if `autofit-frames-flag'
          (not (eq buffer orig-buf))     ; Don't resize if same buffer.
          autofit-frames-flag
          (fit-frame))))
-
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;

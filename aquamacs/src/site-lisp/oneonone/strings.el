@@ -1,5 +1,5 @@
 ;;; strings.el --- Miscellaneous string functions.
-;; 
+;;
 ;; Filename: strings.el
 ;; Description: Miscellaneous string functions.
 ;; Author: Drew Adams
@@ -7,18 +7,18 @@
 ;; Copyright (C) 1996-2005, Drew Adams, all rights reserved.
 ;; Created: Tue Mar  5 17:09:08 1996
 ;; Version: 21.0
-;; Last-Updated: Sat May 28 15:10:46 2005
+;; Last-Updated: Mon Jul 04 11:14:01 2005
 ;;           By: dradams
-;;     Update #: 360
+;;     Update #: 385
 ;; Keywords: internal, extensions, local
 ;; Compatibility: GNU Emacs 20.x, GNU Emacs 21.x, GNU Emacs 22.x
-;; 
+;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
-;;; Commentary: 
-;; 
+;;
+;;; Commentary:
+;;
 ;;        Miscellaneous string functions.
-;; 
+;;
 ;;  You may want to put this in your `~/.emacs' file, to erase the
 ;;  minibuffer when it is inactive and `minibuffer-empty-p':
 ;;
@@ -47,16 +47,16 @@
 ;;  `read-buffer' - Uses `completing-read'.
 ;;  `read-variable' - Uses `symbol-nearest-point' & `completing-read'
 ;;                    to get the default.
-;;  
+;;
 ;;
 ;;  Library `strings' requires these libraries:
 ;;
 ;;    `thingatpt', `thingatpt+'.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
+;;
 ;;; Change log:
-;; 
+;;
 ;; 2005/05/28 dadams
 ;;     read-buffer: Use other-buffer, if another-buffer is not available.
 ;; 2004/09/21 dadams
@@ -89,7 +89,7 @@
 ;;     Added insert-in-minibuffer, erase-inactive-minibuffer, display-in-minibuffer.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
+;;
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation; either version 2, or (at your option)
@@ -106,8 +106,8 @@
 ;; Boston, MA 02111-1307, USA.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
-;;; Code: 
+;;
+;;; Code:
 
 (eval-when-compile (require 'cl)) ;; psetq (plus, for Emacs <20: cadr, when, unless)
 
@@ -120,7 +120,10 @@
 
 
 ;; Taken from `wimpy-del.el'.
-(defsubst absdiff (m n) (if (< m n) (- n m) (- m n)))
+(defsubst absdiff (m n)
+  "Absolute value of the difference between two numbers.
+M and N are the numbers."
+  (if (< m n) (- n m) (- m n)))
 
 ;;;###autoload
 (defmacro empty-name-p (name)
@@ -135,7 +138,7 @@
 ;; Stolen from `diary.el' (`diary-ordinal-suffix').
 ;;;###autoload
 (defun ordinal-suffix (n)
-  "Ordinal suffix for N. (That is, `st', `nd', `rd', or `th', as appropriate.)"
+  "Ordinal suffix for N.  That is, `st', `nd', `rd', or `th', as appropriate."
   (if (or (memq (% n 100) '(11 12 13)) (< 3 (% n 10)))
       "th"
     (aref ["th" "st" "nd" "rd"] (% n 10))))
@@ -169,9 +172,9 @@ for backward."
 ;; Stolen from `wimpy-del.el'
 ;;;###autoload
 (defun region-description (width &optional prefix suffix begin end)
-  "Returns a string containing a one-line description of the region.
+  "Return a string containing a one-line description of the region.
 WIDTH arg is max length of string (must be at least 20 chars).
-Optional args PREFIX and SUFFIX are strings (default: "") added to msg ends.
+Optional args PREFIX and SUFFIX are strings (default: \"\") added to msg ends.
 They count towards its length.
 Optional args BEGIN and END delimit the region to use."
   (unless prefix (setq prefix ""))
@@ -199,6 +202,7 @@ Optional args BEGIN and END delimit the region to use."
 ;; From `header2.el'.
 ;;;###autoload
 (defun current-d-m-y-string ()
+  "Return string of current day, month, and year, in form \"dd-mon-year\"."
   (let ((str (current-time-string)))
     (concat (if (equal ?\  (aref str 8))
                 (substring str 9 10)
@@ -208,7 +212,7 @@ Optional args BEGIN and END delimit the region to use."
 ;; Adapted from file `intes.el.2'.
 ;;;###autoload
 (defun current-line-string (&optional buffer)
-  "Returns current line of text in BUFFER as a string."
+  "Return current line of text in BUFFER as a string."
   (setq buffer (or buffer (current-buffer)))
   (save-excursion
     (set-buffer buffer)
@@ -245,10 +249,10 @@ Interactively:
         (flush-lines string)
       (keep-lines string))
     (set-buffer-modified-p nil)))
-  
+
 ;;;###autoload
 (defun word-before-point ()
-  "Returns the word at (or before) the cursor, as a string.
+  "Return the word at (or before) the cursor, as a string.
 \"Word\" is as defined by `forward-word'.
 Note: It is possible for the symbol found to be on a previous line.
 
@@ -269,7 +273,7 @@ Note that these last two functions return symbols, not strings."
 
 ;;;###autoload
 (defun symbol-name-before-point ()
-  "Returns the name of the symbol at (or before) the cursor, as a string.
+  "Return the name of the symbol at (or before) the cursor, as a string.
 If no symbol is found, returns the empty string, \"\".
 Note: It is possible for the symbol found to be on a previous line.
 
@@ -296,7 +300,7 @@ Note that these last two functions return symbols, not strings."
 ;;;###autoload
 (defun echo-in-buffer (buffer-name string &optional force-display-p)
   "Display string STRING in buffer BUFFER-NAME, creating buffer if needed.
-If FORCE-DISPLAY-P is non-nil, buffer is displayed."
+FORCE-DISPLAY-P non-nil means buffer is displayed."
   (let ((buffer (get-buffer-create buffer-name)))
     (when force-display-p (display-buffer buffer))
     ;; There is probably a better way to do this.
@@ -318,7 +322,7 @@ but only the memorized state.  Use the function of the same name to be sure.")
 
 ;;;###autoload
 (defun minibuffer-empty-p ()
-  "Returns non-nil iff minibuffer is empty.
+  "Return non-nil iff minibuffer is empty.
 Sets variable `minibuffer-empty-p' to returned value."
   (save-excursion
     (save-window-excursion
@@ -332,7 +336,7 @@ To do this at each user input event:
    (add-hook 'pre-command-hook 'erase-nonempty-inactive-minibuffer).
 
 Note that `minibuffer-empty-p' is not infallible.  To make sure the
-minibuffer is emptied, you can use the surer, though slower, function 
+minibuffer is emptied, you can use the surer, though slower, function
 `erase-inactive-minibuffer'."
   (interactive) (or minibuffer-empty-p (erase-inactive-minibuffer)))
 
@@ -384,8 +388,8 @@ NOTE: For versions of Emacs that do not have faces, a list of
   arg)
 
 ;;;###autoload
-(defun concat-w-faces (&rest args)
-  "Return the string that is the concatenation of all the args.
+(defun concat-w-faces (&rest arguments)
+  "Return the string that is the concatenation of all ARGUMENTS.
 Text (face) properties of any string arguments are preserved.
 
 Items in arg list may be strings or numbers (see `insert-string'), or
@@ -398,11 +402,11 @@ belonging to it are ignored.
 NOTE: For versions of Emacs that do not have faces, a list of
       (FACE OBJECT) is simply treated as the string resulting from
       (format \"%s\" OBJECT)."
-  (interactive "sString: ") (mapconcat 'string-w-face args ""))
+  (interactive "sString: ") (mapconcat 'string-w-face arguments ""))
 
 ;;;###autoload
-(defun insert-in-minibuffer (&rest args)
-  "Insert arguments in minibuffer, indefinitely, preserving faces.
+(defun insert-in-minibuffer (&rest arguments)
+  "Insert ARGUMENTS in minibuffer, indefinitely, preserving faces.
 The minibuffer is not erased before display.  If you want to ensure
 that the minibuffer is erased at each user input event, then do this:
     (add-hook 'pre-command-hook 'erase-inactive-minibuffer)
@@ -426,13 +430,13 @@ NOTE: For versions of Emacs that do not have faces, a list of
     (save-window-excursion
       (set-buffer (window-buffer (minibuffer-window)))
       (goto-char (point-max))
-      (insert-string (apply 'concat-w-faces args))))
-  (when args (set-minibuffer-empty-p nil))
+      (insert-string (apply 'concat-w-faces arguments))))
+  (when arguments (set-minibuffer-empty-p nil))
   (message nil) (sit-for 0))            ; Clear any messages & show minibuf.
 
 ;;;###autoload
-(defun display-in-minibuffer (option &rest args)
-  "Display arguments ARGS in minibuffer, preserving their face properties.
+(defun display-in-minibuffer (option &rest arguments)
+  "Display ARGUMENTS in minibuffer, preserving their face properties.
 This function essentially allows you to display messages with faces.
 
 First arg OPTION determines the display behavior, as follows:
@@ -445,7 +449,7 @@ First arg OPTION determines the display behavior, as follows:
  to erase the minibuffer at some time after displaying.  Other values
  do not erase it afterward.  They allow you to later add more to the
  current contents of the minibuffer.  Remember that they leave the
- minibuffer with text in it. They should therefore at some point be
+ minibuffer with text in it.  They should therefore at some point be
  followed by something that erases the contents, such as
  `erase-inactive-minibuffer'.
 
@@ -471,7 +475,7 @@ First arg OPTION determines the display behavior, as follows:
       the duration of the current minibuffer contents.)
  If `new': ARGS displayed indefinitely, after erasing minibuffer.
       (If ARGS = nil, then this just erases the minibuffer.)
- Else (e.g. `more'): ARGS displayed indefinitely, without first 
+ Else (e.g. `more'): ARGS displayed indefinitely, without first
       erasing minibuffer.  (If ARGS = nil, then this is a no-op.)
 
 If you cannot (or do not want to) explicitly program the ultimate
@@ -518,7 +522,7 @@ EXAMPLE (without `sit-for', explicit erasure later):
   ...                                     ;  --> ab
   (display-in-minibuffer 'more \"cd\")    ; Display (no erase).
   ...                                     ;  --> abcd
-  (display-in-minibuffer 'new)            ; Erase---same as 
+  (display-in-minibuffer 'new)            ; Erase---same as
                                           ; (erase-inactive-minibuffer).
   ...                                     ;  -->
 
@@ -545,7 +549,7 @@ NOTE:
       (setq option 'event)))
   (when (or (natnump option) (memq option '(event new)))
     (erase-inactive-minibuffer))
-  (apply (function insert-in-minibuffer) args)
+  (apply (function insert-in-minibuffer) arguments)
   (cond ((integerp option) (sit-for (abs option)) (erase-inactive-minibuffer))
         ((memq option '(event more-event))
          (while (not (input-pending-p)) (sit-for 0))
@@ -553,7 +557,7 @@ NOTE:
 
 
 
-;; REPLACES ORIGINAL (built-in): 
+;; REPLACES ORIGINAL (built-in):
 ;; 1. Uses `completing-read'.
 ;; 2. Uses `another-buffer' or `other-buffer' if no default.
 ;;
@@ -562,19 +566,19 @@ NOTE:
   "Read the name of a buffer and return it as a string.
 Prompts with first arg, PROMPT (a string).
 
-The default buffer is named by the optional 2nd arg, DEFAULT, if a
-string or buffer, or by `another-buffer' if nil. (`other-buffer' is
-used instead, if `another-buffer' is not defined.)
+Non-nil DEFAULT names the default buffer.
+Otherwise, `another-buffer' is used as the default.
+If `another-buffer' is undefined, then `other-buffer' is the default.
 
-Non-nil optional 3rd arg, EXISTING, means to allow only names of
-existing buffers."
+Non-nil EXISTING means to allow only names of existing buffers."
   (setq default (or default (if (fboundp 'another-buffer) ; Defined in `misc-fns.el'.
                                 (another-buffer nil t)
                               (other-buffer (current-buffer)))))
   ;; Need a string as default.
   (when (bufferp default) (setq default (buffer-name default)))
   (unless (stringp default)
-    (error "read-buffer: DEFAULT arg is neither a live buffer nor a string."))
+    (error
+     "Function `read-buffer': DEFAULT arg is not a live buffer or a string"))
   (completing-read prompt (buffer-alist) nil existing default
                    'minibuffer-history default t))
 
@@ -601,7 +605,7 @@ PROMPT is a string."
 A user variable is one whose doc string starts with a \"*\" character.
 You can change the value of a user variable via `\\[edit-options]'.
 
-Prompts with arg PROMPT (a string).  
+Prompts with arg PROMPT (a string).
 
 A non-nil DEFAULT-VALUE is returned if input is empty."
   (let ((symb (cond ((fboundp 'symbol-nearest-point) (symbol-nearest-point))
@@ -616,8 +620,8 @@ A non-nil DEFAULT-VALUE is returned if input is empty."
 
 ;;; See also `make-frame-names-alist', defined in `frame.el'.
 ;;;###autoload
-(defun frame-alist ()                   
-  "Alist of (FR-NAME . FR) items. FR-NAME names FR in `frame-list'.
+(defun frame-alist ()
+  "Alist of (FR-NAME . FR) items.  FR-NAME names FR in `frame-list'.
 FR-NAME is a string.  The alist is sorted by ASCII code in reverse
 alphabetical order, and with case ignored."
   (sort (mapcar (function (lambda (fr) (cons (get-frame-name fr) fr)))

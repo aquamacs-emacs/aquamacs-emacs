@@ -1,5 +1,5 @@
 ;;; oneonone.el --- Frame configuration that uses one frame per window.
-;; 
+;;
 ;; Filename: oneonone.el
 ;; Description: Frame configuration that uses one frame per window.
 ;; Author: Drew Adams
@@ -7,16 +7,16 @@
 ;; Copyright (C) 1999-2005, Drew Adams, all rights reserved.
 ;; Created: Fri Apr  2 12:34:20 1999
 ;; Version: 21.1
-;; Last-Updated: Sun May 29 09:22:37 2005
+;; Last-Updated: Mon Jul 04 10:08:28 2005
 ;;           By: dradams
-;;     Update #: 1458
+;;     Update #: 1480
 ;; Keywords: local, frames
 ;; Compatibility: GNU Emacs 20.x, GNU Emacs 21.x, GNU Emacs 22.x
-;; 
+;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
-;;; Commentary: 
-;; 
+;;
+;;; Commentary:
+;;
 ;;    Frame configuration that uses one frame per window.
 ;;
 ;;  This library is part of One-on-One Emacs, a collection of
@@ -24,7 +24,7 @@
 ;;  window-oriented.
 ;;
 ;;  This library sets up Emacs to use multiple frames: individual
-;;  frames are used, by default, instead of Emacs windows. That is,
+;;  frames are used, by default, instead of Emacs windows.  That is,
 ;;  the default is to use a frame for each Emacs window: one window on
 ;;  one frame.
 ;;
@@ -44,29 +44,29 @@
 ;;  More precisely, buffers *Help* and *Completions* are always
 ;;  created in frames that have the special properties defined here.
 ;;
-;;  `1on1-minibuffer-frame' is a standalone minibuffer frame. It is
-;;  the only frame to have a minibuffer. By default, it is
+;;  `1on1-minibuffer-frame' is a standalone minibuffer frame.  It is
+;;  the only frame to have a minibuffer.  By default, it is
 ;;  automatically sized to the full width of your display and placed
 ;;  at the bottom of the display.
 ;;
 ;;  This library is especially useful if used in combination with
 ;;  One-on-One Emacs libraries `autofit-frame.el', which automatically
 ;;  fits frames to their sole window, and `fit-frame.el', which lets
-;;  you fit a frame to its selected window manually. Library
+;;  you fit a frame to its selected window manually.  Library
 ;;  `autofit-frame.el' uses library `fit-frame.el'.
 ;;
 ;;  Because Emacs is not really designed to be frame-oriented, there
 ;;  are many built-in and standard functions that produce
 ;;  less-than-optimal results when frames, instead of windows, are the
-;;  default. In other One-on-One Emacs libraries, I have fixed most of
-;;  these built-in functions to play well with frames.
+;;  default.  In other One-on-One Emacs libraries, I have fixed most
+;;  of these built-in functions to play well with frames.
 ;;
 ;;  For more information on One-on-One Emacs see
 ;;  http://www.emacswiki.org/cgi-bin/wiki/OneOnOneEmacs.
 ;;
 ;;
 ;;  To use this library, put the following at the *END* of your init
-;;  file, `.emacs'. In particular, if your init file contains a
+;;  file, `.emacs'.  In particular, if your init file contains a
 ;;  `custom-set-variables' expression, then the following must appear
 ;;  *AFTER* `custom-set-variables', in order for this to take into
 ;;  account your customizations of any `1on1-' user options.
@@ -75,8 +75,8 @@
 ;;    (1on1-emacs)
 ;;
 ;;  I also recommend that you put the following code in your init
-;;  file, so that these buffers will display in their own
-;;  frames. Which code to use depends on your version of GNU Emacs.
+;;  file, so that these buffers will display in their own frames.
+;;  Which code to use depends on your version of GNU Emacs.
 ;;
 ;;    ;; Change first test to (string-match "22." emacs-version)
 ;;    ;;   after 22.x release.
@@ -104,12 +104,12 @@
 ;;  ---------------------------------
 ;;
 ;;    Some user options are used here only as conveniences to define
-;;    frame-parameter alists. They are defined using `defvar', not
+;;    frame-parameter alists.  They are defined using `defvar', not
 ;;    `defcustom', because you cannot use Customize to define them
-;;    independently of the alist user options they help define. The
-;;    alists themselves are the variables to customize. If you want to
-;;    change the `defvar' variables individually and then use them to
-;;    set the alist variables, you must do use `setq' or
+;;    independently of the alist user options they help define.  The
+;;    alists themselves are the variables to customize.  If you want
+;;    to change the `defvar' variables individually and then use them
+;;    to set the alist variables, you must do use `setq' or
 ;;    `set-variable', not using Customize, to change them, and you
 ;;    must restart Emacs for their changes to take effect.
 ;;
@@ -118,7 +118,7 @@
 ;;    `M-x 1on1-emacs' to see their changes (no need to restart
 ;;    Emacs).
 ;;
-;; 
+;;
 ;;  New functions and macros defined here (each has prefix `1on1-'):
 ;;
 ;;    `color-(in)active-minibuffer-frame',
@@ -160,7 +160,7 @@
 ;;    `minibuffer-frame-mouse-color'.
 ;;
 ;;  Other new variables defined here (each has prefix `1on1-'):
-;;    
+;;
 ;;    `minibuffer-frame'.
 ;;
 ;;
@@ -175,12 +175,15 @@
 ;;  Library `oneonone' requires these libraries:
 ;;
 ;;    `avoid', `cl', `files+', `frame-cmds', `frame-fns', `icomplete',
-;;    `icomplete+', `oneonone', `strings', `thingatpt', `thingatpt+'.
+;;    `icomplete+', `misc-fns', `oneonone', `strings', `thingatpt',
+;;    `thingatpt+'.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
+;;
 ;;; Change log:
 ;;
+;; 2005/06/01 dadams
+;;     Corrected typo that gave minibuffer frame a vertical scroll bar.
 ;; 2005/05/29 dadams
 ;;     *-alist: Use values from standard alist variables, if available (that is,
 ;;       don't override user settings.)
@@ -216,7 +219,7 @@
 ;; 2005/05/17 dadams
 ;;     Updated to work with Emacs 22.x.
 ;; 2005/05/09 dadams
-;;     Major reorganization/rewrite. Created, from previous version setup-frames.el.
+;;     Major reorganization/rewrite.  Created, from previous version setup-frames.el.
 ;;       Added prefix "1on1-".
 ;;       Encapsulated stuff in new command 1on1-emacs.
 ;; 2005/01/29 dadams
@@ -242,7 +245,7 @@
 ;;     added 1on1-set-minibuffer-frame-top/bottom.
 ;; 2001/01/05 dadams
 ;;     1. 1on1-minibuffer-frame-width: Use 1on1-minibuffer-frame arg for frame-char-width.
-;;     2. Don't define width when initially set 1on1-minibuffer-frame-alist. Instead,
+;;     2. Don't define width when initially set 1on1-minibuffer-frame-alist.  Instead,
 ;;        use set-frame-width afterward, so 1on1-minibuffer-frame-width uses correct
 ;;        character size.
 ;; 2001/01/05 dadams
@@ -258,7 +261,7 @@
 ;;     3. Changed var 1on1-minibuffer-frame-width to nil default (now use *-percent).
 ;; 2000/09/27 dadams
 ;;     1. Added: 1on1-display-*Completions*-frame, 1on1-display-*Help*-frame.
-;;     2. *Help* & *Completions* frames not created here. Instead, use
+;;     2. *Help* & *Completions* frames not created here.  Instead, use
 ;;        special-display-buffer-names & display-*-frame fns to define them.
 ;;     3. Added: top-level, abort-recursive-edit.
 ;; 1999/08/24 dadams
@@ -273,9 +276,9 @@
 ;;     4. Use new vars to define default-frame-alist, special-display-frame-alist.
 ;;     5. Only create built-in frames if 1on1-separate-minibuffer-frame-flag.
 ;;     6. Protected refs to x-* vars.
-;; 
+;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
+;;
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation; either version 2, or (at your option)
@@ -292,7 +295,7 @@
 ;; Boston, MA 02111-1307, USA.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
+;;
 ;;; Code:
 
 (eval-and-compile (require 'cl)) ;; pushnew (plus, for Emacs <20: when, unless)
@@ -338,7 +341,7 @@ take effect.")
 Note: This is not used if `1on1-minibuffer-frame-flag' is nil.
 
 This is used only to define the standard value of
-`1on1-minibuffer-frame-alist'. Customize that variable, not this one.
+`1on1-minibuffer-frame-alist'.  Customize that variable, not this one.
 If you change this variable, you will need to restart Emacs for it to
 take effect.")
 
@@ -348,7 +351,7 @@ take effect.")
 Note: This is not used if `1on1-minibuffer-frame-flag' is nil.
 
 This is used only to define the standard value of
-`1on1-minibuffer-frame-alist'. Customize that variable, not this one.
+`1on1-minibuffer-frame-alist'.  Customize that variable, not this one.
 If you change this variable, you will need to restart Emacs for it to
 take effect.")
 
@@ -383,7 +386,7 @@ Note: This is not used if `1on1-minibuffer-frame-flag' is nil."
 Note: This is not used if `1on1-minibuffer-frame-flag' is nil.
 
 This is used only to define the standard value of
-`1on1-minibuffer-frame-alist'. Customize that variable, not this one.
+`1on1-minibuffer-frame-alist'.  Customize that variable, not this one.
 If you change this variable, you will need to restart Emacs for it to
 take effect.")
 
@@ -393,7 +396,7 @@ take effect.")
 Note: This is not used if `1on1-minibuffer-frame-flag' is nil.
 
 This is used only to define the standard value of
-`1on1-minibuffer-frame-alist'. Customize that variable, not this one.
+`1on1-minibuffer-frame-alist'.  Customize that variable, not this one.
 If you change this variable, you will need to restart Emacs for it to
 take effect.")
 
@@ -403,7 +406,7 @@ take effect.")
 Note: This is not used if `1on1-minibuffer-frame-flag' is nil.
 
 This is used only to define the standard value of
-`1on1-minibuffer-frame-alist'. Customize that variable, not this one.
+`1on1-minibuffer-frame-alist'.  Customize that variable, not this one.
 If you change this variable, you will need to restart Emacs for it to
 take effect.")
 
@@ -412,8 +415,8 @@ take effect.")
 If nil, function `1on1-set-minibuffer-frame-top/bottom' will position
 minibuffer at bottom of display.
 
-An integer. If negative, then the position is that of the frame bottom
-relative to the screen bottom.
+An integer.  If negative, then the position is that of the frame
+bottom relative to the screen bottom.
 
 See `default-frame-alist' for an explanation of frame parameters.
 
@@ -431,7 +434,7 @@ for it to take effect."
 Note: This is not used if `1on1-minibuffer-frame-flag' is nil.
 
 This is used only to define the standard value of
-`1on1-minibuffer-frame-alist'. Customize that variable, not this one.
+`1on1-minibuffer-frame-alist'.  Customize that variable, not this one.
 If you change this variable, you will need to restart Emacs for it to
 take effect.")
 
@@ -457,7 +460,7 @@ If you customize this variable, you will need to rerun `1on1-emacs'
 for it to take effect."
   :type 'integer :group 'oneonone)
 
-;; Use values from the standard list, when available. However, we have no way of
+;; Use values from the standard list, when available.  However, we have no way of
 ;; distinguishing values predefined in vanilla Emacs from user settings.
 (defcustom 1on1-minibuffer-frame-alist
   (list
@@ -482,7 +485,7 @@ for it to take effect."
    (or (assq 'user-position minibuffer-frame-alist)
        (cons 'user-position t))
    (or (assq 'vertical-scroll-bars minibuffer-frame-alist) ;  No scroll bar.
-       (cons 'user-position nil))
+       (cons 'vertical-scroll-bars nil))
    (or (assq 'name minibuffer-frame-alist)
        (cons 'name "Emacs Minibuffer")))
   "Frame-parameter alist for the standalone minibuffer frame
@@ -517,7 +520,7 @@ Note: This is not used if `1on1-*Help*-frame-flag' is nil.
 If you customize this variable, you will need to rerun `1on1-emacs'
 for it to take effect."
   :type 'string :group 'oneonone)
-    
+
 (defcustom 1on1-help-frame-mouse+cursor-color "Blue Violet"
   "Default color for cursor & pointer of *Help* frame.
 
@@ -547,7 +550,7 @@ Note: This is not used if `1on1-*Completions*-frame-flag' is nil.
 If you customize this variable, you will need to rerun `1on1-emacs'
 for it to take effect."
   :type 'string :group 'oneonone)
-    
+
 (defcustom 1on1-completions-frame-mouse+cursor-color "VioletRed"
   "Default color for cursor & pointer of *Completions* frame.
 
@@ -563,14 +566,14 @@ for it to take effect."
 (defvar 1on1-default-frame-foreground "Black"
   "*Default foreground color for non-special frames.
 This is used only to define the standard value of
-`1on1-default-frame-alist'. Customize that variable, not this one.
+`1on1-default-frame-alist'.  Customize that variable, not this one.
 If you change this variable, you will need to restart Emacs for it to
 take effect.")
 
 (defvar 1on1-default-frame-background "LightBlue"
   "*Default background color for non-special frames.
 This is used only to define the standard value of
-`1on1-default-frame-alist'. Customize that variable, not this one.
+`1on1-default-frame-alist'.  Customize that variable, not this one.
 If you change this variable, you will need to restart Emacs for it to
 take effect.")
 
@@ -581,28 +584,28 @@ take effect.")
     "-Misc-Fixed-Medium-R-Normal--15-140-75-75-C-90-ISO8859-1")
   "*Default font for non-special frames.
 This is used only to define the standard value of
-`1on1-default-frame-alist'. Customize that variable, not this one.
+`1on1-default-frame-alist'.  Customize that variable, not this one.
 If you change this variable, you will need to restart Emacs for it to
 take effect.")
 
 (defvar 1on1-default-frame-mouse-color "Red"
   "*Default mouse color for non-special frames.
 This is used only to define the standard value of
-`1on1-default-frame-alist'. Customize that variable, not this one.
+`1on1-default-frame-alist'.  Customize that variable, not this one.
 If you change this variable, you will need to restart Emacs for it to
 take effect.")
 
 (defvar 1on1-default-frame-cursor-color "Red"
   "*Default text cursor color for non-special frames.
 This is used only to define the standard value of
-`1on1-default-frame-alist'. Customize that variable, not this one.
+`1on1-default-frame-alist'.  Customize that variable, not this one.
 If you change this variable, you will need to restart Emacs for it to
 take effect.")
 
 (defvar 1on1-default-frame-menu-bar-lines 1
   "*Number of lines used for the menu bar in non-special frames.
 This is used only to define the standard value of
-`1on1-default-frame-alist'. Customize that variable, not this one.
+`1on1-default-frame-alist'.  Customize that variable, not this one.
 If you change this variable, you will need to restart Emacs for it to
 take effect.")
 
@@ -612,7 +615,7 @@ A cons whose car is the distance from the top in pixels
 and whose cdr is the distance from the left in pixels.
 
 This is used only to define the standard value of
-`1on1-default-frame-alist'. Customize that variable, not this one.
+`1on1-default-frame-alist'.  Customize that variable, not this one.
 If you change this variable, you will need to restart Emacs for it to
 take effect.")
 
@@ -622,11 +625,11 @@ A cons whose car is the frame width in pixels
 and whose cdr is the frame height in pixels.
 
 This is used only to define the standard value of
-`1on1-default-frame-alist'. Customize that variable, not this one.
+`1on1-default-frame-alist'.  Customize that variable, not this one.
 If you change this variable, you will need to restart Emacs for it to
 take effect.")
 
-;; Use values from the standard list, when available. However, we have no way of
+;; Use values from the standard list, when available.  However, we have no way of
 ;; distinguishing values predefined in vanilla Emacs from user settings.
 (defcustom 1on1-default-frame-alist
   (list
@@ -680,17 +683,17 @@ for it to take effect."
   "*Default foreground color for special display frames.
 
 This is used only to define the standard value of
-`1on1-special-display-frame-alist'. Customize that variable, not this one.
-If you change this variable, you will need to restart Emacs for it to
-take effect.")
+`1on1-special-display-frame-alist'.  Customize that variable, not this
+one.  If you change this variable, you will need to restart Emacs for
+it to take effect.")
 
 (defvar 1on1-default-special-frame-background "LightSteelBlue"
   "*Default background color for special display frames.
 
 This is used only to define the standard value of
-`1on1-special-display-frame-alist'. Customize that variable, not this one.
-If you change this variable, you will need to restart Emacs for it to
-take effect.")
+`1on1-special-display-frame-alist'.  Customize that variable, not this
+one.  If you change this variable, you will need to restart Emacs for
+it to take effect.")
 
 (defvar 1on1-default-special-frame-font
   (if (eq system-type 'windows-nt)
@@ -700,32 +703,33 @@ take effect.")
   "*Default font for special display frames.
 
 This is used only to define the standard value of
-`1on1-special-display-frame-alist'. Customize that variable, not this one.
-If you change this variable, you will need to restart Emacs for it to
-take effect.")
+`1on1-special-display-frame-alist'.  Customize that variable, not this
+one.  If you change this variable, you will need to restart Emacs for
+it to take effect.")
 
 (defvar 1on1-default-special-frame-mouse-color "Yellow"
   "*Default mouse color for special display frames.
 
 This is used only to define the standard value of
-`1on1-special-display-frame-alist'. Customize that variable, not this one.
-If you change this variable, you will need to restart Emacs for it to
-take effect.")
+`1on1-special-display-frame-alist'.  Customize that variable, not this
+one.  If you change this variable, you will need to restart Emacs for
+it to take effect.")
 
 (defvar 1on1-default-special-frame-cursor-color "Yellow"
   "*Default text cursor color for special display frames.
 
 This is used only to define the standard value of
-`1on1-special-display-frame-alist'. Customize that variable, not this one.
-If you change this variable, you will need to restart Emacs for it to
-take effect.")
+`1on1-special-display-frame-alist'.  Customize that variable, not this
+one.  If you change this variable, you will need to restart Emacs for
+it to take effect.")
 
 (defvar 1on1-default-special-frame-menu-bar-lines 1
   "*Number of lines used for the menu bar of special display frames.
+
 This is used only to define the standard value of
-`1on1-special-display-frame-alist'. Customize that variable, not this one.
-If you change this variable, you will need to restart Emacs for it to
-take effect.")
+`1on1-special-display-frame-alist'.  Customize that variable, not this
+one.  If you change this variable, you will need to restart Emacs for
+it to take effect.")
 
 (defvar 1on1-default-special-frame-upper-left-corner '(0 . 0)
   "*Position of upper left corner of special display frames.
@@ -733,9 +737,9 @@ A cons whose car is the distance from the top in pixels
 and whose cdr is the distance from the left in pixels.
 
 This is used only to define the standard value of
-`1on1-special-display-frame-alist'. Customize that variable, not this one.
-If you change this variable, you will need to restart Emacs for it to
-take effect.")
+`1on1-special-display-frame-alist'.  Customize that variable, not this
+one.  If you change this variable, you will need to restart Emacs for
+it to take effect.")
 
 (defvar 1on1-default-special-frame-size '(80 . 20)
   "*Default size of special display frames.
@@ -743,11 +747,11 @@ A cons whose car is the frame width in pixels
 and whose cdr is the frame height in pixels.
 
 This is used only to define the standard value of
-`1on1-special-display-frame-alist'. Customize that variable, not this one.
-If you change this variable, you will need to restart Emacs for it to
-take effect.")
+`1on1-special-display-frame-alist'.  Customize that variable, not this
+one.  If you change this variable, you will need to restart Emacs for
+it to take effect.")
 
-;; Use values from the standard list, when available. However, we have no way of
+;; Use values from the standard list, when available.  However, we have no way of
 ;; distinguishing values predefined in vanilla Emacs from user settings.
 (defcustom 1on1-special-display-frame-alist
   (list
@@ -839,7 +843,7 @@ If `1on1-separate-minibuffer-*Completions*-flag' is non-nil, then
     ;; `display-buffer' (& `*-other-window' fns) will use separate frames.
     (setq pop-up-frames      t
           pop-up-frame-alist (append default-frame-alist pop-up-frame-alist))
-    
+
     ;; Set up `1on1-minibuffer-frame'.
     (setq minibuffer-frame-alist (append 1on1-minibuffer-frame-alist
                                          minibuffer-frame-alist))
@@ -848,8 +852,8 @@ If `1on1-separate-minibuffer-*Completions*-flag' is non-nil, then
       (setq 1on1-minibuffer-frame
             (let ((after-make-frame-functions nil)) ; E.g. inhibit `fit-frame'.
               (make-frame 1on1-minibuffer-frame-alist))))
-    
-    ;; Resize and reposition it. If variable `1on1-minibuffer-frame-width'
+
+    ;; Resize and reposition it.  If variable `1on1-minibuffer-frame-width'
     ;; or `1on1-minibuffer-frame-top/bottom' is nil, calculate automatically.
     (1on1-set-minibuffer-frame-width)
     (1on1-set-minibuffer-frame-top/bottom)
@@ -865,12 +869,13 @@ show/hide: hold CTRL + click in window"))
     (add-hook 'minibuffer-setup-hook '1on1-color-active-minibuffer-frame)
     (add-hook 'minibuffer-exit-hook '1on1-color-inactive-minibuffer-frame)
     ;; Redefine built-in fns so they color minibuffer frame.
-    (1on1-setup-minibuffer-frame-coloring))) 
+    (1on1-setup-minibuffer-frame-coloring)))
 
 
 (defun 1on1-display-*Help*-frame (buf &optional args)
   "Display *Help* buffer in its own frame.
-`special-display-function' is used to do the actual displaying."
+`special-display-function' is used to do the actual displaying.
+BUF and ARGS are the arguments to `special-display-function'."
   (let ((old-ptr-shape x-pointer-shape)
         return-window)
     (when (boundp 'x-pointer-xterm)
@@ -883,7 +888,8 @@ show/hide: hold CTRL + click in window"))
 (defun 1on1-display-*Completions*-frame (buf &optional args)
   "Display *Completions* buffer in its own frame.
 `special-display-function' is used to do the actual displaying.
-Completion input events are redirected to `1on1-minibuffer-frame'."
+Completion input events are redirected to `1on1-minibuffer-frame'.
+BUF and ARGS are the arguments to `special-display-function'."
   (let ((old-ptr-shape x-pointer-shape)
         return-window)
     (when (boundp 'x-pointer-box-spiral)
@@ -922,18 +928,21 @@ and display size, and depending on
             (* 100 (frame-char-width 1on1-minibuffer-frame)))))))
 
 (defun 1on1-color-active-minibuffer-frame ()
+  "Use `1on1-active-minibuffer-frame-background' for minibuffer."
   (and (boundp '1on1-minibuffer-frame)
        (save-window-excursion
          (select-frame 1on1-minibuffer-frame)
          (set-background-color 1on1-active-minibuffer-frame-background))))
 
 (defun 1on1-color-inactive-minibuffer-frame ()
+  "Use `1on1-inactive-minibuffer-frame-background' for minibuffer."
   (and (boundp '1on1-minibuffer-frame)
        (save-window-excursion
          (select-frame 1on1-minibuffer-frame)
          (set-background-color 1on1-inactive-minibuffer-frame-background))))
 
 (defun 1on1-color-isearch-minibuffer-frame ()
+  "Use `1on1-isearch-minibuffer-frame-background' for minibuffer."
   (and (boundp '1on1-minibuffer-frame)
        (save-window-excursion
          (select-frame 1on1-minibuffer-frame)

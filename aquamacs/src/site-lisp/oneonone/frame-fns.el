@@ -1,5 +1,5 @@
 ;;; frame-fns.el --- Non-interactive frame and window functions.
-;; 
+;;
 ;; Filename: frame-fns.el
 ;; Description: Non-interactive frame and window functions.
 ;; Author: Drew Adams
@@ -7,15 +7,15 @@
 ;; Copyright (C) 1996-2005, Drew Adams, all rights reserved.
 ;; Created: Tue Mar  5 16:15:50 1996
 ;; Version: 21.1
-;; Last-Updated: Sat Jan 01 18:22:44 2005
+;; Last-Updated: Mon Jul 04 00:19:06 2005
 ;;           By: dradams
-;;     Update #: 154
+;;     Update #: 163
 ;; Keywords: internal, extensions, local, frames
-;; Compatibility: GNU Emacs 21.x, GNU Emacs 20.x
-;; 
+;; Compatibility: GNU Emacs 20.x, GNU Emacs 21.x, GNU Emacs 22.x
+;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
-;;; Commentary: 
+;;
+;;; Commentary:
 ;;
 ;;    Non-interactive frame and window functions.
 ;;
@@ -32,21 +32,21 @@
 ;;    `avoid'.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
+;;
 ;;; Change log:
-;; 
+;;
 ;; 2004/11/26 dadams
 ;;     Added frame-geom-spec-numeric and frame-geom-value-numeric.
 ;; 2004/03/19 dadams
-;;     read-frame: 1) if default is a frame, use its name, 
+;;     read-frame: 1) if default is a frame, use its name,
 ;;                 2) use frame-name-history, not minibuffer-history,
 ;;                    and use make-frame-names-alist, not frame-alist,
 ;;                    in completing-read
 ;; 1996/02/14 dadams
 ;;     Added: window-coords, distance.
-;; 
+;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
+;;
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation; either version 2, or (at your option)
@@ -63,8 +63,8 @@
 ;; Boston, MA 02111-1307, USA.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
-;;; Code: 
+;;
+;;; Code:
 
 (eval-when-compile (require 'cl)) ;; member-if
                                   ;; (plus, for Emacs 20: dolist, push
@@ -224,7 +224,7 @@ the opposite frame edge from the edge indicated in the input spec."
   (unless frame (setq frame (selected-frame)))
   (if (framep frame)
       (cdr (assq 'name (frame-parameters frame)))
-    (error "GET-FRAME-NAME:  Argument not a frame: %s." frame)))
+    (error "Function `get-frame-name': Argument not a frame: `%s'" frame)))
 
 ;;;###autoload
 (defun get-a-frame (frame)
@@ -237,7 +237,9 @@ If FRAME is a frame, it is returned."
                (function (lambda (fr) (string= frame (get-frame-name fr))))
                (frame-list))))
         (t
-         (error "GET-A-FRAME:  Arg neither a string nor a frame: %s." frame))))
+         (error
+          "Function `get-frame-name': Arg neither a string nor a frame: `%s'"
+          frame))))
 
 ;;;###autoload
 (defun read-frame (prompt &optional default existing)
@@ -252,7 +254,8 @@ existing frames."
   (setq default (if (framep default) (get-frame-name default)
                   (or default (get-frame-name))))
   (unless (stringp default)
-    (error "read-frame: DEFAULT arg is neither a frame nor a string."))
+    (error
+     "Function `read-frame': DEFAULT arg is neither a frame nor a string"))
   (completing-read prompt (make-frame-names-alist)
                    ;; To limit to live frames:
                    ;; (function (lambda (fn+f)(frame-live-p (cdr fn+f))))
@@ -273,7 +276,7 @@ The optional FRAME argument is as for function `get-buffer-window'."
     (save-excursion
       (set-buffer buffer)
       (when (buffer-live-p buffer)      ; Do nothing if dead buffer.
-        (dolist (fr (frames-on buffer)) ; Is it better to search through 
+        (dolist (fr (frames-on buffer)) ; Is it better to search through
           (save-window-excursion        ; frames-on or windows-on?
             (select-frame fr)
             (when (one-window-p t fr) (push fr frs))))))
@@ -287,7 +290,7 @@ The optional FRAME argument is as for function `get-buffer-window'."
     (save-excursion
       (set-buffer buffer)
       (when (buffer-live-p buffer)      ; Do nothing if dead buffer.
-        (dolist (fr (frames-on buffer)) ; Is it better to search through 
+        (dolist (fr (frames-on buffer)) ; Is it better to search through
           (save-window-excursion        ; frames-on or windows-on?
             (select-frame fr)
             (when (not (one-window-p t fr)) (push fr frs))))))
