@@ -11,7 +11,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.24 2005/07/02 21:59:46 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.25 2005/07/05 13:35:52 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -204,7 +204,7 @@ yes-or-no prompts - y or n will do."
 
 (condition-case nil (progn (make-directory "~/Library/Preferences/Aquamacs Emacs")
 ;; problem with this: could be started from /Volumes/.. (DMG) for first time, then moved		
-	   (init-user-help) ;; init help system (first start)
+	   (aquamacs-init-user-help) ;; init help system (first start)
 			   )
   (error t)) 
 
@@ -1181,10 +1181,15 @@ to be appropriate for its first buffer"
 	(frame-live-p frame)
 	(next-window (selected-window) 'nominibuf frame)
 	(not (memq  (frame-first-window frame) delw))
-	)) 
+	)
+      ) 
     )
   )  
- 
+
+;; pressing q in a view should delete the frame
+(aquamacs-set-defaults
+ '((view-remove-frame-by-deleting t)))
+
 
 
 
@@ -1458,7 +1463,11 @@ we put it on this frame."
 ;
 ;		      )))
 
-
+;; workaround for people who still call this in their .emacs
+(defun mwheel-install ()
+  (princ "mwheel-install ignored in Aquamacs- mouse wheel support is present by default.\n")
+  t
+)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; temporary stuff for releases according to admin/FOR-RELEASE
@@ -1481,6 +1490,5 @@ we put it on this frame."
 (require 'check-for-updates)
 ; via hook so it can be turned off
 (add-hook 'after-init-hook 'aquamacs-check-for-updates-if-necessary 'append)
-(provide 'osx_defaults)
 
-(load-sitestart-files)
+(provide 'osx_defaults)
