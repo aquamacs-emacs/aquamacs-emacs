@@ -22,8 +22,6 @@
 ;; A (very) minimal CSS mode.  Does indentation, some font-locking and
 ;; nothing more.
 
-;; Edit, David Reitter 06/2005: run-mode-hooks, auto-mode-alist
-
 ;;; Code:
 
 (eval-when-compile
@@ -147,14 +145,14 @@
   (setq comment-start-skip "/\\*+ *")
   (make-local-variable 'comment-style)
   (setq comment-style 'extra-line)
+  (make-local-variable 'fill-paragraph-function)
+  (setq fill-paragraph-function 'css-fill)
   ;; (make-local-variable 'comment-indent-function)
   ;; (setq comment-indent-function 'css-mode-indent-comment)
   (setq indent-line-function 'css-mode-indent-line)
   (setq font-lock-defaults '((css-mode-font-lock-keywords
                               css-mode-font-lock-keywords-1
-                              css-mode-font-lock-keywords-2)))
-  (run-mode-hooks)
-)
+                              css-mode-font-lock-keywords-2))))
 
 ;; set up keymap
 (if css-mode-map
@@ -171,31 +169,32 @@
   ;; corrects as follows: If we're on a line with a closing
   ;; parenthesis, outdent.  If we're inside a comment, indent by
   ;; three, unless the line starts with the closing comment sequence.
-  (let* ((indent-data (parse-partial-sexp (point-min) (line-beginning-position)))
-	 (indent (car indent-data))
-	 (in-comment (nth 4 indent-data))
-	 close-block
-	 close-comment
-	 pos)
+  (let* ((indent-data (parse-partial-sexp (point-min)
+                                          (line-beginning-position)))
+         (indent (car indent-data))
+         (in-comment (nth 4 indent-data))
+         close-block
+         close-comment
+         pos)
     (save-excursion
       (back-to-indentation)
       (setq close-block (looking-at "}")
-	    close-comment (looking-at "\\*/")))
+            close-comment (looking-at "\\*/")))
     (when close-block
       (setq indent (1- indent)))
     (setq pos (* indent css-mode-indent-depth))
     (if (and in-comment (not close-comment))
-	(+ 3 pos)
+        (+ 3 pos)
       pos)))
       
-(defun css-mode-indent-line (&optional indent)
+(defun css-mode-indent-line (&;optional indent)
   "Indent the current line.
 
 If optional INDENT is non-nil, use that instead of calculating the
 indent level."
   (interactive)
   (let ((indent (or indent (css-mode-calc-indent-level)))
-	pos)
+        pos)
     (save-excursion
       (back-to-indentation)
       (delete-region (point-at-bol) (point))
@@ -217,7 +216,31 @@ indent level."
   (css-mode-indent-line)
   (forward-char))
 
-(add-to-list 'auto-mode-alist '("\\.css\\'" . css-mode))
+(defun css-fill (&;rest ignore)
+  "Lay out CSS expressions."
+  (interactive)
+  (condition-case data
+      (progn
+        (backward-up-list 1)
+        (forward-char 1)
+        (newline-and-indent)
+        (catch 'done
+          (let ((start (point)))
+            (while (re-search-forward "\n\\|;")
+              (let* ((data (save-excursion
+                             (parse-partial-sexp start (point))))
+                     (depth (nth 0 data))
+                     (in-string (nth 3 data))
+                     (in-comment (nth 4 data)))
+                (when (< depth 0)
+                  (throw 'done t))
+                (when (and (= depth 0)
+                           (not (or in-string in-comment)))
+                  (if (string= (match-string 0) "\n")
+                      (replace-match "")
+                    (newline-and-indent))))))))
+    (scan-error
+     (search-forward "{"))))
 
 (provide 'css-mode)
 
