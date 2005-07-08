@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.6 2005/07/01 07:00:37 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.7 2005/07/08 21:52:22 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -283,6 +283,15 @@ rather than behaving as Meta"
 (easy-menu-add-item  nil '("Help")
   ["-" nil nil] 'emacs-tutorial)
   
+
+;; workarounds for current bugs
+
+; can't get rid of the menu bar on a Mac
+(easy-menu-remove-item global-map  '("menu-bar" "options" "showhide") 'menu-bar-mode)
+
+; can't show a frame on a different display
+(easy-menu-remove-item global-map  '("menu-bar" "file") 'make-frame-on-display)
+
 
 
 (provide 'aquamacs-menu)
