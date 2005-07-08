@@ -11,7 +11,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.25 2005/07/05 13:35:52 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.26 2005/07/08 21:54:55 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -146,6 +146,7 @@ yes-or-no prompts - y or n will do."
 
 ; do this early, so we can override settings
 (require 'aquamacs-frame-setup)
+; one-on-one is called later
 (setq osxkeys-command-key 'hyper)
 ; we have inhibit-fit-frame set to true... can't do this
 ; (global-set-key [(control ?x) (control ?-)] 'fit-frame)
@@ -224,39 +225,7 @@ yes-or-no prompts - y or n will do."
     )
   )
 
-(defun filter-font-from-alist (alist)
-(if (and (assq 'font  alist)
-	 (not (font-exists-p (cdr (assq 'font  alist)))) 
-	 )
-  (progn 
-    (print (format "Warning: Font %s not available." (cdr (assq 'font  alist)))) 
-    (assq-delete-all 'font alist) ;; return
-    )
-  alist)
-) 
-
-(defun filter-missing-fonts ()
-  (setq default-frame-alist (filter-font-from-alist default-frame-alist))
-  (setq special-display-frame-alist (filter-font-from-alist special-display-frame-alist))
-
-  (let ((newlist))
-	(dolist (th   aquamacs-mode-specific-default-themes    )
-	 
-	   (if (cdr th)   
-	     (add-to-list 'newlist  (cons (car th)  (filter-font-from-alist (cdr th))))
-	   )
-	   
-	   ) 
-	(setq aquamacs-mode-specific-default-themes newlist)
-	)
-	  
-  )
-
-; filters all missing fonts from specifications, so we don't show
-; stupid error messages
-; especially necessary during 0.9.1 -> 0.9.2 transition, because
-; scalable fonts have different names now
-(add-hook 'after-init-hook 'filter-missing-fonts t) 
+   
 
 (require 'easymenu) 
 
@@ -411,38 +380,7 @@ yes-or-no prompts - y or n will do."
   )
 
 
-(defun aquamacs-set-theme-as-mode-default () 
-  (interactive)
-   "Activate current theme as default for a given mode."
-
-   ;; stolen from frame-cmds.el
-   (setq theme (set-difference (frame-parameters (selected-frame))
-                              (append '((user-position) (visibility) (top) (left) (width) (height)) frame-parameters-to-exclude)
-                             :key 'car))
-
-
-  (customize-set-variable 'aquamacs-mode-specific-default-themes
-
-			  (cons (cons major-mode theme
-				      ) 
-				(assq-delete-all major-mode aquamacs-mode-specific-default-themes)
-				)
- 
-			  )
-    
-  (message (format "Theme has been set as default for %s" major-mode))
-  )
-; 
-(define-key-after menu-bar-options-menu [menu-set-theme-as-default]
-  '(menu-item  "Use current theme as default"     aquamacs-set-theme-as-default
-	 
-	      :help "") 'mouse-set-font)
-
-(define-key-after menu-bar-options-menu [menu-set-theme-as-mode-default]
-  '(menu-item  "Use current theme for current mode"     aquamacs-set-theme-as-mode-default 
-	      :help "") 'mouse-set-font)
-
-;; one buffer per frame
+   
  
 ;; define customization option
 (defcustom one-buffer-one-frame t
@@ -577,62 +515,8 @@ Use this argument instead of explicitly setting `view-exit-action'."
     (when need-save
       (custom-save-all))))
 
-(defun fontset-exist-p (font)
-(condition-case nil
-    (fontset-info font)
-  (error nil))
-)
-
-;; this needs to be replaced by functions defined earlier
-; recursion is not so good in elisp anyways
-(defun filter-fonts (list)
- "Filters the font list LIST to contain only existing fontsets.
-Each element of LIST has to be of the form (symbol . fontset)."
-  (if (car list)
-      (if (fontset-exist-p (cdr (cdr (car list))))
-	  (cons (car list)
-		(filter-fonts (cdr list))
-		)
-					; else
-	(filter-fonts (cdr list))
-	) 
-    ;; else
-    nil)
-
-  )
- 
-;; this is overridden by the user's customization
-
-;; but use a different font for other modes
-; this doesnt work yet, because set-frame-font is applied to the wrong
-; frame at that point
-
 ;; mode-specific font settings
-;;   contains a list
-
-
-(defcustom aquamacs-mode-specific-default-themes
-  (filter-fonts '(
-		  (text-mode  (font . "fontset-lucida13")) 
-		  (change-log-mode  (font . "fontset-lucida13"))
-		  (tex-mode  (font . "fontset-lucida13"))
-		  (outline-mode  (font . "fontset-lucida13"))
-		  (paragraph-indent-text-mode  (font . "fontset-lucida13"))
-		  (speedbar-mode (minibuffer-auto-raise . nil))
-		  ))
-  "Association list to set mode-specific themes. Each element 
-is a list of elements of the form (mode-name theme), where
-THEME is an association list giving frame parameters as
-in default-frame-alist or (frame-parameters). The fontset is set
-whenever the mode MODE-NAME is activated."
-  :type '(repeat (cons :format "%v"
-		       (symbol :tag "Mode-name")
-		       (repeat (cons :format "%v"
-				     (symbol :tag "Frame-Parameter")
-				     (sexp :tag "Value")))))
-  :group 'Aquamacs
-  )
- 
+(require 'aquamacs-mode-specific-themes)
  
  
 ; update the help-mode specification with a fit-frame
@@ -659,162 +543,15 @@ whenever the mode MODE-NAME is activated."
 	'append) ;; move to the end: after loading customizations
 	
 	
-(defun aquamacs-combined-mode-specific-settings (default-alist theme)
-
-  (dolist (th default-alist )
      
-    (unless (assq (car th) theme)
-      (setq theme (cons th theme))
-      )
-    )
-  (setq theme (assq-delete-all 'user-position theme))
-  (setq theme (assq-delete-all 'menu-bar-lines theme))
-  (setq theme (assq-delete-all 'top theme))
-  (setq theme (assq-delete-all 'height theme))
-  (setq theme (assq-delete-all 'left theme))
-  (setq theme (assq-delete-all 'width theme))
-  (setq theme (assq-delete-all 'user-position theme))
-  theme
-) 
-(defun set-mode-specific-theme (&optional frame force)
-  (unless frame (setq frame (selected-frame)))
 
-  (if (frame-live-p frame)
+;; this loads a huge package to get emacs to play ball with multiple frames
+(require 'aquamacs-frame-setup)  
 
-      (condition-case err		; (otherwise, Emacs hangs)
-      
-	  ; frame-configured-for-buffer stores for which buffer
-	  ; and which major-mode the frame configuration
-	  ; is for, so we don't have to apply the theme again. 
-	  ; This is also very important because setting the theme in itself
-	  ; will cause another menu-bar-update-hook call, so we can end up
-	  ; with this function called again and again...
-
-	  (let ((buffer (window-buffer (frame-first-window frame))))
-	    
-	    (if (or 
-		    (not (equal (frame-parameter frame 
-					     'frame-configured-for-buffer)
-			     ;(cons 
-			      buffer 
-			     ; major-mode)
-			     ))
-		     force)
-
-		(save-excursion
-		  (set-buffer buffer)
-		  (let ((theme (aquamacs-combined-mode-specific-settings 
-				(if (special-display-p (buffer-name)) 
-				    special-display-frame-alist 
-				  default-frame-alist
-				  )
-				(get-mode-specific-theme major-mode)
-		      
-				)
-			       )
-			)
-		    
-		   
-		    ;; make sure we don't move the whole frame -
-		    ;; it is already shown on screen, and 
-		    ;; the position is determined by "smart-frame-positioning",
-		    ;; that is per file name and according to the 'smart' heuristic
-		    
-		 
-		    (modify-frame-parameters frame (cons (cons 'frame-configured-for-buffer 
-				 
-							       buffer 
-				 
-							       ) theme))
-		    )
-		  )
-	      )
-	    )
-	(error (print err))  
-	)
-    )
-  )
-
-
-
-(defun get-mode-specific-theme (mode) 
-  (cdr (assq mode aquamacs-mode-specific-default-themes)) 
-)
-
-(defun set-mode-theme-after-change-major-mode ()       			      
-; delete the configuration cache parameter
-; sometimes, this will be called for the buffer, but before
-; the target frame has been switched to the new buffer.
-; that's bad luck then. 
-   
-  (dolist (f (find-all-frames-internal (current-buffer)))
-; update the theme 
-    (set-mode-specific-theme f t)
-    )  
-)
- 
-(add-hook 'after-change-major-mode-hook	
-	  'set-mode-theme-after-change-major-mode
-	  )
-; (setq after-change-major-mode-hook nil) 
-
-(defun set-mode-theme-after-make-frame (frame) 
-	    ; only if we have a window and a buffer here
-	    (if (and (frame-first-window) (window-buffer (frame-first-window frame)))
-		; make sure we acticate the right buffer
-		; and that we don't change the selected frame
-		(save-excursion
-		  (set-buffer (window-buffer (frame-first-window frame)))
-		  (set-mode-specific-theme frame)
-		  ) 
-	      )
-	    )
-;(add-hook 'after-make-frame-functions	
-;	  'set-mode-theme-after-make-frame
-;	  )
-
-;(setq last-major-mode-theme-in-this-frame nil)
-
-(defun update-mode-theme ()
-  "Update the theme (colors, font) of the selected frame 
-to be appropriate for its first buffer"
-  
-      (condition-case nil
-					; we must catch errors here, because
-					; otherwise Emacs would clear menu-bar-update-hook
-					; which would be not good at all.
-	  (unless
-	      (minibuffer-window-active-p (selected-window))
-					;(make-variable-frame-local 'last-major-mode-theme-in-this-frame)
-					;(setq last-major-mode-theme-in-this-frame major-mode)
-					; can't call ->crash
-	    (set-mode-specific-theme)
-	    )
-	(error nil)
-	)
-  )
-(add-hook 'menu-bar-update-hook 'update-mode-theme)
-
-; menu-bar-update-hook
-
-
-; (setq after-make-frame-functions nil) 
-
- 
-;; need to copy frame settings (font) into default-frame-alist (using setup-frames library)
-;; avoids popping up frames and then resizing them
- 
-  
-;; this is to set the default font from what has been specified 
-;; in the customization variables
-;; the following doesn't work - even though the hook is run, set-frame-font doesnt set the font for the first frame.
+(provide 'drews_init) ; migration from 0.9.1 (require in customizations)
 
 ;; http://www.emacswiki.org/cgi-bin/wiki/DrewsElispLibraries
   
-;; this loads a huge package to get emacs to play ball with multiple frames
- (require 'aquamacs-frame-setup)  
-(provide 'drews_init) ; migration from 0.9.1 (require in customizations)
-
 ;; set default fonts - after aquamacs-frame-setup has initialized things
 
 (if (fontset-exist-p "fontset-monaco12") 
@@ -899,344 +636,21 @@ to be appropriate for its first buffer"
 	  )
 	)
     )
-)
-
-
-
-(defun open-in-other-frame-p (buf)
-  
- (or one-buffer-one-frame-force	;; set by color-theme
-     (let ( (bufname (get-bufname buf))
-	    )
-   
-       (if (and one-buffer-one-frame 
-		(> (buffer-size (window-buffer)) 0)
-		)
-	   (if 
-	       (member bufname
-		       '(
-			 "\*Completions\*" 
-			 "\*Apropos\*" 
-			 " SPEEDBAR" ; speedbar package opens its own frame
-			 "\*Article\*"	; gnus
-		      
-			 )
-		       )
-	       nil
-	     t 				
-   
-	     )
-					; else --> not one-buffer-one-frame
-	 (special-display-p (get-bufname (car args))) ; return nil if not special-display buffer 
-	 )
-       )
-     )
- )
-
-(defun killable-buffer-p (buf)
-  
-  (let ( (bufname (get-bufname buf))
-	 )
- 
-    (if one-buffer-one-frame
-	(if (or (equal "\*Messages\*" bufname) 
-	      
-		(equal  "\*scratch\*" bufname) 
-		(equal  "\*Help\*" bufname) 
-	      
-		)
-	    nil
-      
-	  t
-	  ) nil 
-	    )
-    )
-  )
-
-
-; init
-(setq aquamacs-newly-opened-frames '() )
-
-;; only for certain special buffers
-
- 
-
-(if (string= "mac" window-system)
-(defadvice switch-to-buffer (around sw-force-other-frame (&rest args) activate)
-    
-  
-					; is buffer shown in a frame?
-  (if (and one-buffer-one-frame
-	   (walk-windows
-	    (lambda (w)
-	      (if (eq (window-buffer w) (get-bufobj (car args)))
-	     
-		   (make-frame-visible (select-frame (window-frame w)
-						    )
-				      ) 
-		  
-		)
-	      ) t) ;; include hidden frames
-	   )
-      t
-  
-    (if (or (not (visible-frame-list))
-	    (not (frame-visible-p (selected-frame)))
-	    (open-in-other-frame-p (car args))
-	     
-	    )
-	(if (equal (car args) (buffer-name (current-buffer)))  ; is buffer already current? then make sure it's visible.
-	    (raise-frame (selected-frame) )  ; bring to front
-	     (progn
-	        
-	       (apply #'switch-to-buffer-other-frame args)
-	  
-	       (add-to-list 'aquamacs-newly-opened-frames (cons (selected-window) (current-buffer))) ;; store the frame/buffer information
-	       )
-	     )
-	; else : show in same frame
-      (if (window-dedicated-p (selected-window))
-        (apply #'switch-to-buffer-other-window args)
-					; else: show in same frame
-	ad-do-it
-	)
-	
+  (if (< aquamacs-customization-version-id 094.2)
+      (progn
+	;; in the mode-spec themes, this is taken care of
+	;; anyways
+      (setq default-frame-alist 
+	    (assq-delete-all 'scroll-bar-width default-frame-alist))
+      (setq special-display-frame-alist 
+	    (assq-delete-all 'scroll-bar-width special-display-frame-alist))
       )
-    )
- 
-  (set-mode-specific-theme)
- 
-  )
-)
-
-
-;; make sure that when a minibuffer is ready to take input, 
-;; the appropriate frame is raised (made visible)
-;; using minibuffer-auto-raise globally has unpleasant results,
-;; with frames losing focus all the time. speedbar doesn't work either.
-(defun auto-raise-if-all-hidden ()
-  (setq minibuffer-auto-raise (not (visible-frame-list))) 
-)
-(add-hook 'menu-bar-update-hook 'auto-raise-if-all-hidden)
-
- 
-;; we'd like to open new frames for some stuff
-   
-; one could make h-W just kill the buffer and then handle things here
-; however, kill-buffer is called a lot for buffers that are not associated
-; with a frame and we would need to make sure that only buffers for
-; which a new frame was created will take their dedicated frame with
-; them when they are killed!
-; maybe the previous force-other-frame should keep track of
-; newly opened frames!
- 
-
-
-
-; quit-window is usually called by some modes when the user enters 'q'
-; e.g. in dired. we want to delete the window then.        
- (defadvice quit-window (around always-dedicated (&rest args) activate)
-   (interactive)
-   (if one-buffer-one-frame
-       (let (save (window-dedicated-p (selected-window)))
-	 (set-window-dedicated-p (selected-window) t)
-	 ad-do-it
-	 (set-window-dedicated-p (selected-window) save)
-	 )
-; else
-     ad-do-it
-     )
-   )
-
-
- 
-;; delete window when buffer is killed
-;; but only do so if aquamacs opened a new frame&window for
-;; this buffer (e.g. during switch-to-buffer)
-
-(defun delete-window-if-created-for-buffer ()
-
-   (let (
-	 (buf (current-buffer))
-	 )
-     
-     (let ((winlist (find-all-windows-internal buf))
-	   
-	   )
-        
-       (dolist (win winlist)
-	 ; force deletion if buffer is not killable
-	 (delete-window-if-created-for-this-buffer win buf t)
-	 ; (not (killable-buffer-p buf)))
-
-	 
-	
-       )
-     )
-				
-   ) 
-)
-    
-
-
-(setq pop-up-frames nil)
-(setq pop-up-windows t)
-(setq display-buffer-reuse-frames t)
-
-(defadvice pop-to-buffer (around always-dedicated (buf &rest args) protect activate) 
-
-  (if one-buffer-one-frame
-      (let ((puf pop-up-frames)
-	    (sw (selected-window))
-	    (wd (window-dedicated-p (selected-window)))
-	    )
- 
-	(setq pop-up-frames (not 
-			     (string-match "[ ]*\*(Completions|Apropos)\*" 
-					   (get-bufname buf))
-				 )
-	      )
- 
-	(set-window-dedicated-p sw nil) 
-	ad-do-it
-	(set-window-dedicated-p sw wd)
-	(setq pop-up-frames puf)
-
-	)
-    ;; else
-    ad-do-it
-
-    )
-  )
-
-; make sure that push-button does not lead to reusing of 
-
-(defun delete-window-if-created-for-this-buffer (win buf force)
-  ;; used by osxkeys, too
-  ;; as of now, we're always forcing the deletion of a window if the user requests it.
-  ;; 
- 
-  (let ((elt (car (member (cons win buf) aquamacs-newly-opened-frames))))
-    (if (or force elt (window-dedicated-p win) )
-	(progn
-	  ;; remove entry from windows list
-	  (if elt
-	      (setq aquamacs-newly-opened-frames (delq elt aquamacs-newly-opened-frames))
-	    )
-
-	  ;; delete the window (or make the frame invisible)
-	  (condition-case nil 
-	      (if (window-live-p win)
-		  (delete-window win) ;; only get rid of that current window
-		)
-	    (error   
-	     
-
-	     (make-frame-invisible (selected-frame) t) 
-	     (if (find-all-frames-internal (get-buffer "*Messages*"))
-		 (select-frame (car (find-all-frames-internal (get-buffer "*Messages*"))) 
-			       )
-	       )
-
-	     ) 
-	    )
-)
-      ;; else:
-      ;; decide not to delete / make invisible
-      ;; then switch buffer
-	  (next-buffer)
-	   
-	  )
       )
-    
-  )
-(defun delete-window-if-one-buffer-one-frame ()
-  (if one-buffer-one-frame
-      (delete-window-if-created-for-buffer)
-    )
-  )
-(if (string= "mac" window-system)
-    (add-hook 'kill-buffer-hook 'delete-window-if-one-buffer-one-frame t)
-  )
+)
+
+(require 'one-buffer-one-frame)
  
-;; redefine this from frame.el
-;; (why advise it when we don't call it anyways?)
 (require 'osxkeys)
-(defun handle-delete-frame (event)
-  "Handle delete-frame events from the X server."
-  (interactive "e")
-  (let ((frame (posn-window (event-start event)))
-	(i 0)
-	(delw nil)
-	)
-    (select-frame frame)
-     
-
-    (while 
-	(and (frame-first-window frame) 
-	(window-live-p (frame-first-window frame))
-	(select-window (frame-first-window frame))
-	(setq delw (cons (frame-first-window frame) delw))
-	(close-current-window-asktosave)
-	(frame-live-p frame)
-	(next-window (selected-window) 'nominibuf frame)
-	(not (memq  (frame-first-window frame) delw))
-	)
-      ) 
-    )
-  )  
-
-;; pressing q in a view should delete the frame
-(aquamacs-set-defaults
- '((view-remove-frame-by-deleting t)))
-
-
-
-
-;; make sure that C-mouse-1 menu acts locally
-(defadvice mouse-buffer-menu (around select-buffer-same-frame (&rest args) activate) 
- (let ((one-buffer-one-frame nil))
-   ad-do-it
-) 
-)
-  
-
-;; as a bugfix, we're redefining this
-;; in order to create a new frame if all frames are invisible
-(defun fancy-splash-frame ()
-  "Return the frame to use for the fancy splash screen.
-Returning non-nil does not mean we should necessarily
-use the fancy splash screen, but if we do use it,
-we put it on this frame."
-  (let (chosen-frame)
-   
-    (dolist (frame (append (frame-list) (list (selected-frame))))
-      (if (and (frame-visible-p frame)
-	       (not (window-minibuffer-p (frame-selected-window frame))))
-	  (setq chosen-frame frame))) 
-    (if chosen-frame
-	chosen-frame
-      
-      (or
-       ;; make visible
-       (select-frame (car (frame-list))) 
-       ;; or create a new one
-       (make-frame)
-       )
-      )
-    )
-)
-; no tool-bars, always white 
-(defadvice fancy-splash-screens (around modify-frame (&rest args) activate)
-
-  (let ( (default-frame-alist '( (tool-bar-lines . 0) (minibuffer . nil ) ) ) )
-    ad-do-it
-    )
-  (message "") ;; workaround ("wrong argument")
-)
-
-
-
 
 
 ; ----------- MISC STUFF ----------------
@@ -1402,39 +816,11 @@ we put it on this frame."
 		       )
 )
 
-;; advise frame-notice-user-settings (from frame.el)
-;; to integrate the mode-specific frame settings
-;; which supersede the default-frame-alist, but not
-;; the initial-frame-alist
-
-  
-(defadvice frame-notice-user-settings 
-  (around aquamacs-respect-mode-defaults () activate)
-
-  (let ((default-frame-alist  
-	  (aquamacs-combined-mode-specific-settings 
-	   default-frame-alist
-				  
-	   (get-mode-specific-theme major-mode)
-		      
-	   )
-	  ))
-    
-    ad-do-it
-    
-    )
-)
-
-
-
-
-
-
 ; Default for soft wrap
 ; (set-default 'longlines-mode t)
 ;; and turn on in current buffer
 ; (longlines-mode t)
-
+ 
 
 ;; Define customization group
 
