@@ -8,7 +8,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-frame-setup.el,v 1.6 2005/06/24 23:28:17 davidswelt Exp $
+;; Last change: $Id: aquamacs-frame-setup.el,v 1.7 2005/07/08 21:52:05 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -54,11 +54,11 @@
 ( 1on1-help-frame-background "LightBlue") 
 ( 1on1-*Help*-frame-flag t)
 ( 1on1-*Completions*-frame-flag nil)
-( 1on1-minibuffer-frame-flag nil)
+
 ))
  
 ; (setq autofit-frames-flag nil)
- 
+ (setq 1on1-minibuffer-frame-flag nil) ;; this is a defvar
 
 (remove-hook 'same-window-regexps "\\*info\\*\\(\\|<[0-9]+>\\)")
 (remove-hook 'same-window-regexps "\\`\\*Customiz.*\\*\\'")
@@ -205,7 +205,8 @@ Usable in `temp-buffer-show-hook'."
 (require 'oneonone nil nil)                 ; Default frame configuration.
 
 (if (string= "mac" window-system)
-    (1on1-emacs)
+    ;;(add-hook 'after-init-hook '1on1-emacs) ;; test 
+    (1on1-emacs) ;; need to call this here for now
 )
 ;;(require 'window+ nil t)                ; Corrections.
  
