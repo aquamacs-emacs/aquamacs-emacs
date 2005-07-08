@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.5 2005/07/08 21:51:14 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.6 2005/07/08 23:17:17 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -157,22 +157,22 @@ Each element of LIST has to be of the form (symbol . fontset)."
 (defun aquamacs-set-defaults (list)
   "Set a new default for a customization option in Aquamacs."
 
-  (dolist (elt list)
-    
-	  (progn 
-	    (let ((symbol (car elt))
-		  (value (car (cdr elt))))
-	      (set symbol value)
+  (mapc (lambda (elt)
+	  (let ((symbol (car elt))
+		(value (car (cdr elt))))
+	    (set symbol value)
 
-	      ;; make sure that user customizations get 
-	      ;; saved to customizations.el (.emacs)
-	      ;; and that this appears as the new default.
+	    ;; make sure that user customizations get 
+	    ;; saved to customizations.el (.emacs)
+	    ;; and that this appears as the new default.
 
-	      (put symbol 'standard-value `((quote  ,(eval symbol))))
+	    (put symbol 'standard-value `((quote  ,(eval symbol))))
 	    )
-	  )
+	 
 
 	  )
+	list
+	)
   )
 
 
@@ -205,6 +205,7 @@ Optional CODING is used for encoding coding-system."
     )
   t
 )
+ 
 
 (provide 'aquamacs-tools)
 

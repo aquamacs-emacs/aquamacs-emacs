@@ -12,7 +12,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.3 2005/07/08 22:41:57 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.4 2005/07/08 23:17:12 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -119,12 +119,15 @@ if there is an entry for the current major mode."
 
   (if aquamacs-auto-frame-parameters-flag
       (progn
-	(dolist (th default-alist )
-     
-	  (unless (assq (car th) theme)
-	    (setq theme (cons th theme))
-	    )
-	  )
+	(mapc  
+	 (lambda (th)
+	   (unless (assq (car th) theme)
+	     (setq theme (cons th theme))
+	     )
+	   )
+	 ;; list
+	 default-alist
+	 )
 	(mapc
 	 (lambda (e) (setq theme (assq-delete-all e theme)))
 	 '(user-position menu-bar-lines top height left width scroll-bar-width)
@@ -218,10 +221,14 @@ if there is an entry for the current major mode."
   
   (when aquamacs-auto-frame-parameters-flag
  
-    (dolist (f (find-all-frames-internal (current-buffer)))
-      ;; update the theme 
-      (set-mode-specific-theme f t)
-      )  
+    (mapc 
+     (lambda (f) 
+       ;; update the theme 
+       (set-mode-specific-theme f t)
+       )  
+     ;; list
+     (find-all-frames-internal (current-buffer))
+     )
     )  
   )
 
@@ -363,16 +370,14 @@ revert to the default. Save Options to store setting.")
   (setq special-display-frame-alist (filter-font-from-alist special-display-frame-alist))
 
   (let ((newlist))
-	(dolist (th   aquamacs-mode-specific-default-themes    )
+    (mapc (lambda (th) 
 	 
-	   (if (cdr th)   
-	     (add-to-list 'newlist  (cons (car th)  (filter-font-from-alist (cdr th))))
-	   )
-	   
-	   ) 
-	(setq aquamacs-mode-specific-default-themes newlist)
-	)
-	  
+	    (if (cdr th)   
+		(add-to-list 'newlist  
+			     (cons (car th)  
+				   (filter-font-from-alist (cdr th))))))
+	  aquamacs-mode-specific-default-themes) 
+    (setq aquamacs-mode-specific-default-themes newlist))  
   )
 
 ; filters all missing fonts from specifications, so we don't show
@@ -395,16 +400,9 @@ revert to the default. Save Options to store setting.")
       (let ((default-frame-alist  
 	      (aquamacs-combined-mode-specific-settings 
 	       default-frame-alist
-				  
-	       (get-mode-specific-theme major-mode)
-		      
-	       )
-	      )
-	    )
-	ad-do-it
-    
-	)
-					; else
+	       (get-mode-specific-theme major-mode))))
+	ad-do-it)
+    ;; else
     ad-do-it
     )
   )

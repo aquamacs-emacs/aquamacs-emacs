@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.1 2005/07/08 21:53:16 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.2 2005/07/08 23:17:13 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -31,7 +31,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.1 2005/07/08 21:53:16 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.2 2005/07/08 23:17:13 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -209,26 +209,30 @@
 
 (defun delete-window-if-created-for-buffer ()
 
-   (let (
-	 (buf (current-buffer))
-	 )
+  (let (
+	(buf (current-buffer))
+	)
      
-     (let ((winlist (find-all-windows-internal buf))
+    (let ((winlist (find-all-windows-internal buf))
 	   
-	   )
+	  )
         
-       (dolist (win winlist)
-	 ; force deletion if buffer is not killable
+      (mapc  
+       (lambda (win)
+					
+	 ;;force deletion if buffer is not killable
 	 (delete-window-if-created-for-this-buffer win buf t)
-	 ; (not (killable-buffer-p buf)))
-
+					; (not (killable-buffer-p buf)))
+	 )
+       winlist
+       )
 	 
 	
-       )
-     )
+      )
+    )
 				
-   ) 
-)
+  
+  )
     
 
 
@@ -365,10 +369,14 @@ use the fancy splash screen, but if we do use it,
 we put it on this frame."
   (let (chosen-frame)
    
-    (dolist (frame (append (frame-list) (list (selected-frame))))
-      (if (and (frame-visible-p frame)
-	       (not (window-minibuffer-p (frame-selected-window frame))))
-	  (setq chosen-frame frame))) 
+    (mapc  
+     (lambda (frame) (if (and (frame-visible-p frame)
+			      (not (window-minibuffer-p 
+				    (frame-selected-window frame))))
+			 (setq chosen-frame frame)))
+     ;; list:
+     (append (frame-list) (list (selected-frame)))
+     ) 
     (if chosen-frame
 	chosen-frame
       

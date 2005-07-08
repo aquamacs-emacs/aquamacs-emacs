@@ -21,7 +21,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.6 2005/06/10 07:58:47 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.7 2005/07/08 23:17:13 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -188,35 +188,39 @@ pixels apart if possible."
 		  )
    
 					; we'll try to position the frame somewhere near the original one
-	      (dolist (ny (list y (+ y margin) (+ y (* 3 margin)) (+ y (* 5 margin)) 
-				(+ y (* 6 margin)) (+ y (* 4 margin))  (+ y (* 2 margin)) 
-				(- y margin) (- y (* 3 margin)) (- y (* 5 margin)) 
-				(- y (* 6 margin)) (- y (* 4 margin)) (+ y (* 2 margin))))
-	      
-		(if next-y
-		    nil	;; no operation if next-y already found
-		  (let ((samerow t))
-		    (dolist (f (visible-frame-list) )
-		    
-		      (if (or (> (abs (- (frame-parameter f 'top) ny)) 10) ; different height
-			      (or (> next-x (+ (eval (frame-parameter f 'left)) (frame-parameter f 'width))) ;or no overlap
-				  (< (+ next-x next-w) (eval (frame-parameter f 'left))))
-			      )
-			  nil		; fine
-			(setq samerow nil)
-			)
-		     
+	      (mapc  
+	       (lambda (ny)
+		 (if next-y
+		     nil ;; no operation if next-y already found
+		   (let ((samerow t))
+		     (mapc  
+		      (lambda (f)  
+			(if (or (> (abs (- (frame-parameter f 'top) ny)) 10) ; different height
+				(or (> next-x (+ (eval (frame-parameter f 'left)) (frame-parameter f 'width))) ;or no overlap
+				    (< (+ next-x next-w) (eval (frame-parameter f 'left))))
+				)
+			    nil		; fine
+			 (setq samerow nil)  
+			  ) )
+		      ;; list:
+		      (visible-frame-list)
 		      )
-		    (if samerow
-			(setq next-y ny)
-		      )
-
-		    )
-		  )
-		)
+		     (if samerow
+			 
+			 (setq next-y ny)
+		       ) 
+		     )
+		   ) )
+	       ;; list:
+	       (list y (+ y margin) (+ y (* 3 margin)) (+ y (* 5 margin)) 
+		     (+ y (* 6 margin)) (+ y (* 4 margin))  (+ y (* 2 margin)) 
+		     (- y margin) (- y (* 3 margin)) (- y (* 5 margin)) 
+		     (- y (* 6 margin)) (- y (* 4 margin)) (+ y (* 2 margin)))
+	       )
 	      (if next-y
 		  ; make sure it's not too low
 		  (setq next-y (min next-y (- (display-pixel-height) next-h (* 2 margin) )))
+		   
 		 (setq next-y margin)) ;; if all else fails
 
 	      (assq-set 'left next-x 'new-frame-parameters)
