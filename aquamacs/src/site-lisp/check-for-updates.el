@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs version check
  
-;; Last change: $Id: check-for-updates.el,v 1.5 2005/06/26 14:25:34 davidswelt Exp $
+;; Last change: $Id: check-for-updates.el,v 1.6 2005/07/08 21:51:23 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -125,19 +125,19 @@ and show user a message if there is."
 	( today (date-to-day (current-time-string)))
 	( last-update-check 0) )
 
-    (if (file-exists-p aquamacs-id-file)
+    (if (file-readable-p aquamacs-id-file)
 	(with-temp-buffer
 	  (insert-file-contents-literally aquamacs-id-file)
 	    ; (set-buffer buf)
 	    ; (buffer-string)
 	    (goto-char (point-min)) 
-	    (setq call-number (number-at-point) )
+	    (setq call-number (or (number-at-point) 0) )
 	    (goto-line 2)
-	    (setq last-update-check (number-at-point))
+	    (setq last-update-check (or (number-at-point) 0))
 	    (goto-line 3)
-	    (setq session-id (number-at-point))
+	    (setq session-id (or (number-at-point) (random t)))
 	    (goto-line 4)
-	    (setq aquamacs-user-likes-beta (number-at-point))
+	    (setq aquamacs-user-likes-beta (or (number-at-point) 0))
 	    (goto-line 5)
 	    (setq force-check (eq 888 (number-at-point))) ;; contains 888 if new version previously found
 	    ; (kill-buffer buf)
@@ -155,9 +155,9 @@ and show user a message if there is."
 	  (setq last-update-check today)
 	  )
       )
-        (write-region (concat (number-to-string (+ 1 call-number)) "\n"
-			  (number-to-string last-update-check) "\n"
-			  (number-to-string session-id) "\n"
+        (write-region (concat (number-to-string (+ 1 (or call-number 0))) "\n"
+			  (number-to-string (or last-update-check 0)) "\n"
+			  (number-to-string (or session-id 0)) "\n"
 			   (if (> aquamacs-user-likes-beta 0) "1" "0") "\n"
 			  )
  
@@ -187,10 +187,10 @@ and show user a message if there is."
 	(condition-case nil
 	    (let ((url (url-generic-parse-url 
 			 (concat aquamacs-version-check-url
-				 "?sess=" (number-to-string session-id) 
-				 "&seq=" (number-to-string calls)
-				 "&beta=" (number-to-string aquamacs-user-likes-beta) 
-				 "&ver=" (url-encode-string (concat aquamacs-version aquamacs-minor-version))
+				 "?sess=" (number-to-string (or session-id 0)) 
+				 "&seq=" (number-to-string (or calls 0))
+				 "&beta=" (number-to-string (or aquamacs-user-likes-beta 0)) 
+				 "&ver=" (url-encode-string (concat (or aquamacs-version "unknown") (or aquamacs-minor-version "-")))
 				 ) 
 			 )))
 	; HTTP-GET
