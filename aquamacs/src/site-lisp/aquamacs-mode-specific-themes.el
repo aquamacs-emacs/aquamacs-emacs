@@ -12,7 +12,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.2 2005/07/08 22:27:05 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.3 2005/07/08 22:41:57 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -65,7 +65,7 @@ parametrized. Parameters in ``default-frame-alist'' and
 ``special-display-frame-alist'' serve as defaults which are 
 superceded by a setting in this list, if there is an entry
 for the current major mode. To turn off this behavior, see
-``aquamacs-auto-frame-parameters''.
+``aquamacs-auto-frame-parameters-flag''.
 "
   :type '(repeat (cons :format "%v"
 		       (symbol :tag "Mode-name")
@@ -75,7 +75,7 @@ for the current major mode. To turn off this behavior, see
   :group 'Aquamacs
   )
 
-(defcustom aquamacs-auto-frame-parameters t
+(defcustom aquamacs-auto-frame-parameters-flag t
    "When non-nil, frames are automatically
 parametrized when a major mode is changed. 
 Parameters in ``default-frame-alist'' and 
@@ -93,7 +93,7 @@ if there is an entry for the current major mode."
 ; append it, so the user's choice has priority
 (defun 	make-help-mode-use-frame-fitting ()
 
-  (when aquamacs-auto-frame-parameters
+  (when aquamacs-auto-frame-parameters-flag
     (unless (assq 'fit-frame 
 		  (assq 'help-mode aquamacs-mode-specific-default-themes)
 		  ) ;; unless it's already set
@@ -117,7 +117,7 @@ if there is an entry for the current major mode."
 	
 (defun aquamacs-combined-mode-specific-settings (default-alist theme)
 
-  (if aquamacs-auto-frame-parameters
+  (if aquamacs-auto-frame-parameters-flag
       (progn
 	(dolist (th default-alist )
      
@@ -140,20 +140,20 @@ if there is an entry for the current major mode."
 
 (defun set-mode-specific-theme (&optional frame force)
 
-  (when aquamacs-auto-frame-parameters
+  (when aquamacs-auto-frame-parameters-flag
 
     (unless frame (setq frame (selected-frame)))
 
     (if (frame-live-p frame)  
 
-	(condition-case err		; (otherwise, Emacs hangs)
+	(condition-case err ;; (otherwise, Emacs hangs)
       
-					; frame-configured-for-buffer stores for which buffer
-					; and which major-mode the frame configuration
-					; is for, so we don't have to apply the theme again. 
-					; This is also very important because setting the theme in itself
-					; will cause another menu-bar-update-hook call, so we can end up
-					; with this function called again and again...
+	    ;; frame-configured-for-buffer stores for which buffer
+	    ;; and which major-mode the frame configuration
+	    ;; is for, so we don't have to apply the theme again. 
+	    ;; This is also very important because setting the theme in itself
+	    ;; will cause another menu-bar-update-hook call, so we can end up
+	    ;; with this function called again and again...
 
 	    (let ((buffer (window-buffer (frame-first-window frame))))
 	    
@@ -204,7 +204,7 @@ if there is an entry for the current major mode."
 
 
 (defun get-mode-specific-theme (mode) 
-  (if aquamacs-auto-frame-parameters
+  (if aquamacs-auto-frame-parameters-flag
       (cdr (assq mode aquamacs-mode-specific-default-themes)) 
     nil
     )
@@ -216,7 +216,7 @@ if there is an entry for the current major mode."
   ;; the target frame has been switched to the new buffer.
   ;; that's bad luck then. 
   
-  (when aquamacs-auto-frame-parameters
+  (when aquamacs-auto-frame-parameters-flag
  
     (dolist (f (find-all-frames-internal (current-buffer)))
       ;; update the theme 
@@ -235,7 +235,7 @@ if there is an entry for the current major mode."
 
 (defun set-mode-theme-after-make-frame (frame) 
   ;; only if we have a window and a buffer here
-  (if (and aquamacs-auto-frame-parameters
+  (if (and aquamacs-auto-frame-parameters-flag
 	   (frame-first-window) (window-buffer (frame-first-window frame)))
       ;; make sure we acticate the right buffer
       ;; and that we don't change the selected frame
@@ -305,9 +305,9 @@ to be appropriate for its first buffer"
 			  )
     
   (message (format "Theme has been set as default for %s. %s" major-mode
-		   (if aquamacs-auto-frame-parameters
+		   (if aquamacs-auto-frame-parameters-flag
 		       ""
-		     "Note: aquamacs-auto-frame-parameters is nil - hence functionality is off!"
+		     "Note: aquamacs-auto-frame-parameters-flag is nil - hence functionality is off!"
 		     )
 		   )
 	   )
@@ -390,7 +390,7 @@ revert to the default. Save Options to store setting.")
 ;; for some reason, we can't byte-compile this.
 (defadvice frame-notice-user-settings 
   (around aquamacs-respect-mode-defaults () activate)
-  (if aquamacs-auto-frame-parameters
+  (if aquamacs-auto-frame-parameters-flag
 
       (let ((default-frame-alist  
 	      (aquamacs-combined-mode-specific-settings 
