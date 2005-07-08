@@ -4,7 +4,7 @@ RCS file: /cvsroot/emacs/emacs/lisp/term/mac-win.el,v
 retrieving revision 1.47
 diff -c -r1.47 mac-win.el
 *** mac-win.el	16 May 2005 11:27:56 -0000	1.47
---- mac-win.el	30 Jun 2005 21:26:05 -0000
+--- mac-win.el	4 Jul 2005 11:54:35 -0000
 ***************
 *** 1603,1609 ****
   	       mac-font-encoder-list)
@@ -86,12 +86,12 @@ diff -c -r1.47 mac-win.el
 !  "-apple-lucida grande*-medium-r-*-*-13-*-*-*-*-*-mac-roman"
 !  nil
 !  "lucida"
-!  'fast
+!  ;; 'fast ; dont do this - to be sure
 !  )
 ! 
 ! (setq initial-frame-alist (cons (cons 'font "fontset-lucida") initial-frame-alist))
 ! 
-! (fontset-add-mac-fonts "fontset-mac" nil 'fast)
+! (fontset-add-mac-fonts "fontset-mac" nil) ;;; for safety, donb't do: 'fast)
   
   ;; Create fontset specified in X resources "Fontset-N" (N is 0, 1, ...).
   (create-fontset-from-x-resource)
