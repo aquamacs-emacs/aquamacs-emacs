@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.4 2005/07/02 21:59:02 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.5 2005/07/08 21:51:14 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -89,6 +89,30 @@ Elements of ALIST that are not conses are ignored."
   alist)
 
 
+(defun fontset-exist-p (font)
+(condition-case nil
+    (fontset-info font)
+  (error nil))
+)
+
+;; this needs to be replaced by functions defined earlier
+; recursion is not so good in elisp anyways
+(defun filter-fonts (list)
+ "Filters the font list LIST to contain only existing fontsets.
+Each element of LIST has to be of the form (symbol . fontset)."
+  (if (car list)
+      (if (fontset-exist-p (cdr (cdr (car list))))
+	  (cons (car list)
+		(filter-fonts (cdr list))
+		)
+					; else
+	(filter-fonts (cdr list))
+	) 
+    ;; else
+    nil)
+
+  )
+ 
 
 (defun get-bufname (buf)
    (if (eq (type-of buf) 'string)
