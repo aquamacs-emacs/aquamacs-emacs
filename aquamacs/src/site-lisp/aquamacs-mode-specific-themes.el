@@ -12,7 +12,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.4 2005/07/08 23:17:12 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.5 2005/07/10 10:31:10 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -46,13 +46,15 @@
 
 
 (defcustom aquamacs-mode-specific-default-themes
-  (filter-fonts '(
+  (filter-fonts '((help-mode (tool-bar-lines . 0) (fit-frame . t))
 		  (text-mode  (font . "fontset-lucida13")) 
 		  (change-log-mode  (font . "fontset-lucida13"))
 		  (tex-mode  (font . "fontset-lucida13"))
 		  (outline-mode  (font . "fontset-lucida13"))
 		  (paragraph-indent-text-mode  (font . "fontset-lucida13"))
 		  (speedbar-mode (minibuffer-auto-raise . nil))
+		  (fundamental-mode (tool-bar-lines . 0))
+		  (custom-mode (tool-bar-lines . 0) (fit-frame . t))
 		  ))
   "Association list to set mode-specific themes. Each element 
 is a list of elements of the form (mode-name theme), where
@@ -275,15 +277,7 @@ to be appropriate for its first buffer"
 	  ;; can't call ->crash
 	  (set-mode-specific-theme)
 	  )
-	(define-key menu-bar-options-menu [menu-set-theme-as-mode-default]
-	  '(menu-item  (format "Use current theme for %s"
-			       (or major-mode "current mode"))
-		       aquamacs-set-theme-as-mode-default 
-		       :help ""
-		       :enable  (and (frame-live-p (selected-frame))
-				     (frame-visible-p (selected-frame) ))
-				  
-		       ))
+	
 	)
 
     (error nil)
@@ -329,20 +323,41 @@ to be appropriate for its first buffer"
   (message "Mode-specific themes removed. Add new ones or use customize to 
 revert to the default. Save Options to store setting.")
   )
+
+(defvar aquamacs-frame-theme-menu (make-sparse-keymap "Frame Appearance Themes"))
+
  
-(define-key-after menu-bar-options-menu [menu-delete-themes]
+(define-key-after aquamacs-frame-theme-menu [menu-delete-themes]
   '(menu-item  "Delete all mode-specific themes"     aquamacs-delete-mode-specific-themes 
-	      :help "Deletes all mode-specific themes set previously.") 'mouse-set-font)
+	      :help "Deletes all mode-specific themes set previously."))
 
-(define-key-after menu-bar-options-menu [menu-set-theme-as-default]
+(define-key aquamacs-frame-theme-menu [menu-set-theme-as-default]
   '(menu-item  "Use current theme as default"     aquamacs-set-theme-as-default
-	 
-	      :help "") 'mouse-set-font)
+	    :enable  (aquamacs-updated-is-visible-frame-p)
+	      :help ""))
 
-(define-key-after menu-bar-options-menu [menu-set-theme-as-mode-default]
-  '(menu-item  "Use current theme for this mode"     aquamacs-set-theme-as-mode-default 
-	      :help "") 'mouse-set-font)
+(defun aquamacs-updated-major-mode ()
 
+  (with-current-buffer (window-buffer
+   (frame-selected-window menu-updating-frame))
+    major-mode)
+)
+
+(define-key aquamacs-frame-theme-menu [menu-set-theme-as-mode-default]
+	  '(menu-item (format "Use current theme for %s" (or (aquamacs-updated-major-mode) "current mode"))
+		       aquamacs-set-theme-as-mode-default 
+		       :help "Set the current frame parameters as default 
+for all frames with the current major-mode."
+		       :enable  (aquamacs-updated-is-visible-frame-p)
+		 	  
+		       ))
+  
+(define-key-after menu-bar-options-menu [aquamacs-frame-themes]
+
+  (list 'menu-item "Frame Appearance Themes" aquamacs-frame-theme-menu
+	:help "Set themes for frames depending on major mode in buffer")
+
+  'aquamacs-color-theme-select)
 
 (defun font-exists-p (fontorfontset)
   (condition-case nil
