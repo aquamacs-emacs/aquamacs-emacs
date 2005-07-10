@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: tool-bar
  
-;; Last change: $Id: aquamacs-tool-bar.el,v 1.2 2005/06/09 19:52:49 davidswelt Exp $
+;; Last change: $Id: aquamacs-tool-bar.el,v 1.3 2005/07/10 10:31:20 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -34,11 +34,9 @@
  
 
 (define-minor-mode aquamacs-tool-bar-mode
- "Turn on toolbars in default frames, but not in special display frames.
-That means that the toolbar is not shown in in frames with help, info
-or similar buffers.
-See `tool-bar-add-item' and `tool-bar-add-item-from-menu' for
-conveniently adding tool bar items."
+ "This minor mode is deprecated in Aquamacs. Simply add an element
+(tool-bar-lines . 0) to major mode entries in  
+`mode-specific-default-themes' where you want no tool-bar."
   :init-value t
   :global t
   :group 'mouse
@@ -79,20 +77,12 @@ conveniently adding tool bar items."
 					 )
 )
 
-(add-hook 'Info-mode-hook
-	  (lambda ()
-	    (if aquamacs-tool-bar-mode (turn-on-toolbar-here))	    )
-)
+;(add-hook 'Info-mode-hook
+;	  (lambda ()
+;	    (if aquamacs-tool-bar-mode (turn-on-toolbar-here))	    )
+;)
 
-
-; defaults to true
-(put 'aquamacs-tool-bar-mode 'standard-value '(t))
-
-;; "save options" needs to be augmented externally (aquamacs does that)
  
-
-;; some
-;(tool-bar-mode -1) ;; turn it off now
 
 ; we want tool-bars only in normal frames, if at all
 ; (assq-set  'tool-bar-lines 1 'default-frame-alist )
