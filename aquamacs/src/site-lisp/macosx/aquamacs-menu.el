@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.7 2005/07/08 21:52:22 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.8 2005/07/10 10:31:43 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -56,6 +56,13 @@
 
   )
 
+(defun aquamacs-updated-is-visible-frame-p ()
+  
+  (and (frame-live-p menu-updating-frame)
+       (frame-visible-p menu-updating-frame ))
+)
+
+
  
 ;; apple command character is unicode x2318  
 ;; 
@@ -69,10 +76,14 @@
 ; redefine New
 ; (define-key menu-bar-edit-menu [mark-whole-buffer] (cdr (assq 'mark-whole-buffer (lookup-key global-map [menu-bar edit]))))
 
+
+
+
 (define-key menu-bar-file-menu [new-file]
   '(menu-item (format  "New                            %sN"  apple-char)  new-frame-with-new-scratch
-	      :enable (not (window-minibuffer-p
-			    (frame-selected-window menu-updating-frame)))
+	      :enable (or one-buffer-one-frame
+			  (not (window-minibuffer-p
+			    (frame-selected-window menu-updating-frame))))
 	      :help "Read or create a file and edit it"))
  
 
@@ -105,7 +116,8 @@
  (define-key-after menu-bar-file-menu [mac-show-in-finder]
           '(menu-item "Show In Finder" mac-key-show-in-finder
 
-		      :enable buffer-file-number
+		      :enable (and (aquamacs-updated-is-visible-frame-p)
+				   buffer-file-number)
 		      ) 'my-file-separator)
 ; 
 ;; we will set the following ones directly
@@ -116,6 +128,70 @@
 (easy-menu-remove-item global-map  '("menu-bar" "options") 'transient-mark-mode)
 (easy-menu-remove-item global-map  '("menu-bar" "options") 'case-fold-search)
 
+
+;; save as (redefinition for :enable)
+
+(define-key menu-bar-file-menu [write-file]
+  '(menu-item "Save Buffer As..." write-file
+
+	      :enable (and (frame-live-p menu-updating-frame)
+			   (frame-visible-p menu-updating-frame )
+			   (not (window-minibuffer-p
+				 (frame-selected-window menu-updating-frame))))
+	      :help "Write current buffer to another file"))
+
+
+(define-key menu-bar-file-menu [split-window]
+  '(menu-item "Split Window" split-window-vertically
+	      :enable (and (frame-live-p menu-updating-frame)
+			   (frame-visible-p menu-updating-frame )
+			   (not (window-minibuffer-p
+				 (frame-selected-window menu-updating-frame))))
+	      :help "Split selected window in two"))
+
+
+;; Printing (redefinition for :enable)
+
+(define-key menu-bar-file-menu [ps-print-region]
+  '(menu-item "Postscript Print Region (B+W)" ps-print-region
+	      :enable mark-active
+	      :help "Pretty-print marked region in black and white to PostScript printer"))
+(define-key menu-bar-file-menu [ps-print-buffer]
+  '(menu-item "Postscript Print Buffer (B+W)" ps-print-buffer
+	      :enable (and (frame-live-p menu-updating-frame)
+			   (frame-visible-p menu-updating-frame ))
+	      :help "Pretty-print current buffer in black and white to PostScript printer"))
+(define-key menu-bar-file-menu [ps-print-region-faces]
+  '(menu-item "Postscript Print Region" ps-print-region-with-faces
+	      :enable mark-active
+	      :help "Pretty-print marked region to PostScript printer"))
+(define-key menu-bar-file-menu [ps-print-buffer-faces]
+  '(menu-item "Postscript Print Buffer" ps-print-buffer-with-faces
+	      :enable (and (frame-live-p menu-updating-frame)
+			   (frame-visible-p menu-updating-frame ))
+	      :help "Pretty-print current buffer to PostScript printer"))
+(define-key menu-bar-file-menu [print-region]
+  '(menu-item "Print Region" print-region
+	      :enable mark-active
+	      :help "Print region between mark and current position"))
+(define-key menu-bar-file-menu [print-buffer]
+  '(menu-item "Print Buffer" print-buffer
+	      :enable (and (frame-live-p menu-updating-frame)
+			   (frame-visible-p menu-updating-frame ))
+	      :help "Print current buffer with page headings"))
+
+
+
+
+;; redefinition (for :enable)
+(define-key menu-bar-options-menu [truncate-lines]
+  '(menu-item "Truncate Long Lines in this Buffer"
+	      toggle-truncate-lines
+	      :help "Truncate long lines on the screen"
+	      :button (:toggle . truncate-lines)
+	      :enable (and (frame-live-p menu-updating-frame)
+			   (frame-visible-p menu-updating-frame ))))
+
 (require 'longlines) 
 
 ;; must use the menu-item syntax here because longlines-mode
@@ -124,6 +200,7 @@
   '(menu-item "Soft word wrap in this Buffer"
 	      longlines-mode
 	      :help "Wrap long lines without inserting carriage returns"
+	      :enable (aquamacs-updated-is-visible-frame-p)
 	      :button (:toggle . longlines-mode))
   'auto-fill-mode
   )
@@ -167,8 +244,13 @@ rather than behaving as Meta"
 
   )
 
+ ;; this is a redefine
+(define-key menu-bar-options-menu [mouse-set-font]
+  '(menu-item "Set Font..." mouse-set-font
+	       :visible (display-multi-font-p)
+	       :enable (aquamacs-updated-is-visible-frame-p) 
+	       :help "Select a font from list of known fonts/fontsets"))
 
-(change-menu-text [menu-bar options] 'mouse-set-font "Set Font...")
 
 
 ;; Quit entry shouldnt be there
@@ -181,6 +263,50 @@ rather than behaving as Meta"
 ;; this is to set the action for the "Quit" function (Emacs menu)
 (global-set-key [mac-application-quit] 'save-buffers-kill-emacs)
  
+
+
+(easy-menu-add-item  nil '("Options")
+  ["-" nil nil] 'mouse-set-font)
+;(easy-menu-add-item  nil '("Options")
+;  ["Set Color Theme..." aquamacs-color-theme-select t
+;   :enable (aquamacs-updated-is-visible-frame-p) ] 'mouse-set-font)
+
+(define-key-after menu-bar-options-menu [aquamacs-color-theme-select]
+  '(menu-item "Set Color Theme..." aquamacs-color-theme-select
+	       :visible (and (display-multi-font-p)
+			     (fboundp 'color-theme-install)
+			     )
+	       :enable (aquamacs-updated-is-visible-frame-p) 
+	       :help "Select a color theme from a list")
+  'mouse-set-font)
+
+
+
+
+;; local toolbars
+
+(defun tool-bar-enabled-p ()
+  (> (or (frame-parameter nil 'tool-bar-lines) 0) 0)
+)
+
+(defun toggle-tool-bar-here ()
+(interactive)
+  (modify-frame-parameters 
+   nil 
+   (list (cons 'tool-bar-lines 
+	       (if (tool-bar-enabled-p)
+		   0
+		 1
+		 )))))
+;; (toggle-tool-bar-here)
+
+(define-key-after menu-bar-showhide-menu [showhide-tool-bar-here]
+    (list 'menu-item "Tool-bar in this frame" 'toggle-tool-bar-here
+	:help ""
+	:visible `(display-graphic-p)
+	:button `(tool-bar-enabled-p))
+    'showhide-tool-bar)
+
 
 ;; SENDMAIL doesn't usually work on OS X
 ;; unless postfix is set up
