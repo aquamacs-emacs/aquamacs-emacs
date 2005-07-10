@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.2 2005/07/08 23:17:13 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.3 2005/07/10 10:33:16 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -31,7 +31,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.2 2005/07/08 23:17:13 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.3 2005/07/10 10:33:16 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -55,6 +55,20 @@
 
  
 
+;; define customization option
+(defcustom one-buffer-one-frame t
+  "When non-nil, open a new frame for each new buffer and switch to that frame
+   when buffer is selected from Buffers menu. When nil, regular buffers are displayed
+   in the same frame and window."
+  :type '(radio 
+		(const :tag "Open new frames for buffers" t)
+		(const :tag "standard Emacs behavior (nil)" nil))
+  :group 'Aquamacs
+  :require 'aquamacs-frame-setup)
+ 
+(defvar one-buffer-one-frame-force nil 
+  "Enforce one-buffer-one-frame - should be set only temporarily.")
+ 
 
 (defun open-in-other-frame-p (buf)
   
@@ -117,7 +131,6 @@
 (if (string= "mac" window-system)
 (defadvice switch-to-buffer (around sw-force-other-frame (&rest args) activate)
     
-  
 					; is buffer shown in a frame?
   (if (and one-buffer-one-frame
 	   (walk-windows
@@ -167,8 +180,19 @@
 ;; the appropriate frame is raised (made visible)
 ;; using minibuffer-auto-raise globally has unpleasant results,
 ;; with frames losing focus all the time. speedbar doesn't work either.
+
+(add-hook 'minibuffer-setup-hook 
+	  (lambda () 
+	    (if one-buffer-one-frame
+		(raise-frame)))
+)
+
 (defun auto-raise-if-all-hidden ()
-  (setq minibuffer-auto-raise (not (visible-frame-list))) 
+;  (setq minibuffer-auto-raise (not (visible-frame-list))) 
+
+
+
+
 )
 (add-hook 'menu-bar-update-hook 'auto-raise-if-all-hidden)
 
@@ -241,7 +265,6 @@
 (setq display-buffer-reuse-frames t)
 
 (defadvice pop-to-buffer (around always-dedicated (buf &rest args) protect activate) 
-
   (if one-buffer-one-frame
       (let ((puf pop-up-frames)
 	    (sw (selected-window))
@@ -266,6 +289,17 @@
     )
   )
 
+(defun aquamacs-delete-window (&optional window)
+  "Remove WINDOW from the display.  Default is `selected-window'.
+If WINDOW is the only one in its frame, then `delete-frame' too,
+even if it's the only visible frame."
+  (interactive)
+  (setq window (or window (selected-window)))
+  (select-window window)
+  (if (one-window-p t) (delete-frame nil 'force) (old-delete-window (selected-window))))
+
+
+
 ; make sure that push-button does not lead to reusing of 
 
 (defun delete-window-if-created-for-this-buffer (win buf force)
@@ -288,25 +322,21 @@
 		)
 	    (error   
 	     
-
-	     (make-frame-invisible (selected-frame) t) 
-	     (if (find-all-frames-internal (get-buffer "*Messages*"))
-		 (select-frame (car (find-all-frames-internal (get-buffer "*Messages*"))) 
-			       )
-	       )
-
-	     ) 
-	    )
-)
+	     (let ((f (selected-frame)))
+	       (make-frame-invisible f t)
+	        
+	       (if (find-all-frames-internal (get-buffer "*Messages*"))
+		   (select-frame (car (find-all-frames-internal 
+				       (get-buffer "*Messages*")))))))))
       ;; else:
       ;; decide not to delete / make invisible
       ;; then switch buffer
-	  (next-buffer)
-	   
-	  )
-      )
-    
-  )
+      (if (and one-buffer-one-frame (get-buffer "*scratch*"))
+	  (let ((one-buffer-one-frame))
+	    (switch-to-buffer "*scratch*")
+	    )
+	  (next-buffer)))))
+
 (defun delete-window-if-one-buffer-one-frame ()
   (if one-buffer-one-frame
       (delete-window-if-created-for-buffer)
@@ -316,7 +346,63 @@
     (add-hook 'kill-buffer-hook 'delete-window-if-one-buffer-one-frame t)
   )
  
-
+(defun close-current-window-asktosave ()
+  "Delete current window (and its frame), ask to save file if necessary."
+  (interactive)
+  (select-frame-set-input-focus (selected-frame))
+ 
+      (let ((wind (selected-window))
+	      (killable (and (killable-buffer-p (window-buffer))
+			     (eq (length (find-all-windows-internal 
+					  (window-buffer) 
+					  'only_visible_ones)) 
+				 1))))
+	; ask before killing
+	(cond ( (and (eq (current-buffer) (window-buffer)) ;; only if a document is shown
+		     killable
+		     (eq   (string-match "\\*.*\\*" (buffer-name)) nil)
+		     (eq   (string-match " SPEEDBAR" (buffer-name)) nil) ; has no minibuffer!
+		     )
+		(cond ((buffer-modified-p)
+		       (if (progn
+			     (unless (minibuffer-window)
+			       (setq last-nonmenu-event nil)
+			       )
+			     (aquamacs-yes-or-no-p "Save this buffer to file before closing window? ")
+			     )
+			   (progn
+			     (save-buffer)
+			     (message "File saved.")
+			     )
+			 ; mark as not modified, so it will be killed for sure
+			 (set-buffer-modified-p nil)
+			 ))
+		      ((message ""))
+		       
+		      )      )
+	      )
+  
+  
+	
+	  ;; only if not a *special* buffer
+	  ;; if the buffer is shown in another window , just delete the current win
+	  
+	(if
+	  (if killable 
+	      (kill-buffer (window-buffer))    
+	    t
+	    )
+	  ; always delete in this situation
+	    ; unless user said "no"
+	    (progn
+	      (message "") 
+	      ;; we don't want a message in the echo area of the next window!
+	      (delete-window-if-created-for-this-buffer wind (window-buffer) t)
+	      )
+	  )	
+	)
+   t 
+  )
 
 (defun handle-delete-frame (event)
   "Handle delete-frame events from the X server."
