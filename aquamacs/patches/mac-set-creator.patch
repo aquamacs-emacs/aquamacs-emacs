@@ -1,13 +1,13 @@
 Index: macfns.c
 ===================================================================
 RCS file: /cvsroot/emacs/emacs/src/macfns.c,v
-retrieving revision 1.61
-diff -c -r1.61 macfns.c
-*** macfns.c	23 Jun 2005 16:12:25 -0000	1.61
---- macfns.c	24 Jun 2005 08:51:24 -0000
+retrieving revision 1.63
+diff -c -r1.63 macfns.c
+*** macfns.c	4 Jul 2005 16:06:33 -0000	1.63
+--- macfns.c	10 Jul 2005 11:52:18 -0000
 ***************
 *** 4406,4411 ****
---- 4406,4570 ----
+--- 4406,4656 ----
   {
   }
   #endif
@@ -16,7 +16,7 @@ diff -c -r1.61 macfns.c
 + #ifdef MAC_OSX
 + 
 + 
-+ /* The code for FSBumpDate and FSChangeCreator is taken from 
++ /* The code for FSBumpDate and FSChangeCreatorType is taken from 
 +    MoreFilesX.c (Apple Sample Code), authored by Jim Luther / Apple 
 +    and released for free use. The code has been modified.
 + 
@@ -99,12 +99,13 @@ diff -c -r1.61 macfns.c
 + 
 + 
 + OSErr
-+ FSChangeCreator(
++ FSChangeCreatorType(
 + 	const FSRef *ref,
-+ 	OSType fileCreator)
++ 	OSType fileCreator,
++ 	OSType fileType)
 + {
 + 	OSErr			result;
-+ 	FSCatalogInfo	catalogInfo;
++ 	FSCatalogInfo    	catalogInfo;
 + 	FSRef			parentRef;
 + 	
 + 	/* get nodeFlags, finder info, and parent FSRef */
@@ -119,9 +120,14 @@ diff -c -r1.61 macfns.c
 + 	
 + 	
 + 	/* If creator not 0x00000000, change creator */
-+ 	if ( fileCreator != (OSType)0x00000000 )
++ 	if (fileCreator && fileCreator != (OSType)0x00000000 )
 + 	{
 + 	  ((FileInfo *)&catalogInfo.finderInfo)->fileCreator = fileCreator;
++ 	}
++ 	/* If type not 0x00000000, change type */
++ 	if (fileType && fileType != (OSType)0x00000000 )
++ 	{
++ 	  ((FileInfo *)&catalogInfo.finderInfo)->fileType = fileType;
 + 	}
 + 	
 + 	/* now, save the new information back to disk */
@@ -140,31 +146,111 @@ diff -c -r1.61 macfns.c
 + }
 + 
 + 
-+ DEFUN ("mac-set-creator", Fmac_set_creator, Smac_set_creator, 1, 1, 0,
-+        doc: /* Set creator code of file PATH to 'EMAx'.
-+ PATH must be a fully qualified file name.
-+ Return non-nil if successful.
++ DEFUN ("mac-set-file-creator", Fmac_set_file_creator, Smac_set_file_creator, 1, 2, 0,
++        doc: /* Set creator code of file FILENAME to CODE.
++ If non-nil, CODE must be a 4-character string. Otherwise,
++ 'EMAx' is assumed. Return non-nil if successful.
 +    */)
-+   (path)
-+      Lisp_Object path;
++   (filename, code)
++      Lisp_Object filename;
++      Lisp_Object code;
 + {
-+   CHECK_STRING (path);
 + 
++ 
++ 
++ 
++   CHECK_STRING (filename);
 +   OSErr	status;
 +   FSRef defLoc;
-+   status = FSPathMakeRef(SDATA(ENCODE_FILE(path)), &defLoc, NULL);
++   OSType cCode;
++ 
++   if (NILP(code))
++     {
++       cCode = 'EMAx';
++     } 
++   else
++     {
++       /* check type string */
++       CHECK_STRING(code);
++       if (strlen(SDATA(code)) != 4)
++ 	{
++ 	  error ("Wrong argument: need string of length 4 for CODE");
++ 	}
++       cCode = (OSType) *((int *) SDATA(code));
++     }
++   BLOCK_INPUT;
++   filename = Fexpand_file_name (filename, Qnil);
++   status = FSPathMakeRef(SDATA(ENCODE_FILE(filename)), &defLoc, NULL);
++   
 + 
 +   if (status == noErr)
 +     {
-+       status = FSChangeCreator(&defLoc, (OSType) 'EMAx');
-+ 	
++       status = FSChangeCreatorType(&defLoc, cCode, (OSType) 0);
++       UNBLOCK_INPUT;
++ 
 + 	if (status == noErr)
-+ 	  return Qt;
++ 	  {
++ 	    return Qt;
++ 	  }
++ 	else
++ 	  error ("Error while setting creator information.");
++     }	
++   else
++     {
++       UNBLOCK_INPUT;
++       error ("Error while accessing file.");
 +     }
-+   return Qnil;
 + }
 +  
 + 
++ DEFUN ("mac-set-file-type", Fmac_set_file_type, Smac_set_file_type, 2, 2, 0,
++        doc: /* Set type of file FILENAME to TYPE.
++ TYPE must be a 4-character string. 
++ Return non-nil if successful.
++    */)
++   (filename,type)
++      Lisp_Object filename;
++      Lisp_Object type;
++ {
++   OSErr	status;
++   FSRef defLoc;
++ 
++   CHECK_STRING (filename);
++ 
++   /* check type string */
++   CHECK_STRING(type);
++   if (strlen(SDATA(type)) != 4)
++     {
++       error ("Wrong argument: need string of length 4 for CODE");
++     }
++ 
++   BLOCK_INPUT;
++   filename = Fexpand_file_name (filename, Qnil);
++   status = FSPathMakeRef(SDATA(ENCODE_FILE(filename)), &defLoc, NULL);
++ 
++   if (status == noErr)
++     {
++       /* warning: the string-to-OSType conversion here might not be safe
++ 	 when using Intel type endians... */
++ 
++       status = FSChangeCreatorType(&defLoc, 
++ 				   (OSType) 0, 
++ 				   (OSType) *((int *) SDATA(type)));
++       UNBLOCK_INPUT;
++       if (status == noErr)
++ 	{
++ 	  return Qt;
++ 	}
++       else
++ 	error ("Error while setting creator information.");
++     }	
++   else
++     {
++       UNBLOCK_INPUT;
++       error ("Error while accessing file.");
++     }
++ }
++  
 + 
 + #endif
 + 
@@ -174,14 +260,15 @@ diff -c -r1.61 macfns.c
   /***********************************************************************
   			    Initialization
 ***************
-*** 4617,4622 ****
---- 4776,4784 ----
+*** 4616,4621 ****
+--- 4861,4870 ----
+  
   #if TARGET_API_MAC_CARBON
     defsubr (&Sx_file_dialog);
-  #endif
-+ #if MAC_OSX
-+   defsubr (&Smac_set_creator);
 + #endif
++ #if MAC_OSX
++   defsubr (&Smac_set_file_creator);
++   defsubr (&Smac_set_file_type);
+  #endif
   }
   
-  /* arch-tag: d7591289-f374-4377-b245-12f5dbbb8edc
