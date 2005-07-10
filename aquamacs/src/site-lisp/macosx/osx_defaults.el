@@ -11,7 +11,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.26 2005/07/08 21:54:55 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.27 2005/07/10 10:32:31 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -182,12 +182,6 @@ yes-or-no prompts - y or n will do."
     )
  
   )
-
-(easy-menu-add-item  nil '("Options")
-  ["-" nil nil] 'mouse-set-font)
-(easy-menu-add-item  nil '("Options")
-  ["Set Color Theme..." aquamacs-color-theme-select t] 'mouse-set-font)
-
 
 
 
@@ -378,41 +372,7 @@ yes-or-no prompts - y or n will do."
 								    "special, internal frames"
 								  "normal frames.")))
   )
-
-
-   
  
-;; define customization option
-(defcustom one-buffer-one-frame t
-  "When non-nil, open a new frame for each new buffer and switch to that frame
-   when buffer is selected from Buffers menu. When nil, regular buffers are displayed
-   in the same frame and window."
-  :type '(radio 
-		(const :tag "Open new frames for buffers" t)
-		(const :tag "standard Emacs behavior (nil)" nil))
-  :require 'aquamacs-frame-setup)
- 
-(defvar one-buffer-one-frame-force nil 
-  "Enforce one-buffer-one-frame - should be set only temporarily.")
-
-;; ;; add a menu item to the Options menu
-;; (define-key-after menu-bar-options-menu [inhibitfitframe]
-;;   (menu-bar-make-toggle toggle-oneonone inhibit-fit-frame
-;; 			"Resize Frames to Fit Buffers"
-;; 			"Resize Frames to Fit Buffers: %s"
-;; 			"Adjusts the size of a frame depending on the buffer displayed."
-;; 			(require 'aquamacs-frame-setup)
-		 
-;; 			(setq inhibit-fit-frame-flag
-;; 			      (not inhibit-fit-frame-flag))
-;; 			)
-;; 			) 'edit-options-separator)
-
-;; add a menu item to the Options menu
-
-
-
-
 (require 'view)
 ;; redefine view-buffer
 (defun view-buffer (buffer &optional exit-action)
@@ -486,7 +446,7 @@ Use this argument instead of explicitly setting `view-exit-action'."
     ;; 
     ;; These are set with `customize-set-variable'.
     (dolist (elt '(scroll-bar-mode
-		   debug-on-quit debug-on-error menu-bar-mode aquamacs-tool-bar-mode
+		   debug-on-quit debug-on-error menu-bar-mode
 		   save-place uniquify-buffer-name-style fringe-mode
 		   fringe-indicators case-fold-search
 		   display-time-mode auto-compression-mode
@@ -618,25 +578,24 @@ Use this argument instead of explicitly setting `view-exit-action'."
   (if (< aquamacs-customization-version-id 092.8)
       ;; bring the lucida font back because
       ;; we have switched over to monaco as the default
-      (dolist (th (filter-fonts '(
-				  (text-mode  
-				   (font . "fontset-lucida14")) 
-				  (change-log-mode  
-				   (font . "fontset-lucida14"))
-				  (tex-mode  
-				   (font . "fontset-lucida14"))
-				  (paragraph-indent-text-mode  
-				   (font . "fontset-lucida14"))
-				  )))
-
-	(unless (assq (car th) aquamacs-mode-specific-default-themes)
-	  (assq-set (car th) 
-		    (cdr th)
-		    'aquamacs-mode-specific-default-themes)
-	  )
-	)
-    )
-  (if (< aquamacs-customization-version-id 094.2)
+      (mapc 
+       (lambda (th)
+	 (unless (assq (car th) aquamacs-mode-specific-default-themes)
+	   (assq-set (car th) 
+		     (cdr th)
+		     'aquamacs-mode-specific-default-themes)))
+       ;; list
+       (filter-fonts '(
+		       (text-mode  
+			(font . "fontset-lucida14")) 
+		       (change-log-mode  
+			(font . "fontset-lucida14"))
+		       (tex-mode  
+			(font . "fontset-lucida14"))
+		       (paragraph-indent-text-mode  
+			(font . "fontset-lucida14"))
+		       ))))
+  (if (< aquamacs-customization-version-id 094.1)
       (progn
 	;; in the mode-spec themes, this is taken care of
 	;; anyways
@@ -644,9 +603,18 @@ Use this argument instead of explicitly setting `view-exit-action'."
 	    (assq-delete-all 'scroll-bar-width default-frame-alist))
       (setq special-display-frame-alist 
 	    (assq-delete-all 'scroll-bar-width special-display-frame-alist))
-      )
-      )
-)
+      
+(mapc 
+       (lambda (th)
+	 (unless (assq (car th) aquamacs-mode-specific-default-themes)
+	   (assq-set (car th) 
+		     (cdr th)
+		     'aquamacs-mode-specific-default-themes)))
+       ;; list
+       (filter-fonts '(
+		       (help-mode (tool-bar-lines . 0) (fit-frame . t)) 
+		       (fundamental-mode (tool-bar-lines . 0))
+		       (custom-mode (tool-bar-lines . 0) (fit-frame . t))))))))
 
 (require 'one-buffer-one-frame)
  
@@ -656,42 +624,10 @@ Use this argument instead of explicitly setting `view-exit-action'."
 ; ----------- MISC STUFF ----------------
 
 
-; Set up tool-bar
-; this needs to be done after color themes are defined
- 
-(require 'aquamacs-tool-bar) 
-(aquamacs-set-defaults '((tool-bar-mode nil)
-			 (aquamacs-tool-bar-mode t)
-			 ))
-(tool-bar-mode -1)
-(aquamacs-tool-bar-mode 1)
-
-;; overwrite the menu option (originally defined in menu-bar.el)
-
-(define-key menu-bar-showhide-menu [showhide-tool-bar]
-  (list 'menu-item "Tool-bar" 'aquamacs-tool-bar-mode
-	:help "Turn tool-bar in normal frames on/off"
-	:visible `(display-graphic-p)
-	:button `(:toggle . aquamacs-tool-bar-mode)))
-
-
-
 (require 'ibuffer)
 
 (put 'upcase-region 'disabled nil)
-
-;; keep formatting all the time
-
-(defun space-then-fill (fillp)
-  "Insert SPACE then fill-paragraph"
-  (interactive "P")
-  (insert " ")
-  (fill-paragraph fillp)
-  (if (eolp)
-  (insert " ") ) )
-;; (local-set-key " " 'space-then-fill)
-
-
+ 
 
 ;; -------- MOUSE BEHAVIOR / SELECTION -------------
 
@@ -706,12 +642,11 @@ Use this argument instead of explicitly setting `view-exit-action'."
     (aquamacs-set-defaults '( 
 			     (cua-use-hyper-key only) ;;this avoids shift-return
 			     (cua-keep-region-after-copy t)
-
+			     (cua-enable-cua-keys nil)
 			     )
 			   )
  
- 
-(setq cua-enable-cua-keys nil) ; not customizable
+  
 (cua-mode 1) ;; this goes first (so we can overwrite the settings)
 
   
@@ -838,7 +773,8 @@ Use this argument instead of explicitly setting `view-exit-action'."
     (mac-command-modifier  custom-variable)
     (mac-pass-command-to-system  custom-variable)
  )
-  "Aquamacs Options"
+  "Options specific to Aquamacs."
+  :group 'emacs
 )
 
 ;; output the list of 1on1 variables with:
@@ -876,5 +812,6 @@ Use this argument instead of explicitly setting `view-exit-action'."
 (require 'check-for-updates)
 ; via hook so it can be turned off
 (add-hook 'after-init-hook 'aquamacs-check-for-updates-if-necessary 'append)
+
 
 (provide 'osx_defaults)
