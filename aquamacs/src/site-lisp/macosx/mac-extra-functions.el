@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.9 2005/07/05 13:36:32 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.10 2005/07/10 11:59:04 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -83,9 +83,9 @@ double-click in Finder."
 (defun mac-set-creator-code-for-file ()
   (if (and aquamacs-set-creator-codes-after-writing-files
 	   buffer-file-name
-	   (fboundp 'mac-set-creator)
+	   (fboundp 'mac-set-file-creator)
 	   )
-      (mac-set-creator buffer-file-name)
+      (mac-set-file-creator buffer-file-name)
     )
   )
 
