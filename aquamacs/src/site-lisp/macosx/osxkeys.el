@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.8 2005/06/29 13:38:05 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.9 2005/07/10 10:36:39 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -70,65 +70,7 @@
 )
 )
 
-(defun close-current-window-asktosave ()
-  "Delete current window (and its frame), ask to save file if necessary."
-  (interactive)
-  (select-frame-set-input-focus (selected-frame))
  
-      (let ((wind (selected-window))
-	      (killable (and (killable-buffer-p (window-buffer))
-			     (eq (length (find-all-windows-internal 
-					  (window-buffer) 
-					  'only_visible_ones)) 
-				 1)
-			     )
-			)
-	      )
-	; ask before killing
-	(cond ( (and (eq (current-buffer) (window-buffer)) ;; only if a document is shown
-		     killable
-		     (eq   (string-match "\\*.*\\*" (buffer-name)) nil)
-		     (eq   (string-match " SPEEDBAR" (buffer-name)) nil) ; has no minibuffer!
-		     )
-		(cond ((buffer-modified-p)
-		       (if (progn
-			     (unless (minibuffer-window)
-			       (setq last-nonmenu-event nil)
-			       )
-			     (aquamacs-yes-or-no-p "Save this buffer to file before closing window? ")
-			     )
-			   (progn
-			     (save-buffer)
-			     (message "File saved.")
-			     )
-			 ; mark as not modified, so it will be killed for sure
-			 (set-buffer-modified-p nil)
-			 ))
-		      ((message ""))
-		       
-		      )      )
-	      )
-  
-
-	
-	  ;; only if not a *special* buffer
-	  ;; if the buffer is shown in another window , just delete the current win
-	  
-	(if
-	  (if killable 
-	      (kill-buffer (window-buffer))    
-	    t
-	    )
-	  ; always delete in this situation
-	    ; unless user said "no"
-	    (progn
-	      (message "") ; we don't want a message in the echo area of the next window!
-	      (delete-window-if-created-for-this-buffer wind (window-buffer) t)
-	      )
-	  )	
-	)
-   t 
-  ) 
 
  
 (require 'aquamacs-tools)
