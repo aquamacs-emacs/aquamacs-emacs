@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.8 2005/07/10 10:31:43 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.9 2005/07/14 09:52:06 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -89,6 +89,13 @@
 
 ;(change-menu-text-2 [menu-bar application] 'quit (format  "Quit Emacs                %sQ"  apple-char))
 (change-menu-text [menu-bar file] 'open-file (format  "Open File...                 %sO"  apple-char)) 
+
+;; redefine this
+(define-key menu-bar-file-menu [kill-buffer]
+  '(menu-item (format "Close (current buffer)  %sW" apple-char) close-current-window-asktosave
+	      :enable (aquamacs-updated-is-visible-frame-p)
+	      :help "Discard current buffer"))
+ 
 (change-menu-text [menu-bar file] 'exit-emacs (format  "Quit Emacs                %sQ"  apple-char))
 ;(change-menu-text [menu-bar application] 'quit (format  "Quit Emacs                %sQ"  apple-char))
 (change-menu-text [menu-bar edit] 'copy (format  "Copy                 %sC"  apple-char))
