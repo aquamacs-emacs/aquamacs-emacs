@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.10 2005/07/10 11:59:04 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.11 2005/07/14 09:57:29 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -128,42 +128,39 @@ end tell"
     ))
 
 
-
+(defvar aquamacs-mac-add-standard-directories-added-flag nil)
 (defun mac-add-standard-directories ()
-;; Add standard directories and automatically add their subdirectories.
-; this idea blatantly copied and adapted from Martin Schwenke (meltin.net)
-(let ((ddir default-directory))
-(mapcar '(lambda (dir)
-	   (let* ((xdir (expand-file-name dir)  )
-		  (default-directory xdir)) 
-	     (and xdir
-		  (add-to-list 'load-path xdir)
-		  ;; Now add subdirectories.
+  ;; Add standard directories and automatically add their subdirectories.
+  ;; this idea blatantly copied and adapted from Martin Schwenke (meltin.net)
+  (if (not aquamacs-mac-add-standard-directories-added-flag)
+      (let ((ddir default-directory))
+	(setq aquamacs-mac-add-standard-directories-added-flag t)
+	(mapcar '(lambda (dir)
+		   (let* ((xdir (expand-file-name dir)  )
+			  (default-directory xdir)) 
+		     (and xdir
+			  (add-to-list 'load-path xdir)
+			  ;; Now add subdirectories.
 		  
-		  (condition-case nil
-		      (progn
-			(cd xdir)
-		      (normal-top-level-add-subdirs-to-load-path)
-		      )		    (error nil))
-		  )
-	     )
-	   )
+			  (condition-case nil
+			      (progn
+				(cd xdir)
+				(normal-top-level-add-subdirs-to-load-path)
+				)		    (error nil)))))
 
-	'("/Library/Application Support/Emacs"
-	  ;"/Library/Application Support/Emacs/site-lisp"
-	  "/Library/Application Support/Aquamacs Emacs"
-	  "~/Library/Application Support/Emacs"
-	  ;"~/Library/Application Support/Emacs/site-lisp"
-	  "~/Library/Application Support/Aquamacs Emacs"
-	  "/Library/Preferences/Emacs"	; for all Emacsen
-	  "/Library/Preferences/Aquamacs Emacs"	; for Aquamacs
-	  "~/Library/Preferences/Emacs"	; for all Emacsen (user-specific):
-	  "~/Library/Preferences/Aquamacs Emacs" ; for Aquamacs (user-specific)
-	  )
-)
-(setq default-directory ddir) ; restore
-)
-)
+		'("/Library/Application Support/Emacs"
+					;"/Library/Application Support/Emacs/site-lisp"
+		  "/Library/Application Support/Aquamacs Emacs"
+		  "~/Library/Application Support/Emacs"
+					;"~/Library/Application Support/Emacs/site-lisp"
+		  "~/Library/Application Support/Aquamacs Emacs"
+		  "/Library/Preferences/Emacs"	    ; for all Emacsen
+		  "/Library/Preferences/Aquamacs Emacs" ; for Aquamacs
+		  "~/Library/Preferences/Emacs"	; for all Emacsen (user-specific):
+		  "~/Library/Preferences/Aquamacs Emacs" ; for Aquamacs (user-specific)
+		  ))
+	(setq default-directory ddir)	; restore
+	)))
 
 (defun mac-read-environment-vars-from-shell ()
 
@@ -196,8 +193,8 @@ end tell"
     
 )
 
-(defun new-frame-with-new-scratch  ()
-  "Opens a new frame containing an empty buffer in ``text-mode'' and ``filladapt-mode''."
+(defun new-frame-with-new-scratch  (&optional other-frame)
+  "Opens a new frame containing an empty buffer."
   (interactive)			
   (let ((buf (generate-new-buffer "New document")))
 
@@ -206,15 +203,17 @@ end tell"
     (save-excursion
       (set-buffer buf)
       (if default-major-mode (funcall  default-major-mode))
-     )
+      )
 
-  (switch-to-buffer-other-frame buf)
- 
+    (if other-frame
+	(switch-to-buffer-other-frame buf)
+      (switch-to-buffer buf)
+      )
   
-  (setq buffer-offer-save t)
-  (set-buffer-modified-p nil)
+    (setq buffer-offer-save t)
+    (set-buffer-modified-p nil)
+    )
   )
-)
 
 
 ;; register the help manuals
