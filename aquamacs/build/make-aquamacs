@@ -69,6 +69,7 @@ export MYCPPFLAGS="-DUSE_TOOLKIT_SCROLL_BARS -DUSE_TRANSPARENCY"
  
 ## Default location to place it is /usr/local
 prefix=/usr/local
+bootfast=no
 appsdir=/Applications
 emapp=Emacs.app
 with_config=yes
@@ -323,6 +324,15 @@ if [ ! -f ${srcdir}/lisp/abbrev.elc ]; then
    echo "Required .elc files missing; making bootstrap..."
    if ! (cd ${builddir}; make bootstrap $make_options); then
       echo "Make bootstrap failed...  Aborting make-package."
+      exit 2
+   fi
+fi
+## make bootfast
+
+if test "$bootfast" == "yes"; then
+   echo " making bootfast..."
+   if ! (cd ${builddir}; make bootfast $make_options); then
+      echo "Make bootfast failed...  Aborting make-package."
       exit 2
    fi
 fi
