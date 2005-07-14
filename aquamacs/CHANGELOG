@@ -26,7 +26,7 @@ Frame Appearance Themes have a better menu structure now in the Options
 	menu. Also, there's a new function "Delete all mode-specific
 	themes". 
 
-Many menu items are greyed out (cannot be selected) when no frame is visible.
+Many menu items are now greyed out (cannot be selected) when no frame is visible.
 	
 Font 'Bitstream vera sans' works again.  	
 
@@ -34,7 +34,31 @@ Tool-bar can be turned off (per frame) again. Different defaults for major
 	modes are allowed.
 	
 Improvement when working with multiple frames: when no frame is visible,
-	Aquamacs no longer raises some other frame as soon as a file is loaded.	
+	Aquamacs no longer raises some other frame as soon as a file is
+	loaded.	
+	
+Speedbar works when one-buffer-one-frame ("Open Buffers in Separate
+	Frames") is turned off. 
+
+Ispell did not work when one-buffer-one-frame was turned on.
+	(Reported by Robert Sloan)
+
+Startup with arguments -nw (tty / in terminal) revised.
+	
+In particular in TeX mode, Aquamacs tended to give audio signals all the
+	time when there were internal exceptions (internal errors signaled) with
+	parsing the TeX code. Therefore, we don't ring the bell any more,
+	i.e. aquamacs-ring-bell-on-error-flag is nil by default.
+	(Reported by Ken Bloom and Andreas Hess)
+
+You can now redefine keys like this:
+	(define-key osx-key-mode-map [end] 'end-of-line)
+	(thanks for reporting: Andreas Hess)
+	
+If the user changes mac-command-modifier, it may be advisable to call
+	 (osx-key-reset-mode-map)
+	This will ensure that the keymap is updated and Aquamacs installs
+	its mac-like keyboard commands (provided you want this.)
 	
 Emacs Manual updated to 0.9.4 with change log.
 	
@@ -977,4 +1001,5 @@ Stefan Monnier, Steven Tamm, Drew Adams for their helpful hints.
 
 Local variables:
 mode: change-log
+mode: auto-fill
 end:
