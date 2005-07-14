@@ -11,7 +11,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.27 2005/07/10 10:32:31 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.28 2005/07/14 09:58:07 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -89,12 +89,16 @@
 
 
 (fset 'old-yes-or-no-p (symbol-function 'yes-or-no-p))
-(defcustom aquamacs-quick-yes-or-no-prompt t
+
+(defcustom aquamacs-quick-yes-or-no-prompt-flag t
   "If non-nil, the user does not have to type in yes or no at
 yes-or-no prompts - y or n will do."
   :group 'Aquamacs
   :version "22.0"
+  :type 'boolean
   )
+(defvaralias 'aquamacs-quick-yes-or-no-prompt 'aquamacs-quick-yes-or-no-prompt-flag)
+
 (defun aquamacs-repl-yes-or-no-p (arg)
   (interactive)
   (if aquamacs-quick-yes-or-no-prompt
@@ -117,25 +121,25 @@ yes-or-no prompts - y or n will do."
 ;; this can be turned off in .emacs via
 ;; (setq ring-bell-function nil)
 
-(defcustom aquamacs-ring-bell-on-error t
+(defcustom aquamacs-ring-bell-on-error-flag nil
   "If non-nil, Aquamacs gives an audio signal in cases of error, regardless of ``ring-bell-function''."
   :group 'Aquamacs
   :version "22.0"
+  :type 'boolean
   )
+(defvaralias  'aquamacs-ring-bell-on-error 'aquamacs-ring-bell-on-error-flag)
 
 ;; but please ring the bell when there is a real error
-(defadvice error (around ring-bell (&rest args) activate)
+(defadvice error (around ring-bell (&rest args) activate protect)
  
-(if aquamacs-ring-bell-on-error
-  (let ((ring-bell-function nil)
-	)
-    (ding)
-    ad-do-it
-    )
-  ; else
-  ad-do-it
-  ) 
- ) 
+  (if aquamacs-ring-bell-on-error-flag
+      (progn
+	(let ((ring-bell-function nil))
+	  (ding))
+;	(message (prin1-to-string args))
+	ad-do-it)
+    ;; else
+    ad-do-it)) 
 
 
 ; Mac Drag-N-Drop
@@ -340,8 +344,8 @@ yes-or-no prompts - y or n will do."
   )
 
 ; activate the modes now
-(global-font-lock-mode t) 
-(column-number-mode t)
+(global-font-lock-mode 1) 
+(column-number-mode 1)
 
 ; ------- Frames (OSX Windows) ----------
 
@@ -390,9 +394,11 @@ argument.  This function is called when finished viewing buffer.
 Use this argument instead of explicitly setting `view-exit-action'."
 
   (interactive "bView buffer: ")
-  (let ((undo-window (list (window-buffer) (window-start) (window-point))))
+  (let ((undo-window (list (window-buffer) (window-start) (window-point)))
+	(obof one-buffer-one-frame);;may be buffer-local!
+	) 
     (switch-to-buffer buffer)
-    (view-mode-enter (cons (selected-window) (cons (cons nil undo-window) one-buffer-one-frame))
+    (view-mode-enter (cons (selected-window) (cons (cons nil undo-window) obof))
 		     exit-action)))
 
 
@@ -503,11 +509,7 @@ Use this argument instead of explicitly setting `view-exit-action'."
 	'append) ;; move to the end: after loading customizations
 	
 	
-     
-
-;; this loads a huge package to get emacs to play ball with multiple frames
-(require 'aquamacs-frame-setup)  
-
+      
 (provide 'drews_init) ; migration from 0.9.1 (require in customizations)
 
 ;; http://www.emacswiki.org/cgi-bin/wiki/DrewsElispLibraries
@@ -618,8 +620,6 @@ Use this argument instead of explicitly setting `view-exit-action'."
 
 (require 'one-buffer-one-frame)
  
-(require 'osxkeys)
-
 
 ; ----------- MISC STUFF ----------------
 
@@ -646,7 +646,6 @@ Use this argument instead of explicitly setting `view-exit-action'."
 			     )
 			   )
  
-  
 (cua-mode 1) ;; this goes first (so we can overwrite the settings)
 
   
@@ -697,7 +696,6 @@ Use this argument instead of explicitly setting `view-exit-action'."
 			   )
  
     
-(require 'mac-extra-functions)
 
    ; while pc selection mode will be turned on, we don't
 ; want it to override Emacs like key bindings. 
