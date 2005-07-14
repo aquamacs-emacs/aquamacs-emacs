@@ -12,7 +12,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.5 2005/07/10 10:31:10 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.6 2005/07/14 09:50:30 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -355,6 +355,7 @@ for all frames with the current major-mode."
 (define-key-after menu-bar-options-menu [aquamacs-frame-themes]
 
   (list 'menu-item "Frame Appearance Themes" aquamacs-frame-theme-menu
+	  :enable aquamacs-auto-frame-parameters-flag
 	:help "Set themes for frames depending on major mode in buffer")
 
   'aquamacs-color-theme-select)
