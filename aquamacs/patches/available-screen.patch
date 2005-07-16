@@ -1,0 +1,50 @@
+Index: macfns.c
+===================================================================
+RCS file: /cvsroot/emacs/emacs/src/macfns.c,v
+retrieving revision 1.63
+diff -c -r1.63 macfns.c
+*** macfns.c	4 Jul 2005 16:06:33 -0000	1.63
+--- macfns.c	16 Jul 2005 01:16:11 -0000
+***************
+*** 3028,3033 ****
+--- 3029,3057 ----
+    return make_number ((int) (dpyinfo->width * 25.4 / dpyinfo->resx));
+  }
+  
++ 
++ 
++ DEFUN ("mac-display-available-pixel-width", Fmac_display_available_pixel_width, Smac_display_available_pixel_width, 0, 0, 0,
++        doc: /* Return the available width of the display 
++ in pixels, excluding the Dock.*/)
++   (void)
++ {
++   Rect rect;
++   
++   GetAvailableWindowPositioningBounds(LMGetMainDevice(), &rect);
++ 
++   Lisp_Object rv = 
++     Fcons( make_number (rect.left),
++ 	   Fcons( make_number (rect.top),
++ 		  Fcons( make_number (rect.right),
++ 			 Fcons( make_number (rect.bottom), Qnil))));
++   return rv;
++ 
++ }
++ 
++ 
++ 
++ 
+  DEFUN ("x-display-backing-store", Fx_display_backing_store,
+         Sx_display_backing_store, 0, 1, 0,
+         doc: /* Returns an indication of whether display DISPLAY does backing store.
+***************
+*** 4586,4591 ****
+--- 4610,4617 ----
+    defsubr (&Sx_close_connection);
+    defsubr (&Sx_display_list);
+    defsubr (&Sx_synchronize);
++ 
++   defsubr (&Smac_display_available_pixel_width);
+  
+    /* Setting callback functions for fontset handler.  */
+    get_font_info_func = x_get_font_info;
