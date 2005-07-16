@@ -11,7 +11,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.28 2005/07/14 09:58:07 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.29 2005/07/16 01:20:32 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -207,7 +207,12 @@ yes-or-no prompts - y or n will do."
 			   )
   (error t)) 
 
-(setq custom-file "~/Library/Preferences/Aquamacs Emacs/customizations.el")
+(aquamacs-set-defaults
+ '((custom-file "~/Library/Preferences/Aquamacs Emacs/customizations.el")
+;;   (user-init-file "~/Library/Preferences/Aquamacs Emacs/Preferences.el")
+   )
+)
+
 (add-hook 'after-init-hook (lambda () 
 		    (condition-case nil (load custom-file) (error t))
 		    (aquamacs-activate-features-new-in-this-version)
@@ -754,6 +759,8 @@ Use this argument instead of explicitly setting `view-exit-action'."
 ;; and turn on in current buffer
 ; (longlines-mode t)
  
+
+
 
 ;; Define customization group
 
