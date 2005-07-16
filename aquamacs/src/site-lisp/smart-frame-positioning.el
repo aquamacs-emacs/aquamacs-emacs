@@ -21,7 +21,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.7 2005/07/08 23:17:13 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.8 2005/07/16 01:19:11 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -111,6 +111,14 @@ pixels apart if possible."
      (frame-pixel-height f)
      )
 )
+(defmacro smart-fp--char-to-pixel-width (chars frame)
+       (* chars (frame-char-width frame)))
+(defmacro smart-fp--char-to-pixel-height (chars frame)
+       (* chars (frame-char-height frame)))
+(defmacro smart-fp--pixel-to-char-width (pixels frame)
+       (round (- (/ pixels (frame-char-width frame)) .5)))
+(defmacro smart-fp--pixel-to-char-height (pixels frame)
+       (round (- (/ pixels (frame-char-height frame)) .5)))
 
 ;(setq  smart-frame-positioning-enforce nil)
 ; (find-good-frame-position default-frame-alist)
@@ -124,9 +132,21 @@ pixels apart if possible."
 	     (cdr (assq 'user-position (frame-parameters new-frame))))
 	nil ;; just leave the parameters unmodified, if user has set a position
       
-      (let ((preassigned (get-frame-position-assigned-to-buffer-name)))
+      (let* (
+	     ;; on some systems, we can retrieve the available pixel width with
+	     ;; non-standard methods.
+	     ;; on OS X, e.g. mac-display-available-pixel-width (patch!!) returns
+	     ;; available screen region, excluding the Dock.
+	       (rect (if (fboundp 'mac-display-available-pixel-width)
+			 (mac-display-available-pixel-width)
+		       (0 0 (display-pixel-width) (display-pixel-height))))
+	       (min-x (nth 0 rect))
+	       (min-y (nth 1 rect))
+	       (max-x (nth 2 rect))
+	       (max-y (nth 3 rect))
+	       (preassigned (get-frame-position-assigned-to-buffer-name)))
 	
-	(or
+	(if preassigned
 	 ;; ( progn 
 	 ;; OS X ensures that frames are not opened outside the visible area of the screen
 	 ;; untested for other systems - the following might have to be enabled
@@ -135,7 +155,33 @@ pixels apart if possible."
 	 ;;(dolist (pair preassigned)
 	 ;;	(assq-set (car pair) (cdr pair) 'new-frame-parameters))
 	 ;;new-frame-parameters
-	 preassigned ; if preassigned, return it
+
+	 ;; if preassigned, the return it
+	    (progn
+	       
+	      `(
+		(left .
+		      ,(max min-x (cdr (assq 'left preassigned))))
+		(top 
+		 ,(max min-y (cdr (assq 'top preassigned))))
+		(width .
+		       (smart-fp--pixel-to-char-width
+			(min (- max-x (cdr (assq 'left preassigned)))
+			     (smart-fp--char-to-pixel-width
+				(cdr (assq 'width preassigned))
+				new-frame)) 
+			new-frame))   
+		(height .
+			(smart-fp--pixel-to-char-height
+			 (min (- max-y  (cdr (assq 'top preassigned)))
+			      (smart-fp--char-to-pixel-height
+				 (cdr (assq 'height preassigned))
+				 new-frame))
+			 new-frame))
+	    
+		)
+	      )
+ 
 	 ;;  )
 	 ;;else
 	  (let
@@ -157,37 +203,36 @@ pixels apart if possible."
 	    (unless (frame-visible-p old-frame)
 	      ;; if we're given an invisible frame (probably no
 	      ;; frame visible then!), assume a sensible standard
-	      ;; 3 * margin for y because of menu bar (on OS X)
-	      (setq x margin y (* 3 margin) w 0 h 0))
+	      (setq x (+ min-x margin) y (+ min-y margin) w 0 h 0))
 	     
 	    (let (
 		  (next-x 
-		   (if (> (- x margin next-w) 0)
+		   (if (> (- x margin next-w) min-x)
 		       (- x margin next-w)
 					; if it doesn't fit to the left
-		     (if (> (display-pixel-width)  (+ x w margin next-w))
+		     (if (> max-x  (+ x w margin next-w))
 		   
 			 (+ x w margin)
 		 
 		       ; if it doesn't fit to the right
 		       ; then position on the "other side" (where current frame is not)
 		       (if (or (equal w 0) (equal h 0)  ; invisible?
-			       (> (+ x (/ w 2)) (/ (display-pixel-width) 2)))
+			       (> (+ x (/ w 2)) (/ max-x 2)))
 			   margin ;; left edeg
 			 
 		       ; or on the right edge 
-			 (- (display-pixel-width) next-w margin)
+			 (- max-x next-w)
 		        )
 		       )
 	      
 		     ) )
 	  
 
-					; now determine y position	
+		  ;; now determine y position	
 		  (next-y nil)
 		  )
    
-					; we'll try to position the frame somewhere near the original one
+	      ;; we'll try to position the frame somewhere near the original one
 	      (mapc  
 	       (lambda (ny)
 		 (if next-y
@@ -218,8 +263,9 @@ pixels apart if possible."
 		     (- y (* 6 margin)) (- y (* 4 margin)) (+ y (* 2 margin)))
 	       )
 	      (if next-y
-		  ; make sure it's not too low
-		  (setq next-y (min next-y (- (display-pixel-height) next-h (* 2 margin) )))
+		  ;; make sure it's not too low
+		  ;; the 20 seem to be necessary because of a bug in Emacs
+		  (setq next-y (min next-y (- max-y next-h 20)))
 		   
 		 (setq next-y margin)) ;; if all else fails
 
@@ -277,7 +323,7 @@ can be remembered. This is part of Aquamacs Emacs."
  
 (defun store-frame-position-for-buffer (f)
  "Store position of frame F associated with current buffer for later retrieval. (Part of Aquamacs)"
-
+; (setq smart-frame-prior-positions nil)
 ; don't store too many entries here
  (if (> (length smart-frame-prior-positions) 50)
      (setcdr (nthcdr 49 smart-frame-prior-positions) nil)
@@ -293,7 +339,7 @@ can be remembered. This is part of Aquamacs Emacs."
 		  
 	    'smart-frame-prior-positions)
 
-  )
+  )  ; (frame-parameters)
 (defun get-frame-position-assigned-to-buffer-name ()
   (cdr (assq-string-equal (buffer-name) smart-frame-prior-positions))
 )
