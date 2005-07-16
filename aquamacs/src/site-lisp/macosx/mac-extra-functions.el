@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.11 2005/07/14 09:57:29 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.12 2005/07/16 01:36:21 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -193,10 +193,25 @@ end tell"
     
 )
 
+;; according to Apple's guidelines, we should
+;; always go for "untitled", "untitled 2", ...
+(defun mac-new-buffer-name (name &optional n)
+
+  (if (not (get-buffer name))
+      name
+    (setq n (if n (+ n 1) 2))
+    (setq new-name (concat name " " (int-to-string n)))
+    (if (not (get-buffer new-name))
+	new-name
+      (mac-new-buffer-name name n)
+      )
+    )
+)
+
 (defun new-frame-with-new-scratch  (&optional other-frame)
   "Opens a new frame containing an empty buffer."
   (interactive)			
-  (let ((buf (generate-new-buffer "New document")))
+  (let ((buf (generate-new-buffer (mac-new-buffer-name "untitled"))))
 
     ;; setting mode is done before showing the new frame
     ;; because otherwise, we get a nasty animation effect
