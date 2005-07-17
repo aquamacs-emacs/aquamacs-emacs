@@ -38,10 +38,10 @@
 ;(load "emacs-lisp/easy-mmode.el")
 
 ;; aquamacs
+;; the function aq-preload is supplied by the make-aquamacs script
+(aq-preload "aquamacs-tools.el")
 
-;(load "aquamacs/aquamacs-tools.el")
-
-;(load "aquamacs/mac-extra-functions.el")
+(aq-preload "macosx/mac-extra-functions.el")
 ;(load "aquamacs/applescript-mode.el")
 
 ;; (load "mail/rfc822.el")
@@ -66,7 +66,7 @@
 
 ;(load "aquamacs/better-buffer-menu.el")
 ;(load "aquamacs/carbon-font.el")
-;(load "aquamacs/check-for-updates.el")
+(aq-preload "aquamacs/check-for-updates.el")
 ;(load "aquamacs/color-theme.el")
 ;(load "aquamacs/css-mode.el")
 ;(load "aquamacs/def-face-const.el")
