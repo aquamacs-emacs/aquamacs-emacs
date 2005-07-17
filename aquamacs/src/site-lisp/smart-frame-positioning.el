@@ -21,7 +21,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.8 2005/07/16 01:19:11 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.9 2005/07/17 19:58:07 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -135,11 +135,12 @@ pixels apart if possible."
       (let* (
 	     ;; on some systems, we can retrieve the available pixel width with
 	     ;; non-standard methods.
-	     ;; on OS X, e.g. mac-display-available-pixel-width (patch!!) returns
+	     ;; on OS X, e.g. mac-display-available-pixel-bounds (patch!!) returns
 	     ;; available screen region, excluding the Dock.
-	       (rect (if (fboundp 'mac-display-available-pixel-width)
-			 (mac-display-available-pixel-width)
-		       (0 0 (display-pixel-width) (display-pixel-height))))
+	       (rect (if (fboundp 'mac-display-available-pixel-bounds)
+			 (mac-display-available-pixel-bounds)
+		       (list 0 0 
+			     (display-pixel-width) (display-pixel-height))))
 	       (min-x (nth 0 rect))
 	       (min-y (nth 1 rect))
 	       (max-x (nth 2 rect))
@@ -203,7 +204,7 @@ pixels apart if possible."
 	    (unless (frame-visible-p old-frame)
 	      ;; if we're given an invisible frame (probably no
 	      ;; frame visible then!), assume a sensible standard
-	      (setq x (+ min-x margin) y (+ min-y margin) w 0 h 0))
+	      (setq x min-x  y min-y w 0 h 0))
 	     
 	    (let (
 		  (next-x 
@@ -214,8 +215,9 @@ pixels apart if possible."
 		   
 			 (+ x w margin)
 		 
-		       ; if it doesn't fit to the right
-		       ; then position on the "other side" (where current frame is not)
+		       ;; if it doesn't fit to the right
+		       ;; then position on the "other side" 
+		       ;; (where current frame is not)
 		       (if (or (equal w 0) (equal h 0)  ; invisible?
 			       (> (+ x (/ w 2)) (/ max-x 2)))
 			   margin ;; left edeg
@@ -262,12 +264,16 @@ pixels apart if possible."
 		     (- y margin) (- y (* 3 margin)) (- y (* 5 margin)) 
 		     (- y (* 6 margin)) (- y (* 4 margin)) (+ y (* 2 margin)))
 	       )
+	      (setq next-x (max next-x min-x))
+
+	      
 	      (if next-y
 		  ;; make sure it's not too low
 		  ;; the 20 seem to be necessary because of a bug in Emacs
-		  (setq next-y (min next-y (- max-y next-h 20)))
+		  (setq next-y (max min-y (min next-y (- max-y next-h 20))))
 		   
-		 (setq next-y margin)) ;; if all else fails
+		 (setq next-y min-y)) ;; if all else fails
+ 
 
 	      (assq-set 'left next-x 'new-frame-parameters)
 	      (assq-set 'top next-y 'new-frame-parameters)
@@ -322,27 +328,25 @@ can be remembered. This is part of Aquamacs Emacs."
 )
  
 (defun store-frame-position-for-buffer (f)
- "Store position of frame F associated with current buffer for later retrieval. (Part of Aquamacs)"
-; (setq smart-frame-prior-positions nil)
-; don't store too many entries here
- (if (> (length smart-frame-prior-positions) 50)
-     (setcdr (nthcdr 49 smart-frame-prior-positions) nil)
-   ) 
+  "Store position of frame F associated with current buffer for later retrieval. (Part of Aquamacs)"
+  ;; (setq smart-frame-prior-positions nil)
+  ;; don't store too many entries here
+  (when buffer-file-number ;;; don't save position if 'untitled'
+    (if (> (length smart-frame-prior-positions) 50)
+	(setcdr (nthcdr 49 smart-frame-prior-positions) nil)
+      ) 
 
-  (assq-set-equal (buffer-name) 
-	     ( list 
-		    (cons 'left (eval (frame-parameter f 'left)))
-		    (cons 'top (eval (frame-parameter f 'top)))
-		    (cons 'width (frame-parameter f 'width))
-		    (cons 'height (frame-parameter f 'height))
-		    ) 
-		  
-	    'smart-frame-prior-positions)
+    (assq-set-equal (buffer-name) 
+		    ( list 
+		      (cons 'left (eval (frame-parameter f 'left)))
+		      (cons 'top (eval (frame-parameter f 'top)))
+		      (cons 'width (frame-parameter f 'width))
+		      (cons 'height (frame-parameter f 'height))) 
+		    'smart-frame-prior-positions)))
 
-  )  ; (frame-parameters)
+
 (defun get-frame-position-assigned-to-buffer-name ()
-  (cdr (assq-string-equal (buffer-name) smart-frame-prior-positions))
-)
+      (cdr (assq-string-equal (buffer-name) smart-frame-prior-positions)))
 
 
 (add-hook 'delete-frame-functions
