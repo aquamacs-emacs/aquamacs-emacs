@@ -11,7 +11,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.29 2005/07/16 01:20:32 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.30 2005/07/17 19:57:14 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -51,8 +51,8 @@
 
 
 
-(defvar aquamacs-version "0.9.4")
-(defvar aquamacs-version-id 094.0)
+(defvar aquamacs-version "0.9.5 beta-1")
+(defvar aquamacs-version-id 095.1)
 (defvar aquamacs-minor-version "")
 
 
@@ -140,6 +140,11 @@ yes-or-no prompts - y or n will do."
 	ad-do-it)
     ;; else
     ad-do-it)) 
+
+
+;; Mac creator
+
+(add-hook 'after-save-hook 'mac-set-creator-code-for-file)
 
 
 ; Mac Drag-N-Drop
