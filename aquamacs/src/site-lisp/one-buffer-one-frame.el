@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.4 2005/07/14 09:58:49 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.5 2005/07/17 19:57:44 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -31,7 +31,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.4 2005/07/14 09:58:49 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.5 2005/07/17 19:57:44 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -75,10 +75,8 @@
   (or one-buffer-one-frame-force ;; set by color-theme
       (let ( (bufname (get-bufname buf))
 	     )
-   
 	(if one-buffer-one-frame 
-	    (if	(> (buffer-size (window-buffer)) 0)
-		
+	    
 		(if 
 		    (member bufname
 			    '(
@@ -87,22 +85,15 @@
 			      " SPEEDBAR" ; speedbar package opens its own frame
 			      "\*Choices\*" ; for ispell
 			      "\*Article\*" ; gnus
-		      
-			      )
-			    )
-		    nil
-		  t 				
-   
-		  )
-					; else --> not one-buffer-one-frame
-	      (special-display-p (get-bufname (car args))) ; return nil if not special-display buffer 
-	      )
-					; else - one-buffer-one-frame is off
-	  nil
-	  )
-	)
-      )
-  )
+			      ))
+		    (progn (print nil) nil)
+		  (or	
+		   (> (buffer-size (window-buffer)) 0)
+		   (progn (print "bs>0") t)
+		   ;; return nil if not special-display buffer 
+		   (special-display-p (get-bufname (car args)))))
+	  ;; else --> not one-buffer-one-frame
+	  nil))))
 
 (defun killable-buffer-p (buf)
   
@@ -136,30 +127,26 @@
 
 (if window-system
 (defadvice switch-to-buffer (around sw-force-other-frame (&rest args) activate)
-    
-					; is buffer shown in a frame?
+  ;; is buffer shown in a frame?
   (if (and one-buffer-one-frame
 	   (walk-windows
 	    (lambda (w)
 	      (if (eq (window-buffer w) (get-bufobj (car args)))
-	     
-		   (make-frame-visible (select-frame (window-frame w)
-						    )
-				      ) 
-		  
-		)
-	      ) t) ;; include hidden frames
-	   )
+	     ;; used to be make-frame-visible
+		   (raise-frame (select-frame (window-frame w))))
+	      ) 'include-hidden-frames)) 
       t
   
     (if (or (not (visible-frame-list))
 	    (not (frame-visible-p (selected-frame)))
-	    (open-in-other-frame-p (car args))
-	     
-	    )
-	(if (equal (car args) (buffer-name (current-buffer)))  ; is buffer already current? then make sure it's visible.
-	    (raise-frame (selected-frame) )  ; bring to front
-	     (progn
+	    (open-in-other-frame-p (car args)))
+	(if (or 
+	     (equal (car args) (buffer-name (window-buffer))) 
+		(equal (car args)  (window-buffer)))
+	    ;; are we switching to buffer shown in the selected window?
+	    ;;(raise-frame)  ; bring selected frame to front
+	    nil ;; no operation - frame is raised from before
+		(progn
 	        
 	       (apply #'switch-to-buffer-other-frame args)
 	  
@@ -170,17 +157,36 @@
       (if (window-dedicated-p (selected-window))
         (apply #'switch-to-buffer-other-window args)
 					; else: show in same frame
-	ad-do-it
-	)
-	
-      )
-    )
+	ad-do-it)))
  
-  (set-mode-specific-theme)
- 
-  )
-)
+  (set-mode-specific-theme)))
 
+
+;; some exception for the speedbar
+;; this doesn't work, unfortunately
+;; (add-hook 'speedbar-load-hook 
+;; 	  (lambda ()
+;; 	    (make-local-variable 'one-buffer-one-frame)
+;; 	    (setq one-buffer-one-frame nil)
+;; 	    )
+;; )
+
+;; less elegant, but it works:
+(add-hook 'speedbar-load-hook (lambda ()
+(defadvice speedbar-find-file 
+  (around same-frame (&rest args) protect activate)
+  
+  (if one-buffer-one-frame 
+      (progn
+	(setq one-buffer-one-frame nil)
+	(unwind-protect
+	    ad-do-it
+	  (setq one-buffer-one-frame t)
+    
+	  ))
+    ad-do-it))))
+
+ 
 
 ;; make sure that when a minibuffer is ready to take input, 
 ;; the appropriate frame is raised (made visible)
