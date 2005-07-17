@@ -58,7 +58,7 @@ projdir=$HOME/Projects/Aquamacs/aquamacs
 
 rm EmacsInstaller.dmg 2>/dev/null
 
-aquamacsprecompile=0 # set to 1 to include some core files via site-load
+aquamacsprecompile=1 # set to 1 to include some core files via site-load
 progname="$0"
 
 srcdir="`pwd`/.."
@@ -69,7 +69,7 @@ export MYCPPFLAGS="-DUSE_TOOLKIT_SCROLL_BARS -DUSE_TRANSPARENCY"
  
 ## Default location to place it is /usr/local
 prefix=/usr/local
-bootfast=no
+bootfast=no  # turn this on to compile all the emacs el files
 appsdir=/Applications
 emapp=Emacs.app
 with_config=yes
@@ -197,10 +197,13 @@ fi
 #find $srcdir/lisp/aquamacs -name '*.el' -exec echo "(load \""{}"\")" \; >$srcdir/lisp/aquamacs-load.el
 
 if [ aquamacsprecompile ]; then
-    cp $projdir/src/site-load.el $srcdir/lisp/site-load.el
+    # add path function
+    echo "(defun aq-preload (f)  (load (concat \""$projdir"/src/site-lisp/\" f)))" >$srcdir/lisp/site-load.el 
+    cat $projdir/src/site-load.el >>$srcdir/lisp/site-load.el
 else
     rm $srcdir/lisp/site-load.el 2>/dev/null
 fi
+ 
 
 LANGUAGE=C
 LC_ALL=C
@@ -471,9 +474,9 @@ fi # this mod by david reitter - dont create a package if self-contained
 mkdir Aquamacs-Raw 2>/dev/null
 
 if test "$self_contained" = "yes"; then
-cp -R ${tempparentfull}$appsdir/$emapp Aquamacs-Raw/
+cp -Rp ${tempparentfull}$appsdir/$emapp Aquamacs-Raw/
 else
-cp -R ${packagedir} Aquamacs-Raw/
+cp -Rp ${packagedir} Aquamacs-Raw/
 fi
 
 
