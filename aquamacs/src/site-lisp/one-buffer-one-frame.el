@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.5 2005/07/17 19:57:44 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.6 2005/07/17 20:52:41 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -31,7 +31,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.5 2005/07/17 19:57:44 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.6 2005/07/17 20:52:41 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -73,10 +73,8 @@
 (defun open-in-other-frame-p (buf)
   
   (or one-buffer-one-frame-force ;; set by color-theme
-      (let ( (bufname (get-bufname buf))
-	     )
-	(if one-buffer-one-frame 
-	    
+      (let ( (bufname (get-bufname buf)))
+	(and one-buffer-one-frame 
 		(if 
 		    (member bufname
 			    '(
@@ -86,15 +84,13 @@
 			      "\*Choices\*" ; for ispell
 			      "\*Article\*" ; gnus
 			      ))
-		    (progn (print nil) nil)
+		    nil
 		  (or	
+		   ;; return t if there is already text in window
 		   (> (buffer-size (window-buffer)) 0)
-		   (progn (print "bs>0") t)
 		   ;; return nil if not special-display buffer 
-		   (special-display-p (get-bufname (car args)))))
-	  ;; else --> not one-buffer-one-frame
-	  nil))))
-
+		   (special-display-p (get-bufname (car args)))))))))
+ 
 (defun killable-buffer-p (buf)
   
   (let ( (bufname (get-bufname buf))
