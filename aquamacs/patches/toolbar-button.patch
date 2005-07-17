@@ -1,0 +1,172 @@
+Index: src/keyboard.c
+===================================================================
+RCS file: /cvsroot/emacs/emacs/src/keyboard.c,v
+retrieving revision 1.833
+diff -c -r1.833 keyboard.c
+*** src/keyboard.c	13 Jul 2005 05:30:56 -0000	1.833
+--- src/keyboard.c	17 Jul 2005 20:23:36 -0000
+***************
+*** 517,522 ****
+--- 517,525 ----
+  Lisp_Object Qmake_frame_visible;
+  Lisp_Object Qselect_window;
+  Lisp_Object Qhelp_echo;
++ #ifdef MAC_OSX
++ Lisp_Object Qtoggle_frame_toolbar;
++ #endif
+  
+  #ifdef HAVE_MOUSE
+  Lisp_Object Qmouse_fixup_help_message;
+***************
+*** 4017,4022 ****
+--- 4020,4034 ----
+  	  kbd_fetch_ptr = event + 1;
+  	}
+  #endif
++ #ifdef MAC_OSX
++       else if (event->kind == TOGGLE_TOOLBAR_EVENT)
++ 	{
++ 	  /* Make an event (toggle-frame-toolbar (FRAME)).  */
++ 	  obj = Fcons (event->frame_or_window, Qnil);
++ 	  obj = Fcons (Qtoggle_frame_toolbar, Fcons (obj, Qnil));
++ 	  kbd_fetch_ptr = event + 1;
++ 	}
++ #endif
+        else if (event->kind == BUFFER_SWITCH_EVENT)
+  	{
+  	  /* The value doesn't matter here; only the type is tested.  */
+***************
+*** 10773,10778 ****
+--- 10785,10793 ----
+    /* `select-window' should be handled just like `switch-frame'
+       in read_key_sequence.  */
+    {&Qselect_window,       "select-window",       &Qswitch_frame}
++ #ifdef MAC_OSX
++   ,{&Qtoggle_frame_toolbar,  "toggle-frame-toolbar",  &Qtoggle_frame_toolbar}
++ #endif
+  };
+  
+  void
+***************
+*** 11436,11441 ****
+--- 11451,11458 ----
+  
+    initial_define_lispy_key (Vspecial_event_map, "delete-frame",
+  			    "handle-delete-frame");
++   /* initial_define_lispy_key (Vspecial_event_map, "toggle-frame-toolbar",
++      "handle-toggle-frame-toolbar"); */
+    /* Here we used to use `ignore-event' which would simple set prefix-arg to
+       current-prefix-arg, as is done in `handle-switch-frame'.
+       But `handle-switch-frame is not run from the special-map.
+Index: src/termhooks.h
+===================================================================
+RCS file: /cvsroot/emacs/emacs/src/termhooks.h,v
+retrieving revision 1.69
+diff -c -r1.69 termhooks.h
+*** src/termhooks.h	4 Jul 2005 16:06:35 -0000	1.69
+--- src/termhooks.h	17 Jul 2005 20:23:36 -0000
+***************
+*** 289,294 ****
+--- 289,298 ----
+    DEICONIFY_EVENT,		/* An X client deiconified this window.  */
+    MENU_BAR_ACTIVATE_EVENT,      /* A button press in the menu bar
+  				   (toolkit version only).  */
++ #ifdef MAC_OSX
++   TOGGLE_TOOLBAR_EVENT,         /* A client requestes toggling the tool-bar */
++ #endif
++ 
+    DRAG_N_DROP_EVENT,		/* A drag-n-drop event is generated when
+  				   files selected outside of Emacs are dropped
+  				   onto an Emacs window.
+Index: src/macfns.c
+===================================================================
+RCS file: /cvsroot/emacs/emacs/src/macfns.c,v
+retrieving revision 1.63
+diff -c -r1.63 macfns.c
+*** src/macfns.c	4 Jul 2005 16:06:33 -0000	1.63
+--- src/macfns.c	17 Jul 2005 20:23:37 -0000
+***************
+*** 2226,2232 ****
+  #if TARGET_API_MAC_CARBON
+    CreateNewWindow (kDocumentWindowClass,
+  		   kWindowStandardDocumentAttributes
+! 		   /* | kWindowToolbarButtonAttribute */,
+  		   &r, &FRAME_MAC_WINDOW (f));
+    if (FRAME_MAC_WINDOW (f))
+      {
+--- 2226,2232 ----
+  #if TARGET_API_MAC_CARBON
+    CreateNewWindow (kDocumentWindowClass,
+  		   kWindowStandardDocumentAttributes
+! 		   | kWindowToolbarButtonAttribute,
+  		   &r, &FRAME_MAC_WINDOW (f));
+    if (FRAME_MAC_WINDOW (f))
+      {
+Index: src/macterm.c
+===================================================================
+RCS file: /cvsroot/emacs/emacs/src/macterm.c,v
+retrieving revision 1.123
+diff -c -r1.123 macterm.c
+*** src/macterm.c	14 Jul 2005 09:23:24 -0000	1.123
+--- src/macterm.c	17 Jul 2005 20:23:40 -0000
+***************
+*** 9124,9129 ****
+--- 9124,9134 ----
+  		if (TrackBox (window_ptr, er.where, part_code))
+  		  do_zoom_window (window_ptr, part_code);
+  		break;
++ 	      case inToolbarButton:
++ 		inev.kind = TOGGLE_TOOLBAR_EVENT;
++ 		XSETFRAME (inev.frame_or_window,
++ 			   mac_window_to_frame (window_ptr));
++ 		break;
+  
+  	      default:
+  		break;
+Index: lisp/toolbar/tool-bar.el
+===================================================================
+RCS file: /cvsroot/emacs/emacs/lisp/toolbar/tool-bar.el,v
+retrieving revision 1.40
+diff -c -r1.40 tool-bar.el
+*** lisp/toolbar/tool-bar.el	4 Jul 2005 23:09:00 -0000	1.40
+--- lisp/toolbar/tool-bar.el	17 Jul 2005 20:23:40 -0000
+***************
+*** 265,271 ****
+--- 265,301 ----
+  			      (popup-menu menu-bar-help-menu))
+  		     'help
+  		     :help "Pop up the Help menu")
++ 
++   ;; Toolbar button, mapped to handle-toggle-tool-bar in tool-bar.el
++   ;; (Toolbar button - on systems that support it!)
++   (global-set-key [toggle-frame-toolbar] 'handle-toggle-tool-bar)
++ 
+    )
++ 
++ 
++ ;; local toolbars
++ 
++ (defun tool-bar-enabled-p (&optional frame)
++ "Evaluates to non-nil if the tool-bar is present
++ in frame FRAME. If FRAME is nil, the function applies
++ to the selected frame."
++   (> (or (frame-parameter frame 'tool-bar-lines) 0) 0))
++ 
++ (defun toggle-tool-bar (&optional frame)
++ "Switches the tool bar on and off in frame FRAME.
++ If FRAME is nil, the change applies to the selected frame."
++ (interactive)
++   (modify-frame-parameters frame 
++    (list (cons 'tool-bar-lines 
++ 	       (if (tool-bar-enabled-p frame)
++ 		   0
++ 		 1
++ 		 )))))
++ 
++ (defun handle-toggle-tool-bar (event)
++ "Handles a tool-bar toggle event."
++ (interactive "e")
++   (toggle-tool-bar  (posn-window (event-start event))))
+  
+  (provide 'tool-bar)
+  
