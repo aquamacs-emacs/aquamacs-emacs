@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.12 2005/07/16 01:36:21 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.13 2005/07/17 19:57:20 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -88,8 +88,6 @@ double-click in Finder."
       (mac-set-file-creator buffer-file-name)
     )
   )
-
-(add-hook 'after-save-hook 'mac-set-creator-code-for-file)
 
 ;; (do-applescript (format "try
 ;; tell application \"Finder\"
@@ -217,18 +215,16 @@ end tell"
     ;; because otherwise, we get a nasty animation effect
     (save-excursion
       (set-buffer buf)
-      (if default-major-mode (funcall  default-major-mode))
-      )
+      (if default-major-mode (funcall  default-major-mode)))
 
     (if other-frame
 	(switch-to-buffer-other-frame buf)
-      (switch-to-buffer buf)
-      )
+      (let ((one-buffer-one-frame-force one-buffer-one-frame))
+	;; force new frame
+	(switch-to-buffer buf)))
   
     (setq buffer-offer-save t)
-    (set-buffer-modified-p nil)
-    )
-  )
+    (set-buffer-modified-p nil)))
 
 
 ;; register the help manuals
