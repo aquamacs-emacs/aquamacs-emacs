@@ -1,0 +1,51 @@
+Index: lisp/startup.el
+===================================================================
+RCS file: /cvsroot/emacs/emacs/lisp/startup.el,v
+retrieving revision 1.368
+diff -c -r1.368 startup.el
+*** lisp/startup.el	15 Jul 2005 14:47:06 -0000	1.368
+--- lisp/startup.el	17 Jul 2005 22:07:56 -0000
+***************
+*** 463,469 ****
+  		  (if (string-match "^\\(xterm\\|rxvt\\|dtterm\\|eterm\\)"
+  				    term)
+  		      (setq default-frame-background-mode 'light)))
+! 		(frame-set-background-mode (selected-frame)))))
+  
+  	;; Now we know the user's default font, so add it to the menu.
+  	(if (fboundp 'font-menu-add-default)
+--- 463,472 ----
+  		  (if (string-match "^\\(xterm\\|rxvt\\|dtterm\\|eterm\\)"
+  				    term)
+  		      (setq default-frame-background-mode 'light)))
+! 		(frame-set-background-mode (selected-frame))))
+! 
+! 	  ;; time to make the frame visible (Aquamacs)
+! 	  (make-frame-visible))
+  
+  	;; Now we know the user's default font, so add it to the menu.
+  	(if (fboundp 'font-menu-add-default)
+***************
+*** 721,726 ****
+--- 724,732 ----
+      (and command-line-args
+           (setcdr command-line-args args)))
+  
++   ;; the initial frame is hidden in Aquamacs
++   (setq initial-frame-alist (cons '(visibility . nil) initial-frame-alist))
++ 
+    ;; Under X Window, this creates the X frame and deletes the terminal frame.
+    (when (fboundp 'frame-initialize)
+      (frame-initialize))
+***************
+*** 1730,1735 ****
+--- 1736,1744 ----
+      ;; keystroke, and that's distracting.
+      (when (fboundp 'frame-notice-user-settings)
+        (frame-notice-user-settings))
++ 
++     ;; time to make the frame visible (Aquamacs)
++     (make-frame-visible) 
+  
+      ;; If there are no switches to process, we might as well
+      ;; run this hook now, and there may be some need to do it
