@@ -21,7 +21,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.9 2005/07/17 19:58:07 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.10 2005/07/18 17:47:14 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -120,6 +120,13 @@ pixels apart if possible."
 (defmacro smart-fp--pixel-to-char-height (pixels frame)
        (round (- (/ pixels (frame-char-height frame)) .5)))
 
+
+;; Unit test  / check requirements
+(require 'aquamacs-tools)
+(aquamacs-require 
+ '(fboundp 'mac-display-available-pixel-bounds)
+)
+
 ;(setq  smart-frame-positioning-enforce nil)
 ; (find-good-frame-position default-frame-alist)
 (defun find-good-frame-position ( old-frame new-frame )
@@ -158,7 +165,7 @@ pixels apart if possible."
 	 ;;new-frame-parameters
 
 	 ;; if preassigned, the return it
-	    (progn
+	    (progn  
 	       
 	      `(
 		(left .
@@ -200,12 +207,10 @@ pixels apart if possible."
        
 	       ) 
 	    ;; return:
- 
 	    (unless (frame-visible-p old-frame)
 	      ;; if we're given an invisible frame (probably no
 	      ;; frame visible then!), assume a sensible standard
-	      (setq x min-x  y min-y w 0 h 0))
-	     
+	      (setq x (+ min-x margin)  y (+ min-y margin) w 0 h 0))
 	    (let (
 		  (next-x 
 		   (if (> (- x margin next-w) min-x)

@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.7 2005/07/14 09:50:30 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.8 2005/07/18 17:47:14 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -213,6 +213,23 @@ Optional CODING is used for encoding coding-system."
     load-path
     )
   t
+)
+
+;; Aquamacs Unit Tests
+
+(defvar aquamacs-require-list nil)
+(defun aquamacs-require (arg)
+  (setq aquamacs-require-list (cons arg aquamacs-require-list))
+)
+(defun aquamacs-run-unit-tests ()
+  (message "Aquamacs Unit Tests...")
+  (mapc
+   (lambda (expr)
+     (if (eval expr)
+	 (message (format "%s passed." expr))
+       (message (format "%s failed." expr))))
+   aquamacs-require-list)
+  (message "... done")
 )
  
 

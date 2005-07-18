@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.9 2005/07/10 10:36:39 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.10 2005/07/18 17:47:39 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -32,6 +32,14 @@
 ;; Copyright (C) 2005, David Reitter
 
 
+;; Unit test  / check requirements
+(require 'aquamacs-tools)
+(aquamacs-require  '(boundp 'mac-command-modifier))
+(aquamacs-require  '(boundp 'mac-control-modifier))
+(aquamacs-require  '(boundp 'mac-pass-option-to-system))
+
+
+;; To do: this should only happen when the mode is switched on
 
 (setq mac-option-modifier 'meta) 
 (setq mac-control-modifier 'ctrl)
@@ -74,6 +82,7 @@
 
  
 (require 'aquamacs-tools)
+
 
  
 
