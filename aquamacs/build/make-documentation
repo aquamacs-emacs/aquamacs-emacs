@@ -9,13 +9,16 @@ proc makePDF {} {
 	puts "Please select a LaTeX file."
 	exit
     } else {
+	set pdfdir [file dirname $fname]
+	cd $pdfdir
 	puts "Running pdflatex on $fname..."
 	catch {exec pdflatex -interaction=nonstopmode $fname}
 	puts "Running pdflatex again to update references..."
 	catch {exec pdflatex -interaction=nonstopmode $fname}
 	set newpdf [string replace $fname end-2 end pdf]
-	puts "Opening $newpdf..."
-	exec open $newpdf
+	puts "PDF conversion completed."
+#	puts "Opening $newpdf..."
+#	exec open $newpdf
     }
 }
 
@@ -23,21 +26,24 @@ proc makePDF {} {
 proc makeHTML {} {
     global fname
     set fname $::argv
-
+    set htmldir [file dirname $fname]
+    cd $htmldir
     puts "Running latex2html on $fname..."
     catch {exec latex2html -local_icons -html_version=4.1 $fname}
     puts "$fname converted to HTML."
     set newdir [string replace $fname end-3 end]
-    puts $newdir
+   # puts $newdir
     set newcss [string replace $fname end-2 end css]
-    file copy -force $newcss $newdir/$newcss
+   # puts $newcss
+    set newcssfile [file tail $newcss]
+    file copy -force $newcssfile $newdir/$newcssfile
     puts "Applying Apple Help tags..."
     set phrase  {<META NAME="description" CONTENT="Aquamacs User Help">}
 
     set newphrase  {
-	<META NAME="description" CONTENT="Aquamacs User Help">
-	<META NAME="AppleTitle" content="Aquamacs User Help">
-	<META NAME="AppleFont" content="Lucida Grande,Helvetica">
+<META NAME="description" CONTENT="Aquamacs User Help">
+<META NAME="AppleTitle" content="Aquamacs User Help">
+<META NAME="AppleFont" content="Lucida Grande,Helvetica">
     }
     set oldindex [open $newdir/index.html r]
     set contents [read $oldindex]
@@ -46,9 +52,9 @@ proc makeHTML {} {
     set newindex [open $newdir/index.html w]
     puts -nonewline $newindex $contents
     close $newindex
-    puts "Apple Help tags applied..."
-    puts "Opening $newdir/index.html..."
-    exec open $newdir/index.html
+    puts "Apple Help tags applied. HTML conversion completed."
+  #  puts "Opening $newdir/index.html..."
+  #  exec open $newdir/index.html
 }
 
 

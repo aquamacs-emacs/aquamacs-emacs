@@ -64,15 +64,76 @@ pleasant surprise.
 
 \section{What's New in This Release}
 
-This is version 0.9.4 of Aquamacs, released July 2, 2005. Aquamacs 0.9.4 is a bugfix release; it corrects a number of issues  that occurred in 0.9.3.
-As a result of one bugfix, you may notice a change in font size.  Please adjust your font settings to accomodate for that. 
+This is version 0.9.5b1 of Aquamacs, released July 20, 2005. Aquamacs 0.9.5b1 includes a number of bug fixes and optimizations that should improve performance and stability. 
 
+\subsection{Changes: 0.9.5b1}
 
-\subsection{New Download Location}
+\begin{itemize}
 
-The latest version of Aquamacs can always be dowloaded at \url{http://aquamacs.org/cgi-bin/download.cgi}. 
+\item The customization variable aquamacs-auto-frame-parameters allows you to
+	turn off mode-specific themes---your frames stay the same, no
+	matter what major mode you switch to. 
 
+\item Frame Appearance Themes have a better menu structure now in the Options
+	menu. Also, there is a new function ``Delete all mode-specific
+	themes''. 
 
+\item Many menu items are now greyed out (cannot be selected) when no frame is visible.
+	
+\item Font ``Bitstream Vera Sans'' works again.  	
+
+\item Every Aquamacs frame has a toolbar-button now. Use it to turn the
+	toolbar in the given frame on and off. 
+	
+\item Tool-bar can be turned off (per frame) again. Different defaults for majo modes are allowed.
+	
+\item Improvement when working with multiple frames: when no frame is visible,
+	Aquamacs no longer raises some other frame as soon as a file is
+	loaded.	
+	
+\item Speedbar works when one-buffer-one-frame (``Open Buffers in Separate
+	Frames'') is turned off. 
+
+\item Ispell did not work when one-buffer-one-frame was turned on.
+	(Reported by Robert Sloan)
+
+\item Startup with arguments -nw (tty / in terminal) revised.
+	
+\item In particular in TeX mode, Aquamacs tended to give audio signals all the
+	time when there were internal exceptions (internal errors signaled) with parsing the TeX code. Therefore, we do not ring the bell any more,
+	i.e. aquamacs-ring-bell-on-error-flag is nil by default.
+	(Reported by Ken Bloom and Andreas Hess)
+
+\item You can now redefine Aquamacs keys like this:
+
+	\texttt{(define-key osx-key-mode-map [end] 'end-of-line)}
+
+	(Thanks for reporting: Andreas Hess.)
+	
+\item If the user changes mac-command-modifier, it may be advisable to call
+
+	 \texttt{(osx-key-reset-mode-map)}
+
+	This will ensure that the keymap is updated and Aquamacs installs
+	its Mac-like keyboard commands (provided you want this).
+
+\item New frames will not open behind the Dock any more.
+
+\item Manual updated to 0.9.4 with changelog.
+	
+\item Startup is faster now due to an optimization in loading fonts 
+	(thanks: Yamamoto M.) and precompiling some .el files.
+
+\item Error message during version check on startup removed (occurred in
+	certain cases where users had upgraded their system.)
+
+\item Exiting view mode (e.g. help) with 'q' deletes the frame instead of
+	iconifying it.
+
+\item An error message (harmless) when clicking on "Finish" in customize is gone.
+
+\end{itemize}
+	
 \subsection{Bug Fixes---0.9.4}
 
 \begin{itemize}
@@ -81,7 +142,7 @@ The latest version of Aquamacs can always be dowloaded at \url{http://aquamacs.o
 \item No more (delay due to) tramp mode on startup in cases where tramp
     mode had been used before (recentf).
 
-\item Files on externally mounted volumes aren't checked for readability
+\item Files on externally mounted volumes are not checked for readability
     any more for exclusion from recent files list.
     (Reported by Bill Clementson)
 
@@ -137,7 +198,7 @@ The latest version of Aquamacs can always be dowloaded at \url{http://aquamacs.o
 
 \begin{itemize}
 
-\item Fixed ``wrong argument type" problem (version check),
+\item Fixed ``wrong argument type'' problem (version check),
     which could occur in new installations or those updated from 0.9.1.
 
 \item Monaco 18 font present (suggestion: David M. Cook).
@@ -823,6 +884,7 @@ details.
 
 
 \subsection{\LaTeX\ Support}
+
 One special feature of Aquamacs is its extensive support for the
 editing of \LaTeX documents, especially Emacs' Auc\TeX\ mode. 
 
@@ -856,6 +918,14 @@ functionality that Aquamacs offers:
   have that interface mapped to OS X conventions, you may want to
   consider using Yaced instead of Aquamacs.}
 
+\subsubsection{Enhanced Carbon Emacs Plugin Under Development}
+Enrico Franconi, developer of the old Enhanced Carbon Emacs distribution that had special support for La\TeX\ editing via its customizations for Auc\TeX\ mode, has revived ECE as an external plugin that can be installed on any Carbon Emacs,including Aquamacs. At this time, the ECE plugin is undergoing beta testing. The beta version can be downloaded from this location:
+
+\url{http://www.inf.unibz.it/~franconi/enhanced-carbon-emacs/ec-emacs-plugin-beta.dmg} 
+
+\subsubsection{\TeX niscope: A Superb \LaTeX\ Previewer}
+One special feature of the Enhanced Carbon Emacs plugin is its support for \TeX niscope, a Cocoa-based La\TeX\ previewer that can display both PDF and DVI formats. We recommend \TeX niscope as a superb La\TeX\ previewer and complement to Aquamacs/Enhanced Carbon Emacs. \TeX niscope can be downloaded from \url{http://www.ing.unipi.it/~d9615/homepage/texniscope.html}.\footnote{The developer of \TeX niscope, Massimiliano Gubinelli, is also the creator of the Aquamacs icon.}
+
 \section{Getting Help}
 
 There are many options for getting help with Aquamacs.
@@ -877,7 +947,7 @@ Another option for general Emacs help is the gnu.emacs.help newsgroup.
 
 In addition to requesting help, you can also offer it. Apart from
 answering questions at the OS X Emacs mailing list, you can also file
-bug reports on Aquamacs. Use the ``Send Bug Report" function in the
+bug reports on Aquamacs. Use the ``Send Bug Report'' function in the
 Help menu  (general Emacs bugs, too), and also our Aquamacs-specific
 bug report  system at \url{http://sourceforge.net/projects/aquamacs}. 
 
