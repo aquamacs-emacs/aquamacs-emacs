@@ -21,7 +21,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.10 2005/07/18 17:47:14 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.11 2005/07/19 11:13:26 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -111,13 +111,13 @@ pixels apart if possible."
      (frame-pixel-height f)
      )
 )
-(defmacro smart-fp--char-to-pixel-width (chars frame)
+(defun smart-fp--char-to-pixel-width (chars frame)
        (* chars (frame-char-width frame)))
-(defmacro smart-fp--char-to-pixel-height (chars frame)
+(defun smart-fp--char-to-pixel-height (chars frame)
        (* chars (frame-char-height frame)))
-(defmacro smart-fp--pixel-to-char-width (pixels frame)
+(defun smart-fp--pixel-to-char-width (pixels frame)
        (round (- (/ pixels (frame-char-width frame)) .5)))
-(defmacro smart-fp--pixel-to-char-height (pixels frame)
+(defun smart-fp--pixel-to-char-height (pixels frame)
        (round (- (/ pixels (frame-char-height frame)) .5)))
 
 
@@ -130,8 +130,8 @@ pixels apart if possible."
 ;(setq  smart-frame-positioning-enforce nil)
 ; (find-good-frame-position default-frame-alist)
 (defun find-good-frame-position ( old-frame new-frame )
-					; next-frame-alist is optional
-					; we assume default-frame-alist if it is not given
+  ;; next-frame-alist is optional
+  ;; we assume default-frame-alist if it is not given
  
 
   (let ((new-frame-parameters))
@@ -156,7 +156,8 @@ pixels apart if possible."
 	
 	(if preassigned
 	 ;; ( progn 
-	 ;; OS X ensures that frames are not opened outside the visible area of the screen
+	 ;; OS X ensures that frames are not opened outside the visible 
+	    ;; area of the screen
 	 ;; untested for other systems - the following might have to be enabled
 	 ;; to guard cases when the available screen size gets smaller
 	 ;; (if (> (cdr (assq 'top preassigned)) (- (display-pixel-width) 40)
@@ -247,9 +248,14 @@ pixels apart if possible."
 		   (let ((samerow t))
 		     (mapc  
 		      (lambda (f)  
-			(if (or (> (abs (- (frame-parameter f 'top) ny)) 10) ; different height
-				(or (> next-x (+ (eval (frame-parameter f 'left)) (frame-parameter f 'width))) ;or no overlap
-				    (< (+ next-x next-w) (eval (frame-parameter f 'left))))
+			(if (or (> (abs (- (frame-parameter f 'top) ny)) 10) 
+				;; different height
+				(or (> next-x (+ (eval 
+						  (frame-parameter f 'left)) 
+						 (frame-parameter f 'width))) 
+					;or no overlap
+				    (< (+ next-x next-w) 
+				       (eval (frame-parameter f 'left))))
 				)
 			    nil		; fine
 			 (setq samerow nil)  
@@ -269,13 +275,14 @@ pixels apart if possible."
 		     (- y margin) (- y (* 3 margin)) (- y (* 5 margin)) 
 		     (- y (* 6 margin)) (- y (* 4 margin)) (+ y (* 2 margin)))
 	       )
-	      (setq next-x (max next-x min-x))
+	      (setq next-x (max next-x (+ min-x margin)))
 
 	      
 	      (if next-y
 		  ;; make sure it's not too low
 		  ;; the 20 seem to be necessary because of a bug in Emacs
-		  (setq next-y (max min-y (min next-y (- max-y next-h 20))))
+		  (setq next-y (max (+ min-y margin)
+				    (min next-y (- max-y next-h 20))))
 		   
 		 (setq next-y min-y)) ;; if all else fails
  
@@ -314,15 +321,22 @@ Nota bene: This is not an exact science."
  
       (unless (eq frame-creation-function
 		  'smart-position-and-create-frame)
-	(setq smart-frame-positioning-old-frame-creation-function frame-creation-function)
+	(setq smart-frame-positioning-old-frame-creation-function 
+	      frame-creation-function)
 	)
 
       (setq frame-creation-function 'smart-position-and-create-frame)
+
+      (add-hook 'delete-frame-functions
+		'store-frame-position-for-buffer)
       )
     
 	;else
  
-      (setq frame-creation-function smart-frame-positioning-old-frame-creation-function)
+      (setq frame-creation-function 
+	    smart-frame-positioning-old-frame-creation-function)
+      (remove-hook 'delete-frame-functions
+		   'store-frame-position-for-buffer)
       )
   smart-frame-positioning-mode 
   )
@@ -354,8 +368,6 @@ can be remembered. This is part of Aquamacs Emacs."
       (cdr (assq-string-equal (buffer-name) smart-frame-prior-positions)))
 
 
-(add-hook 'delete-frame-functions
-	  'store-frame-position-for-buffer)
 
 
 (provide 'smart-frame-positioning)
