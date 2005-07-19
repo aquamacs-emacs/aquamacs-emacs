@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.6 2005/07/17 20:52:41 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.7 2005/07/19 11:13:53 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -31,7 +31,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.6 2005/07/17 20:52:41 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.7 2005/07/19 11:13:53 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -124,36 +124,34 @@
 (if window-system
 (defadvice switch-to-buffer (around sw-force-other-frame (&rest args) activate)
   ;; is buffer shown in a frame?
-  (if (and one-buffer-one-frame
-	   (walk-windows
-	    (lambda (w)
-	      (if (eq (window-buffer w) (get-bufobj (car args)))
-	     ;; used to be make-frame-visible
-		   (raise-frame (select-frame (window-frame w))))
-	      ) 'include-hidden-frames)) 
-      t
-  
-    (if (or (not (visible-frame-list))
-	    (not (frame-visible-p (selected-frame)))
-	    (open-in-other-frame-p (car args)))
-	(if (or 
-	     (equal (car args) (buffer-name (window-buffer))) 
-		(equal (car args)  (window-buffer)))
-	    ;; are we switching to buffer shown in the selected window?
-	    ;;(raise-frame)  ; bring selected frame to front
-	    nil ;; no operation - frame is raised from before
-		(progn
+  (let ((switch t))
+    (if one-buffer-one-frame
+	(walk-windows
+	 (lambda (w)
+	   (when (equal (window-buffer w) (get-bufobj (car args)))
+	     (setq switch nil)
+	     (raise-frame (select-frame (window-frame w))))
+	   ) t)) ;; t = include-hidden-frame (must be t) 
+      
+    (if switch
+	(if (or (not (visible-frame-list))
+		(not (frame-visible-p (selected-frame)))
+		(open-in-other-frame-p (car args)))
+ 
+	    (progn
 	        
-	       (apply #'switch-to-buffer-other-frame args)
+	      (apply #'switch-to-buffer-other-frame args)
 	  
-	       (add-to-list 'aquamacs-newly-opened-frames (cons (selected-window) (current-buffer))) ;; store the frame/buffer information
-	       )
-	     )
-	; else : show in same frame
-      (if (window-dedicated-p (selected-window))
-        (apply #'switch-to-buffer-other-window args)
-					; else: show in same frame
-	ad-do-it)))
+	      ;; store the frame/buffer information
+	      (add-to-list 'aquamacs-newly-opened-frames 
+			   (cons (selected-window) (current-buffer))) 
+	       
+	      ) 
+	  ;; else : show in same frame
+	  (if (window-dedicated-p (selected-window))
+	      (apply #'switch-to-buffer-other-window args)
+	    ;; else: show in same frame
+	    ad-do-it))))
  
   (set-mode-specific-theme)))
 
