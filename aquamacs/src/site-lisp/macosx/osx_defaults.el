@@ -11,7 +11,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.30 2005/07/17 19:57:14 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.31 2005/07/19 11:13:19 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -55,6 +55,8 @@
 (defvar aquamacs-version-id 095.1)
 (defvar aquamacs-minor-version "")
 
+
+(defun aquamacs-osx-defaults-setup ()
 
 (require 'aquamacs-tools)
 
@@ -823,5 +825,6 @@ Use this argument instead of explicitly setting `view-exit-action'."
 ; via hook so it can be turned off
 (add-hook 'after-init-hook 'aquamacs-check-for-updates-if-necessary 'append)
 
+) ;; aquamacs-osx-defaults-setup
 
 (provide 'osx_defaults)
