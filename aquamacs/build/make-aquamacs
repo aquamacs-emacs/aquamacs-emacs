@@ -58,7 +58,7 @@ projdir=$HOME/Projects/Aquamacs/aquamacs
 
 rm EmacsInstaller.dmg 2>/dev/null
 
-aquamacsprecompile=1 # set to 1 to include some core files via site-load
+aquamacsprecompile=no # set to yes to include some core files via site-load
 progname="$0"
 
 srcdir="`pwd`/.."
@@ -195,14 +195,14 @@ fi
 #find $projdir/src/site-lisp -name '*.el' -exec cp {} $srcdir/lisp/aquamacs/ \;
 
 #find $srcdir/lisp/aquamacs -name '*.el' -exec echo "(load \""{}"\")" \; >$srcdir/lisp/aquamacs-load.el
-
-if [ aquamacsprecompile ]; then
+if test "$aquamacsprecompile" = "yes"; then
     # add path function
     echo "(defun aq-preload (f)  (load (concat \""$projdir"/src/site-lisp/\" f)))" >$srcdir/lisp/site-load.el 
     cat $projdir/src/site-load.el >>$srcdir/lisp/site-load.el
 else
     rm $srcdir/lisp/site-load.el 2>/dev/null
 fi
+rm $srcdir/lisp/site-load.elc 2>/dev/null
  
 
 LANGUAGE=C
