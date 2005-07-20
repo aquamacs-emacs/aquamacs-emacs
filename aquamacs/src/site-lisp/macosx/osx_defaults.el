@@ -11,7 +11,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.31 2005/07/19 11:13:19 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.32 2005/07/20 16:36:50 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -170,25 +170,28 @@ yes-or-no prompts - y or n will do."
 (require 'aquamacs-mac-fontsets)
  
 (setq mac-allow-anti-aliasing t) 
-
-(require 'color-theme)
-(setq color-theme-is-global nil)
-(setq color-theme-target-frame nil)
-(defadvice color-theme-install (around for-other-frame (&rest args) activate)
+ 
+(defun aquamacs-color-theme-select ()
+  (interactive)
+  ;; only require now - speeds up start up
+  (require 'color-theme)
+  (setq color-theme-is-global nil)
+  (setq color-theme-target-frame nil)
+  (defadvice color-theme-install 
+    (around for-other-frame (&rest args) activate)
  
     (if color-theme-target-frame
 	(select-frame color-theme-target-frame)
       )
     ad-do-it 
-)
+    )
 
-(defun aquamacs-color-theme-select ()
-  (interactive)
   (setq color-theme-target-frame (selected-frame))
    
   (let ((one-buffer-one-frame-force t))	
-; always open in new frame
-; because we've redefined bury->kill-buffer-and window in color-theme
+    ;; always open in new frame
+    ;; because we've redefined bury->kill-buffer-and window 
+    ;; in color-theme
     (color-theme-select)
     )
  
@@ -495,7 +498,8 @@ Use this argument instead of explicitly setting `view-exit-action'."
 
 ;; mode-specific font settings
 (require 'aquamacs-mode-specific-themes)
- 
+(aquamacs-mode-specific-themes-setup)
+
  
 ; update the help-mode specification with a fit-frame
 ; append it, so the user's choice has priority
@@ -636,7 +640,7 @@ Use this argument instead of explicitly setting `view-exit-action'."
 ; ----------- MISC STUFF ----------------
 
 
-(require 'ibuffer)
+;; (require 'ibuffer)
 
 (put 'upcase-region 'disabled nil)
  

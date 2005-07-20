@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.9 2005/07/14 09:52:06 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.10 2005/07/20 16:36:55 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -281,7 +281,7 @@ rather than behaving as Meta"
 (define-key-after menu-bar-options-menu [aquamacs-color-theme-select]
   '(menu-item "Set Color Theme..." aquamacs-color-theme-select
 	       :visible (and (display-multi-font-p)
-			     (fboundp 'color-theme-install)
+			     (fboundp 'aquamacs-color-theme-select)
 			     )
 	       :enable (aquamacs-updated-is-visible-frame-p) 
 	       :help "Select a color theme from a list")
