@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs fonts
  
-;; Last change: $Id: aquamacs-mac-fontsets.el,v 1.8 2005/07/08 21:53:00 davidswelt Exp $
+;; Last change: $Id: aquamacs-mac-fontsets.el,v 1.9 2005/07/20 23:08:43 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -35,8 +35,8 @@
 ;;; FONT DEFAULTS 
 
 (setq ignore-font-errors t)
-(setq aquamacs-ring-bell-on-error-saved aquamacs-ring-bell-on-error)
-(setq aquamacs-ring-bell-on-error nil)
+(setq aquamacs-ring-bell-on-error-saved aquamacs-ring-bell-on-error-flag)
+(setq aquamacs-ring-bell-on-error-flag nil)
 
 (defun signal-font-error (arg)
   (unless ignore-font-errors
@@ -126,5 +126,5 @@ is non-nil. (This function is part of Aquamacs and subject to change.)"
 (setq x-fixed-font-alist
       '("--- Font menu" ("Misc" () ))) 
 
-(setq aquamacs-ring-bell-on-error aquamacs-ring-bell-on-error-saved)
+(setq aquamacs-ring-bell-on-error-flag aquamacs-ring-bell-on-error-saved)
 (provide 'aquamacs-mac-fontsets)
