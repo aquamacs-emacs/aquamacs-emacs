@@ -42,7 +42,9 @@
 (aq-preload "aquamacs-tools.el")
 (aq-preload "macosx/mac-extra-functions.el")
 ;(load "aquamacs/applescript-mode.el")
-(aq-preload "aquamacs-mode-specific-themes")
+; the following can't be precompiled. reason unknown.
+;; no text available if this is compiled in. 
+;;(aq-preload "aquamacs-mode-specific-themes")
 (aq-preload "macosx/osx_defaults.el")
 
 ;; (load "mail/rfc822.el")
