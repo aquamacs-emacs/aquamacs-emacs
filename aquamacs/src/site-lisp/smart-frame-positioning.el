@@ -21,7 +21,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.11 2005/07/19 11:13:26 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.12 2005/07/20 23:45:54 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -148,8 +148,8 @@ pixels apart if possible."
 			 (mac-display-available-pixel-bounds)
 		       (list 0 0 
 			     (display-pixel-width) (display-pixel-height))))
-	       (min-x (nth 0 rect))
-	       (min-y (nth 1 rect))
+	       (min-x (+ 5 (nth 0 rect)))
+	       (min-y (+ 5 (nth 1 rect)))
 	       (max-x (nth 2 rect))
 	       (max-y (nth 3 rect))
 	       (preassigned (get-frame-position-assigned-to-buffer-name)))
@@ -226,7 +226,7 @@ pixels apart if possible."
 		       ;; (where current frame is not)
 		       (if (or (equal w 0) (equal h 0)  ; invisible?
 			       (> (+ x (/ w 2)) (/ max-x 2)))
-			   margin ;; left edeg
+			   min-x ;; left edeg
 			 
 		       ; or on the right edge 
 			 (- max-x next-w)
@@ -275,13 +275,13 @@ pixels apart if possible."
 		     (- y margin) (- y (* 3 margin)) (- y (* 5 margin)) 
 		     (- y (* 6 margin)) (- y (* 4 margin)) (+ y (* 2 margin)))
 	       )
-	      (setq next-x (max next-x (+ min-x margin)))
+	      (setq next-x (max next-x min-x ))
 
 	      
 	      (if next-y
 		  ;; make sure it's not too low
 		  ;; the 20 seem to be necessary because of a bug in Emacs
-		  (setq next-y (max (+ min-y margin)
+		  (setq next-y (max min-y 
 				    (min next-y (- max-y next-h 20))))
 		   
 		 (setq next-y min-y)) ;; if all else fails
