@@ -11,7 +11,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.32 2005/07/20 16:36:50 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.33 2005/07/20 23:09:44 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -170,34 +170,6 @@ yes-or-no prompts - y or n will do."
 (require 'aquamacs-mac-fontsets)
  
 (setq mac-allow-anti-aliasing t) 
- 
-(defun aquamacs-color-theme-select ()
-  (interactive)
-  ;; only require now - speeds up start up
-  (require 'color-theme)
-  (setq color-theme-is-global nil)
-  (setq color-theme-target-frame nil)
-  (defadvice color-theme-install 
-    (around for-other-frame (&rest args) activate)
- 
-    (if color-theme-target-frame
-	(select-frame color-theme-target-frame)
-      )
-    ad-do-it 
-    )
-
-  (setq color-theme-target-frame (selected-frame))
-   
-  (let ((one-buffer-one-frame-force t))	
-    ;; always open in new frame
-    ;; because we've redefined bury->kill-buffer-and window 
-    ;; in color-theme
-    (color-theme-select)
-    )
- 
-  )
-
-
 
 
 ;; -- KEYS AND MENUs ---------------------------
@@ -367,30 +339,6 @@ yes-or-no prompts - y or n will do."
 ; format the title-bar to always include the buffer name
 (setq frame-title-format "Emacs - %b")
  
-;;   ((window-id) (buffer-list) (name) (title) (icon-name))
-(add-to-list 'frame-parameters-to-exclude '(minibuffer))
-(add-to-list 'frame-parameters-to-exclude '(frame-configured-for-buffer))
-(defun aquamacs-set-theme-as-default () 
-  "Activate current frame settings (theme) as default. Sets default-frame-alist."
-  (interactive)
-					; need to find out if frame
-  (let ((frte frame-parameters-to-exclude)) ; make backup
-
-    (setq frame-parameters-to-exclude 
-	  (append '((user-position) (visibility)  (top) (left) (width) (height)) frame-parameters-to-exclude))
-
-    (set-all-frame-alist-parameters-from-frame
-     (if (special-display-p (buffer-name (current-buffer)))
-	 'special-display-frame-alist
-       'default-frame-alist)
-     )
-    (setq frame-parameters-to-exclude frte) ; restore old value
-    )
-					; (setq initial-frame-alist default-frame-alist)  
-  (message (concat "Theme has been set as default for all new " (if (special-display-p (buffer-name (current-buffer)))
-								    "special, internal frames"
-								  "normal frames.")))
-  )
  
 (require 'view)
 ;; redefine view-buffer
