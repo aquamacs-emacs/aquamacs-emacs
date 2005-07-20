@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.10 2005/07/20 16:36:55 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.11 2005/07/20 23:09:01 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -29,6 +29,7 @@
 ;; Copyright (C) 2005, David Reitter
  
 
+(require 'easymenu)
 
 ;; this is a big hack like most other things
 (defun change-menu-text (keymap key str)
@@ -292,9 +293,11 @@ rather than behaving as Meta"
 
 ;; local toolbars
 
-(defun tool-bar-enabled-p ()
-  (> (or (frame-parameter nil 'tool-bar-lines) 0) 0)
-)
+(defun tool-bar-enabled-p (&optional frame)
+"Evaluates to non-nil if the tool-bar is present
+in frame FRAME. If FRAME is nil, the function applies
+to the selected frame."
+  (> (or (frame-parameter frame 'tool-bar-lines) 0) 0)) 
 
 (defun toggle-tool-bar-here ()
 (interactive)
@@ -390,7 +393,7 @@ rather than behaving as Meta"
   (vector (format "Aquamacs Help                    %s?"  apple-char) 'aquamacs-user-help) 'emacs-tutorial)
 
 (easy-menu-add-item  nil '("Help")
-  (vector (format "Aquamacs Tips Wiki Online"  apple-char) 'aquamacs-user-wiki) 'emacs-tutorial)
+  (vector  "Aquamacs Tips Wiki Online"  'aquamacs-user-wiki) 'emacs-tutorial)
  
  
 
@@ -411,7 +414,7 @@ rather than behaving as Meta"
   (vector "Emacs Wiki Online" 'emacs-user-wiki) 'emacs-tutorial)
  
 (easy-menu-add-item  nil '("Help")
-  (vector (format "Subscribe to mailing list..."  apple-char) 'emacsosx-mailing-list-subscribe) 'emacs-tutorial)
+  (vector  "Subscribe to mailing list..."  'emacsosx-mailing-list-subscribe) 'emacs-tutorial)
 
 (easy-menu-add-item  nil '("Help")
   ["-" nil nil] 'emacs-tutorial)
