@@ -42,6 +42,7 @@
 (aq-preload "aquamacs-tools.el")
 (aq-preload "macosx/mac-extra-functions.el")
 ;(load "aquamacs/applescript-mode.el")
+(aq-preload aquamacs-mode-specific-themes-setup)
 (aq-preload "macosx/osx_defaults.el")
 
 ;; (load "mail/rfc822.el")
