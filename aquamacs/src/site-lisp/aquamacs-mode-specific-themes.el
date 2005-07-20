@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.8 2005/07/20 23:10:32 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.9 2005/07/20 23:46:14 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -227,7 +227,23 @@ to be appropriate for its first buffer"
     )
   t
   )
+(defun update-mode-themes-everywhere ()
+  "Update the themes (colors, font) of all frames
+to be appropriate for its first buffer"
+   
+  (mapc (lambda (frame)
+  (condition-case err
+      ;; we must catch errors here, because
+      ;; otherwise Emacs would clear menu-bar-update-hook
+      ;; which would be not good at all.
+       
  
+	  (set-mode-specific-theme frame 'force)
+	    
+    (error nil)
+    )) (frame-list))
+  t
+  ) 
 (defun aquamacs-get-theme-snapshot ()
 
   ;; (set-difference (frame-parameters (selected-frame))
@@ -292,12 +308,19 @@ to be appropriate for its first buffer"
 (defun aquamacs-delete-mode-specific-themes ()
   "Deletes all mode-specific themes set previously"
   (interactive)
- (customize-set-variable  'aquamacs-mode-specific-default-themes nil)
+  (customize-set-variable  'aquamacs-mode-specific-default-themes nil)
   (message "Mode-specific themes removed. Add new ones or use customize to 
 revert to the default. Save Options to store setting.")
   )
 
- 
+(defun aquamacs-delete-one-mode-specific-theme ()
+  "Deletes mode-specific themes for current major mode"
+  (interactive)
+  (customize-set-variable  'aquamacs-mode-specific-default-themes 
+			   (assq-delete-all major-mode
+					    aquamacs-mode-specific-default-themes))
+  (message "Mode-specific theme removed.")
+  )
 
 (defun aquamacs-updated-major-mode ()
 
@@ -411,10 +434,13 @@ if there is an entry for the current major mode."
 	  'set-mode-theme-after-change-major-mode
 	  )
 (add-hook 'menu-bar-update-hook 'update-mode-theme)
+(define-key-after aquamacs-frame-theme-menu [menu-delete-one-theme]
+  '(menu-item (format "Delete theme for %s" (or (aquamacs-updated-major-mode) "current mode"))   aquamacs-delete-one-mode-specific-theme 
+	      :enable (assq (aquamacs-updated-major-mode) aquamacs-mode-specific-default-themes)
+	      :help "Deletes a mode-specific theme."))
 (define-key-after aquamacs-frame-theme-menu [menu-delete-themes]
   '(menu-item  "Delete all mode-specific themes"     aquamacs-delete-mode-specific-themes 
 	      :help "Deletes all mode-specific themes set previously."))
-
 (define-key aquamacs-frame-theme-menu [menu-set-theme-as-default]
   '(menu-item  "Use current theme as default"     aquamacs-set-theme-as-default
 	    :enable  (aquamacs-updated-is-visible-frame-p)
