@@ -4,7 +4,9 @@
 ;; it is not complete - right now this files just
 ;; serves as a collection of function that interact with
 ;; things from osx_defaults
- 
+
+;; Call aquamacs-mode-specific-themes-setup after loading to install.
+
 ;; Filename: aquamacs-frame-setup.el
 ;; Description: Emacs init file for use with libraries from Drew Adams
 ;; Author: David Reitter
@@ -12,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.6 2005/07/14 09:50:30 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.7 2005/07/20 16:38:03 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -34,15 +36,8 @@
 
 ;; Copyright (C) 2005, David Reitter, all rights reserved.
 
+ 
 
-;; this is overridden by the user's customization
-
-;; but use a different font for other modes
-; this doesnt work yet, because set-frame-font is applied to the wrong
-; frame at that point
-
-;; mode-specific font settings
-;;   contains a list
 
 
 (defcustom aquamacs-mode-specific-default-themes
@@ -112,11 +107,6 @@ if there is an entry for the current major mode."
 
 
    
-(add-hook 'after-init-hook
-	'make-help-mode-use-frame-fitting
-	'append) ;; move to the end: after loading customizations
-	
-	
 (defun aquamacs-combined-mode-specific-settings (default-alist theme)
 
   (if aquamacs-auto-frame-parameters-flag
@@ -234,10 +224,6 @@ if there is an entry for the current major mode."
     )  
   )
 
-(add-hook 'after-change-major-mode-hook	
-	  'set-mode-theme-after-change-major-mode
-	  )
-
 
 
 ;; (setq after-change-major-mode-hook nil) 
@@ -284,7 +270,7 @@ to be appropriate for its first buffer"
     )
   t
   )
-(add-hook 'menu-bar-update-hook 'update-mode-theme)
+
 
 (defun aquamacs-set-theme-as-mode-default () 
   (interactive)
@@ -327,14 +313,6 @@ revert to the default. Save Options to store setting.")
 (defvar aquamacs-frame-theme-menu (make-sparse-keymap "Frame Appearance Themes"))
 
  
-(define-key-after aquamacs-frame-theme-menu [menu-delete-themes]
-  '(menu-item  "Delete all mode-specific themes"     aquamacs-delete-mode-specific-themes 
-	      :help "Deletes all mode-specific themes set previously."))
-
-(define-key aquamacs-frame-theme-menu [menu-set-theme-as-default]
-  '(menu-item  "Use current theme as default"     aquamacs-set-theme-as-default
-	    :enable  (aquamacs-updated-is-visible-frame-p)
-	      :help ""))
 
 (defun aquamacs-updated-major-mode ()
 
@@ -343,22 +321,8 @@ revert to the default. Save Options to store setting.")
     major-mode)
 )
 
-(define-key aquamacs-frame-theme-menu [menu-set-theme-as-mode-default]
-	  '(menu-item (format "Use current theme for %s" (or (aquamacs-updated-major-mode) "current mode"))
-		       aquamacs-set-theme-as-mode-default 
-		       :help "Set the current frame parameters as default 
-for all frames with the current major-mode."
-		       :enable  (aquamacs-updated-is-visible-frame-p)
-		 	  
-		       ))
-  
-(define-key-after menu-bar-options-menu [aquamacs-frame-themes]
 
-  (list 'menu-item "Frame Appearance Themes" aquamacs-frame-theme-menu
-	  :enable aquamacs-auto-frame-parameters-flag
-	:help "Set themes for frames depending on major mode in buffer")
 
-  'aquamacs-color-theme-select)
 
 (defun font-exists-p (fontorfontset)
   (condition-case nil
@@ -396,11 +360,49 @@ for all frames with the current major-mode."
     (setq aquamacs-mode-specific-default-themes newlist))  
   )
 
+
+(defun aquamacs-mode-specific-themes-setup ()
+"Installs Aquamacs mode specific themes."
 ; filters all missing fonts from specifications, so we don't show
 ; stupid error messages
 ; especially necessary during 0.9.1 -> 0.9.2 transition, because
 ; scalable fonts have different names now
 (add-hook 'after-init-hook 'filter-missing-fonts t) 
+
+(add-hook 'after-init-hook
+	'make-help-mode-use-frame-fitting
+	'append) ;; move to the end: after loading customizations
+	
+	
+(add-hook 'after-change-major-mode-hook	
+	  'set-mode-theme-after-change-major-mode
+	  )
+(add-hook 'menu-bar-update-hook 'update-mode-theme)
+(define-key-after aquamacs-frame-theme-menu [menu-delete-themes]
+  '(menu-item  "Delete all mode-specific themes"     aquamacs-delete-mode-specific-themes 
+	      :help "Deletes all mode-specific themes set previously."))
+
+(define-key aquamacs-frame-theme-menu [menu-set-theme-as-default]
+  '(menu-item  "Use current theme as default"     aquamacs-set-theme-as-default
+	    :enable  (aquamacs-updated-is-visible-frame-p)
+	      :help ""))
+
+(define-key aquamacs-frame-theme-menu [menu-set-theme-as-mode-default]
+	  '(menu-item (format "Use current theme for %s" (or (aquamacs-updated-major-mode) "current mode"))
+		       aquamacs-set-theme-as-mode-default 
+		       :help "Set the current frame parameters as default 
+for all frames with the current major-mode."
+		       :enable  (aquamacs-updated-is-visible-frame-p)
+		 	  
+		       ))
+  
+(define-key-after menu-bar-options-menu [aquamacs-frame-themes]
+
+  (list 'menu-item "Frame Appearance Themes" aquamacs-frame-theme-menu
+	  :enable aquamacs-auto-frame-parameters-flag
+	:help "Set themes for frames depending on major mode in buffer")
+
+  'aquamacs-color-theme-select)
 
 
 ;; advise frame-notice-user-settings (from frame.el)
@@ -422,6 +424,6 @@ for all frames with the current major-mode."
     ad-do-it
     )
   )
-
+)
 
 (provide 'aquamacs-mode-specific-themes)
