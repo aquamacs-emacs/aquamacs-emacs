@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: site-start.el,v 1.8 2005/07/19 11:13:19 davidswelt Exp $
+;; Last change: $Id: site-start.el,v 1.9 2005/07/20 23:11:23 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -27,12 +27,20 @@
 ;; Boston, MA 02111-1307, USA.
  
 ;; Copyright (C) 2005, David Reitter
-  
-(require 'load-emacs-pre-plugins)
 
-(require 'osx_defaults)
-(aquamacs-osx-defaults-setup)
 
-(require 'aquamacs-mode-defaults)
+(when ;; do not load this twice 
+    (not (memq 'aquamacs-site-start features))
+  (provide 'aquamacs-site-start)
+
+  (require 'load-emacs-pre-plugins)
+
+  (require 'osx_defaults)
+  (aquamacs-osx-defaults-setup)
+
+  (require 'aquamacs-mode-defaults)
  
-(require 'load-emacs-plugins)
+  (require 'load-emacs-plugins)
+
+
+  )
