@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.10 2005/07/18 17:47:39 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.11 2005/07/21 09:42:09 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -175,6 +175,8 @@ default."
     (define-key map `[(,osxkeys-command-key left)] 'beginning-of-line)
     (define-key map `[(,osxkeys-command-key right)] 'end-of-line)
     (define-key map `[(,osxkeys-command-key backspace)] 'kill-whole-line)
+    (define-key map `[(meta up)] 'cua-scroll-down)
+    (define-key map `[(meta down)] 'cua-scroll-up)
 
     (define-key map [(home)] 'beginning-of-buffer)
     (define-key map [(end)] 'end-of-buffer)
