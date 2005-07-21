@@ -11,7 +11,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.33 2005/07/20 23:09:44 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.34 2005/07/21 09:42:18 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -51,8 +51,8 @@
 
 
 
-(defvar aquamacs-version "0.9.5 beta-1")
-(defvar aquamacs-version-id 095.1)
+(defvar aquamacs-version "0.9.5 beta-2")
+(defvar aquamacs-version-id 095.2)
 (defvar aquamacs-minor-version "")
 
 
