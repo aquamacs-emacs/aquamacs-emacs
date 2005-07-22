@@ -3,38 +3,29 @@
 
 proc makePDF {} {
     global fname
-    set fname $::argv
-    set suffix tex
-    if {[string range $fname end-2 end] != $suffix} {
-	puts "Please select a LaTeX file."
-	exit
-    } else {
-	set pdfdir [file dirname $fname]
+   
+    set fname aquamacs.tex
+	set pdfdir ../doc/latex
 	cd $pdfdir
 	puts "Running pdflatex on $fname..."
 	catch {exec pdflatex -interaction=nonstopmode $fname}
 	puts "Running pdflatex again to update references..."
 	catch {exec pdflatex -interaction=nonstopmode $fname}
 	set newpdf [string replace $fname end-2 end pdf]
-	puts "PDF conversion completed."
-#	puts "Opening $newpdf..."
-#	exec open $newpdf
+	set finalpdf  "Aquamacs Manual.pdf"
+	file copy -force $newpdf $finalpdf
+	puts "PDF conversion completed, PDF renamed to $finalpdf."
     }
-}
+
 
 
 proc makeHTML {} {
-    global fname
-    set fname $::argv
-    set htmldir [file dirname $fname]
-    cd $htmldir
+    global fname   
     puts "Running latex2html on $fname..."
     catch {exec latex2html -local_icons -html_version=4.1 $fname}
     puts "$fname converted to HTML."
     set newdir [string replace $fname end-3 end]
-   # puts $newdir
     set newcss [string replace $fname end-2 end css]
-   # puts $newcss
     set newcssfile [file tail $newcss]
     file copy -force $newcssfile $newdir/$newcssfile
     puts "Applying Apple Help tags..."
@@ -53,8 +44,18 @@ proc makeHTML {} {
     puts -nonewline $newindex $contents
     close $newindex
     puts "Apple Help tags applied. HTML conversion completed."
-  #  puts "Opening $newdir/index.html..."
-  #  exec open $newdir/index.html
+    set newname AquamacsHelp
+    file rename -force $newdir $newname
+    file copy "AquamacsHelp idx" $newname
+    cd ../
+    set finaldir [pwd]
+  # puts $finaldir
+    puts "Backing up old Aquamacs Help directory, copying new help files."
+    file rename AquamacsHelp AquamacsHelp-bak
+    file rename -force latex/$newname $finaldir
+    file copy -force AquamacsHelp-bak/CVS AquamacsHelp/CVS
+    file delete -force AquamacsHelp-bak 
+    puts "Help files copied. Old AquamacsHelp folder removed."
 }
 
 
