@@ -6,6 +6,18 @@ $key = q/buffers.jpg/;
 $ref_files{$key} = "$dir".q|node24.html|; 
 $noresave{$key} = "$nosave";
 
+$key = q/tab:variables/;
+$ref_files{$key} = "$dir".q|node29.html|; 
+$noresave{$key} = "$nosave";
+
+$key = q/aquamacs-tex.jpg/;
+$ref_files{$key} = "$dir".q|node30.html|; 
+$noresave{$key} = "$nosave";
+
+$key = q/tab:command/;
+$ref_files{$key} = "$dir".q|node28.html|; 
+$noresave{$key} = "$nosave";
+
 $key = q/tab:shortcuts/;
 $ref_files{$key} = "$dir".q|node28.html|; 
 $noresave{$key} = "$nosave";
@@ -20,14 +32,6 @@ $noresave{$key} = "$nosave";
 
 $key = q/theme.jpg/;
 $ref_files{$key} = "$dir".q|node29.html|; 
-$noresave{$key} = "$nosave";
-
-$key = q/aquamacs-tex.jpg/;
-$ref_files{$key} = "$dir".q|node30.html|; 
-$noresave{$key} = "$nosave";
-
-$key = q/tab:command/;
-$ref_files{$key} = "$dir".q|node28.html|; 
 $noresave{$key} = "$nosave";
 
 1;

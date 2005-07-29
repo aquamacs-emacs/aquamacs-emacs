@@ -3,6 +3,7 @@
 \usepackage{graphicx} 
 \usepackage{html}
 \usepackage{rotating}
+\usepackage{palatino}
 \author{David Reitter and Kevin Walzer}
 \title{Aquamacs User Help}
 \begin{document}
@@ -861,13 +862,59 @@ when you restart Aquamacs Emacs. To do so, use the function ``Save Options.''
 \label{theme.jpg}
 \end{figure}
 
+\item \textbf{mac-pass-option-to-system is nil.} If this variable is set in your .emacs or Preferences.el file to non-nil, the Mac ``Option'' key can be used to compose
+      characters as handled by the system and depending on the
+      keyboard layout chosen. Only if the Mac ``Command'' or ``Ctrl'' key
+      is depressed at the same time, Emacs evaluates the combination using
+      whatever modifier is set in mac-option-modifier.
+
+\item \textbf{mac-option-modifier's value is meta.} This is  the modifier to use for the Mac alt/option key.  The value can
+be alt, hyper, or super for the respective modifier.  If the value is
+nil then the key will act as the normal Mac option modifier, and the option
+key can be used to compose characters depending on the chosen Mac keyboard
+setting.
+Note that mac-pass-option-to-system takes precedence over this setting. If
+mac-pass-option-to-system is non-nil, simple key combinations with Option
+will be handled by the system in order to produce characters, and only
+combinations in conjunction with Command or Control will let Emacs see
+the modifier that is assigned to the Option key. 
+
 \item \textbf{Additional customization.} Of course, Aquamacs Emacs
   offers you almost all the customization  possibilities that Emacs
   has. Under ``Customize Emacs,'' you will find  a sub-menu that
   allows you to browse the vast space of customization
   settings. Beware: some of them are complex and not easy to
   understand. If you would like to tinker with some Aquamacs-specific
-  behavior, you can customize the group ``Aquamacs.''
+  behavior, you can customize the group ``Aquamacs.'' See Table \ref{tab:variables} for a complete list of the items that can be configured here.
+
+
+\begin{table}[t]
+\begin{center}
+ \begin{tabular}{|c|}
+\hline  \textbf{Variable}\\
+
+\hline Aquamacs Set Creator Codes After Writing Files\\
+\hline Aquamacs Quick Yes Or No Prompt\\
+\hline Aquamacs Ring Bell On Error\\
+\hline Aquamacs Mode Specific Default Themes\\ 
+\hline Aquamacs Auto Frame Parameters\\
+\hline One Buffer One Frame; Smart Frame Positioning Enforce\\
+\hline Smart Frame Positioning Mode\\
+\hline 1on1 *Completions* Frame\\
+\hline 1on1 *Help* Frame\\
+\hline Mac Option Modifier\\
+\hline Mac Pass Option To System\\
+\hline Mac Control Modifier\\
+\hline Mac Pass Control To System\\
+\hline Mac Command Modifier\\
+\hline Mac Pass Command To System\\
+\hline 
+\end{tabular} 
+\caption{Aquamacs-specific variables that can be customized in the Options menu.}
+\label{tab:variables}
+\end{center}
+\end{table}
+
 
 \end{itemize}
 
@@ -914,9 +961,9 @@ functionality that Aquamacs offers:
   Aquamacs.)\footnote{Norm Gall maintains
   a full distribution of Emacs called Yet Another Carbon Emacs
   Distribution (Yaced) that is a standard build of Emacs on the
-  Mac. If you are accustomed to the Emacs interface and prefer not to
+  Mac, which can be downloaded at \url{http://yaced.sourceforge.net}. Another distribution, with some differences,  is maintained by Seiji Zenitani at \url{http://home.att.ne.jp/alpha/z123/emacs-mac-e.html}. If you are accustomed to the Emacs interface and prefer not to
   have that interface mapped to OS X conventions, you may want to
-  consider using Yaced instead of Aquamacs.}
+  consider using either of these distributions.}
 
 \subsubsection{Enhanced Carbon Emacs Plugin Under Development}
 Enrico Franconi, developer of the old Enhanced Carbon Emacs distribution that had special support for La\TeX\ editing via its customizations for Auc\TeX\ mode, has revived ECE as an external plugin that can be installed on any Carbon Emacs,including Aquamacs. At this time, the ECE plugin is undergoing beta testing. The beta version can be downloaded from this location:
