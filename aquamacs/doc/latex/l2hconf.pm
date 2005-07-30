@@ -1,5 +1,6 @@
+#!/perl
 # LaTeX2HTML l2hconf.pm
-# $Id: l2hconf.pm,v 1.1 2005/06/25 08:01:33 davidswelt Exp $
+# $Id: l2hconf.pm,v 1.2 2005/07/30 21:39:35 wordtech Exp $
 
 package main;
 
@@ -490,7 +491,7 @@ $EXTERNAL_CONTENTS = "";
 # -info
 # 0 = do not make an "About this document..." section 
 #
-$INFO = 1;
+$INFO = 0;
 
 
 # -reuse, -no_reuse, Image recycling:
@@ -595,7 +596,7 @@ $INTERLACE = 1;
 # Values > 1 are also possible.
 #
 $NAV_BORDER = 0;
-
+  
 
 ### Colors ###
 #
@@ -1239,3 +1240,4 @@ framebox # [] # [] # {}
 _RAW_ARG_CMDS_
 	
 1;	# This must be the last line
+
