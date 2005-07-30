@@ -24,8 +24,12 @@
 (load "wid-edit.el")
 ; (load "emacs-lisp/easymenu") ;; needs to be loaded at runtime... causes strange behavior otherwise
 ; (load "recentf") 
-(load "emulation/cua-base")
-(load "emulation/pc-select")
+ (let ((load-path  
+	(append load-path
+		(list (expand-file-name "emulation" (car load-path))))))
+   (load "emulation/cua-base")
+   (load "emulation/pc-select")
+   )
 (load "delsel")
 (load "paren")
 (load "calendar/time-date")
