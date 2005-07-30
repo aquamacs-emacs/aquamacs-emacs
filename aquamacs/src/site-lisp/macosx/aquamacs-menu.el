@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.11 2005/07/20 23:09:01 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.12 2005/07/30 14:16:58 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -240,13 +240,14 @@
 (if (boundp 'mac-pass-option-to-system) 
     (define-key-after menu-bar-options-menu [option-to-system]
       (menu-bar-make-toggle toggle-pass-option-to-system mac-pass-option-to-system
-			    "Option key produces only special characters"
-			    "Option key produces only special characters: %s"
-			    "Let Option key produce special characters (passing the key to the system),
-rather than behaving as Meta"
+			    (format "Option key for %s (not for extra characters)" 
+				    (upcase-initials (symbol-name (or mac-option-modifier 'meta))))
+			    "Do not pass Option key to system to produce extra characters: %s"
+			    "Let Option key behave as Emacs key, do not let it produce special characters 
+(passing the key to the system),"
 			    
-			    (setq mac-pass-option-to-system
-				       (not mac-pass-option-to-system))
+			    (not (setq mac-pass-option-to-system
+				       (not mac-pass-option-to-system)))
 			
 			    ) 'edit-options-separator)
 
