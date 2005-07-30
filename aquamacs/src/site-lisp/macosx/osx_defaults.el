@@ -11,7 +11,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.34 2005/07/21 09:42:18 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.35 2005/07/30 14:18:40 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -149,6 +149,11 @@ yes-or-no prompts - y or n will do."
 (add-hook 'after-save-hook 'mac-set-creator-code-for-file)
 
 
+;; Find-file opens a new frame
+(if window-system
+    (global-set-key [remap find-file] 'aquamacs-find-file)  
+)
+ 
 ; Mac Drag-N-Drop
 
 (require 'mac-drag-N-drop)
@@ -436,6 +441,9 @@ Use this argument instead of explicitly setting `view-exit-action'."
 		   special-display-frame-alist
 		   aquamacs-mode-specific-default-themes 
 		   aquamacs-customization-version-id
+		   ;; need to save this because it is set by
+		   ;; mode-spec-frame themes
+		   default-frame-alist
 		   ))
       (and (get elt 'customized-value) 
 	   (customize-mark-to-save elt)
