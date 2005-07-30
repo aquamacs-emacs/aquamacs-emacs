@@ -8,7 +8,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-frame-setup.el,v 1.7 2005/07/08 21:52:05 davidswelt Exp $
+;; Last change: $Id: aquamacs-frame-setup.el,v 1.8 2005/07/30 14:17:55 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -206,7 +206,9 @@ Usable in `temp-buffer-show-hook'."
 
 (if (string= "mac" window-system)
     ;;(add-hook 'after-init-hook '1on1-emacs) ;; test 
-    (1on1-emacs) ;; need to call this here for now
+    (let ((initial-frame-alist)) ; workaround
+      (1on1-emacs) ;; need to call this here for now
+    )
 )
 ;;(require 'window+ nil t)                ; Corrections.
  
