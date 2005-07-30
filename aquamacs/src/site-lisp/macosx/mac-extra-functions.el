@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.13 2005/07/17 19:57:20 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.14 2005/07/30 14:18:08 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -33,7 +33,43 @@
 
 
 
+(defun aquamacs-find-file ()
+"Open a new buffer. If `one-buffer-one-frame' is non-nil,
+a new frame is opened to contain the new buffer. If find-file
+leads to opening a dired buffer, newly opened files will open
+right there as well."
+  (interactive)
 
+  (if (not one-buffer-one-frame)
+      (call-interactively 'find-file)
+
+    ;; open new frame with empty buffer
+    (new-frame-with-new-scratch nil) ;;  'fundamental-mode
+
+    (let ((buf (current-buffer))
+	  
+	  )
+      (unwind-protect 
+	  (progn 
+	    ;; the following will open the file in the given
+	    ;; frame, because the buffer shown is empty.
+	    (call-interactively 'find-file)
+	    (unless (eq (current-buffer) buf) ; get rid of old buffer
+	      (kill-buffer buf))
+	    ;;(setq one-buffer-one-frame t))	
+	(progn 
+;	  (if (assq 'one-buffer-one-frame (frame-parameters nil) )
+	      ;; this doesn't work - only works for buffers
+	 ;     (kill-local-variable 'one-buffer-one-frame)
+	;       )
+ 
+	(when (eq major-mode 'dired-mode)
+	    (set (make-local-variable 'one-buffer-one-frame) nil)
+	    )
+	(if (and (buffer-live-p buf)
+		 (= (buffer-size) 0))		; for security
+	    (kill-buffer buf))
+	))))))
 
 ;; File Open / Save
 ;; TO DO: these should be replaced with the file menu item 
