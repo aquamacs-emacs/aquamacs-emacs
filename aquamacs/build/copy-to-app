@@ -55,6 +55,8 @@ cp -pr $projdir/src/etc/aquamacs-splash-screen.jpg $dest/Contents/Resources/etc/
 
 cp -pr $projdir/src/Info.plist $dest/Contents/
 
+cp -pr $projdir/src/emacs-document.icns $dest/Contents/Resources/
+
 cp -Rvp $projdir/src/site-lisp/*.el $dest/Contents/Resources/site-lisp/
 
 cp -Rvp $projdir/src/site-lisp/edit-modes/*.el $dest/Contents/Resources/site-lisp/edit-modes/
@@ -66,16 +68,22 @@ if [ $compile ]; then
     # prevent the site-start.el from being loaded all the time (gives error)
     # doesn't work yet
     # mv $dest/Contents/Resources/site-lisp/site-start.el $dest/Contents/Resources/site-lisp/site-start.elx
-    $em -batch -f batch-byte-compile $dest/Contents/Resources/site-lisp/*.el
-    $em -batch -f batch-byte-compile $dest/Contents/Resources/site-lisp/macosx/*.el 
-    $em -batch -f batch-byte-compile $dest/Contents/Resources/site-lisp/oneonone/*.el
+    echo "Compiling site-lisp"
+    $em  -batch -f batch-byte-compile $dest/Contents/Resources/site-lisp/*.el
+    echo "Compiling macosx"
+    $em  -batch -f batch-byte-compile $dest/Contents/Resources/site-lisp/macosx/*.el 
+    echo "Compiling oneonone"
+    $em  -batch -f batch-byte-compile $dest/Contents/Resources/site-lisp/oneonone/*.el
     #mv $dest/Contents/Resources/site-lisp/site-start.elx $dest/Contents/Resources/site-lisp/site-start.el
-    echo "(Note: ignore the --no-splash error!)"
+    # echo "(Note: ignore the --no-splash error!)"
 
 # .el is too large
     gzip $dest/Contents/Resources/site-lisp/color-theme-themes.el
 fi
  
+# for LaunchServices (on local machine)
+touch $dest
+
 # replace hardlinks
 
 rm $dest/Contents/MacOS/bin/emacs
