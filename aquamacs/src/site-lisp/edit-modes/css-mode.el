@@ -202,6 +202,7 @@ indent level."
       (setq pos (point)))
     (when (> pos (point))
       (goto-char pos)))); move only forward after indenting
+)
 
 (defun css-mode-newline-and-indent ()
   "Insert a newline and indent."
