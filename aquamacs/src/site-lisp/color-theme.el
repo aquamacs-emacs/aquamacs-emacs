@@ -5,7 +5,7 @@
 ;; Copyright (C) 2003  Xavier Maillard <zedek@gnu-rox.org>
 ;; Copyright (C) 2005  David Reitter <david.reitter@gmail.com>
 
-;; Version: 6.5.4Aquamacs
+;; Version: 6.5.5Aquamacs
 ;; Keywords: faces
 ;; Author: Jonadab the Unsightly One <jonadab@bright.net>
 ;; Maintainer: Xavier Maillard <zedek@gnu-rox.org>
@@ -1643,6 +1643,61 @@ frame-parameter settings of previous color themes."
   (when color-theme-history-max-length
     (color-theme-add-to-history
      (car theme))))
+
+;; Sharing your stuff
+
+(defun color-theme-submit ()
+  "Submit your color-theme to the maintainer."
+  (interactive)
+  (require 'reporter)
+  (let ((reporter-eval-buffer (current-buffer))
+	final-resting-place
+	after-sep-pos
+	(reporter-status-message "Formatting buffer...")
+	(reporter-status-count 0)
+	(problem "Yet another color-theme")
+	(agent (reporter-compose-outgoing))
+	(mailbuf (current-buffer))
+	hookvar)
+    ;; do the work
+    (require 'sendmail)
+    ;; If mailbuf did not get made visible before, make it visible now.
+    (let (same-window-buffer-names same-window-regexps)
+      (pop-to-buffer mailbuf)
+      ;; Just in case the original buffer is not visible now, bring it
+      ;; back somewhere
+      (and pop-up-windows (display-buffer reporter-eval-buffer)))
+    (goto-char (point-min))
+    (mail-position-on-field "to")
+    (insert color-theme-maintainer-address)
+    (mail-position-on-field "subject")
+    (insert problem)
+    ;; move point to the body of the message
+    (mail-text)
+    (setq after-sep-pos (point))
+    (unwind-protect
+	(progn
+	  (setq final-resting-place (point-marker))
+	  (goto-char final-resting-place))
+      (color-theme-print (current-buffer))
+      (goto-char final-resting-place)
+      (insert "\n\n")
+      (goto-char final-resting-place)
+      (insert "Hello there!\n\nHere's my color theme named: ")
+      (set-marker final-resting-place nil))
+    ;; compose the minibuf message and display this.
+    (let* ((sendkey-whereis (where-is-internal
+			     (get agent 'sendfunc) nil t))
+	   (abortkey-whereis (where-is-internal
+			      (get agent 'abortfunc) nil t))
+	   (sendkey (if sendkey-whereis
+			(key-description sendkey-whereis)
+		      "C-c C-c")); TBD: BOGUS hardcode
+	   (abortkey (if abortkey-whereis
+			 (key-description abortkey-whereis)
+		       "M-x kill-buffer"))); TBD: BOGUS hardcode
+      (message "Enter a message and type %s to send or %s to abort."
+	       sendkey abortkey))))
 
 
 ;; inserted by david reitter 07/2005

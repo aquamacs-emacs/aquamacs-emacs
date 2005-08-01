@@ -1,61 +1,4 @@
 
-;; Sharing your stuff
-
-(defun color-theme-submit ()
-  "Submit your color-theme to the maintainer."
-  (interactive)
-  (require 'reporter)
-  (let ((reporter-eval-buffer (current-buffer))
-	final-resting-place
-	after-sep-pos
-	(reporter-status-message "Formatting buffer...")
-	(reporter-status-count 0)
-	(problem "Yet another color-theme")
-	(agent (reporter-compose-outgoing))
-	(mailbuf (current-buffer))
-	hookvar)
-    ;; do the work
-    (require 'sendmail)
-    ;; If mailbuf did not get made visible before, make it visible now.
-    (let (same-window-buffer-names same-window-regexps)
-      (pop-to-buffer mailbuf)
-      ;; Just in case the original buffer is not visible now, bring it
-      ;; back somewhere
-      (and pop-up-windows (display-buffer reporter-eval-buffer)))
-    (goto-char (point-min))
-    (mail-position-on-field "to")
-    (insert color-theme-maintainer-address)
-    (mail-position-on-field "subject")
-    (insert problem)
-    ;; move point to the body of the message
-    (mail-text)
-    (setq after-sep-pos (point))
-    (unwind-protect
-	(progn
-	  (setq final-resting-place (point-marker))
-	  (goto-char final-resting-place))
-      (color-theme-print (current-buffer))
-      (goto-char final-resting-place)
-      (insert "\n\n")
-      (goto-char final-resting-place)
-      (insert "Hello there!\n\nHere's my color theme named: ")
-      (set-marker final-resting-place nil))
-    ;; compose the minibuf message and display this.
-    (let* ((sendkey-whereis (where-is-internal
-			     (get agent 'sendfunc) nil t))
-	   (abortkey-whereis (where-is-internal
-			      (get agent 'abortfunc) nil t))
-	   (sendkey (if sendkey-whereis
-			(key-description sendkey-whereis)
-		      "C-c C-c")); TBD: BOGUS hardcode
-	   (abortkey (if abortkey-whereis
-			 (key-description abortkey-whereis)
-		       "M-x kill-buffer"))); TBD: BOGUS hardcode
-      (message "Enter a message and type %s to send or %s to abort."
-	       sendkey abortkey))))
-
-
-
 ;;; The color theme functions
 
 (defun color-theme-gnome ()
@@ -10709,6 +10652,7 @@ Includes custom, erc, font-lock, jde, semantic, speedbar, widget."
      (message-header-subject-face ((t (:foreground "green3"))))
      (message-header-to-face ((t (:bold t :foreground "green2" :weight bold))))
      (message-header-xheader-face ((t (:foreground "blue"))))
+
      (message-mml-face ((t (:foreground "ForestGreen"))))
      (message-separator-face ((t (:foreground "blue3"))))
      (minibuffer-prompt ((t (:foreground "cyan"))))
@@ -11142,6 +11086,7 @@ Bonus: do not use 3D modeline."
      (term-default-face ((t (nil))))
      (term-default-fg ((t (nil))))
      (term-default-fg-inv ((t (nil))))
+
      (term-default-inv-face ((t (:background "peachpuff" :foreground "black"))))
      (term-default-ul-face ((t (:underline t))))
      (term-green ((t (:foreground "green"))))
@@ -13523,5 +13468,7 @@ bold))))
      (widget-field-face ((t (:background "gray85"))))
      (widget-inactive-face ((t (:foreground "dim gray"))))
      (widget-single-line-field-face ((t (:background "gray85")))))))
+
+
 
 (provide 'color-theme-themes)
