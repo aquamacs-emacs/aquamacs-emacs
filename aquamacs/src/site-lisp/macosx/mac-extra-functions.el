@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.14 2005/07/30 14:18:08 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.15 2005/08/01 22:33:19 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -40,7 +40,8 @@ leads to opening a dired buffer, newly opened files will open
 right there as well."
   (interactive)
 
-  (if (not one-buffer-one-frame)
+  (if (or (not one-buffer-one-frame)
+	  (< (buffer-size (window-buffer (frame-first-window))) 2))
       (call-interactively 'find-file)
 
     ;; open new frame with empty buffer
