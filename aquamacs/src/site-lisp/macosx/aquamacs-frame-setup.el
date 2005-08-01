@@ -8,7 +8,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-frame-setup.el,v 1.8 2005/07/30 14:17:55 davidswelt Exp $
+;; Last change: $Id: aquamacs-frame-setup.el,v 1.9 2005/08/01 22:19:14 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -50,13 +50,14 @@
 ;; set default colors
 (aquamacs-set-defaults 
  '(
-( 1on1-default-frame-background "White")
-( 1on1-help-frame-background "LightBlue") 
-( 1on1-*Help*-frame-flag t)
+
+;;( 1on1-help-frame-background "LightBlue") 
+( 1on1-*Help*-frame-flag nil)
 ( 1on1-*Completions*-frame-flag nil)
 
-))
- 
+(default-frame-alist 
+((foreground-color . "Black") (background-color . "White") (font . "fontset-monaco12")  (cursor-color . "Red")   (vertical-scroll-bars . right)  (tool-bar-lines . 1) (left-fringe . 0) (right-fringe . 0) (fringe . 0)))))
+  
 ; (setq autofit-frames-flag nil)
  (setq 1on1-minibuffer-frame-flag nil) ;; this is a defvar
 
@@ -202,14 +203,17 @@ Usable in `temp-buffer-show-hook'."
 (require 'frame-cmds nil t)             ; Frame and window commands.
  ; (require 'autofit-frame nil t)          ; automatically fit frames to sole window. 
  
-(require 'oneonone nil nil)                 ; Default frame configuration.
 
-(if (string= "mac" window-system)
+;; let's try to go without oneonone
+
+; (require 'oneonone nil nil)                 ; Default frame configuration.
+
+;(if (string= "mac" window-system)
     ;;(add-hook 'after-init-hook '1on1-emacs) ;; test 
-    (let ((initial-frame-alist)) ; workaround
-      (1on1-emacs) ;; need to call this here for now
-    )
-)
+;    (let ((initial-frame-alist)) ; workaround
+;      (1on1-emacs) ;; need to call this here for now
+;    )
+;)
 ;;(require 'window+ nil t)                ; Corrections.
  
 ;;;  
