@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.8 2005/07/18 17:47:14 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.9 2005/08/01 22:18:21 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -100,18 +100,22 @@ Elements of ALIST that are not conses are ignored."
 (defun filter-fonts (list)
  "Filters the font list LIST to contain only existing fontsets.
 Each element of LIST has to be of the form (symbol . fontset)."
-  (if (car list)
-      (if (fontset-exist-p (cdr (cdr (car list))))
-	  (cons (car list)
-		(filter-fonts (cdr list))
-		)
-					; else
-	(filter-fonts (cdr list))
-	) 
-    ;; else
-    nil)
 
-  )
+ (mapcar
+  (lambda (p)
+    (mapcar
+     (lambda (e)
+       (if (and (consp e)
+		(eq (car e) 'font)
+		(not (fontset-exist-p (cdr e)))
+		)
+	   '(font . "fontset-mac")
+	 e)) 
+     p))
+  list))
+
+  
+
  
 
 (defun get-bufname (buf)
