@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.12 2005/07/30 14:16:58 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.13 2005/08/01 22:19:55 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -322,6 +322,27 @@ to the selected frame."
 ;; SENDMAIL doesn't usually work on OS X
 ;; unless postfix is set up
 (easy-menu-remove-item global-map  '("menu-bar" "tools") 'compose-mail)
+
+
+;; move stuff from File to the Buffers menu
+ 
+(setq  menu-bar-buffers-menu-command-entries
+       (append 
+	       (list '(command-separator "--")
+		     (assq 'make-frame menu-bar-file-menu)
+		     (assq 'one-window menu-bar-file-menu)
+		     (assq 'split-window menu-bar-file-menu))
+	       menu-bar-buffers-menu-command-entries))
+
+(assq-delete-all 'make-frame menu-bar-file-menu)
+(assq-delete-all 'one-window menu-bar-file-menu)
+(assq-delete-all 'split-window menu-bar-file-menu) 
+(assq-delete-all 'delete-this-frame menu-bar-file-menu)
+(assq-delete-all 'separator-window menu-bar-file-menu)
+
+
+
+
 
 
 ;; HELP MENU
