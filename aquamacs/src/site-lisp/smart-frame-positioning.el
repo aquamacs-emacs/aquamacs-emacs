@@ -21,7 +21,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.12 2005/07/20 23:45:54 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.13 2005/08/01 22:20:59 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -329,8 +329,28 @@ Nota bene: This is not an exact science."
 
       (add-hook 'delete-frame-functions
 		'store-frame-position-for-buffer)
-      )
-    
+
+      ;; the first frame should be in a good position
+
+      (let* (
+	     ;; on some systems, we can retrieve the available pixel width with
+	     ;; non-standard methods.
+	     ;; on OS X, e.g. mac-display-available-pixel-bounds (patch!!) returns
+	     ;; available screen region, excluding the Dock.
+	       (rect (if (fboundp 'mac-display-available-pixel-bounds)
+			 (mac-display-available-pixel-bounds)
+		       (list 0 0 
+			     (display-pixel-width) (display-pixel-height))))
+	       (min-x (+ 5 (nth 0 rect)))
+	       (min-y (+ 5 (nth 1 rect))))
+	(setq initial-frame-alist
+	      (append
+	       `((top . ,(+ smart-frame-positioning-margin min-y))
+		 (left . ,(+ smart-frame-positioning-margin min-x))
+		 )
+	       initial-frame-alist)))
+	)
+   
 	;else
  
       (setq frame-creation-function 
