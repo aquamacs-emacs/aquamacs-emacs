@@ -49,6 +49,7 @@
 ; the following can't be precompiled. reason unknown.
 ;; no text available if this is compiled in. 
 ;;(aq-preload "aquamacs-mode-specific-themes")
+(aq-preload "aquamacs.el")
 (aq-preload "macosx/osx_defaults.el")
 
 ;; (load "mail/rfc822.el")
