@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.10 2005/07/30 14:17:37 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.11 2005/08/01 22:18:33 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -92,6 +92,7 @@
   "Sets the mode-specific theme (frame parameters) for FRAME
  (selected frame if nil), unless it is already set (or
 FORCE is non-nil)."
+    
   (when aquamacs-auto-frame-parameters-flag
 
     (unless frame (setq frame (selected-frame) ))
@@ -126,7 +127,9 @@ FORCE is non-nil)."
 				       special-display-frame-alist 
 				     default-frame-alist
 				     )
-				   (get-mode-specific-theme major-mode) )  )
+				   (append
+				    (get-buffer-specific-theme (buffer-name))
+				   (get-mode-specific-theme major-mode))))
 			   ;; read out color-theme		 
 			   ( color-theme (cdr (assq 'color-theme theme)))
 			   (theme (assq-delete-all 'color-theme theme)
@@ -156,10 +159,22 @@ FORCE is non-nil)."
   )
 
 
+; (get-buffer-specific-theme "*Help*")
+
+(defun get-buffer-specific-theme (bufname) 
+  (if aquamacs-auto-frame-parameters-flag
+      
+     
+	   (cdr (assq-string-equal bufname 
+				   aquamacs-buffer-specific-frame-themes))
+        
+    nil
+    )
+)
+
 
 (defun get-mode-specific-theme (mode) 
   (if aquamacs-auto-frame-parameters-flag
-      
       (or (cdr (assq mode aquamacs-mode-specific-default-themes)) 
 	  ;(progn (print "resorting to default") nil)
 	  (cdr (assq 'default aquamacs-mode-specific-default-themes))
@@ -309,21 +324,21 @@ to be appropriate for its first buffer"
   ;; doesn't show anything else, and so that frames are created
   ;; (quickly) with the right parameters
 
-  (when (eq mode 'default)
+  ;; (when (eq mode 'default)
 
-    (let* ( 
-	   (theme-parms 
-	    (cdr (assq mode aquamacs-mode-specific-default-themes)))
-	   (frame-parms 
-	    (append 
-	     (car (cdr (cdr (assq 'color-theme theme-parms))))
-	     (assq-delete-all 'color-theme theme-parms))))
-      ;; needs to be saved to customization file
+;;     (let* ( 
+;; 	   (theme-parms 
+;; 	    (cdr (assq mode aquamacs-mode-specific-default-themes)))
+;; 	   (frame-parms 
+;; 	    (append 
+;; 	     (car (cdr (cdr (assq 'color-theme theme-parms))))
+;; 	     (assq-delete-all 'color-theme theme-parms))))
+;;       ;; needs to be saved to customization file
        
-      (customize-set-variable 'default-frame-alist frame-parms)
+;;       (customize-set-variable 'default-frame-alist frame-parms)
        
-    )
-    )
+;;     )
+;;     )
    
 
   (message (format "Theme has been set as default for %s. %s" (if (eq mode 'default) "all frames" mode)
@@ -333,12 +348,20 @@ to be appropriate for its first buffer"
 		     ))))
 
 ; 
+
+(defun set-to-custom-standard-value (symbol)
+  (customize-set-variable symbol 
+			  (eval (car
+			   (get symbol 'standard-value))))
+  )
+
 (defun aquamacs-delete-themes ()
   "Deletes all themes (mode-specific and the default theme)"
   (interactive)
-  (customize-set-variable  'aquamacs-mode-specific-default-themes nil)
-  (message "All themes removed. Add new ones or use customize to 
-revert to the default. Save Options to store setting.")
+  (set-to-custom-standard-value 'aquamacs-mode-specific-default-themes)
+  (set-to-custom-standard-value 'aquamacs-buffer-specific-frame-themes)
+  (message "All themes reset to defaults. Add new ones or use customize to 
+modify them. Save Options to store setting.")
   )
 
 (defun aquamacs-delete-one-mode-specific-theme ()
@@ -408,6 +431,36 @@ for which the menu is being updated."
 
   (defvar aquamacs-frame-theme-menu (make-sparse-keymap "Frame Appearance Themes"))
 
+(defcustom aquamacs-buffer-specific-frame-themes
+    (filter-fonts '( 
+		    ("*Help*" (background-color . "lightblue")
+		     (right-fringe . 0) (left-fringe . 0)
+		     (toolbar-lines . 0))
+		    ("*Messages*" (background-color . "light goldenrod")
+		     (toolbar-lines . 0))
+		    )) 
+    "Association list to set buffer-specific themes. Each element 
+is a list of elements of the form (buffer-name theme), where
+THEME is an association list giving frame parameters as
+in default-frame-alist or (frame-parameters). The frame parameters are set
+whenever the buffer BUFFER-NAME is activated. BUFFER-NAME has to be a 
+string. Parameters set here override parameters set in 
+`aquamacs-mode-specific-default-themes'.
+ 
+Note that when a major mode is changed, frames are automatically
+parametrized. Parameters in `default-frame-alist' and 
+`special-display-frame-alist' serve as defaults which are 
+overruled by a setting in this list if there is an entry
+for the current major mode. To turn off this behavior, see
+`aquamacs-auto-frame-parameters-flag'.
+"
+    :type '(repeat (cons :format "%v"
+			 (symbol :tag "Mode-name")
+			 (repeat (cons :format "%v"
+				       (symbol :tag "Frame-Parameter")
+				       (sexp :tag "Value")))))
+    :group 'Aquamacs
+    )
 
   (defcustom aquamacs-mode-specific-default-themes
     (filter-fonts '((help-mode (tool-bar-lines . 0) (fit-frame . t))
@@ -418,14 +471,14 @@ for which the menu is being updated."
 		    (paragraph-indent-text-mode  (font . "fontset-lucida13"))
 		    (speedbar-mode (minibuffer-auto-raise . nil))
 		    (fundamental-mode (tool-bar-lines . 0))
-		    (custom-mode (tool-bar-lines . 0) (fit-frame . t))
+		    (custom-mode (tool-bar-lines . 0) (fit-frame . t) 
+				 (background-color . "light goldenrod"))
 		    ))
     "Association list to set mode-specific themes. Each element 
 is a list of elements of the form (mode-name theme), where
 THEME is an association list giving frame parameters as
-in default-frame-alist or (frame-parameters). The fontset is set
-whenever the mode MODE-NAME is activated.
-Set this to nil to turn mode-specific themes off.
+in default-frame-alist or (frame-parameters). The parameters are set
+whenever the mode MODE-NAME is activated. 
 Note that when a major mode is changed, frames are automatically
 parametrized. Parameters in ``default-frame-alist'' and 
 ``special-display-frame-alist'' serve as defaults which are 
@@ -464,15 +517,20 @@ if there is an entry for the current major mode."
 	    )
   (add-hook 'menu-bar-update-hook 'update-mode-theme)
   (define-key-after aquamacs-frame-theme-menu [menu-delete-one-theme]
-    '(menu-item (format "Delete theme for %s" (or (aquamacs-updated-major-mode) "current mode"))   aquamacs-delete-one-mode-specific-theme 
-		:enable (assq (aquamacs-updated-major-mode) aquamacs-mode-specific-default-themes)
-		:help "Deletes a mode-specific theme."))
+    '(menu-item (format "Remove theme for %s" (or (aquamacs-updated-major-mode) "current mode"))   aquamacs-delete-one-mode-specific-theme 
+		:enable (and aquamacs-auto-frame-parameters-flag
+			     (assq (aquamacs-updated-major-mode) 
+				   aquamacs-mode-specific-default-themes))
+		:help "Removes a mode-specific theme."))
   (define-key-after aquamacs-frame-theme-menu [menu-delete-themes]
-    '(menu-item  "Delete all themes"     aquamacs-delete-themes 
-		 :help "Deletes all themes set previously."))
+    '(menu-item  "Reset all themes"     aquamacs-delete-themes 
+		 :help "Resets all themes to the default."
+		 :enable aquamacs-auto-frame-parameters-flag))
+
   (define-key aquamacs-frame-theme-menu [menu-set-theme-as-default]
     '(menu-item  "Use current theme as default"     aquamacs-set-theme-as-default
-		 :enable  (aquamacs-updated-is-visible-frame-p)
+		 :enable  (and aquamacs-auto-frame-parameters-flag
+			       (aquamacs-updated-is-visible-frame-p))
 		 :help ""))
 
   (define-key aquamacs-frame-theme-menu [menu-set-theme-as-mode-default]
@@ -480,14 +538,23 @@ if there is an entry for the current major mode."
 		aquamacs-set-theme-as-mode-default 
 		:help "Set the current frame parameters as default 
 for all frames with the current major-mode."
-		:enable  (aquamacs-updated-is-visible-frame-p)
+		:enable   (and aquamacs-auto-frame-parameters-flag
+			       (aquamacs-updated-is-visible-frame-p))
 		 	  
-		))
-  
+		)) 
+
+  (define-key aquamacs-frame-theme-menu [menu-auto-frame-parameters]
+    (menu-bar-make-toggle 
+     toggle-aquamacs-auto-frame-parameters-flag
+     aquamacs-auto-frame-parameters-flag
+     "Frame Appearance Themes"
+     "Frame Appearance Themes %s"
+     "Always set the frame parameters according to major-mode."))
+      
+
   (define-key-after menu-bar-options-menu [aquamacs-frame-themes]
 
-    (list 'menu-item "Frame Appearance Themes" aquamacs-frame-theme-menu
-	  :enable aquamacs-auto-frame-parameters-flag
+    (list 'menu-item "Frame Appearance Themes" aquamacs-frame-theme-menu 
 	  :help "Set themes for frames depending on major mode in buffer")
 
     'aquamacs-color-theme-select)
@@ -510,10 +577,17 @@ for all frames with the current major-mode."
 	;; 	       (get-mode-specific-theme major-mode))))
 	(progn
 	  (set-mode-specific-theme nil 'force) 
-	  ;; apply initial-frame-alist
+	  ;; apply initial-frame-alist and default-frame-alist
+	  (let ((default-frame-alist nil))
 	  ad-do-it)
+	  )
       ;; else
       ad-do-it
+      )
+    ;; workaround for an Emacs bug
+    (let ((vsb (frame-parameter nil  'vertical-scroll-bars)))
+      (modify-frame-parameters nil '((vertical-scroll-bars . nil)))
+      (modify-frame-parameters nil `((vertical-scroll-bars . ,vsb)))
       )
     )
 
@@ -535,6 +609,7 @@ for all frames with the current major-mode."
       )
     ad-do-it 
     )
+
 
   )
 
