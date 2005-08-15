@@ -1717,6 +1717,29 @@ loaded when the color-theme package is loaded."
 )
 
 (define-color-theme-autoloads)
+
+
+;; workaround (patch)
+
+
+(defun color-theme-face-attr-construct (face frame)
+    (unless frame (setq frame (selected-frame)))
+    (let (plist liste)
+      (if (atom face)
+	  (setq plist (custom-face-attributes-get face frame))
+	(cond ((and (consp face) (eq (car face) 'quote))
+	       (message "On est dans le bloc quote")
+	       (setq liste (cadr face)))
+	      ((and (consp face) (eq (car face) 'list))
+	       (message "On est dans le bloc list")
+	       (setq liste (cdr face))))
+	(when liste
+	  (dolist (elem  liste)
+	    (message "Face to get attributes: %s" elem)
+	    (push (custom-face-attributes-get elem frame) plist)))
+	(apply 'append plist))))
+
+
  
 
 
