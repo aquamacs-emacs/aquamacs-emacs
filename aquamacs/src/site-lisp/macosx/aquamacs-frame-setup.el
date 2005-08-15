@@ -8,7 +8,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-frame-setup.el,v 1.9 2005/08/01 22:19:14 davidswelt Exp $
+;; Last change: $Id: aquamacs-frame-setup.el,v 1.10 2005/08/15 19:27:34 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -38,28 +38,28 @@
  (require 'fit-frame)
  (require 'aquamacs-mac-fontsets)
 
-(defvar 1on1-default-frame-font "fontset-mac")
-(defvar 1on1-special-display-frame-font "fontset-mac")
-(defvar 1on1-minibuffer-frame-font "fontset-mac")
+;(defvar 1on1-default-frame-font "fontset-mac")
+;(defvar 1on1-special-display-frame-font "fontset-mac")
+;(defvar 1on1-minibuffer-frame-font "fontset-mac")
 
 
-(setq 1on1-default-frame-upper-left-corner '(80 . 60))
-(setq 1on1-default-special-frame-upper-left-corner '(180 . 140))
- (setq 1on1-default-special-frame-size '(400 . 600))
+;(setq 1on1-default-frame-upper-left-corner '(80 . 60))
+;(setq 1on1-default-special-frame-upper-left-corner '(180 . 140))
+;(setq 1on1-default-special-frame-size '(400 . 600))
 
 ;; set default colors
 (aquamacs-set-defaults 
  '(
 
 ;;( 1on1-help-frame-background "LightBlue") 
-( 1on1-*Help*-frame-flag nil)
-( 1on1-*Completions*-frame-flag nil)
+;( 1on1-*Help*-frame-flag nil)
+;( 1on1-*Completions*-frame-flag nil)
 
 (default-frame-alist 
 ((foreground-color . "Black") (background-color . "White") (font . "fontset-monaco12")  (cursor-color . "Red")   (vertical-scroll-bars . right)  (tool-bar-lines . 1) (left-fringe . 0) (right-fringe . 0) (fringe . 0)))))
   
 ; (setq autofit-frames-flag nil)
- (setq 1on1-minibuffer-frame-flag nil) ;; this is a defvar
+ ;(setq 1on1-minibuffer-frame-flag nil) ;; this is a defvar
 
 (remove-hook 'same-window-regexps "\\*info\\*\\(\\|<[0-9]+>\\)")
 (remove-hook 'same-window-regexps "\\`\\*Customiz.*\\*\\'")
@@ -68,7 +68,7 @@
 ;;; Maximum height for new frames.
 ;;; (defvar create-frame-max-height-percent 82) ; no more than 82% of display height.
 ;;; (defvar create-frame-max-height 48)         ; no more than 48 characters high.
- (defvar create-frame-max-height-percent 75)
+(defvar create-frame-max-height-percent 75)
 
 ;;; UNCOMMENT AND CHANGE *ONE* OF THESE, IF DEFAULT FRAME WIDTH IS INAPPROPRIATE.
 ;;; Maximum width for new frames.
@@ -149,9 +149,12 @@
 
 (defvar autofit-frames-flag nil) ; Inhibit automatic frame fitting.
 ;;; (defvar inhibit-fit-frame t) ; Inhibit *ALL* frame fitting, (even `C-x C-_').
-(setq inhibit-fit-frame-flag t)
+
+(aquamacs-set-defaults 
+ '(
+   (inhibit-fit-frame-flag t)))
+
 ; never fit frames automatically, but force frame-fitting
-;(setq '((inhibit-frame-fitting . t)
 
 (defun fit-frame-single-window-forced ( f)
   "Resize frame to fit selected window if it is alone in the frame.
