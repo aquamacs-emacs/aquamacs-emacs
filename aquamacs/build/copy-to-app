@@ -25,7 +25,7 @@ fi
 
 if [ ! $dest ]; then
 
-    dest=/Applications/Emacs.app
+    dest=/Applications/Aquamacs\ Emacs.app
 
 fi
 
@@ -35,57 +35,61 @@ if [ ! $projdir ]; then
 
 fi
 
+oldem="$dest/Contents/MacOS/Emacs"
 
-em=$dest/Contents/MacOS/Emacs
+em="$dest/Contents/MacOS/Aquamacs Emacs"
+
+cd "$dest"
  
 rm -r /tmp/backup.site-lisp
-mv  $dest/Contents/Resources/site-lisp /tmp/backup.site-lisp
+mv  "Contents/Resources/site-lisp" /tmp/backup.site-lisp
 
-mkdir $dest/Contents/Resources/site-lisp 2>/dev/null
-mkdir $dest/Contents/Resources/site-lisp/oneonone 2>/dev/null
-mkdir $dest/Contents/Resources/site-lisp/macosx 2>/dev/null
-mkdir $dest/Contents/Resources/site-lisp/edit-modes 2>/dev/null
+mkdir Contents/Resources/site-lisp 2>/dev/null
+mkdir Contents/Resources/site-lisp/oneonone 2>/dev/null
+mkdir Contents/Resources/site-lisp/macosx 2>/dev/null
+mkdir Contents/Resources/site-lisp/edit-modes 2>/dev/null
 
-rm -r $dest/Contents/Resources/Aquamacs\ Help
-cp -pr $projdir/doc/AquamacsHelp $dest/Contents/Resources/Aquamacs\ Help
-cp -pr $projdir/doc/EmacsManual $dest/Contents/Resources/Emacs\ Manual
-cp -pr $projdir/src/Emacs.icns $dest/Contents/Resources/Emacs.icns
+rm -r Contents/Resources/Aquamacs\ Help
+cp -pr $projdir/doc/AquamacsHelp Contents/Resources/Aquamacs\ Help
+cp -pr $projdir/doc/EmacsManual Contents/Resources/Emacs\ Manual
+cp -pr $projdir/src/Emacs.icns Contents/Resources/Emacs.icns
 
-cp -pr $projdir/src/etc/aquamacs-splash-screen.jpg $dest/Contents/Resources/etc/
+cp -pr $projdir/src/etc/aquamacs-splash-screen.jpg Contents/Resources/etc/
 
-cp -pr $projdir/src/Info.plist $dest/Contents/
+cp -pr $projdir/src/Info.plist Contents/
+cp -pr $projdir/src/InfoPlist.strings Contents/Resources/English.lproj/
 
-cp -pr $projdir/src/emacs-document.icns $dest/Contents/Resources/
+cp -pr $projdir/src/emacs-document.icns Contents/Resources/
 
-cp -Rvp $projdir/src/site-lisp/*.el $dest/Contents/Resources/site-lisp/
+cp -Rvp $projdir/src/site-lisp/*.el Contents/Resources/site-lisp/
 
-cp -Rvp $projdir/src/site-lisp/edit-modes/*.el $dest/Contents/Resources/site-lisp/edit-modes/
+cp -Rvp $projdir/src/site-lisp/edit-modes/*.el Contents/Resources/site-lisp/edit-modes/
 
-cp -Rvp $projdir/src/site-lisp/macosx/*.el $dest/Contents/Resources/site-lisp/macosx/
-cp -Rvp $projdir/src/site-lisp/oneonone/*.el $dest/Contents/Resources/site-lisp/oneonone/
+cp -Rvp $projdir/src/site-lisp/macosx/*.el Contents/Resources/site-lisp/macosx/
+cp -Rvp $projdir/src/site-lisp/oneonone/*.el Contents/Resources/site-lisp/oneonone/
 
 if [ $compile ]; then
     # prevent the site-start.el from being loaded all the time (gives error)
     # doesn't work yet
-    # mv $dest/Contents/Resources/site-lisp/site-start.el $dest/Contents/Resources/site-lisp/site-start.elx
+    # mv Contents/Resources/site-lisp/site-start.el Contents/Resources/site-lisp/site-start.elx
     echo "Compiling site-lisp"
-    $em  -batch -f batch-byte-compile $dest/Contents/Resources/site-lisp/*.el
+    "$em"  -batch -f batch-byte-compile Contents/Resources/site-lisp/*.el
     echo "Compiling macosx"
-    $em  -batch -f batch-byte-compile $dest/Contents/Resources/site-lisp/macosx/*.el 
+    "$em"  -batch -f batch-byte-compile Contents/Resources/site-lisp/macosx/*.el 
     echo "Compiling oneonone"
-    $em  -batch -f batch-byte-compile $dest/Contents/Resources/site-lisp/oneonone/*.el
-    #mv $dest/Contents/Resources/site-lisp/site-start.elx $dest/Contents/Resources/site-lisp/site-start.el
+    "$em"  -batch -f batch-byte-compile Contents/Resources/site-lisp/oneonone/*.el
+    #mv Contents/Resources/site-lisp/site-start.elx Contents/Resources/site-lisp/site-start.el
     # echo "(Note: ignore the --no-splash error!)"
 
 # .el is too large
-    gzip $dest/Contents/Resources/site-lisp/color-theme-themes.el
+    gzip Contents/Resources/site-lisp/color-theme-themes.el
 fi
  
 # for LaunchServices (on local machine)
-touch $dest
+touch .
 
 # replace hardlinks
 
-rm $dest/Contents/MacOS/bin/emacs
-rm $dest/Contents/MacOS/bin/emacs-22.0.50
-cd $dest/Contents/MacOS/bin/ ; ln -s ../Emacs emacs ; ln -s ../Emacs emacs-22.0.50
+rm Contents/MacOS/bin/emacs
+rm Contents/MacOS/bin/emacs-22.0.50
+cd Contents/MacOS/bin/ ; ln -s ../Emacs emacs ; ln -s ../Emacs emacs-22.0.50

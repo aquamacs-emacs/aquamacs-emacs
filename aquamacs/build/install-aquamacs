@@ -13,7 +13,7 @@ SRC=$3       # Emacs build, e.g. /Users/dr/Projects/emacs/mac/Aquamacs-Raw/Emacs
 
 if [ ! $dest ]; then
 
-    dest=/Applications/Emacs.app
+    dest="/Applications/Aquamacs Emacs.app"
 
 fi
 
@@ -43,12 +43,15 @@ $CSCRIPT -n $projdir $SRC
 
 bak=/tmp/aquamacs-backup.`date +"%H%M%S"`
 mkdir $bak
-mv $dest $bak/ 
+mv "$dest" $bak/ 
 
 
 # move to Applications
-mv $SRC $dest
+mv $SRC "$dest"
 
+
+mv "$dest/Contents/MacOS/Emacs" "$dest/Contents/MacOS/Aquamacs Emacs"
+ln -s "$dest/Contents/MacOS/Aquamacs Emacs" "$dest/Contents/MacOS/Emacs"
 
 
 

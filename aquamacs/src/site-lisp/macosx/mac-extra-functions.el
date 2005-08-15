@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.15 2005/08/01 22:33:19 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.16 2005/08/15 19:26:24 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -47,16 +47,14 @@ right there as well."
     ;; open new frame with empty buffer
     (new-frame-with-new-scratch nil) ;;  'fundamental-mode
 
-    (let ((buf (current-buffer))
-	  
-	  )
+    (let ((buf (current-buffer)))
       (unwind-protect 
 	  (progn 
 	    ;; the following will open the file in the given
 	    ;; frame, because the buffer shown is empty.
 	    (call-interactively 'find-file)
 	    (unless (eq (current-buffer) buf) ; get rid of old buffer
-	      (kill-buffer buf))
+	      (kill-buffer buf)))
 	    ;;(setq one-buffer-one-frame t))	
 	(progn 
 ;	  (if (assq 'one-buffer-one-frame (frame-parameters nil) )
@@ -67,10 +65,10 @@ right there as well."
 	(when (eq major-mode 'dired-mode)
 	    (set (make-local-variable 'one-buffer-one-frame) nil)
 	    )
-	(if (and (buffer-live-p buf)
-		 (= (buffer-size) 0))		; for security
+	(when (and (buffer-live-p buf)
+		 (< (buffer-size) 2))		; for security
 	    (kill-buffer buf))
-	))))))
+	)))))
 
 ;; File Open / Save
 ;; TO DO: these should be replaced with the file menu item 
@@ -269,9 +267,9 @@ end tell"
   (if (condition-case nil 
 	  (file-exists-p (car command-line-args)) 
 	(error nil))
-      (shell-command (concat "python -c \"from Carbon import AH; AH.AHRegisterHelpBook('" (substring (car command-line-args) 0 -21) "')\" >/dev/null 2>/dev/null") t t) 
+      (shell-command (concat "python -c \"from Carbon import AH; AH.AHRegisterHelpBook('" (substring (car command-line-args) 0 -30) "')\" >/dev/null 2>/dev/null") t t) 
     ; else
-    (message "Emacs.app has been moved or renamed. Please restart Emacs!")
+    (message "Aquamacs Emacs.app has been moved or renamed. Please restart Aquamacs!")
   )
 )
 
