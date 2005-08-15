@@ -23,6 +23,11 @@ $firstday = 12936;  # manually set: day of introduction
 %users_lastcheck = (); # a user's last version check
 %new_users_in_period = ();
 
+%checksperday = ();
+%checkscurrentperiod = ();
+
+$lastperiod = -1;
+
 # the following assumes sequential reading - 
 # earlier events must come earlier
 while (<STDIN>)
@@ -65,12 +70,25 @@ while (<STDIN>)
 	$ver =~ s/%20/ /gs;
 	$users_version{$uid} = $ver;
 
+	# checks per day
+	if ($period > $lastperiod)
+	  {
+	   
+	    if ($lastperiod > 0)
+	      {	   
+		$checksperday{$lastperiod} = scalar(keys %checkscurrentperiod);
+	      }
+	     %checkscurrentperiod = ();
+	    $lastperiod = $period;
+	  }
+	$checkscurrentperiod{$uid} = 1;
       } else {
   # warn "parsing error: ".$_;
 }		
 
   }
-  
+
+$checksperday{$lastperiod} = scalar(keys %checkscurrentperiod);
 
 # now check conversion rates
 
@@ -92,17 +110,18 @@ foreach my $uid (keys %users_installtime)
       }
   }
 
+ 
 
 # print user community stats
 
 
 open F, ">conversionrate.txt";
-print F "day    no_new    no_converted \n";
+print F "day  no.users  no.new    no.converted \n";
 
 foreach my $p (sort(map(int, keys(%new_users_in_period))))
   {
-    
-    print F $p-$firstday, "\t", $new_users_in_period{$p}, "\t";
+    # multiplyu checks per day by 3 --> estimate of user base
+    print F $p-$firstday, "\t", 3* $checksperday{$p}, "\t", $new_users_in_period{$p}, "\t";
     if ($converted_per_period{$p})
       {
 	print F $converted_per_period{$p}
@@ -116,7 +135,7 @@ close F;
 
 
 open F, ">versions.txt";
-print F "version   no_users \n" ;
+print F "version   no.users \n" ;
 
 foreach my $v (sort keys %version_dist)
   {
@@ -126,7 +145,7 @@ close F;
 
 
 open F, ">countries.txt";
-print F "country   no_users \n" ;
+print F "country   no.users \n" ;
 
 foreach my $c (sort keys %countries)
   {
@@ -158,7 +177,7 @@ foreach my $uid (keys %users_startups)
 
 
 open F, ">startups.txt";
-print F "no_startups   no_users \n";
+print F "no.startups   no.users \n";
 print F "# Mean # startups per day: ", ($perday_sum / $perday_num), "\n";
 $i=0;
 while($i< scalar( @perday_dist))
@@ -169,7 +188,7 @@ while($i< scalar( @perday_dist))
 close F;
 
 open F, ">usage-duration.txt";
-print F "duration   no_users \n"; 
+print F "duration   no.users \n"; 
 
 $i=0;
 while($i< scalar( @usage_duration))
