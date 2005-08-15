@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.1 2005/08/01 22:20:48 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.2 2005/08/15 19:27:19 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -126,7 +126,7 @@ yes-or-no prompts - y or n will do."
 
    
 
-  ;; Mac OS X specific stuff
+  ;; Mac OS X specific stuff 
 
   (when (eq window-system 'mac)
     (require 'osx_defaults)
@@ -141,20 +141,39 @@ yes-or-no prompts - y or n will do."
 
   (require 'recentf)
 
+  (defun aquamacs-recentf-show-basenames (l &optional no-dir)
+    "Filter the list of menu elements L to show filenames sans directory.
+When a filename is duplicated, it is appended a sequence number if
+optional argument NO-DIR is non-nil, or its directory otherwise.
+Separate paths from file names with --."
+    (let (filtered-names filtered-list full name counters sufx)
+      (dolist (elt l (nreverse filtered-list))
+	(setq full (recentf-menu-element-value elt)
+	      name (file-name-nondirectory full))
+	(if (not (member name filtered-names))
+	    (push name filtered-names)
+	  (if no-dir
+	      (if (setq sufx (assoc name counters))
+		  (setcdr sufx (1+ (cdr sufx)))
+		(setq sufx 1)
+		(push (cons name sufx) counters))
+	    (setq sufx (file-name-directory full)))
+	  (setq name (format "%s -- %s" name sufx)))
+	(push (recentf-make-menu-element name full) filtered-list))))
+
   (aquamacs-set-defaults 
    '(
      ( recentf-max-menu-items 25)
      (recentf-menu-before "Insert File...")
      (recentf-keep ( mac-is-mounted-volume-p file-remote-p file-readable-p))
-     )
-   )  
+     (recentf-filename-handler abbreviate-file-name)
+     (recentf-menu-filter aquamacs-recentf-show-basenames)))  
 
   ;; define a single command to be included in the recentf menu
   (defun recentf-clearlist ()
     "Remove all files from the recent list."
     (interactive)
-    (setq recentf-list ())
-    )
+    (setq recentf-list ()))
 
   (setq recentf-menu-items-for-commands
 	(list ["Clear Menu"
@@ -164,6 +183,8 @@ yes-or-no prompts - y or n will do."
         
 	      ) 
 	)
+
+
 
   (recentf-mode 1)  
 
@@ -492,17 +513,12 @@ Use this argument instead of explicitly setting `view-exit-action'."
 			   (help-mode (tool-bar-lines . 0) (fit-frame . t)) 
 			   (fundamental-mode (tool-bar-lines . 0))
 			   (custom-mode (tool-bar-lines . 0) (fit-frame . t)))))))
-    (if (< aquamacs-customization-version-id 094.3)
-
-	;; make sure we fit frames
-	(message "New Aquamacs Version: In case of issues with Frame Appearance Themes, 
-please try the `reset' function (menu)!")
-      ))
+    )
 
   (require 'one-buffer-one-frame)
  
 
-					; ----------- MISC STUFF ----------------
+;; ----------- MISC STUFF ----------------
 
 
   ;; (require 'ibuffer)
@@ -533,7 +549,7 @@ please try the `reset' function (menu)!")
   (global-set-key [(shift down-mouse-1)] 'mouse-extend)
   (global-set-key [(shift hyper down-mouse-1)] 'mouse-extend-secondary)
 
-  (let ((cmdkey (if (boundp osxkeys-command-key) osxkeys-command-key 'hyper)))
+  (let ((cmdkey (if (boundp 'osxkeys-command-key) osxkeys-command-key 'hyper)))
     (global-set-key `[(,cmdkey mouse-1)] 'mouse-start-secondary)
     (global-set-key `[(,cmdkey drag-mouse-1)] 'mouse-set-secondary)
     (global-set-key `[(,cmdkey down-mouse-1)] 'mouse-drag-secondary)
