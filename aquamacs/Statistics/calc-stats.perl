@@ -99,9 +99,9 @@ $num_users = 0;
 %converted_per_period = {};
 foreach my $uid (keys %users_installtime)
   {
-    if ($users_lastcheck{$uid} > $starttime and $users_installtime{$uid}<$starttime)
+    if ($users_lastcheck{$uid} - $users_installtime{$uid}>7*$oneday and $users_installtime{$uid}<$today-12*$oneday)
       {
-	# less than 10 days ago? 
+	# user has been sticking with it for at least 10 days
 	
 	$p = int($users_installtime{$uid}/$oneday);
 	$converted_per_period{$p} += 1;

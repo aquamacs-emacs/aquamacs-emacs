@@ -6,7 +6,7 @@ prod <- "Aquamacs"
 
 startups <- read.table("startups.txt", header=TRUE, fill=TRUE)
 
-
+# 
 usage_duration <- read.table("usage-duration.txt", header=TRUE, fill=TRUE)
 
 versions <- read.table("versions.txt", header=TRUE, fill=TRUE)
@@ -71,3 +71,4 @@ with(conversionrate2, plot (ratio ~ day, type="l",  main=" Conversion Rate",  yl
 conversionrate2$avg <- filter(conversionrate2$ratio, rep(1/7,7), sides=1)
 lines(conversionrate2$avg, col="blue")
 dev.off()
+
