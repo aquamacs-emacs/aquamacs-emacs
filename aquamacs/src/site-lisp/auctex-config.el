@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: auctex
  
-;; Last change: $Id: auctex-config.el,v 1.6 2005/06/19 14:24:17 davidswelt Exp $
+;; Last change: $Id: auctex-config.el,v 1.7 2005/08/18 17:39:29 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -71,8 +71,8 @@
 			      (turn-on-bib-cite)
 			      (TeX-fold-mode 1)
 			      (setq ispell-parser 'tex)
-			      (flyspell-mode)
-			      (abbrev-mode)
+			      (flyspell-mode 1)
+			      (abbrev-mode 1)
 			      (LaTeX-install-toolbar)))
 )
 
