@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.16 2005/08/15 19:26:24 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.17 2005/08/18 17:41:50 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -45,8 +45,9 @@ right there as well."
       (call-interactively 'find-file)
 
     ;; open new frame with empty buffer
-    (new-frame-with-new-scratch nil) ;;  'fundamental-mode
-
+    (let ((default-major-mode 'fundamental-mode))
+      (new-frame-with-new-scratch nil) ;;  'fundamental-mode
+    )
     (let ((buf (current-buffer)))
       (unwind-protect 
 	  (progn 
