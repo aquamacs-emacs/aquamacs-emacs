@@ -8,7 +8,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-frame-setup.el,v 1.10 2005/08/15 19:27:34 davidswelt Exp $
+;; Last change: $Id: aquamacs-frame-setup.el,v 1.11 2005/08/18 17:42:21 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -127,10 +127,14 @@
  ;; (defconst special-display-regexps '("[ ]?[*][^*]+[*]"))
  ; (defconst special-display-regexps '("[ ]?[*][^sC][^c][^r][^*]+[*]" ))
 
-(defconst special-display-regexps '( "[ ]?\\*info.*\\*[ ]?"  "[ ]?\\*Help\\*[ ]?" 
+;; We cannot just open all buffers in special frames, because
+;; then we could not pop up nice *Completion* windows etc locally.
+
+;; Help windows only start with *Help (so e.g. ESS Help gets opened separately)
+(defconst special-display-regexps '( "[ ]?\\*info.*\\*[ ]?"  "[ ]?\\*[hH]elp.*" 
 				     "[ ]?\\*Messages\\*[ ]?"   "[ ]*Customize*""[ ]?\\*Open Recent\\*[ ]?"
-				     ".*SPEEDBAR.*"
-				     ))
+				     ".*SPEEDBAR.*"))
+
 ;; If we make Backtrace dedicated,
 ;; the frame gets iconified all the time
 ;; while debugging ( "[ ]?\\*Backtrace\\*[ ]?"  )
