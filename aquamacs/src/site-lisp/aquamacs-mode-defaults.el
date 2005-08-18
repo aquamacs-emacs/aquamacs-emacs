@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-mode-defaults.el,v 1.2 2005/06/19 16:52:13 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-defaults.el,v 1.3 2005/08/18 17:39:09 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -28,17 +28,70 @@
  
 ;; Copyright (C) 2005, David Reitter
 
+(defvar aq-resources-dir (concat
+			  (substring (car command-line-args) 0 -20)
+			  "Resources"))
 
 ;; load auctex if present 
 (ignore-errors (require 'auctex-config nil t))
 
+(autoload 'ess-mode "ess-site" "Emacs Speaks Statistics" t)
+(autoload 'R-mode "ess-site" "Emacs Speaks Statistics" t)
+(autoload 'S-mode "ess-site" "Emacs Speaks Statistics" t)
+(autoload 'Rnw-mode "ess-site" "Emacs Speaks Statistics" t)
+(autoload 'omegahat-mode "ess-site" "Emacs Speaks Statistics" t)
+(autoload 'XLS-mode "ess-site" "Emacs Speaks Statistics" t)
+(autoload 'STA-mode "ess-site" "Emacs Speaks Statistics" t)
+(autoload 'SAS-mode "ess-site" "Emacs Speaks Statistics" t)
+(autoload 'S-transcript-mode "ess-site" "Emacs Speaks Statistics" t)
+(autoload 'R-transcript-mode "ess-site" "Emacs Speaks Statistics" t)
+
+(setq auto-mode-alist
+	(append
+	 '(("\\.sp\\'"		. S-mode) ;; re: Don MacQueen <macq@llnl.gov>
+	   ("\\.[qsS]\\'"	. S-mode) ;; q,s,S [see ess-restore-asm-extns above!]
+	   ("\\.ssc\\'"		. S-mode) ;; Splus 4.x script files.
+	   ("\\.[rR]\\'"	. R-mode)
+	   ("\\.[rR]nw\\'"	. Rnw-mode)
+	   ("\\.[rR]profile\\'" . R-mode)
+	   ("NAMESPACE\\'"	. R-mode)
+	   ("\\.omg\\'"         . omegahat-mode)
+	   ("\\.hat\\'"         . omegahat-mode) ;; Duncan's pref'd...
+	   ("\\.lsp\\'"		. XLS-mode)
+	   ("\\.do\\'"		. STA-mode)
+	   ("\\.ado\\'"		. STA-mode)
+	   ("\\.[Ss][Aa][Ss]\\'"	. SAS-mode)
+	   ;; Many .log/.lst files, not just SAS
+	   ;;("\\.log\\'"	. SAS-log-mode)
+	   ;;("\\.lst\\'"	. SAS-listing-mode)
+	   ("\\.[Ss]t\\'"	. S-transcript-mode)
+	   ("\\.[Ss]out"	. S-transcript-mode)
+	   ("\\.[Rr]t\\'"	. R-transcript-mode)
+	   ("\\.[Rr]out"	. R-transcript-mode) 
+          )
+	 auto-mode-alist))
 
 
+(defvar ess-etc-directory (concat  aq-resources-dir
+				  "/site-lisp/edit-modes/ess-mode/etc"
+				  ))
+(setenv "INFOPATH" 
+	(concat (getenv "INFOPATH") 
+		(concat ":" aq-resources-dir
+			"/site-lisp/edit-modes/info"
+			)
+		))
+
+(autoload 'html-helper-mode "html-helper-mode" "major mode for editing HTML source." t)
+(setq auto-mode-alist
+      (cons '("\\.html$" . html-helper-mode) auto-mode-alist)
+      )
 
 (autoload 'css-mode "css-mode" "major mode for editing CSS source." t)
 (setq auto-mode-alist
       (cons '("\\.css$" . css-mode) auto-mode-alist)
-      )
+      ) 
+
 
 (autoload 'applescript-mode "applescript-mode" "major mode for editing AppleScript source." t)
 (setq auto-mode-alist
