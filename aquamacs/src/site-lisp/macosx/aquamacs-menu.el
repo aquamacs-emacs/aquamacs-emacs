@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.13 2005/08/01 22:19:55 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.14 2005/08/18 17:42:08 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -315,7 +315,7 @@ to the selected frame."
     (list 'menu-item "Tool-bar in this frame" 'toggle-tool-bar-here
 	:help ""
 	:visible `(display-graphic-p)
-	:button `(tool-bar-enabled-p))
+	:button '(:toggle . (tool-bar-enabled-p)))
     'showhide-tool-bar)
 
 
