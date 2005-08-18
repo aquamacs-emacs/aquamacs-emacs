@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.7 2005/07/19 11:13:53 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.8 2005/08/18 17:41:06 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -31,7 +31,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.7 2005/07/19 11:13:53 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.8 2005/08/18 17:41:06 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -119,8 +119,6 @@
 
 ;; only for certain special buffers
 
- 
-
 (if window-system
 (defadvice switch-to-buffer (around sw-force-other-frame (&rest args) activate)
   ;; is buffer shown in a frame?
@@ -139,20 +137,19 @@
 		(open-in-other-frame-p (car args)))
  
 	    (progn
-	        
 	      (apply #'switch-to-buffer-other-frame args)
-	  
 	      ;; store the frame/buffer information
 	      (add-to-list 'aquamacs-newly-opened-frames 
 			   (cons (selected-window) (current-buffer))) 
 	       
 	      ) 
 	  ;; else : show in same frame
+   
 	  (if (window-dedicated-p (selected-window))
 	      (apply #'switch-to-buffer-other-window args)
 	    ;; else: show in same frame
 	    ad-do-it))))
- 
+  
   (set-mode-specific-theme)))
 
 
@@ -238,17 +235,10 @@
       (let ((puf pop-up-frames)
 	    (sw (selected-window))
 	    (wd (window-dedicated-p (selected-window)))
-	    )
- 
-	(setq pop-up-frames (not 
-			     (string-match "[ ]*\*(Completions|Apropos)\*" 
-					   (get-bufname buf))
-				 )
-	      )
- 
-	(set-window-dedicated-p sw nil) 
-	ad-do-it
-	(set-window-dedicated-p sw wd)
+	    ) 
+	(set-window-dedicated-p sw nil)  
+	ad-do-it  
+	(set-window-dedicated-p sw wd)  
 	(setq pop-up-frames puf)
 
 	)
@@ -258,6 +248,34 @@
     )
   )
  )
+
+
+(defun aquamacs-display-buffer (&rest args)
+
+       
+       (let ((display-buffer-function nil))
+	 (if (and
+	      one-buffer-one-frame
+	      (open-in-other-frame-p (car args))
+	      )
+	     (let ((pop-up-frames t)
+		   ;;(sframe (selected-frame))
+		   ;;(swin (selected-window))
+		   )
+	       (apply (function display-buffer) args)
+	       ;; make sure the old frame stays the selected one
+	       ;; this would have a more general effect 
+	       ;;(select-frame sframe)
+	       ;;(select-window swin)
+
+	       )
+	   (apply (function display-buffer) args)
+	   )
+       )
+)
+
+(aquamacs-set-defaults 
+ '((display-buffer-function aquamacs-display-buffer)))
 
 (defun aquamacs-delete-window (&optional window)
   "Remove WINDOW from the display.  Default is `selected-window'.
