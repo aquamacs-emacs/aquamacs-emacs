@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.2 2005/08/15 19:27:19 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.3 2005/08/18 21:51:23 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -32,8 +32,8 @@
 
 
 
-(defvar aquamacs-version "0.9.5 beta-3")
-(defvar aquamacs-version-id 095.3)
+(defvar aquamacs-version "0.9.5 beta-4")
+(defvar aquamacs-version-id 095.4)
 (defvar aquamacs-minor-version "")
 
 
@@ -193,6 +193,21 @@ Separate paths from file names with --."
 
   (setq file-name-coding-system 'utf-8)
 
+;; Page scrolling
+
+  (require 'pager)
+  ;; overwrites CUA stuff
+  (global-set-key [remap scroll-down]	      'pager-page-down)
+  (global-set-key [remap cua-scroll-up]	      'pager-page-down)
+  (global-set-key [next] 	      'pager-page-down)
+  (global-set-key [\M-up]	      'pager-page-up)
+  (global-set-key [remap scroll-up]	      'pager-page-up) 
+  (global-set-key [remap cua-scroll-down]	      'pager-page-up)
+  (global-set-key [prior]	      'pager-page-up)
+  (global-set-key [C-up]        'pager-row-up)
+  (global-set-key [C-down]      'pager-row-down)
+  ;;(global-set-key "Oa"        'pager-row-up)         ;; mac
+  ;;(global-set-key "Ob"        'pager-row-down)       ;; mac
 
 
 
