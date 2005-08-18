@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.9 2005/08/01 22:18:21 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.10 2005/08/18 17:40:56 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -236,6 +236,24 @@ Optional CODING is used for encoding coding-system."
   (message "... done")
 )
  
+
+
+(defun aq-current-milliseconds ()
+  (let ((ti (cdr (current-time)))
+	
+	)
+    (+ (* 1000 (- (car ti) (car (cdr aq-timer)))) 
+       (/ (- (car  (cdr ti))
+	  (car (cdr (cdr aq-timer)))
+	  ) 1000))))
+
+(defun aq-start-timer ()
+  (setq aq-timer (current-time))
+)
+(aq-start-timer)
+(defun aq-print-timer ()
+  (message  (format "%d" (aq-current-milliseconds))  ))
+
 
 (provide 'aquamacs-tools)
 
