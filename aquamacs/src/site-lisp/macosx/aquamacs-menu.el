@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.14 2005/08/18 17:42:08 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.15 2005/08/20 09:46:24 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -78,6 +78,26 @@
 ; (define-key menu-bar-edit-menu [mark-whole-buffer] (cdr (assq 'mark-whole-buffer (lookup-key global-map [menu-bar edit]))))
 
 
+;; New documents
+(defun new-frame-with-new-scratch  (&optional other-frame mode)
+  "Opens a new frame containing an empty buffer."
+  (interactive)			
+  (let ((buf (generate-new-buffer (mac-new-buffer-name "untitled"))))
+
+    ;; setting mode is done before showing the new frame
+    ;; because otherwise, we get a nasty animation effect
+    (save-excursion
+      (set-buffer buf)
+      (if default-major-mode (funcall  (or mode default-major-mode))))
+
+    (if other-frame
+	(switch-to-buffer-other-frame buf)
+      (let ((one-buffer-one-frame-force one-buffer-one-frame))
+	;; force new frame
+	(switch-to-buffer buf)))
+  
+    (setq buffer-offer-save t)
+    (set-buffer-modified-p nil)))
 
 
 (define-key menu-bar-file-menu [new-file]
@@ -85,8 +105,58 @@
 	      :enable (or one-buffer-one-frame
 			  (not (window-minibuffer-p
 			    (frame-selected-window menu-updating-frame))))
-	      :help "Read or create a file and edit it"))
+	      :help "Create a new buffer"))
  
+
+(defcustom aquamacs-menu-new-buffer-modes
+  '(text-mode html-helper-mode latex-mode lisp-interaction-mode emacs-lisp-mode c-mode perl-mode python-mode applescript-mode R-mode sh-mode)
+  "List of modes to include in the New Buffer menu."
+  :group 'menu
+  :group 'Aquamacs
+  :type '(repeat (symbol :tag "Mode-name"))
+)
+ 
+
+(defvar menu-bar-new-file-menu nil)
+
+(defun aquamacs-update-new-file-menu ()
+  (setq menu-bar-new-file-menu (make-sparse-keymap "New Buffer")) 
+  (mapc
+   (lambda (modename)
+     (when (fboundp modename)
+       (define-key ;;-after doesn't work with after- why?>? 
+	 menu-bar-new-file-menu 
+	 (vector (make-symbol (concat "new-buffer-" (symbol-name modename))))
+	 `(menu-item  
+	   ,(concat 
+	     (capitalize 
+	      (replace-regexp-in-string "-mode" "" (symbol-name modename)))
+	     " Buffer")
+	   ,(eval 
+	     (list 'lambda '() '(interactive)
+		   (list 'new-frame-with-new-scratch nil `(quote ,modename))
+		   ))
+	   :help "Create a new buffer in a specific mode."
+	   ))))
+      
+   (reverse (sort (copy-list aquamacs-menu-new-buffer-modes)
+		  (lambda (a b) (string< 
+				 (upcase (symbol-name a)) 
+				 (upcase (symbol-name b))))))
+   )
+  (define-key-after menu-bar-file-menu [new-file-menu]
+    (list 'menu-item "New Buffer" menu-bar-new-file-menu
+	  :help "Create a new buffer with a specific major mode.")
+    'new-file)
+  )
+
+(add-hook 'after-init-hook 'aquamacs-update-new-file-menu)
+
+(defun aquamacs-menu-make-new-buffer ()
+  (interactive))
+;; (apply (function defun) (make-symbol (concat "aquamacs-make-new-buffer-" (symbol-name modename))) '() '(interactive)
+;; 		     (list 'new-frame-with-new-scratch nil `(quote ,modename))
+;; 		     )
 
 ;(change-menu-text-2 [menu-bar application] 'quit (format  "Quit Emacs                %sQ"  apple-char))
 (change-menu-text [menu-bar file] 'open-file (format  "Open File...                 %sO"  apple-char)) 
@@ -388,6 +458,16 @@ to the selected frame."
       (message "Sorry, help function unavailable (python, OS problem?)")
   )
 )
+(defun aquamacs-show-change-log ()
+  (interactive)
+
+  (init-user-help) ; make sure it's registered
+  (or (shell-command "python -c \"from Carbon import AH; AH.AHGotoPage('Aquamacs Help', 'node3.html', None)\"  >/dev/null 2>/dev/null" t t)
+      (message "Sorry, help function unavailable (python, OS problem?)")
+  )
+)
+
+
 (defun aquamacs-emacs-manual ()
   (interactive)
 
