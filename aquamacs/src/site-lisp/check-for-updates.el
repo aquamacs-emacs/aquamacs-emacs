@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs version check
  
-;; Last change: $Id: check-for-updates.el,v 1.6 2005/07/08 21:51:23 davidswelt Exp $
+;; Last change: $Id: check-for-updates.el,v 1.7 2005/08/20 09:46:08 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -52,7 +52,8 @@
 	happens once every 3 days. The server will receive and 
 	store the following anonymous connection data: 
 	an anonymous ID, the number of program starts and the 
-	version of Aquamacs that you're using. Like every web server, 
+	versions of Aquamacs and OS X that you're using. 
+        Just as during any access to an Internet server, 
 	your IP address and the time of your inquiry may be stored,
 	too. This information is used to produce statistics; we delete the
 	original data after a period of time. The statistics solely
@@ -85,9 +86,8 @@ nil
 	  (re-search-forward "<version>\\(.*\\)</version>" (buffer-end 1) t)
 	  )
  
-	(if (equal (match-string 1) aquamacs-version)
-	    (message "")	;; up-to-date; workaround for "Saw end of trailers" bug
-	  (progn
+	(when (not (equal (match-string 1) aquamacs-version))
+	    ;;(message "")	;; up-to-date; workaround for "Saw end of trailers" bug
 	    (write-region (concat "888\n") ;; notice that a new version is available 
 		  nil
 		  aquamacs-id-file
@@ -95,11 +95,7 @@ nil
 		  'shut-up
 		  nil
 		  nil)
-	    (aquamacs-new-version-notify (match-string 1))
-
-	    
-	  )
-)
+	    (aquamacs-new-version-notify (match-string 1)) )
 
 	        
 	)
@@ -107,23 +103,38 @@ nil
   )
  
 (defun aquamacs-new-version-notify (v)
+  ;; show right away and show when idle
   (message (format "Get the new Aquamacs %s from http://aquamacs.org" v))
+  (run-with-idle-timer 
+   0 nil 'message
+   (format "Get the new Aquamacs %s from http://aquamacs.org" v))
 )
-
+(defun aquamacs-welcome-notify ()
+  ;; show right away and show when idle
+   
+  (run-with-idle-timer 
+   0 nil 'message
+   (format "Welcome to the new Aquamacs. Please consider donating at http://aquamacs.org" ))
+)
 
 
 (defvar aquamacs-check-update-time-period 3
   "Time to wait between online checks for update.")
 
-(defun aquamacs-check-for-updates-if-necessary ()
+(defun aquamacs-check-for-updates ()
+  (interactive)
+  (aquamacs-check-for-updates-if-necessary 'force)
+)
+
+(defun aquamacs-check-for-updates-if-necessary (&optional force-check)
   "Check (periodically) if there's an update for Aquamacs available, 
 and show user a message if there is."
-  (let ( (force-check)
-	  
+  (let (  
 	( call-number 0)
 	( session-id (random t) )
 	( today (date-to-day (current-time-string)))
-	( last-update-check 0) )
+	( last-update-check 0) 
+	( previous-version 0))
 
     (if (file-readable-p aquamacs-id-file)
 	(with-temp-buffer
@@ -139,19 +150,32 @@ and show user a message if there is."
 	    (goto-line 4)
 	    (setq aquamacs-user-likes-beta (or (number-at-point) 0))
 	    (goto-line 5)
-	    (setq force-check (eq 888 (number-at-point))) ;; contains 888 if new version previously found
-	    ; (kill-buffer buf)
+	    ;; number-at-point doesn't like decimals
+	    (setq previous-version (or (string-to-number 
+					(thing-at-point 'line)) 0))
+	    (if (eq previous-version 888) ;; upgrade compat.
+		(setq previous-version 0))
+	    (goto-line 6)
+	    (setq force-check (or force-check (eq 888 (number-at-point)))) 
+	    ;; contains 888 if new version previously found
 	    )
 	  
       )
   
     (if (string-match "beta"  aquamacs-version)
 	     (setq aquamacs-user-likes-beta 1)
-      ) 
+      )
+
+    ;; show "what's new" 
+    (when (> (abs (- previous-version aquamacs-version-id)) 0)
+	(aquamacs-show-change-log)
+	(if (> previous-version 0)
+	    (aquamacs-welcome-notify))
+      )
  
     (if (or force-check (>= (- today last-update-check)  aquamacs-check-update-time-period))
 	(progn
-	  (aquamacs-check-for-updates session-id call-number)
+	  (aquamacs-check-for-updates-internal session-id call-number)
 	  (setq last-update-check today)
 	  )
       )
@@ -159,6 +183,7 @@ and show user a message if there is."
 			  (number-to-string (or last-update-check 0)) "\n"
 			  (number-to-string (or session-id 0)) "\n"
 			   (if (> aquamacs-user-likes-beta 0) "1" "0") "\n"
+			   (number-to-string aquamacs-version-id) "\n"
 			  )
  
 		  nil
@@ -167,19 +192,14 @@ and show user a message if there is."
 		  'shut-up
 		  nil
 		  nil)
-
-					; store file
-    
-		  
-    )
-
-  )
+	;; store file
+    	     ))
 
 
     
  
 
-(defun aquamacs-check-for-updates (session-id calls)
+(defun aquamacs-check-for-updates-internal (session-id calls)
  
  
     (if aquamacs-version-check-url
@@ -191,6 +211,7 @@ and show user a message if there is."
 				 "&seq=" (number-to-string (or calls 0))
 				 "&beta=" (number-to-string (or aquamacs-user-likes-beta 0)) 
 				 "&ver=" (url-encode-string (concat (or aquamacs-version "unknown") (or aquamacs-minor-version "-")))
+				 "&os=" (url-encode-string  (replace-regexp-in-string "\[\r\n\]" "" (shell-command-to-string "uname -r")))
 				 ) 
 			 )))
 	; HTTP-GET
