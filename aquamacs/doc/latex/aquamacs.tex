@@ -27,7 +27,6 @@ Emacs. This allows Mac users who might be unfamiliar with Emacs'
 complex standard interface to harness its amazing editing power in a
 familiar way. 
 
-
 \begin{figure}
 \centering
 {\includegraphics[width=5in]{aquamacs-screenshot.jpg}}
@@ -65,8 +64,81 @@ pleasant surprise.
 
 \section{What's New in This Release}
 
-This is version 0.9.5b1 of Aquamacs, released July 20, 2005. Aquamacs 0.9.5b1 includes a number of bug fixes and optimizations that should improve performance and stability. 
+This is version 0.9.5b4 of Aquamacs, released August 20, 2005. Aquamacs 0.9.5b4 includes several bug fixes, optimizations, and improvements that will lead the way to a stable 0.9.5 release soon. 
 
+\subsection{Version 0.9.5b4}
+
+\begin{itemize}
+
+\item The application is now called Aquamacs Emacs.
+
+\item The menu of Recent Files will abbreviate long paths now.
+
+\item Page-wise scrolling is more reliable--that is, it is really page-wise and
+    you can always return to the same line. (Pager package)
+
+\item Better support for editing HTML: HTML-Helper-Mode is included.
+
+\item Emacs Speaks Statistics is included. (Minor glitches with toolbar and  info
+    files are known and will be addressed.)
+
+\item Auctex configuration now turns on abbrev-mode and flyspell-mode when
+    latex-mode is started (instead of toggling them).
+    (reported by Robert Sloan)
+
+\end{itemize}
+
+\subsection{Version 0.9.5b3}
+
+\begin{itemize}
+	
+\item Renamed ``Option key produces only special characters'' to ``Option key for
+	Meta (not for extra characters).''
+
+\item C-x C-f  (find-file) will bring up a window first before asking for the
+	name of the file to be loaded.
+
+\item Files saved with Aquamacs have a nice file icon now.
+
+\item The "frame appearance themes" system has been revised. *Messages* now has
+	a distinctive colored background. To change this background (or
+	the one for *Help* buffers), customize the variable 
+	`aquamacs-buffer-specific-frame-themes'. Also, you can turn Frame Appearance Themes on and off with a menu
+	item.  (Also: fixes for issues introduced in the last beta.)
+
+\item Frame-related functions from File menu are now in Buffers menu.
+
+\item 1on1-* customization variables are gone---most of them were not in working
+	order (in Aquamacs) anyways due to the way we were using the
+	Oneonone package. This gets rid of quite a bit of doubly
+	implemented functionality.
+
+\item Help (Aquamacs Manual) has been revised.
+
+\item Known bug: Do not try to create a mode specific theme in latex-mode. It
+	may fail.
+
+\end{itemize}
+	
+\subsection{Version 0.9.5b2}
+
+\begin{itemize}
+
+\item Mode-specific themes revised: the full set of parameters coming from 
+	color themes is now supported, in addition to the font and toolbar setting.
+
+\item Menu item to delete the mode-specific theme for the current major mode.
+
+
+\item Option-up/down (if Option is meta) now scroll page-wise.
+	
+\item (Even) speedier startup.
+
+\item A number of bug-fixes.
+
+\end{itemize}
+
+  
 \subsection{Changes: 0.9.5b1}
 
 \begin{itemize}
@@ -668,6 +740,8 @@ settings. If you change a setting, such as the color theme or fonts, be sure to
 select the ``Save Options'' item in the menu. The changes will not be
 saved by default.
 
+If you want to delve deeply into customizing Aquamacs, select ``Customize Emacs:Top-Level Customization Group'' in the Options menu. A new frame titled ``Customize Group: Emacs'' will open. Scroll down and find the ``Aquamacs Group'' listing, and push the ``Go to Group'' button. This will open a new frame with all of the configuration options for Emacs---deep-level customization that can be implemented by Aquamacs power users in the Emacs scripting language, elisp---and each option is documented there. Table \ref{tab:variables} displays a complete list of the options. 
+
 \subsection{Buffers}
 The Buffers menu allows you to navigate through the windows/frames
 that you may have open. Note that a ``buffer'' is not synonymous with
@@ -811,22 +885,22 @@ is possible to modify these files directly, but we discourage this
 practice and provide no support for it.}
 
 
-We recommend that user customizations be placed in specific
-locations:
+We recommend that user customizations be placed in specific locations:
 
 \begin{itemize}
-\item /Library/Preferences/Emacs/Preferences: Preferences
-for all  Carbon Emacs installations
-\item /Library/Preferences/Aquamacs Emacs/Preferences:
-Preferences for Aquamacs and for all users
-\item /Users/username/Library/Emacs/Preferences: User-specific preferences for all Carbon Emacs installations  
-\item /Users/username/Library/Aquamacs Emacs/Preferences: User-specific preferences for Aquamacs
+\item /Library/Preferences/Emacs/Preferences.el: Preferences for all Carbon  Emacs installations
+\item /Library/Preferences/Aquamacs Emacs/Preferences.el: Preferences for  Aquamacs and for all users
+\item /Users/username/Library/Emacs/Preferences.el: User-specific  preferences for all Carbon Emacs installations
+\item /Users/username/Library/Aquamacs Emacs/Preferences.el: User-specific  preferences for Aquamacs
 \end{itemize}
 
-It is also possible to define and store user
-customizations in the traditional .emacs file, which is
-placed in the user's home directory. This option is deprecated in
-Aquamacs, however.
+If in doubt, use the last option:
+\begin{itemize}
+\item /Users/username/Library/Aquamacs Emacs/Preferences.el
+\end{itemize}
+
+
+This replaces the usual ~/.emacs file, which is still loaded for  compatibility.
 
 Below are some specific customization items that may be of interest:
 
@@ -839,28 +913,6 @@ Below are some specific customization items that may be of interest:
   Emacs, just deselect  ``Display Buffers in Separate Frames'' in the
   Options menu and save  your choice with ``Save Options.''
 
-\item \textbf{Colors and fonts for frames and modes.} Aquamacs allows
-  you to alter specific features of the current frame  via functions
-  in the Options menu. ``Set Color Theme...'' will let you choose a
-  pre-defined combination  of colors and fonts. ``Set Font...'' gives you a choice of pre-defined fonts to use.
-
-These settings only apply to the current frame. To make them ``stick,'' use the function ``Set current theme as default.'' Then, all  future frames will open with the new colors and fonts chosen. This  applies to all frame-settings that a mode or you as a user have  chosen using Emacs' configuration system. The choice of a default  theme will stick until you restart Aquamacs Emacs.
-
-Aquamacs Emacs also offers you to pick a theme specific to the
-current mode. For example, you can use different settings when you are
-editing C or LaTeX, then when you are editing a text file. That is
-what  the function ``Set current theme for current mode'' is for. Again, the setting  will stick for newly opened frames or or whenever you newly use a  given mode, until you restart Aquamacs Emacs.
-
-Finally, you may want to save your settings so they will stick even
-when you restart Aquamacs Emacs. To do so, use the function ``Save Options.''
-
-
-\begin{figure}
-\centering
-{\includegraphics[width=5in]{theme.jpg}}
-\caption{Aquamacs with a custom theme applied.}
-\label{theme.jpg}
-\end{figure}
 
 \item \textbf{mac-pass-option-to-system is nil.} If this variable is set in your .emacs or Preferences.el file to non-nil, the Mac ``Option'' key can be used to compose
       characters as handled by the system and depending on the
@@ -896,9 +948,11 @@ the modifier that is assigned to the Option key.
 \hline Aquamacs Set Creator Codes After Writing Files\\
 \hline Aquamacs Quick Yes Or No Prompt\\
 \hline Aquamacs Ring Bell On Error\\
-\hline Aquamacs Mode Specific Default Themes\\ 
-\hline Aquamacs Auto Frame Parameters\\
-\hline One Buffer One Frame; Smart Frame Positioning Enforce\\
+\hline Aquamacs Mode Specific Default Themes\\
+\hline Aquamacs Buffer Specific Frame Themes\\ 
+\hline Aquamacs Auto Frame Parameters Flag\\
+\hline One Buffer One Frame\\
+\hline Smart Frame Positioning Enforce\\
 \hline Smart Frame Positioning Mode\\
 \hline 1on1 *Completions* Frame\\
 \hline 1on1 *Help* Frame\\
@@ -927,6 +981,29 @@ modifications. See
 details. 
 
 
+\subsection{The Right Look: Colors and Fonts for Frames and Modes}
+Aquamacs allows
+  you to alter specific features of the current frame  via functions
+  in the Options menu. ``Set Color Theme...'' will let you choose a
+  pre-defined combination  of colors and fonts. ``Set Font...'' gives you a choice of pre-defined fonts to use.
+
+These settings only apply to the current frame. To make them ``stick,'' use the function ``Set current theme as default.'' Then, all  future frames will open with the new colors and fonts chosen. This  applies to all frame-settings that a mode or you as a user have  chosen using Emacs' configuration system. The choice of a default  theme will stick until you restart Aquamacs Emacs.
+
+Aquamacs Emacs also offers you to pick a theme specific to the
+current mode. For example, you can use different settings when you are
+editing C or LaTeX, then when you are editing a text file. That is
+what  the function ``Set current theme for current mode'' is for. Again, the setting  will stick for newly opened frames or or whenever you newly use a  given mode, until you restart Aquamacs Emacs.
+
+Finally, you may want to save your settings so they will stick even
+when you restart Aquamacs Emacs. To do so, use the function ``Save Options.''
+
+
+\begin{figure}
+\centering
+{\includegraphics[width=5in]{theme.jpg}}
+\caption{Aquamacs with a custom theme applied.}
+\label{theme.jpg}
+\end{figure}
 
 
 
