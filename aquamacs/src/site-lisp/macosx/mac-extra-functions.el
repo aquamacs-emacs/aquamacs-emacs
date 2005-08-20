@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.17 2005/08/18 17:41:50 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.18 2005/08/20 09:46:43 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -242,25 +242,7 @@ end tell"
     )
 )
 
-(defun new-frame-with-new-scratch  (&optional other-frame)
-  "Opens a new frame containing an empty buffer."
-  (interactive)			
-  (let ((buf (generate-new-buffer (mac-new-buffer-name "untitled"))))
 
-    ;; setting mode is done before showing the new frame
-    ;; because otherwise, we get a nasty animation effect
-    (save-excursion
-      (set-buffer buf)
-      (if default-major-mode (funcall  default-major-mode)))
-
-    (if other-frame
-	(switch-to-buffer-other-frame buf)
-      (let ((one-buffer-one-frame-force one-buffer-one-frame))
-	;; force new frame
-	(switch-to-buffer buf)))
-  
-    (setq buffer-offer-save t)
-    (set-buffer-modified-p nil)))
 
 
 ;; register the help manuals
