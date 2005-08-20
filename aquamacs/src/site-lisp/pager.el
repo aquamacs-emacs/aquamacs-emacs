@@ -1,10 +1,13 @@
 ;;; pager.el --- windows-scroll commands
-;;; Version 2.0 - 97-10-06
+;;; Version 2.1 - 05-08-20
 ;;; Copyright (C) 1992-1997 Mikael Sjödin (mic@docs.uu.se)
+;;; Copyright (C) 2005 David Reitter (david.reitter@gmail.com)
 ;;;
 ;;; Author: Mikael Sjödin  --  mic@docs.uu.se
 ;;;
 ;;; This file is NOT part of GNU Emacs.
+;;; This file is part of Aquamacs Emacs.
+;;;
 ;;; You may however redistribute it and/or modify it under the terms of the GNU
 ;;; General Public License as published by the Free Software Foundation; either
 ;;; version 2, or (at your option) any later version.
@@ -51,6 +54,9 @@
 
 ;;; ----------------------------------------------------------------------
 ;;; Versions:
+;;; 2.1 Fixed scrolling from top of buffer. 
+;;;     allow scrolling to top / end of buffer to be compatible
+;;;     with common UI paradigm.
 ;;; 2.0 Renamed interface functions (kept old-ones as aliases)
 ;;;     Complete reimplementation, old version where not working well in Emacs
 ;;;     20.
@@ -87,15 +93,17 @@ keep the `pager-temporary-goal-column'")
   (interactive)
   (if (not (pos-visible-in-window-p (point-max)))
       (pager-scroll-screen (- (1- (window-height))
-			      next-screen-context-lines))))
-    
+			      next-screen-context-lines))
+    (end-of-buffer)))
+
 (defun pager-page-up ()
   "Like scroll-down, but moves a fixed amount of lines (fixed relative the
 `window-height') so that pager-page-down moves back to the same line."
   (interactive)
   (if (not (pos-visible-in-window-p (point-min)))
       (pager-scroll-screen (- next-screen-context-lines 
-			      (1- (window-height))))))
+			      (1- (window-height))))
+    (beginning-of-buffer)))
 
 ;; ------------------------------
 
@@ -106,7 +114,8 @@ keep the `pager-temporary-goal-column'")
   (save-excursion
     (goto-char (window-start))
     (forward-line lines)
-    (set-window-start (selected-window) (point)))
+    (set-window-start (selected-window) (point) t )
+    )
   (forward-line lines)
   (move-to-column pager-temporary-goal-column))
 
