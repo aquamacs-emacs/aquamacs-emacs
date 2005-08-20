@@ -6,7 +6,7 @@
 # this takes three optional arguments   
 
 projdir=$1   # project-dir (Aquamacs CVS)
-dest=$2      # destination, e.g. /Applications/Emacs.app
+dest=$2      # destination, e.g. "/Applications/Aquamacs Emacs.app"
 SRC=$3       # Emacs build, e.g. /Users/dr/Projects/emacs/mac/Aquamacs-Raw/Emacs.app
 
 
@@ -14,13 +14,13 @@ SRC=$3       # Emacs build, e.g. /Users/dr/Projects/emacs/mac/Aquamacs-Raw/Emacs
 if [ ! $dest ]; then
 
     dest="/Applications/Aquamacs Emacs.app"
-
+    
 fi
 
 if [ ! $projdir ]; then
 
     # project directory (out of Aquamacs CVS)
-    projdir=$HOME/Projects/Aquamacs/aquamacs
+    projdir=`pwd`/../../Aquamacs/aquamacs
 
 fi
 
@@ -28,10 +28,14 @@ fi
 if [ ! $SRC ]; then
 
 # where the Emacs build is
-    SRC=$HOME/Projects/emacs/mac/Aquamacs-Raw/Emacs.app
+    SRC=`pwd`/Aquamacs-Raw/Emacs.app
+
 
 fi
 
+echo "Destination App (e.g. /Applications/Aquamacs.app): $dest"
+echo "Project CVS Dir (e.g. ~/Proj/aquamacs): $projdir"
+echo "Source Dir (e.g. Aquamacs-Raw/Emacs.app): $SRC"
  
 # copy-to-app script
 CSCRIPT=$projdir/build/copy-to-app
@@ -39,15 +43,15 @@ CSCRIPT=$projdir/build/copy-to-app
 
 # install elisp files etc in $SRC
 #  -n --> do not compile
-$CSCRIPT -n $projdir $SRC
+$CSCRIPT -n "$projdir" "$SRC"
 
 bak=/tmp/aquamacs-backup.`date +"%H%M%S"`
-mkdir $bak
+mkdir $bak 2>/dev/null
 mv "$dest" $bak/ 
 
 
 # move to Applications
-mv $SRC "$dest"
+mv "$SRC" "$dest"
 
 
 mv "$dest/Contents/MacOS/Emacs" "$dest/Contents/MacOS/Aquamacs Emacs"
