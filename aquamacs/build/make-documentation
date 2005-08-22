@@ -54,7 +54,16 @@ proc makeHTML {} {
     puts "Backing up old Aquamacs Help directory, copying new help files."
     file rename AquamacsHelp AquamacsHelp-bak
     file rename -force latex/$newname $finaldir
+    puts "Copying icon files..."
     file copy -force AquamacsHelp-bak/CVS AquamacsHelp/CVS
+    file copy -force latex/contents.png AquamacsHelp/contents.png
+    file copy -force latex/next_g.png AquamacsHelp/next_g.png
+    file copy -force latex/next.png AquamacsHelp/next.png
+    file copy -force latex/prev_g.png AquamacsHelp/prev_g.png
+    file copy -force latex/prev.png AquamacsHelp/prev.png
+    file copy -force latex/up_g.png AquamacsHelp/up_g.png
+    file copy -force latex/up.png AquamacsHelp/up.png
+    puts "Icon files copied."
     file delete -force AquamacsHelp-bak 
     puts "Help files copied. Old AquamacsHelp folder removed."
 }

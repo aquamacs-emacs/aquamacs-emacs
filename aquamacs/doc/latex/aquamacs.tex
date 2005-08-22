@@ -64,33 +64,18 @@ pleasant surprise.
 
 \section{What's New in This Release}
 
-This is version 0.9.5b4 of Aquamacs, released August 20, 2005. Aquamacs 0.9.5b4 includes several bug fixes, optimizations, and improvements that will lead the way to a stable 0.9.5 release soon. 
+This is version 0.9.5 of Aquamacs, released August 25, 2005. Aquamacs 0.9.5 includes several bug fixes, optimizations, and improvements.
 
-\subsection{Version 0.9.5b4}
+\subsection{Interface/Usability Improvements}
+
 
 \begin{itemize}
-
 \item The application is now called Aquamacs Emacs.
+
+
 
 \item The menu of Recent Files will abbreviate long paths now.
 
-\item Page-wise scrolling is more reliable--that is, it is really page-wise and
-    you can always return to the same line. (Pager package)
-
-\item Better support for editing HTML: HTML-Helper-Mode is included.
-
-\item Emacs Speaks Statistics is included. (Minor glitches with toolbar and  info
-    files are known and will be addressed.)
-
-\item Auctex configuration now turns on abbrev-mode and flyspell-mode when
-    latex-mode is started (instead of toggling them).
-    (reported by Robert Sloan)
-
-\end{itemize}
-
-\subsection{Version 0.9.5b3}
-
-\begin{itemize}
 	
 \item Renamed ``Option key produces only special characters'' to ``Option key for
 	Meta (not for extra characters).''
@@ -113,35 +98,6 @@ This is version 0.9.5b4 of Aquamacs, released August 20, 2005. Aquamacs 0.9.5b4 
 	Oneonone package. This gets rid of quite a bit of doubly
 	implemented functionality.
 
-\item Help (Aquamacs Manual) has been revised.
-
-\item Known bug: Do not try to create a mode specific theme in latex-mode. It
-	may fail.
-
-\end{itemize}
-	
-\subsection{Version 0.9.5b2}
-
-\begin{itemize}
-
-\item Mode-specific themes revised: the full set of parameters coming from 
-	color themes is now supported, in addition to the font and toolbar setting.
-
-\item Menu item to delete the mode-specific theme for the current major mode.
-
-
-\item Option-up/down (if Option is meta) now scroll page-wise.
-	
-\item (Even) speedier startup.
-
-\item A number of bug-fixes.
-
-\end{itemize}
-
-  
-\subsection{Changes: 0.9.5b1}
-
-\begin{itemize}
 
 \item The customization variable aquamacs-auto-frame-parameters allows you to
 	turn off mode-specific themes---your frames stay the same, no
@@ -152,30 +108,72 @@ This is version 0.9.5b4 of Aquamacs, released August 20, 2005. Aquamacs 0.9.5b4 
 	themes''. 
 
 \item Many menu items are now greyed out (cannot be selected) when no frame is visible.
+
+\item Help (Aquamacs Manual) has been revised.
+
+
 	
-\item Font ``Bitstream Vera Sans'' works again.  	
+\item (Even) speedier startup.
+
+
 
 \item Every Aquamacs frame has a toolbar-button now. Use it to turn the
 	toolbar in the given frame on and off. 
 	
-\item Tool-bar can be turned off (per frame) again. Different defaults for majo modes are allowed.
+
 	
 \item Improvement when working with multiple frames: when no frame is visible,
 	Aquamacs no longer raises some other frame as soon as a file is
 	loaded.	
-	
-\item Speedbar works when one-buffer-one-frame (``Open Buffers in Separate
-	Frames'') is turned off. 
 
-\item Ispell did not work when one-buffer-one-frame was turned on.
-	(Reported by Robert Sloan)
+
+
+\item Mode-specific themes revised: the full set of parameters coming from 
+	color themes is now supported, in addition to the font and toolbar setting.
+
+\item Menu item to delete the mode-specific theme for the current major mode.
+
+
+\end{itemize}
+
+
+
+\subsection{Package Improvements}
+\begin{itemize}
+
+\item Better support for editing HTML: HTML-Helper-Mode is included.
+
+\item Emacs Speaks Statistics is included. (Minor glitches with toolbar and  info
+    files are known and will be addressed.)
+
+\item Auctex configuration now turns on abbrev-mode and flyspell-mode when
+    latex-mode is started (instead of toggling them).
+    (reported by Robert Sloan)
+
+\item Page-wise scrolling is more reliable--that is, it is really page-wise and
+    you can always return to the same line. (Pager package)
+\end{itemize}
+
+\subsection{Bug Fixes}
+
+
+\begin{itemize}
+
+
+\item Known bug: Do not try to create a mode specific theme in latex-mode. It
+	may fail.
+	
+\item Font ``Bitstream Vera Sans'' works again.  	
+
+
+\item Exiting view mode (e.g. help) with 'q' deletes the frame instead of
+	iconifying it.
+
+
 
 \item Startup with arguments -nw (tty / in terminal) revised.
 	
-\item In particular in TeX mode, Aquamacs tended to give audio signals all the
-	time when there were internal exceptions (internal errors signaled) with parsing the TeX code. Therefore, we do not ring the bell any more,
-	i.e. aquamacs-ring-bell-on-error-flag is nil by default.
-	(Reported by Ken Bloom and Andreas Hess)
+
 
 \item You can now redefine Aquamacs keys like this:
 
@@ -192,18 +190,22 @@ This is version 0.9.5b4 of Aquamacs, released August 20, 2005. Aquamacs 0.9.5b4 
 
 \item New frames will not open behind the Dock any more.
 
-\item Manual updated to 0.9.4 with changelog.
-	
-\item Startup is faster now due to an optimization in loading fonts 
-	(thanks: Yamamoto M.) and precompiling some .el files.
+
+\item An error message (harmless) when clicking on "Finish" in customize is gone.
 
 \item Error message during version check on startup removed (occurred in
 	certain cases where users had upgraded their system.)
 
-\item Exiting view mode (e.g. help) with 'q' deletes the frame instead of
-	iconifying it.
+\item In particular in TeX mode, Aquamacs tended to give audio signals all the
+	time when there were internal exceptions (internal errors signaled) with parsing the TeX code. Therefore, we do not ring the bell any more,
+	i.e. aquamacs-ring-bell-on-error-flag is nil by default.
+	(Reported by Ken Bloom and Andreas Hess)
+\item Speedbar works when one-buffer-one-frame (``Open Buffers in Separate
+	Frames'') is turned off. 
+\item Option-up/down (if Option is meta) now scrolls page-wise.
 
-\item An error message (harmless) when clicking on "Finish" in customize is gone.
+
+\item Other bug-fixes.
 
 \end{itemize}
 	
@@ -954,8 +956,6 @@ the modifier that is assigned to the Option key.
 \hline One Buffer One Frame\\
 \hline Smart Frame Positioning Enforce\\
 \hline Smart Frame Positioning Mode\\
-\hline 1on1 *Completions* Frame\\
-\hline 1on1 *Help* Frame\\
 \hline Mac Option Modifier\\
 \hline Mac Pass Option To System\\
 \hline Mac Control Modifier\\
