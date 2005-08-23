@@ -18,6 +18,10 @@ $key = q/tab:command/;
 $ref_files{$key} = "$dir".q|node30.html|; 
 $noresave{$key} = "$nosave";
 
+$key = q/Look/;
+$ref_files{$key} = "$dir".q|node32.html|; 
+$noresave{$key} = "$nosave";
+
 $key = q/tab:shortcuts/;
 $ref_files{$key} = "$dir".q|node30.html|; 
 $noresave{$key} = "$nosave";
@@ -26,12 +30,12 @@ $key = q/aquamacs-screenshot.jpg/;
 $ref_files{$key} = "$dir".q|node2.html|; 
 $noresave{$key} = "$nosave";
 
-$key = q/tab:terms/;
-$ref_files{$key} = "$dir".q|node21.html|; 
-$noresave{$key} = "$nosave";
-
 $key = q/theme.jpg/;
 $ref_files{$key} = "$dir".q|node32.html|; 
+$noresave{$key} = "$nosave";
+
+$key = q/tab:terms/;
+$ref_files{$key} = "$dir".q|node21.html|; 
 $noresave{$key} = "$nosave";
 
 1;
