@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-mode-defaults.el,v 1.3 2005/08/18 17:39:09 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-defaults.el,v 1.4 2005/08/26 08:26:25 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -27,10 +27,6 @@
 ;; Boston, MA 02111-1307, USA.
  
 ;; Copyright (C) 2005, David Reitter
-
-(defvar aq-resources-dir (concat
-			  (substring (car command-line-args) 0 -20)
-			  "Resources"))
 
 ;; load auctex if present 
 (ignore-errors (require 'auctex-config nil t))
@@ -72,44 +68,35 @@
 	 auto-mode-alist))
 
 
-(defvar ess-etc-directory (concat  aq-resources-dir
+(defvar ess-etc-directory (concat  (mac-resources-path)
 				  "/site-lisp/edit-modes/ess-mode/etc"
 				  ))
 (setenv "INFOPATH" 
 	(concat (getenv "INFOPATH") 
-		(concat ":" aq-resources-dir
+		(concat ":" (mac-resources-path)
 			"/site-lisp/edit-modes/info"
 			)
 		))
 
-(autoload 'html-helper-mode "html-helper-mode" "major mode for editing HTML source." t)
-(setq auto-mode-alist
-      (cons '("\\.html$" . html-helper-mode) auto-mode-alist)
-      )
+(autoload 'html-helper-mode "html-helper-mode" 
+  "major mode for editing HTML source." t)
+(assq-set-equal "\\.html$" 'html-helper-mode 'auto-mode-alist)
+(assq-set-equal "\\.shtml$" 'html-helper-mode 'auto-mode-alist)
+
 
 (autoload 'css-mode "css-mode" "major mode for editing CSS source." t)
-(setq auto-mode-alist
-      (cons '("\\.css$" . css-mode) auto-mode-alist)
-      ) 
+(assq-set-equal "\\.css$" 'css-mode 'auto-mode-alist)
 
-
-(autoload 'applescript-mode "applescript-mode" "major mode for editing AppleScript source." t)
-(setq auto-mode-alist
-      (cons '("\\.applescript$" . applescript-mode) auto-mode-alist)
-      )
- 
+(autoload 'applescript-mode "applescript-mode" 
+  "major mode for editing AppleScript source." t)
+(assq-set-equal "\\.applescript$" 'applescript-mode 'auto-mode-alist)
 
 (autoload 'php-mode "php-mode" "major mode for editing PHP source." t)
-(setq auto-mode-alist
-      (cons '("\\.php$" . php-mode) auto-mode-alist)
-      )
-
+(assq-set-equal "\\.php$" 'php-mode 'auto-mode-alist)
 
 
 (autoload 'ruby-mode "ruby-mode" "major mode for editing Ruby source." t)
-(setq auto-mode-alist
-      (cons '("\\.rb$" . ruby-mode) auto-mode-alist)
-      ) 
+(assq-set-equal "\\.rb$" 'ruby-mode 'auto-mode-alist) 
 ;; watch out - .rb is also used for realbasic
 ;; do we need to distinguish?
 ;; we don't have a REALBasic mode yet
@@ -118,12 +105,12 @@
 ;; ---------------------------------------------------------
 ;; PERL EDITING and other modes
 
-(autoload 'perl-mode "cperl-mode" "alternate mode for editing Perl programs" t)
-;(setq cperl-hairy t)
+(autoload 'perl-mode "cperl-mode" 
+  "alternate mode for editing Perl programs" t)
 (defalias 'perl-mode 'cperl-mode)
- (setq cperl-invalid-face nil) ;(uherbst)
+(setq cperl-invalid-face nil) ;(uherbst)
  
- (setq cperl-highlight-variables-indiscriminately t)
+(setq cperl-highlight-variables-indiscriminately t)
 
 
 (provide 'aquamacs-mode-defaults)
