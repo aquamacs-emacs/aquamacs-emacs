@@ -8,7 +8,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-frame-setup.el,v 1.11 2005/08/18 17:42:21 davidswelt Exp $
+;; Last change: $Id: aquamacs-frame-setup.el,v 1.12 2005/08/26 08:27:05 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -47,6 +47,36 @@
 ;(setq 1on1-default-special-frame-upper-left-corner '(180 . 140))
 ;(setq 1on1-default-special-frame-size '(400 . 600))
 
+;; for fringe:
+
+(set-default  'indicate-empty-lines t)
+(setq indicate-empty-lines t)
+ ;; Fringes
+(defun aquamacs-define-the-fringe-bitmap ()
+  "Redefines a fringe bitmap (continuation) so that it looks good
+even when minimal fringes are used. (Aquamacs)"
+  (let ((fm fringe-mode))
+    (fringe-mode 0) ;; turn off temporarily
+    (define-fringe-bitmap  'continuation-line
+      ;; a plus sign
+      [#B0011111111
+       #B0001111111
+       #B0000110011
+       #B0000011011
+       #B0000001111
+       #B0000000111
+       #B0000000011
+       #B0000000001])
+
+    (fringe-mode fm) ;; turn back on
+    )
+  )
+
+(aquamacs-define-the-fringe-bitmap)
+(setq fringe-mode '(1 . 1)) ;; to reflect the default.
+ 
+;; This is a hack because fringe-mode likes to round up stuff.
+
 ;; set default colors
 (aquamacs-set-defaults 
  '(
@@ -56,8 +86,10 @@
 ;( 1on1-*Completions*-frame-flag nil)
 
 (default-frame-alist 
-((foreground-color . "Black") (background-color . "White") (font . "fontset-monaco12")  (cursor-color . "Red")   (vertical-scroll-bars . right)  (tool-bar-lines . 1) (left-fringe . 0) (right-fringe . 0) (fringe . 0)))))
-  
+((foreground-color . "Black") (background-color . "White") (font . "fontset-monaco12")  (cursor-color . "Red")   (vertical-scroll-bars . right)  (tool-bar-lines . 1) (left-fringe . 1) (right-fringe . nil) (fringe . nil)))))
+
+ 
+ 
 ; (setq autofit-frames-flag nil)
  ;(setq 1on1-minibuffer-frame-flag nil) ;; this is a defvar
 
