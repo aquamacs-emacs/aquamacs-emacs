@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.3 2005/08/18 21:51:23 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.4 2005/08/26 08:25:16 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -39,6 +39,7 @@
 
 (defun aquamacs-setup ()
 
+  (aquamacs-mac-initialize) ;; call at runtime only
        
   (require 'aquamacs-tools)
 
@@ -197,11 +198,11 @@ Separate paths from file names with --."
 
   (require 'pager)
   ;; overwrites CUA stuff
-  (global-set-key [remap scroll-down]	      'pager-page-down)
+  (global-set-key [remap scroll-up]	      'pager-page-down)
   (global-set-key [remap cua-scroll-up]	      'pager-page-down)
   (global-set-key [next] 	      'pager-page-down)
   (global-set-key [\M-up]	      'pager-page-up)
-  (global-set-key [remap scroll-up]	      'pager-page-up) 
+  (global-set-key [remap scroll-down]	      'pager-page-up) 
   (global-set-key [remap cua-scroll-down]	      'pager-page-up)
   (global-set-key [prior]	      'pager-page-up)
   (global-set-key [C-up]        'pager-row-up)
@@ -340,57 +341,6 @@ Use this argument instead of explicitly setting `view-exit-action'."
   ;;    )
   ;; )
  
-					; this is initialized to the current version 
-					; it'll be overwritten by whatever is in the customization file
-  (defvar aquamacs-customization-version-id 0)
-  ;; the following ensures that it gets saved
-  ;; as customized variable.
-  (customize-set-variable 'aquamacs-customization-version-id 
-			  aquamacs-customization-version-id)
-
-  (defun menu-bar-options-save ()
-    "Save current values of Options menu items using Custom."
-    (interactive)
-    (let ((need-save nil))
-      (setq aquamacs-customization-version-id aquamacs-version-id)
-      ;; These are set with menu-bar-make-mm-toggle, which does not
-      ;; put on a customized-value property.
-      (dolist (elt '(line-number-mode column-number-mode cua-mode show-paren-mode
-				      transient-mark-mode global-font-lock-mode
-				      ))
-	(and (customize-mark-to-save elt)
-	     (setq need-save t))) 
-      ;; 
-      ;; These are set with `customize-set-variable'.
-      (dolist (elt '(scroll-bar-mode
-		     debug-on-quit debug-on-error menu-bar-mode
-		     save-place uniquify-buffer-name-style fringe-mode
-		     fringe-indicators case-fold-search
-		     display-time-mode auto-compression-mode
-		     current-language-environment default-input-method
-		     ;; Saving `text-mode-hook' is somewhat questionable,
-		     ;; as we might get more than we bargain for, if
-		     ;; other code may has added hooks as well.
-		     ;; Nonetheless, not saving it would like be confuse
-		     ;; more often.
-		     ;; -- Per Abrahamsen <abraham@dina.kvl.dk> 2002-02-11.
-		     text-mode-hook
-
-		     blink-cursor-mode
-		     ;; added dr. 04/2005
-		     one-buffer-one-frame 
-		     mac-pass-option-to-system
-		     aquamacs-auto-frame-parameters-flag
-		     aquamacs-mode-specific-default-themes 
-		     aquamacs-customization-version-id
-		     ))
-	(and (get elt 'customized-value) 
-	     (customize-mark-to-save elt)
-	     (setq need-save t)))
-      ;; Save if we changed anything.
-      (when need-save
-	(custom-save-all))))
-
   ;; mode-specific font settings
   (require 'aquamacs-mode-specific-themes)
   (aquamacs-mode-specific-themes-setup)
@@ -445,21 +395,26 @@ Use this argument instead of explicitly setting `view-exit-action'."
 	(assq-set 'font "fontset-monaco12" 'special-display-frame-alist))
     )
 
-					; automatic positioning please  
-					; for normal windows
-					; for special windows, the user can set and save things
-					; also, we don't want the initial frame to move around
+  ;; automatic positioning please  
+  ;; for normal windows
+  ;; for special windows, the user can set and save things
+  ;; also, we don't want the initial frame to move around
   (setq default-frame-alist (assq-delete-all 'top default-frame-alist))
   (setq default-frame-alist (assq-delete-all 'left default-frame-alist)) 
   (setq default-frame-alist (assq-delete-all 'width default-frame-alist))
   (setq default-frame-alist (assq-delete-all 'height default-frame-alist))
-					; sensible defaults for the position of the special windows
-					; (in case user turns them off)
+  ;; sensible defaults for the position of the special windows
+  ;; (in case user turns them off)
   (assq-set 'top 30 'special-display-frame-alist)
   (assq-set 'left '(- 0) 'special-display-frame-alist)
   (assq-set 'height 30 'special-display-frame-alist)
   (assq-set 'width 75 'special-display-frame-alist)
   (assq-set 'user-position nil 'special-display-frame-alist)
+
+
+ 
+
+
 
 					; and turn on smart frame positioning
 
@@ -472,6 +427,8 @@ Use this argument instead of explicitly setting `view-exit-action'."
    )
 
   (smart-frame-positioning-mode t) ;; and turn on!
+
+  
 
   ;; make sure there are no old customizations around
   ;; N.B.: if no customization file is present, 
@@ -528,7 +485,10 @@ Use this argument instead of explicitly setting `view-exit-action'."
 			   (help-mode (tool-bar-lines . 0) (fit-frame . t)) 
 			   (fundamental-mode (tool-bar-lines . 0))
 			   (custom-mode (tool-bar-lines . 0) (fit-frame . t)))))))
-    )
+(if (< aquamacs-customization-version-id 095.5)
+	  ;; should we go through all themes
+    ;; and set the fringes? maybe not.
+)    )
 
   (require 'one-buffer-one-frame)
  
@@ -631,6 +591,8 @@ Use this argument instead of explicitly setting `view-exit-action'."
      (show-paren-mode t)
      (blink-cursor-mode t)
      (cursor-type (bar . 2))
+     ;; on modern systems, loading files doesn't take so long any more.
+     (large-file-warning-threshold 20000000)
      )
    ) 
    
@@ -645,6 +607,12 @@ Use this argument instead of explicitly setting `view-exit-action'."
 
   (set-default 'cursor-type '(bar . 2))
 
+
+  ;;; for initial buffer
+;;; for some reason
+(add-hook 'after-init-hook (lambda ()
+			     (setq buffer-offer-save t)
+			     ))
      
   ;; Define customization group
 
@@ -653,8 +621,6 @@ Use this argument instead of explicitly setting `view-exit-action'."
       (aquamacs-mode-specific-default-themes custom-variable)
       (smart-frame-positioning-enforce custom-variable)
       (smart-frame-positioning-mode custom-variable)
-      (1on1-*Completions*-frame-flag custom-variable)
-      (1on1-*Help*-frame-flag custom-variable)
       (mac-option-modifier  custom-variable)
       (mac-pass-option-to-system  custom-variable)
       (mac-control-modifier  custom-variable)
@@ -666,6 +632,66 @@ Use this argument instead of explicitly setting `view-exit-action'."
     :group 'emacs
     )
  
+
+;; ensure that Save Options saves all of our fancy new options
+;; TO DO:
+;; now that variable setting has been revised
+;; we should review whether this is still necessary.
+
+  ;; this is initialized to the current version 
+  ;; it'll be overwritten by whatever is in the customization file
+  (defvar aquamacs-customization-version-id 0)
+  ;; the following ensures that it gets saved
+  ;; as customized variable.
+  (customize-set-variable 'aquamacs-customization-version-id 
+			  aquamacs-customization-version-id)
+
+  (defun menu-bar-options-save ()
+    "Save current values of Options menu items using Custom."
+    (interactive)
+    (let ((need-save nil))
+      (setq aquamacs-customization-version-id aquamacs-version-id)
+      ;; These are set with menu-bar-make-mm-toggle, which does not
+      ;; put on a customized-value property.
+      (dolist (elt '(line-number-mode column-number-mode cua-mode show-paren-mode
+				      transient-mark-mode global-font-lock-mode
+				      ))
+	(and (customize-mark-to-save elt)
+	     (setq need-save t))) 
+      ;; 
+      ;; These are set with `customize-set-variable'.
+      (dolist (elt '(scroll-bar-mode
+		     debug-on-quit debug-on-error menu-bar-mode
+		     save-place uniquify-buffer-name-style fringe-mode
+		     fringe-indicators case-fold-search
+		     display-time-mode auto-compression-mode
+		     current-language-environment default-input-method
+		     ;; Saving `text-mode-hook' is somewhat questionable,
+		     ;; as we might get more than we bargain for, if
+		     ;; other code may has added hooks as well.
+		     ;; Nonetheless, not saving it would like be confuse
+		     ;; more often.
+		     ;; -- Per Abrahamsen <abraham@dina.kvl.dk> 2002-02-11.
+		     text-mode-hook
+
+		     blink-cursor-mode
+		     ;; added dr. 04/2005
+		     one-buffer-one-frame 
+		     mac-pass-option-to-system
+		     aquamacs-auto-frame-parameters-flag
+		     aquamacs-mode-specific-default-themes 
+		     aquamacs-customization-version-id
+		     ))
+	(and (get elt 'customized-value) 
+	     (customize-mark-to-save elt)
+	     (setq need-save t)))
+      ;; Save if we changed anything.
+      (when need-save
+	(custom-save-all))))
+
+
+
+
   ;; workaround for people who still call this in their .emacs
   (defun mwheel-install ()
     (princ "mwheel-install ignored in Aquamacs- mouse wheel support is present by default.\n")
@@ -697,9 +723,13 @@ Use this argument instead of explicitly setting `view-exit-action'."
 
   (require 'check-for-updates)
 					; via hook so it can be turned off
-  (add-hook 'after-init-hook 'aquamacs-check-for-updates-if-necessary 'append)
+  (add-hook 'after-init-hook 'aquamacs-check-for-updates-if-necessary 'append) 
 
   ) ;; aquamacs-setup
 
 
 (provide 'aquamacs)
+
+
+
+
