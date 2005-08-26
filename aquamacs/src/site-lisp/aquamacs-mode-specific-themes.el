@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.11 2005/08/01 22:18:33 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.12 2005/08/26 08:25:59 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -462,19 +462,19 @@ for the current major mode. To turn off this behavior, see
     :group 'Aquamacs
     )
 
-  (defcustom aquamacs-mode-specific-default-themes
-    (filter-fonts '((help-mode (tool-bar-lines . 0) (fit-frame . t))
-		    (text-mode  (font . "fontset-lucida13")) 
-		    (change-log-mode  (font . "fontset-lucida13"))
-		    (tex-mode  (font . "fontset-lucida13"))
-		    (outline-mode  (font . "fontset-lucida13"))
-		    (paragraph-indent-text-mode  (font . "fontset-lucida13"))
-		    (speedbar-mode (minibuffer-auto-raise . nil))
-		    (fundamental-mode (tool-bar-lines . 0))
-		    (custom-mode (tool-bar-lines . 0) (fit-frame . t) 
-				 (background-color . "light goldenrod"))
-		    ))
-    "Association list to set mode-specific themes. Each element 
+(defcustom aquamacs-mode-specific-default-themes
+  (filter-fonts '((help-mode (tool-bar-lines . 0) (fit-frame . t))
+		  (text-mode  (font . "fontset-lucida13")) 
+		  (change-log-mode  (font . "fontset-lucida13"))
+		  (tex-mode  (font . "fontset-lucida13"))
+		  (outline-mode  (font . "fontset-lucida13"))
+		  (paragraph-indent-text-mode  (font . "fontset-lucida13"))
+		  (speedbar-mode (minibuffer-auto-raise . nil))
+		  (fundamental-mode (tool-bar-lines . 0))
+		  (custom-mode (tool-bar-lines . 0) (fit-frame . t) 
+			       (background-color . "light goldenrod"))
+		  ))
+  "Association list to set mode-specific themes. Each element 
 is a list of elements of the form (mode-name theme), where
 THEME is an association list giving frame parameters as
 in default-frame-alist or (frame-parameters). The parameters are set
@@ -486,15 +486,15 @@ overruled by a setting in this list if there is an entry
 for the current major mode. To turn off this behavior, see
 ``aquamacs-auto-frame-parameters-flag''.
 "
-    :type '(repeat (cons :format "%v"
-			 (symbol :tag "Mode-name")
-			 (repeat (cons :format "%v"
-				       (symbol :tag "Frame-Parameter")
-				       (sexp :tag "Value")))))
-    :group 'Aquamacs
-    )
+  :type '(repeat (cons :format "%v"
+		       (symbol :tag "Mode-name")
+		       (repeat (cons :format "%v"
+				     (symbol :tag "Frame-Parameter")
+				     (sexp :tag "Value")))))
+  :group 'Aquamacs
+  )
 
-  (defcustom aquamacs-auto-frame-parameters-flag t
+(defcustom aquamacs-auto-frame-parameters-flag t
     "When non-nil, frames are automatically
 parametrized when a major mode is changed. 
 Parameters in ``default-frame-alist'' and 
@@ -505,11 +505,27 @@ if there is an entry for the current major mode."
     :group 'Aquamacs
     )
 
-  (add-hook 'after-init-hook 'filter-missing-fonts t) 
+(defadvice mouse-set-font
+  (after show-font-warning () activate)
+  "The frame font is set for the current frame only if 
+`aquamacs-auto-frame-parameters-flag' is non-nil. Otherwise,
+the frame font is set as a default in `default-frame-alist'."
 
-  (add-hook 'after-init-hook
-	    'make-help-mode-use-frame-fitting
-	    'append) ;; move to the end: after loading customizations
+  (if aquamacs-auto-frame-parameters-flag
+      (message "Font set for current frame only. Use functions in 
+Frame Appearance Themes to make the setting stick.")
+    (progn
+      (modify-all-frames-parameters `((font . ,(frame-parameter nil 'font))))
+      (message "Font set for this and all future frames.")
+      )
+    )
+  )
+
+(add-hook 'after-init-hook 'filter-missing-fonts t) 
+
+(add-hook 'after-init-hook
+	  'make-help-mode-use-frame-fitting
+	  'append) ;; move to the end: after loading customizations
 	
 	
   (add-hook 'after-change-major-mode-hook	
@@ -519,6 +535,7 @@ if there is an entry for the current major mode."
   (define-key-after aquamacs-frame-theme-menu [menu-delete-one-theme]
     '(menu-item (format "Remove theme for %s" (or (aquamacs-updated-major-mode) "current mode"))   aquamacs-delete-one-mode-specific-theme 
 		:enable (and aquamacs-auto-frame-parameters-flag
+			     (aquamacs-updated-is-visible-frame-p)
 			     (assq (aquamacs-updated-major-mode) 
 				   aquamacs-mode-specific-default-themes))
 		:help "Removes a mode-specific theme."))
@@ -612,6 +629,8 @@ for all frames with the current major-mode."
 
 
   )
+
+
 
 (defun aquamacs-color-theme-select ()
   (interactive) 
