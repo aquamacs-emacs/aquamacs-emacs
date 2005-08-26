@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.18 2005/08/20 09:46:43 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.19 2005/08/26 08:31:41 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -30,6 +30,25 @@
  
 ;; Copyright (C) 2005, David Reitter
 
+;; The following   need to be loaded at runtime. 
+
+
+(defun aquamacs-mac-initialize  ()
+
+  (defvar aquamacs-mac-application-bundle-directory
+    (if (and (boundp 'load-file-name) load-file-name)
+	(replace-regexp-in-string 
+	 "/Contents/Resources/site-lisp" "" 
+	 (directory-file-name (file-name-directory
+			       (file-truename load-file-name))))
+      "/Applications/Aquamacs Emacs.app")) ;; default
+  )
+
+
+(defun mac-resources-path ()
+       (concat
+	aquamacs-mac-application-bundle-directory
+	"/Contents/Resources/"))
 
 
 
@@ -206,8 +225,11 @@ end tell"
       ;; user's default shell (whatever that is - probably bash as well)
       ;; so it should get all the environment variables.
       (setq default-directory "~/")	; ensure it can be executed
-      (shell-command "/bin/bash -l -c printenv" t)
-
+      ;; To Do: use call-process instead -> this here
+      ;; will invoke two bashes
+      (let ((shell-file-name "/bin/bash"))
+	(shell-command "/bin/bash -l -c printenv" t)
+	)
 	   ; the following is elegant, but insecure
 	   ; (query-replace-regexp "^\\([A-Za-z_0-9]+\\)=\\(.*\\)$" 
            ;   "(setenv \"\\1\" \"\\2\")")
@@ -234,25 +256,38 @@ end tell"
   (if (not (get-buffer name))
       name
     (setq n (if n (+ n 1) 2))
-    (setq new-name (concat name " " (int-to-string n)))
-    (if (not (get-buffer new-name))
-	new-name
-      (mac-new-buffer-name name n)
-      )
+    (let ((new-name (concat name " " (int-to-string n))))
+      (if (not (get-buffer new-name))
+	  new-name
+	(mac-new-buffer-name name n)
+	))
     )
-)
-
-
-
+  ) 
+(defun aq-run-python-command (cmd)
+  (let ((f (make-temp-file "emacs-command")))
+    	(let ((coding-system-for-write 'no-conversion))
+	  (write-region 
+	   cmd nil f nil 'shut-up))
+	  (let ((ret (call-process "/usr/bin/python" f)))
+	    (if  (equal ret 0)  
+		nil
+	      (message "aq-run-python-command - Error")
+	      ;; call again to produce error output
+	      (call-process "/usr/bin/python" f t)
+	      ret))
+	  (ignore-errors (delete-file (car f)))))
 
 ;; register the help manuals
 (defun aquamacs-init-user-help ()
   (if (condition-case nil 
-	  (file-exists-p (car command-line-args)) 
+	  (file-exists-p aquamacs-mac-application-bundle-directory) 
 	(error nil))
-      (shell-command (concat "python -c \"from Carbon import AH; AH.AHRegisterHelpBook('" (substring (car command-line-args) 0 -30) "')\" >/dev/null 2>/dev/null") t t) 
+      (aq-run-python-command
+       (concat "from Carbon import AH; AH.AHRegisterHelpBook('" 
+		 aquamacs-mac-application-bundle-directory "')"))
     ; else
-    (message "Aquamacs Emacs.app has been moved or renamed. Please restart Aquamacs!")
+    (message "Could not register Manual.
+Aquamacs Emacs.app may have been moved or renamed. Please restart Aquamacs!")
   )
 )
 
@@ -262,8 +297,9 @@ end tell"
   (interactive)
 
   (aquamacs-init-user-help) ; make sure it's registered
- 
-  (or (shell-command "python -c \"from Carbon import AH; AH.AHGotoPage('Aquamacs Help', None, None)\"  >/dev/null 2>/dev/null" t t)
+  
+  (and (aq-run-python-command
+   "from Carbon import AH; AH.AHGotoPage('Aquamacs Help', None, None)")
       (message "Sorry, help function unavailable (python, OS problem?)")
   )
 )
@@ -272,10 +308,43 @@ end tell"
 
   (aquamacs-init-user-help) ; make sure it's registered
  
-  (or (shell-command "python -c \"from Carbon import AH; AH.AHGotoPage('Emacs Manual', None, None)\"  >/dev/null 2>/dev/null" t t)
+  (and (aq-run-python-command
+   "from Carbon import AH; AH.AHGotoPage('Emacs Manual', None, None)")
+      (message "Sorry, help function unavailable (python, OS problem?)")
+  )
+)
+  
+
+;; it's imporant to make sure that the following are in the Info.plist file:
+;; 	<key>CFBundleHelpBookFolder</key>
+;; 	 <array>
+;; 	   <string>Aquamacs Help</string>
+;; 	   <string>Emacs Manual</string>
+;; 	</array>
+;; 	 <key>CFBundleHelpBookName</key>
+;; 	 <array>
+;; 	   <string>Aquamacs Help</string>
+;; 	   <string>Emacs Manual</string>
+;; 	</array>
+;; it is vital that the folder name ("Aquamacs Help") is the same as
+;; given above, and that it is also in a META tag in the help file.
+;; spelling of the META tag (upper case) might be important.
+
+; Call up help book
+ 
+(defun aquamacs-show-change-log ()
+  (interactive)
+
+  (aquamacs-init-user-help) ; make sure it's registered
+
+
+  (and (aq-run-python-command
+   "from Carbon import AH; AH.AHGotoPage('Aquamacs Help', 'node3.html', None)")
       (message "Sorry, help function unavailable (python, OS problem?)")
   )
 )
  
+ 
+
 (provide 'mac-extra-functions)
 
