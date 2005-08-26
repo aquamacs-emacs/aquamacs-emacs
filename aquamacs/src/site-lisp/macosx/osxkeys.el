@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.11 2005/07/21 09:42:09 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.12 2005/08/26 08:30:55 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -169,7 +169,7 @@ default."
     (define-key map `[(,osxkeys-command-key w)] 'close-current-window-asktosave)
     (define-key map `[(,osxkeys-command-key m)] 'iconify-or-deiconify-frame) 
     (define-key map `[(,osxkeys-command-key .)] 'keyboard-quit)
-    (define-key map `[(,osxkeys-command-key \e)] 'keyboard-escape-quit)
+    (define-key map `[(,osxkeys-command-key escape)] 'keyboard-escape-quit)
     (define-key map `[(,osxkeys-command-key up)] 'beginning-of-buffer)
     (define-key map `[(,osxkeys-command-key down)] 'end-of-buffer)
     (define-key map `[(,osxkeys-command-key left)] 'beginning-of-line)
@@ -177,13 +177,15 @@ default."
     (define-key map `[(,osxkeys-command-key backspace)] 'kill-whole-line)
     (define-key map `[(meta up)] 'cua-scroll-down)
     (define-key map `[(meta down)] 'cua-scroll-up)
+    
+    (define-key map `[(,osxkeys-command-key \;)] 'toggle-pass-option-to-system)
 
     (define-key map [(home)] 'beginning-of-buffer)
     (define-key map [(end)] 'end-of-buffer)
 
     (define-key map `[(control ,osxkeys-command-key q)] 'kill-emacs)
     (define-key map `[(,osxkeys-command-key q)] 'save-buffers-kill-emacs)
-;    (define-key map `[(,osxkeys-command-key ",")] 'customize)
+    (define-key map (vector (list osxkeys-command-key '\,) ) 'customize)
 
     (define-key map `[(,osxkeys-command-key z)] 'undo)
     (define-key map `[(,osxkeys-command-key shift z)] 'redo)
