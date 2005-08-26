@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.15 2005/08/20 09:46:24 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.16 2005/08/26 08:32:07 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -275,7 +275,7 @@
 ;; must use the menu-item syntax here because longlines-mode
 ;; is a buffer-local variable
 (define-key-after menu-bar-options-menu [longlines-on]
-  '(menu-item "Soft word wrap in this Buffer"
+  '(menu-item "Soft Word Wrap in this Buffer"
 	      longlines-mode
 	      :help "Wrap long lines without inserting carriage returns"
 	      :enable (aquamacs-updated-is-visible-frame-p)
@@ -295,37 +295,40 @@
 
 
 (if (string= "mac" window-system)
-(define-key-after menu-bar-options-menu [oneonone]
-  (menu-bar-make-toggle toggle-oneonone one-buffer-one-frame
-			"Display Buffers in Separate Frames"
-			"Display Buffers in Separate Frames: %s"
-			"Open a new Frame (window) for each new buffer."
-			(require 'aquamacs-frame-setup)
+    (define-key-after menu-bar-options-menu [oneonone]
+      (menu-bar-make-toggle 
+       toggle-oneonone one-buffer-one-frame
+       "Display Buffers in Separate Frames"
+       "Display Buffers in Separate Frames: %s"
+       "Open a new Frame (window) for each new buffer."
+       (require 'aquamacs-frame-setup)
 		 
-		        (setq one-buffer-one-frame
-			      (not one-buffer-one-frame))
-			) 'edit-options-separator)
-)
+       (setq one-buffer-one-frame
+	     (not one-buffer-one-frame))
+       ) 'edit-options-separator)
+  )
 
 (if (boundp 'mac-pass-option-to-system) 
     (define-key-after menu-bar-options-menu [option-to-system]
-      (menu-bar-make-toggle toggle-pass-option-to-system mac-pass-option-to-system
-			    (format "Option key for %s (not for extra characters)" 
-				    (upcase-initials (symbol-name (or mac-option-modifier 'meta))))
-			    "Do not pass Option key to system to produce extra characters: %s"
-			    "Let Option key behave as Emacs key, do not let it produce special characters 
+      (menu-bar-make-toggle 
+       toggle-pass-option-to-system mac-pass-option-to-system
+       (format "Option Key for %s (not extra characters)  %s;" 
+	       (upcase-initials (symbol-name (or mac-option-modifier 'meta)))
+	       apple-char)
+       "Do not pass Option key to system to produce extra characters: %s"
+       "Let Option key behave as Emacs key, do not let it produce special characters 
 (passing the key to the system),"
 			    
-			    (not (setq mac-pass-option-to-system
+       (not (setq mac-pass-option-to-system
 				       (not mac-pass-option-to-system)))
 			
-			    ) 'edit-options-separator)
+       ) 'edit-options-separator)
 
   )
 
  ;; this is a redefine
 (define-key menu-bar-options-menu [mouse-set-font]
-  '(menu-item "Set Font..." mouse-set-font
+  '(menu-item "Set Font for this Frame..." mouse-set-font
 	       :visible (display-multi-font-p)
 	       :enable (aquamacs-updated-is-visible-frame-p) 
 	       :help "Select a font from list of known fonts/fontsets"))
@@ -351,7 +354,7 @@
 ;   :enable (aquamacs-updated-is-visible-frame-p) ] 'mouse-set-font)
 
 (define-key-after menu-bar-options-menu [aquamacs-color-theme-select]
-  '(menu-item "Set Color Theme..." aquamacs-color-theme-select
+  '(menu-item "Set Color Theme for this Frame..." aquamacs-color-theme-select
 	       :visible (and (display-multi-font-p)
 			     (fboundp 'aquamacs-color-theme-select)
 			     )
@@ -359,9 +362,35 @@
 	       :help "Select a color theme from a list")
   'mouse-set-font)
 
+;; Small Fringe
+
+(defun aquamacs-menu-bar-showhide-fringe-menu-customize-small ()
+  "Display small fringes only on the left of each window."
+  (interactive)
+  (require 'fringe) 
+
+  ;; Unfortunately, fringe-mode likes to round up fringes.
+  ;; Therefore, we set both to 1.
+  (customize-set-variable 'fringes-outside-margins 1)
+  (customize-set-variable 'left-fringe-width 1)
+  (customize-set-variable 'left-margin-width 1)
+
+  (setq default-fringes-outside-margins 1)
+  (setq default-left-fringe-width 3)
+  (setq default-left-margin-width 0)
+  (aquamacs-define-the-fringe-bitmap) ;; redefine 
+  (customize-set-variable 'fringe-mode '(1 . 1))
+  ) 
 
 
+ 
+(define-key-after menu-bar-showhide-fringe-menu [small]
+  '(menu-item "Small left fringe" aquamacs-menu-bar-showhide-fringe-menu-customize-small
+	      :help "Narrow fringe, left only"
+	      :visible (display-graphic-p)
+	      :button (:radio . (equal fringe-mode '(1 . 1)))) 'none)
 
+ 
 ;; local toolbars
 
 (defun tool-bar-enabled-p (&optional frame)
@@ -421,62 +450,7 @@ to the selected frame."
 ; for Aquamacs users
 (easy-menu-remove-item global-map  '("menu-bar" "Help") 'emacs-problems)
  
- 
-;; register the help manuals
-(defun init-user-help ()
-  (if (condition-case nil 
-	  (file-exists-p (car command-line-args)) 
-	(error nil))
-      (shell-command (concat "python -c \"from Carbon import AH; AH.AHRegisterHelpBook('" (substring (car command-line-args) 0 -21) "')\" >/dev/null 2>/dev/null") t t) 
-    ; else
-    (message "Emacs.app has been moved or renamed. Please restart Emacs!")
-  )
-)
-
-;; it's imporant to make sure that the following are in the Info.plist file:
-;; 	<key>CFBundleHelpBookFolder</key>
-;; 	 <array>
-;; 	   <string>Aquamacs Help</string>
-;; 	   <string>Emacs Manual</string>
-;; 	</array>
-;; 	 <key>CFBundleHelpBookName</key>
-;; 	 <array>
-;; 	   <string>Aquamacs Help</string>
-;; 	   <string>Emacs Manual</string>
-;; 	</array>
-;; it is vital that the folder name ("Aquamacs Help") is the same as
-;; given above, and that it is also in a META tag in the help file.
-;; spelling of the META tag (upper case) might be important.
-
-; Call up help book
-(defun aquamacs-user-help ()
-  (interactive)
-
-  (init-user-help) ; make sure it's registered
- 
-  (or (shell-command "python -c \"from Carbon import AH; AH.AHGotoPage('Aquamacs Help', None, None)\"  >/dev/null 2>/dev/null" t t)
-      (message "Sorry, help function unavailable (python, OS problem?)")
-  )
-)
-(defun aquamacs-show-change-log ()
-  (interactive)
-
-  (init-user-help) ; make sure it's registered
-  (or (shell-command "python -c \"from Carbon import AH; AH.AHGotoPage('Aquamacs Help', 'node3.html', None)\"  >/dev/null 2>/dev/null" t t)
-      (message "Sorry, help function unavailable (python, OS problem?)")
-  )
-)
-
-
-(defun aquamacs-emacs-manual ()
-  (interactive)
-
-  (init-user-help) ; make sure it's registered
- 
-  (or (shell-command "python -c \"from Carbon import AH; AH.AHGotoPage('Emacs Manual', None, None)\"  >/dev/null 2>/dev/null" t t)
-      (message "Sorry, help function unavailable (python, OS problem?)")
-  )
-)
+     
  
  (defun aquamacs-user-wiki ()
   (interactive)
