@@ -14,13 +14,13 @@
 
 
 
-\section{Emacs: The Aquamacs Distribution}
+\section{Aquamacs Emacs - a User-friendly Emacs Distribution}
 
 Aquamacs is an freely-available Aqua-native build of the powerful Emacs text editor (\url{http://www.gnu.org/software/emacs/emacs.html}). By ``Aqua-native,'' we mean more than just the fact that this version of Emacs runs as a standard OS X application. Aquamacs features extensive customization that enables it to conform better with Apple's standard Human Interface Guidelines (HIG) than standard versions of the editor do. 
 
 Emacs is a text editor of legendary power and configurability, but it also has an enormously complex interface that, while consistent across platforms, is usually at odds with the specific interface conventions of the particular platform on which it is being used. The official OS X version of Emacs, called Carbon Emacs, is no different. 
 
-The Aquamacs distribution implements the standard OS X keyboard
+Aquamacs Emacs implements the standard OS X keyboard
 shortcuts and other interface conventions, integrating Emacs into the
 Aqua environment to a far greater degree than other versions of
 Emacs. This allows Mac users who might be unfamiliar with Emacs'
@@ -64,7 +64,7 @@ pleasant surprise.
 
 \section{What's New in This Release}
 
-This is version 0.9.5 of Aquamacs, released August 25, 2005. Aquamacs 0.9.5 includes several bug fixes, optimizations, and improvements.
+This is version 0.9.5 of Aquamacs, released August 29, 2005. Aquamacs 0.9.5 includes several bug fixes, optimizations, and many improvements.
 
 \subsection{Interface/Usability Improvements---0.9.5}
 
@@ -85,11 +85,22 @@ This is version 0.9.5 of Aquamacs, released August 25, 2005. Aquamacs 0.9.5 incl
 
 \item Files saved with Aquamacs have a nice file icon now.
 
+\item Text is now nicely shown a little to the right in windows. In
+	the left "fringe", you can see small dots indicating the end of
+	the buffer, and a small triangle indicating continued lines. If
+	you can't see them, your Frame / default theme overwrites
+	it. Select "Options / Frame Appearance Themes / Reset all themes"
+	to make the fringes appear.
+
 \item The "frame appearance themes" system has been revised. *Messages* now has
 	a distinctive colored background. To change this background (or
 	the one for *Help* buffers), customize the variable 
 	`aquamacs-buffer-specific-frame-themes'. Also, you can turn Frame Appearance Themes on and off with a menu
-	item.  (Also: fixes for issues introduced in the last beta.)
+	item.  
+
+\item Setting the frame font gives a warning now (that the font
+	is only set for the current frame), or sets it as default if Frame
+	Appearance Themes are off.
 
 \item Frame-related functions from File menu are now in Buffers menu.
 
@@ -98,6 +109,10 @@ This is version 0.9.5 of Aquamacs, released August 25, 2005. Aquamacs 0.9.5 incl
 	Oneonone package. This gets rid of quite a bit of doubly
 	implemented functionality.
 
+\item You can switch the Option key from its Emacs-specific
+	Meta meaning to its Mac typical use (composing keys such as \"{u}
+	 (Engl. keyboard) or the backslash (German keyboard) by typing Apple-; -- this
+	is equivalent to the Options menu entry ``Option key for Meta".
 
 \item The customization variable aquamacs-auto-frame-parameters allows you to
 	turn off mode-specific themes---your frames stay the same, no
@@ -138,7 +153,7 @@ This is version 0.9.5 of Aquamacs, released August 25, 2005. Aquamacs 0.9.5 incl
 
 
 
-\subsection{Package Improvements---0.9.5}
+\subsection{New and Updated Major Modes---0.9.5}
 \begin{itemize}
 
 \item Better support for editing HTML: HTML-Helper-Mode is included.
@@ -160,16 +175,16 @@ This is version 0.9.5 of Aquamacs, released August 25, 2005. Aquamacs 0.9.5 incl
 \begin{itemize}
 
 
-\item Known bug: Do not try to create a mode specific theme in latex-mode. It
-	may fail.
-	
+
 \item Font ``Bitstream Vera Sans'' works again.  	
 
 
 \item Exiting view mode (e.g. help) with 'q' deletes the frame instead of
 	iconifying it.
 
-
+\item The (Apple Help) manuals work now on systems where tcsh
+	is the default shell.  (Reported by Arthur Ogus)
+	
 
 \item Startup with arguments -nw (tty / in terminal) revised.
 	
@@ -363,7 +378,7 @@ This is version 0.9.5 of Aquamacs, released August 25, 2005. Aquamacs 0.9.5 incl
 \item The menu shortcut entries were corrected.
 
 \item Characters that require the use of the option key work again. For
-    example, Alt-3 produces the pound sign (å£) on a US keyboard,
+    example, Alt-3 produces the pound sign (£) on a US keyboard,
     Alt-L the `at' sign @ and Alt-Shift-7 the backslash \ on a
     German one. Inputting the Euro sign works, too. \textit{However, that means that the option key is not used to emulate
     the `meta' modifier;  you will have to use Esc to do that.}
@@ -384,7 +399,7 @@ This is version 0.9.5 of Aquamacs, released August 25, 2005. Aquamacs 0.9.5 incl
 
 \begin{itemize} 
 
-\item We have moved Aquamacs to \url{http://www.aquamacs.org}.
+\item We have moved Aquamacs to \url{http://aquamacs.org}.
 
 \item The Aquamacs wiki is now at \url{http://www.emacswiki.org/cgi-bin/wiki/AquamacsEmacs/}.
 
@@ -744,6 +759,35 @@ saved by default. For more information on fonts, please see Section \ref{Look}.
 
 If you want to delve deeply into customizing Aquamacs, select ``Customize Emacs:Top-Level Customization Group'' in the Options menu. A new frame titled ``Customize Group: Emacs'' will open. Scroll down and find the ``Aquamacs Group'' listing, and push the ``Go to Group'' button. This will open a new frame with all of the configuration options for Emacs---deep-level customization that can be implemented by Aquamacs power users in the Emacs scripting language, elisp---and each option is documented there. Table \ref{tab:variables} displays a complete list of the options. 
 
+
+\subsubsection{The Right Look: Colors and Fonts for Frames and Modes}\label{Look}
+Aquamacs allows
+  you to alter specific features of the current frame  via functions
+  in the Options menu. ``Set Color Theme...'' will let you choose a
+  pre-defined combination  of colors and fonts. ``Set Font...'' gives you a choice of pre-defined fonts to use.
+
+These settings only apply to the current frame. To make them ``stick,'' use the function ``Set current theme as default.'' Then, all  future frames will open with the new colors and fonts chosen. This  applies to all frame-settings that a mode or you as a user have  chosen using Emacs' configuration system. The choice of a default  theme will stick until you restart Aquamacs Emacs.
+
+Aquamacs Emacs also offers you to pick a theme specific to the
+current mode. For example, you can use different settings when you are
+editing C or LaTeX, then when you are editing a text file. That is
+what  the function ``Set current theme for current mode'' is for. Again, the setting  will stick for newly opened frames or or whenever you newly use a  given mode, until you restart Aquamacs Emacs.
+
+Finally, you may want to save your settings so they will stick even
+when you restart Aquamacs Emacs. To do so, use the function ``Save Options.''
+
+
+\begin{figure}
+\centering
+{\includegraphics[width=5in]{theme.jpg}}
+\caption{Aquamacs with a custom theme applied.}
+\label{theme.jpg}
+\end{figure}
+
+
+
+
+
 \subsection{Buffers}
 The Buffers menu allows you to navigate through the windows/frames
 that you may have open. Note that a ``buffer'' is not synonymous with
@@ -813,17 +857,15 @@ and Table \ref{tab:command} for details.
 
 \begin{table}[t]
 \begin{center}
- \begin{tabular}{|c|c|c|}
+ \begin{tabular}{|l|l|l|}
 \hline  \textbf{Shortcut} &  \textbf{Elisp Command} &   \textbf{Function}\\ 
 
-\hline Apple-N &new-frame-with-new-scratch & Open a new empty window/frame\\
+\hline Apple-N &new-frame-with & Create new buffer\\ &-new-scratch & \\
 
-\hline Apple-O & mac-find-file-other-frame & Open a new window/frame with a file\\
+\hline Apple-O & mac-find-file- & Open a file\\ & other-frame & \\
 
 \hline Apple-shift-s & mac-save-file-as & Save as\\
-
-\hline Apple-shift-O &find-file-other-frame & Find file in another frame\\
-
+ 
 \hline Apple-A & mark-whole-buffer & Select all text\\
 
 \hline Apple-V & yank & Paste text\\
@@ -840,13 +882,17 @@ and Table \ref{tab:command} for details.
 
 \hline Apple-G &  isearch-repeat-forward & Repeat search\\
 
-\hline  Apple-W &  `intelligent-close) & Close window\\
+\hline  Apple-W &  intelligent-close & Close selected window\\
 
-\hline Apple-M & iconify-or-deiconify-frame & Minimize window to the Dock\\
+\hline Apple-M & iconify-or-deiconify- & Minimize window \\ & frame &  to the Dock\\
 
 \hline Apple-. & keyboard-quit) & Keyboard quit\\
 
-\hline Apple-Q & `save-buffers-kill-emacs) & Save file, exit program\\
+\hline Apple-, & customize & Show Customization Buffer\\
+
+\hline Apple-; & toggle-pass-option- & Change Option key function\\ & to-system &\\
+
+\hline Apple-Q & save-buffers-kill-emacs & Save file, exit program\\
 
 \hline Apple-Z & undo & Undo\\
 
@@ -854,7 +900,7 @@ and Table \ref{tab:command} for details.
 
 \hline 
 \end{tabular} 
-\caption{Aqua-specific keyboard shortcuts implemented in Aquamacs.}
+\caption{Aqua-specific keyboard shortcuts implemented in Aquamacs. }
 \label{tab:shortcuts}
 \end{center}
 \end{table}
@@ -866,7 +912,7 @@ and Table \ref{tab:command} for details.
 \hline \textbf{Emacs Command Key} & \textbf{Aqua Command Key}\\
 \hline C-* & Control-*\\
 \hline H-* & Apple-*\\
-\hline A-* & Option-*\\
+\hline M-* & Option-*\footnote{See setting in Options menu.}\\
 \hline C-M-* & ESC Control-*\\
 \hline 
 \end{tabular} 
@@ -916,11 +962,11 @@ Below are some specific customization items that may be of interest:
   Options menu and save  your choice with ``Save Options.''
 
 
-\item \textbf{mac-pass-option-to-system is nil.} If this variable is set in your .emacs or Preferences.el file to non-nil, the Mac ``Option'' key can be used to compose
+\item \textbf{mac-pass-option-to-system.} If this variable is set in your .emacs or Preferences.el file to non-nil, the Mac ``Option'' key can be used to compose
       characters as handled by the system and depending on the
       keyboard layout chosen. Only if the Mac ``Command'' or ``Ctrl'' key
       is depressed at the same time, Emacs evaluates the combination using
-      whatever modifier is set in mac-option-modifier.
+      whatever modifier is set in mac-option-modifier. You can use the function ``Option key for Meta'' in the Options menu for quick changes (or press Apple-;).
 
 \item \textbf{mac-option-modifier's value is meta.} This is  the modifier to use for the Mac alt/option key.  The value can
 be alt, hyper, or super for the respective modifier.  If the value is
@@ -944,7 +990,7 @@ the modifier that is assigned to the Option key.
 
 \begin{table}[t]
 \begin{center}
- \begin{tabular}{|c|}
+ \begin{tabular}{|l|}
 \hline  \textbf{Variable}\\
 
 \hline Aquamacs Set Creator Codes After Writing Files\\
@@ -964,7 +1010,7 @@ the modifier that is assigned to the Option key.
 \hline Mac Pass Command To System\\
 \hline 
 \end{tabular} 
-\caption{Aquamacs-specific variables that can be customized in the Options menu.}
+\caption{Aquamacs-specific variables that can be customized in the Aquamacs customization group.}
 \label{tab:variables}
 \end{center}
 \end{table}
@@ -979,33 +1025,6 @@ help document. However, we provide a wiki for users to share their
 modifications. See
 \url{http://www.emacswiki.org/cgi-bin/wiki/AquamacsEmacs/} for more
 details. 
-
-
-\subsection{The Right Look: Colors and Fonts for Frames and Modes}\label{Look}
-Aquamacs allows
-  you to alter specific features of the current frame  via functions
-  in the Options menu. ``Set Color Theme...'' will let you choose a
-  pre-defined combination  of colors and fonts. ``Set Font...'' gives you a choice of pre-defined fonts to use.
-
-These settings only apply to the current frame. To make them ``stick,'' use the function ``Set current theme as default.'' Then, all  future frames will open with the new colors and fonts chosen. This  applies to all frame-settings that a mode or you as a user have  chosen using Emacs' configuration system. The choice of a default  theme will stick until you restart Aquamacs Emacs.
-
-Aquamacs Emacs also offers you to pick a theme specific to the
-current mode. For example, you can use different settings when you are
-editing C or LaTeX, then when you are editing a text file. That is
-what  the function ``Set current theme for current mode'' is for. Again, the setting  will stick for newly opened frames or or whenever you newly use a  given mode, until you restart Aquamacs Emacs.
-
-Finally, you may want to save your settings so they will stick even
-when you restart Aquamacs Emacs. To do so, use the function ``Save Options.''
-
-
-\begin{figure}
-\centering
-{\includegraphics[width=5in]{theme.jpg}}
-\caption{Aquamacs with a custom theme applied.}
-\label{theme.jpg}
-\end{figure}
-
-
 
 \subsection{\LaTeX\ Support}
 
@@ -1050,6 +1069,9 @@ Enrico Franconi, developer of the old Enhanced Carbon Emacs distribution that ha
 \subsubsection{\TeX niscope: A Superb \LaTeX\ Previewer}
 One special feature of the Enhanced Carbon Emacs plugin is its support for \TeX niscope, a Cocoa-based La\TeX\ previewer that can display both PDF and DVI formats. We recommend \TeX niscope as a superb La\TeX\ previewer and complement to Aquamacs/Enhanced Carbon Emacs. \TeX niscope can be downloaded from \url{http://www.ing.unipi.it/~d9615/homepage/texniscope.html}.\footnote{The developer of \TeX niscope, Massimiliano Gubinelli, is also the creator of the Aquamacs icon.}
 
+\TeX niscope needs a bit of configuration to work well with Aquamacs. See the Wiki page at \url{http://www.emacswiki.org/cgi-bin/wiki/AquamacsTexniscope} for up-to-date configuration info. 
+
+
 \section{Getting Help}
 
 There are many options for getting help with Aquamacs.
@@ -1065,7 +1087,7 @@ to begin is the OS X Emacs mailing
 list. The searchable list archives are located at
 \url{http://www.esm.psu.edu/mac-tex/MacOSX-Emacs-Digests/}. For more
 information on subscribing to the list, see
-\url{http://www.aquamacs.org}.
+\url{http://aquamacs.org}.
 
 Another option for general Emacs help is the gnu.emacs.help newsgroup.
 
@@ -1075,28 +1097,40 @@ bug reports on Aquamacs. Use the ``Send Bug Report'' function in the
 Help menu  (general Emacs bugs, too), and also our Aquamacs-specific
 bug report  system at \url{http://sourceforge.net/projects/aquamacs}. 
 
+\section{Donations}
+
+Aquamacs Emacs is a project that depends on your support. You can donate very small amounts by looking at ads, or small or larger amounts directly. Both is appreciated. Your contributions will be used towards maintaining the Aquamacs web site and further development.
+
+\url{http://aquamacs.org/donations.shtml}
 
 \section{Acknowledgments}
 
-
 We would also like to acknowledge the contributions of these authors, whose source code and hints on public forums have already been integrated into the build:
-Andrew Choi (main Emacs-to-Mac port);  Drew Adams;
+Drew Adams;
 Lawrence Akka;
  Emil Astrom; 
 Stefan Bruda; 
-Steve Dodd; 
+Steve Dodd;  
+Hiromatsu T.; 
 Massimiliano Gubinelli (Emacs icon); 
  Kyle E. Jones; 
+ Xavier Maillard;
  Pekka Marjola;
 Yamamoto Mitsuharu;
 Gerd Neugebauer;
  Ovidiu Predesc; 
+ Alex Schršder;
+ Mikael Sjšdin;
 Steven Tamm;
  Bob Weiner;  
 Milan Zamazal; and 
 Seiji Zenitani.
 
-Emacs is the work of Richard Stallman and many other developers.
+Emacs is the work of Richard Stallman and many other developers, in particular Andrew Choi (main GNU Emacs-to-MacOS/OSX port). We also would like to acknowledge the work of the authors of the major modes included.
+
+Last but not least, Aquamacs couldn't exist without the dedication of its users, who report bugs and help us fix them. 
+
+Aquamacs Emacs is developed by David Reitter. Documentation and user support contributed by Kevin Walzer. 
 
 \section {Licenses}
 
