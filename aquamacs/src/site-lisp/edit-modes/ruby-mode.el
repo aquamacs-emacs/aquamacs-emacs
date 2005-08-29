@@ -1,12 +1,12 @@
 ;;;
 ;;;  ruby-mode.el -
 ;;;
-;;;  $Author: davidswelt $
-;;;  $Date: 2005/06/19 16:53:06 $
+;;;  knu@FreeBSD.org
+;;;  $Date: 2005/08/29 21:50:32 $
 ;;;  created at: Fri Feb  4 14:49:13 JST 1994
 ;;;
 
-(defconst ruby-mode-revision "$Revision: 1.1 $")
+(defconst ruby-mode-revision "$Revision: 1.2 $")
 
 (defconst ruby-mode-version
   (progn
