@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.16 2005/08/26 08:32:07 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.17 2005/08/29 21:50:57 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -40,28 +40,21 @@
       (setcar (cdr (assq key (lookup-key global-map keymap)))
 	      str
 	      )
-    (if (eq 'string (type-of (car (cdr (cdr (assq key (lookup-key global-map keymap)))))))
+    (if (eq 'string (type-of 
+		     (car (cdr (cdr 
+				(assq key 
+				      (lookup-key global-map keymap)))))))
 	(setcar (cdr (cdr (assq key (lookup-key global-map keymap))))
-	      str
-	      )
-
+	      str)
     (setcar (cdr (assq key (lookup-key global-map keymap)))
 	    str
-	    )
-
-)
-    )
+	    )))
   (define-key global-map (vconcat (append keymap (list key)))
-    (cdr (assq key (lookup-key global-map keymap)))
-    )
-
-  )
+    (cdr (assq key (lookup-key global-map keymap)))))
 
 (defun aquamacs-updated-is-visible-frame-p ()
-  
   (and (frame-live-p menu-updating-frame)
-       (frame-visible-p menu-updating-frame ))
-)
+       (frame-visible-p menu-updating-frame )))
 
 
  
@@ -261,25 +254,78 @@
 
 
 
-;; redefinition (for :enable)
-(define-key menu-bar-options-menu [truncate-lines]
-  '(menu-item "Truncate Long Lines in this Buffer"
-	      toggle-truncate-lines
-	      :help "Truncate long lines on the screen"
-	      :button (:toggle . truncate-lines)
-	      :enable (and (frame-live-p menu-updating-frame)
-			   (frame-visible-p menu-updating-frame ))))
-
 (require 'longlines) 
+ 
+;; goes in simple.el
+(defun turn-on-longlines ()
+  "Unconditionally turn on Longlines mode."
+  (longlines-mode 1))
 
-;; must use the menu-item syntax here because longlines-mode
-;; is a buffer-local variable
-(define-key-after menu-bar-options-menu [longlines-on]
-  '(menu-item "Soft Word Wrap in this Buffer"
-	      longlines-mode
-	      :help "Wrap long lines without inserting carriage returns"
-	      :enable (aquamacs-updated-is-visible-frame-p)
-	      :button (:toggle . longlines-mode))
+(defun turn-off-longlines ()
+  "Unconditionally turn off Longlines mode."
+  (longlines-mode -1))
+
+(custom-add-option 'text-mode-hook 'turn-on-longlines)
+
+;; goes in textmodes/text-mode
+(defun toggle-text-mode-longlines ()
+  "Toggle whether to use Auto Fill in Text mode and related modes.
+This command affects all buffers that use modes related to Text mode,
+both existing buffers and buffers that you subsequently create."
+  (interactive)
+  (let ((enable-mode (not (memq 'turn-on-longlines text-mode-hook))))
+    (if enable-mode
+	(add-hook 'text-mode-hook 'turn-on-longlines)
+      (remove-hook 'text-mode-hook 'turn-on-longlines))
+    (dolist (buffer (buffer-list))
+      (with-current-buffer buffer
+	(if (or (derived-mode-p 'text-mode) text-mode-variant)
+	    (longlines-mode (if enable-mode 1 0)))))
+    (message "Longlines %s in Text modes"
+	     (if enable-mode "enabled" "disabled"))))
+
+;; This should go into menu-bar.el
+(defun menu-bar-text-mode-longlines ()
+  (interactive)
+  ;; First turn off auto-fill
+  (if
+      (if (listp text-mode-hook)
+	  (member 'turn-on-auto-fill text-mode-hook)
+	(eq 'turn-on-auto-fill text-mode-hook))
+      (toggle-text-mode-auto-fill)
+      )
+  (toggle-text-mode-longlines)
+  ;; This is somewhat questionable, as `text-mode-hook'
+  ;; might have changed outside customize.
+  ;; -- Per Abrahamsen <abraham@dina.kvl.dk> 2002-02-11.
+  (customize-mark-as-set 'text-mode-hook))
+ 
+
+(defun menu-bar-text-mode-auto-fill ()
+  (interactive)
+  ;; First turn off longlines
+  (if
+      (if (listp text-mode-hook)
+	  (member 'turn-on-longlines text-mode-hook)
+	(eq 'turn-on-longlines text-mode-hook))
+      (toggle-text-mode-longlines)
+      )
+  (toggle-text-mode-auto-fill)
+  ;; This is somewhat questionable, as `text-mode-hook'
+  ;; might have changed outside customize.
+  ;; -- Per Abrahamsen <abraham@dina.kvl.dk> 2002-02-11.
+  (customize-mark-as-set 'text-mode-hook))
+
+
+
+
+(define-key-after menu-bar-options-menu [longlines]
+  '(menu-item "Soft Word Wrap in Text Modes"
+	      menu-bar-text-mode-longlines
+	      :help "Wrap long lines without inserting carriage returns (Longlines)"
+	      :button (:toggle . (if (listp text-mode-hook)
+				     (member 'turn-on-longlines text-mode-hook)
+				   (eq 'turn-on-longlines text-mode-hook))))
   'auto-fill-mode
   )
 
@@ -464,7 +510,10 @@ to the selected frame."
   (interactive)
   (browse-url "mailto:macosx-emacs-on@email.esm.psu.edu?subject=subscribe%20macosx-emacs&body=Send%20off%20this%20e-mail%20to%20subscrube%20to%20the%20Emacs-on-MacOSX%20mailing%20list.")
 ) 
-
+(defun aquamacs-donate ()
+  (interactive)
+  (browse-url "http://aquamacs.org/donations.shtml")
+)
 (easy-menu-add-item  nil '("Help")
   (vector (format "Aquamacs Help                    %s?"  apple-char) 'aquamacs-user-help) 'emacs-tutorial)
 
@@ -491,7 +540,8 @@ to the selected frame."
  
 (easy-menu-add-item  nil '("Help")
   (vector  "Subscribe to mailing list..."  'emacsosx-mailing-list-subscribe) 'emacs-tutorial)
-
+(easy-menu-add-item  nil '("Help")
+  (vector  "Donate to Aquamacs..."  'aquamacs-donate) 'emacs-tutorial)
 (easy-menu-add-item  nil '("Help")
   ["-" nil nil] 'emacs-tutorial)
   
