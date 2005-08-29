@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.4 2005/08/26 08:25:16 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.5 2005/08/29 21:50:06 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -32,8 +32,8 @@
 
 
 
-(defvar aquamacs-version "0.9.5 beta-4")
-(defvar aquamacs-version-id 095.4)
+(defvar aquamacs-version "0.9.5")
+(defvar aquamacs-version-id 095.5)
 (defvar aquamacs-minor-version "")
 
 
@@ -485,10 +485,7 @@ Use this argument instead of explicitly setting `view-exit-action'."
 			   (help-mode (tool-bar-lines . 0) (fit-frame . t)) 
 			   (fundamental-mode (tool-bar-lines . 0))
 			   (custom-mode (tool-bar-lines . 0) (fit-frame . t)))))))
-(if (< aquamacs-customization-version-id 095.5)
-	  ;; should we go through all themes
-    ;; and set the fringes? maybe not.
-)    )
+     )
 
   (require 'one-buffer-one-frame)
  
@@ -550,23 +547,37 @@ Use this argument instead of explicitly setting `view-exit-action'."
      
 					; applications on OS X don't display a splash screen 
  
-  (setq command-line-args  (append command-line-args (list "--no-splash")))
-  (setq inhibit-startup-message t)
+(setq command-line-args  (append command-line-args (list "--no-splash")))
+(setq inhibit-startup-message t)
 
+;; redefine this
+(defun startup-echo-area-message ()
+  (if (eq (key-binding [(hyper \?)]) 'aquamacs-user-help)
+      "For a introduction to Aquamacs Emacs, type Apple-?."
+    (substitute-command-keys
+     "For a introduction to Aquamacs Emacs, type \
+\\[aquamacs-user-help].")))
 
-  (if (string= "mac" window-system)
-      (defun use-fancy-splash-screens-p () t)
-    )
+(if (string= "mac" window-system)
+    (defun use-fancy-splash-screens-p () t)
+  )
+ 
+;; the following causes not-so-good things to happen.
+;; (defun fancy-splash-default-action () nil)
+
+(aquamacs-set-defaults
+ '((  fancy-splash-image "aquamacs-splash-screen.jpg")
+   ( fancy-splash-max-time 3000)))
+
   ;; only the fancy splash screen is displayed more than once
   ;; this is a workaround    
-
-  (setq fancy-splash-image "aquamacs-splash-screen.jpg")
-    
+ 
     
   ;; scratch buffer should be empty 
   ;; the philosophy is: don't give users any text to read to get started!    
 
-  (aquamacs-set-defaults '(  (  initial-scratch-message nil)
+  (aquamacs-set-defaults '( 
+			   (  initial-scratch-message nil)
 			     )
 			 )
  
@@ -702,6 +713,25 @@ Use this argument instead of explicitly setting `view-exit-action'."
   ;; temporary stuff for releases according to admin/FOR-RELEASE
 
   (setq undo-ask-before-discard nil)
+
+;; patch from RMS
+(defun custom-save-all ()
+  "Save all customizations in `custom-file'."
+  (let* ((filename (custom-file))
+	 (recentf-exclude (if recentf-mode
+			      (cons (concat "\\`"
+					    (regexp-quote (custom-file))
+					    "\\'")
+				    recentf-exclude)))
+	 (old-buffer (find-buffer-visiting filename)))
+    (with-current-buffer (or old-buffer (find-file-noselect filename))
+      (let ((inhibit-read-only t))
+	(custom-save-variables)
+	(custom-save-faces))
+      (let ((file-precious-flag t))
+	(save-buffer))
+      (unless old-buffer
+	(kill-buffer (current-buffer))))))
 
   ;; workarounds for current bugs 
  
