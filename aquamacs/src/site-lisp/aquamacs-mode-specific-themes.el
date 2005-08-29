@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.12 2005/08/26 08:25:59 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.13 2005/08/29 21:49:23 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -434,7 +434,7 @@ for which the menu is being updated."
 (defcustom aquamacs-buffer-specific-frame-themes
     (filter-fonts '( 
 		    ("*Help*" (background-color . "lightblue")
-		     (right-fringe . 0) (left-fringe . 0)
+		     (right-fringe . 1) (left-fringe . 1)
 		     (toolbar-lines . 0))
 		    ("*Messages*" (background-color . "light goldenrod")
 		     (toolbar-lines . 0))
