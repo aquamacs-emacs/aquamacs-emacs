@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.5 2005/08/29 21:50:06 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.6 2005/09/19 19:12:40 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -34,7 +34,7 @@
 
 (defvar aquamacs-version "0.9.5")
 (defvar aquamacs-version-id 095.5)
-(defvar aquamacs-minor-version "")
+(defvar aquamacs-minor-version "c")
 
 
 (defun aquamacs-setup ()
@@ -205,11 +205,10 @@ Separate paths from file names with --."
   (global-set-key [remap scroll-down]	      'pager-page-up) 
   (global-set-key [remap cua-scroll-down]	      'pager-page-up)
   (global-set-key [prior]	      'pager-page-up)
-  (global-set-key [C-up]        'pager-row-up)
-  (global-set-key [C-down]      'pager-row-down)
-  ;;(global-set-key "Oa"        'pager-row-up)         ;; mac
-  ;;(global-set-key "Ob"        'pager-row-down)       ;; mac
-
+  ;; was here in 0.9.5, taken out
+  ;;(global-set-key [C-up]        'pager-row-up)
+  ;;(global-set-key [C-down]      'pager-row-down)
+ 
 
 
 
@@ -561,13 +560,21 @@ Use this argument instead of explicitly setting `view-exit-action'."
 (if (string= "mac" window-system)
     (defun use-fancy-splash-screens-p () t)
   )
- 
+
+       
 ;; the following causes not-so-good things to happen.
 ;; (defun fancy-splash-default-action () nil)
 
 (aquamacs-set-defaults
  '((  fancy-splash-image "aquamacs-splash-screen.jpg")
    ( fancy-splash-max-time 3000)))
+
+(defadvice fancy-splash-screens (around new-frame (&rest args) activate protect)
+ 
+  (let ((one-buffer-one-frame-force t))
+    ad-do-it)
+  (message " ")
+  )
 
   ;; only the fancy splash screen is displayed more than once
   ;; this is a workaround    
@@ -638,8 +645,13 @@ Use this argument instead of explicitly setting `view-exit-action'."
       (mac-pass-control-to-system  custom-variable)
       (mac-command-modifier  custom-variable)
       (mac-pass-command-to-system  custom-variable)
+      (special-display-regexps custom-variable)
       )
-    "Options specific to Aquamacs."
+    "Options specific to Aquamacs Emacs. Some of these customizations
+values exist in GNU Emacs as well, but have default values different 
+from those in GNU Emacs. Customize them to achieve the GNU Emacs behavior.
+Note that not all customization variables with differing defaults are
+listed here."
     :group 'emacs
     )
  
@@ -672,10 +684,11 @@ Use this argument instead of explicitly setting `view-exit-action'."
       ;; 
       ;; These are set with `customize-set-variable'.
       (dolist (elt '(scroll-bar-mode
-		     debug-on-quit debug-on-error menu-bar-mode
+		     debug-on-quit debug-on-error
+		     tooltip-mode menu-bar-mode tool-bar-mode
 		     save-place uniquify-buffer-name-style fringe-mode
-		     fringe-indicators case-fold-search
-		     display-time-mode auto-compression-mode
+		     indicate-empty-lines indicate-buffer-boundaries
+		     case-fold-search
 		     current-language-environment default-input-method
 		     ;; Saving `text-mode-hook' is somewhat questionable,
 		     ;; as we might get more than we bargain for, if
