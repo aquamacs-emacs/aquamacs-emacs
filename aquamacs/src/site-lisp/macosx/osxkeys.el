@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.12 2005/08/26 08:30:55 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.13 2005/09/19 19:00:56 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -70,7 +70,7 @@
 
   (raise-frame f) ; make sure frame is visible
   (let ((y (- (display-pixel-height) (frame-total-pixel-height f) 30 ))) ; extra 30 pix for typical Dock
-    (if (< y (frame-parameter f 'top))
+    (if (< y (eval (frame-parameter f 'top)))
 	(modify-frame-parameters f (list (cons 'top y)))
     )
     )
@@ -197,21 +197,17 @@ default."
 (defvar osx-key-mode-map
   (make-osx-key-mode-map)
   "Keymap for `osx-key-mode'.")
-
+ 
 (define-minor-mode osx-key-mode
   "Toggle Mac Key mode.
 With arg, turn Mac Key mode on iff arg is positive.
 When Mac Key mode is enabled, mac-style key bindings are provided."
   :global t
   :group 'osx-key-mode 
-  :keymap 'osx-key-mode-map  ;; probably not needed
+  :keymap 'osx-key-mode-map  
+  )
+ 
 
-  ; create up-to-date keymap
-  (setq osx-key-mode-map  (make-osx-key-mode-map))
-) 
-; unfortunately, it doesn't pick up changes in the keymap,
-; so users can't change mac-command-modifier and then redefine
-; the keymap at this point. 
 
 ;; Change encoding so you can use alt-e and alt-u accents (and others) 
 (set-terminal-coding-system 'iso-8859-1) 
