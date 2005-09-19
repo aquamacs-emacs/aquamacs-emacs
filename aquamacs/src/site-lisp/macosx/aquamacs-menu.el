@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.17 2005/08/29 21:50:57 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.18 2005/09/19 19:01:16 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -102,7 +102,7 @@
  
 
 (defcustom aquamacs-menu-new-buffer-modes
-  '(text-mode html-helper-mode latex-mode lisp-interaction-mode emacs-lisp-mode c-mode perl-mode python-mode applescript-mode R-mode sh-mode)
+  '(text-mode html-helper-mode latex-mode lisp-interaction-mode emacs-lisp-mode c-mode perl-mode python-mode applescript-mode R-mode sh-mode tcl-mode)
   "List of modes to include in the New Buffer menu."
   :group 'menu
   :group 'Aquamacs
@@ -354,22 +354,33 @@ both existing buffers and buffers that you subsequently create."
        ) 'edit-options-separator)
   )
 
+
+(defun  toggle-pass-option-to-system (&optional interactively) 
+  (interactive "p")
+   (setq mac-pass-option-to-system
+	 (not mac-pass-option-to-system))
+   (if interactively (customize-mark-as-set 'mac-pass-option-to-system))
+	   (message 
+	    (format "Option key is %s%s" 
+		    (if mac-pass-option-to-system
+			"not "
+		      "")
+		    (upcase-initials 
+		     (symbol-name (or mac-option-modifier 'meta))))))
+
+
 (if (boundp 'mac-pass-option-to-system) 
     (define-key-after menu-bar-options-menu [option-to-system]
-      (menu-bar-make-toggle 
-       toggle-pass-option-to-system mac-pass-option-to-system
-       (format "Option Key for %s (not extra characters)  %s;" 
+      `(menu-item
+	,(format "Option Key for %s (not extra characters)  %s;" 
 	       (upcase-initials (symbol-name (or mac-option-modifier 'meta)))
 	       apple-char)
-       "Do not pass Option key to system to produce extra characters: %s"
-       "Let Option key behave as Emacs key, do not let it produce special characters 
-(passing the key to the system),"
-			    
-       (not (setq mac-pass-option-to-system
-				       (not mac-pass-option-to-system)))
-			
-       ) 'edit-options-separator)
-
+	toggle-pass-option-to-system 
+	:visible (boundp mac-pass-option-to-system)
+	:help "Toggle whether to let Option key behave as Emacs key, 
+do not let it produce special characters (passing the key to the system)."
+	:button (:toggle . (not mac-pass-option-to-system)))
+       'edit-options-separator)
   )
 
  ;; this is a redefine
