@@ -187,7 +187,7 @@
         (+ 3 pos)
       pos)))
       
-(defun css-mode-indent-line (&;optional indent)
+(defun css-mode-indent-line (&optional indent)
   "Indent the current line.
 
 If optional INDENT is non-nil, use that instead of calculating the
@@ -202,7 +202,7 @@ indent level."
       (setq pos (point)))
     (when (> pos (point))
       (goto-char pos)))); move only forward after indenting
-)
+
 
 (defun css-mode-newline-and-indent ()
   "Insert a newline and indent."
@@ -217,7 +217,7 @@ indent level."
   (css-mode-indent-line)
   (forward-char))
 
-(defun css-fill (&;rest ignore)
+(defun css-fill (&rest ignore)
   "Lay out CSS expressions."
   (interactive)
   (condition-case data
