@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs version check
  
-;; Last change: $Id: check-for-updates.el,v 1.7 2005/08/20 09:46:08 davidswelt Exp $
+;; Last change: $Id: check-for-updates.el,v 1.8 2005/09/19 19:00:30 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -86,7 +86,10 @@ nil
 	  (re-search-forward "<version>\\(.*\\)</version>" (buffer-end 1) t)
 	  )
  
-	(when (not (equal (match-string 1) aquamacs-version))
+	(when (and (not (equal (match-string 1) aquamacs-version))
+		   (not (equal (match-string 1) 
+			       (concat aquamacs-version 
+				       aquamacs-minor-version) )))
 	    ;;(message "")	;; up-to-date; workaround for "Saw end of trailers" bug
 	    (write-region (concat "888\n") ;; notice that a new version is available 
 		  nil
@@ -95,12 +98,7 @@ nil
 		  'shut-up
 		  nil
 		  nil)
-	    (aquamacs-new-version-notify (match-string 1)) )
-
-	        
-	)
-    )
-  )
+	    (aquamacs-new-version-notify (match-string 1))))))
  
 (defun aquamacs-new-version-notify (v)
   ;; show right away and show when idle
