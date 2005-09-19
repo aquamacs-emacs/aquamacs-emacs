@@ -21,7 +21,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.13 2005/08/01 22:20:59 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.14 2005/09/19 19:03:51 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -248,7 +248,7 @@ pixels apart if possible."
 		   (let ((samerow t))
 		     (mapc  
 		      (lambda (f)  
-			(if (or (> (abs (- (frame-parameter f 'top) ny)) 10) 
+			(if (or (> (abs (- (eval (frame-parameter f 'top)) ny)) 10) 
 				;; different height
 				(or (> next-x (+ (eval 
 						  (frame-parameter f 'left)) 

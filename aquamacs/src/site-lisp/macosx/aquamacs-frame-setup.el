@@ -8,7 +8,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-frame-setup.el,v 1.12 2005/08/26 08:27:05 davidswelt Exp $
+;; Last change: $Id: aquamacs-frame-setup.el,v 1.13 2005/09/19 19:01:38 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -46,11 +46,9 @@
 ;(setq 1on1-default-frame-upper-left-corner '(80 . 60))
 ;(setq 1on1-default-special-frame-upper-left-corner '(180 . 140))
 ;(setq 1on1-default-special-frame-size '(400 . 600))
-
-;; for fringe:
-
-(set-default  'indicate-empty-lines t)
-(setq indicate-empty-lines t)
+ 
+;(set-default  'indicate-empty-lines t)
+;(setq indicate-empty-lines t)
  ;; Fringes
 (defun aquamacs-define-the-fringe-bitmap ()
   "Redefines a fringe bitmap (continuation) so that it looks good
@@ -71,10 +69,12 @@ even when minimal fringes are used. (Aquamacs)"
     (fringe-mode fm) ;; turn back on
     )
   )
+;;(customize-set-variable 'fringe-indicators 'empty)
+(setq default-indicate-empty-lines t)
 
 (aquamacs-define-the-fringe-bitmap)
 (setq fringe-mode '(1 . 1)) ;; to reflect the default.
- 
+
 ;; This is a hack because fringe-mode likes to round up stuff.
 
 ;; set default colors
