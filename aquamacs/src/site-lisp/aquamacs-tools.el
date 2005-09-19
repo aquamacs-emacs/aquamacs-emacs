@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.10 2005/08/18 17:40:56 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.11 2005/09/19 19:03:17 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -165,7 +165,8 @@ Each element of LIST has to be of the form (symbol . fontset)."
 	  (let ((symbol (car elt))
 		(value (car (cdr elt))))
 	    (set symbol value)
-
+	    (set-default symbol value) ;; new in post-0.9.5
+ 
 	    ;; make sure that user customizations get 
 	    ;; saved to customizations.el (.emacs)
 	    ;; and that this appears as the new default.
