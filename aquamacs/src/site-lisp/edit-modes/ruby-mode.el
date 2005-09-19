@@ -2,11 +2,11 @@
 ;;;  ruby-mode.el -
 ;;;
 ;;;  knu@FreeBSD.org
-;;;  $Date: 2005/08/29 21:50:32 $
+;;;  $Date: 2005/09/19 18:59:54 $
 ;;;  created at: Fri Feb  4 14:49:13 JST 1994
 ;;;
 
-(defconst ruby-mode-revision "$Revision: 1.2 $")
+(defconst ruby-mode-revision "$Revision: 1.3 $")
 
 (defconst ruby-mode-version
   (progn
@@ -17,9 +17,9 @@
   "class\\|module\\|def\\|if\\|unless\\|case\\|while\\|until\\|for\\|begin\\|do"
   )
 
+;;; this patch applied: http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-core/3719
 (defconst ruby-non-block-do-re
-  "\\(while\\|until\\|for\\|rescue\\)\\>"
-  )
+  "\\(while\\|until\\|for\\|rescue\\)\\>[^_]")
 
 (defconst ruby-indent-beg-re
   "\\(\\s *\\(class\\|module\\|def\\)\\)\\|if\\|unless\\|case\\|while\\|until\\|for\\|begin"
