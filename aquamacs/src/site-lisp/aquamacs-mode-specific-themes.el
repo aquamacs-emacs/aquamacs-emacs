@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.13 2005/08/29 21:49:23 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.14 2005/09/19 19:03:34 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -250,7 +250,7 @@ to be appropriate for its first buffer"
   )
 (defun update-mode-themes-everywhere ()
   "Update the themes (colors, font) of all frames
-to be appropriate for its first buffer"
+to be appropriate for its first buffer. (Aquamacs)"
    
   (mapc (lambda (frame)
   (condition-case err
@@ -307,13 +307,15 @@ to be appropriate for its first buffer"
 ;;   )
 
 (defun aquamacs-set-theme-as-default () 
-  "Activate current frame settings (theme) as default. Sets default-frame-alist."
+  "Activate current frame settings (theme) as default. 
+Sets default-frame-alist. (Aquamacs)"
   (interactive)
   (aquamacs-set-theme-as-mode-default 'default))
 
 (defun aquamacs-set-theme-as-mode-default (&optional mode) 
   (interactive)
-  "Activate current theme as default for a given mode."
+  "Activate current theme as default for a given mode.
+(Aquamacs)"
   (setq mode (or mode major-mode))
   (customize-set-variable 'aquamacs-mode-specific-default-themes
 			  (cons (cons mode (aquamacs-get-theme-snapshot)) 
