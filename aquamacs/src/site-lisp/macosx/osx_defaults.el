@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.36 2005/08/01 22:20:03 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.37 2005/09/23 08:04:40 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -84,6 +84,9 @@
 
   (add-hook 'after-save-hook 'mac-set-creator-code-for-file)
 
+
+
+  (require 'aquamacs-mule)              ; Language settings
 
 					; Mac Drag-N-Drop
 
