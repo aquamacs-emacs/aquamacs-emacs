@@ -64,7 +64,50 @@ pleasant surprise.
 
 \section{What's New in This Release}
 
-This is version 0.9.5 of Aquamacs, released August 29, 2005. Aquamacs 0.9.5 includes several bug fixes, optimizations, and many improvements.
+This is version 0.9.6 of Aquamacs, released September 29, 2005. Aquamacs 0.9.6 includes several bug fixes, optimizations, and improvements.
+
+\subsection{Changes---0.9.6}
+
+\begin{itemize}
+\item Aquamacs now provides extended input methods for 
+	Korean, Japanese and Chinese (GB/BIG5). You can select them in 
+	the Options menu, under "Aquamacs Multilingual Environment" / 
+	"Set Language Environment" - everything is integrated with
+	Mule.   
+
+	In order to load more fixed-width fonts suitable for use with
+	Asian languages, you may want to load the carbon-font package,
+	which is included (but not activated) in Aquamacs. Just add the
+	following to the file 
+	~/Library/Preferences/Aquamacs Emacs/Preferences.el:
+
+	(require 'carbon-font)
+
+	(maintained by   Mahn-Soo Choi.)
+	
+\item CSS-Mode fixed. 
+	(First reported by Kris Khaira and Michael Jakl.)
+
+\item Dual-head setups (two screens) with one screen on the left, 
+	the system menu on the right and Aquamacs frames on the left 
+	caused problems.	
+	(reported by Otto Karl Florian Diesenbacher)
+	
+\item osx-key-mode-map can now be changed to modify key
+	assignments, in particular those of Apple Command keys
+	 (implemented in Emacs as Hyper = H- keys.)
+	(reported by William Ziemer)
+
+\item "font-lock-keywords ... void" message used to appear when
+	attempting to load a new file. This bug in the underlying GNU
+	Emacs has been fixed.
+
+\item Apple-Q and iconized frames: When all frames where iconized and	one attempted to quit Aquamacs, the application seemed to hang 	(because it was showing a minibuffer prompt in an iconized frame.)
+		
+\item Thanks for the donations!
+ 
+\end{itemize}
+
 
 \subsection{Interface/Usability Improvements---0.9.5}
 
@@ -759,6 +802,20 @@ saved by default. For more information on fonts, please see Section \ref{Look}.
 
 If you want to delve deeply into customizing Aquamacs, select ``Customize Emacs:Top-Level Customization Group'' in the Options menu. A new frame titled ``Customize Group: Emacs'' will open. Scroll down and find the ``Aquamacs Group'' listing, and push the ``Go to Group'' button. This will open a new frame with all of the configuration options for Emacs---deep-level customization that can be implemented by Aquamacs power users in the Emacs scripting language, elisp---and each option is documented there. Table \ref{tab:variables} displays a complete list of the options. 
 
+\subsubsection{Languages of the World - Dealing with Different Character Sets}
+
+Computer keyboards were designed to input text in languages with a small character set. 
+Aquamacs Emacs lets you use your keyboard with a variety of \emph{ input methods } in order to   input text in languages with many characters, among them Asian languages. 
+ 
+The Multilingual Environment, present in GNU Emacs, provides a number of predefined input methods.  Aquamacs Emacs extends this:
+On Mac OS X, because of the particular ways of user interface and
+unicode handling, these standard Emacs language environments are not enough to
+read and write some international languages.  One needs to
+set additional parameters, especially, the language specific coding
+systems.
+ 
+You can find these new language environments (Korean, Japanese, Chinese-GB and Chinese-BIG5)  -- among other ones -- under "Aquamacs Multilingual Environment". Updates
+for more languages will be provided later on.
 
 \subsubsection{The Right Look: Colors and Fonts for Frames and Modes}\label{Look}
 Aquamacs allows
@@ -1110,6 +1167,7 @@ Drew Adams;
 Lawrence Akka;
  Emil Astrom; 
 Stefan Bruda; 
+Mahn-Soo Choi;
 Steve Dodd;  
 Hiromatsu T.; 
 Massimiliano Gubinelli (Emacs icon); 
@@ -1121,14 +1179,14 @@ Gerd Neugebauer;
  Ovidiu Predesc; 
  Alex Schršder;
  Mikael Sjšdin;
-Steven Tamm;
+Steven Tamm; 
  Bob Weiner;  
 Milan Zamazal; and 
 Seiji Zenitani.
 
 Emacs is the work of Richard Stallman and many other developers, in particular Andrew Choi (main GNU Emacs-to-MacOS/OSX port). We also would like to acknowledge the work of the authors of the major modes included.
 
-Last but not least, Aquamacs couldn't exist without the dedication of its users, who report bugs and help us fix them. 
+Last but not least, Aquamacs couldn't exist without the dedication of its users, who donate money, report bugs and help us fix them.
 
 Aquamacs Emacs is developed by David Reitter. Documentation and user support contributed by Kevin Walzer. 
 
