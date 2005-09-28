@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Frame and Window Operations</TITLE>
-<META NAME="description" CONTENT="Frame and Window Operations">
+<TITLE>Running Aquamacs</TITLE>
+<META NAME="description" CONTENT="Running Aquamacs">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,69 +21,121 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="node14.html">
 <LINK REL="previous" HREF="node12.html">
-<LINK REL="up" HREF="node10.html">
+<LINK REL="up" HREF="node11.html">
 <LINK REL="next" HREF="node14.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html279"
+<A NAME="tex2html283"
   HREF="node14.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html275"
-  HREF="node10.html">
+<A NAME="tex2html279"
+  HREF="node11.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html269"
+<A NAME="tex2html273"
   HREF="node12.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html277"
+<A NAME="tex2html281"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html280"
-  HREF="node14.html">Fonts</A>
-<B> Up:</B> <A NAME="tex2html276"
-  HREF="node10.html">Features and Changes: 0.9.3</A>
-<B> Previous:</B> <A NAME="tex2html270"
-  HREF="node12.html">Running Aquamacs</A>
- &nbsp; <B>  <A NAME="tex2html278"
+<B> Next:</B> <A NAME="tex2html284"
+  HREF="node14.html">Frame and Window Operations</A>
+<B> Up:</B> <A NAME="tex2html280"
+  HREF="node11.html">Features and Changes: 0.9.3</A>
+<B> Previous:</B> <A NAME="tex2html274"
+  HREF="node12.html">New Address</A>
+ &nbsp; <B>  <A NAME="tex2html282"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION00037300000000000000">
-Frame and Window Operations</A>
+<H3><A NAME="SECTION00038200000000000000">
+Running Aquamacs</A>
 </H3>
 
 <P>
-We make sure that the *Completions* buffer (and similar things)
-    open as a window inside the frame directly above the Minibuffer,
-    and not in a new frame.
+
+<UL>
+<LI>Slightly faster startup.
 
 <P>
-All newly opened frames open in a somewhat useful position, so
-they are not in the way. (If you do not like this, we suggest you set
-    your own static frame positions via ``set current theme as default''
-    and also add this to your file / Users / yourname / Library / Preferences/ Aquamacs
-    Emacs/ Preferences.el:
+</LI>
+<LI>Runs on OS X 10.3.9, 10.4.0 and 10.4.--tested.
 
 <P>
-<TT> (setq smart-frame-positioning-enforce nil)</TT>
+</LI>
+<LI>Aquamacs automatically checks for updates and notifies the user
+    if there is something new. This function communicates with an internet server; it does not
+    transmit any information identifying the user. If you would like to
+    know more about what is transmitted, use M-x
+    aquamacs-check-version-information. If you like to turn this check off, add this to your file
+ /Users/ yourname / Library /Preferences /Aquamacs Emacs/ Preferences.el:
 
 <P>
-Or, if you would like to go with the default position all the time,
-    turn the global minor mode off:
+<TT>(setq aquamacs-version-check-url nil)</TT>
 
 <P>
-<TT>(smart-frame-positioning-mode nil)</TT>
+</LI>
+<LI>Adding Emacs packages is easier now: Emacs automatically finds
+    packages in subdirectories within the /Library/Preferences| Application
+    Support/Emacs|Aquamacs Emacs/ paths.
 
 <P>
-<BR><HR>
+</LI>
+<LI>Aquamacs now sets the file creator information of files it
+    writes. This helps to open the file from Finder with Aquamacs when
+    you double-click it. Feature can be turned off via customization
+    option ``aquamacs-set-creator-codes-after-writing-files.''  Also,
+    Emacs will appear in the Finder's context menu under ``Open With''
+    for a lot of files that it is commonly used to edit.
+
+<P>
+</LI>
+<LI>You can start Aquamacs in a terminal (by running
+    /Applications/ Emacs.app /Contents/ MacOS/ Emacs) with parameter -nw
+    and will show up in the terminal rather than as a  Carbon
+    application. Basic file editing and all traditional commands
+    work. However, Aquamacs-specific keyboard commands (with the
+    Command key) will not work and other functionality may be limited,
+    too. <SPAN  CLASS="textit">Warning: </SPAN>This mode of use, which may break in future versions, is not
+    supported by the Aquamacs team.
+    
+</LI>
+</UL>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html283"
+  HREF="node14.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html279"
+  HREF="node11.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html273"
+  HREF="node12.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html281"
+  HREF="node1.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html284"
+  HREF="node14.html">Frame and Window Operations</A>
+<B> Up:</B> <A NAME="tex2html280"
+  HREF="node11.html">Features and Changes: 0.9.3</A>
+<B> Previous:</B> <A NAME="tex2html274"
+  HREF="node12.html">New Address</A>
+ &nbsp; <B>  <A NAME="tex2html282"
+  HREF="node1.html">Contents</A></B> </DIV>
+<!--End of Navigation Panel-->
 <ADDRESS>
-Kevin  Walzer
-2005-09-03
+David
+2005-09-28
 </ADDRESS>
 </BODY>
 </HTML>

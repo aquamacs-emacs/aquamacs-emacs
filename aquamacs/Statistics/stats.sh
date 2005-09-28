@@ -5,7 +5,7 @@
 
 SOURCEFORGEUSERNAME=davidswelt
 
-scp ${SOURCEFORGEUSERNAME}@shell.sourceforge.net:/home/groups/a/aq/aquamacs/logs/version-queries.log .
+#scp ${SOURCEFORGEUSERNAME}@shell.sourceforge.net:/home/groups/a/aq/aquamacs/logs/version-queries.log .
 
 shopt -s xpg_echo
 

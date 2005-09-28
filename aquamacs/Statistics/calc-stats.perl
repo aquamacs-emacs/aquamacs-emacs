@@ -87,6 +87,7 @@ while (<STDIN>)
 }		
 
   }
+print "done1\n";
 
 $checksperday{$lastperiod} = scalar(keys %checkscurrentperiod);
 
@@ -114,6 +115,7 @@ foreach my $uid (keys %users_installtime)
 
 # print user community stats
 
+print "done2\n";
 
 open F, ">conversionrate.txt";
 print F "day  no.users  no.new    no.converted \n";
@@ -133,6 +135,7 @@ foreach my $p (sort(map(int, keys(%new_users_in_period))))
   }
 close F;
 
+print "done3\n";
 
 open F, ">versions.txt";
 print F "version   no.users \n" ;
@@ -144,6 +147,7 @@ foreach my $v (sort keys %version_dist)
 close F;
 
 
+print "done4\n";
 open F, ">countries.txt";
 print F "country   no.users \n" ;
 
