@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.18 2005/09/19 19:01:16 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.19 2005/09/28 14:12:58 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -565,7 +565,15 @@ to the selected frame."
 ; can't show a frame on a different display
 (easy-menu-remove-item global-map  '("menu-bar" "file") 'make-frame-on-display)
 
-
+;; language environment
+(when (eq system-type 'darwin) 
+    (require 'aquamacs-mule)
+(change-menu-text
+ [menu-bar options]
+ 'mule
+ "Aquamacs Multilingual Environment"
+)
+)
 
 (provide 'aquamacs-menu)
  
