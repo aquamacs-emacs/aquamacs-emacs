@@ -1,7 +1,7 @@
 ;;; carbon-font.el -- fontsets for Carbon Emacs -*- coding: iso-2022-7bit -*-
 
 ;; Copyright (C) 2004-2005 by T. Hiromatsu <matsuan@users.sourceforge.jp>
-;; Version 1_2_2
+;; Version 1_4_2
 
 ;;; Commentary:
 
@@ -44,7 +44,7 @@
 ;;      $B$+$iF~<j2DG=$G$9!#(B
 ;;
 ;;----------------------------------------------------------------------
-;; carbon-font.el 2005-04-17$BHG(B
+;; carbon-font.el 2005-07-27$BHG(B
 ;;
 ;; 1. Introduction
 ;; 1.1. $B$3$N%U%!%$%k$NCf?H(B
@@ -52,39 +52,24 @@
 ;;	1:2$B$NI}$G(B($B=j0bEyI}(B)$B$G!"I=<($9$k$?$a$N(Bfontset$BDj5A$NNc$r<($7$F$$$^$9!#(B
 ;;
 ;;	$BDj5A$7$F$$$k$N$O!"2<5-$N(B4$B<o$NJ8;z%;%C%H$G$9!#(B
-;;	    hiraginomaru**    Monaco(Ayuthaya) + $B%R%i%.%N4]%4(B
-;;	    hiraginokaku**    Monaco(Ayuthaya) + $B%R%i%.%N3Q%4(B
-;;	    osaka**           Monaco(Ayuthaya) + osaka
-;;	    hiraginomin**     Courier  + $B%R%i%.%NL@D+(B
+;;	    hiraginomaru    Monaco(Ayuthaya) + $B%R%i%.%N4]%4(B
+;;	    hiraginokaku    Monaco(Ayuthaya) + $B%R%i%.%N3Q%4(B
+;;	    osaka           Monaco(Ayuthaya) + osaka
+;;	    hiraginomin     Courier  + $B%R%i%.%NL@D+(B
 ;;
-;;	**$B$NItJ,$O%5%$%:$G!"(Bascii$BJ8;z$N(Bpoint$B?t$rI=$7$^$9!#$3$N%U%!%$%k$G$O!"(B
-;;	    07,08,09,10,12,14,16,18,20,24
-;;	$B$rDj5A$7$F$$$^$9!#99$K!"(Bosaka$B$N$_(B15point$B$rDj5A$7$F$$$^$9!#$D$^$j!"(B
-;;	$B$3$N%U%!%$%k$G$O!"(B41$B<o$N!"(Bfontset $B$rDj5A$7$F$$$k$3$H$K$J$j$^$9!#(B
-;;
-;;	$B<B:]$N(B fontset$BL>$O!"(Bhiraginomaru14 $BEy$N$h$&$K@.$j$^$9!#(B
+;;	    point 07,08,09,10,12,14,16,18,20,24 $B$N%5%$%:(B
+;;	$B$rDj5A$7$F$$$^$9!#$D$^$j!"$3$N%U%!%$%k$G$O!"(B40$B<o$N!"(Bfontset $B$rDj5A(B
+;;	$B$7$F$$$k$3$H$K$J$j$^$9!#(B
+;;      default$B$N%5%$%:$O!"(B12$B$G$9!#(B
 ;; 
 ;;      $B$3$N%P!<%8%g%s$+$i!"=>Mh$N(B carbon-font $B$G$O=PMh$J$+$C$?!"F|K\8l%U%)(B
 ;;      $B%s%H$N(Bface-font$BBP1~$7$F$$$^$9!#(B
 ;;      $BJ?$?$/1>$($P!"(Binfo$BEy$G!"Bg$-$J;z$K%j%9%1!<%k$7$?$j!"%\!<%k%I$d!"%9(B
 ;;      $B%i%s%H%U%'!<%9$K$9$k0Y$NJ*$G$9!#(B
 ;;
-;;      $B8=:_!"BP1~$7$F$$$k$N$O!"(Bfontset-osaka** $B$N$_$G$9!#(B
-;;          08,09,10,12,15,20  $B$O!"0l1~$^$H$b$KI=<($G$-$F$$$k$h$&$G$9!#(B
-;;      $BB>$K$*5$IU$-$K$J$C$?$3$H$,M-$j$^$7$?$i!"%a!<%j%s%0%j%9%H$K$4Js9p4j(B
-;;      $B$($k$H9,$$$G$9!#(B
-;;
 ;; 1.2. $BF0:n4D6-(B
-;;	carbon emacs $B$O!"(B2005-11-30 $B0J9_$N(BCVS$B$+$iF~<j$7$?J*$r8f;H$$$/$@$5$$!#(B
+;;	carbon emacs $B$O!"(B2005-06-01 $B0J9_$N(BCVS$B$+$iF~<j$7$?J*$r8f;H$$$/$@$5$$!#(B
 ;;	$B$=$l0JA0$NJ*$O!"(B.emacs$BFI$_9~$_$N;~$K%(%i!<$K$J$k2DG=@-$,$"$j$^$9!#(B
-;;
-;;      OSX $B$N%$%s%9%H!<%k$N;~$K!"4J0W%$%s%9%H!<%k$r$5$l$?>l9g!"(BAyuthaya$B$,(B
-;;      $B%$%s%9%H!<%k$5$l$F$$$^$;$s!#$3$N>l9g!"%5%$%:$O!"(B09,10,12,14$B$N$_$H$J$j(B
-;;      $B$^$9!#(B
-;;
-;;	07,08,16,18,20,24 $B$r$*;H$$$K$J$j$?$$>l9g$O!"(BInstaller CD$B$NCf$+$i!"(B
-;;	    AdditionalFonts.pkg
-;;	$B$rC5$7=P$7$F!"%$%s%9%H!<%k$7$F$/$@$5$$!#(B
 ;;
 ;;	$B<o!9$JCN7C$r<x$1$F$/$@$5$C$?!"(Bmac-emacsen ML $B$d(B 2ch mac de emacs$B2q5D(B
 ;;	$B<<$NJ}!9$K46<U$7$^$9!#(B
@@ -96,16 +81,16 @@
 ;;     $B$N@_Dj$,I,MW$G$7$?$,!"8=:_$OITMW$G$9!#<+F0$GJQ99$5$l$^$9!#(B
 ;;     $B$h$C$F!"$J$K$b$7$J$/$F$b!"(Bbold$B$H!"(Bmedium$B$NI}$OF1$8$K$J$j$^$9!#(B
 ;;     
-;;     $B$b$7!"(Bsilk$B$r$*;H$$$N>l9g$O!"<+F0JQ99$O<YKb$G$9$+$i!"(B
-;;	    (setq carbon-font-auto-rescale-enable nil)
-;;     $B$7$F$/$@$5$$!#(B
-;;
 ;; 2.1. $BFI$_9~$_J}(B
 ;;     $B$3$N%U%!%$%k$r!"(B~/$B$KCV$$$F!"(B.emacs$B$K(B   
 ;;          (if (eq window-system 'mac) (load "~/carbon-font"))
 ;;     $B$H$7$F$=$N8e$G!";H$&(Bfontset $B$N0Y$K(B
-;;          (set-default-font "fontset-hiraginomaru16")
-;;     $BEy$H!"@_Dj$7$F$/$@$5$$!#(B
+;;          (set-default-font "fontset-hiraginomaru")
+;;     $BEy$H!"@_Dj$7$F$/$@$5$$!#$3$N>l9g!"%5%$%:$O(Bdefault$B$N(B12$B$H$J$j$^$9!#(B
+;;     $BJL$N%5%$%:$r;XDj$7$?$$>l9g$O!"(B
+;;          (set-default-font
+;;                 "-*-*-medium-r-normal--8-*-*-*-*-*-fontset-hiraginomaru")
+;;     $BEy$H%U%k%M!<%`$G;XDj$7$F$/$@$5$$!#(B
 ;;
 ;;     $BKt!"(Bload-path $B$NDL$C$?$H$3$m$KCV$$$F!"(B
 ;;          (if (eq window-system 'mac) (require 'carbon-font))
@@ -114,39 +99,14 @@
 ;;     $B:G=i$O!"(Bfontset$B$N;XDj$r$7$J$$$G!"(Bshift + click $B$G=P$F$/$k!"(Bfontset
 ;;     menu $B$+$i!"$*9%$_$NJ*$rC5$9J}$,NI$$$+$b$7$l$^$;$s!#(B
 ;;
-;;     $BCm(B: carbon emacs $B$G!"(Biso-2022-7bit $B8GM-$JJ8;z$r(B kill & yank $B$9$k>l9g(B
-;;     $BLdBj$,$"$k$h$&$J$N$G!"(B.emacs$B$K$3$N%U%!%$%k$+$i(B kill & yank $B$9$k$h$j!"(B
-;;     $B$3$N%U%!%$%k$r$=$N$^$^$*;H$$$K$J$k$h$&$*4+$a$7$^$9!#(B
-;;
-;;     $B$b$7!"(Bkill & yank $B$9$k>l9g$O!"0l;~E*$K(B
-;;     (set-clipboard-coding-system            'iso-2022-7bit)
-;;     $B$7$F$/$@$5$$!#(B
-;;
 ;; 2.2. ascii bold $B$rEyI}$GI=<($9$k(B
 ;;
-;; 2.2.1. face-font-rescale-alist $B$r@_Dj$9$k(B(default)
 ;;      Bold$B$bF1$8$K$J$k$h$&!"(Bfont $B$NBg$-$5$r!"(Bface-font-rescale-alist $B$G!"(B
 ;;      $BD4@0$7$F$$$^$9!#(B
 ;;
 ;;     $BESCf$G!"(Bfontset-menu$B$+$i(Bfontset$B$rA*$s$@>l9g$b!"<+F0$GJQ99$5$l$^$9!#(B
 ;;     $B7gE@(B: Bold$B$N9b$5$,Dc$/$J$k(B
 ;;     $BH~E@(B: elisp$B$@$1$G<B8=$G$-$k(B
-;;
-;; 2.2.2. Silk Sytem Preferences $B$r;H$&(B
-;;     Silk $B%7%9%F%`4D6-@_Dj$N(B
-;;         "Global/Application Settings"$B$N(B
-;;             "Use Quartz Text Metrics" $B$K(Bcheck$B$rF~$l$k!#(B
-;;         $B$3$N;~!"(BAdd Application$B$G!"(BEmacs$B$rDI2C$7$F!"(BEmacs$B$N$_$K$3$NB0@-(B
-;;         $B$rM?$($?J}$,NI$$$H;W$o$l$^$9!#(B
-;;
-;;     $BKt!"(B (setq carbon-font-auto-rescale-enable nil) $B$,I,MW$G$9!#(B
-;;     
-;;     $B7gE@(B: $BM>7W$J%7%9%F%`4D6-@_Dj$rF~$l$kI,MW$,M-$k!#(B
-;;           $B7y$$$J?M$K$H$C$F$OCWL?E*(B
-;;     $BH~E@(B: Bold Font$B$b!"(Bnormal Font $B$HF1$89b$5$GI=<($G$-$k!#(B
-;;     
-;;     silk $B$O2<5-%5%$%H$GF~<j$G$-$^$9!#(B
-;;     http://www.unsanity.com/
 ;;
 ;; 2.3. Alias $B$,3]$i$J$$>l9g(B
 ;;     $B>.$5$$%U%)%s%H$N>l9g!"(Baliasing$B$,>e<j$/3]$i$J$$>l9g$,M-$j$^$9!"$=$N;~(B
@@ -159,6 +119,19 @@
 ;;     $B$HI=<($5$l$^$9!#(B($BH&$G$9(B)
 ;;
 ;; 3. Changelog
+;; 1_4_2   2005-08-03
+;;         $BK\2H(B lisp/international/fontset.el $B$r;29M$K4X?t$r=q$-49$(!#4JAG2=!#(B
+;;         $BDj?t$r3g$j=P$7$F!">-Mh$N3HD%$r2DG=$K!#(B
+;; 1_4_0   2005-07-27
+;;         $B;3K\$5$s(B(Mew)$B$K4X?t$r=q$-49$($F$$$?$@$-$^$7$?!#(B
+;;         $B$3$NJQ99$K$h$j!"(Bfontset$B$N;XDjJ}K!$,JQ$o$j$^$7$?!#(B
+;;         silk $B%5%]!<%H$rCf;_$7$^$7$?!#(B
+;;         $BL@D+$K$"$o$;$F!"(Bgb2312$B!"(Bbig5$B!"(Bksc5601$B$N%U%)%s%H$rJQ99(B
+;;
+;; 1_3_0   2005-07-04 face $BBP1~$rA4(Bfontset$B$K(B
+;;         ascii font $B$N@_Dj$r(B create-fontset-from-mac-roman-font $B$KJQ99(B
+;;         $B;3K\$5$s(B(emacs-devel)$B$N=u8@$K$h$jJQ99$7$^$7$?!#(B
+;;
 ;; 1_2_2   2005-05-21 Tiger$BBP:v(B
 ;;         monaco $B$,I=<($G$-$J$$%5%$%:$N(Balternative$B$H$7$F!"(Bayuthaya $B8GDj$G$O$J$/(B
 ;;         $B?7$?$K!"JQ?t(B carbon-font-monaco-alternative $B$r@_$1$F!"%G%U%)%k%H$K(B
@@ -217,408 +190,272 @@
 ;; fontset section
 ;;
 
-(defun carbon-font-concat-with-comma (&rest args)
-  (mapconcat 'identity (remq nil args) ","))
+(defvar carbon-font-encode-reg-alist
+  '((japanese-jisx0208 . "jisx0208.*")
+    (katakana-jisx0201 . "jisx0201.*")
+    (chinese-gb2312 . "gb2312.*")
+    (chinese-big5-1 . "big5-*")
+    (korean-ksc5601 . "ksc5601.*")
+    (latin-iso8859-1 . "mac-roman")
+    (latin-iso8859-2 . "mac-centraleurroman")
+    (cyrillic-iso8859-5 . "mac-cyrillic")))
 
-(defun carbon-font-spec-japanese-generic (name size pt)
-  (carbon-font-concat-with-comma
-   (format "japanese-jisx0208:-apple-%s-medium-r-normal--%d-%d-75-75-m-%d-jisx0208.1983-sjis" 
-           name size pt pt)
-   (format "japanese-jisx0201:-apple-%s-medium-r-normal--%d-%d-75-75-m-%d-jisx0201.1976-0" 
-           name size pt pt)))
+(defvar carbon-font-xlfd-template
+  "-apple-%s-medium-r-normal--%d-*-*-*-*-*-mac-roman")
 
-(defun carbon-font-spec-chinese-std (size pt)
-  (carbon-font-concat-with-comma
-   (format "chinese-gb2312:-apple-$A;*ND:ZLe(B-medium-r-normal--%d-%d-75-75-m-%d-gb2312.1980-0" 
-           size pt pt)
-   (format "chinese-big5-1:-apple-$(0\cE*(B pro-medium-r-normal--%d-%d-75-75-m-%d-big5-0" 
-           size pt pt)))
+(defun carbon-font-create-encode-family-reg-list (list)
+  (mapcar (function
+           (lambda (s)
+             (cons (car s)
+                   (cons (cdr s)
+                         (cdr (assoc (car s)
+                                     carbon-font-encode-reg-alist))))))
+          list))
 
-(defun carbon-font-spec-korean-std (size pt)
-  (format "korean-ksc5601:-apple-applegothic-medium-r-normal--%d-%d-75-75-m-%d-ksc5601.1989-0" 
-          size pt pt))
+(defun carbon-font-set-fontset-font (fontset list)
+  (dolist (elt list) (set-fontset-font fontset (car elt) (cdr elt))))
 
-(defvar carbon-font-monaco-alternative "lucida sans typewriter"
-  "Monaco alternative font name")
+(defun carbon-font-create-fontset (fontset size list)
+  (if (listp size)
+      (dolist (elt size) (carbon-font-create-fontset fontset elt list))
+    (let* ((asc-font (assoc 'ascii list))
+           (asc-xlfd (format carbon-font-xlfd-template (cdr asc-font) size)))
+      (carbon-font-set-fontset-font
+       (create-fontset-from-mac-roman-font asc-xlfd nil fontset)
+       (carbon-font-create-encode-family-reg-list (delete asc-font list))))))
 
-(defvar carbon-font-monaco-alternative-exist (x-list-fonts (concat "*-" carbon-font-monaco-alternative "-*"))
-  "Variable if monaco alternative font is installed or not.")
+;;
+;; fontset definition section
+;;
 
-(defvar carbon-font-courier_new-exist (x-list-fonts "*-courier new-*")
-  "Variable if courier new font is installed or not.")
-
-(defvar carbon-font-monaco_cy-exist (x-list-fonts "*-monaco cy-*")
-  "Variable if monaco cy font is installed or not.")
-
-(defvar carbon-font-monaco_ce-exist (x-list-fonts "*-monaco ce-*")
-  "Variable if monaco ce font is installed or not.")
-
-(defun carbon-font-spec-family-monaco (size ascsize alternative)
-  (carbon-font-concat-with-comma
-   (format "ascii:-apple-%s-medium-r-normal--%d-*-*-*-m-*-mac-*"
-;;    (format "ascii:-apple-%s-medium-r-normal--%d-*-75-75-m-*-mac-*"
-           (if alternative carbon-font-monaco-alternative "monaco")
-           ascsize)
-;   (format "latin-iso8859-1:-apple-monaco-medium-r-normal--%d-*-75-75-m-*-mac-roman" size)
-   (format "latin-iso8859-1:-apple-%s-medium-r-normal--%d-*-75-75-m-*-mac-*"
-           (if alternative carbon-font-monaco-alternative "monaco")
-           ascsize)
-   (format "greek-iso8859-7:-apple-symbol-medium-r-normal--%d-*-75-75-m-*-mac-symbol" size)
-;;    (format "latin-iso8859-7:-apple-monaco-medium-r-normal--%d-*-75-75-m-*-mac-roman" size)
-;;    (format "latin-iso8859-7:-apple-%s-medium-r-normal--%d-*-75-75-m-*-mac-*"
-;;            (if alternative carbon-font-monaco-alternative "monaco")
-;;            ascsize)
-;   (format "latin-iso8859-9:-apple-monaco-medium-r-normal--%d-*-75-75-m-*-mac-roman" size)
-   (format "latin-iso8859-9:-apple-%s-medium-r-normal--%d-*-75-75-m-*-mac-*"
-           (if alternative carbon-font-monaco-alternative "monaco")
-           ascsize)
-   (format "latin-iso8859-15:-apple-%s-medium-r-normal--%d-*-75-75-m-*-mac-*"
-           (if alternative carbon-font-monaco-alternative "monaco")
-           ascsize)
-   (format "mac-roman-lower:-apple-%s-medium-r-normal--%d-*-75-75-m-*-mac-*"
-           (if alternative carbon-font-monaco-alternative "monaco")
-           ascsize)
-   (format "mac-roman-upper:-apple-%s-medium-r-normal--%d-*-75-75-m-*-mac-*"
-           (if alternative carbon-font-monaco-alternative "monaco")
-           ascsize)
-   (format "mule-unicode-0100-24ff:-apple-symbol-medium-r-normal--%d-*-75-75-m-*-mac-symbol" size)
-;;    (format "mule-unicode-0100-24ff:-apple-%s-medium-r-normal--%d-*-75-75-m-*-mac-*"
-;;            (if alternative carbon-font-monaco-alternative "monaco")
-;;            ascsize)
-   (format "mule-unicode-2500-33ff:-apple-%s-medium-r-normal--%d-*-75-75-m-*-mac-*"
-           (if alternative carbon-font-monaco-alternative "monaco")
-           ascsize)
-   (format "mule-unicode-e000-ffff:-apple-%s-medium-r-normal--%d-*-75-75-m-*-mac-*"
-           (if alternative carbon-font-monaco-alternative "monaco")
-           ascsize)
-   (format "iso10646-1:-apple-%s-medium-r-normal--%d-*-75-75-m-*-mac-*"
-           (if alternative carbon-font-monaco-alternative "monaco")
-           ascsize)
-   (format "latin-iso8859-2:-apple-%s-medium-r-normal--%d-*-75-75-m-*-mac-centraleurroman"
-           (if carbon-font-monaco_ce-exist "monaco ce" "*")
-           size)
-   (format "cyrillic-iso8859-5:-apple-%s-medium-r-normal--%d-*-75-75-m-*-mac-cyrillic"
-	   (if carbon-font-monaco_cy-exist "monaco cy" "*")
-	   size)
-   ))
-
-(defun carbon-font-spec-family-courier (size ascsize cnew)
-  (carbon-font-concat-with-comma
-   (format "ascii:-apple-%s-*-*-normal--%d-*-75-75-m-*-mac-roman"
-           (if cnew "courier new" "courier")
-           ascsize)
-   (format "latin-iso8859-1:-apple-%s-*-*-normal--%d-*-75-75-m-*-mac-roman"
-           (if cnew "courier new" "courier")
-           size)
-   (format "latin-iso8859-15:-apple-%s-*-*-normal--%d-*-75-75-m-*-mac-roman"
-           (if cnew "courier new" "courier")
-           size)
-   (format "mac-roman-lower:-apple-%s-*-*-normal--%d-*-75-75-m-*-mac-roman"
-           (if cnew "courier new" "courier")
-           size)
-   (format "mac-roman-upper:-apple-%s-*-*-normal--%d-*-75-75-m-*-mac-roman"
-           (if cnew "courier new" "courier")
-           size)
-   (format "mule-unicode-0100-24ff:-apple-%s-*-*-normal--%d-*-75-75-m-*-mac-roman"
-           (if cnew "courier new" "courier")
-           size)
-   (format "mule-unicode-2500-33ff:-apple-%s-*-*-normal--%d-*-75-75-m-*-mac-roman"
-           (if cnew "courier new" "courier")
-           size)
-   (format "mule-unicode-e000-ffff:-apple-%s-*-*-normal--%d-*-75-75-m-*-mac-roman"
-           (if cnew "courier new" "courier")
-           size)
-   (format "iso10646-1:-apple-%s-*-*-normal--%d-*-75-75-m-*-mac-roman"
-           (if cnew "courier new" "courier")
-           size)
-   (format "latin-iso8859-2:-apple-courier ce-medium-r-normal--%d-*-75-75-m-*-mac-centraleurroman" size)
-   (format "cyrillic-iso8850-5:-apple-%s-medium-r-normal--%d-*-75-75-m-*-mac-cyrillic"
-           (if (<= size 12) "lucida grande cy" "*")
-           size)
-   ))
+(defvar carbon-font-defined-sizes '(12 7 8 9 10 14 16 18 20 24))
 
 ;;
 ;; hiraginomaru** = $B%R%i%.%N4]%4(B + monaco(alternative) 
 ;;
 
-(defun carbon-font-create-fontset-hiraginomaru (size cjksize cjkpt ascsize alternative)
-  (if (or (not alternative) carbon-font-monaco-alternative-exist)
-      (create-fontset-from-fontset-spec
-       (carbon-font-concat-with-comma 
-        (format "-*-fixed-medium-r-normal-*-%d-*-*-*-*-*-fontset-hiraginomaru%02d" size size)
-        (carbon-font-spec-japanese-generic "$B%R%i%.%N4]%4(B pro w4" cjksize cjkpt)
-        (carbon-font-spec-chinese-std cjksize cjkpt)
-        (carbon-font-spec-korean-std cjksize cjkpt)
-        (carbon-font-spec-family-monaco size ascsize alternative)
-        ))))
+(defvar carbon-font-encode-family-list-hiraginomaru
+  (list '(ascii . "monaco")
+        '(japanese-jisx0208 . "$B%R%i%.%N4]%4(B*")
+        '(katakana-jisx0201 . "$B%R%i%.%N4]%4(B*")
+        '(chinese-gb2312 . "$A;*ND:ZLe(B*")
+        (cons 'chinese-big5-1
+              (if (x-list-fonts "*apple ligothic medium*")
+                  "apple ligothic medium*" "$(0\cE*(B*"))
+        '(korean-ksc5601 . "applegothic*")))
 
-(carbon-font-create-fontset-hiraginomaru 24 28 288 22 nil)
-(carbon-font-create-fontset-hiraginomaru 20 24 240 19 nil)
-(carbon-font-create-fontset-hiraginomaru 18 22 216 18 nil)
-(carbon-font-create-fontset-hiraginomaru 16 20 200 16 nil)
-(carbon-font-create-fontset-hiraginomaru 14 16 160 14 nil)
-(carbon-font-create-fontset-hiraginomaru 12 14 140 12 nil)
-(carbon-font-create-fontset-hiraginomaru 10 12 120 10 nil)
-(carbon-font-create-fontset-hiraginomaru  9 12 120  9 nil)
-(carbon-font-create-fontset-hiraginomaru  8 10 100  8 nil)
-(carbon-font-create-fontset-hiraginomaru  7  8  80  7 nil)
+(carbon-font-create-fontset "hiraginomaru"
+                            carbon-font-defined-sizes
+                            carbon-font-encode-family-list-hiraginomaru)
 
 ;;
 ;; hiraginokaku** = $B%R%i%.%N3Q%4(B + monaco(alternative) 
 ;;
 
-(defun carbon-font-create-fontset-hiraginokaku (size cjksize cjkpt ascsize alternative)
-  (if (or (not alternative) carbon-font-monaco-alternative-exist)
-      (create-fontset-from-fontset-spec
-       (carbon-font-concat-with-comma 
-        (format "-*-fixed-medium-r-normal-*-%d-*-*-*-*-*-fontset-hiraginokaku%02d" size size)
-        (carbon-font-spec-japanese-generic "$B%R%i%.%N3Q%4(B pro w3" cjksize cjkpt)
-        (carbon-font-spec-chinese-std cjksize cjkpt)
-        (carbon-font-spec-korean-std cjksize cjkpt)
-        (carbon-font-spec-family-monaco size ascsize alternative)
-        ))))
+(defvar carbon-font-encode-family-list-hiraginokaku
+  (list '(ascii . "monaco")
+        '(japanese-jisx0208 . "$B%R%i%.%N3Q%4(B*")
+        '(katakana-jisx0201 . "$B%R%i%.%N3Q%4(B*")
+        (cons 'chinese-gb2312
+              (if (x-list-fonts "*$A;*NDO8:Z(B*") "$A;*NDO8:Z(B*" "$A;*ND:ZLe(B*"))
+        '(chinese-big5-1 . "$(0\cE*(B*")
+        '(korean-ksc5601 . "applegothic*")))
 
-(carbon-font-create-fontset-hiraginokaku 24 28 288 22 nil)
-(carbon-font-create-fontset-hiraginokaku 20 24 240 19 nil)
-(carbon-font-create-fontset-hiraginokaku 18 22 216 18 nil)
-(carbon-font-create-fontset-hiraginokaku 16 20 200 16 nil)
-(carbon-font-create-fontset-hiraginokaku 14 16 160 14 nil)
-(carbon-font-create-fontset-hiraginokaku 12 14 140 12 nil)
-(carbon-font-create-fontset-hiraginokaku 10 12 120 10 nil)
-(carbon-font-create-fontset-hiraginokaku  9 12 120  9 nil)
-(carbon-font-create-fontset-hiraginokaku  8 10 100  8 nil)
-(carbon-font-create-fontset-hiraginokaku  7  8  80  7 nil)
+(carbon-font-create-fontset "hiraginokaku"
+                            carbon-font-defined-sizes
+                            carbon-font-encode-family-list-hiraginokaku)
 
 ;;
 ;; hiraginomin** = $B%R%i%.%NL@D+(B + courier 
 ;;
 
-(defun carbon-font-create-fontset-hiraginomin (size cjksize cjkpt ascsize cnew)
-  (if (or (not cnew) carbon-font-courier_new-exist)
-      (create-fontset-from-fontset-spec
-       (carbon-font-concat-with-comma 
-        (format "-*-fixed-medium-r-normal-*-%d-*-*-*-*-*-fontset-hiraginomin%02d" size size)
-        (carbon-font-spec-japanese-generic "$B%R%i%.%NL@D+(B pro w3" cjksize cjkpt)
-        (carbon-font-spec-chinese-std cjksize cjkpt)
-        (carbon-font-spec-korean-std cjksize cjkpt)
-        (carbon-font-spec-family-courier size ascsize cnew)
-        ))))
+(defvar carbon-font-encode-family-list-hiraginomin
+  (list '(ascii . "courier")
+        '(japanese-jisx0208 . "$B%R%i%.%NL@D+(B*")
+        '(katakana-jisx0201 . "$B%R%i%.%NL@D+(B*")
+        (cons 'chinese-gb2312
+              (if (x-list-fonts "*$A;*NDKNLe(B*") "$A;*NDKNLe(B*" "$A;*ND:ZLe(B*"))
+        (cons 'chinese-big5-1
+              (if (x-list-fonts "*$(0\c+{(B*") "$(0\c+{(B*" "$(0\cE*(B*"))
+        (cons 'korean-ksc5601
+              (if (x-list-fonts "*applemyungjo*") "applemyungjo*"
+                "applegothic*"))))
 
-(carbon-font-create-fontset-hiraginomin 24 28 288 24 nil)
-(carbon-font-create-fontset-hiraginomin 20 22 220 19 nil)
-(carbon-font-create-fontset-hiraginomin 18 22 216 18 nil)
-(carbon-font-create-fontset-hiraginomin 16 20 200 16 nil)
-;; (carbon-font-create-fontset-hiraginomin 16 20 200 16   t)
-(carbon-font-create-fontset-hiraginomin 14 16 160 14 nil)
-(carbon-font-create-fontset-hiraginomin 12 14 140 12 nil)
-(carbon-font-create-fontset-hiraginomin 10 12 120 10 nil)
-(carbon-font-create-fontset-hiraginomin  9 10 100  9 nil)
-(carbon-font-create-fontset-hiraginomin  8 10 100  8 nil)
-;; (carbon-font-create-fontset-hiraginomin  7  8  80  7 t)
-(carbon-font-create-fontset-hiraginomin  7  8  80  7 nil)
+(carbon-font-create-fontset "hiraginomin"
+                            carbon-font-defined-sizes
+                            carbon-font-encode-family-list-hiraginomin)
 
 ;;
 ;; osaka** = osaka + monaco(alternative) 
 ;;
 
-(defun carbon-font-create-fontset-osaka (size cjksize cjkpt alternative japanese)
-  (if (or (not alternative) carbon-font-monaco-alternative-exist)
-      (create-fontset-from-fontset-spec
-       (carbon-font-concat-with-comma 
-        (format "-apple-osaka-medium-r-normal-*-%d-*-*-*-*-*-fontset-osaka%02d" size size)
-        (and japanese (carbon-font-spec-japanese-generic "osaka" cjksize cjkpt))
-        (carbon-font-spec-chinese-std cjksize cjkpt)
-        (carbon-font-spec-korean-std cjksize cjkpt)
-        (carbon-font-spec-family-monaco size size alternative)
-        ))))
+(defvar carbon-font-encode-family-list-osaka
+  '((ascii . "monaco")
+    (japanese-jisx0208 . "osaka*")
+    (katakana-jisx0201 . "osaka*")
+    (chinese-gb2312 . "$A;*ND:ZLe(B*")
+    (chinese-big5-1 . "$(0\cE*(B*")
+    (korean-ksc5601 . "applegothic*")))
 
-(carbon-font-create-fontset-osaka 24 28 288 nil   t)
-(carbon-font-create-fontset-osaka 20 24 240 nil nil)
-(carbon-font-create-fontset-osaka 18 22 216 nil nil)
-(carbon-font-create-fontset-osaka 16 20 200 nil nil)
-(carbon-font-create-fontset-osaka 15 18 180 nil nil)
-(carbon-font-create-fontset-osaka 14 16 160 nil   t)
-(carbon-font-create-fontset-osaka 12 14 140 nil nil)
-(carbon-font-create-fontset-osaka 10 12 120 nil nil)
-(carbon-font-create-fontset-osaka  9 12 120 nil nil)
-(carbon-font-create-fontset-osaka  8 10 100 nil nil)
-(carbon-font-create-fontset-osaka  7  8  80 nil nil)
+(carbon-font-create-fontset "osaka"
+                            carbon-font-defined-sizes
+                            carbon-font-encode-family-list-osaka)
 
 ;;
 ;;  $BJQ?t(B section
 ;;
 
 ;;  $B;HMQ$9$k%U%)%s%H%;%C%H$rJQ$($?8e!"<+F0$G!"%\!<%k%I$r%j%9%1!<%k$5$;$k!#(B
-;;  $B$b$7!"(BSilk$B$r;H$&>l9g$O!"(Bnil$B$K%;%C%H(B
-
-(defvar carbon-font-auto-rescale-enable t
-  "Enable auto set face-font-rescale-alist after changing font.")
-
 ;;  $B%\!<%k%I$r%j%9%1!<%k$9$k0Y$N%U%!%/%?!<$NDj5A(B
 
-(defvar carbon-font-scale-alist-without-silk
-  '(("ayuthaya-bold" .   (
-                          ("07". 0.8)
-                          ("08". 0.95)
-                          ("09". 0.85)
-                          ("10". 0.9)
-                          ("12". 0.9)
-                          ("14". 0.9)
-                          ("16". 0.95)
-                          ("15". 0.95)
-                          ("18". 0.9)
-                          ("20". 0.95)
-                          ("24". 1.0)))
-    ("monaco-bold" . (
-                          ("07". 0.8)
-                          ("08". 0.95)
-                          ("09". 0.90)
-                          ("10". 0.8)
-                          ("12". 0.9)
-                          ("14". 0.9)
-                          ("16". 0.95)
-                          ("15". 0.95)
-                          ("18". 0.9)
-                          ("20". 0.95)
-                          ("24". 0.92)))
-;;     ("ayuthaya-medium" . (("08". 1.1)
-;;                           ("09". 1.1)
-;;                           ("20". 1.1)
-;;                           ("24". 1.1)))
-    ("courier-bold" . (   ("07". 1.0)
-                          ("09". 0.9)
-                          ("10". 0.9)))
-    ("courier-medium" . ( ("07". 1.0)
-                          ("20". 1.1)))
-    ("osaka-medium-r" .  (
-                          ("07". 1.15)
-                          ("08". 1.25)
-                          ("09". 1.35)
-                          ("10". 1.2)
-                          ("12". 1.2)
-                          ("15". 1.2)
-                          ("16". 1.25)
-                          ("18". 1.25)
-                          ("20". 1.2)
-                          ))
-    ("osaka-medium-i" .  (
-                          ("07". 1.15)
-                          ("08". 1.25)
-                          ("09". 1.35)
-                          ("10". 1.2)
-                          ("12". 1.2)
-                          ("15". 1.2)
-                          ("16". 1.25)
-                          ("18". 1.25)
-                          ("20". 1.2)
-                          ))
-    ("osaka-bold" .      (
-                          ("08". 1.2)
-                          ("09". 1.3)
-                          ("10". 1.10)
-                          ("12". 1.15)
-                          ("15". 1.15)
-                          ("16". 1.20)
-                          ("18". 1.20)
-                          ("20". 1.15)
-                          ))
-    )
-  "ReScale factor alist for each fonts and size without silk.")
-
-(defvar carbon-font-scale-alist-with-silk
-  '(("ayuthaya-medium" . (("20". 1.1)
-                          ("24". 1.1)))
-    ("courier-medium" . ( ("20". 1.1)))
-    ("osaka-medium" . (
-;;                          ("07". 1.1)
-                          ("08". 1.2)
-                          ("09". 1.2)
-                          ("10". 1.2)
-                          ("12". 1.2)
-;;                          ("14". 1.3)
-                          ("15". 1.2)
-;;                          ("16". 1.3)
-;;                          ("18". 1.2)
-                          ("20". 1.2)
-;;                          ("24". 1.3)
-                          ))
-    ("osaka-bold" . (
-;;                          ("07". 1.2)
-                          ("08". 1.3)
-                          ("09". 1.3)
-                          ("10". 1.3)
-                          ("12". 1.3)
-;;                          ("14". 1.4)
-                          ("15". 1.2)
-;;                          ("16". 1.4)
-;;                          ("18". 1.3)
-                          ("20". 1.3)
-;;                          ("24". 1.4)
-                          ))
-    )
-  "ReScale factor alist for each fonts and size with silk.")
+(defvar carbon-font-get-scale-alist
+  '(("monaco-bold" . (    ( "7" . 0.8)
+                          ( "8" . 0.95)
+                          ( "9" . 0.90)
+                          ("10" . 0.8)
+                          ("12" . 0.9)
+                          ("14" . 0.9)
+                          ("16" . 0.95)
+                          ("18" . 0.9)
+                          ("20" . 0.95)
+                          ("24" . 0.92)))
+    ("courier-bold" . (   ( "7" . 1.0)
+                          ( "9" . 0.9)
+                          ("10" . 0.9)))
+    ("courier-medium" . ( ( "7" . 1.0)
+                          ("20" . 1.1)))
+    ("osaka-medium" . (   ( "7" . 1.15)
+                          ( "8" . 1.25)
+                          ( "9" . 1.35)
+                          ("10" . 1.2)
+                          ("12" . 1.2)
+                          ("14" . 1.2)
+                          ("16" . 1.25)
+                          ("18" . 1.25)
+                          ("20" . 1.2)
+                          ("24" . 1.2)))
+    ("osaka-bold" . (     ( "8" . 1.2)
+                          ( "9" . 1.25)
+                          ("10" . 1.10)
+                          ("12" . 1.2)
+                          ("14" . 1.2)
+                          ("16" . 1.20)
+                          ("18" . 1.20)
+                          ("20" . 1.15)
+                          ("24" . 1.2)))
+    ("pro w4-medium" . (  ( "7" . 1.15)
+                          ( "8" . 1.3)
+                          ( "9" . 1.35)
+                          ("10" . 1.2)
+                          ("12" . 1.2)
+                          ("14" . 1.2)
+                          ("16" . 1.25)
+                          ("18" . 1.25)
+                          ("20" . 1.2)
+                          ("24" . 1.2)))
+    ("pro w4-bold" . (    ( "7" . 1.15)
+                          ( "8" . 1.3)
+                          ( "9" . 1.35)
+                          ("10" . 1.2)
+                          ("12" . 1.2)
+                          ("14" . 1.2)
+                          ("16" . 1.25)
+                          ("18" . 1.25)
+                          ("20" . 1.2)
+                          ("24" . 1.2)))
+    ("pro w3-medium" . (  ( "7" . 1.15)
+                          ( "8" . 1.3)
+                          ( "9" . 1.35)
+                          ("10" . 1.2)
+                          ("12" . 1.2)
+                          ("14" . 1.2)
+                          ("16" . 1.25)
+                          ("18" . 1.25)
+                          ("20" . 1.2)
+                          ("24" . 1.2)))
+    ("pro w3-bold" . (    ( "7" . 1.15)
+                          ( "8" . 1.3)
+                          ( "9" . 1.35)
+                          ("10" . 1.2)
+                          ("12" . 1.2)
+                          ("14" . 1.2)
+                          ("16" . 1.25)
+                          ("18" . 1.25)
+                          ("20" . 1.2)
+                          ("24" . 1.2)))
+    ("medium-.*-gb2312" . (("7" . 1.15)
+                          ( "8" . 1.25)
+                          ( "9" . 1.35)
+                          ("10" . 1.2)
+                          ("12" . 1.2)
+                          ("16" . 1.25)
+                          ("18" . 1.25)
+                          ("20" . 1.2)))
+    ("bold-.*-gb2312" .  (( "8" . 1.2)
+                          ( "9" . 1.3)
+                          ("10" . 1.10)
+                          ("12" . 1.2)
+                          ("16" . 1.20)
+                          ("18" . 1.20)
+                          ("20" . 1.15)))
+    ("medium-.*-big5" .  (( "7" . 1.15)
+                          ( "8" . 1.25)
+                          ( "9" . 1.35)
+                          ("10" . 1.2)
+                          ("12" . 1.2)
+                          ("16" . 1.25)
+                          ("18" . 1.25)
+                          ("20" . 1.2)))
+    ("bold-.*-big5" .    (( "8" . 1.2)
+                          ( "9" . 1.3)
+                          ("10" . 1.10)
+                          ("12" . 1.2)
+                          ("16" . 1.20)
+                          ("18" . 1.20)
+                          ("20" . 1.15)))
+    ("medium-.*-ksc5601" . (("7" . 1.15)
+                          ( "8" . 1.25)
+                          ( "9" . 1.35)
+                          ("10" . 1.2)
+                          ("12" . 1.2)
+                          ("16" . 1.25)
+                          ("18" . 1.25)
+                          ("20" . 1.2)))
+    ("bold-.*-ksc5601" . (( "8" . 1.2)
+                          ( "9" . 1.3)
+                          ("10" . 1.10)
+                          ("12" . 1.2)
+                          ("16" . 1.20)
+                          ("18" . 1.20)
+                          ("20" . 1.15))))
+  "ReScale factor alist for each fonts and size.")
 
 ;;  $B4X?tDj5A(B
-;;
+
 ;;  $B%+%l%s%H%U%l!<%`$G;H$o$l$F$$$k%U%)%s%H$N!"%j%9%1!<%k%U%!%/%?!<$r!"(B
 ;;  carbon-font-scale-alist $B$+$i!"<hF@$9$k!#(B
 
 (defun carbon-font-get-scale (font-name)
-  "current frame $B$G!"(Bfont-name $B$N!"(Brescale parameter $B$rJV$9(B"
-  (let
-      ((x
-        (cdr (assoc (substring (cdr (assoc 'font (frame-parameters))) -2 nil)
-                    (assoc font-name
-                           (if carbon-font-auto-rescale-enable
-                               carbon-font-scale-alist-without-silk
-                             carbon-font-scale-alist-with-silk))
-                    ))
-        ))
-    (if x x 1.0)
-    ))
+  "current frame $B$G!"(Bfont-name $B$N!"(Brescale factor $B$rJV$9(B"
+  (let* ((xlfd-fields (x-decompose-font-name (frame-parameter nil 'font)))
+	 (scale (cdr (assoc (aref xlfd-fields xlfd-regexp-pixelsize-subnum)
+                            (assoc font-name carbon-font-get-scale-alist)))))
+    (cons (format ".*%s.*" font-name) (or scale 1.0))))
 
 ;;  $B<hF@$7$?%j%9%1!<%k%U%!%/%?!<$G!"(Bface-font-rescale-alist$B$r=q$-49$($k!#(B
 
-(defun carbon-font-append-factor-recursively (scale-list)
-  "Append rescale list to 'face-font-rescale-alist"
-  (setq face-font-rescale-alist
-        (append
-         (list (cons (concat ".*" (car (car scale-list)) ".*")
-                     (carbon-font-get-scale (car (car scale-list)))
-                     ))
-         (delete (assoc (concat ".*" (car (car scale-list)) ".*")
-                        face-font-rescale-alist) face-font-rescale-alist)
-         ))
-  (if (cdr scale-list)
-      (carbon-font-append-factor-recursively (cdr scale-list))))
-
-;; (defun carbon-font-set-rescale-alist ()
-;;   "Append rescale list to 'face-font-rescale-alist" 
-;;   (dolist (elt (if carbon-font-auto-rescale-enable
-;;                    carbon-font-scale-alist-without-silk
-;;                  carbon-font-scale-alist-with-silk))
-;;     (setq face-font-rescale-alist
-;;           (append
-;;            (list (cons (concat ".*" (car elt) ".*")
-;;                        (carbon-font-get-scale (car elt))))
-;;            (delete (assoc (concat ".*" (car elt) ".*") face-font-rescale-alist)
-;;                    face-font-rescale-alist)))
-;;     ))
+(defun carbon-font-append-factor ()
+  "$B<hF@$7$?(B rescale factor $B$G!"(Bface-font-rescale-alist $B$r=q$-49$($k!#(B"
+  (dolist (elt carbon-font-get-scale-alist)
+    (let* ((new (carbon-font-get-scale (car elt)))
+           (old (assoc (car new) face-font-rescale-alist)))
+      (setq face-font-rescale-alist
+            (cons new (delete old face-font-rescale-alist))))))
 
 ;;  $B%U%)%s%H$,JQ99$5$l$?>l9g$K%U%C%/$r$+$1$F!"(B
-;;  carbon-font-append-factor-recursively $B$r5/F0$9$k!#(B
+;;  carbon-font-append-factor $B$r5/F0$9$k!#(B
 
-(add-hook 'after-setting-font-hook
-          (lambda ()
-            (carbon-font-append-factor-recursively
-             (if carbon-font-auto-rescale-enable
-                 carbon-font-scale-alist-without-silk
-               carbon-font-scale-alist-with-silk)
-             ))
-          )
-
-;; (add-hook 'after-setting-font-hook
-;;           'carbon-font-set-rescale-alist)
+(add-hook 'after-setting-font-hook 'carbon-font-append-factor)
 
 (provide 'carbon-font)
 
