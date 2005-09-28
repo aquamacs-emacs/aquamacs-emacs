@@ -1,4 +1,4 @@
-Aquamacs Change Log
+ï»¿Aquamacs Change Log
 
 	
 	Aquamacs is an Emacs distribution for Mac OS X 
@@ -10,16 +10,18 @@ questions, the Aquamacs Wiki (also: see Help menu).
 If you can't solve your problem, please contact us with questions 
 on the Emacs-OS X mailing list. The easiest way to subscribe is 
 to send a message to: macosx-emacs-on@email.esm.psu.edu
-Please use this list for bug reports or feature requests.
- 
+
 Aquamacs needs developers. Have a patch or ideas about the future 
-development of Aquamacs? Send your patch to the developers list:
+development of Aquamacs? Subscribe to the developers list:
 aquamacs-devel@aquamacs.org and check the development section 
 on the homepage.
 
-Please use "Send Bug Report"  (Help menu) to report bugs.
+Please use "Send Bug Report"  (Help menu) to report bugs, 
+or write to aquamacs-bugs@aquamacs.org.
 
-
+Do you like Aquamacs? Please donate to allow us to continue 
+development. Go here:  http://aquamacs.org/donations.shtml
+	
 Aquamacs Emacs
 	developed by David Reitter 
 	documentation by Kevin Walzer 
@@ -28,6 +30,79 @@ Aquamacs Emacs
 GNU Emacs is due to Richard M. Stallman and many others.
 GNU Emacs was ported to the Mac by Andrew Choi and many others.
 
+2005-09-29 Version 0.9.6  
+
+	* Aquamacs now provides extended input methods for 
+	Korean, Japanese and Chinese (GB/BIG5). You can select them in 
+	the Options menu, under "Aquamacs Multilingual Environment" / 
+	"Set Language Environment" - everything is integrated with
+	Mule.   
+
+	In order to load more fixed-width fonts suitable for use with
+	Asian languages, you may want to load the carbon-font package,
+	which is included (but not activated) in Aquamacs. Just add the
+	following to the file 
+	~/Library/Preferences/Aquamacs Emacs/Preferences.el:
+
+ 	(require 'carbon-font)
+
+	(maintained by  ìµœë§Œìˆ˜, Mahn-Soo Choi.)
+	
+	* CSS-Mode fixed. 
+	(First reported by Kris Khaira and Michael Jakl.)
+
+	* Dual-head setups (two screens) with one screen on the left, 
+	the system menu on the right and Aquamacs frames on the left 
+	caused problems.	
+	(reported by Otto Karl Florian Diesenbacher)
+	
+	* osx-key-mode-map can now be changed to modify key
+	assignments, in particular those of Apple Command keys
+	 (implemented in Emacs as Hyper = H- keys.)
+	(reported by William Ziemer)
+
+	* "font-lock-keywords ... void" message used to appear when
+	attempting to load a new file. This bug in the underlying GNU
+	Emacs has been fixed.
+
+	* Apple-Q and iconized frames: When all frames where iconized and
+	one attempted to quit Aquamacs, the application seemed to hang
+ 	(because it was showing a minibuffer prompt in an iconized frame.)
+	
+	* Thanks for the donations!
+	
+2005-08-31  Version 0.9.5b (minor bugfix release)
+
+	* Finder Start: Aquamacs Emacs could sometimes not be assigned as
+	default application to open files. Hence, double-clicking files in
+	Finder to open Aquamacs didn't work in all cases. Reset
+	LaunchServices database after installing Aquamacs as shown below
+	in case things don't work right away.
+	
+	* Application Services: Aquamacs didn't show up as a application
+	service ("Open New Buffer with Selection", etc.), or it couldn't
+	handle these calls. This should work now. If it doesn't work for
+	you, execute the following on the command line in order to reset
+	your LaunchServices database.
+	
+	/System/Library/Frameworks/ApplicationServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
+	
+	* Ctrl-Up/Down now skip paragraphs again.
+
+	* Attempt to rectify some problems where error messages
+	indicated that "max-lisp-eval-depth" had been exceeded.
+	More intelligence on this issue is appreciated. Please file bug
+	reports.
+
+	* tcl-mode included in the New Buffers menu.
+
+	* indicate-empty-lines: can be switched off now. Issues with 
+	saving the option may remain.
+
+	* Option Key Is Meta: this menu item showed the wrong (opposite)
+	state with its check-mark in some cases.
+	
+	
 2005-08-28  Version 0.9.5
 	
 	* Fonts: Setting the frame font gives a warning now (that the font
@@ -35,7 +110,7 @@ GNU Emacs was ported to the Mac by Andrew Choi and many others.
 	Appearance Themes are off.
 
 	* Keyboard: You can switch the Option key from its Emacs-specific
-	Meta meaning to its Mac typical use (composing keys such as ü
+	Meta meaning to its Mac typical use (composing keys such as Ã¼
 	 (Engl. keyboard) or \ (German keyboard) by typing Apple-; -- this
 	is equivalent to the Options menu entry "Option key for Meta".
 
@@ -437,7 +512,7 @@ Configuration:
 	* If mac-pass-option-to system is nil, your Aquamacs will get all
 	key combinations. If you press option-3, Aquamacs will see "M-3"
 	(or, depending on mac-option-modifier "A-3"). If it is non-nil,
-	you will simply get the pound sign (£) on a US keyboard.
+	you will simply get the pound sign (Â£) on a US keyboard.
 
 External Tools Support:
 
@@ -522,7 +597,7 @@ BUG FIXES:
 	* The menu shortcut entries were corrected.
 
 	* Characters that require the use of the option key work again. For
-	example, Alt-3 produces the pound sign (£) on a US keyboard, Alt-L
+	example, Alt-3 produces the pound sign (Â£) on a US keyboard, Alt-L
 	the 'at' sign @ and Alt-Shift-7 the backslash \ on a German
 	one. Inputting the Euro sign works, too. However, that means that
 	the option key is not used to emulate the 'meta' modifier; you
@@ -897,7 +972,7 @@ USABILITY:
 	* If mac-pass-option-to system is nil, your Aquamacs will get all key
 	combinations. If you press option-3, Aquamacs will see "M-3" (or,
 	depending on mac-option-modifier "A-3"). If it is non-nil, you
-	will simply get the pound sign (£) on a US keyboard.
+	will simply get the pound sign (Â£) on a US keyboard.
 
 	* FEATURE:
 	Aquamacs will load packaged configuration files residing in
@@ -932,7 +1007,7 @@ USABILITY:
 
 	* BUGFIX:
 	characters that require the use of the option key work again - for
-	example, Alt-3 produces the pound sign (£) on a US keyboard, 
+	example, Alt-3 produces the pound sign (Â£) on a US keyboard, 
 	Alt-L the 'at' sign @ and Alt-Shift-7 the backslash \ on a 
 	German one. Inputting the Euro sign works, too.
 	However, that means that the option key is not used to emulate
@@ -999,7 +1074,7 @@ VERSION 0.9.1
 	* The default font is saved to .emacs with "Save Options".
 	So if you don't like Lucida as normal font, just switch to another
 	font in the font menu (Options/Set Font/Fontset), then do "Set
-	current Fontset as default" and then "Save Options". Voilà!
+	current Fontset as default" and then "Save Options". VoilÃ !
 	* Some additional fontsets are available now.
 	The mac_roman* fontsets allow you to display
 	the Euro sign. (Note that ENTERING the Euro sign is a different
