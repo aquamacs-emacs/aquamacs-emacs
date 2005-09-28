@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.6 2005/09/19 19:12:40 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.7 2005/09/28 14:12:42 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -32,9 +32,9 @@
 
 
 
-(defvar aquamacs-version "0.9.5")
+(defvar aquamacs-version "0.9.6")
 (defvar aquamacs-version-id 095.5)
-(defvar aquamacs-minor-version "c")
+(defvar aquamacs-minor-version "")
 
 
 (defun aquamacs-setup ()
@@ -56,19 +56,29 @@ yes-or-no prompts - y or n will do."
     :version "22.0"
     :type 'boolean
     )
-  (defvaralias 'aquamacs-quick-yes-or-no-prompt 'aquamacs-quick-yes-or-no-prompt-flag)
+  (defvaralias 'aquamacs-quick-yes-or-no-prompt 
+    'aquamacs-quick-yes-or-no-prompt-flag)
 
   (defun aquamacs-repl-yes-or-no-p (arg)
     (interactive)
     (if aquamacs-quick-yes-or-no-prompt
-	(y-or-n-p arg)
+	(progn
+	  ;; ensure that frames are raised
+	  (unless (visible-frame-list)
+	    (raise-frame)
+	    )
+	  (y-or-n-p arg)
+	)
       (old-yes-or-no-p arg)
       )
-    )
+    ) 
   (fset 'yes-or-no-p 'aquamacs-repl-yes-or-no-p)
-
+      
   ;;(fset 'yes-or-no-p 'y-or-n-p)
 
+  (defadvice map-y-or-n-p (around raiseframe (&rest args) activate)
+    (raise-frame)
+    ad-do-it)    
 
   ;; No more annoying bells all the time
 
