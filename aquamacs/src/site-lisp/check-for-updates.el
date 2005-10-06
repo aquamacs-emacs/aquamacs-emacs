@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs version check
  
-;; Last change: $Id: check-for-updates.el,v 1.8 2005/09/19 19:00:30 davidswelt Exp $
+;; Last change: $Id: check-for-updates.el,v 1.9 2005/10/06 12:09:47 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -117,14 +117,22 @@ nil
 
 
 (defvar aquamacs-check-update-time-period 3
-  "Time to wait between online checks for update.")
+  "Time to wait (in days) between online checks for update.")
+
+(defvar aquamacs-check-update-timer nil)
 
 (defun aquamacs-check-for-updates ()
   (interactive)
   (aquamacs-check-for-updates-if-necessary 'force)
-)
+  ;; re-run the check after three days
+  (if aquamacs-check-update-timer
+      (cancel-timer aquamacs-check-update-timer))
+  (let ((secs (* 86400 aquamacs-check-update-time-period)))
+    (setq aquamacs-check-update-timer
+	  (run-with-timer secs secs 
+			  'aquamacs-check-for-updates-if-necessary 'force 'nonewstart))))
 
-(defun aquamacs-check-for-updates-if-necessary (&optional force-check)
+(defun aquamacs-check-for-updates-if-necessary (&optional force-check no-new-start)
   "Check (periodically) if there's an update for Aquamacs available, 
 and show user a message if there is."
   (let (  
@@ -177,7 +185,8 @@ and show user a message if there is."
 	  (setq last-update-check today)
 	  )
       )
-        (write-region (concat (number-to-string (+ 1 (or call-number 0))) "\n"
+        (write-region (concat (number-to-string (+ (if no-new-start 0 1) 
+						   (or call-number 0))) "\n"
 			  (number-to-string (or last-update-check 0)) "\n"
 			  (number-to-string (or session-id 0)) "\n"
 			   (if (> aquamacs-user-likes-beta 0) "1" "0") "\n"
