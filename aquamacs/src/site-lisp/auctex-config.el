@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: auctex
  
-;; Last change: $Id: auctex-config.el,v 1.7 2005/08/18 17:39:29 davidswelt Exp $
+;; Last change: $Id: auctex-config.el,v 1.8 2005/10/11 19:00:59 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -50,9 +50,10 @@
 			  "/opt/local/bin"
 			  "/usr/local/teTeX/bin/powerpc-apple-darwin-current")))
 
-(require 'tex-site nil t) 
-
-
+(load "edit-modes/auctex.el" nil t t)
+;; this is not done by default
+;; maybe add a menu option?
+;;(load "preview-latex.el" nil t t)
 
 (setq TeX-parse-self t)
 (setq-default TeX-master nil)
