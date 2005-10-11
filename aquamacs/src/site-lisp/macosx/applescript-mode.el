@@ -13,7 +13,9 @@
 ;; Author: sakito <sakito@users.sourceforge.jp>
 ;; Keywords: languages, tools
 
-(defconst applescript-mode-version "$Revision: 1.1 $"
+;; Changed string-to-int -> string-to-number (David Reitter)
+
+(defconst applescript-mode-version "$Revision: 1.2 $"
   "The current version of the AppleScript mode.")
 
 (defconst applescript-mode-help-address "sakito@users.sourceforge.jp"
@@ -478,7 +480,7 @@ contain this package.")
 
    ;; as integer
    ((string-match "\\`\\s-*\\([0-9]+\\)\\s-*\\'" retstr)
-    (string-to-int (match-string 1 retstr)))
+    (string-to-number (match-string 1 retstr)))
 
     ;; else
     (t (intern retstr))))
