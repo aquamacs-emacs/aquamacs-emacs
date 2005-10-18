@@ -3,114 +3,52 @@ Some Aquamacs ideas
 feel free to add your own!
 
 
-*** user-init-file
+* Printing
+DavidReitter: WYSIWYG printing show be supported. 
+the original OS X print dialogs / drivers / previews should be used.
+this means that printing needs to be done via ATSUI on C level,
+or somehow output to PDF (then have Preview.app handle the printing).
 
-Set user-init-file to Preferences.el
+PS2PDF solutions are not acceptable: they don't work (lacking fonts), or require Ghostscript (huge) to be installed.
 
-
-*** Speed up startup
-
-We should work on moving all the stuff that's in site-lisp right now to the lisp directory as an extension, and load it e.g. via site-load or in some other way that will make the Aquamacs customizations part of the saved state (binary) that is loaded when Emacs loads up. 
-This should reduce boot time to a minimum.
-Explanations here:
-	     http://www.zvon.org/other/elisp/Output/SEC661.html
-and here:    
-    http://www.gnu.org/software/emacs/elisp-manual/html_node/elisp_715.html
-
-Work is likely to involve
-- writing functions a-require and a-provide that run either load or require (or provide, respectively). When 'temacs' is called, require seems to be a no-no [can someone confirm?].
-- modifying the build process to copy all Aquamacs files into the appropriate lisp folder before Emacs is compiled, so things will get included when "temacs" is called
-- identify possible issues with this. releasing a beta version is advisable.
+  
+* A better Buffers menu
+DavidReitter: I think it would be a nice thing to structure all the buffers, similar to what msb-mode does. However, msb-mode creates submenus for each category, which is inefficient from a UI point of view - I want all buffers visible in the menu, but separated with divider lines and maybe with a greyed-out title. One could take msb and extend it so that it can do that. Then, move the frame-related stuff out of the File menu and combine it with the Buffers menu, so that we have the equivalent of a normal Windows menu on the Mac. It'd be good if there were functions that 'tile' frames, minimize and zoom them (maybe). But that's lower priority.
 
 
-
-*** Redesign the menu bar
-
-The current structure of the menu bar is far from optimal. Aquamacs already does a lot of shuffling to get items where they belong, yet we still see menu items where an average GUI user (i.e. OS X user) wouldn't expect them. For example, the "Split/Unsplit window" group would usually be a menu "Windows", which might be more appriately named "Frames" or "Buffers" (as existing) in Emacs. 
-I think it would be a good idea to rework all of the standard menus, throw out what shouldn't be there and maybe conceive functions that should be there. 
-Part of the job would be to carefully consider which special functions we should keep in the Tools menu. Do we really need "Read Net News (Gnus)", or the Calculator, or Games? All these things are handled by other applications, which do the job, IMHO, better anyways.
-Altering the menu will not upset long-time users too much - because they use the keyboard. So that's why I'm suggesting a redesign from scratch, to replace menu-bar.el. 
+* A better Fonts menu (1)
+DavidReitter: Someone needs to figure out how to put the Fonts into a proper sub-menu.
 
 
+* A better Fonts menu (2)
+DavidReitter: Someone needs to figure out how to create fontsets that include all compatible fonts for different charsets.
 
-*** Mac-UTF patch
-
-The MacEmacsJP project offers a 'UTF' patch that relates to charset conversion of buffers (or something like that). Someone with an interest for Asian languages should take a look at this and determine whether we want this in Aquamacs.
-
-http://sourceforge.jp/projects/macemacsjp/files/
-
- 
-*** Inline-patch (Asian input methods)
-
-Someone with knowledge of Asian languages should take a look at the inline-patch offered by the MacEmacsJP project. Is this useful, important?  
+* A better Fonts menu (3)
+DavidReitter: Someone needs to write a Carbon function that brings up the standard OS X font dialog and then takes the user's choice and converts it into a fontset usable by Emacs.
 
 
-*** "New Document"
+* Customization of Mode-specific themes
+DavidReitter: Someone knowledgable in customization buffers could figure out how to comfortably customize the aquamacs-mode-specific-default-themes variable.
 
-The "New" function is inherently flawed - we only create an empty buffer and put it into text-mode. Most comparable applications offer to create a document of a certain kind, which would be a choice of major modes, speaking in Emacs terms. Can we offer a sub-menu of common major modes? And add a few recently used major modes maybe? And a function that opens a buffer in a major mode that is specified interactively?
+
+* Command-modifier character in menus (and everywhere else)
+DavidReitter: We map the Command modifier to hyper, which results in it being described as 'H-'. At least in the menus, we want it to be a nice standard Apple-Command sign. Right now this is done by modifying the text of the menu items, which is quite a kludge. Also the keyboard shortcuts in the menus are not properly aligned, which looks ugly and is more difficult to read. Fixing this might be a bit of a challenge, and definitely something for a Carbon/C hacker.
+
+
+* Modifier key patch
+DavidReitter: change effect of mac-pass-option-to-system to only do it in cases where the option key actually modifies the given key. thus, we can preserve the assigned functionality for all keys where option doesn't have a particular effect on the keycode - for example for the arrow keys.
 
 
 
-
-*** Documentation
-
-Do we need more documentation regarding mode-specific frame-themes (see variable aquamacs-mode-specific-default-themes)?
+* Arrow keys with modifiers: standard Mac functionalities
+DavidReitter: Assign standard functionalities to the arrow keys when pressed with particular modifiers (command, alt, etc.)
 
 
+* Spell-Check with OS X
+DavidReitter: Can someone implement an interface that queries the built-in OS X spellchecker? It would have to implement the ispell/aspell API, which should be too hard. Because such a thing would be small, we could easily distribute it with Aquamacs.
 
-*** A better Buffers menu
-
-I think it would be a nice thing to structure all the buffers, similar to what msb-mode does. However, msb-mode creates submenus for each category, which is inefficient from a UI point of view - I want all buffers visible in the menu, but separated with divider lines and maybe with a greyed-out title. One could take msb and extend it so that it can do that. Then, move the frame-related stuff out of the File menu and combine it with the Buffers menu, so that we have the equivalent of a normal Windows menu on the Mac. It'd be good if there were functions that 'tile' frames, minimize and zoom them (maybe). But that's lower priority.
-
-
-*** A better Fonts menu (1)
-
-Someone needs to figure out how to put the Fonts into a proper sub-menu.
-
-
-*** A better Fonts menu (2)
-
-Someone needs to figure out how to create fontsets that include all compatible fonts for different charsets.
-
-*** A better Fonts menu (3)
-
-Someone needs to write a Carbon function that brings up the standard OS X font dialog and then takes the user's choice and converts it into a fontset usable by Emacs.
-
-
-*** Customization of Mode-specific themes
-
-Someone knowledgable in customization buffers could figure out how to comfortably customize the aquamacs-mode-specific-default-themes variable.
-
-
-*** Command-modifier character in menus (and everywhere else)
-
-We map the Command modifier to hyper, which results in it being described as 'H-'. At least in the menus, we want it to be a nice standard Apple-Command sign. Right now this is done by modifying the text of the menu items, which is quite a kludge. Also the keyboard shortcuts in the menus are not properly aligned, which looks ugly and is more difficult to read. Fixing this might be a bit of a challenge, and definitely something for a Carbon/C hacker.
-
-
-*** Modifier key patch
-
-change effect of mac-pass-option-to-system to only do it in cases where the option key actually modifies the given key. thus, we can preserve the assigned functionality for all keys where option doesn't have a particular effect on the keycode - for example for the arrow keys.
-
-
-
-*** Arrow keys with modifiers: standard Mac functionalities
-
-Assign standard functionalities to the arrow keys when pressed with particular modifiers (command, alt, etc.)
-
-
-*** Spell-Check with OS X
-
-Can someone implement an interface that queries the built-in OS X spellchecker? It would have to implement the ispell/aspell API, which should be too hard. Because such a thing would be small, we could easily distribute it with Aquamacs.
-
-
-*** Bugs
-
-- sometimes when all frames are gone and I open a file via drag&drop or from some terminal, Aquamacs brings up frames together with the newly loaded file. No good.
-
-
-
-
-
+* Tabs (to switch buffers)
+Anonymous: I suggest adding tabs. In addition or instead of having "show buffers in new frames" you could have "show new buffers in tab". This would allow very nice operation with LaTeX compilation etc. Also, I suggest flashing the tab name just like e.g. iTerm does when something changes…
 
 
 

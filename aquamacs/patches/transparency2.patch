@@ -1,27 +1,29 @@
---- lisp/frame.el.orig_t	2005-06-25 06:27:47.000000000 +0900
-+++ lisp/frame.el	2005-06-25 06:28:20.000000000 +0900
-@@ -927,6 +927,30 @@
+--- lisp/frame.el.original	2005-08-06 14:02:55.000000000 +0900
++++ lisp/frame.el	2005-08-06 14:09:08.000000000 +0900
+@@ -926,6 +926,32 @@
    (modify-frame-parameters (selected-frame)
  			   (list (cons 'border-color color-name))))
  
 +(when (memq system-type '(windows-nt darwin))
 +  (defun set-active-alpha (alpha &optional frame)
-+    "Set the opacity of FRAME in active state to ALPHA. A floating-point
-+parameter ALPHA should range from 0.0 (invisible) to 1.0 (completely opaque).
-+When called interactively, prompt for the value of the opacity to set.
-+FRAME defaults to the selected frame.  To get the frame's current
-+active alpha value state, use `frame-parameters'."
++    "Set the opacity of FRAME in active state to ALPHA.
++First argument ALPHA should range from 0.0 (invisible) to 1.0
++(completely opaque).
++When called interactively, prompt for the value of the opacity to
++set.  FRAME defaults to the selected frame.  To get the frame's
++current active alpha value state, use `frame-parameters'."
 +    (interactive "nActive alpha (0.0 - 1.0): ")
 +    (when (or (< alpha 0.0) (> alpha 1.0))
 +      (error "Alpha value must be between 0.0 and 1.0, inclusive"))
 +    (modify-frame-parameters frame
 +                             (list (cons 'active-alpha alpha))))
 +  (defun set-inactive-alpha (alpha &optional frame)
-+    "Set the opacity of FRAME in active state to ALPHA. A floating-point
-+parameter ALPHA should range from 0.0 (invisible) to 1.0 (completely opaque).
-+When called interactively, prompt for the value of the opacity to set.
-+FRAME defaults to the selected frame.  To get the frame's current
-+inactive alpha value state, use `frame-parameters'."
++    "Set the opacity of FRAME in inactive state to ALPHA.
++First argument ALPHA should range from 0.0 (invisible) to 1.0
++(completely opaque).
++When called interactively, prompt for the value of the opacity to
++set.  FRAME defaults to the selected frame.  To get the frame's
++current inactive alpha value state, use `frame-parameters'."
 +    (interactive "nInactive alpha (0.0 - 1.0): ")
 +    (when (or (< alpha 0.0) (> alpha 1.0))
 +      (error "Alpha value must be between 0.0 and 1.0, inclusive"))
@@ -31,8 +33,8 @@
  (defun auto-raise-mode (arg)
    "Toggle whether or not the selected frame should auto-raise.
  With arg, turn auto-raise mode on if and only if arg is positive.
---- src/frame.c.orig_t	2005-06-25 06:27:47.000000000 +0900
-+++ src/frame.c	2005-06-25 06:28:21.000000000 +0900
+--- src/frame.c.original	2005-08-06 14:02:55.000000000 +0900
++++ src/frame.c	2005-08-06 14:04:23.000000000 +0900
 @@ -106,6 +106,10 @@
  Lisp_Object Qleft_fringe, Qright_fringe;
  Lisp_Object Qbuffer_predicate, Qbuffer_list;
@@ -44,7 +46,7 @@
  
  Lisp_Object Qfullscreen, Qfullwidth, Qfullheight, Qfullboth;
  
-@@ -2581,6 +2585,10 @@
+@@ -2580,6 +2584,10 @@
    {"right-fringe",		&Qright_fringe},
    {"wait-for-wm",		&Qwait_for_wm},
    {"fullscreen",                &Qfullscreen},
@@ -55,8 +57,8 @@
  };
  
  #ifdef HAVE_WINDOW_SYSTEM
---- src/frame.h.orig_t	2005-06-25 06:27:47.000000000 +0900
-+++ src/frame.h	2005-06-25 06:28:21.000000000 +0900
+--- src/frame.h.original	2005-08-06 14:02:55.000000000 +0900
++++ src/frame.h	2005-08-06 14:04:23.000000000 +0900
 @@ -451,6 +451,11 @@
    /* Additional space to put between text lines on this frame.  */
    int extra_line_spacing;
@@ -69,7 +71,7 @@
    /* Set to non-zero in change_frame_size when size of frame changed
       Clear the frame in clear_garbaged_frames if set.  */
    unsigned resized_p : 1;
-@@ -1003,6 +1008,10 @@
+@@ -1007,6 +1012,10 @@
  extern Lisp_Object Qline_spacing;
  extern Lisp_Object Qwait_for_wm;
  extern Lisp_Object Qfullscreen;
@@ -80,18 +82,18 @@
  
  extern Lisp_Object Qleft_fringe, Qright_fringe;
  extern Lisp_Object Qheight, Qwidth;
---- src/macfns.c.orig_t	2005-06-25 06:27:47.000000000 +0900
-+++ src/macfns.c	2005-06-25 09:58:37.000000000 +0900
-@@ -302,6 +302,8 @@
+--- src/macfns.c.original	2005-08-06 14:02:55.000000000 +0900
++++ src/macfns.c	2005-08-06 14:04:23.000000000 +0900
+@@ -218,6 +218,8 @@
  
- extern void mac_get_window_bounds P_ ((struct frame *, Rect *, Rect *));
+ 
  
 +extern void x_set_frame_alpha P_ ((struct frame *, int));
 +
  /* Store the screen positions of frame F into XPTR and YPTR.
     These are the positions of the containing window manager window,
     not Emacs's own window.  */
-@@ -2026,6 +2028,82 @@
+@@ -1926,6 +1928,82 @@
  #endif /* not MAC_OSX */
  }
  
@@ -174,7 +176,7 @@
  
  /* Subroutines of creating a frame.  */
  
-@@ -2736,6 +2814,10 @@
+@@ -2636,6 +2714,10 @@
    x_default_parameter (f, parms, Qscroll_bar_width, Qnil,
  		       "scrollBarWidth", "ScrollBarWidth",
  		       RES_TYPE_NUMBER);
@@ -185,7 +187,7 @@
  
    /* Dimensions, especially FRAME_LINES (f), must be done via change_frame_size.
       Change will not be effected unless different from the current
-@@ -4445,6 +4527,8 @@
+@@ -4340,6 +4422,8 @@
    x_set_fringe_width,
    0, /* x_set_wait_for_wm, */
    x_set_fullscreen,
@@ -194,9 +196,9 @@
  };
  
  void
---- src/macterm.c.orig_t	2005-06-25 06:27:47.000000000 +0900
-+++ src/macterm.c	2005-06-25 09:58:38.000000000 +0900
-@@ -1771,6 +1771,23 @@
+--- src/macterm.c.original	2005-08-06 14:02:55.000000000 +0900
++++ src/macterm.c	2005-08-06 14:04:24.000000000 +0900
+@@ -1687,6 +1687,23 @@
    return FONT_TYPE_UNKNOWN;
  }
  
@@ -213,14 +215,14 @@
 +  UNBLOCK_INPUT;
 +
 +  if ((err == noErr) && (response >= 0x1020)) {
-+    SetWindowAlpha (f->output_data.mac->mWP,
++    SetWindowAlpha (FRAME_MAC_WINDOW(f),
 +                    activate_p? f->active_alpha: f->inactive_alpha);
 +  }
 +}
  
  
  /***********************************************************************
-@@ -3493,6 +3510,7 @@
+@@ -3403,6 +3420,7 @@
      ActivateControl (root_control);
    UNBLOCK_INPUT;
    x_update_cursor (f, 1);
@@ -228,7 +230,7 @@
  }
  
  static void
-@@ -3508,6 +3526,7 @@
+@@ -3418,6 +3436,7 @@
      DeactivateControl (root_control);
    UNBLOCK_INPUT;
    x_update_cursor (f, 1);
@@ -236,8 +238,8 @@
  }
  
  /* The focus has changed.  Update the frames as necessary to reflect
---- src/w32fns.c.orig_t	2005-06-25 06:27:47.000000000 +0900
-+++ src/w32fns.c	2005-06-25 09:56:21.000000000 +0900
+--- src/w32fns.c.original	2005-08-06 14:02:55.000000000 +0900
++++ src/w32fns.c	2005-08-06 14:04:24.000000000 +0900
 @@ -70,6 +70,8 @@
  
  extern char *lispy_function_keys[];
@@ -356,7 +358,7 @@
  };
  
  void
-@@ -8912,6 +8995,9 @@
+@@ -8914,6 +8997,9 @@
    /* ditto for GetClipboardSequenceNumber.  */
    clipboard_sequence_fn = (ClipboardSequence_Proc)
      GetProcAddress (user32_lib, "GetClipboardSequenceNumber");
@@ -366,9 +368,9 @@
  
    DEFVAR_INT ("w32-ansi-code-page",
  	      &w32_ansi_code_page,
---- src/w32term.c.orig_t	2005-06-25 06:27:47.000000000 +0900
-+++ src/w32term.c	2005-06-25 06:28:21.000000000 +0900
-@@ -272,6 +272,8 @@
+--- src/w32term.c.original	2005-08-06 14:02:55.000000000 +0900
++++ src/w32term.c	2005-08-06 14:04:24.000000000 +0900
+@@ -280,6 +280,8 @@
  
  static Lisp_Object Qvendor_specific_keysyms;
  
@@ -377,7 +379,7 @@
  
  /***********************************************************************
  			      Debugging
-@@ -1187,6 +1189,25 @@
+@@ -1211,6 +1213,25 @@
      return ANSI_FONT;
  }
  
@@ -403,7 +405,7 @@
  
  
  /***********************************************************************
-@@ -2786,6 +2807,7 @@
+@@ -2810,6 +2831,7 @@
       struct frame *f;
  {
    x_update_cursor (f, 1);
@@ -411,7 +413,7 @@
  }
  
  static void
-@@ -2793,6 +2815,7 @@
+@@ -2817,6 +2839,7 @@
       struct frame *f;
  {
    x_update_cursor (f, 1);
@@ -419,8 +421,8 @@
  }
  
  /* The focus has changed.  Update the frames as necessary to reflect
---- src/w32term.h.orig_t	2005-06-25 06:27:47.000000000 +0900
-+++ src/w32term.h	2005-06-25 06:29:12.000000000 +0900
+--- src/w32term.h.original	2005-08-06 14:02:55.000000000 +0900
++++ src/w32term.h	2005-08-06 14:04:24.000000000 +0900
 @@ -643,6 +643,14 @@
  
  #define WND_EXTRA_BYTES     (WND_LAST_INDEX)
