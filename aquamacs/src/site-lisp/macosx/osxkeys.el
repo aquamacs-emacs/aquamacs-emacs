@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.13 2005/09/19 19:00:56 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.14 2005/10/18 08:37:35 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -36,7 +36,7 @@
 (require 'aquamacs-tools)
 (aquamacs-require  '(boundp 'mac-command-modifier))
 (aquamacs-require  '(boundp 'mac-control-modifier))
-(aquamacs-require  '(boundp 'mac-pass-option-to-system))
+(aquamacs-require  '(boundp 'mac-option-modifier))
 
 
 ;; To do: this should only happen when the mode is switched on
@@ -44,7 +44,6 @@
 (setq mac-option-modifier 'meta) 
 (setq mac-control-modifier 'ctrl)
 (setq mac-command-modifier 'hyper)
-(setq mac-pass-option-to-system t) ;; let system do stuff with option
 (setq mac-pass-command-to-system t) ;; let system handle Apple-H and the like
 ;; (this is default anyways)
 
@@ -103,13 +102,14 @@
 (global-unset-key [f20])
 (global-unset-key [f16])
 (global-unset-key [f18])
-   
-  
+ 
+
 (defun clipboard-kill-ring-save-secondary ()
   "Copy secondary selection to kill ring, and save in the X clipboard."
 (interactive)
   (if mouse-secondary-overlay
-  (let ((x-select-enable-clipboard t))
+  (let ((x-select-enable-clipboard t)
+	(cua-keep-region-after-copy t))
     (clipboard-kill-ring-save 
      (overlay-start mouse-secondary-overlay) 
      (overlay-end mouse-secondary-overlay) )
@@ -178,7 +178,7 @@ default."
     (define-key map `[(meta up)] 'cua-scroll-down)
     (define-key map `[(meta down)] 'cua-scroll-up)
     
-    (define-key map `[(,osxkeys-command-key \;)] 'toggle-pass-option-to-system)
+    (define-key map `[(,osxkeys-command-key \;)] 'toggle-mac-option-modifier)
 
     (define-key map [(home)] 'beginning-of-buffer)
     (define-key map [(end)] 'end-of-buffer)
