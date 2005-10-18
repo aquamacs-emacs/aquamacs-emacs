@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.19 2005/09/28 14:12:58 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.20 2005/10/18 08:38:50 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -162,7 +162,13 @@
  
 (change-menu-text [menu-bar file] 'exit-emacs (format  "Quit Emacs                %sQ"  apple-char))
 ;(change-menu-text [menu-bar application] 'quit (format  "Quit Emacs                %sQ"  apple-char))
-(change-menu-text [menu-bar edit] 'copy (format  "Copy                 %sC"  apple-char))
+(define-key menu-bar-edit-menu [copy]
+  `(menu-item ,(format  "Copy                 %sC"  apple-char) 
+	      clipboard-kill-ring-save
+	      :enable mark-active
+	      :help "Copy selected text in region"
+	      :keys "\\[clipboard-kill-ring-save]"))
+ 
 (change-menu-text [menu-bar edit] 'paste (format  "Paste                 %sV"  apple-char))
 (change-menu-text [menu-bar edit] 'undo (format  "Undo                 %sZ"  apple-char))
 (easy-menu-add-item  nil '("Edit")
@@ -354,34 +360,40 @@ both existing buffers and buffers that you subsequently create."
        ) 'edit-options-separator)
   )
 
-
-(defun  toggle-pass-option-to-system (&optional interactively) 
+(defvar mac-option-modifier-enabled-value 'meta)
+(defun  toggle-mac-option-modifier (&optional interactively) 
   (interactive "p")
-   (setq mac-pass-option-to-system
-	 (not mac-pass-option-to-system))
-   (if interactively (customize-mark-as-set 'mac-pass-option-to-system))
-	   (message 
-	    (format "Option key is %s%s" 
-		    (if mac-pass-option-to-system
-			"not "
-		      "")
-		    (upcase-initials 
-		     (symbol-name (or mac-option-modifier 'meta))))))
+  (unless mac-option-modifier-enabled-value
+    (setq mac-option-modifier-enabled-value 'meta))
+   (setq mac-option-modifier
+	 (if mac-option-modifier
+	     (progn
+	       (setq mac-option-modifier-enabled-value mac-option-modifier)
+	       nil)
+	   mac-option-modifier-enabled-value))
+   (if interactively (customize-mark-as-set 'mac-option-modifier))
+   (message 
+    (format "Option key is %s%s" 
+	    (if mac-option-modifier 
+		""  "not ")
+	    (upcase-initials 
+	     (symbol-name (or mac-option-modifier 
+			      mac-option-modifier-enabled-value))))))
 
-
-(if (boundp 'mac-pass-option-to-system) 
+(if (boundp 'mac-option-modifier) 
     (define-key-after menu-bar-options-menu [option-to-system]
       `(menu-item
-	,(format "Option Key for %s (not extra characters)  %s;" 
-	       (upcase-initials (symbol-name (or mac-option-modifier 'meta)))
-	       apple-char)
-	toggle-pass-option-to-system 
-	:visible (boundp mac-pass-option-to-system)
+	(format "Option Key for %s (not extra characters)  %s;" 
+	       (upcase-initials (symbol-name 
+				 (or mac-option-modifier 
+				     mac-option-modifier-enabled-value)))
+	       ,apple-char)
+	toggle-mac-option-modifier 
+	:visible (boundp 'mac-option-modifier)
 	:help "Toggle whether to let Option key behave as Emacs key, 
 do not let it produce special characters (passing the key to the system)."
-	:button (:toggle . (not mac-pass-option-to-system)))
-       'edit-options-separator)
-  )
+	:button (:toggle . mac-option-modifier))
+       'edit-options-separator))
 
  ;; this is a redefine
 (define-key menu-bar-options-menu [mouse-set-font]
@@ -496,7 +508,15 @@ to the selected frame."
 (assq-delete-all 'delete-this-frame menu-bar-file-menu)
 (assq-delete-all 'separator-window menu-bar-file-menu)
 
+;; move this down after "customize"
 
+(define-key-after menu-bar-options-menu [save-custom-separator]
+  '("--") 'customize)
+
+(define-key-after menu-bar-options-menu [save]
+  '(menu-item "Save Options" menu-bar-options-save
+	      :help "Save options set from the menu above")
+  'save-custom-separator)
 
 
 
