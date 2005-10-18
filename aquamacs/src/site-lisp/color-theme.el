@@ -419,7 +419,8 @@ of `color-theme-history-max-length'.")
 ;; buffer.
 
 (defvar color-themes
-  '((color-theme-aalto-dark "Aalto Dark" "Jari Aalto <jari.aalto@poboxes.com>")
+  '((color-theme-tiger-xcode "Tiger / Xcode" "Kevin D. Smith <kevin.smith@themorgue.org>")
+    (color-theme-aalto-dark "Aalto Dark" "Jari Aalto <jari.aalto@poboxes.com>")
     (color-theme-aalto-light "Aalto Light" "Jari Aalto <jari.aalto@poboxes.com>")
     (color-theme-aliceblue "Alice Blue" "Girish Bharadwaj <girishb@gbvsoft.com>")
     (color-theme-andreas "Andreas" "Andreas Busch <Andreas.Busch@politics.ox.ac.uk>")
