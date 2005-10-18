@@ -51,13 +51,23 @@ mkdir Contents/Resources/site-lisp/edit-modes 2>/dev/null
 
 rm -r Contents/Resources/Aquamacs\ Help
 cp -pvr $projdir/doc/AquamacsHelp Contents/Resources/Aquamacs\ Help
+rm -rf Contents/Resources/Emacs\ Manual
 cp -pvr $projdir/doc/EmacsManual Contents/Resources/Emacs\ Manual
 cp -pvr $projdir/src/Emacs.icns Contents/Resources/Emacs.icns
 
 cp -pvr $projdir/src/etc/aquamacs-splash-screen.jpg Contents/Resources/etc/
 
 cp -pvr $projdir/src/Info.plist Contents/
-cp -pvr $projdir/src/InfoPlist.strings Contents/Resources/English.lproj/
+ 
+# update this
+
+AQVERSION=`cat $projdir/src/site-lisp/aquamacs.el | perl -ne 'if (/aquamacs-version \"([0-9\.]+?)\"\s*\)/sg) {print $1;} '`
+
+echo "CFBundleName = \"Aquamacs Emacs\";" >Contents/Resources/English.lproj/InfoPlist.strings
+echo "CFBundleShortVersionString = \"Aquamacs $AQVERSION, GNU Emacs 22\";" >>Contents/Resources/English.lproj/InfoPlist.strings
+echo "CFBundleGetInfoString = \"Aquamacs $AQVERSION, Copyright (C) 2005 by David Reitter and individual contributors; GNU Emacs 22, Copyright (C) 2005 Free Software Foundation, Inc.\";" >>Contents/Resources/English.lproj/InfoPlist.strings
+
+
 
 cp -pvr $projdir/src/emacs-document.icns Contents/Resources/
 
@@ -81,11 +91,11 @@ if [ $compile ]; then
     "$em"  -batch -f batch-byte-compile Contents/Resources/site-lisp/oneonone/*.el
     #mv Contents/Resources/site-lisp/site-start.elx Contents/Resources/site-lisp/site-start.el
     # echo "(Note: ignore the --no-splash error!)"
-
-# .el is too large
-    gzip Contents/Resources/site-lisp/color-theme-themes.el
 fi
  
+# .el is too large
+gzip Contents/Resources/site-lisp/color-theme-themes.el
+
 # for LaunchServices (on local machine)
 touch .
 
