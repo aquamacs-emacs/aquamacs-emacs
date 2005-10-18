@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.7 2005/09/28 14:12:42 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.8 2005/10/18 08:36:46 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -32,8 +32,8 @@
 
 
 
-(defvar aquamacs-version "0.9.6")
-(defvar aquamacs-version-id 095.5)
+(defvar aquamacs-version "0.9.7")
+(defvar aquamacs-version-id 097.0)
 (defvar aquamacs-minor-version "")
 
 
@@ -206,8 +206,10 @@ Separate paths from file names with --."
 
 ;; Page scrolling
 
+
   (require 'pager)
   ;; overwrites CUA stuff
+ 
   (global-set-key [remap scroll-up]	      'pager-page-down)
   (global-set-key [remap cua-scroll-up]	      'pager-page-down)
   (global-set-key [next] 	      'pager-page-down)
@@ -494,7 +496,26 @@ Use this argument instead of explicitly setting `view-exit-action'."
 			   (help-mode (tool-bar-lines . 0) (fit-frame . t)) 
 			   (fundamental-mode (tool-bar-lines . 0))
 			   (custom-mode (tool-bar-lines . 0) (fit-frame . t)))))))
-     )
+
+;; Print warnings / compatibility options
+    
+    (if (boundp 'mac-reverse-ctrl-meta)
+	(message "Warning: `mac-reverse-ctrl-meta' is not used any more from
+Aquamacs 0.9.7 on. This variable had been deprecated for several versions.
+Use `mac-{control|command|option|function}-modifier' instead."))
+    (if (boundp 'mac-command-key-is-meta)
+	(message "Warning: `mac-command-key-is-meta' is not used any more from
+Aquamacs 0.9.7 on. This variable had been deprecated for several versions.
+Use `mac-command-modifier' instead."))
+
+
+    (when (boundp 'mac-pass-option-to-system)
+      (when mac-pass-option-to-system
+	   (setq mac-option-modifier-enabled-value mac-option-modifier)
+	   (setq mac-option-modifier nil))
+      (if (> aquamacs-customization-version-id 096.0)
+	(message "Warning: `mac-pass-option-to-system' is deprecated from
+Aquamacs 0.9.7 on. `mac-option-modifier' has been set for you."))))
 
   (require 'one-buffer-one-frame)
  
@@ -519,11 +540,18 @@ Use this argument instead of explicitly setting `view-exit-action'."
 
   (aquamacs-set-defaults '( 
 			   (cua-use-hyper-key only) ;;this avoids shift-return
-			   (cua-keep-region-after-copy t)
 			   (cua-enable-cua-keys nil)
 			   )
 			 )
  
+  ;; enable cua-keep-region-after-copy only for the mac like commands
+  (defadvice cua-copy-region (around keep-region activate)
+    (if (eq this-original-command 'clipboard-kill-ring-save)
+	(let ((cua-keep-region-after-copy t))
+	  ad-do-it) 
+      ;; respect user's setting of cua-keep-region-after-copy for M-w etc.
+      ad-do-it))
+
   (cua-mode 1) ;; this goes first (so we can overwrite the settings)
 
   
@@ -562,7 +590,7 @@ Use this argument instead of explicitly setting `view-exit-action'."
 ;; redefine this
 (defun startup-echo-area-message ()
   (if (eq (key-binding [(hyper \?)]) 'aquamacs-user-help)
-      "For a introduction to Aquamacs Emacs, type Apple-?."
+      "For an introduction to Aquamacs Emacs, type Apple-?."
     (substitute-command-keys
      "For a introduction to Aquamacs Emacs, type \
 \\[aquamacs-user-help].")))
