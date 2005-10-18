@@ -57,6 +57,46 @@ mv "$SRC" "$dest"
 mv "$dest/Contents/MacOS/Emacs" "$dest/Contents/MacOS/Aquamacs Emacs"
 cd "$dest/Contents/MacOS/"; ln -s "Aquamacs Emacs" "Emacs"
 
+# delete some files that we don't need
+
+# large, not needed
+rm -f "$dest/Contents/Resources/etc/termcap.src"
+cd "$dest/Contents/Resources"
+rm -f "leim/ja-dic/ja-dic.el" "lisp/loaddefs.el"  "lisp/ldefs-boot.el" "site-lisp/edit-modes/ess-mode/etc/other/S-spread/asaprc.ps" etc/*refcard.ps
+
+# compress the sources
+  
+cd "$dest"/Contents/Resources/lisp
+
+# compress whatever is byte-compiled
+for f in ../leim/*/*.el ../leim/*.el */*.el *.el
+do
+    if [ -e "$f"c ]
+    then 
+	gzip "$f"
+    fi
+done
 
 
+
+# do not compress subdirs
+gzip -d "subdirs.el.gz" 2>/dev/null
+
+# compress some of the .elc files
+# not all of them (speed, startup issues)
+
+gzip  woman.elc wid-edit.elc vc.elc type-break.elc term.elc speedbar.elc subr.elc simple.elc printing.elc ps-print.elc info.elc menu-bar.elc ido.elc files.elc ediff-util.elc cus-edit.elc
+
+cd "$dest"/Contents/Resources/leim/quail
+gzip tsang-*.elc quick-*.elc hanja*.elc ZOZY.elc ZIRANMA.elc SW.elc PY*.elc ETZY.elc ECDICT.elc CTLau*.elc CCDOSPY.elc ARRAY30.elc 4Corner.elc
+cd "$dest"/Contents/Resources/leim
+gzip ja-dic/ja-dic.elc
+
+# compress info
+
+gzip ../info/*
+
+# get rid of the CVS directories
+cd "$dest"
+find . -name CVS  -exec rm -r "{}" \;
 
