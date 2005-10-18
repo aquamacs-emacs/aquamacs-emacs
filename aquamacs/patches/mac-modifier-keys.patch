@@ -1,19 +1,20 @@
-Index: src/macterm.c
+Index: macterm.c
 ===================================================================
 RCS file: /cvsroot/emacs/emacs/src/macterm.c,v
-retrieving revision 1.123
-diff -c -r1.123 macterm.c
-*** src/macterm.c	14 Jul 2005 09:23:24 -0000	1.123
---- src/macterm.c	15 Jul 2005 23:15:49 -0000
+retrieving revision 1.140
+diff -c -r1.140 macterm.c
+*** macterm.c	18 Oct 2005 08:07:06 -0000	1.140
+--- macterm.c	18 Oct 2005 08:56:26 -0000
 ***************
-*** 86,99 ****
+*** 86,100 ****
+  #include "intervals.h"
   #include "atimer.h"
   #include "keymap.h"
-  
+! 
 ! /* Set of macros that handle mapping of Mac modifier keys to emacs.  */
 ! #define macCtrlKey     (NILP (Vmac_reverse_ctrl_meta) ? controlKey :	\
 ! 			(NILP (Vmac_command_key_is_meta) ? optionKey : cmdKey))
-  #define macShiftKey    (shiftKey)
+! #define macShiftKey    (shiftKey)
 ! #define macMetaKey     (NILP (Vmac_reverse_ctrl_meta) ?			\
 ! 			(NILP (Vmac_command_key_is_meta) ? optionKey : cmdKey) \
 ! 			: controlKey)
@@ -21,42 +22,16 @@ diff -c -r1.123 macterm.c
   
   
   /* Non-nil means Emacs uses toolkit scroll bars.  */
---- 86,118 ----
+--- 86,92 ----
+  #include "intervals.h"
   #include "atimer.h"
   #include "keymap.h"
-  
-! /* Set of macros that handle mapping of Mac modifier keys to emacs.  
-!     If any of the newer-style mac_*_modifier variables is set, these 
-!     macros are basically out of function.
-!  */
 !  
-! #define macOldModifierSetting   (  NILP(Vmac_control_modifier) && \
-! 				   NILP(Vmac_option_modifier) && \
-! 				   NILP(Vmac_command_modifier)   )
-!  
-! #define macCtrlKey     (macOldModifierSetting ? \
-!  			(NILP(Vmac_reverse_ctrl_meta) ? controlKey :	\
-!  			       (NILP(Vmac_command_key_is_meta) ? \
-! 				optionKey : cmdKey)) :		 \
-!  			controlKey)
-  #define macShiftKey    (shiftKey)
-!  
-! #define macMetaKey     (macOldModifierSetting ? \
-!  			(NILP(Vmac_reverse_ctrl_meta) ?		\
-!  			 (NILP(Vmac_command_key_is_meta) ? optionKey : \
-! 			  cmdKey) : controlKey) :		       \
-!  			(cmdKey | controlKey | optionKey))
-!  
-! #define macAltKey     (macOldModifierSetting ?  \
-! 			(NILP(Vmac_command_key_is_meta) ? \
-! 			 cmdKey : optionKey) : optionKey)
-!  
-! #define macCmdKey (cmdKey)
   
   
   /* Non-nil means Emacs uses toolkit scroll bars.  */
 ***************
-*** 205,211 ****
+*** 206,212 ****
   
   /* The keysyms to use for the various modifiers.  */
   
@@ -64,7 +39,7 @@ diff -c -r1.123 macterm.c
   
   extern int inhibit_window_system;
   
---- 224,230 ----
+--- 198,204 ----
   
   /* The keysyms to use for the various modifiers.  */
   
@@ -73,62 +48,46 @@ diff -c -r1.123 macterm.c
   extern int inhibit_window_system;
   
 ***************
-*** 7321,7333 ****
+*** 7901,7914 ****
   /* Contains the string "reverse", which is a constant for mouse button emu.*/
   Lisp_Object Qreverse;
   
-! /* True if using command key as meta key.  */
-  Lisp_Object Vmac_command_key_is_meta;
+- /* True if using command key as meta key.  */
+- Lisp_Object Vmac_command_key_is_meta;
   
-  /* Modifier associated with the option key, or nil for normal behavior. */
+! /* Modifier associated with the option key, or nil for normal behavior. */
   Lisp_Object Vmac_option_modifier;
   
 ! /* True if the ctrl and meta keys should be reversed.  */
-  Lisp_Object Vmac_reverse_ctrl_meta;
+! Lisp_Object Vmac_reverse_ctrl_meta;
   
   /* True if the option and command modifiers should be used to emulate
---- 7340,7360 ----
+     a three button mouse */
+--- 7893,7910 ----
   /* Contains the string "reverse", which is a constant for mouse button emu.*/
   Lisp_Object Qreverse;
   
-! /* True if using command key as meta key.  
-!    Deprecated; only use if macOldModifierSetting evaluates to true. */
-  Lisp_Object Vmac_command_key_is_meta;
   
-+ /* Modifier associated with the control key, or nil for normal behavior. */
-+ Lisp_Object Vmac_control_modifier;
-+ 
-  /* Modifier associated with the option key, or nil for normal behavior. */
+! /* Modifier associated with the control key, or nil to ignore. */
+! Lisp_Object Vmac_control_modifier;
+! 
+! /* Modifier associated with the option key, or nil to ignore. */
   Lisp_Object Vmac_option_modifier;
   
-! /* Modifier associated with the command key, or nil for normal behavior. */
+! /* Modifier associated with the command key, or nil to ignore. */
 ! Lisp_Object Vmac_command_modifier;
 ! 
-! /* True if the ctrl and meta keys should be reversed. 
-! 	Deprecated; only use if macOldModifierSetting evaluates to true. */
-  Lisp_Object Vmac_reverse_ctrl_meta;
+! /* Modifier associated with the function key, or nil to ignore. */
+! Lisp_Object Vmac_function_modifier;
   
   /* True if the option and command modifiers should be used to emulate
+     a three button mouse */
 ***************
-*** 7347,7352 ****
---- 7374,7386 ----
-     for processing before Emacs sees it.  */
-  Lisp_Object Vmac_pass_control_to_system;
-  
-+ /* If  non-nil, the Mac \"Option\" key can be used to compose
-+        characters as handled by the system and depending on the
-+        keyboard layout chosen. Only if the Mac \"Command\" or \"Ctrl\" key
-+        is depressed at the same time, Emacs evaluates the combination using
-+        whatever modifier is set in mac-option-modifier.  */
-+ Lisp_Object Vmac_pass_option_to_system;
-+ 
-  /* Points to the variable `inev' in the function XTread_socket.  It is
-     used for passing an input event to the function back from
-     Carbon/Apple event handlers.  */
-***************
-*** 7404,7420 ****
+*** 7982,8001 ****
+  #endif
+  {
     unsigned int result = 0;
-    if (mods & macShiftKey)
+!   if (mods & macShiftKey)
       result |= shift_modifier;
 !   if (mods & macCtrlKey)
 !     result |= ctrl_modifier;
@@ -136,230 +95,378 @@ diff -c -r1.123 macterm.c
 !     result |= meta_modifier;
 !   if (NILP (Vmac_command_key_is_meta) && (mods & macAltKey))
 !     result |= alt_modifier;
-!   if (!NILP (Vmac_option_modifier) && (mods & optionKey)) {
+    if (!NILP (Vmac_option_modifier) && (mods & optionKey)) {
 !       Lisp_Object val = Fget(Vmac_option_modifier, Qmodifier_value);
 !       if (!NILP(val))
-            result |= XUINT(val);
-!   }
-  
-    return result;
-  }
---- 7438,7512 ----
-    unsigned int result = 0;
-    if (mods & macShiftKey)
-      result |= shift_modifier;
-! 
-!   if (macOldModifierSetting)   /* compatibility with old-style modifier keys */
-!     {
-!       if (mods & macCtrlKey)
-! 	result |= ctrl_modifier;
-!       if (mods & macMetaKey)
-! 	result |= meta_modifier;
-! 
-!       if ( ( NILP(Vmac_pass_option_to_system) || 
-! 	     ( /* only for ctrl/cmd combos if option is handled by system */
-! 	      (mods & cmdKey) || (mods & controlKey) 
-! 	       )
-! 	     ) &&
-! 	   !NILP (Vmac_command_key_is_meta) &&
-! 	   (mods & macAltKey) 
-! 	)
-! 	result |= alt_modifier;
-!     } else
-!     {
-!       /* new-style modifier keys */ 
-! 
-!       /* if Vmac_pass_option_to_system is NIL, we fully process the Option
-! 	 key. Otherwise, we only process it if an additional Ctrl or Command
-! 	 is pressed. That way the system may convert the character to a 
-! 	 composed one.
-!       */
-! 
-!       if (
-! 	  (mods & optionKey) &&
-! 	  (
-! 	   ( NILP(Vmac_pass_option_to_system) || 
-! 	     ( 
-! 	      (mods & cmdKey) || (mods & controlKey) 
-! 	       )
-! 	     )
-! 	   )
-! 	  )
-! 	{
-! 	  if (!NILP (Vmac_option_modifier)) {
-! 	    Lisp_Object val = Fget(Vmac_option_modifier, Qmodifier_value);
-! 	    if (!NILP(val))
-! 	      result |= XUINT(val);
-! 	  } else { /* default behavior if modifier variable is set to nil: 
-! 		      do NOT assume alt modifier, because the OS already 
-! 		      sends a modified key (e.g. option-l -> @ 
-! 		      on German keyboard) */
-! 	      
-! 	      result |= alt_modifier;  
-! 	  }
-! 
-! 	}
-!       if (!NILP (Vmac_command_modifier) && (mods & cmdKey)) {
-! 	Lisp_Object val = Fget(Vmac_command_modifier, Qmodifier_value);
-! 	if (!NILP(val))
-            result |= XUINT(val);
-!       } else { /* default behavior if modifier variable is not set: 
-! 		  assign hyper*/
-! 	if (mods & macCmdKey)
-! 	  result |= hyper_modifier;
-!       }
-!       if (!NILP (Vmac_control_modifier) && (mods & controlKey)) {
-! 	Lisp_Object val = Fget(Vmac_control_modifier, Qmodifier_value);
-! 	if (!NILP(val))
 !           result |= XUINT(val);
-!       } else { /* default behavior if modifier variable is not set */
-! 	if (mods & macCtrlKey)
-! 	  result |= ctrl_modifier;
-!       }
-!     }
+    }
   
     return result;
   }
+  
+--- 7978,8021 ----
+  #endif
+  {
+    unsigned int result = 0;
+!   if (mods & shiftKey)
+      result |= shift_modifier;
+!  
+! 
+! 
+!   /* Deactivated to simplify configuration:
+!      if Vmac_option_modifier is non-NIL, we fully process the Option
+!      key. Otherwise, we only process it if an additional Ctrl or Command
+!      is pressed. That way the system may convert the character to a 
+!      composed one.
+!      if ((mods & optionKey) &&
+!       (( !NILP(Vmac_option_modifier) || 
+!       ((mods & cmdKey) || (mods & controlKey))))) */
+! 
+    if (!NILP (Vmac_option_modifier) && (mods & optionKey)) {
+!     Lisp_Object val = Fget(Vmac_option_modifier, Qmodifier_value);
+!     if (!NILP(val))
+!       result |= XUINT(val);
+    }
++   if (!NILP (Vmac_command_modifier) && (mods & cmdKey)) {
++     Lisp_Object val = Fget(Vmac_command_modifier, Qmodifier_value);
++     if (!NILP(val))
++       result |= XUINT(val);
++   }   
++   if (!NILP (Vmac_control_modifier) && (mods & controlKey)) {
++     Lisp_Object val = Fget(Vmac_control_modifier, Qmodifier_value);
++     if (!NILP(val))
++       result |= XUINT(val);
++   }  
+  
++ #ifdef MAC_OSX
++   if (!NILP (Vmac_function_modifier) && (mods & kEventKeyModifierFnMask)) {
++     Lisp_Object val = Fget(Vmac_function_modifier, Qmodifier_value);
++     if (!NILP(val))
++       result |= XUINT(val);
++   } 
++ #endif
++  
+    return result;
+  }
+  
 ***************
-*** 9326,9334 ****
+*** 8016,8022 ****
+  #if USE_CARBON_EVENTS
+  /* Obtains the event modifiers from the event ref and then calls
+     mac_to_emacs_modifiers.  */
+! static int
+  mac_event_to_emacs_modifiers (EventRef eventRef)
+  {
+    UInt32 mods = 0;
+--- 8036,8042 ----
+  #if USE_CARBON_EVENTS
+  /* Obtains the event modifiers from the event ref and then calls
+     mac_to_emacs_modifiers.  */
+! static UInt32
+  mac_event_to_emacs_modifiers (EventRef eventRef)
+  {
+    UInt32 mods = 0;
+***************
+*** 9366,9378 ****
+    /*0x7C*/ 0x53 /*right*/, 0x54 /*down*/, 0x52 /*up*/, 0
+  };
+  
+  static int
+! keycode_to_xkeysym (int keyCode, int *xKeySym)
+  {
+    *xKeySym = keycode_to_xkeysym_table [keyCode & 0x7f];
+    return *xKeySym != 0;
+  }
+  
+  #if !USE_CARBON_EVENTS
+  static RgnHandle mouse_region = NULL;
+  
+--- 9386,9515 ----
+    /*0x7C*/ 0x53 /*right*/, 0x54 /*down*/, 0x52 /*up*/, 0
+  };
+  
++ 
+  static int
+!   keycode_to_xkeysym (int keyCode, int *xKeySym)
+  {
+    *xKeySym = keycode_to_xkeysym_table [keyCode & 0x7f];
++ 
+    return *xKeySym != 0;
+  }
+  
++ static unsigned char fn_keycode_to_xkeysym_table[] = {
++   /*0x00*/ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
++   /*0x10*/ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
++   /*0x20*/ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
++ 
++   /*0x30*/ 0, 0, 0, 0,
++   /*0x34*/ 0, 0, 0, 0,
++   /*0x38*/ 0, 0, 0, 0,
++   /*0x3C*/ 0, 0, 0, 0,
++ 
++   /*0x40*/ 0, 0x2e /*kp-. = .*/, 0, 0x50 /*kp-* = 'p'*/,
++   /*0x44*/ 0, '/' /*kp-+*/, 0, 0,
++   /*0x48*/ 0, 0, 0, 0x30 /*kp-/ = '0'*/,
++   /*0x4C*/ 0, 0, 0x3b /*kp-- = ';'*/, 0,
++ 
++   /*0x50*/ 0, 0x2d /*kp-= = '-'*/, 0x6d /*kp-0 = 'm'*/, 0x6a /*kp-1 = 'j'*/,
++   /*0x54*/ 0x6b /*kp-2 = 'k'*/, 0x6c /*kp-3 = 'l'*/, 'u' /*kp-4*/, 'i' /*kp-5*/,
++   /*0x58*/ 'o' /*kp-6*/, '7' /*kp-7*/, 0, '8' /*kp-8*/,
++   /*0x5C*/ '9' /*kp-9*/, 0, 0, 0,
++ 
++   /*0x60*/ 0, 0, 0, 0,
++   /*0x64*/ 0, 0, 0, 0,
++   /*0x68*/ 0, 0, 0, 0,
++   /*0x6C*/ 0, 0, 0, 0,
++ 
++   /*0x70*/ 0, 0, 0, 0,
++   /*0x74*/ 0, 0, 0, 0,
++   /*0x78*/ 0, 0, 0, 0,
++   /*0x7C*/ 0, 0, 0, 0
++ };
++ static int
++ convert_fn_keycode (EventRef eventRef, int keyCode, int *newCode)
++ {
++ #ifdef MAC_OSX
++   /* Use the special map to translate keys when function modifier is 
++      to be caught. KeyTranslate can't be used in that case.
++      We can't detect the function key using the input_event.modifiers,
++      because this uses the high word of an UInt32. Therefore,
++      we'll just read it out of the original eventRef.
++   */
++ 
++ 
++   /* TODO / known issues
++ 
++   - Fn-Shift-j is regonized as Fn-j and not Fn-J.
++   The above table always translates to lower characters. We need to use
++   the KCHR keyboard resource (KeyTranslate() ) to map k->K and 8->*.
++ 
++   - The table is meant for English language keyboards, and it will work
++   for many others with the exception of key combinations like Fn-ö on
++   a German keyboard, which is currently mapped to Fn-;. 
++   How to solve this without keeping separate tables for all keyboards
++   around? KeyTranslate isn't of much help here, as it only takes a 16-bit
++   value for keycode with the modifiers in he high byte, i.e. no room for the
++   Fn modifier. That's why we need the table.
++ 
++   */
++ 
++   UInt32 mods = 0;
++   if (!NILP(Vmac_function_modifier))  
++     {
++       GetEventParameter (eventRef, kEventParamKeyModifiers, typeUInt32, NULL,
++ 			 sizeof (UInt32), NULL, &mods);
++       if (mods & kEventKeyModifierFnMask) 
++ 	{  *newCode = fn_keycode_to_xkeysym_table [keyCode & 0x7f];
++ 	   
++ 	  return (*newCode != 0);
++ 	}
++     }
++ #endif
++   return false;
++ }
++ 
++ static int 
++ backtranslate_modified_keycode(int mods, int keycode, int def) 
++ {
++   if  (mods & 
++        (controlKey | 
++ 	(NILP (Vmac_option_modifier) ? 0 : optionKey) | 
++ 	cmdKey))
++     {
++       /* This code comes from Keyboard Resource,
++ 	 Appendix C of IM - Text.  This is necessary
++ 	 since shift is ignored in KCHR table
++ 	 translation when option or command is pressed.
++ 	 It also does not translate correctly
++ 	 control-shift chars like C-% so mask off shift
++ 	 here also.
++ 
++ 	 Not done for combinations with the option key (alt)
++ 	 unless it is to be caught by Emacs:  this is 
++ 	 to preserve key combinations translated by the OS
++ 	 such as Alt-3.
++       */
++       /* mask off option and command */
++       int new_modifiers = mods & 0xe600; 
++       /* set high byte of keycode to modifier high byte*/
++       int new_keycode = keycode | new_modifiers;
++       Ptr kchr_ptr = (Ptr) GetScriptManagerVariable (smKCHRCache);
++       unsigned long some_state = 0;
++       return (int) KeyTranslate (kchr_ptr, new_keycode,
++ 			   &some_state) & 0xff;
++       /* TO DO: Recognize two separate resulting characters, "for
++ 	 example, when the user presses Option-E followed by N, you
++ 	 can map this through the KeyTranslate function using the
++ 	 U.S. 'KCHR' resource to produce ´n, which KeyTranslate
++ 	 returns as two characters in the bytes labeled Character code
++ 	 1 and Character code 2." (from Carbon API doc) */
++ 
++     }
++   else
++     return def;
++ }
++ 
++ 
+  #if !USE_CARBON_EVENTS
+  static RgnHandle mouse_region = NULL;
+  
+***************
+*** 9916,9923 ****
   		 || !(er.modifiers & cmdKey))
   		&& (!NILP (Vmac_pass_control_to_system)
   		    || !(er.modifiers & controlKey))
 ! 		&& (!NILP (Vmac_command_key_is_meta)
 ! 		    && NILP (Vmac_option_modifier)
-! 		    || !(er.modifiers & optionKey)))
+  		    || !(er.modifiers & optionKey)))
   	      if (SendEventToEventTarget (eventRef, toolbox_dispatcher)
   		  != eventNotHandledErr)
-  		break;
---- 9418,9431 ----
+--- 10053,10059 ----
   		 || !(er.modifiers & cmdKey))
   		&& (!NILP (Vmac_pass_control_to_system)
   		    || !(er.modifiers & controlKey))
-! 		&& (!NILP (Vmac_pass_option_to_system)
-! 		    || (macOldModifierSetting ?
-! 		    ((!NILP (Vmac_command_key_is_meta)
-! 		      && NILP (Vmac_option_modifier)
-! 		      || !(er.modifiers & optionKey)))
-! 			:  !(er.modifiers & optionKey))
-! 		    )
-! 		)
+! 		&& (NILP (Vmac_option_modifier)
+  		    || !(er.modifiers & optionKey)))
   	      if (SendEventToEventTarget (eventRef, toolbox_dispatcher)
   		  != eventNotHandledErr)
-  		break;
 ***************
-*** 9377,9386 ****
-  		inev.kind = NON_ASCII_KEYSTROKE_EVENT;
+*** 9961,10009 ****
+  		dpyinfo->mouse_face_hidden = 1;
   	      }
-  	    else
+  
+! 	    if (keycode_to_xkeysym (keycode, &xkeysym))
 ! 	      {
+! 		inev.code = 0xff00 | xkeysym;
+! 		inev.kind = NON_ASCII_KEYSTROKE_EVENT;
+! 	      }
+! 	    else
+  	      {
 ! 		if (er.modifiers & (controlKey |
 ! 				    (NILP (Vmac_command_key_is_meta) ? optionKey
 ! 				     : cmdKey)))
-  		  {
-  		    /* This code comes from Keyboard Resource,
-  		       Appendix C of IM - Text.  This is necessary
---- 9474,9492 ----
-  		inev.kind = NON_ASCII_KEYSTROKE_EVENT;
-  	      }
-  	    else
-! 	      { 
-! 		if  (er.modifiers & (controlKey | 
-! 				     (NILP (Vmac_pass_option_to_system) ? optionKey : 0) | 
-!  				     (
-!  				      (macOldModifierSetting ?  
-!  				       (NILP (Vmac_command_key_is_meta) ? 
-!  					optionKey : cmdKey
-!  					) 
-!  				       : cmdKey
-!  				       )
-!  				      )  
-!  				     )
-!  		     )
-  		  {
-  		    /* This code comes from Keyboard Resource,
-  		       Appendix C of IM - Text.  This is necessary
-***************
-*** 9388,9394 ****
-  		       translation when option or command is pressed.
-  		       It also does not translate correctly
-  		       control-shift chars like C-% so mask off shift
+! 		  {
+! 		    /* This code comes from Keyboard Resource,
+! 		       Appendix C of IM - Text.  This is necessary
+! 		       since shift is ignored in KCHR table
+! 		       translation when option or command is pressed.
+! 		       It also does not translate correctly
+! 		       control-shift chars like C-% so mask off shift
 ! 		       here also */
-  		    int new_modifiers = er.modifiers & 0xe600;
-  		    /* mask off option and command */
-  		    int new_keycode = keycode | new_modifiers;
---- 9494,9507 ----
-  		       translation when option or command is pressed.
-  		       It also does not translate correctly
-  		       control-shift chars like C-% so mask off shift
-! 		       here also.
-! 
-! 		       For combinations with the option key (alt), this is only
-! 		       done if either command or control are used additionally,
-! 		       in which case this isn't handled 
-! 		       or if mac-pass-option-to-system is nil  -- in order
-! 		       to preserve key combinations translated by the OS, such as Alt-3.
-! 		    */
-  		    int new_modifiers = er.modifiers & 0xe600;
-  		    /* mask off option and command */
-  		    int new_keycode = keycode | new_modifiers;
-***************
-*** 9397,9415 ****
-  		    inev.code = KeyTranslate (kchr_ptr, new_keycode,
-  					      &some_state) & 0xff;
-  		  }
-- 		else if (!NILP (Vmac_option_modifier)
-- 			 && (er.modifiers & optionKey))
-- 		  {
-- 		    /* When using the option key as an emacs modifier,
-- 		       convert the pressed key code back to one
-- 		       without the Mac option modifier applied. */
-- 		    int new_modifiers = er.modifiers & ~optionKey;
-- 		    int new_keycode = keycode | new_modifiers;
-- 		    Ptr kchr_ptr = (Ptr) GetScriptManagerVariable (smKCHRCache);
-- 		    unsigned long some_state = 0;
-- 		    inev.code = KeyTranslate (kchr_ptr, new_keycode,
-- 					      &some_state) & 0xff;
-- 		  }
-  		else
-  		  inev.code = er.message & charCodeMask;
+! 		    int new_modifiers = er.modifiers & 0xe600;
+! 		    /* mask off option and command */
+! 		    int new_keycode = keycode | new_modifiers;
+! 		    Ptr kchr_ptr = (Ptr) GetScriptManagerVariable (smKCHRCache);
+! 		    unsigned long some_state = 0;
+! 		    inev.code = KeyTranslate (kchr_ptr, new_keycode,
+! 					      &some_state) & 0xff;
+! 		  }
+! 		else if (!NILP (Vmac_option_modifier)
+! 			 && (er.modifiers & optionKey))
+! 		  {
+! 		    /* When using the option key as an emacs modifier,
+! 		       convert the pressed key code back to one
+! 		       without the Mac option modifier applied. */
+! 		    int new_modifiers = er.modifiers & ~optionKey;
+! 		    int new_keycode = keycode | new_modifiers;
+! 		    Ptr kchr_ptr = (Ptr) GetScriptManagerVariable (smKCHRCache);
+! 		    unsigned long some_state = 0;
+! 		    inev.code = KeyTranslate (kchr_ptr, new_keycode,
+! 					      &some_state) & 0xff;
+! 		  }
+! 		else
+! 		  inev.code = er.message & charCodeMask;
   		inev.kind = ASCII_KEYSTROKE_EVENT;
---- 9510,9515 ----
-***************
-*** 10029,10034 ****
---- 10129,10138 ----
-  #if TARGET_API_MAC_CARBON
-    init_required_apple_events ();
+! 	      }
+  	  }
   
+  #if USE_CARBON_EVENTS
+--- 10097,10132 ----
+  		dpyinfo->mouse_face_hidden = 1;
+  	      }
+  
+! 	    /* translate the keycode back to determine the original key */
+! 	    /* Convert key code if function key is pressed.
+! 	       Otherwise, if non-ASCII-event, take care of that
+! 	       without re-translating the key code. */
+! #if USE_CARBON_EVENTS
+! 	    if (convert_fn_keycode (eventRef, keycode, &xkeysym))
+  	      {
+! 		inev.code = xkeysym;
+! 		/* this doesn't work - tried to add shift modifiers */
+! 		  inev.code =  
+! 		    backtranslate_modified_keycode(er.modifiers & (~0x2200), 
+! 						   xkeysym | 0x80,  xkeysym); 
+  		inev.kind = ASCII_KEYSTROKE_EVENT;
+! 	      } 
+! 	    else 
+! #endif	     
+! 	      if (keycode_to_xkeysym (keycode, &xkeysym))
+! 		{
+! 		  inev.code = 0xff00 | xkeysym;
+! 		  inev.kind = NON_ASCII_KEYSTROKE_EVENT;
+! 		}
+! 	      else
+! 		{ 
+! 
+! 		  inev.code = 
+! 		    backtranslate_modified_keycode(er.modifiers, keycode, 
+! 						   er.message & charCodeMask);
+! 		  inev.kind = ASCII_KEYSTROKE_EVENT;
+!  
+! 		}
+  	  }
+  
+  #if USE_CARBON_EVENTS
+***************
+*** 10443,10452 ****
+  
+    /* Map modifiers */
+    mac_quit_char_modifiers = 0;
+!   if (qc_modifiers & ctrl_modifier)  mac_quit_char_modifiers |= macCtrlKey;
+!   if (qc_modifiers & shift_modifier) mac_quit_char_modifiers |= macShiftKey;
+!   if (qc_modifiers & meta_modifier)  mac_quit_char_modifiers |= macMetaKey;
+!   if (qc_modifiers & alt_modifier)   mac_quit_char_modifiers |= macAltKey;
+  }
+  
+  static void
+--- 10566,10574 ----
+  
+    /* Map modifiers */
+    mac_quit_char_modifiers = 0;
+!   if (qc_modifiers & ctrl_modifier)  mac_quit_char_modifiers |= controlKey;
+!   if (qc_modifiers & shift_modifier) mac_quit_char_modifiers |= shiftKey; 
+!   if (qc_modifiers & alt_modifier)   mac_quit_char_modifiers |= optionKey;
+  }
+  
+  static void
+***************
+*** 10603,10608 ****
+--- 10725,10734 ----
+  #endif
+  
+    Qmodifier_value = intern ("modifier-value");
 +   Qctrl = intern ("ctrl");
 +   Fput (Qctrl, Qmodifier_value, make_number (ctrl_modifier));
 +   Qmeta = intern ("meta");
 +   Fput (Qmeta, Qmodifier_value, make_number (meta_modifier)); 
-  #if USE_CARBON_EVENTS
-  #ifdef MAC_OSX
-    init_service_handler ();
+    Qalt = intern ("alt");
+    Fput (Qalt, Qmodifier_value, make_number (alt_modifier));
+    Qhyper = intern ("hyper");
 ***************
-*** 10079,10084 ****
---- 10183,10191 ----
-  #ifdef MAC_OSX
-    Fprovide (intern ("mac-carbon"), Qnil);
-  #endif
-+ /* Deprecated variables to configure modifier key assignment.
-+ 	Retained for backward-compatibility. */
-+ 	
+*** 10654,10675 ****
   
-    staticpro (&Qreverse);
-    Qreverse = intern ("reverse");
-***************
-*** 10105,10123 ****
+    staticpro (&last_mouse_motion_frame);
+    last_mouse_motion_frame = Qnil;
   
-    DEFVAR_LISP ("mac-command-key-is-meta", &Vmac_command_key_is_meta,
-      doc: /* Non-nil means that the command key is used as the Emacs meta key.
+!   DEFVAR_LISP ("mac-command-key-is-meta", &Vmac_command_key_is_meta,
+!     doc: /* Non-nil means that the command key is used as the Emacs meta key.
 ! Otherwise the option key is used.  */);
-    Vmac_command_key_is_meta = Qt;
+!   Vmac_command_key_is_meta = Qt;
   
     DEFVAR_LISP ("mac-option-modifier", &Vmac_option_modifier,
-      doc: /* Modifier to use for the Mac alt/option key.  The value can
-  be alt, hyper, or super for the respective modifier.  If the value is
+!     doc: /* Modifier to use for the Mac alt/option key.  The value can
+! be alt, hyper, or super for the respective modifier.  If the value is
 ! nil then the key will act as the normal Mac option modifier.  */);
     Vmac_option_modifier = Qnil;
   
@@ -370,77 +477,41 @@ diff -c -r1.123 macterm.c
   
     DEFVAR_LISP ("mac-emulate-three-button-mouse",
   	       &Vmac_emulate_three_button_mouse,
---- 10212,10267 ----
+--- 10780,10816 ----
   
-    DEFVAR_LISP ("mac-command-key-is-meta", &Vmac_command_key_is_meta,
-      doc: /* Non-nil means that the command key is used as the Emacs meta key.
-! Otherwise the option key is used. This variable is DEPRECATED. 
-! It is only in effect if all of the variables mac-*-modifier are nil. */);
-    Vmac_command_key_is_meta = Qt;
-+   
-+   DEFVAR_LISP ("mac-reverse-ctrl-meta", &Vmac_reverse_ctrl_meta,
-+     doc: /* Non-nil means that the control and meta keys are reversed.  This is
-+ useful for non-standard keyboard layouts. This variable is DEPRECATED. 
-+ Backwards-compatibility: It is only in effect if none of the variables 
-+ mac-{command|control|option}-modifier is non-nil. */);
-+   Vmac_reverse_ctrl_meta = Qnil;
+    staticpro (&last_mouse_motion_frame);
+    last_mouse_motion_frame = Qnil;
++  
 + 
-+ 
-+ /* Variables to configure modifier key assignment.  */
-+ 	
-+   DEFVAR_LISP ("mac-control-modifier", &Vmac_control_modifier,
-+     doc: /* Modifier to use for the Mac control key.  The value can
-+ be alt, hyper, or super for the respective modifier.  If the value is
-+ nil then the key will act as the normal Mac control modifier.  
-+ Backwards-compatibility: If all values of 
-+ mac-{command|control|option}-modifier are nil, the deprecated
-+ default assignment determined by mac-command-key-is-meta and
-+ mac-reverse-ctrl-meta is used. */);
-+   Vmac_control_modifier = Qnil;
+  
+! /* Variables to configure modifier key assignment.  */
+! 	
+!   DEFVAR_LISP ("mac-control-modifier", &Vmac_control_modifier,
+!     doc: /* Modifier key assumed when the Mac control key is pressed.  
+! The value can be `alt', `ctrl', `hyper', or `super' for the respective
+! modifier.  The default is `ctrl'.  */);
+!   Vmac_control_modifier = Qctrl;
   
     DEFVAR_LISP ("mac-option-modifier", &Vmac_option_modifier,
-      doc: /* Modifier to use for the Mac alt/option key.  The value can
-  be alt, hyper, or super for the respective modifier.  If the value is
-! nil then the key will act as the normal Mac option modifier, and the option
-! key can be used to compose characters depending on the chosen Mac keyboard
-! setting. 
-! Note that mac-pass-option-to-system takes precedence over this setting. If 
-! mac-pass-option-to-system is non-nil, simple key combinations with Option
-! will be handled by the system in order to produce characters, and only
-! combinations in conjunction with Command or Control will let Emacs see
-! the modifier that is assigned to the Option key. 
-! Backwards-compatibility: If all values of 
-! mac-{command|control|option}-modifier are nil, the deprecated default 
-! assignment determined by mac-command-key-is-meta and
-! mac-reverse-ctrl-meta is used.  */);
+!     doc: /* Modifier key assumed when the Mac alt/option key is pressed.
+! The value can be `alt', `ctrl', `hyper', or `super' for the respective
+! modifier.  If the value is nil then the key will act as the normal
+! Mac control modifier, and the option key can be used to compose 
+! characters depending on the chosen Mac keyboard setting. */);
     Vmac_option_modifier = Qnil;
   
 !   DEFVAR_LISP ("mac-command-modifier", &Vmac_command_modifier,
-!     doc: /* Modifier to use for the Mac command key.  The value can
-! be alt, hyper, or super for the respective modifier. If the value is
-! nil then the key will act as the Emacs 'hyper' modifier. 
-! Backwards-compatibility: If all values of 
-! mac-{command|control|option}-modifier are nil, the deprecated
-! default assignment determined by mac-command-key-is-meta and
-! mac-reverse-ctrl-meta is used.  */);
-!   Vmac_command_modifier = Qnil;
+!     doc: /* Modifier key assumed when the Mac command key is pressed.  
+! The value can be `alt', `ctrl', `hyper', or `super' for the respective
+! modifier. The default is `meta'. */);
+!   Vmac_command_modifier = Qmeta;
+! 
+!   DEFVAR_LISP ("mac-function-modifier", &Vmac_function_modifier,
+!     doc: /* Modifier key assumed when the Mac function key is pressed.  
+! The value can be `alt', `ctrl', `hyper', or `super' for the respective
+! modifier. Note that remapping the function key may lead to unexpected
+! results for some keys on non-US/GB keyboards.  */);
+!   Vmac_function_modifier = Qnil;
   
     DEFVAR_LISP ("mac-emulate-three-button-mouse",
   	       &Vmac_emulate_three_button_mouse,
-***************
-*** 10146,10151 ****
---- 10290,10303 ----
-     doc: /* If non-nil, the Mac \"Control\" key is passed on to the Mac
-  Toolbox for processing before Emacs sees it.  */);
-    Vmac_pass_control_to_system = Qt;
-+ 
-+   DEFVAR_LISP ("mac-pass-option-to-system", &Vmac_pass_option_to_system,
-+    doc: /* If  non-nil, the Mac \"Option\" key can be used to compose
-+       characters as handled by the system and depending on the
-+       keyboard layout chosen. Only if the Mac \"Command\" or \"Ctrl\" key
-+       is depressed at the same time, Emacs evaluates the combination using
-+       whatever modifier is set in mac-option-modifier.  */);
-+   Vmac_pass_option_to_system = Qt;
-  
-  #endif
-  
