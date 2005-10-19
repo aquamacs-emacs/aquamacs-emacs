@@ -6,7 +6,7 @@
 
 ;(load "mwheel") ;; wants to be loaded at runtime
 (load "disp-table")
-(load "toolbar/tool-bar")
+(load "tool-bar")
 (load "image")
 (load "button")
 (load "view")
