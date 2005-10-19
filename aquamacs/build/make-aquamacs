@@ -1,7 +1,5 @@
 #!/bin/sh
 
-projdir=$HOME/Projects/Aquamacs/aquamacs
-
 # make-aquamacs: customized make-package script
 # produces a self-contained binary in a folder Aquamacs-Raw
 # call with -no-conf to avoid running configure to speed up
@@ -11,6 +9,14 @@ projdir=$HOME/Projects/Aquamacs/aquamacs
 
 # the resulting binary is NOT Aquamacs until all the support
 # files are copied into the app bundle!
+
+# usage:
+
+# set environment variable AQUAMACS_ROOT
+# execute from within emacs/mac directory or set EMACS_ROOT
+
+# call with -no-conf to speed things up after the first time.
+#  (avoid running ./configure)
 
 # Maintainer: David Reitter, david.reitter@gmail.com
 
@@ -58,10 +64,40 @@ projdir=$HOME/Projects/Aquamacs/aquamacs
 
 rm EmacsInstaller.dmg 2>/dev/null
 
-aquamacsprecompile=yes # set to yes to include some core files via site-load
+if [ ! ${projdir} ]
+then
+    if [ ${AQUAMACS_ROOT} ]
+    then
+	projdir=${AQUAMACS_ROOT}
+    else
+	projdir=`pwd`/../../aquamacs
+	echo "Aquamacs Project directory set to default: $projdir"
+    fi
+fi
+    
+if [ ! ${aquamacsprecompile} ]
+then
+    aquamacsprecompile=yes # set to yes to include some core files via site-load
+fi
+
 progname="$0"
 
-srcdir="`pwd`/.."
+if [ ${EMACS_ROOT} ]
+then
+    srcdir=${EMACS_ROOT}
+    cd ${srcdir}/mac
+else
+    if [ ${AQUAMACS_ROOT} ]
+    then
+	srcdir=${AQUAMACS_ROOT}/../emacs
+	cd ${srcdir}/mac
+    else
+	srcdir="`pwd`/.."
+	echo "Emacs Project directory set to default: $srcdir"
+    fi
+fi
+
+
 builddir=${srcdir}
 
 export MYCPPFLAGS="-DUSE_TOOLKIT_SCROLL_BARS -DUSE_TRANSPARENCY -DUSE_ATSUI"
@@ -69,7 +105,7 @@ export MYCPPFLAGS="-DUSE_TOOLKIT_SCROLL_BARS -DUSE_TRANSPARENCY -DUSE_ATSUI"
  
 ## Default location to place it is /usr/local
 prefix=/usr/local
-bootfast=yes  # turn this on to compile all the emacs el files
+bootfast=no # yes  # turn this on to compile all the emacs el files
 appsdir=/Applications
 emapp=Emacs.app
 with_config=yes
