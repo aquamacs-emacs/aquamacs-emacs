@@ -67,7 +67,11 @@ proc makeHTML {} {
     file delete -force AquamacsHelp-bak 
     puts "Help files copied. Old AquamacsHelp folder removed."
 }
-
+ 
+catch {
+        # okay, it's there, use it
+        cd $::env(AQUAMACS_ROOT)/build
+    } 
 
 makePDF
 makeHTML
