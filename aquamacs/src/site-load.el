@@ -7,7 +7,7 @@
 ;(load "mwheel") ;; wants to be loaded at runtime
 (load "disp-table")
 (load "tool-bar")
-(load "image")
+;; (load "image") ;; taken out so as to not initialize the path variable
 (load "button")
 (load "view")
 (load "help-mode")
