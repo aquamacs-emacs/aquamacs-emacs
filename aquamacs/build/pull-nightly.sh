@@ -50,8 +50,6 @@ fi
 
 if test "$GET_LOG" == "yes"; then
     scp $LOG . 
-    rm last_night.log
-elif test "$GET_LOG" == "buggy"; then
-    scp $LOG last_night.log
 fi
-
+rm last_night.log
+scp $LOG last_night.log
