@@ -34,7 +34,7 @@ if test "${BUILD_GNU_EMACS}" == "yes"; then
 
     cd emacs.GNU/mac
 
-    ./make-package --self-contained
+    . ./make-package --self-contained >>$LOG 2>>$LOG 
 
     NAME=GNU-Emacs-`date +"%Y-%b-%e-%a"`
 
@@ -60,10 +60,10 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
     echo "CVS update: aquamacs" >>$LOG  
     cvs update -dP >>$LOG 2>>$LOG 
 
-    ${AQUAMACS_ROOT}/build/apply-patches.sh 2>>$LOG
+    . ${AQUAMACS_ROOT}/build/apply-patches.sh 2>>$LOG
 
     cd ~/Aquamacs/emacs/mac
-    ${AQUAMACS_ROOT}/build/make-aquamacs   >>$LOG 2>>$LOG 
+    . ${AQUAMACS_ROOT}/build/make-aquamacs   >>$LOG 2>>$LOG 
 
     rm -rf "${DEST}/Aquamacs Emacs.app"  >>$LOG 2>>$LOG 
     ${AQUAMACS_ROOT}/build/install-aquamacs "${AQUAMACS_ROOT}" "${DEST}/Aquamacs Emacs.app" "Aquamacs-Raw/Emacs.app"  >>$LOG 2>>$LOG 
