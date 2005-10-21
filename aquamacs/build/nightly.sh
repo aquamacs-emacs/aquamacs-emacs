@@ -4,9 +4,12 @@
 
 # regular build
 
-
-BUILD_GNU_EMACS=yes   
-BUILD_AQUAMACS=yes  
+if [ ! "${BUILD_GNU_EMACS}" ]; then
+    BUILD_GNU_EMACS=yes   
+fi
+if [ ! "${BUILD_AQUAMACS}" ]; then
+    BUILD_AQUAMACS=yes  
+fi
 
 cd ~/Aquamacs
 
