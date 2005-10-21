@@ -1,4 +1,12 @@
+#!/bin/sh
+
+# scp nightly.sy dr@rodrigues.inf.ed.ac.uk:~/Aquamacs/
+
 # regular build
+
+
+BUILD_GNU_EMACS=yes   
+BUILD_AQUAMACS=yes  
 
 cd ~/Aquamacs
 
@@ -14,29 +22,60 @@ cd emacs.raw
 echo "CVS update: emacs" >>$LOG  
 cvs update -dP >>$LOG 2>>$LOG
 
-cd ~/Aquamacs
 
-rm -rf emacs  2>>$LOG 
-echo "Copying emacs.raw emacs" >>$LOG  
-cp -r emacs.raw emacs  2>>$LOG 
 
-cd aquamacs
-echo "CVS update: aquamacs" >>$LOG  
-cvs update -dP >>$LOG 2>>$LOG 
+if test "${BUILD_GNU_EMACS}" == "yes"; then
+    
+    cd ~/Aquamacs
 
-${AQUAMACS_ROOT}/build/apply-patches.sh 2>>$LOG
+    rm -rf emacs.GNU 2>>$LOG
+    echo "Copying emacs.raw emacs.GNU" >>$LOG  
+    cp -r emacs.raw emacs.GNU  2>>$LOG 
 
-cd ~/Aquamacs/emacs/mac
-${AQUAMACS_ROOT}/build/make-aquamacs   >>$LOG 2>>$LOG 
+    cd emacs.GNU/mac
 
-${AQUAMACS_ROOT}/build/install-aquamacs "${AQUAMACS_ROOT}" "${DEST}/Aquamacs Emacs.app" "Aquamacs-Raw/Emacs.app"  >>$LOG 2>>$LOG 
+    ./make-package --self-contained
 
-NAME=Aquamacs-`date +"%Y-%b-%e-%a"`
+    NAME=GNU-Emacs-`date +"%Y-%b-%e-%a"`
 
-cd $DEST
-tar cvjf ${NAME}.tar.bz2 Aquamacs\ Emacs.app  >>$LOG 2>>$LOG 
+    mv EmacsInstaller.dmg ${NAME}.dmg
+    bzip2 ${NAME}.dmg  >>$LOG 2>>$LOG 
+    rm -rf ${DEST}/GNU-Emacs*
+    mv ${NAME}.dmg.bz2 ${DEST}/
+
+    echo "If succeeded, result in " ${NAME}.dmg  >>$LOG  
+
+fi
+
+
+if test "${BUILD_AQUAMACS}" == "yes"; then
+    
+    cd ~/Aquamacs
+
+    rm -rf emacs  2>>$LOG 
+    echo "Copying emacs.raw emacs" >>$LOG  
+    cp -r emacs.raw emacs  2>>$LOG 
+
+    cd aquamacs
+    echo "CVS update: aquamacs" >>$LOG  
+    cvs update -dP >>$LOG 2>>$LOG 
+
+    ${AQUAMACS_ROOT}/build/apply-patches.sh 2>>$LOG
+
+    cd ~/Aquamacs/emacs/mac
+    ${AQUAMACS_ROOT}/build/make-aquamacs   >>$LOG 2>>$LOG 
+
+    rm -rf "${DEST}/Aquamacs Emacs.app"  >>$LOG 2>>$LOG 
+    ${AQUAMACS_ROOT}/build/install-aquamacs "${AQUAMACS_ROOT}" "${DEST}/Aquamacs Emacs.app" "Aquamacs-Raw/Emacs.app"  >>$LOG 2>>$LOG 
+
+    NAME=Aquamacs-`date +"%Y-%b-%e-%a"`
+
+    rm -rf ${DEST}/Aquamacs*.tar.bz2  >>$LOG 2>>$LOG 
+    cd $DEST
+    tar cvjf ${NAME}.tar.bz2 Aquamacs\ Emacs.app  >>$LOG 2>>$LOG 
 
 # rm -rf $DEST/Aquamacs\ Emacs.app
 
-echo "If succeeded, result in " ${NAME}.tar.bz2  >>$LOG  
+    echo "If succeeded, result in " ${NAME}.tar.bz2  >>$LOG  
 
+fi
