@@ -63,7 +63,8 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
     echo "CVS update: aquamacs" >>$LOG  
     cvs update -dP >>$LOG 2>>$LOG 
 
-    . ${AQUAMACS_ROOT}/build/apply-patches.sh 2>>$LOG
+    echo "Applying Aquamacs patches..." >>$LOG  
+    . ${AQUAMACS_ROOT}/build/apply-patches.sh >>$LOG 2>>$LOG
 
     cd ~/Aquamacs/emacs/mac
     . ${AQUAMACS_ROOT}/build/make-aquamacs   >>$LOG 2>>$LOG 
