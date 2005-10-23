@@ -14,7 +14,7 @@ fi
 cd ~/Aquamacs
 
 export AQUAMACS_ROOT=`pwd`/aquamacs
-export EMACS_ROOT=`pwd`/emacs
+# EMACS_ROOT is set separately for each compile run
  
 DEST=~/Aquamacs/builds
 LOG=~/Aquamacs/aquamacs-build.log
@@ -51,7 +51,10 @@ if test "${BUILD_GNU_EMACS}" == "yes"; then
     
     cd ~/Aquamacs
 
+    export EMACS_ROOT=`pwd`/emacs.GNU
     cd emacs.GNU/mac
+
+   
 
     . ./make-package --self-contained >>$LOG 2>>$LOG 
 
@@ -70,7 +73,7 @@ fi
 if test "${BUILD_AQUAMACS}" == "yes"; then
     
     cd ~/Aquamacs
-
+    export EMACS_ROOT=`pwd`/emacs
     cd aquamacs
     echo "CVS update: aquamacs" >>$LOG  
     cvs update -dP >>$LOG 2>>$LOG 
