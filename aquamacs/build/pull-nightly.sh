@@ -21,18 +21,17 @@ mkdir tmp 2>/dev/null
 
 scp $SOURCE/${NAME} tmp/
 
-echo "" >latest.txt
+echo "<HTML><BODY><span style=\"font-family:sans-serif; font-size:10pt;\">" >latest.html
 if [ -e tmp/${NAME} ]; then
 	rm -rf builds
 	mv tmp builds
 	chmod go+rx builds
 	rm Aquamacs-nightly.tar.bz2
 	ln -s builds/$NAME Aquamacs-nightly.tar.bz2
-	echo "The latest Aquamacs Emacs nightly is ${NAME}" >latest.txt
-
+	echo "The latest Aquamacs Emacs nightly is ${NAME}<BR>" >latest-aquamacs.html
 	GET_LOG="yes"
 fi
-
+cat latest-aquamacs.html >>latest.html
 
 mkdir gnutmp 2>/dev/null
 scp $SOURCE/${GNUNAME} gnutmp/
@@ -43,13 +42,14 @@ if [ -e gnutmp/${GNUNAME} ]; then
 	chmod go+rx gnubuilds
 	rm GNU-Emacs-nightly.dmg.bz2 2>/dev/null
 	ln -s gnubuilds/$GNUNAME GNU-Emacs-nightly.dmg.bz2
-	echo "The latest GNU Emacs nightly is ${GNUNAME}" >>latest.txt
+	echo "The latest GNU Emacs nightly is ${GNUNAME}" >latest-emacs.html
 	GET_LOG="yes"
 fi
-
+cat latest-emacs.html >>latest.html
+echo "</span></BODY></HTML>" >>latest.html
 
 if test "$GET_LOG" == "yes"; then
     scp $LOG . 
 fi
-rm last_night.log
+rm last_night.log  2>/dev/null
 scp $LOG last_night.log
