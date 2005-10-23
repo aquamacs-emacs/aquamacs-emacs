@@ -26,14 +26,30 @@ echo "CVS update: emacs" >>$LOG
 cvs update -dP >>$LOG 2>>$LOG
 
 
-
 if test "${BUILD_GNU_EMACS}" == "yes"; then
-    
+
     cd ~/Aquamacs
 
     rm -rf emacs.GNU 2>>$LOG
     echo "Copying emacs.raw emacs.GNU" >>$LOG  
-    cp -r emacs.raw emacs.GNU  2>>$LOG 
+    cp -R emacs.raw emacs.GNU  2>>$LOG 
+
+fi
+
+
+if test "${BUILD_AQUAMACS}" == "yes"; then
+
+    cd ~/Aquamacs
+
+    rm -rf emacs  2>>$LOG 
+    echo "Copying emacs.raw emacs" >>$LOG  
+    cp -R emacs.raw emacs  2>>$LOG 
+
+fi
+
+if test "${BUILD_GNU_EMACS}" == "yes"; then
+    
+    cd ~/Aquamacs
 
     cd emacs.GNU/mac
 
@@ -54,10 +70,6 @@ fi
 if test "${BUILD_AQUAMACS}" == "yes"; then
     
     cd ~/Aquamacs
-
-    rm -rf emacs  2>>$LOG 
-    echo "Copying emacs.raw emacs" >>$LOG  
-    cp -r emacs.raw emacs  2>>$LOG 
 
     cd aquamacs
     echo "CVS update: aquamacs" >>$LOG  
