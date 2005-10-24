@@ -32,7 +32,8 @@ export AQUAMACS_ROOT=`pwd`/aquamacs
  
 DEST=~/Aquamacs/builds
 
-date >${LOG}
+echo "-------------------" >>${LOG}
+date >>${LOG}
 
 if test "${UPDATE_CVS}" == "yes"; then
     
