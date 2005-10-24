@@ -9,17 +9,17 @@
 
 # workaround: two cron jobs
 
-if [ test $1 == "emacs" ]; then
+if test "$1" == "emacs" ; then
     BUILD_GNU_EMACS=yes   
     LOG=~/Aquamacs/emacs-build.log
 
 fi
-if [ test $1 == "aquamacs" ]; then
+if test "$1" == "aquamacs" ; then
     BUILD_AQUAMACS=yes  
     LOG=~/Aquamacs/aquamacs-build.log
 
 fi
-if [ test $1 == "cvs" ]; then
+if test "$1" == "cvs" ; then
     UPDATE_CVS=yes  
     LOG=~/Aquamacs/cvs-update.log
 
