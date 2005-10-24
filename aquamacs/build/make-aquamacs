@@ -312,7 +312,7 @@ fi
 tempparentfull="`pwd`/${tempparent}"
 tempparentdist=${tempparentfull}/dist
 
-if test "$build_in_place" = "no"; then
+if test "$build_in_place" == "no"; then
     case ${builddir} in
       ${srcdir})
         tempbuild="make-package.build.$$"
@@ -403,7 +403,7 @@ fi
 
 compver=powerpc-apple-darwin`uname -r`
  
-if test "$self_contained" = "yes"; then
+if test "$self_contained" == "yes"; then
     # Move shared files down to Resources directory
     mv $installprefix/share/emacs/$version/* $installprefix
     rm -rf $installprefix/share
@@ -508,14 +508,14 @@ fi # this mod by david reitter - dont create a package if self-contained
 
 mkdir Aquamacs-Raw 2>/dev/null
 
-if test "$self_contained" = "yes"; then
+if test "$self_contained" == "yes"; then
 cp -Rp ${tempparentfull}$appsdir/$emapp Aquamacs-Raw/
 else
 cp -Rp ${packagedir} Aquamacs-Raw/
 fi
 
 
-if test "$keep_directory" = "no"; then
+if test "$keep_directory" == "no"; then
     rm -rf ${tempparentfull}
 else
     mv ${tempparentfull} ${emacsname}
