@@ -49,13 +49,14 @@ if test "${BUILD_GNU_EMACS}" == "yes"; then
 
     rm -rf emacs.GNU 2>>$LOG
     echo "Copying emacs.raw emacs.GNU" >>$LOG  
-    cp -R emacs.raw emacs.GNU  2>>$LOG 
+    cp -Rp emacs.raw emacs.GNU  2>>$LOG 
 
     export EMACS_ROOT=`pwd`/emacs.GNU
     cd emacs.GNU/mac
 
    
     echo "Building Emacs (make-package)..." >>$LOG 
+    printenv | grep -v SSH >>$LOG
     . ./make-package --self-contained --build-in-place >>$LOG 2>>$LOG 
 
     NAME=GNU-Emacs-`date +"%Y-%b-%e-%a"`
@@ -76,7 +77,7 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
 
     rm -rf emacs  2>>$LOG 
     echo "Copying emacs.raw emacs" >>$LOG  
-    cp -R emacs.raw emacs  2>>$LOG 
+    cp -Rp emacs.raw emacs  2>>$LOG 
 
     export EMACS_ROOT=`pwd`/emacs
     cd aquamacs
@@ -88,6 +89,7 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
 
     cd ~/Aquamacs/emacs/mac
     echo "Building Emacs (make-aquamacs)..." >>$LOG 
+    printenv | grep -v SSH >>$LOG
     . ${AQUAMACS_ROOT}/build/make-aquamacs   >>$LOG 2>>$LOG 
 
     rm -rf "${DEST}/Aquamacs Emacs.app"  >>$LOG 2>>$LOG 
@@ -97,10 +99,14 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
 
     rm -rf ${DEST}/Aquamacs*.tar.bz2  >>$LOG 2>>$LOG 
     cd $DEST
-    tar cvjf ${NAME}.tar.bz2 Aquamacs\ Emacs.app  >>$LOG 2>>$LOG 
+    if [ -e "${DEST}/Aquamacs Emacs.app" ]; then
+	tar cvjf ${NAME}.tar.bz2 Aquamacs\ Emacs.app  >>$LOG 2>>$LOG
+	echo "Result (if successful) in " ${NAME}.tar.bz2  >>$LOG  
+    else
+	echo "Build failed."
+    fi
 
 # rm -rf $DEST/Aquamacs\ Emacs.app
 
-    echo "If succeeded, result in " ${NAME}.tar.bz2  >>$LOG  
-
+   
 fi
