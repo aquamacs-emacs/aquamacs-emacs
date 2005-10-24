@@ -55,8 +55,8 @@ if test "${BUILD_GNU_EMACS}" == "yes"; then
     cd emacs.GNU/mac
 
    
-
-    . ./make-package --self-contained >>$LOG 2>>$LOG 
+    echo "Building Emacs (make-package)..." >>$LOG 
+    . ./make-package --self-contained --build-in-place >>$LOG 2>>$LOG 
 
     NAME=GNU-Emacs-`date +"%Y-%b-%e-%a"`
 
@@ -82,6 +82,7 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
     . ${AQUAMACS_ROOT}/build/apply-patches.sh >>$LOG 2>>$LOG
 
     cd ~/Aquamacs/emacs/mac
+    echo "Building Emacs (make-aquamacs)..." >>$LOG 
     . ${AQUAMACS_ROOT}/build/make-aquamacs   >>$LOG 2>>$LOG 
 
     rm -rf "${DEST}/Aquamacs Emacs.app"  >>$LOG 2>>$LOG 
