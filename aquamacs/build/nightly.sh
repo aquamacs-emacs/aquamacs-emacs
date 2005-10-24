@@ -2,13 +2,27 @@
 
 # scp nightly.sy dr@rodrigues.inf.ed.ac.uk:~/Aquamacs/
 
-# regular build
+# building both apps from the same script seems to fail
+# for some obscure reason. When this is done, we get
+# emacs.GNU as a path for prefix or datadir at some
+# point in the second (Aquamacs) run instead of just emacs.
 
-if [ ! "${BUILD_GNU_EMACS}" ]; then
+# workaround: two cron jobs
+
+if [ test $1 == "emacs" ]; then
     BUILD_GNU_EMACS=yes   
+    LOG=~/Aquamacs/emacs-build.log
+
 fi
-if [ ! "${BUILD_AQUAMACS}" ]; then
+if [ test $1 == "aquamacs" ]; then
     BUILD_AQUAMACS=yes  
+    LOG=~/Aquamacs/aquamacs-build.log
+
+fi
+if [ test $1 == "cvs" ]; then
+    UPDATE_CVS=yes  
+    LOG=~/Aquamacs/cvs-update.log
+
 fi
 
 cd ~/Aquamacs
@@ -17,39 +31,24 @@ export AQUAMACS_ROOT=`pwd`/aquamacs
 # EMACS_ROOT is set separately for each compile run
  
 DEST=~/Aquamacs/builds
-LOG=~/Aquamacs/aquamacs-build.log
 
 date >${LOG}
 
-cd emacs.raw
-echo "CVS update: emacs" >>$LOG  
-cvs update -dP >>$LOG 2>>$LOG
-
-
-if test "${BUILD_GNU_EMACS}" == "yes"; then
-
-    cd ~/Aquamacs
-
-    rm -rf emacs.GNU 2>>$LOG
-    echo "Copying emacs.raw emacs.GNU" >>$LOG  
-    cp -R emacs.raw emacs.GNU  2>>$LOG 
-
-fi
-
-
-if test "${BUILD_AQUAMACS}" == "yes"; then
-
-    cd ~/Aquamacs
-
-    rm -rf emacs  2>>$LOG 
-    echo "Copying emacs.raw emacs" >>$LOG  
-    cp -R emacs.raw emacs  2>>$LOG 
-
+if test "${UPDATE_CVS}" == "yes"; then
+    
+    cd emacs.raw
+    echo "CVS update: emacs" >>$LOG  
+    cvs update -dP >>$LOG 2>>$LOG
+ 
 fi
 
 if test "${BUILD_GNU_EMACS}" == "yes"; then
     
     cd ~/Aquamacs
+
+    rm -rf emacs.GNU 2>>$LOG
+    echo "Copying emacs.raw emacs.GNU" >>$LOG  
+    cp -R emacs.raw emacs.GNU  2>>$LOG 
 
     export EMACS_ROOT=`pwd`/emacs.GNU
     cd emacs.GNU/mac
@@ -73,6 +72,11 @@ fi
 if test "${BUILD_AQUAMACS}" == "yes"; then
     
     cd ~/Aquamacs
+
+    rm -rf emacs  2>>$LOG 
+    echo "Copying emacs.raw emacs" >>$LOG  
+    cp -R emacs.raw emacs  2>>$LOG 
+
     export EMACS_ROOT=`pwd`/emacs
     cd aquamacs
     echo "CVS update: aquamacs" >>$LOG  
