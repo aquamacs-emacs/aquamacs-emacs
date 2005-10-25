@@ -1109,7 +1109,14 @@ ommited, tries `xpm', `xbm' and `pbm'."
   (let ((file))
     (dolist (i '("" ".xpm" ".xbm" ".pbm"))
       (unless file
-	(setq file (locate-library (concat filename i) t toolbarx-image-path))))
+	(setq file
+             (or
+              (and (fboundp 'image-search-load-path) ;; Emacs 22+
+                   (boundp 'image-load-path)
+                   (image-search-load-path
+                    (concat filename i) image-load-path))
+              (locate-library (concat filename i) t toolbarx-image-path)))))	
+
     (when file
       (funcall (if (featurep 'xemacs) 'make-glyph 'create-image)
 	       file))))
