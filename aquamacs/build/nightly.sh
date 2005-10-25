@@ -1,28 +1,22 @@
 #!/bin/sh
 
-# scp nightly.sy dr@rodrigues.inf.ed.ac.uk:~/Aquamacs/
-
-# building both apps from the same script seems to fail
-# for some obscure reason. When this is done, we get
-# emacs.GNU as a path for prefix or datadir at some
-# point in the second (Aquamacs) run instead of just emacs.
-
-# workaround: two cron jobs
+# scp nightly.sy dr@rodrigues.inf.ed.ac.uk:~/
 
 if test "$1" == "emacs" ; then
     BUILD_GNU_EMACS=yes   
     LOG=~/Aquamacs/emacs-build.log
 
-fi
-if test "$1" == "aquamacs" ; then
+elif test "$1" == "aquamacs" ; then
     BUILD_AQUAMACS=yes  
     LOG=~/Aquamacs/aquamacs-build.log
 
-fi
-if test "$1" == "cvs" ; then
+elif test "$1" == "cvs" ; then
     UPDATE_CVS=yes  
     LOG=~/Aquamacs/cvs-update.log
-
+else
+    ./nightly cvs
+    ./nightly emacs
+    ./nightly aquamacs
 fi
 
 cd ~/Aquamacs
@@ -56,8 +50,7 @@ if test "${BUILD_GNU_EMACS}" == "yes"; then
 
    
     echo "Building Emacs (make-package)..." >>$LOG 
-    printenv | grep -v SSH >>$LOG
-    . ./make-package --self-contained --build-in-place >>$LOG 2>>$LOG 
+    ./make-package --self-contained --build-in-place >>$LOG 2>>$LOG 
 
     NAME=GNU-Emacs-`date +"%Y-%b-%e-%a"`
 
@@ -89,8 +82,8 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
 
     cd ~/Aquamacs/emacs/mac
     echo "Building Emacs (make-aquamacs)..." >>$LOG 
-    printenv | grep -v SSH >>$LOG
-    . ${AQUAMACS_ROOT}/build/make-aquamacs   >>$LOG 2>>$LOG 
+
+    ${AQUAMACS_ROOT}/build/make-aquamacs >>$LOG 2>>$LOG 
 
     rm -rf "${DEST}/Aquamacs Emacs.app"  >>$LOG 2>>$LOG 
     ${AQUAMACS_ROOT}/build/install-aquamacs "${AQUAMACS_ROOT}" "${DEST}/Aquamacs Emacs.app" "Aquamacs-Raw/Emacs.app"  >>$LOG 2>>$LOG 
