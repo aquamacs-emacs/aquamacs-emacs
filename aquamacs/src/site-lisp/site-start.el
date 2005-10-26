@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: site-start.el,v 1.11 2005/09/28 14:13:14 davidswelt Exp $
+;; Last change: $Id: site-start.el,v 1.12 2005/10/26 23:59:38 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -29,8 +29,18 @@
 ;; Copyright (C) 2005, David Reitter
 
 
+;; undefine this if you're a developer and you have changed code
+
+
+
 (when ;; do not load this twice 
     (not (memq 'aquamacs-site-start features))
+
+;; (if (boundp 'aq-preloaded)
+;;     (mapc (lambda (p)
+;; 	    (setq features (delete p features)))
+;; 	  aq-preloaded))
+
   (provide 'aquamacs-site-start)
 
   (require 'load-emacs-pre-plugins)
