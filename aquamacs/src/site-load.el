@@ -1,13 +1,22 @@
 ;; Aquamacs core files
 ;; to be loaded and included in dumped state at compile time
  
+(defvar aq-preloaded nil
+"List of preloaded (precomiled) features.")
 
+(defun aq-preload (f)  
+  (let ((features-before features))
+    (load (concat aq-compile-path f))
+    (mapc (lambda (e)
+	    (unless (member e features-before)
+	      (setq aq-preloaded (cons e aq-preloaded))))
+	    features)))
 
 
 ;(load "mwheel") ;; wants to be loaded at runtime
 (load "disp-table")
 (load "tool-bar")
-;; (load "image") ;; taken out so as to not initialize the path variable
+(load "image") ;; taken out so as to not initialize the path variable
 (load "button")
 (load "view")
 (load "help-mode")
