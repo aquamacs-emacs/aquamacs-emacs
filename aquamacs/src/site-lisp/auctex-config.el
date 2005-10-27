@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: auctex
  
-;; Last change: $Id: auctex-config.el,v 1.8 2005/10/11 19:00:59 davidswelt Exp $
+;; Last change: $Id: auctex-config.el,v 1.9 2005/10/27 00:32:29 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -33,21 +33,22 @@
 
 (setenv "PATH"
 	(concat (getenv "PATH")
+		":/usr/local/teTeX/bin/powerpc-apple-darwin-current"))
 
-		":/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/local/teTeX/bin/powerpc-apple-darwin-current:/sw/bin:/sw/sbin:/usr/libexec:/usr/X11R6/bin:/opt/local/bin"))
-
+;; don't set all of these paths. only what's necessary.
+;; by default, should read from PATH anyways
 (setq exec-path (append exec-path
-			'("/bin"
-			  "/sbin"
-			  "/usr/bin"
-			  "/usr/sbin"
-			  "/usr/local/bin" 
-			  "/usr/local/sbin"
-			  "/sw/bin" 
-			  "/sw/sbin" 
- 			  "/usr/libexec"    
- 			  "/usr/X11R6/bin" 
-			  "/opt/local/bin"
+			'(;;"/bin"
+			  ;"/sbin"
+			  ;"/usr/bin"
+			  ;"/usr/sbin"
+			  ;"/usr/local/bin" 
+			  ;"/usr/local/sbin"
+			  ;"/sw/bin" 
+			  ;"/sw/sbin" 
+ 			  ;"/usr/libexec"    
+ 			  ;"/usr/X11R6/bin" 
+			  ;"/opt/local/bin"
 			  "/usr/local/teTeX/bin/powerpc-apple-darwin-current")))
 
 (load "edit-modes/auctex.el" nil t t)
@@ -74,6 +75,7 @@
 			      (setq ispell-parser 'tex)
 			      (flyspell-mode 1)
 			      (abbrev-mode 1)
+			      (TeX-PDF-mode t)
 			      (LaTeX-install-toolbar)))
 )
 
@@ -148,12 +150,7 @@
   ("^html?$" "." "open %o"))
 )
 
-; the following doesn't seem to work
-; why?
 
-
-(if (fboundp 'TeX-global-PDF-mode)
-    (TeX-global-PDF-mode t)
-)
+ 
 
 (provide 'auctex-config)
