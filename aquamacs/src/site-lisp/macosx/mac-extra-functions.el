@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.19 2005/08/26 08:31:41 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.20 2005/10/27 00:28:38 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -46,11 +46,7 @@
 
 
 (defun mac-resources-path ()
-       (concat
-	aquamacs-mac-application-bundle-directory
-	"/Contents/Resources/"))
-
-
+  (substring data-directory 0 -4))
 
 (defun aquamacs-find-file ()
 "Open a new buffer. If `one-buffer-one-frame' is non-nil,
@@ -245,9 +241,20 @@ end tell"
 	     )
 	 )
 	) 
-      )
-    
+      )    
 )
+
+(defun mac-add-path-to-exec-path ()
+  "Add elements from environment variable `PATH' to `exec-path'."
+  (let ((l (split-string (getenv "PATH") ":")))
+
+  (mapc
+   (lambda (p)
+     (unless (member p l)
+       (nconc l (list p))))
+   exec-path)
+  (setq exec-path l)))
+
 
 ;; according to Apple's guidelines, we should
 ;; always go for "untitled", "untitled 2", ...
