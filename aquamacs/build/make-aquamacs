@@ -82,6 +82,7 @@ fi
 
 progname="$0"
 
+echo ${EMACS_ROOT}
 if [ ${EMACS_ROOT} ]
 then
     srcdir=${EMACS_ROOT}
@@ -233,7 +234,7 @@ fi
 #find $srcdir/lisp/aquamacs -name '*.el' -exec echo "(load \""{}"\")" \; >$srcdir/lisp/aquamacs-load.el
 if test "$aquamacsprecompile" = "yes"; then
     # add path function
-    echo "(defun aq-preload (f)  (load (concat \""$projdir"/src/site-lisp/\" f)))" >$srcdir/lisp/site-load.el 
+    echo "(setq aq-compile-path \""$projdir"/src/site-lisp/\")" >$srcdir/lisp/site-load.el 
     cat $projdir/src/site-load.el >>$srcdir/lisp/site-load.el
 else
     rm $srcdir/lisp/site-load.el 2>/dev/null
