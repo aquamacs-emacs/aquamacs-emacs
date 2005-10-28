@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.9 2005/10/28 10:58:31 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.10 2005/10/28 21:27:56 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -792,7 +792,7 @@ listed here."
 
   ;; workarounds for current bugs 
  
-  (tool-bar-setup) ;; when image.el is preloaded,
+  ;; (tool-bar-setup) ;; when image.el is preloaded,
   ;; tool bar is created too early upon launch.
   ;; therefore, set it up again, this time after
   ;; image-load-path is defined properly
