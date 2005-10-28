@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.20 2005/10/18 08:38:50 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.21 2005/10/28 10:56:11 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -485,6 +485,10 @@ to the selected frame."
 	:visible `(display-graphic-p)
 	:button '(:toggle . (tool-bar-enabled-p)))
     'showhide-tool-bar)
+
+;; Battery status is displayed in menu bar 
+;; additional option for this is just confusing
+(easy-menu-remove-item global-map  '("menu-bar" "options" "showhide") 'showhide-battery)
 
 
 ;; SENDMAIL doesn't usually work on OS X
