@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.8 2005/10/18 08:36:46 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.9 2005/10/28 10:58:31 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -714,8 +714,14 @@ listed here."
       (setq aquamacs-customization-version-id aquamacs-version-id)
       ;; These are set with menu-bar-make-mm-toggle, which does not
       ;; put on a customized-value property.
-      (dolist (elt '(line-number-mode column-number-mode cua-mode show-paren-mode
-				      transient-mark-mode global-font-lock-mode
+      (dolist (elt '(line-number-mode 
+		     column-number-mode 
+		     size-indication-mode
+		     cua-mode show-paren-mode
+		     transient-mark-mode 
+		     global-font-lock-mode
+		     display-time-mode 
+		     display-battery-mode
 				      ))
 	(and (customize-mark-to-save elt)
 	     (setq need-save t))) 
@@ -786,6 +792,11 @@ listed here."
 
   ;; workarounds for current bugs 
  
+  (tool-bar-setup) ;; when image.el is preloaded,
+  ;; tool bar is created too early upon launch.
+  ;; therefore, set it up again, this time after
+  ;; image-load-path is defined properly
+
   '			      ; can't get rid of the menu bar on a Mac
   (easy-menu-remove-item global-map 
 			 '("menu-bar" "options" "showhide") 'menu-bar-mode)
