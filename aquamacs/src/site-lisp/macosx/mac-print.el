@@ -4,10 +4,19 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-print.el,v 1.1 2005/10/29 16:10:44 davidswelt Exp $
+;; Last change: $Id: mac-print.el,v 1.2 2005/10/29 16:31:18 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
+
+
+
+;; This package implements export to PDF, export to HTML and
+;; printing under Mac OS X.
+
+;; It relies on the htmlize package for HTML conversion.
+
+;; Known caveat: US Letter format only for PDFs and printing.
 
 ;; Attribution: Leave this header intact in case you redistribute this file.
 
