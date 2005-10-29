@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.21 2005/10/28 10:56:11 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.22 2005/10/29 16:11:24 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -208,14 +208,52 @@
 
 ;; save as (redefinition for :enable)
 
+(change-menu-text [menu-bar file] 'save-buffer (format  "Save Buffer                  %sS"  apple-char))  
+
 (define-key menu-bar-file-menu [write-file]
-  '(menu-item "Save Buffer As..." write-file
+  '(menu-item (format  "Save Buffer As...          %s-S-S"  apple-char) write-file
 
 	      :enable (and (frame-live-p menu-updating-frame)
 			   (frame-visible-p menu-updating-frame )
 			   (not (window-minibuffer-p
 				 (frame-selected-window menu-updating-frame))))
 	      :help "Write current buffer to another file"))
+
+
+;; Export file functions
+(require 'mac-print)
+
+(defvar menu-bar-export-file-menu (make-sparse-keymap "Export Buffer..."))
+
+(setq menu-bar-export-file-menu (make-sparse-keymap "New Buffer"))
+
+(define-key menu-bar-export-file-menu [export-pdf]
+  '(menu-item "PDF..." export-to-pdf
+
+	      :enable (and (frame-live-p menu-updating-frame)
+			   (frame-visible-p menu-updating-frame )
+			   (not (window-minibuffer-p
+				 (frame-selected-window menu-updating-frame))))
+	      :help "Write current buffer to another file in PDF format"))
+
+(define-key menu-bar-export-file-menu [export-html]
+  '(menu-item "HTML..." export-to-html
+
+	      :enable (and (frame-live-p menu-updating-frame)
+			   (frame-visible-p menu-updating-frame )
+			   (not (window-minibuffer-p
+				 (frame-selected-window menu-updating-frame))))
+	      :help "Write current buffer to another file in HTML format"))
+
+(define-key-after menu-bar-file-menu [export-file-menu]
+    (list 'menu-item "Export Buffer" menu-bar-export-file-menu
+	  :help "Export buffer in a different format")
+    'write-file)
+
+
+
+
+
 
 
 (define-key menu-bar-file-menu [split-window]
@@ -227,35 +265,46 @@
 	      :help "Split selected window in two"))
 
 
-;; Printing (redefinition for :enable)
 
-(define-key menu-bar-file-menu [ps-print-region]
-  '(menu-item "Postscript Print Region (B+W)" ps-print-region
-	      :enable mark-active
-	      :help "Pretty-print marked region in black and white to PostScript printer"))
-(define-key menu-bar-file-menu [ps-print-buffer]
-  '(menu-item "Postscript Print Buffer (B+W)" ps-print-buffer
-	      :enable (and (frame-live-p menu-updating-frame)
-			   (frame-visible-p menu-updating-frame ))
-	      :help "Pretty-print current buffer in black and white to PostScript printer"))
-(define-key menu-bar-file-menu [ps-print-region-faces]
-  '(menu-item "Postscript Print Region" ps-print-region-with-faces
-	      :enable mark-active
-	      :help "Pretty-print marked region to PostScript printer"))
-(define-key menu-bar-file-menu [ps-print-buffer-faces]
-  '(menu-item "Postscript Print Buffer" ps-print-buffer-with-faces
-	      :enable (and (frame-live-p menu-updating-frame)
-			   (frame-visible-p menu-updating-frame ))
-	      :help "Pretty-print current buffer to PostScript printer"))
-(define-key menu-bar-file-menu [print-region]
-  '(menu-item "Print Region" print-region
-	      :enable mark-active
-	      :help "Print region between mark and current position"))
-(define-key menu-bar-file-menu [print-buffer]
-  '(menu-item "Print Buffer" print-buffer
+
+(define-key-after menu-bar-file-menu [aquamacs-print]
+  '(menu-item "Preview and Print..." aquamacs-print
 	      :enable (and (frame-live-p menu-updating-frame)
 			   (frame-visible-p menu-updating-frame ))
 	      :help "Print current buffer with page headings"))
+
+
+
+;; Printing (redefinition for :enable)
+
+(easy-menu-remove-item global-map  '("menu-bar" "file") 'ps-print-region) 
+(easy-menu-remove-item global-map  '("menu-bar" "file") 'ps-print-buffer) 
+(easy-menu-remove-item global-map  '("menu-bar" "file") 'ps-print-region-faces) 
+(easy-menu-remove-item global-map  '("menu-bar" "file") 'ps-print-buffer-faces) 
+(easy-menu-remove-item global-map  '("menu-bar" "file") 'print-region) 
+(easy-menu-remove-item global-map  '("menu-bar" "file") 'print-buffer) 
+
+ 
+(defun menu-bar-print-region-or-buffer ()
+  "Prints the current buffer or the region, if mark is active."
+  (interactive)
+  (if mark-active
+      (print-region (region-beginning) (region-end))
+    (print-buffer)))
+
+
+(define-key-after menu-bar-file-menu [aquamacs-print]
+  '(menu-item "Preview and Print..." aquamacs-print
+	      :enable (and (frame-live-p menu-updating-frame)
+			   (frame-visible-p menu-updating-frame ))
+	      :help "Print current buffer with page headings"))
+
+
+(define-key-after menu-bar-file-menu [print-region-or-buffer]
+  '(menu-item "Quick Print Region/Buffer" menu-bar-print-region-or-buffer
+	      :enable mark-active
+	      :help "Print buffer, or region if active"))
+
 
 
 
