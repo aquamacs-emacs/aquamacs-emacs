@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-print.el,v 1.3 2005/10/30 11:14:03 davidswelt Exp $
+;; Last change: $Id: mac-print.el,v 1.4 2005/10/30 15:47:10 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -53,7 +53,9 @@ The document is shown in Preview.app and a printing dialog is opened."
   
   (let ((tmp-pdf-file (make-temp-file 
 		       (concat "Aquamacs Printing " 
-			       (file-name-nondirectory buffer-file-name)
+			       (if buffer-file-name
+				   (file-name-nondirectory buffer-file-name)
+				 "")
 			       " ") 
 		       nil)))
  
