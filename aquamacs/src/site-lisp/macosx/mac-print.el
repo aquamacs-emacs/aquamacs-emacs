@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-print.el,v 1.4 2005/10/30 15:47:10 davidswelt Exp $
+;; Last change: $Id: mac-print.el,v 1.5 2005/10/30 17:56:56 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -59,7 +59,13 @@ The document is shown in Preview.app and a printing dialog is opened."
 			       " ") 
 		       nil)))
  
-    (export-to-pdf tmp-pdf-file)
+    (let ((htmlize-html-charset 'utf-8)
+	  (htmlize-use-rgb-txt nil)
+	  (htmlize-before-hook nil)
+	  (htmlize-after-hook nil)
+	  (htmlize-generate-hyperlinks nil)
+	  (htmlize-white-background t))
+      (export-to-pdf tmp-pdf-file))
 
     (add-hook 'kill-emacs-hook 'aquamacs-delete-temp-files)
     (do-applescript (concat
@@ -133,12 +139,9 @@ in HTML format."
 
     (require 'htmlize)
 
-    (let* ((htmlize-html-charset 'utf-8)
+    (let* (
 	   (htmlize-html-major-mode nil)
-	   (htmlize-use-rgb-txt nil)
-	   (htmlize-before-hook nil)
-	   (htmlize-after-hook nil)
-	   (htmlize-generate-hyperlinks nil)
+	   
 	   (show-paren-mode-save show-paren-mode)
 	   
 	   (html (unwind-protect
