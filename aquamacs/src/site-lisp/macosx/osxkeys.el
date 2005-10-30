@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.14 2005/10/18 08:37:35 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.15 2005/10/30 11:22:25 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -163,6 +163,7 @@ default."
     (define-key map `[(,osxkeys-command-key x)] 'clipboard-kill-region)
     (define-key map `[(shift ,osxkeys-command-key x)] 'clipboard-kill-secondary)
     (define-key map `[(,osxkeys-command-key s)] 'save-buffer)
+    (define-key map `[(,osxkeys-command-key p)] 'aquamacs-print)
     (define-key map `[(,osxkeys-command-key l)] 'goto-line)
     (define-key map `[(,osxkeys-command-key f)] 'isearch-forward)
     (define-key map `[(,osxkeys-command-key g)] 'isearch-repeat-forward)
