@@ -4,12 +4,10 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-print.el,v 1.2 2005/10/29 16:31:18 davidswelt Exp $
+;; Last change: $Id: mac-print.el,v 1.3 2005/10/30 11:14:03 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
-
-
 
 ;; This package implements export to PDF, export to HTML and
 ;; printing under Mac OS X.
@@ -19,7 +17,9 @@
 ;; Known caveat: US Letter format only for PDFs and printing.
 
 ;; Attribution: Leave this header intact in case you redistribute this file.
-
+;; Attribution must be given in application About dialog or similar,
+;; "Contains Aquamacs Mac-Print by D Reitter" does the job.
+;; Apart from that, released under the GPL:
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation; either version 2, or (at your option)
@@ -48,7 +48,9 @@
   "Prints the current buffer or, if the mark is active, the current region.
 The document is shown in Preview.app and a printing dialog is opened."
   (interactive)
-
+  
+  (message "Rendering text ...")
+  
   (let ((tmp-pdf-file (make-temp-file 
 		       (concat "Aquamacs Printing " 
 			       (file-name-nondirectory buffer-file-name)
@@ -67,7 +69,8 @@ The document is shown in Preview.app and a printing dialog is opened."
 			keystroke \"p\" using command down
 		end tell
 	end tell
-end tell"  ))))
+end tell"  ))
+    (message "... done")))
 
 (defun export-to-pdf (target-file)
   "Saves the current buffer (or region, if mark is active) to a file 
