@@ -1,6 +1,7 @@
 ;; htmlize.el -- Convert buffer text and decorations to HTML.
 
 ;; Copyright (C) 1997,1998,1999,2000,2001,2002,2003,2005 Hrvoje Niksic
+;; Copyright (C) 2005 David Reitter
 
 ;; Author: Hrvoje Niksic <hniksic@xemacs.org>
 ;; Keywords: hypermedia, extensions
@@ -93,7 +94,7 @@
     ;; `cl' is loaded.
     (load "cl-extra")))
 
-(defconst htmlize-version "1.23")
+(defconst htmlize-version (format "1.23a (Aquamacs %s)" aquamacs-version))
 
 ;; Incantations to make custom stuff work without customize, e.g. on
 ;; XEmacs 19.14 or GNU Emacs 19.34.
@@ -134,6 +135,14 @@ When set to `font', the properties will be set using layout tags
 supporting old, pre-CSS browsers, or for easy embedding of colorized
 text in foreign HTML documents (no style sheet to carry around)."
   :type '(choice (const css) (const font))
+  :group 'htmlize)
+
+
+(defcustom htmlize-white-background nil
+  "*Non-nil means do not set background color for default face.
+For printing purposes, a neutral (white) background color is usually
+desirable."
+  :type 'boolean
   :group 'htmlize)
 
 (defcustom htmlize-generate-hyperlinks t
@@ -735,13 +744,17 @@ If no rgb.txt file is found, return nil."
 (defun htmlize-face-background (face)
   ;; Return the name of the background color of FACE.  If FACE does
   ;; not specify a background color, return nil.
-  (cond (htmlize-running-xemacs
+  (cond ((and htmlize-white-background
+	      (eq face 'default))
+	  nil)
+	(htmlize-running-xemacs
 	 ;; XEmacs.
 	 (and (htmlize-face-specifies-property face 'background)
 	      (color-instance-name (face-background-instance face))))
 	(t
 	 ;; GNU Emacs.
 	 (htmlize-face-color-internal face nil))))
+ 
 
 ;; Convert COLOR to the #RRGGBB string.  If COLOR is already in that
 ;; format, it's left unchanged.
@@ -792,6 +805,8 @@ If no rgb.txt file is found, return nil."
 ;; faces.
 
 (defstruct htmlize-fstruct
+  family  			  	; font family
+  size     			  	; font size
   foreground				; foreground color, #rrggbb
   background				; background color, #rrggbb
   boldp					; whether face is bold
@@ -805,6 +820,16 @@ If no rgb.txt file is found, return nil."
 (defun htmlize-face-emacs21-attr (fstruct attr value)
   ;; For ATTR and VALUE, set the equivalent value in FSTRUCT.
   (case attr
+    (:family
+     (setf (htmlize-fstruct-family fstruct) 
+	   (concat (if (string-match "^.+-\\([^-*]+\\)" value)
+		       (match-string 1 value) 
+		     value) ", sans-serif" )))
+    (:height
+     ;; it looks like "pt" in Emacs and "pt" in HTML mean different
+     ;; things. In particular since fonts appear wider in a browser,
+     ;; we should aim for a slightly smaller target font.
+     (setf (htmlize-fstruct-size fstruct)  (/ value 15))) 
     (:foreground
      (setf (htmlize-fstruct-foreground fstruct) (htmlize-color-to-rgb value)))
     (:background
@@ -851,7 +876,7 @@ If no rgb.txt file is found, return nil."
 		   (face-underline-p face))))
 	  ((fboundp 'face-attribute)
 	   ;; GNU Emacs 21 and further.
-	   (dolist (attr '(:weight :slant :underline :overline :strike-through))
+	   (dolist (attr '(:family :height :weight :slant :underline :overline :strike-through))
 	     (let ((value (if (>= emacs-major-version 22)
 			      ;; Use the INHERIT arg in GNU Emacs 22.
 			      (face-attribute face attr nil t)
@@ -1121,8 +1146,38 @@ property and by buffer overlays that specify `face'."
   "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\">")
 
 ;; Internal function; not a method.
-(defun htmlize-css-specs (fstruct)
+;; (defun htmlize-css-specs (fstruct)
+;;   (let (result)
+;;     (when (htmlize-fstruct-foreground fstruct)
+;;       (push (format "color: %s;" (htmlize-fstruct-foreground fstruct))
+;; 	    result))
+;;     (when (htmlize-fstruct-background fstruct)
+;;       (push (format "background-color: %s;"
+;; 		    (htmlize-fstruct-background fstruct))
+;; 	    result))
+;;     (when (htmlize-fstruct-boldp fstruct)
+;;       (push "font-weight: bold;" result))
+;;     (when (htmlize-fstruct-italicp fstruct)
+;;       (push "font-style: italic;" result))
+;;     (when (htmlize-fstruct-underlinep fstruct)
+;;       (push "text-decoration: underline;" result))
+;;     (when (htmlize-fstruct-overlinep fstruct)
+;;       (push "text-decoration: overline;" result))
+;;     (when (htmlize-fstruct-strikep fstruct)
+;;       (push "text-decoration: line-through;" result))
+;;     (nreverse result)))
+(defun htmlize-css-specs (fstruct) ;;(fstruct &optional default-fstruct)
+;; original htmlize-css-specs patched 
   (let (result)
+    (when (htmlize-fstruct-family fstruct)
+      (push (format "font-family: %s;" (htmlize-fstruct-family fstruct)) 
+	    result))
+    (when (htmlize-fstruct-size fstruct)
+      (push (format "font-size: %dpt;" (htmlize-fstruct-size fstruct)) 
+	    result))
+    (when (htmlize-fstruct-foreground fstruct)
+      (push (format "color: %s;" (htmlize-fstruct-foreground fstruct))
+	    result))
     (when (htmlize-fstruct-foreground fstruct)
       (push (format "color: %s;" (htmlize-fstruct-foreground fstruct))
 	    result))
@@ -1142,9 +1197,10 @@ property and by buffer overlays that specify `face'."
       (push "text-decoration: line-through;" result))
     (nreverse result)))
 
+
 (defun htmlize-css-insert-head (buffer-faces face-map)
   (insert "    <style type=\"text/css\">\n    <!--\n")
-  (insert "      body {\n        "
+  (insert "      body,pre {\n        "
 	  (mapconcat #'identity
 		     (htmlize-css-specs (gethash 'default face-map))
 		     "\n        ")
@@ -1224,6 +1280,7 @@ property and by buffer overlays that specify `face'."
     (format "<body text=\"%s\" bgcolor=\"%s\">"
 	    (htmlize-fstruct-foreground fstruct)
 	    (htmlize-fstruct-background fstruct))))
+ 
 
 (defun htmlize-font-insert-text (text fstruct-list buffer)
   ;; In `font' mode, we use the traditional HTML means of altering
@@ -1233,6 +1290,8 @@ property and by buffer overlays that specify `face'."
     ;; Merge the face attributes.
     (dolist (fstruct fstruct-list)
       ;; A non-null boolean attribute in any face sets the attribute.
+      (and (htmlize-fstruct-family fstruct)      (setq family (htmlize-fstruct-family fstruct)))
+      (and (htmlize-fstruct-size fstruct)      (setq size (htmlize-fstruct-size fstruct)))
       (and (htmlize-fstruct-boldp fstruct)      (setq bold t))
       (and (htmlize-fstruct-italicp fstruct)    (setq italic t))
       (and (htmlize-fstruct-underlinep fstruct) (setq underline t))
@@ -1243,6 +1302,8 @@ property and by buffer overlays that specify `face'."
 
     ;; Generate the markup that reflects the merged attributes.
     (princ (concat
+	    (and family    (format "<font family=\"%s\">" family))
+	    (and size    (format "<font size=\"%dpt\">" size))
 	    (and fg        (format "<font color=\"%s\">" fg))
 	    (and bold      "<b>")
 	    (and italic    "<i>")
@@ -1257,7 +1318,7 @@ property and by buffer overlays that specify `face'."
 	    (and underline "</u>")
 	    (and italic    "</i>")
 	    (and bold      "</b>")
-	    (and fg        "</font>"))
+	    (and (or family size fg) "</font>"))
 	   buffer)))
 
 (defun htmlize-buffer-1 ()
