@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.10 2005/10/28 21:27:56 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.11 2005/10/30 11:13:04 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -175,7 +175,7 @@ Separate paths from file names with --."
   (aquamacs-set-defaults 
    '(
      ( recentf-max-menu-items 25)
-     (recentf-menu-before "Insert File...")
+     (recentf-menu-before "Open Directory...                 ")
      (recentf-keep ( mac-is-mounted-volume-p file-remote-p file-readable-p))
      (recentf-filename-handler abbreviate-file-name)
      (recentf-menu-filter aquamacs-recentf-show-basenames)))  
