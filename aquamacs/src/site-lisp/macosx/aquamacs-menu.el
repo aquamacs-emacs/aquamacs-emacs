@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.22 2005/10/29 16:11:24 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.23 2005/10/30 11:13:30 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -94,7 +94,7 @@
 
 
 (define-key menu-bar-file-menu [new-file]
-  '(menu-item (format  "New                            %sN"  apple-char)  new-frame-with-new-scratch
+  '(menu-item (format  "New                                        %sN"  apple-char)  new-frame-with-new-scratch
 	      :enable (or one-buffer-one-frame
 			  (not (window-minibuffer-p
 			    (frame-selected-window menu-updating-frame))))
@@ -152,13 +152,14 @@
 ;; 		     )
 
 ;(change-menu-text-2 [menu-bar application] 'quit (format  "Quit Emacs                %sQ"  apple-char))
-(change-menu-text [menu-bar file] 'open-file (format  "Open File...                 %sO"  apple-char)) 
-
+(change-menu-text [menu-bar file] 'open-file (format  "Open File...                             %sO"  apple-char)) 
+(change-menu-text [menu-bar file] 'dired "Open Directory...                 ") 
+(change-menu-text [menu-bar file] 'insert-file "Insert File...                         ") 
 ;; redefine this
-(define-key menu-bar-file-menu [kill-buffer]
-  '(menu-item (format "Close (current buffer)  %sW" apple-char) close-current-window-asktosave
+(define-key-after menu-bar-file-menu [kill-buffer]
+  '(menu-item (format "Close Buffer                            %sW" apple-char) close-current-window-asktosave
 	      :enable (aquamacs-updated-is-visible-frame-p)
-	      :help "Discard current buffer"))
+	      :help "Discard current buffer") 'separator-save)
  
 (change-menu-text [menu-bar file] 'exit-emacs (format  "Quit Emacs                %sQ"  apple-char))
 ;(change-menu-text [menu-bar application] 'quit (format  "Quit Emacs                %sQ"  apple-char))
@@ -208,10 +209,10 @@
 
 ;; save as (redefinition for :enable)
 
-(change-menu-text [menu-bar file] 'save-buffer (format  "Save Buffer                  %sS"  apple-char))  
+(change-menu-text [menu-bar file] 'save-buffer (format  "Save Buffer                              %sS"  apple-char))  
 
 (define-key menu-bar-file-menu [write-file]
-  '(menu-item (format  "Save Buffer As...          %s-S-S"  apple-char) write-file
+  '(menu-item (format  "Save Buffer As...                      %s-S-S"  apple-char) write-file
 
 	      :enable (and (frame-live-p menu-updating-frame)
 			   (frame-visible-p menu-updating-frame )
@@ -246,8 +247,9 @@
 	      :help "Write current buffer to another file in HTML format"))
 
 (define-key-after menu-bar-file-menu [export-file-menu]
-    (list 'menu-item "Export Buffer" menu-bar-export-file-menu
-	  :help "Export buffer in a different format")
+  '(menu-item (concat "Export " (if mark-active "Region" "Buffer")) 
+	      menu-bar-export-file-menu
+	      :help "Export buffer in a different format")
     'write-file)
 
 
@@ -268,10 +270,13 @@
 
 
 (define-key-after menu-bar-file-menu [aquamacs-print]
-  '(menu-item "Preview and Print..." aquamacs-print
+  '(menu-item (format "Preview and Print %s ...       %sP" 
+		      (if mark-active "Region" "Buffer")
+		      apple-char) 
+	      aquamacs-print
 	      :enable (and (frame-live-p menu-updating-frame)
 			   (frame-visible-p menu-updating-frame ))
-	      :help "Print current buffer with page headings"))
+	      :help "Print current buffer or region with page headings"))
 
 
 
@@ -292,17 +297,14 @@
       (print-region (region-beginning) (region-end))
     (print-buffer)))
 
-
-(define-key-after menu-bar-file-menu [aquamacs-print]
-  '(menu-item "Preview and Print..." aquamacs-print
-	      :enable (and (frame-live-p menu-updating-frame)
-			   (frame-visible-p menu-updating-frame ))
-	      :help "Print current buffer with page headings"))
-
+  
 
 (define-key-after menu-bar-file-menu [print-region-or-buffer]
-  '(menu-item "Quick Print Region/Buffer" menu-bar-print-region-or-buffer
-	      :enable mark-active
+  '(menu-item (format "Quick Print %s       " 
+		      (if mark-active "Region" "Buffer")
+		       )  menu-bar-print-region-or-buffer
+	      :enable (and (frame-live-p menu-updating-frame)
+			   (frame-visible-p menu-updating-frame ))
 	      :help "Print buffer, or region if active"))
 
 
