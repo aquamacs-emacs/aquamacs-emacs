@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.11 2005/10/30 11:13:04 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.12 2005/10/31 21:28:03 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -770,6 +770,9 @@ listed here."
   ;; temporary stuff for releases according to admin/FOR-RELEASE
 
   (setq undo-ask-before-discard nil)
+  (garbage-collect) ;; workaronud for memory corruption bug
+;; http://sourceforge.net/tracker/index.php?func=detail&aid=1295333&group_id=138078&atid=740475				      
+
 
 ;; patch from RMS
 (defun custom-save-all ()
