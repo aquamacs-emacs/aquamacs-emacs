@@ -1,3 +1,4 @@
+(garbage-collect)
 
 ;;; The color theme functions
 
