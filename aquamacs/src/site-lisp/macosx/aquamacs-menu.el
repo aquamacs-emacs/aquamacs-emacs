@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.23 2005/10/30 11:13:30 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.24 2005/10/31 11:12:46 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -224,13 +224,12 @@
 ;; Export file functions
 (require 'mac-print)
 
-(defvar menu-bar-export-file-menu (make-sparse-keymap "Export Buffer..."))
+(defvar menu-bar-export-file-menu (make-sparse-keymap "Export ..."))
 
 (setq menu-bar-export-file-menu (make-sparse-keymap "New Buffer"))
 
 (define-key menu-bar-export-file-menu [export-pdf]
   '(menu-item "PDF..." export-to-pdf
-
 	      :enable (and (frame-live-p menu-updating-frame)
 			   (frame-visible-p menu-updating-frame )
 			   (not (window-minibuffer-p
@@ -239,7 +238,6 @@
 
 (define-key menu-bar-export-file-menu [export-html]
   '(menu-item "HTML..." export-to-html
-
 	      :enable (and (frame-live-p menu-updating-frame)
 			   (frame-visible-p menu-updating-frame )
 			   (not (window-minibuffer-p
@@ -247,8 +245,12 @@
 	      :help "Write current buffer to another file in HTML format"))
 
 (define-key-after menu-bar-file-menu [export-file-menu]
-  '(menu-item (concat "Export " (if mark-active "Region" "Buffer")) 
-	      menu-bar-export-file-menu
+  `(menu-item (concat "Export " (if mark-active "Region" "Buffer")) 
+	      ,menu-bar-export-file-menu
+	      :enable (and (frame-live-p menu-updating-frame)
+			   (frame-visible-p menu-updating-frame )
+			   (not (window-minibuffer-p
+				 (frame-selected-window menu-updating-frame))))
 	      :help "Export buffer in a different format")
     'write-file)
 
@@ -270,7 +272,7 @@
 
 
 (define-key-after menu-bar-file-menu [aquamacs-print]
-  '(menu-item (format "Preview and Print %s ...       %sP" 
+  '(menu-item (format "Preview and Print %s...       %sP" 
 		      (if mark-active "Region" "Buffer")
 		      apple-char) 
 	      aquamacs-print
