@@ -19,6 +19,8 @@ fi
 
 
 cd ${EMACS_ROOT}
+echo "soft-wrap (experimental)"
+patch -p0 <${AQUAMACS_ROOT}/patches/soft-wrap.patch 
 echo "mac-modifier-keys"
 patch -p0 <${AQUAMACS_ROOT}/patches/mac-modifier-keys.patch 
 echo "transparency2"
