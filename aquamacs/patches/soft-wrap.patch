@@ -1,0 +1,1008 @@
+*** buffer.c	18 Jul 2005 22:41:31 +0200	1.486
+--- buffer.c	21 Jul 2005 15:51:28 +0200	
+***************
+*** 4985,4990 ****
+--- 4985,4991 ----
+    buffer_defaults.enable_multibyte_characters = Qt;
+    buffer_defaults.buffer_file_coding_system = Qnil;
+    XSETFASTINT (buffer_defaults.fill_column, 70);
++   buffer_defaults.wrap_column = Qnil;
+    XSETFASTINT (buffer_defaults.left_margin, 0);
+    buffer_defaults.cache_long_line_scans = Qnil;
+    buffer_defaults.file_truename = Qnil;
+***************
+*** 4998,5003 ****
+--- 4999,5005 ----
+    buffer_defaults.vertical_scroll_bar_type = Qt;
+    buffer_defaults.indicate_empty_lines = Qnil;
+    buffer_defaults.indicate_buffer_boundaries = Qnil;
++   buffer_defaults.indicate_continued_lines = Qt;
+    buffer_defaults.scroll_up_aggressively = Qnil;
+    buffer_defaults.scroll_down_aggressively = Qnil;
+    buffer_defaults.display_time = Qnil;
+***************
+*** 5045,5050 ****
+--- 5047,5053 ----
+    XSETFASTINT (buffer_local_flags.truncate_lines, idx); ++idx;
+    XSETFASTINT (buffer_local_flags.ctl_arrow, idx); ++idx;
+    XSETFASTINT (buffer_local_flags.fill_column, idx); ++idx;
++   XSETFASTINT (buffer_local_flags.wrap_column, idx); ++idx;
+    XSETFASTINT (buffer_local_flags.left_margin, idx); ++idx;
+    XSETFASTINT (buffer_local_flags.abbrev_table, idx); ++idx;
+    XSETFASTINT (buffer_local_flags.display_table, idx); ++idx;
+***************
+*** 5069,5074 ****
+--- 5072,5078 ----
+    XSETFASTINT (buffer_local_flags.vertical_scroll_bar_type, idx); ++idx;
+    XSETFASTINT (buffer_local_flags.indicate_empty_lines, idx); ++idx;
+    XSETFASTINT (buffer_local_flags.indicate_buffer_boundaries, idx); ++idx;
++   XSETFASTINT (buffer_local_flags.indicate_continued_lines, idx); ++idx;
+    XSETFASTINT (buffer_local_flags.scroll_up_aggressively, idx); ++idx;
+    XSETFASTINT (buffer_local_flags.scroll_down_aggressively, idx); ++idx;
+    XSETFASTINT (buffer_local_flags.header_line_format, idx); ++idx;
+***************
+*** 5306,5311 ****
+--- 5310,5320 ----
+  		     doc: /* Default value of `fill-column' for buffers that do not override it.
+  This is the same as (default-value 'fill-column).  */);
+
++   DEFVAR_LISP_NOPRO ("default-wrap-column",
++ 		     &buffer_defaults.wrap_column,
++ 		     doc: /* Default value of `wrap-column' for buffers that don't override it.
++ This is the same as (default-value 'wrap-column).  */);
++ 
+    DEFVAR_LISP_NOPRO ("default-left-margin",
+  		     &buffer_defaults.left_margin,
+  		     doc: /* Default value of `left-margin' for buffers that do not override it.
+***************
+*** 5374,5379 ****
+--- 5383,5393 ----
+  		     doc: /* Default value of `indicate-buffer-boundaries' for buffers that don't override it.
+  This is the same as (default-value 'indicate-buffer-boundaries).  */);
+
++   DEFVAR_LISP_NOPRO ("default-indicate-continued-lines",
++ 		     &buffer_defaults.indicate_continued_lines,
++ 		     doc: /* Default value of `indicate-continued-lines' for buffers that don't override it.
++ This is the same as (default-value 'indicate-continued-lines).  */);
++ 
+    DEFVAR_LISP_NOPRO ("default-scroll-up-aggressively",
+  		     &buffer_defaults.scroll_up_aggressively,
+  		     doc: /* Default value of `scroll-up-aggressively'.
+***************
+*** 5475,5480 ****
+--- 5489,5498 ----
+  		     doc: /* *Column beyond which automatic line-wrapping should happen.
+  Interactively, you can set the buffer local value using \\[set-fill-column].  */);
+
++   DEFVAR_PER_BUFFER ("wrap-column", &current_buffer->wrap_column,
++ 		     make_number (Lisp_Int),
++ 		     doc: /* *Column beyond which display-only line-wrapping should happen.  */);
++ 
+    DEFVAR_PER_BUFFER ("left-margin", &current_buffer->left_margin,
+  		     make_number (Lisp_Int),
+  		     doc: /* *Column for the default indent-line-function to indent to.
+***************
+*** 5719,5724 ****
+--- 5737,5748 ----
+  bitmaps in right fringe.  To show just the angle bitmaps in the left
+  fringe, but no arrow bitmaps, use ((top .  left) (bottom . left)).  */);
+
++   DEFVAR_PER_BUFFER ("indicate-continued-lines",
++ 		     &current_buffer->indicate_continued_lines, Qnil,
++ 		     doc: /* *Visually indicate continued lines in buffer.
++ If non-nil on window-systems, a bitmap is displayed in the right fringe
++ of continued lines, and in left fringe of continuation lines.  */);
++ 
+    DEFVAR_PER_BUFFER ("scroll-up-aggressively",
+  		     &current_buffer->scroll_up_aggressively, Qnil,
+  		     doc: /* How far to scroll windows upward.
+Index: buffer.h
+===================================================================
+RCS file: /cvsroot/emacs/emacs/src/buffer.h,v
+retrieving revision 1.103
+diff -c -r1.103 buffer.h
+*** buffer.h	18 Jul 2005 21:34:33 -0000	1.103
+--- buffer.h	21 Jul 2005 13:36:59 -0000
+***************
+*** 610,615 ****
+--- 610,616 ----
+    Lisp_Object case_fold_search;
+    Lisp_Object tab_width;
+    Lisp_Object fill_column;
++   Lisp_Object wrap_column;
+    Lisp_Object left_margin;
+    /* Function to call when insert space past fill column.  */
+    Lisp_Object auto_fill_function;
+***************
+*** 738,743 ****
+--- 739,747 ----
+
+    /* Non-nil means indicate buffer boundaries and scrolling.  */
+    Lisp_Object indicate_buffer_boundaries;
++
++   /* Non-nil means indicate continued rows.  */
++   Lisp_Object indicate_continued_lines;
+
+    /* Time stamp updated each time this buffer is displayed in a window.  */
+    Lisp_Object display_time;
+Index: dispextern.h
+===================================================================
+RCS file: /cvsroot/emacs/emacs/src/dispextern.h,v
+retrieving revision 1.207
+diff -c -r1.207 dispextern.h
+*** dispextern.h	4 Jul 2005 16:06:30 -0000	1.207
+--- dispextern.h	21 Jul 2005 13:36:59 -0000
+***************
+*** 1950,1955 ****
+--- 1950,1959 ----
+       next newline; > 0 means hide lines indented more than that value.  */
+    int selective;
+
++   /* < INFINITY means do auto-wrap lines during redisplay for
++      this window at specified pixel position. */
++   int wrap_at_x;
++
+    /* An enumeration describing what the next display element is
+       after a call to get_next_display_element.  */
+    enum display_element_type what;
+Index: dispnew.c
+===================================================================
+RCS file: /cvsroot/emacs/emacs/src/dispnew.c,v
+retrieving revision 1.351
+diff -c -r1.351 dispnew.c
+*** dispnew.c	4 Jul 2005 16:06:30 -0000	1.351
+--- dispnew.c	21 Jul 2005 13:37:00 -0000
+***************
+*** 3475,3480 ****
+--- 3475,3481 ----
+        || g == '\t'
+        || g == '\n'
+        || g == '\r'
++       || (g == ' ' && !NILP (w->wrap_column))
+        /* Give up if unable to display the cursor in the window.  */
+        || w->cursor.vpos < 0
+        /* Give up if we are showing a message or just cleared the message
+Index: fringe.c
+===================================================================
+RCS file: /cvsroot/emacs/emacs/src/fringe.c,v
+retrieving revision 1.28
+diff -c -r1.28 fringe.c
+*** fringe.c	4 Jul 2005 16:06:31 -0000	1.28
+--- fringe.c	21 Jul 2005 13:37:00 -0000
+***************
+*** 906,912 ****
+        else if (row->indicate_eob_p && EQ (boundary_bot, Qleft))
+  	left = BOTTOM_LEFT_ANGLE_BITMAP;
+        else if (MATRIX_ROW_CONTINUATION_LINE_P (row))
+! 	left = CONTINUATION_LINE_BITMAP;
+        else if (row->indicate_empty_line_p && EQ (empty_pos, Qleft))
+  	left = ZV_LINE_BITMAP;
+        else if (row->indicate_top_line_p && EQ (arrow_top, Qleft))
+--- 906,914 ----
+        else if (row->indicate_eob_p && EQ (boundary_bot, Qleft))
+  	left = BOTTOM_LEFT_ANGLE_BITMAP;
+        else if (MATRIX_ROW_CONTINUATION_LINE_P (row))
+! 	left = (NILP (w->indicate_continued_rows)
+! 		? NO_FRINGE_BITMAP
+! 		: CONTINUATION_LINE_BITMAP);
+        else if (row->indicate_empty_line_p && EQ (empty_pos, Qleft))
+  	left = ZV_LINE_BITMAP;
+        else if (row->indicate_top_line_p && EQ (arrow_top, Qleft))
+***************
+*** 932,938 ****
+        else if (row->indicate_eob_p && EQ (boundary_bot, Qright))
+  	right = BOTTOM_RIGHT_ANGLE_BITMAP;
+        else if (row->continued_p)
+! 	right = CONTINUED_LINE_BITMAP;
+        else if (row->indicate_top_line_p && EQ (arrow_top, Qright))
+  	right = UP_ARROW_BITMAP;
+        else if (row->indicate_bottom_line_p && EQ (arrow_bot, Qright))
+--- 934,942 ----
+        else if (row->indicate_eob_p && EQ (boundary_bot, Qright))
+  	right = BOTTOM_RIGHT_ANGLE_BITMAP;
+        else if (row->continued_p)
+! 	right = (NILP (w->indicate_continued_rows)
+! 		 ? NO_FRINGE_BITMAP
+! 		 : CONTINUED_LINE_BITMAP);
+        else if (row->indicate_top_line_p && EQ (arrow_top, Qright))
+  	right = UP_ARROW_BITMAP;
+        else if (row->indicate_bottom_line_p && EQ (arrow_bot, Qright))
+Index: window.c
+===================================================================
+RCS file: /cvsroot/emacs/emacs/src/window.c,v
+retrieving revision 1.512
+diff -c -r1.512 window.c
+*** window.c	11 Jul 2005 21:43:10 -0000	1.512
+--- window.c	21 Jul 2005 13:37:00 -0000
+***************
+*** 282,287 ****
+--- 282,289 ----
+    p->fringes_outside_margins = Qnil;
+    p->scroll_bar_width = Qnil;
+    p->vertical_scroll_bar_type = Qt;
++   p->wrap_column = Qnil;
++   p->indicate_continued_rows = Qt;
+
+    Vwindow_list = Qnil;
+    return val;
+***************
+*** 3123,3128 ****
+--- 3125,3134 ----
+  			       b->scroll_bar_width,
+  			       b->vertical_scroll_bar_type, Qnil);
+
++       Fset_window_wrap_column (window,
++ 			       b->wrap_column,
++ 			       b->indicate_continued_lines);
++
+        w->left_margin_cols = save_left;
+        w->right_margin_cols = save_right;
+
+***************
+*** 3836,3841 ****
+--- 3842,3852 ----
+    p->scroll_bar_width = o->scroll_bar_width;
+    p->vertical_scroll_bar_type = o->vertical_scroll_bar_type;
+
++   /* Duplicate line wrapping settings.  */
++
++   p->wrap_column = o->wrap_column;
++   p->indicate_continued_rows = o->indicate_continued_rows;
++
+    /* Apportion the available frame space among the two new windows */
+
+    if (!NILP (horflag))
+***************
+*** 5622,5631 ****
+    Lisp_Object left_margin_cols, right_margin_cols;
+    Lisp_Object left_fringe_width, right_fringe_width, fringes_outside_margins;
+    Lisp_Object scroll_bar_width, vertical_scroll_bar_type;
+  };
+
+- #define SAVED_WINDOW_VECTOR_SIZE 24 /* Arg to Fmake_vector */
+-
+  #define SAVED_WINDOW_N(swv,n) \
+    ((struct saved_window *) (XVECTOR ((swv)->contents[(n)])))
+
+--- 5633,5641 ----
+    Lisp_Object left_margin_cols, right_margin_cols;
+    Lisp_Object left_fringe_width, right_fringe_width, fringes_outside_margins;
+    Lisp_Object scroll_bar_width, vertical_scroll_bar_type;
++   Lisp_Object wrap_column, indicate_continued_rows;
+  };
+
+  #define SAVED_WINDOW_N(swv,n) \
+    ((struct saved_window *) (XVECTOR ((swv)->contents[(n)])))
+
+***************
+*** 5842,5847 ****
+--- 5852,5859 ----
+  	  w->fringes_outside_margins = p->fringes_outside_margins;
+  	  w->scroll_bar_width = p->scroll_bar_width;
+  	  w->vertical_scroll_bar_type = p->vertical_scroll_bar_type;
++ 	  w->wrap_column = p->wrap_column;
++ 	  w->indicate_continued_rows = p->indicate_continued_rows;
+  	  XSETFASTINT (w->last_modified, 0);
+  	  XSETFASTINT (w->last_overlay_modified, 0);
+
+***************
+*** 6111,6116 ****
+--- 6123,6131 ----
+        p->fringes_outside_margins = w->fringes_outside_margins;
+        p->scroll_bar_width = w->scroll_bar_width;
+        p->vertical_scroll_bar_type = w->vertical_scroll_bar_type;
++       p->wrap_column = w->wrap_column;
++       p->indicate_continued_rows = w->indicate_continued_rows;
++
+        if (!NILP (w->buffer))
+  	{
+  	  /* Save w's value of point in the window configuration.
+***************
+*** 6205,6211 ****
+    data->saved_windows = tem;
+    for (i = 0; i < n_windows; i++)
+      XVECTOR (tem)->contents[i]
+!       = Fmake_vector (make_number (SAVED_WINDOW_VECTOR_SIZE), Qnil);
+    save_window_save (FRAME_ROOT_WINDOW (f), XVECTOR (tem), 0);
+    XSETWINDOW_CONFIGURATION (tem, data);
+    return (tem);
+--- 6220,6226 ----
+    data->saved_windows = tem;
+    for (i = 0; i < n_windows; i++)
+      XVECTOR (tem)->contents[i]
+!       = Fmake_vector (make_number (VECSIZE (struct saved_window)), Qnil);
+    save_window_save (FRAME_ROOT_WINDOW (f), XVECTOR (tem), 0);
+    XSETWINDOW_CONFIGURATION (tem, data);
+    return (tem);
+***************
+*** 6439,6444 ****
+--- 6454,6512 ----
+
+  
+  /***********************************************************************
++ 			   Auto filling
++  ***********************************************************************/
++
++ DEFUN ("set-window-wrap-column", Fset_window_wrap_column, Sset_window_wrap_column,
++        2, 3, 0,
++        doc: /* Set display auto-wrap column of window WINDOW.
++ If WINDOW is nil, set margins of the currently selected window.
++ Second arg WRAP-COLUMN is a positive number that specifies the
++ wrap column, or nil to disable auto-wrap in window.
++ Optional thrid arg INDICATORS non-nil means to show the indicators
++ for continued lines in the fringes.  */)
++   (window, wrap_column, indicators)
++      Lisp_Object window, wrap_column, indicators;
++ {
++   struct window *w = decode_window (window);
++
++   /* Translate negative or zero widths to nil.
++      Margins that are too wide have to be checked elsewhere.  */
++
++   if (!NILP (wrap_column))
++     {
++       CHECK_NUMBER (wrap_column);
++       if (XINT (wrap_column) <= 0)
++ 	wrap_column = Qnil;
++     }
++
++   if (!EQ (w->wrap_column, wrap_column)
++       || !EQ (w->indicate_continued_rows, indicators))
++     {
++       w->wrap_column = wrap_column;
++       w->indicate_continued_rows = indicators;
++
++       ++windows_or_buffers_changed;
++     }
++
++   return Qnil;
++ }
++
++
++ DEFUN ("window-wrap-column", Fwindow_wrap_column, Swindow_wrap_column,
++        0, 1, 0,
++        doc: /* Get display auto-wrap column of window WINDOW.
++ If WINDOW is omitted or nil, use the currently selected window.  */)
++      (window)
++      Lisp_Object window;
++ {
++   struct window *w = decode_window (window);
++   return w->wrap_column;
++ }
++
++
++ 
++ /***********************************************************************
+  			   Smooth scrolling
+   ***********************************************************************/
+
+***************
+*** 6721,6726 ****
+--- 6789,6798 ----
+  	return 0;
+        if (! EQ (p1->vertical_scroll_bar_type, p2->vertical_scroll_bar_type))
+  	return 0;
++       if (! EQ (p1->wrap_column, p2->wrap_column))
++ 	return 0;
++       if (! EQ (p1->indicate_continued_rows, p2->indicate_continued_rows))
++ 	return 0;
+      }
+
+    return 1;
+***************
+*** 7045,7050 ****
+--- 7117,7124 ----
+    defsubr (&Swindow_fringes);
+    defsubr (&Sset_window_scroll_bars);
+    defsubr (&Swindow_scroll_bars);
++   defsubr (&Swindow_wrap_column);
++   defsubr (&Sset_window_wrap_column);
+    defsubr (&Swindow_vscroll);
+    defsubr (&Sset_window_vscroll);
+    defsubr (&Scompare_window_configurations);
+Index: window.h
+===================================================================
+RCS file: /cvsroot/emacs/emacs/src/window.h,v
+retrieving revision 1.65
+diff -c -r1.65 window.h
+*** window.h	4 Jul 2005 16:06:38 -0000	1.65
+--- window.h	21 Jul 2005 13:37:00 -0000
+***************
+*** 179,184 ****
+--- 179,191 ----
+         no scroll bar.  A value of t means use frame value.  */
+      Lisp_Object vertical_scroll_bar_type;
+
++     /* Non-nil means text column to automatically wrap lines
++        during redisplay.  */
++     Lisp_Object wrap_column;
++
++     /* Non-nil means to show continuation bitmaps in current window.  */
++     Lisp_Object indicate_continued_rows;
++
+      /* Frame coords of mark as of last time display completed */
+      /* May be nil if mark does not exist or was not on frame */
+      Lisp_Object last_mark_x;
+Index: xdisp.c
+===================================================================
+RCS file: /cvsroot/emacs/emacs/src/xdisp.c,v
+retrieving revision 1.1036
+diff -c -r1.1036 xdisp.c
+*** xdisp.c	18 Jul 2005 20:59:41 -0000	1.1036
+--- xdisp.c	21 Jul 2005 13:37:01 -0000
+***************
+*** 2116,2121 ****
+--- 2116,2130 ----
+  		       Iterator initialization
+   ***********************************************************************/
+
++ /* Check if iterator is at a position corresponding to a valid buffer
++    position after some move_it_ call.  */
++
++ #define IT_POS_VALID_AFTER_MOVE_P(it)			\
++   ((it)->method == GET_FROM_STRING			\
++    ? IT_STRING_CHARPOS (*it) == 0			\
++    : 1)
++
++
+  /* Initialize IT for displaying current_buffer in window W, starting
+     at character position CHARPOS.  CHARPOS < 0 means that no buffer
+     position is specified which is useful when the iterator is assigned
+***************
+*** 2226,2231 ****
+--- 2235,2245 ----
+    it->selective_display_ellipsis_p
+      = !NILP (current_buffer->selective_display_ellipses);
+
++   it->wrap_at_x = (INTEGERP (w->wrap_column)
++ 		   ? (XFASTINT (w->wrap_column)
++ 		      * WINDOW_FRAME_COLUMN_WIDTH (w))
++ 		   : INFINITY);
++
+    /* Display table to use.  */
+    it->dp = window_display_table (w);
+
+***************
+*** 2410,2416 ****
+
+    /* Don't reseat to previous visible line start if current start
+       position is in a string or image.  */
+!   if (it->method == GET_FROM_BUFFER && !it->truncate_lines_p)
+      {
+        int start_at_line_beg_p;
+        int first_y = it->current_y;
+--- 2424,2430 ----
+
+    /* Don't reseat to previous visible line start if current start
+       position is in a string or image.  */
+!   if (IT_POS_VALID_AFTER_MOVE_P (it) && !it->truncate_lines_p)
+      {
+        int start_at_line_beg_p;
+        int first_y = it->current_y;
+***************
+*** 2422,2427 ****
+--- 2436,2442 ----
+        if (!start_at_line_beg_p)
+  	{
+  	  int new_x;
++ 	  int last_x = min (it->wrap_at_x, it->last_visible_x);
+
+  	  reseat_at_previous_visible_line_start (it);
+  	  move_it_to (it, CHARPOS (pos), -1, -1, -1, MOVE_TO_POS);
+***************
+*** 2437,2446 ****
+  	  if (it->current_x > 0
+  	      && !it->truncate_lines_p /* Lines are continued.  */
+  	      && (/* And glyph doesn't fit on the line.  */
+! 		  new_x > it->last_visible_x
+  		  /* Or it fits exactly and we're on a window
+  		     system frame.  */
+! 		  || (new_x == it->last_visible_x
+  		      && FRAME_WINDOW_P (it->f))))
+  	    {
+  	      if (it->current.dpvec_index >= 0
+--- 2452,2461 ----
+  	  if (it->current_x > 0
+  	      && !it->truncate_lines_p /* Lines are continued.  */
+  	      && (/* And glyph doesn't fit on the line.  */
+! 		  new_x > last_x
+  		  /* Or it fits exactly and we're on a window
+  		     system frame.  */
+! 		  || (new_x == last_x
+  		      && FRAME_WINDOW_P (it->f))))
+  	    {
+  	      if (it->current.dpvec_index >= 0
+***************
+*** 4737,4742 ****
+--- 4752,4758 ----
+  	  pos = --IT_CHARPOS (it2);
+  	  --IT_BYTEPOS (it2);
+  	  it2.sp = 0;
++ 	  it2.string_from_display_prop_p = 0;
+  	  if (handle_display_prop (&it2) == HANDLED_RETURN
+  	      && !NILP (val = get_char_property_and_overlay
+  			(make_number (pos), Qdisplay, Qnil, &overlay))
+***************
+*** 4884,4889 ****
+--- 4900,4906 ----
+    IT_STRING_CHARPOS (*it) = -1;
+    IT_STRING_BYTEPOS (*it) = -1;
+    it->string = Qnil;
++   it->string_from_display_prop_p = 0;
+    it->method = GET_FROM_BUFFER;
+    /* RMS: I added this to fix a bug in move_it_vertically_backward
+       where it->area continued to relate to the starting point
+***************
+*** 5873,5887 ****
+  	     Moving an iterator without producing glyphs
+   ***********************************************************************/
+
+- /* Check if iterator is at a position corresponding to a valid buffer
+-    position after some move_it_ call.  */
+-
+- #define IT_POS_VALID_AFTER_MOVE_P(it)			\
+-   ((it)->method == GET_FROM_STRING			\
+-    ? IT_STRING_CHARPOS (*it) == 0			\
+-    : 1)
+-
+-
+  /* Move iterator IT to a specified buffer or X position within one
+     line on the display without producing glyphs.
+
+--- 5890,5895 ----
+***************
+*** 5922,5932 ****
+--- 5930,5947 ----
+  {
+    enum move_it_result result = MOVE_UNDEFINED;
+    struct glyph_row *saved_glyph_row;
++   struct it wrap_it, atpos_it;
++   int may_wrap;
++   int last_x = min (it->wrap_at_x, it->last_visible_x);
+
+    /* Don't produce glyphs in produce_glyphs.  */
+    saved_glyph_row = it->glyph_row;
+    it->glyph_row = NULL;
+
++   wrap_it.sp = -1;
++   atpos_it.sp = -1;
++   may_wrap = 0;
++
+  #define BUFFER_POS_REACHED_P()					\
+    ((op & MOVE_TO_POS) != 0					\
+     && BUFFERP (it->object)					\
+***************
+*** 5946,5951 ****
+--- 5961,5978 ----
+  	  && it->method == GET_FROM_BUFFER
+  	  && IT_CHARPOS (*it) > to_charpos)
+  	{
++ 	  if (it->wrap_at_x == INFINITY || wrap_it.sp < 0)
++ 	    {
++ 	      result = MOVE_POS_MATCH_OR_ZV;
++ 	      break;
++ 	    }
++ 	  /* Must continue to see if we wrap after pos */
++ 	  if (atpos_it.sp < 0)
++ 	    atpos_it = *it;
++ 	}
++
++       if (!get_next_display_element (it))
++ 	{
+  	  result = MOVE_POS_MATCH_OR_ZV;
+  	  break;
+  	}
+***************
+*** 5954,5965 ****
+           We used to stop here when TO_CHARPOS reached as well, but that is
+           too soon if this glyph does not fit on this line.  So we handle it
+           explicitly below.  */
+!       if (!get_next_display_element (it)
+! 	  || (it->truncate_lines_p
+! 	      && BUFFER_POS_REACHED_P ()))
+  	{
+! 	  result = MOVE_POS_MATCH_OR_ZV;
+! 	  break;
+  	}
+
+        /* The call to produce_glyphs will get the metrics of the
+--- 5981,5997 ----
+           We used to stop here when TO_CHARPOS reached as well, but that is
+           too soon if this glyph does not fit on this line.  So we handle it
+           explicitly below.  */
+!       if (it->truncate_lines_p
+! 	  && BUFFER_POS_REACHED_P ())
+  	{
+! 	  if (it->wrap_at_x == INFINITY || wrap_it.sp < 0)
+! 	    {
+! 	      result = MOVE_POS_MATCH_OR_ZV;
+! 	      break;
+! 	    }
+! 	  /* Must continue to see if we wrap after pos */
+! 	  if (atpos_it.sp < 0)
+! 	    atpos_it = *it;
+  	}
+
+        /* The call to produce_glyphs will get the metrics of the
+***************
+*** 5976,5981 ****
+--- 6008,6026 ----
+  	  descent = it->max_descent;
+  	}
+
++       if (it->what == IT_CHARACTER && (it->c == ' ' || it->c == '\t'))
++ 	may_wrap = (it->wrap_at_x != INFINITY);
++       else if (may_wrap) {
++ 	/* We are done if to_pos is found before a possible wrap point.  */
++ 	if (atpos_it.sp >= 0)
++ 	  {
++ 	    *it = atpos_it;
++ 	    goto buffer_pos_reached;
++ 	  }
++ 	wrap_it = *it;
++ 	may_wrap = 0;
++       }
++
+        PRODUCE_GLYPHS (it);
+
+        if (it->area != TEXT_AREA)
+***************
+*** 6017,6040 ****
+  	      if ((op & MOVE_TO_X) && new_x > to_x)
+  		{
+  		  if (BUFFER_POS_REACHED_P ())
+! 		    goto buffer_pos_reached;
+  		  it->current_x = x;
+  		  result = MOVE_X_REACHED;
+  		  break;
+  		}
+! 	      else if (/* Lines are continued.  */
+! 		       !it->truncate_lines_p
+! 		       && (/* And glyph doesn't fit on the line.  */
+! 			   new_x > it->last_visible_x
+! 			   /* Or it fits exactly and we're on a window
+! 			      system frame.  */
+! 			   || (new_x == it->last_visible_x
+! 			       && FRAME_WINDOW_P (it->f))))
+  		{
+  		  if (/* IT->hpos == 0 means the very first glyph
+  			 doesn't fit on the line, e.g. a wide image.  */
+  		      it->hpos == 0
+! 		      || (new_x == it->last_visible_x
+  			  && FRAME_WINDOW_P (it->f)))
+  		    {
+  		      ++it->hpos;
+--- 6062,6092 ----
+  	      if ((op & MOVE_TO_X) && new_x > to_x)
+  		{
+  		  if (BUFFER_POS_REACHED_P ())
+! 		    {
+! 		      if (it->wrap_at_x == INFINITY || wrap_it.sp < 0)
+! 			goto buffer_pos_reached;
+! 		      /* Must continue to see if we wrap after pos */
+! 		      if (atpos_it.sp < 0)
+! 			atpos_it = *it;
+! 		    }
+  		  it->current_x = x;
+  		  result = MOVE_X_REACHED;
+  		  break;
+  		}
+!
+! 	      if (/* Lines are continued.  */
+! 		  !it->truncate_lines_p
+! 		  && (/* And glyph doesn't fit on the line.  */
+! 		      new_x > last_x
+! 		      /* Or it fits exactly and we're on a window
+! 			 system frame.  */
+! 		      || (new_x == last_x
+! 			  && FRAME_WINDOW_P (it->f))))
+  		{
+  		  if (/* IT->hpos == 0 means the very first glyph
+  			 doesn't fit on the line, e.g. a wide image.  */
+  		      it->hpos == 0
+! 		      || (new_x == last_x
+  			  && FRAME_WINDOW_P (it->f)))
+  		    {
+  		      ++it->hpos;
+***************
+*** 6074,6087 ****
+  		      it->max_descent = descent;
+  		    }
+
+  		  TRACE_MOVE ((stderr, "move_it_in: continued at %d\n",
+  			       IT_CHARPOS (*it)));
+  		  result = MOVE_LINE_CONTINUED;
+  		  break;
+  		}
+! 	      else if (BUFFER_POS_REACHED_P ())
+! 		goto buffer_pos_reached;
+! 	      else if (new_x > it->first_visible_x)
+  		{
+  		  /* Glyph is visible.  Increment number of glyphs that
+  		     would be displayed.  */
+--- 6126,6153 ----
+  		      it->max_descent = descent;
+  		    }
+
++ 		  if (wrap_it.sp >= 0)
++ 		    {
++ 		      *it = wrap_it;
++ 		      atpos_it.sp = -1;
++ 		    }
++
+  		  TRACE_MOVE ((stderr, "move_it_in: continued at %d\n",
+  			       IT_CHARPOS (*it)));
+  		  result = MOVE_LINE_CONTINUED;
+  		  break;
+  		}
+!
+! 	      if (BUFFER_POS_REACHED_P ())
+! 		{
+! 		  if (it->wrap_at_x == INFINITY || wrap_it.sp < 0)
+! 		    goto buffer_pos_reached;
+! 		  /* Must continue to see if we wrap after pos */
+! 		  if (atpos_it.sp < 0)
+! 		    atpos_it = *it;
+! 		}
+!
+! 	      if (new_x > it->first_visible_x)
+  		{
+  		  /* Glyph is visible.  Increment number of glyphs that
+  		     would be displayed.  */
+***************
+*** 6096,6112 ****
+
+  	  if (result != MOVE_UNDEFINED)
+  	    break;
+  	}
+!       else if (BUFFER_POS_REACHED_P ())
+  	{
+! 	buffer_pos_reached:
+! 	  it->current_x = x;
+! 	  it->max_ascent = ascent;
+! 	  it->max_descent = descent;
+! 	  result = MOVE_POS_MATCH_OR_ZV;
+! 	  break;
+  	}
+!       else if ((op & MOVE_TO_X) && it->current_x >= to_x)
+  	{
+  	  /* Stop when TO_X specified and reached.  This check is
+  	     necessary here because of lines consisting of a line end,
+--- 6162,6187 ----
+
+  	  if (result != MOVE_UNDEFINED)
+  	    break;
++ 	  goto glyphs_done;
+  	}
+!
+!       if (BUFFER_POS_REACHED_P ())
+  	{
+! 	  if (it->wrap_at_x == INFINITY || wrap_it.sp < 0)
+! 	    {
+! 	    buffer_pos_reached:
+! 	      it->current_x = x;
+! 	      it->max_ascent = ascent;
+! 	      it->max_descent = descent;
+! 	      result = MOVE_POS_MATCH_OR_ZV;
+! 	      break;
+! 	    }
+! 	  /* Must continue to see if we wrap after pos */
+! 	  if (atpos_it.sp < 0)
+! 	    atpos_it = *it;
+  	}
+!
+!       if ((op & MOVE_TO_X) && it->current_x >= to_x)
+  	{
+  	  /* Stop when TO_X specified and reached.  This check is
+  	     necessary here because of lines consisting of a line end,
+***************
+*** 6117,6122 ****
+--- 6192,6198 ----
+  	  break;
+  	}
+
++     glyphs_done:
+        /* Is this a line end?  If yes, we're done.  */
+        if (ITERATOR_AT_END_OF_LINE_P (it))
+  	{
+***************
+*** 6156,6161 ****
+--- 6232,6242 ----
+
+  #undef BUFFER_POS_REACHED_P
+
++   /* If we scanned beyond to_pos and didn't find a point to wrap at,
++      return iterator at to_pos.  */
++   if (atpos_it.sp >= 0)
++     *it = atpos_it;
++
+    /* Restore the iterator settings altered at the beginning of this
+       function.  */
+    it->glyph_row = saved_glyph_row;
+***************
+*** 6627,6634 ****
+  	    break;
+  	  /* If start of line is still in string or image,
+  	     move further back.  */
+! 	  back_to_previous_visible_line_start (it);
+! 	  reseat (it, it->current.pos, 1);
+  	  dvpos--;
+  	}
+
+--- 6708,6714 ----
+  	    break;
+  	  /* If start of line is still in string or image,
+  	     move further back.  */
+! 	  reseat_at_previous_visible_line_start (it);
+  	  dvpos--;
+  	}
+
+***************
+*** 12777,12782 ****
+--- 12857,12907 ----
+    /* Initialize iterator and info to start at POS.  */
+    start_display (&it, w, pos);
+
++ #if 0
++   /* Move iterator before (partial) overlay strings and images at start
++      of window start line. */
++   if (IT_CHARPOS (it) > BEGV)
++     {
++       struct it it2 = it;
++       struct it it3;
++
++       while (IT_CHARPOS (it2) > BEGV)
++ 	{
++ 	  int start_pos = IT_CHARPOS (it2);
++ 	  reseat_at_previous_visible_line_start (&it2);
++ 	  it3 = it2;
++ 	  it3.vpos = 0;
++ 	  move_it_to (&it3, CHARPOS (pos), -1, -1, it3.vpos + 1,
++ 		      MOVE_TO_POS | MOVE_TO_VPOS);
++ 	  if (it3.vpos)
++ 	    {
++ 	      it2 = it3;
++ 	      break;
++ 	    }
++ 	  IT_CHARPOS (it2) = max (BEGV, min (start_pos, IT_CHARPOS (it2))) - 1;
++ 	  it2.sp = 0;
++ 	}
++
++       it2.current_x = 0;
++       it3.current_x = -1;
++       while (!IT_POS_VALID_AFTER_MOVE_P (&it2)
++ 	     || (it2.method == GET_FROM_BUFFER
++ 		 && IT_CHARPOS (it2) < CHARPOS (pos)))
++ 	{
++ 	  it3 = it2;
++ 	  move_it_to (&it2, CHARPOS (pos), -1, -1, it2.vpos + 1,
++ 		      MOVE_TO_POS | MOVE_TO_VPOS);
++ 	}
++
++       if (it3.current_x == 0 && it2.current_x > 0)
++ 	{
++ 	  it = it3;
++ 	  it.current_y = 0;
++ 	  it.vpos = 0;
++ 	}
++     }
++ #endif
++
+    /* Display all lines of W.  */
+    while (it.current_y < it.last_visible_y)
+      {
+***************
+*** 15097,15102 ****
+--- 15222,15233 ----
+  {
+    struct glyph_row *row = it->glyph_row;
+    Lisp_Object overlay_arrow_string;
++   struct it wrap_it;
++   int may_wrap = 0, wrap_x;
++   int wrap_row_used = -1, wrap_row_ascent, wrap_row_height;
++   int wrap_row_phys_ascent, wrap_row_phys_height;
++   int wrap_row_extra_line_spacing;
++   int last_x = min (it->wrap_at_x, it->last_visible_x);
+
+    /* We always start displaying at hpos zero even if hscrolled.  */
+    xassert (it->hpos == 0 && it->current_x == 0);
+***************
+*** 15199,15204 ****
+--- 15330,15352 ----
+  	  phys_descent = it->max_phys_descent;
+  	}
+
++       if (it->area == TEXT_AREA)
++ 	{
++ 	  if (it->what == IT_CHARACTER && (it->c == ' ' || it->c == '\t'))
++ 	    may_wrap = (it->wrap_at_x != INFINITY);
++ 	  else if (may_wrap) {
++ 	    wrap_it = *it;
++ 	    wrap_x = x;
++ 	    wrap_row_used = row->used[TEXT_AREA];
++ 	    wrap_row_ascent = row->ascent;
++ 	    wrap_row_height = row->height;
++ 	    wrap_row_phys_ascent = row->phys_ascent;
++ 	    wrap_row_phys_height = row->phys_height;
++ 	    wrap_row_extra_line_spacing = row->extra_line_spacing;
++ 	    may_wrap = 0;
++ 	  }
++ 	}
++
+        PRODUCE_GLYPHS (it);
+
+        /* If this display element was in marginal areas, continue with
+***************
+*** 15232,15238 ****
+        if (/* Not a newline.  */
+  	  nglyphs > 0
+  	  /* Glyphs produced fit entirely in the line.  */
+! 	  && it->current_x < it->last_visible_x)
+  	{
+  	  it->hpos += nglyphs;
+  	  row->ascent = max (row->ascent, it->max_ascent);
+--- 15380,15386 ----
+        if (/* Not a newline.  */
+  	  nglyphs > 0
+  	  /* Glyphs produced fit entirely in the line.  */
+! 	  && it->current_x < last_x)
+  	{
+  	  it->hpos += nglyphs;
+  	  row->ascent = max (row->ascent, it->max_ascent);
+***************
+*** 15258,15266 ****
+  	      if (/* Lines are continued.  */
+  		  !it->truncate_lines_p
+  		  && (/* Glyph doesn't fit on the line.  */
+! 		      new_x > it->last_visible_x
+  		      /* Or it fits exactly on a window system frame.  */
+! 		      || (new_x == it->last_visible_x
+  			  && FRAME_WINDOW_P (it->f))))
+  		{
+  		  /* End of a continued line.  */
+--- 15406,15414 ----
+  	      if (/* Lines are continued.  */
+  		  !it->truncate_lines_p
+  		  && (/* Glyph doesn't fit on the line.  */
+! 		      new_x > last_x
+  		      /* Or it fits exactly on a window system frame.  */
+! 		      || (new_x == last_x
+  			  && FRAME_WINDOW_P (it->f))))
+  		{
+  		  /* End of a continued line.  */
+***************
+*** 15297,15302 ****
+--- 15445,15452 ----
+  				}
+  			    }
+  #endif /* HAVE_WINDOW_SYSTEM */
++ 			  if (wrap_row_used > 0)
++ 			    goto back_to_wrap;
+  			}
+  		    }
+  		  else if (CHAR_GLYPH_PADDING_P (*glyph)
+***************
+*** 15336,15341 ****
+--- 15486,15507 ----
+  		      row->continued_p = 1;
+  		      glyph->pixel_width = it->last_visible_x - x;
+  		      it->starts_in_middle_of_char_p = 1;
++ 		    }
++ 		  else if (wrap_row_used > 0)
++ 		    {
++ 		    back_to_wrap:
++ 		      *it = wrap_it;
++ 		      it->continuation_lines_width += wrap_x;
++ 		      row->used[TEXT_AREA] = wrap_row_used;
++ 		      row->ascent = wrap_row_ascent;
++ 		      row->height = wrap_row_height;
++ 		      row->phys_ascent = wrap_row_phys_ascent;
++ 		      row->phys_height = wrap_row_phys_height;
++ 		      row->extra_line_spacing = wrap_row_extra_line_spacing;
++ 		      row->continued_p = 1;
++ 		      row->ends_at_zv_p = 0;
++ 		      row->exact_window_width_line_p = 0;
++ 		      it->continuation_lines_width += x;
+  		    }
+  		  else
+  		    {
