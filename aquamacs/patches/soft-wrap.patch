@@ -1,5 +1,5 @@
-*** buffer.c	18 Jul 2005 22:41:31 +0200	1.486
---- buffer.c	21 Jul 2005 15:51:28 +0200	
+*** src/buffer.c	18 Jul 2005 22:41:31 +0200	1.486
+--- src/buffer.c	21 Jul 2005 15:51:28 +0200	
 ***************
 *** 4985,4990 ****
 --- 4985,4991 ----
@@ -96,13 +96,13 @@
     DEFVAR_PER_BUFFER ("scroll-up-aggressively",
   		     &current_buffer->scroll_up_aggressively, Qnil,
   		     doc: /* How far to scroll windows upward.
-Index: buffer.h
+Index: src/buffer.h
 ===================================================================
 RCS file: /cvsroot/emacs/emacs/src/buffer.h,v
 retrieving revision 1.103
 diff -c -r1.103 buffer.h
-*** buffer.h	18 Jul 2005 21:34:33 -0000	1.103
---- buffer.h	21 Jul 2005 13:36:59 -0000
+*** src/buffer.h	18 Jul 2005 21:34:33 -0000	1.103
+--- src/buffer.h	21 Jul 2005 13:36:59 -0000
 ***************
 *** 610,615 ****
 --- 610,616 ----
@@ -125,13 +125,13 @@ diff -c -r1.103 buffer.h
 
     /* Time stamp updated each time this buffer is displayed in a window.  */
     Lisp_Object display_time;
-Index: dispextern.h
+Index: src/dispextern.h
 ===================================================================
 RCS file: /cvsroot/emacs/emacs/src/dispextern.h,v
 retrieving revision 1.207
 diff -c -r1.207 dispextern.h
-*** dispextern.h	4 Jul 2005 16:06:30 -0000	1.207
---- dispextern.h	21 Jul 2005 13:36:59 -0000
+*** src/dispextern.h	4 Jul 2005 16:06:30 -0000	1.207
+--- src/dispextern.h	21 Jul 2005 13:36:59 -0000
 ***************
 *** 1950,1955 ****
 --- 1950,1959 ----
@@ -145,13 +145,13 @@ diff -c -r1.207 dispextern.h
     /* An enumeration describing what the next display element is
        after a call to get_next_display_element.  */
     enum display_element_type what;
-Index: dispnew.c
+Index: src/dispnew.c
 ===================================================================
 RCS file: /cvsroot/emacs/emacs/src/dispnew.c,v
 retrieving revision 1.351
 diff -c -r1.351 dispnew.c
-*** dispnew.c	4 Jul 2005 16:06:30 -0000	1.351
---- dispnew.c	21 Jul 2005 13:37:00 -0000
+*** src/dispnew.c	4 Jul 2005 16:06:30 -0000	1.351
+--- src/dispnew.c	21 Jul 2005 13:37:00 -0000
 ***************
 *** 3475,3480 ****
 --- 3475,3481 ----
@@ -162,13 +162,13 @@ diff -c -r1.351 dispnew.c
         /* Give up if unable to display the cursor in the window.  */
         || w->cursor.vpos < 0
         /* Give up if we are showing a message or just cleared the message
-Index: fringe.c
+Index: src/fringe.c
 ===================================================================
 RCS file: /cvsroot/emacs/emacs/src/fringe.c,v
 retrieving revision 1.28
 diff -c -r1.28 fringe.c
-*** fringe.c	4 Jul 2005 16:06:31 -0000	1.28
---- fringe.c	21 Jul 2005 13:37:00 -0000
+*** src/fringe.c	4 Jul 2005 16:06:31 -0000	1.28
+--- src/fringe.c	21 Jul 2005 13:37:00 -0000
 ***************
 *** 906,912 ****
         else if (row->indicate_eob_p && EQ (boundary_bot, Qleft))
@@ -207,13 +207,13 @@ diff -c -r1.28 fringe.c
         else if (row->indicate_top_line_p && EQ (arrow_top, Qright))
   	right = UP_ARROW_BITMAP;
         else if (row->indicate_bottom_line_p && EQ (arrow_bot, Qright))
-Index: window.c
+Index: src/window.c
 ===================================================================
 RCS file: /cvsroot/emacs/emacs/src/window.c,v
 retrieving revision 1.512
 diff -c -r1.512 window.c
-*** window.c	11 Jul 2005 21:43:10 -0000	1.512
---- window.c	21 Jul 2005 13:37:00 -0000
+*** src/window.c	11 Jul 2005 21:43:10 -0000	1.512
+--- src/window.c	21 Jul 2005 13:37:00 -0000
 ***************
 *** 282,287 ****
 --- 282,289 ----
@@ -400,13 +400,13 @@ diff -c -r1.512 window.c
     defsubr (&Swindow_vscroll);
     defsubr (&Sset_window_vscroll);
     defsubr (&Scompare_window_configurations);
-Index: window.h
+Index: src/window.h
 ===================================================================
 RCS file: /cvsroot/emacs/emacs/src/window.h,v
 retrieving revision 1.65
 diff -c -r1.65 window.h
-*** window.h	4 Jul 2005 16:06:38 -0000	1.65
---- window.h	21 Jul 2005 13:37:00 -0000
+*** src/window.h	4 Jul 2005 16:06:38 -0000	1.65
+--- src/window.h	21 Jul 2005 13:37:00 -0000
 ***************
 *** 179,184 ****
 --- 179,191 ----
@@ -423,13 +423,13 @@ diff -c -r1.65 window.h
       /* Frame coords of mark as of last time display completed */
       /* May be nil if mark does not exist or was not on frame */
       Lisp_Object last_mark_x;
-Index: xdisp.c
+Index: src/xdisp.c
 ===================================================================
 RCS file: /cvsroot/emacs/emacs/src/xdisp.c,v
 retrieving revision 1.1036
 diff -c -r1.1036 xdisp.c
-*** xdisp.c	18 Jul 2005 20:59:41 -0000	1.1036
---- xdisp.c	21 Jul 2005 13:37:01 -0000
+*** src/xdisp.c	18 Jul 2005 20:59:41 -0000	1.1036
+--- src/xdisp.c	21 Jul 2005 13:37:01 -0000
 ***************
 *** 2116,2121 ****
 --- 2116,2130 ----
