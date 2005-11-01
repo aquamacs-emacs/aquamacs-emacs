@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.14 2005/09/19 19:03:34 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.15 2005/11/01 02:42:02 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -88,10 +88,10 @@
     )
   ) 
 
-(defun set-mode-specific-theme (&optional frame force)
+(defun set-mode-specific-theme (&optional frame force for-mode)
   "Sets the mode-specific theme (frame parameters) for FRAME
  (selected frame if nil), unless it is already set (or
-FORCE is non-nil)."
+FORCE is non-nil). Use theme of major mode FOR-MODE if given."
     
   (when aquamacs-auto-frame-parameters-flag
 
@@ -127,9 +127,11 @@ FORCE is non-nil)."
 				       special-display-frame-alist 
 				     default-frame-alist
 				     )
-				   (append
-				    (get-buffer-specific-theme (buffer-name))
-				   (get-mode-specific-theme major-mode))))
+				   (if for-mode
+				       (get-mode-specific-theme for-mode)
+				     (append
+				      (get-buffer-specific-theme (buffer-name))
+				      (get-mode-specific-theme major-mode)))))
 			   ;; read out color-theme		 
 			   ( color-theme (cdr (assq 'color-theme theme)))
 			   (theme (assq-delete-all 'color-theme theme)
@@ -535,25 +537,29 @@ Frame Appearance Themes to make the setting stick.")
 	    )
   (add-hook 'menu-bar-update-hook 'update-mode-theme)
   (define-key-after aquamacs-frame-theme-menu [menu-delete-one-theme]
-    '(menu-item (format "Remove theme for %s" (or (aquamacs-updated-major-mode) "current mode"))   aquamacs-delete-one-mode-specific-theme 
+    '(menu-item (format "Remove Theme for %s" 
+			(or 
+			 (modename-to-string (aquamacs-updated-major-mode)) 
+			 "current mode"))   
+		aquamacs-delete-one-mode-specific-theme 
 		:enable (and aquamacs-auto-frame-parameters-flag
 			     (aquamacs-updated-is-visible-frame-p)
 			     (assq (aquamacs-updated-major-mode) 
 				   aquamacs-mode-specific-default-themes))
 		:help "Removes a mode-specific theme."))
   (define-key-after aquamacs-frame-theme-menu [menu-delete-themes]
-    '(menu-item  "Reset all themes"     aquamacs-delete-themes 
+    '(menu-item  "Reset All Themes"     aquamacs-delete-themes 
 		 :help "Resets all themes to the default."
 		 :enable aquamacs-auto-frame-parameters-flag))
 
   (define-key aquamacs-frame-theme-menu [menu-set-theme-as-default]
-    '(menu-item  "Use current theme as default"     aquamacs-set-theme-as-default
+    '(menu-item  "Use Current Theme as Default"     aquamacs-set-theme-as-default
 		 :enable  (and aquamacs-auto-frame-parameters-flag
 			       (aquamacs-updated-is-visible-frame-p))
 		 :help ""))
 
   (define-key aquamacs-frame-theme-menu [menu-set-theme-as-mode-default]
-    '(menu-item (format "Use current theme for %s" (or (aquamacs-updated-major-mode) "current mode"))
+    '(menu-item (format "Use Current Theme for %s" (or (modename-to-string (aquamacs-updated-major-mode)) "Current Mode"))
 		aquamacs-set-theme-as-mode-default 
 		:help "Set the current frame parameters as default 
 for all frames with the current major-mode."
@@ -561,6 +567,41 @@ for all frames with the current major-mode."
 			       (aquamacs-updated-is-visible-frame-p))
 		 	  
 		)) 
+
+(defun modename-to-string (modename)
+  (capitalize
+   (replace-regexp-in-string "-" " " (symbol-name modename))))
+
+(defvar apptheme-mode-menu nil)
+
+  (setq apptheme-mode-menu (make-sparse-keymap "Set Mode")) 
+  (mapc
+   (lambda (pair)
+     (let ((modename (car pair)))
+     (when (fboundp modename)
+       (define-key ;;-after doesn't work with after- why?>? 
+	 apptheme-mode-menu 
+	 (vector (make-symbol (concat "set-theme-of-" (symbol-name modename))))
+	 `(menu-item  
+	   ,(modename-to-string modename)
+	   ,(eval 
+	     (list 'lambda '() '(interactive)
+		   (list 'set-mode-specific-theme nil t `(quote ,modename))
+		   ))
+	   :help "Apply frame theme of some major mode."
+	   )))))
+      
+   (reverse (sort (copy-list aquamacs-mode-specific-default-themes)
+		  (lambda (a b) (string< 
+				 (upcase (symbol-name (car a))) 
+				 (upcase (symbol-name (car b)))))))
+   )
+  (define-key-after aquamacs-frame-theme-menu [set-mode]
+    (list 'menu-item "Apply Theme from some Mode" apptheme-mode-menu
+	  :help "Apply frame theme of some major mode.")
+    'menu-set-theme-as-default)
+
+
 
   (define-key aquamacs-frame-theme-menu [menu-auto-frame-parameters]
     (menu-bar-make-toggle 
