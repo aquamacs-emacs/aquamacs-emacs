@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.15 2005/10/30 11:22:25 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.16 2005/11/01 00:46:56 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -139,6 +139,7 @@
 "Create a mode map for OSX key mode. COMMAND-KEY specifies
 which key is mapped to command. mac-command-modifier is the
 default."
+(garbage-collect) ;; attempted workaround
 (if command-key
     (setq osxkeys-command-key command-key)
   (if mac-command-modifier
