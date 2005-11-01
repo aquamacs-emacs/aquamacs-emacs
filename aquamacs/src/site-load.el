@@ -84,7 +84,8 @@
 ;(aq-preload "carbon-font.el")
 (aq-preload "check-for-updates.el")
 ;(aq-preload "color-theme.el")
-(aq-preload "color-theme-themes.el")
+;; too large - will fail
+;;(aq-preload "color-theme-themes.el")
 
 ;(aq-preload "css-mode.el")
 ;(aq-preload "def-face-const.el")
