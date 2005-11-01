@@ -52,7 +52,7 @@ if test "${BUILD_GNU_EMACS}" == "yes"; then
     echo "Building Emacs (make-package)..." >>$LOG 
     ./make-package --self-contained --build-in-place >>$LOG 2>>$LOG 
 
-    NAME=GNU-Emacs-`date +"%Y-%b-%e-%a"`
+    NAME=GNU-Emacs-`date +"%Y-%b-%d-%a"`
 
     mv EmacsInstaller.dmg ${NAME}.dmg
     bzip2 ${NAME}.dmg  >>$LOG 2>>$LOG 
@@ -88,7 +88,7 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
     rm -rf "${DEST}/Aquamacs Emacs.app"  >>$LOG 2>>$LOG 
     ${AQUAMACS_ROOT}/build/install-aquamacs "${AQUAMACS_ROOT}" "${DEST}/Aquamacs Emacs.app" "Aquamacs-Raw/Emacs.app"  >>$LOG 2>>$LOG 
 
-    NAME=Aquamacs-`date +"%Y-%b-%e-%a"`
+    NAME=Aquamacs-`date +"%Y-%b-%d-%a"`
 
     rm -rf ${DEST}/Aquamacs*.tar.bz2  >>$LOG 2>>$LOG 
     cd $DEST
