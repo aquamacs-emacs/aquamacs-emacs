@@ -2,6 +2,8 @@
 
 # scp nightly.sy dr@rodrigues.inf.ed.ac.uk:~/
 
+CVS_PREFIX="CVS_RSH=ssh cvs -z3 -d:ext:davidswelt@cvs.sourceforge.net:/cvsroot/aquamacs"
+
 if test "$1" == "emacs" ; then
     BUILD_GNU_EMACS=yes   
     LOG=~/Aquamacs/emacs-build.log
@@ -75,7 +77,7 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
     export EMACS_ROOT=`pwd`/emacs
     cd aquamacs
     echo "CVS update: aquamacs" >>$LOG  
-    CVS_RSH=ssh cvs update -dP >>$LOG 2>>$LOG 
+    $CVS_PREFIX update -dP >>$LOG 2>>$LOG 
 
     echo "Applying Aquamacs patches..." >>$LOG  
     . ${AQUAMACS_ROOT}/build/apply-patches.sh >>$LOG 2>>$LOG
