@@ -3,7 +3,6 @@
  
 (defvar aq-preloaded nil
 "List of preloaded (precomiled) features.")
-
 (defun aq-preload (f)  
   (let ((features-before features))
     (load (concat aq-compile-path f))
@@ -13,42 +12,42 @@
 	    features)))
 
 
-;(aq-preload "mwheel") ;; wants to be loaded at runtime
-(aq-preload "disp-table")
-(aq-preload "tool-bar")
-(aq-preload "image") ;; taken out so as to not initialize the path variable
-(aq-preload "button")
-(aq-preload "view")
-(aq-preload "help-mode")
-(aq-preload "help-fns")
+;(load "mwheel") ;; wants to be loaded at runtime
+(load "disp-table")
+(load "tool-bar")
+(load "image") ;; taken out so as to not initialize the path variable
+(load "button")
+(load "view")
+(load "help-mode")
+(load "help-fns")
 
-(aq-preload "emacs-lisp/debug")
-(aq-preload "emacs-lisp/bytecomp")
-(aq-preload "emacs-lisp/byte-opt")
-(aq-preload "emacs-lisp/advice")
-(aq-preload "custom")
-;(aq-preload "emacs-lisp/cl")
-;(aq-preload "emacs-lisp/cl-seq")
-(aq-preload "international/encoded-kb")
-(aq-preload "wid-edit.el")
-; (aq-preload "emacs-lisp/easymenu") ;; needs to be loaded at runtime... causes strange behavior otherwise
-; (aq-preload "recentf") 
- (let ((aq-preload-path  
+(load "emacs-lisp/debug")
+(load "emacs-lisp/bytecomp")
+(load "emacs-lisp/byte-opt")
+(load "emacs-lisp/advice")
+(load "custom")
+;(load "emacs-lisp/cl")
+;(load "emacs-lisp/cl-seq")
+(load "international/encoded-kb")
+(load "wid-edit.el")
+; (load "emacs-lisp/easymenu") ;; needs to be loaded at runtime... causes strange behavior otherwise
+; (load "recentf") 
+ (let ((load-path  
 	(append load-path
 		(list (expand-file-name "emulation" (car load-path))))))
-   (aq-preload "emulation/cua-base")
-   (aq-preload "emulation/pc-select")
+   (load "emulation/cua-base")
+   (load "emulation/pc-select")
    )
-(aq-preload "delsel")
-(aq-preload "paren")
-(aq-preload "calendar/time-date")
-(aq-preload "timezone")
-(aq-preload "calendar/parse-time")
+(load "delsel")
+(load "paren")
+(load "calendar/time-date")
+(load "timezone")
+(load "calendar/parse-time")
  
-;(aq-preload "emacs-lisp/cl-macs")
-;(aq-preload "emacs-lisp/cl")
-;(aq-preload "emacs-lisp/cl-seq")
-;(aq-preload "emacs-lisp/easy-mmode.el")
+;(load "emacs-lisp/cl-macs")
+;(load "emacs-lisp/cl")
+;(load "emacs-lisp/cl-seq")
+;(load "emacs-lisp/easy-mmode.el")
 
 ;; aquamacs
 ;; the function aq-preload is supplied by the make-aquamacs script
@@ -61,17 +60,17 @@
 (aq-preload "aquamacs.el")
 (aq-preload "macosx/osx_defaults.el")
 
-;; (aq-preload "mail/rfc822.el")
-;; (aq-preload "mail/mail-utils.el")
-;; (aq-preload "international/mule-util.el")
+;; (load "mail/rfc822.el")
+;; (load "mail/mail-utils.el")
+;; (load "international/mule-util.el")
 
-;; (aq-preload "assoc.el")
-;; (aq-preload "speedbar.el")
-;; (aq-preload "mail/rmail.el")
-;; (aq-preload "mail/sendmail.el")
+;; (load "assoc.el")
+;; (load "speedbar.el")
+;; (load "mail/rmail.el")
+;; (load "mail/sendmail.el")
 
 
-;; (aq-preload "mail/emacsbug.el")
+;; (load "mail/emacsbug.el")
 ;; (aq-preload "aquamacs-bug.el")
 ;(aq-preload "aquamacs-mac-fontsets.el")
 
