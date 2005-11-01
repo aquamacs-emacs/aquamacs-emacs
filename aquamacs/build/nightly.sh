@@ -2,7 +2,8 @@
 
 # scp nightly.sy dr@rodrigues.inf.ed.ac.uk:~/
 
-CVS_PREFIX="CVS_RSH=ssh cvs -z3 -d:ext:davidswelt@cvs.sourceforge.net:/cvsroot/aquamacs"
+export CVS_RSH=ssh
+CVS_PREFIX="cvs -z3 -d:ext:davidswelt@cvs.sourceforge.net:/cvsroot/aquamacs"
 
 if test "$1" == "emacs" ; then
     BUILD_GNU_EMACS=yes   
