@@ -207,76 +207,64 @@ diff -c -r1.28 fringe.c
         else if (row->indicate_top_line_p && EQ (arrow_top, Qright))
   	right = UP_ARROW_BITMAP;
         else if (row->indicate_bottom_line_p && EQ (arrow_bot, Qright))
-Index: src/window.c
+Index: window.c
 ===================================================================
 RCS file: /cvsroot/emacs/emacs/src/window.c,v
-retrieving revision 1.512
-diff -c -r1.512 window.c
-*** src/window.c	11 Jul 2005 21:43:10 -0000	1.512
---- src/window.c	21 Jul 2005 13:37:00 -0000
+retrieving revision 1.524
+diff -c -r1.524 window.c
+*** src/window.c	1 Nov 2005 08:01:40 -0000	1.524
+--- src/window.c	1 Nov 2005 08:55:45 -0000
 ***************
-*** 282,287 ****
---- 282,289 ----
+*** 281,286 ****
+--- 281,288 ----
     p->fringes_outside_margins = Qnil;
     p->scroll_bar_width = Qnil;
     p->vertical_scroll_bar_type = Qt;
 +   p->wrap_column = Qnil;
 +   p->indicate_continued_rows = Qt;
-
+  
     Vwindow_list = Qnil;
     return val;
 ***************
-*** 3123,3128 ****
---- 3125,3134 ----
+*** 3121,3126 ****
+--- 3123,3132 ----
   			       b->scroll_bar_width,
   			       b->vertical_scroll_bar_type, Qnil);
-
+  
 +       Fset_window_wrap_column (window,
 + 			       b->wrap_column,
 + 			       b->indicate_continued_lines);
-+
++ 
         w->left_margin_cols = save_left;
         w->right_margin_cols = save_right;
-
+  
 ***************
-*** 3836,3841 ****
---- 3842,3852 ----
+*** 3838,3843 ****
+--- 3844,3854 ----
     p->scroll_bar_width = o->scroll_bar_width;
     p->vertical_scroll_bar_type = o->vertical_scroll_bar_type;
-
+  
 +   /* Duplicate line wrapping settings.  */
-+
++ 
 +   p->wrap_column = o->wrap_column;
 +   p->indicate_continued_rows = o->indicate_continued_rows;
-+
++ 
     /* Apportion the available frame space among the two new windows */
-
+  
     if (!NILP (horflag))
 ***************
-*** 5622,5631 ****
-    Lisp_Object left_margin_cols, right_margin_cols;
-    Lisp_Object left_fringe_width, right_fringe_width, fringes_outside_margins;
-    Lisp_Object scroll_bar_width, vertical_scroll_bar_type;
-  };
-
-- #define SAVED_WINDOW_VECTOR_SIZE 24 /* Arg to Fmake_vector */
--
-  #define SAVED_WINDOW_N(swv,n) \
-    ((struct saved_window *) (XVECTOR ((swv)->contents[(n)])))
-
---- 5633,5641 ----
+*** 5624,5629 ****
+--- 5635,5641 ----
     Lisp_Object left_margin_cols, right_margin_cols;
     Lisp_Object left_fringe_width, right_fringe_width, fringes_outside_margins;
     Lisp_Object scroll_bar_width, vertical_scroll_bar_type;
 +   Lisp_Object wrap_column, indicate_continued_rows;
   };
-
+  
   #define SAVED_WINDOW_N(swv,n) \
-    ((struct saved_window *) (XVECTOR ((swv)->contents[(n)])))
-
 ***************
 *** 5842,5847 ****
---- 5852,5859 ----
+--- 5854,5861 ----
   	  w->fringes_outside_margins = p->fringes_outside_margins;
   	  w->scroll_bar_width = p->scroll_bar_width;
   	  w->vertical_scroll_bar_type = p->vertical_scroll_bar_type;
@@ -284,45 +272,28 @@ diff -c -r1.512 window.c
 + 	  w->indicate_continued_rows = p->indicate_continued_rows;
   	  XSETFASTINT (w->last_modified, 0);
   	  XSETFASTINT (w->last_overlay_modified, 0);
-
+  
 ***************
 *** 6111,6116 ****
---- 6123,6131 ----
+--- 6125,6133 ----
         p->fringes_outside_margins = w->fringes_outside_margins;
         p->scroll_bar_width = w->scroll_bar_width;
         p->vertical_scroll_bar_type = w->vertical_scroll_bar_type;
 +       p->wrap_column = w->wrap_column;
 +       p->indicate_continued_rows = w->indicate_continued_rows;
-+
++ 
         if (!NILP (w->buffer))
   	{
   	  /* Save w's value of point in the window configuration.
 ***************
-*** 6205,6211 ****
-    data->saved_windows = tem;
-    for (i = 0; i < n_windows; i++)
-      XVECTOR (tem)->contents[i]
-!       = Fmake_vector (make_number (SAVED_WINDOW_VECTOR_SIZE), Qnil);
-    save_window_save (FRAME_ROOT_WINDOW (f), XVECTOR (tem), 0);
-    XSETWINDOW_CONFIGURATION (tem, data);
-    return (tem);
---- 6220,6226 ----
-    data->saved_windows = tem;
-    for (i = 0; i < n_windows; i++)
-      XVECTOR (tem)->contents[i]
-!       = Fmake_vector (make_number (VECSIZE (struct saved_window)), Qnil);
-    save_window_save (FRAME_ROOT_WINDOW (f), XVECTOR (tem), 0);
-    XSETWINDOW_CONFIGURATION (tem, data);
-    return (tem);
-***************
-*** 6439,6444 ****
---- 6454,6512 ----
-
+*** 6517,6522 ****
+--- 6534,6592 ----
+  
   
   /***********************************************************************
 + 			   Auto filling
 +  ***********************************************************************/
-+
++ 
 + DEFUN ("set-window-wrap-column", Fset_window_wrap_column, Sset_window_wrap_column,
 +        2, 3, 0,
 +        doc: /* Set display auto-wrap column of window WINDOW.
@@ -335,30 +306,30 @@ diff -c -r1.512 window.c
 +      Lisp_Object window, wrap_column, indicators;
 + {
 +   struct window *w = decode_window (window);
-+
++ 
 +   /* Translate negative or zero widths to nil.
 +      Margins that are too wide have to be checked elsewhere.  */
-+
++ 
 +   if (!NILP (wrap_column))
 +     {
 +       CHECK_NUMBER (wrap_column);
 +       if (XINT (wrap_column) <= 0)
 + 	wrap_column = Qnil;
 +     }
-+
++ 
 +   if (!EQ (w->wrap_column, wrap_column)
 +       || !EQ (w->indicate_continued_rows, indicators))
 +     {
 +       w->wrap_column = wrap_column;
 +       w->indicate_continued_rows = indicators;
-+
++ 
 +       ++windows_or_buffers_changed;
 +     }
-+
++ 
 +   return Qnil;
 + }
-+
-+
++ 
++ 
 + DEFUN ("window-wrap-column", Fwindow_wrap_column, Swindow_wrap_column,
 +        0, 1, 0,
 +        doc: /* Get display auto-wrap column of window WINDOW.
@@ -369,16 +340,16 @@ diff -c -r1.512 window.c
 +   struct window *w = decode_window (window);
 +   return w->wrap_column;
 + }
-+
-+
++ 
++ 
 + 
 + /***********************************************************************
   			   Smooth scrolling
    ***********************************************************************/
-
+  
 ***************
-*** 6721,6726 ****
---- 6789,6798 ----
+*** 6799,6804 ****
+--- 6869,6878 ----
   	return 0;
         if (! EQ (p1->vertical_scroll_bar_type, p2->vertical_scroll_bar_type))
   	return 0;
@@ -387,11 +358,11 @@ diff -c -r1.512 window.c
 +       if (! EQ (p1->indicate_continued_rows, p2->indicate_continued_rows))
 + 	return 0;
       }
-
+  
     return 1;
 ***************
-*** 7045,7050 ****
---- 7117,7124 ----
+*** 7124,7129 ****
+--- 7198,7205 ----
     defsubr (&Swindow_fringes);
     defsubr (&Sset_window_scroll_bars);
     defsubr (&Swindow_scroll_bars);
