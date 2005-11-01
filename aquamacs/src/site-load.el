@@ -85,6 +85,8 @@
 ;(load "aquamacs/carbon-font.el")
 (aq-preload "check-for-updates.el")
 ;(load "aquamacs/color-theme.el")
+(aq-preload "aquamacs/color-theme-themes.el")
+
 ;(load "aquamacs/css-mode.el")
 ;(load "aquamacs/def-face-const.el")
 
