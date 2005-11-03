@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.16 2005/11/01 00:46:56 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.17 2005/11/03 01:11:21 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -103,6 +103,44 @@
 (global-unset-key [f16])
 (global-unset-key [f18])
  
+(defun screen-line-up ()
+       (interactive)
+       (let ((old-col (current-column)))
+              (vertical-motion 0)  ;; to left
+	      (let ((screen-col (- old-col (current-column)))
+		    (next-line-start (point)) )
+	      (vertical-motion -1) ;; up
+	      (forward-char (min screen-col (- next-line-start (point) 1)   ))))) 
+	    
+(defun screen-line-down ()
+  (interactive)
+  (let ((old-col (current-column)))
+    (vertical-motion 0)	;; to left
+    (let ((screen-col (- old-col (current-column))))
+      (vertical-motion +1) ;; down
+      (unless (= (point) (point-max))
+	(vertical-motion +1) ;; down
+	(let ((next-line-start 
+	       (if (not (= (point) (point-max)))
+		   ;; move right, but not further than to end of line
+		   (prog1 (point)
+		     (vertical-motion -1)) ;; one up again
+		 (vertical-motion 0) ;; workaround
+		 (point-max))))
+	  (forward-char (min screen-col 
+			     (- next-line-start (point) 1))))))))
+	    
+(defun beginning-of-screen-line ()
+  (interactive)
+  (vertical-motion 0)
+)
+(defun end-of-screen-line ()
+  (interactive)
+  (vertical-motion 1)
+  (unless (eq (point) (point-max))
+    (backward-char 1)
+))
+
 
 (defun clipboard-kill-ring-save-secondary ()
   "Copy secondary selection to kill ring, and save in the X clipboard."
@@ -176,7 +214,15 @@ default."
     (define-key map `[(,osxkeys-command-key down)] 'end-of-buffer)
     (define-key map `[(,osxkeys-command-key left)] 'beginning-of-line)
     (define-key map `[(,osxkeys-command-key right)] 'end-of-line)
+
+    (define-key map '[up] 'screen-line-up)
+    (define-key map '[down] 'screen-line-down)
+    (define-key map `[(,osxkeys-command-key left)] 'beginning-of-screen-line)
+    (define-key map `[(,osxkeys-command-key right)] 'end-of-screen-line)
+
     (define-key map `[(,osxkeys-command-key backspace)] 'kill-whole-line)
+
+
     (define-key map `[(meta up)] 'cua-scroll-down)
     (define-key map `[(meta down)] 'cua-scroll-up)
     
