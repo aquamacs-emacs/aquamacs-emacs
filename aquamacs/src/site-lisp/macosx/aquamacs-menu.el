@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.24 2005/10/31 11:12:46 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.25 2005/11/04 12:56:57 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -201,7 +201,7 @@
 ;; we will set the following ones directly
 ;; customization is always possible
 ;; the existing menu item is badly worded and the C-c/v/x don't apply anyways
-(easy-menu-remove-item global-map  '("menu-bar" "options") 'cua-mode) 
+(easy-menu-remove-item global-map  '("menu-bar" "options") 'cua-emulation-mode) 
 (easy-menu-remove-item global-map  '("menu-bar" "options") 'uniquify)
 (easy-menu-remove-item global-map  '("menu-bar" "options") 'transient-mark-mode)
 (easy-menu-remove-item global-map  '("menu-bar" "options") 'case-fold-search)
