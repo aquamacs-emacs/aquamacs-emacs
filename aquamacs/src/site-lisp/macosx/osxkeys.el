@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.19 2005/11/04 12:56:43 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.20 2005/11/04 14:34:36 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -130,16 +130,19 @@
 
     (let ((beg-of-line (point)))
 
-      (if (= (point) (point-max))
-	  (vertical-motion 0)
-	(vertical-motion -1)	;; back up, to left 
-	)
+      (goto-char old-point)
+      (vertical-motion 0)
+
+;      (if (and (= (point) (point-max))  (= old-point (point-max)))
+;	  (vertical-motion 0)
+;	(vertical-motion -1)	;; back up, to left 
+;	)
     (let* ((next-line-start 
 	    (if (not (= (point) (point-max)))
 		;; move right, but not further than to end of line
 		(prog1 (point)
 		  (vertical-motion -1))	    ;; one up again
-	      (vertical-motion 0)	    ;; workaround
+	      (vertical-motion -1)	    ;; workaround
 	      (point-max)))
 	   (rel-next-line-start  (- next-line-start (point) 1))
 	   )
@@ -181,18 +184,12 @@
 	(visual-col (visual-col-at-point))
 	(old-point (point)))
     (vertical-motion +1) ;; down
-    (let ((beg-of-line (point)))
+    (let ( 
+	  (beg-of-line (point)))
       (unless (= (point) (point-max))
 	(vertical-motion +1) ;; down
-	(let* ((next-line-start 
-		(if (not (= (point) (point-max)))
-		    ;; move right, but not further than to end of line
-		    (prog1 (point)
-		      (vertical-motion -1)) ;; one up again
-		  (vertical-motion 0)	    ;; workaround
-		  (point-max)))
-	       (rel-next-line-start  (- next-line-start (point) 1))
-	       )
+	(let ((rel-next-line-start  (- (point) beg-of-line 1))) 
+	  (goto-char beg-of-line) ;; jump back up
 	  ;; approximate positioning
 	  (if (and (or goal-column visual-movement-temporary-goal-column)
 		   (= old-point (- beg-of-line 1))) ;; jumping from end of line
@@ -222,20 +219,17 @@
 		  (unless (= (visual-line-at-point) new-line)
 		    (forward-char -1)))))))))))
 
-; (define-key global-map '[up] 'visual-line-up)
-;    (define-key global-map '[down] 'visual-line-down)
 
 	    
 (defun beginning-of-visual-line ()
   (interactive)
-  (vertical-motion 0)
-)
+  (vertical-motion 0))
+
 (defun end-of-visual-line ()
   (interactive)
   (vertical-motion 1)
   (unless (eq (point) (point-max))
-    (backward-char 1)
-))
+    (backward-char 1)))
 
 
 (defun clipboard-kill-ring-save-secondary ()
