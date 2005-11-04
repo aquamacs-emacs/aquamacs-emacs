@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.18 2005/11/03 11:45:34 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.19 2005/11/04 12:56:43 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -108,13 +108,22 @@
 ;; does not respect (yet)  track-eol 
 ;; unchecked: line-move-ignore-invisible
 
+(defun visual-line-at-point ()
+(cdr (nth 6 (posn-at-point))))
+
+(defun visual-col-at-point ()
+(car (nth 6 (posn-at-point))))
+
+(defun visual-pixel-col-at-point ()
+(car (nth 2 (posn-at-point))))
+
 (defvar visual-movement-temporary-goal-column nil)
 (make-variable-buffer-local 'visual-movement-temporary-goal-column)
 
 (defun visual-line-up ()
   (interactive)
   (let ((pixel-col (car (nth 2 (posn-at-point))))
-	(screen-col (screen-col-at-point))
+	(visual-col (visual-col-at-point))
 	(old-point (point)))
 
     (vertical-motion 1)	;; one down, to left
@@ -142,34 +151,34 @@
 			      rel-next-line-start))
 	;; else, do complete positioning
 	;; save original position  
-	(setq visual-movement-temporary-goal-column screen-col)
+	(setq visual-movement-temporary-goal-column visual-col)
 	;; approximate positioning
-	(forward-char (min screen-col rel-next-line-start)) 
+	(forward-char (min visual-col rel-next-line-start)) 
 	;; correct position
-	(let ((new-line (screen-line-at-point)))
-	  (if (>= (screen-pixel-col-at-point) pixel-col)
+	(let ((new-line (visual-line-at-point)))
+	  (if (>= (visual-pixel-col-at-point) pixel-col)
 	      (progn 
 		(while (and 
-			(> (screen-pixel-col-at-point) pixel-col)
-			(= (screen-line-at-point) new-line))
+			(> (visual-pixel-col-at-point) pixel-col)
+			(= (visual-line-at-point) new-line))
 		  (forward-char -1))
-		(unless (= (screen-line-at-point) new-line)
+		(unless (= (visual-line-at-point) new-line)
 		  ;; moved too far, beyond the line?
 		  (forward-char +1)))
 	    (progn 
 	       
 	      (while (and 
-		      (< (screen-pixel-col-at-point) pixel-col)
-		      (= (screen-line-at-point) new-line))
+		      (< (visual-pixel-col-at-point) pixel-col)
+		      (= (visual-line-at-point) new-line))
 		 
 		(forward-char +1))
-	      (unless (= (screen-line-at-point) new-line)
+	      (unless (= (visual-line-at-point) new-line)
 		(forward-char -1))))))))))
 
 (defun visual-line-down ()
   (interactive)
   (let ((pixel-col (car (nth 2 (posn-at-point))))
-	(screen-col (screen-col-at-point))
+	(visual-col (visual-col-at-point))
 	(old-point (point)))
     (vertical-motion +1) ;; down
     (let ((beg-of-line (point)))
@@ -192,36 +201,36 @@
 				 rel-next-line-start))
 	    ;; else, do complete positioning
 	    ;; save original position  
-	    (setq visual-movement-temporary-goal-column screen-col)
-	    (forward-char (min screen-col rel-next-line-start))
+	    (setq visual-movement-temporary-goal-column visual-col)
+	    (forward-char (min visual-col rel-next-line-start))
 	    ;; correct position
-	    (let ((new-line (screen-line-at-point)))
-	      (if (> (screen-pixel-col-at-point) pixel-col)
+	    (let ((new-line (visual-line-at-point)))
+	      (if (> (visual-pixel-col-at-point) pixel-col)
 		  (progn 
 		    (while (and 
-			    (> (screen-pixel-col-at-point) pixel-col)
-			    (= (screen-line-at-point) new-line))
+			    (> (visual-pixel-col-at-point) pixel-col)
+			    (= (visual-line-at-point) new-line))
 		      (forward-char -1))
-		    (unless (= (screen-line-at-point) new-line)
+		    (unless (= (visual-line-at-point) new-line)
 		      ;; moved too far, beyond the line?
 		      (forward-char +1)))
 		(progn 
 		  (while (and 
-			  (< (screen-pixel-col-at-point) pixel-col)
-			  (= (screen-line-at-point) new-line))
+			  (< (visual-pixel-col-at-point) pixel-col)
+			  (= (visual-line-at-point) new-line))
 		    (forward-char +1))
-		  (unless (= (screen-line-at-point) new-line)
+		  (unless (= (visual-line-at-point) new-line)
 		    (forward-char -1)))))))))))
 
 ; (define-key global-map '[up] 'visual-line-up)
 ;    (define-key global-map '[down] 'visual-line-down)
 
 	    
-(defun beginning-of-screen-line ()
+(defun beginning-of-visual-line ()
   (interactive)
   (vertical-motion 0)
 )
-(defun end-of-screen-line ()
+(defun end-of-visual-line ()
   (interactive)
   (vertical-motion 1)
   (unless (eq (point) (point-max))
@@ -304,8 +313,8 @@ default."
 
     (define-key map '[up] 'visual-line-up)
     (define-key map '[down] 'visual-line-down)
-    (define-key map `[(,osxkeys-command-key left)] 'beginning-of-screen-line)
-    (define-key map `[(,osxkeys-command-key right)] 'end-of-screen-line)
+    (define-key map `[(,osxkeys-command-key left)] 'beginning-of-visual-line)
+    (define-key map `[(,osxkeys-command-key right)] 'end-of-visual-line)
 
     (define-key map `[(,osxkeys-command-key backspace)] 'kill-whole-line)
 
