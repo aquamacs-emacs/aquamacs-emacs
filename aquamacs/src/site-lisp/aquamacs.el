@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.13 2005/11/04 12:58:47 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.14 2005/11/04 23:22:37 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -42,8 +42,6 @@
   (aquamacs-mac-initialize) ;; call at runtime only
        
   (require 'aquamacs-tools)
-
-  (require 'aquamacs-change-log-mode)
 
   ;; Stop Emacs from asking for "y-e-s", when a "y" will do. 
 
