@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.12 2005/10/31 21:28:03 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.13 2005/11/04 12:58:47 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -43,6 +43,7 @@
        
   (require 'aquamacs-tools)
 
+  (require 'aquamacs-change-log-mode)
 
   ;; Stop Emacs from asking for "y-e-s", when a "y" will do. 
 
@@ -639,8 +640,8 @@ Aquamacs 0.9.7 on. `mac-option-modifier' has been set for you."))))
   (aquamacs-set-defaults 
    '( 
      (mouse-wheel-progessive-speed nil)
-     (mouse-wheel-scroll-amount (1 (shift . 0.5) (control . 0.2) ))
-
+   ;;  (mouse-wheel-scroll-amount (1 (shift . 0.5) (control . 0.2) ))
+     (mouse-wheel-scroll-amount (1 ((shift) . 0.5) ((control) . 0.2) ))
      (pc-select-meta-moves-sexps t)
      (pc-select-selection-keys-only t)
      (pc-selection-mode t)
@@ -771,6 +772,7 @@ listed here."
 
   (setq undo-ask-before-discard nil)
   (garbage-collect) ;; workaronud for memory corruption bug
+  (setq gc-cons-threshold 4000000)
 ;; http://sourceforge.net/tracker/index.php?func=detail&aid=1295333&group_id=138078&atid=740475				      
 
 
