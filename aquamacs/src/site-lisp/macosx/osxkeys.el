@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.22 2005/11/05 12:03:53 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.23 2005/11/05 18:15:26 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -406,8 +406,8 @@ default."
     (define-key map `[(,osxkeys-command-key left)] 'beginning-of-line)
     (define-key map `[(,osxkeys-command-key right)] 'end-of-line)
 
-    (define-key map '[up] 'visual-line-up)
-    (define-key map '[down] 'visual-line-down)
+    (define-key map '[remap previous-line] 'visual-line-up)
+    (define-key map '[remap next-line] 'visual-line-down)
     (define-key map `[(,osxkeys-command-key left)] 'beginning-of-visual-line)
     (define-key map `[(,osxkeys-command-key right)] 'end-of-visual-line)
 
@@ -436,7 +436,8 @@ default."
 (defvar osx-key-mode-map
   (make-osx-key-mode-map)
   "Keymap for `osx-key-mode'.")
- 
+;; (setq  osx-key-mode-map (make-osx-key-mode-map))
+
 (define-minor-mode osx-key-mode
   "Toggle Mac Key mode.
 With arg, turn Mac Key mode on iff arg is positive.
