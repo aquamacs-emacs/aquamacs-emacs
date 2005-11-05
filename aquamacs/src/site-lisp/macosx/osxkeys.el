@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.20 2005/11/04 14:34:36 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.21 2005/11/05 00:54:49 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -120,8 +120,8 @@
 (defvar visual-movement-temporary-goal-column nil)
 (make-variable-buffer-local 'visual-movement-temporary-goal-column)
 
-(defun visual-line-up ()
-  (interactive)
+(defun visual-line-up (num-lines)
+  (interactive "p")
   (let ((pixel-col (car (nth 2 (posn-at-point))))
 	(visual-col (visual-col-at-point))
 	(old-point (point)))
@@ -138,12 +138,9 @@
 ;	(vertical-motion -1)	;; back up, to left 
 ;	)
     (let* ((next-line-start 
-	    (if (not (= (point) (point-max)))
 		;; move right, but not further than to end of line
 		(prog1 (point)
-		  (vertical-motion -1))	    ;; one up again
-	      (vertical-motion -1)	    ;; workaround
-	      (point-max)))
+		  (vertical-motion (- num-lines))))	    ;; one up again
 	   (rel-next-line-start  (- next-line-start (point) 1))
 	   )
       ;; approximate positioning
@@ -178,23 +175,25 @@
 	      (unless (= (visual-line-at-point) new-line)
 		(forward-char -1))))))))))
 
-(defun visual-line-down ()
-  (interactive)
+(defun visual-line-down (num-lines)
+ (interactive "p")
   (let ((pixel-col (car (nth 2 (posn-at-point))))
 	(visual-col (visual-col-at-point))
-	(old-point (point)))
-    (vertical-motion +1) ;; down
-    (let ( 
-	  (beg-of-line (point)))
-      (unless (= (point) (point-max))
-	(vertical-motion +1) ;; down
-	(let ((rel-next-line-start  (- (point) beg-of-line 1))) 
-	  (goto-char beg-of-line) ;; jump back up
+	(old-point (point))
+	(beg-of-line)
+	(rel-next-line-start))
+    (vertical-motion num-lines) ;; down
+    (save-excursion
+      (setq beg-of-line (point))
+      (vertical-motion +1) ;; down
+      (setq rel-next-line-start  (- (point) beg-of-line 1)))
+    (unless (= beg-of-line (point-max))
 	  ;; approximate positioning
 	  (if (and (or goal-column visual-movement-temporary-goal-column)
 		   (= old-point (- beg-of-line 1))) ;; jumping from end of line
 	      
-	      (forward-char (min (or goal-column visual-movement-temporary-goal-column) 
+	      (forward-char (min (or goal-column 
+				     visual-movement-temporary-goal-column) 
 				 rel-next-line-start))
 	    ;; else, do complete positioning
 	    ;; save original position  
@@ -217,8 +216,7 @@
 			  (= (visual-line-at-point) new-line))
 		    (forward-char +1))
 		  (unless (= (visual-line-at-point) new-line)
-		    (forward-char -1)))))))))))
-
+		    (forward-char -1)))))))))
 
 	    
 (defun beginning-of-visual-line ()
@@ -230,6 +228,14 @@
   (vertical-motion 1)
   (unless (eq (point) (point-max))
     (backward-char 1)))
+
+;; mark functions for CUA
+(dolist (cmd
+	 '( beginning-of-visual-line 
+	    end-of-visual-line
+	    visual-line-down visual-line-up))
+  (put cmd 'CUA 'move))
+
 
 
 (defun clipboard-kill-ring-save-secondary ()
