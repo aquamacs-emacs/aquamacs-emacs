@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.21 2005/11/05 00:54:49 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.22 2005/11/05 12:03:53 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -122,27 +122,23 @@
 
 (defun visual-line-up (num-lines)
   (interactive "p")
+  (if (bobp) (signal 'beginning-of-buffer nil))
   (let ((pixel-col (car (nth 2 (posn-at-point))))
 	(visual-col (visual-col-at-point))
-	(old-point (point)))
+	(old-point (point))
+	(beg-of-line))
 
-    (vertical-motion 1)	;; one down, to left
-
-    (let ((beg-of-line (point)))
-
-      (goto-char old-point)
+    (save-excursion
+      (vertical-motion 1)	;; trying going one down, to left
+      (setq beg-of-line (point)))
+ 
       (vertical-motion 0)
 
-;      (if (and (= (point) (point-max))  (= old-point (point-max)))
-;	  (vertical-motion 0)
-;	(vertical-motion -1)	;; back up, to left 
-;	)
     (let* ((next-line-start 
 		;; move right, but not further than to end of line
-		(prog1 (point)
-		  (vertical-motion (- num-lines))))	    ;; one up again
-	   (rel-next-line-start  (- next-line-start (point) 1))
-	   )
+	    (prog1 (point)
+	      (vertical-motion (- num-lines))))	    ;; one up again
+	   (rel-next-line-start  (- next-line-start (point) 1)))
       ;; approximate positioning
       (if (and (or goal-column visual-movement-temporary-goal-column)
 	       (= old-point (- beg-of-line 1)))	;; jumping from end of line
@@ -173,10 +169,11 @@
 		 
 		(forward-char +1))
 	      (unless (= (visual-line-at-point) new-line)
-		(forward-char -1))))))))))
+		(forward-char -1)))))))))
 
 (defun visual-line-down (num-lines)
  (interactive "p")
+ (if (eobp) (signal 'end-of-buffer nil))
   (let ((pixel-col (car (nth 2 (posn-at-point))))
 	(visual-col (visual-col-at-point))
 	(old-point (point))
@@ -221,13 +218,111 @@
 	    
 (defun beginning-of-visual-line ()
   (interactive)
+  (if (bobp)
+      (signal 'beginning-of-buffer nil))
   (vertical-motion 0))
 
 (defun end-of-visual-line ()
   (interactive)
-  (vertical-motion 1)
-  (unless (eq (point) (point-max))
-    (backward-char 1)))
+  (if (eobp)
+      (signal 'end-of-buffer nil))
+  (let ((end-of-line (line-end-position)))
+    (vertical-motion 1)
+     (unless (or (eobp)
+		 (< (point) end-of-line)) ;; jumping over wrapped text
+      (backward-char 1))))
+
+;; this code based on simple.el
+(defun kill-visual-line (&optional arg)
+  "Kill the rest of the visual line; if no nonblanks there, kill thru newline.
+With prefix argument, kill that many lines from point.
+Negative arguments kill lines backward.
+With zero argument, kills the text before point on hthe current line.
+
+When calling from a program, nil means \"no arg\",
+a number counts as a prefix arg.
+
+To kill a whole line, when point is not at the beginning, type \
+\\[beginning-of-line] \\[kill-line] \\[kill-line].
+
+If `kill-whole-line' is non-nil, then this command kills the whole line
+including its terminating newline, when used at the beginning of a line
+with no argument.  As a consequence, you can always kill a whole line
+by typing \\[beginning-of-line] \\[kill-line].
+
+If you want to append the killed line to the last killed text,
+use \\[append-next-kill] before \\[kill-line].
+
+If the buffer is read-only, Emacs will beep and refrain from deleting
+the line, but put the line in the kill ring anyway.  This means that
+you can use this command to copy text from a read-only buffer.
+\(If the variable `kill-read-only-ok' is non-nil, then this won't
+even beep.)"
+  (interactive "P")
+  (kill-region (point)
+	       ;; It is better to move point to the other end of the kill
+	       ;; before killing.  That way, in a read-only buffer, point
+	       ;; moves across the text that is copied to the kill ring.
+	       ;; The choice has no effect on undo now that undo records
+	       ;; the value of point from before the command was run.
+	       (progn
+		 (if arg
+		     (vertical-motion (prefix-numeric-value arg))
+		   (if (eobp)
+		       (signal 'end-of-buffer nil))
+		   (let ((end
+			  (save-excursion
+			    (end-of-visual-line) (point))))
+		     (if (or (save-excursion
+			       ;; If trailing whitespace is visible,
+			       ;; don't treat it as nothing.
+			       (unless show-trailing-whitespace
+				 (skip-chars-forward " \t" end))
+			       (= (point) end))
+			     (and kill-whole-line (bolp)))
+			 (visual-line-down 1)
+		       (goto-char end))))
+		 (point))))
+
+
+(defun kill-whole-visual-line (&optional arg)
+  "Kill current visual line.
+With prefix arg, kill that many lines starting from the current line.
+If arg is negative, kill backward.  Also kill the preceding newline.
+\(This is meant to make \\[repeat] work well with negative arguments.\)
+If arg is zero, kill current line but exclude the trailing newline."
+  (interactive "p")
+  (if (and (> arg 0) (eobp) (save-excursion (vertical-motion 0) (eobp)))
+      (signal 'end-of-buffer nil))
+  (if (and (< arg 0) (bobp) (save-excursion (vertical-motion 1) (bobp)))
+      (signal 'beginning-of-buffer nil))
+  (unless (eq last-command 'kill-region)
+    (kill-new "")
+    (setq last-command 'kill-region))
+  (cond ((zerop arg)
+	 ;; We need to kill in two steps, because the previous command
+	 ;; could have been a kill command, in which case the text
+	 ;; before point needs to be prepended to the current kill
+	 ;; ring entry and the text after point appended.  Also, we
+	 ;; need to use save-excursion to avoid copying the same text
+	 ;; twice to the kill ring in read-only buffers.
+	 (save-excursion
+	   ;; delete in one go
+	   (kill-region (progn (vertical-motion 0) (point))
+			(progn (vertical-motion 1) (point)))
+	 ))
+	((< arg 0)
+	 (save-excursion
+	   (kill-region (point) (progn (end-of-visual-line) (point))))
+	 (kill-region (point)
+		      (progn (vertical-motion (1+ arg))
+			     (unless (bobp) (backward-char))
+			     (point))))
+	(t
+	 (save-excursion
+	   (kill-region (progn (vertical-motion 0) (point))
+			(progn (vertical-motion arg) (point)))))))
+
 
 ;; mark functions for CUA
 (dolist (cmd
@@ -316,7 +411,7 @@ default."
     (define-key map `[(,osxkeys-command-key left)] 'beginning-of-visual-line)
     (define-key map `[(,osxkeys-command-key right)] 'end-of-visual-line)
 
-    (define-key map `[(,osxkeys-command-key backspace)] 'kill-whole-line)
+    (define-key map `[(,osxkeys-command-key backspace)] 'kill-whole-visual-line)
 
 
     (define-key map `[(meta up)] 'cua-scroll-down)
