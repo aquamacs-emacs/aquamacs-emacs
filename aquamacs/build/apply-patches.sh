@@ -39,6 +39,11 @@ echo "about-aquamacs"
 patch -p0 <${AQUAMACS_ROOT}/patches/about-aquamacs.patch
 echo "puresize"
 patch -p0 <${AQUAMACS_ROOT}/patches/puresize.patch
+echo "carbon-emacs"
+patch -p0 <${AQUAMACS_ROOT}/patches/carbon-emacs.patch
+echo "fix-bugs"
+patch -p0 <${AQUAMACS_ROOT}/patches/fix-bugs.patch
+
 echo "eval-depth"
 patch -p0 <${AQUAMACS_ROOT}/patches/eval-depth.patch
 
