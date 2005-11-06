@@ -35,6 +35,8 @@ echo "toolbar-button"
 patch -p0 <${AQUAMACS_ROOT}/patches/toolbar-button.patch
 echo "org-gnu-Aquamacs"
 patch -p0 <${AQUAMACS_ROOT}/patches/org-gnu-Aquamacs.patch
+echo "about-aquamacs"
+patch -p0 <${AQUAMACS_ROOT}/patches/about-aquamacs.patch
 echo "puresize"
 patch -p0 <${AQUAMACS_ROOT}/patches/puresize.patch
 echo "eval-depth"
