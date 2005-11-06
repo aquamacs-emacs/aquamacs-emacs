@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.25 2005/11/06 16:53:58 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.26 2005/11/06 23:31:06 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -371,17 +371,31 @@ If arg is zero, kill current line but exclude the trailing newline."
 (defun debug-keymap-corruption ()
   (interactive)
   
-(with-output-to-temp-buffer "*temp*"
+  (with-output-to-temp-buffer "*temp*"
   
-  (print global-map)
-  (print osx-key-mode-map)
-  (write-file "~/Temp/Aquamacs-Corrupt-Keymap.log.el")
-)
-(with-buffer "*Messages*"
-	     (write-file "~/Temp/Aquamacs-Messages.log.el")
-)	     
+    (print global-map)
+    (print osx-key-mode-map)
+    (write-file "~/Temp/Aquamacs-Corrupt-Keymap.log.el")
+    )
+  (with-buffer "*Messages*"
+	       (write-file "~/Temp/Aquamacs-Messages.log.el"))	     
 
-)
+  ;; try to restore key map
+
+  (if global-map-backup
+      (setq global-map global-map-backup)
+    )
+  (if osx-key-mode-map-backup
+      (setq global-map-backup osx-key-mode-map-backup)
+    )
+  (message "Corrupted keymaps restored from backup."))
+
+(add-hook 'after-init-hook 
+	  (lambda () 
+	    (setq osx-key-mode-map-backup osx-key-mode-map)
+	    (setq global-map-backup global-map)
+	    )
+	  )
 
 (defun make-osx-key-mode-map (&optional command-key)
 "Create a mode map for OSX key mode. COMMAND-KEY specifies
