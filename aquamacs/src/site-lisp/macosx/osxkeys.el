@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.24 2005/11/06 16:02:30 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.25 2005/11/06 16:53:58 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -112,13 +112,13 @@
 ;; unchecked: line-move-ignore-invisible
 
 (defun visual-line-at-point ()
-(cdr (nth 6 (posn-at-point))))
+ (or (cdr (nth 6 (posn-at-point))) 0))
 
 (defun visual-col-at-point ()
-(car (nth 6 (posn-at-point))))
+  (or (car (nth 6 (posn-at-point))) 0))
 
 (defun visual-pixel-col-at-point ()
-(car (nth 2 (posn-at-point))))
+  (or (car (nth 2 (posn-at-point))) 0))
 
 (defvar visual-movement-temporary-goal-column nil)
 (make-variable-buffer-local 'visual-movement-temporary-goal-column)
