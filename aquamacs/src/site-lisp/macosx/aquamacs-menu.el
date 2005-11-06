@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.26 2005/11/05 18:16:00 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.27 2005/11/06 13:25:25 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -31,26 +31,34 @@
 
 (require 'easymenu)
 
+ 
+ 
+
+
+; (assq 'paste (lookup-key global-map [menu-bar edit]))
+; (assq 'new-file (lookup-key global-map [menu-bar file]))
+
+
+(defun change-menu-text-1 (list subst)
+;; replace the first string or relevant element with subst
+;; return new list
+  (cond 
+    ((not list) nil)
+    ((not (listp list)) list)
+    ((or
+      (stringp (car list))
+      (and (listp (car list))
+	   (eq 'aq-shortcut (car (car list))))
+     )
+    (cons subst (change-menu-text-1 (cdr list) subst)))
+   (t  (cons (car list) (change-menu-text-1 (cdr list) subst)))
+      ))
+
 ;; this is a big hack like most other things
 (defun change-menu-text (keymap key str)
  
-
-  (if (eq 'string (type-of (car (cdr (assq key (lookup-key global-map keymap))))))
-    
-      (setcar (cdr (assq key (lookup-key global-map keymap)))
-	      str
-	      )
-    (if (eq 'string (type-of 
-		     (car (cdr (cdr 
-				(assq key 
-				      (lookup-key global-map keymap)))))))
-	(setcar (cdr (cdr (assq key (lookup-key global-map keymap))))
-	      str)
-    (setcar (cdr (assq key (lookup-key global-map keymap)))
-	    str
-	    )))
   (define-key global-map (vconcat (append keymap (list key)))
-    (cdr (assq key (lookup-key global-map keymap)))))
+    (change-menu-text-1 (cdr (assq key (lookup-key global-map keymap))) str )))
 
 (defun aquamacs-updated-is-visible-frame-p ()
   (and (frame-live-p menu-updating-frame)
@@ -78,7 +86,7 @@
     "Fn ")
    )
  ;; (progn (print mod) nil)
-     (signal 'search-failed 'modifier-unavailable nil)
+     (signal 'search-failed nil)
    ))
 
 (defvar apple-char (string (decode-char 'ucs #X2318)))
@@ -89,7 +97,7 @@
 ;; as 'hyper' and only known as such)
 
 ; redefine New
-; (define-key menu-bar-edit-menu [mark-whole-buffer] (cdr (assq 'mark-whole-buffer (lookup-key global-map [menu-bar edit]))))
+; (define-key menu-bar-edit-menu [mark-whole-buffer] (cdr (assq 'mark-whole-buffer (key-binding [menu-bar edit]))))
 
 
 ;; New documents
@@ -113,27 +121,66 @@
     (setq buffer-offer-save t)
     (set-buffer-modified-p nil)))
 
+(defun aq-resolve-remapped (list)
+  (flatten  
+  (mapcar
+     (lambda (k)
+       (cond 
+	( (and 
+	   (vectorp k)
+	   (eq (aref k 0) 'remap)
+	   )
+	  (where-is-internal (aref k 1) nil nil t t))
+	((and 
+	   (vectorp k)
+	   (eq (aref k 0) 'menu-bar)
+	   )
+	 nil
+	 )
+	(t k))
+	)
+     list)))
+
+(defun aq-find-best-key (list)
+  
+(or (if (not list)
+	"")
+    (key-description (car list))
+    (aq-find-best-key (cdr list)))
+)
+
+(defun aq-find-good-key (symbol)
+  (aq-find-best-key
+   (aq-resolve-remapped
+    (or
+     (where-is-internal 
+      symbol
+      (list  osx-key-mode-map   ) 
+      )
+     (where-is-internal 
+      symbol
+      (list    global-map ) 
+      )
+			
+
+     (where-is-internal 
+      symbol
+      nil 
+      nil t t))
+)))
+
 (defun aq-shortcut (text symbol &rest more-args)
+  
   (if osx-key-mode
       (condition-case err
 	  (progn
 	    (let* ((case-fold-search nil)
-		   (s (key-description 
-		       (or
-			(where-is-internal 
-			 symbol
-			 (list  osx-key-mode-map   ) 
-			 'nom)
-			(where-is-internal 
-			 symbol
-			 (list    global-map ) 
-			 'nom)
-			)))
+		   (s (aq-find-good-key symbol))
 		   (s (replace-regexp-in-string 
-		       "S-." (lambda (txt) (concat (aq-describe-modifier 'shift) "-" 
-						   (downcase (substring txt 2))))
-		       s
-		       )))
+		       "S-." (lambda (txt) 
+			       (concat (aq-describe-modifier 'shift) "-" 
+				       (downcase (substring txt 2))))
+		       s)))
 	      
 	    (apply (function format) 
 		   (append (list (concat text "%s")) more-args 
@@ -153,8 +200,8 @@
 				 s
 				 nil nil 1 ;; replace sub-exp
 				 ))))))))))
-	(error
-	 (apply (function format) text more-args)
+	(error nil
+	       (apply (function format) text more-args)
 	 ))
     ;; not osx-key-mode
     (apply (function format) text more-args)))
@@ -163,9 +210,9 @@
 ;;(Defun aq-shortcut (text &rest more-args)
 ;;  (append (list (function format)) (append (list text 'apple-char) more-args )))
  
-(define-key menu-bar-file-menu [new-file]
+(define-key menu-bar-file-menu [menu-bar-new-file]
   '(menu-item (aq-shortcut  "New                                        "
-			    new-frame-with-new-scratch)  
+			    'new-frame-with-new-scratch)  
 	      new-frame-with-new-scratch
 	      :enable (or one-buffer-one-frame
 			  (not (window-minibuffer-p
@@ -223,43 +270,66 @@
 ;; 		     (list 'new-frame-with-new-scratch nil `(quote ,modename))
 ;; 		     )
 
-;(change-menu-text-2 [menu-bar application] 'quit (format  "Quit Emacs                %sQ" )) 
  
 (define-key menu-bar-file-menu [open-file] 
   '(menu-item
     (aq-shortcut  "Open File...                             " 
-		  (lookup-key global-map [menu-bar file open-file]) )
+		  (key-binding [menu-bar file open-file]) )
     mac-key-open-file
     :keys nil)) 
 
-(change-menu-text [menu-bar file] 'dired "Open Directory...                 ") 
-(change-menu-text [menu-bar file] 'insert-file "Insert File...                         ") 
+(define-key menu-bar-file-menu [insert-file]
+  '(menu-item "Insert File...                         " insert-file
+	      :enable (menu-bar-non-minibuffer-window-p)
+	      :help "Insert another file into current buffer"))
+(define-key menu-bar-file-menu [dired]
+  '(menu-item "Open Directory...                 " dired
+	      :enable (menu-bar-non-minibuffer-window-p)
+	      :help "Read a directory, to operate on its files"))
+
+
 ;; redefine this
 (define-key-after menu-bar-file-menu [kill-buffer]
   '(menu-item (aq-shortcut "Close Buffer                            " 
-			   close-current-window-asktosave) 
+			   (key-binding [menu-bar file kill-buffer])) 
 	      close-current-window-asktosave
 	      :enable (aquamacs-updated-is-visible-frame-p)
 	      :help "Discard current buffer") 'separator-save)
  
-;(change-menu-text [menu-bar application] 'quit (aq-shortcut  "Quit Emacs                %sQ" ))
 (define-key menu-bar-edit-menu [copy]
-  '(menu-item (aq-shortcut  "Copy                 " clipboard-kill-ring-save) 
+  '(menu-item (aq-shortcut  "Copy                 " 
+			    (key-binding [menu-bar edit copy])) 
 	      clipboard-kill-ring-save
 	      :enable mark-active
 	      :help "Copy selected text in region"
 	      :keys "\\[clipboard-kill-ring-save]"))
  
-(change-menu-text [menu-bar edit] 'paste 
-		  '(aq-shortcut  "Paste                 " 
-				 (lookup-key global-map [menu-bar edit paste]) ))
-(change-menu-text [menu-bar edit] 'undo 
-		  '(aq-shortcut  "Undo                 "
-				 (lookup-key global-map [menu-bar edit undo]) ))
+(define-key menu-bar-edit-menu [paste]
+  '(menu-item (aq-shortcut  "Paste                 " 
+				 (key-binding [menu-bar edit paste]) ) 
+	      yank
+	      :enable (and
+		       ;; Emacs compiled --without-x doesn't have
+		       ;; x-selection-exists-p.
+		       (fboundp 'x-selection-exists-p)
+		       (x-selection-exists-p) (not buffer-read-only))
+	      :help "Paste (yank) text most recently cut/copied"))
+
+
+(define-key menu-bar-edit-menu [undo]
+  '(menu-item (aq-shortcut  "Undo                 "
+				 (key-binding [menu-bar edit undo]) )
+	      undo
+	      :enable (and (not buffer-read-only)
+			   (not (eq t buffer-undo-list))
+			   (if (eq last-command 'undo)
+			       pending-undo-list
+			     (consp buffer-undo-list)))
+	      :help "Undo last operation"))
 
 (define-key-after menu-bar-edit-menu [redo]
   '(menu-item (aq-shortcut "Redo                 " 
-			   (lookup-key global-map [menu-bar edit redo])) 
+			   (key-binding [menu-bar edit redo])) 
 	      'redo
 	      :enable (aquamacs-updated-is-visible-frame-p)
 	      :help "Discard current buffer") 'undo)
@@ -267,24 +337,39 @@
 (easy-menu-add-item  nil '("Edit")
   ["-" nil nil] 'cut)
 
-(change-menu-text [menu-bar edit] 'cut 
-		  '(aq-shortcut  "Cut                    "
-				 (lookup-key global-map [menu-bar edit cut])))
+(define-key menu-bar-edit-menu [cut]
+  '(menu-item (aq-shortcut  "Cut                    "
+				 (key-binding [menu-bar edit cut]))
+	      clipboard-kill-region
+	      :enable (and mark-active (not buffer-read-only))
+	      :help
+	      "Delete text in region and copy it to the clipboard"))
 
-;; still a problem with this
-(change-menu-text [menu-bar edit] 'mark-whole-buffer 
-		  '(aq-shortcut  "Select All           " 
-				 (lookup-key global-map [menu-bar edit mark-whole-buffer])))
+(define-key menu-bar-edit-menu [mark-whole-buffer]
+  '(menu-item (aq-shortcut  "Select All           " 
+				 (key-binding [menu-bar edit mark-whole-buffer])) 
+	      mark-whole-buffer
+	      :help "Mark the whole buffer for a subsequent cut/copy."))
 
-(change-menu-text [menu-bar edit search] 'search-forward 
-		  '(aq-shortcut  "Search forward              " 
-				 (lookup-key global-map [menu-bar edit search search-forward])))
+(define-key menu-bar-i-search-menu [isearch-forward]
+  '(menu-item (aq-shortcut  "Forward String...             " 
+				 (key-binding [menu-bar edit search i-search isearch-forward]))
+	      isearch-forward
+	      :help "Search forward for a string as you type it"))
+ 
+(define-key menu-bar-i-search-menu [isearch-repeat-forward]
+  '(menu-item (aq-shortcut  "Repeat Forward String...             " 
+				 (key-binding [menu-bar edit search i-search isearch-repeat-forward])) 
+	      isearch-repeat-forward
+	      :help "Search forward for a string as you type it"))
+ 
 
-(change-menu-text [menu-bar edit search] 'repeat-search-fwd 
-		  '(aq-shortcut  "Repeat forward              "
-				 (lookup-key global-map [menu-bar edit search repeat-search-fwd])))
 
-(change-menu-text [menu-bar edit] 'fill "Reformat (fill)") 
+(define-key menu-bar-edit-menu [fill]
+  '(menu-item "Reformat (fill)" fill-region
+	      :enable (and mark-active (not buffer-read-only))
+	      :help
+	      "Fill text in region to fit between left and right margin"))
 
 ;; this needs an extension to show the keyboard shortcut 
 ;; interesting extensions to menu-item: (:visible nil), (:key-sequence)
@@ -311,13 +396,13 @@
 
 (define-key menu-bar-file-menu [save-buffer ]
   '(menu-item (aq-shortcut  "Save Buffer                              "
-			    (lookup-key global-map [menu-bar file save-buffer]))
+			    (key-binding [menu-bar file save-buffer]))
 	      save-buffer
 		  ))  
 
 (define-key menu-bar-file-menu [write-file]
   '(menu-item (aq-shortcut  "Save Buffer As...                      "
-			    (lookup-key global-map [menu-bar file write-file])) 
+			    (key-binding [menu-bar file write-file])) 
 	      write-file
 
 	      :enable (and (frame-live-p menu-updating-frame)
@@ -379,7 +464,7 @@
 
 (define-key-after menu-bar-file-menu [aquamacs-print]
   '(menu-item (aq-shortcut "Preview and Print %s...       " 
-		      (lookup-key global-map [menu-bar file aquamacs-print])
+		      (key-binding [menu-bar file aquamacs-print])
 		      (if mark-active "Region" "Buffer")
 		     ) 
 	      aquamacs-print
@@ -412,7 +497,7 @@
 
 (define-key-after menu-bar-file-menu [print-region-or-buffer]
   '(menu-item (aq-shortcut "Quick Print %s       " 
-		      (lookup-key global-map [menu-bar file print-region-or-buffer])
+		      (key-binding [menu-bar file print-region-or-buffer])
 		      (if mark-active "Region" "Buffer"))  
 	      menu-bar-print-region-or-buffer
 	      :enable (and (frame-live-p menu-updating-frame)
@@ -712,7 +797,7 @@ to the selected frame."
   (browse-url "http://aquamacs.org/donations.shtml")
 )
 (easy-menu-add-item  nil '("Help")
-		     (vector '(aq-shortcut "Aquamacs Help                    " aquamacs-user-help) 
+		     (vector '(aq-shortcut "Aquamacs Help                    " 'aquamacs-user-help) 
 			     'aquamacs-user-help) 'emacs-tutorial)
 
 (easy-menu-add-item  nil '("Help")
@@ -763,11 +848,15 @@ to the selected frame."
 ;; language environment
 (when (eq system-type 'darwin) 
     (require 'aquamacs-mule)
-(change-menu-text
- [menu-bar options]
- 'mule
- "Aquamacs Multilingual Environment"
-)
+(define-key menu-bar-options-menu [mule]
+  ;; It is better not to use backquote here,
+  ;; because that makes a bootstrapping problem
+  ;; if you need to recompile all the Lisp files using interpreted code.
+  (list 'menu-item "Aquamacs Multilingual Environment" mule-menu-keymap
+;; Most of the MULE menu actually does make sense in unibyte mode,
+;; e.g. language selection.
+;;;	':visible 'default-enable-multibyte-characters
+	':help "Default language, encodings, input method"))
 )
 
 (provide 'aquamacs-menu)
