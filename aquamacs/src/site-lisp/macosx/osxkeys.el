@@ -7,12 +7,15 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.23 2005/11/05 18:15:26 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.24 2005/11/06 16:02:30 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
 
-
+;; Attribution: Leave this header intact in case you redistribute this file.
+;; Attribution must be given in application About dialog or similar,
+;; "Contains Aquamacs osx-key-mode by D Reitter" does the job.
+;; Apart from that, released under the GPL:
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation; either version 2, or (at your option)
@@ -364,6 +367,22 @@ If arg is zero, kill current line but exclude the trailing newline."
      )
 )
 
+(setq garbage-collection-messages t)
+(defun debug-keymap-corruption ()
+  (interactive)
+  
+(with-output-to-temp-buffer "*temp*"
+  
+  (print global-map)
+  (print osx-key-mode-map)
+  (write-file "~/Temp/Aquamacs-Corrupt-Keymap.log.el")
+)
+(with-buffer "*Messages*"
+	     (write-file "~/Temp/Aquamacs-Messages.log.el")
+)	     
+
+)
+
 (defun make-osx-key-mode-map (&optional command-key)
 "Create a mode map for OSX key mode. COMMAND-KEY specifies
 which key is mapped to command. mac-command-modifier is the
@@ -376,6 +395,12 @@ default."
     )
 )
 (let ((map (make-sparse-keymap)))
+
+;; debug log
+
+  
+  (define-key map `[(,osxkeys-command-key t)] 'debug-keymap-corruption)
+
     (define-key map `[(,osxkeys-command-key \?)] 'aquamacs-user-help)
     (define-key map `[(,osxkeys-command-key shift \?)] 'aquamacs-emacs-manual)
 
