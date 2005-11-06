@@ -1,0 +1,21 @@
+--- src/mac.c   2005-09-26 00:35:12.000000000 +0900
++++ src/mac.c   2005-09-26 00:35:26.000000000 +0900
+@@ -4513,7 +4513,7 @@
+      have the value "<path to lisp dir>:<path to leim dir>:<path to
+      site-lisp dir>".  */
+   p = (char *) alloca (app_bundle_pathname_len + 50);
+-  q = (char *) alloca (3 * app_bundle_pathname_len + 150);
++  q = (char *) alloca (4 * app_bundle_pathname_len + 200);
+   if (!getenv ("EMACSLOADPATH"))
+     {
+       q[0] = '\0';
+--- lisp/term/mac-win.el	2005-07-05 01:06:34.000000000 +0900
++++ lisp/term/mac-win.el	2005-08-06 00:15:00.000000000 +0900
+@@ -1815,6 +1815,7 @@
+   ;; Make sure the drop target has positive co-ords
+   ;; before setting the selected frame - otherwise it
+   ;; won't work.  <skx@tardis.ed.ac.uk>
++  (set-frame-parameter nil 'visibility t)
+   (let* ((window (posn-window (event-start event)))
+ 	 (coords (posn-x-y (event-start event)))
+ 	 (x (car coords))
