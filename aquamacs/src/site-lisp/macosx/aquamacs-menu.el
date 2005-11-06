@@ -5,12 +5,15 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.27 2005/11/06 13:25:25 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.28 2005/11/06 16:02:50 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
 
-
+;; Attribution: Leave this header intact in case you redistribute this file.
+;; Attribution must be given in application About dialog or similar,
+;; "Contains Aquamacs Menu by D fReitter" does the job.
+;; Apart from that, released under the GPL:
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation; either version 2, or (at your option)
@@ -39,26 +42,26 @@
 ; (assq 'new-file (lookup-key global-map [menu-bar file]))
 
 
-(defun change-menu-text-1 (list subst)
-;; replace the first string or relevant element with subst
-;; return new list
-  (cond 
-    ((not list) nil)
-    ((not (listp list)) list)
-    ((or
-      (stringp (car list))
-      (and (listp (car list))
-	   (eq 'aq-shortcut (car (car list))))
-     )
-    (cons subst (change-menu-text-1 (cdr list) subst)))
-   (t  (cons (car list) (change-menu-text-1 (cdr list) subst)))
-      ))
+;; (defun change-menu-text-1 (list subst)
+;; ;; replace the first string or relevant element with subst
+;; ;; return new list
+;;   (cond 
+;;     ((not list) nil)
+;;     ((not (listp list)) list)
+;;     ((or
+;;       (stringp (car list))
+;;       (and (listp (car list))
+;; 	   (eq 'aq-shortcut (car (car list))))
+;;      )
+;;     (cons subst (change-menu-text-1 (cdr list) subst)))
+;;    (t  (cons (car list) (change-menu-text-1 (cdr list) subst)))
+;;       ))
 
-;; this is a big hack like most other things
-(defun change-menu-text (keymap key str)
+;; ;; this is a big hack like most other things
+;; (defun change-menu-text (keymap key str)
  
-  (define-key global-map (vconcat (append keymap (list key)))
-    (change-menu-text-1 (cdr (assq key (lookup-key global-map keymap))) str )))
+;;   (define-key global-map (vconcat (append keymap (list key)))
+;;     (change-menu-text-1 (cdr (assq key (lookup-key global-map keymap))) str )))
 
 (defun aquamacs-updated-is-visible-frame-p ()
   (and (frame-live-p menu-updating-frame)
@@ -210,7 +213,7 @@
 ;;(Defun aq-shortcut (text &rest more-args)
 ;;  (append (list (function format)) (append (list text 'apple-char) more-args )))
  
-(define-key menu-bar-file-menu [menu-bar-new-file]
+(define-key menu-bar-file-menu [new-file]
   '(menu-item (aq-shortcut  "New                                        "
 			    'new-frame-with-new-scratch)  
 	      new-frame-with-new-scratch
@@ -270,7 +273,7 @@
 ;; 		     (list 'new-frame-with-new-scratch nil `(quote ,modename))
 ;; 		     )
 
- 
+;; (easy-menu-remove-item global-map  '("menu-bar" "file") 'new-file) 
 (define-key menu-bar-file-menu [open-file] 
   '(menu-item
     (aq-shortcut  "Open File...                             " 
@@ -797,7 +800,7 @@ to the selected frame."
   (browse-url "http://aquamacs.org/donations.shtml")
 )
 (easy-menu-add-item  nil '("Help")
-		     (vector '(aq-shortcut "Aquamacs Help                    " 'aquamacs-user-help) 
+		     (vector '(aq-shortcut "Aquamacs Help                     " 'aquamacs-user-help) 
 			     'aquamacs-user-help) 'emacs-tutorial)
 
 (easy-menu-add-item  nil '("Help")
