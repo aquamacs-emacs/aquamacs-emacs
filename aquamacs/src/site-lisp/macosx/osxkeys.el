@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.27 2005/11/07 11:05:07 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.28 2005/11/07 11:31:00 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -375,10 +375,10 @@ If arg is zero, kill current line but exclude the trailing newline."
   
     (print global-map)
     (print osx-key-mode-map)
-    (write-file "~/Temp/Aquamacs-Corrupt-Keymap.log.el")
+    (write-file "/tmp/Aquamacs-Corrupt-Keymap.log.el")
     )
   (with-current-buffer "*Messages*"
-	       (write-file "~/Temp/Aquamacs-Messages.log.el"))	     
+	       (write-file "/tmp//Aquamacs-Messages.log.el"))	     
 
   ;; try to restore key map
 
@@ -390,7 +390,7 @@ If arg is zero, kill current line but exclude the trailing newline."
     )
   (message "Corrupted keymaps restored from backup. 
 Please save your work in backup files and restart Aquamacs.
-Debug info left in ~/Temp/Aquamacs-Corrupt-Keymap.log.el."))
+Debug info left in /tmp/Aquamacs-Corrupt-Keymap.log.el."))
 
  (define-key global-map '[(hyper shift t)] 'debug-keymap-corruption)
 
