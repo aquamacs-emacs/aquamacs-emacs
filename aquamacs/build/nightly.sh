@@ -29,8 +29,7 @@ export AQUAMACS_ROOT=`pwd`/aquamacs
  
 DEST=~/Aquamacs/builds
 
-echo "-------------------" >>${LOG}
-date >>${LOG}
+date >${LOG}
 
 if test "${UPDATE_CVS}" == "yes"; then
     
@@ -68,7 +67,7 @@ fi
 
 
 if test "${BUILD_AQUAMACS}" == "yes"; then
-    
+     
     cd ~/Aquamacs
 
     rm -rf emacs  2>>$LOG 
