@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-mode-defaults.el,v 1.4 2005/08/26 08:26:25 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-defaults.el,v 1.5 2005/11/08 19:40:05 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -31,6 +31,20 @@
 ;; load auctex if present 
 (ignore-errors (require 'auctex-config nil t))
 
+;; NXML
+
+(unless (boundp 'nxml-version)
+  (load "edit-modes/nxml/rng-auto")) 
+ 
+(assq-set-equal "\\.\\(xml\\|xsl\\|rng\\|xhtml\\)" 
+		'nxml-mode 'auto-mode-alist)
+ 
+(assq-set-equal "<\\?xml " 'nxml-mode 'magic-mode-alist)
+
+
+
+
+;; ESS
 (autoload 'ess-mode "ess-site" "Emacs Speaks Statistics" t)
 (autoload 'R-mode "ess-site" "Emacs Speaks Statistics" t)
 (autoload 'S-mode "ess-site" "Emacs Speaks Statistics" t)
