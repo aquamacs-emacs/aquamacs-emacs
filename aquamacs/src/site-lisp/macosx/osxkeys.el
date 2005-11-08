@@ -1,4 +1,4 @@
-;; osxkeys.el
+ ;; osxkeys.el
 ;; Mac Style Keyboard Shortcuts 
 ;; provides osx-key-mode
 
@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.28 2005/11/07 11:31:00 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.29 2005/11/08 19:43:47 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -336,7 +336,7 @@ If arg is zero, kill current line but exclude the trailing newline."
 
 
 
-(defun clipboard-kill-ring-save-secondary ()
+(defun aquamacs-clipboard-kill-ring-save-secondary ()
   "Copy secondary selection to kill ring, and save in the X clipboard."
 (interactive)
   (if mouse-secondary-overlay
@@ -352,7 +352,7 @@ If arg is zero, kill current line but exclude the trailing newline."
   )
 )
 
-(defun clipboard-kill-secondary ()
+(defun aquamacs-clipboard-kill-secondary ()
   "Kill the secondary selection, and save it in the X clipboard."
    (interactive)
    (if mouse-secondary-overlay
@@ -370,26 +370,30 @@ If arg is zero, kill current line but exclude the trailing newline."
 (setq garbage-collection-messages t)
 (defun debug-keymap-corruption ()
   (interactive)
-  
-  (with-output-to-temp-buffer "*temp*"
-  
-    (print global-map)
-    (print osx-key-mode-map)
-    (write-file "/tmp/Aquamacs-Corrupt-Keymap.log.el")
-    )
+   (with-temp-buffer
+     "*aq-temp*"
+     (with-output-to-temp-buffer "*aq-temp*"
+       (print global-map)
+       (print osx-key-mode-map))
+       (write-region nil nil "/tmp/Aquamacs-Corrupt-Keymap.log.el")
+     )
+   (kill-buffer "*aq-temp*")
+
   (with-current-buffer "*Messages*"
-	       (write-file "/tmp//Aquamacs-Messages.log.el"))	     
+	       (write-region nil nil "/tmp//Aquamacs-Messages.log.el"))	     
 
   ;; try to restore key map
-
+(when nil
   (if global-map-backup
       (setq global-map global-map-backup)
     )
   (if osx-key-mode-map-backup
       (setq global-map-backup osx-key-mode-map-backup)
-    )
-  (message "Corrupted keymaps restored from backup. 
-Please save your work in backup files and restart Aquamacs.
+    ))
+  (mac-dialog "Internal data corruption -- Some data restored." 
+"Corrupted keymaps restored from backup. 
+Please save your work and restart Aquamacs.
+Consider filing a bug report with Help/Send Bug Report.
 Debug info left in /tmp/Aquamacs-Corrupt-Keymap.log.el."))
 
  (define-key global-map '[(hyper shift t)] 'debug-keymap-corruption)
@@ -430,11 +434,11 @@ default."
     (define-key map `[(,osxkeys-command-key a)] 'mark-whole-buffer)
     (define-key map `[(,osxkeys-command-key v)] 'clipboard-yank) 
     (define-key map `[(,osxkeys-command-key c)] 'clipboard-kill-ring-save)
-    (define-key map `[(shift ,osxkeys-command-key c)] 'clipboard-kill-ring-save-secondary)
+    (define-key map `[(shift ,osxkeys-command-key c)] 'aquamacs-clipboard-kill-ring-save-secondary)
     ; this because the combination control-space usually activates Spotlight
     (define-key map `[(control ,osxkeys-command-key space)] 'set-mark)
     (define-key map `[(,osxkeys-command-key x)] 'clipboard-kill-region)
-    (define-key map `[(shift ,osxkeys-command-key x)] 'clipboard-kill-secondary)
+    (define-key map `[(shift ,osxkeys-command-key x)] 'aquamacs-clipboard-kill-secondary)
     (define-key map `[(,osxkeys-command-key s)] 'save-buffer)
     (define-key map `[(,osxkeys-command-key p)] 'aquamacs-print)
     (define-key map `[(,osxkeys-command-key l)] 'goto-line)
