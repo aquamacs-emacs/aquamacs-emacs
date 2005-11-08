@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.15 2005/11/08 01:12:03 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.16 2005/11/08 19:42:57 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -572,12 +572,14 @@ Aquamacs 0.9.7 on. `mac-option-modifier' has been set for you."))))
   ;; mainly to ensure  that we overwrite a marked region
   ;; (transient-mark-mode nil)
 
-  ;; make services menu work again
 
-  (when (string= "mac" window-system)
-    (put 'PRIMARY 'mac-scrap-name "org.gnu.Emacs.selection.PRIMARY")
-    (setq mac-services-selection 'PRIMARY)
-    )
+;  (when (string= "mac" window-system)
+; don't do this -  
+ ;;   (put 'PRIMARY 'mac-scrap-name "org.gnu.Emacs.selection.PRIMARY")
+
+  ;; unnecessary
+;    (setq mac-services-selection 'PRIMARY)
+;    )
 ;;;;;;;;;;;;
  
      
