@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.14 2005/11/04 23:22:37 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.15 2005/11/08 01:12:03 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -770,7 +770,7 @@ listed here."
 
   (setq undo-ask-before-discard nil)
   (garbage-collect) ;; workaronud for memory corruption bug
-  (setq gc-cons-threshold 4000000)
+  (setq gc-cons-threshold 2000000)
 ;; http://sourceforge.net/tracker/index.php?func=detail&aid=1295333&group_id=138078&atid=740475				      
 
 
