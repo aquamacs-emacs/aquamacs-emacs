@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-mode-defaults.el,v 1.5 2005/11/08 19:40:05 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-defaults.el,v 1.6 2005/11/09 12:49:43 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -96,6 +96,11 @@
   "major mode for editing HTML source." t)
 (assq-set-equal "\\.html$" 'html-helper-mode 'auto-mode-alist)
 (assq-set-equal "\\.shtml$" 'html-helper-mode 'auto-mode-alist)
+(assq-set-equal "\\(?:<\\?xml\\s +[^>]*>\\)?\\s *<\\(?:!--\\(?:[^-]\\|-[^-]\\)*-->\\s *<\\)*\\(?:!DOCTYPE\\s +[^>]*>\\s *<\\s *\\(?:!--\\(?:[^-]\\|-[^-]\\)*-->\\s *<\\)*\\)?[Hh][Tt][Mm][Ll]" 'html-helper-mode 'magic-mode-alist)
+
+
+(autoload 'javascript-mode "javascript-mode" "JavaScript mode" t)
+(assq-set-equal "\\.js$" 'javascript-mode 'auto-mode-alist)
 
 
 (autoload 'css-mode "css-mode" "major mode for editing CSS source." t)
