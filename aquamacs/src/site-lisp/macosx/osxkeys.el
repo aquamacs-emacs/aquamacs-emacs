@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.29 2005/11/08 19:43:47 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.30 2005/11/09 15:20:27 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -458,8 +458,8 @@ default."
     (define-key map `[(,osxkeys-command-key left)] 'beginning-of-visual-line)
     (define-key map `[(,osxkeys-command-key right)] 'end-of-visual-line)
 
+    (define-key map `[(,osxkeys-command-key delete)] 'kill-visual-line)
     (define-key map `[(,osxkeys-command-key backspace)] 'kill-whole-visual-line)
-
 
     (define-key map `[(meta up)] 'cua-scroll-down)
     (define-key map `[(meta down)] 'cua-scroll-up)
