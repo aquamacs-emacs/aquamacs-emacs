@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-print.el,v 1.7 2005/10/31 23:14:21 davidswelt Exp $
+;; Last change: $Id: mac-print.el,v 1.8 2005/11/09 20:30:19 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -59,6 +59,11 @@ The document is shown in Preview.app and a printing dialog is opened."
 			       " ") 
 		       nil)))
  
+    (require 'htmlize) ;; needs to be loaded before let-bindings
+    (unless (boundp 'htmlize-white-background)
+      (message "Warning - incompatible htmlize package installed. 
+Remove from your load-path for optimal printing / export results.")
+      )
     (let ((htmlize-html-charset 'utf-8)
 	  (htmlize-use-rgb-txt nil)
 	  (htmlize-before-hook nil)
