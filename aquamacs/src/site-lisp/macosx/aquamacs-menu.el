@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.29 2005/11/09 13:13:44 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.30 2005/11/09 15:15:31 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -34,8 +34,6 @@
 
 (require 'easymenu)
 
- 
- 
 
 
 ; (assq 'paste (lookup-key global-map [menu-bar edit]))
@@ -224,36 +222,45 @@
  
 (defvar menu-bar-new-file-menu nil)
 
+(defun aq-copy-list (list)
+  "Return a copy of LIST, which may be a dotted list.
+The elements of LIST are not copied, just the list structure itself."
+  (if (consp list)
+      (let ((res nil))
+	(while (consp list) (push (pop list) res))
+	(prog1 (nreverse res) (setcdr res list)))
+    (car list)))
+
 (defun aquamacs-update-new-file-menu ()
   (setq menu-bar-new-file-menu (make-sparse-keymap "New Buffer")) 
   (mapc
-   (lambda (modename)
+   (lambda (modeentry)
+     (let ((modename (if (consp modeentry) (car modeentry) modeentry))
+	   (displayname (if (consp modeentry) (cdr modeentry) 
+			  (capitalize 
+			   (replace-regexp-in-string "-mode" "" (symbol-name modeentry))))))
+
      (when (fboundp modename)
        (define-key ;;-after doesn't work with after- why?>? 
 	 menu-bar-new-file-menu 
 	 (vector (make-symbol (concat "new-buffer-" (symbol-name modename))))
 	 `(menu-item  
-	   ,(concat 
-	     (capitalize 
-	      (replace-regexp-in-string "-mode" "" (symbol-name modename)))
-	     " Buffer")
+	   ,displayname
 	   ,(eval 
 	     (list 'lambda '() '(interactive)
 		   (list 'new-frame-with-new-scratch nil `(quote ,modename))
 		   ))
 	   :help "Create a new buffer in a specific mode."
-	   ))))
+	   )))))
       
-   (reverse (sort (copy-list aquamacs-menu-new-buffer-modes)
+   (reverse (sort (aq-copy-list aquamacs-menu-new-buffer-modes)
 		  (lambda (a b) (string< 
-				 (upcase (symbol-name a)) 
-				 (upcase (symbol-name b))))))
-   )
+				 (upcase (if (consp a) (cdr a) (symbol-name a))) 
+				 (upcase (if (consp b) (cdr b) (symbol-name b))))))))
   (define-key-after menu-bar-file-menu [new-file-menu]
     (list 'menu-item "New Buffer" menu-bar-new-file-menu
 	  :help "Create a new buffer with a specific major mode.")
-    'new-file)
-  )
+    'new-file))
 
 (defun set-aquamacs-menu-new-buffer-modes (variable value)
   "Like `custom-set-default', but for `aquamacs-menu-new-buffer-modes'."
@@ -262,14 +269,31 @@
       (aquamacs-update-new-file-menu)))
 
 (defcustom aquamacs-menu-new-buffer-modes
-  '(text-mode html-mode css-mode fortran-mode javascript-mode html-helper-mode latex-mode lisp-interaction-mode emacs-lisp-mode c-mode objc-mode c++-mode perl-mode php-mode python-mode applescript-mode matlab-mode R-mode sh-mode tcl-mode nxml-mode)
+  '(text-mode 
+    (css-mode . "CSS")
+    fortran-mode 
+    (javascript-mode . "JavaScript")
+    (html-mode . "HTML")
+    (html-helper-mode . "HTML (Helper)")
+    (latex-mode . "LaTeX")
+    lisp-interaction-mode emacs-lisp-mode c-mode 
+    (objc-mode . "Objective C")
+    c++-mode perl-mode 
+    (php-mode . "PHP")
+    python-mode 
+    (applescript-mode ."AppleScript")
+    matlab-mode R-mode 
+    (sh-mode . "Shell Script")
+    (nxml-mode . "XML (nXML)"))
   "List of modes to include in the New Buffer menu."
   :group 'menu
   :group 'Aquamacs
-  :type '(repeat (symbol :tag "Mode-name"))
+  :type '(repeat (choice
+		  (symbol :tag "Mode-name")
+		  (cons :tag "Mode / Display name" (symbol :tag "Mode-name") (symbol :tag "Display name"))))
   :set 'set-aquamacs-menu-new-buffer-modes
 )
- 
+
 (add-hook 'after-init-hook 'aquamacs-update-new-file-menu)
 
 (defun aquamacs-menu-make-new-buffer ()
@@ -868,4 +892,4 @@ to the selected frame."
 )
 
 (provide 'aquamacs-menu)
- 
+  
