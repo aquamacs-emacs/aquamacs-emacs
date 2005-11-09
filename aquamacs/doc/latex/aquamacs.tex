@@ -767,13 +767,22 @@ Emacs one  (control-x d), and it brings up a directory name in the
 ``minibuffer'' (small space for commands at the bottom of the main
 window, or frame). 
 
-Printing is supported, though only from the menu, and it will not
-present a traditional Mac print dialog. Instead the text in your file
-will print to your default printer using the command-line \texttt{lpr} program.
+You can open a new buffer from the File menu -- you will need to
+choose a buffer from a list of recently and commonly used editing modes.
+You may also change the current editing mode.
 
-From the File menu, you can also open a new ``frame,'' or window, or
-split the open window into two separate buffers. The keyboard
-shortcuts for these commands are the traditional Emacs ones (see the menubar).
+Printing is fully supported, although no ``Setup Page'' option is
+available at this point.  You will see a print screen (in the system's
+Preview.app) from where you can select a printer.  This may take a few
+seconds to appear with very large buffers. (Printing of embedded
+images is currently not supported.)
+
+You may export your buffer to PDF or to HTML format. This operation
+preserves all the formatting, including any word-wrapping - so you may
+want to choose a font and resize the frame so that the lines are
+wrapped in the intended way (if Soft Wrapping is used).
+
+Printing and PDF export are in US Letter format at this point.
 
 \subsection{Edit}
 The Edit menu is the heart of Emacs' textual wizardry. Emacs supports
@@ -789,6 +798,7 @@ than twenty of the most recently-copied items on the clipboard, and
 these are accessible from the menu in case you need to paste these
 items again.  The Edit menu also supports ``bookmarks,'' a feature
 that allows you to save your place in a specific file. 
+
 
 
 \subsection{Options}
@@ -861,6 +871,12 @@ operations. Finally, there is the ``info'' buffer, in which Aquamacs
 displays built-in user help, tutorials and other documentation in
 Emacs' ``info'' format.
 
+ 
+From the Buffers menu, you can also open a new ``frame,'' or window, or
+split the open window into two separate buffers. The keyboard
+shortcuts for these commands are the traditional Emacs ones (see the menubar).
+
+
 
 \begin{figure}
 \centering
@@ -921,7 +937,7 @@ and Table \ref{tab:command} for details.
 
 \hline Apple-O & mac-find-file- & Open a file\\ & other-frame & \\
 
-\hline Apple-shift-s & mac-save-file-as & Save as\\
+\hline Apple-Shift-S & mac-save-file-as & Save as\\
  
 \hline Apple-A & mark-whole-buffer & Select all text\\
 
@@ -949,11 +965,16 @@ and Table \ref{tab:command} for details.
 
 \hline Apple-; & toggle-pass-option- & Change Option key function\\ & to-system &\\
 
+\hline Apple-{ / } / '& (un)comment-region-or-line & Comment out or in the \\ & current line or region if marked  &\\
+
+\hline Apple-Backspace & kill-whole-visual-line & Deletes the current line \\
+\hline Apple-Delete & kill-visual-line & Deletes the remainder of the current line \\
+
 \hline Apple-Q & save-buffers-kill-emacs & Save file, exit program\\
 
 \hline Apple-Z & undo & Undo\\
 
-\hline Apple-shift-Z &  redo & Redo\\
+\hline Apple-Shift-Z &  redo & Redo\\
 
 \hline 
 \end{tabular} 
@@ -968,7 +989,7 @@ and Table \ref{tab:command} for details.
  \begin{tabular}{|c|c|}
 \hline \textbf{Emacs Command Key} & \textbf{Aqua Command Key}\\
 \hline C-* & Control-*\\
-\hline H-* & Apple-*\\
+\hline A-* & Apple-*\\
 \hline M-* & Option-*\footnote{See setting in Options menu.}\\
 \hline C-M-* & ESC Control-*\\
 \hline 
@@ -1004,7 +1025,6 @@ If in doubt, use the last option:
 \item /Users/username/Library/Preferences/Aquamacs Emacs/Preferences.el
 \end{itemize}
 
-
 This replaces the usual ~/.emacs file, which is still loaded for  compatibility.
 
 Below are some specific customization items that may be of interest:
@@ -1018,23 +1038,12 @@ Below are some specific customization items that may be of interest:
   Emacs, just deselect  ``Display Buffers in Separate Frames'' in the
   Options menu and save  your choice with ``Save Options.''
 
-
-\item \textbf{mac-pass-option-to-system.} If this variable is set in your .emacs or Preferences.el file to non-nil, the Mac ``Option'' key can be used to compose
-      characters as handled by the system and depending on the
-      keyboard layout chosen. Only if the Mac ``Command'' or ``Ctrl'' key
-      is depressed at the same time, Emacs evaluates the combination using
-      whatever modifier is set in mac-option-modifier. You can use the function ``Option key for Meta'' in the Options menu for quick changes (or press Apple-;).
-
-\item \textbf{mac-option-modifier's value is meta.} This is  the modifier to use for the Mac alt/option key.  The value can
+ 
+\item \textbf{mac-option-modifier.} This is  the modifier to use for the Mac alt/option key.  The value can
 be alt, hyper, or super for the respective modifier.  If the value is
 nil then the key will act as the normal Mac option modifier, and the option
 key can be used to compose characters depending on the chosen Mac keyboard
-setting.
-Note that mac-pass-option-to-system takes precedence over this setting. If
-mac-pass-option-to-system is non-nil, simple key combinations with Option
-will be handled by the system in order to produce characters, and only
-combinations in conjunction with Command or Control will let Emacs see
-the modifier that is assigned to the Option key. 
+setting. 
 
 \item \textbf{Additional customization.} Of course, Aquamacs Emacs
   offers you almost all the customization  possibilities that Emacs
@@ -1059,12 +1068,10 @@ the modifier that is assigned to the Option key.
 \hline One Buffer One Frame\\
 \hline Smart Frame Positioning Enforce\\
 \hline Smart Frame Positioning Mode\\
-\hline Mac Option Modifier\\
-\hline Mac Pass Option To System\\
-\hline Mac Control Modifier\\
-\hline Mac Pass Control To System\\
-\hline Mac Command Modifier\\
-\hline Mac Pass Command To System\\
+\hline Mac Option Modifier\\ 
+\hline Mac Control Modifier\\ 
+\hline Mac Command Modifier\\ 
+\hline Aquamacs Known Buffer Modes
 \hline 
 \end{tabular} 
 \caption{Aquamacs-specific variables that can be customized in the Aquamacs customization group.}
