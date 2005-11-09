@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-mode-defaults.el,v 1.6 2005/11/09 12:49:43 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-defaults.el,v 1.7 2005/11/09 13:15:12 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -120,7 +120,11 @@
 ;; do we need to distinguish?
 ;; we don't have a REALBasic mode yet
 
- 
+(autoload 'matlab-mode "matlab" "Enter MATLAB mode." t)
+(autoload 'matlab-shell "matlab" "Interactive MATLAB mode." t)
+(assq-set-equal "\\.m$" 'matlab-mode 'auto-mode-alist) 
+
+
 ;; ---------------------------------------------------------
 ;; PERL EDITING and other modes
 
