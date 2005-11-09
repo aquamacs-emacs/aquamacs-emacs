@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.31 2005/11/09 16:19:23 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.32 2005/11/09 17:54:08 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -95,7 +95,7 @@
 ;; The following is a big hack. The mac port can't currently cope 
 ;; with putting the command key combos in the menu, for various 
 ;; reasons (1. they are just secondary alternatives, 2. command is defined
-;; as 'hyper' and only known as such)
+;; as 'alt' and only known as such)
 
 ; redefine New
 ; (define-key menu-bar-edit-menu [mark-whole-buffer] (cdr (assq 'mark-whole-buffer (key-binding [menu-bar edit]))))
@@ -195,12 +195,13 @@
 			       "C-" (concat (aq-describe-modifier 'ctrl) "-")
 			       (replace-regexp-in-string 
 				"H-" (concat (aq-describe-modifier 'hyper) "-")
-			    
+				(replace-regexp-in-string 
+				 "A-" (concat (aq-describe-modifier 'alt) "-")
 				(replace-regexp-in-string 
 				 "-\\([A-Z]\\)" (lambda (txt) (concat (aq-describe-modifier 'shift) txt))
 				 s
 				 nil nil 1 ;; replace sub-exp
-				 ))))))))))
+				 )))))))))))
 	(error nil
 	       (apply (function format) text more-args)
 	 ))
@@ -252,12 +253,15 @@ The elements of LIST are not copied, just the list structure itself."
   (if (nthcdr 10 aquamacs-recent-major-modes)
       (setcdr (nthcdr 9 aquamacs-recent-major-modes) nil))
   (setq aquamacs-recent-major-modes
-	(cons major-mode aquamacs-recent-major-modes)))
-  
+	(cons major-mode aquamacs-recent-major-modes))
+  (if (fboundp 'aquamacs-update-new-file-menu)
+      (aquamacs-update-new-file-menu))
+  (if (fboundp 'aquamacs-update-change-mode-menu)
+      (aquamacs-update-change-mode-menu)))
+
+ 
 (add-hook 'after-change-major-mode-hook 'aquamacs-record-mode-change)
-
-
-
+ 
 (defun aquamacs-change-mode (buffer mode)
   (with-current-buffer (or buffer (current-buffer))
     (if (eq major-mode mode)

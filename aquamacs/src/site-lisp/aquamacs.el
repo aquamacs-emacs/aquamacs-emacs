@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.16 2005/11/08 19:42:57 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.17 2005/11/09 17:53:53 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -38,6 +38,11 @@
 
 
 (defun aquamacs-setup ()
+
+  ;; workaround for memory corruption bug
+  (garbage-collect) 
+  (setq gc-cons-threshold 2000000)
+
 
   (aquamacs-mac-initialize) ;; call at runtime only
        
@@ -555,9 +560,9 @@ Aquamacs 0.9.7 on. `mac-option-modifier' has been set for you."))))
 
   
   (global-set-key [(shift down-mouse-1)] 'mouse-extend)
-  (global-set-key [(shift hyper down-mouse-1)] 'mouse-extend-secondary)
+  (global-set-key [(shift alt down-mouse-1)] 'mouse-extend-secondary)
 
-  (let ((cmdkey (if (boundp 'osxkeys-command-key) osxkeys-command-key 'hyper)))
+  (let ((cmdkey (or mac-command-modifier 'alt)))
     (global-set-key `[(,cmdkey mouse-1)] 'mouse-start-secondary)
     (global-set-key `[(,cmdkey drag-mouse-1)] 'mouse-set-secondary)
     (global-set-key `[(,cmdkey down-mouse-1)] 'mouse-drag-secondary)
@@ -590,7 +595,7 @@ Aquamacs 0.9.7 on. `mac-option-modifier' has been set for you."))))
 
 ;; redefine this
 (defun startup-echo-area-message ()
-  (if (eq (key-binding [(hyper \?)]) 'aquamacs-user-help)
+  (if (eq (key-binding [(alt \?)]) 'aquamacs-user-help)
       "For an introduction to Aquamacs Emacs, type Apple-?."
     (substitute-command-keys
      "For a introduction to Aquamacs Emacs, type \
@@ -771,8 +776,6 @@ listed here."
   ;; temporary stuff for releases according to admin/FOR-RELEASE
 
   (setq undo-ask-before-discard nil)
-  (garbage-collect) ;; workaronud for memory corruption bug
-  (setq gc-cons-threshold 2000000)
 ;; http://sourceforge.net/tracker/index.php?func=detail&aid=1295333&group_id=138078&atid=740475				      
 
 

@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.31 2005/11/09 17:35:31 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.32 2005/11/09 17:54:26 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -46,7 +46,7 @@
 
 (setq mac-option-modifier 'meta) 
 (setq mac-control-modifier 'ctrl)
-(setq mac-command-modifier 'hyper)
+(setq mac-command-modifier 'alt)
 (setq mac-pass-command-to-system t) ;; let system handle Apple-H and the like
 ;; (this is default anyways)
 
@@ -415,7 +415,7 @@ Please save your work and restart Aquamacs.
 Consider filing a bug report with Help/Send Bug Report.
 Debug info left in /tmp/Aquamacs-Corrupt-Keymap.log.el."))
 
- (define-key global-map '[(hyper shift t)] 'debug-keymap-corruption)
+ (define-key global-map '[(alt shift t)] 'debug-keymap-corruption)
 
 (add-hook 'after-init-hook 
 	  (lambda () 
