@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.30 2005/11/09 15:20:27 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.31 2005/11/09 17:35:31 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -363,9 +363,28 @@ If arg is zero, kill current line but exclude the trailing newline."
 	 (message "Secondary selection saved to clipboard and kill-ring, then killed.")    
 	 )
 					; else
-     (message "The secondary selection is not set.")
-     )
-)
+     (message "The secondary selection is not set.")))
+
+(defmacro allow-line-as-region-for-function (orig-function)
+`(defun ,(intern (concat (symbol-name orig-function) "-or-line")) 
+   ()
+   ,(format "Like `%s', but acts on the current line if mark is not active." orig-function)
+   (interactive)
+   (if mark-active
+       (call-interactively (function ,orig-function))
+     (save-excursion 
+       ;; define a region (temporarily) -- so any C-u prefixes etc. are preserved.
+       (beginning-of-line)
+       (set-mark (point))
+       (end-of-line)
+       (call-interactively (function ,orig-function))))))
+
+(allow-line-as-region-for-function comment-region)
+(allow-line-as-region-for-function uncomment-region)
+(allow-line-as-region-for-function comment-or-uncomment-region)
+
+
+
 
 (setq garbage-collection-messages t)
 (defun debug-keymap-corruption ()
@@ -452,6 +471,10 @@ default."
     (define-key map `[(,osxkeys-command-key down)] 'end-of-buffer)
     (define-key map `[(,osxkeys-command-key left)] 'beginning-of-line)
     (define-key map `[(,osxkeys-command-key right)] 'end-of-line)
+
+    (define-key global-map `[(,osxkeys-command-key {)] 'comment-region-or-line)
+    (define-key global-map `[(,osxkeys-command-key })] 'uncomment-region-or-line)
+    (define-key global-map `[(,osxkeys-command-key \')] 'comment-or-uncomment-region-or-line)
 
     (define-key map '[remap previous-line] 'visual-line-up)
     (define-key map '[remap next-line] 'visual-line-down)
