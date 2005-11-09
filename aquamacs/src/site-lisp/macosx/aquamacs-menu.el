@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.28 2005/11/06 16:02:50 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.29 2005/11/09 13:13:44 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -222,16 +222,6 @@
 			    (frame-selected-window menu-updating-frame))))
 	      :help "Create a new buffer"))
  
-
-(defcustom aquamacs-menu-new-buffer-modes
-  '(text-mode html-helper-mode latex-mode lisp-interaction-mode emacs-lisp-mode c-mode perl-mode python-mode applescript-mode R-mode sh-mode tcl-mode)
-  "List of modes to include in the New Buffer menu."
-  :group 'menu
-  :group 'Aquamacs
-  :type '(repeat (symbol :tag "Mode-name"))
-)
- 
-
 (defvar menu-bar-new-file-menu nil)
 
 (defun aquamacs-update-new-file-menu ()
@@ -265,6 +255,21 @@
     'new-file)
   )
 
+(defun set-aquamacs-menu-new-buffer-modes (variable value)
+  "Like `custom-set-default', but for `aquamacs-menu-new-buffer-modes'."
+  (custom-set-default variable value)
+  (if (fboundp 'aquamacs-update-new-file-menu)
+      (aquamacs-update-new-file-menu)))
+
+(defcustom aquamacs-menu-new-buffer-modes
+  '(text-mode html-mode css-mode fortran-mode javascript-mode html-helper-mode latex-mode lisp-interaction-mode emacs-lisp-mode c-mode objc-mode c++-mode perl-mode php-mode python-mode applescript-mode matlab-mode R-mode sh-mode tcl-mode nxml-mode)
+  "List of modes to include in the New Buffer menu."
+  :group 'menu
+  :group 'Aquamacs
+  :type '(repeat (symbol :tag "Mode-name"))
+  :set 'set-aquamacs-menu-new-buffer-modes
+)
+ 
 (add-hook 'after-init-hook 'aquamacs-update-new-file-menu)
 
 (defun aquamacs-menu-make-new-buffer ()
