@@ -829,7 +829,7 @@ If no rgb.txt file is found, return nil."
      ;; it looks like "pt" in Emacs and "pt" in HTML mean different
      ;; things. In particular since fonts appear wider in a browser,
      ;; we should aim for a slightly smaller target font.
-     (setf (htmlize-fstruct-size fstruct)  (/ value 15))) 
+     (setf (htmlize-fstruct-size fstruct)  (/ value 12))) 
     (:foreground
      (setf (htmlize-fstruct-foreground fstruct) (htmlize-color-to-rgb value)))
     (:background
