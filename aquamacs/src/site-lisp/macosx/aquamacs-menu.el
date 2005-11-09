@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.32 2005/11/09 17:54:08 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.33 2005/11/09 18:02:24 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -66,7 +66,6 @@
        (frame-visible-p menu-updating-frame )))
 
 
- 
 ;; apple command character is unicode x2318  
 ;; 
 (defun aq-describe-modifier (mod)
@@ -171,7 +170,6 @@
 )))
 
 (defun aq-shortcut (text symbol &rest more-args)
-  
   (if osx-key-mode
       (condition-case err
 	  (progn
@@ -182,7 +180,6 @@
 			       (concat (aq-describe-modifier 'shift) "-" 
 				       (downcase (substring txt 2))))
 		       s)))
-	      
 	    (apply (function format) 
 		   (append (list (concat text "%s")) more-args 
 			   (list 
@@ -192,11 +189,11 @@
 			      "-\\([a-z]\\)" 'upcase
 			  
 			      (replace-regexp-in-string 
-			       "C-" (concat (aq-describe-modifier 'ctrl) "-")
+			       "C-" (lambda (txt) (concat (aq-describe-modifier 'ctrl) "-"))
 			       (replace-regexp-in-string 
-				"H-" (concat (aq-describe-modifier 'hyper) "-")
+				"H-" (lambda (txt) (concat (aq-describe-modifier 'hyper) "-"))
 				(replace-regexp-in-string 
-				 "A-" (concat (aq-describe-modifier 'alt) "-")
+				 "A-" (lambda (txt) (concat (aq-describe-modifier 'alt) "-"))
 				(replace-regexp-in-string 
 				 "-\\([A-Z]\\)" (lambda (txt) (concat (aq-describe-modifier 'shift) txt))
 				 s
