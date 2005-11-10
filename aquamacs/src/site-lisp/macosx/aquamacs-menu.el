@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.34 2005/11/10 00:11:55 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.35 2005/11/10 16:32:34 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -60,11 +60,7 @@
  
 ;;   (define-key global-map (vconcat (append keymap (list key)))
 ;;     (change-menu-text-1 (cdr (assq key (lookup-key global-map keymap))) str )))
-
-(defun aquamacs-updated-is-visible-frame-p ()
-  (and (frame-live-p menu-updating-frame)
-       (frame-visible-p menu-updating-frame )))
-
+ 
 
 ;; apple command character is unicode x2318  
 ;; 
@@ -275,7 +271,8 @@ The elements of LIST are not copied, just the list structure itself."
    (define-key-after menu-bar-file-menu [change-mode-menu]
      `(menu-item "Change Buffer Mode" ,menu-bar-change-mode-menu
 	   :help "Change to a specific major mode."
-	   :enable (menu-bar-non-minibuffer-window-p))
+	   :enable (and (menu-bar-menu-frame-live-and-visible-p)
+			(menu-bar-non-minibuffer-window-p)))
      'insert-file)) 
 
 (defun aquamacs-define-mode-menu (keymap symbol-prefix function-to-call docstring &optional enable-if)
@@ -398,7 +395,8 @@ customization buffer."
   '(menu-item (aq-shortcut "Close Buffer                            " 
 			   (key-binding [menu-bar file kill-buffer])) 
 	      close-current-window-asktosave
-	      :enable (aquamacs-updated-is-visible-frame-p)
+	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
+			   (menu-bar-non-minibuffer-window-p))
 	      :help "Discard current buffer") 'separator-save)
  
 (define-key menu-bar-edit-menu [copy]
@@ -417,7 +415,8 @@ customization buffer."
 		       ;; Emacs compiled --without-x doesn't have
 		       ;; x-selection-exists-p.
 		       (fboundp 'x-selection-exists-p)
-		       (x-selection-exists-p) (not buffer-read-only))
+		       (x-selection-exists-p) (not buffer-read-only)
+		       (menu-bar-menu-frame-live-and-visible-p))
 	      :help "Paste (yank) text most recently cut/copied"))
 
 
@@ -429,14 +428,15 @@ customization buffer."
 			   (not (eq t buffer-undo-list))
 			   (if (eq last-command 'undo)
 			       pending-undo-list
-			     (consp buffer-undo-list)))
+			     (consp buffer-undo-list))
+			   (menu-bar-menu-frame-live-and-visible-p))
 	      :help "Undo last operation"))
 
 (define-key-after menu-bar-edit-menu [redo]
   '(menu-item (aq-shortcut "Redo                 " 
 			   (key-binding [menu-bar edit redo])) 
 	      'redo
-	      :enable (aquamacs-updated-is-visible-frame-p)
+	      :enable (menu-bar-menu-frame-live-and-visible-p)
 	      :help "Discard current buffer") 'undo)
 
 (easy-menu-add-item  nil '("Edit")
@@ -454,6 +454,7 @@ customization buffer."
   '(menu-item (aq-shortcut  "Select All           " 
 				 (key-binding [menu-bar edit mark-whole-buffer])) 
 	      mark-whole-buffer
+	      :enable (menu-bar-menu-frame-live-and-visible-p)
 	      :help "Mark the whole buffer for a subsequent cut/copy."))
 
 (define-key menu-bar-i-search-menu [isearch-forward]
@@ -484,8 +485,9 @@ customization buffer."
  (define-key-after menu-bar-file-menu [mac-show-in-finder]
           '(menu-item "Show In Finder" mac-key-show-in-finder
 
-		      :enable (and (aquamacs-updated-is-visible-frame-p)
-				   buffer-file-number)
+		      :enable (and  (menu-bar-menu-frame-live-and-visible-p)
+				    (menu-bar-non-minibuffer-window-p)
+				    buffer-file-number)
 		      ) 'my-file-separator)
 ; 
 ;; we will set the following ones directly
@@ -503,17 +505,20 @@ customization buffer."
   '(menu-item (aq-shortcut  "Save Buffer                              "
 			    (key-binding [menu-bar file save-buffer]))
 	      save-buffer
-		  ))  
+	      :enable (and (buffer-modified-p)
+			   (buffer-file-name)
+			   (menu-bar-menu-frame-live-and-visible-p)
+			   (menu-bar-non-minibuffer-window-p))
+	      :help "Save current buffer to its file"
+	      ))  
 
 (define-key menu-bar-file-menu [write-file]
   '(menu-item (aq-shortcut  "Save Buffer As...                      "
 			    (key-binding [menu-bar file write-file])) 
 	      write-file
 
-	      :enable (and (frame-live-p menu-updating-frame)
-			   (frame-visible-p menu-updating-frame )
-			   (not (window-minibuffer-p
-				 (frame-selected-window menu-updating-frame))))
+	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
+			   (menu-bar-non-minibuffer-window-p))
 	      :help "Write current buffer to another file"))
 
 
@@ -526,44 +531,35 @@ customization buffer."
 
 (define-key menu-bar-export-file-menu [export-pdf]
   '(menu-item "PDF..." export-to-pdf
-	      :enable (and (frame-live-p menu-updating-frame)
-			   (frame-visible-p menu-updating-frame )
-			   (not (window-minibuffer-p
-				 (frame-selected-window menu-updating-frame))))
+	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
+			   (menu-bar-non-minibuffer-window-p))
 	      :help "Write current buffer to another file in PDF format"))
 
 (define-key menu-bar-export-file-menu [export-html]
   '(menu-item "HTML..." export-to-html
-	      :enable (and (frame-live-p menu-updating-frame)
-			   (frame-visible-p menu-updating-frame )
-			   (not (window-minibuffer-p
-				 (frame-selected-window menu-updating-frame))))
+	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
+			   (menu-bar-non-minibuffer-window-p))
 	      :help "Write current buffer to another file in HTML format"))
 
 (define-key-after menu-bar-file-menu [export-file-menu]
   `(menu-item (concat "Export " (if mark-active "Region" "Buffer")) 
 	      ,menu-bar-export-file-menu
-	      :enable (and (frame-live-p menu-updating-frame)
-			   (frame-visible-p menu-updating-frame )
-			   (not (window-minibuffer-p
-				 (frame-selected-window menu-updating-frame))))
+	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
+			   (menu-bar-non-minibuffer-window-p))
 	      :help "Export buffer in a different format")
     'write-file)
 
 
 
 
-
-
-
+ 
 (define-key menu-bar-file-menu [split-window]
   '(menu-item "Split Window" split-window-vertically
-	      :enable (and (frame-live-p menu-updating-frame)
-			   (frame-visible-p menu-updating-frame )
-			   (not (window-minibuffer-p
-				 (frame-selected-window menu-updating-frame))))
+	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
+			   (menu-bar-non-minibuffer-window-p))
 	      :help "Split selected window in two"))
-
+;; will be moved to Buffers menu later on 
+;; but is created here
 
 
 
@@ -575,8 +571,8 @@ customization buffer."
 	      aquamacs-print
 	      :key-sequence nil
 	      :keys nil
-	      :enable (and (frame-live-p menu-updating-frame)
-			   (frame-visible-p menu-updating-frame ))
+	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
+			   (menu-bar-non-minibuffer-window-p))
 	      :help "Print current buffer or region with page headings"))
 
 
@@ -605,8 +601,8 @@ customization buffer."
 		      (key-binding [menu-bar file print-region-or-buffer])
 		      (if mark-active "Region" "Buffer"))  
 	      menu-bar-print-region-or-buffer
-	      :enable (and (frame-live-p menu-updating-frame)
-			   (frame-visible-p menu-updating-frame ))
+	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
+			   (menu-bar-non-minibuffer-window-p))
 	      :help "Print buffer, or region if active"))
 
 
@@ -753,7 +749,7 @@ do not let it produce special characters (passing the key to the system)."
 (define-key menu-bar-options-menu [mouse-set-font]
   '(menu-item "Set Font for this Frame..." mouse-set-font
 	       :visible (display-multi-font-p)
-	       :enable (aquamacs-updated-is-visible-frame-p) 
+	       :enable (menu-bar-menu-frame-live-and-visible-p) 
 	       :help "Select a font from list of known fonts/fontsets"))
 
 ;; Quit entry shouldnt be there
@@ -770,16 +766,13 @@ do not let it produce special characters (passing the key to the system)."
 
 (easy-menu-add-item  nil '("Options")
   ["-" nil nil] 'mouse-set-font)
-;(easy-menu-add-item  nil '("Options")
-;  ["Set Color Theme..." aquamacs-color-theme-select t
-;   :enable (aquamacs-updated-is-visible-frame-p) ] 'mouse-set-font)
 
 (define-key-after menu-bar-options-menu [aquamacs-color-theme-select]
   '(menu-item "Set Color Theme for this Frame..." aquamacs-color-theme-select
 	       :visible (and (display-multi-font-p)
 			     (fboundp 'aquamacs-color-theme-select)
 			     )
-	       :enable (aquamacs-updated-is-visible-frame-p) 
+	       :enable (menu-bar-menu-frame-live-and-visible-p)  
 	       :help "Select a color theme from a list")
   'mouse-set-font)
 
