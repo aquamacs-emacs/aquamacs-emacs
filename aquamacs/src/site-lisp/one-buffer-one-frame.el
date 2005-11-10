@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.10 2005/11/10 09:47:17 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.11 2005/11/10 17:09:30 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -31,7 +31,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.10 2005/11/10 09:47:17 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.11 2005/11/10 17:09:30 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -157,7 +157,7 @@
       ;; ineffective from within walk-windows
       (raise-frame (select-frame (window-frame window-to-select)))
       (setq ad-return-value (current-buffer)))
-  (set-mode-specific-theme)))
+  (set-mode-specific-theme))))
 
 ;; some exception for the speedbar
 ;; this doesn't work, unfortunately
@@ -417,13 +417,13 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
 			 (unless (minibuffer-window)
 			   (setq last-nonmenu-event nil)
 			   )
-			 (aquamacs-yes-or-no-p "Save this buffer to file before closing window? ")
+			 (y-or-n-p "Save this buffer to file before closing window? ")
 			 )
 		       (progn
 			 (save-buffer)
 			 (message "File saved.")
 			 )
-					; mark as not modified, so it will be killed for sure
+		     ;; mark as not modified, so it will be killed for sure
 		     (set-buffer-modified-p nil)
 		     ))
 		  ((message ""))
