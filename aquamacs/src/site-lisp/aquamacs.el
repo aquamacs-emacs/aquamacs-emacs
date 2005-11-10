@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.18 2005/11/10 00:17:52 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.19 2005/11/10 17:14:09 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -41,7 +41,9 @@
 
   ;; workaround for memory corruption bug
   (garbage-collect) 
-  (setq gc-cons-threshold 10000000)
+  ;; setting it to a much higher value will cause
+  ;; (temporary) lockups and swapping
+  (setq gc-cons-threshold 4000000)
 
 
   (aquamacs-mac-initialize) ;; call at runtime only
@@ -51,7 +53,7 @@
   ;; Stop Emacs from asking for "y-e-s", when a "y" will do. 
 
 
-  (fset 'old-yes-or-no-p (symbol-function 'yes-or-no-p))
+  
 
   (defcustom aquamacs-quick-yes-or-no-prompt-flag t
     "If non-nil, the user does not have to type in yes or no at
@@ -63,22 +65,38 @@ yes-or-no prompts - y or n will do."
   (defvaralias 'aquamacs-quick-yes-or-no-prompt 
     'aquamacs-quick-yes-or-no-prompt-flag)
 
-  (defun aquamacs-repl-yes-or-no-p (arg)
-    (interactive)
-    (if aquamacs-quick-yes-or-no-prompt
-	(progn
-	  ;; ensure that frames are raised
-	  (unless (visible-frame-list)
-	    (raise-frame)
-	    )
-	  (y-or-n-p arg)
+
+   
+  (defun aquamacs-repl-yes-or-no-p (text)
+    (aquamacs-ask-for-confirmation text t))
+  (defun aquamacs-y-or-n-p (text)
+    (aquamacs-ask-for-confirmation text nil))
+
+  (unless (fboundp 'old-yes-or-no-p)
+    (fset 'old-yes-or-no-p (symbol-function 'yes-or-no-p)))
+  (unless (fboundp 'old-y-or-n-p)
+    (fset 'old-y-or-n-p (symbol-function 'y-or-n-p)))
+  
+  (defun aquamacs-ask-for-confirmation (text long)
+    (let ((f (window-frame (minibuffer-window))))
+      (raise-frame f)			; make sure frame is visible
+      (let ((y (- (display-pixel-height) (frame-total-pixel-height f) 30 ))) ; extra 30 pix for typical Dock
+	(if (< y (eval (frame-parameter f 'top)))
+	    (modify-frame-parameters f (list (cons 'top y)))
+	  )
 	)
-      (old-yes-or-no-p arg)
-      )
-    ) 
-  (fset 'yes-or-no-p 'aquamacs-repl-yes-or-no-p)
-      
-  ;;(fset 'yes-or-no-p 'y-or-n-p)
+      (if (or (and last-nonmenu-event (not (consp last-nonmenu-event)))
+	      (not use-dialog-box)
+	      (not (fboundp 'mac-dialog-y-or-n-p))
+	      (not window-system))
+	  (if (and long (not aquamacs-quick-yes-or-no-prompt))
+	      (old-yes-or-no-p text)
+	    (old-y-or-n-p text))
+	(mac-dialog-y-or-n-p text ""))))
+
+  (fset 'y-or-n-p 'aquamacs-y-or-n-p)
+  (fset 'yes-or-n-p 'aquamacs-repl-yes-or-no-p)
+
 
   (defadvice map-y-or-n-p (around raiseframe (&rest args) activate)
     (raise-frame)
