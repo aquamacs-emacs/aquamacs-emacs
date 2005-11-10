@@ -21,7 +21,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.14 2005/09/19 19:03:51 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.15 2005/11/10 19:50:37 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -171,17 +171,17 @@ pixels apart if possible."
 	      `(
 		(left .
 		      ,(max min-x (cdr (assq 'left preassigned))))
-		(top 
+		(top .
 		 ,(max min-y (cdr (assq 'top preassigned))))
 		(width .
-		       (smart-fp--pixel-to-char-width
+		       ,(smart-fp--pixel-to-char-width
 			(min (- max-x (cdr (assq 'left preassigned)))
 			     (smart-fp--char-to-pixel-width
 				(cdr (assq 'width preassigned))
 				new-frame)) 
 			new-frame))   
 		(height .
-			(smart-fp--pixel-to-char-height
+			,(smart-fp--pixel-to-char-height
 			 (min (- max-y  (cdr (assq 'top preassigned)))
 			      (smart-fp--char-to-pixel-height
 				 (cdr (assq 'height preassigned))
