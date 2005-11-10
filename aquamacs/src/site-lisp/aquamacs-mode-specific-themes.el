@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.16 2005/11/10 23:17:16 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.17 2005/11/10 23:22:41 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -581,7 +581,7 @@ for all frames with the current major-mode."
      (when (fboundp modename)
        (define-key ;;-after doesn't work with after- why?>? 
 	 apptheme-mode-menu 
-	 (vector (make-symbol (concat "set-theme-of-" (symbol-name modename))))
+	 (vector (intern (concat "set-theme-of-" (symbol-name modename))))
 	 `(menu-item  
 	   ,(modename-to-string modename)
 	   ,(eval 
