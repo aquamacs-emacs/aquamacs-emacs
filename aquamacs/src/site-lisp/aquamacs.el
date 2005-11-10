@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.19 2005/11/10 17:14:09 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.20 2005/11/10 20:00:36 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -80,23 +80,31 @@ yes-or-no prompts - y or n will do."
   (defun aquamacs-ask-for-confirmation (text long)
     (let ((f (window-frame (minibuffer-window))))
       (raise-frame f)			; make sure frame is visible
-      (let ((y (- (display-pixel-height) (frame-total-pixel-height f) 30 ))) ; extra 30 pix for typical Dock
-	(if (< y (eval (frame-parameter f 'top)))
-	    (modify-frame-parameters f (list (cons 'top y)))
-	  )
-	)
-      (if (or (and last-nonmenu-event (not (consp last-nonmenu-event)))
+;;       (let ((y (- (display-pixel-height) (frame-total-pixel-height f) 30 ))) ; extra 30 pix for typical Dock
+;; 	(print y)
+;; 	(if (< y (eval (frame-parameter f 'top)))
+;; 	    (modify-frame-parameters f (list (cons 'top y)))
+;; 	  )
+;; 	)
+      (if (and
+	   (or ;; ensure that the minibuffer shows up on screen
+	    (not (fboundp 'mac-display-available-pixel-bounds))
+	    (not (fboundp 'frame-total-pixel-height))
+	    (< (+ (eval (frame-parameter f 'top)) 
+		  (frame-total-pixel-height f))
+	       (nth 3 (mac-display-available-pixel-bounds))))
+	   (or (and last-nonmenu-event (not (consp last-nonmenu-event)))
 	      (not use-dialog-box)
 	      (not (fboundp 'mac-dialog-y-or-n-p))
-	      (not window-system))
+	      (not window-system)))
 	  (if (and long (not aquamacs-quick-yes-or-no-prompt))
 	      (old-yes-or-no-p text)
 	    (old-y-or-n-p text))
-	(mac-dialog-y-or-n-p text ""))))
+	(mac-dialog-y-or-n-p text ""))))         
+  ;; it would be nice to offer a "cancel" option like C-g in the dialog
 
   (fset 'y-or-n-p 'aquamacs-y-or-n-p)
   (fset 'yes-or-n-p 'aquamacs-repl-yes-or-no-p)
-
 
   (defadvice map-y-or-n-p (around raiseframe (&rest args) activate)
     (raise-frame)
@@ -768,6 +776,7 @@ listed here."
 		     mac-pass-option-to-system
 		     aquamacs-auto-frame-parameters-flag
 		     aquamacs-mode-specific-default-themes 
+		     smart-frame-prior-positions
 		     aquamacs-customization-version-id
 		     ))
 	(and (get elt 'customized-value) 
@@ -844,6 +853,4 @@ listed here."
 
 (provide 'aquamacs)
 
-
-
-
+ 
