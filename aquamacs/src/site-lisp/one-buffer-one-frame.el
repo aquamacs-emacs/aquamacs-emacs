@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.9 2005/11/10 00:52:17 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.10 2005/11/10 09:47:17 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -31,7 +31,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.9 2005/11/10 00:52:17 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.10 2005/11/10 09:47:17 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -122,14 +122,17 @@
 (if window-system
 (defadvice switch-to-buffer (around sw-force-other-frame (&rest args) activate compile)
   ;; is buffer shown in a frame?
-  (let ((switch t))
+  (let ((switch t)
+	(window-to-select))
     (if one-buffer-one-frame
 	(walk-windows
 	 (lambda (w)
 	   (when (equal (window-buffer w) (get-bufobj (car args)))
 	     (setq switch nil)
-	     (raise-frame (select-frame (window-frame w))))
-	   ) t)) ;; t = include-hidden-frame (must be t) 
+	     (setq window-to-select w)
+	     
+	     )
+	   ) t t)) ;; t = include-hidden-frame (must be t) 
       
     (if switch
 	(if (or (not (visible-frame-list))
@@ -138,21 +141,23 @@
  
 	    (progn
 	      (apply #'switch-to-buffer-other-frame args)
+	      (setq ad-return-value (current-buffer))
 	      ;; store the frame/buffer information
 	      (add-to-list 'aquamacs-newly-opened-frames 
-			   (cons (selected-window) (current-buffer))) 
-	       
-	      ) 
+			   (cons (selected-window) (current-buffer)))) 
 	  ;; else : show in same frame
-   
 	  (if (window-dedicated-p (selected-window))
-	      (apply #'switch-to-buffer-other-window args)
+	      (progn 
+		(apply #'switch-to-buffer-other-window args)
+		(setq ad-return-value (current-buffer)))
 	    ;; else: show in same frame
-	    ad-do-it))))
-  (set-mode-specific-theme)
-  (current-buffer) ;; return this for compatibility
-  ))
-
+	    ad-do-it))
+      ;; else (don't switch, just activate another frame)
+      ;; we need to do it here, because raise-frame / select frame are
+      ;; ineffective from within walk-windows
+      (raise-frame (select-frame (window-frame window-to-select)))
+      (setq ad-return-value (current-buffer)))
+  (set-mode-specific-theme)))
 
 ;; some exception for the speedbar
 ;; this doesn't work, unfortunately
