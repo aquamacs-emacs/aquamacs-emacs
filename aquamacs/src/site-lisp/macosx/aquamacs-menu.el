@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.35 2005/11/10 16:32:34 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.36 2005/11/10 23:35:23 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -224,6 +224,10 @@ The elements of LIST are not copied, just the list structure itself."
 	(prog1 (nreverse res) (setcdr res list)))
     (car list)))
 
+(defun aq-concat-symbol (sym1 sym2)
+  (intern (concat (if (stringp sym1) sym1 (symbol-name sym1))
+		  (if (stringp sym2) sym2 (symbol-name sym2)))))
+
 (defvar menu-bar-new-file-menu nil)
 (defun aquamacs-update-new-file-menu ()
    (setq menu-bar-new-file-menu 
@@ -275,24 +279,29 @@ The elements of LIST are not copied, just the list structure itself."
 			(menu-bar-non-minibuffer-window-p)))
      'insert-file)) 
 
-(defun aquamacs-define-mode-menu (keymap symbol-prefix function-to-call docstring &optional enable-if)
+(defun aquamacs-define-mode-menu 
+  (keymap symbol-prefix function-to-call docstring &optional enable-if)
   "Defines a menu consisting of recently and commonly used major modes,
 using `aquamacs-recent-major-modes' and `aquamacs-known-major-modes'."
 
   (unless enable-if
     (setq enable-if 't))
   (aquamacs-define-mode-menu-1 aquamacs-known-major-modes keymap 
-			       symbol-prefix function-to-call docstring enable-if)
+			       symbol-prefix
+			       function-to-call docstring enable-if)
   (define-key keymap [separator]  '(menu-item "--"))
   (aquamacs-define-mode-menu-1 
    ;; look up texts of mode names in case there are any (for consistency)
    (mapcar (lambda (m)
-	     (or (cdr (assq m aquamacs-known-major-modes))
+	     (or (assq m aquamacs-known-major-modes)
 		 m))
 	   (reverse aquamacs-recent-major-modes)) 
-   keymap symbol-prefix function-to-call docstring enable-if))
+   keymap 
+   (aq-concat-symbol symbol-prefix "recent-") 
+   function-to-call docstring enable-if))
 
-(defun aquamacs-define-mode-menu-1 (the-list keymap symbol-prefix function-to-call docstring enable-if)
+(defun aquamacs-define-mode-menu-1 
+  (the-list keymap symbol-prefix function-to-call docstring enable-if)
   (mapc
    (lambda (modeentry)
      (let ((modename (if (consp modeentry) (car modeentry) modeentry))
@@ -303,7 +312,7 @@ using `aquamacs-recent-major-modes' and `aquamacs-known-major-modes'."
      (when (fboundp modename)
        (define-key ;;-after doesn't work with after- why?>? 
 	 keymap 
-	 (vector (make-symbol (concat symbol-prefix (symbol-name modename))))
+	 (vector (aq-concat-symbol symbol-prefix modename))
 	 `(menu-item  
 	   ,displayname
 	   ,(eval 
