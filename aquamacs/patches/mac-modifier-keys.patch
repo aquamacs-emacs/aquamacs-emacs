@@ -1,10 +1,10 @@
 Index: macterm.c
 ===================================================================
 RCS file: /cvsroot/emacs/emacs/src/macterm.c,v
-retrieving revision 1.140
-diff -c -r1.140 macterm.c
-*** src/macterm.c	18 Oct 2005 08:07:06 -0000	1.140
---- src/macterm.c	18 Oct 2005 08:56:26 -0000
+retrieving revision 1.141
+diff -c -r1.141 macterm.c
+*** macterm.c	25 Oct 2005 08:13:16 -0000	1.141
+--- macterm.c	10 Nov 2005 20:40:50 -0000
 ***************
 *** 86,100 ****
   #include "intervals.h"
@@ -31,7 +31,7 @@ diff -c -r1.140 macterm.c
   
   /* Non-nil means Emacs uses toolkit scroll bars.  */
 ***************
-*** 206,212 ****
+*** 207,213 ****
   
   /* The keysyms to use for the various modifiers.  */
   
@@ -39,16 +39,17 @@ diff -c -r1.140 macterm.c
   
   extern int inhibit_window_system;
   
---- 198,204 ----
+--- 199,206 ----
   
   /* The keysyms to use for the various modifiers.  */
   
-! static Lisp_Object Qalt, Qhyper, Qsuper, Qctrl, Qmeta, Qmodifier_value;
+! static Lisp_Object Qalt, Qhyper, Qsuper, Qctrl, Qcontrol, 
+!   Qmeta, Qmodifier_value;
   
   extern int inhibit_window_system;
   
 ***************
-*** 7901,7914 ****
+*** 7920,7933 ****
   /* Contains the string "reverse", which is a constant for mouse button emu.*/
   Lisp_Object Qreverse;
   
@@ -63,7 +64,7 @@ diff -c -r1.140 macterm.c
   
   /* True if the option and command modifiers should be used to emulate
      a three button mouse */
---- 7893,7910 ----
+--- 7913,7930 ----
   /* Contains the string "reverse", which is a constant for mouse button emu.*/
   Lisp_Object Qreverse;
   
@@ -83,7 +84,7 @@ diff -c -r1.140 macterm.c
   /* True if the option and command modifiers should be used to emulate
      a three button mouse */
 ***************
-*** 7982,8001 ****
+*** 8001,8020 ****
   #endif
   {
     unsigned int result = 0;
@@ -104,7 +105,7 @@ diff -c -r1.140 macterm.c
     return result;
   }
   
---- 7978,8021 ----
+--- 7998,8041 ----
   #endif
   {
     unsigned int result = 0;
@@ -124,24 +125,24 @@ diff -c -r1.140 macterm.c
 ! 
     if (!NILP (Vmac_option_modifier) && (mods & optionKey)) {
 !     Lisp_Object val = Fget(Vmac_option_modifier, Qmodifier_value);
-!     if (!NILP(val))
+!     if (INTEGERP(val))
 !       result |= XUINT(val);
     }
 +   if (!NILP (Vmac_command_modifier) && (mods & cmdKey)) {
 +     Lisp_Object val = Fget(Vmac_command_modifier, Qmodifier_value);
-+     if (!NILP(val))
++     if (INTEGERP(val))
 +       result |= XUINT(val);
 +   }   
 +   if (!NILP (Vmac_control_modifier) && (mods & controlKey)) {
 +     Lisp_Object val = Fget(Vmac_control_modifier, Qmodifier_value);
-+     if (!NILP(val))
++     if (INTEGERP(val))
 +       result |= XUINT(val);
 +   }  
   
 + #ifdef MAC_OSX
 +   if (!NILP (Vmac_function_modifier) && (mods & kEventKeyModifierFnMask)) {
 +     Lisp_Object val = Fget(Vmac_function_modifier, Qmodifier_value);
-+     if (!NILP(val))
++     if (INTEGERP(val))
 +       result |= XUINT(val);
 +   } 
 + #endif
@@ -150,7 +151,7 @@ diff -c -r1.140 macterm.c
   }
   
 ***************
-*** 8016,8022 ****
+*** 8035,8041 ****
   #if USE_CARBON_EVENTS
   /* Obtains the event modifiers from the event ref and then calls
      mac_to_emacs_modifiers.  */
@@ -158,7 +159,7 @@ diff -c -r1.140 macterm.c
   mac_event_to_emacs_modifiers (EventRef eventRef)
   {
     UInt32 mods = 0;
---- 8036,8042 ----
+--- 8056,8062 ----
   #if USE_CARBON_EVENTS
   /* Obtains the event modifiers from the event ref and then calls
      mac_to_emacs_modifiers.  */
@@ -167,12 +168,12 @@ diff -c -r1.140 macterm.c
   {
     UInt32 mods = 0;
 ***************
-*** 9366,9378 ****
+*** 9385,9397 ****
     /*0x7C*/ 0x53 /*right*/, 0x54 /*down*/, 0x52 /*up*/, 0
   };
   
-  static int
-! keycode_to_xkeysym (int keyCode, int *xKeySym)
+! static int
+  keycode_to_xkeysym (int keyCode, int *xKeySym)
   {
     *xKeySym = keycode_to_xkeysym_table [keyCode & 0x7f];
     return *xKeySym != 0;
@@ -181,16 +182,15 @@ diff -c -r1.140 macterm.c
   #if !USE_CARBON_EVENTS
   static RgnHandle mouse_region = NULL;
   
---- 9386,9515 ----
+--- 9406,9534 ----
     /*0x7C*/ 0x53 /*right*/, 0x54 /*down*/, 0x52 /*up*/, 0
   };
   
-+ 
-  static int
-!   keycode_to_xkeysym (int keyCode, int *xKeySym)
+! 
+! static int 
+  keycode_to_xkeysym (int keyCode, int *xKeySym)
   {
     *xKeySym = keycode_to_xkeysym_table [keyCode & 0x7f];
-+ 
     return *xKeySym != 0;
   }
   
@@ -313,7 +313,7 @@ diff -c -r1.140 macterm.c
   static RgnHandle mouse_region = NULL;
   
 ***************
-*** 9916,9923 ****
+*** 9936,9943 ****
   		 || !(er.modifiers & cmdKey))
   		&& (!NILP (Vmac_pass_control_to_system)
   		    || !(er.modifiers & controlKey))
@@ -322,7 +322,7 @@ diff -c -r1.140 macterm.c
   		    || !(er.modifiers & optionKey)))
   	      if (SendEventToEventTarget (eventRef, toolbox_dispatcher)
   		  != eventNotHandledErr)
---- 10053,10059 ----
+--- 10073,10079 ----
   		 || !(er.modifiers & cmdKey))
   		&& (!NILP (Vmac_pass_control_to_system)
   		    || !(er.modifiers & controlKey))
@@ -331,7 +331,7 @@ diff -c -r1.140 macterm.c
   	      if (SendEventToEventTarget (eventRef, toolbox_dispatcher)
   		  != eventNotHandledErr)
 ***************
-*** 9961,10009 ****
+*** 9981,10029 ****
   		dpyinfo->mouse_face_hidden = 1;
   	      }
   
@@ -381,7 +381,7 @@ diff -c -r1.140 macterm.c
   	  }
   
   #if USE_CARBON_EVENTS
---- 10097,10132 ----
+--- 10117,10152 ----
   		dpyinfo->mouse_face_hidden = 1;
   	      }
   
@@ -419,7 +419,7 @@ diff -c -r1.140 macterm.c
   
   #if USE_CARBON_EVENTS
 ***************
-*** 10443,10452 ****
+*** 10463,10472 ****
   
     /* Map modifiers */
     mac_quit_char_modifiers = 0;
@@ -430,7 +430,7 @@ diff -c -r1.140 macterm.c
   }
   
   static void
---- 10566,10574 ----
+--- 10586,10594 ----
   
     /* Map modifiers */
     mac_quit_char_modifiers = 0;
@@ -441,20 +441,22 @@ diff -c -r1.140 macterm.c
   
   static void
 ***************
-*** 10603,10608 ****
---- 10725,10734 ----
+*** 10623,10628 ****
+--- 10745,10756 ----
   #endif
   
     Qmodifier_value = intern ("modifier-value");
 +   Qctrl = intern ("ctrl");
 +   Fput (Qctrl, Qmodifier_value, make_number (ctrl_modifier));
++   Qcontrol = intern ("control");
++   Fput (Qcontrol, Qmodifier_value, make_number (ctrl_modifier));
 +   Qmeta = intern ("meta");
 +   Fput (Qmeta, Qmodifier_value, make_number (meta_modifier)); 
     Qalt = intern ("alt");
     Fput (Qalt, Qmodifier_value, make_number (alt_modifier));
     Qhyper = intern ("hyper");
 ***************
-*** 10654,10675 ****
+*** 10674,10695 ****
   
     staticpro (&last_mouse_motion_frame);
     last_mouse_motion_frame = Qnil;
@@ -477,7 +479,7 @@ diff -c -r1.140 macterm.c
   
     DEFVAR_LISP ("mac-emulate-three-button-mouse",
   	       &Vmac_emulate_three_button_mouse,
---- 10780,10816 ----
+--- 10802,10838 ----
   
     staticpro (&last_mouse_motion_frame);
     last_mouse_motion_frame = Qnil;
