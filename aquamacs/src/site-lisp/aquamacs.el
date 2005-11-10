@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.17 2005/11/09 17:53:53 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.18 2005/11/10 00:17:52 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -41,7 +41,7 @@
 
   ;; workaround for memory corruption bug
   (garbage-collect) 
-  (setq gc-cons-threshold 2000000)
+  (setq gc-cons-threshold 10000000)
 
 
   (aquamacs-mac-initialize) ;; call at runtime only
@@ -542,11 +542,8 @@ Aquamacs 0.9.7 on. `mac-option-modifier' has been set for you."))))
   (require 'mouse-sel) ; provie functions - but don't turn on mouse-sel-mode
  
 
-  (aquamacs-set-defaults '( 
-			   (cua-use-hyper-key only) ;;this avoids shift-return
-			   (cua-enable-cua-keys nil)
-			   )
-			 )
+  (aquamacs-set-defaults '((cua-use-hyper-key only) ;;this avoids shift-return
+			   (cua-enable-cua-keys nil)))
  
   ;; enable cua-keep-region-after-copy only for the mac like commands
   (defadvice cua-copy-region (around keep-region activate)
@@ -565,8 +562,7 @@ Aquamacs 0.9.7 on. `mac-option-modifier' has been set for you."))))
   (let ((cmdkey (or mac-command-modifier 'alt)))
     (global-set-key `[(,cmdkey mouse-1)] 'mouse-start-secondary)
     (global-set-key `[(,cmdkey drag-mouse-1)] 'mouse-set-secondary)
-    (global-set-key `[(,cmdkey down-mouse-1)] 'mouse-drag-secondary)
-    )
+    (global-set-key `[(,cmdkey down-mouse-1)] 'mouse-drag-secondary))
   (setq x-select-enable-clipboard nil) 
  
   (aquamacs-set-defaults '( 
