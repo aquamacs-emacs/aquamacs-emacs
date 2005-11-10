@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.15 2005/11/01 02:42:02 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.16 2005/11/10 23:17:16 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -543,7 +543,7 @@ Frame Appearance Themes to make the setting stick.")
 			 "current mode"))   
 		aquamacs-delete-one-mode-specific-theme 
 		:enable (and aquamacs-auto-frame-parameters-flag
-			     (aquamacs-updated-is-visible-frame-p)
+			     (menu-bar-menu-frame-live-and-visible-p)
 			     (assq (aquamacs-updated-major-mode) 
 				   aquamacs-mode-specific-default-themes))
 		:help "Removes a mode-specific theme."))
@@ -555,7 +555,7 @@ Frame Appearance Themes to make the setting stick.")
   (define-key aquamacs-frame-theme-menu [menu-set-theme-as-default]
     '(menu-item  "Use Current Theme as Default"     aquamacs-set-theme-as-default
 		 :enable  (and aquamacs-auto-frame-parameters-flag
-			       (aquamacs-updated-is-visible-frame-p))
+			       (menu-bar-menu-frame-live-and-visible-p))
 		 :help ""))
 
   (define-key aquamacs-frame-theme-menu [menu-set-theme-as-mode-default]
@@ -564,7 +564,7 @@ Frame Appearance Themes to make the setting stick.")
 		:help "Set the current frame parameters as default 
 for all frames with the current major-mode."
 		:enable   (and aquamacs-auto-frame-parameters-flag
-			       (aquamacs-updated-is-visible-frame-p))
+			       (menu-bar-menu-frame-live-and-visible-p))
 		 	  
 		)) 
 
