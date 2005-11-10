@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.33 2005/11/10 00:18:43 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.34 2005/11/10 17:10:10 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -65,27 +65,10 @@
 ;; use Esc instead of Option (alt) if you need Meta for a reserved combination.
   
 ;; allow selection of secondary buffer
-  
-(defun aquamacs-yes-or-no-p (text)
-
-(let ((f (window-frame (minibuffer-window))))
-
-  (raise-frame f) ; make sure frame is visible
-  (let ((y (- (display-pixel-height) (frame-total-pixel-height f) 30 ))) ; extra 30 pix for typical Dock
-    (if (< y (eval (frame-parameter f 'top)))
-	(modify-frame-parameters f (list (cons 'top y)))
-    )
-    )
-   (yes-or-no-p text)
-)
-)
-
- 
-
+   
  
 (require 'aquamacs-tools)
-
-
+ 
  
 
 (require 'filladapt)
