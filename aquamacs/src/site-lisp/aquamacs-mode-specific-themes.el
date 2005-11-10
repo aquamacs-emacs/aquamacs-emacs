@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.17 2005/11/10 23:22:41 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.18 2005/11/10 23:44:24 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -574,8 +574,8 @@ for all frames with the current major-mode."
 
 (defvar apptheme-mode-menu nil)
 
-  (setq apptheme-mode-menu (make-sparse-keymap "Set Mode")) 
-  (mapc
+(setq apptheme-mode-menu (make-sparse-keymap "Set Mode")) 
+(mapc
    (lambda (pair)
      (let ((modename (car pair)))
      (when (fboundp modename)
