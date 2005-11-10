@@ -2,12 +2,14 @@
 ;;;  ruby-mode.el -
 ;;;
 ;;;  $Author: davidswelt $
-;;;  $Date: 2005/10/31 17:55:29 $
+;;;  $Date: 2005/11/10 22:00:07 $
 ;;;  created at: Fri Feb  4 14:49:13 JST 1994
 ;;;
-;;; Aquamacs-Update-From http://cvs.sourceforge.jp/cgi-bin/viewcvs.cgi/*checkout*/macemacsjp/CarbonEmacsPackage/GPL/ruby-mode/ruby-mode.el?rev=HEAD&content-type=text/plain
+;;; DO NOT UPDATE FROM EXTERNALLY.
+;;; CONTAINS important syntax coloring patch 
+;;; Aquam****acs-Update-From http://cvs.sourceforge.jp/cgi-bin/viewcvs.cgi/*checkout*/macemacsjp/CarbonEmacsPackage/GPL/ruby-mode/ruby-mode.el?rev=HEAD&content-type=text/plain
 
-(defconst ruby-mode-revision "$Revision: 1.4 $")
+(defconst ruby-mode-revision "$Revision: 1.5 $")
 
 (defconst ruby-mode-version
   (progn
@@ -246,6 +248,17 @@ The variable ruby-indent-level controls the amount of indentation.
   (interactive)
   (kill-all-local-variables)
   (use-local-map ruby-mode-map)
+
+  (unless (featurep 'xemacs)
+	       (make-local-variable 'font-lock-defaults)
+	       (make-local-variable 'font-lock-keywords)
+	       (make-local-variable 'font-lock-syntax-table)
+	       (make-local-variable 'font-lock-syntactic-keywords)
+	       (setq font-lock-defaults '((ruby-font-lock-keywords) nil nil))
+	       (setq font-lock-keywords ruby-font-lock-keywords)
+	       (setq font-lock-syntax-table ruby-font-lock-syntax-table)
+	       (setq font-lock-syntactic-keywords ruby-font-lock-syntactic-keywords))
+
   (setq mode-name "Ruby")
   (setq major-mode 'ruby-mode)
   (ruby-mode-variables)
@@ -1036,6 +1049,9 @@ balanced expression is found."
 	       (setq font-lock-keywords ruby-font-lock-keywords)
 	       (setq font-lock-syntax-table ruby-font-lock-syntax-table)
 	       (setq font-lock-syntactic-keywords ruby-font-lock-syntactic-keywords)))))
+
+
+
 
   (defun ruby-font-lock-docs (limit)
     (if (re-search-forward "^=begin\\(\\s \\|$\\)" limit t)
