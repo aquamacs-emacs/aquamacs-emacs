@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.11 2005/11/10 17:09:30 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.12 2005/11/10 17:13:22 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -31,7 +31,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.11 2005/11/10 17:09:30 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.12 2005/11/10 17:13:22 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -426,10 +426,7 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
 		     ;; mark as not modified, so it will be killed for sure
 		     (set-buffer-modified-p nil)
 		     ))
-		  ((message ""))
-		       
-		  )      )
-	  )
+		  ((message "")))))
   
   
 	
@@ -470,16 +467,7 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
 		      ;; if it's not killable, we need to jump to the next buffer
 		      (next-buffer)
 		    )
-		(aquamacs-delete-window wind)
-		)
-	      )
-	    )
-	  )
-	)
-	 
-      )
-    )
-  )
+		(aquamacs-delete-window wind) ) ) ) ) ) ) ) )
 
 (if window-system
 (defun handle-delete-frame (event)
