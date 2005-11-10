@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.8 2005/08/18 17:41:06 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.9 2005/11/10 00:52:17 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -31,7 +31,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.8 2005/08/18 17:41:06 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.9 2005/11/10 00:52:17 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -120,7 +120,7 @@
 ;; only for certain special buffers
 
 (if window-system
-(defadvice switch-to-buffer (around sw-force-other-frame (&rest args) activate)
+(defadvice switch-to-buffer (around sw-force-other-frame (&rest args) activate compile)
   ;; is buffer shown in a frame?
   (let ((switch t))
     (if one-buffer-one-frame
@@ -149,8 +149,9 @@
 	      (apply #'switch-to-buffer-other-window args)
 	    ;; else: show in same frame
 	    ad-do-it))))
-  
-  (set-mode-specific-theme)))
+  (set-mode-specific-theme)
+  (current-buffer) ;; return this for compatibility
+  ))
 
 
 ;; some exception for the speedbar
