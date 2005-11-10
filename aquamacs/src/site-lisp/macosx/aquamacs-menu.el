@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.33 2005/11/09 18:02:24 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.34 2005/11/10 00:11:55 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -270,23 +270,32 @@ The elements of LIST are not copied, just the list structure itself."
    (setq menu-bar-change-mode-menu 
 	 (aquamacs-define-mode-menu (make-sparse-keymap "Change Mode")
 				    "aquamacs-change-mode-" 'aquamacs-change-mode
-				    "Change the major mode of the current buffer to `%s'."))
+				    "Change the major mode of the current buffer to `%s'."
+				    '(menu-bar-non-minibuffer-window-p)))
    (define-key-after menu-bar-file-menu [change-mode-menu]
-     (list 'menu-item "Change Buffer Mode" menu-bar-change-mode-menu
-	   :help "Change to a specific major mode.")
-     'insert-file))
+     `(menu-item "Change Buffer Mode" ,menu-bar-change-mode-menu
+	   :help "Change to a specific major mode."
+	   :enable (menu-bar-non-minibuffer-window-p))
+     'insert-file)) 
 
-(defun aquamacs-define-mode-menu (keymap symbol-prefix function-to-call docstring)
+(defun aquamacs-define-mode-menu (keymap symbol-prefix function-to-call docstring &optional enable-if)
   "Defines a menu consisting of recently and commonly used major modes,
 using `aquamacs-recent-major-modes' and `aquamacs-known-major-modes'."
 
+  (unless enable-if
+    (setq enable-if 't))
   (aquamacs-define-mode-menu-1 aquamacs-known-major-modes keymap 
-			       symbol-prefix function-to-call docstring)
+			       symbol-prefix function-to-call docstring enable-if)
   (define-key keymap [separator]  '(menu-item "--"))
-  (aquamacs-define-mode-menu-1 (reverse aquamacs-recent-major-modes) keymap 
-			       symbol-prefix function-to-call docstring))
+  (aquamacs-define-mode-menu-1 
+   ;; look up texts of mode names in case there are any (for consistency)
+   (mapcar (lambda (m)
+	     (or (cdr (assq m aquamacs-known-major-modes))
+		 m))
+	   (reverse aquamacs-recent-major-modes)) 
+   keymap symbol-prefix function-to-call docstring enable-if))
 
-(defun aquamacs-define-mode-menu-1 (the-list keymap symbol-prefix function-to-call docstring)
+(defun aquamacs-define-mode-menu-1 (the-list keymap symbol-prefix function-to-call docstring enable-if)
   (mapc
    (lambda (modeentry)
      (let ((modename (if (consp modeentry) (car modeentry) modeentry))
@@ -307,6 +316,7 @@ using `aquamacs-recent-major-modes' and `aquamacs-known-major-modes'."
 		   (list function-to-call nil `(quote ,modename))
 		   ))
 	   :help (format docstring modename)
+	   :enable ,enable-if
 	   )))))
    (reverse (sort (aq-copy-list the-list)
 		  (lambda (a b) (string< 
@@ -325,21 +335,26 @@ using `aquamacs-recent-major-modes' and `aquamacs-known-major-modes'."
 
 (defcustom aquamacs-known-major-modes
   '(text-mode 
+    change-log-mode
     (css-mode . "CSS")
     fortran-mode 
+    java-mode
     (javascript-mode . "JavaScript")
     (html-mode . "HTML")
     (html-helper-mode . "HTML (Helper)")
     (latex-mode . "LaTeX")
-    lisp-interaction-mode emacs-lisp-mode c-mode 
+    lisp-interaction-mode 
+    emacs-lisp-mode 
+    c-mode 
     (objc-mode . "Objective C")
     c++-mode perl-mode 
     (php-mode . "PHP")
     python-mode 
     (applescript-mode ."AppleScript")
     matlab-mode R-mode 
-    (sh-mode . "Shell Script")
-    (nxml-mode . "XML (nXML)"))
+    (sh-mode . "Unix Shell Script")
+    (nxml-mode . "XML (nXML)")
+    (shell . "Unix Shell"))
   "List of commonly used modes to include in menus.
 This is used to compose the New Buffer and Change Buffer Mode menus.
 Each element is either a symbol containing the name of a major mode,
