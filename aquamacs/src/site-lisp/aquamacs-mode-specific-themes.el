@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.19 2005/11/11 00:27:30 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.20 2005/11/11 22:11:03 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -88,6 +88,30 @@
     )
   ) 
 
+(defun aquamacs-theme-relevant-window (frame)
+  "For a given frame, determines the main window to be used for the theme.
+The following constraints are optimized to find this:
+- Disprefer buffer names of the form *...*.
+- Disprefer minibuffers (hard constraint)
+- Prefer buffers that the frame is currently configured for."
+
+
+  (let ((chosen)
+	(currently-used-buf 
+	 (frame-parameter frame 'frame-configured-for-buffer)))
+    (walk-windows 
+     (lambda (w)
+       (let ((wb (window-buffer w)))
+	 (if (or (eq wb currently-used-buf)
+		 (and (not chosen)
+		      (string-match "^\s*\\*.*\\*\s*$" (buffer-name wb))))
+	     (setq chosen w))))
+     'no-minibuf frame)
+    (or chosen
+	;; nothing else found?
+	(frame-first-window frame))))
+
+
 (defun set-mode-specific-theme (&optional frame force for-mode)
   "Sets the mode-specific theme (frame parameters) for FRAME
  (selected frame if nil), unless it is already set (or
@@ -108,7 +132,8 @@ FORCE is non-nil). Use theme of major mode FOR-MODE if given."
 	    ;; will cause another menu-bar-update-hook call, so we can end up 
 	    ;; with this function called again and again...  
 
-	    (let ((buffer (window-buffer (frame-first-window frame))))
+	    (let ((buffer (window-buffer 
+			   (aquamacs-theme-relevant-window frame))))
 	    
 	      (if (or 
 		   force
@@ -140,8 +165,35 @@ FORCE is non-nil). Use theme of major mode FOR-MODE if given."
 		      ;; it is already shown on screen, and  
 		      ;; the position is determined by `smart-frame-positioning',  
 		      ;; that is per file name and according to the 'smart' heuristic   
-		    
-		 
+		      
+		      ;; ensure that setting the new frame parameters doesn't resize
+		      ;; the frame significantly:
+		      ;; change width / height to adapt to new font size
+
+		     ;;  (let ((newfont (cdr (assq 'font theme))))
+;; 			(when newfont
+;; 			  (let* (  (info  (fontset-info newfont frame))
+;; 				 (new-font-width)
+;; 				 (new-font-height))
+;; 			    (when info
+;; 			      (setq new-font-width (aref info 0))
+;; 			      (setq new-font-height (aref info 1))
+			      
+
+;; 			      ;; this doesn't currently work because
+;; 			      ;; the fontset-info is wrong for the fonts used:
+;; 			      ;; it returns the wrong size (width) specification
+;; 			      ;; if applied to an actual frame, it's different
+
+;; 			      (if new-font-height
+;; 				  (assq-set 'height  (1+ (/ (* (frame-char-height frame) (frame-height frame))
+;; 							new-font-height))
+;; 					    'theme))
+;; 			      (if new-font-width
+;; 				  (assq-set 'width  (1+ (/ (* (frame-char-width frame) (frame-width frame))
+;; 						       new-font-width))
+;; 					    'theme))
+;; 			      ))))
 		      (modify-frame-parameters frame (cons (cons 'frame-configured-for-buffer 
 								 buffer 
 								 ) theme))
@@ -433,7 +485,45 @@ for which the menu is being updated."
 					; scalable fonts have different names now
 
 
-  (defvar aquamacs-frame-theme-menu (make-sparse-keymap "Frame Appearance Themes"))
+  (defvar aquamacs-frame-theme-menu 
+    (make-sparse-keymap "Frame Appearance Themes"))
+
+
+(defvar apptheme-mode-menu nil)
+
+(defun aquamacs-apply-theme-for-mode (ignored modename)
+  (set-mode-specific-theme nil t modename))
+ 
+
+(defun aquamacs-update-apply-theme-for-mode-menu ()
+  (setq apptheme-mode-menu
+	(aquamacs-define-mode-menu-1 
+
+	 (reverse (sort (copy-list 
+			 (mapcar 'car aquamacs-mode-specific-default-themes))
+			(lambda (a b) (string< 
+				       (upcase (symbol-name a)) 
+				       (upcase (symbol-name b))))))
+
+	 (make-sparse-keymap "Set Mode") 
+	 "set-theme-of-"
+	 'aquamacs-apply-theme-for-mode
+	 "Apply frame theme assigned to %s." 
+	 '(menu-bar-non-minibuffer-window-p)
+	 ))
+  (define-key-after aquamacs-frame-theme-menu [set-mode]
+    `(menu-item "Apply Theme of Some Mode" ,apptheme-mode-menu
+		:help "Apply frame theme of some major mode."
+		:enable (menu-bar-menu-frame-live-and-visible-p))
+    'menu-set-theme-as-default))
+
+
+(defun set-aquamacs-mode-specific-default-themes (variable value)
+  "Like `custom-set-default', but for `aquamacs-mode-specific-default-themes'."
+  (custom-set-default variable value)
+  (if (fboundp 'aquamacs-update-apply-theme-for-mode-menu)
+      (aquamacs-update-apply-theme-for-mode-menu)))
+
 
 (defcustom aquamacs-buffer-specific-frame-themes
     (filter-fonts '( 
@@ -458,6 +548,7 @@ overruled by a setting in this list if there is an entry
 for the current major mode. To turn off this behavior, see
 `aquamacs-auto-frame-parameters-flag'.
 "
+;; To Do: add a setter function maybe for menu?
     :type '(repeat (cons :format "%v"
 			 (symbol :tag "Mode-name")
 			 (repeat (cons :format "%v"
@@ -495,6 +586,7 @@ for the current major mode. To turn off this behavior, see
 		       (repeat (cons :format "%v"
 				     (symbol :tag "Frame-Parameter")
 				     (sexp :tag "Value")))))
+  :set 'set-aquamacs-mode-specific-default-themes
   :group 'Aquamacs
   )
 
@@ -572,35 +664,32 @@ for all frames with the current major-mode."
   (capitalize
    (replace-regexp-in-string "-" " " (symbol-name modename))))
 
-(defvar apptheme-mode-menu nil)
 
-(setq apptheme-mode-menu (make-sparse-keymap "Set Mode")) 
-(mapc
-   (lambda (pair)
-     (let ((modename (car pair)))
-     (when (fboundp modename)
-       (define-key ;;-after doesn't work with after- why?>? 
-	 apptheme-mode-menu 
-	 (vector (intern (concat "set-theme-of-" (symbol-name modename))))
-	 `(menu-item  
-	   ,(modename-to-string modename)
-	   ,(eval 
-	     (list 'lambda '() '(interactive)
-		   (list 'set-mode-specific-theme nil t `(quote ,modename))
-		   ))
-	   :help "Apply frame theme of some major mode."
-	   )))))
+
+;; (setq apptheme-mode-menu (make-sparse-keymap "Set Mode")) 
+;; (mapc
+;;    (lambda (pair)
+;;      (let ((modename (car pair)))
+;;      (when (fboundp modename)
+;;        (define-key ;;-after doesn't work with after- why?>? 
+;; 	 apptheme-mode-menu 
+;; 	 (vector (intern (concat "set-theme-of-" (symbol-name modename))))
+;; 	 `(menu-item  
+;; 	   ,(modename-to-string modename)
+;; 	   ,(eval 
+;; 	     (list 'lambda '() '(interactive)
+;; 		   (list 'set-mode-specific-theme nil t `(quote ,modename))
+;; 		   ))
+;; 	   :help "Apply frame theme of some major mode."
+;; 	   )))))
       
-   (reverse (sort (copy-list aquamacs-mode-specific-default-themes)
-		  (lambda (a b) (string< 
-				 (upcase (symbol-name (car a))) 
-				 (upcase (symbol-name (car b)))))))
-   )
-  (define-key-after aquamacs-frame-theme-menu [set-mode]
-    `(menu-item "Apply Theme from some Mode" ,apptheme-mode-menu
-	  :help "Apply frame theme of some major mode."
-	  :enable (menu-bar-menu-frame-live-and-visible-p))
-    'menu-set-theme-as-default)
+;;    (reverse (sort (copy-list aquamacs-mode-specific-default-themes)
+;; 		  (lambda (a b) (string< 
+;; 				 (upcase (symbol-name (car a))) 
+;; 				 (upcase (symbol-name (car b)))))))
+;;    )
+
+  
 
 
 
