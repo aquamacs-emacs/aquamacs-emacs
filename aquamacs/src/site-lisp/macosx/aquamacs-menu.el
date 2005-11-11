@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.36 2005/11/10 23:35:23 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.37 2005/11/11 23:47:29 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -101,19 +101,17 @@
   "Opens a new frame containing an empty buffer."
   (interactive)			
   (let ((buf (generate-new-buffer (mac-new-buffer-name "untitled"))))
-
     ;; setting mode is done before showing the new frame
     ;; because otherwise, we get a nasty animation effect
     (save-excursion
       (set-buffer buf)
-      (if default-major-mode (funcall  (or mode default-major-mode))))
-
+      (if (or mode default-major-mode)
+	  (funcall  (or mode default-major-mode))))
     (if other-frame
 	(switch-to-buffer-other-frame buf)
       (let ((one-buffer-one-frame-force one-buffer-one-frame))
 	;; force new frame
 	(switch-to-buffer buf)))
-  
     (setq buffer-offer-save t)
     (set-buffer-modified-p nil)))
 
@@ -300,7 +298,7 @@ using `aquamacs-recent-major-modes' and `aquamacs-known-major-modes'."
    (aq-concat-symbol symbol-prefix "recent-") 
    function-to-call docstring enable-if))
 
-(defun aquamacs-define-mode-menu-1 
+(defun aquamacs-define-mode-menu-1
   (the-list keymap symbol-prefix function-to-call docstring enable-if)
   (mapc
    (lambda (modeentry)
@@ -315,8 +313,8 @@ using `aquamacs-recent-major-modes' and `aquamacs-known-major-modes'."
 	 (vector (aq-concat-symbol symbol-prefix modename))
 	 `(menu-item  
 	   ,displayname
-	   ,(eval 
-	     (list 'lambda '() 
+	    ,(eval 
+	     (list 'defun (aq-concat-symbol symbol-prefix modename) '() 
 		   (format docstring modename)
 		   '(interactive)
 		   (list function-to-call nil `(quote ,modename))
@@ -360,7 +358,7 @@ using `aquamacs-recent-major-modes' and `aquamacs-known-major-modes'."
     matlab-mode R-mode 
     (sh-mode . "Unix Shell Script")
     (nxml-mode . "XML (nXML)")
-    (shell . "Unix Shell"))
+    ) ;; can't add unix shell here
   "List of commonly used modes to include in menus.
 This is used to compose the New Buffer and Change Buffer Mode menus.
 Each element is either a symbol containing the name of a major mode,
