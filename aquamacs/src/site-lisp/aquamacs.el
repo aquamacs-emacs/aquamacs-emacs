@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.20 2005/11/10 20:00:36 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.21 2005/11/11 00:22:29 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -104,7 +104,7 @@ yes-or-no prompts - y or n will do."
   ;; it would be nice to offer a "cancel" option like C-g in the dialog
 
   (fset 'y-or-n-p 'aquamacs-y-or-n-p)
-  (fset 'yes-or-n-p 'aquamacs-repl-yes-or-no-p)
+  (fset 'yes-or-no-p 'aquamacs-repl-yes-or-no-p)
 
   (defadvice map-y-or-n-p (around raiseframe (&rest args) activate)
     (raise-frame)
