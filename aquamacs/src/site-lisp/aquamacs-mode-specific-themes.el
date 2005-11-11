@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.18 2005/11/10 23:44:24 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.19 2005/11/11 00:27:30 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -597,8 +597,9 @@ for all frames with the current major-mode."
 				 (upcase (symbol-name (car b)))))))
    )
   (define-key-after aquamacs-frame-theme-menu [set-mode]
-    (list 'menu-item "Apply Theme from some Mode" apptheme-mode-menu
-	  :help "Apply frame theme of some major mode.")
+    `(menu-item "Apply Theme from some Mode" ,apptheme-mode-menu
+	  :help "Apply frame theme of some major mode."
+	  :enable (menu-bar-menu-frame-live-and-visible-p))
     'menu-set-theme-as-default)
 
 
