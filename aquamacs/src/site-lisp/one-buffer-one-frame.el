@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.12 2005/11/10 17:13:22 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.13 2005/11/11 22:11:46 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -31,7 +31,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.12 2005/11/10 17:13:22 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.13 2005/11/11 22:11:46 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -116,6 +116,10 @@
 
 ; init
 (setq aquamacs-newly-opened-frames '() )
+;; this won't work very well - the buffer names stored
+;; here could change in the mean time.
+;; storing objects won't work either, because
+;; comparing them doesn't work once the buffer is killed
 
 ;; only for certain special buffers
 
@@ -144,7 +148,7 @@
 	      (setq ad-return-value (current-buffer))
 	      ;; store the frame/buffer information
 	      (add-to-list 'aquamacs-newly-opened-frames 
-			   (cons (selected-window) (current-buffer)))) 
+			   (cons (selected-window) (buffer-name)))) 
 	  ;; else : show in same frame
 	  (if (window-dedicated-p (selected-window))
 	      (progn 
@@ -298,9 +302,7 @@ even if it's the only visible frame."
 
 (defun delete-window-if-one-buffer-one-frame ()
   (if one-buffer-one-frame
-      (delete-window-if-created-for-buffer)
-    )
-  )
+      (delete-window-if-created-for-buffer)))
 
 (defun aquamacs-delete-frame (&optional frame)
   (condition-case nil 
@@ -312,48 +314,32 @@ even if it's the only visible frame."
        ;; select messages to it gets any input
        (if (find-all-frames-internal (get-buffer "*Messages*"))
 	   (select-frame (car (find-all-frames-internal 
-			       (get-buffer "*Messages*"))))))))
-  ) 
+			       (get-buffer "*Messages*"))))))))) 
 
 ;; delete window when buffer is killed
 ;; but only do so if aquamacs opened a new frame&window for
 ;; this buffer (e.g. during switch-to-buffer)
 
-(defun delete-window-if-created-for-buffer ()
-
-  
-  (let (
-	(buf (current-buffer))
-	)
-     
-    (let ((winlist (find-all-windows-internal buf))
-	   
-	  )
-        
+(defun delete-window-if-created-for-buffer (&optional buffer)
+  (let ((buf (or buffer (current-buffer))))
+    (let ((winlist (find-all-windows-internal buf)))
       (mapc  
        (lambda (win)
-					
 	 ;;force deletion if buffer is not killable
-	 (delete-window-if-created-for-this-buffer win buf t)
+	 (delete-window-if-created-for-this-buffer win (buffer-name buf) t)
 					; (not (killable-buffer-p buf)))
 	 )
-       winlist
-       )
-	 
-	
-      )
-    )
- 
-)
+       winlist))))
      
-(defun delete-window-if-created-for-this-buffer (win buf force)
+(defun delete-window-if-created-for-this-buffer (win buf-name skip-check)
   ;; used by osxkeys, too
   ;; as of now, we're always forcing the deletion of a window if the user requests it.
   ;; 
  
-  (let ((elt (car (member (cons win buf)
+  (let ((elt (car (member (cons win buf-name)
 			  aquamacs-newly-opened-frames))))
-    (if (or force elt (window-dedicated-p win) )
+    (if (and (or (not buf-name) (not (same-window-p buf-name)))
+	     (or skip-check elt (window-dedicated-p win) ))
 	(progn
 	  ;; remove entry from windows list
 	  (if elt
@@ -433,9 +419,12 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
     ;; only if not a *special* buffer
     ;; if the buffer is shown in another window , just delete the current win
     (if one-buffer-one-frame
+       (let* ((this-buf (window-buffer))
+	     (this-buf-name (buffer-name this-buf)))
 	(if
+	 
 	    (if killable 
-		(kill-buffer (window-buffer))    
+		(kill-buffer this-buf)    
 	      t
 	      )
 	    ;; else
@@ -445,8 +434,8 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
 	      (message "") 
 	      ;; we don't want a message in the echo area of the next window!
 	      (delete-window-if-created-for-this-buffer 
-	       wind (window-buffer) t) 
-	      )
+	       wind this-buf-name t) 
+	      ))
 	  )	
       ;; else not one-buffer=one-frame
       (progn
