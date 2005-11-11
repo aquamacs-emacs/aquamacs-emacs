@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.38 2005/10/27 00:29:03 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.39 2005/11/11 23:57:22 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -69,9 +69,10 @@
 
   (mac-read-environment-vars-from-shell)
   (mac-add-path-to-exec-path)
-  (setenv "INFOPATH" (concat (getenv "INFOPATH") 
-			     ":~/Library/Application Support/Emacs/info"
-			     ":/Library/Application Support/Emacs/info"))
+  (add-to-list 'Info-default-directory-list 
+			     "~/Library/Application Support/Emacs/info")
+  (add-to-list 'Info-default-directory-list 
+			     "/Library/Application Support/Emacs/info")
  
  
 
