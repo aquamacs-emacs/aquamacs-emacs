@@ -23,8 +23,6 @@ echo "minibuffer-space"
 patch -p0 <${AQUAMACS_ROOT}/patches/minibuffer-space.patch 
 echo "soft-wrap (experimental)"
 patch -p0 <${AQUAMACS_ROOT}/patches/soft-wrap.patch 
-echo "mac-modifier-keys"
-patch -p0 <${AQUAMACS_ROOT}/patches/mac-modifier-keys.patch 
 echo "transparency2"
 patch -p0 <${AQUAMACS_ROOT}/patches/transparency2.patch 
 echo "calm-startup"
