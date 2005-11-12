@@ -585,7 +585,7 @@ Many aspects this mode can be customized using
       (setq buffer-file-coding-system nxml-default-buffer-file-coding-system))
     (when nxml-auto-insert-xml-declaration-flag
       (nxml-insert-xml-declaration)))
-  (run-hooks 'nxml-mode-hook))
+  (run-mode-hooks 'nxml-mode-hook))
 
 (defun nxml-degrade (context err)
   (message "Internal nXML mode error in %s (%s), degrading"
