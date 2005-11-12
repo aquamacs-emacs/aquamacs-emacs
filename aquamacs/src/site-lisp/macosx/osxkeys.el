@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.34 2005/11/10 17:10:10 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.35 2005/11/12 20:00:16 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -375,7 +375,8 @@ If arg is zero, kill current line but exclude the trailing newline."
    (with-temp-buffer
      "*aq-temp*"
      (with-output-to-temp-buffer "*aq-temp*"
-       (print global-map)
+       (print "current global map:")
+       (print (current-global-map))
        (print osx-key-mode-map))
        (write-region nil nil "/tmp/Aquamacs-Corrupt-Keymap.log.el")
      )
@@ -387,10 +388,10 @@ If arg is zero, kill current line but exclude the trailing newline."
   ;; try to restore key map
 (when nil
   (if global-map-backup
-      (setq global-map global-map-backup)
+      (use-global-map global-map-backup)
     )
   (if osx-key-mode-map-backup
-      (setq global-map-backup osx-key-mode-map-backup)
+      (use-local-map osx-key-mode-map-backup)
     ))
   (mac-dialog "Internal data corruption -- Some data restored." 
 "Corrupted keymaps restored from backup. 
