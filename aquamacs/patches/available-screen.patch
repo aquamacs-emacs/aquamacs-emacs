@@ -6,18 +6,8 @@ diff -c -r1.63 macfns.c
 *** src/macfns.c	4 Jul 2005 16:06:33 -0000	1.63
 --- src/macfns.c	17 Jul 2005 20:28:16 -0000
 ***************
-*** 2896,2901 ****
---- 2896,2902 ----
-  {
-    struct mac_display_info *dpyinfo = check_x_display_info (display);
-  
-+ 
-    return make_number (dpyinfo->height);
-  }
-  
-***************
 *** 3028,3033 ****
---- 3029,3058 ----
+--- 3029,3059 ----
     return make_number ((int) (dpyinfo->width * 25.4 / dpyinfo->resx));
   }
   
@@ -30,7 +20,7 @@ diff -c -r1.63 macfns.c
 +   (void)
 + {
 +   Rect rect;
-+   
++   BLOCK_INPUT;   
 +   GetAvailableWindowPositioningBounds(LMGetMainDevice(), &rect);
 + 
 +   Lisp_Object rv = 
@@ -38,6 +28,7 @@ diff -c -r1.63 macfns.c
 + 	   Fcons( make_number (rect.top),
 + 		  Fcons( make_number (rect.right),
 + 			 Fcons( make_number (rect.bottom), Qnil))));
++   UNBLOCK_INPUT;
 +   return rv;
 + 
 + }

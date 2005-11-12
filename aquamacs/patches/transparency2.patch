@@ -93,7 +93,7 @@
  /* Store the screen positions of frame F into XPTR and YPTR.
     These are the positions of the containing window manager window,
     not Emacs's own window.  */
-@@ -1926,6 +1928,82 @@
+@@ -1926,6 +1928,84 @@
  #endif /* not MAC_OSX */
  }
  
@@ -165,10 +165,12 @@
 +  if (FLOATP (alpha))
 +    {
 +      f->inactive_alpha = XFLOAT_DATA (alpha);
++      BLOCK_INPUT;
 +      if(dpyinfo->x_highlight_frame != f)
 +        {
 +          x_set_frame_alpha (f, 0);
 +        }
++	 UNBLOCK_INPUT;
 +    }
 +
 +  return;
