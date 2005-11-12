@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.39 2005/11/11 23:57:22 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.40 2005/11/12 00:41:13 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -69,12 +69,21 @@
 
   (mac-read-environment-vars-from-shell)
   (mac-add-path-to-exec-path)
+  (add-to-list 'Info-default-directory-list
+	       (concat (mac-resources-path)
+		       "info"))
+
+  ;; inferior workaround, until mac.c is fixed not to set INFOPATH any longer
+  (if (equal (concat (mac-resources-path)
+		       "info")
+	     (getenv "INFOPATH"))
+      (setenv "INFOPATH"))
+  ;; when INFOPATH is set from outside, it will only load INFOPATH
+
   (add-to-list 'Info-default-directory-list 
 			     "~/Library/Application Support/Emacs/info")
   (add-to-list 'Info-default-directory-list 
 			     "/Library/Application Support/Emacs/info")
- 
- 
 
 
   ;; emulate a three button mouse with Option / Control modifiers 
