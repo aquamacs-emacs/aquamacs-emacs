@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.21 2005/11/11 00:22:29 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.22 2005/11/12 19:59:18 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -32,7 +32,7 @@
 
 
 
-(defvar aquamacs-version "0.9.7")
+(defvar aquamacs-version "0.9.7beta")
 (defvar aquamacs-version-id 097.0)
 (defvar aquamacs-minor-version "")
 
@@ -65,8 +65,9 @@ yes-or-no prompts - y or n will do."
   (defvaralias 'aquamacs-quick-yes-or-no-prompt 
     'aquamacs-quick-yes-or-no-prompt-flag)
 
-
-   
+; (yes-or-no-p "asda")
+  ; (aquamacs-ask-for-confirmation "asd" t)
+ 
   (defun aquamacs-repl-yes-or-no-p (text)
     (aquamacs-ask-for-confirmation text t))
   (defun aquamacs-y-or-n-p (text)
@@ -100,7 +101,10 @@ yes-or-no prompts - y or n will do."
 	  (if (and long (not aquamacs-quick-yes-or-no-prompt))
 	      (old-yes-or-no-p text)
 	    (old-y-or-n-p text))
-	(mac-dialog-y-or-n-p text ""))))         
+	(let ((ret (mac-dialog-y-or-n-p text "" t)))
+	  (if (eq ret 'cancel)
+	      (keyboard-quit))
+	  ret))))         
   ;; it would be nice to offer a "cancel" option like C-g in the dialog
 
   (fset 'y-or-n-p 'aquamacs-y-or-n-p)
