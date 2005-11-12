@@ -37,8 +37,8 @@ echo "about-aquamacs"
 patch -p0 <${AQUAMACS_ROOT}/patches/about-aquamacs.patch
 echo "puresize"
 patch -p0 <${AQUAMACS_ROOT}/patches/puresize.patch
-echo "carbon-emacs"
-patch -p0 <${AQUAMACS_ROOT}/patches/carbon-emacs.patch
+echo "macfns-dialog-menu"
+patch -p0 <${AQUAMACS_ROOT}/patches/macfns-dialog-menu.patch
 echo "fix-bugs"
 patch -p0 <${AQUAMACS_ROOT}/patches/fix-bugs.patch
 
