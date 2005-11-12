@@ -159,9 +159,18 @@ development. Go here:  http://aquamacs.org/donations.shtml
 
 	Thanks to CarbonEmacsJP project for part of this.
 
+	* Info mode: C-h i  will bring up not only up-to-date info nodes
+	for Emacs, but also info on installed packages on the system.
+ 	(unless you have an INFOPATH environment variable set)
+	
 	* Mode-specific themes: With a new menu function, you can now
 	apply the theme assigned to some other mode, effectively copying
 	it over.
+
+	* Mode-specific themes are not applied any more for the major-mode
+	of buffers shown in temporary windows inside frames such as the
+	*Completions* buffer. This prevents ugly font-switching etc. for
+	the whole frame.
 	
 	* New Packages: findr, htmlize, ruby's friends, auctex
  	(latex-mode), nxml-mode, matlab-mode, javascript-mode, 
@@ -173,6 +182,18 @@ development. Go here:  http://aquamacs.org/donations.shtml
 	It used to be "H-" (or: hyper), so change your configuration code
 	in case you've defined your own shortcuts.
 
+	* Bugfix/Workaround: For some users, Emacs locks up at random
+	times, showing a message like (wrong command-p ...) in the echo
+	area of a frame on every input. 
+	This error should occur less frequently in the new version (but
+	your mileage may vary).
+	If it occurs, you are usually able to press Apple-T (or
+	Apple-Shift-T), which will restore the key definitions (keymaps).
+	Sometimes, this will enable you to save your work and safely
+	restart Emacs. 
+	This is a likely to be a bug in the underlying Emacs, not in
+	Aquamacs. 
+	
 	* Bugfix: Aquamacs now correctly remembers the positions of frames
 	with specific files, so they open again on the same screen
 	position if the file is re-loaded (in the same session, or after
@@ -204,14 +225,14 @@ development. Go here:  http://aquamacs.org/donations.shtml
 	* CSS-Mode fixed. 
 	(First reported by Kris Khaira and Michael Jakl.)
 
-	* Dual-head setups (two screens) with one screen on the left, 
-	the system menu on the right and Aquamacs frames on the left 
-	caused problems.	
+	* Dual-head setups (two screens) with one screen on the left, the
+	system menu on the right and Aquamacs frames on the left caused
+	problems.
 	(reported by Otto Karl Florian Diesenbacher)
 	
 	* osx-key-mode-map can now be changed to modify key
 	assignments, in particular those of Apple Command keys
-	 (implemented in Emacs as Hyper = H- keys.)
+ 	(implemented in Emacs as Hyper = H- keys.)
 	(reported by William Ziemer)
 
 	* "font-lock-keywords ... void" message used to appear when
