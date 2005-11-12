@@ -1,0 +1,190 @@
+Index: src/macfns.c
+===================================================================
+RCS file: /cvsroot/emacs/emacs/src/macfns.c,v
+retrieving revision 1.70
+diff -c -r1.70 macfns.c
+*** src/macfns.c	31 Oct 2005 08:36:55 -0000	1.70
+--- src/macfns.c	12 Nov 2005 16:38:31 -0000
+***************
+*** 91,96 ****
+--- 91,100 ----
+  Lisp_Object Qundefined_color;
+  Lisp_Object Qcancel_timer;
+  
++ /* Cancel button selected in mac-dialog-y-or-n-p */
++ 
++ Lisp_Object Qcancel;
++ 
+  /* In dispnew.c */
+  
+  extern Lisp_Object Vwindow_system_version;
+***************
+*** 4326,4331 ****
+--- 4355,4483 ----
+       void *data ;
+  {
+  }
++ 
++ #if MAC_OSX
++ DEFUN ("mac-show-menu-bar", Fmac_show_menu_bar, Smac_show_menu_bar, 0, 1, "",
++        doc: /* Show the menu bar.  */)
++   (display)
++      Lisp_Object display;
++ {
++   if ( EQ (Vwindow_system, intern ("mac")))
++     ShowMenuBar();
++   return Qnil;
++ }
++ DEFUN ("mac-hide-menu-bar", Fmac_hide_menu_bar, Smac_hide_menu_bar, 0, 1, "",
++        doc: /* Hide the menu bar.  */)
++   (display)
++      Lisp_Object display;
++ {
++   if ( EQ (Vwindow_system, intern ("mac")))
++     HideMenuBar();
++   return Qnil;
++ }
++ DEFUN ("mac-dialog", Fmac_dialog, Smac_dialog, 2, 2, "",
++        doc: /* Show a dialog.  */)
++   (message, explanation)
++      Lisp_Object message, explanation;
++ {
++   DialogRef 		sheet=NULL;
++   AlertStdCFStringAlertParamRec alertParams;
++   struct frame *f = XFRAME (selected_frame);
++   CHECK_STRING (message);
++   CHECK_STRING (explanation);
++  
++   if (FRAME_MAC_WINDOW (f))
++     {
++       GetStandardAlertDefaultParams(&alertParams,kStdCFStringAlertVersionOne);
++       alertParams.defaultText=(CFStringRef)kAlertDefaultOKText;	
++       alertParams.defaultButton=kAlertStdAlertOKButton;	
++ 
++       BLOCK_INPUT;
++       {
++ 	CFStringRef msgTitle = NULL, msgExplanation = NULL;
++ 	msgTitle       = cfstring_create_with_string (message);
++ 	msgExplanation = cfstring_create_with_string (explanation);
++ 
++ 	OSStatus err;
++ 	err = CreateStandardAlert(kAlertNoteAlert,
++ 				  msgTitle,
++ 				  msgExplanation,
++ 				  &alertParams,
++ 				  &sheet);
++ 	if(err == noErr)
++ 	  err = RunStandardAlert(sheet,
++ 				 NULL,
++ 				 NULL);
++ 	CFRelease (msgTitle);
++ 	CFRelease (msgExplanation);
++       }
++       UNBLOCK_INPUT;
++     }
++   return Qnil;
++ }
++ 
++ DEFUN ("mac-dialog-y-or-n-p", Fmac_dialog_y_or_n_p, Smac_dialog_y_or_n_p, 2, 3, "",
++        doc: /* Show a dialog, which asks user a "Yes or No" question.
++ Return t if answer is "Yes", nil if it is "No". Takes two arguments,
++ which are the strings to display to ask the question.
++ If optional third argument is non-nil, display a "Cancel" button.
++ If it is selected, returns `cancel'.*/)
++   (message, explanation, cancel_button)
++      Lisp_Object message, explanation, cancel_button;
++ {
++   DialogRef 		sheet=NULL;
++   AlertStdCFStringAlertParamRec alertParams;
++   struct frame *f = XFRAME (selected_frame);
++   CHECK_STRING (message);
++   CHECK_STRING (explanation);
++   SInt16 index = 0;
++  
++   if (FRAME_MAC_WINDOW (f))
++     {
++       GetStandardAlertDefaultParams(&alertParams,kStdCFStringAlertVersionOne);
++       alertParams.defaultText=CFSTR ("Yes");
++       alertParams.defaultButton=kAlertStdAlertOKButton;	
++       alertParams.cancelText=CFSTR ("No");
++       alertParams.cancelButton=kAlertStdAlertCancelButton;
++       if (!NILP(cancel_button)) 
++ 	{
++ 	  alertParams.otherText=CFSTR ("Cancel");
++ 	  // The cancel button is "Cancel", in that case, instead of "No"
++ 	  alertParams.cancelButton=kAlertStdAlertOtherButton;
++ 	}
++ 
++       BLOCK_INPUT;
++       {
++ 	CFStringRef msgTitle = NULL, msgExplanation = NULL;
++ 	msgTitle       = cfstring_create_with_string (message);
++ 	msgExplanation = cfstring_create_with_string (explanation);
++ 
++ 	OSStatus err;
++ 	err = CreateStandardAlert(kAlertNoteAlert,
++ 				  msgTitle,
++ 				  msgExplanation,
++ 				  &alertParams,
++ 				  &sheet);
++ 	if(err == noErr)
++ 	  err = RunStandardAlert(sheet,
++ 				 NULL,
++ 				 &index);
++ 	CFRelease (msgTitle);
++ 	CFRelease (msgExplanation);
++       }
++       UNBLOCK_INPUT;
++     }
++   if( index==kAlertStdAlertOKButton ){
++     return Qt;
++   } else if (index==kAlertStdAlertOtherButton) {
++     return Qcancel;
++   }
++   else{
++     return Qnil;
++   }
++ }
++ #endif /*MAC_OSX*/
++ 
+  #endif
+  
+  /***********************************************************************
+***************
+*** 4392,4397 ****
+--- 4544,4552 ----
+    staticpro (&Qcancel_timer);
+    /* This is the end of symbol initialization.  */
+  
++   Qcancel = intern ("cancel");
++   staticpro (&Qcancel);
++ 
+    /* Text property `display' should be nonsticky by default.  */
+    Vtext_property_default_nonsticky
+      = Fcons (Fcons (Qdisplay, Qt), Vtext_property_default_nonsticky);
+***************
+*** 4508,4513 ****
+--- 4663,4670 ----
+    defsubr (&Sx_display_list);
+    defsubr (&Sx_synchronize);
+  
++   defsubr (&Smac_display_available_pixel_bounds);
++ 
+    /* Setting callback functions for fontset handler.  */
+    get_font_info_func = x_get_font_info;
+  
+***************
+*** 4537,4542 ****
+--- 4694,4705 ----
+  
+  #if TARGET_API_MAC_CARBON
+    defsubr (&Sx_file_dialog);
++ #if MAC_OSX
++   defsubr (&Smac_show_menu_bar);
++   defsubr (&Smac_hide_menu_bar);
++   defsubr (&Smac_dialog);
++   defsubr (&Smac_dialog_y_or_n_p);
++ #endif
+  #endif
+  }
+  
