@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.22 2005/11/12 19:59:18 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.23 2005/11/13 23:30:13 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -586,20 +586,19 @@ Aquamacs 0.9.7 on. `mac-option-modifier' has been set for you."))))
   (cua-mode 1) ;; this goes first (so we can overwrite the settings)
 
   
-  (global-set-key [(shift down-mouse-1)] 'mouse-extend)
-  (global-set-key [(shift alt down-mouse-1)] 'mouse-extend-secondary)
+  ;; do not use [ ... ] notation - pure space allocation!
+  (global-set-key (vector (shift down-mouse-1)) 'mouse-extend)
+  (global-set-key (vector (shift alt down-mouse-1)) 'mouse-extend-secondary)
 
   (let ((cmdkey (or mac-command-modifier 'alt)))
-    (global-set-key `[(,cmdkey mouse-1)] 'mouse-start-secondary)
-    (global-set-key `[(,cmdkey drag-mouse-1)] 'mouse-set-secondary)
-    (global-set-key `[(,cmdkey down-mouse-1)] 'mouse-drag-secondary))
+    (global-set-key `(vector (,cmdkey mouse-1)) 'mouse-start-secondary)
+    (global-set-key `(vector (,cmdkey drag-mouse-1)) 'mouse-set-secondary)
+    (global-set-key `(vector (,cmdkey down-mouse-1)) 'mouse-drag-secondary))
   (setq x-select-enable-clipboard nil) 
  
-  (aquamacs-set-defaults '( 
-			   (cua-mode t)
-			   (mouse-sel-leave-point-near-mouse t)
-			   )
-			 )
+  (aquamacs-set-defaults '((cua-mode t)
+			   (mouse-sel-leave-point-near-mouse t)))
+
   ;; mainly to ensure  that we overwrite a marked region
   ;; (transient-mark-mode nil)
 
@@ -636,8 +635,8 @@ Aquamacs 0.9.7 on. `mac-option-modifier' has been set for you."))))
 ;; (defun fancy-splash-default-action () nil)
 
 (aquamacs-set-defaults
- '((  fancy-splash-image "aquamacs-splash-screen.jpg")
-   ( fancy-splash-max-time 3000)))
+ '((fancy-splash-image "aquamacs-splash-screen.jpg")
+   (fancy-splash-max-time 3000)))
 
 (defadvice fancy-splash-screens (around new-frame (&rest args) activate protect)
  
