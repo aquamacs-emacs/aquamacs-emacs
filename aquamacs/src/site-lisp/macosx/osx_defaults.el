@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.40 2005/11/12 00:41:13 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.41 2005/11/13 19:34:24 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -78,7 +78,8 @@
 		       "info")
 	     (getenv "INFOPATH"))
       (setenv "INFOPATH"))
-  ;; when INFOPATH is set from outside, it will only load INFOPATH
+  
+;; when INFOPATH is set from outside, it will only load INFOPATH
 
   (add-to-list 'Info-default-directory-list 
 			     "~/Library/Application Support/Emacs/info")
@@ -87,33 +88,42 @@
 
 
   ;; emulate a three button mouse with Option / Control modifiers 
-					; (setq mac-emulate-three-button-mouse t)
-					; seems to prevent setting the secondary selection, so turned off for now
+  ;; (setq mac-emulate-three-button-mouse t)
+  ;; seems to prevent setting the secondary selection, so turned off for now
 
   ;; Mac creator
 
   (add-hook 'after-save-hook 'mac-set-creator-code-for-file)
-
+					
 
 
   (require 'aquamacs-mule)              ; Language settings
 
-					; Mac Drag-N-Drop
+  ;; Mac Drag-N-Drop
 
    (require 'mac-drag-N-drop)
-					; this will disturb x-dnd... :-(
-  (global-set-key [drag-n-drop] 'mac-drag-N-drop)
+   ;; this will disturb x-dnd... :-(
+   ;; use vector, not [...] (pure-space!)
+  (global-set-key (vector 'drag-n-drop) 'mac-drag-N-drop)
 
-					; do this early, so we can override settings
+  ;; do this early, so we can override settings
   (require 'aquamacs-frame-setup)
-					; one-on-one is called later
-  (setq osxkeys-command-key 'hyper)
-					; we have inhibit-fit-frame set to true... can't do this
-					; (global-set-key [(control ?x) (control ?-)] 'fit-frame)
-  (global-set-key `[(control ,osxkeys-command-key down)] 'enlarge-frame)
-  (global-set-key `[(control ,osxkeys-command-key right)] 'enlarge-frame-horizontally)
-  (global-set-key `[(control ,osxkeys-command-key up)] 'shrink-frame)
-  (global-set-key `[(control ,osxkeys-command-key left)] 'shrink-frame-horizontally)
+  ;; one-on-one is called later
+  (setq osxkeys-command-key (or mac-command-modifier 'alt))
+  ;; we have inhibit-fit-frame set to true... can't do this
+  ;; (global-set-key [(control ?x) (control ?-)] 'fit-frame)
+  ;; use vector, not [...] in order to not allocate at load-time 
+  ;; in pure-space
+  (global-set-key (vector  `(,osxkeys-command-key control down)) 
+		  'enlarge-frame)
+  (global-set-key (vector  `(,osxkeys-command-key control right)) 
+		  'enlarge-frame-horizontally)
+  (global-set-key (vector  `(,osxkeys-command-key control up)) 
+		  'shrink-frame)
+  (global-set-key (vector  `(,osxkeys-command-key control left)) 
+		  'shrink-frame-horizontally)
+  
+
     
 
   (require 'aquamacs-mac-fontsets)
