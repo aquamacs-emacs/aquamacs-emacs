@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.24 2005/11/14 09:10:40 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.25 2005/11/14 14:40:43 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -586,6 +586,51 @@ Aquamacs 0.9.7 on. `mac-option-modifier' has been set for you."))))
   (cua-mode 1) ;; this goes first (so we can overwrite the settings)
 
   
+  ;; use right mouse click as mouse-2
+  (setq mac-wheel-button-is-mouse-2 nil)
+
+  ;; give context menus on right click
+
+  (define-key mode-line-major-mode-keymap [mode-line down-mouse-1] 
+    'mouse-major-mode-menu)
+  (define-key mode-line-major-mode-keymap [mode-line mouse-2] 
+    'mode-line-mode-menu-1)
+  (define-key mode-line-major-mode-keymap [mode-line down-mouse-3] 
+    'describe-mode)
+  (define-key mode-line-minor-mode-keymap [header-line down-mouse-3] 
+    'mode-line-minor-mode-help)
+  (define-key mode-line-minor-mode-keymap [mode-line down-mouse-3] 
+    'mode-line-minor-mode-help)
+  (define-key mode-line-minor-mode-keymap [header-line mouse-2] 
+    'mode-line-mode-menu-1)
+  (define-key mode-line-minor-mode-keymap [mode-line mouse-2] 
+    'mode-line-mode-menu-1)
+
+
+  (let ((help-echo 
+	 "left click (mouse-1): select (drag to resize), right click (mouse-2): delete others, mouse-3: delete this"))
+    (setq-default mode-line-modes
+		  (list
+		   (propertize "%[(" 'help-echo help-echo)
+		   `(:propertize ("" mode-name)
+				 help-echo "left click (mouse-1): major-mode-menu, mouse-3: help for current major mode"
+				 mouse-face mode-line-highlight
+				 local-map ,mode-line-major-mode-keymap)
+		   '("" mode-line-process)
+		   `(:propertize ("" minor-mode-alist)
+				 mouse-face mode-line-highlight
+				 help-echo "mouse-2 (right click): minor mode menu, mouse-3: help for minor modes"
+				 local-map ,mode-line-minor-mode-keymap)
+		   (propertize "%n" 'help-echo "right click (mouse-2): widen"
+			       'mouse-face 'mode-line-highlight
+			       'local-map (make-mode-line-mouse-map
+					   'mouse-2 #'mode-line-widen))
+		   (propertize ")%]--" 'help-echo 
+			       help-echo))))
+
+
+
+
   ;; do not use [ ... ] notation - pure space allocation!
 
   (let ((cmdkey (or mac-command-modifier 'alt)))
