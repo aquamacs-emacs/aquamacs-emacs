@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: site-start.el,v 1.12 2005/10/26 23:59:38 davidswelt Exp $
+;; Last change: $Id: site-start.el,v 1.13 2005/11/14 23:15:53 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -29,21 +29,25 @@
 ;; Copyright (C) 2005, David Reitter
 
 
-;; undefine this if you're a developer and you have changed code
 
 
 
 (when ;; do not load this twice 
     (not (memq 'aquamacs-site-start features))
-
-;; (if (boundp 'aq-preloaded)
-;;     (mapc (lambda (p)
-;; 	    (setq features (delete p features)))
-;; 	  aq-preloaded))
-
+ 
   (provide 'aquamacs-site-start)
 
   (require 'load-emacs-pre-plugins)
+
+  ;; aquamacs-reload-preloaded-files should be set by a
+  ;; plugin (preloaded) --> for Aquamacs developer(s) only.
+  (when (and (boundp 'aquamacs-reload-preloaded-files)
+	   aquamacs-reload-preloaded-files
+	   (boundp 'aq-preloaded))
+      (message "Ignoring preloaded files.")
+      (mapc (lambda (p)
+	      (setq features (delete p features)))
+	    aq-preloaded))
 
   (require 'aquamacs)
   (aquamacs-setup)
