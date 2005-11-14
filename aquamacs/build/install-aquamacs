@@ -17,20 +17,23 @@ if [ ! "$dest" ]; then
     
 fi
 
-if [ ! "$projdir" ]; then
-
-    # project directory (out of Aquamacs CVS)
-    projdir=`pwd`/../../Aquamacs/aquamacs
-
+if [ ! ${projdir} ]
+then
+    if [ ${AQUAMACS_ROOT} ]
+    then
+	projdir=${AQUAMACS_ROOT}
+    else
+	projdir=`pwd`/../../aquamacs
+	echo "Aquamacs Project directory set to default: $projdir"
+    fi
 fi
 
-
 if [ ! "$SRC" ]; then
-
-# where the Emacs build is
-    SRC=`pwd`/Aquamacs-Raw/Emacs.app
-
-
+    if [ ${EMACS_ROOT} ]; then
+	SRC = ${EMACS_ROOT}/mac/Aquamacs-Raw/Emacs.app
+    else
+	SRC = ${projdir}/../emacs/mac/Aquamacs-Raw/Emacs.app
+    fi
 fi
 
 echo "Destination App (e.g. /Applications/Aquamacs.app): $dest"
