@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.23 2005/11/13 23:30:13 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.24 2005/11/14 09:10:40 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -587,16 +587,17 @@ Aquamacs 0.9.7 on. `mac-option-modifier' has been set for you."))))
 
   
   ;; do not use [ ... ] notation - pure space allocation!
-  (global-set-key (vector (shift down-mouse-1)) 'mouse-extend)
-  (global-set-key (vector (shift alt down-mouse-1)) 'mouse-extend-secondary)
 
   (let ((cmdkey (or mac-command-modifier 'alt)))
-    (global-set-key `(vector (,cmdkey mouse-1)) 'mouse-start-secondary)
-    (global-set-key `(vector (,cmdkey drag-mouse-1)) 'mouse-set-secondary)
-    (global-set-key `(vector (,cmdkey down-mouse-1)) 'mouse-drag-secondary))
-  (setq x-select-enable-clipboard nil) 
+    (global-set-key (vector '(shift down-mouse-1)) 'mouse-extend)
+    (global-set-key (vector `(shift ,cmdkey down-mouse-1)) 
+		    'mouse-extend-secondary)
+    (global-set-key (vector `(,cmdkey mouse-1)) 'mouse-start-secondary)
+    (global-set-key (vector `(,cmdkey drag-mouse-1)) 'mouse-set-secondary)
+    (global-set-key (vector `(,cmdkey down-mouse-1)) 'mouse-drag-secondary))
  
-  (aquamacs-set-defaults '((cua-mode t)
+  (aquamacs-set-defaults '((x-select-enable-clipboard nil) 
+			   (cua-mode t)
 			   (mouse-sel-leave-point-near-mouse t)))
 
   ;; mainly to ensure  that we overwrite a marked region
