@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.26 2005/11/15 00:41:29 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.27 2005/11/15 08:38:06 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -637,7 +637,6 @@ Aquamacs 0.9.7 on. `mac-option-modifier' has been set for you."))))
 	  (define-key map (if (featurep 'xemacs) [button3] [down-mouse-3])
 	    #'flyspell-correct-word)
 	  map))
-  "Keymap for Flyspell to put on erroneous words.")
 
   (let ((cmdkey (or mac-command-modifier 'alt)))
     (global-set-key (vector '(shift down-mouse-1)) 'mouse-extend)
