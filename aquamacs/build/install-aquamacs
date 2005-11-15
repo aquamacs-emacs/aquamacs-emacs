@@ -12,12 +12,10 @@ SRC=$3       # Emacs build, e.g. /Users/dr/Projects/emacs/mac/Aquamacs-Raw/Emacs
 
 
 if [ ! "$dest" ]; then
-
     dest="/Applications/Aquamacs Emacs.app"
-    
 fi
 
-if [ ! ${projdir} ]
+if [ ! "${projdir}" ]
 then
     if [ ${AQUAMACS_ROOT} ]
     then
@@ -28,11 +26,11 @@ then
     fi
 fi
 
-if [ ! "$SRC" ]; then
-    if [ ${EMACS_ROOT} ]; then
-	SRC = ${EMACS_ROOT}/mac/Aquamacs-Raw/Emacs.app
+if [ ! "${SRC}" ]; then
+    if [ "${EMACS_ROOT}" ]; then
+	SRC="${EMACS_ROOT}/mac/Aquamacs-Raw/Emacs.app"
     else
-	SRC = ${projdir}/../emacs/mac/Aquamacs-Raw/Emacs.app
+	SRC="${projdir}/../emacs/mac/Aquamacs-Raw/Emacs.app"
     fi
 fi
 
@@ -88,12 +86,12 @@ gzip -d "subdirs.el.gz" 2>/dev/null
 # compress some of the .elc files
 # not all of them (speed, startup issues)
 
-gzip  woman.elc wid-edit.elc vc.elc type-break.elc term.elc speedbar.elc subr.elc simple.elc printing.elc ps-print.elc info.elc menu-bar.elc ido.elc files.elc ediff-util.elc cus-edit.elc
+#gzip  woman.elc wid-edit.elc vc.elc type-break.elc term.elc speedbar.elc subr.elc simple.elc printing.elc ps-print.elc info.elc menu-bar.elc ido.elc files.elc ediff-util.elc cus-edit.elc
 
 cd "$dest"/Contents/Resources/leim/quail
-gzip tsang-*.elc quick-*.elc hanja*.elc ZOZY.elc ZIRANMA.elc SW.elc PY*.elc ETZY.elc ECDICT.elc CTLau*.elc CCDOSPY.elc ARRAY30.elc 4Corner.elc
+#gzip tsang-*.elc quick-*.elc hanja*.elc ZOZY.elc ZIRANMA.elc SW.elc PY*.elc ETZY.elc ECDICT.elc CTLau*.elc CCDOSPY.elc ARRAY30.elc 4Corner.elc
 cd "$dest"/Contents/Resources/leim
-gzip ja-dic/ja-dic.elc
+#gzip ja-dic/ja-dic.elc
 
 # compress info
 
@@ -101,5 +99,5 @@ gzip ../info/*
 
 # get rid of the CVS directories
 cd "$dest"
-find . -name CVS  -exec rm -r "{}" \;
+find "$dest" -name CVS  -exec rm -r "{}" \;
 
