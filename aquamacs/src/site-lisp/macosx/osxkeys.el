@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.36 2005/11/14 18:39:23 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.37 2005/11/15 00:34:28 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -369,7 +369,7 @@ If arg is zero, kill current line but exclude the trailing newline."
 
 
 
-(setq garbage-collection-messages t)
+; (setq garbage-collection-messages t)
 (defun debug-keymap-corruption ()
   (interactive)
    (with-temp-buffer
@@ -400,33 +400,133 @@ Consider filing a bug report with Help/Send Bug Report.
 Debug info left in /tmp/Aquamacs-Corrupt-Keymap.log.el."))
 
  (define-key global-map '[(alt shift t)] 'debug-keymap-corruption)
+ (define-key global-map '[(alt t)] 'debug-keymap-corruption)
 
 (add-hook 'after-init-hook 
 	  (lambda () 
 	    
 	    ;; make a copy of it as a workaround attempt
-	    (use-global-map (copy-keymap (current-global-map)))
+	   ;;  (use-global-map (copy-keymap (current-global-map)))
 	    (setq global-map-backup global-map)
 	    )
 	  )
 
+
+;;  aquamacs context menu
+
+
+(defun aquamacs-mouse-get-word ()
+  (if mark-active
+      (buffer-substring-no-properties (region-beginning) (region-end))
+    (if last-nonmenu-event ;; mouse used
+	(save-excursion
+	  (mouse-set-point last-nonmenu-event)
+	  (mouse-skip-word -1)
+	  (set-mark (point))
+	  (mouse-set-point last-nonmenu-event)
+	  (mouse-skip-word 1)
+	  (buffer-substring-no-properties (region-beginning) (region-end)))
+      (thing-at-point 'word))))
+
+    
+
+;; doubles in mailclient.el
+(defun aquamacs-encode-string-as-url (string)
+  "Convert STRING to a URL, using utf-8 as encoding."
+  (apply (function concat)
+	 (mapcar
+	  (lambda (char)
+	    (cond
+	     ((eq char ?\x20) "%20")   ;; space
+	     ((eq char ?\n) "%0D%0A")  ;; newline 
+	     ((string-match "[-a-zA-Z0-9_:/.@]" (char-to-string char))
+	      (char-to-string char))   ;; printable
+	     (t                        ;; everything else
+	      (format "%%%02x" char))))	;; escape
+	  ;; Convert string to list of chars
+	  (append (encode-coding-string string 'utf-8)))))
+
+(defun aquamacs-google-lookup ()
+  (interactive)
+  (let ((word (aquamacs-mouse-get-word)))
+    (if word
+	(browse-url  
+	 (concat "http://www.google.com/search?q="  
+		 (aquamacs-encode-string-as-url 
+		  (substring word 0 (min (length word) 128))))))))
+
+(defun aquamacs-dictionary-lookup ()
+  (interactive)
+  (let ((word (aquamacs-mouse-get-word)))
+    (if word
+	(do-applescript (concat 
+			 "tell application \"Dictionary\" to activate
+tell application \"System Events\"
+	tell process \"Dictionary\"
+		tell text field 1 of group 1 of tool bar 1 of window \"Dictionary and Thesaurus\"
+			keystroke \"" 
+			 (replace-regexp-in-string 
+			  "[\\\\\"]" ""
+			  (substring word 0 (min (length word) 32))) "\"
+			keystroke return
+		end tell
+	end tell
+end tell")))))
+
+
+
+
+(setq aquamacs-context-menu-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map [paste] (cons "Paste" 'clipboard-yank))
+    (define-key map [copy] (cons "Copy" 'clipboard-kill-ring-save))
+    (define-key map [cut] (cons "Cut" 'clipboard-kill-region))
+    (define-key map [aq-cm-sep] '(menu-item "--"))
+   
+    (define-key map [dictionary] (cons "Look Up in Dictionary" 
+				   'aquamacs-dictionary-lookup))
+    (define-key map [aq-cm-sep2] '(menu-item "--"))
+   
+    (define-key map [google] (cons "Search in Google" 
+				   'aquamacs-google-lookup))
+    ;; (define-key map [spotlight] (cons "Search in Spotlight" 
+    ;;				   'aquamacs-spotlight-lookup))
+
+   map))
+
+(defun aquamacs-popup-context-menu  (event &optional  prefix)
+  "Popup a context menu."
+  (interactive "@e \nP")
+   
+  ;; Let the mode update its menus first.
+  ;; (run-hooks 'activate-menubar-hook 'menu-bar-update-hook)
+  
+  (popup-menu aquamacs-context-menu-map event prefix))
+
+
+
+
+
 (defun make-osx-key-mode-map (&optional command-key)
-"Create a mode map for OSX key mode. COMMAND-KEY specifies
+  "Create a mode map for OSX key mode. COMMAND-KEY specifies
 which key is mapped to command. mac-command-modifier is the
 default."
-; (garbage-collect) ;; attempted workaround
-(if command-key
-    (setq osxkeys-command-key command-key)
-  (if mac-command-modifier
-      (setq osxkeys-command-key mac-command-modifier)
+					; (garbage-collect) ;; attempted workaround
+  (if command-key
+      (setq osxkeys-command-key command-key)
+    (if mac-command-modifier
+	(setq osxkeys-command-key mac-command-modifier)
+      )
     )
-)
-(let ((map (make-sparse-keymap)))
+  (let ((map (make-sparse-keymap)))
 
-;; debug log
+    ;; debug log
 
   
-  (define-key map `[(,osxkeys-command-key t)] 'debug-keymap-corruption)
+    (define-key map `[(,osxkeys-command-key t)] 'debug-keymap-corruption)
+
+    (define-key map [mouse-3] 'aquamacs-popup-context-menu)
+
 
     (define-key map `[(,osxkeys-command-key \?)] 'aquamacs-user-help)
     (define-key map `[(,osxkeys-command-key shift \?)] 'aquamacs-emacs-manual)
@@ -440,7 +540,7 @@ default."
     (define-key map `[(,osxkeys-command-key v)] 'clipboard-yank) 
     (define-key map `[(,osxkeys-command-key c)] 'clipboard-kill-ring-save)
     (define-key map `[(shift ,osxkeys-command-key c)] 'aquamacs-clipboard-kill-ring-save-secondary)
-    ; this because the combination control-space usually activates Spotlight
+					; this because the combination control-space usually activates Spotlight
     (define-key map `[(control ,osxkeys-command-key space)] 'set-mark)
     (define-key map `[(,osxkeys-command-key x)] 'clipboard-kill-region)
     (define-key map `[(shift ,osxkeys-command-key x)] 'aquamacs-clipboard-kill-secondary)
@@ -486,7 +586,7 @@ default."
     (define-key map `[(,osxkeys-command-key shift z)] 'redo)
     (define-key map `[(,osxkeys-command-key \`)] 'switch-to-next-frame)
     map)
-)
+  )
 
 
 (defvar osx-key-mode-map
@@ -505,7 +605,10 @@ When Mac Key mode is enabled, mac-style key bindings are provided."
  
 
 
+
+
 ;; Change encoding so you can use alt-e and alt-u accents (and others) 
+;; To Do: move this to the minor mode initialization or so
 (set-terminal-coding-system 'iso-8859-1) 
 (set-keyboard-coding-system				  'mac-roman) ;; keyboard
 (set-selection-coding-system			  'mac-roman) ;; copy'n'paste
