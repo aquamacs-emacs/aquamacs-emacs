@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.37 2005/11/15 00:34:28 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.38 2005/11/15 00:41:03 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -476,8 +476,9 @@ end tell")))))
 
 
 
-(setq aquamacs-context-menu-map
+(defvar aquamacs-context-menu-map
   (let ((map (make-sparse-keymap)))
+    (define-key map [yank] (cons "Yank" 'yank))
     (define-key map [paste] (cons "Paste" 'clipboard-yank))
     (define-key map [copy] (cons "Copy" 'clipboard-kill-ring-save))
     (define-key map [cut] (cons "Cut" 'clipboard-kill-region))
@@ -492,7 +493,7 @@ end tell")))))
     ;; (define-key map [spotlight] (cons "Search in Spotlight" 
     ;;				   'aquamacs-spotlight-lookup))
 
-   map))
+   map) "Keymap for the Aquamacs context menu.")
 
 (defun aquamacs-popup-context-menu  (event &optional  prefix)
   "Popup a context menu."
