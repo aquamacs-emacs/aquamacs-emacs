@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.39 2005/11/16 12:51:19 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.40 2005/11/16 16:17:25 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -470,12 +470,102 @@ tell application \"System Events\"
 	end tell
 end tell")))))
 
-
-
-
+(defun aquamacs-make-mouse-buffer-menu ( )
+  "Return a menu keymap of buffers for selection with the mouse.
+This switches buffers in the window that you clicked on,
+and selects that window."
+  (let ((buffers (buffer-list))  alist menu split-by-major-mode sum-of-squares)
+    ;; Make an alist of elements that look like (MENU-ITEM . BUFFER).
+    (let ((tail buffers))
+      (while tail
+	;; Divide all buffers into buckets for various major modes.
+	;; Each bucket looks like (MODE NAMESTRING BUFFERS...).
+	(with-current-buffer (car tail)
+	  (let* ((adjusted-major-mode major-mode) elt)
+	    (let ((tail mouse-buffer-menu-mode-groups))
+	      (while tail
+		(if (string-match (car (car tail)) mode-name)
+		    (setq adjusted-major-mode (cdr (car tail))))
+		(setq tail (cdr tail))))
+	    (setq elt (assoc adjusted-major-mode split-by-major-mode))
+	    (if (null elt)
+		(setq elt (list adjusted-major-mode
+				(if (stringp adjusted-major-mode)
+				    adjusted-major-mode
+				  mode-name))
+		      split-by-major-mode (cons elt split-by-major-mode)))
+	    (or (memq (car tail) (cdr (cdr elt)))
+		(setcdr (cdr elt) (cons (car tail) (cdr (cdr elt)))))))
+	(setq tail (cdr tail))))
+    ;; Compute the sum of squares of sizes of the major-mode buckets.
+    (let ((tail split-by-major-mode))
+      (setq sum-of-squares 0)
+      (while tail
+	(setq sum-of-squares
+	      (+ sum-of-squares
+		 (let ((len (length (cdr (cdr (car tail)))))) (* len len))))
+	(setq tail (cdr tail))))
+    (if (< (* sum-of-squares mouse-buffer-menu-mode-mult)
+	   (* (length buffers) (length buffers)))
+	;; Subdividing by major modes really helps, so let's do it.
+	(let (subdivided-menus (buffers-left (length buffers)))
+	  ;; Sort the list to put the most popular major modes first.
+	  (setq split-by-major-mode
+		(sort split-by-major-mode
+		      (function (lambda (elt1 elt2)
+				  (> (length elt1) (length elt2))))))
+	  ;; Make a separate submenu for each major mode
+	  ;; that has more than one buffer,
+	  ;; unless all the remaining buffers are less than 1/10 of them.
+	  (while (and split-by-major-mode
+		      (and (> (length (car split-by-major-mode)) 3)
+			   (> (* buffers-left 10) (length buffers))))
+	    (let ((this-mode-list (mouse-buffer-menu-alist
+				   (cdr (cdr (car split-by-major-mode))))))
+	      (and this-mode-list
+		   (setq subdivided-menus
+			 (cons (cons
+				(nth 1 (car split-by-major-mode))
+				this-mode-list)
+			       subdivided-menus))))
+	    (setq buffers-left
+		  (- buffers-left (length (cdr (car split-by-major-mode)))))
+	    (setq split-by-major-mode (cdr split-by-major-mode)))
+	  ;; If any major modes are left over,
+	  ;; make a single submenu for them.
+	  (if split-by-major-mode
+	      (let ((others-list
+		     (mouse-buffer-menu-alist
+		      ;; we don't need split-by-major-mode any more,
+		      ;; so we can ditch it with nconc.
+		      (apply 'nconc (mapcar 'cddr split-by-major-mode)))))
+		(and others-list
+		     (setq subdivided-menus
+			   (cons (cons "Others" others-list)
+				 subdivided-menus)))))
+	  (setq menu (cons "Buffer Menu" (nreverse subdivided-menus))))
+      (progn
+	(setq alist (mouse-buffer-menu-alist buffers))
+	(setq menu (cons "Buffer Menu"
+			 (mouse-buffer-menu-split "Select Buffer" alist)))))
+  
+    (let ((km (make-sparse-keymap)))
+      (mapc (lambda (pair)
+	      (define-key km (vector (intern (car pair)))
+		`(menu-item ,(car pair) 
+			,(eval
+			  (list 'lambda () 
+				'(interactive)
+				`(let ((one-buffer-one-frame nil))
+				   (switch-to-buffer ,(cdr pair)))))
+	      ))) alist)
+      km
+	 )  )
+  )
+ 
 (defvar aquamacs-context-menu-map
   (let ((map (make-sparse-keymap)))
-    (define-key map [yank] (cons "Yank" 'yank))
+    
     (define-key map [paste] (cons "Paste" 'clipboard-yank))
     (define-key map [copy] (cons "Copy" 'clipboard-kill-ring-save))
     (define-key map [cut] (cons "Cut" 'clipboard-kill-region))
@@ -483,23 +573,34 @@ end tell")))))
    
     (define-key map [dictionary] (cons "Look Up in Dictionary" 
 				   'aquamacs-dictionary-lookup))
-    (define-key map [aq-cm-sep2] '(menu-item "--"))
-   
     (define-key map [google] (cons "Search in Google" 
 				   'aquamacs-google-lookup))
+    (define-key map [aq-cm-sep3] '(menu-item "--"))
+ 
+
+    (define-key map [switch-buffer] nil)
+    (define-key map [aq-cm-sep4] '(menu-item "--"))
+ 
+    (define-key map [yank-sel] '(menu-item "Yank here" 
+				     'mouse-yank-at-click))
     ;; (define-key map [spotlight] (cons "Search in Spotlight" 
     ;;				   'aquamacs-spotlight-lookup))
 
    map) "Keymap for the Aquamacs context menu.")
 
+(defvar aquamacs-popup-context-menu-buffers-state nil)
 (defun aquamacs-popup-context-menu  (event &optional  prefix)
   "Popup a context menu."
   (interactive "@e \nP")
-   
   ;; Let the mode update its menus first.
   ;; (run-hooks 'activate-menubar-hook 'menu-bar-update-hook)
-  
+  (if (frame-or-buffer-changed-p 'aquamacs-popup-context-menu-buffers-state)
+    (define-key aquamacs-context-menu-map [switch-buffer] 
+      `(menu-item "Switch to Buffer "   
+	      ,(aquamacs-make-mouse-buffer-menu)
+	      :help "Show a different buffer in this frame")))
   (popup-menu aquamacs-context-menu-map event prefix))
+
 
 
 
