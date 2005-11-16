@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.38 2005/11/15 00:41:03 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.39 2005/11/16 12:51:19 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -398,10 +398,7 @@ If arg is zero, kill current line but exclude the trailing newline."
 Please save your work and restart Aquamacs.
 Consider filing a bug report with Help/Send Bug Report.
 Debug info left in /tmp/Aquamacs-Corrupt-Keymap.log.el."))
-
- (define-key global-map '[(alt shift t)] 'debug-keymap-corruption)
- (define-key global-map '[(alt t)] 'debug-keymap-corruption)
-
+ 
 (add-hook 'after-init-hook 
 	  (lambda () 
 	    
@@ -507,12 +504,11 @@ end tell")))))
 
 
 
-
 (defun make-osx-key-mode-map (&optional command-key)
   "Create a mode map for OSX key mode. COMMAND-KEY specifies
 which key is mapped to command. mac-command-modifier is the
 default."
-					; (garbage-collect) ;; attempted workaround
+  ;; (garbage-collect) ;; attempted workaround
   (if command-key
       (setq osxkeys-command-key command-key)
     (if mac-command-modifier
@@ -524,7 +520,7 @@ default."
     ;; debug log
 
   
-    (define-key map `[(,osxkeys-command-key t)] 'debug-keymap-corruption)
+    (define-key map `[(,osxkeys-command-key shift t)] 'debug-keymap-corruption)
 
     (define-key map [mouse-3] 'aquamacs-popup-context-menu)
 
@@ -532,16 +528,20 @@ default."
     (define-key map `[(,osxkeys-command-key \?)] 'aquamacs-user-help)
     (define-key map `[(,osxkeys-command-key shift \?)] 'aquamacs-emacs-manual)
 
-    (define-key map `[(,osxkeys-command-key n)] 'new-frame-with-new-scratch) ;open new frame empty
-    (define-key map `[(,osxkeys-command-key o)] 'mac-key-open-file) ;open new frame with a file
+    (define-key map `[(,osxkeys-command-key n)] 'new-frame-with-new-scratch) 
+					;open new frame empty
+    (define-key map `[(,osxkeys-command-key o)] 'mac-key-open-file) 
+					;open new frame with a file
 
     (define-key map `[(,osxkeys-command-key shift s)] 'write-file)
-    (define-key map `[(,osxkeys-command-key shift o)] 'find-file-other-frame) ;open new frame with a file
+    (define-key map `[(,osxkeys-command-key shift o)] 'find-file-other-frame) 
+					;open new frame with a file
     (define-key map `[(,osxkeys-command-key a)] 'mark-whole-buffer)
     (define-key map `[(,osxkeys-command-key v)] 'clipboard-yank) 
     (define-key map `[(,osxkeys-command-key c)] 'clipboard-kill-ring-save)
-    (define-key map `[(shift ,osxkeys-command-key c)] 'aquamacs-clipboard-kill-ring-save-secondary)
-					; this because the combination control-space usually activates Spotlight
+    (define-key map `[(shift ,osxkeys-command-key c)] 
+      'aquamacs-clipboard-kill-ring-save-secondary)
+    ;; this because the combination control-space usually activates Spotlight
     (define-key map `[(control ,osxkeys-command-key space)] 'set-mark)
     (define-key map `[(,osxkeys-command-key x)] 'clipboard-kill-region)
     (define-key map `[(shift ,osxkeys-command-key x)] 'aquamacs-clipboard-kill-secondary)
@@ -602,17 +602,18 @@ When Mac Key mode is enabled, mac-style key bindings are provided."
   :global t
   :group 'osx-key-mode 
   :keymap 'osx-key-mode-map  
-  )
- 
-
-
 
 
 ;; Change encoding so you can use alt-e and alt-u accents (and others) 
-;; To Do: move this to the minor mode initialization or so
-(set-terminal-coding-system 'iso-8859-1) 
-(set-keyboard-coding-system				  'mac-roman) ;; keyboard
-(set-selection-coding-system			  'mac-roman) ;; copy'n'paste
+  (set-terminal-coding-system 'iso-8859-1) 
+  (set-keyboard-coding-system 'mac-roman) ;; keyboard
+  (set-selection-coding-system 'mac-roman) ;; copy'n'paste
  
+  (setq mac-emulate-three-button-mouse (if osx-key-mode
+					   'ctrl
+					 nil)))
+  
+
+
 
 (provide 'osxkeys)
