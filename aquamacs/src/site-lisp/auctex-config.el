@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: auctex
  
-;; Last change: $Id: auctex-config.el,v 1.10 2005/11/14 19:39:31 davidswelt Exp $
+;; Last change: $Id: auctex-config.el,v 1.11 2005/11/16 18:04:54 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -68,8 +68,8 @@
 (load "preview-latex.el" nil t t)
 
 (when (boundp 'LaTeX-mode-hook)
-(add-hook  'turn-on-reftex)
-(add-hook  'turn-on-bib-cite)
+(add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+(add-hook 'LaTeX-mode-hook 'turn-on-bib-cite)
 (add-hook 'LaTeX-mode-hook '(lambda ()
 			      (TeX-fold-mode 1)
 			      (setq ispell-parser 'tex)
