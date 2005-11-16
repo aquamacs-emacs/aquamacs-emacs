@@ -1,5 +1,5 @@
 *** src/macterm.c	Tue Nov 15 23:14:07 2005
---- src/macterm.c	Tue Nov 15 23:23:37 2005
+--- src/macterm.c	Wed Nov 16 00:04:01 2005
 ***************
 *** 8223,8233 ****
   {
@@ -13,7 +13,7 @@
     }
     return result;
   }
---- 8223,8236 ----
+--- 8223,8240 ----
   {
     int result = 0;
     if (!NILP (Vmac_emulate_three_button_mouse)) {
@@ -25,8 +25,30 @@
 !       {
 ! 	result = (modifiers & controlKey) ? 2 : ((modifiers & cmdKey) ? 1 : 0);
 !       }
+!     else 
+!       {
+! 	result = (modifiers & optionKey) ? 1 : ((modifiers & cmdKey) ? 2 : 0);
+!       }
     }
     return result;
+  }
+***************
+*** 8244,8250 ****
+    if (!NILP (Vmac_emulate_three_button_mouse) &&
+        GetEventClass(eventRef) == kEventClassMouse)
+      {
+!       mods &= ~(optionKey | cmdKey);
+      }
+    return mac_to_emacs_modifiers (mods);
+  }
+--- 8251,8258 ----
+    if (!NILP (Vmac_emulate_three_button_mouse) &&
+        GetEventClass(eventRef) == kEventClassMouse)
+      {
+!       mods &= ~(((EQ (Vmac_emulate_three_button_mouse, Qctrl))
+! 		 ? controlKey : optionKey) | cmdKey);
+      }
+    return mac_to_emacs_modifiers (mods);
   }
 ***************
 *** 11018,11030 ****
@@ -43,7 +65,7 @@
     Vmac_emulate_three_button_mouse = Qnil;
   
   #if USE_CARBON_EVENTS
---- 11021,11035 ----
+--- 11026,11040 ----
   
     DEFVAR_LISP ("mac-emulate-three-button-mouse",
   	       &Vmac_emulate_three_button_mouse,
