@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: auctex
  
-;; Last change: $Id: auctex-config.el,v 1.11 2005/11/16 18:04:54 davidswelt Exp $
+;; Last change: $Id: auctex-config.el,v 1.12 2005/11/16 18:11:19 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -64,6 +64,7 @@
 (setq bib-highlight-mouse-t t)
 (setq bib-cite-use-reftex-view-crossref t)
 
+(autoload 'bib-cite-minor-mode "bib-cite")
 (autoload 'turn-on-bib-cite "bib-cite")
 (load "preview-latex.el" nil t t)
 
