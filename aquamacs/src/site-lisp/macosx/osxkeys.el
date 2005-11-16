@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.40 2005/11/16 16:17:25 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.41 2005/11/16 17:09:03 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -565,22 +565,17 @@ and selects that window."
  
 (defvar aquamacs-context-menu-map
   (let ((map (make-sparse-keymap)))
-    
     (define-key map [paste] (cons "Paste" 'clipboard-yank))
     (define-key map [copy] (cons "Copy" 'clipboard-kill-ring-save))
     (define-key map [cut] (cons "Cut" 'clipboard-kill-region))
     (define-key map [aq-cm-sep] '(menu-item "--"))
-   
     (define-key map [dictionary] (cons "Look Up in Dictionary" 
 				   'aquamacs-dictionary-lookup))
     (define-key map [google] (cons "Search in Google" 
 				   'aquamacs-google-lookup))
     (define-key map [aq-cm-sep3] '(menu-item "--"))
- 
-
     (define-key map [switch-buffer] nil)
     (define-key map [aq-cm-sep4] '(menu-item "--"))
- 
     (define-key map [yank-sel] '(menu-item "Yank here" 
 				     'mouse-yank-at-click))
     ;; (define-key map [spotlight] (cons "Search in Spotlight" 
@@ -650,7 +645,8 @@ default."
     (define-key map `[(,osxkeys-command-key p)] 'aquamacs-print)
     (define-key map `[(,osxkeys-command-key l)] 'goto-line)
     (define-key map `[(,osxkeys-command-key f)] 'isearch-forward)
-    (define-key map `[(,osxkeys-command-key g)] 'isearch-repeat-forward)
+    (define-key map `[(,osxkeys-command-key g)] 'isearch-repeat-forward)  
+    (define-key map `[(,osxkeys-command-key shift g)] 'isearch-repeat-backward)
     (define-key map `[(,osxkeys-command-key w)] 'close-current-window-asktosave)
     (define-key map `[(,osxkeys-command-key m)] 'iconify-or-deiconify-frame) 
     (define-key map `[(,osxkeys-command-key .)] 'keyboard-quit)
