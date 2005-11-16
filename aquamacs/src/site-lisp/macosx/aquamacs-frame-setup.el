@@ -8,7 +8,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-frame-setup.el,v 1.13 2005/09/19 19:01:38 davidswelt Exp $
+;; Last change: $Id: aquamacs-frame-setup.el,v 1.14 2005/11/16 12:51:43 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -95,8 +95,13 @@ even when minimal fringes are used. (Aquamacs)"
 
 (remove-hook 'same-window-regexps "\\*info\\*\\(\\|<[0-9]+>\\)")
 (remove-hook 'same-window-regexps "\\`\\*Customiz.*\\*\\'")
- 
-;;; UNCOMMENT AND CHANGE *ONE* OF THESE, IF DEFAULT FRAME HEIGHT IS INAPPROPRIATE.
+ ;; ;; only subsequent ones should be opened in the same frame
+(add-hook 'custom-mode-hook
+	  (lambda ()
+	    (add-to-list (make-local-variable 'same-window-regexps)
+			 "\\`\\*Customiz.*\\*\\'")))
+	    
+;;; UNCOMMENT AND CHANGE *ONE* OF THESE, IF DEFAULT FRAME HEIGHT IS INAPPROPRIATE. 
 ;;; Maximum height for new frames.
 ;;; (defvar create-frame-max-height-percent 82) ; no more than 82% of display height.
 ;;; (defvar create-frame-max-height 48)         ; no more than 48 characters high.
@@ -164,9 +169,9 @@ even when minimal fringes are used. (Aquamacs)"
 
 ;; Help windows only start with *Help (so e.g. ESS Help gets opened separately)
 (defconst special-display-regexps '( "[ ]?\\*info.*\\*[ ]?"  "[ ]?\\*[hH]elp.*" 
-				     "[ ]?\\*Messages\\*[ ]?"   "[ ]*Customize*""[ ]?\\*Open Recent\\*[ ]?"
+				     "[ ]?\\*Messages\\*[ ]?"   "[ ]?\\*Open Recent\\*[ ]?"
 				     ".*SPEEDBAR.*"))
-
+; "[ ]*Customize*"
 ;; If we make Backtrace dedicated,
 ;; the frame gets iconified all the time
 ;; while debugging ( "[ ]?\\*Backtrace\\*[ ]?"  )
