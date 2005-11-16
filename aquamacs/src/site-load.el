@@ -14,8 +14,9 @@
 
 ;(load "mwheel") ;; wants to be loaded at runtime
 (load "disp-table")
-(load "tool-bar")
-(load "image") ;; taken out so as to not initialize the path variable
+;; (load "tool-bar") ;; (setq global-map-backup global-map)
+;; image taken out,  troubleshooting GC problem
+;;(load "image") ;; taken out so as to not initialize the path variable
 (load "button")
 (load "view")
 (load "help-mode")
@@ -28,7 +29,8 @@
 (load "custom")
 ;(load "emacs-lisp/cl")
 ;(load "emacs-lisp/cl-seq")
-(load "international/encoded-kb")
+
+;; (load "international/encoded-kb")  must not be reloaded (creates mutable objects in purespace) 
 (load "wid-edit.el")
 ; (load "emacs-lisp/easymenu") ;; needs to be loaded at runtime... causes strange behavior otherwise
 ; (load "recentf") 
