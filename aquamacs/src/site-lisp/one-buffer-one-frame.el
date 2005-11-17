@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.15 2005/11/17 11:29:16 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.16 2005/11/17 23:29:59 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -31,7 +31,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.15 2005/11/17 11:29:16 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.16 2005/11/17 23:29:59 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -53,19 +53,100 @@
  
 ;; Copyright (C) 2005, David Reitter
  
- 
+;; DESCRIPTION:
+;; 
+;; Always open new frames for each new buffer and switch to their frame.
+;; In this minor mode, buffers are usually displayed in their own frames.
+;; All buffer switching functions available to users will raise the
+;; frame that shows the buffer. Deletion of the frame (or window) usually
+;; kills the associated buffer, unless the buffer is still shown in another
+;; window or it is a special-purpose buffer such as `*Messages*'.
+;;
+;; To enable, add this to your init file:
+;; (one-buffer-one-frame-mode t)
 
-;; define customization option
-(defcustom one-buffer-one-frame t
-  "When non-nil, open a new frame for each new buffer and switch to that frame
-   when buffer is selected from Buffers menu. When nil, regular buffers are displayed
-   in the same frame and window."
-  :type '(radio 
-		(const :tag "Open new frames for buffers" t)
-		(const :tag "standard Emacs behavior (nil)" nil))
+
+
+
+;; CODE
+
+
+(defvar one-buffer-one-frame-mode-map (make-sparse-keymap))
+
+
+(defvar obof-backups-initialized nil)
+
+;; temporary definition (workaround for old defcustom in preloaded func)
+;; (defun one-buffer-one-frame-mode (&rest a))
+
+
+(define-minor-mode one-buffer-one-frame-mode
+  "Always open new frames for each new buffer and switch to their frame.
+In this minor mode, buffers are usually displayed in their own frames.
+All buffer switching functions available to users will raise the
+frame that shows the buffer. Deletion of the frame (or window) usually
+kills the associated buffer, unless the buffer is still shown in another
+window or it is a special-purpose buffer such as `*Messages*'. 
+
+This minor mode provides some additional key bindings:
+
+C-x B         `switch-to-buffer-here'
+C-x S-left    `prev-buffer-here'
+C-x S-right   `next-buffer-here'
+C-x C-B       `list-buffers-here'
+
+The mode sets `pop-up-frames', `pop-up-windows', 
+`display-buffer-reuse-frames'.
+
+This mode is part of Aquamacs Emacs, http://aquamacs.org."
+
+;; the condition case is because otherwise this won't
+;; do it's job. don't know why.
+  (condition-case nil
+  (if one-buffer-one-frame-mode
+      (setq obofm-old-pop-up-frames  pop-up-frames
+	    pop-up-frames nil
+	    ;; if pop-up-frames is t, even *Completions* buffers
+	    ;; will spawn their own frames
+	    obofm-old-pop-up-windows pop-up-windows
+	    pop-up-windows t
+	    obofm-old-display-buffer-reuse-frames display-buffer-reuse-frames
+	    display-buffer-reuse-frames t
+	    obof-backups-initialized t)
+					; else (turning off)
+    ;; restore settings
+    (if obof-backups-initialized
+	(setq    pop-up-frames obofm-old-pop-up-frames
+		 pop-up-windows obofm-old-pop-up-windows
+		 display-buffer-reuse-frames 
+		 obofm-old-display-buffer-reuse-frames)))
+  (error nil))
+
   :group 'Aquamacs
+  :global t
+  :keymap 'one-buffer-one-frame-mode-map
   :require 'aquamacs-frame-setup)
- 
+
+;; because of the following alias, setting the mode variable will
+;; enable most of the mode, but not the keymap.
+(defvaralias 'one-buffer-one-frame 'one-buffer-one-frame-mode)
+
+(defun enable-one-buffer-one-frame-mode ()
+  "Turn on `one-buffer-one-frame-mode' if `one-buffer-one-frame' is non-nil.
+This ensures that the mode is active even if one-buffer-one-frame is set
+with `setq' in the user's init file.
+
+This is just a kludge.
+To enable `one-buffer-one-frame-mode', call 
+(one-buffer-one-frame-mode 1)
+To disable `one-buffer-one-frame-mode', call 
+(one-buffer-one-frame-mode 0)"
+  (one-buffer-one-frame-mode (if one-buffer-one-frame 1 0)))
+
+
+(add-hook 'after-init-hook 'enable-one-buffer-one-frame-mode 'append)
+
+  
 (defvar one-buffer-one-frame-force nil 
   "Enforce one-buffer-one-frame - should be set only temporarily.")
  
@@ -123,6 +204,50 @@
 
 ;; only for certain special buffers
 
+(defun switch-to-buffer-here (buffer &optional norecord)
+  "Switch to another buffer to be shown in the same window.
+Like `switch-to-buffer', except that even in `one-buffer-one-frame-mode'
+the current window is switched to the new buffer."
+  (interactive "BSwitch to buffer here: ")
+  (let ((one-buffer-one-frame nil))
+    (switch-to-buffer buffer norecord)))
+(defun list-buffers-here (&optional files-only)
+  "Display a list of names of existing buffers.
+Like `list-buffers', except that even in `one-buffer-one-frame-mode'
+the current window is switched to the new buffer."
+  (interactive "P")
+  (let ((one-buffer-one-frame nil))
+    (list-buffers files-only)))
+
+(defun next-buffer-here ()
+  "Switch to the next buffer in cyclic order in the same window.
+Like `next-buffer', except that even in `one-buffer-one-frame-mode'
+the current window is switched to the new buffer."
+  (interactive)
+  (let ((one-buffer-one-frame nil))
+    (next-buffer)))
+(defun prev-buffer-here ()
+  "Switch to the previous buffer in cyclic order in the same window.
+Like `prev-buffer', except that even in `one-buffer-one-frame-mode'
+the current window is switched to the new buffer."
+  (interactive)
+  (let ((one-buffer-one-frame nil))
+    (prev-buffer)))
+
+(define-key one-buffer-one-frame-mode-map [(control x) (shift b)] 
+  'switch-buffer-here)
+(define-key one-buffer-one-frame-mode-map [(control x) (control shift b)] 
+  'list-buffers-here)
+(define-key one-buffer-one-frame-mode-map [(control x) (shift right)] 
+  'next-buffer-here)
+(define-key one-buffer-one-frame-mode-map [(control x) (shift left)] 
+  'prev-buffer-here)
+(define-key one-buffer-one-frame-mode-map [(control x) (control shift right)] 
+  'next-buffer-here)
+(define-key one-buffer-one-frame-mode-map [(control x) (control shift left)] 
+  'prev-buffer-here)
+
+
 (if window-system
 (defadvice switch-to-buffer (around sw-force-other-frame (&rest args) activate compile)
   ;; is buffer shown in a frame?
@@ -160,6 +285,7 @@
       ;; we need to do it here, because raise-frame / select frame are
       ;; ineffective from within walk-windows
       (raise-frame (select-frame (window-frame window-to-select)))
+      (select-window window-to-select)
       (setq ad-return-value (current-buffer)))
   (set-mode-specific-theme))))
 
@@ -218,46 +344,45 @@
 ; quit-window is usually called by some modes when the user enters 'q'
 ; e.g. in dired. we want to delete the window then.        
 (if window-system
- (defadvice quit-window (around always-dedicated (&rest args) activate)
-   (interactive)
+ (defadvice quit-window (around always-dedicated (&optional kill window) 
+				activate)
+   (interactive "P")
    (if one-buffer-one-frame
-       (let (save (window-dedicated-p (selected-window)))
-	 (set-window-dedicated-p (selected-window) t)
+       (let* ((one-buffer-one-frame nil)
+	     (win (selected-window))
+	     (save (window-dedicated-p win)))
+	 (set-window-dedicated-p win t)
+	 (ad-set-arg 1 win)
 	 ad-do-it
-	 (set-window-dedicated-p (selected-window) save)
+	 (if (window-live-p win)
+	     (set-window-dedicated-p win save))
 	 )
-; else
-     ad-do-it
-     )
-   )
-)
+     ;; else 
+     ad-do-it 
+     ) ))
 
  
 
+;; (if window-system
+;; (defadvice pop-to-buffer (around always-dedicated (buf &rest args) 
+;; 				 protect activate)
+;;   "Temporarily make selected window dedicated, "
+;;   (if one-buffer-one-frame
+;;       (let* ((pop-up-frames t)
+;; 	     (pop-up-windows nil)
+;; 	   (win (selected-window))
+;; 	   (wd (window-dedicated-p win))
+;; 	    ) 
+;; 	(set-window-dedicated-p win nil)  
+;; 	ad-do-it  
+;; 	(set-window-dedicated-p win wd)  
+;; 	)
+;;     ;; else
+;;     ad-do-it
 
-(setq pop-up-frames nil)
-(setq pop-up-windows t)
-(setq display-buffer-reuse-frames t)
-
-(if window-system
-(defadvice pop-to-buffer (around always-dedicated (buf &rest args) protect activate) 
-  (if one-buffer-one-frame
-      (let ((puf pop-up-frames)
-	    (sw (selected-window))
-	    (wd (window-dedicated-p (selected-window)))
-	    ) 
-	(set-window-dedicated-p sw nil)  
-	ad-do-it  
-	(set-window-dedicated-p sw wd)  
-	(setq pop-up-frames puf)
-
-	)
-    ;; else
-    ad-do-it
-
-    )
-  )
- )
+;;     )
+;;   )
+;;  )
 
 
 (defun aquamacs-display-buffer (&rest args)
@@ -309,7 +434,7 @@ even if it's the only visible frame."
       (delete-frame)
     (error   
 	     
-     (let ((f (frame or (selected-frame))))
+     (let ((f (or frame (selected-frame))))
        (make-frame-invisible f t)
        ;; select messages to it gets any input
        (if (find-all-frames-internal (get-buffer "*Messages*"))
@@ -383,20 +508,24 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
  
   (let ((wind (selected-window))
 	(killable (and (killable-buffer-p (window-buffer))
-		       ;; theoretically, we should check if, in case of force-delete-frame
-		       ;; all windows display the same buffer, in which case it is killable again.
-		       ;; practically, this situation shouldn't occur to often, so we skip
-		       ;; that someone tedious check.
+		       ;; theoretically, we should check if, in case
+		       ;; of force-delete-frame all windows display
+		       ;; the same buffer, in which case it is
+		       ;; killable again.  practically, this situation
+		       ;; shouldn't occur to often, so we skip that
+		       ;; someone tedious check.
 
 		       (eq (length (find-all-windows-internal 
 				    (window-buffer) 
 				    'only_visible_ones)) 
 			   1))))
 					; ask before killing
-    (cond ( (and (eq (current-buffer) (window-buffer)) ;; only if a document is shown
+    (cond ( (and (eq (current-buffer) (window-buffer)) 
+					; only if a document is shown
 		 killable
 		 (eq   (string-match "\\*.*\\*" (buffer-name)) nil)
-		 (eq   (string-match " SPEEDBAR" (buffer-name)) nil) ; has no minibuffer!
+		 (eq   (string-match " SPEEDBAR" (buffer-name)) nil) 
+					; has no minibuffer!
 		 )
 	    (cond ((buffer-modified-p)
 		   (if (progn
@@ -446,14 +575,17 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
 	  (if (or force-delete-frame ;; called via frame closer button
 		  (window-dedicated-p wind)
 		  )
-	      (aquamacs-delete-frame (window-frame wind) ) ;; delete window/frame, hide if necessary
+	      (aquamacs-delete-frame (window-frame wind) ) 
+					; delete window/frame, hide if
+					; necessary
 	    ;; else
 	    (progn
 	   
 	      (select-window wind)
 	      (if (one-window-p 'nomini 'only_selected_frame)
 		  (if (not killable)
-		      ;; if it's not killable, we need to jump to the next buffer
+		      ;; if it's not killable, we need to jump to the
+		      ;; next buffer
 		      (next-buffer)
 		    )
 		(aquamacs-delete-window wind) ) ) ) ) ) ) ) )
@@ -546,8 +678,23 @@ we put it on this frame."
 ))
 
 
+;; (defcustom one-buffer-one-frame t
+;;   "When non-nil, new buffers open in new frames and are killed with them.
+;; When non-nil, open a new frame for each new buffer and switch to that frame
+;; when buffer is selected from Buffers menu. When nil, regular buffers are displayed
+;; in the same frame and window.
 
+;; This variable is controlled by `one-buffer-one-frame-mode'.
+;; Switch on the mode interactively, and only temporarily set this variable
+;; to nil from lisp functions to inhibit its functionality.
 
+;; If set during startup (e.g. in `user-init-file'), the mode will turn on."
+;;   :type '(radio 
+;; 		(const :tag "Open new frames for buffers" t)
+;; 		(const :tag "standard Emacs behavior (nil)" nil))
+;;   :group 'Aquamacs
+;;   :set 'one-buffer-one-frame-mode
+;;   :require 'aquamacs-frame-setup)
 
 
 (provide 'one-buffer-one-frame)
