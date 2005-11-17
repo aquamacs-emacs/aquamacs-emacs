@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.28 2005/11/17 20:21:13 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.29 2005/11/17 23:32:45 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -546,7 +546,7 @@ Use `mac-command-modifier' instead."))
 Aquamacs 0.9.7 on. `mac-option-modifier' has been set for you."))))
 
   (require 'one-buffer-one-frame)
- 
+  (one-buffer-one-frame-mode 1)
 
 ;; ----------- MISC STUFF ----------------
 
