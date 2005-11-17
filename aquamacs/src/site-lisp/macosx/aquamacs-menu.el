@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.37 2005/11/11 23:47:29 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.38 2005/11/17 23:30:46 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -109,7 +109,7 @@
 	  (funcall  (or mode default-major-mode))))
     (if other-frame
 	(switch-to-buffer-other-frame buf)
-      (let ((one-buffer-one-frame-force one-buffer-one-frame))
+      (let ((one-buffer-one-frame-force one-buffer-one-frame-mode))
 	;; force new frame
 	(switch-to-buffer buf)))
     (setq buffer-offer-save t)
@@ -207,7 +207,8 @@
   '(menu-item (aq-shortcut  "New                                        "
 			    'new-frame-with-new-scratch)  
 	      new-frame-with-new-scratch
-	      :enable (or one-buffer-one-frame
+	      :enable (or (and (boundp 'one-buffer-one-frame-mode)
+			       one-buffer-one-frame-mode)
 			  (not (window-minibuffer-p
 			    (frame-selected-window menu-updating-frame))))
 	      :help "Create a new buffer"))
@@ -702,19 +703,15 @@ both existing buffers and buffers that you subsequently create."
 
 
 
-(if (string= "mac" window-system)
+(when (string= "mac" window-system)
+    (require 'aquamacs-frame-setup)
     (define-key-after menu-bar-options-menu [oneonone]
-      (menu-bar-make-toggle 
-       toggle-oneonone one-buffer-one-frame
+      (menu-bar-make-mm-toggle 
+       one-buffer-one-frame-mode
        "Display Buffers in Separate Frames"
-       "Display Buffers in Separate Frames: %s"
        "Open a new Frame (window) for each new buffer."
-       (require 'aquamacs-frame-setup)
-		 
-       (setq one-buffer-one-frame
-	     (not one-buffer-one-frame))
-       ) 'edit-options-separator)
-  )
+       (:visible (boundp 'one-buffer-one-frame-mode)))
+       'edit-options-separator))
 
 (defvar mac-option-modifier-enabled-value 'meta)
 (defun  toggle-mac-option-modifier (&optional interactively) 
