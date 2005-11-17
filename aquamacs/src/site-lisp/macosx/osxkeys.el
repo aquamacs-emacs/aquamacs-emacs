@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.41 2005/11/16 17:09:03 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.42 2005/11/17 13:54:43 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -576,8 +576,9 @@ and selects that window."
     (define-key map [aq-cm-sep3] '(menu-item "--"))
     (define-key map [switch-buffer] nil)
     (define-key map [aq-cm-sep4] '(menu-item "--"))
-    (define-key map [yank-sel] '(menu-item "Yank here" 
-				     'mouse-yank-at-click))
+    (define-key map [yank-here] '(menu-item "Yank here" 
+				     mouse-yank-at-click
+				     :enable kill-ring))
     ;; (define-key map [spotlight] (cons "Search in Spotlight" 
     ;;				   'aquamacs-spotlight-lookup))
 
@@ -585,7 +586,8 @@ and selects that window."
 
 (defvar aquamacs-popup-context-menu-buffers-state nil)
 (defun aquamacs-popup-context-menu  (event &optional  prefix)
-  "Popup a context menu."
+  "Popup a context menu. 
+Its content is specified in the keymap `aquamacs-context-menu-map'."
   (interactive "@e \nP")
   ;; Let the mode update its menus first.
   ;; (run-hooks 'activate-menubar-hook 'menu-bar-update-hook)
