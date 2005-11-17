@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.27 2005/11/15 08:38:06 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.28 2005/11/17 20:21:13 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -38,13 +38,7 @@
 
 
 (defun aquamacs-setup ()
-
-  ;; workaround for memory corruption bug
-  (garbage-collect) 
-  ;; setting it to a much higher value will cause
-  ;; (temporary) lockups and swapping
-  (setq gc-cons-threshold 4000000)
-
+ 
 
   (aquamacs-mac-initialize) ;; call at runtime only
        
