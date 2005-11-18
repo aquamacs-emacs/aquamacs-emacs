@@ -8,7 +8,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-frame-setup.el,v 1.14 2005/11/16 12:51:43 davidswelt Exp $
+;; Last change: $Id: aquamacs-frame-setup.el,v 1.15 2005/11/18 01:39:37 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -96,10 +96,15 @@ even when minimal fringes are used. (Aquamacs)"
 (remove-hook 'same-window-regexps "\\*info\\*\\(\\|<[0-9]+>\\)")
 (remove-hook 'same-window-regexps "\\`\\*Customiz.*\\*\\'")
  ;; ;; only subsequent ones should be opened in the same frame
-(add-hook 'custom-mode-hook
-	  (lambda ()
-	    (add-to-list (make-local-variable 'same-window-regexps)
-			 "\\`\\*Customiz.*\\*\\'")))
+;; doesn't work well
+;; (add-hook 'custom-mode-hook
+;; 	  (lambda ()
+;; 	    (make-variable-frame-local 'pop-up-windows)
+;; 	    (make-variable-frame-local 'same-window-regexps)
+;; 	    (modify-frame-parameters nil '((pop-up-windows . nil)
+;; 					   (same-window-regexps . ("\\`\\*Customiz.*\\*\\'"))))))
+;; (setq custom-mode-hook)
+
 	    
 ;;; UNCOMMENT AND CHANGE *ONE* OF THESE, IF DEFAULT FRAME HEIGHT IS INAPPROPRIATE. 
 ;;; Maximum height for new frames.
