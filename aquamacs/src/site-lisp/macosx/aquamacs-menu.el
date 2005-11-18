@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.38 2005/11/17 23:30:46 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.39 2005/11/18 12:45:30 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -898,10 +898,14 @@ to the selected frame."
   (interactive)
   (browse-url "http://aquamacs.org/donations.shtml")
 )
-(easy-menu-add-item  nil '("Help")
-		     (vector '(aq-shortcut "Aquamacs Help                     " 'aquamacs-user-help) 
-			     'aquamacs-user-help) 'emacs-tutorial)
-
+ 
+(define-key menu-bar-help-menu [menu-aquamacs-help]
+  '(menu-item (aq-shortcut "Aquamacs Help                     " 
+		       'aquamacs-user-help)
+	      aquamacs-user-help
+	      :help "Show Aquamacs Manual in Apple Help"
+	      :keys nil) )
+ 
 (easy-menu-add-item  nil '("Help")
   (vector  "Aquamacs Tips Wiki Online"  'aquamacs-user-wiki) 'emacs-tutorial)
  
@@ -915,7 +919,6 @@ to the selected frame."
   '(menu-item (aq-shortcut "Emacs Manual                       " 
 		       'aquamacs-emacs-manual)
 	      aquamacs-emacs-manual
-	      
 	      :help "Show Emacs Manual in Apple Help"
 	      :keys nil)
   'Aquamacs\ Homepage)
