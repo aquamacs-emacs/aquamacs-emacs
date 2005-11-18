@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.16 2005/11/17 23:29:59 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.17 2005/11/18 01:39:22 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -31,7 +31,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.16 2005/11/17 23:29:59 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.17 2005/11/18 01:39:22 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -150,6 +150,14 @@ To disable `one-buffer-one-frame-mode', call
 (defvar one-buffer-one-frame-force nil 
   "Enforce one-buffer-one-frame - should be set only temporarily.")
  
+(defvar obof-same-frame-names
+  '(
+    "\*Completions\*" 
+    "\*Apropos\*" 
+    " SPEEDBAR"			; speedbar package opens its own frame
+    "\*Choices\*"			    ; for ispell
+    "\*Article\*"			    ; gnus
+    ))
 
 (defun open-in-other-frame-p (buf)
   
@@ -158,13 +166,7 @@ To disable `one-buffer-one-frame-mode', call
 	(and one-buffer-one-frame 
 		(if 
 		    (member bufname
-			    '(
-			      "\*Completions\*" 
-			      "\*Apropos\*" 
-			      " SPEEDBAR" ; speedbar package opens its own frame
-			      "\*Choices\*" ; for ispell
-			      "\*Article\*" ; gnus
-			      ))
+			    obof-same-frame-names)
 		    nil
 		  (or	
 		   ;; return t if there is already text in window
@@ -363,26 +365,29 @@ the current window is switched to the new buffer."
 
  
 
-;; (if window-system
-;; (defadvice pop-to-buffer (around always-dedicated (buf &rest args) 
-;; 				 protect activate)
-;;   "Temporarily make selected window dedicated, "
-;;   (if one-buffer-one-frame
-;;       (let* ((pop-up-frames t)
-;; 	     (pop-up-windows nil)
-;; 	   (win (selected-window))
-;; 	   (wd (window-dedicated-p win))
-;; 	    ) 
-;; 	(set-window-dedicated-p win nil)  
-;; 	ad-do-it  
-;; 	(set-window-dedicated-p win wd)  
-;; 	)
-;;     ;; else
-;;     ad-do-it
+(if window-system
+(defadvice pop-to-buffer (around always-dedicated (buf &rest args) 
+				 protect activate)
+  "Temporarily make selected window dedicated, "
+  (if one-buffer-one-frame
+      (let* ((pop-up-frames t)
+	     (pop-up-windows t)
+	   (win (selected-window))
+	   (wd (window-dedicated-p win))
+	    ) 
+	(unless (and (member (get-bufname buf)
+			    obof-same-frame-names)
+		   (not (same-window-p (get-bufname buf))))
+	    (set-window-dedicated-p win t))
+	ad-do-it  
+	(set-window-dedicated-p win wd)  
+	)
+    ;; else
+    ad-do-it
 
-;;     )
-;;   )
-;;  )
+    )
+  )
+ )
 
 
 (defun aquamacs-display-buffer (&rest args)
