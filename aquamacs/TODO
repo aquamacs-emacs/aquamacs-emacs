@@ -2,7 +2,16 @@ Some Aquamacs ideas
 --------------------------------------------------------
 feel free to add your own!
 
-  
+* Include Table mode   
+  http://table.sourceforge.net/
+  for 0.9.8
+
+* Integrate Emacs Code Browser
+  http://ecb.sourceforge.net/
+  for 0.9.8
+  (make it work with one-buffer-one-frames)
+
+
 * A better Buffers menu
 DavidReitter: I think it would be a nice thing to structure all the buffers, similar to what msb-mode does. However, msb-mode creates submenus for each category, which is inefficient from a UI point of view - I want all buffers visible in the menu, but separated with divider lines and maybe with a greyed-out title. One could take msb and extend it so that it can do that. Then, move the frame-related stuff out of the File menu and combine it with the Buffers menu, so that we have the equivalent of a normal Windows menu on the Mac. It'd be good if there were functions that 'tile' frames, minimize and zoom them (maybe). But that's lower priority.
 
@@ -20,18 +29,13 @@ DavidReitter: Someone needs to write a Carbon function that brings up the standa
 
 * Customization of Mode-specific themes
 DavidReitter: Someone knowledgable in customization buffers could figure out how to comfortably customize the aquamacs-mode-specific-default-themes variable.
-
+(Some of this done now)
 
 * Command-modifier character in menus (and everywhere else)
 DavidReitter: We map the Command modifier to hyper, which results in it being described as 'H-'. At least in the menus, we want it to be a nice standard Apple-Command sign. Right now this is done by modifying the text of the menu items, which is quite a kludge. Also the keyboard shortcuts in the menus are not properly aligned, which looks ugly and is more difficult to read. Fixing this might be a bit of a challenge, and definitely something for a Carbon/C hacker.
+--> Wait for Cocoa Emacs.
 
-
-* Modifier key patch
-DavidReitter: change effect of mac-pass-option-to-system to only do it in cases where the option key actually modifies the given key. thus, we can preserve the assigned functionality for all keys where option doesn't have a particular effect on the keycode - for example for the arrow keys.
-
-
-
-
+  
 * Spell-Check with OS X
 DavidReitter: Can someone implement an interface that queries the built-in OS X spellchecker? It would have to implement the ispell/aspell API, which should be too hard. Because such a thing would be small, we could easily distribute it with Aquamacs.
 
