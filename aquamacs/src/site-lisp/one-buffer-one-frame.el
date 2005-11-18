@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.17 2005/11/18 01:39:22 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.18 2005/11/18 20:39:35 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -31,7 +31,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.17 2005/11/18 01:39:22 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.18 2005/11/18 20:39:35 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -150,23 +150,32 @@ To disable `one-buffer-one-frame-mode', call
 (defvar one-buffer-one-frame-force nil 
   "Enforce one-buffer-one-frame - should be set only temporarily.")
  
-(defvar obof-same-frame-names
+(defvar obof-same-frame-regexps
   '(
     "\*Completions\*" 
     "\*Apropos\*" 
     " SPEEDBAR"			; speedbar package opens its own frame
     "\*Choices\*"			    ; for ispell
     "\*Article\*"			    ; gnus
-    ))
+    "\*VC-*"
+    )
+"In `one-buffer-one-frame-mode', if the name of a buffer to be shown matches
+one of the regular expressions in this list, it is shown in the same frame,
+as an extra window."
+)
+
+(defun obof-same-frame-p (bufname)
+  (let ((same-window-buffer-names nil)
+	(same-window-regexps obof-same-frame-regexps))
+    ;; this is a fast solution
+    (same-window-p bufname)))
 
 (defun open-in-other-frame-p (buf)
-  
   (or one-buffer-one-frame-force ;; set by color-theme
       (let ( (bufname (get-bufname buf)))
 	(and one-buffer-one-frame 
 		(if 
-		    (member bufname
-			    obof-same-frame-names)
+		    (obof-same-frame-p bufname) 
 		    nil
 		  (or	
 		   ;; return t if there is already text in window
@@ -370,14 +379,16 @@ the current window is switched to the new buffer."
 				 protect activate)
   "Temporarily make selected window dedicated, "
   (if one-buffer-one-frame
-      (let* ((pop-up-frames t)
+      (let* (;; (pop-up-frames t) ;; leave this alone, respect config.
+	     ;; setting it to t will force new windows to open.
+	     ;; only force it under the conditions below
+	     ;; (via set-window-dedicated)
 	     (pop-up-windows t)
 	   (win (selected-window))
 	   (wd (window-dedicated-p win))
 	    ) 
-	(unless (and (member (get-bufname buf)
-			    obof-same-frame-names)
-		   (not (same-window-p (get-bufname buf))))
+	(unless (or (obof-same-frame-p (get-bufname buf))
+		     (same-window-p (get-bufname buf)))
 	    (set-window-dedicated-p win t))
 	ad-do-it  
 	(set-window-dedicated-p win wd)  
@@ -386,7 +397,7 @@ the current window is switched to the new buffer."
     ad-do-it
 
     )
-  )
+  )  
  )
 
 
