@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.42 2005/11/17 13:54:43 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.43 2005/11/19 18:03:47 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -596,7 +596,16 @@ Its content is specified in the keymap `aquamacs-context-menu-map'."
       `(menu-item "Switch to Buffer "   
 	      ,(aquamacs-make-mouse-buffer-menu)
 	      :help "Show a different buffer in this frame")))
-  (popup-menu aquamacs-context-menu-map event prefix))
+  ;; move popup menu a little so mouse pointer is over first entry
+  ;; not needed
+  ;; ((pos
+  ;; 	 (if (not (eq (event-basic-type event) 'mouse-3))
+  ;; 	     event
+  ;; 	   (list (lispost (- (car (nth 2 (car (cdr event)))) 0)
+  ;; 		       (- (cdr (nth 2 (car (cdr event)))) 0))
+  ;; 		 (car (car (cdr event)))))))
+  
+    (popup-menu aquamacs-context-menu-map event prefix))
 
 
 
