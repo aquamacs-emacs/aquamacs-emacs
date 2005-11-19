@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs version check
  
-;; Last change: $Id: check-for-updates.el,v 1.9 2005/10/06 12:09:47 davidswelt Exp $
+;; Last change: $Id: check-for-updates.el,v 1.10 2005/11/19 18:05:38 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -51,7 +51,8 @@
 	contacts an internet server to get the version number - this
 	happens once every 3 days. The server will receive and 
 	store the following anonymous connection data: 
-	an anonymous ID, the number of program starts and the 
+	an anonymous ID, the number of program starts, whether
+        you have `one-buffer-one-frame-mode' turned on and the 
 	versions of Aquamacs and OS X that you're using. 
         Just as during any access to an Internet server, 
 	your IP address and the time of your inquiry may be stored,
@@ -209,15 +210,21 @@ and show user a message if there is."
 (defun aquamacs-check-for-updates-internal (session-id calls)
  
  
-    (if aquamacs-version-check-url
- 
+    (when aquamacs-version-check-url
+      ;; do not autoload (avoid messages)
+      (require 'mail-utils)
+      (require 'url-parse)
+      (require 'url-methods)
+      (require 'url-cache)
 	(condition-case nil
+	   
 	    (let ((url (url-generic-parse-url 
 			 (concat aquamacs-version-check-url
 				 "?sess=" (number-to-string (or session-id 0)) 
 				 "&seq=" (number-to-string (or calls 0))
 				 "&beta=" (number-to-string (or aquamacs-user-likes-beta 0)) 
 				 "&ver=" (url-encode-string (concat (or aquamacs-version "unknown") (or aquamacs-minor-version "-")))
+				 "&obof=" (if one-buffer-one-frame-mode "1" "0")
 				 "&os=" (url-encode-string  (replace-regexp-in-string "\[\r\n\]" "" (shell-command-to-string "uname -r")))
 				 ) 
 			 )))
@@ -241,7 +248,7 @@ and show user a message if there is."
 
   )
 
-; (aquamacs-check-for-updates-if-necessary)
+; (aquamacs-check-for-updates-if-necessary t)
 
 (provide 'check-for-updates)
 
