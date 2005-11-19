@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>LATEX Support</TITLE>
-<META NAME="description" CONTENT="LATEX Support">
+<TITLE>Customizing Aquamacs</TITLE>
+<META NAME="description" CONTENT="Customizing Aquamacs">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -19,117 +19,195 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="STYLESHEET" HREF="aquamacs.css">
 
+<LINK REL="next" HREF="node36.html">
 <LINK REL="previous" HREF="node34.html">
-<LINK REL="up" HREF="node32.html">
+<LINK REL="up" HREF="node33.html">
 <LINK REL="next" HREF="node36.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html551"
+<A NAME="tex2html556"
   HREF="node36.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html547"
-  HREF="node32.html">
+<A NAME="tex2html552"
+  HREF="node33.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html543"
+<A NAME="tex2html546"
   HREF="node34.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html549"
+<A NAME="tex2html554"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html552"
-  HREF="node36.html">Enhanced Carbon Emacs Plugin</A>
-<B> Up:</B> <A NAME="tex2html548"
-  HREF="node32.html">Aquamacs for Emacs Veterans</A>
-<B> Previous:</B> <A NAME="tex2html544"
-  HREF="node34.html">Customizing Aquamacs</A>
- &nbsp; <B>  <A NAME="tex2html550"
+<B> Next:</B> <A NAME="tex2html557"
+  HREF="node36.html">L<SUP>A</SUP>TEX Support</A>
+<B> Up:</B> <A NAME="tex2html553"
+  HREF="node33.html">Aquamacs for Emacs Veterans</A>
+<B> Previous:</B> <A NAME="tex2html547"
+  HREF="node34.html">Keyboard Shortcuts</A>
+ &nbsp; <B>  <A NAME="tex2html555"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION00063000000000000000">
-<SPAN CLASS="logo,LaTeX">L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X</SPAN> Support</A>
+<H2><A NAME="SECTION00062000000000000000">
+Customizing Aquamacs</A>
 </H2>
+One of the distinguishing features of Emacs is the degree to which it
+can be customized by the end user. Emacs includes its own internal
+scripting language, elisp, which allows the user to customize such
+things as keyboard shortcuts, window settings, fonts, and more. The
+Aquamacs customizations themselves are implemented in elisp.<A NAME="tex2html17"
+  HREF="footnode.html#foot164"><SUP><SPAN CLASS="arabic">3</SPAN></SUP></A>
+<P>
+We recommend that user customizations be placed in specific locations:
 
 <P>
-One special feature of Aquamacs is its extensive support for the
-editing of <SPAN CLASS="logo,LaTeX">L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X</SPAN>documents, especially Emacs' Auc<SPAN CLASS="logo-TeX">T<SMALL>E</SMALL>X</SPAN> mode. 
+
+<UL>
+<LI>/Library/Preferences/Emacs/Preferences.el: Preferences for all Carbon  Emacs installations
+</LI>
+<LI>/Library/Preferences/Aquamacs Emacs/Preferences.el: Preferences for  Aquamacs and for all users
+</LI>
+<LI>/Users/username/Library/Preferences/Emacs/Preferences.el: User-specific  preferences for all Carbon Emacs installations
+</LI>
+<LI>/Users/username/Library/Preferences/Aquamacs Emacs/Preferences.el: User-specific  preferences for Aquamacs
+</LI>
+</UL>
+
+<P>
+If in doubt, use the last option:
+
+<UL>
+<LI>/Users/username/Library/Preferences/Aquamacs Emacs/Preferences.el
+</LI>
+</UL>
+
+<P>
+This replaces the usual&nbsp;/.emacs file, which is still loaded for  compatibility.
+
+<P>
+Below are some specific customization items that may be of interest:
 
 <P>
 
-<DIV ALIGN="CENTER"><A NAME="aquamacs-tex.jpg"></A><A NAME="184"></A>
+<UL>
+<LI><SPAN  CLASS="textbf">Frame.</SPAN> Aquamacs opens new files (and other buffers) in
+  new frames. That is usually more convenient and allows you to use
+  the graphical user  interface of today's computers, which did not
+  exist when Emacs was  conceived almost three decades ago. If you do
+  not like this behavior, perhaps  because you are used to traditional
+  Emacs, just deselect  ``Display Buffers in Separate Frames'' in the
+  Options menu and save  your choice with ``Save Options.''
+
+<P>
+</LI>
+<LI><SPAN  CLASS="textbf">mac-option-modifier.</SPAN> This is  the modifier to use for the Mac alt/option key.  The value can
+be alt, hyper, or super for the respective modifier.  If the value is
+nil then the key will act as the normal Mac option modifier, and the option
+key can be used to compose characters depending on the chosen Mac keyboard
+setting. 
+
+<P>
+</LI>
+<LI><SPAN  CLASS="textbf">Additional customization.</SPAN> Of course, Aquamacs Emacs
+  offers you almost all the customization  possibilities that Emacs
+  has. Under ``Customize Emacs,'' you will find  a sub-menu that
+  allows you to browse the vast space of customization
+  settings. Beware: some of them are complex and not easy to
+  understand. If you would like to tinker with some Aquamacs-specific
+  behavior, you can customize the group ``Aquamacs.'' See Table <A HREF="#tab:variables">4</A> for a complete list of the items that can be configured here.
+
+<P>
+<BR><P></P>
+<DIV ALIGN="CENTER"><A NAME="180"></A>
 <TABLE>
-<CAPTION ALIGN="BOTTOM"><STRONG>Figure 4:</STRONG>
-Aquamacs offers extensive support for <SPAN CLASS="logo,LaTeX">L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X</SPAN> documents.</CAPTION>
+<CAPTION><STRONG>Table 4:</STRONG>
+Aquamacs-specific variables that can be customized in the Aquamacs customization group.</CAPTION>
 <TR><TD>
 <DIV ALIGN="CENTER">
+<TABLE CELLPADDING=3 BORDER="1" ALIGN="CENTER">
+<TR><TH ALIGN="LEFT"><SPAN  CLASS="textbf">Variable</SPAN></TH>
+</TR>
+<TR><TD ALIGN="LEFT">Aquamacs Set Creator Codes After Writing Files</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Aquamacs Quick Yes Or No Prompt</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Aquamacs Ring Bell On Error</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Aquamacs Mode Specific Default Themes</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Aquamacs Buffer Specific Frame Themes</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Aquamacs Auto Frame Parameters Flag</TD>
+</TR>
+<TR><TD ALIGN="LEFT">One Buffer One Frame</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Smart Frame Positioning Enforce</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Smart Frame Positioning Mode</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Mac Option Modifier</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Mac Control Modifier</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Mac Command Modifier</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Aquamacs Known Buffer Modes</TD>
+</TR>
+</TABLE> 
 
-</DIV><IMG
-  WIDTH="500" HEIGHT="375" ALIGN="BOTTOM" BORDER="0"
- SRC="./aquamacs-tex.jpg"
- ALT="Image aquamacs-tex"></TD></TR>
+<A NAME="tab:variables"></A>
+</DIV></TD></TR>
 </TABLE>
-</DIV>
+</DIV><P></P>
+<BR>
 
 <P>
-AUCTeX comes with its own manual, accessible via the LaTeX menu (when in latex mode after loading a .tex file), ``Read the AUCTeX manual''. If you have a question, please consult the manual. If that doesn't work, or you suspect you've found a bug in AUCTeX, please turn to the AUCTeX mailing lists, accessible here: <TT><A NAME="tex2html21"
-  HREF="http://www.gnu.org/software/auctex/mailing-lists.html">http://www.gnu.org/software/auctex/mailing-lists.html</A></TT>.
-
-<P>
-To  access the enhanced <SPAN CLASS="logo,LaTeX">L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X</SPAN> functionality that Aquamacs offers, you will need to install a LaTeX system. Our recommendation:
- Install Gerben Wierda's <SPAN CLASS="logo-TeX">T<SMALL>E</SMALL>X</SPAN> package for Mac OS X. This package
-  is the most complete and user-friendly <SPAN CLASS="logo-TeX">T<SMALL>E</SMALL>X</SPAN> distribution for the
-  Mac. You can download the installer package at
-  <TT><A NAME="tex2html22"
-  HREF="http://www.rna.nl/tex.html">http://www.rna.nl/tex.html</A></TT>. While you can obtain <SPAN CLASS="logo-TeX">T<SMALL>E</SMALL>X</SPAN> from
-  other sources,  the Gerben Wierda distribution is particularly well supported in
-  Aquamacs.
-
-<P>
-<BR><HR>
-<!--Table of Child-Links-->
-<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
-
-<UL CLASS="ChildLinks">
-<LI><A NAME="tex2html553"
-  HREF="node36.html">Enhanced Carbon Emacs Plugin Under Development</A>
-<LI><A NAME="tex2html554"
-  HREF="node37.html"><SPAN CLASS="logo-TeX">T<SMALL>E</SMALL>X</SPAN>niscope: A Superb <SPAN CLASS="logo,LaTeX">L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X</SPAN> Previewer</A>
+</LI>
 </UL>
-<!--End of Table of Child-Links-->
+
+<P>
+The range of possible customizations--including restoring some of
+Emacs' traditional interface conventions--is beyond the scope of this
+help document. However, we provide a wiki for users to share their
+modifications. See
+<TT><A NAME="tex2html19"
+  HREF="http://www.emacswiki.org/cgi-bin/wiki/AquamacsEmacs/">http://www.emacswiki.org/cgi-bin/wiki/AquamacsEmacs/</A></TT> for more
+details. 
+
+<P>
 
 <DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
-<A NAME="tex2html551"
+<A NAME="tex2html556"
   HREF="node36.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html547"
-  HREF="node32.html">
+<A NAME="tex2html552"
+  HREF="node33.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html543"
+<A NAME="tex2html546"
   HREF="node34.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html549"
+<A NAME="tex2html554"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html552"
-  HREF="node36.html">Enhanced Carbon Emacs Plugin</A>
-<B> Up:</B> <A NAME="tex2html548"
-  HREF="node32.html">Aquamacs for Emacs Veterans</A>
-<B> Previous:</B> <A NAME="tex2html544"
-  HREF="node34.html">Customizing Aquamacs</A>
- &nbsp; <B>  <A NAME="tex2html550"
+<B> Next:</B> <A NAME="tex2html557"
+  HREF="node36.html">L<SUP>A</SUP>TEX Support</A>
+<B> Up:</B> <A NAME="tex2html553"
+  HREF="node33.html">Aquamacs for Emacs Veterans</A>
+<B> Previous:</B> <A NAME="tex2html547"
+  HREF="node34.html">Keyboard Shortcuts</A>
+ &nbsp; <B>  <A NAME="tex2html555"
   HREF="node1.html">Contents</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
 David
-2005-11-09
+2005-11-19
 </ADDRESS>
 </BODY>
 </HTML>

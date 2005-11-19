@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Features and Changes: 0.9.3</TITLE>
-<META NAME="description" CONTENT="Features and Changes: 0.9.3">
+<TITLE>Bug Fixes--0.9.3</TITLE>
+<META NAME="description" CONTENT="Bug Fixes--0.9.3">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -19,6 +19,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="STYLESHEET" HREF="aquamacs.css">
 
+<LINK REL="next" HREF="node12.html">
 <LINK REL="previous" HREF="node10.html">
 <LINK REL="up" HREF="node3.html">
 <LINK REL="next" HREF="node12.html">
@@ -27,63 +28,201 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html248"
+<A NAME="tex2html253"
   HREF="node12.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html244"
+<A NAME="tex2html249"
   HREF="node3.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html240"
+<A NAME="tex2html243"
   HREF="node10.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html246"
+<A NAME="tex2html251"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html249"
-  HREF="node12.html">New Address</A>
-<B> Up:</B> <A NAME="tex2html245"
+<B> Next:</B> <A NAME="tex2html254"
+  HREF="node12.html">Features and Changes: 0.9.3</A>
+<B> Up:</B> <A NAME="tex2html250"
   HREF="node3.html">What's New in This</A>
-<B> Previous:</B> <A NAME="tex2html241"
-  HREF="node10.html">Bug Fixes 0.9.3</A>
- &nbsp; <B>  <A NAME="tex2html247"
+<B> Previous:</B> <A NAME="tex2html244"
+  HREF="node10.html">Bug Fixes 0.9.3a and</A>
+ &nbsp; <B>  <A NAME="tex2html252"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION00038000000000000000">
-Features and Changes: 0.9.3</A>
+Bug Fixes--0.9.3</A>
 </H2>
 
 <P>
-<BR><HR>
-<!--Table of Child-Links-->
-<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<UL CLASS="ChildLinks">
-<LI><A NAME="tex2html250"
-  HREF="node12.html">New Address</A>
-<LI><A NAME="tex2html251"
-  HREF="node13.html">Running Aquamacs</A>
-<LI><A NAME="tex2html252"
-  HREF="node14.html">Frame and Window Operations</A>
-<LI><A NAME="tex2html253"
-  HREF="node15.html">Fonts</A>
-<LI><A NAME="tex2html254"
-  HREF="node16.html">Interface</A>
-<LI><A NAME="tex2html255"
-  HREF="node17.html">Configuration</A>
-<LI><A NAME="tex2html256"
-  HREF="node18.html">External Tools Support</A>
-<LI><A NAME="tex2html257"
-  HREF="node19.html">User Documentation</A>
+<UL>
+<LI>Initial-frame-alist is respected. (Reported by Alastair Rankine)
+
+<P>
+</LI>
+<LI>When saving a buffer and the Finder is not running, 
+	the Finder is not opened any more. (Reported by George W. Gilchrist.)
+
+<P>
+</LI>
+<LI>Using dead-keys (like Option-u or Option-n on most
+	keyboards) works again. (Reported by Howard Melman and Pierre Albarede
+</LI>
+<LI>When modified files existed, but no frame was visible and
+    one tried to quit Aquamacs, the application seemed to hang while
+    prompting for keyboard input (Save file? y/n) in an invisible
+    window. This has been fixed. 
+
+<P>
+</LI>
+<LI>If no frame is visible and you input text, the frame is  made
+    visible so you can see what you are doing.
+
+<P>
+</LI>
+<LI>Closing windows consistently with the mouse now works properly. 
+
+<P>
+</LI>
+<LI>Clicking on links to source files in help buffers properly
+    opens a new frame (if ``open buffers in separate frames'' is on).
+
+<P>
+</LI>
+<LI>When the buffer shown in a frame changes, sometimes the
+    color theme and font were not set correctly; this has been addressed. This could happen when
+    ``Show Buffers in Separate Frames'' was off, and one killed a
+    buffer. (Reported by Peter Dyballa.)
+
+<P>
+</LI>
+<LI>When ``Show Buffers in Separate Frames'' was off, and one killed a
+    buffer (kill-buffer, C-x k), the frame was deleted.
+
+<P>
+</LI>
+<LI>You have the option to save newly created buffers (Command-N)
+    that have not been saved yet when you quit Aquamacs.
+
+<P>
+</LI>
+<LI>Less frame-dancing (resizing) on startup.
+
+<P>
+</LI>
+<LI>AUC<SPAN CLASS="logo-TeX">T<SMALL>E</SMALL>X</SPAN> uses the standard commands again. The menu is
+  unstructured for this reason. (Reported by Robert Sloan.)
+
+<P>
+</LI>
+<LI>No frames could be opened when using a two-screen setup
+    with the menu bar on the right screen, and a currently selected
+    frame on the left screen. This has been addressed.  (Reported by George W. Gilchrist.)
+
+<P>
+</LI>
+<LI>Customizing a theme for a special display frame (e.g.  help or
+    customization) works now.
+
+<P>
+</LI>
+<LI>Recent Files/Clear Menu works again.
+
+<P>
+</LI>
+<LI>Paths and other environment variables are now derived
+    from the shell  when
+    you start Aquamacs. 
+
+<P>
+</LI>
+<LI>Your settings for highlight parens,``Blinking Cursor,'' etc.  are now
+    persistent. The function Options/Save Options
+    (menu-bar-option-save) now correctly saves such settings. This
+    should include most customization settings except some that
+    Aquamacs relies on for proper clipboard copy/paste functionality.
+
+<P>
+</LI>
+<LI>The font menu (Options) no longer includes non-existent fonts. 
+
+<P>
+</LI>
+<LI>Option/Show-Hide/Menu Bar is gone because you cannot turn off  the
+    menu bar on OS X.
+
+<P>
+</LI>
+<LI>``Send Emacs Bug Report'' now uses the OS X
+    default mail program to compose
+    a message. This ensures that bug reports actually go through.
+    Before, they did not, unless you were running a local SMTP server
+    (sendmail/postfix), which is not enabled by default.
+
+<P>
+</LI>
+<LI>Fixed loading of files when file names contain certain  Kanji characters,
+    due to a bug in AppleScript.
+
+<P>
+</LI>
+<LI>The menu shortcut entries were corrected.
+
+<P>
+</LI>
+<LI>Characters that require the use of the option key work again. For
+    example, Alt-3 produces the pound sign (£) on a US keyboard,
+    Alt-L the `at' sign @ and Alt-Shift-7 the backslash  on a
+    German one. Inputting the Euro sign works, too. <SPAN  CLASS="textit">However, that means that the option key is not used to emulate
+    the `meta' modifier;  you will have to use Esc to do that.</SPAN>
+    Alternatively, you can map the option key to meta in your .emacs
+    file:
+
+<P>
+<TT>    (setq mac-option-modifier 'meta)</TT>
+
+<P>
+</LI>
+<LI>Improvements in the fontset selection allow you to display the  Euro sign
+    with the default font.
+
+<P>
+</LI>
 </UL>
-<!--End of Table of Child-Links-->
-<BR><HR>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html253"
+  HREF="node12.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html249"
+  HREF="node3.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html243"
+  HREF="node10.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html251"
+  HREF="node1.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html254"
+  HREF="node12.html">Features and Changes: 0.9.3</A>
+<B> Up:</B> <A NAME="tex2html250"
+  HREF="node3.html">What's New in This</A>
+<B> Previous:</B> <A NAME="tex2html244"
+  HREF="node10.html">Bug Fixes 0.9.3a and</A>
+ &nbsp; <B>  <A NAME="tex2html252"
+  HREF="node1.html">Contents</A></B> </DIV>
+<!--End of Navigation Panel-->
 <ADDRESS>
 David
-2005-11-09
+2005-11-19
 </ADDRESS>
 </BODY>
 </HTML>
