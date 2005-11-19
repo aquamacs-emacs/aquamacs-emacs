@@ -41,7 +41,7 @@ em="$dest/Contents/MacOS/Aquamacs Emacs"
 
 cd "$dest"
  
-rm -r /tmp/backup.site-lisp
+rm -rf /tmp/backup.site-lisp
 mv  "Contents/Resources/site-lisp" /tmp/backup.site-lisp
 
 mkdir Contents/Resources/site-lisp 2>/dev/null
@@ -50,14 +50,14 @@ mkdir Contents/Resources/site-lisp/macosx 2>/dev/null
 mkdir Contents/Resources/site-lisp/edit-modes 2>/dev/null
 
 rm -r Contents/Resources/Aquamacs\ Help
-cp -pvr "$projdir/doc/AquamacsHelp" "Contents/Resources/Aquamacs Help"
+cp -pr "$projdir/doc/AquamacsHelp" "Contents/Resources/Aquamacs Help"
 rm -rf "Contents/Resources/Emacs Manual"
-cp -pvr "$projdir/doc/EmacsManual" "Contents/Resources/Emacs Manual"
-cp -pvr "$projdir/src/Emacs.icns" "Contents/Resources/Emacs.icns"
+cp -pr "$projdir/doc/EmacsManual" "Contents/Resources/Emacs Manual"
+cp -pr "$projdir/src/Emacs.icns" "Contents/Resources/Emacs.icns"
 
-cp -pvr "$projdir/src/etc/aquamacs-splash-screen.jpg" "Contents/Resources/etc/"
+cp -pr "$projdir/src/etc/aquamacs-splash-screen.jpg" "Contents/Resources/etc/"
 
-cp -pvr "$projdir/src/Info.plist" Contents/
+cp -pr "$projdir/src/Info.plist" Contents/
  
 # update this
 
@@ -69,15 +69,15 @@ echo "CFBundleGetInfoString = \"Aquamacs $AQVERSION, Copyright (C) 2005 by David
 
 
 
-cp -pvr "$projdir/src/emacs-document.icns" Contents/Resources/
+cp -pr "$projdir/src/emacs-document.icns" Contents/Resources/
 
-cp -Rvp "$projdir"/src/site-lisp/*.el Contents/Resources/site-lisp/
+cp -Rp "$projdir"/src/site-lisp/*.el Contents/Resources/site-lisp/
 
-cp -Rvp "$projdir"/src/site-lisp/edit-modes/* Contents/Resources/site-lisp/edit-modes/
+cp -Rp "$projdir"/src/site-lisp/edit-modes/* Contents/Resources/site-lisp/edit-modes/
  
 
-cp -Rvp "$projdir"/src/site-lisp/macosx/*.el Contents/Resources/site-lisp/macosx/
-cp -Rvp "$projdir"/src/site-lisp/oneonone/*.el Contents/Resources/site-lisp/oneonone/
+cp -Rp "$projdir"/src/site-lisp/macosx/*.el Contents/Resources/site-lisp/macosx/
+cp -Rp "$projdir"/src/site-lisp/oneonone/*.el Contents/Resources/site-lisp/oneonone/
 
 if [ $compile ]; then
     # prevent the site-start.el from being loaded all the time (gives error)
