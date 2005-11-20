@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.29 2005/11/17 23:32:45 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.30 2005/11/20 20:22:10 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -579,6 +579,13 @@ Aquamacs 0.9.7 on. `mac-option-modifier' has been set for you."))))
 
   (cua-mode 1) ;; this goes first (so we can overwrite the settings)
 
+  (defun aquamacs-cua-warning ()
+    (and (not cua-mode)
+	 (message 
+	  "Warning: You have turned off `cua-mode' in your customizations 
+or init file. Without this mode, Aquamacs will behave in an 
+un-Mac-like way when you select text and copy&paste it.")))
+  (add-hook 'after-init-hook 'aquamacs-cua-warning)
   
   ;; use right mouse click as mouse-2
   (setq mac-wheel-button-is-mouse-2 t)
@@ -665,11 +672,14 @@ Aquamacs 0.9.7 on. `mac-option-modifier' has been set for you."))))
 
 ;; redefine this
 (defun startup-echo-area-message ()
-  (if (eq (key-binding [(alt \?)]) 'aquamacs-user-help)
+  (if (and (eq window-system 'mac) 
+	   (eq (key-binding [(alt \?)]) 'aquamacs-user-help))
       "For an introduction to Aquamacs Emacs, type Apple-?."
-    (substitute-command-keys
+    (if window-system
+	"For an introduction to Aquamacs Emacs,\nchoose `Aquamacs Help' from the `Help' menu."
+	(substitute-command-keys
      "For a introduction to Aquamacs Emacs, type \
-\\[aquamacs-user-help].")))
+\\[aquamacs-user-help]."))))
 
 (if (string= "mac" window-system)
     (defun use-fancy-splash-screens-p () t)
