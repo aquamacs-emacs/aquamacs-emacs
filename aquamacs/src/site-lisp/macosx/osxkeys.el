@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.43 2005/11/19 18:03:47 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.44 2005/11/20 20:16:52 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -55,7 +55,14 @@
 
 ;;; MacOS X specific stuff
 
-(defvar osxkeys-command-key mac-command-modifier)
+(defvar osxkeys-command-key mac-command-modifier
+"Command key used for `osx-key-mode'.
+Defaults to the value of `mac-command-modifier'.
+You will need to run
+
+(setq  osx-key-mode-map (make-osx-key-mode-map))
+
+after updating this variable.")
 
 ;; Define the return key to avoid problems on MacOS X
 (define-key function-key-map [return] [13])
@@ -703,6 +710,21 @@ default."
   "Keymap for `osx-key-mode'.")
 ;; (setq  osx-key-mode-map (make-osx-key-mode-map))
 
+
+(defun osx-key-mode-command-key-warning ()
+  (and osx-key-mode
+       (not (eq mac-command-modifier osxkeys-command-key))
+       (message (format
+"Warning: You have set `mac-command-modifier' to %s in your 
+customizations or init file. The Mac-like keyboard shortcuts
+provided by `osx-key-mode' won't work with this setting.
+The mode uses `osxkeys-command-key' als Command, which is
+currently set to %s. You should change one of those two
+variables or turn off `osx-key-mode'.
+See the description of `osxkeys-command-key'." 
+mac-command-modifier osxkeys-command-key))))
+
+
 (define-minor-mode osx-key-mode
   "Toggle Mac Key mode.
 With arg, turn Mac Key mode on iff arg is positive.
@@ -719,9 +741,9 @@ When Mac Key mode is enabled, mac-style key bindings are provided."
  
   (setq mac-emulate-three-button-mouse (if osx-key-mode
 					   'ctrl
-					 nil)))
+					 nil))
+  (osx-key-mode-command-key-warning))
   
-
-
+(add-hook 'after-init-hook 'osx-key-mode-command-key-warning)
 
 (provide 'osxkeys)
