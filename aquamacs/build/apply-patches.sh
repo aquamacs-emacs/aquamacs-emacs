@@ -21,7 +21,7 @@ fi
 cd ${EMACS_ROOT}
 echo "minibuffer-space"
 patch -p0 <${AQUAMACS_ROOT}/patches/minibuffer-space.patch 
-echo "soft-wrap (experimental)"
+echo "pretty-modeline"
 patch -p0 <${AQUAMACS_ROOT}/patches/pretty-modeline.patch 
 echo "soft-wrap (experimental)"
 patch -p0 <${AQUAMACS_ROOT}/patches/soft-wrap.patch 
