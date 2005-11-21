@@ -1,5 +1,5 @@
 *** src/macterm.c	Tue Nov 15 23:14:07 2005
---- src/macterm.c	Wed Nov 16 00:04:01 2005
+--- src/macterm.c	Mon Nov 21 17:39:45 2005
 ***************
 *** 8223,8233 ****
   {
@@ -13,21 +13,24 @@
     }
     return result;
   }
---- 8223,8240 ----
+--- 8223,8243 ----
   {
     int result = 0;
     if (!NILP (Vmac_emulate_three_button_mouse)) {
 !     if (EQ (Vmac_emulate_three_button_mouse, Qreverse))
 !       {
-! 	result = (modifiers & optionKey) ? 2 : ((modifiers & cmdKey) ? 1 : 0);
+! 	result = (modifiers & optionKey) ? ((modifiers & cmdKey) ? 3 : 2) : 
+! 	  ((modifiers & cmdKey) ? 1 : 0);
 !       }
 !     else if (EQ (Vmac_emulate_three_button_mouse, Qctrl))
 !       {
-! 	result = (modifiers & controlKey) ? 2 : ((modifiers & cmdKey) ? 1 : 0);
+! 	result = (modifiers & controlKey) ? ((modifiers & cmdKey) ? 3 : 2) : 
+! 	  ((modifiers & cmdKey) ? 1 : 0);
 !       }
 !     else 
 !       {
-! 	result = (modifiers & optionKey) ? 1 : ((modifiers & cmdKey) ? 2 : 0);
+! 	result = (modifiers & optionKey) ? ((modifiers & cmdKey) ? 3 : 1) : 
+! 	  ((modifiers & cmdKey) ? 2 : 0);
 !       }
     }
     return result;
@@ -41,12 +44,20 @@
       }
     return mac_to_emacs_modifiers (mods);
   }
---- 8251,8258 ----
+--- 8254,8269 ----
     if (!NILP (Vmac_emulate_three_button_mouse) &&
         GetEventClass(eventRef) == kEventClassMouse)
       {
-!       mods &= ~(((EQ (Vmac_emulate_three_button_mouse, Qctrl))
-! 		 ? controlKey : optionKey) | cmdKey);
+!       /* Only for a true mouse-1 */
+!       EventMouseButton button = kEventMouseButtonPrimary;
+!       GetEventParameter (eventRef, kEventParamMouseButton, 
+! 			 typeMouseButton, NULL,
+! 			 sizeof (EventMouseButton), NULL, &button);
+!       if (button == kEventMouseButtonPrimary) 
+! 	{
+! 	  mods &= ~(((EQ (Vmac_emulate_three_button_mouse, Qctrl))
+! 		     ? controlKey : optionKey) | cmdKey);
+! 	}
       }
     return mac_to_emacs_modifiers (mods);
   }
@@ -65,7 +76,7 @@
     Vmac_emulate_three_button_mouse = Qnil;
   
   #if USE_CARBON_EVENTS
---- 11026,11040 ----
+--- 11037,11051 ----
   
     DEFVAR_LISP ("mac-emulate-three-button-mouse",
   	       &Vmac_emulate_three_button_mouse,
