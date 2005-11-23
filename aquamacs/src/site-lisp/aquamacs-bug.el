@@ -3,7 +3,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: mac bug report
  
-;; Last change: $Id: aquamacs-bug.el,v 1.7 2005/07/01 06:51:24 davidswelt Exp $
+;; Last change: $Id: aquamacs-bug.el,v 1.8 2005/11/23 21:36:14 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -59,6 +59,8 @@ the HTML to bring up the appropriate mail client."
 	    browse-url-default-windows-browser 
 	    browse-url-default-macosx-browser 
 	    browse-url-gnome-moz 
+	    browse-url-safari
+	    browse-url-camino
 	    )
 	  )
   )
