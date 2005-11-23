@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.20 2005/10/27 00:28:38 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.21 2005/11/23 21:35:26 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -43,6 +43,19 @@
 			       (file-truename load-file-name))))
       "/Applications/Aquamacs Emacs.app")) ;; default
   )
+
+
+(defun browse-url-safari (url &optional new-window)
+   "Open URL in a new Safari window."
+   (interactive (browse-url-interactive-arg "URL: "))
+   (unless
+       (string= ""
+             (shell-command-to-string
+              (concat "open -a Safari " url)))
+     (message "Starting Safari...")
+     (start-process (concat "open -a Safari " url) nil "open -a Safari " url)
+     (message "Starting Safari... done")))
+
 
 
 (defun mac-resources-path ()
