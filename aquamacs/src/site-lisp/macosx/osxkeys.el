@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.44 2005/11/20 20:16:52 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.45 2005/11/24 20:09:10 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -570,6 +570,36 @@ and selects that window."
 	 )  )
   )
  
+
+(defun aquamacs-get-mouse-major-mode-menu ()
+  "Pop up a mode-specific menu of mouse commands.
+Defaults to nil if the major mode doesn't define a menu."
+  ;; Switch to the window clicked on, because otherwise
+  ;; the mode's commands may not make sense.
+  (interactive "@e\nP")
+  ;; Let the mode update its menus first.
+  (run-hooks 'activate-menubar-hook 'menu-bar-update-hook)
+  (let* (;; This is where mouse-major-mode-menu-prefix
+	 ;; returns the prefix we should use (after menu-bar).
+	 ;; It is either nil or (SOME-SYMBOL).
+	 (mouse-major-mode-menu-prefix nil)
+	 ;; Keymap from which to inherit; may be null.
+	 (ancestor (mouse-major-mode-menu-1
+		    (and (current-local-map)
+			 (local-key-binding [menu-bar]))))
+	 ;; Make a keymap in which our last command leads to a menu or
+	 ;; default to the edit menu.
+	 (newmap (if ancestor
+		     (make-sparse-keymap (concat mode-name " Mode"))
+		   nil)))
+    (if ancestor
+	;; Make our menu inherit from the desired keymap which we want
+	;; to display as the menu now.
+	(set-keymap-parent newmap ancestor))
+    newmap))
+
+
+
 (defvar aquamacs-context-menu-map
   (let ((map (make-sparse-keymap)))
     (define-key map [paste] (cons "Paste" 'clipboard-yank))
@@ -582,6 +612,7 @@ and selects that window."
 				   'aquamacs-google-lookup))
     (define-key map [aq-cm-sep3] '(menu-item "--"))
     (define-key map [switch-buffer] nil)
+    (define-key map [mode-menu] nil)
     (define-key map [aq-cm-sep4] '(menu-item "--"))
     (define-key map [yank-here] '(menu-item "Yank here" 
 				     mouse-yank-at-click
@@ -592,13 +623,22 @@ and selects that window."
    map) "Keymap for the Aquamacs context menu.")
 
 (defvar aquamacs-popup-context-menu-buffers-state nil)
+(require 'aquamacs-menu) ;; for pretty mode name function
 (defun aquamacs-popup-context-menu  (event &optional  prefix)
   "Popup a context menu. 
 Its content is specified in the keymap `aquamacs-context-menu-map'."
   (interactive "@e \nP")
   ;; Let the mode update its menus first.
   ;; (run-hooks 'activate-menubar-hook 'menu-bar-update-hook)
-  (if (frame-or-buffer-changed-p 'aquamacs-popup-context-menu-buffers-state)
+  (when (frame-or-buffer-changed-p 'aquamacs-popup-context-menu-buffers-state)
+    (let ((mode-menu (aquamacs-get-mouse-major-mode-menu)))
+      (if mode-menu
+	  ;; TO DO major mode might not work unless we switch buffer
+	  (define-key aquamacs-context-menu-map [mode-menu] 
+	    `(menu-item ,(aquamacs-pretty-mode-name major-mode) ,mode-menu :visible t))
+	(define-key aquamacs-context-menu-map [mode-menu] 
+	  '(menu-item nil :visible nil))))
+
     (define-key aquamacs-context-menu-map [switch-buffer] 
       `(menu-item "Switch to Buffer "   
 	      ,(aquamacs-make-mouse-buffer-menu)
@@ -613,8 +653,7 @@ Its content is specified in the keymap `aquamacs-context-menu-map'."
   ;; 		 (car (car (cdr event)))))))
   
     (popup-menu aquamacs-context-menu-map event prefix))
-
-
+  
 
 
 
@@ -742,6 +781,11 @@ When Mac Key mode is enabled, mac-style key bindings are provided."
   (setq mac-emulate-three-button-mouse (if osx-key-mode
 					   'ctrl
 					 nil))
+
+
+  ;; use right mouse click as mouse-3
+  (setq mac-wheel-button-is-mouse-2 osx-key-mode)
+
   (osx-key-mode-command-key-warning))
   
 (add-hook 'after-init-hook 'osx-key-mode-command-key-warning)
