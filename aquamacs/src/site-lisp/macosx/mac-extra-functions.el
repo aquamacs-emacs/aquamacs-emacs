@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.21 2005/11/23 21:35:26 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.22 2005/11/24 00:53:06 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -44,6 +44,33 @@
       "/Applications/Aquamacs Emacs.app")) ;; default
   )
 
+
+(defun aquamacs-delete-temp-url-files ()
+  (shell-command "rm -f /tmp/aquamacs-* 2>/dev/null" 'shut-up))
+
+(defun browse-url-default-macosx-browser-via-redirection (url &optional new-window)
+  "Opens a URL with the system's default browser.
+If the URL points to a local file (file://), this will
+open the file via redirection in order to ensure that the
+file is actually opened with the browser, and not with the
+application that happens to be handling .html files. 
+As default browser, in that case, is assumed whatever application
+handles files of type HTML."
+  (interactive (browse-url-interactive-arg "URL: "))
+  (if (not (string-match "file:/*\\(/.*\\)" url))
+      (start-process (concat "open " url) nil "open" url)
+    (let* ((file (match-string 1 url))
+	   (newfile "/tmp/aquamacs-redirect-html.aquamacs-html"))
+      ;;  (copy-file file newfile 'overwrite 'keeptime nil 'preserve)
+      (let ((coding-system-for-write 'no-conversion)) 
+	(write-region (format "<html><head><META HTTP-EQUIV=\"Refresh\" CONTENT=\"0; URL=%s\"></head><body></body></html>" url) nil newfile nil 'quiet ))
+      (mac-set-file-type newfile "HTML")
+      (start-process (concat "open " newfile) nil "open" url)
+      (add-hook 'kill-emacs-hook 'aquamacs-delete-temp-url-files))))
+v
+
+(aquamacs-set-defaults '(
+ (browse-url-browser-function browse-url-default-macosx-browser-via-redirection)))
 
 (defun browse-url-safari (url &optional new-window)
    "Open URL in a new Safari window."
