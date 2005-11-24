@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.22 2005/11/24 00:53:06 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.23 2005/11/24 07:52:36 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -67,7 +67,7 @@ handles files of type HTML."
       (mac-set-file-type newfile "HTML")
       (start-process (concat "open " newfile) nil "open" url)
       (add-hook 'kill-emacs-hook 'aquamacs-delete-temp-url-files))))
-v
+
 
 (aquamacs-set-defaults '(
  (browse-url-browser-function browse-url-default-macosx-browser-via-redirection)))
