@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.39 2005/11/18 12:45:30 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.40 2005/11/24 20:08:50 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -299,14 +299,18 @@ using `aquamacs-recent-major-modes' and `aquamacs-known-major-modes'."
    (aq-concat-symbol symbol-prefix "recent-") 
    function-to-call docstring enable-if))
 
+;; also used by osxkeys.el
+(defmacro aquamacs-pretty-mode-name (mode)
+  (capitalize 
+   (replace-regexp-in-string "-mode" "" (symbol-name (eval mode)))))
+
 (defun aquamacs-define-mode-menu-1
   (the-list keymap symbol-prefix function-to-call docstring enable-if)
   (mapc
    (lambda (modeentry)
      (let ((modename (if (consp modeentry) (car modeentry) modeentry))
 	   (displayname (if (consp modeentry) (cdr modeentry) 
-			  (capitalize 
-			   (replace-regexp-in-string "-mode" "" (symbol-name modeentry))))))
+			  (aquamacs-pretty-mode-name modeentry))))
 
      (when (fboundp modename)
        (define-key ;;-after doesn't work with after- why?>? 
