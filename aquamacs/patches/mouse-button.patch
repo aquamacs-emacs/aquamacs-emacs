@@ -1,7 +1,12 @@
-*** src/macterm.c	Tue Nov 15 23:14:07 2005
---- src/macterm.c	Mon Nov 21 17:39:45 2005
+Index: macterm.c
+===================================================================
+RCS file: /cvsroot/emacs/emacs/src/macterm.c,v
+retrieving revision 1.145
+diff -c -r1.145 macterm.c
+*** macterm.c	24 Nov 2005 08:20:16 -0000	1.145
+--- macterm.c	26 Nov 2005 11:19:29 -0000
 ***************
-*** 8223,8233 ****
+*** 8222,8232 ****
   {
     int result = 0;
     if (!NILP (Vmac_emulate_three_button_mouse)) {
@@ -13,7 +18,7 @@
     }
     return result;
   }
---- 8223,8243 ----
+--- 8222,8242 ----
   {
     int result = 0;
     if (!NILP (Vmac_emulate_three_button_mouse)) {
@@ -36,7 +41,7 @@
     return result;
   }
 ***************
-*** 8244,8250 ****
+*** 8243,8249 ****
     if (!NILP (Vmac_emulate_three_button_mouse) &&
         GetEventClass(eventRef) == kEventClassMouse)
       {
@@ -44,7 +49,7 @@
       }
     return mac_to_emacs_modifiers (mods);
   }
---- 8254,8269 ----
+--- 8253,8268 ----
     if (!NILP (Vmac_emulate_three_button_mouse) &&
         GetEventClass(eventRef) == kEventClassMouse)
       {
@@ -62,33 +67,42 @@
     return mac_to_emacs_modifiers (mods);
   }
 ***************
-*** 11018,11030 ****
+*** 11012,11026 ****
   
     DEFVAR_LISP ("mac-emulate-three-button-mouse",
   	       &Vmac_emulate_three_button_mouse,
-!     doc: /* t means that when the option-key is held down while pressing the
-! mouse button, the click will register as mouse-2 and while the
-! command-key is held down, the click will register as mouse-3.
-! 'reverse means that the option-key will register for mouse-3
-! and the command-key will register for mouse-2.  nil means that
-! no emulation should be done and the modifiers should be placed
-! on the mouse-1 event. */);
+!     doc: /* Specify a way of three button mouse emulation.
+! The value can be nil, t, or the symbol `reverse'.
+! nil means that no emulation should be done and the modifiers should be
+! placed on the mouse-1 event.
+  t means that when the option-key is held down while pressing the mouse
+  button, the click will register as mouse-2 and while the command-key
+! is held down, the click will register as mouse-3.
+! The symbol `reverse' means that the option-key will register for
+! mouse-3 and the command-key will register for mouse-2.  */);
     Vmac_emulate_three_button_mouse = Qnil;
   
   #if USE_CARBON_EVENTS
---- 11037,11051 ----
+--- 11031,11052 ----
   
     DEFVAR_LISP ("mac-emulate-three-button-mouse",
   	       &Vmac_emulate_three_button_mouse,
-!     doc: /* Non-nil means emulate mouse buttons using modifier keys.
-! t means that when the option-key is held down while pressing the mouse
-! button, the click will register as mouse-2 and while the command-key
-! is held down, the click will register as mouse-3.  'reverse means that
-! the option-key will register for mouse-3 and the command-key will
-! register for mouse-2. If `ctrl', a click with the control-key held
-! down will register as mouse-3, and command-click will register as
-! mouse-2. nil means that no emulation should be done and the modifiers
-! should be placed on the mouse-1 event. */);
+!     doc: /* Specify a way of three button mouse emulation.  
+! The value canbe nil, t, or one of the symbols `reverse' or `ctrl'.  
+! Non-nil means emulate mouse buttons using modifier keys:  
+! 
+  t means that when the option-key is held down while pressing the mouse
+  button, the click will register as mouse-2 and while the command-key
+! is held down, the click will register as mouse-3.  
+! 
+! `reverse' means that the option-key will register for mouse-3 and the
+! command-key will register for mouse-2. 
+! 
+! `ctrl' means that a click with the control-key held down will register
+! as mouse-3, and command-click will register as mouse-2.
+! 
+! nil means that no emulation should be done and the modifiers should be
+! placed on the mouse-1 event. */);
     Vmac_emulate_three_button_mouse = Qnil;
   
   #if USE_CARBON_EVENTS
