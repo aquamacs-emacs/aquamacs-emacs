@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.46 2005/11/26 16:31:16 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.47 2005/11/26 17:07:16 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -45,7 +45,7 @@
 ;; To do: this should only happen when the mode is switched on
 
 (setq mac-option-modifier 'meta) 
-(setq mac-control-modifier 'ctrl)
+;;(setq mac-control-modifier nil) ;; use default
 (setq mac-command-modifier 'alt)
 (setq mac-pass-command-to-system t) ;; let system handle Apple-H and the like
 ;; (this is default anyways)
