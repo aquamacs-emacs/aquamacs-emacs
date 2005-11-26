@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.45 2005/11/24 20:09:10 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.46 2005/11/26 16:31:16 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -100,6 +100,8 @@ after updating this variable.")
 ;; respects goal-column
 ;; does not respect (yet)  track-eol 
 ;; unchecked: line-move-ignore-invisible
+(defun buffer-line-at-point ()
+ (or (cdr (nth 2 (posn-at-point))) 0))
 
 (defun visual-line-at-point ()
  (or (cdr (nth 6 (posn-at-point))) 0))
@@ -113,56 +115,82 @@ after updating this variable.")
 (defvar visual-movement-temporary-goal-column nil)
 (make-variable-buffer-local 'visual-movement-temporary-goal-column)
 
+(defvar visual-previous-scroll-margin 'none)
+(defun visual-restore-scroll-margin ()
+  (if (integerp visual-previous-scroll-margin)
+      (setq scroll-margin visual-previous-scroll-margin))
+    (remove-hook 'pre-command-hook 'visual-restore-scroll-margin))
+
+
+
+(defcustom visual-scroll-margin nil
+ "Number of lines of margin at top and bottom of a window. 
+For visual scrolling with up and down keys, this value
+applies instead of `scroll-margin' if it is non-nil.
+
+The reason this variable exists is that clicks in the first and last
+line of a window will set the cursor within the standard scroll-margin,
+causing the buffer to scroll immediately. This is usually undesired.
+In this case, set `scroll-margin' to zero and `visual-scroll-margin' 
+to the desired margin."
+:group 'Aquamacs)
+
+;; (setq scroll-margin 0)
+;; (setq visual-scroll-margin 5) 
 (defun visual-line-up (num-lines)
   (interactive "p")
   (if (bobp) (signal 'beginning-of-buffer nil))
   (let ((pixel-col (car (nth 2 (posn-at-point))))
 	(visual-col (visual-col-at-point))
 	(old-point (point))
-	(beg-of-line))
+	(end-of-old-line))
+
+    ;; temporary binding of scroll-margin
+    ;; cannot do this with a temporary let binding
+    (setq visual-previous-scroll-margin scroll-margin)
+    (setq scroll-margin visual-scroll-margin)
+    (add-hook 'pre-command-hook 'visual-restore-scroll-margin)
 
     (save-excursion
       (vertical-motion 1)	;; trying going one down, to left
-      (setq beg-of-line (point)))
+      (setq end-of-old-line (point)))
  
       (vertical-motion 0)
 
-    (let* ((next-line-start 
+    (let* ((beg-of-old-line 
 		;; move right, but not further than to end of line
 	    (prog1 (point)
 	      (vertical-motion (- num-lines))))	    ;; one up again
-	   (rel-next-line-start  (- next-line-start (point) 1)))
+	   (beg-of-new-line (point))
+	   (rel-beg-of-old-line  (- beg-of-old-line (point) 1)))
       ;; approximate positioning
       (if (and (or goal-column visual-movement-temporary-goal-column)
-	       (= old-point (- beg-of-line 1)))	;; jumping from end of line
+	       (= old-point (- end-of-old-line 1)))	
+	  ;; jumping from end of line
 	      
-	   (forward-char (min (or goal-column visual-movement-temporary-goal-column) 
-			      rel-next-line-start))
+	   (forward-char (min (or goal-column 
+				  visual-movement-temporary-goal-column) 
+			      rel-beg-of-old-line))
 	;; else, do complete positioning
 	;; save original position  
 	(setq visual-movement-temporary-goal-column visual-col)
 	;; approximate positioning
-	(forward-char (min visual-col rel-next-line-start)) 
+	(forward-char (min visual-col rel-beg-of-old-line)) 
 	;; correct position
 	(let ((new-line (visual-line-at-point)))
 	  (if (>= (visual-pixel-col-at-point) pixel-col)
 	      (progn 
 		(while (and 
 			(> (visual-pixel-col-at-point) pixel-col)
-			(= (visual-line-at-point) new-line))
-		  (forward-char -1))
-		(unless (= (visual-line-at-point) new-line)
-		  ;; moved too far, beyond the line?
-		  (forward-char +1)))
+			(> (point) beg-of-new-line) ;; do not cross line
+			)
+		  (forward-char -1)))
 	    (progn 
-	       
 	      (while (and 
 		      (< (visual-pixel-col-at-point) pixel-col)
-		      (= (visual-line-at-point) new-line))
-		 
-		(forward-char +1))
-	      (unless (= (visual-line-at-point) new-line)
-		(forward-char -1)))))))))
+		      (< (point) (1- beg-of-old-line)) ;; do not cross line
+		      )
+		(forward-char +1)))))))))
 
 (defun visual-line-down (num-lines)
  (interactive "p")
@@ -171,11 +199,20 @@ after updating this variable.")
 	(visual-col (visual-col-at-point))
 	(old-point (point))
 	(beg-of-line)
+	(next-line-start)
 	(rel-next-line-start))
+
+    ;; temporary binding of scroll-margin
+    ;; cannot do this with a temporary let binding
+    (setq visual-previous-scroll-margin scroll-margin)
+    (setq scroll-margin visual-scroll-margin)
+    (add-hook 'pre-command-hook 'visual-restore-scroll-margin)
+
     (vertical-motion num-lines) ;; down
     (save-excursion
       (setq beg-of-line (point))
       (vertical-motion +1) ;; down
+      (setq next-line-start (point))
       (setq rel-next-line-start  (- (point) beg-of-line 1)))
     (unless (= beg-of-line (point-max))
 	  ;; approximate positioning
@@ -195,18 +232,15 @@ after updating this variable.")
 		  (progn 
 		    (while (and 
 			    (> (visual-pixel-col-at-point) pixel-col)
-			    (= (visual-line-at-point) new-line))
-		      (forward-char -1))
-		    (unless (= (visual-line-at-point) new-line)
-		      ;; moved too far, beyond the line?
-		      (forward-char +1)))
+			    (> (point) beg-of-line) ;; do not cross line
+			    )
+		      (forward-char -1)))
 		(progn 
 		  (while (and 
 			  (< (visual-pixel-col-at-point) pixel-col)
-			  (= (visual-line-at-point) new-line))
-		    (forward-char +1))
-		  (unless (= (visual-line-at-point) new-line)
-		    (forward-char -1)))))))))
+			  (< (point) next-line-start) ;; do not cross line
+			  )
+		    (forward-char +1)))))))))
 
 	    
 (defun beginning-of-visual-line ()
