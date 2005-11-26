@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.41 2005/11/13 19:34:24 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.42 2005/11/26 16:32:05 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -109,7 +109,8 @@
   ;; do this early, so we can override settings
   (require 'aquamacs-frame-setup)
   ;; one-on-one is called later
-  (setq osxkeys-command-key (or mac-command-modifier 'alt))
+  (setq osxkeys-command-key (or (if (boundp 'mac-command-modifier)
+				    mac-command-modifier nil) 'alt))
   ;; we have inhibit-fit-frame set to true... can't do this
   ;; (global-set-key [(control ?x) (control ?-)] 'fit-frame)
   ;; use vector, not [...] in order to not allocate at load-time 
