@@ -1,0 +1,136 @@
+
+*** lisp/net/browse-url.el      25 Oct 2005 13:18:52 -0000      1.51
+--- lisp/net/browse-url.el      25 Nov 2005 21:07:14 -0000
+***************
+*** 811,818 ****
+      (w32-shell-execute "open" url)))
+  
+  (defun browse-url-default-macosx-browser (url &optional new-window)
+    (interactive (browse-url-interactive-arg "URL: "))
+!   (start-process (concat "open " url) nil "open" url))
+  
+  ;; --- Netscape ---
+  
+--- 811,820 ----
+      (w32-shell-execute "open" url)))
+  
+  (defun browse-url-default-macosx-browser (url &optional new-window)
++ "Launch the default browser specified in Mac OS X.
++ NEW-WINDOW is ignored."
+    (interactive (browse-url-interactive-arg "URL: "))
+!   (mac-launch-URL-with-default-browser url))
+  
+  ;; --- Netscape ---
+  
+
+
+
+*** src/mac.c	Fri Nov 25 20:45:05 2005
+--- src/mac.c	Fri Nov 25 21:06:10 2005
+***************
+*** 4247,4252 ****
+--- 4247,4332 ----
+      return Qnil;
+  }
+  
++ DEFUN ("mac-launch-URL-with-default-browser", Fmac_launch_url_with_default_browser, Smac_launch_url_with_default_browser, 1, 1, 0,
++        doc: /* Launch the URL with the system's default browser. 
++ Return non-nil if the URL has been successfully launched.*/)
++      (URLstring)
++      Lisp_Object URLstring;
++ {
++   check_mac();
++   CHECK_STRING (URLstring);
++   if (NILP (URLstring))
++     {
++       error ("URL is nil.");
++       return Qnil;
++     }
++ 
++   BLOCK_INPUT;
++   // get default browser
++ 	 
++   FSRef appRef;  // will be discarded
++   LSLaunchURLSpec spec;
++   OSStatus status;
++ 
++   /* Build URL to find out what the default handler for http is.
++      Without an explicit application reference, the launch function
++      (e.g. LSOpenFromURLSpec or ICLaunchURL) will determine the
++      default file handler for the file, which is not neccessarily the
++      default browser.*/
++ 	
++   char* urlStr = "http://www.gnu.org/"; // just a test URL
++   CFStringRef inURLCfs = CFStringCreateWithCString(NULL, urlStr,	
++ 						   kCFStringEncodingASCII);
++   CFURLRef inURLRef = CFURLCreateWithString(NULL, inURLCfs, NULL);
++ 	
++   /* Get application for opening html pages */
++   status = LSGetApplicationForURL(inURLRef, kLSRolesEditor, &appRef,
++ 				  &spec.appURL);
++   CFRelease(inURLRef);
++   CFRelease(inURLCfs);
++   
++   if (status == noErr) 
++     {
++       /* Open the file / http with the http handler */
++       CFStringRef targetUrlCfs = 
++ 	CFStringCreateWithCString(NULL, SDATA(URLstring),
++ 				  kCFStringEncodingASCII);
++       CFURLRef targetUrlRef = CFURLCreateWithString(NULL, targetUrlCfs, NULL);
++ 		
++       if ( (spec.itemURLs = 
++ 	    CFArrayCreate(NULL, (const void **)&targetUrlRef, 1, 
++ 			  &kCFTypeArrayCallBacks)) == NULL)
++ 	{
++ 	  return Qnil;
++ 	}
++       spec.passThruParams = NULL;
++       spec.launchFlags = kLSLaunchDefaults;
++       spec.asyncRefCon = NULL;
++       status = LSOpenFromURLSpec(&spec, NULL);
++ 		
++       CFRelease(spec.itemURLs);
++       CFRelease(targetUrlRef);
++       CFRelease(targetUrlCfs);
++       UNBLOCK_INPUT;
++ 
++       if (status != noErr) 
++ 	{
++ 	  error("Failed to launch default browser.");
++ 	  return Qnil;
++ 	}
++     } 
++   else
++     {
++       UNBLOCK_INPUT;
++       error("Could not determine default browser.");
++       return Qnil;
++     }
++ 
++ 
++   return Qt;
++ }
++ 
++ 
+  
+  #ifdef MAC_OSX
+  #undef select
+***************
+*** 4692,4698 ****
+    defsubr (&Smac_code_convert_string);
+  #endif
+    defsubr (&Smac_clear_font_name_table);
+! 
+    defsubr (&Smac_set_file_creator);
+    defsubr (&Smac_set_file_type);
+    defsubr (&Smac_get_file_creator);
+--- 4772,4779 ----
+    defsubr (&Smac_code_convert_string);
+  #endif
+    defsubr (&Smac_clear_font_name_table);
+!   
+!   defsubr (&Smac_launch_url_with_default_browser);
+    defsubr (&Smac_set_file_creator);
+    defsubr (&Smac_set_file_type);
+    defsubr (&Smac_get_file_creator);
