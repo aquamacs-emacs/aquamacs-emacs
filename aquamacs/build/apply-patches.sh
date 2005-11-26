@@ -33,6 +33,8 @@ echo "available-screen"
 patch -p0 <${AQUAMACS_ROOT}/patches/available-screen.patch
 echo "mouse-button"
 patch -p0 <${AQUAMACS_ROOT}/patches/mouse-button.patch
+echo "launch-browser"
+patch -p0 <${AQUAMACS_ROOT}/patches/launch-browser.patch
 echo "toolbar-button"
 patch -p0 <${AQUAMACS_ROOT}/patches/toolbar-button.patch
 echo "org-gnu-Aquamacs"
