@@ -114,3 +114,19 @@
 
 ;(aq-preload "ruby-mode.el")
 ; (aq-preload "site-start.el")
+
+
+;; correct paths in load-history
+(setq load-history
+      (mapcar
+       (lambda (e)
+	 (let ((case-fold-search nil))
+	   (if 
+	       (and (car-safe e)
+		    (string-match (concat "^" aq-compile-path 
+					  "\\(.*\\)$") 
+				  (car e)))
+	       (cons (match-string 1 (car e))
+		     (cdr e))
+	     e)))
+       load-history))
