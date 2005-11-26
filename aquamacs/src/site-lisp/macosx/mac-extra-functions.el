@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.23 2005/11/24 07:52:36 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.24 2005/11/26 16:29:37 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -48,6 +48,26 @@
 (defun aquamacs-delete-temp-url-files ()
   (shell-command "rm -f /tmp/aquamacs-* 2>/dev/null" 'shut-up))
 
+(defun browse-url-default-macosx-browser (url &optional new-window)
+"Opens a URL with the system's default browser.
+If the URL points to a local file (file://), this will
+set the file's creator and type."
+ (if (not (string-match "file:/*\\(/.*\\)" url))
+      (start-process (concat "open " url) nil "open" url)
+    (let* ((file (match-string 1 url))
+	   (creator (mac-get-file-creator file))
+	   (type (mac-get-file-type file)))
+ 
+      
+      (mac-set-file-creator file "udog")
+      (mac-set-file-type file "    ")
+      (print file)
+      (start-process (concat "open " file) nil "open" file)
+      (sleep-for 1)
+      (mac-set-file-creator file creator)
+      (mac-set-file-type file type))))
+
+
 (defun browse-url-default-macosx-browser-via-redirection (url &optional new-window)
   "Opens a URL with the system's default browser.
 If the URL points to a local file (file://), this will
@@ -65,12 +85,8 @@ handles files of type HTML."
       (let ((coding-system-for-write 'no-conversion)) 
 	(write-region (format "<html><head><META HTTP-EQUIV=\"Refresh\" CONTENT=\"0; URL=%s\"></head><body></body></html>" url) nil newfile nil 'quiet ))
       (mac-set-file-type newfile "HTML")
-      (start-process (concat "open " newfile) nil "open" url)
+      (start-process (concat "open " newfile) nil "open" newfile)
       (add-hook 'kill-emacs-hook 'aquamacs-delete-temp-url-files))))
-
-
-(aquamacs-set-defaults '(
- (browse-url-browser-function browse-url-default-macosx-browser-via-redirection)))
 
 (defun browse-url-safari (url &optional new-window)
    "Open URL in a new Safari window."
