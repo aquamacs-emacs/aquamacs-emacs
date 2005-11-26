@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.30 2005/11/20 20:22:10 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.31 2005/11/26 16:28:47 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -32,9 +32,23 @@
 
 
 
-(defvar aquamacs-version "0.9.7beta")
-(defvar aquamacs-version-id 097.0)
-(defvar aquamacs-minor-version "")
+(defvar aquamacs-version "0.9.7beta"
+"A string with Aquamacs' version number.
+The format of the string is undefined. 
+For a reliable numerical representation, use `aquamacs-version-id'.")
+
+(defvar aquamacs-version-id 097.0
+"A float indicating Aquamacs' version number.
+Full integers correspond to the third position of the public
+version number, e.g. version 0.9.7 is represented as `97.x'.
+Minor version numbers are reflected in the decimals. 
+It is guaranteed that iff of two Aquamacs releases A and B,
+B is newer than A, then aquamacs-version-id for B is higher 
+than aquamacs-version-id for A.")
+
+(defvar aquamacs-minor-version ""
+"Version code for minor maintenance releases.
+Changes in this code are ignored during the online version check.")
 
 
 (defun aquamacs-setup ()
@@ -88,7 +102,7 @@ yes-or-no prompts - y or n will do."
 	    (< (+ (eval (frame-parameter f 'top)) 
 		  (frame-total-pixel-height f))
 	       (nth 3 (mac-display-available-pixel-bounds))))
-	   (or (and last-nonmenu-event (not (consp last-nonmenu-event)))
+	   (or  last-nonmenu-event  ;; (and  (not (consp last-nonmenu-event)))
 	      (not use-dialog-box)
 	      (not (fboundp 'mac-dialog-y-or-n-p))
 	      (not window-system)))
@@ -276,7 +290,8 @@ Separate paths from file names with --."
      (scroll-step 1)
      (scroll-conservatively 10000)
      ;; Start scrolling when 2 lines from top/bottom 
-     (scroll-margin 1)
+     (scroll-margin 0)
+     (visual-scroll-margin 2)
 
 
 					; no flash instead of that annoying bell
@@ -587,9 +602,6 @@ or init file. Without this mode, Aquamacs will behave in an
 un-Mac-like way when you select text and copy&paste it.")))
   (add-hook 'after-init-hook 'aquamacs-cua-warning)
   
-  ;; use right mouse click as mouse-2
-  (setq mac-wheel-button-is-mouse-2 t)
-
   ;; give context menus on right click
   ;; if mac-wh is nil, we need the following
  ;;  (define-key mode-line-major-mode-keymap [mode-line down-mouse-1] 
@@ -639,7 +651,8 @@ un-Mac-like way when you select text and copy&paste it.")))
 	    #'flyspell-correct-word)
 	  map))
 
-  (let ((cmdkey (or mac-command-modifier 'alt)))
+  (let ((cmdkey (or (if (boundp 'mac-command-modifier)
+			mac-command-modifier nil) 'alt)))
     (global-set-key (vector '(shift down-mouse-1)) 'mouse-extend)
     (global-set-key (vector `(shift ,cmdkey down-mouse-1)) 
 		    'mouse-extend-secondary)
