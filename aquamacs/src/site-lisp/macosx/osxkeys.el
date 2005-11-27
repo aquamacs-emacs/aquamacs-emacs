@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.49 2005/11/27 13:39:00 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.50 2005/11/27 13:45:26 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -837,7 +837,7 @@ When Mac Key mode is enabled, mac-style key bindings are provided."
   (set-selection-coding-system 'mac-roman) ;; copy'n'paste
  
   (setq mac-emulate-three-button-mouse (if osx-key-mode
-					   'ctrl
+					   'control
 					 nil))
 
 
