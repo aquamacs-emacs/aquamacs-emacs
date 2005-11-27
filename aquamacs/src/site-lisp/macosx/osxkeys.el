@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.48 2005/11/27 12:18:56 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.49 2005/11/27 13:39:00 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -692,7 +692,27 @@ Its content is specified in the keymap `aquamacs-context-menu-map'."
   
     (popup-menu aquamacs-context-menu-map event prefix))
   
-
+(defcustom osx-key-mode-mouse-3-behavior #'aquamacs-popup-context-menu
+  "Determine behavior of mouse-3 in osx-key-mode.
+When set to `aquamacs-popup-context-menu' or nil,  mouse-3
+(usually: clicking the right mouse button) will bring up a
+context menu.  When set to `mouse-save-then-kill', mouse-3 will
+extend the region with `mouse-save-then-kill' (traditional Emacs
+behavior)."
+  :group 'Aquamacs
+  :type '(radio 
+	  (function-item :tag "Save or kill text between point and mouse"  
+			 mouse-save-then-kill) 
+	  (function-item :tag "Show context menu" 
+			 aquamacs-popup-context-menu)))
+ 
+(defun osx-key-mode-mouse-3 (event &optional  prefix)
+  "Popup a context menu or extend the region.
+Behavior depends on setting of `osx-key-mode-mouse-3-behavior'." 
+  (interactive "@e \nP")
+  (apply (or osx-key-mode-mouse-3-behavior 
+	     (function aquamacs-popup-context-menu))
+	 event prefix))
 
 
 (defun make-osx-key-mode-map (&optional command-key)
@@ -711,9 +731,9 @@ default."
     ;; debug log
 
   
-    (define-key map `[(,osxkeys-command-key shift t)] 'debug-keymap-corruption)
+  ;;  (define-key map `[(,osxkeys-command-key shift t)] 'debug-keymap-corruption)
 
-    (define-key map [mouse-3] 'aquamacs-popup-context-menu)
+    (define-key map [mouse-3] 'osx-key-mode-mouse-3)
 
 
     (define-key map `[(,osxkeys-command-key \?)] 'aquamacs-user-help)
