@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.47 2005/11/26 17:07:16 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.48 2005/11/27 12:18:56 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -107,10 +107,16 @@ after updating this variable.")
  (or (cdr (nth 6 (posn-at-point))) 0))
 
 (defun visual-col-at-point ()
-  (or (car (nth 6 (posn-at-point))) 0))
+(- (point)
+   (save-excursion
+     (vertical-motion 0)
+     (point))))
+  ;; seems slower (in situations with very long lines)
+  ;;(or (car (nth 6 (posn-at-point))) 0))
 
 (defun visual-pixel-col-at-point ()
-  (or (car (nth 2 (posn-at-point))) 0))
+  (car-safe (pos-visible-in-window-p (point) nil 'partial)))
+
 
 (defvar visual-movement-temporary-goal-column nil)
 (make-variable-buffer-local 'visual-movement-temporary-goal-column)
@@ -140,7 +146,7 @@ to the desired margin."
 (defun visual-line-up (num-lines)
   (interactive "p")
   (if (bobp) (signal 'beginning-of-buffer nil))
-  (let ((pixel-col (car (nth 2 (posn-at-point))))
+  (let ((pixel-col (visual-pixel-col-at-point))
 	(visual-col (visual-col-at-point))
 	(old-point (point))
 	(end-of-old-line))
@@ -177,7 +183,6 @@ to the desired margin."
 	;; approximate positioning
 	(forward-char (min visual-col rel-beg-of-old-line)) 
 	;; correct position
-	(let ((new-line (visual-line-at-point)))
 	  (if (>= (visual-pixel-col-at-point) pixel-col)
 	      (progn 
 		(while (and 
@@ -190,12 +195,12 @@ to the desired margin."
 		      (< (visual-pixel-col-at-point) pixel-col)
 		      (< (point) (1- beg-of-old-line)) ;; do not cross line
 		      )
-		(forward-char +1)))))))))
+		(forward-char +1))))))))
 
 (defun visual-line-down (num-lines)
  (interactive "p")
  (if (eobp) (signal 'end-of-buffer nil))
-  (let ((pixel-col (car (nth 2 (posn-at-point))))
+  (let ((pixel-col (visual-pixel-col-at-point))
 	(visual-col (visual-col-at-point))
 	(old-point (point))
 	(beg-of-line)
@@ -227,20 +232,19 @@ to the desired margin."
 	    (setq visual-movement-temporary-goal-column visual-col)
 	    (forward-char (min visual-col rel-next-line-start))
 	    ;; correct position
-	    (let ((new-line (visual-line-at-point)))
-	      (if (> (visual-pixel-col-at-point) pixel-col)
-		  (progn 
-		    (while (and 
-			    (> (visual-pixel-col-at-point) pixel-col)
-			    (> (point) beg-of-line) ;; do not cross line
-			    )
-		      (forward-char -1)))
+	    (if (> (visual-pixel-col-at-point) pixel-col)
 		(progn 
 		  (while (and 
-			  (< (visual-pixel-col-at-point) pixel-col)
-			  (< (point) next-line-start) ;; do not cross line
+			  (> (visual-pixel-col-at-point) pixel-col)
+			  (> (point) beg-of-line) ;; do not cross line
 			  )
-		    (forward-char +1)))))))))
+		    (forward-char -1)))
+	      (progn 
+		(while (and 
+			(< (visual-pixel-col-at-point) pixel-col)
+			(< (point) next-line-start) ;; do not cross line
+			)
+		  (forward-char +1))))))))
 
 	    
 (defun beginning-of-visual-line ()
