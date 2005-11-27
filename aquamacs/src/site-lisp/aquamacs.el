@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.31 2005/11/26 16:28:47 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.32 2005/11/27 12:24:07 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -806,7 +806,7 @@ listed here."
   (customize-set-variable 'aquamacs-customization-version-id 
 			  aquamacs-customization-version-id)
 
-  (defun menu-bar-options-save ()
+  (defun aquamacs-menu-bar-options-save ()
     "Save current values of Options menu items using Custom."
     (interactive)
     (let ((need-save nil))
@@ -843,8 +843,8 @@ listed here."
 
 		     blink-cursor-mode
 		     ;; added dr. 04/2005
-		     one-buffer-one-frame 
-		     mac-pass-option-to-system
+		     one-buffer-one-frame-mode 
+		     mac-option-modifier
 		     aquamacs-auto-frame-parameters-flag
 		     aquamacs-mode-specific-default-themes 
 		     smart-frame-prior-positions
@@ -872,25 +872,6 @@ listed here."
   (setq undo-ask-before-discard nil)
 ;; http://sourceforge.net/tracker/index.php?func=detail&aid=1295333&group_id=138078&atid=740475				      
 
-
-;; patch from RMS
-(defun custom-save-all ()
-  "Save all customizations in `custom-file'."
-  (let* ((filename (custom-file))
-	 (recentf-exclude (if recentf-mode
-			      (cons (concat "\\`"
-					    (regexp-quote (custom-file))
-					    "\\'")
-				    recentf-exclude)))
-	 (old-buffer (find-buffer-visiting filename)))
-    (with-current-buffer (or old-buffer (find-file-noselect filename))
-      (let ((inhibit-read-only t))
-	(custom-save-variables)
-	(custom-save-faces))
-      (let ((file-precious-flag t))
-	(save-buffer))
-      (unless old-buffer
-	(kill-buffer (current-buffer))))))
 
   ;; workarounds for current bugs 
  
