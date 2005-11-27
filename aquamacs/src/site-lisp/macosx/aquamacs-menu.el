@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.40 2005/11/24 20:08:50 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.41 2005/11/27 12:23:44 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -871,7 +871,7 @@ to the selected frame."
   '("--") 'customize)
 
 (define-key-after menu-bar-options-menu [save]
-  '(menu-item "Save Options" menu-bar-options-save
+  '(menu-item "Save Options" aquamacs-menu-bar-options-save
 	      :help "Save options set from the menu above")
   'save-custom-separator)
 
