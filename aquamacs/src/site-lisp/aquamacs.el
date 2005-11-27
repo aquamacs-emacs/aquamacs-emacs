@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.32 2005/11/27 12:24:07 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.33 2005/11/27 12:31:03 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -821,6 +821,9 @@ listed here."
 		     global-font-lock-mode
 		     display-time-mode 
 		     display-battery-mode
+		     one-buffer-one-frame-mode 
+		     mac-option-modifier
+		     smart-frame-prior-positions
 				      ))
 	(and (customize-mark-to-save elt)
 	     (setq need-save t))) 
@@ -843,11 +846,8 @@ listed here."
 
 		     blink-cursor-mode
 		     ;; added dr. 04/2005
-		     one-buffer-one-frame-mode 
-		     mac-option-modifier
 		     aquamacs-auto-frame-parameters-flag
 		     aquamacs-mode-specific-default-themes 
-		     smart-frame-prior-positions
 		     aquamacs-customization-version-id
 		     ))
 	(and (get elt 'customized-value) 
