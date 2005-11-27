@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.50 2005/11/27 13:45:26 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.51 2005/11/27 23:57:19 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -144,6 +144,27 @@ to the desired margin."
 ;; (setq scroll-margin 0)
 ;; (setq visual-scroll-margin 5) 
 (defun visual-line-up (num-lines)
+"Move cursor vertically up NUM-LINES lines.
+Interactively, vscroll tall lines if `auto-window-vscroll' is
+enabled.  If there is no character in the target line exactly
+over the current horizontal pixel position, the cursor is
+positioned close to the character in that line at the same position, 
+or at the end of the line if it is not long enough.
+
+The command C-x C-n can be used to create
+a semipermanent goal column for this command.
+Then instead of trying to move exactly vertically (or as close as possible),
+this command moves to the specified goal column (or as close as possible).
+The goal column is stored in the variable `goal-column', which is nil
+when there is no goal column.
+
+This function differs from `previous-line' as it moves vertically 
+in the visual sense. The result differs when variable-width font is
+used or when characters of non-standard width (e.g. TABs) are used.
+
+If you are thinking of using this in a Lisp program, consider using
+`forward-line' with a negative argument instead.  It is usually easier
+to use and more reliable (no dependence on goal column, etc.)."
   (interactive "p")
   (if (bobp) (signal 'beginning-of-buffer nil))
   (let ((pixel-col (visual-pixel-col-at-point))
@@ -157,6 +178,8 @@ to the desired margin."
     (setq scroll-margin visual-scroll-margin)
     (add-hook 'pre-command-hook 'visual-restore-scroll-margin)
 
+    
+
     (save-excursion
       (vertical-motion 1)	;; trying going one down, to left
       (setq end-of-old-line (point)))
@@ -169,9 +192,18 @@ to the desired margin."
 	      (vertical-motion (- num-lines))))	    ;; one up again
 	   (beg-of-new-line (point))
 	   (rel-beg-of-old-line  (- beg-of-old-line (point) 1)))
+
+      ;; handle track-eol...
+      (if (and track-eol (= old-point (1- end-of-old-line))
+	       ;; Don't count beg of empty line as end of line
+	       ;; unless we just did explicit end-of-line.
+	       (or (not (= old-point beg-of-old-line)) 
+		   (eq last-command 'end-of-line)))
+	  (setq visual-movement-temporary-goal-column 9999))
+
       ;; approximate positioning
       (if (and (or goal-column visual-movement-temporary-goal-column)
-	       (= old-point (- end-of-old-line 1)))	
+	       (= old-point (1- end-of-old-line)))	
 	  ;; jumping from end of line
 	      
 	   (forward-char (min (or goal-column 
@@ -180,6 +212,7 @@ to the desired margin."
 	;; else, do complete positioning
 	;; save original position  
 	(setq visual-movement-temporary-goal-column visual-col)
+
 	;; approximate positioning
 	(forward-char (min visual-col rel-beg-of-old-line)) 
 	;; correct position
@@ -187,20 +220,49 @@ to the desired margin."
 	      (progn 
 		(while (and 
 			(> (visual-pixel-col-at-point) pixel-col)
-			(> (point) beg-of-new-line) ;; do not cross line
-			)
+			(> (point) beg-of-new-line)) ;; do not cross line
 		  (forward-char -1)))
 	    (progn 
 	      (while (and 
 		      (< (visual-pixel-col-at-point) pixel-col)
-		      (< (point) (1- beg-of-old-line)) ;; do not cross line
-		      )
+		      (< (point) (1- beg-of-old-line))) ;; do not cross line
 		(forward-char +1))))))))
 
 (defun visual-line-down (num-lines)
+"Move cursor vertically down NUM-LINES lines.
+Interactively, vscroll tall lines if `auto-window-vscroll' is enabled.
+If there is no character in the target line exactly under the current column,
+the cursor is positioned after the character in that line which spans this
+column, or at the end of the line if it is not long enough.
+If there is no line in the buffer after this one, behavior depends on the
+value of `next-line-add-newlines'.  If non-nil, it inserts a newline character
+to create a line, and moves the cursor to that line.  Otherwise it moves the
+cursor to the end of the buffer.
+
+The command C-x C-n can be used to create
+a semipermanent goal column for this command.
+Then instead of trying to move exactly vertically (or as close as possible),
+this command moves to the specified goal column (or as close as possible).
+The goal column is stored in the variable `goal-column', which is nil
+when there is no goal column.
+
+This function differs from `next-line' as it moves vertically 
+in the visual sense. The result differs when variable-width font is
+used or when characters of non-standard width (e.g. TABs) are used.
+
+If you are thinking of using this in a Lisp program, consider
+using `forward-line' instead.  It is usually easier to use
+and more reliable (no dependence on goal column, etc.)."
  (interactive "p")
- (if (eobp) (signal 'end-of-buffer nil))
-  (let ((pixel-col (visual-pixel-col-at-point))
+
+ (if (and next-line-add-newlines (= num-lines 1))
+     (if (save-excursion (end-of-line) (eobp))
+	 ;; When adding a newline, don't expand an abbrev.
+	 (let ((abbrev-mode nil))
+	   (end-of-line)
+	   (insert hard-newline)))
+   (if (eobp) (signal 'end-of-buffer nil)))
+ (let ((pixel-col (visual-pixel-col-at-point))
 	(visual-col (visual-col-at-point))
 	(old-point (point))
 	(beg-of-line)
@@ -213,6 +275,8 @@ to the desired margin."
     (setq scroll-margin visual-scroll-margin)
     (add-hook 'pre-command-hook 'visual-restore-scroll-margin)
 
+    
+
     (vertical-motion num-lines) ;; down
     (save-excursion
       (setq beg-of-line (point))
@@ -220,6 +284,13 @@ to the desired margin."
       (setq next-line-start (point))
       (setq rel-next-line-start  (- (point) beg-of-line 1)))
     (unless (= beg-of-line (point-max))
+      ;; handle track-eol...
+      (if (and track-eol (= old-point (1- next-line-start))
+	       ;; Don't count beg of empty line as end of line
+	       ;; unless we just did explicit end-of-line.
+	       (or (not (= 0 visual-col)) 
+		   (eq last-command 'end-of-line)))
+	  (setq visual-movement-temporary-goal-column 9999))
 	  ;; approximate positioning
 	  (if (and (or goal-column visual-movement-temporary-goal-column)
 		   (= old-point (- beg-of-line 1))) ;; jumping from end of line
@@ -236,14 +307,12 @@ to the desired margin."
 		(progn 
 		  (while (and 
 			  (> (visual-pixel-col-at-point) pixel-col)
-			  (> (point) beg-of-line) ;; do not cross line
-			  )
+			  (> (point) beg-of-line)) ;; do not cross line
 		    (forward-char -1)))
 	      (progn 
 		(while (and 
 			(< (visual-pixel-col-at-point) pixel-col)
-			(< (point) next-line-start) ;; do not cross line
-			)
+			(< (point) (1- next-line-start))) ;; do not cross line
 		  (forward-char +1))))))))
 
 	    
