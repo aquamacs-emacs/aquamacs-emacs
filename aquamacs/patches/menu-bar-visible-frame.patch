@@ -1,0 +1,209 @@
+Index: lisp/menu-bar.el
+===================================================================
+RCS file: /cvsroot/emacs/emacs/lisp/menu-bar.el,v
+retrieving revision 1.278
+diff -c -r1.278 menu-bar.el
+*** lisp/menu-bar.el	1 Nov 2005 23:21:39 -0000	1.278
+--- lisp/menu-bar.el	10 Nov 2005 16:02:35 -0000
+***************
+*** 172,177 ****
+--- 172,178 ----
+    '(menu-item "Save" save-buffer
+  	      :enable (and (buffer-modified-p)
+  			   (buffer-file-name)
++ 			   (menu-bar-menu-frame-live-and-visible-p)
+  			   (menu-bar-non-minibuffer-window-p))
+  	      :help "Save current buffer to its file"))
+  
+***************
+*** 184,190 ****
+  	      :help "Discard (kill) current buffer"))
+  (define-key menu-bar-file-menu [insert-file]
+    '(menu-item "Insert File..." insert-file
+! 	      :enable (menu-bar-non-minibuffer-window-p)
+  	      :help "Insert another file into current buffer"))
+  (define-key menu-bar-file-menu [dired]
+    '(menu-item "Open Directory..." dired
+--- 185,192 ----
+  	      :help "Discard (kill) current buffer"))
+  (define-key menu-bar-file-menu [insert-file]
+    '(menu-item "Insert File..." insert-file
+! 	      :enable (and (menu-bar-non-minibuffer-window-p)
+! 			   (menu-bar-menu-frame-live-and-visible-p))
+  	      :help "Insert another file into current buffer"))
+  (define-key menu-bar-file-menu [dired]
+    '(menu-item "Open Directory..." dired
+***************
+*** 192,202 ****
+  	      :help "Read a directory, to operate on its files"))
+  (define-key menu-bar-file-menu [open-file]
+    '(menu-item "Open File..." find-file-existing
+! 	      :enable (menu-bar-non-minibuffer-window-p)
+  	      :help "Read an existing file into an Emacs buffer"))
+  (define-key menu-bar-file-menu [new-file]
+    '(menu-item "Visit New File..." find-file
+! 	      :enable (menu-bar-non-minibuffer-window-p)
+  	      :help "Specify a new file's name, to edit the file"))
+  
+  
+--- 194,206 ----
+  	      :help "Read a directory, to operate on its files"))
+  (define-key menu-bar-file-menu [open-file]
+    '(menu-item "Open File..." find-file-existing
+! 	      :enable (or enable-recursive-minibuffers
+! 		       (menu-bar-non-minibuffer-window-p))
+  	      :help "Read an existing file into an Emacs buffer"))
+  (define-key menu-bar-file-menu [new-file]
+    '(menu-item "Visit New File..." find-file
+! 	      :enable (or enable-recursive-minibuffers
+! 			  (menu-bar-non-minibuffer-window-p))
+  	      :help "Specify a new file's name, to edit the file"))
+  
+  
+***************
+*** 359,364 ****
+--- 363,369 ----
+  ;;; Assemble the top-level Edit menu items.
+  (define-key menu-bar-edit-menu [props]
+    '(menu-item "Text Properties" facemenu-menu
++ 	      :enable (menu-bar-menu-frame-live-and-visible-p)
+  	      :help "Change properties of text in region"))
+  
+  (define-key menu-bar-edit-menu [fill]
+***************
+*** 371,377 ****
+    '(menu-item "--"))
+  
+  (define-key menu-bar-edit-menu [bookmark]
+!   '(menu-item "Bookmarks" menu-bar-bookmark-map
+  	      :help "Record positions and jump between them"))
+  
+  (defvar menu-bar-goto-menu (make-sparse-keymap "Go To"))
+--- 376,382 ----
+    '(menu-item "--"))
+  
+  (define-key menu-bar-edit-menu [bookmark]
+!   `(menu-item "Bookmarks" ,menu-bar-bookmark-map
+  	      :help "Record positions and jump between them"))
+  
+  (defvar menu-bar-goto-menu (make-sparse-keymap "Go To"))
+***************
+*** 431,449 ****
+  	      :help "Read a line number and go to that line"))
+  
+  (define-key menu-bar-edit-menu [goto]
+!   (list 'menu-item "Go To" menu-bar-goto-menu))
+  
+  (define-key menu-bar-edit-menu [replace]
+!   (list 'menu-item "Replace" menu-bar-replace-menu))
+  
+  (define-key menu-bar-edit-menu [search]
+!   (list 'menu-item "Search" menu-bar-search-menu))
+  
+  (define-key menu-bar-edit-menu [separator-search]
+    '(menu-item "--"))
+  
+  (define-key menu-bar-edit-menu [mark-whole-buffer]
+    '(menu-item "Select All" mark-whole-buffer
+  	      :help "Mark the whole buffer for a subsequent cut/copy."))
+  (define-key menu-bar-edit-menu [clear]
+    '(menu-item "Clear" delete-region
+--- 436,458 ----
+  	      :help "Read a line number and go to that line"))
+  
+  (define-key menu-bar-edit-menu [goto]
+!   `(menu-item "Go To" ,menu-bar-goto-menu
+! 	        :enable (menu-bar-menu-frame-live-and-visible-p)))
+  
+  (define-key menu-bar-edit-menu [replace]
+!   `(menu-item "Replace" ,menu-bar-replace-menu
+! 	      :enable (menu-bar-menu-frame-live-and-visible-p)))
+  
+  (define-key menu-bar-edit-menu [search]
+!   `(menu-item "Search" ,menu-bar-search-menu
+! 	      :enable (menu-bar-menu-frame-live-and-visible-p)))
+  
+  (define-key menu-bar-edit-menu [separator-search]
+    '(menu-item "--"))
+  
+  (define-key menu-bar-edit-menu [mark-whole-buffer]
+    '(menu-item "Select All" mark-whole-buffer
++ 	      :enable (menu-bar-menu-frame-live-and-visible-p)
+  	      :help "Mark the whole buffer for a subsequent cut/copy."))
+  (define-key menu-bar-edit-menu [clear]
+    '(menu-item "Clear" delete-region
+***************
+*** 456,462 ****
+  (fset 'yank-menu (cons 'keymap yank-menu))
+  (define-key menu-bar-edit-menu [select-paste]
+    '(menu-item "Select and Paste" yank-menu
+! 	      :enable (and (cdr yank-menu) (not buffer-read-only))
+  	      :help "Paste (yank) text cut or copied earlier"))
+  (define-key menu-bar-edit-menu [paste]
+    '(menu-item "Paste" yank
+--- 465,473 ----
+  (fset 'yank-menu (cons 'keymap yank-menu))
+  (define-key menu-bar-edit-menu [select-paste]
+    '(menu-item "Select and Paste" yank-menu
+! 	      :enable (and (cdr yank-menu) 
+! 			   (not buffer-read-only)
+! 			   (menu-bar-menu-frame-live-and-visible-p))
+  	      :help "Paste (yank) text cut or copied earlier"))
+  (define-key menu-bar-edit-menu [paste]
+    '(menu-item "Paste" yank
+***************
+*** 464,470 ****
+  		       ;; Emacs compiled --without-x doesn't have
+  		       ;; x-selection-exists-p.
+  		       (fboundp 'x-selection-exists-p)
+! 		       (x-selection-exists-p) (not buffer-read-only))
+  	      :help "Paste (yank) text most recently cut/copied"))
+  (define-key menu-bar-edit-menu [copy]
+    '(menu-item "Copy" menu-bar-kill-ring-save
+--- 475,482 ----
+  		       ;; Emacs compiled --without-x doesn't have
+  		       ;; x-selection-exists-p.
+  		       (fboundp 'x-selection-exists-p)
+! 		       (x-selection-exists-p) (not buffer-read-only)
+! 		       (menu-bar-menu-frame-live-and-visible-p))
+  	      :help "Paste (yank) text most recently cut/copied"))
+  (define-key menu-bar-edit-menu [copy]
+    '(menu-item "Copy" menu-bar-kill-ring-save
+***************
+*** 479,484 ****
+--- 491,497 ----
+  (define-key menu-bar-edit-menu [undo]
+    '(menu-item "Undo" undo
+  	      :enable (and (not buffer-read-only)
++ 			   (menu-bar-menu-frame-live-and-visible-p)
+  			   (not (eq t buffer-undo-list))
+  			   (if (eq last-command 'undo)
+  			       pending-undo-list
+***************
+*** 1427,1433 ****
+    (let ((menu-frame (if (display-multi-frame-p) menu-updating-frame
+  		      (selected-frame))))
+      (and (frame-live-p menu-frame)
+! 	 (frame-visible-p menu-frame))))
+  
+  (defun menu-bar-non-minibuffer-window-p ()
+    "Return non-nil if selected window of the menu frame is not a minibuf window.
+--- 1440,1447 ----
+    (let ((menu-frame (if (display-multi-frame-p) menu-updating-frame
+  		      (selected-frame))))
+      (and (frame-live-p menu-frame)
+! 	 ;; not icon
+! 	 (eq (frame-visible-p menu-frame) t))))
+  
+  (defun menu-bar-non-minibuffer-window-p ()
+    "Return non-nil if selected window of the menu frame is not a minibuf window.
+***************
+*** 1451,1456 ****
+--- 1465,1471 ----
+  	  (setq count (1+ count)))
+        (setq buffers (cdr buffers)))
+      (and (menu-bar-non-minibuffer-window-p)
++ 	 (menu-bar-menu-frame-live-and-visible-p)
+  	 (> count 1))))
+  
+  (put 'dired 'menu-enable '(menu-bar-non-minibuffer-window-p))
