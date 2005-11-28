@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs version check
  
-;; Last change: $Id: check-for-updates.el,v 1.10 2005/11/19 18:05:38 davidswelt Exp $
+;; Last change: $Id: check-for-updates.el,v 1.11 2005/11/28 22:52:33 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -108,13 +108,19 @@ nil
    0 nil 'message
    (format "Get the new Aquamacs %s from http://aquamacs.org" v))
 )
+(defun aquamacs-ask-donate ()
+  (if (and (fboundp 'mac-dialog-y-or-n-p)
+	   (mac-dialog-y-or-n-p "Welcome to the new Aquamacs."
+				"The Aquamacs Project depends on your support.
+Please consider donating at http://aquamacs.org in case
+you haven't done so yet. 
+Would you like to see the donations site now?"))
+      (aquamacs-donate)))
+
 (defun aquamacs-welcome-notify ()
   ;; show right away and show when idle
-   
-  (run-with-idle-timer 
-   0 nil 'message
-   (format "Welcome to the new Aquamacs. Please consider donating at http://aquamacs.org" ))
-)
+      (run-with-idle-timer 
+       0 nil 'aquamacs-ask-donate))
 
 
 (defvar aquamacs-check-update-time-period 3
