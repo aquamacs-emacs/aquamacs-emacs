@@ -20,13 +20,13 @@ $insert =
 	width="129" height="122" /> 
 </p>
 ';
-
+ 
 open E, $ARGV[0];
 $x = join("", <E>);
 close E;
  
 
-if ($x =~ s/(<body>)(.*?)(<div class="node">)/$1 $insert $3/is)
+if ($x =~ s/(<body>)(.*?)(<div class="node">)/$1 <h1>GNU Emacs Manual<\/h1> $insert $3/is)
 {
 	$y = $2;
 	
@@ -36,7 +36,7 @@ if ($x =~ s/(<body>)(.*?)(<div class="node">)/$1 $insert $3/is)
 $x =~ s/For information on extending/<div style="color:red;">For specific additions and deviations from Emacs as described in this manual, please refer to the Aquamacs manual.<\/div>For information on extending/is;
 
 # give legal stuff section title
-$x =~ s/^\s*(<li>\s*<a accesskey="." href="Distrib\.html.*?Acknowledgments.*?)(<p>\s*Indexes)/<p>Introduction and Preambles<\/p>\1\2/ism;
+$x =~ s/^\s*(<ul class="menu">\s*<li>\s*<a accesskey="." href="Distrib\.html.*?Acknowledgments.*?)(<p>\s*Indexes)/<p>Introduction and Preambles<\/p>\1\2/ism;
 #; {
 # ;   $y = $1;
 # ;   $x =~ s/^\s*(<p>MS-DOS and Windows)/$y$1/ism;
@@ -44,14 +44,14 @@ $x =~ s/^\s*(<li>\s*<a accesskey="." href="Distrib\.html.*?Acknowledgments.*?)(<
 # ; }
 $x =~ s/<\/title>/<\/title>\n<META NAME="AppleTitle" content="Emacs Manual">\n<META NAME="AppleFont" content="Lucida Grande,Helvetica">\n/is;
 
-# skip mac os x link
-$x =~ s/^\s*<li>\s*<a accesskey="." href="Mac-OS\.html.*?<li>/<li>/ism;
+# # skip mac os x link
+# $x =~ s/^\s*<li>\s*<a accesskey="." href="Mac-OS\.html.*?<li>/<li>/ism;
 
-# skip DOS link
-$x =~ s/^\s*<li>\s*<a accesskey="." href="MS-DOS\.html.*?<li>/<li>/ism;
+# # skip DOS link
+# $x =~ s/^\s*<li>\s*<a accesskey="." href="MS[^\"]*-DOS\.html.*?<li>/<li>/igsm;
 
-# skip Windows section
-$x =~ s/^\s*<p>MS-DOS and Windows.*?the ALT key does\.//ism;
+# # skip Windows section
+# $x =~ s/^\s*<p>MS-DOS and Windows.*?the ALT key does\.//ism;
  
 
 
