@@ -47,7 +47,8 @@ echo "macfns-dialog-menu"
 patch -p0 <${AQUAMACS_ROOT}/patches/macfns-dialog-menu.patch
 echo "fix-bugs"
 patch -p0 <${AQUAMACS_ROOT}/patches/fix-bugs.patch
-
+echo "menu-bar-visible-frame"
+patch -p0 <${AQUAMACS_ROOT}/patches/menu-bar-visible-frame.patch
 echo "eval-depth"
 patch -p0 <${AQUAMACS_ROOT}/patches/eval-depth.patch
 
