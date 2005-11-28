@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.41 2005/11/27 12:23:44 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.42 2005/11/28 22:09:11 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -155,19 +155,23 @@
       symbol
       (list    global-map ) 
       )
-			
-
      (where-is-internal 
       symbol
       nil 
-      nil t t))
-)))
+      nil t t)))))
+
+;; TO DO: speed this up
+;; should only update if there isn't already a string
+;; or the key variables have changed
+
 
 (defun aq-shortcut (text symbol &rest more-args)
-  (if osx-key-mode
+  (if (if (boundp 'osx-key-mode) osx-key-mode nil)
       (condition-case err
+	  
 	  (progn
-	    (let* ((case-fold-search nil)
+	    (let* ((the-args (cons (eval (car more-args)) (cdr more-args)))
+		   (case-fold-search nil)
 		   (s (aq-find-good-key symbol))
 		   (s (replace-regexp-in-string 
 		       "S-." (lambda (txt) 
@@ -183,19 +187,23 @@
 			      "-\\([a-z]\\)" 'upcase
 			  
 			      (replace-regexp-in-string 
-			       "C-" (lambda (txt) (concat (aq-describe-modifier 'ctrl) "-"))
+			       "C-" (lambda (txt) (concat (aq-describe-modifier 'ctrl) 
+							  "-"))
 			       (replace-regexp-in-string 
-				"H-" (lambda (txt) (concat (aq-describe-modifier 'hyper) "-"))
+				"H-" (lambda (txt) (concat (aq-describe-modifier 'hyper)
+							   "-"))
 				(replace-regexp-in-string 
-				 "A-" (lambda (txt) (concat (aq-describe-modifier 'alt) "-"))
+				 "A-" (lambda (txt) (concat (aq-describe-modifier 'alt)
+							    "-"))
 				(replace-regexp-in-string 
-				 "-\\([A-Z]\\)" (lambda (txt) (concat (aq-describe-modifier 'shift) txt))
+				 "-\\([A-Z]\\)" (lambda (txt) 
+						  (concat 
+						   (aq-describe-modifier 'shift) txt))
 				 s
 				 nil nil 1 ;; replace sub-exp
 				 )))))))))))
 	(error nil
-	       (apply (function format) text more-args)
-	 ))
+	       (apply (function format) text more-args)))
     ;; not osx-key-mode
     (apply (function format) text more-args)))
 	  
@@ -203,17 +211,6 @@
 ;;(Defun aq-shortcut (text &rest more-args)
 ;;  (append (list (function format)) (append (list text 'apple-char) more-args )))
  
-(define-key menu-bar-file-menu [new-file]
-  '(menu-item (aq-shortcut  "New                                        "
-			    'new-frame-with-new-scratch)  
-	      new-frame-with-new-scratch
-	      :enable (or (and (boundp 'one-buffer-one-frame-mode)
-			       one-buffer-one-frame-mode)
-			  (not (window-minibuffer-p
-			    (frame-selected-window menu-updating-frame))))
-	      :help "Create a new buffer"))
- 
-
 (defun aq-copy-list (list)
   "Return a copy of LIST, which may be a dotted list.
 The elements of LIST are not copied, just the list structure itself."
@@ -385,6 +382,20 @@ customization buffer."
 
 (add-hook 'after-init-hook 'aquamacs-update-new-file-menu)
 
+(defun aquamacs-menu-bar-setup ()
+
+
+(define-key menu-bar-file-menu [new-file]
+  `(menu-item ,(aq-shortcut  "New                                        "
+			    'new-frame-with-new-scratch)  
+	      new-frame-with-new-scratch
+	      :enable (or (and (boundp 'one-buffer-one-frame-mode)
+			       one-buffer-one-frame-mode)
+			  (not (window-minibuffer-p
+			    (frame-selected-window menu-updating-frame))))
+	      :help "Create a new buffer"))
+ 
+
 (define-key menu-bar-file-menu [open-file] 
   '(menu-item
     (aq-shortcut  "Open File...                             " 
@@ -404,7 +415,7 @@ customization buffer."
 
 ;; redefine this
 (define-key-after menu-bar-file-menu [kill-buffer]
-  '(menu-item (aq-shortcut "Close Buffer                            " 
+  `(menu-item ,(aq-shortcut "Close Buffer                            " 
 			   (key-binding [menu-bar file kill-buffer])) 
 	      close-current-window-asktosave
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
@@ -412,7 +423,7 @@ customization buffer."
 	      :help "Discard current buffer") 'separator-save)
  
 (define-key menu-bar-edit-menu [copy]
-  '(menu-item (aq-shortcut  "Copy                 " 
+  `(menu-item ,(aq-shortcut  "Copy                 " 
 			    (key-binding [menu-bar edit copy])) 
 	      clipboard-kill-ring-save
 	      :enable mark-active
@@ -420,7 +431,7 @@ customization buffer."
 	      :keys "\\[clipboard-kill-ring-save]"))
  
 (define-key menu-bar-edit-menu [paste]
-  '(menu-item (aq-shortcut  "Paste                 " 
+  `(menu-item ,(aq-shortcut  "Paste                 " 
 				 (key-binding [menu-bar edit paste]) ) 
 	      yank
 	      :enable (and
@@ -433,7 +444,7 @@ customization buffer."
 
 
 (define-key menu-bar-edit-menu [undo]
-  '(menu-item (aq-shortcut  "Undo                 "
+  `(menu-item ,(aq-shortcut  "Undo                 "
 				 (key-binding [menu-bar edit undo]) )
 	      undo
 	      :enable (and (not buffer-read-only)
@@ -445,7 +456,7 @@ customization buffer."
 	      :help "Undo last operation"))
 
 (define-key-after menu-bar-edit-menu [redo]
-  '(menu-item (aq-shortcut "Redo                 " 
+  `(menu-item ,(aq-shortcut "Redo                 " 
 			   (key-binding [menu-bar edit redo])) 
 	      'redo
 	      :enable (menu-bar-menu-frame-live-and-visible-p)
@@ -455,28 +466,30 @@ customization buffer."
   ["-" nil nil] 'cut)
 
 (define-key menu-bar-edit-menu [cut]
-  '(menu-item (aq-shortcut  "Cut                    "
-				 (key-binding [menu-bar edit cut]))
+  `(menu-item ,(aq-shortcut  "Cut                    "
+			     (key-binding [menu-bar edit cut]))
 	      clipboard-kill-region
 	      :enable (and mark-active (not buffer-read-only))
 	      :help
 	      "Delete text in region and copy it to the clipboard"))
 
 (define-key menu-bar-edit-menu [mark-whole-buffer]
-  '(menu-item (aq-shortcut  "Select All           " 
-				 (key-binding [menu-bar edit mark-whole-buffer])) 
+  `(menu-item ,(aq-shortcut  
+	       "Select All           " 
+	       (key-binding [menu-bar edit mark-whole-buffer])) 
 	      mark-whole-buffer
 	      :enable (menu-bar-menu-frame-live-and-visible-p)
 	      :help "Mark the whole buffer for a subsequent cut/copy."))
 
 (define-key menu-bar-i-search-menu [isearch-forward]
-  '(menu-item (aq-shortcut  "Forward String...             " 
-				 (key-binding [menu-bar edit search i-search isearch-forward]))
+  `(menu-item ,(aq-shortcut  
+		"Forward String...             " 
+		(key-binding [menu-bar edit search i-search isearch-forward]))
 	      isearch-forward
 	      :help "Search forward for a string as you type it"))
  
 (define-key menu-bar-i-search-menu [isearch-repeat-forward]
-  '(menu-item (aq-shortcut  "Repeat Forward String...             " 
+  `(menu-item ,(aq-shortcut  "Repeat Forward String...             " 
 				 (key-binding [menu-bar edit search i-search isearch-repeat-forward])) 
 	      isearch-repeat-forward
 	      :help "Search forward for a string as you type it"))
@@ -501,20 +514,11 @@ customization buffer."
 				    (menu-bar-non-minibuffer-window-p)
 				    buffer-file-number)
 		      ) 'my-file-separator)
-; 
-;; we will set the following ones directly
-;; customization is always possible
-;; the existing menu item is badly worded and the C-c/v/x don't apply anyways
-(easy-menu-remove-item global-map  '("menu-bar" "options") 'cua-emulation-mode) 
-(easy-menu-remove-item global-map  '("menu-bar" "options") 'uniquify)
-(easy-menu-remove-item global-map  '("menu-bar" "options") 'transient-mark-mode)
-(easy-menu-remove-item global-map  '("menu-bar" "options") 'case-fold-search)
-
 
 ;; save as (redefinition for :enable)
 
 (define-key menu-bar-file-menu [save-buffer ]
-  '(menu-item (aq-shortcut  "Save Buffer                              "
+  `(menu-item ,(aq-shortcut  "Save Buffer                              "
 			    (key-binding [menu-bar file save-buffer]))
 	      save-buffer
 	      :enable (and (buffer-modified-p)
@@ -525,7 +529,7 @@ customization buffer."
 	      ))  
 
 (define-key menu-bar-file-menu [write-file]
-  '(menu-item (aq-shortcut  "Save Buffer As...                      "
+  `(menu-item ,(aq-shortcut  "Save Buffer As...                      "
 			    (key-binding [menu-bar file write-file])) 
 	      write-file
 
@@ -564,19 +568,8 @@ customization buffer."
 
 
 
- 
-(define-key menu-bar-file-menu [split-window]
-  '(menu-item "Split Window" split-window-vertically
-	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
-			   (menu-bar-non-minibuffer-window-p))
-	      :help "Split selected window in two"))
-;; will be moved to Buffers menu later on 
-;; but is created here
-
-
-
 (define-key-after menu-bar-file-menu [aquamacs-print]
-  '(menu-item (aq-shortcut "Preview and Print %s...       " 
+  `(menu-item ,(aq-shortcut "Preview and Print %s...       " 
 		      (key-binding [menu-bar file aquamacs-print])
 		      (if mark-active "Region" "Buffer")
 		     ) 
@@ -609,7 +602,7 @@ customization buffer."
   
 
 (define-key-after menu-bar-file-menu [print-region-or-buffer]
-  '(menu-item (aq-shortcut "Quick Print %s       " 
+  `(menu-item ,(aq-shortcut "Quick Print %s       " 
 		      (key-binding [menu-bar file print-region-or-buffer])
 		      (if mark-active "Region" "Buffer"))  
 	      menu-bar-print-region-or-buffer
@@ -739,8 +732,8 @@ both existing buffers and buffers that you subsequently create."
 
 (if (boundp 'mac-option-modifier) 
     (define-key-after menu-bar-options-menu [option-to-system]
-      '(menu-item
-	(aq-shortcut  "Option Key for %s (not extra characters)  "
+      `(menu-item
+	,(aq-shortcut  "Option Key for %s (not extra characters)  "
 		      'toggle-mac-option-modifier 
 	       (upcase-initials (symbol-name 
 				 (or mac-option-modifier 
@@ -755,29 +748,19 @@ do not let it produce special characters (passing the key to the system)."
 
  ;; this is a redefine
 (define-key menu-bar-options-menu [mouse-set-font]
-  '(menu-item "Set Font for this Frame..." mouse-set-font
-	       :visible (display-multi-font-p)
+  `(menu-item "Set Font for this Frame..." mouse-set-font
+	       :visible ,(display-multi-font-p)
 	       :enable (menu-bar-menu-frame-live-and-visible-p) 
 	       :help "Select a font from list of known fonts/fontsets"))
 
-;; Quit entry shouldnt be there
-(easy-menu-remove-item global-map  '("menu-bar" "file") 'separator-exit)
-(easy-menu-remove-item global-map  '("menu-bar" "file") 'exit-emacs)
-
-;; About entry is now in application menu
-(easy-menu-remove-item global-map  '("menu-bar" "Help") 'about)
-
-;; this is to set the action for the "Quit" function (Emacs menu)
-(global-set-key [mac-application-quit] 'save-buffers-kill-emacs)
- 
 
 
 (easy-menu-add-item  nil '("Options")
   ["-" nil nil] 'mouse-set-font)
 
 (define-key-after menu-bar-options-menu [aquamacs-color-theme-select]
-  '(menu-item "Set Color Theme for this Frame..." aquamacs-color-theme-select
-	       :visible (and (display-multi-font-p)
+  `(menu-item "Set Color Theme for this Frame..." aquamacs-color-theme-select
+	       :visible ,(and (display-multi-font-p)
 			     (fboundp 'aquamacs-color-theme-select)
 			     )
 	       :enable (menu-bar-menu-frame-live-and-visible-p)  
@@ -807,9 +790,10 @@ do not let it produce special characters (passing the key to the system)."
 
  
 (define-key-after menu-bar-showhide-fringe-menu [small]
-  '(menu-item "Small left fringe" aquamacs-menu-bar-showhide-fringe-menu-customize-small
+  `(menu-item "Small left fringe" 
+	      aquamacs-menu-bar-showhide-fringe-menu-customize-small
 	      :help "Narrow fringe, left only"
-	      :visible (display-graphic-p)
+	      :visible ,(display-graphic-p)
 	      :button (:radio . (equal fringe-mode '(1 . 1)))) 'none)
 
  
@@ -839,6 +823,84 @@ to the selected frame."
 	:button '(:toggle . (tool-bar-enabled-p)))
     'showhide-tool-bar)
 
+;; move this down after "customize"
+
+(define-key-after menu-bar-options-menu [save-custom-separator]
+  '("--") 'customize)
+
+(define-key-after menu-bar-options-menu [save]
+  '(menu-item "Save Options" aquamacs-menu-bar-options-save
+	      :help "Save options set from the menu above")
+  'save-custom-separator)
+
+
+
+
+;; HELP MENU
+
+
+(define-key menu-bar-help-menu [menu-aquamacs-help]
+  `(menu-item ,(aq-shortcut "Aquamacs Help                     " 
+		       'aquamacs-user-help)
+	      aquamacs-user-help
+	      :help "Show Aquamacs Manual in Apple Help"
+	      :keys nil) )
+  
+(define-key-after menu-bar-help-menu [menu-aquamacs-user-wiki]
+  `(menu-item ,(aq-shortcut "Aquamacs Tips Wiki Online" 
+		       'aquamacs-user-wiki)
+	      aquamacs-user-wiki
+	      :help "Show Wiki (online)"
+	      :keys nil)
+  'menu-aquamacs-help)
+
+
+(define-key-after menu-bar-help-menu [menu-aquamacs-homepage]
+  `(menu-item ,(aq-shortcut "Aquamacs Homepage                       " 
+		       'aquamacs-homepage)
+	      aquamacs-homepage
+	      :help "Show Aquamacs Homepage"
+	      :keys nil)
+  'menu-aquamacs-user-wiki)
+
+(define-key-after menu-bar-help-menu [menu-aquamacs-emacs-manual]
+  `(menu-item ,(aq-shortcut "Emacs Manual                       " 
+		       'aquamacs-emacs-manual)
+	      aquamacs-emacs-manual
+	      :help "Show Emacs Manual in Apple Help"
+	      :keys nil)
+  'menu-aquamacs-homepage)
+
+)
+
+;;; ONE TIME SETUP
+
+; 
+;; we will set the following ones directly
+;; customization is always possible
+;; the existing menu item is badly worded and the C-c/v/x don't apply anyways
+(easy-menu-remove-item global-map  '("menu-bar" "options") 'cua-emulation-mode) 
+(easy-menu-remove-item global-map  '("menu-bar" "options") 'uniquify)
+(easy-menu-remove-item global-map  '("menu-bar" "options") 'transient-mark-mode)
+(easy-menu-remove-item global-map  '("menu-bar" "options") 'case-fold-search)
+
+
+;; Quit entry shouldnt be there
+(easy-menu-remove-item global-map  '("menu-bar" "file") 'separator-exit)
+(easy-menu-remove-item global-map  '("menu-bar" "file") 'exit-emacs)
+
+;; About entry is now in application menu
+(easy-menu-remove-item global-map  '("menu-bar" "Help") 'about)
+
+;; this is to set the action for the "Quit" function (Emacs menu)
+(global-set-key [mac-application-quit] 'save-buffers-kill-emacs)
+ 
+
+; these problems here are for X-based systems etc. and not relevant
+; for Aquamacs users
+(easy-menu-remove-item global-map  '("menu-bar" "Help") 'emacs-problems)
+ 
+     
 ;; Battery status is displayed in menu bar 
 ;; additional option for this is just confusing
 (easy-menu-remove-item global-map  '("menu-bar" "options" "showhide") 'showhide-battery)
@@ -848,6 +910,15 @@ to the selected frame."
 ;; unless postfix is set up
 (easy-menu-remove-item global-map  '("menu-bar" "tools") 'compose-mail)
 
+
+ 
+(define-key menu-bar-file-menu [split-window]
+  `(menu-item "Split Window" split-window-vertically
+	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
+			   (menu-bar-non-minibuffer-window-p))
+	      :help "Split selected window in two"))
+;; will be moved to Buffers menu later on 
+;; but is created here
 
 ;; move stuff from File to the Buffers menu
  
@@ -865,26 +936,32 @@ to the selected frame."
 (assq-delete-all 'delete-this-frame menu-bar-file-menu)
 (assq-delete-all 'separator-window menu-bar-file-menu)
 
-;; move this down after "customize"
-
-(define-key-after menu-bar-options-menu [save-custom-separator]
-  '("--") 'customize)
-
-(define-key-after menu-bar-options-menu [save]
-  '(menu-item "Save Options" aquamacs-menu-bar-options-save
-	      :help "Save options set from the menu above")
-  'save-custom-separator)
-
-
-
-
-;; HELP MENU
-
-; these problems here are for X-based systems etc. and not relevant
-; for Aquamacs users
-(easy-menu-remove-item global-map  '("menu-bar" "Help") 'emacs-problems)
+;; regular setup
+(aquamacs-menu-bar-setup)
  
-     
+(defvar aquamacs-update-menu-old-state nil)
+
+(defun aquamacs-update-menu (&optional force)
+  "Updates the menu bar in Aquamacs if this is necessary.
+Call this with FORCE non-nil if you change key-bindings
+that should be represented in the Aquamacs menus."
+;; We only update if modifiers have changed.
+;; changed key assi 
+  (condition-case nil
+  (let ((state 
+	(list mac-control-modifier 
+	      mac-command-modifier 
+	      mac-option-modifier 
+	      mac-function-modifier 
+	      osx-key-mode)))
+    (unless (and (null force) 
+		 (equal aquamacs-update-menu-old-state state))
+      (setq aquamacs-update-menu-old-state state)
+      (aquamacs-menu-bar-setup)))
+  (error nil)))
+
+(add-hook 'menu-bar-update-hook 'aquamacs-update-menu)
+
  
  (defun aquamacs-user-wiki ()
   (interactive)
@@ -903,33 +980,6 @@ to the selected frame."
   (browse-url "http://aquamacs.org/donations.shtml")
 )
  
-(define-key menu-bar-help-menu [menu-aquamacs-help]
-  '(menu-item (aq-shortcut "Aquamacs Help                     " 
-		       'aquamacs-user-help)
-	      aquamacs-user-help
-	      :help "Show Aquamacs Manual in Apple Help"
-	      :keys nil) )
- 
-(easy-menu-add-item  nil '("Help")
-  (vector  "Aquamacs Tips Wiki Online"  'aquamacs-user-wiki) 'emacs-tutorial)
- 
- 
-
-(easy-menu-add-item  nil '("Help")
-  (vector "Aquamacs Homepage" 'aquamacs-homepage) 'emacs-tutorial)   
-  
-
-(define-key-after menu-bar-help-menu [menu-aquamacs-emacs-manual]
-  '(menu-item (aq-shortcut "Emacs Manual                       " 
-		       'aquamacs-emacs-manual)
-	      aquamacs-emacs-manual
-	      :help "Show Emacs Manual in Apple Help"
-	      :keys nil)
-  'Aquamacs\ Homepage)
-
-
- 
-  
 (defun emacs-user-wiki ()
   (interactive)
   (browse-url "http://www.emacswiki.org/")) 
