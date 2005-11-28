@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.51 2005/11/27 23:57:19 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.52 2005/11/28 20:51:41 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -115,8 +115,9 @@ after updating this variable.")
   ;;(or (car (nth 6 (posn-at-point))) 0))
 
 (defun visual-pixel-col-at-point ()
-  (car-safe (pos-visible-in-window-p (point) nil 'partial)))
-
+ (or 
+  (car-safe (pos-visible-in-window-p (point) nil 'partial))
+  0))
 
 (defvar visual-movement-temporary-goal-column nil)
 (make-variable-buffer-local 'visual-movement-temporary-goal-column)
@@ -274,8 +275,6 @@ and more reliable (no dependence on goal column, etc.)."
     (setq visual-previous-scroll-margin scroll-margin)
     (setq scroll-margin visual-scroll-margin)
     (add-hook 'pre-command-hook 'visual-restore-scroll-margin)
-
-    
 
     (vertical-motion num-lines) ;; down
     (save-excursion
