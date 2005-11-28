@@ -52,7 +52,11 @@ mkdir Contents/Resources/site-lisp/edit-modes 2>/dev/null
 rm -r Contents/Resources/Aquamacs\ Help
 cp -pr "$projdir/doc/AquamacsHelp" "Contents/Resources/Aquamacs Help"
 rm -rf "Contents/Resources/Emacs Manual"
-cp -pr "$projdir/doc/EmacsManual" "Contents/Resources/Emacs Manual"
+cd Contents/Resources
+tar xzf "$projdir/doc/EmacsManual.tgz"
+mv "EmacsManual" "Emacs Manual"
+cd ../../
+#cp -pr "$projdir/doc/EmacsManual" "Contents/Resources/Emacs Manual"
 cp -pr "$projdir/src/Emacs.icns" "Contents/Resources/Emacs.icns"
 
 cp -pr "$projdir/src/etc/aquamacs-splash-screen.jpg" "Contents/Resources/etc/"
