@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.42 2005/11/28 22:09:11 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.43 2005/11/28 22:21:59 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -946,7 +946,6 @@ to the selected frame."
 Call this with FORCE non-nil if you change key-bindings
 that should be represented in the Aquamacs menus."
 ;; We only update if modifiers have changed.
-;; changed key assi 
   (condition-case nil
   (let ((state 
 	(list mac-control-modifier 
@@ -965,20 +964,19 @@ that should be represented in the Aquamacs menus."
  
  (defun aquamacs-user-wiki ()
   (interactive)
-  (browse-url "http://aquamacs.org/wiki/")
-) 
+  (browse-url "http://aquamacs.org/wiki/"))
+ 
  (defun aquamacs-homepage ()
   (interactive)
-  (browse-url "http://aquamacs.org/")
-) 
+  (browse-url "http://aquamacs.org/"))
+
 (defun emacsosx-mailing-list-subscribe ()
   (interactive)
-  (browse-url "mailto:macosx-emacs-on@email.esm.psu.edu?subject=subscribe%20macosx-emacs&body=Send%20off%20this%20e-mail%20to%20subscrube%20to%20the%20Emacs-on-MacOSX%20mailing%20list.")
-) 
+  (browse-url "mailto:macosx-emacs-on@email.esm.psu.edu?subject=subscribe%20macosx-emacs&body=Send%20off%20this%20e-mail%20to%20subscrube%20to%20the%20Emacs-on-MacOSX%20mailing%20list."))
+ 
 (defun aquamacs-donate ()
   (interactive)
-  (browse-url "http://aquamacs.org/donations.shtml")
-)
+  (browse-url "http://aquamacs.org/donations.shtml"))
  
 (defun emacs-user-wiki ()
   (interactive)
@@ -999,10 +997,12 @@ that should be represented in the Aquamacs menus."
 ;; workarounds for current bugs
 
 ; can't get rid of the menu bar on a Mac
-(easy-menu-remove-item global-map  '("menu-bar" "options" "showhide") 'menu-bar-mode)
+(easy-menu-remove-item global-map  
+		       '("menu-bar" "options" "showhide") 'menu-bar-mode)
 
 ; can't show a frame on a different display
-(easy-menu-remove-item global-map  '("menu-bar" "file") 'make-frame-on-display)
+(easy-menu-remove-item global-map 
+		       '("menu-bar" "file") 'make-frame-on-display)
 
 ;; language environment
 (when (eq system-type 'darwin) 
