@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.24 2005/11/26 16:29:37 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.25 2005/11/28 09:17:35 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -397,17 +397,10 @@ Aquamacs Emacs.app may have been moved or renamed. Please restart Aquamacs!")
  
 (defun aquamacs-show-change-log ()
   (interactive)
-
   (aquamacs-init-user-help) ; make sure it's registered
-
-
   (and (aq-run-python-command
-   "from Carbon import AH; AH.AHGotoPage('Aquamacs Help', 'node3.html', None)")
-      (message "Sorry, help function unavailable (python, OS problem?)")
-  )
-)
- 
- 
+   "from Carbon import AH; AH.AHGotoPage('Aquamacs Help', 'node4.html', None)")
+      (message "Sorry, help function unavailable (python, OS problem?)"))) 
 
 (provide 'mac-extra-functions)
 
