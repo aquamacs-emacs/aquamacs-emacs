@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.43 2005/11/28 22:21:59 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.44 2005/11/29 01:16:39 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -170,8 +170,7 @@
       (condition-case err
 	  
 	  (progn
-	    (let* ((the-args (cons (eval (car more-args)) (cdr more-args)))
-		   (case-fold-search nil)
+	    (let* ((case-fold-search nil)
 		   (s (aq-find-good-key symbol))
 		   (s (replace-regexp-in-string 
 		       "S-." (lambda (txt) 
@@ -1015,8 +1014,7 @@ that should be represented in the Aquamacs menus."
 ;; Most of the MULE menu actually does make sense in unibyte mode,
 ;; e.g. language selection.
 ;;;	':visible 'default-enable-multibyte-characters
-	':help "Default language, encodings, input method"))
-)
+	':help "Default language, encodings, input method")))
 
 (provide 'aquamacs-menu)
   
