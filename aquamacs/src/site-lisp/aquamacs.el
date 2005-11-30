@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.33 2005/11/27 12:31:03 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.34 2005/11/30 18:26:03 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -32,7 +32,7 @@
 
 
 
-(defvar aquamacs-version "0.9.7beta"
+(defvar aquamacs-version "0.9.7"
 "A string with Aquamacs' version number.
 The format of the string is undefined. 
 For a reliable numerical representation, use `aquamacs-version-id'.")
@@ -770,18 +770,20 @@ un-Mac-like way when you select text and copy&paste it.")))
 			     ))
      
   ;; Define customization group
-
+;; add items that aren't Aquamacs defcustoms
   (defgroup Aquamacs 
-    '((one-buffer-one-frame custom-variable)
-      (aquamacs-mode-specific-default-themes custom-variable)
+    '( 
       (smart-frame-positioning-enforce custom-variable)
       (smart-frame-positioning-mode custom-variable)
       (mac-option-modifier  custom-variable)
-      (mac-pass-option-to-system  custom-variable)
       (mac-control-modifier  custom-variable)
+      (mac-function-modifier  custom-variable)
       (mac-pass-control-to-system  custom-variable)
       (mac-command-modifier  custom-variable)
       (mac-pass-command-to-system  custom-variable)
+      (mac-emulate-three-button-mouse  custom-variable)
+      (mac-allow-anti-aliasing  custom-variable)
+      (x-select-enable-clipboard  custom-variable)
       (special-display-regexps custom-variable)
       )
     "Options specific to Aquamacs Emacs. Some of these customizations
