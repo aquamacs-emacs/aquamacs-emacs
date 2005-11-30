@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.45 2005/11/30 16:23:06 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.46 2005/11/30 16:25:57 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -569,7 +569,7 @@ customization buffer."
 
 
 
-(define-key-after menu-bar-file-menu [aquamacs-p2rint]
+(define-key-after menu-bar-file-menu [aquamacs-print]
   `(menu-item (aq-shortcut "Preview and Print %s...       " 
 		       ,(key-binding [menu-bar file aquamacs-print])
 		      (if mark-active "Region" "Buffer")
