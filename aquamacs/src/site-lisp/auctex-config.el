@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: auctex
  
-;; Last change: $Id: auctex-config.el,v 1.13 2005/11/29 19:29:52 davidswelt Exp $
+;; Last change: $Id: auctex-config.el,v 1.14 2005/11/30 17:57:55 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -36,7 +36,7 @@
 		":/usr/local/teTeX/bin/powerpc-apple-darwin-current"))
 
 ;; don't set all of these paths. only what's necessary.
-;; by default, should read from PATH anyways
+;; everything else should be initialized from PATH anyways
 (setq exec-path (append exec-path
 			'(;;"/bin"
 			  ;"/sbin"
@@ -84,7 +84,7 @@ Only checks once - subsequent calls will not result in any action."
 
 
 
-(when (boundp 'LaTeX-mode-hook)
+(defvar LaTeX-mode-hook nil) ;; make sure it's defined
 
 (add-hook 'LaTeX-mode-hook 'load-preview-if-ghostscript)
 (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
@@ -98,7 +98,7 @@ Only checks once - subsequent calls will not result in any action."
 ;;			      (abbrev-mode 1)
 			      (TeX-PDF-mode t)
 			      (LaTeX-install-toolbar)))
-)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Customize LaTeX parameters
