@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.34 2005/11/30 18:26:03 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.35 2005/11/30 20:11:06 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -483,6 +483,7 @@ Use this argument instead of explicitly setting `view-exit-action'."
   (smart-frame-positioning-mode t) ;; and turn on!
 
   
+  (defvar mac-pass-option-to-system 'deprecated)
 
   ;; make sure there are no old customizations around
   ;; N.B.: if no customization file is present, 
@@ -552,7 +553,8 @@ Aquamacs 0.9.7 on. This variable had been deprecated for several versions.
 Use `mac-command-modifier' instead."))
 
 
-    (when (boundp 'mac-pass-option-to-system)
+    (when (and (boundp 'mac-pass-option-to-system)
+	       (not (eq mac-pass-option-to-system 'deprecated)))
       (when mac-pass-option-to-system
 	   (setq mac-option-modifier-enabled-value mac-option-modifier)
 	   (setq mac-option-modifier nil))
@@ -562,6 +564,9 @@ Aquamacs 0.9.7 on. `mac-option-modifier' has been set for you."))))
 
   (require 'one-buffer-one-frame)
   (one-buffer-one-frame-mode 1)
+  ;; necessary to ensure the value is saved with the Options
+  ;; (setting the default)
+  (aquamacs-set-defaults '((one-buffer-one-frame-mode t)))
 
 ;; ----------- MISC STUFF ----------------
 
