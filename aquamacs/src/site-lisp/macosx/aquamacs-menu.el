@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.44 2005/11/29 01:16:39 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.45 2005/11/30 16:23:06 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -266,12 +266,14 @@ The elements of LIST are not copied, just the list structure itself."
 	 (aquamacs-define-mode-menu (make-sparse-keymap "Change Mode")
 				    "aquamacs-change-mode-" 'aquamacs-change-mode
 				    "Change the major mode of the current buffer to `%s'."
-				    '(menu-bar-non-minibuffer-window-p)))
+				    ;; do not slow things down
+				    ;;'(menu-bar-non-minibuffer-window-p)
+				    ))
    (define-key-after menu-bar-file-menu [change-mode-menu]
      `(menu-item "Change Buffer Mode" ,menu-bar-change-mode-menu
 	   :help "Change to a specific major mode."
-	   :enable (and (menu-bar-menu-frame-live-and-visible-p)
-			(menu-bar-non-minibuffer-window-p)))
+	    :enable  (and (menu-bar-menu-frame-live-and-visible-p)
+ 			(menu-bar-non-minibuffer-window-p)))
      'insert-file)) 
 
 (defun aquamacs-define-mode-menu 
@@ -316,12 +318,12 @@ using `aquamacs-recent-major-modes' and `aquamacs-known-major-modes'."
 	   ,displayname
 	    ,(eval 
 	     (list 'defun (aq-concat-symbol symbol-prefix modename) '() 
-		   (format docstring modename)
+		   ;;(format docstring modename)
 		   '(interactive)
 		   (list function-to-call nil `(quote ,modename))
 		   ))
-	   :help (format docstring modename)
-	   :enable ,enable-if
+	   :help ,(format docstring modename)
+ 	   :enable ,enable-if
 	   )))))
    (reverse (sort (aq-copy-list the-list)
 		  (lambda (a b) (string< 
@@ -567,9 +569,9 @@ customization buffer."
 
 
 
-(define-key-after menu-bar-file-menu [aquamacs-print]
-  `(menu-item ,(aq-shortcut "Preview and Print %s...       " 
-		      (key-binding [menu-bar file aquamacs-print])
+(define-key-after menu-bar-file-menu [aquamacs-p2rint]
+  `(menu-item (aq-shortcut "Preview and Print %s...       " 
+		       ,(key-binding [menu-bar file aquamacs-print])
 		      (if mark-active "Region" "Buffer")
 		     ) 
 	      aquamacs-print
