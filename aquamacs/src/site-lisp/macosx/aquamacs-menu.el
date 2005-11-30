@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.47 2005/11/30 18:32:54 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.48 2005/11/30 19:40:37 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -566,7 +566,7 @@ customization buffer."
 	      :help "Export buffer in a different format")
     'write-file)
 
-
+ 
  
 (define-key-after menu-bar-file-menu [aquamacs-print]
   `(menu-item (aq-shortcut "Preview and Print %s...       " 
