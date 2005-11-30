@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.25 2005/11/28 09:17:35 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.26 2005/11/30 10:41:13 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -280,30 +280,29 @@ end tell"
       ;; To Do: use call-process instead -> this here
       ;; will invoke two bashes
       (let ((shell-file-name "/bin/bash"))
-	(shell-command "/bin/bash -l -c printenv" t)
-	)
+	(shell-command "/bin/bash -l -c printenv" t))
 	   ; the following is elegant, but insecure
 	   ; (query-replace-regexp "^\\([A-Za-z_0-9]+\\)=\\(.*\\)$" 
            ;   "(setenv \"\\1\" \"\\2\")")
 	   ; (eval-buffer)
 
+      ;; remove function definintions
+      (goto-char (point-min))
+      (while (re-search-forward "^[A-Za-z_0-9]+=()\s*[^\x]*?
+\s*}\s*$" nil t)
+	(replace-match "..." nil nil))
+      (goto-char (point-min))
       (while (search-forward-regexp "^\\([A-Za-z_0-9]+\\)=\\(.*\\)$" nil t)
-	;(print (format "%s=%s" (match-string 1) (match-string 2)) )
 	(setenv
 	 (match-string 1)
 	 (if (equal (match-string 1) "PATH")
 	     (concat (getenv "PATH") ":" (match-string 2))
 	     (match-string 2)
-	     )
-	 )
-	) 
-      )    
-)
+	     )))))
 
 (defun mac-add-path-to-exec-path ()
   "Add elements from environment variable `PATH' to `exec-path'."
   (let ((l (split-string (getenv "PATH") ":")))
-
   (mapc
    (lambda (p)
      (unless (member p l)
