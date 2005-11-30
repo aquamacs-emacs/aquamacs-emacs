@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: auctex
  
-;; Last change: $Id: auctex-config.el,v 1.14 2005/11/30 17:57:55 davidswelt Exp $
+;; Last change: $Id: auctex-config.el,v 1.15 2005/11/30 18:18:00 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -80,13 +80,16 @@ Only checks once - subsequent calls will not result in any action."
 	    "No Ghostscript (pdf2dsc) found - preview-latex not activated.") 
 	(load "preview-latex.el" nil t t)))
     (setq aq-preview-latex-checked t)) nil)
-;; (load-preview-if-ghostscript)
+
+;; must be done here do initialize
+;; can't be loaded in hook later on.
+(load-preview-if-ghostscript)
 
 
 
 (defvar LaTeX-mode-hook nil) ;; make sure it's defined
 
-(add-hook 'LaTeX-mode-hook 'load-preview-if-ghostscript)
+;; (add-hook 'LaTeX-mode-hook 'load-preview-if-ghostscript)
 (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
 (add-hook 'LaTeX-mode-hook 'turn-on-bib-cite)
 (add-hook 'LaTeX-mode-hook '(lambda ()
