@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.20 2005/11/11 22:11:03 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.21 2005/11/30 18:33:23 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -514,7 +514,9 @@ for which the menu is being updated."
   (define-key-after aquamacs-frame-theme-menu [set-mode]
     `(menu-item "Apply Theme of Some Mode" ,apptheme-mode-menu
 		:help "Apply frame theme of some major mode."
-		:enable (menu-bar-menu-frame-live-and-visible-p))
+;; don't do this check (speed) - higher-level menu is disabled
+;;		:enable (menu-bar-menu-frame-live-and-visible-p)
+)
     'menu-set-theme-as-default))
 
 
