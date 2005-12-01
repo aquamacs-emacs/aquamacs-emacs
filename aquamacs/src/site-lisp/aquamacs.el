@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.35 2005/11/30 20:11:06 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.36 2005/12/01 08:12:45 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -269,11 +269,13 @@ Separate paths from file names with --."
   (require 'aquamacs-menu)
   (require 'aquamacs-bug) ;; successfully send bug reports on the Mac
 
+  
 
 
   (require 'longlines) 
   (aquamacs-set-defaults 
    `(
+     (send-mail-function mailclient-send-it)
  
 					; Colorized fonts
 					; Turn on font-lock in all modes that support it
