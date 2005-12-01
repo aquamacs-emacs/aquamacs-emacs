@@ -4,12 +4,14 @@
 ;; Copyright (C) 2004-2005  Seiji Zenitani <zenitani@mac.com>
 
 ;; Author: Seiji Zenitani <zenitani@mac.com>
-;; Version: v20050920
+;; Version: v20051124
 ;; Keywords: mac, multilingual, Unicode, UTF-8
 ;; Created: 2004-02-20
 ;; Compatibility: Mac OS X (Carbon Emacs)
 ;; URL(jp): http://home.att.ne.jp/alpha/z123/emacs-mac-j.html
 ;; URL(en): http://home.att.ne.jp/alpha/z123/emacs-mac-e.html
+
+;; Contributed by Eiji Honjoh
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -96,10 +98,12 @@
     mule-unicode-e000-ffff
     ,@(if utf-translate-cjk-mode
           utf-translate-cjk-charsets))
-   (mime-charset . utf-8)
+   (mime-charset . nil)
    (coding-category . coding-category-utf-8)
    (valid-codes (0 . 255))
    (pre-write-conversion . utf-8-pre-write-conversion)
+;   (pre-write-conversion . utf-8m-pre-write-conversion)
+;   (post-read-conversion . utf-8-post-read-conversion)
    (post-read-conversion . utf-8m-post-read-conversion)
    (translation-table-for-encode . utf-translation-table-for-encode)
    (dependency unify-8859-on-encoding-mode
