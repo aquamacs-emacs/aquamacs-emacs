@@ -99,8 +99,17 @@ It is recommended that you remove any previous installations of
 <P>
 </LI>
 <LI>nXML: Edit XML code more comfortably with the included
-	nxml-mode. It validates the document as you type.  
-	Suggestion from Tim Bray.
+	nxml-mode. It validates the document as you type. If you don't
+	like the mode, the following in your Preferences.el file will
+	bring the old XML mode back:
+
+<P>
+<PRE> 	
+(assq-set-equal "&lt;\\?xml " 'xml-mode 'magic-mode-alist)
+</PRE>
+
+<P>
+Suggestion from Tim Bray.
 
 <P>
 </LI>
@@ -149,8 +158,20 @@ It is recommended that you remove any previous installations of
 </LI>
 <LI>Navigation in wrapped lines (not word wrap) is easier now: arrow
 	keys will jump to the next visual line, not to the next
-	buffer/file line.  Navigation is visual now for variable width
-	fonts like Lucida.
+	buffer/file line. Also, navigation is visual now for variable
+	width fonts like Lucida: jumping up or down moves to roughly the
+	same place in the adjacent line going after what's displayed on
+	the screen rather than counting characters (jumping to the same
+	row number in the next line).  If you don't like the behavior, you
+	can turn it off with this code in your Preferences.el / .emacs
+	file:
+
+<P>
+<TT>(define-key osx-key-mode-map [remap previous-line]
+  'previous-line)</TT>
+
+<P>
+<TT>(define-key osx-key-mode-map [remap next-line] 'next-line)</TT>
 
 <P>
 </LI>
@@ -342,10 +363,17 @@ The mode has been revised to open fewer extra windows when their
 <LI>Bugfix: links from describe-variable/function help buffers to the 
 	source files are correct now for the Aquamacs-specific objects
 </LI>
-<LI>Aquamacs works fine now on systems where, in the default
+<LI>Bugfix: Aquamacs works fine now on systems where, in the default
 	shell (e.g. via .bash_profile), functions have been defined and
 	exported.
 	Reported by Terry Jones
+</LI>
+<LI>Bugfix: RefTeX mode does't give constant audio signals (errors) 
+	any more in certain situations
+</LI>
+<LI>Bugfix: Allout mode should work again (saving files)
+	Reported by Gerry Brush
+	Patch by Ken Mannheimer
 
 <P>
 </LI>
@@ -385,7 +413,7 @@ The mode has been revised to open fewer extra windows when their
 <!--End of Navigation Panel-->
 <ADDRESS>
 David
-2005-11-30
+2005-12-02
 </ADDRESS>
 </BODY>
 </HTML>

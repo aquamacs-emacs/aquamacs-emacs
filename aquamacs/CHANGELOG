@@ -93,10 +93,11 @@ planned for 0.9.8
 	Google or look it up in the system dictionary and switch the buffer.
 
 	* Control-Mouse-click is always mapped to mouse-3 (right mouse
-	button) now so Apple mouse and laptop users will consistently get the same
-	functionality. To do mouse-2, just hold down the Command key while
-	clicking. (This does mouse-yank-at-click, a useful functionality that you
-	might be used to from Linux / X11 machines!)
+	button) now so Apple mouse and laptop users will consistently get
+	the same functionality. To do mouse-2, just hold down the Command
+	key while clicking. (This does mouse-yank-at-click, a useful
+	functionality that you might be used to from Linux / X11
+	machines!)
 
 	* Alt-Mouse-click&drag allows you to select a secondary
 	selection. (This used to be on Command-mouse-1-drag.)
@@ -116,8 +117,16 @@ planned for 0.9.8
 
 	* Navigation in wrapped lines (not word wrap) is easier now: arrow
 	keys will jump to the next visual line, not to the next
-	buffer/file line.  Navigation is visual now for variable width
-	fonts like Lucida.
+	buffer/file line. Also, navigation is visual now for variable
+	width fonts like Lucida: jumping up or down moves to roughly the
+	same place in the adjacent line going after what's displayed on
+	the screen rather than counting characters (jumping to the same
+	row number in the next line).  If you don't like the behavior, you
+	can turn it off with this code in your Preferences.el / .emacs
+	file:
+
+ 	(define-key osx-key-mode-map [remap previous-line] 'previous-line)
+ 	(define-key osx-key-mode-map [remap next-line] 'next-line)
 
 	* Scrolling and setting the point with the mouse has improved:
 	`scroll-margin' defaults to 0 now, so scrolling won't happen until
@@ -159,9 +168,9 @@ planned for 0.9.8
 
  	(setq mac-function-modifier 'meta)
 
-	Note that support of the Fn key is experimental. Rare
-	combinations may fail on non-English keyboard layouts,
-	and some keys will not work correctly in combination with Fn and Shift.
+	Note that support of the Fn key is experimental. Rare combinations
+	may fail on non-English keyboard layouts, and some keys will not
+	work correctly in combination with Fn and Shift.
 	 
 	* Modifier keys such as Command or Shift show up correctly in the
 	shortcuts (menu)
@@ -255,6 +264,11 @@ planned for 0.9.8
 	shell (e.g. via .bash_profile), functions have been defined and
 	exported.
 	Reported by Terry Jones
+	* Bugfix: RefTeX mode does't give constant audio signals (errors) 
+	any more in certain situations
+	* Bugfix: Allout mode should work again (saving files)
+	Reported by Gerry Brush
+	Patch by Ken Mannheimer
 	
 	* Donate: Happy about the new version?  Want further improvements?
 	Please donate to the Aquamacs project at http://aquamacs.org -

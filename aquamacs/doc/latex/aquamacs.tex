@@ -86,8 +86,9 @@ Project. We will use the term \emph{Aquamacs Emacs} (or just
 
 \section{What's New in This Release}
 
-This is version 0.9.7-beta of Aquamacs, released November 19, 2005. Aquamacs 0.9.7 includes several bug fixes, optimizations, and improvements.
-
+This is version 0.9.7 of Aquamacs, released December 2, 2005. Aquamacs
+0.9.7 includes a range of new features, optimizations and several bug
+fixes. It is a recommended update.
 
 
 
@@ -127,7 +128,14 @@ This is version 0.9.7-beta of Aquamacs, released November 19, 2005. Aquamacs 0.9
 	AUCTeX. 
 	
 \item nXML: Edit XML code more comfortably with the included
-	nxml-mode. It validates the document as you type.  
+	nxml-mode. It validates the document as you type. If you don't
+	like the mode, the following in your Preferences.el file will
+	bring the old XML mode back:
+
+\begin{verbatim} 	
+(assq-set-equal "<\\?xml " 'xml-mode 'magic-mode-alist) 
+\end{verbatim}
+
 	Suggestion from Tim Bray.
 
 \item Speed: Aquamacs is a little faster now when opening new frames,
@@ -161,8 +169,18 @@ This is version 0.9.7-beta of Aquamacs, released November 19, 2005. Aquamacs 0.9
 
 \item Navigation in wrapped lines (not word wrap) is easier now: arrow
 	keys will jump to the next visual line, not to the next
-	buffer/file line.  Navigation is visual now for variable width
-	fonts like Lucida.
+	buffer/file line. Also, navigation is visual now for variable
+	width fonts like Lucida: jumping up or down moves to roughly the
+	same place in the adjacent line going after what's displayed on
+	the screen rather than counting characters (jumping to the same
+	row number in the next line).  If you don't like the behavior, you
+	can turn it off with this code in your Preferences.el / .emacs
+	file:
+
+{\tt 	(define-key osx-key-mode-map [remap previous-line]
+  'previous-line)}
+
+{\tt 	(define-key osx-key-mode-map [remap next-line] 'next-line)}
 
 \item Scrolling and setting the point with the mouse has improved:
 	`scroll-margin' defaults to 0 now, so scrolling won't happen until
@@ -296,10 +314,15 @@ This is version 0.9.7-beta of Aquamacs, released November 19, 2005. Aquamacs 0.9
 	"Save Options".
 \item Bugfix: links from describe-variable/function help buffers to the 
 	source files are correct now for the Aquamacs-specific objects
-\item Aquamacs works fine now on systems where, in the default
+\item Bugfix: Aquamacs works fine now on systems where, in the default
 	shell (e.g. via .bash_profile), functions have been defined and
 	exported.
 	Reported by Terry Jones
+\item Bugfix: RefTeX mode does't give constant audio signals (errors) 
+	any more in certain situations
+\item Bugfix: Allout mode should work again (saving files)
+	Reported by Gerry Brush
+	Patch by Ken Mannheimer
 
 \item Donate: Happy about the new version?  Want further improvements?
 	Please donate to the Aquamacs project at http://aquamacs.org -
