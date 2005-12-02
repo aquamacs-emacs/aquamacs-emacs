@@ -18,9 +18,7 @@ then
 fi
 
 
-cd ${EMACS_ROOT}
-echo "minibuffer-space"
-patch -p0 <${AQUAMACS_ROOT}/patches/minibuffer-space.patch 
+cd ${EMACS_ROOT} 
 echo "pretty-modeline"
 patch -p0 <${AQUAMACS_ROOT}/patches/pretty-modeline.patch 
 echo "soft-wrap (experimental)"
