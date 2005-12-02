@@ -44,7 +44,10 @@ CSCRIPT="$projdir/build/copy-to-app"
 
 # install elisp files etc in $SRC
 #  -n --> do not compile
-$CSCRIPT -n "$projdir" "$SRC"
+$CSCRIPT -n "$projdir" "$SRC" || {
+    echo "$0: Copying to application directory '$SRC' failed."
+    exit 1
+}
 
 bak=/tmp/aquamacs-backup.`date +"%H%M%S"`
 mkdir $bak 2>/dev/null
