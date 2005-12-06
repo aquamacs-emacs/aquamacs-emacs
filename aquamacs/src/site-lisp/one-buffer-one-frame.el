@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.18 2005/11/18 20:39:35 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.19 2005/12/06 12:17:19 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -31,7 +31,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.18 2005/11/18 20:39:35 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.19 2005/12/06 12:17:19 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -158,6 +158,7 @@ To disable `one-buffer-one-frame-mode', call
     "\*Choices\*"			    ; for ispell
     "\*Article\*"			    ; gnus
     "\*VC-*"
+    "\*Bug Help\*"
     )
 "In `one-buffer-one-frame-mode', if the name of a buffer to be shown matches
 one of the regular expressions in this list, it is shown in the same frame,
