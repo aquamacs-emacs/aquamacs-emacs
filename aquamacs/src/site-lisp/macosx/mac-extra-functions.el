@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.26 2005/11/30 10:41:13 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.27 2005/12/07 11:48:45 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -268,7 +268,6 @@ end tell"
 	)))
 
 (defun mac-read-environment-vars-from-shell ()
-
 ; Get the environment from the default shell
 ; this helps to get apps to run under 10.3
 ; and under 10.4 if ~/.bash_profile is changed before restart
@@ -279,13 +278,12 @@ end tell"
       (setq default-directory "~/")	; ensure it can be executed
       ;; To Do: use call-process instead -> this here
       ;; will invoke two bashes
-      (let ((shell-file-name "/bin/bash"))
+      (if (member shell-file-name '("/bin/bash" "/bin/tcsh"))
+	  (shell-command "printenv" t) ;; the simple variant
+	;; more complex because we don't know if printenv will work
 	(shell-command "/bin/bash -l -c printenv" t))
-	   ; the following is elegant, but insecure
-	   ; (query-replace-regexp "^\\([A-Za-z_0-9]+\\)=\\(.*\\)$" 
-           ;   "(setenv \"\\1\" \"\\2\")")
-	   ; (eval-buffer)
-
+      ;; using -l doesn't seem to be necessary - we're getting
+      ;; a normal shell anyways.
       ;; remove function definintions
       (goto-char (point-min))
       (while (re-search-forward "^[A-Za-z_0-9]+=()\s*[^\x]*?
