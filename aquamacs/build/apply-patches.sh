@@ -43,8 +43,6 @@ echo "puresize"
 patch -p0 <${AQUAMACS_ROOT}/patches/puresize.patch
 echo "macfns-dialog-menu"
 patch -p0 <${AQUAMACS_ROOT}/patches/macfns-dialog-menu.patch
-echo "fix-bugs"
-patch -p0 <${AQUAMACS_ROOT}/patches/fix-bugs.patch
 # reftex bugfix
 echo "reftext bugfix"
 patch -p0 <${AQUAMACS_ROOT}/patches/reftex.patch
