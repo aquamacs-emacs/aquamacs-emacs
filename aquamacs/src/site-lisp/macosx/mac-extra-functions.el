@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.27 2005/12/07 11:48:45 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.28 2005/12/12 13:20:10 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -48,24 +48,7 @@
 (defun aquamacs-delete-temp-url-files ()
   (shell-command "rm -f /tmp/aquamacs-* 2>/dev/null" 'shut-up))
 
-(defun browse-url-default-macosx-browser (url &optional new-window)
-"Opens a URL with the system's default browser.
-If the URL points to a local file (file://), this will
-set the file's creator and type."
- (if (not (string-match "file:/*\\(/.*\\)" url))
-      (start-process (concat "open " url) nil "open" url)
-    (let* ((file (match-string 1 url))
-	   (creator (mac-get-file-creator file))
-	   (type (mac-get-file-type file)))
  
-      
-      (mac-set-file-creator file "udog")
-      (mac-set-file-type file "    ")
-      (print file)
-      (start-process (concat "open " file) nil "open" file)
-      (sleep-for 1)
-      (mac-set-file-creator file creator)
-      (mac-set-file-type file type))))
 
 
 (defun browse-url-default-macosx-browser-via-redirection (url &optional new-window)
