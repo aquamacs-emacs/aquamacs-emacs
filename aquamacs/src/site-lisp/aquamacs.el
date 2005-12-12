@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.36 2005/12/01 08:12:45 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.37 2005/12/12 13:19:38 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -822,7 +822,8 @@ listed here."
       (setq aquamacs-customization-version-id aquamacs-version-id)
       ;; These are set with menu-bar-make-mm-toggle, which does not
       ;; put on a customized-value property.
-      (dolist (elt '(line-number-mode 
+      (dolist (elt (append 
+		    '(line-number-mode 
 		     column-number-mode 
 		     size-indication-mode
 		     cua-mode show-paren-mode
@@ -832,7 +833,10 @@ listed here."
 		     display-battery-mode
 		     one-buffer-one-frame-mode 
 		     mac-option-modifier
-		     smart-frame-prior-positions
+		     smart-frame-prior-positions)
+		     (mapcar (lambda (x) 
+			       (emkm-name (car x))) 
+			       emulate-mac-keyboard-mode-maps)
 				      ))
 	(and (customize-mark-to-save elt)
 	     (setq need-save t))) 

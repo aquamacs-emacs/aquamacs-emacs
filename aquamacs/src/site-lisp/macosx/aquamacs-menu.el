@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.50 2005/12/07 19:09:09 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.51 2005/12/12 13:19:46 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -711,41 +711,6 @@ both existing buffers and buffers that you subsequently create."
        (:visible (boundp 'one-buffer-one-frame-mode)))
        'edit-options-separator))
 
-(defvar mac-option-modifier-enabled-value 'meta)
-(defun  toggle-mac-option-modifier (&optional interactively) 
-  (interactive "p")
-  (unless mac-option-modifier-enabled-value
-    (setq mac-option-modifier-enabled-value 'meta))
-   (setq mac-option-modifier
-	 (if mac-option-modifier
-	     (progn
-	       (setq mac-option-modifier-enabled-value mac-option-modifier)
-	       nil)
-	   mac-option-modifier-enabled-value))
-   (if interactively (customize-mark-as-set 'mac-option-modifier))
-   (message 
-    (format "Option key is %s%s" 
-	    (if mac-option-modifier 
-		""  "not ")
-	    (upcase-initials 
-	     (symbol-name (or mac-option-modifier 
-			      mac-option-modifier-enabled-value))))))
-
-(if (boundp 'mac-option-modifier) 
-    (define-key-after menu-bar-options-menu [option-to-system]
-      `(menu-item
-	,(aq-shortcut  "Option Key for %s (not extra characters)  "
-		      'toggle-mac-option-modifier 
-	       (upcase-initials (symbol-name 
-				 (or mac-option-modifier 
-				     mac-option-modifier-enabled-value))))
-	toggle-mac-option-modifier 
-	:key-sequence nil
-	:visible (boundp 'mac-option-modifier)
-	:help "Toggle whether to let Option key behave as Emacs key, 
-do not let it produce special characters (passing the key to the system)."
-	:button (:toggle . mac-option-modifier))
-       'edit-options-separator))
 
  ;; this is a redefine
 (define-key menu-bar-options-menu [mouse-set-font]

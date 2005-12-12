@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.42 2005/11/26 16:32:05 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.43 2005/12/12 13:20:15 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -142,6 +142,8 @@
   ;; turn on mac key mode by default
 
   (osx-key-mode 1) 
+
+  (require 'emulate-mac-keyboard-mode) ;; not turned on by default
 
   (condition-case 
       nil 
