@@ -24,11 +24,11 @@ layout to be used, and BINDINGS is a list of bindings, each consisting of
 a cons cell (KEY . RESULT), where KEY is a string or other key identifier
 denoting the key, and RESULT is a string giving the text to be inserted
 for the key. Example:
- ((german . ((\"\M-\l\" . \"@\")
- 	     (\"\M-/\" . \"\\\"))))")
+ ((german . ((\"\\M-l\" . \"@\")
+ 	     (\"\\M-/\" . \"\\\\\"))))")
 
 (setq emulate-mac-keyboard-mode-maps
-  '((german . (("\M-l" . "@")
+ `((german . (("\M-l" . "@")
 	       ("\M-/" . "\\")
 	       ("\M-5" . "[")
 	       ("\M-6" . "]")
@@ -50,7 +50,13 @@ for the key. Example:
 		("\M-4" . "[")
 		("\M-)" . "}")
 		("\M-7" . "]")  
-		("\M-\:" . "|")))))
+		("\M-\:" . "|")))
+    (us . (     ("\M-3" . "£")
+		("\M-@" . ,(make-char 'latin-iso8859-15 164)) ;; euro symbol
+		("\M-6" . "§")))
+    (british . (("\M-3" . "#")
+		("\M-2" . ,(make-char 'latin-iso8859-15 164)) ;; euro symbol
+		("\M-6" . "§")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -88,7 +94,10 @@ for the key. Example:
 ; (turn-off-emulate-mac-keyboard-modes)
  
 (defun define-emulate-mac-keyboard-modes ()
-
+"Read `emulate-mac-keyboard-mode-maps' and define a minor mode
+for each entry in this alist. The minor mode will apply the
+keymap specified there, and turn off all other keyboard emulation
+minor modes."
   (mapc 
    (lambda (language)
      ;; define keymap first
@@ -100,7 +109,10 @@ for the key. Example:
 to their keyboard-specific equivalents in order to use the 
 Option key as Meta, while retaining access to commonly used  
 such as [, ], @, etc. This mode is intended to be used with
-`mac-option-modifier' set to `meta'."
+`mac-option-modifier' set to `meta'.
+Other mac keyboard emulation modes are turned off.
+This mode has been defined from `emulate-mac-keyboard-mode-maps'
+by the function `define-emulate-mac-keyboard-modes'."
 		,nil ;; init-value
 		,nil ;; lighter
 		,keymap-sym ;; keymap
@@ -115,9 +127,19 @@ such as [, ], @, etc. This mode is intended to be used with
 		nil
 		)))
      (set (emkm-name language) nil))
-   (mapcar 'car emulate-mac-keyboard-mode-maps)))
-
-(define-emulate-mac-keyboard-modes)
+   (mapcar 'car emulate-mac-keyboard-mode-maps))
+  (mapc (lambda (language)
+	;; define-key-after won't work - has issues.
+	(define-key menu-bar-option-key-menu (vector (list language))
+	  (eval `(menu-bar-make-mm-toggle 
+		  ,(emkm-name language)
+		  ,(format "Emulate some %s Option key combinations" 
+			   (capitalize (symbol-name language)))
+		  "This mode binds commonly used Option key combinations
+to their equivalents used on Mac OS X."
+		  (:enable (eq mac-option-modifier 'meta))
+		  ))))
+(mapcar 'car emulate-mac-keyboard-mode-maps)))
 
 ;; Define entries for menu
 
@@ -147,18 +169,9 @@ such as [, ], @, etc. This mode is intended to be used with
 (defvar menu-bar-option-key-menu (make-sparse-keymap "Modifier Keys"))
 
 
-(mapc (lambda (language)
-	;; define-key-after won't work - has issues.
-	(define-key menu-bar-option-key-menu (vector (list language))
-	  (eval `(menu-bar-make-mm-toggle 
-		  ,(emkm-name language)
-		  ,(format "Emulate some %s Option key combinations" 
-			   (capitalize (symbol-name language)))
-		  "This mode binds commonly used Option key combinations
-to their equivalents used on Mac OS X."
-		  (:enable (eq mac-option-modifier 'meta))
-		  ))))
-(mapcar 'car emulate-mac-keyboard-mode-maps))
+
+(define-emulate-mac-keyboard-modes)
+
 
 (define-key menu-bar-option-key-menu [option-to-system-separator]
   '(menu-item "--"))
