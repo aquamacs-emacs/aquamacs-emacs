@@ -1,6 +1,10 @@
-
-*** lisp/net/browse-url.el      25 Oct 2005 13:18:52 -0000      1.51
---- lisp/net/browse-url.el      25 Nov 2005 21:07:14 -0000
+Index: lisp/net/browse-url.el
+===================================================================
+RCS file: /cvsroot/emacs/emacs/lisp/net/browse-url.el,v
+retrieving revision 1.52
+diff -c -r1.52 browse-url.el
+*** lisp/net/browse-url.el	19 Nov 2005 15:57:19 -0000	1.52
+--- lisp/net/browse-url.el	9 Dec 2005 09:46:39 -0000
 ***************
 *** 811,818 ****
       (w32-shell-execute "open" url)))
@@ -11,25 +15,32 @@
   
   ;; --- Netscape ---
   
---- 811,820 ----
+--- 811,825 ----
       (w32-shell-execute "open" url)))
   
   (defun browse-url-default-macosx-browser (url &optional new-window)
 + "Launch the default browser specified in Mac OS X.
 + NEW-WINDOW is ignored."
     (interactive (browse-url-interactive-arg "URL: "))
-!   (mac-launch-URL-with-default-browser url))
+!   (condition-case nil
+!       (mac-launch-URL-with-default-browser url)
+!     (error 
+!      ;; fallback - sometimes http is not registered in the
+!      ;; LaunchServices database
+!      (start-process (concat "open " url) nil "open" url))))
   
   ;; --- Netscape ---
   
-
-
-
-*** src/mac.c	Fri Nov 25 20:45:05 2005
---- src/mac.c	Fri Nov 25 21:06:10 2005
+Index: src/mac.c
+===================================================================
+RCS file: /cvsroot/emacs/emacs/src/mac.c,v
+retrieving revision 1.48
+diff -c -r1.48 mac.c
+*** src/mac.c	23 Nov 2005 07:19:16 -0000	1.48
+--- src/mac.c	9 Dec 2005 09:46:40 -0000
 ***************
-*** 4247,4252 ****
---- 4247,4332 ----
+*** 4259,4264 ****
+--- 4259,4343 ----
       return Qnil;
   }
   
@@ -66,11 +77,10 @@
 +   CFURLRef inURLRef = CFURLCreateWithString(NULL, inURLCfs, NULL);
 + 	
 +   /* Get application for opening html pages */
-+   status = LSGetApplicationForURL(inURLRef, kLSRolesEditor, &appRef,
++   status = LSGetApplicationForURL(inURLRef, kLSRolesAll, &appRef,
 + 				  &spec.appURL);
 +   CFRelease(inURLRef);
 +   CFRelease(inURLCfs);
-+   printf("Error code: %ld\n", status);
 +   if (status == noErr) 
 +     {
 +       /* Open the file / http with the http handler */
@@ -97,14 +107,14 @@
 + 
 +       if (status != noErr) 
 + 	{
-+ 	  error("Failed to launch default browser.");
++ 	  error ("Failed to launch default browser. Error %d", XINT(status));
 + 	  return Qnil;
 + 	}
 +     } 
 +   else
 +     {
 +       UNBLOCK_INPUT;
-+       error("Could not determine default browser.");
++       error ("Could not determine default browser. Error %d", XINT(status));
 +       return Qnil;
 +     }
 + 
@@ -117,7 +127,7 @@
   #ifdef MAC_OSX
   #undef select
 ***************
-*** 4692,4698 ****
+*** 4704,4710 ****
     defsubr (&Smac_code_convert_string);
   #endif
     defsubr (&Smac_clear_font_name_table);
@@ -125,7 +135,7 @@
     defsubr (&Smac_set_file_creator);
     defsubr (&Smac_set_file_type);
     defsubr (&Smac_get_file_creator);
---- 4772,4779 ----
+--- 4783,4790 ----
     defsubr (&Smac_code_convert_string);
   #endif
     defsubr (&Smac_clear_font_name_table);
