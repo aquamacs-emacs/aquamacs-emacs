@@ -21,7 +21,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.15 2005/11/10 19:50:37 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.16 2005/12/12 14:54:23 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -166,27 +166,34 @@ pixels apart if possible."
 	 ;;new-frame-parameters
 
 	 ;; if preassigned, the return it
-	    (progn  
-	       
+	    (let* ((next-x (max min-x (cdr (assq 'left preassigned))))
+		  (next-y (max min-y 
+			       (min 
+				(- max-y (smart-fp--char-to-pixel-height
+					  (cdr (assq 'height preassigned))
+					  new-frame) 20) 
+				(cdr (assq 'top preassigned)))))
+		  (next-w (smart-fp--pixel-to-char-width
+			   (min (- max-x (cdr (assq 'left preassigned)))
+				(smart-fp--char-to-pixel-width
+				 (cdr (assq 'width preassigned))
+				 new-frame)) 
+			   new-frame))
+		  (next-h (smart-fp--pixel-to-char-height
+			   (min (- max-y next-y)
+				 (smart-fp--char-to-pixel-height
+				  (cdr (assq 'height preassigned))
+				 new-frame))
+			   new-frame)))
 	      `(
 		(left .
-		      ,(max min-x (cdr (assq 'left preassigned))))
+		      ,next-x)
 		(top .
-		 ,(max min-y (cdr (assq 'top preassigned))))
+		     ,next-y)
 		(width .
-		       ,(smart-fp--pixel-to-char-width
-			(min (- max-x (cdr (assq 'left preassigned)))
-			     (smart-fp--char-to-pixel-width
-				(cdr (assq 'width preassigned))
-				new-frame)) 
-			new-frame))   
+		       ,next-w)   
 		(height .
-			,(smart-fp--pixel-to-char-height
-			 (min (- max-y  (cdr (assq 'top preassigned)))
-			      (smart-fp--char-to-pixel-height
-				 (cdr (assq 'height preassigned))
-				 new-frame))
-			 new-frame))
+			,next-h)
 	    
 		)
 	      )
@@ -281,23 +288,23 @@ pixels apart if possible."
 	      (if next-y
 		  ;; make sure it's not too low
 		  ;; the 20 seem to be necessary because of a bug in Emacs
+
 		  (setq next-y (max min-y 
-				    (min next-y (- max-y next-h 20))))
+				    (min next-y (- max-y next-h 25))))
 		   
 		 (setq next-y min-y)) ;; if all else fails
- 
-
+	      ;; do we need to change the height as well?
+	      (when (and next-y (> (+ 25 next-y next-h) max-y))
+		(setq next-h (- max-y next-y 25)))
+	      
 	      (assq-set 'left next-x 'new-frame-parameters)
 	      (assq-set 'top next-y 'new-frame-parameters)
-	      
-	      new-frame-parameters	; return this
-	      )
-	    )
-	  )
-	)
-      )
-    )
-  )
+	    ;;  (assq-set 'width next-w 'new-frame-parameters)
+	      (assq-set 'height (smart-fp--pixel-to-char-height
+				 next-h new-frame) 'new-frame-parameters)
+
+	      new-frame-parameters ; return this 
+	      )))))))
 
 (defvar smart-frame-positioning-old-frame-creation-function 
   (setq smart-frame-positioning-old-frame-creation-function 
