@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.21 2005/11/30 18:33:23 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.22 2005/12/14 18:41:11 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -203,14 +203,10 @@ FORCE is non-nil). Use theme of major mode FOR-MODE if given."
 			)
 
 		      )
-		    )
-		)
-	      )
+		    (if (fboundp 'smart-move-frame-inside-screen)
+			(smart-move-frame-inside-screen)))))
 	  (error (print err))  
-	  )
-      )
-    )
-  )
+	  ))))
 
 
 ; (get-buffer-specific-theme "*Help*")

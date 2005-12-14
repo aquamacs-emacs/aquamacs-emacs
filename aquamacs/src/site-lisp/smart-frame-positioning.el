@@ -21,7 +21,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.16 2005/12/12 14:54:23 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.17 2005/12/14 18:41:11 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -77,6 +77,8 @@
     ; make sure we don't make it visible prematurely
     (setq newpos (assq-delete-all 'visibility newpos))
     (modify-frame-parameters f newpos)
+    ;; avoid the Dock (important for preassigned positions)
+    (smart-move-frame-inside-screen f)
     (make-frame-visible f)
     f					; return the frame
     )
@@ -154,52 +156,8 @@ pixels apart if possible."
 	       (max-y (nth 3 rect))
 	       (preassigned (get-frame-position-assigned-to-buffer-name)))
 	
-	(if preassigned
-	 ;; ( progn 
-	 ;; OS X ensures that frames are not opened outside the visible 
-	    ;; area of the screen
-	 ;; untested for other systems - the following might have to be enabled
-	 ;; to guard cases when the available screen size gets smaller
-	 ;; (if (> (cdr (assq 'top preassigned)) (- (display-pixel-width) 40)
-	 ;;(dolist (pair preassigned)
-	 ;;	(assq-set (car pair) (cdr pair) 'new-frame-parameters))
-	 ;;new-frame-parameters
-
-	 ;; if preassigned, the return it
-	    (let* ((next-x (max min-x (cdr (assq 'left preassigned))))
-		  (next-y (max min-y 
-			       (min 
-				(- max-y (smart-fp--char-to-pixel-height
-					  (cdr (assq 'height preassigned))
-					  new-frame) 20) 
-				(cdr (assq 'top preassigned)))))
-		  (next-w (smart-fp--pixel-to-char-width
-			   (min (- max-x (cdr (assq 'left preassigned)))
-				(smart-fp--char-to-pixel-width
-				 (cdr (assq 'width preassigned))
-				 new-frame)) 
-			   new-frame))
-		  (next-h (smart-fp--pixel-to-char-height
-			   (min (- max-y next-y)
-				 (smart-fp--char-to-pixel-height
-				  (cdr (assq 'height preassigned))
-				 new-frame))
-			   new-frame)))
-	      `(
-		(left .
-		      ,next-x)
-		(top .
-		     ,next-y)
-		(width .
-		       ,next-w)   
-		(height .
-			,next-h)
+	(or preassigned ;; if preassigned, return that.
 	    
-		)
-	      )
- 
-	 ;;  )
-	 ;;else
 	  (let
 	      ( 
 	       ;; eval is necessary, because left can be (+ -1000)
@@ -395,6 +353,79 @@ can be remembered. This is part of Aquamacs Emacs."
       (cdr (assq-string-equal (buffer-name) smart-frame-prior-positions)))
 
 
+(defun smart-move-frame-inside-screen (&optional frame)
+  "Move a frame inside the available screen boundaries. 
+The frame specified in FRAME is moved so it is entirely visible on
+the screen. The function tries to avoid leaving frames on screen
+boundaries.
+The function will fail to do its job when the Dock is not displayed
+on the main screen, i.e. where the menu is."
+  (interactive)
+  (let* ((frame (or frame (selected-frame)))
+	 ;; on some systems, we can retrieve the available pixel width with
+	 ;; non-standard methods.
+	 ;; on OS X, e.g. mac-display-available-pixel-bounds (patch!!) returns
+	 ;; available screen region, excluding the Dock.
+	 (rect (if (fboundp 'mac-display-available-pixel-bounds)
+		   (mac-display-available-pixel-bounds)
+		 (list 0 0 
+		       (display-pixel-width) (display-pixel-height))))
+	 (min-x (+ 5 (nth 0 rect)))
+	 (min-y (+ 5 (nth 1 rect)))
+	 (max-x (nth 2 rect))
+	 (max-y (nth 3 rect))
+	 (next-x (eval (frame-parameter frame 'left)))
+	 (next-y (eval (frame-parameter frame 'top)))
+	 (next-w (eval (frame-parameter frame 'width)))
+	 (next-h (eval (frame-parameter frame 'height)))
+	 (next-x2 (+ next-x (smart-fp--char-to-pixel-width
+				    next-w
+				    frame)))
+	 (next-y2 (+ next-y (smart-fp--char-to-pixel-height
+				    next-h
+				    frame))))
+    ;; if frame is entirely on a different screen
+    (unless
+	(or (and (< next-x 0) (< next-x2 0) (>= min-x 0)) ; left of dock
+	    (and (>= next-x 0) (>= next-x2 0) (< min-x 0)) ; right of dock
+	    (and (< next-y 0) (< next-y2 0) (>= min-y 0)) ; above dock scr.
+	    (and (>= next-y 0) (>= next-y2 0) (< min-y 0))) ; below dock scr.
+
+    (modify-frame-parameters 
+     frame
+     (let* ((next-x (max min-x next-x))
+	    (next-y (max min-y 
+			 (min 
+			  (- max-y (smart-fp--char-to-pixel-height
+				    next-h
+				    frame) 23) 
+			  next-y)))
+	    (next-w (smart-fp--pixel-to-char-width
+		     (min (- max-x next-x 20)
+			  (smart-fp--char-to-pixel-width
+			   next-w
+			   frame)) 
+		     frame))
+	    (next-h (smart-fp--pixel-to-char-height
+		     (min (- max-y next-y)
+			  (smart-fp--char-to-pixel-height
+			   next-h
+			   frame))
+		     frame)))
+       `(
+	 (left .
+	       ,next-x)
+	 (top .
+	      ,next-y)
+	 (width .
+		,next-w)   
+	 (height .
+		 ,next-h)
+	    
+	 ))))))
+ 
+	 
+    
 
 
 (provide 'smart-frame-positioning)
