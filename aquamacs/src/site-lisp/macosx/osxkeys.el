@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.53 2005/12/12 13:20:55 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.54 2005/12/14 18:42:15 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -780,9 +780,17 @@ behavior)."
   "Popup a context menu or extend the region.
 Behavior depends on setting of `osx-key-mode-mouse-3-behavior'." 
   (interactive "@e \nP")
-  (apply (or osx-key-mode-mouse-3-behavior 
-	     (function aquamacs-popup-context-menu))
-	 event prefix))
+  ;; we need to bind last-command to the target command
+  ;; so mouse-save-then-kill is not confused and recognizes
+  ;; a double click.
+  (let* ((cmd (or osx-key-mode-mouse-3-behavior 
+	     (function aquamacs-popup-context-menu)))
+	(last-command (if (eq last-command this-command)
+			  cmd
+			last-command)))
+    
+  (apply cmd 
+	 event prefix)))
 
 
 (defun make-osx-key-mode-map (&optional command-key)
