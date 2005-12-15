@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: auctex
  
-;; Last change: $Id: auctex-config.el,v 1.15 2005/11/30 18:18:00 davidswelt Exp $
+;; Last change: $Id: auctex-config.el,v 1.16 2005/12/15 12:06:19 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -92,17 +92,11 @@ Only checks once - subsequent calls will not result in any action."
 ;; (add-hook 'LaTeX-mode-hook 'load-preview-if-ghostscript)
 (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
 (add-hook 'LaTeX-mode-hook 'turn-on-bib-cite)
-(add-hook 'LaTeX-mode-hook '(lambda ()
-			      (TeX-fold-mode 1)
-			      (setq ispell-parser 'tex)
-;; do not use flyspell by default - it's too slow
-;;			      (flyspell-mode 1)
-;; we have no abbrev table for latex mode
-;;			      (abbrev-mode 1)
-			      (TeX-PDF-mode t)
-			      (LaTeX-install-toolbar)))
-
-
+(add-hook 'LaTeX-mode-hook 'LaTeX-install-toolbar)
+(add-hook 'LaTeX-mode-hook (lambda () (TeX-fold-mode t)))
+(aquamacs-set-defaults '((TeX-PDF-mode t)
+			 (ispell-parser 'tex)))
+ 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Customize LaTeX parameters
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
