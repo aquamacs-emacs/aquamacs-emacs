@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.28 2005/12/12 13:20:10 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.29 2005/12/15 11:26:38 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -250,24 +250,30 @@ end tell"
 	(setq default-directory ddir)	; restore
 	)))
 
+(defvar shell-login-switch nil)
+
 (defun mac-read-environment-vars-from-shell ()
 ; Get the environment from the default shell
 ; this helps to get apps to run under 10.3
 ; and under 10.4 if ~/.bash_profile is changed before restart
     (with-temp-buffer
-      ;; execute 'set' with bash. bash is invoked from the 
-      ;; user's default shell (whatever that is - probably bash as well)
-      ;; so it should get all the environment variables.
+      ;; execute 'printenv' with the default login shell,
+      ;; running the shell with -l (to load the environment)
       (setq default-directory "~/")	; ensure it can be executed
       ;; To Do: use call-process instead -> this here
       ;; will invoke two bashes
-      (if (member shell-file-name '("/bin/bash" "/bin/tcsh"))
-	  (shell-command "printenv" t) ;; the simple variant
-	;; more complex because we don't know if printenv will work
-	(shell-command "/bin/bash -l -c printenv" t))
-      ;; using -l doesn't seem to be necessary - we're getting
-      ;; a normal shell anyways.
-      ;; remove function definintions
+      
+      (let ((shell-login-switch 
+	     (or shell-login-switch 
+		 (if (string-match ".*/\\(ba\\|tc\\|z\\)sh" shell-file-name)
+		     "-l"
+		   "" ;; works for ksh
+		   ;; won't work for csh, because it doesn't take -l -c ...
+		   ))))
+		    
+	(call-process shell-file-name nil
+		      t
+		      nil shell-login-switch shell-command-switch "printenv"))
       (goto-char (point-min))
       (while (re-search-forward "^[A-Za-z_0-9]+=()\s*[^\x]*?
 \s*}\s*$" nil t)
