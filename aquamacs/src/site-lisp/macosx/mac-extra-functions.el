@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.29 2005/12/15 11:26:38 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.30 2005/12/15 15:25:55 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -250,12 +250,15 @@ end tell"
 	(setq default-directory ddir)	; restore
 	)))
 
-(defvar shell-login-switch nil)
+(defvar shell-login-switch nil
+"Command-line switch to be used with the shell to get a login shell.
+If nil, a switch is automatically chosen depending on
+`shell-file-name'.
+This is relevant only for `mac-read-environment-vars-from-shell'."
 
 (defun mac-read-environment-vars-from-shell ()
-; Get the environment from the default shell
-; this helps to get apps to run under 10.3
-; and under 10.4 if ~/.bash_profile is changed before restart
+"Import the environment from the system's default login shell
+specified in `shell-file-name'."
     (with-temp-buffer
       ;; execute 'printenv' with the default login shell,
       ;; running the shell with -l (to load the environment)
@@ -267,9 +270,11 @@ end tell"
 	     (or shell-login-switch 
 		 (if (string-match ".*/\\(ba\\|tc\\|z\\)sh" shell-file-name)
 		     "-l"
-		   "" ;; works for ksh
+		   (if (string-match ".*/ksh" shell-file-name)
+		       "" ;; works for ksh
+		     (message "Could not retrieve login shell environment with login shell: %s" shell-file-name)
 		   ;; won't work for csh, because it doesn't take -l -c ...
-		   ))))
+		   )))))
 		    
 	(call-process shell-file-name nil
 		      t
@@ -284,8 +289,7 @@ end tell"
 	 (match-string 1)
 	 (if (equal (match-string 1) "PATH")
 	     (concat (getenv "PATH") ":" (match-string 2))
-	     (match-string 2)
-	     )))))
+	     (match-string 2))))))
 
 (defun mac-add-path-to-exec-path ()
   "Add elements from environment variable `PATH' to `exec-path'."
