@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.30 2005/12/15 15:25:55 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.31 2005/12/16 08:37:53 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -254,7 +254,7 @@ end tell"
 "Command-line switch to be used with the shell to get a login shell.
 If nil, a switch is automatically chosen depending on
 `shell-file-name'.
-This is relevant only for `mac-read-environment-vars-from-shell'."
+This is relevant only for `mac-read-environment-vars-from-shell'.")
 
 (defun mac-read-environment-vars-from-shell ()
 "Import the environment from the system's default login shell
