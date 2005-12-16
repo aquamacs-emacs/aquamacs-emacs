@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.37 2005/12/12 13:19:38 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.38 2005/12/16 15:01:14 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -102,7 +102,11 @@ yes-or-no prompts - y or n will do."
 	    (< (+ (eval (frame-parameter f 'top)) 
 		  (frame-total-pixel-height f))
 	       (nth 3 (mac-display-available-pixel-bounds))))
-	   (or  last-nonmenu-event  ;; (and  (not (consp last-nonmenu-event)))
+	   (or  
+	    (and last-nonmenu-event 
+		 (not (consp last-nonmenu-event))) 
+		 ;;(not (eq (car-safe last-nonmenu-event)  
+		;;	  'mac-apple-event)))
 	      (not use-dialog-box)
 	      (not (fboundp 'mac-dialog-y-or-n-p))
 	      (not window-system)))
@@ -112,7 +116,7 @@ yes-or-no prompts - y or n will do."
 	(let ((ret (mac-dialog-y-or-n-p text "" t)))
 	  (if (eq ret 'cancel)
 	      (keyboard-quit))
-	  ret))))         
+	  ret))))          
   ;; it would be nice to offer a "cancel" option like C-g in the dialog
 
   (fset 'y-or-n-p 'aquamacs-y-or-n-p)
