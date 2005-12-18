@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-mode-defaults.el,v 1.8 2005/11/11 23:55:38 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-defaults.el,v 1.9 2005/12/18 12:24:45 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -28,8 +28,24 @@
  
 ;; Copyright (C) 2005, David Reitter
 
+(require 'smart-dnd) ;; Smart Drag&Drop
+
 ;; load auctex if present 
 (ignore-errors (require 'auctex-config nil t))
+(defun smart-dnd-latex ()
+   (smart-dnd-setup
+    '(
+      ("\\.tex\\'" . "\\input{%r}\n")
+      ("\\.cls\\'" . "\\documentclass{%f}\n")
+      ("\\.sty\\'" . "\\usepackage{%f}\n")
+      ("\\.eps\\'" . "\\includegraphics[]{%r}\n")
+      ("\\.ps\\'"  . "\\includegraphics[]{%r}\n")
+      ("\\.pdf\\'" . "\\includegraphics[]{%r}\n")
+      ("\\.jpg\\'" . "\\includegraphics[]{%r}\n")
+      ("\\.png\\'" . "\\includegraphics[]{%r}\n")
+      )))
+(add-hook 'latex-mode-hook 'smart-dnd-latex)
+
 
 ;; NXML
 
@@ -95,6 +111,17 @@
 (assq-set-equal "\\.html$" 'html-helper-mode 'auto-mode-alist)
 (assq-set-equal "\\.shtml$" 'html-helper-mode 'auto-mode-alist)
 (assq-set-equal "\\(?:<\\?xml\\s +[^>]*>\\)?\\s *<\\(?:!--\\(?:[^-]\\|-[^-]\\)*-->\\s *<\\)*\\(?:!DOCTYPE\\s +[^>]*>\\s *<\\s *\\(?:!--\\(?:[^-]\\|-[^-]\\)*-->\\s *<\\)*\\)?[Hh][Tt][Mm][Ll]" 'html-helper-mode 'magic-mode-alist)
+(defun smart-dnd-html ()
+   (smart-dnd-setup
+    '(
+      ("\\.gif\\'" . "<img src=\"%r\">\n")
+      ("\\.jpg\\'" . "<img src=\"%r\">\n")
+      ("\\.png\\'" . "<img src=\"%r\">\n")
+      ("\\.css\\'" . "<link rel=\"stylesheet\" type=\"text/css\" href=\"%r\">\n" )
+      ("\\.js\\'"  . "<script type=\"text/javascript\" src=\"%r\"></script>\n" )
+      (".*" . "<a href=\"%r\">%f</a>\n")
+      )))
+(add-hook 'html-mode-hook 'smart-dnd-html)
 
 
 (autoload 'javascript-mode "javascript-mode" "JavaScript mode" t)
@@ -124,14 +151,22 @@
 
 
 ;; ---------------------------------------------------------
-;; PERL EDITING and other modes
+;; PERL EDITING  
 
-(autoload 'perl-mode "cperl-mode" 
-  "alternate mode for editing Perl programs" t)
-(defalias 'perl-mode 'cperl-mode)
-(setq cperl-invalid-face nil) ;(uherbst)
- 
-(setq cperl-highlight-variables-indiscriminately t)
+(autoload 'cperl-mode "cperl-mode" "major mode for editing Perl source." t)
+(assq-set-equal "\\.\\([pP]\\([Llm]\\|erl\\|od\\)\\|al\\)\\'"  
+		'cperl-mode 'auto-mode-alist)
+(assq-set-equal "perl" 'cperl-mode 'interpreter-mode-alist)
+(assq-set-equal "perl5" 'cperl-mode 'interpreter-mode-alist)
+(assq-set-equal "miniperl" 'cperl-mode 'interpreter-mode-alist)
+
+(aquamacs-set-defaults 
+ '((cperl-invalid-face nil)
+   (cperl-highlight-variables-indiscriminately t)))
+
+;; C-Mode
+(defun smart-dnd-c () (smart-dnd-setup '(("\\.h\\'" . "#include <%f>"))))
+(add-hook 'c-mode-common-hook 'smart-dnd-c)
 
 
 (provide 'aquamacs-mode-defaults)
