@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.51 2005/12/12 13:19:46 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.52 2005/12/18 10:00:38 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -355,7 +355,8 @@ using `aquamacs-recent-major-modes' and `aquamacs-known-major-modes'."
     tcl-mode
     c-mode 
     (objc-mode . "Objective C")
-    c++-mode perl-mode 
+    c++-mode 
+    (cperl-mode . "Perl")
     (php-mode . "PHP")
     python-mode 
     (applescript-mode ."AppleScript")
