@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-mode-defaults.el,v 1.9 2005/12/18 12:24:45 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-defaults.el,v 1.10 2005/12/18 13:34:16 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -31,6 +31,7 @@
 (require 'smart-dnd) ;; Smart Drag&Drop
 
 ;; load auctex if present 
+
 (ignore-errors (require 'auctex-config nil t))
 (defun smart-dnd-latex ()
    (smart-dnd-setup
@@ -45,7 +46,8 @@
       ("\\.png\\'" . "\\includegraphics[]{%r}\n")
       )))
 (add-hook 'latex-mode-hook 'smart-dnd-latex)
-
+(defvar LaTeX-mode-hook nil)
+(add-hook 'LaTeX-mode-hook 'smart-dnd-latex)
 
 ;; NXML
 
