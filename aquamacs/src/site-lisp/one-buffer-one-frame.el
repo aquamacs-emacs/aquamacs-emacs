@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.19 2005/12/06 12:17:19 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.20 2005/12/18 19:04:20 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -31,7 +31,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.19 2005/12/06 12:17:19 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.20 2005/12/18 19:04:20 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -521,7 +521,7 @@ even if it's the only visible frame."
 if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
   (interactive) 
 
-  (select-frame-set-input-focus (selected-frame))
+  
  
   (let ((wind (selected-window))
 	(killable (and (killable-buffer-p (window-buffer))
@@ -536,6 +536,9 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
 				    (window-buffer) 
 				    'only_visible_ones)) 
 			   1))))
+    (when (frame-visible-p (window-frame wind))
+
+      (select-frame-set-input-focus (selected-frame))
 					; ask before killing
     (cond ( (and (eq (current-buffer) (window-buffer)) 
 					; only if a document is shown
@@ -605,7 +608,7 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
 		      ;; next buffer
 		      (next-buffer)
 		    )
-		(aquamacs-delete-window wind) ) ) ) ) ) ) ) )
+		(aquamacs-delete-window wind) ) ) ) ) ) ) ) ))
 
 (if window-system
 (defun handle-delete-frame (event)
