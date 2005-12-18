@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.43 2005/12/12 13:20:15 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.44 2005/12/18 13:34:35 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -99,12 +99,6 @@
 
   (require 'aquamacs-mule)              ; Language settings
 
-  ;; Mac Drag-N-Drop
-
-   (require 'mac-drag-N-drop)
-   ;; this will disturb x-dnd... :-(
-   ;; use vector, not [...] (pure-space!)
-  (global-set-key (vector 'drag-n-drop) 'mac-drag-N-drop)
 
   ;; do this early, so we can override settings
   (require 'aquamacs-frame-setup)
