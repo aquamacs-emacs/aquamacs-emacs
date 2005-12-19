@@ -95,4 +95,12 @@
 	  ;; Make sure that we have an empty post note if pre is not empty
 	  (if (string= pre "") (insert "[]"))))))
 
+(defvar LaTeX-natbib-package-options '("numbers" "super" "authoryear"
+				       "round" "square" "angle" "curly"
+				       "comma" "colon" "nobibstyle" 
+				       "bibstyle" "openbib" "sectionbib"
+				       "sort" "sort&compress"
+				       "longnamesfirst" "nonamebreak")
+  "Package options for the natbib package.")
+
 ;; natbib.el ends here

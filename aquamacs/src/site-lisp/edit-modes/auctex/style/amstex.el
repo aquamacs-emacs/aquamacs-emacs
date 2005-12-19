@@ -1,6 +1,6 @@
 ;;; amstex.el --- AMS-LaTeX support.
 
-;; Copyright (C) 2004 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005 Free Software Foundation, Inc.
 
 ;; Maintainer: auctex-devel@gnu.org
 ;; Keywords: tex
@@ -46,5 +46,15 @@
   (lambda ()
     (unless (memq major-mode '(plain-tex-mode ams-tex-mode))
       (TeX-run-style-hooks "amsmath")))))
+
+(defvar LaTeX-amstex-package-options '("noamsfonts" "psamsfonts" 
+				       "intlimits" "nointlimits"
+				       "sumlimits" "nosumlimits"
+				       "namelimits" "nonamelimits"
+				       "leqno" "reqno" "centertags"
+				       "tbtags" "fleqn" "righttag"
+				       "ctagsplt" "intlim" "nosumlim"
+				       "nonamelm")
+    "Package options for the amstex package.")
 
 ;;; amstex.el ends here.

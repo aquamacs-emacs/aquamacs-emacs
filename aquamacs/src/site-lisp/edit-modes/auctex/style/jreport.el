@@ -1,6 +1,6 @@
 ;;; jreport.el - Special code for jreport style.
 
-;; $Id: jreport.el,v 1.1 2005/10/18 08:34:29 davidswelt Exp $
+;; $Id: jreport.el,v 1.2 2005/12/19 13:01:32 davidswelt Exp $
 
 ;;; Code:
 

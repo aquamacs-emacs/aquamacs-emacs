@@ -33,4 +33,7 @@
     (and (fboundp 'reftex-add-index-macros)
 	 (reftex-add-index-macros '(multind)))))
 
+(defvar LaTeX-multind-package-options nil
+  "Package options for the multind package.")
+
 ;; multind.el ends here

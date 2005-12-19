@@ -16,4 +16,7 @@
     (TeX-add-symbols
      '("verbatiminput" TeX-arg-file)))))
 
+(defvar LaTeX-verbatim-package-options nil
+  "Package options for the verbatim package.")
+
 ;;; verbatim.el ends here.

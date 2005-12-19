@@ -75,4 +75,13 @@
 		     "setdefaultleftmargin")))
      (font-latex-match-variable-make))))
 
+(defvar LaTeX-paralist-package-options '("newitem" "olditem" "newenum"
+					 "oldenum" "alwaysadjust"
+					 "neveradjust" "neverdecrease"
+					 "increaseonly" "defblank"
+					 "pointedenum" "pointlessenum"
+					 "cfg" "nocfg" "flushright"
+					 "flushleft")
+  "Package options for the paralist package.")
+
 ;;; paralist.el ends here

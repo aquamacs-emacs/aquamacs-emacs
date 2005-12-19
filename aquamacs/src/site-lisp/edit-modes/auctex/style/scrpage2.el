@@ -100,4 +100,18 @@
 		     "providepagestyle")))
      (font-latex-match-function-make))))
 
+(defvar LaTeX-scrpage2-package-options '("headinclude" "headexclude"
+					 "footinclude" "footexclude"
+					 "mpinclude" "mpexclude"
+					 "headtopline" "headsepline"
+					 "footsepline" "footbotline"
+					 "plainheadtopline" "plainheadsepline"
+					 "plainfootsepline" "plainfootbotline"
+					 "ilines" "clines" "olines"
+					 "automark" "manualmark"
+					 "autooneside" "markuppercase"
+					 "markusedcase" "nouppercase"
+					 "komastyle" "standardstyle")
+  "Package options for the scrpage2 package.")
+
 ;;; scrpage2.el ends here

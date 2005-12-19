@@ -1,6 +1,6 @@
 ;;; units.el --- AUCTeX style for the LaTeX package `units.sty' (v0.9b)
 
-;; Copyright (C) 2004 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005 Free Software Foundation, Inc.
 
 ;; Author: Christian Schlauer <cschl@arcor.de>
 ;; Maintainer: auctex-devel@gnu.org
@@ -44,5 +44,8 @@
      (add-to-list 'font-latex-match-textual-keywords-local "unit")
      (add-to-list 'font-latex-match-textual-keywords-local "unitfrac")
      (font-latex-match-textual-make))))
+
+(defvar LaTeX-units-package-options '("tight" "loose")
+  "Package options for the units package.")
 
 ;;; units.el ends here

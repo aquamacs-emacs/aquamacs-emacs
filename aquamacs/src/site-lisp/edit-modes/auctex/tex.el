@@ -561,7 +561,6 @@ the name of the file being processed, with an optional extension."
 (autoload 'TeX-kill-job "tex-buf" nil t)
 (autoload 'TeX-recenter-output-buffer "tex-buf" nil t)
 (autoload 'TeX-next-error "tex-buf" nil t)
-(autoload 'TeX-toggle-debug-boxes "tex-buf" nil t)
 (autoload 'TeX-region-file "tex-buf" nil nil)
 (autoload 'TeX-current-offset "tex-buf" nil nil)
 (autoload 'TeX-process-set-variable "tex-buf" nil nil)
@@ -693,6 +692,17 @@ overlays."
 	     (+ (/ (- outer-priority inner-priority) 2) inner-priority))
 	    (t TeX-overlay-priority-step)))) )
 
+
+(if (fboundp 'completing-read-multiple)
+    (defalias 'TeX-completing-read-multiple 'completing-read-multiple)
+  (defun TeX-completing-read-multiple
+    (prompt table &optional predicate require-match initial-input
+	    hist def inherit-input-method)
+    "Poor mans implementation of Emacs' `completing-read-multiple' for XEmacs.
+The XEmacs package edit-utils-2.32 includes `crm.el'."
+    (multi-prompt "," nil prompt table predicate require-match initial-input
+		  hist)))
+
 ;;; Special support for GNU Emacs
 
 (unless (featurep 'xemacs)
@@ -778,9 +788,28 @@ Elements of KEEP-LIST are not removed even if duplicate."
   :type 'boolean)
 
 (defcustom TeX-debug-bad-boxes nil
-  "*Non-nil means also find overfull/underfull boxes warnings with \\[TeX-next-error]."
+  "Non-nil means also find overfull/underfull box warnings with \\[TeX-next-error]."
   :group 'TeX-output
   :type 'boolean)
+
+(defcustom TeX-debug-warnings nil
+  "Non-nil means also find LaTeX or package warnings with \\[TeX-next-error]."
+  :group 'TeX-output
+  :type 'boolean)
+
+(defun TeX-toggle-debug-bad-boxes ()
+  "Toggle if the debugger should display \"bad boxes\" too."
+  (interactive)
+  (setq TeX-debug-bad-boxes (not TeX-debug-bad-boxes))
+  (message (concat "TeX-debug-bad-boxes: "
+		   (if TeX-debug-bad-boxes "on" "off"))))
+
+(defun TeX-toggle-debug-warnings ()
+  "Toggle if the debugger should display warnings too."
+  (interactive)
+  (setq TeX-debug-warnings (not TeX-debug-warnings))
+  (message (concat "TeX-debug-warnings: "
+		   (if TeX-debug-warnings "on" "off"))))
 
 ;;; Mode names.
 
@@ -1843,6 +1872,8 @@ The variable will be temporarily let-bound with the necessary value.")
   "String used as a closing brace for argument insertion.
 The variable will be temporarily let-bound with the necessary value.")
 
+(defvar TeX-macro-history nil)
+
 (defun TeX-insert-macro (symbol)
   "Insert TeX macro SYMBOL with completion.
 
@@ -1858,7 +1889,8 @@ is called with \\[universal-argument]."
 					      TeX-default-macro
 					      "): "
 					      TeX-esc)
-				      (TeX-symbol-list))))
+				      (TeX-symbol-list) nil nil nil
+				      'TeX-macro-history)))
   (cond ((string-equal symbol "")
 	 (setq symbol TeX-default-macro))
 	((interactive-p)
@@ -2089,6 +2121,20 @@ Return the number as car and unit as cdr."
   "Evaluates FORM, if SYMBOL is an element of LIST."
   (when (memq symbol list)
     (eval form)))
+
+(defun TeX-arg-free (optional &rest args)
+  "Parse its arguments but use no braces when they are inserted."
+  (let ((TeX-arg-opening-brace "")
+	(TeX-arg-closing-brace ""))
+    (if (equal (length args) 1)
+	(TeX-parse-argument optional (car args))
+      (TeX-parse-argument optional args))))
+
+(defun TeX-arg-literal (optional &rest args)
+  "Insert its arguments ARGS into the buffer.
+Used for specifying extra syntax for a macro."
+  ;; FIXME: What is the purpose of OPTIONAL here?  -- rs
+  (apply 'insert args))
 
 
 ;;; Font Locking
@@ -2636,18 +2682,29 @@ If SKIP is not-nil, don't insert code for SKIP."
   '(("<IMPOSSIBLE>\\(\\'\\`\\)" 1 ignore))
   "List of regular expressions guaranteed to match nothing.")
 
+(defvar TeX-token-char
+  (if (featurep 'mule)
+      "\\(?:[a-zA-Z]\\|\\cj\\)"
+    "[a-zA-Z]")
+  "Regexp matching a character in a TeX macro.
+
+Please use a shy group if you use a grouping construct, because
+the functions/variables which use `TeX-token-char' expect not to
+alter the numbering of any ordinary, non-shy groups.")
+
 (defvar plain-TeX-auto-regexp-list
-  '(("\\\\def\\\\\\([a-zA-Z]+\\)[^a-zA-Z@]" 1 TeX-auto-symbol-check)
-    ("\\\\let\\\\\\([a-zA-Z]+\\)[^a-zA-Z@]" 1 TeX-auto-symbol-check)
-    ("\\\\font\\\\\\([a-zA-Z]+\\)[^a-zA-Z@]" 1 TeX-auto-symbol)
-    ("\\\\chardef\\\\\\([a-zA-Z]+\\)[^a-zA-Z@]" 1 TeX-auto-symbol)
-    ("\\\\new\\(count\\|dimen\\|muskip\\|skip\\)\\\\\\([a-z]+\\)[^a-zA-Z@]"
-     2 TeX-auto-symbol)
-    ("\\\\newfont{?\\\\\\([a-zA-Z]+\\)}?" 1 TeX-auto-symbol)
-    ("\\\\typein\\[\\\\\\([a-zA-Z]+\\)\\]" 1 TeX-auto-symbol)
-    ("\\\\input +\\(\\.*[^#%\\\\\\.\n\r]+\\)\\(\\.[^#%\\\\\\.\n\r]+\\)?"
-     1 TeX-auto-file)
-    ("\\\\mathchardef\\\\\\([a-zA-Z]+\\)[^a-zA-Z@]" 1 TeX-auto-symbol))
+  (let ((token TeX-token-char))
+    `((,(concat "\\\\def\\\\\\(" token "+\\)[^a-zA-Z@]") 1 TeX-auto-symbol-check)
+      (,(concat "\\\\let\\\\\\(" token "+\\)[^a-zA-Z@]") 1 TeX-auto-symbol-check)
+      (,(concat "\\\\font\\\\\\(" token "+\\)[^a-zA-Z@]") 1 TeX-auto-symbol)
+      (,(concat "\\\\chardef\\\\\\(" token "+\\)[^a-zA-Z@]") 1 TeX-auto-symbol)
+      (,(concat "\\\\new\\(?:count\\|dimen\\|muskip\\|skip\\)\\\\\\(" token "+\\)[^a-zA-Z@]")
+       1 TeX-auto-symbol)
+      (,(concat "\\\\newfont{?\\\\\\(" token "+\\)}?") 1 TeX-auto-symbol)
+      (,(concat "\\\\typein\\[\\\\\\(" token "+\\)\\]") 1 TeX-auto-symbol)
+      ("\\\\input +\\(\\.*[^#%\\\\\\.\n\r]+\\)\\(\\.[^#%\\\\\\.\n\r]+\\)?"
+       1 TeX-auto-file)
+      (,(concat "\\\\mathchardef\\\\\\(" token "+\\)[^a-zA-Z@]") 1 TeX-auto-symbol)))
   "List of regular expression matching common LaTeX macro definitions.")
 
 (defvar TeX-auto-full-regexp-list plain-TeX-auto-regexp-list
@@ -2945,6 +3002,7 @@ t means autodetect, nil means kpathsea is disabled."
 
 (defcustom TeX-kpathsea-format-alist
   '(("tex" "${TEXINPUTS.latex}" TeX-file-extensions)
+    ("sty" "${TEXINPUTS.latex}" '("sty"))
     ("eps" "${TEXINPUTS}" LaTeX-includegraphics-extensions)
     ("pdf" "${TEXINPUTS}" LaTeX-includegraphics-extensions)
     ("png" "${TEXINPUTS}" LaTeX-includegraphics-extensions)
@@ -3136,12 +3194,6 @@ to look backward for."
     (skip-chars-backward " \t\n")
     (bobp)))
 
-(defun TeX-arg-literal (optional &rest args)
-  "Insert its arguments ARGS into the buffer.
-Used for specifying extra syntax for a macro."
-  ;; FIXME: What is the purpose of OPTIONAL here?  -- rs
-  (apply 'insert args))
-
 (defalias 'TeX-run-mode-hooks
   (if (fboundp 'run-mode-hooks) 'run-mode-hooks 'run-hooks))
 
@@ -3251,9 +3303,12 @@ Used for specifying extra syntax for a macro."
 ;;; Keymap
 
 (defcustom TeX-electric-escape nil
-  "Specify whether ``\\'' will be bound to `TeX-electric-macro'.
-If this is non-nil when AUCTeX is loaded, the TeX escape character ``\\'' will
-be bound to `TeX-electric-macro'."
+  "If non-nil, ``\\'' will be bound to `TeX-electric-macro'."
+  :group 'TeX-macro
+  :type 'boolean)
+
+(defcustom TeX-electric-sub-and-superscript nil
+  "If non-nil, insert braces after typing `^' and `_' in math mode."
   :group 'TeX-macro
   :type 'boolean)
 
@@ -3264,6 +3319,24 @@ be bound to `TeX-electric-macro'."
 		 (const newline-and-indent)
 		 (const reindent-then-newline-and-indent)
 		 (sexp :tag "Other")))
+
+(defun TeX-insert-backslash (arg)
+  "Either insert typed key ARG times or call `TeX-electric-macro'.
+`TeX-electric-macro' will be called if `TeX-electric-escape' is non-nil."
+  (interactive "*p")
+  (if TeX-electric-escape
+      (TeX-electric-macro)
+    (self-insert-command arg)))
+
+(defun TeX-insert-sub-or-superscript (arg)
+  "Insert typed key ARG times and possibly a pair of braces.
+Brace insertion is only done if point is in a math construct and
+`TeX-electric-sub-and-superscript' has a non-nil value."
+  (interactive "*p")
+  (self-insert-command arg)
+  (when (and TeX-electric-sub-and-superscript (texmathp))
+    (insert (concat TeX-grop TeX-grcl))
+    (backward-char)))
 
 (defun TeX-newline ()
   "Call the function specified by the variable `TeX-newline-function'."
@@ -3289,9 +3362,10 @@ be bound to `TeX-electric-macro'."
     (define-key map "\C-c{"    'TeX-insert-braces)
     (define-key map "\C-c\C-f" 'TeX-font)
     (define-key map "\C-c\C-m" 'TeX-insert-macro)
-    (if TeX-electric-escape
-	(define-key map "\\" 'TeX-electric-macro))
-    (define-key map "\e\t"   'TeX-complete-symbol) ;*** Emacs 19 way
+    (define-key map "\\"       'TeX-insert-backslash)
+    (define-key map "^"        'TeX-insert-sub-or-superscript)
+    (define-key map "_"        'TeX-insert-sub-or-superscript)
+    (define-key map "\e\t"     'TeX-complete-symbol) ;*** Emacs 19 way
     
     (define-key map "\C-c'"    'TeX-comment-or-uncomment-paragraph) ;*** Old way
     (define-key map "\C-c:"    'TeX-comment-or-uncomment-region) ;*** Old way
@@ -3305,6 +3379,9 @@ be bound to `TeX-electric-macro'."
     (define-key map "\C-c\C-t\C-i"   'TeX-interactive-mode)
     (define-key map "\C-c\C-t\C-s"   'TeX-source-specials-mode)
     (define-key map "\C-c\C-t\C-r"   'TeX-pin-region)
+    (define-key map "\C-c\C-w"       'TeX-toggle-debug-bad-boxes); to be removed
+    (define-key map "\C-c\C-t\C-b"   'TeX-toggle-debug-bad-boxes)
+    (define-key map "\C-c\C-t\C-w"   'TeX-toggle-debug-warnings)
     (define-key map "\C-c\C-v" 'TeX-view)
     ;; From tex-buf.el
     (define-key map "\C-c\C-d" 'TeX-save-document)
@@ -3324,7 +3401,6 @@ be bound to `TeX-electric-macro'."
 	(substitute-key-definition 'previous-error 'TeX-previous-error
 				   map global-map)
       (define-key map [remap previous-error] 'TeX-previous-error))
-    (define-key map "\C-c\C-w" 'TeX-toggle-debug-boxes)
     ;; From tex-fold.el
     (define-key map "\C-c\C-o\C-f" 'TeX-fold-mode)
 
@@ -3398,14 +3474,17 @@ be bound to `TeX-electric-macro'."
 	 :active (not TeX-Omega-mode)
 	 :help "Use PDFTeX to generate PDF instead of DVI"]
        [ "Run Interactively" TeX-interactive-mode
-	 :style toggle :selected TeX-interactive-mode
+	 :style toggle :selected TeX-interactive-mode :keys "C-c C-t C-i"
 	 :help "Stop on errors in a TeX run"]
        [ "Source Specials" TeX-source-specials-mode
 	 :style toggle :selected TeX-source-specials-mode
 	 :help "Enable forward and inverse search in the previewer"]
-       ["Debug Bad Boxes" TeX-toggle-debug-boxes
-	:style toggle :selected TeX-debug-bad-boxes
-	:help "Make \"Next Error\" show bad boxes"])))
+       ["Debug Bad Boxes" TeX-toggle-debug-bad-boxes
+	:style toggle :selected TeX-debug-bad-boxes :keys "C-c C-t C-b"
+	:help "Make \"Next Error\" show overfull and underfull boxes"]
+       ["Debug Warnings" TeX-toggle-debug-warnings
+	:style toggle :selected TeX-debug-warnings
+	:help "Make \"Next Error\" show warnings"])))
    (let ((file 'TeX-command-on-current));; is this actually needed?
      (TeX-maybe-remove-help
       (delq nil
@@ -4091,7 +4170,15 @@ escape characters, such as \"\\\" in LaTeX."
     (when pos (goto-char pos))
     (not (zerop (mod (skip-chars-backward (regexp-quote TeX-esc)) 2)))))
 
-
+(defun TeX-current-macro ()
+  "Return the name of the macro containing point, nil if there is none."
+  (let ((macro-start (TeX-find-macro-start)))
+    (when macro-start
+      (save-excursion
+	(goto-char macro-start)
+	(forward-char (length TeX-esc))
+	(buffer-substring-no-properties
+	 (point) (progn (skip-chars-forward "@A-Za-z") (point)))))))
 
 ;;; Fonts
 
@@ -4289,8 +4376,9 @@ With optional ARG, insert that many dollar signs."
 		       (buffer-substring (point)
 					 (progn (end-of-line) (point)))))))
       ;; Math mode was not entered with dollar - we cannot finish it with one.
-      (error "Math mode because of `%s'.  Use `C-q $' to force a dollar"
-	     (car texmathp-why))))
+      (message "Math mode started with `%s' cannot be closed with dollar"
+	       (car texmathp-why))
+      (insert "$")))
    (t
     ;; Just somewhere in the text.
     (insert "$")))
@@ -4360,13 +4448,15 @@ quotes are inserted only after \"."
   "Alist for overriding the default language-specific quote insertion.
 First element in each item is the name of the language as set by
 the language style file.  Second element is the opening quotation
-mark as string.  Third element is the closing quotation mark.
-Fourth element is a boolean specifying insertion behavior,
-overriding `TeX-quote-after-quote'."
+mark.  Third element is the closing quotation mark.  Opening and
+closing quotation marks can be specified directly as strings or
+as functions returning a string.  Fourth element is a boolean
+specifying insertion behavior, overriding
+`TeX-quote-after-quote'."
   :group 'TeX-quote
   :type '(repeat (group (string :tag "Language")
-			(string :tag "Opening quotation mark")
-			(string :tag "Closing quotation mark")
+			(choice :tag "Opening quotation mark" string function)
+			(choice :tag "Closing quotation mark" string function)
 			(boolean :tag "Insert plain quote first" :value t))))
 
 (defvar TeX-quote-language nil
@@ -4408,8 +4498,21 @@ With prefix argument FORCE, always inserts \" characters."
 	   (open-quote (if lang (nth 1 lang) TeX-open-quote))
 	   (close-quote (if lang (nth 2 lang) TeX-close-quote))
 	   (q-after-q (if lang (nth 3 lang) TeX-quote-after-quote)))
+      (when (functionp open-quote)
+	(setq open-quote (funcall open-quote)))
+      (when (functionp close-quote)
+	(setq close-quote (funcall close-quote)))
       (if q-after-q
 	  (insert (cond ((bobp)
+			 ?\")
+			((save-excursion
+			   (TeX-looking-at-backward
+			    (concat (regexp-quote open-quote) "\\|"
+				    (regexp-quote close-quote))
+			    (max (length open-quote) (length close-quote))))
+			 (delete-backward-char (length (match-string 0)))
+			 "\"\"")
+			((< (save-excursion (skip-chars-backward "\"")) -1)
 			 ?\")
 			((not (= (preceding-char) ?\"))
 			 ?\")
@@ -4460,12 +4563,22 @@ With prefix argument FORCE, always inserts \" characters."
 (defun TeX-insert-braces (arg)
   "Make a pair of braces around next ARG sexps and leave point inside.
 No argument is equivalent to zero: just insert braces and leave point
-between."
+between.
+
+If there is an active region, ARG will be ignored, braces will be
+inserted around the region, and point will be left after the
+closing brace."
   (interactive "P")
-  (insert TeX-grop)
-  (save-excursion
-    (if arg (forward-sexp (prefix-numeric-value arg)))
-    (insert TeX-grcl)))
+  (if (TeX-active-mark)
+      (progn
+	(insert TeX-grcl)
+	(save-excursion
+	  (goto-char (mark))
+	  (insert TeX-grop)))
+    (insert TeX-grop)
+    (save-excursion
+      (if arg (forward-sexp (prefix-numeric-value arg)))
+      (insert TeX-grcl))))
 
 (defun TeX-goto-info-page ()
   "Read documentation for AUCTeX in the info system."

@@ -3,7 +3,7 @@
 ;; Harvard citation style is from Peter Williams
 ;; available on the CTAN servers
 
-;; Version: $Id: harvard.el,v 1.1 2005/10/18 08:34:29 davidswelt Exp $
+;; Version: $Id: harvard.el,v 1.2 2005/12/19 13:01:32 davidswelt Exp $
 
 ;; Copyright (C) 1994 Berwin Turlach <berwin@core.ucl.ac.be>
 ;; Copyright (C) 1997 Berwin Turlach <berwin.turlach@anu.edu.au>
@@ -11,7 +11,7 @@
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 1, or (at your option)
+;; the Free Software Foundation; either version 2, or (at your option)
 ;; any later version.
 ;; 
 ;; This program is distributed in the hope that it will be useful,
@@ -20,8 +20,8 @@
 ;; GNU General Public License for more details.
 ;; 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, write to the Free Software
-;; Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+;; along with this program; if not, write to the Free Software Foundation,
+;; Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 ;;; Code:
 
@@ -119,5 +119,10 @@
 (defun LaTeX-item-harvardbib ()
   "Insert a new harvarditem."
   (TeX-insert-macro "harvarditem"))
+
+(defvar LaTeX-harvard-package-options '("full" "abbr" "default"
+					"agsmcite" "dcucite" "round"
+					"curly" "angle" "square" "none")
+  "Package options for the harvard package.")
 
 ;; harvard.el ends here

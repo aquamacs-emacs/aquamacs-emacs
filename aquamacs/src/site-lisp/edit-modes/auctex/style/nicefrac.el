@@ -1,6 +1,6 @@
 ;;; nicefrac.el --- AUCTeX style for the LaTeX package `nicefrac.sty' (v0.9b)
 
-;; Copyright (C) 2004 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005 Free Software Foundation, Inc.
 
 ;; Author: Christian Schlauer <cschl@arcor.de>
 ;; Maintainer: auctex-devel@gnu.org
@@ -39,5 +39,8 @@
 	      (eq TeX-install-font-lock 'font-latex-setup))
      (add-to-list 'font-latex-match-textual-keywords-local "nicefrac")
      (font-latex-match-textual-make))))
+
+(defvar LaTeX-nicefrac-package-options '("nice" "ugly")
+  "Package options for the nicefrac package.")
 
 ;;; nicefrac.el ends here

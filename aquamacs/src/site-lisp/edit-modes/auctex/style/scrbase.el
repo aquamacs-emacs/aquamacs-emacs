@@ -5,7 +5,7 @@
 
 ;; Author: Mark Trettin <Mark.Trettin@gmx.de>
 ;; Created: 2002-09-26
-;; Version: $Id: scrbase.el,v 1.1 2005/10/18 08:34:29 davidswelt Exp $
+;; Version: $Id: scrbase.el,v 1.2 2005/12/19 13:01:35 davidswelt Exp $
 ;; Keywords: tex
 ;; License: GPL, see the file COPYING in the base directory of AUCTeX
 

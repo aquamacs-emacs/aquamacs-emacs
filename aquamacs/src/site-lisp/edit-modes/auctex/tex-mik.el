@@ -62,6 +62,5 @@
   (setq TeX-source-specials-view-editor-flags ""))
 
 (provide 'tex-mik)
-(require 'tex-site)
 
 ;;; tex-mik.el ends here

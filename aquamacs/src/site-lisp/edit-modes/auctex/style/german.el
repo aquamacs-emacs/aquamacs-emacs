@@ -37,6 +37,10 @@
        (setq TeX-quote-language
 	     `("german" ,open-quote ,close-quote ,q-after-q))))
    (setq LaTeX-babel-hyphen-language "german")
+   ;; Fontification of quotation marks.
+   (when (fboundp 'font-latex-add-quotes)
+     (font-latex-add-quotes '("\"`" "\"'"))
+     (font-latex-add-quotes '("\">" "\"<" german)))
    (run-hooks 'TeX-language-de-hook)))
 
 ;;; german.el ends here

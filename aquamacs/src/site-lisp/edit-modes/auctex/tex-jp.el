@@ -73,10 +73,6 @@ For detail, see `TeX-command-list', which this list is appended to."
 				(function-item TeX-run-command)
 				(function-item TeX-run-format)
 				(function-item TeX-run-TeX)
-				;; leave the following line in
-				;; customization? Replaced (but still
-				;; available) with TeX-run-TeX --pg
-				(function-item TeX-run-LaTeX)
 				(function-item TeX-run-interactive)
 				(function-item TeX-run-BibTeX)
 				(function-item TeX-run-compile)
@@ -203,63 +199,6 @@ For detail, see `TeX-command-list', which this list is appended to."
 	 TeX-japanese-process-output-coding-system
 	 TeX-japanese-process-input-coding-system)))
 )
-
-;;; Japanese Parsing
-
-(when (featurep 'mule)
-
-(defconst LaTeX-auto-regexp-list
-  (append
-   '(("\\\\\\(new\\|provide\\)command\\*?{?\\\\\\(\\([a-zA-Z]\\|\\cj\\)+\\)}?\\[\\([0-9]+\\)\\]\\[\\([^\n\r]*\\)\\]"
-      (2 4 5) LaTeX-auto-optional)
-     ("\\\\\\(new\\|provide\\)command\\*?{?\\\\\\(\\([a-zA-Z]\\|\\cj\\)+\\)}?\\[\\([0-9]+\\)\\]"
-      (2 4) LaTeX-auto-arguments)
-     ("\\\\\\(new\\|provide\\)command\\*?{?\\\\\\(\\([a-zA-Z]\\|\\cj\\)+\\)}?" 2 TeX-auto-symbol)
-     ("\\\\newenvironment\\*?{?\\(\\([a-zA-Z]\\|\\cj\\)+\\)}?\\[\\([0-9]+\\)\\]\\["
-      1 LaTeX-auto-environment)
-     ("\\\\newenvironment\\*?{?\\(\\([a-zA-Z]\\|\\cj\\)+\\)}?\\[\\([0-9]+\\)\\]"
-      (1 3) LaTeX-auto-env-args)
-     ("\\\\newenvironment\\*?{?\\(\\([a-zA-Z]\\|\\cj\\)+\\)}?" 1 LaTeX-auto-environment)
-     ("\\\\newtheorem{\\(\\([a-zA-Z]\\|\\cj\\)+\\)}" 1 LaTeX-auto-environment)
-     ("\\\\input{\\(\\.*[^#}%\\\\\\.\n\r]+\\)\\(\\.[^#}%\\\\\\.\n\r]+\\)?}"
-      1 TeX-auto-file)
-     ("\\\\include{\\(\\.*[^#}%\\\\\\.\n\r]+\\)\\(\\.[^#}%\\\\\\.\n\r]+\\)?}"
-      1 TeX-auto-file)
-     ("\\\\bibitem{\\(\\([a-zA-Z]\\|\\cj\\)[^, \n\r\t%\"#'()={}]*\\)}" 1 LaTeX-auto-bibitem)
-     ("\\\\bibitem\\[[^][\n\r]+\\]{\\(\\([a-zA-Z]\\|\\cj\\)[^, \n\r\t%\"#'()={}]*\\)}"
-      1 LaTeX-auto-bibitem)
-     ("\\\\bibliography{\\([^#}\\\\\n\r]+\\)}" 1 LaTeX-auto-bibliography))
-   LaTeX-auto-class-regexp-list
-   LaTeX-auto-label-regexp-list
-   LaTeX-auto-index-regexp-list
-   LaTeX-auto-minimal-regexp-list)
-  "List of regular expression matching common LaTeX macro definitions.")
-
-(defconst plain-TeX-auto-regexp-list
-  '(("\\\\def\\\\\\(\\([a-zA-Z]\\|\\cj\\)+\\)[^a-zA-Z@]" 1 TeX-auto-symbol-check)
-    ("\\\\let\\\\\\(\\([a-zA-Z]\\|\\cj\\)+\\)[^a-zA-Z@]" 1 TeX-auto-symbol-check)
-    ("\\\\font\\\\\\(\\([a-zA-Z]\\|\\cj\\)+\\)[^a-zA-Z@]" 1 TeX-auto-symbol)
-    ("\\\\chardef\\\\\\(\\([a-zA-Z]\\|\\cj\\)+\\)[^a-zA-Z@]" 1 TeX-auto-symbol)
-    ("\\\\new\\(count\\|dimen\\|muskip\\|skip\\)\\\\\\(\\([a-z]\\|\\cj\\)+\\)[^a-zA-Z@]"
-     2 TeX-auto-symbol)
-    ("\\\\newfont{?\\\\\\(\\([a-zA-Z]\\|\\cj\\)+\\)}?" 1 TeX-auto-symbol)
-    ("\\\\typein\\[\\\\\\(\\([a-zA-Z]\\|\\cj\\)+\\)\\]" 1 TeX-auto-symbol)
-    ("\\\\input +\\(\\.*[^#%\\\\\\.\n\r]+\\)\\(\\.[^#%\\\\\\.\n\r]+\\)?"
-     1 TeX-auto-file)
-    ("\\\\mathchardef\\\\\\(\\([a-zA-Z]\\|\\cj\\)+\\)[^a-zA-Z@]" 1 TeX-auto-symbol))
-  "List of regular expression matching common LaTeX macro definitions.")
-
-(defconst BibTeX-auto-regexp-list
-  '(("@[Ss][Tt][Rr][Ii][Nn][Gg]" 1 ignore)
-    ("@[a-zA-Z]+[{(][ \t]*\\(\\([a-zA-Z]\\|\\cj\\)[^, \n\r\t%\"#'()={}]*\\)"
-     1 LaTeX-auto-bibitem))
-  "List of regexp-list expressions matching BibTeX items.")
-
-)
-
-(defconst TeX-auto-full-regexp-list
-  (append LaTeX-auto-regexp-list plain-TeX-auto-regexp-list)
-  "Full list of regular expression matching TeX macro definitions.")
 
 ;;; Japanese TeX modes
 

@@ -1,6 +1,6 @@
 ;;; mdwlist.el --- AUCTeX style for `mdwlist.sty'
 
-;; Copyright (C) 2004 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005 Free Software Foundation, Inc.
 
 ;; Maintainer: auctex-devel@gnu.org
 ;; Keywords: tex
@@ -56,3 +56,8 @@
 	   (append font-latex-match-function-keywords-local
 		   '("makecompactlist" "suspend" "resume")))
      (font-latex-match-function-make))))
+
+(defvar LaTeX-mdwlist-package-options nil
+  "Package options for the mdwlist package.")
+
+;;; mdwlist.el ends here

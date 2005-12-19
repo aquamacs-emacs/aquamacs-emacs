@@ -1,6 +1,6 @@
 ;;; listings.el --- AUCTeX style for `listings.sty'
 
-;; Copyright (C) 2004 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005 Free Software Foundation, Inc.
 
 ;; Author: Ralf Angeli <angeli@iwi.uni-sb.de>
 ;; Maintainer: auctex-devel@gnu.org
@@ -49,13 +49,14 @@
    (LaTeX-add-environments
     "lstlisting")
    ;; Filling
-   (make-local-variable 'LaTeX-verbatim-macros)
-   (add-to-list 'LaTeX-verbatim-macros "lstinline")
    (make-local-variable 'LaTeX-indent-environment-list)
    (add-to-list 'LaTeX-indent-environment-list
 		'("lstlisting" current-indentation))
    (make-local-variable 'LaTeX-verbatim-regexp)
    (setq LaTeX-verbatim-regexp (concat LaTeX-verbatim-regexp "\\|lstlisting"))
+   (add-to-list 'LaTeX-verbatim-environments-local "lstlisting")
+   (add-to-list 'LaTeX-verbatim-macros-with-delims-local "lstinline")
+   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "lstinline")
    ;; Fontification
    (when (and (featurep 'font-latex)
 	      (eq TeX-install-font-lock 'font-latex-setup))
@@ -71,12 +72,14 @@
      (add-to-list 'font-latex-match-variable-keywords-local "lstdefinestyle")
      (add-to-list 'font-latex-match-variable-keywords-local "lstset")
      (font-latex-match-variable-make)
-     (add-to-list 'font-latex-verbatim-environments-local "lstlisting")
-     (add-to-list 'font-latex-verbatim-macros-local "lstinline")
-     (add-to-list 'font-latex-verb-like-commands-local "lstinline")
+     ;; For syntactic fontification, e.g. verbatim constructs.
      (font-latex-set-syntactic-keywords)
      ;; Tell font-lock about the update.
      (setq font-lock-set-defaults nil)
      (font-lock-set-defaults))))
+
+(defvar LaTeX-listings-package-options '("draft" "final" "savemem" 
+					 "noaspects")
+  "Package options for the listings package.")
 
 ;;; listings.el ends here

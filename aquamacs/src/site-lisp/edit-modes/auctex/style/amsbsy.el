@@ -12,4 +12,7 @@
      '("pmb"        "Symbol")
      ))))
 
+(defvar LaTeX-amsbsy-package-options nil
+  "Package options for the amsbsy package.")
+
 ;;; amsbsy.el ends here.

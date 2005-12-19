@@ -51,6 +51,9 @@
 			  "\">")))
        (setq TeX-quote-language
 	     `("italian" ,open-quote ,close-quote TeX-quote-after-quote))))
+   ;; Fontification of quotation marks.
+   (when (fboundp 'font-latex-add-quotes)
+     (font-latex-add-quotes '("\"<" "\">" french)))
    (run-hooks 'TeX-language-it-hook)))
 
 ;;; italian.el ends here

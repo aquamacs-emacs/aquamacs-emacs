@@ -51,4 +51,7 @@ PROMPT is the value of the prompt to be shown."
 		     "specialrule")))
      (font-latex-match-function-make))))
 
+(defvar LaTeX-booktabs-package-options nil
+  "Package options for the booktabs package.")			
+
 ;;; booktabs.el ends here

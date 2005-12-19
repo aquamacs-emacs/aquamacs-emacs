@@ -94,4 +94,9 @@ If the user gives an unknown name, add it to the list."
 	(add-to-list 'LaTeX-fancyref-formats (list format)))
     (TeX-argument-insert format optional)))
 
+(defvar LaTeX-fancyref-package-options '("english" "german" "loose"
+					 "margin" "paren" "plain" "tight"
+					 "vario")
+  "Package options for the fancyref package.")
+
 ;; fancyref.el ends here

@@ -25,4 +25,17 @@
 	       2 LaTeX-label-list "}"))
 	    TeX-complete-list))))
 
+(defvar LaTeX-varioref-package-options '("draft" "final" "afrikaans" 
+				       "american" "austrian" "naustrian"
+				       "brazil" "breton" "catalan" "croatian"
+				       "czech" "danish" "dutch" "english"
+				       "esperanto" "finnish" "french"
+				       "galician" "german" "ngerman" "greek"
+				       "italian" "magyar" "norsk" "nynorsk"
+				       "polish" "portuges" "romanian"
+				       "russian" "slovak" "slovene"
+				       "spanish" "swedish" "turkish"
+				       "francais" "germanb")
+  "Package options for the varioref package.")
+
 ;; varioref.el ends here

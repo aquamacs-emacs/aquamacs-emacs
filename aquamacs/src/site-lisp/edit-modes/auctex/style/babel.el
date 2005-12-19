@@ -43,6 +43,11 @@
     "welsh" "UKenglish" "USenglish")
   "List of languages supported by the babel LaTeX package.")
 
+(if (fboundp 'defvaralias)
+    (defvaralias 'LaTeX-babel-package-options 'LaTeX-babel-language-list)
+  (defvar LaTeX-babel-package-options LaTeX-babel-language-list
+    "Package options for the babel package."))
+
 (defun LaTeX-babel-active-languages ()
   "Return a list of languages used in the document."
   (let (active-languages)

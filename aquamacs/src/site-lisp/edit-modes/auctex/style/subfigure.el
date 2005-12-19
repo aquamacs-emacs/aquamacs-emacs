@@ -1,5 +1,5 @@
 ;; subfigure.el --- AUCTeX style file for subfigure.sty
-;; Copyright (C) 2003 Reiner Steib
+;; Copyright (C) 2003, 2005 Reiner Steib
 
 ;; Author: Reiner Steib  <Reiner.Steib@gmx.de>
 ;; Keywords: tex
@@ -35,5 +35,20 @@
      (add-to-list 'font-latex-match-reference-keywords-local "Subref")
      (add-to-list 'font-latex-match-reference-keywords-local "subref")
      (font-latex-match-reference-make))))
+
+(defvar LaTeX-subfigure-package-options '("normal" "hang" "center"
+					  "centerlast" "nooneline"
+					  "raggedright" "isu" "anne"
+					  "scriptsize" "footnotesize"
+					  "small" "normalsize" "large"
+					  "Large" "rm" "sf" "tt" "md"
+					  "bf" "up" "it" "sl" "sc" "RM"
+					  "SF" "TT" "MD" "BF" "IT" "SL"
+					  "SC" "UP" "figbotcap"
+					  "figtopcap" "tabbotcap"
+					  "tabtopcap" "FIGBOTCAP"
+					  "FIGTOPCAP" "TABBOTCAP"
+					  "TABTOPCAP" "loose" "tight")
+  "Package options for the subfigure package.")
 
 ;; subfigure.el ends here

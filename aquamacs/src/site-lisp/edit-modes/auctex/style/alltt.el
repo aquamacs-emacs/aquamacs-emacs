@@ -1,6 +1,6 @@
 ;;; alltt.el --- AUCTeX style for `alltt.sty'
 
-;; Copyright (C) 2004 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005 Free Software Foundation, Inc.
 
 ;; Author: Ralf Angeli <angeli@iwi.uni-sb.de>
 ;; Maintainer: auctex-devel@gnu.org
@@ -39,13 +39,17 @@
 		'("alltt" current-indentation))
    (make-local-variable 'LaTeX-verbatim-regexp)
    (setq LaTeX-verbatim-regexp (concat LaTeX-verbatim-regexp "\\|alltt"))
+   (add-to-list 'LaTeX-verbatim-environments-local "alltt")
    ;; Fontification
    (when (and (featurep 'font-latex)
 	      (eq TeX-install-font-lock 'font-latex-setup))
-     (add-to-list 'font-latex-verbatim-environments-local "alltt")
+     ;; For syntactic fontification, e.g. verbatim constructs.
      (font-latex-set-syntactic-keywords)
      ;; Tell font-lock about the update.
      (setq font-lock-set-defaults nil)
      (font-lock-set-defaults))))
+
+(defvar LaTeX-alltt-package-options nil
+  "Package options for the alltt package.")
 
 ;;; alltt.el ends here

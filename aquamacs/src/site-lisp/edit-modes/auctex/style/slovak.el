@@ -4,4 +4,7 @@
  "slovak"
  (lambda ()
    (setq TeX-quote-language `("slovak" "\\uv{" "}" ,TeX-quote-after-quote))
+   (when (fboundp 'font-latex-add-quotes)
+     (font-latex-add-quotes '("\"`" "\"'"))
+     (font-latex-add-quotes '("\"<" "\">" french)))
    (run-hooks 'TeX-language-sk-hook)))

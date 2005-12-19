@@ -10,4 +10,7 @@
     (TeX-add-symbols
      '("text" t)))))
 
+(defvar LaTeX-amstext-package-option nil
+  "Package options for the amstext package.")
+
 ;;; amstext.el ends here.

@@ -152,4 +152,11 @@
     (and (LaTeX-label environment)
 	 (newline-and-indent))))
 
+(defvar LaTeX-amsmath-package-options '("intlimits" "nointlimits"
+					"sumlimits" "nosumlimits"
+					"namelimits" "nonamelimits"
+					"leqno" "reqno" "centertags"
+					"tbtags" "cmex10" "fleqn" "?")
+    "Package options for the amsmath package.")
+
 ;;; amsmath.el ends here.

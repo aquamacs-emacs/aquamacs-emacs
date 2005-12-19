@@ -13,4 +13,7 @@
      '("operatorname" t)
      '("operatorname*" t)))))
 
+(defvar LaTeX-amsopn-package-options '("namelimits" "nonamelimits")
+  "Package options for the amsopn package.")
+
 ;;; amsopn.el ends here.
