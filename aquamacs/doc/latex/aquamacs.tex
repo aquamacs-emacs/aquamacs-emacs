@@ -92,6 +92,87 @@ fixes. It is a recommended update.
 
 
 
+\subsection{Changes---0.9.8}
+
+\begin{itemize}
+
+\item Meta/Option key: New minor modes allow users of various
+	keyboard layouts (German, French, Italian, GB/US) to use the
+	Option key as Meta modifier under Emacs (as it is the
+	default), but still be able to input characters such as [ ] {
+	} | and @. This works for common characters (not all). Some
+	rarely used Emacs key bindings such as M-4 on Italian
+	keyboards are overridden by these modes. Activate them via the
+	Options menu ("Option Key"), or with M-x
+	emulate-mac-french-keyboard-mode (substitute 'french' with
+	a keyboard layout in lower case).
+	The following keyboard layouts are known:
+
+	German, Italian, French, US, British
+
+	You may define your own mappings. (Please publish them.)
+	
+\item Bug reporting: Use standard GNU Emacs bug reporting facility
+ 	(but go through the mail client when necessary.)
+
+\item One-Buffer-One-Frame: Change in the decision-making process
+	about when to show a buffer in a new frame. Generally, all buffers
+	with names in *'s (such as *vc*) will be shown in the same
+	frame (as directed by `obof-same-frame-regexps'), with the
+	exception of Messages, Help and Customize buffers (as listed in
+	`obof-other-frame-regexps'). This means that more buffers will
+	open as a "small" window inside the current frame. Please report
+	back to us in case you have any unwanted results with this.
+
+\item Drag\&Drop of files in buffers with HTML/LaTeX/C modes results in
+	the appropriate code (such as $<$IMG SRC=...$>$ or
+	$\backslash$includegraphics$\{$...$\}$) being inserted.
+	Patches by Seiji Zenitani
+	
+\item AUCTeX/PDF: TeX-PDF-mode is now the default via the default of
+	its mode variable `TeX-PDF-mode' rather than an entry in
+	`LaTeX-mode-hook', making configuring the default in the
+	customization buffer (or in .emacs) easier.
+
+\item DONATE: If you like the new version, please donate so we can
+	keep the development efforts going throughout 2006. Have a great
+	new year!
+\end{itemize}	
+\paragraph{  Bugfixes:}
+\begin{itemize}
+\item Browsing a URL (as in Help menu functions, mouse clicks in Gnus
+	etc. could fail in rare circumstances.
+	Reported by Count László de Almásy
+	
+\item Tcsh environments will be correctly imported into Aquamacs now.
+	Reported by Michael Kohlhase
+	
+\item AUCTeX and RSS documentation (info) are now included.
+	Reported by Arthur Ogus and José Figueroa-O'Farrill
+	
+\item Avoid the Dock when opening or automatically resizing frames in
+	most situations. 
+
+\item Up/down movements of the cursor: subtle tweak (jumping to
+	temporary goal column only in series of up/down movements.)
+
+\item `mouse-save-then-kill' for `osx-key-mode-mouse-3-behavior' set
+	to now works fine for double clicks (deleting the selected region)
+	Reported by Konrad Podczeck
+	
+\item Tcl-mode back in the "New Buffer" menu.
+	Patch by Kevin Walzer
+
+\item CPerl mode is still the default for perl files, but perl-mode is
+	not an alias any more for cperl-mode.
+	
+\item Environment import (from the default login shell) works better
+	now for users of tcsh, zsh and ksh.
+	
+
+
+\end{itemize}
+
 \subsection{Changes---0.9.7}
 
 \begin{itemize}
@@ -133,7 +214,8 @@ fixes. It is a recommended update.
 	bring the old XML mode back:
 
 \begin{verbatim} 	
-(assq-set-equal "<\\?xml " 'xml-mode 'magic-mode-alist) 
+(assq-set-equal "<\\?xml " 'xml-mode 
+                           'magic-mode-alist) 
 \end{verbatim}
 
 	Suggestion from Tim Bray.
@@ -177,10 +259,13 @@ fixes. It is a recommended update.
 	can turn it off with this code in your Preferences.el / .emacs
 	file:
 
-{\tt 	(define-key osx-key-mode-map [remap previous-line]
-  'previous-line)}
+\begin{verbatim} 
+(define-key osx-key-mode-map [remap previous-line]
+            'previous-line)
 
-{\tt 	(define-key osx-key-mode-map [remap next-line] 'next-line)}
+(define-key osx-key-mode-map [remap next-line] 
+            'next-line)
+\end{verbatim}
 
 \item Scrolling and setting the point with the mouse has improved:
 	`scroll-margin' defaults to 0 now, so scrolling won't happen until
@@ -190,8 +275,8 @@ fixes. It is a recommended update.
 	boundary. You can configure this via Aquamacs' customization
 	variable `visual-scroll-margin'.
 
-\item Command-{ comments the line or the region (in programming modes)
-\item Command-} uncomments the line or the region (in programming
+\item Command-\{ comments the line or the region (in programming modes)
+\item Command-\} uncomments the line or the region (in programming
 	modes) 
 \item Command-' comments or uncomments (toggling) the line or
 	the region (in programming modes)
@@ -214,13 +299,13 @@ fixes. It is a recommended update.
 	To set the Apple key to Meta (not recommended), add this to your
 	Preferences.el file:
 
- 	(setq mac-command-modifier 'meta)
+ 	{tt (setq mac-command-modifier 'meta)}
 
 \item Fn-key can act as Meta. If you have an Fn key on your laptop,
 	you can use it as Meta key now. Add this to your Preferences.el
 	file:
 
- 	(setq mac-function-modifier 'meta)
+ 	{\tt (setq mac-function-modifier 'meta)}
 
 	Note that support of the Fn key is experimental. Rare
 	combinations may fail on non-English keyboard layouts,
@@ -245,11 +330,10 @@ fixes. It is a recommended update.
 	Emacs. Apple-C will not deselect the region, just like it's done
 	on the Mac. 
 
-\item Run executables from within Emacs that lie in your PATH as set
-	in .bash_profile (or the appropriate shell configuration
-	file). Aquamacs will set `exec-path' automatically from PATH.
-	We don't add paths to exec-path any more (except one default tetex
-	path for AUCTeX).
+      \item Run executables from within Emacs that lie in your PATH as
+        set in shell init files. Aquamacs will set `exec-path'
+        automatically from PATH.  We don't add paths to exec-path any
+        more (except one default tetex path for AUCTeX).
 
 \item Questions like "Save to file before closing?" will be asked with
 	a proper dialog and not with a menu appearing out of nothing - if
@@ -315,9 +399,9 @@ fixes. It is a recommended update.
 \item Bugfix: links from describe-variable/function help buffers to the 
 	source files are correct now for the Aquamacs-specific objects
 \item Bugfix: Aquamacs works fine now on systems where, in the default
-	shell (e.g. via .bash_profile), functions have been defined and
+	shell (e.g. via .bash profile), functions have been defined and
 	exported.
-	Reported by Terry Jones
+	Reported by Terry Jones 
 \item Bugfix: RefTeX mode does't give constant audio signals (errors) 
 	any more in certain situations
 \item Bugfix: Allout mode should work again (saving files)
@@ -689,7 +773,7 @@ fixes. It is a recommended update.
 
 \item Characters that require the use of the option key work again. For
     example, Alt-3 produces the pound sign (£) on a US keyboard,
-    Alt-L the `at' sign @ and Alt-Shift-7 the backslash \backslash on a
+    Alt-L the `at' sign @ and Alt-Shift-7 the backslash $\backslash$ on a
     German one. Inputting the Euro sign works, too. \textit{However, that means that the option key is not used to emulate
     the `meta' modifier;  you will have to use Esc to do that.}
     Alternatively, you can map the option key to meta in your .emacs
@@ -1086,6 +1170,34 @@ down and find the ``Aquamacs Group'' listing, and push the ``Go to
 Group'' button. This will open a new frame with all of the
 configuration options for Aquamacs Emacs---deep-level customization that can be implemented by Aquamacs power users in the Emacs scripting language, elisp---and each option is documented there. Table \ref{tab:variables} displays a complete list of the options. 
 
+\subsubsection{Using the Options key and more...}
+
+The keyboard has always been the essential user interface to Emacs -
+it's what makes Emacs so efficient as an editor for daily
+tasks. There are keyboard bindings for pretty much every task. Many
+bindings involve pressing the ``Meta'' modifier key - it's a key just
+like Control or Shift, which all go together with another (normal)
+key. ``Meta'' has only really existed on Unix keyboards long time ago
+-- nowadays, computers have other keys instead. Therefore, you will
+need to press another key on your Macintosh keyboard. \emph{By default, this
+is the Option key}, but you can use the ESC key instead (in this case,
+you may press ESC first, then the rest of the keys).
+
+\paragraph{In most non-English keyboard layouts,} the Option key also
+serves to input characters such as $\{$ or $\backslash$ or @. Using
+Option as Meta would inhibit you from inputting those characters. You
+have two options to get around this. \emph{Either}, you deselect
+``Option Key for Meta'' in the Options menu (under ``Option Key''), in
+which case you will have to use ESC for Meta, \emph{or} you toggle
+back and forth between the modes using Command-;, \emph{or} you use
+Option for Meta, but enable one of the emulation modes provided in the
+same menu under ``Option Key''. This will allow you to input some
+common characters with the Option key on some common keyboard layouts.
+
+Alternatively, Aquamacs allows you to use another modifier key -- such
+as the Function key on laptops. The customization group ``Aquamacs''
+contains appropriate settings.
+
 \subsubsection{Languages of the World - Dealing with Different Character Sets}
 
 Computer keyboards were designed to input text in languages with a small character set. 
@@ -1107,12 +1219,23 @@ Aquamacs allows
   in the Options menu. ``Set Color Theme...'' will let you choose a
   pre-defined combination  of colors and fonts. ``Set Font...'' gives you a choice of pre-defined fonts to use.
 
-These settings only apply to the current frame. To make them ``stick,'' use the function ``Set current theme as default.'' Then, all  future frames will open with the new colors and fonts chosen. This  applies to all frame-settings that a mode or you as a user have  chosen using Emacs' configuration system. The choice of a default  theme will stick until you restart Aquamacs Emacs.
+  These settings only apply to the current frame. To make them
+  ``stick,'' use the function ``Set current theme as default.'' Then,
+  future frames will open {\em by default} with the new colors and fonts
+  chosen. This applies to all visual frame-settings that a mode or you
+  as a user have chosen using Emacs' configuration system. The choice
+  of a default theme will stick until you restart Aquamacs Emacs.
 
 Aquamacs Emacs also offers you to pick a theme specific to the
 current mode. For example, you can use different settings when you are
 editing C or LaTeX, then when you are editing a text file. That is
 what  the function ``Set current theme for current mode'' is for. Again, the setting  will stick for newly opened frames or or whenever you newly use a  given mode, until you restart Aquamacs Emacs.
+
+\textbf{Note that mode-specific themes will override any default
+  theme.} If you'd like to use the same theme for all frames, you
+should disable the ``Frame Appearance Themes'' option. You can then
+use the customization options `default-frame-alist' and
+`initial-frame-alist' as documented in the Emacs manual.
 
 Finally, you may want to save your settings so they will stick even
 when you restart Aquamacs Emacs. To do so, use the function ``Save Options.''
@@ -1331,6 +1454,7 @@ setting.
 \begin{table}[t]
 \begin{center}
  \begin{tabular}{|l|}
+
 \hline  \textbf{Variable}\\
 
 \hline Aquamacs Set Creator Codes After Writing Files\\
@@ -1345,8 +1469,8 @@ setting.
 \hline Mac Option Modifier\\ 
 \hline Mac Control Modifier\\ 
 \hline Mac Command Modifier\\ 
-\hline Aquamacs Known Buffer Modes
-\hline 
+\hline Aquamacs Known Buffer Modes \\
+\hline
 \end{tabular} 
 \caption{Aquamacs-specific variables that can be customized in the Aquamacs customization group.}
 \label{tab:variables}
@@ -1393,7 +1517,14 @@ Enrico Franconi, developer of the old Enhanced Carbon Emacs distribution that ha
 \url{http://www.inf.unibz.it/~franconi/enhanced-carbon-emacs/ec-emacs-plugin-beta.dmg} 
 
 \subsubsection{\TeX niscope: A Superb \LaTeX\ Previewer}
-One special feature of the Enhanced Carbon Emacs plugin is its support for \TeX niscope, a Cocoa-based La\TeX\ previewer that can display both PDF and DVI formats. We recommend \TeX niscope as a superb La\TeX\ previewer and complement to Aquamacs/Enhanced Carbon Emacs. \TeX niscope can be downloaded from \url{http://www.ing.unipi.it/~d9615/homepage/texniscope.html}.\footnote{The developer of \TeX niscope, Massimiliano Gubinelli, is also the creator of the Aquamacs icon.}
+One special feature of the Enhanced Carbon Emacs plugin is its support
+for \TeX niscope, a Cocoa-based La\TeX\ previewer that can display
+both PDF and DVI formats. We recommend \TeX niscope as a superb
+La\TeX\ previewer and complement to Aquamacs/Enhanced Carbon
+Emacs. \TeX niscope can be downloaded from 
+
+\noindent
+\url{http://www.ing.unipi.it/~d9615/homepage/texniscope.html}.\footnote{The developer of \TeX niscope, Massimiliano Gubinelli, is also the creator of the Aquamacs icon.}
 
 \TeX niscope needs a bit of configuration to work well with Aquamacs. See the Wiki page at \url{http://www.emacswiki.org/cgi-bin/wiki/AquamacsTexniscope} for up-to-date configuration info. 
 
