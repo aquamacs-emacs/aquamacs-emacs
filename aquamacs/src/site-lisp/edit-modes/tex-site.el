@@ -78,7 +78,18 @@ shared by all users of a site."
 	  (lambda ()
 	    (let ((list after-load-alist))
 	      (while list
-		(assq-delete-all 'TeX-modes-set (car list))
+		;; Adapted copy of the definition of `assq-delete-all'
+		;; from Emacs 21 as substitute for
+		;; `(assq-delete-all'TeX-modes-set (car list))' which
+		;; fails on non-list elements in Emacs 21.
+		(let* ((alist (car list))
+		       (tail alist)
+		       (key 'TeX-modes-set))
+		  (while tail
+		    (if (and (consp (car tail))
+			     (eq (car (car tail)) key))
+			(setq alist (delq (car tail) alist)))
+		    (setq tail (cdr tail))))
 		(setq list (cdr list))))
 	    (setq load-path (delq TeX-lisp-directory load-path))))
 
@@ -120,11 +131,11 @@ set it with `TeX-modes-set'."
 		      `(TeX-modes-set ',var ,var t))
 		    (setq list (cdr list))))))
 
-(defconst AUCTeX-version "11.81"
+(defconst AUCTeX-version "11.82"
     "AUCTeX version.
 If not a regular release, the date of the last change.")
 
-(defconst AUCTeX-date "2005-09-25"
+(defconst AUCTeX-date "2005-12-17"
   "AUCTeX release date using the ISO 8601 format, yyyy-mm-dd.")
 
 ;;; auto-loads.el --- automatically extracted autoloads
@@ -207,7 +218,7 @@ of context-mode-hook.
 ;;;***
 
 ;;;### (autoloads (font-latex-setup) "font-latex" "font-latex.el"
-;;;;;;  (17206 25637))
+;;;;;;  (17300 7088))
 ;;; Generated autoloads from font-latex.el
 
 (autoload (quote font-latex-setup) "font-latex" "\
@@ -218,7 +229,7 @@ Setup this buffer for LaTeX font-lock.  Usually called from a hook.
 ;;;***
 
 ;;;### (autoloads (docTeX-mode TeX-latex-mode BibTeX-auto-store)
-;;;;;;  "latex" "latex.el" (17167 17074))
+;;;;;;  "latex" "latex.el" (17300 7077))
 ;;; Generated autoloads from latex.el
 
 (autoload (quote BibTeX-auto-store) "latex" "\
@@ -272,7 +283,7 @@ are the arguments to `completing-read'.  See that.
 
 ;;;### (autoloads (TeX-submit-bug-report ams-tex-mode TeX-auto-generate-global
 ;;;;;;  TeX-auto-generate TeX-plain-tex-mode TeX-tex-mode) "tex"
-;;;;;;  "tex.el" (17198 46974))
+;;;;;;  "tex.el" (17304 35692))
 ;;; Generated autoloads from tex.el
 
 (autoload (quote TeX-tex-mode) "tex" "\
@@ -369,8 +380,8 @@ Setup font lock support for TeX.
 
 ;;;***
 
-;;;### (autoloads (TeX-texinfo-mode) "tex-info" "tex-info.el" (17080
-;;;;;;  25197))
+;;;### (autoloads (TeX-texinfo-mode) "tex-info" "tex-info.el" (17300
+;;;;;;  7063))
 ;;; Generated autoloads from tex-info.el
 
 (defalias (quote Texinfo-mode) (quote texinfo-mode))
@@ -389,7 +400,7 @@ value of `Texinfo-mode-hook'.
 ;;;***
 
 ;;;### (autoloads (japanese-latex-mode japanese-plain-tex-mode) "tex-jp"
-;;;;;;  "tex-jp.el" (17010 10577))
+;;;;;;  "tex-jp.el" (17221 35562))
 ;;; Generated autoloads from tex-jp.el
 
 (autoload (quote japanese-plain-tex-mode) "tex-jp" "\
@@ -407,7 +418,7 @@ Set japanese-TeX-mode to t, and enters latex-mode.
 ;;;***
 
 ;;;### (autoloads (texmathp-match-switch texmathp) "texmathp" "texmathp.el"
-;;;;;;  (17195 59737))
+;;;;;;  (17293 49353))
 ;;; Generated autoloads from texmathp.el
 
 (autoload (quote texmathp) "texmathp" "\
@@ -427,7 +438,7 @@ Limit searched to BOUND.
 
 ;;;***
 
-;;;### (autoloads nil "toolbar-x" "toolbar-x.el" (17014 15160))
+;;;### (autoloads nil "toolbar-x" "toolbar-x.el" (17241 1359))
 ;;; Generated autoloads from toolbar-x.el
  (autoload 'toolbarx-install-toolbar "toolbar-x")
 

@@ -42,6 +42,6 @@ Report a bug in the preview-latex package.
 ;; End:
 ;;; preview-latex.el ends here
 
-(add-to-list 'load-path (expand-file-name "preview" (file-name-directory load-file-name)))
+(add-to-list 'load-path (expand-file-name "auctex" (file-name-directory load-file-name)))
 (defvar preview-datadir (expand-file-name "auctex" (file-name-directory load-file-name)))
 (defvar preview-TeX-style-dir (concat ".:" (expand-file-name "auctex/latex" (file-name-directory load-file-name)) ":"))
