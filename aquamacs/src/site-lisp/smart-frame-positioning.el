@@ -21,7 +21,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.17 2005/12/14 18:41:11 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.18 2005/12/19 11:41:36 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -370,8 +370,8 @@ on the main screen, i.e. where the menu is."
 		   (mac-display-available-pixel-bounds)
 		 (list 0 0 
 		       (display-pixel-width) (display-pixel-height))))
-	 (min-x (+ 5 (nth 0 rect)))
-	 (min-y (+ 5 (nth 1 rect)))
+	 (min-x (nth 0 rect))
+	 (min-y (nth 1 rect))
 	 (max-x (nth 2 rect))
 	 (max-y (nth 3 rect))
 	 (next-x (eval (frame-parameter frame 'left)))
