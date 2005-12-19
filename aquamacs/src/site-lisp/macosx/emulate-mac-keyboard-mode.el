@@ -35,7 +35,8 @@ for the key. Example:
 	       ("\M-7" . "|")
 	       ("\M-8" . "{")
 	       ("\M-9" . "}")
-	       ("\M-6" . "]")))
+	       ("\M-e" . ,(make-char 'latin-iso8859-15 164)) ;; euro symbol
+	       ))
     (french . (("\M-`" . "@")
 	       ("\M-$" . "\223")
 	       ("\M-/" . "\\")
@@ -139,7 +140,7 @@ by the function `define-emulate-mac-keyboard-modes'."
 to their equivalents used on Mac OS X."
 		  (:enable (eq mac-option-modifier 'meta))
 		  ))))
-(mapcar 'car emulate-mac-keyboard-mode-maps)))
+	(mapcar 'car emulate-mac-keyboard-mode-maps)))
 
 ;; Define entries for menu
 
