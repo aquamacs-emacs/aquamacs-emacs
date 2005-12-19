@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Getting Help</TITLE>
-<META NAME="description" CONTENT="Getting Help">
+<TITLE>Customizing Aquamacs</TITLE>
+<META NAME="description" CONTENT="Customizing Aquamacs">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -20,106 +20,194 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <LINK REL="STYLESHEET" HREF="aquamacs.css">
 
 <LINK REL="next" HREF="node41.html">
-<LINK REL="previous" HREF="node34.html">
-<LINK REL="up" HREF="aquamacs.html">
+<LINK REL="previous" HREF="node39.html">
+<LINK REL="up" HREF="node38.html">
 <LINK REL="next" HREF="node41.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html615"
+<A NAME="tex2html626"
   HREF="node41.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html611"
-  HREF="aquamacs.html">
+<A NAME="tex2html622"
+  HREF="node38.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html605"
+<A NAME="tex2html616"
   HREF="node39.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html613"
+<A NAME="tex2html624"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html616"
-  HREF="node41.html">Donations</A>
-<B> Up:</B> <A NAME="tex2html612"
-  HREF="aquamacs.html">Aquamacs User Help</A>
-<B> Previous:</B> <A NAME="tex2html606"
-  HREF="node39.html">TEXniscope: A Superb L<SUP>A</SUP>TEX</A>
- &nbsp; <B>  <A NAME="tex2html614"
+<B> Next:</B> <A NAME="tex2html627"
+  HREF="node41.html">L<SUP>A</SUP>TEX Support</A>
+<B> Up:</B> <A NAME="tex2html623"
+  HREF="node38.html">Aquamacs for Emacs Veterans</A>
+<B> Previous:</B> <A NAME="tex2html617"
+  HREF="node39.html">Keyboard Shortcuts</A>
+ &nbsp; <B>  <A NAME="tex2html625"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H1><A NAME="SECTION00070000000000000000">
-Getting Help</A>
-</H1>
+<H2><A NAME="SECTION00062000000000000000">
+Customizing Aquamacs</A>
+</H2>
+One of the distinguishing features of Emacs is the degree to which it
+can be customized by the end user. Emacs includes its own internal
+scripting language, elisp, which allows the user to customize such
+things as keyboard shortcuts, window settings, fonts, and more. The
+Aquamacs customizations themselves are implemented in elisp.<A NAME="tex2html17"
+  HREF="footnode.html#foot192"><SUP><SPAN CLASS="arabic">3</SPAN></SUP></A>
+<P>
+We recommend that user customizations be placed in specific locations:
 
 <P>
-There are many options for getting help with Aquamacs.
+
+<UL>
+<LI>/Library/Preferences/Emacs/Preferences.el: Preferences for all Carbon  Emacs installations
+</LI>
+<LI>/Library/Preferences/Aquamacs Emacs/Preferences.el: Preferences for  Aquamacs and for all users
+</LI>
+<LI>/Users/username/Library/Preferences/Emacs/Preferences.el: User-specific  preferences for all Carbon Emacs installations
+</LI>
+<LI>/Users/username/Library/Preferences/Aquamacs Emacs/Preferences.el: User-specific  preferences for Aquamacs
+</LI>
+</UL>
 
 <P>
-From within Aquamacs, you can access user documentation from the menu
-or from specific key combinations: C-h k (key/menu entry) brings up
-help for some input items; C-h f (function) gives help for an elisp
-function; autocompletion support is available with (tab); and  
-C-h a brings up apropos, a search function.
+If in doubt, use the last option:
+
+<UL>
+<LI>/Users/username/Library/Preferences/Aquamacs Emacs/Preferences.el
+</LI>
+</UL>
 
 <P>
-For help from other Aquamacs/Emacs users, the best place
-to begin is the OS X Emacs mailing
-list. The searchable list archives are located at
-<TT><A NAME="tex2html27"
-  HREF="http://www.esm.psu.edu/mac-tex/MacOSX-Emacs-Digests/">http://www.esm.psu.edu/mac-tex/MacOSX-Emacs-Digests/</A></TT>. For more
-information on subscribing to the list, see
-<TT><A NAME="tex2html28"
-  HREF="http://aquamacs.org">http://aquamacs.org</A></TT>.
+This replaces the usual&nbsp;/.emacs file, which is still loaded for  compatibility.
 
 <P>
-Another option for general Emacs help is the gnu.emacs.help newsgroup.
+Below are some specific customization items that may be of interest:
 
 <P>
-Apart from
-answering questions at the OS X Emacs mailing list, you can also file
-bug reports on Aquamacs. Use the ``Send Bug Report'' function in the
-Help menu  (general Emacs bugs, too), and also our Aquamacs-specific
-bug report  system at <TT><A NAME="tex2html29"
-  HREF="http://sourceforge.net/projects/aquamacs">http://sourceforge.net/projects/aquamacs</A></TT>. 
+
+<UL>
+<LI><SPAN  CLASS="textbf">Frame.</SPAN> Aquamacs opens new files (and other buffers) in
+  new frames. That is usually more convenient and allows you to use
+  the graphical user  interface of today's computers, which did not
+  exist when Emacs was  conceived almost three decades ago. If you do
+  not like this behavior, perhaps  because you are used to traditional
+  Emacs, just deselect  ``Display Buffers in Separate Frames'' in the
+  Options menu and save  your choice with ``Save Options.''
 
 <P>
-In addition to requesting help, you can also offer it in these mailing lists. <SPAN  CLASS="textit">Please note that in case we have helped you with a configuration problem on the mailing list, we may ask you to write a little note in the Aquamacs Wiki so others can profit, too.</SPAN> Remember: Aquamacs is an Open Source community project!
+</LI>
+<LI><SPAN  CLASS="textbf">mac-option-modifier.</SPAN> This is  the modifier to use for the Mac alt/option key.  The value can
+be alt, hyper, or super for the respective modifier.  If the value is
+nil then the key will act as the normal Mac option modifier, and the option
+key can be used to compose characters depending on the chosen Mac keyboard
+setting. 
+
+<P>
+</LI>
+<LI><SPAN  CLASS="textbf">Additional customization.</SPAN> Of course, Aquamacs Emacs
+  offers you almost all the customization  possibilities that Emacs
+  has. Under ``Customize Emacs,'' you will find  a sub-menu that
+  allows you to browse the vast space of customization
+  settings. Beware: some of them are complex and not easy to
+  understand. If you would like to tinker with some Aquamacs-specific
+  behavior, you can customize the group ``Aquamacs.'' See Table <A HREF="#tab:variables">4</A> for a complete list of the items that can be configured here.
+
+<P>
+<BR><P></P>
+<DIV ALIGN="CENTER"><A NAME="208"></A>
+<TABLE>
+<CAPTION><STRONG>Table 4:</STRONG>
+Aquamacs-specific variables that can be customized in the Aquamacs customization group.</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+<TABLE CELLPADDING=3 BORDER="1" ALIGN="CENTER">
+<TR><TH ALIGN="LEFT"><SPAN  CLASS="textbf">Variable</SPAN></TH>
+</TR>
+<TR><TD ALIGN="LEFT">Aquamacs Set Creator Codes After Writing Files</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Aquamacs Quick Yes Or No Prompt</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Aquamacs Ring Bell On Error</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Aquamacs Mode Specific Default Themes</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Aquamacs Buffer Specific Frame Themes</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Aquamacs Auto Frame Parameters Flag</TD>
+</TR>
+<TR><TD ALIGN="LEFT">One Buffer One Frame</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Smart Frame Positioning Enforce</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Smart Frame Positioning Mode</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Mac Option Modifier</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Mac Control Modifier</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Mac Command Modifier</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Aquamacs Known Buffer Modes</TD>
+</TR>
+</TABLE> 
+
+<A NAME="tab:variables"></A>
+</DIV></TD></TR>
+</TABLE>
+</DIV><P></P>
+<BR>
+
+<P>
+</LI>
+</UL>
+
+<P>
+The range of possible customizations--including restoring some of
+Emacs' traditional interface conventions--is beyond the scope of this
+help document. However, we provide a wiki for users to share their
+modifications. See
+<TT><A NAME="tex2html19"
+  HREF="http://www.emacswiki.org/cgi-bin/wiki/AquamacsEmacs/">http://www.emacswiki.org/cgi-bin/wiki/AquamacsEmacs/</A></TT> for more
+details. 
 
 <P>
 
 <DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
-<A NAME="tex2html615"
+<A NAME="tex2html626"
   HREF="node41.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html611"
-  HREF="aquamacs.html">
+<A NAME="tex2html622"
+  HREF="node38.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html605"
+<A NAME="tex2html616"
   HREF="node39.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html613"
+<A NAME="tex2html624"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html616"
-  HREF="node41.html">Donations</A>
-<B> Up:</B> <A NAME="tex2html612"
-  HREF="aquamacs.html">Aquamacs User Help</A>
-<B> Previous:</B> <A NAME="tex2html606"
-  HREF="node39.html">TEXniscope: A Superb L<SUP>A</SUP>TEX</A>
- &nbsp; <B>  <A NAME="tex2html614"
+<B> Next:</B> <A NAME="tex2html627"
+  HREF="node41.html">L<SUP>A</SUP>TEX Support</A>
+<B> Up:</B> <A NAME="tex2html623"
+  HREF="node38.html">Aquamacs for Emacs Veterans</A>
+<B> Previous:</B> <A NAME="tex2html617"
+  HREF="node39.html">Keyboard Shortcuts</A>
+ &nbsp; <B>  <A NAME="tex2html625"
   HREF="node1.html">Contents</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
 David
-2005-12-02
+2005-12-19
 </ADDRESS>
 </BODY>
 </HTML>
