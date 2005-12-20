@@ -14,11 +14,11 @@
 
 # Add your patch file name here (file names cannot contain spaces).
 
-PATCHES="pretty-modeline soft-wrap transparency2
+PATCHES="emacs-inline pretty-modeline soft-wrap transparency2
          calm-startup available-screen mouse-button launch-browser
          toolbar-button org-gnu-Aquamacs about-aquamacs puresize
          macfns-dialog-menu reftex menu-bar-visible-frame
-         eval-depth emacs-inline sendmail-mac"
+         eval-depth sendmail-mac"
 
 # The patches here are specified separately so their order can be defined.
 
