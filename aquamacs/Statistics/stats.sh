@@ -5,7 +5,8 @@
 
 SOURCEFORGEUSERNAME=davidswelt
 
-#scp ${SOURCEFORGEUSERNAME}@shell.sourceforge.net:/home/groups/a/aq/aquamacs/logs/version-queries.log .
+
+scp -C ${SOURCEFORGEUSERNAME}@shell.sourceforge.net:/home/groups/a/aq/aquamacs/logs/version-queries.log .
 
 shopt -s xpg_echo
 
@@ -13,8 +14,12 @@ echo "user\tcalls\tvers\ttime\n" >stats.txt
 
 #perl -ne 'use Time::ParseDate; /^(.*)\t.*sess=(\-?[0-9]*)\&.*seq=([0-9]*)\&.*ver=([^\&\n]*)/ig; $ep = parsedate($1); print "$2\t$3\t$4\t$ep\n";' <version-queries.log >>stats.txt
  
+cat version-queries.a.log > vq.log
+cat version-queries.log >>vq.log
 
-cat version-queries.log | ./calc-stats.perl
+cat vq.log | ./calc-stats.perl
+
+rm vq.log
 
 # stats can now be processed with R 
 
@@ -31,7 +36,9 @@ echo  "
 
 for i in *.pdf
 do
- echo "<iframe src=\""$i"\" width=100% height=500> </iframe> <br>" >>index.html
+ nn=`basename "$i" .pdf`.gif
+ convert $i $nn
+ echo "<img src=\""$nn"\" />  <br>" >>index.html
 done
 
 date >>index.html
