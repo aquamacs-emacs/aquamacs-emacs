@@ -14,7 +14,9 @@
 
 # Add your patch file name here (file names cannot contain spaces).
 
-PATCHES="emacs-inline pretty-modeline soft-wrap transparency2
+# doesnt work yet: emacs-inline
+
+PATCHES="pretty-modeline soft-wrap transparency2
          calm-startup available-screen mouse-button launch-browser
          toolbar-button org-gnu-Aquamacs about-aquamacs puresize
          macfns-dialog-menu reftex menu-bar-visible-frame
@@ -33,7 +35,7 @@ PATCHES="emacs-inline pretty-modeline soft-wrap transparency2
 exec=1
 if [ $# -ge 1 ];
 then
-    if [$0 eq '-t'];
+    if [ $0 -eq '-t' ];
     then
 	exec=0
     fi
