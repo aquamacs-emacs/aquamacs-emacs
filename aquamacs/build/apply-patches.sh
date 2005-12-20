@@ -29,11 +29,16 @@ PATCHES="pretty-modeline soft-wrap transparency2
 # in case you picked up changes to the patch file from CVS.
 
 
-# If we are passed any argument, just echo what would be done.
-case $# in
-    0) exec=1 ;;
-    *) exec=0 ;;
-esac
+# If we are passed -t as argument, just echo what would be done.
+exec=1
+if [ $# -ge 1 ];
+then
+    if [$0 eq '-t'];
+    then
+	exec=0
+    fi
+fi
+ 
 
 if [ ! ${AQUAMACS_ROOT} ]
 then  
