@@ -1,0 +1,880 @@
+diff -N -r -p ../emacs-20051122-0/lisp/loadup.el lisp/loadup.el
+*** ../emacs-20051122-0/lisp/loadup.el	Tue Nov 22 20:06:57 2005
+--- lisp/loadup.el	Tue Nov 29 16:09:09 2005
+***************
+*** 203,208 ****
+--- 203,211 ----
+  (if (fboundp 'atan)	; preload some constants and
+      (progn		; floating pt. functions if we have float support.
+        (load "emacs-lisp/float-sup")))
++ (if (eq system-type 'darwin)
++     (progn
++       (load "term/mac-im")))
+  (message "%s" (garbage-collect))
+  
+  (load "vc-hooks")
+diff -N -r -p ../emacs-20051122-0/lisp/term/mac-im.el lisp/term/mac-im.el
+*** ../emacs-20051122-0/lisp/term/mac-im.el	Thu Jan  1 09:00:00 1970
+--- lisp/term/mac-im.el	Tue Nov 29 16:09:09 2005
+***************
+*** 0 ****
+--- 1,221 ----
++ ;; mac-im.el --- Input Method for Mac OS X -*-coding: iso-2022-7bit;-*-
++ 
++ ;; Copyright (C) 2005 HASHIMOTO Taiichi <taiichi2@mac.com>
++ ;; Keywords: input method, Mac OS X
++ 
++ ;; This file is not part of GNU Emacs.
++ 
++ ;; GNU Emacs is free software; you can redistribute it and/or modify
++ ;; it under the terms of the GNU General Public License as published by
++ ;; the Free Software Foundation; either version 2, or (at your option)
++ ;; any later version.
++ 
++ ;; You should have received a copy of the GNU General Public License
++ ;; along with GNU Emacs; see the file COPYING.  If not, write to the
++ ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
++ ;; Boston, MA 02111-1307, USA.
++ 
++ ;; Written by Taiichi Hashimoto (taiichi2@mac.com).
++ 
++ ;;
++ ;; Faces for inline input method on MacOSX.
++ ;;
++ (make-face 'mac-input-method-face)
++ (set-face-underline-p 'mac-input-method-face t)
++ 
++ (make-face 'mac-input-method-selection-face)
++ (set-face-foreground 'mac-input-method-selection-face "black")
++ (set-face-background 'mac-input-method-selection-face "light sky blue")
++ (set-face-underline-p 'mac-input-method-selection-face t)
++ 
++ 
++ ;;
++ ;; Variables for inline input method on MacOSX.
++ ;;
++ (defvar mac-input-method-preedit-start (make-marker)
++   "Start position on buffer for inline input method preedit.")
++ (make-variable-buffer-local 'mac-input-method-preedit-start)
++ 
++ (defvar  mac-input-method-preedit-end (make-marker)
++   "End position on buffer for inline input method preedit.")
++ (make-variable-buffer-local 'mac-input-method-preedit-end)
++ 
++ (defconst mac-input-method-face-alist
++   '((1 . nil)                             ; kTSMHiliteCaretPosition
++     (2 . mac-input-method-face)           ; kTSMHiliteRawText
++     (3 . mac-input-method-face)           ; kTSMHiliteSelectedRawText
++     (4 . mac-input-method-face)           ; kTSMHiliteConvertedText
++     (5 . mac-input-method-selection-face) ; kTSMHiliteSelectedConvertedText
++     (6 . mac-input-method-face)           ; kTSMHiliteBlockFillText
++     (7 . mac-input-method-face)           ; kTSMHiliteOutlineText
++     (8 . mac-input-method-selection-face) ; kTSMHiliteSelectedText
++     (9 . nil))                            ; kTSMHiliteNoteHilite
++   "An alist of property type of input method vs face.")
++ 
++ (defconst mac-input-method-property-function-alist
++   '((1 . mac-move-caret)                  ; kTSMHiliteCaretPosition
++     (2 . mac-set-input-method-face)       ; kTSMHiliteRawText
++     (3 . mac-set-input-method-face)       ; kTSMHiliteSelectedRawText
++     (4 . mac-set-input-method-face)       ; kTSMHiliteConvertedText
++     (5 . mac-set-input-method-face)       ; kTSMHiliteSelectedConvertedText
++     (6 . mac-set-input-method-face)       ; kTSMHiliteBlockFillText
++     (7 . mac-set-input-method-face)       ; kTSMHiliteOutlineText
++     (8 . mac-set-input-method-face)       ; kTSMHiliteSelectedText
++     (9 . nil))                            ; kTSMHiliteNoteHilite
++   "An alist of property type of input method vs function.")
++ 
++ (defconst mac-input-method-title-alist
++   '((0 . nil)		; smRoman
++     (1 . "あ")		; smJapanese
++     (2 . "繁")		; smTradChinese
++     (3 . "가")		; smKorean
++     (7 . "Cy")		; smCyrillic
++     (25 . "簡")		; smSimpChinese
++     (29 . "EU")	; smCentralEuroRoman
++     )
++   "Alist of Mac script codes vs input method title.")
++ 
++ ;;
++ ;; Functions for inline input method on MacOSX.
++ ;;
++ (defun mac-set-input-method-property (str coding-system prop)
++   "Function to add property to string inserted on buffer."
++   (let* ((type (nth 0 prop))
++ 	 (pos (marker-position mac-input-method-preedit-start))
++ 	 (beg (+ pos (length (decode-coding-string
++ 			      (substring str 0 (nth 1 prop))
++ 			      coding-system))))
++ 	 (end (+ pos (length (decode-coding-string
++ 			      (substring str 0 (nth 2 prop))
++ 			      coding-system))))
++ 	 (func (assq type mac-input-method-property-function-alist)))
++     (and func (cdr func) (funcall (cdr func) type beg end))))
++ 
++ (defun mac-set-input-method-face (type beg end)
++   "Function to set face to string inserted on buffer."
++   (let* ((face (assq type mac-input-method-face-alist))
++ 	 (obj (make-overlay beg end)))
++     (if (and face (cdr face))
++ 	(overlay-put obj 'face (cdr face)))))
++ 
++ (defun mac-move-caret (type beg end)
++   "Function to set face to string inserted on buffer."
++   (goto-char beg))
++ 
++ (defun mac-input-method-preedit (event)
++   "Function to insert input method preedit string and set property of it."
++   (interactive "e")
++ 
++   (let* ((coding-system (keyboard-coding-system))
++ 	 (arg (cdr event))
++ 	 (str (car arg))
++ 	 (fix (cadr arg))
++ 	 (prop (cddr arg)))
++ 
++     ;; initialize start/end marker for input method
++     (if (equal mac-input-method-preedit-start mac-input-method-preedit-end)
++ 	(progn
++ 	  (set-marker mac-input-method-preedit-start (point))
++ 	  (set-marker mac-input-method-preedit-end (point))
++ 	  (set-marker-insertion-type mac-input-method-preedit-start nil)
++ 	  (set-marker-insertion-type mac-input-method-preedit-end t))
++       (delete-region mac-input-method-preedit-start mac-input-method-preedit-end))
++ 
++     ;; insert character to current buffer 
++     (let ((l (string-to-list (decode-coding-string str coding-system))))
++       (while l
++ 	(insert (if (and (eq coding-system 'japanese-shift-jis)
++ 			 (eq (car l) ?\x80))
++ 		    ?\\
++ 		  (car l)))
++ 	(setq l (cdr l))))
++     
++     (if prop
++ 	(let ((p prop))
++ 	  (while p
++ 	    (mac-set-input-method-property str coding-system (car p))
++ 	    (setq p (cdr p))))
++       (set-marker mac-input-method-preedit-start nil nil)
++       (set-marker mac-input-method-preedit-end nil nil))))
++ 
++ 
++ (defun mac-input-method-isearch-mode (event)
++   "Function to change from isearch-mode to isearch-edit-string 
++ for inline input method on MacOSX."
++   (interactive "e")
++   (let ((minibuffer-setup-hook nil))
++     (setq unread-command-events (cons event unread-command-events))
++     (isearch-edit-string)))
++ 
++ (defun mac-input-method-isearch-edit-string (event)
++   "Function is isearch-edit-string for inline input method on MacOSX."
++   (interactive "e")
++   (mac-input-method-preedit event)
++   (if (equal mac-input-method-preedit-start mac-input-method-preedit-end)
++       (exit-minibuffer)))
++ 
++ (defun mac-toggle-input-method (&optional arg)
++   "Function to toggle input method on MacOSX."
++   (interactive)
++   (if arg
++       (progn
++ 	(setq inactivate-current-input-method-function 'mac-toggle-input-method)
++ 	(make-local-variable 'input-method-function)
++ 	(setq input-method-function nil)
++ 	(setq describe-current-input-method-function nil)
++ 	
++ 	;; change input method title for isearch-toggle-input-method
++ 	(let* ((lang (mac-get-key-script))
++ 	       (title (cdr (assq lang mac-input-method-title-alist))))
++ 	  (setq current-input-method-title title))
++ 
++ 	(if (= (mac-get-key-script) 0) (mac-set-key-script -1)))
++     (kill-local-variable 'input-method-function)
++     (setq describe-current-input-method-function nil)
++     (if (not (= (mac-get-key-script) 0)) (mac-set-key-script -17))))
++ 
++ (defun mac-change-language-to-us ()
++   "Function to change language (Apple Key Script) to us."
++   (interactive)
++   (mac-toggle-input-method nil))
++ 
++ (defun mac-handle-input-method-change (event)
++   (interactive "e")
++   (mac-handle-language-change event)
++ 
++   (let* ((lang (car (cadr event)))
++ 	 (title (cdr (assq lang mac-input-method-title-alist))))
++     
++     (if (or (and (not current-input-method) (> lang 0))
++ 	    (and current-input-method (= lang 0)))
++ 	(if isearch-mode
++ 	    (isearch-toggle-input-method)
++ 	  (toggle-input-method)))
++ 
++     (setq current-input-method-title title)
++     (force-mode-line-update 'all)))
++ 
++ 
++ ;;
++ ;; Emacs input method for input method on MacOSX.
++ ;;
++ (register-input-method "MacOSX" "MacOSX" 'mac-toggle-input-method
++ 		       "Mac" "Input Method on MacOSX System")
++ 
++ 
++ ;;
++ ;; Setup function of inline input method
++ ;;
++ (defun mac-setup-inline-input-method ()
++   (interactive)
++   (mac-set-inline-input-method t)
++   (set-input-method "MacOSX"))
++ 
++ 
++ ;;
++ ;; Key binding for inline input method on MacOSX.
++ ;;
++ (define-key global-map [mac-input-method] 'mac-input-method-preedit)
++ (define-key isearch-mode-map [mac-input-method] 'mac-input-method-isearch-mode)
++ (define-key minibuffer-local-isearch-map [mac-input-method] 'mac-input-method-isearch-edit-string)
++ (define-key special-event-map [mac-change-input-method] 'mac-handle-input-method-change)
+diff -N -r -p ../emacs-20051122-0/src/Makefile.in src/Makefile.in
+*** ../emacs-20051122-0/src/Makefile.in	Tue Nov 22 20:07:05 2005
+--- src/Makefile.in	Tue Nov 29 16:09:09 2005
+*************** CYGWIN_OBJ = sheap.o
+*** 568,574 ****
+  
+  #ifdef HAVE_CARBON
+  mac = $(dot)$(dot)/mac/
+! MAC_OBJ = mac.o macterm.o macfns.o macmenu.o macselect.o fontset.o fringe.o image.o
+  emacsapp = $(PWD)/$(mac)Emacs.app/
+  emacsappsrc = ${srcdir}/../mac/Emacs.app/
+  #endif
+--- 568,574 ----
+  
+  #ifdef HAVE_CARBON
+  mac = $(dot)$(dot)/mac/
+! MAC_OBJ = mac.o macterm.o macfns.o macmenu.o macselect.o fontset.o fringe.o image.o macim.o
+  emacsapp = $(PWD)/$(mac)Emacs.app/
+  emacsappsrc = ${srcdir}/../mac/Emacs.app/
+  #endif
+*************** obj=    dispnew.o frame.o scroll.o xdisp
+*** 595,601 ****
+     in case they are needed there.  */
+  SOME_MACHINE_OBJECTS = sunfns.o dosfns.o msdos.o \
+    xterm.o xfns.o xmenu.o xselect.o xrdb.o xsmfns.o fringe.o image.o \
+!   mac.o macterm.o macfns.o macmenu.o macselect.o fontset.o \
+    w32.o w32bdf.o w32console.o w32fns.o w32heap.o w32inevt.o \
+    w32menu.o w32proc.o w32reg.o w32select.o w32term.o w32xfns.o
+  
+--- 595,601 ----
+     in case they are needed there.  */
+  SOME_MACHINE_OBJECTS = sunfns.o dosfns.o msdos.o \
+    xterm.o xfns.o xmenu.o xselect.o xrdb.o xsmfns.o fringe.o image.o \
+!   mac.o macterm.o macfns.o macmenu.o macselect.o macim.o fontset.o \
+    w32.o w32bdf.o w32console.o w32fns.o w32heap.o w32inevt.o \
+    w32menu.o w32proc.o w32reg.o w32select.o w32term.o w32xfns.o
+  
+*************** macterm.o: blockinput.h atimer.h systime
+*** 1253,1258 ****
+--- 1253,1262 ----
+    frame.h charset.h ccl.h dispextern.h fontset.h termhooks.h termopts.h \
+    termchar.h gnu.h disptab.h buffer.h window.h keyboard.h $(INTERVAL_SRC) \
+    process.h coding.h $(config_h)
++ macim.o: blockinput.h atimer.h systime.h syssignal.h macterm.h macgui.h \
++   frame.h charset.h ccl.h dispextern.h fontset.h termhooks.h termopts.h \
++   termchar.h gnu.h disptab.h buffer.h window.h keyboard.h $(INTERVAL_SRC) \
++   process.h coding.h $(config_h)
+  macselect.o: blockinput.h macterm.h macgui.h frame.h $(config_h)
+  
+  ${emacsapp}Contents/Resources/English.lproj:
+diff -N -r -p ../emacs-20051122-0/src/keyboard.c src/keyboard.c
+*** ../emacs-20051122-0/src/keyboard.c	Tue Nov 22 20:07:05 2005
+--- src/keyboard.c	Tue Nov 29 16:09:09 2005
+*************** Lisp_Object Qmouse_click;
+*** 525,530 ****
+--- 525,534 ----
+  #if defined (WINDOWSNT) || defined (MAC_OS)
+  Lisp_Object Qlanguage_change;
+  #endif
++ #if defined (MAC_OSX)
++ Lisp_Object Qmac_input_method;
++ Lisp_Object Qmac_change_input_method;
++ #endif
+  Lisp_Object Qdrag_n_drop;
+  Lisp_Object Qsave_session;
+  
+*************** kbd_buffer_get_event (kbp, used_mouse_me
+*** 4042,4047 ****
+--- 4046,4067 ----
+  	  kbd_fetch_ptr = event + 1;
+  	}
+  #endif
++ #if defined (MAC_OSX)
++       else if (event->kind == MAC_INPUT_METHOD_EVENT)
++ 	{
++ 	  /* Make an event (mac-input-method (STRING FIXED_LEN 
++ 	     (HILITE_TYPE1 START1 END1) (HILITE_TYPE2 START2 END2) ...). */
++ 	  obj = Fcons (Qmac_input_method, event->arg);
++ 	  kbd_fetch_ptr = event + 1;
++ 	}
++       else if (event->kind == MAC_CHANGE_INPUT_METHOD_EVENT)
++ 	{
++ 	  /* Make an event (mac-change-input-method (KEY_SCRIPT)).  */
++ 	  obj = Fcons (make_number (event->code), Qnil);
++ 	  obj = Fcons (Qmac_change_input_method, Fcons (obj, Qnil));
++ 	  kbd_fetch_ptr = event + 1;
++ 	}
++ #endif
+        else if (event->kind == SAVE_SESSION_EVENT)
+          {
+            obj = Fcons (Qsave_session, Qnil);
+*************** syms_of_keyboard ()
+*** 10873,10878 ****
+--- 10893,10904 ----
+    Qlanguage_change = intern ("language-change");
+    staticpro (&Qlanguage_change);
+  #endif
++ #if defined (MAC_OSX)
++   Qmac_input_method = intern ("mac-input-method");
++   staticpro (&Qmac_input_method);
++   Qmac_change_input_method = intern ("mac-change-input-method");
++   staticpro (&Qmac_change_input_method);
++ #endif
+    Qdrag_n_drop = intern ("drag-n-drop");
+    staticpro (&Qdrag_n_drop);
+  
+diff -N -r -p ../emacs-20051122-0/src/macim.c src/macim.c
+*** ../emacs-20051122-0/src/macim.c	Thu Jan  1 09:00:00 1970
+--- src/macim.c	Tue Nov 29 19:30:44 2005
+***************
+*** 0 ****
+--- 1,423 ----
++ /* Implementation of Inline Input Method for MacOS X.
++    Copyright (C) 2004, 2005 Taiichi Hashimoto <taiichi2@mac.com>.
++ 
++ This file is not part of GNU Emacs.
++ 
++ GNU Emacs is free software; you can redistribute it and/or modify
++ it under the terms of the GNU General Public License as published by
++ the Free Software Foundation; either version 2, or (at your option)
++ any later version.
++ 
++ GNU Emacs is distributed in the hope that it will be useful,
++ but WITHOUT ANY WARRANTY; without even the implied warranty of
++ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ GNU General Public License for more details.
++ 
++ You should have received a copy of the GNU General Public License
++ along with GNU Emacs; see the file COPYING.  If not, write to
++ the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
++ Boston, MA 02111-1307, USA.  */
++ 
++ /* Written by Taiichi Hashimoto (taiichi2@mac.com).  */
++ 
++ 
++ #include <config.h>
++ #include <signal.h>
++ #include <stdio.h>
++ #include <stdlib.h>
++ #include "lisp.h"
++ #include "charset.h"
++ #include "blockinput.h"
++ 
++ #include "macterm.h"
++ 
++ #ifndef MAC_OSX
++ #include <alloca.h>
++ #endif
++ 
++ #ifdef MAC_OSX
++ #undef mktime
++ #undef DEBUG
++ #undef free
++ #undef malloc
++ #undef realloc
++ /* Macros max and min defined in lisp.h conflict with those in
++    precompiled header Carbon.h.  */
++ #undef max
++ #undef min
++ #undef init_process
++ #include <Carbon/Carbon.h>
++ #undef free
++ #define free unexec_free
++ #undef malloc
++ #define malloc unexec_malloc
++ #undef realloc
++ #define realloc unexec_realloc
++ #undef min
++ #define min(a, b) ((a) < (b) ? (a) : (b))
++ #undef max
++ #define max(a, b) ((a) > (b) ? (a) : (b))
++ #undef init_process
++ #define init_process emacs_init_process
++ /* USE_CARBON_EVENTS determines if the Carbon Event Manager is used to
++    obtain events from the event queue.  If set to 0, WaitNextEvent is
++    used instead.  */
++ #define USE_CARBON_EVENTS 1
++ #else /* not MAC_OSX */
++ #include <Quickdraw.h>
++ #include <ToolUtils.h>
++ #include <Sound.h>
++ #include <Events.h>
++ #include <Script.h>
++ #include <Resources.h>
++ #include <Fonts.h>
++ #include <TextUtils.h>
++ #include <LowMem.h>
++ #include <Controls.h>
++ #if defined (__MRC__) || (__MSL__ >= 0x6000)
++ #include <ControlDefinitions.h>
++ #endif
++ #include <Gestalt.h>
++ 
++ #if __profile__
++ #include <profiler.h>
++ #endif
++ #endif /* not MAC_OSX */
++ 
++ #include "systty.h"
++ #include "systime.h"
++ #include "atimer.h"
++ #include "keymap.h"
++ 
++ #include <ctype.h>
++ #include <errno.h>
++ #include <setjmp.h>
++ #include <sys/stat.h>
++ 
++ #include "keyboard.h"
++ #include "frame.h"
++ #include "dispextern.h"
++ #include "fontset.h"
++ #include "termhooks.h"
++ #include "termopts.h"
++ #include "termchar.h"
++ #include "gnu.h"
++ #include "disptab.h"
++ #include "buffer.h"
++ #include "window.h"
++ #include "intervals.h"
++ #include "composite.h"
++ #include "coding.h"
++ 
++ #ifdef USE_CARBON_EVENTS && defined (MAC_OSX)
++ 
++ extern Lisp_Object Qcurrent_input_method;
++ Lisp_Object Vmac_use_inline_input_method;
++ Lisp_Object Vmac_prior_to_emacs_keys;
++ 
++ static EventTypeSpec events[] = {
++   { kEventClassTextInput, kEventTextInputOffsetToPos },
++   { kEventClassTextInput, kEventTextInputUpdateActiveInputArea },
++   { kEventClassTextInput, kEventTextInputUnicodeForKeyEvent },
++   { kEventClassTextInput, kEventTextInputPosToOffset },
++   { kEventClassTextInput, kEventTextInputGetSelectedText }
++ };
++ 
++ static EventHandlerRef mac_input_method_handler = NULL;
++ static EventHandlerUPP mac_input_method_handlerUPP = NULL;
++ static TSMDocumentID mac_tsm_doc_id;
++ static int converting = FALSE;
++ 
++ pascal OSStatus mac_handle_input_method_event (EventHandlerCallRef, EventRef, void *);
++ void init_input_method (void);
++ 
++ 
++ DEFUN ("mac-set-key-script", Fmac_set_key_script,
++        Smac_set_key_script, 1, 1, 0,
++        doc: /* change languge environment of MacOSX */)
++      (code)
++      Lisp_Object code;
++ {
++   BLOCK_INPUT;
++   KeyScript (XINT (code));
++   UNBLOCK_INPUT;
++ 
++   return Qnil;
++ }
++ 
++ DEFUN ("mac-get-key-script", Fmac_get_key_script,
++        Smac_get_key_script, 0, 0, 0,
++        doc: /* get current languge environment of MacOSX */)
++      ()
++ {
++   SInt16 current_key_script;
++ 
++   BLOCK_INPUT;
++   current_key_script = GetScriptManagerVariable (smKeyScript);
++   UNBLOCK_INPUT;
++ 
++   return make_number (current_key_script);
++ }
++ 
++ DEFUN ("mac-set-inline-input-method", Fmac_set_inline_input_method,
++        Smac_set_inline_input_method, 1, 1, 0,
++        doc: /* set inline input method */)
++      (on_p)
++      Lisp_Object on_p;
++ {
++ 
++   BLOCK_INPUT;
++   if (NILP (on_p))
++     {
++       DeactivateTSMDocument (mac_tsm_doc_id);
++       Vmac_use_inline_input_method = Qnil;
++     }
++   else
++     {
++       ActivateTSMDocument (mac_tsm_doc_id);
++       Vmac_use_inline_input_method = Qt;
++     }
++   UNBLOCK_INPUT;
++ 
++   return on_p;
++ }
++ 
++ void
++ mac_reset_tsm_document ()
++ {
++   BLOCK_INPUT;
++   if (!NILP (Vmac_use_inline_input_method))
++     {
++       DeactivateTSMDocument (mac_tsm_doc_id);
++       ActivateTSMDocument (mac_tsm_doc_id);
++     }
++   UNBLOCK_INPUT;
++ }
++ 
++ void 
++ mac_store_change_input_method_event (unsigned long timestamp)
++ {
++   Lisp_Object input_method;
++   static SInt16 last_key_script = -1;
++   SInt16 current_key_script;
++ 
++   BLOCK_INPUT;
++ 
++   if (!NILP (Vmac_use_inline_input_method))
++     {
++       current_key_script = GetScriptManagerVariable (smKeyScript);
++ 
++       input_method = Fsymbol_value (Qcurrent_input_method);
++ 
++       if (last_key_script != current_key_script
++ 	  || ((current_key_script && NILP (input_method))
++ 	      || (!current_key_script && !NILP (input_method))))
++ 	{
++ 	  struct input_event event;
++       
++ 	  EVENT_INIT (event);
++ 	  event.kind = MAC_CHANGE_INPUT_METHOD_EVENT;
++ 	  event.arg = Qnil;
++ 	  event.code = current_key_script;
++ 	  event.timestamp = timestamp;
++ 	  kbd_buffer_store_event (&event);
++ 	}
++ 
++       last_key_script = current_key_script;
++     }
++ 
++   UNBLOCK_INPUT;
++ }
++ 
++ int
++ mac_pass_key_to_system (int keycode, UInt32 modifiers)
++ {
++   if (this_command_key_count
++       || !NILP (current_buffer->read_only)
++       || cursor_in_echo_area)
++     return FALSE;
++   else if (!converting && Fmac_get_key_script ())
++     {
++       
++       Lisp_Object keys = Vmac_prior_to_emacs_keys;
++       Lisp_Object m, k;
++ 
++       while (!NILP (keys))
++ 	{
++ 	  m = XCAR (XCAR (keys));
++ 	  k = XCDR (XCAR (keys));
++ 	  keys = XCDR (keys);
++ 
++ 	  if (NUMBERP (m) && modifiers == XINT (m))
++ 	    if (NILP (k)
++ 		|| (NUMBERP (k) && keycode == XINT (k)))
++ 	      return FALSE;
++ 	}
++     }
++ 
++   return TRUE;
++ }
++ 
++ pascal OSStatus
++ mac_handle_input_method_event(EventHandlerCallRef er, EventRef event, void *data)
++ {
++   UInt32 ekind = GetEventKind (event), eclass = GetEventClass (event);
++   OSStatus ret = noErr;
++   unsigned long timestamp = GetEventTime (event) / kEventDurationMillisecond;
++ 
++   BLOCK_INPUT;
++   switch (eclass) {
++   case kEventClassTextInput:
++     switch (ekind) {
++     case kEventTextInputOffsetToPos:
++       {
++ 	struct frame *f = one_mac_display_info.x_focus_frame;
++ 	struct window *w = XWINDOW (f->selected_window);
++ 	Point pt;
++ 
++ 	/* set position of candidates window */
++ 	pt.h = WINDOW_TO_FRAME_PIXEL_X (w, w->phys_cursor.x);
++ 	pt.v = WINDOW_TO_FRAME_PIXEL_Y (w, w->phys_cursor.y) + w->phys_cursor_height;
++ 	LocalToGlobal (&pt);
++ 
++ 	SetEventParameter (event, kEventParamTextInputReplyPoint,
++ 			   typeQDPoint, sizeof(pt), &pt);
++       }
++       break;
++     case kEventTextInputPosToOffset:
++       break;
++     case kEventTextInputUpdateActiveInputArea:
++       {
++ 	UInt32 src_nbytes = 0, array_nbytes = 0, fixed_nbytes = 0;
++ 	unsigned char *src = NULL;
++ 	TextRangeArray *array = NULL;
++ 	Lisp_Object argv[1024], triple[3];
++ 	int argc = 0, i = 0;
++ 
++ 	GetEventParameter (event, kEventParamTextInputSendText,
++ 			   typeChar,
++ 			   NULL, 0,
++ 			   &src_nbytes, NULL);
++ 	
++ 	if (src_nbytes) 
++ 	  {
++ 	    /* get converting string from TSM */
++ 	    src = (unsigned char *) xmalloc (src_nbytes + 1);
++ 	    memset (src, 0, src_nbytes + 1);
++ 	    GetEventParameter (event, kEventParamTextInputSendText,
++ 			       typeChar,
++ 			       NULL, src_nbytes,
++ 			       NULL, src);
++ 	    argv[argc++] = make_string_from_bytes (src, src_nbytes, src_nbytes);
++ 	    
++ 	    /* get fixed string length (bytes) from TSM */
++ 	    GetEventParameter (event, kEventParamTextInputSendFixLen,
++ 			       typeLongInteger, 
++ 			       NULL, sizeof(fixed_nbytes), 
++ 			       NULL, &fixed_nbytes);
++ 	    argv[argc++] = make_number (fixed_nbytes);
++ 
++ 	    /* get properties of string from TSM */
++ 	    GetEventParameter (event, kEventParamTextInputSendHiliteRng,
++ 			       typeTextRangeArray,
++ 			       NULL, 0,
++ 			       &array_nbytes, NULL);
++ 	    
++ 	    if (array_nbytes)
++ 	      {
++ 		array = (TextRangeArray *) xmalloc (array_nbytes);
++ 		
++ 		GetEventParameter (event, kEventParamTextInputSendHiliteRng,
++ 				   typeTextRangeArray,
++ 				   NULL, array_nbytes,
++ 				   NULL, array);
++ 
++ 		for (i = 0; i < array->fNumOfRanges && argc < 1024; i++)
++ 		  {
++ 		    triple[0] = make_number (array->fRange[i].fHiliteStyle);
++ 		    triple[1] = make_number (array->fRange[i].fStart);
++ 		    triple[2] = make_number (array->fRange[i].fEnd);
++ 		    argv[argc++] = list3 (make_number (array->fRange[i].fHiliteStyle),
++ 					  make_number (array->fRange[i].fStart),
++ 					  make_number (array->fRange[i].fEnd));
++ 		  }
++ 	      }
++ 	    if (src) xfree(src);
++ 	    if (array) xfree(array);
++ 
++ 	    if (fixed_nbytes) converting = FALSE;
++ 	    else converting = TRUE;
++ 	  }
++ 	else
++ 	  { /* src_nbytes == 0 */
++ 	    argv[argc++] = make_string("", 0);
++ 	    argv[argc++] = make_number(0);
++ 
++ 	    converting = FALSE;
++ 	  }
++ 
++ 	{
++ 	  struct input_event inev;
++ 	  
++ 	  EVENT_INIT (inev);
++ 	  inev.kind = MAC_INPUT_METHOD_EVENT;
++ 	  inev.arg = Flist (argc, argv);
++ 	  inev.timestamp = timestamp;
++ 	  kbd_buffer_store_event (&inev);
++ 	}
++       }
++       break;
++     case kEventTextInputGetSelectedText:
++       break;
++     case kEventTextInputUnicodeForKeyEvent:
++       if (!converting) ret = eventNotHandledErr;
++       break;
++     default:
++       break;
++     }
++     break;
++   default:
++     break;
++   }
++   UNBLOCK_INPUT;
++ 
++   return ret;
++ }
++ 
++ void init_input_method (void)
++ {
++   if(!mac_input_method_handler) {
++     OSErr err;
++     InterfaceTypeList itl = { kTextService };
++ 
++     BLOCK_INPUT;
++     err = NewTSMDocument (1, itl, &mac_tsm_doc_id, 715);
++     if (err != noErr) abort (); 
++ 
++     err = InstallEventHandler(GetApplicationEventTarget (),
++ 			      NewEventHandlerUPP (mac_handle_input_method_event),
++ 			      GetEventTypeCount (events),
++ 			      events,
++ 			      NULL,
++ 			      &mac_input_method_handler);
++     if (err != noErr) abort ();
++     UNBLOCK_INPUT;
++   }
++ 
++   DEFVAR_LISP ("mac-use-inline-input-method", &Vmac_use_inline_input_method,
++    doc: /* If non-nil, users use inline input method on MacOSX. */);
++   Vmac_use_inline_input_method = Qnil;
++   //Fmac_set_inline_input_method (Vmac_use_inline_input_method);
++ 
++   DEFVAR_LISP ("mac-prior-to-emacs-keys", &Vmac_prior_to_emacs_keys,
++    doc: /* The list of pairs of a keycode and modifiers 
++ 	   which don't pass to system. */);
++   Vmac_prior_to_emacs_keys = Qnil;
++ 
++   defsubr (&Smac_set_inline_input_method);
++   defsubr (&Smac_set_key_script);
++   defsubr (&Smac_get_key_script);
++ }
++ 
++ #endif
++ 
+diff -N -r -p ../emacs-20051122-0/src/macterm.c src/macterm.c
+*** ../emacs-20051122-0/src/macterm.c	Tue Nov 22 20:07:05 2005
+--- src/macterm.c	Wed Nov 30 10:24:44 2005
+*************** mac_handle_window_event (next_handler, e
+*** 9000,9005 ****
+--- 9000,9010 ----
+        return noErr;
+  
+        break;
++ 
++     case kEventWindowActivated:
++       mac_reset_tsm_document ();
++       break;
++ 
+      }
+  
+    return eventNotHandledErr;
+*************** install_window_handler (window)
+*** 9079,9084 ****
+--- 9084,9090 ----
+       {kEventClassWindow, kEventWindowShown},
+       {kEventClassWindow, kEventWindowHidden},
+       {kEventClassWindow, kEventWindowExpanded},
++      {kEventClassWindow, kEventWindowActivated},
+       {kEventClassWindow, kEventWindowCollapsed}};
+    EventTypeSpec specs_mouse[] = {{kEventClassMouse, kEventMouseWheelMoved}};
+    static EventHandlerUPP handle_window_eventUPP = NULL;
+*************** static unsigned char keycode_to_xkeysym_
+*** 9574,9581 ****
+    /*0x5C*/ 0xb9 /*kp-9*/, 0, 0, 0,
+  
+    /*0x60*/ 0xc2 /*f5*/, 0xc3 /*f6*/, 0xc4 /*f7*/, 0xc0 /*f3*/,
+!   /*0x64*/ 0xc5 /*f8*/, 0xc6 /*f9*/, 0, 0xc8 /*f11*/,
+!   /*0x68*/ 0, 0xca /*f13*/, 0, 0xcb /*f14*/,
+    /*0x6C*/ 0, 0xc7 /*f10*/, 0x0a /*fn+enter on laptops*/, 0xc9 /*f12*/,
+  
+    /*0x70*/ 0, 0xcc /*f15*/, 0x6a /*help*/, 0x50 /*home*/,
+--- 9580,9587 ----
+    /*0x5C*/ 0xb9 /*kp-9*/, 0, 0, 0,
+  
+    /*0x60*/ 0xc2 /*f5*/, 0xc3 /*f6*/, 0xc4 /*f7*/, 0xc0 /*f3*/,
+!   /*0x64*/ 0xc5 /*f8*/, 0xc6 /*f9*/, 0x2f /*eisu-shift*/, 0xc8 /*f11*/,
+!   /*0x68*/ 0x2e /*kana-shift*/, 0xca /*f13*/, 0, 0xcb /*f14*/,
+    /*0x6C*/ 0, 0xc7 /*f10*/, 0x0a /*fn+enter on laptops*/, 0xc9 /*f12*/,
+  
+    /*0x70*/ 0, 0xcc /*f15*/, 0x6a /*help*/, 0x50 /*home*/,
+*************** XTread_socket (sd, expected, hold_quit)
+*** 10252,10258 ****
+  		&& (!NILP (Vmac_pass_control_to_system)
+  		    || !(er.modifiers & controlKey))
+  		&& (NILP (Vmac_option_modifier)
+! 		    || !(er.modifiers & optionKey)))
+  	      if (SendEventToEventTarget (eventRef, toolbox_dispatcher)
+  		  != eventNotHandledErr)
+  		break;
+--- 10258,10265 ----
+  		&& (!NILP (Vmac_pass_control_to_system)
+  		    || !(er.modifiers & controlKey))
+  		&& (NILP (Vmac_option_modifier)
+! 		    || !(er.modifiers & optionKey))
+! 		&& mac_pass_key_to_system (keycode, er.modifiers))
+  	      if (SendEventToEventTarget (eventRef, toolbox_dispatcher)
+  		  != eventNotHandledErr)
+  		break;
+*************** XTread_socket (sd, expected, hold_quit)
+*** 10382,10387 ****
+--- 10389,10395 ----
+  	  count++;
+  	}
+  
++       mac_store_change_input_method_event (timestamp);
+      }
+  
+    /* If the focus was just given to an autoraising frame,
+*************** mac_initialize ()
+*** 10898,10903 ****
+--- 10906,10913 ----
+    init_service_handler ();
+  
+    init_quit_char_handler ();
++   
++   init_input_method();
+  #endif	/* MAC_OSX */
+  
+    init_command_handler ();
+diff -N -r -p ../emacs-20051122-0/src/termhooks.h src/termhooks.h
+*** ../emacs-20051122-0/src/termhooks.h	Tue Nov 22 20:07:06 2005
+--- src/termhooks.h	Tue Nov 29 16:09:10 2005
+*************** enum event_kind
+*** 260,265 ****
+--- 260,271 ----
+  				   language is changed by the
+  				   user.  */
+  #endif
++ #if defined (MAC_OSX)
++   MAC_INPUT_METHOD_EVENT,	/* A MAC_INPUT_METHOD_EVENT is generated 
++ 				   for inline input method using TSM. */
++   MAC_CHANGE_INPUT_METHOD_EVENT,/* A MAC_CHANGE_INPUT_METHOD_EVENT is generated 
++ 				   for changing input method on MacOSX. */  
++ #endif
+    SCROLL_BAR_CLICK_EVENT,	/* .code gives the number of the mouse button
+  				   that was clicked.
+  				   .modifiers holds the state of the modifier
