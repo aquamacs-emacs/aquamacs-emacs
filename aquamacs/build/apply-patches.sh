@@ -52,3 +52,9 @@ echo "eval-depth"
 patch -p0 <${AQUAMACS_ROOT}/patches/eval-depth.patch
 
 
+# temp
+echo "sendmail-mac"
+patch -p0 <${AQUAMACS_ROOT}/patches/sendmail-mac.patch
+
+
+
