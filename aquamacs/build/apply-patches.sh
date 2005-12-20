@@ -51,6 +51,8 @@ patch -p0 <${AQUAMACS_ROOT}/patches/menu-bar-visible-frame.patch
 echo "eval-depth"
 patch -p0 <${AQUAMACS_ROOT}/patches/eval-depth.patch
 
+echo "emacs-inline"
+patch -p0 <${AQUAMACS_ROOT}/patches/emacs-inline.patch
 
 # temp
 echo "sendmail-mac"
