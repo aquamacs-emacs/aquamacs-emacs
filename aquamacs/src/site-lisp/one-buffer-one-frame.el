@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.20 2005/12/18 19:04:20 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.21 2005/12/21 00:45:52 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -31,7 +31,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.20 2005/12/18 19:04:20 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.21 2005/12/21 00:45:52 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -152,37 +152,81 @@ To disable `one-buffer-one-frame-mode', call
  
 (defvar obof-same-frame-regexps
   '(
-    "\*Completions\*" 
-    "\*Apropos\*" 
-    " SPEEDBAR"			; speedbar package opens its own frame
-    "\*Choices\*"			    ; for ispell
-    "\*Article\*"			    ; gnus
-    "\*VC-*"
-    "\*Bug Help\*"
+  ;;   "\*Completions\*" 
+;;     "\*Apropos\*" 
+;;     " SPEEDBAR"			; speedbar package opens its own frame
+;;     "\*Choices\*"			    ; for ispell
+;;     "\*Article\*"			    ; gnus
+;;     "\*VC-*"
+;;     "\*Bug Help\*"
+    " SPEEDBAR"
+    "\\*.*\\*"
     )
 "In `one-buffer-one-frame-mode', if the name of a buffer to be shown matches
 one of the regular expressions in this list, it is shown in the same frame,
 as an extra window."
 )
+(defvar obof-other-frame-regexps
+  '(
+    "\*Messages\*" 
+    "\*scratch\*" 
+    "\*Help\*"
+    )
+"Show buffers with matching names in a separate frame.
+In `one-buffer-one-frame-mode', if the name of a buffer to be shown matches
+one of the regular expressions in this list, it is shown in a separate frame.
+This overrides entries in `obof-same-frame-regexps'.
+All other frames
+"
+)
+(defun obof-same-frame-p (buf)
+  (or (not one-buffer-one-frame-mode)
+  (let ( (bufname (get-bufname buf)))  
+     (if one-buffer-one-frame-force ;; set by color-theme
+	 nil
+       (or
+	(and
+	  (let ((same-window-buffer-names nil)
+		(same-window-regexps obof-same-frame-regexps))
+	    ;; this is a fast solution
+	    (same-window-p bufname))
+	  (not (let ((same-window-buffer-names nil)
+		     (same-window-regexps obof-other-frame-regexps))
+		 ;; this is a fast solution
+		 (same-window-p bufname))))
+	 (= (buffer-size (window-buffer)) 0)
+	  )))))
 
-(defun obof-same-frame-p (bufname)
-  (let ((same-window-buffer-names nil)
-	(same-window-regexps obof-same-frame-regexps))
-    ;; this is a fast solution
-    (same-window-p bufname)))
+;; (obof-same-frame-p "asdasd") 
 
 (defun open-in-other-frame-p (buf)
-  (or one-buffer-one-frame-force ;; set by color-theme
-      (let ( (bufname (get-bufname buf)))
-	(and one-buffer-one-frame 
-		(if 
-		    (obof-same-frame-p bufname) 
-		    nil
-		  (or	
-		   ;; return t if there is already text in window
-		   (> (buffer-size (window-buffer)) 0)
-		   ;; return nil if not special-display buffer 
-		   (special-display-p (get-bufname (car args)))))))))
+  (not (obof-same-frame-p buf)))
+
+;;   (or one-buffer-one-frame-force ;; set by color-theme
+;;       (let ( (bufname (get-bufname buf)))(let ( (bufname (get-bufname buf)))  
+     (if one-buffer-one-frame-force ;; set by color-theme
+	 nil
+       (or
+	(and
+	  (let ((same-window-buffer-names nil)
+		(same-window-regexps obof-same-frame-regexps))
+	    ;; this is a fast solution
+	    (same-window-p bufname))
+	  (not (let ((same-window-buffer-names nil)
+		     (same-window-regexps obof-other-frame-regexps))
+		 ;; this is a fast solution
+		 (same-window-p bufname))))
+	 (= (buffer-size (window-buffer)) 0)
+	  )))
+;; 	(and one-buffer-one-frame 
+;; 		(if 
+;; 		    (obof-same-frame-p bufname) 
+;; 		    nil
+;; 		  (or	
+;; 		   ;; return t if there is already text in window
+;; 		   (> (buffer-size (window-buffer)) 0)
+;; 		   ;; return nil if not special-display buffer 
+;; 		   (special-display-p (get-bufname (car args)))))))))
  
 (defun killable-buffer-p (buf)
   
@@ -659,34 +703,34 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
 
 ;; as a bugfix, we're redefining this
 ;; in order to create a new frame if all frames are invisible
-(if window-system
-(defun fancy-splash-frame ()
-  "Return the frame to use for the fancy splash screen.
-Returning non-nil does not mean we should necessarily
-use the fancy splash screen, but if we do use it,
-we put it on this frame."
-  (let (chosen-frame)
+;; (if window-system
+;; (defun fancy-splash-frame ()
+;;   "Return the frame to use for the fancy splash screen.
+;; Returning non-nil does not mean we should necessarily
+;; use the fancy splash screen, but if we do use it,
+;; we put it on this frame."
+;;   (let (chosen-frame)
    
-    (mapc  
-     (lambda (frame) (if (and (frame-visible-p frame)
-			      (not (window-minibuffer-p 
-				    (frame-selected-window frame))))
-			 (setq chosen-frame frame)))
-     ;; list:
-     (append (frame-list) (list (selected-frame)))
-     ) 
-    (if chosen-frame
-	chosen-frame
+;;     (mapc  
+;;      (lambda (frame) (if (and (frame-visible-p frame)
+;; 			      (not (window-minibuffer-p 
+;; 				    (frame-selected-window frame))))
+;; 			 (setq chosen-frame frame)))
+;;      ;; list:
+;;      (append (frame-list) (list (selected-frame)))
+;;      ) 
+;;     (if chosen-frame
+;; 	chosen-frame
       
-      (or
-       ;; make visible
-       (select-frame (car (frame-list))) 
-       ;; or create a new one
-       (make-frame)
-       )
-      )
-    )
-))
+;;       (or
+;;        ;; make visible
+;;        (select-frame (car (frame-list))) 
+;;        ;; or create a new one
+;;        (make-frame)
+;;        )
+;;       )
+;;     )
+;; ))
 
 (if window-system
 (defadvice fancy-splash-screens (around modify-frame (&rest args) activate)
