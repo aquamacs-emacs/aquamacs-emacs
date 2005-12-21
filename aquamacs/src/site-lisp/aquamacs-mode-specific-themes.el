@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.22 2005/12/14 18:41:11 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.23 2005/12/21 12:24:39 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -194,17 +194,27 @@ FORCE is non-nil). Use theme of major mode FOR-MODE if given."
 ;; 						       new-font-width))
 ;; 					    'theme))
 ;; 			      ))))
-		      (modify-frame-parameters frame (cons (cons 'frame-configured-for-buffer 
-								 buffer 
-								 ) theme))
-		      (let ((color-theme-target-frame frame))
+		      (let ((old-frame-pixel-width (frame-pixel-width frame))
+			    (old-frame-pixel-height (frame-pixel-height frame)))
 
-			(color-theme-install color-theme)
-			)
+			(modify-frame-parameters 
+			 frame 
+			 (cons (cons 'frame-configured-for-buffer 
+				     buffer) 
+			       theme))
+			(let ((color-theme-target-frame frame))
+			  
+			  (color-theme-install color-theme)
+			  )
 
-		      )
-		    (if (fboundp 'smart-move-frame-inside-screen)
-			(smart-move-frame-inside-screen)))))
+			
+		      (if (and (fboundp 'smart-move-frame-inside-screen)
+			       (or (not (equal old-frame-pixel-width
+					       (frame-pixel-width frame)))
+				   (not (equal old-frame-pixel-height
+					       (frame-pixel-height frame)))))
+			  (smart-move-frame-inside-screen))))
+		    )))
 	  (error (print err))  
 	  ))))
 
