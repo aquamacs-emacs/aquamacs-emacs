@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.21 2005/12/21 00:45:52 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.22 2005/12/21 08:44:29 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -31,7 +31,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.21 2005/12/21 00:45:52 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.22 2005/12/21 08:44:29 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -201,32 +201,6 @@ All other frames
 
 (defun open-in-other-frame-p (buf)
   (not (obof-same-frame-p buf)))
-
-;;   (or one-buffer-one-frame-force ;; set by color-theme
-;;       (let ( (bufname (get-bufname buf)))(let ( (bufname (get-bufname buf)))  
-     (if one-buffer-one-frame-force ;; set by color-theme
-	 nil
-       (or
-	(and
-	  (let ((same-window-buffer-names nil)
-		(same-window-regexps obof-same-frame-regexps))
-	    ;; this is a fast solution
-	    (same-window-p bufname))
-	  (not (let ((same-window-buffer-names nil)
-		     (same-window-regexps obof-other-frame-regexps))
-		 ;; this is a fast solution
-		 (same-window-p bufname))))
-	 (= (buffer-size (window-buffer)) 0)
-	  )))
-;; 	(and one-buffer-one-frame 
-;; 		(if 
-;; 		    (obof-same-frame-p bufname) 
-;; 		    nil
-;; 		  (or	
-;; 		   ;; return t if there is already text in window
-;; 		   (> (buffer-size (window-buffer)) 0)
-;; 		   ;; return nil if not special-display buffer 
-;; 		   (special-display-p (get-bufname (car args)))))))))
  
 (defun killable-buffer-p (buf)
   
