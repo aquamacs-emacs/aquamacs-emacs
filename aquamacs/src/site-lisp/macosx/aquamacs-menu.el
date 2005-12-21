@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.53 2005/12/20 12:46:37 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.54 2005/12/21 08:54:14 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -462,7 +462,8 @@ customization buffer."
   `(menu-item ,(aq-shortcut "Redo                 " 
 			   (key-binding [menu-bar edit redo])) 
 	      redo
-	      :enable (menu-bar-menu-frame-live-and-visible-p)
+	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
+			   last-buffer-undo-list)
 	      :help "Discard current buffer") 'undo)
 
 (easy-menu-add-item  nil '("Edit")
