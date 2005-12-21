@@ -33,9 +33,9 @@ PATCHES="pretty-modeline soft-wrap transparency2
 
 # If we are passed -t as argument, just echo what would be done.
 exec=1
-if [ $# -ge 1 ];
+if [ $# -ge 2 ];
 then
-    if [ $0 -eq '-t' ];
+    if [ $1 -eq '-t' ];
     then
 	exec=0
     fi
