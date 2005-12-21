@@ -4,12 +4,14 @@
 
 ;; Author: Seiji Zenitani <zenitani@mac.com>
 ;; Based on: mac-drag-N-drop.el by Seiji Zenitani
-;; Version: v20051215
+;; Version: v20051222
 ;; Keywords: tools
 ;; Created: 2003-04-27
 ;; Compatibility: Emacs 22
 ;; URL(en): http://home.att.ne.jp/alpha/z123/elisp-e.html
-;; URL(jp): http://home.att.ne.jp/alpha/z123/elisp-j.html
+;; URL(jp): http://home.att.ne.jp/alpha/z123/elisp-j.html#smart-dnd
+
+;; Contributors: David Reitter
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -29,10 +31,9 @@
 ;;; Commentary
 
 ;; This package provides user-configurable drag-n-drop feature to Emacs 22.
-
-
-;;; Usage:
-
+;;
+;; Usage:
+;;
 ;; First, evaluate `smart-dnd-setup' function in the buffer
 ;; by using the following alist argument.
 ;; The code modifies drag-n-drop behaviour in the local buffer and then
@@ -123,31 +124,32 @@ See `dnd-protocol-alist' for more information."
       (error "Remote files not supported"))))
 
 (defun smart-dnd-execute (f)
-  "Execute a Drag'n'Drop action with URL f depending on `smart-dnd-string-alist'."
+  "Execute a Drag'n'Drop action with filename F
+depending on `smart-dnd-string-alist'."
   (interactive "f")
   (save-excursion
     (if (eq (car-safe last-nonmenu-event) 'drag-n-drop)
-	(goto-char (posn-point (car (cdr-safe last-nonmenu-event)))))
+        (goto-char (posn-point (car (cdr-safe last-nonmenu-event)))))
     (let( (alist smart-dnd-string-alist)
-	  (case-fold-search nil)
-	  (my-string nil)
-	  (succeed nil) )
+          (case-fold-search nil)
+          (my-string nil)
+          (succeed nil) )
       (while alist
-	(when (string-match (caar alist) f)
-	  (setq my-string (cdar alist))
-	  (when (stringp my-string)
-	    (insert (smart-dnd-string my-string f))
-	    (setq alist nil)
-	    (setq succeed t)
-	    )
-	  (when (not (stringp my-string))
-	    (eval (cdar alist))
-	    (setq alist nil)
-	    (setq succeed t)
-	    )
-	  )
-	(setq alist (cdr alist))
-	)
+        (when (string-match (caar alist) f)
+          (setq my-string (cdar alist))
+          (when (stringp my-string)
+            (insert (smart-dnd-string my-string f))
+            (setq alist nil)
+            (setq succeed t)
+            )
+          (when (not (stringp my-string))
+            (eval (cdar alist))
+            (setq alist nil)
+            (setq succeed t)
+            )
+          )
+        (setq alist (cdr alist))
+        )
       succeed)))
 
 (defun smart-dnd-setup (alist)
@@ -173,10 +175,12 @@ You can use the following keywords in the format control STRING.
          '(
            ("%F" . f)
            ("%f" . (file-name-nondirectory f))
-           ("%r" . (file-relative-name
-                    f (file-name-directory (buffer-file-name))))
+           ("%r" . (if buffer-file-name
+                       (file-relative-name
+                        f (file-name-directory buffer-file-name))
+                     f))
            ("%n" . (file-name-sans-extension (file-name-nondirectory f)))
-           ("%e" . (or (file-name-extension file) ""))
+           ("%e" . (or (file-name-extension f) ""))
            ))
         (f filename))
     (while rlist
