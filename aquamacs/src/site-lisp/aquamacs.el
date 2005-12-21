@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.39 2005/12/19 11:50:26 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.40 2005/12/21 14:44:43 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -717,12 +717,12 @@ un-Mac-like way when you select text and copy&paste it.")))
  '((fancy-splash-image "aquamacs-splash-screen.jpg")
    (fancy-splash-max-time 3000)))
 
-(defadvice fancy-splash-screens (around new-frame (&rest args) activate protect)
+;; (defadvice fancy-splash-screens (around new-frame (&rest args) activate protect)
  
-  (let ((one-buffer-one-frame-force t))
-    ad-do-it)
-  (message " ")
-  )
+;;   (let ((one-buffer-one-frame-force t))
+;;     ad-do-it)
+;;   (message " ")
+;;   )
 
   ;; only the fancy splash screen is displayed more than once
   ;; this is a workaround    
@@ -759,8 +759,8 @@ un-Mac-like way when you select text and copy&paste it.")))
      (cursor-type (bar . 2))
      ;; on modern systems, loading files doesn't take so long any more.
      (large-file-warning-threshold 20000000)
-     )
-   ) 
+     ;; show unfinished key inputs early
+     (echo-keystrokes 0.1))) 
    
 
   
