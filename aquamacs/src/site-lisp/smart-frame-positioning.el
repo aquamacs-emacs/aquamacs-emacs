@@ -15,15 +15,12 @@
 ;; How to check?
 ;; 
  
-;; Emacs Version: 22.0(smart-fp--char-to-pixel-height
-				    next-h
-				    frame)
-
+;; Emacs Version: 22.0 
 ;; Author: David Reitter, david.reitter@gmail.com
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.19 2005/12/21 12:14:06 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.20 2005/12/21 12:26:34 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
