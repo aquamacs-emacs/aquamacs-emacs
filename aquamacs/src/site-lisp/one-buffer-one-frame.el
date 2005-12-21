@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.23 2005/12/21 13:08:54 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.24 2005/12/21 14:31:05 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -31,7 +31,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.23 2005/12/21 13:08:54 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.24 2005/12/21 14:31:05 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -168,17 +168,16 @@ as an extra window."
 )
 (defvar obof-other-frame-regexps
   '(
-    "\*Messages\*" 
-    "\*scratch\*" 
-    "\*Help\*"
+    "\\*Messages\\*" 
+    "\\*scratch\\*" 
+    "\\*Help\\*"
+    "\\*Custom.*"
     )
 "Show buffers with matching names in a separate frame.
 In `one-buffer-one-frame-mode', if the name of a buffer to be shown matches
 one of the regular expressions in this list, it is shown in a separate frame.
 This overrides entries in `obof-same-frame-regexps'.
-All other frames
-"
-)
+All other buffers open in separate frames.")
 (defun obof-same-frame-p (buf)
   (or (not one-buffer-one-frame-mode)
   (let ( (bufname (get-bufname buf)))  
