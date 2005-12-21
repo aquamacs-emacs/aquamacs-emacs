@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-mode-defaults.el,v 1.10 2005/12/18 13:34:16 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-defaults.el,v 1.11 2005/12/21 16:17:06 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -124,6 +124,7 @@
       (".*" . "<a href=\"%r\">%f</a>\n")
       )))
 (add-hook 'html-mode-hook 'smart-dnd-html)
+(add-hook 'html-helper-mode-hook 'smart-dnd-html)
 
 
 (autoload 'javascript-mode "javascript-mode" "JavaScript mode" t)
