@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.22 2005/12/21 08:44:29 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.23 2005/12/21 13:08:54 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -31,7 +31,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.22 2005/12/21 08:44:29 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.23 2005/12/21 13:08:54 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -674,46 +674,20 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
 )
   
 
-
+;; when all frames are hidden, 
+;; the original fancy-splash-frame just returns nil
 ;; as a bugfix, we're redefining this
 ;; in order to create a new frame if all frames are invisible
-;; (if window-system
-;; (defun fancy-splash-frame ()
-;;   "Return the frame to use for the fancy splash screen.
-;; Returning non-nil does not mean we should necessarily
-;; use the fancy splash screen, but if we do use it,
-;; we put it on this frame."
-;;   (let (chosen-frame)
-   
-;;     (mapc  
-;;      (lambda (frame) (if (and (frame-visible-p frame)
-;; 			      (not (window-minibuffer-p 
-;; 				    (frame-selected-window frame))))
-;; 			 (setq chosen-frame frame)))
-;;      ;; list:
-;;      (append (frame-list) (list (selected-frame)))
-;;      ) 
-;;     (if chosen-frame
-;; 	chosen-frame
-      
-;;       (or
-;;        ;; make visible
-;;        (select-frame (car (frame-list))) 
-;;        ;; or create a new one
-;;        (make-frame)
-;;        )
-;;       )
-;;     )
-;; ))
+
+(defun fancy-splash-frame ()
+  (selected-frame))
 
 (if window-system
 (defadvice fancy-splash-screens (around modify-frame (&rest args) activate)
-
-  (let ( (default-frame-alist '( (tool-bar-lines . 0) (minibuffer . nil ) ) ) )
+  (let ((one-buffer-one-frame-force t)
+	(default-frame-alist '( (tool-bar-lines . 0) (minibuffer . t ) ) ) )    
     ad-do-it
-    )
-  (message "") ;; workaround ("wrong argument")
-))
+    )))
 
 
 ;; (defcustom one-buffer-one-frame t
