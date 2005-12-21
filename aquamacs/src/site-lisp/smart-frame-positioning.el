@@ -15,13 +15,15 @@
 ;; How to check?
 ;; 
  
-;; Emacs Version: 22.0
+;; Emacs Version: 22.0(smart-fp--char-to-pixel-height
+				    next-h
+				    frame)
 
 ;; Author: David Reitter, david.reitter@gmail.com
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.18 2005/12/19 11:41:36 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.19 2005/12/21 12:14:06 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -107,20 +109,27 @@ pixels apart if possible."
   :group 'frames
 )
 
-(defun frame-total-pixel-height (f)
+(defvar smart-fp--frame-title-bar-height 22) ;; how to determine this?
 
-  (+ 0 (* (frame-char-height f) (tool-bar-lines-needed f))
-     (frame-pixel-height f)
-     )
-)
+
+(defun frame-total-pixel-height (f) 
+;; this should use the correct faces for minibuffer/modeline
+;; and check for presence of those elements etc etc.
+;; it's just an approximation right now.
+  (+ smart-fp--frame-title-bar-height ;; this is for the title bar of the window
+   (smart-fp--char-to-pixel-height
+     (eval (frame-parameter f 'height)) f
+   )))
+ 
+
 (defun smart-fp--char-to-pixel-width (chars frame)
        (* chars (frame-char-width frame)))
 (defun smart-fp--char-to-pixel-height (chars frame)
-       (* chars (frame-char-height frame)))
-(defun smart-fp--pixel-to-char-width (pixels frame)
-       (round (- (/ pixels (frame-char-width frame)) .5)))
-(defun smart-fp--pixel-to-char-height (pixels frame)
-       (round (- (/ pixels (frame-char-height frame)) .5)))
+        (* chars (frame-char-height frame)))
+(defun smart-fp--pixel-to-char-width (pixels frame &optional round-to-lower)
+       (round (- (/ pixels (frame-char-width frame)) (if round-to-lower 0 .5))))
+(defun smart-fp--pixel-to-char-height (pixels frame &optional round-to-lower)
+       (round (- (/ pixels (frame-char-height frame)) (if round-to-lower 0 .5))))
 
 
 ;; Unit test  / check requirements
@@ -381,7 +390,8 @@ on the main screen, i.e. where the menu is."
 	 (next-x2 (+ next-x (smart-fp--char-to-pixel-width
 				    next-w
 				    frame)))
-	 (next-y2 (+ next-y (smart-fp--char-to-pixel-height
+	 (next-y2 (+ next-y smart-fp--frame-title-bar-height 
+		     (smart-fp--char-to-pixel-height
 				    next-h
 				    frame))))
     ;; if frame is entirely on a different screen
@@ -396,22 +406,23 @@ on the main screen, i.e. where the menu is."
      (let* ((next-x (max min-x next-x))
 	    (next-y (max min-y 
 			 (min 
-			  (- max-y (smart-fp--char-to-pixel-height
+			   (- max-y (smart-fp--char-to-pixel-height
 				    next-h
-				    frame) 23) 
+				    frame) 
+			      smart-fp--frame-title-bar-height) 
 			  next-y)))
 	    (next-w (smart-fp--pixel-to-char-width
 		     (min (- max-x next-x 20)
 			  (smart-fp--char-to-pixel-width
 			   next-w
 			   frame)) 
-		     frame))
+		     frame 'round-lower))
 	    (next-h (smart-fp--pixel-to-char-height
 		     (min (- max-y next-y)
 			  (smart-fp--char-to-pixel-height
 			   next-h
 			   frame))
-		     frame)))
+		     frame 'round-lower)))
        `(
 	 (left .
 	       ,next-x)
