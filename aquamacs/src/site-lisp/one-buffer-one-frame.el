@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.24 2005/12/21 14:31:05 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.25 2005/12/25 22:43:17 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -31,7 +31,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.24 2005/12/21 14:31:05 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.25 2005/12/25 22:43:17 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -109,7 +109,10 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
 	    ;; if pop-up-frames is t, even *Completions* buffers
 	    ;; will spawn their own frames
 	    obofm-old-pop-up-windows pop-up-windows
-	    pop-up-windows t
+	    
+;; if this is set to t, we ignore the user's preferenes
+;; and it doesn't lead to good decisions (by default)
+	  ;;  pop-up-windows t
 	    obofm-old-display-buffer-reuse-frames display-buffer-reuse-frames
 	    display-buffer-reuse-frames t
 	    obof-backups-initialized t)
@@ -117,7 +120,7 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
     ;; restore settings
     (if obof-backups-initialized
 	(setq    pop-up-frames obofm-old-pop-up-frames
-		 pop-up-windows obofm-old-pop-up-windows
+		 ;; pop-up-windows obofm-old-pop-up-windows
 		 display-buffer-reuse-frames 
 		 obofm-old-display-buffer-reuse-frames)))
   (error nil))
@@ -126,6 +129,7 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
   :global t
   :keymap 'one-buffer-one-frame-mode-map
   :require 'aquamacs-frame-setup)
+
 
 ;; because of the following alias, setting the mode variable will
 ;; enable most of the mode, but not the keymap.
@@ -150,6 +154,10 @@ To disable `one-buffer-one-frame-mode', call
 (defvar one-buffer-one-frame-force nil 
   "Enforce one-buffer-one-frame - should be set only temporarily.")
  
+(defvar one-buffer-one-frame-inhibit nil
+  "Enforce one-buffer-one-frame - should be set only temporarily.")
+ 
+
 (defvar obof-same-frame-regexps
   '(
   ;;   "\*Completions\*" 
@@ -172,29 +180,68 @@ as an extra window."
     "\\*scratch\\*" 
     "\\*Help\\*"
     "\\*Custom.*"
+    ".*output\\*"
     )
 "Show buffers with matching names in a separate frame.
 In `one-buffer-one-frame-mode', if the name of a buffer to be shown matches
 one of the regular expressions in this list, it is shown in a separate frame.
 This overrides entries in `obof-same-frame-regexps'.
 All other buffers open in separate frames.")
+
 (defun obof-same-frame-p (buf)
-  (or (not one-buffer-one-frame-mode)
-  (let ( (bufname (get-bufname buf)))  
-     (if one-buffer-one-frame-force ;; set by color-theme
-	 nil
-       (or
-	(and
-	  (let ((same-window-buffer-names nil)
-		(same-window-regexps obof-same-frame-regexps))
-	    ;; this is a fast solution
-	    (same-window-p bufname))
-	  (not (let ((same-window-buffer-names nil)
-		     (same-window-regexps obof-other-frame-regexps))
-		 ;; this is a fast solution
-		 (same-window-p bufname))))
-	 (= (buffer-size (window-buffer)) 0)
-	  )))))
+  (let ((buf (and last-command-event
+		  (window-buffer 
+		   (posn-window (event-start last-command-event))))))
+	(with-current-buffer (or buf (selected-buffer))
+	  (or (not one-buffer-one-frame-mode)
+	      (let ( (bufname (get-bufname buf)))
+		(if one-buffer-one-frame-force ;; set by color-theme
+		    nil
+		  (or
+		   ;; when called, the current buffer is already the new buffer
+		   ;; so check the event
+		   one-buffer-one-frame-inhibit
+		   (and
+		    (let ((same-window-buffer-names nil)
+			  (same-window-regexps obof-same-frame-regexps))
+		      ;; this is a fast solution
+		      (same-window-p bufname))
+		    (not (let ((same-window-buffer-names nil)
+			       (same-window-regexps obof-other-frame-regexps))
+			   ;; this is a fast solution
+			   (same-window-p bufname))))
+		   (= (buffer-size (window-buffer)) 0))))))))
+
+(defun obof-inhibit-frame-creation ()
+  "Inhibit creation of extra frames resulting from clicks here."
+  (set (make-local-variable 'one-buffer-one-frame-inhibit)
+       t))
+
+(define-key dired-mode-map [mouse-2] 'dired-mouse-find-file)
+
+(defun dired-mouse-find-file (event)
+  "In Dired, visit the file or directory name you click on."
+  (interactive "e")
+  (let (window pos file)
+    (save-excursion
+      (setq window (posn-window (event-end event))
+	    pos (posn-point (event-end event)))
+      (if (not (windowp window))
+	  (error "No file chosen"))
+      (set-buffer (window-buffer window))
+      (goto-char pos)
+      (setq file (dired-get-file-for-visit)))
+    (if (file-directory-p file)
+	(or (and (cdr dired-subdir-alist)
+		 (dired-goto-subdir file))
+	    (progn
+	      (select-window window)
+	      (dired file)))
+      (select-window window)
+      (find-file (file-name-sans-versions file t)))))
+
+;; this will cause newly opened files to show up in the dired buffer
+(add-hook 'dired-mode-hook 'obof-inhibit-frame-creation)
 
 ;; (obof-same-frame-p "asdasd") 
 
@@ -391,32 +438,38 @@ the current window is switched to the new buffer."
      ) ))
 
  
+;; (defadvice pop-to-buffer (around always-dedicated (buf &rest args) 
+;; 				 protect activate)
+;;   ad-do-it)
 
-(if window-system
-(defadvice pop-to-buffer (around always-dedicated (buf &rest args) 
-				 protect activate)
-  "Temporarily make selected window dedicated, "
-  (if one-buffer-one-frame
-      (let* (;; (pop-up-frames t) ;; leave this alone, respect config.
-	     ;; setting it to t will force new windows to open.
-	     ;; only force it under the conditions below
-	     ;; (via set-window-dedicated)
-	     (pop-up-windows t)
-	   (win (selected-window))
-	   (wd (window-dedicated-p win))
-	    ) 
-	(unless (or (obof-same-frame-p (get-bufname buf))
-		     (same-window-p (get-bufname buf)))
-	    (set-window-dedicated-p win t))
-	ad-do-it  
-	(set-window-dedicated-p win wd)  
-	)
-    ;; else
-    ad-do-it
+;; The following should not be necessary
+;; because pop-to-buffer will call display-buffer
 
-    )
-  )  
- )
+;; (if window-system
+;; (defadvice pop-to-buffer (around always-dedicated (buf &rest args) 
+;; 				 protect activate)
+;;   "Temporarily make selected window dedicated, "
+;;   (if one-buffer-one-frame
+;;       (let* (;; (pop-up-frames t) ;; leave this alone, respect config.
+;; 	     ;; setting it to t will force new windows to open.
+;; 	     ;; only force it under the conditions below
+;; 	     ;; (via set-window-dedicated)
+;; 	     (pop-up-windows t)
+;; 	   (win (selected-window))
+;; 	   (wd (window-dedicated-p win))
+;; 	    ) 
+;; 	(unless (or (obof-same-frame-p (get-bufname buf))
+;; 		     (same-window-p (get-bufname buf)))
+;; 	    (set-window-dedicated-p win t))
+;; 	ad-do-it  
+;; 	(set-window-dedicated-p win wd)  
+;; 	)
+;;     ;; else
+;;     ad-do-it
+
+;;     )
+;;   )  
+;;  )
 
 
 (defun aquamacs-display-buffer (&rest args)
@@ -428,15 +481,16 @@ the current window is switched to the new buffer."
 	      (open-in-other-frame-p (car args))
 	      )
 	     (let ((pop-up-frames t)
-		   ;;(sframe (selected-frame))
-		   ;;(swin (selected-window))
+		   (sframe (selected-frame))
+		   (swin (selected-window))
 		   )
-	       (apply (function display-buffer) args)
+	       
+	       (let ((ret (apply (function display-buffer) args)))
 	       ;; make sure the old frame stays the selected one
 	       ;; this would have a more general effect 
-	       ;;(select-frame sframe)
-	       ;;(select-window swin)
-
+	       (select-frame sframe)
+	       (select-window swin)
+	      ret) 
 	       )
 	   (apply (function display-buffer) args)
 	   )
