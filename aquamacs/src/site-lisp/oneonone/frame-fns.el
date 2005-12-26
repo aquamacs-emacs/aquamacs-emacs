@@ -1,3 +1,4 @@
+;;; Aquamacs-Update: http://www.emacswiki.org/cgi-bin/wiki/download/frame-fns.el
 ;;; frame-fns.el --- Non-interactive frame and window functions.
 ;;
 ;; Filename: frame-fns.el
@@ -7,11 +8,15 @@
 ;; Copyright (C) 1996-2005, Drew Adams, all rights reserved.
 ;; Created: Tue Mar  5 16:15:50 1996
 ;; Version: 21.1
-;; Last-Updated: Mon Jul 04 00:19:06 2005
+;; Last-Updated: Wed Dec 07 09:33:42 2005 (-28800 Pacific Standard Time)
 ;;           By: dradams
-;;     Update #: 163
+;;     Update #: 167
 ;; Keywords: internal, extensions, local, frames
 ;; Compatibility: GNU Emacs 20.x, GNU Emacs 21.x, GNU Emacs 22.x
+;;
+;; Features that might be required by this library:
+;;
+;;   `avoid'.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -27,14 +32,12 @@
 ;;    `frames-on', `get-a-frame', `get-frame-name',
 ;;    `multi-window-frames-on', `read-frame', `window-coords'.
 ;;
-;;  Library `frame-fns' requires these libraries:
-;;
-;;    `avoid'.
-;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change log:
 ;;
+;; 2005/10/31 dadams
+;;     read-frame: Swapped default and init values in call to completing-read.
 ;; 2004/11/26 dadams
 ;;     Added frame-geom-spec-numeric and frame-geom-value-numeric.
 ;; 2004/03/19 dadams
@@ -58,9 +61,9 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth
+;; Floor, Boston, MA 02110-1301, USA.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -260,7 +263,7 @@ existing frames."
                    ;; To limit to live frames:
                    ;; (function (lambda (fn+f)(frame-live-p (cdr fn+f))))
                    ;; `frame-name-history' is defined in `frame.el'.
-                   nil existing default '(frame-name-history . 2)))
+                   nil existing nil '(frame-name-history . 2) default))
 
 ;;;###autoload
 (defun frames-on (buffer &optional frame)

@@ -1,3 +1,5 @@
+;;; Aquamacs-Update: http://www.emacswiki.org/cgi-bin/wiki/download/fit-frame.el
+
 ;;; fit-frame.el --- Resize a frame to fit window, or resize it incrementally
 ;;
 ;; Filename: fit-frame.el
@@ -7,11 +9,16 @@
 ;; Copyright (C) 2000-2005, Drew Adams, all rights reserved.
 ;; Created: Thu Dec  7 09:32:12 2000
 ;; Version: 21.0
-;; Last-Updated: Mon Jul 04 16:16:45 2005
+;; Last-Updated: Wed Dec 07 09:33:18 2005 (-28800 Pacific Standard Time)
 ;;           By: dradams
-;;     Update #: 526
+;;     Update #: 543
 ;; Keywords: internal, extensions, convenience, local
 ;; Compatibility: GNU Emacs 20.x, GNU Emacs 21.x, GNU Emacs 22.x
+;;
+;; Features that might be required by this library:
+;;
+;;   `avoid', `frame-cmds', `frame-fns', `misc-fns', `strings',
+;;   `thingatpt', `thingatpt+'.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -96,15 +103,15 @@
 ;;  `resize-frame.el', and command `fit-frame' was formerly called
 ;;  `shrink-frame-to-fit', then `resize-frame'.
 ;;
-;;  Library `fit-frame' requires these libraries:
-;;
-;;    `avoid', `frame-cmds', `frame-fns', `icomplete', `icomplete+',
-;;    `misc-fns', `strings', `thingatpt', `thingatpt+'.
-;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change log:
 ;;
+;; 2005/11/15 dadams
+;;     create-frame-max-* functions: Added optional frame arg.
+;;     Minor bug fix: Call create-frame-max-* with frame arg, so use correct char size.
+;; 2005/07/31 dadams
+;;     Removed require of strings.el.
 ;; 2005/07/04 dadams
 ;;     fit-frame: Bug fix: Added (set-buffer (window-buffer))
 ;; 2005/05/30 dadams
@@ -159,16 +166,15 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth
+;; Floor, Boston, MA 02110-1301, USA.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Code:
 
 (and (< emacs-major-version 20) (eval-when-compile (require 'cl))) ;; when, unless
-(require 'strings nil t)    ;; minibuffer-empty-p, read-number
 (require 'frame-cmds nil t) ;; show-frame
 
 ;;;;;;;;;;;;;;;;;;;;;;;
@@ -272,31 +278,33 @@ Each item in the alist is of form (MODE . LINES).
 
 ;;; Non-Interactive Functions -------------------------------------------
 
-(defun create-frame-max-width ()
+(defun create-frame-max-width (&optional frame)
   "Maximum width, in characters, for new frames
 when `fit-frame' is used in `after-make-frame-functions',
 and `create-frame-max-width' is nil.
 
-The value is relative to your display size and the frame's character
+The value is relative to your display size and FRAME's character
 size, and depends on the value of `create-frame-max-width-percent':
 
   (/ (* create-frame-max-width-percent (x-display-pixel-width))
-     (* 100 (frame-char-width)))"
+     (* 100 (frame-char-width FRAME)))"
+  (setq frame (or frame (selected-frame)))
   (/ (* create-frame-max-width-percent (x-display-pixel-width))
-     (* 100 (frame-char-width))))
+     (* 100 (frame-char-width frame))))
 
-(defun create-frame-max-height ()
+(defun create-frame-max-height (&optional frame)
   "Maximum height, in characters, for new frames
 when `fit-frame' is used in `after-make-frame-functions',
 and `create-frame-max-height' is nil.
 
-The value is relative to your display size and the frame's character
+The value is relative to your display size and FRAME's character
 size, and depends on the value of `create-frame-max-height-percent':
 
   (/ (* create-frame-max-height-percent (x-display-pixel-height))
-     (* 100 (frame-char-height)))"
+     (* 100 (frame-char-height FRAME)))"
+  (setq frame (or frame (selected-frame)))
   (/ (* create-frame-max-height-percent (x-display-pixel-height))
-     (* 100 (frame-char-height))))
+     (* 100 (frame-char-height frame))))
 
 
 
@@ -411,7 +419,7 @@ If optional args WIDTH and HEIGHT are `natnump's:
                       create-empty-special-display-frame-width
                     create-empty-frame-width)))
            (max create-frame-min-width window-min-width
-                (min (or create-frame-max-width (create-frame-max-width))
+                (min (or create-frame-max-width (create-frame-max-width frame))
                      (save-window-excursion
                        (select-frame frame)
                        (let ((hdr-lines
@@ -446,7 +454,7 @@ If optional args WIDTH and HEIGHT are `natnump's:
                                 create-empty-special-display-frame-height
                               create-empty-frame-height))
            (max create-frame-min-height window-min-height
-                (min (or create-frame-max-height (create-frame-max-height))
+                (min (or create-frame-max-height (create-frame-max-height frame))
                      nb-lines))))
       ;;; IS THIS NEEDED AT ALL? - 2005-05-31 $$$$$$$$$$$$$$$$$$$$$
       ;;;(when (fboundp 'show-frame) (show-frame frame))
@@ -480,57 +488,57 @@ If optional args WIDTH and HEIGHT are `natnump's:
 ;;; Helper Functions, to enable this file to work standalone --------------------
 
 ;; Defined in `strings.el'.
-(or (fboundp 'minibuffer-empty-p)
-    (defun minibuffer-empty-p ()
-      "Returns non-nil iff minibuffer is empty.
+(unless (fboundp 'minibuffer-empty-p)
+  (defun minibuffer-empty-p ()
+    "Returns non-nil iff minibuffer is empty.
 Sets variable `minibuffer-empty-p' to returned value."
-      (save-excursion
-        (save-window-excursion
-          (set-buffer (window-buffer (minibuffer-window)))
-          (set-minibuffer-empty-p (= 0 (buffer-size)))))))
+    (save-excursion
+      (save-window-excursion
+        (set-buffer (window-buffer (minibuffer-window)))
+        (set-minibuffer-empty-p (= 0 (buffer-size)))))))
 
 ;; Defined in `strings.el'.
-(or (fboundp 'set-minibuffer-empty-p)
-    (defun set-minibuffer-empty-p (flag)
-      "Set value of variable `set-minibuffer-empty-p' to FLAG."
-      (setq minibuffer-empty-p flag)))
+(unless (fboundp 'set-minibuffer-empty-p)
+  (defun set-minibuffer-empty-p (flag)
+    "Set value of variable `set-minibuffer-empty-p' to FLAG."
+    (setq minibuffer-empty-p flag)))
 
 ;; Defined in `frame-cmds.el'.
-(or (fboundp 'show-frame)
-    (defun show-frame (frame)
-      "Make FRAME visible and raise it, without selecting it.
+(unless (fboundp 'show-frame)
+  (defun show-frame (frame)
+    "Make FRAME visible and raise it, without selecting it.
 FRAME may be a frame or its name."
-      (interactive (list (read-frame "Frame to make visible: ")))
-      (setq frame (get-a-frame frame))
-      (make-frame-visible frame)
-      (raise-frame frame)))
+    (interactive (list (read-frame "Frame to make visible: ")))
+    (setq frame (get-a-frame frame))
+    (make-frame-visible frame)
+    (raise-frame frame)))
 
 ;; Defined in `frame-fns.el'.
-(or (fboundp 'get-a-frame)
-    (defun get-a-frame (frame)
-      "Return a frame, if any, named FRAME (a frame or a string).
+(unless (fboundp 'get-a-frame)
+  (defun get-a-frame (frame)
+    "Return a frame, if any, named FRAME (a frame or a string).
 If none, return nil.
 If FRAME is a frame, it is returned."
-      (cond ((framep frame) frame)
-            ((stringp frame)
-             (let ((frs (frame-list))
-                   (found-fr nil))
-               (while (and frs (not found-fr))
-                 (when (string= frame (get-frame-name (car frs)))
-                   (setq found-fr (car frs)))
-                 (setq frs (cdr frs)))
-               found-fr))
-            (t (error "GET-A-FRAME:  Arg neither a string nor a frame: `%s'" frame)))))
+    (cond ((framep frame) frame)
+          ((stringp frame)
+           (let ((frs (frame-list))
+                 (found-fr nil))
+             (while (and frs (not found-fr))
+               (when (string= frame (get-frame-name (car frs)))
+                 (setq found-fr (car frs)))
+               (setq frs (cdr frs)))
+             found-fr))
+          (t (error "GET-A-FRAME:  Arg neither a string nor a frame: `%s'" frame)))))
 
 
 ;; Defined in `frame-fns.el'.
-(or (fboundp 'get-frame-name)
-    (defun get-frame-name (&optional frame)
-      "Return the string that names FRAME (a frame).  Default is selected frame."
-      (or frame (setq frame (selected-frame)))
-      (if (framep frame)
-          (cdr (assq 'name (frame-parameters frame)))
-        (error "GET-FRAME-NAME:  Argument not a frame: `%s'" frame))))
+(unless (fboundp 'get-frame-name)
+  (defun get-frame-name (&optional frame)
+    "Return the string that names FRAME (a frame).  Default is selected frame."
+    (or frame (setq frame (selected-frame)))
+    (if (framep frame)
+        (cdr (assq 'name (frame-parameters frame)))
+      (error "GET-FRAME-NAME:  Argument not a frame: `%s'" frame))))
 
 ;;;;;;;;;;
 

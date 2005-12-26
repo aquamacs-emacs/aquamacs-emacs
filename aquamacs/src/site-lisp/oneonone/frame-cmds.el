@@ -7,11 +7,16 @@
 ;; Copyright (C) 1996-2005, Drew Adams, all rights reserved.
 ;; Created: Tue Mar  5 16:30:45 1996
 ;; Version: 21.0
-;; Last-Updated: Mon Jul 04 00:11:02 2005
+;; Last-Updated: Tue Dec 13 15:06:34 2005 (-28800 Pacific Standard Time)
 ;;           By: dradams
-;;     Update #: 2037
+;;     Update #: 2088
 ;; Keywords: internal, extensions, mouse, local, frames, windows, convenience
 ;; Compatibility: GNU Emacs 20.x, GNU Emacs 21.x, GNU Emacs 22.x
+;;
+;; Features that might be required by this library:
+;;
+;;   `avoid', `frame-fns', `misc-fns', `strings', `thingatpt',
+;;   `thingatpt+'.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -73,7 +78,8 @@
 ;;
 ;;  New user options defined here:
 ;;
-;;    `frame-config-register', `frame-parameters-to-exclude',
+;;    `enlarge-font-tries', `frame-config-register',
+;;    `frame-parameters-to-exclude',
 ;;    `move-frame-wrap-within-display-flag'
 ;;    `rename-frame-when-iconify-flag', `show-hide-show-function',
 ;;    `window-mgr-title-bar-pixel-width'.
@@ -81,15 +87,15 @@
 ;;  New commands defined here:
 ;;
 ;;    `delete-1-window-frames-on', `delete/iconify-window',
-;;    `delete/iconify-windows-on', `enlarge-font', `enlarge-frame',
-;;    `enlarge-frame-horizontally', `hide-everything', `hide-frame',
-;;    `iconify-everything', `iconify/map-frame',
-;;    `jump-to-frame-config-register', `mouse-iconify/map-frame',
-;;    `mouse-remove-window', `mouse-show-hide-mark-unmark',
-;;    `move-frame-down', `move-frame-left', `move-frame-right',
-;;    `move-frame-up', `remove-window', `remove-windows-on',
-;;    `rename-frame', `rename-non-minibuffer-frame',
-;;    `save-frame-config',
+;;    `delete/iconify-windows-on', `delete-other-frames',
+;;    `enlarge-font', `enlarge-frame', `enlarge-frame-horizontally',
+;;    `hide-everything', `hide-frame', `iconify-everything',
+;;    `iconify/map-frame', `jump-to-frame-config-register',
+;;    `mouse-iconify/map-frame', `mouse-remove-window',
+;;    `mouse-show-hide-mark-unmark', `move-frame-down',
+;;    `move-frame-left', `move-frame-right', `move-frame-up',
+;;    `remove-window', `remove-windows-on', `rename-frame',
+;;    `rename-non-minibuffer-frame', `save-frame-config',
 ;;    `set-all-frame-alist-parameters-from-frame',
 ;;    `set-frame-alist-parameter-from-frame', `show-*Help*-buffer',
 ;;    `show-a-frame-on', `show-buffer-menu', `show-frame',
@@ -99,9 +105,9 @@
 ;;
 ;;  New non-interactive (helper) functions defined here:
 ;;
-;;    `frame-alist-var-names', `frame-iconified-p',
-;;    `frame-parameter-names', `new-frame-position',
-;;    `read-args-for-tile-frames'.
+;;    `enlarged-font-name', `frame-alist-var-names',
+;;    `frame-iconified-p', `frame-parameter-names',
+;;    `new-frame-position', `read-args-for-tile-frames'.
 ;;
 ;;
 ;;
@@ -133,6 +139,7 @@
 ;;   (global-set-key [vertical-line C-down-mouse-1] 'show-hide)
 ;;   (global-set-key [C-down-mouse-1] 'mouse-show-hide-mark-unmark)
 ;;   (substitute-key-definition 'delete-window 'remove-window global-map)
+;;   (define-key ctl-x-4-map "1" 'delete-other-frames)
 ;;   (define-key ctl-x-5-map "h" 'show-*Help*-buffer)
 ;;   (substitute-key-definition 'delete-window 'remove-window global-map)
 ;;   (define-key global-map "\C-xt." 'save-frame-config)
@@ -186,15 +193,17 @@
 ;;     `zoom-frm.el'      - Zoom a frame, so that its font becomes
 ;;                          larger or smaller.
 ;;
-;;  Library `frame-cmds' requires these libraries:
-;;
-;;    `avoid', `frame-fns', `icomplete', `icomplete+', `misc-fns',
-;;    `strings', `thingatpt', `thingatpt+'.
-;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change log:
 ;;
+;; 2005/12/13 dadams
+;;     Added: delete-other-frames.
+;; 2005/11/18 dadams
+;;     enlarge-font: Try to increment or decrment further, testing for an existing font.
+;;     Added: enlarge-font-tries, enlarged-font-name.
+;; 2005/10/03 dadams
+;;     Removed require of icomplete+.el (no longer redefines read-from-minibuffer).
 ;; 2005/07/03 dadams
 ;;     Renamed: args-for-tile-frames to read-args-for-tile-frames.
 ;; 2005/06/19 dadams
@@ -299,9 +308,9 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth
+;; Floor, Boston, MA 02110-1301, USA.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -312,7 +321,6 @@
 (require 'frame-fns) ;; frame-geom-value-numeric, frames-on, get-frame-name, get-a-frame, read-frame
 (require 'strings nil t) ;; (no error if not found) read-buffer
 (require 'misc-fns nil t) ;; (no error if not found) another-buffer
-(require 'icomplete+ nil t) ;; (no error if not found): read-from-minibuffer
 
 ;; Not required here, because this library requires `frame-cmds.el': `thumb-frm.el'.
 ;; However, `frame-cmds.el' soft-uses `thumbnail-frame-p', which is defined in `thumb-frm.el'.
@@ -348,6 +356,12 @@ Candidates include `jump-to-frame-config-register' and `show-buffer-menu'."
 (defcustom window-mgr-title-bar-pixel-width 30
   "*Width of frame title bar provided by the window manager, in pixels.
 There is no way for Emacs to determine this, so you must set it."
+  :type 'integer :group 'frame-cmds)
+
+(defcustom enlarge-font-tries 100
+  "Number of times to try to change font-size, when looking for a font.
+The font-size portion of a font name is incremented or decremented at
+most this many times, before giving up and raising an error."
   :type 'integer :group 'frame-cmds)
 
 (defcustom frame-parameters-to-exclude '((window-id) (buffer-list) (name) (title) (icon-name))
@@ -749,6 +763,17 @@ BUFFER may be a buffer or its name (a string)."
           (when (one-window-p t fr) (delete-frame)))))))
 
 ;;;###autoload
+(defun delete-other-frames (&optional frame)
+  "Delete all frames except FRAME (default: selected frame).
+Interactively, use a prefix arg (`\\[universal-argument]') to be prompted for FRAME."
+  (interactive (list (if current-prefix-arg
+                         (get-a-frame (read-frame "Frame to make invisible: "))
+                       (selected-frame))))
+  (when frame
+    (dolist (fr (frame-list))
+      (unless (eq fr frame) (condition-case nil (delete-frame fr) (error nil))))))
+
+;;;###autoload
 (defun tile-frames-horizontally (&optional frames)
   "Tile frames horizontally.
 Interatively:
@@ -948,6 +973,15 @@ INCR is the increment to use when changing the position."
       (when (> new-pos display-dimension) (setq new-pos (- frame-dimension)))
       new-pos)))
 
+
+;; This still doesn't work 100% well.  For instance, set frame font to
+;; "-raster-Terminal-normal-r-normal-normal-12-90-96-96-c-50-ms-oemlatin", then decrease font size.
+;; The next smaller existing font on my machine is
+;; "-raster-Terminal-normal-r-normal-normal-11-*-96-96-c-*-ms-oemlatin".  Decrease size again.
+;; Next smaller font is "-raster-Terminal-bold-r-normal-normal-5-37-96-96-c-60-ms-oemlatin".  Notice
+;; the switch to bold from regular.  Cannot decrease any more.  Increase size.  Next larger font is
+;; "-raster-Terminal-bold-r-normal-normal-8-*-96-96-c-*-ms-oemlatin".  Can no longer increase size.
+;;
 ;;;###autoload
 (defun enlarge-font (&optional increment frame)
   "Increase size of font in FRAME by INCREMENT.
@@ -955,25 +989,31 @@ Interactively, INCREMENT is given by the prefix argument.
 Optional FRAME parameter defaults to current frame."
   (interactive "p")
   (setq frame (or frame (selected-frame)))
-  (let ((fontname (cdr (assq 'font (frame-parameters frame)))))
-    (when (query-fontset fontname)
-      (setq fontname (nth 2 (assq 'ascii (aref (fontset-info fontname frame) 2)))))
-    (let ((xlfd-fields (x-decompose-font-name fontname))
-          new-font-name)
-      (unless xlfd-fields (error "Cannot decompose font name"))
-      (let ((new-size (+ (string-to-number (aref xlfd-fields xlfd-regexp-pixelsize-subnum))
-                         increment)))
-        (unless (> new-size 0) (error "New font size is too small: %s" new-size))
-        (aset xlfd-fields
-              xlfd-regexp-pixelsize-subnum
-              (number-to-string new-size)))
-      ;; Set point size & width to "*", so frame width will adjust to new font size
-      (aset xlfd-fields xlfd-regexp-pointsize-subnum "*")
-      (aset xlfd-fields xlfd-regexp-avgwidth-subnum "*")
-      (setq new-font-name (x-compose-font-name xlfd-fields))
-      (modify-frame-parameters frame (list (cons 'font new-font-name)))
-      ;; Update faces that want a bold or italic version of the default font.
-      (frame-update-faces frame))))
+  (let ((fontname (cdr (assq 'font (frame-parameters frame))))
+        (count enlarge-font-tries))
+    (setq fontname (enlarged-font-name fontname frame increment))
+    (while (and (not (x-list-fonts fontname)) (wholenump (setq count (1- count))))
+      (setq fontname (enlarged-font-name fontname frame increment)))
+    (unless (x-list-fonts fontname) (error "Cannot change font size"))
+    (modify-frame-parameters frame (list (cons 'font fontname)))
+    ;; Update faces that want a bold or italic version of the default font.
+    (frame-update-faces frame)))
+
+(defun enlarged-font-name (fontname frame increment)
+  "FONTNAME, after enlarging font size of FRAME by INCREMENT.
+FONTNAME is the font of FRAME."
+  (when (query-fontset fontname)
+    (setq fontname (nth 2 (assq 'ascii (aref (fontset-info fontname frame) 2)))))
+  (let ((xlfd-fields (x-decompose-font-name fontname)))
+    (unless xlfd-fields (error "Cannot decompose font name"))
+    (let ((new-size (+ (string-to-number (aref xlfd-fields xlfd-regexp-pixelsize-subnum))
+                       increment)))
+      (unless (> new-size 0) (error "New font size is too small: %s" new-size))
+      (aset xlfd-fields xlfd-regexp-pixelsize-subnum (number-to-string new-size)))
+    ;; Set point size & width to "*", so frame width will adjust to new font size
+    (aset xlfd-fields xlfd-regexp-pointsize-subnum "*")
+    (aset xlfd-fields xlfd-regexp-avgwidth-subnum "*")
+    (x-compose-font-name xlfd-fields)))
 
 ;;;###autoload
 (defun set-frame-alist-parameter-from-frame (alist parameter &optional frame)
