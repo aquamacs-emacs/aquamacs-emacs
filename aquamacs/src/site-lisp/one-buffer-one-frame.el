@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.26 2005/12/26 07:43:31 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.27 2005/12/26 07:47:31 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -31,7 +31,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.26 2005/12/26 07:43:31 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.27 2005/12/26 07:47:31 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -192,7 +192,7 @@ All other buffers open in separate frames.")
   (let ((buf (and last-command-event
 		  (window-buffer 
 		   (posn-window (event-start last-command-event))))))
-	(with-current-buffer (or buf (selected-buffer))
+	(with-current-buffer (or buf (current-buffer))
 	  (or (not one-buffer-one-frame-mode)
 	      (let ( (bufname (get-bufname buf)))
 		(if one-buffer-one-frame-force ;; set by color-theme
@@ -212,7 +212,7 @@ All other buffers open in separate frames.")
 			   (same-window-p bufname))))
 		   (= (buffer-size (window-buffer)) 0))))))))
 
-(defun obof-inhibit-frame-creation ()
+(defun obof-inhibit-frame-creation () 
   "Inhibit creation of extra frames resulting from clicks here."
   (set (make-local-variable 'one-buffer-one-frame-inhibit)
        t))
