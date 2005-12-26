@@ -7,11 +7,15 @@
 ;; Copyright (C) 1996-2005, Drew Adams, all rights reserved.
 ;; Created: Mon Oct 16 13:33:18 1995
 ;; Version: 21.0
-;; Last-Updated: Mon Jul 04 08:05:14 2005
+;; Last-Updated: Wed Dec 07 09:42:15 2005 (-28800 Pacific Standard Time)
 ;;           By: dradams
-;;     Update #: 394
+;;     Update #: 546
 ;; Keywords: help, abbrev, internal, extensions, local
 ;; Compatibility: GNU Emacs 20.x, GNU Emacs 21.x, GNU Emacs 22.x
+;;
+;; Features that might be required by this library:
+;;
+;;   `icomplete'.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -29,32 +33,40 @@
 ;;
 ;;  `icomplete-completions' -
 ;;     Sorts alternatives and puts them in a different face.
-;;  `icomplete-exhibit' - Doesn't insert if input begins with `('
-;;                        (e.g. `repeat-complex-command').
-;;
-;;
-;;  ***** NOTE: The following EMACS PRIMITIVES have been REDEFINED HERE
-;;
-;;  `read-from-minibuffer' -
-;;     Resets `minibuffer-completion-table' to avoid icompletion.
-;;  `read-no-blanks-input' -
-;;     Resets `minibuffer-completion-table' to avoid icompletion.
-;;  `read-string' -
-;;     Resets `minibuffer-completion-table' to avoid icompletion.
+;;  `icomplete-exhibit' - 
+;;     Doesn't insert if input begins with `(' (e.g.
+;;       `repeat-complex-command').
+;;     Set `deactivate-mark' to nil at end, so the insertion doesn't
+;;       deactivate mark.
 ;;
 ;;
 ;;  This file should be loaded after loading the standard GNU file
 ;;  `icomplete.el'.  So, in your `~/.emacs' file, do this:
 ;;  (eval-after-load "icomplete" '(progn (require 'icomplete+)))
 ;;
-;;  Library `icomplete+' requires these libraries:
 ;;
-;;    `icomplete'.
+;;  To Do
+;;  -----
+;;
+;;  1. Use defface, not face variables.
+;;
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change log:
 ;;
+;; 2005/09/30 dadams
+;;     Commented out redefinitions of primitives, so no longer reset
+;;       minibuffer-completion-table to nil. Leaving the commented code in for now.
+;; 2005/08/16 dadams
+;;     icomplete-completions: If icicles.el is loaded, change no-match message slightly.
+;; 2005/07/24 dadams
+;;     icomplete-exhibit: Set deactivate-mark to nil at end.
+;;     Remove commented Emacs 19 code at end.
+;; 2005/07/19 dadams
+;;     Added: icomplete-nb-candidates-face.
+;;     icomplete-completions: Add number of icomplete candidates.
+;;                            Append number of other cycle candidates (icicle).
 ;; 2005/05/29 dadams
 ;;     read-from-minibuffer: Updated to deal with new arg in Emacs 22.
 ;; 2004/12/02 dadams
@@ -90,9 +102,9 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth
+;; Floor, Boston, MA 02110-1301, USA.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -108,9 +120,6 @@
 
 ;;;;;;;;;;;;;;;;;;;
 
-(defvar icomplete-prospects-length 100  ; Default was 80
-  "*Length of string displaying icompletion candidates.")
-
 ;;;###autoload
 (unless (boundp 'darkblue-foreground-face)
   (define-face-const "DarkBlue" nil))
@@ -123,10 +132,24 @@
 (defvar icomplete-determined-face seagreen-foreground-face
   "*Face for minibuffer reminder of possible completion prefix.")
 
+;;;###autoload
+(unless (boundp 'darkmagenta-foreground-face)
+  (define-face-const "DarkMagenta" nil))
+(defvar icomplete-nb-candidates-face darkmagenta-foreground-face
+  "*Face for minibuffer reminder of number of completion candidates.
+This has no effect unless library `icicles.el' is being used.")
+
+;;;###autoload
 (unless (boundp 'red-foreground-face)
   (define-face-const "Red" nil))
 (defvar icomplete-keys-face red-foreground-face
   "*Face for minibuffer reminder of possible completion key bindings.")
+
+(defvar icomplete-prospects-length 100  ; Default was 80
+  "*Length of string displaying icompletion candidates.")
+
+
+
 
 ;; REPLACES ORIGINAL defined in `icomplete.el':
 ;; Doesn't insert if input begins with `(' (e.g. `repeat-complex-command').
@@ -155,8 +178,7 @@ See `icomplete-mode' and `minibuffer-setup-hook'."
                    (save-excursion
                      (goto-char minibuf-begin)
                      (not (looking-at   ; No (, ", ', 9 etc. at start.
-                           "\\(\\s-+$\\|\\s-*\\(\\s(\\|\\s\"\\|\\s'\\|\\s<\\|\
-[0-9]\\)\\)")))
+                           "\\(\\s-+$\\|\\s-*\\(\\s(\\|\\s\"\\|\\s'\\|\\s<\\|[0-9]\\)\\)")))
 		   (or
 		    ;; Don't bother with delay after certain number of chars:
 		    (> (point-max) icomplete-max-delay-chars)
@@ -175,12 +197,14 @@ See `icomplete-mode' and `minibuffer-setup-hook'."
           (insert
            (icomplete-completions contents minibuffer-completion-table
                                   minibuffer-completion-predicate
-                                  (not minibuffer-completion-confirm))))))))
+                                  (not minibuffer-completion-confirm)))))
+      (setq deactivate-mark nil))))     ; Don't let the insert deactivate the mark.
 
 
 
 ;; REPLACES ORIGINAL defined in `icomplete.el':
 ;; Sorts alternatives and puts them in a different face.
+;;
 ;;;###autoload
 (defun icomplete-completions (name candidates predicate require-match)
   "Identify prospective candidates for minibuffer completion.
@@ -202,20 +226,34 @@ Prospective completion suffixes (if any) are displayed, bracketed by
 
 The displays for unambiguous matches have \" [ Matched ]\" appended
 \(whether complete or not), or \" \[ No match ]\", if no eligible
-matches exist.  \(Keybindings for uniquely matched commands
-are exhibited within the square braces.)"
+matches exist.
+Keybindings for uniquely matched commands are displayed within the [].
+
+When more than one completion is available, the total number precedes
+the suffixes display, like so: 
+  M-x forw    14 (ard-) { char line list...}
+
+If library `icicles.el' is also loaded, then you can cycle
+completions.  When you change cycling direction, the number of
+additional cycle candidates, besides the current one, is displayed
+following the rest of the icomplete info:
+  M-x forward-line   [Matched]  (13 more)."
   ;; 'all-completions' doesn't like empty
   ;; minibuffer-completion-table's (ie: (nil))
   (when (and (listp candidates) (null (car candidates)))
     (setq candidates nil))
   (let ((comps (all-completions name candidates predicate))
         ;; "-determined" - only one candidate
-        (open-bracket-determined (if require-match "   (" "   ["))
-        (close-bracket-determined (if require-match ")" "]"))
-        (keys nil))
+        (open-bracket-determined (if require-match "(" " ["))
+        (close-bracket-determined (if require-match ") " "] "))
+        (keys nil)
+        nb-candidates nb-candidates-string)
+    (setq nb-candidates (length comps))
     ;; `concat'/`mapconcat' is the slow part.  With the introduction of
     ;; `icomplete-prospects-length', there is no need for `catch'/`throw'.
-    (if (null comps) (format "\t%sNo matches%s"
+    (if (null comps) (format (if (fboundp 'icicle-apropos-complete)
+                                 "\t%sNo prefix matches%s"
+                               "\t%sNo matches%s")
 			     open-bracket-determined
 			     close-bracket-determined)
       (let* ((most-try (try-completion name (mapcar (function list) comps)))
@@ -225,11 +263,13 @@ are exhibited within the square braces.)"
 			  (concat open-bracket-determined
 				  (substring most (length name))
 				  close-bracket-determined)))
-	     (open-bracket-prospects "     { ")
+	     (open-bracket-prospects "{ ")
 	     (close-bracket-prospects " }")
              ;; "-prospects" - more than one candidate
 	     (prospects-len 0)
-             prompt prospects most-is-exact comp)
+             prompt prompt-rest prospects most-is-exact comp)
+        (when determ
+          (put-text-property 0 (length determ) 'face icomplete-determined-face determ))
 	(if (eq most-try t)
 	    (setq prospects nil)
 	  (while (and comps (< prospects-len icomplete-prospects-length))
@@ -239,32 +279,52 @@ are exhibited within the square braces.)"
 		  ((member comp prospects))
 		  (t (setq prospects (cons comp prospects)
 			   prospects-len (+ (length comp) 1 prospects-len))))))
-	(setq prompt
+        (setq prompt-rest
               (if prospects
-                  (concat determ
-                          open-bracket-prospects
+                  (concat open-bracket-prospects
                           (and most-is-exact ", ")
                           (mapconcat 'identity
                                      (sort prospects (function string-lessp))
                                      "  ")
                           (and comps "...")
                           close-bracket-prospects)
-                (concat determ
-                        "\t[ Matched"
+                (concat "\t[ Matched"
                         (if (setq keys (and icomplete-show-key-bindings
                                             (commandp (intern-soft most))
                                             (icomplete-get-keys most)))
                             (concat "; " keys)
                           (setq keys nil))
                         " ]")))
-        (put-text-property (length determ) (length prompt)
-                           'face icomplete-choices-face prompt)
-        (put-text-property (point-min) (length determ)
-                           'face icomplete-determined-face prompt)
-        ;; Highlight keys, after "Matched; " (12 chars).
-        (when keys (put-text-property (+ 12 (length determ)) (1- (length prompt))
+        (put-text-property 0 (length prompt-rest)
+                           'face icomplete-choices-face prompt-rest)
+        (cond ((< nb-candidates 2)
+               (setq prompt (concat "      " determ prompt-rest))
+               (when (eq last-command this-command)
+                 (setq icicle-nb-of-other-cycle-candidates 0))) ; We know now, so reset it.
+              (t
+               (setq nb-candidates-string (format "%7d " nb-candidates))
+               (put-text-property (string-match "\\S-" nb-candidates-string)
+                                  (1- (length nb-candidates-string))
+                                  'face icomplete-nb-candidates-face nb-candidates-string)
+               (setq prompt (concat nb-candidates-string determ prompt-rest))))
+        ;; Highlight keys, after "Matched; " (18 chars).
+        (when keys (put-text-property (+ 18 (length determ)) (1- (length prompt))
                                       'face icomplete-keys-face prompt))
+        ;; Append mention of number of other cycle candidates (from `icicles.el').
+        (when (and (boundp 'icicle-last-completion-candidate)
+                   (> icicle-nb-of-other-cycle-candidates 0)
+                   (= 1 nb-candidates)
+                   icicle-last-completion-candidate
+                   (not (eq last-command this-command)))
+          (setq nb-candidates-string    ; Reuse the string.
+                (format "  (%d more)" icicle-nb-of-other-cycle-candidates))
+          (put-text-property (string-match "\\S-" nb-candidates-string)
+                             (length nb-candidates-string)
+                             'face icomplete-nb-candidates-face nb-candidates-string)
+          (setq prompt (concat prompt nb-candidates-string)))
         prompt))))
+
+
 
 
 ;;; The following functions have been REDEFINED to reset the
@@ -274,130 +334,111 @@ are exhibited within the square braces.)"
 
 ;; Note:  The function `read-input' is an alias for `read-string'.
 
-(or (fboundp 'old-read-string)
-(fset 'old-read-string (symbol-function 'read-string)))
+;; (or (fboundp 'old-read-string)
+;; (fset 'old-read-string (symbol-function 'read-string)))
 
-;; REPLACES ORIGINAL:
-;; Resets `minibuffer-completion-table' to avoid icompletion.
-(defsubst read-string
-  (prompt &optional initial-input history default-value inherit-input-method)
-  "Read a string from the minibuffer, prompting with string PROMPT.
-If non-nil, second arg INITIAL-INPUT is a string to insert before
-    reading.  This argument has been superseded by DEFAULT-VALUE and
-    should normally be `nil' in new code.  It behaves as in
-    `read-from-minibuffer'.  See the documentation for that function.
-The third arg HISTORY, if non-nil, specifies a history list and
-    optionally the initial position in that list.
-    See `read-from-minibuffer' for details of argument HISTORY.
-Fourth arg DEFAULT-VALUE is the default value.  If non-nil, it is used
-    for history commands and as the value to return if the user enters
-    an empty string.
-Fifth arg INHERIT-INPUT-METHOD, if non-nil, means the minibuffer
-    inherits the current input method and setting of
-    `enable-multibyte-characters'."
-  (setq minibuffer-completion-table nil) ; So won't icomplete by default.
-  (old-read-string prompt initial-input history default-value inherit-input-method))
-
-
-(or (fboundp 'old-read-from-minibuffer)
-(fset 'old-read-from-minibuffer (symbol-function 'read-from-minibuffer)))
-
-;; REPLACES ORIGINAL:
-;; Resets `minibuffer-completion-table' to avoid icompletion.
-(defsubst read-from-minibuffer
-  (prompt &optional initial-contents keymap read hist default-value
-          inherit-input-method keep-all)
-  "Read a string from the minibuffer, prompting with string PROMPT.
-The optional second arg INITIAL-CONTENTS is an obsolete alternative to
-  DEFAULT-VALUE.  It normally should be nil in new code, except when
-  HIST is a cons.  It is discussed in more detail below.
-Third arg KEYMAP is a keymap to use while reading;
-  if omitted or nil, the default is `minibuffer-local-map'.
-If fourth arg READ is non-nil, then interpret the result as a Lisp
-  object and return that object.  In other words, do this:
-      `(car (read-from-string INPUT-STRING))'
-Fifth arg HIST, if non-nil, specifies a history list and optionally
-  the initial position in the list.
-  It can be a symbol, which is the history list variable to use,
-  or it can be a cons cell (HISTVAR . HISTPOS).
-  In that case, HISTVAR is the history-list variable to use,
-  and HISTPOS is the initial position for use by the minibuffer
-  history commands.  For consistency, you should also specify that
-  element of the history as the value of INITIAL-CONTENTS.
-  Positions are counted starting from 1 at the beginning of the list.
-Sixth arg DEFAULT-VALUE is the default value.  If non-nil, it is
-  available for history commands; but, unless READ is non-nil,
-  `read-from-minibuffer' does NOT return DEFAULT-VALUE if the user
-  enters empty input!  It returns the empty string.
-Seventh arg INHERIT-INPUT-METHOD, if non-nil, means the minibuffer
-  inherits the current input method and the setting of
-  `enable-multibyte-characters'.
-Eighth arg KEEP-ALL, if non-nil, says to put all inputs in the history
- list, even empty or duplicate inputs. (This argument is not available
- in Emacs versions prior to Emacs 22.)
-If variable `minibuffer-allow-text-properties' is non-nil, then the
-  string returned includes whatever text properties were present in
-  the minibuffer.  Otherwise the value has no text properties.
-
-The remainder of this documentation describes INITIAL-CONTENTS in more
-detail.  It is relevant only when studying existing code, or when HIST
-is a cons.  If non-nil, INITIAL-CONTENTS is a string to be inserted
-into the minibuffer before reading input.  Normally, point is put at
-the end of that string.  However, if INITIAL-CONTENTS is (STRING .
-POSITION), the initial input is STRING, but point is placed at
-_one-indexed_ position POSITION in the minibuffer.  Any integer value
-less than or equal to one puts point at the beginning of the string.
-*Note* that this behavior differs from the way such arguments are used
-in `completing-read' and some related functions, which use
-zero-indexing for POSITION."
-  (setq minibuffer-completion-table nil) ; So won't icomplete by default.
-  (if (or (string-match "22." emacs-version) (string-match "21.3.50" emacs-version))
-      (old-read-from-minibuffer prompt initial-contents keymap read hist
-                                default-value inherit-input-method keep-all)
-    (old-read-from-minibuffer prompt initial-contents keymap read hist
-                              default-value inherit-input-method))) ; No KEEP-ALL
+;; ;; REPLACES ORIGINAL:
+;; ;; Resets `minibuffer-completion-table' to avoid icompletion.
+;; (defsubst read-string
+;;   (prompt &optional initial-input history default-value inherit-input-method)
+;;   "Read a string from the minibuffer, prompting with string PROMPT.
+;; If non-nil, second arg INITIAL-INPUT is a string to insert before
+;;     reading.  This argument has been superseded by DEFAULT-VALUE and
+;;     should normally be `nil' in new code.  It behaves as in
+;;     `read-from-minibuffer'.  See the documentation for that function.
+;; The third arg HISTORY, if non-nil, specifies a history list and
+;;     optionally the initial position in that list.
+;;     See `read-from-minibuffer' for details of argument HISTORY.
+;; Fourth arg DEFAULT-VALUE is the default value.  If non-nil, it is used
+;;     for history commands and as the value to return if the user enters
+;;     an empty string.
+;; Fifth arg INHERIT-INPUT-METHOD, if non-nil, means the minibuffer
+;;     inherits the current input method and setting of
+;;     `enable-multibyte-characters'."
+;;   (setq minibuffer-completion-table nil) ; So won't icomplete by default.
+;;   (old-read-string prompt initial-input history default-value inherit-input-method))
 
 
-(or (fboundp 'old-read-no-blanks-input)
-(fset 'old-read-no-blanks-input (symbol-function 'read-no-blanks-input)))
+;; (or (fboundp 'old-read-from-minibuffer)
+;; (fset 'old-read-from-minibuffer (symbol-function 'read-from-minibuffer)))
 
-;; REPLACES ORIGINAL:
-;; Resets `minibuffer-completion-table' to avoid icompletion.
-(defsubst read-no-blanks-input (prompt &optional initial-contents inherit-input-method)
-  "Read a string from the minibuffer, not allowing blanks.
-Arg PROMPT is a prompt string.  Whitespace terminates the input.
+;; ;; REPLACES ORIGINAL:
+;; ;; Resets `minibuffer-completion-table' to avoid icompletion.
+;; (defsubst read-from-minibuffer
+;;   (prompt &optional initial-contents keymap read hist default-value
+;;           inherit-input-method keep-all)
+;;   "Read a string from the minibuffer, prompting with string PROMPT.
+;; The optional second arg INITIAL-CONTENTS is an obsolete alternative to
+;;   DEFAULT-VALUE.  It normally should be nil in new code, except when
+;;   HIST is a cons.  It is discussed in more detail below.
+;; Third arg KEYMAP is a keymap to use while reading;
+;;   if omitted or nil, the default is `minibuffer-local-map'.
+;; If fourth arg READ is non-nil, then interpret the result as a Lisp
+;;   object and return that object.  In other words, do this:
+;;       `(car (read-from-string INPUT-STRING))'
+;; Fifth arg HIST, if non-nil, specifies a history list and optionally
+;;   the initial position in the list.
+;;   It can be a symbol, which is the history list variable to use,
+;;   or it can be a cons cell (HISTVAR . HISTPOS).
+;;   In that case, HISTVAR is the history-list variable to use,
+;;   and HISTPOS is the initial position for use by the minibuffer
+;;   history commands.  For consistency, you should also specify that
+;;   element of the history as the value of INITIAL-CONTENTS.
+;;   Positions are counted starting from 1 at the beginning of the list.
+;; Sixth arg DEFAULT-VALUE is the default value.  If non-nil, it is
+;;   available for history commands; but, unless READ is non-nil,
+;;   `read-from-minibuffer' does NOT return DEFAULT-VALUE if the user
+;;   enters empty input!  It returns the empty string.
+;; Seventh arg INHERIT-INPUT-METHOD, if non-nil, means the minibuffer
+;;   inherits the current input method and the setting of
+;;   `enable-multibyte-characters'.
+;; Eighth arg KEEP-ALL, if non-nil, says to put all inputs in the history
+;;  list, even empty or duplicate inputs. (This argument is not available
+;;  in Emacs versions prior to Emacs 22.)
+;; If variable `minibuffer-allow-text-properties' is non-nil, then the
+;;   string returned includes whatever text properties were present in
+;;   the minibuffer.  Otherwise the value has no text properties.
 
-If optional second arg INITIAL-CONTENTS is non-nil, it should be a
-string, which is used as initial input, with point positioned at the
-end, so that a SPACE will accept the input.  INITIAL-CONTENTS can
-alternatively be a cons of a string and an integer.  Such values are
-treated as in `read-from-minibuffer', but are normally not useful in
-this function.
+;; The remainder of this documentation describes INITIAL-CONTENTS in more
+;; detail.  It is relevant only when studying existing code, or when HIST
+;; is a cons.  If non-nil, INITIAL-CONTENTS is a string to be inserted
+;; into the minibuffer before reading input.  Normally, point is put at
+;; the end of that string.  However, if INITIAL-CONTENTS is (STRING .
+;; POSITION), the initial input is STRING, but point is placed at
+;; _one-indexed_ position POSITION in the minibuffer.  Any integer value
+;; less than or equal to one puts point at the beginning of the string.
+;; *Note* that this behavior differs from the way such arguments are used
+;; in `completing-read' and some related functions, which use
+;; zero-indexing for POSITION."
+;;   (setq minibuffer-completion-table nil) ; So won't icomplete by default.
+;;   (if (or (string-match "22." emacs-version) (string-match "21.3.50" emacs-version))
+;;       (old-read-from-minibuffer prompt initial-contents keymap read hist
+;;                                 default-value inherit-input-method keep-all)
+;;     (old-read-from-minibuffer prompt initial-contents keymap read hist
+;;                               default-value inherit-input-method))) ; No KEEP-ALL
 
-Third arg INHERIT-INPUT-METHOD, if non-nil, means the minibuffer
-inherits the current input method and the setting of
-`enable-multibyte-characters'."
-  (setq minibuffer-completion-table nil) ; So won't icomplete by default.
-  (old-read-no-blanks-input prompt initial-contents inherit-input-method))
 
+;; (or (fboundp 'old-read-no-blanks-input)
+;; (fset 'old-read-no-blanks-input (symbol-function 'read-no-blanks-input)))
 
-;;;@@@Emacs19 (or (fboundp 'old-yes-or-no-p)
-;;;@@@Emacs19 (fset 'old-yes-or-no-p (symbol-function 'yes-or-no-p)))
+;; ;; REPLACES ORIGINAL:
+;; ;; Resets `minibuffer-completion-table' to avoid icompletion.
+;; (defsubst read-no-blanks-input (prompt &optional initial-contents inherit-input-method)
+;;   "Read a string from the minibuffer, not allowing blanks.
+;; Arg PROMPT is a prompt string.  Whitespace terminates the input.
 
-;;;@@@Emacs19 ;; REPLACES ORIGINAL (built-in function):
-;;;@@@Emacs19 ;; Temporarily sets `icomplete-inhibit' to non-nil.
-;;;@@@Emacs19 ;;
-;;;@@@Emacs19 ;; (For some reason, the standard `yes-or-no-p' doesn't nullify
-;;;@@@Emacs19 ;; `minibuffer-completion-table', and that is tested by
-;;;@@@Emacs19 ;; `icomplete-pre-command-hook' to see if needs to do icompletion.)
-;;;@@@Emacs19 (defsubst yes-or-no-p (prompt)
-;;;@@@Emacs19   "Ask user a yes-or-no question.  Return t if answer is yes.
-;;;@@@Emacs19 Takes one argument, which is the string to display to ask the question.
-;;;@@@Emacs19 It should end in a space; `yes-or-no-p' adds `(yes or no) ' to it.
-;;;@@@Emacs19 The user must confirm the answer with RET,
-;;;@@@Emacs19 and can edit it until it has been confirmed."
-;;;@@@Emacs19   (let ((icomplete-inhibit t)) (old-yes-or-no-p prompt)))
+;; If optional second arg INITIAL-CONTENTS is non-nil, it should be a
+;; string, which is used as initial input, with point positioned at the
+;; end, so that a SPACE will accept the input.  INITIAL-CONTENTS can
+;; alternatively be a cons of a string and an integer.  Such values are
+;; treated as in `read-from-minibuffer', but are normally not useful in
+;; this function.
 
+;; Third arg INHERIT-INPUT-METHOD, if non-nil, means the minibuffer
+;; inherits the current input method and the setting of
+;; `enable-multibyte-characters'."
+;;   (setq minibuffer-completion-table nil) ; So won't icomplete by default.
+;;   (old-read-no-blanks-input prompt initial-contents inherit-input-method))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 
