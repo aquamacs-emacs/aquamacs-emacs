@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.25 2005/12/25 22:43:17 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.26 2005/12/26 07:43:31 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -31,7 +31,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.25 2005/12/25 22:43:17 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.26 2005/12/26 07:43:31 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -217,7 +217,9 @@ All other buffers open in separate frames.")
   (set (make-local-variable 'one-buffer-one-frame-inhibit)
        t))
 
-(define-key dired-mode-map [mouse-2] 'dired-mouse-find-file)
+;; Todo:
+;; make this a patch
+;; (define-key dired-mode-map [mouse-2] 'dired-mouse-find-file)
 
 (defun dired-mouse-find-file (event)
   "In Dired, visit the file or directory name you click on."
@@ -241,6 +243,7 @@ All other buffers open in separate frames.")
       (find-file (file-name-sans-versions file t)))))
 
 ;; this will cause newly opened files to show up in the dired buffer
+(defvar dired-mode-hook nil)
 (add-hook 'dired-mode-hook 'obof-inhibit-frame-creation)
 
 ;; (obof-same-frame-p "asdasd") 
