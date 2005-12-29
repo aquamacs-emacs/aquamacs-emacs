@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.28 2005/12/29 12:44:16 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.29 2005/12/29 12:45:33 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -31,7 +31,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.28 2005/12/29 12:44:16 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.29 2005/12/29 12:45:33 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -189,11 +189,11 @@ This overrides entries in `obof-same-frame-regexps'.
 All other buffers open in separate frames.")
 
 (defun obof-same-frame-p (buf)
-  (let ((buf (and last-command-event
+  (let ((from-buf (and last-command-event
 		  (listp (event-start last-command-event))
 		  (window-buffer 
 		   (posn-window (event-start last-command-event))))))
-	(with-current-buffer (or buf (current-buffer))
+	(with-current-buffer (or from-buf (current-buffer))
 	  (or (not one-buffer-one-frame-mode)
 	      (let ( (bufname (get-bufname buf)))
 		(if one-buffer-one-frame-force ;; set by color-theme
