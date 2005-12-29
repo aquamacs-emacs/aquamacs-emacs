@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.27 2005/12/26 07:47:31 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.28 2005/12/29 12:44:16 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -31,7 +31,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.27 2005/12/26 07:47:31 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.28 2005/12/29 12:44:16 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -190,6 +190,7 @@ All other buffers open in separate frames.")
 
 (defun obof-same-frame-p (buf)
   (let ((buf (and last-command-event
+		  (listp (event-start last-command-event))
 		  (window-buffer 
 		   (posn-window (event-start last-command-event))))))
 	(with-current-buffer (or buf (current-buffer))
