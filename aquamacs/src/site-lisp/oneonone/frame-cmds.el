@@ -1,5 +1,7 @@
 ;;; frame-cmds.el --- Frame and window commands (interactive functions).
 ;;
+;;; Aquamacs-Update: http://www.emacswiki.org/cgi-bin/wiki/download/frame-cmds.el
+;;
 ;; Filename: frame-cmds.el
 ;; Description: Frame and window commands (interactive functions).
 ;; Author: Drew Adams
