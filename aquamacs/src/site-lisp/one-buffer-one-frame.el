@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.29 2005/12/29 12:45:33 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.30 2006/01/01 17:13:33 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -31,7 +31,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.29 2005/12/29 12:45:33 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.30 2006/01/01 17:13:33 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -113,7 +113,8 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
 ;; if this is set to t, we ignore the user's preferenes
 ;; and it doesn't lead to good decisions (by default)
 	  ;;  pop-up-windows t
-	    obofm-old-display-buffer-reuse-frames display-buffer-reuse-frames
+	    obofm-old-display-buffer-reuse-frames 
+	    display-buffer-reuse-frames
 	    display-buffer-reuse-frames t
 	    obof-backups-initialized t)
 					; else (turning off)
@@ -203,15 +204,16 @@ All other buffers open in separate frames.")
 		   ;; so check the event
 		   one-buffer-one-frame-inhibit
 		   (and
+		    (or (= (buffer-size (window-buffer)) 0)
 		    (let ((same-window-buffer-names nil)
 			  (same-window-regexps obof-same-frame-regexps))
 		      ;; this is a fast solution
-		      (same-window-p bufname))
+		      (same-window-p bufname)))
 		    (not (let ((same-window-buffer-names nil)
 			       (same-window-regexps obof-other-frame-regexps))
 			   ;; this is a fast solution
 			   (same-window-p bufname))))
-		   (= (buffer-size (window-buffer)) 0))))))))
+		   )))))))
 
 (defun obof-inhibit-frame-creation () 
   "Inhibit creation of extra frames resulting from clicks here."
@@ -477,29 +479,22 @@ the current window is switched to the new buffer."
 
 
 (defun aquamacs-display-buffer (&rest args)
-
-       
        (let ((display-buffer-function nil))
 	 (if (and
 	      one-buffer-one-frame
-	      (open-in-other-frame-p (car args))
-	      )
-	     (let ((pop-up-frames t)
+	      (open-in-other-frame-p (car args)))
+	     (let ((pop-up-frames t) ;; open in a new frame!
 		   (sframe (selected-frame))
-		   (swin (selected-window))
-		   )
+		   (swin (selected-window)))
 	       
-	       (let ((ret (apply (function display-buffer) args)))
+	       (let ((ret 
+		      (apply (function display-buffer) args)))
 	       ;; make sure the old frame stays the selected one
-	       ;; this would have a more general effect 
 	       (select-frame sframe)
 	       (select-window swin)
 	      ret) 
 	       )
-	   (apply (function display-buffer) args)
-	   )
-       )
-)
+	   (apply (function display-buffer) args))))
 
 (aquamacs-set-defaults 
  '((display-buffer-function aquamacs-display-buffer)))
