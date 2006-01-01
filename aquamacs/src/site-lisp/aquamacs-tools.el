@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.11 2005/09/19 19:03:17 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.12 2006/01/01 17:15:28 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -157,6 +157,18 @@ Each element of LIST has to be of the form (symbol . fontset)."
 
 
 
+(defgroup Aquamacs-is-more-than-Emacs nil
+  "All defaults in Aquamacs that are different from GNU Emacs.
+This customization group contains every default for customization
+variables that is changed in Aquamacs compared to GNU Emacs. 
+Not that non-customization variables as well as code may be 
+changed or advised in Aquamacs (compared to GNU Emacs), so reverting
+all of these defaults to their GNU Emacs value will not give you
+a GNU Emacs. To achieve that, use a self-compiled or provided 
+Carbon Emacs instead of Aquamacs.")
+ 
+
+
 
 (defun aquamacs-set-defaults (list)
   "Set a new default for a customization option in Aquamacs."
@@ -172,6 +184,12 @@ Each element of LIST has to be of the form (symbol . fontset)."
 	    ;; and that this appears as the new default.
 
 	    (put symbol 'standard-value `((quote  ,(eval symbol))))
+
+	    ;; since the standard-value changed, put it in the
+	    ;; group
+	    (custom-add-to-group 'Aquamacs-is-more-than-Emacs 
+				 symbol 'custom-variable)
+ 
 	    )
 	 
 
