@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs version check
  
-;; Last change: $Id: check-for-updates.el,v 1.12 2005/12/20 13:22:05 davidswelt Exp $
+;; Last change: $Id: check-for-updates.el,v 1.13 2006/01/02 13:37:18 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -45,20 +45,21 @@
 (print "
         Aquamacs - Version update check
  
-        Aquamacs automatically checks for updates and notifies the user
-	if there's something new. 
-	Your privacy:  While checking for a new version, Aquamacs
-	contacts an internet server to get the version number - this
-	happens once every 3 days. The server will receive and 
-	store the following anonymous connection data: 
-	an anonymous ID, the number of program starts, whether
-        you have `one-buffer-one-frame-mode' turned on and the 
-	versions of Aquamacs and OS X that you're using. 
-        Just as during any access to an Internet server, 
-	your IP address and the time of your inquiry may be stored,
-	too. This information is used to produce statistics; we delete the
-	original data after a period of time. The statistics solely
-	inform the Aquamacs development. 
+        Aquamacs automatically checks for updates and notifies
+	the user if there's something new.  Your privacy: While
+	checking for a new version, Aquamacs contacts an internet
+	server to get the version number - this happens once
+	every 3 days. The server will receive and store the
+	following anonymous connection data: an anonymous ID, the
+	number of program starts, whether you have
+	`smart-frame-positioning-mode' and frame appearance themes
+	(`aquamacs-auto-frame-parameters-flag') turned on and the
+	versions of Aquamacs and OS X that you're using.  Just as
+	during any access to an Internet server, your IP address
+	and the time of your inquiry may be stored, too. This
+	information is used to produce statistics; we will delete
+	the original data after a period of time. The statistics
+	serve to direct the Aquamacs development.
 
 	If you like to turn this check off, add this to your file
 	~/Library/Preferences/Aquamacs Emacs/Preferences.el:
@@ -218,6 +219,7 @@ and show user a message if there is."
     (when aquamacs-version-check-url
       ;; do not autoload (avoid messages)
       (require 'mail-utils)
+      (require 'url)
       (require 'url-parse)
       (require 'url-methods)
       (require 'url-cache)
@@ -229,7 +231,8 @@ and show user a message if there is."
 				 "&seq=" (number-to-string (or calls 0))
 				 "&beta=" (number-to-string (or aquamacs-user-likes-beta 0)) 
 				 "&ver=" (url-encode-string (concat (or aquamacs-version "unknown") (or aquamacs-minor-version "-")))
-				 "&obof=" (if one-buffer-one-frame-mode "1" "0")
+				 "&afpf=" (if aquamacs-auto-frame-parameters-flag "1" "0")
+				 "&sfpm=" (if smart-frame-positioning-mode "1" "0")
 				 "&os=" (url-encode-string  (replace-regexp-in-string "\[\r\n\]" "" (shell-command-to-string "uname -r")))
 				 ) 
 			 )))
