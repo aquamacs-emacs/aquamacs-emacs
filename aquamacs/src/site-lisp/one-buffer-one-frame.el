@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.31 2006/01/03 09:57:05 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.32 2006/01/03 16:44:08 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -31,7 +31,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.31 2006/01/03 09:57:05 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.32 2006/01/03 16:44:08 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -91,7 +91,7 @@ window or it is a special-purpose buffer such as `*Messages*'.
 This minor mode provides some additional key bindings:
 
 C-x B         `switch-to-buffer-here'
-C-x S-left    `prev-buffer-here'
+C-x S-left    `previous-buffer-here'
 C-x S-right   `next-buffer-here'
 C-x C-B       `list-buffers-here'
 
@@ -302,13 +302,14 @@ the current window is switched to the new buffer."
   (interactive)
   (let ((one-buffer-one-frame nil))
     (next-buffer)))
-(defun prev-buffer-here ()
+
+(defun previous-buffer-here ()
   "Switch to the previous buffer in cyclic order in the same window.
-Like `prev-buffer', except that even in `one-buffer-one-frame-mode'
+Like `previous-buffer', except that even in `one-buffer-one-frame-mode'
 the current window is switched to the new buffer."
   (interactive)
   (let ((one-buffer-one-frame nil))
-    (prev-buffer)))
+    (previous-buffer)))
 
 (define-key one-buffer-one-frame-mode-map [(control x) (shift b)] 
   'switch-buffer-here)
@@ -317,11 +318,11 @@ the current window is switched to the new buffer."
 (define-key one-buffer-one-frame-mode-map [(control x) (shift right)] 
   'next-buffer-here)
 (define-key one-buffer-one-frame-mode-map [(control x) (shift left)] 
-  'prev-buffer-here)
+  'previous-buffer-here)
 (define-key one-buffer-one-frame-mode-map [(control x) (control shift right)] 
   'next-buffer-here)
 (define-key one-buffer-one-frame-mode-map [(control x) (control shift left)] 
-  'prev-buffer-here)
+  'previous-buffer-here)
 
 
 (if window-system
@@ -569,11 +570,9 @@ even if it's the only visible frame."
       ;; else:
       ;; decide not to delete / make invisible
       ;; then switch buffer
-      (if (and one-buffer-one-frame (get-buffer "*scratch*"))
-	  (let ((one-buffer-one-frame))
-	    (switch-to-buffer "*scratch*")
-	    )
-	  (next-buffer)))))
+      ;; to whatever was shown previously (does this work well???)
+      (next-buffer-here)
+      )))
 
 
 (if window-system
