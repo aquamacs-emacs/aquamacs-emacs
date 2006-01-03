@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.30 2006/01/01 17:13:33 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.31 2006/01/03 09:57:05 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -31,7 +31,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.30 2006/01/01 17:13:33 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.31 2006/01/03 09:57:05 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -161,17 +161,10 @@ To disable `one-buffer-one-frame-mode', call
 
 (defvar obof-same-frame-regexps
   '(
-  ;;   "\*Completions\*" 
-;;     "\*Apropos\*" 
-;;     " SPEEDBAR"			; speedbar package opens its own frame
-;;     "\*Choices\*"			    ; for ispell
-;;     "\*Article\*"			    ; gnus
-;;     "\*VC-*"
-;;     "\*Bug Help\*"
     " SPEEDBAR"
     "\\*.*\\*"
     )
-"In `one-buffer-one-frame-mode', if the name of a buffer to be shown matches
+  "In `one-buffer-one-frame-mode', if the name of a buffer to be shown matches
 one of the regular expressions in this list, it is shown in the same frame,
 as an extra window."
 )
@@ -182,6 +175,7 @@ as an extra window."
     "\\*Help\\*"
     "\\*Custom.*"
     ".*output\\*"
+    "\\*mail\\*"
     )
 "Show buffers with matching names in a separate frame.
 In `one-buffer-one-frame-mode', if the name of a buffer to be shown matches
@@ -217,8 +211,14 @@ All other buffers open in separate frames.")
 
 (defun obof-inhibit-frame-creation () 
   "Inhibit creation of extra frames resulting from clicks here."
-  (set (make-local-variable 'one-buffer-one-frame-inhibit)
-       t))
+  (when one-buffer-one-frame-mode
+      (set (make-local-variable 'one-buffer-one-frame-inhibit)
+	   t)))
+
+(defun obof-inhibit-pop-up-windows ()
+   (when one-buffer-one-frame-mode
+     (set (make-local-variable 'pop-up-windows)
+	  nil)))
 
 ;; Todo:
 ;; make this a patch
@@ -248,6 +248,12 @@ All other buffers open in separate frames.")
 ;; this will cause newly opened files to show up in the dired buffer
 (defvar dired-mode-hook nil)
 (add-hook 'dired-mode-hook 'obof-inhibit-frame-creation)
+(add-hook 'dired-mode-hook 'obof-inhibit-pop-up-windows)
+(defvar custom-mode-hook nil)
+(add-hook 'custom-mode-hook 'obof-inhibit-frame-creation)
+(add-hook 'custom-mode-hook 'obof-inhibit-pop-up-windows)
+
+
 
 ;; (obof-same-frame-p "asdasd") 
 
@@ -255,26 +261,14 @@ All other buffers open in separate frames.")
   (not (obof-same-frame-p buf)))
  
 (defun killable-buffer-p (buf)
-  
-  (let ( (bufname (get-bufname buf))
-	 )
- 
-   ; (if one-buffer-one-frame
+  "Returns non-nil if buffer BUF can be killed."
+  (let ( (bufname (get-bufname buf)))
 	(if (or (equal "\*Messages\*" bufname) 
-	      
 		(equal  "\*scratch\*" bufname) 
 		(equal  "\*Help\*" bufname) 
-	      
 		)
 	    nil
-      
-	  t
-	  )
-      ;; if not one-buffer-one-frame
-   ;   t ;;  used to be nil!
-;	    )
-    )
-  )
+	  t)))
 
 
 ; init
@@ -486,7 +480,7 @@ the current window is switched to the new buffer."
 	     (let ((pop-up-frames t) ;; open in a new frame!
 		   (sframe (selected-frame))
 		   (swin (selected-window)))
-	       
+	      ; (message "Pop-up-frames is %s" pop-up-frames)
 	       (let ((ret 
 		      (apply (function display-buffer) args)))
 	       ;; make sure the old frame stays the selected one
