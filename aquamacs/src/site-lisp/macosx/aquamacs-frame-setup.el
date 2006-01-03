@@ -8,7 +8,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-frame-setup.el,v 1.16 2005/12/20 13:14:01 davidswelt Exp $
+;; Last change: $Id: aquamacs-frame-setup.el,v 1.17 2006/01/03 09:53:51 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -99,6 +99,7 @@ even when minimal fringes are used. (Aquamacs)"
 ; (setq autofit-frames-flag nil)
  ;(setq 1on1-minibuffer-frame-flag nil) ;; this is a defvar
 
+(remove-hook 'same-window-buffer-names "*mail*")
 (remove-hook 'same-window-regexps "\\*info\\*\\(\\|<[0-9]+>\\)")
 (remove-hook 'same-window-regexps "\\`\\*Customiz.*\\*\\'")
  ;; ;; only subsequent ones should be opened in the same frame
