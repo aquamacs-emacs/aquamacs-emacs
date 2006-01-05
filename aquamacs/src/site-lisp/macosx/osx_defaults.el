@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.44 2005/12/18 13:34:35 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.45 2006/01/05 14:31:37 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -69,9 +69,6 @@
 
   (mac-read-environment-vars-from-shell)
   (mac-add-path-to-exec-path)
-  (add-to-list 'Info-default-directory-list
-	       (concat (mac-resources-path)
-		       "info"))
 
   ;; inferior workaround, until mac.c is fixed not to set INFOPATH any longer
   (if (equal (concat (mac-resources-path)
@@ -81,12 +78,22 @@
   
 ;; when INFOPATH is set from outside, it will only load INFOPATH
 
-  (add-to-list 'Info-default-directory-list 
-			     "~/Library/Application Support/Emacs/info")
-  (add-to-list 'Info-default-directory-list 
-			     "/Library/Application Support/Emacs/info")
-
-
+  (let ((extra-dirs (list
+		     "~/Library/Application Support/Emacs/info"
+		     "/Library/Application Support/Emacs/info"
+		     (concat (mac-resources-path)
+			     "site-lisp/edit-modes/info")
+		     (concat (mac-resources-path)
+			     "info"))))
+    
+    (setq Info-default-directory-list (append
+				       Info-default-directory-list
+				       extra-dirs))
+    (when (getenv "INFOPATH")
+      (setenv "INFOPATH" (apply 'concat (getenv "INFOPATH")
+				(mapcar (lambda (x) (concat ":" x))
+					extra-dirs)))))
+  
   ;; emulate a three button mouse with Option / Control modifiers 
   ;; (setq mac-emulate-three-button-mouse t)
   ;; seems to prevent setting the secondary selection, so turned off for now
@@ -141,10 +148,13 @@
 
   (condition-case 
       nil 
-      (progn (make-directory "~/Library/Preferences/Aquamacs Emacs")
-	     ;; problem with this: could be started from /Volumes/.. (DMG) for first time, then moved		
-	     (aquamacs-init-user-help) ;; init help system (first start)
-	     )
+      (progn 
+	(make-directory "~/Library/Preferences/Aquamacs Emacs")
+	(make-directory "~/Library/Application Support/Aquamacs Emacs")
+	(make-directory "~/Library/Application Support/Aquamacs Emacs/Temporary Files")
+	;; problem with this: could be started from /Volumes/.. (DMG) for first time, then moved		
+	(aquamacs-init-user-help) ;; init help system (first start)
+	)
     (error t)) 
 
   (aquamacs-set-defaults
@@ -160,13 +170,17 @@
 
   (require 'recentf)
 
+  ;; create temporary directory if necessary
+  
+
   (aquamacs-set-defaults 
    '(
 			
      (auto-save-list-file-prefix 
       "~/Library/Preferences/Aquamacs Emacs/auto-save-list/.saves-")
      ( save-place-file "~/Library/Preferences/Aquamacs Emacs/places.el")
-     ( recentf-save-file "~/Library/Preferences/Aquamacs Emacs/Recent Files.el")))
+     ( recentf-save-file "~/Library/Preferences/Aquamacs Emacs/Recent Files.el")
+     ( mail-default-directory "~/Library/Application Support/Aquamacs Emacs/Temporary Files")))
 
   ) ;; aquamacs-osx-defaults-setup
 
