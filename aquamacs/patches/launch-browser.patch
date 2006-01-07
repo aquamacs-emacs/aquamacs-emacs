@@ -1,46 +1,13 @@
-Index: lisp/net/browse-url.el
-===================================================================
-RCS file: /cvsroot/emacs/emacs/lisp/net/browse-url.el,v
-retrieving revision 1.52
-diff -c -r1.52 browse-url.el
-*** lisp/net/browse-url.el	19 Nov 2005 15:57:19 -0000	1.52
---- lisp/net/browse-url.el	9 Dec 2005 09:46:39 -0000
-***************
-*** 811,818 ****
-      (w32-shell-execute "open" url)))
-  
-  (defun browse-url-default-macosx-browser (url &optional new-window)
-    (interactive (browse-url-interactive-arg "URL: "))
-!   (start-process (concat "open " url) nil "open" url))
-  
-  ;; --- Netscape ---
-  
---- 811,825 ----
-      (w32-shell-execute "open" url)))
-  
-  (defun browse-url-default-macosx-browser (url &optional new-window)
-+ "Launch the default browser specified in Mac OS X.
-+ NEW-WINDOW is ignored."
-    (interactive (browse-url-interactive-arg "URL: "))
-!   (condition-case nil
-!       (mac-launch-URL-with-default-browser url)
-!     (error 
-!      ;; fallback - sometimes http is not registered in the
-!      ;; LaunchServices database
-!      (start-process (concat "open " url) nil "open" url))))
-  
-  ;; --- Netscape ---
-  
-Index: src/mac.c
+Index: mac.c
 ===================================================================
 RCS file: /cvsroot/emacs/emacs/src/mac.c,v
-retrieving revision 1.48
-diff -c -r1.48 mac.c
-*** src/mac.c	23 Nov 2005 07:19:16 -0000	1.48
---- src/mac.c	9 Dec 2005 09:46:40 -0000
+retrieving revision 1.53
+diff -c -r1.53 mac.c
+*** mac.c	5 Jan 2006 08:14:12 -0000	1.53
+--- mac.c	7 Jan 2006 11:47:30 -0000
 ***************
-*** 4259,4264 ****
---- 4259,4343 ----
+*** 4699,4704 ****
+--- 4699,4800 ----
       return Qnil;
   }
   
@@ -87,24 +54,41 @@ diff -c -r1.48 mac.c
 +       CFStringRef targetUrlCfs = 
 + 	CFStringCreateWithCString(NULL, SDATA(URLstring),
 + 				  kCFStringEncodingASCII);
-+       CFURLRef targetUrlRef = CFURLCreateWithString(NULL, targetUrlCfs, NULL);
-+ 		
-+       if ( (spec.itemURLs = 
-+ 	    CFArrayCreate(NULL, (const void **)&targetUrlRef, 1, 
-+ 			  &kCFTypeArrayCallBacks)) == NULL)
++ 
++       CFStringRef targetUrlCfsEscaped = 
++ 	CFURLCreateStringByAddingPercentEscapes(NULL, targetUrlCfs, 
++ 						NULL, NULL, 
++ 						kCFStringEncodingUTF8);
++ 
++       CFURLRef targetUrlRef = 
++ 	CFURLCreateWithString(NULL, targetUrlCfsEscaped, NULL);
++ 	
++       if (targetUrlRef) 
 + 	{
-+ 	  return Qnil;
-+ 	}
-+       spec.passThruParams = NULL;
-+       spec.launchFlags = kLSLaunchDefaults;
-+       spec.asyncRefCon = NULL;
-+       status = LSOpenFromURLSpec(&spec, NULL);
++ 	
++ 	  if ( (spec.itemURLs = 
++ 		CFArrayCreate(NULL, (const void **)&targetUrlRef, 1, 
++ 			      &kCFTypeArrayCallBacks)) == NULL)
++ 	    {
++ 	      return Qnil;
++ 	    }
++ 	  spec.passThruParams = NULL;
++ 	  spec.launchFlags = kLSLaunchDefaults;
++ 	  spec.asyncRefCon = NULL;
++ 	  status = LSOpenFromURLSpec(&spec, NULL);
 + 		
-+       CFRelease(spec.itemURLs);
-+       CFRelease(targetUrlRef);
++ 	  CFRelease(spec.itemURLs);
++ 	  CFRelease(targetUrlRef);
++ 	}
 +       CFRelease(targetUrlCfs);
++       CFRelease(targetUrlCfsEscaped);
 +       UNBLOCK_INPUT;
 + 
++       if (! targetUrlRef) 
++ 	{
++ 	  error ("Could not produce valid URL from string.");
++ 	  return Qnil;
++ 	}
 +       if (status != noErr) 
 + 	{
 + 	  error ("Failed to launch default browser. Error %d", XINT(status));
@@ -127,7 +111,7 @@ diff -c -r1.48 mac.c
   #ifdef MAC_OSX
   #undef select
 ***************
-*** 4704,4710 ****
+*** 5148,5154 ****
     defsubr (&Smac_code_convert_string);
   #endif
     defsubr (&Smac_clear_font_name_table);
@@ -135,7 +119,7 @@ diff -c -r1.48 mac.c
     defsubr (&Smac_set_file_creator);
     defsubr (&Smac_set_file_type);
     defsubr (&Smac_get_file_creator);
---- 4783,4790 ----
+--- 5244,5251 ----
     defsubr (&Smac_code_convert_string);
   #endif
     defsubr (&Smac_clear_font_name_table);
