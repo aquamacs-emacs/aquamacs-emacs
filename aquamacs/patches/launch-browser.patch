@@ -1,10 +1,43 @@
-Index: mac.c
+Index: lisp/net/browse-url.el
+===================================================================
+RCS file: /cvsroot/emacs/emacs/lisp/net/browse-url.el,v
+retrieving revision 1.52
+diff -c -r1.52 browse-url.el
+*** lisp/net/browse-url.el	19 Nov 2005 15:57:19 -0000	1.52
+--- lisp/net/browse-url.el	9 Dec 2005 09:46:39 -0000
+***************
+*** 811,818 ****
+      (w32-shell-execute "open" url)))
+  
+  (defun browse-url-default-macosx-browser (url &optional new-window)
+    (interactive (browse-url-interactive-arg "URL: "))
+!   (start-process (concat "open " url) nil "open" url))
+  
+  ;; --- Netscape ---
+  
+--- 811,825 ----
+      (w32-shell-execute "open" url)))
+  
+  (defun browse-url-default-macosx-browser (url &optional new-window)
++ "Launch the default browser specified in Mac OS X.
++ NEW-WINDOW is ignored."
+    (interactive (browse-url-interactive-arg "URL: "))
+!   (condition-case nil
+!       (mac-launch-URL-with-default-browser url)
+!     (error 
+!      ;; fallback - sometimes http is not registered in the
+!      ;; LaunchServices database
+!      (start-process (concat "open " url) nil "open" url))))
+  
+  ;; --- Netscape ---
+  
+Index: src/mac.c
 ===================================================================
 RCS file: /cvsroot/emacs/emacs/src/mac.c,v
 retrieving revision 1.53
 diff -c -r1.53 mac.c
-*** mac.c	5 Jan 2006 08:14:12 -0000	1.53
---- mac.c	7 Jan 2006 11:47:30 -0000
+*** src/mac.c	5 Jan 2006 08:14:12 -0000	1.53
+--- src/mac.c	7 Jan 2006 11:47:30 -0000
 ***************
 *** 4699,4704 ****
 --- 4699,4800 ----
