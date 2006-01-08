@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.32 2006/01/03 16:44:08 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.33 2006/01/08 16:37:03 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -31,7 +31,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.32 2006/01/03 16:44:08 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.33 2006/01/08 16:37:03 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -64,6 +64,17 @@
 ;;
 ;; To enable, add this to your init file:
 ;; (one-buffer-one-frame-mode t)
+
+
+
+;; KNOWN ISSUES
+
+;; save-window-excursion does not unwind newly created frames.
+;; because we advise switch-to-buffer to open stuff in new frames,
+;; we get undesirable behavior, for example in viper-mode, where
+;; an extra frame is opened.
+
+;; it might make sense to extend save-window-excursion...
 
 
 
@@ -176,7 +187,8 @@ as an extra window."
     "\\*Custom.*"
     ".*output\\*"
     "\\*mail\\*"
-    )
+    "\\*grep\\*"   
+ )
 "Show buffers with matching names in a separate frame.
 In `one-buffer-one-frame-mode', if the name of a buffer to be shown matches
 one of the regular expressions in this list, it is shown in a separate frame.
