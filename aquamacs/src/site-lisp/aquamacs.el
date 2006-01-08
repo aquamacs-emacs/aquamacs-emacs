@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.40 2005/12/21 14:44:43 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.41 2006/01/08 17:18:30 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -696,14 +696,23 @@ un-Mac-like way when you select text and copy&paste it.")))
 
 ;; redefine this
 (defun startup-echo-area-message ()
-  (if (and (eq window-system 'mac) 
-	   (eq (key-binding [(alt \?)]) 'aquamacs-user-help))
-      "For an introduction to Aquamacs Emacs, type Apple-?."
-    (if window-system
-	"For an introduction to Aquamacs Emacs,\nchoose `Aquamacs Help' from the `Help' menu."
-	(substitute-command-keys
-     "For a introduction to Aquamacs Emacs, type \
-\\[aquamacs-user-help]."))))
+  (concat
+   (if (and (eq window-system 'mac) 
+	    (eq (key-binding [(alt \?)]) 'aquamacs-user-help))
+       "For an introduction to Aquamacs Emacs, type Apple-?." 
+     (if window-system
+	 "For an introduction to Aquamacs Emacs,\nchoose `Aquamacs Help' from the `Help' menu."
+       (substitute-command-keys
+	"For a introduction to Aquamacs Emacs, type \
+\\[aquamacs-user-help].")))
+
+   ;;The GPL stipulates that the following message is shown.
+
+   (propertize 	(substitute-command-keys "
+Copyright (C) 2006 Free Software Foundation, Inc., & D. Reitter. No Warranty. You may
+redistribute Aquamacs under the GNU General Public License. Type \\[describe-copying] to view.") 'face 'blue)))
+
+;;  (message (startup-echo-area-message))
 
 (if (string= "mac" window-system)
     (defun use-fancy-splash-screens-p () t)
