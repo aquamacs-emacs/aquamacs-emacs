@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.34 2006/01/12 11:04:35 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.35 2006/01/12 16:17:09 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -31,7 +31,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.34 2006/01/12 11:04:35 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.35 2006/01/12 16:17:09 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -196,11 +196,15 @@ This overrides entries in `obof-same-frame-regexps'.
 All other buffers open in separate frames.")
 
 (defun obof-same-frame-p (buf)
-  (let ((from-buf (and last-command-event
-		  (listp (event-start last-command-event))
-		  (window-buffer 
-		   (posn-window (event-start last-command-event))))))
-	(with-current-buffer (or from-buf (current-buffer))
+  (let* ((from-buf (and last-command-event
+		       (listp (event-start last-command-event))
+		       (clicked-in-window (posn-window 
+					   (event-start last-command-event)))
+		       (if (window-live-p clicked-in-window)
+			   (window-buffer 
+			    clicked-in-window)
+			 (current-buffer)))))
+    (with-current-buffer (or from-buf (current-buffer))
 	  (or (not one-buffer-one-frame-mode)
 	      (let ( (bufname (get-bufname buf)))
 		(if one-buffer-one-frame-force ;; set by color-theme
