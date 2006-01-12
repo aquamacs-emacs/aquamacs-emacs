@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.32 2006/01/01 17:14:55 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.33 2006/01/12 16:12:00 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -193,10 +193,8 @@ double-click in Finder."
   (if (and aquamacs-set-creator-codes-after-writing-files
 	   buffer-file-name
 	   (fboundp 'mac-set-file-creator)
-	   )
-      (mac-set-file-creator buffer-file-name)
-    )
-  )
+	   (not (file-remote-p buffer-file-name)))
+      (mac-set-file-creator buffer-file-name)))
 
 ;; (do-applescript (format "try
 ;; tell application \"Finder\"
