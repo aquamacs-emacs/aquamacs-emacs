@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.33 2006/01/08 16:37:03 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.34 2006/01/12 11:04:35 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -31,7 +31,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.33 2006/01/08 16:37:03 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.34 2006/01/12 11:04:35 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -324,7 +324,7 @@ the current window is switched to the new buffer."
     (previous-buffer)))
 
 (define-key one-buffer-one-frame-mode-map [(control x) (shift b)] 
-  'switch-buffer-here)
+  'switch-to-buffer-here)
 (define-key one-buffer-one-frame-mode-map [(control x) (control shift b)] 
   'list-buffers-here)
 (define-key one-buffer-one-frame-mode-map [(control x) (shift right)] 
@@ -428,11 +428,11 @@ the current window is switched to the new buffer."
 ; newly opened frames!
  
 
-
+      
+(when window-system
 
 ; quit-window is usually called by some modes when the user enters 'q'
-; e.g. in dired. we want to delete the window then.        
-(if window-system
+; e.g. in dired. we want to delete the window then.  
  (defadvice quit-window (around always-dedicated (&optional kill window) 
 				activate)
    (interactive "P")
@@ -448,9 +448,11 @@ the current window is switched to the new buffer."
 	 )
      ;; else 
      ad-do-it 
-     ) ))
+     )))
 
  
+
+
 ;; (defadvice pop-to-buffer (around always-dedicated (buf &rest args) 
 ;; 				 protect activate)
 ;;   ad-do-it)
