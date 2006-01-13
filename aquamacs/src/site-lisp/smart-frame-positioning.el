@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.21 2006/01/13 23:27:09 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.22 2006/01/13 23:42:01 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -339,9 +339,7 @@ Nota bene: This is not an exact science."
   :group 'frames
   
   (if smart-frame-positioning-mode
-				
-					; else
-					; turn on
+      ;; turn on
     (progn 
  
       (unless (eq frame-creation-function
@@ -376,15 +374,12 @@ Nota bene: This is not an exact science."
 	       initial-frame-alist)))
 	)
    
-	;else
- 
+    ;; else (turning off)
       (setq frame-creation-function 
 	    smart-frame-positioning-old-frame-creation-function)
       (remove-hook 'delete-frame-functions
-		   'store-frame-position-for-buffer)
-      )
-  smart-frame-positioning-mode 
-  )
+		   'store-frame-position-for-buffer))
+  smart-frame-positioning-mode)
         
 (defvar smart-frame-prior-positions '()
   "Association list with buffer names and frame positions / sizes, so these
@@ -408,6 +403,15 @@ can be remembered. This is part of Aquamacs Emacs."
 		      (cons 'height (frame-parameter f 'height))) 
 		    'smart-frame-prior-positions)))
 
+(defun assq-string-equal (key alist)
+  (catch 'break
+    (mapc 
+     (lambda (element)
+       (if (string-equal (car-safe element) key)
+	   (throw 'break element)))
+     alist)
+    nil ;; not found
+    ))
 
 (defun get-frame-position-assigned-to-buffer-name ()
       (cdr (assq-string-equal (buffer-name) smart-frame-prior-positions)))
