@@ -8,7 +8,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-frame-setup.el,v 1.17 2006/01/03 09:53:51 davidswelt Exp $
+;; Last change: $Id: aquamacs-frame-setup.el,v 1.18 2006/01/13 23:27:26 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -36,7 +36,16 @@
 (provide 'aquamacs-frame-setup) ;; added by dr. 12/2004
  
  (require 'fit-frame)
- (require 'aquamacs-mac-fontsets)
+
+;; allow autofitting using smart-frame-positioning
+(defvar smart-frame-positioning-hook nil)
+(add-hook 'smart-frame-positioning-hook
+	  (lambda (f)
+	    (if (frame-parameter f 'fit-frame )
+		(when (fboundp 'fit-frame-single-window-forced) 
+		  (progn (fit-frame-single-window-forced f))))))
+
+(require 'aquamacs-mac-fontsets)
 
 ;(defvar 1on1-default-frame-font "fontset-mac")
 ;(defvar 1on1-special-display-frame-font "fontset-mac")

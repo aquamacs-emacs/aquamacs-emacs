@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.24 2005/12/21 12:25:48 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.25 2006/01/13 23:26:28 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -229,9 +229,7 @@ FORCE is non-nil). Use theme of major mode FOR-MODE if given."
 	  (cdr (assq 'default aquamacs-mode-specific-default-themes))
 	  ;(progn (print "nothing found") nil)
 	  )
-    nil
-    )
-)
+    nil))
 
 (defun set-mode-theme-after-change-major-mode ()       			      
   ;; delete the configuration cache parameter
@@ -773,7 +771,14 @@ for all frames with the current major-mode."
     ;; in color-theme
     (color-theme-select)
     )
- 
   )
+
+
+(defvar smart-frame-positioning-hook nil)
+(add-hook 'smart-frame-positioning-hook
+	  (lambda (f)
+	    (modify-frame-parameters f
+				     (get-mode-specific-theme major-mode))))
+
 
 (provide 'aquamacs-mode-specific-themes)
