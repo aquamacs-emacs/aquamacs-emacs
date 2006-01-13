@@ -1,26 +1,10 @@
 ;;; Smart-frame-positioning.el 
-
-;; Smart Frame Positioning Mode: Aquamacs frames (because there are
-;;  usually many) are opened in useful positions on the screen, so they
-;;  don't overlap. Aquamacs associates positions with buffer names, so
-;;  that frames displaying the same buffer (and file name) are always
-;;  opened in the same position.
-
-;; to activate:
-;; (require 'smart-frame-positioning)
-;; (smart-frame-positioning-mode t)
-;;
-;; To Do:
-;; The origin of the display is not necessarily 0. 
-;; How to check?
-;; 
- 
 ;; Emacs Version: 22.0 
 ;; Author: David Reitter, david.reitter@gmail.com
 ;; Maintainer: David Reitter
-;; Keywords: aquamacs
+;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.20 2005/12/21 12:26:34 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.21 2006/01/13 23:27:09 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -42,51 +26,94 @@
  
 ;; Copyright (C) 2005, David Reitter
 
+;; Smart Frame Positioning Mode: Aquamacs frames (because there are
+;;  usually many) are opened in useful positions on the screen, so they
+;;  don't overlap. Aquamacs associates positions with buffer names, so
+;;  that frames displaying the same buffer (and file name) are always
+;;  opened in the same position.
 
+;; to activate:
+;; (require 'smart-frame-positioning)
+;; (smart-frame-positioning-mode t)
+;;
+;; To Do:
+
+;; Mac specific: On OS X, multiple screens are currently handled
+;; crudely.  The function `mac-get-available-screen-bounds' returns
+;; the available screen coordinates for the main screen, and the
+;; position of the current window in relation to that one is only
+;; guessed.  Via GetDeviceList and GetNextDevice (Quickdraw), all
+;; screens can be retrieved.  A better implementation could be done
+;; once the Cocoa port is available, so we're not going to invest much
+;; time in the Carbon portion here.
+
+;; This should be well-behaved in dual-screen setups, with the exception
+;; that all screens are assumed to be of the same size.
+;; May produce undesirable results on certain triple-screen setups.
+
+
+(defvar smart-frame-positioning-hook nil
+"Functions to be run before frame creation.
+These functions are run in `smart-frame-positioning-mode after
+a frame is created and before it is made visible. 
+The functions should take one argument, that is, the new frame.
+The functions may alter the frame parameters. 
+After return from these functions, the above mode will adapt
+the frame position of the frame. Height and width, if set 
+by any of the hook functions, will normally be preserved.")
 
 (defun smart-position-and-create-frame (&optional parameters) 
- 
-  (let* ((hasbeenfitted)
-	 
+ "Create a frame in a useful screen position.
+May be used in `frame-creation-function'. 
+`smart-frame-positioning-mode' should be used as the interface
+to this function."
+  (let* ((newpos)
+	 (hasbeenfitted)
 	 (oldframe (selected-frame))
 	 (newparms (append (list '(visibility . nil)) 
-			   (get-mode-specific-theme major-mode)
-			   parameters
-			   )
-		   )
+			   
+			   parameters))
 	 (f
-	  (funcall smart-frame-positioning-old-frame-creation-function 
-		   newparms
-		   )
-	  )
-	 )
-     			; first position the frame  
-    (if (cdr (assq 'fit-frame newparms)) 
-	(when (fboundp 'fit-frame-single-window-forced) 
-	  (progn (fit-frame-single-window-forced f)
-		 (setq hasbeenfitted t)
-		 )
-	  )
-      )
+	  (funcall smart-frame-positioning-old-frame-creation-function
+		   newparms ) ) )
+     			; first position the frame 
+    ;; the frame creation function doesn't set all parameters
+    ;; set the remaining ones manually
+    ;; bug reported to pretest bug list 13/Jan/2006
+
+    (mapc (lambda (x)
+	    (assq-delete-all (car x) newparms))
+		 (frame-parameters f))
+    ;; set remaining parameters
+    (modify-frame-parameters f newparms)
   
+    (let ((h (frame-parameter f 'height))
+	  (w (frame-parameter f 'width)))
+      (run-hook-with-args 'smart-frame-positioning-hook f)
+      (setq hasbeenfitted ; have width/height changed?
+	    (or (not (equal w (frame-parameter f 'height)))
+	      (not (equal h (frame-parameter f 'width))))))
+	   
     (setq newpos (find-good-frame-position oldframe f)) 
     (if hasbeenfitted
-	(setq newpos (assq-delete-all 'height (assq-delete-all 'width newpos)))
+	;; delete height and width - these parameters
+	;; are preserved and will stay untouched
+	;; in case the hook changed them.
+	;; (unless exceeding screen dimensions)
+	(setq newpos 
+	      (assq-delete-all 'height 
+			       (assq-delete-all 'width newpos)))
       )
     ; make sure we don't make it visible prematurely
     (setq newpos (assq-delete-all 'visibility newpos))
     (modify-frame-parameters f newpos)
-    ;; avoid the Dock (important for preassigned positions)
+    ;; stay within the available screen
     (smart-move-frame-inside-screen f)
     (make-frame-visible f)
-    f					; return the frame
-    )
-  
-  )
+    f))	; return the frame
 ; modified fit-frame -- don't call show-frame
 ; make sure the frame is not shown prematurely
 
-; (setq inhibit-fit-frame nil)
  
 (defcustom smart-frame-positioning-enforce nil
   "If true and if in smart-frame-positioning-mode, ignore any user-supplied
@@ -124,13 +151,15 @@ pixels apart if possible."
 (defun smart-fp--char-to-pixel-height (chars frame)
         (* chars (frame-char-height frame)))
 (defun smart-fp--pixel-to-char-width (pixels frame &optional round-to-lower)
-       (round (- (/ pixels (frame-char-width frame)) (if round-to-lower 0 .5))))
+       (round (- (/ pixels (frame-char-width frame)) 
+		 (if round-to-lower 0 .5))))
 (defun smart-fp--pixel-to-char-height (pixels frame &optional round-to-lower)
-       (round (- (/ pixels (frame-char-height frame)) (if round-to-lower 0 .5))))
+       (round (- (/ pixels (frame-char-height frame)) 
+		 (if round-to-lower 0 .5))))
 
 
 ;; Unit test  / check requirements
-(require 'aquamacs-tools)
+; (require 'aquamacs-tools)
 (aquamacs-require 
  '(fboundp 'mac-display-available-pixel-bounds)
 )
@@ -138,10 +167,7 @@ pixels apart if possible."
 ;(setq  smart-frame-positioning-enforce nil)
 ; (find-good-frame-position default-frame-alist)
 (defun find-good-frame-position ( old-frame new-frame )
-  ;; next-frame-alist is optional
-  ;; we assume default-frame-alist if it is not given
- 
-
+"Finds a good frame position for a new frame based on the old one's position."
   (let ((new-frame-parameters))
     (if (and (not smart-frame-positioning-enforce) 
 	     (cdr (assq 'user-position (frame-parameters new-frame))))
@@ -162,6 +188,8 @@ pixels apart if possible."
 	       (max-y (nth 3 rect))
 	       (preassigned (get-frame-position-assigned-to-buffer-name)))
 	
+
+
 	(or preassigned ;; if preassigned, return that.
 	    
 	  (let
@@ -178,6 +206,32 @@ pixels apart if possible."
 	       (margin smart-frame-positioning-margin)
        
 	       ) 
+
+	    ;; in case the frame is obviously created
+	    ;; on another screen
+	    ;; these ought to use the full screen dimensions, not
+	    ;; the available ones. However, since we don't know the dimensions
+	    ;; of the other screen (we only know the main ones), these aren't
+	    ;; quite clear
+	    (when (< (+ x w) min-x) ; to the left
+	      (let ((new-max-x min-x))
+		(setq min-x (- min-x max-x))
+		(setq max-x new-max-x)))
+	    (when (> x max-x) ;; to the right
+	      ;; there seems to be a screen right to the Dock screen
+	      ;; try to guess the size
+	      (setq min-x max-x) 
+	      (setq max-x (* 2 max-x))) ;; crude assumption - screen size unknown
+	    (when (< (+ y h) min-y) ; above
+	      (let ((new-max-y min-y))
+		(setq min-y (- min-y max-y))
+		(setq max-y new-max-y)))
+	    (when (> y max-y) ;; below
+	      (setq min-y max-y)
+	      (setq max-y (* 2 max-y)))
+	    
+
+
 	    ;; return:
 	    (unless (frame-visible-p old-frame)
 	      ;; if we're given an invisible frame (probably no
@@ -267,7 +321,7 @@ pixels apart if possible."
 	      (assq-set 'height (smart-fp--pixel-to-char-height
 				 next-h new-frame) 'new-frame-parameters)
 
-	      new-frame-parameters ; return this 
+	      (smart-fp--convert-negative-ordinates new-frame-parameters) ; return this 
 	      )))))))
 
 (defvar smart-frame-positioning-old-frame-creation-function 
@@ -338,7 +392,7 @@ can be remembered. This is part of Aquamacs Emacs."
 )
  
 (defun store-frame-position-for-buffer (f)
-  "Store position of frame F associated with current buffer for later retrieval. (Part of Aquamacs)"
+  "Store position of frame F associated with current buffer for later retrieval."
   ;; (setq smart-frame-prior-positions nil)
   ;; don't store too many entries here
   (when buffer-file-number ;;; don't save position if 'untitled'
@@ -391,16 +445,42 @@ on the main screen, i.e. where the menu is."
 		     (smart-fp--char-to-pixel-height
 				    next-h
 				    frame))))
+    (when (< (+ next-x next-w) min-x) ; to the left
+      (let ((new-max-x min-x))
+	(setq min-x (- min-x max-x))
+	(setq max-x new-max-x)))
+    (when (> next-x max-x)
+      ;; there seems to be a screen right to the Dock screen
+      ;; try to guess the size
+      (setq min-x max-x) 
+      (setq max-x (* 2 max-x)) ;; crude assumption - screen size unknown
+      )
+    (when (< (+ next-y next-h) min-y) ; above
+      (let ((new-max-y min-y))
+	(setq min-y (- min-y max-y))
+	(setq max-y new-max-y)))
+    (when (> next-y max-y) ; below
+      (setq min-y max-y)
+      (setq max-y (* 2 max-y)))
+
+
     ;; if frame is entirely on a different screen
     (unless
 	(or (and (< next-x 0) (< next-x2 0) (>= min-x 0)) ; left of dock
 	    (and (>= next-x 0) (>= next-x2 0) (< min-x 0)) ; right of dock
 	    (and (< next-y 0) (< next-y2 0) (>= min-y 0)) ; above dock scr.
-	    (and (>= next-y 0) (>= next-y2 0) (< min-y 0))) ; below dock scr.
-
+	    (and (>= next-y 0) (>= next-y2 0) (< min-y 0)) ; below dock scr.
+	;    (> next-x max-x) ;; on screen right of dock screen
+	 ;   (> next-y max-y) ;; on screen below dock screen
+	    )
     (modify-frame-parameters 
      frame
-     (let* ((next-x (max min-x next-x))
+     (let* ((next-x (max min-x 
+			 (min
+			  (- max-x (smart-fp--char-to-pixel-width
+				    next-w
+				    frame))
+			  next-x)))
 	    (next-y (max min-y 
 			 (min 
 			   (- max-y (smart-fp--char-to-pixel-height
@@ -420,20 +500,29 @@ on the main screen, i.e. where the menu is."
 			   next-h
 			   frame))
 		     frame 'round-lower)))
-       `(
-	 (left .
+       `((left .
 	       ,next-x)
 	 (top .
 	      ,next-y)
 	 (width .
 		,next-w)   
 	 (height .
-		 ,next-h)
-	    
-	 ))))))
+		 ,next-h)))))))
  
 	 
     
+(defun smart-fp--convert-negative-ordinates (parms)
+  "Converts screen ordinates of the form -x to a list (+ -x)."
+  
+  (mapcar (lambda (o)
+	    (if (and (integerp (cdr-safe o))
+		     (< (cdr o) 0))
+
+		`(,(car o) . (+ ,(cdr o)))
+		; else
+		o))
+	  parms))
+
 
 
 (provide 'smart-frame-positioning)
