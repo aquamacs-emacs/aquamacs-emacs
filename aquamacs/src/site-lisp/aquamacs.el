@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.41 2006/01/08 17:18:30 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.42 2006/01/13 15:40:35 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -694,8 +694,16 @@ un-Mac-like way when you select text and copy&paste it.")))
 (setq command-line-args  (append command-line-args (list "--no-splash")))
 (setq inhibit-startup-message t)
 
+(defun aquamacs-wrap-string (str width)
+  (with-temp-buffer 
+    (insert str)
+    (let ((fill-column width))
+      (fill-region (point-min) (point-max)))
+    (buffer-string)))
+ 
 ;; redefine this
 (defun startup-echo-area-message ()
+  (aquamacs-wrap-string
   (concat
    (if (and (eq window-system 'mac) 
 	    (eq (key-binding [(alt \?)]) 'aquamacs-user-help))
@@ -705,12 +713,13 @@ un-Mac-like way when you select text and copy&paste it.")))
        (substitute-command-keys
 	"For a introduction to Aquamacs Emacs, type \
 \\[aquamacs-user-help].")))
-
    ;;The GPL stipulates that the following message is shown.
 
    (propertize 	(substitute-command-keys "
 Copyright (C) 2006 Free Software Foundation, Inc., & D. Reitter. No Warranty. You may
-redistribute Aquamacs under the GNU General Public License. Type \\[describe-copying] to view.") 'face 'blue)))
+redistribute Aquamacs under the GNU General Public License. Type \\[describe-copying] to view.") 'face 'blue)) 
+  (frame-parameter nil 'width) ;; let's just hope that this is the width of the echo area
+))
 
 ;;  (message (startup-echo-area-message))
 
