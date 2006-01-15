@@ -88,13 +88,13 @@ diff -c -r1.53 mac.c
 + 	CFStringCreateWithCString(NULL, SDATA(URLstring),
 + 				  kCFStringEncodingASCII);
 + 
-+       CFStringRef targetUrlCfsEscaped = 
++       /* CFStringRef targetUrlCfsEscaped = 
 + 	CFURLCreateStringByAddingPercentEscapes(NULL, targetUrlCfs, 
 + 						NULL, NULL, 
 + 						kCFStringEncodingUTF8);
-+ 
++         the URL must already be encoded. */
 +       CFURLRef targetUrlRef = 
-+ 	CFURLCreateWithString(NULL, targetUrlCfsEscaped, NULL);
++ 	CFURLCreateWithString(NULL, targetUrlCfs, NULL);
 + 	
 +       if (targetUrlRef) 
 + 	{
@@ -114,7 +114,7 @@ diff -c -r1.53 mac.c
 + 	  CFRelease(targetUrlRef);
 + 	}
 +       CFRelease(targetUrlCfs);
-+       CFRelease(targetUrlCfsEscaped);
++       /* CFRelease(targetUrlCfsEscaped); */
 +       UNBLOCK_INPUT;
 + 
 +       if (! targetUrlRef) 
