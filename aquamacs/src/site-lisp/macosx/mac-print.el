@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-print.el,v 1.8 2005/11/09 20:30:19 davidswelt Exp $
+;; Last change: $Id: mac-print.el,v 1.9 2006/01/16 19:16:53 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -35,8 +35,12 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, David Reitter
-
+;; Copyright (C) 2005, 2006, David Reitter
+ 
+(defcustom mac-print-font-size-scaling-factor 0.6
+  "The factor by which fonts are rescaled during PDF export and printing."
+  :type 'float
+  :group 'print)
 
 (defun aquamacs-delete-temp-files ()
   (shell-command "rm -f /tmp/Aquamacs\\ Printing\\ * 2>/dev/null" 'shut-up))
@@ -111,7 +115,11 @@ in PDF format.
   (setq target-file (expand-file-name target-file))
    
   (let ((html-to-pdf "/System/Library/Printers/Libraries/./convert")
-	(html-file (make-temp-file "aquamacs-temp-" nil ".html")))
+	(html-file (make-temp-file "aquamacs-temp-" nil ".html"))
+	(htmlize-font-size-scaling-factor 
+	 (or 
+	  mac-print-font-size-scaling-factor
+	  htmlize-font-size-scaling-factor)))
     (export-to-html html-file)
     (message
      (with-temp-buffer
