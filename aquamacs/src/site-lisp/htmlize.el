@@ -176,6 +176,13 @@ htmlize-after-hook."
   :type 'boolean
   :group 'htmlize)
 
+(defcustom htmlize-font-size-scaling-factor 0.83
+  "Contains the factor by which the fonts are rescaled during `htmlize'.
+Text is often displayed in a slightly smaller font in most browsers
+(depending on the settings). A scaling factor can, therefore, be assumed."
+  :type 'float
+  :group 'htmlize)
+
 (defcustom htmlize-html-charset nil
   "*The charset declared by the resulting HTML documents.
 When non-nil, causes htmlize to insert the following in the HEAD section
@@ -819,6 +826,8 @@ If no rgb.txt file is found, return nil."
 
 (defun htmlize-face-emacs21-attr (fstruct attr value)
   ;; For ATTR and VALUE, set the equivalent value in FSTRUCT.
+
+
   (case attr
     (:family
      (setf (htmlize-fstruct-family fstruct) 
@@ -829,7 +838,9 @@ If no rgb.txt file is found, return nil."
      ;; it looks like "pt" in Emacs and "pt" in HTML mean different
      ;; things. In particular since fonts appear wider in a browser,
      ;; we should aim for a slightly smaller target font.
-     (setf (htmlize-fstruct-size fstruct)  (/ value 12))) 
+ 
+     (setf (htmlize-fstruct-size fstruct)  
+	   (round (* value (/ htmlize-font-size-scaling-factor 10)))) )
     (:foreground
      (setf (htmlize-fstruct-foreground fstruct) (htmlize-color-to-rgb value)))
     (:background
