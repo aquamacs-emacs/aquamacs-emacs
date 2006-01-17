@@ -35,18 +35,20 @@ for the key. Example:
 	       ("\M-7" . "|")
 	       ("\M-8" . "{")
 	       ("\M-9" . "}")
+	       ("\M-n" . "~")
 	       ("\M-e" . ,(make-char 'latin-iso8859-15 164)) ;; euro symbol
 	       ))
     (french . (("\M-`" . "@")
-	       ("\M-$" . "\223")
+	       ("\M-$" . ,(make-char 'latin-iso8859-15 164)) 
 	       ("\M-/" . "\\")
 	       ("\M-£" . "#")
 	       ("\M-(" . "{")
 	       ("\M-5" . "[")
 	       ("\M-)" . "}")
 	       ("\M-°" . "]")))
-    (italian . ( ; ("\M-§" . "@")  
-		 ;; ([(meta ¤)]  . "@") ; wont work either
+    (italian . ( ("\M-§" . "@")  
+		 
+		("\M-¤"  . "@") ; wont work either
 		("\M-(" . "{")
 		("\M-4" . "[")
 		("\M-)" . "}")
