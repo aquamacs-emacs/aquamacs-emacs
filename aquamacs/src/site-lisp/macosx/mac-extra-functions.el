@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.33 2006/01/12 16:12:00 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.34 2006/01/19 22:52:02 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -200,7 +200,7 @@ double-click in Finder."
 ;; tell application \"Finder\"
 ;; set the creator type of POSIX file \"%s\" to \"EMAx\"
 ;; end tell
-;; end try" buffer-file-name)
+;; end try" buffer-file-name)]
 
 
 ;; copied here from osx-key-mode.el by Seiji Zenitani
@@ -285,17 +285,20 @@ specified in `shell-file-name'."
       
       (let ((shell-login-switch 
 	     (or shell-login-switch 
-		 (if (string-match ".*/\\(ba\\|tc\\|z\\)sh" shell-file-name)
+		 (if (string-match ".*/\\(ba\\|z\\)sh" shell-file-name)
 		     "-l"
+		   (if (string-match ".*/\\tcsh" shell-file-name)
+		     ""
 		   (if (string-match ".*/ksh" shell-file-name)
 		       "" ;; works for ksh
 		     (message "Could not retrieve login shell environment with login shell: %s" shell-file-name)
 		   ;; won't work for csh, because it doesn't take -l -c ...
-		   )))))
+		   ))))))
 		    
-	(call-process shell-file-name nil
-		      t
-		      nil shell-login-switch shell-command-switch "printenv"))
+	(apply 'call-process shell-file-name nil
+	       t
+	       (flatten (list shell-login-switch 
+			      shell-command-switch "printenv"))))
       (goto-char (point-min))
       (while (re-search-forward "^[A-Za-z_0-9]+=()\s*[^\x]*?
 \s*}\s*$" nil t)
