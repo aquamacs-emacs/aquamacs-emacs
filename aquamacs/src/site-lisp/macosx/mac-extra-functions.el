@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.34 2006/01/19 22:52:02 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.35 2006/01/20 11:41:31 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -273,6 +273,18 @@ If nil, a switch is automatically chosen depending on
 `shell-file-name'.
 This is relevant only for `mac-read-environment-vars-from-shell'.")
 
+(defun aq-flat-concat (list)
+  "Produces a list of all non-nil elements of list."
+  (let ((c (car-safe list))
+	(d (cdr-safe list)))
+    (if c
+	(if d
+	    (cons c (aq-flat-concat d))
+	  (list c))
+      (if d
+	  (aq-flat-concat d)
+	nil))))
+ 
 (defun mac-read-environment-vars-from-shell ()
 "Import the environment from the system's default login shell
 specified in `shell-file-name'."
@@ -297,8 +309,9 @@ specified in `shell-file-name'."
 		    
 	(apply 'call-process shell-file-name nil
 	       t
-	       (flatten (list shell-login-switch 
-			      shell-command-switch "printenv"))))
+	       (aq-flat-concat (list shell-login-switch
+			       shell-command-switch
+			       "printenv"))))
       (goto-char (point-min))
       (while (re-search-forward "^[A-Za-z_0-9]+=()\s*[^\x]*?
 \s*}\s*$" nil t)
