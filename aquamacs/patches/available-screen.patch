@@ -20,14 +20,14 @@ diff -c -r1.63 macfns.c
 +   (void)
 + {
 +   Rect rect;
-+   Lisb_Object rv = Qnil;
++   Lisp_Object rv = Qnil;
 +   GDHandle main_device_handle = LMGetMainDevice();
 +   BLOCK_INPUT;   
 +   if (main_device_handle && 
-+       GetAvailableWindowPositioningBounds(, &rect)
++       GetAvailableWindowPositioningBounds(rv, &rect)
 +       == noErr) {
 + 
-+   Lisp_Object rv = 
++   rv = 
 +     Fcons( make_number (rect.left),
 + 	   Fcons( make_number (rect.top),
 + 		  Fcons( make_number (rect.right),
