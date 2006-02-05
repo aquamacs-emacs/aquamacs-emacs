@@ -7,7 +7,7 @@ diff -c -r1.63 macfns.c
 --- src/macfns.c	17 Jul 2005 20:28:16 -0000
 ***************
 *** 3028,3033 ****
---- 3029,3062 ----
+--- 3029,3064 ----
     return make_number ((int) (dpyinfo->width * 25.4 / dpyinfo->resx));
   }
   
@@ -21,8 +21,10 @@ diff -c -r1.63 macfns.c
 + {
 +   Rect rect;
 +   Lisb_Object rv = Qnil;
++   GDHandle main_device_handle = LMGetMainDevice();
 +   BLOCK_INPUT;   
-+   if (GetAvailableWindowPositioningBounds(LMGetMainDevice(), &rect)
++   if (main_device_handle && 
++       GetAvailableWindowPositioningBounds(, &rect)
 +       == noErr) {
 + 
 +   Lisp_Object rv = 
