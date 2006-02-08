@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-mode-defaults.el,v 1.12 2005/12/21 16:18:05 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-defaults.el,v 1.13 2006/02/08 20:41:39 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -104,9 +104,7 @@
 				  "/site-lisp/edit-modes/ess-mode/etc"
 				  ))
 
-(add-to-list 'Info-default-directory-list
-	     (concat (mac-resources-path)
-		     "/site-lisp/edit-modes/info"))
+
  
 (autoload 'html-helper-mode "html-helper-mode" 
   "major mode for editing HTML source." t)
