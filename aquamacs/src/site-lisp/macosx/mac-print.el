@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-print.el,v 1.9 2006/01/16 19:16:53 davidswelt Exp $
+;; Last change: $Id: mac-print.el,v 1.10 2006/02/08 20:48:38 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -37,7 +37,7 @@
  
 ;; Copyright (C) 2005, 2006, David Reitter
  
-(defcustom mac-print-font-size-scaling-factor 0.6
+(defcustom mac-print-font-size-scaling-factor 0.5
   "The factor by which fonts are rescaled during PDF export and printing."
   :type 'float
   :group 'print)
@@ -114,7 +114,7 @@ in PDF format.
       (error "Must give a full file name."))
   (setq target-file (expand-file-name target-file))
    
-  (let ((html-to-pdf "/System/Library/Printers/Libraries/./convert")
+  (let ((html-to-pdf "/System/Library/Printers/Libraries/convert")
 	(html-file (make-temp-file "aquamacs-temp-" nil ".html"))
 	(htmlize-font-size-scaling-factor 
 	 (or 
@@ -123,10 +123,13 @@ in PDF format.
     (export-to-html html-file)
     (message
      (with-temp-buffer
-       (shell-command (concat html-to-pdf " -f \"" html-file "\" -o \"" target-file "\" -j application/pdf ; rm -f " html-file) 'output-here)
+       (call-process html-to-pdf nil t nil  
+		      "-f" html-file 
+		      "-o" target-file
+		      "-j" "application/pdf"
+		      "-D")
        (buffer-string))))
   target-file)
-
 
 (defun export-to-html (target-file)
   "Saves the current buffer (or region, if mark is active) to a file 
