@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.28 2006/02/08 16:18:44 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.29 2006/02/08 20:41:53 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -574,10 +574,10 @@ string. Parameters set here override parameters set in
 `aquamacs-mode-specific-default-themes'.
  
 Note that when a major mode is changed, frames are automatically
-parametrized. Parameters in `default-frame-alist' and 
-`special-display-frame-alist' serve as defaults which are 
-overruled by a setting in this list if there is an entry
-for the current major mode. To turn off this behavior, see
+parametrized. Parameters in `default-frame-alist' and
+`special-display-frame-alist' serve as defaults which are
+overruled by a setting in this list if there is an entry for the
+current major mode. To turn off this behavior, see
 `aquamacs-auto-frame-parameters-flag'.
 "
 ;; To Do: add a setter function maybe for menu?
@@ -623,17 +623,17 @@ for the current major mode. To turn off this behavior, see
   )
 
 (defcustom aquamacs-auto-frame-parameters-flag t
-    "When non-nil, frames are automatically
-parametrized when a major mode is changed. 
-Parameters in ``default-frame-alist'' and 
-``special-display-frame-alist'' serve as defaults which are 
-overruled by a setting in ``aquamacs-mode-specific-default-themes'' 
-if there is an entry for the current major mode.
+    "When non-nil, frames are automatically parametrized when a
+major mode is changed.  Parameters in ``default-frame-alist'' and
+``special-display-frame-alist'' serve as defaults which are
+overruled by a setting in
+``aquamacs-mode-specific-default-themes'' if there is an entry
+for the current major mode.
 
 Frames are only configured in this way if there is only one
 window visible.  Otherwise, the frame parameters are left as they
 are. That means that additional, temporary windows (such as for
-the *Completions* buffer) will not alter the style of the frame. 
+the *Completions* buffer) will not alter the style of the frame.
 
 Note that `aquamacs-mode-specific-default-themes' has a default
 configuration with commonly used major modes."
@@ -740,7 +740,8 @@ for all frames with the current major-mode."
      aquamacs-auto-frame-parameters-flag
      "Frame Appearance Themes"
      "Frame Appearance Themes %s"
-     "Always set the frame parameters according to major-mode."))
+     "adapt the frame parameters to the major-mode 
+(see `aquamacs-auto-frame-parameters-flag')"))
       
 
   (define-key-after menu-bar-options-menu [aquamacs-frame-themes]
