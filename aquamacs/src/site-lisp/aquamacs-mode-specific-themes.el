@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.25 2006/01/13 23:26:28 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.26 2006/02/08 14:44:26 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -203,7 +203,11 @@ FORCE is non-nil). Use theme of major mode FOR-MODE if given."
 				     buffer) 
 			       theme))
 			(let ((color-theme-target-frame frame))
-			  (color-theme-install color-theme))
+			  (if (and (functionp (car-safe color-theme))
+				   (memq (car-safe color-theme) color-themes)
+				   (not (cdr-safe color-theme)))
+			      (funcall (car color-theme))  ;; just install the color theme directly
+			    (color-theme-install color-theme)))
 			(if (and (fboundp 'smart-move-frame-inside-screen)
 			       (or (not (equal old-frame-pixel-width
 					       (frame-pixel-width frame)))
@@ -313,19 +317,20 @@ to be appropriate for its first buffer. (Aquamacs)"
   t
   ) 
 (defun aquamacs-get-theme-snapshot ()
-
-  ;; (set-difference (frame-parameters (selected-frame))
-  ;; 			      (append '((user-position) (visibility) (top) (left) (width) (height)) 
-  ;; 				      frame-parameters-to-exclude)
-  ;; 			      :key 'car)
+ 
   (list 
-   (cons 'color-theme `(color-theme-snapshot
-			;; alist of frame parameters
-			,(color-theme-get-params)
-			;; alist of variables
-			,(color-theme-get-vars)
-			;; remaining elements of snapshot: face specs
-			,@(color-theme-get-face-definitions)))
+   (cons 'color-theme (let ((theme 
+			     `(color-theme-snapshot
+			       ;; alist of frame parameters
+			       ,(color-theme-get-params)
+			       ;; alist of variables
+			       ,(color-theme-get-vars)
+			       ;; remaining elements of snapshot: face specs
+			       ,@(color-theme-get-face-definitions))))
+			;; find out if this is any different from the theme that was set  
+			;; - not implemented -
+			theme
+			))
    (cons 'font (frame-parameter nil 'font))
    (cons 'tool-bar-lines (frame-parameter nil 'tool-bar-lines))
    )
@@ -357,6 +362,25 @@ to be appropriate for its first buffer. (Aquamacs)"
   "Activate current frame settings (theme) as default. 
 Sets default-frame-alist. (Aquamacs)"
   (interactive)
+;; maybe delete mode-specific frames?
+  
+  (when 
+      (let ((existing-themes  aquamacs-mode-specific-default-themes))
+	(setq existing-themes (assq-delete-all 'default existing-themes)) 
+	(and existing-themes
+	     (yes-or-no-p 
+	      (format "Mode-specific themes are in-place for the following modes: %s. Do you want to delete all of them so the default theme is applied to frames with buffers in those modes?"
+		      (apply 'concat  
+			     (let ((l (mapcar (lambda (x)
+						(concat
+						 (symbol-name (car x)) ", ")
+						)
+					      existing-themes)))
+			       (if (nthcdr 5 l)
+				   (setcdr (nthcdr 5 l) (list "(...)")))
+			       l))))))
+    (aquamacs-delete-themes)
+    (sleep-for 1)) 
   (aquamacs-set-theme-as-mode-default 'default))
 
 (defun aquamacs-set-theme-as-mode-default (&optional mode) 
@@ -406,6 +430,14 @@ Sets default-frame-alist. (Aquamacs)"
 
 (defun aquamacs-delete-themes ()
   "Deletes all themes (mode-specific and the default theme)"
+  (interactive)
+  (customize-set-variable 'aquamacs-mode-specific-default-themes nil)
+  (customize-set-variable 'aquamacs-buffer-specific-frame-themes nil)
+  (message "All themes deleted. Save Options to store setting.")
+  )
+
+(defun aquamacs-reset-themes ()
+  "Resets all themes (mode-specific and the default theme)"
   (interactive)
   (set-to-custom-standard-value 'aquamacs-mode-specific-default-themes)
   (set-to-custom-standard-value 'aquamacs-buffer-specific-frame-themes)
@@ -634,8 +666,8 @@ Frame Appearance Themes to make the setting stick.")
 			     (assq (aquamacs-updated-major-mode) 
 				   aquamacs-mode-specific-default-themes))
 		:help "Removes a mode-specific theme."))
-  (define-key-after aquamacs-frame-theme-menu [menu-delete-themes]
-    '(menu-item  "Reset All Themes"     aquamacs-delete-themes 
+  (define-key-after aquamacs-frame-theme-menu [menu-reset-themes]
+    '(menu-item  "Reset All Themes"     aquamacs-reset-themes 
 		 :help "Resets all themes to the default."
 		 :enable aquamacs-auto-frame-parameters-flag))
 
