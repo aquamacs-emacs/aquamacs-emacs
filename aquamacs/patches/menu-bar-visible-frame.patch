@@ -34,33 +34,6 @@ diff -c -r1.278 menu-bar.el
   (define-key menu-bar-file-menu [dired]
     '(menu-item "Open Directory..." dired
 ***************
-*** 192,202 ****
-  	      :help "Read a directory, to operate on its files"))
-  (define-key menu-bar-file-menu [open-file]
-    '(menu-item "Open File..." find-file-existing
-! 	      :enable (menu-bar-non-minibuffer-window-p)
-  	      :help "Read an existing file into an Emacs buffer"))
-  (define-key menu-bar-file-menu [new-file]
-    '(menu-item "Visit New File..." find-file
-! 	      :enable (menu-bar-non-minibuffer-window-p)
-  	      :help "Specify a new file's name, to edit the file"))
-  
-  
---- 194,206 ----
-  	      :help "Read a directory, to operate on its files"))
-  (define-key menu-bar-file-menu [open-file]
-    '(menu-item "Open File..." find-file-existing
-! 	      :enable (or enable-recursive-minibuffers
-! 		       (menu-bar-non-minibuffer-window-p))
-  	      :help "Read an existing file into an Emacs buffer"))
-  (define-key menu-bar-file-menu [new-file]
-    '(menu-item "Visit New File..." find-file
-! 	      :enable (or enable-recursive-minibuffers
-! 			  (menu-bar-non-minibuffer-window-p))
-  	      :help "Specify a new file's name, to edit the file"))
-  
-  
-***************
 *** 359,364 ****
 --- 363,369 ----
   ;;; Assemble the top-level Edit menu items.
