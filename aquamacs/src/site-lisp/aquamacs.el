@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.42 2006/01/13 15:40:35 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.43 2006/02/08 20:42:13 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -46,7 +46,7 @@ It is guaranteed that iff of two Aquamacs releases A and B,
 B is newer than A, then aquamacs-version-id for B is higher 
 than aquamacs-version-id for A.")
 
-(defvar aquamacs-minor-version ""
+(defvar aquamacs-minor-version "CVS"
 "Version code for minor maintenance releases.
 Changes in this code are ignored during the online version check.")
 
@@ -478,7 +478,11 @@ Use this argument instead of explicitly setting `view-exit-action'."
 
 					; and turn on smart frame positioning
 
+  
   (require 'smart-frame-positioning)
+  
+  (fset 'winmgr-display-available-pixel-bounds
+	'mac-display-available-pixel-bounds)
 
   (aquamacs-set-defaults 
    '((smart-frame-positioning-mode t)
