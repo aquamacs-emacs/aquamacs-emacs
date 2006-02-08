@@ -3,7 +3,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: mac bug report
  
-;; Last change: $Id: aquamacs-bug.el,v 1.9 2005/12/06 12:15:42 davidswelt Exp $
+;; Last change: $Id: aquamacs-bug.el,v 1.10 2006/02/08 20:41:10 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -35,11 +35,51 @@
 
 ;; Request by RMS 06/2005: do not report Aquamacs bugs 
 ;; to the Emacs mailing lists.
-
-(aquamacs-set-defaults 
- '(
-   (report-emacs-bug-address "aquamacs-bugs@aquamacs.org")
-   (report-emacs-bug-pretest-address "aquamacs-bugs@aquamacs.org")
-   (report-emacs-bug-no-confirmation t)))
  
 ;; use standard emacs bug reporting technology.
+
+; (report-aquamacs-bug)
+(defun report-aquamacs-bug (topic &optional recent-keys)
+  "Report a bug in Aquamacs Emacs.
+Prompts for bug subject.  Leaves you in a mail buffer."
+  ;; This strange form ensures that (recent-keys) is the value before
+  ;; the bug subject string is read.
+  (interactive 
+   (reverse (list (recent-keys) 
+		  (if (eq send-mail-function 'mailclient-send-it)
+		      nil (read-string "Bug Subject: ")))))
+  ;; If there are four numbers in emacs-version, this is a pretest
+  ;; version.
+  
+  (let  ((report-emacs-bug-address "aquamacs-bugs@aquamacs.org")
+	 (report-emacs-bug-pretest-address "aquamacs-bugs@aquamacs.org")
+	 (report-emacs-bug-no-confirmation t))
+ 
+    (if (not (eq send-mail-function 'mailclient-send-it))
+	(report-emacs-bug topic recent-keys)
+					; else
+    
+      (let ((one-buffer-one-frame nil)
+	    (mail-interactive nil))
+	(save-window-excursion
+	  (let (backup-buffer)
+	    (when (get-buffer "*mail*")
+	      (with-current-buffer (get-buffer "*mail*")
+		(setq backup-buffer (rename-buffer "mail-backup" t))))
+	    (report-emacs-bug topic recent-keys)
+	    (insert "Enter your bug report here.")
+	    (set-buffer-modified-p t)
+	    (mail-send)
+	    (kill-buffer "*mail*")
+	    (if backup-buffer
+		(with-current-buffer backup-buffer
+		  (rename-buffer "*mail*" t)))
+	    ))))))
+
+
+(define-key-after menu-bar-help-menu [report-emacs-bug]
+  `(menu-item ,(aq-shortcut "Send Bug Report..." 
+		       'report-aquamacs-bug)
+	      report-aquamacs-bug
+	      :help "Report a Bug in Aquamacs Emacs"
+	      :keys nil) 'menu-aquamacs-homepage)
