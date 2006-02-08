@@ -1,10 +1,10 @@
 ;; configuration for AUCTeX on OS X
 
-;; Author: Kevin Walzer 04/2005
 ;; Maintainer: David Reitter
+;; originally authored by Kevin Walzer
 ;; Keywords: auctex
  
-;; Last change: $Id: auctex-config.el,v 1.16 2005/12/15 12:06:19 davidswelt Exp $
+;; Last change: $Id: auctex-config.el,v 1.17 2006/02/08 20:44:35 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -101,11 +101,6 @@ Only checks once - subsequent calls will not result in any action."
 ;;; Customize LaTeX parameters
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Directories containing the sites TeX macro files and style files
-(setq TeX-macro-global '("/usr/local/teTeX/share/texmf/tex/"
-			 "/usr/local/teTeX/share/texmf.os/tex/"
-			 "/usr/local/teTeX/share/texmf.local/tex/"
-			 "~/Library/texmf/tex/"))
 
 ;; the following seem not to be AUCTeX variables ... 
 ;; obsolete?
@@ -124,6 +119,77 @@ Only checks once - subsequent calls will not result in any action."
 ; expect that things work - in particular, the default values
 ; that are set (when reading the command in the input buffer)
 ; are hard-coded. 
+
+;; modify the default command list
+
+;; This is duplicated from AUCTeX, unfortunately
+
+(aquamacs-set-defaults
+ '(
+   ;; Directories containing the sites TeX macro files and style files
+   (TeX-macro-global ("/usr/local/teTeX/share/texmf/tex/"
+		      "/usr/local/teTeX/share/texmf.os/tex/"
+		      "/usr/local/teTeX/share/texmf.local/tex/"
+		      "~/Library/texmf/tex/"))
+   (TeX-command-list
+    (("TeX" "%(PDF)%(tex) %S%(PDFout) \"%(mode)\\input %t\"" TeX-run-TeX nil
+      (plain-tex-mode ams-tex-mode texinfo-mode)
+      :help "Run plain TeX")
+     ("LaTeX" "%l \"%(mode)\\input{%t}\"" TeX-run-TeX nil
+      (latex-mode doctex-mode)
+      :help "Run LaTeX")
+     ("Makeinfo" "makeinfo %t" TeX-run-compile nil
+      (texinfo-mode)
+      :help "Run Makeinfo with Info output")
+     ("Makeinfo HTML" "makeinfo --html %t" TeX-run-compile nil
+      (texinfo-mode)
+      :help "Run Makeinfo with HTML output")
+     ("AmSTeX" "%(PDF)amstex %S%(PDFout) \"%(mode)\\input %t\"" TeX-run-TeX nil
+      (ams-tex-mode)
+      :help "Run AMSTeX")
+     ("ConTeXt" "texexec --once --texutil %(execopts)%t" TeX-run-TeX nil
+      (context-mode)
+      :help "Run ConTeXt once")
+     ("ConTeXt Full" "texexec %(execopts)%t" TeX-run-TeX nil
+      (context-mode)
+      :help "Run ConTeXt until completion")
+     ("ConTeXt Clean" "texutil --purgeall" TeX-run-interactive nil
+      (context-mode)
+      :help "Clean temporary ConTeXt files")
+     ("BibTeX" "bibtex %s" TeX-run-BibTeX nil t :help "Run BibTeX")
+     ("View" "%V" TeX-run-discard t t :help "Run Viewer")
+     ("Print" "%p" TeX-run-command t t :help "Print the file")
+     ("Queue" "%q" TeX-run-background nil t :help "View the printer queue" :visible TeX-queue-command)
+     ("File" "%(o?)dvips %d -o %f " TeX-run-command t t :help "Generate PostScript file")
+     ("Index" "makeindex %s" TeX-run-command nil t :help "Create index file")
+     ("Check" "lacheck %s" TeX-run-compile nil
+      (latex-mode)
+      :help "Check LaTeX file for correctness")
+     ("Spell" "<ignored>" TeX-run-ispell-on-document nil t :help "Spell-check the document")
+     ("XɘTeX" "
+ xetex \"%(mode)\\input %t\"" TeX-run-TeX nil (plain-tex-mode
+					       context-mode))
+     ("XɘLaTeX" "xelatex \"%(mode)\\input{%t}\""
+      TeX-run-TeX nil (latex-mode context-mode))
+     ("Other" "" TeX-run-command t t :help "Run an arbitrary command")))
+
+; no XDVI on the Mac
+; we just use 'open'
+; This TeXniscope support requires the option to be specified
+; it's unclear whether this should stay that way
+   (TeX-output-view-style
+    (("^dvi$" "^xdvi$" "open-x11 %(o?)xdvi %dS %d")  ; %(o?) is 'o' if Omega mode
+     ("^dvi$" "^TeXniscope$" "open -a TeXniscope.app %o")
+     ("^pdf$" "." "open %o")
+     ("^html?$" "." "open %o"))
+    )))
+
+
+
+ 
+
+
+
 ;(setq TeX-command-list
    
  ;;  (list 
@@ -157,16 +223,6 @@ Only checks once - subsequent calls will not result in any action."
 ;;       )
 ;; ) 
 
-; no XDVI on the Mac
-; we just use 'open'
-; This TeXniscope support requires the option to be specified
-; it's unclear whether this should stay that way
-(setq TeX-output-view-style
-'(("^dvi$" "^xdvi$" "open-x11 %(o?)xdvi %dS %d")  ; %(o?) is 'o' if Omega mode
-  ("^dvi$" "^TeXniscope$" "open -a TeXniscope.app %o")
-  ("^pdf$" "." "open %o")
-  ("^html?$" "." "open %o"))
-)
 
 
  
