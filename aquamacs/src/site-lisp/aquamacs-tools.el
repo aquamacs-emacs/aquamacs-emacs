@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.12 2006/01/01 17:15:28 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.13 2006/02/08 20:42:47 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -53,13 +53,11 @@
 
 (defun assq-set (key val alist)
   (set alist (assq-delete-all key (eval alist)))
-  (add-to-list alist (cons key  val))
-) 
+  (add-to-list alist (cons key  val))) 
 
 (defun assq-set-equal (key val alist)
   (set alist (assq-delete-all-equal key (eval alist)))
-  (add-to-list alist (cons key  val))
-) 
+  (add-to-list alist (cons key  val))) 
 
 (defun assq-string-equal (key alist)
   
@@ -157,25 +155,29 @@ Each element of LIST has to be of the form (symbol . fontset)."
 
 
 
+
+
+
 (defgroup Aquamacs-is-more-than-Emacs nil
   "All defaults in Aquamacs that are different from GNU Emacs.
 This customization group contains every default for customization
-variables that is changed in Aquamacs compared to GNU Emacs. 
-Not that non-customization variables as well as code may be 
+variables that is changed in Aquamacs compared to GNU Emacs 22 or
+an additionally included package. 
+Note that non-customization variables as well as code may be 
 changed or advised in Aquamacs (compared to GNU Emacs), so reverting
 all of these defaults to their GNU Emacs value will not give you
-a GNU Emacs. To achieve that, use a self-compiled or provided 
-Carbon Emacs instead of Aquamacs.")
+a GNU Emacs. To achieve that, use a self-compiled binary of 
+Carbon Emacs instead of Aquamacs."
+:group 'Aquamacs)
  
-
-
-
 (defun aquamacs-set-defaults (list)
-  "Set a new default for a customization option in Aquamacs."
+  "Set a new default for a customization option in Aquamacs.
+Add the value to the customization group `Aquamacs-is-more-than-Emacs'."
 
   (mapc (lambda (elt)
-	  (let ((symbol (car elt))
-		(value (car (cdr elt))))
+	  (let* ((symbol (car elt))
+		(value (car (cdr elt)))
+		(s-value (get symbol 'standard-value)))
 	    (set symbol value)
 	    (set-default symbol value) ;; new in post-0.9.5
  
@@ -187,16 +189,25 @@ Carbon Emacs instead of Aquamacs.")
 
 	    ;; since the standard-value changed, put it in the
 	    ;; group
-	    (custom-add-to-group 'Aquamacs-is-more-than-Emacs 
-				 symbol 'custom-variable)
- 
-	    )
-	 
 
-	  )
+	    (unless (or (eq s-value (get symbol 'standard-value))
+			(get symbol 'aquamacs-original-default))
+	      (put symbol 'aquamacs-original-default
+		   s-value)
+	      (put symbol 'variable-documentation
+		   (concat
+		    (documentation-property symbol 'variable-documentation)
+		    (format "
+
+The original default (in GNU Emacs or in the package) was:
+%s" s-value)))
+	      
+	      (custom-add-to-group 'Aquamacs-is-more-than-Emacs 
+				   symbol 'custom-variable) 
+	      )))
 	list
-	)
-  )
+	))
+
 
 
 (defun url-encode-string (string &optional coding)
