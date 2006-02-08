@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.26 2006/02/08 14:44:26 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.27 2006/02/08 16:01:56 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -87,29 +87,33 @@
     nil
     )
   ) 
-
-(defun aquamacs-theme-relevant-window (frame)
+;; (aquamacs-theme-relevant-buffer)
+(defun aquamacs-theme-relevant-buffer (&optional frame)
   "For a given frame, determines the main window to be used for the theme.
 The following constraints are optimized to find this:
-- Disprefer buffer names of the form *...*.
-- Disprefer minibuffers (hard constraint)
-- Prefer buffers that the frame is currently configured for."
+
+- Ignore minibuffers
+- if there is only one window, use that
+- if there are several windows, use the first if all windows show buffers with the same major mode
+- otherwise, return nil." 
 
 
-  (let ((chosen)
-	(currently-used-buf 
-	 (frame-parameter frame 'frame-configured-for-buffer)))
-    (walk-windows 
-     (lambda (w)
-       (let ((wb (window-buffer w)))
-	 (if (or (eq wb currently-used-buf)
-		 (and (not chosen)
-		      (string-match "^\s*\\*.*\\*\s*$" (buffer-name wb))))
-	     (setq chosen w))))
-     'no-minibuf frame)
-    (or chosen
-	;; nothing else found?
-	(frame-first-window frame))))
+(let ((l (window-list frame 'no-minibuf (frame-first-window frame))))
+  
+  (if (cdr-safe l)
+      
+      (let (mm
+	    (ret (window-buffer (car l))))
+	(mapcar (lambda (w) 
+		(let ((m (with-current-buffer (window-buffer w) major-mode)))
+		  (if mm
+		      (unless (eq mm m)
+			(setq ret nil))
+		      (setq mm m))))
+		l)
+	ret)
+    (window-buffer (car l)))))
+  
 
 
 (defun set-mode-specific-theme (&optional frame force for-mode)
@@ -132,18 +136,19 @@ FORCE is non-nil). Use theme of major mode FOR-MODE if given."
 	    ;; will cause another menu-bar-update-hook call, so we can end up 
 	    ;; with this function called again and again...  
 
-	    (let ((buffer (window-buffer 
-			   (aquamacs-theme-relevant-window frame))))
+	    (let ((buffer  
+			   (aquamacs-theme-relevant-buffer frame)))
 	    
 	      (if (or 
-		   force
-		   (not (equal (frame-parameter frame 
-						'frame-configured-for-buffer)
+		   (and force (or buffer for-mode))
+		   (and buffer
+			(not (equal (frame-parameter 
+				     frame 
+				     'frame-configured-for-buffer)
 					;(cons  
-			       buffer 
+				    buffer 
 					; major-mode)  
-			       ))
-		   )
+			       ))))
 
 		  (save-excursion
 		    (set-buffer buffer)
@@ -623,7 +628,16 @@ parametrized when a major mode is changed.
 Parameters in ``default-frame-alist'' and 
 ``special-display-frame-alist'' serve as defaults which are 
 overruled by a setting in ``aquamacs-mode-specific-default-themes'' 
-if there is an entry for the current major mode."
+if there is an entry for the current major mode.
+
+Frames are only configured in this way if there is only one
+window visible.  Otherwise, the frame parameters are left as they
+are. That means that additional, temporary windows (such as for
+the *Completions* buffer) will not alter the style of the frame. 
+
+Note that `aquamacs-mode-specific-default-themes' has a default
+configuration with commonly used major modes."
+
     :type 'boolean
     :group 'Aquamacs
     )
