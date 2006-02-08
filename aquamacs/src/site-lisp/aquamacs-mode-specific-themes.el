@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.27 2006/02/08 16:01:56 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.28 2006/02/08 16:18:44 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -89,19 +89,17 @@
   ) 
 ;; (aquamacs-theme-relevant-buffer)
 (defun aquamacs-theme-relevant-buffer (&optional frame)
-  "For a given frame, determines the main window to be used for the theme.
-The following constraints are optimized to find this:
+  "For a given frame, determine the main window to be used for the theme.
+Return nil if no theme should be applied due lack of decision-making
+ability. The following rules are followed:
 
-- Ignore minibuffers
-- if there is only one window, use that
-- if there are several windows, use the first if all windows show buffers with the same major mode
-- otherwise, return nil." 
-
+- Ignore minibuffers if there is only one window, use that 
+- if there are several windows, use the first 
+- if all windows show buffers with the same major mode 
+- otherwise, return nil."
 
 (let ((l (window-list frame 'no-minibuf (frame-first-window frame))))
-  
   (if (cdr-safe l)
-      
       (let (mm
 	    (ret (window-buffer (car l))))
 	(mapcar (lambda (w) 
@@ -384,8 +382,7 @@ Sets default-frame-alist. (Aquamacs)"
 			       (if (nthcdr 5 l)
 				   (setcdr (nthcdr 5 l) (list "(...)")))
 			       l))))))
-    (aquamacs-delete-themes)
-    (sleep-for 1)) 
+    (aquamacs-delete-themes)) 
   (aquamacs-set-theme-as-mode-default 'default))
 
 (defun aquamacs-set-theme-as-mode-default (&optional mode) 
@@ -419,7 +416,10 @@ Sets default-frame-alist. (Aquamacs)"
 ;;     )
    
 
-  (message (format "Theme has been set as default for %s. %s" (if (eq mode 'default) "all frames" mode)
+  (message (format "Theme has been set as default for %s. %s
+Use Save Options before restart to retain setting." 
+ 
+   (if (eq mode 'default) "all frames" mode)
 		   (if aquamacs-auto-frame-parameters-flag
 		       ""
 		     "Note: aquamacs-auto-frame-parameters-flag is nil - hence functionality is off!"
@@ -438,7 +438,7 @@ Sets default-frame-alist. (Aquamacs)"
   (interactive)
   (customize-set-variable 'aquamacs-mode-specific-default-themes nil)
   (customize-set-variable 'aquamacs-buffer-specific-frame-themes nil)
-  (message "All themes deleted. Save Options to store setting.")
+  (message "All themes deleted. Use Save Options before restart to retain setting.")
   )
 
 (defun aquamacs-reset-themes ()
@@ -447,7 +447,7 @@ Sets default-frame-alist. (Aquamacs)"
   (set-to-custom-standard-value 'aquamacs-mode-specific-default-themes)
   (set-to-custom-standard-value 'aquamacs-buffer-specific-frame-themes)
   (message "All themes reset to defaults. Add new ones or use customize to 
-modify them. Save Options to store setting.")
+modify them. Use Save Options before restart to retain setting.")
   )
 
 (defun aquamacs-delete-one-mode-specific-theme ()
@@ -456,7 +456,7 @@ modify them. Save Options to store setting.")
   (customize-set-variable  'aquamacs-mode-specific-default-themes 
 			   (assq-delete-all major-mode
 					    aquamacs-mode-specific-default-themes))
-  (message "Mode-specific theme removed.")
+  (message "Mode-specific theme removed. Use Save Options before restart to retain setting.")
   )
 
 (defun aquamacs-updated-major-mode ()
