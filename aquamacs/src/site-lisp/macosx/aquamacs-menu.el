@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.55 2006/01/01 17:14:37 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.56 2006/02/08 20:49:13 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -937,7 +937,7 @@ that should be represented in the Aquamacs menus."
   (vector "Emacs Wiki Online" 'emacs-user-wiki) 'emacs-tutorial)
  
 (easy-menu-add-item  nil '("Help")
-  (vector  "Subscribe to mailing list..."  'emacsosx-mailing-list-subscribe) 'emacs-tutorial)
+  (vector  "Subscribe to Mailing List..."  'emacsosx-mailing-list-subscribe) 'emacs-tutorial)
 (easy-menu-add-item  nil '("Help")
   (vector  "Make a Donation for Aquamacs..."  'aquamacs-donate) 'emacs-tutorial)
 (easy-menu-add-item  nil '("Help")
