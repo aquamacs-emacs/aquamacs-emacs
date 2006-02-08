@@ -5,34 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.36 2006/01/12 16:20:31 davidswelt Exp $
-;; This file is part of Aquamacs Emacs
-;; http://aquamacs.org/
-
-;; GNU Emacs is free software; you can redistribute it and/or modify
-;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
-;; any later version.
-
-;; GNU Emacs is distributed in the hope that it will be useful,
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-;; GNU General Public License for more details.
-
-;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
- 
-;; Copyright (C) 2005, David Reitter
-
- ;;
-;; Author: David Reitter, david.reitter@gmail.com
-;; Maintainer: David Reitter
-;; Keywords: aquamacs
- 
-;; Last change: $Id: one-buffer-one-frame.el,v 1.36 2006/01/12 16:20:31 davidswelt Exp $
-
+;; Last change: $Id: one-buffer-one-frame.el,v 1.37 2006/02/08 20:45:07 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -76,6 +49,9 @@
 
 ;; it might make sense to extend save-window-excursion...
 
+;; doesn't play well with ediff-directories
+;; conjecture: ediff divides the frame (into two windows), then calls switch-to-buffer
+;; instead of using pop-to-buffer
 
 
 
@@ -174,6 +150,7 @@ To disable `one-buffer-one-frame-mode', call
   '(
     " SPEEDBAR"
     "\\*.*\\*"
+    "*Ediff Control Panel*"
     )
   "In `one-buffer-one-frame-mode', if the name of a buffer to be shown matches
 one of the regular expressions in this list, it is shown in the same frame,
@@ -626,7 +603,10 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
 		 (eq   (string-match " SPEEDBAR" (buffer-name)) nil) 
 					; has no minibuffer!
 		 )
-	    (cond ((buffer-modified-p)
+	    (cond ((and (or buffer-file-name buffer-offer-save)
+			(buffer-modified-p))
+		   ;; a lot of buffers (e.g. dired) may be modified,
+		   ;; but have no file name
 		   (if (progn
 			 (unless (minibuffer-window)
 			   (setq last-nonmenu-event nil)
