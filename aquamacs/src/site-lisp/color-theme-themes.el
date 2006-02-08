@@ -1,5 +1,3 @@
-(garbage-collect)
-
 ;;; The color theme functions
 
 (defun color-theme-gnome ()
