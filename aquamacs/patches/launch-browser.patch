@@ -1,46 +1,32 @@
-Index: lisp/net/browse-url.el
-===================================================================
-RCS file: /cvsroot/emacs/emacs/lisp/net/browse-url.el,v
-retrieving revision 1.52
-diff -c -r1.52 browse-url.el
-*** lisp/net/browse-url.el	19 Nov 2005 15:57:19 -0000	1.52
---- lisp/net/browse-url.el	9 Dec 2005 09:46:39 -0000
-***************
-*** 811,818 ****
-      (w32-shell-execute "open" url)))
-  
-  (defun browse-url-default-macosx-browser (url &optional new-window)
-    (interactive (browse-url-interactive-arg "URL: "))
-!   (start-process (concat "open " url) nil "open" url))
-  
-  ;; --- Netscape ---
-  
---- 811,825 ----
-      (w32-shell-execute "open" url)))
-  
-  (defun browse-url-default-macosx-browser (url &optional new-window)
-+ "Launch the default browser specified in Mac OS X.
-+ NEW-WINDOW is ignored."
-    (interactive (browse-url-interactive-arg "URL: "))
-!   (condition-case nil
-!       (mac-launch-URL-with-default-browser url)
-!     (error 
-!      ;; fallback - sometimes http is not registered in the
-!      ;; LaunchServices database
-!      (start-process (concat "open " url) nil "open" url))))
-  
-  ;; --- Netscape ---
-  
 Index: src/mac.c
 ===================================================================
-RCS file: /cvsroot/emacs/emacs/src/mac.c,v
-retrieving revision 1.53
-diff -c -r1.53 mac.c
-*** src/mac.c	5 Jan 2006 08:14:12 -0000	1.53
---- src/mac.c	7 Jan 2006 11:47:30 -0000
+RCS file: /sources/emacs/emacs/src/mac.c,v
+retrieving revision 1.54
+diff -c -r1.54 mac.c
+*** src/mac.c	6 Feb 2006 15:23:21 -0000	1.54
+--- src/mac.c	9 Feb 2006 08:34:49 -0000
+***************
+*** 4676,4683 ****
+    mac_clear_font_name_table ();
+    return Qnil;
+  }
+! 
+! 
+  static Lisp_Object
+  mac_get_system_locale ()
+  {
+--- 4676,4683 ----
+    mac_clear_font_name_table ();
+    return Qnil;
+  }
+!  
+!  
+  static Lisp_Object
+  mac_get_system_locale ()
+  {
 ***************
 *** 4699,4704 ****
---- 4699,4800 ----
+--- 4699,4809 ----
       return Qnil;
   }
   
@@ -61,26 +47,35 @@ diff -c -r1.53 mac.c
 +   BLOCK_INPUT;
 +   // get default browser
 + 	 
-+   FSRef appRef;  // will be discarded
++ 
++  
 +   LSLaunchURLSpec spec;
 +   OSStatus status;
-+ 
-+   /* Build URL to find out what the default handler for http is.
-+      Without an explicit application reference, the launch function
-+      (e.g. LSOpenFromURLSpec or ICLaunchURL) will determine the
-+      default file handler for the file, which is not neccessarily the
-+      default browser.*/
++  
++   if (strncmp("file://", SDATA(URLstring), 7) == 0)
++     {
++       /* Build URL to find out what the default handler for http is.
++ 	 Without an explicit application reference, the launch function
++ 	 (e.g. LSOpenFromURLSpec or ICLaunchURL) will determine the
++ 	 default file handler for the file, which is not neccessarily the
++ 	 default browser.*/
 + 	
-+   char* urlStr = "http://www.gnu.org/"; // just a test URL
-+   CFStringRef inURLCfs = CFStringCreateWithCString(NULL, urlStr,	
-+ 						   kCFStringEncodingASCII);
-+   CFURLRef inURLRef = CFURLCreateWithString(NULL, inURLCfs, NULL);
++       FSRef appRef;  // will be discarded
++       char* urlStr = "http://www.gnu.org/"; // just a test URL
++       CFStringRef inURLCfs = CFStringCreateWithCString(NULL, urlStr,	
++ 						       kCFStringEncodingASCII);
++       CFURLRef inURLRef = CFURLCreateWithString(NULL, inURLCfs, NULL);
 + 	
-+   /* Get application for opening html pages */
-+   status = LSGetApplicationForURL(inURLRef, kLSRolesAll, &appRef,
-+ 				  &spec.appURL);
-+   CFRelease(inURLRef);
-+   CFRelease(inURLCfs);
++       /* Get application for opening html pages */
++       status = LSGetApplicationForURL(inURLRef, kLSRolesAll, &appRef,
++ 				      &spec.appURL);
++       CFRelease(inURLRef);
++       CFRelease(inURLCfs);
++     } else
++     {
++       spec.appURL = NULL; /* use preferred application */
++       status = noErr;
++     }
 +   if (status == noErr) 
 +     {
 +       /* Open the file / http with the http handler */
@@ -152,7 +147,7 @@ diff -c -r1.53 mac.c
     defsubr (&Smac_set_file_creator);
     defsubr (&Smac_set_file_type);
     defsubr (&Smac_get_file_creator);
---- 5244,5251 ----
+--- 5253,5260 ----
     defsubr (&Smac_code_convert_string);
   #endif
     defsubr (&Smac_clear_font_name_table);
@@ -161,3 +156,36 @@ diff -c -r1.53 mac.c
     defsubr (&Smac_set_file_creator);
     defsubr (&Smac_set_file_type);
     defsubr (&Smac_get_file_creator);
+Index: lisp/net/browse-url.el
+===================================================================
+RCS file: /sources/emacs/emacs/lisp/net/browse-url.el,v
+retrieving revision 1.52
+diff -c -r1.52 browse-url.el
+*** lisp/net/browse-url.el	19 Nov 2005 15:57:19 -0000	1.52
+--- lisp/net/browse-url.el	9 Feb 2006 08:34:51 -0000
+***************
+*** 811,818 ****
+      (w32-shell-execute "open" url)))
+  
+  (defun browse-url-default-macosx-browser (url &optional new-window)
+    (interactive (browse-url-interactive-arg "URL: "))
+!   (start-process (concat "open " url) nil "open" url))
+  
+  ;; --- Netscape ---
+  
+--- 811,825 ----
+      (w32-shell-execute "open" url)))
+  
+  (defun browse-url-default-macosx-browser (url &optional new-window)
++ "Launch the default browser specified in Mac OS X.
++ NEW-WINDOW is ignored."
+    (interactive (browse-url-interactive-arg "URL: "))
+!   (condition-case nil
+!       (mac-launch-URL-with-default-browser url)
+!     (error 
+!      ;; fallback - sometimes http is not registered in the
+!      ;; LaunchServices database
+!      (start-process (concat "open " url) nil "open" url))))
+  
+  ;; --- Netscape ---
+  
