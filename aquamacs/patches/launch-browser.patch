@@ -26,13 +26,15 @@ diff -c -r1.54 mac.c
   {
 ***************
 *** 4699,4704 ****
---- 4699,4809 ----
+--- 4699,4811 ----
       return Qnil;
   }
   
 + DEFUN ("mac-launch-URL-with-default-browser", Fmac_launch_url_with_default_browser, Smac_launch_url_with_default_browser, 1, 1, 0,
-+        doc: /* Launch the URL with the system's default browser. 
-+ Return non-nil if the URL has been successfully launched.*/)
++        doc: /* Launch the URL with the appropriate handler application.
++ file:// URLs are always opened with the system's default browser, i.e.
++ the http:// handler. Return non-nil if the URL has been successfully 
++ launched.*/)
 +      (URLstring)
 +      Lisp_Object URLstring;
 + {
