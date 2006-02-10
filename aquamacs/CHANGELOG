@@ -73,6 +73,17 @@ CVS Version
 	`send-mail-function')
 	Suggested by Robert Sloan
 
+	* Mail composed with the Message package will now be routed
+	through the mail client by default (`message-send-mail-function')
+	and there is no "From" line. If you run postfix locally, you may
+	want to do something like the following in your .emacs or Preferences.el:
+
+	(setq send-mail-function 'sendmail-send-it)
+	(setq message-send-mail-function 'sendmail-send-it)
+	(setq mail-setup-with-from t)
+
+	Alternatively do the same in customization buffers.	
+
 	* Bugfix: Aquamacs will not ask the user any longer whether to
 	save dired buffers and other non-file-buffers upon deleting the
 	frame (killing the buffer).
@@ -93,6 +104,12 @@ CVS Version
 
 	* Bugfix: Preview & Print now works with buffers in Tramp Mode, too.
 	Reported by Tim Hodgson
+
+	* Bugfix: Fonts (not fontsets) set in default-frame-alist and
+	similar variables are not filtered out any more after startup if
+	they haven't been explicitly loaded (or applied to a frame, and
+	thus, loaded).
+	Reported by Konstantinos Efstathiou
 	
 	* Bugfix: display copyright message at startup. 
 
