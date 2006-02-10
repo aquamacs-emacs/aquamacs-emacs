@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.29 2006/02/08 20:41:53 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.30 2006/02/10 19:06:38 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -470,41 +470,49 @@ for which the menu is being updated."
 
 
 
-(defun font-exists-p (fontorfontset)
-  (condition-case nil
-      (or
-       (font-info fontorfontset)
-       (fontset-info fontorfontset)
-       )
-    (error nil)
-    )
-  )
+;; (defun font-exists-p (fontorfontset)
+;; "Does not work as intended when font not loaded, e.g. after startup."
+;; (or
+;;   (condition-case nil
+;;        (font-info fontorfontset)
+;;     (error nil))
+;;   (condition-case nil
+;;        (fontset-info fontorfontset)
+       
+;;    (error nil)
+;;   )
+;;   ))
 
-(defun filter-font-from-alist (alist)
-(if (and (assq 'font  alist)
-	 (not (font-exists-p (cdr (assq 'font  alist)))) 
-	 )
-  (progn 
-    (print (format "Warning: Font %s not available." (cdr (assq 'font  alist)))) 
-    (assq-delete-all 'font alist) ;; return
-    )
-  alist)
-) 
+;; (defun filter-font-from-alist (alist)
+;; "Filters all missing fonts. Currently disabled, because `font-exists-p'
+;; does not work properly if the fonts aren't loaded (e.g. after startup)."
+;; (if (and (assq 'font  alist)
+;; 	 (not (font-exists-p (cdr (assq 'font  alist)))) 
+;; 	 )
+;;   (progn 
+;;     (print (format "Warning: Font %s not available." (cdr (assq 'font  alist))))    (assq-delete-all 'font alist) ;; return
+;; alist
+;;     )
+;;   alist)
+;; )
 
-(defun filter-missing-fonts ()
-  (setq default-frame-alist (filter-font-from-alist default-frame-alist))
-  (setq special-display-frame-alist (filter-font-from-alist special-display-frame-alist))
 
-  (let ((newlist))
-    (mapc (lambda (th) 
+;; (defun filter-missing-fonts ()
+;; "Filters all missing fonts. Currently disabled, because `font-exists-p'
+;; does not work properly if the fonts aren't loaded (e.g. after startup)."
+;;   (setq default-frame-alist (filter-font-from-alist default-frame-alist))
+;;   (setq special-display-frame-alist (filter-font-from-alist special-display-frame-alist))
+
+;;   (let ((newlist))
+;;     (mapc (lambda (th) 
 	 
-	    (if (cdr th)   
-		(add-to-list 'newlist  
-			     (cons (car th)  
-				   (filter-font-from-alist (cdr th))))))
-	  aquamacs-mode-specific-default-themes) 
-    (setq aquamacs-mode-specific-default-themes newlist))  
-  )
+;; 	    (if (cdr th)   
+;; 		(add-to-list 'newlist  
+;; 			     (cons (car th)  
+;; 				   (filter-font-from-alist (cdr th))))))
+;; 	  aquamacs-mode-specific-default-themes) 
+;;     (setq aquamacs-mode-specific-default-themes newlist))  
+;;   )
 
 
 (defun aquamacs-mode-specific-themes-setup ()
@@ -657,8 +665,6 @@ Frame Appearance Themes to make the setting stick.")
       )
     )
   )
-
-(add-hook 'after-init-hook 'filter-missing-fonts t) 
 
 (add-hook 'after-init-hook
 	  'make-help-mode-use-frame-fitting
