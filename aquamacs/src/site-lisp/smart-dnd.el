@@ -1,15 +1,15 @@
 ;;; smart-dnd.el --- user-configurable drag-n-drop feature
 
-;; Copyright (C) 2003-2005  Seiji Zenitani <zenitani@mac.com>
+;; Copyright (C) 2003-2006  Seiji Zenitani <zenitani@mac.com>
 
 ;; Author: Seiji Zenitani <zenitani@mac.com>
 ;; Based on: mac-drag-N-drop.el by Seiji Zenitani
-;; Version: v20051222
+;; Version: v20060108
 ;; Keywords: tools
 ;; Created: 2003-04-27
 ;; Compatibility: Emacs 22
-;; URL(en): http://home.att.ne.jp/alpha/z123/elisp-e.html
-;; URL(jp): http://home.att.ne.jp/alpha/z123/elisp-j.html#smart-dnd
+;; URL(en): http://homepage.mac.com/zenitani/comp-e.html
+;; URL(jp): http://homepage.mac.com/zenitani/elisp-j.html#smart-dnd
 
 ;; Contributors: David Reitter
 
@@ -62,12 +62,12 @@
 ;;  (lambda ()
 ;;    (smart-dnd-setup
 ;;     '(
-;;       ("\\.gif\\'" . "<img src=\"%r\">\n")
-;;       ("\\.jpg\\'" . "<img src=\"%r\">\n")
-;;       ("\\.png\\'" . "<img src=\"%r\">\n")
-;;       ("\\.css\\'" . "<link rel=\"stylesheet\" type=\"text/css\" href=\"%r\">\n" )
-;;       ("\\.js\\'"  . "<script type=\"text/javascript\" src=\"%r\"></script>\n" )
-;;       (".*" . "<a href=\"%r\">%f</a>\n")
+;;       ("\\.gif\\'" . "<img src=\"%R\">\n")
+;;       ("\\.jpg\\'" . "<img src=\"%R\">\n")
+;;       ("\\.png\\'" . "<img src=\"%R\">\n")
+;;       ("\\.css\\'" . "<link rel=\"stylesheet\" type=\"text/css\" href=\"%R\">\n" )
+;;       ("\\.js\\'"  . "<script type=\"text/javascript\" src=\"%R\"></script>\n" )
+;;       (".*" . "<a href=\"%R\">%f</a>\n")
 ;;       ))))
 ;;
 ;; LaTeX mode:
@@ -165,8 +165,11 @@ depending on `smart-dnd-string-alist'."
 You can use the following keywords in the format control STRING.
 %F means absolute pathname.           [ /home/zenitani/public_html/index.html ]
 %f means file name without directory. [ index.html ]
-%r means relative path to the FILENAME
-   from a file in the current buffer. [ public_html/index.html ]
+%r and %R means relative path to the FILENAME from a file in the current buffer.
+                                      [ public_html/index.html ]
+When the target buffer hasn't been assigned a file name yet,
+%r returns the absolute pathname      [ /home/zenitani/public_html/index.html ]
+while %R returns the URL.             [ file:///home/zenitani/ .. /index.html ]
 %n means file name without extention. [ index ]
 %e means extention of file name.      [ html ]
 "
@@ -179,6 +182,10 @@ You can use the following keywords in the format control STRING.
                        (file-relative-name
                         f (file-name-directory buffer-file-name))
                      f))
+           ("%R" . (if buffer-file-name
+                       (file-relative-name
+                        f (file-name-directory buffer-file-name))
+                     (concat "file://" f)))
            ("%n" . (file-name-sans-extension (file-name-nondirectory f)))
            ("%e" . (or (file-name-extension f) ""))
            ))
