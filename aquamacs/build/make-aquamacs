@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # make-aquamacs: customized make-package script
-# produces a self-contained binary in a folder Aquamacs-Raw
+# produces a self-contained binary in a folder mac/Aquamacs
 # call with -no-conf to avoid running configure to speed up
 # this builds everything 'in place' to speed up
 # warning: before release, delete lisp/*.elc, make maintainer-clean
@@ -108,7 +108,7 @@ export MYCPPFLAGS="-DUSE_TOOLKIT_SCROLL_BARS -DUSE_TRANSPARENCY -DUSE_ATSUI -DSY
 prefix=/usr/local
 bootfast=no # yes  # turn this on to compile all the emacs el files
 appsdir=/Applications
-emapp=Emacs.app
+emapp="Emacs.app"
 with_config=yes
 with_app=yes
 with_x=no
@@ -394,7 +394,7 @@ fi
 if test "$compressed_dist" == "yes" -a "$full_dist" == "yes"; then
     echo "Compressing .el files"
     sharedir=$installprefix/share/emacs/$version
-    find $sharedir/lisp $sharedir/leim -name "*.elc" -print | sed 's|\(.*\)\.elc$|/usr/bin/gzip -9 \1.el|' | /bin/sh -s
+    find $sharedir/lisp $sharedir/leim -name "*.elc" -print | sed 's|\(.*\)\.elc$|/usr/bin/gzip -9f \1.el|' | /bin/sh -s
     echo "Compressing info files"
     find $installprefix/info -type f ! -name dir -print | sed 's|\(.*\)$|/usr/bin/gzip -9 \1|' | /bin/sh -s
 fi
@@ -517,14 +517,17 @@ fi # this mod by david reitter - dont create a package if self-contained
 #   exit 0
 # fi
 
-# this is mod by david reitter
+# this is for Aquamacs
 
-mkdir Aquamacs-Raw 2>/dev/null
+
+if test "$with_app" == "yes"; then
+
+mkdir Aquamacs 2>/dev/null
 
 if test "$self_contained" == "yes"; then
-cp -Rp ${tempparentfull}$appsdir/$emapp Aquamacs-Raw/
+cp -Rp ${tempparentfull}$appsdir/$emapp Aquamacs/
 else
-cp -Rp ${packagedir} Aquamacs-Raw/
+cp -Rp ${packagedir} Aquamacs/
 fi
 
 
@@ -534,6 +537,65 @@ else
     mv ${tempparentfull} ${emacsname}
 fi
 
+echo "Copying Aquamcas code to app bundle..."
+
+dest=`pwd`/Aquamacs/${emapp}
+
+"$projdir/build/copy-to-app" -n "$projdir" "$dest"  || {
+    echo "$0: Copying to Aquamacs directory failed."
+    exit 1
+}
+
+mv "$dest/Contents/MacOS/Emacs" "$dest/Contents/MacOS/Aquamacs Emacs"
+cd "$dest/Contents/MacOS/"; ln -s "Aquamacs Emacs" "Emacs"
+
+
+# delete some files that we don't need
+
+# large, not needed
+rm -f "$dest/Contents/Resources/etc/termcap.src"
+cd "$dest/Contents/Resources"
+rm -f "leim/ja-dic/ja-dic.el" "lisp/loaddefs.el"  "lisp/ldefs-boot.el" "site-lisp/edit-modes/ess-mode/etc/other/S-spread/asaprc.ps" etc/*refcard.ps
+
+# compress the sources
+  
+cd "$dest"/Contents/Resources/lisp
+
+# # compress whatever is byte-compiled
+# for f in ../leim/*/*.el ../leim/*.el */*.el *.el
+# do
+#     if [ -e "$f"c ]
+#     then 
+# 	gzip --best -f "$f"
+#     fi
+# done
+
+ 
+# # do not compress subdirs
+# gzip -d "subdirs.el.gz" 2>/dev/null
+
+# compress some of the .elc files
+# not all of them (speed, startup issues)
+
+# gzip    woman.elc wid-edit.elc vc.elc type-break.elc term.elc speedbar.elc subr.elc simple.elc printing.elc ps-print.elc info.elc menu-bar.elc ido.elc files.elc ediff-util.elc cus-edit.elc
+
+cd "$dest"/Contents/Resources/leim/quail
+gzip tsang-*.elc quick-*.elc hanja*.elc ZOZY.elc ZIRANMA.elc SW.elc PY*.elc ETZY.elc ECDICT.elc CTLau*.elc CCDOSPY.elc ARRAY30.elc 4Corner.elc
+cd "$dest"/Contents/Resources/leim
+gzip ja-dic/ja-dic.elc
+
+# compress info
+# no longer needed, is done by make-aquamacs / make-package
+# gzip ../info/*
+
+# get rid of the CVS directories
+pushd "$dest"
+find "$dest" -name CVS  -exec rm -r "{}" \;  2>/dev/null
+popd
+
+mv Aquamacs/Emacs.app "Aquamacs/Aquamacs Emacs.app"
+
+fi
 
 # ## Converting Disk Image to read-only
 # echo 'Converting Disc Image to read-only'
