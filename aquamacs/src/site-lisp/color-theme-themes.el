@@ -13470,7 +13470,7 @@ bold))))
 
 
 (defun color-theme-tiger-xcode ()
-  "Emacs 21 theme changed to be more like Apple's Tiger and Xcode"
+  "Similar to Apple's Tiger and Xcode"
   (interactive)
   (color-theme-install
    '(color-theme-tiger-xcode
