@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.44 2006/02/11 20:07:28 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.45 2006/02/11 23:46:49 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -898,6 +898,14 @@ Return non-nil if options where saved."
 	(custom-save-all))
       need-save))
 
+(defcustom aquamacs-save-options-on-quit 'ask
+"If t, always save the options (from the options menu) when quitting.
+If set to `ask' (default), the user is asked in case the options
+have changed."
+:group 'Aquamacs
+:type '(choice (const nil)  (const ask) (const t)))
+
+ 
 (defun aquamacs-ask-to-save-options ()
 "Checks if options need saving and allows to do that.
 Returns t."
@@ -909,7 +917,9 @@ Returns t."
 	     ;; NOT implemented for the standard menu-bar-options-save!
 	     
 	     ;; ask user whether to accept these saved changes
-	     (y-or-n-p "Options have changed - save them? "))
+	     (if (eq aquamacs-save-options-on-quit 'ask)
+		 (y-or-n-p "Options have changed - save them? ")
+	       aquamacs-save-options-on-quit)
 	(rename-file custom-file real-custom-file 'overwrite)))
 t)
 (add-hook 'kill-emacs-query-functions 'aquamacs-ask-to-save-options)
