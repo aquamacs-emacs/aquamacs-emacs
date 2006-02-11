@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.43 2006/02/08 20:42:13 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.44 2006/02/11 20:07:28 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -280,7 +280,7 @@ Separate paths from file names with --."
   (aquamacs-set-defaults 
    `(
      (send-mail-function mailclient-send-it)
- 
+     (mail-setup-with-from nil)  
 					; Colorized fonts
 					; Turn on font-lock in all modes that support it
      (global-font-lock-mode t)
@@ -842,7 +842,8 @@ listed here."
 			  aquamacs-customization-version-id)
 
   (defun aquamacs-menu-bar-options-save ()
-    "Save current values of Options menu items using Custom."
+    "Save current values of Options menu items using Custom.
+Return non-nil if options where saved."
     (interactive)
     (let ((need-save nil))
       (setq aquamacs-customization-version-id aquamacs-version-id)
@@ -894,16 +895,64 @@ listed here."
 	     (setq need-save t)))
       ;; Save if we changed anything.
       (when need-save
-	(custom-save-all))))
+	(custom-save-all))
+      need-save))
+
+(defun aquamacs-ask-to-save-options ()
+"Checks if options need saving and allows to do that.
+Returns t."
+  (interactive)
+  (let ((real-custom-file custom-file)
+	(custom-file (make-temp-file "customizations" nil ".el")))
+    (if (and (aquamacs-menu-bar-options-save)
+	     ;; depends on return value of `aquamacs-menu-bar-options-save'
+	     ;; NOT implemented for the standard menu-bar-options-save!
+	     
+	     ;; ask user whether to accept these saved changes
+	     (y-or-n-p "Options have changed - save them? "))
+	(rename-file custom-file real-custom-file 'overwrite)))
+t)
+(add-hook 'kill-emacs-query-functions 'aquamacs-ask-to-save-options)
 
 
+(defun aquamacs-save-buffers-kill-emacs (&optional arg)
+  "Offer to save each buffer, then kill this Emacs process.
+With prefix arg, silently save all file-visiting buffers, then kill.
+Like `save-buffers-kill-emacs', except that it doesn't ask again
+if modified buffers exist."
+  (interactive "P")
+  (save-some-buffers arg t)
+  (and (or (not (memq t (mapcar (function
+				  (lambda (buf) (and (buffer-file-name buf)
+						     (buffer-modified-p buf))))
+				(buffer-list)))))
+       (or (not (fboundp 'process-list))
+	   ;; process-list is not defined on VMS.
+	   (let ((processes (process-list))
+		 active)
+	     (while processes
+	       (and (memq (process-status (car processes)) 
+			  '(run stop open listen))
+		    (process-query-on-exit-flag (car processes))
+		    (setq active t))
+	       (setq processes (cdr processes)))
+	     (or (not active)
+		 (list-processes t)
+		 (yes-or-no-p 
+		  "Active processes exist; kill them and exit anyway? "))))
+       ;; Query the user for other things, perhaps.
+       (run-hook-with-args-until-failure 'kill-emacs-query-functions)
+       (or (null confirm-kill-emacs)
+	   (funcall confirm-kill-emacs "Really exit Emacs? "))
+       (kill-emacs)))
 
+(global-set-key [remap save-buffers-kill-emacs] 
+		'aquamacs-save-buffers-kill-emacs)
 
   ;; workaround for people who still call this in their .emacs
   (defun mwheel-install ()
-    (princ "mwheel-install ignored in Aquamacs- mouse wheel support is present by default.\n")
-    t
-    )
+    (message "mwheel-install ignored in Aquamacs- mouse wheel support is present by default.")
+    t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; temporary stuff for releases according to admin/FOR-RELEASE
