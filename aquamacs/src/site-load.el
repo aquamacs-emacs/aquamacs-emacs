@@ -14,9 +14,12 @@
 
 ;(load "mwheel") ;; wants to be loaded at runtime
 (load "disp-table")
-;; (load "tool-bar") ;; (setq global-map-backup global-map)
-;; image taken out,  troubleshooting GC problem
-;;(load "image") ;; taken out so as to not initialize the path variable
+(load "tool-bar") 
+(load "tooltip")
+(load "font-lock")
+(load "jit-lock")
+(load "image") ;; path issue should be alright now
+(load "image-file")
 (load "button")
 (load "view")
 (load "help-mode")
@@ -26,6 +29,8 @@
 (load "emacs-lisp/bytecomp")
 (load "emacs-lisp/byte-opt")
 (load "emacs-lisp/advice")
+(load "emacs-lisp/regexp-opt")
+;; (load "emacs-lisp/syntax") ; maybe not: syntax-ppss-stats is mutable
 (load "custom")
 ;(load "emacs-lisp/cl")
 ;(load "emacs-lisp/cl-seq")
@@ -34,6 +39,9 @@
 (load "wid-edit.el")
 ; (load "emacs-lisp/easymenu") ;; needs to be loaded at runtime... causes strange behavior otherwise
 ; (load "recentf") 
+
+
+
  (let ((load-path  
 	(append load-path
 		(list (expand-file-name "emulation" (car load-path))))))
@@ -82,7 +90,7 @@
 ; (aq-preload "aquamacs-tool-bar.el")
 ; (aq-preload "auctex-config.el")
 
-;(aq-preload "better-buffer-menu.el")
+;(aq-preload "better-buffer-menu].el")
 ;(aq-preload "carbon-font.el")
 (aq-preload "check-for-updates.el")
 ;(aq-preload "color-theme.el")
