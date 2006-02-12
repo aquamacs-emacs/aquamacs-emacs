@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.45 2006/02/11 23:46:49 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.46 2006/02/12 08:37:16 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -695,50 +695,49 @@ un-Mac-like way when you select text and copy&paste it.")))
      
 					; applications on OS X don't display a splash screen 
  
-(setq command-line-args  (append command-line-args (list "--no-splash")))
-(setq inhibit-startup-message t)
+  (setq command-line-args  (append command-line-args (list "--no-splash")))
+  (setq inhibit-startup-message t)
 
-(defun aquamacs-wrap-string (str width)
-  (with-temp-buffer 
-    (insert str)
-    (let ((fill-column width))
-      (fill-region (point-min) (point-max)))
-    (buffer-string)))
+  (defun aquamacs-wrap-string (str width)
+    (with-temp-buffer 
+      (insert str)
+      (let ((fill-column width))
+	(fill-region (point-min) (point-max)))
+      (buffer-string)))
  
 ;; redefine this
-(defun startup-echo-area-message ()
-  (aquamacs-wrap-string
-  (concat
-   (if (and (eq window-system 'mac) 
-	    (eq (key-binding [(alt \?)]) 'aquamacs-user-help))
-       "For an introduction to Aquamacs Emacs, type Apple-?." 
-     (if window-system
-	 "For an introduction to Aquamacs Emacs,\nchoose `Aquamacs Help' from the `Help' menu."
-       (substitute-command-keys
-	"For a introduction to Aquamacs Emacs, type \
+  (defun startup-echo-area-message ()
+    (aquamacs-wrap-string
+     (concat
+      (if (and (eq window-system 'mac) 
+	       (eq (key-binding [(alt \?)]) 'aquamacs-user-help))
+	  "For an introduction to Aquamacs Emacs, type Apple-?." 
+	(if window-system
+	    "For an introduction to Aquamacs Emacs,\nchoose `Aquamacs Help' from the `Help' menu."
+	  (substitute-command-keys
+	   "For a introduction to Aquamacs Emacs, type \
 \\[aquamacs-user-help].")))
-   ;;The GPL stipulates that the following message is shown.
+      ;;The GPL stipulates that the following message is shown.
 
-   (propertize 	(substitute-command-keys "
+      (propertize 	(substitute-command-keys "
 Copyright (C) 2006 Free Software Foundation, Inc., & D. Reitter. No Warranty. You may
 redistribute Aquamacs under the GNU General Public License. Type \\[describe-copying] to view.") 'face 'blue)) 
-  (frame-parameter nil 'width) ;; let's just hope that this is the width of the echo area
-))
+     (frame-parameter nil 'width) ;; let's just hope that this is the width of the echo area
+     ))
 
 ;;  (message (startup-echo-area-message))
-
-(if (string= "mac" window-system)
-    (defun use-fancy-splash-screens-p () t)
-  )
-
+  
+  (if (string= "mac" window-system)
+      (defun use-fancy-splash-screens-p () t))
+  
        
 ;; the following causes not-so-good things to happen.
 ;; (defun fancy-splash-default-action () nil)
 
-(aquamacs-set-defaults
- '((fancy-splash-image "aquamacs-splash-screen.jpg")
-   (fancy-splash-max-time 3000)))
-
+  (aquamacs-set-defaults
+   '((fancy-splash-image "aquamacs-splash-screen.jpg")
+     (fancy-splash-max-time 3000)))
+  
 ;; (defadvice fancy-splash-screens (around new-frame (&rest args) activate protect)
  
 ;;   (let ((one-buffer-one-frame-force t))
@@ -753,12 +752,8 @@ redistribute Aquamacs under the GNU General Public License. Type \\[describe-cop
   ;; scratch buffer should be empty 
   ;; the philosophy is: don't give users any text to read to get started!    
 
-  (aquamacs-set-defaults '( 
-			   (  initial-scratch-message nil)
-			     )
-			 )
- 
-    
+  (aquamacs-set-defaults '((  initial-scratch-message nil)
+			   ))
 
   ;; while pc selection mode will be turned on, we don't
   ;; want it to override Emacs like key bindings. 
@@ -798,9 +793,9 @@ redistribute Aquamacs under the GNU General Public License. Type \\[describe-cop
 
   ;;; for initial buffer
 ;;; for some reason
-(add-hook 'after-init-hook (lambda ()
-			     (setq buffer-offer-save t)
-			     ))
+  (add-hook 'after-init-hook (lambda ()
+			       (setq buffer-offer-save t)
+			       ))
      
   ;; Define customization group
 ;; add items that aren't Aquamacs defcustoms
@@ -840,7 +835,7 @@ listed here."
   ;; as customized variable.
   (customize-set-variable 'aquamacs-customization-version-id 
 			  aquamacs-customization-version-id)
-
+  
   (defun aquamacs-menu-bar-options-save ()
     "Save current values of Options menu items using Custom.
 Return non-nil if options where saved."
@@ -851,20 +846,20 @@ Return non-nil if options where saved."
       ;; put on a customized-value property.
       (dolist (elt (append 
 		    '(line-number-mode 
-		     column-number-mode 
-		     size-indication-mode
-		     cua-mode show-paren-mode
-		     transient-mark-mode 
-		     global-font-lock-mode
-		     display-time-mode 
-		     display-battery-mode
-		     one-buffer-one-frame-mode 
-		     mac-option-modifier
-		     smart-frame-prior-positions)
-		     (mapcar (lambda (x) 
-			       (emkm-name (car x))) 
-			       emulate-mac-keyboard-mode-maps)
-				      ))
+		      column-number-mode 
+		      size-indication-mode
+		      cua-mode show-paren-mode
+		      transient-mark-mode 
+		      global-font-lock-mode
+		      display-time-mode 
+		      display-battery-mode
+		      one-buffer-one-frame-mode 
+		      mac-option-modifier
+		      smart-frame-prior-positions)
+		    (mapcar (lambda (x) 
+			      (emkm-name (car x))) 
+			    emulate-mac-keyboard-mode-maps)
+		    ))
 	(and (customize-mark-to-save elt)
 	     (setq need-save t))) 
       ;; 
@@ -898,16 +893,16 @@ Return non-nil if options where saved."
 	(custom-save-all))
       need-save))
 
-(defcustom aquamacs-save-options-on-quit 'ask
-"If t, always save the options (from the options menu) when quitting.
+  (defcustom aquamacs-save-options-on-quit 'ask
+    "If t, always save the options (from the options menu) when quitting.
 If set to `ask' (default), the user is asked in case the options
 have changed."
-:group 'Aquamacs
-:type '(choice (const nil)  (const ask) (const t)))
+    :group 'Aquamacs
+    :type '(choice (const nil)  (const ask) (const t)))
+  
 
- 
-(defun aquamacs-ask-to-save-options ()
-"Checks if options need saving and allows to do that.
+  (defun aquamacs-ask-to-save-options ()
+  "Checks if options need saving and allows to do that.
 Returns t."
   (interactive)
   (let ((real-custom-file custom-file)
@@ -915,46 +910,45 @@ Returns t."
     (if (and (aquamacs-menu-bar-options-save)
 	     ;; depends on return value of `aquamacs-menu-bar-options-save'
 	     ;; NOT implemented for the standard menu-bar-options-save!
-	     
 	     ;; ask user whether to accept these saved changes
 	     (if (eq aquamacs-save-options-on-quit 'ask)
 		 (y-or-n-p "Options have changed - save them? ")
 	       aquamacs-save-options-on-quit)
-	(rename-file custom-file real-custom-file 'overwrite)))
-t)
-(add-hook 'kill-emacs-query-functions 'aquamacs-ask-to-save-options)
+	     (rename-file custom-file real-custom-file 'overwrite))))
+  t)
+  (add-hook 'kill-emacs-query-functions 'aquamacs-ask-to-save-options)
 
 
-(defun aquamacs-save-buffers-kill-emacs (&optional arg)
-  "Offer to save each buffer, then kill this Emacs process.
+  (defun aquamacs-save-buffers-kill-emacs (&optional arg)
+    "Offer to save each buffer, then kill this Emacs process.
 With prefix arg, silently save all file-visiting buffers, then kill.
 Like `save-buffers-kill-emacs', except that it doesn't ask again
 if modified buffers exist."
-  (interactive "P")
-  (save-some-buffers arg t)
-  (and (or (not (memq t (mapcar (function
-				  (lambda (buf) (and (buffer-file-name buf)
-						     (buffer-modified-p buf))))
-				(buffer-list)))))
-       (or (not (fboundp 'process-list))
-	   ;; process-list is not defined on VMS.
-	   (let ((processes (process-list))
-		 active)
-	     (while processes
-	       (and (memq (process-status (car processes)) 
-			  '(run stop open listen))
-		    (process-query-on-exit-flag (car processes))
-		    (setq active t))
-	       (setq processes (cdr processes)))
-	     (or (not active)
-		 (list-processes t)
-		 (yes-or-no-p 
-		  "Active processes exist; kill them and exit anyway? "))))
-       ;; Query the user for other things, perhaps.
-       (run-hook-with-args-until-failure 'kill-emacs-query-functions)
-       (or (null confirm-kill-emacs)
-	   (funcall confirm-kill-emacs "Really exit Emacs? "))
-       (kill-emacs)))
+    (interactive "P")
+    (save-some-buffers arg t)
+    (and (or (not (memq t (mapcar (function
+				   (lambda (buf) (and (buffer-file-name buf)
+						      (buffer-modified-p buf))))
+				  (buffer-list)))))
+	 (or (not (fboundp 'process-list))
+	     ;; process-list is not defined on VMS.
+	     (let ((processes (process-list))
+		   active)
+	       (while processes
+		 (and (memq (process-status (car processes)) 
+			    '(run stop open listen))
+		      (process-query-on-exit-flag (car processes))
+		      (setq active t))
+		 (setq processes (cdr processes)))
+	       (or (not active)
+		   (list-processes t)
+		   (yes-or-no-p 
+		    "Active processes exist; kill them and exit anyway? "))))
+	 ;; Query the user for other things, perhaps.
+	 (run-hook-with-args-until-failure 'kill-emacs-query-functions)
+	 (or (null confirm-kill-emacs)
+	     (funcall confirm-kill-emacs "Really exit Emacs? "))
+	 (kill-emacs)))
 
 (global-set-key [remap save-buffers-kill-emacs] 
 		'aquamacs-save-buffers-kill-emacs)
