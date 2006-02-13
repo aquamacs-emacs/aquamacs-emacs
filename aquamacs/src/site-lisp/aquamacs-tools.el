@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.13 2006/02/08 20:42:47 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.14 2006/02/13 18:01:56 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -169,13 +169,22 @@ all of these defaults to their GNU Emacs value will not give you
 a GNU Emacs. To achieve that, use a self-compiled binary of 
 Carbon Emacs instead of Aquamacs."
 :group 'Aquamacs)
- 
+
+(setq  messages-buffer-max-lines 500)
 (defun aquamacs-set-defaults (list)
   "Set a new default for a customization option in Aquamacs.
 Add the value to the customization group `Aquamacs-is-more-than-Emacs'."
 
   (mapc (lambda (elt)
+	  (custom-load-symbol (car elt))
 	  (let* ((symbol (car elt))
+		 ;; we're accessing the doc property here so
+		 ;; if the symbol is an autoload symbol,
+		 ;; it'll get loaded now before setting its defaults
+		 ;; (e.g. standard-value), which would otherwise be
+		 ;; overwritten.
+		 (old-doc (documentation-property symbol 
+						  'variable-documentation))
 		(value (car (cdr elt)))
 		(s-value (get symbol 'standard-value)))
 	    (set symbol value)
@@ -186,7 +195,6 @@ Add the value to the customization group `Aquamacs-is-more-than-Emacs'."
 	    ;; and that this appears as the new default.
 
 	    (put symbol 'standard-value `((quote  ,(eval symbol))))
-
 	    ;; since the standard-value changed, put it in the
 	    ;; group
 
@@ -194,19 +202,20 @@ Add the value to the customization group `Aquamacs-is-more-than-Emacs'."
 			(get symbol 'aquamacs-original-default))
 	      (put symbol 'aquamacs-original-default
 		   s-value)
-	      (put symbol 'variable-documentation
-		   (concat
-		    (documentation-property symbol 'variable-documentation)
-		    (format "
+	      (if old-doc ;; in some cases the documentation
+		  ;; might not be loaded. Can we load it somehow?
+		  ;; either way, the "if" is a workaround.
+		  (put symbol 'variable-documentation
+		       (concat
+			old-doc
+			(format "
 
 The original default (in GNU Emacs or in the package) was:
-%s" s-value)))
-	      
+%s" 
+				s-value))))
 	      (custom-add-to-group 'Aquamacs-is-more-than-Emacs 
-				   symbol 'custom-variable) 
-	      )))
-	list
-	))
+				   symbol 'custom-variable))))
+	list))
 
 
 

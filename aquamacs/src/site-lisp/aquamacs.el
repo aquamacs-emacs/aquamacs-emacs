@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.46 2006/02/12 08:37:16 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.47 2006/02/13 18:03:01 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -913,8 +913,9 @@ Returns t."
 	     ;; ask user whether to accept these saved changes
 	     (if (eq aquamacs-save-options-on-quit 'ask)
 		 (y-or-n-p "Options have changed - save them? ")
-	       aquamacs-save-options-on-quit)
-	     (rename-file custom-file real-custom-file 'overwrite))))
+	       aquamacs-save-options-on-quit))
+	(rename-file custom-file real-custom-file 'overwrite)
+      (delete-file custom-file)))
   t)
   (add-hook 'kill-emacs-query-functions 'aquamacs-ask-to-save-options)
 
