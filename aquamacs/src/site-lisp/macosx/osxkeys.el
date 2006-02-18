@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.54 2005/12/14 18:42:15 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.55 2006/02/18 13:37:39 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -44,11 +44,14 @@
 
 ;; To do: this should only happen when the mode is switched on
 
-(setq mac-option-modifier 'meta) 
+(aquamacs-set-defaults '(
+			 (mac-option-modifier meta) 
 ;;(setq mac-control-modifier nil) ;; use default
-(setq mac-command-modifier 'alt)
-(setq mac-pass-command-to-system t) ;; let system handle Apple-H and the like
+			 (mac-command-modifier alt)
+			 (mac-pass-command-to-system t) 
+;; let system handle Apple-H and the like
 ;; (this is default anyways)
+))
 
 ;; mac-command-is-meta won't work any more at this point!
 ;; it's deprecated
@@ -482,37 +485,7 @@ If arg is zero, kill current line but exclude the trailing newline."
 (allow-line-as-region-for-function comment-or-uncomment-region)
 
 
-
-
-; (setq garbage-collection-messages t)
-(defun debug-keymap-corruption ()
-  (interactive)
-   (with-temp-buffer
-     "*aq-temp*"
-     (with-output-to-temp-buffer "*aq-temp*"
-       (print "current global map:")
-       (print (current-global-map))
-       (print osx-key-mode-map))
-       (write-region nil nil "/tmp/Aquamacs-Corrupt-Keymap.log.el")
-     )
-   (kill-buffer "*aq-temp*")
-
-  (with-current-buffer "*Messages*"
-	       (write-region nil nil "/tmp//Aquamacs-Messages.log.el"))	     
-
-  ;; try to restore key map
-(when nil
-  (if global-map-backup
-      (use-global-map global-map-backup)
-    )
-  (if osx-key-mode-map-backup
-      (use-local-map nil)
-    ))
-  (mac-dialog "Internal data corruption -- Some data restored." 
-"Corrupted keymaps restored from backup. 
-Please save your work and restart Aquamacs.
-Consider filing a bug report with Help/Send Bug Report.
-Debug info left in /tmp/Aquamacs-Corrupt-Keymap.log.el."))
+ 
  
 (add-hook 'after-init-hook 
 	  (lambda () 
@@ -807,9 +780,6 @@ default."
   (let ((map (make-sparse-keymap)))
 
     ;; debug log
-
-  
-  ;;  (define-key map `[(,osxkeys-command-key shift t)] 'debug-keymap-corruption)
 
     (define-key map [mouse-3] 'osx-key-mode-mouse-3)
 
