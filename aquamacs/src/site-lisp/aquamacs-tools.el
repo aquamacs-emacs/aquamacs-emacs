@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.14 2006/02/13 18:01:56 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.15 2006/02/18 13:37:15 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -50,6 +50,18 @@
 ;;         (t
 ;;           	; first of alist plus rest w/ recursion
 ;;           (get-alist-value-for-name name (cdr alist)))))
+
+(defun filter-list (lst elements)
+"Returns LST sans ELEMENTS.
+Creates a new list where all elements in ELEMENTS from LST
+are removed. Comparison is done with `eq'."
+
+(if (null lst) 
+    nil
+  (if (member (car lst) elements)
+      (filter-list (cdr lst) elements)
+    (cons (car lst) (filter-list (cdr lst) elements)))))
+
 
 (defun assq-set (key val alist)
   (set alist (assq-delete-all key (eval alist)))
@@ -171,6 +183,7 @@ Carbon Emacs instead of Aquamacs."
 :group 'Aquamacs)
 
 (setq  messages-buffer-max-lines 500)
+
 (defun aquamacs-set-defaults (list)
   "Set a new default for a customization option in Aquamacs.
 Add the value to the customization group `Aquamacs-is-more-than-Emacs'."
@@ -214,10 +227,11 @@ The original default (in GNU Emacs or in the package) was:
 %s" 
 				s-value))))
 	      (custom-add-to-group 'Aquamacs-is-more-than-Emacs 
-				   symbol 'custom-variable))))
+				   symbol 'custom-variable))
+	    ))
 	list))
 
-
+; (aquamacs-setup)
 
 (defun url-encode-string (string &optional coding)
   "Encode STRING by url-encoding.

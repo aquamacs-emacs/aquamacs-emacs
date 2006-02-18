@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.47 2006/02/13 18:03:01 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.48 2006/02/18 13:37:15 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -861,7 +861,7 @@ Return non-nil if options where saved."
 			    emulate-mac-keyboard-mode-maps)
 		    ))
 	(and (customize-mark-to-save elt)
-	     (setq need-save t))) 
+	     (setq need-save (cons elt need-save)))) 
       ;; 
       ;; These are set with `customize-set-variable'.
       (dolist (elt '(scroll-bar-mode
@@ -887,7 +887,7 @@ Return non-nil if options where saved."
 		     ))
 	(and (get elt 'customized-value) 
 	     (customize-mark-to-save elt)
-	     (setq need-save t)))
+	     (setq need-save (cons elt need-save))))
       ;; Save if we changed anything.
       (when need-save
 	(custom-save-all))
@@ -906,11 +906,16 @@ have changed."
 Returns t."
   (interactive)
   (let ((real-custom-file custom-file)
-	(custom-file (make-temp-file "customizations" nil ".el")))
-    (if (and (aquamacs-menu-bar-options-save)
+	(custom-file (make-temp-file "customizations" nil ".el"))
+	(changed (aquamacs-menu-bar-options-save)))
+    (if (and (filter-list changed
+			  (list 'aquamacs-customization-version-id
+				'smart-frame-prior-positions
+				'transient-mark-mode))
 	     ;; depends on return value of `aquamacs-menu-bar-options-save'
 	     ;; NOT implemented for the standard menu-bar-options-save!
 	     ;; ask user whether to accept these saved changes
+	     (print changed) 
 	     (if (eq aquamacs-save-options-on-quit 'ask)
 		 (y-or-n-p "Options have changed - save them? ")
 	       aquamacs-save-options-on-quit))
