@@ -1,0 +1,108 @@
+Index: lisp/tool-bar.el
+===================================================================
+RCS file: /sources/emacs/emacs/lisp/tool-bar.el,v
+retrieving revision 1.4
+diff -c -r1.4 tool-bar.el
+*** lisp/tool-bar.el	23 Dec 2005 11:36:08 -0000	1.4
+--- lisp/tool-bar.el	19 Feb 2006 23:07:57 -0000
+***************
+*** 123,128 ****
+--- 123,130 ----
+  	 (bg (face-attribute 'tool-bar :background))
+  	 (colors (nconc (if (eq fg 'unspecified) nil (list :foreground fg))
+  			(if (eq bg 'unspecified) nil (list :background bg))))
++ 	 (png-spec (list :type 'png :background bg
++ 			 :file (concat icon ".png")))
+  	 (xpm-spec (list :type 'xpm :file (concat icon ".xpm")))
+  	 (xpm-lo-spec (if (> (display-color-cells) 256)
+  			  nil
+***************
+*** 134,141 ****
+                                   (concat icon ".xbm")) colors))
+  	 (image (find-image
+  		(if (display-color-p)
+! 		    (list xpm-lo-spec xpm-spec pbm-spec xbm-spec)
+! 		  (list pbm-spec xbm-spec xpm-lo-spec xpm-spec)))))
+  
+      (when (and (display-images-p) image)
+        (unless (image-mask-p image)
+--- 136,143 ----
+                                   (concat icon ".xbm")) colors))
+  	 (image (find-image
+  		(if (display-color-p)
+! 		    (list png-spec xpm-lo-spec xpm-spec pbm-spec xbm-spec)
+! 		  (list pbm-spec xbm-spec xpm-lo-spec xpm-spec png-spec)))))
+  
+      (when (and (display-images-p) image)
+        (unless (image-mask-p image)
+***************
+*** 178,183 ****
+--- 180,187 ----
+  	 (bg (face-attribute 'tool-bar :background))
+  	 (colors (nconc (if (eq fg 'unspecified) nil (list :foreground fg))
+  			(if (eq bg 'unspecified) nil (list :background bg))))
++ 	 (png-spec (list :type 'png :background bg
++ 			 :file (concat icon ".png")))
+  	 (xpm-spec (list :type 'xpm :file (concat icon ".xpm")))
+  	 (xpm-lo-spec (if (> (display-color-cells) 256)
+  			  nil
+***************
+*** 188,195 ****
+  	 (xbm-spec (append (list :type 'xbm :file
+                                   (concat icon ".xbm")) colors))
+  	 (spec (if (display-color-p)
+! 		   (list xpm-lo-spec xpm-spec pbm-spec xbm-spec)
+! 		 (list pbm-spec xbm-spec xpm-lo-spec xpm-spec)))
+  	 (image (find-image spec))
+  	 submap key)
+      (when (and (display-images-p) image)
+--- 192,199 ----
+  	 (xbm-spec (append (list :type 'xbm :file
+                                   (concat icon ".xbm")) colors))
+  	 (spec (if (display-color-p)
+! 		   (list png-spec xpm-lo-spec xpm-spec pbm-spec xbm-spec)
+! 		 (list pbm-spec xbm-spec xpm-lo-spec xpm-spec png-spec)))
+  	 (image (find-image spec))
+  	 submap key)
+      (when (and (display-images-p) image)
+***************
+*** 275,282 ****
+--- 279,316 ----
+  			      (popup-menu menu-bar-help-menu))
+  		     'help
+  		     :help "Pop up the Help menu")
++ 
++   ;; Toolbar button, mapped to handle-toggle-tool-bar in tool-bar.el
++   ;; (Toolbar button - on systems that support it!)
++   (global-set-key [toggle-frame-toolbar] 'handle-toggle-tool-bar)
++ 
+    )
+  
++ 
++ ;; local toolbars
++ 
++ (defun tool-bar-enabled-p (&optional frame)
++ "Evaluates to non-nil if the tool-bar is present
++ in frame FRAME. If FRAME is nil, the function applies
++ to the selected frame."
++   (> (or (frame-parameter frame 'tool-bar-lines) 0) 0))
++ 
++ (defun toggle-tool-bar (&optional frame)
++ "Switches the tool bar on and off in frame FRAME.
++ If FRAME is nil, the change applies to the selected frame."
++ (interactive)
++   (modify-frame-parameters frame 
++    (list (cons 'tool-bar-lines 
++ 	       (if (tool-bar-enabled-p frame)
++ 		   0
++ 		 1
++ 		 )))))
++ 
++ (defun handle-toggle-tool-bar (event)
++ "Handles a tool-bar toggle event."
++ (interactive "e")
++   (toggle-tool-bar  (posn-window (event-start event))))
++ 
+  (provide 'tool-bar)
+  
+  ;;; arch-tag: 15f30f0a-d0d7-4d50-bbb7-f48fd0c8582f
