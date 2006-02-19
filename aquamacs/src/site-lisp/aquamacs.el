@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.48 2006/02/18 13:37:15 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.49 2006/02/19 23:33:52 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -721,7 +721,7 @@ un-Mac-like way when you select text and copy&paste it.")))
 
       (propertize 	(substitute-command-keys "
 Copyright (C) 2006 Free Software Foundation, Inc., & D. Reitter. No Warranty. You may
-redistribute Aquamacs under the GNU General Public License. Type \\[describe-copying] to view.") 'face 'blue)) 
+redistribute Aquamacs under the GNU General Public License. Type \\[describe-copying] to view.") 'face 'blue-foreground-face)) 
      (frame-parameter nil 'width) ;; let's just hope that this is the width of the echo area
      ))
 
@@ -1000,6 +1000,63 @@ if modified buffers exist."
 
   ) ;; aquamacs-setup
 
+
+;; this to overwrite the tool-bar setup function
+; (tool-bar-setup) 
+(defun tool-bar-setup ()
+  ;; People say it's bad to have EXIT on the tool bar, since users
+  ;; might inadvertently click that button.
+  ;;(tool-bar-add-item-from-menu 'save-buffers-kill-emacs "exit")
+  (tool-bar-add-item-from-menu 'new-frame-with-new-scratch "new")
+  (tool-bar-add-item-from-menu 'mac-key-open-file "open")
+  (tool-bar-add-item-from-menu 'dired "diropen")
+  (tool-bar-add-item-from-menu 'kill-this-buffer "close" nil
+			       :visible (not one-buffer-one-frame-mode))
+  (tool-bar-add-item-from-menu 'save-buffer "save" nil
+			       :visible '(or buffer-file-name
+					     (not (eq 'special
+						      (get major-mode
+							   'mode-class))))) 
+  (tool-bar-add-item-from-menu 'write-file "saveas" nil
+			       :visible '(or buffer-file-name
+					     (not (eq 'special
+						      (get major-mode
+							   'mode-class)))))
+  (tool-bar-add-item-from-menu 'undo "undo" nil
+			       :visible '(not (eq 'special (get major-mode
+								'mode-class))))
+  (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [cut])
+			       "cut" nil
+			       :visible '(not (eq 'special (get major-mode
+								'mode-class))))
+  (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [copy])
+			       "copy")
+  (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [paste])
+			       "paste" nil
+			       :visible '(not (eq 'special (get major-mode
+								'mode-class))))
+  (tool-bar-add-item-from-menu 'nonincremental-search-forward "search")
+  ;;(tool-bar-add-item-from-menu 'ispell-buffer "spell")
+
+  ;; There's no icon appropriate for News and we need a command rather
+  ;; than a lambda for Read Mail.
+  ;;(tool-bar-add-item-from-menu 'compose-mail "mail/compose")
+
+  (tool-bar-add-item-from-menu 'print-buffer "print")
+  (tool-bar-add-item "preferences" 'customize 'customize
+		     :help "Edit preferences (customize)")
+
+  (tool-bar-add-item "help" (lambda ()
+			      (interactive)
+			      (popup-menu menu-bar-help-menu))
+		     'help
+		     :help "Pop up the Help menu")
+
+  ;; Toolbar button, mapped to handle-toggle-tool-bar in tool-bar.el
+  ;; (Toolbar button - on systems that support it!)
+  (global-set-key [toggle-frame-toolbar] 'handle-toggle-tool-bar)
+
+  )
 
 (provide 'aquamacs)
 
