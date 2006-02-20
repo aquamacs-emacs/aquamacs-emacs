@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.30 2006/02/10 19:06:38 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.31 2006/02/20 23:19:52 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -605,7 +605,6 @@ current major mode. To turn off this behavior, see
 		  (outline-mode  (font . "fontset-lucida13"))
 		  (paragraph-indent-text-mode  (font . "fontset-lucida13"))
 		  (speedbar-mode (minibuffer-auto-raise . nil))
-		  (fundamental-mode (tool-bar-lines . 0))
 		  (custom-mode (tool-bar-lines . 0) (fit-frame . t) 
 			       (background-color . "light goldenrod"))
 		  ))
@@ -712,6 +711,10 @@ for all frames with the current major-mode."
    (replace-regexp-in-string "-" " " (symbol-name modename))))
 
 
+  (defadvice tool-bar-mode (around aquamacs-check-themes) activate
+    (if aquamacs-mode-specific-default-themes
+	(message "As Frame Appearance Themes are activated, tool-bar-mode may be overridden by themes."))
+    ad-do-it)
 
 ;; (setq apptheme-mode-menu (make-sparse-keymap "Set Mode")) 
 ;; (mapc

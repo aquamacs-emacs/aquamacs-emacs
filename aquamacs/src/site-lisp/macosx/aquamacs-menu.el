@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.57 2006/02/11 23:47:56 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.58 2006/02/20 23:19:56 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -747,31 +747,12 @@ both existing buffers and buffers that you subsequently create."
 	      :button (:radio . (equal fringe-mode '(1 . 1)))) 'none)
 
  
-;; local toolbars
 
-(defun tool-bar-enabled-p (&optional frame)
-"Evaluates to non-nil if the tool-bar is present
-in frame FRAME. If FRAME is nil, the function applies
-to the selected frame."
-  (> (or (frame-parameter frame 'tool-bar-lines) 0) 0)) 
+;; remove this entry, because in Aquamacs, no global tool-bar-mode
+;; is present
+(define-key menu-bar-showhide-menu [showhide-tool-bar]
+    nil)
 
-(defun toggle-tool-bar-here ()
-(interactive)
-  (modify-frame-parameters 
-   nil 
-   (list (cons 'tool-bar-lines 
-	       (if (tool-bar-enabled-p)
-		   0
-		 1
-		 )))))
-;; (toggle-tool-bar-here)
-
-(define-key-after menu-bar-showhide-menu [showhide-tool-bar-here]
-    (list 'menu-item "Tool-bar in this frame" 'toggle-tool-bar-here
-	:help ""
-	:visible `(display-graphic-p)
-	:button '(:toggle . (tool-bar-enabled-p)))
-    'showhide-tool-bar)
 
 ;; move this down after "customize"
 

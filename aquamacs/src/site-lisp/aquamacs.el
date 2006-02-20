@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.51 2006/02/20 22:46:35 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.52 2006/02/20 23:19:52 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -474,6 +474,25 @@ Use this argument instead of explicitly setting `view-exit-action'."
 
  
 
+
+  ;; local toolbars
+
+  (defun tool-bar-enabled-p (&optional frame)
+    "Evaluates to non-nil if the tool-bar is present
+in frame FRAME. If FRAME is nil, the function applies
+to the selected frame."
+    (> (or (frame-parameter frame 'tool-bar-lines) 0) 0)) 
+
+  (defun toggle-tool-bar-here ()
+    (interactive)
+    (modify-frame-parameters 
+     nil 
+     (list (cons 'tool-bar-lines 
+		 (if (tool-bar-enabled-p)
+		     0
+		   1
+		   )))))
+  ;; (toggle-tool-bar-here)
 
 
 					; and turn on smart frame positioning
