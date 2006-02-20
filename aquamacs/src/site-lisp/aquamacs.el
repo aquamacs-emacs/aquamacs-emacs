@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.50 2006/02/20 12:35:43 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.51 2006/02/20 22:46:35 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -932,11 +932,7 @@ Like `save-buffers-kill-emacs', except that it doesn't ask again
 if modified buffers exist."
     (interactive "P")
     (save-some-buffers arg t)
-    (and (or (not (memq t (mapcar (function
-				   (lambda (buf) (and (buffer-file-name buf)
-						      (buffer-modified-p buf))))
-				  (buffer-list)))))
-	 (or (not (fboundp 'process-list))
+    (and (or (not (fboundp 'process-list))
 	     ;; process-list is not defined on VMS.
 	     (let ((processes (process-list))
 		   active)
@@ -998,21 +994,30 @@ if modified buffers exist."
 					; via hook so it can be turned off
   (add-hook 'after-init-hook 'aquamacs-check-for-updates-if-necessary 'append) 
 
+(aquamacs-tool-bar-setup)
+
   ) ;; aquamacs-setup
 
 
 ;; this to overwrite the tool-bar setup function
-; (tool-bar-setup) 
-(defun tool-bar-setup ()
+;  
+(defun aquamacs-tool-bar-setup ()
   ;; People say it's bad to have EXIT on the tool bar, since users
   ;; might inadvertently click that button.
   ;;(tool-bar-add-item-from-menu 'save-buffers-kill-emacs "exit")
+  (setq tool-bar-map (make-sparse-keymap))
+  (let ((face 'tool-bar)
+	(spec '((t (:background "#e0e0e0" :foreground "black" 
+				:box (:line-width 1 :style released-button))))))
+    (face-spec-set face spec nil)
+    (put face 'face-defface-spec spec))
+
   (tool-bar-add-item-from-menu 'new-frame-with-new-scratch "new")
   (tool-bar-add-item-from-menu 'mac-key-open-file "open")
   (tool-bar-add-item-from-menu 'dired "diropen")
   (tool-bar-add-item-from-menu 
    'kill-this-buffer "close" nil
-   :visible (or (not (boundp 'one-buffer-one-frame-mode))
+   :visible '(or (not (boundp 'one-buffer-one-frame-mode))
 		(not one-buffer-one-frame-mode)))
   (tool-bar-add-item-from-menu 'save-buffer "save" nil
 			       :visible '(or buffer-file-name
@@ -1026,7 +1031,7 @@ if modified buffers exist."
 							   'mode-class)))))
   (tool-bar-add-item-from-menu 'undo "undo" nil
 			       :visible '(not (eq 'special (get major-mode
-								'mode-class))))
+	  							'mode-class))))
   (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [cut])
 			       "cut" nil
 			       :visible '(not (eq 'special (get major-mode
