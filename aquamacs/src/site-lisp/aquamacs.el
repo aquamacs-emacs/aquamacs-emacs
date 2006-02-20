@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.49 2006/02/19 23:33:52 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.50 2006/02/20 12:35:43 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -1010,8 +1010,10 @@ if modified buffers exist."
   (tool-bar-add-item-from-menu 'new-frame-with-new-scratch "new")
   (tool-bar-add-item-from-menu 'mac-key-open-file "open")
   (tool-bar-add-item-from-menu 'dired "diropen")
-  (tool-bar-add-item-from-menu 'kill-this-buffer "close" nil
-			       :visible (not one-buffer-one-frame-mode))
+  (tool-bar-add-item-from-menu 
+   'kill-this-buffer "close" nil
+   :visible (or (not (boundp 'one-buffer-one-frame-mode))
+		(not one-buffer-one-frame-mode)))
   (tool-bar-add-item-from-menu 'save-buffer "save" nil
 			       :visible '(or buffer-file-name
 					     (not (eq 'special
