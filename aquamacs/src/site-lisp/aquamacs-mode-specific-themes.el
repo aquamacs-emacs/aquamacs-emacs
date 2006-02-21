@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.31 2006/02/20 23:19:52 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.32 2006/02/21 10:44:22 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -711,7 +711,7 @@ for all frames with the current major-mode."
    (replace-regexp-in-string "-" " " (symbol-name modename))))
 
 
-  (defadvice tool-bar-mode (around aquamacs-check-themes) activate
+  (defadvice tool-bar-mode (around aquamacs-check-themes () activate)
     (if aquamacs-mode-specific-default-themes
 	(message "As Frame Appearance Themes are activated, tool-bar-mode may be overridden by themes."))
     ad-do-it)
