@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.52 2006/02/20 23:19:52 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.53 2006/02/22 12:25:39 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -924,7 +924,7 @@ have changed."
   "Checks if options need saving and allows to do that.
 Returns t."
   (interactive)
-  (let ((real-custom-file custom-file)
+  (let* ((real-custom-file custom-file)
 	(custom-file (make-temp-file "customizations" nil ".el"))
 	(changed (aquamacs-menu-bar-options-save)))
     (if (and (filter-list changed
@@ -938,7 +938,11 @@ Returns t."
 	     (if (eq aquamacs-save-options-on-quit 'ask)
 		 (y-or-n-p "Options have changed - save them? ")
 	       aquamacs-save-options-on-quit))
-	(rename-file custom-file real-custom-file 'overwrite)
+	(progn
+	  (rename-file real-custom-file 
+		       (concat real-custom-file ".bak") 'overwrite)
+	  (rename-file custom-file real-custom-file 'overwrite)
+	)
       (delete-file custom-file)))
   t)
   (add-hook 'kill-emacs-query-functions 'aquamacs-ask-to-save-options)

@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.32 2006/02/21 10:44:22 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.33 2006/02/22 12:25:39 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -711,10 +711,19 @@ for all frames with the current major-mode."
    (replace-regexp-in-string "-" " " (symbol-name modename))))
 
 
-  (defadvice tool-bar-mode (around aquamacs-check-themes () activate)
+(aquamacs-set-defaults '((tool-bar-mode 0)))
+;(tool-bar-mode 0) ;; turn it off
+;; additionally, we should ensure that default-frame-alist
+;; is consistent with that. (see aquamacs-frame-setup)
+
+  (defadvice tool-bar-mode (around aquamacs-warn-if-themes-active () activate)
     (if aquamacs-mode-specific-default-themes
-	(message "As Frame Appearance Themes are activated, tool-bar-mode may be overridden by themes."))
+	(let ((msg "As Frame Appearance Themes are active, tool-bar may be controlled by themes."))
+	  (message msg )
+	  (unless (interactive-p)
+	    (message ""))))
     ad-do-it)
+
 
 ;; (setq apptheme-mode-menu (make-sparse-keymap "Set Mode")) 
 ;; (mapc
@@ -757,9 +766,7 @@ for all frames with the current major-mode."
 
     (list 'menu-item "Frame Appearance Themes" aquamacs-frame-theme-menu 
 	  :help "Set themes for frames depending on major mode in buffer")
-
     'aquamacs-color-theme-select)
-
 
   ;; advise frame-notice-user-settings (from frame.el)
   ;; to integrate the mode-specific frame settings
