@@ -8,7 +8,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-frame-setup.el,v 1.19 2006/02/22 12:25:48 davidswelt Exp $
+;; Last change: $Id: aquamacs-frame-setup.el,v 1.20 2006/02/22 19:40:41 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -47,9 +47,9 @@
 
 (require 'aquamacs-mac-fontsets)
 
-;(defvar 1on1-default-frame-font "fontset-mac")
-;(defvar 1on1-special-display-frame-font "fontset-mac")
-;(defvar 1on1-minibuffer-frame-font "fontset-mac")
+;(defvar 1on1-default-frame-font "fontset-standard")
+;(defvar 1on1-special-display-frame-font "fontset-standard")
+;(defvar 1on1-minibuffer-frame-font "fontset-standard")
 
 
 ;(setq 1on1-default-frame-upper-left-corner '(80 . 60))
