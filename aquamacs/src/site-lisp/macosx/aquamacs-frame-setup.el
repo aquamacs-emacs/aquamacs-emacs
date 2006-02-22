@@ -8,7 +8,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-frame-setup.el,v 1.18 2006/01/13 23:27:26 davidswelt Exp $
+;; Last change: $Id: aquamacs-frame-setup.el,v 1.19 2006/02/22 12:25:48 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -95,7 +95,7 @@ even when minimal fringes are used. (Aquamacs)"
 ;( 1on1-*Completions*-frame-flag nil)
 
 (default-frame-alist 
-((foreground-color . "Black") (background-color . "White") (font . "fontset-monaco12")  (cursor-color . "Red")   (vertical-scroll-bars . right)  (tool-bar-lines . 1) (left-fringe . 1) (right-fringe . nil) (fringe . nil)))
+((foreground-color . "Black") (background-color . "White") (font . "fontset-monaco12")  (cursor-color . "Red")   (vertical-scroll-bars . right)  (tool-bar-lines . 0) (left-fringe . 1) (right-fringe . nil) (fringe . nil)))
 
 (special-display-frame-alist
  ((unsplittable)

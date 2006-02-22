@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.45 2006/01/05 14:31:37 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.46 2006/02/22 12:25:48 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -157,11 +157,11 @@
 	)
     (error t)) 
 
-  (aquamacs-set-defaults
-   '((custom-file "~/Library/Preferences/Aquamacs Emacs/customizations.el")
-     ;;   (user-init-file "~/Library/Preferences/Aquamacs Emacs/Preferences.el")
-     )
-   )
+  (require 'cus-edit) ;; because of some autoload weirdness 
+  
+   (aquamacs-set-defaults
+    '((custom-file "~/Library/Preferences/Aquamacs Emacs/customizations.el")
+      ))
 
   (defun mac-is-mounted-volume-p (file)
     (if (string-match "/Volumes/.*" file ) t nil)
