@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.53 2006/02/22 12:25:39 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.54 2006/02/22 19:40:08 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -77,8 +77,10 @@ yes-or-no prompts - y or n will do."
   ; (aquamacs-ask-for-confirmation "asd" t)
  
   (defun aquamacs-repl-yes-or-no-p (text)
+    "Like `yes-or-no-p' - use that function instead."
     (aquamacs-ask-for-confirmation text t))
   (defun aquamacs-y-or-n-p (text)
+    "Like `y-or-n-p' - use that function instead."
     (aquamacs-ask-for-confirmation text nil))
 
   (unless (fboundp 'old-yes-or-no-p)
@@ -86,39 +88,7 @@ yes-or-no prompts - y or n will do."
   (unless (fboundp 'old-y-or-n-p)
     (fset 'old-y-or-n-p (symbol-function 'y-or-n-p)))
   
-  (defun aquamacs-ask-for-confirmation (text long)
-    (let ((f (window-frame (minibuffer-window))))
-      (raise-frame f)			; make sure frame is visible
-;;       (let ((y (- (display-pixel-height) (frame-total-pixel-height f) 30 ))) ; extra 30 pix for typical Dock
-;; 	(print y)
-;; 	(if (< y (eval (frame-parameter f 'top)))
-;; 	    (modify-frame-parameters f (list (cons 'top y)))
-;; 	  )
-;; 	)
-      (if (and
-	   (or ;; ensure that the minibuffer shows up on screen
-	    (not (fboundp 'mac-display-available-pixel-bounds))
-	    (not (fboundp 'frame-total-pixel-height))
-	    (< (+ (eval (frame-parameter f 'top)) 
-		  (frame-total-pixel-height f))
-	       (nth 3 (mac-display-available-pixel-bounds))))
-	   (or  
-	    (and last-nonmenu-event 
-		 (not (consp last-nonmenu-event))) 
-		 ;;(not (eq (car-safe last-nonmenu-event)  
-		;;	  'mac-apple-event)))
-	      (not use-dialog-box)
-	      (not (fboundp 'mac-dialog-y-or-n-p))
-	      (not window-system)))
-	  (if (and long (not aquamacs-quick-yes-or-no-prompt))
-	      (old-yes-or-no-p text)
-	    (old-y-or-n-p text))
-	(let ((ret (mac-dialog-y-or-n-p text "" t)))
-	  (if (eq ret 'cancel)
-	      (keyboard-quit))
-	  ret))))          
-  ;; it would be nice to offer a "cancel" option like C-g in the dialog
-
+  
   (fset 'y-or-n-p 'aquamacs-y-or-n-p)
   (fset 'yes-or-no-p 'aquamacs-repl-yes-or-no-p)
 
@@ -924,9 +894,14 @@ have changed."
   "Checks if options need saving and allows to do that.
 Returns t."
   (interactive)
-  (let* ((real-custom-file custom-file)
-	(custom-file (make-temp-file "customizations" nil ".el"))
-	(changed (aquamacs-menu-bar-options-save)))
+  (let* ((tmp-file "/tmp/aquamacs-customizations.el.temp")
+	 (changed (let ((custom-file tmp-file))
+		   (aquamacs-menu-bar-options-save))))
+    ;; undo the changes made 
+    (delete-file tmp-file)
+    (mapc (lambda (symbol) 
+	    (put symbol 'saved-value nil))
+	  changed)
     (if (and (filter-list changed
 			  (list 'aquamacs-customization-version-id
 				'smart-frame-prior-positions
@@ -934,16 +909,10 @@ Returns t."
 	     ;; depends on return value of `aquamacs-menu-bar-options-save'
 	     ;; NOT implemented for the standard menu-bar-options-save!
 	     ;; ask user whether to accept these saved changes
-	     (print changed) 
 	     (if (eq aquamacs-save-options-on-quit 'ask)
 		 (y-or-n-p "Options have changed - save them? ")
 	       aquamacs-save-options-on-quit))
-	(progn
-	  (rename-file real-custom-file 
-		       (concat real-custom-file ".bak") 'overwrite)
-	  (rename-file custom-file real-custom-file 'overwrite)
-	)
-      (delete-file custom-file)))
+	(aquamacs-menu-bar-options-save)))
   t)
   (add-hook 'kill-emacs-query-functions 'aquamacs-ask-to-save-options)
 
