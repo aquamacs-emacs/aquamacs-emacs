@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.15 2006/02/18 13:37:15 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.16 2006/02/22 19:39:08 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -50,6 +50,43 @@
 ;;         (t
 ;;           	; first of alist plus rest w/ recursion
 ;;           (get-alist-value-for-name name (cdr alist)))))
+
+
+
+(defun aquamacs-ask-for-confirmation (text long)
+    (let ((f (window-frame (minibuffer-window))))
+      (raise-frame f)			; make sure frame is visible
+;;       (let ((y (- (display-pixel-height) (frame-total-pixel-height f) 30 ))) ; extra 30 pix for typical Dock
+;; 	(print y)
+;; 	(if (< y (eval (frame-parameter f 'top)))
+;; 	    (modify-frame-parameters f (list (cons 'top y)))
+;; 	  )
+;; 	)
+      (if (and
+	   (or ;; ensure that the minibuffer shows up on screen
+	    (not (fboundp 'mac-display-available-pixel-bounds))
+	    (not (fboundp 'frame-total-pixel-height))
+	    (< (+ (eval (frame-parameter f 'top)) 
+		  (frame-total-pixel-height f))
+	       (nth 3 (mac-display-available-pixel-bounds))))
+	   (or  
+	    (and last-nonmenu-event 
+		 (not (consp last-nonmenu-event))) 
+		 ;;(not (eq (car-safe last-nonmenu-event)  
+		;;	  'mac-apple-event)))
+	      (not use-dialog-box)
+	      (not (fboundp 'mac-dialog-y-or-n-p))
+	      (not window-system)))
+	  (if (and long (not aquamacs-quick-yes-or-no-prompt))
+	      (old-yes-or-no-p text)
+	    (old-y-or-n-p text))
+	(let ((ret (mac-dialog-y-or-n-p text "" t)))
+	  (if (eq ret 'cancel)
+	      (keyboard-quit))
+	  ret))))          
+  ;; it would be nice to offer a "cancel" option like C-g in the dialog
+
+
 
 (defun filter-list (lst elements)
 "Returns LST sans ELEMENTS.
@@ -110,7 +147,6 @@ Elements of ALIST that are not conses are ignored."
 (defun filter-fonts (list)
  "Filters the font list LIST to contain only existing fontsets.
 Each element of LIST has to be of the form (symbol . fontset)."
-
  (mapcar
   (lambda (p)
     (mapcar
@@ -119,7 +155,7 @@ Each element of LIST has to be of the form (symbol . fontset)."
 		(eq (car e) 'font)
 		(not (fontset-exist-p (cdr e)))
 		)
-	   '(font . "fontset-mac")
+	   '(font . "fontset-standard")
 	 e)) 
      p))
   list))
