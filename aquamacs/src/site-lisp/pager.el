@@ -1,7 +1,7 @@
 ;;; pager.el --- windows-scroll commands
-;;; Version 2.1 - 05-08-20
+;;; Version 2.2 - 06-02-23
 ;;; Copyright (C) 1992-1997 Mikael Sjödin (mic@docs.uu.se)
-;;; Copyright (C) 2005 David Reitter (david.reitter@gmail.com)
+;;; Copyright (C) 2005-2006 David Reitter (david.reitter@gmail.com)
 ;;;
 ;;; Author: Mikael Sjödin  --  mic@docs.uu.se
 ;;;
@@ -54,6 +54,7 @@
 
 ;;; ----------------------------------------------------------------------
 ;;; Versions:
+;;; 2.2 Fixed page-wise scrolling for long (wrapped) lines
 ;;; 2.1 Fixed scrolling from top of buffer. 
 ;;;     allow scrolling to top / end of buffer to be compatible
 ;;;     with common UI paradigm.
@@ -87,19 +88,39 @@ keep the `pager-temporary-goal-column'")
 
 ;; ----------------------------------------------------------------------
 
-(defun pager-page-down ()
+(defun pager-page-down-extend-region ()
+  (interactive)
+  (unless mark-active
+    (set-mark (point)))
+  (pager-page-down t))
+
+(defun pager-page-down (&optional keep-mark)
   "Like scroll-up, but moves a fixed amount of lines (fixed relative the
 `window-height') so that pager-page-up moves back to the same line."
   (interactive)
+  (unless (and cua-mode ;; this means transient-mark-mode, too
+	       cua--explicit-region-start
+	       (nil keep-mark))
+    (deactivate-mark))
   (if (not (pos-visible-in-window-p (point-max)))
       (pager-scroll-screen (- (1- (window-height))
 			      next-screen-context-lines))
     (end-of-buffer)))
 
-(defun pager-page-up ()
+(defun pager-page-up-extend-region ()
+  (interactive)
+  (unless mark-active
+    (set-mark (point)))
+  (pager-page-up t))
+
+(defun pager-page-up (&optional keep-mark)
   "Like scroll-down, but moves a fixed amount of lines (fixed relative the
 `window-height') so that pager-page-down moves back to the same line."
   (interactive)
+  (unless (and cua-mode ;; this means transient-mark-mode, too
+	       cua--explicit-region-start
+	       (nil keep-mark))
+    (deactivate-mark))
   (if (not (pos-visible-in-window-p (point-min)))
       (pager-scroll-screen (- next-screen-context-lines 
 			      (1- (window-height))))
@@ -113,12 +134,12 @@ keep the `pager-temporary-goal-column'")
       (setq pager-temporary-goal-column (current-column)))
   (save-excursion
     (goto-char (window-start))
-    (forward-line lines)
+    (vertical-motion lines)
     (set-window-start (selected-window) (point) t )
     )
-  (forward-line lines)
+  (vertical-motion lines)
   (move-to-column pager-temporary-goal-column))
-
+;; ??? (put 'pager-scroll-screen 'CUA 'move)
 
 ;; ----------------------------------------------------------------------
 
@@ -131,8 +152,7 @@ The effect is that the cursor stays in the same position on the screen."
   (if (not (pos-visible-in-window-p (point-min)))
       (scroll-down 1))
   (forward-line -1)
-  (move-to-column pager-temporary-goal-column)
-  )
+  (move-to-column pager-temporary-goal-column))
 
 (defun pager-row-down ()
   "Move point to next line while scrolling screen up one line.
