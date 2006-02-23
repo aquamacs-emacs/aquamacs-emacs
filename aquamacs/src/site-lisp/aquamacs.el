@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.54 2006/02/22 19:40:08 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.55 2006/02/23 16:09:13 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -228,11 +228,16 @@ Separate paths from file names with --."
  
   (global-set-key [remap scroll-up]	      'pager-page-down)
   (global-set-key [remap cua-scroll-up]	      'pager-page-down)
+  (global-set-key [remap scroll-up-mark]      'pager-page-down-extend-region)
   (global-set-key [next] 	      'pager-page-down)
+  (global-set-key [\S-next] 	      'pager-page-down-extend-region)
   (global-set-key [\M-up]	      'pager-page-up)
   (global-set-key [remap scroll-down]	      'pager-page-up) 
   (global-set-key [remap cua-scroll-down]	      'pager-page-up)
+  (global-set-key [remap scroll-down-mark]      'pager-page-up-extend-region)
   (global-set-key [prior]	      'pager-page-up)
+  (global-set-key [\S-prior]	      'pager-page-up-extend-region)
+
   ;; was here in 0.9.5, taken out
   ;;(global-set-key [C-up]        'pager-row-up)
   ;;(global-set-key [C-down]      'pager-row-down)

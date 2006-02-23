@@ -90,18 +90,19 @@ keep the `pager-temporary-goal-column'")
 
 (defun pager-page-down-extend-region ()
   (interactive)
-  (unless mark-active
-    (set-mark (point)))
+  (or mark-active (set-mark-command nil))
   (pager-page-down t))
 
 (defun pager-page-down (&optional keep-mark)
   "Like scroll-up, but moves a fixed amount of lines (fixed relative the
 `window-height') so that pager-page-up moves back to the same line."
   (interactive)
-  (unless (and cua-mode ;; this means transient-mark-mode, too
-	       cua--explicit-region-start
-	       (nil keep-mark))
-    (deactivate-mark))
+  (unless (or keep-mark
+	      (and cua-mode ;; this means transient-mark-mode, too
+	       cua--explicit-region-start))
+    (deactivate-mark)) ; why doesn't this happen automatically in cua-mode?
+					; there is probable a more
+					; elegant solution to this
   (if (not (pos-visible-in-window-p (point-max)))
       (pager-scroll-screen (- (1- (window-height))
 			      next-screen-context-lines))
@@ -109,17 +110,16 @@ keep the `pager-temporary-goal-column'")
 
 (defun pager-page-up-extend-region ()
   (interactive)
-  (unless mark-active
-    (set-mark (point)))
+  (or mark-active (set-mark-command nil))
   (pager-page-up t))
 
 (defun pager-page-up (&optional keep-mark)
   "Like scroll-down, but moves a fixed amount of lines (fixed relative the
 `window-height') so that pager-page-down moves back to the same line."
   (interactive)
-  (unless (and cua-mode ;; this means transient-mark-mode, too
-	       cua--explicit-region-start
-	       (nil keep-mark))
+  (unless (or keep-mark
+	      (and cua-mode ;; this means transient-mark-mode, too
+	       cua--explicit-region-start))
     (deactivate-mark))
   (if (not (pos-visible-in-window-p (point-min)))
       (pager-scroll-screen (- next-screen-context-lines 
