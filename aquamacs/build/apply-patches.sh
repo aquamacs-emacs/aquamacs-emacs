@@ -19,7 +19,7 @@
 PATCHES="pretty-modeline transparency2 calm-startup
          available-screen mouse-button launch-browser toolbar-button
          toolbar-png org-gnu-Aquamacs about-aquamacs puresize
-         macfns-dialog-menu reftex menu-bar-visible-frame eval-depth
+         macfns-dialog-menu menu-bar-visible-frame eval-depth
          sendmail-mac"
 
 # The patches here are specified separately so their order can be defined.
