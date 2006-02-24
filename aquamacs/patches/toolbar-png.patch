@@ -1,69 +1,69 @@
-Index: lisp/tool-bar.el
+Index: tool-bar.el
 ===================================================================
-RCS file: /sources/emacs/emacs/lisp/tool-bar.el,v
-retrieving revision 1.4
-diff -c -r1.4 tool-bar.el
-*** lisp/tool-bar.el	23 Dec 2005 11:36:08 -0000	1.4
---- lisp/tool-bar.el	19 Feb 2006 23:07:57 -0000
+RCS file: /cvsroot/emacs/emacs/lisp/tool-bar.el,v
+retrieving revision 1.5
+diff -c -r1.5 tool-bar.el
+*** tool-bar.el 6 Feb 2006 14:33:35 -0000       1.5
+--- tool-bar.el 24 Feb 2006 10:30:46 -0000
 ***************
 *** 123,128 ****
 --- 123,130 ----
-  	 (bg (face-attribute 'tool-bar :background))
-  	 (colors (nconc (if (eq fg 'unspecified) nil (list :foreground fg))
-  			(if (eq bg 'unspecified) nil (list :background bg))))
-+ 	 (png-spec (list :type 'png :background bg
-+ 			 :file (concat icon ".png")))
-  	 (xpm-spec (list :type 'xpm :file (concat icon ".xpm")))
-  	 (xpm-lo-spec (if (> (display-color-cells) 256)
-  			  nil
+         (bg (face-attribute 'tool-bar :background))
+         (colors (nconc (if (eq fg 'unspecified) nil (list :foreground fg))
+                        (if (eq bg 'unspecified) nil (list :background bg))))
++        (png-spec (list :type 'png :background bg
++                        :file (concat icon ".png")))
+         (xpm-spec (list :type 'xpm :file (concat icon ".xpm")))
+         (xpm-lo-spec (if (> (display-color-cells) 256)
+                          nil
 ***************
 *** 134,141 ****
                                    (concat icon ".xbm")) colors))
-  	 (image (find-image
-  		(if (display-color-p)
-! 		    (list xpm-lo-spec xpm-spec pbm-spec xbm-spec)
-! 		  (list pbm-spec xbm-spec xpm-lo-spec xpm-spec)))))
+         (image (find-image
+                (if (display-color-p)
+!                   (list xpm-lo-spec xpm-spec pbm-spec xbm-spec)
+!                 (list pbm-spec xbm-spec xpm-lo-spec xpm-spec)))))
   
       (when (and (display-images-p) image)
         (unless (image-mask-p image)
 --- 136,143 ----
                                    (concat icon ".xbm")) colors))
-  	 (image (find-image
-  		(if (display-color-p)
-! 		    (list png-spec xpm-lo-spec xpm-spec pbm-spec xbm-spec)
-! 		  (list pbm-spec xbm-spec xpm-lo-spec xpm-spec png-spec)))))
+         (image (find-image
+                (if (display-color-p)
+!                   (list png-spec xpm-lo-spec xpm-spec pbm-spec xbm-spec)
+!                 (list pbm-spec xbm-spec xpm-lo-spec xpm-spec png-spec)))))
   
       (when (and (display-images-p) image)
         (unless (image-mask-p image)
 ***************
 *** 178,183 ****
 --- 180,187 ----
-  	 (bg (face-attribute 'tool-bar :background))
-  	 (colors (nconc (if (eq fg 'unspecified) nil (list :foreground fg))
-  			(if (eq bg 'unspecified) nil (list :background bg))))
-+ 	 (png-spec (list :type 'png :background bg
-+ 			 :file (concat icon ".png")))
-  	 (xpm-spec (list :type 'xpm :file (concat icon ".xpm")))
-  	 (xpm-lo-spec (if (> (display-color-cells) 256)
-  			  nil
+         (bg (face-attribute 'tool-bar :background))
+         (colors (nconc (if (eq fg 'unspecified) nil (list :foreground fg))
+                        (if (eq bg 'unspecified) nil (list :background bg))))
++        (png-spec (list :type 'png :background bg
++                        :file (concat icon ".png")))
+         (xpm-spec (list :type 'xpm :file (concat icon ".xpm")))
+         (xpm-lo-spec (if (> (display-color-cells) 256)
+                          nil
 ***************
 *** 188,195 ****
-  	 (xbm-spec (append (list :type 'xbm :file
+         (xbm-spec (append (list :type 'xbm :file
                                    (concat icon ".xbm")) colors))
-  	 (spec (if (display-color-p)
-! 		   (list xpm-lo-spec xpm-spec pbm-spec xbm-spec)
-! 		 (list pbm-spec xbm-spec xpm-lo-spec xpm-spec)))
-  	 (image (find-image spec))
-  	 submap key)
+         (spec (if (display-color-p)
+!                  (list xpm-lo-spec xpm-spec pbm-spec xbm-spec)
+!                (list pbm-spec xbm-spec xpm-lo-spec xpm-spec)))
+         (image (find-image spec))
+         submap key)
       (when (and (display-images-p) image)
 --- 192,199 ----
-  	 (xbm-spec (append (list :type 'xbm :file
+         (xbm-spec (append (list :type 'xbm :file
                                    (concat icon ".xbm")) colors))
-  	 (spec (if (display-color-p)
-! 		   (list png-spec xpm-lo-spec xpm-spec pbm-spec xbm-spec)
-! 		 (list pbm-spec xbm-spec xpm-lo-spec xpm-spec png-spec)))
-  	 (image (find-image spec))
-  	 submap key)
+         (spec (if (display-color-p)
+!                  (list png-spec xpm-lo-spec xpm-spec pbm-spec xbm-spec)
+!                (list pbm-spec xbm-spec xpm-lo-spec xpm-spec png-spec)))
+         (image (find-image spec))
+         submap key)
       (when (and (display-images-p) image)
 ***************
 *** 275,282 ****
