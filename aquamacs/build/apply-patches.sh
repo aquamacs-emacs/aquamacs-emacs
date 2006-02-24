@@ -16,7 +16,7 @@
 
 # doesnt work yet: emacs-inline
 
-PATCHES="pretty-modeline soft-wrap transparency2 calm-startup
+PATCHES="pretty-modeline transparency2 calm-startup
          available-screen mouse-button launch-browser toolbar-button
          toolbar-png org-gnu-Aquamacs about-aquamacs puresize
          macfns-dialog-menu reftex menu-bar-visible-frame eval-depth
