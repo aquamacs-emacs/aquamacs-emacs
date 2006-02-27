@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.55 2006/02/23 16:09:13 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.56 2006/02/27 12:40:32 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -903,7 +903,8 @@ Returns t."
 	 (changed (let ((custom-file tmp-file))
 		   (aquamacs-menu-bar-options-save))))
     ;; undo the changes made 
-    (delete-file tmp-file)
+    (if (file-exists-p tmp-file)
+	(delete-file tmp-file))
     (mapc (lambda (symbol) 
 	    (put symbol 'saved-value nil))
 	  changed)
@@ -1008,6 +1009,7 @@ if modified buffers exist."
 				:box (:line-width 1 :style released-button))))))
     (face-spec-set face spec nil)
     (put face 'face-defface-spec spec))
+  ;; will be overwritten by color themes
 
   (tool-bar-add-item-from-menu 'new-frame-with-new-scratch "new")
   (tool-bar-add-item-from-menu 'mac-key-open-file "open")
