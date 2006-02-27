@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.35 2006/01/20 11:41:31 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.36 2006/02/27 13:02:08 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -307,11 +307,11 @@ specified in `shell-file-name'."
 		   ;; won't work for csh, because it doesn't take -l -c ...
 		   ))))))
 		    
-	(apply 'call-process shell-file-name nil
-	       t
-	       (aq-flat-concat (list shell-login-switch
-			       shell-command-switch
-			       "printenv"))))
+	(call-process shell-file-name nil
+	       t nil
+	        shell-login-switch
+		shell-command-switch
+		"printenv"))
       (goto-char (point-min))
       (while (re-search-forward "^[A-Za-z_0-9]+=()\s*[^\x]*?
 \s*}\s*$" nil t)
