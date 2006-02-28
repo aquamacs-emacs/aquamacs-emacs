@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.16 2006/02/22 19:39:08 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.17 2006/02/28 20:40:56 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -99,6 +99,30 @@ are removed. Comparison is done with `eq'."
       (filter-list (cdr lst) elements)
     (cons (car lst) (filter-list (cdr lst) elements)))))
 
+(defun assq-set-all (source dest-sym)
+  "Writes all values from alist SOURCE into alist DEST-SYM,
+overwriting any previous associations in DEST"
+  (mapc (lambda (x)
+	  (set dest-sym (assq-delete-all (car x) (eval dest-sym))))
+	source)
+  (set dest-sym (append source (eval dest-sym))))
+
+; (setq test '((a . 1) (b . 2)))
+; (assq-set-all '((b . 5) (c . 6)) 'test)
+      
+
+
+; (assq-subtract '((asd . 3) (wqe . 5)) '((wqq . 3) (wqe . 5)))
+(defun assq-subtract (a b)
+  "Subtracts alist A from B. Order of elements is NOT preserved."
+  
+  (let ((ret))
+    (mapc (lambda (x)
+	    (let ((p (assq (car x) b)))
+	      (unless (and p (eq (cdr p) (cdr x)))
+		(setq ret (cons x ret)))))
+	  a)
+    ret))
 
 (defun assq-set (key val alist)
   (set alist (assq-delete-all key (eval alist)))
