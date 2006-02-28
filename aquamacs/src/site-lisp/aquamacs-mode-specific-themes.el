@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.34 2006/02/28 20:40:41 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.35 2006/02/28 23:28:17 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -711,16 +711,7 @@ for all frames with the current major-mode."
 ;(tool-bar-mode 0) ;; turn it off
 ;; additionally, we should ensure that default-frame-alist
 ;; is consistent with that. (see aquamacs-frame-setup)
-
-  (defadvice tool-bar-mode (around aquamacs-warn-if-themes-active () activate)
-    (if aquamacs-mode-specific-default-themes
-	(let ((msg "As Frame Appearance Themes are active, tool-bar may be controlled by themes."))
-	  (message msg )
-	  (unless (interactive-p)
-	    (message ""))))
-    ad-do-it)
-
-
+ 
 ;; (setq apptheme-mode-menu (make-sparse-keymap "Set Mode")) 
 ;; (mapc
 ;;    (lambda (pair)
