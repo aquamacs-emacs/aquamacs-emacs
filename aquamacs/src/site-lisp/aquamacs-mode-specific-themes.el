@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.33 2006/02/22 12:25:39 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-specific-themes.el,v 1.34 2006/02/28 20:40:41 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -61,32 +61,28 @@
   )
 
 
-   
-(defun aquamacs-combined-mode-specific-settings (default-alist theme)
+(aquamacs-set-defaults '((default-frame-alist nil)))   
 
+(defun aquamacs-combined-mode-specific-settings (default-alist theme)
+  "Return the frame parameter set resulting from two alists.
+Parameters from DEFAULT-ALIST receive priority over those from THEME.
+If `aquamacs-auto-frame-parameters-flag' is nil, returns nil."
   (if aquamacs-auto-frame-parameters-flag
       (progn
-	(mapc  
-	 (lambda (th)
-	   (unless (assq (car th) theme)
-	     (setq theme (cons th theme))
-	     )
-	   )
-	 ;; list
-	 default-alist
-	 )
+	;; remove stuff that's set in default-alist
+	;; and add it, so it'll get priority
+	(setq theme (append default-alist (assq-subtract theme default-alist)))
+
+	;; delete a few things as we don't want them here
 	(mapc
 	 (lambda (e) (setq theme (assq-delete-all e theme)))
-	 '(user-position menu-bar-lines top height left width scroll-bar-width)
-	 )
+	 '(user-position menu-bar-lines top height left width scroll-bar-width))
 	;; workaround
 	(assq-set 'scroll-bar-width 0 'theme)
-	theme
-	) 
-					; else
-    nil
-    )
-  ) 
+	theme)
+    ;; else
+    nil))
+
 ;; (aquamacs-theme-relevant-buffer)
 (defun aquamacs-theme-relevant-buffer (&optional frame)
   "For a given frame, determine the main window to be used for the theme.
