@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.56 2006/02/27 12:40:32 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.57 2006/03/01 19:36:52 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -376,9 +376,6 @@ Use this argument instead of explicitly setting `view-exit-action'."
   ;;    )
   ;; )
  
-  ;; mode-specific font settings
-  (require 'aquamacs-mode-specific-themes)
-  (aquamacs-mode-specific-themes-setup)
 
  
 					; update the help-mode specification with a fit-frame
@@ -386,15 +383,15 @@ Use this argument instead of explicitly setting `view-exit-action'."
   (defun 	make-help-mode-use-frame-fitting ()
 
     (unless (assq 'fit-frame 
-		  (assq 'help-mode aquamacs-mode-specific-default-themes)
+		  (assq 'help-mode aquamacs-default-styles)
 		  ) ;; unless it's already set
 
       (assq-set 'help-mode
 		(append  
-		 (cdr (assq 'help-mode aquamacs-mode-specific-default-themes))
+		 (cdr (assq 'help-mode aquamacs-default-styles))
 		 '((fit-frame . t))
 		 )
-		'aquamacs-mode-specific-default-themes)
+		'aquamacs-default-styles)
       )
     )
 
@@ -446,8 +443,13 @@ Use this argument instead of explicitly setting `view-exit-action'."
   (assq-set 'width 75 'special-display-frame-alist)
   (assq-set 'user-position nil 'special-display-frame-alist)
 
-
- 
+  
+  ;; turn on mode-spec styles AFTER setting default-frame-alist
+  ;; so everything is copied over to the 'default style as appropriate
+  ;; mode-specific font settings
+  (aquamacs-set-defaults '((aquamacs-styles-mode t)))
+  (require 'aquamacs-styles) 
+  ;; default-frame-alist should be empty now
 
 
   ;; local toolbars
@@ -509,10 +511,10 @@ to the selected frame."
 	;; we have switched over to monaco as the default
 	(mapc 
 	 (lambda (th)
-	   (unless (assq (car th) aquamacs-mode-specific-default-themes)
+	   (unless (assq (car th) aquamacs-default-styles)
 	     (assq-set (car th) 
 		       (cdr th)
-		       'aquamacs-mode-specific-default-themes)))
+		       'aquamacs-default-styles)))
 	 ;; list
 	 (filter-fonts '(
 			 (text-mode  
@@ -526,7 +528,7 @@ to the selected frame."
 			 ))))
     (if (< aquamacs-customization-version-id 094.1)
 	(progn
-	  ;; in the mode-spec themes, this is taken care of
+	  ;; in the mode-spec styles, this is taken care of
 	  ;; anyways
 	  (setq default-frame-alist 
 		(assq-delete-all 'scroll-bar-width default-frame-alist))
@@ -535,15 +537,36 @@ to the selected frame."
       
 	  (mapc 
 	   (lambda (th)
-	     (unless (assq (car th) aquamacs-mode-specific-default-themes)
+	     (unless (assq (car th) aquamacs-default-styles)
 	       (assq-set (car th) 
 			 (cdr th)
-			 'aquamacs-mode-specific-default-themes)))
+			 'aquamacs-default-styles)))
 	   ;; list
 	   (filter-fonts '(
 			   (help-mode (tool-bar-lines . 0) (fit-frame . t)) 
 			   (fundamental-mode (tool-bar-lines . 0))
 			   (custom-mode (tool-bar-lines . 0) (fit-frame . t)))))))
+
+
+
+;; todo before 0.9.8:
+
+
+;; how to deal with tool-bar-mode set in user's custom-file?
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
 
 ;; Print warnings / compatibility options
     
@@ -860,7 +883,7 @@ Return non-nil if options where saved."
       ;; These are set with `customize-set-variable'.
       (dolist (elt '(scroll-bar-mode
 		     debug-on-quit debug-on-error
-		     tooltip-mode menu-bar-mode tool-bar-mode
+		     tooltip-mode menu-bar-mode ;; tool-bar-mode
 		     save-place uniquify-buffer-name-style fringe-mode
 		     indicate-empty-lines indicate-buffer-boundaries
 		     case-fold-search
@@ -875,8 +898,8 @@ Return non-nil if options where saved."
 
 		     blink-cursor-mode
 		     ;; added dr. 04/2005
-		     aquamacs-auto-frame-parameters-flag
-		     aquamacs-mode-specific-default-themes 
+		     aquamacs-styles-mode
+		     aquamacs-default-styles 
 		     aquamacs-customization-version-id
 		     ))
 	(and (get elt 'customized-value) 

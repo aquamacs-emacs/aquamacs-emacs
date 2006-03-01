@@ -8,7 +8,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-frame-setup.el,v 1.20 2006/02/22 19:40:41 davidswelt Exp $
+;; Last change: $Id: aquamacs-frame-setup.el,v 1.21 2006/03/01 19:41:42 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -232,7 +232,7 @@ Usable in `temp-buffer-show-hook'."
 ; (add-hook 'temp-buffer-show-hook 'fit-frame-if-one-window-regardless-of-autofit-frames-flag) 
 ;(add-hook 'help-mode-hook 'fit-frame-if-one-window-regardless-of-autofit-frames-flag 'append)
 
-; we do it properly - in mode-specific themes!
+; we do it properly - in mode-specific styles!
  ; this is set in osx-defaults
  
 

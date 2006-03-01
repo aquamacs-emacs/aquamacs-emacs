@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.37 2006/02/08 20:45:07 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.38 2006/03/01 19:41:23 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -355,7 +355,7 @@ the current window is switched to the new buffer."
       (raise-frame (select-frame (window-frame window-to-select)))
       (select-window window-to-select)
       (setq ad-return-value (current-buffer)))
-  (set-mode-specific-theme))))
+  (aquamacs-set-style))))
 
 ;; some exception for the speedbar
 ;; this doesn't work, unfortunately
