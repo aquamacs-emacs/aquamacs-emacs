@@ -27,12 +27,16 @@ cd ~/Aquamacs
 export AQUAMACS_ROOT=`pwd`/aquamacs
 # EMACS_ROOT is set separately for each compile run
  
-DEST=~/Aquamacs/builds
+cd ~/Aquamacs/builds
+DEST=`pwd`
 
 date >${LOG}
 
+cd ~/Aquamacs
+
 if test "${UPDATE_CVS}" == "yes"; then
-    
+
+
     cd emacs.raw
     echo "CVS update: emacs" >>$LOG  
     CVS_RSH=ssh cvs update -dP >>$LOG 2>>$LOG
@@ -41,7 +45,6 @@ fi
 
 if test "${BUILD_GNU_EMACS}" == "yes"; then
     
-    cd ~/Aquamacs
 
     rm -rf emacs.GNU 2>>$LOG
     echo "Copying emacs.raw emacs.GNU" >>$LOG  
@@ -68,8 +71,6 @@ fi
 
 if test "${BUILD_AQUAMACS}" == "yes"; then
      
-    cd ~/Aquamacs
-
     rm -rf emacs  2>>$LOG 
     echo "Copying emacs.raw emacs" >>$LOG  
     cp -Rp emacs.raw emacs  2>>$LOG 
@@ -87,13 +88,18 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
 
     ${AQUAMACS_ROOT}/build/make-aquamacs >>$LOG 2>>$LOG 
 
-    rm -rf "${DEST}/Aquamacs Emacs.app"  >>$LOG 2>>$LOG 
-    ${AQUAMACS_ROOT}/build/install-aquamacs "${AQUAMACS_ROOT}" "${DEST}/Aquamacs Emacs.app" "Aquamacs-Raw/Emacs.app"  >>$LOG 2>>$LOG 
+    rm -rvf "${DEST}/Aquamacs Emacs.app"  >>$LOG 2>>$LOG 
+#    ${AQUAMACS_ROOT}/build/install-aquamacs "${AQUAMACS_ROOT}" 
+#"${DEST}/Aquamacs Emacs.app" "Aquamacs-Raw/Emacs.app"  >>$LOG 2>>$LOG 
+    cd ~/Aquamacs/emacs/mac	
+    mv -v "Aquamacs/Aquamacs Emacs.app" "${DEST}/" >>$LOG 2>>LOG
 
     NAME=Aquamacs-`date +"%Y-%b-%d-%a"`
 
-    rm -rf ${DEST}/Aquamacs*.tar.bz2  >>$LOG 2>>$LOG 
-    cd $DEST
+
+    rm -rvf ${DEST}/Aquamacs*.tar.bz2  >>$LOG 2>>$LOG 
+    cd ${DEST}
+	ls -la
     if [ -e "${DEST}/Aquamacs Emacs.app" ]; then
 	tar cvjf ${NAME}.tar.bz2 Aquamacs\ Emacs.app  >>$LOG 2>>$LOG
 	echo "Result (if successful) in " ${NAME}.tar.bz2  >>$LOG  
