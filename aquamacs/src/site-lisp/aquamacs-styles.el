@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.1 2006/03/01 19:36:03 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.2 2006/03/02 18:34:20 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -618,6 +618,74 @@ for the current major mode. To turn off this behavior, see
   :group 'Aquamacs
   )
 
+
+
+(define-minor-mode aquamacs-styles-mode
+  "Automatically set frame style according to major mode
+This global minor mode will cause frame settings (parameters,
+faces, variables) to be set according to a style that is specific
+to the major mode of the buffer currently shown in the single
+window inside the frame.
+`aquamacs-default-styles' specifies styles for major
+modes. 
+
+Frames are only configured in this way if there is only one
+window visible.  Otherwise, the frame parameters are left as they
+are. That means that additional, temporary windows (such as for
+the *Completions* buffer) will not alter the style of the frame.
+
+A special style `default' is applied when no mode-specific style
+is present. Parameters in `default-frame-alist' and
+`special-display-frame-alist' overwrite any styles set.
+ 
+When this mode is turned on, parameters from
+`default-frame-alist' are copied to the `default' style.
+When it is turned off, parameters are copied back.
+
+This mode is part of Aquamacs Emacs, http://aquamacs.org."
+
+;; the condition case is because otherwise this won't
+;; do it's job. don't know why.
+  (condition-case nil
+  
+(if aquamacs-styles-mode
+    ;; turning on
+    ;; copy `default-frame-alist' parameters over to our default
+    ;; N.B. the default-frame-alist parms will have priority
+;; so delete parms?
+    (progn
+      (assq-set 'default
+		(append
+		 (assq-subtract 
+		  (assq 'default aquamacs-default-styles)
+		  default-frame-alist)
+		 default-frame-alist)
+		'aquamacs-default-styles)
+      (setq default-frame-alist))
+  ;; else
+  ;; when turning off, copy things back to default-frame-alist
+  (setq default-frame-alist
+	      (append
+	       default-frame-alist
+	       (assq-subtract 
+		default-frame-alist
+		(assq 'default aquamacs-default-styles))))
+
+    nil)
+
+  (error nil))
+
+  :group 'Aquamacs
+  :global t
+  :require 'color-theme)
+
+
+
+
+
+
+
+
 (defadvice mouse-set-font
   (after show-font-warning () activate)
   "The frame font is set for the current frame only if 
@@ -720,9 +788,9 @@ for all frames with the current major-mode."
 
 
 
-  (define-key aquamacs-frame-style-menu [menu-auto-frame-parameters]
+  (define-key aquamacs-frame-style-menu [menu-aquamacs-styles]
     (menu-bar-make-mm-toggle 
-     'aquamacs-styles-mode
+     aquamacs-styles-mode
      "Frame Appearance Styles"
      "adapt the frame parameters to the major-mode"))
       
@@ -806,64 +874,7 @@ for all frames with the current major-mode."
 				     (aquamacs-get-style major-mode))))
 
 
-(define-minor-mode aquamacs-styles-mode
-  "Automatically set frame style according to major mode
-This global minor mode will cause frame settings (parameters,
-faces, variables) to be set according to a style that is specific
-to the major mode of the buffer currently shown in the single
-window inside the frame.
-`aquamacs-default-styles' specifies styles for major
-modes. 
 
-Frames are only configured in this way if there is only one
-window visible.  Otherwise, the frame parameters are left as they
-are. That means that additional, temporary windows (such as for
-the *Completions* buffer) will not alter the style of the frame.
-
-A special style `default' is applied when no mode-specific style
-is present. Parameters in `default-frame-alist' and
-`special-display-frame-alist' overwrite any styles set.
- 
-When this mode is turned on, parameters from
-`default-frame-alist' are copied to the `default' style.
-When it is turned off, parameters are copied back.
-
-This mode is part of Aquamacs Emacs, http://aquamacs.org."
-
-;; the condition case is because otherwise this won't
-;; do it's job. don't know why.
-  (condition-case nil
-  
-(if aquamacs-styles-mode
-    ;; turning on
-    ;; copy `default-frame-alist' parameters over to our default
-    ;; N.B. the default-frame-alist parms will have priority
-;; so delete parms?
-    (progn
-      (assq-set 'default
-		(append
-		 (assq-subtract 
-		  (assq 'default aquamacs-default-styles)
-		  default-frame-alist)
-		 default-frame-alist)
-		'aquamacs-default-styles)
-      (setq default-frame-alist))
-  ;; else
-  ;; when turning off, copy things back to default-frame-alist
-  (setq default-frame-alist
-	      (append
-	       default-frame-alist
-	       (assq-subtract 
-		default-frame-alist
-		(assq 'default aquamacs-default-styles))))
-
-    nil)
-
-  (error nil))
-
-  :group 'Aquamacs
-  :global t
-  :require 'color-theme)
 
 ;; backwards compatibility
 (defvaralias 'aquamacs-auto-frame-parameters-flag
