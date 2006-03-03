@@ -7,13 +7,27 @@
 
 # SSH authentication should be installed
 
-GNUNAME=GNU-Emacs-`date +"%Y-%b-%e-%a"`.dmg.bz2
-NAME=Aquamacs-`date +"%Y-%b-%e-%a"`.tar.bz2
+GNUNAME=GNU-Emacs-`date +"%Y-%b-%d-%a"`.dmg.bz2
+NAME=Aquamacs-`date +"%Y-%b-%d-%a"`.tar.bz2
 
-SOURCE=dr@rodrigues.inf.ed.ac.uk:/Users/dr/Aquamacs/builds
-LOGPATH=dr@rodrigues.inf.ed.ac.uk:/Users/dr/Aquamacs
+if [ "$1" == "intel" ];
+then
+    
+    SOURCE=dreitter@discontinuity.dyndns.org:/Users/dreitter/Aquamacs/builds
+    LOGPATH=dreitter@discontinuity.dyndns.org:/Users/dreitter/Aquamacs
 
-DEST=~/web/web/Aquamacs
+    DEST=~/web/web/Aquamacs/intel
+
+else
+
+    SOURCE=dr@rodrigues.inf.ed.ac.uk:/Users/dr/Aquamacs/builds
+    LOGPATH=dr@rodrigues.inf.ed.ac.uk:/Users/dr/Aquamacs
+
+    DEST=~/web/web/Aquamacs
+
+fi
+
+TMP=/tmp/builds
 
 cd $DEST
 
@@ -23,18 +37,19 @@ scp $LOGPATH/aquamacs-build.log . 2>/dev/null
 scp $LOGPATH/emacs-build.log . 2>/dev/null
 cp cvs-update.log latest-logs/ 2>/dev/null
 
-mkdir tmp 2>/dev/null
+rm -r $TMP 2>/dev/null
+mkdir $TMP 2>/dev/null
 mkdir latest-logs 2>/dev/null
 
-scp $SOURCE/${NAME} tmp/
+scp $SOURCE/${NAME} $TMP/
 
 
-if [ -e tmp/${NAME} ]; then
+if [ -e $TMP/${NAME} ]; then
 
-    if [ `stat -c %s tmp/${NAME}` -gt 1000000 ]; then
+    if [ `stat -c %s $TMP/${NAME}` -gt 1000000 ]; then
 
 	rm -rf builds
-	mv tmp builds
+	mv $TMP builds
 	chmod go+rx builds
 	rm Aquamacs-nightly.tar.bz2
 	ln -s builds/$NAME Aquamacs-nightly.tar.bz2
@@ -43,20 +58,21 @@ if [ -e tmp/${NAME} ]; then
 	cp aquamacs-build.log latest-logs/ 2>/dev/null
 
     else
-	rm -r tmp 
+	rm -r $TMP 
     fi
 fi
+echo "more..."
 
+rm -r $TMP 2>/dev/null
+mkdir $TMP 2>/dev/null
+scp $SOURCE/${GNUNAME} $TMP/
 
-mkdir gnutmp 2>/dev/null
-scp $SOURCE/${GNUNAME} gnutmp/
+if [ -e $TMP/${GNUNAME} ]; then
 
-if [ -e gnutmp/${GNUNAME} ]; then
-
-    if [ `stat -c %s gnutmp/${GNUNAME}` -gt 1000000 ]; then
+    if [ `stat -c %s $TMP/${GNUNAME}` -gt 1000000 ]; then
 
 	rm -rf gnubuilds
-	mv gnutmp gnubuilds
+	mv $TMP gnubuilds
 	chmod go+rx gnubuilds
 	rm GNU-Emacs-nightly.dmg.bz2 2>/dev/null
 	ln -s gnubuilds/$GNUNAME GNU-Emacs-nightly.dmg.bz2
@@ -65,13 +81,13 @@ if [ -e gnutmp/${GNUNAME} ]; then
 	cp emacs-build.log latest-logs/  2>/dev/null
 
     else
-	rm -r gnutmp
+	rm -r $TMP
 	
     fi
 fi
  
 
-echo "<HTML><BODY><span style=\"font-family:sans-serif; font-size:10pt;\">" >latest.html
+echo "<HTML style=\"border: none ;\"><BODY style=\"border: none ;\"><span style=\"font-family:sans-serif; font-size:10pt;\">" >latest.html
 cat latest-aquamacs.html latest-emacs.html >>latest.html
 echo "</span></BODY></HTML>" >>latest.html
 
