@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.57 2006/03/01 19:36:52 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.58 2006/03/03 22:20:57 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -853,6 +853,45 @@ listed here."
   (customize-set-variable 'aquamacs-customization-version-id 
 			  aquamacs-customization-version-id)
   
+  (defvar aquamacs-menu-bar-options-to-save
+    (append '(line-number-mode 
+	      column-number-mode 
+	      size-indication-mode
+	      cua-mode show-paren-mode
+	      transient-mark-mode 
+	      global-font-lock-mode
+	      display-time-mode 
+	      display-battery-mode
+	      one-buffer-one-frame-mode 
+	      mac-option-modifier
+	      smart-frame-prior-positions)
+	    (mapcar (lambda (x) 
+		      (emkm-name (car x))) 
+		    emulate-mac-keyboard-mode-maps)
+	    ))
+
+  (defvar aquamacs-menu-bar-customize-options-to-save
+    '(scroll-bar-mode
+     debug-on-quit debug-on-error
+     tooltip-mode menu-bar-mode	;; tool-bar-mode
+     save-place uniquify-buffer-name-style fringe-mode
+     indicate-empty-lines indicate-buffer-boundaries
+     case-fold-search
+     current-language-environment default-input-method
+     ;; Saving `text-mode-hook' is somewhat questionable,
+     ;; as we might get more than we bargain for, if
+     ;; other code may has added hooks as well.
+     ;; Nonetheless, not saving it would like be confuse
+     ;; more often.
+     ;; -- Per Abrahamsen <abraham@dina.kvl.dk> 2002-02-11.
+     text-mode-hook
+
+     blink-cursor-mode
+     ;; added dr. 04/2005
+     aquamacs-styles-mode
+     aquamacs-default-styles 
+     aquamacs-customization-version-id))
+
   (defun aquamacs-menu-bar-options-save ()
     "Save current values of Options menu items using Custom.
 Return non-nil if options where saved."
@@ -861,53 +900,29 @@ Return non-nil if options where saved."
       (setq aquamacs-customization-version-id aquamacs-version-id)
       ;; These are set with menu-bar-make-mm-toggle, which does not
       ;; put on a customized-value property.
-      (dolist (elt (append 
-		    '(line-number-mode 
-		      column-number-mode 
-		      size-indication-mode
-		      cua-mode show-paren-mode
-		      transient-mark-mode 
-		      global-font-lock-mode
-		      display-time-mode 
-		      display-battery-mode
-		      one-buffer-one-frame-mode 
-		      mac-option-modifier
-		      smart-frame-prior-positions)
-		    (mapcar (lambda (x) 
-			      (emkm-name (car x))) 
-			    emulate-mac-keyboard-mode-maps)
-		    ))
+      (dolist (elt aquamacs-menu-bar-options-to-save)
 	(and (customize-mark-to-save elt)
 	     (setq need-save (cons elt need-save)))) 
       ;; 
       ;; These are set with `customize-set-variable'.
-      (dolist (elt '(scroll-bar-mode
-		     debug-on-quit debug-on-error
-		     tooltip-mode menu-bar-mode ;; tool-bar-mode
-		     save-place uniquify-buffer-name-style fringe-mode
-		     indicate-empty-lines indicate-buffer-boundaries
-		     case-fold-search
-		     current-language-environment default-input-method
-		     ;; Saving `text-mode-hook' is somewhat questionable,
-		     ;; as we might get more than we bargain for, if
-		     ;; other code may has added hooks as well.
-		     ;; Nonetheless, not saving it would like be confuse
-		     ;; more often.
-		     ;; -- Per Abrahamsen <abraham@dina.kvl.dk> 2002-02-11.
-		     text-mode-hook
-
-		     blink-cursor-mode
-		     ;; added dr. 04/2005
-		     aquamacs-styles-mode
-		     aquamacs-default-styles 
-		     aquamacs-customization-version-id
-		     ))
+      (dolist (elt aquamacs-menu-bar-customize-options-to-save)
 	(and (get elt 'customized-value) 
 	     (customize-mark-to-save elt)
 	     (setq need-save (cons elt need-save))))
       ;; Save if we changed anything.
       (when need-save
 	(custom-save-all))
+      need-save))
+
+  (defun aquamacs-menu-bar-changed-options ()
+    (let ((need-save))
+      (dolist (elt aquamacs-menu-bar-options-to-save)
+	(and (aquamacs-variable-customized-p elt)
+	     (setq need-save (cons elt need-save))))
+      (dolist (elt aquamacs-menu-bar-customize-options-to-save)
+	(and (get elt 'customized-value) 
+	     (aquamacs-variable-customized-p elt)
+	     (setq need-save (cons elt need-save))))
       need-save))
 
   (defcustom aquamacs-save-options-on-quit 'ask
@@ -917,20 +932,28 @@ have changed."
     :group 'Aquamacs
     :type '(choice (const nil)  (const ask) (const t)))
   
+  (defun aquamacs-variable-customized-p (symbol)
+    "Returns t if variable SYMBOL has a different value from what was saved."
+    (custom-load-symbol symbol)
+    (let* ((get (or (get symbol 'custom-get) 'default-value))
+	   (value (funcall get symbol))
+	   (saved (get symbol 'saved-value))
+	   (standard (get symbol 'standard-value))
+	   (comment (get symbol 'customized-variable-comment)))
+
+      (and (or (null standard)
+	      (not (equal value (condition-case nil
+				    (eval (car standard))
+				  (error nil)))))
+	  (eq saved (list (custom-quote value))))))
+	  
+
 
   (defun aquamacs-ask-to-save-options ()
   "Checks if options need saving and allows to do that.
 Returns t."
   (interactive)
-  (let* ((tmp-file "/tmp/aquamacs-customizations.el.temp")
-	 (changed (let ((custom-file tmp-file))
-		   (aquamacs-menu-bar-options-save))))
-    ;; undo the changes made 
-    (if (file-exists-p tmp-file)
-	(delete-file tmp-file))
-    (mapc (lambda (symbol) 
-	    (put symbol 'saved-value nil))
-	  changed)
+  (let* ((changed (aquamacs-menu-bar-changed-options)))
     (if (and (filter-list changed
 			  (list 'aquamacs-customization-version-id
 				'smart-frame-prior-positions
