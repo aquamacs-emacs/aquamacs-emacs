@@ -14,9 +14,9 @@
 
 # Add your patch file name here (file names cannot contain spaces).
 
-# doesnt work yet: emacs-inline
+# doesnt work yet: 
 
-PATCHES="pretty-modeline transparency2 calm-startup
+PATCHES="emacs-inline pretty-modeline transparency2 calm-startup
          available-screen mouse-button launch-browser toolbar-button
          toolbar-png org-gnu-Aquamacs about-aquamacs puresize
          macfns-dialog-menu menu-bar-visible-frame eval-depth
