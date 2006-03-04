@@ -603,4 +603,415 @@ diff -p -N -r ../emacs-20060118-0/src/macim.c src/macim.c
 + 
 + DEFUN ("mac-set-key-script", Fmac_set_key_script,
 +        Smac_set_key_script, 1, 1, 0,
-+        doc: /*
++        doc: /* change languge environment of MacOSX */)
++      (code)
++      Lisp_Object code;
++ {
++   BLOCK_INPUT;
++   KeyScript (XINT (code));
++   UNBLOCK_INPUT;
++ 
++   return Qnil;
++ }
++ 
++ DEFUN ("mac-get-key-script", Fmac_get_key_script,
++        Smac_get_key_script, 0, 0, 0,
++        doc: /* get current languge environment of MacOSX */)
++      ()
++ {
++   SInt16 current_key_script;
++ 
++   BLOCK_INPUT;
++   current_key_script = GetScriptManagerVariable (smKeyScript);
++   UNBLOCK_INPUT;
++ 
++   return make_number (current_key_script);
++ }
++ 
++ 
++ DEFUN ("mac-set-inline-input-method", Fmac_set_inline_input_method,
++        Smac_set_inline_input_method, 1, 1, 0,
++        doc: /* set inline input method */)
++      (on_p)
++      Lisp_Object on_p;
++ {
++ 
++   BLOCK_INPUT;
++   if (NILP (on_p))
++     {
++       DeactivateTSMDocument (mac_tsm_doc_id);
++       Vmac_use_inline_input_method = Qnil;
++     }
++   else
++     {
++       ActivateTSMDocument (mac_tsm_doc_id);
++       Vmac_use_inline_input_method = Qt;
++     }
++   UNBLOCK_INPUT;
++ 
++   return on_p;
++ }
++ 
++ void
++ mac_reset_tsm_document ()
++ {
++   BLOCK_INPUT;
++   if (!NILP (Vmac_use_inline_input_method))
++     {
++       DeactivateTSMDocument (mac_tsm_doc_id);
++       ActivateTSMDocument (mac_tsm_doc_id);
++     }
++   UNBLOCK_INPUT;
++ }
++ 
++ void 
++ mac_store_change_input_method_event (unsigned long timestamp)
++ {
++   Lisp_Object input_method;
++   static SInt16 last_key_script = -1;
++   SInt16 current_key_script;
++ 
++   BLOCK_INPUT;
++ 
++   if (!NILP (Vmac_use_inline_input_method))
++     {
++       current_key_script = GetScriptManagerVariable (smKeyScript);
++ 
++       input_method = Fsymbol_value (Qcurrent_input_method);
++ 
++       if (last_key_script != current_key_script
++ 	  || (current_key_script && NILP (input_method))
++ 	  || (!current_key_script && !NILP (input_method)))
++ 	{
++ 	  struct input_event event;
++       
++ 	  EVENT_INIT (event);
++ 	  event.kind = MAC_CHANGE_INPUT_METHOD_EVENT;
++ 	  event.arg = Qnil;
++ 	  event.code = current_key_script;
++ 	  event.timestamp = timestamp;
++ 	  kbd_buffer_store_event (&event);
++ 	}
++ 
++       last_key_script = current_key_script;
++     }
++ 
++   UNBLOCK_INPUT;
++ }
++ 
++ 
++ int
++ mac_pass_key_to_system (int xkeysym, UInt32 modifiers)
++ {
++   if (this_command_key_count
++       || !NILP (current_buffer->read_only)
++       || cursor_in_echo_area)
++     return FALSE;
++   else if (!NILP (Vmac_use_inline_input_method)
++ 	   && !converting)
++     {
++       
++       Lisp_Object keys = Vmac_ignore_shortcuts;
++       Lisp_Object m, k;
++ 
++       while (!NILP (keys))
++ 	{
++ 	  m = XCAR (XCAR (keys));
++ 	  k = XCDR (XCAR (keys));
++ 	  keys = XCDR (keys);
++ 	  
++ 	  if (NUMBERP (m) && modifiers == XINT (m))
++ 	    if (NILP (k)
++ 		|| (NUMBERP (k) && xkeysym == XINT (k)))
++ 	      return FALSE;
++ 	}
++       return TRUE;
++     }
++   else
++     return TRUE;
++ }
++ 
++ pascal OSStatus
++ mac_handle_input_method_event(EventHandlerCallRef er, EventRef event, void *data)
++ {
++   UInt32 ekind = GetEventKind (event), eclass = GetEventClass (event);
++   OSStatus ret = noErr;
++   unsigned long timestamp = GetEventTime (event) / kEventDurationMillisecond;
++ 
++   BLOCK_INPUT;
++   switch (eclass) {
++   case kEventClassTextInput:
++     switch (ekind) {
++     case kEventTextInputOffsetToPos:
++       {
++ 	struct frame *f = one_mac_display_info.x_focus_frame;
++ 	struct window *w = XWINDOW (f->selected_window);
++ 	Point pt;
++ 
++ 	/* set position of candidates window */
++ 	pt.h = WINDOW_TO_FRAME_PIXEL_X (w, w->phys_cursor.x);
++ 	pt.v = WINDOW_TO_FRAME_PIXEL_Y (w, w->phys_cursor.y) + w->phys_cursor_height;
++ 	LocalToGlobal (&pt);
++ 
++ 	SetEventParameter (event, kEventParamTextInputReplyPoint,
++ 			   typeQDPoint, sizeof(pt), &pt);
++       }
++       break;
++     case kEventTextInputPosToOffset:
++       break;
++     case kEventTextInputUpdateActiveInputArea:
++       {
++ 	UInt32 src_nbytes = 0, array_nbytes = 0, fixed_nbytes = 0;
++ 	unsigned char *src = NULL;
++ 	TextRangeArray *array = NULL;
++ 	Lisp_Object argv[1024], triple[3];
++ 	int argc = 0, i = 0;
++ 
++ 	GetEventParameter (event, kEventParamTextInputSendText,
++ 			   typeChar,
++ 			   NULL, 0,
++ 			   &src_nbytes, NULL);
++ 	
++ 	if (src_nbytes) 
++ 	  {
++ 	    /* get converting string from TSM */
++ 	    src = (unsigned char *) xmalloc (src_nbytes + 1);
++ 	    memset (src, 0, src_nbytes + 1);
++ 	    GetEventParameter (event, kEventParamTextInputSendText,
++ 			       typeChar,
++ 			       NULL, src_nbytes,
++ 			       NULL, src);
++ 	    argv[argc++] = make_string_from_bytes (src, 
++ 						   src_nbytes,
++ 						   src_nbytes);
++ 	    
++ 	    /* get fixed string length (bytes) from TSM */
++ 	    GetEventParameter (event, kEventParamTextInputSendFixLen,
++ 			       typeLongInteger, 
++ 			       NULL, sizeof(fixed_nbytes), 
++ 			       NULL, &fixed_nbytes);
++ 	    argv[argc++] = make_number (fixed_nbytes);
++ 
++ 	    /* get properties of string from TSM */
++ 	    GetEventParameter (event, kEventParamTextInputSendHiliteRng,
++ 			       typeTextRangeArray,
++ 			       NULL, 0,
++ 			       &array_nbytes, NULL);
++ 	    
++ 	    if (array_nbytes)
++ 	      {
++ 		array = (TextRangeArray *) xmalloc (array_nbytes);
++ 		
++ 		GetEventParameter (event, kEventParamTextInputSendHiliteRng,
++ 				   typeTextRangeArray,
++ 				   NULL, array_nbytes,
++ 				   NULL, array);
++ 
++ 		for (i = 0; i < array->fNumOfRanges && argc < 1024; i++)
++ 		  {
++ 		    triple[0] = make_number (array->fRange[i].fHiliteStyle);
++ 		    triple[1] = make_number (array->fRange[i].fStart);
++ 		    triple[2] = make_number (array->fRange[i].fEnd);
++ 		    argv[argc++] = list3 (make_number (array->fRange[i].fHiliteStyle),
++ 					  make_number (array->fRange[i].fStart),
++ 					  make_number (array->fRange[i].fEnd));
++ 		  }
++ 	      }
++ 	    if (src) xfree(src);
++ 	    if (array) xfree(array);
++ 
++ 	    if (fixed_nbytes) converting = FALSE;
++ 	    else converting = TRUE;
++ 	  }
++ 	else
++ 	  { /* src_nbytes == 0 */
++ 	    argv[argc++] = make_string("", 0);
++ 	    argv[argc++] = make_number(0);
++ 
++ 	    converting = FALSE;
++ 	  }
++ 
++ 	{
++ 	  struct input_event inev;
++ 	  
++ 	  EVENT_INIT (inev);
++ 	  inev.kind = MAC_INPUT_METHOD_EVENT;
++ 	  inev.arg = Flist (argc, argv);
++ 	  inev.timestamp = timestamp;
++ 	  kbd_buffer_store_event (&inev);
++ 	}
++       }
++       break;
++     case kEventTextInputGetSelectedText:
++       break;
++     case kEventTextInputUnicodeForKeyEvent:
++       if (!converting) ret = eventNotHandledErr;
++       break;
++     default:
++       break;
++     }
++     break;
++   default:
++     break;
++   }
++   UNBLOCK_INPUT;
++ 
++   return ret;
++ }
++ 
++ void init_input_method (void)
++ {
++   if(!mac_input_method_handler) {
++     OSErr err;
++     InterfaceTypeList itl = { kTextService };
++ 
++     BLOCK_INPUT;
++     err = NewTSMDocument (1, itl, &mac_tsm_doc_id, 715);
++     if (err != noErr) abort (); 
++ 
++     err = InstallEventHandler(GetApplicationEventTarget (),
++ 			      NewEventHandlerUPP (mac_handle_input_method_event),
++ 			      GetEventTypeCount (events),
++ 			      events,
++ 			      NULL,
++ 			      &mac_input_method_handler);
++     if (err != noErr) abort ();
++     UNBLOCK_INPUT;
++   }
++ 
++   DEFVAR_LISP ("mac-use-inline-input-method", &Vmac_use_inline_input_method,
++    doc: /* If non-nil, users use inline input method on MacOSX. */);
++   Vmac_use_inline_input_method = Qnil;
++   //Fmac_set_inline_input_method (Vmac_use_inline_input_method);
++ 
++   DEFVAR_LISP ("mac-ignore-shortcuts", &Vmac_ignore_shortcuts,
++    doc: /* The list of pairs of a xkeysym and modifiers 
++ 	   which don't pass to system. */);
++   Vmac_ignore_shortcuts = Qnil;
++ 
++   defsubr (&Smac_set_inline_input_method);
++   defsubr (&Smac_set_key_script);
++   defsubr (&Smac_get_key_script);
++ }
++ 
++ #endif
++ 
+diff -p -N -r ../emacs-20060118-0/src/macterm.c src/macterm.c
+*** ../emacs-20060118-0/src/macterm.c	Thu Jan 19 16:03:48 2006
+--- src/macterm.c	Thu Jan 19 16:06:58 2006
+*************** mac_handle_window_event (next_handler, e
+*** 8948,8954 ****
+--- 8948,8959 ----
+        mac_handle_visibility_change (mac_window_to_frame (wp));
+        return noErr;
+  
++     case kEventWindowActivated:
++       mac_reset_tsm_document ();
+        break;
++     case kEventWindowDeactivated:
++       break;
++ 
+      }
+  
+    return eventNotHandledErr;
+*************** install_window_handler (window)
+*** 9072,9077 ****
+--- 9077,9084 ----
+       {kEventClassWindow, kEventWindowShown},
+       {kEventClassWindow, kEventWindowHidden},
+       {kEventClassWindow, kEventWindowExpanded},
++      {kEventClassWindow, kEventWindowActivated},
++      {kEventClassWindow, kEventWindowDeactivated},
+       {kEventClassWindow, kEventWindowCollapsed}};
+    EventTypeSpec specs_mouse[] = {{kEventClassMouse, kEventMouseWheelMoved}};
+    static EventHandlerUPP handle_window_eventUPP = NULL;
+*************** XTread_socket (sd, expected, hold_quit)
+*** 10048,10053 ****
+--- 10055,10061 ----
+  	    int keycode = (er.message & keyCodeMask) >> 8;
+  	    int xkeysym;
+  
++ #if 0
+  #if USE_CARBON_EVENTS && defined (MAC_OSX)
+  	    /* When using Carbon Events, we need to pass raw keyboard
+  	       events to the TSM ourselves.  If TSM handles it, it
+*************** XTread_socket (sd, expected, hold_quit)
+*** 10064,10069 ****
+--- 10072,10078 ----
+  		  != eventNotHandledErr)
+  		break;
+  #endif
++ #endif /* 0 */
+  
+  #if 0
+  	    if (dpyinfo->x_focus_frame == NULL)
+*************** XTread_socket (sd, expected, hold_quit)
+*** 10130,10135 ****
+--- 10139,10166 ----
+  						   er.message & charCodeMask);
+  		  inev.kind = ASCII_KEYSTROKE_EVENT;
+  		}
++ 
++ #if USE_CARBON_EVENTS && defined (MAC_OSX)
++ 	    /* When using Carbon Events, we need to pass raw keyboard
++ 	       events to the TSM ourselves.  If TSM handles it, it
++ 	       will pass back noErr, otherwise it will pass back
++ 	       "eventNotHandledErr" and we can process it
++ 	       normally.  */
++ 	    if ((!NILP (mac_pass_command_to_system)
++ 		 || !(er.modifiers & cmdKey))
++ 		&& (!NILP (mac_pass_control_to_system)
++ 		    || !(er.modifiers & controlKey))
++ 		&& (NILP (Vmac_option_modifier)
++ 		    || !(er.modifiers & optionKey))
++ 		&& mac_pass_key_to_system (inev.code,
++ 					   er.modifiers & (~shiftKey)))
++ 	      if (SendEventToEventTarget (eventRef, toolbox_dispatcher)
++ 		  != eventNotHandledErr)
++ 		{
++ 		  inev.kind = NO_EVENT;
++ 		  break;
++ 		}
++ #endif
+  	  }
+  
+  #if USE_CARBON_EVENTS
+*************** XTread_socket (sd, expected, hold_quit)
+*** 10187,10192 ****
+--- 10218,10224 ----
+  	  count++;
+  	}
+  
++       mac_store_change_input_method_event (timestamp);
+      }
+  
+    /* If the focus was just given to an autoraising frame,
+*************** mac_initialize ()
+*** 10702,10707 ****
+--- 10734,10741 ----
+    init_service_handler ();
+  
+    init_quit_char_handler ();
++ 
++   init_input_method();
+  #endif	/* MAC_OSX */
+  
+    init_command_handler ();
+diff -p -N -r ../emacs-20060118-0/src/termhooks.h src/termhooks.h
+*** ../emacs-20060118-0/src/termhooks.h	Thu Jan 19 16:03:48 2006
+--- src/termhooks.h	Thu Jan 19 16:06:59 2006
+*************** enum event_kind
+*** 260,265 ****
+--- 260,271 ----
+  				   language is changed by the
+  				   user.  */
+  #endif
++ #if defined (MAC_OSX)
++   MAC_INPUT_METHOD_EVENT,	/* A MAC_INPUT_METHOD_EVENT is generated 
++ 				   for inline input method using TSM. */
++   MAC_CHANGE_INPUT_METHOD_EVENT,/* A MAC_CHANGE_INPUT_METHOD_EVENT is generated
++ 				   for changing input method on MacOSX. */  
++ #endif
+    SCROLL_BAR_CLICK_EVENT,	/* .code gives the number of the mouse button
+  				   that was clicked.
+  				   .modifiers holds the state of the modifier
