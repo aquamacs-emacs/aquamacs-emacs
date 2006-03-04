@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.2 2006/03/02 18:34:20 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.3 2006/03/04 15:51:56 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -60,18 +60,15 @@
     )
   )
 
-
-(aquamacs-set-defaults '((default-frame-alist nil)))   
-
+ 
 (defun aquamacs-combined-mode-specific-settings (default-alist style)
   "Return the frame parameter set resulting from two alists.
 Parameters from DEFAULT-ALIST receive priority over those from STYLE.
 If `aquamacs-styles-mode' is nil, returns nil."
   (if aquamacs-styles-mode
       (progn
-	;; remove stuff that's set in default-alist
-	;; and add it, so it'll get priority
-	(setq style (append default-alist (assq-subtract style default-alist)))
+	;; style has priority over default-frame-alist
+	(setq style (append style (assq-subtract  default-alist style)))
 
 	;; delete a few things as we don't want them here
 	(mapc
@@ -154,7 +151,7 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 				   (if for-mode
 				       (aquamacs-get-style for-mode)
 				     (append
-				      (get-buffer-specific-style (buffer-name))
+				      (aquamacs-get-buffer-style (buffer-name))
 				      (aquamacs-get-style major-mode)))))
 			   ;; read out color-theme		 
 			   ( color-theme (cdr (assq 'color-theme style)))
@@ -216,12 +213,12 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 	  (error (print err))))))
 
 
-; (get-buffer-specific-style "*Help*")
+; (aquamacs-get-buffer-style "*Help*")
 
-(defun get-buffer-specific-style (bufname) 
+(defun aquamacs-get-buffer-style (bufname) 
   (if aquamacs-styles-mode
 	   (cdr (assq-string-equal bufname 
-				   aquamacs-buffer-specific-frame-styles))
+				   aquamacs-buffer-default-styles))
     nil))
 
 
@@ -275,7 +272,7 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 
 ;;(setq last-major-mode-style-in-this-frame nil)
 
-(defun update-mode-style ()
+(defun aquamacs-update-mode-style ()
   "Update the style (colors, font) of the selected frame 
 to be appropriate for its first buffer"
    
@@ -298,7 +295,7 @@ to be appropriate for its first buffer"
     )
   t
   )
-(defun update-mode-styles-everywhere ()
+(defun aquamacs-update-mode-styles-everywhere ()
   "Update the styles (colors, font) of all frames
 to be appropriate for its first buffer. (Aquamacs)"
    
@@ -361,8 +358,8 @@ to be appropriate for its first buffer. (Aquamacs)"
   "Activate current frame settings (style) as default. 
 Sets default-frame-alist. (Aquamacs)"
   (interactive)
+
 ;; maybe delete mode-specific frames?
-  
   (when 
       (let ((existing-styles  aquamacs-default-styles))
 	(setq existing-styles (assq-delete-all 'default existing-styles)) 
@@ -433,7 +430,7 @@ Use Save Options before restart to retain setting."
   "Deletes all styles (mode-specific and the default style)"
   (interactive)
   (customize-set-variable 'aquamacs-default-styles nil)
-  (customize-set-variable 'aquamacs-buffer-specific-frame-styles nil)
+  (customize-set-variable 'aquamacs-buffer-default-styles nil)
   (message "All styles deleted. Use Save Options before restart to retain setting.")
   )
 
@@ -441,7 +438,7 @@ Use Save Options before restart to retain setting."
   "Resets all styles (mode-specific and the default style)"
   (interactive)
   (set-to-custom-standard-value 'aquamacs-default-styles)
-  (set-to-custom-standard-value 'aquamacs-buffer-specific-frame-styles)
+  (set-to-custom-standard-value 'aquamacs-buffer-default-styles)
   (message "All styles reset to defaults. Add new ones or use customize to 
 modify them. Use Save Options before restart to retain setting.")
   )
@@ -554,7 +551,7 @@ for which the menu is being updated."
       (aquamacs-update-apply-style-for-mode-menu)))
 
 
-(defcustom aquamacs-buffer-specific-frame-styles
+(defcustom aquamacs-buffer-default-styles
     (filter-fonts '( 
 		    ("*Help*" (background-color . "lightblue")
 		     (right-fringe . 1) (left-fringe . 1)
@@ -562,10 +559,10 @@ for which the menu is being updated."
 		    ("*Messages*" (background-color . "light goldenrod")
 		     (toolbar-lines . 0))
 		    )) 
-    "Association list to set buffer-specific styles. Each element 
+    "Association list to set buffer styles. Each element 
 is a list of elements of the form (buffer-name style), where
 STYLE is an association list giving frame parameters as
-in default-frame-alist or (frame-parameters). The frame parameters are set
+in `default-frame-alist' or `frame-parameters'. The frame parameters are set
 whenever the buffer BUFFER-NAME is activated. BUFFER-NAME has to be a 
 string. Parameters set here override parameters set in 
 `aquamacs-default-styles'.
@@ -595,7 +592,10 @@ current major mode. To turn off this behavior, see
 		  (paragraph-indent-text-mode  (font . "fontset-lucida13"))
 		  (speedbar-mode (minibuffer-auto-raise . nil))
 		  (custom-mode (tool-bar-lines . 0) (fit-frame . t) 
+			       (font . "fontset-monaco11")
 			       (background-color . "light goldenrod"))
+		  (default (font . "fontset-monaco12")   
+			    (right-fringe . 1) (left-fringe . 1))
 		  ))
   "Association list to set mode-specific styles. Each element 
 is a list of elements of the form (mode-name style), where
@@ -607,8 +607,7 @@ parametrized. Parameters in ``default-frame-alist'' and
 ``special-display-frame-alist'' serve as defaults which are 
 overruled by a setting in this list if there is an entry
 for the current major mode. To turn off this behavior, see
-``aquamacs-styles-mode''.
-"
+``aquamacs-styles-mode''."
   :type '(repeat (cons :format "%v"
 		       (symbol :tag "Mode-name")
 		       (repeat (cons :format "%v"
@@ -635,8 +634,8 @@ are. That means that additional, temporary windows (such as for
 the *Completions* buffer) will not alter the style of the frame.
 
 A special style `default' is applied when no mode-specific style
-is present. Parameters in `default-frame-alist' and
-`special-display-frame-alist' overwrite any styles set.
+is present. Any style setting will override parameters set 
+in `default-frame-alist' or `special-display-frame-alist'.
  
 When this mode is turned on, parameters from
 `default-frame-alist' are copied to the `default' style.
@@ -682,6 +681,34 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
 
 
 
+(defun aquamacs-styles-set-default-parameter (param value)
+  "Sets frame parameter PARAM of `default' frame style."
+  (let* ((x (assq 'default aquamacs-default-styles))
+	 (y (assq param (cdr x))))
+    (setcdr y value)))
+ 
+(defadvice modify-all-frames-parameters
+  (after set-tool-bar-in-default-style (alist) activate)
+  (mapc (lambda (x)
+	  (aquamacs-styles-set-default-parameter (car-safe x)
+						 (cdr-safe x)))
+	alist))
+
+(defadvice tool-bar-mode
+  (after set-tool-bar-in-default-style () activate)
+
+  (aquamacs-styles-set-default-parameter 'tool-bar-lines
+					 (if tool-bar-mode 1 0)))
+
+(defadvice set-fringe-mode
+  (after set-fringe-in-default-style () activate)
+
+  (aquamacs-styles-set-default-parameter 
+   'right-fringe
+   (cdr (assq 'right-fringe default-frame-alist)))
+  (aquamacs-styles-set-default-parameter 
+   'left-fringe
+   (cdr (assq 'left-fringe default-frame-alist))))
 
 
 
@@ -710,7 +737,7 @@ Frame Appearance Styles to make the setting stick.")
   (add-hook 'after-change-major-mode-hook	
 	    'set-mode-style-after-change-major-mode
 	    )
-  (add-hook 'menu-bar-update-hook 'update-mode-style)
+  (add-hook 'menu-bar-update-hook 'aquamacs-update-mode-style)
   (define-key-after aquamacs-frame-style-menu [menu-delete-one-style]
     '(menu-item (format "Remove Style for %s" 
 			(or 
@@ -749,12 +776,9 @@ for all frames with the current major-mode."
 
 
 (aquamacs-set-defaults '((tool-bar-mode 0)))
-(tool-bar-mode 0) ;; turn it off
-(message "tool-bar-mode turned off %s" tool-bar-mode)
+(let ((default-frame-alist)) ;; protect against change
+  (tool-bar-mode 0)) ;; turn it off
 
-(add-hook 'after-init-hook
-	  (lambda ()
-	    (message "tool-bar-mode val %s" tool-bar-mode)))
 
 
 
@@ -810,21 +834,29 @@ for all frames with the current major-mode."
 
   (defadvice frame-notice-user-settings 
     (around aquamacs-respect-mode-defaults () activate)
-    (if aquamacs-styles-mode
+    
+    (let ((dfa-tbl (assq 'tool-bar-lines default-frame-alist)))
 
-	;;  (let ((default-frame-alist  
-	;; 	      (aquamacs-combined-mode-specific-settings 
-	;; 	       default-frame-alist
-	;; 	       (aquamacs-get-style major-mode))))
-	(progn
-	  (aquamacs-set-style nil 'force) 
-	  ;; apply initial-frame-alist and default-frame-alist
-	  (let ((default-frame-alist nil))
-	  ad-do-it)
-	  )
-      ;; else
-      ad-do-it
-      )
+      (if aquamacs-styles-mode
+
+	 
+	  (progn
+	    (aquamacs-set-style nil 'force) 
+	    ;; apply initial-frame-alist and default-frame-alist
+	    (let ((default-frame-alist nil))
+	      ad-do-it)
+	    )
+	;; else
+	ad-do-it
+	)
+    
+      ;; ensure that frame-notice-user-settings doesn't set tool-bar-mode in
+      ;; default-frame-alist
+      (unless (eq dfa-tbl
+		  (assq 'tool-bar-lines default-frame-alist))
+	(setq default-frame-alist
+	      (assq-delete-all 'tool-bar-lines default-frame-alist))))
+
     ;; workaround for an Emacs bug
     (let ((vsb (frame-parameter nil  'vertical-scroll-bars)))
       (modify-frame-parameters nil '((vertical-scroll-bars . nil)))
@@ -867,11 +899,13 @@ for all frames with the current major-mode."
   )
 
 
-(defvar smart-frame-positioning-hook nil)
+(defvar smart-frame-positioning-hook nil) ;; stub
 (add-hook 'smart-frame-positioning-hook
 	  (lambda (f)
 	    (modify-frame-parameters f
 				     (aquamacs-get-style major-mode))))
+
+
 
 
 
@@ -882,7 +916,7 @@ for all frames with the current major-mode."
 (defvaralias 'aquamacs-mode-specific-default-themes
   'aquamacs-default-styles)
 (defvaralias 'aquamacs-buffer-specific-frame-themes
-  'aquamacs-buffer-specific-frame-styles)
+  'aquamacs-buffer-default-styles)
 
 ;; turn on if desired
 (if aquamacs-styles-mode
