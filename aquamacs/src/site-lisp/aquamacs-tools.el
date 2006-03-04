@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.17 2006/02/28 20:40:56 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.18 2006/03/04 16:38:12 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -113,13 +113,17 @@ overwriting any previous associations in DEST"
 
 
 ; (assq-subtract '((asd . 3) (wqe . 5)) '((wqq . 3) (wqe . 5)))
-(defun assq-subtract (a b)
-  "Subtracts alist A from B. Order of elements is NOT preserved."
+; (assq-subtract '((asd . 3) (wqe . 5)) '((wqq . 3) (wqe . 2)))
+; (assq-subtract '((asd . 3) (wqe . 5)) '((wqq . 3) (wqe . 2)) t)
+(defun assq-subtract (a b &optional ignore-values)
+  "Subtracts alist B from A. Order of elements is NOT preserved.
+If IGNORE-VALUES is non-nil, alist elements with differing cdrs (values)
+are still subtracted."
   
   (let ((ret))
     (mapc (lambda (x)
 	    (let ((p (assq (car x) b)))
-	      (unless (and p (eq (cdr p) (cdr x)))
+	      (unless (and p (or ignore-values (eq (cdr p) (cdr x))))
 		(setq ret (cons x ret)))))
 	  a)
     ret))
