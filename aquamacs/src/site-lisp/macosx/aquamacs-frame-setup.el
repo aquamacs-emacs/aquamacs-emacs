@@ -8,7 +8,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-frame-setup.el,v 1.21 2006/03/01 19:41:42 davidswelt Exp $
+;; Last change: $Id: aquamacs-frame-setup.el,v 1.22 2006/03/04 16:55:16 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -59,11 +59,13 @@
 ;(set-default  'indicate-empty-lines t)
 ;(setq indicate-empty-lines t)
  ;; Fringes
+; (aquamacs-define-the-fringe-bitmap)
 (defun aquamacs-define-the-fringe-bitmap ()
   "Redefines a fringe bitmap (continuation) so that it looks good
 even when minimal fringes are used. (Aquamacs)"
   (let ((fm fringe-mode))
-    (fringe-mode 0) ;; turn off temporarily
+    ;;(fringe-mode 0) ;; turn off temporarily
+    ;; taken out so we don't modify default-frame-alist etc.
     (define-fringe-bitmap  'continuation-line
       ;; a plus sign
       [#B0011111111
@@ -75,7 +77,7 @@ even when minimal fringes are used. (Aquamacs)"
        #B0000000011
        #B0000000001])
 
-    (fringe-mode fm) ;; turn back on
+    ;;(fringe-mode fm) ;; turn back on
     )
   )
 ;;(customize-set-variable 'fringe-indicators 'empty)
@@ -95,7 +97,7 @@ even when minimal fringes are used. (Aquamacs)"
 ;( 1on1-*Completions*-frame-flag nil)
 
 (default-frame-alist 
-((foreground-color . "Black") (background-color . "White") (font . "fontset-monaco12")  (cursor-color . "Red")   (vertical-scroll-bars . right)  (tool-bar-lines . 0) (left-fringe . 1) (right-fringe . nil) (fringe . nil)))
+  ((foreground-color . "Black") (background-color . "White") (font . "fontset-monaco12")  (cursor-color . "Red")   (vertical-scroll-bars . right)  (tool-bar-lines . 1 ) (left-fringe . 1) (right-fringe . nil) (fringe . nil)))
 
 (special-display-frame-alist
  ((unsplittable)
@@ -103,7 +105,8 @@ even when minimal fringes are used. (Aquamacs)"
  (height . 35)
  (left . 0)
  (top . 30)
- (font . "fontset-monaco12")))))
+;; (font . "fontset-monaco12") don't overwrite mode def
+))))
  
 ; (setq autofit-frames-flag nil)
  ;(setq 1on1-minibuffer-frame-flag nil) ;; this is a defvar
