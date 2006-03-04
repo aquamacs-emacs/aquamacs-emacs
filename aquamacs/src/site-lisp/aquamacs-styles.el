@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.3 2006/03/04 15:51:56 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.4 2006/03/04 16:22:58 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -34,7 +34,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
 
-;; Copyright (C) 2005, David Reitter, all rights reserved.
+;; Copyright (C) 2005, 2006, David Reitter, all rights reserved.
 
  
 
@@ -684,8 +684,14 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
 (defun aquamacs-styles-set-default-parameter (param value)
   "Sets frame parameter PARAM of `default' frame style."
   (let* ((x (assq 'default aquamacs-default-styles))
-	 (y (assq param (cdr x))))
-    (setcdr y value)))
+	 (y (assq param (cdr-safe x))))
+    (if y
+	(setcdr y value)
+      (if x
+	  (setcdr x (cons (cons param value) (cdr x)))
+	(setq aquamacs-default-styles
+	      (cons (cons 'default (cons param value)) 
+		    aquamacs-default-styles))))))
  
 (defadvice modify-all-frames-parameters
   (after set-tool-bar-in-default-style (alist) activate)
