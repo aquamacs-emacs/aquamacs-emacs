@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.4 2006/03/04 16:22:58 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.5 2006/03/04 16:36:46 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -68,7 +68,8 @@ If `aquamacs-styles-mode' is nil, returns nil."
   (if aquamacs-styles-mode
       (progn
 	;; style has priority over default-frame-alist
-	(setq style (append style (assq-subtract  default-alist style)))
+	(setq style (append (assq-subtract  default-alist style 'ign)
+			    style))
 
 	;; delete a few things as we don't want them here
 	(mapc
@@ -646,39 +647,11 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
 ;; the condition case is because otherwise this won't
 ;; do it's job. don't know why.
   (condition-case nil
-  
-(if aquamacs-styles-mode
-    ;; turning on
-    ;; copy `default-frame-alist' parameters over to our default
-    ;; N.B. the default-frame-alist parms will have priority
-;; so delete parms?
-    (progn
-      (assq-set 'default
-		(append
-		 (assq-subtract 
-		  (assq 'default aquamacs-default-styles)
-		  default-frame-alist)
-		 default-frame-alist)
-		'aquamacs-default-styles)
-      (setq default-frame-alist))
-  ;; else
-  ;; when turning off, copy things back to default-frame-alist
-  (setq default-frame-alist
-	      (append
-	       default-frame-alist
-	       (assq-subtract 
-		default-frame-alist
-		(assq 'default aquamacs-default-styles))))
-
-    nil)
-
-  (error nil))
+      (error nil))
 
   :group 'Aquamacs
   :global t
   :require 'color-theme)
-
-
 
 
 (defun aquamacs-styles-set-default-parameter (param value)
