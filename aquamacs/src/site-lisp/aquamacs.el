@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.58 2006/03/03 22:20:57 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.59 2006/03/07 22:58:52 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -863,8 +863,7 @@ listed here."
 	      display-time-mode 
 	      display-battery-mode
 	      one-buffer-one-frame-mode 
-	      mac-option-modifier
-	      smart-frame-prior-positions)
+	      mac-option-modifier)
 	    (mapcar (lambda (x) 
 		      (emkm-name (car x))) 
 		    emulate-mac-keyboard-mode-maps)

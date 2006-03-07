@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.23 2006/01/14 19:20:20 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.24 2006/03/07 22:58:04 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -57,6 +57,11 @@
 
 ;; Code
 
+(defcustom save-frame-position-file 
+  (convert-standard-filename
+   "~/Library/Preferences/Aquamacs Emacs/frame-positions.el")
+  "Name of the file that records `smart-frame-prior-positions' value."
+ :type 'file)
  
 (defcustom smart-frame-positioning-hook nil
   "Functions to be run before frame creation.
@@ -370,6 +375,31 @@ later retrieval."
 		      (cons 'width (frame-parameter f 'width))
 		      (cons 'height (frame-parameter f 'height))) 
 		    'smart-frame-prior-positions)))
+
+;; modelled after `save-place-alist-to-file'
+;; but we're saving a (setq ...) so we can just load the file
+;; (smart-fp--save-frame-positions-to-file)
+(defun smart-fp--load-frame-positions-to-file ()
+  (load (expand-file-name save-frame-position-file)))
+(defun smart-fp--save-frame-positions-to-file ()
+  "Save `smart-frame-prior-positions' to a file.
+The file is specified in `smart-frame-position-file'."
+  (let ((file (expand-file-name save-frame-position-file)))
+    (save-excursion
+      (set-buffer (get-buffer-create " *Saved Positions*"))
+      (delete-region (point-min) (point-max))
+      (let ((print-length nil)
+            (print-level nil))
+        (print `(setq smart-frame-prior-positions
+		      ',smart-frame-prior-positions)
+	       (current-buffer)))
+      (condition-case nil
+	  ;; Don't use write-file; we don't want this buffer to visit it.
+	  (write-region (point-min) (point-max) file)
+	(file-error (message "Saving frame positions: Can't write %s" file)))
+      (kill-buffer (current-buffer))
+      )))
+(add-hook 'after-init-hook 'smart-fp--load-frame-positions-to-file)
 
 (defun assq-string-equal (key alist)
   (catch 'break
