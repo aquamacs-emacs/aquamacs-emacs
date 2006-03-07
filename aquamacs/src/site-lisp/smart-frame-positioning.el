@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.24 2006/03/07 22:58:04 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.25 2006/03/07 23:13:30 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -379,7 +379,7 @@ later retrieval."
 ;; modelled after `save-place-alist-to-file'
 ;; but we're saving a (setq ...) so we can just load the file
 ;; (smart-fp--save-frame-positions-to-file)
-(defun smart-fp--load-frame-positions-to-file ()
+(defun smart-fp--load-frame-positions-from-file ()
   (load (expand-file-name save-frame-position-file)))
 (defun smart-fp--save-frame-positions-to-file ()
   "Save `smart-frame-prior-positions' to a file.
@@ -399,7 +399,11 @@ The file is specified in `smart-frame-position-file'."
 	(file-error (message "Saving frame positions: Can't write %s" file)))
       (kill-buffer (current-buffer))
       )))
-(add-hook 'after-init-hook 'smart-fp--load-frame-positions-to-file)
+
+;; load this after the custom-file
+(add-hook 'after-init-hook 'smart-fp--load-frame-positions-from-file 'append)
+
+(add-hook 'kill-emacs-hook 'smart-fp--save-frame-positions-to-file)
 
 (defun assq-string-equal (key alist)
   (catch 'break
