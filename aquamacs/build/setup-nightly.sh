@@ -1,7 +1,6 @@
 #!/bin/sh
 # initial setup
  
-. ~/.bash_profile
 
 mkdir Aquamacs
 cd Aquamacs
