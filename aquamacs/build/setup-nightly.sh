@@ -12,4 +12,4 @@ cvs -z3 -d:pserver:anonymous@cvs.savannah.gnu.org:/sources/emacs co -d emacs.raw
 cvs -d:pserver:anonymous@cvs.aquamacs.org:/cvsroot/aquamacs login
 cvs -z3 -d:pserver:anonymous@cvs.aquamacs.org:/cvsroot/aquamacs co -P aquamacs
 
-ln -s aquamacs/builds/nightly.sh .
+ln -s aquamacs/builds/nightly.sh build.sh
