@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.38 2006/03/01 19:41:23 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.39 2006/03/14 23:17:59 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -577,6 +577,11 @@ even if it's the only visible frame."
 if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
   (interactive) 
 
+  
+  ;; quit current command
+  (when (minibuffer-window-active-p 
+       (minibuffer-window (selected-frame)))
+      (abort-recursive-edit))
   
  
   (let ((wind (selected-window))
