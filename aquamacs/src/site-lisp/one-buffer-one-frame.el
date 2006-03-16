@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.42 2006/03/16 18:09:52 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.43 2006/03/16 19:05:49 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -802,6 +802,10 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
 ;;      (lambda () (setq one-buffer-one-frame-inhibit nil))))) 
 
 
+(defadvice desktop-read (around inhibit-one-buffer-one-frame 
+				(&rest args) activate compile)
+  (let ((one-buffer-one-frame-inhibit t))
+    ad-do-it))
 
 
 
