@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.41 2006/03/16 16:35:09 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.42 2006/03/16 18:09:52 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -436,31 +436,39 @@ the current window is switched to the new buffer."
 ; them when they are killed!
 ; maybe the previous force-other-frame should keep track of
 ; newly opened frames!
- 
+  
+;; (when window-system
 
-      
-(when window-system
+;; ; quit-window is usually called by some modes when the user enters 'q'
+;; ; e.g. in dired. we want to delete the window then.  
+;;  (defadvice quit-window (around always-dedicated (&optional kill window) 
+;; 				activate)
+;;    (interactive "P")
+;;    (if one-buffer-one-frame
+;;        (let* ((one-buffer-one-frame nil)
+;; 	     (win (selected-window))
+;; 	     (save (window-dedicated-p win)))
+;; 	 (set-window-dedicated-p win t)
+;; 	 (ad-set-arg 1 win)
+;; 	 ad-do-it
+;; 	 (if (window-live-p win)
+;; 	     (set-window-dedicated-p win save))
+;; 	 )
+;;      ;; else 
+;;      ad-do-it 
+;;      )))
+
+ (when window-system
 
 ; quit-window is usually called by some modes when the user enters 'q'
 ; e.g. in dired. we want to delete the window then.  
- (defadvice quit-window (around always-dedicated (&optional kill window) 
+ (defadvice bury-buffer (around always-dedicated (&optional buffer) 
 				activate)
-   (interactive "P")
-   (if one-buffer-one-frame
-       (let* ((one-buffer-one-frame nil)
-	     (win (selected-window))
-	     (save (window-dedicated-p win)))
-	 (set-window-dedicated-p win t)
-	 (ad-set-arg 1 win)
-	 ad-do-it
-	 (if (window-live-p win)
-	     (set-window-dedicated-p win save))
-	 )
-     ;; else 
-     ad-do-it 
-     )))
+   ad-do-it
 
- 
+   (if one-buffer-one-frame
+       ;; delete the frame if necessary
+       (delete-window-if-created-for-buffer buffer))))
 
 
 ;; (defadvice pop-to-buffer (around always-dedicated (buf &rest args) 
@@ -774,14 +782,26 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
 ;; mode, this will open a new buffer.
 
 
-(defadvice split-window (before inhibit-one-buffer-one-frame (&rest args) activate compile)
+(defadvice split-window (before inhibit-one-buffer-one-frame 
+				(&rest args) activate compile)
+  (when one-buffer-one-frame-mode
+    (setq one-buffer-one-frame-inhibit t)
+    ;; clear flag as soon as command has finished (or similar)
+    (run-with-idle-timer 
+     0 nil 
+     (lambda () (setq one-buffer-one-frame-inhibit nil))))) 
 
-(setq one-buffer-one-frame-inhibit t)
-;; clear flag as soon as command has finished (or similar)
-(run-with-idle-timer 0 nil 
-		     (lambda () (setq one-buffer-one-frame-inhibit nil)))
-  
-)
+
+;; (defadvice delete-window (before inhibit-one-buffer-one-frame 
+;; 				(&rest args) activate compile)
+;;   (when one-buffer-one-frame-mode
+;;     (setq one-buffer-one-frame-inhibit t)
+;;     ;; clear flag as soon as command has finished (or similar)
+;;     (run-with-idle-timer 
+;;      0 nil 
+;;      (lambda () (setq one-buffer-one-frame-inhibit nil))))) 
+
+
 
 
 
