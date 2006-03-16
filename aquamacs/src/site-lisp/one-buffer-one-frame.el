@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.40 2006/03/16 15:34:15 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.41 2006/03/16 16:35:09 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -159,7 +159,6 @@ To disable `one-buffer-one-frame-mode', call
   '(
     " SPEEDBAR"
     "\\*.*\\*"
-    "*Ediff Control Panel*"
     )
   "Buffers popped up in a separate frame in `one-buffer-one-frame-mode'.
 In `one-buffer-one-frame-mode', if the name of a buffer to be shown matches
@@ -173,7 +172,6 @@ Exceptions are listed in `obof-other-frame-regexps'."
 (defcustom obof-same-frame-switching-regexps
   '(
     " SPEEDBAR"
-    "*Ediff Control Panel*"
     )
   "Buffers to switch to in a separate frame in `one-buffer-one-frame-mode'.
 In `one-buffer-one-frame-mode', if the name of a buffer to be shown matches
@@ -741,6 +739,7 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
  '((view-remove-frame-by-deleting t)))
 
 
+;; FIXES IN VARIOUS PLACES
 
 
 ;; make sure that C-mouse-1 menu acts locally
@@ -769,23 +768,21 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
     )))
 
 
-;; (defcustom one-buffer-one-frame t
-;;   "When non-nil, new buffers open in new frames and are killed with them.
-;; When non-nil, open a new frame for each new buffer and switch to that frame
-;; when buffer is selected from Buffers menu. When nil, regular buffers are displayed
-;; in the same frame and window.
+;; ediff-directories, e.g. uses split-window to create a new window
+;; in a frame, and then `switch-to-buffer', which should simply show
+;; another buffer in the newly created window. Problem is, in this
+;; mode, this will open a new buffer.
 
-;; This variable is controlled by `one-buffer-one-frame-mode'.
-;; Switch on the mode interactively, and only temporarily set this variable
-;; to nil from lisp functions to inhibit its functionality.
 
-;; If set during startup (e.g. in `user-init-file'), the mode will turn on."
-;;   :type '(radio 
-;; 		(const :tag "Open new frames for buffers" t)
-;; 		(const :tag "standard Emacs behavior (nil)" nil))
-;;   :group 'Aquamacs
-;;   :set 'one-buffer-one-frame-mode
-;;   :require 'aquamacs-frame-setup)
+(defadvice split-window (before inhibit-one-buffer-one-frame (&rest args) activate compile)
+
+(setq one-buffer-one-frame-inhibit t)
+;; clear flag as soon as command has finished (or similar)
+(run-with-idle-timer 0 nil 
+		     (lambda () (setq one-buffer-one-frame-inhibit nil)))
+  
+)
+
 
 
 (provide 'one-buffer-one-frame)
