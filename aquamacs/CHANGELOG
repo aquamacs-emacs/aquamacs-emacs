@@ -49,17 +49,22 @@ CVS Version
 
 	* Intel: Aquamacs is now available as native version for Mac
 	computers with Intel CPU. Note that this is a separate download.
-	Thanks to Richard Koch for providing a computer.
+	Thanks to Jonathan Shea and Richard Koch for providing compile
+	machines.
 	
 	* Dired in one-buffer-one-frame-mode will show new
 	directories and open files in the same frame.
 
 	* Customize will show new groups etc. in the same frame & window.
 
-	* *mail* and *grep* buffers will show in a new frame
- 	(not in `same-window-buffer-names' any more, but in 
-	`obof-obof-other-frame-regexps'.)
-
+	* One-Buffer-One-Frame-Mode ("Display Buffers in Separate Frames")
+	will now show buffers such as *mail*, *grep*, *shell* in their own
+	frames. This also applies if other modes open *...* buffers, such
+	as ESS opening an inferior R shell, which previously didn't even
+	show in a separate window. One-Buffer-One-Frame-Mode is also better
+	documented now and has customization options so you can decide
+	which buffers are shown in new frames.	
+ 	 
 	* Frame-Appearance-Themes reconfigure a frame only if just one
 	window is present (or all windows show buffers in the same major
 	mode). This should more effectively prevent appearance switching
@@ -100,7 +105,8 @@ CVS Version
 	Alternatively do the same in customization buffers.	
 
 	* Toolbar looks prettier now.
-
+	Patch by Kim F. Storm
+	
 	* `Frame-Appearance-Styles' is the new name for the former `Frame
 	Appearance Themes, so they won't be confused with GNU Emacs new
 	customization themes. A global minor mode called
@@ -113,7 +119,16 @@ CVS Version
 	       (was: `aquamacs-auto-frame-parameters-flag')
 	`aquamacs-buffer-default-styles' 
 	       (was: `aquamacs-buffer-specific-frame-themes')
-	 
+
+	* A-Backspace deletes the whole logical line again, not just
+	the visual line. A-Shift-Backspace deletes the visual line now.
+	
+	* Bugfix: Typing C-x C-f, then A-w made the newly opened frame go
+	away, but not the "Find file" prompt, which was quite persistent,
+	especially if you didn't know about C-g and the minibuffer. That
+	is fixed now. 
+	Reported by a number of people.
+	
 	* Bugfix: Setting tool-bar-mode or changing the fringes via the
 	Options menu will now affect the default frame style as well, so
 	the setting will affect new frames (even if frame appearance
@@ -172,6 +187,13 @@ CVS Version
 	site-load.el), it is usually sufficient to run 
 	"copy-to-app -n". Remember to set the AQUAMACS_ROOT and EMACS_ROOT
 	environment variables before using any of these scripts.
+
+	* A_BIG_THANKYOU goes to all users who have donated
+	(http://aquamacs.org/donate) in the past months. I'd also like to
+	thank all those who tested the beta versions, reported bugs and
+	contributed ideas: Peter Dyballa, Terry Jones, 
+	José Figuera O'Farrill, Konrad Podczeck, Robert Sloan and many others.
+
 	
 2005-12-21 Version 0.9.8
 
@@ -222,6 +244,7 @@ CVS Version
 	* DONATE: If you like the new version, please donate so we can
 	keep the development efforts going throughout 2006. Have a great
 	new year!
+
 	
    Bugfixes:
 
