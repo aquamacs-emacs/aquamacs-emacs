@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.39 2006/03/14 23:17:59 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.40 2006/03/16 15:34:15 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -82,6 +82,15 @@ C-x S-left    `previous-buffer-here'
 C-x S-right   `next-buffer-here'
 C-x C-B       `list-buffers-here'
 
+Decisions about showing buffers in separate frames can be influenced
+in a number of customization variables. Buffers are, by default,
+shown in new frames, unless they are switched to with `switch-to-buffer'
+and match an entry in `obof-same-frame-switching-regexps', or they are
+popped up with `pop-to-buffer' and match an entry in `obof-same-frame-regexps'
+(typically Emacs always shows these in a new window). 
+A matching entry in `obof-other-frame-regexps' will always force buffers to 
+be shown in a new frame.
+
 The mode sets `pop-up-frames', `pop-up-windows', 
 `display-buffer-reuse-frames'.
 
@@ -146,17 +155,36 @@ To disable `one-buffer-one-frame-mode', call
   "Enforce one-buffer-one-frame - should be set only temporarily.")
  
 
-(defvar obof-same-frame-regexps
+(defcustom obof-same-frame-regexps
   '(
     " SPEEDBAR"
     "\\*.*\\*"
     "*Ediff Control Panel*"
     )
-  "In `one-buffer-one-frame-mode', if the name of a buffer to be shown matches
+  "Buffers popped up in a separate frame in `one-buffer-one-frame-mode'.
+In `one-buffer-one-frame-mode', if the name of a buffer to be shown matches
 one of the regular expressions in this list, it is shown in the same frame,
-as an extra window."
+as an extra window, when shown with `pop-to-buffer'.
+Exceptions are listed in `obof-other-frame-regexps'."
+  :group 'Aquamacs
+  :group 'frames
 )
-(defvar obof-other-frame-regexps
+
+(defcustom obof-same-frame-switching-regexps
+  '(
+    " SPEEDBAR"
+    "*Ediff Control Panel*"
+    )
+  "Buffers to switch to in a separate frame in `one-buffer-one-frame-mode'.
+In `one-buffer-one-frame-mode', if the name of a buffer to be shown matches
+one of the regular expressions in this list, it is shown in the same frame 
+when switched to with `switch-to-buffer'. 
+Exceptions are listed in `obof-other-frame-regexps'."
+  :group 'Aquamacs
+  :group 'frames
+)
+
+(defcustom obof-other-frame-regexps
   '(
     "\\*Messages\\*" 
     "\\*scratch\\*" 
@@ -164,15 +192,17 @@ as an extra window."
     "\\*Custom.*"
     ".*output\\*"
     "\\*mail\\*"
-    "\\*grep\\*"   
- )
-"Show buffers with matching names in a separate frame.
+    "\\*grep\\*"  
+    "\\*shell\\*"   
+    )
+  "Buffers always shown in a separate frame in `one-buffer-one-frame-mode'.
 In `one-buffer-one-frame-mode', if the name of a buffer to be shown matches
 one of the regular expressions in this list, it is shown in a separate frame.
-This overrides entries in `obof-same-frame-regexps'.
-All other buffers open in separate frames.")
+This overrides entries in `obof-same-frame-regexps'."  
+  :group 'Aquamacs
+  :group 'frames)
 
-(defun obof-same-frame-p (buf)
+(defun obof-same-frame-p (buf &optional switching)
   (let ((from-buf 
 	 (and last-command-event
 	      (listp (event-start last-command-event))
@@ -192,7 +222,10 @@ All other buffers open in separate frames.")
 		   (and
 		    (or (= (buffer-size (window-buffer)) 0)
 		    (let ((same-window-buffer-names nil)
-			  (same-window-regexps obof-same-frame-regexps))
+			  (same-window-regexps 
+			   (if switching
+			       obof-same-frame-switching-regexps
+			     obof-same-frame-regexps)))
 		      ;; this is a fast solution
 		      (same-window-p bufname)))
 		    (not (let ((same-window-buffer-names nil)
@@ -248,8 +281,8 @@ All other buffers open in separate frames.")
 
 ;; (obof-same-frame-p "asdasd") 
 
-(defun open-in-other-frame-p (buf)
-  (not (obof-same-frame-p buf)))
+(defun open-in-other-frame-p (buf &optional switching)
+  (not (obof-same-frame-p buf switching)))
  
 (defun killable-buffer-p (buf)
   "Returns non-nil if buffer BUF can be killed."
@@ -334,7 +367,7 @@ the current window is switched to the new buffer."
     (if switch
 	(if (or (not (visible-frame-list))
 		(not (frame-visible-p (selected-frame)))
-		(open-in-other-frame-p (car args)))
+		(open-in-other-frame-p (car args) t))
  
 	    (progn
 	      (apply #'switch-to-buffer-other-frame args)
