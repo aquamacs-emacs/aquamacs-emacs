@@ -448,7 +448,7 @@ In the calendar, the date can be selected with mouse-1.  However, the
 minibuffer will also be active, and you can simply enter the date as well.
 When nil, only the minibuffer will be available."
   :group 'org-time
-  :type 'number)
+  :type 'boolean)
 
 (defcustom org-calendar-follow-timestamp-change t
   "Non-nil means, make the calendar window follow timestamp changes.
@@ -1746,7 +1746,7 @@ Changing this variable requires a restart of Emacs to take effect."
     (((type tty) (class color)) (:foreground "white"))
     (((class color) (background light)) (:foreground "white"))
     (((class color) (background dark)) (:foreground "black"))
-;    (((class color) (backgro6und light)) (:foreground "grey90"))
+;    (((class color) (background light)) (:foreground "grey90"))
 ;    (((class color) (background dark)) (:foreground "grey10"))
     (t (:inverse-video nil)))
   "Face used for level 1 headlines."
