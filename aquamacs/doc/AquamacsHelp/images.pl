@@ -4,27 +4,32 @@
 
 $key = q/>;MSF=1.6;LFS=11;AAT/;
 $cached_env_img{$key} = q|<IMG
- ALIGN="MIDDLE" BORDER="0" SRC="|."$dir".q|img2.png"
+ WIDTH="18" HEIGHT="33" ALIGN="MIDDLE" BORDER="0"
+ SRC="|."$dir".q|img2.png"
  ALT="$&gt;$">|; 
 
 $key = q/{;MSF=1.6;LFS=11;AAT/;
 $cached_env_img{$key} = q|<IMG
- ALIGN="MIDDLE" BORDER="0" SRC="|."$dir".q|img4.png"
+ WIDTH="13" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
+ SRC="|."$dir".q|img4.png"
  ALT="$\{$">|; 
 
 $key = q/<;MSF=1.6;LFS=11;AAT/;
 $cached_env_img{$key} = q|<IMG
- ALIGN="MIDDLE" BORDER="0" SRC="|."$dir".q|img1.png"
+ WIDTH="18" HEIGHT="33" ALIGN="MIDDLE" BORDER="0"
+ SRC="|."$dir".q|img1.png"
  ALT="$&lt;$">|; 
 
 $key = q/};MSF=1.6;LFS=11;AAT/;
 $cached_env_img{$key} = q|<IMG
- ALIGN="MIDDLE" BORDER="0" SRC="|."$dir".q|img5.png"
+ WIDTH="13" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
+ SRC="|."$dir".q|img5.png"
  ALT="$\}$">|; 
 
 $key = q/backslash;MSF=1.6;LFS=11;AAT/;
 $cached_env_img{$key} = q|<IMG
- ALIGN="MIDDLE" BORDER="0" SRC="|."$dir".q|img3.png"
+ WIDTH="13" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
+ SRC="|."$dir".q|img3.png"
  ALT="$\backslash$">|; 
 
 1;

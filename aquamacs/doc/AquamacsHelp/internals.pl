@@ -38,5 +38,9 @@ $key = q/tab:terms/;
 $ref_files{$key} = "$dir".q|node25.html|; 
 $noresave{$key} = "$nosave";
 
+$key = q/frame-appearance-styles/;
+$ref_files{$key} = "$dir".q|node33.html|; 
+$noresave{$key} = "$nosave";
+
 1;
 

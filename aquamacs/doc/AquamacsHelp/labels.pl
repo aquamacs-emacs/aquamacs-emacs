@@ -38,6 +38,10 @@ $key = q/tab:terms/;
 $external_labels{$key} = "$URL/" . q|node25.html|; 
 $noresave{$key} = "$nosave";
 
+$key = q/frame-appearance-styles/;
+$external_labels{$key} = "$URL/" . q|node33.html|; 
+$noresave{$key} = "$nosave";
+
 1;
 
 
@@ -79,6 +83,10 @@ $noresave{$key} = "$nosave";
 
 $key = q/tab:terms/;
 $external_latex_labels{$key} = q|1|; 
+$noresave{$key} = "$nosave";
+
+$key = q/frame-appearance-styles/;
+$external_latex_labels{$key} = q|4.3.3|; 
 $noresave{$key} = "$nosave";
 
 1;
