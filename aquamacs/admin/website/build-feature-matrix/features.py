@@ -259,7 +259,7 @@ f = features.add_node('Spell-Checking')
 matrix.add(aquamacs, f, 'OS X native, ispell, aspell')
 matrix.add(emacs, f, 'ispell, aspell (extra install)')
 matrix.add(bbedit, f, 'OS X native')
-matrix.add(smultron, f, minus)
+matrix.add(smultron, f, 'OS X native')
 
 f = features.add_node('Overall')
 
