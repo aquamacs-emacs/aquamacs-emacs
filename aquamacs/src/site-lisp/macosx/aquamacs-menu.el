@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.58 2006/02/20 23:19:56 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.59 2006/03/19 12:49:01 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -146,11 +146,13 @@
 ;; should only update if there isn't already a string
 ;; or the key variables have changed
 
+;(defun aq-shortcut (text symbol &rest more-args)
+;  (apply (function format) text more-args))
+
 
 (defun aq-shortcut (text symbol &rest more-args)
   (if (if (boundp 'osx-key-mode) osx-key-mode nil)
       (condition-case err
-	  
 	  (progn
 	    (let* ((case-fold-search nil)
 		   (s (aq-find-good-key symbol))
@@ -159,30 +161,34 @@
 			       (concat (aq-describe-modifier 'shift) "-" 
 				       (downcase (substring txt 2))))
 		       s)))
-	    (apply (function format) 
-		   (append (list (concat text "%s")) more-args 
-			   (list 
-			    (replace-regexp-in-string 
-			     "-" ""
-			     (replace-regexp-in-string 
-			      "-\\([a-z]\\)" 'upcase
-			  
+	      (apply (function format) 
+		     (append (list (concat text "%s")) more-args 
+			     (list 
 			      (replace-regexp-in-string 
-			       "C-" (lambda (txt) (concat (aq-describe-modifier 'ctrl) 
-							  "-"))
+			       "-" ""
 			       (replace-regexp-in-string 
-				"H-" (lambda (txt) (concat (aq-describe-modifier 'hyper)
-							   "-"))
+				"-\\([a-z]\\)" 'upcase
+			  
 				(replace-regexp-in-string 
-				 "A-" (lambda (txt) (concat (aq-describe-modifier 'alt)
-							    "-"))
-				(replace-regexp-in-string 
-				 "-\\([A-Z]\\)" (lambda (txt) 
-						  (concat 
-						   (aq-describe-modifier 'shift) txt))
-				 s
-				 nil nil 1 ;; replace sub-exp
-				 )))))))))))
+				 "C-" (lambda (txt) 
+					(concat (aq-describe-modifier 'ctrl) 
+						"-"))
+				 (replace-regexp-in-string 
+				  "H-" (lambda (txt) 
+					 (concat (aq-describe-modifier 'hyper)
+						 "-"))
+				  (replace-regexp-in-string 
+				   "A-" (lambda (txt) 
+					  (concat (aq-describe-modifier 'alt)
+						  "-"))
+				   (replace-regexp-in-string 
+				    "-\\([A-Z]\\)" 
+				    (lambda (txt) 
+				      (concat 
+				       (aq-describe-modifier 'shift) txt))
+				    s
+				    nil nil 1 ;; replace sub-exp
+				    )))))))))))
 	(error nil
 	       (apply (function format) text more-args)))
     ;; not osx-key-mode
@@ -279,10 +285,11 @@ using `aquamacs-recent-major-modes' and `aquamacs-known-major-modes'."
    (aq-concat-symbol symbol-prefix "recent-") 
    function-to-call docstring enable-if))
 
+ 
 ;; also used by osxkeys.el
-(defmacro aquamacs-pretty-mode-name (mode)
+(defun aquamacs-pretty-mode-name (mode)
   (capitalize 
-   (replace-regexp-in-string "-mode" "" (symbol-name (eval mode)))))
+   (replace-regexp-in-string "-mode" "" (symbol-name mode))))
 
 (defun aquamacs-define-mode-menu-1
   (the-list keymap symbol-prefix function-to-call docstring enable-if)
@@ -382,9 +389,9 @@ customization buffer."
  
 
 (define-key menu-bar-file-menu [open-file] 
-  '(menu-item
-    (aq-shortcut  "Open File...                             " 
-		  (key-binding [menu-bar file open-file]) )
+  `(menu-item
+    ,(aq-shortcut  "Open File...                             " 
+		  'mac-key-open-file )
     mac-key-open-file
     :keys nil)) 
 
