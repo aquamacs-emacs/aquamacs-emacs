@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.6 2006/03/25 17:48:32 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.7 2006/03/25 19:49:36 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -844,7 +844,6 @@ for all frames with the current major-mode."
 
 	 
 	  (progn
-	    (print (frame-parameter nil 'tool-bar-lines))
 	    (aquamacs-set-style nil 'force) 
 	    ;; apply initial-frame-alist and default-frame-alist
 	    (let ((default-frame-alist nil))
@@ -863,7 +862,6 @@ for all frames with the current major-mode."
 ;; 	(setq default-frame-alist
 ;; 	      (assq-delete-all 'tool-bar-lines default-frame-alist)))
       )
-(print (frame-parameter nil 'tool-bar-lines))
     ;; workaround for an Emacs bug
     (let ((vsb (frame-parameter nil  'vertical-scroll-bars)))
       (modify-frame-parameters nil '((vertical-scroll-bars . nil)))
