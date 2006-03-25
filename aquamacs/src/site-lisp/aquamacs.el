@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.62 2006/03/25 15:55:34 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.63 2006/03/25 19:50:57 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -32,12 +32,12 @@
 
 
 
-(defvar aquamacs-version "0.9.8"
+(defvar aquamacs-version "0.9.9"
 "A string with Aquamacs' version number.
 The format of the string is undefined. 
 For a reliable numerical representation, use `aquamacs-version-id'.")
 
-(defvar aquamacs-version-id 098.0
+(defvar aquamacs-version-id 099.0
 "A float indicating Aquamacs' version number.
 Full integers correspond to the third position of the public
 version number, e.g. version 0.9.7 is represented as `97.x'.
