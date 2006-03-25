@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.60 2006/03/08 19:03:15 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.61 2006/03/25 15:53:18 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -494,11 +494,15 @@ to the selected frame."
 
   ;; make sure there are no old customizations around
   ;; N.B.: if no customization file is present, 
-  ;; aquamacs-customization-version-id is 0924
+  ;; aquamacs-customization-version-id is 0 or nil
+
   (defun aquamacs-activate-features-new-in-this-version ()
 
     ;; aquamacs-customization-version-id contains the version id
     ;; of aquamacs when the customization file was written
+
+    (when (and aquamacs-customization-version-id
+	       (> aquamacs-customization-version-id 0))
 
     (if (< aquamacs-customization-version-id 092.5)
 
@@ -550,24 +554,9 @@ to the selected frame."
 
 
 
-;; todo before 0.9.8:
-
-
+;; todo before 0.9.9:
 ;; how to deal with tool-bar-mode set in user's custom-file?
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
+;; for now, ignore it
 
 ;; Print warnings / compatibility options
     
@@ -588,7 +577,7 @@ Use `mac-command-modifier' instead."))
 	   (setq mac-option-modifier nil))
       (if (> aquamacs-customization-version-id 096.0)
 	(message "Warning: `mac-pass-option-to-system' is deprecated from
-Aquamacs 0.9.7 on. `mac-option-modifier' has been set for you."))))
+Aquamacs 0.9.7 on. `mac-option-modifier' has been set for you.")))))
 
   (require 'one-buffer-one-frame)
   (one-buffer-one-frame-mode 1)
