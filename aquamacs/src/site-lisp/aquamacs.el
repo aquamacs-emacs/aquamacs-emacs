@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.61 2006/03/25 15:53:18 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.62 2006/03/25 15:55:34 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -549,7 +549,6 @@ to the selected frame."
 	   ;; list
 	   (filter-fonts '(
 			   (help-mode (tool-bar-lines . 0) (fit-frame . t)) 
-			   (fundamental-mode (tool-bar-lines . 0))
 			   (custom-mode (tool-bar-lines . 0) (fit-frame . t)))))))
 
 
