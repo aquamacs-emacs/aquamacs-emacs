@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.5 2006/03/04 16:36:46 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.6 2006/03/25 17:48:32 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -315,6 +315,10 @@ to be appropriate for its first buffer. (Aquamacs)"
   ) 
 (defun aquamacs-get-style-snapshot ()
  
+
+;; retrieve theme
+
+ 
   (list 
    (cons 'color-theme (let ((theme 
 			     `(color-theme-snapshot
@@ -325,13 +329,33 @@ to be appropriate for its first buffer. (Aquamacs)"
 			       ;; remaining elements of snapshot: face specs
 			       ,@(color-theme-get-face-definitions))))
 			;; find out if this is any different from the theme that was set  
+
+
+;; (let ((theme-name (frame-parameter nil 'color-theme-name)))
+;;   (when (and theme-name 
+;; 	     (not (eq theme-name 'color-theme-snapshot))
+;; 	     (functionp theme-name))
+;;     (let ((shelved-color-theme nil))
+;;       ;; too bad we can't do it with let...
+;;       (fset 'color-theme-backup 'color-theme-install)
+;;       (unwind-protect 
+;; 	  (progn
+;; 	    (fset 'color-theme-install
+;; 		  (lambda (theme) (setq shelved-color-theme theme)))
+;; 	    (funcall theme-name)
+;; 	    )
+;; 	(fset 'color-theme-install 'color-theme-backup))
+;;       (print shelved-color-theme))
+;;     ;; compare theme
+;;     (print (eq shelved-color-theme theme))
+;;     theme
+;;     )))
+
 			;; - not implemented -
 			theme
 			))
    (cons 'font (frame-parameter nil 'font))
-   (cons 'tool-bar-lines (frame-parameter nil 'tool-bar-lines))
-   )
-  )
+   (cons 'tool-bar-lines (frame-parameter nil 'tool-bar-lines))))
 
 ;; (defun aquamacs-set-style-as-default () 
 ;;   "Activate current frame settings (style) as default. Sets default-frame-alist."
@@ -820,6 +844,7 @@ for all frames with the current major-mode."
 
 	 
 	  (progn
+	    (print (frame-parameter nil 'tool-bar-lines))
 	    (aquamacs-set-style nil 'force) 
 	    ;; apply initial-frame-alist and default-frame-alist
 	    (let ((default-frame-alist nil))
@@ -831,18 +856,20 @@ for all frames with the current major-mode."
     
       ;; ensure that frame-notice-user-settings doesn't set tool-bar-mode in
       ;; default-frame-alist
-      (unless (eq dfa-tbl
-		  (assq 'tool-bar-lines default-frame-alist))
-	(setq default-frame-alist
-	      (assq-delete-all 'tool-bar-lines default-frame-alist))))
-
+      ;; this should not be needed since default-frame-alist is
+      ;; locally bound (away) via `let'. 
+      ;; (unless (eq dfa-tbl
+;; 		  (assq 'tool-bar-lines default-frame-alist))
+;; 	(setq default-frame-alist
+;; 	      (assq-delete-all 'tool-bar-lines default-frame-alist)))
+      )
+(print (frame-parameter nil 'tool-bar-lines))
     ;; workaround for an Emacs bug
     (let ((vsb (frame-parameter nil  'vertical-scroll-bars)))
       (modify-frame-parameters nil '((vertical-scroll-bars . nil)))
       (modify-frame-parameters nil `((vertical-scroll-bars . ,vsb)))
       )
     )
-
 
 
   ;; color styles
