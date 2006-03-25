@@ -86,6 +86,176 @@ Project. We will use the term \emph{Aquamacs Emacs} (or just
 
 \section{What's New in This Release}
  
+\subsection{Changes---0.9.9}
+
+\begin{itemize}
+
+\item  SUMMARY: More bugs and other annoyances 
+	have been removed. Opening new frames (for new buffers) is more
+	useful now, and frame themes aren't applied when a frame is split
+	up. Options are automatically saved across sessions. A new
+	customization groups for Emacs-die-hards makes it easier to change
+	Aquamacs-specific customization defaults. 
+
+\item  Intel: Aquamacs is now available as native version for Mac
+	computers with Intel CPU. Note that this is a separate download.
+	Thanks to Jonathan Shea and Richard Koch for providing compile
+	machines.
+	
+\item  Dired in one-buffer-one-frame-mode will show new
+	directories and open files in the same frame.
+
+\item  Customize will show new groups etc. in the same frame and window.
+
+\item  One-Buffer-One-Frame-Mode ("Display Buffers in Separate Frames")
+	will now show buffers such as *mail*, *grep*, *shell* in their own
+	frames. This also applies if other modes open *...* buffers, such
+	as ESS opening an inferior R shell, which previously didn't even
+	show in a separate window. One-Buffer-One-Frame-Mode is also better
+	documented now and has customization options so you can decide
+	which buffers are shown in new frames.	
+ 	 
+\item  Frame-Appearance-Themes reconfigure a frame only if just one
+	window is present (or all windows show buffers in the same major
+	mode). This should more effectively prevent appearance switching
+	when a second window is shown temporarily.
+
+\item  Frame-Appearance-Themes now allow the user to delete all
+	mode-specific themes when a default is defined. Hints to select
+	"Save Options" are more prominent.
+
+\item  Options are saved automatically upon quitting Aquamacs (it'll
+	ask you.) - customize `aquamacs-save-options-on-quit' to
+	configure.
+
+\item  Quitting Aquamacs: you won't be asked any more whether to quit
+	if modified buffers exist, because at that point you've always already
+	been asked to save each modified buffer.
+	
+\item  Aquamacs-is-more-than-Emacs is a new customization group
+	containing all customization variables whose defaults are changed
+	in Aquamacs compared to GNU Emacs or the relevant package.
+	This is useful for Emacs veterans who want certain behaviors to be
+	more similar to GNU Emacs.
+
+\item  Bug Reporting is handled fully in the system's default mail
+	client again (unless you've set up a different
+	`send-mail-function')
+	Suggested by Robert Sloan
+
+\item  Mail composed with the Message package will now be routed
+	through the mail client by default (`message-send-mail-function')
+	and there is no "From" line. If you run postfix locally, you may
+	want to do something like the following in your .emacs or Preferences.el:
+
+	(setq send-mail-function 'sendmail-send-it)
+	(setq message-send-mail-function 'sendmail-send-it)
+	(setq mail-setup-with-from t)
+
+	Alternatively do the same in customization buffers.	
+
+\item  Toolbar looks prettier now.
+	Patch by Kim F. Storm
+	
+\item  `Frame-Appearance-Styles' is the new name for the former `Frame
+	Appearance Themes, so they won't be confused with GNU Emacs new
+	customization themes. A global minor mode called
+	`aquamacs-styles-mode' is now used to switch them on/off.
+
+	Some configuration variables have been renamed: 
+	`aquamacs-default-styles' 
+	       (was: `aquamacs-mode-specific-default-themes')
+	`aquamacs-styles-mode' 
+	       (was: `aquamacs-auto-frame-parameters-flag')
+	`aquamacs-buffer-default-styles' 
+	       (was: `aquamacs-buffer-specific-frame-themes')
+
+\item  A-Backspace deletes the whole logical line again, not just
+	the visual line. A-Shift-Backspace deletes the visual line now.
+
+\item  Tilde ~ can now be input on German keyboards with the German
+	emulation mode via Option-N.
+
+\item  Frame-positions for individual files are now saved to/loaded
+	from a file called frame-positions.el (in ~/Library/Preferences...)
+	
+\item  Bugfix: Typing C-x C-f, then A-w made the newly opened frame go
+	away, but not the "Find file" prompt, which was quite persistent,
+	especially if you didn't know about C-g and the minibuffer. That
+	is fixed now. 
+	Reported by a number of people.
+	
+\item  Bugfix: Setting tool-bar-mode or changing the fringes via the
+	Options menu will now affect the default frame style as well, so
+	the setting will affect new frames (even if frame appearance
+	styles are active). Note that if fringes or tool-bar are set in
+	.emacs, the customized and saved styles will override your
+	settings. 
+	
+\item  Bugfix: Aquamacs will not ask the user any longer whether to
+	save dired buffers and other non-file-buffers upon deleting the
+	frame (killing the buffer).
+	Reported by Carsten Bormann
+
+\item  Bugfix: desktop-mode should be able to restore the desktop on
+	startup appropriately. 
+	Reported by Rudi Schlatte
+	
+\item  Bugfix: page-wise scrolling (PgUp/PgDown) with long lines
+	scrolls exactly one screen now
+
+\item  Bugfix: page-wise scrolling (PgUp/PgDown) will remove the region
+	as expected when the cursor moves. Shift-PgUp/PgDown will extend
+	the region (and set the mark if neccessary).
+	
+\item  Bugfix: completing-read-multiple didn't work (icomplete+ library
+	updated)   
+
+\item  Bugfix: frames sometimes didn't open in
+	one-buffer-one-frame-mode when the buffer shown was empty.
+	
+\item  Bugfix: In one-buffer-one-frame-mode, Apple-W deletes a window
+	or kills a buffer and returns to the next buffer in the buffer
+	list (i.e. the previously shown buffer) when the frame wasn't
+	created for the particular window / buffer being killed. Think of
+	it as a stack of buffers that are shown. Previously, Aquamacs
+	always switched to *scratch*.
+
+\item  Bugfix: Preview & Print now works with buffers in Tramp Mode, too.
+	Reported by Tim Hodgson
+
+\item  Bugfix: Fonts (not fontsets) set in default-frame-alist and
+	similar variables are not filtered out any more after startup if
+	they haven't been explicitly loaded (or applied to a frame, and
+	thus, loaded).
+	Reported by Konstantinos Efstathiou
+	
+\item  Bugfix: display copyright message at startup. 
+
+\item  Bugfix: Javascript-mode exchanged for the one borrowed from
+	XEmacs. This one will hopefully work better now.
+	Suggested by Tom Van Vleck
+
+\item  Bugfix: ediff-directories interferes less with one-buffer-one-frame-mode.
+	
+\item  Compiling: Those who build Aquamacs themselves, note that the
+	make-aquamacs script will now produce a complete app bundle
+	located in <emacs-path>/mac/Aquamacs. The install-aquamacs script
+	only moves the bundle to /Applications. If you make any changes to
+	the Aquamacs source code (except for pre-loaded code in
+	site-load.el), it is usually sufficient to run 
+	"copy-to-app -n". Remember to set the AQUAMACS_ROOT and EMACS_ROOT
+	environment variables before using any of these scripts.
+
+      \item A BIG THANKYOU goes to all users who have donated
+        (\url{http://aquamacs.org/donate}) in the past months. I'd
+        also like to thank all those who tested the beta versions,
+        reported bugs and contributed ideas and server space:
+        Nathaniel Cunningham, Peter Dyballa, Terry Jones, José Figuera
+        O'Farrill, Konrad Podczeck, Robert Sloan and many others.
+
+\end{itemize}
+
 \subsection{Changes---0.9.8}
 
 \begin{itemize}
@@ -118,7 +288,7 @@ Project. We will use the term \emph{Aquamacs Emacs} (or just
 	open as a "small" window inside the current frame. Please report
 	back to us in case you have any unwanted results with this.
 
-\item * Special-Display-Frames such as the one with the *Help* buffer
+\item Special-Display-Frames such as the one with the *Help* buffer
 	can now show *Completions* buffers and other ones in a second
 	window inside the frame, just like other frames can.
  	(`unsplittable' property in `special-display-frame-alist').
@@ -352,7 +522,7 @@ Bugfixes:
 
 \item Mode-specific styles are not applied any more for the major-mode
 	of buffers shown in temporary windows inside frames such as the
-	*Completions* buffer. This prevents ugly font-switching etc. for
+\item Completions* buffer. This prevents ugly font-switching etc. for
 	the whole frame when just a small window is opened inside the frame.
 
 \item New Packages: findr, htmlize, ruby's friends, auctex
