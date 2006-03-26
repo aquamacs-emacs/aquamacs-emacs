@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.56 2006/03/15 19:39:12 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.57 2006/03/26 19:09:05 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -440,7 +440,9 @@ If arg is zero, kill current line but exclude the trailing newline."
 (defun aquamacs-clipboard-kill-ring-save-secondary ()
   "Copy secondary selection to kill ring, and save in the X clipboard."
 (interactive)
-  (if mouse-secondary-overlay
+  (if (and mouse-secondary-overlay
+	   (overlay-start mouse-secondary-overlay)
+	   (overlay-end mouse-secondary-overlay))
   (let ((x-select-enable-clipboard t)
 	(cua-keep-region-after-copy t))
     (clipboard-kill-ring-save 
@@ -450,8 +452,7 @@ If arg is zero, kill current line but exclude the trailing newline."
     )
   ; else
   (message "The secondary selection is not set.")
-  )
-)
+  ))
 
 (defun aquamacs-clipboard-kill-secondary ()
   "Kill the secondary selection, and save it in the X clipboard."
@@ -847,6 +848,9 @@ default."
     (define-key map `[(,osxkeys-command-key z)] 'undo)
     (define-key map `[(,osxkeys-command-key shift z)] 'redo)
     (define-key map `[(,osxkeys-command-key \`)] 'switch-to-next-frame)
+    (define-key map `[(,osxkeys-command-key t)] 'mouse-set-font)
+
+
     map)
   )
 
