@@ -1,38 +1,44 @@
 #!/bin/sh
-
-# scp nightly.sy dr@rodrigues.inf.ed.ac.uk:~/
-
+ 
 export CVS_RSH=ssh
-CVS_PREFIX="cvs -z3 -d:ext:davidswelt@cvs.sourceforge.net:/cvsroot/aquamacs"
+
+if test "$AQUAMACS_CVS_PREFIX" ; then
+    CVS_PREFIX=$AQUAMACS_CVS_PREFIX
+else
+    CVS_PREFIX="cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aquamacs"
+fi
+
+AQ_PREFIX=`pwd`
+
 
 if test "$1" == "emacs" ; then
     BUILD_GNU_EMACS=yes   
-    LOG=~/Aquamacs/emacs-build.log
+    LOG=${AQ_PREFIX}/emacs-build.log
 
 elif test "$1" == "aquamacs" ; then
     BUILD_AQUAMACS=yes  
-    LOG=~/Aquamacs/aquamacs-build.log
+    LOG=${AQ_PREFIX}/aquamacs-build.log
 
 elif test "$1" == "cvs" ; then
     UPDATE_CVS=yes  
-    LOG=~/Aquamacs/cvs-update.log
+    LOG=${AQ_PREFIX}/cvs-update.log
 else
-    ./nightly cvs
-    ./nightly emacs
-    ./nightly aquamacs
+    ./build.sh cvs
+    ./build.sh emacs
+    ./build.sh aquamacs
 fi
 
-cd ~/Aquamacs
+cd ${AQ_PREFIX}
 
 export AQUAMACS_ROOT=`pwd`/aquamacs
 # EMACS_ROOT is set separately for each compile run
  
-cd ~/Aquamacs/builds
+cd ${AQ_PREFIX}/builds
 DEST=`pwd`
 
 date >${LOG}
 
-cd ~/Aquamacs
+cd ${AQ_PREFIX}
 
 if test "${UPDATE_CVS}" == "yes"; then
 
@@ -83,7 +89,7 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
     echo "Applying Aquamacs patches..." >>$LOG  
     . ${AQUAMACS_ROOT}/build/apply-patches.sh >>$LOG 2>>$LOG
 
-    cd ~/Aquamacs/emacs/mac
+    cd ${AQ_PREFIX}/emacs/mac
     echo "Building Emacs (make-aquamacs)..." >>$LOG 
 
     ${AQUAMACS_ROOT}/build/make-aquamacs >>$LOG 2>>$LOG 
@@ -91,7 +97,7 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
     rm -rvf "${DEST}/Aquamacs Emacs.app"  >>$LOG 2>>$LOG 
 #    ${AQUAMACS_ROOT}/build/install-aquamacs "${AQUAMACS_ROOT}" 
 #"${DEST}/Aquamacs Emacs.app" "Aquamacs-Raw/Emacs.app"  >>$LOG 2>>$LOG 
-    cd ~/Aquamacs/emacs/mac	
+    cd ${AQ_PREFIX}/emacs/mac	
     mv -v "Aquamacs/Aquamacs Emacs.app" "${DEST}/" >>$LOG 2>>LOG
 
     NAME=Aquamacs-`date +"%Y-%b-%d-%a"`
