@@ -10,30 +10,46 @@ fi
 
 AQ_PREFIX=`pwd`
 
-
-if test "$1" == "emacs" ; then
-    BUILD_GNU_EMACS=yes   
-    LOG=${AQ_PREFIX}/emacs-build.log
-
-elif test "$1" == "aquamacs" ; then
-    BUILD_AQUAMACS=yes  
-    LOG=${AQ_PREFIX}/aquamacs-build.log
-
-elif test "$1" == "cvs" ; then
-    UPDATE_CVS=yes  
-    LOG=${AQ_PREFIX}/cvs-update.log
+LOG="/dev/stdout"
+LOGPAR=""
+if test "$1" == "-l" ; then 
+    a=$2
+    LOGPAR="-l"
 else
-    ./build.sh cvs
-    ./build.sh emacs
-    ./build.sh aquamacs
+    a=$1
 fi
+    
+if test "$a" == "emacs" ; then
+    BUILD_GNU_EMACS=yes  
+    if [ $LOGPAR ]; then
+	LOG=${AQ_PREFIX}/emacs-build.log
+    fi
+elif test "$a" == "aquamacs" ; then
+    BUILD_AQUAMACS=yes  
+    if [ $LOGPAR ]; then
+	LOG=${AQ_PREFIX}/aquamacs-build.log
+    fi
+elif test "$a" == "cvs" ; then
+    UPDATE_CVS=yes  
+    if [ $LOGPAR ]; then
+	LOG=${AQ_PREFIX}/cvs-update.log
+    fi
+else
+    echo "Aquamacs build.sh"
+    echo "Usage:  aquamacs/build/build.sh [-l] {cvs|emacs|aquamacs}"
+    echo
+    exit
+fi
+
+
 
 cd ${AQ_PREFIX}
 
 export AQUAMACS_ROOT=`pwd`/aquamacs
 # EMACS_ROOT is set separately for each compile run
  
-cd ${AQ_PREFIX}/builds
+mkdir builds 2>/dev/null
+cd builds
 DEST=`pwd`
 
 date >${LOG}
