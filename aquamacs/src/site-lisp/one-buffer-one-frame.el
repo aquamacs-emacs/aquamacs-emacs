@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.43 2006/03/16 19:05:49 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.44 2006/03/27 23:18:16 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -24,7 +24,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, David Reitter
+;; Copyright (C) 2005, 2006, David Reitter
  
 ;; DESCRIPTION:
 ;; 
@@ -462,13 +462,19 @@ the current window is switched to the new buffer."
 
 ; quit-window is usually called by some modes when the user enters 'q'
 ; e.g. in dired. we want to delete the window then.  
+; (ad-disable-advice 'bury-buffer 'around 'always-dedicated)
  (defadvice bury-buffer (around always-dedicated (&optional buffer) 
 				activate)
    ad-do-it
 
    (if one-buffer-one-frame
        ;; delete the frame if necessary
-       (delete-window-if-created-for-buffer buffer))))
+       ;; only delete a whole frame with only the window in it
+       ;; because extra windows are usually created with pop-to-buffer etc.
+       ;; so a package expects them to exist to do something with them.
+       ;; if a frame was created, however, this heuristic doesn't work out
+       ;; seems to work with SLIME like this...
+       (delete-window-if-created-for-buffer buffer 'only-frame))))
 
 
 ;; (defadvice pop-to-buffer (around always-dedicated (buf &rest args) 
@@ -559,15 +565,16 @@ even if it's the only visible frame."
 ;; but only do so if aquamacs opened a new frame&window for
 ;; this buffer (e.g. during switch-to-buffer)
 
-(defun delete-window-if-created-for-buffer (&optional buffer)
+(defun delete-window-if-created-for-buffer (&optional buffer whole-frame-only)
   (let ((buf (or buffer (current-buffer))))
     (let ((winlist (find-all-windows-internal buf)))
       (mapc  
        (lambda (win)
 	 ;;force deletion if buffer is not killable
-	 (delete-window-if-created-for-this-buffer win (buffer-name buf) t)
+	 (if (or (not whole-frame-only)
+		 (eq 1 (length (window-list (window-frame win) 'no-minibuf))))
+	     (delete-window-if-created-for-this-buffer win (buffer-name buf) t)))
 					; (not (killable-buffer-p buf)))
-	 )
        winlist))))
      
 (defun delete-window-if-created-for-this-buffer (win buf-name skip-check)
