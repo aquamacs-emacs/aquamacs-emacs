@@ -244,7 +244,7 @@ Project. We will use the term \emph{Aquamacs Emacs} (or just
 	only moves the bundle to /Applications. If you make any changes to
 	the Aquamacs source code (except for pre-loaded code in
 	site-load.el), it is usually sufficient to run 
-	"copy-to-app -n". Remember to set the AQUAMACS_ROOT and EMACS_ROOT
+	"copy-to-app -n". Remember to set the AQUAMACS\_ROOT and EMACS\_ROOT
 	environment variables before using any of these scripts.
 
       \item A BIG THANKYOU goes to all users who have donated
@@ -1147,7 +1147,7 @@ Or, if you would like to go with the default position all the time,
     PLEASE NOTE that a lot of customization variables have changed
     their names---usually, you just need to prepend 1on1  to them.
 
-\item Aquamacs will load YOUR configuration files not just from
+\item Aquamacs will load your configuration files not just from
     / Users / yourname/.emacs, but also from the location that is appropriate for a Mac
     OS X installation:
 
@@ -1155,8 +1155,6 @@ Or, if you would like to go with the default position all the time,
 / Users / yourname/Library/Preferences/Aquamacs Emacs/Preferences.el\\
   /Library/Preferences / Emacs / Preferences.el\\
  / Users / yourname / Library/Preferences/Emacs/Preferences.el\\
-
-
 
     It is recommended to use these instead of / Users / yourname/.emacs on OS X-only
     installations. The first two files should be used for the
@@ -1733,6 +1731,55 @@ Emacs. \TeX niscope can be downloaded from
 \url{http://www.ing.unipi.it/~d9615/homepage/texniscope.html}.\footnote{The developer of \TeX niscope, Massimiliano Gubinelli, is also the creator of the Aquamacs icon.}
 
 \TeX niscope needs a bit of configuration to work well with Aquamacs. See the Wiki page at \url{http://www.emacswiki.org/cgi-bin/wiki/AquamacsTexniscope} for up-to-date configuration info. 
+
+\section{Extending Aquamacs}
+
+Aquamacs supports Plugins that can be packaged to provide point-and-click installers (via Apple's PackageMaker). The interface is simple.
+Adding standard Emacs packages is easy as well.
+
+\subsection{Plug-in Interface}
+
+All files named \emph{site-start.el} anywhere in the load-path
+    are loaded at startup, before the user's init files are
+    loaded. For example, such a file may be placed in
+    \~/Library/Application Support/Aquamacs Emacs/myPlugin. 
+
+The load-path is automatically extended to cover all subdirectories in standard paths (see Section \ref{standardpaths}).
+
+If a plug-in needs to execute code earlier in the initialization phase, that is, before any Aquamacs-specific code is executed (but after Emacs initilization code has been executed), this code can be provided in a file  \emph{site-prestart.el} anywhere in the load-path.
+
+Note that plug-ins should not make any assumptions about whether a frame exists or is visible.
+
+
+\subsection{Load-path}
+
+Aquamacs is able to find configuration files and Emacs packages
+from any of the following locations (load-path). 
+\label{standardpaths}
+
+{\tt
+/ Library/ Application Support /Aquamacs Emacs / \\
+/ Users / User Name / Library/ Preferences / Aquamacs Emacs/\\
+ / Library/Application Support / Emacs / \\
+ / Users / User Name / Library/ Preferences / Emacs/\\
+}
+
+The following paths are available in the load-path for individual preference settings. \emph{They should not be used if you distribute a point-and-click installer package.}
+
+{\tt
+/ Library/ Preferences /Aquamacs Emacs / \\
+/ Users / User Name/Library/Preferences / Aquamacs Emacs/\\
+ / Library/Preferences / Emacs / \\
+ / Users / User Name / Library/ Preferences/ Emacs/\\
+}
+
+All subsequent directories are added recursively, so Aquamacs will find any path that starts below. Type {\tt C-h v load-path} for more information.
+
+\subsection{Disabling a plug-in or a load-path}
+
+If an (emtpy) file named \emph{.ignore} exists in a specific path, Aquamacs does not load any \emph{site-start} and \emph{site-prestart} source files in this or descending paths and does not add that or subsequent paths to the load-path. 
+
+
 
 
 \section{Getting Help}
