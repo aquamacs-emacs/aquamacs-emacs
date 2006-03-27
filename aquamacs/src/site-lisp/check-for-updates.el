@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs version check
  
-;; Last change: $Id: check-for-updates.el,v 1.13 2006/01/02 13:37:18 davidswelt Exp $
+;; Last change: $Id: check-for-updates.el,v 1.14 2006/03/27 19:25:57 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -113,8 +113,8 @@ nil
   (if (and (fboundp 'mac-dialog-y-or-n-p)
 	   (mac-dialog-y-or-n-p "Welcome to the new Aquamacs."
 				"The Aquamacs Project depends on your support.
-Please consider donating at http://aquamacs.org in case
-you haven't done so lately.
+Please consider becoming a Friend of Aquamacs by donating at 
+http://aquamacs.org. Your continued support keeps the project alive!
 Would you like to see the donations site now?"))
       (aquamacs-donate)))
 
