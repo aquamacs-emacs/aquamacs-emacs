@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.7 2006/03/25 19:49:36 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.8 2006/03/27 19:26:24 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -667,12 +667,13 @@ When this mode is turned on, parameters from
 When it is turned off, parameters are copied back.
 
 This mode is part of Aquamacs Emacs, http://aquamacs.org."
-
+ 
+ 
 ;; the condition case is because otherwise this won't
 ;; do it's job. don't know why.
-  (condition-case nil
-      (error nil))
-
+;  (condition-case nil
+ ;     (error nil))
+:init-value  t
   :group 'Aquamacs
   :global t
   :require 'color-theme)
@@ -777,10 +778,12 @@ for all frames with the current major-mode."
   (capitalize
    (replace-regexp-in-string "-" " " (symbol-name modename))))
 
-
+;; (setq aquamacs-default-styles nil)
 (aquamacs-set-defaults '((tool-bar-mode 0)))
-(let ((default-frame-alist)) ;; protect against change
-  (tool-bar-mode 0)) ;; turn it off
+;; do not turn it off globally, because that would
+;; only modify the default-frame-alist etc. 
+;; and needlessly change the current frame.
+;; anything necessary will be done by frame notice-user-settings
 
 
 
@@ -838,16 +841,18 @@ for all frames with the current major-mode."
   (defadvice frame-notice-user-settings 
     (around aquamacs-respect-mode-defaults () activate)
     
-    (let ((dfa-tbl (assq 'tool-bar-lines default-frame-alist)))
+    ;(let ((dfa-tbl (assq 'tool-bar-lines default-frame-alist)))
 
       (if aquamacs-styles-mode
 
 	 
 	  (progn
-	    (aquamacs-set-style nil 'force) 
 	    ;; apply initial-frame-alist and default-frame-alist
 	    (let ((default-frame-alist nil))
 	      ad-do-it)
+	    ;; ensure that correct style is set. This may turn the
+	    ;; tool-bar on.
+	    (aquamacs-set-style nil 'force)
 	    )
 	;; else
 	ad-do-it
@@ -861,7 +866,7 @@ for all frames with the current major-mode."
 ;; 		  (assq 'tool-bar-lines default-frame-alist))
 ;; 	(setq default-frame-alist
 ;; 	      (assq-delete-all 'tool-bar-lines default-frame-alist)))
-      )
+    ;  )
     ;; workaround for an Emacs bug
     (let ((vsb (frame-parameter nil  'vertical-scroll-bars)))
       (modify-frame-parameters nil '((vertical-scroll-bars . nil)))
