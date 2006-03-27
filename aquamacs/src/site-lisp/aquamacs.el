@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.64 2006/03/27 19:26:04 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.65 2006/03/27 20:34:48 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -852,6 +852,7 @@ listed here."
 	      display-time-mode 
 	      display-battery-mode
 	      one-buffer-one-frame-mode 
+	      aquamacs-styles-mode
 	      mac-option-modifier)
 	    (mapcar (lambda (x) 
 		      (emkm-name (car x))) 
@@ -876,7 +877,6 @@ listed here."
 
      blink-cursor-mode
      ;; added dr. 04/2005
-     aquamacs-styles-mode
      aquamacs-default-styles 
      aquamacs-customization-version-id))
 
