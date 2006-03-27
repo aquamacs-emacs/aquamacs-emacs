@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.37 2006/03/27 11:15:50 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.38 2006/03/27 23:40:59 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -244,7 +244,7 @@ end tell"
 		   (let* ((xdir (expand-file-name dir)  )
 			  (default-directory xdir)) 
 		     (and xdir
-			  (not (file-exists-p (concat p "/.ignore")))
+			  (not (file-exists-p (concat xdir "/.ignore")))
 			  (add-to-list 'load-path xdir)
 			  ;; Now add subdirectories.
 		  
