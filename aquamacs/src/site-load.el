@@ -31,7 +31,7 @@
 (load "emacs-lisp/advice")
 (load "emacs-lisp/regexp-opt")
 ;; (load "emacs-lisp/syntax") ; maybe not: syntax-ppss-stats is mutable
-(load "custom")
+;;(load "custom") ;; loading this seems to cause problems with doc strings (why?) e.g. custom-file
 ;(load "emacs-lisp/cl")
 ;(load "emacs-lisp/cl-seq")
 
@@ -134,7 +134,8 @@
 		    (string-match (concat "^" aq-compile-path 
 					  "\\(.*\\)$") 
 				  (car e)))
-	       (cons (match-string 1 (car e))
+	       (cons (concat "../site-lisp/"
+		      (match-string 1 (car e)))
 		     (cdr e))
 	     e)))
        load-history))
