@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.65 2006/03/27 20:34:48 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.66 2006/03/27 23:39:04 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -901,7 +901,8 @@ Return non-nil if options where saved."
       (when need-save
 	(custom-save-all))
       need-save))
-
+  ;; (aquamacs-menu-bar-changed-options)
+;; (aquamacs-variable-customized-p 'aquamacs-styles-mode)
   (defun aquamacs-menu-bar-changed-options ()
     (let ((need-save))
       (dolist (elt aquamacs-menu-bar-options-to-save)
@@ -933,7 +934,9 @@ have changed."
 	      (not (equal value (condition-case nil
 				    (eval (car standard))
 				  (error nil)))))
-	  (eq saved (list (custom-quote value))))))
+	   (or (eq saved (list (custom-quote value)))
+	       ;; not quite clear why this is doubled
+	       (eq saved (custom-quote value))))))
 	  
 
 
