@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.18 2006/03/04 16:38:12 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.19 2006/03/27 10:35:19 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -320,21 +320,21 @@ Optional CODING is used for encoding coding-system."
 
 
 (defun load-post-sitestart-files ()
+  "Load the Aquamacs plugins from site-start directories."
   (mapcar 
-    (lambda (p) (load (concat p "/site-start") 'noerror))
-    load-path
-    )
-  t
-)
+    (lambda (p) (unless (file-exists-p (concat p "/.ignore"))
+		  (load (concat p "/site-start") 'noerror)))
+    load-path)
+  t)
  
 
 (defun load-pre-sitestart-files ()
+  "Load the pre-start Aquamacs plugins from site-prestart directories."
   (mapcar 
-    (lambda (p) (load (concat p "/site-prestart") 'noerror))
-    load-path
-    )
-  t
-)
+    (lambda (p) (unless (file-exists-p (concat p "/.ignore"))
+		  (load (concat p "/site-prestart") 'noerror)))
+    load-path)
+  t)
 
 ;; Aquamacs Unit Tests
 
