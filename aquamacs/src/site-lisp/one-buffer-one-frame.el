@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.44 2006/03/27 23:18:16 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.45 2006/03/27 23:32:25 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -564,7 +564,6 @@ even if it's the only visible frame."
 ;; delete window when buffer is killed
 ;; but only do so if aquamacs opened a new frame&window for
 ;; this buffer (e.g. during switch-to-buffer)
-
 (defun delete-window-if-created-for-buffer (&optional buffer whole-frame-only)
   (let ((buf (or buffer (current-buffer))))
     (let ((winlist (find-all-windows-internal buf)))
@@ -572,8 +571,10 @@ even if it's the only visible frame."
        (lambda (win)
 	 ;;force deletion if buffer is not killable
 	 (if (or (not whole-frame-only)
-		 (eq 1 (length (window-list (window-frame win) 'no-minibuf))))
-	     (delete-window-if-created-for-this-buffer win (buffer-name buf) t)))
+		 (equal 1 (length (window-list 
+				   (window-frame win) 'no-minibuf))))
+	     (delete-window-if-created-for-this-buffer win 
+						       (buffer-name buf) t)))
 					; (not (killable-buffer-p buf)))
        winlist))))
      
