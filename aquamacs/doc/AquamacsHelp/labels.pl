@@ -42,6 +42,10 @@ $key = q/frame-appearance-styles/;
 $external_labels{$key} = "$URL/" . q|node34.html|; 
 $noresave{$key} = "$nosave";
 
+$key = q/standardpaths/;
+$external_labels{$key} = "$URL/" . q|node46.html|; 
+$noresave{$key} = "$nosave";
+
 1;
 
 
@@ -83,6 +87,10 @@ $noresave{$key} = "$nosave";
 
 $key = q/tab:terms/;
 $external_latex_labels{$key} = q|1|; 
+$noresave{$key} = "$nosave";
+
+$key = q/standardpaths/;
+$external_latex_labels{$key} = q|6.2|; 
 $noresave{$key} = "$nosave";
 
 $key = q/frame-appearance-styles/;

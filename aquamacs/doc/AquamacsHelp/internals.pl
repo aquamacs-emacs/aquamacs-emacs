@@ -42,5 +42,9 @@ $key = q/frame-appearance-styles/;
 $ref_files{$key} = "$dir".q|node34.html|; 
 $noresave{$key} = "$nosave";
 
+$key = q/standardpaths/;
+$ref_files{$key} = "$dir".q|node46.html|; 
+$noresave{$key} = "$nosave";
+
 1;
 

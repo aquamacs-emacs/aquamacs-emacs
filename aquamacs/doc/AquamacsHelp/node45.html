@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Donations</TITLE>
-<META NAME="description" CONTENT="Donations">
+<TITLE>Plug-in Interface</TITLE>
+<META NAME="description" CONTENT="Plug-in Interface">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,53 +21,62 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="node46.html">
 <LINK REL="previous" HREF="node44.html">
-<LINK REL="up" HREF="aquamacs.html">
+<LINK REL="up" HREF="node44.html">
 <LINK REL="next" HREF="node46.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html690"
+<A NAME="tex2html701"
   HREF="node46.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html686"
-  HREF="aquamacs.html">
+<A NAME="tex2html697"
+  HREF="node44.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html680"
+<A NAME="tex2html691"
   HREF="node44.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html688"
+<A NAME="tex2html699"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html691"
-  HREF="node46.html">Acknowledgments</A>
-<B> Up:</B> <A NAME="tex2html687"
-  HREF="aquamacs.html">Aquamacs User Help</A>
-<B> Previous:</B> <A NAME="tex2html681"
-  HREF="node44.html">Getting Help</A>
- &nbsp; <B>  <A NAME="tex2html689"
+<B> Next:</B> <A NAME="tex2html702"
+  HREF="node46.html">Load-path</A>
+<B> Up:</B> <A NAME="tex2html698"
+  HREF="node44.html">Extending Aquamacs</A>
+<B> Previous:</B> <A NAME="tex2html692"
+  HREF="node44.html">Extending Aquamacs</A>
+ &nbsp; <B>  <A NAME="tex2html700"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H1><A NAME="SECTION00080000000000000000">
-Donations</A>
-</H1>
+<H2><A NAME="SECTION00071000000000000000">
+Plug-in Interface</A>
+</H2>
 
 <P>
-Aquamacs Emacs is a project that depends on your support. You can donate very small amounts by looking at ads, or small or larger amounts directly. Both is appreciated. Your contributions will be used towards maintaining the Aquamacs web site and further development.
+All files named <SPAN  CLASS="textit">site-start.el</SPAN> anywhere in the load-path
+    are loaded at startup, before the user's init files are
+    loaded. For example, such a file may be placed in
+    /Library/Application Support/Aquamacs Emacs/myPlugin. 
 
 <P>
-<TT><A NAME="tex2html31"
-  HREF="http://aquamacs.org/donations.shtml">http://aquamacs.org/donations.shtml</A></TT>
+The load-path is automatically extended to cover all subdirectories in standard paths (see Section <A HREF="node46.html#standardpaths">6.2</A>).
+
+<P>
+If a plug-in needs to execute code earlier in the initialization phase, that is, before any Aquamacs-specific code is executed (but after Emacs initilization code has been executed), this code can be provided in a file  <SPAN  CLASS="textit">site-prestart.el</SPAN> anywhere in the load-path.
+
+<P>
+Note that plug-ins should not make any assumptions about whether a frame exists or is visible.
+
 <P>
 <BR><HR>
 <ADDRESS>
 David
-2006-03-25
+2006-03-27
 </ADDRESS>
 </BODY>
 </HTML>
