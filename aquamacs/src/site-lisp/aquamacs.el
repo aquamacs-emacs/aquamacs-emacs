@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.67 2006/03/28 13:58:44 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.68 2006/03/28 14:04:51 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -901,8 +901,7 @@ Return non-nil if options where saved."
       (when need-save
 	(custom-save-all))
       need-save))
-  ;; (aquamacs-menu-bar-changed-options)
-;; (aquamacs-variable-customized-p 'aquamacs-styles-mode)
+  ;; (aquamacs-menu-bar-changed-options) 
   (defun aquamacs-menu-bar-changed-options ()
     (let ((need-save))
       (dolist (elt aquamacs-menu-bar-options-to-save)
@@ -923,6 +922,7 @@ have changed."
   
   ;; (aquamacs-variable-customized-p 'aquamacs-styles-mode)    
   ;; (aquamacs-variable-customized-p 'case-fold-search)
+  ;; (aquamacs-variable-customized-p 'mac-option-modifier)
   (defun aquamacs-variable-customized-p (symbol)
     "Returns t if variable SYMBOL has a different value from what was saved."
     (custom-load-symbol symbol)
@@ -938,7 +938,7 @@ have changed."
 		       (error nil)))))
 	  (not (or (equal cmp (list (custom-quote value)))
 		   ;; not quite clear why this is doubled
-		    (equal cmp (custom-quote value)))))))
+		    (equal (custom-quote cmp) (custom-quote value)))))))
 	  
 
 
@@ -955,7 +955,8 @@ Returns t."
 	     ;; NOT implemented for the standard menu-bar-options-save!
 	     ;; ask user whether to accept these saved changes
 	     (if (eq aquamacs-save-options-on-quit 'ask)
-		 (y-or-n-p "Options have changed - save them? ")
+		 (progn (print changed)
+		 (y-or-n-p "Options have changed - save them? "))
 	       aquamacs-save-options-on-quit))
 	(aquamacs-menu-bar-options-save)))
   t)
