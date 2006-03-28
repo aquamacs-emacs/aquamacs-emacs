@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.66 2006/03/27 23:39:04 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.67 2006/03/28 13:58:44 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -921,6 +921,8 @@ have changed."
     :group 'Aquamacs
     :type '(choice (const nil)  (const ask) (const t)))
   
+  ;; (aquamacs-variable-customized-p 'aquamacs-styles-mode)    
+  ;; (aquamacs-variable-customized-p 'case-fold-search)
   (defun aquamacs-variable-customized-p (symbol)
     "Returns t if variable SYMBOL has a different value from what was saved."
     (custom-load-symbol symbol)
@@ -930,13 +932,13 @@ have changed."
 	   (standard (get symbol 'standard-value))
 	   (comment (get symbol 'customized-variable-comment)))
 
-      (and (or (null standard)
-	      (not (equal value (condition-case nil
-				    (eval (car standard))
-				  (error nil)))))
-	   (or (eq saved (list (custom-quote value)))
-	       ;; not quite clear why this is doubled
-	       (eq saved (custom-quote value))))))
+      (let ((cmp (or saved
+		     (condition-case nil
+			 (eval (car standard))
+		       (error nil)))))
+	  (not (or (equal cmp (list (custom-quote value)))
+		   ;; not quite clear why this is doubled
+		    (equal cmp (custom-quote value)))))))
 	  
 
 
