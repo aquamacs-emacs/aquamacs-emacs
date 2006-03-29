@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.68 2006/03/28 14:04:51 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.69 2006/03/29 23:27:53 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -716,6 +716,7 @@ un-Mac-like way when you select text and copy&paste it.")))
     (aquamacs-wrap-string
      (concat
       (if (and (eq window-system 'mac) 
+	       (eq mac-command-modifier 'alt)
 	       (eq (key-binding [(alt \?)]) 'aquamacs-user-help))
 	  "For an introduction to Aquamacs Emacs, type Apple-?." 
 	(if window-system
