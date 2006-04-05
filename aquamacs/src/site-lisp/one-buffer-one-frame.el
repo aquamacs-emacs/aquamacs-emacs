@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.45 2006/03/27 23:32:25 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.46 2006/04/05 07:29:33 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -192,6 +192,8 @@ Exceptions are listed in `obof-other-frame-regexps'."
     "\\*mail\\*"
     "\\*grep\\*"  
     "\\*shell\\*"   
+    "\\*Faces\\*"
+    "\\*Colors\\*"
     )
   "Buffers always shown in a separate frame in `one-buffer-one-frame-mode'.
 In `one-buffer-one-frame-mode', if the name of a buffer to be shown matches
@@ -357,9 +359,7 @@ the current window is switched to the new buffer."
 	 (lambda (w)
 	   (when (equal (window-buffer w) (get-bufobj (car args)))
 	     (setq switch nil)
-	     (setq window-to-select w)
-	     
-	     )
+	     (setq window-to-select w))
 	   ) t t)) ;; t = include-hidden-frame (must be t) 
       
     (if switch
@@ -383,10 +383,15 @@ the current window is switched to the new buffer."
       ;; else (don't switch, just activate another frame)
       ;; we need to do it here, because raise-frame / select frame are
       ;; ineffective from within walk-windows
-      (raise-frame (select-frame (window-frame window-to-select)))
+      (select-frame-set-input-focus (window-frame window-to-select))
+
+      ;(raise-frame (switch-frame (window-frame window-to-select)))
+      ;; raise-frame doesn't select it  
       (select-window window-to-select)
       (setq ad-return-value (current-buffer)))
   (aquamacs-set-style))))
+
+;; (select-window wts)
 
 ;; some exception for the speedbar
 ;; this doesn't work, unfortunately
@@ -523,8 +528,11 @@ the current window is switched to the new buffer."
 	       (let ((ret 
 		      (apply (function display-buffer) args)))
 	       ;; make sure the old frame stays the selected one
-	       (select-frame sframe)
-	       (select-window swin)
+
+;; maybe this doesn't make sense anyways
+;	       (select-frame-set-input-focus sframe)
+;	       (select-window swin)
+		 
 	      ret) 
 	       )
 	   (apply (function display-buffer) args))))
