@@ -1,9 +1,9 @@
-diff -p -N -r ../emacs-20060118-0/lisp/loadup.el lisp/loadup.el
-*** ../emacs-20060118-0/lisp/loadup.el	Thu Jan 19 16:03:42 2006
---- lisp/loadup.el	Thu Jan 19 16:06:58 2006
+diff -prN -x '*.orig' ../emacs-20060319-0/lisp/loadup.el lisp/loadup.el
+*** ../emacs-20060319-0/lisp/loadup.el	Mon Mar 20 15:03:33 2006
+--- lisp/loadup.el	Mon Mar 20 15:04:18 2006
 ***************
-*** 205,210 ****
---- 205,213 ----
+*** 206,211 ****
+--- 206,214 ----
   (if (fboundp 'atan)	; preload some constants and
       (progn		; floating pt. functions if we have float support.
         (load "emacs-lisp/float-sup")))
@@ -13,15 +13,15 @@ diff -p -N -r ../emacs-20060118-0/lisp/loadup.el lisp/loadup.el
   (message "%s" (garbage-collect))
   
   (load "vc-hooks")
-diff -p -N -r ../emacs-20060118-0/lisp/term/mac-im.el lisp/term/mac-im.el
-*** ../emacs-20060118-0/lisp/term/mac-im.el	Thu Jan  1 09:00:00 1970
---- lisp/term/mac-im.el	Thu Jan 19 16:06:58 2006
+diff -prN -x '*.orig' ../emacs-20060319-0/lisp/term/mac-im.el lisp/term/mac-im.el
+*** ../emacs-20060319-0/lisp/term/mac-im.el	Thu Jan  1 09:00:00 1970
+--- lisp/term/mac-im.el	Mon Mar 20 15:04:18 2006
 ***************
 *** 0 ****
---- 1,336 ----
+--- 1,349 ----
 + ;; mac-im.el --- Input Method for Mac OS X -*-coding: iso-2022-7bit;-*-
 + 
-+ ;; Copyright (C) 2005 HASHIMOTO Taiichi <taiichi2@mac.com>
++ ;; Copyright (C) 2005, 2006 HASHIMOTO Taiichi <taiichi2@mac.com>
 + ;; Keywords: input method, Mac OS X
 + 
 + ;; This file is not part of GNU Emacs.
@@ -137,13 +137,14 @@ diff -p -N -r ../emacs-20060118-0/lisp/term/mac-im.el lisp/term/mac-im.el
 + 		  (car l)))
 + 	(setq l (cdr l))))
 +     
-+     (if prop
-+ 	(let ((p prop))
-+ 	  (while p
-+ 	    (mac-set-input-method-property str coding-system (car p))
-+ 	    (setq p (cdr p))))
-+       (set-marker mac-input-method-preedit-start nil nil)
-+       (set-marker mac-input-method-preedit-end nil nil))))
++     (if (= fix (length str))
++ 	(progn
++ 	  (set-marker mac-input-method-preedit-start nil nil)
++ 	  (set-marker mac-input-method-preedit-end nil nil))
++       (let ((p prop))
++ 	(while p
++ 	  (mac-set-input-method-property str coding-system (car p))
++ 	  (setq p (cdr p)))))))
 + 
 + 
 + ;;
@@ -235,17 +236,21 @@ diff -p -N -r ../emacs-20060118-0/lisp/term/mac-im.el lisp/term/mac-im.el
 + (defun mac-input-method-update (lang)
 +   "Funtion to update parameters of a input method."
 +   (let ((title (cdr (mac-get-input-method-parameter lang 'title)))
-+ 	(ctype (cdr (mac-get-input-method-parameter lang 'cursor-type)))
-+ 	(ccolor (cdr (mac-get-input-method-parameter lang 'cursor-color))))
++ 	(ctype (or (cdr (mac-get-input-method-parameter lang 'cursor-type))
++ 		   (cdr (assq 'cursor-type default-frame-alist))
++ 		   default-cursor-type))
++ 	(ccolor (or (cdr (mac-get-input-method-parameter lang 'cursor-color))
++ 		    (cdr (assq 'cursor-color default-frame-alist)))))
 +     (setq current-input-method-title title)
 +     (if ctype (setq cursor-type ctype))
 +     (if ccolor (set-cursor-color ccolor))
++     (if isearch-mode (isearch-update))
 +     (force-mode-line-update 'all)))
 + 
 + (defun mac-toggle-input-method (&optional arg)
 +   "Function to toggle input method on MacOSX."
 +   (interactive)
-+   (let ((lang (mac-get-key-script)))
++   (let ((lang (mac-get-current-key-script)))
 +     (if arg
 + 	(progn
 + 	  (make-local-variable 'input-method-function)
@@ -256,15 +261,15 @@ diff -p -N -r ../emacs-20060118-0/lisp/term/mac-im.el lisp/term/mac-im.el
 + 	  (setq input-method-function nil)
 + 	  (setq describe-current-input-method-function nil)
 + 
-+ 	  (if (= lang 0) (mac-set-key-script -1))
-+ 	  (mac-input-method-update (mac-get-key-script)))
++ 	  (mac-input-method-update (mac-get-last-key-script))
++ 	  (if (= lang 0) (mac-set-key-script -1)))
 +       (kill-local-variable 'input-method-function)
 +       (kill-local-variable 'cursor-type)
 +       
 +       (setq describe-current-input-method-function nil)
 + 
-+       (if (not (= lang 0)) (mac-set-key-script -17))
-+       (mac-input-method-update 0))))
++       (mac-input-method-update 0)
++       (if (not (= lang 0)) (mac-set-key-script -17)))))
 + 
 + (defun mac-change-language-to-us ()
 +   "Function to change language (Apple Key Script) to us."
@@ -278,11 +283,14 @@ diff -p -N -r ../emacs-20060118-0/lisp/term/mac-im.el lisp/term/mac-im.el
 +   
 +   (let ((lang (car (cadr event))))
 + 
-+     (if (or (and (not current-input-method) (> lang 0))
-+             (and current-input-method (= lang 0)))
++     (if (and (not current-input-method) (> lang 0))
 +         (if isearch-mode
 +             (isearch-toggle-input-method)
-+           (toggle-input-method)))
++           (set-input-method "MacOSX"))
++       (if (and current-input-method (= lang 0))
++ 	  (if isearch-mode
++ 	      (isearch-toggle-input-method)
++ 	    (toggle-input-method nil))))
 + 
 +     (mac-input-method-update lang)))
 + 
@@ -295,20 +303,57 @@ diff -p -N -r ../emacs-20060118-0/lisp/term/mac-im.el lisp/term/mac-im.el
 + 
 + 
 + ;;
-+ ;; Setup function of inline input method
++ ;; Setup/Unsetup function of inline input method
 + ;;
 + (defun mac-setup-inline-input-method ()
 +   (interactive)
-+   
-+   (let* ((params (frame-parameters))
-+ 	 (color (or (cdr (assq 'cursor-color default-frame-alist))
-+ 		    (cdr (assq 'cursor-color params))))
-+ 	 (type (or (cdr (assq 'cursor-type default-frame-alist))
-+ 		   (cdr (assq 'cursor-type params)))))
-+     (mac-set-input-method-parameter 0 'cursor-color color)
-+     (mac-set-input-method-parameter 0 'cursor-type type)
-+     (mac-set-inline-input-method t)
-+     (setq default-input-method "MacOSX")))
++   (mac-set-inline-input-method t)
++   (setq default-input-method "MacOSX"))
++ 
++ (defun mac-exit-inline-input-method ()
++   (interactive)
++   (mac-set-inline-input-method nil)
++   (set-input-method (get-language-info current-language-environment
++ 				       'input-method)))
++ 
++ 
++ ;;
++ ;; Valiable and functions to ignore system shortcut.
++ ;;
++ (defvar mac-ignore-shortcut nil
++   "A list of ignore shortcut on MacOSX.")
++ 
++ (defun mac-add-ignore-shortcut (key)
++   (let ((command '(command cmd))
++ 	(option '(option opt))
++ 	(control '(control ctrl ctl)))
++     (add-to-list 'mac-ignore-shortcut
++ 		 (cond ((symbolp key)
++ 			(cond ((memq key command) (cons #x100 nil))
++ 			      ((memq key option)  (cons #x800 nil))
++ 			      ((memq key control) (cons #x1000 nil))
++ 			      (t (cons nil nil))))
++ 		       ((numberp key) (cons 0 key))
++ 		       ((listp key) 
++ 			(let ((l key)
++ 			      (k nil)
++ 			      (m 0))
++ 			  (while l
++ 			    (cond ((memq (car l) command)
++ 				   (if (= (logand m #x100) 0)
++ 				       (setq m (logior m #x100))))
++ 				  ((memq (car l) option)
++ 				   (if (= (logand m #x800) 0)
++ 				       (setq m (logior m #x800))))
++ 				  ((memq (car l) control)
++ 				   (if (= (logand m #x1000) 0)
++ 				       (setq m (logior m #x1000))))
++ 				  ((numberp (car l))
++ 				   (if (not k)
++ 				       (setq k (car l)))))
++ 			    (setq l (cdr l)))
++ 			  (cons m k)))
++ 		       (t (cons nil nil))))))
 + 
 + 
 + ;;
@@ -323,41 +368,9 @@ diff -p -N -r ../emacs-20060118-0/lisp/term/mac-im.el lisp/term/mac-im.el
 + (define-key special-event-map
 +   [mac-change-input-method] 'mac-handle-input-method-change)
 + 
-+ 
-+ ;;
-+ ;; Functions to ignore system shortcut.
-+ ;;
-+ (defun mac-add-ignore-shortcut (key)
-+   (add-to-list 'mac-ignore-shortcuts
-+ 	       (cond ((symbolp key)
-+ 		      (cond ((eq key 'command) (cons #x100 nil))
-+ 			    ((eq key 'option) (cons #x800 nil))
-+ 			    ((eq key 'control) (cons #x1000 nil))
-+ 			    (t (cons nil nil))))
-+ 		     ((numberp key) (cons 0 key))
-+ 		     ((listp key) 
-+ 		      (let ((l key)
-+ 			    (k nil)
-+ 			    (m 0))
-+ 			(while l
-+ 			  (cond ((eq (car l) 'command) 
-+ 				 (if (= (logand m #x100) 0)
-+ 				     (setq m (logior m #x100))))
-+ 				((eq (car l) 'option) 
-+ 				 (if (= (logand m #x800) 0)
-+ 				     (setq m (logior m #x800))))
-+ 				((eq (car l) 'control)
-+ 				 (if (= (logand m #x1000) 0)
-+ 				     (setq m (logior m #x1000))))
-+ 				((numberp (car l))
-+ 				 (if (not k)
-+ 				     (setq k (car l)))))
-+ 			  (setq l (cdr l)))
-+ 			(cons m k)))
-+ 		     (t (cons nil nil)))))
-diff -p -N -r ../emacs-20060118-0/src/Makefile.in src/Makefile.in
-*** ../emacs-20060118-0/src/Makefile.in	Thu Jan 19 16:03:48 2006
---- src/Makefile.in	Thu Jan 19 16:06:58 2006
+diff -prN -x '*.orig' ../emacs-20060319-0/src/Makefile.in src/Makefile.in
+*** ../emacs-20060319-0/src/Makefile.in	Mon Mar 20 15:03:40 2006
+--- src/Makefile.in	Mon Mar 20 15:04:18 2006
 *************** CYGWIN_OBJ = sheap.o
 *** 568,574 ****
   
@@ -405,9 +418,9 @@ diff -p -N -r ../emacs-20060118-0/src/Makefile.in src/Makefile.in
   macselect.o: blockinput.h macterm.h macgui.h frame.h keymap.h $(config_h)
   
   ${emacsapp}Contents/Resources/English.lproj:
-diff -p -N -r ../emacs-20060118-0/src/keyboard.c src/keyboard.c
-*** ../emacs-20060118-0/src/keyboard.c	Thu Jan 19 16:03:47 2006
---- src/keyboard.c	Thu Jan 19 16:06:58 2006
+diff -prN -x '*.orig' ../emacs-20060319-0/src/keyboard.c src/keyboard.c
+*** ../emacs-20060319-0/src/keyboard.c	Mon Mar 20 15:03:39 2006
+--- src/keyboard.c	Mon Mar 20 15:04:18 2006
 *************** Lisp_Object Qmouse_click;
 *** 528,533 ****
 --- 528,537 ----
@@ -422,8 +435,8 @@ diff -p -N -r ../emacs-20060118-0/src/keyboard.c src/keyboard.c
   Lisp_Object Qsave_session;
   #ifdef MAC_OS
 *************** kbd_buffer_get_event (kbp, used_mouse_me
-*** 4049,4054 ****
---- 4053,4074 ----
+*** 4056,4061 ****
+--- 4060,4081 ----
   	  kbd_fetch_ptr = event + 1;
   	}
   #endif
@@ -447,8 +460,8 @@ diff -p -N -r ../emacs-20060118-0/src/keyboard.c src/keyboard.c
           {
             obj = Fcons (Qsave_session, Qnil);
 *************** syms_of_keyboard ()
-*** 10888,10893 ****
---- 10908,10919 ----
+*** 10907,10912 ****
+--- 10927,10938 ----
     Qlanguage_change = intern ("language-change");
     staticpro (&Qlanguage_change);
   #endif
@@ -461,14 +474,14 @@ diff -p -N -r ../emacs-20060118-0/src/keyboard.c src/keyboard.c
     Qdrag_n_drop = intern ("drag-n-drop");
     staticpro (&Qdrag_n_drop);
   
-diff -p -N -r ../emacs-20060118-0/src/macim.c src/macim.c
-*** ../emacs-20060118-0/src/macim.c	Thu Jan  1 09:00:00 1970
---- src/macim.c	Thu Jan 19 16:06:58 2006
+diff -prN -x '*.orig' ../emacs-20060319-0/src/macim.c src/macim.c
+*** ../emacs-20060319-0/src/macim.c	Thu Jan  1 09:00:00 1970
+--- src/macim.c	Mon Mar 20 15:04:18 2006
 ***************
 *** 0 ****
---- 1,429 ----
+--- 1,447 ----
 + /* Implementation of Inline Input Method for MacOS X.
-+    Copyright (C) 2004, 2005 Taiichi Hashimoto <taiichi2@mac.com>.
++    Copyright (C) 2004, 2005, 2006 Taiichi Hashimoto <taiichi2@mac.com>.
 + 
 + This file is not part of GNU Emacs.
 + 
@@ -581,21 +594,22 @@ diff -p -N -r ../emacs-20060118-0/src/macim.c src/macim.c
 + #ifdef USE_CARBON_EVENTS && defined (MAC_OSX)
 + 
 + extern Lisp_Object Qcurrent_input_method;
-+ Lisp_Object Vmac_use_inline_input_method;
-+ Lisp_Object Vmac_ignore_shortcuts;
++ static Lisp_Object Qmac_ignore_shortcut;
 + 
 + static EventTypeSpec events[] = {
 +   { kEventClassTextInput, kEventTextInputOffsetToPos },
 +   { kEventClassTextInput, kEventTextInputUpdateActiveInputArea },
 +   { kEventClassTextInput, kEventTextInputUnicodeForKeyEvent },
 +   { kEventClassTextInput, kEventTextInputPosToOffset },
-+   { kEventClassTextInput, kEventTextInputGetSelectedText }
++   { kEventClassTextInput, kEventTextInputGetSelectedText },
++   { kEventClassApplication, kEventAppActivated }
 + };
 + 
 + static EventHandlerRef mac_input_method_handler = NULL;
 + static EventHandlerUPP mac_input_method_handlerUPP = NULL;
 + static TSMDocumentID mac_tsm_doc_id;
 + static int converting = FALSE;
++ static int mac_use_inline_input_method;
 + 
 + pascal OSStatus mac_handle_input_method_event (EventHandlerCallRef, EventRef, void *);
 + void init_input_method (void);
@@ -614,8 +628,8 @@ diff -p -N -r ../emacs-20060118-0/src/macim.c src/macim.c
 +   return Qnil;
 + }
 + 
-+ DEFUN ("mac-get-key-script", Fmac_get_key_script,
-+        Smac_get_key_script, 0, 0, 0,
++ DEFUN ("mac-get-current-key-script", Fmac_get_current_key_script,
++        Smac_get_current_key_script, 0, 0, 0,
 +        doc: /* get current languge environment of MacOSX */)
 +      ()
 + {
@@ -628,6 +642,19 @@ diff -p -N -r ../emacs-20060118-0/src/macim.c src/macim.c
 +   return make_number (current_key_script);
 + }
 + 
++ DEFUN ("mac-get-last-key-script", Fmac_get_last_key_script,
++        Smac_get_last_key_script, 0, 0, 0,
++        doc: /* get last languge environment of MacOSX */)
++      ()
++ {
++   SInt16 last_key_script;
++   
++   BLOCK_INPUT;
++   last_key_script = GetScriptManagerVariable (smLastScript);
++   UNBLOCK_INPUT;
++   
++   return make_number (last_key_script);
++ }
 + 
 + DEFUN ("mac-set-inline-input-method", Fmac_set_inline_input_method,
 +        Smac_set_inline_input_method, 1, 1, 0,
@@ -640,12 +667,12 @@ diff -p -N -r ../emacs-20060118-0/src/macim.c src/macim.c
 +   if (NILP (on_p))
 +     {
 +       DeactivateTSMDocument (mac_tsm_doc_id);
-+       Vmac_use_inline_input_method = Qnil;
++       mac_use_inline_input_method = 0;
 +     }
 +   else
 +     {
 +       ActivateTSMDocument (mac_tsm_doc_id);
-+       Vmac_use_inline_input_method = Qt;
++       mac_use_inline_input_method = 1;
 +     }
 +   UNBLOCK_INPUT;
 + 
@@ -656,7 +683,7 @@ diff -p -N -r ../emacs-20060118-0/src/macim.c src/macim.c
 + mac_reset_tsm_document ()
 + {
 +   BLOCK_INPUT;
-+   if (!NILP (Vmac_use_inline_input_method))
++   if (mac_use_inline_input_method)
 +     {
 +       DeactivateTSMDocument (mac_tsm_doc_id);
 +       ActivateTSMDocument (mac_tsm_doc_id);
@@ -673,7 +700,7 @@ diff -p -N -r ../emacs-20060118-0/src/macim.c src/macim.c
 + 
 +   BLOCK_INPUT;
 + 
-+   if (!NILP (Vmac_use_inline_input_method))
++   if (mac_use_inline_input_method)
 +     {
 +       current_key_script = GetScriptManagerVariable (smKeyScript);
 + 
@@ -707,11 +734,10 @@ diff -p -N -r ../emacs-20060118-0/src/macim.c src/macim.c
 +       || !NILP (current_buffer->read_only)
 +       || cursor_in_echo_area)
 +     return FALSE;
-+   else if (!NILP (Vmac_use_inline_input_method)
-+ 	   && !converting)
++   else if (mac_use_inline_input_method && !converting)
 +     {
-+       
-+       Lisp_Object keys = Vmac_ignore_shortcuts;
++       Fsymbol_value (Qcurrent_input_method);
++       Lisp_Object keys = Fsymbol_value (Qmac_ignore_shortcut);
 +       Lisp_Object m, k;
 + 
 +       while (!NILP (keys))
@@ -764,7 +790,7 @@ diff -p -N -r ../emacs-20060118-0/src/macim.c src/macim.c
 + 	UInt32 src_nbytes = 0, array_nbytes = 0, fixed_nbytes = 0;
 + 	unsigned char *src = NULL;
 + 	TextRangeArray *array = NULL;
-+ 	Lisp_Object argv[1024], triple[3];
++ 	Lisp_Object argv[1024];
 + 	int argc = 0, i = 0;
 + 
 + 	GetEventParameter (event, kEventParamTextInputSendText,
@@ -809,12 +835,10 @@ diff -p -N -r ../emacs-20060118-0/src/macim.c src/macim.c
 + 
 + 		for (i = 0; i < array->fNumOfRanges && argc < 1024; i++)
 + 		  {
-+ 		    triple[0] = make_number (array->fRange[i].fHiliteStyle);
-+ 		    triple[1] = make_number (array->fRange[i].fStart);
-+ 		    triple[2] = make_number (array->fRange[i].fEnd);
-+ 		    argv[argc++] = list3 (make_number (array->fRange[i].fHiliteStyle),
-+ 					  make_number (array->fRange[i].fStart),
-+ 					  make_number (array->fRange[i].fEnd));
++ 		    argv[argc++] =
++ 		      list3 (make_number (array->fRange[i].fHiliteStyle),
++ 			     make_number (array->fRange[i].fStart),
++ 			     make_number (array->fRange[i].fEnd));
 + 		  }
 + 	      }
 + 	    if (src) xfree(src);
@@ -851,6 +875,17 @@ diff -p -N -r ../emacs-20060118-0/src/macim.c src/macim.c
 +       break;
 +     }
 +     break;
++ 
++   case kEventClassApplication:
++     switch (ekind) {
++     case kEventAppActivated:
++       mac_reset_tsm_document ();
++       break;
++     default:
++       break;
++     }
++     break;
++ 
 +   default:
 +     break;
 +   }
@@ -879,55 +914,44 @@ diff -p -N -r ../emacs-20060118-0/src/macim.c src/macim.c
 +     UNBLOCK_INPUT;
 +   }
 + 
-+   DEFVAR_LISP ("mac-use-inline-input-method", &Vmac_use_inline_input_method,
-+    doc: /* If non-nil, users use inline input method on MacOSX. */);
-+   Vmac_use_inline_input_method = Qnil;
-+   //Fmac_set_inline_input_method (Vmac_use_inline_input_method);
++   Fmac_set_inline_input_method (Qt);
 + 
-+   DEFVAR_LISP ("mac-ignore-shortcuts", &Vmac_ignore_shortcuts,
-+    doc: /* The list of pairs of a xkeysym and modifiers 
-+ 	   which don't pass to system. */);
-+   Vmac_ignore_shortcuts = Qnil;
++   Qmac_ignore_shortcut = intern ("mac-ignore-shortcut");
++   staticpro (&Qmac_ignore_shortcut);
 + 
 +   defsubr (&Smac_set_inline_input_method);
 +   defsubr (&Smac_set_key_script);
-+   defsubr (&Smac_get_key_script);
++   defsubr (&Smac_get_current_key_script);
++   defsubr (&Smac_get_last_key_script);
 + }
 + 
 + #endif
 + 
-diff -p -N -r ../emacs-20060118-0/src/macterm.c src/macterm.c
-*** ../emacs-20060118-0/src/macterm.c	Thu Jan 19 16:03:48 2006
---- src/macterm.c	Thu Jan 19 16:06:58 2006
-*************** mac_handle_window_event (next_handler, e
-*** 8948,8954 ****
---- 8948,8959 ----
-        mac_handle_visibility_change (mac_window_to_frame (wp));
-        return noErr;
+diff -prN -x '*.orig' ../emacs-20060319-0/src/macterm.c src/macterm.c
+*** ../emacs-20060319-0/src/macterm.c	Mon Mar 20 15:03:39 2006
+--- src/macterm.c	Mon Mar 20 15:04:18 2006
+*************** static unsigned char keycode_to_xkeysym_
+*** 9731,9738 ****
+    /*0x5C*/ 0xb9 /*kp-9*/, 0, 0, 0,
   
-+     case kEventWindowActivated:
-+       mac_reset_tsm_document ();
-        break;
-+     case kEventWindowDeactivated:
-+       break;
-+ 
-      }
+    /*0x60*/ 0xc2 /*f5*/, 0xc3 /*f6*/, 0xc4 /*f7*/, 0xc0 /*f3*/,
+!   /*0x64*/ 0xc5 /*f8*/, 0xc6 /*f9*/, 0, 0xc8 /*f11*/,
+!   /*0x68*/ 0, 0xca /*f13*/, 0, 0xcb /*f14*/,
+    /*0x6C*/ 0, 0xc7 /*f10*/, 0x0a /*fn+enter on laptops*/, 0xc9 /*f12*/,
   
-    return eventNotHandledErr;
-*************** install_window_handler (window)
-*** 9072,9077 ****
---- 9077,9084 ----
-       {kEventClassWindow, kEventWindowShown},
-       {kEventClassWindow, kEventWindowHidden},
-       {kEventClassWindow, kEventWindowExpanded},
-+      {kEventClassWindow, kEventWindowActivated},
-+      {kEventClassWindow, kEventWindowDeactivated},
-       {kEventClassWindow, kEventWindowCollapsed}};
-    EventTypeSpec specs_mouse[] = {{kEventClassMouse, kEventMouseWheelMoved}};
-    static EventHandlerUPP handle_window_eventUPP = NULL;
+    /*0x70*/ 0, 0xcc /*f15*/, 0x6a /*help*/, 0x50 /*home*/,
+--- 9731,9738 ----
+    /*0x5C*/ 0xb9 /*kp-9*/, 0, 0, 0,
+  
+    /*0x60*/ 0xc2 /*f5*/, 0xc3 /*f6*/, 0xc4 /*f7*/, 0xc0 /*f3*/,
+!   /*0x64*/ 0xc5 /*f8*/, 0xc6 /*f9*/, 0x2f /*eisu-shift*/, 0xc8 /*f11*/,
+!   /*0x68*/ 0x2e /*kana-shift*/, 0xca /*f13*/, 0, 0xcb /*f14*/,
+    /*0x6C*/ 0, 0xc7 /*f10*/, 0x0a /*fn+enter on laptops*/, 0xc9 /*f12*/,
+  
+    /*0x70*/ 0, 0xcc /*f15*/, 0x6a /*help*/, 0x50 /*home*/,
 *************** XTread_socket (sd, expected, hold_quit)
-*** 10048,10053 ****
---- 10055,10061 ----
+*** 10407,10412 ****
+--- 10407,10413 ----
   	    int keycode = (er.message & keyCodeMask) >> 8;
   	    int xkeysym;
   
@@ -936,8 +960,8 @@ diff -p -N -r ../emacs-20060118-0/src/macterm.c src/macterm.c
   	    /* When using Carbon Events, we need to pass raw keyboard
   	       events to the TSM ourselves.  If TSM handles it, it
 *************** XTread_socket (sd, expected, hold_quit)
-*** 10064,10069 ****
---- 10072,10078 ----
+*** 10423,10428 ****
+--- 10424,10430 ----
   		  != eventNotHandledErr)
   		break;
   #endif
@@ -946,8 +970,8 @@ diff -p -N -r ../emacs-20060118-0/src/macterm.c src/macterm.c
   #if 0
   	    if (dpyinfo->x_focus_frame == NULL)
 *************** XTread_socket (sd, expected, hold_quit)
-*** 10130,10135 ****
---- 10139,10166 ----
+*** 10489,10494 ****
+--- 10491,10518 ----
   						   er.message & charCodeMask);
   		  inev.kind = ASCII_KEYSTROKE_EVENT;
   		}
@@ -958,9 +982,9 @@ diff -p -N -r ../emacs-20060118-0/src/macterm.c src/macterm.c
 + 	       will pass back noErr, otherwise it will pass back
 + 	       "eventNotHandledErr" and we can process it
 + 	       normally.  */
-+ 	    if ((!NILP (mac_pass_command_to_system)
++ 	    if ((mac_pass_command_to_system
 + 		 || !(er.modifiers & cmdKey))
-+ 		&& (!NILP (mac_pass_control_to_system)
++ 		&& (mac_pass_control_to_system
 + 		    || !(er.modifiers & controlKey))
 + 		&& (NILP (Vmac_option_modifier)
 + 		    || !(er.modifiers & optionKey))
@@ -977,8 +1001,8 @@ diff -p -N -r ../emacs-20060118-0/src/macterm.c src/macterm.c
   
   #if USE_CARBON_EVENTS
 *************** XTread_socket (sd, expected, hold_quit)
-*** 10187,10192 ****
---- 10218,10224 ----
+*** 10546,10551 ****
+--- 10570,10576 ----
   	  count++;
   	}
   
@@ -987,8 +1011,8 @@ diff -p -N -r ../emacs-20060118-0/src/macterm.c src/macterm.c
   
     /* If the focus was just given to an autoraising frame,
 *************** mac_initialize ()
-*** 10702,10707 ****
---- 10734,10741 ----
+*** 11067,11072 ****
+--- 11092,11099 ----
     init_service_handler ();
   
     init_quit_char_handler ();
@@ -997,9 +1021,9 @@ diff -p -N -r ../emacs-20060118-0/src/macterm.c src/macterm.c
   #endif	/* MAC_OSX */
   
     init_command_handler ();
-diff -p -N -r ../emacs-20060118-0/src/termhooks.h src/termhooks.h
-*** ../emacs-20060118-0/src/termhooks.h	Thu Jan 19 16:03:48 2006
---- src/termhooks.h	Thu Jan 19 16:06:59 2006
+diff -prN -x '*.orig' ../emacs-20060319-0/src/termhooks.h src/termhooks.h
+*** ../emacs-20060319-0/src/termhooks.h	Mon Mar 20 15:03:40 2006
+--- src/termhooks.h	Mon Mar 20 15:04:18 2006
 *************** enum event_kind
 *** 260,265 ****
 --- 260,271 ----
