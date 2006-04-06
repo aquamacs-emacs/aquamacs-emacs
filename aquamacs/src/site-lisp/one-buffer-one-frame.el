@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.46 2006/04/05 07:29:33 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.47 2006/04/06 09:55:23 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -472,7 +472,12 @@ the current window is switched to the new buffer."
 				activate)
    ad-do-it
 
-   (if one-buffer-one-frame
+   ;; from the documentation of bury-buffer:
+   ;; Also, if buffer is nil or omitted, remove the current buffer from the
+   ;; selected window if it is displayed there.
+
+   (if (and one-buffer-one-frame
+	    (null buffer)) ;; only if nil
        ;; delete the frame if necessary
        ;; only delete a whole frame with only the window in it
        ;; because extra windows are usually created with pop-to-buffer etc.
@@ -527,11 +532,12 @@ the current window is switched to the new buffer."
 	      ; (message "Pop-up-frames is %s" pop-up-frames)
 	       (let ((ret 
 		      (apply (function display-buffer) args)))
-	       ;; make sure the old frame stays the selected one
-
-;; maybe this doesn't make sense anyways
-;	       (select-frame-set-input-focus sframe)
-;	       (select-window swin)
+		 ;; make sure the old frame stays the selected one
+		 ;; this is to maintain compatibility with opening
+		 ;; a new window inside the frame, where the input focus
+		 ;; stays in the original window.
+	       (select-frame-set-input-focus sframe)
+	       (select-window swin)
 		 
 	      ret) 
 	       )
