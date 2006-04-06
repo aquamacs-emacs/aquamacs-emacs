@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.69 2006/03/29 23:27:53 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.70 2006/04/06 18:50:11 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -46,7 +46,7 @@ It is guaranteed that iff of two Aquamacs releases A and B,
 B is newer than A, then aquamacs-version-id for B is higher 
 than aquamacs-version-id for A.")
 
-(defvar aquamacs-minor-version "a"
+(defvar aquamacs-minor-version "a-CVS"
 "Version code for minor maintenance releases.
 Changes in this code are ignored during the online version check.")
 
