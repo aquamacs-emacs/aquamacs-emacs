@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: site-start.el,v 1.14 2006/03/27 19:28:00 davidswelt Exp $
+;; Last change: $Id: site-start.el,v 1.15 2006/04/06 18:49:46 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -28,6 +28,14 @@
  
 ;; Copyright (C) 2006, David Reitter
  
+
+;; LAST-MINUTE FIXES
+;; overwriting precompiled things
+
+; NONE
+
+
+
 
 (when ;; do not load this twice 
     (not (memq 'aquamacs-site-start features))
