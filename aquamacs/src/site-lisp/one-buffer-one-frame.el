@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.47 2006/04/06 09:55:23 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.48 2006/04/06 16:18:47 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -520,7 +520,6 @@ the current window is switched to the new buffer."
 ;;   )  
 ;;  )
 
-
 (defun aquamacs-display-buffer (&rest args)
        (let ((display-buffer-function nil))
 	 (if (and
@@ -536,15 +535,23 @@ the current window is switched to the new buffer."
 		 ;; this is to maintain compatibility with opening
 		 ;; a new window inside the frame, where the input focus
 		 ;; stays in the original window.
-	       (select-frame-set-input-focus sframe)
-	       (select-window swin)
+		 ;; NOT GOOD. switch-to-buffer and friends
+		 ;; don't work as expected.
+		 ;; besides, switching input focus to new frames
+		 ;; will allow users to use these "modally", i.e. 
+		 ;; close them after reading. In other cases, they
+		 ;; might want to let them stay and move them somewhere
+		 ;; else.
+	       ;(select-frame-set-input-focus sframe)
+	       ;(select-window swin)
 		 
 	      ret) 
 	       )
 	   (apply (function display-buffer) args))))
 
 (aquamacs-set-defaults 
- '((display-buffer-function aquamacs-display-buffer)))
+ '((display-buffer-reuse-frames t)
+   (display-buffer-function aquamacs-display-buffer)))
 
 (defun aquamacs-delete-window (&optional window)
   "Remove WINDOW from the display.  Default is `selected-window'.
