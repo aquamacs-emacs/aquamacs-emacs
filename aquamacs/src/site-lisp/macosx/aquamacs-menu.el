@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.59 2006/03/19 12:49:01 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.60 2006/04/07 19:17:43 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -954,6 +954,29 @@ that should be represented in the Aquamacs menus."
 ;; e.g. language selection.
 ;;;	':visible 'default-enable-multibyte-characters
 	':help "Default language, encodings, input method")))
+
+(defvar inline-input-method-on nil)
+(defun toggle-input-method ()
+  (interactive)
+  (setq inline-input-method-on (not inline-input-method-on))
+  (if inline-input-method-on
+      (progn
+	(mac-setup-inline-input-method)
+	(add-hook 'minibuffer-setup-hook 'mac-change-language-to-us)
+	)
+    (remove-hook 'minibuffer-setup-hook 'mac-change-language-to-us)
+    (mac-change-language-to-us)))
+
+(define-key-after mule-menu-keymap [toggle-inline-input-method]
+  `(menu-item "Allow native Mac input method" 
+	      'toggle-inline-input-method
+	      :help "Use native Mac input method"
+	      :keys nil)
+  'toggle-input-method)
+
+
+
+
 
 (provide 'aquamacs-menu)
   
