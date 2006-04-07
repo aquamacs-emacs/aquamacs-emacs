@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.8 2006/03/27 19:26:24 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.9 2006/04/07 15:15:50 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -678,17 +678,29 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
   :global t
   :require 'color-theme)
 
+ ;; (let (
+;; (aquamacs-default-styles 
+;;    (quote ((help-mode (fit-frame . t)) 
+;; 	   (speedbar-mode (minibuffer-auto-raise)) 
+;; 	   (paragraph-indent-text-mode (font . "fontset-lucida14")) 
+;; 	   (tex-mode (font . "fontset-lucida14")) 
+;; 	   (change-log-mode (font . "fontset-lucida14")) 
+;; 	   (text-mode (font . "fontset-lucida14"))
+;; 	   )))) 
+;;    (aquamacs-styles-set-default-parameter 'tool-bar-lines 0))
 
 (defun aquamacs-styles-set-default-parameter (param value)
   "Sets frame parameter PARAM of `default' frame style."
   (let* ((x (assq 'default aquamacs-default-styles))
-	 (y (assq param (cdr-safe x))))
+	 (x2 (cdr-safe x))
+	 ;; just in case the entry is malformed (or obsolete, maybe?)
+	 (y (assq param (if (listp (cdr-safe x2)) x2 (list x2)))))
     (if y
 	(setcdr y value)
       (if x
 	  (setcdr x (cons (cons param value) (cdr x)))
 	(setq aquamacs-default-styles
-	      (cons (cons 'default (cons param value)) 
+	      (cons (list 'default (cons param value)) 
 		    aquamacs-default-styles))))))
  
 (defadvice modify-all-frames-parameters
