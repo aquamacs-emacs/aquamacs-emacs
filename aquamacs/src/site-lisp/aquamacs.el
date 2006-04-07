@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.70 2006/04/06 18:50:11 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.71 2006/04/07 17:29:21 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -533,6 +533,13 @@ to the selected frame."
 			 ))))
     (if (< aquamacs-customization-version-id 094.1)
 	(progn
+	  ;; change the customizations.el file to not contain the setq statement any more
+	  ;; old versions of Aquamacs (unclear which ones) wrote it to custom-file this way.
+	  (if (file-exists-p custom-file)
+	      (with-temp-file custom-file
+		(insert-file-contents custom-file)
+		(replace-regexp "(setq aquamacs-customization-version-id [0-9\\.]+)"
+				"" nil (point-min) (point-max))))
 	  ;; in the mode-spec styles, this is taken care of
 	  ;; anyways
 	  (setq default-frame-alist 
