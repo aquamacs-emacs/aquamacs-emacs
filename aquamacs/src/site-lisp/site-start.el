@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: site-start.el,v 1.15 2006/04/06 18:49:46 davidswelt Exp $
+;; Last change: $Id: site-start.el,v 1.16 2006/04/07 18:37:01 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -35,6 +35,26 @@
 ; NONE
 
 
+
+;; Version information
+
+(defvar aquamacs-version "0.9.9"
+"A string with Aquamacs' version number.
+The format of the string is undefined. 
+For a reliable numerical representation, use `aquamacs-version-id'.")
+
+(defvar aquamacs-version-id 099.0
+"A float indicating Aquamacs' version number.
+Full integers correspond to the third position of the public
+version number, e.g. version 0.9.7 is represented as `97.x'.
+Minor version numbers are reflected in the decimals. 
+It is guaranteed that iff of two Aquamacs releases A and B,
+B is newer than A, then aquamacs-version-id for B is higher 
+than aquamacs-version-id for A.")
+
+(defvar aquamacs-minor-version "b"
+"Version code for minor maintenance releases.
+Changes in this code are ignored during the online version check.")
 
 
 (when ;; do not load this twice 
