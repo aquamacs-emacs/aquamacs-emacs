@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.60 2006/04/07 19:17:43 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.61 2006/04/07 19:20:22 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -956,7 +956,8 @@ that should be represented in the Aquamacs menus."
 	':help "Default language, encodings, input method")))
 
 (defvar inline-input-method-on nil)
-(defun toggle-input-method ()
+
+(defun toggle-inline-input-method ()
   (interactive)
   (setq inline-input-method-on (not inline-input-method-on))
   (if inline-input-method-on
@@ -969,8 +970,9 @@ that should be represented in the Aquamacs menus."
 
 (define-key-after mule-menu-keymap [toggle-inline-input-method]
   `(menu-item "Allow native Mac input method" 
-	      'toggle-inline-input-method
+	      toggle-inline-input-method
 	      :help "Use native Mac input method"
+	       :button (:toggle . inline-input-method-on)
 	      :keys nil)
   'toggle-input-method)
 
