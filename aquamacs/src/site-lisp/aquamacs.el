@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.72 2006/04/07 18:36:47 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.73 2006/04/10 07:13:17 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -28,7 +28,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, David Reitter
+;; Copyright (C) 2005,2006, David Reitter
 
 
 
@@ -275,6 +275,9 @@ Separate paths from file names with --."
  
      (longlines-wrap-follows-window-size t)
 
+     (mac-inline-input-method-mode t)
+     
+
      ;; do not allow user to mess with minibuffer prompt
 
      (minibuffer-prompt-properties
@@ -283,6 +286,8 @@ Separate paths from file names with --."
 
      )
    )
+  ;; on by default
+  (mac-inline-input-method-mode t)
 
 
   ;; set a nntp server if there's none
@@ -760,6 +765,7 @@ redistribute Aquamacs under the GNU General Public License. Type \\[describe-cop
 
   (aquamacs-set-defaults 
    '( 
+     (resize-mini-windows t)
      (mouse-wheel-progessive-speed nil)
    ;;  (mouse-wheel-scroll-amount (1 (shift . 0.5) (control . 0.2) ))
      (mouse-wheel-scroll-amount (1 ((shift) . 0.5) ((control) . 0.2) ))
@@ -840,6 +846,7 @@ listed here."
 	      global-font-lock-mode
 	      display-time-mode 
 	      display-battery-mode
+	      mac-inline-input-method-mode
 	      one-buffer-one-frame-mode 
 	      aquamacs-styles-mode
 	      mac-option-modifier)
