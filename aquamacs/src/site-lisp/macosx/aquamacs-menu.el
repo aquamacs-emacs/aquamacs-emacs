@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.61 2006/04/07 19:20:22 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.62 2006/04/10 07:13:33 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -957,25 +957,35 @@ that should be represented in the Aquamacs menus."
 
 (defvar inline-input-method-on nil)
 
-(defun toggle-inline-input-method ()
-  (interactive)
-  (setq inline-input-method-on (not inline-input-method-on))
-  (if inline-input-method-on
-      (progn
+(define-minor-mode mac-inline-input-method-mode 
+"Use the standard Mac input method.
+This is usually used to allow non-roman scripts to be input.
+Call this function for the mode to take effect."
+:init-value t
+:group 'Aquamacs
+:global t
+
+(if mac-inline-input-method-mode
+    (progn
 	(mac-setup-inline-input-method)
 	(add-hook 'minibuffer-setup-hook 'mac-change-language-to-us)
 	)
-    (remove-hook 'minibuffer-setup-hook 'mac-change-language-to-us)
-    (mac-change-language-to-us)))
-
+  (mac-exit-inline-input-method)
+  (remove-hook 'minibuffer-setup-hook 'mac-change-language-to-us)))
+ 
 (define-key-after mule-menu-keymap [toggle-inline-input-method]
-  `(menu-item "Allow native Mac input method" 
-	      toggle-inline-input-method
-	      :help "Use native Mac input method"
-	       :button (:toggle . inline-input-method-on)
-	      :keys nil)
-  'toggle-input-method)
+  (menu-bar-make-mm-toggle mac-inline-input-method-mode
+			   "Use System input method" 
+	      "Use native Mac input method")
+  'separator-mule)
 
+;; overwrite these with text and :enable
+(define-key mule-menu-keymap [toggle-input-method]
+  '(menu-item "Toggle Internal Input Method" toggle-input-method
+	      :enable (not mac-inline-input-method-mode)))
+(define-key mule-menu-keymap [set-input-method]
+  '(menu-item "Select Internal Input Method..." set-input-method
+	       :enable (not mac-inline-input-method-mode)))
 
 
 
