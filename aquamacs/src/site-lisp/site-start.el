@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: site-start.el,v 1.16 2006/04/07 18:37:01 davidswelt Exp $
+;; Last change: $Id: site-start.el,v 1.17 2006/04/10 08:06:32 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -33,6 +33,7 @@
 ;; overwriting precompiled things
 
 ; NONE
+;; one at the end of this file
 
 
 
@@ -52,10 +53,9 @@ It is guaranteed that iff of two Aquamacs releases A and B,
 B is newer than A, then aquamacs-version-id for B is higher 
 than aquamacs-version-id for A.")
 
-(defvar aquamacs-minor-version "b"
+(defvar aquamacs-minor-version "c"
 "Version code for minor maintenance releases.
 Changes in this code are ignored during the online version check.")
-
 
 (when ;; do not load this twice 
     (not (memq 'aquamacs-site-start features))
@@ -84,5 +84,7 @@ Changes in this code are ignored during the online version check.")
  
   (require 'load-emacs-plugins)
 
+  ;; workaround - Emacs doesn't do it  (0.9.9b)
+  (add-hook 'after-init-hook 'display-startup-echo-area-message 'append)
 
   )
