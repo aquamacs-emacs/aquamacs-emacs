@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.57 2006/03/26 19:09:05 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.58 2006/04/12 08:58:44 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -32,7 +32,7 @@
 ;; Boston, MA 02111-1307, USA.
 
  
-;; Copyright (C) 2005, David Reitter
+;; Copyright (C) 2005, 2006 David Reitter
 
 
 ;; Unit test  / check requirements
@@ -84,11 +84,7 @@ after updating this variable.")
 (require 'filladapt)
 
 (require 'mac-extra-functions)
-
-(defun switch-to-next-frame ()
-  (interactive)
-  (select-frame-set-input-focus (next-frame))
-)
+ 
 (require 'redo)
   
 ;; remove existing bindings that don't exist on the mac
@@ -179,7 +175,8 @@ to use and more reliable (no dependence on goal column, etc.)."
     ;; temporary binding of scroll-margin
     ;; cannot do this with a temporary let binding
     (setq visual-previous-scroll-margin scroll-margin)
-    (setq scroll-margin visual-scroll-margin)
+    (if visual-scroll-margin
+	(setq scroll-margin visual-scroll-margin))
     (add-hook 'pre-command-hook 'visual-restore-scroll-margin)
 
     
@@ -277,7 +274,8 @@ and more reliable (no dependence on goal column, etc.)."
     ;; temporary binding of scroll-margin
     ;; cannot do this with a temporary let binding
     (setq visual-previous-scroll-margin scroll-margin)
-    (setq scroll-margin visual-scroll-margin)
+    (if visual-scroll-margin
+	(setq scroll-margin visual-scroll-margin))
     (add-hook 'pre-command-hook 'visual-restore-scroll-margin)
 
     (vertical-motion num-lines) ;; down
@@ -428,13 +426,39 @@ If arg is zero, kill current line but exclude the trailing newline."
 			(progn (vertical-motion arg) (point)))))))
 
 
+(defun osxkeys-visual-line-up-in-buffers ()
+"Moves the cursor up one (visual) line.
+If the `up' key would normally be bound to something else than
+`previous-line' (as it is the case in minibuffers), the other binding
+is called."
+  (interactive)
+  (let* (osx-key-mode  ;; turn off mode temporarily
+	 (binding (key-binding [up])))
+    (if (eq binding 'previous-line)
+	(call-interactively (function visual-line-up))
+      (call-interactively binding))))
+
+
+(defun osxkeys-visual-line-down-in-buffers ()
+"Moves the cursor down one (visual) line.
+If the `down' key would normally be bound to something else than
+`next-line' (as it is the case in minibuffers), the other binding
+is called."
+  (interactive)
+  (let* (osx-key-mode  ;; turn off mode temporarily
+	 (binding (key-binding [down])))
+    (if (eq binding 'next-line)
+	(call-interactively (function visual-line-down))
+      (call-interactively binding))))
+
 ;; mark functions for CUA
 (dolist (cmd
 	 '( beginning-of-visual-line 
 	    end-of-visual-line
-	    visual-line-down visual-line-up))
+	    visual-line-down visual-line-up
+	    osxkeys-visual-line-up-in-buffers
+	    osxkeys-visual-line-down-in-buffers))
   (put cmd 'CUA 'move))
-
 
 
 (defun aquamacs-clipboard-kill-ring-save-secondary ()
@@ -824,8 +848,9 @@ default."
     (define-key global-map `[(,osxkeys-command-key })] 'uncomment-region-or-line)
     (define-key global-map `[(,osxkeys-command-key \')] 'comment-or-uncomment-region-or-line)
 
-    (define-key map '[remap previous-line] 'visual-line-up)
-    (define-key map '[remap next-line] 'visual-line-down)
+    ;; only those keys - C-n and C-p stay Emacs-like
+    (define-key map '[(up)] 'osxkeys-visual-line-up-in-buffers)
+    (define-key map '[(down)] 'osxkeys-visual-line-down-in-buffers)
     (define-key map `[(,osxkeys-command-key left)] 'beginning-of-visual-line)
     (define-key map `[(,osxkeys-command-key right)] 'end-of-visual-line)
 
@@ -847,7 +872,7 @@ default."
 
     (define-key map `[(,osxkeys-command-key z)] 'undo)
     (define-key map `[(,osxkeys-command-key shift z)] 'redo)
-    (define-key map `[(,osxkeys-command-key \`)] 'switch-to-next-frame)
+    (define-key map `[(,osxkeys-command-key \`)] 'other-frame)
     (define-key map `[(,osxkeys-command-key t)] 'mouse-set-font)
 
 
