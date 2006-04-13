@@ -5179,7 +5179,7 @@ NDAYS defaults to `org-agenda-ndays'."
 			 (d (- nt n1)))
 		    (- sd (+ (if (< d 0) 7 0) d)))))
 	 (day-numbers (list start))
-;FIXME	 (inhibit-redisplay t)
+	 (inhibit-redisplay t)
 	 s e rtn rtnall file date d start-pos end-pos todayp nd)
     (setq org-agenda-redo-command
 	  (list 'org-agenda-list (list 'quote include-all) start-day ndays t))
@@ -13238,7 +13238,7 @@ With optional NODE, go directly to that node."
   ;; through to `fill-paragraph' when appropriate.
   (set (make-local-variable 'fill-paragraph-function) 'org-fill-paragraph)
   ;; Adaptive filling: To get full control, first make sure that
-  ;; `adaptive-fill-regexp' never matches.  Then install our won matcher.
+  ;; `adaptive-fill-regexp' never matches.  Then install our own matcher.
   (set (make-local-variable 'adaptive-fill-regexp) "\000")
   (set (make-local-variable 'adaptive-fill-function)
        'org-adaptive-fill-function))
