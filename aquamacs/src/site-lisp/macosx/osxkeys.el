@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.58 2006/04/12 08:58:44 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.59 2006/04/13 23:16:53 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -204,7 +204,10 @@ to use and more reliable (no dependence on goal column, etc.)."
 
       ;; approximate positioning
       (if (and (or goal-column visual-movement-temporary-goal-column)
-	       (memq last-command '(visual-line-up visual-line-down))
+	       (memq last-command '(visual-line-up 
+				    visual-line-down
+				    osxkeys-visual-line-up-in-buffers
+				    osxkeys-visual-line-down-in-buffers))
 	       (= old-point (1- end-of-old-line)))	
 	  ;; jumping from end of line
 	      
@@ -294,7 +297,10 @@ and more reliable (no dependence on goal column, etc.)."
 	  (setq visual-movement-temporary-goal-column 9999))
 	  ;; approximate positioning
 	  (if (and (or goal-column visual-movement-temporary-goal-column)
-		   (memq last-command '(visual-line-up visual-line-down))
+		   (memq last-command '(visual-line-up 
+					visual-line-down
+					osxkeys-visual-line-up-in-buffers
+					osxkeys-visual-line-down-in-buffers))
 		   (= old-point (- beg-of-line 1))) ;; jumping from end of line
 	      
 	      (forward-char (min (or goal-column 
