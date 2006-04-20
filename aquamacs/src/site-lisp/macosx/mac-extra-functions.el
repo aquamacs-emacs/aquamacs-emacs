@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.41 2006/04/20 13:31:08 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.42 2006/04/20 23:01:55 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -165,19 +165,15 @@ right there as well."
   (find-file-other-frame filename wildcards)
   )
 
-(defun mac-key-save-file (filename  )
+(defun mac-key-save-file ()
+  (interactive)
   "Save buffer. If needed, select file by dialog"
-  (interactive
    (if buffer-file-name 
-       (list buffer-file-name)
-     (let ((last-nonmenu-event nil))
-       (find-file-read-args "Save buffer to file: " nil))))
-  
-  (if (null buffer-file-name)
-      (setq buffer-file-name filename))
-  (save-buffer))
+       (save-buffer)
+     (call-interactively (function mac-key-save-file-as))))
  
-(defun mac-key-save-file-as (filename  )
+ 
+(defun mac-key-save-file-as (filename &optional wildcards )
   "Save buffer to a file, selecting file by dialog"
   (interactive
    (let ((last-nonmenu-event nil))
