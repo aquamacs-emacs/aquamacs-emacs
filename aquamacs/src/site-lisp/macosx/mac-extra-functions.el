@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.39 2006/04/20 12:17:15 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.40 2006/04/20 13:22:29 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -151,42 +151,38 @@ right there as well."
  
 
 (defun mac-key-open-file (filename &optional wildcards)
-  "Open a file, selected with file open dialog"
+  "Open a file, selecting file by dialog"
   (interactive
    (let ((last-nonmenu-event nil))
-     (find-file-read-args "Open existing file: " t)))
+     (find-file-read-args "Open file: " t)))
   (find-file-existing filename wildcards)
   )
  (defun mac-key-open-file-other-frame (filename &optional wildcards)
-  "Open a file in new frame, selected with file open dialog"
+  "Open a file in new frame, selecting file by dialog"
   (interactive
    (let ((last-nonmenu-event nil))
-     (find-file-read-args "Open existing file: " t)))
+     (find-file-read-args "Open file: " t)))
   (find-file-other-frame filename wildcards)
   )
 
-(defun mac-key-save-file-as (filename)
-  "Save buffer to a file, selected with file open dialog"
+(defun mac-key-save-file (filename  )
+  "Save buffer. If needed, select file by dialog"
+  (interactive
+   (or buffer-file-name
+       (let ((last-nonmenu-event nil))
+	 (find-file-read-args "Save buffer to file: " nil))))
+  (if (null buffer-file-name)
+      (setq buffer-file-name filename))
+  (save-buffer))
+ 
+(defun mac-key-save-file-as (filename  )
+  "Save buffer to a file, selecting file by dialog"
   (interactive
    (let ((last-nonmenu-event nil))
-     (find-file-read-args "Save to file: ")))
+     (find-file-read-args "Save buffer to file: " nil)))
   (write-file filename))
  
- 
-
- (defun mac-save-file-as ()
-   (interactive)
-   (let ((file (do-applescript "try
- POSIX path of (choose file name with prompt \"Save As...\")
- end try")))
-     (if (> (length file) 3)
-         (setq file
-               (substring file 1 (- (length file) 1))
-               ))
-     (if (not (equal file ""))
-         (write-file file)
-       (beep))
-     ))
+  
   
 
 ;; when saving a file, set its creator code
