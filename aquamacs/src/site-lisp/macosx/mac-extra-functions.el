@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.38 2006/03/27 23:40:59 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.39 2006/04/20 12:17:15 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -149,13 +149,29 @@ right there as well."
 ;; can't do this because the internal find-file function will
 ;; display a file dialogue only if menu was used w/ mouse
  
+
 (defun mac-key-open-file (filename &optional wildcards)
-  "Open a file using standard file open dialog."
+  "Open a file, selected with file open dialog"
   (interactive
    (let ((last-nonmenu-event nil))
-     (find-file-read-args "Find existing file: " t)))
+     (find-file-read-args "Open existing file: " t)))
   (find-file-existing filename wildcards)
   )
+ (defun mac-key-open-file-other-frame (filename &optional wildcards)
+  "Open a file in new frame, selected with file open dialog"
+  (interactive
+   (let ((last-nonmenu-event nil))
+     (find-file-read-args "Open existing file: " t)))
+  (find-file-other-frame filename wildcards)
+  )
+
+(defun mac-key-save-file-as (filename)
+  "Save buffer to a file, selected with file open dialog"
+  (interactive
+   (let ((last-nonmenu-event nil))
+     (find-file-read-args "Save to file: ")))
+  (write-file filename))
+ 
  
 
  (defun mac-save-file-as ()
