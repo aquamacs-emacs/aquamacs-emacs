@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.59 2006/04/13 23:16:53 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.60 2006/04/20 13:23:43 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -823,8 +823,8 @@ default."
     (define-key map `[(,osxkeys-command-key o)] 'mac-key-open-file) 
 					;open new frame with a file
 
-    (define-key map `[(,osxkeys-command-key shift s)] 'write-file)
-    (define-key map `[(,osxkeys-command-key shift o)] 'find-file-other-frame) 
+    (define-key map `[(,osxkeys-command-key shift s)] 'mac-key-save-file-as)
+    (define-key map `[(,osxkeys-command-key shift o)] 'mac-key-open-file-other-frame) 
 					;open new frame with a file
     (define-key map `[(,osxkeys-command-key a)] 'mark-whole-buffer)
     (define-key map `[(,osxkeys-command-key v)] 'clipboard-yank) 
@@ -835,7 +835,7 @@ default."
     (define-key map `[(control ,osxkeys-command-key space)] 'set-mark)
     (define-key map `[(,osxkeys-command-key x)] 'clipboard-kill-region)
     (define-key map `[(shift ,osxkeys-command-key x)] 'aquamacs-clipboard-kill-secondary)
-    (define-key map `[(,osxkeys-command-key s)] 'save-buffer)
+    (define-key map `[(,osxkeys-command-key s)] 'mac-key-save-file)
     (define-key map `[(,osxkeys-command-key p)] 'aquamacs-print)
     (define-key map `[(,osxkeys-command-key l)] 'goto-line)
     (define-key map `[(,osxkeys-command-key f)] 'isearch-forward)
