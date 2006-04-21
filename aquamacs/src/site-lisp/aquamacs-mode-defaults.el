@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-mode-defaults.el,v 1.13 2006/02/08 20:41:39 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-defaults.el,v 1.14 2006/04/21 21:17:12 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -58,6 +58,40 @@
 		'nxml-mode 'auto-mode-alist)
  
 (assq-set-equal "<\\?xml " 'nxml-mode 'magic-mode-alist)
+
+
+;; SLIME
+
+
+;; update SLIME
+;; cd ~/Temp
+;; mkdir slime
+;; cd slime
+;; curl -O http://common-lisp.net/project/slime/slime-2.0.zip
+
+;; unzip slime-*.zip
+;; mv slime-* ~/src/edit-modes/slime
+;; cd ~/src/edit-modes
+;; mv slime/doc/slime.info info/
+;; rm -r slime/doc slime/ChangeLog 
+;; gzip slime/*.el
+
+
+ 
+;;(aquamacs-set-defaults '((inferior-lisp-program "/opt/sbcl/bin/sbcl") ))
+
+(defun load-and-setup-slime ()
+  "Load and setup SLIME"
+  (require 'slime)
+  (slime-setup) 
+  ;; run hook directly, because it wouldn't
+  ;; be picked up otherwise
+  (slime-lisp-mode-hook)
+  ;; remove this from lisp-mode-hook
+  (remove-hook 'lisp-mode-hook 'load-and-setup-slime))
+
+(add-hook 'lisp-mode-hook 'load-and-setup-slime)
+(autoload 'slime "slime.el" "Start an inferior/superior Lisp and connect to its Swank server." 'interactive nil)
 
 
 
