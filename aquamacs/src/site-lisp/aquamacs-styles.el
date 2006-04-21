@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.9 2006/04/07 15:15:50 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.10 2006/04/21 21:52:33 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -88,18 +88,18 @@ Return nil if no style should be applied due lack of decision-making
 ability. The following rules are followed:
 
 - Ignore minibuffers if there is only one window, use that 
-- if there are several windows, use the first 
-- if all windows show buffers with the same major mode 
+- if there are several windows and if all windows show buffers
+  with the same major mode, use the first 
 - otherwise, return nil."
 
 (let ((l (window-list frame 'no-minibuf (frame-first-window frame))))
-  (if (cdr-safe l)
+  (if (cdr-safe l) ;; more than one window
       (let (mm
 	    (ret (window-buffer (car l))))
 	(mapcar (lambda (w) 
 		(let ((m (with-current-buffer (window-buffer w) major-mode)))
 		  (if mm
-		      (unless (eq mm m)
+		      (unless (eq mm m) ;; not the same major mode?
 			(setq ret nil))
 		      (setq mm m))))
 		l)
