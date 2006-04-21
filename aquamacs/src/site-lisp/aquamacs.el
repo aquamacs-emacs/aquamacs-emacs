@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.73 2006/04/10 07:13:17 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.74 2006/04/21 21:48:22 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -789,7 +789,8 @@ redistribute Aquamacs under the GNU General Public License. Type \\[describe-cop
   (show-paren-mode 1) 
   (blink-cursor-mode 1)
 
-  (set-default 'cursor-type '(bar . 2))
+  ;; should not be needed - done by a-s-d above
+  ;; (set-default 'cursor-type '(bar . 2))
 
 
   ;;; for initial buffer
