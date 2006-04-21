@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.62 2006/04/10 07:13:33 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.63 2006/04/21 21:47:52 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -965,13 +965,15 @@ Call this function for the mode to take effect."
 :group 'Aquamacs
 :global t
 
+(when window-system
 (if mac-inline-input-method-mode
     (progn
 	(mac-setup-inline-input-method)
 	(add-hook 'minibuffer-setup-hook 'mac-change-language-to-us)
 	)
-  (mac-exit-inline-input-method)
-  (remove-hook 'minibuffer-setup-hook 'mac-change-language-to-us)))
+  (if (fboundp 'mac-exit-inline-input-method)
+      (mac-exit-inline-input-method))
+  (remove-hook 'minibuffer-setup-hook 'mac-change-language-to-us))))
  
 (define-key-after mule-menu-keymap [toggle-inline-input-method]
   (menu-bar-make-mm-toggle mac-inline-input-method-mode
