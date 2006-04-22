@@ -16,9 +16,9 @@
 
 # doesnt work yet: 
 
-PATCHES="emacs-inline pretty-modeline transparency2 calm-startup
-         available-screen mouse-button launch-browser toolbar-button
-         org-gnu-Aquamacs about-aquamacs puresize
+PATCHES="custom-verbosity emacs-inline pretty-modeline transparency2
+         calm-startup available-screen mouse-button launch-browser
+         toolbar-button org-gnu-Aquamacs about-aquamacs puresize
          macfns-dialog-menu menu-bar-visible-frame eval-depth
          sendmail-mac shut-up"
 
