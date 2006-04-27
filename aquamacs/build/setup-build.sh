@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -l
 # initial setup
  
 if test "$AQUAMACS_CVS_PREFIX" ; then
