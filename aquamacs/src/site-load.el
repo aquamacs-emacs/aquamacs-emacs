@@ -14,7 +14,7 @@
 
 ;(load "mwheel") ;; wants to be loaded at runtime
 (load "disp-table")
-(load "tool-bar") 
+;; (load "tool-bar")  ;; taken out while we're working on it!
 (load "tooltip")
 (load "font-lock")
 (load "jit-lock")
