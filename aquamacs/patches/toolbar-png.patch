@@ -1,108 +1,173 @@
-Index: lisp/tool-bar.el
+Index: tool-bar.el
 ===================================================================
-RCS file: /cvsroot/emacs/emacs/lisp/tool-bar.el,v
+RCS file: /sources/emacs/emacs/lisp/tool-bar.el,v
 retrieving revision 1.5
 diff -c -r1.5 tool-bar.el
-*** lisp/tool-bar.el 6 Feb 2006 14:33:35 -0000       1.5
---- lisp/tool-bar.el 24 Feb 2006 10:30:46 -0000
+*** tool-bar.el	6 Feb 2006 14:33:35 -0000	1.5
+--- tool-bar.el	1 May 2006 11:06:51 -0000
 ***************
-*** 123,128 ****
---- 123,130 ----
-         (bg (face-attribute 'tool-bar :background))
-         (colors (nconc (if (eq fg 'unspecified) nil (list :foreground fg))
-                        (if (eq bg 'unspecified) nil (list :background bg))))
-+        (png-spec (list :type 'png :background bg
-+                        :file (concat icon ".png")))
-         (xpm-spec (list :type 'xpm :file (concat icon ".xpm")))
-         (xpm-lo-spec (if (> (display-color-cells) 256)
-                          nil
+*** 90,95 ****
+--- 90,136 ----
+  		'(menu-item "tool bar" ignore
+  			    :filter (lambda (ignore) tool-bar-map)))
+  
++ (defun tool-bar-get-image-spec (icon)
++   (let* ((fg (face-attribute 'tool-bar :foreground))
++ 	 (bg (face-attribute 'tool-bar :background))
++ 	 (colors (nconc (if (eq fg 'unspecified) nil (list :foreground fg))
++ 			(if (eq bg 'unspecified) nil (list :background bg))))
++ 	 (xpm-spec (list :type 'xpm :file (concat icon ".xpm")))
++ 	 (xpm-lo-spec (if (> (display-color-cells) 256)
++ 			  nil
++ 			(list :type 'xpm :file
++                               (concat "low-color/" icon ".xpm"))))
++ 	 (png-spec-1 (list :type 'png)) ;; :background bg
++ 	 (png-spec (append png-spec-1 
++ 			   (list
++ 			    :file (concat icon ".png")) ))  
++ 	 (png-spec-sel (append png-spec-1 
++ 			   (list
++ 			    :file (concat icon ".sel.png")) ))
++ 	 (png-spec-dis (append png-spec-1 
++ 			   (list
++ 			    :file (concat icon ".dis.png")) ))
++ 	 (pbm-spec (append (list :type 'pbm :file
++                                  (concat icon ".pbm")) colors))
++ 	 (xbm-spec (append (list :type 'xbm :file
++                                  (concat icon ".xbm")) colors))
++ 	 (image (find-image
++ 		(if (display-color-p)
++ 		    (list png-spec xpm-lo-spec xpm-spec pbm-spec xbm-spec)
++ 		  (list pbm-spec xbm-spec xpm-lo-spec xpm-spec))))
++ 	 (image-sel (find-image
++ 		     (if (display-color-p)
++ 			 (list png-spec-sel)
++ 		       nil)))
++ 	 (image-dis (find-image
++ 		     (if (display-color-p)
++ 			 (list png-spec-dis)
++ 		       nil)))
++ 	 (images (if (and image-sel image-dis)
++ 		    (vector image-sel image image-dis image-dis)
++ 		  image)))
++     (cons image images)))
++ 
+  ;;;###autoload
+  (defun tool-bar-add-item (icon def key &rest props)
+    "Add an item to the tool bar.
 ***************
-*** 134,141 ****
-                                   (concat icon ".xbm")) colors))
-         (image (find-image
-                (if (display-color-p)
-!                   (list xpm-lo-spec xpm-spec pbm-spec xbm-spec)
-!                 (list pbm-spec xbm-spec xpm-lo-spec xpm-spec)))))
+*** 119,147 ****
+  function will first try to use low-color/ICON.xpm if display-color-cells
+  is less or equal to 256, then ICON.xpm, then ICON.pbm, and finally
+  ICON.xbm, using `find-image'."
+!   (let* ((fg (face-attribute 'tool-bar :foreground))
+! 	 (bg (face-attribute 'tool-bar :background))
+! 	 (colors (nconc (if (eq fg 'unspecified) nil (list :foreground fg))
+! 			(if (eq bg 'unspecified) nil (list :background bg))))
+! 	 (xpm-spec (list :type 'xpm :file (concat icon ".xpm")))
+! 	 (xpm-lo-spec (if (> (display-color-cells) 256)
+! 			  nil
+! 			(list :type 'xpm :file
+!                               (concat "low-color/" icon ".xpm"))))
+! 	 (pbm-spec (append (list :type 'pbm :file
+!                                  (concat icon ".pbm")) colors))
+! 	 (xbm-spec (append (list :type 'xbm :file
+!                                  (concat icon ".xbm")) colors))
+! 	 (image (find-image
+! 		(if (display-color-p)
+! 		    (list xpm-lo-spec xpm-spec pbm-spec xbm-spec)
+! 		  (list pbm-spec xbm-spec xpm-lo-spec xpm-spec)))))
   
       (when (and (display-images-p) image)
         (unless (image-mask-p image)
---- 136,143 ----
-                                   (concat icon ".xbm")) colors))
-         (image (find-image
-                (if (display-color-p)
-!                   (list png-spec xpm-lo-spec xpm-spec pbm-spec xbm-spec)
-!                 (list pbm-spec xbm-spec xpm-lo-spec xpm-spec png-spec)))))
+  	(setq image (append image '(:mask heuristic))))
+        (define-key-after map (vector key)
+! 	`(menu-item ,(symbol-name key) ,def :image ,image ,@props)))))
+  
+  ;;;###autoload
+  (defun tool-bar-add-item-from-menu (command icon &optional map &rest props)
+--- 160,174 ----
+  function will first try to use low-color/ICON.xpm if display-color-cells
+  is less or equal to 256, then ICON.xpm, then ICON.pbm, and finally
+  ICON.xbm, using `find-image'."
+!   (let* ((is (tool-bar-get-image-spec icon))
+! 	 (image (car is))
+! 	 (images (cdr is))) 
   
       (when (and (display-images-p) image)
         (unless (image-mask-p image)
-***************
-*** 178,183 ****
---- 180,187 ----
-         (bg (face-attribute 'tool-bar :background))
-         (colors (nconc (if (eq fg 'unspecified) nil (list :foreground fg))
-                        (if (eq bg 'unspecified) nil (list :background bg))))
-+        (png-spec (list :type 'png :background bg
-+                        :file (concat icon ".png")))
-         (xpm-spec (list :type 'xpm :file (concat icon ".xpm")))
-         (xpm-lo-spec (if (> (display-color-cells) 256)
-                          nil
-***************
-*** 188,195 ****
-         (xbm-spec (append (list :type 'xbm :file
-                                   (concat icon ".xbm")) colors))
-         (spec (if (display-color-p)
-!                  (list xpm-lo-spec xpm-spec pbm-spec xbm-spec)
-!                (list pbm-spec xbm-spec xpm-lo-spec xpm-spec)))
-         (image (find-image spec))
-         submap key)
-      (when (and (display-images-p) image)
---- 192,199 ----
-         (xbm-spec (append (list :type 'xbm :file
-                                   (concat icon ".xbm")) colors))
-         (spec (if (display-color-p)
-!                  (list png-spec xpm-lo-spec xpm-spec pbm-spec xbm-spec)
-!                (list pbm-spec xbm-spec xpm-lo-spec xpm-spec png-spec)))
-         (image (find-image spec))
-         submap key)
-      (when (and (display-images-p) image)
-***************
-*** 275,282 ****
---- 279,316 ----
-  			      (popup-menu menu-bar-help-menu))
-  		     'help
-  		     :help "Pop up the Help menu")
-+ 
-+   ;; Toolbar button, mapped to handle-toggle-tool-bar in tool-bar.el
-+   ;; (Toolbar button - on systems that support it!)
-+   (global-set-key [toggle-frame-toolbar] 'handle-toggle-tool-bar)
-+ 
-    )
+  	(setq image (append image '(:mask heuristic))))
+        (define-key-after map (vector key)
+! 	`(menu-item ,(symbol-name key) ,def :image ,images ,@props)))))
   
-+ 
-+ ;; local toolbars
-+ 
-+ (defun tool-bar-enabled-p (&optional frame)
-+ "Evaluates to non-nil if the tool-bar is present
-+ in frame FRAME. If FRAME is nil, the function applies
-+ to the selected frame."
-+   (> (or (frame-parameter frame 'tool-bar-lines) 0) 0))
-+ 
-+ (defun toggle-tool-bar (&optional frame)
-+ "Switches the tool bar on and off in frame FRAME.
-+ If FRAME is nil, the change applies to the selected frame."
-+ (interactive)
-+   (modify-frame-parameters frame 
-+    (list (cons 'tool-bar-lines 
-+ 	       (if (tool-bar-enabled-p frame)
-+ 		   0
-+ 		 1
-+ 		 )))))
-+ 
-+ (defun handle-toggle-tool-bar (event)
-+ "Handles a tool-bar toggle event."
-+ (interactive "e")
-+   (toggle-tool-bar  (posn-window (event-start event))))
-+ 
-  (provide 'tool-bar)
+  ;;;###autoload
+  (defun tool-bar-add-item-from-menu (command icon &optional map &rest props)
+***************
+*** 174,196 ****
+      (setq from-map global-map))
+    (let* ((menu-bar-map (lookup-key from-map [menu-bar]))
+  	 (keys (where-is-internal command menu-bar-map))
+! 	 (fg (face-attribute 'tool-bar :foreground))
+! 	 (bg (face-attribute 'tool-bar :background))
+! 	 (colors (nconc (if (eq fg 'unspecified) nil (list :foreground fg))
+! 			(if (eq bg 'unspecified) nil (list :background bg))))
+! 	 (xpm-spec (list :type 'xpm :file (concat icon ".xpm")))
+! 	 (xpm-lo-spec (if (> (display-color-cells) 256)
+! 			  nil
+! 			(list :type 'xpm :file
+!                               (concat "low-color/" icon ".xpm"))))
+! 	 (pbm-spec (append (list :type 'pbm :file
+!                                  (concat icon ".pbm")) colors))
+! 	 (xbm-spec (append (list :type 'xbm :file
+!                                  (concat icon ".xbm")) colors))
+! 	 (spec (if (display-color-p)
+! 		   (list xpm-lo-spec xpm-spec pbm-spec xbm-spec)
+! 		 (list pbm-spec xbm-spec xpm-lo-spec xpm-spec)))
+! 	 (image (find-image spec))
+  	 submap key)
+      (when (and (display-images-p) image)
+        ;; We'll pick up the last valid entry in the list of keys if
+--- 201,209 ----
+      (setq from-map global-map))
+    (let* ((menu-bar-map (lookup-key from-map [menu-bar]))
+  	 (keys (where-is-internal command menu-bar-map))
+! 	 (is (tool-bar-get-image-spec icon))
+! 	 (image (car is))
+! 	 (images (cdr is)) 
+  	 submap key)
+      (when (and (display-images-p) image)
+        ;; We'll pick up the last valid entry in the list of keys if
+***************
+*** 215,221 ****
+        (let ((defn (assq key (cdr submap))))
+  	(if (eq (cadr defn) 'menu-item)
+  	    (define-key-after in-map (vector key)
+! 	      (append (cdr defn) (list :image image) props))
+  	  (setq defn (cdr defn))
+  	  (define-key-after in-map (vector key)
+  	    (let ((rest (cdr defn)))
+--- 228,234 ----
+        (let ((defn (assq key (cdr submap))))
+  	(if (eq (cadr defn) 'menu-item)
+  	    (define-key-after in-map (vector key)
+! 	      (append (cdr defn) (list :image images) props))
+  	  (setq defn (cdr defn))
+  	  (define-key-after in-map (vector key)
+  	    (let ((rest (cdr defn)))
+***************
+*** 224,230 ****
+  	      (if (and (consp rest) (consp (car rest)))
+  		  (setq rest (cdr rest)))
+  	      (append `(menu-item ,(car defn) ,rest)
+! 		      (list :image image) props))))))))
   
-  ;;; arch-tag: 15f30f0a-d0d7-4d50-bbb7-f48fd0c8582f
+  ;;; Set up some global items.  Additions/deletions up for grabs.
+  
+--- 237,243 ----
+  	      (if (and (consp rest) (consp (car rest)))
+  		  (setq rest (cdr rest)))
+  	      (append `(menu-item ,(car defn) ,rest)
+! 		      (list :image images) props))))))))
+  
+  ;;; Set up some global items.  Additions/deletions up for grabs.
+  
