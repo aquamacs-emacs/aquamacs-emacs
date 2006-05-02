@@ -1,16 +1,40 @@
-Index: tool-bar.el
+Index: lisp/tool-bar.el
 ===================================================================
 RCS file: /sources/emacs/emacs/lisp/tool-bar.el,v
 retrieving revision 1.5
 diff -c -r1.5 tool-bar.el
-*** tool-bar.el	6 Feb 2006 14:33:35 -0000	1.5
---- tool-bar.el	1 May 2006 11:06:51 -0000
+*** lisp/tool-bar.el	6 Feb 2006 14:33:35 -0000	1.5
+--- lisp/tool-bar.el	2 May 2006 11:18:01 -0000
 ***************
 *** 90,95 ****
---- 90,136 ----
+--- 90,166 ----
   		'(menu-item "tool bar" ignore
   			    :filter (lambda (ignore) tool-bar-map)))
   
++ (defun tool-bar-set-file-extension (image-spec-list extension)
++   "Set new file extensions for all :file properties
++ Replace any extensions of :file properties in elements of
++ IMAGE-SPEC-LIST. An extension may start with a period . or an
++ underscore. EXTENSION and the original file name extension (starting
++ with a period) are added to the file name.
++ 
++ E.g. foo_dis.xpm becomes foo_sel.xpm if EXTENSION is "_sel"."
++   (mapcar
++    (lambda (spec) 
++      (let ((f (plist-get spec :file)) 
++ 	    )
++         (if (null f)
++ 	    spec
++ 	  ;; need to replace previous extensions, including those
++ 	  ;; starting with _ - 
++ 	  (plist-put spec :file (concat (replace-regexp-in-string "[\.\_].*$" 
++ 								  "" f)
++ 					extension 
++ 					(file-name-extension f t)))
++ 	  )))
++    image-spec-list))
++ 
++ ;; (cdr (tool-bar-get-image-spec "new"))
 + (defun tool-bar-get-image-spec (icon)
 +   (let* ((fg (face-attribute 'tool-bar :foreground))
 + 	 (bg (face-attribute 'tool-bar :background))
@@ -21,16 +45,8 @@ diff -c -r1.5 tool-bar.el
 + 			  nil
 + 			(list :type 'xpm :file
 +                               (concat "low-color/" icon ".xpm"))))
-+ 	 (png-spec-1 (list :type 'png)) ;; :background bg
-+ 	 (png-spec (append png-spec-1 
-+ 			   (list
-+ 			    :file (concat icon ".png")) ))  
-+ 	 (png-spec-sel (append png-spec-1 
-+ 			   (list
-+ 			    :file (concat icon ".sel.png")) ))
-+ 	 (png-spec-dis (append png-spec-1 
-+ 			   (list
-+ 			    :file (concat icon ".dis.png")) ))
++ 	 (png-spec (list :type 'png
++ 			   :file (concat icon ".png")) )
 + 	 (pbm-spec (append (list :type 'pbm :file
 +                                  (concat icon ".pbm")) colors))
 + 	 (xbm-spec (append (list :type 'xbm :file
@@ -41,15 +57,29 @@ diff -c -r1.5 tool-bar.el
 + 		  (list pbm-spec xbm-spec xpm-lo-spec xpm-spec))))
 + 	 (image-sel (find-image
 + 		     (if (display-color-p)
-+ 			 (list png-spec-sel)
++ 			 (tool-bar-set-file-extension
++ 			  (list png-spec xpm-lo-spec xpm-spec pbm-spec xbm-spec)
++ 			  "_sel")
 + 		       nil)))
 + 	 (image-dis (find-image
 + 		     (if (display-color-p)
-+ 			 (list png-spec-dis)
++ 			 (tool-bar-set-file-extension
++ 			  (list png-spec xpm-lo-spec xpm-spec pbm-spec xbm-spec)
++ 			  "_dis")
 + 		       nil)))
-+ 	 (images (if (and image-sel image-dis)
-+ 		    (vector image-sel image image-dis image-dis)
-+ 		  image)))
++ 	 (images (progn
++ 		   (unless (image-mask-p image)
++ 		     (setq image (append image '(:mask heuristic))))
++ 		   (if (and image-sel image-dis)
++ 		       (progn		     
++ 			 (unless (image-mask-p image-sel)
++ 			   (setq image-sel (append image-sel 
++ 						   '(:mask heuristic))))
++ 			 (unless (image-mask-p image-dis)
++ 			   (setq image-dis (append image-dis 
++ 						   '(:mask heuristic))))
++ 			 (vector image-sel image image-dis image-dis))
++ 		     image)))) 
 +     (cons image images)))
 + 
   ;;;###autoload
@@ -79,14 +109,14 @@ diff -c -r1.5 tool-bar.el
 ! 		  (list pbm-spec xbm-spec xpm-lo-spec xpm-spec)))))
   
       (when (and (display-images-p) image)
-        (unless (image-mask-p image)
-  	(setq image (append image '(:mask heuristic))))
+!       (unless (image-mask-p image)
+! 	(setq image (append image '(:mask heuristic))))
         (define-key-after map (vector key)
 ! 	`(menu-item ,(symbol-name key) ,def :image ,image ,@props)))))
   
   ;;;###autoload
   (defun tool-bar-add-item-from-menu (command icon &optional map &rest props)
---- 160,174 ----
+--- 190,203 ----
   function will first try to use low-color/ICON.xpm if display-color-cells
   is less or equal to 256, then ICON.xpm, then ICON.pbm, and finally
   ICON.xbm, using `find-image'."
@@ -95,8 +125,7 @@ diff -c -r1.5 tool-bar.el
 ! 	 (images (cdr is))) 
   
       (when (and (display-images-p) image)
-        (unless (image-mask-p image)
-  	(setq image (append image '(:mask heuristic))))
+!       
         (define-key-after map (vector key)
 ! 	`(menu-item ,(symbol-name key) ,def :image ,images ,@props)))))
   
@@ -127,7 +156,7 @@ diff -c -r1.5 tool-bar.el
   	 submap key)
       (when (and (display-images-p) image)
         ;; We'll pick up the last valid entry in the list of keys if
---- 201,209 ----
+--- 230,238 ----
       (setq from-map global-map))
     (let* ((menu-bar-map (lookup-key from-map [menu-bar]))
   	 (keys (where-is-internal command menu-bar-map))
@@ -138,7 +167,12 @@ diff -c -r1.5 tool-bar.el
       (when (and (display-images-p) image)
         ;; We'll pick up the last valid entry in the list of keys if
 ***************
-*** 215,221 ****
+*** 210,221 ****
+  			key kk)))))
+        (when (and (symbolp submap) (boundp submap))
+  	(setq submap (eval submap)))
+-       (unless (image-mask-p image)
+- 	(setq image (append image '(:mask heuristic))))
         (let ((defn (assq key (cdr submap))))
   	(if (eq (cadr defn) 'menu-item)
   	    (define-key-after in-map (vector key)
@@ -146,7 +180,10 @@ diff -c -r1.5 tool-bar.el
   	  (setq defn (cdr defn))
   	  (define-key-after in-map (vector key)
   	    (let ((rest (cdr defn)))
---- 228,234 ----
+--- 252,261 ----
+  			key kk)))))
+        (when (and (symbolp submap) (boundp submap))
+  	(setq submap (eval submap)))
         (let ((defn (assq key (cdr submap))))
   	(if (eq (cadr defn) 'menu-item)
   	    (define-key-after in-map (vector key)
@@ -154,20 +191,3 @@ diff -c -r1.5 tool-bar.el
   	  (setq defn (cdr defn))
   	  (define-key-after in-map (vector key)
   	    (let ((rest (cdr defn)))
-***************
-*** 224,230 ****
-  	      (if (and (consp rest) (consp (car rest)))
-  		  (setq rest (cdr rest)))
-  	      (append `(menu-item ,(car defn) ,rest)
-! 		      (list :image image) props))))))))
-  
-  ;;; Set up some global items.  Additions/deletions up for grabs.
-  
---- 237,243 ----
-  	      (if (and (consp rest) (consp (car rest)))
-  		  (setq rest (cdr rest)))
-  	      (append `(menu-item ,(car defn) ,rest)
-! 		      (list :image images) props))))))))
-  
-  ;;; Set up some global items.  Additions/deletions up for grabs.
-  
