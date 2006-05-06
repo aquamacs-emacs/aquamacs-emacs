@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.74 2006/04/21 21:48:22 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.75 2006/05/06 12:27:09 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -753,6 +753,7 @@ redistribute Aquamacs under the GNU General Public License. Type \\[describe-cop
   ;; the philosophy is: don't give users any text to read to get started!    
 
   (aquamacs-set-defaults '((  initial-scratch-message nil)
+			   ( frame-title-format "Aquamacs - %b")
 			   ))
 
   ;; while pc selection mode will be turned on, we don't
@@ -1002,13 +1003,7 @@ if modified buffers exist."
 ;; http://sourceforge.net/tracker/index.php?func=detail&aid=1295333&group_id=138078&atid=740475				      
 
 
-  ;; workarounds for current bugs 
- 
-  ;; (tool-bar-setup) ;; when image.el is preloaded,
-  ;; tool bar is created too early upon launch.
-  ;; therefore, set it up again, this time after
-  ;; image-load-path is defined properly
-
+  ;; workarounds for current bugs  
   '			      ; can't get rid of the menu bar on a Mac
   (easy-menu-remove-item global-map 
 			 '("menu-bar" "options" "showhide") 'menu-bar-mode)
@@ -1029,6 +1024,11 @@ if modified buffers exist."
 					; via hook so it can be turned off
   (add-hook 'after-init-hook 'aquamacs-check-for-updates-if-necessary 'append) 
 
+(aquamacs-set-defaults '(
+			 (tool-bar-button-relief 0)
+			 (tool-bar-button-margin 6)
+			 (tool-bar-border 5)))
+
 (aquamacs-tool-bar-setup)
 
   ) ;; aquamacs-setup
@@ -1042,7 +1042,8 @@ if modified buffers exist."
   ;;(tool-bar-add-item-from-menu 'save-buffers-kill-emacs "exit")
   (setq tool-bar-map (make-sparse-keymap))
   (let ((face 'tool-bar)
-	(spec '((t (:background "#e0e0e0" :foreground "black" 
+	;; e2e2e2 is eaeaea in imagemagick for some reason
+	(spec '((t (:background "#e2e2e2" :foreground "black" 
 				:box (:line-width 1 :style released-button))))))
     (face-spec-set face spec nil)
     (put face 'face-defface-spec spec))
