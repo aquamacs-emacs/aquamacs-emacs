@@ -1,0 +1,44 @@
+*** src/buffer.c	25 Feb 2006 23:33:57 +0000	1.501
+--- src/buffer.c	07 May 2006 22:45:45 +0100	
+***************
+*** 175,180 ****
+--- 175,182 ----
+  Lisp_Object Qinsert_in_front_hooks;
+  Lisp_Object Qinsert_behind_hooks;
+  
++ Lisp_Object Qselect_frame_set_input_focus;
++ 
+  static void alloc_buffer_text P_ ((struct buffer *, size_t));
+  static void free_buffer_text P_ ((struct buffer *b));
+  static struct Lisp_Overlay * copy_overlays P_ ((struct buffer *, struct Lisp_Overlay *));
+***************
+*** 1723,1729 ****
+  	}
+      }
+    Fset_buffer (buf);
+!   Fselect_window (Fdisplay_buffer (buf, other_window, Qnil), norecord);
+    return buf;
+  }
+  
+--- 1725,1734 ----
+  	}
+      }
+    Fset_buffer (buf);
+!   call1(Qselect_frame_set_input_focus,
+! 	Fwindow_frame( Fselect_window (Fdisplay_buffer (buf, 
+! 							other_window, Qnil), 
+! 				       norecord)));
+    return buf;
+  }
+  
+***************
+*** 5227,5232 ****
+--- 5232,5239 ----
+    Qafter_change_functions = intern ("after-change-functions");
+    staticpro (&Qafter_change_functions);
+    staticpro (&Qucs_set_table_for_input);
++   Qselect_frame_set_input_focus = intern ("select-frame-set-input-focus");
++   staticpro (&Qselect_frame_set_input_focus);
+  
+    Qkill_buffer_query_functions = intern ("kill-buffer-query-functions");
+    staticpro (&Qkill_buffer_query_functions);
