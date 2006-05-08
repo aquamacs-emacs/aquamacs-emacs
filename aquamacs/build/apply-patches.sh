@@ -19,7 +19,7 @@
 PATCHES="custom-verbosity emacs-inline pretty-modeline transparency2
          capslock pop-to-buffer
          calm-startup available-screen mouse-button launch-browser
-         toolbar-button org-gnu-Aquamacs about-aquamacs puresize
+         org-gnu-Aquamacs about-aquamacs puresize
          macfns-dialog-menu menu-bar-visible-frame eval-depth
          sendmail-mac shut-up"
 
