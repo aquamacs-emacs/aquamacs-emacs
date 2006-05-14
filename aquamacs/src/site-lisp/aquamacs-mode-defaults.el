@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-mode-defaults.el,v 1.14 2006/04/21 21:17:12 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-defaults.el,v 1.15 2006/05/14 10:22:10 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -97,6 +97,9 @@
 
 
 ;; ESS
+;; Need this to prevent the tramp problem.
+(setq ess-r-versions nil)
+
 (autoload 'ess-mode "ess-site" "Emacs Speaks Statistics" t)
 (autoload 'R-mode "ess-site" "Emacs Speaks Statistics" t)
 (autoload 'S-mode "ess-site" "Emacs Speaks Statistics" t)
