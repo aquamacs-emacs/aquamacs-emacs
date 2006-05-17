@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.76 2006/05/17 17:15:33 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.77 2006/05/17 17:32:59 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -1065,7 +1065,10 @@ if modified buffers exist."
 			       :visible '(or buffer-file-name
 					     (not (eq 'special
 						      (get major-mode
-							   'mode-class)))))
+  							   'mode-class)))))
+  (tool-bar-add-item-from-menu 'redo "redo" nil
+			       :visible '(not (eq 'special (get major-mode
+	  							'mode-class))))  
   (tool-bar-add-item-from-menu 'undo "undo" nil
 			       :visible '(not (eq 'special (get major-mode
 	  							'mode-class))))
