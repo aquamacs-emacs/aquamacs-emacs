@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.75 2006/05/06 12:27:09 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.76 2006/05/17 17:15:33 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -1075,10 +1075,11 @@ if modified buffers exist."
 								'mode-class))))
   (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [copy])
 			       "copy")
-  (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [paste])
+  (let ((cua-mode nil))
+      (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [paste])
 			       "paste" nil
 			       :visible '(not (eq 'special (get major-mode
-								'mode-class))))
+								'mode-class)))))
   (tool-bar-add-item-from-menu 'nonincremental-search-forward "search")
   ;;(tool-bar-add-item-from-menu 'ispell-buffer "spell")
 
