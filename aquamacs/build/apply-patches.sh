@@ -14,10 +14,9 @@
 
 # Add your patch file name here (file names cannot contain spaces).
 
-# doesnt work yet: 
-# emacs-inline
+# 
 PATCHES="custom-verbosity pretty-modeline transparency2
-         capslock pop-to-buffer toolbar-png
+         capslock pop-to-buffer toolbar-png emacs-inline
          calm-startup available-screen mouse-button launch-browser
          org-gnu-Aquamacs about-aquamacs puresize
          macfns-dialog-menu menu-bar-visible-frame eval-depth
