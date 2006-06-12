@@ -44,13 +44,13 @@ development. Go here:  http://aquamacs.org/donations.shtml
 	Aquamacs is licensed under the GNU General Public License.
 	Aquamacs comes with NO WARRANTY whatsoever.
 
-
-	TO DO
-	C-n / C-p not functional -- arrow key bound wrongly in minibuffer
-	seems like osx-key-mode overrides minibuffer key map.
-	this didn't happen with [remap next-buffer], of course.
+ 
+To Do:
+	Saving does not set buffer-modified-p in longlines-mode (Bob
+	Sloan)
 	
-
+	max-specpdl-size issue
+	
 	CVS:
 
 	* Frames (windows) now have a little icon in the title bar for the
@@ -87,6 +87,16 @@ development. Go here:  http://aquamacs.org/donations.shtml
 	via customization or in your Preferences.el as follows:
 
 	(setq inferior-lisp-program "path to lisp")
+
+	* Keyboard bug-fix: certain keys could not be successfully input
+	on certain keyboard layouts, most notably the key combination 
+	C-c ` as used in LaTeX mode (AUCTeX) was not available on German
+	keyboards.
+	Patch by Taiichi Hashimoto
+
+	* Ispell/LaTeX bug-fix: ispell will now ignore TeX commands in
+	such buffers.
+	Patch by Bill Rising
 	
 	
 2006-04-10 Version 0.9.9c
