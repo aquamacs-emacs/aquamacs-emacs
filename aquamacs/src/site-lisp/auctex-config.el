@@ -4,7 +4,7 @@
 ;; originally authored by Kevin Walzer
 ;; Keywords: auctex
  
-;; Last change: $Id: auctex-config.el,v 1.17 2006/02/08 20:44:35 davidswelt Exp $
+;; Last change: $Id: auctex-config.el,v 1.18 2006/06/12 23:39:59 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -94,8 +94,7 @@ Only checks once - subsequent calls will not result in any action."
 (add-hook 'LaTeX-mode-hook 'turn-on-bib-cite)
 (add-hook 'LaTeX-mode-hook 'LaTeX-install-toolbar)
 (add-hook 'LaTeX-mode-hook (lambda () (TeX-fold-mode t)))
-(aquamacs-set-defaults '((TeX-PDF-mode t)
-			 (ispell-parser 'tex)))
+(aquamacs-set-defaults '((TeX-PDF-mode t)))
  
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Customize LaTeX parameters
