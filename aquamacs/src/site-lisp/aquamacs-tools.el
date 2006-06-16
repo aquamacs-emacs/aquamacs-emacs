@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.20 2006/06/13 14:05:52 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.21 2006/06/16 12:54:26 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -276,24 +276,24 @@ Add the value to the customization group `Aquamacs-is-more-than-Emacs'."
 	    ;; group
 
 
-;; commented out temporarily
-	    ;; (unless (or (eq s-value (get symbol 'standard-value))
-;; 			(get symbol 'aquamacs-original-default))
-;; 	      (put symbol 'aquamacs-original-default
-;; 		   s-value)
-;; 	      (if old-doc ;; in some cases the documentation
-;; 		  ;; might not be loaded. Can we load it somehow?
-;; 		  ;; either way, the "if" is a workaround.
-;; 		  (put symbol 'variable-documentation
-;; 		       (concat
-;; 			old-doc
-;; 			(format "
+	    (unless (or (eq s-value (get symbol 'standard-value))
+			(get symbol 'aquamacs-original-default))
+	      (put symbol 'aquamacs-original-default
+		   s-value)
+	      (if old-doc ;; in some cases the documentation
+		  ;; might not be loaded. Can we load it somehow?
+		  ;; either way, the "if" is a workaround.
+		  (put symbol 'variable-documentation
+		       (concat
+			old-doc
+			(format "
 
-;; The original default (in GNU Emacs or in the package) was:
-;; %s" 
-;; 				s-value))))
-;; 	      (custom-add-to-group 'Aquamacs-is-more-than-Emacs 
-;; 				   symbol 'custom-variable))
+The original default (in GNU Emacs or in the package) was:
+%s" 
+				s-value))))
+	      (custom-add-to-group 'Aquamacs-is-more-than-Emacs 
+				   symbol 'custom-variable))
+
 
 
 
