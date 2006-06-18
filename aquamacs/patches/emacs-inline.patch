@@ -605,7 +605,7 @@ diff -prN -x '*.orig' ../emacs-20060603-0/src/macim.c src/macim.c
 + #endif
 + 
 diff -prN -x '*.orig' ../emacs-20060603-0/src/macterm.c src/macterm.c
-*** ../emacs-20060603-0/src/macterm.c	Sun Jun  4 21:08:15 2006
+*** ../emacs-20060618-0/src/macterm.c	Sun Jun  4 21:08:15 2006
 --- src/macterm.c	Tue Jun  6 00:37:25 2006
 *************** Lisp_Object Vx_toolkit_scroll_bars;
 *** 95,100 ****
@@ -617,44 +617,31 @@ diff -prN -x '*.orig' ../emacs-20060603-0/src/macterm.c src/macterm.c
   
   /* Non-zero means that a HELP_EVENT has been generated since Emacs
      start.  */
-*************** static void
-*** 8865,8871 ****
-  do_app_resume ()
+***************
+*** 8868,8877 ****
+  static OSStatus
+  mac_tsm_resume ()
   {
-  #if USE_MAC_TSM
-!   ActivateTSMDocument (tsm_document_id);
-  #endif
-  }
+!   OSStatus err;
+    ScriptLanguageRecord slrec, *slptr = NULL;
   
---- 8866,8873 ----
-  do_app_resume ()
+!   err = ActivateTSMDocument (tsm_document_id);
+  
+    if (err == noErr)
+      {
+--- 8868,8879 ----
+  static OSStatus
+  mac_tsm_resume ()
   {
-  #if USE_MAC_TSM
+!   OSStatus err = noErr;
+    ScriptLanguageRecord slrec, *slptr = NULL;
+  
 !   if (mac_use_inline_input_method)
-!     ActivateTSMDocument (tsm_document_id);
-  #endif
-  }
+!     err = ActivateTSMDocument (tsm_document_id);
+! 
   
-*************** mac_handle_window_event (next_handler, e
-*** 9330,9336 ****
-  #if USE_MAC_TSM
-      case kEventWindowFocusAcquired:
-        result = CallNextEventHandler (next_handler, event);
-!       err = ActivateTSMDocument (tsm_document_id);
-        return err == noErr ? noErr : result;
-  
-      case kEventWindowFocusRelinquish:
---- 9332,9341 ----
-  #if USE_MAC_TSM
-      case kEventWindowFocusAcquired:
-        result = CallNextEventHandler (next_handler, event);
-!       if (mac_use_inline_input_method)
-! 	err = ActivateTSMDocument (tsm_document_id);
-!       else
-! 	err = noErr;
-        return err == noErr ? noErr : result;
-  
-      case kEventWindowFocusRelinquish:
+    if (err == noErr)
+      {
 *************** XTread_socket (sd, expected, hold_quit)
 *** 10587,10593 ****
   	       normally.  */
