@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-mode-defaults.el,v 1.15 2006/05/14 10:22:10 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-defaults.el,v 1.16 2006/06/23 11:00:41 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -111,6 +111,8 @@
 (autoload 'S-transcript-mode "ess-site" "Emacs Speaks Statistics" t)
 (autoload 'R-transcript-mode "ess-site" "Emacs Speaks Statistics" t)
 
+
+
 (setq auto-mode-alist
 	(append
 	 '(("\\.sp\\'"		. S-mode) ;; re: Don MacQueen <macq@llnl.gov>
@@ -203,6 +205,10 @@
 ;; C-Mode
 (defun smart-dnd-c () (smart-dnd-setup '(("\\.h\\'" . "#include <%f>"))))
 (add-hook 'c-mode-common-hook 'smart-dnd-c)
-
+(setq auto-mode-alist
+	(append
+	 '(("\\.cp\\'"		. c++-mode)    ;; old Mac c++ code
+          )
+	 auto-mode-alist))
 
 (provide 'aquamacs-mode-defaults)
