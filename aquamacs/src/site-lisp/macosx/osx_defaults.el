@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.46 2006/02/22 12:25:48 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.47 2006/06/23 16:43:11 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -181,6 +181,40 @@
      ( save-place-file "~/Library/Preferences/Aquamacs Emacs/places.el")
      ( recentf-save-file "~/Library/Preferences/Aquamacs Emacs/Recent Files.el")
      ( mail-default-directory "~/Library/Application Support/Aquamacs Emacs/Temporary Files")))
+
+
+
+  ;; de-iconify
+  ;; when application gains focus, de-iconfiy
+
+
+  (defun aquamacs-de-iconify-some-frame (event)
+    (interactive "e")
+
+    (unless (visible-frame-list)
+
+;; if current frame is iconified, use that
+
+	;; if selected frame is not iconified, but hidden,
+	;; then try to select an iconified frame
+      
+	(unless (eq 'found
+		    (catch 'exit 
+		      (mapc (lambda (f)
+			      (when (frame-iconified-p f)
+				(select-frame f)
+				(make-frame-visible)
+				(throw 'exit 'found)))
+			    (append (list (selected-frame))
+			(frame-list))))
+		   )
+	  (switch-to-buffer "*scratch*"))))
+
+    (when (boundp 'mac-apple-event-map)
+      (define-key mac-apple-event-map [core-event reopen-application ]
+	'aquamacs-de-iconify-some-frame))
+
+
 
   ) ;; aquamacs-osx-defaults-setup
 
