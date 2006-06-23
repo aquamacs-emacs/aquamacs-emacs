@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.47 2006/06/23 16:43:11 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.48 2006/06/23 17:18:43 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -190,7 +190,12 @@
 
   (defun aquamacs-de-iconify-some-frame (event)
     (interactive "e")
+    ;; run AFTER unhiding any hidden frames - we don't want
+    ;; to de-minimize something in addition to that
+    (run-with-idle-timer 0 nil 'aquamacs-de-iconify-some-frame-1))
 
+  (defun aquamacs-de-iconify-some-frame-1 ()
+     
     (unless (visible-frame-list)
 
 ;; if current frame is iconified, use that
