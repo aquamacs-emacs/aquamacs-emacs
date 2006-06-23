@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.48 2006/06/23 17:18:43 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.49 2006/06/23 21:20:18 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -29,7 +29,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, David Reitter
+;; Copyright (C) 2005, 2006 David Reitter
 
  
 
@@ -197,12 +197,6 @@
   (defun aquamacs-de-iconify-some-frame-1 ()
      
     (unless (visible-frame-list)
-
-;; if current frame is iconified, use that
-
-	;; if selected frame is not iconified, but hidden,
-	;; then try to select an iconified frame
-      
 	(unless (eq 'found
 		    (catch 'exit 
 		      (mapc (lambda (f)
@@ -210,17 +204,18 @@
 				(select-frame f)
 				(make-frame-visible)
 				(throw 'exit 'found)))
+
+			    ;; if current frame is iconified, use that
+			    ;; if selected frame is not iconified, but hidden,
+			    ;; then try to select an iconified frame
 			    (append (list (selected-frame))
-			(frame-list))))
-		   )
+				    (frame-list)))))
+	  ;; this should work with and without one-buffer-one-frame
 	  (switch-to-buffer "*scratch*"))))
 
     (when (boundp 'mac-apple-event-map)
       (define-key mac-apple-event-map [core-event reopen-application ]
 	'aquamacs-de-iconify-some-frame))
-
-
-
   ) ;; aquamacs-osx-defaults-setup
 
  
