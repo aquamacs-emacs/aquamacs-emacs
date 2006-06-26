@@ -16,7 +16,14 @@
 
 \section{Aquamacs Emacs: a User-friendly Emacs Distribution}
 
-Aquamacs is an freely-available Aqua-native build of the powerful Emacs text editor (\url{http://www.gnu.org/software/emacs/emacs.html}). By ``Aqua-native,'' we mean more than just the fact that this version of Emacs runs as a standard OS X application. Aquamacs features extensive customization that enables it to conform better with Apple's standard Human Interface Guidelines (HIG) than standard versions of the editor do. 
+Aquamacs is an freely-available Aqua-native build of the powerful
+Emacs text editor
+(\url{http://www.gnu.org/software/emacs/emacs.html}). By
+``Aqua-native,'' we mean more than just the fact that this version of
+Emacs runs as a standard OS X application. Aquamacs features extensive
+customization that enables it to conform better with Apple's standard
+Human Interface Guidelines (HIG) than standard versions of the editor
+do.
 
 Emacs is a text editor of legendary power and configurability, but it
 also has an enormously complex interface that, while consistent across
@@ -86,6 +93,76 @@ Project. We will use the term \emph{Aquamacs Emacs} (or just
 
 \section{What's New in This Release}
 
+\subsection{Changes---0.9.9d}
+
+
+\begin{itemize}
+
+
+\item  Frames (windows) now have a little icon in the title bar for the
+	selected buffer, and you can drag\&drop this to other applications.
+	Patch by  Mitsuharu Yamamoto
+
+\item  Clicking the Dock icon of Aquamacs will now bring up a minimized
+	frame, if there is no other frame to be shown - just like in any
+	OS X application.
+	Suggested by Frank Atanassow
+
+\item  Fonts can now be selected comfortably with the OS X standard
+	font selector, accessible via "Options -> Show Fonts".
+	Remember  - to make a setting stick, use the "Frame Appearance
+	Styles". Set the new style either for the given major mode, or as
+	a default.
+	Patch by  Mitsuharu Yamamoto
+	
+\item  C-n and C-p are now mapped to `next-line' / `previous-line'
+	again, so they may be used to jump full lines (as defined by
+	carriage returns) - even if the lines are wrapped around. The
+	arrow keys move the cursor visually as before. 
+	Suggested by Tom van Vleck
+
+\item  Apple-` now cycles through all the frames, not just the topmost two.
+	Reported by William Henney
+
+\item  Apple-: now spell-checks the buffer, provided ispell is installed.
+	Suggested by Jean-Christophe Helary
+	
+\item  Apple-Shift-S will now bring up a file selector rather than
+	prompting for a file name in the minibuffer. If you prefer the
+	Emacs-style prompt, you should use the Emacs-style key binding:
+	C-x C-w.
+	Suggested by Jean-Christophe Helary
+
+\item  Emulate-Mac-Keyboard-Mode: improved support for French keyboard
+	layouts
+	
+\item  ESS 5.3.0 included
+
+\item  SLIME - the Superior Lisp Interaction Mode is now available with
+	Aquamacs. It's pre-configured for you. Use `lisp-mode' for your
+	Lisp editing, and run M-x slime to start a lisp inferior
+	process. You may need to set the variable `inferior-lisp-program'
+	via customization or in your Preferences.el as follows:
+
+\begin{verbatim}
+	(setq inferior-lisp-program "path to lisp")
+\end{verbatim}
+
+
+\item  C++ Mode is used automatically for .cp files.
+	
+\item  Keyboard bug-fix: certain keys could not be successfully input
+	on certain keyboard layouts, most notably the key combination 
+	C-c ` as used in LaTeX mode (AUCTeX) was not available on German
+	keyboards.
+	Patch by Taiichi Hashimoto
+
+\item  Ispell/LaTeX bug-fix: ispell will now ignore TeX commands in
+	such buffers.
+	Patch by Bill Rising
+	
+
+\end{itemize}	
 
 \subsection{Changes---0.9.9c}
 
@@ -103,9 +180,7 @@ Project. We will use the term \emph{Aquamacs Emacs} (or just
 \subsection{Changes---0.9.9b}
 
 \begin{itemize}
-
-\item SUMMARY: bug fixes.
-
+ 
 \item `mac-pass-option-to-system' didn't work as intended. There may
 	have been other input problems.
 	
@@ -195,9 +270,11 @@ Project. We will use the term \emph{Aquamacs Emacs} (or just
 	and there is no "From" line. If you run postfix locally, you may
 	want to do something like the following in your .emacs or Preferences.el:
 
+\begin{verbatim}
 	(setq send-mail-function 'sendmail-send-it)
 	(setq message-send-mail-function 'sendmail-send-it)
 	(setq mail-setup-with-from t)
+\end{verbatim}
 
 	Alternatively do the same in customization buffers.	
 
@@ -1446,26 +1523,30 @@ for more languages will be provided later on.
 
 \subsubsection{The Right Look: Colors and Fonts for Frames and Modes}\label{Look}
 \label{frame-appearance-styles}
-Aquamacs allows
-  you to alter specific features of the current frame  via functions
-  in the Options menu. ``Set Color Theme...'' will let you choose a
-  pre-defined combination  of colors and fonts. ``Set Font...'' gives you a choice of pre-defined fonts to use.
+Aquamacs allows you to alter specific features of the current frame
+via functions in the Options menu. ``Show Color Themes (this
+Frame)...'' will let you choose a pre-defined combination of colors
+and fonts. ``Show Fonts (this Frame)...'' gives you a choice of
+pre-defined fonts to use.
 
-  These settings only apply to the current frame. To make them
-  ``stick,'' use the function ``Set current style as default.'' Then,
+ \emph{ These settings only apply to the current frame.} To make them
+  ``stick,'' use the function ``Frame Appearance Styles / Use current style as default.'' Then,
   future frames will open {\em by default} with the new colors and fonts
   chosen. This applies to all visual frame-settings that a mode or you
   as a user have chosen using Emacs' configuration system. The choice
   of a default style will stick until you restart Aquamacs Emacs.
 
-Aquamacs Emacs also offers you to pick a style specific to the
-current mode. For example, you can use different settings when you are
-editing C or LaTeX, then when you are editing a text file. That is
-what  the function ``Set current style for current mode'' is for. Again, the setting  will stick for newly opened frames or or whenever you newly use a  given mode, until you restart Aquamacs Emacs.
+  Aquamacs Emacs also offers you to pick a style specific to the
+  current mode. For example, you can use different settings when you
+  are editing C or LaTeX, then when you are editing a text file. That
+  is what the function ``Use current style for [current] mode'' is
+  for. Again, the setting will stick for newly opened frames or or
+  whenever you newly use a given mode, until you restart Aquamacs
+  Emacs.
 
 \textbf{Note that mode-specific styles will override any default
   style.} If you'd like to use the same style for all frames, you
-should use ``Set current style as default.'' and delete all the mode-specific frames. 
+should use ``Use current style as default.'' and delete all the mode-specific frames. 
 
 If you're more of an Emacs expert and you'd like to configure things
 manually by means of elisp or the customization buffer
@@ -1736,7 +1817,7 @@ Also, see Table \ref{tab:variables} for a partial list of such settings.
 \hline CUA Mode \\
 \hline
 \end{tabular} 
-\caption{Aquamacs-specific variables that can be customized in the Aquamacs customization group.}
+\caption{Subset of Aquamacs-specific variables that can be customized in the Aquamacs customization group.}
 \label{tab:variables}
 \end{center}
 \end{table}
@@ -1884,26 +1965,32 @@ Lawrence Akka;
 Stefan Bruda; 
 Mahn-Soo Choi;
 Steve Dodd;  
-Hiromatsu T.; 
+Taiichi Hashimoto;
+T. Hiromatsu; 
 Massimiliano Gubinelli (Emacs icon); 
  Kyle E. Jones; 
  Xavier Maillard;
  Pekka Marjola;
-Yamamoto Mitsuharu;
+Mitsuharu Yamamoto;
 Gerd Neugebauer;
  Ovidiu Predesc; 
  Alex Schršder;
  Mikael Sjšdin;
 Steven Tamm; 
  Bob Weiner;  
-Milan Zamazal; and 
-Seiji Zenitani.
+Milan Zamazal;
+Seiji Zenitani; and many others.
 
-Emacs is the work of Richard Stallman and many other developers, in particular Andrew Choi (main GNU Emacs-to-MacOS/OSX port). We also would like to acknowledge the work of the authors of the major modes included.
+Emacs is the work of Richard Stallman and many other developers, in
+particular Andrew Choi (main GNU Emacs-to-MacOS/OSX port). We also
+would like to acknowledge the work of the many authors of the major modes
+included.
 
-Aquamacs Emacs is developed by David Reitter. Documentation and user support contributed by Kevin Walzer. 
+Aquamacs Emacs is developed by David Reitter. Documentation and user
+support contributed by Kevin Walzer.
 
-Last but not least, Aquamacs couldn't exist without the dedication of its users, who donate money, report bugs and help us fix them.
+Last but not least, Aquamacs couldn't exist without the dedication of
+its users, who donate money, report bugs and help us fix them.
 
 
 \section {Obtaining the Source Code}
