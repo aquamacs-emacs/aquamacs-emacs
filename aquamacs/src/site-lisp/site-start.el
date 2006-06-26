@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: site-start.el,v 1.20 2006/06/25 18:10:15 davidswelt Exp $
+;; Last change: $Id: site-start.el,v 1.21 2006/06/26 15:16:50 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -60,8 +60,6 @@ Changes in this code are ignored during the online version check.")
 (when ;; do not load this twice 
     (not (memq 'aquamacs-site-start features))
  
-  (load "tool-bar.el") ;; workaround - because it's preloaded
-
   (provide 'aquamacs-site-start)
 
   (require 'load-emacs-pre-plugins)
