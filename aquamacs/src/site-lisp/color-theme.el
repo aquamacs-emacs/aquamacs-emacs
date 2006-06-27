@@ -3,9 +3,9 @@
 ;; Copyright (C) 1999, 2000  Jonadab the Unsightly One <jonadab@bright.net>
 ;; Copyright (C) 2000, 2001, 2002, 2003  Alex Schroeder <alex@gnu.org>
 ;; Copyright (C) 2003  Xavier Maillard <zedek@gnu-rox.org>
-;; Copyright (C) 2005  David Reitter <david.reitter@gmail.com>
+;; Copyright (C) 2005,2006  David Reitter <david.reitter@gmail.com>
 
-;; Version: 6.5.5Aquamacs
+;; Version: 6.5.5Aquamacs2
 ;; Keywords: faces
 ;; Author: Jonadab the Unsightly One <jonadab@bright.net>
 ;; Maintainer: Xavier Maillard <zedek@gnu-rox.org>
@@ -16,6 +16,8 @@
 ;; This file is part of Aquamacs.
 ;; some modifications (bury-buffer -> kill-buffer, different menu)
 ;; by dr. 05/2005
+;; mod to color-theme-install: store name of theme in color-theme-name
+;; frame parameter - useful to aquamacs-styles
 
 ;; This is free software; you can redistribute it and/or modify it under
 ;; the terms of the GNU General Public License as published by the Free
@@ -1636,6 +1638,7 @@ with `color-theme-install-faces'.
 
 If `color-theme-is-cumulative' is nil, a color theme will undo face and
 frame-parameter settings of previous color themes."
+  (modify-frame-parameters nil `((color-theme-name . ,(car theme))))
   (setq theme (color-theme-canonic theme))
   (color-theme-install-variables (color-theme-variables theme))
   (color-theme-install-faces (color-theme-faces theme))
