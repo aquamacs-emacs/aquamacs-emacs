@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Load-path</TITLE>
-<META NAME="description" CONTENT="Load-path">
+<TITLE>Plug-in Interface</TITLE>
+<META NAME="description" CONTENT="Plug-in Interface">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,71 +21,62 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="node49.html">
 <LINK REL="previous" HREF="node47.html">
-<LINK REL="up" HREF="node46.html">
+<LINK REL="up" HREF="node47.html">
 <LINK REL="next" HREF="node49.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html743"
+<A NAME="tex2html746"
   HREF="node49.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html739"
-  HREF="node46.html">
+<A NAME="tex2html742"
+  HREF="node47.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html733"
+<A NAME="tex2html736"
   HREF="node47.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html741"
+<A NAME="tex2html744"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html744"
-  HREF="node49.html">Disabling a plug-in or</A>
-<B> Up:</B> <A NAME="tex2html740"
-  HREF="node46.html">Extending Aquamacs</A>
-<B> Previous:</B> <A NAME="tex2html734"
-  HREF="node47.html">Plug-in Interface</A>
- &nbsp; <B>  <A NAME="tex2html742"
+<B> Next:</B> <A NAME="tex2html747"
+  HREF="node49.html">Load-path</A>
+<B> Up:</B> <A NAME="tex2html743"
+  HREF="node47.html">Extending Aquamacs</A>
+<B> Previous:</B> <A NAME="tex2html737"
+  HREF="node47.html">Extending Aquamacs</A>
+ &nbsp; <B>  <A NAME="tex2html745"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION00072000000000000000">
-Load-path</A>
+<H2><A NAME="SECTION00071000000000000000">
+Plug-in Interface</A>
 </H2>
 
 <P>
-Aquamacs is able to find configuration files and Emacs packages
-from any of the following locations (load-path). 
-<A NAME="standardpaths"></A>
-<P>
-<TT>/ Library/ Application Support /Aquamacs Emacs / 
-<BR>/ Users / User Name / Library/ Preferences / Aquamacs Emacs/
-<BR> / Library/Application Support / Emacs / 
-<BR> / Users / User Name / Library/ Preferences / Emacs/
-<BR></TT>
+All files named <SPAN  CLASS="textit">site-start.el</SPAN> anywhere in the load-path
+    are loaded at startup, before the user's init files are
+    loaded. For example, such a file may be placed in
+    /Library/Application Support/Aquamacs Emacs/myPlugin. 
 
 <P>
-The following paths are available in the load-path for individual preference settings. <SPAN  CLASS="textit">They should not be used if you distribute a point-and-click installer package.</SPAN>
+The load-path is automatically extended to cover all subdirectories in standard paths (see Section <A HREF="node49.html#standardpaths">6.2</A>).
 
 <P>
-<TT>/ Library/ Preferences /Aquamacs Emacs / 
-<BR>/ Users / User Name/Library/Preferences / Aquamacs Emacs/
-<BR> / Library/Preferences / Emacs / 
-<BR> / Users / User Name / Library/ Preferences/ Emacs/
-<BR></TT>
+If a plug-in needs to execute code earlier in the initialization phase, that is, before any Aquamacs-specific code is executed (but after Emacs initilization code has been executed), this code can be provided in a file  <SPAN  CLASS="textit">site-prestart.el</SPAN> anywhere in the load-path.
 
 <P>
-All subsequent directories are added recursively, so Aquamacs will find any path that starts below. Type <TT>C-h v load-path</TT> for more information.
+Note that plug-ins should not make any assumptions about whether a frame exists or is visible.
 
 <P>
 <BR><HR>
 <ADDRESS>
 David
-2006-04-10
+2006-06-26
 </ADDRESS>
 </BODY>
 </HTML>
