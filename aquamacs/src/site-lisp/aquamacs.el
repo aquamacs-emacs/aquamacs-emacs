@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.77 2006/05/17 17:32:59 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.78 2006/06/27 15:10:56 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -29,16 +29,25 @@
 ;; Boston, MA 02111-1307, USA.
  
 ;; Copyright (C) 2005,2006, David Reitter
+ 
+(defvar aq-starttime 0)
+;; (defun ats (txt) 
+;;     (message "%s:  %s" (time-since aq-starttime) txt))
+(defun ats (txt) nil)
 
+(setq aq-starttime (current-time))
+(ats "started")
 
 
 (defun aquamacs-setup ()
  
 
   (aquamacs-mac-initialize) ;; call at runtime only
-       
-  (require 'aquamacs-tools)
+  (ats "aquamacs-mac-initialize done")
 
+
+  (require 'aquamacs-tools)
+  (ats "aquamacs-tools done")
   ;; Stop Emacs from asking for "y-e-s", when a "y" will do. 
 
 
@@ -136,6 +145,8 @@ yes-or-no prompts - y or n will do."
 
   ;; Mac OS X specific stuff 
 
+  (ats "osx_defaults ...")
+
   (when (eq window-system 'mac)
     (require 'osx_defaults)
     (aquamacs-osx-defaults-setup)
@@ -144,10 +155,12 @@ yes-or-no prompts - y or n will do."
     (require 'osx_defaults)
     (aquamacs-osx-defaults-setup)
     )
+  (ats "osx_defaults done")
   (require 'easymenu) 
 
 
   (require 'recentf)
+  (ats "recentf loaded")
 
   (defun aquamacs-recentf-show-basenames (l &optional no-dir)
     "Filter the list of menu elements L to show filenames sans directory.
@@ -225,10 +238,11 @@ Separate paths from file names with --."
  
 
 
-
+(ats "aquamacs-menu ...")
   (require 'aquamacs-menu)
+(ats "aquamacs-menu done")
   (require 'aquamacs-bug) ;; successfully send bug reports on the Mac
-
+(ats "aquamacs-busg done")
   
 
 
@@ -474,8 +488,8 @@ to the selected frame."
    )
 
   (smart-frame-positioning-mode t) ;; and turn on!
+  (ats "smart-frame-positioning-mode done")
 
-  
   (defvar mac-pass-option-to-system 'deprecated)
 
   ;; make sure there are no old customizations around
@@ -1028,9 +1042,9 @@ if modified buffers exist."
 			 (tool-bar-button-relief 0)
 			 (tool-bar-button-margin 6)
 			 (tool-bar-border 5)))
-
+(ats "aquamacs-tool-bar-setup ...")
 (aquamacs-tool-bar-setup)
-
+(ats "aquamacs-tool-bar-setup done")
   ) ;; aquamacs-setup
 
 
