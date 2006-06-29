@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.21 2006/06/16 12:54:26 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.22 2006/06/29 16:52:55 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -326,20 +326,29 @@ Optional CODING is used for encoding coding-system."
 
 (defun load-post-sitestart-files ()
   "Load the Aquamacs plugins from site-start directories."
-  (mapcar 
-    (lambda (p) (unless (file-exists-p (concat p "/.ignore"))
-		  (load (concat p "/site-start") 'noerror)))
-    load-path)
-  t)
- 
+  (let (loaded)
+    (mapcar 
+     (lambda (p) (unless (file-exists-p (concat p "/.ignore"))
+		   (let ((file (expand-file-name (concat p "/site-start") "~/")))
+		     (unless (member file loaded)
+		       (load (concat p "/site-start") 'noerror)
+		       (setq loaded (cons file loaded))))))
+     load-path)
+    t)) 
+ ; (load-post-sitestart-files)
 
 (defun load-pre-sitestart-files ()
   "Load the pre-start Aquamacs plugins from site-prestart directories."
-  (mapcar 
-    (lambda (p) (unless (file-exists-p (concat p "/.ignore"))
-		  (load (concat p "/site-prestart") 'noerror)))
-    load-path)
-  t)
+  (let (loaded)
+    (mapcar 
+     (lambda (p) (unless (file-exists-p (concat p "/.ignore"))
+		   (let ((file (expand-file-name (concat p "/site-prestart") "~/")))
+		     (unless (member file loaded)
+		       (load file 'noerror)
+		       (setq loaded (cons file loaded))))))
+     load-path)
+    t))
+; (load-pre-sitestart-files)
 
 ;; Aquamacs Unit Tests
 
