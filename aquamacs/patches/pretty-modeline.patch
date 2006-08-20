@@ -1,13 +1,13 @@
 Index: lisp/bindings.el
 ===================================================================
-RCS file: /cvsroot/emacs/emacs/lisp/bindings.el,v
-retrieving revision 1.154
-diff -c -r1.154 bindings.el
-*** lisp/bindings.el	28 Oct 2005 16:19:16 -0000	1.154
---- lisp/bindings.el	21 Nov 2005 18:32:38 -0000
+RCS file: /sources/emacs/emacs/lisp/bindings.el,v
+retrieving revision 1.166
+diff -c -r1.166 bindings.el
+*** lisp/bindings.el	6 Aug 2006 00:32:33 -0000	1.166
+--- lisp/bindings.el	20 Aug 2006 11:31:31 -0000
 ***************
-*** 281,286 ****
---- 281,289 ----
+*** 273,278 ****
+--- 273,281 ----
       map) "\
   Keymap to display on minor modes.")
   
@@ -18,82 +18,63 @@ diff -c -r1.154 bindings.el
   	;; The multi-line message doesn't work terribly well on the
   	;; bottom mode line...  Better ideas?
 ***************
-*** 288,298 ****
+*** 280,290 ****
   	;; mouse-1: select window, mouse-2: delete others, mouse-3: delete,
   	;; drag-mouse-1: resize, C-mouse-2: split horizontally"
   	"mouse-1: select (drag to resize), mouse-2: delete others, mouse-3: delete this")
-!        (dashes (propertize "--" 'help-echo help-echo)))
-    (setq-default mode-line-format
-      (list
-       "%e"
-!      (propertize "-" 'help-echo help-echo)
-       'mode-line-mule-info
-       'mode-line-modified
-       'mode-line-frame-identification
---- 289,302 ----
+!        (dashes (propertize "--" 'help-echo help-echo))
+         (standard-mode-line-format
+  	(list
+  	 "%e"
+! 	 (propertize "-" 'help-echo help-echo)
+  	 'mode-line-mule-info
+  	 'mode-line-modified
+  	 'mode-line-frame-identification
+--- 283,295 ----
   	;; mouse-1: select window, mouse-2: delete others, mouse-3: delete,
   	;; drag-mouse-1: resize, C-mouse-2: split horizontally"
   	"mouse-1: select (drag to resize), mouse-2: delete others, mouse-3: delete this")
 !        (lotsofdashes (if window-system (make-string 100 32) "%-"))
 !        (dash (propertize (if window-system " " "-") 'help-echo help-echo))
-!        (dashes (propertize (if window-system "  " "--") 'help-echo help-echo)))
-! 
-    (setq-default mode-line-format
-      (list
-       "%e"
-!      (propertize dash 'help-echo help-echo)
-       'mode-line-mule-info
-       'mode-line-modified
-       'mode-line-frame-identification
+!        (dashes (propertize (if window-system "  " "--") 'help-echo help-echo))
+         (standard-mode-line-format
+  	(list
+  	 "%e"
+! 	 (propertize dash 'help-echo help-echo)
+  	 'mode-line-mule-info
+  	 'mode-line-modified
+  	 'mode-line-frame-identification
 ***************
-*** 304,310 ****
-       'mode-line-modes
-       `(which-func-mode ("" which-func-format ,dashes))
-       `(global-mode-string (,dashes global-mode-string))
-!      (propertize "-%-" 'help-echo help-echo)))
-  
-    (setq-default mode-line-modes
-      (list
---- 308,314 ----
-       'mode-line-modes
-       `(which-func-mode ("" which-func-format ,dashes))
-       `(global-mode-string (,dashes global-mode-string))
-!      (propertize (concat dash lotsofdashes) 'help-echo help-echo)))
-  
-    (setq-default mode-line-modes
-      (list
+*** 296,302 ****
+  	 'mode-line-modes
+  	 `(which-func-mode ("" which-func-format ,dashes))
+  	 `(global-mode-string (,dashes global-mode-string))
+! 	 (propertize "-%-" 'help-echo help-echo)))
+         (standard-mode-line-modes
+  	(list
+  	 (propertize "%[(" 'help-echo help-echo)
+--- 301,307 ----
+  	 'mode-line-modes
+  	 `(which-func-mode ("" which-func-format ,dashes))
+  	 `(global-mode-string (,dashes global-mode-string))
+! 	 (propertize (concat dash lotsofdashes) 'help-echo help-echo)))
+         (standard-mode-line-modes
+  	(list
+  	 (propertize "%[(" 'help-echo help-echo)
 ***************
-*** 322,329 ****
-  		 'mouse-face 'mode-line-highlight
-  		 'local-map (make-mode-line-mouse-map
-  			     'mouse-2 #'mode-line-widen))
-!      (propertize ")%]--" 'help-echo help-echo)))
-! 
-    (setq-default mode-line-position
-      `((-3 ,(propertize "%p" 'help-echo help-echo))
-        (size-indication-mode
---- 326,332 ----
-  		 'mouse-face 'mode-line-highlight
-  		 'local-map (make-mode-line-mouse-map
-  			     'mouse-2 #'mode-line-widen))
-!      (propertize (concat ")%]" dashes) 'help-echo help-echo)))
-    (setq-default mode-line-position
-      `((-3 ,(propertize "%p" 'help-echo help-echo))
-        (size-indication-mode
-***************
-*** 333,339 ****
-  	 (10 ,(propertize " (%l,%c)" 'help-echo help-echo))
-  	 (6 ,(propertize " L%l" 'help-echo help-echo))))
-         ((column-number-mode
-! 	 (5 ,(propertize " C%c" 'help-echo help-echo))))))))
-  
-  (defvar mode-line-buffer-identification-keymap nil "\
-  Keymap for what is displayed by `mode-line-buffer-identification'.")
---- 336,342 ----
-  	 (10 ,(propertize " (%l,%c)" 'help-echo help-echo))
-  	 (6 ,(propertize " L%l" 'help-echo help-echo))))
-         ((column-number-mode
-! 	 (5 ,(propertize " C%c" 'help-echo help-echo)))))))))
-  
-  (defvar mode-line-buffer-identification-keymap nil "\
-  Keymap for what is displayed by `mode-line-buffer-identification'.")
+*** 313,319 ****
+  		     'mouse-face 'mode-line-highlight
+  		     'local-map (make-mode-line-mouse-map
+  				 'mouse-2 #'mode-line-widen))
+! 	 (propertize ")%]--" 'help-echo help-echo)))
+         (standard-mode-line-position
+  	`((-3 ,(propertize "%p" 'help-echo help-echo))
+  	  (size-indication-mode
+--- 318,324 ----
+  		     'mouse-face 'mode-line-highlight
+  		     'local-map (make-mode-line-mouse-map
+  				 'mouse-2 #'mode-line-widen))
+! 	 (propertize (concat ")%]" dashes) 'help-echo help-echo)))
+         (standard-mode-line-position
+  	`((-3 ,(propertize "%p" 'help-echo help-echo))
+  	  (size-indication-mode
