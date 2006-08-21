@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.78 2006/06/27 15:10:56 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.79 2006/08/21 18:22:34 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -780,6 +780,7 @@ redistribute Aquamacs under the GNU General Public License. Type \\[describe-cop
 
   (aquamacs-set-defaults 
    '( 
+     (focus-follows-mouse nil) ;; do not mess with user's mouse!
      (resize-mini-windows t)
      (mouse-wheel-progessive-speed nil)
    ;;  (mouse-wheel-scroll-amount (1 (shift . 0.5) (control . 0.2) ))
