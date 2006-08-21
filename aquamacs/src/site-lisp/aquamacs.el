@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.79 2006/08/21 18:22:34 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.80 2006/08/21 18:40:18 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -269,7 +269,7 @@ Separate paths from file names with --."
      (scroll-margin 0)
      (visual-scroll-margin 2)
 
-     (tramp-verbose 1)                  ;; don't annoy us
+     (tramp-verbose 4)                  ;; don't annoy us
 
 					; no flash instead of that annoying bell
      (visible-bell nil)
