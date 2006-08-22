@@ -1,6 +1,6 @@
-diff -prN -x '*.orig' ../emacs-20060603-0/lisp/loadup.el lisp/loadup.el
-*** ../emacs-20060603-0/lisp/loadup.el	Sun Jun  4 21:08:09 2006
---- lisp/loadup.el	Mon Jun  5 00:07:03 2006
+diff -prN -x '*.orig' ../emacs-20060617-0/lisp/loadup.el lisp/loadup.el
+*** ../emacs-20060617-0/lisp/loadup.el	Fri Jun 16 23:46:36 2006
+--- lisp/loadup.el	Fri Jun 16 23:47:19 2006
 ***************
 *** 207,212 ****
 --- 207,215 ----
@@ -13,12 +13,12 @@ diff -prN -x '*.orig' ../emacs-20060603-0/lisp/loadup.el lisp/loadup.el
   (message "%s" (garbage-collect))
   
   (load "vc-hooks")
-diff -prN -x '*.orig' ../emacs-20060603-0/lisp/term/mac-im.el lisp/term/mac-im.el
-*** ../emacs-20060603-0/lisp/term/mac-im.el	Thu Jan  1 09:00:00 1970
---- lisp/term/mac-im.el	Tue Jun  6 00:45:18 2006
+diff -prN -x '*.orig' ../emacs-20060617-0/lisp/term/mac-im.el lisp/term/mac-im.el
+*** ../emacs-20060617-0/lisp/term/mac-im.el	Thu Jan  1 09:00:00 1970
+--- lisp/term/mac-im.el	Sat Jun 24 00:34:36 2006
 ***************
 *** 0 ****
---- 1,211 ----
+--- 1,208 ----
 + ;; mac-im.el --- Input Method for Mac OS X -*-coding: iso-2022-7bit;-*-
 + 
 + ;; Copyright (C) 2005, 2006 HASHIMOTO Taiichi <taiichi2@mac.com>
@@ -167,23 +167,20 @@ diff -prN -x '*.orig' ../emacs-20060603-0/lisp/term/mac-im.el lisp/term/mac-im.e
 + 
 + 
 + ;;
-+ ;; Setup/Unsetup function of inline input method
++ ;; Minor mode of using input methods on MacOS X
 + ;;
-+ (defun mac-setup-inline-input-method ()
-+   (interactive)
-+   (if (fboundp 'mac-set-inline-input-method)
-+       (progn
-+ 	(mac-set-inline-input-method t)
-+ 	(setq default-input-method "MacOSX"))))
++ (define-minor-mode mac-input-method-mode
++ "Use input methods on MacOSX."
++ :init-value t
++ :group 'mac
++ :global t
 + 
-+ (defun mac-exit-inline-input-method ()
-+   (interactive)
-+   (if (fboundp 'mac-set-inline-input-method)
-+       (progn
-+  	(mac-set-inline-input-method nil)
-+  	(set-input-method (get-language-info current-language-environment
-+  					     'input-method)))))
-+ 
++ (if mac-input-method-mode
++     (progn
++       (setq default-input-method "MacOSX")
++       (add-hook 'minibuffer-setup-hook 'mac-change-language-to-us))
++   (setq default-input-method nil)
++   (remove-hook 'minibuffer-setup-hook 'mac-change-language-to-us)))
 + 
 + ;;
 + ;; Valiable and functions to ignore system shortcut.
@@ -230,9 +227,9 @@ diff -prN -x '*.orig' ../emacs-20060603-0/lisp/term/mac-im.el lisp/term/mac-im.e
 + (define-key special-event-map
 +   [mac-change-input-method] 'mac-handle-input-method-change)
 +       
-diff -prN -x '*.orig' ../emacs-20060603-0/src/Makefile.in src/Makefile.in
-*** ../emacs-20060603-0/src/Makefile.in	Sun Jun  4 21:08:15 2006
---- src/Makefile.in	Mon Jun  5 00:07:03 2006
+diff -prN -x '*.orig' ../emacs-20060617-0/src/Makefile.in src/Makefile.in
+*** ../emacs-20060617-0/src/Makefile.in	Fri Jun 16 23:46:42 2006
+--- src/Makefile.in	Fri Jun 16 23:47:20 2006
 *************** CYGWIN_OBJ = sheap.o
 *** 569,575 ****
   
@@ -280,9 +277,9 @@ diff -prN -x '*.orig' ../emacs-20060603-0/src/Makefile.in src/Makefile.in
   macselect.o: blockinput.h macterm.h macgui.h frame.h keymap.h $(config_h)
   
   ${emacsapp}Contents/Resources/English.lproj:
-diff -prN -x '*.orig' ../emacs-20060603-0/src/keyboard.c src/keyboard.c
-*** ../emacs-20060603-0/src/keyboard.c	Sun Jun  4 21:08:15 2006
---- src/keyboard.c	Mon Jun  5 00:07:03 2006
+diff -prN -x '*.orig' ../emacs-20060617-0/src/keyboard.c src/keyboard.c
+*** ../emacs-20060617-0/src/keyboard.c	Fri Jun 16 23:46:42 2006
+--- src/keyboard.c	Fri Jun 16 23:47:20 2006
 *************** Lisp_Object Qmouse_click;
 *** 528,533 ****
 --- 528,536 ----
@@ -326,12 +323,12 @@ diff -prN -x '*.orig' ../emacs-20060603-0/src/keyboard.c src/keyboard.c
     Qdrag_n_drop = intern ("drag-n-drop");
     staticpro (&Qdrag_n_drop);
   
-diff -prN -x '*.orig' ../emacs-20060603-0/src/macim.c src/macim.c
-*** ../emacs-20060603-0/src/macim.c	Thu Jan  1 09:00:00 1970
---- src/macim.c	Tue Jun  6 00:42:30 2006
+diff -prN -x '*.orig' ../emacs-20060617-0/src/macim.c src/macim.c
+*** ../emacs-20060617-0/src/macim.c	Thu Jan  1 09:00:00 1970
+--- src/macim.c	Sat Jun 24 00:35:51 2006
 ***************
 *** 0 ****
---- 1,272 ----
+--- 1,257 ----
 + /* Implementation of Inline Input Method for MacOS X.
 +    Copyright (C) 2004, 2005, 2006 Taiichi Hashimoto <taiichi2@mac.com>.
 + 
@@ -448,7 +445,7 @@ diff -prN -x '*.orig' ../emacs-20060603-0/src/macim.c src/macim.c
 + extern Lisp_Object Qcurrent_input_method;
 + static Lisp_Object Qmac_ignore_shortcut;
 + static TSMDocumentID tsm_document_id;
-+ int mac_use_inline_input_method = 1;
++ int mac_input_method_mode;
 + 
 + void init_input_method (TSMDocumentID id);
 + int mac_store_change_input_method_event (unsigned long timestamp);
@@ -494,39 +491,17 @@ diff -prN -x '*.orig' ../emacs-20060603-0/src/macim.c src/macim.c
 +   return make_number (last_key_script);
 + }
 + 
-+ DEFUN ("mac-set-inline-input-method", Fmac_set_inline_input_method,
-+        Smac_set_inline_input_method, 1, 1, 0,
-+        doc: /* set inline input method */)
-+      (on_p)
-+      Lisp_Object on_p;
-+ {
-+ 
-+   BLOCK_INPUT;
-+   if (NILP (on_p))
-+     {
-+       DeactivateTSMDocument (tsm_document_id);
-+       mac_use_inline_input_method = 0;
-+     }
-+   else
-+     {
-+       ActivateTSMDocument (tsm_document_id);
-+       mac_use_inline_input_method = 1;
-+     }
-+   UNBLOCK_INPUT;
-+ 
-+   return on_p;
-+ }
 + 
 + int
 + mac_store_change_input_method_event (unsigned long timestamp)
 + {
 +   Lisp_Object input_method;
 +   static SInt16 last_key_script = -1;
-+   SInt16 current_key_script, count = 0; 
++   SInt16 current_key_script, count = 0;
 + 
 +   BLOCK_INPUT;
 + 
-+   if (mac_use_inline_input_method)
++   if (mac_input_method_mode)
 +     {
 +       current_key_script = GetScriptManagerVariable (smKeyScript);
 +       input_method = Fsymbol_value (Qcurrent_input_method);
@@ -548,6 +523,10 @@ diff -prN -x '*.orig' ../emacs-20060603-0/src/macim.c src/macim.c
 +       
 +       last_key_script = current_key_script;
 +     }
++   else
++     {
++       KeyScript ( smKeyRoman );
++     }
 + 
 +   UNBLOCK_INPUT;
 + 
@@ -565,7 +544,7 @@ diff -prN -x '*.orig' ../emacs-20060603-0/src/macim.c src/macim.c
 +   if (GetScriptManagerVariable (smKeyScript)
 +       && (this_command_key_count || cursor_in_echo_area))
 +     return FALSE;
-+   else if (mac_use_inline_input_method && !Flength (buf))
++   else if (!Flength (buf))
 +     {
 +       Fsymbol_value (Qcurrent_input_method);
 +       Lisp_Object keys = Fsymbol_value (Qmac_ignore_shortcut);
@@ -596,7 +575,10 @@ diff -prN -x '*.orig' ../emacs-20060603-0/src/macim.c src/macim.c
 +   Qmac_ignore_shortcut = intern ("mac-ignore-shortcut");
 +   staticpro (&Qmac_ignore_shortcut);
 + 
-+   defsubr (&Smac_set_inline_input_method);
++   DEFVAR_BOOL ("mac-input-method-mode", &mac_input_method_mode,
++     doc: /* If non-nil, input methods on MacOSX are used. */);
++   mac_input_method_mode = 1;
++ 
 +   defsubr (&Smac_set_key_script);
 +   defsubr (&Smac_get_current_key_script);
 +   defsubr (&Smac_get_last_key_script);
@@ -604,46 +586,11 @@ diff -prN -x '*.orig' ../emacs-20060603-0/src/macim.c src/macim.c
 + 
 + #endif
 + 
-diff -prN -x '*.orig' ../emacs-20060603-0/src/macterm.c src/macterm.c
-*** ../emacs-20060618-0/src/macterm.c	Sun Jun  4 21:08:15 2006
---- src/macterm.c	Tue Jun  6 00:37:25 2006
-*************** Lisp_Object Vx_toolkit_scroll_bars;
-*** 95,100 ****
---- 95,101 ----
-     rendering which may anti-alias the text.  */
-  int mac_use_core_graphics;
-  
-+ extern int mac_use_inline_input_method;
-  
-  /* Non-zero means that a HELP_EVENT has been generated since Emacs
-     start.  */
-***************
-*** 8868,8877 ****
-  static OSStatus
-  mac_tsm_resume ()
-  {
-!   OSStatus err;
-    ScriptLanguageRecord slrec, *slptr = NULL;
-  
-!   err = ActivateTSMDocument (tsm_document_id);
-  
-    if (err == noErr)
-      {
---- 8868,8879 ----
-  static OSStatus
-  mac_tsm_resume ()
-  {
-!   OSStatus err = noErr;
-    ScriptLanguageRecord slrec, *slptr = NULL;
-  
-!   if (mac_use_inline_input_method)
-!     err = ActivateTSMDocument (tsm_document_id);
-! 
-  
-    if (err == noErr)
-      {
+diff -prN -x '*.orig' ../emacs-20060617-0/src/macterm.c src/macterm.c
+*** ../emacs-20060617-0/src/macterm.c	Fri Jun 16 23:46:42 2006
+--- src/macterm.c	Wed Jun 28 00:14:36 2006
 *************** XTread_socket (sd, expected, hold_quit)
-*** 10587,10593 ****
+*** 10654,10660 ****
   	       normally.  */
   	    if (!(mapped_modifiers
   		  & ~(mac_pass_command_to_system ? cmdKey : 0)
@@ -651,7 +598,7 @@ diff -prN -x '*.orig' ../emacs-20060603-0/src/macterm.c src/macterm.c
   	      {
   		OSStatus err;
   
---- 10592,10600 ----
+--- 10654,10662 ----
   	       normally.  */
   	    if (!(mapped_modifiers
   		  & ~(mac_pass_command_to_system ? cmdKey : 0)
@@ -662,8 +609,8 @@ diff -prN -x '*.orig' ../emacs-20060603-0/src/macterm.c src/macterm.c
   		OSStatus err;
   
 *************** XTread_socket (sd, expected, hold_quit)
-*** 10809,10814 ****
---- 10816,10822 ----
+*** 10876,10881 ****
+--- 10878,10884 ----
   	  count++;
   	}
   
@@ -672,8 +619,8 @@ diff -prN -x '*.orig' ../emacs-20060603-0/src/macterm.c src/macterm.c
   
     /* If the focus was just given to an autoraising frame,
 *************** init_tsm ()
-*** 11248,11253 ****
---- 11256,11263 ----
+*** 11306,11311 ****
+--- 11309,11316 ----
   
     NewTSMDocument (sizeof (types) / sizeof (types[0]), types,
   		  &tsm_document_id, 0);
@@ -682,9 +629,9 @@ diff -prN -x '*.orig' ../emacs-20060603-0/src/macterm.c src/macterm.c
   }
   #endif
   
-diff -prN -x '*.orig' ../emacs-20060603-0/src/termhooks.h src/termhooks.h
-*** ../emacs-20060603-0/src/termhooks.h	Sun Jun  4 21:08:16 2006
---- src/termhooks.h	Mon Jun  5 00:07:03 2006
+diff -prN -x '*.orig' ../emacs-20060617-0/src/termhooks.h src/termhooks.h
+*** ../emacs-20060617-0/src/termhooks.h	Fri Jun 16 23:46:43 2006
+--- src/termhooks.h	Fri Jun 16 23:47:20 2006
 *************** enum event_kind
 *** 260,265 ****
 --- 260,269 ----
