@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.65 2006/06/18 17:49:44 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.66 2006/08/22 15:53:15 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -702,9 +702,11 @@ both existing buffers and buffers that you subsequently create."
        (:visible (boundp 'one-buffer-one-frame-mode)))
        'edit-options-separator))
 
-(defun turn-on-mac-font-panel-mode ()
-  (interactive)
-  (mac-font-panel-mode 1))
+(when (fboundp 'mac-font-panel-mode)
+
+  (defun turn-on-mac-font-panel-mode ()
+    (interactive)
+    (mac-font-panel-mode 1))
 
  ;; this is a redefine
 (define-key menu-bar-options-menu [mouse-set-font]
@@ -715,7 +717,7 @@ both existing buffers and buffers that you subsequently create."
 	       :enable (menu-bar-menu-frame-live-and-visible-p) 
 	       :help "Select a font from list of known fonts/fontsets"))
 
-
+)
 
 (easy-menu-add-item  nil '("Options")
   ["-" nil nil] 'mouse-set-font)
@@ -948,6 +950,7 @@ that should be represented in the Aquamacs menus."
 		       '("menu-bar" "file") 'make-frame-on-display)
 
 ;; language environment
+(unless (boundp 'unicode-emacs)
 (when (eq system-type 'darwin) 
     (require 'aquamacs-mule)
 (define-key menu-bar-options-menu [mule]
@@ -960,29 +963,33 @@ that should be represented in the Aquamacs menus."
 ;;;	':visible 'default-enable-multibyte-characters
 	':help "Default language, encodings, input method")))
 
-(defvar inline-input-method-on nil)
+;; (defvar inline-input-method-on nil)
 
-(define-minor-mode mac-inline-input-method-mode 
-"Use the standard Mac input method.
-This is usually used to allow non-roman scripts to be input.
-Call this function for the mode to take effect."
-:init-value t
-:group 'Aquamacs
-:global t
+;; for compatibility with earlier Aquamaacs version
+(defalias 'mac-inline-input-method-mode 'mac-input-method-mode)
 
-(when window-system
-(if mac-inline-input-method-mode
-    (when (fboundp 'mac-setup-inline-input-method)
-	(mac-setup-inline-input-method)
-	(add-hook 'minibuffer-setup-hook 'mac-change-language-to-us)
-	)
-  (if (fboundp 'mac-exit-inline-input-method)
-      (mac-exit-inline-input-method))
-  (remove-hook 'minibuffer-setup-hook 'mac-change-language-to-us))))
+
+;; (define-minor-mode mac-inline-input-method-mode 
+;; "Use the standard Mac input method.
+;; This is usually used to allow non-roman scripts to be input.
+;; Call this function for the mode to take effect."
+;; :init-value t
+;; :group 'Aquamacs
+;; :global t
+
+;; (when window-system
+;; (if mac-inline-input-method-mode
+;;     (when (fboundp 'mac-setup-inline-input-method)
+;; 	(mac-setup-inline-input-method)
+;; 	(add-hook 'minibuffer-setup-hook 'mac-change-language-to-us)
+;; 	)
+;;   (if (fboundp 'mac-exit-inline-input-method)
+;;       (mac-exit-inline-input-method))
+;;   (remove-hook 'minibuffer-setup-hook 'mac-change-language-to-us))))
  
-(when  (fboundp 'mac-setup-inline-input-method)
+(when  (fboundp 'mac-input-method-mode)
 (define-key-after mule-menu-keymap [toggle-inline-input-method]
-  (menu-bar-make-mm-toggle mac-inline-input-method-mode
+  (menu-bar-make-mm-toggle mac-input-method-mode
 			   "Use System input method" 
 	      "Use native Mac input method")
   'separator-mule)
@@ -990,13 +997,13 @@ Call this function for the mode to take effect."
 ;; overwrite these with text and :enable
 (define-key mule-menu-keymap [toggle-input-method]
   '(menu-item "Toggle Internal Input Method" toggle-input-method
-	      :enable (not mac-inline-input-method-mode)))
+	      :enable (not mac-input-method-mode)))
 (define-key mule-menu-keymap [set-input-method]
   '(menu-item "Select Internal Input Method..." set-input-method
-	       :enable (not mac-inline-input-method-mode)))
+	       :enable (not mac-input-method-mode)))
 
 )
-
+)
 
 (provide 'aquamacs-menu)
   
