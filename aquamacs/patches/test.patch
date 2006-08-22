@@ -1,0 +1,153 @@
+Index: src/macfns.c
+===================================================================
+RCS file: /cvsroot/emacs/emacs/src/macfns.c,v
+retrieving revision 1.90
+diff -c -p -r1.90 macfns.c
+*** src/macfns.c	28 Jun 2006 08:30:16 -0000	1.90
+--- src/macfns.c	22 Aug 2006 05:35:29 -0000
+*************** static void
+*** 1945,2007 ****
+  mac_update_proxy_icon (f)
+       struct frame *f;
+  {
+    Lisp_Object file_name =
+      XBUFFER (XWINDOW (FRAME_SELECTED_WINDOW (f))->buffer)->filename;
+    Window w = FRAME_MAC_WINDOW (f);
+! 
+!   if (FRAME_FILE_NAME (f) == NULL && !STRINGP (file_name))
+!     return;
+!   if (FRAME_FILE_NAME (f) && STRINGP (file_name)
+!       && strcmp (FRAME_FILE_NAME (f), SDATA (file_name)) == 0)
+!     return;
+! 
+!   if (FRAME_FILE_NAME (f))
+!     {
+!       xfree (FRAME_FILE_NAME (f));
+!       FRAME_FILE_NAME (f) = NULL;
+!     }
+
+    BLOCK_INPUT;
+
+    if (STRINGP (file_name))
+      {
+-       OSStatus err;
+        AEDesc desc;
+        Lisp_Object encoded_file_name = ENCODE_FILE (file_name);
+
+! #ifdef MAC_OS8
+        SetPortWindowPort (w);
+- #endif
+        err = AECoercePtr (TYPE_FILE_NAME, SDATA (encoded_file_name),
+! 			 SBYTES (encoded_file_name), typeAlias, &desc);
+        if (err == noErr)
+  	{
+! 	  Size size = AEGetDescDataSize (&desc);
+! 	  AliasHandle alias = (AliasHandle) NewHandle (size);
+! 
+! 	  if (alias == NULL)
+! 	    err = memFullErr;
+! 	  else
+! 	    {
+! 	      HLock ((Handle) alias);
+! 	      err = AEGetDescData (&desc, *alias, size);
+! 	      HUnlock ((Handle) alias);
+! 	      if (err == noErr)
+! 		err = SetWindowProxyAlias (w, alias);
+! 	      DisposeHandle ((Handle) alias);
+! 	    }
+  	  AEDisposeDesc (&desc);
+  	}
+        if (err == noErr)
+  	{
+! 	  FRAME_FILE_NAME (f) = xmalloc (SBYTES (file_name) + 1);
+! 	  strcpy (FRAME_FILE_NAME (f), SDATA (file_name));
+  	}
+      }
+
+!   if (FRAME_FILE_NAME (f) == NULL)
+      RemoveWindowProxy (w);
+
+    UNBLOCK_INPUT;
+  }
+  #endif
+--- 1945,2024 ----
+  mac_update_proxy_icon (f)
+       struct frame *f;
+  {
++   OSStatus err;
+    Lisp_Object file_name =
+      XBUFFER (XWINDOW (FRAME_SELECTED_WINDOW (f))->buffer)->filename;
+    Window w = FRAME_MAC_WINDOW (f);
+!   AliasHandle alias = NULL;
+
+    BLOCK_INPUT;
+
++   err = GetWindowProxyAlias (w, &alias);
++   if (err == errWindowDoesNotHaveProxy && !STRINGP (file_name))
++     goto out;
++ 
+    if (STRINGP (file_name))
+      {
+        AEDesc desc;
++ #ifdef MAC_OSX
++       FSRef fref;
++ #else
++       FSSpec fss;
++ #endif
++       Boolean changed;
+        Lisp_Object encoded_file_name = ENCODE_FILE (file_name);
+
+! #ifdef MAC_OSX
+!       err = AECoercePtr (TYPE_FILE_NAME, SDATA (encoded_file_name),
+! 			 SBYTES (encoded_file_name), typeFSRef, &desc);
+! #else
+        SetPortWindowPort (w);
+        err = AECoercePtr (TYPE_FILE_NAME, SDATA (encoded_file_name),
+! 			 SBYTES (encoded_file_name), typeFSS, &desc);
+! #endif
+        if (err == noErr)
+  	{
+! #ifdef MAC_OSX
+! 	  err = AEGetDescData (&desc, &fref, sizeof (FSRef));
+! #else
+! 	  err = AEGetDescData (&desc, &fss, sizeof (FSSpec));
+! #endif
+  	  AEDisposeDesc (&desc);
+  	}
+        if (err == noErr)
+  	{
+! 	  if (alias)
+! 	    {
+! #ifdef MAC_OSX
+! 	      err = FSUpdateAlias (NULL, &fref, alias, &changed);
+! #else
+! 	      err = UpdateAlias (NULL, &fss, alias, &changed);
+! #endif
+! 	    }
+! 	  if (err != noErr || alias == NULL)
+! 	    {
+! 	      if (alias)
+! 		DisposeHandle ((Handle) alias);
+! #ifdef MAC_OSX
+! 	      err = FSNewAliasMinimal (&fref, &alias);
+! #else
+! 	      err = NewAliasMinimal (&fss, &alias);
+! #endif
+! 	      changed = true;
+! 	    }
+  	}
++       if (err == noErr)
++ 	if (changed)
++ 	  err = SetWindowProxyAlias (w, alias);
+      }
+
+!   if (alias)
+!     DisposeHandle ((Handle) alias);
+! 
+!   if (err != noErr || !STRINGP (file_name))
+      RemoveWindowProxy (w);
+
++  out:
+    UNBLOCK_INPUT;
+  }
+  #endif
