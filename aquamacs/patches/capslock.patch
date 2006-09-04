@@ -1,13 +1,13 @@
 Index: src/macterm.c
 ===================================================================
 RCS file: /sources/emacs/emacs/src/macterm.c,v
-retrieving revision 1.180
-diff -c -r1.180 macterm.c
-*** src/macterm.c	16 Jun 2006 08:08:59 -0000	1.180
---- src/macterm.c	18 Jun 2006 11:24:44 -0000
+retrieving revision 1.186
+diff -c -r1.186 macterm.c
+*** src/macterm.c	27 Aug 2006 07:09:52 -0000	1.186
+--- src/macterm.c	4 Sep 2006 15:04:26 -0000
 ***************
-*** 8470,8475 ****
---- 8470,8478 ----
+*** 8507,8512 ****
+--- 8507,8515 ----
   /* Modifier associated with the function key, or nil to ignore. */
   Lisp_Object Vmac_function_modifier;
   
@@ -18,25 +18,25 @@ diff -c -r1.180 macterm.c
      a three button mouse */
   Lisp_Object Vmac_emulate_three_button_mouse;
 ***************
-*** 8497,8503 ****
+*** 8534,8540 ****
   
   /* Apple Events */
   #if USE_CARBON_EVENTS
-! static Lisp_Object Qhicommand;
+! static Lisp_Object Qhi_command;
   #ifdef MAC_OSX
   extern Lisp_Object Qwindow;
   static Lisp_Object Qtoolbar_switch_mode;
---- 8500,8506 ----
+--- 8537,8543 ----
   
   /* Apple Events */
   #if USE_CARBON_EVENTS
-! static Lisp_Object Qhicommand, Qappevent;
+! static Lisp_Object Qhi_command, Qappevent;
   #ifdef MAC_OSX
   extern Lisp_Object Qwindow;
   static Lisp_Object Qtoolbar_switch_mode;
 ***************
-*** 8588,8593 ****
---- 8591,8601 ----
+*** 8701,8706 ****
+--- 8704,8714 ----
       if (INTEGERP(val))
         result |= XUINT(val);
     }
@@ -49,8 +49,8 @@ diff -c -r1.180 macterm.c
   
     return result;
 ***************
-*** 9278,9283 ****
---- 9286,9359 ----
+*** 9399,9404 ****
+--- 9407,9480 ----
   }
   
   static pascal OSStatus
@@ -126,7 +126,7 @@ diff -c -r1.180 macterm.c
        EventHandlerCallRef next_handler;
        EventRef event;
 ***************
-*** 9611,9617 ****
+*** 9735,9741 ****
   	    mapped_modifiers =
   	      (NILP (Vmac_control_modifier) ? 0 : controlKey)
   	      | (NILP (Vmac_option_modifier) ? 0 : optionKey)
@@ -134,7 +134,7 @@ diff -c -r1.180 macterm.c
   #ifdef MAC_OSX
   	    mapped_modifiers |=
   	      (NILP (Vmac_function_modifier) ? 0 : kEventKeyModifierFnMask);
---- 9687,9694 ----
+--- 9811,9818 ----
   	    mapped_modifiers =
   	      (NILP (Vmac_control_modifier) ? 0 : controlKey)
   	      | (NILP (Vmac_option_modifier) ? 0 : optionKey)
@@ -144,8 +144,8 @@ diff -c -r1.180 macterm.c
   	    mapped_modifiers |=
   	      (NILP (Vmac_function_modifier) ? 0 : kEventKeyModifierFnMask);
 ***************
-*** 11400,11405 ****
---- 11477,11483 ----
+*** 11458,11463 ****
+--- 11535,11541 ----
   #endif	/* MAC_OSX */
   
     init_command_handler ();
@@ -154,18 +154,18 @@ diff -c -r1.180 macterm.c
     init_menu_bar ();
   
 ***************
-*** 11450,11455 ****
---- 11528,11534 ----
+*** 11508,11513 ****
+--- 11586,11592 ----
   
   #if USE_CARBON_EVENTS
-    Qhicommand   = intern ("hicommand");    staticpro (&Qhicommand);
+    Qhi_command   = intern ("hi-command");    staticpro (&Qhi_command);
 +   Qappevent   = intern ("application-event");    staticpro (&Qappevent);
   #ifdef MAC_OSX
     Qtoolbar_switch_mode = intern ("toolbar-switch-mode");
     staticpro (&Qtoolbar_switch_mode);
 ***************
-*** 11537,11549 ****
---- 11616,11640 ----
+*** 11603,11615 ****
+--- 11682,11706 ----
   respective modifier.  The default is `meta'.  */);
     Vmac_command_modifier = Qmeta;
   
