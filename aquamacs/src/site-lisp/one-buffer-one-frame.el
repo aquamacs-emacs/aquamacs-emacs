@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.48 2006/04/06 16:18:47 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.49 2006/09/04 14:57:07 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -384,10 +384,16 @@ the current window is switched to the new buffer."
       ;; we need to do it here, because raise-frame / select frame are
       ;; ineffective from within walk-windows
       (select-frame-set-input-focus (window-frame window-to-select))
-
+      
       ;(raise-frame (switch-frame (window-frame window-to-select)))
       ;; raise-frame doesn't select it  
       (select-window window-to-select)
+
+      ;; normally, the following would only happen in 
+      ;; the next top-level event loop (assumption)
+      ;; but because the normal switch-to-buffer does it right away
+      ;; we should do it manually.
+      (set-buffer (window-buffer window-to-select))
       (setq ad-return-value (current-buffer)))
   (aquamacs-set-style))))
 
