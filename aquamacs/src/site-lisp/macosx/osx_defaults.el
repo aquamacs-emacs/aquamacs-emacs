@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.49 2006/06/23 21:20:18 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.50 2006/10/09 21:33:58 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -103,9 +103,9 @@
   (add-hook 'after-save-hook 'mac-set-creator-code-for-file)
 					
 
-
-  (require 'aquamacs-mule)              ; Language settings
-
+  (unless (boundp 'unicode-emacs)
+    (require 'aquamacs-mule)              ; Language settings
+    )
 
   ;; do this early, so we can override settings
   (require 'aquamacs-frame-setup)
@@ -213,7 +213,7 @@
 	  ;; this should work with and without one-buffer-one-frame
 	  (switch-to-buffer "*scratch*"))))
 
-    (when (boundp 'mac-apple-event-map)
+    (when (and (boundp 'mac-apple-event-map) mac-apple-event-map)
       (define-key mac-apple-event-map [core-event reopen-application ]
 	'aquamacs-de-iconify-some-frame))
   ) ;; aquamacs-osx-defaults-setup
