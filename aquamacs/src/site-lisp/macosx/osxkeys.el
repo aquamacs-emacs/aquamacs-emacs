@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.62 2006/06/18 17:46:50 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.63 2006/10/09 21:37:57 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -882,7 +882,8 @@ default."
     (define-key map `[(,osxkeys-command-key z)] 'undo)
     (define-key map `[(,osxkeys-command-key shift z)] 'redo)
     (define-key map `[(,osxkeys-command-key \`)] 'other-frame)
-    (define-key map `[(,osxkeys-command-key t)] 'mac-font-panel-mode)
+    (if (fboundp 'mac-font-panel-mode)
+	(define-key map `[(,osxkeys-command-key t)] 'mac-font-panel-mode))
 
     map)
   )
