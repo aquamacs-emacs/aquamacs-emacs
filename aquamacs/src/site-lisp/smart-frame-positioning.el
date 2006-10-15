@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.26 2006/03/25 15:48:35 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.27 2006/10/15 14:29:42 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -388,6 +388,7 @@ The file is specified in `smart-frame-position-file'."
   (let ((file (expand-file-name save-frame-position-file)))
     (save-excursion
       (set-buffer (get-buffer-create " *Saved Positions*"))
+      (setq buffer-file-coding-system 'utf-8) ;; avoid asking questions
       (delete-region (point-min) (point-max))
       (let ((print-length nil)
             (print-level nil))
