@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.42 2006/04/20 23:01:55 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.43 2006/10/16 22:48:57 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -150,20 +150,18 @@ right there as well."
 ;; display a file dialogue only if menu was used w/ mouse
  
 
-(defun mac-key-open-file (filename &optional wildcards)
+(defun mac-key-open-file (filename)
   "Open a file, selecting file by dialog"
   (interactive
    (let ((last-nonmenu-event nil))
      (find-file-read-args "Open file: " t)))
-  (find-file-existing filename wildcards)
-  )
- (defun mac-key-open-file-other-frame (filename &optional wildcards)
+  (find-file-existing filename))
+(defun mac-key-open-file-other-frame (filename)
   "Open a file in new frame, selecting file by dialog"
   (interactive
    (let ((last-nonmenu-event nil))
      (find-file-read-args "Open file: " t)))
-  (find-file-other-frame filename wildcards)
-  )
+  (find-file-other-frame filename))
 
 (defun mac-key-save-file ()
   (interactive)
