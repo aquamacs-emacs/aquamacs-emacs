@@ -1,0 +1,1484 @@
+\input texinfo   @c -*-texinfo-*-
+
+@comment $Id: elib.texi,v 1.1 2006/12/01 23:31:41 davidswelt Exp $
+@comment Documentation for the GNU Emacs lisp library, Elib
+@comment Copyright (C) 1991, 1992 Free Software Foundation
+
+@comment This file is part of the GNU Emacs lisp library, Elib.
+
+@comment GNU Elib is free software; you can redistribute it and/or modify
+@comment it under the terms of the GNU General Public License as published by
+@comment the Free Software Foundation; either version 2, or (at your option)
+@comment any later version.
+
+@comment GNU Elib is distributed in the hope that it will be useful,
+@comment but WITHOUT ANY WARRANTY; without even the implied warranty of
+@comment MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+@comment GNU General Public License for more details.
+
+@comment You should have received a copy of the GNU General Public License
+@comment along with GNU Emacs; see the file COPYING.  If not, write to
+@comment the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
+@setfilename elib.info
+@settitle Elib - The Emacs Lisp Library
+@setchapternewpage odd
+@syncodeindex fn cp
+     
+@ifinfo
+Copyright @copyright{} 1991, 1992 Free Software Foundation
+@end ifinfo
+     
+@comment The titlepage section does not appear in the Info file.
+@titlepage
+@sp 4
+@comment The title is printed in a large font.
+@center @titlefont{User's Guide}
+@sp
+@center @titlefont{to}
+@sp
+@center @titlefont{Elib - The Emacs Lisp Library}
+@sp 2
+@center version 1.0
+@c --version--
+@sp 3
+@center Inge Wallin
+@sp 3
+@center last updated 10 dec 1995
+@c --date--
+
+@comment  The following two commands start the copyright page
+@comment  for the printed manual.  This will not appear in the Info file.
+@page
+@vskip 0pt plus 1filll
+Copyright @copyright{} 1991, 1992 Free Software Foundation
+
+Permission is granted to make and distribute verbatim copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies.
+
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions that the section entitled ``GNU ELIB GENERAL
+PUBLIC LICENSE'' is included exactly as in the original, and provided
+that the entire resulting derived work is distributed under the terms of
+a permission notice identical to this one.
+
+Permission is granted to copy and distribute translations of this manual
+into another language under the above conditions for modified versions,
+except that the section entitled ``GNU ELIB GENERAL PUBLIC LICENSE'' may
+be included in a translation approved by the author instead of in the
+original English.
+@end titlepage
+
+@comment ================================================================
+@comment                   The real text starts here
+@comment ================================================================
+
+@ifinfo
+@node    Top, License information, (dir), (dir)
+@comment node-name, next,          previous, up
+@cindex Introduction
+
+
+This manual describes Elib, the GNU emacs lisp library version 1.0.
+@c --version--
+The functions and data types in Elib are supposed to be a common
+base for all kinds of other elisp packages and are not programs, modes
+or packages of their own.
+
+@end ifinfo
+@menu
+* License information::         Information about terms for copying Elib.
+* What is Elib?::               What is Elib?
+* Container data types::        Data types which can contain other data.
+* Cookie package::              The Cookie package.
+* String functions::            A number of string functions.
+* Read functions::              Read data from the minibuffer.
+
+* Future enhancements::         Future enhancements of Elib.
+* Reporting bugs::              Where do you report a bug you have found?
+
+* Node index::                  Index over important all the nodes 
+                                  in this manual.
+@end menu
+
+@node   License information, What is Elib?, Top, Top
+@comment  node-name,    next,   previous,       up
+@include gpl.texi
+
+@node     What is Elib?, Container data types, License information, Top
+@comment  node-name,     next, previous, up
+@chapter What is Elib?
+@cindex What is Elib?
+@cindex Elib, introduction
+@cindex Introduction to Elib
+@cindex Require
+
+Elib, the GNU Emacs lisp library, is a collection of elisp
+functions which you can use as parts of your own elisp programs.
+Each file contains functions which have something in common, e.g.
+they handle a certain data type.  
+
+Elib is designed to be both as efficient and as easy to use as
+possible.  Each file in Elib uses the elisp function @code{provide}
+to tell emacs when it has been loaded.  To use the functions in
+the file @code{foo}, you just have to put a line such as:  
+
+@example
+(require 'foo)
+@end example
+
+into your own elisp file.  This will cause emacs to load the file
+@code{foo.elc} and evaluate the functions in it.  This, of course,
+requires that your system manager has installed Elib properly on your
+system.
+
+@menu
+* Contributors::                Contributors to GNU Elib.
+* Archives::                    Where can I get a copy of Elib?
+@end menu
+
+@node     Contributors, Archives, What is Elib?, What is Elib?
+@comment  node-name,  next,  previous,  up
+@section Contributors to Elib
+@cindex Contributors
+@cindex Inge Wallin
+@cindex Wallin, Inge
+@cindex Kremer, Sebastian
+@cindex Sebastian Kremer
+@cindex Bellman, Thomas
+@cindex Thomas Bellman
+@cindex Cederqvist, Per
+@cindex Per Cederqvist
+
+The following persons have made contributions to GNU Elib.
+
+@itemize @bullet
+@item
+Inge Wallin wrote most of the otherwise unattributed functions in
+Elib as well as all documentation.
+
+@item
+Sebastian Kremer contributed the string functions.
+
+@item
+Thomas Bellman wrote some of the code for AVL trees.
+
+@item
+Per Cederqvist wrote the cookie package and the doubly linked list.  The
+first design of @file{cookie.el} was made by Inge Wallin.
+@end itemize
+
+
+@node     Archives,  , Contributors, What is Elib?
+@comment  node-name,  next,  previous,  up
+@section Where can I get Elib?
+@cindex sites
+@cindex Archives
+@cindex Ftp
+@cindex Lysator
+@cindex ftp.lysator.liu.se
+
+There will probably be a number of sites archiving Elib.
+Currently the latest release can always be fetched via anonymos
+ftp from @code{ftp.lysator.liu.se} 
+in @file{pub/emacs}.
+@c --site--
+
+@node     Container data types, Cookie package, What is Elib?, Top
+@comment  node-name,  next,  previous,  up
+@chapter Container Data Types
+@cindex Container Data Types
+@cindex Conventions
+
+Container data types are data types which are used to hold and organize
+other data.  Since lisp is a dynamically typed language, any container
+data type can hold any other data type or a mix of other data types.
+This is contrary to the case for @code{C} or @code{C++} where all data in
+a typical container must be of the same type.
+
+As a convention do all names of the functions handling a certain
+container data type begin in @code{<type>-}, i.e. the functions 
+implementing the container data type @code{foo} all start with
+@code{foo-}. 
+
+@menu
+* Stack::                       The Stack data type.
+* Queue::                       The Queue data type.
+* Doubly Linked List::          The Doubly Linked List Data Type.
+* Binary tree::                 An ordinary binary tree.
+* AVL tree::                    A balanced binary tree (AVL tree).
+@end menu
+
+@node     Stack, Queue, Container data types, Container data types
+@comment  node-name,  next,  previous,  up
+@section The Stack Data Type
+@cindex Stack
+@cindex LIFO Stack
+@cindex stack-f
+@cindex stack-m
+
+The stack data type provides a simple LIFO stack.  There are two
+implementations of a stack in Elib, one using macros and one using
+functions.  The names of the functions/macros in the two implementations
+are the same, but the efficiency of using one or the other vary greatly
+under different circumstances.
+
+The implementation using macros should be used when you want to
+byte-compile your own elisp program.  This will be most efficient since
+byte-compiling an elisp function using macros has the same effect as
+using inline code in @code{C}.
+
+To use the stack data type, put the line
+
+@example
+(require 'stack-f)
+@end example
+
+in your own elisp source file if you want to use the implementation
+using functions or
+
+@example
+(require 'stack-m)
+@end example
+
+if you want to use the implementation using macros.  This is the only
+difference between them, so it is easy to switch between them during
+debugging.
+
+The following functions are provided by the stack:
+
+@table @code
+@item (stack-create)
+@findex stack-create
+Create a new empty stack.
+
+@item (stack-p stack)
+@findex stack-p
+Return @code{t} if @var{stack} is a stack, otherwise return @code{nil}.
+
+@item (stack-push stack element)
+@findex stack-push
+Push @var{element} onto @var{stack}.
+
+@item (stack-pop stack)
+@findex stack-pop
+Remove the topmost element from @var{stack} and return it. If
+@var{stack} is empty, return @code{nil}.
+
+@item (stack-empty stack)
+@findex stack-empty
+Return @code{t} if @var{stack} is empty, otherwise return @code{nil}.
+
+@item (stack-top stack)
+@findex stack-top
+Return the top element of @var{stack}, but don't remove it from the stack.
+Return @code{nil} if @var{stack} is empty.
+
+@item (stack-nth stack n)
+@findex stack-nth
+Return the @var{n}th element of @var{stack} where the top stack element
+has number 0.  If @var{stack} is not that long, return @code{nil}.  The
+element is not removed from the stack.
+
+@item (stack-all stack)
+@findex stack-all
+Return a list of all entries in @var{stack} with the topmost element first.
+
+@item (stack-copy stack)
+@findex stack-copy
+Return a copy of @var{stack}.  All entries in @var{stack} are also copied.
+
+@item (stack-length stack)
+@findex stack-length
+Return the number of elements in @var{stack}.
+
+@item (stack-clear stack)
+@findex stack-clear
+Remove all elements from @var{stack}.
+
+@end table
+
+
+@node     Queue, Doubly Linked List, Stack, Container data types
+@comment  node-name,  next,  previous,  up
+@section The Queue Data Type
+@cindex Queue
+@cindex FIFO Queue
+@cindex queue-f
+@cindex queue-m
+
+The queue data type provides a simple FIFO queue.  There are two 
+implementations of a queue in Elib, one using macros and one using
+functions.  The names of the functions/macros in the two implementations
+are the same, but the efficiency of using one or the other vary greatly
+under different circumstances.
+
+The implementation using macros should be used when you want to
+byte-compile your own elisp program.  This will be most efficient since
+byte-compiling an elisp function using macros has the same effect as
+using inline code in @code{C}.  
+
+To use the queue data type, put the line
+
+@example
+(require 'queue-f)
+@end example
+
+in your own elisp source file if you want to use the implementation
+using functions or
+
+@example
+(require 'queue-m)
+@end example
+
+if you want to use the implementation using macros.  This is the only
+difference between them, so it is easy to switch between them during
+debugging.
+
+Not all functions in @file{queue-m.el} are implemented as macros,
+only the short ones.  This does not make it less recommendable to use
+the macro version in your compiled code.
+
+The following functions are provided by the queue:
+
+@table @code
+@item (queue-create)
+@findex queue-create
+Create a new empty queue.
+
+@item (queue-p queue)
+@findex queue-p
+Return @code{t} if @var{queue} is a queue, otherwise return @code{nil}.
+
+@item (queue-enqueue queue element)
+@findex queue-enqueue
+Enter @var{element} last into @var{queue}.
+
+@item (queue-dequeue queue)
+@findex queue-dequeue
+Remove the first element from @var{queue} and return it.
+
+@item (queue-empty queue)
+@findex queue-empty
+Return @code{t} if @var{queue} is empty, otherwise return @code{nil}.
+
+@item (queue-first queue)
+@findex queue-first
+Return the first element of @var{queue} or @code{nil} if it is empty.  The
+element is not removed from the queue.
+
+@item (queue-nth queue n)
+@findex queue-nth
+Return the @var{n}th element of @var{queue}, where the first element of
+@var{queue} has number 0.  If the length of @var{queue} is less than
+@var{n}, return @code{nil}.  The element is not removed from the queue.
+
+@item (queue-last queue)
+@findex queue-last
+Return the last element of @var{queue} or @code{nil} if it is empty.  The
+element is not removed from the queue. 
+
+@item (queue-all queue)
+@findex queue-all
+Return a list of all elements in @var{queue}.  Return @code{nil} if
+@var{queue} is empty.  The oldest element in the queue is the first in
+the list.
+
+@item (queue-copy queue)
+@findex queue-copy
+Return a copy of @var{queue}.  All entries in @var{queue} are also copied.
+
+@item (queue-length queue)
+@findex queue-length
+Return the number of elements in @var{queue}.
+
+@item (queue-clear queue)
+@findex queue-clear
+Remove all elements from @var{queue}.
+
+@end table
+
+@node Doubly Linked List, Binary tree, Queue, Container data types
+@comment  node-name,  next,  previous,  up
+@section The Doubly Linked List Data Type
+@cindex Doubly linked list
+@cindex List, doubly linked
+@cindex dll
+
+The doubly linked list is an efficient data structure if you need to
+traverse the elements on the list in two directions, and maybe insert
+new elements in the middle of the list.  You can efficiently delete any
+element, and insert new elements, anywhere on the list.
+
+A doubly linked list (@dfn{dll} for short) consists of a number of
+@dfn{nodes}, each containing exactly one @dfn{element}.  Some of the
+functions operate directly on the elements, while some manipulate nodes.
+For instance, all of the functions that let you step forward and
+backwards in the list handle nodes.  Use the function @dfn{dll-element}
+to extract the element of a node.
+
+To use the doubly linked list provided by Elib you must put the line
+
+@example
+(require 'dll)
+@end example
+
+in your elisp source file.
+
+@menu
+* Creating a dll::              Creating a Doubly Linked List
+* Entering elements::           Entering elements in a dll
+* Accessing elements::          Accessing elements of a dll
+* Removing nodes::              Removing nodes from a dll
+* Predicates::                  Predicates on a dll
+* Maps and Filters::            Maps and Filters on a dll
+* Misc dll operations::         Miscellaneous dll operations
+* Debugging dll applications::  Debugging dll applications
+@end menu
+
+@node Creating a dll, Entering elements, Doubly Linked List, Doubly Linked List
+@comment  node-name,  next,  previous,  up
+@subsection Creating a Doubly Linked List
+
+@table @code
+@item (dll-create)
+@findex dll-create
+Create an empty doubly linked list.
+
+@item (dll-create-from-list list)
+@findex dll-create-from-list
+Given the ordinary lisp list @var{list}, create a doubly linked list
+with the same elements.
+
+@item (dll-copy dll &optional element-copy-fnc)
+@findex dll-copy
+Return a copy of the doubly linked list @var{dll}.  If optional second
+argument @var{element-copy-fnc} is non-@code{nil} it should be a
+function that takes one argument, an element, and returns a copy of it.
+If @var{element-copy-fnc} is not given the elements themselves are not
+copied.
+@end table
+
+@node Entering elements, Accessing elements, Creating a dll, Doubly Linked List
+@comment  node-name,  next,  previous,  up
+@subsection Entering elements in a dll
+
+@table @code
+@item (dll-enter-first dll element)
+@findex dll-enter-first
+Add an element first on a doubly linked list.
+
+@item (dll-enter-last dll element)
+@findex dll-enter-last
+Add an element last on a doubly linked list.
+
+@item (dll-enter-after dll node element)
+@findex dll-enter-after
+In the doubly linked list @var{dll}, insert a node containing
+@var{element} after @var{node}.
+
+@item (dll-enter-before dll node element)
+@findex dll-enter-before
+In the doubly linked list @var{dll}, insert a node containing
+@var{element} before @var{node}.
+@end table
+
+@node Accessing elements, Removing nodes, Entering elements, Doubly Linked List
+@comment  node-name,  next,  previous,  up
+@subsection Accessing elements of a dll
+
+@table @code
+@item (dll-element dll node)
+@findex dll-element
+Get the element of a @var{node} in a doubly linked list @var{dll}.
+
+@item (dll-first dll)
+@findex dll-first
+Return the first element on the doubly linked list @var{dll}.  Return
+@code{nil} if the list is empty. The element is not removed.
+
+@item (dll-nth dll n)
+@findex dll-nth
+Return the @var{n}th node from the doubly linked list @var{dll}.
+@var{n} counts from zero. If @var{dll} is not that long, @code{nil} is
+returned.  If @var{n} is negative, return the -(@var{n}+1)th last
+element.  Thus, @code{(dll-nth dll 0)} returns the first node, and
+@code{(dll-nth dll -1)} returns the last node.
+
+@item (dll-last dll)
+@findex dll-last
+Return the last element on the doubly linked list @var{dll}.  Return
+@code{nil} if the list is empty. The element is not removed.
+
+@item (dll-next dll node)
+@findex dll-next
+Return the last element on the doubly linked list @var{dll}.  Return
+@code{nil} if the list is empty. The element is not removed.
+
+@item (dll-previous dll node)
+@findex dll-previous
+Return the node before @var{node}, or @code{nil} if @var{node} is the
+first node.
+
+@item (dll-all dll)
+@findex dll-all
+Return all elements on the double linked list @var{dll} as an ordinary list.
+
+@end table
+
+@node Removing nodes, Predicates, Accessing elements, Doubly Linked List
+@comment  node-name,  next,  previous,  up
+@subsection Removing nodes from a dll
+
+@table @code
+@item (dll-delete dll node)
+@findex dll-delete
+Delete @var{node} from the doubly linked list @var{dll}.  Return the
+element of @var{node}.
+
+@item (dll-delete-first dll)
+@findex dll-delete-first
+Delete the first @var{node} from the doubly linked list @var{dll}.
+Return the element. Returns @code{nil} if @var{dll} was empty.
+
+@item (dll-delete-last dll)
+@findex dll-delete-last
+Delete the last @var{node} from the doubly linked list @var{dll}.
+Return the element. Returns @code{nil} if @var{dll} was empty.
+
+@item (dll-clear dll)
+@findex dll-clear
+Clear the doubly linked list @var{dll}, i.e. make it completely empty.
+@end table
+
+@node Predicates, Maps and Filters, Removing nodes, Doubly Linked List
+@comment  node-name,  next,  previous,  up
+@subsection Predicates on a dll
+
+@table @code
+@item (dll-p object)
+@findex dll-p
+Return @code{t} if @var{object} is a doubly linked list, otherwise return
+@code{nil}.
+
+@item (dll-empty dll)
+@findex dll-empty
+Return @code{t} if the doubly linked list @var{dll} is empty, @code{nil}
+otherwise.
+@end table
+
+@node Maps and Filters, Misc dll operations, Predicates, Doubly Linked List
+@comment  node-name,  next,  previous,  up
+@subsection Maps and Filters on a dll
+
+@table @code
+@item (dll-map map-function dll)
+@findex dll-map
+Apply @var{map-function} to all elements in the doubly linked list @var{dll}.
+The function is applied to the first element first.
+
+@item (dll-map-reverse map-function dll)
+@findex dll-map-reverse
+Apply @var{map-function} to all elements in the doubly linked list
+@var{dll}.  The function is applied to the last element first.
+
+@item (dll-filter dll predicate)
+@findex dll-filter
+Remove all elements in the doubly linked list @var{dll} for which
+@var{predicate} returns @code{nil}.
+@end table
+
+@node Misc dll operations, Debugging dll applications, Maps and Filters, Doubly Linked List
+@comment  node-name,  next,  previous,  up
+@subsection Miscellaneous dll operations
+
+@table @code
+@item (dll-length dll)
+@findex dll-length
+Returns the number of elements in the doubly linked list @var{dll}.
+
+@item (dll-sort dll predicate)
+@findex dll-sort
+Sort the doubly linked list @var{dll}, stably, comparing elements using
+@var{predicate}.  Returns the sorted list. @var{dll} is modified by side
+effects.  @var{predicate} is called with two elements of @var{dll}, and
+should return @code{t} if the first element is ``less'' than the second.
+@end table
+
+@node Debugging dll applications,  , Misc dll operations, Doubly Linked List
+@comment  node-name,  next,  previous,  up
+@subsection Debugging dll applications
+@cindex Debugging dll
+@cindex Doubly linked lists, debugging
+@cindex dll-debug
+@cindex Circular lists
+@cindex Error: circular lists
+
+The data structure used by the dll package contains both forward and
+backward pointers.  The primitives in Emacs, such as @code{print}, know
+nothing about dlls, so when Emacs tries to print out a dll it will think
+that it found a circular structure.  Fortunately it detects this 
+situation and gives an error message, instead of getting stuck in an
+eternal loop.
+
+The error message can be quite annoying when you are developing an
+application that uses dlls.  Suppose your code has an error, and you
+type @samp{(setq debug-on-error t)} to try to figure out exactly what
+the error is.  If any function in the backtrace has a dll as an
+argument, Emacs will abort printing the entire backtrace and only
+respond with a "Back at top level" message (or something similar,
+depending on exactly what you are doing) in the echo area.
+
+There are two solutions to this problem: patch your emacs so that it
+detects circular structures (there have been patches for this floating
+around the net) or use @file{dll-debug.el}.
+
+The file @file{dll-debug.el} implements all of the functionality that
+are present in @file{dll.el}, but it uses a normal, singly linked list
+instead.  This makes some operations, like @samp{dll-previous},
+dreadfully slow, but it makes it possible to debug dll applications.
+@file{dll-debug.el} also has more built-in sanity tests than
+@file{dll.el}.
+
+@strong{NOTE:} To use the debug package, you must load the library
+@file{dll-debug} before you load any of the libraries (such as cookie)
+or your program that use dll.  You must also make sure that you don't
+load any byte-compiled version of any file that was compiled with the
+normal dll library.  Since it contains some macros very strange results
+will occur otherwise...
+
+When the debug package is loaded, you simply run your code normally,
+and any bugs should be easier to trace.
+
+@node     Binary tree, AVL tree, Doubly Linked List, Container data types
+@comment  node-name,  next,  previous,  up
+@section The Binary Tree Data Type
+@cindex Binary tree
+@cindex bintree
+
+The binary tree is sometimes an efficient way to store data.  When a
+binary tree is created a compare function is given to the create
+function (@code{bintree-create}).  This function is used throughout
+all data entry and deletions into and out of the tree.
+
+To use the binary tree in Elib you must put the line 
+
+@example
+(require 'bintree)
+@end example
+
+in your elisp source file.
+
+The following functions are provided by the binary tree in the library:
+
+@table @code
+@item (bintree-create compare-function)
+@findex bintree-create
+Create a new empty binary tree.  The argument @var{compare-function} is a
+function which compares two instances of the data type which is to be
+entered into the tree.  The call @code{(compare-function data1 data2)}
+should return non-@code{nil} if @code{data1} is less than @code{data2},
+and @code{nil} otherwise.
+
+@item (bintree-p tree)
+@findex bintree-p
+Return @code{t} if @var{tree} is an bintree, otherwise return @code{nil}.
+
+@item (bintree-compare-function tree)
+@findex bintree-compare-function
+Return @code{compare-function} given to @code{bintree-create} when
+@var{tree} was created.
+
+@item (bintree-empty tree)
+@findex bintree-empty
+Return @code{t} if @var{tree} is empty, otherwise return @code{nil}.
+
+@item (bintree-enter tree data)
+@findex bintree-enter
+Enter @var{data} into @var{tree}.  If there already is a data element
+which is considered equal to @var{data} by @code{compare-function} given
+to @code{bintree-create}, the new element will replace the old one in
+the tree.
+
+@item (bintree-delete tree data)
+@findex bintree-delete
+Delete the element which is considered equal to @var{data} by
+@code{compare-function} given to @code{bintree-create}.  If there
+is no matching element within the tree, nothing is done to the tree.
+
+@item (bintree-member tree data)
+@findex bintree-member
+Return the element in @var{tree} which is considered equal to @var{data} by
+@code{compare-function} given to @code{bintree-create}.  If there
+is no such element in the tree, return @code{nil}.
+
+@item (bintree-map map-function tree)
+@findex bintree-map
+Apply @var{map-function} to all elements in @var{tree}.  The function is applied in
+the order in which the tree is sorted.
+
+@item (bintree-first tree)
+@findex bintree-first
+Return the first element of @var{tree}, i.e. the one who is considered first
+by @code{compare-function} given to @code{bintree-create}.  If the
+tree is empty, return @code{nil}.
+
+@item (bintree-last tree)
+@findex bintree-last
+Return the last element of @var{tree}, i.e. the one who is considered last
+by @code{compare-function} given to @code{bintree-create}.  If the
+tree is empty, return @code{nil}.
+
+@item (bintree-copy tree)
+@findex bintree-copy
+Return a copy of @var{tree}.
+
+@item (bintree-flatten tree)
+@findex bintree-flatten
+Return a sorted list containing all elements of @var{tree}.
+
+@item (bintree-size tree)
+@findex bintree-size
+Return the number of elements in @var{tree}.
+
+@item (bintree-clear tree)
+@findex bintree-clear
+Clear @var{tree}, i.e. make it totally empty.
+
+@end table
+
+
+@node     AVL tree,  , Binary tree, Container data types
+@comment  node-name,  next,  previous,  up
+@section The AVL Tree Data Type
+@cindex AVL tree
+@cindex Balanced binary tree
+@cindex Binary tree, balanced
+@cindex avltree
+
+The AVL tree data types provides a balanced binary tree.  The tree will
+remain balanced throughout its entire life time, regardless of in which
+order elements are entered into or deleted from the tree.
+
+Although an AVL tree is not perfectly balanced, it has almost the same
+performance as if it was.  The definition of an AVL tree is that the
+difference in depth of the two branches of a particular node is at most
+1.  This criterium is enough to make the performance of searching in an
+AVL tree very close to a perfectly balanced tree, but will simplify the
+entering and deleting of data significantly.
+
+All data that is entered into an AVL tree should be of the same type.
+If they are not, there are no way to compare two elements and this is
+essential for entering and deleting data from the tree.  When a tree is
+created, a compare function is given to the create function.  This
+function is used throughout the life of the tree in all subsequent
+insertions and deletions.
+
+To use the Elib AVL tree, you must put the line
+
+@example
+(require 'avltree)
+@end example
+
+in your elisp source file.
+
+The following functions are provided by the AVL tree in the library:
+
+@table @code
+@item (avltree-create compare-function)
+@findex avltree-create
+Create a new empty AVL tree.  The argument @var{compare-function} is a
+function which compares two instances of the data type which is to be
+entered into the tree.  The call @code{(compare-function data1 data2)}
+should return non-@code{nil} if @code{data1} is less than @code{data2},
+and @code{nil} otherwise.
+
+@item (avltree-p tree)
+@findex avltree-p
+Return @code{t} if @var{tree} is an avltree, otherwise return @code{nil}.
+
+@item (avltree-compare-function tree)
+@findex avltree-compare-function
+Return @code{compare-function} given to @code{avltree-create} when
+@var{tree} was created.
+
+@item (avltree-empty tree)
+@findex avltree-empty
+Return @code{t} if @var{tree} is empty, otherwise return @code{nil}.
+
+@item (avltree-enter tree data)
+@findex avltree-enter
+Enter @var{data} into @var{tree}.  If there already is a data element
+which is considered equal to @var{data} by @code{compare-function} given to
+@code{avltree-create}, the new element will replace the old one in the
+tree.
+
+@item (avltree-delete tree data)
+@findex avltree-delete
+Delete the element which is considered equal to @var{data} by
+@code{compare-function} given to @code{avltree-create}.  If there
+is no matching element within the tree, nothing is done to the tree.
+
+@item (avltree-member tree data)
+@findex avltree-member
+Return the element in @var{tree} which is considered equal to @var{data} by
+@code{compare-function} given to @code{avltree-create}.  If there
+is no such element in the tree, return @code{nil}.
+
+@item (avltree-map map-function tree)
+@findex avltree-map
+Apply @var{map-function} to all elements in @var{tree}.  The function is
+applied in the order in which the tree is sorted.
+
+@item (avltree-first tree)
+@findex avltree-first
+Return the first element of @var{tree}, i.e. the one who is considered first
+by @code{compare-function} given to @code{avltree-create}.  If the
+tree is empty, return @code{nil}.
+
+@item (avltree-last tree)
+@findex avltree-last
+Return the last element of @var{tree}, i.e. the one who is considered last
+by @code{compare-function} given to @code{avltree-create}.  If the
+tree is empty, return @code{nil}.
+
+@item (avltree-copy tree)
+@findex avltree-copy
+Return a copy of @var{tree}.
+
+@item (avltree-flatten tree)
+@findex avltree-flatten
+Return a sorted list containing all elements of @var{tree}.
+
+@item (avltree-size tree)
+@findex avltree-size
+Return the number of elements in @var{tree}.
+
+@item (avltree-clear tree)
+@findex avltree-clear
+Clear @var{tree}, i.e. make it totally empty.
+
+@end table
+
+@node Cookie package, String functions, Container data types, Top
+@comment  node-name,  next,  previous,  up
+@chapter The Cookie package---nodal data in a buffer
+@cindex Cookie
+@cindex Nodal data
+
+If you want to have structured nodal data in a buffer, the cookie
+package can be a help to you.
+
+Cookie is a package that implements a connection between a
+dll (a doubly linked list) and the contents of a buffer.
+Possible uses are @code{dired} (have all files in a list, and show them),
+@code{buffer-list}, @code{kom-prioritize} (in the LysKOM elisp client) and
+others.  The CVS control package @file{pcl-cvs.el} uses @file{cookie.el}.
+
+@menu
+* Cookie terminology::          Introduction to cookies.
+* Cookie conventions::          Coding conventions used in the cookie package.
+* Collection::                  Manipulating the entire collection.
+* Inserting cookies::           Inserting cookies in the collection.
+* Tins and cookies::            Tins and cookies.
+* Deleting cookies::            Deleting cookies.
+* Collection as a DLL::         Treating the collection as a 
+                                  doubly linked list.
+* Scanning the list::           Scanning the list.
+* In the buffer::               Operations that affect the buffer.
+* Debugging cookie applications::  Debugging cookie applications
+@end menu
+
+@node Cookie terminology, Cookie conventions, Cookie package, Cookie package
+@comment  node-name,  next,  previous,  up
+@section Introduction to cookie terminology
+@cindex Cookie definitions
+@cindex Collection
+@cindex Tin
+
+The cookie package uses its own terminology.  Here are some important
+definitions.
+
+@table @dfn
+@item cookie
+A @dfn{cookie} can be any lisp object.  When you use the cookie
+package you specify a pretty-printer, a function that inserts
+a printable representation of the cookie in the buffer.
+
+@item collection
+
+A @dfn{collection} consists of a doubly linked list of
+cookies, a header, a footer and a pretty-printer.  It is
+displayed at a certain point in a certain buffer.  (The
+buffer and point are selected when the collection is
+created).  The header and the footer are constant strings.
+They appear before and after the cookies.  (Currently,
+once set, they can not be changed).
+
+@item tin
+A @dfn{tin} is an object that contains one cookie.  There
+are functions in this package that given a tin extracts
+the cookie, or gives the next or previous tin.  (All tins
+are linked together in a doubly linked list.  The
+previous tin is the one that appears before the other in
+the buffer.)  You should not do anything with a tin except
+pass it to the functions in this package.
+
+@end table
+
+Cookie does not affect the mode of the buffer in any way.
+It merely makes it easy to connect an underlying data
+representation to the buffer contents.
+
+A collection is a very dynamic thing.  You can easily add or
+delete cookies.  You can sort all cookies in a collection (you
+have to supply a function that compares two cookies).  You can
+apply a function to all cookies in a collection, etc, etc.
+
+Remember that a cookie can be anything.  Your imagination is the
+limit!  It is even possible to have another collection as a
+cookie.  In that way some kind of tree hierarchy can be created.
+
+@node Cookie conventions, Collection, Cookie terminology, Cookie package
+@comment  node-name,  next,  previous,  up
+@section Coding conventions used in the cookie package
+@cindex Cookie conventions
+@cindex Prefixes
+
+All functions that are intended for external use begin
+with one of the prefixes @samp{cookie-},
+@samp{collection-} or @samp{tin-}.  The prefix
+@samp{elib-} is used for internal functions
+and macros.  Currently, no global or buffer-local
+variables are used.
+
+Many functions operate on tins instead of cookies.  For
+most functions, the prefix used should help tell which
+kind of object the function uses.
+
+Most doc-strings contains an "Args:" line that lists the
+arguments.
+
+@node Collection, Inserting cookies, Cookie conventions, Cookie package
+@comment  node-name,  next,  previous,  up
+@section Manipulating the entire collection
+
+@table @code
+@item (collection-create buffer pretty-printer &optional header footer pos)
+@findex collection-create
+Create a collection that is displayed in @var{buffer}.
+@var{buffer} may be a buffer or a buffer name. It is created if
+it does not exist.
+
+@var{pretty-printer} should be a function that takes one
+argument, a cookie, and inserts a string representing it
+in the buffer (at point). The string @var{pretty-printer}
+inserts may be empty or span several lines. A trailing
+newline will always be inserted automatically. The
+@var{pretty-printer} should use @code{insert}, and not
+@code{insert-before-markers}.
+
+Optional third argument @var{header} is a string that will
+always be present at the top of the collection.
+@var{header} should end with a newline.  Optionaly fourth
+argument @var{footer} is similar, and will always be
+inserted at the bottom of the collection.
+
+Optional fifth argument @var{pos} is a buffer position,
+specifying where the collection will be inserted.  It
+defaults to the begining of the buffer.  @var{pos} will probably default
+to the current value of @code{(point)} in future releases of Elib, so
+you should not depend on this default in cases where it matters.
+
+@item (collection-empty collection)
+@findex collection-empty
+Return true if there are no cookies in @var{collection}.
+
+@item (collection-length collection)
+@findex collection-length
+Return the number of cookies in @var{collection}.
+
+@item (collection-list-cookies collection)
+@findex collection-list-cookies
+Return a list of all cookies in @var{collection}.
+@end table
+
+@node Inserting cookies, Tins and cookies, Collection, Cookie package
+@comment  node-name,  next,  previous,  up
+@section Inserting cookies in the collection
+
+These functions can be used to insert one or more cookies
+into a collection.  The printed representation will
+immediately and automatically be updated by the cookie
+package.  (It will call the pretty-printer that was
+specified to @code{collection-create}).
+
+@table @code
+@item (cookie-enter-first collection cookie)
+@findex cookie-enter-first
+Enter @var{cookie} first in the cookie collection @var{collection}.
+
+@item (cookie-enter-last collection cookie)
+@findex cookie-enter-last
+Enter @var{cookie} last in the cookie collection @var{collection}.
+
+@item (cookie-enter-after-tin collection tin cookie)
+@findex cookie-enter-after-tin
+Enter @var{cookie} into @var{collection}, immediately
+after @var{tin}.
+
+@item (cookie-enter-before-tin collection tin cookie)
+@findex cookie-enter-before-tin
+Enter @var{cookie} into @var{collection}, immediately
+before @var{tin}.
+
+@item (collection-append-cookies (collection cookie-list))
+@findex collection-append-cookies
+Insert all cookies in the list @var{cookie-list} last in
+@var{collection}.
+@end table
+
+@node Tins and cookies, Deleting cookies, Inserting cookies, Cookie package
+@comment  node-name,  next,  previous,  up
+@section Tins and cookies
+
+@table @code
+@item (tin-cookie collection tin)
+@findex tin-cookie
+This function can be used to extract a cookie from
+@var{tin}.  The collection that @var{tin} is present in
+must also be specified as @var{collection}.
+@end table
+
+@node Deleting cookies, Collection as a DLL, Tins and cookies, Cookie package
+@comment  node-name,  next,  previous,  up
+@section Deleting cookies
+
+There are a couple of different ways to delete cookies
+from the collection.
+
+@table @code
+@item (tin-delete collection tin)
+@findex tin-delete
+Delete @var{tin} from @var{collection}. The cookie that is
+stored in @var{tin} is returned.
+
+@item (cookie-delete-first collection)
+@findex cookie-delete-first
+Delete first cookie in @var{collection} and return it.
+Returns @code{nil} if there are no cookies left in
+@var{collection}.
+
+@item (cookie-delete-last collection)
+@findex cookie-delete-last
+Delete last cookie in @var{collection} and return it.
+Returns @code{nil} if there are no cookies left in
+@var{collection}.
+@end table
+
+The following two functions can be used to delete several
+cookies that fulfills certain criteria.
+
+@table @code
+@item (collection-filter-cookies collection predicate &rest extra-args)
+@findex collection-filter-cookies
+Remove all cookies in @var{collection} for which
+@var{predicate} returns nil.  Note that the buffer for
+@var{collection} will be current-buffer when
+@var{predicate} is called. @var{predicate} must restore
+the current buffer before it returns if it changes it.
+
+The @var{predicate} is called with @var{cookie} as its
+first argument. If any @var{extra-args} are given to
+@code{collection-filter-cookies} they will be passed
+unmodified to @var{predicate}.
+
+@item (collection-filter-tins collection predicate &rest extra-args)
+@findex collection-filter-tins
+This is like @code{collection-filter-cookies}, but
+@var{predicate} is called with a tin instead of a cookie.
+@end table
+
+And finally, a way to delete all cookies in one swift
+function call:
+
+@table @code
+@item (collection-clear collection)
+@findex collection-clear
+Remove all cookies in @var{collection}.
+@end table
+
+@node Collection as a DLL, Scanning the list, Deleting cookies, Cookie package
+@comment  node-name,  next,  previous,  up
+@section Collection as a Doubly linked list
+
+The functions in this section treat the collection as a
+doubly linked list.
+
+@table @code
+@item (tin-nth collection n)
+@findex tin-nth
+Return the @var{n}th tin.  @var{n} counts from zero.
+@code{nil} is returned if there is less than @var{n}
+cookies.  If @var{n} is negative, return the
+-(@var{n}+1)th last element.  Thus, @code{(tin-nth dll 0)}
+returns the first node, and @code{(tin-nth dll -1)}
+returns the last node.
+
+Use @code{tin-cookie} to extract the cookie from the tin (or use
+@code{cookie-nth} instead).
+
+@item (cookie-nth collection n)
+@findex cookie-nth
+Like @code{tin-nth}, but the cookie is returned instead of
+the tin.
+
+@item (tin-next collection tin)
+@findex tin-next
+Get the next tin.  Returns nil if @var{tin} is @code{nil}
+or refers to the last cookie in @var{collection}.
+
+@item (tin-previous collection tin)
+@findex tin-previous
+Get the previous tin.  Returns nil if @var{tin} is
+@code{nil} or refers to the first cookie in
+@var{collection}.
+
+@item (cookie-sort collection predicate)
+@findex cookie-sort
+Sort the cookies in @var{collection}, stably, comparing
+elements using @var{predicate}.  @var{predicate} is called
+with two cookies, and should return @samp{t} if the first
+cookie is @dfn{less} than the second.
+
+The screen representaion of the collection will refreshed after the sort
+is complete.
+
+@item (cookie-first collection)
+@findex cookie-first
+Return the first cookie in @var{collection}. The cookie is
+not removed.
+
+@item (cookie-last collection)
+@findex cookie-last
+Return the last cookie in @var{collection}. The cookie is
+not removed.
+@end table
+
+@node Scanning the list, In the buffer, Collection as a DLL, Cookie package
+@comment  node-name,  next,  previous,  up
+@section Scanning the list
+
+@table @code
+@item (cookie-map map-function collection &rest map-args)
+@findex cookie-map
+Apply @var{map-function} to all cookies in
+@var{collection}.  @var{map-function} is applied to the
+first element first.  If @var{map-function} returns
+non-@code{nil} the cookie will be refreshed (its
+pretty-printer will be called once again).
+
+Note that the buffer for @var{collection} will be current
+buffer when @var{map-function} is called.
+@var{map-function} must restore the current buffer to
+@var{buffer} before it returns, if it changes it.
+
+If more than two arguments are given to @code{cookie-map}, remaining
+arguments will be passed to @var{map-function}.
+
+@item (cookie-map-reverse map-function collection &rest map-args)
+@findex cookie-map-reverse
+Like @code{cookie-map}, but @var{map-function} will be
+applied to the last cookie first.
+
+@item (collection-collect-tin collection predicate &rest predicate-args)
+@findex collection-collect-tin
+Select cookies from @var{collection} using @var{predicate}.
+Return a list of all selected tins.
+
+@var{predicate} is a function that takes a cookie as its
+first argument.
+
+The tins on the returned list will appear in the same
+order as in the buffer.  You should not rely on in which
+order @var{predicate} is called.
+
+Note that the buffer the @var{collection} is displayed in
+is current-buffer when @var{predicate} is called.
+@var{predicate} must restore current-buffer if it changes
+it.
+
+If more than two arguments are given to
+@code{collection-collect-tin} the remaining arguments will
+be passed to @var{predicate}.
+
+@item (collection-collect-cookie collection predicate &rest predicate-args)
+@findex collection-collect-cookie
+Like @code{collection-collect-tin}, but a list of cookies
+is returned.
+@end table
+
+@node In the buffer, Debugging cookie applications, Scanning the list, Cookie package
+@comment  node-name,  next,  previous,  up
+@section Operations that affect the buffer
+
+@table @code
+@item (collection-buffer collection)
+@findex collection-buffer
+Return the buffer that @var{collection} is displayed in.
+
+@item (collection-refresh collection)
+@findex collection-refresh
+Refresh all cookies in @var{collection}.
+
+The pretty-printer that was specified when the
+@var{collection} was created will be called for all
+cookies in @var{collection}.
+
+Note that @code{tin-invalidate} is more efficient if only
+a small number of cookies needs to be refreshed.
+
+@item (tin-invalidate collection &rest tins)
+@findex tin-invalidate
+Refresh some cookies.  The pretty-printer for
+@var{collection} will be called for all @var{tins}.
+
+@item (collection-set-goal-column collection goal)
+@findex collection-set-goal-column
+Set goal-column for @var{collection}.  goal-column is made buffer-local.
+This function will be obsoleted in the next release of Elib.  Instead,
+there is going to be a function that given a cookie will return a
+position where the cursor should be stored.  The details are not yet
+decided.
+
+@item (tin-goto-previous collection pos arg)
+@findex tin-goto-previous
+Move point to the @var{arg}th previous cookie.  Don't move if we are at
+the first cookie, or if @var{collection} is empty.  Returns the tin we
+move to.
+
+@item (tin-goto-next collection pos arg)
+@findex tin-goto-next
+Like @code{tin-goto-previous}, but move towards the end of
+the buffer instead.
+
+@item (tin-goto collection tin)
+@findex tin-goto
+Move point to @var{tin}.
+
+@item (tin-locate collection pos &optional guess)
+@findex tin-locate
+Return the tin that @var{pos} (a buffer position) is within.
+
+@var{pos} may be a marker or an integer.  @var{guess}
+should be a tin that it is likely that @var{pos} is near.
+
+If @var{pos} points before the first cookie, the first
+cookie is returned.  If @var{pos} points after the last
+cookie, the last cookie is returned.  If @var{collection}
+is empty, @code{nil} is returned.
+@end table
+
+@node Debugging cookie applications,  , In the buffer, Cookie package
+@comment  node-name,  next,  previous,  up
+@section Debugging cookie applications
+
+Since the cookie package uses dll, cookie applications can be hard to
+debug.  Fortunately, the same technique can be used here---just load
+dll-debug prior to loading cookie. @xref{Debugging dll applications}.
+
+@emph{Warning!}  Don't load a byte-compiled @file{cookie.elc} that was
+compiled using dll (as opposed to dll-debug) when you have dll-debug in
+memory.  Your Emacs will be seriously confused.
+
+@node     String functions, Read functions, Cookie package, Top
+@comment  node-name,  next,  previous,  up
+@chapter String functions
+@cindex String functions
+@cindex string
+
+To use the string functions in Elib you have to put the following line
+into your elisp source file:  
+
+@example
+(require 'string)
+@end example
+
+The following string functions are provided with Elib.
+
+@table @code
+@item (string-replace-match regexp string newtext &optional literal global)
+@findex string-replace-match
+
+This function tries to be a string near-equivalent to the elisp function
+@code{replace-match}.  It returns a string with the first text matched
+by @var{regexp} in @var{string} replaced by @var{newtext}.  If no match
+is found, @code{nil} is returned.  If optional argument @var{global} is
+non-@code{nil}, all occurances matching @var{regexp} are replaced
+instead of only the first one.
+
+If optional argument @var{literal} is non-@code{nil}, then @var{newtext}
+is inserted exactly as it is.  If it is @code{nil} (which is the
+default), then the character @kbd{\} is treated specially.  If a @kbd{\}
+appears in @var{newtext}, it can start any one of the following sequences:
+
+@table @kbd
+@item \&
+@kbd{\&} stands for the entire text being replaced.
+
+@item \@var{n}
+@kbd{\@var{n}} stands for the @var{n}th subexpression in the original regexp.
+Subexpressions are those expressions grouped inside of @code{\(...\)}.
+@var{n} is a digit.
+
+@item \\
+@kbd{\\} stands for a single @kbd{\} in @var{newtext}.
+@end table
+
+Any other character after the @key{\} will just be copied into the
+string. 
+
+@item (string-split pattern string &optional limit)
+
+Split the string @var{string} on the regexp @var{pattern} and return a
+list of the strings between the matches.  If the optional numerical
+argument @var{limit} is >= 1, only the first @var{limit} elements of the list are
+returned.
+
+For example, the call
+
+@example
+(string-split "[ \t]+" "Elisp programming is fun.")
+@end example
+
+will return @code{("Elisp" "programming" "is" "fun.")}, but the call
+
+@example
+(string-split " " "Elisp programming is fun." 3)
+@end example
+
+will return @code{("Elisp" "programming" "is")}.
+
+@end table
+
+@node Read functions, Future enhancements, String functions, Top
+@comment  node-name,  next,  previous,  up
+@chapter Read functions
+@cindex Read functions
+@cindex read
+
+Elib provides a number of functions for reading data from the
+minibuffer.  To use them in your own elisp programs, put the following
+line into you source file:
+
+@example
+(require 'read)
+@end example
+
+The following functions are provided by @file{read}.
+
+@table @code
+@item (read-number &optional prompt default)
+@findex read-number
+Read a number from the minibuffer. If optional argument @var{prompt} is
+non-@code{nil}, the user is prompted using @var{prompt}, otherwise the
+prompt string @code{Enter a number:} is used.  If optional argument
+@var{default} is non-@code{nil}, it is written within parenthesis after
+the prompt string.  @var{default} can be either a number or of the type which
+@code{(interactive "P")} generates.
+
+@item (read-num-range low high &optional prompt show-range)
+@findex read-num-range
+Read a number from the minibuffer.  The number returned will be forced
+to lie between @var{low} and @var{high}.  If @var{prompt} is
+non-@code{nil}, the user is prompted using @var{prompt}, otherwise the
+prompt string @code{Enter a number:} is used.  If @var{show-range} is
+non-@code{nil}, the prompt will show the range within parenthesis to the
+user.
+
+@item (read-silent prompt &optional showchar)
+@findex read-silent
+Read a string in the minibuffer without echoing.  The following
+characters are special when entering the string:
+
+@table @kbd
+@item DEL
+Delete the last character in the input buffer.
+
+@item C-u
+Clear the input buffer.
+
+@item RET
+End the reading of the string.
+
+@item Newline
+Same as @kbd{RET}.
+
+@end table
+
+If optional argument @var{showchar} is non-@code{nil}, one of these characters
+will be displayed for each character input by the user.
+
+This function is well suited to read a password from the user, but
+beware of the function @code{(view-lossage)} which displays the last 100
+keystrokes, even hidden ones.
+
+@end table
+
+
+@node     Future enhancements, Reporting bugs, Read functions, Top
+@comment  node-name,  next,  previous,  up
+@chapter Future enhancements
+@cindex Enhancements
+
+Elib needs a number of enhancements to be
+called complete.  Here is a list of wishes of functions and data
+types which we would like to enter into Elib in future releases:
+
+@itemize @bullet
+@item
+More container data types such as Priority queues, 2-3-trees, Hash
+tables, Sets, etc.  Much inspiration can be gotten from libg++ and the
+standard C++ library, STL.
+
+@item
+Other implementations of old container data types.  For instance, are
+vector implementations of stacks and queues faster than the current ones
+using cons cells?
+
+@item
+Miscellaneous other small functions.
+
+@item
+More tests for all code in the library, especially the untested
+container data types.  See the TODO file.
+@end itemize
+
+
+@section Contributions
+
+We are grateful for all donations of code that we can receive.  However,
+your code will be still more useful if you also provide documentation
+and code to test your new library functions.
+
+
+@node     Reporting bugs, Node index, Future enhancements, Top
+@comment  node-name,  next,  previous,  up
+@chapter Reporting bugs
+@cindex Reporting bugs
+
+Undoubtedly there are numerous bugs remaining, both in the elisp source
+code and in the documentation.  If you find a bug in either, please send
+a bug report to @code{elib-maintainers@@lysator.liu.se}.  We will try to
+be as quick as possible in fixing the bugs and redistributing the fixes.
+
+@ifinfo
+@node    Node index,  , Reporting bugs, Top
+@comment node-name,    next,  previous,      up
+@unnumbered Node index
+
+@printindex cp
+@end ifinfo
+
+@contents
+@bye

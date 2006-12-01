@@ -1,0 +1,420 @@
+Mon Dec 11 00:21:02 1995  Per Cederqvist  (ceder@lysator.liu.se)
+
+	* Released version 1.0.
+
+	* gpl.texi: New file.
+	* Makefile (OTHERS): Added gpl.texi.
+	* elib.texi: Include gpl.texi; removed gpl version 1.
+	* Makefile (install-info): Install all info files, not only the
+	directory.
+
+	* elib.texi: Lots of index entries added.
+
+	* All .el-files: Added conventional headers for emacs libraries.
+
+Sun Dec 10 21:46:38 1995  Per Cederqvist  (ceder@lysator.liu.se)
+
+	* elib-test-all.el (elib-test-all): Set load-path to ".", not to
+	"./library", when doing the tests.
+	(test-stack-f): Likewise.
+	(test-stack-m): Likewise.
+	(test-queue-f): Likewise.
+	(test-queue-m): Likewise.
+	(test-string): Likewise.
+	(test-dll): Likewise.
+	(test-dll-debug): Likewise.
+	(test-cookie): Likewise.
+
+Mon Dec 11 00:14:54 1995  Inge Wallin  <inge@lysator.liu.se>
+
+	* RELEASING: Fix a spelling error.
+
+	* elib-test.el: Require backquote explicitely since we set the
+	load-path to (".") in all the tests.
+
+	* INSTALL: Change all mentioning of elib.texinfo to elib.texi.
+
+	* All .el-files, Makefile: Changed header to contain correct
+	address of the FSF and the correct copyright notice.
+
+Sun Dec 10 23:26:21 1995  Inge Wallin  <inge@lysator.liu.se>
+
+	* elib-test.el: Now contains all tests for the library.
+	* elib-test-all.el: Removed.
+	* Makefile(OTHERS): elib-test-all.el is removed.
+
+Sun Dec 10 21:46:38 1995  Per Cederqvist  (ceder@lysator.liu.se)
+
+	* Makefile: Rewritten according to GNU Coding standards.
+	(OTHERS): Don't forget to distribute .cvsignore, RELEASING, TODO,
+	elib-test.el and elib-test-all.el.
+
+	* dist-makefile: Removed.  We now distribute our internal
+	Makefile, so that the entire world can make new releases of this
+	package.
+
+	* elib.texi: New name for former elib.texinfo.
+
+	* avltree.el, bintree.el, cookie.el, dll-debug.el, dll.el,
+ 	elib-node.el, queue-f.el, queue-m.el, read.el, stack-f.el,
+ 	stack-m.el, string.el: Moved from the library subdirectory to the
+ 	top directory.
+
+Sun Dec 10 16:30:26 1995  Inge Wallin  <inge@lysator.liu.se>
+
+	* elib.texinfo: Removed the installation chapter.
+
+	* elib.texinfo: Some minor spelling corrections.
+
+	* INSTALL: Better description of how to do it.
+	* dist-makefile: Change standard installation path.
+
+Sun Dec 10 16:10:02 1995  Per Cederqvist  (ceder@lysator.liu.se)
+
+	* Makefile (dist): Was formerly known as distribution.
+
+	* RELEASING: Translated to English.
+
+	* library/cookie.el: Renamed the prefix "icookie-" to "elib-".
+	Since these are private entities, nobody should be affected by the
+	change.
+	* elib.texinfo (Cookie conventions): Changed the documentation
+	accordingly.
+
+Sun Dec 10 16:02:58 1995  Inge Wallin  <inge@lysator.liu.se>
+
+	* README: Modernized it.
+
+	* COPYING: Use GPL version 1 to version 2.
+
+Sun Feb 19 00:42:03 1995  Inge Wallin  <inge@lysator.liu.se>
+
+	* Id 20: Error in 'make clean': now remove all .elc files.
+	dist-makefile: Call library/Makefile
+	library/Makefile: New file.
+
+Tue Jun  1 01:47:02 1993  Per Cederqvist  (ceder@lysator.liu.se)
+
+	* Released version 0.07.
+
+	* startup-template.el: Insert the Elib directory first on
+	load-path, so that our cookie.el is used even if Emacs 19 is
+	used.
+
+Sun May  2 13:52:45 1993  Per Cederqvist  (ceder@lysator.liu.se)
+
+	* cookie.el (tin-goto): Set collection->last-tin.
+	* cookie.el (icookie-delete-tin-internal): Clear
+	collection->last-tin if we are deleting it.
+	* cookie.el (tin-delete): Rely on icookie-delete-tin-internal to
+	clear collection->last-tin, and don't do it here.
+
+	* elib-test-all.el: Wrote some tests for the cookie package. A lot
+	of more tests need to be written.
+
+Tue Apr 27 00:45:22 1993  Per Cederqvist  (ceder@lysator.liu.se)
+
+	* cookie.el (collection-length, collection-refresh): Fixed fatal typos.
+
+Sun Jan 24 20:21:29 1993  Inge Wallin  (inge@ruben)
+
+	* Released version 0.06.
+
+	* elib.texinfo: Fixed a number of spelling and grammatical errors
+	  in the documentation of dlls.
+
+Sun Jan 24 15:13:24 1993  Per Cederqvist  (ceder@robin)
+
+	* elib.texinfo: Talk about debugging cookie applications.
+
+	* dll-debug.el: New file, moved here from the pcl-cvs project.
+	  Some comments updated.
+	* elib.texinfo: Documented dll-debug.  Revisited the documentation
+	  on dll.
+	* Makefile, dist-makefile, elib-compile-all.el: Updated to know
+	  about dll-debug.el.
+	* elib-test-all.el: Added test cases for dll and dll-debug.
+
+	* elib-test-all.el (elib-test-library): Load the library, don't
+	  only require it.
+	* elib-test-all.el (test-a-case): Print the test when something
+	  goes wrong.
+
+	* dll-debug.el (dll-previous, dll-last): Don't return the dummy node.
+	* dll-debug.el (dll-delete, dll-delete-fisrt, dll-delete-last):
+	  Fixed return value.
+
+Mon Jan 18 00:12:35 1993  Per Cederqvist  (ceder@mauritz)
+
+	* Release 0.05.1 (not released to the world).
+
+	* cookie.el: Require dll, not elib-dll.
+
+	* cookie.el (tin-goto-previous): Handle empty collections.
+
+	* cookie.el (icookie-abs): Fixed typo.
+
+	* string.el (string-split): Fixed typo.
+	* string.el (string-replace-match): Fix the doc string. Groups are
+	  contained inside \( \), not ( ).
+	* elib-test-all.el (string): Wrote some test cases.
+
+Sat Jan 16 16:26:53 1993  Inge Wallin  (inge@robin)
+
+	* Released version 0.05.
+
+	* elib.texinfo: Changed file name of info file to elib.info.
+
+Sat Jan 16 15:59:45 1993  Per Cederqvist  (ceder@konrad)
+
+	* cookie.el (tin-goto): New function.
+	* elib.texinfo: Document it.
+
+	* elib.texinfo: changed all references to parameters of functions
+	  to use @var{}.
+
+	* dist-makefile (ELFILES, ELCFILES): Added dll and cookie.
+
+Thu Jan 14 17:10:03 1993  Per Cederqvist  (ceder@konrad)
+
+	* elib.texinfo: Documented dll.el.
+
+	* Makefile (ELFILES): Added dll.el.
+
+Sun Jan  3 23:22:18 1993  Per Cederqvist  (ceder@konrad)
+
+	* dll.el: New file. This has been used extensively in pcl-cvs, so
+	  it might be relatively bugfree.
+	* dll.el: Provide dll, not elib-dll.
+
+Wed Dec 30 02:42:19 1992  Per Cederqvist  (ceder@konrad)
+
+	* elib.texinfo (Cookie package): Documented the cookie package.
+	  Phew.  All information from the doc-strings are included.  More
+	  examples and explanations are needed.
+
+Tue Dec 29 21:43:28 1992  Per Cederqvist  (ceder@konrad)
+
+	* cookie.el, elib.texinfo: Renamed all functions, since RMS
+	  doesn't like the prefix convention "cookie:function".  This is
+	  the list of function names before and after:
+
+cookie::abs                             -> icookie-abs
+cookie::collection->buffer              -> icookie-collection->buffer
+cookie::collection->dll                 -> icookie-collection->dll
+cookie::collection->footer              -> icookie-collection->footer
+cookie::collection->header              -> icookie-collection->header
+cookie::collection->last-tin            -> icookie-collection->last-tin
+cookie::collection->pretty-printer      -> icookie-collection->pretty-printer
+cookie::create-collection               -> icookie-create-collection
+cookie::create-wrapper                  -> icookie-create-wrapper
+cookie::create-wrapper-and-insert       -> icookie-create-wrapper-and-insert
+cookie::create-wrapper-and-pretty-print
+			-> icookie-create-wrapper-and-pretty-print
+cookie::delete-tin-internal             -> icookie-delete-tin-internal
+cookie::filter-hf                       -> icookie-filter-hf
+cookie::pos-before-middle-p             -> icookie-pos-before-middle-p
+cookie::refresh-tin                     -> icookie-refresh-tin
+cookie::set-buffer-bind-dll             -> icookie-set-buffer-bind-dll
+cookie::set-buffer-bind-dll-let*        -> icookie-set-buffer-bind-dll-let*
+cookie::set-collection->buffer          -> icookie-set-collection->buffer
+cookie::set-collection->dll             -> icookie-set-collection->dll
+cookie::set-collection->footer          -> icookie-set-collection->footer
+cookie::set-collection->header          -> icookie-set-collection->header
+cookie::set-collection->last-tin        -> icookie-set-collection->last-tin
+cookie::set-collection->pretty-printer
+			-> icookie-set-collection->pretty-printer
+cookie::wrapper->cookie                 -> icookie-wrapper->cookie
+cookie::wrapper->cookie-safe            -> icookie-wrapper->cookie-safe
+cookie::wrapper->start-marker           -> icookie-wrapper->start-marker
+cookie:all                              -> collection-list-cookies
+cookie:buffer                           -> collection-buffer
+cookie:clear                            -> collection-clear
+cookie:collect-cookies                  -> collection-collect-cookie
+cookie:collect-tins                     -> collection-collect-tin
+cookie:create                           -> collection-create
+cookie:delete-first                     -> cookie-delete-first
+cookie:delete-last                      -> cookie-delete-last
+cookie:delete-tin                       -> tin-delete
+cookie:empty                            -> collection-empty
+cookie:enter-after                      -> cookie-enter-after-tin
+cookie:enter-before                     -> cookie-enter-before-tin
+cookie:enter-cookies                    -> collection-append-cookies
+cookie:enter-first                      -> cookie-enter-first
+cookie:enter-last                       -> cookie-enter-last
+cookie:filter                           -> collection-filter-cookies
+cookie:first                            -> cookie-first
+cookie:goto-next-tin                    -> tin-goto-next
+cookie:goto-previous-tin                -> tin-goto-previous
+cookie:invalidate-tins                  -> tin-invalidate
+cookie:last                             -> cookie-last
+cookie:length                           -> collection-length
+cookie:map                              -> cookie-map
+cookie:map-reverse                      -> cookie-map-reverse
+cookie:next-tin                         -> tin-next
+cookie:nth-cookie                       -> cookie-nth
+cookie:nth-tin                          -> tin-nth
+cookie:previous-tin                     -> tin-previous
+cookie:refresh-all                      -> collection-refresh
+cookie:set-goal-column                  -> collection-set-goal-column
+cookie:sort                             -> cookie-sort
+cookie:tin->cookie                      -> tin-cookie
+cookie:tin-filter                       -> collection-filter-tins
+cookie:tin-get-selection                -> tin-locate
+
+	* Makefile (ELFILES): Added cookie.el.
+
+	* Makefile (tags): New target.
+
+Sat Aug 22 00:54:26 1992  Inge Wallin  (inge@ruben)
+
+	* string.el(string-replace-match): Fixed the doc string.
+
+	* BUGS and BUGMAILS: New files for tracking bugs with the emacs
+	  bugtrack package.
+
+Sat Aug 22 00:11:37 1992  Per Cederqvist  (ceder@maskros)
+
+	* string.el (string-replace-match, string-split): Save and restore
+	match-data.
+
+Fri Aug 21 12:50:55 1992  Per Cederqvist  (ceder@maskros)
+
+	* cookie.el: Beautified a lot of comments.
+
+	* cookie.el (cookie::abs): New function. This should exist
+	elsewhere in elib!
+
+	* cookie.el (cookie:filter, cookie:tin-filter): Allow some extra
+	args for predicate.
+
+	* cookie.el (cookie:tin-get-selection): Omit the FORCE-GUESS arg.
+	Rewrote the code that finds the best guess so that it always uses
+	collection->last-tin as a guess.
+
+	* cookie.el (tin-start-marker, tin-end-marker): Commented out.
+
+	* cookie.el (Local Variables): Added. Sets the lisp-indent-hook
+	for some functions.
+
+Thu Aug 20 05:53:59 1992  Per Cederqvist  (ceder@robin)
+
+	* cookie.el: The pretty-printer should now insert the string in
+	the buffer, not return the string.
+	* cookie.el (cookie::create-wrapper-and-pretty-print): New
+	function.
+	* cookie.el (cookie::refresh-tin, cookie::pos-before-middle-p,
+	cookie:enter-first, cookie:enter-last, cookie:enter-after,
+	cookie:enter-before, cookie:next-tin, cookie:refresh-all):
+	Updated.
+
+Wed Aug 19 03:50:11 1992  Per Cederqvist  (ceder@robert)
+
+	* Merged in some changes made by Inge Wallin:
+	* elib-compile-all.el (compile-elib): Bind load-path locally.
+
+Mon Jul 27 21:08:27 1992  Inge Wallin  (inge@lysator)
+
+	* Changed all copyright notices to read:
+	  Copyright 1991, 1992 Free Software Foundation
+
+Sun Mar 15 00:01:12 1992  Per Cederqvist  (ceder@robin)
+
+	* Added RCS Id keywords to most of the files.
+
+Thu Jul 25 18:32:21 1991  Inge Wallin  (inge at lysator)
+
+	* elib-avltree.el -> avltree.el
+
+	* elib.texinfo: Changed all function names (dropped elib- prefix).
+
+Wed Jul 24 01:10:09 1991  Inge Wallin  (inge at lysator)
+
+	* elib-bintree.el -> bintree.el
+	  elib-read.el	  -> read.el
+          elib-string.el  -> string.el
+	  elib-stack-f.el -> stack-f.el
+	  elib-stack-m.el -> stack-m.el
+          Also the functions intended for the user to call lost their
+	  elib- prefix. 
+
+	* Function silent-read -> read-silent for consistency.
+
+Sun Jun 16 02:30:08 1991  Inge Wallin  (inge at robert)
+
+	* Released version 0.03.
+
+	* elib.texinfo: Fixed the node index.
+
+	* New file: elib-compile-all. This file byte-compiles those files
+	  in elib which needs recompiling.
+
+	* New file: elib-avltree.el. Added AVL trees and documentation to
+	  the library.
+
+Tue Jun  4 21:13:33 1991  Inge Wallin  (inge at laila)
+
+	* Finished and tested all functions in elib-bintree.el.
+
+Thu May 30 23:57:12 1991  Inge Wallin  (inge at laila)
+
+	* Fixed a few errors in the documentation.
+
+Tue May 28 01:43:02 1991  Inge Wallin  (inge at lave)
+
+	* Documented the functions in elib-bintree in elib.texinfo. 
+
+Tue May 21 21:43:03 1991  Inge Wallin  (inge at lave)
+
+	* New file: elib-bintree.el containing functions for ordinary
+	  (not balanced) binary trees.
+
+	* Corrected a bug in elib-node.el
+
+Mon May 20 23:03:36 1991  Inge Wallin  (inge at laila)
+
+	* New file: elib-node.el. Contains a number of macros for creating
+	  and handling nodes for binary trees and doubly linked lists.
+
+Wed May 15 22:17:53 1991  Inge Wallin  (inge at lave)
+
+	* Made elib-stack-f.el delete elib-stack-m.el from the features
+	  variable and vice versa. Same for queue.
+
+	* Changed a few things in elib.texinfo.
+
+Sun May 12 19:31:54 1991  Inge Wallin  (inge at laila)
+
+	* Added a macro implementation of elib-queue. New file:
+	  elib-queue-m.el. The old file elib-queue.el changed name to
+	  elib-queue-f.el. Also changed Makefile.  Documented.
+
+	* Added a macro implementation of elib-stack. New file:
+	  elib-stack-m.el. The old file elib-stack.el changed name to
+	  elib-stack-f.el. Also changed dist-makefile.  Documented.
+
+	* Added the functions elib-stack-copy and elib-queue-copy to
+	  elib-stack.el and elib-queue.el, resp.
+
+Sat May 11 03:36:30 1991  Inge Wallin  (inge at laila)
+
+	* New file in the library: elib-read.el, containing a few functions
+	  for reading data from the minibuffer.  Documented them in
+	  elib.texinfo. 
+
+	* Fixed a number of bugs in the documentation reported by
+	  Sebastian Kremer.
+
+Fri May 10 03:28:04 1991  Inge Wallin  (inge at laila)
+
+	* Documented the new container type AVL tree.  Also added it to
+	  Makefile. 
+
+	* Done some small changes in elib.texinfo regarding classes in
+	  version 0.01.
+
+Thu May  9 23:07:02 1991  Inge Wallin  (inge at laila)
+
+	* version 0.01 released. Contents: 2 string functions, a stack and
+	  a queue.
+
