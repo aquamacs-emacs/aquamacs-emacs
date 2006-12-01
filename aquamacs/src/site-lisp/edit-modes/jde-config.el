@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: java jde
  
-;; Last change: $Id: jde-config.el,v 1.1 2006/12/01 23:06:13 davidswelt Exp $
+;; Last change: $Id: jde-config.el,v 1.2 2006/12/01 23:49:18 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -37,7 +37,8 @@
  
 (when load-file-name
   (add-to-list 'load-path (expand-file-name "cedet/common" (file-name-directory load-file-name)))
-  (add-to-list 'load-path (expand-file-name "semantic" (file-name-directory load-file-name)))
+  (add-to-list 'load-path (expand-file-name "cedet/semantic" (file-name-directory load-file-name)))
+  (add-to-list 'load-path (expand-file-name "cedet/eieio" (file-name-directory load-file-name)))
   (add-to-list 'load-path (expand-file-name "jde/lisp" (file-name-directory load-file-name)))
   (add-to-list 'load-path (expand-file-name "elib" (file-name-directory load-file-name))))
 
