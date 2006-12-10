@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-mode-defaults.el,v 1.16 2006/06/23 11:00:41 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-defaults.el,v 1.17 2006/12/10 10:37:27 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -48,6 +48,12 @@
 (add-hook 'latex-mode-hook 'smart-dnd-latex)
 (defvar LaTeX-mode-hook nil)
 (add-hook 'LaTeX-mode-hook 'smart-dnd-latex)
+
+;; JDEE
+
+(ignore-errors (require 'jde-config nil t))
+
+
 
 ;; NXML
 
@@ -143,8 +149,8 @@
 				  "/site-lisp/edit-modes/ess-mode/etc"
 				  ))
 
-
- 
+(aquamacs-set-defaults 
+ '((html-helper-mode-uses-JDE nil)))
 (autoload 'html-helper-mode "html-helper-mode" 
   "major mode for editing HTML source." t)
 (assq-set-equal "\\.html$" 'html-helper-mode 'auto-mode-alist)
