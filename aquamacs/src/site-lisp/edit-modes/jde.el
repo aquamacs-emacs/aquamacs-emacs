@@ -1,9 +1,9 @@
 ;; create directory for semantic.cache
 
-(make-directory (concat temporary-file-directory "semantic.cache"))
+(make-directory semanticdb-default-save-directory 'dont-complain)
 
 ;; require cedet - but only on demand
 
 (require 'cedet)
 
-(load "jde/jde.el") ;; this will provide `jde'
+(load "jde/lisp/jde.el") ;; this will provide `jde'
