@@ -1,0 +1,30 @@
+Index: src/macterm.c
+===================================================================
+RCS file: /cvsroot/emacs/emacs/src/macterm.c,v
+retrieving revision 1.198
+diff -c -p -r1.198 macterm.c
+*** src/macterm.c	10 Dec 2006 23:16:11 -0000	1.198
+--- src/macterm.c	11 Dec 2006 07:54:05 -0000
+*************** XTread_socket (sd, expected, hold_quit)
+*** 10398,10410 ****
+  		break;
+
+  	      case inContent:
+! 		if (
+! #if TARGET_API_MAC_CARBON
+! 		    FrontNonFloatingWindow ()
+! #else
+! 		    FrontWindow ()
+! #endif
+! 		    != window_ptr)
+  		  SelectWindow (window_ptr);
+  		else
+  		  {
+--- 10398,10404 ----
+  		break;
+
+  	      case inContent:
+! 		if (mac_window_to_frame (window_ptr) != dpyinfo->x_focus_frame)
+  		  SelectWindow (window_ptr);
+  		else
+  		  {
