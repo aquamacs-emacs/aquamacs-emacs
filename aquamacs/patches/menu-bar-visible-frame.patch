@@ -1,10 +1,10 @@
 Index: lisp/menu-bar.el
 ===================================================================
 RCS file: /sources/emacs/emacs/lisp/menu-bar.el,v
-retrieving revision 1.293
-diff -c -r1.293 menu-bar.el
-*** lisp/menu-bar.el	26 May 2006 20:01:16 -0000	1.293
---- lisp/menu-bar.el	4 Sep 2006 15:12:37 -0000
+retrieving revision 1.300
+diff -c -r1.300 menu-bar.el
+*** lisp/menu-bar.el	10 Dec 2006 20:46:52 -0000	1.300
+--- lisp/menu-bar.el	12 Dec 2006 15:59:54 -0000
 ***************
 *** 172,177 ****
 --- 172,178 ----
@@ -16,7 +16,7 @@ diff -c -r1.293 menu-bar.el
   	      :help "Save current buffer to its file"))
   
 ***************
-*** 195,201 ****
+*** 195,205 ****
   	      :help "Discard (kill) current buffer"))
   (define-key menu-bar-file-menu [insert-file]
     '(menu-item "Insert File..." insert-file
@@ -24,7 +24,11 @@ diff -c -r1.293 menu-bar.el
   	      :help "Insert another file into current buffer"))
   (define-key menu-bar-file-menu [dired]
     '(menu-item "Open Directory..." dired
---- 196,203 ----
+! 	      :enable (menu-bar-non-minibuffer-window-p)
+  	      :help "Read a directory, to operate on its files"))
+  (define-key menu-bar-file-menu [open-file]
+    '(menu-item "Open File..." menu-find-file-existing
+--- 196,208 ----
   	      :help "Discard (kill) current buffer"))
   (define-key menu-bar-file-menu [insert-file]
     '(menu-item "Insert File..." insert-file
@@ -33,6 +37,11 @@ diff -c -r1.293 menu-bar.el
   	      :help "Insert another file into current buffer"))
   (define-key menu-bar-file-menu [dired]
     '(menu-item "Open Directory..." dired
+! 	      :enable (and (menu-bar-non-minibuffer-window-p)
+! 			   (menu-bar-menu-frame-live-and-visible-p))
+  	      :help "Read a directory, to operate on its files"))
+  (define-key menu-bar-file-menu [open-file]
+    '(menu-item "Open File..." menu-find-file-existing
 ***************
 *** 368,374 ****
   
@@ -42,7 +51,7 @@ diff -c -r1.293 menu-bar.el
   
   (define-key menu-bar-edit-menu [fill]
     '(menu-item "Fill" fill-region
---- 370,377 ----
+--- 371,378 ----
   
   ;;; Assemble the top-level Edit menu items.
   (define-key menu-bar-edit-menu [props]
@@ -72,7 +81,7 @@ diff -c -r1.293 menu-bar.el
   	      :help "Mark the whole buffer for a subsequent cut/copy."))
   (define-key menu-bar-edit-menu [clear]
     '(menu-item "Clear" delete-region
---- 442,464 ----
+--- 443,465 ----
   	      :help "Read a line number and go to that line"))
   
   (define-key menu-bar-edit-menu [goto]
@@ -97,14 +106,25 @@ diff -c -r1.293 menu-bar.el
   (define-key menu-bar-edit-menu [clear]
     '(menu-item "Clear" delete-region
 ***************
-*** 464,477 ****
+*** 464,470 ****
   (fset 'yank-menu (cons 'keymap yank-menu))
-  (define-key menu-bar-edit-menu [select-paste]
-    '(menu-item "Select and Paste" yank-menu
-! 	      :enable (and (cdr yank-menu) (not buffer-read-only))))
+  (define-key menu-bar-edit-menu [paste-from-menu]
+    '(menu-item "Paste from kill menu" yank-menu
+! 	      :enable (and (cdr yank-menu) (not buffer-read-only))
+  	      :help "Choose a string from the kill ring and paste it"))
   (define-key menu-bar-edit-menu [paste]
     '(menu-item "Paste" yank
-  	      :enable (and
+--- 472,479 ----
+  (fset 'yank-menu (cons 'keymap yank-menu))
+  (define-key menu-bar-edit-menu [paste-from-menu]
+    '(menu-item "Paste from kill menu" yank-menu
+! 	      :enable (and (cdr yank-menu) (not buffer-read-only)
+! 			   (menu-bar-menu-frame-live-and-visible-p))
+  	      :help "Choose a string from the kill ring and paste it"))
+  (define-key menu-bar-edit-menu [paste]
+    '(menu-item "Paste" yank
+***************
+*** 472,478 ****
   		       ;; Emacs compiled --without-x doesn't have
   		       ;; x-selection-exists-p.
   		       (fboundp 'x-selection-exists-p)
@@ -112,15 +132,7 @@ diff -c -r1.293 menu-bar.el
   	      :help "Paste (yank) text most recently cut/copied"))
   (define-key menu-bar-edit-menu [copy]
     '(menu-item "Copy" menu-bar-kill-ring-save
---- 471,486 ----
-  (fset 'yank-menu (cons 'keymap yank-menu))
-  (define-key menu-bar-edit-menu [select-paste]
-    '(menu-item "Select and Paste" yank-menu
-! 	      :enable (and (cdr yank-menu) (not buffer-read-only)
-! 			   (menu-bar-menu-frame-live-and-visible-p))))
-  (define-key menu-bar-edit-menu [paste]
-    '(menu-item "Paste" yank
-  	      :enable (and
+--- 481,488 ----
   		       ;; Emacs compiled --without-x doesn't have
   		       ;; x-selection-exists-p.
   		       (fboundp 'x-selection-exists-p)
@@ -130,8 +142,12 @@ diff -c -r1.293 menu-bar.el
   (define-key menu-bar-edit-menu [copy]
     '(menu-item "Copy" menu-bar-kill-ring-save
 ***************
-*** 486,491 ****
---- 495,501 ----
+*** 484,492 ****
+--- 494,504 ----
+  	      :enable (and mark-active (not buffer-read-only))
+  	      :help
+  	      "Cut (kill) text in region between mark and current position"))
++ 			   (menu-bar-menu-frame-live-and-visible-p)
   (define-key menu-bar-edit-menu [undo]
     '(menu-item "Undo" undo
   	      :enable (and (not buffer-read-only)
@@ -140,7 +156,7 @@ diff -c -r1.293 menu-bar.el
   			   (if (eq last-command 'undo)
   			       (listp pending-undo-list)
 ***************
-*** 1413,1419 ****
+*** 1414,1420 ****
   The menu frame is the frame for which we are updating the menu."
     (let ((menu-frame (or menu-updating-frame (selected-frame))))
       (and (frame-live-p menu-frame)
@@ -148,7 +164,7 @@ diff -c -r1.293 menu-bar.el
   
   (defun menu-bar-non-minibuffer-window-p ()
     "Return non-nil if selected window of the menu frame is not a minibuf window.
---- 1423,1430 ----
+--- 1426,1433 ----
   The menu frame is the frame for which we are updating the menu."
     (let ((menu-frame (or menu-updating-frame (selected-frame))))
       (and (frame-live-p menu-frame)
@@ -158,8 +174,14 @@ diff -c -r1.293 menu-bar.el
   (defun menu-bar-non-minibuffer-window-p ()
     "Return non-nil if selected window of the menu frame is not a minibuf window.
 ***************
-*** 1436,1441 ****
---- 1447,1453 ----
+*** 1432,1442 ****
+--- 1445,1457 ----
+  (defun kill-this-buffer-enabled-p ()
+    (let ((count 0)
+  	(buffers (buffer-list)))
++ 	 (menu-bar-menu-frame-live-and-visible-p)
+      (while buffers
+        (or (string-match "^ " (buffer-name (car buffers)))
   	  (setq count (1+ count)))
         (setq buffers (cdr buffers)))
       (and (menu-bar-non-minibuffer-window-p)
