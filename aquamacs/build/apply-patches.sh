@@ -15,12 +15,16 @@
 # Add your patch file name here (file names cannot contain spaces).
 
 # toolbar-png  taken out, because it's slow and we don't need it yet
-PATCHES="test custom-verbosity pretty-modeline transparency2
-         capslock pop-to-buffer  emacs-inline
+PATCHES="test display-buffer-reuse custom-verbosity pretty-modeline transparency2
+         capslock 
+         pop-to-buffer display-buffer-reuse
+         emacs-inline
          calm-startup available-screen mouse-button launch-browser
          org-gnu-Aquamacs about-aquamacs puresize
          macfns-dialog-menu menu-bar-visible-frame eval-depth
-         sendmail-mac shut-up"
+          shut-up"
+
+# sendmail-mac - probably not needed any longer - CHECK CHECK CHECK
 
 # The patches here are specified separately so their order can be defined.
 
