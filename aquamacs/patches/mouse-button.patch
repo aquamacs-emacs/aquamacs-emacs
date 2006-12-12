@@ -1,12 +1,12 @@
 Index: src/macterm.c
 ===================================================================
-RCS file: /cvsroot/emacs/emacs/src/macterm.c,v
-retrieving revision 1.145
-diff -c -r1.145 macterm.c
-*** src/macterm.c	24 Nov 2005 08:20:16 -0000	1.145
---- src/macterm.c	26 Nov 2005 11:19:29 -0000
+RCS file: /sources/emacs/emacs/src/macterm.c,v
+retrieving revision 1.198
+diff -c -r1.198 macterm.c
+*** src/macterm.c	10 Dec 2006 23:16:11 -0000	1.198
+--- src/macterm.c	12 Dec 2006 15:51:21 -0000
 ***************
-*** 8222,8232 ****
+*** 8784,8794 ****
   {
     int result = 0;
     if (!NILP (Vmac_emulate_three_button_mouse)) {
@@ -18,7 +18,7 @@ diff -c -r1.145 macterm.c
     }
     return result;
   }
---- 8222,8242 ----
+--- 8784,8804 ----
   {
     int result = 0;
     if (!NILP (Vmac_emulate_three_button_mouse)) {
@@ -41,7 +41,7 @@ diff -c -r1.145 macterm.c
     return result;
   }
 ***************
-*** 8243,8249 ****
+*** 8805,8811 ****
     if (!NILP (Vmac_emulate_three_button_mouse) &&
         GetEventClass(eventRef) == kEventClassMouse)
       {
@@ -49,7 +49,7 @@ diff -c -r1.145 macterm.c
       }
     return mac_to_emacs_modifiers (mods);
   }
---- 8253,8268 ----
+--- 8815,8830 ----
     if (!NILP (Vmac_emulate_three_button_mouse) &&
         GetEventClass(eventRef) == kEventClassMouse)
       {
@@ -67,42 +67,35 @@ diff -c -r1.145 macterm.c
     return mac_to_emacs_modifiers (mods);
   }
 ***************
-*** 11012,11026 ****
-  
+*** 11734,11747 ****
     DEFVAR_LISP ("mac-emulate-three-button-mouse",
   	       &Vmac_emulate_three_button_mouse,
-!     doc: /* *Specify a way of three button mouse emulation.
+      doc: /* *Specify a way of three button mouse emulation.
 ! The value can be nil, t, or the symbol `reverse'.
-! nil means that no emulation should be done and the modifiers should be
-! placed on the mouse-1 event.
+  A value of nil means that no emulation should be done and the modifiers
+  should be placed on the mouse-1 event.
   t means that when the option-key is held down while pressing the mouse
   button, the click will register as mouse-2 and while the command-key
-! is held down, the click will register as mouse-3.
-! The symbol `reverse' means that the option-key will register for
+  is held down, the click will register as mouse-3.
+  The symbol `reverse' means that the option-key will register for
 ! mouse-3 and the command-key will register for mouse-2.  */);
     Vmac_emulate_three_button_mouse = Qnil;
   
   #if USE_CARBON_EVENTS
---- 11031,11052 ----
-  
+--- 11753,11768 ----
     DEFVAR_LISP ("mac-emulate-three-button-mouse",
   	       &Vmac_emulate_three_button_mouse,
-!     doc: /* Specify a way of three button mouse emulation.  
-! The value canbe nil, t, or one of the symbols `reverse' or `control'.  
-! Non-nil means emulate mouse buttons using modifier keys:  
-! 
+      doc: /* *Specify a way of three button mouse emulation.
+! The value can be nil, t,  or one of the symbols `reverse' or `control'. 
+  A value of nil means that no emulation should be done and the modifiers
+  should be placed on the mouse-1 event.
   t means that when the option-key is held down while pressing the mouse
   button, the click will register as mouse-2 and while the command-key
-! is held down, the click will register as mouse-3.  
-! 
-! `reverse' means that the option-key will register for mouse-3 and the
-! command-key will register for mouse-2. 
-! 
-! `control' means that a click with the control-key held down will register
-! as mouse-3, and command-click will register as mouse-2.
-! 
-! nil means that no emulation should be done and the modifiers should be
-! placed on the mouse-1 event. */);
+  is held down, the click will register as mouse-3.
+  The symbol `reverse' means that the option-key will register for
+! mouse-3 and the command-key will register for mouse-2.  
+! The symbol  `control' means that a click with the control-key held down 
+! will register as mouse-3, and command-click will register as mouse-2.  */);
     Vmac_emulate_three_button_mouse = Qnil;
   
   #if USE_CARBON_EVENTS
