@@ -15,7 +15,7 @@
 # Add your patch file name here (file names cannot contain spaces).
 
 # toolbar-png  taken out, because it's slow and we don't need it yet
-PATCHES="test display-buffer-reuse custom-verbosity pretty-modeline transparency2
+PATCHES="test custom-verbosity pretty-modeline transparency2
          capslock 
          recentf-track-minibuf
          pop-to-buffer display-buffer-reuse
