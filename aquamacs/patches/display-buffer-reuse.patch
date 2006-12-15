@@ -1,12 +1,13 @@
 *** src/window.c	12 Sep 2006 10:58:06 +0100	1.557
---- src/window.c	13 Dec 2006 09:39:10 +0000	
+--- src/window.c	15 Dec 2006 13:38:33 +0000	
 ***************
 *** 54,59 ****
---- 54,61 ----
+--- 54,62 ----
   Lisp_Object Qwindow_size_fixed;
   extern Lisp_Object Qleft_margin, Qright_margin;
   
 + Lisp_Object Qselect;
++ Lisp_Object Qselect_frame_set_input_focus;
 + 
   static int displayed_window_lines P_ ((struct window *));
   static struct window *decode_window P_ ((Lisp_Object));
@@ -20,13 +21,13 @@
       }
   
     return window;
---- 3392,3403 ----
+--- 3393,3404 ----
         if (FRAME_ICONIFIED_P (f))
   	Fmake_frame_visible (frame);
         else if (FRAME_VISIBLE_P (f))
 ! 	{
 ! 	  if (EQ (display_buffer_reuse_frames, Qselect))
-! 	    Fselect_frame (frame);
+! 	    call1(Qselect_frame_set_input_focus, frame);
 ! 	  else
 ! 	    Fraise_frame (frame);
 ! 	}
@@ -35,12 +36,15 @@
     return window;
 ***************
 *** 7133,7138 ****
---- 7140,7148 ----
+--- 7141,7152 ----
   void
   syms_of_window ()
   {
 +   Qselect = intern ("select");
 +   staticpro (&Qselect);
++ 
++   Qselect_frame_set_input_focus = intern ("select-frame-set-input-focus");
++   staticpro (&Qselect_frame_set_input_focus);
 + 
     Qscroll_up = intern ("scroll-up");
     staticpro (&Qscroll_up);
@@ -54,7 +58,7 @@
     display_buffer_reuse_frames = 0;
   
     DEFVAR_LISP ("pop-up-frame-function", &Vpop_up_frame_function,
---- 7223,7230 ----
+--- 7227,7234 ----
   
     DEFVAR_BOOL ("display-buffer-reuse-frames", &display_buffer_reuse_frames,
   	       doc: /* *Non-nil means `display-buffer' should reuse frames.
