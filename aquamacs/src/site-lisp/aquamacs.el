@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.80 2006/08/21 18:40:18 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.81 2006/12/17 23:33:18 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -1040,7 +1040,7 @@ if modified buffers exist."
   (add-hook 'after-init-hook 'aquamacs-check-for-updates-if-necessary 'append) 
 
 (aquamacs-set-defaults '(
-			 (tool-bar-button-relief 0)
+			 (tool-bar-button-relief 1)
 			 (tool-bar-button-margin 6)
 			 (tool-bar-border 5)))
 (ats "aquamacs-tool-bar-setup ...")
@@ -1056,6 +1056,10 @@ if modified buffers exist."
   ;; might inadvertently click that button.
   ;;(tool-bar-add-item-from-menu 'save-buffers-kill-emacs "exit")
   (setq tool-bar-map (make-sparse-keymap))
+ 
+  (face-spec-set 'tooltip '((t (:inherit variable-pitch :background "lightyellow" :foreground "black" :height 100 :family "lucida sans"))) nil)
+
+
   (let ((face 'tool-bar)
 	;; e2e2e2 is eaeaea in imagemagick for some reason
 	(spec '((t (:background "#e2e2e2" :foreground "black" 
