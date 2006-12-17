@@ -34,10 +34,10 @@ development. Go here:  http://aquamacs.org/donations.shtml
 	developed by David Reitter 
 	based on GNU Emacs
 
-	GNU Emacs is due to Richard M. Stallman and many others.  
-	GNU Emacs was ported to the Mac by Andrew Choi, Yamamoto
-	Mitsuharu, Steven Tamm and many others.  
-	Full list of GNU Emacs contributors: http://aquamacs.org/emacs-authors
+		GNU Emacs is due to Richard M. Stallman and many others.  
+		GNU Emacs was ported to the Mac by Andrew Choi, 
+		Yamamoto Mitsuharu, Steven Tamm and many others.  
+		Full list of GNU Emacs contributors: http://aquamacs.org/emacs-authors
 
 	Project co-founder, documentation: Kevin Walzer
 	
@@ -54,13 +54,29 @@ CVS Version
 	more. Aquamacs now contains the latest version of JDEE, configured
 	to work with the Java SDK installed via Apple's Developer
 	Tools. Visit http://jdee.sunsite.dk for more information.
+
+	* Toolbar-Icons are new. This artwork is by Adrian Chromenko.
+
+	* Toolbars have been slightly revised.
 	
 	* one-buffer-one-frame-mode is more compatible to the normal Emacs
 	paradigm of one-frame-many-buffers for internal technical
-	reasons. (Function `switch-to-buffer' will set the current buffer
-	immediately without waiting for the next top-level event loop.)
-	Thanks to Lowell Vaughn for pointing out a seeminly unimportant
-	bug in one of Emacs' on-board games.
+	reasons, but also with respect to whether newly opened frames
+	(windows) are actually selected and receive the following user
+	inputs. In many situations, classical Emacs shows a buffer in an
+	extra window, but doesn't select it - so the user can keep
+	working on the original document. Aquamacs will now do the same -
+	it will raise the appropriate frame, but not select it. If you
+	would like to make it select at all newly opened frames, use this
+	in your Preferences.el:
+
+	(setq display-buffer-reuse-frames 'select)
+
+	Also (the technical change): Function `switch-to-buffer' will set
+	the current buffer immediately without waiting for the next
+	top-level event loop.)  Thanks to Lowell Vaughn for pointing out a
+	seeminly unimportant bug in one of Emacs' on-board games, which
+	led to the discovery of this issue.
 
 	* Menu Bar fixes. (Disabled menu bar entries when frames invisible.)
 	
@@ -72,6 +88,11 @@ CVS Version
 	browser again. This applies to C-c C-z v in html-helper-mode and
 	other modes using `browse-url'.
 
+	* Recently opened files that were opened from the "Recent Files"
+	menu, or from an external shell with the 'open' command or
+	something similar are now available in the minibuffer history that
+	one gets with C-x C-f <up>.
+	
 	* Clicking into raised frames (windows) that are not the selected
 	frame (i.e. have grey instead of red-yellow-green buttons) will
 	now activate that frame.
