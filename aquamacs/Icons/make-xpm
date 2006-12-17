@@ -1,0 +1,75 @@
+#!/bin/sh
+
+# copies 
+
+# usage: make-xpm source-dir dest-dir
+
+#cd "/Applications/Aquamacs Emacs.app/Contents/Resources/etc/images/"
+
+#P="/Users/dr/Projects/Aquamacs/Icons"
+#cp -r ~/Projects/Aquamacs/Icons/*.png .
+
+
+P=$1
+
+push $P
+FILES=`ls *.png`
+popd
+
+if [ "$2" ]
+  cd $2
+fi
+
+BGCOL='#EAEAEA'
+
+
+# Emacs doesn't seem to support masks for PNGs, not even bitmasks
+
+for file in $FILES
+do
+
+    LABEL=`awk "/$file/ {print \\$2;}" $P/labels.txt`
+    
+    # resize source file
+    convert "$P/$file" -resize x28 small.miff
+
+    echo $LABEL
+    # add text label
+    montage -fill black -font $P/LucidaGrande.ttf -pointsize 11 -geometry +0+0 -label "${LABEL}" -background transparent small.miff  small-text.png
+    
+    # draw same-size background
+    composite -size 48x48 xc:$BGCOL -compose copy small-text.png  mask.miff
+    # and compose the two so that alpha blended pixels (<100% transp) are mixed
+    composite small-text.png -compose atop  mask.miff   apmask.miff 
+
+    # convert to gif so we can pick the transparency
+    convert apmask.miff -transparent $BGCOL trans.gif
+    # and convert to target format
+    convert trans.gif  `basename "$file" \.png`.xpm
+
+    convert small.miff -modulate 60 small-dark.miff
+    composite -size 28x28 xc:$BGCOL -compose copy small-dark.miff  mask.miff
+    composite small-dark.miff -compose atop  mask.miff   apmask.miff
+    # convert to gif so we can set 
+    convert apmask.miff -transparent $BGCOL trans.gif
+    convert trans.gif  `basename "$file" \.png`_sel.xpm
+
+
+# produce greyed-out version
+
+    convert small.miff -modulate 110,20 small-grey.miff
+    composite -size 28x28 xc:$BGCOL -compose copy small-grey.miff  mask.miff
+    composite small-grey.miff -compose atop  mask.miff   apmask.miff
+
+    # convert to gif so we can set 
+    convert apmask.miff -transparent $BGCOL trans.gif
+    convert trans.gif  `basename "$file" \.png`_dis.xpm
+
+
+    #convert "mask.$file" -resize x28  `basename "$file" \.png`.xpm
+done 
+rm apmask.miff mask.miff trans.gif
+
+rm *.png
+rm small.miff small1.miff
+#   -mattecolor '#EEEEEE' 
