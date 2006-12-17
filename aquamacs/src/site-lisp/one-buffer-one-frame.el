@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.49 2006/09/04 14:57:07 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.50 2006/12/17 16:26:10 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -541,6 +541,14 @@ the current window is switched to the new buffer."
 		 ;; this is to maintain compatibility with opening
 		 ;; a new window inside the frame, where the input focus
 		 ;; stays in the original window.
+		 
+		 ;; dr 12/2006 - we'll try this again, because
+		 ;; that's the way display-buffer is supposed to work.
+
+		 (unless (eq display-buffer-reuse-frames 'select)
+		   (select-frame-set-input-focus sframe)
+		   (select-window swin))
+		   
 		 ;; NOT GOOD. switch-to-buffer and friends
 		 ;; don't work as expected.
 		 ;; besides, switching input focus to new frames
@@ -548,13 +556,11 @@ the current window is switched to the new buffer."
 		 ;; close them after reading. In other cases, they
 		 ;; might want to let them stay and move them somewhere
 		 ;; else.
-	       ;(select-frame-set-input-focus sframe)
-	       ;(select-window swin)
 		 
 	      ret) 
 	       )
 	   (apply (function display-buffer) args))))
-
+;; (setq display-buffer-reuse-frames 'select)
 (aquamacs-set-defaults 
  '((display-buffer-reuse-frames t)
    (display-buffer-function aquamacs-display-buffer)))
