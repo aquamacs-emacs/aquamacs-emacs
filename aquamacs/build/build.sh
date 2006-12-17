@@ -105,8 +105,10 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
     echo "Applying Aquamacs patches..." >>$LOG  
     . ${AQUAMACS_ROOT}/build/apply-patches.sh >>$LOG 2>>$LOG
 
-    echo "Building icons..." >>$LOG
-    ${AQUAMACS_ROOT}/Icons/make-xpm ${AQUAMACS_ROOT}/Icons ${EMACS_ROOT}/etc/images 
+    echo "Copying icons..." >>$LOG
+    cp ${AQUAMACS_ROOT}/Icons/build/* ${EMACS_ROOT}/etc/images/
+    # can't produce icons without ImageMagick / freetype in build env.
+    # ${AQUAMACS_ROOT}/Icons/make-xpm ${AQUAMACS_ROOT}/Icons ${EMACS_ROOT}/etc/images 
 
     cd ${AQ_PREFIX}/emacs/mac
     echo "Building Emacs (make-aquamacs)..." >>$LOG 
