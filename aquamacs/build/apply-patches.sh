@@ -14,8 +14,10 @@
 
 # Add your patch file name here (file names cannot contain spaces).
 
-# toolbar-png  taken out, because it's slow and we don't need it yet
-PATCHES="test custom-verbosity pretty-modeline transparency2
+# toolbar-png:  taken out, because it's slow and we don't need it yet
+# DR 12/2006: inserted again, maybe useful for the "sel" images.
+#    is it slow with xpm as well?
+PATCH ES="test toolbar-png custom-verbosity pretty-modeline transparency2
          capslock 
          recentf-track-minibuf
          pop-to-buffer display-buffer-reuse
