@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.82 2006/12/17 23:33:58 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.83 2006/12/17 23:35:46 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -1059,6 +1059,7 @@ if modified buffers exist."
  
   (face-spec-set 'tooltip '((t (:inherit variable-pitch :background "lightyellow" :foreground "black" :height 100 :family "lucida sans"))) nil)
 
+  (aquamacs-set-defaults '((auto-resize-tool-bar nil)))
 
   (let ((face 'tool-bar)
 	;; e2e2e2 is eaeaea in imagemagick for some reason
