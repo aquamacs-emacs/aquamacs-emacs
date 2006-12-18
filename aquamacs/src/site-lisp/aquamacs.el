@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.83 2006/12/17 23:35:46 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.84 2006/12/18 15:47:29 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -557,8 +557,12 @@ to the selected frame."
 	   (filter-fonts '(
 			   (help-mode (tool-bar-lines . 0) (fit-frame . t)) 
 			   (custom-mode (tool-bar-lines . 0) (fit-frame . t)))))))
-
-
+    (if (< aquamacs-customization-version-id 99.1)
+	(mapc (lambda (formode)
+		(assq-delete-all 'tool-bar  
+				 (cdr-safe (cdr-safe (car-safe 
+						      (cdr-safe formode))))))
+	      aquamacs-default-styles))
 
 ;; todo before 0.9.9:
 ;; how to deal with tool-bar-mode set in user's custom-file?
