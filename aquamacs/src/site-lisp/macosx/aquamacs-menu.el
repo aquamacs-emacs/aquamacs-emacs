@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.66 2006/08/22 15:53:15 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.67 2006/12/18 12:31:52 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -453,7 +453,7 @@ customization buffer."
 	      redo
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
 			   last-buffer-undo-list)
-	      :help "Discard current buffer") 'undo)
+	      :help "Redo undone operation") 'undo)
 
 (easy-menu-add-item  nil '("Edit")
   ["-" nil nil] 'cut)
@@ -709,7 +709,7 @@ both existing buffers and buffers that you subsequently create."
     (mac-font-panel-mode 1))
 
  ;; this is a redefine
-(define-key menu-bar-options-menu [mouse-set-font]
+  (define-key menu-bar-options-menu [mouse-set-font]
   `(menu-item ,(aq-shortcut "Show Fonts (this Frame)..." 
 			    mac-font-panel-mode)
 	      turn-on-mac-font-panel-mode
