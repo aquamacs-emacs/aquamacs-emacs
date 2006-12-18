@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: site-start.el,v 1.21 2006/06/26 15:16:50 davidswelt Exp $
+;; Last change: $Id: site-start.el,v 1.22 2006/12/18 15:46:57 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -39,23 +39,31 @@
 
 ;; Version information
 
-(defvar aquamacs-version "0.9.9d"
+(defvar aquamacs-version "1.0rc1"
 "A string with Aquamacs' version number.
 The format of the string is undefined. 
 For a reliable numerical representation, use `aquamacs-version-id'.")
 
-(defvar aquamacs-version-id 099.0
+(defvar aquamacs-version-id 100
 "A float indicating Aquamacs' version number.
 Full integers correspond to the third position of the public
 version number, e.g. version 0.9.7 is represented as `97.x'.
 Minor version numbers are reflected in the decimals. 
-It is guaranteed that iff of two Aquamacs releases A and B,
-B is newer than A, then aquamacs-version-id for B is higher 
-than aquamacs-version-id for A.")
+It is guaranteed that for any two Aquamacs releases A and B,
+if aquamacs-version-id for B is higher than aquamacs-version-id 
+for A, then B is newer than A.")
 
 (defvar aquamacs-minor-version ""
 "Version code for minor maintenance releases.
 Changes in this code are ignored during the online version check.")
+
+;; only for Emacs.app
+(when nil
+ (setq load-path (cons "~/src" load-path))
+ (setq load-path (cons "~/src/oneonone" load-path))
+ (setq load-path (cons "~/src/macosx" load-path))
+ (setq unicode-emacs 0)
+)
 
 (when ;; do not load this twice 
     (not (memq 'aquamacs-site-start features))
