@@ -1629,7 +1629,7 @@ emacs*Foreground:		Wheat"
        (speedbar-highlight-face ((t (:background "dark slate blue" :foreground "wheat"))))
        (speedbar-selected-face ((t (:foreground "seashell1" :underline t))))
        (speedbar-tag-face ((t (:foreground "antique white"))))
-       (tool-bar ((t (:background "MidnightBlue" :foreground "Grey" :box (:line-width 1 :style released-button)))))
+       
        (underline ((t (:underline t))))
        (widget-button-face ((t (:bold t))))
        (widget-button-pressed-face ((t (:foreground "red"))))
@@ -1769,7 +1769,7 @@ XEmacs color theme."
    '(color-theme-xemacs
      ((background-color . "gray80")
       (background-mode . light)
-      (background-toolbar-color . "#cf3ccf3ccf3c")
+      
       (border-color . "#000000000000")
       (bottom-toolbar-shadow-color . "#79e77df779e7")
       (cursor-color . "Red3")
@@ -1839,7 +1839,7 @@ XEmacs color theme."
     (right-margin ((t (nil))))
     (secondary-selection ((t (:background "paleturquoise"))))
     (text-cursor ((t (:background "Red3" :foreground "gray80"))))
-    (toolbar ((t (:background "Gray80"))))
+    
     (underline ((t (:underline t))))
     (vertical-divider ((t (:background "Gray80"))))
     (widget-button-face ((t (:bold t))))
@@ -2235,7 +2235,7 @@ Uses white background and bold for many things"
    '(color-theme-jb-simple
      ((background-color . "white")
       (background-mode . light)
-      (background-toolbar-color . "#cf3ccf3ccf3c")
+      
       (border-color . "black")
       (bottom-toolbar-shadow-color . "#79e77df779e7")
       (cursor-color . "black")
@@ -2485,7 +2485,7 @@ Uses white background and bold for many things"
     (term-yellow ((t (:foreground "yellow"))))
     (term-yellowbg ((t (:background "yellow"))))
     (text-cursor ((t (nil))))
-    (toolbar ((t (nil))))
+    
     (underline ((t (:underline t))))
     (vc-annotate-face-0046FF ((t (nil))))
     (vcursor ((t (:underline t :background "cyan" :foreground "blue"))))
@@ -2648,7 +2648,7 @@ Supports standard, font-lock and info faces, and it uses
        (mode-line-inactive ((t (:background "gray20" :foreground "lemon chiffon" :box (:line-width 1 :style released-button)))))
        (region ((t (:background "dark olive green"))))
        (secondary-selection ((t (:background "dark green"))))
-       (tool-bar ((t (:background "gray25" :foreground "lemon chiffon" :box (:line-width 1 :style released-button)))))
+       
        (underline ((t (:underline t))))))))
 
 (defun color-theme-ramangalahy ()
@@ -2660,12 +2660,12 @@ dired, display-time, cperl, font-lock, widget, x-symbol."
    '(color-theme-ramangalahy
      ((background-color . "lightgrey")
       (background-mode . light)
-      (background-toolbar-color . "#bfbfbfbfbfbf")
+      
       (border-color . "#000000000000")
       (bottom-toolbar-shadow-color . "#737373737373")
       (cursor-color . "blue")
       (foreground-color . "black")
-      (top-toolbar-shadow-color . "#e6e6e6e6e6e6"))
+      )
      ((gnus-mouse-face . highlight)
       (goto-address-mail-face . info-xref)
       (ispell-highlight-face . highlight)
@@ -2814,7 +2814,7 @@ dired, display-time, cperl, font-lock, widget, x-symbol."
     (secondary-selection ((t (:background "paleturquoise"))))
     (template-message-face ((t (:bold t))))
     (text-cursor ((t (:background "blue" :foreground "lightgrey"))))
-    (toolbar ((t (nil))))
+    
     (underline ((t (:underline t))))
     (vertical-divider ((t (nil))))
     (widget-button-face ((t (:bold t))))
@@ -2840,7 +2840,7 @@ Includes faces for dired, font-lock, info, paren."
    '(color-theme-raspopovic
      ((background-color . "darkblue")
       (background-mode . light)
-      (background-toolbar-color . "#bfbfbfbfbfbf")
+      
       (border-color . "#000000000000")
       (bottom-toolbar-shadow-color . "#737373737373")
       (cursor-color . "Red3")
@@ -3013,7 +3013,6 @@ in your ~/.Xdefaults."
    '(color-theme-marquardt
      ((background-color . "bisque")
       (background-mode . light)
-      (background-toolbar-color . "bisque")
       (border-color . "#000000000000")
       (bottom-toolbar-shadow-color . "#909099999999")
       (cursor-color . "Red3")
@@ -3090,7 +3089,7 @@ in your ~/.Xdefaults."
     (speedbar-selected-face ((t (:underline t :foreground "red"))))
     (speedbar-tag-face ((t (:foreground "brown"))))
     (text-cursor ((t (:background "Red3" :foreground "bisque"))))
-    (toolbar ((t (:background "Gray80"))))
+    
     (underline ((t (:underline t))))
     (vertical-divider ((t (nil))))
     (vhdl-font-lock-attribute-face ((t (:foreground "Orchid"))))
@@ -3320,7 +3319,7 @@ with my favorit fontlock color."
    '(color-theme-infodoc
      ((background-color . "wheat")
       (background-mode . light)
-      (background-toolbar-color . "#000000000000")
+      
       (border-color . "#000000000000")
       (bottom-toolbar-shadow-color . "#000000000000")
       (cursor-color . "red")
@@ -3396,7 +3395,7 @@ with my favorit fontlock color."
     (shell-output-face ((t (:bold t :background "wheat" :foreground "black"))))
     (shell-prompt-face ((t (:bold t :background "wheat" :foreground "dark orchid"))))
     (text-cursor ((t (:bold t :background "red" :foreground "wheat"))))
-    (toolbar ((t (:bold t :background "wheat" :foreground "black"))))
+    
     (underline ((t (:underline t :bold t :background "wheat" :foreground "black"))))
     (vertical-divider ((t (:bold t))))
     (widget-button-face ((t (nil))))
@@ -3784,7 +3783,7 @@ Includes dired, bbdb, font-lock, gnus, message, viper, and widget."
    '(color-theme-montz
      ((background-color . "gray80")
       (background-mode . light)
-      (background-toolbar-color . "#cccccccccccc")
+      
       (border-color . "#000000000000")
       (bottom-toolbar-shadow-color . "#7a7a7a7a7a7a")
       (cursor-color . "Red3")
@@ -3928,7 +3927,7 @@ Includes dired, bbdb, font-lock, gnus, message, viper, and widget."
     (right-margin ((t (nil))))
     (secondary-selection ((t (:background "paleturquoise"))))
     (text-cursor ((t (:background "Red3" :foreground "gray80"))))
-    (toolbar ((t (nil))))
+    
     (underline ((t (:underline t))))
     (vertical-divider ((t (nil))))
     (viper-minibuffer-emacs-face ((t (:background "gray80" :foreground "black"))))
@@ -4149,7 +4148,7 @@ Includes font-lock and message."
    '(color-theme-blippblopp
      ((background-color . "white")
       (background-mode . light)
-      (background-toolbar-color . "#cf3ccf3ccf3c")
+      
       (border-color . "#000000000000")
       (bottom-toolbar-shadow-color . "#79e77df779e7")
       (cursor-color . "Red3")
@@ -4201,7 +4200,6 @@ Includes font-lock and message."
     (show-paren-match-face ((t (:background "turquoise"))))
     (show-paren-mismatch-face ((t (:background "purple" :foreground "white"))))
     (text-cursor ((t (:background "Red3" :foreground "white"))))
-    (toolbar ((t (:background "Gray80"))))
     (underline ((t (:underline t))))
     (vcursor ((t (:underline t :background "cyan" :foreground "blue"))))
     (vertical-divider ((t (:background "Gray80"))))
@@ -4370,7 +4368,7 @@ shell, speedbar, term, vhdl, viper, widget, woman, xref.  Wow!"
    '(color-theme-bharadwaj
      ((background-color . "gainsboro")
       (background-mode . light)
-      (background-toolbar-color . "#cf3ccf3ccf3c")
+      
       (border-color . "black")
       (bottom-toolbar-shadow-color . "#79e77df779e7")
       (cursor-color . "grey15")
@@ -4665,7 +4663,7 @@ shell, speedbar, term, vhdl, viper, widget, woman, xref.  Wow!"
     (term-yellow ((t (:foreground "yellow"))))
     (term-yellowbg ((t (:background "yellow"))))
     (text-cursor ((t (:background "grey15" :foreground "gainsboro"))))
-    (toolbar ((t (nil))))
+    
     (underline ((t (:underline t))))
     (vc-annotate-face-0046FF ((t (nil))))
     (vcursor ((t (:underline t :background "cyan" :foreground "blue"))))
@@ -4829,8 +4827,7 @@ uses neep, for example."
        (modeline ((t (:background "dark olive green" :foreground "wheat" :box (:line-width 1 :style released-button)))))
        (mode-line-inactive ((t (:background "dark olive green" :foreground "khaki" :box (:line-width 1 :style released-button)))))
        (semantic-dirty-token-face ((t (:background "grey22"))))
-       (tool-bar ((t (:background "#304020" :foreground "wheat" :box (:line-width 1 :style released-button)))))
-       (tooltip ((t (:background "lemon chiffon" :foreground "black"))))))))
+       ))))
 
 (defun color-theme-snowish ()
   "Color theme by Girish Bharadwaj, created 2001-05-17.
@@ -5057,7 +5054,7 @@ term, widget."
      (term-yellow-inv-face ((t (:background "yellow"))))
      (term-yellow-ul-face ((t (:underline t :background "snow2" :foreground "yellow"))))
      (text-cursor ((t (:background "Red3" :foreground "snow2"))))
-     (toolbar ((t (nil))))
+     
      (underline ((t (:underline t))))
      (vertical-divider ((t (nil))))
      (white ((t (:foreground "white"))))
@@ -5222,7 +5219,6 @@ message, paren, shell, and widget."
    '(color-theme-taming-mr-arneson
      ((background-color . "black")
       (background-mode . light)
-      (background-toolbar-color . "#cf3ccf3ccf3c")
       (border-color . "#000000000000")
       (bottom-toolbar-shadow-color . "#79e77df779e7")
       (cursor-color . "Red3")
@@ -5355,7 +5351,7 @@ message, paren, shell, and widget."
      (shell-output-face ((t (:bold t))))
      (shell-prompt-face ((t (:foreground "red4"))))
      (text-cursor ((t (:background "Red3" :foreground "black"))))
-     (toolbar ((t (:background "Gray80" :foreground "black"))))
+     
      (underline ((t (:underline t))))
      (vertical-divider ((t (nil))))
      (vm-xface ((t (:background "white" :foreground "black"))))
@@ -5386,7 +5382,6 @@ vhdl, viper, w3m, widget, woman, x-symbol, xref."
    '(color-theme-digital-ofs1
      ((background-color . "#CA94AA469193")
       (background-mode . light)
-      (background-toolbar-color . "#cf3ccf3ccf3c")
       (border-color . "black")
       (bottom-toolbar-shadow-color . "#79e77df779e7")
       (cursor-color . "Black")
@@ -5799,7 +5794,7 @@ vhdl, viper, w3m, widget, woman, x-symbol, xref."
     (term-yellow-ul-face ((t (:underline t :background "snow2" :foreground "yellow"))))
     (term-yellowbg ((t (:background "yellow"))))
     (text-cursor ((t (:bold t :background "Red3" :foreground "gray80"))))
-    (toolbar ((t (:bold t :background "Gray80"))))
+    
     (underline ((t (:underline t :bold t))))
     (vc-annotate-face-0046FF ((t (nil))))
     (vcursor ((t (:underline t :background "cyan" :foreground "blue"))))
@@ -6010,7 +6005,7 @@ Includes custom, font-lock, paren, widget."
      (secondary-selection ((t (:background "darkslateblue" :foreground "white"))))
      (template-message-face ((t (:bold t))))
      (text-cursor ((t (:background "yellow" :foreground "#9dcec9"))))
-     (toolbar ((t (nil))))
+     
      (underline ((t (:underline t))))
      (vertical-divider ((t (nil))))
      (widget ((t (nil))))
@@ -6142,7 +6137,6 @@ sgml, speedbar, term, vhdl, viper, vm, widget, woman, xref, xxml."
    '(color-theme-subtle-blue
      ((background-color . "#65889C")
       (background-mode . dark)
-      (background-toolbar-color . "#cf3ccf3ccf3c")
       (border-color . "black")
       (bottom-toolbar-shadow-color . "#79e77df779e7")
       (cursor-color . "white")
@@ -6485,8 +6479,8 @@ sgml, speedbar, term, vhdl, viper, vm, widget, woman, xref, xxml."
     (term-yellow ((t (:foreground "yellow"))))
     (term-yellowbg ((t (:background "yellow"))))
     (text-cursor ((t (:background "Red3" :foreground "white"))))
-    (tool-bar ((t (:background "grey75" :foreground "black"))))
-    (toolbar ((t (:background "Gray"))))
+    
+    
     (trailing-whitespace ((t (:background "red"))))
     (underline ((t (:underline t))))
     (variable-pitch ((t (nil))))
@@ -6724,7 +6718,6 @@ Updated 2001-10-12."
    '(color-theme-gray1
      ((background-color . "darkgray")
       (background-mode . light)
-      (background-toolbar-color . "#949494949494")
       (border-color . "#000000000000")
       (bottom-toolbar-shadow-color . "#595959595959")
       (cursor-color . "Yellow")
@@ -6777,7 +6770,7 @@ Updated 2001-10-12."
      (right-margin ((t (nil))))
      (secondary-selection ((t (:background "paleturquoise"))))
      (text-cursor ((t (:background "Yellow" :foreground "darkgray"))))
-     (toolbar ((t (:background "#aa80aa" :foreground "linen"))))
+     
      (underline ((t (:underline t))))
      (vertical-divider ((t (nil))))
      (x-face ((t (:background "black" :foreground "lavenderblush"))))
@@ -7310,8 +7303,7 @@ flyspell texinfo tex-mode tooltip vcursor wid-edit woman term man"
      (term-yellowbg ((t (:stipple nil :background "yellow" :foreground "black" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :width normal :family "adobe-courier"))))
      (tex-math-face ((t (:foreground "RosyBrown"))))
      (texinfo-heading-face ((t (:foreground "Blue"))))
-     (tool-bar ((t (:background "grey75" :foreground "black" :box (:line-width 1 :style released-button)))))
-     (tooltip ((t (:background "lightyellow" :foreground "black"))))
+     
      (trailing-whitespace ((t (:background "red"))))
      (underline ((t (:underline t))))
      (variable-pitch ((t (:family "helv"))))
@@ -7397,7 +7389,7 @@ This builds on `color-theme-jsc-light'."
        (secondary-selection ((t (:background "yellow"))))
        (show-paren-match-face ((t (:background "turquoise"))))
        (show-paren-mismatch-face ((t (:background "purple" :foreground "white"))))
-       (tooltip ((t (:background "lightyellow" :foreground "black"))))))))
+       ))))
 
 (defun color-theme-ld-dark ()
   "Dark Color theme by Linh Dang, created 2001-11-06."
@@ -7601,7 +7593,7 @@ This builds on `color-theme-jsc-light'."
      (region ((t (:background "DarkSlateGray"))))
      (scroll-bar ((t (nil))))
      (secondary-selection ((t (:background "SkyBlue4"))))
-     (tool-bar ((t (:background "grey75" :foreground "black" :box (:line-width 1 :style released-button)))))
+     
      (trailing-whitespace ((t (:background "white"))))
      (underline ((t (:underline t))))
      (variable-pitch ((t (:family "helv"))))
@@ -7713,8 +7705,7 @@ This builds on `color-theme-jsc-light'."
       (secondary-selection ((t (:background "yellow" :foreground "gray10"))))
       (show-paren-match-face ((t (:bold t :foreground "yellow" :weight bold))))
       (show-paren-mismatch-face ((t (:bold t :foreground "red" :weight bold))))
-      (tool-bar ((t (:background "grey75" :foreground "black" :box (:line-width 1 :style released-button)))))
-      (tooltip ((t (:background "lightyellow" :foreground "black"))))
+      
       (trailing-whitespace ((t (:background "#102e4e"))))
       (underline ((t (:underline t))))
       (variable-pitch ((t (:family "helv"))))
@@ -7984,7 +7975,7 @@ Hail Eris! All hail Discordia!"
      (show-paren-mismatch-face ((t (:background "Red" :foreground "White"))))
      (swbuff-current-buffer-face ((t (:bold t :foreground "red" :weight bold))))
      (text-cursor ((t (:background "Red" :foreground "white"))))
-     (tool-bar ((t (:background "grey75" :foreground "black" :box (:line-width 1 :style released-button)))))
+     
      (trailing-whitespace ((t (:background "red"))))
      (underline ((t (:underline t))))
      (variable-pitch ((t (:family "Arial"))))
@@ -8160,8 +8151,7 @@ Steel blue on black."
      (speedbar-highlight-face ((t (:background "sea green"))))
      (speedbar-selected-face ((t (:foreground "red" :underline t))))
      (speedbar-tag-face ((t (:foreground "yellow"))))
-     (tool-bar ((t (:background "grey75" :foreground "black" :box (:line-width 1 :style released-button)))))
-     (tooltip ((t (:background "lightyellow" :foreground "black"))))
+     
      (trailing-whitespace ((t (:background "red"))))
      (underline ((t (:underline t))))
      (variable-pitch ((t (:family "helv"))))
@@ -8393,7 +8383,7 @@ A pastelly-mac like color-theme."
      (show-paren-match-face ((t (:background "Aquamarine" :foreground "SlateBlue"))))
      (show-paren-mismatch-face ((t (:background "Red" :foreground "White"))))
      (text-cursor ((t (:background "yellow" :foreground "black"))))
-     (toolbar ((t (nil))))
+     
      (underline ((nil (:underline nil))))
      (vertical-divider ((t (nil))))
      (widget ((t (nil))))
@@ -8568,7 +8558,7 @@ jde, senator, speedbar, and widget."
      (speedbar-selected-face ((t (:foreground "red" :underline t))))
      (speedbar-tag-face ((t (:foreground "brown"))))
      (template-message-face ((t (:bold t :weight bold))))
-     (tool-bar ((t (:background "grey75" :foreground "black" :box (:line-width 1 :style released-button)))))
+     
      (trailing-whitespace ((t (:background "red"))))
      (underline ((t (:underline t))))
      (variable-pitch ((t (:family "helv"))))
@@ -8679,7 +8669,7 @@ the look of \"angry fruit salad\" when editing."
      (semantic-dirty-token-face ((t (nil))))
      (semantic-unmatched-syntax-face ((t (nil))))
      (text-cursor ((t (:background "red" :foreground "gray"))))
-     (toolbar ((t (:background "gray75"))))
+     
      (underline ((t (:underline t))))
      (vertical-divider ((t (:background "gray75"))))
      (widget ((t (:size "8pt" :background "gray75"))))
@@ -8704,7 +8694,6 @@ a large theme."
    '(color-theme-dark-blue2
      ((background-color . "#233b5a")
       (background-mode . dark)
-      (background-toolbar-color . "#cf3ccf3ccf3c")
       (border-color . "black")
       (bottom-toolbar-shadow-color . "#79e77df779e7")
       (cursor-color . "Yellow")
@@ -9228,9 +9217,8 @@ a large theme."
      (tex-math-face ((t (:foreground "RosyBrown"))))
      (texinfo-heading-face ((t (:foreground "Blue"))))
      (text-cursor ((t (:background "Red3" :foreground "gray80"))))
-     (tool-bar ((t (:background "grey75" :foreground "black"))))
-     (toolbar ((t (:background "Gray80"))))
-     (tooltip ((t (:background "lightyellow" :foreground "black"))))
+     
+     
      (trailing-whitespace ((t (:background "red"))))
      (underline ((t (:underline t))))
      (variable-pitch ((t (:family "helv"))))
@@ -9323,7 +9311,6 @@ Includes cperl, custom, font-lock, p4, speedbar, widget."
    '(color-theme-blue-mood
      ((background-color . "DodgerBlue4")
       (background-mode . dark)
-      (background-toolbar-color . "#bfbfbfbfbfbf")
       (border-color . "Blue")
       (border-color . "#000000000000")
       (bottom-toolbar-shadow-color . "#6c6c68686868")
@@ -9410,7 +9397,7 @@ Includes cperl, custom, font-lock, p4, speedbar, widget."
      (speedbar-selected-face ((t (:underline t :foreground "red"))))
      (speedbar-tag-face ((t (:foreground "chartreuse"))))
      (text-cursor ((t (:background "DarkGoldenrod1" :foreground "DodgerBlue4"))))
-     (toolbar ((t (:background "#e7e3d6" :foreground "#000000"))))
+     
      (underline ((t (:underline t))))
      (vertical-divider ((t (:background "#e7e3d6" :foreground "#000000"))))
      (widget-button-face ((t (:bold t))))
@@ -9483,8 +9470,7 @@ Green on black theme including font-lock, speedbar, and widget."
      (speedbar-highlight-face ((t (:background "#00ff00" :foreground "purple"))))
      (speedbar-selected-face ((t (:foreground "deeppink" :underline t))))
      (speedbar-tag-face ((t (:foreground "yellow"))))
-     (tool-bar ((t (:background "gray16" :foreground "green" :box (:line-width 1 :style released-button)))))
-     (tooltip ((t (:background "gray16" :foreground "#00ff00"))))
+     
      (trailing-whitespace ((t (:background "red"))))
      (underline ((t (:underline t))))
      (variable-pitch ((t (:family "helv"))))
@@ -9644,8 +9630,7 @@ A white smoke on blue color theme."
      (secondary-selection ((t (:background "gray91" :foreground "sienna3"))))
      (show-paren-match-face ((t (:background "cyan3" :foreground "blue"))))
      (show-paren-mismatch-face ((t (:background "red" :foreground "blue"))))
-     (tool-bar ((t (:background "grey75" :foreground "black"))))
-     (tooltip ((t (:background "lightyellow" :foreground "black"))))
+     
      (trailing-whitespace ((t (:background "red"))))
      (underline ((t (:underline t))))
      (variable-pitch ((t (:family "helv"))))
@@ -9802,8 +9787,7 @@ Includes custom, erc, font-lock, jde, semantic, speedbar, widget."
      (speedbar-selected-face ((t (:foreground "red" :underline t))))
      (speedbar-tag-face ((t (:foreground "brown"))))
      (template-message-face ((t (:bold t :weight bold))))
-     (tool-bar ((t (:background "grey75" :foreground "black" :box (:line-width 1 :style released-button)))))
-     (tooltip ((t (:background "lightyellow" :foreground "black"))))
+     
      (trailing-whitespace ((t (:background "red"))))
      (underline ((t (:underline t))))
      (variable-pitch ((t (:family "helv"))))
@@ -9966,8 +9950,8 @@ Includes custom, erc, font-lock, jde, semantic, speedbar, widget."
      (speedbar-selected-face ((t (:foreground "red" :underline t))))
      (speedbar-tag-face ((t (:foreground "yellow"))))
      (template-message-face ((t (:bold t :weight bold))))
-     (tool-bar ((t (:background "grey75" :foreground "black" :box (:line-width 1 :style released-button)))))
-     (tooltip ((t (:background "lightyellow" :foreground "black"))))
+     
+     
      (trailing-whitespace ((t (:background "red"))))
      (underline ((t (:underline t))))
      (variable-pitch ((t (:family "helv"))))
@@ -9985,7 +9969,6 @@ Includes custom, erc, font-lock, jde, semantic, speedbar, widget."
   (color-theme-install
    '(color-theme-dark-green
      ((background-mode . light)
-      (background-toolbar-color . "#e79ddf7ddf7d")
       (border-color . "#000000000000")
       (bottom-toolbar-shadow-color . "#8e3886178617")
       (top-toolbar-shadow-color . "#ffffffffffff"))
@@ -10022,8 +10005,8 @@ Includes custom, erc, font-lock, jde, semantic, speedbar, widget."
      (rpm-spec-tag-face ((t (:foreground "blue"))))
      (secondary-selection ((t (:background "paleturquoise"))))
      (text-cursor ((t (:background "Red3" :foreground "DarkSlateGray"))))
-     (tool-bar ((t (nil))))
-     (toolbar ((t (:background "#ffffff" :foreground "#000000"))))
+     
+     
      (underline ((t (:underline t))))
      (vertical-divider ((t (:background "#ffffff" :foreground "#000000"))))
      (widget-button-face ((t (:bold t))))
@@ -10393,8 +10376,7 @@ Includes custom, erc, font-lock, jde, semantic, speedbar, widget."
      (term-yellowbg ((t (:stipple nil :background "yellow" :foreground "black" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :width normal :family "adobe-courier"))))
      (tex-math-face ((t (:foreground "RosyBrown"))))
      (texinfo-heading-face ((t (:foreground "Blue"))))
-     (tool-bar ((t (:background "grey75" :foreground "black" :box (:line-width 1 :style released-button)))))
-     (tooltip ((t (:background "lightyellow" :foreground "black"))))
+     
      (trailing-whitespace ((t (:background "red"))))
      (underline ((t (:foreground "navy" :underline t))))
      (variable-pitch ((t (:family "helv"))))
@@ -10707,8 +10689,7 @@ Includes custom, erc, font-lock, jde, semantic, speedbar, widget."
      (term-whitebg ((t (:background "white"))))
      (term-yellow ((t (:foreground "yellow"))))
      (term-yellowbg ((t (:background "yellow"))))
-     (tool-bar ((t (:background "DarkSlateGray" :foreground "White" :box (:line-width 1 :color "blue")))))
-     (tooltip ((t (:background "lightyellow" :foreground "black"))))
+     
      (trailing-whitespace ((t (:background "red"))))
      (underline ((t (:underline t))))
      (variable-pitch ((t (:family "helv"))))
@@ -10758,7 +10739,6 @@ Bonus: do not use 3D modeline."
    '(color-theme-lethe
      ((background-color . "black")
       (background-mode . dark)
-      (background-toolbar-color . "#000000000000")
       (border-color . "#000000000000")
       (bottom-toolbar-shadow-color . "red")
       (cursor-color . "red")
@@ -11122,9 +11102,9 @@ Bonus: do not use 3D modeline."
      (term-yellow-ul-face ((t (:underline t :foreground "yellow"))))
      (term-yellowbg ((t (:background "yellow"))))
      (text-cursor ((t (:background "red" :foreground "black"))))
-     (tool-bar ((t (:background "grey75" :foreground "black"))))
-     (toolbar ((t (:background "Gray80" :foreground "black"))))
-     (tooltip ((t (:background "lightyellow" :foreground "black"))))
+     
+     
+     
      (trailing-whitespace ((t (:background "red"))))
      (underline ((t (:underline t))))
      (variable-pitch ((t (nil))))
@@ -11173,7 +11153,7 @@ Bonus: do not use 3D modeline."
    '(color-theme-shaman
      ((background-color . "#456345")
       (background-mode . dark)
-      (background-toolbar-color . "#cf3ccf3ccf3c")
+      
       (border-color . "#000000000000")
       (bottom-toolbar-shadow-color . "#79e77df779e7")
       (foreground-color . "White")
@@ -11238,8 +11218,8 @@ Bonus: do not use 3D modeline."
      (rpm-spec-var-face ((t (:foreground "maroon"))))
      (secondary-selection ((t (:background "paleturquoise"))))
      (text-cursor ((t (:background "Pink" :foreground "Black"))))
-     (tool-bar ((t (nil))))
-     (toolbar ((t (:background "Gray80" :foreground "black"))))
+     
+     
      (underline ((t (:underline t))))
      (vertical-divider ((t (:background "Gray80" :foreground "black"))))
      (widget ((t (:size "12" :background "Gray80" :foreground "black"))))
@@ -11587,8 +11567,7 @@ than absolute, viz: call that first and then tweak minor stuff."
      (term-yellowbg ((t (:stipple nil :background "yellow" :foreground "black" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :width normal :family "adobe-courier"))))
      (tex-math-face ((t (:foreground "RosyBrown"))))
      (texinfo-heading-face ((t (:foreground "Blue"))))
-     (tool-bar ((t (:background "grey75" :foreground "black" :box (:line-width 1 :style released-button)))))
-     (tooltip ((t (:background "lightyellow" :foreground "black"))))
+     
      (trailing-whitespace ((t (:background "red"))))
      (underline ((t (:underline t))))
      (variable-pitch ((t (:family "helv"))))
@@ -11644,7 +11623,7 @@ its default 80x25 state -- dark grey on black."
      '(color-theme-late-night
        ((background-color . "#000")
 	(background-mode . dark)
-	(background-toolbar-color . "#000")
+	
 	(border-color . "#000")
 	(bottom-toolbar-shadow-color . "#000")
 	(cursor-color	. "#888")
@@ -11672,8 +11651,8 @@ its default 80x25 state -- dark grey on black."
        (secondary-selection ((t (:background "Aquamarine" :foreground "SlateBlue"))))
        (show-paren-match-face ((t (:foreground "white" :background "light slate blue"))))
        (show-paren-mismatch-face ((t (:foreground "white" :background "red"))))
-       (tool-bar ((t (:background "#111" :foreground "#777"))))
-       (tooltip ((t (:background "#333" :foreground "#777"))))
+       
+       
        (underline ((t (:bold t))))
        (variable-pitch ((t (nil))))
        (widget-button-face ((t (:bold t :foreground "#888"))))
@@ -11758,8 +11737,8 @@ its default 80x25 state -- dark grey on black."
      (show-block-face9 ((t (:background "gray50"))))
      (show-paren-match-face ((t (:background "turquoise"))))
      (show-paren-mismatch-face ((t (:background "purple" :foreground "white"))))
-     (tool-bar ((t (:background "grey75" :foreground "black" :box (:line-width 1 :style released-button)))))
-     (tooltip ((t (:background "lightyellow" :foreground "black"))))
+     
+     
      (trailing-whitespace ((t (:background "red"))))
      (underline ((t (:underline t))))
      (variable-pitch ((t (:family "helv"))))
@@ -11777,7 +11756,6 @@ its default 80x25 state -- dark grey on black."
    '(color-theme-andreas
      ((background-mode . light)
       (background-color . "white")
-      (background-toolbar-color . "#cccccccccccc")
       (border-color . "#000000000000")
       (bottom-toolbar-shadow-color . "#7a7a7a7a7a7a")
       (foreground-color . "black")
@@ -11945,7 +11923,6 @@ its default 80x25 state -- dark grey on black."
      (right-margin ((t (nil))))
      (secondary-selection ((t (:background "paleturquoise"))))
      (text-cursor ((t (:background "red" :foreground "LightYellow1"))))
-     (toolbar ((t (:background "Gray80"))))
      (underline ((t (:underline t))))
      (vertical-divider ((t (:background "Gray80"))))
      (widget-button-face ((t (:bold t))))
@@ -12220,8 +12197,8 @@ its default 80x25 state -- dark grey on black."
      (speedbar-selected-face ((t (:foreground "seashell1" :underline t))))
      (speedbar-separator-face ((t (:background "blue" :foreground "white" :overline "gray"))))
      (speedbar-tag-face ((t (:foreground "antique white"))))
-     (tool-bar ((t (:background "grey75" :foreground "black" :box (:line-width 1 :style released-button)))))
-     (tooltip ((t (:background "lightyellow" :foreground "black"))))
+     
+     
      (trailing-whitespace ((t (:background "red"))))
      (underline ((t (:underline t))))
      (variable-pitch ((t (:family "helv"))))
@@ -12322,8 +12299,8 @@ its default 80x25 state -- dark grey on black."
      (sh-heredoc-face ((t (:foreground "tan"))))
      (show-paren-match-face ((t (:background "turquoise"))))
      (show-paren-mismatch-face ((t (:background "purple" :foreground "white"))))
-     (tool-bar ((t (:background "grey75" :foreground "black"))))
-     (tooltip ((t (:background "lightyellow" :foreground "black"))))
+     
+     
      (trailing-whitespace ((t (:background "red"))))
      (underline ((t (:underline t))))
      (variable-pitch ((t (nil))))
@@ -12468,8 +12445,7 @@ released-button)))))
      (speedbar-selected-face ((t (:foreground "red" :underline t))))
      (speedbar-separator-face ((t (:background "blue" :foreground "white" :overline "gray"))))
      (speedbar-tag-face ((t (:foreground "yellow"))))
-     (tool-bar ((t (:background "grey75" :foreground "black" :box (:line-width 1 :style
-released-button)))))
+     
      (trailing-whitespace ((t (:background "red"))))
      (underline ((t (:underline t))))
      (variable-pitch ((t (:family "helv"))))
@@ -12721,8 +12697,8 @@ Contains faces for erc, gnus, most of jde."
      (tabbar-selected-face ((t (:background "black" :foreground "springgreen" :box (:line-width 2 :color "black" :style released-button)))))
      (tabbar-separator-face ((t (:foreground "#00cc00" :background "black"))))
      (tabbar-unselected-face ((t (:background "black" :foreground "seagreen" :box (:line-width 2 :color "black" :style pressed-button)))))
-     (tool-bar ((t (:box (:line-width 1 :style released-button)))))
-     (tooltip ((t (nil))))
+     
+     
      (trailing-whitespace ((t (:background "lightseagreen" :foreground "black"))))
      (underline ((t (:foreground "#00CC00" :background "black" :underline t))))
      (variable-pitch ((t (:underline nil :foreground "#00CC00" :background "black"))))
@@ -12740,7 +12716,6 @@ Contains faces for erc, gnus, most of jde."
    '(color-theme-matrix
      ((background-color . "black")
       (background-mode . dark)
-      (background-toolbar-color . "bisque")
       (border-color . "orange")
       (bottom-toolbar-shadow-color . "#909099999999")
       (cursor-color . "#7eff00")
@@ -13341,8 +13316,8 @@ bold))))
      (tex-math-face ((t (nil))))
      (texinfo-heading-face ((t (nil))))
      (text-cursor ((t (nil))))
-     (tool-bar ((t (nil))))
-     (tooltip ((t (nil))))
+     
+     
      (trailing-whitespace ((t (nil))))
      (underline ((t (:underline t))))
      (variable-pitch ((t (nil))))
@@ -13456,8 +13431,7 @@ bold))))
      (region ((t (:background "lavender" :foreground "black"))))
      (scroll-bar ((t (nil))))
      (secondary-selection ((t (:background "yellow"))))
-     (tool-bar ((t (:background "grey75" :foreground "black" :box
-(:line-width 1 :style released-button)))))
+     
      (trailing-whitespace ((t (:background "red"))))
      (underline ((t (:underline t))))
      (variable-pitch ((t (:family "helv"))))
@@ -13790,8 +13764,8 @@ bold))))
      (term-yellowbg ((t (:stipple nil :background "yellow" :foreground "black" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :width normal :family "adobe-courier"))))
      (tex-math-face ((t (:foreground "RosyBrown"))))
      (texinfo-heading-face ((t (:foreground "Blue"))))
-     (tool-bar ((t (:background "#e0e0e0" :foreground "black" :box (:line-width 1 :style released-button)))))
-     (tooltip ((t (:background "lightyellow" :foreground "black"))))
+     
+     
      (trailing-whitespace ((t (:background "red"))))
      (underline ((t (:underline t))))
      (variable-pitch ((t (:family "helv"))))
