@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.10 2006/04/21 21:52:33 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.11 2006/12/20 10:11:30 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -239,9 +239,9 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
   ;; that's bad luck then. 
   
   (when aquamacs-styles-mode
- 
     (mapc 
      (lambda (f) 
+           
        ;; update the style 
        (aquamacs-set-style f t)
        )  
@@ -267,9 +267,11 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 	) 
     )
   )
-;;(add-hook 'after-make-frame-functions	
-;;	  'set-mode-style-after-make-frame
-;;	  )
+;; this is needed for newly created frames, because the after-mode-change
+;; hook can get run before the frame is displayed.
+(add-hook 'after-make-frame-functions	
+	  'set-mode-style-after-make-frame
+	  )
 
 ;;(setq last-major-mode-style-in-this-frame nil)
 
