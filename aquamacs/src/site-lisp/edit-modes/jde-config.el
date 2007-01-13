@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: java jde
  
-;; Last change: $Id: jde-config.el,v 1.2 2006/12/01 23:49:18 davidswelt Exp $
+;; Last change: $Id: jde-config.el,v 1.3 2007/01/13 13:10:21 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -42,7 +42,7 @@
   (add-to-list 'load-path (expand-file-name "jde/lisp" (file-name-directory load-file-name)))
   (add-to-list 'load-path (expand-file-name "elib" (file-name-directory load-file-name))))
 
-(autoload 'jde-mode "jde" "JDE mode." t)
+(autoload 'jde-mode "jde-load" "JDE mode." t)
 (setq auto-mode-alist
       (append
        '((".java'" . jde-mode))
@@ -53,10 +53,8 @@
 (let* ((java-path "/System/Library/Frameworks/JavaVM.framework/Versions")
       (java-versions (directory-files java-path nil "[0-9]+\..*")))
 (aquamacs-set-defaults
- `((semanticdb-default-save-directory 
-    ,(concat temporary-file-directory "semantic.cache"))
+ `((semanticdb-default-save-directory ,(concat temporary-file-directory "semantic.cache"))
    (jde-jdk-registry
     ,(mapcar (lambda (version) (cons version (concat java-path "/" version))) 
 	     java-versions))
    (jde-jdk ,(last java-versions)))))
- 
