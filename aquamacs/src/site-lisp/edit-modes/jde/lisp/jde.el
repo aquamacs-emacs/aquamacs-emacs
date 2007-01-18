@@ -1708,6 +1708,27 @@ named doc of the directory that contains the file
 jde.el."
   (jde-find-jde-data-directory))
 
+(defun jde-url-encode-string (string &optional coding)
+  "Encode STRING by url-encoding.
+Optional CODING is used for encoding coding-system."
+  (apply (function concat)
+	 (mapcar
+	  (lambda (ch)
+	    (cond
+	     ((eq ch ?\n)		; newline
+	      "%0D%0A")
+	     ((string-match "[-a-zA-Z0-9_:/.]" (char-to-string ch))
+	      (char-to-string ch))	; printable
+	     ((char-equal ch ?\x20)	; space
+	      "%20")
+	     (t
+	      (format "%%%02x" ch))))	; escape
+	  ;; Coerce a string to a list of chars.
+	  (append (encode-coding-string (or string "")
+					(or coding
+					    file-name-coding-system))
+		  nil))))
+
 ;;;###autoload
 (defun jde-show-help ()
   "Displays the JDE User's Guide in a browser."
@@ -1719,7 +1740,8 @@ jde.el."
     (if (and
          jde-help
          (file-exists-p jde-help))
-        (browse-url (concat "file://" (jde-convert-cygwin-path jde-help))
+        (browse-url (concat "file://" (jde-url-encode-string
+				       (jde-convert-cygwin-path jde-help)))
                     (if (boundp 'browse-url-new-window-flag)
 			'browse-url-new-window-flag
 		      browse-url-new-window-p))
