@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.12 2007/01/26 19:13:10 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.13 2007/01/26 19:17:45 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -914,9 +914,12 @@ for all frames with the current major-mode."
  
 
 (defun aquamacs-color-theme-select ()
+"Select a Color Theme.
+Display a buffer with a list of color themes, which, upon selection, are applied to the 
+selected frame."
   (interactive) 
  
-  (setq color-theme-target-frame (selected-frame))
+  (setq color-theme-target-frame (selected-frame)) ;; this variable seems to be deprecated!
    
   (let ((one-buffer-one-frame-force t))	
     ;; always open in new frame
