@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.11 2006/12/20 10:11:30 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.12 2007/01/26 19:13:10 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -112,7 +112,7 @@ ability. The following rules are followed:
   "Sets the mode-specific style (frame parameters) for FRAME
  (selected frame if nil), unless it is already set (or
 FORCE is non-nil). Use style of major mode FOR-MODE if given."
-    
+ 
   (when aquamacs-styles-mode
 
     (unless frame (setq frame (selected-frame) ))
@@ -193,18 +193,23 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 ;; 			      ))))
 		      (let ((old-frame-pixel-width (frame-pixel-width frame))
 			    (old-frame-pixel-height (frame-pixel-height frame)))
-
+			 
 			(modify-frame-parameters 
 			 frame 
 			 (cons (cons 'frame-configured-for-buffer 
 				     buffer) 
 			       style))
-			(let ((color-style-target-frame frame))
+			
+			(save-window-excursion
+			  (select-frame frame)
+			  ;; color-style-target-frame seems deprecated
+			 
 			  (if (and (functionp (car-safe color-theme))
 				   (memq (car-safe color-theme) color-themes)
 				   (not (cdr-safe color-theme)))
 			      (funcall (car color-theme))  ;; just install the color style directly
-			    (color-theme-install color-theme)))
+			    (color-theme-install color-theme))) 
+			
 			(if (and (fboundp 'smart-move-frame-inside-screen)
 			       (or (not (equal old-frame-pixel-width
 					       (frame-pixel-width frame)))
