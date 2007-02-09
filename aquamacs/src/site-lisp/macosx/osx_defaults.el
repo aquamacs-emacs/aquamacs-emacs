@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.50 2006/10/09 21:33:58 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.51 2007/02/09 22:58:41 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -100,6 +100,7 @@
 
   ;; Mac creator
 
+  (add-hook 'find-file-hook 'mac-read-file-creator)
   (add-hook 'after-save-hook 'mac-set-creator-code-for-file)
 					
 
