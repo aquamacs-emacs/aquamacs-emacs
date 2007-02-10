@@ -22,8 +22,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with AUCTeX; see the file COPYING.  If not, write to the Free
-;; Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-;; 02111-1307, USA.
+;; Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+;; 02110-1301, USA.
 
 ;;; Commentary:
 
@@ -131,11 +131,11 @@ set it with `TeX-modes-set'."
 		      `(TeX-modes-set ',var ,var t))
 		    (setq list (cdr list))))))
 
-(defconst AUCTeX-version "11.82"
+(defconst AUCTeX-version "11.84"
     "AUCTeX version.
 If not a regular release, the date of the last change.")
 
-(defconst AUCTeX-date "2005-12-17"
+(defconst AUCTeX-date "2007-01-12"
   "AUCTeX release date using the ISO 8601 format, yyyy-mm-dd.")
 
 ;;; auto-loads.el --- automatically extracted autoloads
@@ -144,7 +144,7 @@ If not a regular release, the date of the last change.")
 
 
 ;;;### (autoloads (turn-on-bib-cite bib-cite-minor-mode) "bib-cite"
-;;;;;;  "bib-cite.el" (17014 40138))
+;;;;;;  "bib-cite.el" (17603 42500))
 ;;; Generated autoloads from bib-cite.el
 
 (autoload (quote bib-cite-minor-mode) "bib-cite" "\
@@ -162,7 +162,7 @@ Unconditionally turn on Bib Cite mode.
 
 ;;;***
 
-;;;### (autoloads (context-mode) "context" "context.el" (17080 25212))
+;;;### (autoloads (context-mode) "context" "context.el" (17783 2620))
 ;;; Generated autoloads from context.el
 
 (defalias (quote ConTeXt-mode) (quote context-mode))
@@ -182,7 +182,7 @@ of context-mode-hook.
 ;;;***
 
 ;;;### (autoloads (context-en-mode) "context-en" "context-en.el"
-;;;;;;  (17133 11477))
+;;;;;;  (17783 2626))
 ;;; Generated autoloads from context-en.el
 
 (autoload (quote context-en-mode) "context-en" "\
@@ -200,7 +200,7 @@ of context-mode-hook.
 ;;;***
 
 ;;;### (autoloads (context-nl-mode) "context-nl" "context-nl.el"
-;;;;;;  (16634 12849))
+;;;;;;  (17783 2634))
 ;;; Generated autoloads from context-nl.el
 
 (autoload (quote context-nl-mode) "context-nl" "\
@@ -218,7 +218,7 @@ of context-mode-hook.
 ;;;***
 
 ;;;### (autoloads (font-latex-setup) "font-latex" "font-latex.el"
-;;;;;;  (17300 7088))
+;;;;;;  (17606 21819))
 ;;; Generated autoloads from font-latex.el
 
 (autoload (quote font-latex-setup) "font-latex" "\
@@ -229,7 +229,7 @@ Setup this buffer for LaTeX font-lock.  Usually called from a hook.
 ;;;***
 
 ;;;### (autoloads (docTeX-mode TeX-latex-mode BibTeX-auto-store)
-;;;;;;  "latex" "latex.el" (17300 7077))
+;;;;;;  "latex" "latex.el" (17813 6880))
 ;;; Generated autoloads from latex.el
 
 (autoload (quote BibTeX-auto-store) "latex" "\
@@ -283,7 +283,7 @@ are the arguments to `completing-read'.  See that.
 
 ;;;### (autoloads (TeX-submit-bug-report ams-tex-mode TeX-auto-generate-global
 ;;;;;;  TeX-auto-generate TeX-plain-tex-mode TeX-tex-mode) "tex"
-;;;;;;  "tex.el" (17304 35692))
+;;;;;;  "tex.el" (17826 48620))
 ;;; Generated autoloads from tex.el
 
 (autoload (quote TeX-tex-mode) "tex" "\
@@ -350,9 +350,14 @@ information about your AUCTeX version and AUCTeX configuration.
 
 ;;;***
 
-;;;### (autoloads (LaTeX-install-toolbar) "tex-bar" "tex-bar.el"
-;;;;;;  (17060 34510))
+;;;### (autoloads (LaTeX-install-toolbar TeX-install-toolbar) "tex-bar"
+;;;;;;  "tex-bar.el" (17784 30838))
 ;;; Generated autoloads from tex-bar.el
+
+(autoload (quote TeX-install-toolbar) "tex-bar" "\
+Install toolbar buttons for TeX mode.
+
+\(fn)" t nil)
 
 (autoload (quote LaTeX-install-toolbar) "tex-bar" "\
 Install toolbar buttons for LaTeX mode.
@@ -361,16 +366,16 @@ Install toolbar buttons for LaTeX mode.
 
 ;;;***
 
-;;;### (autoloads nil "tex-fold" "tex-fold.el" (17135 20045))
+;;;### (autoloads nil "tex-fold" "tex-fold.el" (17813 6851))
 ;;; Generated autoloads from tex-fold.el
- (autoload 'TeX-fold-mode "tex-fold" "Minor mode for hiding and revealing macros and environments.")
+ (autoload 'TeX-fold-mode "tex-fold" "Minor mode for hiding and revealing macros and environments." t)
 
 (defalias (quote tex-fold-mode) (quote TeX-fold-mode))
 
 ;;;***
 
-;;;### (autoloads (tex-font-setup) "tex-font" "tex-font.el" (17012
-;;;;;;  2606))
+;;;### (autoloads (tex-font-setup) "tex-font" "tex-font.el" (17525
+;;;;;;  25057))
 ;;; Generated autoloads from tex-font.el
 
 (autoload (quote tex-font-setup) "tex-font" "\
@@ -380,8 +385,8 @@ Setup font lock support for TeX.
 
 ;;;***
 
-;;;### (autoloads (TeX-texinfo-mode) "tex-info" "tex-info.el" (17300
-;;;;;;  7063))
+;;;### (autoloads (TeX-texinfo-mode) "tex-info" "tex-info.el" (17813
+;;;;;;  6832))
 ;;; Generated autoloads from tex-info.el
 
 (defalias (quote Texinfo-mode) (quote texinfo-mode))
@@ -394,24 +399,6 @@ Special commands:
 
 Entering Texinfo mode calls the value of `text-mode-hook'  and then the
 value of `Texinfo-mode-hook'.
-
-\(fn)" t nil)
-
-;;;***
-
-;;;### (autoloads (japanese-latex-mode japanese-plain-tex-mode) "tex-jp"
-;;;;;;  "tex-jp.el" (17221 35562))
-;;; Generated autoloads from tex-jp.el
-
-(autoload (quote japanese-plain-tex-mode) "tex-jp" "\
-Major mode in AUCTeX for editing Japanese plain TeX files.
-Set japanese-TeX-mode to t, and enters plain-tex-mode.
-
-\(fn)" t nil)
-
-(autoload (quote japanese-latex-mode) "tex-jp" "\
-Major mode in AUCTeX for editing Japanese LaTeX files.
-Set japanese-TeX-mode to t, and enters latex-mode.
 
 \(fn)" t nil)
 
@@ -438,7 +425,7 @@ Limit searched to BOUND.
 
 ;;;***
 
-;;;### (autoloads nil "toolbar-x" "toolbar-x.el" (17241 1359))
+;;;### (autoloads nil "toolbar-x" "toolbar-x.el" (17780 34283))
 ;;; Generated autoloads from toolbar-x.el
  (autoload 'toolbarx-install-toolbar "toolbar-x")
 
