@@ -1,0 +1,175 @@
+Release notes for AUCTeX 11.84 with preview-latex
+=================================================
+
+AUCTeX provides by far the most wide-spread and sophisticated
+environment for editing LaTeX, TeX, ConTeXt and Texinfo documents with
+Emacs or XEmacs.  Combined with packages like RefTeX, flyspell and
+others it is pretty much without peer as a comprehensive authoring
+solution for a large variety of operating system platforms and TeX
+distributions.  It supports document-dependent completion and syntax
+highlighting, easily accessible menus, jumping to error locations in
+the source file, a number of editing shortcuts, intelligent
+indentation and filling of text during entry, and WYSIWYG previews of
+graphical elements like math formulas right in the Emacs source
+buffer, by virtue of its preview-latex component.
+
+One part of the preview-latex subsystem is the central `preview.sty'
+file that is independently useful for a number of applications and is
+available in unbundled form from CTAN.[1]
+
+Interfaces and installation procedures in this release remain a moving
+target.  If you feel you need to consult third-party installation
+instructions for some reason, be sure that they refer to the same
+version of AUCTeX as you are installing.  For installing AUCTeX
+itself, the installation instructions in the AUCTeX package should be
+preferred.
+
+AUCTeX needs volunteers in particular for non-programming tasks:
+documentation writing, tutorials, translations, reference material,
+sleuth work, testing.
+
+
+New features and fixed bugs in this release
+-------------------------------------------
+
+There have been problems with the `-without-texmf-dir' option to
+`configure' when the value of `-with-kpathsea-sep' was set or
+determined for an installation system with a default different from
+that of the runtime system.  `with-kpathsea-sep' has been removed; the
+setting is now usually determined at runtime.
+
+Due to this and other problems, preview-latex in the released XEmacs
+package failed under Windows or with anything except recent 21.5
+XEmacsen.
+
+AUCTeX and preview-latex have been changed in order to accommodate
+file names containing spaces.  preview-latex now tolerates bad
+PostScript code polluting the stack (like some Omega fonts).
+
+`preview.sty' had in some cases failed to emit PostScript header
+specials.
+
+Support for folding of comments was added.
+
+The `polish' language option of the babel LaTeX package as well as the
+`polski' LaTeX package are now supported.  Most notably this means
+that AUCTeX will help to insert quotation marks as defined by
+polish.sty ("`..."') and polski.sty (,,...'').
+
+There has been quite a number of bug fixes to various features and
+documentation across the board, most critical probably the tool bar.
+
+IMPORTANT: Many of the new features in the 11.x series rely on special
+properties in the variable `TeX-command-list' and will not work if you
+customized this variable for a pre-11.5x release of AUCTeX.  If this
+is the case for you, please re-initialize the variable by erasing the
+customization, thereby setting the variable to the new default, and
+re-adding your changes afterwards.
+
+
+Requirements
+------------
+
+It is required that you use at least GNU Emacs 21 or XEmacs 21.4.
+XEmacs requires at least version 1.84 of the xemacs-base package
+(released on 01/27/2004) or a sumo tarball dated 02/02/2004 or newer
+for compiling AUCTeX: please use the XEmacs package system for
+upgrading if necessary.  Warning: release 21.4.16 of XEmacs is
+severely broken.  This leads to crashes and hangs; don't use it.
+
+The preview-latex subsystem requires image support.  This is available
+with GNU Emacs 21.3 under the X window system.  For Windows[2], MacOS
+Carbon[3] or native GTK+ toolkit support[4], a developer version[5] of
+GNU Emacs (to be released as 22.1) is definitely required.  A recent
+developer version of GNU Emacs appears like the best choice even on
+X11, however.  If you prefer XEmacs-21, it will work in version
+21.4.10 or later.
+
+You'll also need a working LaTeX installation and Ghostscript.
+dvipng[6] (version 1.4 or later: teTeX-3.0 works, TeXlive2004 not), a
+very fast dvi converter, can be used to speed up the conversion.
+
+Availability
+------------
+
+AUCTeX can be downloaded in various formats from
+<URL:ftp://ftp.gnu.org/pub/gnu/auctex/>.  At release time, we provide
+the source tarball, source and binary RPMs for Emacs under Fedora and
+SUSE, and a platform-independent XEmacs package file (which you have
+to install yourself using XEmacs' own package system, after using it
+for removing the previous version of AUCTeX).  There are also RPMs
+just for installing the LaTeX part of preview (AUCTeX itself does not
+need them, but possibly other applications).  The easiest way for
+using AUCTeX, of course, is using versions of Emacs that already
+include AUCTeX (check the footnotes below).
+
+RPMs with minor version 1 are built from the spec file in the tarball
+which should work on both SUSE as well as Fedora.  The source RPMs
+should also work for rebuilding RPMs on other RPM-based distributions.
+(We have only tested SUSE and Fedora, though.)
+
+The XEmacs package file can be discerned by `pkg' in its name.  It is
+usually more recent and functional than what gets distributed from
+XEmacs servers and as part of the Sumo tarball.
+
+A separate directory for each release contains some stuff from the
+tarball, such as ChangeLog, printable manuals, and a reference sheet.
+The download area is mirrored to the directory support/auctex on CTAN.
+AUCTeX is licensed under the GNU General Public License version 2.
+
+You'll find more information at the web site of AUCTeX
+<URL:http://www.gnu.org/software/auctex/>, including its mailing list
+addresses.
+
+
+Future development and additional information
+---------------------------------------------
+
+AUCTeX is proceeding as a GNU project with the long-term intent of
+merging it into Emacs.  For that reason, all new contributors need to
+assign copyright to their contributions to the FSF (the usual
+procedure for Emacs contributors).  The same holds for past
+contributors.  The principal authors and maintainers have already done
+so, but it would require a diligent and diplomatic volunteer to find
+and ask the rest.
+
+Current project manager is David Kastrup.  Paypal contributions to
+<URL:mailto:auctex@gnu.org> would be appreciated in order to
+compensate for time, money and hardware required for presenting AUCTeX
+at conferences.  Extensions may be commissioned: enquire on the
+developer list (see above).  Other than that, volunteering for tasks
+remains the most effective way of helping AUCTeX development.
+
+The following people contributed to this release series (in
+alphabetical order): Ralf Angeli, Masayuki Ataka, Thomas Baumann,
+Berend de Boer, Joshua Buhl, Miguel Frasson, Peter S. Galbraith,
+Patrick Gundlach, Yvon Hevel, Arne Jørgensen, David Kastrup, Ikumi
+Keita, Frank Küster, Jan-Åke Larsson, Dan Nicolaescu, Piet van
+Oostrum, Davide G. M. Salvetti, Mike Sperber, Reiner Steib, Christian
+Schlauer, Shiro Takeda, Mark Trettin (Please accept our apologies if
+we forgot somebody.)
+
+Footnotes: 
+
+[1]  <URL:ftp://ftp.dante.de/tex-archive/macros/latex/contrib/preview/>
+
+[2]  You can get a precompiled version of CVS Emacs for Windows e.g. at
+<URL:http://ourcomments.org/Emacs/EmacsW32.html>.  A version with
+AUCTeX preinstalled can be found at
+<URL:ftp://alpha.gnu.org/gnu/auctex/>.
+
+[3]  Precompiled versions of Emacs for Mac OS X can be found e.g. at
+<URL:http://yaced.sf.net/> (including AUCTeX) and
+<URL:http://homepage.mac.com/zenitani/emacs-e.html>.
+
+[4]  Debian provides precompiled GTK+ Emacs packages in its `unstable'
+distribution (look for `emacs-snapshot-gtk').  Packages for Fedora can
+be found at <URL:http://people.redhat.com/coldwell/bugs/emacs/176171/>.
+
+[5]  If making use of the precompiled variants is not an option for
+you, instructions for checking out the CVS version straight from the
+GNU's mouth can be found at
+<URL:http://savannah.gnu.org/cvs/?group=emacs>
+
+[6]  dvipng is available via its project page
+<URL:http://savannah.nongnu.org/projects/dvipng> and from CTAN.
