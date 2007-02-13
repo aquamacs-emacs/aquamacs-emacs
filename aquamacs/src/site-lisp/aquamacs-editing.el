@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-editing.el,v 1.1 2007/02/13 12:32:21 davidswelt Exp $
+;; Last change: $Id: aquamacs-editing.el,v 1.2 2007/02/13 12:54:35 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -50,14 +50,26 @@ are deleted."
   (message "Region unfilled. Stand-alone newlines deleted")
   (widen))
  
-(defun unfill-paragraph-or-region () ; Version:1.7dr
-  "Unfill paragraph or region (if any).
-When no region is defined (mark is not active), puts a paragraph
- (separated by empty lines) in one (long line). If a region is
-defined, acts like `unfill-region'."
+(defun fill-paragraph-or-region ()  
+  "Fill paragraph or region (if any).
+When no region is defined (mark is not active) or
+`transient-mark-mode' is off, call `fill-paragraph'.
+Otherwise, call `fill-region'."
   (interactive)
 
-  (if mark-active
+  (if (and mark-active transient-mark-mode)
+      (call-interactively 'fill-region)
+    (call-interactively 'fill-paragraph)))
+
+(defun unfill-paragraph-or-region () ; Version:1.7dr
+  "Unfill paragraph or region (if any).
+When no region is defined (mark is not active) or
+`transient-mark-mode' is off, puts a paragraph (separated by
+empty lines) in one (long line). If a region is defined, acts
+like `unfill-region'."
+  (interactive)
+
+  (if (and mark-active transient-mark-mode)
     (unfill-region)
   (when use-hard-newlines
 	;; 	(backward-paragraph 1)
@@ -98,5 +110,6 @@ defined, acts like `unfill-region'."
 		 "\\*\\| \\|#\\|;\\|:\\||\\|!\\|$"))))
  
  
+
  
 (provide 'aquamacs-editing)
