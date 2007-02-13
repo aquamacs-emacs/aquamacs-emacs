@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.65 2007/02/13 13:07:33 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.66 2007/02/13 19:20:32 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -85,7 +85,7 @@ after updating this variable.")
 
 (require 'mac-extra-functions)
  
-(require 'redo)
+(require 'aquamacs-redo)
   
 ;; remove existing bindings that don't exist on the mac
 (global-unset-key [cut])
@@ -881,8 +881,8 @@ default."
     (define-key map `[(,osxkeys-command-key q)] 'save-buffers-kill-emacs)
     (define-key map (vector (list osxkeys-command-key '\,) ) 'customize)
 
-    (define-key map `[(,osxkeys-command-key z)] 'undo)
-    (define-key map `[(,osxkeys-command-key shift z)] 'redo)
+    (define-key map `[(,osxkeys-command-key z)] 'aquamacs-undo)
+    (define-key map `[(,osxkeys-command-key shift z)] 'aquamacs-redo)
     (define-key map `[(,osxkeys-command-key \`)] 'other-frame)
     (if (fboundp 'mac-font-panel-mode)
 	(define-key map `[(,osxkeys-command-key t)] 'mac-font-panel-mode))
