@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.68 2007/02/13 12:55:12 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.69 2007/02/13 13:05:15 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -498,13 +498,14 @@ customization buffer."
 	      :help
 	      "Fill text in region (or paragraph) to fit between
 	      left and right margin"))
-(define-key menu-bar-edit-menu [unfill]
+(define-key-after menu-bar-edit-menu [unfill]
 `(menu-item ,(aq-shortcut "Unwrap Lines (unfill)     " 
 			   (key-binding [menu-bar edit unfill]))
 	    unfill-paragraph-or-region
 	      :enable (not buffer-read-only)
 	      :help
-	      "Remove line-breaks from paragraph or region."))
+	      "Remove line-breaks from paragraph or region.")
+'fill)
 
   
 ;; this needs an extension to show the keyboard shortcut
