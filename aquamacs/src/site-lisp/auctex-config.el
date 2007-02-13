@@ -4,7 +4,7 @@
 ;; originally authored by Kevin Walzer
 ;; Keywords: auctex
  
-;; Last change: $Id: auctex-config.el,v 1.18 2006/06/12 23:39:59 davidswelt Exp $
+;; Last change: $Id: auctex-config.el,v 1.19 2007/02/13 23:30:12 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -78,7 +78,7 @@ Only checks once - subsequent calls will not result in any action."
       (if (string-match "^no " (buffer-string))
 	   (message  
 	    "No Ghostscript (pdf2dsc) found - preview-latex not activated.") 
-	(load "preview-latex.el" nil t t)))
+	(load "preview/preview-latex.el" nil t t)))
     (setq aq-preview-latex-checked t)) nil)
 
 ;; must be done here do initialize
