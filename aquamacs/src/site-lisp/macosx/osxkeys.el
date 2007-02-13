@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.64 2007/02/13 12:33:55 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.65 2007/02/13 13:07:33 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -844,7 +844,8 @@ default."
     (define-key map `[(,osxkeys-command-key w)] 'close-current-window-asktosave)
     (define-key map `[(,osxkeys-command-key m)] 'iconify-or-deiconify-frame) 
     (define-key map `[(,osxkeys-command-key .)] 'keyboard-quit)
-    (define-key map `[(,osxkeys-command-key shift q)] 'unfill-paragraph-or-region)
+    (define-key map `[(meta q)] 'fill-paragraph-or-region)
+    (define-key map `[(meta shift q)] 'unfill-paragraph-or-region)
     (define-key map `[(,osxkeys-command-key escape)] 'keyboard-escape-quit)
     (define-key map `[(,osxkeys-command-key up)] 'beginning-of-buffer)
     (define-key map `[(,osxkeys-command-key down)] 'end-of-buffer)
