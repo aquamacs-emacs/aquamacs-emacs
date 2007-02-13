@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.69 2007/02/13 13:05:15 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.70 2007/02/13 14:58:53 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -148,8 +148,7 @@
 
 ;(defun aq-shortcut (text symbol &rest more-args)
 ;  (apply (function format) text more-args))
-
-
+ 
 (defun aq-shortcut (text symbol &rest more-args)
   (if (if (boundp 'osx-key-mode) osx-key-mode nil)
       (condition-case err
@@ -182,13 +181,18 @@
 					  (concat (aq-describe-modifier 'alt)
 						  "-"))
 				   (replace-regexp-in-string 
+				   "M-" (lambda (txt) 
+					  (concat (aq-describe-modifier 'meta)
+						  "-"))
+
+				   (replace-regexp-in-string 
 				    "-\\([A-Z]\\)" 
 				    (lambda (txt) 
 				      (concat 
 				       (aq-describe-modifier 'shift) txt))
 				    s
 				    nil nil 1 ;; replace sub-exp
-				    )))))))))))
+				    ))))))))))))
 	(error nil
 	       (apply (function format) text more-args)))
     ;; not osx-key-mode
