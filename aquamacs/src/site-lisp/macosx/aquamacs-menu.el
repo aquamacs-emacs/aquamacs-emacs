@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.67 2006/12/18 12:31:52 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.68 2007/02/13 12:55:12 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -489,13 +489,25 @@ customization buffer."
  
 
 
+(require 'aquamacs-editing)
 (define-key menu-bar-edit-menu [fill]
-  '(menu-item "Reformat (fill)" fill-region
-	      :enable (and mark-active (not buffer-read-only))
+`(menu-item ,(aq-shortcut "Re-Wrap Lines (fill)      " 
+			   (key-binding [menu-bar edit fill]))
+	    fill-paragraph-or-region
+	      :enable (not buffer-read-only)
 	      :help
-	      "Fill text in region to fit between left and right margin"))
+	      "Fill text in region (or paragraph) to fit between
+	      left and right margin"))
+(define-key menu-bar-edit-menu [unfill]
+`(menu-item ,(aq-shortcut "Unwrap Lines (unfill)     " 
+			   (key-binding [menu-bar edit unfill]))
+	    unfill-paragraph-or-region
+	      :enable (not buffer-read-only)
+	      :help
+	      "Remove line-breaks from paragraph or region."))
 
-;; this needs an extension to show the keyboard shortcut 
+  
+;; this needs an extension to show the keyboard shortcut
 ;; interesting extensions to menu-item: (:visible nil), (:key-sequence)
 
  (define-key-after menu-bar-file-menu [my-file-separator]
