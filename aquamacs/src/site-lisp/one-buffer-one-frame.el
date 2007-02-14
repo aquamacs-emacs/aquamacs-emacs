@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.50 2006/12/17 16:26:10 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.51 2007/02/14 00:36:34 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -350,7 +350,8 @@ the current window is switched to the new buffer."
 
 
 (if window-system
-(defadvice switch-to-buffer (around sw-force-other-frame (&rest args) activate compile)
+(defadvice switch-to-buffer (around sw-force-other-frame (&rest args) 
+				    activate compile)
   ;; is buffer shown in a frame?
   (let ((switch t)
 	(window-to-select))
@@ -525,7 +526,7 @@ the current window is switched to the new buffer."
 ;;     )
 ;;   )  
 ;;  )
-
+;; 
 (defun aquamacs-display-buffer (&rest args)
        (let ((display-buffer-function nil))
 	 (if (and
@@ -544,11 +545,17 @@ the current window is switched to the new buffer."
 		 
 		 ;; dr 12/2006 - we'll try this again, because
 		 ;; that's the way display-buffer is supposed to work.
+		  
+;; 		 (unless (eq display-buffer-reuse-frames 'select)
+;; 		   (select-frame-set-input-focus sframe)
+;; 		   (select-window swin))
+		 ;; for some reason, this doesn't seem to be needed
+		 ;; any longer (??) -- the old frame keeps the focus
+		 ;; anyways. instead this caused the selected frame
+		 ;; to be raised on top of the new one -- not planned!
 
-		 (unless (eq display-buffer-reuse-frames 'select)
-		   (select-frame-set-input-focus sframe)
-		   (select-window swin))
-		   
+
+		 ;; OLD:
 		 ;; NOT GOOD. switch-to-buffer and friends
 		 ;; don't work as expected.
 		 ;; besides, switching input focus to new frames
