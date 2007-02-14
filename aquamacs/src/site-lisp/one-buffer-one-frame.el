@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.51 2007/02/14 00:36:34 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.52 2007/02/14 11:26:04 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -546,27 +546,20 @@ the current window is switched to the new buffer."
 		 ;; dr 12/2006 - we'll try this again, because
 		 ;; that's the way display-buffer is supposed to work.
 		  
-;; 		 (unless (eq display-buffer-reuse-frames 'select)
-;; 		   (select-frame-set-input-focus sframe)
-;; 		   (select-window swin))
-		 ;; for some reason, this doesn't seem to be needed
-		 ;; any longer (??) -- the old frame keeps the focus
-		 ;; anyways. instead this caused the selected frame
-		 ;; to be raised on top of the new one -- not planned!
-
-
-		 ;; OLD:
-		 ;; NOT GOOD. switch-to-buffer and friends
-		 ;; don't work as expected.
-		 ;; besides, switching input focus to new frames
-		 ;; will allow users to use these "modally", i.e. 
-		 ;; close them after reading. In other cases, they
-		 ;; might want to let them stay and move them somewhere
-		 ;; else.
-		 
+		 (unless (eq display-buffer-reuse-frames 'select)
+		   ;; we can't use select-frame-set-input-focus because
+		   ;; that would raise the (main) frame over the newly
+		   ;; opened one, and we don't want that.
+		   (select-frame sframe)
+		   (cond ((memq window-system '(x mac))
+			  (x-focus-frame sframe))
+			 ((eq window-system 'w32)
+			  (w32-focus-frame sframe)))
+		   (select-window swin)) 
 	      ret) 
 	       )
 	   (apply (function display-buffer) args))))
+
 ;; (setq display-buffer-reuse-frames 'select)
 (aquamacs-set-defaults 
  '((display-buffer-reuse-frames t)
