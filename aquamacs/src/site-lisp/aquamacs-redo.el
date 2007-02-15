@@ -1,4 +1,4 @@
-;;; redo.el -- Redo/undo system for XEmacs
+;;; aquamacs-redo.el -- Redo/undo system for Aquamacs
 
 ;; Copyright (C) 1985, 1986, 1987, 1993-1995 Free Software Foundation, Inc.
 ;; Copyright (C) 1995 Tinker Systems and INS Engineering Corp.
@@ -6,6 +6,7 @@
 ;; Copyright (C) 2007 David Reitter
 
 ;; Author: Kyle E. Jones, February 1997
+;; Author/Maintainer: David Reitter, February 2007
 ;; Keywords: lisp, extensions
 
 ;; This file is part of Aquamacs.
@@ -24,9 +25,7 @@
 ;; along with Aquamacs; see the file COPYING.  If not, write to the Free
 ;; Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 ;; 02111-1307, USA.
-
-;;; Synched up with: Not in FSF.
-
+ 
 ;;; Commentary:
 
 ;; Derived partly from lisp/prim/simple.el in XEmacs.
@@ -43,37 +42,31 @@
 ;;   1. The undo/redo command chain is only broken by a buffer
 ;;      modification.  You can move around the buffer or switch
 ;;      buffers and still come back and do more undos or redos.
-;;   2. The `redo' command rescinds the most recent undo without
-;;      recording the change as a _new_ buffer change.  It
-;;      completely reverses the effect of the undo, which
-;;      includes making the chain of buffer modification records
-;;      shorter by one, to counteract the effect of the undo
-;;      command making the record list longer by one.
+;;   2. The `aquamacs-redo' command rescinds the most recent undo
+;;      without recording the change as a _new_ buffer change.  It
+;;      completely reverses the effect of the undo, which includes
+;;      making the chain of buffer modification records shorter by
+;;      one, to counteract the effect of the undo command making the
+;;      record list longer by one.  
+;;   3. `aquamacs-undo' will restore point and mark.
 ;;
-;; Installation:
-;;
-;; Save this file as redo.el, byte compile it and put the
-;; resulting redo.elc file in a directory that is listed in
-;; load-path.
-;;
-;; In your .emacs file, add
-;;   (require 'redo)
-;; and the system will be enabled.
-
+ 
 ;; Changes:
 
+;; 02/2007:
 ;; renamed undo -> aquamacs-undo, and redo -> aquamacs-redo
 ;; so that old undo/redo commands are still available (C-_)
+;; restore mark and point
 
 ;;; Code:
 
-(defvar redo-version "1.03aq"
-  "Version number for the Redo package.")
+(defvar aquamacs-redo-version "2.0aq"
+  "Version number for the Aquamcas-Redo package.")
 
 (defvar last-buffer-undo-list nil
   "The head of buffer-undo-list at the last time an undo or redo was done.")
-(make-variable-buffer-local 'last-buffer-undo-list)
 
+(make-variable-buffer-local 'last-buffer-undo-list)
 (make-variable-buffer-local 'pending-undo-list)
 
 ;; Emacs 20 variable
@@ -83,7 +76,8 @@
   "Redo the the most recent undo.
 Prefix arg COUNT means redo the COUNT most recent undos.
 If you have modified the buffer since the last redo or undo,
-then you cannot redo any undos before then."
+then you cannot redo any undos before then.
+See also `aquamacs-undo'."
   (interactive "*p")
   (if (eq buffer-undo-list t)
       (error "No undo information in this buffer"))
@@ -160,12 +154,14 @@ then you cannot redo any undos before then."
 	(message "Redo!"))
     (setq last-buffer-undo-list buffer-undo-list)))
 
-(defalias 'redo 'aquamacs-redo )
+(defalias 'redo 'aquamacs-redo) ;; backwards compatibility and convenience
 
 (defun aquamacs-undo (&optional arg)
   "Undo some previous changes.
 Repeat this command to undo more changes.
-A numeric argument serves as a repeat count."
+A numeric argument serves as a repeat count.
+Unlike `undo', this will also restore the positions of
+mark and point, and it will collaborate with `aquamacs-redo'."
   (interactive "*p")
   (let ((modified (buffer-modified-p))
 	(recent-save (recent-auto-save-p)))
@@ -190,20 +186,63 @@ A numeric argument serves as a repeat count."
     ;;;; instead of just the cells from the beginning to the next
     ;;;; undo boundary.  This does what I think the other code
     ;;;; meant to do.
-    (let ((list buffer-undo-list)
-    	  (prev nil))
-      (while (and list (not (null (car list))))
-    	(if (integerp (car list))
-    	    (if prev
-    		(setcdr prev (cdr list))
-    	      ;; impossible now, but maybe not in the future 
-    	      (setq buffer-undo-list (cdr list))))
-    	(setq prev list
-    	      list (cdr list))))
-    (and modified (not (buffer-modified-p))
-	 (delete-auto-save-file-if-necessary recent-save)))
+    (when (listp buffer-undo-list) ;; safety, inserted DR 02/2007
+
+      (let ((list buffer-undo-list)
+	    (prev nil))
+	(while (and list (not (null (car list))))
+	  (if (integerp (car list))
+	      (if prev
+		  (setcdr prev (cdr list))
+		;; impossible now, but maybe not in the future 
+		(setq buffer-undo-list (cdr list))))
+	  (setq prev list
+		list (cdr list))))
+      (and modified (not (buffer-modified-p))
+	   (delete-auto-save-file-if-necessary recent-save))))
   (or (eq (selected-window) (minibuffer-window))
       (message "Undo!"))
   (setq last-buffer-undo-list buffer-undo-list))
+
+
+;; Save and restore point and mark
+ 
+(make-variable-buffer-local 'aquamacs-undo--before-command-point)
+(make-variable-buffer-local 'aquamacs-undo--before-command-mark) 
+
+(defun aquamacs-undo--rec-region  ()
+;; this is necessary to have in pre-command-hook (delete-selection-mode!)
+  (unless (eq this-command 'aquamacs-undo)
+       (setq aquamacs-undo--before-command-point (point))
+      (setq aquamacs-undo--before-command-mark (if mark-active (mark)))))
+
+;; fore before-change
+(defun aquamacs-undo--rec-region-when-buffer-changes  (beg end &optional oldlen)
+  (or (eq this-command 'aquamacs-undo) 
+      (eq this-command 'undo)
+      (not aquamacs-undo--before-command-mark) 
+;      (not mark-active)
+      (eq buffer-undo-list t)
+      ;; storing add'l point-setting op's would overwrite the effect
+      (setq buffer-undo-list  
+	    (cons `(apply aquamacs-undo--restore-mark-and-point 
+		;	  ,(point) ,(mark))
+			  ,aquamacs-undo--before-command-point 
+			  ,aquamacs-undo--before-command-mark) 
+		  buffer-undo-list))))
+
+(defun aquamacs-undo--restore-mark-and-point (point mark)
+  (when (eq this-command 'aquamacs-undo)
+    (goto-char point)
+    (if mark (set-mark mark))
+    (setq deactivate-mark nil)))
+
+
+;; need to make sure this is before delete-selection-pre-hook
+
+(add-hook 'pre-command-hook 'aquamacs-undo--rec-region)
+
+(add-hook 'before-change-functions 
+	  'aquamacs-undo--rec-region-when-buffer-changes) 
 
 (provide 'aquamacs-redo)
