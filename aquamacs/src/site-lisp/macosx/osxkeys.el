@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.66 2007/02/13 19:20:32 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.67 2007/02/15 15:52:32 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -95,6 +95,62 @@ after updating this variable.")
 (global-unset-key [f16])
 (global-unset-key [f18])
   
+
+(defvar cua--explicit-region-start)
+
+(defun aquamacs-backward-char ()
+  "Like `backward-char', but moves cursor to the beginning of the
+region in `transient-mark-mode' if the mark is active."
+  (interactive)
+  (let ((left (min (point) (mark))))
+
+    (if (and transient-mark-mode 
+	     mark-active
+	     (not cua--explicit-region-start)
+	     (not (aquamacs--shift-key-for-command-p))
+	     (not (eq left (point))))
+	(goto-char left)
+      (let ((this-command 'backward-car)) ;; maintain compatibility
+	(call-interactively 'backward-char)))))
+
+
+(defun aquamacs-forward-char (&rest args)
+  "Like `forward-char', but moves cursor to the end of the
+region in `transient-mark-mode' if the mark is active."
+  (interactive)
+  (let ((right (max (point) (mark))))
+
+    (if (and transient-mark-mode 
+	     mark-active
+	     (not cua--explicit-region-start)
+	     (not (aquamacs--shift-key-for-command-p))
+	     (not (eq right (point))))
+	(goto-char right)
+       (let ((this-command 'forward-car)) ;; maintain compatibility
+	 (call-interactively 'forward-char)))))
+ 
+(dolist (cmd
+	 '(aquamacs-backward-char aquamacs-forward-char))
+  (put cmd 'CUA 'move))
+
+(defun aquamacs--shift-key-for-command-p ()
+;; code from cua-base.el
+(if window-system
+	(memq 'shift (event-modifiers
+		      (aref (this-single-command-raw-keys) 0)))
+      (or
+       (memq 'shift (event-modifiers
+		     (aref (this-single-command-keys) 0)))
+       ;; See if raw escape sequence maps to a shifted event, e.g. S-up or C-S-home.
+       (and (boundp 'function-key-map)
+	    function-key-map
+	    (let ((ev (lookup-key function-key-map
+				  (this-single-command-raw-keys))))
+	      (and (vector ev)
+		   (symbolp (setq ev (aref ev 0)))
+		   (string-match "S-" (symbol-name ev))))))))
+
+
 
 ;; respects goal-column
 ;; does not respect (yet)  track-eol 
@@ -858,6 +914,12 @@ default."
     (define-key global-map `[(,osxkeys-command-key {)] 'comment-region-or-line)
     (define-key global-map `[(,osxkeys-command-key })] 'uncomment-region-or-line)
     (define-key global-map `[(,osxkeys-command-key \')] 'comment-or-uncomment-region-or-line)
+
+    ;; left / right (for transient-mark-mode)
+    ;; could be moved into transient-mark-mode-map?
+    (define-key map '[(left)] 'aquamacs-backward-char)
+    (define-key map '[(right)] 'aquamacs-forward-char)
+
 
     ;; only those keys - C-n and C-p stay Emacs-like
     (define-key map '[(up)] 'osxkeys-visual-line-up-in-buffers)
