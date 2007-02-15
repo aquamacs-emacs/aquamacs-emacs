@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.67 2007/02/15 15:52:32 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.68 2007/02/15 15:58:20 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -96,15 +96,16 @@ after updating this variable.")
 (global-unset-key [f18])
   
 
-(defvar cua--explicit-region-start)
+(defvar cua--explicit-region-start) ;; in case CUA isn't loaded
 
 (defun aquamacs-backward-char ()
-  "Like `backward-char', but moves cursor to the beginning of the
-region in `transient-mark-mode' if the mark is active."
+  "Move point to the left or the beginning of the region.
+ Like `backward-char', but moves point to the beginning of the region
+provided `cua-mode' and the mark are active."
   (interactive)
   (let ((left (min (point) (mark))))
 
-    (if (and transient-mark-mode 
+    (if (and cua-mode transient-mark-mode 
 	     mark-active
 	     (not cua--explicit-region-start)
 	     (not (aquamacs--shift-key-for-command-p))
@@ -115,12 +116,13 @@ region in `transient-mark-mode' if the mark is active."
 
 
 (defun aquamacs-forward-char (&rest args)
-  "Like `forward-char', but moves cursor to the end of the
-region in `transient-mark-mode' if the mark is active."
+  "Move point to the right or the end of the region.
+ Like `forward-char', but moves point to the end of the region
+provided `cua-mode' and the mark are active."
   (interactive)
   (let ((right (max (point) (mark))))
 
-    (if (and transient-mark-mode 
+    (if (and cua-mode transient-mark-mode 
 	     mark-active
 	     (not cua--explicit-region-start)
 	     (not (aquamacs--shift-key-for-command-p))
