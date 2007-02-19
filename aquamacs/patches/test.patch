@@ -1,30 +1,65 @@
 Index: src/macterm.c
 ===================================================================
 RCS file: /cvsroot/emacs/emacs/src/macterm.c,v
-retrieving revision 1.198
-diff -c -p -r1.198 macterm.c
-*** src/macterm.c	10 Dec 2006 23:16:11 -0000	1.198
---- src/macterm.c	11 Dec 2006 07:54:05 -0000
+retrieving revision 1.204
+diff -c -p -r1.204 macterm.c
+*** src/macterm.c	13 Feb 2007 08:28:39 -0000	1.204
+--- src/macterm.c	19 Feb 2007 01:06:40 -0000
 *************** XTread_socket (sd, expected, hold_quit)
-*** 10398,10410 ****
-  		break;
-
-  	      case inContent:
-! 		if (
-! #if TARGET_API_MAC_CARBON
-! 		    FrontNonFloatingWindow ()
-! #else
-! 		    FrontWindow ()
-! #endif
-! 		    != window_ptr)
-  		  SelectWindow (window_ptr);
-  		else
+*** 11165,11170 ****
+--- 11165,11180 ----
+  		/* translate the keycode back to determine the
+  		   original key */
+  #ifdef MAC_OSX
++ 		UCKeyboardLayout *uchr_ptr = NULL;
++ #if MAC_OS_X_VERSION_MAX_ALLOWED >= 1020
++ 		OSStatus err;
++ 		KeyboardLayoutRef layout;
++ 
++ 		err = KLGetCurrentKeyboardLayout (&layout);
++ 		if (err == noErr)
++ 		  KLGetKeyboardLayoutProperty (layout, kKLuchrData,
++ 					       (const void **) &uchr_ptr);
++ #else
+  		static SInt16 last_key_layout_id = 0;
+  		static Handle uchr_handle = (Handle)-1;
+  		SInt16 current_key_layout_id =
+*************** XTread_socket (sd, expected, hold_quit)
+*** 11176,11183 ****
+  		    uchr_handle = GetResource ('uchr', current_key_layout_id);
+  		    last_key_layout_id = current_key_layout_id;
+  		  }
+- 
+  		if (uchr_handle)
   		  {
---- 10398,10404 ----
-  		break;
-
-  	      case inContent:
-! 		if (mac_window_to_frame (window_ptr) != dpyinfo->x_focus_frame)
-  		  SelectWindow (window_ptr);
-  		else
+  		    OSStatus status;
+  		    UInt16 key_action = er.what - keyDown;
+--- 11186,11196 ----
+  		    uchr_handle = GetResource ('uchr', current_key_layout_id);
+  		    last_key_layout_id = current_key_layout_id;
+  		  }
+  		if (uchr_handle)
++ 		  uchr_ptr = (UCKeyboardLayout *)*uchr_handle;
++ #endif
++ 
++ 		if (uchr_ptr)
   		  {
+  		    OSStatus status;
+  		    UInt16 key_action = er.what - keyDown;
+*************** XTread_socket (sd, expected, hold_quit)
+*** 11188,11194 ****
+  		    UniChar code;
+  		    UniCharCount actual_length;
+
+! 		    status = UCKeyTranslate ((UCKeyboardLayout *)*uchr_handle,
+  					     keycode, key_action,
+  					     modifier_key_state,
+  					     keyboard_type,
+--- 11201,11207 ----
+  		    UniChar code;
+  		    UniCharCount actual_length;
+
+! 		    status = UCKeyTranslate (uchr_ptr,
+  					     keycode, key_action,
+  					     modifier_key_state,
+  					     keyboard_type,
