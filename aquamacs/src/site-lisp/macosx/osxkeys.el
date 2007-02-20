@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.70 2007/02/19 17:21:52 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.71 2007/02/20 15:21:40 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -902,8 +902,8 @@ default."
     (define-key map `[(,osxkeys-command-key w)] 'close-current-window-asktosave)
     (define-key map `[(,osxkeys-command-key m)] 'iconify-or-deiconify-frame) 
     (define-key map `[(,osxkeys-command-key .)] 'keyboard-quit)
-    (define-key map `[(,osxkeys-command-key 1)] 'delete-other-windows)
-    (define-key map `[(,osxkeys-command-key 2)] 'split-window-vertically)
+    (define-key map `[(,osxkeys-command-key 49)] 'delete-other-windows) ; 49='1'
+    (define-key map `[(,osxkeys-command-key 50)] 'split-window-vertically) ; 50='2'
     
     (define-key map `[(meta q)] 'fill-paragraph-or-region)
     (define-key map `[(meta shift q)] 'unfill-paragraph-or-region)
