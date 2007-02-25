@@ -4,7 +4,7 @@
 ;; originally authored by Kevin Walzer
 ;; Keywords: auctex
  
-;; Last change: $Id: auctex-config.el,v 1.19 2007/02/13 23:30:12 davidswelt Exp $
+;; Last change: $Id: auctex-config.el,v 1.20 2007/02/25 11:17:30 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -77,8 +77,8 @@ Only checks once - subsequent calls will not result in any action."
       (shell-command "which pdf2dsc " t)
       (if (string-match "^no " (buffer-string))
 	   (message  
-	    "No Ghostscript (pdf2dsc) found - preview-latex not activated.") 
-	(load "preview/preview-latex.el" nil t t)))
+	    "No Ghostscript (pdf2dsc) found - preview-latex not activated.")
+	(load "auctex/preview/preview-latex.el" nil t nil)))
     (setq aq-preview-latex-checked t)) nil)
 
 ;; must be done here do initialize
@@ -94,7 +94,13 @@ Only checks once - subsequent calls will not result in any action."
 (add-hook 'LaTeX-mode-hook 'turn-on-bib-cite)
 (add-hook 'LaTeX-mode-hook 'LaTeX-install-toolbar)
 (add-hook 'LaTeX-mode-hook (lambda () (TeX-fold-mode t)))
-(aquamacs-set-defaults '((TeX-PDF-mode t)))
+
+
+(defcustom TeX-PDF-mode t nil  ;; defaults to t
+  :group 'TeX-command
+  :set 'TeX-mode-set
+  :type 'boolean)
+;;(aquamacs-set-defaults '((TeX-PDF-mode t)))
  
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Customize LaTeX parameters
