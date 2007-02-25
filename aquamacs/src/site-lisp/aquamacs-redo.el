@@ -245,4 +245,12 @@ mark and point, and it will collaborate with `aquamacs-redo'."
 (add-hook 'before-change-functions 
 	  'aquamacs-undo--rec-region-when-buffer-changes) 
 
+
+;; this is a workaround so that selecting a region by mouse
+;; and pressing DEL / backspace works with Undo
+;; (otherwise, pre-command-hooks are not run due to the hackiness of
+;; mouse.el)
+
+(aquamacs-set-defaults '((mouse-region-delete-keys nil)))
+
 (provide 'aquamacs-redo)
