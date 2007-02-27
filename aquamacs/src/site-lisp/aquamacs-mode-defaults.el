@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-mode-defaults.el,v 1.17 2006/12/10 10:37:27 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-defaults.el,v 1.18 2007/02/27 00:55:29 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -90,6 +90,12 @@
   "Load and setup SLIME"
   (require 'slime)
   (slime-setup) 
+
+  ;; slime 2.0 bug workarounds
+  (define-key sldb-mode-map [follow-link] 'mouse-face)
+  (put 'slime-space 'delete-selection t)
+
+
   ;; run hook directly, because it wouldn't
   ;; be picked up otherwise
   (slime-lisp-mode-hook)
