@@ -4,7 +4,7 @@
 ;; originally authored by Kevin Walzer
 ;; Keywords: auctex
  
-;; Last change: $Id: auctex-config.el,v 1.20 2007/02/25 11:17:30 davidswelt Exp $
+;; Last change: $Id: auctex-config.el,v 1.21 2007/03/02 11:00:21 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -136,47 +136,9 @@ Only checks once - subsequent calls will not result in any action."
 		      "/usr/local/teTeX/share/texmf.os/tex/"
 		      "/usr/local/teTeX/share/texmf.local/tex/"
 		      "~/Library/texmf/tex/"))
-   (TeX-command-list
-    (("TeX" "%(PDF)%(tex) %S%(PDFout) \"%(mode)\\input %t\"" TeX-run-TeX nil
-      (plain-tex-mode ams-tex-mode texinfo-mode)
-      :help "Run plain TeX")
-     ("LaTeX" "%l \"%(mode)\\input{%t}\"" TeX-run-TeX nil
-      (latex-mode doctex-mode)
-      :help "Run LaTeX")
-     ("Makeinfo" "makeinfo %t" TeX-run-compile nil
-      (texinfo-mode)
-      :help "Run Makeinfo with Info output")
-     ("Makeinfo HTML" "makeinfo --html %t" TeX-run-compile nil
-      (texinfo-mode)
-      :help "Run Makeinfo with HTML output")
-     ("AmSTeX" "%(PDF)amstex %S%(PDFout) \"%(mode)\\input %t\"" TeX-run-TeX nil
-      (ams-tex-mode)
-      :help "Run AMSTeX")
-     ("ConTeXt" "texexec --once --texutil %(execopts)%t" TeX-run-TeX nil
-      (context-mode)
-      :help "Run ConTeXt once")
-     ("ConTeXt Full" "texexec %(execopts)%t" TeX-run-TeX nil
-      (context-mode)
-      :help "Run ConTeXt until completion")
-     ("ConTeXt Clean" "texutil --purgeall" TeX-run-interactive nil
-      (context-mode)
-      :help "Clean temporary ConTeXt files")
-     ("BibTeX" "bibtex %s" TeX-run-BibTeX nil t :help "Run BibTeX")
-     ("View" "%V" TeX-run-discard t t :help "Run Viewer")
-     ("Print" "%p" TeX-run-command t t :help "Print the file")
-     ("Queue" "%q" TeX-run-background nil t :help "View the printer queue" :visible TeX-queue-command)
-     ("File" "%(o?)dvips %d -o %f " TeX-run-command t t :help "Generate PostScript file")
-     ("Index" "makeindex %s" TeX-run-command nil t :help "Create index file")
-     ("Check" "lacheck %s" TeX-run-compile nil
-      (latex-mode)
-      :help "Check LaTeX file for correctness")
-     ("Spell" "<ignored>" TeX-run-ispell-on-document nil t :help "Spell-check the document")
-     ("XɘTeX" "
- xetex \"%(mode)\\input %t\"" TeX-run-TeX nil (plain-tex-mode
-					       context-mode))
-     ("XɘLaTeX" "xelatex \"%(mode)\\input{%t}\""
-      TeX-run-TeX nil (latex-mode context-mode))
-     ("Other" "" TeX-run-command t t :help "Run an arbitrary command")))
+;; for TeX-command-list
+;; ("XɘLaTeX" "xelatex \"%(mode)\\input{%t}\""
+;;      TeX-run-TeX nil (latex-mode context-mode))
 
 ; no XDVI on the Mac
 ; we just use 'open'
