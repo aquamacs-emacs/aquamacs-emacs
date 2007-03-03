@@ -1,4 +1,4 @@
- ;; osxkeys.el
+;; osxkeys.el
 ;; Mac Style Keyboard Shortcuts 
 ;; provides osx-key-mode
 
@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.71 2007/02/20 15:21:40 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.72 2007/03/03 00:18:53 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -576,15 +576,16 @@ is called."
 
  
  
-(add-hook 'after-init-hook 
-	  (lambda () 
+;; (add-hook 'after-init-hook 
+;; 	  (lambda () 
 	    
-	    ;; make a copy of it as a workaround attempt
-	   ;;  (use-global-map (copy-keymap (current-global-map)))
-	    (setq global-map-backup global-map)
-	    )
-	  )
+;; 	    ;; make a copy of it as a workaround attempt
+;; 	   ;;  (use-global-map (copy-keymap (current-global-map)))
+;; 	    (setq global-map-backup global-map)
+;; 	    )
+;; 	  )
 
+;; 
 
 ;;  aquamacs context menu
 
@@ -840,7 +841,7 @@ behavior)."
  
 (defun osx-key-mode-mouse-3 (event &optional  prefix)
   "Popup a context menu or extend the region.
-Behavior depends on setting of `osx-key-mode-mouse-3-behavior'." 
+ Behavior depends on setting of `osx-key-mode-mouse-3-behavior'." 
   (interactive "@e \nP")
   ;; we need to bind last-command to the target command
   ;; so mouse-save-then-kill is not confused and recognizes
@@ -854,12 +855,54 @@ Behavior depends on setting of `osx-key-mode-mouse-3-behavior'."
   (apply cmd 
 	 event prefix)))
 
+(defun make-osx-key-low-priority-map (&optional command-key)
+
+(if command-key
+      (setq osxkeys-command-key command-key)
+    (if mac-command-modifier
+	(setq osxkeys-command-key mac-command-modifier)
+      )
+    )
+  (let ((map (make-sparse-keymap)))
+
+    (define-key map `[(meta q)] 'fill-paragraph-or-region)
+    (define-key map `[(meta shift q)] 'unfill-paragraph-or-region)
+    (define-key map '[(up)] 'visual-line-up)
+    (define-key map '[(down)] 'visual-line-down)
+    (define-key map `[(,osxkeys-command-key left)] 'beginning-of-visual-line)
+    (define-key map `[(,osxkeys-command-key right)] 'end-of-visual-line)
+
+    (define-key map `[(,osxkeys-command-key delete)] 'kill-visual-line)
+    (define-key map `[(,osxkeys-command-key backspace)] 'kill-whole-line)
+    (define-key map `[(,osxkeys-command-key shift backspace)] 'kill-whole-visual-line)
+
+    (define-key map `[(meta up)] 'cua-scroll-down)
+    (define-key map `[(meta down)] 'cua-scroll-up)
+    ;; left / right (for transient-mark-mode)
+    ;; could be moved into transient-mark-mode-map?
+    (define-key map '[(left)] 'aquamacs-backward-char)
+    (define-key map '[(right)] 'aquamacs-forward-char)
+   (define-key map `[(,osxkeys-command-key up)] 'beginning-of-buffer)
+    (define-key map `[(,osxkeys-command-key down)] 'end-of-buffer)
+    (define-key map `[(,osxkeys-command-key left)] 'beginning-of-line)
+    (define-key map `[(,osxkeys-command-key right)] 'end-of-line)
+
+    (define-key map [(home)] 'beginning-of-buffer)
+    (define-key map [(end)] 'end-of-buffer)
+    map))
+
+(defvar osx-key-low-priority-key-map
+  (make-osx-key-low-priority-map)
+  "Low-priority keymap for `osx-key-mode'.
+These bindings will be added to the global key map when the mode is
+turned on. Toggle mode in order to update the global map.")
+;; (setq  osx-key-low-priority-key-map (make-osx-key-low-priority-map))
+
 
 (defun make-osx-key-mode-map (&optional command-key)
   "Create a mode map for OSX key mode. COMMAND-KEY specifies
 which key is mapped to command. mac-command-modifier is the
 default."
-  ;; (garbage-collect) ;; attempted workaround
   (if command-key
       (setq osxkeys-command-key command-key)
     (if mac-command-modifier
@@ -905,14 +948,8 @@ default."
     (define-key map `[(,osxkeys-command-key 49)] 'delete-other-windows) ; 49='1'
     (define-key map `[(,osxkeys-command-key 50)] 'split-window-vertically) ; 50='2'
     
-    (define-key map `[(meta q)] 'fill-paragraph-or-region)
-    (define-key map `[(meta shift q)] 'unfill-paragraph-or-region)
     (define-key map `[(,osxkeys-command-key escape)] 'keyboard-escape-quit)
-    (define-key map `[(,osxkeys-command-key up)] 'beginning-of-buffer)
-    (define-key map `[(,osxkeys-command-key down)] 'end-of-buffer)
-    (define-key map `[(,osxkeys-command-key left)] 'beginning-of-line)
-    (define-key map `[(,osxkeys-command-key right)] 'end-of-line)
-
+ 
     (define-key map `[(,osxkeys-command-key :)] 'ispell-buffer)
 
 
@@ -920,29 +957,11 @@ default."
     (define-key global-map `[(,osxkeys-command-key })] 'uncomment-region-or-line)
     (define-key global-map `[(,osxkeys-command-key \')] 'comment-or-uncomment-region-or-line)
 
-    ;; left / right (for transient-mark-mode)
-    ;; could be moved into transient-mark-mode-map?
-    (define-key map '[(left)] 'aquamacs-backward-char)
-    (define-key map '[(right)] 'aquamacs-forward-char)
 
 
     ;; only those keys - C-n and C-p stay Emacs-like
-    (define-key map '[(up)] 'osxkeys-visual-line-up-in-buffers)
-    (define-key map '[(down)] 'osxkeys-visual-line-down-in-buffers)
-    (define-key map `[(,osxkeys-command-key left)] 'beginning-of-visual-line)
-    (define-key map `[(,osxkeys-command-key right)] 'end-of-visual-line)
-
-    (define-key map `[(,osxkeys-command-key delete)] 'kill-visual-line)
-    (define-key map `[(,osxkeys-command-key backspace)] 'kill-whole-line)
-    (define-key map `[(,osxkeys-command-key shift backspace)] 'kill-whole-visual-line)
-
-    (define-key map `[(meta up)] 'cua-scroll-down)
-    (define-key map `[(meta down)] 'cua-scroll-up)
     
     (define-key map `[(,osxkeys-command-key \;)] 'toggle-mac-option-modifier)
-
-    (define-key map [(home)] 'beginning-of-buffer)
-    (define-key map [(end)] 'end-of-buffer)
 
     (define-key map `[(control ,osxkeys-command-key q)] 'kill-emacs)
     (define-key map `[(,osxkeys-command-key q)] 'save-buffers-kill-emacs)
@@ -961,7 +980,7 @@ default."
 (defvar osx-key-mode-map
   (make-osx-key-mode-map)
   "Keymap for `osx-key-mode'.")
-;; (setq  osx-key-mode-map (make-osx-key-mode-map))
+;;  (setq  osx-key-mode-map (make-osx-key-mode-map))
 
 
 (defun osx-key-mode-command-key-warning ()
@@ -977,11 +996,40 @@ variables or turn off `osx-key-mode'.
 See the description of `osxkeys-command-key'." 
 mac-command-modifier osxkeys-command-key))))
 
+(defun aquamacs-install-low-priority-global-key-map (keymap &optional target)
+  "Install keys from keymap keymap into the target (or global) map."
+  (let ((target (or target (current-global-map)))
+	(overwritten (make-sparse-keymap)))
+    (map-keymap
+   (lambda (key command)
+
+     (let ((old (lookup-key  target `[,key])))
+	   
+
+       (if (keymapp command)  ; key is a prefix key
+	   (if (keymapp old)
+	       ;; recurse
+	       (setq old (aquamacs-install-low-priority-global-key-map
+			  command old)))
+	 (define-key target `[,key] command))
+	 ;; also save "nil" entries for unassigned keys
+       (define-key overwritten `[,key] old))) 
+   keymap)
+    overwritten))
+
+;(aquamacs-install-low-priority-global-key-map osx-key-low-priority-key-map)
+
+ 
+
+(defvar osx-key--saved-low-priority-map (make-sparse-keymap)
+"Bindings in the global map overwritten when osx-key-mode was turned on.")
 
 (define-minor-mode osx-key-mode
   "Toggle Mac Key mode.
 With arg, turn Mac Key mode on iff arg is positive.
-When Mac Key mode is enabled, mac-style key bindings are provided."
+When Mac Key mode is enabled, mac-style key bindings are provided.
+Setting the `osx-key-mode' variable has limited effect - call
+the `osx-key-mode' function to switch mode on or off."
   :global t
   :group 'osx-key-mode 
   :keymap 'osx-key-mode-map  
@@ -992,16 +1040,28 @@ When Mac Key mode is enabled, mac-style key bindings are provided."
   (set-keyboard-coding-system 'mac-roman) ;; keyboard
   (set-selection-coding-system 'mac-roman) ;; copy'n'paste
  
-  (setq mac-emulate-three-button-mouse (if osx-key-mode
-					   'control
-					 nil))
+  (setq mac-emulate-three-button-mouse (if osx-key-mode 'control
+					   nil))
 
 
   ;; use right mouse click as mouse-3
   (setq mac-wheel-button-is-mouse-2 osx-key-mode)
 
+  (if osx-key-mode
+      ;; install low priority map
+      (setq osx-key--saved-low-priority-map 
+	    (aquamacs-install-low-priority-global-key-map
+	    osx-key-low-priority-key-map))
+    ;; restore old map
+    (when osx-key--saved-low-priority-map
+      (aquamacs-install-low-priority-global-key-map
+       osx-key--saved-low-priority-map)
+      (setq osx-key--saved-low-priority-map (make-sparse-keymap)))
+    )
+
   (osx-key-mode-command-key-warning))
-  
+
 (add-hook 'after-init-hook 'osx-key-mode-command-key-warning)
 
+;; (osx-key-mode 1)
 (provide 'osxkeys)
