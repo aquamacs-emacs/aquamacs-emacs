@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.13 2007/01/26 19:17:45 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.14 2007/03/06 00:48:36 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -585,10 +585,12 @@ for which the menu is being updated."
 
 (defcustom aquamacs-buffer-default-styles
     (filter-fonts '( 
-		    ("*Help*" (background-color . "lightblue")
+		    ("*Help*" (background-color . "lightsteelblue")
+		     (foreground-color . "black")
 		     (right-fringe . 1) (left-fringe . 1)
 		     (toolbar-lines . 0))
-		    ("*Messages*" (background-color . "light goldenrod")
+		    ("*Messages*" (background-color . "khaki") ;; "light goldenrod")
+		     (foreground-color . "black")
 		     (toolbar-lines . 0))
 		    )) 
     "Association list to set buffer styles. Each element 
@@ -625,6 +627,7 @@ current major mode. To turn off this behavior, see
 		  (speedbar-mode (minibuffer-auto-raise . nil))
 		  (custom-mode (tool-bar-lines . 0) (fit-frame . t) 
 			       (font . "fontset-monaco11")
+			       (foreground-color . "sienna")
 			       (background-color . "light goldenrod"))
 		  (default (font . "fontset-monaco12")   
 			    (right-fringe . 1) (left-fringe . 1))
