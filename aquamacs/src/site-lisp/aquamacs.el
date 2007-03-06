@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.84 2006/12/18 15:47:29 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.85 2007/03/06 23:34:48 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -237,6 +237,8 @@ Separate paths from file names with --."
   ;;(global-set-key [C-down]      'pager-row-down)
  
 
+
+  (require 'aquamacs-editing)
 
 (ats "aquamacs-menu ...")
   (require 'aquamacs-menu)
@@ -972,7 +974,7 @@ Returns t."
 	     ;; NOT implemented for the standard menu-bar-options-save!
 	     ;; ask user whether to accept these saved changes
 	     (if (eq aquamacs-save-options-on-quit 'ask)
-		 (progn (print changed)
+		 (progn ;;(print changed)
 		 (y-or-n-p "Options have changed - save them? "))
 	       aquamacs-save-options-on-quit))
 	(aquamacs-menu-bar-options-save)))
