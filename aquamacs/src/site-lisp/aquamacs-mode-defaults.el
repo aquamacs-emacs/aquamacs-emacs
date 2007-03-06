@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-mode-defaults.el,v 1.18 2007/02/27 00:55:29 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-defaults.el,v 1.19 2007/03/06 23:32:43 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -124,6 +124,9 @@
 (autoload 'R-transcript-mode "ess-site" "Emacs Speaks Statistics" t)
 
 
+;; 
+(autoload 'actr-mode "actr-mode" "ACT-R mode" 'interactive nil)
+(autoload 'haskell-mode "haskell-mode" "Haskell mode" 'interactive nil)
 
 (setq auto-mode-alist
 	(append
@@ -194,6 +197,7 @@
 ;; watch out - .rb is also used for realbasic
 ;; do we need to distinguish?
 ;; we don't have a REALBasic mode yet
+(autoload 'rails-minor-mode "rails.el" "Enter Ruby on Rails mode" 'interactive nil)
 
 (autoload 'matlab-mode "matlab" "Enter MATLAB mode." t)
 (autoload 'matlab-shell "matlab" "Interactive MATLAB mode." t)
