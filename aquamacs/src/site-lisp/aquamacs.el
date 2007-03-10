@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.85 2007/03/06 23:34:48 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.86 2007/03/10 08:38:10 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -239,6 +239,17 @@ Separate paths from file names with --."
 
 
   (require 'aquamacs-editing)
+
+
+
+;; set ispell-program-name to correct name, or to nil
+;; if neither aspell nor ispell are available.
+;; original definition in Emacs always uses "ispell",
+;; even if it isn't installed.
+
+(aquamacs-set-defaults `((ispell-program-name
+  ,(or (locate-file "aspell" exec-path exec-suffixes 'file-executable-p)
+      (locate-file "ispell" exec-path exec-suffixes 'file-executable-p)))))
 
 (ats "aquamacs-menu ...")
   (require 'aquamacs-menu)
