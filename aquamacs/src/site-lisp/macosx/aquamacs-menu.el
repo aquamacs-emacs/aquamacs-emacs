@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.71 2007/02/13 19:19:39 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.72 2007/03/10 08:34:26 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -141,6 +141,7 @@
       symbol
       nil 
       nil t t)))))
+
 
 ;; TO DO: speed this up
 ;; should only update if there isn't already a string
@@ -797,6 +798,20 @@ both existing buffers and buffers that you subsequently create."
   'save-custom-separator)
 
 
+;; Spell Checking
+
+(defun aquamacs-ispell-install ()
+  (interactive)
+  (browse-url "http://aquamacs.org/spellchecking"))
+(define-key-after menu-bar-tools-menu [spell-download-aspell]
+	'(menu-item "Download Spell-Checking..." aquamacs-ispell-install
+		    :help "Download spell-checking package"
+		    :visible (not ispell-program-name))
+	'spell) 
+
+(define-key menu-bar-tools-menu [spell]
+  '(menu-item "Spell Checking" ispell-menu-map 
+	      :visible ispell-program-name))
 
 
 ;; HELP MENU
