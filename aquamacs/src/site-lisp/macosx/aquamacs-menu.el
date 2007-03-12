@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.72 2007/03/10 08:34:26 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.73 2007/03/12 23:47:49 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -803,16 +803,24 @@ both existing buffers and buffers that you subsequently create."
 (defun aquamacs-ispell-install ()
   (interactive)
   (browse-url "http://aquamacs.org/spellchecking"))
-(define-key-after menu-bar-tools-menu [spell-download-aspell]
+ 
+
+(define-key menu-bar-tools-menu [spell] nil)
+(define-key menu-bar-tools-menu [separator-spell] nil)
+(define-key-after menu-bar-edit-menu [separator-spell]
+  '(menu-item "--")
+  'separator-bookmark)
+
+(define-key-after menu-bar-edit-menu [spell]
+  '(menu-item "Spell Checking" ispell-menu-map 
+	      :visible ispell-program-name) 
+
+  'separator-bookmark)
+(define-key-after menu-bar-edit-menu [spell-download-aspell]
 	'(menu-item "Download Spell-Checking..." aquamacs-ispell-install
 		    :help "Download spell-checking package"
 		    :visible (not ispell-program-name))
 	'spell) 
-
-(define-key menu-bar-tools-menu [spell]
-  '(menu-item "Spell Checking" ispell-menu-map 
-	      :visible ispell-program-name))
-
 
 ;; HELP MENU
 
