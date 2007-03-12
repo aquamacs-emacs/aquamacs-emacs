@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.86 2007/03/10 08:38:10 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.87 2007/03/12 11:12:29 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -250,6 +250,15 @@ Separate paths from file names with --."
 (aquamacs-set-defaults `((ispell-program-name
   ,(or (locate-file "aspell" exec-path exec-suffixes 'file-executable-p)
       (locate-file "ispell" exec-path exec-suffixes 'file-executable-p)))))
+
+;; find cocoAspell's directories automatically
+(if (and (equal ispell-program-name "aspell")
+	 (file-readable-p "/Library/Application Support/cocoAspell/aspell6-en-6.0-0")
+	 (not (getenv "ASPELL_CONF")))
+    (setenv "ASPELL_CONF"
+	    "dict-dir /Library/Application Support/cocoAspell/aspell6-en-6.0-0"))
+
+ 
 
 (ats "aquamacs-menu ...")
   (require 'aquamacs-menu)
