@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.73 2007/03/12 23:47:49 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.74 2007/03/13 00:05:14 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -821,6 +821,18 @@ both existing buffers and buffers that you subsequently create."
 		    :help "Download spell-checking package"
 		    :visible (not ispell-program-name))
 	'spell) 
+(if (boundp 'ispell-menu-map)
+    (define-key ispell-menu-map [flyspell-mode]
+	'(menu-item "Check Spelling as You Type"
+		    flyspell-mode
+		    :help "Check spelling while you edit the text"
+		    :button (:toggle . (bound-and-true-p flyspell-mode)))))
+
+(defun aquamacs-flyspell-maybe-check-buffer ()
+  (if (< (- (point-max) (point-min)) 50000)
+      (flyspell-buffer)
+    (message "Spell-checking (flyspell) on. M-x flyspell-buffer to check buffer.")))
+(add-hook 'flyspell-mode-hook 'aquamacs-flyspell-maybe-check-buffer)
 
 ;; HELP MENU
 
