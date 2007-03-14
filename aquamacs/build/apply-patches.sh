@@ -25,7 +25,7 @@ PATCHES="test toolbar-png custom-verbosity pretty-modeline transparency2
          calm-startup available-screen mouse-button launch-browser
          org-gnu-Aquamacs about-aquamacs puresize
          macfns-dialog-menu menu-bar-visible-frame eval-depth
-          shut-up"
+          shut-up python-mode"
 
 # sendmail-mac - probably not needed any longer - CHECK CHECK CHECK
 
