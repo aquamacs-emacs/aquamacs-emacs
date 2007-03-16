@@ -1,0 +1,55 @@
+*** lisp/textmodes/ispell.el	26 Feb 2007 20:23:50 +0000	1.208
+--- lisp/textmodes/ispell.el	16 Mar 2007 15:14:44 +0000	
+***************
+*** 1044,1049 ****
+--- 1044,1051 ----
+  	'(menu-item "Save Dictionary"
+  		    (lambda () (interactive) (ispell-pdict-save t t))
+  		    :help "Save personal dictionary"))
++       (define-key ispell-menu-map [ispell-customize-separator]
++ 	'(menu-item "--"))
+        (define-key ispell-menu-map [ispell-customize]
+  	'(menu-item "Customize..."
+  		    (lambda () (interactive) (customize-group 'ispell))
+***************
+*** 1053,1069 ****
+  	'(menu-item "Help"
+  		    (lambda () (interactive) (describe-function 'ispell-help))
+  		    :help "Show standard Ispell keybindings and commands"))
+!       (define-key ispell-menu-map [flyspell-mode]
+! 	'(menu-item "Automatic spell checking (Flyspell)"
+! 		    flyspell-mode
+! 		    :help "Check spelling while you edit the text"
+! 		    :button (:toggle . (bound-and-true-p flyspell-mode))))
+        (define-key ispell-menu-map [ispell-complete-word]
+  	'(menu-item "Complete Word" ispell-complete-word
+  		    :help "Complete word at cursor using dictionary"))
+        (define-key ispell-menu-map [ispell-complete-word-interior-frag]
+  	'(menu-item "Complete Word Fragment" ispell-complete-word-interior-frag
+! 		    :help "Complete word fragment at cursor"))))
+  
+  ;;;###autoload
+  (if ispell-menu-map-needed
+--- 1055,1076 ----
+  	'(menu-item "Help"
+  		    (lambda () (interactive) (describe-function 'ispell-help))
+  		    :help "Show standard Ispell keybindings and commands"))
+!       (define-key ispell-menu-map [ispell-complete-word-separator]
+! 	'(menu-item "--"))
+! 
+        (define-key ispell-menu-map [ispell-complete-word]
+  	'(menu-item "Complete Word" ispell-complete-word
+  		    :help "Complete word at cursor using dictionary"))
+        (define-key ispell-menu-map [ispell-complete-word-interior-frag]
+  	'(menu-item "Complete Word Fragment" ispell-complete-word-interior-frag
+! 		    :help "Complete word fragment at cursor"))
+!       (define-key ispell-menu-map [flyspell-mode-separator]
+! 	'(menu-item "--"))
+!       (define-key ispell-menu-map [flyspell-mode]
+! 	'(menu-item "Check Spelling as You Type"
+! 		    flyspell-mode
+! 		    :help "Check spelling while you edit the text"
+! 		    :button (:toggle . (bound-and-true-p flyspell-mode))))))
+  
+  ;;;###autoload
+  (if ispell-menu-map-needed
