@@ -105,6 +105,8 @@
 (defvar xterm-mouse-y 0
   "Position of last xterm mouse event relative to the frame.")
 
+(defvar xt-mouse-epoch nil)
+
 ;; Indicator for the xterm-mouse mode.
 
 (defun xterm-mouse-position-function (pos)
@@ -125,7 +127,13 @@
 	 (x (- (xterm-mouse-event-read) #o40 1))
 	 (y (- (xterm-mouse-event-read) #o40 1))
 	 (time (current-time))
-	 (timestamp (+ ( * (nth 1 time) 1000 ) (/ (nth 2 time) 1000)))
+	 ;; Emulate timestamp information.  This is accurate enough
+	 ;; for default value of mouse-1-click-follows-link (450msec).
+	 (timestamp (truncate
+		     (* 1000
+			(- (float-time)
+			   (or xt-mouse-epoch
+			       (setq xt-mouse-epoch (float-time)))))))
 	 (mouse (intern
 		 ;; For buttons > 3, the release-event looks
 		 ;; differently (see xc/programs/xterm/button.c,
