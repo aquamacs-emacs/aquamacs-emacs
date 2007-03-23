@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.72 2007/03/03 00:18:53 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.73 2007/03/23 22:00:16 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -108,8 +108,7 @@ provided `cua-mode' and the mark are active."
     (if (and cua-mode transient-mark-mode 
 	     mark-active
 	     (not cua--explicit-region-start)
-	     (not (aquamacs--shift-key-for-command-p))
-	     (not (eq left (point))))
+	     (not (aquamacs--shift-key-for-command-p)))
 	(goto-char left)
       (let ((this-command 'backward-car)) ;; maintain compatibility
 	(call-interactively 'backward-char)))))
@@ -125,8 +124,7 @@ provided `cua-mode' and the mark are active."
     (if (and cua-mode transient-mark-mode 
 	     mark-active
 	     (not cua--explicit-region-start)
-	     (not (aquamacs--shift-key-for-command-p))
-	     (not (eq right (point))))
+	     (not (aquamacs--shift-key-for-command-p)))
 	(goto-char right)
        (let ((this-command 'forward-car)) ;; maintain compatibility
 	 (call-interactively 'forward-char)))))
