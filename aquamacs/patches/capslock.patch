@@ -126,23 +126,23 @@ diff -c -r1.186 macterm.c
        EventHandlerCallRef next_handler;
        EventRef event;
 ***************
-*** 9735,9741 ****
-  	    mapped_modifiers =
-  	      (NILP (Vmac_control_modifier) ? 0 : controlKey)
-  	      | (NILP (Vmac_option_modifier) ? 0 : optionKey)
-! 	      | (NILP (Vmac_command_modifier) ? 0 : cmdKey);
+*** 9057,9063 ****
+  
   #ifdef MAC_OSX
-  	    mapped_modifiers |=
-  	      (NILP (Vmac_function_modifier) ? 0 : kEventKeyModifierFnMask);
---- 9811,9818 ----
-  	    mapped_modifiers =
-  	      (NILP (Vmac_control_modifier) ? 0 : controlKey)
-  	      | (NILP (Vmac_option_modifier) ? 0 : optionKey)
-! 	      | (NILP (Vmac_command_modifier) ? 0 : cmdKey)
-! 	      | (NILP (Vmac_capslock_modifier) ? 0 : alphaLock);
+    mapped_modifiers_all |=
+!     (NILP (Vmac_function_modifier) ? 0 : kEventKeyModifierFnMask);
+  #endif
+  
+    return mapped_modifiers_all & modifiers;
+--- 9071,9078 ----
+  
   #ifdef MAC_OSX
-  	    mapped_modifiers |=
-  	      (NILP (Vmac_function_modifier) ? 0 : kEventKeyModifierFnMask);
+    mapped_modifiers_all |=
+!     (NILP (Vmac_function_modifier) ? 0 : kEventKeyModifierFnMask)
+!     | (NILP (Vmac_capslock_modifier) ? 0 : alphaLock);
+  #endif
+  
+    return mapped_modifiers_all & modifiers;
 ***************
 *** 11458,11463 ****
 --- 11535,11541 ----
