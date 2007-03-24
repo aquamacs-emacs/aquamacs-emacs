@@ -43,7 +43,7 @@ PATCHES="test ui-strings
 exec=1
 if [ $# -ge 2 ];
 then
-    if [ $1 -eq '-t' ];
+    if [ "$1" -eq '-t' ];
     then
 	exec=0
     fi
