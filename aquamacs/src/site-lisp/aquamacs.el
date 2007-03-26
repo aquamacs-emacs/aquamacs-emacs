@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.90 2007/03/26 22:03:15 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.91 2007/03/26 22:04:20 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -242,8 +242,6 @@ Separate paths from file names with --."
 
   (require 'aquamacs-editing)
 
-
-
 ;; set ispell-program-name to correct name, or to nil
 ;; if neither aspell nor ispell are available.
 ;; original definition in Emacs always uses "ispell",
@@ -255,32 +253,20 @@ Separate paths from file names with --."
 	     "aspell")
 	 (if (locate-file "ispell" exec-path exec-suffixes 'file-executable-p)
 	     "ispell")))))
-
-(defun aquamacs-ispell-call-process-to-string (&rest args)
-  "Execute command COMMAND and return its output as a string."
-  (with-output-to-string
-    (with-current-buffer
-      standard-output
-      (apply #'ispell-call-process nil '(t nil) nil args))))
-
-
+ 
 ;; find cocoAspell's directories automatically
-; (setenv "ASPELL_CONF" nil)
 (defun aquamacs--configure-aspell ()
   "Configure Aspell automatically if it hasn't been configured already."
   (remove-hook 'ispell-kill-ispell-hook 'aquamacs--configure-aspell) 
   ;; only once please
   (when (and (equal ispell-program-name "aspell")
-;	     (not ispell-dictionary-alist) ;; nothing found yet
+	     ;;	     (not ispell-dictionary-alist) ;; nothing found yet
 	     (not (getenv "ASPELL_CONF")))
-					
     ;; don't do this - would assume default dirs 	
     ;;(ispell-maybe-find-aspell-dictionaries) ;; try to find dictionaries
     ;; (setq ispell-have-aspell-dictionaries nil)
     ;; to find out if it's already configured
     ;;(unless ispell-dictionary-alist
-
- 
       (condition-case nil
 	  (if (with-temp-buffer
 	      ;; is there a stored cocoaSpell configuration? 
@@ -288,7 +274,6 @@ Separate paths from file names with --."
 		(eq (point-min) (point-max))) ;; no output?
 	      ;; OK, aspell has not been configured by user on Unix level
 	      ;; or in Emacs
-
 	      (setenv 
 	       "ASPELL_CONF"
 	       (let ((config-dir (expand-file-name 
@@ -308,8 +293,11 @@ Separate paths from file names with --."
 	    (error nil)))))
 
 (add-hook 'ispell-kill-ispell-hook 'aquamacs--configure-aspell)
- ; (getenv "ASPELL_CONF")
+;; unit test:
+; (setenv "ASPELL_CONF" nil)
 ; (aquamacs--configure-aspell) 
+; (getenv "ASPELL_CONF")
+
 (ats "aquamacs-menu ...")
   (require 'aquamacs-menu)
 (ats "aquamacs-menu done")
