@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.88 2007/03/13 00:04:43 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.89 2007/03/26 07:41:59 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -38,6 +38,7 @@
 (setq aq-starttime (current-time))
 (ats "started")
 
+(defvar aquamacs-version t) ;; supplied by site-start.el
 
 (defun aquamacs-setup ()
  
@@ -187,7 +188,7 @@ Separate paths from file names with --."
      ( recentf-max-menu-items 25)
      (recentf-menu-before  "Open Directory...                 ")
      (recentf-keep ( mac-is-mounted-volume-p file-remote-p file-readable-p))
-     (recentf-filename-handler abbreviate-file-name)
+     (recentf-filename-handlers '(abbreviate-file-name))
      (recentf-menu-filter aquamacs-recentf-show-basenames)))  
 
   ;; define a single command to be included in the recentf menu
@@ -207,6 +208,7 @@ Separate paths from file names with --."
 
 
 
+  (tramp-register-file-name-handlers) ;; to make sure file-remote-p works
   (recentf-mode 1)  
 
   (global-set-key "\C-x\ \C-r" 'recentf-open-files)  
