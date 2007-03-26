@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.89 2007/03/26 07:41:59 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.90 2007/03/26 22:03:15 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -256,15 +256,60 @@ Separate paths from file names with --."
 	 (if (locate-file "ispell" exec-path exec-suffixes 'file-executable-p)
 	     "ispell")))))
 
+(defun aquamacs-ispell-call-process-to-string (&rest args)
+  "Execute command COMMAND and return its output as a string."
+  (with-output-to-string
+    (with-current-buffer
+      standard-output
+      (apply #'ispell-call-process nil '(t nil) nil args))))
+
+
 ;; find cocoAspell's directories automatically
-(if (and (equal ispell-program-name "aspell")
-	 (file-readable-p "/Library/Application Support/cocoAspell/aspell6-en-6.0-0")
-	 (not (getenv "ASPELL_CONF")))
-    (setenv "ASPELL_CONF"
-	    "dict-dir /Library/Application Support/cocoAspell/aspell6-en-6.0-0"))
+; (setenv "ASPELL_CONF" nil)
+(defun aquamacs--configure-aspell ()
+  "Configure Aspell automatically if it hasn't been configured already."
+  (remove-hook 'ispell-kill-ispell-hook 'aquamacs--configure-aspell) 
+  ;; only once please
+  (when (and (equal ispell-program-name "aspell")
+;	     (not ispell-dictionary-alist) ;; nothing found yet
+	     (not (getenv "ASPELL_CONF")))
+					
+    ;; don't do this - would assume default dirs 	
+    ;;(ispell-maybe-find-aspell-dictionaries) ;; try to find dictionaries
+    ;; (setq ispell-have-aspell-dictionaries nil)
+    ;; to find out if it's already configured
+    ;;(unless ispell-dictionary-alist
 
  
+      (condition-case nil
+	  (if (with-temp-buffer
+	      ;; is there a stored cocoaSpell configuration? 
+		(ispell-call-process ispell-program-name nil t nil "dicts")
+		(eq (point-min) (point-max))) ;; no output?
+	      ;; OK, aspell has not been configured by user on Unix level
+	      ;; or in Emacs
 
+	      (setenv 
+	       "ASPELL_CONF"
+	       (let ((config-dir (expand-file-name 
+				  "~/Library/Preferences/cocoAspell"))
+		     (dict-dir 
+		      (car ;; use the first subdir in that path
+		       (file-expand-wildcards 
+			"/Library/Application Support/cocoAspell/aspell*"))))
+		 ;; check if the directories are readable
+		 (if (file-readable-p config-dir) 
+		     (setq config-dir (concat "conf-dir " config-dir))
+		   (setq config-dir nil))
+		 (if (file-readable-p dict-dir) 
+		     (setq dict-dir (concat ";dict-dir " dict-dir))
+		   (setq dict-dir nil))
+		 (concat config-dir dict-dir)))
+	    (error nil)))))
+
+(add-hook 'ispell-kill-ispell-hook 'aquamacs--configure-aspell)
+ ; (getenv "ASPELL_CONF")
+; (aquamacs--configure-aspell) 
 (ats "aquamacs-menu ...")
   (require 'aquamacs-menu)
 (ats "aquamacs-menu done")
