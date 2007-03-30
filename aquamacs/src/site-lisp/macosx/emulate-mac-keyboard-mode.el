@@ -1,4 +1,3 @@
-
 ;; emulate-mac-*-keyboard-modes for Aquamacs
 ;; (C) 2005 by David Reitter
 ;; do not copy / redistribute. All rights reserved.
@@ -56,7 +55,7 @@ inserted for the key. Example:
 		("\M-(" . "{")
 		("\M-4" . "[")
 		("\M-)" . "}")
-		("\M-7" . "]")  
+		("\m-7" . "]")  
 		("\M-\:" . "|")))
     (italian-pro . 
 		(("\M-5" . "~") 
@@ -72,8 +71,9 @@ inserted for the key. Example:
     (british . (("\M-3" . "#")
 		("\M-2" . ,emmkm--euro) ;; euro symbol
 		("\M-6" . "§")))))
-;; (define-emulate-mac-keyboard-modes) @ @@@ @@@@
-;; (make-emulate-mac-keyboard-mode-map 'german)  @ 
+
+;; (define-emulate-mac-keyboard-modes)
+;; (make-emulate-mac-keyboard-mode-map 'german)   
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun emmkm-key-binding (key)
@@ -81,6 +81,7 @@ inserted for the key. Example:
       (lookup-key overriding-terminal-local-map key)
     (key-binding key)))
 
+;; also add it to isearch-mode-map
 (defun make-emulate-mac-keyboard-mode-map (language)
   (let ((emkm-ins-count 0))
     (let ((mode-name (emkm-name language))
@@ -110,7 +111,6 @@ This command is part of `%s'." string-rep language mode-name mode-name)
 								 (cdr x)))
 					   (kb (emmkm-key-binding ,string-rep)))
 				       (and kb
-					 ;   (print kb)
 					    ;; we call the original binding to preserve 
 					    ;; functionality (e.g. in isearch)
 					    (call-interactively kb)))
@@ -131,9 +131,12 @@ This command is part of `%s'." string-rep language mode-name mode-name)
   (if suf
       (intern (format "emulate-mac-%s-keyboard-mode%s" lang suf))
     (intern (format "emulate-mac-%s-keyboard-mode" lang))))
+(defvar aquamacs-emkm-current-keymap)
 
 (defun turn-off-emulate-mac-keyboard-modes (&optional except-language)
-"Turn off all emulate-mac-keyboard minor modes"
+  "Turn off all emulate-mac-keyboard minor modes"
+  (aquamacs-emkm-uninstall-overriding-keys)
+  (setq aquamacs-emkm-current-keymap nil)
   (mapcar (lambda 
 	    (other-language)
 	    (if (eq except-language other-language)
@@ -142,7 +145,7 @@ This command is part of `%s'." string-rep language mode-name mode-name)
 	  (mapcar 'car emulate-mac-keyboard-mode-maps)))
 
 ; (turn-off-emulate-mac-keyboard-modes)
- 
+
 (defun define-emulate-mac-keyboard-modes ()
 "Read `emulate-mac-keyboard-mode-maps' and define a minor mode
 for each entry in this alist. The minor mode will apply the
@@ -166,13 +169,23 @@ by the function `define-emulate-mac-keyboard-modes'."
 		,nil ;; init-value
 		,nil ;; lighter
 		,keymap-sym ;; keymap
-		:global t
-		:group 'Aquamacs
-		(when (eval ,(emkm-name language))
+		:global t 
+		:group 'Aquamacs 
+		(if (or (not (eval ,(emkm-name language)))
+			(eq 0 (eval ,(emkm-name language))))
+		    (progn (aquamacs-emkm-uninstall-overriding-keys)
+			   (setq aquamacs-emkm-current-keymap nil)
+			   (remove-hook 'isearch-mode-hook 'aquamacs-emkm-install-overriding-keys))
+		  ;; turning it on...
 		  ;; disable competing modes
 		  (turn-off-emulate-mac-keyboard-modes (quote ,language))
 		  ;; Option key is Meta
 		  (setq mac-option-modifier 'meta)
+		  ;; not which keymap is currently active
+		  (setq aquamacs-emkm-current-keymap (quote ,keymap-sym))
+		  ;; install isearch hook
+		  
+		  (add-hook 'isearch-mode-hook 'aquamacs-emkm-install-overriding-keys)
 		  (message "Emulating important Option key combinations of %s keyboard layout." (capitalize (symbol-name (quote ,language)))))
 		nil
 		)))
@@ -190,6 +203,23 @@ to their equivalents used on Mac OS X."
 		  (:enable (eq mac-option-modifier 'meta))
 		  ))))
 	(mapcar 'car emulate-mac-keyboard-mode-maps)))
+
+
+(defun aquamacs-emkm-install-overriding-keys ()
+  "Install keys from `aquamacs-emkm-current-keymap'  into the `overriding-terminal-local-map'."
+  (and overriding-terminal-local-map
+       aquamacs-emkm-current-keymap
+      (map-keymap (lambda (key command)
+		    (define-key overriding-terminal-local-map  `[,key] command))
+		  (eval aquamacs-emkm-current-keymap))))
+
+(defun aquamacs-emkm-uninstall-overriding-keys ()
+  "Uninstall keys in `aquamacs-emkm-current-keymap' from `isearch-mode-map'."
+  (and isearch-mode-map
+       aquamacs-emkm-current-keymap
+      (map-keymap (lambda (key command)
+		    (define-key isearch-mode-map  `[,key] nil))
+		  (eval aquamacs-emkm-current-keymap))))
 
 ;; Define entries for menu
 
