@@ -21,11 +21,13 @@
 Each element of this list should be a cons (LANGUAGE . BINDINGS), where
 LANGUAGE is a symbol named after the language associated with the keyboard
 layout to be used, and BINDINGS is a list of bindings, each consisting of
-a cons cell (KEY . RESULT), where KEY is a string or other key identifier
-denoting the key, and RESULT is a string giving the text to be inserted
-for the key. Example:
+a cons cell (KEY . RESULT), where KEY is a string or other keycode vector 
+denoting the key, and RESULT is a string or key code giving the text to be 
+inserted for the key. Example:
  ((german . ((\"\\M-l\" . \"@\")
  	     (\"\\M-/\" . \"\\\\\"))))")
+
+(defvar emmkm--euro 342604)
 
 (setq emulate-mac-keyboard-mode-maps
  `((german . (("\M-l" . "@")
@@ -36,21 +38,21 @@ for the key. Example:
 	       ("\M-8" . "{")
 	       ("\M-9" . "}")
 	       ("\M-n" . "~")
-	       ("\M-e" . ,(make-char 'latin-iso8859-15 164)) ;; euro symbol
+	       ("\M-e" . ,emmkm--euro) ;; euro symbol
 	       ))
-    (french . (("\M-`" . "@")
-	       ("\M-$" . ,(make-char 'latin-iso8859-15 164)) 
+    (french . (([?\M-`] . "@")
+	       ("\M-$" . ,emmkm--euro) 
 	       ("\M-/" . "\\")
-	       ("\M-£" . "#")
+	       ([?\M-£]  . "#") ;; was: "\M-£"
 	       ("\M-n" . "~")
 	       ("\M-L" . "|")
 	       ("\M-(" . "{")
 	       ("\M-5" . "[")
 	       ("\M-)" . "}")
-	       ("\M-°" . "]")))
+	       ([?\M-°] . "]")))
     (italian . ( ("\M-§" . "@")  
 		 
-		("\M-¤"  . "@") ; wont work either
+		([?\M-¤]  . "@") ; wont work either
 		("\M-(" . "{")
 		("\M-4" . "[")
 		("\M-)" . "}")
@@ -58,44 +60,77 @@ for the key. Example:
 		("\M-\:" . "|")))
     (italian-pro . 
 		(("\M-5" . "~") 
-		(,(kbd "M-\217") . "[")
-		(,(kbd "M-\216") . "{")
+		([?\M-è] . "[") ;;  was ,(kbd "M-\217")
+		([?\M-é] . "{") ;;      ,(kbd "M-\216")
 		("\M-*" . "}")
 		("\M-+" . "]")
-		(,(kbd "M-\210") . "#")
+		([?\M-à] . "#") ;;  was  ,(kbd "M-\210")
 		 ))
     (us . (     ("\M-3" . "£")
-		("\M-@" . ,(make-char 'latin-iso8859-15 164)) ;; euro symbol
+		("\M-@" . ,emmkm--euro) ;; euro symbol
 		("\M-6" . "§")))
     (british . (("\M-3" . "#")
-		("\M-2" . ,(make-char 'latin-iso8859-15 164)) ;; euro symbol
+		("\M-2" . ,emmkm--euro) ;; euro symbol
 		("\M-6" . "§")))))
-
-;; (define-emulate-mac-keyboard-modes)
-
+;; (define-emulate-mac-keyboard-modes) @ @@@ @@@@
+;; (make-emulate-mac-keyboard-mode-map 'german)  @ 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun emmkm-key-binding (key)
+  (if overriding-terminal-local-map
+      (lookup-key overriding-terminal-local-map key)
+    (key-binding key)))
 
 (defun make-emulate-mac-keyboard-mode-map (language)
   (let ((emkm-ins-count 0))
-  (let ((map (make-sparse-keymap)))
-	  (mapcar (lambda (x)
-		    (setq emkm-ins-count (1+ emkm-ins-count))
-		    (define-key map  (car x)
-		      (eval (list 'defun  (intern (format "emkm-%s-%d" 
-					     language emkm-ins-count))
-				  ()
-				  (format "Insert %s characters" language)
-				  '(interactive) 
-				  `(insert ,(cdr x))))))
-		  (reverse (cdr 
-			    (assq language 
-				  emulate-mac-keyboard-mode-maps))))
-	  map))) 
+    (let ((mode-name (emkm-name language))
+	  (map (make-sparse-keymap)))
+      (mapcar (lambda (x)
+		(setq emkm-ins-count (1+ emkm-ins-count))
+		(let ((string-rep (if (stringp (cdr x))
+				      (cdr x)
+				    (char-to-string (cdr x)))))
+		  (define-key map  (car x)
+		    (eval (list 'defun  (intern (format "emkm-%s-%d" 
+							language emkm-ins-count))
+				'(n)
+				(format "Insert %s character (%s keyboard layout).
+If called with ESC prefix (rather than Meta modifier), 
+call the command that would be called if 
+ey`%s' was off.
+
+This command is part of `%s'." string-rep language mode-name mode-name)
+				'(interactive "p") 
+				;; was called using Meta modifier?
+				`(if (list-contains (event-modifiers 
+						     last-command-event)
+						    'meta)
+				     (let ((last-command-char ,(if (stringp (cdr x))
+								   (string-to-char (cdr x))
+								 (cdr x)))
+					   (kb (emmkm-key-binding ,string-rep)))
+				       (and kb
+					 ;   (print kb)
+					    ;; we call the original binding to preserve 
+					    ;; functionality (e.g. in isearch)
+					    (call-interactively kb)))
+				     
+				   ;; otherwise: called using Esc prefix.
+				   ;; call original binding 
+				   (let* ((,mode-name nil)
+					  (kb (emmkm-key-binding (this-command-keys))))
+				     (and kb
+					  (not (eq kb this-command))
+					  (call-interactively kb)))))))))
+	      (reverse (cdr 
+			(assq language 
+			      emulate-mac-keyboard-mode-maps))))
+      map))) 
 
 (defun emkm-name (lang &optional suf)
   (if suf
-      (intern (format "emulate-mac-%s-keyboard-mode%s" lang suf)))
-  (intern (format "emulate-mac-%s-keyboard-mode" lang)))
+      (intern (format "emulate-mac-%s-keyboard-mode%s" lang suf))
+    (intern (format "emulate-mac-%s-keyboard-mode" lang))))
 
 (defun turn-off-emulate-mac-keyboard-modes (&optional except-language)
 "Turn off all emulate-mac-keyboard minor modes"
