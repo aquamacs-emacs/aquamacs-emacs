@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.92 2007/03/27 18:26:15 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.93 2007/03/30 11:40:36 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -287,8 +287,8 @@ Separate paths from file names with --."
 		 (if (file-readable-p dict-dir) 
 		     (setq dict-dir (concat ";dict-dir " dict-dir))
 		   (setq dict-dir nil))
-		 (concat config-dir dict-dir)))
-	    (error nil)))))
+		 (concat config-dir dict-dir))))
+	(error nil))))
 
 (add-hook 'ispell-kill-ispell-hook 'aquamacs--configure-aspell)
 ;; unit test:
