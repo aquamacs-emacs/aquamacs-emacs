@@ -4,13 +4,12 @@ RCS file: /sources/emacs/emacs/lisp/recentf.el,v
 retrieving revision 1.55
 diff -c -r1.55 recentf.el
 *** lisp/recentf.el	21 Jan 2007 03:53:11 -0000	1.55
---- lisp/recentf.el	22 Mar 2007 23:22:50 -0000
+--- lisp/recentf.el	31 Mar 2007 13:47:40 -0000
 ***************
-*** 359,373 ****
-               recentf-auto-cleanup nil 'recentf-cleanup))))))
+*** 360,373 ****
   
   ;;; File functions
-! ;;
+  ;;
   (defsubst recentf-push (filename)
     "Push FILENAME into the recent list, if it isn't there yet.
   If it is there yet, move it at the beginning of the list.
@@ -22,11 +21,19 @@ diff -c -r1.55 recentf.el
   
   (defun recentf-apply-filename-handlers (name)
     "Apply `recentf-filename-handlers' to file NAME.
---- 359,383 ----
-               recentf-auto-cleanup nil 'recentf-cleanup))))))
+--- 360,393 ----
   
   ;;; File functions
-! ;; (setq file-name-history nil)
+  ;;
++ 
++ (defun recentf-shorten-file-name (filename)
++   "Shorten the file name (use ~/ if possible)."
++   (let ((h (expand-file-name "~/"))
++ 	(f (recentf-expand-file-name filename)))
++     (if (eq t (compare-strings h 0 nil f 0 (length h)))
++ 	(concat "~/" (substring f (length h)))
++       f)))
++ 
   (defsubst recentf-push (filename)
     "Push FILENAME into the recent list, if it isn't there yet.
   If it is there yet, move it at the beginning of the list.
@@ -35,16 +42,17 @@ diff -c -r1.55 recentf.el
 ! is non-nil, ignore case when comparing filenames."
     (let ((m (recentf-string-member filename recentf-list)))
       (and m (setq recentf-list (delq (car m) recentf-list)))
-!     (push filename recentf-list))
+!     (push filename recentf-list)) 
 !   (when (and recentf-initialize-file-name-history
 ! 	     ;; prevent adding files opened via minibuffer interaction
 ! 	     ;; a second time.
 ! 	     (not (and file-name-history
-! 		       (equal (recentf-expand-file-name (car file-name-history))
+! 		       (recentf-string-equal 
+! 			(recentf-expand-file-name (car file-name-history))
 ! 			filename))))
 !     (let ((m (recentf-string-member filename file-name-history)))
 !       (and m (setq file-name-history (delq (car m) file-name-history)))
-!       (push filename file-name-history))))
+!       (push (recentf-shorten-file-name filename) file-name-history))))
   
   (defun recentf-apply-filename-handlers (name)
     "Apply `recentf-filename-handlers' to file NAME.
@@ -59,7 +67,7 @@ diff -c -r1.55 recentf.el
   
   (defsubst recentf-remove-if-non-kept (filename)
     "Remove FILENAME from the recent list, if file is not kept.
---- 437,445 ----
+--- 447,455 ----
     "Add or move FILENAME at the beginning of the recent list.
   Does nothing if the name satisfies any of the `recentf-exclude'
   regexps or predicates."
@@ -69,3 +77,21 @@ diff -c -r1.55 recentf.el
   
   (defsubst recentf-remove-if-non-kept (filename)
     "Remove FILENAME from the recent list, if file is not kept.
+***************
+*** 1268,1274 ****
+          (insert "\n\n;;; Local Variables:\n"
+                  (format ";;; coding: %s\n" recentf-save-file-coding-system)
+                  ";;; End:\n")
+!         (write-file (expand-file-name recentf-save-file))
+          (when recentf-save-file-modes
+            (set-file-modes recentf-save-file recentf-save-file-modes))
+          nil)
+--- 1288,1295 ----
+          (insert "\n\n;;; Local Variables:\n"
+                  (format ";;; coding: %s\n" recentf-save-file-coding-system)
+                  ";;; End:\n")
+! 	(let (write-file-functions) ; don't add this file to the history
+! 	  (write-file (expand-file-name recentf-save-file)))
+          (when recentf-save-file-modes
+            (set-file-modes recentf-save-file recentf-save-file-modes))
+          nil)
