@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Help</TITLE>
-<META NAME="description" CONTENT="Help">
+<TITLE>Plug-in Interface</TITLE>
+<META NAME="description" CONTENT="Plug-in Interface">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -19,59 +19,64 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="STYLESHEET" HREF="aquamacs.css">
 
+<LINK REL="next" HREF="node41.html">
 <LINK REL="previous" HREF="node39.html">
-<LINK REL="up" HREF="node30.html">
+<LINK REL="up" HREF="node39.html">
 <LINK REL="next" HREF="node41.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html644"
+<A NAME="tex2html636"
   HREF="node41.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html640"
-  HREF="node30.html">
+<A NAME="tex2html632"
+  HREF="node39.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html636"
+<A NAME="tex2html626"
   HREF="node39.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html642"
+<A NAME="tex2html634"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html645"
-  HREF="node41.html">Aquamacs for Emacs Veterans</A>
-<B> Up:</B> <A NAME="tex2html641"
-  HREF="node30.html">In Depth: The Aquamacs</A>
-<B> Previous:</B> <A NAME="tex2html637"
-  HREF="node39.html">Tools</A>
- &nbsp; <B>  <A NAME="tex2html643"
+<B> Next:</B> <A NAME="tex2html637"
+  HREF="node41.html">Load-path</A>
+<B> Up:</B> <A NAME="tex2html633"
+  HREF="node39.html">Extending Aquamacs</A>
+<B> Previous:</B> <A NAME="tex2html627"
+  HREF="node39.html">Extending Aquamacs</A>
+ &nbsp; <B>  <A NAME="tex2html635"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION00056000000000000000">
-Help</A>
+<H2><A NAME="SECTION00071000000000000000">
+Plug-in Interface</A>
 </H2>
-The Help menu contains a wealth of information about
-Aquamacs Emacs and GNU Emacs. Except for the help provided in this document,
-Aquamacs' Help menu also provides documentation of the Mac-specific
-customizations with the present User Manual. The general Emacs
-user help is comprehensive and detailed to the point of possibly
-overwhelming the inexperienced user. The beginner should definitely
-start with the Emacs tutorial contained in the Help menu. While geared
-toward the traditional Emacs interface instead of the OS X Aquamacs
-version, the tutorial is a good introduction to Emacs' unique
-capabilities. And, as you gain more experience, you will appreciate
-the depth of the Emacs documentation. 
+
+<P>
+All files named <SPAN  CLASS="textit">site-start.el</SPAN> anywhere in the load-path
+    are loaded at startup, before the user's init files are
+    loaded. For example, such a file may be placed in
+    /Library/Application Support/Aquamacs Emacs/myPlugin. 
+
+<P>
+The load-path is automatically extended to cover all subdirectories in standard paths (see Section <A HREF="node41.html#standardpaths">6.2</A>).
+
+<P>
+If a plug-in needs to execute code earlier in the initialization phase, that is, before any Aquamacs-specific code is executed (but after Emacs initilization code has been executed), this code can be provided in a file  <SPAN  CLASS="textit">site-prestart.el</SPAN> anywhere in the load-path.
+
+<P>
+Note that plug-ins should not make any assumptions about whether a frame exists or is visible.
 
 <P>
 <BR><HR>
 <ADDRESS>
 David
-2006-06-26
+2007-03-31
 </ADDRESS>
 </BODY>
 </HTML>

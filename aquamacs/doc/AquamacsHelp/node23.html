@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Interface</TITLE>
-<META NAME="description" CONTENT="Interface">
+<TITLE>File</TITLE>
+<META NAME="description" CONTENT="File">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,195 +21,102 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="node24.html">
 <LINK REL="previous" HREF="node22.html">
-<LINK REL="up" HREF="node18.html">
+<LINK REL="up" HREF="node22.html">
 <LINK REL="next" HREF="node24.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html433"
+<A NAME="tex2html426"
   HREF="node24.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html429"
-  HREF="node18.html">
+<A NAME="tex2html422"
+  HREF="node22.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html423"
+<A NAME="tex2html416"
   HREF="node22.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html431"
+<A NAME="tex2html424"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html434"
-  HREF="node24.html">Configuration</A>
-<B> Up:</B> <A NAME="tex2html430"
-  HREF="node18.html">Features and Changes: 0.9.3</A>
-<B> Previous:</B> <A NAME="tex2html424"
-  HREF="node22.html">Fonts</A>
- &nbsp; <B>  <A NAME="tex2html432"
+<B> Next:</B> <A NAME="tex2html427"
+  HREF="node24.html">Edit</A>
+<B> Up:</B> <A NAME="tex2html423"
+  HREF="node22.html">In Depth: The Aquamacs</A>
+<B> Previous:</B> <A NAME="tex2html417"
+  HREF="node22.html">In Depth: The Aquamacs</A>
+ &nbsp; <B>  <A NAME="tex2html425"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION000314500000000000000">
-Interface</A>
-</H3>
+<H2><A NAME="SECTION00051000000000000000">
+File</A>
+</H2>
+The File menu includes basic operations for opening, closing, and
+printing files. Opening and saving files uses standard Mac keyboard
+shortcuts (Apple-O, Apple-S), and uses standard Aqua dialog boxes. 
 
 <P>
-
-<UL>
-<LI>``Recursive Minibuffers'' are enabled. 
-
-<P>
-</LI>
-<LI>``Subscribe to mailing list'' in Help menu.
+You can create a new buffer: Aquamacs allows you to choose from a list
+of recently and commonly used editing modes.  A similar function lets
+you change the current editing mode.
 
 <P>
-</LI>
-<LI>PHP-Mode included (M-x php-mode).
+You can also open a directory. When called by mouse from the menubar,
+this brings up a standard Aqua dialog box. When called up with a
+keyboard command (Control-x d), it brings up a directory name in the
+``minibuffer'' (small space for commands at the bottom of the main
+window, or frame).
 
 <P>
-</LI>
-<LI>Ruby-Mode included (M-x ruby-mode)
+Printing is fully supported, although no ``Page Setup'' option is
+available at this point.  You will see a print screen (in the system's
+Preview.app) from where you can select a printer and the usual
+options.  This may take a few seconds to appear with very large
+buffers. (Printing of embedded images such in LaTeX Preview mode is currently not supported.)
 
 <P>
-</LI>
-<LI>yes-or-no-p is customizable now. Use the new customization
- 	variable aquamacs-quick-yes-or-no-prompt. (Thanks: Pavel Hlavnicka.)
+You may export your buffer to PDF or to HTML format. This operation
+preserves all the formatting, including any word-wrapping - so you may
+want to choose a font and resize the frame so that the lines are
+wrapped in the intended way (if Soft Wrapping is used).
 
 <P>
-</LI>
-<LI>Soft word wrap (longlines-mode) is available from the Options
-	menu. To make it the default, add this to your preferences
-	file:	
-	<TT>(set-default 'longlines-mode t)</TT>
-
-<P>
-</LI>
-<LI>Case-insensitive search option has gone into ``search'' submenu (in ``Edit'').
-
-<P>
-</LI>
-<LI>If you are in an empty frame (i.e. a frame with an empty buffer)
-	and you load (find) a file, Aquamacs will not open an additional frame.
-	This is useful also for drag and drops, when a scratch frame is open.
-
-<P>
-</LI>
-<LI>The secondary selection is back: use the Command (Apple) key
-    together with clicking/dragging the mouse cursor over text in
-    order to select text that is not related to the point
-    (cursor). This way, you can select text and then scroll somewhere
-    else. Extend your selection with shift-command-mouse1.
-    To copy/cut the text in the secondary selection to the  clipboard, use
-    Shift-Command-C/X, respectively.
-
-<P>
-</LI>
-<LI>Some key-bindings are more like the original Emacs ones-in
-    particular M-w, which does kill-ring-save again.
-    (Idea: Joe Davison)   Also, Home and End keys work as expected.
-
-<P>
-</LI>
-<LI>No more annoying system ``ding'' (bell ringing) all the time.  The bell is
-    turned off completely, until Emacs developers eliminate the use of
-    the bell on user-initiated abort actions (such as ESC ESC ESC when
-    in minibuffer, of pressing Cancel in the file selection dialog).
-
-<P>
-</LI>
-<LI>The toolbar is only displayed in normal frames, but not
-    in frames that show help/info buffers. (tool-bar+ and
-    aquamacs-tool-bar packages). Turn such toolbars on/off in
-    Options/Show/Hide menu.
-
-<P>
-</LI>
-<LI>The ``About Emacs'' dialogue has been improved.
-
-<P>
-</LI>
-<LI>Key combinations with the option key that  involve
-    another modifier (that is, ctrl or command) will now work, even
-    though simple option combinations are handled by the system to
-    produce special characters.
-
-<P>
-</LI>
-<LI>The Speedbar is back. Activate in Options/ Show/Hide.
-
-<P>
-</LI>
-<LI>The redo function is in the Edit menu now.
-
-<P>
-</LI>
-<LI>New buffers (File / New) open in Text Adapt Fill mode now.
-
-<P>
-</LI>
-<LI>.save-places and customizations.el do not show up in the recent  files list
-    any more.
-
-<P>
-</LI>
-<LI>auto-save-files (in / Users / yourname /.emacs.d) are now saved to / Users / yourname/Library/Preferences.
-
-<P>
-</LI>
-<LI>``Save Place in Files in between sessions'' will not generate  files in the
-    user's home folder any more. Instead, the file goes into
-    / Users / yourname/Library/Preferences/Aquamacs Emacs/ where it belongs.
-
-<P>
-</LI>
-<LI>Command-' now cycles between different windows (suggested  by Joseph Kiniry.)
-
-<P>
-</LI>
-<LI>Option is mapped to Meta by default, allowing you to enter key
-    combinations such as C-M- easily. If you'd like to map it to
-    alt instead, just add this to your .emacs:
-
-<P>
-<TT>(setq mac-option-modifier 'alt)</TT>
-
-<P>
-</LI>
-</UL>
+Printing and PDF export are in US Letter format at this point.
 
 <P>
 
 <DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
-<A NAME="tex2html433"
+<A NAME="tex2html426"
   HREF="node24.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html429"
-  HREF="node18.html">
+<A NAME="tex2html422"
+  HREF="node22.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html423"
+<A NAME="tex2html416"
   HREF="node22.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html431"
+<A NAME="tex2html424"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html434"
-  HREF="node24.html">Configuration</A>
-<B> Up:</B> <A NAME="tex2html430"
-  HREF="node18.html">Features and Changes: 0.9.3</A>
-<B> Previous:</B> <A NAME="tex2html424"
-  HREF="node22.html">Fonts</A>
- &nbsp; <B>  <A NAME="tex2html432"
+<B> Next:</B> <A NAME="tex2html427"
+  HREF="node24.html">Edit</A>
+<B> Up:</B> <A NAME="tex2html423"
+  HREF="node22.html">In Depth: The Aquamacs</A>
+<B> Previous:</B> <A NAME="tex2html417"
+  HREF="node22.html">In Depth: The Aquamacs</A>
+ &nbsp; <B>  <A NAME="tex2html425"
   HREF="node1.html">Contents</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
 David
-2006-06-26
+2007-03-31
 </ADDRESS>
 </BODY>
 </HTML>
