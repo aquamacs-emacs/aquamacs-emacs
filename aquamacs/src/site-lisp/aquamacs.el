@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.93 2007/03/30 11:40:36 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.94 2007/04/02 06:31:22 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -347,7 +347,7 @@ Separate paths from file names with --."
  
      (longlines-wrap-follows-window-size t)
 
-     (mac-inline-input-method-mode t)
+     (mac-inline-input-method-mode (if window-system t))
      
 
      ;; do not allow user to mess with minibuffer prompt
@@ -359,7 +359,13 @@ Separate paths from file names with --."
      )
    )
   ;; on by default
-  (mac-inline-input-method-mode t)
+(if window-system
+    (mac-inline-input-method-mode t)
+  ;; otherwise, redefine the mode function
+  ;; so that it won't be called when loading custom-file.
+  (defun mac-inline-input-method-mode ()
+    (interactive)
+    (message "mac-inline-input-method-mode not available without window system.")))
 
 
   ;; set a nntp server if there's none
