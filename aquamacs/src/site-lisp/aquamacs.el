@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.94 2007/04/02 06:31:22 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.95 2007/04/03 16:16:09 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -1099,9 +1099,11 @@ if modified buffers exist."
   ;; this is for the About dialog
 
   (setq emacs-build-system 
-	(concat emacs-build-system
-		" - Aquamacs Distribution " 
-		aquamacs-version aquamacs-minor-version))
+	(concat 
+	 emacs-build-system
+	 " - Aquamacs Distribution " 
+	 (if (boundp 'aquamacs-version) aquamacs-version "?") 
+	 (if (boundp 'aquamacs-minor-version) aquamacs-minor-version "?")))
 
   (require 'check-for-updates)
 					; via hook so it can be turned off
@@ -1112,7 +1114,7 @@ if modified buffers exist."
 			 (tool-bar-button-margin 6)
 			 (tool-bar-border 5)))
 (ats "aquamacs-tool-bar-setup ...")
-(aquamacs-tool-bar-setup)
+(if window-system (aquamacs-tool-bar-setup))
 (ats "aquamacs-tool-bar-setup done")
   ) ;; aquamacs-setup
 
