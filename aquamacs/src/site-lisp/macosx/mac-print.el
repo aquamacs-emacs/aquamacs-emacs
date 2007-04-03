@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-print.el,v 1.10 2006/02/08 20:48:38 davidswelt Exp $
+;; Last change: $Id: mac-print.el,v 1.11 2007/04/03 16:18:27 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -79,6 +79,7 @@ Remove from your load-path for optimal printing / export results.")
     (add-hook 'kill-emacs-hook 'aquamacs-delete-temp-files)
     (do-applescript (concat
 		     "tell application \"Preview\"
+        activate
 	open the POSIX file \"" tmp-pdf-file  "\"
 	activate
 	tell application \"System Events\"
