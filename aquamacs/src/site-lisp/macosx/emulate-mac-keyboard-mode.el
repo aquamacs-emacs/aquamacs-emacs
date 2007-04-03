@@ -131,7 +131,9 @@ This command is part of `%s'." string-rep language mode-name mode-name)
   (if suf
       (intern (format "emulate-mac-%s-keyboard-mode%s" lang suf))
     (intern (format "emulate-mac-%s-keyboard-mode" lang))))
-(defvar aquamacs-emkm-current-keymap)
+
+(defvar aquamacs-emkm-current-keymap nil 
+  "Keymap currently in use by `emulate-mac-<language>-keyboard-mode'.")
 
 (defun turn-off-emulate-mac-keyboard-modes (&optional except-language)
   "Turn off all emulate-mac-keyboard minor modes"

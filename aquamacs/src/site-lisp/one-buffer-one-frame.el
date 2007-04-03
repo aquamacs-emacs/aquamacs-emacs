@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.52 2007/02/14 11:26:04 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.53 2007/04/03 14:24:12 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -87,7 +87,7 @@ in a number of customization variables. Buffers are, by default,
 shown in new frames, unless they are switched to with `switch-to-buffer'
 and match an entry in `obof-same-frame-switching-regexps', or they are
 popped up with `pop-to-buffer' and match an entry in `obof-same-frame-regexps'
-(typically Emacs always shows these in a new window). 
+\(typically Emacs always shows these in a new window). 
 A matching entry in `obof-other-frame-regexps' will always force buffers to 
 be shown in a new frame.
 
@@ -99,28 +99,33 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
 ;; the condition case is because otherwise this won't
 ;; do it's job. don't know why.
   (condition-case nil
-  (if one-buffer-one-frame-mode
-      (setq obofm-old-pop-up-frames  pop-up-frames
-	    pop-up-frames nil
-	    ;; if pop-up-frames is t, even *Completions* buffers
-	    ;; will spawn their own frames
-	    obofm-old-pop-up-windows pop-up-windows
+      (if window-system
+	  (if one-buffer-one-frame-mode
+	      (setq obofm-old-pop-up-frames  pop-up-frames
+		    pop-up-frames nil
+		    ;; if pop-up-frames is t, even *Completions* buffers
+		    ;; will spawn their own frames
+		    obofm-old-pop-up-windows pop-up-windows
 	    
-;; if this is set to t, we ignore the user's preferenes
-;; and it doesn't lead to good decisions (by default)
-	  ;;  pop-up-windows t
-	    obofm-old-display-buffer-reuse-frames 
-	    display-buffer-reuse-frames
-	    display-buffer-reuse-frames t
-	    obof-backups-initialized t)
+		    ;; if this is set to t, we ignore the user's preferenes
+		    ;; and it doesn't lead to good decisions (by default)
+		    ;;  pop-up-windows t
+		    obofm-old-display-buffer-reuse-frames 
+		    display-buffer-reuse-frames
+		    display-buffer-reuse-frames t
+		    obof-backups-initialized t
+		    ;; pressing q in a view should delete the frame
+		    view-remove-frame-by-deleting t)
 					; else (turning off)
-    ;; restore settings
-    (if obof-backups-initialized
-	(setq    pop-up-frames obofm-old-pop-up-frames
-		 ;; pop-up-windows obofm-old-pop-up-windows
-		 display-buffer-reuse-frames 
-		 obofm-old-display-buffer-reuse-frames)))
-  (error nil))
+	    ;; restore settings
+	    (if obof-backups-initialized
+		(setq    pop-up-frames obofm-old-pop-up-frames
+			 ;; pop-up-windows obofm-old-pop-up-windows
+			 display-buffer-reuse-frames 
+			 obofm-old-display-buffer-reuse-frames)))
+	;; no window-system available
+	(message "one-buffer-one-frame mode won't work without frames."))
+    (error nil))
 
   :group 'Aquamacs
   :global t
@@ -561,9 +566,10 @@ the current window is switched to the new buffer."
 	   (apply (function display-buffer) args))))
 
 ;; (setq display-buffer-reuse-frames 'select)
-(aquamacs-set-defaults 
- '((display-buffer-reuse-frames t)
-   (display-buffer-function aquamacs-display-buffer)))
+(if window-system
+    (aquamacs-set-defaults 
+     '((display-buffer-reuse-frames t)
+       (display-buffer-function aquamacs-display-buffer))))
 
 (defun aquamacs-delete-window (&optional window)
   "Remove WINDOW from the display.  Default is `selected-window'.
@@ -782,10 +788,6 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
   )
 )
   
-
-;; pressing q in a view should delete the frame
-(aquamacs-set-defaults
- '((view-remove-frame-by-deleting t)))
 
 
 ;; FIXES IN VARIOUS PLACES
