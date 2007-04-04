@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.95 2007/04/03 16:16:09 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.96 2007/04/04 10:52:16 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -205,8 +205,6 @@ Separate paths from file names with --."
 	)
 
 
-
-  (tramp-register-file-name-handlers) ;; to make sure file-remote-p works
   (recentf-mode 1)  
 
   (global-set-key "\C-x\ \C-r" 'recentf-open-files)  
