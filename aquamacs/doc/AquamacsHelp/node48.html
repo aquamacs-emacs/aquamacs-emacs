@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Contribute to Aquamacs - Join the Fun!</TITLE>
-<META NAME="description" CONTENT="Contribute to Aquamacs - Join the Fun!">
+<TITLE>Bug Fixes--0.9.4</TITLE>
+<META NAME="description" CONTENT="Bug Fixes--0.9.4">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,58 +21,163 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="node49.html">
 <LINK REL="previous" HREF="node47.html">
-<LINK REL="up" HREF="aquamacs.html">
+<LINK REL="up" HREF="node36.html">
 <LINK REL="next" HREF="node49.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html733"
+<A NAME="tex2html735"
   HREF="node49.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html729"
-  HREF="aquamacs.html">
+<A NAME="tex2html731"
+  HREF="node36.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html723"
+<A NAME="tex2html725"
   HREF="node47.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html731"
+<A NAME="tex2html733"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html734"
-  HREF="node49.html">Nightly Development Builds</A>
-<B> Up:</B> <A NAME="tex2html730"
-  HREF="aquamacs.html">Aquamacs User Help</A>
-<B> Previous:</B> <A NAME="tex2html724"
-  HREF="node47.html">Acknowledgments</A>
- &nbsp; <B>  <A NAME="tex2html732"
+<B> Next:</B> <A NAME="tex2html736"
+  HREF="node49.html">Bug Fixes 0.9.3a and</A>
+<B> Up:</B> <A NAME="tex2html732"
+  HREF="node36.html">What's New in This</A>
+<B> Previous:</B> <A NAME="tex2html726"
+  HREF="node47.html">Bug Fixes 0.9.5</A>
+ &nbsp; <B>  <A NAME="tex2html734"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H1><A NAME="SECTION000110000000000000000">
-Contribute to Aquamacs - Join the Fun!</A>
-</H1>
+<H2><A NAME="SECTION0001412000000000000000">
+Bug Fixes--0.9.4</A>
+</H2>
 
 <P>
-If you'd like to join us in working on Aquamacs, download the source
-code from CVS and take a look. Do ask if you have questions! When you
-have a patch or a less specific suggestion for improvements, send it
-to the development mailing list.
+
+<UL>
+<LI>Bug reports contain the subject line that the user entered.
 
 <P>
-We're a very open team. Everyone is allowed to suggest modifications
-to every piece of code. There is no ``ownership'' of code, so please
-join us to make Aquamacs even better!
+</LI>
+<LI>No more (delay due to) tramp mode on startup in cases where tramp
+    mode had been used before (recentf).
 
 <P>
-<BR><HR>
+</LI>
+<LI>Files on externally mounted volumes are not checked for readability
+    any more for exclusion from recent files list.
+    (Reported by Bill Clementson)
+
+<P>
+</LI>
+<LI>No more warnings when fonts are missing (on startup).
+
+<P>
+</LI>
+<LI>Drag and Drop while in minibuffer works again.
+
+<P>
+</LI>
+<LI>Mouse-2 works again.
+
+<P>
+</LI>
+<LI>default-major-mode and initial-major-mode are respected now.
+    initial-frame-alist is not modified any more.
+    Note that other than in any standard Emacs, mode-specific settings
+    always take precedence over default-frame-alist (but not over
+    initial-frame-alist).
+    (Reported by Rick Zaccone, Joe Davison and Peter Dyballa)
+
+<P>
+</LI>
+<LI>No more warnings in customization buffers that the values have
+    been changed outside customize (for certain variables).
+
+<P>
+</LI>
+<LI>Gnus articles (newsreader) open in same frame now.
+
+<P>
+</LI>
+<LI>Gnus has a useful (free) nntp server set so you can start right
+    away.
+
+<P>
+</LI>
+<LI>Send Email with Sendmail is gone from menu (doesn't usually work
+    on  OS X).
+
+<P>
+</LI>
+<LI>Fonts corrected: Some glyphs in some fonts turned out wrong when
+    in bold or italic. Also, font sizes are correct again (Lucida 14
+    is Lucida Grande 14, not 12 or so). The default font size for
+    text-mode (and similar ones) is set to Lucida 13 to make up for
+    the change.  Apologies for any inconvenience this may cause with
+    your default settings. (Reported by William Henney)
+
+<P>
+</LI>
+<LI>Better customization for aquamacs-mode-specific-default-themes
+
+<P>
+</LI>
+<LI>The customizations file (customizations.el) doesn't grow any more.
+    (Reported by Alastair Rankine.)
+
+<P>
+</LI>
+<LI>Various corrections in the Aquamacs Manual.
+
+<P>
+</LI>
+<LI>Plugin support: All files named site-start.el anywhere in the load-path
+    are loaded at startup, before the user's init files are
+    loaded. For example, such a file may be placed in
+&nbsp;/Library/Application Support/Aquamacs Emacs/myPlugin. This
+    feature enables support for easily installable plugins.
+
+<P>
+</LI>
+<LI>We anticipate shorter startup times in the next release. Stay tuned.
+</LI>
+</UL>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html735"
+  HREF="node49.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html731"
+  HREF="node36.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html725"
+  HREF="node47.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html733"
+  HREF="node1.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html736"
+  HREF="node49.html">Bug Fixes 0.9.3a and</A>
+<B> Up:</B> <A NAME="tex2html732"
+  HREF="node36.html">What's New in This</A>
+<B> Previous:</B> <A NAME="tex2html726"
+  HREF="node47.html">Bug Fixes 0.9.5</A>
+ &nbsp; <B>  <A NAME="tex2html734"
+  HREF="node1.html">Contents</A></B> </DIV>
+<!--End of Navigation Panel-->
 <ADDRESS>
 David
-2007-04-05
+2007-04-09
 </ADDRESS>
 </BODY>
 </HTML>

@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Changing Aquamacs source files</TITLE>
-<META NAME="description" CONTENT="Changing Aquamacs source files">
+<TITLE>Changes--0.9.6</TITLE>
+<META NAME="description" CONTENT="Changes--0.9.6">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -19,68 +19,135 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="STYLESHEET" HREF="aquamacs.css">
 
+<LINK REL="next" HREF="node45.html">
 <LINK REL="previous" HREF="node43.html">
-<LINK REL="up" HREF="node40.html">
+<LINK REL="up" HREF="node36.html">
 <LINK REL="next" HREF="node45.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html685"
+<A NAME="tex2html687"
   HREF="node45.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html681"
-  HREF="node40.html">
+<A NAME="tex2html683"
+  HREF="node36.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
 <A NAME="tex2html677"
   HREF="node43.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html683"
+<A NAME="tex2html685"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html686"
-  HREF="node45.html">Getting Help</A>
-<B> Up:</B> <A NAME="tex2html682"
-  HREF="node40.html">Extending Aquamacs</A>
+<B> Next:</B> <A NAME="tex2html688"
+  HREF="node45.html">Interface/Usability Improvements 0.9.5</A>
+<B> Up:</B> <A NAME="tex2html684"
+  HREF="node36.html">What's New in This</A>
 <B> Previous:</B> <A NAME="tex2html678"
-  HREF="node43.html">Disabling a plug-in or</A>
- &nbsp; <B>  <A NAME="tex2html684"
+  HREF="node43.html">Changes 0.9.7</A>
+ &nbsp; <B>  <A NAME="tex2html686"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION00074000000000000000">
-Changing Aquamacs source files</A>
+<H2><A NAME="SECTION000148000000000000000">
+Changes--0.9.6</A>
 </H2>
 
 <P>
-If you'd like to tinker with the Emacs lisp source files that come with Aquamacs,
-you can do so quite easily. When activaten a new function or evaluate an
-expression, C-x C-e is your friend. 
+
+<UL>
+<LI>Aquamacs now provides extended input methods for 
+	Korean, Japanese and Chinese (GB/BIG5). You can select them in 
+	the Options menu, under "Aquamacs Multilingual Environment" / 
+	"Set Language Environment" - everything is integrated with
+	Mule.   
 
 <P>
-However, you may notice that some
-of your changes aren't active after you've saved your work (into the
-Aquamacs application bundle) and restart. That is because some of the
-code is precompiled into the Aquamacs binary and not loaded from the
-source (or .elc / .el.gz) files. To alleviate that problem, create a
-file ``/Library/Application Support/Aquamacs
-Emacs/site-prestart.el'' with the following content:
+In order to load more fixed-width fonts suitable for use with
+	Asian languages, you may want to load the carbon-font package,
+	which is included (but not activated) in Aquamacs. Just add the
+	following to the file 
+	&nbsp;/Library/Preferences/Aquamacs Emacs/Preferences.el:
 
 <P>
-<TT>(setq aquamacs-reload-preloaded-files t)</TT>
+(require 'carbon-font)
 
 <P>
-This will cause to re-read the otherwise preloaded files from disk.
+(maintained by   Mahn-Soo Choi.)
 
 <P>
-<BR><HR>
+</LI>
+<LI>CSS-Mode fixed. 
+	(First reported by Kris Khaira and Michael Jakl.)
+
+<P>
+</LI>
+<LI>Dual-head setups (two screens) with one screen on the left, 
+	the system menu on the right and Aquamacs frames on the left 
+	caused problems.	
+	(reported by Otto Karl Florian Diesenbacher)
+
+<P>
+</LI>
+<LI>osx-key-mode-map can now be changed to modify key
+	assignments, in particular those of Apple Command keys
+	 (implemented in Emacs as Hyper = H- keys.)
+	(reported by William Ziemer)
+
+<P>
+</LI>
+<LI>"font-lock-keywords ... void" message used to appear when
+	attempting to load a new file. This bug in the underlying GNU
+	Emacs has been fixed.
+
+<P>
+</LI>
+<LI>Apple-Q and iconized frames: When all frames where
+        iconized and one attempted to quit Aquamacs, the application
+        seemed to hang (because it was showing a minibuffer prompt in
+        an iconized frame.)
+
+<P>
+</LI>
+<LI>Thanks for the donations!
+
+<P>
+</LI>
+</UL>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html687"
+  HREF="node45.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html683"
+  HREF="node36.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html677"
+  HREF="node43.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html685"
+  HREF="node1.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html688"
+  HREF="node45.html">Interface/Usability Improvements 0.9.5</A>
+<B> Up:</B> <A NAME="tex2html684"
+  HREF="node36.html">What's New in This</A>
+<B> Previous:</B> <A NAME="tex2html678"
+  HREF="node43.html">Changes 0.9.7</A>
+ &nbsp; <B>  <A NAME="tex2html686"
+  HREF="node1.html">Contents</A></B> </DIV>
+<!--End of Navigation Panel-->
 <ADDRESS>
 David
-2007-04-05
+2007-04-09
 </ADDRESS>
 </BODY>
 </HTML>

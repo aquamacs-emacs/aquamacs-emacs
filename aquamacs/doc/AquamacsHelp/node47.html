@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Acknowledgments</TITLE>
-<META NAME="description" CONTENT="Acknowledgments">
+<TITLE>Bug Fixes--0.9.5</TITLE>
+<META NAME="description" CONTENT="Bug Fixes--0.9.5">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,127 +21,144 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="node48.html">
 <LINK REL="previous" HREF="node46.html">
-<LINK REL="up" HREF="aquamacs.html">
+<LINK REL="up" HREF="node36.html">
 <LINK REL="next" HREF="node48.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html721"
+<A NAME="tex2html723"
   HREF="node48.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html717"
-  HREF="aquamacs.html">
+<A NAME="tex2html719"
+  HREF="node36.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html711"
+<A NAME="tex2html713"
   HREF="node46.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html719"
+<A NAME="tex2html721"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html722"
-  HREF="node48.html">Contribute to Aquamacs -</A>
-<B> Up:</B> <A NAME="tex2html718"
-  HREF="aquamacs.html">Aquamacs User Help</A>
-<B> Previous:</B> <A NAME="tex2html712"
-  HREF="node46.html">Donations</A>
- &nbsp; <B>  <A NAME="tex2html720"
+<B> Next:</B> <A NAME="tex2html724"
+  HREF="node48.html">Bug Fixes 0.9.4</A>
+<B> Up:</B> <A NAME="tex2html720"
+  HREF="node36.html">What's New in This</A>
+<B> Previous:</B> <A NAME="tex2html714"
+  HREF="node46.html">New and Updated Major</A>
+ &nbsp; <B>  <A NAME="tex2html722"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H1><A NAME="SECTION000100000000000000000">
-Acknowledgments</A>
-</H1>
+<H2><A NAME="SECTION0001411000000000000000">
+Bug Fixes--0.9.5</A>
+</H2>
 
 <P>
-Who's behind Aquamacs?
+
+<UL>
+<LI>Font ``Bitstream Vera Sans'' works again.  	
 
 <P>
-It's a free software project, and naturally, Aquamacs could not exist
-without the help of developers, designers, writers and users. The
-following people have contributed code, bug reports and ideas to the
-Aquamacs project at one point of the other.
+</LI>
+<LI>Exiting view mode (e.g. help) with 'q' deletes the frame instead of
+	iconifying it.
 
 <P>
-Lawrence Akka; Mahn-Soo Choi; Bill Clementson;
-Adrian Chromenko (icon artwork);
-Nathaniel Cunningham; José Figueroa-O'Farrill; 
-Enrico Franconi; Terry Jones; Jean-Christophe Helary;
-David Reitter (co-founder, lead developer);
-Robert H. Sloan;
-Kevin Walzer (co-founder, documentation); and others.
+</LI>
+<LI>The (Apple Help) manuals work now on systems where tcsh
+	is the default shell.  (Reported by Arthur Ogus)
 
 <P>
-We would also like to acknowledge the contributions of these authors,
-whose source code and hints on public forums have already been
-integrated into the build:
+</LI>
+<LI>Startup with arguments -nw (tty / in terminal) revised.
 
 <P>
-Drew Adams;
-Emil Astrom; 
-Stefan Bruda; 
-Steve Dodd;  
-Massimiliano Gubinelli (Emacs icon); 
-Taiichi Hashimoto;
-T. Hiromatsu; 
- Kyle E. Jones; 
-Paul Kinnucan (JDE); 
-Eric M. Ludlam (Cedet);
- Xavier Maillard;
- Pekka Marjola;
-Mitsuharu Yamamoto;
-Gerd Neugebauer;
- Ovidiu Predesc; 
- Alex Schröder;
- Mikael Sjödin;
-Steven Tamm; 
- Bob Weiner;  
-Milan Zamazal;
-Seiji Zenitani; and many others.
+</LI>
+<LI>You can now redefine Aquamacs keys like this:
 
 <P>
-Aquamacs is based on GNU Emacs, which is the work of Richard Stallman
-and many other developers, in particular Andrew Choi (main GNU
-Emacs-to-MacOS/OSX port). We also would like to acknowledge the work
-of the many authors of the major modes included.
+<TT>(define-key osx-key-mode-map [end] 'end-of-line)</TT>
 
 <P>
-Last but not least, Aquamacs couldn't exist without the dedication of
-its users, who donate money, report bugs and help us fix them.
+(Thanks for reporting: Andreas Hess.)
+
+<P>
+</LI>
+<LI>If the user changes mac-command-modifier, it may be advisable to call
+
+<P>
+<TT>(osx-key-reset-mode-map)</TT>
+
+<P>
+This will ensure that the keymap is updated and Aquamacs installs
+	its Mac-like keyboard commands (provided you want this).
+
+<P>
+</LI>
+<LI>New frames will not open behind the Dock any more.
+
+<P>
+</LI>
+<LI>An error message (harmless) when clicking on "Finish" in customize is gone.
+
+<P>
+</LI>
+<LI>Error message during version check on startup removed (occurred in
+	certain cases where users had upgraded their system.)
+
+<P>
+</LI>
+<LI>In particular in TeX mode, Aquamacs tended to give audio signals all the
+	time when there were internal exceptions (internal errors signaled) with parsing the TeX code. Therefore, we do not ring the bell any more,
+	i.e. aquamacs-ring-bell-on-error-flag is nil by default.
+	(Reported by Ken Bloom and Andreas Hess)
+</LI>
+<LI>Speedbar works when one-buffer-one-frame (``Open Buffers in Separate
+	Frames'') is turned off. 
+</LI>
+<LI>Option-up/down (if Option is meta) now scrolls page-wise.
+
+<P>
+</LI>
+<LI>Other bug-fixes.
+
+<P>
+</LI>
+</UL>
 
 <P>
 
 <DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
-<A NAME="tex2html721"
+<A NAME="tex2html723"
   HREF="node48.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html717"
-  HREF="aquamacs.html">
+<A NAME="tex2html719"
+  HREF="node36.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html711"
+<A NAME="tex2html713"
   HREF="node46.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html719"
+<A NAME="tex2html721"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html722"
-  HREF="node48.html">Contribute to Aquamacs -</A>
-<B> Up:</B> <A NAME="tex2html718"
-  HREF="aquamacs.html">Aquamacs User Help</A>
-<B> Previous:</B> <A NAME="tex2html712"
-  HREF="node46.html">Donations</A>
- &nbsp; <B>  <A NAME="tex2html720"
+<B> Next:</B> <A NAME="tex2html724"
+  HREF="node48.html">Bug Fixes 0.9.4</A>
+<B> Up:</B> <A NAME="tex2html720"
+  HREF="node36.html">What's New in This</A>
+<B> Previous:</B> <A NAME="tex2html714"
+  HREF="node46.html">New and Updated Major</A>
+ &nbsp; <B>  <A NAME="tex2html722"
   HREF="node1.html">Contents</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
 David
-2007-04-05
+2007-04-09
 </ADDRESS>
 </BODY>
 </HTML>

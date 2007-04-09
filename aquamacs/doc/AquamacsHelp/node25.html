@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Edit</TITLE>
-<META NAME="description" CONTENT="Edit">
+<TITLE>Plug-in Interface</TITLE>
+<META NAME="description" CONTENT="Plug-in Interface">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,91 +21,62 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="node26.html">
 <LINK REL="previous" HREF="node24.html">
-<LINK REL="up" HREF="node23.html">
+<LINK REL="up" HREF="node24.html">
 <LINK REL="next" HREF="node26.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html453"
+<A NAME="tex2html448"
   HREF="node26.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html449"
-  HREF="node23.html">
+<A NAME="tex2html444"
+  HREF="node24.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html443"
+<A NAME="tex2html438"
   HREF="node24.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html451"
+<A NAME="tex2html446"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html454"
-  HREF="node26.html">Options</A>
-<B> Up:</B> <A NAME="tex2html450"
-  HREF="node23.html">In Depth: The Aquamacs</A>
-<B> Previous:</B> <A NAME="tex2html444"
-  HREF="node24.html">File</A>
- &nbsp; <B>  <A NAME="tex2html452"
+<B> Next:</B> <A NAME="tex2html449"
+  HREF="node26.html">Load-path</A>
+<B> Up:</B> <A NAME="tex2html445"
+  HREF="node24.html">Extending Aquamacs</A>
+<B> Previous:</B> <A NAME="tex2html439"
+  HREF="node24.html">Extending Aquamacs</A>
+ &nbsp; <B>  <A NAME="tex2html447"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION00052000000000000000">
-Edit</A>
+<H2><A NAME="SECTION00061000000000000000">
+Plug-in Interface</A>
 </H2>
-The Edit menu is the heart of Aquamacs' textual wizardry. Aquamacs supports
-all customary editing functions, such as cut, copy, paste, and simple
-search and replace. In Aquamacs these basic functions are supported by
-standard Aqua keyboard shortcuts. There is a great deal more
-functionality, however, than the average text editor. For instance,
-Aquamacs Emacs allows you to go to a specific line number in the file you are
-editing, to the top or bottom of the buffer, and so on. It also supports searches with <SPAN  CLASS="textit">regular expressions,</SPAN>
-which are sophisticated text patterns that go beyond simply matching a
-specific set of characters (or ``string''). Aquamacs Emacs also stores more
-than twenty of the most recently-copied items on the clipboard, and
-these are accessible from the menu in case you need to paste these
-items again.  The Edit menu also supports ``bookmarks,'' a feature
-that allows you to save your place in a specific file. 
 
 <P>
-Aquamacs contains spell-checking functions; however, either the extra
-packages ``Aspell'' or ``Ispell'' need to be installed. The
-recommended way to do that is to install ``CocoAspell'', which is a
-Mac variant of the Aspell program. It comes with a dictionaries for
-English, but a variety of other dictionaries is available.
+All files named <SPAN  CLASS="textit">site-start.el</SPAN> anywhere in the load-path
+    are loaded at startup, before the user's init files are
+    loaded. For example, such a file may be placed in
+    /Library/Application Support/Aquamacs Emacs/myPlugin. 
 
 <P>
+The load-path is automatically extended to cover all subdirectories in standard paths (see Section <A HREF="node26.html#standardpaths">5.2</A>).
 
-<DIV CLASS="navigation"><HR>
-<!--Navigation Panel-->
-<A NAME="tex2html453"
-  HREF="node26.html">
-<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html449"
-  HREF="node23.html">
-<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html443"
-  HREF="node24.html">
-<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html451"
-  HREF="node1.html">
-<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
-<BR>
-<B> Next:</B> <A NAME="tex2html454"
-  HREF="node26.html">Options</A>
-<B> Up:</B> <A NAME="tex2html450"
-  HREF="node23.html">In Depth: The Aquamacs</A>
-<B> Previous:</B> <A NAME="tex2html444"
-  HREF="node24.html">File</A>
- &nbsp; <B>  <A NAME="tex2html452"
-  HREF="node1.html">Contents</A></B> </DIV>
-<!--End of Navigation Panel-->
+<P>
+If a plug-in needs to execute code earlier in the initialization phase, that is, before any Aquamacs-specific code is executed (but after Emacs initilization code has been executed), this code can be provided in a file  <SPAN  CLASS="textit">site-prestart.el</SPAN> anywhere in the load-path.
+
+<P>
+Note that plug-ins should not make any assumptions about whether a frame exists or is visible.
+
+<P>
+<BR><HR>
 <ADDRESS>
 David
-2007-04-05
+2007-04-09
 </ADDRESS>
 </BODY>
 </HTML>

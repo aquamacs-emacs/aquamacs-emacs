@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Bug Fixes--0.9.5</TITLE>
-<META NAME="description" CONTENT="Bug Fixes--0.9.5">
+<TITLE>Buffers</TITLE>
+<META NAME="description" CONTENT="Buffers">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -20,145 +20,108 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <LINK REL="STYLESHEET" HREF="aquamacs.css">
 
 <LINK REL="next" HREF="node16.html">
-<LINK REL="previous" HREF="node14.html">
-<LINK REL="up" HREF="node4.html">
+<LINK REL="previous" HREF="node10.html">
+<LINK REL="up" HREF="node7.html">
 <LINK REL="next" HREF="node16.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html326"
+<A NAME="tex2html323"
   HREF="node16.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html322"
-  HREF="node4.html">
+<A NAME="tex2html319"
+  HREF="node7.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html316"
+<A NAME="tex2html313"
   HREF="node14.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html324"
+<A NAME="tex2html321"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html327"
-  HREF="node16.html">Bug Fixes 0.9.4</A>
-<B> Up:</B> <A NAME="tex2html323"
-  HREF="node4.html">What's New in This</A>
-<B> Previous:</B> <A NAME="tex2html317"
-  HREF="node14.html">New and Updated Major</A>
- &nbsp; <B>  <A NAME="tex2html325"
+<B> Next:</B> <A NAME="tex2html324"
+  HREF="node16.html">Tools</A>
+<B> Up:</B> <A NAME="tex2html320"
+  HREF="node7.html">In Depth: The Aquamacs</A>
+<B> Previous:</B> <A NAME="tex2html314"
+  HREF="node14.html">The Right Look: Colors</A>
+ &nbsp; <B>  <A NAME="tex2html322"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION000311000000000000000">
-Bug Fixes--0.9.5</A>
+<H2><A NAME="SECTION00044000000000000000">
+Buffers</A>
 </H2>
+The Buffers menu allows you to navigate through the windows/frames
+that you may have open. Note that a ``buffer'' is not synonymous with
+a window or frame, in that you can split a frame and have more than
+one buffer contained within. (Multiple windows/frames is a feature of
+Aquamacs; standard Emacs does not support this.) In addition to
+standard frames that display open files, there are a few other
+important buffer types. One is the ``scratch'' buffer, which is simply
+a buffer to type notes into; this can also be the starting point for a
+file to save, and a buffer to type configuration commands for Aquamacs
+(an advanced feature). Another is the ``Messages'' buffer, which
+displays a log of output from Emacs commands and
+operations. Finally, there is the ``info'' buffer, in which Aquamacs Emacs
+displays built-in user help, tutorials and other documentation in
+Emacs' ``info'' format.
+
+<P>
+From the Buffers menu, you can also open a new ``frame,'' or window, or
+split the open window into two separate ones. The keyboard
+shortcuts for these commands are the traditional Emacs ones (see the menubar).
 
 <P>
 
-<UL>
-<LI>Font ``Bitstream Vera Sans'' works again.  	
+<DIV ALIGN="CENTER"><A NAME="buffers.jpg"></A><A NAME="77"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 3:</STRONG>
+Using multiple buffers and windows in Aquamacs Emacs is
+a powerful tool for enhancing productivity.</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
 
-<P>
-</LI>
-<LI>Exiting view mode (e.g. help) with 'q' deletes the frame instead of
-	iconifying it.
-
-<P>
-</LI>
-<LI>The (Apple Help) manuals work now on systems where tcsh
-	is the default shell.  (Reported by Arthur Ogus)
-
-<P>
-</LI>
-<LI>Startup with arguments -nw (tty / in terminal) revised.
-
-<P>
-</LI>
-<LI>You can now redefine Aquamacs keys like this:
-
-<P>
-<TT>(define-key osx-key-mode-map [end] 'end-of-line)</TT>
-
-<P>
-(Thanks for reporting: Andreas Hess.)
-
-<P>
-</LI>
-<LI>If the user changes mac-command-modifier, it may be advisable to call
-
-<P>
-<TT>(osx-key-reset-mode-map)</TT>
-
-<P>
-This will ensure that the keymap is updated and Aquamacs installs
-	its Mac-like keyboard commands (provided you want this).
-
-<P>
-</LI>
-<LI>New frames will not open behind the Dock any more.
-
-<P>
-</LI>
-<LI>An error message (harmless) when clicking on "Finish" in customize is gone.
-
-<P>
-</LI>
-<LI>Error message during version check on startup removed (occurred in
-	certain cases where users had upgraded their system.)
-
-<P>
-</LI>
-<LI>In particular in TeX mode, Aquamacs tended to give audio signals all the
-	time when there were internal exceptions (internal errors signaled) with parsing the TeX code. Therefore, we do not ring the bell any more,
-	i.e. aquamacs-ring-bell-on-error-flag is nil by default.
-	(Reported by Ken Bloom and Andreas Hess)
-</LI>
-<LI>Speedbar works when one-buffer-one-frame (``Open Buffers in Separate
-	Frames'') is turned off. 
-</LI>
-<LI>Option-up/down (if Option is meta) now scrolls page-wise.
-
-<P>
-</LI>
-<LI>Other bug-fixes.
-
-<P>
-</LI>
-</UL>
+</DIV><IMG
+  WIDTH="500" HEIGHT="375" ALIGN="BOTTOM" BORDER="0"
+ SRC="./buffers.jpg"
+ ALT="Image buffers"></TD></TR>
+</TABLE>
+</DIV>
 
 <P>
 
 <DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
-<A NAME="tex2html326"
+<A NAME="tex2html323"
   HREF="node16.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html322"
-  HREF="node4.html">
+<A NAME="tex2html319"
+  HREF="node7.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html316"
+<A NAME="tex2html313"
   HREF="node14.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html324"
+<A NAME="tex2html321"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html327"
-  HREF="node16.html">Bug Fixes 0.9.4</A>
-<B> Up:</B> <A NAME="tex2html323"
-  HREF="node4.html">What's New in This</A>
-<B> Previous:</B> <A NAME="tex2html317"
-  HREF="node14.html">New and Updated Major</A>
- &nbsp; <B>  <A NAME="tex2html325"
+<B> Next:</B> <A NAME="tex2html324"
+  HREF="node16.html">Tools</A>
+<B> Up:</B> <A NAME="tex2html320"
+  HREF="node7.html">In Depth: The Aquamacs</A>
+<B> Previous:</B> <A NAME="tex2html314"
+  HREF="node14.html">The Right Look: Colors</A>
+ &nbsp; <B>  <A NAME="tex2html322"
   HREF="node1.html">Contents</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
 David
-2007-04-05
+2007-04-09
 </ADDRESS>
 </BODY>
 </HTML>
