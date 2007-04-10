@@ -1,0 +1,124 @@
+Index: src/callproc.c
+===================================================================
+RCS file: /cvsroot/emacs/emacs/src/callproc.c,v
+retrieving revision 1.221
+diff -c -p -r1.221 callproc.c
+*** src/callproc.c	17 Feb 2007 01:59:00 -0000	1.221
+--- src/callproc.c	10 Apr 2007 02:29:20 -0000
+*************** init_callproc_1 ()
+*** 1522,1533 ****
+    char *data_dir = egetenv ("EMACSDATA");
+    char *doc_dir = egetenv ("EMACSDOC");
+
+    Vdata_directory
+!     = Ffile_name_as_directory (build_string (data_dir ? data_dir
+! 					     : PATH_DATA));
+    Vdoc_directory
+!     = Ffile_name_as_directory (build_string (doc_dir ? doc_dir
+! 					     : PATH_DOC));
+
+    /* Check the EMACSPATH environment variable, defaulting to the
+       PATH_EXEC path from epaths.h.  */
+--- 1522,1541 ----
+    char *data_dir = egetenv ("EMACSDATA");
+    char *doc_dir = egetenv ("EMACSDOC");
+
++   if (!data_dir) data_dir = PATH_DATA;
++   if (!doc_dir) doc_dir = PATH_DOC;
++ 
++   /* At this moment, we still don't know how to decode the directory
++      name.  So, we keep the bytes in multibyte form so that
++      ENCODE_FILE correctly gets the original bytes.  */
+    Vdata_directory
+!     = Ffile_name_as_directory (string_to_multibyte
+! 			       (make_unibyte_string (data_dir,
+! 						     strlen (data_dir))));
+    Vdoc_directory
+!     = Ffile_name_as_directory (string_to_multibyte
+! 			       (make_unibyte_string (doc_dir,
+! 						     strlen (doc_dir))));
+
+    /* Check the EMACSPATH environment variable, defaulting to the
+       PATH_EXEC path from epaths.h.  */
+*************** init_callproc ()
+*** 1605,1617 ****
+  #endif
+      {
+        tempdir = Fdirectory_file_name (Vexec_directory);
+!       if (access (SDATA (tempdir), 0) < 0)
+  	dir_warning ("Warning: arch-dependent data dir (%s) does not exist.\n",
+  		     Vexec_directory);
+      }
+
+    tempdir = Fdirectory_file_name (Vdata_directory);
+!   if (access (SDATA (tempdir), 0) < 0)
+      dir_warning ("Warning: arch-independent data dir (%s) does not exist.\n",
+  		 Vdata_directory);
+
+--- 1613,1625 ----
+  #endif
+      {
+        tempdir = Fdirectory_file_name (Vexec_directory);
+!       if (access (SDATA (ENCODE_FILE (tempdir)), 0) < 0)
+  	dir_warning ("Warning: arch-dependent data dir (%s) does not exist.\n",
+  		     Vexec_directory);
+      }
+
+    tempdir = Fdirectory_file_name (Vdata_directory);
+!   if (access (SDATA (ENCODE_FILE (tempdir)), 0) < 0)
+      dir_warning ("Warning: arch-independent data dir (%s) does not exist.\n",
+  		 Vdata_directory);
+
+Index: src/emacs.c
+===================================================================
+RCS file: /cvsroot/emacs/emacs/src/emacs.c,v
+retrieving revision 1.401
+diff -c -p -r1.401 emacs.c
+*** src/emacs.c	3 Apr 2007 15:25:28 -0000	1.401
+--- src/emacs.c	10 Apr 2007 02:29:20 -0000
+*************** decode_env_path (evarname, defalt)
+*** 2379,2385 ****
+      {
+        p = index (path, SEPCHAR);
+        if (!p) p = path + strlen (path);
+!       element = (p - path ? make_string (path, p - path)
+  		 : build_string ("."));
+
+        /* Add /: to the front of the name
+--- 2379,2389 ----
+      {
+        p = index (path, SEPCHAR);
+        if (!p) p = path + strlen (path);
+!       /* At this moment, we still don't know how to decode the
+! 	 directory name.  So, we keep the bytes in multibyte form so
+! 	 that ENCODE_FILE correctly gets the original bytes.  */
+!       element = (p - path
+! 		 ? string_to_multibyte (make_unibyte_string (path, p - path))
+  		 : build_string ("."));
+
+        /* Add /: to the front of the name
+Index: src/lread.c
+===================================================================
+RCS file: /cvsroot/emacs/emacs/src/lread.c,v
+retrieving revision 1.369
+diff -c -p -r1.369 lread.c
+*** src/lread.c	28 Mar 2007 08:16:19 -0000	1.369
+--- src/lread.c	10 Apr 2007 02:29:20 -0000
+*************** openp (path, str, suffixes, storeptr, pr
+*** 1234,1240 ****
+  		  handler = Ffind_file_name_handler (filename, Qfile_exists_p);
+  	     It's not clear why that was the case and it breaks things like
+  	     (load "/bar.el") where the file is actually "/bar.el.gz".  */
+! 	  string = build_string (fn);
+  	  handler = Ffind_file_name_handler (string, Qfile_exists_p);
+  	  if ((!NILP (handler) || !NILP (predicate)) && !NATNUMP (predicate))
+              {
+--- 1234,1241 ----
+  		  handler = Ffind_file_name_handler (filename, Qfile_exists_p);
+  	     It's not clear why that was the case and it breaks things like
+  	     (load "/bar.el") where the file is actually "/bar.el.gz".  */
+! 	  string = make_specified_string (fn, -1, strlen (fn),
+! 					  STRING_MULTIBYTE (filename));
+  	  handler = Ffind_file_name_handler (string, Qfile_exists_p);
+  	  if ((!NILP (handler) || !NILP (predicate)) && !NATNUMP (predicate))
+              {
