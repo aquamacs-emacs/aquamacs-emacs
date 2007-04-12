@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.96 2007/04/04 10:52:16 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.97 2007/04/12 18:22:49 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -1177,7 +1177,7 @@ if modified buffers exist."
   ;; than a lambda for Read Mail.
   ;;(tool-bar-add-item-from-menu 'compose-mail "mail/compose")
 
-  (tool-bar-add-item-from-menu 'print-buffer "print")
+  (tool-bar-add-item-from-menu 'aquamacs-print "print")
   (tool-bar-add-item "preferences" 'customize 'customize
 		     :help "Edit preferences (customize)")
 
