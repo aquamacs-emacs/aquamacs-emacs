@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.97 2007/04/12 18:22:49 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.98 2007/04/12 22:16:51 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -1118,7 +1118,7 @@ if modified buffers exist."
 
 
 ;; this to overwrite the tool-bar setup function
-;  
+;  (aquamacs-tool-bar-setup)
 (defun aquamacs-tool-bar-setup ()
   ;; People say it's bad to have EXIT on the tool bar, since users
   ;; might inadvertently click that button.
@@ -1153,10 +1153,10 @@ if modified buffers exist."
 					     (not (eq 'special
 						      (get major-mode
   							   'mode-class)))))
-  (tool-bar-add-item-from-menu 'redo "redo" nil
+  (tool-bar-add-item-from-menu 'aquamacs-redo "redo" nil
 			       :visible '(not (eq 'special (get major-mode
 	  							'mode-class))))  
-  (tool-bar-add-item-from-menu 'undo "undo" nil
+  (tool-bar-add-item-from-menu 'aquamacs-undo "undo" nil
 			       :visible '(not (eq 'special (get major-mode
 	  							'mode-class))))
   (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [cut])
@@ -1170,7 +1170,8 @@ if modified buffers exist."
 			       "paste" nil
 			       :visible '(not (eq 'special (get major-mode
 								'mode-class)))))
-  (tool-bar-add-item-from-menu 'nonincremental-search-forward "search")
+  (tool-bar-add-item-from-menu 'isearch-forward "search")
+;; nonincremental-search-forward
   ;;(tool-bar-add-item-from-menu 'ispell-buffer "spell")
 
   ;; There's no icon appropriate for News and we need a command rather
