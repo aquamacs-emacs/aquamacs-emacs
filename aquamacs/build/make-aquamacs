@@ -547,7 +547,18 @@ dest=`pwd`/Aquamacs/${emapp}
 }
 
 mv "$dest/Contents/MacOS/Emacs" "$dest/Contents/MacOS/Aquamacs Emacs"
+
+# find out where the change log file is
+
+cd "$dest/Contents/Resources/Aquamacs Help"
+CHGL=`grep '<TITLE>Changes--' -l *.html | head -n 1`
+ln -s $CHGL current-changelog.html
+
+
 cd "$dest/Contents/MacOS/";  
+
+
+
 
 # delete some files that we don't need
 
