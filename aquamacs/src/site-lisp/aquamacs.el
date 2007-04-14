@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.98 2007/04/12 22:16:51 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.99 2007/04/14 10:47:12 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -1115,8 +1115,7 @@ if modified buffers exist."
 (if window-system (aquamacs-tool-bar-setup))
 (ats "aquamacs-tool-bar-setup done")
   ) ;; aquamacs-setup
-
-
+ 
 ;; this to overwrite the tool-bar setup function
 ;  (aquamacs-tool-bar-setup)
 (defun aquamacs-tool-bar-setup ()
@@ -1143,19 +1142,23 @@ if modified buffers exist."
    'kill-this-buffer "close" nil
    :visible '(or (not (boundp 'one-buffer-one-frame-mode))
 		(not one-buffer-one-frame-mode)))
+ 
+
   (tool-bar-add-item-from-menu 'save-buffer "save" nil
-			       :visible '(or buffer-file-name
+			       :visible '(and buffer-file-name
 					     (not (eq 'special
 						      (get major-mode
 							   'mode-class))))) 
   (tool-bar-add-item-from-menu 'write-file "saveas" nil
-			       :visible '(or buffer-file-name
+			       :visible '(and (not buffer-file-name)
 					     (not (eq 'special
 						      (get major-mode
   							   'mode-class)))))
-  (tool-bar-add-item-from-menu 'aquamacs-redo "redo" nil
-			       :visible '(not (eq 'special (get major-mode
-	  							'mode-class))))  
+;; taken out - not enough space in toolbar
+  ;; (tool-bar-add-item-from-menu 'aquamacs-redo "redo" nil
+;; 			       :visible '(not (eq 'special (get major-mode
+;; 	  							'mode-class))))
+  
   (tool-bar-add-item-from-menu 'aquamacs-undo "undo" nil
 			       :visible '(not (eq 'special (get major-mode
 	  							'mode-class))))
