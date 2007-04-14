@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs version check
  
-;; Last change: $Id: check-for-updates.el,v 1.15 2007/02/14 11:12:54 davidswelt Exp $
+;; Last change: $Id: check-for-updates.el,v 1.16 2007/04/14 15:41:38 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -51,15 +51,15 @@
 	server to get the version number - this happens once
 	every 3 days. The server will receive and store the
 	following anonymous connection data: an anonymous ID, the
-	number of program starts, whether you have
-	`smart-frame-positioning-mode' and frame appearance themes
-	(`aquamacs-auto-frame-parameters-flag') turned on and the
+	number of program starts and the
 	versions of Aquamacs and OS X that you're using.  Just as
 	during any access to an Internet server, your IP address
 	and the time of your inquiry may be stored, too. This
 	information is used to produce statistics; we will delete
 	the original data after a period of time. The statistics
-	serve to direct the Aquamacs development.
+        help us develop the application further - for example, we
+        may decide to drop support for a particular operating system
+        version.
 
 	If you like to turn this check off, add this to your file
 	~/Library/Preferences/Aquamacs Emacs/Preferences.el:
@@ -211,7 +211,8 @@ and show user a message if there is."
 
 
     
- 
+;; "&afpf=" (if aquamacs-auto-frame-parameters-flag "1" "0")
+;; "&sfpm=" (if smart-frame-positioning-mode "1" "0")
 
 (defun aquamacs-check-for-updates-internal (session-id calls)
  
@@ -231,8 +232,7 @@ and show user a message if there is."
 				 "&seq=" (number-to-string (or calls 0))
 				 "&beta=" (number-to-string (or aquamacs-user-likes-beta 0)) 
 				 "&ver=" (url-encode-string (concat (or aquamacs-version "unknown") (or aquamacs-minor-version "-")))
-				 "&afpf=" (if aquamacs-auto-frame-parameters-flag "1" "0")
-				 "&sfpm=" (if smart-frame-positioning-mode "1" "0")
+				 
 				 "&os=" (url-encode-string  (replace-regexp-in-string "\[\r\n\]" "" (shell-command-to-string "uname -r")))
 				 ) 
 			 )))
