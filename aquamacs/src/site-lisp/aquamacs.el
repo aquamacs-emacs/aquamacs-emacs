@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.99 2007/04/14 10:47:12 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.100 2007/04/14 11:04:32 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -1109,7 +1109,7 @@ if modified buffers exist."
 
 (aquamacs-set-defaults '(
 			 (tool-bar-button-relief 1)
-			 (tool-bar-button-margin 6)
+			 (tool-bar-button-margin 4)
 			 (tool-bar-border 5)))
 (ats "aquamacs-tool-bar-setup ...")
 (if window-system (aquamacs-tool-bar-setup))
@@ -1130,7 +1130,7 @@ if modified buffers exist."
 
   (let ((face 'tool-bar)
 	;; e2e2e2 is eaeaea in imagemagick for some reason
-	(spec '((t (:background "#e2e2e2" :foreground "black" 
+	(spec '((t (:background "#eaeaea" :foreground "black" 
 				:box (:line-width 1 :style released-button))))))
     (face-spec-set face spec nil)
     (put face 'face-defface-spec spec))
@@ -1159,10 +1159,13 @@ if modified buffers exist."
 ;; 			       :visible '(not (eq 'special (get major-mode
 ;; 	  							'mode-class))))
   
+  (tool-bar-add-item "space" nil 'space-1 :enable nil )
   (tool-bar-add-item-from-menu 'aquamacs-undo "undo" nil
 			       :visible '(not (eq 'special (get major-mode
 	  							'mode-class))))
-  (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [cut])
+ 
+
+ (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [cut])
 			       "cut" nil
 			       :visible '(not (eq 'special (get major-mode
 								'mode-class))))
@@ -1181,7 +1184,11 @@ if modified buffers exist."
   ;; than a lambda for Read Mail.
   ;;(tool-bar-add-item-from-menu 'compose-mail "mail/compose")
 
+
   (tool-bar-add-item-from-menu 'aquamacs-print "print")
+
+  (tool-bar-add-item "space" nil 'space-2 :enable nil )
+
   (tool-bar-add-item "preferences" 'customize 'customize
 		     :help "Edit preferences (customize)")
 
