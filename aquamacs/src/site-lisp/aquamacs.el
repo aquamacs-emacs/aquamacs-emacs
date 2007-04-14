@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.100 2007/04/14 11:04:32 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.101 2007/04/14 13:53:36 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -28,7 +28,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005,2006, David Reitter
+;; Copyright (C) 2005,2006, 2007: David Reitter
  
 (defvar aq-starttime 0)
 ;; (defun ats (txt) 
@@ -1112,98 +1112,14 @@ if modified buffers exist."
 			 (tool-bar-button-margin 4)
 			 (tool-bar-border 5)))
 (ats "aquamacs-tool-bar-setup ...")
-(if window-system (aquamacs-tool-bar-setup))
+(when window-system 
+  (require 'aquamacs-tool-bar)
+  (aquamacs-tool-bar-setup))
 (ats "aquamacs-tool-bar-setup done")
   ) ;; aquamacs-setup
  
-;; this to overwrite the tool-bar setup function
-;  (aquamacs-tool-bar-setup)
-(defun aquamacs-tool-bar-setup ()
-  ;; People say it's bad to have EXIT on the tool bar, since users
-  ;; might inadvertently click that button.
-  ;;(tool-bar-add-item-from-menu 'save-buffers-kill-emacs "exit")
-  (setq tool-bar-map (make-sparse-keymap))
- 
-  (face-spec-set 'tooltip '((t (:inherit variable-pitch :background "lightyellow" :foreground "black" :height 100 :family "lucida sans"))) nil)
 
-  (aquamacs-set-defaults '((auto-resize-tool-bar nil)))
-
-  (let ((face 'tool-bar)
-	;; e2e2e2 is eaeaea in imagemagick for some reason
-	(spec '((t (:background "#eaeaea" :foreground "black" 
-				:box (:line-width 1 :style released-button))))))
-    (face-spec-set face spec nil)
-    (put face 'face-defface-spec spec))
-  ;; will be overwritten by color themes
-
-  (tool-bar-add-item-from-menu 'new-frame-with-new-scratch "new")
-  (tool-bar-add-item-from-menu 'mac-key-open-file "open")
-  (tool-bar-add-item-from-menu 
-   'kill-this-buffer "close" nil
-   :visible '(or (not (boundp 'one-buffer-one-frame-mode))
-		(not one-buffer-one-frame-mode)))
- 
-
-  (tool-bar-add-item-from-menu 'save-buffer "save" nil
-			       :visible '(and buffer-file-name
-					     (not (eq 'special
-						      (get major-mode
-							   'mode-class))))) 
-  (tool-bar-add-item-from-menu 'write-file "saveas" nil
-			       :visible '(and (not buffer-file-name)
-					     (not (eq 'special
-						      (get major-mode
-  							   'mode-class)))))
-;; taken out - not enough space in toolbar
-  ;; (tool-bar-add-item-from-menu 'aquamacs-redo "redo" nil
-;; 			       :visible '(not (eq 'special (get major-mode
-;; 	  							'mode-class))))
-  
-  (tool-bar-add-item "space" nil 'space-1 :enable nil )
-  (tool-bar-add-item-from-menu 'aquamacs-undo "undo" nil
-			       :visible '(not (eq 'special (get major-mode
-	  							'mode-class))))
- 
-
- (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [cut])
-			       "cut" nil
-			       :visible '(not (eq 'special (get major-mode
-								'mode-class))))
-  (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [copy])
-			       "copy")
-  (let ((cua-mode nil))
-      (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [paste])
-			       "paste" nil
-			       :visible '(not (eq 'special (get major-mode
-								'mode-class)))))
-  (tool-bar-add-item-from-menu 'isearch-forward "search")
-;; nonincremental-search-forward
-  ;;(tool-bar-add-item-from-menu 'ispell-buffer "spell")
-
-  ;; There's no icon appropriate for News and we need a command rather
-  ;; than a lambda for Read Mail.
-  ;;(tool-bar-add-item-from-menu 'compose-mail "mail/compose")
-
-
-  (tool-bar-add-item-from-menu 'aquamacs-print "print")
-
-  (tool-bar-add-item "space" nil 'space-2 :enable nil )
-
-  (tool-bar-add-item "preferences" 'customize 'customize
-		     :help "Edit preferences (customize)")
-
-  (tool-bar-add-item "help" (lambda ()
-			      (interactive)
-			      (popup-menu menu-bar-help-menu))
-		     'help
-		     :help "Pop up the Help menu")
-
-  ;; Toolbar button, mapped to handle-toggle-tool-bar in tool-bar.el
-  ;; (Toolbar button - on systems that support it!)
-  (global-set-key [toggle-frame-toolbar] 'handle-toggle-tool-bar)
-
-  )
-
+			 
 (provide 'aquamacs)
 
  
