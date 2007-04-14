@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tool-bar.el,v 1.5 2007/04/14 13:41:06 davidswelt Exp $ 
+;; Last change: $Id: aquamacs-tool-bar.el,v 1.6 2007/04/14 13:51:49 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -62,6 +62,8 @@ This will update the keymap `aquamacs-menu-bar-showhide-toolbar-items-menu'."
 		(eval `(defcustom ,toggle-var nil 
 			 (format "If non-nil, an icon for \"%s\" is shown in the toolbar." name) 
 			 :group 'Aquamacs :group 'tool-bar :version "22.0" :type 'boolean))
+		(add-to-list 'aquamacs-menu-bar-customize-options-to-save
+			     toggle-var 'append)
 		(define-key aquamacs-menu-bar-showhide-toolbar-items-menu (vector toggle-var)
 		  (eval `(menu-bar-make-toggle 
 			  ,(intern (format "toggle-toolbar-show--%s" (car item)))
@@ -77,7 +79,8 @@ This will update the keymap `aquamacs-menu-bar-showhide-toolbar-items-menu'."
 		  (define-key tool-bar-map (vector (car item))
 		    (append (cdr item)
 			    `(:visible ,l)))))
-	    (define-key aquamacs-menu-bar-showhide-toolbar-items-menu (vector (intern (format "%s-sep" (car item)))) 
+	    (define-key aquamacs-menu-bar-showhide-toolbar-items-menu 
+	      (vector (intern (format "%s-sep" (car item)))) 
 	      '(menu-item "--" nil)))))
    (reverse (cdr tool-bar-map))) nil)
 
@@ -172,26 +175,26 @@ This will update the keymap `aquamacs-menu-bar-showhide-toolbar-items-menu'."
   (global-set-key [toggle-frame-toolbar] 'handle-toggle-tool-bar)
 
   (aquamacs-toolbar-create-showhide-menu)
-(define-key-after menu-bar-showhide-menu [small]
-  `(menu-item "Toolbar items" 
-	      ,aquamacs-menu-bar-showhide-toolbar-items-menu
-	      :help "Select items to show in the toolbar"
-	      :visible ,(display-graphic-p)
-	     'showhide-tooltip-mode))
-
-(aquamacs-set-defaults '(
-			 (toolbar-menu-show--aquamacs-print  t)
-			 (toolbar-menu-show--copy t)
-			 (toolbar-menu-show--customize t)	   
-			 (toolbar-menu-show--cut t)
-			 (toolbar-menu-show--help t)		   
-			 (toolbar-menu-show--new-file t)	   
-			 (toolbar-menu-show--open-file t)
-			 (toolbar-menu-show--paste t)	   
-			 (toolbar-menu-show--redo nil)
-			 (toolbar-menu-show--save-buffer t)	   
-			 (toolbar-menu-show--undo t)
-			 (toolbar-menu-show--write-file t)
+  (define-key-after menu-bar-showhide-menu [small]
+    `(menu-item "Toolbar items" 
+		,aquamacs-menu-bar-showhide-toolbar-items-menu
+		:help "Select items to show in the toolbar"
+		:visible ,(display-graphic-p))
+    'showhide-tool-bar)
+  
+  (aquamacs-set-defaults '(
+			   (toolbar-menu-show--aquamacs-print  t)
+			   (toolbar-menu-show--copy t)
+			   (toolbar-menu-show--customize t)	   
+			   (toolbar-menu-show--cut t)
+			   (toolbar-menu-show--help t)		   
+			   (toolbar-menu-show--new-file t)	   
+			   (toolbar-menu-show--open-file t)
+			   (toolbar-menu-show--paste t)	   
+			   (toolbar-menu-show--redo nil)
+			   (toolbar-menu-show--save-buffer t)	   
+			   (toolbar-menu-show--undo t)
+			   (toolbar-menu-show--write-file t)
 			 (toolbar-menu-show--isearch-forward t)))
   )
 
