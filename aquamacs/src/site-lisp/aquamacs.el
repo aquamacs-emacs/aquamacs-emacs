@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.101 2007/04/14 13:53:36 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.102 2007/04/19 20:22:13 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -786,28 +786,32 @@ un-Mac-like way when you select text and copy&paste it.")))
  
 ;; redefine this
   (defun startup-echo-area-message ()
-    (aquamacs-wrap-string
-     (concat
-      (if (and (eq window-system 'mac) 
-	       (eq mac-command-modifier 'alt)
-	       (eq (key-binding [(alt \?)]) 'aquamacs-user-help))
-	  "For an introduction to Aquamacs Emacs, type Apple-?." 
-	(if window-system
-	    "For an introduction to Aquamacs Emacs,\nchoose `Aquamacs Help' from the `Help' menu."
-	  (substitute-command-keys
-	   "For a introduction to Aquamacs Emacs, type \
+    (concat
+     (if (and (eq window-system 'mac) 
+	      (eq mac-command-modifier 'alt)
+	      (eq (key-binding [(alt \?)]) 'aquamacs-user-help))
+	 "For an introduction to Aquamacs Emacs, type Apple-?." 
+       (if window-system
+	   "For an introduction to Aquamacs Emacs,\nchoose `Aquamacs Help' from the `Help' menu."
+	 (substitute-command-keys
+	  "For a introduction to Aquamacs Emacs, type \
 \\[aquamacs-user-help].")))
-      ;;The GPL stipulates that the following message is shown.
+     ;;The GPL stipulates that the following message is shown.
+					;(aquamacs-wrap-string
+     (propertize 	
+      (substitute-command-keys "
+Copyright (C) 2007 Free Software Foundation, Inc. (C) 2007 D. Reitter. No Warranty. 
+You may redistribute Aquamacs under the GNU General Public License. Type \\[describe-copying] to view.") 
+      'face (list :family 'lucida8 :height 110 :foreground "darkblue" ))))  
 
-      (propertize 	(substitute-command-keys "
-Copyright (C) 2006 Free Software Foundation, Inc., & D. Reitter. No Warranty. You may
-redistribute Aquamacs under the GNU General Public License. Type \\[describe-copying] to view.") 'face 'blue-foreground-face)) 
-     (frame-parameter nil 'width) ;; let's just hope that this is the width of the echo area
-     ))
+;;'blue-foreground-face)) 
+;;(- (frame-parameter nil 'width) 5) 
+;; let's just hope that this is the width of the echo area
 
-;;  (message (startup-echo-area-message))
-  
-  (if (string= "mac" window-system)
+;; (progn  (message (startup-echo-area-message)) (sleep-for 5))
+;; buffer-file-name
+
+(if (string= "mac" window-system)
       (defun use-fancy-splash-screens-p () t))
   
        
