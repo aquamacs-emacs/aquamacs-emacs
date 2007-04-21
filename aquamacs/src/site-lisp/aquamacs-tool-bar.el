@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tool-bar.el,v 1.6 2007/04/14 13:51:49 davidswelt Exp $ 
+;; Last change: $Id: aquamacs-tool-bar.el,v 1.7 2007/04/21 12:28:27 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -48,10 +48,10 @@
 
 (defvar aquamacs-menu-bar-showhide-toolbar-items-menu (make-sparse-keymap)
 "Keymap with items that allow toggling items on the tool-bar.")
+
 (defun aquamacs-toolbar-create-showhide-menu ()
   "Updates the toolbar items toggle menu.
 This will update the keymap `aquamacs-menu-bar-showhide-toolbar-items-menu'."
-
   (setq aquamacs-menu-bar-showhide-toolbar-items-menu (make-sparse-keymap))
   (mapc
    (lambda (item)
@@ -85,9 +85,37 @@ This will update the keymap `aquamacs-menu-bar-showhide-toolbar-items-menu'."
    (reverse (cdr tool-bar-map))) nil)
 
 
+(defun aquamacs-toolbar-x-create-meaning-list (keymap)
+  "Creates a meaning list for `toolbar-x' from a toolbar keymap."
+;; FIXME: is "sep" from AUCTeX?
+  (let ((meaning '((bar-separator :image "sep" :command t :enable nil :help ""))))
+  (mapc
+   (lambda (item)
+     (and (car item)
+	  (add-to-list 
+	   'meaning
+	   
 
+	   (if (nth 3 item)
+		;; go over all properties of item
+		(let ((img (aq-list-has-property-element item :image)))
+		  (list (car item) 
+			:command (nth 3 item)
+		  :visible (aq-list-has-property-element item :visible)
+		  :enable (aq-list-has-property-element item :enable)
+		  :image (vector img (elt img 1)) ;; 1st: Emacs, 2nd: XEma
+		  :help (aq-list-has-property-element item :help)))
+	     (let ((img (aq-list-has-property-element item :image)))
+		  (list 'separator
+			:command t
+			:visible t
+			:enable nil
+			:image (vector img img) ;; 1st: Emacs, 2nd: XEma
+			:help ""))
 
-
+))))
+   (reverse (cdr keymap))) meaning) )
+ 
 ;; this to overwrite the tool-bar setup function
 ;  (aquamacs-tool-bar-setup)
 (defun aquamacs-tool-bar-setup ()
@@ -196,6 +224,12 @@ This will update the keymap `aquamacs-menu-bar-showhide-toolbar-items-menu'."
 			   (toolbar-menu-show--undo t)
 			   (toolbar-menu-show--write-file t)
 			 (toolbar-menu-show--isearch-forward t)))
+
+
+(defvar aquamacs-default-toolbarx-meaning-alist
+  (aquamacs-toolbar-x-create-meaning-list tool-bar-map)
+  "Contains Aquamacs' default toolbar buttons as a meaning list for toolbar-x.")
+
   )
 
 
