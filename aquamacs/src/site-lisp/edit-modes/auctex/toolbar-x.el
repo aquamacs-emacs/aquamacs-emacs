@@ -1,6 +1,6 @@
 ;;; toolbar-x.el --- fancy toolbar handling in Emacs and XEmacs
 
-;; Copyright (C) 2004, 2005 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005,2007 Free Software Foundation, Inc.
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -502,10 +502,10 @@ documentation of function `toolbarx-process-symbol')."
 					    ; (defined with `defimage')
 			      (consp (eval val))
 			      (eq (car (eval val)) 'image))
-			 (and (listp val) ; or list with 4 strings or
-					  ; image descriptors
+			 (and (sequencep val) ; or list or vector with 
+					  ; 4 strings or image descriptors
 			      (= (length val) 4)
-			      (dolist (i val all-obj-ok)
+			      (dolist (i (append val nil) all-obj-ok)
 				(setq all-obj-ok
 				      (and all-obj-ok
 					   (or (stringp i)
