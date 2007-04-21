@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tool-bar.el,v 1.7 2007/04/21 12:28:27 davidswelt Exp $ 
+;; Last change: $Id: aquamacs-tool-bar.el,v 1.8 2007/04/21 14:06:46 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -94,8 +94,6 @@ This will update the keymap `aquamacs-menu-bar-showhide-toolbar-items-menu'."
      (and (car item)
 	  (add-to-list 
 	   'meaning
-	   
-
 	   (if (nth 3 item)
 		;; go over all properties of item
 		(let ((img (aq-list-has-property-element item :image)))
@@ -111,9 +109,7 @@ This will update the keymap `aquamacs-menu-bar-showhide-toolbar-items-menu'."
 			:visible t
 			:enable nil
 			:image (vector img img) ;; 1st: Emacs, 2nd: XEma
-			:help ""))
-
-))))
+			:help ""))))))
    (reverse (cdr keymap))) meaning) )
  
 ;; this to overwrite the tool-bar setup function
@@ -124,7 +120,11 @@ This will update the keymap `aquamacs-menu-bar-showhide-toolbar-items-menu'."
   ;;(tool-bar-add-item-from-menu 'save-buffers-kill-emacs "exit")
   (setq tool-bar-map (make-sparse-keymap))
  
-  (face-spec-set 'tooltip '((t (:inherit variable-pitch :background "lightyellow" :foreground "black" :height 100 :family "lucida sans"))) nil)
+  (face-spec-set 'tooltip '((t (:inherit variable-pitch 
+				:background "lightyellow" 
+				:foreground "black" 
+				:height 100 
+				:family "lucida sans"))) nil)
 
   (aquamacs-set-defaults '((auto-resize-tool-bar nil)))
 
@@ -138,12 +138,22 @@ This will update the keymap `aquamacs-menu-bar-showhide-toolbar-items-menu'."
 
   (tool-bar-add-item-from-menu 'new-frame-with-new-scratch "new")
   (tool-bar-add-item-from-menu 'mac-key-open-file "open")
-  (tool-bar-add-item-from-menu 
-   'kill-this-buffer "close" nil
-   :visible '(or (not (boundp 'one-buffer-one-frame-mode))
-		(not one-buffer-one-frame-mode)))
- 
 
+  (tool-bar-add-item "history" (lambda ()
+			      (interactive)
+			      (popup-menu (easy-menu-filter-return
+					   (recentf-make-menu-items)
+					   "Open Recent")))
+		     'recent-files
+		     :visible '(and (boundp 'recentf-mode) recentf-mode)
+		     :help "Pop up the Recent Files menu")
+
+  (tool-bar-add-item "circle_stop" 'kill-this-buffer  'kill-current-buffer
+		     :visible '(or (not (boundp 'one-buffer-one-frame-mode))
+				   (not one-buffer-one-frame-mode)))
+ 
+  (tool-bar-add-item-from-menu 'revert-buffer "update" nil)
+  
   (tool-bar-add-item-from-menu 'save-buffer "save" nil
 			       :visible '(and buffer-file-name
 					     (not (eq 'special
@@ -188,6 +198,8 @@ This will update the keymap `aquamacs-menu-bar-showhide-toolbar-items-menu'."
   (tool-bar-add-item-from-menu 'aquamacs-print "print")
 
   (tool-bar-add-item "space" nil 'space-2 :enable nil )
+  
+  (tool-bar-add-item-from-menu 'make-frame-command "new_window" nil)
 
   (tool-bar-add-item "preferences" 'customize 'customize
 		     :help "Edit preferences (customize)")
@@ -226,10 +238,13 @@ This will update the keymap `aquamacs-menu-bar-showhide-toolbar-items-menu'."
 			 (toolbar-menu-show--isearch-forward t)))
 
 
-(defvar aquamacs-default-toolbarx-meaning-alist
-  (aquamacs-toolbar-x-create-meaning-list tool-bar-map)
-  "Contains Aquamacs' default toolbar buttons as a meaning list for toolbar-x.")
+  (defvar aquamacs-default-toolbarx-meaning-alist
+    (aquamacs-toolbar-x-create-meaning-list tool-bar-map)
+    "Contains Aquamacs' default toolbar buttons as a meaning list for toolbar-x.
+The contents of this variable are generated from `tool-bar-map'. 
+Changes to this variable will have no immediate effect.
 
+This variable is used in the AUCTeX configuration.")
   )
 
 
