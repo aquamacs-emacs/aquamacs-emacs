@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tool-bar.el,v 1.8 2007/04/21 14:06:46 davidswelt Exp $ 
+;; Last change: $Id: aquamacs-tool-bar.el,v 1.9 2007/04/21 14:24:46 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -32,18 +32,18 @@
 
 ; go over tool-bar-map to find out what's in there
 
-(defun aq-list-has-property-element (list elem)
-  (let ((ret))
+(defun aq-list-has-property-element (list elem &optional default)
+  (let ((ret default))
     (and (listp list)
 	 (or
 	  (when (eq (car-safe list) elem)
 	    (setq ret (car-safe (cdr-safe list)))
 	    t)
 	  
-	  (setq ret (if (cdr-safe list) (aq-list-has-property-element (cdr-safe list) elem)))))
+	  (setq ret (if (cdr-safe list) (aq-list-has-property-element (cdr-safe list) elem default) default))))
     ret))
 
-; (aq-list-has-property-element (list :hello 1 :you "me") :yoou)
+; (aq-list-has-property-element (list :hello 1 :you "me") :yoou 'not-there)
 
 
 (defvar aquamacs-menu-bar-showhide-toolbar-items-menu (make-sparse-keymap)
@@ -69,8 +69,12 @@ This will update the keymap `aquamacs-menu-bar-showhide-toolbar-items-menu'."
 			  ,(intern (format "toggle-toolbar-show--%s" (car item)))
 			  ,toggle-var
 			  ,(format "%s" name)
-			  ,(format "Show toolbar icon for %s " name)
-			  "Show an icon in the toolbar for this function.")))
+			  (if (eval ,(aq-list-has-property-element item :visible t))
+			      ,(format "Toolbar icon for %s %%s" name)
+			      (message (format "Item not visible due to current configuration or state:
+%s"  (quote ,(aq-list-has-property-element item :visible)))))
+			  "Show an icon in the toolbar for this function."
+			  )))
 		(let ((l (aq-list-has-property-element item :visible)))
 		  (if l
 		      (setq l `(and ,l ,toggle-var))
@@ -110,7 +114,7 @@ This will update the keymap `aquamacs-menu-bar-showhide-toolbar-items-menu'."
 			:enable nil
 			:image (vector img img) ;; 1st: Emacs, 2nd: XEma
 			:help ""))))))
-   (reverse (cdr keymap))) meaning) )
+   (reverse (cdr keymap))) meaning))
  
 ;; this to overwrite the tool-bar setup function
 ;  (aquamacs-tool-bar-setup)
