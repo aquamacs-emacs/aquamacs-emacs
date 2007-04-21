@@ -196,6 +196,9 @@ the printer has no corresponding command."
      :help "Delete generated intermediate files")
     ("Clean All" "(TeX-clean t)" TeX-run-function nil t
      :help "Delete generated intermediate and output files")
+    ("XeLaTeX" "xelatex \"%(mode)\\input{%t}\""
+      TeX-run-TeX nil (latex-mode context-mode) 
+      :help (format "Run X%sLaTeX" (string (decode-char 'ucs #x258))))
     ("Other" "" TeX-run-command t t :help "Run an arbitrary command"))
   "List of commands to execute on the current document.
 
