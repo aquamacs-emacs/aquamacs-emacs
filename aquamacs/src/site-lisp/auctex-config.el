@@ -4,7 +4,7 @@
 ;; originally authored by Kevin Walzer
 ;; Keywords: auctex
  
-;; Last change: $Id: auctex-config.el,v 1.24 2007/04/21 12:29:04 davidswelt Exp $
+;; Last change: $Id: auctex-config.el,v 1.25 2007/04/21 13:13:45 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -96,12 +96,19 @@ Only checks once - subsequent calls will not result in any action."
 (add-hook 'LaTeX-mode-hook (lambda () (TeX-fold-mode t)))
 
 
+(defvar aquamacs-addl-TeX-bar-TeX-button-alist
+
+
+
+
 (aquamacs-set-defaults 
  '((TeX-PDF-mode t)
-
 ;; Toolbar business
    (TeX-bar-TeX-all-button-alists
     (TeX-bar-TeX-button-alist aquamacs-default-toolbarx-meaning-alist))
+   (TeX-bar-LaTeX-all-button-alists
+    (TeX-bar-LaTeX-button-alist aquamacs-default-toolbarx-meaning-alist))
+
    (TeX-bar-TeX-buttons
     (open-file save-buffer write-file cut copy paste undo
 	       [separator nil]   tex next-error view bibtex))))
