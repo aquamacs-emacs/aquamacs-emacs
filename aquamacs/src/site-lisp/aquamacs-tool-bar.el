@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tool-bar.el,v 1.9 2007/04/21 14:24:46 davidswelt Exp $ 
+;; Last change: $Id: aquamacs-tool-bar.el,v 1.10 2007/04/21 14:48:19 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -192,7 +192,7 @@ This will update the keymap `aquamacs-menu-bar-showhide-toolbar-items-menu'."
 								'mode-class)))))
   (tool-bar-add-item-from-menu 'isearch-forward "search")
 ;; nonincremental-search-forward
-  (tool-bar-add-item-from-menu 'ispell-buffer "spell")
+  (tool-bar-add-item-from-menu 'ispell-buffer "spellcheck")
 
   ;; There's no icon appropriate for News and we need a command rather
   ;; than a lambda for Read Mail.
