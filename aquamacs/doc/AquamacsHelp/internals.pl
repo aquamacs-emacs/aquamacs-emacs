@@ -10,7 +10,7 @@ $key = q/tab:variables/;
 $ref_files{$key} = "$dir".q|node20.html|; 
 $noresave{$key} = "$nosave";
 
-$key = q/aquamacs-tex.jpg/;
+$key = q/aquamacs-tex/;
 $ref_files{$key} = "$dir".q|node21.html|; 
 $noresave{$key} = "$nosave";
 
@@ -30,12 +30,12 @@ $key = q/aquamacs-screenshot.jpg/;
 $ref_files{$key} = "$dir".q|node2.html|; 
 $noresave{$key} = "$nosave";
 
-$key = q/theme.jpg/;
-$ref_files{$key} = "$dir".q|node14.html|; 
-$noresave{$key} = "$nosave";
-
 $key = q/tab:terms/;
 $ref_files{$key} = "$dir".q|node6.html|; 
+$noresave{$key} = "$nosave";
+
+$key = q/theme.jpg/;
+$ref_files{$key} = "$dir".q|node14.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/frame-appearance-styles/;
