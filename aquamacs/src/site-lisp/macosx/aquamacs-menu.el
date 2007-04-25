@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.76 2007/04/25 10:17:29 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.77 2007/04/25 17:30:59 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -124,7 +124,7 @@
     (key-description (car list))
     (aq-find-best-key (cdr list)))
 )
-
+;; 
 (defun aq-find-good-key (symbol)
   (aq-find-best-key
    (aq-resolve-remapped
@@ -150,6 +150,8 @@
 ;(defun aq-shortcut (text symbol &rest more-args)
 ;  (apply (function format) text more-args))
  
+; (aq-find-good-key 'cua-paste)
+
 (defun aq-shortcut (text symbol &rest more-args)
   (if (if (boundp 'osx-key-mode) osx-key-mode nil)
       (condition-case err
@@ -429,7 +431,8 @@ customization buffer."
  
 (define-key menu-bar-edit-menu [paste]
   `(menu-item ,(aq-shortcut  "Paste                 " 
-				 (key-binding [menu-bar edit paste]) ) 
+;(key-binding [menu-bar edit paste]) ;; doesn't work
+			     'clipboard-yank) 
 	      yank
 	      :enable (and
 		       ;; Emacs compiled --without-x doesn't have
