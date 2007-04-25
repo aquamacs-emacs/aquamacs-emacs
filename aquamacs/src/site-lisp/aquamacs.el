@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.102 2007/04/19 20:22:13 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.103 2007/04/25 10:12:22 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -1099,6 +1099,77 @@ if modified buffers exist."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; this is for the About dialog
+(defun fancy-splash-head ()
+  "Insert the head part of the splash screen into the current buffer.
+This is modified in Aquamacs compared to GNU Emacs, because most
+information given would otherwise be irrelevant to Aquamacs users.
+"
+  (let* ((image-file (cond ((stringp fancy-splash-image)
+			    fancy-splash-image)
+			   ((and (display-color-p)
+				 (image-type-available-p 'xpm))
+			    (if (and (fboundp 'x-display-planes)
+				     (= (funcall 'x-display-planes) 8))
+				"splash8.xpm"
+			      "splash.xpm"))
+			   (t "splash.pbm")))
+	 (img (create-image image-file))
+	 (image-width (and img (car (image-size img))))
+	 (window-width (window-width (selected-window))))
+    (when img
+      (when (> window-width image-width)
+	;; Center the image in the window.
+;; 	(insert (propertize " " 'display
+;; 			    `(space :align-to (+ center (-0.5 . ,img)))))
+
+	;; Change the color of the XPM version of the splash image
+	;; so that it is visible with a dark frame background.
+	(when (and (memq 'xpm img)
+		   (eq (frame-parameter nil 'background-mode) 'dark))
+	  (setq img (append img '(:color-symbols (("#000000" . "gray30"))))))
+
+	;; Insert the image with a help-echo and a keymap.
+	(let ((map (make-sparse-keymap))
+	      (help-echo "mouse-1: browse http://aquamacs.org/"))
+	  (define-key map [mouse-1]
+	    (lambda ()
+	      (interactive)
+	      (browse-url "http://aquamacs.org/")
+	      (throw 'exit nil)))
+	  (define-key map [down-mouse-1] 'ignore)
+	  (define-key map [up-mouse-1] 'ignore)
+	  (insert-image img (propertize "xxx" 'help-echo help-echo
+					'keymap map)))
+	(insert "\n"))))
+(insert "\n\n")
+  (fancy-splash-insert
+   :face '(variable-pitch :foreground "red")
+   (if (eq system-type 'gnu/linux)
+       "GNU Emacs is one component of the GNU/Linux operating system."
+     "GNU Emacs is one component of the GNU operating system."))
+(insert "\n")
+  (fancy-splash-insert
+   :face 'variable-pitch
+   "Aquamacs is a distribution of GNU Emacs that is adapted for Mac users.\n\n")
+  (insert "\n")
+  )
+(setq fancy-splash-text
+      '((:face (variable-pitch :weight bold)
+           :face variable-pitch "Aquamacs Emacs comes with "
+	   :face (variable-pitch :slant oblique)
+	   "ABSOLUTELY NO WARRANTY\n"
+	   )
+  (:face variable-pitch
+	 "Use the Help menu to view manuals or go to helpful websites."
+
+	 "To quit a partially entered command, type "
+	 :face default
+	 "Control-g"
+	 :face variable-pitch
+	 ".\n"
+	   )))
+
+
 
   (setq emacs-build-system 
 	(concat 
