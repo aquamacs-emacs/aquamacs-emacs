@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.73 2007/03/23 22:00:16 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.74 2007/04/25 17:02:40 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -928,12 +928,12 @@ default."
     (define-key map `[(,osxkeys-command-key a)] 'mark-whole-buffer)
     (define-key map `[(,osxkeys-command-key v)] 'clipboard-yank) 
     (define-key map `[(,osxkeys-command-key c)] 'clipboard-kill-ring-save)
-    (define-key map `[(shift ,osxkeys-command-key c)] 
+    (define-key map `[(meta ,osxkeys-command-key c)] 
       'aquamacs-clipboard-kill-ring-save-secondary)
     ;; this because the combination control-space usually activates Spotlight
     (define-key map `[(control ,osxkeys-command-key space)] 'set-mark)
     (define-key map `[(,osxkeys-command-key x)] 'clipboard-kill-region)
-    (define-key map `[(shift ,osxkeys-command-key x)] 'aquamacs-clipboard-kill-secondary)
+    (define-key map `[(meta ,osxkeys-command-key x)] 'aquamacs-clipboard-kill-secondary)
     (define-key map `[(,osxkeys-command-key s)] 'mac-key-save-file)
     (define-key map `[(,osxkeys-command-key p)] 'aquamacs-print)
     (define-key map `[(,osxkeys-command-key l)] 'goto-line)
