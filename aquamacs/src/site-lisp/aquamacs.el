@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.103 2007/04/25 10:12:22 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.104 2007/04/25 23:53:23 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -802,7 +802,7 @@ un-Mac-like way when you select text and copy&paste it.")))
       (substitute-command-keys "
 Copyright (C) 2007 Free Software Foundation, Inc. (C) 2007 D. Reitter. No Warranty. 
 You may redistribute Aquamacs under the GNU General Public License. Type \\[describe-copying] to view.") 
-      'face (list :family 'lucida8 :height 110 :foreground "darkblue" ))))  
+      'face (list :family "Lucida Grande" :height 110 :foreground "darkblue" ))))  
 
 ;;'blue-foreground-face)) 
 ;;(- (frame-parameter nil 'width) 5) 
