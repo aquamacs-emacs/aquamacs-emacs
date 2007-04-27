@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.78 2007/04/27 10:24:48 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.79 2007/04/27 11:57:44 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -500,7 +500,15 @@ customization buffer."
 	      isearch-repeat-forward
 	      :help "Search forward for a string as you type it"))
  
+(define-key-after menu-bar-search-menu [grep]
+  '(menu-item "Search Files (Grep)..." grep
+	      :help "Search files for strings or regexps (with Grep)")
+  'separator-tag-search)
 
+(define-key-after menu-bar-search-menu [separator-grep-search]
+  '(menu-item "--")
+  'grep)
+(define-key menu-bar-tools-menu [grep] nil)
 
 (require 'aquamacs-editing)
 (define-key menu-bar-edit-menu [fill]
@@ -538,7 +546,7 @@ customization buffer."
 
 (define-key menu-bar-file-menu [save-buffer ]
   `(menu-item ,(aq-shortcut  "Save Buffer                              "
-			    (key-binding [menu-bar file save-buffer]))
+			    'mac-key-save-file)
 	      save-buffer
 	      :enable (and (buffer-modified-p)
 			   (buffer-file-name)
@@ -549,7 +557,7 @@ customization buffer."
 
 (define-key menu-bar-file-menu [write-file]
   `(menu-item ,(aq-shortcut  "Save Buffer As...                      "
-			    (key-binding [menu-bar file write-file])) 
+			    'mac-key-save-file-as) 
 	      write-file
 
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
@@ -736,8 +744,8 @@ both existing buffers and buffers that you subsequently create."
 
  ;; this is a redefine
   (define-key menu-bar-options-menu [mouse-set-font]
-  `(menu-item ,(aq-shortcut "Show Fonts (this Frame)..." 
-			    mac-font-panel-mode)
+  `(menu-item ,(aq-shortcut "Show Fonts (this Frame)...                 " 
+			    'mac-font-panel-mode)
 	      turn-on-mac-font-panel-mode
 	       :visible ,(display-multi-font-p)
 	       :enable (menu-bar-menu-frame-live-and-visible-p) 
@@ -804,6 +812,18 @@ both existing buffers and buffers that you subsequently create."
 	      :help "Save options set from the menu above")
   'save-custom-separator)
 
+;; Goto Line
+
+(define-key menu-bar-goto-menu [go-to-line]
+  `(menu-item ,(aq-shortcut  "Goto Line...                      "
+			    'goto-line) 
+	      goto-line
+
+	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
+			   (menu-bar-non-minibuffer-window-p))
+	      :help "Read a line number and go to that line"))
+
+
 
 ;; Spell Checking
 
@@ -828,6 +848,11 @@ both existing buffers and buffers that you subsequently create."
 		    :help "Download spell-checking package"
 		    :visible (not ispell-program-name))
 	'spell) 
+
+(define-key ispell-menu-map [ispell-buffer]
+	'(menu-item (aq-shortcut "Spell-Check Buffer               " 
+		       'ispell-buffer) ispell-buffer
+		    :help "Check spelling of selected buffer"))
 
 ;; taken out - the standard Cocoa spell doesn't do it either
 ;; (defvar aquamacs-flyspell-buffer-checked nil)
