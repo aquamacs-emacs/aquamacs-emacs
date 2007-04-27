@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.104 2007/04/25 23:53:23 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.105 2007/04/27 22:18:09 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -1160,8 +1160,8 @@ information given would otherwise be irrelevant to Aquamacs users.
 	   "ABSOLUTELY NO WARRANTY\n"
 	   )
   (:face variable-pitch
-	 "Use the Help menu to view manuals or go to helpful websites."
-
+	 "Use the Help menu to view manuals or go to helpful websites.\n"
+	 
 	 "To quit a partially entered command, type "
 	 :face default
 	 "Control-g"
