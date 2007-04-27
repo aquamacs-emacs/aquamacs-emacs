@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.77 2007/04/25 17:30:59 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.78 2007/04/27 10:24:48 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -151,9 +151,12 @@
 ;  (apply (function format) text more-args))
  
 ; (aq-find-good-key 'cua-paste)
+; (aq-find-good-key #'nil)
 
 (defun aq-shortcut (text symbol &rest more-args)
-  (if (if (boundp 'osx-key-mode) osx-key-mode nil)
+  ;; symbol can be nil in some circumstances 
+  ;; (e.g. in tool-bar-map from early initialization)
+  (if (and symbol (if (boundp 'osx-key-mode) osx-key-mode nil))
       (condition-case err
 	  (progn
 	    (let* ((case-fold-search nil)
