@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.74 2007/04/25 17:02:40 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.75 2007/04/27 21:29:46 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -781,6 +781,7 @@ Defaults to nil if the major mode doesn't define a menu."
 				   'aquamacs-google-lookup))
     (define-key map [aq-cm-sep3] '(menu-item "--"))
     (define-key map [switch-buffer] nil)
+    (define-key map [change-mode] nil)
     (define-key map [mode-menu] nil)
     (define-key map [aq-cm-sep4] '(menu-item "--"))
     (define-key map [yank-here] '(menu-item "Yank here" 
@@ -810,8 +811,13 @@ Its content is specified in the keymap `aquamacs-context-menu-map'."
 
     (define-key aquamacs-context-menu-map [switch-buffer] 
       `(menu-item "Switch to Buffer "   
-	      ,(aquamacs-make-mouse-buffer-menu)
-	      :help "Show a different buffer in this frame")))
+		  ,(aquamacs-make-mouse-buffer-menu)
+		  :help "Show a different buffer in this frame"))
+    (define-key aquamacs-context-menu-map [change-mode] 
+      `(menu-item "Change Major Mode "   
+		  ,menu-bar-change-mode-menu
+		  :help "Show a different buffer in this frame")))
+  
   ;; move popup menu a little so mouse pointer is over first entry
   ;; not needed
   ;; ((pos
