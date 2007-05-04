@@ -5,18 +5,17 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.22 2006/06/29 16:52:55 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.23 2007/05/04 12:50:28 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
 
-
-;; GNU Emacs is free software; you can redistribute it and/or modify
+;; Aquamacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation; either version 2, or (at your option)
 ;; any later version.
 
-;; GNU Emacs is distributed in the hope that it will be useful,
+;; Aquamacs is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
@@ -26,7 +25,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, David Reitter
+;; Copyright (C) 2005, 2007 David Reitter
 
 
 ; remove an element from an associative list (alist) 
@@ -162,6 +161,20 @@ Elements of ALIST that are not conses are ignored."
 	  (setcdr tail (cdr tail-cdr))
 	(setq tail tail-cdr))))
   alist)
+
+
+(defun aq-list-contains (list element)
+  "Return non-nil if the LIST contains ELEMENT. Aquamacs only.
+Comparison is done with `eq'."
+  (let (first result)
+    (while list
+      (if (not (eq (car-safe list) element))
+	  (setq list (cdr-safe list))
+	(setq list nil)
+	(setq result t))
+      )
+    result))
+;; (aq-list-contains (list 1 2 3 4 5 'a 'b nil 'x) 1)
 
 
 (defun fontset-exist-p (font)
