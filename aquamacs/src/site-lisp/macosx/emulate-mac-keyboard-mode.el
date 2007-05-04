@@ -1,6 +1,6 @@
 ;; emulate-mac-*-keyboard-modes for Aquamacs
-;; (C) 2005 by David Reitter
-;; do not copy / redistribute. All rights reserved.
+;; (C) 2005,2007 by David Reitter
+;; do not copy / redistribute outside of Aquamacs. All rights reserved.
 
 ;; This defines multiple global minor modes, each of which
 ;; emulates common keys of a keyboard layout.
@@ -76,10 +76,16 @@ inserted for the key. Example:
 ;; (make-emulate-mac-keyboard-mode-map 'german)   
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(require 'aquamacs-tools) ;; aq-list-contains
+  
+
 (defun emmkm-key-binding (key)
-  (if overriding-terminal-local-map
-      (lookup-key overriding-terminal-local-map key)
-    (key-binding key)))
+  (or
+   (if overriding-terminal-local-map
+       (lookup-key overriding-terminal-local-map key)
+     (key-binding key))
+   ;; not all keys are bound to self-insert-command -- e.g. the pound sign.
+   'self-insert-command))
 
 ;; also add it to isearch-mode-map
 (defun make-emulate-mac-keyboard-mode-map (language)
@@ -103,7 +109,7 @@ ey`%s' was off.
 This command is part of `%s'." string-rep language mode-name mode-name)
 				'(interactive "p") 
 				;; was called using Meta modifier?
-				`(if (list-contains (event-modifiers 
+				`(if (aq-list-contains (event-modifiers 
 						     last-command-event)
 						    'meta)
 				     (let ((last-command-char ,(if (stringp (cdr x))
