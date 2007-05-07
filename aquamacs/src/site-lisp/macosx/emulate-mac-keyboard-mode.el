@@ -77,15 +77,16 @@ inserted for the key. Example:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'aquamacs-tools) ;; aq-list-contains
-  
+
 
 (defun emmkm-key-binding (key)
+  (let ((key-char (vector (string-to-char "£"))))
   (or
    (if overriding-terminal-local-map
-       (lookup-key overriding-terminal-local-map key)
-     (key-binding key))
+       (lookup-key overriding-terminal-local-map key-char)
+     (key-binding key-char))
    ;; not all keys are bound to self-insert-command -- e.g. the pound sign.
-   'self-insert-command))
+   'self-insert-command)))
 
 ;; also add it to isearch-mode-map
 (defun make-emulate-mac-keyboard-mode-map (language)
