@@ -87,6 +87,7 @@ if test "${BUILD_GNU_EMACS}" == "yes"; then
     mv ${NAME}.dmg.bz2 ${DEST}/
 
     echo "If succeeded, result in " ${NAME}.dmg  >>$LOG  
+    date >>${LOG}
 
 fi
 
@@ -133,6 +134,8 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
     else
 	echo "Build failed."
     fi
+    date >>${LOG}
+
 
 # rm -rf $DEST/Aquamacs\ Emacs.app
 
