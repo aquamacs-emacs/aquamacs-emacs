@@ -1,6 +1,8 @@
 \documentclass[11pt(,letterpaper]{article}
 \usepackage[latin1]{inputenc}
 % Choose C-x f RET latin-1 to save this file in Emacs
+\usepackage[left=3cm,top=2cm,right=4cm,bottom=3cm,nohead]{geometry}
+
 \usepackage{graphicx} 
 \usepackage{html}
 \usepackage{rotating}
@@ -14,6 +16,7 @@ Manual}
 \tableofcontents
 \pagebreak
 
+\newcommand\file{\tt\small}
 
 
 \section{Aquamacs Emacs: a User-friendly Emacs Distribution}
@@ -420,7 +423,7 @@ and Table \ref{tab:command} for details.
 
 
 
-\begin{table}[t]
+\begin{table}[thp]
 \begin{center}
  \begin{tabular}{|l|l|l|}
 \hline  \textbf{Shortcut} &  \textbf{Elisp Command} &   \textbf{Function}\\ 
@@ -436,12 +439,12 @@ and Table \ref{tab:command} for details.
 \hline Apple-V & yank & Paste text\\
 
 \hline Apple-C & clipboard-kill-ring-save & Copy text\\
-\hline Apple-Option-C & aquamacs-clipboard-kill-ring-save-secondary & Copy text
-from secondary selection\\
+\hline Apple-Option-C & aquamacs-clipboard-kill- & Copy text
+from secondary selection\\ & ring-save-secondary  \\
 
 \hline Apple-X &  clipboard-kill-region & Cut text\\
-\hline Apple-Option-X & aquamacs-clipboard-kill-secondary & Cut text
-from secondary selection\\
+\hline Apple-Option-X & aquamacs-clipboard- & Cut text
+from secondary selection\\ & kill-secondary \\
 
 \hline Apple-S &  save-buffer & Save file\\
 
@@ -464,7 +467,8 @@ from secondary selection\\
 \hline Apple-{ / } / '& (un)comment-region-or-line & Comment out or in the \\ & current line or region if marked  &\\
 
 \hline Apple-Backspace & kill-whole-visual-line & Deletes the current line \\
-\hline Apple-Delete & kill-visual-line & Deletes the remainder of the current line \\
+\hline Apple-Delete & kill-visual-line & Deletes the remainder of the
+\\ & & current line \\
 
 \hline Apple-Q & save-buffers-kill-emacs & Save file, exit program\\
 
@@ -484,7 +488,7 @@ from secondary selection\\
 \end{table}
 
 
-\begin{table}[t]
+\begin{table}[htp]
 \begin{center}
  \begin{tabular}{|c|c|}
 \hline \textbf{Emacs Command Key} & \textbf{Aquamacs / Mac Command Key}\\
@@ -514,18 +518,18 @@ practice and provide no support for it.}
 We recommend that user customizations be placed in specific locations:
 
 \begin{itemize}
-\item /Library/Preferences/Emacs/Preferences.el: Preferences for all Carbon  Emacs installations
-\item /Library/Preferences/Aquamacs Emacs/Preferences.el: Preferences for  Aquamacs and for all users
-\item /Users/username/Library/Preferences/Emacs/Preferences.el: User-specific  preferences for all Carbon Emacs installations
-\item /Users/username/Library/Preferences/Aquamacs Emacs/Preferences.el: User-specific  preferences for Aquamacs
+\item {\file /Library/Preferences/Aquamacs Emacs/Preferences.el}: Preferences for  Aquamacs and for all users
+\item {\file /Users/User Name/Library/Preferences/Aquamacs
+    Emacs/Preferences.el}: \\ User-specific  preferences for Aquamacs
 \end{itemize}
 
-If in doubt, use the last option:
-\begin{itemize}
-\item /Users/username/Library/Preferences/Aquamacs Emacs/Preferences.el
-\end{itemize}
-
-This replaces the usual ~/.emacs file, which is still loaded for  compatibility.
+If in doubt, use the last option. This replaces the usual ~/.emacs file, which is still loaded for
+compatibility.\footnote{Two more files are loaded as well for
+  compatibility with earlier Aquamacs versions: \\
+  {\file /Library/Preferences/Emacs/Preferences.el} and \\
+  {\file /Users/User Name/Library/Preferences/Emacs/Preferences.el.}
+  \\ The use of
+  these files is not recommended.}
 
 Below are some specific customization options and groups that may be of interest:
 
@@ -679,8 +683,8 @@ Adding standard Emacs packages is easy as well.
 
 All files named \emph{site-start.el} anywhere in the load-path
     are loaded at startup, before the user's init files are
-    loaded. For example, such a file may be placed in
-    \~/Library/Application Support/Aquamacs Emacs/myPlugin. 
+    loaded. For example, such a file may be placed in \\
+   {\file /Users/User Name/Library/Application Support/Aquamacs Emacs/myPlugin}. 
 
 The load-path is automatically extended to cover all subdirectories in standard paths (see Section \ref{standardpaths}).
 
@@ -689,29 +693,39 @@ If a plug-in needs to execute code earlier in the initialization phase, that is,
 Note that plug-ins should not make any assumptions about whether a frame exists or is visible.
 
 
-\subsection{Load-path}
+\subsection{Load path}
 
 Aquamacs is able to find configuration files and Emacs packages
 from any of the following locations (load-path). 
 \label{standardpaths}
 
-{\tt
-/ Library/ Application Support /Aquamacs Emacs / \\
-/ Users / User Name / Library/ Preferences / Aquamacs Emacs/\\
- / Library/Application Support / Emacs / \\
- / Users / User Name / Library/ Preferences / Emacs/\\
-}
-
+\begin{itemize}  {\file
+  \item  /Library/Application Support/Aquamacs Emacs/
+  \item  /Users/User Name/Library/Preferences/Aquamacs Emacs/
+    \\
+  }
+\end{itemize}
 The following paths are available in the load-path for individual preference settings. \emph{They should not be used if you distribute a point-and-click installer package.}
+\begin{itemize}  {\file
+  \item  /Library/Preferences/Aquamacs Emacs/
+  \item  /Users/User Name/Library/Preferences/Aquamacs Emacs/
+  }
+\end{itemize}
 
-{\tt
-/ Library/ Preferences /Aquamacs Emacs / \\
-/ Users / User Name/Library/Preferences / Aquamacs Emacs/\\
- / Library/Preferences / Emacs / \\
- / Users / User Name / Library/ Preferences/ Emacs/\\
-}
 
-All subsequent directories are added recursively, so Aquamacs will find any path that starts below. Type {\tt C-h v load-path} for more information.
+All subsequent directories are added recursively, so Aquamacs will
+find any path that starts below. Type {\tt C-h v load-path} for more
+information.\footnote{The following paths are loaded for backward
+  compatibility reasons:{\file
+    \begin{itemize}\item 
+      /Library/Application Support/Emacs/
+\item       /Library/Preferences/Emacs/ \item /Users/User
+      Name/Library/Preferences/Emacs/ \item /Users/User
+      Name/Library/Preferences/Emacs/
+    \end{itemize}
+.} Do not use these paths.}\\
+
+
 
 \subsection{Disabling a plug-in or a load-path}
 
@@ -729,8 +743,9 @@ of your changes aren't active after you've saved your work (into the
 Aquamacs application bundle) and restart. That is because some of the
 code is precompiled into the Aquamacs binary and not loaded from the
 source (or .elc / .el.gz) files. To alleviate that problem, create a
-file ``\~/Library/Application Support/Aquamacs
-Emacs/site-prestart.el'' with the following content:
+file\\ 
+{\file /Users/User Name/Library/Application Support/Aquamacs
+Emacs/site-prestart.el} \\ with the following content:
 
 \texttt{(setq aquamacs-reload-preloaded-files t)}
 
