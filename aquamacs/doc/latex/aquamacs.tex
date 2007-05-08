@@ -1,8 +1,7 @@
-\documentclass[11pt(,letterpaper]{article}
+\documentclass[11pt,letterpaper]{article}
 \usepackage[latin1]{inputenc}
 % Choose C-x f RET latin-1 to save this file in Emacs
 \usepackage[left=3cm,top=2cm,right=4cm,bottom=3cm,nohead]{geometry}
-
 \usepackage{graphicx} 
 \usepackage{html}
 \usepackage{rotating}
@@ -10,13 +9,14 @@
 % \author{David Reitter and Kevin Walzer}
 \title{Aquamacs Emacs\\
 Manual}
+
+\newcommand{\ttfile}{\tt\small}
+
 \begin{document}
 \maketitle
 
 \tableofcontents
 \pagebreak
-
-\newcommand\file{\tt\small}
 
 
 \section{Aquamacs Emacs: a User-friendly Emacs Distribution}
@@ -440,11 +440,11 @@ and Table \ref{tab:command} for details.
 
 \hline Apple-C & clipboard-kill-ring-save & Copy text\\
 \hline Apple-Option-C & aquamacs-clipboard-kill- & Copy text
-from secondary selection\\ & ring-save-secondary  \\
+from secondary selection\\ & ring-save-secondary  &\\
 
 \hline Apple-X &  clipboard-kill-region & Cut text\\
 \hline Apple-Option-X & aquamacs-clipboard- & Cut text
-from secondary selection\\ & kill-secondary \\
+from secondary selection\\ & kill-secondary &\\
 
 \hline Apple-S &  save-buffer & Save file\\
 
@@ -518,16 +518,16 @@ practice and provide no support for it.}
 We recommend that user customizations be placed in specific locations:
 
 \begin{itemize}
-\item {\file /Library/Preferences/Aquamacs Emacs/Preferences.el}: Preferences for  Aquamacs and for all users
-\item {\file /Users/User Name/Library/Preferences/Aquamacs
+\item {\ttfile /Library/Preferences/Aquamacs Emacs/Preferences.el}: Preferences for  Aquamacs and for all users
+\item {\ttfile /Users/User Name/Library/Preferences/Aquamacs
     Emacs/Preferences.el}: \\ User-specific  preferences for Aquamacs
 \end{itemize}
 
 If in doubt, use the last option. This replaces the usual ~/.emacs file, which is still loaded for
 compatibility.\footnote{Two more files are loaded as well for
   compatibility with earlier Aquamacs versions: \\
-  {\file /Library/Preferences/Emacs/Preferences.el} and \\
-  {\file /Users/User Name/Library/Preferences/Emacs/Preferences.el.}
+  {\ttfile /Library/Preferences/Emacs/Preferences.el} and \\
+  {\ttfile /Users/User Name/Library/Preferences/Emacs/Preferences.el.}
   \\ The use of
   these files is not recommended.}
 
@@ -684,7 +684,7 @@ Adding standard Emacs packages is easy as well.
 All files named \emph{site-start.el} anywhere in the load-path
     are loaded at startup, before the user's init files are
     loaded. For example, such a file may be placed in \\
-   {\file /Users/User Name/Library/Application Support/Aquamacs Emacs/myPlugin}. 
+   {\ttfile /Users/User Name/Library/Application Support/Aquamacs Emacs/myPlugin}. 
 
 The load-path is automatically extended to cover all subdirectories in standard paths (see Section \ref{standardpaths}).
 
@@ -699,14 +699,14 @@ Aquamacs is able to find configuration files and Emacs packages
 from any of the following locations (load-path). 
 \label{standardpaths}
 
-\begin{itemize}  {\file
+\begin{itemize}  {\ttfile
   \item  /Library/Application Support/Aquamacs Emacs/
   \item  /Users/User Name/Library/Preferences/Aquamacs Emacs/
     \\
   }
 \end{itemize}
 The following paths are available in the load-path for individual preference settings. \emph{They should not be used if you distribute a point-and-click installer package.}
-\begin{itemize}  {\file
+\begin{itemize}  {\ttfile
   \item  /Library/Preferences/Aquamacs Emacs/
   \item  /Users/User Name/Library/Preferences/Aquamacs Emacs/
   }
@@ -716,7 +716,7 @@ The following paths are available in the load-path for individual preference set
 All subsequent directories are added recursively, so Aquamacs will
 find any path that starts below. Type {\tt C-h v load-path} for more
 information.\footnote{The following paths are loaded for backward
-  compatibility reasons:{\file
+  compatibility reasons:{\ttfile
     \begin{itemize}\item 
       /Library/Application Support/Emacs/
 \item       /Library/Preferences/Emacs/ \item /Users/User
@@ -744,7 +744,7 @@ Aquamacs application bundle) and restart. That is because some of the
 code is precompiled into the Aquamacs binary and not loaded from the
 source (or .elc / .el.gz) files. To alleviate that problem, create a
 file\\ 
-{\file /Users/User Name/Library/Application Support/Aquamacs
+{\ttfile /Users/User Name/Library/Application Support/Aquamacs
 Emacs/site-prestart.el} \\ with the following content:
 
 \texttt{(setq aquamacs-reload-preloaded-files t)}
@@ -832,7 +832,7 @@ Drew Adams;
 Emil Astrom; 
 Stefan Bruda; 
 Steve Dodd;  
-Massimiliano Gubinelli (Emacs icon); 
+Massimiliano Gubinelli (Aquamacs ``gnu'' icon); 
 Taiichi Hashimoto;
 T. Hiromatsu; 
 Kyle E. Jones; 
@@ -852,7 +852,7 @@ Seiji Zenitani; and many others.
 
 Aquamacs is based on GNU Emacs, which is the work of Richard Stallman
 and many other developers, in particular Andrew Choi (original GNU
-Emacs-to-MacOS/OSX port), Steven Tamm and Mitsuharu Yamamoto
+Emacs-to-MacOS and OSX ports), Steven Tamm and Mitsuharu Yamamoto
 (continued port development). We also would like to acknowledge the work
 of the many authors of the major modes included.
 
