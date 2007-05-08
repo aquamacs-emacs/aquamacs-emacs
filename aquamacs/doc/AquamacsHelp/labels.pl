@@ -89,12 +89,12 @@ $key = q/theme.jpg/;
 $external_latex_labels{$key} = q|2|; 
 $noresave{$key} = "$nosave";
 
-$key = q/standardpaths/;
-$external_latex_labels{$key} = q|5.2|; 
-$noresave{$key} = "$nosave";
-
 $key = q/frame-appearance-styles/;
 $external_latex_labels{$key} = q|3.3.3|; 
+$noresave{$key} = "$nosave";
+
+$key = q/standardpaths/;
+$external_latex_labels{$key} = q|5.2|; 
 $noresave{$key} = "$nosave";
 
 1;
