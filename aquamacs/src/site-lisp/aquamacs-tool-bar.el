@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tool-bar.el,v 1.11 2007/04/22 23:10:51 davidswelt Exp $ 
+;; Last change: $Id: aquamacs-tool-bar.el,v 1.12 2007/05/09 23:21:38 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -100,11 +100,13 @@ This will update the keymap `aquamacs-menu-bar-showhide-toolbar-items-menu'."
 	   'meaning
 	   (if (nth 3 item)
 		;; go over all properties of item
-		(let ((img (aq-list-has-property-element item :image)))
+		(let ((img (aq-list-has-property-element item :image))
+		      (vis (aq-list-has-property-element item :visible 'none))
+		      (ena (aq-list-has-property-element item :enable 'none)))
 		  (list (car item) 
 			:command (nth 3 item)
-		  :visible (aq-list-has-property-element item :visible)
-		  :enable (aq-list-has-property-element item :enable)
+		  :visible (if (eq vis 'none) t vis)
+		  :enable (if (eq ena 'none) t ena)
 		  :image (vector img (elt img 1)) ;; 1st: Emacs, 2nd: XEma
 		  :help (aq-list-has-property-element item :help)))
 	     (let ((img (aq-list-has-property-element item :image)))
