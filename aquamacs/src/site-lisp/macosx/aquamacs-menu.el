@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.80 2007/05/11 07:19:19 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.81 2007/05/11 07:54:35 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -743,6 +743,9 @@ both existing buffers and buffers that you subsequently create."
     (mac-font-panel-mode 1))
 
  ;; this is a redefine
+
+  (define-key menu-bar-showhide-menu [mac-font-panel-mode]
+    nil)
   (define-key menu-bar-options-menu [mouse-set-font]
   `(menu-item ,(aq-shortcut "Show Fonts (this Frame)...                 " 
 			    'mac-font-panel-mode)
@@ -752,6 +755,14 @@ both existing buffers and buffers that you subsequently create."
 	       :help "Select a font from list of known fonts/fontsets"))
 
 )
+
+(define-key menu-bar-options-menu [highlight-paren-mode] nil)
+(define-key menu-bar-options-menu [highlight-separator] nil)
+(define-key-after menu-bar-showhide-menu [highlight-separator] '("--"))
+(define-key-after menu-bar-showhide-menu [highlight-paren-mode]
+  (menu-bar-make-mm-toggle show-paren-mode
+			   "Paren Match Highlighting"
+			   "Highlight matching/mismatched parentheses at cursor (Show Paren mode)"))
 
 (easy-menu-add-item  nil '("Options")
   ["-" nil nil] 'mouse-set-font)
