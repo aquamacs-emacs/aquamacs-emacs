@@ -5,21 +5,21 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.79 2007/04/27 11:57:44 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.80 2007/05/11 07:19:19 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
 
 ;; Attribution: Leave this header intact in case you redistribute this file.
 ;; Attribution must be given in application About dialog or similar,
-;; "Contains Aquamacs Menu by D fReitter" does the job.
+;; "Contains Aquamacs Menu by D Reitter" does the job.
 ;; Apart from that, released under the GPL:
-;; GNU Emacs is free software; you can redistribute it and/or modify
+;; Aquamacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation; either version 2, or (at your option)
 ;; any later version.
 
-;; GNU Emacs is distributed in the hope that it will be useful,
+;; Aquamacs is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
@@ -29,7 +29,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, David Reitter
+;; Copyright (C) 2005, 2006, 2007 David Reitter
  
 
 (require 'easymenu)
@@ -714,7 +714,7 @@ both existing buffers and buffers that you subsequently create."
 				   (eq 'turn-on-longlines text-mode-hook))))
   'auto-fill-mode
   )
-
+ 
 ;; in edit menu
 
 (define-key menu-bar-search-menu [case-fold-search]
@@ -755,6 +755,10 @@ both existing buffers and buffers that you subsequently create."
 
 (easy-menu-add-item  nil '("Options")
   ["-" nil nil] 'mouse-set-font)
+
+(define-key menu-bar-options-menu [blink-cursor-mode] nil)
+(define-key menu-bar-options-menu [cursor-separator] nil)
+
 
 (define-key-after menu-bar-options-menu [aquamacs-color-theme-select]
   `(menu-item "Show Color Themes (this Frame)..." aquamacs-color-theme-select
