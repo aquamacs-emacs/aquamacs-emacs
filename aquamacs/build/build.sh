@@ -5,7 +5,7 @@ export CVS_RSH=ssh
 if test "$AQUAMACS_CVS_PREFIX" ; then
     CVS_PREFIX=$AQUAMACS_CVS_PREFIX
 else
-    CVS_PREFIX="cvs -z3 -d:pserver:anonymous@cvs.aquamacs.org:/cvsroot/aquamacs"
+    CVS_PREFIX="cvs -z3 -d:pserver:anonymous@cvs.aquamacs.org:/cvsroot/aquamacs -r EMACS_22_BASE"
 fi
 
 AQ_PREFIX=`pwd`
