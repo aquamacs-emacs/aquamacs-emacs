@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-mode-defaults.el,v 1.20 2007/04/24 07:20:39 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-defaults.el,v 1.21 2007/05/18 08:41:55 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -32,7 +32,10 @@
 
 ;; load auctex if present 
 
-(ignore-errors (require 'auctex-config nil t))
+(condition-case nil 
+    (require 'auctex-config nil t)
+  (error nil))
+
 (defun smart-dnd-latex ()
    (smart-dnd-setup
     '(
@@ -51,8 +54,9 @@
 
 ;; JDEE
 
-(ignore-errors (require 'jde-config nil t))
-
+(condition-case nil 
+    (require 'jde-config nil t)
+  (error nil))
 
 
 ;; NXML
