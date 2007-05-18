@@ -15,3 +15,5 @@ The elements of LIST are not copied, just the list structure itself."
 	(prog1 (nreverse res) (setcdr res list)))
     (car list)))
 
+
+(provide 'aquamacs-cl)
