@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.14 2007/03/06 00:48:36 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.15 2007/05/18 07:44:34 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -37,8 +37,8 @@
 ;; Copyright (C) 2005, 2006, David Reitter, all rights reserved.
 
  
-
-
+; (require 'cl)
+(require 'aquamacs-cl)
  
  
 ; update the help-mode specification with a fit-frame
@@ -555,7 +555,7 @@ for which the menu is being updated."
   (setq appstyle-mode-menu
 	(aquamacs-define-mode-menu-1 
 
-	 (reverse (sort (copy-list 
+	 (reverse (sort (aq-copy-list 
 			 (mapcar 'car aquamacs-default-styles))
 			(lambda (a b) (string< 
 				       (upcase (symbol-name a)) 
@@ -830,7 +830,7 @@ for all frames with the current major-mode."
 ;; 	   :help "Apply frame style of some major mode."
 ;; 	   )))))
       
-;;    (reverse (sort (copy-list aquamacs-default-styles)
+;;    (reverse (sort (aq-copy-list aquamacs-default-styles)
 ;; 		  (lambda (a b) (string< 
 ;; 				 (upcase (symbol-name (car a))) 
 ;; 				 (upcase (symbol-name (car b)))))))
