@@ -13,6 +13,10 @@
 ;; emulate-mac-italian-keyboard-mode
 ;; emulate-mac-french-keyboard-mode
 
+;; Changes:
+
+;; 2007-05-21: Finnish keybindings by Lauri Raittila
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defvar emulate-mac-keyboard-mode-maps nil
@@ -22,7 +26,8 @@ LANGUAGE is a symbol named after the language associated with the keyboard
 layout to be used, and BINDINGS is a list of bindings, each consisting of
 a cons cell (KEY . RESULT), where KEY is a string or other keycode vector 
 denoting the key, and RESULT is a string or key code giving the text to be 
-inserted for the key. Example:
+inserted for the key. Prefixed keybindings are currently not supported.
+Example:
  ((german . ((\"\\M-l\" . \"@\")
  	     (\"\\M-/\" . \"\\\\\"))))")
 
@@ -65,6 +70,17 @@ inserted for the key. Example:
 		("\M-+" . "]")
 		([?\M-à] . "#") ;;  was  ,(kbd "M-\210")
 		 ))
+    (finnish . (("\M-2" . "@")
+ 		("\M-4" . "$")
+ 		("\M-/" . "\\")
+;;		(,[?\M-¨ 32] . "~") ;; won't work - prefix keybinding
+		(,[?\M-¨] . "~")
+ ;;		(,(quote [134219944]) . "~") ;; an alternative
+ 		("\M-7" . "|")
+ 		("\M-(" . "{")
+ 		("\M-8" . "[")
+ 		("\M-)" . "}")
+ 		("\M-9" . "]")))
     (us . (     ("\M-3" . "£")
 		("\M-@" . ,emmkm--euro) ;; euro symbol
 		("\M-6" . "§")))
@@ -73,7 +89,7 @@ inserted for the key. Example:
 		("\M-6" . "§")))))
 
 ;; (define-emulate-mac-keyboard-modes)
-;; (make-emulate-mac-keyboard-mode-map 'german)   
+;; (make-emulate-mac-keyboard-mode-map 'finnish)   
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'aquamacs-tools) ;; aq-list-contains
@@ -110,6 +126,9 @@ ey`%s' was off.
 This command is part of `%s'." string-rep language mode-name mode-name)
 				'(interactive "p") 
 				;; was called using Meta modifier?
+				;; caveat: because of this, prefix key bindings are not supported.
+				;; To Do: check whether a command is bound to the ESC x alternative. 
+				;; Or, better yet, check explicitly for ESC use. (How?)
 				`(if (aq-list-contains (event-modifiers 
 						     last-command-event)
 						    'meta)
@@ -117,7 +136,9 @@ This command is part of `%s'." string-rep language mode-name mode-name)
 								   (string-to-char (cdr x))
 								 (cdr x)))
 					   (kb (emmkm-key-binding ,string-rep)))
+				  
 				       (and kb
+					    
 					    ;; we call the original binding to preserve 
 					    ;; functionality (e.g. in isearch)
 					    (call-interactively kb)))
