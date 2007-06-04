@@ -1,6 +1,6 @@
-diff -p -N -r -x '*.orig' ../emacs-20070221-0/lisp/loadup.el lisp/loadup.el
-*** ../emacs-20070221-0/lisp/loadup.el	2007-02-22 10:53:30.000000000 +0900
---- lisp/loadup.el	2007-02-22 16:15:53.000000000 +0900
+diff -p -N -r -x '*.orig' ../emacs-20070409-0/lisp/loadup.el lisp/loadup.el
+*** ../emacs-20070409-0/lisp/loadup.el	2007-04-09 20:40:49.000000000 +0900
+--- lisp/loadup.el	2007-04-09 20:41:51.000000000 +0900
 ***************
 *** 207,212 ****
 --- 207,215 ----
@@ -13,12 +13,12 @@ diff -p -N -r -x '*.orig' ../emacs-20070221-0/lisp/loadup.el lisp/loadup.el
   (message "%s" (garbage-collect))
   
   (load "vc-hooks")
-diff -p -N -r -x '*.orig' ../emacs-20070221-0/lisp/term/mac-im.el lisp/term/mac-im.el
-*** ../emacs-20070221-0/lisp/term/mac-im.el	1970-01-01 09:00:00.000000000 +0900
---- lisp/term/mac-im.el	2007-02-22 16:15:53.000000000 +0900
+diff -p -N -r -x '*.orig' ../emacs-20070409-0/lisp/term/mac-im.el lisp/term/mac-im.el
+*** ../emacs-20070409-0/lisp/term/mac-im.el	1970-01-01 09:00:00.000000000 +0900
+--- lisp/term/mac-im.el	2007-04-09 20:41:51.000000000 +0900
 ***************
 *** 0 ****
---- 1,208 ----
+--- 1,209 ----
 + ;; mac-im.el --- Input Method for Mac OS X -*-coding: iso-2022-7bit;-*-
 + 
 + ;; Copyright (C) 2005, 2006 HASHIMOTO Taiichi <taiichi2@mac.com>
@@ -110,7 +110,8 @@ diff -p -N -r -x '*.orig' ../emacs-20070221-0/lisp/term/mac-im.el lisp/term/mac-
 +     (setq current-input-method-title title)
 +     (if ctype (setq cursor-type ctype))
 +     (if ccolor (set-cursor-color ccolor))
-+     (force-mode-line-update 'all)))
++     (force-mode-line-update 'all)
++     (if isearch-mode (isearch-update))))
 + 
 + (defun mac-toggle-input-method (&optional arg)
 +   "Function to toggle input method on MacOSX."
@@ -227,9 +228,9 @@ diff -p -N -r -x '*.orig' ../emacs-20070221-0/lisp/term/mac-im.el lisp/term/mac-
 + (define-key special-event-map
 +   [mac-change-input-method] 'mac-handle-input-method-change)
 +       
-diff -p -N -r -x '*.orig' ../emacs-20070221-0/lisp/term/mac-win.el lisp/term/mac-win.el
-*** ../emacs-20070221-0/lisp/term/mac-win.el	2007-02-22 10:53:22.000000000 +0900
---- lisp/term/mac-win.el	2007-02-22 16:15:53.000000000 +0900
+diff -p -N -r -x '*.orig' ../emacs-20070409-0/lisp/term/mac-win.el lisp/term/mac-win.el
+*** ../emacs-20070409-0/lisp/term/mac-win.el	2007-04-09 20:40:41.000000000 +0900
+--- lisp/term/mac-win.el	2007-04-09 20:41:51.000000000 +0900
 *************** either in the current buffer or in the e
 *** 2086,2094 ****
   				      (concat msg active-input-string)))
@@ -261,11 +262,11 @@ diff -p -N -r -x '*.orig' ../emacs-20070221-0/lisp/term/mac-win.el lisp/term/mac
   	(overlay-put mac-ts-active-input-overlay 'before-string
   		     active-input-string))
         (mac-unread-string (funcall decode-fun confirmed coding)))
-diff -p -N -r -x '*.orig' ../emacs-20070221-0/src/Makefile.in src/Makefile.in
-*** ../emacs-20070221-0/src/Makefile.in	2007-02-22 10:53:05.000000000 +0900
---- src/Makefile.in	2007-02-22 16:15:53.000000000 +0900
+diff -p -N -r -x '*.orig' ../emacs-20070409-0/src/Makefile.in src/Makefile.in
+*** ../emacs-20070409-0/src/Makefile.in	2007-04-09 20:40:23.000000000 +0900
+--- src/Makefile.in	2007-04-09 20:44:30.000000000 +0900
 *************** CYGWIN_OBJ = sheap.o
-*** 576,582 ****
+*** 574,580 ****
   
   #ifdef HAVE_CARBON
   mac = $(dot)$(dot)/mac/
@@ -273,7 +274,7 @@ diff -p -N -r -x '*.orig' ../emacs-20070221-0/src/Makefile.in src/Makefile.in
   emacsapp = $(PWD)/$(mac)Emacs.app/
   emacsappsrc = ${srcdir}/../mac/Emacs.app/
   #endif
---- 576,582 ----
+--- 574,580 ----
   
   #ifdef HAVE_CARBON
   mac = $(dot)$(dot)/mac/
@@ -282,7 +283,7 @@ diff -p -N -r -x '*.orig' ../emacs-20070221-0/src/Makefile.in src/Makefile.in
   emacsappsrc = ${srcdir}/../mac/Emacs.app/
   #endif
 *************** obj=    dispnew.o frame.o scroll.o xdisp
-*** 603,609 ****
+*** 601,607 ****
      in case they are needed there.  */
   SOME_MACHINE_OBJECTS = sunfns.o dosfns.o msdos.o \
     xterm.o xfns.o xmenu.o xselect.o xrdb.o xsmfns.o fringe.o image.o \
@@ -290,7 +291,7 @@ diff -p -N -r -x '*.orig' ../emacs-20070221-0/src/Makefile.in src/Makefile.in
     w32.o w32bdf.o w32console.o w32fns.o w32heap.o w32inevt.o \
     w32menu.o w32proc.o w32reg.o w32select.o w32term.o w32xfns.o
   
---- 603,609 ----
+--- 601,607 ----
      in case they are needed there.  */
   SOME_MACHINE_OBJECTS = sunfns.o dosfns.o msdos.o \
     xterm.o xfns.o xmenu.o xselect.o xrdb.o xsmfns.o fringe.o image.o \
@@ -299,21 +300,21 @@ diff -p -N -r -x '*.orig' ../emacs-20070221-0/src/Makefile.in src/Makefile.in
     w32menu.o w32proc.o w32reg.o w32select.o w32term.o w32xfns.o
   
 *************** macterm.o: blockinput.h atimer.h systime
-*** 1281,1286 ****
---- 1281,1290 ----
-    frame.h charset.h ccl.h dispextern.h fontset.h termhooks.h termopts.h \
-    termchar.h gnu.h disptab.h buffer.h window.h keyboard.h $(INTERVAL_SRC) \
+*** 1286,1291 ****
+--- 1286,1295 ----
     process.h coding.h $(config_h)
+  macselect.o: blockinput.h atimer.h systime.h macterm.h macgui.h frame.h \
+    keymap.h $(config_h)
 + macim.o: blockinput.h atimer.h systime.h syssignal.h macterm.h macgui.h \
 +   frame.h charset.h ccl.h dispextern.h fontset.h termhooks.h termopts.h \
 +   termchar.h gnu.h disptab.h buffer.h window.h keyboard.h $(INTERVAL_SRC) \
 +   process.h coding.h $(config_h)
-  macselect.o: blockinput.h macterm.h macgui.h frame.h keymap.h $(config_h)
   
   ${emacsapp}Contents/Resources/English.lproj:
-diff -p -N -r -x '*.orig' ../emacs-20070221-0/src/keyboard.c src/keyboard.c
-*** ../emacs-20070221-0/src/keyboard.c	2007-02-22 10:53:05.000000000 +0900
---- src/keyboard.c	2007-02-22 16:15:53.000000000 +0900
+  	mkdir -p $@
+diff -p -N -r -x '*.orig' ../emacs-20070409-0/src/keyboard.c src/keyboard.c
+*** ../emacs-20070409-0/src/keyboard.c	2007-04-09 20:40:23.000000000 +0900
+--- src/keyboard.c	2007-04-09 20:41:51.000000000 +0900
 *************** Lisp_Object Qmouse_click;
 *** 531,536 ****
 --- 531,539 ----
@@ -327,8 +328,8 @@ diff -p -N -r -x '*.orig' ../emacs-20070221-0/src/keyboard.c src/keyboard.c
   Lisp_Object Qsave_session;
   #ifdef MAC_OS
 *************** kbd_buffer_get_event (kbp, used_mouse_me
-*** 4131,4136 ****
---- 4134,4148 ----
+*** 4151,4156 ****
+--- 4154,4168 ----
   	  kbd_fetch_ptr = event + 1;
   	}
   #endif
@@ -345,8 +346,8 @@ diff -p -N -r -x '*.orig' ../emacs-20070221-0/src/keyboard.c src/keyboard.c
           {
             obj = Fcons (Qsave_session, Qnil);
 *************** syms_of_keyboard ()
-*** 11168,11173 ****
---- 11180,11189 ----
+*** 11192,11197 ****
+--- 11204,11213 ----
     Qlanguage_change = intern ("language-change");
     staticpro (&Qlanguage_change);
   #endif
@@ -357,9 +358,9 @@ diff -p -N -r -x '*.orig' ../emacs-20070221-0/src/keyboard.c src/keyboard.c
     Qdrag_n_drop = intern ("drag-n-drop");
     staticpro (&Qdrag_n_drop);
   
-diff -p -N -r -x '*.orig' ../emacs-20070221-0/src/macim.c src/macim.c
-*** ../emacs-20070221-0/src/macim.c	1970-01-01 09:00:00.000000000 +0900
---- src/macim.c	2007-02-22 16:50:08.000000000 +0900
+diff -p -N -r -x '*.orig' ../emacs-20070409-0/src/macim.c src/macim.c
+*** ../emacs-20070409-0/src/macim.c	1970-01-01 09:00:00.000000000 +0900
+--- src/macim.c	2007-04-09 20:41:51.000000000 +0900
 ***************
 *** 0 ****
 --- 1,270 ----
@@ -633,11 +634,11 @@ diff -p -N -r -x '*.orig' ../emacs-20070221-0/src/macim.c src/macim.c
 + 
 + #endif
 + 
-diff -p -N -r -x '*.orig' ../emacs-20070221-0/src/macterm.c src/macterm.c
-*** ../emacs-20070221-0/src/macterm.c	2007-02-22 10:53:05.000000000 +0900
---- src/macterm.c	2007-02-22 16:15:53.000000000 +0900
+diff -p -N -r -x '*.orig' ../emacs-20070409-0/src/macterm.c src/macterm.c
+*** ../emacs-20070409-0/src/macterm.c	2007-04-09 20:40:23.000000000 +0900
+--- src/macterm.c	2007-04-09 20:41:51.000000000 +0900
 *************** XTread_socket (sd, expected, hold_quit)
-*** 11095,11101 ****
+*** 11132,11138 ****
   	       normally.  */
   	    if (!(mapped_modifiers
   		  & ~(mac_pass_command_to_system ? cmdKey : 0)
@@ -645,7 +646,7 @@ diff -p -N -r -x '*.orig' ../emacs-20070221-0/src/macterm.c src/macterm.c
   	      {
   		OSStatus err;
   
---- 11095,11103 ----
+--- 11132,11140 ----
   	       normally.  */
   	    if (!(mapped_modifiers
   		  & ~(mac_pass_command_to_system ? cmdKey : 0)
@@ -656,8 +657,8 @@ diff -p -N -r -x '*.orig' ../emacs-20070221-0/src/macterm.c src/macterm.c
   		OSStatus err;
   
 *************** XTread_socket (sd, expected, hold_quit)
-*** 11330,11335 ****
---- 11332,11338 ----
+*** 11367,11372 ****
+--- 11369,11375 ----
   	  count++;
   	}
   
@@ -666,8 +667,8 @@ diff -p -N -r -x '*.orig' ../emacs-20070221-0/src/macterm.c src/macterm.c
   
     /* If the focus was just given to an autoraising frame,
 *************** init_tsm ()
-*** 11694,11699 ****
---- 11697,11704 ----
+*** 11755,11760 ****
+--- 11758,11765 ----
   
     NewTSMDocument (sizeof (types) / sizeof (types[0]), types,
   		  &tsm_document_id, 0);
@@ -676,9 +677,9 @@ diff -p -N -r -x '*.orig' ../emacs-20070221-0/src/macterm.c src/macterm.c
   }
   #endif
   
-diff -p -N -r -x '*.orig' ../emacs-20070221-0/src/termhooks.h src/termhooks.h
-*** ../emacs-20070221-0/src/termhooks.h	2007-02-22 10:53:06.000000000 +0900
---- src/termhooks.h	2007-02-22 16:15:53.000000000 +0900
+diff -p -N -r -x '*.orig' ../emacs-20070409-0/src/termhooks.h src/termhooks.h
+*** ../emacs-20070409-0/src/termhooks.h	2007-04-09 20:40:24.000000000 +0900
+--- src/termhooks.h	2007-04-09 20:41:51.000000000 +0900
 *************** enum event_kind
 *** 265,270 ****
 --- 265,274 ----
