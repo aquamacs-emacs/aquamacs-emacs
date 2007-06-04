@@ -27,7 +27,7 @@ PATCHES="test ui-strings
          calm-startup available-screen mouse-button launch-browser
          org-gnu-Aquamacs about-aquamacs puresize
          macfns-dialog-menu menu-bar-visible-frame eval-depth
-          shut-up python-mode"
+          shut-up python-mode intel"
 
 # sendmail-mac - probably not needed any longer - CHECK CHECK CHECK
 
