@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: site-start.el,v 1.25 2007/04/21 14:52:37 davidswelt Exp $
+;; Last change: $Id: site-start.el,v 1.26 2007/06/05 07:56:03 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -29,8 +29,6 @@
 ;; Copyright (C) 2006, 2007: David Reitter
  
 
-;; LAST-MINUTE FIXES
-;; overwriting precompiled things
 
 ; NONE
 ;; one at the end of this file
@@ -39,7 +37,7 @@
 
 ;; Version information
 
-(defvar aquamacs-version "1.0rc4"
+(defvar aquamacs-version "1.0"
 "A string with Aquamacs' version number.
 The format of the string is undefined. 
 For a reliable numerical representation, use `aquamacs-version-id'.")
