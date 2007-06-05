@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.105 2007/04/27 22:18:09 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.106 2007/06/05 07:53:47 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -537,7 +537,8 @@ to the selected frame."
 
 					; and turn on smart frame positioning
 
-  
+  (when window-system
+
   (require 'smart-frame-positioning)
   
   (fset 'winmgr-display-available-pixel-bounds
@@ -551,6 +552,7 @@ to the selected frame."
 
   (smart-frame-positioning-mode t) ;; and turn on!
   (ats "smart-frame-positioning-mode done")
+  )
 
   (defvar mac-pass-option-to-system 'deprecated)
 
