@@ -101,7 +101,8 @@ fi
 
 builddir=${srcdir}
 
-export MYCPPFLAGS="-DUSE_TOOLKIT_SCROLL_BARS -DUSE_TRANSPARENCY -DUSE_ATSUI -DSYNC_INPUT"
+export MYCPPFLAGS="-DUSE_TOOLKIT_SCROLL_BARS -DUSE_TRANSPARENCY -DUSE_ATSUI"
+#  -DSYNC_INPUT  taken out (experimental) 7 June 2007 dr.
 # " -lncurses.5"
  
 ## Default location to place it is /usr/local
@@ -566,6 +567,26 @@ cd "$dest/Contents/MacOS/";
 rm -f "$dest/Contents/Resources/etc/termcap.src"
 cd "$dest/Contents/Resources"
 rm -f "leim/ja-dic/ja-dic.el" "lisp/loaddefs.el"  "lisp/ldefs-boot.el" "site-lisp/edit-modes/ess-mode/etc/other/S-spread/asaprc.ps" etc/*refcard.ps
+
+# byte-compile the site-lisp stuff
+
+cd "$dest/Contents/Resources/site-lisp"
+emacs="$dest/Contents/MacOS/Aquamacs Emacs"
+sourcefiles=`find . -name \*.el`
+for el in $sourcefiles
+do
+  elc=${el}c
+  if [ ! -f $elc ]
+  then
+      echo "Compiling Aquamacs file $el" 
+      "$emacs" -nw -Q -batch -f batch-byte-compile $el 
+      if [ -f $elc ]  # did it  work?
+      then
+	  gzip --best -f $el  # then compress the .el file
+      fi
+  fi
+done
+
 
 # compress the sources
   
