@@ -8,18 +8,17 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs version check
  
-;; Last change: $Id: check-for-updates.el,v 1.16 2007/04/14 15:41:38 davidswelt Exp $
+;; Last change: $Id: check-for-updates.el,v 1.17 2007/06/07 16:00:35 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
-;; Emacs Version: 22.0
 
-;; GNU Emacs is free software; you can redistribute it and/or modify
+;; Aquamacs Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation; either version 2, or (at your option)
 ;; any later version.
 
-;; GNU Emacs is distributed in the hope that it will be useful,
+;; Aquamacs Emacs is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
@@ -29,13 +28,11 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, David Reitter
+;; Copyright (C) 2005, 2007 David Reitter
 
-;
-;
 ; the following is user-settable (to "")
-(defvar aquamacs-version-check-url "http://aquamacs.sourceforge.net/cgi-bin/currentversion.cgi" "URL to check for updates.  ")
-
+(defvar aquamacs-version-check-url "http://aquamacs.org/cgi-bin/currentversion.cgi" "URL to check for updates.  ")
+;; warning: the default used to be aquamacs.sourceforge.net until after 1.0a
 
 (defun aquamacs-check-version-information ()
   (interactive) 
