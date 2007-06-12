@@ -3,6 +3,7 @@
 export CVS_RSH=ssh
 
 AQEMACSSRC='emacs-22.1'
+COPY='copy-to-server'
 
 if test "$AQUAMACS_CVS_PREFIX" ; then
     CVS_PREFIX=$AQUAMACS_CVS_PREFIX
@@ -136,7 +137,7 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
 	
 	# copy to web dir
 
-	if test "$a" == "copy-to-server"; then
+	if test "$COPY" == "copy-to-server"; then
 	    ${AQUAMACS_ROOT}/build/copy-nightly-build.sh
 	fi
 
