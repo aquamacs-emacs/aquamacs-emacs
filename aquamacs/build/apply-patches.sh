@@ -23,11 +23,13 @@ PATCHES="test ui-strings
          recentf-track-minibuf
          pop-to-buffer display-buffer-reuse
          emacs-inline
-         longlines-fillcolumn
+       
          calm-startup available-screen mouse-button launch-browser
          org-gnu-Aquamacs about-aquamacs puresize
          macfns-dialog-menu menu-bar-visible-frame eval-depth
           shut-up python-mode intel"
+#  longlines-fillcolumn  out temporarily
+
 
 # sendmail-mac - probably not needed any longer - CHECK CHECK CHECK
 
