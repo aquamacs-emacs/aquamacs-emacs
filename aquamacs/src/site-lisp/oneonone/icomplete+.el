@@ -4,12 +4,13 @@
 ;; Description: Extensions to `icomplete.el'.
 ;; Author: Drew Adams
 ;; Maintainer: Drew Adams
-;; Copyright (C) 1996-2005, Drew Adams, all rights reserved.
+;; Copyright (C) 1996-2007, Drew Adams, all rights reserved.
 ;; Created: Mon Oct 16 13:33:18 1995
 ;; Version: 21.0
-;; Last-Updated: Wed Dec 07 09:42:15 2005 (-28800 Pacific Standard Time)
+;; Last-Updated: Fri Jan 19 21:13:44 2007 (-28800 Pacific Standard Time)
 ;;           By: dradams
-;;     Update #: 546
+;;     Update #: 635
+;; URL: http://www.emacswiki.org/cgi-bin/wiki/icomplete+.el
 ;; Keywords: help, abbrev, internal, extensions, local
 ;; Compatibility: GNU Emacs 20.x, GNU Emacs 21.x, GNU Emacs 22.x
 ;;
@@ -23,9 +24,14 @@
 ;;
 ;;    Extensions to `icomplete.el'.
 ;;
-;;  New user options (variables) defined here:
+;;  Faces defined here:
 ;;
-;;    `icomplete-choices-face', `icomplete-determined-face'.
+;;    `icompletep-choices', `icompletep-determined',
+;;    `icompletep-keys', `icompletep-nb-candidates'.
+;;
+;;  User option defined here:
+;;
+;;    `icompletep-prospects-length'.
 ;;
 ;;
 ;;  ***** NOTE: The following functions defined in `icomplete.el'
@@ -33,7 +39,8 @@
 ;;
 ;;  `icomplete-completions' -
 ;;     Sorts alternatives and puts them in a different face.
-;;  `icomplete-exhibit' - 
+;;  `icomplete-exhibit' -
+;;     Saves match-data.
 ;;     Doesn't insert if input begins with `(' (e.g.
 ;;       `repeat-complex-command').
 ;;     Set `deactivate-mark' to nil at end, so the insertion doesn't
@@ -44,17 +51,25 @@
 ;;  `icomplete.el'.  So, in your `~/.emacs' file, do this:
 ;;  (eval-after-load "icomplete" '(progn (require 'icomplete+)))
 ;;
-;;
-;;  To Do
-;;  -----
-;;
-;;  1. Use defface, not face variables.
-;;
-;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change log:
 ;;
+;; 2006/07/30 dadams
+;;     icomplete-exhibit: Save match-data.
+;; 2006/07/16 dadams
+;;     Added dark-background face suggestions from Le Wang - thx.
+;; 2006/06/18 dadams
+;;      icomplete-exhibit: Don't insert if Icicles apropos-completing.
+;; 2006/01/07 dadams
+;;      Added :link for sending bug report.
+;; 2006/01/06 dadams
+;;      Added defgroup.  Added :link.
+;;      Renamed: prefix icomplete- to icompletep-.
+;; 2005/12/18 dadams
+;;     Renamed faces without "-face".
+;;     Use defface.  Removed require of def-face-const.el.
+;;     icomplete-prospects-length: defvar -> defcustom.
 ;; 2005/09/30 dadams
 ;;     Commented out redefinitions of primitives, so no longer reset
 ;;       minibuffer-completion-table to nil. Leaving the commented code in for now.
@@ -113,92 +128,110 @@
 (require 'icomplete)
 (and (< emacs-major-version 20) (eval-when-compile (require 'cl))) ;; when, unless
 
-;; Get macro `define-face-const' when this is compiled,
-;; or run interpreted, but not when the compiled code is loaded.
-(eval-when-compile (require 'def-face-const))
-
-
 ;;;;;;;;;;;;;;;;;;;
 
-;;;###autoload
-(unless (boundp 'darkblue-foreground-face)
-  (define-face-const "DarkBlue" nil))
-(defvar icomplete-choices-face darkblue-foreground-face
-  "*Face for minibuffer reminder of possible completion suffixes.")
+(defgroup Icomplete-Plus nil
+  "Icomplete Enhancements."
+  :prefix "icompletep-"
+  :group 'completion :group 'convenience :group 'matching :group 'minibuffer
+  :link `(url-link :tag "Send Bug Report"
+          ,(concat "mailto:" "drew.adams" "@" "oracle" ".com?subject=\
+icomplete+.el bug: \
+&body=Describe bug here, starting with `emacs -q'.  \
+Don't forget to mention your Emacs and library versions."))
+  :link '(url-link :tag "Other Libraries by Drew"
+          "http://www.emacswiki.org/cgi-bin/wiki/DrewsElispLibraries")
+  :link '(url-link :tag "Download"
+          "http://www.emacswiki.org/cgi-bin/wiki/icomplete+.el")
+  :link '(url-link :tag "Description"
+          "http://www.emacswiki.org/cgi-bin/wiki/IcompleteMode#IcompleteModePlus")
+  :link '(emacs-commentary-link :tag "Commentary" "icomplete+")
+  )
 
-;;;###autoload
-(unless (boundp 'seagreen-foreground-face)
-  (define-face-const "SeaGreen" nil))
-(defvar icomplete-determined-face seagreen-foreground-face
-  "*Face for minibuffer reminder of possible completion prefix.")
+(defface icompletep-choices
+    '((((background dark)) (:foreground "Snow4"))
+      (t (:foreground "DarkBlue")))
+  "*Face for minibuffer reminder of possible completion suffixes."
+  :group 'Icomplete-Plus)
 
-;;;###autoload
-(unless (boundp 'darkmagenta-foreground-face)
-  (define-face-const "DarkMagenta" nil))
-(defvar icomplete-nb-candidates-face darkmagenta-foreground-face
+(defface icompletep-determined
+    '((t (:foreground "SeaGreen")))
+  "*Face for minibuffer reminder of possible completion prefix."
+  :group 'Icomplete-Plus)
+
+(defface icompletep-nb-candidates
+  '((((background dark)) (:foreground "SpringGreen"))
+    (t (:foreground "DarkMagenta")))
   "*Face for minibuffer reminder of number of completion candidates.
-This has no effect unless library `icicles.el' is being used.")
+This has no effect unless library `icicles.el' is being used."
+  :group 'Icomplete-Plus)
 
-;;;###autoload
-(unless (boundp 'red-foreground-face)
-  (define-face-const "Red" nil))
-(defvar icomplete-keys-face red-foreground-face
-  "*Face for minibuffer reminder of possible completion key bindings.")
+(defface icompletep-keys
+    '((t (:foreground "Red")))
+  "*Face for minibuffer reminder of possible completion key bindings."
+  :group 'Icomplete-Plus)
 
-(defvar icomplete-prospects-length 100  ; Default was 80
-  "*Length of string displaying icompletion candidates.")
-
+(defcustom icompletep-prospects-length 100 ; Default was 80
+  "*Length of string displaying icompletion candidates."
+  :type 'integer :group 'Icomplete-Plus)
 
 
 
 ;; REPLACES ORIGINAL defined in `icomplete.el':
-;; Doesn't insert if input begins with `(' (e.g. `repeat-complex-command').
+;;
+;; Save match-data.
+;; Don't insert if Icicles apropos-completing.
+;; Don't insert if input begins with `(' (e.g. `repeat-complex-command').
+;;
 ;;;###autoload
 (defun icomplete-exhibit ()
   "Insert icomplete completions display.
 Should be run via minibuffer `post-command-hook'.
 See `icomplete-mode' and `minibuffer-setup-hook'."
   (when (icomplete-simple-completing-p)
-    (let* ((minibuf-begin (if (< emacs-major-version 21)
-                              (point-min)
-                            (minibuffer-prompt-end)))
-           (contents (buffer-substring minibuf-begin (point-max)))
-           (buffer-undo-list t))
-      (save-excursion
-        (goto-char (point-max))
+    (save-match-data
+      (let* ((minibuf-begin (if (< emacs-major-version 21)
+                                (point-min)
+                              (minibuffer-prompt-end)))
+             (contents (buffer-substring minibuf-begin (point-max)))
+             (buffer-undo-list t))
+        (save-excursion
+          (goto-char (point-max))
                                         ; Register the end of input, so we
                                         ; know where the extra stuff
                                         ; (match-status info) begins:
-        (unless (boundp 'icomplete-eoinput)
-          ;; In case it got wiped out by major mode business:
-          (make-local-variable 'icomplete-eoinput))
-        (setq icomplete-eoinput (point))
+          (unless (boundp 'icomplete-eoinput)
+            ;; In case it got wiped out by major mode business:
+            (make-local-variable 'icomplete-eoinput))
+          (setq icomplete-eoinput (point))
                                         ; Insert the match-status information:
-        (when (and (> (point-max) minibuf-begin)
-                   (save-excursion
-                     (goto-char minibuf-begin)
-                     (not (looking-at   ; No (, ", ', 9 etc. at start.
-                           "\\(\\s-+$\\|\\s-*\\(\\s(\\|\\s\"\\|\\s'\\|\\s<\\|[0-9]\\)\\)")))
-		   (or
-		    ;; Don't bother with delay after certain number of chars:
-		    (> (point-max) icomplete-max-delay-chars)
-		    ;; Don't delay if alternatives number is small enough:
-		    (if minibuffer-completion-table
-			(cond ((numberp minibuffer-completion-table)
-			       (< minibuffer-completion-table
-				  icomplete-delay-completions-threshold))
-			      ((sequencep minibuffer-completion-table)
-			       (< (length minibuffer-completion-table)
-				  icomplete-delay-completions-threshold))
-			      ))
-		    ;; Delay - give some grace time for next keystroke, before
-		    ;; embarking on computing completions:
-		    (sit-for icomplete-compute-delay)))
-          (insert
-           (icomplete-completions contents minibuffer-completion-table
-                                  minibuffer-completion-predicate
-                                  (not minibuffer-completion-confirm)))))
-      (setq deactivate-mark nil))))     ; Don't let the insert deactivate the mark.
+          (when (and (or(not (boundp 'icicle-apropos-completing-p))
+                        (not icicle-apropos-completing-p))
+                     (> (point-max) minibuf-begin)
+                     (save-excursion
+                       (goto-char minibuf-begin)
+                       (not (looking-at ; No (, ", ', 9 etc. at start.
+                             "\\(\\s-+$\\|\\s-*\\(\\s(\\|\\s\"\\|\\s'\\|\\s<\\|[0-9]\\)\\)")))
+                     (or
+                      ;; Don't bother with delay after certain number of chars:
+                      (> (point-max) icomplete-max-delay-chars)
+                      ;; Don't delay if alternatives number is small enough:
+                      (if minibuffer-completion-table
+                          (cond ((numberp minibuffer-completion-table)
+                                 (< minibuffer-completion-table
+                                    icomplete-delay-completions-threshold))
+                                ((sequencep minibuffer-completion-table)
+                                 (< (length minibuffer-completion-table)
+                                    icomplete-delay-completions-threshold))
+                                ))
+                      ;; Delay - give some grace time for next keystroke, before
+                      ;; embarking on computing completions:
+                      (sit-for icomplete-compute-delay)))
+            (insert
+             (icomplete-completions contents minibuffer-completion-table
+                                    minibuffer-completion-predicate
+                                    (not minibuffer-completion-confirm)))))
+        (setq deactivate-mark nil))))) ; Don't let the insert deactivate the mark.
 
 
 
@@ -230,7 +263,7 @@ matches exist.
 Keybindings for uniquely matched commands are displayed within the [].
 
 When more than one completion is available, the total number precedes
-the suffixes display, like so: 
+the suffixes display, like so:
   M-x forw    14 (ard-) { char line list...}
 
 If library `icicles.el' is also loaded, then you can cycle
@@ -240,8 +273,7 @@ following the rest of the icomplete info:
   M-x forward-line   [Matched]  (13 more)."
   ;; 'all-completions' doesn't like empty
   ;; minibuffer-completion-table's (ie: (nil))
-  (when (and (listp candidates) (null (car candidates)))
-    (setq candidates nil))
+  (when (and (listp candidates) (null (car candidates))) (setq candidates nil))
   (let ((comps (all-completions name candidates predicate))
         ;; "-determined" - only one candidate
         (open-bracket-determined (if require-match "(" " ["))
@@ -250,35 +282,35 @@ following the rest of the icomplete info:
         nb-candidates nb-candidates-string)
     (setq nb-candidates (length comps))
     ;; `concat'/`mapconcat' is the slow part.  With the introduction of
-    ;; `icomplete-prospects-length', there is no need for `catch'/`throw'.
+    ;; `icompletep-prospects-length', there is no need for `catch'/`throw'.
     (if (null comps) (format (if (fboundp 'icicle-apropos-complete)
                                  "\t%sNo prefix matches%s"
                                "\t%sNo matches%s")
-			     open-bracket-determined
-			     close-bracket-determined)
+                             open-bracket-determined
+                             close-bracket-determined)
       (let* ((most-try (try-completion name (mapcar (function list) comps)))
-	     (most (if (stringp most-try) most-try (car comps)))
-	     (most-len (length most))
-	     (determ (and (> most-len (length name))
-			  (concat open-bracket-determined
-				  (substring most (length name))
-				  close-bracket-determined)))
-	     (open-bracket-prospects "{ ")
-	     (close-bracket-prospects " }")
+             (most (if (stringp most-try) most-try (car comps)))
+             (most-len (length most))
+             (determ (and (> most-len (length name))
+                          (concat open-bracket-determined
+                                  (substring most (length name))
+                                  close-bracket-determined)))
+             (open-bracket-prospects "{ ")
+             (close-bracket-prospects " }")
              ;; "-prospects" - more than one candidate
-	     (prospects-len 0)
+             (prospects-len 0)
              prompt prompt-rest prospects most-is-exact comp)
         (when determ
-          (put-text-property 0 (length determ) 'face icomplete-determined-face determ))
-	(if (eq most-try t)
-	    (setq prospects nil)
-	  (while (and comps (< prospects-len icomplete-prospects-length))
-	    (setq comp (substring (car comps) most-len)
-		  comps (cdr comps))
-	    (cond ((string-equal comp "") (setq most-is-exact t))
-		  ((member comp prospects))
-		  (t (setq prospects (cons comp prospects)
-			   prospects-len (+ (length comp) 1 prospects-len))))))
+          (put-text-property 0 (length determ) 'face 'icompletep-determined determ))
+        (if (eq most-try t)
+            (setq prospects nil)
+          (while (and comps (< prospects-len icompletep-prospects-length))
+            (setq comp (substring (car comps) most-len)
+                  comps (cdr comps))
+            (cond ((string-equal comp "") (setq most-is-exact t))
+                  ((member comp prospects))
+                  (t (setq prospects (cons comp prospects)
+                           prospects-len (+ (length comp) 1 prospects-len))))))
         (setq prompt-rest
               (if prospects
                   (concat open-bracket-prospects
@@ -296,7 +328,7 @@ following the rest of the icomplete info:
                           (setq keys nil))
                         " ]")))
         (put-text-property 0 (length prompt-rest)
-                           'face icomplete-choices-face prompt-rest)
+                           'face 'icompletep-choices prompt-rest)
         (cond ((< nb-candidates 2)
                (setq prompt (concat "      " determ prompt-rest))
                (when (eq last-command this-command)
@@ -305,11 +337,11 @@ following the rest of the icomplete info:
                (setq nb-candidates-string (format "%7d " nb-candidates))
                (put-text-property (string-match "\\S-" nb-candidates-string)
                                   (1- (length nb-candidates-string))
-                                  'face icomplete-nb-candidates-face nb-candidates-string)
+                                  'face 'icompletep-nb-candidates nb-candidates-string)
                (setq prompt (concat nb-candidates-string determ prompt-rest))))
         ;; Highlight keys, after "Matched; " (18 chars).
         (when keys (put-text-property (+ 18 (length determ)) (1- (length prompt))
-                                      'face icomplete-keys-face prompt))
+                                      'face 'icompletep-keys prompt))
         ;; Append mention of number of other cycle candidates (from `icicles.el').
         (when (and (boundp 'icicle-last-completion-candidate)
                    (> icicle-nb-of-other-cycle-candidates 0)
@@ -320,7 +352,7 @@ following the rest of the icomplete info:
                 (format "  (%d more)" icicle-nb-of-other-cycle-candidates))
           (put-text-property (string-match "\\S-" nb-candidates-string)
                              (length nb-candidates-string)
-                             'face icomplete-nb-candidates-face nb-candidates-string)
+                             'face 'icompletep-nb-candidates nb-candidates-string)
           (setq prompt (concat prompt nb-candidates-string)))
         prompt))))
 

@@ -4,14 +4,20 @@
 ;; Description: Automatically resize one-window frames to fit.
 ;; Author: Drew Adams
 ;; Maintainer: Drew Adams
-;; Copyright (C) 2000-2005, Drew Adams, all rights reserved.
+;; Copyright (C) 2000-2007, Drew Adams, all rights reserved.
 ;; Created: Thu Dec  7 10:06:18 2000
 ;; Version: 21.0
-;; Last-Updated: Mon Jul 04 11:37:14 2005
+;; Last-Updated: Fri Jan 19 20:35:18 2007 (-28800 Pacific Standard Time)
 ;;           By: dradams
-;;     Update #: 374
+;;     Update #: 425
+;; URL: http://www.emacswiki.org/cgi-bin/wiki/autofit-frame.el
 ;; Keywords: internal, extensions, convenience, local
 ;; Compatibility: GNU Emacs 20.x, GNU Emacs 21.x, GNU Emacs 22.x
+;;
+;; Features that might be required by this library:
+;;
+;;   `avoid', `fit-frame', `frame-cmds', `frame-fns', `misc-fns',
+;;   `strings', `thingatpt', `thingatpt+'.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -117,16 +123,18 @@
 ;;     `zoom-frm.el'      - Zoom a frame, so that its font becomes
 ;;                          larger or smaller.
 ;;
-;;
-;;  Library `autofit-frame' requires these libraries:
-;;
-;;    `avoid', `fit-frame', `frame-cmds', `frame-fns', `icomplete',
-;;    `icomplete+', `misc-fns', `strings', `thingatpt', `thingatpt+'.
-;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change log:
 ;;
+;; 2006/03/07 dadams
+;;      switch-to-buffer: Bug fix: return destination buffer.  Thx to AndreyZ.
+;; 2006/01/07 dadams
+;;      Added :link for sending bug report.
+;; 2006/01/06 dadams
+;;      Removed defgroup - not needed, since require fit-frame.el, which does it.
+;; 2005/09/02 dadams
+;;      switch-to-buffer: Don't require existing buffer.
 ;; 2005/05/28 dadams
 ;;      autofit-frames-flag: defvar -> defcustom.  Added defgroup fit-frame.
 ;;      switch-to-buffer: Use explicit default in read-buffer.
@@ -162,9 +170,9 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth
+;; Floor, Boston, MA 02110-1301, USA.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -179,18 +187,19 @@
 
 
 
-
+ 
 ;;; User options ---------------------------------------------------
-
-;;;###autoload
-(defgroup fit-frame nil
-  "Resize a frame to fit its selected window, or resize it incrementally."
-  :version "22.1" :group 'frames :group 'convenience)
 
 ;;;###autoload
 (defcustom autofit-frames-flag t
   "*Non-nil means automatically resize one-window frames to fit buffer."
-  :type 'boolean :group 'fit-frame)
+  :type 'boolean :group 'Fit-Frame      ; Group is defined in `fit-frame.el'.
+  :link `(url-link :tag "Send Bug Report"
+          ,(concat "mailto:" "drew.adams" "@" "oracle" ".com?subject=\
+autofit-frame.el bug: \
+&body=Describe bug here, starting with `emacs -q'.  \
+Don't forget to mention your Emacs and library versions.")))
+
 
 
 
@@ -228,7 +237,7 @@ This does nothing if `autofit-frames-flag' is nil."
 
 
 
-
+ 
 ;;; Commands ---------------------------------------------------
 
 
@@ -251,7 +260,7 @@ argument NOT-THIS-WINDOW is non-nil (interactively, with prefix arg).
 If `pop-up-frames' is non-nil, make a new frame if no window shows BUFFER.
 Return the window displaying BUFFER.
 
-Emacs 21 only:
+Emacs 21 or later only:
   If `display-buffer-reuse-frames' is non-nil, and another frame is
   currently displaying BUFFER, then simply raise that frame.
 
@@ -268,7 +277,7 @@ If FRAME is nil, search only the selected frame
  unless `pop-up-frames' or `display-buffer-reuse-frames' is non-nil,
  which means search visible and iconified frames.
 
-Emacs 21 only:
+Emacs 21 or later only:
   If `even-window-heights' is non-nil, window heights will be evened
   out if displaying the buffer causes two vertically adjacent windows
   to be displayed.
@@ -301,10 +310,17 @@ Resizes frame to fit sole window if `autofit-frames-flag'."
 (defun switch-to-buffer (buffer &optional norecord)
   "Select buffer BUFFER in current window, unless the window is dedicated.
 If current window is dedicated (`window-dedicated-p'), then another window
-is used.  BUFFER may be a buffer or its name.
+is used.
 
-Optional second arg NORECORD non-nil =>
-   Do not put BUFFER at front of list of recently selected buffers.
+BUFFER may be a buffer, a string (a buffer name), or nil.  If BUFFER
+is a string that does not identify an existing buffer, then a new
+buffer with that name is created.  If BUFFER is nil, then function
+`other-buffer' is used to choose a buffer.
+
+Optional second arg NORECORD non-nil means do not put BUFFER at the
+front of the list of recently selected buffers.
+
+The buffer switched to is returned.
 
 *WARNING*: This is NOT the way to work on another buffer temporarily
 within a Lisp program!  Use `set-buffer' instead, to avoid messing
@@ -316,18 +332,16 @@ Resizes frame to fit sole window if `autofit-frames-flag'
    (list (read-buffer "Switch to buffer: "
                       (if (fboundp 'another-buffer) ; Defined in `misc-fns.el'.
                           (another-buffer nil t)
-                        (other-buffer (current-buffer)))
-                      'existing)))
+                        (other-buffer (current-buffer))))))
   (setq buffer (get-buffer-create buffer)) ; If arg is a string, convert it to a buffer.
   (let ((orig-buf (current-buffer)))
-    (if (window-dedicated-p (selected-window))
-        (switch-to-buffer-other-window buffer)
-      (old-switch-to-buffer buffer norecord))
-    (and (one-window-p t)
-         (not (eq buffer orig-buf))     ; Don't resize if same buffer.
-         autofit-frames-flag
-         (fit-frame))))
-
+    (prog1 (if (window-dedicated-p (selected-window))
+               (switch-to-buffer-other-window buffer)
+             (old-switch-to-buffer buffer norecord))
+      (and (one-window-p t)
+           (not (eq buffer orig-buf))     ; Don't resize if same buffer.
+           autofit-frames-flag
+           (fit-frame)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 

@@ -1,17 +1,16 @@
-;;; Aquamacs-Update: http://www.emacswiki.org/cgi-bin/wiki/download/fit-frame.el
-
 ;;; fit-frame.el --- Resize a frame to fit window, or resize it incrementally
 ;;
 ;; Filename: fit-frame.el
 ;; Description: Resize a frame to fit its selected window.
 ;; Author: Drew Adams
 ;; Maintainer: Drew Adams
-;; Copyright (C) 2000-2005, Drew Adams, all rights reserved.
+;; Copyright (C) 2000-2007, Drew Adams, all rights reserved.
 ;; Created: Thu Dec  7 09:32:12 2000
 ;; Version: 21.0
-;; Last-Updated: Wed Dec 07 09:33:18 2005 (-28800 Pacific Standard Time)
+;; Last-Updated: Sun Mar 11 15:35:31 2007 (-25200 Pacific Daylight Time)
 ;;           By: dradams
-;;     Update #: 543
+;;     Update #: 620
+;; URL: http://www.emacswiki.org/cgi-bin/wiki/fit-frame.el
 ;; Keywords: internal, extensions, convenience, local
 ;; Compatibility: GNU Emacs 20.x, GNU Emacs 21.x, GNU Emacs 22.x
 ;;
@@ -107,6 +106,19 @@
 ;;
 ;;; Change log:
 ;;
+;; 2007/03/11 dadams
+;;      fit-frame: Deal with header lines that wrap more than once.
+;;      fit-frame-skip-header-lines-alist: 2 lines for Dired.
+;; 2006/03/13 dadams
+;;      fit-frame: Treat nil tool-bar-lines as zero.  (Thx to Sebastian Luque.)
+;; 2006/01/07 dadams
+;;      Added :link for sending bug report.
+;; 2006/01/06 dadams
+;;      Added :link.  Capitalized group name.
+;;      Added ;;;###autoload.
+;; 2005/12/30 dadams
+;;      Added: thumbnail-factor.
+;;      create-frame-max-height: Use thumbnail-factor.
 ;; 2005/11/15 dadams
 ;;     create-frame-max-* functions: Added optional frame arg.
 ;;     Minor bug fix: Call create-frame-max-* with frame arg, so use correct char size.
@@ -181,84 +193,111 @@
 
 
 
-
+ 
 ;;; User options ---------------------------------------------------
 
-(defgroup fit-frame nil
+;;;###autoload
+(defgroup Fit-Frame nil
   "Resize a frame to fit its selected window, or resize it incrementally."
-  :version "22.1" :group 'frames :group 'convenience)
+  :group 'frames :group 'convenience
+  :link `(url-link :tag "Send Bug Report"
+          ,(concat "mailto:" "drew.adams" "@" "oracle" ".com?subject=\
+fit-frame.el bug: \
+&body=Describe bug here, starting with `emacs -q'.  \
+Don't forget to mention your Emacs and library versions."))
+  :link '(url-link :tag "Other Libraries by Drew"
+          "http://www.emacswiki.org/cgi-bin/wiki/DrewsElispLibraries")
+  :link '(url-link :tag "Download"
+          "http://www.emacswiki.org/cgi-bin/wiki/fit-frame.el")
+  :link '(url-link :tag "Description"
+          "http://www.emacswiki.org/cgi-bin/wiki/Shrink-Wrapping_Frames")
+  :link '(emacs-commentary-link :tag "Commentary" "fit-frame")
+  )
 
+;;;###autoload
 (defcustom inhibit-fit-frame-flag nil
   "*Non-nil means command `fit-frame' does nothing.
 You can bind this to non-`nil' to temporarily inhibit frame fitting:
     (let ((inhibit-fit-frame-flag t))...)"
-  :type 'boolean :group 'fit-frame)
+  :type 'boolean :group 'Fit-Frame)
 
+;;;###autoload
 (defcustom create-frame-min-width 20
   "*Minimum width, in characters, for new frames created by `fit-frame'.
 The actual minimum is at least the greater of this and `window-min-width'."
-  :type 'integer :group 'fit-frame)
+  :type 'integer :group 'Fit-Frame)
 
+;;;###autoload
 (defcustom create-frame-max-width nil
   "*Maximum width, in characters, for new frames created by `fit-frame'.
 If nil, then the function `create-frame-max-width' is used instead."
   :type '(choice (const :tag "Use `create-frame-max-width-percent' instead" nil)
                  integer)
-  :group 'fit-frame)
+  :group 'Fit-Frame)
 
+;;;###autoload
 (defcustom create-frame-max-width-percent 94
   "*Maximum percent of display width for a new frame created by `fit-frame'.
 See function `create-frame-max-width'.
 Not used unless `create-frame-max-width' is nil."
-  :type 'integer :group 'fit-frame)
+  :type 'integer :group 'Fit-Frame)
 
+;;;###autoload
 (defcustom create-frame-min-height window-min-height
   "*Minimum height, in lines, for new frames created by `fit-frame'.
 The actual minimum is at least the greater of this and `window-min-height'."
-  :type 'integer :group 'fit-frame)
+  :type 'integer :group 'Fit-Frame)
 
+;;;###autoload
 (defcustom create-frame-max-height nil
   "*Maximum height, in lines, for new frames created by `fit-frame'.
 If nil, then the function `create-frame-max-height' is used instead."
   :type '(choice (const :tag "Use `create-frame-max-height-percent' instead" nil)
                  integer)
-  :group 'fit-frame)
+  :group 'Fit-Frame)
 
+;;;###autoload
 (defcustom create-frame-max-height-percent 82
   "*Maximum percent of display height for a new frame created by `fit-frame'.
 See function `create-frame-max-height'.
 Not used unless `create-frame-max-height' is nil."
-  :type 'integer :group 'fit-frame)
+  :type 'integer :group 'Fit-Frame)
 
+;;;###autoload
 (defcustom create-empty-frame-width (or (cdr (assq 'width default-frame-alist)) 80)
   "*Width, in characters, for new empty frames created by `fit-frame'."
-  :type 'integer :group 'fit-frame)
+  :type 'integer :group 'Fit-Frame)
 
+;;;###autoload
 (defcustom create-empty-frame-height (or (cdr (assq 'height default-frame-alist)) 35)
   "*Height, in lines, for new empty frames created by `fit-frame'."
-  :type 'integer :group 'fit-frame)
+  :type 'integer :group 'Fit-Frame)
 
+;;;###autoload
 (defcustom create-empty-special-display-frame-width 80
   "*Width, in chars, for new empty special-display frames created
 by `fit-frame'.  If this is nil, it is ignored."
-  :type 'integer :group 'fit-frame)
+  :type 'integer :group 'Fit-Frame)
 
+;;;###autoload
 (defcustom create-empty-special-display-frame-height 9
   "*Height, in lines, for new empty special-display frames created
 by `fit-frame'.  If this is nil, it is ignored."
-  :type 'integer :group 'fit-frame)
+  :type 'integer :group 'Fit-Frame)
 
+;;;###autoload
 (defcustom fill-column-frame-margin 7
   "*With negative prefix arg, `fit-frame' frame width minus `fill-column'.
 That is, `fill-column' + `fill-column-frame-margin' = frame width.
 Depending on the average word length of the language used in selected-window,
 you may need different values for this.  This variable is buffer-local."
-  :type 'integer :group 'fit-frame)
+  :type 'integer :group 'Fit-Frame)
 
 (make-variable-buffer-local 'fill-column-frame-margin)
 
+;;;###autoload
 (defcustom fit-frame-skip-header-lines-alist
-  '((Info-mode . 1) (dired-mode . 1) (compilation-mode . 2))
+  '((Info-mode . 1) (dired-mode . 2) (compilation-mode . 2))
   "*Alist of major-modes and header lines to ignore.
 
 When `fit-frame' calculates the width of the current buffer, it can
@@ -272,10 +311,11 @@ Each item in the alist is of form (MODE . LINES).
  LINES is the number of lines to skip at the beginning of the buffer."
   :type '(repeat (cons :format "%v" (symbol :tag "Major Mode")
                        (integer :tag "Header Lines to Ignore")))
-  :group 'fit-frame)
+  :group 'Fit-Frame)
 
 
-
+
+ 
 ;;; Non-Interactive Functions -------------------------------------------
 
 (defun create-frame-max-width (&optional frame)
@@ -304,13 +344,30 @@ size, and depends on the value of `create-frame-max-height-percent':
      (* 100 (frame-char-height FRAME)))"
   (setq frame (or frame (selected-frame)))
   (/ (* create-frame-max-height-percent (x-display-pixel-height))
-     (* 100 (frame-char-height frame))))
+     (* 100 (frame-char-height frame)
+        ;; When fitting a thumbnail frame, we don't want the height to use the
+        ;; whole display height.  So, we apply a fudge factor: `thumbnail-factor'.
+        ;; We could also use it in `create-frame-max-width', in addition to
+        ;; `create-frame-max-height', but we don't need to.
+        (thumbnail-factor frame))))
+
+(defun thumbnail-factor (frame)
+  "Shrink factor for thumbnail frames.  See `thumb-frm.el'.
+FRAME is the frame to apply factor to."
+  (let ((char-height (frame-char-height frame)))
+    (if (and (fboundp 'thumbnail-frame-p) ; Defined in `thumb-frm.el'
+             (thumbnail-frame-p frame))
+        ;; Need integer result for `set-frame-size'.
+        ;; Add one because of integer round-off.
+        (1+ (/ (+ char-height frame-thumbnail-font-difference) char-height))
+      1)))
 
 
 
-
+ 
 ;;; Commands ---------------------------------------------------
 
+;;;###autoload
 (defun fit-frame (&optional frame width height)
   "Resize FRAME to fit its selected window.
 Usable in `after-make-frame-functions'.
@@ -400,11 +457,10 @@ If optional args WIDTH and HEIGHT are `natnump's:
       ;; horizontal scroll bar also needs to be taken into account.
       (when (>= emacs-major-version 21)
 	(let* ((fparams (frame-parameters frame))
-               (tool-bar-lines (cdr (assq 'tool-bar-lines fparams)))
+               (tool-bar-lines (or (cdr (assq 'tool-bar-lines fparams)) 0))
                (minibuf        (cdr (assq 'minibuffer     fparams))))
 	  (setq nb-lines (+ nb-lines tool-bar-lines (if minibuf 1 0)
                             2))))       ; Tweak factor - not sure why it's needed.
-
       (set-frame-size
        ;; Frame
        frame
@@ -442,10 +498,14 @@ If optional args WIDTH and HEIGHT are `natnump's:
                              (setq nb-lines (1+ nb-lines))))
                          (setq max-width (1+ max-width))
                          ;; Add height for any wrap-around header lines.
-                         ;; This could be refined to deal with lines that wrap > once.
                          (while hdr-widths
                            (when (> (car hdr-widths) max-width)
-                             (setq nb-lines (1+ nb-lines)))
+                             (if (zerop max-width)
+                                 (setq nb-lines (1+ nb-lines))
+                               (let ((nb-wraps (/ (car hdr-widths) max-width))
+                                     (remainder (% (car hdr-widths) max-width)))
+                                 (unless (zerop remainder) (setq nb-wraps (1+ nb-wraps)))
+                                 (setq nb-lines (+ nb-lines nb-wraps)))))
                            (setq hdr-widths (cdr hdr-widths)))
                          max-width)))))
        ;; Rows
@@ -457,10 +517,10 @@ If optional args WIDTH and HEIGHT are `natnump's:
                 (min (or create-frame-max-height (create-frame-max-height frame))
                      nb-lines))))
       ;;; IS THIS NEEDED AT ALL? - 2005-05-31 $$$$$$$$$$$$$$$$$$$$$
-      ;;;(when (fboundp 'show-frame) (show-frame frame))
+      ;;;(when (fboundp 'show-frame) (show-frame frame)) ; Defined in `frame-cmds.el'.
+      )))
 
-      ))) ; Defined in `frame-cmds.el'.
-
+;;;###autoload
 (defun fit-frame-or-mouse-drag-vertical-line (start-event)
   "If only window in frame, `fit-frame'; else `mouse-drag-vertical-line'."
   (interactive "e")
@@ -468,12 +528,14 @@ If optional args WIDTH and HEIGHT are `natnump's:
 
 ;; Note that in Windows you can also just double-click the title bar
 ;; of a frame to alternately maximize and restore it.
+;;;###autoload
 (when (eq window-system 'w32)
   (defun restore-frame (&optional frame)
     "Restore FRAME to previous size (default: current frame)."
     (interactive)
     (w32-send-sys-command 61728 frame)))
 
+;;;###autoload
 (when (eq window-system 'w32)
   (defun maximize-frame (&optional frame)
     "Maximize FRAME (default: current frame)."
@@ -484,7 +546,9 @@ If optional args WIDTH and HEIGHT are `natnump's:
   (defalias 'minimize-frame (if (fboundp 'really-iconify-frame)
                                 'really-iconify-frame
                               'iconify-frame)))
-
+
+
+ 
 ;;; Helper Functions, to enable this file to work standalone --------------------
 
 ;; Defined in `strings.el'.
@@ -504,6 +568,7 @@ Sets variable `minibuffer-empty-p' to returned value."
     (setq minibuffer-empty-p flag)))
 
 ;; Defined in `frame-cmds.el'.
+;;;###autoload
 (unless (fboundp 'show-frame)
   (defun show-frame (frame)
     "Make FRAME visible and raise it, without selecting it.

@@ -4,14 +4,19 @@
 ;; Description: Miscellaneous non-interactive functions.
 ;; Author: Drew Adams
 ;; Maintainer: Drew Adams
-;; Copyright (C) 1996-2005, Drew Adams, all rights reserved.
+;; Copyright (C) 1996-2007, Drew Adams, all rights reserved.
 ;; Created: Tue Mar  5 17:21:28 1996
 ;; Version: 21.0
-;; Last-Updated: Mon Jul 04 09:22:19 2005
+;; Last-Updated: Mon Apr 02 21:13:43 2007 (-25200 Pacific Daylight Time)
 ;;           By: dradams
-;;     Update #: 204
+;;     Update #: 301
+;; URL: http://www.emacswiki.org/cgi-bin/wiki/misc-fns.el
 ;; Keywords: internal, unix, lisp, extensions, local
 ;; Compatibility: GNU Emacs 20.x, GNU Emacs 21.x, GNU Emacs 22.x
+;;
+;; Features that might be required by this library:
+;;
+;;   `misc-fns'.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -30,27 +35,54 @@
 ;;   (add-hook '<mode>-hook 'notify-user-of-mode), for each <mode>.
 ;;
 ;;
-;;  Main new functions defined here:
+;;  Face defined here: `notifying-user-of-mode'.
 ;;
-;;    `another-buffer', `current-line', `display-in-mode-line',
-;;    `do-files', `force-time-redisplay', `interesting-buffer-p',
-;;    `live-buffer-name', `make-transient-mark-mode-buffer-local',
-;;    `mod-signed', `notify-user-of-mode', `undefine-keys-bound-to',
-;;    `undefine-killer-commands'.
-;;
-;;  Main new user options (variables) defined here:
+;;  User options (variables) defined here:
 ;;
 ;;    `buffer-modifying-cmds', `mode-line-reminder-duration',
-;;    `notify-user-of-mode-face', `notifying-user-of-mode'.
+;;    `notifying-user-of-mode-flag'.
 ;;
-;;  Library `misc-fns' requires these libraries:
+;;  Functions defined here:
 ;;
-;;    `misc-fns'.
+;;    `another-buffer', `current-line', `display-in-mode-line',
+;;    `do-files', `flatten', `fontify-buffer', `force-time-redisplay',
+;;    `interesting-buffer-p', `live-buffer-name',
+;;    `make-transient-mark-mode-buffer-local', `mod-signed',
+;;    `notify-user-of-mode', `region-or-buffer-limits', `signum',
+;;    `simple-set-difference', `simple-set-intersection',
+;;    `simple-set-union', `undefine-keys-bound-to',
+;;    `undefine-killer-commands'.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change log:
 ;;
+;; 2007/04/02 dadams
+;;     Added: region-or-buffer-limits.
+;; 2006/12/11 dadams
+;;     undefine-*: Don't bind to undefined if command is already bound in keymap.
+;; 2006/03/31 dadams
+;;     No longer use display-in-minibuffer.
+;; 2006-02-20 dadams
+;;     Added signum.
+;; 2005/12/30 dadams
+;;     Removed stray require of def-face-const.el.
+;; 2005/12/18 dadams
+;;     buffer-modifying-cmds, mode-line-reminder-duration: defvar -> defcustom.
+;;     notify-user-of-mode-face -> notify-user-of-mode.
+;;       Use defface.  Removed require of def-face-const.el.
+;;     notify-user-of-mode (variable) -> notify-user-of-mode-flag.
+;;       defvar -> defcustom.
+;;     undefine-keys-bound-to: defsubst -> defun.
+;; 2005/10/28 dadams
+;;     notify-user-of-mode: Don't notify if minibuffer is active.
+;; 2005/09/30 dadams
+;;     Renamed simple-intersection to simple-set-intersection.
+;;     Added: simple-set-union.
+;; 2005/09/26 dadams
+;;     Added simple-set-difference.
+;; 2005/07/21 dadams
+;;     Added simple-intersection.
 ;; 2005/01/25 dadams
 ;;     Removed ###autoload on defvars.
 ;; 2004/12/30 dadams
@@ -103,9 +135,9 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth
+;; Floor, Boston, MA 02110-1301, USA.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -113,12 +145,6 @@
 
 (and (< emacs-major-version 21)         ;; dolist, push, pop
      (eval-when-compile (require 'cl))) ;; (plus, for Emacs <20: when, unless)
-
-;; Get macro `define-face-const' when this is compiled,
-;; or run interpreted, but not when the compiled code is loaded.
-(eval-when-compile (require 'def-face-const))
-
- ;; (autoload 'display-in-minibuffer "strings")
 
 ;;;;;;;;;;;;;;;;;;;;;
 
@@ -130,9 +156,9 @@
 
 ;;;$ MODE-LINE ----------------------------------------------------------------
 
-;; From `show-bind.el'.
-(defvar mode-line-reminder-duration 10
-  "*Maximum number of seconds to display a reminder in the mode-line.")
+(defcustom mode-line-reminder-duration 10
+  "*Maximum number of seconds to display a reminder in the mode-line."
+  :type 'integer)
 (put 'mode-line-reminder-duration 'variable-interactive
      "nMax seconds to display key reminders in mode-line: ")
 
@@ -148,7 +174,7 @@
 ;;;###autoload
 (defun force-time-redisplay ()
   "Force a redisplay.
-This is probably obsolete now.  Use `force-mode-line-update."
+This is probably obsolete now.  Use `force-mode-line-update'."
   (save-excursion (set-buffer (other-buffer)))
   (set-buffer-modified-p (buffer-modified-p))
   (sit-for 0))
@@ -221,43 +247,45 @@ default value is not changed."
   (setq-default transient-mark-mode (or default
                                         (default-value 'transient-mark-mode))))
 
+(defun region-or-buffer-limits ()
+    "Return the start and end of the region as a list, smallest first.
+If the region is not active or empty, then bob and eob are used."
+  (if (or (not mark-active) (null (mark)) (= (point) (mark)))
+      (list (point-min) (point-max))
+    (if (< (point) (mark)) (list (point) (mark)) (list (mark) (point)))))
+
 
 
 ;;;$ MODE ---------------------------------------------------------------------
 
-(defvar notifying-user-of-mode t
-  "*Non-nil <=> Displaying messages notifying user of mode changes.
-See function `notify-user-of-mode'.")
+(defcustom notifying-user-of-mode-flag t
+  "*Non-nil means to display messages notifying user of mode changes.
+See function `notify-user-of-mode'."
+  :type 'boolean)
 
-(unless (boundp 'blue-foreground-face) (define-face-const "Blue" nil))
-(defvar notify-user-of-mode-face blue-foreground-face
+(defface notify-user-of-mode '((((background dark)) (:foreground "cyan"))
+                               (t (:foreground "dark blue")))
   "*Face used for notifying user of current major mode.
 See function `notify-user-of-mode'.")
 
 ;;;###autoload
 (defun notify-user-of-mode (&optional buffer anyway)
   "Display msg naming major mode of BUFFER (default: current buffer).
-No msg is displayed if not `notifying-user-of-mode' or BUFFER is
-internal, unless optional 2nd arg ANYWAY is non-nil.
-In that case, msg is displayed anyway.
+A message is never displayed if the minibuffer is active.  Otherwise:
+  No msg is displayed if not `notifying-user-of-mode-flag' or BUFFER
+  is internal, unless optional 2nd arg ANYWAY is non-nil.
+  In that case, msg is displayed anyway.
 Useful as a mode hook.  For example:
 \(add-hook 'c-mode-hook 'notify-user-of-mode)"
   (setq buffer (buffer-name (and buffer (get-buffer buffer)))) ; Default curr.
   (when (and buffer
-             (or (and notifying-user-of-mode ; Global var controls display.
+             (not (active-minibuffer-window))
+             (or (and notifying-user-of-mode-flag ; Global var controls display.
                       (interesting-buffer-p buffer)) ; Not internal buffer.
                  anyway))               ; Override.
-    (if (fboundp 'display-in-minibuffer)
-	(display-in-minibuffer
-         'new "Buffer `" (list notify-user-of-mode-face buffer) "' is in "
-         (list notify-user-of-mode-face mode-name)
-         " mode.   For info on the mode: `"
-         (list notify-user-of-mode-face
-               (substitute-command-keys "\\[describe-mode]")) "'.")
-      (message
-       "Buffer `%s' is in %s mode.   For info on the mode: `%s'."
-       buffer mode-name
-       (substitute-command-keys "\\[describe-mode]")))))
+    (message "Buffer `%s' is in %s mode.   For info on the mode: `%s'."
+             buffer mode-name
+             (substitute-command-keys "\\[describe-mode]"))))
 
 
 ;;;$ FILES --------------------------------------------------------------------
@@ -266,7 +294,7 @@ Useful as a mode hook.  For example:
 (defun do-files (files fn &optional kill-buf-after)
   "Visit each file in list FILES, executing function FN once in each.
 Optional arg KILL-BUF-AFTER non-nil means kill buffer after saving it."
-  (let ((notifying-user-of-mode nil))    ; No msg on mode.
+  (let ((notifying-user-of-mode-flag nil)) ; No msg on mode.
     (dolist (file files)
       (set-buffer (find-file-noselect file))
       (funcall fn)
@@ -278,27 +306,32 @@ Optional arg KILL-BUF-AFTER non-nil means kill buffer after saving it."
 
 ;;;$ KEYS ---------------------------------------------------------------------
 
-(defsubst undefine-keys-bound-to (command keymap &optional oldmap)
+(defun undefine-keys-bound-to (command keymap &optional oldmap)
   "Bind to `undefined' all keys currently bound to COMMAND in KEYMAP.
 If optional argument OLDMAP is specified, rebinds in KEYMAP as
-`undefined' all keys that are currently bound to COMMAND in OLDMAP."
-  (substitute-key-definition command 'undefined keymap oldmap))
+`undefined' all keys that are currently bound to COMMAND in OLDMAP but
+are not bound in KEYMAP."
+  (unless (where-is-internal command keymap 'first-only)
+    (substitute-key-definition command 'undefined keymap oldmap)))
 
-(defvar buffer-modifying-cmds
+(defcustom buffer-modifying-cmds
   '(delete-char quoted-insert transpose-chars kill-region yank kill-word
                 indent-new-comment-line kill-sentence fill-paragraph
                 transpose-words yank-pop zap-to-char just-one-space
                 indent-for-comment delete-indentation kill-sexp split-line
                 transpose-sexps backward-kill-sentence)
-  "*Buffer-modifying commands used in `undefine-killer-commands'.")
+  "*Buffer-modifying commands used in `undefine-killer-commands'."
+  :type '(repeat symbol))
 
-(defsubst undefine-killer-commands (keymap &optional oldmap)
+(defun undefine-killer-commands (keymap &optional oldmap)
   "Bind `undefined' to KEYMAP keys bound to buffer-modifying commands.
 If optional arg OLDMAP is specified, rebinds in KEYMAP as `undefined'
 the keys that are currently bound to buffer-modifying commands in
-OLDMAP.  The buffer-modifying commands used: `buffer-modifying-cmds'."
-  (mapcar (function (lambda (cmd) (undefine-keys-bound-to cmd keymap oldmap)))
+OLDMAP but are not bound in KEYMAP.  The buffer-modifying commands
+used: `buffer-modifying-cmds'."
+  (mapcar (lambda (cmd) (undefine-keys-bound-to cmd keymap oldmap))
           buffer-modifying-cmds))
+
 
 ;;;; ;;;###autoload
 ;;;; (defun name+key (cmd)
@@ -377,6 +410,58 @@ Also works for a consp whose cdr is non-nil."
                (setq item (car item)))
              (setq new (cons item new)))
            (reverse new)))))
+
+;; From `cl-seq.el', function `union', without keyword treatment.
+(defun simple-set-union (list1 list2)
+  "Combine LIST1 and LIST2 using a set-union operation.
+The result list contains all items that appear in either LIST1 or
+LIST2.  This is a non-destructive function; it copies the data if
+necessary."
+  (cond ((null list1) list2)
+        ((null list2) list1)
+	((equal list1 list2) list1)
+	(t
+	 (or (>= (length list1) (length list2))
+	     (setq list1 (prog1 list2 (setq list2 list1)))) ; Swap them.
+	 (while list2
+           (unless (member (car list2) list1)
+               (setq list1 (cons (car list2) list1)))
+	   (setq list2 (cdr list2)))
+	 list1)))
+
+;; From `cl-seq.el', function `intersection', without keyword treatment.
+(defun simple-set-intersection (list1 list2)
+  "Set intersection of lists LIST1 and LIST2.
+This is a non-destructive operation: it copies the data if necessary."
+  (and list1 list2
+       (if (equal list1 list2)
+           list1
+	 (let ((result nil))
+           (unless (>= (length list1) (length list2))
+             (setq list1 (prog1 list2 (setq list2 list1)))) ; Swap them.
+           (while list2
+             (when (member (car list2) list1)
+               (setq result (cons (car list2) result)))
+             (setq list2 (cdr list2)))
+           result))))
+
+;; From `cl-seq.el', function `set-difference', without keyword treatment.
+(defun simple-set-difference (list1 list2 &rest cl-keys)
+  "Combine LIST1 and LIST2 using a set-difference operation.
+The result list contains all items that appear in LIST1 but not LIST2.
+This is a non-destructive function; it copies the data if necessary."
+  (if (or (null list1) (null list2))
+      list1
+    (let ((result nil))
+      (while list1
+        (unless (member (car list1) list2) (setq result (cons (car list1) result)))
+        (setq list1 (cdr list1)))
+      result)))
+
+;; from `cl-extra.el'.
+(defun signum (num)
+  "Return 1 if NUM is positive, -1 if negative, 0 if zero."
+  (cond ((< num 0) -1) ((> num 0) 1) (t 0)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; misc-fns.el ends here

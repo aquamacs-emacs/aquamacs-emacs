@@ -4,14 +4,19 @@
 ;; Description: Extensions to `thingatpt.el'.
 ;; Author: Drew Adams
 ;; Maintainer: Drew Adams
-;; Copyright (C) 1996-2005, Drew Adams, all rights reserved.
+;; Copyright (C) 1996-2007, Drew Adams, all rights reserved.
 ;; Created: Tue Feb 13 16:47:45 1996
 ;; Version: 21.0
-;; Last-Updated: Mon Jul 04 11:20:02 2005
+;; Last-Updated: Fri Jan 19 21:28:45 2007 (-28800 Pacific Standard Time)
 ;;           By: dradams
-;;     Update #: 381
-;; Keywords: extensions, matching, mouse, local
+;;     Update #: 649
+;; URL: http://www.emacswiki.org/cgi-bin/wiki/thingatpt+.el
+;; Keywords: extensions, matching, mouse
 ;; Compatibility: GNU Emacs 20.x, GNU Emacs 21.x, GNU Emacs 22.x
+;;
+;; Features that might be required by this library:
+;;
+;;   `thingatpt'.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -19,11 +24,11 @@
 ;;
 ;;    Extensions to `thingatpt.el'.
 ;;
-;;  Code here is organized into sections by area affected.
+;;  Commands defined here:
 ;;
-;;    Sections are separated by `;;;$ ... ---------------'.
+;;    `find-fn-or-var-nearest-point', `forward-char-same-line'.
 ;;
-;;  New functions defined here:
+;;  Non-interactive functions defined here:
 ;;
 ;;    `bounds-of-form-at-point', `bounds-of-form-nearest-point',
 ;;    `bounds-of-symbol-at-point', `bounds-of-symbol-nearest-point',
@@ -65,14 +70,18 @@
 ;;  (eval-after-load "thingatpt" '(require 'thingatpt+))
 ;;
 ;;
-;;  Library `thingatpt+' requires these libraries:
-;;
-;;    `thingatpt'.
-;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change log:
 ;;
+;; 2006/12/08 dadams
+;;     Added: find-fn-or-var-nearest-point.
+;; 2006/05/16 dadams
+;;     Only require cl (at compile time) for Emacs < 20.
+;;     Replace incf by setq...1+.
+;; 2005/12/17 dadams
+;;     symbol-name-nearest-point, form-at-point-with-bounds:
+;;       Treat nil as legitmate symbol.
 ;; 1996/06/11 dadams
 ;;     bounds-of-symbol-at-point, bounds-of-symbol-nearest-point,
 ;;     symbol-at-point, symbol-at-point-with-bounds,
@@ -124,33 +133,18 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth
+;; Floor, Boston, MA 02110-1301, USA.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Code:
 
 (require 'thingatpt) ;; bounds-of-thing-at-point, form-at-point
-(eval-when-compile (require 'cl)) ;; incf (plus, for Emacs <20: when, unless)
+(when (< emacs-major-version 20) (eval-when-compile (require 'cl))) ;; when, unless
 
 ;;;;;;;;;;;;;;;;;;;;;;
-
-
-;; Copied from `misc-cmds.el'.
-(unless (fboundp 'forward-char-same-line)
-  (defun forward-char-same-line (&optional arg)
-    "Move forward a max of ARG chars on the same line, or backward if ARG < 0.
-Return the signed number of chars moved if /= ARG, else return nil."
-    (interactive "p")
-    (let* ((start (point))
-           (fwd-p (natnump arg))
-           (max (save-excursion
-                  (if fwd-p (end-of-line) (beginning-of-line))
-                  (- (point) start))))
-      (forward-char (if fwd-p (min max arg) (max max arg)))
-      (and (< (abs max) (abs arg)) max))))
 
 
 ;;; THINGS ----------------------------------------------------------
@@ -235,7 +229,7 @@ The optional arg is a SYNTAX-TABLE to use while determining bounds."
             ;; IND1: Loop over chars in same line (alternately left and right),
             ;; until either found thing or both line limits reached.
             (while (and (not thing+bds) (not (and bolp eolp)))
-              (incf ind1)
+              (setq ind1 (1+ ind1))
               (unless bolp (save-excursion ; Left.
                              (setq bolp (forward-char-same-line (- ind1)))
                              (setq thing+bds (thing-at-point-with-bounds
@@ -247,7 +241,7 @@ The optional arg is a SYNTAX-TABLE to use while determining bounds."
                                                               syntax-table)))))
             (setq bobp (bobp)) (setq eobp (eobp)))))
       ;; Increase search line distance every second time (once up, once down).
-      (when (or (natnump updown) (zerop ind2)) (incf ind2))) ; 0,1,1,2,2...
+      (when (or (natnump updown) (zerop ind2)) (setq ind2 (1+ ind2)))) ; 0,1,1,2,2...
     thing+bds))
 
 ;;;###autoload
@@ -297,7 +291,8 @@ Optional arguments:
                     (condition-case nil
                         (read-from-whole-string (car thing+bds))
                       (error nil)))))   ; E.g. tries to read `.'.
-    (and sexp (or (not pred) (funcall pred sexp))
+    (and (or sexp (string= "nil" (car thing+bds))) ; The symbol could be `nil'.
+         (or (not pred) (funcall pred sexp))
          (cons sexp (cdr thing+bds)))))
 
 ;;;###autoload
@@ -367,7 +362,7 @@ Optional arguments:
             ;; IND1: Loop over chars in same line (alternately left and right),
             ;; until either found form or both line limits reached.
             (while (and (not form+bds) (not (and bolp eolp)))
-              (incf ind1)
+              (setq ind1 (1+ ind1))
               (unless bolp (save-excursion ; Left.
                              (setq bolp (forward-char-same-line (- ind1)))
                              (setq form+bds (form-at-point-with-bounds
@@ -379,7 +374,7 @@ Optional arguments:
                                                             syntax-table)))))
             (setq bobp (bobp)) (setq eobp (eobp)))))
       ;; Increase search line distance every second time (once up, once down).
-      (when (or (natnump updown) (zerop ind2)) (incf ind2))) ; 0,1,1,2,2...
+      (when (or (natnump updown) (zerop ind2)) (setq ind2 (1+ ind2)))) ; 0,1,1,2,2...
     form+bds))
 
 ;;;###autoload
@@ -486,8 +481,9 @@ Note that these last three functions return strings, not symbols."
 (defun symbol-name-nearest-point ()
   "String naming the Emacs Lisp symbol nearest point, or \"\" if none.
 \"Nearest\" to point is determined as for `thing-nearest-point'."
-  (let ((symb (symbol-nearest-point)))
-    (if symb (symbol-name symb) "")))
+  ;; We do it this way to be able to pick symbol `nil' (name "nil").
+  (let ((symb+bds (symbol-nearest-point-with-bounds)))
+    (if symb+bds (symbol-name (car symb+bds)) "")))
 
 ;;;###autoload
 (defun word-nearest-point (&optional syntax-table)
@@ -531,6 +527,55 @@ the empty list.)
 The optional arg is a SYNTAX-TABLE to use while determining bounds."
   (form-nearest-point 'list 'listp syntax-table))
 
+
+;;; COMMANDS ----------------------------
+
+;; Copied from `misc-cmds.el'.
+;;;###autoload
+(unless (fboundp 'forward-char-same-line)
+  (defun forward-char-same-line (&optional arg)
+    "Move forward a max of ARG chars on the same line, or backward if ARG < 0.
+Return the signed number of chars moved if /= ARG, else return nil."
+    (interactive "p")
+    (let* ((start (point))
+           (fwd-p (natnump arg))
+           (max (save-excursion
+                  (if fwd-p (end-of-line) (beginning-of-line))
+                  (- (point) start))))
+      (forward-char (if fwd-p (min max arg) (max max arg)))
+      (and (< (abs max) (abs arg)) max))))
+
+;; Inspired by `find-thing-at-point' at http://www.emacswiki.org/cgi-bin/wiki/SeanO.
+;;;###autoload
+(defun find-fn-or-var-nearest-point (&optional confirmp)
+  "Go to the definition of the function or variable nearest the cursor.
+With a prefix arg, or if no function or variable is near the cursor,
+prompt for the function or variable to find, instead."
+  (interactive "P")
+  (let* ((symb (symbol-nearest-point))
+         (var (and (boundp symb) symb))
+         (fn (or (and (fboundp symb) symb) (function-called-at-point))))
+    (condition-case nil
+        (progn
+          (push-mark nil t)
+          (cond ((or confirmp (not (or var fn)))
+                 (when (not (or var fn))
+                   (message "Symbol nearest cursor is not a function or variable")
+                   (sit-for 1))
+                 (call-interactively
+                  (if (y-or-n-p "Find function? (n means find variable) ")
+                      'find-function
+                    'find-variable)))                   
+                (var (find-variable var))
+                ((and (fboundp 'help-C-file-name) ; Emacs 22
+                      fn (subrp (symbol-function fn)))
+                 (let ((buf+pos
+                        (find-function-search-for-symbol
+                         fn nil (help-C-file-name (symbol-function fn) 'subr))))
+                   (when (car buf+pos) (pop-to-buffer (car buf+pos)))))
+                (fn (find-function fn))
+                (t (call-interactively 'find-function))))
+      (quit (pop-mark)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 

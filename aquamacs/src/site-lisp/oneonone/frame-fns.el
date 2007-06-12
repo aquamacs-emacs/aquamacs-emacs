@@ -1,16 +1,16 @@
-;;; Aquamacs-Update: http://www.emacswiki.org/cgi-bin/wiki/download/frame-fns.el
 ;;; frame-fns.el --- Non-interactive frame and window functions.
 ;;
 ;; Filename: frame-fns.el
 ;; Description: Non-interactive frame and window functions.
 ;; Author: Drew Adams
 ;; Maintainer: Drew Adams
-;; Copyright (C) 1996-2005, Drew Adams, all rights reserved.
+;; Copyright (C) 1996-2007, Drew Adams, all rights reserved.
 ;; Created: Tue Mar  5 16:15:50 1996
 ;; Version: 21.1
-;; Last-Updated: Wed Dec 07 09:33:42 2005 (-28800 Pacific Standard Time)
+;; Last-Updated: Fri Jan 19 21:05:31 2007 (-28800 Pacific Standard Time)
 ;;           By: dradams
-;;     Update #: 167
+;;     Update #: 170
+;; URL: http://www.emacswiki.org/cgi-bin/wiki/frame-fns.el
 ;; Keywords: internal, extensions, local, frames
 ;; Compatibility: GNU Emacs 20.x, GNU Emacs 21.x, GNU Emacs 22.x
 ;;
