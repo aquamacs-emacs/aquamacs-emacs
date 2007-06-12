@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.81 2007/05/11 07:54:35 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.82 2007/06/12 11:12:44 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -359,7 +359,7 @@ using `aquamacs-recent-major-modes' and `aquamacs-known-major-modes'."
     (php-mode . "PHP")
     python-mode 
     (applescript-mode ."AppleScript")
-    matlab-mode R-mode 
+    matlab-mode R-mode ruby-mode
     (sh-mode . "Unix Shell Script")
     (nxml-mode . "XML (nXML)")
     ) ;; can't add unix shell here
