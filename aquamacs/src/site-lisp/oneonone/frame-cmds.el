@@ -6,13 +6,14 @@
 ;; Description: Frame and window commands (interactive functions).
 ;; Author: Drew Adams
 ;; Maintainer: Drew Adams
-;; Copyright (C) 1996-2005, Drew Adams, all rights reserved.
+;; Copyright (C) 1996-2007, Drew Adams, all rights reserved.
 ;; Created: Tue Mar  5 16:30:45 1996
 ;; Version: 21.0
-;; Last-Updated: Tue Dec 13 15:06:34 2005 (-28800 Pacific Standard Time)
+;; Last-Updated: Sun May 27 13:54:37 2007 (-25200 Pacific Daylight Time)
 ;;           By: dradams
-;;     Update #: 2088
-;; Keywords: internal, extensions, mouse, local, frames, windows, convenience
+;;     Update #: 2177
+;; URL: http://www.emacswiki.org/cgi-bin/wiki/frame-cmds.el
+;; Keywords: internal, extensions, mouse, frames, windows, convenience
 ;; Compatibility: GNU Emacs 20.x, GNU Emacs 21.x, GNU Emacs 22.x
 ;;
 ;; Features that might be required by this library:
@@ -39,6 +40,7 @@
 ;;    Use `C-mouse-1' in Dired to mark/unmark a file.
 ;;    Use `C-mouse-3' on the mode line to remove window from frame.
 ;;    Use `tile-frames-horizontally', `-vertically' to tile frames.
+;;    Use `C-x o' to select `other-window' or `other-frame'.
 ;;
 ;;  Commands to incrementally resize frames are `enlarge-frame' and
 ;;  `enlarge-frame-horizontally'.  Sarir Khamsi
@@ -78,7 +80,7 @@
 ;;    defined here.
 ;;
 ;;
-;;  New user options defined here:
+;;  User options defined here:
 ;;
 ;;    `enlarge-font-tries', `frame-config-register',
 ;;    `frame-parameters-to-exclude',
@@ -86,17 +88,18 @@
 ;;    `rename-frame-when-iconify-flag', `show-hide-show-function',
 ;;    `window-mgr-title-bar-pixel-width'.
 ;;
-;;  New commands defined here:
+;;  Commands defined here:
 ;;
 ;;    `delete-1-window-frames-on', `delete/iconify-window',
 ;;    `delete/iconify-windows-on', `delete-other-frames',
-;;    `enlarge-font', `enlarge-frame', `enlarge-frame-horizontally',
-;;    `hide-everything', `hide-frame', `iconify-everything',
-;;    `iconify/map-frame', `jump-to-frame-config-register',
-;;    `mouse-iconify/map-frame', `mouse-remove-window',
-;;    `mouse-show-hide-mark-unmark', `move-frame-down',
-;;    `move-frame-left', `move-frame-right', `move-frame-up',
-;;    `remove-window', `remove-windows-on', `rename-frame',
+;;    `delete-windows-for', `enlarge-font', `enlarge-frame',
+;;    `enlarge-frame-horizontally', `hide-everything', `hide-frame',
+;;    `iconify-everything', `iconify/map-frame',
+;;    `jump-to-frame-config-register', `mouse-iconify/map-frame',
+;;    `mouse-remove-window', `mouse-show-hide-mark-unmark',
+;;    `move-frame-down', `move-frame-left', `move-frame-right',
+;;    `move-frame-up', `other-window-or-frame', `remove-window',
+;;    `remove-windows-on', `rename-frame',
 ;;    `rename-non-minibuffer-frame', `save-frame-config',
 ;;    `set-all-frame-alist-parameters-from-frame',
 ;;    `set-frame-alist-parameter-from-frame', `show-*Help*-buffer',
@@ -105,11 +108,12 @@
 ;;    `tell-customize-var-has-changed', `tile-frames',
 ;;    `tile-frames-horizontally', `tile-frames-vertically'.
 ;;
-;;  New non-interactive (helper) functions defined here:
+;;  Non-interactive functions defined here:
 ;;
 ;;    `enlarged-font-name', `frame-alist-var-names',
 ;;    `frame-iconified-p', `frame-parameter-names',
-;;    `new-frame-position', `read-args-for-tile-frames'.
+;;    `new-frame-position', `read-args-for-tile-frames',
+;;    `read-buffer-for-delete-windows'.
 ;;
 ;;
 ;;
@@ -117,7 +121,7 @@
 ;;
 ;;  `delete-window' - If only one window in frame, `delete-frame'.
 ;;  `delete-windows-on' -
-;;     1) Uses `read-buffer'.
+;;     1) Reads buffer differently.  Only buffers showing windows are candidates.
 ;;     2) Calls `delete-window', so this also deletes frames where
 ;;        window showing the BUFFER is the only window.
 ;;
@@ -141,10 +145,12 @@
 ;;   (global-set-key [vertical-line C-down-mouse-1] 'show-hide)
 ;;   (global-set-key [C-down-mouse-1] 'mouse-show-hide-mark-unmark)
 ;;   (substitute-key-definition 'delete-window 'remove-window global-map)
+;;   (define-key ctl-x-map "o" 'other-window-or-frame)
 ;;   (define-key ctl-x-4-map "1" 'delete-other-frames)
 ;;   (define-key ctl-x-5-map "h" 'show-*Help*-buffer)
-;;   (substitute-key-definition 'delete-window 'remove-window global-map)
+;;   (substitute-key-definition 'delete-window 'delete-windows-for global-map)
 ;;   (define-key global-map "\C-xt." 'save-frame-config)
+;;   (define-key ctl-x-map "o" 'other-window-or-frame)
 ;;
 ;;   (defalias 'doremi-prefix (make-sparse-keymap))
 ;;   (defvar doremi-map (symbol-function 'doremi-prefix)
@@ -199,6 +205,23 @@
 ;;
 ;;; Change log:
 ;;
+;; 2007/05/27 dadams
+;;      enlarged-font-name:
+;;        Do nothing if null assq of ascii.  Not sure what this means, but gets around Emacs 23 bug.
+;; 2006/08/22 dadams
+;;      Added: delete-windows-for, read-buffer-for-delete-windows.
+;;      delete-windows-on: Use read-buffer-for-delete-windows.
+;;      Removed old-delete-windows-on (not used).
+;; 2006/05/30 dadams
+;;      delete-windows-on: Return nil if buffer arg is nil. Thanks to Slawomir Nowaczyk.
+;; 2006/01/07 dadams
+;;      Added :link for sending bug report.
+;; 2006/01/06 dadams
+;;      Renamed group.  Added :link.
+;; 2006/01/04 dadams
+;;     Added: other-window-or-frame.
+;; 2005/12/29 dadams
+;;     mouse-show-hide-mark-unmark: dired-mouse-mark/unmark -> diredp-mouse-mark/unmark.
 ;; 2005/12/13 dadams
 ;;     Added: delete-other-frames.
 ;; 2005/11/18 dadams
@@ -335,43 +358,66 @@
 
 ;;; USER OPTIONS (VARIABLES) ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defgroup frame-cmds nil
+(defgroup Frame-Commands nil
   "Miscellaneous frame and window commands."
-  :version "22.1" :group 'frames)
+  :group 'frames
+  :link `(url-link :tag "Send Bug Report"
+          ,(concat "mailto:" "drew.adams" "@" "oracle" ".com?subject=\
+frame-cmds.el bug: \
+&body=Describe bug here, starting with `emacs -q'.  \
+Don't forget to mention your Emacs and library versions."))
+  :link '(url-link :tag "Other Libraries by Drew"
+          "http://www.emacswiki.org/cgi-bin/wiki/DrewsElispLibraries")
+  :link '(url-link :tag "Download"
+          "http://www.emacswiki.org/cgi-bin/wiki/frame-cmds.el")
+  :link '(url-link :tag "Description - `delete-window'"
+          "http://www.emacswiki.org/cgi-bin/wiki/FrameModes")
+  :link '(url-link :tag "Description - Frame Renaming"
+          "http://www.emacswiki.org/cgi-bin/wiki/FrameTitle")
+  :link '(url-link :tag "Description - Frame Resizing"
+          "http://www.emacswiki.org/cgi-bin/wiki/Shrink-Wrapping_Frames")
+  :link '(url-link :tag "Description - Frame Customization"
+          "http://www.emacswiki.org/cgi-bin/wiki/CustomizingAndSaving")
+  :link '(url-link :tag "Description - Frame Tiling"
+          "http://www.emacswiki.org/cgi-bin/wiki/Frame_Tiling_Commands")
+  :link '(url-link :tag "Description - General"
+          "http://www.emacswiki.org/cgi-bin/wiki/FrameModes")
+  :link '(emacs-commentary-link :tag "Commentary" "frame-cmds")
+  )
 
 (defcustom rename-frame-when-iconify-flag t
   "*Non-nil means frames are renamed when iconified.
 The new name is the name of the current buffer."
-  :type 'boolean :group 'frame-cmds)
+  :type 'boolean :group 'Frame-Commands)
 
 (defcustom frame-config-register ?\C-l  ; Control-L is the name of the register.
   "*Character naming register for saving/restoring frame configuration."
-  :type 'character :group 'frame-cmds)
+  :type 'character :group 'Frame-Commands)
 
 (defcustom show-hide-show-function 'jump-to-frame-config-register
   "*Function to show stuff that is hidden or iconified by `show-hide'.
 Candidates include `jump-to-frame-config-register' and `show-buffer-menu'."
   :type '(choice (const :tag "Restore frame configuration" jump-to-frame-config-register)
 		 (function :tag "Another function"))
-  :group 'frame-cmds)
+  :group 'Frame-Commands)
 
 (defcustom window-mgr-title-bar-pixel-width 30
   "*Width of frame title bar provided by the window manager, in pixels.
 There is no way for Emacs to determine this, so you must set it."
-  :type 'integer :group 'frame-cmds)
+  :type 'integer :group 'Frame-Commands)
 
 (defcustom enlarge-font-tries 100
   "Number of times to try to change font-size, when looking for a font.
 The font-size portion of a font name is incremented or decremented at
 most this many times, before giving up and raising an error."
-  :type 'integer :group 'frame-cmds)
+  :type 'integer :group 'Frame-Commands)
 
 (defcustom frame-parameters-to-exclude '((window-id) (buffer-list) (name) (title) (icon-name))
   "Parameters to exclude in `set-all-frame-alist-parameters-from-frame'.
 An alist of the same form as that returned by `frame-parameters'.
 The cdr of each alist element is ignored.
 These frame parameters are not copied to the target alist."
-  :type '(repeat (cons symbol sexp)) :group 'frame-cmds)
+  :type '(repeat (cons symbol sexp)) :group 'Frame-Commands)
 
 (defcustom move-frame-wrap-within-display-flag t
   "*Non-nil means wrap frame movements within the display.
@@ -379,7 +425,7 @@ Commands `move-frame-up', `move-frame-down', `move-frame-left', and
 `move-frame-right' then move the frame back onto the display when it
 moves off of it.
 If nil, you can move the frame as far off the display as you like."
-  :type 'boolean :group 'frame-cmds :group 'frames)
+  :type 'boolean :group 'Frame-Commands)
 
 
 
@@ -466,8 +512,8 @@ being made invisible."
   (if (window-minibuffer-p (posn-window (event-start event)))
       (show-hide)
     (or (and (memq major-mode '(dired-mode vc-dired-mode))
-             (fboundp 'dired-mouse-mark/unmark)
-             (dired-mouse-mark/unmark event)) ; Return nil if not on a file or dir.
+             (fboundp 'diredp-mouse-mark/unmark)
+             (diredp-mouse-mark/unmark event)) ; Return nil if not on a file or dir.
         (mouse-buffer-menu event))))
 
 ;;;###autoload
@@ -489,7 +535,6 @@ With non-nil prefix arg ICONIFY-ALL, iconify all visible frames."
   (iconify-or-deiconify-frame))
 
 
-
 (or (fboundp 'old-delete-window)
     (fset 'old-delete-window (symbol-function 'delete-window)))
 
@@ -504,9 +549,15 @@ If WINDOW is the only one in its frame, then `delete-frame' too."
   (select-window window)
   (if (one-window-p t) (delete-frame) (old-delete-window (selected-window))))
 
+;;;###autoload
+(defun delete-windows-for (&optional buffer)
+  "`delete-window' or prompt for buffer and delete its windows.
+With no prefix arg, delete the selected window.
+With a prefix arg, prompt for a buffer and delete all windows, on any
+  frame, that show that buffer."
+  (interactive (list (and current-prefix-arg (read-buffer-for-delete-windows))))
+  (if buffer (delete-windows-on buffer) (delete-window)))
 
-(or (fboundp 'old-delete-windows-on)
-    (fset 'old-delete-windows-on (symbol-function 'delete-windows-on)))
 
 ;; REPLACES ORIGINAL (built-in):
 ;; 1) Uses `read-buffer' in interactive spec.
@@ -527,14 +578,29 @@ Interactively, FRAME depends on the prefix arg, as follows:
   With prefix arg >= 0, FRAME is t (this frame only).
   With prefix arg < 0,  FRAME is `visible' (all visible frames)."
   (interactive
-   (list (read-buffer "Delete windows on buffer: " (current-buffer) 'existing)
+   (list (read-buffer-for-delete-windows)
          (and current-prefix-arg
               (or (natnump (prefix-numeric-value current-prefix-arg))
                   'visible))))
   ;; `get-buffer-window' interprets FRAME oppositely for t and nil, so switch.
   (setq frame (if (eq t frame) nil (if (eq nil frame) t frame)))
   (let (win)
-    (while (setq win (get-buffer-window buffer frame)) (delete-window win))))
+    ;; Apparently, the original returns nil if buffer is nil (!).
+    (and buffer
+         (while (setq win (get-buffer-window buffer frame))
+           (delete-window win)))))
+
+(defun read-buffer-for-delete-windows ()
+  "Read buffer name for delete-windows commands.
+Only displayed buffers are completion candidates."
+  (completing-read "Delete windows on buffer: "
+                   (let ((all-bufs (buffer-list))
+                         (cand-bufs nil))
+                     (dolist (buf all-bufs)
+                       (when (get-buffer-window buf t)
+                         (push (list (buffer-name buf)) cand-bufs)))
+                     cand-bufs)
+                   nil t nil 'minibuffer-history (buffer-name (current-buffer)) t))
 
 (defsubst frame-iconified-p (frame)
   "Return non-nil if FRAME is `frame-live-p' and `frame-visible-p'."
@@ -809,7 +875,8 @@ frames (except a standalone minibuffer frame, if any)."
               (function
                (lambda (fr)
                  (and (eq t (frame-visible-p fr))
-                      (and (fboundp 'thumbnail-frame-p) (not (thumbnail-frame-p fr)))
+                      (if (fboundp 'thumbnail-frame-p) 
+			  (not (thumbnail-frame-p fr)) t)
                       (or (not (boundp '1on1-minibuffer-frame))
                           (not (eq (cdr (assq 'name (frame-parameters 1on1-minibuffer-frame)))
                                    (cdr (assq 'name (frame-parameters fr))))))))))))
@@ -1005,7 +1072,8 @@ Optional FRAME parameter defaults to current frame."
   "FONTNAME, after enlarging font size of FRAME by INCREMENT.
 FONTNAME is the font of FRAME."
   (when (query-fontset fontname)
-    (setq fontname (nth 2 (assq 'ascii (aref (fontset-info fontname frame) 2)))))
+    (let ((ascii (assq 'ascii (aref (fontset-info fontname frame) 2))))
+      (when ascii (setq fontname (nth 2 ascii)))))
   (let ((xlfd-fields (x-decompose-font-name fontname)))
     (unless xlfd-fields (error "Cannot decompose font name"))
     (let ((new-size (+ (string-to-number (aref xlfd-fields xlfd-regexp-pixelsize-subnum))
@@ -1089,11 +1157,18 @@ The CDR is nil."
                                    "wait-for-wm" "scroll-bar-foreground" "scroll-bar-foreground"))))
     params))
 
+;;;###autoload
 (defun tell-customize-var-has-changed (variable)
   "Tell Customize to recognize that VARIABLE has been set (changed).
 VARIABLE is a symbol that names a user option."
   (interactive "vVariable: ")
   (put variable 'customized-value (list (custom-quote (eval variable)))))
+
+;;;###autoload
+(defun other-window-or-frame (arg)
+  "`other-frame', if `one-window-p'; otherwise, `other-window'."
+  (interactive "p")
+  (if (one-window-p) (other-frame arg) (other-window arg)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 
