@@ -133,6 +133,13 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
     if [ -e "${DEST}/Aquamacs Emacs.app" ]; then
 	tar cvjf ${NAME}.tar.bz2 Aquamacs\ Emacs.app  >>$LOG 2>>$LOG
 	echo "Result (if successful) in " ${NAME}.tar.bz2  >>$LOG  
+	
+	# copy to web dir
+
+	if test "$a" == "copy-to-server"; then
+	    ${AQUAMACS_ROOT}/build/copy-nightly-build.sh
+	fi
+
     else
 	echo "Build failed."
     fi
