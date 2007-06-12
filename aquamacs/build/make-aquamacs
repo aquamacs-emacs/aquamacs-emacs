@@ -570,22 +570,27 @@ rm -f "leim/ja-dic/ja-dic.el" "lisp/loaddefs.el"  "lisp/ldefs-boot.el" "site-lis
 
 # byte-compile the site-lisp stuff
 
-cd "$dest/Contents/Resources/site-lisp"
-emacs="$dest/Contents/MacOS/Aquamacs Emacs"
-sourcefiles=`find . -name \*.el`
-for el in $sourcefiles
-do
-  elc=${el}c
-  if [ ! -f $elc ]
-  then
-      echo "Compiling Aquamacs file $el" 
-      "$emacs" -nw -Q -batch -f batch-byte-compile $el 
-      if [ -f $elc ]  # did it  work?
-      then
-	  gzip --best -f $el  # then compress the .el file
-      fi
-  fi
-done
+# disabled, because it can't be loaded. 
+# presumably, auto-compression-mode isn't on,
+# and the .elc aren't loaded because the .el.gz are newer - or so...
+# turned off for now.
+
+# cd "$dest/Contents/Resources/site-lisp"
+# emacs="$dest/Contents/MacOS/Aquamacs Emacs"
+# sourcefiles=`find . -name \*.el`
+# for el in $sourcefiles
+# do
+#   elc=${el}c
+#   if [ ! -f $elc ]
+#   then
+#       echo "Compiling Aquamacs file $el" 
+#       "$emacs" -nw -Q -batch -f batch-byte-compile $el 
+#       if [ -f $elc ]  # did it  work?
+#       then
+# 	  gzip --best -f $el  # then compress the .el file
+#       fi
+#   fi
+# done
 
 
 # compress the sources
