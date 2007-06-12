@@ -2,6 +2,8 @@
  
 export CVS_RSH=ssh
 
+AQEMACSSRC='emacs-22.1'
+
 if test "$AQUAMACS_CVS_PREFIX" ; then
     CVS_PREFIX=$AQUAMACS_CVS_PREFIX
 else
@@ -96,7 +98,7 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
      
     rm -rf emacs  2>>$LOG 
     echo "Copying emacs.raw emacs" >>$LOG  
-    cp -Rp emacs.raw emacs  2>>$LOG 
+    cp -Rp $AQEMACSSRC emacs  2>>$LOG 
 
     export EMACS_ROOT=`pwd`/emacs
     cd aquamacs
