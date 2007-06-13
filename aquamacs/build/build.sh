@@ -119,7 +119,7 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
 
     ${AQUAMACS_ROOT}/build/make-aquamacs >>$LOG 2>>$LOG 
 
-    rm -rvf "${DEST}/Aquamacs Emacs.app"  >>$LOG 2>>$LOG 
+    rm -rf "${DEST}/Aquamacs Emacs.app"  >>$LOG 2>>$LOG 
 #    ${AQUAMACS_ROOT}/build/install-aquamacs "${AQUAMACS_ROOT}" 
 #"${DEST}/Aquamacs Emacs.app" "Aquamacs-Raw/Emacs.app"  >>$LOG 2>>$LOG 
     cd ${AQ_PREFIX}/emacs/mac	
