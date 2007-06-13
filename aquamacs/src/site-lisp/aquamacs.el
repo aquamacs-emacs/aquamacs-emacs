@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.107 2007/06/13 16:26:30 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.108 2007/06/13 16:52:14 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -1106,6 +1106,7 @@ if modified buffers exist."
 This is modified in Aquamacs compared to GNU Emacs, because most
 information given would otherwise be irrelevant to Aquamacs users.
 "
+(longlines-mode -1)
   (let* ((image-file (cond ((stringp fancy-splash-image)
 			    fancy-splash-image)
 			   ((and (display-color-p)
@@ -1153,7 +1154,7 @@ information given would otherwise be irrelevant to Aquamacs users.
    :face 'variable-pitch
    "Aquamacs is a distribution of GNU Emacs that is adapted for Mac users.\n\n")
   (insert "\n")
-  )
+)
 (setq fancy-splash-text
       '((:face (variable-pitch :weight bold)
            :face variable-pitch "Aquamacs Emacs comes with "
