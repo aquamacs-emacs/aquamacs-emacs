@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.76 2007/06/13 19:07:59 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.77 2007/06/13 20:28:13 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -1033,7 +1033,9 @@ mac-command-modifier osxkeys-command-key))))
 With arg, turn Mac Key mode on iff arg is positive.
 When Mac Key mode is enabled, mac-style key bindings are provided.
 Setting the `osx-key-mode' variable has limited effect - call
-the `osx-key-mode' function to switch mode on or off."
+the `osx-key-mode' function to switch mode on or off.
+`osx-key-mode-map' and `osx-key-low-priority-key-map' contain the
+keymaps used by this mode. They may be modified where necessary."
   :global t
   :group 'osx-key-mode 
   :keymap 'osx-key-mode-map  
