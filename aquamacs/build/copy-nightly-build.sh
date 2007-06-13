@@ -8,6 +8,7 @@
 
 GNUNAME=GNU-Emacs-`date +"%Y-%b-%d-%a"`.dmg.bz2
 NAME=Aquamacs-`date +"%Y-%b-%d-%a"`.tar.bz2
+COPYORLINK='cp'  # 'ln -s'
 
 if [ "$1" == "intel" ];
 then
@@ -53,7 +54,7 @@ if [ -e $TMP/${NAME} ]; then
         mv $TMP builds
         chmod go+rx builds
         rm Aquamacs-nightly.tar.bz2
-        ln -s builds/$NAME Aquamacs-nightly.tar.bz2
+        $COPYORLINK builds/$NAME Aquamacs-nightly.tar.bz2
         echo "The latest Aquamacs Emacs nightly is ${NAME}<BR>" >latest-aquamacs.html
         # copy the downloaded log for this step into "latest" because the build worked
         cp aquamacs-build.log latest-logs/ 2>/dev/null
@@ -76,7 +77,7 @@ if [ -e $TMP/${GNUNAME} ]; then
         mv $TMP gnubuilds
         chmod go+rx gnubuilds
         rm GNU-Emacs-nightly.dmg.bz2 2>/dev/null
-        ln -s gnubuilds/$GNUNAME GNU-Emacs-nightly.dmg.bz2
+        ${COPYORLINK} gnubuilds/$GNUNAME GNU-Emacs-nightly.dmg.bz2
         echo "The latest GNU Emacs nightly is ${GNUNAME}" >latest-emacs.html
         # copy the downloaded log for this step into "latest" because the build worked
         cp emacs-build.log latest-logs/  2>/dev/null
