@@ -1,5 +1,4 @@
 #!/bin/sh
-#scp pull-nightly.sh dreitter@ssh.inf.ed.ac.uk:~/
 
 # this script grabs the Aquamacs nightly from rodrigues
 # the build process runs at 4am on rodrigues
