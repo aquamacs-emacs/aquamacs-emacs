@@ -46,7 +46,7 @@ scp $SOURCE/${NAME} $TMP/
 
 if [ -e $TMP/${NAME} ]; then
 
-    if [ `stat -c %s $TMP/${NAME}` -gt 1000000 ]; then
+    if [ `stat -f %z $TMP/${NAME}` -gt 1000000 ]; then
 
         rm -rf builds
         mv $TMP builds
@@ -68,7 +68,7 @@ scp $SOURCE/${GNUNAME} $TMP/
 
 if [ -e $TMP/${GNUNAME} ]; then
 
-    if [ `stat -c %s $TMP/${GNUNAME}` -gt 1000000 ]; then
+    if [ `stat -f %z $TMP/${GNUNAME}` -gt 1000000 ]; then
 
         rm -rf gnubuilds
         mv $TMP gnubuilds
