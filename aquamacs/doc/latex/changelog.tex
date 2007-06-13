@@ -89,11 +89,13 @@
 \item Undo (aquamacs-undo, Apple-Z) will now restore point and mark as
 	appropriate.
 
-\item Left/Right keys will now, when text is marked (a region is
-	defined), behave more Mac-like: they move to the beginning or the
-	end of that region, respectively. (Rebind left/right keys in
-	osx-mode-map or turn off CUA mode to get rid of this new
-	behavior).
+      \item Left/Right keys will now behave more Mac-like, whenever text is         marked (i.e. the mark is active / text has been selected). They now         move to the beginning or the end of that region, respectively. To turn off this behavior, turn off CUA mode or rebind  left/right keys in osx-key-low-priority-key-map by adding this to your Preferences.el or .emacs file: 
+
+(define-key osx-key-low-priority-key-map [left] 'backward-char)
+
+(define-key osx-key-low-priority-key-map [right] 'forward-char)
+
+(osx-key-mode 1)
 
 \item Apple-2 can now be used to split the window into two (like C-x
 	2), Apple-1 will undo that split (like C-x 1).
