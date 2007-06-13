@@ -92,6 +92,5 @@ cat latest-aquamacs.html latest-emacs.html >>latest.html
 echo "</span></BODY></HTML>" >>latest.html
 
 
-cat latest-logs/cvs-update.log latest-logs/emacs-build.log latest-logs/aquamacs-build.log >latest.log 2>/dev/nu
-ll
+cat latest-logs/cvs-update.log latest-logs/emacs-build.log latest-logs/aquamacs-build.log >latest.log 2>/dev/null
 cat cvs-update.log emacs-build.log aquamacs-build.log >last_night.log 2>/dev/null
