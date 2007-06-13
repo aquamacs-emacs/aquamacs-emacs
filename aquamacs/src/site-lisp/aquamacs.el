@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.106 2007/06/05 07:53:47 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.107 2007/06/13 16:26:30 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -1136,8 +1136,7 @@ information given would otherwise be irrelevant to Aquamacs users.
 	  (define-key map [mouse-1]
 	    (lambda ()
 	      (interactive)
-	      (browse-url "http://aquamacs.org/")
-	      (throw 'exit nil)))
+	      (browse-url "http://aquamacs.org/")))
 	  (define-key map [down-mouse-1] 'ignore)
 	  (define-key map [up-mouse-1] 'ignore)
 	  (insert-image img (propertize "xxx" 'help-echo help-echo
