@@ -46,7 +46,8 @@ scp $SOURCE/${NAME} $TMP/
 
 if [ -e $TMP/${NAME} ]; then
 
-    if [ `stat -f %z $TMP/${NAME}` -gt 1000000 ]; then
+    SIZE=`du -sk $TMP/${NAME} | awk '{print $1}'`
+    if [ $SIZE -gt 1000 ]; then
 
         rm -rf builds
         mv $TMP builds
@@ -68,7 +69,8 @@ scp $SOURCE/${GNUNAME} $TMP/
 
 if [ -e $TMP/${GNUNAME} ]; then
 
-    if [ `stat -f %z $TMP/${GNUNAME}` -gt 1000000 ]; then
+    SIZE=`du -sk $TMP/${GNUNAME} | awk '{print $1}'`
+    if [ $SIZE -gt 1000 ]; then
 
         rm -rf gnubuilds
         mv $TMP gnubuilds
