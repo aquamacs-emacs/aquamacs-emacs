@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.82 2007/06/12 11:12:44 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.83 2007/06/13 16:51:07 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -644,8 +644,10 @@ customization buffer."
  
 ;; goes in simple.el
 (defun turn-on-longlines ()
-  "Unconditionally turn on Longlines mode."
-  (longlines-mode 1))
+  "Turn on Longlines mode.
+... unless buffer is read-only."
+  (unless buffer-read-only
+    (longlines-mode 1)))
 
 (defun turn-off-longlines ()
   "Unconditionally turn off Longlines mode."
