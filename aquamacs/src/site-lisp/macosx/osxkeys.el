@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.75 2007/04/27 21:29:46 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.76 2007/06/13 19:07:59 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -103,7 +103,7 @@ after updating this variable.")
  Like `backward-char', but moves point to the beginning of the region
 provided `cua-mode' and the mark are active."
   (interactive)
-  (let ((left (min (point) (or (mark) 0))))
+  (let ((left (min (point) (or (mark t) 0))))
 
     (if (and cua-mode transient-mark-mode 
 	     mark-active
@@ -119,7 +119,7 @@ provided `cua-mode' and the mark are active."
  Like `forward-char', but moves point to the end of the region
 provided `cua-mode' and the mark are active."
   (interactive)
-  (let ((right (max (point) (or (mark) 0))))
+  (let ((right (max (point) (or (mark t) 0))))
 
     (if (and cua-mode transient-mark-mode 
 	     mark-active
