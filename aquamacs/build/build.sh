@@ -138,7 +138,7 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
 	# copy to web dir
 
 	if test "$COPY" == "copy-to-server"; then
-	    ${AQUAMACS_ROOT}/build/copy-nightly-build.sh
+	    ${AQUAMACS_ROOT}/build/copy-build-to-server.sh
 	fi
 
     else
