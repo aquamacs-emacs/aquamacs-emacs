@@ -89,7 +89,7 @@ if [ -e $TMP/${GNUNAME} ]; then
 fi
  
 
-echo "<HTML style=\"border: none ;\"><BODY style=\"border: none ;\"><span style=\"font-family:sans-serif; font-
+echo "<HTML style=\"border: none ;\"><META HTTP-EQUIV="expires" CONTENT="now"><BODY style=\"border: none ;\"><span style=\"font-family:sans-serif; font-
 size:10pt;\">" >latest.html
 cat latest-aquamacs.html latest-emacs.html >>latest.html
 echo "</span></BODY></HTML>" >>latest.html
