@@ -2,7 +2,7 @@
 # run from within build directory
 
 
-FILE=ess-5.2.12
+FILE=ess-5.3.0
 DEST=../src/site-lisp/edit-modes/ess-mode
 INFODEST=../src/site-lisp/edit-modes/info
 
@@ -13,6 +13,8 @@ cd /tmp
 tar xvzf /tmp/$FILE.tar.gz
 
 cd /tmp/$FILE
+
+chmod -R u+w * 
 
 mkdir /tmp/ess
 PREFIX=/tmp/ess  make -e all
@@ -34,4 +36,6 @@ mv /tmp/$FILE/etc $DEST/
 # delete some big files that arent needed
 
 rm -rf $DEST/etc/other/S-spread/*.ps
+cd $DEST/etc
+rm config.guess backbug* Makefile  R-ESS-bugs.R Makefile BACKBUG* sas-keys.*
 
