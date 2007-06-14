@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.27 2006/10/15 14:29:42 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.28 2007/06/14 15:44:49 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -312,9 +312,9 @@ When frames are deleted, their position (associated with the name of
 the buffer shown in their first window) is stored. Frames will be 
 re-created at that position later on.
 
-`smart-frame-positioning-enforce', `smart-frame-positioning-margin'
-and `smart-frame-positioning-hook' can be customized to configure
-this mode."
+`smart-frame-positioning-enforce', `smart-frame-positioning-margin',
+`smart-frame-positioning-hook' and `save-frame-position-file' 
+can be customized to configure this mode."
 
   :init-value nil
   :global t
