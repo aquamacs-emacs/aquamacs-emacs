@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.51 2007/02/09 22:58:41 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.52 2007/06/15 09:47:51 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -93,7 +93,13 @@
       (setenv "INFOPATH" (apply 'concat (getenv "INFOPATH")
 				(mapcar (lambda (x) (concat ":" x))
 					extra-dirs)))))
-  
+ 
+;
+
+
+
+  (aquamacs-set-defaults '(( frame-title-format "%b")))
+ 
   ;; emulate a three button mouse with Option / Control modifiers 
   ;; (setq mac-emulate-three-button-mouse t)
   ;; seems to prevent setting the secondary selection, so turned off for now
