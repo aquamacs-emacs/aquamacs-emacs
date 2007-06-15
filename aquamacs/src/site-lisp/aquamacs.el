@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.108 2007/06/13 16:52:14 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.109 2007/06/15 09:47:19 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -383,9 +383,6 @@ Separate paths from file names with --."
 
 					; ------- Frames (OSX Windows) ----------
 
-					; format the title-bar to always include the buffer name
-  (setq frame-title-format "Emacs - %b")
- 
  
   (require 'view)
   ;; redefine view-buffer
@@ -823,25 +820,7 @@ You may redistribute Aquamacs under the GNU General Public License. Type \\[desc
   (aquamacs-set-defaults
    '((fancy-splash-image "aquamacs-splash-screen.jpg")
      (fancy-splash-max-time 3000)))
-  
-;; (defadvice fancy-splash-screens (around new-frame (&rest args) activate protect)
- 
-;;   (let ((one-buffer-one-frame-force t))
-;;     ad-do-it)
-;;   (message " ")
-;;   )
-
-  ;; only the fancy splash screen is displayed more than once
-  ;; this is a workaround    
- 
     
-  ;; scratch buffer should be empty 
-  ;; the philosophy is: don't give users any text to read to get started!    
-
-  (aquamacs-set-defaults '((  initial-scratch-message nil)
-			   ( frame-title-format "Aquamacs - %b")
-			   ))
-
   ;; while pc selection mode will be turned on, we don't
   ;; want it to override Emacs like key bindings. 
   ;; we need to fill the following variable with something
@@ -851,7 +830,10 @@ You may redistribute Aquamacs under the GNU General Public License. Type \\[desc
 					 ))
 
   (aquamacs-set-defaults 
-   '( 
+   '(
+     ;; scratch buffer should be empty 
+     ;; the philosophy is: don't give users any text to read to get started!    
+     (initial-scratch-message nil)
      (focus-follows-mouse nil) ;; do not mess with user's mouse!
      (resize-mini-windows t)
      (mouse-wheel-progessive-speed nil)
