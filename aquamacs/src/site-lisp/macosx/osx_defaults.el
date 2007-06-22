@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.53 2007/06/22 10:38:06 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.54 2007/06/22 11:32:41 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -65,28 +65,64 @@
       ;; fail silently if file can't be written.
       (error nil)))))
 
+(defvar aquamacs-preference-files
+  '("/Library/Preferences/Emacs/Preferences" 
+			  "/Library/Preferences/Aquamacs Emacs/Preferences"
+			  "~/Library/Preferences/Emacs/Preferences"
+			  "~/Library/Preferences/Aquamacs Emacs/Preferences")
+  "List of names of source files to be loaded as Preference files.")
+
+;; (setq init-file-debug nil)
+;; (aquamacs-load-preferences)
 (defun aquamacs-load-preferences ()
     "Loads the custom and preference files.
 
-The following files are loaded. 
+The files listed in the variables `custom-file' and `aquamacs-preference-files'
+are loaded. If errors occur, *Messages* is shown containing a helpful error message.
 Aquamacs also executes compatibility code to allow transitions from
-earlier versions of the distribution.
-
-`custom-file'
-/Library/Preferences/Emacs/Preferences.el
-/Library/Preferences/Aquamacs Emacs/Preferences.el
-~/Library/Preferences/Emacs/Preferences.el
-~/Library/Preferences/Aquamacs Emacs/Preferences.el"
+earlier versions of the distribution."
+    (interactive)
     (unless (or (aq-list-contains-equal command-line-args "-q")
 		(aq-list-contains-equal command-line-args "--no-init-file"))
-     
-      (condition-case nil 
-	  (progn
-	    (load "/Library/Preferences/Emacs/Preferences" t) 
-	    (load "/Library/Preferences/Aquamacs Emacs/Preferences" t) 
-	    (load "~/Library/Preferences/Emacs/Preferences" t) 
-	    (load "~/Library/Preferences/Aquamacs Emacs/Preferences" t) 
-	    (load custom-file))
+	(if init-file-debug
+	    ;; Do this without a condition-case if the user wants to debug.
+	    (mapc (lambda (file)
+		    (let ((user-init-file file))
+		      (load user-init-file t)))
+		  aquamacs-preference-files)
+	      (mapc (lambda (file)
+		      	  
+		      (let ((user-init-file file))
+			(condition-case error 
+			    (load user-init-file t)
+			  (error ;; this code is from startup.el
+			   (let ((message-log-max nil))
+			     (save-excursion
+			       (set-buffer (get-buffer-create "*Messages*"))
+			       (insert "\n\n"
+				       (format "An error has occurred while loading `%s.el (or .elc)':\n\n"
+					       user-init-file)
+				       (format "%s%s%s"
+					       (get (car error) 'error-message)
+					       (if (cdr error) ": " "")
+					       (mapconcat (lambda (s) (prin1-to-string s t)) (cdr error) ", "))
+				       "\n\n"
+				       "To ensure normal operation, you should investigate and remove the\n"
+				       "cause of the error in your initialization file.  Start Emacs with\n"
+				       "the `--debug-init' option to view a complete error backtrace.\n\n"))
+			     (message "Error in init file: %s%s%s"
+				      (get (car error) 'error-message)
+				      (if (cdr error) ": " "")
+				      (mapconcat 'prin1-to-string (cdr error) ", "))
+			     (let ((pop-up-windows nil))
+			       (pop-to-buffer "*Messages*")
+			       (end-of-buffer))
+			     (setq init-file-had-error t)))
+			  )))
+		    aquamacs-preference-files))
+      ;; the customization file is loaded even if the Preferences fail.
+      (condition-case nil
+	  (load custom-file)
 	(error t))
       (aquamacs-activate-features-new-in-this-version)))
 
