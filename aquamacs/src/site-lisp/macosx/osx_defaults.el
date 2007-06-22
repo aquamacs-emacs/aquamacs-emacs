@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.54 2007/06/22 11:32:41 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.55 2007/06/22 11:35:35 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -123,8 +123,8 @@ earlier versions of the distribution."
       ;; the customization file is loaded even if the Preferences fail.
       (condition-case nil
 	  (load custom-file)
-	(error t))
-      (aquamacs-activate-features-new-in-this-version)))
+	(error (message "Loading `custom-file' failed.")))
+      (aquamacs-activate-features-new-in-this-version)) t)
 
 (defun aquamacs-osx-defaults-setup ()
 
