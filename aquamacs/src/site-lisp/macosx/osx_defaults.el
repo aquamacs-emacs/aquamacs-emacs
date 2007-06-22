@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.52 2007/06/15 09:47:51 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.53 2007/06/22 10:38:06 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -47,6 +47,48 @@
 ; move one-buffer-one-frame to extra mode
 
 
+(defun aquamacs-create-preferences-file ()
+  "Creates a Preferences.el in the right place if needed."
+  (let ((pf (expand-file-name 
+	     "~/Library/Preferences/Aquamacs Emacs/Preferences")))
+    (unless (or (file-readable-p (concat pf ".elc"))
+		(file-readable-p (concat pf ".el")))
+          (condition-case nil 
+      (with-temp-file (concat pf ".el")
+	(insert ";; This is the Aquamacs Preferences file.
+;; Add Emacs-Lisp code here that should be executed whenever
+;; you start Aquamacs Emacs. If errors occur, Aquamacs will stop
+;; evaluating this file and print errors in the *Messags* buffer.
+;; Use this file in place of ~/.emacs (which is loaded as well.)
+
+"))  
+      ;; fail silently if file can't be written.
+      (error nil)))))
+
+(defun aquamacs-load-preferences ()
+    "Loads the custom and preference files.
+
+The following files are loaded. 
+Aquamacs also executes compatibility code to allow transitions from
+earlier versions of the distribution.
+
+`custom-file'
+/Library/Preferences/Emacs/Preferences.el
+/Library/Preferences/Aquamacs Emacs/Preferences.el
+~/Library/Preferences/Emacs/Preferences.el
+~/Library/Preferences/Aquamacs Emacs/Preferences.el"
+    (unless (or (aq-list-contains-equal command-line-args "-q")
+		(aq-list-contains-equal command-line-args "--no-init-file"))
+     
+      (condition-case nil 
+	  (progn
+	    (load "/Library/Preferences/Emacs/Preferences" t) 
+	    (load "/Library/Preferences/Aquamacs Emacs/Preferences" t) 
+	    (load "~/Library/Preferences/Emacs/Preferences" t) 
+	    (load "~/Library/Preferences/Aquamacs Emacs/Preferences" t) 
+	    (load custom-file))
+	(error t))
+      (aquamacs-activate-features-new-in-this-version)))
 
 (defun aquamacs-osx-defaults-setup ()
 
@@ -57,15 +99,13 @@
   (mac-add-standard-directories)
 
  
+  (aquamacs-create-preferences-file)
+
   ;; load files (give full paths and load all files)
   ;; this will be called after .emacs has been loaded
   (add-hook 'after-init-hook   
-	    '(lambda () 
-	       (load "/Library/Preferences/Emacs/Preferences" t) 
-	       (load "/Library/Preferences/Aquamacs Emacs/Preferences" t) 
-	       (load "~/Library/Preferences/Emacs/Preferences" t) 
-	       (load "~/Library/Preferences/Aquamacs Emacs/Preferences" t) 
-	       ))
+	    'aquamacs-load-preferences
+	    'append)
 
   (mac-read-environment-vars-from-shell)
   (mac-add-path-to-exec-path)
