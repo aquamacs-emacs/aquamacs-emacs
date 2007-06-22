@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.109 2007/06/15 09:47:19 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.110 2007/06/22 10:37:45 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -121,15 +121,8 @@ yes-or-no prompts - y or n will do."
   (if window-system
       (global-set-key [remap find-file] 'aquamacs-find-file)  
     )
- 
-
-
-  (add-hook 'after-init-hook 
-	    (lambda () 
-	      (condition-case nil (load custom-file) (error t))
-	      (aquamacs-activate-features-new-in-this-version)
-	      ) 'append)
-
+  
+  
   (defun font-exists-p (fontorfontset)
     (condition-case nil
 	(or
