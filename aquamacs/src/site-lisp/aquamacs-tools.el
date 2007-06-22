@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.23 2007/05/04 12:50:28 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.24 2007/06/22 10:05:53 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -175,6 +175,18 @@ Comparison is done with `eq'."
       )
     result))
 ;; (aq-list-contains (list 1 2 3 4 5 'a 'b nil 'x) 1)
+
+(defun aq-list-contains-equal (list element)
+  "Return non-nil if the LIST contains ELEMENT. Aquamacs only.
+Comparison is done with `equal'."
+  (let (first result)
+    (while list
+      (if (not (equal (car-safe list) element))
+	  (setq list (cdr-safe list))
+	(setq list nil)
+	(setq result t))
+      )
+    result))
 
 
 (defun fontset-exist-p (font)
