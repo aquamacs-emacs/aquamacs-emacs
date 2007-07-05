@@ -110,6 +110,7 @@ prefix=/usr/local
 bootfast=no  # turn this on to compile all the emacs el files
 appsdir=/Applications
 emapp="Emacs.app"
+target_emapp="Aquamacs Emacs.app"
 with_config=yes
 with_app=yes
 with_x=no
@@ -415,18 +416,21 @@ if test "$with_app" == "yes"; then
   fi
 fi
 
-compver=`uname -p`-apple-`uname -s | tr A-Z a-z``uname -r`
- 
+compver=`uname -p`-apple-darwin`uname -r`
+
 if test "$self_contained" == "yes"; then
     # Move shared files down to Resources directory
     mv $installprefix/share/emacs/$version/* $installprefix
+    mv $installprefix/share/info $installprefix
+    mv $installprefix/share/man $installprefix
     rm -rf $installprefix/share
     # These directories might remain in Resources
     mv $installprefix/bin $installprefix/../MacOS/bin
     mv $installprefix/libexec/emacs/$version/$compver $installprefix/../MacOS/libexec
-    # Make the application binary a hard link
-    rm $installprefix/../MacOS/Emacs
-    ln $installprefix/../MacOS/bin/emacs $installprefix/../MacOS/Aquamacs\ Emacs
+    # Do not make the application binary a hard link
+    # move it out of the bin directory
+    rm "$installprefix/../MacOS/$target_emapp"
+    mv $installprefix/../MacOS/bin/emacs "$installprefix/../MacOS/${target_emapp}"
 
 fi # this mod by david reitter - dont create a package if self-contained
 
@@ -547,7 +551,8 @@ dest=`pwd`/Aquamacs/${emapp}
     exit 1
 }
 
-mv "$dest/Contents/MacOS/Emacs" "$dest/Contents/MacOS/Aquamacs Emacs"
+# obsolete:
+#mv "$dest/Contents/MacOS/Emacs" "$dest/Contents/MacOS/${target_emapp}"
 
 # find out where the change log file is
 
@@ -631,7 +636,7 @@ popd
 
 cd $dest
 cd ..
-mv Emacs.app "Aquamacs Emacs.app"
+mv Emacs.app "${target_emapp}"
 
 fi
 
