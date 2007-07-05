@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.55 2007/06/22 11:35:35 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.56 2007/07/05 22:04:29 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -82,8 +82,7 @@ are loaded. If errors occur, *Messages* is shown containing a helpful error mess
 Aquamacs also executes compatibility code to allow transitions from
 earlier versions of the distribution."
     (interactive)
-    (unless (or (aq-list-contains-equal command-line-args "-q")
-		(aq-list-contains-equal command-line-args "--no-init-file"))
+    (unless (equal init-file-user nil) ;; no .emacs was read (-q option)
 	(if init-file-debug
 	    ;; Do this without a condition-case if the user wants to debug.
 	    (mapc (lambda (file)
