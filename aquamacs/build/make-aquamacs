@@ -26,9 +26,7 @@
 #### /Application/Emacs and the rest of emacs in the usual unix places
 #### under /usr/local or some other location if specified as the first
 #### argument. The disc image will be in the file EmacsInstaller.dmg.
-####
-#### Upon installation, this will leave two versions of emacs on the
-#### computer, 20.7 and 21.1.
+#### 
 ####
 #### Examples:
 #### ./make-package
@@ -110,7 +108,7 @@ prefix=/usr/local
 bootfast=no  # turn this on to compile all the emacs el files
 appsdir=/Applications
 emapp="Emacs.app"
-target_emapp="Aquamacs Emacs.app"
+target_binary_name="Aquamacs Emacs"
 with_config=yes
 with_app=yes
 with_x=no
@@ -429,8 +427,8 @@ if test "$self_contained" == "yes"; then
     mv $installprefix/libexec/emacs/$version/$compver $installprefix/../MacOS/libexec
     # Do not make the application binary a hard link
     # move it out of the bin directory
-    rm "$installprefix/../MacOS/$target_emapp"
-    mv $installprefix/../MacOS/bin/emacs "$installprefix/../MacOS/${target_emapp}"
+    rm "$installprefix/../MacOS/${target_binary_name}" 2>/dev/null
+    mv $installprefix/../MacOS/bin/emacs "$installprefix/../MacOS/${target_binary_name}"
 
 fi # this mod by david reitter - dont create a package if self-contained
 
@@ -552,7 +550,7 @@ dest=`pwd`/Aquamacs/${emapp}
 }
 
 # obsolete:
-#mv "$dest/Contents/MacOS/Emacs" "$dest/Contents/MacOS/${target_emapp}"
+#mv "$dest/Contents/MacOS/Emacs" "$dest/Contents/MacOS/${target_binary_name}"
 
 # find out where the change log file is
 
@@ -636,7 +634,7 @@ popd
 
 cd $dest
 cd ..
-mv Emacs.app "${target_emapp}"
+mv Emacs.app "${target_binary_name}.app"
 
 fi
 
