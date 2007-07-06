@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.56 2007/07/05 22:04:29 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.57 2007/07/06 09:10:32 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -161,9 +161,9 @@ earlier versions of the distribution."
 		     (concat (mac-resources-path)
 			     "info"))))
     
-    (setq Info-default-directory-list (append
+    (setq Info-default-directory-list (append extra-dirs
 				       Info-default-directory-list
-				       extra-dirs))
+				       ))
     (when (getenv "INFOPATH")
       (setenv "INFOPATH" (apply 'concat (getenv "INFOPATH")
 				(mapcar (lambda (x) (concat ":" x))
