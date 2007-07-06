@@ -123,7 +123,7 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
 #    ${AQUAMACS_ROOT}/build/install-aquamacs "${AQUAMACS_ROOT}" 
 #"${DEST}/Aquamacs Emacs.app" "Aquamacs-Raw/Emacs.app"  >>$LOG 2>>$LOG 
     cd ${AQ_PREFIX}/emacs/mac	
-    mv -v "Aquamacs/Aquamacs Emacs.app" "${DEST}/" >>$LOG 2>>LOG
+    mv "Aquamacs/Aquamacs Emacs.app" "${DEST}/" >>$LOG 2>>LOG
 
     NAME=Aquamacs-`date +"%Y-%b-%d-%a"`
 
