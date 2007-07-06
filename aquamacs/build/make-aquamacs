@@ -399,8 +399,6 @@ if test "$compressed_dist" == "yes" -a "$full_dist" == "yes"; then
     find $installprefix/info -type f ! -name dir -print | sed 's|\(.*\)$|/usr/bin/gzip -9 \1|' | /bin/sh -s
 fi
 
-echo "after building."
-find ${tempparentfull}
 
 if test "$with_app" == "yes"; then
   echo "Creating Emacs.app application"
@@ -433,7 +431,9 @@ find $installprefix
     # Do not make the application binary a hard link
     # move it out of the bin directory
     rm "$installprefix/../MacOS/${target_binary_name}" 2>/dev/null
-    mv $installprefix/../MacOS/bin/emacs "$installprefix/../MacOS/${target_binary_name}"
+    mv $installprefix/../MacOS/Emacs "$installprefix/../MacOS/${target_binary_name}"
+    
+    rm $installprefix/../MacOS/bin/emacs-*
 
 fi # this mod by david reitter - dont create a package if self-contained
 
