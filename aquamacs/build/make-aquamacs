@@ -399,6 +399,9 @@ if test "$compressed_dist" == "yes" -a "$full_dist" == "yes"; then
     find $installprefix/info -type f ! -name dir -print | sed 's|\(.*\)$|/usr/bin/gzip -9 \1|' | /bin/sh -s
 fi
 
+echo "after building."
+find ${tempparentfull}
+
 if test "$with_app" == "yes"; then
   echo "Creating Emacs.app application"
   tempappdir=${tempparentfull}${appsdir}
@@ -419,6 +422,8 @@ compver=`uname -p`-apple-darwin`uname -r`
 if test "$self_contained" == "yes"; then
     # Move shared files down to Resources directory
     mv $installprefix/share/emacs/$version/* $installprefix
+echo "after moving some shared files:"
+find $installprefix
     mv $installprefix/share/info $installprefix
     mv $installprefix/share/man $installprefix
     rm -rf $installprefix/share
