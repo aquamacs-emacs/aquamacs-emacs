@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.53 2007/04/03 14:24:12 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.54 2007/07/06 19:09:29 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -173,7 +173,7 @@ Exceptions are listed in `obof-other-frame-regexps'."
   :group 'Aquamacs
   :group 'frames
 )
-
+ 
 (defcustom obof-same-frame-switching-regexps
   '(
     " SPEEDBAR"
@@ -192,7 +192,7 @@ Exceptions are listed in `obof-other-frame-regexps'."
     "\\*Messages\\*" 
     "\\*scratch\\*" 
     "\\*Help\\*"
-    "\\*Custom.*"
+    "\\*Custom.*\\*"
     ".*output\\*"
     "\\*mail\\*"
     "\\*grep\\*"  
@@ -246,9 +246,16 @@ This overrides entries in `obof-same-frame-regexps'."
 
 (defun obof-inhibit-pop-up-windows ()
    (when one-buffer-one-frame-mode
-     (set (make-local-variable 'pop-up-windows)
-	  nil)))
+     (set (make-local-variable 'pop-up-windows) nil)
+;; this doesn't work very well
+;; because it isn't called from the target frame!
+;     (make-variable-frame-local 'pop-up-windows)
+;     (set-frame-parameter nil  'pop-up-windows nil)
+))
 
+;; (assq 'pop-up-windows (frame-parameters nil))
+;; pop-up-windows one-buffer-one-frame-inhibit
+;; one-buffer-one-frame
 ;; Todo:
 ;; make this a patch
 ;; (define-key dired-mode-map [mouse-2] 'dired-mouse-find-file)
@@ -274,17 +281,14 @@ This overrides entries in `obof-same-frame-regexps'."
       (select-window window)
       (find-file (file-name-sans-versions file t)))))
 
-;; this will cause newly opened files to show up in the dired buffer
-(defvar dired-mode-hook nil)
-(add-hook 'dired-mode-hook 'obof-inhibit-frame-creation)
-(add-hook 'dired-mode-hook 'obof-inhibit-pop-up-windows)
+ ;; this will cause newly opened files to show up in the dired buffer
+;(defvar dired-mode-hook nil)
+; (add-hook 'dired-mode-hook 'obof-inhibit-frame-creation)
+; (add-hook 'dired-mode-hook 'obof-inhibit-pop-up-windows)
 (defvar custom-mode-hook nil)
 (add-hook 'custom-mode-hook 'obof-inhibit-frame-creation)
-(add-hook 'custom-mode-hook 'obof-inhibit-pop-up-windows)
+;;(add-hook 'custom-mode-hook 'obof-inhibit-pop-up-windows)
 
-
-
-;; (obof-same-frame-p "asdasd") 
 
 (defun open-in-other-frame-p (buf &optional switching)
   (not (obof-same-frame-p buf switching)))
@@ -342,6 +346,12 @@ the current window is switched to the new buffer."
 
 (define-key one-buffer-one-frame-mode-map [(control x) (shift b)] 
   'switch-to-buffer-here)
+
+(define-key one-buffer-one-frame-mode-map [?\C-x B] 
+  'switch-to-buffer-here)
+
+
+
 (define-key one-buffer-one-frame-mode-map [(control x) (control shift b)] 
   'list-buffers-here)
 (define-key one-buffer-one-frame-mode-map [(control x) (shift right)] 
