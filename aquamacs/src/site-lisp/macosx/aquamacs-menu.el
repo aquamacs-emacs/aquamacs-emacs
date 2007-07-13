@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.83 2007/06/13 16:51:07 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.84 2007/07/13 21:52:47 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -391,6 +391,7 @@ customization buffer."
   `(menu-item ,(aq-shortcut  "New                                        "
 			    'new-frame-with-new-scratch)  
 	      new-frame-with-new-scratch
+	      :key-sequence nil
 	      :enable (or (and (boundp 'one-buffer-one-frame-mode)
 			       one-buffer-one-frame-mode)
 			  (not (window-minibuffer-p
@@ -403,7 +404,7 @@ customization buffer."
     ,(aq-shortcut  "Open File...                             " 
 		  'mac-key-open-file )
     mac-key-open-file
-    :keys nil)) 
+    :key-sequence nil))
 
 (define-key menu-bar-file-menu [insert-file]
   '(menu-item "Insert File...                         " insert-file
@@ -420,23 +421,26 @@ customization buffer."
   `(menu-item ,(aq-shortcut "Close Buffer                            " 
 			   (key-binding [menu-bar file kill-buffer])) 
 	      close-current-window-asktosave
+	      :key-sequence nil
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
 			   (menu-bar-non-minibuffer-window-p))
 	      :help "Discard current buffer") 'separator-save)
  
 (define-key menu-bar-edit-menu [copy]
-  `(menu-item ,(aq-shortcut  "Copy                 " 
+  `(menu-item ,(aq-shortcut  "Copy                              " 
 			    (key-binding [menu-bar edit copy])) 
 	      clipboard-kill-ring-save
+	      :key-sequence nil
 	      :enable mark-active
 	      :help "Copy selected text in region"
 	      :keys "\\[clipboard-kill-ring-save]"))
  
 (define-key menu-bar-edit-menu [paste]
-  `(menu-item ,(aq-shortcut  "Paste                 " 
+  `(menu-item ,(aq-shortcut  "Paste                              " 
 ;(key-binding [menu-bar edit paste]) ;; doesn't work
 			     'clipboard-yank) 
 	      yank
+	      :key-sequence nil
 	      :enable (and
 		       ;; Emacs compiled --without-x doesn't have
 		       ;; x-selection-exists-p.
@@ -448,9 +452,10 @@ customization buffer."
 
 (require 'aquamacs-redo)
 (define-key menu-bar-edit-menu [undo]
-  `(menu-item ,(aq-shortcut  "Undo                 "
+  `(menu-item ,(aq-shortcut  "Undo                              "
 				 (key-binding [menu-bar edit undo]) )
 	      aquamacs-undo
+	      :key-sequence nil
 	      :enable (and (not buffer-read-only)
 			   (not (eq t buffer-undo-list))
 			   (if (eq last-command 'undo)
@@ -460,9 +465,10 @@ customization buffer."
 	      :help "Undo last operation"))
 
 (define-key-after menu-bar-edit-menu [redo]
-  `(menu-item ,(aq-shortcut "Redo                 " 
+  `(menu-item ,(aq-shortcut "Redo                              " 
 			   (key-binding [menu-bar edit redo])) 
 	      aquamacs-redo
+	      :key-sequence nil
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
 			   (boundp 'last-buffer-undo-list)
 			   last-buffer-undo-list)
@@ -471,19 +477,22 @@ customization buffer."
 (easy-menu-add-item  nil '("Edit")
   ["-" nil nil] 'cut)
 
+;;done
 (define-key menu-bar-edit-menu [cut]
-  `(menu-item ,(aq-shortcut  "Cut                    "
+  `(menu-item ,(aq-shortcut  "Cut                                 "
 			     (key-binding [menu-bar edit cut]))
 	      clipboard-kill-region
+	      :key-sequence nil
 	      :enable (and mark-active (not buffer-read-only))
 	      :help
 	      "Delete text in region and copy it to the clipboard"))
 
 (define-key menu-bar-edit-menu [mark-whole-buffer]
   `(menu-item ,(aq-shortcut  
-	       "Select All           " 
+	       "Select All                        " 
 	       (key-binding [menu-bar edit mark-whole-buffer])) 
 	      mark-whole-buffer
+	      :key-sequence nil
 	      :enable (menu-bar-menu-frame-live-and-visible-p)
 	      :help "Mark the whole buffer for a subsequent cut/copy."))
 
@@ -512,20 +521,23 @@ customization buffer."
 
 (require 'aquamacs-editing)
 (define-key menu-bar-edit-menu [fill]
-`(menu-item ,(aq-shortcut "Re-Wrap Lines (fill)      " 
+`(menu-item ,(aq-shortcut "Re-Wrap Lines (fill)          " 
 			   (key-binding [menu-bar edit fill]))
 	    fill-paragraph-or-region
-	      :enable (not buffer-read-only)
-	      :help
-	      "Fill text in region (or paragraph) to fit between
-	      left and right margin"))
+	    :key-sequence nil
+	    :enable (not buffer-read-only)
+	    :help
+	    "Fill text in region (or paragraph) to fit between
+left and right margin"))
+
 (define-key-after menu-bar-edit-menu [unfill]
 `(menu-item ,(aq-shortcut "Unwrap Lines (unfill)     " 
 			   (key-binding [menu-bar edit unfill]))
 	    unfill-paragraph-or-region
-	      :enable (not buffer-read-only)
-	      :help
-	      "Remove line-breaks from paragraph or region.")
+	    :key-sequence nil
+	    :enable (not buffer-read-only)
+	    :help
+	    "Remove line-breaks from paragraph or region.")
 'fill)
 
   
@@ -548,6 +560,7 @@ customization buffer."
   `(menu-item ,(aq-shortcut  "Save Buffer                              "
 			    'mac-key-save-file)
 	      save-buffer
+	      :key-sequence nil
 	      :enable (and (buffer-modified-p)
 			   (buffer-file-name)
 			   (menu-bar-menu-frame-live-and-visible-p)
@@ -559,7 +572,7 @@ customization buffer."
   `(menu-item ,(aq-shortcut  "Save Buffer As...                      "
 			    'mac-key-save-file-as) 
 	      write-file
-
+	      :key-sequence nil
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
 			   (menu-bar-non-minibuffer-window-p))
 	      :help "Write current buffer to another file"))
@@ -570,7 +583,7 @@ customization buffer."
 
 (defvar menu-bar-export-file-menu (make-sparse-keymap "Export ..."))
 
-(setq menu-bar-export-file-menu (make-sparse-keymap "New Buffer"))
+;; (setq menu-bar-export-file-menu (make-sparse-keymap "New Buffer"))
 
 (define-key menu-bar-export-file-menu [export-pdf]
   '(menu-item "PDF..." export-to-pdf
@@ -601,7 +614,6 @@ customization buffer."
 		     ) 
 	      aquamacs-print
 	      :key-sequence nil
-	      :keys nil
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
 			   (menu-bar-non-minibuffer-window-p))
 	      :help "Print current buffer or region with page headings"))
@@ -609,14 +621,13 @@ customization buffer."
 
 
 ;; Printing (redefinition for :enable)
-
+ 
 (easy-menu-remove-item global-map  '("menu-bar" "file") 'ps-print-region) 
 (easy-menu-remove-item global-map  '("menu-bar" "file") 'ps-print-buffer) 
 (easy-menu-remove-item global-map  '("menu-bar" "file") 'ps-print-region-faces) 
 (easy-menu-remove-item global-map  '("menu-bar" "file") 'ps-print-buffer-faces) 
 (easy-menu-remove-item global-map  '("menu-bar" "file") 'print-region) 
 (easy-menu-remove-item global-map  '("menu-bar" "file") 'print-buffer) 
-
  
 (defun menu-bar-print-region-or-buffer ()
   "Prints the current buffer or the region, if mark is active."
@@ -893,15 +904,15 @@ both existing buffers and buffers that you subsequently create."
   `(menu-item ,(aq-shortcut "Aquamacs Help                     " 
 		       'aquamacs-user-help)
 	      aquamacs-user-help
-	      :help "Show Aquamacs Manual in Apple Help"
-	      :keys nil) )
+	      :key-sequence nil
+	      :help "Show Aquamacs Manual in Apple Help"))
   
 (define-key-after menu-bar-help-menu [menu-aquamacs-user-wiki]
   `(menu-item ,(aq-shortcut "Aquamacs Tips Wiki Online" 
 		       'aquamacs-user-wiki)
 	      aquamacs-user-wiki
-	      :help "Show Wiki (online)"
-	      :keys nil)
+	      :key-sequence nil
+	      :help "Show Wiki (online)")
   'menu-aquamacs-help)
 
 
@@ -909,16 +920,16 @@ both existing buffers and buffers that you subsequently create."
   `(menu-item ,(aq-shortcut "Aquamacs Homepage                       " 
 		       'aquamacs-homepage)
 	      aquamacs-homepage
-	      :help "Show Aquamacs Homepage"
-	      :keys nil)
+	      :key-sequence nil
+	      :help "Show Aquamacs Homepage")
   'menu-aquamacs-user-wiki)
 
 (define-key-after menu-bar-help-menu [menu-aquamacs-emacs-manual]
   `(menu-item ,(aq-shortcut "Emacs Manual                       " 
 		       'aquamacs-emacs-manual)
 	      aquamacs-emacs-manual
-	      :help "Show Emacs Manual in Apple Help"
-	      :keys nil)
+	      :key-sequence nil
+	      :help "Show Emacs Manual in Apple Help")
   'menu-aquamacs-homepage)
 
 ;; remove this entry, because new versions of Aquamacs are available
@@ -934,6 +945,7 @@ both existing buffers and buffers that you subsequently create."
 ;; we will set the following ones directly
 ;; customization is always possible
 ;; the existing menu item is badly worded and the C-c/v/x don't apply anyways
+;; done
 (easy-menu-remove-item global-map  '("menu-bar" "options") 'cua-emulation-mode) 
 (easy-menu-remove-item global-map  '("menu-bar" "options") 'uniquify)
 (easy-menu-remove-item global-map  '("menu-bar" "options") 'transient-mark-mode)
@@ -974,6 +986,8 @@ both existing buffers and buffers that you subsequently create."
 	      :help "Split selected window in two"))
 ;; will be moved to Buffers menu later on 
 ;; but is created here
+
+;; --done
 
 ;; move stuff from File to the Buffers menu
  
@@ -1051,6 +1065,7 @@ that should be represented in the Aquamacs menus."
 
 ;; workarounds for current bugs
 
+;; done
 ; can't get rid of the menu bar on a Mac
 (easy-menu-remove-item global-map  
 		       '("menu-bar" "options" "showhide") 'menu-bar-mode)
@@ -1114,6 +1129,7 @@ that should be represented in the Aquamacs menus."
 
 )
 )
+;; --done
 
 (provide 'aquamacs-menu)
   
