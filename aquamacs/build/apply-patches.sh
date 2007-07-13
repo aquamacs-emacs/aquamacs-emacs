@@ -23,7 +23,7 @@ PATCHES="fix-configure test ui-strings
          recentf-track-minibuf
          pop-to-buffer display-buffer-reuse
          emacs-inline
-       
+         faces-speedup
          calm-startup available-screen mouse-button launch-browser
          org-gnu-Aquamacs about-aquamacs puresize
          macfns-dialog-menu menu-bar-visible-frame eval-depth
