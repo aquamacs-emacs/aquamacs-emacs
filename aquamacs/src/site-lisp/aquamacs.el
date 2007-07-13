@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.110 2007/06/22 10:37:45 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.111 2007/07/13 20:45:20 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -913,7 +913,9 @@ listed here."
 	      mac-inline-input-method-mode
 	      one-buffer-one-frame-mode 
 	      aquamacs-styles-mode
-	      mac-option-modifier)
+	      mac-option-modifier
+	      aquamacs-standard-fontsets ;; retain for backwards compatibility
+	      )
 	    (mapcar (lambda (x) 
 		      (emkm-name (car x))) 
 		    emulate-mac-keyboard-mode-maps)
@@ -1167,7 +1169,7 @@ information given would otherwise be irrelevant to Aquamacs users.
 (when window-system 
   (require 'aquamacs-tool-bar)
   (aquamacs-tool-bar-setup))
-(ats "aquamacs-tool-bar-setup done")
+(ats "aquamacs-tool-bar-setup done") 
   ) ;; aquamacs-setup
  
 
