@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.54 2007/07/06 19:09:29 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.55 2007/07/15 07:42:31 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -165,10 +165,11 @@ To disable `one-buffer-one-frame-mode', call
     " SPEEDBAR"
     "\\*.*\\*"
     )
-  "Buffers popped up in a separate frame in `one-buffer-one-frame-mode'.
+  "Buffers popped up in a new window in `one-buffer-one-frame-mode'.
 In `one-buffer-one-frame-mode', if the name of a buffer to be shown matches
 one of the regular expressions in this list, it is shown in the same frame,
-as an extra window, when shown with `pop-to-buffer'.
+when shown with `pop-to-buffer' (or `display-buffer' in general). A new window
+inside the frame may be opened to show the buffer.
 Exceptions are listed in `obof-other-frame-regexps'."
   :group 'Aquamacs
   :group 'frames
@@ -178,7 +179,7 @@ Exceptions are listed in `obof-other-frame-regexps'."
   '(
     " SPEEDBAR"
     )
-  "Buffers to switch to in a separate frame in `one-buffer-one-frame-mode'.
+  "Buffers to switch to in the same frame in `one-buffer-one-frame-mode'.
 In `one-buffer-one-frame-mode', if the name of a buffer to be shown matches
 one of the regular expressions in this list, it is shown in the same frame 
 when switched to with `switch-to-buffer'. 
@@ -240,20 +241,27 @@ This overrides entries in `obof-same-frame-regexps'."
 
 (defun obof-inhibit-frame-creation () 
   "Inhibit creation of extra frames resulting from clicks here."
+)
   (when one-buffer-one-frame-mode
       (set (make-local-variable 'one-buffer-one-frame-inhibit)
 	   t)))
 
 (defun obof-inhibit-pop-up-windows ()
    (when one-buffer-one-frame-mode
-     (set (make-local-variable 'pop-up-windows) nil)
+;(set (make-local-variable 'one-buffer-one-frame-inhibit)	   t)
+(set (make-local-variable 'obof-same-frame-regexps)	   '("\\`\\*Customiz.*\\*\\'"))
+     (set (make-local-variable 'same-window-regexps) '("\\`\\*Customiz.*\\*\\'"))
+;     (set (make-local-variable 'display-buffer-function) 'display-buffer-in-same-window)
+;     (set (make-local-variable 'pop-up-windows ) nil)
 ;; this doesn't work very well
 ;; because it isn't called from the target frame!
+;; and because it is too sticky
+
 ;     (make-variable-frame-local 'pop-up-windows)
 ;     (set-frame-parameter nil  'pop-up-windows nil)
 ))
 
-;; (assq 'pop-up-windows (frame-parameters nil))
+;; (assq ' pop-up-windows (frame-parameters nil))
 ;; pop-up-windows one-buffer-one-frame-inhibit
 ;; one-buffer-one-frame
 ;; Todo:
@@ -285,9 +293,13 @@ This overrides entries in `obof-same-frame-regexps'."
 ;(defvar dired-mode-hook nil)
 ; (add-hook 'dired-mode-hook 'obof-inhibit-frame-creation)
 ; (add-hook 'dired-mode-hook 'obof-inhibit-pop-up-windows)
-(defvar custom-mode-hook nil)
+
+; customization buffers
+(setq custom-mode-hook nil)
 (add-hook 'custom-mode-hook 'obof-inhibit-frame-creation)
-;;(add-hook 'custom-mode-hook 'obof-inhibit-pop-up-windows)
+(add-hook 'custom-mode-hook 'obof-inhibit-pop-up-windows)
+(aquamacs-set-defaults
+ '((custom-buffer-done-kill t)))
 
 
 (defun open-in-other-frame-p (buf &optional switching)
@@ -508,7 +520,6 @@ the current window is switched to the new buffer."
        ;; seems to work with SLIME like this...
        (delete-window-if-created-for-buffer buffer 'only-frame))))
 
-
 ;; (defadvice pop-to-buffer (around always-dedicated (buf &rest args) 
 ;; 				 protect activate)
 ;;   ad-do-it)
@@ -574,6 +585,12 @@ the current window is switched to the new buffer."
 	      ret) 
 	       )
 	   (apply (function display-buffer) args))))
+
+(defun display-buffer-in-same-window (&rest args)
+
+  (let (pop-up-windows pop-up-frames (same-window-regexps '(".*Custom.*"))
+		       (display-buffer-function nil))
+    (apply #'display-buffer args)))
 
 ;; (setq display-buffer-reuse-frames 'select)
 (if window-system
@@ -661,6 +678,7 @@ even if it's the only visible frame."
       ;; then switch buffer
       ;; to whatever was shown previously (does this work well???)
       (next-buffer-here)
+
       )))
 
 
