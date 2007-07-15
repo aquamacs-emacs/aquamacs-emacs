@@ -4,13 +4,17 @@
 
 proc makePDF {} {
     global fname
+
     
     set fname aquamacs.tex
+    set cname changes.tex
     set pdfdir ../doc/latex
    # puts "Preprocessing latex document..."
    # catch {exec ./preprocess-latex.perl $pdfdir/$fname >/tmp/aquamacs.tex}
     cd $pdfdir
     #file rename -force /tmp/aquamacs.tex $fname 
+    puts "Running pdflatex on $cname..."
+    catch {exec pdflatex -interaction=nonstopmode $cname}
     puts "Running pdflatex on $fname..."
     catch {exec pdflatex -interaction=nonstopmode $fname}
     puts "Running pdflatex again to update references..."
