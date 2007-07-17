@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.55 2007/07/15 07:42:31 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.56 2007/07/17 15:53:50 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -241,7 +241,6 @@ This overrides entries in `obof-same-frame-regexps'."
 
 (defun obof-inhibit-frame-creation () 
   "Inhibit creation of extra frames resulting from clicks here."
-)
   (when one-buffer-one-frame-mode
       (set (make-local-variable 'one-buffer-one-frame-inhibit)
 	   t)))
