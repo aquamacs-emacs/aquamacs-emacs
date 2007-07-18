@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.111 2007/07/13 20:45:20 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.112 2007/07/18 23:27:29 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -1012,6 +1012,7 @@ Returns t."
     (if (and (filter-list changed
 			  (list 'aquamacs-customization-version-id
 				'smart-frame-prior-positions
+				'aquamacs-standard-fontsets
 				'transient-mark-mode))
 	     ;; depends on return value of `aquamacs-menu-bar-options-save'
 	     ;; NOT implemented for the standard menu-bar-options-save!
