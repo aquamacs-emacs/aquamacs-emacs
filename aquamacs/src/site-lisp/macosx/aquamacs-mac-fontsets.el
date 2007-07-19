@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs fonts
  
-;; Last change: $Id: aquamacs-mac-fontsets.el,v 1.11 2007/07/13 20:42:09 davidswelt Exp $
+;; Last change: $Id: aquamacs-mac-fontsets.el,v 1.12 2007/07/19 10:42:49 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -55,22 +55,21 @@
 SIZES is a list of integers, indicating the desired font sizes in points.
 Errors are signalled with ``signal-font-error'', unless ''ignore-font-errors'' 
 is non-nil. (This function is part of Aquamacs and subject to change.)"
-  (message (concat "Defining fontset: " (or fontsetname name)))
   (condition-case e
       (dolist (size (if (listp sizes) sizes (list sizes)))
-	  
-	(create-fontset-from-mac-roman-font
-	 (format "-%s-%s-%s-%s-%s-*-%s-*-*-*-*-*-mac-roman"
-		 (or maker "*")
-		 (or name "*")
-		 (or weight "*")
-		 (or variety "*")
-		 (or style "*")
-		 size 
-		 )
-	 nil
-	 (concat (or fontsetname name) (format "%s" size))
-	 )
+	(let ((fontset-name (concat (or fontsetname name) (format "%s" size))))
+	  (unless (fontset-exist-p (format "fontset-%s" fontset-name))
+	    (message "Defining fontset: %s" fontset-name)
+	    (create-fontset-from-mac-roman-font
+	     (format "-%s-%s-%s-%s-%s-*-%s-*-*-*-*-*-mac-roman"
+		     (or maker "*")
+		     (or name "*")
+		     (or weight "*")
+		     (or variety "*")
+		     (or style "*")
+		     size)
+	     nil
+	     fontset-name)))
 	) 
     (error (signal-font-error e))))
 
@@ -83,7 +82,7 @@ is non-nil. (This function is part of Aquamacs and subject to change.)"
 ;    (require 'carbon-font)
 ;  )
 
-(defvar aquamacs-standard-fontsets
+(defvar aquamacs-additional-fontsets
   (append 
 	   (mapcar (lambda (x) (list "apple" "monaco*" "medium" "r" "normal" x "monaco")) '(9 10 11 12 13 14 16 18))
 	   (mapcar (lambda (x) (list "apple" "lucida grande*" "medium" "r" "normal" x "lucida")) '(9 10 11 12 13 14 16 18))
@@ -94,39 +93,44 @@ is non-nil. (This function is part of Aquamacs and subject to change.)"
 	   )
   "List of fontsets defined on startup.
 This variable is reduced by `aquamacs-mac-fontsets.el' to 
-contain only those fontsets referred to by `custom-file'.")
+contain only those fontsets referred to by `custom-file'.
+
+Thus, this variable is not intended to be changed by users.
+Use `create-aquamacs-fontset' to create a custom fontset.")
 
 
-(defun aquamacs-create-standard-fontsets ()
+(defun aquamacs-create-additional-fontsets ()
   "Define a number of fontsets to be used with Aquamacs.
 As of Aquamacs 1.1, this is not called on startup any more."
   (interactive)
 
-  (dolist (font aquamacs-standard-fontsets)
+  (dolist (font aquamacs-additional-fontsets)
 (print font)
     (apply #'create-aquamacs-fontset font)))
 
 ; (aquamacs-create-customization-fontsets)
 (defun aquamacs-create-customization-fontsets ()
   "Defines fontsets referred to in `custom-file'.
-Only fontsets in `aquamacs-standard-fontsets' are defined.
+Only fontsets in `aquamacs-additional-fontsets' are defined.
 This variable is changed to reflect the needed fontsets."
-
   (let ((standard-fontsets nil)
 	(buf (find-file-noselect custom-file 'nowarn 'lit)))
     (when (bufferp buf)
-      (dolist (font aquamacs-standard-fontsets)
+      (dolist (font aquamacs-additional-fontsets)
 	(let ((fontset-name (concat (nth 6 font) (int-to-string (nth 5 font)))))
 	  (with-current-buffer buf
 	    (beginning-of-buffer)
 	    (if (search-forward fontset-name nil 'no)
 		(add-to-list 'standard-fontsets font )))))
-      ;; reduce the fontsets - they will be saved in customizations. the next time, it'll be quicker
-      (setq aquamacs-standard-fontsets standard-fontsets)
-      (kill-buffer buf)))
-  (aquamacs-create-standard-fontsets))
+      (kill-buffer buf))
+    ;; reduce the fontsets - they will be saved in customizations. 
+    ;; the next time, it'll be quicker. 
+    ;; if custom-file is not readable, we'll reduce the fontsets to nil
+    (setq aquamacs-additional-fontsets standard-fontsets))
+  (aquamacs-create-additional-fontsets))
 
-(add-hook 'after-init-hook 'aquamacs-create-customization-fontsets)
+(if (or (not (boundp 'aquamacs-additional-fontsets)) aquamacs-additional-fontsets)
+    (add-hook 'after-init-hook 'aquamacs-create-customization-fontsets))
   
 ;; want more fonts? 
 ;; (print-elements-of-list (x-list-fonts "*arial*"))
