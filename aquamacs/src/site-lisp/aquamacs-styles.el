@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.15 2007/05/18 07:44:34 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.16 2007/07/19 10:35:00 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -616,6 +616,11 @@ current major mode. To turn off this behavior, see
 				       (sexp :tag "Value")))))
     :group 'Aquamacs
     )
+
+;; create some essential fontsets
+(when (fboundp 'create-aquamacs-fontset)
+  (create-aquamacs-fontset "apple" "lucida grande*" "medium" "r" "normal" '(11 12 13 14) "lucida")
+  (create-aquamacs-fontset "apple" "monaco*" "medium" "r" "normal" '(11 12) "monaco"))
 
 (defcustom aquamacs-default-styles
   (filter-fonts '((help-mode (tool-bar-lines . 0) (fit-frame . t))

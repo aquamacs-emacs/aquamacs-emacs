@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.112 2007/07/18 23:27:29 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.113 2007/07/19 10:35:29 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -462,7 +462,14 @@ Use this argument instead of explicitly setting `view-exit-action'."
   
   ;; set default fonts - after aquamacs-frame-setup has initialized things
 
-  (if (fontset-exist-p "fontset-monaco12") 
+
+;; create some essential fontsets
+;; some of these are used by aquamacs-styles
+(when (fboundp 'create-aquamacs-fontset)
+  (create-aquamacs-fontset "apple" "lucida grande*" "medium" "r" "normal" '(12) "lucida")
+  (create-aquamacs-fontset "apple" "monaco*" "medium" "r" "normal"  '(12) "monaco"))
+
+(if (fontset-exist-p "fontset-monaco12") 
       (assq-set 'font "fontset-monaco12" 'default-frame-alist)
     (if (fontset-exist-p "fontset-mac_roman_12") 
 	(assq-set 'font "fontset-mac_roman_12" 'default-frame-alist)
