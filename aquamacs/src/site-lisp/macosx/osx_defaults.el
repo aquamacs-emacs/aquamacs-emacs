@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.57 2007/07/06 09:10:32 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.58 2007/07/19 14:06:16 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -144,6 +144,7 @@ earlier versions of the distribution."
 
   (mac-read-environment-vars-from-shell)
   (mac-add-path-to-exec-path)
+  (mac-add-local-directory-to-exec-path) ;; needed for CocoAspell
 
   ;; inferior workaround, until mac.c is fixed not to set INFOPATH any longer
   (if (equal (concat (mac-resources-path)
