@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.113 2007/07/19 10:35:29 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.114 2007/07/19 10:41:08 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -921,7 +921,7 @@ listed here."
 	      one-buffer-one-frame-mode 
 	      aquamacs-styles-mode
 	      mac-option-modifier
-	      aquamacs-standard-fontsets ;; retain for backwards compatibility
+	      aquamacs-additional-fontsets ;; retain for backwards compatibility
 	      )
 	    (mapcar (lambda (x) 
 		      (emkm-name (car x))) 
@@ -1019,7 +1019,7 @@ Returns t."
     (if (and (filter-list changed
 			  (list 'aquamacs-customization-version-id
 				'smart-frame-prior-positions
-				'aquamacs-standard-fontsets
+				'aquamacs-additional-fontsets
 				'transient-mark-mode))
 	     ;; depends on return value of `aquamacs-menu-bar-options-save'
 	     ;; NOT implemented for the standard menu-bar-options-save!
