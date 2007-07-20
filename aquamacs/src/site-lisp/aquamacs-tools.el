@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.24 2007/06/22 10:05:53 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.25 2007/07/20 18:05:27 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -349,6 +349,7 @@ Optional CODING is used for encoding coding-system."
 		  nil))))
 
 
+
 (defun load-post-sitestart-files ()
   "Load the Aquamacs plugins from site-start directories."
   (let (loaded)
@@ -356,7 +357,9 @@ Optional CODING is used for encoding coding-system."
      (lambda (p) (unless (file-exists-p (concat p "/.ignore"))
 		   (let ((file (expand-file-name (concat p "/site-start") "~/")))
 		     (unless (member file loaded)
-		       (load (concat p "/site-start") 'noerror)
+		       (if (file-directory-p (concat p "/info"))
+			   (add-to-list 'Info-default-directory-list  (concat p "/info")))
+		       (load file 'noerror)
 		       (setq loaded (cons file loaded))))))
      load-path)
     t)) 
@@ -369,6 +372,8 @@ Optional CODING is used for encoding coding-system."
      (lambda (p) (unless (file-exists-p (concat p "/.ignore"))
 		   (let ((file (expand-file-name (concat p "/site-prestart") "~/")))
 		     (unless (member file loaded)
+		       (if (file-directory-p (concat p "/info"))
+			   (add-to-list 'Info-default-directory-list  (concat p "/info")))
 		       (load file 'noerror)
 		       (setq loaded (cons file loaded))))))
      load-path)
