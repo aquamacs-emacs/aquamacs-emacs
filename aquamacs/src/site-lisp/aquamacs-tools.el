@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.25 2007/07/20 18:05:27 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.26 2007/07/20 19:56:18 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -355,10 +355,12 @@ Optional CODING is used for encoding coding-system."
   (let (loaded)
     (mapcar 
      (lambda (p) (unless (file-exists-p (concat p "/.ignore"))
-		   (let ((file (expand-file-name (concat p "/site-start") "~/")))
+		   (let ((infod (concat p "/info"))
+			 (file (expand-file-name (concat p "/site-start") "~/")))
+		     
 		     (unless (member file loaded)
-		       (if (file-directory-p (concat p "/info"))
-			   (add-to-list 'Info-default-directory-list  (concat p "/info")))
+		       (if (file-directory-p infod)
+			   (add-to-list 'Info-default-directory-list infod))
 		       (load file 'noerror)
 		       (setq loaded (cons file loaded))))))
      load-path)
@@ -370,10 +372,11 @@ Optional CODING is used for encoding coding-system."
   (let (loaded)
     (mapcar 
      (lambda (p) (unless (file-exists-p (concat p "/.ignore"))
-		   (let ((file (expand-file-name (concat p "/site-prestart") "~/")))
+		   (let ((infod (concat p "/info"))
+			 (file (expand-file-name (concat p "/site-prestart") "~/")))
 		     (unless (member file loaded)
-		       (if (file-directory-p (concat p "/info"))
-			   (add-to-list 'Info-default-directory-list  (concat p "/info")))
+		       (if (file-directory-p infod)
+			   (add-to-list 'Info-default-directory-list infod))
 		       (load file 'noerror)
 		       (setq loaded (cons file loaded))))))
      load-path)
