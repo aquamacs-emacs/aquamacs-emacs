@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.56 2007/07/17 15:53:50 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.57 2007/07/20 09:36:08 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -246,19 +246,18 @@ This overrides entries in `obof-same-frame-regexps'."
 	   t)))
 
 (defun obof-inhibit-pop-up-windows ()
-   (when one-buffer-one-frame-mode
-;(set (make-local-variable 'one-buffer-one-frame-inhibit)	   t)
-(set (make-local-variable 'obof-same-frame-regexps)	   '("\\`\\*Customiz.*\\*\\'"))
-     (set (make-local-variable 'same-window-regexps) '("\\`\\*Customiz.*\\*\\'"))
-;     (set (make-local-variable 'display-buffer-function) 'display-buffer-in-same-window)
-;     (set (make-local-variable 'pop-up-windows ) nil)
-;; this doesn't work very well
-;; because it isn't called from the target frame!
-;; and because it is too sticky
-
-;     (make-variable-frame-local 'pop-up-windows)
-;     (set-frame-parameter nil  'pop-up-windows nil)
-))
+  (when one-buffer-one-frame-mode
+    ;;(set (make-local-variable 'one-buffer-one-frame-inhibit)	   t) ;; no need?
+    (set (make-local-variable 'obof-same-frame-regexps)	   `("\\`\\*Customiz.*\\*\\'" . ,obof-same-frame-regexps ))
+    (set (make-local-variable 'same-window-regexps) `("\\`\\*Customiz.*\\*\\'" . ,same-window-regexps))
+    ;;     (set (make-local-variable 'display-buffer-function) 'display-buffer-in-same-window) ;; strong. not needed.
+    (set (make-local-variable 'pop-up-windows ) nil) ;; this works for dired
+    ;; this doesn't work very well
+    ;; because it isn't called from the target frame!
+    ;; and because it is too sticky
+    ;;     (make-variable-frame-local 'pop-up-windows)
+    ;;     (set-frame-parameter nil  'pop-up-windows nil)
+    ))
 
 ;; (assq ' pop-up-windows (frame-parameters nil))
 ;; pop-up-windows one-buffer-one-frame-inhibit
@@ -290,8 +289,8 @@ This overrides entries in `obof-same-frame-regexps'."
 
  ;; this will cause newly opened files to show up in the dired buffer
 ;(defvar dired-mode-hook nil)
-; (add-hook 'dired-mode-hook 'obof-inhibit-frame-creation)
-; (add-hook 'dired-mode-hook 'obof-inhibit-pop-up-windows)
+ (add-hook 'dired-mode-hook 'obof-inhibit-frame-creation)
+ (add-hook 'dired-mode-hook 'obof-inhibit-pop-up-windows)
 
 ; customization buffers
 (setq custom-mode-hook nil)
