@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs fonts
  
-;; Last change: $Id: aquamacs-mac-fontsets.el,v 1.12 2007/07/19 10:42:49 davidswelt Exp $
+;; Last change: $Id: aquamacs-mac-fontsets.el,v 1.13 2007/07/23 10:47:56 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -105,7 +105,6 @@ As of Aquamacs 1.1, this is not called on startup any more."
   (interactive)
 
   (dolist (font aquamacs-additional-fontsets)
-(print font)
     (apply #'create-aquamacs-fontset font)))
 
 ; (aquamacs-create-customization-fontsets)
