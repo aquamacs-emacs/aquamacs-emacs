@@ -4,7 +4,7 @@
 ;; originally authored by Kevin Walzer
 ;; Keywords: auctex
  
-;; Last change: $Id: auctex-config.el,v 1.26 2007/04/25 23:47:28 davidswelt Exp $
+;; Last change: $Id: auctex-config.el,v 1.27 2007/07/25 16:02:57 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -56,13 +56,14 @@
 ;; maybe add a menu option?
 ;;(load "preview-latex.el" nil t t)
 
-(setq TeX-parse-self t)
-(setq-default TeX-master nil)
-(setq reftex-plug-into-AUCTeX t)
-(setq reftex-save-parse-info t)
-(setq reftex-use-multiple-selection-buffers t)
-(setq bib-highlight-mouse-t t)
-(setq bib-cite-use-reftex-view-crossref t)
+(aquamacs-set-defaults '(
+			 ( TeX-parse-self t)
+			 ( TeX-master nil) ;; was set with setq-default
+			 ( reftex-plug-into-AUCTeX t)
+			 ( reftex-save-parse-info t)
+			 ( reftex-use-multiple-selection-buffers t)
+			 ( bib-highlight-mouse-t nil)
+			 ( bib-cite-use-reftex-view-crossref t)))
 
 (autoload 'bib-cite-minor-mode "bib-cite")
 (autoload 'turn-on-bib-cite "bib-cite")
