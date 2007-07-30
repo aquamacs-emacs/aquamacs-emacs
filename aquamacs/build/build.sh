@@ -2,7 +2,7 @@
  
 export CVS_RSH=ssh
 
-AQEMACSSRC='emacs-22.1'
+AQEMACSSRC='emacs.raw'
 COPY='copy-to-server'
 
 if test "$AQUAMACS_CVS_PREFIX" ; then
