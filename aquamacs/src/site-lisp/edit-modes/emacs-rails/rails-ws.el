@@ -1,13 +1,13 @@
-;;; rails-webkick.el --- functions for manadge webrick
+;;; rails-ws.el --- functions for manadge application server
 
-;; Copyright (C) 2006 Galinsky Dmitry <dima dot exe at gmail dot com>
+;; Copyright (C) 2006 Dmitry Galinsky <dima dot exe at gmail dot com>
 
-;; Authors: Galinsky Dmitry <dima dot exe at gmail dot com>,
+;; Authors: Dmitry Galinsky <dima dot exe at gmail dot com>,
 ;;          Rezikov Peter <crazypit13 (at) gmail.com>
 
 ;; Keywords: ruby rails languages oop
 ;; $URL: svn+ssh://rubyforge/var/svn/emacs-rails/trunk/rails-ws.el $
-;; $Id: rails-ws.el,v 1.1 2007/03/06 23:25:26 davidswelt Exp $
+;; $Id: rails-ws.el,v 1.2 2007/08/02 12:32:38 davidswelt Exp $
 
 ;;; License
 
@@ -46,7 +46,7 @@
   :tag "Rails Server Type")
 
 (defvar rails-ws:available-servers-list (list "mongrel" "lighttpd" "webrick"))
-(defvar rails-ws:buffer-name "*RailsWebServer*")
+(defvar rails-ws:buffer-name "*RWebServer*")
 (defvar rails-ws:process-environment nil)
 
 (defun rails-ws:default-server-type-p (type)
@@ -67,42 +67,47 @@
   (if (get-buffer-process rails-ws:buffer-name) t nil))
 
 (defun rails-ws:sentinel-proc (proc msg)
-  (when (memq (process-status proc) '(exit signal))
-    (setq rails-ws:process-environment nil))
-  (princ
+  (let ((env rails-ws:process-environment))
+    (when (memq (process-status proc) '(exit signal))
+      (setq rails-ws:process-environment nil)
+      (setq msg (format "stopped (%s)" msg)))
+  (message
    (replace-regexp-in-string "\n" ""
                              (format "%s - %s"
-                                     (upcase rails-ws:default-server-type)
-                                     msg))))
+                                     (capitalize rails-ws:default-server-type)
+                                     msg)))))
 
 (defun rails-ws:start(&optional env)
-  "Start a WEBrick process with ENV environment if ENV is not set
-using `rails-webrick:default-env'."
+  "Start a server process with ENV environment if ENV is not set
+using `rails-default-environment'."
   (interactive (list (rails-read-enviroment-name)))
-  (rails-core:with-root
+  (rails-project:with-root
    (root)
-   (let ((proc (get-buffer-process rails-ws:buffer-name))
-         (dir default-directory))
-     (unless proc
-       (progn
-         (setq default-directory root)
-         (unless env
-           (setq env rails-default-environment))
-         (let ((rails-ws:process-environment env)
-               (process
-                (apply 'start-process-shell-command
-                       rails-ruby-command
-                       rails-ws:buffer-name
-                       rails-ruby-command
-                       (list "script/server"
-                             (concat "-e " env)
-                             (concat "-p " rails-ws:port)))))
-           (set-process-sentinel process 'rails-ws:sentinel-proc)
-           (setq default-directory dir)
+   (let ((proc (get-buffer-process rails-ws:buffer-name)))
+     (if proc
+         (message "Only one instance rails-ws allowed")
+       (let* ((default-directory root)
+              (env (if env env rails-default-environment))
+              (proc
+               (rails-cmd-proxy:start-process rails-ruby-command
+                                              rails-ws:buffer-name
+                                              rails-ruby-command
+                                              (format "script/server %s -p %s -e %s"
+                                                      rails-ws:default-server-type
+                                                      rails-ws:port env))))
+           (set-process-sentinel proc 'rails-ws:sentinel-proc)
+           (setq rails-ws:process-environment env)
            (message (format "%s (%s) starting with port %s"
-                            (upcase rails-ws:default-server-type)
-                            rails-ws:process-environment
-                            rails-ws:port))))))))
+                            (capitalize rails-ws:default-server-type)
+                            env
+                            rails-ws:port)))))))
+
+(defun rails-ws:stop ()
+  "Stop the WebServer process."
+  (interactive)
+  (let ((proc (get-buffer-process rails-ws:buffer-name)))
+    (when proc (kill-process proc t))))
+
 
 (defun rails-ws:start-default ()
   "Start WebServer using the default environment defined in
@@ -121,12 +126,6 @@ using `rails-webrick:default-env'."
 (defun rails-ws:start-test ()
   (interactive)
   (rails-ws:start "test"))
-
-(defun rails-ws:stop()
-  "Stop the WebServer process."
-  (interactive)
-  (let ((proc (get-buffer-process rails-ws:buffer-name)))
-    (if proc (kill-process proc))))
 
 (defun rails-ws:toggle-start-stop ()
   "Toggle Rails WebServer start/stop with default environment."
@@ -179,7 +178,7 @@ file."
   "Autodetect the current action and open browser on it with.
 Prefix the command to ask parameters for action."
   (interactive "P")
-  (rails-core:with-root
+  (rails-project:with-root
    (root)
    (if (find (rails-core:buffer-type) '(:view :controller))
        (when-bind (controller (rails-core:current-controller))

@@ -1,13 +1,14 @@
 ;;; rails-lib.el ---
 
-;; Copyright (C) 2006 Galinsky Dmitry <dima dot exe at gmail dot com>
+;; Copyright (C) 2006 Dmitry Galinsky <dima dot exe at gmail dot com>
 
-;; Authors: Galinsky Dmitry <dima dot exe at gmail dot com>,
+;; Authors: Dmitry Galinsky <dima dot exe at gmail dot com>,
 ;;          Rezikov Peter <crazypit13 (at) gmail.com>
+;;          Howard Yeh <hayeah at gmail dot com>
 
 ;; Keywords: ruby rails languages oop
 ;; $URL: svn+ssh://rubyforge/var/svn/emacs-rails/trunk/rails-lib.el $
-;; $Id: rails-lib.el,v 1.1 2007/03/06 23:25:25 davidswelt Exp $
+;; $Id: rails-lib.el,v 1.2 2007/08/02 12:32:37 davidswelt Exp $
 
 ;;; License
 
@@ -72,6 +73,35 @@ If EXPR is not nil exeutes BODY.
 
 ;; Strings
 
+(defun string-repeat (char num)
+  (let ((len num)
+        (str ""))
+  (while (not (zerop len))
+    (setq len (- len 1))
+    (setq str (concat char str)))
+  str))
+
+
+(defmacro string=~ (regex string &rest body)
+  "regex matching similar to the =~ operator found in other languages."
+  (let ((str (gensym)))
+    `(lexical-let ((,str ,string))
+       ;; Use lexical-let to make closures (in flet).
+       (when (string-match ,regex ,str)
+         (symbol-macrolet ,(loop for i to 9 collect
+                                 (let ((sym (intern (concat "$" (number-to-string i)))))
+                                   `(,sym (match-string ,i ,str))))
+           (flet (($ (i) (match-string i ,str))
+                  (sub (replacement &optional (i 0) &key fixedcase literal-string)
+                       (replace-match replacement fixedcase literal-string ,str i)))
+             (symbol-macrolet ( ;;before
+                               ($b (substring ,str 0 (match-beginning 0)))
+                               ;;match
+                               ($m (match-string 0 ,str))
+                               ;;after
+                               ($a (substring ,str (match-end 0) (length ,str))))
+               ,@body)))))))
+
 (defun string-not-empty (str) ;(+)
   "Return t if string STR is not empty."
   (and (stringp str) (not (or (string-equal "" str)
@@ -106,10 +136,12 @@ BlaPostfix -> Bla."
   "Join all STRINGS using a SEPARATOR."
   (mapconcat 'identity strings separator))
 
+(defalias 'string-join 'strings-join)
+
 (defun capital-word-p (word)
   "Return t if first letter of WORD is uppercased."
-  (and (>= (elt word 0) 65)
-       (<= (elt word 0) 90)))
+  (= (elt word 0)
+     (elt (capitalize word) 0)))
 
 ;;;;;;;; def-snips stuff ;;;;
 
@@ -229,6 +261,9 @@ it."
     (set-buffer buffer-name)
     (buffer-string)))
 
+(defun buffer-visible-p (buffer-name)
+  (if (get-buffer-window buffer-name) t nil))
+
 ;; Misc
 
 (defun rails-browse-api-url (url)
@@ -246,51 +281,24 @@ the user explicit sets `rails-use-alternative-browse-url'."
       (w32-shell-execute "open" "iexplore" url)
     (browse-url url args)))
 
-;; snippets related
-
-;; (setq pp (create-snippets-and-menumap-from-dsl rails-snippets-menu-list))
-
-;; ;; (symbol-value 'lisp-mode-abbrev-table)
-;; (setq mm (make-sparse-keymap "test3"))
-;; (local-set-key [menu-bar test3] (cons "Test3" pp))
-
-(defmacro compile-snippet(expand)
-  `(lambda () (interactive) (snippet-insert ,(symbol-value expand))))
-
-;; (setq b "for")
-;; (macroexpand '(compile-snippet b))
-
-;; ([rails] (cons "RubyOnRails" (make-sparse-keymap "RubyOnRails")))
-
-(defun create-snippets-and-menumap-from-dsl (body &optional path menu keymap abbrev-table)
-  (unless path (setq path (list)))
-  (unless menu (setq menu (list)))
-  (unless abbrev-table (setq abbrev-table (list)))
-  (unless keymap (setq keymap (make-sparse-keymap "Snippets")))
-  (dolist (tail body)
-    (let ((p path)
-          (a (nth 0 tail))
-          (b (nth 1 tail))
-          (c (cddr tail))
-          (abbr abbrev-table))
-      (if (eq a :m)
-          (progn
-            (while (not (listp (car c)))
-              (add-to-list 'abbr (car c))
-              (setq c (cdr c)))
-            (add-to-list 'p b t)
-            (define-key keymap
-              (vconcat (mapcar #'make-symbol p))
-              (cons b (make-sparse-keymap b)))
-            (setq keymap (create-snippets-and-menumap-from-dsl c p menu keymap abbr)))
-        (let ((c (car c)))
-          (while (car abbr)
-            (define-abbrev (symbol-value (car abbr)) a "" (compile-snippet b))
-            (setq abbr (cdr abbr)))
-          (define-key keymap
-            (vconcat (mapcar #'make-symbol (add-to-list 'p a t)))
-            (cons (concat a " \t" c) (compile-snippet b)))))))
-  keymap)
+;; abbrev
+;; from http://www.opensource.apple.com/darwinsource/Current/emacs-59/emacs/lisp/derived.el
+(defun merge-abbrev-tables (old new)
+  "Merge an old abbrev table into a new one.
+This function requires internal knowledge of how abbrev tables work,
+presuming that they are obarrays with the abbrev as the symbol, the expansion
+as the value of the symbol, and the hook as the function definition."
+  (when old
+    (mapatoms
+     (lambda(it)
+       (or (intern-soft (symbol-name it) new)
+           (define-abbrev new
+             (symbol-name it)
+             (symbol-value it)
+             (symbol-function it)
+             nil
+             t)))
+     old)))
 
 ;; Colorize
 
@@ -302,6 +310,22 @@ the user explicit sets `rails-use-alternative-browse-url'."
               '(lambda (start end len)
                  (ansi-color-apply-on-region start end)))
     (set-buffer buffer)))
+
+;; completion-read
+(defun rails-completing-read (prompt table history require-match)
+  (let ((history-value (symbol-value history)))
+  (list (completing-read
+         (format "%s?%s: "
+                 prompt
+                 (if (car history-value)
+                     (format " (%s)" (car history-value))
+                   ""))
+         (list->alist table) ; table
+         nil ; predicate
+         require-match ; require-match
+         nil ; initial input
+         history ; hist
+         (car history-value))))) ;def
 
 ;; MMM
 
@@ -379,21 +403,5 @@ the user explicit sets `rails-use-alternative-browse-url'."
 
 
 ;; Cross define functions from my rc files
-
-(unless (fboundp 'indent-or-complete)
-  (defun indent-or-complete ()
-    "Complete if point is at end of a word, otherwise indent line."
-    (interactive)
-    (unless
-        (when (and (boundp 'snippet)
-                   snippet)
-          (progn
-            (snippet-next-field)))
-      (if (looking-at "\\>")
-          (progn
-            (hippie-expand nil)
-            (message ""))
-        (indent-for-tab-command)))))
-
 
 (provide 'rails-lib)
