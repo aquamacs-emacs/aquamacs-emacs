@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.58 2007/07/19 14:06:16 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.59 2007/08/03 11:59:16 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -77,10 +77,11 @@
 (defun aquamacs-load-preferences ()
     "Loads the custom and preference files.
 
-The files listed in the variables `custom-file' and `aquamacs-preference-files'
-are loaded. If errors occur, *Messages* is shown containing a helpful error message.
-Aquamacs also executes compatibility code to allow transitions from
-earlier versions of the distribution."
+The files listed in the variables `custom-file' and
+`aquamacs-preference-files' are loaded. If errors occur,
+*Messages* is shown containing a helpful error message.
+Aquamacs also executes compatibility code to allow transitions
+from earlier versions of the distribution."
     (interactive)
     (unless (equal init-file-user nil) ;; no .emacs was read (-q option)
 	(if init-file-debug
@@ -227,7 +228,12 @@ earlier versions of the distribution."
 
   (osx-key-mode 1) 
 
-  (require 'emulate-mac-keyboard-mode) ;; not turned on by default
+
+  ;; need to enforce a coding system (problems with Jap locale otherwise)
+  (let ((coding-system-for-read 'iso-latin-1-unix))
+    ;; not turned on by default                    
+    (require 'emulate-mac-keyboard-mode) )  
+
 
   (condition-case 
       nil 
