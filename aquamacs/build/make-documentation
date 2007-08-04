@@ -30,7 +30,7 @@ proc makePDF {} {
 proc makeHTML {} {
     global fname   
     puts "Running latex2html on $fname..."
-    catch {exec latex2html -local_icons -html_version=4.1 $fname}
+    catch {exec latex2html -init_file l2hconf-local.pm -local_icons -html_version=4.1 $fname}
     puts "$fname converted to HTML."
     set newdir [string replace $fname end-3 end]
     set newcss [string replace $fname end-2 end css]
