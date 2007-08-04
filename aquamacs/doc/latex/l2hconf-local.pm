@@ -1,80 +1,13 @@
 #!/perl
-# LaTeX2HTML l2hconf.pm
-# $Id: l2hconf.pm,v 1.2 2005/07/30 21:39:35 wordtech Exp $
+# LaTeX2HTML l2hconf-local.pm
+# $Id: l2hconf-local.pm,v 1.1 2007/08/04 06:37:44 davidswelt Exp $
+
+# This file is loaded via the -init_file parameter.
+# it overwrites site-wide (machine-local) settings for the Aquamacs manual.
 
 package main;
-
-use vars qw(%used_icons);
-
-# Setting this variable to where your perl executable resides can lead to
-# better performance on some platforms.
-#
-# It is advisable to do this on an Intel system; e.g.
-# $PERL='g:/usr/bin/perl_.exe';
-#
-# On a unix system it may be best left empty, or set as in:
-# $PERL='/usr/local/bin/perl';
-#
-$PERL = '/usr/bin/perl';
-
-# ############### THESE VARIABLES ARE DETERMINED BY CONFIGURE ################
-
-#  Give the paths to latex and dvips on your system:
-#
-$LATEX = '/usr/local/teTeX/bin/powerpc-apple-darwin-current/latex';	# LaTeX
-$DVIPS = '/usr/local/teTeX/bin/powerpc-apple-darwin-current/dvips';	# dvips
-
-
-#  give these too, to use the  -ldump  feature
-#
-$TEX = "/usr/local/teTeX/bin/powerpc-apple-darwin-current/tex"; 			# TeX
-$INILATEX = " \"&latex\"";	# initex+latex
-
-
-# These affect whether images are made on a white or gray background.
-# They are ignored when the document preamble contains similar commands.
-# Use these defaults for dark solid (anti-aliased) characters in text and math.
-#
-$LOAD_LATEX_COLOR = "\\usepackage[dvips]{color}";
-$LATEX_COLOR = "\\pagecolor[gray]{.7}";
-
-
-# -white
-# this overrides the above gray-scale for figures that don't need anti-aliasing
-#
-$WHITE_BACKGROUND = 0;
-
-
-# -image_type
-# This specifies the type of images produced by latex2html when processing
-# unknown environments and/or e.g. math formulae.
-#
-@IMAGE_TYPES = qw(png gif);
-$IMAGE_TYPE  = $IMAGE_TYPES[0];
-
-
-# -tmp
-# Specify a  tmp  directory for image-generation (optional)
-#
-$TMP = '/tmp';
-
-
-#############  HTML validation  ###############
-#
-# set $HTML_VALIDATOR to the command needed to run a validator to check
-# the HTML pages produced;
-# use the  -validate  switch to run the validator, or set $HTML_VALIDATE
-#
-$HTML_VALIDATOR = '';
-
-
-# -validate
-# when $HTML_VALIDATE is 1, the validator will run as default
-# provided $HTML_VALIDATOR is also set;  -novalidate  suppresses this
-#
-$HTML_VALIDATE = 0;
-
-
+ 
+ 
 ##########  ICONSERVER  --- !! IMPORTANT !! ############################
 #
 # LaTeX2HTML uses many small graphics as icons within the navigation
@@ -112,7 +45,7 @@ $HTML_VALIDATE = 0;
 #    In this case, customize &img_tag to use a central directory, say,
 #    "../icons".
 #
-$ICONSERVER = ''||'file:/usr/local/share/lib/latex2html/icons';
+$ICONSERVER = '.';
 $ALTERNATIVE_ICONS = 0;
 
 
@@ -610,251 +543,6 @@ $COLOR_HTML = 0;
 # Specify the path to your systems color database if you do not agree on
 # the databases provided with the translator. Eg.: /usr/lib/X11/rgb.txt
 
-# the RGB colors database
-#
-$RGBCOLORFILE = '/usr/local/share/lib/latex2html/styles/rgb.txt';
-
-# the CMYK colors database
-#
-$CRAYOLAFILE = '/usr/local/share/lib/latex2html/styles/crayola.txt';
-
-### End Colors ###
-
-# Do not try to translate these input files, and do not
-# complain about a missing Perl module.
-# Complex LaTeX inputs, styles, or classes may cause the translator
-# to hang. If this occurs add the input file here.
-# You may also specify filename extensions here, e.g. if you do
-# not want to include input files matching "*.myfig", add
-# ``:.myfig''.
-#
-$DONT_INCLUDE = "2up:psfig:epsf:texinfo:pictex:" .
-    ".ps:.eps:.fig:.pstex_t:.epsf:.epic:.eepic:.xy:.xya:.xyc:" .
-    "titlepage:openbib:\\d+pt:twoside:twocolumn:" .
-    "memo:dvipsfig:times:margins:aaii2:a4:art\\d+:doublespace:" .
-    "alltt:amstex:anysize:array:article:bm:book:bookman:" .
-    "boxedminipage:cite:comment:courier:dcolumn:doc:eepic:" .
-    "enumerate:epic:fleqn:float:floatflt:fullpage:index:" .
-    "inputenc:isolatin1:leqno:letter:llncs:makeidx:" .
-    "multicol:psfig:report:shadow:shapepar:showidx:" .
-    "slides:syntonly:sz:tabls:times:twoside:umlaut:umlaute";
-
-
-# Latex2html usually does not include style files provided by
-# \documentstyle, \documentclass, \usepackage but tries to use the 
-# corresponding *.perl files provided in the styles/ subdirectory.
-# Now if you use home-brew style files with new environments/commands
-# you may want to include them. E.g. if you want to include "mystyle.sty",
-# say $DO_INCLUDE = "mystyle" here. Separate styles with colons. This
-# setting overrides the settings in $DONT_INCLUDE. You may specify
-# filename extensions here as well.
-#
-# $DO_INCLUDE = "";
-
-
-# If you have equations in your text, and must use bitmap'd fonts with 
-# an old (pre 4.02) version of Ghostscript...
-#  (RRM: ignore all the following with later versions)
-#
-#    ... you'll get the best results with PK_GENERATION=1.
-# With this option switched on, DVIPS will be told to generate
-# all of the images for a specific screen resolution,
-# eliminating "blurring" of small letters and subscripts.
-# If any of it causes you grief, simply set PK_GENERATION=0,
-# and your default printer's resolution will be used.
-#
-# Sidik Isani, <isani@cfht.hawaii.edu> added this.
-#
-$PK_GENERATION = 0; # 0 # by configure
-
-
-#    ... and set the following variable ONLY if your version of dvips
-#  understands the "-mode" command line switch.  It is a more reliable
-#  way of setting the METAfont mode than the .dvipsrc file on versions that
-#  support this switch. If you do this, you do not need to modify .dvipsrc
-#  as described below. Herb Swan <dprhws@edp.Arco.com> added this.
-#
-$DVIPS_MODE = '';
-
-
-# Only if you have PK_GENERATION set to 1:
-# A file 'modes.mf' is probably installed somewhere in your tex
-# tree. e.g /usr/local/tex/texmf/mf/modes.mf or something similar.
-# If it has and entry for 'toshiba', then you can ignore the rest.
-# Otherwise, you'll need to try *one* of the following things:
-#
-#  o Set PK_GENERATION=0 and generate images for your default printer
-#  o Download the latest modes.mf from the TeX archive and re-run inimf.
-#  o Choose another LOW RESOLUTION screen or printer entry from modes.mf,
-#    (preferably with "|blacker|" set to 0.0 and a 1:1 aspect ratio--
-#     If you don't have "toshiba", try "epsonlq", "lqlores", "nec", or "NEC")
-#     If you try some other mode, remember to update two other things as well:
-#
-#      1) Change the 'toshiba' in the .dvipsrc file that came with latex2html.
-#      2) Put whatever the |pixels_per_inch| value is into $METAFONT_DPI
-#         and the .dvipsrc file
-#
-#   Note: The maximum usable SCALE_FACTOR is determined by this resolution.
-#   A higher resolution will take more memory during processing (regardless
-#   of SCALE_FACTOR) but will allow higher SCALE_FACTORs.  Do NOT just
-#   change this value though.  It *must* match the |pixels_per_inch| of
-#   the metafont mode (e.g. `toshiba').
-#
-$METAFONT_DPI = 0;
-
-
-# Controls which markup shows up between page and its foot.
-$CHILDLINE = "<BR><HR>\n";
-
-
-# If this is set as below, LaTeX2HTML produces a directory index link to
-# the html document, ie. you may use <http://my.cite.is.here/dir/of/document>
-# instead of <http://my.cite.is.here/dir/of/document/document.html>.
-# Set it to eg. 'node1' to have the index pointing to node1.html, etc.
-# Comment it out to have no index generation.
-# Note: $EXTN is ".html" by default, see -short_extn.
-#
-$LINKPOINT = '"$FILE$EXTN"';
-
-# Uses this one to determine the name of the directory index.
-$LINKNAME = '"index$EXTN"';
-
-
-# This is the line width measured in pixels and it is used to right justify
-# equations and equation arrays; 
-$LINE_WIDTH = 500;
-
-
-# Used in conjunction with AUTO_NAVIGATION
-$WORDS_IN_PAGE = 300;
-
-
-# Affects ONLY the way accents are processed 
-$default_language = 'english';	
-
-
-# The value of this variable determines how many words to use in each 
-# title that is added to the navigation panel (see below)
-# 
-$WORDS_IN_NAVIGATION_PANEL_TITLES = 4;
-
-
-# This number will determine the size of the equations, special characters,
-# and anything which will be converted into an inlined image
-# *except* "image generating environments" such as "figure", "table" 
-# or "minipage".
-# Effective values are those greater than 0.
-# Sensible values are between 0.1 - 4.
-#
-$MATH_SCALE_FACTOR = 1.6;
-
-
-# This number, when defined, determines extra scaling for displayed equations.
-# It multiplies with the $MATH_SCALE_FACTOR to give the total scaling.
-# It is especially useful when \scriptscriptstyle text is used frequently,
-# which would otherwise be extremely difficult to read on-screen.
-#
-#$DISP_SCALE_FACTOR = 1;
-
-
-# This number will determine the size of 
-# image generating environments such as "figure", "table" or "minipage".
-# Effective values are those greater than 0.
-# Sensible values are between 0.1 - 4.
-#
-$FIGURE_SCALE_FACTOR = 1.6;
-
-
-# This is yet another scaling factor which has a special use.
-# When this number is set, images are created at a size scaled by the
-# specified amount (multiplying any other scale factors).
-# However the images are displayed unscaled, by setting the
-#  HEIGHT="..."  and  WIDTH="..." attributes to the unscaled size.
-# Thus a larger image is squeezed into a smaller area.
-# This allows for better quality when the HTML page is printed.
-#  {figure}  environments are *not* affected by this factor.
-#
-#$EXTRA_IMAGE_SCALE = 2;
-
-
-# If this is set to 0 then any inlined images generated from "figure" 
-# environments will NOT be transparent.
-#
-$TRANSPARENT_FIGURES = 1;
-
-
-# Set the default body text, inserted between <BODY> ... </BODY>.
-# See also \bodytext{..} provided with html.sty.
-#
-$BODYTEXT = "";
-
-
-# Valid paper sizes are "letter", "legal", "note" and ...
-#   "a0", ... "a10", "b0", ... "b5";  
-# Recommended:  "a5"
-# Paper sizes has no effect other than with images that
-# need special alignment; 
-# e.g for equation-numbering with HTML, version 2.0
-#  - larger paper sizes *MAY* help with large image problems 
-#  - smaller paper sizes *MAY* be quicker to handle on some systems
-#
-$PAPERSIZE = "a5";
-
-### Improved graphics support #################################################
-# These utilities may be needed to implement some of the graphics effects
-# that can be requested using optional parameters to LaTeX's \includegraphics
-# command, from the  graphics.sty  and  graphicx.sty  packages.
-# Thanks to Bruce Miller <bruce.miller@nist.gov> for revising support for
-# these packages, via the module  styles/graphics-support.perl 
-
-$PNMCUT = '/usr/local/bin/pnmcut';
-$PNMFLIP = '/usr/local/bin/pnmflip';
-$PNMPAD = '/usr/local/bin/pnmpad';
-$PNMROTATE = '/usr/local/bin/pnmrotate';
-$PNMSCALE = '/usr/local/bin/pnmscale';
-
-$GIFTOPNM = '/usr/local/bin/giftopnm';
-$JPEGTOPNM = '/usr/local/bin/jpegtopnm';
-$PNGTOPNM = '/usr/local/bin/pngtopnm';
-$PNMTOPNG = '/usr/local/bin/pnmtopng';
-$PPMTOGIF = '/usr/local/bin/ppmtogif';
-$PPMTOJPEG = '/usr/local/bin/ppmtojpeg';
-
-# there are for some lesser-used (platform-specific ?) graphics formats:
-$TIFFTOPNM = '/usr/local/bin/tifftopnm';
-$ANYTOPNM = '/usr/local/bin/anytopnm';
-$BMPTOPPM = '/usr/local/bin/bmptoppm';
-$PCXTOPPM = '/usr/local/bin/pcxtoppm';
-$PICTTOPPM = '/usr/local/bin/picttoppm';
-$SGITOPNM = '/usr/local/bin/sgitopnm';
-$XBMTOPBM = '/usr/local/bin/xbmtopbm';
-$XWDTOPNM = '/usr/local/bin/xwdtopnm';
-
-# uncomment these, and adjust  configure.in  to find the executable
-# $FIASCOTOPNM = ;
-# $FITSTOPNM = ;
-# $GEMTOPNM = ;
-# $JBIGTOPNM = ;
-# $PALMTOPNM = ;
-# $PAMTOPNM = ;
-# $PSTOPNM = ;
-# $RASTTOPNM = ;
-# $RLETOPNM = ;
-# $SIRTOPNM = ;
-# $ZEISSTOPNM = ;
-
-# $IMGTOPPM = ;
-# $RGB3TOPPM = ;
-# $TGATOPPM = ;
-# $XIMTOPPM = ;
-# $XPMTOPPM = ;
-# $XVMINITOPPM = ;
-# $XVPICTOPPM = ;
-# $YUVTOPPM = ;
-
-# $ICONTOPBM = ;
-# $WBMTOPBM = ;
-# $YBMTOPBM = ;
 
 #
 ### Internationalization ######################################################
@@ -1094,12 +782,10 @@ foreach $typ (@IMAGE_TYPES) {
 	'change_delete_right_visible_mark',"ch_del_r.$typ"
     )
 };
-if (!%icons) {
-    %icons = %{"icons_$IMAGE_TYPE"};
-}
+     %icons = %{"icons_$IMAGE_TYPE"};
 
-if (!%iconsizes) {
-    %iconsizes = (
+
+     %iconsizes = (
 	'up' ,'WIDTH="32" HEIGHT="32"',
 	'next','WIDTH="32" HEIGHT="32"',
 	'previous','WIDTH="32" HEIGHT="32"',
@@ -1116,8 +802,7 @@ if (!%iconsizes) {
 	'index','WIDTH="32" HEIGHT="32"',
 	#'image','WIDTH="48" HEIGHT="24"'
     ); 
-}
-
+ 
 $extern_image_mark = &extern_image_mark();
 
 sub extern_image_mark {
