@@ -173,6 +173,8 @@ This command is part of `%s'." string-rep language mode-name mode-name)
 	      (funcall (emkm-name other-language) 0)))
 	  (mapcar 'car emulate-mac-keyboard-mode-maps)))
 
+(defvar aquamacs-emkm-saved-mac-option-key-modifier nil)
+
 ; (turn-off-emulate-mac-keyboard-modes)
 
 (defun define-emulate-mac-keyboard-modes ()
@@ -190,9 +192,8 @@ minor modes."
 		"Binds a number of typically used Mac key combinations
 to their keyboard-specific equivalents in order to use the 
 Option key as Meta, while retaining access to commonly used  
-such as [, ], @, etc. This mode is intended to be used with
-`mac-option-modifier' set to `meta'.
-Other mac keyboard emulation modes are turned off.
+such as [, ], @, etc. This modewill set `mac-option-modifier' 
+to `meta'. Other mac keyboard emulation modes are turned off.
 This mode has been defined from `emulate-mac-keyboard-mode-maps'
 by the function `define-emulate-mac-keyboard-modes'."
 		,nil ;; init-value
@@ -204,18 +205,21 @@ by the function `define-emulate-mac-keyboard-modes'."
 			(eq 0 (eval ,(emkm-name language))))
 		    (progn (aquamacs-emkm-uninstall-overriding-keys)
 			   (setq aquamacs-emkm-current-keymap nil)
+			   (setq mac-option-modifier aquamacs-emkm-saved-mac-option-key-modifier)
 			   (remove-hook 'isearch-mode-hook 'aquamacs-emkm-install-overriding-keys))
 		  ;; turning it on...
 		  ;; disable competing modes
 		  (turn-off-emulate-mac-keyboard-modes (quote ,language))
+		  ;; 
+		  (unless aquamacs-emkm-current-keymap ;; if no emulation mode is active
+		    (setq aquamacs-emkm-saved-mac-option-key-modifier mac-option-modifier))
 		  ;; Option key is Meta
 		  (setq mac-option-modifier 'meta)
-		  ;; not which keymap is currently active
+		  ;; note which keymap is currently active
 		  (setq aquamacs-emkm-current-keymap (quote ,keymap-sym))
 		  ;; install isearch hook
-		  
 		  (add-hook 'isearch-mode-hook 'aquamacs-emkm-install-overriding-keys)
-		  (message "Emulating important Option key combinations of %s keyboard layout." (capitalize (symbol-name (quote ,language)))))
+		  (message ,(format "Emulating important Option key combinations of %s keyboard layout." (capitalize (symbol-name (quote language))))))
 		nil
 		)))
      (set (emkm-name language) nil))
@@ -225,11 +229,14 @@ by the function `define-emulate-mac-keyboard-modes'."
 	(define-key menu-bar-option-key-menu (vector (list language))
 	  (eval `(menu-bar-make-mm-toggle 
 		  ,(emkm-name language)
-		  ,(format "Emulate some %s Option key combinations" 
-			   (capitalize (symbol-name language)))
+		  ,(format "Meta & %s" 
+			   (let ((str (symbol-name language))) 
+			     (if (> (length str) 3)
+				 (capitalize str)
+			       (upcase str))))
 		  "This mode binds commonly used Option key combinations
 to their equivalents used on Mac OS X."
-		  (:enable (eq mac-option-modifier 'meta))
+		  (:enable t)
 		  ))))
 	(mapcar 'car emulate-mac-keyboard-mode-maps)))
 
@@ -267,6 +274,8 @@ to their equivalents used on Mac OS X."
 	       nil)
 	   mac-option-modifier-enabled-value))
    (if interactively (customize-mark-as-set 'mac-option-modifier))
+   (unless mac-option-modifier
+     (turn-off-emulate-mac-keyboard-modes (quote ,language)))
    (message 
     (format "Option key is %s%s" 
 	    (if mac-option-modifier 
@@ -282,12 +291,9 @@ to their equivalents used on Mac OS X."
 (define-emulate-mac-keyboard-modes)
 
 
-(define-key menu-bar-option-key-menu [option-to-system-separator]
-  '(menu-item "--"))
-
-(define-key menu-bar-option-key-menu [option-to-system]
+(define-key menu-bar-option-key-menu [option-is-meta]
   `(menu-item
-    ,(aq-shortcut  "Option Key for %s (not extra characters)  "
+    (aq-shortcut  "%s                          "
 		   'toggle-mac-option-modifier 
 		   (upcase-initials (symbol-name 
 				     (or mac-option-modifier 
@@ -297,13 +303,37 @@ to their equivalents used on Mac OS X."
     :visible (boundp 'mac-option-modifier)
     :help "Toggle whether to let Option key behave as Emacs key, 
 do not let it produce special characters (passing the key to the system)."
-    :button (:toggle . mac-option-modifier)))
+    :button (:toggle . (and mac-option-modifier  (not aquamacs-emkm-current-keymap)))))
+ 
+(define-key menu-bar-option-key-menu [option-to-system]
+  `(menu-item
+    ,(aq-shortcut  "All extra characters   "
+		   'toggle-mac-option-modifier)
+    toggle-mac-option-modifier 
+    :key-sequence nil
+    :visible (boundp 'mac-option-modifier)
+    :help "Toggle whether to let Option key behave as Emacs key, 
+do not let it produce special characters (passing the key to the system)."
+    :button (:toggle . (not mac-option-modifier))))
  
 
 
 (define-key-after menu-bar-options-menu [option-key-menu]
   `(menu-item "Option Key" ,menu-bar-option-key-menu)
   'edit-options-separator)
+
+;; doesn't work:
+;; ;;;; Keyboard layout/language change events
+;; (defun aquamacs-handle-language-change (event)
+;;   "Set keyboard coding system to what is specified in EVENT."
+;;   (interactive "e")
+;;   (setq aquamacs-current-system-keyboard-layout (car (cadr event)))
+;;   (mac-handle-language-change event))
+
+;; (define-key special-event-map [language-change] 'aquamacs-handle-language-change)
+
+
+
 
 (provide 'emulate-mac-keyboard-mode)
  
