@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.114 2007/07/19 10:41:08 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.115 2007/08/12 17:08:50 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -786,22 +786,22 @@ un-Mac-like way when you select text and copy&paste it.")))
 ;; redefine this
   (defun startup-echo-area-message ()
     (concat
-     (if (and (eq window-system 'mac) 
-	      (eq mac-command-modifier 'alt)
-	      (eq (key-binding [(alt \?)]) 'aquamacs-user-help))
-	 "For an introduction to Aquamacs Emacs, type Apple-?." 
-       (if window-system
-	   "For an introduction to Aquamacs Emacs,\nchoose `Aquamacs Help' from the `Help' menu."
-	 (substitute-command-keys
-	  "For a introduction to Aquamacs Emacs, type \
-\\[aquamacs-user-help].")))
+     
+	 "Aquamacs is based on GNU Emacs 22, a part of the GNU/Linux system." 
      ;;The GPL stipulates that the following message is shown.
 					;(aquamacs-wrap-string
+(aquamacs-wrap-string
      (propertize 	
       (substitute-command-keys "
-Copyright (C) 2007 Free Software Foundation, Inc. (C) 2007 D. Reitter. No Warranty. 
-You may redistribute Aquamacs under the GNU General Public License. Type \\[describe-copying] to view.") 
-      'face (list :family "Lucida Grande" :height 110 :foreground "darkblue" ))))  
+It is Free Software: you can improve and redistribute it under the GNU General Public License, version 3 or later. Copyright (C) 2007 Free Software Foundation, Inc. (C) 2007 D. Reitter. No Warranty.") 
+      'face (list :family "Lucida Grande" :height 110)) 
+     (floor (* (window-width) 1 )))))
+
+;; (progn (message "%s" (startup-echo-area-message)) (sit-for 4))
+
+
+
+
 
 ;;'blue-foreground-face)) 
 ;;(- (frame-parameter nil 'width) 5) 
