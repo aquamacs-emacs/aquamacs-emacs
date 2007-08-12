@@ -8,7 +8,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-frame-setup.el,v 1.24 2007/07/28 19:28:05 davidswelt Exp $
+;; Last change: $Id: aquamacs-frame-setup.el,v 1.25 2007/08/12 17:05:43 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -224,11 +224,11 @@ even when minimal fringes are used. (Aquamacs)"
 (defvar autofit-frames-flag nil) ; Inhibit automatic frame fitting.
 ;;; (defvar inhibit-fit-frame t) ; Inhibit *ALL* frame fitting, (even `C-x C-_').
 
+;; we allow frame fitting by default
 (aquamacs-set-defaults 
- '(
-   (inhibit-fit-frame-flag t)))
+ '((inhibit-fit-frame-flag nil)))
 
-; never fit frames automatically, but force frame-fitting
+; but never fit frames automatically, but force frame-fitting
 
 (defun fit-frame-single-window-forced ( f)
   "Resize frame to fit selected window if it is alone in the frame.
