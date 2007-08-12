@@ -204,7 +204,8 @@
 
 ;;; Code:
 
-(require 'cl); set-difference is a function...
+;; (require 'cl); set-difference is a function...
+(eval-when-compile (require 'cl))
 
 ;; for custom-face-attributes-get or face-custom-attributes-get
 (require 'cus-face)
