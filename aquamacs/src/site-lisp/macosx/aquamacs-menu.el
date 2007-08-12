@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.84 2007/07/13 21:52:47 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.85 2007/08/12 17:06:20 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -437,9 +437,9 @@ customization buffer."
  
 (define-key menu-bar-edit-menu [paste]
   `(menu-item ,(aq-shortcut  "Paste                              " 
-;(key-binding [menu-bar edit paste]) ;; doesn't work
+; (key-binding [menu-bar edit paste]) ;; doesn't work
 			     'clipboard-yank) 
-	      yank
+	      clipboard-yank
 	      :key-sequence nil
 	      :enable (and
 		       ;; Emacs compiled --without-x doesn't have
