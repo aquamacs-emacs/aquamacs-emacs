@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.16 2007/07/19 10:35:00 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.17 2007/08/12 17:08:17 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -621,6 +621,13 @@ current major mode. To turn off this behavior, see
 (when (fboundp 'create-aquamacs-fontset)
   (create-aquamacs-fontset "apple" "lucida grande*" "medium" "r" "normal" '(11 12 13 14) "lucida")
   (create-aquamacs-fontset "apple" "monaco*" "medium" "r" "normal" '(11 12) "monaco"))
+
+(aquamacs-set-defaults 
+ ;; because we fit *Help* frames (fit-frame), we want to specify a
+ ;; minimum of 68 characters. Otherwise we'll fit, and as soon as a
+ ;; new help page is displayed, text gets wrapped.
+ '((setq create-frame-min-width 68)))
+
 
 (defcustom aquamacs-default-styles
   (filter-fonts '((help-mode (tool-bar-lines . 0) (fit-frame . t))
