@@ -1,7 +1,5 @@
 ;;; frame-cmds.el --- Frame and window commands (interactive functions).
 ;;
-;;; Aquamacs-Update: http://www.emacswiki.org/cgi-bin/wiki/download/frame-cmds.el
-;;
 ;; Filename: frame-cmds.el
 ;; Description: Frame and window commands (interactive functions).
 ;; Author: Drew Adams
@@ -9,9 +7,9 @@
 ;; Copyright (C) 1996-2007, Drew Adams, all rights reserved.
 ;; Created: Tue Mar  5 16:30:45 1996
 ;; Version: 21.0
-;; Last-Updated: Sun May 27 13:54:37 2007 (-25200 Pacific Daylight Time)
+;; Last-Updated: Tue Jun 12 16:11:43 2007 (-25200 Pacific Daylight Time)
 ;;           By: dradams
-;;     Update #: 2177
+;;     Update #: 2180
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/frame-cmds.el
 ;; Keywords: internal, extensions, mouse, frames, windows, convenience
 ;; Compatibility: GNU Emacs 20.x, GNU Emacs 21.x, GNU Emacs 22.x
@@ -205,6 +203,8 @@
 ;;
 ;;; Change log:
 ;;
+;; 2007/06/12 dadams
+;;      tile-frames: Corrected use of fboundp for thumbnail-frame-p.
 ;; 2007/05/27 dadams
 ;;      enlarged-font-name:
 ;;        Do nothing if null assq of ascii.  Not sure what this means, but gets around Emacs 23 bug.
@@ -875,8 +875,7 @@ frames (except a standalone minibuffer frame, if any)."
               (function
                (lambda (fr)
                  (and (eq t (frame-visible-p fr))
-                      (if (fboundp 'thumbnail-frame-p) 
-			  (not (thumbnail-frame-p fr)) t)
+                      (or (not (fboundp 'thumbnail-frame-p)) (not (thumbnail-frame-p fr)))
                       (or (not (boundp '1on1-minibuffer-frame))
                           (not (eq (cdr (assq 'name (frame-parameters 1on1-minibuffer-frame)))
                                    (cdr (assq 'name (frame-parameters fr))))))))))))

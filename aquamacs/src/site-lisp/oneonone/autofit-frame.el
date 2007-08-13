@@ -7,17 +7,16 @@
 ;; Copyright (C) 2000-2007, Drew Adams, all rights reserved.
 ;; Created: Thu Dec  7 10:06:18 2000
 ;; Version: 21.0
-;; Last-Updated: Fri Jan 19 20:35:18 2007 (-28800 Pacific Standard Time)
+;; Last-Updated: Sat Jul 21 17:16:19 2007 (-25200 Pacific Daylight Time)
 ;;           By: dradams
-;;     Update #: 425
+;;     Update #: 436
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/autofit-frame.el
 ;; Keywords: internal, extensions, convenience, local
 ;; Compatibility: GNU Emacs 20.x, GNU Emacs 21.x, GNU Emacs 22.x
 ;;
 ;; Features that might be required by this library:
 ;;
-;;   `avoid', `fit-frame', `frame-cmds', `frame-fns', `misc-fns',
-;;   `strings', `thingatpt', `thingatpt+'.
+;;   `fit-frame', `misc-fns', `strings', `thingatpt', `thingatpt+'.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -92,15 +91,7 @@
 ;;
 ;;  This file loads file `fit-frame.el', which provides the main
 ;;  functionality behind the automatic frame resizing.  See it for
-;;  user options to do such things as customize default frame sizes:
-;;
-;;  `create-empty-frame-height', `create-empty-frame-width',
-;;  `create-empty-special-display-frame-height',
-;;  `create-empty-special-display-frame-width',
-;;  `create-frame-max-height', `create-frame-max-height-percent',
-;;  `create-frame-max-width', `create-frame-max-width-percent',
-;;  `create-frame-min-height', `create-frame-min-width', and
-;;  `inhibit-fit-frame-flag'.
+;;  user options to do such things as customize default frame sizes.
 ;;
 ;;  The reason for separating the code here from that in
 ;;  `fit-frame.el' is to let you load that code but not load the code
@@ -127,6 +118,8 @@
 ;;
 ;;; Change log:
 ;;
+;; 2007/02/14 dadams
+;;      display-buffer: Hack to restore point, to work around unknown Emacs 22 bug.
 ;; 2006/03/07 dadams
 ;;      switch-to-buffer: Bug fix: return destination buffer.  Thx to AndreyZ.
 ;; 2006/01/07 dadams
@@ -247,6 +240,7 @@ This does nothing if `autofit-frames-flag' is nil."
 ;; REPLACES ORIGINAL (built-in):
 ;; 1) Uses `read-buffer' in interactive spec.
 ;; 2) Resizes frame to fit sole window if `autofit-frames-flag'.
+;; 3) Hack to restore point in buffer - fixes unknown Emacs 22 bug.
 ;;
 ;; NOTE: It would be better to rewrite the C code, so that the frame
 ;;       is not resized if the frame is simply _raised_.
@@ -286,10 +280,12 @@ Resizes frame to fit sole window if `autofit-frames-flag'."
   (interactive
    (list (read-buffer "Display buffer: " (current-buffer) 'existing)
          current-prefix-arg))
-  (let ((win (old-display-buffer buffer not-this-window frame)))
+  (let ((win (old-display-buffer buffer not-this-window frame))
+        (pt (save-excursion (set-buffer buffer) (point))))
     (when (window-live-p win)
       (save-selected-window
         (select-window win)
+        (goto-char pt)                  ; Hack to fix unknown Emacs 22 bug.
         (and (one-window-p t) autofit-frames-flag (fit-frame))))
     win))                               ; Return the window
 
