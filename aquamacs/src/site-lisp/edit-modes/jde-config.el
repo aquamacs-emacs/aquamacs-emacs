@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: java jde
  
-;; Last change: $Id: jde-config.el,v 1.3 2007/01/13 13:10:21 davidswelt Exp $
+;; Last change: $Id: jde-config.el,v 1.4 2007/09/03 14:54:14 champo Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -45,7 +45,7 @@
 (autoload 'jde-mode "jde-load" "JDE mode." t)
 (setq auto-mode-alist
       (append
-       '((".java'" . jde-mode))
+       '(("\\.java\\'" . jde-mode))
        auto-mode-alist))
 
 ;; find installed JDKs
