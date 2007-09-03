@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.59 2007/08/03 11:59:16 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.60 2007/09/03 07:04:20 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -269,6 +269,7 @@ from earlier versions of the distribution."
       "~/Library/Preferences/Aquamacs Emacs/auto-save-list/.saves-")
      ( save-place-file "~/Library/Preferences/Aquamacs Emacs/places.el")
      ( recentf-save-file "~/Library/Preferences/Aquamacs Emacs/Recent Files.el")
+     ( abbrev-file-name "~/Library/Preferences/Aquamacs Emacs/Abbreviations")
      ( mail-default-directory "~/Library/Application Support/Aquamacs Emacs/Temporary Files")))
 
 
