@@ -7,9 +7,9 @@
 ;; Copyright (C) 1996-2007, Drew Adams, all rights reserved.
 ;; Created: Tue Mar  5 16:30:45 1996
 ;; Version: 21.0
-;; Last-Updated: Tue Jun 12 16:11:43 2007 (-25200 Pacific Daylight Time)
+;; Last-Updated: Sun Sep 02 11:19:14 2007 (-25200 Pacific Daylight Time)
 ;;           By: dradams
-;;     Update #: 2180
+;;     Update #: 2194
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/frame-cmds.el
 ;; Keywords: internal, extensions, mouse, frames, windows, convenience
 ;; Compatibility: GNU Emacs 20.x, GNU Emacs 21.x, GNU Emacs 22.x
@@ -108,6 +108,7 @@
 ;;
 ;;  Non-interactive functions defined here:
 ;;
+;;    `available-screen-pixel-height', `available-screen-pixel-width',
 ;;    `enlarged-font-name', `frame-alist-var-names',
 ;;    `frame-iconified-p', `frame-parameter-names',
 ;;    `new-frame-position', `read-args-for-tile-frames',
@@ -203,6 +204,8 @@
 ;;
 ;;; Change log:
 ;;
+;; 2007/09/02 dadams
+;;      Added: available-screen-pixel-(width|height).  Use in tile-frames, new-frame-position.
 ;; 2007/06/12 dadams
 ;;      tile-frames: Corrected use of fboundp for thumbnail-frame-p.
 ;; 2007/05/27 dadams
@@ -879,12 +882,12 @@ frames (except a standalone minibuffer frame, if any)."
                       (or (not (boundp '1on1-minibuffer-frame))
                           (not (eq (cdr (assq 'name (frame-parameters 1on1-minibuffer-frame)))
                                    (cdr (assq 'name (frame-parameters fr))))))))))))
-        ;; Size of a full-display frame, in pixels - but leave room
-        ;; for a minibuffer frame at bottom of display.
-        (fr-pixel-width (x-display-pixel-width))
+        ;; Size of a frame that uses all of the available screen area,
+        ;; but leaving room for a minibuffer frame at bottom of display.
+        (fr-pixel-width (available-screen-pixel-width))
         (fr-pixel-height (if (boundp '1on1-minibuffer-frame)
                              (cdr (assq 'top (frame-parameters 1on1-minibuffer-frame)))
-                           (x-display-pixel-height)))
+                           (available-screen-pixel-height)))
         (fr-origin 0))
     (case direction                     ; Size of frame in pixels.
       (horizontal (setq fr-pixel-width  (/ fr-pixel-width  (length visible-frames))))
@@ -916,7 +919,6 @@ frames (except a standalone minibuffer frame, if any)."
                           (if (eq direction 'horizontal) 0 fr-origin))
       (show-frame fr)
       (incf fr-origin (if (eq direction 'horizontal) fr-pixel-width fr-pixel-height)))))
-
 
 (defun read-args-for-tile-frames ()
   "Read arguments for `tile-frames'."
@@ -950,6 +952,20 @@ frames (except a standalone minibuffer frame, if any)."
             (setq visible-p (eq t (frame-visible-p fr)))))
         fr)
       t)))))
+
+(defun available-screen-pixel-width ()
+  "Width of the usable screen, in pixels."
+  (if (fboundp 'mac-display-available-pixel-bounds)
+      (let ((bounds (mac-display-available-pixel-bounds)))
+        (- (caddr bounds) (car bounds)))
+    (x-display-pixel-width)))
+
+(defun available-screen-pixel-height ()
+  "Height of the usable screen, in pixels."
+  (if (fboundp 'mac-display-available-pixel-bounds)
+      (let ((bounds (mac-display-available-pixel-bounds)))
+        (- (cadddr bounds) (cadr bounds)))
+    (x-display-pixel-height)))
 
 ;; Inspired by `sk-grow-frame' from Sarir Khamsi [sarir.khamsi@raytheon.com]
 ;;;###autoload
@@ -1032,7 +1048,7 @@ INCR is the increment to use when changing the position."
             (cadr (frame-geom-value-cons type
                                          (cdr (assq type (frame-parameters frame)))))))
         (display-dimension
-         (if (eq 'left type) (x-display-pixel-width) (x-display-pixel-height)))
+         (if (eq 'left type) (available-screen-pixel-width) (available-screen-pixel-height)))
         (frame-dimension
          (if (eq 'left type) (frame-pixel-width frame) (frame-pixel-height frame))))
     (if (not move-frame-wrap-within-display-flag)
