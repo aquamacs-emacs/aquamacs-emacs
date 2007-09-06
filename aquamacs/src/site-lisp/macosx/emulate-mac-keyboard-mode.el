@@ -293,7 +293,7 @@ to their equivalents used on Mac OS X."
 
 (define-key menu-bar-option-key-menu [option-is-meta]
   `(menu-item
-    (aq-shortcut  "%s                          "
+    (aq-shortcut  "%s                                 "
 		   'toggle-mac-option-modifier 
 		   (upcase-initials (symbol-name 
 				     (or mac-option-modifier 
@@ -307,7 +307,7 @@ do not let it produce special characters (passing the key to the system)."
  
 (define-key menu-bar-option-key-menu [option-to-system]
   `(menu-item
-    ,(aq-shortcut  "All extra characters   "
+    ,(aq-shortcut  "Standard Mac characters   "
 		   'toggle-mac-option-modifier)
     toggle-mac-option-modifier 
     :key-sequence nil
