@@ -1,3 +1,4 @@
+;; -*-mode:emacs-lisp; coding: iso-latin-1-unix;-*-'
 ;; emulate-mac-*-keyboard-modes for Aquamacs
 ;; (C) 2005,2007 by David Reitter
 ;; do not copy / redistribute outside of Aquamacs. All rights reserved.
