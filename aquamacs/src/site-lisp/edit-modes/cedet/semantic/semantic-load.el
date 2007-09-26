@@ -1,9 +1,9 @@
 ;;; semantic-load.el --- Autoload definitions for Semantic
 
-;;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005 Eric M. Ludlam
+;;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
-;; X-RCS: $Id: semantic-load.el,v 1.47 2005/06/30 01:33:19 zappo Exp $
+;; X-RCS: $Id: semantic-load.el,v 1.56 2007/05/31 02:25:55 zappo Exp $
 
 ;; Semantic is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -65,21 +65,33 @@ Prevent this load system from loading files in twice.")
 This includes:
  `semantic-idle-scheduler-mode' - Keeps a buffer's parse tree up to date.
  `semanticdb-minor-mode' - Stores tags when a buffer is not in memory.
- `semanticdb-load-system-caches' - Loads any systemdbs created earlier."
+ `semanticdb-load-system-caches' - Loads any systemdbs created earlier.
+ `semanticdb-load-ebrowse-caches' - Loads any ebrowse dbs created earlier."
   (interactive)
 
   (global-semantic-idle-scheduler-mode 1)
 
   (global-semanticdb-minor-mode 1)
 
-  ;; This loads any created system databases which get linked into
-  ;; any searches performed.
-  (when (and (null semantic-load-system-cache-loaded)
-	     (boundp 'semanticdb-default-system-save-directory)
-	     (stringp semanticdb-default-system-save-directory)
-	     (file-exists-p semanticdb-default-system-save-directory))
+  ;; Don't do the loads from semantic-load twice.
+  (when (null semantic-load-system-cache-loaded)
+
+    ;; This loads any created system databases which get linked into
+    ;; any searches performed.
     (setq semantic-load-system-cache-loaded t)
-    (semanticdb-load-system-caches))
+    (when (and (boundp 'semanticdb-default-system-save-directory)
+	       (stringp semanticdb-default-system-save-directory)
+	       (file-exists-p semanticdb-default-system-save-directory))
+      (semanticdb-load-system-caches))
+
+    ;; This loads any created ebrowse databases which get linked into
+    ;; any searches performed.
+    (when (and (not (featurep 'xemacs))
+	       (boundp 'semanticdb-default-system-save-directory)
+	       (stringp semanticdb-default-system-save-directory)
+	       (file-exists-p semanticdb-default-system-save-directory))
+      (semanticdb-load-ebrowse-caches))
+    )
   )
 
 (defun semantic-load-enable-code-helpers ()
@@ -89,7 +101,9 @@ This includes `semantic-load-enable-minimum-features' plus:
   `semantic-idle-summary-mode' - Show a summary for the tag indicated by
                                  code under point.  (intellisense)
   `senator-minor-mode' - Semantic Navigator, and global menu for all
-                         features semantic."
+                         features semantic.
+  `semantic-mru-bookmark-mode' - Provides a `switch-to-buffer' like
+                       keybinding for tag names."
   (interactive)
 
   (semantic-load-enable-minimum-features)
@@ -110,8 +124,8 @@ This includes `semantic-load-enable-minimum-features' plus:
 
   )
 
-(defun semantic-load-enable-guady-code-helpers ()
-  "Enable semantic features that provide guady coding assistance.
+(defun semantic-load-enable-gaudy-code-helpers ()
+  "Enable semantic features that provide gaudy coding assistance.
 This includes `semantic-load-enable-code-helpers'.
   `semantic-stickyfunc-mode' - Tracks current function in header-line
                                (when available).
@@ -135,6 +149,9 @@ This includes `semantic-load-enable-code-helpers'.
 
   (semantic-load-enable-code-helpers)
   )
+
+(semantic-alias-obsolete 'semantic-load-enable-guady-code-helpers
+                         'semantic-load-enable-gaudy-code-helpers)
 
 (defun semantic-load-enable-excessive-code-helpers ()
   "Enable all semantic features that provide coding assistance.
@@ -168,17 +185,21 @@ These modes include:
 
   (global-semantic-show-parser-state-mode 1)
 
+  ;; This enables debug output from the incremental parser.
+  ;; Perhaps a mode for that dumps stuff in a `messages' like buffer
+  ;; would be better?
+  (setq semantic-edits-verbose-flag t)
+
   )
 
-;; Old style variables
-(cond
- (semantic-load-turn-everything-on
-  (semantic-load-enable-excessive-code-helpers))
- (semantic-load-turn-useful-things-on
-  (semantic-load-enable-code-helpers))
- (t
-  (semantic-load-enable-minimum-features)
-  ))
+;; Old style variables.  Use only if we are not in batch mode.
+(when (not noninteractive)
+  (cond
+   (semantic-load-turn-everything-on
+    (semantic-load-enable-excessive-code-helpers))
+   (semantic-load-turn-useful-things-on
+    (semantic-load-enable-code-helpers))
+   ))
 
 (provide 'semantic-load)
 

@@ -6,7 +6,7 @@
 ;; Maintainer: David Ponce <david@dponce.com>
 ;; Created: 02 Aug 2003
 ;; Keywords: syntax
-;; X-RCS: $Id: bovine-grammar-macros.el,v 1.1 2006/12/02 00:57:17 davidswelt Exp $
+;; X-RCS: $Id: bovine-grammar-macros.el,v 1.2 2007/09/26 13:43:23 davidswelt Exp $
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
@@ -22,8 +22,8 @@
 ;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;

@@ -1,10 +1,10 @@
 ;;; semanticdb-el.el --- Semantic database extensions for Emacs Lisp
 
-;;; Copyright (C) 2002, 2003, 2004, 2005 Eric M. Ludlam
+;;; Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: tags
-;; X-RCS: $Id: semanticdb-el.el,v 1.22 2005/06/30 01:21:32 zappo Exp $
+;; X-RCS: $Id: semanticdb-el.el,v 1.26 2007/03/10 01:57:23 zappo Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -20,8 +20,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 ;; 
 ;;; Commentary:
 ;;
@@ -38,6 +38,7 @@
   ;; For generic function searching.
   (require 'eieio)
   (require 'eieio-opt)
+  (require 'eieio-base)
   )
 ;;; Code:
 
@@ -76,7 +77,7 @@ Create one of our special tables that can act as an intermediary."
   ;; We need to return something since there is always the "master table"
   ;; The table can then answer file name type questions.
   (when (not (slot-boundp obj 'tables))
-    (let ((newtable (semanticdb-table-emacs-lisp "tmp")))
+    (let ((newtable (semanticdb-table-emacs-lisp "Emacs System Table")))
       (oset obj tables (list newtable))
       (oset newtable parent-db obj)
       (oset newtable tags nil)
@@ -102,35 +103,16 @@ local variable."
     (set-buffer buffer)
     (eq (or mode-local-active-mode major-mode) 'emacs-lisp-mode)))
 
-;;; Usage
-;;
-;; Unlike other languages, Emacs Lisp always has the system database there
-;; even when there isn't a usage for it.
-(define-mode-local-override semanticdb-find-translate-path emacs-lisp-mode
-  (path brutish)
-  "Return a list of semanticdb tables asociated with PATH.
-If brutish, do the default action.
-If not brutish, do the default action, and append the system
-database (if available.)"
-  (let ((default
-	  ;; When we recurse, disable searching of system databases
-	  ;; so that our ELisp database only shows up once when
-	  ;; we append it in this iteration.
-	  (let ((semanticdb-search-system-databases nil)
-		)
-	    (semanticdb-find-translate-path-default path brutish))))
-    ;; Don't add anything if BRUTISH is on (it will be added in that fcn)
-    ;; or if we aren't supposed to search the system.
-    (if (or brutish (not semanticdb-search-system-databases))
-	default
-      (let ((tables (apply #'append
-			   (mapcar
-			    (lambda (db) (semanticdb-get-database-tables db))
-			    semanticdb-project-system-databases))))
-	(append default tables)))))
-
 ;;; Conversion
 ;;
+(defmethod semanticdb-normalize-tags ((obj semanticdb-table-emacs-lisp) tags)
+  "Convert tags, originating from Emacs OBJ, into standardized form.
+If Emacs cannot resolve this symbol to a particular file, then just
+return the TAGS."
+  ;; @TODO - Lets do this.  We could find the tag's source file
+  ;;         using the help system, for example.
+  tags)
+
 (defun semanticdb-elisp-sym-function-arglist (sym)
   "Get the argument list for SYM.
 Deal with all different forms of function.
@@ -215,7 +197,7 @@ Return a list of tags."
 	   (fun (semanticdb-elisp-sym->tag sym 'function))
 	   (var (semanticdb-elisp-sym->tag sym 'variable))
 	   (typ (semanticdb-elisp-sym->tag sym 'type))
-	   (taglst nil)a
+	   (taglst nil)
 	   )
       (when (or fun var typ)
 	;; If the symbol is any of these things, build the search table.

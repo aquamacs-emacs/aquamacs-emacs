@@ -1,10 +1,10 @@
 ;;; semantic-complete.el --- Routines for performing tag completion
 
-;;; Copyright (C) 2003, 2004, 2005 Eric M. Ludlam
+;;; Copyright (C) 2003, 2004, 2005, 2007 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: syntax
-;; X-RCS: $Id: semantic-complete.el,v 1.38 2005/06/30 01:20:09 zappo Exp $
+;; X-RCS: $Id: semantic-complete.el,v 1.45 2007/06/05 01:23:59 zappo Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -20,8 +20,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -83,7 +83,7 @@
 ;; window.  It may even choose to show short names when there are
 ;; many to choose from, or long names when there are fewer.
 ;;
-;; A complex displayor could opt to help the user 'foucs' on some
+;; A complex displayor could opt to help the user 'focus' on some
 ;; range.  For example, if 4 tags all have the same name, subsequent
 ;; calls to the displayor may opt to show each tag one at a time in
 ;; the buffer.  When the user likes one, selection would cause the
@@ -116,7 +116,9 @@
 (require 'semantic-format)
 (require 'semantic-ctxt)
 ;; Keep semanticdb optional.
-(eval-when-compile (require 'semanticdb))
+(eval-when-compile
+  (require 'semanticdb)
+  (require 'semanticdb-find))
 
 (eval-when-compile
   (condition-case nil
@@ -130,11 +132,11 @@
 ;;; Compatibility
 ;;
 (if (fboundp 'minibuffer-contents)
-    (defalias 'semantic-minibuffer-contents 'minibuffer-contents)
-  (defalias 'semantic-minibuffer-contents 'buffer-string))
+    (eval-and-compile (defalias 'semantic-minibuffer-contents 'minibuffer-contents))
+  (eval-and-compile (defalias 'semantic-minibuffer-contents 'buffer-string)))
 (if (fboundp 'delete-minibuffer-contents)
-    (defalias 'semantic-delete-minibuffer-contents 'delete-minibuffer-contents)
-  (defalias 'semantic-delete-minibuffer-contents 'erase-buffer))
+    (eval-and-compile (defalias 'semantic-delete-minibuffer-contents 'delete-minibuffer-contents))
+  (eval-and-compile (defalias 'semantic-delete-minibuffer-contents 'erase-buffer)))
 
 (defvar semantic-complete-inline-overlay nil
   "The overlay currently active while completing inline.")
@@ -513,10 +515,13 @@ if INLINE, then completion is happing inline in a buffer."
 	)
        ;; We need to display the completions.
        ;; Set the completions into the display engine
-       ((eq na 'display)
+       ((or (eq na 'display) (eq na 'displayend))
 	(semantic-displayor-set-completions
 	 displayor
-	 (semantic-collector-all-completions collector contents)
+	 (or
+	  (and (not (eq na 'displayend))
+	       (semantic-collector-current-exact-match collector))
+	  (semantic-collector-all-completions collector contents))
 	 contents)
 	;; Ask the displayor to display them.
 	(semantic-displayor-show-request displayor)
@@ -588,8 +593,12 @@ Similar to `minibuffer-contents' when completing in the minibuffer."
   (condition-case nil
       (progn
 	(when semantic-complete-inline-overlay
-	  (semantic-overlay-delete semantic-complete-inline-overlay)
-	  (setq semantic-complete-inline-overlay nil))
+	  (let ((wc (semantic-overlay-get semantic-complete-inline-overlay
+					  'window-config-start)))
+	    (semantic-overlay-delete semantic-complete-inline-overlay)
+	    (setq semantic-complete-inline-overlay nil)
+	    (set-window-configuration wc)
+	    ))
 	(setq semantic-completion-collector-engine nil
 	      semantic-completion-display-engine nil))
     (error nil))
@@ -659,6 +668,7 @@ a reasonable distance."
     ;; If something goes terribly wrong, clean up after ourselves.
     (error (semantic-complete-inline-exit))))
 
+;;;###autoload
 (defun semantic-complete-inline-force-display ()
   "Force the display of whatever the current completions are.
 DO NOT CALL THIS IF THE INLINE COMPLETION ENGINE IS NOT ACTIVE."
@@ -702,6 +712,9 @@ END is at the end of the current symbol being completed."
   (semantic-overlay-put semantic-complete-inline-overlay
 			'face
 			'semantic-complete-inline-face)
+  (semantic-overlay-put semantic-complete-inline-overlay
+			'window-config-start
+			(current-window-configuration))
   ;; Install our command hooks
   (add-hook 'pre-command-hook 'semantic-complete-pre-command-hook)
   (add-hook 'post-command-hook 'semantic-complete-post-command-hook)
@@ -750,15 +763,27 @@ Expected return values are:
   scroll -> The completions have been shown, and the user keeps hitting
             the complete button.  If possible, scroll the completions
   focus -> The displayor knows how to shift focus among possible completions.
-           Let it do that."
-  (let ((ans nil))
-    (setq ans (semantic-collector-next-action
-	       semantic-completion-collector-engine
-	       partial))
-    (unless ans
-      (setq ans (semantic-displayor-next-action
-		 semantic-completion-display-engine)))
-    ans))
+           Let it do that.
+  displayend -> Whatever options the displayor had for repeating options, there
+           are none left.  Try something new."
+  (let ((ans1 (semantic-collector-next-action
+		semantic-completion-collector-engine
+		partial))
+	(ans2 (semantic-displayor-next-action
+		semantic-completion-display-engine))
+	)
+    (cond
+     ;; No collector answer, use displayor answer.
+     ((not ans1)
+      ans2)
+     ;; Displayor selection of 'scroll, 'display, or 'focus trumps
+     ;; 'done
+     ((and (eq ans1 'done) ans2)
+      ans2)
+     ;; Use ans1 when we have it.
+     (t
+      ans1))))
+	  
 
 
 ;;; ------------------------------------------------------------
@@ -817,7 +842,10 @@ characters.  This is the last calculated version.")
 			:documentation "The list of matched tags.
 When tokens are matched, they are added to this list.")
    )
-  "Root class for completion engines."
+  "Root class for completion engines.
+The baseclass provides basic functionality for interacting with
+a completion displayor object, and tracking the current progress
+of a completion."
   :abstract t)
 
 (defmethod semantic-collector-next-action
@@ -827,12 +855,18 @@ PARTIAL indicates if we are doing a partial completion."
   (if (and (slot-boundp obj 'last-completion)
 	   (string= (semantic-completion-text) (oref obj last-completion)))
       (let* ((cem (semantic-collector-current-exact-match obj))
-	     (cemlen (semanticdb-find-result-length cem)))
-	(cond ((and cem (= cemlen 1))
+	     (cemlen (semanticdb-find-result-length cem))
+	     (cac (semantic-collector-all-completions
+		   obj (semantic-completion-text)))
+	     (caclen (semanticdb-find-result-length cac)))
+	(cond ((and cem (= cemlen 1)
+		    cac (> caclen 1)
+		    (eq last-command this-command))
+	       ;; Defer to the displayor...
+	       nil)
+	      ((and cem (= cemlen 1))
 	       'done)
-	      ((and (not cem)
-		    (not (semantic-collector-all-completions
-			  obj (semantic-completion-text))))
+	      ((and (not cem) (not cac))
 	       'empty)
 	      ((and partial (semantic-collector-try-completion-whitespace
 			     obj (semantic-completion-text)))
@@ -1020,7 +1054,7 @@ with that name."
 (defclass semantic-collector-buffer-abstract (semantic-collector-abstract)
   ()
   "Root class for per-buffer completion engines.
-These collectors track themselves on a per-buffer basis "
+These collectors track themselves on a per-buffer basis."
   :abstract t)
 
 (defmethod constructor :STATIC ((this semantic-collector-buffer-abstract)
@@ -1060,7 +1094,8 @@ NEWCACHE is the new tag table, but we ignore it."
   (semantic-collector-buffer-abstract)
   ()
   "Completion engine for tags in the current buffer.
-Provides deep searches through types.")
+When searching for a tag, uses semantic  deep searche functions.
+Basics search only in the current buffer.")
 
 (defmethod semantic-collector-calculate-cache
   ((obj semantic-collector-buffer-deep))
@@ -1082,7 +1117,8 @@ Uses `semantic-flatten-tags-table'"
 At creation time, it can be anything accepted by
 `semanticdb-find-translate-path' as a PATH argument.")
    )
-  "Root class for project wide completion engines."
+  "Root class for project wide completion engines.
+Uses semanticdb for searching all tags in the current project."
   :abstract t)
 
 ;;; Project Search
@@ -1168,7 +1204,9 @@ inserted into the current context.")
 		:protection :protected
 		:documentation "Prefix associated with slot `table'")
    )
-  "Manages the display of some number of tags."
+  "Manages the display of some number of tags.
+Provides the basics for a displayor, including interacting with
+a collector, and tracking tables of completion to display."
   :abstract t)
 
 (defmethod semantic-displayor-next-action ((obj semantic-displayor-abstract))
@@ -1211,7 +1249,9 @@ This object type doesn't do focus, so will never have a focus object."
 
 (defclass semantic-displayor-traditional (semantic-displayor-abstract)
   ()
-  "Traditional display mechanism for a list of possible completions.")
+  "Traditional display mechanism for a list of possible completions.
+Completions are showin in a new buffer and listed with the ability
+to click on the items to aid in completion.")
 
 (defmethod semantic-displayor-show-request ((obj semantic-displayor-abstract))
   "A request to show the current tags table."
@@ -1248,7 +1288,15 @@ which have the same name."
   (if (and (slot-boundp obj 'last-prefix)
 	   (string= (oref obj last-prefix) (semantic-completion-text))
 	   (eq last-command this-command))
-      'focus
+      (if (and 
+	   (slot-boundp obj 'focus)
+	   (slot-boundp obj 'table)
+	   (<= (semanticdb-find-result-length (oref obj table))
+	       (1+ (oref obj focus))))
+	  ;; We are at the end of the focus road.
+	  'displayend
+	;; Focus on some item.
+	'focus)
     'display))
 
 (defmethod semantic-displayor-set-completions ((obj semantic-displayor-focus-abstract)
@@ -1290,7 +1338,10 @@ which have the same name."
 (defclass semantic-displayor-traditional-with-focus-highlight
   (semantic-displayor-traditional semantic-displayor-focus-abstract)
   ((find-file-focus :initform t))
-  "A traditional displayor which can focus on a tag by showing it.")
+  "A traditional displayor which can focus on a tag by showing it.
+Same as `semantic-displayor-traditional', but with selection between
+multiple tags with the same name done by 'focusing' on the source
+location of the different tags to differentiate them.")
 
 (defmethod semantic-displayor-focus-request
   ((obj semantic-displayor-traditional-with-focus-highlight))
@@ -1554,7 +1605,10 @@ HISTORY is a symbol representing a variable to store the history in."
 						   context
 						   history)
   "Ask for a tag by name based on the current context.
-PROMPT is the first part of the prompt.  additional prompt
+The function `semantic-analyze-current-context' is used to
+calculate the context.  `semantic-analyze-possible-completions' is used 
+to generate the list of possible completions.
+PROMPT is the first part of the prompt.  Additional prompt
 is added based on the contexts full prefix.
 CONTEXT is the semantic analyzer context to start with.
 HISTORY is a symbol representing a variable to stor the history in.
@@ -1581,8 +1635,25 @@ prompts.  these are calculated from the CONTEXT variable passed in."
      history)))
 
 ;;;###autoload
+(defcustom semantic-complete-inline-analyzer-displayor-class
+  'semantic-displayor-tooltip
+  "*Class for displayor to use with inline completion.
+Good values are:
+  'semantic-displayor-tooltip - show options in a tooltip.
+  'semantic-displayor-traditional - In a buffer."
+  :group 'semantic
+  :type '(radio (const :tag "Tooltip" semantic-displayor-tooltip)
+		(const :tag "Traditional" semantic-displayor-traditional)
+		(const :tag "Traditional with Focus"
+		       semantic-displayor-traditional-with-focus-highlight))
+  )
+
+;;;###autoload
 (defun semantic-complete-inline-analyzer (context)
   "Complete a symbol name by name based on the current context.
+This is similar to `semantic-complete-read-tag-analyze', except
+that the completion interaction is in the buffer where the context
+was calculated from.
 CONTEXT is the semantic analyzer context to start with.
 See `semantic-complete-inline-tag-engine' for details on how
 completion works."
@@ -1615,7 +1686,9 @@ completion works."
 	  ;; There are several options.  Do the completion.
 	  (semantic-complete-inline-tag-engine
 	   collector
-	   (semantic-displayor-tooltip "simple")
+	   (funcall semantic-complete-inline-analyzer-displayor-class
+		    "inline displayor")
+	   ;;(semantic-displayor-tooltip "simple")
 	   (oref context buffer)
 	   (car (oref context bounds))
 	   (cdr (oref context bounds))
@@ -1695,6 +1768,18 @@ will perform the completion."
 	   (not (semantic-completion-inline-active-p)))
       (message "Inline completion not needed."))
   )
+
+;;;###autoload
+(defun semantic-complete-self-insert (arg)
+  "Like `self-insert-command', but does completion afterwards.
+ARG is passed to `self-insert-command'.  If ARG is nil,
+use `semantic-complete-analyze-inline' to complete."
+  (interactive "p")
+  (self-insert-command arg)
+  (when (and (= arg 1)
+	     (semantic-analyze-current-context))
+    (semantic-complete-analyze-inline)
+    ))
 
 ;; End
 (provide 'semantic-complete)

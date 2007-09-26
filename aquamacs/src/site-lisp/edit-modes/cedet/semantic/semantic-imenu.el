@@ -1,11 +1,11 @@
 ;;; semantic-imenu.el --- Use Semantic as an imenu tag generator
 
-;;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005 Paul Kinnucan & Eric Ludlam
+;;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2007 Paul Kinnucan & Eric Ludlam
 ;;; Copyright (C) 2001, 2002, 2003 Eric Ludlam
 
 ;; Created By: Paul Kinnucan
 ;; Maintainer: Eric Ludlam
-;; X-RCS: $Id: semantic-imenu.el,v 1.54 2005/03/24 12:46:17 zappo Exp $
+;; X-RCS: $Id: semantic-imenu.el,v 1.56 2007/02/19 02:51:54 zappo Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -21,8 +21,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -74,6 +74,7 @@
   :group 'imenu
   )
 
+;;;###autoload
 (defcustom semantic-imenu-summary-function 'semantic-format-tag-abbreviate
   "*Function to use when creating items in Imenu.
 Some useful functions are found in `semantic-format-tag-functions'."
@@ -81,6 +82,7 @@ Some useful functions are found in `semantic-format-tag-functions'."
   :type semantic-format-tag-custom-list)
 (make-variable-buffer-local 'semantic-imenu-summary-function)
 
+;;;###autoload
 (defcustom semantic-imenu-bucketize-file t
   "*Non-nil if tags in a file are to be grouped into buckets."
   :group 'semantic-imenu
@@ -101,6 +103,7 @@ This option is ignored if `semantic-imenu-bucketize-file' is nil."
   :type 'boolean)
 (make-variable-buffer-local 'semantic-imenu-buckets-to-submenu)
 
+;;;###autoload
 (defcustom semantic-imenu-expand-type-members t
   "*Non-nil if types should have submenus with members in them."
   :group 'semantic-imenu
@@ -156,6 +159,7 @@ other buffer local ones based on the same semanticdb."
 (defvar semantic-imenu-auto-rebuild-running nil
   "Non-nil if `semantic-imenu-rebuild-directory-indexes' is running.")
 
+;;;###autoload
 (defvar semantic-imenu-expandable-tag-classes '(type)
   "List of expandable tag classes.
 Tags of those classes will be given submenu with children.

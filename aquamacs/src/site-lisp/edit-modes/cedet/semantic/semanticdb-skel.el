@@ -1,10 +1,10 @@
 ;;; semanticdb-skel.el --- Semantic database extensions for SKEL
 
-;;; Copyright (C) 2002, 2003, 2004, 2005 Eric M. Ludlam
+;;; Copyright (C) 2002, 2003, 2004, 2005, 2006 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: tags
-;; X-RCS: $Id: semanticdb-skel.el,v 1.1 2005/02/01 14:49:03 zappo Exp $
+;; X-RCS: $Id: semanticdb-skel.el,v 1.3 2006/07/29 15:02:49 zappo Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -20,8 +20,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 ;; 
 ;;; Commentary:
 ;;
@@ -58,14 +58,14 @@
   "Database representing SKEL.")
 
 ;; Create the database, and add it to searchable databases for SKEL mode.
-(defvar-mode-local emacs-lisp-mode semanticdb-project-system-databases
+(defvar-mode-local YOUR-MAJOR-mode semanticdb-project-system-databases
   (list 
    (semanticdb-project-database-SKEL "SKEL"))
   "Search SKEL for symbols.")
 
 ;; NOTE: Be sure to modify this to the best advantage of your
 ;;       language.
-(defvar-mode-local emacs-lisp-mode semanticdb-find-default-throttle
+(defvar-mode-local YOUR-MAJOR-mode semanticdb-find-default-throttle
   '(project omniscience)
   "Search project files, then search this omniscience database.
 It is not necessary to to system or recursive searching because of

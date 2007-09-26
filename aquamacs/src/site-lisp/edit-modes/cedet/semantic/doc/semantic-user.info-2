@@ -3,9 +3,9 @@ user-guide.texi.
 
 This is the Semantic User's Manual
 
-   Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005 Eric M. Ludlam
-Copyright (C) 2001, 2002, 2003, 2004 David Ponce Copyright (C) 2002,
-2003 Richard Y. Kim
+   Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007
+Eric M. Ludlam Copyright (C) 2001, 2002, 2003, 2004 David Ponce
+Copyright (C) 2002, 2003 Richard Y. Kim
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -27,6 +27,80 @@ text analysis in Emacs_
 David Ponce, and Richard Y. Kim
 
 
+File: semantic-user.info,  Node: Speed Debug,  Next: Customizing,  Prev: semanticdb,  Up: Top
+
+Debugging Speed Problems
+************************
+
+If aspects of semantic cause your Emacs to slow down or block editing,
+there are several things that may be happening.  The most time
+consuming aspect of semantic is usually the parsing of files for tag
+information, and this action can be triggered from many possible
+sources.
+
+A simple way to determine where the problem lies is to use the command
+`M-x debug-on-quit RET' and then just hit `C-g' next time it gets
+'stuck' somewhere.  It will give you a stack and one of the many
+semantic mode functions will likely show up in that stack trace.
+
+From a simple standpoint, your next action might be to use the the
+Senator menu under `Modes' and just toggle suspected modes on and off.
+
+Interruptibility
+================
+
+One of the goals with the semantic based minor modes and auto parse is
+that it should be interruptible.  Thus, a keyboard action should
+interrupt any active parsing or mode activity.  In practice, I've found
+this doesn't always work and I've been a bit stymied as to why.
+
+You can test the interruptibility framework by running `M-x
+semantic-test-throw-on-input RET' and seeing that you can press any key
+to break out of the loop.
+
+Incremental parsing
+===================
+
+The incremental parser used by semantic will reparse only small
+sections of a file you have edited, which eliminates the need to
+reparse entire files.  This speeds up minor modes that need the local
+buffer to be up to date, such as speedbar or ECB.
+
+If the incremental parsing is not always working for you (meaning it
+will parse the whole file frequently while you edit) then perhaps you
+need to customize `semantic-edits-verbose-flag' to enable some friendly
+debug output.  Additionally using
+`semantic-load-enable-semantic-debugging-helpers' to help identify
+possible problem areas by enabling highlight edits mode and show parser
+state mode *note (semantic-langdev.info)Incremental Parser Debugging::
+
+Symbol lookup
+=============
+
+There are many minor modes that have special behaviors tied into the
+current parser state, with the most complex modes being the summary and
+completion modes.  These modes can initiate parsing not only in the
+current buffer, but in other buffers that are referred to in the
+current source by some form of include statement.
+
+If they turn out not to be useful in the language mode you are
+operating in, then it may be best to disable them.
+
+Alternately, you can control how these major modes, and other modes
+like them parse alternate files by adjusting
+`semanticdb-find-default-throttle'. You can read more in *note
+(semantic-appdev.info)DB Search Paths::.
+
+
+File: semantic-user.info,  Node: Customizing,  Next: GNU Free Documentation License,  Prev: Speed Debug,  Up: Top
+
+Customizing
+***********
+
+Customizations can be divided into two categories.  * M-x customize *
+Low level hooks.
+
+
 File: semantic-user.info,  Node: GNU Free Documentation License,  Next: Index,  Prev: Customizing,  Up: Top
 
 GNU Free Documentation License
@@ -34,7 +108,7 @@ GNU Free Documentation License
 
                         Version 1.1, March 2000
      Copyright (C) 2000  Free Software Foundation, Inc.
-     59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+     51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
      
      Everyone is permitted to copy and distribute verbatim copies
      of this license document, but changing it is not allowed.
@@ -427,6 +501,8 @@ Index
 * Minor Modes:                           Minor Modes.
 * re-search-backward:                    senator.
 * re-search-forward:                     senator.
+* semantic-add-system-include:           Include paths.
+* semantic-adebug-searchdb:              Semanticdb search debugging commands.
 * semantic-after-idle-scheduler-reparse-hooks: Reparsing Options.
 * semantic-analyze-current-context:      Analyzer.
 * semantic-analyze-possible-completions: Analyzer.
@@ -441,7 +517,9 @@ Index
 * semantic-highlight-edits-mode:         Highlight Edits Mode.
 * semantic-ia-complete-symbol:           Smart Completion.
 * semantic-ia-complete-symbol-menu:      Smart Completion.
+* semantic-ia-complete-tip:              Smart Completion.
 * semantic-ia-show-doc:                  Smart Completion.
+* semantic-ia-show-summary:              Smart Completion.
 * semantic-idle-scheduler-idle-time:     Idle Scheduler.
 * semantic-idle-scheduler-max-buffer-size: Reparsing Options.
 * semantic-idle-scheduler-mode-hook:     Idle Scheduler.
@@ -457,6 +535,8 @@ Index
 * semantic-imenu-index-directory:        imenu.
 * semantic-imenu-sort-bucket-function:   imenu.
 * semantic-imenu-summary-function:       imenu.
+* semantic-mru-bookmark-mode:            MRU Bookmarks Mode.
+* semantic-remove-system-include:        Include paths.
 * semantic-show-parser-state-mode:       Parser State.
 * semantic-show-unmatched-syntax-mode:   Unmatched Syntax Highlighting.
 * semantic-speedbar-analysis:            Speedbar Analysis.
@@ -467,20 +547,22 @@ Index
 * semantic-toggle-decoration-style:      Tag Decoration Mode.
 * semantic-unmatched-syntax-face:        Unmatched Syntax Highlighting.
 * semanticdb:                            semanticdb.
-* semanticdb-create-system-database:     semanticdb.
-* semanticdb-default-file-name:          semanticdb.
-* semanticdb-default-save-directory:     semanticdb.
-* semanticdb-find-default-throttle:      semanticdb.
-* semanticdb-find-test-translate-path:   semanticdb.
+* semanticdb-create-ebrowse-database:    Create System Databases.
+* semanticdb-create-system-database:     Create System Databases.
+* semanticdb-default-file-name:          Semanticdb Tag Storage.
+* semanticdb-default-save-directory:     Semanticdb Tag Storage.
+* semanticdb-dump-all-table-summary:     Semanticdb search debugging commands.
+* semanticdb-find-default-throttle:      Search Throttle.
+* semanticdb-find-test-translate-path:   Semanticdb search debugging commands.
 * semanticdb-mode-hooks:                 semanticdb.
-* semanticdb-new-database-class:         semanticdb.
-* semanticdb-persistent-path:            semanticdb.
-* semanticdb-project-predicate-functions: semanticdb.
-* semanticdb-project-root-functions:     semanticdb.
-* semanticdb-project-roots:              semanticdb.
-* semanticdb-project-system-databases:   semanticdb.
-* semanticdb-save-database-hooks:        semanticdb.
-* semanticdb-search-system-databases:    semanticdb.
+* semanticdb-new-database-class:         Changing Backends.
+* semanticdb-persistent-path:            Semanticdb Tag Storage.
+* semanticdb-project-predicate-functions: Semanticdb Tag Storage.
+* semanticdb-project-root-functions:     Semanticdb Roots.
+* semanticdb-project-roots:              Semanticdb Roots.
+* semanticdb-project-system-databases:   Semanticdb System Backends.
+* semanticdb-save-database-hooks:        Semanticdb Tag Storage.
+* semanticdb-search-system-databases:    Semanticdb System Backends.
 * senator:                               senator.
 * senator-complete-symbol:               senator.
 * senator-completion-menu-popup:         senator.

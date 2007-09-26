@@ -1,11 +1,11 @@
 ;;; wisent-python-wy.el --- Generated parser support file
 
-;; Copyright (C) 2002, 2003, 2004 Richard Kim
+;; Copyright (C) 2002, 2003, 2004, 2007 Richard Kim
 
-;; Author: David <dr@lucy.lan>
-;; Created: 2006-12-01 20:39:33+0000
+;; Author: David <dr@scarlett.inf.ed.ac.uk>
+;; Created: 2007-09-26 14:39:58+0100
 ;; Keywords: syntax
-;; X-RCS: $Id: wisent-python-wy.el,v 1.1 2006/12/02 00:57:23 davidswelt Exp $
+;; X-RCS: $Id: wisent-python-wy.el,v 1.2 2007/09/26 13:43:25 davidswelt Exp $
 
 ;; This file is not part of GNU Emacs.
 ;;
@@ -21,8 +21,8 @@
 ;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -432,10 +432,12 @@
 	  (semantic-tag-new-function $2 nil $3))))
        (function_parameter_list
 	((PAREN_BLOCK)
-	 (semantic-parse-region
-	  (car $region1)
-	  (cdr $region1)
-	  'function_parameters 1)))
+	 (let
+	     ((wisent-python-EXPANDING-block t))
+	   (semantic-parse-region
+	    (car $region1)
+	    (cdr $region1)
+	    'function_parameters 1))))
        (function_parameters
 	((LPAREN)
 	 nil)
@@ -461,11 +463,13 @@
 	((paren_class_list)))
        (paren_class_list
 	((PAREN_BLOCK)
-	 (mapcar 'semantic-tag-name
-		 (semantic-parse-region
-		  (car $region1)
-		  (cdr $region1)
-		  'paren_classes 1))))
+	 (let
+	     ((wisent-python-EXPANDING-block t))
+	   (mapcar 'semantic-tag-name
+		   (semantic-parse-region
+		    (car $region1)
+		    (cdr $region1)
+		    'paren_classes 1)))))
        (paren_classes
 	((LPAREN)
 	 nil)

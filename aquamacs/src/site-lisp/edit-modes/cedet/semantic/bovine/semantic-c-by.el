@@ -1,11 +1,11 @@
 ;;; semantic-c-by.el --- Generated parser support file
 
-;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005 Eric M. Ludlam
+;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Eric M. Ludlam
 
-;; Author: David <dr@lucy.lan>
-;; Created: 2006-12-01 20:39:41+0000
+;; Author: David <dr@scarlett.inf.ed.ac.uk>
+;; Created: 2007-09-26 14:40:00+0100
 ;; Keywords: syntax
-;; X-RCS: $Id: semantic-c-by.el,v 1.1 2006/12/02 00:57:17 davidswelt Exp $
+;; X-RCS: $Id: semantic-c-by.el,v 1.2 2007/09/26 13:43:23 davidswelt Exp $
 
 ;; This file is not part of GNU Emacs.
 ;;
@@ -21,8 +21,8 @@
 ;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -42,8 +42,6 @@
 (defconst semantic-c-by--keyword-table
   (semantic-lex-make-keyword-table
    '(("include" . INCLUDE)
-     ("define" . DEFINE)
-     ("undef" . UNDEFINE)
      ("extern" . EXTERN)
      ("static" . STATIC)
      ("const" . CONST)
@@ -92,10 +90,14 @@
      ("long" . LONG)
      ("float" . FLOAT)
      ("double" . DOUBLE)
+     ("bool" . BOOL)
      ("_P" . UNDERP)
-     ("__P" . UNDERUNDERP))
-   '(("__P" summary "Common macro to eliminate prototype compatibility on some compilers")
+     ("__P" . UNDERUNDERP)
+     ("__attribute__" . __ATTRIBUTE__))
+   '(("__attribute__" summary "<cdecl> __attribute__ ((<attributeoption>))")
+     ("__P" summary "Common macro to eliminate prototype compatibility on some compilers")
      ("_P" summary "Common macro to eliminate prototype compatibility on some compilers")
+     ("bool" summary "Primitive boolean type")
      ("double" summary "Primitive floating-point type (double-precision 64-bit IEEE 754)")
      ("float" summary "Primitive floating-point type (single-precision 32-bit IEEE 754)")
      ("long" summary "Integral primitive type (-9223372036854775808 to 9223372036854775807)")
@@ -147,6 +149,7 @@
       (BRACKETS . "\\[\\]")
       (PARENS . "()")
       (VOID_BLCK . "^(void)$")
+      (BRACE_BLCK . "^{")
       (PAREN_BLCK . "^(")
       (BRACK_BLCK . "\\[.*\\]$"))
      ("close-paren"
@@ -164,7 +167,7 @@
      ("punctuation"
       (OPSTART . "[-+*/%^|&]")
       (OR . "\\`[|]\\'")
-      (HAT . "\\`[^]\\'")
+      (HAT . "\\`\\^\\'")
       (MOD . "\\`[%]\\'")
       (TILDE . "\\`[~]\\'")
       (COMA . "\\`[,]\\'")
@@ -275,6 +278,14 @@
      ) ;; end macro-def
 
     (macro
+     (spp-macro-def
+      opt-define-arglist
+      macro-def
+      ,(semantic-lambda
+	(semantic-tag-new-variable
+	 (nth 0 vals) nil
+	 (nth 2 vals) :constant-flag t))
+      )
      (punctuation
       "\\`[#]\\'"
       macro-or-include
@@ -284,15 +295,6 @@
      ) ;; end macro
 
     (macro-or-include
-     (DEFINE
-       symbol
-       opt-define-arglist
-       macro-def
-       ,(semantic-lambda
-	 (semantic-tag-new-variable
-	  (nth 1 vals) nil
-	  (nth 3 vals) :constant-flag t))
-       )
      (INCLUDE
       system-include
       ,(semantic-lambda
@@ -323,21 +325,15 @@
      ) ;; end opt-define-arglist
 
     (define
-      (punctuation
-       "\\`[#]\\'"
-       DEFINE
-       symbol
+      (spp-macro-def
        opt-define-arglist
        macro-def
        ,(semantic-lambda
 	 (semantic-tag-new-variable
-	  (nth 2 vals) nil
-	  (nth 3 vals) :constant-flag t))
+	  (nth 0 vals) nil
+	  (nth 2 vals) :constant-flag t))
        )
-      (punctuation
-       "\\`[#]\\'"
-       UNDEFINE
-       symbol
+      (spp-macro-undef
        ,(semantic-lambda
 	 (list nil))
        )
@@ -599,7 +595,7 @@
 	 (car
 	  (nth 0 vals)) nil
 	 (nth 4 vals) :template-specifier
-	 (nth 3 vals) :parent
+	 (nth 3 vals) :prototype t :parent
 	 (car
 	  (nth 1 vals))))
       )
@@ -638,7 +634,8 @@
 	(semantic-tag-new-type
 	 (nth 4 vals)
 	 (nth 0 vals) nil
-	 (nth 2 vals)))
+	 (list
+	  (nth 2 vals))))
       )
      ) ;; end typesimple
 
@@ -678,6 +675,7 @@
 
     (type
      (typesimple
+      opt-attribute
       punctuation
       "\\`[;]\\'"
       ,(semantic-lambda
@@ -701,6 +699,18 @@
 	 (nth 1 vals) nil))
       )
      ) ;; end type
+
+    (opt-attribute
+     (__ATTRIBUTE__
+      semantic-list
+      ,(semantic-lambda
+	(list nil))
+      )
+     ( ;;EMPTY
+      ,(semantic-lambda
+	(list nil))
+      )
+     ) ;; end opt-attribute
 
     (using
      (USING
@@ -824,7 +834,15 @@
 	(list
 	 (nth 1 vals)))
       )
+     (punctuation
+      "\\`[=]\\'"
+      symbol
+      ,(semantic-lambda
+	(list
+	 (nth 1 vals)))
+      )
      ( ;;EMPTY
+      ,(semantic-lambda)
       )
      ) ;; end opt-template-equal
 
@@ -1081,6 +1099,7 @@
       )
      (FLOAT)
      (DOUBLE)
+     (BOOL)
      (LONG
       DOUBLE
       ,(semantic-lambda
@@ -1190,6 +1209,27 @@
 	 (nth 7 vals))
 	(nth 0 vals)
 	(nth 10 vals))
+      )
+     (opt-stars
+      opt-class
+      opt-destructor
+      functionname
+      opt-template-specifier
+      opt-under-p
+      opt-post-fcn-modifiers
+      opt-throw
+      opt-initializers
+      fun-try-end
+      ,(semantic-lambda
+	(nth 3 vals)
+	(list
+	 'function
+	 (nth 1 vals)
+	 (nth 2 vals) nil
+	 (nth 7 vals)
+	 (nth 6 vals))
+	(nth 0 vals)
+	(nth 9 vals))
       )
      ) ;; end func-decl
 
@@ -1710,14 +1750,6 @@
 	 "|="))
       )
      (punctuation
-      "\\`[^]\\'"
-      punctuation
-      "\\`[=]\\'"
-      ,(semantic-lambda
-	(list
-	 "^="))
-      )
-     (punctuation
       "\\`[-]\\'"
       punctuation
       "\\`[>]\\'"
@@ -1804,9 +1836,17 @@
      (punctuation
       "\\`[%]\\'")
      (punctuation
-      "\\`[^]\\'")
-     (punctuation
       "\\`[,]\\'")
+     (punctuation
+      "\\`\\^\\'"
+      punctuation
+      "\\`[=]\\'"
+      ,(semantic-lambda
+	(list
+	 "^="))
+      )
+     (punctuation
+      "\\`\\^\\'")
      ) ;; end operatorsym
 
     (functionname
@@ -1848,7 +1888,8 @@
      ) ;; end function-pointer
 
     (fun-or-proto-end
-     (punctuation
+     (opt-attribute
+      punctuation
       "\\`[;]\\'"
       ,(semantic-lambda
 	(list t))
@@ -1866,24 +1907,42 @@
       ,(semantic-lambda
 	(list ':pure-virtual-flag))
       )
-     (TRY
-      opt-initializers
-      semantic-list
-      CATCH
-      semantic-list
-      semantic-list
-      ,(semantic-lambda
-	(list nil))
-      )
-     (TRY
-      opt-initializers
-      semantic-list
-      CATCH
-      semantic-list
+     (fun-try-end
       ,(semantic-lambda
 	(list nil))
       )
      ) ;; end fun-or-proto-end
+
+    (fun-try-end
+     (TRY
+      opt-initializers
+      semantic-list
+      "^{"
+      fun-try-several-catches
+      ,(semantic-lambda
+	(list nil))
+      )
+     ) ;; end fun-try-end
+
+    (fun-try-several-catches
+     (CATCH
+      semantic-list
+      "^("
+      semantic-list
+      "^{"
+      fun-try-several-catches
+      ,(semantic-lambda)
+      )
+     (CATCH
+      semantic-list
+      "^{"
+      fun-try-several-catches
+      ,(semantic-lambda)
+      )
+     ( ;;EMPTY
+      ,(semantic-lambda)
+      )
+     ) ;; end fun-try-several-catches
 
     (type-cast
      (semantic-list
@@ -1904,6 +1963,16 @@
      ) ;; end type-cast-list
 
     (function-call
+     (namespace-symbol
+      punctuation
+      "\\`[.]\\'"
+      function-call)
+     (namespace-symbol
+      punctuation
+      "\\`[-]\\'"
+      punctuation
+      "\\`[>]\\'"
+      function-call)
      (namespace-symbol
       semantic-list)
      ) ;; end function-call

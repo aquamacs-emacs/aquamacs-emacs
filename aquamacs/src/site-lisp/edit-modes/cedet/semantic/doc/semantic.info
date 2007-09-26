@@ -4,9 +4,9 @@ semantic.texi.
 This manual documents Semantic, a new intrastructure for parser based
 text analysis for Emacs.
 
-   Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005 Eric M. Ludlam
-Copyright (C) 2001, 2002, 2003, 2005 David Ponce Copyright (C) 2002,
-2003 Richard Y. Kim
+   Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2007 Eric M.
+Ludlam Copyright (C) 2001, 2002, 2003, 2005 David Ponce Copyright (C)
+2002, 2003 Richard Y. Kim
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -48,7 +48,7 @@ the mailing list cedet-semantic@sourceforge.net via the URL:
 * Menu:
 
 * Overview::
-* Installation::
+* Installation/Basic Configuration::
 * Semantic manuals::
 * Semantic Internals::
 * Glossary::
@@ -56,7 +56,7 @@ the mailing list cedet-semantic@sourceforge.net via the URL:
 * Index::
 
 
-File: semantic.info,  Node: Overview,  Next: Installation,  Prev: Top,  Up: Top
+File: semantic.info,  Node: Overview,  Next: Installation/Basic Configuration,  Prev: Top,  Up: Top
 
 Overview
 ********
@@ -180,27 +180,205 @@ Finally, semantic provides an API for the Emacs Lisp programmer to
 access the information in the parse tree.
 
 
-File: semantic.info,  Node: Installation,  Next: Semantic manuals,  Prev: Overview,  Up: Top
+File: semantic.info,  Node: Installation/Basic Configuration,  Next: Semantic manuals,  Prev: Overview,  Up: Top
 
-Installation
-************
+Installation and Basic Configuration
+************************************
 
-To install semantic, untar the distribution into a subdirectory, such as
-`/usr/share/emacs/site-lisp/semantic-#.#'.  Next, add the following
-lines into your individual `.emacs' file, or into
-`site-lisp/site-start.el'.
+Semantic should be installed as a part of the CEDET distribution.  See
+the cedet/INSTALL file in the cedet distribution for basic installation
+instructions.
 
-     (setq semantic-load-turn-everything-on t)
-     (load-file "/path/to/semantic/semantic-load.el")
+* Menu:
 
-If you would like to turn individual tools on or off in your init file,
-skip the first line.
-
-Semantic is a part of CEDET.  If you are installing semantic as a part
-of CEDET, see the CEDET `INSTALL' file for directions.
+* Canned Configuration::
+* Search Optimization::
+* Parsing Optimization::
 
 
-File: semantic.info,  Node: Semantic manuals,  Next: Semantic Internals,  Prev: Installation,  Up: Top
+File: semantic.info,  Node: Canned Configuration,  Next: Search Optimization,  Up: Installation/Basic Configuration
+
+Canned Configuration
+====================
+
+As described briefly in the cedet/INSTALL file, there are several
+canned configurations you can use.  These configuration files just turn
+different semantic modes on and off, but don't change intrinsic
+semantic parsing behaviors.
+
+ - Command: semantic-load-enable-minimum-features
+     Enable the minimum number of semantic features for basic usage.
+     This includes:
+    "semantic-idle-scheduler-mode"
+          Keeps a buffer's parse tree up to date.  (*note
+          (semantic-user)Idle Scheduler::.)
+
+    `semanticdb-minor-mode'
+          Stores tags when a buffer is not in memory.  (*note
+          (semantic-user)semanticdb::.)
+
+    "semanticdb-load-system-caches"
+          Loads any systemdbs created earlier.  (*note
+          (semantic-user)semanticdb::.)
+
+    "semanticdb-load-ebrowse-caches"
+          Loads any ebrowse dbs created earlier.  (*note
+          (semantic-user)Create System Databases::.)
+
+ - Command: semantic-load-enable-code-helpers
+     Enable some semantic features that provide coding assistance.
+     This includes "semantic-load-enable-minimum-features" plus:
+    "imenu"
+          Lists Semantic generated tags in the menubar.
+
+    "semantic-idle-summary-mode"
+          Show a summary for the tag indicated by code under point.
+          (intellisense) (*note (semantic-user)Idle Summary Mode::.)
+
+    "senator-minor-mode"
+          Semantic Navigator, and global menu for all features semantic.
+          (*note (semantic-user)senator::.)
+
+    "semantic-mru-bookmark-mode"
+          Provides a `switch-to-buffer' like keybinding for tag names.
+          (*note (semantic-user)MRU Bookmarks Mode::.)
+
+ - Command: semantic-load-enable-gaudy-code-helpers
+     Enable semantic features that provide gaudy coding assistance.
+     This includes "semantic-load-enable-code-helpers".
+    "semantic-stickyfunc-mode"
+          Tracks current function in header-line (when available).
+          (*note (semantic-user)Sticky Function Mode::.)
+
+    "semantic-idle-completions-mode"
+          Provide smart symbol completion automatically at idle time.
+          (*note (semantic-user)Idle Completions Mode::.)
+
+    "semantic-decoration-mode"
+          Decorate tags based on various attributes.  (*note
+          (semantic-user)Tag Decoration Mode::.)
+
+
+     *Compatibility*: `semantic-load-enable-gaudy-code-helpers'
+     introduced in semantic version 2.0 supercedes
+     `semantic-load-enable-guady-code-helpers' which is now obsolete.
+
+ - Command: semantic-load-enable-excessive-code-helpers
+     Enable all semantic features that provide coding assistance.  This
+     includes all features of "semantic-load-enable-code-helpers" plus:
+    "which-func-mode"
+          Display the current function in the mode line.
+
+
+ - Command: semantic-load-enable-semantic-debugging-helpers
+     Enable all semantic features that assist with debugging semantic.
+     These modes include:
+    "semantic-highlight-edits-mode"
+          Highlight text that has been edited since the last parse step.
+          (*note (semantic-user)Highlight Edits Mode::.)
+
+    "semantic-show-unmatched-syntax-mode"
+          Highlight lexical tokens which failed to be parsed.  (*note
+          (semantic-user)Unmatched Syntax Highlighting::.)
+
+    "semantic-show-parser-state-mode"
+          Show the current buffer state via small indicators in the
+          mode line.  (*note (semantic-user)Parser State::.)
+
+
+
+File: semantic.info,  Node: Search Optimization,  Next: Parsing Optimization,  Prev: Canned Configuration,  Up: Installation/Basic Configuration
+
+Search Optimization
+===================
+
+A common use of semantic is for smart completion and tag browsing.
+These operations involve searching through the tags of your files.  For
+complete documentation on configuring your searches, *Note
+(semantic-user)Semanticdb Search Configuration::.
+
+The default configuration is for fast searches that may not find your
+symbols all the time.
+
+Searching is controlled with `semanticdb-find-default-throttle'.  To
+force the search to find and read and tag files not yet in memory, you
+might add code like this for C mode.
+
+     (setq-mode-local c-mode
+     		 semanticdb-find-default-throttle
+     		 '(project unloaded system recursive))
+
+Finding unloaded databases requires knowing the search path.  You can
+find headers on a system or project level search path.  *Note
+(semantic-user)Include paths::.
+
+If using the above tactic doesn't work for your language (something
+other than C/C++), it may be that your language isn't configured
+properly for finding include files.  You would need to refer to the
+*Note (semantic-langdev):: for details.
+
+If you were to be working on a linux kernel, you might opt to configure
+your search path in your `.emacs' file with code like this:
+
+     (semantic-reset-system-include 'c-mode)
+     (semantic-add-system-include "/usr/src/linux-2.4/include" 'c-mode)
+
+It is also useful to find and install extra search engine back-ends,
+such *Note (semantic-user)Create System Databases::.  Ebrowse is one
+such back-end for C and C++ code.
+
+You might create an ebrowse database for your C include files like this:
+
+     M-x semanticdb-create-ebrowse-database RET /usr/include/ RET
+
+This will create the database, save it, and add it to the database
+search list for your C and C++ based projects.  These databases will be
+created in your `~/.semanticdb' directory to be reloaded in future
+Emacs sessions.
+
+
+File: semantic.info,  Node: Parsing Optimization,  Prev: Search Optimization,  Up: Installation/Basic Configuration
+
+Parsing Optimization
+====================
+
+The semantic parsers generate the tags that form the basis of all the
+semantic based tools, such as browsers and completion.  Keeping those
+tags up to date can have performance implications.
+
+Here are some common tasks you may be interested in:
+
+Don't parse certain buffers
+---------------------------
+
+You can inhibit parsing using the `semantic-inhibit-functions' variable.
+
+ - Variable: semantic-inhibit-functions
+     List of functions to call with no arguments before to setup
+     Semantic.  If any of these functions returns non-`nil', the
+     current buffer is not setup to use Semantic.
+
+You could have this inihibit parsing in very large files, or files
+which case particular problems to semantic.
+
+Parsing in idle time
+--------------------
+
+Tags are usually kept up to date when Emacs is idle *Note
+(semantic-user)Idle Scheduler::.  The semantic's idle-scheduler
+automatically updates the tags in various buffers before executing
+specific idle modes, such as summary mode.
+
+You might choose to tune the scheduler with some code like this in your
+`.emacs' file:
+
+     ;; Increase the delay before activation
+     (setq semantic-idle-scheduler-idle-time 10)
+     ;; Don't reparse really big buffers.
+     (setq semantic-idle-scheduler-max-buffer-size 100000)
+
+
+File: semantic.info,  Node: Semantic manuals,  Next: Semantic Internals,  Prev: Installation/Basic Configuration,  Up: Top
 
 Semantic manuals
 ****************
@@ -388,7 +566,7 @@ GNU Free Documentation License
 
                         Version 1.1, March 2000
      Copyright (C) 2000  Free Software Foundation, Inc.
-     59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+     51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
      
      Everyone is permitted to copy and distribute verbatim copies
      of this license document, but changing it is not allowed.
@@ -762,31 +940,48 @@ Index
 
 * Menu:
 
+* semantic-inhibit-functions:            Parsing Optimization.
+* semantic-load-enable-code-helpers:     Canned Configuration.
+* semantic-load-enable-excessive-code-helpers: Canned Configuration.
+* semantic-load-enable-gaudy-code-helpers: Canned Configuration.
+* semantic-load-enable-minimum-features: Canned Configuration.
+* semantic-load-enable-semantic-debugging-helpers: Canned Configuration.
+
+
 
 Tag Table:
-Node: Top1101
-Node: Overview1972
-Node: Semantic Components6152
-Node: Installation7564
-Node: Semantic manuals8229
-Node: Semantic Internals9026
-Node: Glossary12001
-Ref: BNF12136
-Ref: bovinate12341
-Ref: bovine lambda12437
-Ref: bovine parser12625
-Ref: context12757
-Ref: LALR12772
-Ref: lexer12784
-Ref: LL13002
-Ref: nonterminal13012
-Ref: overloadable13031
-Ref: parser13145
-Ref: tag13204
-Ref: token13436
-Ref: token stream13560
-Ref: wisent parser13645
-Node: GNU Free Documentation License13817
-Node: Index33526
+Node: Top1107
+Node: Overview1998
+Node: Semantic Components6198
+Node: Installation/Basic Configuration7610
+Node: Canned Configuration8043
+Ref: semantic-load-enable-minimum-features8486
+Ref: semantic-load-enable-code-helpers9170
+Ref: semantic-load-enable-gaudy-code-helpers9897
+Ref: semantic-load-enable-excessive-code-helpers10728
+Ref: semantic-load-enable-semantic-debugging-helpers11013
+Node: Search Optimization11618
+Node: Parsing Optimization13639
+Ref: semantic-inhibit-functions14218
+Node: Semantic manuals15071
+Node: Semantic Internals15888
+Node: Glossary18863
+Ref: BNF18998
+Ref: bovinate19203
+Ref: bovine lambda19299
+Ref: bovine parser19487
+Ref: context19619
+Ref: LALR19634
+Ref: lexer19646
+Ref: LL19864
+Ref: nonterminal19874
+Ref: overloadable19893
+Ref: parser20007
+Ref: tag20066
+Ref: token20298
+Ref: token stream20422
+Ref: wisent parser20507
+Node: GNU Free Documentation License20679
+Node: Index40393
 
 End Tag Table

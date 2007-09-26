@@ -1,8 +1,8 @@
 ;;; semantic-lex.el --- Lexical Analyzer builder
 
-;;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005 Eric M. Ludlam
+;;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Eric M. Ludlam
 
-;; X-CVS: $Id: semantic-lex.el,v 1.39 2005/06/30 01:32:18 zappo Exp $
+;; X-CVS: $Id: semantic-lex.el,v 1.44 2007/03/08 03:33:11 zappo Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -18,8 +18,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -81,8 +81,7 @@ These keywords are matched explicitly, and converted into special symbols.")
   `(signal 'wrong-type-argument '(semantic-lex-keyword-p ,name)))
 
 (defsubst semantic-lex-keyword-symbol (name)
-  "Return keyword symbol with NAME or nil if not found.
-Return nil otherwise."
+  "Return keyword symbol with NAME or nil if not found."
   (and (arrayp semantic-flex-keywords-obarray)
        (stringp name)
        (intern-soft name semantic-flex-keywords-obarray)))
@@ -479,10 +478,13 @@ when finding unterminated syntax.")
   "Test the semantic lexer in the current buffer.
 If universal argument ARG, then try the whole buffer."
   (interactive "P")
-  (let ((result (semantic-lex
-		 (if arg (point-min) (point))
-		 (point-max))))
-    (message "%s: %S" semantic-lex-analyzer result))
+  (let* ((start (current-time))
+	 (result (semantic-lex
+		  (if arg (point-min) (point))
+		  (point-max)))
+	 (end (current-time)))
+    (message "Elapsed Time: %.2f seconds."
+	     (semantic-elapsed-time start end)))
   )
 
 (defun semantic-lex-test-region (beg end)
@@ -557,6 +559,11 @@ This is an alist of (ANCHOR . STREAM) elements where ANCHOR is the
 start position of the block, and STREAM is the list of tokens in that
 block.")
 
+(defvar semantic-lex-reset-hooks nil
+  "List of hooks major-modes use to reset lexical analyzers.
+Hooks are called with START and END values for the current lexical pass.
+Should be set with `add-hook'specifying a LOCAL option.")
+
 ;; Stack of nested blocks.
 (defvar semantic-lex-block-stack nil)
 
@@ -575,7 +582,11 @@ example, it is good to put a numbe analyzer in front of a symbol
 analyzer which might mistake a number for as a symbol."
   `(defun ,name  (start end &optional depth length)
      ,(concat doc "\nSee `semantic-lex' for more information.")
+     ;; Make sure the state of block parsing starts over.
      (setq semantic-lex-block-streams nil)
+     ;; Allow specialty reset items.
+     (run-hook-with-args 'semantic-lex-reset-hooks start end)
+     ;; Lexing state.
      (let* ((starting-position (point))
             (semantic-lex-token-stream nil)
             (semantic-lex-block-stack nil)
@@ -587,6 +598,10 @@ analyzer which might mistake a number for as a symbol."
 	     (or depth semantic-lex-depth))
 	    ;; Bounds needed for unterminated syntax
 	    (semantic-lex-analysis-bounds (cons start end))
+	    ;; This entry prevents text properties from
+	    ;; confusing our lexical analysis.  See Emacs 22 (CVS)
+	    ;; version of C++ mode with template hack text properties.
+	    (parse-sexp-lookup-properties nil)
 	    )
        ;; Maybe REMOVE THIS LATER.
        ;; Trying to find incremental parser bug.
@@ -682,11 +697,22 @@ The collapsed tokens are saved in `semantic-lex-block-streams'."
 
 ;;; Lexical token API
 ;;
-(defmacro semantic-lex-token (symbol start end)
+(defmacro semantic-lex-token (symbol start end &optional str)
   "Create a lexical token.
 SYMBOL is a symbol representing the class of syntax found.
-START and END define the bounds of the token in the current buffer."
-  `(cons ,symbol (cons ,start ,end)))
+START and END define the bounds of the token in the current buffer.
+Optional STR is the string for the token iff the the bounds
+in the buffer do not cover the string they represent.  (As from
+macro expansion.)"
+  ;; This if statement checks the existance of a STR argument at
+  ;; compile time, where STR is some symbol or constant.  If the
+  ;; variable STr (runtime) is nil, this will make an incorrect decision.
+  ;;
+  ;; It is like this to maintain the original speed of the compiled
+  ;; code.
+  (if str
+      `(cons ,symbol (cons ,str (cons ,start ,end)))
+    `(cons ,symbol (cons ,start ,end))))
 
 (defun semantic-lex-expand-block-specs (specs)
   "Expand block specifications SPECS into a Lisp form.
@@ -743,7 +769,9 @@ See also the function `semantic-lex-token'."
 (defsubst semantic-lex-token-bounds (token)
   "Fetch the start and end locations of the lexical token TOKEN.
 Return a pair (START . END)."
-  (cdr token))
+  (if (stringp (car (cdr token)))
+      (cdr (cdr token))
+    (cdr token)))
 
 (defsubst semantic-lex-token-start (token)
   "Fetch the start position of the lexical token TOKEN.
@@ -758,9 +786,11 @@ See also the function `semantic-lex-token'."
 (defsubst semantic-lex-token-text (token)
   "Fetch the text associated with the lexical token TOKEN.
 See also the function `semantic-lex-token'."
-  (buffer-substring-no-properties
-   (semantic-lex-token-start token)
-   (semantic-lex-token-end   token)))
+  (if (stringp (car (cdr token)))
+      (car (cdr token))
+    (buffer-substring-no-properties
+     (semantic-lex-token-start token)
+     (semantic-lex-token-end   token))))
 
 ;;;###autoload
 (defun semantic-lex-init ()
@@ -1603,7 +1633,7 @@ end of the return token will be larger than END.  To truly restrict
 scanning, use `narrow-to-region'.
 The last argument, LENGTH specifies that `semantic-flex' should only
 return LENGTH tokens."
-  ;;(message "Flexing muscles...")
+  (message "`semantic-flex' is an obsolete function.  Use `define-lex' to create lexers.")
   (if (not semantic-flex-keywords-obarray)
       (setq semantic-flex-keywords-obarray [ nil ]))
   (let ((ts nil)

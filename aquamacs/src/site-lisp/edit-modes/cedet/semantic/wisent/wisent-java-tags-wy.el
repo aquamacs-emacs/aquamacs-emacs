@@ -1,11 +1,11 @@
 ;;; wisent-java-tags-wy.el --- Generated parser support file
 
-;; Copyright (C) 2002 David Ponce
+;; Copyright (C) 2002, 2007 David Ponce
 
-;; Author: David <dr@lucy.lan>
-;; Created: 2006-12-01 20:39:12+0000
+;; Author: David <dr@scarlett.inf.ed.ac.uk>
+;; Created: 2007-09-26 14:39:53+0100
 ;; Keywords: syntax
-;; X-RCS: $Id: wisent-java-tags-wy.el,v 1.1 2006/12/02 00:57:22 davidswelt Exp $
+;; X-RCS: $Id: wisent-java-tags-wy.el,v 1.2 2007/09/26 13:43:25 davidswelt Exp $
 
 ;; This file is not part of GNU Emacs.
 ;;
@@ -21,8 +21,8 @@
 ;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -194,7 +194,9 @@
 
 (defconst wisent-java-tags-wy--token-table
   (semantic-lex-make-type-table
-   '(("number"
+   '(("unicode"
+      (unicodecharacter))
+     ("number"
       (NUMBER_LITERAL))
      ("string"
       (STRING_LITERAL))
@@ -254,6 +256,8 @@
       (BRACE_BLOCK . "(LBRACE RBRACE)")
       (PAREN_BLOCK . "(LPAREN RPAREN)")))
    '(("keyword" :declared t)
+     ("unicode" syntax "\\\\u[0-9a-f][0-9a-f][0-9a-f][0-9a-f]")
+     ("unicode" :declared t)
      ("number" :declared t)
      ("string" :declared t)
      ("symbol" :declared t)
@@ -266,7 +270,7 @@
     (eval-when-compile
       (require 'wisent-comp))
     (wisent-compile-grammar
-     '((PAREN_BLOCK BRACE_BLOCK BRACK_BLOCK LPAREN RPAREN LBRACE RBRACE LBRACK RBRACK NOT NOTEQ MOD MODEQ AND ANDAND ANDEQ MULT MULTEQ PLUS PLUSPLUS PLUSEQ COMMA MINUS MINUSMINUS MINUSEQ DOT DIV DIVEQ COLON SEMICOLON LT LSHIFT LSHIFTEQ LTEQ EQ EQEQ GT GTEQ RSHIFT RSHIFTEQ URSHIFT URSHIFTEQ QUESTION XOR XOREQ OR OREQ OROR COMP IDENTIFIER STRING_LITERAL NUMBER_LITERAL ABSTRACT BOOLEAN BREAK BYTE CASE CATCH CHAR CLASS CONST CONTINUE DEFAULT DO DOUBLE ELSE EXTENDS FINAL FINALLY FLOAT FOR GOTO IF IMPLEMENTS IMPORT INSTANCEOF INT INTERFACE LONG NATIVE NEW PACKAGE PRIVATE PROTECTED PUBLIC RETURN SHORT STATIC STRICTFP SUPER SWITCH SYNCHRONIZED THIS THROW THROWS TRANSIENT TRY VOID VOLATILE WHILE _AUTHOR _VERSION _PARAM _RETURN _EXCEPTION _THROWS _SEE _SINCE _SERIAL _SERIALDATA _SERIALFIELD _DEPRECATED)
+     '((PAREN_BLOCK BRACE_BLOCK BRACK_BLOCK LPAREN RPAREN LBRACE RBRACE LBRACK RBRACK NOT NOTEQ MOD MODEQ AND ANDAND ANDEQ MULT MULTEQ PLUS PLUSPLUS PLUSEQ COMMA MINUS MINUSMINUS MINUSEQ DOT DIV DIVEQ COLON SEMICOLON LT LSHIFT LSHIFTEQ LTEQ EQ EQEQ GT GTEQ RSHIFT RSHIFTEQ URSHIFT URSHIFTEQ QUESTION XOR XOREQ OR OREQ OROR COMP IDENTIFIER STRING_LITERAL NUMBER_LITERAL unicodecharacter ABSTRACT BOOLEAN BREAK BYTE CASE CATCH CHAR CLASS CONST CONTINUE DEFAULT DO DOUBLE ELSE EXTENDS FINAL FINALLY FLOAT FOR GOTO IF IMPLEMENTS IMPORT INSTANCEOF INT INTERFACE LONG NATIVE NEW PACKAGE PRIVATE PROTECTED PUBLIC RETURN SHORT STATIC STRICTFP SUPER SWITCH SYNCHRONIZED THIS THROW THROWS TRANSIENT TRY VOID VOLATILE WHILE _AUTHOR _VERSION _PARAM _RETURN _EXCEPTION _THROWS _SEE _SINCE _SERIAL _SERIALDATA _SERIALFIELD _DEPRECATED)
        nil
        (compilation_unit
 	((package_declaration))
@@ -428,7 +432,12 @@
 	  (semantic-tag-new-variable $3 $2 nil :typemodifiers $1))))
        (variable_declarators
 	((variable_declarators COMMA variable_declarator)
-	 (cons $3 $1))
+	 (progn
+	   (setcdr
+	    (cdr
+	     (car $1))
+	    (cdr $region2))
+	   (cons $3 $1)))
 	((variable_declarator)
 	 (list $1)))
        (variable_declarator
@@ -646,6 +655,12 @@
     (NOT . "!"))
   'punctuation)
 
+(define-lex-regex-type-analyzer wisent-java-tags-wy--<unicode>-regexp-analyzer
+  "regexp analyzer for <unicode> tokens."
+  "\\\\u[0-9a-f][0-9a-f][0-9a-f][0-9a-f]"
+  nil
+  'unicodecharacter)
+
 
 ;;; Epilogue
 ;;
@@ -664,6 +679,10 @@ It ignores whitespaces, newlines and comments."
   wisent-java-tags-wy--<symbol>-regexp-analyzer
   wisent-java-tags-wy--<punctuation>-string-analyzer
   wisent-java-tags-wy--<block>-block-analyzer
+  ;; In theory, unicode chars should be turned into normal chars
+  ;; and then combined into regular ascii keywords and text.  This
+  ;; analyzer just keeps these things from making the lexer go boom.
+  wisent-java-tags-wy--<unicode>-regexp-analyzer
   ;;;;
   semantic-lex-default-action)
 

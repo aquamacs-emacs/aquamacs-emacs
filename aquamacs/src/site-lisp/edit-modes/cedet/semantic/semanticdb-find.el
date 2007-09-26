@@ -1,10 +1,10 @@
 ;;; semanticdb-find.el --- Searching through semantic databases.
 
-;;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005 Eric M. Ludlam
+;;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: tags
-;; X-RCS: $Id: semanticdb-find.el,v 1.27 2005/06/30 01:26:25 zappo Exp $
+;; X-RCS: $Id: semanticdb-find.el,v 1.40 2007/06/04 00:54:25 zappo Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -20,8 +20,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 ;; 
 ;;; Commentary:
 ;;
@@ -118,8 +118,12 @@
 ;;  current project.
 
 (require 'semanticdb)
+(eval-when-compile
+  (require 'eieio)
+  )
 
 ;;; Code:
+;;;###autoload
 (defvar semanticdb-find-throttle-custom-list
   '(repeat (radio (const 'local)
 		  (const 'project)
@@ -130,7 +134,8 @@
   "Customization values for semanticdb find throttle.
 See `semanticdb-find-throttle' for details.")
 
-(defcustom semanticdb-find-default-throttle '(project system recursive)
+;;;###autoload
+(defcustom semanticdb-find-default-throttle '(project unloaded system recursive)
   "The default throttle for `semanticdb-find' routines.
 The throttle controls how detailed the list of database
 tables is for a symbol lookup.  The value is a list with
@@ -164,7 +169,7 @@ the following keys:
       (and (eq access-type 'local)
 	   (memq 'project semanticdb-find-default-throttle))
       ))
-	
+
 ;;; Path Translations
 ;;
 ;;; OVERLOAD Functions
@@ -202,6 +207,7 @@ This routine uses `semanticdb-find-table-for-include' to translate
 specific include tags into a semanticdb table."
   )
 
+;;;###autoload
 (defun semanticdb-find-translate-path-default (path brutish)
   "Translate PATH into a list of semantic tables.
 If BRUTISH is non nil, return all tables associated with PATH.
@@ -226,12 +232,24 @@ Default action as described in `semanticdb-find-translate-path'."
     (apply
      #'append
      (mapcar
-      (lambda (db) (semanticdb-get-database-tables db))
+      (lambda (db)
+	(let ((tabs (semanticdb-get-database-tables db))
+	      (ret nil))
+	  ;; Only return tables of the same language (major-mode)
+	  ;; as the current search environment.
+	  (while tabs
+	    (if (semanticdb-equivalent-mode-for-search (car tabs)
+						       (current-buffer))
+		(setq ret (cons (car tabs) ret)))
+	    (setq tabs (cdr tabs)))
+	  ret))
       ;; FIXME:
       ;; This should scan the current project directory list for all
       ;; semanticdb files, perhaps handling proxies for them.
-      (semanticdb-current-database-list (oref basedb reference-directory)))))
-  )
+      (semanticdb-current-database-list
+       (if basedb (oref basedb reference-directory)
+	 default-directory))))
+    ))
 
 (defun semanticdb-find-translate-path-includes-default (path)
   "Translate PATH into a list of semantic tables.
@@ -251,17 +269,58 @@ Default action as described in `semanticdb-find-translate-path'."
       ;; (message "Scanning %s" (semantic-tag-name (car includetags)))
       (when (and nexttable
 		 (not (memq nexttable matchedtables))
-		 (semanticdb-equivalent-mode nexttable (current-buffer))
+		 (semanticdb-equivalent-mode-for-search nexttable
+							(current-buffer))
 		 )
 	;; Add to list of tables
 	(push nexttable matchedtables)
 	;; Queue new includes to list
 	(if (semanticdb-find-throttle-active-p 'recursive)
-	    (setq includetags (append includetags
-				      (semantic-find-tags-included
-				       (semanticdb-get-tags nexttable))))))
+	    (let ((newtags
+		   (cond
+		    ((semanticdb-table-p nexttable)
+		     ;; Use the method directly, or we will recurse
+		     ;; into ourselves here.
+		     (semanticdb-find-tags-by-class-method
+		      nexttable 'include))
+		    (t
+		     (semantic-find-tags-included
+		      (semanticdb-get-tags nexttable))))))
+	      (setq includetags (append includetags newtags)))))
       (setq includetags (cdr includetags)))
+    ;; Find all the omniscient databases for this major mode, and
+    ;; add them if needed
+    (when (and (semanticdb-find-throttle-active-p 'omniscience)
+	       semanticdb-search-system-databases)
+      ;; We can append any mode-specific omniscience databases into
+      ;; our search list here.
+      (let ((systemdb semanticdb-project-system-databases)
+	    (ans nil))
+	(while systemdb
+	  (setq ans (semanticdb-file-table
+		     (car systemdb)
+		     ;; I would expect most omniscient to return the same
+		     ;; thing reguardless of filename, but we may have
+		     ;; one that can return a table of all things the
+		     ;; current file needs.
+		     (buffer-file-name (current-buffer))))
+	  (when (not (memq ans matchedtables))
+	    (setq matchedtables (cons ans matchedtables)))
+	  (setq systemdb (cdr systemdb))))
+      )
     (nreverse matchedtables)))
+
+(define-overload semanticdb-find-load-unloaded (filename)
+  "Create a database table for FILENAME if it hasn't been parsed yet.
+Assumes that FILENAME exists as a source file.
+Assumes that a preexisting table does not exist, even if it
+isn't in memory yet."
+  (when (semanticdb-find-throttle-active-p 'unloaded)
+    (:override)))
+
+(defun semanticdb-find-load-unloaded-default (filename)
+  "Load an unloaded file in FILENAME using the default semanticdb loader."
+  (semanticdb-file-table-object filename))
 
 ;;;###autoload
 (define-overload semanticdb-find-table-for-include (includetag &optional table)
@@ -288,13 +347,17 @@ Included databases are filtered based on `semanticdb-find-default-throttle'."
 	(ans nil))
     (cond
      ;; Relative path name
+     ;;
      ((and (file-exists-p (expand-file-name name))
 	   (semanticdb-find-throttle-active-p 'local))
-      (setq ans (semanticdb-file-table-object name)))
 
+      (setq ans (semanticdb-file-table-object
+		 name
+		 (not (semanticdb-find-throttle-active-p 'unloaded))))
+      )
      ;; On the path somewhere
-;;;; NOTES: Separate system includes from local includes.
-;;;;        Use only system databases for system includes.
+     ;; NOTES: Separate system includes from local includes.
+     ;;        Use only system databases for system includes.
      ((and (setq tmp (semantic-dependency-tag-file includetag))
 	   (semanticdb-find-throttle-active-p 'system))
       (let ((db (semanticdb-directory-loaded-p (file-name-directory tmp))))
@@ -307,19 +370,21 @@ Included databases are filtered based on `semanticdb-find-default-throttle'."
 	(if ans
 	    ;; We are A-ok!
 	    nil
-	  ;; The file is not i memory!
+	  ;; The file is not in memory!
 	  ;; Should we force it to be loaded in?
-	  (if (semanticdb-find-throttle-active-p 'unloaded)
-	      (progn
-		(setq ans (semanticdb-file-table-object tmp))
-		)
-	    ;; We are not allowed to return the discovered
-	    ;; answer if the throttle is set low.
-	    (setq ans nil)))))
+	  (setq ans (semanticdb-find-load-unloaded tmp))
+	  )))
+
+     ;; Somewhere in our project hierarchy
+     ;; Remember: Roots includes system databases which can create
+     ;; specialized tables we can search.
      ((semanticdb-find-throttle-active-p 'project)
-      ;; Somewhere in our project hierarchy
-      ;; Remember: Roots includes system databases which can create
-      ;; specialized tables we can search.
+
+      ;; @TODO - This needs the same treatment as 'local'
+      ;;         above with the various phases.  We should also
+      ;;         not use the existing DBs, but instead recurse
+      ;;         through our current project.
+
       (while (and (not ans) roots)
 	(let* ((ref (if (slot-boundp (car roots) 'reference-directory)
 			(oref (car roots) reference-directory)))
@@ -328,18 +393,19 @@ Included databases are filtered based on `semanticdb-find-default-throttle'."
 			     (expand-file-name name ref))
 			    ((file-exists-p (expand-file-name (file-name-nondirectory name) ref))
 			     (expand-file-name (file-name-nondirectory name) ref)))))
-	  (if ref
-	      (when fname
-		;; There is an actual file.  Grab it.
-		(setq ans (semanticdb-file-table-object fname)))
-	    ;; No reference directory  Probably a system database
-	    ;; NOTE: Systemdb will need to override `semanticdb-file-table'.
-	    (if (semanticdb-find-throttle-active-p 'omniscience)
-		(setq ans (semanticdb-file-table
-			   (car roots)
-			   ;; Use name direct from tag.  System DB will expect it
-			   ;; in the original form.
-			   (semantic-tag-name includetag))))))
+	  (when (and ref fname)
+	    ;; There is an actual file.  Grab it.
+	    (setq ans (semanticdb-file-table-object fname)))
+
+	  ;; ELSE
+	  ;;
+	  ;; NOTE: We used to look up omniscient databases here, but that
+	  ;; is now handled one layer up.
+	  ;;
+	  ;; Missing: a database that knows where missing files are.  Hmm.
+	  ;; perhaps I need an override function for that?
+
+	  )
 
 	(setq roots (cdr roots))))
      )
@@ -348,34 +414,48 @@ Included databases are filtered based on `semanticdb-find-default-throttle'."
 
 ;;; Perform interactive tests on the path/search mechanisms.
 ;;
+;;;###autoload
 (defun semanticdb-find-test-translate-path (&optional arg)
   "Call and output results of `semanticdb-find-translate-path'.
 With ARG non-nil, specify a BRUTISH translation.
 See `semanticdb-find-default-throttle' and `semanticdb-project-roots'
 for details on how this list is derived."
   (interactive "P")
-  (let ((p (semanticdb-find-translate-path nil arg)))
-    ;; Output the result
-    (message "%d paths found." (length p))
-    (with-output-to-temp-buffer "*Translated Path*"
-      (while p
-	(condition-case nil
-	    (progn
-	      (princ (semanticdb-full-filename (car p)))
-	      (princ ": ")
-	      (prin1 (length (oref (car p) tags)))
-	      (princ " tags")
-	      (let ((parent (oref (car p) parent-db)))
-		(when parent
-		  (princ " : ")
-		  (princ (object-name parent))))
-	      )
-	  (no-method-definition
-	   (princ (semanticdb-printable-name (car p)))))
-	(princ "\n")
-	(setq p (cdr p)))
-      )
-    ))
+  (require 'semantic-adebug)
+  (let ((start (current-time))
+	(p (semanticdb-find-translate-path nil arg))
+	(end (current-time))
+	(ab (semantic-adebug-new-buffer "*SEMANTICDB FTP ADEBUG*"))
+	)
+    (message "Search of tags took %.2f seconds."
+	     (semantic-elapsed-time start end))
+    
+    (semantic-adebug-insert-stuff-list p "*")))
+
+;;    ;; Output the result
+;;    (message "%d paths found." (length p))
+;;    (with-output-to-temp-buffer "*Translated Path*"
+;;      (while p
+;;	(condition-case nil
+;;	    (progn
+;;	      (princ (semanticdb-full-filename (car p)))
+;;	      (princ ": ")
+;;	      (prin1 (condition-case nil
+;;			 (length (oref (car p) tags))
+;;		       (error "--")))
+;;	      (princ " tags")
+;;	      (let ((parent (oref (car p) parent-db)))
+;;		(when parent
+;;		  (princ " : ")
+;;		  (princ (object-name parent))))
+;;	      )
+;;	  (no-method-definition
+;;	   (princ (semanticdb-printable-name (car p)))))
+;;	(princ "\n")
+;;	(setq p (cdr p)))
+;;      )
+;;    ))
+
 
 ;;; FIND results and edebug
 ;;
@@ -392,20 +472,29 @@ for details on how this list is derived."
 ;;
 ;; Once you have a search result, use these routines to operate
 ;; on the search results at a higher level
+
+;;;###autoload
 (defun semanticdb-strip-find-results (results &optional find-file-match)
   "Strip a semanticdb search RESULTS to exclude objects.
 This makes it appear more like the results of a `semantic-find-' call.
 Optional FIND-FILE-MATCH loads all files associated with RESULTS
 into buffers.  This has the side effect of enabling `semantic-tag-buffer' to
 return a value."
-  (when find-file-match
-    ;; Load all files associated with RESULTS.
-    (let ((tmp results))
-      (while tmp
-	(semanticdb-get-buffer (car (car tmp)))
-	(setq tmp (cdr tmp)))))
-  (apply #'append (mapcar #'cdr results)))
+  (if find-file-match
+      ;; Load all files associated with RESULTS.
+      (let ((tmp results)
+	    (output nil))
+	(while tmp
+	  (let ((tab (car (car tmp)))
+		(tags (cdr (car tmp))))
+	    (semanticdb-get-buffer tab)
+	    (setq output (append output
+				 (semanticdb-normalize-tags tab tags))))
+	  (setq tmp (cdr tmp)))
+	output)
+    (apply #'append (mapcar #'cdr results))))
 
+;;;###autoload
 (defun semanticdb-find-results-p (resultp)
   "Non-nil if RESULTP is in the form of a semanticdb search result.
 This query only really tests the first entry in the list that is RESULTP,
@@ -417,7 +506,7 @@ but should be good enough for debugging assertions."
 	   (null (car (cdr (car resultp)))))))
 
 (defun semanticdb-find-result-prin1-to-string (result)
-  "Presuming RESULT satisfies `semanticdb-find-results-p', provide a shirt PRIN1 output."
+  "Presuming RESULT satisfies `semanticdb-find-results-p', provide a short PRIN1 output."
   (concat "#<FIND RESULT "
 	  (mapconcat (lambda (a)
 		       (concat "(" (object-name (car a) ) " . "
@@ -426,6 +515,7 @@ but should be good enough for debugging assertions."
 		     " ")
 	  ">"))
 
+;;;###autoload
 (defun semanticdb-find-result-with-nil-p (resultp)
   "Non-nil of RESULTP is in the form of a semanticdb search result.
 nil is a valid value where a TABLE usually is, but only if the TAG
@@ -451,6 +541,7 @@ but should be good enough for debugging assertions."
 	  result)
     count))
 
+;;;###autoload
 (defun semanticdb-find-result-nth (result n)
   "In RESULT, return the Nth search result.
 This is a 0 based search result, with the first match being element 0.
@@ -487,6 +578,7 @@ the TAG was found.  Sometimes TABLE can be nil."
 	    (error "%d entry is not a tag" i)))
       (setq i (1+ i)))))
 
+;;;###autoload
 (defun semanticdb-find-result-nth-in-buffer (result n)
   "In RESULT, return the Nth search result.
 Like `semanticdb-find-result-nth', except that only the TAG
@@ -717,6 +809,7 @@ associated wit that tag should be loaded into a buffer."
      (semanticdb-deep-find-tags-by-name-method table name tags))
    path find-file-match t))
 
+;;;###autoload
 (defun semanticdb-brute-deep-find-tags-for-completion (prefix &optional path find-file-match)
   "Search for all tags matching PREFIX on PATH.
 See `semanticdb-find-translate-path' for details on PATH.

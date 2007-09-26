@@ -1,10 +1,10 @@
 ;;; semantic-find.el --- Search routines
 
-;;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004 Eric M. Ludlam
+;;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: syntax
-;; X-RCS: $Id: semantic-find.el,v 1.20 2004/03/19 23:48:58 zappo Exp $
+;; X-RCS: $Id: semantic-find.el,v 1.22 2005/09/30 20:20:10 zappo Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -20,8 +20,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -141,14 +141,16 @@ not the current tag."
 	(setq os (semantic-overlay-previous-change os))
 	(when os
 	  ;; Get overlays at position
-	  (setq ol (semantic-overlays-at os))
+	  (setq ol (semantic-overlays-at (1- os)))
 	  ;; find the overlay that belongs to semantic
-	  ;; and starts at the found position.
+	  ;; and ENDS at the found position.
+	  ;;
+	  ;; Use end because we are going backward.
 	  (while (and ol (listp ol))
 	    (if (and (semantic-overlay-get (car ol) 'semantic)
 		     (semantic-tag-p
 		      (semantic-overlay-get (car ol) 'semantic))
-		     (= (semantic-overlay-start (car ol)) os))
+		     (= (semantic-overlay-end (car ol)) os))
 		(setq ol (car ol)))
 	    (when (listp ol) (setq ol (cdr ol))))))
       ;; convert ol to a tag
@@ -621,7 +623,7 @@ and is obsolete."
 ;;;###autoload
 (defun semantic-brute-find-first-tag-by-function
   (function streamorbuffer &optional search-parts search-includes)
-  "Find the first nonterminal which FUNCTION match within STREAMORBUFFER.
+  "Find the first tag which FUNCTION match within STREAMORBUFFER.
 FUNCTION must return non-nil if an element of STREAM will be included
 in the new list.
 
@@ -649,7 +651,7 @@ searched for matches."
 ;;;###autoload
 (defun semantic-brute-find-tag-by-position (position streamorbuffer
 						     &optional nomedian)
-  "Find a nonterminal covering POSITION within STREAMORBUFFER.
+  "Find a tag covering POSITION within STREAMORBUFFER.
 POSITION is a number, or marker.  If NOMEDIAN is non-nil, don't do
 the median calculation, and return nil."
   (save-excursion

@@ -1,10 +1,10 @@
 ;;; document.el --- Use the semantic parser to generate documentation.
 
-;;; Copyright (C) 2000, 2001, 2002, 2003, 2004 Eric M. Ludlam
+;;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2007 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: doc
-;; X-RCS: $Id: document.el,v 1.25 2004/03/19 23:36:11 zappo Exp $
+;; X-RCS: $Id: document.el,v 1.33 2007/03/17 21:21:01 zappo Exp $
 
 ;; Semantic is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -18,8 +18,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -41,9 +41,11 @@
 (require 'document-vars)
 
 ;; XEmacs change: needed to define macros at compile time.
-(eval-when-compile
-  (require 'semantic)
-  (require 'semantic-util))
+(condition-case nil
+    (require 'ede)
+  (error nil))
+(require 'semantic)
+(require 'semantic-util)
 
 ;;; Code:
 
@@ -77,16 +79,17 @@ This is used to create a history element.")
 ;;; User Functions
 ;;
 (defun document (&optional resetfile)
-  "Document the function or variable the cursor is in.
+  "Document in a texinfo file the function or variable the cursor is in.
 Optional argument RESETFILE is provided w/ universal argument.
-When non-nil, query for a new documentation file."
+When non-nil, query for a new documentation file.
+To document a function in a source file, use `document-inline'."
   (interactive (if current-prefix-arg
 		   (save-excursion
 		     (list (document-locate-file
 			    (current-buffer) t)))))
   ;; First, garner some information from Semantic.
   (semantic-fetch-tags)
-  (let ((cdi (semantic-brute-find-tag-by-position (point) (current-buffer)))
+  (let ((cdi (semantic-current-tag))
 	(cdib (current-buffer)))
     ;; Make sure we have a file.
     (document-locate-file (current-buffer))
@@ -105,7 +108,7 @@ When non-nil, query for a new documentation file."
   "Document the current function with an inline comment."
   (interactive)
   (semantic-fetch-tags)
-  (let ((cf (semantic-brute-find-tag-by-position (point) (current-buffer))))
+  (let ((cf (semantic-current-tag)))
     (document-insert-defun-comment cf (current-buffer))))
 
 ;;; Documentation insertion functions
@@ -517,7 +520,7 @@ Argument FORM is the format string to use."
 	   " \\([0-9]*\\)$")
            date))
 	 (wkdy (substring date (match-beginning 1) (match-end 1)))
-	 (hour (string-to-int
+	 (hour (string-to-number
 		(substring date (match-beginning 4) (match-end 4))))
 	 (min (substring date (match-beginning 5) (match-end 5)))
 	 (sec (substring date (match-beginning 6) (match-end 6)))
@@ -772,25 +775,32 @@ Leaves other formatting elements the way they are."
 (defun document-massage-to-texinfo (tag buffer string)
   "Massage TAG's documentation from BUFFER as STRING.
 This is to take advantage of TeXinfo's markup symbols."
-  (if (save-excursion (set-buffer buffer)
-		      (eq major-mode 'emacs-lisp-mode))
+  (let ((mode (with-current-buffer buffer (semantic-tag-mode tag))))
+    (when (eq mode 'emacs-lisp-mode)
       ;; Elisp has a few advantages.  Hack it in.
       (setq string (document-texify-elisp-docstring string)))
-  ;; Else, other languages are simpler.  Also, might as well
-  ;; run the elisp version through also.
-  (let ((case-fold-search nil)
-	(start 0))
-    (while (string-match
-	    "\\(^\\|[^{]\\)\\<\\([A-Z0-9_-]+\\)\\>\\($\\|[^}]\\)"
-	    string start)
-      (setq string (concat (substring string 0 (match-beginning 2))
-			   "@var{"
-			   (downcase (match-string 2 string))
-			   "}"
-			   (substring string (match-end 2)))
-	    start (match-end 2)))
-    )
-  string)
+    ;; Else, other languages are simpler.  Also, might as well
+    ;; run the elisp version through also.
+    (let ((case-fold-search nil)
+          (start 0))
+      (while (string-match
+              "\\(^\\|[^{]\\)\\<\\([A-Z0-9_-]+\\)\\>\\($\\|[^}]\\)"
+              string start)
+	(let ((ms (match-string 2 string)))
+	  (when (eq mode 'emacs-lisp-mode)
+	    (setq ms (downcase ms)))
+	
+	  (when (not (or (string= ms "A")
+			 (string= ms "a")
+			 ))
+	    (setq string (concat (substring string 0 (match-beginning 2))
+				 "@var{"
+				 ms
+				 "}"
+				 (substring string (match-end 2))))))
+	(setq start (match-end 2)))
+      )
+    string))
 
 ;; This FN was taken from EIEIO and modified.  Maybe convert later.
 (defun document-texify-elisp-docstring (string)
@@ -808,7 +818,8 @@ that class.
  t          => @code{t}
  :tag       => @code{:tag}
  [ stuff ]  => @code{[ stuff ]}
- Key        => @kbd{Key}     (key is C\\-h, M\\-h, SPC, RET, TAB and the like)"
+ Key        => @kbd{Key}     (key is C\\-h, M\\-h, SPC, RET, TAB and the like)
+ ...        => @dots{}"
   (while (string-match "`\\([-a-zA-Z0-9<>.]+\\)'" string)
     (let* ((vs (substring string (match-beginning 1) (match-end 1)))
 	   (v (intern-soft vs)))
@@ -829,6 +840,8 @@ that class.
     (setq string (replace-match "@kbd{\\2}" t nil string 2)))
   (while (string-match "\"\\(.+\\)\"" string)
     (setq string (replace-match "``\\1''" t nil string 0)))
+  (while (string-match "\\.\\.\\." string)
+    (setq string (replace-match "@dots{}" t nil string 0)))
   string)
 
 ;;; Buffer finding and managing
@@ -843,7 +856,8 @@ documentation."
   (if (eq (point) (point-min))
       (progn
 	(switch-to-buffer (current-buffer))
-	(error "Position cursor in %s, and try inserting documentation again"))
+	(error "Position cursor in %s, and try inserting documentation again"
+	       file))
     (point-marker)))
 
 (defun document-locate-file (buffer &optional override)

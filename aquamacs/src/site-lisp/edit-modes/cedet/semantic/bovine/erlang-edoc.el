@@ -1,10 +1,10 @@
 ;;; erlang-edoc.el --- Erlang programs documenting support for Semantic
 
-;; Copyright (C) 2002, 2004 Vladimir G. Sekissov
+;; Copyright (C) 2002, 2004, 2007 Vladimir G. Sekissov
 
 ;; Author:  <svg@surnet.ru>
 ;; Keywords: languages, docs
-;; $Id: erlang-edoc.el,v 1.1 2006/12/02 00:57:17 davidswelt Exp $
+;; $Id: erlang-edoc.el,v 1.2 2007/09/26 13:43:23 davidswelt Exp $
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -18,14 +18,15 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to
-;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
 ;; Derived from document.el of Eric M. Ludlam <zappo@gnu.org>
 
 (require 'document)
+(require 'document-vars)
 
 ;;; Code:
 (defcustom erlang-edoc-function-comment "
@@ -60,13 +61,17 @@
   "Parameter type spec.
 %P - align parameter name to longest,
 %p - as is,
-%D - description.")
+%D - description."
+  :group 'semantic
+  :type 'string)
 
 (defcustom erlang-edoc-desc-spec "<dt>%P</dt><dd>%D</dd>"
   "Parameter description spec.
 %P - align parameter name to longest,
 %p - as is,
-%D - description.")
+%D - description."
+  :group 'semantic
+  :type 'string)
 
 (defsubst erlang-edoc--tag-name (nonterm)
   "Nonterminal name."

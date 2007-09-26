@@ -1,12 +1,13 @@
 ;;; wisent-java-tags.wy -- Semantic LALR grammar for Java
 ;;
-;; Copyright (C) 2002 David Ponce
+;; Copyright (C) 2002, 2007 David Ponce
+;; Copyright (C) 2007 Eric Ludlam
 ;;
 ;; Author: David Ponce <david@dponce.com>
 ;; Maintainer: David Ponce <david@dponce.com>
 ;; Created: 25 Feb 2002
 ;; Keywords: syntax
-;; X-RCS: $Id: wisent-java-tags.wy,v 1.1 2006/12/02 00:57:22 davidswelt Exp $
+;; X-RCS: $Id: wisent-java-tags.wy,v 1.2 2007/09/26 13:43:25 davidswelt Exp $
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
@@ -22,8 +23,8 @@
 ;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;%package wisent-java-tags-wy
 
@@ -119,6 +120,9 @@
 
 %type  <number>      ;;syntax semantic-lex-number-expression
 %token <number>      NUMBER_LITERAL
+
+%type <unicode>      syntax "\\\\u[0-9a-f][0-9a-f][0-9a-f][0-9a-f]"
+%token <unicode>     unicodecharacter
 
 ;; -----------------
 ;; Keyword terminals
@@ -566,7 +570,11 @@ field_declaration
 
 variable_declarators
   : variable_declarators COMMA variable_declarator
-    (cons $3 $1)
+    (progn
+      ;; Set the end of the compound declaration to the end of the
+      ;; COMMA delimiter.
+      (setcdr (cdr (car $1)) (cdr $region2))
+      (cons $3 $1))
   | variable_declarator
     (list $1)
   ;
@@ -721,7 +729,6 @@ dims
   ;
 
 %%
-
 ;; Define the lexer for this grammar
 (define-lex wisent-java-tags-lexer
   "Lexical analyzer that handles Java buffers.
@@ -737,6 +744,10 @@ It ignores whitespaces, newlines and comments."
   wisent-java-tags-wy--<symbol>-regexp-analyzer
   wisent-java-tags-wy--<punctuation>-string-analyzer
   wisent-java-tags-wy--<block>-block-analyzer
+  ;; In theory, unicode chars should be turned into normal chars
+  ;; and then combined into regular ascii keywords and text.  This
+  ;; analyzer just keeps these things from making the lexer go boom.
+  wisent-java-tags-wy--<unicode>-regexp-analyzer
   ;;;;
   semantic-lex-default-action)
 

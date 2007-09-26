@@ -4,7 +4,7 @@
 
 ;; Author: Klaus Berndl <klaus.berndl@sdm.de>
 ;; Keywords: syntax test
-;; X-RCS: $Id: semantic-regtest.el,v 1.5 2005/02/15 17:00:51 berndl Exp $
+;; X-RCS: $Id: semantic-regtest.el,v 1.6 2005/09/30 20:21:03 zappo Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -20,8 +20,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;

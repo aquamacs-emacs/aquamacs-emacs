@@ -1,12 +1,12 @@
 ;;; semantic-wisent.el --- Wisent - Semantic gateway
 
-;; Copyright (C) 2001, 2002, 2004 David Ponce
+;; Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007 David Ponce
 
 ;; Author: David Ponce <david@dponce.com>
 ;; Maintainer: David Ponce <david@dponce.com>
 ;; Created: 30 Aug 2001
 ;; Keywords: syntax
-;; X-RCS: $Id: semantic-wisent.el,v 1.1 2006/12/02 00:57:22 davidswelt Exp $
+;; X-RCS: $Id: semantic-wisent.el,v 1.2 2007/09/26 13:43:25 davidswelt Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -22,8 +22,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program; see the file COPYING.  If not, write to
-;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -220,10 +220,21 @@ the standard function `semantic-parse-stream'."
     ;; Parse
     (setq wisent-lex-istream stream
           cache (semantic-safe "wisent-parse-stream: %s"
-                    (wisent-parse semantic--parse-table
-                                  wisent-lexer-function
-                                  wisent-error-function
-                                  goal)))
+                  (condition-case error-to-filter
+                      (wisent-parse semantic--parse-table
+                                    wisent-lexer-function
+                                    wisent-error-function
+                                    goal)
+                    (args-out-of-range
+                     (if (and (not debug-on-error)
+                              (= wisent-parse-max-stack-size
+                                 (nth 2 error-to-filter)))
+                         (progn
+                           (message "wisent-parse-stream: %s"
+                                    (error-message-string error-to-filter))
+                           (message "wisent-parse-max-stack-size \
+might need to be increased"))
+                       (apply 'signal error-to-filter))))))
     ;; Manage returned lookahead token
     (if wisent-lookahead
         (if (eq (caar la-elt) wisent-lookahead)

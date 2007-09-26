@@ -1,10 +1,10 @@
 ;;; semantic-ia.el --- Interactive Analysis functions
 
-;;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005 Eric M. Ludlam
+;;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: syntax
-;; X-RCS: $Id: semantic-ia.el,v 1.7 2005/01/13 12:27:39 zappo Exp $
+;; X-RCS: $Id: semantic-ia.el,v 1.14 2007/02/22 03:32:03 zappo Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -20,8 +20,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -67,9 +67,18 @@ Completion options are calculated with `semantic-analyze-possible-completions'."
 	 (syms (semantic-ia-get-completions a point))
 	 (pre (car (reverse (oref a prefix))))
 	 )
+    ;; If PRE was actually an already completed symbol, it doesn't
+    ;; come in as a string, but as a tag instead.
+    (if (semantic-tag-p pre)
+	;; We will try completions on it anyway.
+	(setq pre (semantic-tag-name pre)))
     ;; Complete this symbol.
     (if (null syms)
-	(message "No smart completions found.")
+	(progn
+	  (message "No smart completions found.  Trying senator-complete-symbol.")
+	  (if (semantic-analyze-context-p a)
+	      (senator-complete-symbol)
+	      ))
       ;; Use try completion to seek a common substring.
       (let ((tc (try-completion pre syms)))
 	(if (and (stringp tc) (not (string= tc pre)))
@@ -106,20 +115,30 @@ Completion options are calculated with `semantic-analyze-possible-completions'."
 	 )
     ;; Complete this symbol.
     (if (not syms)
-	(error "No completions available"))
-    (let ((ans
-	   (imenu--mouse-menu
-	    (mapcar (lambda (tok)
-		      (cons (funcall semantic-ia-completion-menu-format-tag-function tok)
-			    (vector tok)))
-		    syms)
-	    (senator-completion-menu-point-as-event)
-	    "Completions")))
-      (when ans
-	(setq ans (aref (cdr ans) 0))
-	(delete-region (car (oref a bounds)) (cdr (oref a bounds)))
-	(semantic-ia-insert-tag ans))
-      )))
+	(progn
+	  (message "No smart completions found.  Trying Senator.")
+	  (if (semantic-analyze-context-p a)
+	      (senator-completion-menu-popup)))
+      (let* ((menu
+	      (mapcar
+	       (lambda (tag)
+		 (cons
+		  (funcall semantic-ia-completion-menu-format-tag-function tag)
+		  (vector tag)))
+	       syms))
+	     (ans
+	      (imenu--mouse-menu
+	       ;; XEmacs needs that the menu has at least 2 items.  So,
+	       ;; include a nil item that will be ignored by imenu.
+	       (cons nil menu)
+	       (senator-completion-menu-point-as-event)
+	       "Completions")))
+	(when ans
+	  (if (not (semantic-tag-p ans))
+	      (setq ans (aref (cdr ans) 0)))
+	  (delete-region (car (oref a bounds)) (cdr (oref a bounds)))
+	  (semantic-ia-insert-tag ans))
+	))))
 
 (defun semantic-ia-insert-tag (tag)
   "Insert TAG into the current buffer based on completion."
@@ -158,6 +177,21 @@ Completion options are calculated with `semantic-analyze-possible-completions'."
 	   )
 	  (t (message str))
 	  )))
+
+;;;###autoload
+(defun semantic-ia-show-summary (point)
+  "Display a summary for the symbol under POINT."
+  (interactive "P")
+  (let* ((ctxt (semantic-analyze-current-context point))
+	 (pf (reverse (oref ctxt prefix)))
+	 (sum nil)
+	)
+    (while (and pf (not sum))
+      (if (semantic-tag-p (car pf))
+	  (setq sum (semantic-format-tag-summarize (car pf) nil t)))
+      (setq pf (cdr pf)))
+    (message "%s" sum)
+    ))
 
 ;;;###autoload
 (defun semantic-ia-show-doc (point)

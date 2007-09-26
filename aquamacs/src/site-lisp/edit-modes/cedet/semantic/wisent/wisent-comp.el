@@ -1,14 +1,14 @@
 ;;; wisent-comp.el --- GNU Bison for Emacs - Grammar compiler
 
-;; Copyright (C) 2002, 2003, 2004 David Ponce
-;; Copyright 1984, 1986, 1989, 1992, 1995, 2000, 2001
+;; Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007 David Ponce
+;; Copyright (C) 1984, 1986, 1989, 1992, 1995, 2000, 2001
 ;; Free Software Foundation, Inc. (Bison)
 
 ;; Author: David Ponce <david@dponce.com>
 ;; Maintainer: David Ponce <david@dponce.com>
 ;; Created: 30 January 2002
 ;; Keywords: syntax
-;; X-RCS: $Id: wisent-comp.el,v 1.1 2006/12/02 00:57:22 davidswelt Exp $
+;; X-RCS: $Id: wisent-comp.el,v 1.2 2007/09/26 13:43:25 davidswelt Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -24,8 +24,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program; see the file COPYING.  If not, write to
-;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -75,7 +75,7 @@
          (bindings (mapcar #'(lambda (v) (list 'defvar v)) vars)))
     `(eval-when-compile
        ,@bindings
-       (defvar ,context',vars))))
+       (defvar ,context ',vars))))
 (put 'wisent-defcontext 'lisp-indent-function 1)
 
 (defmacro wisent-with-context (name &rest body)
@@ -178,7 +178,7 @@ If optional LEFT is non-nil insert spaces on left."
     noninteractive))
 
 (defvar wisent-debug-flag nil
-  "non-nil means enable some debug stuff.")
+  "Non-nil means enable some debug stuff.")
 
 ;;;; --------------
 ;;;; Logging/Output
@@ -187,11 +187,11 @@ If optional LEFT is non-nil insert spaces on left."
   "Name of the log buffer.")
 
 (defvar wisent-new-log-flag nil
-  "non-nil means to start a new report.")
+  "Non-nil means to start a new report.")
 
 ;;;###autoload
 (defvar wisent-verbose-flag nil
-  "*non-nil means to report verbose information on generated parser.")
+  "*Non-nil means to report verbose information on generated parser.")
 
 ;;;###autoload
 (defun wisent-toggle-verbose-flag ()
@@ -2885,7 +2885,7 @@ Also warn if X is a $N or $regionN symbol with N < 1 or N > M."
   (when (symbolp x)
     (let* ((n (symbol-name x))
            (i (and (string-match "\\`\\$\\(region\\)?\\([0-9]+\\)\\'" n)
-                   (string-to-int (match-string 2 n)))))
+                   (string-to-number (match-string 2 n)))))
       (when i
         (if (and (>= i 1) (<= i m))
             t
@@ -3075,7 +3075,7 @@ internal use.")
 It gives the rules for start symbols.")
 
 (defvar wisent-single-start-flag nil
-  "non-nil means allows only one start symbol like in Bison.
+  "Non-nil means allows only one start symbol like in Bison.
 That is don't add extra start rules to the grammar.  This is
 useful to compare the Wisent's generated automaton with the Bison's
 one.")
@@ -3431,32 +3431,45 @@ NONTERMS is the list of non terminal definitions (see function
 
 ;;;###autoload
 (defun wisent-compile-grammar (grammar &optional start-list)
-  "Compile GRAMMAR and return an LALR(1) automaton.
-Optional argument START-LIST is a list of start symbols
-\(nonterminals).  If nil the first nonterminal defined in the grammar
-is the default start symbol.  If START-LIST contains only one element,
-it defines the start symbol.  If START-LIST contains more than one
-element, all will be defined as potential start symbols, unless
-`wisent-single-start-flag' is non-nil.  In that case the first element
-of START-LIST defines the start symbol and others are ignored.
+  "Compile the LALR(1) GRAMMAR.
 
-The LALR(1) automaton has the form:
+GRAMMAR is a list (TOKENS ASSOCS . NONTERMS) where:
 
-\[ACTIONS GOTOS STARTS FUNCTIONS]
+- TOKENS is a list of terminal symbols (tokens).
 
-- ACTIONS a state/token matrix telling the parser what to do at every
-  state based on the current lookahead token.  That is shift, reduce,
-  accept or error.
+- ASSOCS is nil, or an alist of (ASSOC-TYPE . ASSOC-VALUE) elements
+  describing the associativity of TOKENS.  ASSOC-TYPE must be one of
+  the `default-prec' `nonassoc', `left' or `right' symbols.  When
+  ASSOC-TYPE is `default-prec', ASSOC-VALUE must be nil or t (the
+  default).  Otherwise it is a list of tokens which must have been
+  previously declared in TOKENS.
 
-- GOTOS a state/nonterminal matrix telling the parser the next state
-  to go to after reducing with each rule.
+- NONTERMS is a list of nonterminal definitions.
 
-- STARTS an alist which maps the allowed start symbols (nonterminal)
+Optional argument START-LIST specify the possible grammar start
+symbols.  This is a list of nonterminals which must have been
+previously declared in GRAMMAR's NONTERMS form.  By default, the start
+symbol is the first nonterminal defined.  When START-LIST contains
+only one element, it is the start symbol.  Otherwise, all elements are
+possible start symbols, unless `wisent-single-start-flag' is non-nil.
+In that case, the first element is the start symbol, and others are
+ignored.
+
+Return an automaton as a vector: [ACTIONS GOTOS STARTS FUNCTIONS]
+where:
+
+- ACTIONS is a state/token matrix telling the parser what to do at
+  every state based on the current lookahead token.  That is shift,
+  reduce, accept or error.
+
+- GOTOS is a state/nonterminal matrix telling the parser the next
+  state to go to after reducing with each rule.
+
+- STARTS is an alist which maps the allowed start nonterminal symbols
   to tokens that will be first shifted into the parser stack.
 
-- FUNCTIONS a obarray of semantic action symbols.  A semantic action
-  is actually an Elisp function (lambda expression)."
-  
+- FUNCTIONS is an obarray of semantic action symbols.  Each symbol's
+  function definition is the semantic action lambda expression."
   (if (wisent-automaton-p grammar)
       grammar ;; Grammar already compiled just return it
     (wisent-with-context compile-grammar
@@ -3484,58 +3497,62 @@ The LALR(1) automaton has the form:
   "Byte compile the `wisent-compile-grammar' FORM.
 Automatically called by the Emacs Lisp byte compiler as a
 `byte-compile' handler."
-  (wisent-byte-compile-automaton (eval form)))
+  ;; Eval the `wisent-compile-grammar' form to obtain an LALR
+  ;; automaton internal data structure.  Then, because the internal
+  ;; data structure contains an obarray, convert it to a lisp form so
+  ;; it can be byte-compiled.
+  (byte-compile-form (wisent-automaton-lisp-form (eval form))))
 
 ;;;###autoload
 (put 'wisent-compile-grammar 'byte-compile 'wisent-byte-compile-grammar)
 
-(defun wisent-byte-compile-automaton (automaton)
-  "Byte compile the LALR AUTOMATON."
+(defun wisent-automaton-lisp-form (automaton)
+  "Return a Lisp form that produces AUTOMATON.
+See also `wisent-compile-grammar' for more details on AUTOMATON."
   (or (wisent-automaton-p automaton)
       (signal 'wrong-type-argument
               (list 'wisent-automaton-p automaton)))
-  (byte-compile-form
-   (let ((obn (make-symbol "ob"))       ; Generated obarray name
-         (obv (aref automaton 3))       ; Semantic actions obarray
-         )
-     `(let ((,obn (make-vector 13 0)))
-        ;; Generate code to initialize the semantic actions obarray,
-        ;; in local variable OBN.
-        ,@(let (obcode)
-            (mapatoms
-             #'(lambda (s)
-                 (setq obcode
-                       (cons `(fset (intern ,(symbol-name s) ,obn)
-                                    #',(symbol-function s))
-                             obcode)))
-             obv)
-            obcode)
-        ;; Generate code to create the automaton.
+  (let ((obn (make-symbol "ob"))        ; Generated obarray name
+        (obv (aref automaton 3))        ; Semantic actions obarray
+        )
+    `(let ((,obn (make-vector 13 0)))
+       ;; Generate code to initialize the semantic actions obarray,
+       ;; in local variable OBN.
+       ,@(let (obcode)
+           (mapatoms
+            #'(lambda (s)
+                (setq obcode
+                      (cons `(fset (intern ,(symbol-name s) ,obn)
+                                   #',(symbol-function s))
+                            obcode)))
+            obv)
+           obcode)
+       ;; Generate code to create the automaton.
+       (vector
+        ;; In code generated to initialize the action table, take
+        ;; care of symbols that are interned in the semantic actions
+        ;; obarray.
         (vector
-         ;; In code generated to initialize the action table, take
-         ;; care of symbols that are interned in the semantic actions
-         ;; obarray.
-         (vector
-          ,@(mapcar
-             #'(lambda (state)
-                 `(list
-                   ,@(mapcar
-                      #'(lambda (tr)
-                          (let ((k (car tr))
-                                (a (cdr tr)))
-                            (if (and (symbolp a)
-                                     (intern-soft (symbol-name a) obv))
-                                `(cons ,(if (symbolp k) `(quote ,k) k)
-                                       (intern-soft ,(symbol-name a) ,obn))
-                              `(quote ,tr))))
-                      state)))
-             (aref automaton 0)))
-         ;; The code of the goto table is unchanged.
-         ,(aref automaton 1)
-         ;; The code of the alist of start symbols is unchanged.
-         ',(aref automaton 2)
-         ;; The semantic actions obarray is in the local variable OBN.
-         ,obn)))))
+         ,@(mapcar
+            #'(lambda (state) ;; for each state
+                `(list
+                  ,@(mapcar
+                     #'(lambda (tr) ;; for each transition
+                         (let ((k (car tr))  ; token
+                               (a (cdr tr))) ; action
+                           (if (and (symbolp a)
+                                    (intern-soft (symbol-name a) obv))
+                               `(cons ,(if (symbolp k) `(quote ,k) k)
+                                      (intern-soft ,(symbol-name a) ,obn))
+                             `(quote ,tr))))
+                     state)))
+            (aref automaton 0)))
+        ;; The code of the goto table is unchanged.
+        ,(aref automaton 1)
+        ;; The code of the alist of start symbols is unchanged.
+        ',(aref automaton 2)
+        ;; The semantic actions obarray is in the local variable OBN.
+        ,obn))))
 
 (provide 'wisent-comp)
 

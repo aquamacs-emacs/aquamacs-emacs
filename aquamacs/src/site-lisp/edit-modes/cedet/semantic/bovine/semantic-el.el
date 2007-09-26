@@ -1,9 +1,9 @@
 ;;; semantic-el.el --- Semantic details for Emacs Lisp
 
-;;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005 Eric M. Ludlam
+;;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2007 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
-;; X-RCS: $Id: semantic-el.el,v 1.1 2006/12/02 00:57:17 davidswelt Exp $
+;; X-RCS: $Id: semantic-el.el,v 1.2 2007/09/26 13:43:23 davidswelt Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -19,8 +19,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -132,8 +132,8 @@ syntax as specified by the syntax table."
 (defun semantic-elisp-form-to-doc-string (form)
   "After reading a form FORM, covert it to a doc string.
 For Emacs Lisp, sometimes that string is non-existant.
-Recently discovered, sometimes it is a form which is evaluated
-at compile time, permitting compound strings."
+Sometimes it is a form which is evaluated at compile time, permitting
+compound strings."
   (cond ((stringp form) form)
 	((and (listp form) (eq (car form) 'concat)
 	      (stringp (nth 1 form)))
@@ -210,10 +210,14 @@ Return a bovination list to use."
 
 (semantic-elisp-setup-form-parser
     (lambda (form start end)
-      (condition-case foo
-          (semantic-parse-region start end nil 1)
-        (error (message "MUNGE: %S" foo)
-               nil)))
+      (let ((tags
+             (condition-case foo
+                 (semantic-parse-region start end nil 1)
+               (error (message "MUNGE: %S" foo)
+                      nil))))
+        (if (semantic-tag-p (car-safe tags))
+            tags
+          (semantic-tag-new-code (format "%S" (car form)) nil))))
   eval-and-compile
   eval-when-compile
   )
@@ -454,7 +458,8 @@ Optional argument NOSNARF is ignored."
 	       (cond ((eq (semantic-tag-class tag) 'function)
 		      (setq d (documentation sym)))
 		     (t
-		      (setq d (documentation-property sym)))))
+		      (setq d (documentation-property 
+			       sym 'variable-documentation)))))
 	     ;; Label it as system doc.. perhaps just for debugging
 	     ;; purposes.
 	     (if d (setq d (concat "Sytem Doc: \n" d)))
@@ -813,6 +818,15 @@ See `semantic-format-tag-prototype' for Emacs Lisp for more details."
 
 ;;;###autoload
 (add-hook 'emacs-lisp-mode-hook 'semantic-default-elisp-setup)
+
+;;; LISP MODE
+;;
+;; @TODO: Lisp supports syntaxes that Emacs Lisp does not.
+;;        Write a Lisp only parser someday.
+;;
+;; See this syntax:
+;; (defun foo () /#A)
+;;
 ;;;###autoload
 (add-hook 'lisp-mode-hook 'semantic-default-elisp-setup)
 

@@ -1,12 +1,12 @@
 ;;; semantic-util-modes.el --- Semantic minor modes
 
-;;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005 Eric M. Ludlam
+;;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2007 Eric M. Ludlam
 ;;; Copyright (C) 2001 David Ponce
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Author: David Ponce <david@dponce.com>
 ;; Keywords: syntax
-;; X-RCS: $Id: semantic-util-modes.el,v 1.57 2005/06/30 01:36:19 zappo Exp $
+;; X-RCS: $Id: semantic-util-modes.el,v 1.59 2007/02/19 02:54:37 zappo Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -22,8 +22,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -855,7 +855,9 @@ Use the command `semantic-stickyfunc-mode' to change this variable.")
   "*String used to indent the stickyfunc header.
 Customize this string to match the space used by scrollbars and
 fringe so it does not appear that the code is moving left/right
-when it lands in the sticky line.")
+when it lands in the sticky line."
+  :group 'semantic
+  :type 'string)
 
 (defvar semantic-stickyfunc-old-hlf nil
   "Value of the header line when entering sticky func mode.")

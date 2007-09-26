@@ -1,12 +1,12 @@
 ;;; wisent-debug.el --- GNU Bison for Emacs - Debugging
 
-;; Copyright (C) 2003 David Ponce
+;; Copyright (C) 2003, 2007 David Ponce
 
 ;; Author: David Ponce <david@dponce.com>
 ;; Maintainer: David Ponce <david@dponce.com>
 ;; Created: 11 February 2003
 ;; Keywords: syntax
-;; X-RCS: $Id: wisent-debug.el,v 1.1 2006/12/02 00:57:22 davidswelt Exp $
+;; X-RCS: $Id: wisent-debug.el,v 1.2 2007/09/26 13:43:25 davidswelt Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -22,8 +22,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program; see the file COPYING.  If not, write to
-;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -126,8 +126,10 @@ FUNCTION must be a semantic action symbol that exists in AUTOMATON."
    (require 'pp)))
 
 (if (fboundp 'pprint-to-string)
-    (defalias 'wisent-debug-pp-to-string 'pprint-to-string)
-  (defalias 'wisent-debug-pp-to-string 'pp-to-string))
+    (eval-and-compile
+      (defalias 'wisent-debug-pp-to-string 'pprint-to-string))
+  (eval-and-compile
+    (defalias 'wisent-debug-pp-to-string 'pp-to-string)))
 
 ;;;###autoload
 (defun wisent-debug-show-entry (automaton function)

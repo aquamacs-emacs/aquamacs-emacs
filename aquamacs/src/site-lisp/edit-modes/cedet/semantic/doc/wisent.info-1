@@ -2,7 +2,7 @@ This is wisent.info, produced by makeinfo version 4.3 from wisent.texi.
 
 This manual documents the Wisent parser generator.
 
-   Copyright (C) 2001, 2002, 2003, 2004 David Ponce
+   Copyright (C) 2001, 2002, 2003, 2004, 2007 David Ponce
 
    Some texts are borrowed or adapted from the manual of Bison version
 1.35.  The text in section entitled "Understanding the automaton" is
@@ -159,7 +159,7 @@ File: wisent.info,  Node: Grammar format,  Next: Example,  Prev: Wisent Grammar,
 Grammar format
 ==============
 
-To be acceptable by Wisent a context-free grammars must respect a
+To be acceptable by Wisent a context-free grammar must respect a
 particular format.  That is, must be represented as an Emacs Lisp list
 of the form:
 
@@ -464,7 +464,7 @@ Compiling a grammar
 
 After providing a context-free grammar in a suitable format, it must be
 translated into a set of tables (an "automaton") that will be used to
-drive the parser.  Like Bison, Wisent translates grammars that must be
+derive the parser.  Like Bison, Wisent translates grammars that must be
 "LALR(1)".
 
 A grammar is LALR(1) if it is possible to tell how to parse any portion
@@ -518,8 +518,8 @@ Normally, a grammar should produce an automaton where at each state the
 parser has only one action to do (*note Wisent Parsing::).
 
 In certain cases, a grammar can produce an automaton where, at some
-states, there are more than one action possible.  A such grammar is
-"ambiguous", and generated "conflicts".
+states, there are more than one action possible.  Such a grammar is
+"ambiguous", and generates "conflicts".
 
 The parser can't be driven by an automaton which isn't completely
 "deterministic", that is which contains conflicts.  It is necessary to
@@ -1337,7 +1337,7 @@ Iterative style
 
 The "iterative style" is the preferred style to use with semantic.  It
 relies on an iterative parser back-end mechanism which parses start
-nonterminals one at a time and automagically skip unexpected lexical
+nonterminals one at a time and automagically skips unexpected lexical
 tokens in input.
 
 Compared to rule-based iterative functions (*note Bison style::),
@@ -1352,7 +1352,7 @@ Then, each parsing iteration automatically translates a raw tag into
 "expanded tags", updating the raw tag structure with internal
 properties and buffer related data.
 
-After parsing completed it results in a tree of expanded tags.
+After parsing completes, it results in a tree of expanded tags.
 
 The following example is a snippet of the iterative style Java grammar
 provided in the semantic distribution in the file `wisent-java-tags.wy'.
@@ -1445,7 +1445,7 @@ input data.
 
 The second consequence is that the iterative parser can't do automatic
 tag expansion, except for the start nonterminal value.  It is necessary
-to explicitly expand tag from concerned semantic actions by calling the
-grammar macro `EXPANDTAG' with a raw tag as parameter.  See also *Note
-Start nonterminals::, for incremental re-parse considerations.
+to explicitly expand tags from concerned semantic actions by calling
+the grammar macro `EXPANDTAG' with a raw tag as parameter.  See also
+*Note Start nonterminals::, for incremental re-parse considerations.
 

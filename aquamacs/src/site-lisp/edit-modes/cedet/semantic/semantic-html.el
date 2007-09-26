@@ -1,9 +1,9 @@
 ;;; semantic-html.el --- Semantic details for html files
 
-;;; Copyright (C) 2004, 2005 Eric M. Ludlam
+;;; Copyright (C) 2004, 2005, 2007 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
-;; X-RCS: $Id: semantic-html.el,v 1.7 2005/01/07 02:02:12 zappo Exp $
+;; X-RCS: $Id: semantic-html.el,v 1.9 2007/02/19 02:51:37 zappo Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -19,8 +19,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -228,7 +228,7 @@ tag with greater section value than LEVEL is found."
 	semantic-symbol->name-assoc-list '((section . "Section")
 					   
 					   )
-	semantic-imenu-expandable-tag-class 'section
+	semantic-imenu-expandable-tag-classes 'section
 	semantic-imenu-bucketize-file nil
 	semantic-imenu-bucketize-type-members nil
 	senator-step-at-start-end-tag-classes '(section)

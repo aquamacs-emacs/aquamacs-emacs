@@ -1,10 +1,10 @@
 ;;; semantic-doc.el --- Routines for documentation strings
 
-;;; Copyright (C) 1999, 2000, 2001, 2002, 2003 Eric M. Ludlam
+;;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2005 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: syntax
-;; X-RCS: $Id: semantic-doc.el,v 1.4 2004/04/28 15:36:40 ponced Exp $
+;; X-RCS: $Id: semantic-doc.el,v 1.6 2005/09/30 20:19:50 zappo Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -20,8 +20,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -44,8 +44,7 @@ can look for.  When appropriate, this can be overridden by a language specific
 enhancement.
 Optional argument NOSNARF means to only return the lexical analyzer token for it.
 If nosnarf if 'lex, then only return the lex token."
-  (if (not tag)
-      (setq tag (car (semantic-find-tag-by-overlay nil))))
+  (if (not tag) (setq tag (semantic-current-tag)))
   (:override
    ;; No override.  Try something simple to find documentation nearby
    (save-excursion
@@ -59,17 +58,34 @@ If nosnarf if 'lex, then only return the lex token."
             (goto-char (semantic-tag-docstring tag))
             (semantic-doc-snarf-comment-for-tag nosnarf)))
       ;; Check just before the definition.
-      (save-excursion
-        (re-search-backward comment-start-skip nil t)
-        (if (not (semantic-brute-find-tag-by-position
-                  (point) (current-buffer) t))
-            ;; We found a comment that doesn't belong to the body
-            ;; of a function.
-            (semantic-doc-snarf-comment-for-tag nosnarf)))
+      (semantic-documentation-comment-preceeding-tag tag nosnarf)
       ;;  Lets look for comments either after the definition, but before code:
       ;; Not sure yet.  Fill in something clever later....
       nil))))
 
+(defun semantic-documentation-comment-preceeding-tag (&optional tag nosnarf)
+  "Find a comment preceeding TAG.
+If TAG is nil.  use the tag under point.
+Searches the space between TAG and the preceeding tag for a comment,
+and converts the comment into clean documentation.
+Optional argument NOSNARF means to return just the lexical token and
+not the string."
+  (if (not tag) (setq tag (semantic-current-tag)))
+  (save-excursion
+    ;; Find this tag.
+    (semantic-go-to-tag tag)
+    (let* ((end (point))
+	   (starttag (semantic-find-tag-by-overlay-prev
+		      (semantic-tag-start tag)))
+	   (start (if starttag
+		      (semantic-tag-end starttag)
+		    (point-min))))
+      (when (re-search-backward comment-start-skip start t)
+	;; We found a comment that doesn't belong to the body
+	;; of a function.
+	(semantic-doc-snarf-comment-for-tag nosnarf)))
+    ))
+  
 (make-obsolete-overload 'semantic-find-documentation
                         'semantic-documentation-for-tag)
 

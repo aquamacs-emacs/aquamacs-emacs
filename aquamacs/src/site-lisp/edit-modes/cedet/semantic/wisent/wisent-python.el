@@ -1,12 +1,12 @@
 ;;; wisent-python.el --- Semantic support for Python
 ;;
-;; Copyright (C) 2002, 2004 Richard Kim
+;; Copyright (C) 2002, 2004, 2006, 2007 Richard Kim
 ;;
 ;; Author: Richard Kim <ryk@dspwiz.com>
 ;; Maintainer: Richard Kim <ryk@dspwiz.com>
 ;; Created: June 2002
 ;; Keywords: syntax
-;; X-RCS: $Id: wisent-python.el,v 1.1 2006/12/02 00:57:23 davidswelt Exp $
+;; X-RCS: $Id: wisent-python.el,v 1.2 2007/09/26 13:43:25 davidswelt Exp $
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
@@ -22,8 +22,8 @@
 ;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -57,13 +57,14 @@
           "?['\"]")
   "Regexp matching beginning of a python string.")
 
-(defsubst wisent-python-implicit-line-joining-p ()
+(defvar wisent-python-EXPANDING-block nil
+  "Non-nil when expanding a paren block for Python lexical analyzer.")
+
+(defun wisent-python-implicit-line-joining-p ()
   "Return non-nil if implicit line joining is active.
 That is, if inside an expressions in parentheses, square brackets or
 curly braces."
-  (condition-case nil
-      (progn (scan-lists (point) -1 1) t)
-    (error nil)))
+  wisent-python-EXPANDING-block)
 
 (defsubst wisent-python-forward-string ()
   "Move point at the end of the python string at point."
@@ -122,7 +123,7 @@ identation of the current line."
                        (> (current-indentation) indent))))))
 
 (defun wisent-python-end-of-block ()
-  "Move point to the end of the current block"
+  "Move point to the end of the current block."
   (let ((indent (current-indentation)))
     (while (and (not (eobp)) (>= (current-indentation) indent))
       (wisent-python-forward-line-skip-indented))
@@ -297,7 +298,22 @@ To be implemented for python!  For now just return nil."
    ;; The following is no more necessary as semantic-lex is overriden
    ;; in python-mode.
    ;; semantic-lex-analyzer 'wisent-python-lexer
-   ))
+
+   ;; Semantic to take over from the one provided by python.
+   ;; The python one, if it uses the senator advice, will hang
+   ;; Emacs unrecoverably.
+   imenu-create-index-function 'semantic-create-imenu-index
+
+   ;; I need a python guru to update this list:
+   semantic-symbol->name-assoc-list-for-type-parts '((variable . "Variables")
+						     (function . "Methods"))
+   semantic-symbol->name-assoc-list '((type . "Classes")
+				      (variable . "Variables")
+				      (function . "Functions")
+				      (include  . "Imports")
+				      (package  . "Package")
+				      (code . "Code")))
+   )
 
 ;;;###autoload
 (add-hook 'python-mode-hook 'wisent-python-default-setup)

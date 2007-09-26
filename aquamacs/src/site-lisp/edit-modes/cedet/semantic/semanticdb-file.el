@@ -1,10 +1,10 @@
 ;;; semanticdb-file.el --- Save a semanticdb to a cache file.
 
-;;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005 Eric M. Ludlam
+;;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2007 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: tags
-;; X-RCS: $Id: semanticdb-file.el,v 1.16 2005/06/30 01:24:40 zappo Exp $
+;; X-RCS: $Id: semanticdb-file.el,v 1.19 2007/05/20 15:59:18 zappo Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -20,8 +20,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 ;; 
 ;;; Commentary:
 ;;
@@ -30,6 +30,7 @@
 
 (require 'semanticdb)
 (require 'inversion)
+(require 'cedet-files)
 
 (defvar semanticdb-file-version semantic-version
   "Version of semanticdb we are writing files to disk with.")
@@ -77,6 +78,25 @@ Each function is called with one argument, the object representing
 the database recently written."
   :group 'semanticdb
   :type 'hook)
+
+(defvar semanticdb-dir-sep-char (if (boundp 'directory-sep-char)
+				    (symbol-value 'directory-sep-char)
+				  ?/)
+  "Character used for directory separation.
+Obsoleted in some versions of Emacs.  Needed in others.
+NOTE: This should get deleted from semantic soon.")
+
+(defun semanticdb-fix-pathname (dir)
+  "If DIR is broken, fix it.
+Force DIR to end with a /.
+Note: Same as `file-name-as-directory'.
+NOTE: This should get deleted from semantic soon."
+  (file-name-as-directory dir))
+;; I didn't initially know about the above fcn.  Keep the below as a
+;; reference.  Delete it someday once I've proven everything is the same.
+;;  (if (not (= semanticdb-dir-sep-char (aref path (1- (length path)))))
+;;      (concat path (list semanticdb-dir-sep-char))
+;;    path))
 
 ;;; Classes
 ;;
@@ -180,11 +200,19 @@ If DB is not specified, then use the current database."
 	(file-error ; System error saving?  Ignore it.
 	 (message "Error saving %s" objname))
 	(error
-	 (if (and (listp foo)
-		  (stringp (nth 1 foo))
-		  (string-match "write-protected" (nth 1 foo)))
-	     (message (nth 1 foo))
-	   (error "%S" foo))))
+	 (cond
+	  ((and (listp foo)
+		(stringp (nth 1 foo))
+		(string-match "write[- ]protected" (nth 1 foo)))
+	   (message (nth 1 foo)))
+	  ((and (listp foo)
+		(stringp (nth 1 foo))
+		(string-match "no such directory" (nth 1 foo)))
+	   (message (nth 1 foo)))
+	  (t
+	   (if (y-or-n-p (format "Skip Error: %S ?" (car (cdr foo))))
+	       nil
+	     (error "%S" (car (cdr foo))))))))
       (run-hook-with-args 'semanticdb-save-database-hooks
 			  (or DB semanticdb-current-database))
       (message "Saving tag summary for %s...done" objname))
@@ -282,35 +310,10 @@ File name excludes any directory part."
   "Return the relative directory to where DBCLASS will save its cache file.
 The returned path is related to DIRECTORY."
   (if semanticdb-default-save-directory
-      (let ((file directory)
-	    dir-sep-string)
-        (when (memq system-type '(windows-nt ms-dos))
-          ;; Normalize DOSish file names: convert all slashes to
-          ;; directory-sep-char, downcase the drive letter, if any,
-          ;; and replace the leading "x:" with "/drive_x".
-          (or (file-name-absolute-p file)
-              (setq file (expand-file-name file))) ; make defaults explicit
-          ;; Replace any invalid file-name characters (for the
-          ;; case of backing up remote files).
-          (setq file (expand-file-name (convert-standard-filename file)))
-          (setq dir-sep-string (char-to-string semanticdb-dir-sep-char))
-          (if (eq (aref file 1) ?:)
-              (setq file (concat dir-sep-string
-                                 "drive_"
-                                 (char-to-string (downcase (aref file 0)))
-                                 (if (eq (aref file 2) semanticdb-dir-sep-char)
-                                     ""
-                                   dir-sep-string)
-                                 (substring file 2)))))
-        ;; Make the name unique by substituting directory
-        ;; separators.  It may not really be worth bothering about
-        ;; doubling `!'s in the original name...
-        (setq file (semantic-subst-char-in-string
-                    semanticdb-dir-sep-char ?!
-                    (replace-regexp-in-string "!" "!!" file)))
+      (let ((file (cedet-directory-name-to-file-name directory)))
         ;; Now create a filename for the cache file in
         ;; ;`semanticdb-default-save-directory'.
-     (expand-file-name
+	(expand-file-name
          (concat (file-name-as-directory semanticdb-default-save-directory)
                  file)))
     directory))

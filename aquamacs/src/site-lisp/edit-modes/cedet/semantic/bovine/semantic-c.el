@@ -1,9 +1,9 @@
 ;;; semantic-c.el --- Semantic details for C
 
-;;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005 Eric M. Ludlam
+;;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
-;; X-RCS: $Id: semantic-c.el,v 1.1 2006/12/02 00:57:17 davidswelt Exp $
+;; X-RCS: $Id: semantic-c.el,v 1.2 2007/09/26 13:43:23 davidswelt Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -19,8 +19,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -29,6 +29,7 @@
 ;; 
 
 (require 'semantic)
+(require 'semantic-lex-spp)
 (require 'semantic-c-by)
 (require 'backquote)
 
@@ -40,19 +41,12 @@
   (require 'senator)
   (require 'cc-mode))
 
-;;; Code:
-(define-lex-regex-analyzer semantic-lex-c-if-0
-  "Block out code matched in an #if 0 condition."
-  "^\\s-*#if\\s-*0$"
-  (beginning-of-line)
-  (c-forward-conditional 1)
-  (setq semantic-lex-end-point (point))
-  nil)
 
 ;;; Compatibility
 ;;
 (if (fboundp 'c-end-of-macro)
-    (defalias 'semantic-c-end-of-macro 'c-end-of-macro)
+    (eval-and-compile
+      (defalias 'semantic-c-end-of-macro 'c-end-of-macro))
   ;; From cc-mode 5.30
   (defun semantic-c-end-of-macro ()
     "Go to the end of a preprocessor directive.
@@ -67,10 +61,137 @@ This function does not do any hidden buffer changes."
                (forward-char)
                t))))
   )
+;;-------
+
+;;; Lexical analysis
+(defcustom semantic-lex-c-preprocessor-symbol-map nil
+  "Table of C Preprocessor keywords used by the Semantic C lexer."
+  :group 'c
+  :type '(repeat (cons (string :tag "Keyword")
+		       (string :tag "Replacement")))
+  )
+
+;;; Code:
+(define-lex-spp-macro-declaration-analyzer semantic-lex-cpp-define
+  "A #define of a symbol with some value.
+Record the symbol in the semantic preprocessor.
+Return the the defined symbol as a special spp lex token."
+  "^\\s-*#define\\s-+\\(\\(\\sw\\|\\s_\\)+\\)" 1
+  (goto-char (match-end 0))
+  (skip-chars-forward " \t")
+  (if (eolp)
+      nil
+    (prog1
+	(buffer-substring-no-properties (point)
+					(progn
+					  ;; NOTE: THIS SHOULD BE
+					  ;; END OF MACRO!!!
+					  (forward-word 1)
+					  (point)))
+      ;; Move the lexical end after the value.
+      (semantic-c-end-of-macro)
+      ;; Magical spp variable for end point.
+      (setq semantic-lex-end-point (point))
+      )))
+
+(define-lex-spp-macro-undeclaration-analyzer semantic-lex-cpp-undef
+  "A #undef of a symbol.
+Remove the symbol from the semantic preprocessor.
+Return the the defined symbol as a special spp lex token."
+  "^\\s-*#undef\\s-+\\(\\(\\sw\\|\\s_\\)+\\)" 1)
+
+(defun semantic-c-skip-conditional-section ()
+  "Skip one section of a conditional.
+Moves forward to a matching #elif, #else, or #endif.
+Movers completely over balanced #if blocks."
+  (let ((done nil))
+    ;; (if (looking-at "^\\s-*#if")
+    ;; (semantic-lex-spp-push-if (point))
+    (end-of-line)
+    (while (and (not done)
+		(re-search-forward "^\\s-*#\\(if\\(n?def\\)?\\|el\\(if\\|se\\)\\|endif\\)\\>" nil t))
+      (goto-char (match-beginning 0))
+      (cond
+       ((looking-at "^\\s-*#if")
+	;; We found a nested if.  Skip it.
+	(c-forward-conditional 1))
+       ((looking-at "^\\s-*#\\(endif\\|else\\)\\>")
+	;; We are at the end.  Pop our state.
+	;; (semantic-lex-spp-pop-if)
+	;; Note: We include ELSE and ENDIF the same. If skip some previous
+	;; section, then we should do the else by default, making it much
+	;; like the endif.
+	(end-of-line)
+	(forward-char 1)
+	(setq done t))
+       (t
+	;; We found an elif.  Stop here.
+	(setq done t))))))
 
 (define-lex-regex-analyzer semantic-lex-c-if
+  "Code blocks wrapped up in #if, or #ifdef.
+Uses known macro tables in SPP to determine what block to skip."
+  "^\\s-*#\\(if\\|ifndef\\|ifdef\\|elif\\)\\s-+\\(!?defined(\\|\\)\\(\\(\\sw\\|\\s_\\)+\\))?\\s-*$"
+  (let* ((sym (buffer-substring-no-properties 
+	       (match-beginning 3) (match-end 3)))
+	 (defstr (buffer-substring-no-properties 
+		  (match-beginning 2) (match-end 2)))
+	 (defined (string= defstr "defined("))
+	 (notdefined (string= defstr "!defined("))
+	 (ift (buffer-substring-no-properties 
+	       (match-beginning 1) (match-end 1)))
+	 (ifdef (or (string= ift "ifdef")
+		    (and (string= ift "if") defined)
+		    (and (string= ift "elif") defined)
+		    ))
+	 (ifndef (or (string= ift "ifndef")
+		     (and (string= ift "if") notdefined)
+		     (and (string= ift "elif") notdefined)
+		     ))
+	 )
+    (if (or (and (or (string= ift "if") (string= ift "elif"))
+		 (string= sym "0"))
+	    (and ifdef (not (semantic-lex-spp-symbol-p sym)))
+	    (and ifndef (semantic-lex-spp-symbol-p sym)))
+	;; The if indecates to skip this preprocessor section
+	(let ((pt nil))
+	  ;; (message "%s %s yes" ift sym)
+	  (beginning-of-line)
+	  (setq pt (point))
+	  ;;(c-forward-conditional 1)
+	  ;; This skips only a section of a conditional.  Once that section
+	  ;; is opened, encountering any new #else or related conditional
+	  ;; should be skipped.
+	  (semantic-c-skip-conditional-section)
+	  (setq semantic-lex-end-point (point))
+	  (semantic-push-parser-warning (format "Skip #%s %s" ift sym)
+					pt (point))
+;;	  (semantic-lex-push-token
+;;	   (semantic-lex-token 'c-preprocessor-skip pt (point)))
+	  nil)
+      ;; Else, don't ignore it, but do handle the internals.
+      ;;(message "%s %s no" ift sym)
+      (end-of-line)
+      (setq semantic-lex-end-point (point))
+      nil)))
+
+(define-lex-regex-analyzer semantic-lex-c-macro-else
+  "Ignore an #else block.
+We won't see the #else due to the macro skip section block
+unless we are actively parsing an open #if statement.  In that
+case, we must skip it since it is the ELSE part."
+  "^#\\(else\\)"
+  (let ((pt (point)))
+    (semantic-c-skip-conditional-section)
+    (setq semantic-lex-end-point (point))
+    (semantic-push-parser-warning "Skip #else" pt (point))
+;;    (semantic-lex-push-token
+;;     (semantic-lex-token 'c-preprocessor-skip pt (point)))
+    nil))
+
+(define-lex-regex-analyzer semantic-lex-c-macrobits
   "Ignore various forms of #if/#else/#endif conditionals."
-  "^#\\(if\\(def\\)?\\|el\\(if\\|se\\)\\|endif\\)"
+  "^#\\(if\\(def\\)?\\|endif\\)"
   (semantic-c-end-of-macro)
   (setq semantic-lex-end-point (point))
   nil)
@@ -117,14 +238,19 @@ Go to the next line."
   "Lexical Analyzer for C code."
   semantic-lex-ignore-whitespace
   semantic-lex-ignore-newline
-  semantic-lex-c-if-0
+  ;; C preprocessor features
+  semantic-lex-cpp-define
+  semantic-lex-cpp-undef
   semantic-lex-c-if
+  semantic-lex-c-macro-else
+  semantic-lex-c-macrobits
   semantic-lex-c-include-system
   semantic-lex-c-ignore-ending-backslash
+  ;; Non-preprocessor features
   semantic-lex-number
   ;; Must detect C strings before symbols because of possible L prefix!
   semantic-lex-c-string
-  semantic-lex-symbol-or-keyword
+  semantic-lex-spp-replace-or-symbol-or-keyword
   semantic-lex-charquote
   semantic-lex-paren-or-list
   semantic-lex-close-paren
@@ -209,7 +335,7 @@ Go to the next line."
 				    ;; name shows up as a parent of this
 				    ;; typedef.
 				    :typedef
-				    (semantic-token-type-parent tag)
+				    (semantic-tag-type-superclasses tag)
 				    :documentation
 				    (semantic-tag-docstring tag))
 				   vl))
@@ -274,7 +400,11 @@ Optional argument STAR and REF indicate the number of * and & in the typedef."
 		(fcnpointer (string-match "^\\*" (car tokenpart)))
 		(fnname (if fcnpointer
 			    (substring (car tokenpart) 1)
-			  (car tokenpart))))
+			  (car tokenpart)))
+		(operator (if (string-match "[a-zA-Z]" fnname)
+			      nil
+			    t))
+		)
 	   (if fcnpointer
 	       ;; Function pointers are really variables.
 	       (semantic-tag-new-variable
@@ -291,12 +421,19 @@ Optional argument STAR and REF indicate the number of * and & in the typedef."
 		  (cond ((car (nth 3 tokenpart) )
 			 "void")	; Destructors have no return?
 			(constructor
-			 ;; Constructors return an object.			  ;; in our
-			 (list (or (car semantic-c-classname)
-				   (car (nth 2 tokenpart)))
-			       'type
-			       (or (cdr semantic-c-classname)
-				   "class")))
+			 ;; Constructors return an object.
+			 (semantic-tag-new-type
+			  ;; name
+			  (or (car semantic-c-classname)
+			      (car (nth 2 tokenpart)))
+			  ;; type
+			  (or (cdr semantic-c-classname)
+			      "class")
+			  ;; members
+			  nil
+			  ;; parents
+			  nil
+			  ))
 			(t "int")))
 	      (nth 4 tokenpart)		;arglist
 	      :constant-flag (if (member "const" declmods) t nil)
@@ -305,6 +442,7 @@ Optional argument STAR and REF indicate the number of * and & in the typedef."
 	      :destructor-flag (if (car (nth 3 tokenpart) ) t)
 	      :constructor-flag (if constructor t)
 	      :pointer (nth 7 tokenpart)
+	      :operator-flag operator
 	      ;; Even though it is "throw" in C++, we use
 	      ;; `throws' as a common name for things that toss
 	      ;; exceptions about.
@@ -328,19 +466,22 @@ Optional argument STAR and REF indicate the number of * and & in the typedef."
 
 ;;; Override methods & Variables
 ;;
-(defcustom semantic-default-c-path '("/usr/include" "/usr/dt/include"
-					 "/usr/X11R6/include")
+(defvar-mode-local c-mode semantic-dependency-system-include-path
+  '("/usr/include" "/usr/dt/include" "/usr/X11R6/include")
+  "System path to search for include files.")
+
+(defcustom semantic-default-c-path nil
   "Default set of include paths for C code.
-Used by `semantic-inc' to define an include path.  This should
-probably do some sort of search to see what is actually on the local
-machine."
+Used by `semantic-dep' to define an include path.
+NOTE: In process of obsoleting this."
   :group 'c
   :group 'semantic
   :type '(repeat (string :tag "Path")))
 
-(defvar-mode-local c-mode semantic-dependency-include-path 
+(defvar-mode-local c-mode semantic-dependency-include-path
   semantic-default-c-path
   "System path to search for include files.")
+
 
 (define-mode-local-override semantic-format-tag-name
   c-mode (tag &optional parent color)
@@ -352,6 +493,45 @@ Optional PARENT and COLOR are ignored."
     (if (not fnptr)
 	name
       (concat "(*" name ")"))
+    ))
+
+(define-mode-local-override semantic-format-tag-canonical-name
+  c-mode (tag &optional parent color)
+  "Create a cannonical name for TAG.
+PARENT specifies a parent class.
+COLOR indicates that the text should be type colorized.
+Enhances the base class to search for the entire parent
+tree to make the name accurate."
+  (semantic-format-tag-canonical-name-default tag parent color)
+  )
+
+(define-mode-local-override semantic-format-tag-type c-mode (tag color)
+  "Convert the data type of TAG to a string usable in tag formatting.
+Adds pointer and reference symbols to the default.
+Argument COLOR adds color to the text."
+  (let* ((type (semantic-tag-type tag))
+	 (defaulttype nil)
+	 (point (semantic-tag-get-attribute tag :pointer))
+	 (ref (semantic-tag-get-attribute tag :reference))
+	 )
+    (if (semantic-tag-p type)
+	(let ((typetype (semantic-tag-type type))
+	      (typename (semantic-tag-name type)))
+	  ;; Create the string that expresses the type
+	  (if (string= typetype "class")
+	      (setq defaulttype typename)
+	    (setq defaulttype (concat typetype " " typename))))
+      (setq defaulttype (semantic-format-tag-type-default tag color)))
+      
+    ;; Colorize
+    (when color 
+      (setq defaulttype (semantic--format-colorize-text defaulttype 'type)))
+
+    ;; Add refs, ptrs, etc
+    (if ref (setq ref "&"))
+    (if point (setq point (make-string point ?*)) "")
+    (when type
+      (concat defaulttype ref point))
     ))
 
 (define-mode-local-override semantic-tag-protection
@@ -406,20 +586,6 @@ Override function for `semantic-tag-protection'."
       ;; to make sure we can apply overlays properly.
       (semantic-tag-components (semantic-tag-type-superclasses tag))
     (semantic-tag-components-default tag)))
-
-(define-mode-local-override semantic-format-tag-type c-mode (tag color)
-  "Convert the data type of TAG to a string usable in tag formatting.
-Adds pointer and reference symbols to the default.
-Argument COLOR adds color to the text."
-  (let* ((type (semantic-format-tag-type-default tag color))
-	 (point (semantic-tag-get-attribute tag :pointer))
-	 (ref (semantic-tag-get-attribute tag :reference))
-	 )
-    (if ref (setq ref "&"))
-    (if point (setq point (make-string point ?*)) "")
-    (when type
-      (concat type ref point))
-    ))
 
 (defun semantic-c-tag-template (tag)
   "Return the template specification for TAG, or nil."
@@ -506,7 +672,7 @@ handled.  A class is abstract iff it's destructor is virtual."
    (t (semantic-tag-abstract-p-default tag parent))))
 
 (define-mode-local-override semantic-analyze-dereference-metatype
-  c-mode (type)
+  c-mode (type scope)
   "Dereference TYPE as described in `semantic-analyze-dereference-metatype'.
 If TYPE is a typedef, get TYPE's type by name or tag, and return."
   (if (and (eq (semantic-tag-class type) 'type)
@@ -520,6 +686,13 @@ These are constants which are of type TYPE."
   (if (and (eq (semantic-tag-class type) 'type)
 	   (string= (semantic-tag-type type) "enum"))
       (semantic-tag-type-members type)))
+
+(define-mode-local-override semantic-analyze-split-name c-mode (name)
+  "Split up tag names on colon (:) boundaries."
+  (let ((ans (split-string name ":")))
+    (if (= (length ans) 1)
+	name
+      (delete "" ans))))
 
 (define-mode-local-override semantic-ctxt-scoped-types c-mode (&optional point)
   "Return a list of tags of CLASS type based on POINT.
@@ -561,7 +734,8 @@ DO NOT return the list of tags encompassing point."
 (defvar-mode-local c-mode imenu-create-index-function 'semantic-create-imenu-index
   "Imenu index function for C.")
 
-(defvar-mode-local c-mode semantic-type-relation-separator-character '("." "->")
+(defvar-mode-local c-mode semantic-type-relation-separator-character 
+  '("." "->")
   "Separator characters between something of a give type, and a field.")
 
 (defvar-mode-local c-mode semantic-command-separation-character ";"
@@ -588,7 +762,28 @@ DO NOT return the list of tags encompassing point."
                                             )
         )
   
-  (setq semantic-lex-analyzer #'semantic-c-lexer))
+  (setq semantic-lex-analyzer #'semantic-c-lexer)
+  (setq semantic-lex-spp-macro-symbol-obarray
+	(semantic-lex-make-spp-table semantic-lex-c-preprocessor-symbol-map))
+  (add-hook 'semantic-lex-reset-hooks 'semantic-lex-spp-reset-hook nil t)
+  )
+
+;;;###autoload
+(defun semantic-c-add-preprocessor-symbol (sym replacement)
+  "Add a preprocessor symbol SYM with a REPLACEMENT value."
+  (interactive "sSymbol: \nsReplacement: ")
+  (let ((SA (assoc sym semantic-lex-c-preprocessor-symbol-map)))
+    (if SA
+	;; Replace if there is one.
+	(setcdr SA replacement)
+      ;; Otherwise, append
+      (setq semantic-lex-c-preprocessor-symbol-map
+	    (cons  (cons sym replacement)
+		   semantic-lex-c-preprocessor-symbol-map))))
+  (setq-mode-local c-mode
+		   semantic-lex-spp-macro-symbol-obarray
+		   (semantic-lex-make-spp-table
+		    semantic-lex-c-preprocessor-symbol-map)))
 
 ;;;###autoload
 (add-hook 'c-mode-hook 'semantic-default-c-setup)
@@ -601,3 +796,4 @@ DO NOT return the list of tags encompassing point."
 (provide 'semantic-c)
 
 ;;; semantic-c.el ends here
+

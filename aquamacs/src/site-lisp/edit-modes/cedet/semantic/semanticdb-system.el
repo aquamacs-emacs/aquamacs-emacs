@@ -4,7 +4,7 @@
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: tags
-;; X-RCS: $Id: semanticdb-system.el,v 1.8 2005/06/30 01:26:52 zappo Exp $
+;; X-RCS: $Id: semanticdb-system.el,v 1.10 2007/03/17 21:22:33 zappo Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -20,8 +20,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 ;; 
 ;;; Commentary:
 ;;
@@ -229,7 +229,7 @@ and parsed. After the database is created, save it, and return the DB."
       (semanticdb-save-db sysdb))
 
     ;; Add it to the search path for major modes.
-    (let ((m (oref sysdb major-modes)))
+    (let ((m (oref-default sysdb major-modes)))
       (while m
 	(let ((v (mode-local-value (car m) 'semanticdb-project-system-databases))
 	      )

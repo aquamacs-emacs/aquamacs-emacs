@@ -1,13 +1,13 @@
 ;;; c.by -- LL grammar for C/C++ language specification
 ;;
-;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005 Eric M. Ludlam
+;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Eric M. Ludlam
 ;; Copyright (C) 2002, 2003 David Ponce
 ;;
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;;         David Ponce <david@dponce.com>
 ;;         Klaus Berndl <klaus.berndl@sdm.de>
 ;;
-;; X-RCS: $Id: c.by,v 1.1 2006/12/02 00:57:17 davidswelt Exp $
+;; X-RCS: $Id: c.by,v 1.2 2007/09/26 13:43:23 davidswelt Exp $
 ;;
 ;; c.by is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -21,8 +21,8 @@
 ;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 ;;
 
 %package semantic-c-by
@@ -32,8 +32,6 @@
 %scopestart    codeblock
 
 %token INCLUDE "include"
-%token DEFINE  "define"
-%token UNDEFINE  "undef"
 
 %token <punctuation>   HASH       "\\`[#]\\'"
 %token <punctuation>   PERIOD     "\\`[.]\\'"
@@ -51,7 +49,7 @@
 %token <punctuation>   COMA       "\\`[,]\\'"
 %token <punctuation>   TILDE      "\\`[~]\\'"
 %token <punctuation>   MOD        "\\`[%]\\'"
-%token <punctuation>   HAT        "\\`[^]\\'"
+%token <punctuation>   HAT        "\\`\\^\\'"
 %token <punctuation>   OR         "\\`[|]\\'"
 %token <punctuation>   OPSTART    "[-+*/%^|&]"
 %token <string>        C          "\"C\""
@@ -63,6 +61,7 @@
 %token <close-paren>   RBRACE     "}"
 %token <semantic-list> BRACK_BLCK "\\[.*\\]$"
 %token <semantic-list> PAREN_BLCK "^("
+%token <semantic-list> BRACE_BLCK "^{"
 %token <semantic-list> VOID_BLCK  "^(void)$"
 %token <semantic-list> PARENS     "()"
 %token <semantic-list> BRACKETS   "\\[\\]"
@@ -173,11 +172,17 @@
 %put FLOAT summary "Primitive floating-point type (single-precision 32-bit IEEE 754)"
 %token DOUBLE "double"
 %put DOUBLE summary "Primitive floating-point type (double-precision 64-bit IEEE 754)"
+%token BOOL "bool"
+%put BOOL summary "Primitive boolean type"
 
 %token UNDERP "_P"
 %token UNDERUNDERP "__P"
 %put UNDERP summary "Common macro to eliminate prototype compatibility on some compilers"
 %put UNDERUNDERP summary "Common macro to eliminate prototype compatibility on some compilers"
+
+;; GCC
+%token __ATTRIBUTE__ "__attribute__"
+%put __ATTRIBUTE__ summary "<cdecl> __attribute__ ((<attributeoption>))"
 
 %%
 
@@ -243,14 +248,14 @@ macro-def
   ;
 
 macro
-  : HASH macro-or-include
+  : spp-macro-def opt-define-arglist macro-def
+    (VARIABLE-TAG $1 nil $3 :constant-flag t )
+  | HASH macro-or-include
     ( ,$2 )
   ;
 
 macro-or-include
-  : DEFINE symbol opt-define-arglist macro-def
-    (VARIABLE-TAG $2 nil $4 :constant-flag t )
-  | INCLUDE system-include
+  : INCLUDE system-include
     (INCLUDE-TAG (substring $2 1 (1- (length $2))) t)
   | INCLUDE string
     (INCLUDE-TAG (read $2) nil )
@@ -264,9 +269,9 @@ opt-define-arglist
 
 ;; This is used in struct parts.
 define
-  : HASH DEFINE symbol opt-define-arglist macro-def
-    (VARIABLE-TAG $3 nil $4 :constant-flag t)
-  | HASH UNDEFINE symbol
+  : spp-macro-def opt-define-arglist macro-def
+    (VARIABLE-TAG $1 nil $3 :constant-flag t)
+  | spp-macro-undef
     ( nil )
   ;
 
@@ -412,6 +417,7 @@ typesimple
     opt-class-parents
     (TYPE-TAG (car $3) (car $1) nil $5
               :template-specifier $4
+	      :prototype t
               :parent (car ,$2))
   | UNION opt-class opt-name unionparts
     (TYPE-TAG (car $3) $1 $4 nil
@@ -424,7 +430,7 @@ typesimple
   | TYPEDEF declmods typeformbase cv-declmods typedef-symbol-list
  ;;;; We put the type this typedef renames into PARENT
  ;;;; but will move it in the expand function.
-    (TYPE-TAG $5 $1 nil $3 )
+    (TYPE-TAG $5 $1 nil (list $3) )
   ;
 
 typedef-symbol-list
@@ -447,7 +453,7 @@ struct-or-class
   ;
 
 type
-  : typesimple SEMICOLON
+  : typesimple opt-attribute SEMICOLON
     ( ,$1 )
  ;; named namespaces like "namespace XXX {"
   | NAMESPACE symbol namespaceparts
@@ -455,6 +461,13 @@ type
  ;; unnamed namespaces like "namespace {"
   | NAMESPACE namespaceparts
     (TYPE-TAG "unnamed" $1 $2 nil )
+  ;
+
+opt-attribute
+  : __ATTRIBUTE__ semantic-list
+    ( nil )
+  | ;; EMPTY
+    ( nil )
   ;
 
 ;; Klaus Berndl: We must parse "using namespace XXX" too
@@ -541,7 +554,10 @@ template-var
 opt-template-equal
   : EQUAL symbol LESS template-specifier-types GREATER
     ( $2 )
+  | EQUAL symbol
+    ( $2 )
   | ;;EMPTY
+    ( )
   ;
 
 template-type
@@ -693,6 +709,7 @@ builtintype-types
     ( (concat $1 " " $2) )
   | FLOAT
   | DOUBLE
+  | BOOL
   | LONG DOUBLE
     ( (concat $1 " " $2) )
  ;; TODO: Klaus Berndl: Is there a long long, i think so?!
@@ -761,6 +778,19 @@ func-decl
           ;; Continue with the stuff we found in
           ;; this definition
           $2 $3 $7 $9 $8 ,$1 ,$11 )
+  | opt-stars opt-class opt-destructor functionname
+    opt-template-specifier
+    opt-under-p
+ ;; arg-list   - - ini this case, a try implies a fcn.
+    opt-post-fcn-modifiers
+    opt-throw
+    opt-initializers
+    fun-try-end
+    ( ,$4 'function
+          ;; Extra stuff goes in here.
+          ;; Continue with the stuff we found in
+          ;; this definition
+          $2 $3 nil $8 $7 ,$1 ,$10 )
   ;
 
 var-decl
@@ -987,13 +1017,10 @@ operatorsym
     ( "&=" )
   | OR EQUAL
     ( "|=" )
-  | HAT EQUAL
-    ( "^=" )
   | MINUS GREATER STAR
     ( "->*" )
   | MINUS GREATER
     ( "->" )
- ;; Klaus Berndl: We have to parse also operator() and operator[]
   | PARENS
     ( "()" )
   | BRACKETS
@@ -1018,8 +1045,13 @@ operatorsym
   | BANG
   | TILDE
   | MOD
-  | HAT
   | COMA
+ ;; HAT EQUAL seems to have a really unpleasant result and
+ ;; breaks everything after it.  Leave it at the end, though it
+ ;; doesn't seem to work.
+  | HAT EQUAL
+    ( "^=" )
+  | HAT
   ;
 
 functionname
@@ -1037,17 +1069,29 @@ function-pointer
   ;
 
 fun-or-proto-end
-  : SEMICOLON
+  : opt-attribute SEMICOLON
     ( t )
   | semantic-list
     ( nil )
  ;; Here is an anoying feature of C++ pure virtual methods
   | EQUAL ZERO SEMICOLON
     ( :pure-virtual-flag )
-  | TRY opt-initializers semantic-list CATCH semantic-list semantic-list
-    (nil)
-  | TRY opt-initializers semantic-list CATCH semantic-list
-    (nil)
+  | fun-try-end
+    ( nil )
+  ;
+
+fun-try-end
+  : TRY opt-initializers BRACE_BLCK fun-try-several-catches
+    ( nil )
+  ;
+
+fun-try-several-catches
+  : CATCH PAREN_BLCK BRACE_BLCK fun-try-several-catches
+    ( )
+  | CATCH BRACE_BLCK fun-try-several-catches
+    ( )
+  | ;; EMPTY
+    ( )
   ;
 
 type-cast
@@ -1061,7 +1105,9 @@ type-cast-list
 
 ;; Klaus Berndl: symbol -> namespace-symbol!
 function-call
-  : namespace-symbol semantic-list
+  : namespace-symbol PERIOD function-call ;; method call
+  | namespace-symbol MINUS GREATER function-call ;;method call
+  | namespace-symbol semantic-list
   ;
 
 string-seq

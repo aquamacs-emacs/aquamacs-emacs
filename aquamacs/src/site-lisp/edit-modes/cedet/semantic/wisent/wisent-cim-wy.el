@@ -2,10 +2,10 @@
 
 ;; Copyright (C) 2002 David Ponce
 
-;; Author: David <dr@lucy.lan>
-;; Created: 2006-12-01 20:39:16+0000
+;; Author: David <dr@scarlett.inf.ed.ac.uk>
+;; Created: 2007-09-26 14:39:54+0100
 ;; Keywords: syntax
-;; X-RCS: $Id: wisent-cim-wy.el,v 1.1 2006/12/02 00:57:22 davidswelt Exp $
+;; X-RCS: $Id: wisent-cim-wy.el,v 1.2 2007/09/26 13:43:25 davidswelt Exp $
 
 ;; This file is not part of GNU Emacs.
 ;;
@@ -21,8 +21,8 @@
 ;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;

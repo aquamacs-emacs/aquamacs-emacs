@@ -3,9 +3,9 @@ app-dev-guide.texi.
 
 This manual documents Application Development with Semantic.
 
-   Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005 Eric M. Ludlam
-Copyright (C) 2001, 2002, 2003, 2004 David Ponce Copyright (C) 2002,
-2003 Richard Y. Kim
+   Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2007 Eric M.
+Ludlam Copyright (C) 2001, 2002, 2003, 2004 David Ponce Copyright (C)
+2002, 2003 Richard Y. Kim
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -25,6 +25,401 @@ _Infrastructure for parser based text analysis in Emacs_
 
    Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004 Eric M. Ludlam,
 David Ponce, and Richard Y. Kim
+
+
+File: semantic-appdev.info,  Node: Lexical Safety,  Prev: Parser Hooks,  Up: Parser Features
+
+Lexical Safety
+==============
+
+If you application frequenly requests lists of tags upon user request,
+it may be important to avoid lexical problems that frequenly occur when
+the user has partially written an expression, such as starting a
+string, or argument list.
+
+You can protect your code from lexical problems with this macro:
+
+ - Function: semantic-lex-catch-errors symbol &rest forms
+     Using SYMBOL, execute FORMS catching lexical errors.  If FORMS
+     results in a call to the parser that throws a lexical error, the
+     error will be caught here without the buffer's cache being thrown
+     out of date.  If there is an error, the syntax that failed is
+     returned.  If there is no error, then the last value of FORMS is
+     returned.
+
+It is important to provide a good SYMBOL so that these macros can nest
+correctly.
+
+If you want your code to run anyway, even if there is a lexical error,
+using this macro like this:
+
+     (semantic-lex-catch-errors
+        (semantic-fetch-tags))
+
+will put the parser into the 'unparseable' state, and allow other
+routines to request the tag table without incurring additional parser
+attempts.
+
+
+File: semantic-appdev.info,  Node: Semantic Database,  Next: Idle Scheduling,  Prev: Parser Features,  Up: Top
+
+Semantic Database
+*****************
+
+Semanticdb is a database mechanism for storing tags parsed by semantic.
+The database operates in the background, saving tags as they are
+parsed between sessions.  When a file is read in, and there is a
+previously created set of tags available for it, sematnicdb will save
+time by not parsing the file, and using the cached copy.
+
+In applications, semanticdb can provide access to the sum of all tags
+in a project or in the basic system.  This database can they be
+searched using a set of special routines.
+
+* Menu:
+
+* Semanticdb in Programs::      Basic usage.
+* Semanticdb Tag Queries::      Searching for tokens in the databases.
+* System Databases::            Special kinds of databases for system tags.
+
+
+File: semantic-appdev.info,  Node: Semanticdb in Programs,  Next: Semanticdb Tag Queries,  Up: Semantic Database
+
+Semanticdb in Programs::
+========================
+
+If you write a program using semanticdb, you will probably want to make
+sure it is active in your program.
+
+ - Function: semanticdb-minor-mode-p
+     Return non-`nil' if `semanticdb-minor-mode' is active.
+
+Since semanticdb is optional, it is best if a program can gracefully
+degrade service when semanticdb is not available, or to throw an error
+letting the user know it is required to be active.
+
+At the simplest level, you can ask if a given file is in the database,
+recieving a tag table.  Semanticdb will give you an accurate set of
+tags just by asking.
+
+ - Function: semanticdb-file-stream file
+     Return a list of tags belonging to FILE.  If file has database
+     tags available in the database, return them.  If file does not
+     have tags available, then load the file, and create them.
+
+Alternately, you can get at the table object for a file by asking for
+it.
+
+ - Function: semanticdb-file-table-object file &optional dontload
+     Return a semanticdb table belonging to FILE.  If file has database
+     tags available in the database, return it.  If file does not have
+     tags available, and DONTLOAD is `nil', then load the tags for
+     FILE, and create a new table object for it.  DONTLOAD does not
+     affect the creation of new database objects.
+
+
+File: semantic-appdev.info,  Node: Semanticdb Tag Queries,  Next: System Databases,  Prev: Semanticdb in Programs,  Up: Semantic Database
+
+Semanticdb Tag Queries
+======================
+
+You can search for tags in the semantic database using the
+semanticdb-find API.  It is important to note that database search
+functions do not return a plain list of tags.  This is because some
+tags may not be loaded in a buffer, which means that the found tag
+would not have an overlay, and no way to determine where it came from.
+
+As such, all search functions return a special Database Results list.
+
+There are several types of searches, divided into groups by
+implementation.  While it is possible to add new types of searches, or
+write custom searches, the built in searches are usually the only ones
+available in system backends *Note System Databases::.
+
+When the term brute or brutish is used as a search criteria, that is
+distinguishing between an include-path based search, and a search that
+scans everything available in a project.
+
+Non-brute force searches assume that all symbols available in a given
+buffer are on the search path, or in some file that has been included,
+imported, or otherwise indicated in the source file itself.  While not
+always true for interpreted languages (such as Emacs Lisp), it is
+common among declaritive languages.
+
+Sometimes a brute force approach is needed, scanning every file
+available to the database.  You may want to do this if your application
+is collecting data unrelated to a file currently being worked on.
+
+* Menu:
+
+* DB Results::                  Accessing the results of a search.
+* DB Search Paths::             The list of tables to search.
+* DB Basic Name Search::        Searches based on name.
+* DB Basic Brute Search::       Searches on common tag attributes.
+* DB Advanced Search::          Complex searches on associations
+* DB Generic Brute Search::     Do It Yourself search criteria
+
+
+File: semantic-appdev.info,  Node: DB Results,  Next: DB Search Paths,  Up: Semanticdb Tag Queries
+
+DB Results
+----------
+
+The successful results of a search returns a special list of the
+following form:
+
+        ( (DATABASE TAG1 TAG2 ...) (DATABASE2 TAG3 TAG4 ...) ...)
+
+It should not be necessary to access the results in this way, however,
+as there are several routines that can be used to access this list.
+
+To turn a semanticdb search result into a simple tag table, use:
+
+ - Function: semanticdb-strip-find-results results &optional
+          find-file-match
+     Strip a semanticdb search RESULTS to exclude objects.  This makes
+     it appear more like the results of a `semantic-find-' call.
+     Optional FIND-FILE-MATCH loads all files associated with RESULTS
+     into buffers.  This has the side effect of enabling
+     "semantic-tag-buffer" to return a value.
+
+To write a function that accepts a tag table, or a semanticdb search
+result, use this to test if it is a semanticdb search result:
+
+ - Function: semanticdb-find-results-p resultp
+     Non-`nil' if RESULTP is in the form of a semanticdb search result.
+     This query only really tests the first entry in the list that is
+     RESULTP, but should be good enough for debugging assertions.
+
+ - Function: semanticdb-find-result-with-nil-p resultp
+     Non-`nil' of RESULTP is in the form of a semanticdb search result.
+     `nil' is a valid value where a TABLE usually is, but only if the
+     TAG results include overlays.  This query only really tests the
+     first entry in the list that is RESULTP, but should be good enough
+     for debugging assertions.
+
+To operate on the search results as though it were a simple tags table,
+or plain list, use these routines.
+
+ - Function: semanticdb-find-result-length result
+     Number of tags found in RESULT.
+
+ - Function: semanticdb-find-result-nth result n
+     In RESULT, return the Nth search result.  This is a 0 based search
+     result, with the first match being element 0.
+
+     The returned value is a cons cell: (TAG . TABLE) where TAG is the
+     tag at the Nth position.  TABLE is the semanticdb table where the
+     TAG was found.  Sometimes TABLE can be `nil'.
+
+ - Function: semanticdb-find-result-nth-in-buffer result n
+     In RESULT, return the Nth search result.  Like
+     "semanticdb-find-result-nth", except that only the TAG is
+     returned, and the buffer it is found it will be made current.  If
+     the result tag has no position information, the originating buffer
+     is still made current.
+
+
+File: semantic-appdev.info,  Node: DB Search Paths,  Next: DB Basic Name Search,  Prev: DB Results,  Up: Semanticdb Tag Queries
+
+DB Search Paths
+---------------
+
+For searches based on an include path (non-brutish) a path of tables
+needs to be generated.  Searching a lot of tables is slow, which is why
+a brutish search is not always recommended.  An include-based approach
+can also generate a lot of tables, so you can control how detailed a
+search is with a throttle variable.
+
+Ideally, each language mode will have a mode-specific value for this
+throttle value.  A user can also specify their own values if the
+default is not good enough.
+
+ - Variable: semanticdb-find-default-throttle
+     The default throttle for `semanticdb-find' routines.  The throttle
+     controls how detailed the list of database tables is for a symbol
+     lookup.  The value is a list with the following keys:
+
+    `file'
+          The file the search is being performed from.  This option is
+          here for completeness only, and is assumed to always be on.
+
+    `local'
+          Tables from the same local directory are included.  This
+          includes files directly referenced by a file name which might
+          be in a different directory.
+
+    `project'
+          Tables from the same local project are included If `project'
+          is specified, then `local' is assumed.
+
+    `unloaded'
+          If a table is not in memory, load it.  If it is not cached on
+          disk either, get the source, parse it, and create the table.
+
+    `system'
+          Tables from system databases.  These are specifically tables
+          from system header files, or language equivalent.
+
+    `recursive'
+          For include based searches, includes tables referenced by
+          included files.
+
+    `omniscience'
+          Included system databases which are omniscience, or somehow
+          know everything.  Omniscience databases are found in
+          `semanticdb-project-system-databases'.  The Emacs Lisp system
+          DB is an omniscience database.
+
+
+You can use the command `semanticdb-find-test-translate-path' to
+interactively test out how the path translator is working.  The path
+translation routines are:
+
+ - Function: semanticdb-find-translate-path path brutish
+     Translate PATH into a list of semantic tables.  Path translation
+     involves identifying the PATH input argument in one of the
+     following ways:   `nil' - Take the current buffer, and use it's
+     include list   buffer - Use that buffer's include list.
+     filename - Use that file's include list.  If the file is not
+     in a buffer, see of there is a semanticdb table for it.  If
+     not, read that file into a buffer.    tag - Get that tag's buffer
+     of file file.  See above.    table - Search that table, and it's
+     include list.    find result - Search the results of a previous
+     find.
+
+     In addition, once the base path is found, there is the possibility
+     of each added table adding yet more tables to the path, so this
+     routine can return a lengthy list.
+
+     If argument BRUTISH is non-`nil', then instead of using the include
+     list, use all tables found in the parent project of the table
+     identified by translating PATH.  Such searches use brute force to
+     scan every available table.
+
+     The return value is a list of objects of type "semanticdb-table" or
+     it's children.  In the case of passing in a find result, the result
+     is returned unchanged.
+
+     This routine uses "semanticdb-find-table-for-include" to translate
+     specific include tags into a semanticdb table.  This function can
+     be overloaded (see "define-mode-local-override" for details).
+
+ - Function: semanticdb-find-table-for-include includetag &optional
+          table
+     For a single INCLUDETAG found in TABLE, find a "semanticdb-table"
+     object INCLUDETAG is a semantic TAG of class `'include'.  TABLE as
+     defined by "semantic-something-to-tag-table" to identify where the
+     tag came from.  TABLE is optional if INCLUDETAG has an overlay of
+     `:filename' attribute.  This function can be overloaded (see
+     "define-mode-local-override" for details).
+
+
+File: semantic-appdev.info,  Node: DB Basic Name Search,  Next: DB Basic Brute Search,  Prev: DB Search Paths,  Up: Semanticdb Tag Queries
+
+DB Basic Name Search
+--------------------
+
+These searches scan a database table collection for tags based on name.
+They are divided into normal and deep searches.  A deep search, as
+with in buffer tag scanning, implies that all entries are scanned,
+including those in type declarations.
+
+Normal Searches:
+
+ - Function: semanticdb-find-tags-by-name name &optional path
+          find-file-match
+     Search for all tags matching NAME on PATH.  See
+     "semanticdb-find-translate-path" for details on PATH.
+     FIND-FILE-MATCH indicates that any time a match is found, the file
+     associated with that tag should be loaded into a buffer.
+
+ - Function: semanticdb-find-tags-by-name-regexp regexp &optional path
+          find-file-match
+     Search for all tags matching REGEXP on PATH.  See
+     "semanticdb-find-translate-path" for details on PATH.
+     FIND-FILE-MATCH indicates that any time a match is found, the file
+     associated with that tag should be loaded into a buffer.
+
+ - Function: semanticdb-find-tags-for-completion prefix &optional path
+          find-file-match
+     Search for all tags matching PREFIX on PATH.  See
+     "semanticdb-find-translate-path" for details on PATH.
+     FIND-FILE-MATCH indicates that any time a match is found, the file
+     associated with that tag should be loaded into a buffer.
+
+ - Function: semanticdb-find-tags-by-class class &optional path
+          find-file-match
+     Search for all tags of CLASS on PATH.  See
+     "semanticdb-find-translate-path" for details on PATH.
+     FIND-FILE-MATCH indicates that any time a match is found, the file
+     associated with that tag should be loaded into a buffer.
+
+Deep Searches:
+
+ - Function: semanticdb-deep-find-tags-by-name name &optional path
+          find-file-match
+     Search for all tags matching NAME on PATH.  Search also in all
+     components of top level tags founds.  See
+     "semanticdb-find-translate-path" for details on PATH.
+     FIND-FILE-MATCH indicates that any time a match is found, the file
+     associated with that tag should be loaded into a buffer.
+
+ - Function: semanticdb-deep-find-tags-by-name-regexp regexp &optional
+          path find-file-match
+     Search for all tags matching REGEXP on PATH.  Search also in all
+     components of top level tags founds.  See
+     "semanticdb-find-translate-path" for details on PATH.
+     FIND-FILE-MATCH indicates that any time a match is found, the file
+     associated with that tag should be loaded into a buffer.
+
+ - Function: semanticdb-deep-find-tags-for-completion prefix &optional
+          path find-file-match
+     Search for all tags matching PREFIX on PATH.  Search also in all
+     components of top level tags founds.  See
+     "semanticdb-find-translate-path" for details on PATH.
+     FIND-FILE-MATCH indicates that any time a match is found, the file
+     associated with that tag should be loaded into a buffer.
+
+
+File: semantic-appdev.info,  Node: DB Basic Brute Search,  Next: DB Advanced Search,  Prev: DB Basic Name Search,  Up: Semanticdb Tag Queries
+
+DB Basic Brute Search
+---------------------
+
+These searches allow searching on specific attributes of tags,  such as
+name, type, or other attribute.
+
+ - Function: semanticdb-brute-deep-find-tags-by-name name &optional
+          path find-file-match
+     Search for all tags matching NAME on PATH.  See
+     "semanticdb-find-translate-path" for details on PATH.  The
+     argument BRUTISH will be set so that searching includes all tables
+     in the current project.  FIND-FILE-MATCH indicates that any time a
+     matchi is found, the file associated wit that tag should be loaded
+     into a buffer.
+
+
+File: semantic-appdev.info,  Node: DB Advanced Search,  Next: DB Generic Brute Search,  Prev: DB Basic Brute Search,  Up: Semanticdb Tag Queries
+
+DB Advanced Search
+------------------
+
+These are searches that were needed to accomplish some  specialized
+tasks as discovered in utilities.  Advanced searches  include matching
+methods defined outside some parent class.
+
+The reason for advanced searches are so that external  repositories
+such as the Emacs obarray, or java `.class' files can  quickly answer
+these needed questions without dumping the entire  symbol list into
+Emacs for a regular semanticdb search.
+
+ - Function: semanticdb-find-tags-external-children-of-type type
+          &optional path find-file-match
+     Search for all tags defined outside of TYPE w/ TYPE as a parent.
+     See "semanticdb-find-translate-path" for details on PATH.
+     FIND-FILE-MATCH indicates that any time a match is found, the file
+     associated with that tag should be loaded into a buffer.
 
 
 File: semantic-appdev.info,  Node: DB Generic Brute Search,  Prev: DB Advanced Search,  Up: Semanticdb Tag Queries
@@ -64,12 +459,23 @@ Search routines for these databases return a special type of table not
 associated with a file.  It is important to be aware of this possible
 return value.
 
-At this time, there is only one type:
-
  - Type: semanticdb-project-database-emacs-lisp
      Database representing Emacs core.
 
-Semantic Prased System Databases
+This Emacs database is loaded automatically.
+
+ - Type: semanticdb-project-database-ebrowse
+     Semantic Database deriving tags using the EBROWSE tool.  EBROWSE
+     is a C/C++ parser for use with `ebrowse' Emacs program.
+
+To create new EBROWSE project databases, use:
+
+ - Command: semanticdb-create-ebrowse-database dir
+     Create an EBROSE database for directory DIR.  The database file is
+     stored in ~/.semanticdb, or whichever directory is specified by
+     `semanticdb-default-system-save-directory'.
+
+Semantic Parsed System Databases
 --------------------------------
 
 Another kind of system database is one created by the semantic tools,
@@ -77,6 +483,15 @@ but saved in a special way.  These databases are created with a script,
 or at some other convenient time.  They can then be searched normally.
 They will appear on the same list of system databases as back ends that
 refer to object files indirectly.
+
+A simple way to create one from Emacs is with this function:
+
+ - Command: semanticdb-create-system-database path &optional class
+     Create a system database starting at PATH.  PATH should be a top
+     level directory for a series of files containing declarations for
+     SYSTEM files.  In C, this would be header filaes.  CLASS is the
+     class for the database to create.  Only child classes of symbol
+     "semanticdb-project-database-system" are accepted.
 
 
 File: semantic-appdev.info,  Node: Idle Scheduling,  Next: Example Programs,  Prev: Semantic Database,  Up: Top
@@ -252,7 +667,7 @@ definitions.  In particular, C++ needs the parent to correctly
 calculate the protection of each method.
 
 
-File: semantic-appdev.info,  Node: Current Context,  Next: GNU Free Documentation License,  Prev: Example Programs,  Up: Top
+File: semantic-appdev.info,  Node: Current Context,  Next: App Debugger,  Prev: Example Programs,  Up: Top
 
 Deriving the Current Context
 ****************************
@@ -291,32 +706,34 @@ subset of them to make them work for their language.
      representing a tag class to restrict movement to.  If this is
      `nil', `'function' is used.  This will find the smallest tag of
      that class (function, variable, type, etc) and make sure non-`nil'
-     is returned if you cannot go up past the bounds of that tag.
+     is returned if you cannot go up past the bounds of that tag.  This
+     function can be overloaded (see "define-mode-local-override" for
+     details).
 
  - Function: semantic-beginning-of-context &optional point
      Move POINT to the beginning of the current context.  Return
      non-`nil' if there is no upper context.  The default behavior uses
-     "semantic-up-context".  This function can be overriden in semantic
-     using the symbol `beginning-of-context'.
+     "semantic-up-context".  This function can be overloaded (see
+     "define-mode-local-override" for details).
 
  - Function: semantic-end-of-context &optional point
      Move POINT to the end of the current context.  Return non-`nil' if
      there is no upper context.  Be default, this uses
      "semantic-up-context", and assumes parenthetical block delimiters.
-     This function can be overriden in semantic using the symbol
-     `end-of-context'.
+     This function can be overloaded (see "define-mode-local-override"
+     for details).
 
 These next set of functions can be used to navigate across commands.
 
  - Function: semantic-end-of-command
      Move to the end of the current command.  Be default, uses
      `semantic-command-separation-character'.  This function can be
-     overriden in semantic using the symbol `end-of-command'.
+     overloaded (see "define-mode-local-override" for details).
 
  - Function: semantic-beginning-of-command
      Move to the beginning of the current command.  Be default, uses
      `semantic-command-separation-character'.  This function can be
-     overriden in semantic using the symbol `beginning-of-command'.
+     overloaded (see "define-mode-local-override" for details).
 
 
 File: semantic-appdev.info,  Node: Local Variables,  Next: Derived Context,  Prev: Blocks,  Up: Current Context
@@ -331,7 +748,8 @@ scoped variables.
  - Function: semantic-get-local-variables &optional point
      Get the local variables based on POINT's context.  Local variables
      are returned in Semantic tag format.  This can be overriden with
-     `get-local-variables'.
+     `get-local-variables'.  This function can be overloaded (see
+     "define-mode-local-override" for details).
 
  - Function: semantic-get-local-arguments &optional point
      Get arguments (variables) from the current context at POINT.
@@ -340,15 +758,16 @@ scoped variables.
      Arguments are obtained by overriding `get-local-arguments', or by
      the default function "semantic-get-local-arguments-default".
      This, must return a list of tags, or a list of strings that will
-     be converted to tags.
+     be converted to tags.  This function can be overloaded (see
+     "define-mode-local-override" for details).
 
  - Function: semantic-get-all-local-variables &optional point
      Get all local variables for this context, and parent contexts.
      Local variables are returned in Semantic tag format.  Be default,
      this gets local variables, and local arguments.  Optional argument
      POINT is the location to start getting the variables from.  This
-     function can be overriden in semantic using the symbol
-     `get-all-local-variables'.
+     function can be overloaded (see "define-mode-local-override" for
+     details).
 
 
 File: semantic-appdev.info,  Node: Derived Context,  Next: Context Analysis,  Prev: Local Variables,  Up: Current Context
@@ -366,27 +785,26 @@ specific behavior.  By default, it assumes a C like language.
  - Function: semantic-ctxt-current-symbol &optional point
      Return the current symbol the cursor is on at POINT in a list.
      This will include a list of type/field names when applicable.
-     This function can be overriden in semantic using the symbol
-     `ctxt-current-symbol'.
+     This function can be overloaded (see "define-mode-local-override"
+     for details).
 
  - Function: semantic-ctxt-current-assignment &optional point
      Return the current assignment near the cursor at POINT.  Return a
      list as per "semantic-ctxt-current-symbol".  Return `nil' if there
-     is nothing relevant.  This function can be overriden in semantic
-     using the symbol `ctxt-current-assignment'.
+     is nothing relevant.  This function can be overloaded (see
+     "define-mode-local-override" for details).
 
  - Function: semantic-ctxt-current-function &optional point
      Return the current function call the cursor is in at POINT.  The
      function returned is the one accepting the arguments that the
      cursor is currently in.  It will not return function symbol if the
      cursor is on the text representing that function.  This function
-     can be overriden in semantic using the symbol
-     `ctxt-current-function'.
+     can be overloaded (see "define-mode-local-override" for details).
 
  - Function: semantic-ctxt-current-argument &optional point
      Return the index of the argument position the cursor is on at
-     POINT.  This function can be overriden in semantic using the
-     symbol `ctxt-current-argument'.
+     POINT.  This function can be overloaded (see
+     "define-mode-local-override" for details).
 
  - Function: semantic-ctxt-current-thing
      Calculate a thing identified by the current cursor position.
@@ -400,15 +818,15 @@ specific behavior.  By default, it assumes a C like language.
      is `nil', the current buffer location is used.  For example, in
      Emacs Lisp, the symbol after a ( is most likely a function.  In a
      makefile, symbols after a : are rules, and symbols after a $( are
-     variables.  This function can be overriden in semantic using the
-     symbol `ctxt-current-class-list'.
+     variables.  This function can be overloaded (see
+     "define-mode-local-override" for details).
 
  - Function: semantic-ctxt-scoped-types &optional point
      Return a list of type names currently in scope at POINT.  The
      return value can be a mixed list of either strings (names of types
      that are in scope) or actual tags (type declared locally that may
-     or may not have a name.)  This function can be overriden in
-     semantic using the symbol `ctxt-scoped-types'.
+     or may not have a name.)  This function can be overloaded (see
+     "define-mode-local-override" for details).
 
 
 File: semantic-appdev.info,  Node: Context Analysis,  Prev: Derived Context,  Up: Current Context
@@ -426,15 +844,45 @@ databases to determine the types and names available.
 
 Two high level functions which can be run interactively are:
 
- - Command: semantic-analyze-current-context position
-     Analyze the current context at POSITION.  If called interactively,
-     display interesting information about POSITION in a separate
-     buffer.  Returns an object based on symbol
-     `semantic-analyze-context'.
+ - Command: semantic-analyze-current-context &optional position
+     Analyze the current context at optional POSITION.  If called
+     interactively, display interesting information about POSITION in a
+     separate buffer.  Returns an object based on symbol
+     "semantic-analyze-context".
 
- - Command: semantic-analyze-possible-completions point
-     Return a list of semantic tokens which are possible completions.
-     Analysis is done at POINT.
+     This function can be overriden with the symbol `analyze-context'.
+     When overriding this function, your override will be called while
+     cursor is at POSITION.  In addition, your function will not be
+     called if a cached copy of the return object is found.  This
+     function can be overloaded (see "define-mode-local-override" for
+     details).
+
+ - Command: semantic-analyze-possible-completions context
+     Return a list of semantic tags which are possible completions.
+     CONTEXT is either a position (such as point), or a precalculated
+     context.  Passing in a context is useful if the caller also needs
+     to access parts of the analysis.  Completions run through the
+     following filters:
+
+        * Elements currently in scope
+
+        * Constants currently in scope
+
+        * Elements match the `:prefix' in the CONTEXT.
+
+        * Type of the completion matches the type of the context.
+
+     Context type matching can identify the following:
+
+        * No specific type
+
+        * Assignment into a variable of some type.
+
+        * Argument to a function with type constraints.
+
+     When called interactively, displays the list of possible
+     completions in a buffer.  This function can be overloaded (see
+     "define-mode-local-override" for details).
 
 * Menu:
 
@@ -448,8 +896,8 @@ File: semantic-appdev.info,  Node: Analysis Overview,  Next: Analysis Objects,  
 Analysis Overview
 -----------------
 
-The semantic analysis function "semantic-analye-current-context" creats
-an Analysis Object.  See *Note Analysis Objects::.  This object
+The semantic analysis function "semantic-analye-current-context"
+creates an Analysis Object.  See *Note Analysis Objects::.  This object
 contains many useful pieces of information needed to do any other kind
 of intelligent action on the local context.
 
@@ -486,376 +934,77 @@ Completion Overview
 -------------------
 
 
-File: semantic-appdev.info,  Node: GNU Free Documentation License,  Next: Index,  Prev: Current Context,  Up: Top
+File: semantic-appdev.info,  Node: App Debugger,  Next: GNU Free Documentation License,  Prev: Current Context,  Up: Top
 
-GNU Free Documentation License
-******************************
+Application level Data structure debugger
+*****************************************
 
-                        Version 1.1, March 2000
-     Copyright (C) 2000  Free Software Foundation, Inc.
-     59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-     
-     Everyone is permitted to copy and distribute verbatim copies
-     of this license document, but changing it is not allowed.
+The data structures that Semantic provides can be complex, and figuring
+out why some level of application API performs incorrectly can be
+difficult.
 
+The semantic Application debugger provides a way to look inside the
+various data structures of Semantic in a structures and complete way to
+help identify what a problem may be.
 
-  0. PREAMBLE
+App Debugger Entry Points
+=========================
 
-     The purpose of this License is to make a manual, textbook, or other
-     written document "free" in the sense of freedom: to assure everyone
-     the effective freedom to copy and redistribute it, with or without
-     modifying it, either commercially or noncommercially.  Secondarily,
-     this License preserves for the author and publisher a way to get
-     credit for their work, while not being considered responsible for
-     modifications made by others.
+There are a few basic functions that enter into the debugger:
 
-     This License is a kind of "copyleft", which means that derivative
-     works of the document must themselves be free in the same sense.
-     It complements the GNU General Public License, which is a copyleft
-     license designed for free software.
+ - Command: semantic-adebug-bovinate
+     The same as "bovinate". Display the results in a debug buffer.
 
-     We have designed this License in order to use it for manuals for
-     free software, because free software needs free documentation: a
-     free program should come with manuals providing the same freedoms
-     that the software does.  But this License is not limited to
-     software manuals; it can be used for any textual work, regardless
-     of subject matter or whether it is published as a printed book.
-     We recommend this License principally for works whose purpose is
-     instruction or reference.
+ - Command: semantic-adebug-searchdb regex
+     Search the semanticdb for REGEX for the current buffer.  Display
+     the results as a debug list.
 
+ - Command: semantic-adebug-analyze
+     Perform "semantic-analyze-current-context".  Display the results
+     as a debug list.
 
-  1. APPLICABILITY AND DEFINITIONS
+adebug-mode
+===========
 
-     This License applies to any manual or other work that contains a
-     notice placed by the copyright holder saying it can be distributed
-     under the terms of this License.  The "Document", below, refers to
-     any such manual or work.  Any member of the public is a licensee,
-     and is addressed as "you".
+The semantic debugger mode provides a simple user facing UI for looking
+into the data structures.
 
-     A "Modified Version" of the Document means any work containing the
-     Document or a portion of it, either copied verbatim, or with
-     modifications and/or translated into another language.
+ - Command: semantic-adebug-mode
+     Major-mode for the Analyzer debugger.
 
-     A "Secondary Section" is a named appendix or a front-matter
-     section of the Document that deals exclusively with the
-     relationship of the publishers or authors of the Document to the
-     Document's overall subject (or to related matters) and contains
-     nothing that could fall directly within that overall subject.
-     (For example, if the Document is in part a textbook of
-     mathematics, a Secondary Section may not explain any mathematics.)
-     The relationship could be a matter of historical connection with
-     the subject or with related matters, or of legal, commercial,
-     philosophical, ethical or political position regarding them.
+     Keybindings:
+    `spc'
+          semantic-adebug-expand-or-contract
 
-     The "Invariant Sections" are certain Secondary Sections whose
-     titles are designated, as being those of Invariant Sections, in
-     the notice that says that the Document is released under this
-     License.
+    `n'
+          semantic-adebug-next-expando
 
-     The "Cover Texts" are certain short passages of text that are
-     listed, as Front-Cover Texts or Back-Cover Texts, in the notice
-     that says that the Document is released under this License.
+    `p'
+          semantic-adebug-prev-expando
 
-     A "Transparent" copy of the Document means a machine-readable copy,
-     represented in a format whose specification is available to the
-     general public, whose contents can be viewed and edited directly
-     and straightforwardly with generic text editors or (for images
-     composed of pixels) generic paint programs or (for drawings) some
-     widely available drawing editor, and that is suitable for input to
-     text formatters or for automatic translation to a variety of
-     formats suitable for input to text formatters.  A copy made in an
-     otherwise Transparent file format whose markup has been designed
-     to thwart or discourage subsequent modification by readers is not
-     Transparent.  A copy that is not "Transparent" is called "Opaque".
+    `n'
+          semantic-adebug-next
 
-     Examples of suitable formats for Transparent copies include plain
-     ASCII without markup, Texinfo input format, LaTeX input format,
-     SGML or XML using a publicly available DTD, and
-     standard-conforming simple HTML designed for human modification.
-     Opaque formats include PostScript, PDF, proprietary formats that
-     can be read and edited only by proprietary word processors, SGML
-     or XML for which the DTD and/or processing tools are not generally
-     available, and the machine-generated HTML produced by some word
-     processors for output purposes only.
+    `p'
+          semantic-adebug-prev
 
-     The "Title Page" means, for a printed book, the title page itself,
-     plus such following pages as are needed to hold, legibly, the
-     material this License requires to appear in the title page.  For
-     works in formats which do not have any title page as such, "Title
-     Page" means the text near the most prominent appearance of the
-     work's title, preceding the beginning of the body of the text.
-
-  2. VERBATIM COPYING
-
-     You may copy and distribute the Document in any medium, either
-     commercially or noncommercially, provided that this License, the
-     copyright notices, and the license notice saying this License
-     applies to the Document are reproduced in all copies, and that you
-     add no other conditions whatsoever to those of this License.  You
-     may not use technical measures to obstruct or control the reading
-     or further copying of the copies you make or distribute.  However,
-     you may accept compensation in exchange for copies.  If you
-     distribute a large enough number of copies you must also follow
-     the conditions in section 3.
-
-     You may also lend copies, under the same conditions stated above,
-     and you may publicly display copies.
-
-  3. COPYING IN QUANTITY
-
-     If you publish printed copies of the Document numbering more than
-     100, and the Document's license notice requires Cover Texts, you
-     must enclose the copies in covers that carry, clearly and legibly,
-     all these Cover Texts: Front-Cover Texts on the front cover, and
-     Back-Cover Texts on the back cover.  Both covers must also clearly
-     and legibly identify you as the publisher of these copies.  The
-     front cover must present the full title with all words of the
-     title equally prominent and visible.  You may add other material
-     on the covers in addition.  Copying with changes limited to the
-     covers, as long as they preserve the title of the Document and
-     satisfy these conditions, can be treated as verbatim copying in
-     other respects.
-
-     If the required texts for either cover are too voluminous to fit
-     legibly, you should put the first ones listed (as many as fit
-     reasonably) on the actual cover, and continue the rest onto
-     adjacent pages.
-
-     If you publish or distribute Opaque copies of the Document
-     numbering more than 100, you must either include a
-     machine-readable Transparent copy along with each Opaque copy, or
-     state in or with each Opaque copy a publicly-accessible
-     computer-network location containing a complete Transparent copy
-     of the Document, free of added material, which the general
-     network-using public has access to download anonymously at no
-     charge using public-standard network protocols.  If you use the
-     latter option, you must take reasonably prudent steps, when you
-     begin distribution of Opaque copies in quantity, to ensure that
-     this Transparent copy will remain thus accessible at the stated
-     location until at least one year after the last time you
-     distribute an Opaque copy (directly or through your agents or
-     retailers) of that edition to the public.
-
-     It is requested, but not required, that you contact the authors of
-     the Document well before redistributing any large number of
-     copies, to give them a chance to provide you with an updated
-     version of the Document.
-
-  4. MODIFICATIONS
-
-     You may copy and distribute a Modified Version of the Document
-     under the conditions of sections 2 and 3 above, provided that you
-     release the Modified Version under precisely this License, with
-     the Modified Version filling the role of the Document, thus
-     licensing distribution and modification of the Modified Version to
-     whoever possesses a copy of it.  In addition, you must do these
-     things in the Modified Version:
-
-     A. Use in the Title Page (and on the covers, if any) a title
-     distinct    from that of the Document, and from those of previous
-     versions    (which should, if there were any, be listed in the
-     History section    of the Document).  You may use the same title
-     as a previous version    if the original publisher of that version
-     gives permission.
-     B. List on the Title Page, as authors, one or more persons or
-     entities    responsible for authorship of the modifications in the
-     Modified    Version, together with at least five of the principal
-     authors of the    Document (all of its principal authors, if it
-     has less than five).
-     C. State on the Title page the name of the publisher of the
-     Modified Version, as the publisher.
-     D. Preserve all the copyright notices of the Document.
-     E. Add an appropriate copyright notice for your modifications
-     adjacent to the other copyright notices.
-     F. Include, immediately after the copyright notices, a license
-     notice    giving the public permission to use the Modified Version
-     under the    terms of this License, in the form shown in the
-     Addendum below.
-     G. Preserve in that license notice the full lists of Invariant
-     Sections    and required Cover Texts given in the Document's
-     license notice.
-     H. Include an unaltered copy of this License.
-     I. Preserve the section entitled "History", and its title, and add
-     to    it an item stating at least the title, year, new authors, and
-       publisher of the Modified Version as given on the Title Page.
-     If    there is no section entitled "History" in the Document,
-     create one    stating the title, year, authors, and publisher of
-     the Document as    given on its Title Page, then add an item
-     describing the Modified    Version as stated in the previous
-     sentence.
-     J. Preserve the network location, if any, given in the Document for
-       public access to a Transparent copy of the Document, and
-     likewise    the network locations given in the Document for
-     previous versions    it was based on.  These may be placed in the
-     "History" section.     You may omit a network location for a work
-     that was published at    least four years before the Document
-     itself, or if the original    publisher of the version it refers
-     to gives permission.
-     K. In any section entitled "Acknowledgements" or "Dedications",
-     preserve the section's title, and preserve in the section all the
-      substance and tone of each of the contributor acknowledgements
-     and/or dedications given therein.
-     L. Preserve all the Invariant Sections of the Document,
-     unaltered in their text and in their titles.  Section numbers
-     or the equivalent are not considered part of the section titles.
-     M. Delete any section entitled "Endorsements".  Such a section
-     may not be included in the Modified Version.
-     N. Do not retitle any existing section as "Endorsements"    or to
-     conflict in title with any Invariant Section.
-
-     If the Modified Version includes new front-matter sections or
-     appendices that qualify as Secondary Sections and contain no
-     material copied from the Document, you may at your option
-     designate some or all of these sections as invariant.  To do this,
-     add their titles to the list of Invariant Sections in the Modified
-     Version's license notice.  These titles must be distinct from any
-     other section titles.
-
-     You may add a section entitled "Endorsements", provided it contains
-     nothing but endorsements of your Modified Version by various
-     parties-for example, statements of peer review or that the text has
-     been approved by an organization as the authoritative definition
-     of a standard.
-
-     You may add a passage of up to five words as a Front-Cover Text,
-     and a passage of up to 25 words as a Back-Cover Text, to the end
-     of the list of Cover Texts in the Modified Version.  Only one
-     passage of Front-Cover Text and one of Back-Cover Text may be
-     added by (or through arrangements made by) any one entity.  If the
-     Document already includes a cover text for the same cover,
-     previously added by you or by arrangement made by the same entity
-     you are acting on behalf of, you may not add another; but you may
-     replace the old one, on explicit permission from the previous
-     publisher that added the old one.
-
-     The author(s) and publisher(s) of the Document do not by this
-     License give permission to use their names for publicity for or to
-     assert or imply endorsement of any Modified Version.
-
-  5. COMBINING DOCUMENTS
-
-     You may combine the Document with other documents released under
-     this License, under the terms defined in section 4 above for
-     modified versions, provided that you include in the combination
-     all of the Invariant Sections of all of the original documents,
-     unmodified, and list them all as Invariant Sections of your
-     combined work in its license notice.
-
-     The combined work need only contain one copy of this License, and
-     multiple identical Invariant Sections may be replaced with a single
-     copy.  If there are multiple Invariant Sections with the same name
-     but different contents, make the title of each such section unique
-     by adding at the end of it, in parentheses, the name of the
-     original author or publisher of that section if known, or else a
-     unique number.  Make the same adjustment to the section titles in
-     the list of Invariant Sections in the license notice of the
-     combined work.
-
-     In the combination, you must combine any sections entitled
-     "History" in the various original documents, forming one section
-     entitled "History"; likewise combine any sections entitled
-     "Acknowledgements", and any sections entitled "Dedications".  You
-     must delete all sections entitled "Endorsements."
-
-  6. COLLECTIONS OF DOCUMENTS
-
-     You may make a collection consisting of the Document and other
-     documents released under this License, and replace the individual
-     copies of this License in the various documents with a single copy
-     that is included in the collection, provided that you follow the
-     rules of this License for verbatim copying of each of the
-     documents in all other respects.
-
-     You may extract a single document from such a collection, and
-     distribute it individually under this License, provided you insert
-     a copy of this License into the extracted document, and follow
-     this License in all other respects regarding verbatim copying of
-     that document.
-
-  7. AGGREGATION WITH INDEPENDENT WORKS
-
-     A compilation of the Document or its derivatives with other
-     separate and independent documents or works, in or on a volume of
-     a storage or distribution medium, does not as a whole count as a
-     Modified Version of the Document, provided no compilation
-     copyright is claimed for the compilation.  Such a compilation is
-     called an "aggregate", and this License does not apply to the
-     other self-contained works thus compiled with the Document, on
-     account of their being thus compiled, if they are not themselves
-     derivative works of the Document.
-
-     If the Cover Text requirement of section 3 is applicable to these
-     copies of the Document, then if the Document is less than one
-     quarter of the entire aggregate, the Document's Cover Texts may be
-     placed on covers that surround only the Document within the
-     aggregate.  Otherwise they must appear on covers around the whole
-     aggregate.
-
-  8. TRANSLATION
-
-     Translation is considered a kind of modification, so you may
-     distribute translations of the Document under the terms of section
-     4.  Replacing Invariant Sections with translations requires special
-     permission from their copyright holders, but you may include
-     translations of some or all Invariant Sections in addition to the
-     original versions of these Invariant Sections.  You may include a
-     translation of this License provided that you also include the
-     original English version of this License.  In case of a
-     disagreement between the translation and the original English
-     version of this License, the original English version will prevail.
-
-  9. TERMINATION
-
-     You may not copy, modify, sublicense, or distribute the Document
-     except as expressly provided for under this License.  Any other
-     attempt to copy, modify, sublicense or distribute the Document is
-     void, and will automatically terminate your rights under this
-     License.  However, parties who have received copies, or rights,
-     from you under this License will not have their licenses
-     terminated so long as such parties remain in full compliance.
-
- 10. FUTURE REVISIONS OF THIS LICENSE
-
-     The Free Software Foundation may publish new, revised versions of
-     the GNU Free Documentation License from time to time.  Such new
-     versions will be similar in spirit to the present version, but may
-     differ in detail to address new problems or concerns.  See
-     http://www.gnu.org/copyleft/.
-
-     Each version of the License is given a distinguishing version
-     number.  If the Document specifies that a particular numbered
-     version of this License "or any later version" applies to it, you
-     have the option of following the terms and conditions either of
-     that specified version or of any later version that has been
-     published (not as a draft) by the Free Software Foundation.  If
-     the Document does not specify a version number of this License,
-     you may choose any version ever published (not as a draft) by the
-     Free Software Foundation.
+    `<mouse-2>'
+          semantic-adebug-expand-or-contract-mouse
 
 
-ADDENDUM: How to use this License for your documents
-====================================================
+Create new debugger entry commands
+==================================
 
-To use this License in a document you have written, include a copy of
-the License in the document and put the following copyright and license
-notices just after the title page:
+Creating a new Application debugger entry point is easy.  First, get a
+datastructure you need to analyze.
 
+The first function to call is:
 
-       Copyright (C)  YEAR  YOUR NAME.
-       Permission is granted to copy, distribute and/or modify this document
-       under the terms of the GNU Free Documentation License, Version 1.1
-       or any later version published by the Free Software Foundation;
-       with the Invariant Sections being LIST THEIR TITLES, with the
-       Front-Cover Texts being LIST, and with the Back-Cover Texts being LIST.
-       A copy of the license is included in the section entitled ``GNU
-       Free Documentation License''.
-If you have no Invariant Sections, write "with no Invariant
-Sections" instead of saying which ones are invariant.  If you have no
-Front-Cover Texts, write "no Front-Cover Texts" instead of "Front-Cover
-Texts being LIST"; likewise for Back-Cover Texts.
+ - Function: semantic-adebug-new-buffer name
+     Create a new adebug buffer with NAME.
 
-If your document contains nontrivial examples of program code, we
-recommend releasing these examples in parallel under your choice of
-free software license, such as the GNU General Public License, to
-permit their use in free software.
+Next, you need to find the correct function for inserting your
+datastructure.  All adebug insertion functions are of the form
+`semantic-adebug-insert-THING', where THING is whatever you object is.
+Use Emacs help to pick something out.
 

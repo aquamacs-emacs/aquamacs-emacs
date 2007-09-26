@@ -1,9 +1,9 @@
 ;;; semantic-texi.el --- Semantic details for Texinfo files
 
-;;; Copyright (C) 2001, 2002, 2003, 2004, 2005 Eric M. Ludlam
+;;; Copyright (C) 2001, 2002, 2003, 2004, 2005, 2007 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
-;; X-RCS: $Id: semantic-texi.el,v 1.31 2005/01/16 22:04:00 zappo Exp $
+;; X-RCS: $Id: semantic-texi.el,v 1.35 2007/05/20 16:06:35 zappo Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -19,8 +19,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -39,7 +39,6 @@
   (require 'semantic-ctxt)
   (require 'semantic-imenu)
   (require 'semantic-doc)
-  (require 'document)
   (require 'senator))
 
 (defvar semantic-texi-super-regex
@@ -222,15 +221,15 @@ The cursor should be on the @ sign."
   (semantic-tag-get-attribute tag :members))
 
 (define-mode-local-override semantic-insert-foreign-tag
-  texinfo-mode (tag tagfile)
+  texinfo-mode (foreign-tag)
   "Insert TAG from a foreign buffer in TAGFILE.
 Assume TAGFILE is a source buffer, and create a documentation
 thingy from it using the `document' tool."
   ;; This makes sure that TAG will be in an active buffer.
-  (let ((b (find-file-noselect tagfile)))
+  (let ((b (semantic-tag-buffer foreign-tag)))
     ;; Now call the document insert thingy.
     (require 'document)
-    (document-insert-texinfo tag b)))
+    (document-insert-texinfo foreign-tag b)))
 
 
 (define-mode-local-override semantic-ctxt-current-class-list
@@ -429,9 +428,8 @@ If TAG is nil, determine a tag based on the current position."
     (error "Only deffns (or defun or defvar) can be updated"))
   (let* ((name (semantic-tag-name tag))
 	 (tags (semanticdb-strip-find-results
-		;; `semanticdb-find-first-tag-by-name' returns a
-		;; list ((DB-TABLE . TOKEN) ...)
-		(semanticdb-brute-deep-find-tags-by-name name)
+		(semanticdb-with-match-any-mode
+		  (semanticdb-brute-deep-find-tags-by-name name))
 		t))
 	 (docstring nil)
 	 (docstringproto nil)
@@ -502,8 +500,8 @@ The current buffer must include TAG."
 	 (docbuff nil))
     (while (and texi (not doctag))
       (set-buffer (find-file-noselect (car texi)))
-      (setq doctag (semantic-find-first-tag-by-name
-		    name (semantic-fetch-tags))
+      (setq doctag (car (semantic-deep-find-tags-by-name
+			 name (semantic-fetch-tags)))
 	    docbuff (if doctag (current-buffer) nil))
       (setq texi (cdr texi)))
     (unless doctag
@@ -546,11 +544,10 @@ If TAG is nil, it is derived from the deffn under POINT."
   (unless (semantic-tag-of-class-p tag 'def)
     (error "Only deffns (or defun or defvar) can be updated"))
   (let* ((name (semantic-tag-name tag))
-	 (tags (mapcar
-                #'cdr
-                ;; `semanticdb-find-nonterminal-by-name' returns a
-                ;; list ((DB-TABLE . TOKEN) ...)
-                (semanticdb-deep-find-tags-by-name name nil t)))
+	 (tags (semanticdb-strip-find-results
+		(semanticdb-with-match-any-mode
+		  (semanticdb-brute-deep-find-tags-by-name name nil t))
+		))
 	 (done nil)
 	 )
     (save-excursion
@@ -560,7 +557,10 @@ If TAG is nil, it is derived from the deffn under POINT."
 	  (switch-to-buffer (semantic-tag-buffer (car tags)))
 	  (goto-char (semantic-tag-start (car tags)))
 	  (setq done t))
-	(setq tags (cdr tags))))))
+	(setq tags (cdr tags)))
+      (if (not done)
+	  (error "Could not find tag for %s" (semantic-tag-name tag)))
+      )))
 
 (provide 'semantic-texi)
 

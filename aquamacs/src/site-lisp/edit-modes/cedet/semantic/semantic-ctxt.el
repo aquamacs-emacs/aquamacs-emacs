@@ -1,10 +1,10 @@
 ;;; semantic-ctxt.el --- Context calculations for Semantic tools.
 
-;;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005 Eric M. Ludlam
+;;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: syntax
-;; X-RCS: $Id: semantic-ctxt.el,v 1.38 2005/06/30 01:20:54 zappo Exp $
+;; X-RCS: $Id: semantic-ctxt.el,v 1.43 2007/02/19 13:48:19 zappo Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -20,8 +20,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -37,6 +37,7 @@
 
 ;;; Code:
 ;;
+;;;###autoload
 (defvar semantic-command-separation-character
  ";"
   "String which indicates the end of a command.
@@ -172,14 +173,16 @@ to collect tags, such as local variables or prototypes."
   ;; anything in that case.
   (when (and semantic--parse-table (not (eq semantic--parse-table t)))
     (let ((vars nil)
+	  (vars2 nil)
 	  ;; We want nothing to do with funny syntaxing while doing this.
 	  (semantic-unmatched-syntax-hook nil))
       (while (not (semantic-up-context (point) 'function))
 	(save-excursion
 	  (forward-char 1)
 	  (setq vars
-		;; Note to self: This is specific to bovine parsers.
-		;; We need a better way to configure this generically.
+		;; Note to self: semantic-parse-region returns cooked
+		;; but unlinked tags.  File information is lost here
+		;; and is added next.
 		(append (semantic-parse-region
 			 (point)
 			 (save-excursion (semantic-end-of-context) (point))
@@ -187,6 +190,11 @@ to collect tags, such as local variables or prototypes."
 			 nil
 			 t)
 			vars))))
+      (setq vars2 vars)
+      ;; Modify the tags in place.
+      (while vars2
+	(semantic--tag-put-property (car vars2) :filename (buffer-file-name))
+	(setq vars2 (cdr vars2)))
       vars)))
 
 (define-overload semantic-get-local-arguments (&optional point)
@@ -210,9 +218,11 @@ tags."
                           ((semantic-tag-p arg)
                            ;; Return a copy of tag without overlay.
                            ;; The overlay is preserved.
-                           (semantic-tag-copy arg))
+                           (semantic-tag-copy arg nil t))
                           ((stringp arg)
-                           (semantic-tag-new-variable arg nil nil))
+                           (semantic--tag-put-property
+			    (semantic-tag-new-variable arg nil nil)
+			    :filename (buffer-file-name)))
                           (t
                            (error "Unknown parameter element %S" arg)))
                          tags)))
@@ -355,6 +365,8 @@ Depends on `semantic-type-relation-separator-character'."
 			   (looking-at fieldsep1))))
 	    (setq symlist (list ""))
 	    (forward-sexp -1)
+	    ;; Skip array expressions.
+	    (while (looking-at "\\s(") (forward-sexp -1))
 	    (forward-sexp 1)))
 	(setq end (point))
 	(condition-case nil
@@ -374,7 +386,12 @@ Depends on `semantic-type-relation-separator-character'."
 		;; have to stop.
 		(if (<= cp (point)) (error nil)))
 	      (if (looking-at fieldsep)
-		  (setq end (point))
+		  (progn
+		    (forward-sexp -1)
+		    ;; Skip array expressions.
+		    (while (looking-at "\\s(") (forward-sexp -1))
+		    (forward-sexp 1)
+		    (setq end (point)))
 		(error nil))
 	      )
 	  (error nil)))
@@ -475,6 +492,17 @@ Assume a functional typed language.  Uses very simple rules."
 	       '(type))
 	      (t nil))))))
 
+(define-overload semantic-ctxt-current-mode (&optional point)
+  "Return the major mode active at POINT.
+POINT defaults to the value of point in current buffer.
+You should override this function in multiple mode buffers to
+determine which major mode apply at point.")
+
+(defun semantic-ctxt-current-mode-default (&optional point)
+  "Return the major mode active at POINT.
+POINT defaults to the value of point in current buffer.
+This default implementation returns the current major mode."
+  major-mode)
 
 ;;; Scoped Types
 ;;

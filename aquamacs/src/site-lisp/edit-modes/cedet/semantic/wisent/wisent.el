@@ -1,12 +1,12 @@
 ;;; wisent.el --- GNU Bison for Emacs - Runtime
 
-;; Copyright (C) 2002, 2003, 2004 David Ponce
+;; Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007 David Ponce
 
 ;; Author: David Ponce <david@dponce.com>
 ;; Maintainer: David Ponce <david@dponce.com>
 ;; Created: 30 January 2002
 ;; Keywords: syntax
-;; X-RCS: $Id: wisent.el,v 1.1 2006/12/02 00:57:23 davidswelt Exp $
+;; X-RCS: $Id: wisent.el,v 1.2 2007/09/26 13:43:25 davidswelt Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -22,8 +22,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program; see the file COPYING.  If not, write to
-;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -62,8 +62,8 @@
 
 ;;; Compatibility
 (if (fboundp 'char-valid-p)
-    (defalias 'wisent-char-p 'char-valid-p)
-  (defalias 'wisent-char-p 'char-or-char-int-p))
+    (eval-and-compile (defalias 'wisent-char-p 'char-valid-p))
+  (eval-and-compile (defalias 'wisent-char-p 'char-or-char-int-p)))
 
 ;;; Printed representation of terminals and nonterminals
 (defconst wisent-escape-sequence-strings
@@ -132,7 +132,7 @@ POSITIONS are available."
 ;;; Reporting
 ;;;###autoload
 (defvar wisent-parse-verbose-flag nil
-  "*non-nil means to issue more messages while parsing.")
+  "*Non-nil means to issue more messages while parsing.")
 
 ;;;###autoload
 (defun wisent-parse-toggle-verbose-flag ()
@@ -209,7 +209,7 @@ This variable only has meaning in the scope of `wisent-parse'.")
 This variable only has meaning in the scope of `wisent-parse'.")
 
 (defvar wisent-recovering nil
-  "non-nil means that the parser is recovering.
+  "Non-nil means that the parser is recovering.
 This variable only has meaning in the scope of `wisent-parse'.")
 
 ;; Variables that only have meaning in the scope of a semantic action.
@@ -266,11 +266,16 @@ Must be used in error recovery semantic actions."
     (wisent-clearin)
     (wisent-errok)))
 
-(defun wisent-skip-block ()
+(defun wisent-skip-block (&optional bounds)
   "Safely skip a parenthesized block in order to resume parsing.
 Return nil.
-Must be used in error recovery semantic actions."
-  (let ((start (car $region))
+Must be used in error recovery semantic actions.
+Optional argument BOUNDS is a pair (START . END) which indicates where
+the parenthesized block starts.  Typically the value of a `$regionN'
+variable, where `N' is the the Nth element of the current rule
+components that match the block beginning.  It defaults to the value
+of the `$region' variable."
+  (let ((start (car (or bounds $region)))
         end input block)
     (if (not (number-or-marker-p start))
         ;; No nonterminal region available, skip the lookahead token.
@@ -301,8 +306,8 @@ Must be used in error recovery semantic actions."
             nil
           (wisent-clearin)
           (wisent-errok))
-        ;; Adjust $region to block bounds.
-        (wisent-set-region start (1+ end))
+        ;; Set end of $region to end of block.
+        (wisent-set-region (car $region) (1+ end))
         nil))))
 
 ;;; Core parser engine

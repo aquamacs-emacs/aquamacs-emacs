@@ -1,8 +1,8 @@
 ;;; semantic-bovine.el --- LL Parser/Analyzer core.
 
-;;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004 Eric M. Ludlam
+;;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2006, 2007 Eric M. Ludlam
 
-;; X-CVS: $Id: semantic-bovine.el,v 1.1 2006/12/02 00:57:17 davidswelt Exp $
+;; X-CVS: $Id: semantic-bovine.el,v 1.2 2007/09/26 13:43:23 davidswelt Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -18,8 +18,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -33,9 +33,11 @@
 
 ;;; Code:
 (require 'semantic)
+(require 'bovine-debug)
 
-;;; VAriables
+;;; Variables
 ;;
+;;;###autoload
 (defvar semantic-bovinate-nonterminal-check-obarray nil
   "Obarray of streams already parsed for nonterminal symbols.
 Use this to detect infinite recursion during a parse.")
@@ -126,7 +128,7 @@ list of semantic tokens found."
         (while nt-loop
           (catch 'push-non-terminal
             (setq nt-popup nil
-                  end (cdr (cdr (car stream))))
+                  end (semantic-lex-token-end (car stream)))
             (while (or nt-loop nt-popup)
               (setq nt-loop nil
                     out     nil)
@@ -216,7 +218,7 @@ list of semantic tokens found."
                     )))
                 (if (not cvl)           ;lte=nil;  there was no match.
                     (setq matchlist (cdr matchlist)) ;Move to next matchlist entry
-                  (let ((start (car (cdr (car stream)))))
+                  (let ((start (semantic-lex-token-start (car stream))))
                     (setq out (cond
                                ((car lte)
                                 (funcall (car lte) ;call matchlist fn on values

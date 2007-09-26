@@ -3,9 +3,9 @@ user-guide.texi.
 
 This is the Semantic User's Manual
 
-   Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005 Eric M. Ludlam
-Copyright (C) 2001, 2002, 2003, 2004 David Ponce Copyright (C) 2002,
-2003 Richard Y. Kim
+   Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007
+Eric M. Ludlam Copyright (C) 2001, 2002, 2003, 2004 David Ponce
+Copyright (C) 2002, 2003 Richard Y. Kim
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -49,6 +49,7 @@ semantic.
 * Idle Scheduler::              The idle Scheduler and related modes
 * Minor Modes::                 Useful minor modes
 * semanticdb::                  Cache your parsed buffers between sessions.
+* Speed Debug::                 How to debug speed issues.
 * Customizing::
 * GNU Free Documentation License::
 * Index::
@@ -411,11 +412,12 @@ list.
 
 * Menu:
 
-* Smart Completion::
-* Speedbar Analysis::
+* Smart Completion::       Functions you can bind to keys for completion
+* Smart Idle Completion::  Automatic completion popups
+* Speedbar Analysis::      Speedbar provided completion
 
 
-File: semantic-user.info,  Node: Smart Completion,  Next: Speedbar Analysis,  Up: Analyzer
+File: semantic-user.info,  Node: Smart Completion,  Next: Smart Idle Completion,  Up: Analyzer
 
 Smart Completion
 ================
@@ -434,11 +436,35 @@ These functions just provide commands that can be bound to key bindings.
      options are calculated with
      "semantic-analyze-possible-completions".
 
+ - Command: semantic-ia-complete-tip point
+     Pop up a tooltip for completion at POINT.
+
+ - Command: semantic-ia-show-summary point
+     Display a summary for the symbol under POINT.
+
  - Command: semantic-ia-show-doc point
      Display the code-level documentation for the symbol at POINT.
 
 
-File: semantic-user.info,  Node: Speedbar Analysis,  Prev: Smart Completion,  Up: Analyzer
+File: semantic-user.info,  Node: Smart Idle Completion,  Next: Speedbar Analysis,  Prev: Smart Completion,  Up: Analyzer
+
+Smart Idle Completion
+=====================
+
+You can get smart completions or summary information to automatically
+popup without explicity pressing a key or running a function.
+
+This is accomplished through the Idle Scheduler and related features.
+See *Note Idle Scheduler:: for more on the Scheduler.
+
+Summaries are provided with `semantic-idle-summary-mode'.  See *Note
+Idle Summary Mode::.
+
+Completions are provided with `semantic-idle-completions-mode'.  See
+*Note Idle Completions Mode::.
+
+
+File: semantic-user.info,  Node: Speedbar Analysis,  Prev: Smart Idle Completion,  Up: Analyzer
 
 Speedbar Analysis
 =================
@@ -776,6 +802,7 @@ that can assist in programming Semantic supported langauges.
 
 * Sticky Function Mode::
 * Tag Decoration Mode::
+* MRU Bookmarks Mode::
 
 Senator is another mode which can assist in programming *Note senator::.
 
@@ -815,7 +842,7 @@ Sticky Function Headers
      line.
 
 
-File: semantic-user.info,  Node: Tag Decoration Mode,  Prev: Sticky Function Mode,  Up: Code Helpers
+File: semantic-user.info,  Node: Tag Decoration Mode,  Next: MRU Bookmarks Mode,  Prev: Sticky Function Mode,  Up: Code Helpers
 
 Tag Decoration Mode
 -------------------
@@ -866,6 +893,35 @@ You can create new types of decorations using the following function:
      To add other kind of decorations on a tag, `NAME-highlight' must
      use "semantic-decorate-tag", and other functions of the semantic
      decoration API found in this library.
+
+
+File: semantic-user.info,  Node: MRU Bookmarks Mode,  Prev: Tag Decoration Mode,  Up: Code Helpers
+
+MRU Bookmarks Mode
+------------------
+
+MRU stands for Most Recently Used.  Semantic MRU Bookmarks track the
+tags you edit and maintain a ring of things you've been working on.
+You can then switch back to tags you've worked on recently by name.
+
+ - Command: semantic-mru-bookmark-mode &optional arg
+     Minor mode for tracking tag-based bookmarks automatically.  Tag
+     based bookmarks a tracked based on editing and viewing habits and
+     can then be navigated via the MRU bookmark keymap.
+
+     With prefix argument ARG, turn on if positive, otherwise off.  The
+     minor mode can be turned on only if semantic feature is available
+     and the current buffer was set up for parsing.  Return non-`nil'
+     if the minor mode is enabled.
+
+Once this mode is enbled, any edit, or mark setting will add the
+current tag to your MRU bookmark ring.
+
+`C-x B'
+     This keysequence is like `switch-to-buffer', but uses a capital
+     `B' instead of lower case.  This lets you type in a tag name, or
+     use `M-p' and `M-n' to cycle through the bookmark list in MRU
+     order.
 
 
 File: semantic-user.info,  Node: Highlight Edits Mode,  Next: Parser State,  Up: Development Modes
@@ -944,7 +1000,7 @@ Unmatched Syntax Highlighting
      "semantic-show-unmatched-syntax-mode".
 
 
-File: semantic-user.info,  Node: semanticdb,  Next: Customizing,  Prev: Minor Modes,  Up: Top
+File: semantic-user.info,  Node: semanticdb,  Next: Speed Debug,  Prev: Minor Modes,  Up: Top
 
 Semantic Database
 *****************
@@ -986,11 +1042,8 @@ Persistent Tables
 
 Custom Backends
      These databases and tables are interfaces to some other source of
-     tagging informatin, such as the symbols loaded in Emacs Lisp, or
+     tagging information, such as the symbols loaded in Emacs Lisp, or
      perhaps symbols in a Java `.class' file.
-
-Semanticdb Configuration
-========================
 
 You can execute hooks when semanticdb is activated using its mode hook.
 
@@ -999,8 +1052,20 @@ You can execute hooks when semanticdb is activated using its mode hook.
      "semanticdb-minor-mode-p" to determine if the mode has been turned
      on or off.
 
+* Menu:
+
+* Semanticdb Tag Storage::
+* Semanticdb Search Configuration::
+* Semanticdb System Backends::
+* Changing Backends::
+* Script Generated Cache Files::
+* Create System Databases::
+
+
+File: semantic-user.info,  Node: Semanticdb Tag Storage,  Next: Semanticdb Search Configuration,  Up: semanticdb
+
 Semanticdb Tag Storage
-----------------------
+======================
 
 Once you have tables of tags parsed from your files, the default action
 is to save them when Emacs exits.  You can control the file name and
@@ -1043,8 +1108,68 @@ directories where the caches are stored.
      one argument, the object representing the database recently
      written.
 
+
+File: semantic-user.info,  Node: Semanticdb Search Configuration,  Next: Semanticdb System Backends,  Prev: Semanticdb Tag Storage,  Up: semanticdb
+
 Semanticdb Search Configuration
--------------------------------
+===============================
+
+When different tools such as smart completion or tag jumping needs to
+find a tag, those routines call semanticdb search routines.  Some time
+usually needs to be spent making sure semanticdb can find the files
+your tags are in.
+
+The search path should include:
+
+  1. The current file
+
+  2. a table for each #include file
+
+  3. if 'recursive is in the throttle, then all include files included
+     in include files.
+
+Include files or equivalent are found in:
+
+  1. current directory
+
+  2. directories specified by your project.  (such as EDE, or the
+     `semanticdb-project-roots' variable.)
+
+  3. system directories
+
+In C code, semantic tries to distinguish between project and system
+headers based on `""' or `<>' delimiters.  Each language can
+distinguish using it's own rules.
+
+The system directory is set up via the variable
+`semantic-dependency-system-include-path'.  The path is also modified
+by some system database create routines, such as
+`semanticdb-create-ebrowse-database'. *Note Include paths::.
+
+You can use the command:
+
+     M-x semantic-add-system-include RET /some/path
+
+to add more paths interactively into the current mode's path.  This
+will allow semantic to find more files w/out using system databases.
+
+* Menu:
+
+* Semanticdb Roots::    Specifying the root of different projects
+* Include paths::       Add/Remove directories to include search paths
+* Search Throttle::     Controlling how semanticdb searches occur
+* Semanticdb search debugging commands::
+
+
+File: semantic-user.info,  Node: Semanticdb Roots,  Next: Include paths,  Up: Semanticdb Search Configuration
+
+SemanticDB project roots
+------------------------
+
+Project roots specify where different code projects start.  Searching
+for files usually stops within a single project, so specifying these
+roots is important if you want semantic to find tags in other related
+directories.
 
  - Option: semanticdb-project-roots
      List of directories, where each directory is the root of some
@@ -1061,6 +1186,29 @@ Semanticdb Search Configuration
      root directory) or a list of strings (multiple root directories in
      a more complex system).  This variable should be used by project
      management programs like EDE or JDE.
+
+
+File: semantic-user.info,  Node: Include paths,  Next: Search Throttle,  Prev: Semanticdb Roots,  Up: Semanticdb Search Configuration
+
+Include Paths
+-------------
+
+You can add and remove system include paths based on major mode using
+the following commands:
+
+ - Command: semantic-add-system-include dir &optional mode
+     Add a system include DIR to path for MODE.  Modifies a mode-local
+     version of `semantic-dependency-system-include-path'.
+
+ - Command: semantic-remove-system-include dir &optional mode
+     Add a system include DIR to path for MODE.  Modifies a mode-local
+     version of `semantic-dependency-system-include-path'.
+
+
+File: semantic-user.info,  Node: Search Throttle,  Next: Semanticdb search debugging commands,  Prev: Include paths,  Up: Semanticdb Search Configuration
+
+SemanticDB Search Throttle
+--------------------------
 
 The semanticdb find throttle is a configuration variable that may often
 be configured by a language support author.  If you need to customize
@@ -1104,14 +1252,42 @@ support hook.
           DB is an omniscience database.
 
 
-To test the throttle varuable, use this command.
+To set the throttle, use a command like this:
+
+     (setq-mode-local c-mode
+     		 semanticdb-find-default-throttle
+     		 '(project unloaded system recursive))
+
+
+File: semantic-user.info,  Node: Semanticdb search debugging commands,  Prev: Search Throttle,  Up: Semanticdb Search Configuration
+
+Semanticdb search debugging commands
+------------------------------------
+
+You can use `M-x semanticdb-dump-all-table-summary RET' to see the list
+of databases that will be searched from a given buffer.  It should
+include DBs for the directories you expect.  You can follow up with
+`M-x semanticdb-find-test-translate-path RET' to then make sure
+specific tables from the path are discovered correctly.
+
+ - Command: semanticdb-dump-all-table-summary
+     Dump a list of all databases in Emacs memory.
 
  - Command: semanticdb-find-test-translate-path &optional arg
      Call and output results of "semanticdb-find-translate-path" With
      ARG non-`nil', specify a BRUTISH translation.
 
+Lastly, you can test an explicit search term using this command:
+
+ - Command: semantic-adebug-searchdb regex
+     Search the semanticdb for REGEX for the current buffer.  Display
+     the results as a debug list.
+
+
+File: semantic-user.info,  Node: Semanticdb System Backends,  Next: Changing Backends,  Prev: Semanticdb Search Configuration,  Up: semanticdb
+
 Semanticdb System Backends
---------------------------
+==========================
 
  - Variable: semanticdb-project-system-databases
      List of databases containing system library information.  Mode
@@ -1128,8 +1304,11 @@ duplication.
  - Variable: semanticdb-search-system-databases
      Non `nil' if search routines are to include a system database.
 
+
+File: semantic-user.info,  Node: Changing Backends,  Next: Script Generated Cache Files,  Prev: Semanticdb System Backends,  Up: semanticdb
+
 Changing Backends
------------------
+=================
 
 If you want to use some other form of backend, you can use this
 variable to choose which back end class to use for your general tag
@@ -1141,8 +1320,11 @@ storage.
      using one mechanism, and some directories via a different
      mechanism.
 
+
+File: semantic-user.info,  Node: Script Generated Cache Files,  Next: Create System Databases,  Prev: Changing Backends,  Up: semanticdb
+
 Script Generated Cache Files
-----------------------------
+============================
 
 You can create new semantic databases with the `semanticdb.sh' script
 file.  Give this script the directory you want parsed, and it will
@@ -1150,8 +1332,11 @@ create a cache file for you.
 
      $ semanticdb.sh *.el
 
+
+File: semantic-user.info,  Node: Create System Databases,  Prev: Script Generated Cache Files,  Up: semanticdb
+
 Create System Databases
------------------------
+=======================
 
 If your supported langauge stores the system libraries in readilly
 available parsable source code, you can pre-generate database files for
@@ -1167,17 +1352,13 @@ Use the following command to create new system databases:
      class for the database to create.  Only child classes of symbol
      "semanticdb-project-database-system" are accepted.
 
+ - Command: semanticdb-create-ebrowse-database dir
+     Create an EBROSE database for directory DIR.  The database file is
+     stored in ~/.semanticdb, or whichever directory is specified by
+     `semanticdb-default-system-save-directory'.
+
 The CLASS requested here is a bit of archana representing the class
 name for the language the entry is for.  Use completion `SPC' to see
 the ones available.  The name of the language should be part of the
 class name.
-
-
-File: semantic-user.info,  Node: Customizing,  Next: GNU Free Documentation License,  Prev: semanticdb,  Up: Top
-
-Customizing
-***********
-
-Customizations can be divided into two categories.  * M-x customize *
-Low level hooks.
 

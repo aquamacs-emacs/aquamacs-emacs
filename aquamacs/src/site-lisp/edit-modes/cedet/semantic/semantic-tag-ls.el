@@ -1,8 +1,8 @@
 ;;; semantic-tag-ls.el --- Language Specific override functions for tags
 
-;;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004 Eric M. Ludlam
+;;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2006 Eric M. Ludlam
 
-;; X-CVS: $Id: semantic-tag-ls.el,v 1.9 2004/04/29 10:14:32 ponced Exp $
+;; X-CVS: $Id: semantic-tag-ls.el,v 1.11 2006/07/29 15:06:51 zappo Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -18,8 +18,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -72,6 +72,7 @@ to themselves.  Use of this function should allow for this.
 The default behavior (if not overridden with `tag-protection'
 is to return a symbol based on type modifiers."
   (and (not parent)
+       (semantic-tag-overlay tag)
        (semantic-tag-buffer tag)
        (setq parent (semantic-tag-calculate-parent tag)))
   (:override))

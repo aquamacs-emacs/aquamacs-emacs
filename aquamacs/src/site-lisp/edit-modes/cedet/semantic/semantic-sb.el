@@ -1,10 +1,10 @@
 ;;; semantic-sb.el --- Semantic tag display for speedbar
 
-;;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005 Eric M. Ludlam
+;;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: syntax
-;; X-RCS: $Id: semantic-sb.el,v 1.55 2005/06/30 01:33:48 zappo Exp $
+;; X-RCS: $Id: semantic-sb.el,v 1.58 2007/02/19 02:52:50 zappo Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -20,8 +20,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -257,7 +257,7 @@ Optional MODIFIERS is additional text needed for variables."
   (save-excursion
     (beginning-of-line)
     (let ((dep (if (looking-at "[0-9]+:")
-		   (1- (string-to-int (match-string 0)))
+		   (1- (string-to-number (match-string 0)))
 		 0)))
       (re-search-backward (concat "^"
 				  (int-to-string dep)
@@ -295,15 +295,22 @@ TEXT TOKEN and INDENT are the details."
   "Jump to the location specified in token.
 TEXT TOKEN and INDENT are the details."
   (let ((file
-	 (cond ((fboundp 'speedbar-line-path)
-		(speedbar-line-path indent))
-	       ((fboundp 'speedbar-line-directory)
-		(speedbar-line-directory indent))))
+	 (or
+	  (cond ((fboundp 'speedbar-line-path)
+		 (speedbar-line-path indent))
+		((fboundp 'speedbar-line-directory)
+		 (speedbar-line-directory indent)))
+	  ;; If speedbar cannot figure this out, extract the filename from
+	  ;; the token.  True for Analysis mode.
+	  (semantic-tag-file-name token)))
 	(parent (semantic-sb-detail-parent)))
     (let ((f (selected-frame)))
       (dframe-select-attached-frame speedbar-frame)
       (run-hooks 'speedbar-before-visiting-tag-hook)
       (select-frame f))
+    ;; Sometimes FILE may be nil here.  If you are debugging a problem
+    ;; when this happens, go back and figure out why FILE is nil and try
+    ;; and fix the source.
     (speedbar-find-file-in-frame file)
     (save-excursion (speedbar-stealthy-updates))
     (semantic-go-to-tag token parent)

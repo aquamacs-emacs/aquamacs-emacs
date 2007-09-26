@@ -1,8 +1,8 @@
 ;;; semantic-fw.el --- Framework for Semantic
 
-;;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005 Eric M. Ludlam
+;;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Eric M. Ludlam
 
-;; X-CVS: $Id: semantic-fw.el,v 1.51 2005/06/30 01:30:35 zappo Exp $
+;; X-CVS: $Id: semantic-fw.el,v 1.56 2007/05/20 16:00:11 zappo Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -18,8 +18,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -108,24 +108,8 @@
       'run-mode-hooks
     'run-hooks))
 
-;; subst-char-in-string is not found on the XEmacs <= 21.4.  Provide
-;; here for compatibility.
-(if (not (fboundp 'subst-char-in-string))
-    
-    (defun semantic-subst-char-in-string (fromchar tochar string &optional inplace)
-      ;; From Emacs 21.3/lisp/subr.el
-      "Replace FROMCHAR with TOCHAR in STRING each time it occurs.
-Unless optional argument INPLACE is non-nil, return a new string."
-      (let ((i (length string))
-	    (newstr (if inplace string (copy-sequence string))))
-	(while (> i 0)
-	  (setq i (1- i))
-	  (if (eq (aref newstr i) fromchar)
-	      (aset newstr i tochar)))
-	newstr))
-
-  (defalias 'semantic-subst-char-in-string 'subst-char-in-string)
-  )
+;; Fancy compat useage now handled in cedet-compat
+(defalias 'semantic-subst-char-in-string 'subst-char-in-string)
 
 
 (defun semantic-delete-overlay-maybe (overlay)
@@ -138,6 +122,9 @@ Unless optional argument INPLACE is non-nil, return a new string."
     (if (fboundp 'byte-compile-warn)
 	'byte-compile-warn
       'message)))
+
+(if (not (fboundp 'string-to-number))
+    (defalias 'string-to-number 'string-to-int))
 
 ;;; Positional Data Cache
 ;;
@@ -238,10 +225,14 @@ will throw a warning when it encounters this symbol."
              (not (overload-obsoleted-by newfn))
              ;; Only throw this warning when byte compiling things.
              (boundp 'byte-compile-current-file)
-             byte-compile-current-file)
+             byte-compile-current-file
+	     (not (string-match "cedet" byte-compile-current-file))
+	     )
     (make-obsolete-overload oldfnalias newfn)
     (semantic-compile-warn
-     "`%s' obsoletes overload `%s'" newfn
+     "%s: `%s' obsoletes overload `%s'"
+     byte-compile-current-file
+     newfn
      (semantic-overload-symbol-from-function oldfnalias))
     ))
 
@@ -388,6 +379,8 @@ calling this one."
 		 "define-lex-analyzer"
 		 "define-lex-block-analyzer"
 		 "define-lex-regex-analyzer"
+		 "define-lex-spp-macro-declaration-analyzer"
+		 "define-lex-spp-macro-undeclaration-analyzer"
 		 "define-lex-simple-regex-analyzer"
 		 "define-lex-keyword-type-analyzer"
 		 "define-lex-sexp-type-analyzer"

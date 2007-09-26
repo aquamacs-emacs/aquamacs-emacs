@@ -24,6 +24,7 @@ that can assist in programming Semantic supported langauges.
 @menu
 * Sticky Function Mode::
 * Tag Decoration Mode::
+* MRU Bookmarks Mode::
 @end menu
 
 Senator is another mode which can assist in programming @ref{senator}.
@@ -115,6 +116,39 @@ To add other kind of decorations on a tag, @code{NAME-highlight} must use
 @dfn{semantic-decorate-tag}, and other functions of the semantic
 decoration @var{api} found in this library.
 @end defun
+
+@node MRU Bookmarks Mode
+@subsection MRU Bookmarks Mode
+@cindex semantic-mru-bookmark-mode
+
+MRU stands for Most Recently Used.  Semantic MRU Bookmarks track the
+tags you edit and maintain a ring of things you've been working on.
+You can then switch back to tags you've worked on recently by name.
+
+@deffn Command semantic-mru-bookmark-mode &optional arg
+@anchor{semantic-mru-bookmark-mode}
+Minor mode for tracking tag-based bookmarks automatically.
+Tag based bookmarks a tracked based on editing and viewing habits
+and can then be navigated via the @var{mru} bookmark keymap.
+
+With prefix argument @var{arg}, turn on if positive, otherwise off.  The
+minor mode can be turned on only if semantic feature is available and
+the current buffer was set up for parsing.  Return non-@code{nil} if the
+minor mode is enabled.
+@end deffn
+
+Once this mode is enbled, any edit, or mark setting will add the
+current tag to your MRU bookmark ring.
+
+@table @kbd
+@item C-x B
+This keysequence is like @code{switch-to-buffer}, but uses a capital
+@kbd{B} instead of lower case.  This lets you type in a tag name, or
+use @kbd{M-p} and @kbd{M-n} to cycle through the bookmark list in
+MRU order.
+@end table
+
+
 
 @node Highlight Edits Mode
 @subsection Highlight Edits Mode

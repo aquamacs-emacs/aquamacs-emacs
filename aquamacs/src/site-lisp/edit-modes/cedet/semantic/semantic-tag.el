@@ -1,8 +1,8 @@
 ;;; semantic-tag.el --- tag creation and access
 
-;;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005 Eric M. Ludlam
+;;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2007 Eric M. Ludlam
 
-;; X-CVS: $Id: semantic-tag.el,v 1.35 2005/06/30 01:34:43 zappo Exp $
+;; X-CVS: $Id: semantic-tag.el,v 1.45 2007/05/17 14:42:55 zappo Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -18,8 +18,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;; 
@@ -85,12 +85,36 @@ In this case, we must flush the old tags and start over.")
 ;;
 
 (defsubst semantic-tag-name (tag)
-  "Return the name of TAG."
+  "Return the name of TAG.
+For functions, variables, classes, typedefs, etc., this is the identifier
+that is being defined.  For tags without an obvious associated name, this
+may be the statement type, e.g., this may return @code{print} for python's
+print statement."
   (car tag))
 
 (defsubst semantic-tag-class (tag)
   "Return the class of TAG.
-That is, the symbol 'variable, 'function, 'type, or other."
+That is, the symbol 'variable, 'function, 'type, or other.
+There is no limit to the symbols that may represent the class of a tag.
+Each parser generates tags with classes defined by it.
+
+For functional languages, typical tag classes are:
+
+@table @code
+@item type
+Data types, named map for a memory block.
+@item function
+A function or method, or named execution location.
+@item variable
+A variable, or named storage for data.
+@item include
+Statement that represents a file from which more tags can be found.
+@item package
+Statement that declairs this file's package name.
+@item code
+Code that has not name or binding to any other symbol, such as in a script.
+@end table
+"
   (nth 1 tag))
 
 (defsubst semantic-tag-attributes (tag)
@@ -105,7 +129,9 @@ That is a property list: (PROPERTY-1 VALUE-1 PROPERTY-2 VALUE-2...)."
 
 (defsubst semantic-tag-overlay (tag)
   "Return the OVERLAY part of TAG.
-That is, an overlay or an unloaded buffer representation."
+That is, an overlay or an unloaded buffer representation.
+This function can also return an array of the form [ START END ].
+This occurs for tags that are not currently linked into a buffer."
   (nth 4 tag))
 
 (defsubst semantic--tag-overlay-cdr (tag)
@@ -144,13 +170,44 @@ That function is for internal use only."
         (semantic-overlay-move o start end)
       (semantic--tag-set-overlay tag (vector start end)))))
 
-(defsubst semantic-tag-buffer (tag)
+(defun semantic-tag-buffer (tag)
   "Return the buffer TAG resides in.
+If TAG has an originating file, read that file into a (maybe new)
+buffer, and return it.
 Return nil if there is no buffer for this tag."
   (let ((o (semantic-tag-overlay tag)))
-    (and (semantic-overlay-p o)
-         (semantic-overlay-live-p o)
-         (semantic-overlay-buffer o))))
+    (cond
+     ;; TAG is currently linked to a buffer, return it.
+     ((and (semantic-overlay-p o)
+           (semantic-overlay-live-p o))
+      (semantic-overlay-buffer o))
+     ;; TAG has an originating file, read that file into a buffer, and
+     ;; return it.
+     ((semantic--tag-get-property tag :filename)
+      (find-file-noselect (semantic--tag-get-property tag :filename)))
+     ;; TAG is not in Emacs right now, no buffer is available.
+     )))
+
+(defun semantic-tag-mode (&optional tag)
+  "Return the major mode active for TAG.
+TAG defaults to the tag at point in current buffer.
+If TAG has a :mode property return it.
+If point is inside TAG bounds, return the major mode active at point.
+Return the major mode active at beginning of TAG otherwise.
+See also the function `semantic-ctxt-current-mode'."
+  (or tag (setq tag (semantic-current-tag)))
+  (or (semantic--tag-get-property tag :mode)
+      (let ((buffer (semantic-tag-buffer tag))
+            (start (semantic-tag-start tag))
+            (end   (semantic-tag-end tag)))
+        (save-excursion
+          (and buffer (set-buffer buffer))
+          ;; Unless point is inside TAG bounds, move it to the
+          ;; beginning of TAG.
+          (or (and (>= (point) start) (< (point) end))
+              (goto-char start))
+          (require 'semantic-ctxt)
+          (semantic-ctxt-current-mode)))))
 
 (defsubst semantic--tag-attributes-cdr (tag)
   "Return the cons cell whose car is the ATTRIBUTES part of TAG.
@@ -237,7 +294,9 @@ That function is for internal use only."
 
 (defun semantic-tag-file-name (tag)
   "Return the name of the file from which TAG originated.
-Return nil if that information can't be obtained."
+Return nil if that information can't be obtained.
+If TAG is from a loaded buffer, then that buffer's filename is used.
+If TAG is unlinked, but has a :filename property, then that is used."
   (let ((buffer (semantic-tag-buffer tag)))
     (if buffer
         (buffer-file-name buffer)
@@ -265,12 +324,13 @@ Return nil if that information can't be obtained."
   "Return non-nil if TAG has positional information."
   (and (semantic-tag-p tag)
        (let ((o (semantic-tag-overlay tag)))
-	 (or (semantic-overlay-p o)
+	 (or (and (semantic-overlay-p o)
+		  (semantic-overlay-live-p o))
              (arrayp o)))))
 
 (defun semantic-equivalent-tag-p (tag1 tag2)
   "Compare TAG1 and TAG2 and return non-nil if they are equivalent.
-Use `eq' to test of two tags are the same.  Use this function if tags
+Use `eq' to test if two tags are the same.  Use this function if tags
 are being copied and regrouped to test for if two tags represent the
 same thing, but may be constructed of different cons cells."
   (and (equal (semantic-tag-name tag1) (semantic-tag-name tag2))
@@ -284,7 +344,7 @@ same thing, but may be constructed of different cons cells."
 
 (defun semantic-tag-of-type-p (tag type)
   "Compare TAG's type against TYPE.  Non nil if equivalent.
-TYPE can be a string, or a token of class 'type."
+TYPE can be a string, or a tag of class 'type."
   (let* ((tagtype (semantic-tag-type tag))
 	 (tagtypestring (cond ((stringp tagtype)
 			       tagtype)
@@ -368,7 +428,7 @@ ATTRIBUTES is a list of additional attributes belonging to this tag."
   (list name class (semantic-tag-make-plist attributes) nil nil))
 
 (defsubst semantic-tag-new-variable (name type default-value &rest attributes)
-  "Create a semantic tag of class variable.
+  "Create a semantic tag of class 'variable.
 NAME is the name of this variable.
 TYPE is a string or semantic tag representing the type of this variable.
 DEFAULT-VALUE is a string representing the default value of this variable.
@@ -379,7 +439,7 @@ ATTRIBUTES is a list of additional attributes belonging to this tag."
          attributes))
 
 (defsubst semantic-tag-new-function (name type arg-list &rest attributes)
-  "Create a semantic tag of class function.
+  "Create a semantic tag of class 'function.
 NAME is the name of this function.
 TYPE is a string or semantic tag representing the type of this function.
 ARG-LIST is a list of strings or semantic tags representing the
@@ -391,7 +451,7 @@ ATTRIBUTES is a list of additional attributes belonging to this tag."
          attributes))
 
 (defsubst semantic-tag-new-type (name type members parents &rest attributes)
-  "Create a semantic tag of class type.
+  "Create a semantic tag of class 'type.
 NAME is the name of this type.
 TYPE is a string or semantic tag representing the type of this type.
 MEMBERS is a list of strings or semantic tags representing the
@@ -416,7 +476,7 @@ ATTRIBUTES is a list of additional attributes belonging to this tag."
          attributes))
 
 (defsubst semantic-tag-new-include (name system-flag &rest attributes)
-  "Create a semantic tag of class include.
+  "Create a semantic tag of class 'include.
 NAME is the name of this include.
 SYSTEM-FLAG represents that we were able to identify this include as belonging
 to the system, as opposed to belonging to the local project.
@@ -426,7 +486,7 @@ ATTRIBUTES is a list of additional attributes belonging to this tag."
          attributes))
 
 (defsubst semantic-tag-new-package (name detail &rest attributes)
-  "Create a semantic tag of class package.
+  "Create a semantic tag of class 'package.
 NAME is the name of this package.
 DETAIL is extra information about this package, such as a location where
 it can be found.
@@ -436,7 +496,7 @@ ATTRIBUTES is a list of additional attributes belonging to this tag."
          attributes))
 
 (defsubst semantic-tag-new-code (name detail &rest attributes)
-  "Create a semantic tag of class code.
+  "Create a semantic tag of class 'code.
 NAME is a name for this code.
 DETAIL is extra information about the code.
 ATTRIBUTES is a list of additional attributes belonging to this tag."
@@ -469,16 +529,39 @@ If optional argument NAME is non-nil it specifies a new name for the
 copied tag.
 If optional argument KEEP-FILE is non-nil, and TAG was linked to a
 buffer, the originating buffer file name is kept in the `:filename'
-property of the copied tag."
+property of the copied tag.
+This runs the tag hook `unlink-copy-hook`."
   ;; Right now, TAG is a list.
   (let ((copy (semantic-tag-clone tag name)))
     (when (semantic-tag-with-position-p tag)
+      ;; Keep the filename if needed.
       (when keep-file
 	(semantic--tag-put-property
 	 copy :filename (semantic-tag-file-name copy)))
+      ;; Convert the overlay to a vector, effectively 'unlinking' the tag.
       (semantic--tag-set-overlay
-       copy (vector (semantic-tag-start copy) (semantic-tag-end copy))))
+       copy (vector (semantic-tag-start copy) (semantic-tag-end copy)))
+
+      ;; Force the children to be copied also.
+      ;;et ((chil (semantic--tag-copy-list
+      ;;	   (semantic-tag-components-with-overlays tag)
+      ;;	   keep-file)))
+      ;;;; Put the list into TAG.
+      ;;)
+
+      ;; Call the unlink-copy hook.  This should tell tools that
+      ;; this tag is not part of any buffer.
+      (semantic--tag-run-hooks copy 'unlink-copy-hook)
+      )
     copy))
+
+;;(defun semantic--tag-copy-list (tags &optional keep-file)
+;;  "Make copies of TAGS and return the list of TAGS."
+;;  (let ((out nil))
+;;    (dolist (tag tags out)
+;;      (setq out (cons (semantic-tag-copy tag nil keep-file)
+;;		      out))
+;;      )))
 
 (defun semantic--tag-copy-properties (tag1 tag2)
   "Copy private properties from TAG1 to TAG2.
@@ -500,7 +583,7 @@ This function is for internal use only."
   (semantic-tag-get-attribute tag :type))
 
 (defsubst semantic-tag-modifiers (tag)
-  "Return the value of the `:modifiers' attribute of TAG."
+  "Return the value of the `:typemodifiers' attribute of TAG."
   (semantic-tag-get-attribute tag :typemodifiers))
 
 (defun semantic-tag-docstring (tag &optional buffer)
@@ -513,6 +596,15 @@ If not provided, then only the POSITION can be provided."
         (with-current-buffer buffer
           (semantic-lex-token-text (car (semantic-lex p (1+ p)))))
       p)))
+
+;;; Generic attributes for tags of any class.
+;;
+(defsubst semantic-tag-named-parent (tag)
+  "Return the parent of TAG.
+That is the value of the `:parent' attribute.
+If a definition can occur outside an actual parent structure, but
+refers to that parent by name, then the :parent attribute should be used."
+  (semantic-tag-get-attribute tag :parent))
 
 ;;; Tags of class `type'
 ;;
@@ -550,7 +642,7 @@ That is the value of the `:throws' attribute."
 That is the value of the `:parent' attribute.
 A function has a parent if it is a method of a class, and if the
 function does not appear in body of it's parent class."
-  (semantic-tag-get-attribute tag :parent))
+  (semantic-tag-named-parent tag))
 
 (defsubst semantic-tag-function-destructor-p (tag)
   "Return non-nil if TAG describes a destructor function.
@@ -586,7 +678,10 @@ That is the value of the attribute `:system-flag'."
 The default action is to return the `semantic-tag-name'.
 Some languages do not use full filenames in their include statements.
 Override this method to translate the code represenation
-into a filename.  (A relative filename if necessary.)")
+into a filename.  (A relative filename if necessary.)
+
+See `semantic-dependency-tag-file' to expand an include
+tag to a full file name.")
 
 (defun semantic-tag-include-filename-default (tag)
   "Return a filename representation of TAG.
@@ -634,8 +729,9 @@ Return nil if TAG is not of class 'alias."
 (define-overload semantic-tag-components (tag)
   "Return a list of components for TAG.
 A Component is a part of TAG which itself may be a TAG.
-Examples include the elements of a structure in a `type tag,
-or the list of arguments to a 'function tag."
+Examples include the elements of a structure in a 
+tag of class `type, or the list of arguments to a
+tag of class 'function."
   )
 
 (defun semantic-tag-components-default (tag)
@@ -696,14 +792,16 @@ DO NOT use this fcn in new code.  Use one of the above instead."
   (if positiononly
       (semantic-tag-components-with-overlays tag)
     (semantic-tag-components tag)))
-
 
 ;;; Tag Region
 ;;
 ;; A Tag represents a region in a buffer.  You can narrow to that tag.
 ;;
-(defun semantic-narrow-to-tag (tag)
-  "Narrow to the region specified by TAG."
+(defun semantic-narrow-to-tag (&optional tag)
+  "Narrow to the region specified by the bounds of TAG.
+See `semantic-tag-bounds'."
+  (interactive)
+  (if (not tag) (setq tag (semantic-current-tag)))
   (narrow-to-region (semantic-tag-start tag)
 		    (semantic-tag-end tag)))
 
@@ -728,7 +826,6 @@ DO NOT use this fcn in new code.  Use one of the above instead."
 	  (lambda ()
 	    (def-edebug-spec semantic-with-buffer-narrowed-to-tag
 	      (def-body))))
-
 
 ;;; Tag Hooks
 ;;
@@ -919,6 +1016,7 @@ This function is for internal use only."
     
     ;; Compatibility code to be removed in future versions.
     (unless semantic-tag-expand-function
+      ;; This line throws a byte compiler warning.
       (setq semantic-tag-expand-function semantic-expand-nonterminal)
       )
     
@@ -928,16 +1026,76 @@ This function is for internal use only."
             (list tag))
       (list tag))))
 
+;; Foreign tags
+;;
+(defmacro semantic-foreign-tag-invalid (tag)
+  "Signal that TAG is an invalid foreign tag."
+  `(signal 'wrong-type-argument '(semantic-foreign-tag-p ,tag)))
+
+(defsubst semantic-foreign-tag-p (tag)
+  "Return non-nil if TAG is a foreign tag.
+That is, a tag unlinked from the originating buffer, which carries the
+originating buffer file name, and major mode."
+  (and (semantic-tag-p tag)
+       (semantic--tag-get-property tag :foreign-flag)))
+
+(defsubst semantic-foreign-tag-check (tag)
+  "Check that TAG is a valid foreign tag.
+Signal an error if not."
+  (or (semantic-foreign-tag-p tag)
+      (semantic-foreign-tag-invalid tag)))
+
+(defun semantic-foreign-tag (&optional tag)
+  "Return a copy of TAG as a foreign tag, or nil if it can't be done.
+TAG defaults to the tag at point in current buffer.
+See also `semantic-foreign-tag-p'."
+  (or tag (setq tag (semantic-current-tag)))
+  (when (semantic-tag-p tag)
+    (let ((ftag (semantic-tag-copy tag nil t)))
+      ;; A foreign tag must carry its originating buffer file name!
+      (when (semantic--tag-get-property ftag :filename)
+        (semantic--tag-put-property
+         ftag :mode (semantic-tag-mode tag))
+        (semantic--tag-put-property ftag :foreign-flag t)
+        ftag))))
+
+;; High level obtain/insert foreign tag overloads
+;;
+;;;###autoload
+(define-overload semantic-obtain-foreign-tag (&optional tag)
+  "Obtain a foreign tag from TAG.
+TAG defaults to the tag at point in current buffer.
+Return the obtained foreign tag or nil if failed."
+  (semantic-foreign-tag tag))
+
+(defun semantic-insert-foreign-tag-default (foreign-tag)
+  "Insert FOREIGN-TAG into the current buffer.
+The default behavior assumes the current buffer is a language file,
+and attempts to insert a prototype/function call."
+  ;; Long term goal: Have a mechanism for a tempo-like template insert
+  ;; for the given tag.
+  (insert (semantic-format-tag-prototype foreign-tag)))
+
+;;;###autoload
+(define-overload semantic-insert-foreign-tag (foreign-tag)
+  "Insert FOREIGN-TAG into the current buffer.
+Signal an error if FOREIGN-TAG is not a valid foreign tag.
+This function is overridable with the symbol `insert-foreign-tag'."
+  (semantic-foreign-tag-check foreign-tag)
+  (:override)
+  (message (semantic-format-tag-summarize foreign-tag)))
+
 ;;; EDEBUG display support
 ;;
 (eval-after-load "cedet-edebug"
   '(progn
-     (cedet-edebug-add-print-override '(semantic-tag-p object)
-				      '(concat "#<TAG " (semantic-format-tag-name object) ">"))
-     (cedet-edebug-add-print-override '(and (listp object) (semantic-tag-p (car object)))
-				      '(cedet-edebug-prin1-recurse object) )
+     (cedet-edebug-add-print-override
+      '(semantic-tag-p object)
+      '(concat "#<TAG " (semantic-format-tag-name object) ">"))
+     (cedet-edebug-add-print-override
+      '(and (listp object) (semantic-tag-p (car object)))
+      '(cedet-edebug-prin1-recurse object))
      ))
-
 
 ;;; Compatibility
 ;;

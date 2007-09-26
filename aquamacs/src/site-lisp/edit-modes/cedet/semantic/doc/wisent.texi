@@ -25,7 +25,7 @@
 @copying
 This manual documents the Wisent parser generator.
 
-Copyright @copyright{} 2001, 2002, 2003, 2004 David Ponce
+Copyright @copyright{} 2001, 2002, 2003, 2004, 2007 David Ponce
 
 Some texts are borrowed or adapted from the manual of Bison version
 1.35.  The text in section entitled ``Understanding the automaton'' is
@@ -236,7 +236,7 @@ in between, can be combined into a larger grouping of type @samp{exp}.
 @section Grammar format
 
 @cindex grammar format
-To be acceptable by Wisent a context-free grammars must respect a
+To be acceptable by Wisent a context-free grammar must respect a
 particular format.  That is, must be represented as an Emacs Lisp list
 of the form:
 
@@ -573,7 +573,7 @@ exp:
 @cindex automaton
 After providing a context-free grammar in a suitable format, it must
 be translated into a set of tables (an @dfn{automaton}) that will be
-used to drive the parser.  Like Bison, Wisent translates grammars that
+used to derive the parser.  Like Bison, Wisent translates grammars that
 must be @dfn{LALR(1)}.
 
 @cindex LALR(1) grammar
@@ -634,8 +634,8 @@ the parser has only one action to do (@pxref{Wisent Parsing}).
 
 @cindex ambiguous grammar
 In certain cases, a grammar can produce an automaton where, at some
-states, there are more than one action possible.  A such grammar is
-@dfn{ambiguous}, and generated @dfn{conflicts}.
+states, there are more than one action possible.  Such a grammar is
+@dfn{ambiguous}, and generates @dfn{conflicts}.
 
 @cindex deterministic automaton
 The parser can't be driven by an automaton which isn't completely
@@ -1621,7 +1621,7 @@ it can be worth a mix of the two styles!
 @cindex grammar iterative style
 The @dfn{iterative style} is the preferred style to use with @semantic{}.
 It relies on an iterative parser back-end mechanism which parses start
-nonterminals one at a time and automagically skip unexpected lexical
+nonterminals one at a time and automagically skips unexpected lexical
 tokens in input.
 
 Compared to rule-based iterative functions (@pxref{Bison style}),
@@ -1638,7 +1638,7 @@ Then, each parsing iteration automatically translates a raw tag into
 @dfn{expanded tags}, updating the raw tag structure with internal
 properties and buffer related data.
 
-After parsing completed it results in a tree of expanded tags.
+After parsing completes, it results in a tree of expanded tags.
 
 The following example is a snippet of the iterative style Java grammar
 provided in the @semantic{} distribution in the file
@@ -1743,7 +1743,7 @@ unexpected input data.
 
 The second consequence is that the iterative parser can't do automatic
 tag expansion, except for the start nonterminal value.  It is
-necessary to explicitly expand tag from concerned semantic actions by
+necessary to explicitly expand tags from concerned semantic actions by
 calling the grammar macro @code{EXPANDTAG} with a raw tag as
 parameter.  See also @ref{Start nonterminals}, for incremental
 re-parse considerations.

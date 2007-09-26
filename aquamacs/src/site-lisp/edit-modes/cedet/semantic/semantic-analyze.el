@@ -1,10 +1,10 @@
 ;;; semantic-analyze.el --- Analyze semantic tags against local context
 
-;;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005 Eric M. Ludlam
+;;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2007 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: syntax
-;; X-RCS: $Id: semantic-analyze.el,v 1.42 2005/06/30 01:18:27 zappo Exp $
+;; X-RCS: $Id: semantic-analyze.el,v 1.53 2007/05/17 15:46:42 zappo Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -20,8 +20,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -78,22 +78,10 @@
 
 ;;; Code:
 
-;;; Tag Finding
+;;; Small Mode Specific Options
 ;;
-(defun semantic-analyze-find-tags-by-prefix (prefix)
-  "Attempt to find a tag with PREFIX.
-This is a wrapper on top of semanticdb, and semantic search functions.
-Almost all searches use the same arguments."
-  (if (and (fboundp 'semanticdb-minor-mode-p)
-           (semanticdb-minor-mode-p))
-      ;; Search the database & concatenate all matches together.
-      (semanticdb-strip-find-results
-       (semanticdb-find-tags-for-completion prefix)
-       t)
-    ;; Search just this file because there is no DB available.
-    (semantic-find-tags-for-completion
-     prefix (current-buffer))))
- 
+;; These queries allow a major mode to help the analyzer make decisions.
+;;
 (define-overload semantic-analyze-tag-prototype-p (tag)
   "Non-nil if TAG is a prototype."
   )
@@ -111,6 +99,133 @@ Almost all searches use the same arguments."
      (t nil))
     ))
 
+(define-overload semantic-analyze-split-name (name)
+  "Split a tag NAME into a sequence.
+Sometimes NAMES are gathered from the parser that are compounded,
+such as in C++ where foo::bar means:
+  \"The class BAR in the namespace FOO.\"
+Return the string NAME for no change, or a list if it needs to be split.")
+
+(defun semantic-analyze-split-name-default (name)
+  "Don't split up NAME by default."
+  name)
+
+(define-overload semantic-analyze-dereference-metatype (type scope)
+  "Return a concrete type tag based on input TYPE tag.
+A concrete type is an actual declaration of a memory description,
+such as a structure, or class.  A meta type is an alias,
+or a typedef in C or C++.  If TYPE is concrete, it
+is returned.  If it is a meta type, it will return the concrete
+type defined by TYPE.
+The default behavior always returns TYPE.
+Override functions need not return a real semantic tag.
+Just a name, or short tag will be ok.  It will be expanded here.
+SCOPE is the additional scope in which to search for names."
+  (catch 'default-behavior
+    (let ((ans (:override
+                ;; Nothing fancy, just return type be default.
+                (throw 'default-behavior type))))
+      ;; If ANS is a string, or if ANS is a short tag, we
+      ;; need to do some more work to look it up.
+      (cond ((stringp ans)
+             (semantic-analyze-find-tag ans nil scope))
+            ((and (semantic-tag-p ans)
+                  (eq (semantic-tag-class ans) 'type)
+                  (semantic-tag-type-members ans))
+             ans)
+            ((and (semantic-tag-p ans)
+                  (eq (semantic-tag-class ans) 'type)
+                  (not (semantic-tag-type-members ans)))
+             (semantic-analyze-find-tag
+              (semantic-tag-name ans) nil scope))
+            (t nil)))))
+
+;;; SELECTING/MERGING
+;;
+;; If you narrow things down to a list of tags that all mean
+;; the same thing, how to you pick one?  Select or merge.
+;;
+
+(defun semantic-analyze-merge-namespaces (spaces)
+  "Merge all the namespaces SPACES into a single super-tag.
+TODO: consider some higher level find routine to do this."
+  (if (not (string= (semantic-tag-type (car spaces))
+		    "namespace"))
+      (signal 'wrong-type-argument (list (car spaces) "namespace")))
+  (let ((first (car spaces))
+	(members nil))
+    (while spaces
+      (if (string= (semantic-tag-type (car spaces)) "namespace")
+	  (setq members (append members
+				(semantic-tag-type-members (car spaces))))
+	;; Else ... how did we get here?
+	(message "Non namespace?? : %s"
+		 (semantic-format-tag-summarize (car spaces))))
+      (setq spaces (cdr spaces)))
+
+    ;; Create the new tag.
+    (let ((nt (semantic-tag-new-type (semantic-tag-name first)
+				     (semantic-tag-type first)
+				     members
+				     nil)))
+      (semantic-tag-set-faux nt)
+      nt)))
+
+(defun semantic-analyze-select-best-tag (sequence &optional tagclass)
+  "For a SEQUENCE of tags, pick the best one.
+If SEQUENCE is made up of namespaces, merge the namespaces together.
+If SEQUENCE has several prototypes, find the non-prototype.
+If SEQUENCE has some items w/ no type information, find the one with a type.
+If SEQUENCE is all prototypes, or has no prototypes, get the first one.
+Optional TAGCLASS indicates to restrict the return to only
+tags of TAGCLASS."
+  ;; 1) If these are namespace, merge them together.
+  (if (and (or (not tagclass) (eq tagclass 'type))
+	   (semantic-tag-of-class-p (car sequence) 'type)
+	   (string= (semantic-tag-type (car sequence)) "namespace"))
+      (semantic-analyze-merge-namespaces sequence)
+    ;; 2) Loop over them, select a non-prototype.
+    (let ((best nil)
+	  (proto nil)
+	  (notypeinfo nil)
+	  )
+      (while (and (not best) sequence)
+	
+	(when (or (not tagclass)
+		  (semantic-tag-of-class-p (car sequence) tagclass))
+	  ;; Prototypes are second class tags
+	  (if (semantic-analyze-tag-prototype-p (car sequence))
+	      (setq proto (car sequence))
+	    ;; Typeless symbols are third class tags
+	    (if (not (semantic-tag-type (car sequence)))
+		(setq notypeinfo (car sequence))
+
+	      (setq best (car sequence))))
+	  )
+	
+	(setq sequence (cdr sequence)))
+      
+      ;; Select the best, or at least the prototype.
+      (or best proto notypeinfo))))
+
+;;; Tag Finding
+;;
+;; Mechanism for lookup up tags by name.
+;;
+(defun semantic-analyze-find-tags-by-prefix (prefix)
+  "Attempt to find a tag with PREFIX.
+This is a wrapper on top of semanticdb, and semantic search functions.
+Almost all searches use the same arguments."
+  (if (and (fboundp 'semanticdb-minor-mode-p)
+           (semanticdb-minor-mode-p))
+      ;; Search the database & concatenate all matches together.
+      (semanticdb-strip-find-results
+       (semanticdb-find-tags-for-completion prefix)
+       t)
+    ;; Search just this file because there is no DB available.
+    (semantic-find-tags-for-completion
+     prefix (current-buffer))))
+ 
 (defun semantic-analyze-find-tag (name &optional tagclass scope)
   "Return the first tag found with NAME or nil if not found.
 Optional argument TAGCLASS specifies the class of tag to return, such
@@ -119,33 +234,40 @@ Optional argument SCOPE specifies additional type tags which are in
 SCOPE and do not need prefixing to find.
 This is a wrapper on top of semanticdb, and semantic search functions.
 Almost all searches use the same arguments."
-  (let ((retlist
-         (or (and scope (semantic-find-tags-by-name name scope))
-             (if (and (fboundp 'semanticdb-minor-mode-p)
-                      (semanticdb-minor-mode-p))
-                 ;; Search the database
-                 (semanticdb-strip-find-results
-                  (semanticdb-find-tags-by-name name)
-		  ;; This T means to find files for matching symbols
-		  t)
-               ;; Search just this file
-               (semantic-find-tags-by-name
-                name (current-buffer)))))
-	proto
-        ret)
-    (if tagclass
-        ;; Scan only for tags of a given class.
-        (while (and retlist (not ret))
-          (if (semantic-tag-of-class-p (car retlist) tagclass)
-	      (if (semantic-analyze-tag-prototype-p (car retlist))
-		  (setq proto (car retlist))
-		(setq ret (car retlist))))
-	  (setq retlist (cdr retlist)))
-      ;; Just get the first tag found.
-      (setq ret (car retlist)))
-    (or ret proto)))
+  (let ((namelst (semantic-analyze-split-name name)))
+    (cond
+     ;; If the splitter gives us a list, use the sequence finder
+     ;; to get the list.  Since this routine is expected to return
+     ;; only one tag, return the LAST tag found from the sequence
+     ;; which is supposedly the nexted reference.
+     ;;
+     ;; Of note, the SEQUENCE function below calls this function
+     ;; (recursively now) so the names that we get from the above
+     ;; fcn better not, in turn, be splittable.
+     ((listp namelst)
+      (let ((seq (semantic-analyze-find-tag-sequence
+		  namelst nil scope)))
+	(car (nreverse seq))))
+     ;; If NAME is solo, then do our searches for it here.
+     ((stringp namelst)
+      (let ((retlist
+	     (or (and scope (semantic-find-tags-by-name name scope))
+		 (if (and (fboundp 'semanticdb-minor-mode-p)
+			  (semanticdb-minor-mode-p))
+		     ;; Search the database
+		     (semanticdb-strip-find-results
+		      (semanticdb-find-tags-by-name name)
+		      ;; This T means to find files for matching symbols
+		      t)
+		   ;; Search just this file
+		   (semantic-find-tags-by-name
+		    name (current-buffer))))))
+
+	(semantic-analyze-select-best-tag retlist tagclass))))))
 
 ;;; Finding Datatypes
+;;
+;; Finding a data type by name within a project.
 ;;
 (defun semantic-analyze-tag-type-to-name (tag)
   "Get the name of TAG's type.
@@ -160,41 +282,13 @@ or a string, or a non-positional tag."
 	   (car tt))
 	  (t nil))))
 
-(define-overload semantic-analyze-dereference-metatype (type)
-  "Return a concrete type tag based on input TYPE tag.
-A concrete type is an actual declaration of a memory description,
-such as a structure, or class.  A meta type is an alias,
-or a typedef in C or C++.  If TYPE is concrete, it
-is returned.  If it is a meta type, it will return the concrete
-type defined by TYPE.
-The default behavior always returns TYPE.
-Override functions need not return a real semantic tag.
-Just a name, or short tag will be ok.  It will be expanded here."
-  (catch 'default-behavior
-    (let ((ans (:override
-                ;; Nothing fancy, just return type be default.
-                (throw 'default-behavior type))))
-      ;; If ANS is a string, or if ANS is a short tag, we
-      ;; need to do some more work to look it up.
-      (cond ((stringp ans)
-             (semantic-analyze-find-tag ans))
-            ((and (semantic-tag-p ans)
-                  (eq (semantic-tag-class ans) 'type)
-                  (semantic-tag-type-members ans))
-             ans)
-            ((and (semantic-tag-p ans)
-                  (eq (semantic-tag-class ans) 'type)
-                  (not (semantic-tag-type-members ans)))
-             (semantic-analyze-find-tag
-              (semantic-tag-name ans)))
-            (t nil)))))
-
-(defun semantic-analyze-tag-type (tag)
+(defun semantic-analyze-tag-type (tag scope)
   "Return the semantic tag for a type within the type of TAG.
 TAG can be a variable, function or other type of tag.
 The type of tag (such as a class or struct) is a name.
 Lookup this name in database, and return all slots/fields
-within that types field.  Also handles anonymous types."
+within that types field.  Also handles anonymous types.
+SCOPE represents a calculated scope in which the types might be found."
   (let ((ttype (semantic-tag-type tag))
 	(name nil)
 	(typetag nil)
@@ -209,40 +303,51 @@ within that types field.  Also handles anonymous types."
 	     )
 	;; We have an anonymous type for TAG with children.
 	;; Use this type directly.
-	(semantic-analyze-dereference-metatype ttype)
+	(semantic-analyze-dereference-metatype ttype scope)
 
       ;; Not an anonymous type.  Look up the name of this type
       ;; elsewhere, and report back.
       (setq name (semantic-analyze-tag-type-to-name tag))
       (if (and name (not (string= name "")))
-	  (setq typetag (semantic-analyze-find-tag name))
+	  ;; Find a type of that name in scope.
+	  (setq typetag (semantic-analyze-find-tag name 'type scope))
 	;; No name to look stuff up with.
 	(error "Semantic tag %S has no type information"
 	       (semantic-tag-name ttype)))
 
       ;; Handle lists of tags.
-      (if (and (listp typetag) (semantic-tag-p (car typetag)))
-
-	  (let ((taglist typetag))
-	    (setq typetag nil)
-	    ;; Loop over all returned elements until we find a type
-	    ;; that is a perfect match.
-	    (while (and taglist (not typetag))
-	      ;; FIXME: Do better matching.
-	      ;; TODO: use a prototype of a type only if the real deal
-	      ;;          is not available
-	      (if (and (car taglist)
-		       (eq (semantic-tag-class (car taglist)) 'type))
-		  (setq typetag (car taglist)))
-
-	      (setq taglist (cdr taglist)))))
+      (when (and (listp typetag) (semantic-tag-p (car typetag)))
+	(setq typetag (semantic-analyze-select-best-tag typetag 'type))
+	)
 
       ;; We now have a tag associated with the type.
-      (semantic-analyze-dereference-metatype typetag))))
+      (semantic-analyze-dereference-metatype typetag scope))))
+
+(defun semantic-analyze-type-parts (type &optional scope)
+  "Return all parts of TYPE, a tag representing a TYPE declaration.
+SCOPE include additional tags which are in scope.
+This includes both the TYPE parts, and all functions found in all
+databases which have this type as a property."
+  (let (;; SLOTS are the slots directly a part of TYPE.
+	(slots (semantic-tag-components type))
+	;; EXTMETH are externally defined methods that are still
+	;; a part of this class.
+	(extmeth (semantic-tag-external-member-children type t))
+	;; INHERITED are tags found in classes that our TYPE tag
+	;; inherits from.
+	(inherited (semantic-analyze-inherited-tags type scope))
+	)
+    ;; Flatten the database output.
+    (append slots extmeth inherited)
+    ))
 
 ;;; Tag Sequences
 ;;
-(defun semantic-analyze-find-tag-sequence (sequence &optional localvar scope typereturn)
+;; A list of strings is a sequence.  Each string needs to be found,
+;; and it's datatype determined so the next string can be identified.
+;;
+(defun semantic-analyze-find-tag-sequence (sequence &optional localvar
+						    scope typereturn)
   "Attempt to find all tags in SEQUENCE.
 Optional argument LOCALVAR is the list of local variables to use when
 finding the details on the first element of SEQUENCE in case
@@ -250,7 +355,7 @@ it is not found in the global set of tables.
 Optional argument SCOPE are additional terminals to search which are currently
 scoped.  These are not local variables, but symbols available in a structure
 which doesn't need to be dereferneced.
-Optional argument TYPERETURN is a symbol ini which the types of all found
+Optional argument TYPERETURN is a symbol in which the types of all found
 will be stored.  If nil, that data is thrown away."
   (let ((s sequence)			;copy of the sequence
 	(tmp nil)			;tmp find variable
@@ -275,8 +380,7 @@ will be stored.  If nil, that data is thrown away."
 	       ))
 
     (if (and (listp tmp) (semantic-tag-p (car tmp)))
-	;; We should be smarter... :(
-	(setq tmp (car tmp)))
+	(setq tmp (semantic-analyze-select-best-tag tmp)))
     (if (not (semantic-tag-p tmp))
 	(error "Cannot find definition for \"%s\"" (car s)))
     (setq s (cdr s))
@@ -288,23 +392,24 @@ will be stored.  If nil, that data is thrown away."
       ;; representing the full typeographic information of its
       ;; type, and use that to determine the search context for
       ;; (car s)
-      (let ((tmptype (semantic-analyze-tag-type tmp))
+      (let ((tmptype
+	     ;; In some cases the found TMP is a type,
+	     ;; and we can use it directly.
+	     (cond ((eq (semantic-tag-class tmp) 'type)
+		    tmp)
+		   (t
+		    (semantic-analyze-tag-type tmp scope))))
 	    (slots nil))
 	
 	;; Get the children
 	(setq slots (semantic-analyze-type-parts tmptype))
 
 	;; find (car s) in the list o slots
-	(setq tmp (semantic-find-first-tag-by-name (car s) slots))
+	(setq tmp (semantic-find-tags-by-name (car s) slots))
 
+	;; If we have lots
 	(if (and (listp tmp) (semantic-tag-p (car tmp)))
-	    ;; We should be smarter...  For example
-	    ;; search for an item only of 'variable if we know
-	    ;; the syntax is variable, or only 'function if we
-	    ;; can see a function.  Most languages don't allow that
-	    ;; type of duality, so we will probably be safe with this
-	    ;; forever.
-	    (setq tmp (car tmp)))
+	    (setq tmp (semantic-analyze-select-best-tag tmp)))
 
 	;; Make sure we have a tag.
 	(if (not (semantic-tag-p tmp))
@@ -324,6 +429,10 @@ will be stored.  If nil, that data is thrown away."
     (nreverse tag)))
 
 ;;; Scope Determination
+;;
+;; A context is in a scope, which is a list of tags which are
+;; visible to the current context, but are not "global" variables
+;; or functions.
 ;;
 (defun semantic-analyze-inherited-tags (type scope)
   "Return all tags that TYPE inherits from.
@@ -351,8 +460,14 @@ it should strip out those not accessable by methods of TYPE."
 	(when oneparent
 	  ;; Get tags from this parent.
 	  (let* ((alltags (semantic-analyze-type-parts oneparent))
-		 (accessabletags (semantic-find-tags-by-scope-protection
-				  'public oneparent alltags)))
+		 (accessabletags (append
+				  ;; @todo: Is there a better way to ask
+				  ;;        this question than two full
+				  ;;        searches?
+				  (semantic-find-tags-by-scope-protection
+				   'public oneparent alltags)
+				  (semantic-find-tags-by-scope-protection
+				   'protected oneparent alltags))))
 	    (setq ret (append ret accessabletags)))
 	  ;; is this right?
 	  (setq ret (append ret (semantic-analyze-inherited-tags
@@ -362,40 +477,36 @@ it should strip out those not accessable by methods of TYPE."
       (setq parents (cdr parents)))
     ret))
 
-(defun semantic-analyze-type-parts (type &optional scope)
-  "Return all parts of TYPE, a tag representing a TYPE declaration.
-SCOPE include additional tags which are in scope.
-This includes both the TYPE parts, and all functions found in all
-databases which have this type as a property."
-  (let (;; SLOTS are the slots directly a part of TYPE.
-	(slots (semantic-tag-components type))
-	;; EXTMETH are externally defined methods that are still
-	;; a part of this class.
-	(extmeth (semantic-tag-external-member-children type t))
-	;; INHERITED are tags found in classes that our TYPE tag
-	;; inherits from.
-	(inherited (semantic-analyze-inherited-tags type scope))
-	)
-    ;; Flatten the database output.
-    (append slots extmeth inherited)
-    ))
-
 (defun semantic-analyze-scoped-tags (typelist)
   "Return a list of tags accessable when TYPELIST is in scope.
 Tags returned are not in the global name space, but are instead
 scoped inside a class or namespace.  Such items can be referenced
 without use of \"object.function()\" style syntax due to an
 implicit \"object\"."
-  (let ((currentscope nil))
+  (let ((typelist2 nil)
+	(currentscope nil))
+    ;; Loop over typelist, and find and merge all namespaces matching
+    ;; the names in typelist.
+    (while typelist
+      (if (string= (semantic-tag-type (car typelist)) "namespace")
+	  (setq typelist2 (cons (semantic-analyze-find-tag
+				 (semantic-tag-name (car typelist))
+				 'type
+				 typelist2)
+				typelist2))
+	;; No namespace, just append...
+	(setq typelist2 (cons (car typelist) typelist2)))
+      (setq typelist (cdr typelist)))
+
     ;; Loop over the types (which should be sorted by postion
     ;; adding to the scopelist as we go, and using the scopelist
     ;; for additional searching!
-    (while typelist
+    (while typelist2
       (setq currentscope (append
 			  currentscope
-			  (semantic-analyze-type-parts (car typelist)
+			  (semantic-analyze-type-parts (car typelist2)
 						       currentscope)))
-      (setq typelist (cdr typelist)))
+      (setq typelist2 (cdr typelist2)))
     currentscope))
 
 (defun semantic-analyze-scope-nested-tags (&optional position scopetypes)
@@ -507,7 +618,11 @@ Return (PREFIX ENDSYM BOUNDS)"
 	 )
     (list prefix endsym bounds)))
 
-;;; Top Level context analysis function
+;;; Analysis Classes
+;;
+;; These classes represent what a context is.  Different types
+;; of contexts provide differing amounts of information to help
+;; provide completions.
 ;;
 (defclass semantic-analyze-context ()
   ((bounds :initarg :bounds
@@ -591,6 +706,10 @@ be just a string in some circumstances.")
 Return data methods identify the requred type by the return value
 of the parent function.")
 
+;;; ANALYSIS
+;;
+;; Main Analysis function
+;;
 ;;;###autoload
 (define-overload semantic-analyze-current-context (&optional position)
   "Analyze the current context at optional POSITION.
@@ -635,101 +754,111 @@ Returns an object based on symbol `semantic-analyze-context'."
 	 (bounds (nth 2 prefixandbounds))
 	 (prefixclass (semantic-ctxt-current-class-list))
 	 (prefixtypes nil)
-	 (scopetypes (semantic-analyze-scoped-types position))
-	 (scope (if scopetypes
-		    (semantic-analyze-scoped-tags scopetypes)))
-	 (localvar (semantic-get-local-variables))
-	 (function (semantic-ctxt-current-function))
+	 (scopetypes nil)
+	 (scope nil)
+	 (localvar nil)
+	 (function nil)
 	 (fntag nil)
 	 arg fntagend argtag
 	 )
 
-    (condition-case nil
-	;; If we are on lame stuff, it won't be found!
-	(setq prefix (semantic-analyze-find-tag-sequence
-		      prefix localvar scope 'prefixtypes))
-      (error nil))
+    (unless (not bounds)
 
-    (when function
-      ;; If we have a function, then we can get the argument
-      (setq arg (semantic-ctxt-current-argument))
+      ;; Don't do the work if there are no bounds.
+      (setq scopetypes (semantic-analyze-scoped-types position)
+	    scope (if scopetypes
+		      (semantic-analyze-scoped-tags scopetypes))
+	    localvar (semantic-get-local-variables)
+	    function (semantic-ctxt-current-function))
 
       (condition-case nil
-	  (setq fntag
-		(semantic-analyze-find-tag-sequence
-		 function localvar scope))
+	  ;; If we are on lame stuff, it won't be found!
+	  (setq prefix (semantic-analyze-find-tag-sequence
+			prefix localvar scope 'prefixtypes))
 	(error nil))
 
-      (when fntag
-	(setq fntagend (car (reverse fntag))
-	      argtag
-	      (when (semantic-tag-p fntagend)
-		(nth (1- arg) (semantic-tag-function-arguments fntagend)))
-	      )))
+      (when function
+	;; If we have a function, then we can get the argument
+	(setq arg (semantic-ctxt-current-argument))
 
-    (if fntag
-	;; If we found a tag for our function, we can go into
-	;; functional context analysis mode, meaning we have a type
-	;; for the argument.
-	(setq context-return
-	      (semantic-analyze-context-functionarg
-	       "functionargument"
-	       :buffer (current-buffer)
-	       :function fntag
-	       :index arg
-	       :argument (list argtag)
-	       :scope scope
-	       :scopetypes scopetypes
-	       :localvariables localvar
-	       :prefix prefix
-	       :prefixclass prefixclass
-	       :bounds bounds
-	       :prefixtypes prefixtypes))
+	(condition-case nil
+	    (setq fntag
+		  (semantic-analyze-find-tag-sequence
+		   function localvar scope))
+	  (error nil))
 
-      ;; No function, try assignment
-      (let ((assign (semantic-ctxt-current-assignment))
-	    (asstag nil))
-	(if assign
-	    ;; We have an assignment
-	    (condition-case nil
-		(setq asstag (semantic-analyze-find-tag-sequence
-			      assign localvar scope))
-	      (error nil)))
+	(when fntag
+	  (setq fntagend (car (reverse fntag))
+		argtag
+		(when (semantic-tag-p fntagend)
+		  (nth (1- arg) (semantic-tag-function-arguments fntagend)))
+		)))
+
+      (if fntag
+	  ;; If we found a tag for our function, we can go into
+	  ;; functional context analysis mode, meaning we have a type
+	  ;; for the argument.
+	  (setq context-return
+		(semantic-analyze-context-functionarg
+		 "functionargument"
+		 :buffer (current-buffer)
+		 :function fntag
+		 :index arg
+		 :argument (list argtag)
+		 :scope scope
+		 :scopetypes scopetypes
+		 :localvariables localvar
+		 :prefix prefix
+		 :prefixclass prefixclass
+		 :bounds bounds
+		 :prefixtypes prefixtypes))
+
+	;; No function, try assignment
+	(let ((assign (semantic-ctxt-current-assignment))
+	      (asstag nil))
+	  (if assign
+	      ;; We have an assignment
+	      (condition-case nil
+		  (setq asstag (semantic-analyze-find-tag-sequence
+				assign localvar scope))
+		(error nil)))
 	  
-	(if asstag
+	  (if asstag
+	      (setq context-return
+		    (semantic-analyze-context-assignment
+		     "assignment"
+		     :buffer (current-buffer)
+		     :assignee asstag
+		     :scope scope
+		     :scopetypes scopetypes
+		     :localvariables localvar
+		     :bounds bounds
+		     :prefix prefix
+		     :prefixclass prefixclass
+		     :prefixtypes prefixtypes))
+	  
+	    ;; TODO: Identify return value condition.
+
+	    ;; Nothing in particular
 	    (setq context-return
-		  (semantic-analyze-context-assignment
-		   "assignment"
+		  (semantic-analyze-context
+		   "context"
 		   :buffer (current-buffer)
-		   :assignee asstag
 		   :scope scope
 		   :scopetypes scopetypes
 		   :localvariables localvar
 		   :bounds bounds
 		   :prefix prefix
 		   :prefixclass prefixclass
-		   :prefixtypes prefixtypes))
-	  
-	  ;; TODO: Identify return value condition.
+		   :prefixtypes prefixtypes)))))
 
-	  ;; Nothing in particular
-	  (setq context-return
-		(semantic-analyze-context
-		 "context"
-		 :buffer (current-buffer)
-		 :scope scope
-		 :scopetypes scopetypes
-		 :localvariables localvar
-		 :bounds bounds
-		 :prefix prefix
-		 :prefixclass prefixclass
-		 :prefixtypes prefixtypes)))))
-
-    ;; Return our context.
-    context-return))
+      ;; Return our context.
+      context-return)))
 
 
-;;; Context Analysis Completion
+;;; COMPLETION
+;;
+;; Context Analysis Completion
 ;;
 (defmethod semantic-analyze-type-constraint
   ((context semantic-analyze-context) &optional desired-type)
@@ -916,34 +1045,79 @@ Argument CONTEXT is an object specifying the locally derived context."
 	      )
 	))
 
-    (when desired-type
-
-      (let ((origc c))
-	;; Ok, we now have a completion list based on the text we found
-	;; we want to complete on.  Now filter that stream against the
-	;; type we want to search for.
-	(setq c (semantic-find-tags-by-type (semantic-tag-name desired-type)
-					    origc))
-
-	;; Now anything that is a compound type which could contain
-	;; additional things which are of the desired type
-	(setq c (append c (semantic-find-tags-of-compound-type origc)))
+    (let ((origc c)
+	  (scope (oref a scope))
+	  (dtname (semantic-tag-name desired-type)))
 	
-	;; Some types, like the enum in C, have special constant values that
-	;; we could complete with.  Thus, if the target is an enum, we can
-	;; find possible symbol values to fill in that value.
-	(let ((constants
-	       (semantic-analyze-type-constants desired-type)))
-	  (if constants
-	      (progn
-		;; Filter
-		(setq constants
-		      (semantic-find-tags-by-name-regexp
-		       (concat "^" completetext)
-		       constants))
-		;; Add to the list
-		(setq c (append c constants)))
-	    ))))
+      ;; Reset c.
+      (setq c nil)
+
+      ;; Loop over all the found matches, and catagorize them
+      ;; as being possible features.
+      (while origc
+
+	(cond
+	 ;; Strip operators
+	 ((semantic-tag-get-attribute (car origc) :operator-flag)
+	  nil
+	  )
+	 
+	 ;; If we are completing from within some prefix,
+	 ;; then we want to exclude constructors and destructors
+	 ((and completetexttype
+	       (or (semantic-tag-get-attribute (car origc) :constructor-flag)
+		   (semantic-tag-get-attribute (car origc) :destructor-flag)))
+	  nil
+	  )
+
+	 ;; If there is a desired type, we need a pair of restrictions
+	 (desired-type
+
+	  (cond
+	   ;; Ok, we now have a completion list based on the text we found
+	   ;; we want to complete on.  Now filter that stream against the
+	   ;; type we want to search for.
+	   ((string= dtname (semantic-analyze-tag-type-to-name (car origc)))
+	    (setq c (cons (car origc) c))
+	    )
+
+	   ;; Now anything that is a compound type which could contain
+	   ;; additional things which are of the desired type
+	   ((semantic-tag-type (car origc))
+	    (let ((att (semantic-analyze-tag-type (car origc) scope))
+		)
+	      (if (and att (semantic-tag-type-members att))
+		  (setq c (cons (car origc) c))))
+	    )
+	   
+	   ) ; cond
+	  ); desired type
+
+	 ;; No desired type, no other restrictions.  Just add.
+	 (t
+	  (setq c (cons (car origc) c)))
+
+	 ); cond
+
+	(setq origc (cdr origc)))
+
+      (when desired-type
+      ;; Some types, like the enum in C, have special constant values that
+      ;; we could complete with.  Thus, if the target is an enum, we can
+      ;; find possible symbol values to fill in that value.
+      (let ((constants
+	     (semantic-analyze-type-constants desired-type)))
+	(if constants
+	    (progn
+	      ;; Filter
+	      (setq constants
+		    (semantic-find-tags-by-name-regexp
+		     (concat "^" completetext)
+		     constants))
+	      ;; Add to the list
+	      (setq c (append c constants)))
+	  )))
+      )
 
     (when desired-class
       (setq c (semantic-analyze-tags-of-class-list c desired-class)))
@@ -960,7 +1134,9 @@ Argument CONTEXT is an object specifying the locally derived context."
     c))
 
 
-;;; Friendly output of a context analysis.
+;;; DEBUG OUTPUT 
+;;
+;; Friendly output of a context analysis.
 ;;
 (defcustom semantic-analyze-summary-function 'semantic-format-tag-prototype
   "*Function to use when creating items in Imenu.

@@ -1,8 +1,8 @@
 ;;; semantic-edit.el --- Edit Management for Semantic
 
-;;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005 Eric M. Ludlam
+;;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Eric M. Ludlam
 
-;; X-CVS: $Id: semantic-edit.el,v 1.29 2005/01/13 12:27:39 zappo Exp $
+;; X-CVS: $Id: semantic-edit.el,v 1.34 2007/02/18 22:38:59 zappo Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -18,8 +18,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -113,9 +113,12 @@ incremental reparse.")
   "Hooks run after the incremental parser fails.
 When this happens, the buffer is marked as needing a full reprase.")
 
+;;;###autoload
 (defcustom semantic-edits-verbose-flag nil
   "Non-nil means the incremental perser is verbose.
-If nil, errors are still displayed, but informative messages are not.")
+If nil, errors are still displayed, but informative messages are not."
+  :group 'semantic
+  :type 'boolean)
 
 ;;; Change State management
 ;;
@@ -432,6 +435,7 @@ See `semantic-edits-change-leaf-token' for details on parents."
 
 			  ;; We end when the start of the CDR is after the
 			  ;; end of our asked change.
+			  (cdr list-to-search)
 			  (< (semantic-tag-start (car (cdr list-to-search)))
 			     tokstart)
 			  (setq list-to-search (cdr list-to-search)))))
@@ -490,6 +494,14 @@ the semantic cache to see what needs to be changed."
       (setq changed-tags nil))
     changed-tags))
 
+(defmacro semantic-edits-assert-valid-region ()
+  "Asert that parse-start and parse-end are sorted correctly."
+;;;  (if (> parse-start parse-end)
+;;;      (error "Bug is %s !> %d!  Buff min/max = [ %d %d ]"
+;;;	     parse-start parse-end
+;;;	     (point-min) (point-max)))
+  )
+
 (defun semantic-edits-incremental-parser-1 ()
   "Incrementally reparse the current buffer.
 Return the list of tags that changed.
@@ -507,8 +519,11 @@ This function is for internal use by `semantic-edits-incremental-parser'."
          (parent-token nil)             ;parent of the cache list.
          (cache-list nil)               ;list of children within which
 					;we incrementally reparse.
-         (reparse-symbol nil)      ;The ruled we start at for reparse.
-         (change-group nil)           ;changes grouped in this reparse
+         (reparse-symbol nil)           ;The ruled we start at for reparse.
+         (change-group nil)             ;changes grouped in this reparse
+	 (last-cond nil)		;track the last case used.
+					;query this when debugging to find
+					;source of bugs.
          )
     (or changes
         ;; If we were called, and there are no changes, then we
@@ -550,19 +565,23 @@ This function is for internal use by `semantic-edits-incremental-parser'."
         (cond
          ;; Is this is a new parse group?
          ((not parse-start)
+	  (setq last-cond "new group")
           (let (tmp)
             (cond
 
 ;;;; Are we encompassed all in one token?
              ((setq tmp (semantic-edits-change-leaf-token (car changes)))
+	      (setq last-cond "Encompassed in token")
               (setq tokens (list tmp)
                     parse-start (semantic-tag-start tmp)
                     parse-end (semantic-tag-end tmp)
-                    ))
+                    )
+	      (semantic-edits-assert-valid-region))
 
 ;;;; Did the change occur between some tokens?
              ((setq cache-list (semantic-edits-change-between-tokens
                                 (car changes)))
+	      (setq last-cond "Between and not overlapping tokens")
               ;; The CAR of cache-list is the token just before
               ;; our change, but wasn't modified.  Hmmm.
               ;; Bound our reparse between these two tokens
@@ -572,8 +591,13 @@ This function is for internal use by `semantic-edits-incremental-parser'."
                           parse-start)))
               (cond
                ;; A change at the beginning of the buffer.
+	       ;; Feb 06 -
+	       ;; IDed when the first cache-list token is after
+	       ;; our change, meaning there is nothing before
+	       ;; the chnge.
                ((> (semantic-tag-start (car cache-list))
                    (semantic-overlay-end (car changes)))
+		(setq last-cond "Beginning of buffer")
                 (setq parse-start
                       ;; Don't worry about parents since
                       ;; there there would be an exact
@@ -582,10 +606,12 @@ This function is for internal use by `semantic-edits-incremental-parser'."
                       (point-min)
                       parse-end
                       (semantic-tag-start (car cache-list)))
+		(semantic-edits-assert-valid-region)
                 )
                ;; A change stuck on the first surrounding token.
                ((= (semantic-tag-end (car cache-list))
                    (semantic-overlay-start (car changes)))
+		(setq last-cond "Beginning of Tag")
                 ;; Reparse that first token.
                 (setq parse-start
                       (semantic-tag-start (car cache-list))
@@ -593,23 +619,29 @@ This function is for internal use by `semantic-edits-incremental-parser'."
                       (semantic-overlay-end (car changes))
                       tokens
                       (list (car cache-list)))
+		(semantic-edits-assert-valid-region)
                 )
                ;; A change at the end of the buffer.
                ((not (car (cdr cache-list)))
+		(setq last-cond "End of buffer")
                 (setq parse-start (semantic-tag-end
                                    (car cache-list))
                       parse-end (point-max))
+		(semantic-edits-assert-valid-region)
                 )
                (t
+		(setq last-cond "Default")
                 (setq parse-start
                       (semantic-tag-end (car cache-list))
                       parse-end
                       (semantic-tag-start (car (cdr cache-list)))
-                      ))))
+                      )
+		(semantic-edits-assert-valid-region))))
 
 ;;;; Did the change completely overlap some number of tokens?
              ((setq tmp (semantic-edits-change-over-tokens
                          (car changes)))
+	      (setq last-cond "Overlap multiple tokens")
               ;; Extract the information
               (setq tokens (aref tmp 0)
                     cache-list (aref tmp 1)
@@ -629,7 +661,9 @@ This function is for internal use by `semantic-edits-incremental-parser'."
                         (setq parse-end
                               (semantic-tag-start end-marker))
                       (setq parse-end (semantic-overlay-end
-                                       (car changes)))))
+                                       (car changes))))
+		    (semantic-edits-assert-valid-region)
+		    )
                 ;; Middle of the buffer.
                 (setq parse-start
                       (semantic-tag-end (car cache-list)))
@@ -646,6 +680,7 @@ This function is for internal use by `semantic-edits-incremental-parser'."
                     ;; already matches the end of that token.
                     (setq parse-end
                           (semantic-overlay-end (car changes)))))
+		(semantic-edits-assert-valid-region)
                 ))
 
 ;;;; Unhandled case.
@@ -655,10 +690,12 @@ This function is for internal use by `semantic-edits-incremental-parser'."
          ;; Is this change inside the previous parse group?
          ;; We already checked start.
          ((< (semantic-overlay-end (car changes)) parse-end)
+	  (setq last-cond "in bounds")
           nil)
          ;; This change extends the current parse group.
          ;; Find any new tokens, and see how to append them.
          ((semantic-parse-changes-failed
+	   (setq last-cond "overlap boundary")
            "Unhandled secondary change overlapping boundary"))
          )
         ;; Prepare for the next iteration.
@@ -668,6 +705,9 @@ This function is for internal use by `semantic-edits-incremental-parser'."
       ;; some parent.  They should all have the same start symbol
       ;; since that is how the multi-token parser works.  Grab
       ;; the reparse symbol from the first of the returned tokens.
+      ;;
+      ;; Feb '06 - If repase-symbol is nil, then they are top level
+      ;;     tokens.  (I'm guessing.)  Is this right?
       (setq reparse-symbol
             (semantic--tag-get-property (car (or tokens cache-list))
                                         'reparse-symbol))
@@ -678,15 +718,22 @@ This function is for internal use by `semantic-edits-incremental-parser'."
                   (car tokens))))
       ;; We can do the same trick for our parent and resulting
       ;; cache list.
-      (or cache-list
-          (setq cache-list
-                ;; We need to get all children in case we happen
-                ;; to have a mix of positioned and non-positioned
-                ;; children.
-                (semantic-tag-components parent-token)))
+      (unless cache-list
+	(if parent-token
+	    (setq cache-list
+		  ;; We need to get all children in case we happen
+		  ;; to have a mix of positioned and non-positioned
+		  ;; children.
+		  (semantic-tag-components parent-token))
+	  ;; Else, all the tokens since there is no parent.
+	  ;; It sucks to have to use the full buffer cache in
+	  ;; this case because it can be big.  Failure to provide
+	  ;; however results in a crash.
+	  (setq cache-list semantic--buffer-cache)
+	  ))
       ;; Use the boundary to calculate the new tokens found.
       (setq newf-tokens (semantic-parse-region
-                         parse-start parse-end reparse-symbol))
+			 parse-start parse-end reparse-symbol))
       ;; Make sure all these tokens are given overlays.
       ;; They have already been cooked by the parser and just
       ;; need the overlays.

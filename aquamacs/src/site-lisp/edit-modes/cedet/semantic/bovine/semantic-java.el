@@ -1,9 +1,10 @@
 ;;; semantic-java.el --- Semantic functions for Java
 
-;;; Copyright (C) 1999, 2000, 2001, 2002, 2003 David Ponce
+;;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007
+;;;   David Ponce
 
 ;; Author: David Ponce <david@dponce.com>
-;; X-RCS: $Id: semantic-java.el,v 1.1 2006/12/02 00:57:17 davidswelt Exp $
+;; X-RCS: $Id: semantic-java.el,v 1.2 2007/09/26 13:43:23 davidswelt Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -19,8 +20,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -32,10 +33,10 @@
 ;;; Code:
 (require 'semantic)
 (require 'semantic-ctxt)
+(require 'semantic-doc)
 
 ;;; Lexical analysis
 ;;
-
 (defconst semantic-java-number-regexp
   (eval-when-compile
     (concat "\\("
@@ -83,6 +84,65 @@ FLOATING_POINT_LITERAL:
   | [0-9]+<EXPONENT>?[fFdD]
   ;")
 
+;;; Parsing
+;;
+(defsubst semantic-java-dim (id)
+  "Split ID string into a pair (NAME . DIM).
+NAME is ID without trailing brackets: \"[]\".
+DIM is the dimension of NAME deduced from the number of trailing
+brackets, or 0 if there is no trailing brackets."
+  (let ((dim (string-match "\\(\\[]\\)+\\'" id)))
+    (if dim
+        (cons (substring id 0 dim)
+              (/ (length (match-string 0 id)) 2))
+      (cons id 0))))
+
+(defsubst semantic-java-type (tag)
+  "Return the type of TAG, taking care of array notation."
+  (let ((type (semantic-tag-type tag))
+        (dim  (semantic-tag-get-attribute tag :dereference)))
+    (when dim
+      (while (> dim 0)
+        (setq type (concat type "[]")
+              dim (1- dim))))
+    type))
+
+(defun semantic-java-expand-tag (tag)
+  "Expand compound declarations found in TAG into separate tags.
+TAG contains compound declarations when its class is `variable', and
+its name is a list of elements (NAME START . END), where NAME is a
+compound variable name, and START/END are the bounds of the
+corresponding compound declaration."
+  (let* ((class (semantic-tag-class tag))
+         (elts (semantic-tag-name tag))
+         dim type dim0 elt clone start end xpand)
+    (cond
+     ((and (eq class 'function)
+           (> (cdr (setq dim (semantic-java-dim elts))) 0))
+      (setq clone (semantic-tag-clone tag (car dim))
+            xpand (cons clone xpand))
+      (semantic-tag-put-attribute clone :dereference (cdr dim)))
+     ((eq class 'variable)
+      (or (consp elts) (setq elts (list (list elts))))
+      (setq dim  (semantic-java-dim (semantic-tag-get-attribute tag :type))
+            type (car dim)
+            dim0 (cdr dim))
+      (while elts
+        ;; For each compound element, clone the initial tag with the
+        ;; name and bounds of the compound variable declaration.
+        (setq elt   (car elts)
+              elts  (cdr elts)
+              start (if elts  (cadr elt) (semantic-tag-start tag))
+              end   (if xpand (cddr elt) (semantic-tag-end   tag))
+              dim   (semantic-java-dim (car elt))
+              clone (semantic-tag-clone tag (car dim))
+              xpand (cons clone xpand))
+        (semantic-tag-put-attribute clone :type type)
+        (semantic-tag-put-attribute clone :dereference (+ dim0 (cdr dim)))
+        (semantic-tag-set-bounds clone start end)))
+     )
+    xpand))
+
 ;;; Environment
 ;;
 
@@ -103,7 +163,8 @@ Optional argument PARENT is a parent (containing) item.
 Optional argument COLOR indicates that color should be mixed in.
 See also `semantic-format-prototype-tag'."
   (let ((name (semantic-tag-name tag))
-        (type (semantic-tag-type tag))
+        (type (semantic-java-type tag))
+        (tmpl (semantic-tag-get-attribute tag :template-specifier))
         (args (semantic-tag-function-arguments tag))
         (argp "")
         arg argt)
@@ -113,42 +174,45 @@ See also `semantic-format-prototype-tag'."
       (if (semantic-tag-p arg)
           (setq argt (if color
                          (semantic--format-colorize-text
-                          (semantic-tag-type arg) 'type)
-                       (semantic-tag-type arg))
+                          (semantic-java-type arg) 'type)
+                       (semantic-java-type arg))
                 argp (concat argp argt (if args "," "")))))
-    (if color
-        (progn
-          (if type
-              (setq type (semantic--format-colorize-text type 'type)))
-          (setq name (semantic--format-colorize-text name 'function))))
-    (concat (or type "") (if type " " "") name "(" argp ")")))
+    (when color
+      (when type
+        (setq type (semantic--format-colorize-text type 'type)))
+      (setq name (semantic--format-colorize-text name 'function)))
+    (concat (or tmpl "") (if tmpl " " "")
+            (or type "") (if type " " "")
+            name "(" argp ")")))
 
 (defun semantic-java-prototype-variable (tag &optional parent color)
   "Return a variable (field) prototype for TAG.
 Optional argument PARENT is a parent (containing) item.
 Optional argument COLOR indicates that color should be mixed in.
 See also `semantic-format-prototype-tag'."
-  (concat (if color
-              (semantic--format-colorize-text
-               (semantic-tag-type tag) 'type)
-            (semantic-tag-type tag))
-          " "
-          (if color
-              (semantic--format-colorize-text
-               (semantic-tag-name tag) 'variable)
-            (semantic-tag-name tag))))
+  (let ((name (semantic-tag-name tag))
+        (type (semantic-java-type tag)))
+    (concat (if color
+                (semantic--format-colorize-text type 'type)
+              type)
+            " "
+            (if color
+                (semantic--format-colorize-text name 'variable)
+              name))))
 
 (defun semantic-java-prototype-type (tag &optional parent color)
   "Return a type (class/interface) prototype for TAG.
 Optional argument PARENT is a parent (containing) item.
 Optional argument COLOR indicates that color should be mixed in.
 See also `semantic-format-prototype-tag'."
-  (concat (semantic-tag-type tag)
-          " "
-          (if color
-              (semantic--format-colorize-text
-               (semantic-tag-name tag) 'type)
-            (semantic-tag-name tag))))
+  (let ((name (semantic-tag-name tag))
+        (type (semantic-tag-type tag))
+        (tmpl (semantic-tag-get-attribute tag :template-specifier)))
+    (concat type " "
+            (if color
+                (semantic--format-colorize-text name 'type)
+              name)
+            (or tmpl ""))))
 
 (define-mode-local-override semantic-format-prototype-tag
   java-mode (tag &optional parent color)

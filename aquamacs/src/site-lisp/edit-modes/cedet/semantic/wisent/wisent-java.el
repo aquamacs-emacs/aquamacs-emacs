@@ -1,12 +1,12 @@
 ;;; wisent-java.el --- Java LALR parser for Emacs
 
-;; Copyright (C) 2001, 2002 David Ponce
+;; Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006 David Ponce
 
 ;; Author: David Ponce <david@dponce.com>
 ;; Maintainer: David Ponce <david@dponce.com>
 ;; Created: 19 June 2001
 ;; Keywords: syntax
-;; X-RCS: $Id: wisent-java.el,v 1.1 2006/12/02 00:57:23 davidswelt Exp $
+;; X-RCS: $Id: wisent-java.el,v 1.2 2007/09/26 13:43:25 davidswelt Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -22,8 +22,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program; see the file COPYING.  If not, write to
-;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -45,27 +45,6 @@
 
 ;;; Enable Semantic in `java-mode'.
 ;;
-(defun wisent-java-expand-tag (tag)
-  "Expand compound declarations found in TAG into separate tags.
-TAG contains compound declarations when its class is `variable', and
-its name is a list of elements (NAME START . END), where NAME is a
-compound variable name, and START/END are the bounds of the
-corresponding compound declaration."
-  (let (elts elt clone start end xpand)
-    (when (and (semantic-tag-of-class-p tag 'variable)
-               (consp (setq elts (semantic-tag-name tag))))
-      (while elts
-        ;; For each compound element, clone the initial tag with the
-        ;; name and bounds of the compound variable declaration.
-        (setq elt   (car elts)
-              elts  (cdr elts)
-              start (if elts  (cadr elt) (semantic-tag-start tag))
-              end   (if xpand (cddr elt) (semantic-tag-end   tag))
-              clone (semantic-tag-clone tag (car elt))
-              xpand (cons clone xpand))
-        (semantic-tag-set-bounds clone start end))
-      xpand)))
-
 (defun wisent-java-init-parser-context ()
   "Initialize context of the LR parser engine.
 Used as a local `wisent-pre-parse-hook' to cleanup the stack of enum
@@ -85,7 +64,7 @@ names in scope."
    semantic-lex-depth nil
    semantic-lex-analyzer 'wisent-java-lexer
    ;; Parsing
-   semantic-tag-expand-function 'wisent-java-expand-tag
+   semantic-tag-expand-function 'semantic-java-expand-tag
    ;; Environment
    semantic-imenu-summary-function 'semantic-format-tag-prototype
    semantic-imenu-expandable-tag-classes '(type variable)

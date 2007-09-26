@@ -1,12 +1,12 @@
 ;;; senator.el --- SEmantic NAvigaTOR
 
-;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005 by David Ponce
+;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 by David Ponce
 
 ;; Author: David Ponce <david@dponce.com>
 ;; Maintainer: David Ponce <david@dponce.com>
 ;; Created: 10 Nov 2000
 ;; Keywords: syntax
-;; X-RCS: $Id: senator.el,v 1.107 2005/06/30 01:37:28 zappo Exp $
+;; X-RCS: $Id: senator.el,v 1.116 2007/02/19 02:55:09 zappo Exp $
 
 ;; This file is not part of Emacs
 
@@ -22,8 +22,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program; see the file COPYING.  If not, write to
-;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -96,6 +96,7 @@
 (require 'semantic-imenu)
 (eval-when-compile
   (require 'semanticdb)
+  (require 'semanticdb-find)
   (require 'cl)
   )
 
@@ -242,7 +243,21 @@ Return nil otherwise."
 
 (defun senator-previous-tag-or-parent (pos)
   "Return the tag before POS or one of its parent where to step."
-  (let ((tag (semantic-find-tag-by-overlay-prev pos)))
+  (let (ol tag)
+    (while (and pos (> pos (point-min)) (not tag))
+      (setq pos (semantic-overlay-previous-change pos))
+      (when pos
+        ;; Get overlays at position
+        (setq ol (semantic-overlays-at pos))
+        ;; find the overlay that belongs to semantic
+        ;; and STARTS or ENDS at the found position.
+        (while (and ol (not tag))
+          (setq tag (semantic-overlay-get (car ol) 'semantic))
+          (unless (and tag (semantic-tag-p tag)
+                       (or (= (semantic-tag-start tag) pos)
+                           (= (semantic-tag-end   tag) pos)))
+            (setq tag nil
+                  ol (cdr ol))))))
     (or (senator-step-at-parent tag) tag)))
 
 (defun senator-full-tag-name (tag parent)
@@ -430,11 +445,18 @@ type context exists at point."
 (defun senator-find-tag-for-completion (prefix)
   "Find all tags with a name starting with PREFIX.
 Uses `semanticdb' when available."
-  (if (and (featurep 'semanticdb) (semanticdb-minor-mode-p))
-      ;; semanticdb version returns a list of (DB-TABLE . TAG-LIST)
-      (semanticdb-deep-find-tags-for-completion prefix)
-    ;; semantic version returns a TAG-LIST
-    (semantic-deep-find-tags-for-completion prefix (current-buffer))))
+  (let ((tagsa nil)
+	(tagsb nil))
+    (if (and (featurep 'semantic-analyze))
+	(setq tagsa (semantic-analyze-possible-completions
+		     (semantic-analyze-current-context))))
+    (setq tagsb
+	  (if (and (featurep 'semanticdb) (semanticdb-minor-mode-p))
+	      ;; semanticdb version returns a list of (DB-TABLE . TAG-LIST)
+	      (semanticdb-deep-find-tags-for-completion prefix)
+	    ;; semantic version returns a TAG-LIST
+	    (semantic-deep-find-tags-for-completion prefix (current-buffer))))
+    (append tagsa (semanticdb-strip-find-results tagsb))))
 
 ;;; Senator stream searching functions: no more supported.
 ;;
@@ -461,11 +483,12 @@ source."
                  name))
     (goto-char (semantic-tag-start tag))
     (when (re-search-forward (concat
-                              ;; the tag name is expected at the
-                              ;; beginning of a word or after a
-                              ;; whitespace or a punctuation
+                              ;; The tag name is expected to be
+                              ;; between word delimiters, whitespaces,
+                              ;; or punctuations.
                               "\\(\\<\\|\\s-+\\|\\s.\\)"
-                              (regexp-quote name))
+                              (regexp-quote name)
+                              "\\(\\>\\|\\s-+\\|\\s.\\)")
                              (semantic-tag-end tag)
                              t)
       (goto-char (match-beginning 0))
@@ -761,10 +784,7 @@ of completions once, doing nothing where there are no more matches."
             (setq complst (nthcdr 4 senator-last-completion-stats))
           
           (setq regex (regexp-quote (buffer-substring symstart (point)))
-                complst (let ((found (senator-find-tag-for-completion regex)))
-                          (if (and found (semantic-tag-p (car found)))
-                              found
-                            (apply #'append (mapcar #'cdr found))))
+                complst (senator-find-tag-for-completion regex)
                 senator-last-completion-stats (append (list (current-buffer)
                                                             symstart
                                                             0
@@ -839,15 +859,10 @@ choosen from the completion menu."
 That is a pair (MENU-ITEM-TEXT . TAG-ARRAY).  TAG-ARRAY is an
 array of one element containing TAG.  Can return nil to discard a
 menu item."
-  (if (semantic-tag-p tag)
-      (cons (funcall (if (fboundp senator-completion-menu-summary-function)
-                         senator-completion-menu-summary-function
-                       #'semantic-format-tag-prototype) tag)
-            (vector tag))
-    (cons (semanticdb-printable-name (car tag))
-          (delq nil
-                (mapcar #'senator-completion-menu-item
-                        (cdr tag))))))
+  (cons (funcall (if (fboundp senator-completion-menu-summary-function)
+		     senator-completion-menu-summary-function
+		   #'semantic-format-tag-prototype) tag)
+	(vector tag)))
 
 (defun senator-completion-menu-window-offsets (&optional window)
   "Return offsets of WINDOW relative to WINDOW's frame.
@@ -2428,15 +2443,22 @@ used by add log.")
 (defadvice add-log-current-defun (around senator activate)
   "Return name of function definition point is in, or nil."
   (if senator-minor-mode
-      (let ((cd (nreverse (semantic-find-tag-by-overlay)))
+      (let ((tag (semantic-current-tag))
             (name nil))
-        (while (and cd (not name))
-          (if (memq (semantic-tag-class (car cd))
-                    senator-add-log-tags)
-              (setq name (semantic-tag-name (car cd)))
-            (setq cd (cdr cd))))
-        (if name
-            (setq ad-return-value name)
+        (if (and tag (memq (semantic-tag-class tag)
+			   senator-add-log-tags))
+	    (progn
+	      (setq name
+		    (semantic-format-tag-canonical-name
+		     tag
+		     (or (semantic-current-tag-parent)
+			 (if (semantic-tag-function-parent tag)
+			     (or (semantic-find-first-tag-by-name
+				  (semantic-tag-function-parent tag)
+				  (current-buffer))
+				 (semantic-tag-function-parent
+				  tag))))))
+	      (setq ad-return-value name))
           ad-do-it))
     ad-do-it))
 
@@ -2454,26 +2476,6 @@ used by add log.")
 (defvar senator-tag-ring (make-ring 20)
   "Ring of tags for use with cut and paste.")
 
-(defun semantic-insert-foreign-tag-default (tag tagfile)
-  "Insert TAG from a foreign buffer into the current buffer.
-This is the default behavior for `semantic-insert-foreign-tag'.
-Assumes the current buffer is a language file, and attempts to insert
-a prototype/function call.
-Argument TAGFILE is the file from wence TAG came."
-  ;; Long term goal:
-  ;; Have a mechanism for a tempo-like template insert for the given
-  ;; tag.
-  (insert (semantic-format-tag-prototype tag)))
-
-(define-overload semantic-insert-foreign-tag (tag tagfile)
-  "Insert TAG from a foreign buffer into the current buffer.
-TAG will have originated from TAGFILE.
-This function is overridable with the symbol `insert-foreign-tag'."
-  (if (or (not tag) (not (semantic-tag-p tag)))
-      (signal 'wrong-type-argument (list tag 'semantic-tag-p)))
-  (:override)
-  (message (semantic-format-tag-summarize tag)))
-
 (make-obsolete-overload 'semantic-insert-foreign-token
                         'semantic-insert-foreign-tag)
 
@@ -2484,10 +2486,11 @@ This function is overridable with the symbol `insert-foreign-tag'."
   "Take the current tag, and place it in the tag ring."
   (interactive)
   (senator-parse)
-  (let ((ct (senator-current-tag)))
-    (ring-insert senator-tag-ring (cons ct (buffer-file-name)))
-    (message (semantic-format-tag-summarize ct))
-    ct))
+  (let ((ft (semantic-obtain-foreign-tag)))
+    (when ft
+      (ring-insert senator-tag-ring ft)
+      (message (semantic-format-tag-summarize ft)))
+    ft))
 (semantic-alias-obsolete 'senator-copy-token 'senator-copy-tag)
 
 (defun senator-kill-tag ()
@@ -2506,8 +2509,9 @@ The form the tag takes is differnet depending on where it is being
 yanked to."
   (interactive)
   (or (ring-empty-p senator-tag-ring)
-      (let ((tag (ring-ref senator-tag-ring 0)))
-        (semantic-insert-foreign-tag (car tag) (cdr tag)))))
+      (let ((ft (ring-ref senator-tag-ring 0)))
+          (semantic-foreign-tag-check ft)
+          (semantic-insert-foreign-tag ft))))
 (semantic-alias-obsolete 'senator-yank-token 'senator-yank-tag)
 
 (defun senator-copy-tag-to-register (register &optional kill-flag)
@@ -2515,11 +2519,13 @@ yanked to."
 Optional argument KILL-FLAG will delete the text of the tag to the
 kill ring."
   (interactive "cTag to register: \nP")
-  (let ((ct (senator-current-tag)))
-    (set-register register (cons ct (buffer-file-name)))
-    (if kill-flag
-        (kill-region (semantic-tag-start ct)
-                     (semantic-tag-end ct)))))
+  (senator-parse)
+  (let ((ft (semantic-obtain-foreign-tag)))
+    (when ft
+      (set-register register ft)
+      (if kill-flag
+          (kill-region (semantic-tag-start ft)
+                       (semantic-tag-end ft))))))
 (semantic-alias-obsolete 'senator-copy-token-to-register
                          'senator-copy-tag-to-register)
 
@@ -2528,8 +2534,8 @@ kill ring."
 If senator is not active, use the original mechanism."
   (let ((val (get-register (ad-get-arg 0))))
     (if (and senator-minor-mode (interactive-p)
-             (listp val) (semantic-tag-p (car val)))
-        (semantic-insert-foreign-tag (car val) (cdr val))
+             (semantic-foreign-tag-p val))
+        (semantic-insert-foreign-tag val)
       ad-do-it)))
 
 (defadvice jump-to-register (around senator activate)
@@ -2537,10 +2543,10 @@ If senator is not active, use the original mechanism."
 If senator is not active, use the original mechanism."
   (let ((val (get-register (ad-get-arg 0))))
     (if (and senator-minor-mode (interactive-p)
-             (listp val) (semantic-tag-p (car val)))
+             (semantic-foreign-tag-p val))
         (progn
-          (find-file (cdr val))
-          (goto-char (semantic-tag-start (car val))))
+          (switch-to-buffer (semantic-tag-buffer val))
+          (goto-char (semantic-tag-start val)))
       ad-do-it)))
 
 (defun senator-transpose-tags-up ()

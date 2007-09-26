@@ -1,11 +1,11 @@
 ;;; wisent-java-wy.el --- Generated parser support file
 
-;; Copyright (C) 2002, 2003, 2004 David Ponce
+;; Copyright (C) 2002, 2003, 2004, 2005, 2006 David Ponce
 
-;; Author: David <dr@lucy.lan>
-;; Created: 2006-12-01 20:39:21+0000
+;; Author: David <dr@scarlett.inf.ed.ac.uk>
+;; Created: 2007-09-26 14:39:55+0100
 ;; Keywords: syntax
-;; X-RCS: $Id: wisent-java-wy.el,v 1.1 2006/12/02 00:57:22 davidswelt Exp $
+;; X-RCS: $Id: wisent-java-wy.el,v 1.2 2007/09/26 13:43:25 davidswelt Exp $
 
 ;; This file is not part of GNU Emacs.
 ;;
@@ -21,8 +21,8 @@
 ;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -342,30 +342,30 @@
        (wildcard
 	((QUESTION))
 	((QUESTION EXTENDS reference_type)
-	 (concat $1 $2 $3))
+	 (concat $1 " " $2 " " $3))
 	((QUESTION SUPER reference_type)
-	 (concat $1 $2 $3)))
+	 (concat $1 " " $2 " " $3)))
        (wildcard_1
 	((QUESTION GT)
 	 (concat $1 $2))
 	((QUESTION EXTENDS reference_type_1)
-	 (concat $1 $2 $3))
+	 (concat $1 " " $2 " " $3))
 	((QUESTION SUPER reference_type_1)
-	 (concat $1 $2 $3)))
+	 (concat $1 " " $2 " " $3)))
        (wildcard_2
 	((QUESTION RSHIFT)
 	 (concat $1 $2))
 	((QUESTION EXTENDS reference_type_2)
-	 (concat $1 $2 $3))
+	 (concat $1 " " $2 " " $3))
 	((QUESTION SUPER reference_type_2)
-	 (concat $1 $2 $3)))
+	 (concat $1 " " $2 " " $3)))
        (wildcard_3
 	((QUESTION URSHIFT)
 	 (concat $1 $2))
 	((QUESTION EXTENDS reference_type_3)
-	 (concat $1 $2 $3))
+	 (concat $1 " " $2 " " $3))
 	((QUESTION SUPER reference_type_3)
-	 (concat $1 $2 $3)))
+	 (concat $1 " " $2 " " $3)))
        (reference_type_1
 	((reference_type GT)
 	 (concat $1 $2))
@@ -420,14 +420,10 @@
 	((import_declaration))
 	((type_declaration)))
        (package_declaration
-	((modifiers PACKAGE name SEMICOLON)
+	((modifiers_opt PACKAGE name SEMICOLON)
 	 (wisent-cook-tag
 	  (wisent-raw-tag
-	   (semantic-tag-new-package $3 nil))))
-	((PACKAGE name SEMICOLON)
-	 (wisent-cook-tag
-	  (wisent-raw-tag
-	   (semantic-tag-new-package $2 nil)))))
+	   (semantic-tag-new-package $3 nil :typemodifiers $1)))))
        (import_declaration
 	((IMPORT name SEMICOLON)
 	 (wisent-cook-tag
@@ -553,7 +549,7 @@
 	((LBRACE enum_constants_opt enum_body_declarations_opt RBRACE)
 	 (nconc $2 $3))
 	((LBRACE error)
-	 (wisent-skip-block)))
+	 (wisent-skip-block nil)))
        (enum_constants_opt
 	(nil)
 	((enum_constants)
@@ -581,7 +577,7 @@
 	(nil)
 	((LPAREN argument_list_opt RPAREN))
 	((LPAREN error)
-	 (wisent-skip-block)))
+	 (wisent-skip-block nil)))
        (enum_body_declarations_opt
 	(nil)
 	((SEMICOLON class_body_declarations_opt)
@@ -602,7 +598,12 @@
 	((variable_declarator)
 	 (list $1))
 	((variable_declarators COMMA variable_declarator)
-	 (cons $3 $1)))
+	 (progn
+	   (setcdr
+	    (cdar
+	     (car $1))
+	    (cdr $region2))
+	   (cons $3 $1))))
        (variable_declarator
 	((variable_declarator_id)
 	 (cons
@@ -626,7 +627,6 @@
 	 (let
 	     ((tag
 	       (eval $1)))
-	   (semantic-tag-put-attribute tag :body $2)
 	   (wisent-cook-tag tag))))
        (method_header
 	((modifiers_opt type method_declarator throws_opt)
@@ -638,7 +638,8 @@
 	 `(wisent-raw-tag
 	   (semantic-tag-new-function ',(car $5)
 				      ',$4 ',(cdr $5)
-				      :typemodifiers ',$1 :template-specifier ',$3 :throws ',$6)))
+				      :typemodifiers ',$1 :template-specifier ',(concat $2 $3)
+				      :throws ',$6)))
 	((modifiers_opt VOID method_declarator throws_opt)
 	 `(wisent-raw-tag
 	   (semantic-tag-new-function ',(car $3)
@@ -648,12 +649,15 @@
 	 `(wisent-raw-tag
 	   (semantic-tag-new-function ',(car $5)
 				      ',$4 ',(cdr $5)
-				      :typemodifiers ',$1 :template-specifier ',$3 :throws ',$6))))
+				      :typemodifiers ',$1 :template-specifier ',(concat $2 $3)
+				      :throws ',$6))))
        (method_declarator
 	((IDENTIFIER LPAREN formal_parameter_list_opt RPAREN)
 	 (cons $1 $3))
 	((IDENTIFIER LPAREN error)
-	 (wisent-skip-block))
+	 (prog1
+	     (list $1)
+	   (wisent-skip-block $region2)))
 	((method_declarator LBRACK RBRACK)
 	 (cons
 	  (concat
@@ -675,21 +679,18 @@
 	 (wisent-cook-tag
 	  (wisent-raw-tag
 	   (semantic-tag-new-variable $2 $1 nil))))
-	((FINAL type variable_declarator_id)
+	((modifiers type variable_declarator_id)
 	 (wisent-cook-tag
 	  (wisent-raw-tag
-	   (semantic-tag-new-variable $3 $2 nil :typemodifiers
-				      (list $1)))))
+	   (semantic-tag-new-variable $3 $2 nil :typemodifiers $1))))
 	((type ELLIPSIS IDENTIFIER)
 	 (wisent-cook-tag
 	  (wisent-raw-tag
 	   (semantic-tag-new-variable $3 $1 nil :vararg-flag t))))
-	((FINAL type ELLIPSIS IDENTIFIER)
+	((modifiers type ELLIPSIS IDENTIFIER)
 	 (wisent-cook-tag
 	  (wisent-raw-tag
-	   (semantic-tag-new-variable $4 $2 nil :typemodifiers
-				      (list $1)
-				      :vararg-flag t)))))
+	   (semantic-tag-new-variable $4 $2 nil :typemodifiers $1 :vararg-flag t)))))
        (throws_opt
 	(nil)
 	((throws)))
@@ -708,7 +709,8 @@
        (static_initializer
 	((STATIC block)
 	 (when $2
-	   (semantic-tag-put-attribute $2 :static-flag t)
+	   (semantic-tag-put-attribute $2 :typemodifiers
+				       (list $1))
 	   $2)))
        (constructor_declaration
 	((modifiers_opt constructor_declarator throws_opt constructor_body)
@@ -718,7 +720,7 @@
 	    (car $2)
 	    nil
 	    (cdr $2)
-	    :typemodifiers $1 :throws $3 :constructor-flag t :body $4))))
+	    :typemodifiers $1 :throws $3 :constructor-flag t))))
 	((modifiers_opt LT type_parameter_list_1 constructor_declarator throws_opt constructor_body)
 	 (wisent-cook-tag
 	  (wisent-raw-tag
@@ -726,12 +728,16 @@
 	    (car $4)
 	    nil
 	    (cdr $4)
-	    :typemodifiers $1 :template-specifier $3 :throws $5 :constructor-flag t :body $6)))))
+	    :typemodifiers $1 :template-specifier
+	    (concat $2 $3)
+	    :throws $5 :constructor-flag t)))))
        (constructor_declarator
 	((simple_name LPAREN formal_parameter_list_opt RPAREN)
 	 (cons $1 $3))
 	((simple_name LPAREN error)
-	 (wisent-skip-block)))
+	 (prog1
+	     (list $1)
+	   (wisent-skip-block $region2))))
        (constructor_body
 	((LBRACE explicit_constructor_invocation block_statements RBRACE)
 	 (progn $3))
@@ -742,7 +748,7 @@
 	((LBRACE RBRACE)
 	 nil)
 	((LBRACE error)
-	 (wisent-skip-block)))
+	 (wisent-skip-block nil)))
        (explicit_constructor_invocation
 	((THIS LPAREN argument_list_opt RPAREN SEMICOLON))
 	((type_arguments THIS LPAREN argument_list_opt RPAREN SEMICOLON))
@@ -806,7 +812,7 @@
 	((LBRACE COMMA RBRACE))
 	((LBRACE RBRACE))
 	((LBRACE error)
-	 (wisent-skip-block)))
+	 (wisent-skip-block nil)))
        (variable_initializers
 	((variable_initializer))
 	((variable_initializers COMMA variable_initializer)))
@@ -814,7 +820,7 @@
 	   ((LBRACE block_statements_opt RBRACE)
 	    (progn $2))
 	 ((LBRACE error)
-	  (wisent-skip-block)))
+	  (wisent-skip-block nil)))
        (block_statements_opt
 	(nil)
 	((block_statements)))
@@ -822,7 +828,7 @@
 	((block_statements_reverse)
 	 (wisent-cook-tag
 	  (wisent-raw-tag
-	   (semantic-tag "block" 'block :value
+	   (semantic-tag "block" 'block :members
 			 (apply 'nconc
 				(nreverse $1)))))))
        (block_statements_reverse
@@ -841,14 +847,27 @@
 	((local_variable_declaration SEMICOLON)))
        (local_variable_declaration
 	((type variable_declarators)
-	 (wisent-cook-tag
-	  (wisent-raw-tag
-	   (semantic-tag-new-variable $2 $1 nil))))
-	((FINAL type variable_declarators)
-	 (wisent-cook-tag
-	  (wisent-raw-tag
-	   (semantic-tag-new-variable $3 $2 nil :typemodifiers
-				      (list $1))))))
+	 (let*
+	     ((decls
+	       (mapcar 'car $2))
+	      (anons
+	       (apply 'nconc
+		      (nreverse
+		       (mapcar 'cdr $2)))))
+	   (wisent-cook-tag
+	    (wisent-raw-tag
+	     (semantic-tag-new-variable decls $1 nil :members anons)))))
+	((modifiers type variable_declarators)
+	 (let*
+	     ((decls
+	       (mapcar 'car $3))
+	      (anons
+	       (apply 'nconc
+		      (nreverse
+		       (mapcar 'cdr $3)))))
+	   (wisent-cook-tag
+	    (wisent-raw-tag
+	     (semantic-tag-new-variable decls $2 nil :typemodifiers $1 :members anons))))))
        (statement
 	((statement_without_trailing_substatement))
 	((labeled_statement))
@@ -907,7 +926,7 @@
 	((LBRACE switch_labels RBRACE))
 	((LBRACE RBRACE))
 	((LBRACE error)
-	 (wisent-skip-block)))
+	 (wisent-skip-block nil)))
        (switch_block_statement_groups
 	((switch_block_statement_group))
 	((switch_block_statement_groups switch_block_statement_group)))
@@ -928,12 +947,20 @@
        (foreach_statement
 	((FOR LPAREN type variable_declarator_id COLON expression RPAREN statement)
 	 nil)
+	((FOR LPAREN modifiers type variable_declarator_id COLON expression RPAREN statement)
+	 nil)
 	((FOR IDENTIFIER LPAREN type variable_declarator_id IDENTIFIER expression RPAREN statement)
+	 nil)
+	((FOR IDENTIFIER LPAREN modifiers type variable_declarator_id IDENTIFIER expression RPAREN statement)
 	 nil))
        (foreach_statement_no_short_if
 	((FOR LPAREN type variable_declarator_id COLON expression RPAREN statement_no_short_if)
 	 nil)
+	((FOR LPAREN modifiers type variable_declarator_id COLON expression RPAREN statement_no_short_if)
+	 nil)
 	((FOR IDENTIFIER LPAREN type variable_declarator_id IDENTIFIER expression RPAREN statement_no_short_if)
+	 nil)
+	((FOR IDENTIFIER LPAREN modifiers type variable_declarator_id IDENTIFIER expression RPAREN statement_no_short_if)
 	 nil))
        (for_statement
 	((FOR LPAREN for_init_opt SEMICOLON expression_opt SEMICOLON for_update_opt RPAREN statement)
@@ -1059,7 +1086,7 @@
        (dim_expr
 	((LBRACK expression RBRACK))
 	((LBRACK error)
-	 (wisent-skip-block)))
+	 (wisent-skip-block nil)))
        (dims_opt
 	(nil
 	 (progn ""))
@@ -1191,43 +1218,53 @@
 	(nil))
        (type_parameters
 	((LT type_parameter_list_1)
-	 (progn $2)))
+	 (concat $1 $2)))
        (type_parameter_list
 	((type_parameter_list COMMA type_parameter)
-	 (cons $3 $1))
-	((type_parameter)
-	 (list $1)))
+	 (concat $1 $2 $3))
+	((type_parameter)))
        (type_parameter_list_1
-	((type_parameter_1)
-	 (list $1))
+	((type_parameter_1))
 	((type_parameter_list COMMA type_parameter_1)
-	 (cons $3 $1)))
+	 (concat $1 $2 $3)))
        (type_parameter
-	((type_variable type_bound_opt)))
+	((type_variable type_bound_opt)
+	 (concat $1 $2)))
        (type_parameter_1
-	((type_variable GT))
-	((type_variable type_bound_1)))
+	((type_variable GT)
+	 (concat $1 $2))
+	((type_variable type_bound_1)
+	 (concat $1 $2)))
        (type_bound_opt
 	((type_bound))
-	(nil))
+	(nil
+	 (progn "")))
        (type_bound
-	((EXTENDS reference_type additional_bound_list_opt)))
+	((EXTENDS reference_type additional_bound_list_opt)
+	 (concat $1 " " $2 " " $3)))
        (type_bound_1
-	((EXTENDS reference_type_1))
-	((EXTENDS reference_type additional_bound_list_1)))
+	((EXTENDS reference_type_1)
+	 (concat $1 " " $2))
+	((EXTENDS reference_type additional_bound_list_1)
+	 (concat $1 " " $2 " " $3)))
        (additional_bound_list_opt
 	((additional_bound_list))
-	(nil))
+	(nil
+	 (progn "")))
        (additional_bound_list
-	((additional_bound additional_bound_list))
+	((additional_bound additional_bound_list)
+	 (concat $1 $2))
 	((additional_bound)))
        (additional_bound_list_1
-	((additional_bound additional_bound_list_1))
+	((additional_bound additional_bound_list_1)
+	 (concat $1 $2))
 	((additional_bound_1)))
        (additional_bound
-	((AND interface_type)))
+	((AND interface_type)
+	 (concat $1 " " $2)))
        (additional_bound_1
-	((AND reference_type_1)))
+	((AND reference_type_1)
+	 (concat $1 " " $2)))
        (postfix_expression_no_name
 	((primary))
 	((postincrement_expression))
@@ -1320,7 +1357,7 @@
        (annotation_type_body
 	((LBRACE annotation_type_member_declarations_opt RBRACE))
 	((LBRACE error)
-	 (wisent-skip-block)))
+	 (wisent-skip-block nil)))
        (annotation_type_member_declarations_opt
 	(nil)
 	((annotation_type_member_declarations)))
@@ -1341,12 +1378,18 @@
        (default_value
 	 ((DEFAULT member_value)))
        (annotation
-	((AT name))
-	((AT name LPAREN member_value RPAREN))
-	((AT name LPAREN member_value_pairs RPAREN))
-	((AT name LPAREN RPAREN))
+	((AT name)
+	 (concat $1 $2))
+	((AT name LPAREN member_value RPAREN)
+	 (concat $1 $2))
+	((AT name LPAREN member_value_pairs RPAREN)
+	 (concat $1 $2))
+	((AT name LPAREN RPAREN)
+	 (concat $1 $2))
 	((AT name LPAREN error)
-	 (wisent-skip-block)))
+	 (prog1
+	     (concat $1 $2)
+	   (wisent-skip-block $region3))))
        (member_value_pairs
 	((member_value_pair))
 	((member_value_pairs COMMA member_value_pair)))
@@ -1362,7 +1405,7 @@
 	((LBRACE COMMA RBRACE))
 	((LBRACE RBRACE))
 	((LBRACE error)
-	 (wisent-skip-block)))
+	 (wisent-skip-block nil)))
        (member_values
 	((member_value))
 	((member_values COMMA member_value))))

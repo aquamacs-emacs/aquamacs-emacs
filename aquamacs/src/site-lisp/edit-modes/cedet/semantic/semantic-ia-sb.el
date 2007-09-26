@@ -1,10 +1,10 @@
 ;;; semantic-ia-sb.el --- Speedbar analysis display interactor
 
-;;; Copyright (C) 2002, 2003, 2004 Eric M. Ludlam
+;;; Copyright (C) 2002, 2003, 2004, 2006 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: syntax
-;; X-RCS: $Id: semantic-ia-sb.el,v 1.16 2004/10/14 02:54:15 zappo Exp $
+;; X-RCS: $Id: semantic-ia-sb.el,v 1.18 2006/07/29 15:05:00 zappo Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -20,8 +20,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -86,12 +86,14 @@ DIRECTORY is the current directory, which is ignored, and ZERO is 0."
 	(fnargs nil)
 	(cf (selected-frame))
 	(cnt nil)
+	(mode-local-active-mode nil)
 	)
     ;; Try and get some sort of analysis
     (condition-case nil
 	(progn
 	  (speedbar-select-attached-frame)
 	  (setq buffer (current-buffer))
+	  (setq mode-local-active-mode major-mode)
 	  (save-excursion
 	    ;; We usd to cache the last analysis, but the analyzer
 	    ;; now has a newer and improved analysis cache system.
@@ -131,9 +133,10 @@ DIRECTORY is the current directory, which is ignored, and ZERO is 0."
       (semantic-ia-sb-more-buttons analysis)
       (when completions
 	(speedbar-insert-separator "Completions")
-	(semantic-ia-sb-completion-list completions
-					'speedbar-tag-face
-					'semantic-ia-sb-complete))
+	(save-excursion
+	  (semantic-ia-sb-completion-list completions
+					  'speedbar-tag-face
+					  'semantic-ia-sb-complete)))
       )))
 
 (defmethod semantic-ia-sb-more-buttons ((context semantic-analyze-context))
@@ -191,7 +194,7 @@ Each button will use FACE, and be activated with FUNCTION."
 			 ((semantic-tag-p (car list))
 			  (setq usefn (semantic-tag-with-position-p (car list)))
 			  (semantic-format-tag-uml-concise-prototype (car list)))
-			 (t "foo"))))
+			 (t "<No Tag>"))))
       (if (semantic-tag-p (car list))
 	  (speedbar-make-tag-line 'angle ?i
 				  'semantic-ia-sb-tag-info (car list)

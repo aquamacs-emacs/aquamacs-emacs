@@ -1,10 +1,10 @@
 ;;; ede-ede-grammar.el --- EDE support for Semantic Grammar Files
 
-;;;  Copyright (C) 2003, 2004  Eric M. Ludlam
+;;;  Copyright (C) 2003, 2004, 2007  Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: project, make
-;; RCS: $Id: semantic-ede-grammar.el,v 1.7 2004/05/25 14:24:23 ponced Exp $
+;; RCS: $Id: semantic-ede-grammar.el,v 1.12 2007/03/18 16:43:17 zappo Exp $
 
 ;; This software is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -18,8 +18,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -74,7 +74,7 @@ parsing different languages.")
      "@echo \"(require 'semantic-load)\" >> grammar-make-script"
      "@echo \"(require 'semantic-grammar)\" >> grammar-make-script"
      ;; "@echo \"(setq debug-on-error t)\" >> grammar-make-script"
-     "${EMACS} -batch --no-site-file -l grammar-make-script -f semantic-grammar-batch-build-packages $^"
+     "\"$(EMACS)\" -batch --no-site-file -l grammar-make-script -f semantic-grammar-batch-build-packages $^"
      )
    ;; :autoconf '("AM_PATH_LISPDIR")
    :sourcetype '(semantic-ede-source-grammar-wisent)
@@ -104,7 +104,7 @@ parsing different languages.")
      "@echo \"(require 'semantic-load)\" >> grammar-make-script"
      "@echo \"(require 'semantic-grammar)\" >> grammar-make-script"
      ;; "@echo \"(setq debug-on-error t)\" >> grammar-make-script"
-     "${EMACS} -batch --no-site-file -l grammar-make-script -f semantic-grammar-batch-build-packages $^"
+     "\"$(EMACS)\" -batch --no-site-file -l grammar-make-script -f semantic-grammar-batch-build-packages $^"
      )
    ;; :autoconf '("AM_PATH_LISPDIR")
    :sourcetype '(semantic-ede-source-grammar-bovine)
@@ -148,14 +148,11 @@ Lays claim to all -by.el, and -wy.el files."
 
 (defmethod ede-proj-makefile-insert-variables :AFTER ((this semantic-ede-proj-target-grammar))
   "Insert variables needed by target THIS."
-  (ede-pmake-insert-variable-shared "LOADPATH"
-    (insert (mapconcat 'identity
-		       (ede-proj-elisp-packages-to-loadpath
-			(list "eieio" "semantic" "inversion"))
-		       " "))
-    )
+  (ede-proj-makefile-insert-loadpath-items
+   (ede-proj-elisp-packages-to-loadpath
+    (list "eieio" "semantic" "inversion")))
   (ede-pmake-insert-variable-shared
-      (concat (ede-pmake-varname this) "_SAMENATIC_GRAMMAR_EL")
+      (concat (ede-pmake-varname this) "_SEMANTIC_GRAMMAR_EL")
     (insert
      (mapconcat (lambda (src)
 		  (save-excursion
@@ -184,22 +181,22 @@ This makes sure that all grammar lisp files are created before the dist
 runs, so they are always up to date.
 Argument THIS is the target that should insert stuff."
   (call-next-method)
-  (insert " $(" (ede-pmake-varname this) "_SAMENATIC_GRAMMAR_EL)")
+  (insert " $(" (ede-pmake-varname this) "_SEMANTIC_GRAMMAR_EL)")
   )
 
 ;;;###autoload
 (autoload 'ede-proj-target-elisp "semantic-ede-proj-target-grammar"
   "Target class for Emacs/Semantic grammar files." nil nil)
 
+(ede-proj-register-target "semantic grammar"
+			  semantic-ede-proj-target-grammar)
+
+(provide 'semantic-ede-grammar)
+
 ;;;###autoload
 (eval-after-load "ede-proj"
     (quote
      (require 'semantic-ede-grammar)
      ))
-
-(ede-proj-register-target "semantic grammar"
-			  semantic-ede-proj-target-grammar)
-
-(provide 'semantic-ede-grammar)
 
 ;;; semantic-ede-grammar.el ends here

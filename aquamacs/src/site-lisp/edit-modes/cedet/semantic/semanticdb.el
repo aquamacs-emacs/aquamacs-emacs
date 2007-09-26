@@ -1,10 +1,10 @@
 ;;; semanticdb.el --- Semantic tag database manager
 
-;;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005 Eric M. Ludlam
+;;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: tags
-;; X-RCS: $Id: semanticdb.el,v 1.74 2005/06/30 01:21:14 zappo Exp $
+;; X-RCS: $Id: semanticdb.el,v 1.84 2007/05/20 15:56:43 zappo Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -20,8 +20,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 ;; 
 ;;; Commentary:
 ;;
@@ -69,6 +69,7 @@ on or off."
 Tools wanting to specify the file names of the semantic database
 use this.")
 
+;;;###autoload
 (defvar semanticdb-current-database nil
   "For a given buffer, this is the currently active database.")
 (make-variable-buffer-local 'semanticdb-current-database)
@@ -202,12 +203,20 @@ If one isn't found, create one."
 (defmethod semanticdb-get-buffer ((obj semanticdb-table))
   "Return a buffer associated with OBJ.
 If the buffer is not in memory, load it with `find-file-noselect'."
-  (find-file-noselect (semanticdb-full-filename obj)))
+  (find-file-noselect (semanticdb-full-filename obj) t))
 
 (defmethod semanticdb-set-buffer ((obj semanticdb-table))
   "Set the current buffer to be a buffer owned by OBJ.
 If OBJ's file is not loaded, read it in first."
   (set-buffer (semanticdb-get-buffer obj)))
+
+(defmethod semanticdb-normalize-tags ((obj semanticdb-abstract-table) tags)
+  "For the table OBJ, convert a list of TAGS, into standardized form.
+The default is to return TAGS.
+Some databases may default to searching and providing simplified tags
+based on whichever technique used.  This method provides a hook for
+them to convert TAG into a more complete form."
+  tags)
 
 (defmethod semanticdb-refresh-table ((obj semanticdb-table))
   "If the tag list associated with OBJ is loaded, refresh it.
@@ -284,6 +293,7 @@ Uses `semanticdb-persistent-path' to determine the return value."
 ;;
 ;; What is the current database, are two tables of an equivalent mode,
 ;; and what databases are a part of the same project.
+;;;###autoload
 (defun semanticdb-current-database ()
   "Return the currently active database."
   (or semanticdb-current-database
@@ -292,6 +302,30 @@ Uses `semanticdb-persistent-path' to determine the return value."
 				       default-directory)
 	   )
       nil))
+
+(defvar semanticdb-match-any-mode nil
+  "Non-nil to temporarilly search any major mode for a tag.
+If a particular major mode wants to search any mode, put the
+`semantic-match-any-mode' symbol onto the symbol of that major mode.
+Do not set the value of this variable permanently.")
+
+(defmacro semanticdb-with-match-any-mode (&rest body)
+  "A Semanticdb search occuring withing BODY will search tags in all modes.
+This temporarilly sets `semanticdb-match-any-mode' while executing BODY."
+  `(let ((semanticdb-match-any-mode t))
+     ,@body))
+(put 'semanticdb-with-match-any-mode 'lisp-indent-function 0)
+
+(defmethod semanticdb-equivalent-mode-for-search (table &optional buffer)
+  "Return non-nil if TABLE's mode is equivalent to BUFFER.
+See `semanticdb-equivalent-mode' for details.
+This version is used during searches.  Major-modes that opt
+to set the `semantic-match-any-mode' property will be able to search
+all files of any type."
+  (or (get major-mode 'semantic-match-any-mode)
+      semanticdb-match-any-mode
+      (semanticdb-equivalent-mode table buffer))
+  )
 
 (defmethod semanticdb-equivalent-mode ((table semanticdb-abstract-table) &optional buffer)
   "Return non-nil if TABLE's mode is equivalent to BUFFER.
@@ -310,21 +344,10 @@ local variable."
      (and (not semantic-equivalent-major-modes)
 	  (eq major-mode (oref table major-mode)))
      (and semantic-equivalent-major-modes
-	  (member (oref table major-mode) semantic-equivalent-major-modes)))
+	  (member (oref table major-mode) semantic-equivalent-major-modes))
+     )
     ))
 
-(defvar semanticdb-dir-sep-char (if (boundp 'directory-sep-char)
-				    (symbol-value 'directory-sep-char)
-				  ?/)
-  "Character used for directory separation.
-Obsoleted in some versions of Emacs.  Needed in others.")
-
-(defun semanticdb-fix-pathname (path)
-  "If PATH is broken, fix it.
-Force PATH to end with a /."
-  (if (not (= semanticdb-dir-sep-char (aref path (1- (length path)))))
-      (concat path (list semanticdb-dir-sep-char))
-    path))
 
 (defmethod semanticdb-printable-name ((table semanticdb-table))
   "Return a string which is a short and logical printable name for TABLE.
@@ -412,7 +435,7 @@ Always append `semanticdb-project-system-databases' if
 		)
 	    (while adb
 	      ;; I don't like this part, but close enough.
-	      (if (and (slot-exists-p (car adb) 'file)
+	      (if (and ;; (slot-exists-p (car adb) 'file) <-- What was that for? 2/15/07
 		       (slot-boundp (car adb) 'reference-directory)
 		       (string-match regexp (oref (car adb) reference-directory)))
 		  (setq dbs (cons (car adb) dbs)))
@@ -474,8 +497,8 @@ Argument NEW-TABLE is the new table of tags."
 
 (defun semanticdb-kill-hook ()
   "Function run when a buffer is killed.
-If there is a semantic cache, slurp out the overlays, an store
-it in our database.  If that buffer has not cache, ignore it, we'll
+If there is a semantic cache, slurp out the overlays, and store
+it in our database.  If that buffer has no cache, ignore it, we'll
 handle it later if need be."
   (if (and (semantic-active-p)
 	   semantic--buffer-cache
@@ -584,25 +607,35 @@ Update the environment of Semantic enabled buffers accordingly."
 (defun semanticdb-dump-all-table-summary ()
   "Dump a list of all databases in Emacs memory."
   (interactive)
-  (let ((db semanticdb-database-list))
-    (with-output-to-temp-buffer "*SEMANTICDB*"
-      (while db
-	(princ (object-name (car db)))
-	(princ ": ")
-	(if (slot-boundp (car db) 'reference-directory)
-	    (princ (oref (car db) reference-directory))
-	  (princ "System DB"))
-	(princ "\n")
-	(setq db (cdr db))))
-    ))
+  (require 'semantic-adebug)
+  (let ((ab (semantic-adebug-new-buffer "*SEMANTICDB*"))
+	(db semanticdb-database-list))
+    (semantic-adebug-insert-stuff-list db "*")))
 
+
+;;    (with-output-to-temp-buffer "*SEMANTICDB*"
+;;      (while db
+;;	(princ (object-name (car db)))
+;;	(princ ": ")
+;;	(if (slot-boundp (car db) 'reference-directory)
+;;	    (princ (oref (car db) reference-directory))
+;;	  (princ "System DB"))
+;;	(princ "\n")
+;;	(setq db (cdr db))))
+;;    ))
+
+;;; Generic Accessor Routines
+;;
+;; These routines can be used to get at tags in files w/out
+;; having to know a lot about semanticDB.
 
 ;;;###autoload
-(defun semanticdb-file-table-object (file)
+(defun semanticdb-file-table-object (file &optional dontload)
   "Return a semanticdb table belonging to FILE.
 If file has database tags available in the database, return it.
-If file does not have tags available, then load the file, and create a new
-table object for it."
+If file does not have tags available, and DONTLOAD is nil,
+then load the tags for FILE, and create a new table object for it.
+DONTLOAD does not affect the creation of new database objects."
   (setq file (expand-file-name file))
   (when (file-exists-p file)
     (let* ((default-directory (file-name-directory file))
@@ -614,22 +647,23 @@ table object for it."
 	   )
       (or (semanticdb-file-table db file)
 	  ;; We must load the file.
-	  (save-excursion
-	    (set-buffer (find-file-noselect file))
-	    ;; Find file should automatically do this for us.
-	    ;; Sometimes the DB table doesn't contains tags and needs
-	    ;; a refresh.  For example, when the file is loaded for
-	    ;; the first time, and the idle scheduler didn't get a
-	    ;; chance to trigger a parse before the file buffer is
-	    ;; killed.
-	    (when (semanticdb-needs-refresh-p semanticdb-current-table)
-	      (semanticdb-refresh-table semanticdb-current-table))
-	    (prog1
-		semanticdb-current-table
-	      ;; If we had to find the file, then we should kill it
-	      ;; to keep the master buffer list clean.
-	      (kill-buffer (current-buffer))
-	      ))))))
+	  (if (not dontload)
+	      (save-excursion
+		(set-buffer (find-file-noselect file t))
+		;; Find file should automatically do this for us.
+		;; Sometimes the DB table doesn't contains tags and needs
+		;; a refresh.  For example, when the file is loaded for
+		;; the first time, and the idle scheduler didn't get a
+		;; chance to trigger a parse before the file buffer is
+		;; killed.
+		(when (semanticdb-needs-refresh-p semanticdb-current-table)
+		  (semanticdb-refresh-table semanticdb-current-table))
+		(prog1
+		    semanticdb-current-table
+		  ;; If we had to find the file, then we should kill it
+		  ;; to keep the master buffer list clean.
+		  (kill-buffer (current-buffer))))))
+      )))
 
 ;;;###autoload
 (defun semanticdb-file-stream (file)

@@ -1,10 +1,10 @@
 ;;; semantic-tag-file.el --- Routines that find files based on tags.
 
-;;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005 Eric M. Ludlam
+;;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2007 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: syntax
-;; X-RCS: $Id: semantic-tag-file.el,v 1.11 2005/06/30 01:35:09 zappo Exp $
+;; X-RCS: $Id: semantic-tag-file.el,v 1.17 2007/05/17 01:42:04 zappo Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -20,8 +20,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -127,51 +127,41 @@ Depends on `semantic-dependency-include-path' for searching.  Always searches
   (or tag (setq tag (car (semantic-find-tag-by-overlay nil))))
   (unless (semantic-tag-of-class-p tag 'include)
     (signal 'wrong-type-argument (list tag 'include)))
-  (cond ((semantic-tag-buffer tag)
-	 ;; If the tag has an overlay and buffer associated with it,
-	 ;; switch to that buffer so that we get the right override metohds.
-	 (set-buffer (semantic-tag-buffer tag)))
-	((semantic-tag-file-name tag)
-	 ;; If it didn't have a buffer, but does have a file
-	 ;; name, then we need to get to that file so the tag
-	 ;; location is made accurate.
-	 (set-buffer (find-file-noselect (semantic-tag-file-name tag)))))
-  ;; First, see if this file exists in the current EDE project
-  (if (and (fboundp 'ede-expand-filename) ede-minor-mode
-	   (ede-expand-filename (ede-toplevel)
-				(semantic-tag-name tag)))
-      (ede-expand-filename (ede-toplevel)
-			   (semantic-tag-name tag))
-    (let
-	((result
-	  (if (semantic--tag-get-property tag 'dependency-file)
-	      (semantic--tag-get-property tag 'dependency-file)
-	    (:override
-	     (save-excursion
-	       (let* ((name (semantic-tag-name tag))
-		      (result
-		       (cond ((file-exists-p name)
-			      (expand-file-name name))
-			     ((and (symbolp semantic-dependency-include-path)
-				   (fboundp semantic-dependency-include-path))
-			      (funcall semantic-dependency-include-path name))
-			     (t
-			      (let ((p semantic-dependency-include-path)
-				    (found nil))
-				(while (and p (not found))
-				  (if (file-exists-p (concat (car p) "/" name))
-				      (setq found (concat (car p) "/" name)))
-				  (setq p (cdr p)))
-				found)))))
-		 result)))
-	    )))
-      (if (stringp result)
-	  (progn
-	    (semantic--tag-put-property tag 'dependency-file result)
-	    result)
-	(semantic--tag-put-property tag 'dependency-file 'none)
-	nil)
-      )))
+  (save-excursion
+    (cond ((semantic-tag-buffer tag)
+	   ;; If the tag has an overlay and buffer associated with it,
+	   ;; switch to that buffer so that we get the right override metohds.
+	   (set-buffer (semantic-tag-buffer tag)))
+	  ((semantic-tag-file-name tag)
+	   ;; If it didn't have a buffer, but does have a file
+	   ;; name, then we need to get to that file so the tag
+	   ;; location is made accurate.
+	   (set-buffer (find-file-noselect (semantic-tag-file-name tag)))))
+    ;; First, see if this file exists in the current EDE project
+    (if (and (fboundp 'ede-expand-filename) ede-minor-mode
+	     (ede-expand-filename (ede-toplevel)
+				  (semantic-tag-name tag)))
+	(ede-expand-filename (ede-toplevel)
+			     (semantic-tag-name tag))
+      (let
+	  ((result
+	    (if (semantic--tag-get-property tag 'dependency-file)
+		(semantic--tag-get-property tag 'dependency-file)
+	      (:override
+	       (save-excursion
+		 (let* ((name (semantic-tag-name tag)))
+		   (semantic-dependency-find-file-on-path
+		    name (semantic-tag-include-system-p tag)))))
+	      )))
+	(if (stringp result)
+	    (progn
+	      (semantic--tag-put-property tag 'dependency-file result)
+	      result)
+	  ;; @todo: Do something to make this get flushed w/
+	  ;;        when the path is changed.
+	  (semantic--tag-put-property tag 'dependency-file 'none)
+	  nil)
+	))))
 
 (make-obsolete-overload 'semantic-find-dependency
                         'semantic-dependency-tag-file)
