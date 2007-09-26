@@ -1,10 +1,10 @@
 ;;; ede-proj-info.el --- EDE Generic Project texinfo support
 
-;;;  Copyright (C) 1998, 1999, 2000, 2001, 2004  Eric M. Ludlam
+;;;  Copyright (C) 1998, 1999, 2000, 2001, 2004, 2007  Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: project, make
-;; RCS: $Id: ede-proj-info.el,v 1.15 2004/03/30 14:51:10 zappo Exp $
+;; RCS: $Id: ede-proj-info.el,v 1.18 2007/03/12 03:39:55 zappo Exp $
 
 ;; This software is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -18,8 +18,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -107,7 +107,8 @@ when working in Automake mode."
 (defun ede-makeinfo-find-info-filename (source)
   "Find the info filename produced by SOURCE texinfo file."
   (let ((opened (get-file-buffer source))
-	(buffer (find-file-noselect source nil t))
+	(buffer (or (get-file-buffer source)
+		    (find-file-noselect source nil t)))
 	info)
     (with-current-buffer buffer
       (save-excursion
@@ -166,7 +167,17 @@ Argument THIS is the target which needs to insert an info file."
   "Return a list of files that provides documentation.
 Documentation is not for object THIS, but is provided by THIS for other
 files in the project."
-  (oref this source))
+  (let ((src (oref this source))
+	(out nil)
+	)
+    ;; convert src to full file names.
+    (while src
+      (setq out (cons
+		 (ede-expand-filename this (car src))
+		 out))
+      (setq src (cdr src)))
+    ;; Return it
+    out))
 
 (provide 'ede-proj-info)
 

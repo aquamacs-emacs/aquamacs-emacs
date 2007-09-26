@@ -1,11 +1,11 @@
 ;;; project-am.el --- A project management scheme based on automake files.
 
-;;;  Copyright (C) 1998, 1999, 2000, 2003, 2005  Eric M. Ludlam
+;;;  Copyright (C) 1998, 1999, 2000, 2003, 2005, 2007  Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Version: 0.0.3
 ;; Keywords: project, make
-;; RCS: $Id: project-am.el,v 1.25 2005/04/30 15:00:02 zappo Exp $
+;; RCS: $Id: project-am.el,v 1.28 2007/03/12 03:43:18 zappo Exp $
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -21,8 +21,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;; 
@@ -407,9 +407,10 @@ It does not check for existing project objects.  Use `project-am-load'."
 	      (let ((ampf (project-am-makefile (project-am-last-dir fn)
 					       :name (project-am-last-dir fn)
 					       :file fn)))
-		(project-rescan ampf)
 		(make-local-variable 'ede-object)
 		(setq ede-object ampf)
+		;; Move the rescan after we set ede-object to prevent recursion
+		(project-rescan ampf)
 		ampf))
 	  ;; If the buffer was not already loaded, kill it.
 	  (if (not kb) (kill-buffer (current-buffer))))))))
@@ -649,8 +650,17 @@ Argument FILE is the file to extract the end directory name from."
   "Return a list of files that provides documentation.
 Documentation is not for object THIS, but is provided by THIS for other
 files in the project."
-  (append (oref this source)
-	  (oref this include)))
+  (let ((src (append (oref this source)
+		     (oref this include)))
+	(out nil))
+    ;; Loop over all entries and expand
+    (while src
+      (setq out (cons
+		 (ede-expand-filename this (car src))
+		 out))
+      (setq src (cdr src)))
+    ;; return it
+    out))
 
 
 ;;; Makefile editing and scanning commands

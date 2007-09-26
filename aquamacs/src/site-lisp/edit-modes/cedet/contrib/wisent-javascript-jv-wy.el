@@ -2,8 +2,8 @@
 
 ;; Copyright (C) 2005 Joakim Verona, Eric Ludlam
 
-;; Author: David <dr@lucy.lan>
-;; Created: 2006-12-01 20:44:18+0000
+;; Author: Eric M. Ludlam <zappo@projectile.siege-engine.com>
+;; Created: 2007-06-05 21:48:12-0400
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -21,8 +21,8 @@
 ;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;

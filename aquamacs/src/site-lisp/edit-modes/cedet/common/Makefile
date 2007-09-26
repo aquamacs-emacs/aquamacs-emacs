@@ -10,16 +10,15 @@ top=
 ede_FILES=Project.ede Makefile
 
 misc_AUX=ChangeLog
-EMACS=/Applications/Aquamacs Emacs.app/Contents/MacOS/Aquamacs Emacs
-
-LOADPATH=./ 
+EMACS=emacs
+LOADPATH= ./
 LOADDEFS=cedet-loaddefs.el
 LOADDIRS=.
 init_LISP=cedet-load.el
-#EMACS=emacs
+EMACS=emacs
 setup_LISP=cedet.el
-common_LISP=cedet-autogen.el cedet-compat.el ezimage.el inversion.el pprint.el sformat.el fame.el working.el cedet-edebug.el mode-local.el
-VERSION=1.0pre3
+common_LISP=cedet-autogen.el cedet-compat.el ezimage.el inversion.el pprint.el sformat.el fame.el working.el cedet-edebug.el mode-local.el cedet-files.el
+VERSION=1.0pre4
 DISTDIR=$(top)common-$(VERSION)
 
 

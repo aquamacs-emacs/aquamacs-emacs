@@ -6,11 +6,11 @@
 
 ;;; autoconf.el --- Mode for editing Autoconf configure.in files.
 
-;; Copyright (C) 2000, 2004 Free Software Foundation, Inc.
+;; Copyright (C) 2000, 2004, 2007 Free Software Foundation, Inc.
 
 ;; Author: Dave Love <fx@gnu.org>
 ;; Keywords: languages
-;; $Revision: 1.4 $
+;; $Revision: 1.6 $
 
 ;; This software is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -24,8 +24,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 
@@ -42,7 +42,10 @@
 
 ;;; Code:
 
-  (eval-and-compile (if (not (fboundp 'with-syntax-table))
+(eval-when-compile
+  (require 'font-lock))
+
+(eval-and-compile (if (not (fboundp 'with-syntax-table))
 			
 ;; Copied from Emacs 21 for compatibility with released Emacses.
 (defmacro with-syntax-table (table &rest body)

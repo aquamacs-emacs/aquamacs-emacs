@@ -1,6 +1,6 @@
 ;;; cogre-mode.el --- Graph editing mode
 
-;;; Copyright (C) 2001, 2002, 2003 Eric M. Ludlam
+;;; Copyright (C) 2001, 2002, 2003, 2007 Eric M. Ludlam
 
 ;; This file is not part of GNU Emacs.
 
@@ -16,8 +16,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -188,6 +188,7 @@ Argument MENU-DEF is the easy-menu definition."
   (run-hooks 'cogre-mode-hook)
   (cogre-render-buffer cogre-graph t)
   )
+(put 'cogre-mode 'semantic-match-any-mode t)
 
 ;;; Interactive utility functions
 ;;

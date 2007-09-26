@@ -1,11 +1,11 @@
 ;;; ede.el --- Emacs Development Environment gloss
 
-;;;  Copyright (C) 1998-2005  Eric M. Ludlam
+;;;  Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2007  Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: project, make
-;; RCS: $Id: ede.el,v 1.70 2005/06/30 02:36:30 zappo Exp $
-(defconst ede-version "1.0pre3"
+;; RCS: $Id: ede.el,v 1.82 2007/06/06 01:01:50 zappo Exp $
+(defconst ede-version "1.0pre4"
   "Current version of the Emacs EDE.")
 
 ;; This software is free software; you can redistribute it and/or modify
@@ -20,8 +20,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;; 
@@ -41,7 +41,6 @@
 ;;
 ;;  (global-ede-mode t)
 
-(require 'ede-load)
 (require 'ede-source)
 
 ;;; Code:
@@ -101,6 +100,7 @@ target willing to take the file.  'never means never perform the check."
 
 ;;; Top level classes for projects and targets
 ;;
+;;;###autoload
 (defclass ede-project-autoload ()
   ((name :initarg :name
 	 :documentation "Name of this project type")
@@ -148,6 +148,12 @@ type is required and the load function used.")
 			 :new-p nil)
    )
   "List of vectos defining how to determine what type of projects exist.")
+
+;;; AUTOLOADS
+;;
+;; These autoloads must appear here to avoid recursive loading.
+;;
+(require 'ede-load)
 
 ;;; Generic project information manager objects
 ;;
@@ -406,13 +412,20 @@ Do not set this to non-nil globally.  It is used internally.")
 	(set-buffer (find-file-noselect ede-project-placeholder-cache-file t))
 	(goto-char (point-min))
 	(let ((c (read (current-buffer)))
+	      (new nil)
 	      (p ede-projects))
 	  ;; Remove loaded projects from the cache.
 	  (while p
 	    (setq c (delete (oref (car p) file) c))
 	    (setq p (cdr p)))
+	  ;; Remove projects that aren't on the filesystem
+	  ;; anymore.
+	  (while c
+	    (when (file-exists-p (car c))
+	      (setq new (cons (car c) new)))
+	    (setq c (cdr c)))
 	  ;; Save it
-	  (setq ede-project-cache-files c)))
+	  (setq ede-project-cache-files (nreverse new))))
     (error nil))
   (if (get-file-buffer ede-project-placeholder-cache-file)
       (kill-buffer (get-file-buffer ede-project-placeholder-cache-file)))
@@ -461,6 +474,7 @@ Argument LIST-O-O is the list of objects to choose from."
 
 ;;; Menu and Keymap
 ;;
+;;;###autoload
 (defvar ede-minor-mode nil
   "Non-nil in EDE controlled buffers.")
 (make-variable-buffer-local 'ede-minor-mode)
@@ -805,13 +819,20 @@ Argument FILE is the file or directory to load a project from."
 			   )
 			  nil t)))
   (let* ((obj (object-assoc type 'name ede-project-class-files))
-	 (nobj (progn
+	 (nobj (let ((f (oref obj file))
+		     (pf (oref obj proj-file)))
 		 ;; Make sure this class gets loaded!
-		 (require (oref obj file))
+		 (require f)
 		 (make-instance (oref obj class-sym)
 				:name (read-string "Name: ")
-				:file
-				(expand-file-name (oref obj proj-file))
+				:file (cond ((stringp pf)
+					     (expand-file-name pf))
+					    ((fboundp pf)
+					     (funcall pf))
+					    (t
+					     (error
+					      "Unknown file name specifier %S"
+					      pf)))
 				:targets nil)))
 	 (inits (oref obj initializers)))
     (while inits
@@ -899,6 +920,10 @@ ARGS are additional arguments to pass to method sym."
   (project-add-file target (buffer-file-name))
   (setq ede-object nil)
   (setq ede-object (ede-buffer-object (current-buffer)))
+  (when (not ede-object)
+    (error "Can't add %s to target %s: Wrong file type"
+	   (file-name-nondirectory (buffer-file-name))
+	   (object-name target)))
   (ede-apply-object-keymap))
 
 ;;;###autoload
@@ -1203,7 +1228,8 @@ doesn't exist."
 	    (concat path "include/" filename))
 	   (t
 	    (while (and (not found) proj)
-	      (setq found (ede-expand-filename (car proj) filename)
+	      (setq found (when (car proj)
+			    (ede-expand-filename (car proj) filename))
 		    proj (cdr proj)))
 	    found))
      (and force (concat path filename)))))
@@ -1241,6 +1267,7 @@ Do a quick check to see if there is a Header tag in this buffer."
 		src (cdr src)))
 	found))))
 
+;;;###autoload
 (defun ede-documentation-files ()
   "Return the documentation files for the current buffer.
 Not all buffers need documentations, so return nil if no applicable.
@@ -1313,14 +1340,20 @@ This functions is meant for use with ECB."
 (defmethod ede-dir-to-projectfile ((this ede-project-autoload) dir)
   "Return a full file name of project THIS found in DIR.
 Return nil if the project file does not exist."
-  (let ((f (concat dir (oref this proj-file))))
+  (let* ((d (file-name-as-directory dir))
+	 (pf (oref this proj-file))
+	 (f (cond ((stringp pf)
+		   (concat d pf))
+		  ((and (symbolp pf) (fboundp pf))
+		   (funcall pf dir))))
+	 )
     (and (file-exists-p f) f)))
 
 ;;; EDE basic functions
 ;;
 (defun ede-directory-project-p (dir)
   "Return a project description object if DIR has a project.
-This depends on an up to day `ede-project-class-files' variable."
+This depends on an up to date `ede-project-class-files' variable."
   (let ((types ede-project-class-files)
 	(ret nil))
     ;; Loop over all types, loading in the first type that we find.
@@ -1336,11 +1369,13 @@ This depends on an up to day `ede-project-class-files' variable."
 (defun ede-up-directory (dir)
   "Return a path that is up one directory.
 Argument DIR is the directory to trim upwards."
-  (let ((parent (expand-file-name ".." dir)))
-    (if (and (> (length parent) 1) (string= ".." (substring parent -2)))
-        nil
-      (file-name-as-directory parent))))
-
+  (if (string-match "^[a-zA-Z]:[\\/]$" dir)
+      nil
+    (let ((parent (expand-file-name ".." dir)))
+      (if (and (> (length parent) 1) (string= ".." (substring parent -2)))
+	  nil
+	(file-name-as-directory parent)))))
+  
 (defun ede-toplevel-project-or-nil (path)
   "Starting with PATH, find the toplevel project directory, or return nil.
 nil is returned if the current directory is not a part ofa project."
@@ -1397,10 +1432,13 @@ nil is returned if the current directory is not a part ofa project."
 	(setq tocheck (list o))
 	(setq file (ede-dir-to-projectfile pfc (expand-file-name path)))
 	(while (and tocheck (not found))
-	  (if (string= file (oref (car tocheck) file))
-	      (setq found (car tocheck)))
-	  (setq tocheck
-		(append (cdr tocheck) (oref (car tocheck) subproj))))
+	  (let ((newbits nil))
+	    (when (car tocheck)
+	      (if (string= file (oref (car tocheck) file))
+		  (setq found (car tocheck)))
+	      (setq newbits (oref (car tocheck) subproj)))
+	    (setq tocheck
+		  (append (cdr tocheck) newbits))))
 	(if (not found)
 	    (error "No project for %s, but passes project-p test" file))
 	;; Now that the file has been reset inside the project object, do

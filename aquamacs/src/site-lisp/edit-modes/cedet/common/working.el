@@ -1,7 +1,7 @@
 ;;; working --- Display a "working" message in the minibuffer.
 
 ;; Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003,
-;;               2004  Eric M. Ludlam
+;;               2004, 2007  Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Version: 1.5
@@ -19,8 +19,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -168,8 +168,8 @@ percentage display.  A number such as `2' means `2%'."
 ;; When the user doesn't want messages in the minibuffer, hack the mode
 ;; line of the current buffer.
 (if (featurep 'xemacs)
-    (defalias 'working-mode-line-update 'redraw-modeline)
-  (defalias 'working-mode-line-update 'force-mode-line-update))
+    (eval-and-compile (defalias 'working-mode-line-update 'redraw-modeline))
+  (eval-and-compile (defalias 'working-mode-line-update 'force-mode-line-update)))
 
 (defvar working-mode-line-message nil
   "Message used by working when showing status in the mode line.")
@@ -244,8 +244,8 @@ See the function `message' for details on ARGS."
 
 ;;; Compatibility
 (cond ((fboundp 'run-with-timer)
-       (defalias 'working-run-with-timer 'run-with-timer)
-       (defalias 'working-cancel-timer 'cancel-timer)
+       (eval-and-compile (defalias 'working-run-with-timer 'run-with-timer))
+       (eval-and-compile (defalias 'working-cancel-timer 'cancel-timer))
        )
       ;;Add compatibility here
       (t 

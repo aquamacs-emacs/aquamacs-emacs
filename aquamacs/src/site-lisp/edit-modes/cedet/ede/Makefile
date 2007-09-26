@@ -9,21 +9,19 @@
 top=
 ede_FILES=Project.ede Makefile
 
-EMACS=/Applications/Aquamacs Emacs.app/Contents/MacOS/Aquamacs Emacs
-
-LOADPATH=../common/ ../speedbar/ ../eieio/\
-   
+EMACS=emacs
+LOADPATH= ../common/  ../speedbar/ ../eieio/
 LOADDEFS=ede-loaddefs.el
 LOADDIRS=.
 init_LISP=ede-load.el
-#EMACS=emacs
-ede_LISP=project-am.el ede.el ede-pmake.el ede-pconf.el ede-proj.el ede-dired.el ede-proj-elisp.el ede-proj-misc.el ede-proj-obj.el ede-proj-prog.el ede-proj-archive.el ede-proj-shared.el ede-proj-info.el ede-proj-scheme.el ede-proj-aux.el ede-proj-comp.el ede-source.el ede-util.el ede-system.el ede-speedbar.el
+EMACS=emacs
+ede_LISP=project-am.el ede.el ede-pmake.el ede-pconf.el ede-proj.el ede-dired.el ede-proj-elisp.el ede-proj-misc.el ede-proj-obj.el ede-proj-prog.el ede-proj-archive.el ede-proj-shared.el ede-proj-info.el ede-proj-scheme.el ede-proj-aux.el ede-proj-comp.el ede-source.el ede-util.el ede-system.el ede-speedbar.el ede-simple.el
 aux-lisp_LISP=autoconf-edit.el autoconf-compat.el
 misc_AUX=NEWS README TODO ede-proj-skel.el ChangeLog
 ede_info_TEXINFOS=ede.texi ede-projects.texi ede-targets.texi ede-sourcecode.texi ede-compilers.texi
 MAKEINFO=makeinfo
 test_AUX=
-VERSION=1.0pre3
+VERSION=1.0pre4
 DISTDIR=$(top)EDE-$(VERSION)
 
 

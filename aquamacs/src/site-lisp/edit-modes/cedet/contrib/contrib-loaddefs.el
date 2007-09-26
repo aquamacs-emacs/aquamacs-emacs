@@ -5,7 +5,7 @@
 
 ;;;### (autoloads (semantic-tag-folding-mode global-semantic-tag-folding-mode
 ;;;;;;  global-semantic-tag-folding-mode) "semantic-tag-folding"
-;;;;;;  "semantic-tag-folding.el" (17091 25107))
+;;;;;;  "semantic-tag-folding.el" (18022 5418))
 ;;; Generated autoloads from semantic-tag-folding.el
 
 (defvar global-semantic-tag-folding-mode nil "\
@@ -13,14 +13,14 @@
 With this mode enabled, a new folding decoration mode is added.
 Clicking on a + or - in the fringe will fold that tag.")
 
-(custom-autoload (quote global-semantic-tag-folding-mode) "semantic-tag-folding" nil)
+(custom-add-to-group (quote semantic) (quote global-semantic-tag-folding-mode) (quote custom-variable))
+
+(custom-add-load (quote global-semantic-tag-folding-mode) (quote semantic-util-modes))
 
 (autoload (quote global-semantic-tag-folding-mode) "semantic-tag-folding" "\
 Toggle global use of option `semantic-tag-folding-mode'.
 If ARG is positive, enable, if it is negative, disable.
-If ARG is nil, then toggle.
-
-\(fn &optional ARG)" t nil)
+If ARG is nil, then toggle." t nil)
 
 (autoload (quote semantic-tag-folding-mode) "semantic-tag-folding" "\
 Minor mode mark semantic tags for folding.
@@ -29,43 +29,30 @@ will fold the current tag.
 With prefix argument ARG, turn on if positive, otherwise off.  The
 minor mode can be turned on only if semantic feature is available and
 the current buffer was set up for parsing.  Return non-nil if the
-minor mode is enabled.
-
-\(fn &optional ARG)" t nil)
+minor mode is enabled." t nil)
 
 ;;;***
 
 ;;;### (autoloads (wisent-csharp-default-setup) "wisent-csharp" "wisent-csharp.el"
-;;;;;;  (17091 25107))
+;;;;;;  (18022 5418))
 ;;; Generated autoloads from wisent-csharp.el
 
-(autoload (quote wisent-csharp-default-setup) "wisent-csharp" "\
-Not documented
-
-\(fn)" nil nil)
+(autoload (quote wisent-csharp-default-setup) "wisent-csharp" nil nil nil)
 
 (add-hook (quote csharp-mode-hook) (function wisent-csharp-default-setup))
 
 ;;;***
 
 ;;;### (autoloads (wisent-javascript-setup-parser) "wisent-javascript"
-;;;;;;  "wisent-javascript.el" (17091 25107))
+;;;;;;  "wisent-javascript.el" (18022 5418))
 ;;; Generated autoloads from wisent-javascript.el
 
 (autoload (quote wisent-javascript-setup-parser) "wisent-javascript" "\
-Setup buffer for parse.
-
-\(fn)" nil nil)
+Setup buffer for parse." nil nil)
 
 (add-hook (quote javascript-mode-hook) (quote wisent-javascript-setup-parser))
 
 (add-hook (quote ecmascript-mode-hook) (quote wisent-javascript-setup-parser))
-
-;;;***
-
-;;;### (autoloads nil nil ("cedet-contrib-load.el" "cedet-contrib.el"
-;;;;;;  "wisent-csharp-wy.el" "wisent-javascript-jv-wy.el") (17776
-;;;;;;  37914 234125))
 
 ;;;***
 

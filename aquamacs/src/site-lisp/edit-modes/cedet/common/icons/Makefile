@@ -10,7 +10,7 @@ top=../
 ede_FILES=Project.ede Makefile
 
 icons_MISC=bitsbang.xpm bits.xpm box-minus.xpm box-plus.xpm box.xpm checkmark.xpm dir-minus.xpm dir-plus.xpm dir.xpm doc-minus.xpm doc-plus.xpm doc.xpm info.xpm key.xpm label.xpm lock.xpm mail.xpm page-minus.xpm page-plus.xpm page.xpm tag-gt.xpm tag-minus.xpm tag-plus.xpm tag-type.xpm tag-v.xpm tag.xpm unlock.xpm
-VERSION=1.0pre3
+VERSION=1.0
 DISTDIR=$(top)common-$(VERSION)/icons
 
 

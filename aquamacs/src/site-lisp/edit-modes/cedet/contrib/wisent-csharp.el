@@ -1,6 +1,8 @@
 ;;; wisent-csharp.el --- LALR grammar for C#
 ;;
-;; Copyright (C) 2003 David Shilvock
+;; Copyright (C) 2003, 2007 David Shilvock
+;; Some Changes Copyright (C) 2006 Eric M. Ludlam
+
 ;; Time-stamp: <2003-12-08 19:11:48 dave>
 ;;
 ;; Author: David Shilvock <davels@telus.net>
@@ -22,8 +24,8 @@
 ;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -34,6 +36,8 @@
 ;;; Code:
 
 (require 'semantic-wisent)
+(require 'semantic-format)
+(require 'semantic-ctxt)
 (require 'wisent-csharp-wy)
 
 
@@ -244,6 +248,20 @@ This function overrides `get-local-variables'."
 ;;; * Lexer
 ;;;----------------------------------------------------------------------
 
+(define-lex-regex-analyzer wisent-csharp-lex-ignore-region
+  "Ignore # type macros for C sharp."
+  "^\\s-*#region\\>"
+  (goto-char (match-end 0))
+  (forward-word 1)
+  (setq semantic-lex-end-point (point))
+  nil)
+
+(define-lex-regex-analyzer wisent-csharp-lex-ignore-endregion
+  "Ignore # type macros for C sharp."
+  "^\\s-*#endregion\\>"
+  (setq semantic-lex-end-point (match-end 0))
+  nil)
+
 (define-lex-analyzer wisent-csharp-lex-string
   "Detect and create a string token for csharp strings."
   (looking-at wisent-csharp-string-re)
@@ -284,6 +302,8 @@ It ignores whitespaces, newlines and comments."
   semantic-lex-ignore-whitespace
   semantic-lex-ignore-newline
   semantic-lex-ignore-comments
+  wisent-csharp-lex-ignore-region
+  wisent-csharp-lex-ignore-endregion
   wisent-csharp-lex-number
   wisent-csharp-lex-string
   wisent-csharp-lex-symbol

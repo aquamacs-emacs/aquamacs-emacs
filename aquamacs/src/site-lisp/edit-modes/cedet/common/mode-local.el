@@ -6,7 +6,7 @@
 ;; Maintainer: David Ponce <david@dponce.com>
 ;; Created: 27 Apr 2004
 ;; Keywords: syntax
-;; X-RCS: $Id: mode-local.el,v 1.7 2005/03/24 09:18:54 ponced Exp $
+;; X-RCS: $Id: mode-local.el,v 1.10 2006/01/30 12:51:20 ponced Exp $
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
@@ -22,8 +22,8 @@
 ;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -555,7 +555,9 @@ BODY is the implementation of this function."
 	   ,(format "%s\n\nOverride %s in `%s' buffers."
 		    docstring name mode)
 	   ;; The body for this implementation
-	   ,@body))
+	   ,@body)
+         ;; For find-func to locate the definition of NEWNAME.
+         (put ',newname 'definition-name ',name))
        (mode-local-bind '((,name . ,newname))
                         '(override-flag t)
                         ',mode))
@@ -770,6 +772,11 @@ invoked interactively."
 
 ;;; find-func support (Emacs 21.4, or perhaps 22.1)
 ;;
+(condition-case nil
+    ;; Try to get find-func so we can modify it.
+    (require 'find-func)
+  (error nil))
+
 (when (boundp 'find-function-regexp)
   (unless (string-match "ine-overload" find-function-regexp)
     (if (string-match "(def\\\\(" find-function-regexp)
@@ -783,7 +790,6 @@ invoked interactively."
     )
   ;; The regexp for variables is a little more kind.
   )
-  
 
 ;; TODO: Add XEmacs support
 (when (fboundp 'font-lock-add-keywords)

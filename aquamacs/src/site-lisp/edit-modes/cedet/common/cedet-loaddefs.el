@@ -4,7 +4,7 @@
 
 
 ;;;### (autoloads (cedet-update-autoloads) "cedet-autogen" "cedet-autogen.el"
-;;;;;;  (17091 25106))
+;;;;;;  (18022 5416))
 ;;; Generated autoloads from cedet-autogen.el
 
 (autoload (quote cedet-update-autoloads) "cedet-autogen" "\
@@ -18,34 +18,16 @@ exists." t nil)
 
 ;;;***
 
-;;;### (autoloads (compare-strings) "cedet-compat" "cedet-compat.el"
-;;;;;;  (17091 25106))
-;;; Generated autoloads from cedet-compat.el
-
-(autoload (quote compare-strings) "cedet-compat" "\
-Compare the contents of two strings.
-In string STR1, skip the first START1 characters and stop at END1.
-In string STR2, skip the first START2 characters and stop at END2.
-END1 and END2 default to the full lengths of the respective strings.
-
-Case is significant in this comparison if IGNORE-CASE is nil.
-
-The value is t if the strings (or specified portions) match.
-If string STR1 is less, the value is a negative number N;
-  - 1 - N is the number of characters that match at the beginning.
-If string STR1 is greater, the value is a positive number N;
-  N - 1 is the number of characters that match at the beginning." nil nil)
-
-;;;***
-
-;;;### (autoloads nil "cedet-edebug" "cedet-edebug.el" (17091 25106))
+;;;### (autoloads nil "cedet-edebug" "cedet-edebug.el" (18022 5416))
 ;;; Generated autoloads from cedet-edebug.el
 
-(add-hook (quote edebug-setup-hook) (lambda nil (require (quote cedet-edebug)) (defalias (quote edebug-prin1-to-string) (quote cedet-edebug-prin1-to-string))))
+(add-hook (quote edebug-setup-hook) (lambda nil (require (quote cedet-edebug)) (defalias (quote edebug-prin1-to-string) (quote cedet-edebug-prin1-to-string)) (define-key edebug-mode-map "A" (quote semantic-adebug-edebug-expr))))
+
+(add-hook (quote debugger-mode-hook) (lambda nil (require (quote cedet-edebug)) (define-key debugger-mode-map "A" (quote semantic-adebug-edebug-expr))))
 
 ;;;***
 
-;;;### (autoloads (define-fame-channel) "fame" "fame.el" (17091 25106))
+;;;### (autoloads (define-fame-channel) "fame" "fame.el" (18022 5416))
 ;;; Generated autoloads from fame.el
 
 (autoload (quote define-fame-channel) "fame" "\
@@ -64,8 +46,9 @@ messages to CHANNEL." nil (quote macro))
 
 ;;;***
 
-;;;### (autoloads (inversion-upgrade-package inversion-require) "inversion"
-;;;;;;  "inversion.el" (17091 25106))
+;;;### (autoloads (inversion-upgrade-package inversion-add-to-load-path
+;;;;;;  inversion-find-version inversion-require) "inversion" "inversion.el"
+;;;;;;  (18022 5416))
 ;;; Generated autoloads from inversion.el
 
 (autoload (quote inversion-require) "inversion" "\
@@ -77,13 +60,33 @@ this tool can be located.  If there is a versioning problem and
 DIRECTORY is provided, inversion will offer to download the file.
 Optional argument RESERVED is saved for later use." nil nil)
 
+(autoload (quote inversion-find-version) "inversion" "\
+Search for the version and incompatible version of PACKAGE.
+Does not load PACKAGE nor requires that it has been previously loaded.
+Search in the directories in `load-path' for a PACKAGE.el library.
+Visit the file found and search for the declarations of variables or
+constants `PACKAGE-version' and `PACKAGE-incompatible-version'.  The
+value of these variables must be a version string.
+
+Return a pair (VERSION-STRING . INCOMPATIBLE-VERSION-STRING) where
+INCOMPATIBLE-VERSION-STRING can be nil.
+Return nil when VERSION-STRING was not found." nil nil)
+
+(autoload (quote inversion-add-to-load-path) "inversion" "\
+Add the PACKAGE path to `load-path' if necessary.
+MINIMUM is the minimum version requirement of PACKAGE.
+Optional argument INSTALLDIR is the base directory where PACKAGE is
+installed.  It defaults to `default-directory'/PACKAGE.
+SUBDIRS are sub-directories to add to `load-path', following the main
+INSTALLDIR path." nil nil)
+
 (autoload (quote inversion-upgrade-package) "inversion" "\
 Try to upgrade PACKAGE in DIRECTORY is available." t nil)
 
 ;;;***
 
 ;;;### (autoloads (pprint-function pprint pprint-to-string) "pprint"
-;;;;;;  "pprint.el" (17091 25106))
+;;;;;;  "pprint.el" (18022 5416))
 ;;; Generated autoloads from pprint.el
 
 (autoload (quote pprint-to-string) "pprint" "\
@@ -103,11 +106,6 @@ value defaults to `fill-column'." nil nil)
 
 (autoload (quote pprint-function) "pprint" "\
 See a pretty-printed representation of FUNCTION-NAME." t nil)
-
-;;;***
-
-;;;### (autoloads nil nil ("cedet-load.el" "cedet.el" "ezimage.el"
-;;;;;;  "mode-local.el" "sformat.el" "working.el") (17776 38076 697223))
 
 ;;;***
 

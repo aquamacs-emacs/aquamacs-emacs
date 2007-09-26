@@ -1,10 +1,10 @@
 ;;; cogre.el --- COnnected GRaph Editor for Emacs
 
-;;; Copyright (C) 2001, 2002, 2003, 2005 Eric M. Ludlam
+;;; Copyright (C) 2001, 2002, 2003, 2005, 2007 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: graph, oop, extensions, outlines
-;; X-RCS: $Id: cogre.el,v 1.17 2005/02/03 13:20:03 zappo Exp $
+;; X-RCS: $Id: cogre.el,v 1.20 2007/04/15 00:52:11 zappo Exp $
 
 (defvar cogre-version "0.5"
   "Current version of Cogre.")
@@ -23,8 +23,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -34,17 +34,20 @@
 ;; source code.
 ;;
 
+(require 'cogre-load)
 (require 'eieio)
 (require 'eieio-opt)
 (require 'eieio-base)
 (require 'semantic)
+(eval-when-compile
+  (require 'picture-hack))
 
 ;;; Code:
 
 ;;; Display Faces
 (defgroup cogre nil
   "COnnected GRaph Editor."
-  )
+  :group 'tools)
 
 (defcustom cogre-horizontal-margins 10
   "*Horizontal margins between nodes when they are being layed out."
@@ -815,9 +818,7 @@ This can change the current file assocaited with the current graph."
   (interactive "fFile: ")
   (let ((graph nil)
 	(cogre-loading-from-file t))
-    (let ((cogre-graph (cogre-graph "temp" :name "temp")))
-      (save-excursion
-	(setq graph (eieio-persistent-read file))))
+    (setq graph (eieio-persistent-read file))
     (oset graph file file)
     (cogre (oref graph name))
     (setq cogre-graph graph)

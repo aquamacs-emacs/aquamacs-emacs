@@ -1,10 +1,10 @@
 ;;; ede-proj-elisp.el --- EDE Generic Project Emacs Lisp support
 
-;;;  Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005  Eric M. Ludlam
+;;;  Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2007  Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: project, make
-;; RCS: $Id: ede-proj-elisp.el,v 1.28 2005/05/06 00:56:43 zappo Exp $
+;; RCS: $Id: ede-proj-elisp.el,v 1.30 2007/03/18 16:41:25 zappo Exp $
 
 ;; This software is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -18,8 +18,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
@@ -154,14 +154,27 @@ is found, such as a `-version' variable, or the standard header."
   (cond ((ede-proj-automake-p) '("lisp_LISP" . share))
 	(t (concat (ede-pmake-varname this) "_LISP"))))
 
+(defun ede-proj-makefile-insert-loadpath-items (items)
+  "Insert a sequence of ITEMS into the Makefile LOADPATH variable."
+    (when items
+      (ede-pmake-insert-variable-shared "LOADPATH"
+	(let ((begin (save-excursion (re-search-backward "\\s-*="))))
+	  (while items
+	    (when (not (save-excursion
+			 (re-search-backward
+			  (concat "\\s-" (regexp-quote (car items)) "[ \n\t\\]")
+			  begin t)))
+	      (insert " " (car items)))
+	    (setq items (cdr items)))))
+      ))
+
 (defmethod ede-proj-makefile-insert-variables :AFTER ((this ede-proj-target-elisp))
   "Insert variables needed by target THIS."
-  (ede-pmake-insert-variable-shared "LOADPATH"
-    (if (oref this aux-packages)
-	(insert (mapconcat 'identity
-			   (ede-proj-elisp-packages-to-loadpath
-			    (oref this aux-packages))
-			   " ")))))
+  (let ((newitems (if (oref this aux-packages)
+		      (ede-proj-elisp-packages-to-loadpath
+		       (oref this aux-packages))))
+	)
+    (ede-proj-makefile-insert-loadpath-items newitems)))
 
 (defun ede-proj-elisp-add-path (path)
   "Add path PATH into the file if it isn't already there."

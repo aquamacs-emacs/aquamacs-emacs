@@ -1,10 +1,10 @@
 ;;; ezimage --- Generalized Image management
 
-;;; Copyright (C) 1999, 2000, 2001, 2002, 2003 Free Software Foundation
+;;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2005 Free Software Foundation
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: file, tags, tools
-;; X-RCS: $Id: ezimage.el,v 1.4 2003/11/20 04:11:33 zappo Exp $
+;; X-RCS: $Id: ezimage.el,v 1.6 2005/12/07 16:51:22 zappo Exp $
 
 ;; This file is part of GNU Emacs.
 
@@ -20,14 +20,14 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;;
 ;; A few routines for placing an image over text that will work for any
 ;; Emacs implementation without error.  When images are not supported, then
-;; they are justnot displayed.
+;; they are just not displayed.
 ;;
 ;; The idea is that gui buffers (trees, buttons, etc) will have text
 ;; representations of the GUI elements.  These routines will replace the text
@@ -260,7 +260,7 @@ IMAGESPEC is the image data, and DOCSTRING is documentation for the image."
   "Insert an image button based on text starting at START for LENGTH chars.
 If buttontext is unknown, just insert that text.
 If we have an image associated with it, use that image.
-Optional argument STRING is a st ring upon which to add text properties."
+Optional argument STRING is a string upon which to add text properties."
   (when ezimage-use-images
     (let* ((bt (buffer-substring start (+ length start)))
 	   (a (assoc bt ezimage-expand-image-button-alist)))
