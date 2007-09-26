@@ -19,7 +19,7 @@
 #    is it slow with xpm as well?
 PATCHES="fix-configure test ui-strings
          toolbar-png custom-verbosity pretty-modeline transparency3
-         capslock 
+         capslock mouse-echo
          recentf-track-minibuf
          pop-to-buffer display-buffer-reuse
          emacs-inline
