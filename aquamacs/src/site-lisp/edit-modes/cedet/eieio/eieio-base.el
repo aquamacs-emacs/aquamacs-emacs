@@ -1,10 +1,10 @@
 ;;; eieio-base.el --- Base classes for EIEIO.
 
 ;;;
-;; Copyright (C) 2000, 2001, 2002, 2004, 2005 Eric M. Ludlam
+;; Copyright (C) 2000, 2001, 2002, 2004, 2005, 2007 Eric M. Ludlam
 ;;
 ;; Author: <zappo@gnu.org>
-;; RCS: $Id: eieio-base.el,v 1.19 2005/04/14 00:48:38 zappo Exp $
+;; RCS: $Id: eieio-base.el,v 1.22 2007/06/04 00:39:27 zappo Exp $
 ;; Keywords: OO, lisp
 ;;
 ;; This program is free software; you can redistribute it and/or modify
@@ -18,12 +18,9 @@
 ;; GNU General Public License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's author (see below) or write to:
-;;
-;;              The Free Software Foundation, Inc.
-;;              675 Mass Ave.
-;;              Cambridge, MA 02139, USA.
+;; along with GNU Emacs; see the file COPYING.  If not, write to the
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 ;;
 ;; Please send bug reports, etc. to zappo@gnu.org
 
@@ -76,7 +73,7 @@ All slots are unbound, except those initialized with PARAMS."
     (if (not passname)
 	(save-match-data
 	  (if (string-match "-\\([0-9]+\\)" nm)
-	      (setq num (1+ (string-to-int (match-string 1 nm)))
+	      (setq num (1+ (string-to-number (match-string 1 nm)))
 		    nm (substring nm 0 (match-beginning 0))))
 	  (aset nobj object-name (concat nm "-" (int-to-string num))))
       (aset nobj object-name (car params)))
@@ -212,8 +209,7 @@ a file.  Optional argument NAME specifies a default file name."
       (set-buffer (get-buffer-create " *tmp eieio read*"))
       (unwind-protect
 	  (progn
-	    (erase-buffer)
-	    (insert-file filename)
+	    (insert-file-contents filename nil nil nil t)
 	    (goto-char (point-min))
 	    (setq ret (read (current-buffer)))
 	    (if (not (child-of-class-p (car ret) 'eieio-persistent))
@@ -230,7 +226,6 @@ Optional argument COMMENT is a header line comment."
 
 (defmethod eieio-persistent-path-relative ((this eieio-persistent) file)
   "For object THIS, make absolute file name FILE relative."
-  ;; Woah!  Look at `file-relative-name' as a solution.
   (file-relative-name (expand-file-name file)
 		      (file-name-directory (oref this file))))
 

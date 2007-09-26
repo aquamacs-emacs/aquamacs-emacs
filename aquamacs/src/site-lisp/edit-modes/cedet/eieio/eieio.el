@@ -2,12 +2,12 @@
 ;;               or maybe Eric's Implementation of Emacs Intrepreted Objects
 
 ;;;
-;; Copyright (C) 95,96,98,99,2000,01,02,03,04,05 Eric M. Ludlam
+;; Copyright (C) 95,96,98,99,2000,01,02,03,04,05,06,07 Eric M. Ludlam
 ;;
 ;; Author: <zappo@gnu.org>
-;; RCS: $Id: eieio.el,v 1.142 2005/06/30 02:36:48 zappo Exp $
+;; RCS: $Id: eieio.el,v 1.149 2007/03/18 17:20:41 zappo Exp $
 ;; Keywords: OO, lisp
-(defvar eieio-version "1.0pre3"
+(defvar eieio-version "1.0"
   "Current version of EIEIO.")
 ;;
 ;; This program is free software; you can redistribute it and/or modify
@@ -21,12 +21,9 @@
 ;; GNU General Public License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's author (see below) or write to:
-;;
-;;              The Free Software Foundation, Inc.
-;;              675 Mass Ave.
-;;              Cambridge, MA 02139, USA.
+;; along with GNU Emacs; see the file COPYING.  If not, write to the
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 ;;
 ;; Please send bug reports, etc. to zappo@gnu.org
 
@@ -49,6 +46,8 @@
   "Display the current version of EIEIO."
   (interactive)
   (message eieio-version))
+
+(require 'inversion)
 
 (defun eieio-require-version (major minor &optional beta)
   "Non-nil if this version of EIEIO does not satisfy a specific version.
@@ -522,7 +521,7 @@ OPTIONS-AND-DOC as the toplevel documentation for this class."
 	      (eval (macroexpand
 		     (list  'defsetf acces '(widget) '(store)
 			    (list 'list ''eieio-oset 'widget
-				  (list 'quote (list 'quote acces)) 'store))))
+				  (list 'quote (list 'quote name)) 'store))))
 	      ;;`(defsetf ,acces (widget) (store) (eieio-oset widget ',cname store))
 	      )
 	  )
@@ -2023,7 +2022,7 @@ sure to call `call-next-method' first and modify the returned object."
     (if (not passname)
 	(save-match-data
 	  (if (string-match "-\\([0-9]+\\)" nm)
-	      (setq num (1+ (string-to-int (match-string 1 nm)))
+	      (setq num (1+ (string-to-number (match-string 1 nm)))
 		    nm (substring nm 0 (match-beginning 0))))
 	  (aset nobj object-name (concat nm "-" (int-to-string num))))
       (aset nobj object-name (car params)))
@@ -2056,7 +2055,7 @@ This writes out the vector version of this object.  Complex and recursive
 object are discouraged from being written.
   If optional COMMENT is non-nil, include comments when outputting
 this object."
-  (if (not comment) nil
+  (when comment
     (princ ";; Object ")
     (princ (object-name-string this))
     (princ "\n")
@@ -2086,8 +2085,7 @@ this object."
 	      (princ (make-string (* eieio-print-depth 2) ? ))
 	      (princ (symbol-name i))
 	      (princ " ")
-	      (let ((o (eieio-oref this (car publa))))
-		(eieio-override-prin1 o))
+	      (eieio-override-prin1 v)
 	      (princ "\n"))))
 	(setq publa (cdr publa) publd (cdr publd)))
       (princ (make-string (* eieio-print-depth 2) ? )))

@@ -1,10 +1,10 @@
 ;;; chart.el --- Draw charts (bar charts, etc)
 
-;;; Copyright (C) 1996, 1998, 1999, 2001, 2004 Eric M. Ludlam
+;;; Copyright (C) 1996, 1998, 1999, 2001, 2004, 2005, 2007 Eric M. Ludlam
 ;;
 ;; Author: <zappo@gnu.org>
 ;; Version: 0.2
-;; RCS: $Id: chart.el,v 1.15 2004/11/19 18:18:08 zappo Exp $
+;; RCS: $Id: chart.el,v 1.17 2007/02/18 17:57:07 zappo Exp $
 ;; Keywords: OO, chart, graph
 ;;                                                                          
 ;; This program is free software; you can redistribute it and/or modify
@@ -18,12 +18,9 @@
 ;; GNU General Public License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's author (see below) or write to:
-;;
-;;              The Free Software Foundation, Inc.
-;;              675 Mass Ave.
-;;              Cambridge, MA 02139, USA.
+;; along with GNU Emacs; see the file COPYING.  If not, write to the
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 ;;
 ;; Please send bug reports, etc. to zappo@gnu.org
 
@@ -673,7 +670,7 @@ SORT-PRED if desired."
 	     (num (buffer-substring (match-beginning 1) (match-end 1))))
 	(setq nmlst (cons nam nmlst)
 	      ;; * 1000 to put it into bytes
-	      cntlst (cons (* (string-to-int num) 1000) cntlst))))
+	      cntlst (cons (* (string-to-number num) 1000) cntlst))))
     (if (not nmlst)
 	(error "No files found!"))
     (chart-bar-quickie 'vertical (format "Largest files in %s" d)

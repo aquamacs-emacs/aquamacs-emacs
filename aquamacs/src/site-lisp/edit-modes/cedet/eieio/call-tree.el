@@ -1,11 +1,11 @@
 ;;; call-tree.el --- Uses tree mode to display a call tree of the
 ;;                  give emacs lisp function.
 ;;
-;; Copyright (C) 1996, 1998, 2001 Eric M. Ludlam
+;; Copyright (C) 1996, 1998, 2001, 2005 Eric M. Ludlam
 ;;
 ;; Author: <zappo@gnu.ai.mit.edu>
 ;; Version: 0.1
-;; RCS: $Id: call-tree.el,v 1.5 2001/04/17 03:17:00 emacsman Exp $
+;; RCS: $Id: call-tree.el,v 1.6 2005/09/30 20:17:37 zappo Exp $
 ;; Keywords: OO, tree, call-graph
 ;;                                                                          
 ;; This program is free software; you can redistribute it and/or modify
@@ -19,12 +19,9 @@
 ;; GNU General Public License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's author (see below) or write to:
-;;
-;;              The Free Software Foundation, Inc.
-;;              675 Mass Ave.
-;;              Cambridge, MA 02139, USA.
+;; along with GNU Emacs; see the file COPYING.  If not, write to the
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 ;;
 ;; Please send bug reports, etc. to zappo@gnu.org
 

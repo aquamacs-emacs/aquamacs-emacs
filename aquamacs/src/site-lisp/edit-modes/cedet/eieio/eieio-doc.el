@@ -1,9 +1,9 @@
 ;;; eieio-doc.el --- create texinfo documentation for an eieio class
 
-;;; Copyright (C) 1996, 1998, 1999, 2000, 2001, 2004 Eric M. Ludlam
+;;; Copyright (C) 1996, 1998, 1999, 2000, 2001, 2004, 2005 Eric M. Ludlam
 ;;
 ;; Author: <zappo@gnu.org>
-;; RCS: $Id: eieio-doc.el,v 1.19 2004/03/28 01:31:13 zappo Exp $
+;; RCS: $Id: eieio-doc.el,v 1.20 2005/09/30 20:18:01 zappo Exp $
 ;; Keywords: OO, lisp, docs
 ;;
 ;; This program is free software; you can redistribute it and/or modify
@@ -17,12 +17,9 @@
 ;; GNU General Public License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's author (see below) or write to:
-;;
-;;              The Free Software Foundation, Inc.
-;;              675 Mass Ave.
-;;              Cambridge, MA 02139, USA.
+;; along with GNU Emacs; see the file COPYING.  If not, write to the
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 ;;
 ;; Please send bug reports, etc. to zappo@gnu.org
 

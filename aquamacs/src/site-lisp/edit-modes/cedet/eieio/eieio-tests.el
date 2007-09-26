@@ -1,10 +1,10 @@
 ;;; eieio-tests.el -- eieio tests routines
 
 ;;;
-;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2005 Eric M. Ludlam
+;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2005, 2006 Eric M. Ludlam
 ;;
 ;; Author: <zappo@gnu.org>
-;; RCS: $Id: eieio-tests.el,v 1.34 2005/05/05 01:53:51 zappo Exp $
+;; RCS: $Id: eieio-tests.el,v 1.37 2006/02/09 02:23:09 zappo Exp $
 ;; Keywords: oop, lisp, tools
 ;;
 ;; This program is free software; you can redistribute it and/or modify
@@ -18,12 +18,9 @@
 ;; GNU General Public License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's author (see below) or write to:
-;;
-;;              The Free Software Foundation, Inc.
-;;              675 Mass Ave.
-;;              Cambridge, MA 02139, USA.
+;; along with GNU Emacs; see the file COPYING.  If not, write to the
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 ;;
 ;; Please send bug reports, etc. to zappo@gnu.org
 ;;
@@ -296,7 +293,7 @@ METHOD is the method that was attempting to be called."
 
 ;;; Test the BEFORE, PRIMARY, and AFTER method tags.
 ;;
-(load-file "eieio-test-methodinvoke.el")
+(load-library "eieio-test-methodinvoke.el")
 
 ;;; Test value of a generic function call
 ;;
@@ -583,6 +580,10 @@ METHOD is the method that was attempting to be called."
 
 (if (not (eq (get-slot-3 class-c) 'emu))
     (error "Accessor to private :class slot returned bad value from class."))
+
+(setf (get-slot-3 t1) 'moose)
+(if (not (eq (get-slot-3 t1) 'moose))
+    (error "setf and get through accessor failed!"))
 
 ;; Slot protection
 (defclass prot-0 ()

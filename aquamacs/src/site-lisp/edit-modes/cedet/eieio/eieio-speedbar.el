@@ -1,10 +1,10 @@
 ;;; eieio-speedbar.el -- Classes for managing speedbar displays.
 
 ;;;
-;; Copyright (C) 1999, 2000, 2001, 2002, 2005 Eric M. Ludlam
+;; Copyright (C) 1999, 2000, 2001, 2002, 2005, 2007 Eric M. Ludlam
 ;;
 ;; Author: <zappo@gnu.org>
-;; RCS: $Id: eieio-speedbar.el,v 1.16 2005/01/20 13:39:55 zappo Exp $
+;; RCS: $Id: eieio-speedbar.el,v 1.18 2007/02/18 18:12:49 zappo Exp $
 ;; Keywords: oop, tools
 ;;
 ;; This program is free software; you can redistribute it and/or modify
@@ -18,12 +18,9 @@
 ;; GNU General Public License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's author (see below) or write to:
-;;
-;;              The Free Software Foundation, Inc.
-;;              675 Mass Ave.
-;;              Cambridge, MA 02139, USA.
+;; along with GNU Emacs; see the file COPYING.  If not, write to the
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 ;;
 ;; Please send bug reports, etc. to zappo@gnu.org
 
@@ -385,7 +382,7 @@ Optional argument DEPTH is the current depth of the search."
 	(progn
 	  (beginning-of-line)
 	  (when (looking-at "^\\([0-9]+\\):")
-	    (setq depth (string-to-int (match-string 1))))))
+	    (setq depth (string-to-number (match-string 1))))))
     (when depth
       (while (and (not (object-p (speedbar-line-token)))
 		  (> depth 0))
@@ -401,7 +398,7 @@ Optional DEPTH is the depth we start at."
 	(progn
 	  (beginning-of-line)
 	  (looking-at "^\\([0-9]+\\):")
-	  (setq depth (string-to-int (match-string 1)))))
+	  (setq depth (string-to-number (match-string 1)))))
     ;; This whole function is presently bogus.  Make it better later.
     (let ((tok (eieio-speedbar-find-nearest-object depth)))
       (if (object-p tok)
