@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.115 2007/08/12 17:08:50 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.116 2007/09/26 19:48:42 nzeh Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -947,7 +947,9 @@ listed here."
      blink-cursor-mode
      ;; added dr. 04/2005
      aquamacs-default-styles 
-     aquamacs-customization-version-id))
+     aquamacs-customization-version-id
+     ;; Added by Norbert Zeh <nzeh@cs.dal.ca> 2007-09-23.
+     mac-print-monochrome-mode))
 
   (defun aquamacs-menu-bar-options-save ()
     "Save current values of Options menu items using Custom.

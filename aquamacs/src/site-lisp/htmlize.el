@@ -291,6 +291,14 @@ output.")
 
 (defvar htmlize-file-hook nil
   "Hook run by `htmlize-file' after htmlizing a file, but before saving it.")
+
+;; Support for monochrome printing
+;; Added by Norbert Zeh <nzeh@cs.dal.ca> 2007-09-23
+
+(defvar htmlize-ignore-colors nil
+  "Determines whether htmlize should ignore face colors.  This
+  should only be used internally.")
+
 
 ;;; Some cross-Emacs compatibility.
 
@@ -740,7 +748,11 @@ If no rgb.txt file is found, return nil."
 (defun htmlize-face-foreground (face)
   ;; Return the name of the foreground color of FACE.  If FACE does
   ;; not specify a foreground color, return nil.
-  (cond (htmlize-running-xemacs
+  (cond (;; Monochrome printing support
+	 ;; Added by Norbert Zeh <nzeh@cs.dal.ca> 2007-09-23
+	 htmlize-ignore-colors
+	 "black")
+	(htmlize-running-xemacs
 	 ;; XEmacs.
 	 (and (htmlize-face-specifies-property face 'foreground)
 	      (color-instance-name (face-foreground-instance face))))
@@ -751,8 +763,9 @@ If no rgb.txt file is found, return nil."
 (defun htmlize-face-background (face)
   ;; Return the name of the background color of FACE.  If FACE does
   ;; not specify a background color, return nil.
-  (cond ((and htmlize-white-background
-	      (eq face 'default))
+  (cond ((or htmlize-ignore-colors ;; Monochrome printing support
+	     (and htmlize-white-background
+		  (eq face 'default)))
 	  nil)
 	(htmlize-running-xemacs
 	 ;; XEmacs.
@@ -1475,7 +1488,7 @@ property and by buffer overlays that specify `face'."
 
 
 ;;;###autoload
-(defun htmlize-buffer (&optional buffer)
+(defun htmlize-buffer (&optional buffer ignore-colors)
   "Convert BUFFER to HTML, preserving colors and decorations.
 
 The generated HTML is available in a new buffer, which is returned.
@@ -1490,13 +1503,16 @@ plain.  Likewise, if you don't like the choice of colors, fix the mode
 that created them, or simply alter the faces it uses."
   (interactive)
   (let ((htmlbuf (with-current-buffer (or buffer (current-buffer))
-		   (htmlize-buffer-1))))
+		   (setq htmlize-ignore-colors ignore-colors)
+		   (prog1
+		       (htmlize-buffer-1)
+		     (setq htmlize-ignore-colors nil)))))
     (when (interactive-p)
       (switch-to-buffer htmlbuf))
     htmlbuf))
 
 ;;;###autoload
-(defun htmlize-region (beg end)
+(defun htmlize-region (beg end &optional ignore-colors)
   "Convert the region to HTML, preserving colors and decorations.
 See `htmlize-buffer' for details."
   (interactive "r")
@@ -1505,7 +1521,10 @@ See `htmlize-buffer' for details."
     (zmacs-deactivate-region))
   (let ((htmlbuf (save-restriction
 		   (narrow-to-region beg end)
-		   (htmlize-buffer-1))))
+		   (setq htmlize-ignore-colors ignore-colors)
+		   (prog1
+		       (htmlize-buffer-1)
+		     (setq htmlize-ignore-colors nil)))))
     (when (interactive-p)
       (switch-to-buffer htmlbuf))
     htmlbuf))

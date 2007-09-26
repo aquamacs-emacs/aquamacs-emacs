@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.85 2007/08/12 17:06:20 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.86 2007/09/26 19:48:43 nzeh Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -648,7 +648,22 @@ left and right margin"))
 	      :help "Print buffer, or region if active"))
 
 
+;; Support for monochrome printing
+;; Added by Norbert Zeh <nzeh@cs.dal.ca> 2007-09-23
 
+(defun menu-bar-toggle-mac-print-monochrome-mode ()
+  (interactive)
+  (customize-set-variable 'mac-print-monochrome-mode
+			  (not mac-print-monochrome-mode))
+  (message "Color printing %s"
+	   (if mac-print-monochrome-mode
+	       "disabled" "enabled")))
+
+(define-key-after menu-bar-file-menu [toggle-mac-print-monochrome-mode]
+  '(menu-item "Color Printing"
+	      menu-bar-toggle-mac-print-monochrome-mode
+	      :help "Toggles color printing"
+	      :button (:toggle . (not mac-print-monochrome-mode))))
 
 
 (require 'longlines) 

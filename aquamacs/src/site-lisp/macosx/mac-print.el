@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-print.el,v 1.11 2007/04/03 16:18:27 davidswelt Exp $
+;; Last change: $Id: mac-print.el,v 1.12 2007/09/26 19:48:43 nzeh Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -40,6 +40,15 @@
 (defcustom mac-print-font-size-scaling-factor 0.5
   "The factor by which fonts are rescaled during PDF export and printing."
   :type 'float
+  :group 'print)
+
+;; Support for monochrome printing
+;; Added by Norbert Zeh <nzeh@cs.dal.ca> 2007-09-23
+
+(defcustom mac-print-monochrome-mode nil
+  "If non-nil, face colors are ignored when printing.  If nil,
+face colors are printed."
+  :type 'boolean
   :group 'print)
 
 (defun aquamacs-delete-temp-files ()
@@ -168,8 +177,11 @@ Remove from your load-path for optimal printing / export results.")
 		     (progn
 		       (show-paren-mode 0)
 		       (if mark-active
-			   (htmlize-region (region-beginning) (region-end))
-			 (htmlize-buffer)))
+			   (htmlize-region (region-beginning) 
+					   (region-end)
+					   mac-print-monochrome-mode)
+			 (htmlize-buffer (current-buffer)
+					 mac-print-monochrome-mode)))
 		   (show-paren-mode show-paren-mode-save))))
  
       (with-current-buffer html
