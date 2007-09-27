@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.77 2007/06/13 20:28:13 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.78 2007/09/27 16:24:51 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -768,6 +768,20 @@ Defaults to nil if the major mode doesn't define a menu."
     newmap))
 
 
+(defun raise-next-frame ()
+"Raise the next frame.
+See also `raise-previous-frame' and `other-frame'.
+An Aquamacs-only function."
+  (interactive)
+  (other-frame 1))
+
+(defun raise-previous-frame ()
+"Raise the previous frame.
+See also `raise-next-frame' and `other-frame'.
+An Aquamacs-only function."
+  (interactive)
+  (other-frame -1))
+
 
 (defvar aquamacs-context-menu-map
   (let ((map (make-sparse-keymap)))
@@ -973,13 +987,15 @@ default."
 
     (define-key map `[(,osxkeys-command-key z)] 'aquamacs-undo)
     (define-key map `[(,osxkeys-command-key shift z)] 'aquamacs-redo)
-    (define-key map `[(,osxkeys-command-key \`)] 'other-frame)
+    (define-key map `[(,osxkeys-command-key \`)] 'raise-next-frame)
+    (define-key map `[(,osxkeys-command-key \<)] 'raise-next-frame)
+    (define-key map `[(,osxkeys-command-key \>)] 'raise-previous-frame)
     (if (fboundp 'mac-font-panel-mode)
 	(define-key map `[(,osxkeys-command-key t)] 'mac-font-panel-mode))
 
     map)
   )
-
+ 
 
 (defvar osx-key-mode-map
   (make-osx-key-mode-map)
@@ -1029,6 +1045,43 @@ mac-command-modifier osxkeys-command-key))))
 "Bindings in the global map overwritten when osx-key-mode was turned on.")
 
 (define-minor-mode osx-key-mode
+  "Toggle Mac Key mode.
+With arg, turn Mac Key mode on iff arg is positive.
+When Mac Key mode is enabled, mac-style key bindings are provided.
+Setting the `osx-key-mode' variable has limited effect - call
+the `osx-key-mode' function to switch mode on or off.
+`osx-key-mode-map' and `osx-key-low-priority-key-map' contain the
+keymaps used by this mode. They may be modified where necessary."
+  :global t
+  :group 'osx-key-mode 
+  :keymap 'osx-key-mode-map  
+
+
+;; Change encoding so you can use alt-e and alt-u accents (and others) 
+  (set-terminal-coding-system 'iso-8859-1) 
+  (set-keyboard-coding-system 'mac-roman) ;; keyboard
+  (set-selection-coding-system 'mac-roman) ;; copy'n'paste
+ 
+  (setq mac-emulate-three-button-mouse (if osx-key-mode 'control
+					   nil))
+
+
+  ;; use right mouse click as mouse-3
+  (setq mac-wheel-button-is-mouse-2 osx-key-mode)
+
+  (if osx-key-mode
+      ;; install low priority map
+      (setq osx-key--saved-low-priority-map 
+	    (aquamacs-install-low-priority-global-key-map
+	    osx-key-low-priority-key-map))
+    ;; restore old map
+    (when osx-key--saved-low-priority-map
+      (aquamacs-install-low-priority-global-key-map
+       osx-key--saved-low-priority-map)
+      (setq osx-key--saved-low-priority-map (make-sparse-keymap)))
+    )
+
+  (osx-key-mode-command-key-warning))(define-minor-mode osx-key-mode
   "Toggle Mac Key mode.
 With arg, turn Mac Key mode on iff arg is positive.
 When Mac Key mode is enabled, mac-style key bindings are provided.
