@@ -24,6 +24,7 @@ PATCHES="fix-configure test ui-strings
          pop-to-buffer display-buffer-reuse
          emacs-inline
          cus-edit-switch
+         ediff-workaround
          faces-speedup
          calm-startup available-screen mouse-button launch-browser
          org-gnu-Aquamacs about-aquamacs puresize
