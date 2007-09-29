@@ -1,6 +1,6 @@
 #!/perl
 # LaTeX2HTML l2hconf-local.pm
-# $Id: l2hconf-local.pm,v 1.1 2007/08/04 06:37:44 davidswelt Exp $
+# $Id: l2hconf-local.pm,v 1.2 2007/09/29 11:30:45 davidswelt Exp $
 
 # This file is loaded via the -init_file parameter.
 # it overwrites site-wide (machine-local) settings for the Aquamacs manual.
@@ -132,12 +132,12 @@ $DVIPSOPT = ' -Ppdf  -E';
 
 # Location of texexpand, supplied with the translator
 #
-$TEXEXPAND = "$PERL /usr/local/bin${dd}texexpand";
+$TEXEXPAND = "$PERL /opt/local/bin${dd}texexpand";
 
 
 # Location of pstoimg, supplied with the translator
 #
-$PSTOIMG = "$PERL /usr/local/bin${dd}pstoimg";
+$PSTOIMG = "$PERL /opt/local/bin${dd}pstoimg";
 
 
 # This is used to "autoload" perl code to deal with specific style files
