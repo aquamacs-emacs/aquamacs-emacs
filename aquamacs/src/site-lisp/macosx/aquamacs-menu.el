@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.86 2007/09/26 19:48:43 nzeh Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.87 2007/10/02 09:09:09 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -914,6 +914,17 @@ both existing buffers and buffers that you subsequently create."
 
 ;; HELP MENU
 
+(define-key menu-bar-manuals-menu [info-elisp]
+  '(menu-item "Emacs Lisp Reference (Info)" menu-bar-read-lispref
+	      :help "Read the Emacs Lisp Reference manual"))
+
+(define-key menu-bar-manuals-menu [aquamacs-elisp]
+  '(menu-item "Emacs Lisp Reference" aquamacs-elisp-reference
+	      :help "Read the Emacs Lisp Reference manual"))
+
+(define-key menu-bar-help-menu [emacs-manual]
+  '(menu-item "Read the Emacs Manual (Info)" info-emacs-manual
+	      :help "Full documentation of Emacs features"))
 
 (define-key menu-bar-help-menu [menu-aquamacs-help]
   `(menu-item ,(aq-shortcut "Aquamacs Help                     " 
