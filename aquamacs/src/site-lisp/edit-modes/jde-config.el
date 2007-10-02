@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: java jde
  
-;; Last change: $Id: jde-config.el,v 1.4 2007/09/03 14:54:14 champo Exp $
+;; Last change: $Id: jde-config.el,v 1.5 2007/10/02 10:00:35 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -43,10 +43,11 @@
   (add-to-list 'load-path (expand-file-name "elib" (file-name-directory load-file-name))))
 
 (autoload 'jde-mode "jde-load" "JDE mode." t)
-(setq auto-mode-alist
-      (append
-       '(("\\.java\\'" . jde-mode))
-       auto-mode-alist))
+;; do not use JDE mode for now by default due to various problems with Cedet/Semantic.
+;; (setq auto-mode-alist
+;;       (append
+;;        '(("\\.java\\'" . jde-mode))
+;;        auto-mode-alist))
 
 ;; find installed JDKs
 
