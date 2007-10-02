@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.87 2007/10/02 09:09:09 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.88 2007/10/02 09:35:52 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -606,6 +606,23 @@ left and right margin"))
     'write-file)
 
  
+;; Support for monochrome printing
+;; Added by Norbert Zeh <nzeh@cs.dal.ca> 2007-09-23
+
+(defun menu-bar-toggle-mac-print-monochrome-mode ()
+  (interactive)
+  (customize-set-variable 'mac-print-monochrome-mode
+			  (not mac-print-monochrome-mode))
+  (message "Color printing %s"
+	   (if mac-print-monochrome-mode
+	       "disabled" "enabled")))
+
+(define-key-after menu-bar-file-menu [toggle-mac-print-monochrome-mode]
+  '(menu-item "Color Printing"
+	      menu-bar-toggle-mac-print-monochrome-mode
+	      :help "Toggles color printing"
+	      :button (:toggle . (not mac-print-monochrome-mode))))
+
  
 (define-key-after menu-bar-file-menu [aquamacs-print]
   `(menu-item (aq-shortcut "Preview and Print %s...       " 
@@ -647,23 +664,6 @@ left and right margin"))
 			   (menu-bar-non-minibuffer-window-p))
 	      :help "Print buffer, or region if active"))
 
-
-;; Support for monochrome printing
-;; Added by Norbert Zeh <nzeh@cs.dal.ca> 2007-09-23
-
-(defun menu-bar-toggle-mac-print-monochrome-mode ()
-  (interactive)
-  (customize-set-variable 'mac-print-monochrome-mode
-			  (not mac-print-monochrome-mode))
-  (message "Color printing %s"
-	   (if mac-print-monochrome-mode
-	       "disabled" "enabled")))
-
-(define-key-after menu-bar-file-menu [toggle-mac-print-monochrome-mode]
-  '(menu-item "Color Printing"
-	      menu-bar-toggle-mac-print-monochrome-mode
-	      :help "Toggles color printing"
-	      :button (:toggle . (not mac-print-monochrome-mode))))
 
 
 (require 'longlines) 
@@ -914,13 +914,16 @@ both existing buffers and buffers that you subsequently create."
 
 ;; HELP MENU
 
-(define-key menu-bar-manuals-menu [info-elisp]
+(define-key menu-bar-manuals-menu [emacs-lisp-reference]
   '(menu-item "Emacs Lisp Reference (Info)" menu-bar-read-lispref
 	      :help "Read the Emacs Lisp Reference manual"))
 
 (define-key menu-bar-manuals-menu [aquamacs-elisp]
   '(menu-item "Emacs Lisp Reference" aquamacs-elisp-reference
 	      :help "Read the Emacs Lisp Reference manual"))
+(define-key menu-bar-manuals-menu [emac-lisp-intro]
+  '(menu-item "Introduction to Emacs Lisp (Info)" menu-bar-read-lispintro
+	      :help "Read the Introduction to Emacs Lisp Programming"))
 
 (define-key menu-bar-help-menu [emacs-manual]
   '(menu-item "Read the Emacs Manual (Info)" info-emacs-manual
