@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.116 2007/09/26 19:48:42 nzeh Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.117 2007/10/14 09:59:06 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -786,18 +786,24 @@ un-Mac-like way when you select text and copy&paste it.")))
 ;; redefine this
   (defun startup-echo-area-message ()
     (concat
-     
-	 "Aquamacs is based on GNU Emacs 22, a part of the GNU/Linux system." 
+     (aquamacs-wrap-string
+        (propertize 
+	 "Aquamacs is based on GNU Emacs 22, a part of the GNU/Linux system."
+	 'face (list :family "Lucida Grande" :height 140))
+	(floor (/ (frame-pixel-width) 8)))
      ;;The GPL stipulates that the following message is shown.
 					;(aquamacs-wrap-string
-(aquamacs-wrap-string
-     (propertize 	
+     (aquamacs-wrap-string
+      (propertize 	
       (substitute-command-keys "
 It is Free Software: you can improve and redistribute it under the GNU General Public License, version 3 or later. Copyright (C) 2007 Free Software Foundation, Inc. (C) 2007 D. Reitter. No Warranty.") 
       'face (list :family "Lucida Grande" :height 110)) 
-     (floor (* (window-width) 1 )))))
+      ;; this one is rather ad-hoc, but should work:
+      (floor (/ (frame-pixel-width) 5.75)))))
 
 ;; (progn (message "%s" (startup-echo-area-message)) (sit-for 4))
+;; 
+
 
 
 
