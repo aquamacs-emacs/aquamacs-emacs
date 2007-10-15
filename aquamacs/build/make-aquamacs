@@ -99,7 +99,7 @@ fi
 
 builddir=${srcdir}
 
-export MYCPPFLAGS="-DUSE_TOOLKIT_SCROLL_BARS -DUSE_TRANSPARENCY -DUSE_ATSUI"
+export MYCPPFLAGS="-DUSE_TOOLKIT_SCROLL_BARS -DUSE_TRANSPARENCY -DUSE_ATSUI -j3"
 #  -DSYNC_INPUT  taken out (experimental) 7 June 2007 dr.
 # " -lncurses.5"
  
@@ -550,7 +550,7 @@ echo "Copying Aquamcas code to app bundle..."
 dest=`pwd`/Aquamacs/${emapp}
 
 "$projdir/build/copy-to-app" -n "$projdir" "$dest"  || {
-    echo "$0: Copying to Aquamacs directory failed."
+    echo "$0: Copying to Aquamacs directory with copy-to-app failed."
     exit 1
 }
 
