@@ -89,6 +89,6 @@ if [ -e $TMP/${GNUNAME} ]; then
 fi
  
 
-echo "<HTML style=\"border: none ;\"><META HTTP-EQUIV="expires" CONTENT="now"><link href="http://aquamacs.org/iframe.css" rel="stylesheet" type="text/css" /><BODY style=\"border: none ;\"><span style=\"font-family:sans-serif; font-size:10pt;\">" >latest.html
+echo "<HTML style=\"border: none ;\"><META HTTP-EQUIV=\"expires\" CONTENT=\"now\"><link href=\"http://aquamacs.org/iframe.css\" rel=\"stylesheet\" type=\"text/css\" /><BODY style=\"border: none ;\">" >latest.html
 cat latest-aquamacs.html latest-emacs.html >>latest.html
-echo "</span></BODY></HTML>" >>latest.html
+echo "</BODY></HTML>" >>latest.html
