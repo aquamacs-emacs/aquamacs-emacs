@@ -680,8 +680,7 @@
 *** 717,723 ****
             (setq sequence (vector up-event))
             (aset sequence 0 'mouse-1)
-            (setq defn-up-tricky (key-binding sequence nil nil (event-start 
-up-event))))))
+            (setq defn-up-tricky (key-binding sequence nil nil (event-start up-event))))))
 !       (with-output-to-temp-buffer (help-buffer)
         (princ (help-key-description key untranslated))
         (princ (format "\
@@ -689,8 +688,7 @@ up-event))))))
 --- 718,724 ----
             (setq sequence (vector up-event))
             (aset sequence 0 'mouse-1)
-            (setq defn-up-tricky (key-binding sequence nil nil (event-start 
-up-event))))))
+            (setq defn-up-tricky (key-binding sequence nil nil (event-start up-event))))))
 !       (with-help-window (help-buffer)
         (princ (help-key-description key untranslated))
         (princ (format "\
@@ -850,8 +848,7 @@ up-event))))))
 +             ;; `print-help-return-message'.
 +             (message
 +              (substitute-command-keys
-+               (concat "Type \\[display-buffer] RET to restore the other 
-window"
++               (concat "Type \\[display-buffer] RET to restore the other window"
 +                       (help-window-scrolling-text window t))))
 +           ;; The classic "two windows" configuration.
 +           (message
@@ -971,8 +968,7 @@ window"
   (put 'view-return-to-alist 'permanent-local t)
   
   (defvar view-exit-action nil
-!   "nil or a function with one argument (a buffer) called when finished 
-viewing.
+!   "nil or a function with one argument (a buffer) called when finished viewing.
 ! This is local in each buffer being viewed.
 ! The \\[view-file] and \\[view-file-other-window] commands may set this to
 ! `kill-buffer'.")
@@ -983,8 +979,7 @@ viewing.
   (put 'view-return-to-alist 'permanent-local t)
   
   (defvar view-exit-action nil
-!   "If non-nil a function with one argument (a buffer) called when finished 
-viewing.
+!   "If non-nil a function with one argument (a buffer) called when finished viewing.
 ! This is local in each buffer being viewed.  The \\[view-file] and
 ! \\[view-file-other-window] commands may set this to `kill-buffer'.
 ! Observe that the buffer might not appear in any window when this
@@ -1242,8 +1237,7 @@ viewing.
 + 
 + ;;;###autoload
   (defun view-mode-enter (&optional return-to exit-action) "\
-  Enter View mode and set up exit from view mode depending on optional 
-arguments.
+  Enter View mode and set up exit from view mode depending on optional arguments.
   If RETURN-TO is non-nil it is added as an element to the buffer local alist
 ***************
 *** 532,619 ****
@@ -1259,8 +1253,7 @@ arguments.
 ! then all windows on RETURN-TO-ALIST are restored to their old state.
 ! Otherwise only the selected window is affected (if it is on RETURN-TO-ALIST).
 ! 
-! Elements of RETURN-TO-ALIST have the format (WINDOW OLD-WINDOW . 
-OLD-BUF-INFO).
+! Elements of RETURN-TO-ALIST have the format (WINDOW OLD-WINDOW . OLD-BUF-INFO).
 ! WINDOW is a window displaying the current buffer.
 ! OLD-WINDOW is nil or a window to select after viewing.
 ! OLD-BUF-INFO is information on what to do with WINDOW and is one of:
