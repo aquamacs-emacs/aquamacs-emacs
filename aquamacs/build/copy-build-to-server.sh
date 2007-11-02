@@ -10,6 +10,8 @@ GNUNAME=GNU-Emacs-`date +"%Y-%b-%d-%a"`.dmg.bz2
 NAME=Aquamacs-`date +"%Y-%b-%d-%a"`.tar.bz2
 COPYORLINK='cp'  # 'ln -s'
 
+CHGLOGSCRIPT='~/aquamacs-web/scripts/push-nightly-changelog.sh'
+
 if [ "$1" == "intel" ];
 then
      
@@ -58,6 +60,10 @@ if [ -e $TMP/${NAME} ]; then
         echo "The latest Aquamacs Emacs nightly is ${NAME}<BR>" >latest-aquamacs.html
         # copy the downloaded log for this step into "latest" because the build worked
         cp aquamacs-build.log latest-logs/ 2>/dev/null
+
+	# update the change log 
+
+        $CHGLOGSCRIPT
 
     else
         rm -r $TMP 
