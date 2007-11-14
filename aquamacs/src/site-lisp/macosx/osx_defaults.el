@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.61 2007/09/28 07:38:10 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.62 2007/11/14 23:34:55 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -139,9 +139,13 @@ from earlier versions of the distribution."
 
   ;; load files (give full paths and load all files)
   ;; this will be called after .emacs has been loaded
-  (add-hook 'after-init-hook   
-	    'aquamacs-load-preferences
-	    'append)
+;;   (add-hook 'after-init-hook   
+;; 	    'aquamacs-load-preferences
+;; 	    'append)
+
+  ;; this was no good, since users could not change after-init-hook any more.
+  ;; now solved via a patch to startup.el.
+
 
   (mac-read-environment-vars-from-shell)
   (mac-add-path-to-exec-path)
