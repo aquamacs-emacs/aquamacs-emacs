@@ -1,0 +1,57 @@
+*** lisp/startup.el	2 Aug 2007 17:49:33 -0000	1.436.2.4
+--- lisp/startup.el	14 Nov 2007 23:42:13 -0000
+***************
+*** 878,883 ****
+--- 884,891 ----
+  		      ;; into user-init-file.
+  		      (setq user-init-file t)
+  		      (load user-init-file-1 t t)
++ 		      (if (fboundp 'aquamacs-load-preferences) 
++ 			  (aquamacs-load-preferences))
+  
+  		      (when (eq user-init-file t)
+  			;; If we did not find ~/.emacs, try
+***************
+*** 1702,1734 ****
+  (defun command-line-1 (command-line-args-left)
+    (or noninteractive (input-pending-p) init-file-had-error
+        ;; t if the init file says to inhibit the echo area startup message.
+!       (and inhibit-startup-echo-area-message
+! 	   user-init-file
+! 	   (or (and (get 'inhibit-startup-echo-area-message 'saved-value)
+! 		    (equal inhibit-startup-echo-area-message
+! 			   (if (equal init-file-user "")
+! 			       (user-login-name)
+! 			     init-file-user)))
+! 	       ;; Wasn't set with custom; see if .emacs has a setq.
+! 	       (let ((buffer (get-buffer-create " *temp*")))
+! 		 (prog1
+! 		     (condition-case nil
+! 			 (save-excursion
+! 			   (set-buffer buffer)
+! 			   (insert-file-contents user-init-file)
+! 			   (re-search-forward
+! 			    (concat
+! 			     "([ \t\n]*setq[ \t\n]+"
+! 			     "inhibit-startup-echo-area-message[ \t\n]+"
+! 			     (regexp-quote
+! 			      (prin1-to-string
+! 			       (if (equal init-file-user "")
+! 				   (user-login-name)
+! 				 init-file-user)))
+! 			     "[ \t\n]*)")
+! 			    nil t))
+! 		       (error nil))
+! 		   (kill-buffer buffer)))))
+        ;; display-splash-screen at the end of command-line-1 calls
+        ;; use-fancy-splash-screens-p. This can cause image.el to be
+        ;; loaded, putting "Loading image... done" in the echo area.
+--- 1710,1717 ----
+  (defun command-line-1 (command-line-args-left)
+    (or noninteractive (input-pending-p) init-file-had-error
+        ;; t if the init file says to inhibit the echo area startup message.
+!       inhibit-startup-echo-area-message
+! 	  
+        ;; display-splash-screen at the end of command-line-1 calls
+        ;; use-fancy-splash-screens-p. This can cause image.el to be
+        ;; loaded, putting "Loading image... done" in the echo area.
