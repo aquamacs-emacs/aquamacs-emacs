@@ -26,7 +26,8 @@ PATCHES="fix-configure test ui-strings
          cus-edit-switch
          ediff-workaround
          faces-speedup
-         calm-startup available-screen mouse-button launch-browser
+         calm-startup startup-load-preferences
+         available-screen mouse-button launch-browser
          org-gnu-Aquamacs about-aquamacs puresize
          macfns-dialog-menu menu-bar-visible-frame eval-depth
           shut-up python-mode intel"
