@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.62 2007/11/14 23:34:55 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.63 2007/11/29 08:52:23 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -193,7 +193,13 @@ from earlier versions of the distribution."
 
   (unless (boundp 'unicode-emacs)
     (require 'aquamacs-mule)              ; Language settings
+    ;; 
+    ;; use file name coding system for the Mac
+    (require 'utf-8m)
+    (set-file-name-coding-system 'utf-8m)
     )
+
+
 
   ;; do this early, so we can override settings
   (require 'aquamacs-frame-setup)
