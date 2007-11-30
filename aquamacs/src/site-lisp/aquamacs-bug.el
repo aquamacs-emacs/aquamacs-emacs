@@ -3,7 +3,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: mac bug report
  
-;; Last change: $Id: aquamacs-bug.el,v 1.10 2006/02/08 20:41:10 davidswelt Exp $
+;; Last change: $Id: aquamacs-bug.el,v 1.11 2007/11/30 07:41:51 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -77,7 +77,7 @@ Prompts for bug subject.  Leaves you in a mail buffer."
 	    ))))))
 
 
-(define-key-after menu-bar-help-menu [report-emacs-bug]
+(define-key-after menu-bar-help-menu [send-emacs-bug-report]
   `(menu-item ,(aq-shortcut "Send Bug Report..." 
 		       'report-aquamacs-bug)
 	      report-aquamacs-bug
