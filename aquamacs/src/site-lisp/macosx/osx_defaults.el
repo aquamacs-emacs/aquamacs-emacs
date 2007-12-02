@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.63 2007/11/29 08:52:23 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.64 2007/12/02 16:58:32 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -274,7 +274,7 @@ from earlier versions of the distribution."
 
   (aquamacs-set-defaults 
    '(
-			
+     (savehist-file "~/Library/Preferences/Aquamacs Emacs/minibuffer-history.el")
      (auto-save-list-file-prefix 
       "~/Library/Preferences/Aquamacs Emacs/auto-save-list/.saves-")
      ( save-place-file "~/Library/Preferences/Aquamacs Emacs/places.el")
