@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.88 2007/10/02 09:35:52 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.89 2007/12/02 21:22:46 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -33,6 +33,7 @@
  
 
 (require 'easymenu)
+(require 'aquamacs-tools)
 
 
 
@@ -609,19 +610,22 @@ left and right margin"))
 ;; Support for monochrome printing
 ;; Added by Norbert Zeh <nzeh@cs.dal.ca> 2007-09-23
 
-(defun menu-bar-toggle-mac-print-monochrome-mode ()
-  (interactive)
-  (customize-set-variable 'mac-print-monochrome-mode
-			  (not mac-print-monochrome-mode))
-  (message "Color printing %s"
-	   (if mac-print-monochrome-mode
-	       "disabled" "enabled")))
+(when (boundp 'mac-print-monochrome-mode)
+  (defun menu-bar-toggle-mac-print-monochrome-mode ()
+    (interactive)
+    (customize-set-variable 'mac-print-monochrome-mode
+			    (not mac-print-monochrome-mode))
+    (message "Color printing %s"
+	     (if mac-print-monochrome-mode
+		 "disabled" "enabled")))
 
-(define-key-after menu-bar-file-menu [toggle-mac-print-monochrome-mode]
-  '(menu-item "Color Printing"
-	      menu-bar-toggle-mac-print-monochrome-mode
-	      :help "Toggles color printing"
-	      :button (:toggle . (not mac-print-monochrome-mode))))
+
+
+  (define-key-after menu-bar-file-menu [toggle-mac-print-monochrome-mode]
+    '(menu-item "Color Printing"
+		menu-bar-toggle-mac-print-monochrome-mode
+		:help "Toggles color printing"
+		:button (:toggle . (not mac-print-monochrome-mode)))))
 
  
 (define-key-after menu-bar-file-menu [aquamacs-print]
@@ -883,8 +887,7 @@ both existing buffers and buffers that you subsequently create."
 
 (define-key-after menu-bar-edit-menu [spell]
   '(menu-item "Spelling" ispell-menu-map 
-	      :visible ispell-program-name) 
-
+	      :visible (and (boundp 'ispell-program-name) ispell-program-name))
   'separator-bookmark)
 (define-key-after menu-bar-edit-menu [spell-download-aspell]
 	'(menu-item "Download Spell-Checking..." aquamacs-ispell-install
