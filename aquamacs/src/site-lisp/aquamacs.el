@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.117 2007/10/14 09:59:06 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.118 2007/12/02 16:55:44 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -854,7 +854,9 @@ It is Free Software: you can improve and redistribute it under the GNU General P
      ;; on modern systems, loading files doesn't take so long any more.
      (large-file-warning-threshold 20000000)
      ;; show unfinished key inputs early
-     (echo-keystrokes 0.1))) 
+     (echo-keystrokes 0.1)
+     ;; save minibuffer history
+     (savehist-mode 1))) 
    
 
   
@@ -864,6 +866,7 @@ It is Free Software: you can improve and redistribute it under the GNU General P
   (pc-selection-mode 1) 
   (show-paren-mode 1) 
   (blink-cursor-mode 1)
+  (savehist-mode 1)
 
   ;; should not be needed - done by a-s-d above
   ;; (set-default 'cursor-type '(bar . 2))
