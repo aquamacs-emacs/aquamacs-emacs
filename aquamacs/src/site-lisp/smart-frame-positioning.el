@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.28 2007/06/14 15:44:49 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.29 2007/12/02 19:27:00 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -55,6 +55,16 @@
 ;; An optional parameter (currently not used) could identify the screen.
 
 
+(unless (fboundp 'winmgr-display-available-pixel-bounds)
+  (if (fboundp 'mac-display-available-pixel-bounds)
+      (fset 'winmgr-display-available-pixel-bounds 
+	    'mac-display-available-pixel-bounds))
+  (if (fboundp 'ns-display-available-pixel-bounds)
+      (fset 'winmgr-display-available-pixel-bounds 
+	    'ns-display-available-pixel-bounds)))
+
+
+
 ;; Code
 
 (defcustom save-frame-position-file 
@@ -79,9 +89,9 @@ by any of the hook functions, will normally be preserved."
 
 (defun smart-position-and-create-frame (&optional parameters) 
  "Create a frame in a useful screen position.
-May be used in `frame-creation-function'. 
-`smart-frame-positioning-mode' should be used as the interface
-to this function."
+May be used in `frame-creation-function' or 
+`frame-creation-function-alist'. `smart-frame-positioning-mode' 
+should be used as the interface to this function."
   (let* ((newpos)
 	 (hasbeenfitted)
 	 (oldframe (selected-frame))
@@ -164,6 +174,20 @@ pixels apart if possible."
 (defun smart-fp--pixel-to-char-height (pixels frame &optional round-to-lower)
        (round (- (/ pixels (frame-char-height frame)) 
 		 (if round-to-lower 0 .5))))
+
+(defun smart-fp--get-frame-creation-function ()
+  (if (boundp 'frame-creation-function)
+      frame-creation-function
+    (if (boundp 'frame-creation-function-alist)
+	(assq window-system frame-creation-function-alist))
+    nil))
+(require 'aquamacs-tools)
+(defun smart-fp--set-frame-creation-function (fun)
+  (if (boundp 'frame-creation-function)
+      (setq frame-creation-function fun)
+    (if (boundp 'frame-creation-function-alist)
+	(assq-set window-system fun 'frame-creation-function-alist))
+    nil))
 
  
 (defun find-good-frame-position ( old-frame new-frame )
@@ -300,7 +324,7 @@ pixels apart if possible."
 		 new-frame-parameters))))))))
 
 (defvar smart-frame-positioning-old-frame-creation-function 
-	frame-creation-function)
+	(smart-fp--get-frame-creation-function))
 
 (define-minor-mode smart-frame-positioning-mode
   "If enabled, new frames are opened in a convenient position. 
@@ -325,12 +349,13 @@ can be customized to configure this mode."
       ;; turn on
     (progn 
  
-      (unless (eq frame-creation-function
+      (unless (eq (smart-fp--get-frame-creation-function)
 		  'smart-position-and-create-frame)
 	(setq smart-frame-positioning-old-frame-creation-function 
-	      frame-creation-function))
+	      (smart-fp--get-frame-creation-function)))
 
-      (setq frame-creation-function 'smart-position-and-create-frame)
+      (smart-fp--set-frame-creation-function
+       'smart-position-and-create-frame)
 
       (add-hook 'delete-frame-functions
 		'smart-fp--store-frame-position-for-buffer)
@@ -350,10 +375,10 @@ can be customized to configure this mode."
 	       initial-frame-alist))))
    
     ;; else (turning off)
-      (setq frame-creation-function 
-	    smart-frame-positioning-old-frame-creation-function)
-      (remove-hook 'delete-frame-functions
-		   'smart-fp--store-frame-position-for-buffer))
+    (smart-fp--set-frame-creation-function
+     smart-frame-positioning-old-frame-creation-function)
+    (remove-hook 'delete-frame-functions
+		 'smart-fp--store-frame-position-for-buffer))
   smart-frame-positioning-mode)
         
 (defvar smart-frame-prior-positions '()
@@ -407,6 +432,7 @@ The file is specified in `smart-frame-position-file'."
 
 (add-hook 'kill-emacs-hook 'smart-fp--save-frame-positions-to-file)
 
+;; could assoc be used instead?
 (defun assq-string-equal (key alist)
   (catch 'break
     (mapc 
