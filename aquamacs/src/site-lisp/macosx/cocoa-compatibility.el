@@ -23,7 +23,17 @@
  '("show-menu-bar" "hide-menu-bar" "dialog" "dialog-y-or-n-p" 
    "set-key-script" "get-current-key-script" "get-last-key-script" 
    "launch-URL-with-default-browser"))
+
+
+(unless (fboundp 'winmgr-display-available-pixel-bounds)
+  (if (fboundp 'mac-display-available-pixel-bounds)
+      (fset 'winmgr-display-available-pixel-bounds 
+	    'mac-display-available-pixel-bounds))
+  (if (fboundp 'x-display-usable-bounds)
+      (fset 'winmgr-display-available-pixel-bounds 
+	    'x-display-usable-bounds)))
  
+
 
 (unless (fboundp 'do-applescript)
   (defun do-applescript (s)
