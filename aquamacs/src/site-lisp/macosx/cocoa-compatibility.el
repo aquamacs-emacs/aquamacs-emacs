@@ -14,4 +14,19 @@
 (unless (boundp 'mac-command-modifier)
   (defvaralias 'mac-option-modifier 'ns-option-modifier))
 
+(mapc 
+ (lambda (x)
+   (let ((d (intern (concat "mac-" x)))
+	 (s (intern (concat "ns-" x))))
+     (and (not (fboundp d)) (fboundp s)
+	  (defalias d s))))
+ '("show-menu-bar" "hide-menu-bar" "dialog" "dialog-y-or-n-p" 
+   "set-key-script" "get-current-key-script" "get-last-key-script" 
+   "launch-URL-with-default-browser"))
+ 
+
+(unless (fboundp 'do-applescript)
+  (defun do-applescript (s)
+    (message "Warning: do-applescript call not implemented yet.")))
+
 (provide 'cocoa-compatibility)
