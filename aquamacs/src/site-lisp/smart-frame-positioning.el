@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.30 2007/12/03 07:39:51 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.31 2007/12/03 07:42:03 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -53,15 +53,6 @@
 ;; platforms. It should return a list of four ordinates (x y w h), giving the
 ;; available screen real estate for the main screen.
 ;; An optional parameter (currently not used) could identify the screen.
-
-
-(unless (fboundp 'winmgr-display-available-pixel-bounds)
-  (if (fboundp 'mac-display-available-pixel-bounds)
-      (fset 'winmgr-display-available-pixel-bounds 
-	    'mac-display-available-pixel-bounds))
-  (if (fboundp 'x-display-usable-bounds)
-      (fset 'winmgr-display-available-pixel-bounds 
-	    'x-display-usable-bounds)))
 
 ;; Code
 
