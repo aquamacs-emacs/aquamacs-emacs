@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.118 2007/12/02 16:55:44 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.119 2007/12/06 10:53:14 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -338,7 +338,8 @@ Separate paths from file names with --."
  
      (longlines-wrap-follows-window-size t)
 
-     (mac-inline-input-method-mode (if window-system t))
+   
+     
      
 
      ;; do not allow user to mess with minibuffer prompt
@@ -349,14 +350,28 @@ Separate paths from file names with --."
 
      )
    )
-  ;; on by default
-(if window-system
-    (mac-inline-input-method-mode t)
+
+;; on by default
+
+(unless (fboundp 'mac-inline-input-method-mode)
+  (defun mac-inline-input-method-mode ( &optional onoff)
+      (interactive)
+      (message "mac-inline-input-method-mode not available without window system."))
+  (defvar mac-inline-input-method-mode nil))
+
+
+(if (and (fboundp 'mac-inline-input-method-mode) (not (boundp 'mac-inline-input-method-missing)) window-system)
+    (progn
+      (aquamacs-set-defaults '((mac-inline-input-method-mode t)))
+ ;     (mac-inline-input-method-mode t)
+)
   ;; otherwise, redefine the mode function
   ;; so that it won't be called when loading custom-file.
-  (defun mac-inline-input-method-mode ()
-    (interactive)
-    (message "mac-inline-input-method-mode not available without window system.")))
+;  (aquamacs-set-defaults '((mac-inline-input-method-mode nil)))
+  (defvar 'mac-inline-input-method-missing t)
+  (defun mac-inline-input-method-mode ( &optional onoff)
+      (interactive)
+      (message "mac-inline-input-method-mode not available without window system.")))
 
 
   ;; set a nntp server if there's none
@@ -538,9 +553,6 @@ to the selected frame."
 
   (require 'smart-frame-positioning)
   
-  (fset 'winmgr-display-available-pixel-bounds
-	'mac-display-available-pixel-bounds)
-
   (aquamacs-set-defaults 
    '((smart-frame-positioning-mode t)
      ( smart-frame-positioning-enforce t) ;; and enforce it
@@ -856,7 +868,8 @@ It is Free Software: you can improve and redistribute it under the GNU General P
      ;; show unfinished key inputs early
      (echo-keystrokes 0.1)
      ;; save minibuffer history
-     (savehist-mode 1))) 
+     (savehist-mode 1)
+     (savehist-coding-system "utf-8"))) 
    
 
   
