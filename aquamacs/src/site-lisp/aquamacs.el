@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.119 2007/12/06 10:53:14 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.120 2007/12/09 23:40:49 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -830,10 +830,12 @@ It is Free Software: you can improve and redistribute it under the GNU General P
 
 (if (string= "mac" window-system)
       (defun use-fancy-splash-screens-p () t))
-  
-       
+
+        
 ;; the following causes not-so-good things to happen.
 ;; (defun fancy-splash-default-action () nil)
+
+  (require 'savehist) ;; because we configure and activate it
 
   (aquamacs-set-defaults
    '((fancy-splash-image "aquamacs-splash-screen.jpg")
@@ -868,8 +870,9 @@ It is Free Software: you can improve and redistribute it under the GNU General P
      ;; show unfinished key inputs early
      (echo-keystrokes 0.1)
      ;; save minibuffer history
+     (savehist-coding-system "utf-8")
      (savehist-mode 1)
-     (savehist-coding-system "utf-8"))) 
+     )) 
    
 
   
