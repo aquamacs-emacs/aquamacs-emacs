@@ -196,7 +196,7 @@ the printer has no corresponding command."
      :help "Delete generated intermediate files")
     ("Clean All" "(TeX-clean t)" TeX-run-function nil t
      :help "Delete generated intermediate and output files")
-    ("XeLaTeX" "xelatex \"%(mode)\\input{%t}\""
+    ("XeLaTeX" "%`%l%(mode)%' %t"
       TeX-run-TeX nil (latex-mode context-mode) 
       :help (format "Run X%sLaTeX" (string (decode-char 'ucs #x258))))
     ("Other" "" TeX-run-command t t :help "Run an arbitrary command"))
@@ -3602,7 +3602,7 @@ Brace insertion is only done if point is in a math construct and
   "Return the entries for a Command menu specific to the major MODE."
   (append
    (TeX-menu-with-help
-    '("Command on"
+    '(["Command on" nil :active nil}
       [ "Master File" TeX-command-select-master
 	:keys "C-c C-c" :style radio
 	:selected (eq TeX-command-current 'TeX-command-master)
