@@ -4,7 +4,7 @@
 ;; originally authored by Kevin Walzer
 ;; Keywords: auctex
  
-;; Last change: $Id: auctex-config.el,v 1.28 2007/12/15 17:25:02 davidswelt Exp $
+;; Last change: $Id: auctex-config.el,v 1.29 2007/12/15 17:34:27 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -150,7 +150,8 @@ This will normally be the line number at that position, unless
 
 (defvar aquamacs-tex-pdf-viewer "Skim"
   "External viewer for `aquamacs-call-viewer' and `aquamacs-latex-crossref'.
-Aquamacs defines an AUCTeX command called JumpToPDF, which calls this viewer.")
+Aquamacs defines an AUCTeX command called "Jump To PDF", 
+which calls this viewer.")
 
 (defun aquamacs-call-viewer (the-file line source)
 "Display THE-FILE as PDF at LINE (as in file SOURCE).
@@ -182,7 +183,7 @@ Calls `aquamacs-tex-pdf-viewer' to display the PDF file THE-FILE."
       (let ((aquamacs-ring-bell-on-error-flag nil))
 	(reftex-view-crossref current-prefix-arg))
     (error 
-	   (TeX-command  "JumpToPDF" 'TeX-master-file))
+	   (TeX-command  "Jump To PDF" 'TeX-master-file))
      nil )))
 
 
@@ -217,12 +218,12 @@ Calls `aquamacs-tex-pdf-viewer' to display the PDF file THE-FILE."
 (defun aquamacs-latex-viewer-support ()
   "Support for Skim as LaTeX viewer if present."
   (add-to-list 'TeX-expand-list
-	       '("%(FileLine)" TeX-current-file-line))
+	       '("%(FileLine)" TeX-current-file-line) 'append)
   (add-to-list 'TeX-command-list
-	     '("JumpToPDF" 
+	     '("Jump To PDF" 
 	       "(aquamacs-call-viewer \"%o\" %(FileLine) \"%b\")" 
 	       TeX-run-function nil t 
-	       :help "Jump here in Skim"))
+	       :help "Jump here in Skim") 'append)
   
   (and (boundp 'reftex-mode-map) reftex-mode-map
        (define-key reftex-mode-map [(shift mouse-2)] nil))
@@ -230,7 +231,9 @@ Calls `aquamacs-tex-pdf-viewer' to display the PDF file THE-FILE."
   (and (boundp 'LaTeX-mode-map) LaTeX-mode-map
        (define-key LaTeX-mode-map [(shift mouse-2)] 
 	 'aquamacs-latex-crossref))
-  (setq aquamacs-skim-timer (run-with-idle-timer 30 t 'aquamacs-check-for-skim))
+  (unless aquamacs-skim-timer ;; just once per session
+    (setq aquamacs-skim-timer 
+	  (run-with-idle-timer 30 t 'aquamacs-check-for-skim)))
   (server-start)) ;; make emacsclient work
 
 (require 'server)
