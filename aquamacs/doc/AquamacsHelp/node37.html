@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Changes--1.2</TITLE>
-<META NAME="description" CONTENT="Changes--1.2">
+<TITLE>Changes--1.3 CVS</TITLE>
+<META NAME="description" CONTENT="Changes--1.3 CVS">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -27,147 +27,75 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html614"
+<A NAME="tex2html616"
   HREF="node38.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html610"
+<A NAME="tex2html612"
   HREF="node36.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html604"
+<A NAME="tex2html606"
   HREF="node36.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html612"
+<A NAME="tex2html614"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html615"
-  HREF="node38.html">Changes 1.1</A>
-<B> Up:</B> <A NAME="tex2html611"
+<B> Next:</B> <A NAME="tex2html617"
+  HREF="node38.html">Changes 1.2</A>
+<B> Up:</B> <A NAME="tex2html613"
   HREF="node36.html">What's New in This</A>
-<B> Previous:</B> <A NAME="tex2html605"
+<B> Previous:</B> <A NAME="tex2html607"
   HREF="node36.html">What's New in This</A>
- &nbsp; <B>  <A NAME="tex2html613"
+ &nbsp; <B>  <A NAME="tex2html615"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION000141000000000000000">
-Changes--1.2</A>
+Changes--1.3 CVS</A>
 </H2>
 
 <P>
 
 <UL>
-<LI>Aquamacs failed to start up correctly on some systems with a
-  Japanese (or other) locale.
-Reported by Carson Reynolds.
+<LI>Bug fix: On OS X 10.5 ``Leopard'', Aquamacs consumed a lot of CPU power in certain rare circumstances.
+</LI>
+<LI>The minibuffer history is now retained between Aquamacs sessions.
+</LI>
+<LI>LaTeX editing: better support for jumping from and to the PDF if Skim.app is installed and used. No configuration is necessary. You can jump from Aquamacs to Skim with Shift-Command-Click, or with the AUCTeX command ``Jump to PDF'' (enter C-c C-c J RET) and back. You will need to <TT>usepackage{pdfsync}</TT> in your document preamble and re-compile before you can use the feature.
+</LI>
+<LI>Press Command-E to use the region (selected text) for the next  search operation (Command-F).
+Suggested by Mathieu Godart.
+</LI>
+<LI>Spanish keyboards are now better supported (Emulate Spanish Keyboard Mode. See Options / Option Key menu.)
+Patch by Elias Baixas.
+</LI>
+<LI>File names with non-ASCII characters such as German Umlauts or accented characters will be displayed and dealt with correctly. 
+Reported by Ted Roden.
+</LI>
+<LI>ESS Info file updated from 5.3.0 to 5.3.6
+</LI>
+<LI>Cedet was missing a file and produced errors (JDE
+  Mode). Reported by Nick Frolov.
+</LI>
+<LI>ACT-R support fixed. 
+</LI>
+<LI>Loading of preferences files revised once more. Preferences.el
+  and customizations.el 
+  are now loaded along with the user's .emacs, and changes to
+  `after-init-hook' should work (e.g. to use the `desktop' package)
+  just fine.
+Based on an issue reported by Phil Kime.
 
 <P>
 </LI>
-<LI>Printing through htmlize now has a monochrome option that
-  removes all face foreground and background colors and simply prints
-  black on white.
-
-<P>
-</LI>
-<LI>Apple-&lt; and Apple-&gt; now raise the next or previous frame (respectively).
-
-<P>
-</LI>
-<LI>To bring up the *Messages* buffer, a double click into the echo
-  area is now needed instead of a single click.
-
-<P>
-</LI>
-<LI>Aquamacs now includes the Emacs Lisp Reference as convenient
-  Apple Help document, available from the Help menu (``More Manuals'').
-
-<P>
-</LI>
-<LI>Files created with Aquamacs can now have their default associations changed in Finder more reliable. Aquamacs now sets the file type of newly created files to TEXT. Icons associated with such files should now bear the Aquamacs logo.
-Reported by Frank J.R. Hanstick.
-
-<P>
-</LI>
-<LI>Ediff does not bring up errors any longer when called repeatedly.
-Reported by various users.
-
-<P>
-</LI>
-<LI>In LaTeX-mode, references such as 
-<BR>
-cite{...} are not
-  highlighted any longer when hovering with the mouse over them. This
-  was confusing. Use `bib-highlight-mouse-t' to turn it back on.
-
-<P>
-</LI>
-<LI>Ruby on Rails mode updated to emacs-rails 0.5.99.5. This  fixes
-  a the startup problem (missing ``snippet'') with rails.
-  Reported by Marc Siegel.
-
-<P>
-</LI>
-<LI>Emacs Speaks Statistic (ESS, R-mode etc.) updated to version 5.3.6.
-
-<P>
-</LI>
-<LI>Fitting frame sizes to the content displayed with M-x fit-frame
-  works now, because `inhibit-fit-frame' is nil by default. Frames
-  will still be at least 68 characters wide (`create-frame-min-width')
-  to ensure that *Help* frames are wide enough (if Frame Appearance
-  Styles are active, as by default).
-
-<P>
-</LI>
-<LI>The menu entry `Paste' works for material copied from other
-  applications now just like Apple-V always did. 
-Reported by Matthew Hoyles.
-
-<P>
-</LI>
-<LI>Aquamacs has always imported the environment from the login
-  shell, e.g. any environment variable you might have set in your
-  /.bash_profile. The elements of a PATH known to the login shell now
-  take priority over elements in the PATH defined by the system. That
-  means that if newer versions of system-supplied utilities are
-  installed with Fink or Darwinports, these will be used from within
-  Aquamacs.
-
-<P>
-</LI>
-<LI>Aquamacs should run even without the font Monaco available on the system.
-
-<P>
-</LI>
-<LI>The location of the Abbreviations file was changed. If you have any personal customizations there, move them:
-
-<P>
-mv&nbsp;/.abbrev_defs ``/Library/Preferences/Aquamacs Emacs/Abbreviations''
-
-<P>
-</LI>
-<LI>Revised message in echo area upon startup.
-Suggested by Richard Stallman.
-
-<P>
-</LI>
-<LI>Based on the latest GNU Emacs 22 code, including improvements to
-  the 22.1 release.
-
-<P>
-</LI>
-<LI>Our sincere appreciation goes you to all users who have donated
-        (<TT><A NAME="tex2html34"
-  HREF="http://aquamacs.org/donate">http://aquamacs.org/donate</A></TT>). If you haven't had the
-        chance to support the Aquamacs project yet, please consider a
-        contribution now. Only with your support can we continue to
-        work on Aquamacs.
+<LI>Many thanks for your donations since the last version was published. If you haven't done so lately, please consider making a donation to the project at <TT><A NAME="tex2html33"
+  HREF="http://aquamacs.org/donate">http://aquamacs.org/donate</A></TT>. Your donations are essential in keeping the project going - we have no other source of income from Aquamacs!
 
 <P>
 </LI>
@@ -176,35 +104,35 @@ Suggested by Richard Stallman.
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html614"
+<A NAME="tex2html616"
   HREF="node38.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html610"
+<A NAME="tex2html612"
   HREF="node36.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html604"
+<A NAME="tex2html606"
   HREF="node36.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html612"
+<A NAME="tex2html614"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html615"
-  HREF="node38.html">Changes 1.1</A>
-<B> Up:</B> <A NAME="tex2html611"
+<B> Next:</B> <A NAME="tex2html617"
+  HREF="node38.html">Changes 1.2</A>
+<B> Up:</B> <A NAME="tex2html613"
   HREF="node36.html">What's New in This</A>
-<B> Previous:</B> <A NAME="tex2html605"
+<B> Previous:</B> <A NAME="tex2html607"
   HREF="node36.html">What's New in This</A>
- &nbsp; <B>  <A NAME="tex2html613"
+ &nbsp; <B>  <A NAME="tex2html615"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 <I>David</I>
-<BR><I>2007-10-02</I>
+<BR><I>2007-12-15</I>
 </ADDRESS>
 </BODY>
 </HTML>
