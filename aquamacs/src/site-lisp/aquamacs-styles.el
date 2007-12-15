@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.19 2007/12/15 19:12:00 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.20 2007/12/15 21:05:20 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -702,8 +702,14 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
 :init-value  t
   :group 'Aquamacs
   :global t
-  :require 'color-theme)
+  :require 'color-theme
 
+  (and
+   aquamacs-styles-mode
+   (boundp 'one-buffer-one-frame-mode) (not one-buffer-one-frame-mode)
+   (message "Aquamacs-Styles-Mode disabled. For best results, consider turning
+on One-Buffer-One-Frame-Mode (Display Buffers in Separate Frames)")))
+  
  ;; (let (
 ;; (aquamacs-default-styles 
 ;;    (quote ((help-mode (fit-frame . t)) 
