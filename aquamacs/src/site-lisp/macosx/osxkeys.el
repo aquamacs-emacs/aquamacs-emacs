@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.78 2007/09/27 16:24:51 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.79 2007/12/15 19:29:34 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -572,8 +572,12 @@ is called."
 (allow-line-as-region-for-function comment-or-uncomment-region)
 
 
- 
- 
+
+(defun aquamacs-use-selection-for-find (beg end)
+  (interactive "r")  
+  (if mark-active
+      (setq isearch-string (buffer-substring beg end))))
+
 ;; (add-hook 'after-init-hook 
 ;; 	  (lambda () 
 	    
@@ -960,6 +964,7 @@ default."
     (define-key map `[(,osxkeys-command-key f)] 'isearch-forward)
     (define-key map `[(,osxkeys-command-key g)] 'isearch-repeat-forward)  
     (define-key map `[(,osxkeys-command-key shift g)] 'isearch-repeat-backward)
+    (define-key map `[(,osxkeys-command-key e)] 'aquamacs-use-selection-for-find)
     (define-key map `[(,osxkeys-command-key w)] 'close-current-window-asktosave)
     (define-key map `[(,osxkeys-command-key m)] 'iconify-or-deiconify-frame) 
     (define-key map `[(,osxkeys-command-key .)] 'keyboard-quit)
