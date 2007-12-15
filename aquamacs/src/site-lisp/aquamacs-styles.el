@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.17 2007/08/12 17:08:17 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.18 2007/12/15 18:51:53 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -630,7 +630,10 @@ current major mode. To turn off this behavior, see
 
 
 (defcustom aquamacs-default-styles
-  (filter-fonts '((help-mode (tool-bar-lines . 0) (fit-frame . t))
+  (filter-fonts '((help-mode (tool-bar-lines . 0))
+		  ;; do not fit the frame for *Help*
+		  ;; because the frame will not re-adjust if the buffer
+		  ;; changes. Perhaps some auto-fit-frame?
 		  (text-mode  (font . "fontset-lucida13")) 
 		  (change-log-mode  (font . "fontset-lucida13"))
 		  (tex-mode  (font . "fontset-lucida13"))
@@ -641,6 +644,7 @@ current major mode. To turn off this behavior, see
 			       (font . "fontset-monaco11")
 			       (foreground-color . "sienna")
 			       (background-color . "light goldenrod"))
+		  ;; should the default be taken from default-frame-alist?
 		  (default (font . "fontset-monaco12")   
 			    (right-fringe . 1) (left-fringe . 1))
 		  ))
@@ -711,9 +715,9 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
 ;; 	   )))) 
 ;;    (aquamacs-styles-set-default-parameter 'tool-bar-lines 0))
 
-(defun aquamacs-styles-set-default-parameter (param value)
+(defun aquamacs-styles-set-default-parameter (param value &optional mode)
   "Sets frame parameter PARAM of `default' frame style."
-  (let* ((x (assq 'default aquamacs-default-styles))
+  (let* ((x (assq (or mode 'default) aquamacs-default-styles))
 	 (x2 (cdr-safe x))
 	 ;; just in case the entry is malformed (or obsolete, maybe?)
 	 (y (assq param (if (listp (cdr-safe x2)) x2 (list x2)))))
@@ -722,29 +726,35 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
       (if x
 	  (setcdr x (cons (cons param value) (cdr x)))
 	(setq aquamacs-default-styles
-	      (cons (list 'default (cons param value)) 
+	      (cons (list (or mode 'default) (cons param value)) 
 		    aquamacs-default-styles))))))
  
+(defun aquamacs-styles-set-all-mode-parameters (param value)
+
+  (mapc (lambda (mode) (aquamacs-styles-set-default-parameter param value mode))
+	(mapcar 'car-safe aquamacs-default-styles))
+  (message "Modified the styles for all modes: %s set to %s." param value))
+
 (defadvice modify-all-frames-parameters
-  (after set-tool-bar-in-default-style (alist) activate)
+  (after set-tool-bar-in-all-styles (alist) activate)
   (mapc (lambda (x)
-	  (aquamacs-styles-set-default-parameter (car-safe x)
+	  (aquamacs-styles-set-all-mode-parameters (car-safe x)
 						 (cdr-safe x)))
 	alist))
 
 (defadvice tool-bar-mode
-  (after set-tool-bar-in-default-style () activate)
+  (after set-tool-bar-in-all-styles () activate)
 
-  (aquamacs-styles-set-default-parameter 'tool-bar-lines
+  (aquamacs-styles-set-all-mode-parameters 'tool-bar-lines
 					 (if tool-bar-mode 1 0)))
 
 (defadvice set-fringe-mode
-  (after set-fringe-in-default-style () activate)
+  (after set-fringe-in-all-styles () activate)
 
-  (aquamacs-styles-set-default-parameter 
+  (aquamacs-styles-set-all-mode-parameters 
    'right-fringe
    (cdr (assq 'right-fringe default-frame-alist)))
-  (aquamacs-styles-set-default-parameter 
+  (aquamacs-styles-set-all-mode-parameters 
    'left-fringe
    (cdr (assq 'left-fringe default-frame-alist))))
 
