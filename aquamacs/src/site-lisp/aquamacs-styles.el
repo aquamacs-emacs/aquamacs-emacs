@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.18 2007/12/15 18:51:53 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.19 2007/12/15 19:12:00 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -736,25 +736,25 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
   (message "Modified the styles for all modes: %s set to %s." param value))
 
 (defadvice modify-all-frames-parameters
-  (after set-tool-bar-in-all-styles (alist) activate)
+  (after set-parameter-in-default-style (alist) activate)
   (mapc (lambda (x)
-	  (aquamacs-styles-set-all-mode-parameters (car-safe x)
+	  (aquamacs-styles-set-default-parameter (car-safe x)
 						 (cdr-safe x)))
 	alist))
 
 (defadvice tool-bar-mode
-  (after set-tool-bar-in-all-styles () activate)
+  (after set-tool-bar-in-default-style () activate)
 
-  (aquamacs-styles-set-all-mode-parameters 'tool-bar-lines
+  (aquamacs-styles-set-default-parameter 'tool-bar-lines
 					 (if tool-bar-mode 1 0)))
 
 (defadvice set-fringe-mode
-  (after set-fringe-in-all-styles () activate)
+  (after set-fringe-in-default-style () activate)
 
-  (aquamacs-styles-set-all-mode-parameters 
+  (aquamacs-styles-set-default-parameter 
    'right-fringe
    (cdr (assq 'right-fringe default-frame-alist)))
-  (aquamacs-styles-set-all-mode-parameters 
+  (aquamacs-styles-set-default-parameter 
    'left-fringe
    (cdr (assq 'left-fringe default-frame-alist))))
 
