@@ -4,7 +4,7 @@
 ;; originally authored by Kevin Walzer
 ;; Keywords: auctex
  
-;; Last change: $Id: auctex-config.el,v 1.27 2007/07/25 16:02:57 davidswelt Exp $
+;; Last change: $Id: auctex-config.el,v 1.28 2007/12/15 17:25:02 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -95,6 +95,150 @@ Only checks once - subsequent calls will not result in any action."
 (add-hook 'LaTeX-mode-hook 'turn-on-bib-cite)
 (add-hook 'LaTeX-mode-hook 'LaTeX-install-toolbar)
 (add-hook 'LaTeX-mode-hook (lambda () (TeX-fold-mode t)))
+(add-hook 'TeX-mode-hook 'aquamacs-latex-viewer-support 'append) ;; load reftex first
+
+(defun file-line-number (&optional buffer-pos)
+  "Returns the number of a line in the visited file.
+BUFFER-POS specifies a position in the current buffer (point is assumed
+if nil). The function evaluates to the corresponding number of a line in 
+the file that the buffer visits (assuming the file has been saved).
+This will normally be the line number at that position, unless 
+`longlines-mode' is active."
+  (if longlines-mode
+      (let ((pos 1)  ;; use 1 for pos, not (point-min), to ignore narrowing
+	    (count 1))
+	(while (and (< pos (buffer-size)) 
+		    (setq pos 
+			  (text-property-any pos (or buffer-pos (point)) 
+						 'hard t)))
+	  (if (eq (char-after pos) 10)
+	      (setq count (1+ count)))
+	  (setq pos (1+ pos)))
+	count)
+    (line-number-at-pos pos)))
+
+;; this is much slower
+;; (defun fln (&optional buffer-pos)
+;;   (unless buffer-pos (setq buffer-pos (point)))
+;;   (save-excursion
+;;     (goto-char 0)
+;;     (let ((count 0))
+;;       (while (search-forward "\n" buffer-pos t)
+;;         (if (get-text-property (match-beginning 0) 'hard)
+;; 	    (setq count (1+ count))))
+;;       count)))
+
+
+(defun buffer-line-number (file-line-number)
+  "Returns the buffer line number given a line in the visited file."
+  (if longlines-mode
+      (let ((pos 1) (count 0))
+	(while (and (> file-line-number 0)
+		    (setq pos (text-property-any pos (buffer-size) 'hard t)))
+	  (if (eq (char-after pos) 10)
+	      (setq file-line-number (1- file-line-number)))
+	  (setq pos (1+ pos)))
+	(line-number-at-pos pos))
+    file-line-number))
+
+;;(defun goto-file-line (file-line-number)
+;;  (goto-line (buffer-line-number file-line-number)))
+
+(defun TeX-current-file-line ()
+  "The line number in the file corresponding to the current buffer line number."
+  (format "%d" (+ 1 (file-line-number))))
+
+(defvar aquamacs-tex-pdf-viewer "Skim"
+  "External viewer for `aquamacs-call-viewer' and `aquamacs-latex-crossref'.
+Aquamacs defines an AUCTeX command called JumpToPDF, which calls this viewer.")
+
+(defun aquamacs-call-viewer (the-file line source)
+"Display THE-FILE as PDF at LINE (as in file SOURCE).
+Calls `aquamacs-tex-pdf-viewer' to display the PDF file THE-FILE."
+  (let ((full-file-name
+	 (expand-file-name 
+	  the-file 
+	  (and buffer-file-name (file-name-directory buffer-file-name))))
+      (full-source-name
+       (expand-file-name 
+	source 
+	(and buffer-file-name (file-name-directory buffer-file-name)))))
+  (do-applescript
+  (format 
+ "
+ tell application \"%s\" 
+     activate 
+     open posix file \"%s\" 
+     tell front document to go to TeX line %d from \"%s\" 
+  end tell
+" aquamacs-tex-pdf-viewer full-file-name line full-source-name))))
+
+(defun aquamacs-latex-crossref (ev)
+  "Cross-reference in LaTeX"
+  (interactive "e")
+  (save-excursion 
+    (mouse-set-point ev)
+  (condition-case nil
+      (let ((aquamacs-ring-bell-on-error-flag nil))
+	(reftex-view-crossref current-prefix-arg))
+    (error 
+	   (TeX-command  "JumpToPDF" 'TeX-master-file))
+     nil )))
+
+
+
+ 
+(defun aquamacs-skim-running-p ()
+(ignore-errors
+  (> (string-to-number 
+      (with-temp-buffer
+	(shell-command "ps ax | grep --count -e '[Ss]kim.app'" t)
+	(buffer-string))) 
+     0)))
+
+(defvar aquamacs-skim-timer nil)
+(defun aquamacs-check-for-skim ()
+"Show help message if Skim.app is running."
+  (and (equal major-mode 'latex-mode) (boundp 'TeX-PDF-mode) TeX-PDF-mode 
+       (file-readable-p (expand-file-name 
+			 (TeX-master-file (TeX-output-extension)) 
+			 (and buffer-file-name (file-name-directory buffer-file-name))))
+     ;; check for running 
+     (aquamacs-skim-running-p)
+     (message 
+      (substitute-command-keys 
+       (format 
+	"Skim detected. Use \\[aquamacs-latex-crossref]%s to jump to the PDF and back."
+	(if (eq 'control mac-emulate-three-button-mouse) 
+	    " (Shift-Apple-Click)" ""))))
+     (cancel-timer aquamacs-skim-timer)))
+  
+
+(defun aquamacs-latex-viewer-support ()
+  "Support for Skim as LaTeX viewer if present."
+  (add-to-list 'TeX-expand-list
+	       '("%(FileLine)" TeX-current-file-line))
+  (add-to-list 'TeX-command-list
+	     '("JumpToPDF" 
+	       "(aquamacs-call-viewer \"%o\" %(FileLine) \"%b\")" 
+	       TeX-run-function nil t 
+	       :help "Jump here in Skim"))
+  
+  (and (boundp 'reftex-mode-map) reftex-mode-map
+       (define-key reftex-mode-map [(shift mouse-2)] nil))
+
+  (and (boundp 'LaTeX-mode-map) LaTeX-mode-map
+       (define-key LaTeX-mode-map [(shift mouse-2)] 
+	 'aquamacs-latex-crossref))
+  (setq aquamacs-skim-timer (run-with-idle-timer 30 t 'aquamacs-check-for-skim))
+  (server-start)) ;; make emacsclient work
+
+(require 'server)
+(defun server-goto-line-column (file-line-col)
+  (goto-line (buffer-line-number (nth 1 file-line-col)))
+  (let ((column-number (nth 2 file-line-col)))
+    (when (> column-number 0)
+      (move-to-column (1- column-number)))))
 
 
 (aquamacs-set-defaults 
