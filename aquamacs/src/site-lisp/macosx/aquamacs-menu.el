@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.89 2007/12/02 21:22:46 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.90 2007/12/15 19:29:20 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -499,16 +499,28 @@ customization buffer."
 
 (define-key menu-bar-i-search-menu [isearch-forward]
   `(menu-item ,(aq-shortcut  
-		"Forward String...             " 
+		"Forward String...                         " 
 		(key-binding [menu-bar edit search i-search isearch-forward]))
 	      isearch-forward
 	      :help "Search forward for a string as you type it"))
  
 (define-key menu-bar-i-search-menu [isearch-repeat-forward]
-  `(menu-item ,(aq-shortcut  "Repeat Forward String...             " 
-				 (key-binding [menu-bar edit search i-search isearch-repeat-forward])) 
+  `(menu-item ,(aq-shortcut  
+		"Repeat Forward String...             " 
+		(key-binding [menu-bar edit search i-search 
+				       isearch-repeat-forward])) 
 	      isearch-repeat-forward
 	      :help "Search forward for a string as you type it"))
+
+(define-key menu-bar-i-search-menu [isearch-use-region]
+  `(menu-item ,(aq-shortcut  
+		"Use Region For Search                " 
+		(key-binding [menu-bar edit search i-search 
+				       isearch-use-region]))
+	      aquamacs-use-selection-for-find
+	      :enable region-active
+	      :help "Use the selection for your next search"))
+
  
 (define-key-after menu-bar-search-menu [grep]
   '(menu-item "Search Files (Grep)..." grep
