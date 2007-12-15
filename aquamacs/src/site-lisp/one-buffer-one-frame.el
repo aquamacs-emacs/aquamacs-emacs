@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.57 2007/07/20 09:36:08 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.58 2007/12/15 21:02:41 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -130,7 +130,12 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
   :group 'Aquamacs
   :global t
   :keymap 'one-buffer-one-frame-mode-map
-  :require 'aquamacs-frame-setup)
+  :require 'aquamacs-frame-setup
+
+(and (not one-buffer-one-frame-mode)
+     (boundp 'aquamacs-styles-mode) aquamacs-styles-mode
+     (message "One-Buffer-One-Frame-Mode disabled. 
+For best results, turn off Frame Appearance Styles now.")))
 
 
 ;; because of the following alias, setting the mode variable will
