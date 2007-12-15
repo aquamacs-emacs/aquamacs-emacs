@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.121 2007/12/11 10:26:05 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.122 2007/12/15 13:05:57 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -870,7 +870,7 @@ It is Free Software: you can improve and redistribute it under the GNU General P
      ;; show unfinished key inputs early
      (echo-keystrokes 0.1)
      ;; save minibuffer history
-     (savehist-coding-system 'utf-8)
+     (savehist-coding-system utf-8)
      (savehist-mode 1)
      )) 
    
