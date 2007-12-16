@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.31 2007/12/03 07:42:03 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.32 2007/12/16 12:07:07 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -76,6 +76,18 @@ by any of the hook functions, will normally be preserved."
   :version 22.0
   :group 'frames)
 
+
+(unless (fboundp 'winmgr-display-available-pixel-bounds)
+  (if (fboundp 'mac-display-available-pixel-bounds)
+      (fset 'winmgr-display-available-pixel-bounds 
+	    'mac-display-available-pixel-bounds))
+  (if (fboundp 'x-display-usable-bounds)
+      (fset 'winmgr-display-available-pixel-bounds 
+	    'x-display-usable-bounds)))
+ 
+
+
+
 (defun smart-position-and-create-frame (&optional parameters) 
  "Create a frame in a useful screen position.
 May be used in `frame-creation-function' or 
@@ -101,6 +113,7 @@ should be used as the interface to this function."
   
     (let ((h (frame-parameter f 'height))
 	  (w (frame-parameter f 'width)))
+      
       (run-hook-with-args 'smart-frame-positioning-hook f)
       (setq hasbeenfitted ; have width/height changed?
 	    (or (not (equal w (frame-parameter f 'height)))
@@ -120,7 +133,9 @@ should be used as the interface to this function."
     (modify-frame-parameters f newpos)
     ;; stay within the available screen
     (smart-move-frame-inside-screen f)
-    (make-frame-visible f)
+    (unless  (and (assq 'visibility parameters)
+		  (eq (cdr (assq 'visibility parameters)) nil))
+      (make-frame-visible f))
     f))	; return the frame
 
  
@@ -143,7 +158,7 @@ pixels apart if possible."
 (defvar smart-fp--frame-title-bar-height 22) ;; how to determine this?
 
 
-(defun frame-total-pixel-height (f) 
+(defun frame-total-pixel-height (f) ;;(frame-pixel-height f))
 ;; this should use the correct faces for minibuffer/modeline
 ;; and check for presence of those elements etc etc.
 ;; it's just an approximation right now.
@@ -307,7 +322,6 @@ pixels apart if possible."
 		;; why this? (why? enabled)
 		(assq-set 'height (smart-fp--pixel-to-char-height
 				   next-h new-frame) 'new-frame-parameters)
-
 		;; return this 
 		(smart-fp--convert-negative-ordinates 
 		 new-frame-parameters))))))))
