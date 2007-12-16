@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.123 2007/12/15 13:10:03 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.124 2007/12/16 12:23:38 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -87,6 +87,10 @@ yes-or-no prompts - y or n will do."
 
   ;; No more annoying bells all the time
 
+  (defun aquamacs-bell ()
+    (let ((ring-bell-function nil))
+      (ding)))
+
   (aquamacs-set-defaults 
    '((ring-bell-function (lambda () (message "")))
      )
@@ -106,15 +110,7 @@ yes-or-no prompts - y or n will do."
   ;; but please ring the bell when there is a real error
   (defadvice error (around ring-bell (&rest args) activate protect)
  
-    (if aquamacs-ring-bell-on-error-flag
-	(progn
-	  (let ((ring-bell-function nil))
-	    (ding))
-					;	(message (prin1-to-string args))
-	  ad-do-it)
-      ;; else
-      ad-do-it)) 
-
+    
 
 
   ;; Find-file may open a new frame
