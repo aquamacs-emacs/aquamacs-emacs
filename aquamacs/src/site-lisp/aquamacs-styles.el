@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.21 2007/12/15 21:05:44 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.22 2007/12/16 12:23:05 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -128,8 +128,7 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 	    ;; will cause another menu-bar-update-hook call, so we can end up 
 	    ;; with this function called again and again...  
 
-	    (let ((buffer  
-			   (aquamacs-style-relevant-buffer frame)))
+	    (let ((buffer (aquamacs-style-relevant-buffer frame)))
 	    
 	      (if (or 
 		   (and force (or buffer for-mode))
@@ -142,7 +141,8 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 					; major-mode)  
 			       ))))
 
-		  (save-excursion
+		  (save-excursion 
+
 		    (set-buffer buffer)
 		    (let* ((style (aquamacs-combined-mode-specific-settings 
 				   (if (special-display-p (buffer-name)) 
@@ -210,11 +210,20 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 			      (funcall (car color-theme))  ;; just install the color style directly
 			    (color-theme-install color-theme))) 
 			
+			;; restore old dimensions
+			(set-frame-height frame
+					  (floor (/ (float old-frame-pixel-height) 
+						    (float (frame-char-height)))))
+			(set-frame-width frame
+					  (floor (/ (float old-frame-pixel-width) 
+						    (float (frame-char-width)))))
+
 			(if (and (fboundp 'smart-move-frame-inside-screen)
-			       (or (not (equal old-frame-pixel-width
-					       (frame-pixel-width frame)))
-				   (not (equal old-frame-pixel-height
-					       (frame-pixel-height frame)))))
+			       ;; (or (not (equal old-frame-pixel-width
+;; 					       (frame-pixel-width frame)))
+;; 				   (not (equal old-frame-pixel-height
+;; 					       (frame-pixel-height frame))))
+			       )
 			  (smart-move-frame-inside-screen)))))))
 	  (error (print err))))))
 
@@ -251,34 +260,25 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
        (aquamacs-set-style f t)
        )  
      ;; list
-     (find-all-frames-internal (current-buffer))
-     )
-    )  
-  )
+     (find-all-frames-internal (current-buffer)))))
 
 
-
-;; (setq after-change-major-mode-hook nil) 
 
 (defun set-mode-style-after-make-frame (frame) 
   ;; only if we have a window and a buffer here
   (if (and aquamacs-styles-mode
 	   (frame-first-window) (window-buffer (frame-first-window frame)))
-      ;; make sure we acticate the right buffer
+      ;; make sure we activate the right buffer
       ;; and that we don't change the selected frame
       (save-excursion
 	(set-buffer (window-buffer (frame-first-window frame)))
-	(aquamacs-set-style frame)
-	) 
-    )
-  )
+	(aquamacs-set-style frame))))
+
 ;; this is needed for newly created frames, because the after-mode-change
 ;; hook can get run before the frame is displayed.
 (add-hook 'after-make-frame-functions	
 	  'set-mode-style-after-make-frame
 	  )
-
-;;(setq last-major-mode-style-in-this-frame nil)
 
 (defun aquamacs-update-mode-style ()
   "Update the style (colors, font) of the selected frame 
@@ -960,13 +960,14 @@ selected frame."
     )
   )
 
-
 (defvar smart-frame-positioning-hook nil) ;; stub
 (add-hook 'smart-frame-positioning-hook
 	  (lambda (f)
-	    (modify-frame-parameters f
-				     (aquamacs-get-style major-mode))))
+	    (aquamacs-set-style f)))
 
+;	    (modify-frame-parameters f (aquamacs-get-style major-mode))))
+
+; (setq smart-frame-positioning-hook nil)
 
 
 
