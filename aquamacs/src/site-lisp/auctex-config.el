@@ -4,7 +4,7 @@
 ;; originally authored by Kevin Walzer
 ;; Keywords: auctex
  
-;; Last change: $Id: auctex-config.el,v 1.29 2007/12/15 17:34:27 davidswelt Exp $
+;; Last change: $Id: auctex-config.el,v 1.30 2007/12/16 13:59:11 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -150,7 +150,7 @@ This will normally be the line number at that position, unless
 
 (defvar aquamacs-tex-pdf-viewer "Skim"
   "External viewer for `aquamacs-call-viewer' and `aquamacs-latex-crossref'.
-Aquamacs defines an AUCTeX command called "Jump To PDF", 
+Aquamacs defines an AUCTeX command called `Jump To PDF', 
 which calls this viewer.")
 
 (defun aquamacs-call-viewer (the-file line source)
