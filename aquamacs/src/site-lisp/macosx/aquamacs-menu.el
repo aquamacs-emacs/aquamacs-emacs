@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.90 2007/12/15 19:29:20 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.91 2007/12/16 13:50:15 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -518,7 +518,7 @@ customization buffer."
 		(key-binding [menu-bar edit search i-search 
 				       isearch-use-region]))
 	      aquamacs-use-selection-for-find
-	      :enable region-active
+	      :enable mark-active
 	      :help "Use the selection for your next search"))
 
  
