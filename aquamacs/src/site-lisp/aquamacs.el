@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.124 2007/12/16 12:23:38 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.125 2007/12/16 13:46:35 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -108,8 +108,15 @@ yes-or-no prompts - y or n will do."
   (defvaralias  'aquamacs-ring-bell-on-error 'aquamacs-ring-bell-on-error-flag)
 
   ;; but please ring the bell when there is a real error
+
   (defadvice error (around ring-bell (&rest args) activate protect)
  
+    (if aquamacs-ring-bell-on-error-flag
+	(progn
+	  (aquamacs-bell)
+	  ad-do-it)
+      ;; else
+      ad-do-it))
     
 
 
