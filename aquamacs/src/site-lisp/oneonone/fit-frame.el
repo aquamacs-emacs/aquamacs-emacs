@@ -516,7 +516,10 @@ size, and depends on the value of `fit-frame-max-width-percent':
   (/ (* fit-frame-max-width-percent (x-display-pixel-width))
      (* 100 (frame-char-width FRAME)))"
   (setq frame (or frame (selected-frame)))
-  (/ (* fit-frame-max-width-percent (x-display-pixel-width))
+  (/ (* fit-frame-max-width-percent 
+	(if (fboundp 'winmgr-display-available-pixel-bounds)
+	    (nth 2 (winmgr-display-available-pixel-bounds))
+	(x-display-pixel-width)))
      (* 100 (frame-char-width frame))))
 
 (defun fit-frame-max-height (&optional frame)
@@ -530,7 +533,10 @@ size, and depends on the value of `fit-frame-max-height-percent':
   (/ (* fit-frame-max-height-percent (x-display-pixel-height))
      (* 100 (frame-char-height FRAME)))"
   (setq frame (or frame (selected-frame)))
-  (/ (* fit-frame-max-height-percent (x-display-pixel-height))
+  (/ (* fit-frame-max-height-percent 
+	(if (fboundp 'winmgr-display-available-pixel-bounds)
+	    (nth 3 (winmgr-display-available-pixel-bounds))
+	(x-display-pixel-height)))
      (* 100 (frame-char-height frame)
         ;; When fitting a thumbnail frame, we don't want the height to use the
         ;; whole display height.  So, we apply a fudge factor:
