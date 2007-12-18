@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.35 2007/12/18 14:12:35 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.36 2007/12/18 14:15:45 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -123,8 +123,13 @@ should be used as the interface to this function."
 	;; in case the hook changed them.
 	;; (unless exceeding screen dimensions)
 	(setq newpos 
-	      (assq-delete-all 'height 
-			       (assq-delete-all 'width newpos))))
+	      (assq-delete-all 
+	       'top 
+	       (assq-delete-all 
+		'left 
+		(assq-delete-all 
+		 'height 
+		 (assq-delete-all 'width newpos))))))
     ; make sure we don't make it visible prematurely
     (setq newpos (assq-delete-all 'visibility newpos))
     (modify-frame-parameters f newpos)
