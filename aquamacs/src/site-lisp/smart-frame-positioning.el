@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.34 2007/12/18 01:07:15 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.35 2007/12/18 14:12:35 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -88,13 +88,14 @@ by any of the hook functions, will normally be preserved."
 
 
 
+
 (defun smart-position-and-create-frame (&optional parameters) 
  "Create a frame in a useful screen position.
 May be used in `frame-creation-function' or 
 `frame-creation-function-alist'. `smart-frame-positioning-mode' 
 should be used as the interface to this function."
   (let* ((newpos)
-	 (hasbeenfitted)
+	 
 	 (oldframe (selected-frame))
 	 (newparms (append (list '(visibility . nil)) 
 			   parameters))
@@ -111,16 +112,12 @@ should be used as the interface to this function."
     ;; set remaining parameters
     (modify-frame-parameters f newparms)
   
-    (let ((h (frame-pixel-height f))
-	  (w (frame-pixel-width f)))
       
-      (run-hook-with-args 'smart-frame-positioning-hook f)
-      (setq hasbeenfitted ; have width/height changed?
-	    (or (> (abs (- w (frame-pixel-height f))) 20)
-	      (> (abs (- h (frame-pixel-width f))) 20))))
+    (run-hook-with-args 'smart-frame-positioning-hook f)
+      
 	   
     (setq newpos (find-good-frame-position oldframe f))  
-    (when hasbeenfitted
+    (unless (frame-parameter f 'fit-frame)
 	;; delete height and width - these parameters
 	;; are preserved and will stay untouched
 	;; in case the hook changed them.
