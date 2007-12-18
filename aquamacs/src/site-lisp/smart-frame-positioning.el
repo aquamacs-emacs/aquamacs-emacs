@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.32 2007/12/16 12:07:07 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.33 2007/12/18 00:37:52 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -111,16 +111,16 @@ should be used as the interface to this function."
     ;; set remaining parameters
     (modify-frame-parameters f newparms)
   
-    (let ((h (frame-parameter f 'height))
-	  (w (frame-parameter f 'width)))
+    (let ((h (frame-pixel-height f))
+	  (w (frame-pixel-width f)))
       
       (run-hook-with-args 'smart-frame-positioning-hook f)
       (setq hasbeenfitted ; have width/height changed?
-	    (or (not (equal w (frame-parameter f 'height)))
-	      (not (equal h (frame-parameter f 'width))))))
+	    (or (> (abs (- w (frame-pixel-height f))) 20)
+	      (> (abs (- h (frame-pixel-width f))) 20))))
 	   
-    (setq newpos (find-good-frame-position oldframe f)) 
-    (if hasbeenfitted
+    (setq newpos (find-good-frame-position oldframe f))  
+    (when hasbeenfitted
 	;; delete height and width - these parameters
 	;; are preserved and will stay untouched
 	;; in case the hook changed them.
