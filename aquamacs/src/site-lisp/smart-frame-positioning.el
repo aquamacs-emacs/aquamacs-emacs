@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.36 2007/12/18 14:15:45 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.37 2007/12/19 10:04:47 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -112,24 +112,20 @@ should be used as the interface to this function."
     ;; set remaining parameters
     (modify-frame-parameters f newparms)
   
-      
+
     (run-hook-with-args 'smart-frame-positioning-hook f)
       
 	   
     (setq newpos (find-good-frame-position oldframe f))  
-    (unless (frame-parameter f 'fit-frame)
+    (when (frame-parameter f 'fit-frame)
 	;; delete height and width - these parameters
 	;; are preserved and will stay untouched
 	;; in case the hook changed them.
 	;; (unless exceeding screen dimensions)
 	(setq newpos 
-	      (assq-delete-all 
-	       'top 
-	       (assq-delete-all 
-		'left 
 		(assq-delete-all 
 		 'height 
-		 (assq-delete-all 'width newpos))))))
+		 (assq-delete-all 'width newpos))))
     ; make sure we don't make it visible prematurely
     (setq newpos (assq-delete-all 'visibility newpos))
     (modify-frame-parameters f newpos)
@@ -168,7 +164,8 @@ pixels apart if possible."
    (smart-fp--char-to-pixel-height
      (eval (frame-parameter f 'height)) f
    )))
- 
+ ; (frame-total-pixel-height (selected-frame))
+; (frame-pixel-height)
 
 (defun smart-fp--char-to-pixel-width (chars frame)
        (* chars (frame-char-width frame)))
@@ -198,6 +195,7 @@ pixels apart if possible."
  
 (defun find-good-frame-position ( old-frame new-frame )
   "Finds a good frame position for a new frame based on the old one's position."
+ 
   (let ((new-frame-parameters))
     (if (and (not smart-frame-positioning-enforce) 
 	     (cdr (assq 'user-position (frame-parameters new-frame))))
@@ -478,15 +476,18 @@ on the main screen, i.e. where the menu is."
 	 (max-y (nth 3 rect))
 	 (next-x (eval (frame-parameter frame 'left)))
 	 (next-y (eval (frame-parameter frame 'top)))
-	 (next-w (eval (frame-parameter frame 'width)))
-	 (next-h (eval (frame-parameter frame 'height)))
-	 (next-x2 (+ next-x (smart-fp--char-to-pixel-width
-				    next-w
-				    frame)))
-	 (next-y2 (+ next-y smart-fp--frame-title-bar-height 
-		     (smart-fp--char-to-pixel-height
-				    next-h
-				    frame))))
+	 (next-wc (eval (frame-parameter frame 'width)))
+	 (next-hc (eval (frame-parameter frame 'height)))
+	 (next-w (frame-pixel-width frame)
+		 ;(smart-fp--char-to-pixel-width next-wc frame)
+		  )
+	 (next-h (frame-pixel-height frame))
+
+	 (w-offset (- next-w (smart-fp--char-to-pixel-width next-wc frame)))
+	 (h-offset (- next-h (smart-fp--char-to-pixel-height next-hc frame)))
+
+	 (next-x2 (+ next-x next-w))
+	 (next-y2 (+ next-y next-h)))
     (when (< (+ next-x next-w) min-x) ; to the left
       (let ((new-max-x min-x))
 	(setq min-x (- min-x max-x))
@@ -508,38 +509,29 @@ on the main screen, i.e. where the menu is."
      frame
      (let* ((next-x (max min-x 
 			 (min
-			  (- max-x (smart-fp--char-to-pixel-width
-				    next-w
-				    frame))
+			  (- max-x next-w )
 			  next-x)))
 	    (next-y (max min-y 
 			 (min 
-			   (- max-y (smart-fp--char-to-pixel-height
-				    next-h
-				    frame) 
-			      smart-fp--frame-title-bar-height) 
+			   (- max-y next-h smart-fp--frame-title-bar-height)  ;; why subtract smart-fp--frame-title-bar-height ???
 			  next-y)))
-	    (next-w (smart-fp--pixel-to-char-width
-		     (min (- max-x next-x 20)
-			  (smart-fp--char-to-pixel-width
-			   next-w
-			   frame)) 
-		     frame 'round-lower))
-	    (next-h (smart-fp--pixel-to-char-height
-		     (min (- max-y next-y)
-			  (smart-fp--char-to-pixel-height
-			   next-h
-			   frame))
-		     frame 'round-lower)))
+	    (next-wc  (if (<= next-w (- max-x next-x))
+			  next-wc
+			(smart-fp--pixel-to-char-width (- max-x next-x) 
+						       frame 'round-lower)))
+	    (next-hc (if (<= next-h (- max-y next-y ))
+			 next-hc
+		       (smart-fp--pixel-to-char-height (- max-y next-y)
+						       frame 'round-lower))))
        `((left .
 	       ,next-x)
 	 (top .
 	      ,next-y)
 	 (width .
-		,next-w)   
+		,next-wc)   
 	 (height .
-		 ,next-h))))))
- 
+		 ,next-hc)))))) 
+
 	 
     
 (defun smart-fp--convert-negative-ordinates (parms)
