@@ -7,9 +7,9 @@
 ;; Copyright (C) 2000-2007, Drew Adams, all rights reserved.
 ;; Created: Thu Dec  7 09:32:12 2000
 ;; Version: 21.0
-;; Last-Updated: Sun Jul 22 23:30:38 2007 (-25200 Pacific Daylight Time)
+;; Last-Updated: Tue Dec 18 08:03:49 2007 (-28800 Pacific Standard Time)
 ;;           By: dradams
-;;     Update #: 915
+;;     Update #: 1032
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/fit-frame.el
 ;; Keywords: internal, extensions, convenience, local
 ;; Compatibility: GNU Emacs 20.x, GNU Emacs 21.x, GNU Emacs 22.x
@@ -29,9 +29,9 @@
 ;;  buffer, or the `fill-column' width.
 ;;
 ;;  The command to fit a frame is `fit-frame'.  The main user options
-;;  for this command are`fit-frame-inhibit-fitting-flag' and
-;;  `fit-frame-max-*[-percent]'.  Command `fit-frame' has various
-;;  behaviors, depending on the prefix argument used, if any.
+;;  for this command are `fit-frame-inhibit-fitting-flag' and
+;;  `fit-frame-max-*[-percent]'.  You can use a prefix argument to
+;;  control the behavior of command `fit-frame'.
 ;;
 ;;  To take full advantage of the functionality provided here, load
 ;;  the companion library `auto-fit-frames.el', to modify primitives
@@ -58,6 +58,8 @@
 ;;  Suggested key bindings:
 ;;
 ;;   (global-set-key [(control ?x) (control ?_)] 'fit-frame)
+;;   (global-set-key [vertical-line down-mouse-1]
+;;                   'fit-frame-or-mouse-drag-vertical-line)
 ;;
 ;;  Customize the menu-bar.  Uncomment this to try it out.
 ;;
@@ -119,6 +121,16 @@
 ;;
 ;;; Change log:
 ;;
+;; 2007/12/18 dadams
+;;     fit-frame-max-(width|height): Applied patch from David Reitter for Apple (Mac).
+;; 2007/11/27 dadams
+;;     fit-frame: Use read-number, if available.
+;; 2007/11/21 dadams
+;;     fit-frame: extra-lines:
+;;       Don't add 1 for standalone minibuffer.
+;;       Removed extra 2-line tweak factor for Emacs 21+.
+;; 2007/11/01 dadams
+;;     RMS request: Simplified fit-frame doc string.
 ;; 2007/07/22 dadams
 ;;     RMS requests:
 ;;       Lowercased group name.
@@ -198,7 +210,7 @@
 ;;
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
+;; the Free Software Foundation; either version 3, or (at your option)
 ;; any later version.
 
 ;; This program is distributed in the hope that it will be useful,
@@ -215,8 +227,7 @@
 ;;
 ;;; Code:
 
-(and (< emacs-major-version 20)
-     (eval-when-compile (require 'cl))) ;; when, unless, dolist
+(when (< emacs-major-version 21) (eval-when-compile (require 'cl))) ;; dolist
 
 ;;;;;;;;;;;;;;;;;;;;;;;
  
@@ -237,8 +248,7 @@ Don't forget to mention your Emacs and library versions."))
           "http://www.emacswiki.org/cgi-bin/wiki/fit-frame.el")
   :link '(url-link :tag "Description"
           "http://www.emacswiki.org/cgi-bin/wiki/Shrink-Wrapping_Frames")
-  :link '(emacs-commentary-link :tag "Commentary" "fit-frame")
-  )
+  :link '(emacs-commentary-link :tag "Commentary" "fit-frame"))
 
 ;;;###autoload
 (defcustom fit-frame-inhibit-fitting-flag nil
@@ -344,85 +354,58 @@ Each item in the alist is of form (MODE . LINES).
 
 ;;;###autoload
 (defun fit-frame (&optional frame width height all-windows-p)
-  "Resize FRAME to fit its selected window.
-Usable in `after-make-frame-functions'.
-
-This does nothing if `fit-frame-inhibit-fitting-flag' is non-nil.
+  "Resize FRAME.
+Does nothing if `fit-frame-inhibit-fitting-flag' is non-nil.
 
 FRAME defaults to the current (i.e. selected) frame.
 
-If optional args WIDTH and HEIGHT are non-negative integers, then they
-are the values to use for the new frame size.
+If non-nil, WIDTH and HEIGHT specify the frame width and height.  To
+define them interactively, use a non-negative prefix arg (e.g. `C-9').
 
-Interactively, behavior depends on the prefix argument, as follows:
+To set the width to `fill-column' + `fit-frame-fill-column-margin',
+use a negative prefix arg (e.g. `M--').
 
-1. No prefix arg means to use all of the buffers displayed in the
-   frame to compute its size as described below.  ALL-WINDOWS-P is t.
+To fit the frame to all of its displayed buffers, use no prefix arg.
+To fit it to just the current buffer, use a plain prefix arg (`C-u').
 
-2. A plain prefix arg (just `C-u') means to use only the buffer
-   displayed in the selected window to compute the frame size as
-   described below.  ALL-WINDOWS-P is nil.
+Fitting a non-empty buffer means using the smallest frame such that:
 
-3. A non-negative numeric prefix arg (not plain `C-u') means you will
-   be prompted for the new frame width and height (args WIDTH and
-   HEIGHT).
+ * The width is at least `fit-frame-min-width' and `window-min-width'.
+   The width is at most `fit-frame-max-width(-percent)' and the
+   longest line length.
 
-4. A negative prefix arg means to use the current value of
-   `fill-column', plus `fit-frame-fill-column-margin', for the new frame
-   width (arg WIDTH); and the frame height is not changed.
+ * The height is at least `fit-frame-min-height' and
+   `window-min-height'.  The height is at most
+   `fit-frame-max-height(-percent)' and the number of lines.
 
-With no prefix arg or a plain prefix arg, args WIDTH and HEIGHT are
-nil, and the frame size is computed as follows:
+You can thus use those user variables to control the maximum and
+minimum frame sizes.  The `*-percent' options let you specify the
+maximum as a percentage of your display size.
 
-  If the frame is empty (that is, it has only one window, with an
-  empty buffer), then:
+These user options control fitting of an empty frame:
 
-    If the frame's buffer is a special display buffer, then:
-      The new width is `fit-frame-empty-special-display-width'.
-      The new height is `fit-frame-empty-special-display-height'.
+ * `fit-frame-empty-width', `fit-frame-empty-height' (normal buffer)
+ * `fit-frame-empty-special-display-width',
+   `fit-frame-empty-special-display-height' (special-display buffer)
 
-    Otherwise:
-      The new width is `fit-frame-empty-width'.
-      The new height is `fit-frame-empty-height'.
+See also option `fit-frame-skip-header-lines-alist'.
 
-  If the frame is not empty, then it is made to fit the maximum width
-  and maximum height of either just the selected buffer or all buffers
-  displayed in the frame, depending on ALL-WINDOWS-P.  Each buffer is
-  measured as follows:
-
-    The new frame width is the maximum of:
-      1) `fit-frame-min-width',
-      2) `window-min-width', and
-      3) the minimum of: `fit-frame-max-width' variable or, if nil,
-                         `fit-frame-max-width' function,
-         and the widest line currently in the buffer.
-
-    The new frame height is the maximum of:
-      1) `fit-frame-min-height',
-      2) `window-min-height', and
-      3) the minimum of: `fit-frame-max-height' variable or, if nil,
-                         `fit-frame-max-height' function,
-         and the number of lines in the buffer.
-
-    Note that there are two intended uses of `fit-frame-max-*':
-      1) Use the variable, if you want to specify an absolute size, in
-         characters.
-      2) Use the function (variable = nil), if you want to specify a
-         relative size, in percent of display size.  Frames will then
-         appear the same relative size on different displays.
-
-When used in `after-make-frame-functions', the current `frame-width' and
-`frame-height' are those of the newly created frame."
+When used in `after-make-frame-functions', the current `frame-width'
+and `frame-height' are those of the newly created frame."
   (interactive
    (let ((option (prefix-numeric-value current-prefix-arg)))
      (list nil
            (and current-prefix-arg (atom current-prefix-arg)
                 (if (natnump option)
-                    (floor (string-to-number (read-string "New width: ")))
+                    (floor (if (fboundp 'read-number)
+                               (read-number "New width: ")
+                             (string-to-number (read-string "New width: "))))
                   (+ fill-column fit-frame-fill-column-margin)))
            (and current-prefix-arg (atom current-prefix-arg)
                 (if (natnump option)
-                    (floor (string-to-number (read-string "New height: ")))
+                    (floor (if (fboundp 'read-number)
+                               (read-number "New height: ")
+                             (string-to-number (read-string "New height: "))))
                   (frame-height)))
            (atom current-prefix-arg))))
   (setq frame (or frame (selected-frame)))
@@ -430,21 +413,19 @@ When used in `after-make-frame-functions', the current `frame-width' and
     (let ((extra-lines 2)               ; Minimum is 1 for empty + 1 extra.
           (computed-max-frame-size nil)
           empty-buf-p specbuf-p)
-      ;; Get minimum frame height, `extra-lines'.
-      ;;
-      ;; *** THIS PROBABLY NEEDS SOME MORE TWEAKING FOR EMACS 22 ***
-      ;;
-      ;; Apparently, in Emacs 21 `set-frame-size' includes tool-bar
-      ;; and minibuffer.  It doesn't seem to include menu-bar.  This
-      ;; `extra-lines' calculation should really use frame's current
-      ;; minibuffer height (not just 1).  And perhaps a possible
-      ;; horizontal scroll bar also needs to be taken into account.
+      ;; `extra-lines' for minimum frame height.  Starting with Emacs 21+,
+      ;; `set-frame-size' includes the tool-bar and the minibuffer, but not the
+      ;; menu-bar.  Add 1 line for the minibuffer, unless it is standalone.  Perhaps
+      ;; we should also take into account a possible horizontal scroll bar, but we
+      ;; don't do that.
       (when (>= emacs-major-version 21)
-	(let* ((fparams (frame-parameters frame))
-               (tool-bar-lines (or (cdr (assq 'tool-bar-lines fparams)) 0))
-               (minibuf        (cdr (assq 'minibuffer     fparams))))
-	  (setq extra-lines (+ extra-lines tool-bar-lines (if minibuf 1 0)
-                               2))))    ; Tweak factor - not sure why it's needed.
+        (let* ((fparams (frame-parameters frame)))
+          (setq extra-lines (+ extra-lines
+                               (or (cdr (assq 'tool-bar-lines fparams)) 0))) ; Tool bar.
+          (when (and (cdr (assq 'minibuffer fparams)) ; Frame has a minibuffer, but
+                     (save-window-excursion (select-frame frame) ; it's not standalone.
+                                            (not (one-window-p nil 'selected-frame))))
+            (setq extra-lines (1+ extra-lines)))))
       (set-frame-size
        ;; Frame
        frame
@@ -516,10 +497,10 @@ size, and depends on the value of `fit-frame-max-width-percent':
   (/ (* fit-frame-max-width-percent (x-display-pixel-width))
      (* 100 (frame-char-width FRAME)))"
   (setq frame (or frame (selected-frame)))
-  (/ (* fit-frame-max-width-percent 
-	(if (fboundp 'winmgr-display-available-pixel-bounds)
-	    (nth 2 (winmgr-display-available-pixel-bounds))
-	(x-display-pixel-width)))
+  (/ (* fit-frame-max-width-percent
+        (if (fboundp 'winmgr-display-available-pixel-bounds) ; For MacIntosh.
+ 	    (nth 2 (winmgr-display-available-pixel-bounds))
+          (x-display-pixel-width)))
      (* 100 (frame-char-width frame))))
 
 (defun fit-frame-max-height (&optional frame)
@@ -533,10 +514,10 @@ size, and depends on the value of `fit-frame-max-height-percent':
   (/ (* fit-frame-max-height-percent (x-display-pixel-height))
      (* 100 (frame-char-height FRAME)))"
   (setq frame (or frame (selected-frame)))
-  (/ (* fit-frame-max-height-percent 
-	(if (fboundp 'winmgr-display-available-pixel-bounds)
-	    (nth 3 (winmgr-display-available-pixel-bounds))
-	(x-display-pixel-height)))
+  (/ (* fit-frame-max-height-percent
+        (if (fboundp 'winmgr-display-available-pixel-bounds) ; For MacIntosh.
+ 	    (nth 3 (winmgr-display-available-pixel-bounds))
+          (x-display-pixel-height)))
      (* 100 (frame-char-height frame)
         ;; When fitting a thumbnail frame, we don't want the height to use the
         ;; whole display height.  So, we apply a fudge factor:
