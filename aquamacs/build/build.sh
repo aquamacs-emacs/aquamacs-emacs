@@ -4,6 +4,7 @@ export CVS_RSH=ssh
 
 AQEMACSSRC='emacs.raw'
 COPY='copy-to-server'
+DATE=`date +"%Y-%b-%d-%a-%H%M"`
 
 if test "$AQUAMACS_CVS_PREFIX" ; then
     CVS_PREFIX=$AQUAMACS_CVS_PREFIX
@@ -84,7 +85,7 @@ if test "${BUILD_GNU_EMACS}" == "yes"; then
     echo "Building Emacs (make-package)..." >>$LOG 
     ./make-package --self-contained --build-in-place >>$LOG 2>>$LOG 
 
-    NAME=GNU-Emacs-`date +"%Y-%b-%d-%a-%H%M"`
+    NAME=GNU-Emacs-$DATE
 
     mv EmacsInstaller.dmg ${NAME}.dmg
     bzip2 ${NAME}.dmg  >>$LOG 2>>$LOG 
@@ -127,7 +128,7 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
     cd ${AQ_PREFIX}/emacs/mac	
     mv "Aquamacs/Aquamacs Emacs.app" "${DEST}/" >>$LOG 2>>LOG
 
-    NAME=Aquamacs-`date +"%Y-%b-%d-%a-%H%M"`
+    NAME=Aquamacs-$DATE
 
 
     rm -rvf ${DEST}/Aquamacs*.tar.bz2  >>$LOG 2>>$LOG 
@@ -143,7 +144,7 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
 
     # copy to web dir (logs, build)
     if test "$COPY" == "copy-to-server"; then
-        ${AQUAMACS_ROOT}/build/copy-build-to-server.sh
+        ${AQUAMACS_ROOT}/build/copy-build-to-server.sh ${DATE}
     fi
 
     date >>${LOG}
