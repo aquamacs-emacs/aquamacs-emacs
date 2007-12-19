@@ -6,13 +6,14 @@
 
 # SSH authentication should be installed
 
-GNUNAME=GNU-Emacs-`date +"%Y-%b-%d-%a"`.dmg.bz2
-NAME=Aquamacs-`date +"%Y-%b-%d-%a"`.tar.bz2
+GNUNAME=GNU-Emacs-$1.dmg.bz2
+NAME=Aquamacs-$1.tar.bz2
 COPYORLINK='cp'  # 'ln -s'
-
 CHGLOGSCRIPT='~/aquamacs-web/scripts/push-nightly-changelog.sh'
 
-if [ "$1" == "intel" ];
+
+
+if [ "$2" == "intel" ];
 then
      
     SOURCE=~/Aquamacs/builds
