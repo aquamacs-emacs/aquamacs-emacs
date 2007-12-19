@@ -18,8 +18,10 @@ LOGPAR=""
 if test "$1" == "-l" ; then 
     a=$2
     LOGPAR="-l"
+    BPAR=$3
 else
     a=$1
+    BPAR=$2
 fi
     
 if test "$a" == "emacs" ; then
@@ -82,7 +84,7 @@ if test "${BUILD_GNU_EMACS}" == "yes"; then
     echo "Building Emacs (make-package)..." >>$LOG 
     ./make-package --self-contained --build-in-place >>$LOG 2>>$LOG 
 
-    NAME=GNU-Emacs-`date +"%Y-%b-%d-%a"`
+    NAME=GNU-Emacs-`date +"%Y-%b-%d-%a-%H%M"`
 
     mv EmacsInstaller.dmg ${NAME}.dmg
     bzip2 ${NAME}.dmg  >>$LOG 2>>$LOG 
@@ -117,7 +119,7 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
     cd ${AQ_PREFIX}/emacs/mac
     echo "Building Emacs (make-aquamacs)..." >>$LOG 
 
-    ${AQUAMACS_ROOT}/build/make-aquamacs >>$LOG 2>>$LOG 
+    ${AQUAMACS_ROOT}/build/make-aquamacs ${BPAR} >>$LOG 2>>$LOG 
 
     rm -rf "${DEST}/Aquamacs Emacs.app"  >>$LOG 2>>$LOG 
 #    ${AQUAMACS_ROOT}/build/install-aquamacs "${AQUAMACS_ROOT}" 
@@ -125,7 +127,7 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
     cd ${AQ_PREFIX}/emacs/mac	
     mv "Aquamacs/Aquamacs Emacs.app" "${DEST}/" >>$LOG 2>>LOG
 
-    NAME=Aquamacs-`date +"%Y-%b-%d-%a"`
+    NAME=Aquamacs-`date +"%Y-%b-%d-%a-%H%M"`
 
 
     rm -rvf ${DEST}/Aquamacs*.tar.bz2  >>$LOG 2>>$LOG 
