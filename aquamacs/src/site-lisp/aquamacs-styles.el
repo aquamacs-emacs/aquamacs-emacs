@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.22 2007/12/16 12:23:05 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.23 2007/12/19 10:08:20 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -211,20 +211,21 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 			    (color-theme-install color-theme))) 
 			
 			;; restore old dimensions
-			(set-frame-height frame
+			(when (not (equal old-frame-pixel-height (frame-pixel-height frame)))
+			  (set-frame-height frame
 					  (floor (/ (float old-frame-pixel-height) 
-						    (float (frame-char-height)))))
-			(set-frame-width frame
-					  (floor (/ (float old-frame-pixel-width) 
-						    (float (frame-char-width)))))
-
+						    (float (frame-char-height))))))
+			(when (not (equal old-frame-pixel-width (frame-pixel-width frame)))
+			  (set-frame-width frame
+					   (floor (/ (float old-frame-pixel-width) 
+						     (float (frame-char-width))))))
 			(if (and (fboundp 'smart-move-frame-inside-screen)
-			       ;; (or (not (equal old-frame-pixel-width
-;; 					       (frame-pixel-width frame)))
-;; 				   (not (equal old-frame-pixel-height
-;; 					       (frame-pixel-height frame))))
-			       )
-			  (smart-move-frame-inside-screen)))))))
+				 (or (< old-frame-pixel-width
+					(frame-pixel-width frame))
+				     (< old-frame-pixel-height
+					(frame-pixel-height frame))))
+			     (smart-move-frame-inside-screen)
+			  ))))))
 	  (error (print err))))))
 
 
@@ -626,7 +627,7 @@ current major mode. To turn off this behavior, see
  ;; because we fit *Help* frames (fit-frame), we want to specify a
  ;; minimum of 68 characters. Otherwise we'll fit, and as soon as a
  ;; new help page is displayed, text gets wrapped.
- '((setq create-frame-min-width 68)))
+ '((create-frame-min-width 68)))
 
 
 (defcustom aquamacs-default-styles
