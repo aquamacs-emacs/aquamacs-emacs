@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.37 2007/12/19 10:04:47 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.38 2007/12/19 23:39:00 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -131,6 +131,13 @@ should be used as the interface to this function."
     (modify-frame-parameters f newpos)
     ;; stay within the available screen
     (smart-move-frame-inside-screen f)
+    (when window-configuration-change-hook
+      ;; this is so that longlines-mode recognizes the new window width
+      (save-excursion
+	(select-window (frame-first-window f))
+	(set-buffer (window-buffer (selected-window)))
+	(setq fill-column 50)
+	(run-hooks 'window-configuration-change-hook)))
     (unless  (and (assq 'visibility parameters)
 		  (eq (cdr (assq 'visibility parameters)) nil))
       (make-frame-visible f))
