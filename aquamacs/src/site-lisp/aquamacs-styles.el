@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.23 2007/12/19 10:08:20 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.24 2007/12/20 01:23:35 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -106,7 +106,7 @@ ability. The following rules are followed:
 	ret)
     (window-buffer (car l)))))
   
-
+(require 'smart-frame-positioning)
 
 (defun aquamacs-set-style (&optional frame force for-mode)
   "Sets the mode-specific style (frame parameters) for FRAME
@@ -130,7 +130,7 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 
 	    (let ((buffer (aquamacs-style-relevant-buffer frame)))
 	    
-	      (if (or 
+	      (when (or 
 		   (and force (or buffer for-mode))
 		   (and buffer
 			(not (equal (frame-parameter 
@@ -167,33 +167,16 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 		      ;; the frame significantly:
 		      ;; change width / height to adapt to new font size
 
-		     ;;  (let ((newfont (cdr (assq 'font style))))
-;; 			(when newfont
-;; 			  (let* (  (info  (fontset-info newfont frame))
-;; 				 (new-font-width)
-;; 				 (new-font-height))
-;; 			    (when info
-;; 			      (setq new-font-width (aref info 0))
-;; 			      (setq new-font-height (aref info 1))
-			      
-
-;; 			      ;; this doesn't currently work because
-;; 			      ;; the fontset-info is wrong for the fonts used:
-;; 			      ;; it returns the wrong size (width) specification
-;; 			      ;; if applied to an actual frame, it's different
-
-;; 			      (if new-font-height
-;; 				  (assq-set 'height  (1+ (/ (* (frame-char-height frame) (frame-height frame))
-;; 							new-font-height))
-;; 					    'style))
-;; 			      (if new-font-width
-;; 				  (assq-set 'width  (1+ (/ (* (frame-char-width frame) (frame-width frame))
-;; 						       new-font-width))
-;; 					    'style))
-;; 			      ))))
 		      (let ((old-frame-pixel-width (frame-pixel-width frame))
-			    (old-frame-pixel-height (frame-pixel-height frame)))
-			 
+			    (old-frame-pixel-height (frame-pixel-height frame))
+			    (w-offset 
+			     (- (frame-pixel-width frame) 
+				(smart-fp--char-to-pixel-width (frame-width frame) 
+							       frame)))
+			    (h-offset 
+			     (- (frame-pixel-height frame) 
+				(smart-fp--char-to-pixel-height (frame-height 
+								 frame) frame))))
 			(modify-frame-parameters 
 			 frame 
 			 (cons (cons 'frame-configured-for-buffer 
@@ -207,25 +190,37 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 			  (if (and (functionp (car-safe color-theme))
 				   (memq (car-safe color-theme) color-themes)
 				   (not (cdr-safe color-theme)))
-			      (funcall (car color-theme))  ;; just install the color style directly
+			      (funcall (car color-theme)) 
+			    ;; just install the color style directly
 			    (color-theme-install color-theme))) 
 			
 			;; restore old dimensions
-			(when (not (equal old-frame-pixel-height (frame-pixel-height frame)))
-			  (set-frame-height frame
-					  (floor (/ (float old-frame-pixel-height) 
-						    (float (frame-char-height))))))
-			(when (not (equal old-frame-pixel-width (frame-pixel-width frame)))
-			  (set-frame-width frame
-					   (floor (/ (float old-frame-pixel-width) 
-						     (float (frame-char-width))))))
+			(when (not (equal old-frame-pixel-height 
+					  (frame-pixel-height frame)))
+			  (set-frame-height 
+			   frame
+			   (smart-fp--pixel-to-char-height
+			    (- old-frame-pixel-height h-offset ) frame)))
+			(when (not (equal old-frame-pixel-width 
+					  (frame-pixel-width frame)))
+			  (set-frame-width 
+			   frame
+			   (smart-fp--pixel-to-char-width
+			    (- old-frame-pixel-width w-offset ) frame)))
 			(if (and (fboundp 'smart-move-frame-inside-screen)
 				 (or (< old-frame-pixel-width
 					(frame-pixel-width frame))
 				     (< old-frame-pixel-height
 					(frame-pixel-height frame))))
 			     (smart-move-frame-inside-screen)
-			  ))))))
+			  )))
+		    (if window-configuration-change-hook
+			(let ((selframe (selected-frame)))
+			  (select-frame frame)
+			  (run-hooks 'window-configuration-change-hook)
+			  (select-frame selframe)))
+		    
+		    )))
 	  (error (print err))))))
 
 
