@@ -299,6 +299,15 @@ The optional FRAME argument is as for function `get-buffer-window'."
             (when (not (one-window-p t fr)) (push fr frs))))))
     frs))
 
+
+(defun frame-vertical-extras (frame)
+  "Return the pizel size of a frame's vertical offset from char height."
+  (- (frame-pixel-height frame) (* (frame-char-height frame) (frame-height frame))))
+(defun frame-horizontal-extras (frame)
+  "Return the pizel size of a frame's horizontal offset from char width."
+  (- (frame-pixel-width frame) (* (frame-char-width frame) (frame-width frame))))
+
+
 ;;;###autoload
 (defun flash-ding (&optional do-not-terminate frame)
   "Ring bell (`ding'), after flashing FRAME (default: current), if relevant.
