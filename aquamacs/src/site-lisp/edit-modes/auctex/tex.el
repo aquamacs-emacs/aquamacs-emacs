@@ -3602,7 +3602,7 @@ Brace insertion is only done if point is in a math construct and
   "Return the entries for a Command menu specific to the major MODE."
   (append
    (TeX-menu-with-help
-    '(["Command on" nil :active nil}
+    '(["Command on" nil :active nil]
       [ "Master File" TeX-command-select-master
 	:keys "C-c C-c" :style radio
 	:selected (eq TeX-command-current 'TeX-command-master)
@@ -3621,11 +3621,11 @@ Brace insertion is only done if point is in a math construct and
 		      (and (boundp 'TeX-command-region-begin)
 			   (markerp TeX-command-region-begin)))
 		    (TeX-mark-active))
-	;;:visible (eq TeX-command-current 'TeX-command-region)
+	;; :visible (eq TeX-command-current 'TeX-command-region)
 	:style toggle
 	:selected (and (boundp 'TeX-command-region-begin)
 		       (markerp TeX-command-region-begin))
-	:help "Fix the region for \"Command on Region\""]
+	:help "Fix the region for \"Command on Region\"" ]
       "-"
       ["Recenter Output Buffer" TeX-recenter-output-buffer
        :help "Show the output of current TeX process"]
@@ -3655,7 +3655,7 @@ Brace insertion is only done if point is in a math construct and
 	:help "Make \"Next Error\" show overfull and underfull boxes"]
        ["Debug Warnings" TeX-toggle-debug-warnings
 	:style toggle :selected TeX-debug-warnings
-	:help "Make \"Next Error\" show warnings"])))
+	:help "Make \"Next Error\" show warnings"] )))
    (let ((file 'TeX-command-on-current));; is this actually needed?
      (TeX-maybe-remove-help
       (delq nil
