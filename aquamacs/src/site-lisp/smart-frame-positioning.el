@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.38 2007/12/19 23:39:00 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.39 2007/12/20 00:57:24 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -222,15 +222,15 @@ pixels apart if possible."
 	      (smart-fp--get-frame-position-assigned-to-buffer-name)))
 	
 	(or preassigned	;; if preassigned, return that.
-	    (let ( ;; eval is necessary, because left can be (+ -1000)
+	    (let* ( ;; eval is necessary, because left can be (+ -1000)
 		  ;; which is not an integer!
 		  ( y (eval (frame-parameter old-frame 'top)) )
 		  ( x (eval (frame-parameter old-frame 'left)) )
 		  ( w (frame-pixel-width old-frame) )
 		  ( h (frame-total-pixel-height old-frame) )
         
-		  (next-w (frame-pixel-width new-frame) )
-		  (next-h (frame-total-pixel-height new-frame) )
+		  (next-w w ) ;;(frame-pixel-width new-frame) )
+		  (next-h h ) ;; (frame-total-pixel-height new-frame) )
 		  (margin smart-frame-positioning-margin))
 
 	      ;; in case the frame is obviously created
