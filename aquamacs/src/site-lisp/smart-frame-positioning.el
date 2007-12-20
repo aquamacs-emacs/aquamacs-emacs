@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.39 2007/12/20 00:57:24 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.40 2007/12/20 02:10:30 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -53,8 +53,6 @@
 ;; platforms. It should return a list of four ordinates (x y w h), giving the
 ;; available screen real estate for the main screen.
 ;; An optional parameter (currently not used) could identify the screen.
-
-;; Code
 
 (defcustom save-frame-position-file 
   (convert-standard-filename
@@ -552,5 +550,32 @@ on the main screen, i.e. where the menu is."
 	  parms))
 
 
+(require 'fit-frame)
+(defun scatter-frames ()
+  (interactive)
+  (let ((frames (visible-frame-list)))
+    
+;;     (dolist (frame frames)
+;;       (hide-frame frame t))
+
+  (dolist (frame frames)
+    (let ((smart-frame-positioning-enforce t)
+	  (smart-frame-prior-positions) (newpos)
+	  (fit-frame-max-width-percent (if (> (length frames) 1) 45 90)))
+      (fit-frame frame )
+      (setq newpos (find-good-frame-position (selected-frame) frame))  
+      (when (frame-parameter frame 'fit-frame)
+	;; delete height and width - these parameters
+	;; are preserved and will stay untouched
+	;; in case the hook changed them.
+	;; (unless exceeding screen dimensions)
+	(setq newpos 
+		(assq-delete-all 
+		 'height 
+		 (assq-delete-all 'width newpos))))
+      (modify-frame-parameters frame newpos)
+      (smart-move-frame-inside-screen frame))
+;    (make-frame-visible frame)
+    (select-frame frame))))
 
 (provide 'smart-frame-positioning) 
