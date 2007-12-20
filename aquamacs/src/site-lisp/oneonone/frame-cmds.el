@@ -894,26 +894,15 @@ frames (except a standalone minibuffer frame, if any)."
       (vertical   (setq fr-pixel-height (/ fr-pixel-height (length visible-frames))))
       (otherwise (error "Function tile-frames: DIRECTION must be `horizontal' or `vertical'")))
     (dolist (fr visible-frames)
-      (let ((borders (* 2 (+ (cdr (assq 'border-width (frame-parameters fr)))
-                             (cdr (assq 'internal-border-width (frame-parameters fr))))))
-            (scroll-bar-width (or (cdr (assq 'scroll-bar-width (frame-parameters fr)))
-                                  (frame-char-height fr)))) ; Tweak - can't know scroll-bar width.
-        (set-frame-size
+      (set-frame-size
          fr
          (/ (- fr-pixel-width           ; Subtract borders & scroll bars.
-               borders
-               (if (cdr (assq 'vertical-scroll-bars (frame-parameters fr)))
-                   scroll-bar-width
-                 0))
+               (frame-horizontal-extras (selected-frame)))
             (frame-char-width fr))      ; Divide by # pixels/char.
          (- (/ (- fr-pixel-height       ; Subtract borders, scroll bars, & title bar.
-                  borders
-                  (if (cdr (assq 'horizontal-scroll-bars (frame-parameters fr)))
-                      scroll-bar-width
-                    0)
-                  window-mgr-title-bar-pixel-width)
+                  (frame-vertical-extras (selected-frame)))
                (frame-char-height fr))  ; Divide by # pixels/line.
-            (cdr (assq 'menu-bar-lines (frame-parameters fr))))))
+            (cdr (assq 'menu-bar-lines (frame-parameters fr)))))
       (set-frame-position fr
                           (if (eq direction 'horizontal) fr-origin 0)
                           (if (eq direction 'horizontal) 0 fr-origin))
