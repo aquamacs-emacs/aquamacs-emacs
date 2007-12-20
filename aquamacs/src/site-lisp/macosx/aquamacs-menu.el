@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.91 2007/12/16 13:50:15 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.92 2007/12/20 02:27:41 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -1028,6 +1028,19 @@ both existing buffers and buffers that you subsequently create."
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
 			   (menu-bar-non-minibuffer-window-p))
 	      :help "Split selected window in two"))
+(define-key menu-bar-file-menu [tile-frames]
+  `(menu-item "Scatter frames" scatter-frames
+	      :enable (menu-bar-menu-frame-live-and-visible-p)
+	      :help "Place frames sensibly"))
+(define-key menu-bar-file-menu [tile-frames-v]
+  `(menu-item "Tile frames vertically" tile-frames-vertically
+	      :enable (menu-bar-menu-frame-live-and-visible-p)
+	      :help "Tile frames vertically"))
+(define-key menu-bar-file-menu [tile-frames-h]
+  `(menu-item "Tile frames horizontally" tile-frames-horizontally
+	      :enable (menu-bar-menu-frame-live-and-visible-p)
+	      :help "Tile frames horizontally"))
+
 ;; will be moved to Buffers menu later on 
 ;; but is created here
 
@@ -1037,18 +1050,32 @@ both existing buffers and buffers that you subsequently create."
  
 (setq  menu-bar-buffers-menu-command-entries
        (append 
-	       (list '(command-separator "--")
-		     (assq 'make-frame menu-bar-file-menu)
-		     (assq 'one-window menu-bar-file-menu)
-		     (assq 'split-window menu-bar-file-menu))
-	       menu-bar-buffers-menu-command-entries))
+	       (list 
+		'(command-separator "--")
+		(assq 'make-frame menu-bar-file-menu)
+		(assq 'one-window menu-bar-file-menu)
+		(assq 'split-window menu-bar-file-menu)
+		'(command-separator "--")
+		(assq 'place-frame menu-bar-file-menu)
+		(assq 'tile-frames menu-bar-file-menu)
+		(assq 'tile-frames-h menu-bar-file-menu)
+		(assq 'tile-frames-v menu-bar-file-menu)
+		'(command-separator "--")
+		(assq 'next-buffer menu-bar-buffers-menu-command-entries)
+		(assq 'previous-buffer menu-bar-buffers-menu-command-entries)
+		)))
+
+;(assq-delete-all 'select-named-buffer menu-bar-buffers-menu-command-entries)
+;(assq-delete-all 'list-all-buffers menu-bar-buffers-menu-command-entries)
 
 (assq-delete-all 'make-frame menu-bar-file-menu)
 (assq-delete-all 'one-window menu-bar-file-menu)
 (assq-delete-all 'split-window menu-bar-file-menu) 
 (assq-delete-all 'delete-this-frame menu-bar-file-menu)
 (assq-delete-all 'separator-window menu-bar-file-menu)
-
+(assq-delete-all 'tile-frames menu-bar-file-menu)
+(assq-delete-all 'tile-frames-h menu-bar-file-menu)
+(assq-delete-all 'tile-frames-v menu-bar-file-menu)
 ;; regular setup
 (aquamacs-menu-bar-setup)
  
