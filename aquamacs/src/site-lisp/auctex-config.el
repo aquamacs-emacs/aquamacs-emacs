@@ -4,7 +4,7 @@
 ;; originally authored by Kevin Walzer
 ;; Keywords: auctex
  
-;; Last change: $Id: auctex-config.el,v 1.30 2007/12/16 13:59:11 davidswelt Exp $
+;; Last change: $Id: auctex-config.el,v 1.31 2007/12/22 22:50:17 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -115,7 +115,7 @@ This will normally be the line number at that position, unless
 	      (setq count (1+ count)))
 	  (setq pos (1+ pos)))
 	count)
-    (line-number-at-pos pos)))
+    (line-number-at-pos buffer-pos)))
 
 ;; this is much slower
 ;; (defun fln (&optional buffer-pos)
