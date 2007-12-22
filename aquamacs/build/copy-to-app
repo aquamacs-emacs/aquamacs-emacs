@@ -70,7 +70,7 @@ cp -pr "$projdir/src/Info.plist" Contents/
 # update this
 
 #AQUAMACS_VERSION=`emacs -batch -l $projdir/src/site-lisp/site-start.el -eval '(princ aquamacs-version)'`
-AQUAMACS_VERSION=`perl -ne 'print $1 if (/defvar *aquamacs-version *\"(.*?)\"/);' < $projdir/src/site-lisp/site-start.el`
+AQUAMACS_VERSION=`perl -ne 'print $1 if (/defvar *aquamacs-version *\"(.*?)\"/);print $1 if (/defvar *aquamacs-minor-version *\"(.*?)\"/);' < $projdir/src/site-lisp/site-start.el`
 
 echo "CFBundleName = \"Aquamacs\";" >Contents/Resources/English.lproj/InfoPlist.strings
 echo "CFBundleShortVersionString = \"Aquamacs $AQUAMACS_VERSION, GNU Emacs 22\";" >>Contents/Resources/English.lproj/InfoPlist.strings
@@ -110,6 +110,6 @@ touch .
 
 # remove hardlinks - they don't work, even as symlinks they don't.
 
-rm Contents/MacOS/bin/emacs Contents/MacOS/bin/emacs-22.0.50
+rm Contents/MacOS/bin/emacs Contents/MacOS/bin/emacs-*
 
 exit 0  # return success (checked by make-aquamacs)
