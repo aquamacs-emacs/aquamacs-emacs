@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.25 2007/12/29 12:26:33 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.26 2007/12/29 14:07:54 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -206,7 +206,6 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 
 (defmacro save-frame-size (frame &rest body)
   "Restore pixel size of selected frame after executing body."
-  (declare (indent 0) (debug t))
   `(let ((old-frame-pixel-width (frame-pixel-width ,frame))
 	(old-frame-pixel-height (frame-pixel-height ,frame))
 	(w-offset 
