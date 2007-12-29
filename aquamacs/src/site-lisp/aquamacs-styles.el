@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.24 2007/12/20 01:23:35 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.25 2007/12/29 12:26:33 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -167,16 +167,9 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 		      ;; the frame significantly:
 		      ;; change width / height to adapt to new font size
 
-		      (let ((old-frame-pixel-width (frame-pixel-width frame))
-			    (old-frame-pixel-height (frame-pixel-height frame))
-			    (w-offset 
-			     (- (frame-pixel-width frame) 
-				(smart-fp--char-to-pixel-width (frame-width frame) 
-							       frame)))
-			    (h-offset 
-			     (- (frame-pixel-height frame) 
-				(smart-fp--char-to-pixel-height (frame-height 
-								 frame) frame))))
+		      (save-frame-size 
+			frame
+				       
 			(modify-frame-parameters 
 			 frame 
 			 (cons (cons 'frame-configured-for-buffer 
@@ -186,34 +179,22 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 			(save-window-excursion
 			  (select-frame frame)
 			  ;; color-style-target-frame seems deprecated
-			 
+			  
 			  (if (and (functionp (car-safe color-theme))
 				   (memq (car-safe color-theme) color-themes)
 				   (not (cdr-safe color-theme)))
 			      (funcall (car color-theme)) 
 			    ;; just install the color style directly
-			    (color-theme-install color-theme))) 
-			
-			;; restore old dimensions
-			(when (not (equal old-frame-pixel-height 
-					  (frame-pixel-height frame)))
-			  (set-frame-height 
-			   frame
-			   (smart-fp--pixel-to-char-height
-			    (- old-frame-pixel-height h-offset ) frame)))
-			(when (not (equal old-frame-pixel-width 
-					  (frame-pixel-width frame)))
-			  (set-frame-width 
-			   frame
-			   (smart-fp--pixel-to-char-width
-			    (- old-frame-pixel-width w-offset ) frame)))
+			    (color-theme-install color-theme))))
+			 
 			(if (and (fboundp 'smart-move-frame-inside-screen)
-				 (or (< old-frame-pixel-width
-					(frame-pixel-width frame))
-				     (< old-frame-pixel-height
-					(frame-pixel-height frame))))
+				 ;; (or (< old-frame-pixel-width
+;; 					(frame-pixel-width frame))
+;; 				     (< old-frame-pixel-height
+;; 					(frame-pixel-height frame)))
+				 )
 			     (smart-move-frame-inside-screen)
-			  )))
+			  ))
 		    (if window-configuration-change-hook
 			(let ((selframe (selected-frame)))
 			  (select-frame frame)
@@ -222,6 +203,55 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 		    
 		    )))
 	  (error (print err))))))
+
+(defmacro save-frame-size (frame &rest body)
+  "Restore pixel size of selected frame after executing body."
+  (declare (indent 0) (debug t))
+  `(let ((old-frame-pixel-width (frame-pixel-width ,frame))
+	(old-frame-pixel-height (frame-pixel-height ,frame))
+	(w-offset 
+	 (- (frame-pixel-width ,frame) 
+	    (smart-fp--char-to-pixel-width (frame-width ,frame) 
+					   ,frame)))
+	(h-offset 
+	 (- (frame-pixel-height ,frame) 
+	    (smart-fp--char-to-pixel-height (frame-height 
+					     ,frame) ,frame))))
+    
+    ,@body
+
+    (when (not (equal old-frame-pixel-height 
+		      (frame-pixel-height ,frame)))
+      (set-frame-height 
+       ,frame
+       (smart-fp--pixel-to-char-height
+	(- old-frame-pixel-height h-offset ) ,frame)))
+    (when (not (equal old-frame-pixel-width 
+		      (frame-pixel-width ,frame)))
+      (set-frame-width 
+       ,frame
+	(smart-fp--pixel-to-char-width
+	 (- old-frame-pixel-width w-offset ) ,frame)))))
+
+(defun mac-handle-font-selection (event)
+  "Change default face attributes according to font selection EVENT."
+  (interactive "e")
+  (let* ((ae (mac-event-ae event))
+	 (fm-font-size (mac-ae-number ae "fmsz"))
+	 (atsu-font-id (mac-ae-number ae "auid"))
+	 (attribute-values (and atsu-font-id
+				(mac-atsu-font-face-attributes atsu-font-id))))
+    (if fm-font-size
+	(setq attribute-values
+	      `(:height ,(* 10 fm-font-size) ,@attribute-values)))
+
+    
+    (save-frame-size 
+      (selected-frame)
+      (apply 'set-face-attribute 'default (selected-frame) attribute-values)
+      )))  
+
+
 
 
 ; (aquamacs-get-buffer-style "*Help*")
