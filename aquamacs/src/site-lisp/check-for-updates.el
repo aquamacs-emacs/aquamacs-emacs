@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs version check
  
-;; Last change: $Id: check-for-updates.el,v 1.17 2007/06/07 16:00:35 davidswelt Exp $
+;; Last change: $Id: check-for-updates.el,v 1.18 2007/12/30 12:06:48 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -47,24 +47,23 @@
 	checking for a new version, Aquamacs contacts an internet
 	server to get the version number - this happens once
 	every 3 days. The server will receive and store the
-	following anonymous connection data: an anonymous ID, the
-	number of program starts and the
-	versions of Aquamacs and OS X that you're using.  Just as
-	during any access to an Internet server, your IP address
-	and the time of your inquiry may be stored, too. This
-	information is used to produce statistics; we will delete
-	the original data after a period of time. The statistics
-        help us develop the application further - for example, we
-        may decide to drop support for a particular operating system
-        version.
+	following anonymous connection data: an anonymous but
+	user-specific ID, the number of program starts, the
+	versions of Aquamacs and OS X and the processor type that
+	you're using.  Just as during any access to an Internet
+	server, your IP address and the time of your inquiry may
+	be stored, too. This information is used to produce
+	statistics; we will delete the original data after a
+	period of time. The statistics help us develop the
+	application further - for example, we may decide to drop
+	support for a particular operating system version.
 
 	If you like to turn this check off, add this to your file
 	~/Library/Preferences/Aquamacs Emacs/Preferences.el:
 
 	(setq aquamacs-version-check-url nil)
 "))
-nil  
-)
+nil  )
 
 
 
@@ -85,34 +84,39 @@ nil
 	  (re-search-forward "<version>\\(.*\\)</version>" (buffer-end 1) t)
 	  )
  
-	(when (and (not (equal (match-string 1) aquamacs-version))
+	(if (and (not (equal (match-string 1) aquamacs-version))
 		   (not (equal (match-string 1) 
 			       (concat aquamacs-version 
 				       aquamacs-minor-version) )))
-	    ;;(message "")	;; up-to-date; workaround for "Saw end of trailers" bug
-	    (write-region (concat "888\n") ;; notice that a new version is available 
+	    (progn
+	      (write-region (concat "888\n") 
+			    ;; notice that a new version is available 
 		  nil
 		  aquamacs-id-file
 		  'append 
 		  'shut-up
 		  nil
 		  nil)
-	    (aquamacs-new-version-notify (match-string 1))))))
+	      (aquamacs-new-version-notify (match-string 1)))
+	  (with-temp-message (format "%s is the most recent Aquamacs version available."
+				     (concat aquamacs-version 
+				       aquamacs-minor-version)) nil)))))
  
 (defun aquamacs-new-version-notify (v)
   ;; show right away and show when idle
   (message (format "Get the new Aquamacs %s from http://aquamacs.org" v))
   (run-with-idle-timer 
    0 nil 'message
-   (format "Get the new Aquamacs %s from http://aquamacs.org" v))
-)
+   (format "Get the new Aquamacs %s from http://aquamacs.org" v)))
+
 (defun aquamacs-ask-donate ()
   (if (and (fboundp 'mac-dialog-y-or-n-p)
 	   (mac-dialog-y-or-n-p "Welcome to the new Aquamacs."
 				"The Aquamacs Project depends on your support.
-Please consider becoming a Friend of Aquamacs by donating at 
-http://aquamacs.org. Your continued support keeps the project alive!
-Would you like to see the donations site now?"))
+Please consider to help us by donating at http://aquamacs.org. 
+Only your continued support keeps the project alive.
+Would you like to see the donations site now?
+(This reminder won't be displayed again in this version.)"))
       (aquamacs-donate)))
 
 (defun aquamacs-welcome-notify ()
@@ -224,15 +228,27 @@ and show user a message if there is."
 	(condition-case nil
 	   
 	    (let ((url (url-generic-parse-url 
-			 (concat aquamacs-version-check-url
-				 "?sess=" (number-to-string (or session-id 0)) 
-				 "&seq=" (number-to-string (or calls 0))
-				 "&beta=" (number-to-string (or aquamacs-user-likes-beta 0)) 
-				 "&ver=" (url-encode-string (concat (or aquamacs-version "unknown") (or aquamacs-minor-version "-")))
+			 (concat 
+			  aquamacs-version-check-url
+			  "?sess=" (number-to-string (or session-id 0)) 
+			  "&seq=" (number-to-string (or calls 0))
+			  "&beta=" (number-to-string (or aquamacs-user-likes-beta 0)) 
+			  "&ver=" (url-encode-string (concat (or aquamacs-version "unknown") (or aquamacs-minor-version "-")))
 				 
-				 "&os=" (url-encode-string  (replace-regexp-in-string "\[\r\n\]" "" (shell-command-to-string "uname -r")))
-				 ) 
-			 )))
+			  "&os=" 
+			  (url-encode-string  
+			   (replace-regexp-in-string 
+			    "\[\r\n\]" "" 
+			    (with-temp-buffer
+			      (call-process "/usr/bin/uname" nil t nil "-r") 
+			      (buffer-string))))
+			  "&cpu=" 
+			  (url-encode-string  
+			   (replace-regexp-in-string 
+			    "\[\r\n\]" ""
+			    (with-temp-buffer 
+			      (call-process "/usr/bin/uname" nil t nil "-p") 
+			      (buffer-string))))))))
 	; HTTP-GET
 	(setq aquamacs-version-check-buffer   
 	      (url-http url 
