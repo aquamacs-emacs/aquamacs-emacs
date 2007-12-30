@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.80 2007/12/15 19:38:52 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.81 2007/12/30 13:55:01 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -273,10 +273,22 @@ to use and more reliable (no dependence on goal column, etc.)."
 	;; else, do complete positioning
 	;; save original position  
 	(setq visual-movement-temporary-goal-column visual-col)
-
-	;; approximate positioning
-	(forward-char (min visual-col rel-beg-of-old-line)) 
-	;; correct position
+;	(forward-char (min visual-col rel-beg-of-old-line))
+	
+	;; this won't work because we don't have the 
+	;; absolute position, just the position within window
+	;; (let ((p (pos-visible-in-window-p old-point nil 'p))
+;; 	      (p2 (pos-visible-in-window-p beg-of-new-line nil 'p) ))
+;; 	  (print (cons (car p) (cdr p2)))
+;; 	  (posn-set-point (cons (car p) (cdr p2)))
+;; 	  )
+	(if (> (abs (- (point) beg-of-old-line)) 400)
+	    ;; aq-find-position-at-pixel-col is much faster when
+	    ;; large portions of hidden text are to be crossed.
+	    ;; this can happen in outline-(minor-)mode for instance.
+	    (goto-char (aq-find-position-at-pixel-col  pixel-col))
+	  ;; approximate positioning
+	  (forward-char (min visual-col rel-beg-of-old-line)) 
 	  (if (>= (visual-pixel-col-at-point) pixel-col)
 	      (progn 
 		(while (and 
@@ -287,7 +299,10 @@ to use and more reliable (no dependence on goal column, etc.)."
 	      (while (and 
 		      (< (visual-pixel-col-at-point) pixel-col)
 		      (< (point) (1- beg-of-old-line))) ;; do not cross line
-		(forward-char +1))))))))
+		(forward-char +1)))))
+	
+	))))
+
 
 (defun visual-line-down (num-lines)
 "Move cursor vertically down NUM-LINES lines.
@@ -365,9 +380,13 @@ and more reliable (no dependence on goal column, etc.)."
 	    ;; else, do complete positioning
 	    ;; save original position  
 	    (setq visual-movement-temporary-goal-column visual-col)
-	    (forward-char (min visual-col rel-next-line-start))
-	    ;; correct position
-	    (if (> (visual-pixel-col-at-point) pixel-col)
+	    ;; aq-find-position-at-pixel-col is much faster when
+	    ;; large portions of hidden text are to be crossed.
+	    ;; this can happen in outline-(minor-)mode for instance.
+	    (if (> (abs (- old-point next-line-start)) 400)
+		(goto-char (aq-find-position-at-pixel-col  pixel-col))
+	      (forward-char (min visual-col rel-next-line-start))
+	      (if (> (visual-pixel-col-at-point) pixel-col)
 		(progn 
 		  (while (and 
 			  (> (visual-pixel-col-at-point) pixel-col)
@@ -377,7 +396,66 @@ and more reliable (no dependence on goal column, etc.)."
 		(while (and 
 			(< (visual-pixel-col-at-point) pixel-col)
 			(< (point) (1- next-line-start))) ;; do not cross line
-		  (forward-char +1))))))))
+		  (forward-char +1)))))))))
+
+ 
+(defun aq-find-position-at-pixel-col  (pixel-col)
+
+  (let ((beg-of-line) (end-of-line))
+    (vertical-motion 1)	;; trying going one down, to left
+    (setq end-of-line (point))
+    (if (eq (point) (point-max)) (vertical-motion 0) (vertical-motion -1))
+    (setq beg-of-line (point))
+      
+    (let ((op (point)))
+					; move to beg of line
+      (vertical-motion 0) ;; trying going one down, to left
+      (forward-char (/ pixel-col (frame-char-width)))
+
+      (aq-find-position-at-pixel-col-recursive 
+       beg-of-line end-of-line pixel-col)
+
+      (let* ((nearest-pos (point))
+	     (smallest-distance 
+	      (abs (- pixel-col (visual-pixel-col-at-point)))))
+
+	(let ((pdif (abs (- pixel-col 
+			    (progn (forward-char -1) 
+				   (visual-pixel-col-at-point))))))
+	  (when (< pdif smallest-distance)
+	    (setq nearest-pos (point))
+	    (setq smallest-distance pdif)))
+
+	(let ((pdif (abs (- pixel-col 
+			    (progn (forward-char 2)
+				   (visual-pixel-col-at-point))))))
+	  (when (< pdif smallest-distance)
+	    (setq nearest-pos (point))
+	    (setq smallest-distance pdif)))
+	(goto-char nearest-pos))
+
+      (point))))
+
+
+(defun aq-find-position-at-pixel-col-recursive 
+  (beg-of-line end-of-line pixel-col) 
+   ; set it in the middle
+
+  (if (eq beg-of-line end-of-line)
+      (point)
+
+  (let ((middle (+ beg-of-line (round (/ (- end-of-line beg-of-line) 2)))))
+    (if (or
+	 (eq middle (point)) ;; wouldn't change point any more
+	 (eq (visual-pixel-col-at-point) pixel-col))
+	(point)
+      ;(incf steps)
+      (goto-char middle)
+      (if (> (visual-pixel-col-at-point) pixel-col)
+	  (aq-find-position-at-pixel-col-recursive 
+	   beg-of-line (point) pixel-col)
+	(aq-find-position-at-pixel-col-recursive  
+	 (point) end-of-line pixel-col))))))
 
 	    
 (defun beginning-of-visual-line ()
@@ -578,17 +656,7 @@ is called."
       (setq isearch-string (buffer-substring-no-properties beg end))
       (setq search-ring (cons (buffer-substring-no-properties beg end) 
 			      search-ring))))
-
-;; (add-hook 'after-init-hook 
-;; 	  (lambda () 
-	    
-;; 	    ;; make a copy of it as a workaround attempt
-;; 	   ;;  (use-global-map (copy-keymap (current-global-map)))
-;; 	    (setq global-map-backup global-map)
-;; 	    )
-;; 	  )
-
-;; 
+ 
 
 ;;  aquamacs context menu
 
@@ -863,7 +931,7 @@ behavior)."
 			 aquamacs-popup-context-menu)))
  
 (defun osx-key-mode-mouse-3 (event &optional  prefix)
-  "Popup a context menu or extend the region.
+"Popup a context menu or extend the region.
  Behavior depends on setting of `osx-key-mode-mouse-3-behavior'." 
   (interactive "@e \nP")
   ;; we need to bind last-command to the target command
@@ -905,7 +973,7 @@ behavior)."
     ;; could be moved into transient-mark-mode-map?
     (define-key map '[(left)] 'aquamacs-backward-char)
     (define-key map '[(right)] 'aquamacs-forward-char)
-   (define-key map `[(,osxkeys-command-key up)] 'beginning-of-buffer)
+    (define-key map `[(,osxkeys-command-key up)] 'beginning-of-buffer)
     (define-key map `[(,osxkeys-command-key down)] 'end-of-buffer)
     (define-key map `[(,osxkeys-command-key left)] 'beginning-of-line)
     (define-key map `[(,osxkeys-command-key right)] 'end-of-line)
