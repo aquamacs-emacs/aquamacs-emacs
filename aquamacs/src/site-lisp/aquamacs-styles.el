@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.26 2007/12/29 14:07:54 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.27 2008/01/01 21:42:35 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -43,22 +43,17 @@
  
 ; update the help-mode specification with a fit-frame
 ; append it, so the user's choice has priority
-(defun 	make-help-mode-use-frame-fitting ()
-
-  (when aquamacs-styles-mode
-    (unless (assq 'fit-frame 
+(defun 	make-help-mode-not-use-frame-fitting ()
+    (if (assq 'fit-frame 
 		  (assq 'help-mode aquamacs-default-styles)
 		  ) ;; unless it's already set
 
-      (assq-set 'help-mode
-		(append  
-		 (cdr (assq 'help-mode aquamacs-default-styles))
-		 '((fit-frame . t))
-		 )
-		'aquamacs-default-styles)
-      )
-    )
-  )
+	(assq-set 
+	     'help-mode
+	     (assq-delete-all
+	      'fit-frame  
+	      (cdr (assq 'help-mode aquamacs-default-styles)))
+	     'aquamacs-default-styles)))
 
  
 (defun aquamacs-combined-mode-specific-settings (default-alist style)
@@ -735,16 +730,6 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
    (message "Aquamacs-Styles-Mode disabled. For best results, consider turning
 on One-Buffer-One-Frame-Mode (Display Buffers in Separate Frames)!")))
   
- ;; (let (
-;; (aquamacs-default-styles 
-;;    (quote ((help-mode (fit-frame . t)) 
-;; 	   (speedbar-mode (minibuffer-auto-raise)) 
-;; 	   (paragraph-indent-text-mode (font . "fontset-lucida14")) 
-;; 	   (tex-mode (font . "fontset-lucida14")) 
-;; 	   (change-log-mode (font . "fontset-lucida14")) 
-;; 	   (text-mode (font . "fontset-lucida14"))
-;; 	   )))) 
-;;    (aquamacs-styles-set-default-parameter 'tool-bar-lines 0))
 
 (defun aquamacs-styles-set-default-parameter (param value &optional mode)
   "Sets frame parameter PARAM of `default' frame style."
@@ -808,9 +793,6 @@ Frame Appearance Styles to make the setting stick.")
     )
   )
 
-(add-hook 'after-init-hook
-	  'make-help-mode-use-frame-fitting
-	  'append) ;; move to the end: after loading customizations
 	
 	
   (add-hook 'after-change-major-mode-hook	
