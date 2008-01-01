@@ -8,7 +8,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-frame-setup.el,v 1.25 2007/08/12 17:05:43 davidswelt Exp $
+;; Last change: $Id: aquamacs-frame-setup.el,v 1.26 2008/01/01 21:42:15 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -276,7 +276,8 @@ Usable in `temp-buffer-show-hook'."
  ;; the following is copied from Drew Adams's start.el package:
  
 (require 'simple+ nil t)                ; Corrections, extensions.
-(require 'frame+ nil t)                 ; Corrections, extensions.
+;; do not import - always fits frame for special frames
+;; (require 'frame+ nil t)                 ; Corrections, extensions.
 (require 'frame-cmds nil t)             ; Frame and window commands.
  ; (require 'autofit-frame nil t)          ; automatically fit frames to sole window. 
  
