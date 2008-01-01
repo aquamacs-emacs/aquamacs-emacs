@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs version check
  
-;; Last change: $Id: check-for-updates.el,v 1.18 2007/12/30 12:06:48 davidswelt Exp $
+;; Last change: $Id: check-for-updates.el,v 1.19 2008/01/01 10:42:13 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -241,14 +241,14 @@ and show user a message if there is."
 			    "\[\r\n\]" "" 
 			    (with-temp-buffer
 			      (call-process "/usr/bin/uname" nil t nil "-r") 
-			      (buffer-string))))
+			      (substring (buffer-string) 0 10))))
 			  "&cpu=" 
 			  (url-encode-string  
 			   (replace-regexp-in-string 
 			    "\[\r\n\]" ""
 			    (with-temp-buffer 
 			      (call-process "/usr/bin/uname" nil t nil "-p") 
-			      (buffer-string))))))))
+			      (substring (buffer-string) 0 10))))))))
 	; HTTP-GET
 	(setq aquamacs-version-check-buffer   
 	      (url-http url 
