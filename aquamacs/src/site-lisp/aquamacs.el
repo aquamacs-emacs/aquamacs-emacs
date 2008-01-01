@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.125 2007/12/16 13:46:35 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.126 2008/01/01 21:43:15 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -451,25 +451,12 @@ Use this argument instead of explicitly setting `view-exit-action'."
  
 					; update the help-mode specification with a fit-frame
 					; append it, so the user's choice has priority
-  (defun 	make-help-mode-use-frame-fitting ()
-
-    (unless (assq 'fit-frame 
-		  (assq 'help-mode aquamacs-default-styles)
-		  ) ;; unless it's already set
-
-      (assq-set 'help-mode
-		(append  
-		 (cdr (assq 'help-mode aquamacs-default-styles))
-		 '((fit-frame . t))
-		 )
-		'aquamacs-default-styles)
-      )
-    )
+  
 
 
-   
+  (require 'aquamacs-styles)
   (add-hook 'after-init-hook
-	    'make-help-mode-use-frame-fitting
+	    'make-help-mode-not-use-frame-fitting
 	    'append) ;; move to the end: after loading customizations
 	
 	
