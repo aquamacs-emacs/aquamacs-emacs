@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.92 2007/12/20 02:27:41 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.93 2008/01/02 01:22:44 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -1153,7 +1153,7 @@ that should be represented in the Aquamacs menus."
   ;; It is better not to use backquote here,
   ;; because that makes a bootstrapping problem
   ;; if you need to recompile all the Lisp files using interpreted code.
-  (list 'menu-item "Aquamacs Multilingual Environment" mule-menu-keymap
+  (list 'menu-item "Language" mule-menu-keymap
 ;; Most of the MULE menu actually does make sense in unibyte mode,
 ;; e.g. language selection.
 ;;;	':visible 'default-enable-multibyte-characters
@@ -1186,7 +1186,7 @@ that should be represented in the Aquamacs menus."
 (when  (fboundp 'mac-input-method-mode)
 (define-key-after mule-menu-keymap [toggle-inline-input-method]
   (menu-bar-make-mm-toggle mac-input-method-mode
-			   "Use System input method" 
+			   "Use System Input Method" 
 	      "Use native Mac input method")
   'separator-mule)
 
