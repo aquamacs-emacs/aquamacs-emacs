@@ -4,6 +4,7 @@ export CVS_RSH=ssh
 
 AQEMACSSRC='emacs.raw'
 COPY='copy-to-server'
+SHORTDATE=`date +"%Y-%b-%d-%a"`
 DATE=`date +"%Y-%b-%d-%a-%H%M"`
 
 if test "$AQUAMACS_CVS_PREFIX" ; then
@@ -144,7 +145,7 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
 
     # copy to web dir (logs, build)
     if test "$COPY" == "copy-to-server"; then
-        ${AQUAMACS_ROOT}/build/copy-build-to-server.sh ${DATE}
+        ${AQUAMACS_ROOT}/build/copy-build-to-server.sh ${DATE} ${SHORTDATE}-\*
     fi
 
     date >>${LOG}
