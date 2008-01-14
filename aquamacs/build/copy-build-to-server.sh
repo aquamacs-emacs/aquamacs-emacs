@@ -6,7 +6,7 @@
 
 # SSH authentication should be installed
 
-GNUNAME=GNU-Emacs-*.dmg.bz2
+GNUNAME=GNU-Emacs-$2.dmg.bz2
 NAME=Aquamacs-$1.tar.bz2
 COPYORLINK='cp'  # 'ln -s'
 CHGLOGSCRIPT='~/aquamacs-web/scripts/push-nightly-changelog.sh'
