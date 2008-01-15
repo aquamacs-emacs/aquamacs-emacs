@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.41 2007/12/22 18:12:26 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.42 2008/01/15 00:42:46 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -177,10 +177,10 @@ pixels apart if possible."
         (* chars (frame-char-height frame)))
 (defun smart-fp--pixel-to-char-width (pixels frame &optional round-to-lower)
        (round (- (/ pixels (frame-char-width frame)) 
-		 (if round-to-lower 0 .5))))
+		 (if round-to-lower .5 0))))
 (defun smart-fp--pixel-to-char-height (pixels frame &optional round-to-lower)
        (round (- (/ pixels (frame-char-height frame)) 
-		 (if round-to-lower 0 .5))))
+		 (if round-to-lower .5 0))))
 
 (defun smart-fp--get-frame-creation-function ()
   (if (boundp 'frame-creation-function)
