@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.27 2008/01/01 21:42:35 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.28 2008/01/15 00:41:38 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -212,20 +212,20 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 	    (smart-fp--char-to-pixel-height (frame-height 
 					     ,frame) ,frame))))
     
-    ,@body
-
-    (when (not (equal old-frame-pixel-height 
+    (let ((ret-val (progn ,@body)))
+      (when (not (equal old-frame-pixel-height 
 		      (frame-pixel-height ,frame)))
-      (set-frame-height 
-       ,frame
-       (smart-fp--pixel-to-char-height
-	(- old-frame-pixel-height h-offset ) ,frame)))
-    (when (not (equal old-frame-pixel-width 
-		      (frame-pixel-width ,frame)))
-      (set-frame-width 
-       ,frame
-	(smart-fp--pixel-to-char-width
-	 (- old-frame-pixel-width w-offset ) ,frame)))))
+	(set-frame-height 
+	 ,frame
+	 (smart-fp--pixel-to-char-height
+	  (- old-frame-pixel-height h-offset ) ,frame)))
+      (when (not (equal old-frame-pixel-width 
+			(frame-pixel-width ,frame)))
+	(set-frame-width 
+	 ,frame
+	 (smart-fp--pixel-to-char-width
+	  (- old-frame-pixel-width w-offset ) ,frame)))
+      ret-val)))
 
 (defun mac-handle-font-selection (event)
   "Change default face attributes according to font selection EVENT."
