@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-print.el,v 1.12 2007/09/26 19:48:43 nzeh Exp $
+;; Last change: $Id: mac-print.el,v 1.13 2008/01/22 17:48:46 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -136,6 +136,8 @@ in PDF format.
        (call-process html-to-pdf nil t nil  
 		      "-f" html-file 
 		      "-o" target-file
+		      "-a" (concat "media=" 
+				   (capitalize (symbol-name ps-paper-type)))
 		      "-j" "application/pdf"
 		      "-D")
        (buffer-string))))
