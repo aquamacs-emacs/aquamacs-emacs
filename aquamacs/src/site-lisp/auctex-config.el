@@ -4,7 +4,7 @@
 ;; originally authored by Kevin Walzer
 ;; Keywords: auctex
  
-;; Last change: $Id: auctex-config.el,v 1.31 2007/12/22 22:50:17 davidswelt Exp $
+;; Last change: $Id: auctex-config.el,v 1.32 2008/01/27 14:38:43 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -170,9 +170,10 @@ Calls `aquamacs-tex-pdf-viewer' to display the PDF file THE-FILE."
  tell application \"%s\" 
      activate 
      open posix file \"%s\" 
-     tell front document to go to TeX line %d from \"%s\" 
+     tell front document to go to TeX line %d from posix file \"%s\" 
   end tell
 " aquamacs-tex-pdf-viewer full-file-name line full-source-name))))
+
 
 (defun aquamacs-latex-crossref (ev)
   "Cross-reference in LaTeX"
