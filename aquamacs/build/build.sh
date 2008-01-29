@@ -1,9 +1,7 @@
-#!/bin/sh -l
- 
+#!/bin/bash -l
 export CVS_RSH=ssh
 
 AQEMACSSRC='emacs.raw'
-COPY='copy-to-server'
 SHORTDATE=`date +"%Y-%b-%d-%a"`
 DATE=`date +"%Y-%b-%d-%a-%H%M"`
 
@@ -16,15 +14,38 @@ fi
 AQ_PREFIX=`pwd`
 
 LOG="/dev/stdout"
-LOGPAR=""
-if test "$1" == "-l" ; then 
-    a=$2
-    LOGPAR="-l"
-    BPAR=$3
-else
-    a=$1
-    BPAR=$2
+
+
+LOGPAR=
+COPY=
+while getopts 'lc' OPTION
+do
+    case $OPTION in
+	l)	LOGPAR="-l"
+	    ;;
+	c)	COPY='copy-to-server'
+	    ;;
+	?)	printf "Usage:  %s [-l] [-c] {cvs|emacs|aquamacs} [<build-parameters>]\nExpects directories ./aquamacs and ./emacs.raw (by default),\nso call from top-level directory.\n\n" $(basename $0) >&2
+	    exit 2
+	    ;;
+    esac
+done
+shift $(($OPTIND - 1))
+a='aquamacs'
+case $1 in 
+    aquamacs | emacs | cvs) 
+	a=$1
+	shift $((1))
+esac	
+
+BPAR=$*
+
+echo "Building $a"
+if [ "$BPAR" ]; then
+    echo "Build parameters: $BPAR"
 fi
+
+
     
 if test "$a" == "emacs" ; then
     BUILD_GNU_EMACS=yes  
@@ -41,11 +62,6 @@ elif test "$a" == "cvs" ; then
     if [ $LOGPAR ]; then
 	LOG=${AQ_PREFIX}/cvs-update.log
     fi
-else
-    echo "Aquamacs build.sh"
-    echo "Usage:  aquamacs/build/build.sh [-l] {cvs|emacs|aquamacs}"
-    echo
-    exit
 fi
 
 
@@ -79,6 +95,10 @@ if test "${BUILD_GNU_EMACS}" == "yes"; then
     echo "Copying emacs.raw emacs.GNU" >>$LOG  
     cp -Rp emacs.raw emacs.GNU  2>>$LOG 
 
+    if [ $? != 0 ]; then
+	exit 1
+    fi
+
     export EMACS_ROOT=`pwd`/emacs.GNU
     cd emacs.GNU/mac
 
@@ -102,8 +122,12 @@ fi
 if test "${BUILD_AQUAMACS}" == "yes"; then
      
     rm -rf emacs  2>>$LOG 
-    echo "Copying emacs.raw emacs" >>$LOG  
+    echo "Copying $AQEMACSSRC to emacs" >>$LOG  
     cp -Rp $AQEMACSSRC emacs  2>>$LOG 
+
+    if [ $? != 0 ]; then
+	exit 1
+    fi
 
     export EMACS_ROOT=`pwd`/emacs
     cd aquamacs
@@ -144,6 +168,7 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
     fi
 
     # copy to web dir (logs, build)
+    # done even if build failed so that the GNU Emacs build is copied
     if test "$COPY" == "copy-to-server"; then
         ${AQUAMACS_ROOT}/build/copy-build-to-server.sh ${DATE} ${SHORTDATE}-\*
     fi
