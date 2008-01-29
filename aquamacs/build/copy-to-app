@@ -80,6 +80,12 @@ echo "CFBundleGetInfoString = \"Aquamacs $AQUAMACS_VERSION, Copyright (C) 2007 b
 
 cp -pr "$projdir/src/emacs-document.icns" Contents/Resources/
 
+cp "$projdir/Icons/build"/* Contents/Resources/etc/images/
+# can't produce icons without ImageMagick / freetype in build env.
+# so we won't do that here.
+# ${AQUAMACS_ROOT}/Icons/make-xpm ${AQUAMACS_ROOT}/Icons ${EMACS_ROOT}/etc/images 
+
+
 cp -Rp "$projdir"/src/site-lisp/*.el Contents/Resources/site-lisp/
 
 cp -Rp "$projdir"/src/site-lisp/edit-modes/* Contents/Resources/site-lisp/edit-modes/
