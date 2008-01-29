@@ -63,8 +63,8 @@ Example:
               ("\M-3" . "#")
               ("\M-2" . "@")
               ("\M-1" . "|")
-              ([?\M-°] . "\\")))
-    (italian . ( ("\M-§" . "@")  
+              ([?\M-º] . "\\")))
+    (italian . (;;("\M-§" . "@")  ;; this seems to cause problems
 		([?\M-¤]  . "@") ; wont work either
 		("\M-(" . "{")
 		("\M-4" . "[")
