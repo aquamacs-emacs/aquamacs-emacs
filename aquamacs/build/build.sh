@@ -102,6 +102,7 @@ if test "${BUILD_GNU_EMACS}" == "yes"; then
     export EMACS_ROOT=`pwd`/emacs.GNU
     cd emacs.GNU/mac
 
+    export MACOSX_DEPLOYMENT_TARGET=10.4
    
     echo "Building Emacs (make-package)..." >>$LOG 
     ./make-package --self-contained --build-in-place >>$LOG 2>>$LOG 
@@ -137,10 +138,9 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
     echo "Applying Aquamacs patches..." >>$LOG  
     . ${AQUAMACS_ROOT}/build/apply-patches.sh >>$LOG 2>>$LOG
 
-    echo "Copying icons..." >>$LOG
-    cp ${AQUAMACS_ROOT}/Icons/build/* ${EMACS_ROOT}/etc/images/
-    # can't produce icons without ImageMagick / freetype in build env.
-    # ${AQUAMACS_ROOT}/Icons/make-xpm ${AQUAMACS_ROOT}/Icons ${EMACS_ROOT}/etc/images 
+    
+
+    export MACOSX_DEPLOYMENT_TARGET=10.4
 
     cd ${AQ_PREFIX}/emacs/mac
     echo "Building Emacs (make-aquamacs)..." >>$LOG 
