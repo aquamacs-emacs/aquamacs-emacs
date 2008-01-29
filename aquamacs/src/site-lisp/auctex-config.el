@@ -4,7 +4,7 @@
 ;; originally authored by Kevin Walzer
 ;; Keywords: auctex
  
-;; Last change: $Id: auctex-config.el,v 1.32 2008/01/27 14:38:43 davidswelt Exp $
+;; Last change: $Id: auctex-config.el,v 1.33 2008/01/29 15:04:06 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -235,7 +235,9 @@ Calls `aquamacs-tex-pdf-viewer' to display the PDF file THE-FILE."
   (unless aquamacs-skim-timer ;; just once per session
     (setq aquamacs-skim-timer 
 	  (run-with-idle-timer 30 t 'aquamacs-check-for-skim)))
-  (server-start)) ;; make emacsclient work
+  (unless server-process
+    ;; start server to make emacsclient work
+    (server-start)))
 
 (require 'server)
 (defun server-goto-line-column (file-line-col)
