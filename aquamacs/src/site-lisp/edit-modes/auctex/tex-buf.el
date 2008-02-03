@@ -201,7 +201,7 @@ at bottom if LINE is nil."
   (let ((buffer (TeX-active-buffer)))
     (if buffer
 	(let ((old-buffer (current-buffer)))
-	  (pop-to-buffer buffer t)
+	  ;; (pop-to-buffer buffer t)
 	  (bury-buffer buffer)
 	  (goto-char (point-max))
 	  (recenter (if line
@@ -1074,9 +1074,9 @@ command."
   "Filter to process background output."
   (let ((old-window (selected-window))
 	(pop-up-windows t))
-    (pop-to-buffer "*TeX background*")
-    (goto-char (point-max))
-    (insert string)
+    (with-current-buffer "*TeX background*"
+      (goto-char (point-max))
+      (insert string))
     (select-window old-window)))
 
 ;; Copy and adaption of `comint-postoutput-scroll-to-bottom' from CVS
@@ -1322,11 +1322,11 @@ already in an Emacs buffer) and the cursor is placed at the error."
 
   (let ((old-buffer (current-buffer))
 	(default-major-mode major-mode))
-    (pop-to-buffer (TeX-active-buffer))
-    (if reparse
-	(TeX-parse-reset))
-    (goto-char TeX-error-point)
-    (TeX-parse-error old-buffer)))
+    (with-current-buffer (TeX-active-buffer)
+      (if reparse
+	  (TeX-parse-reset))
+      (goto-char TeX-error-point)
+      (TeX-parse-error old-buffer))))
 
 ;;; - Parsing (La)TeX
 
@@ -1460,11 +1460,15 @@ name(\\([^)]+\\))\\)\\|\
 	  (command-buffer TeX-command-buffer)
 	  error-file-buffer)
       (run-hooks 'TeX-translate-location-hook)
-      (setq error-file-buffer (find-file-other-window file))
+      (setq error-file-buffer (if (equal (buffer-file-name (window-buffer)) 
+					 (expand-file-name file))
+				  (set-buffer (window-buffer))
+				(find-file-other-window file)))
       ;; Set the value of `TeX-command-buffer' in the next file with an
       ;; error to be displayed to the value it has in the current buffer.
       (with-current-buffer error-file-buffer
 	(set (make-local-variable 'TeX-command-buffer) command-buffer))
+      (print (+ offset line))
       (goto-line (+ offset line))
       (if (not (string= string " "))
 	  (search-forward string nil t))
@@ -1530,7 +1534,10 @@ name(\\([^)]+\\))\\)\\|\
 	  (command-buffer TeX-command-buffer)
 	  error-file-buffer)
       (run-hooks 'TeX-translate-location-hook)
-      (setq error-file-buffer (find-file-other-window file))
+      (setq error-file-buffer (if (equal (buffer-file-name (window-buffer)) 
+					 (expand-file-name file))
+				  (set-buffer (window-buffer))
+				(find-file-other-window file)))
       ;; Set the value of `TeX-command-buffer' in the next file with an
       ;; error to be displayed to the value it has in the current buffer.
       (with-current-buffer error-file-buffer
