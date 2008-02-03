@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.58 2007/12/15 21:02:41 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.59 2008/02/03 11:38:58 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -383,6 +383,7 @@ the current window is switched to the new buffer."
 (defadvice switch-to-buffer (around sw-force-other-frame (&rest args) 
 				    activate compile)
   ;; is buffer shown in a frame?
+
   (let ((switch t)
 	(window-to-select))
     (if one-buffer-one-frame
@@ -556,6 +557,8 @@ the current window is switched to the new buffer."
 ;;   )  
 ;;  )
 ;; 
+
+
 (defun aquamacs-display-buffer (&rest args)
        (let ((display-buffer-function nil))
 	 (if (and
@@ -718,31 +721,32 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
 
       (select-frame-set-input-focus (selected-frame))
 					; ask before killing
-    (cond ( (and (eq (current-buffer) (window-buffer)) 
+      (with-current-buffer (window-buffer)
+      (when (and ;(eq (current-buffer) (window-buffer)) 
 					; only if a document is shown
 		 killable
 		 (eq   (string-match "\\*.*\\*" (buffer-name)) nil)
-		 (eq   (string-match " SPEEDBAR" (buffer-name)) nil) 
+		 (eq   (string-match " SPEEDBAR" (buffer-name)) nil)) 
 					; has no minibuffer!
-		 )
-	    (cond ((and (or buffer-file-name buffer-offer-save)
-			(buffer-modified-p))
+	(if (and
+	     (or buffer-file-name buffer-offer-save)
+	     (buffer-modified-p))
 		   ;; a lot of buffers (e.g. dired) may be modified,
 		   ;; but have no file name
-		   (if (progn
-			 (unless (minibuffer-window)
-			   (setq last-nonmenu-event nil)
-			   )
-			 (y-or-n-p "Save this buffer to file before closing window? ")
-			 )
-		       (progn
-			 (save-buffer)
-			 (message "File saved.")
-			 )
-		     ;; mark as not modified, so it will be killed for sure
-		     (set-buffer-modified-p nil)
-		     ))
-		  ((message "")))))
+	    (if (progn
+		  (unless (minibuffer-window)
+		    (setq last-nonmenu-event nil)
+		    )
+		  (y-or-n-p (format "Save buffer %s to file before closing window? " (buffer-name)))
+		  )
+		(progn
+		  (save-buffer)
+		  (message "File saved.")
+		  )
+	      ;; mark as not modified, so it will be killed for sure
+	      (set-buffer-modified-p nil)
+	      )
+	  (message ""))))
   
   
 	
@@ -800,24 +804,16 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
 	(delw nil)
 	)
     (select-frame frame)
-     
-
     (while 
 	(and (frame-first-window frame) 
-	(window-live-p (frame-first-window frame))
-	(select-window (frame-first-window frame))
-	(setq delw (cons (frame-first-window frame) delw))
-	
-	(close-current-window-asktosave 'force-delete-window)
-	 
-	(frame-live-p frame)
-	(next-window (selected-window) 'nominibuf frame)
-	(not (memq  (frame-first-window frame) delw))
-	)
-      ) 
-    )
-  )
-)
+	     (window-live-p (frame-first-window frame))
+	     (select-window (frame-first-window frame))
+	     (setq delw (cons (frame-first-window frame) delw))
+	     (or (close-current-window-asktosave 'force-delete-window) t)
+	     (frame-live-p frame)
+	     (next-window (selected-window) 'nominibuf frame)
+	     (not (memq  (frame-first-window frame) delw))))))) 
+
   
 
 
@@ -826,12 +822,10 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
 
 ;; make sure that C-mouse-1 menu acts locally
 (if window-system
-(defadvice mouse-buffer-menu (around select-buffer-same-frame (&rest args) activate) 
- (let ((one-buffer-one-frame nil))
-   ad-do-it
-) 
-)
-)
+    (defadvice mouse-buffer-menu (around select-buffer-same-frame 
+					 (&rest args) activate) 
+      (let ((one-buffer-one-frame nil))
+	ad-do-it)))
   
 
 ;; when all frames are hidden, 
@@ -843,11 +837,11 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
   (selected-frame))
 
 (if window-system
-(defadvice fancy-splash-screens (around modify-frame (&rest args) activate)
-  (let ((one-buffer-one-frame-force t)
-	(default-frame-alist '( (tool-bar-lines . 0) (minibuffer . t ) ) ) )    
-    ad-do-it
-    )))
+    (defadvice fancy-splash-screens (around modify-frame (&rest args) activate)
+      (let ((one-buffer-one-frame-force t)
+	    (default-frame-alist '( (tool-bar-lines . 0)
+				    (minibuffer . t ) ) ) )    
+	ad-do-it)))
 
 
 ;; ediff-directories, e.g. uses split-window to create a new window
