@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.28 2008/01/15 00:41:38 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.29 2008/02/03 00:43:32 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -188,7 +188,7 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 ;; 				     (< old-frame-pixel-height
 ;; 					(frame-pixel-height frame)))
 				 )
-			     (smart-move-frame-inside-screen)
+			     (smart-move-frame-inside-screen frame)
 			  ))
 		    (if window-configuration-change-hook
 			(let ((selframe (selected-frame)))
