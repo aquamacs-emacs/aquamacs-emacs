@@ -4,7 +4,7 @@
 ;; originally authored by Kevin Walzer
 ;; Keywords: auctex
  
-;; Last change: $Id: auctex-config.el,v 1.33 2008/01/29 15:04:06 davidswelt Exp $
+;; Last change: $Id: auctex-config.el,v 1.34 2008/02/04 23:33:52 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -199,6 +199,9 @@ Calls `aquamacs-tex-pdf-viewer' to display the PDF file THE-FILE."
      0)))
 
 (defvar aquamacs-skim-timer nil)
+
+(defvar aquamacs-skim-show-info-message t)
+
 (defun aquamacs-check-for-skim ()
 "Show help message if Skim.app is running."
   (and (equal major-mode 'latex-mode) (boundp 'TeX-PDF-mode) TeX-PDF-mode 
@@ -207,13 +210,20 @@ Calls `aquamacs-tex-pdf-viewer' to display the PDF file THE-FILE."
 			 (and buffer-file-name (file-name-directory buffer-file-name))))
      ;; check for running 
      (aquamacs-skim-running-p)
+     (if (member '("^pdf$" "." "open -a Skim.app %o") TeX-output-view-style)
+	 t
+       ;; this variable should not be automatically saved by "Save Options"
+       ;; (unless user customizes it explicitly)
+       (setq TeX-output-view-style (cons '("^pdf$" "." "open -a Skim.app %o")
+					 TeX-output-view-style)))
+     (cancel-timer aquamacs-skim-timer)
+     aquamacs-skim-show-info-message
      (message 
       (substitute-command-keys 
        (format 
 	"Skim detected. Use \\[aquamacs-latex-crossref]%s to jump to the PDF and back."
 	(if (eq 'control mac-emulate-three-button-mouse) 
-	    " (Shift-Apple-Click)" ""))))
-     (cancel-timer aquamacs-skim-timer)))
+	    " (Shift-Apple-Click)" ""))))))
   
 
 (defun aquamacs-latex-viewer-support ()
