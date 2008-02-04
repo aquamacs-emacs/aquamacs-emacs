@@ -90,6 +90,42 @@ Example:
  		("\M-8" . "[")
  		("\M-)" . "}")
  		("\M-9" . "]")))
+
+    (swiss-german . (("\M-g" . "@")
+	       ("\M-/" . "\\")
+	       ("\M-3" . "#")
+	       ("\M-4" . "Ç")
+	       ("\M-5" . "[")
+	       ("\M-6" . "]")
+	       ("\M-7" . "|")
+	       ("\M-8" . "{")
+	       ("\M-9" . "}")
+	       ("\M-n" . "~")
+	       ("\M-s" . "ß")
+	       ("\M-o" . "ø")
+	       ("\M-O" . "Ø") 
+	       ;; ("\M-a" . "å") ;; overlaps with Emacs default 
+	       ;; ("\M-A" . "Å") ;; overlaps with Emacs default M-a
+	       ("\M-e" . ,emmkm--euro) ;; euro symbol
+	       ))
+
+    (swiss-french . (("\M-g" . "@")
+	       ("\M-/" . "\\")
+	       ("\M-3" . "#")
+	       ("\M-4" . "Ç")
+	       ("\M-5" . "[")
+	       ("\M-6" . "]")
+	       ("\M-7" . "|")
+	       ("\M-8" . "{")
+	       ("\M-9" . "}")
+	       ("\M-n" . "~")
+	       ("\M-s" . "ß")
+	       ("\M-o" . "ø")
+	       ("\M-O" . "Ø") 
+	       ;; ("\M-a" . "å") ;; overlaps with Emacs default M-a
+	       ;; ("\M-A" . "Å") ;; overlaps with Emacs default M-a
+	       ("\M-e" . ,emmkm--euro) ;; euro symbol
+	       ))
     (us . (     ("\M-3" . "£")
 		("\M-@" . ,emmkm--euro) ;; euro symbol
 		("\M-6" . "§")))
