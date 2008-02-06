@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.126 2008/01/01 21:43:15 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.127 2008/02/06 11:37:21 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -28,7 +28,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005,2006, 2007: David Reitter
+;; Copyright (C) 2005,2006, 2007, 2008: David Reitter
  
 (defvar aq-starttime 0)
 ;; (defun ats (txt) 
@@ -798,7 +798,7 @@ un-Mac-like way when you select text and copy&paste it.")))
      (aquamacs-wrap-string
       (propertize 	
       (substitute-command-keys "
-It is Free Software: you can improve and redistribute it under the GNU General Public License, version 3 or later. Copyright (C) 2007 Free Software Foundation, Inc. (C) 2007 D. Reitter. No Warranty.") 
+It is Free Software: you can improve and redistribute it under the GNU General Public License, version 3 or later. Copyright (C) 2008 Free Software Foundation, Inc. (C) 2008 D. Reitter. No Warranty.") 
       'face (list :family "Lucida Grande" :height 110)) 
       ;; this one is rather ad-hoc, but should work:
       (floor (/ (frame-pixel-width) 5.75)))))
