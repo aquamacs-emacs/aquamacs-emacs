@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.128 2008/02/06 11:47:10 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.129 2008/02/06 11:56:22 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -1077,6 +1077,18 @@ if modified buffers exist."
 
 (global-set-key [remap save-buffers-kill-emacs] 
 		'aquamacs-save-buffers-kill-emacs)
+
+(defun aquamacs-mac-ae-quit-application (event)
+  "Quit the application Emacs with the Apple event EVENT."
+  (interactive "e")
+  (let ((ae (mac-event-ae event)))
+    (unwind-protect
+	(aquamacs-save-buffers-kill-emacs)
+      ;; Reaches here if the user has canceled the quit.
+      (mac-resume-apple-event ae -128))))
+(define-key mac-apple-event-map [core-event quit-application]
+  'aquamacs-mac-ae-quit-application)
+
 
   ;; workaround for people who still call this in their .emacs
   (defun mwheel-install ()
