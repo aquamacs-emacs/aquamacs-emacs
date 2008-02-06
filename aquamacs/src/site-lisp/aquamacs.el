@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.127 2008/02/06 11:37:21 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.128 2008/02/06 11:47:10 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -205,8 +205,7 @@ Separate paths from file names with --."
 
   (global-set-key "\C-x\ \C-r" 'recentf-open-files)  
 
-
-  (setq file-name-coding-system 'utf-8)
+ 
 
 ;; Page scrolling
 
