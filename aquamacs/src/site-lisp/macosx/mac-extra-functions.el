@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.56 2007/12/02 21:26:09 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.57 2008/02/07 22:34:08 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -185,11 +185,13 @@ right there as well."
 
 (defcustom aquamacs-set-creator-codes-after-writing-files t
   "Set creator and type when a file is written.
-If t, the creator and type code of a file are set after it is
-written.  This way, Aquamacs will open the files it writes when
-opened per double-click in Finder. If set to `force', the creator
-code is always set to EMAx and the type code is always set to
-TEXT, no matter what is was for a loaded file."
+If t, the creator and type code of a file are set when it is
+written. Visited files will retain their code, while new files
+will be set to EMAx. If set to `force', the creator code is
+always set to EMAx and the type code is always set to TEXT, no
+matter what is was when the file was visited.  This way, Aquamacs will
+open the files it writes when opened per double-click in
+Finder. "
 :type  '(radio (const :tag "Yes" t)
         (const :tag "No" nil)
         (other :tag "Always set to EMAx" force))
@@ -210,18 +212,22 @@ TEXT, no matter what is was for a loaded file."
 
 ;;  (add-hook 'find-file-hook 'mac-read-file-creator-and-type)
 ;;  (add-hook 'after-save-hook 'mac-set-creator-type-codes-for-file)
+;; (mac-get-file-creator "~/aaa")
 
 (defun mac-read-file-creator-and-type ()
   ;; initialize creator code for the file that was loaded.
   ;; called from `find-file-hook'
   (and buffer-file-name
      (not (file-remote-p buffer-file-name))
+     (file-readable-p buffer-file-name) ;; do not set creator/type if file new
      (fboundp 'mac-get-file-creator)
      (let ((creator (mac-get-file-creator buffer-file-name))
 	   (type (mac-get-file-type buffer-file-name)))
-       (unless (or (null creator) (equal creator "    "))
+       (if (or (null creator) (equal creator "    "))
+	   (set (make-local-variable 'mac-file-creator) 'none)
 	 (set (make-local-variable 'mac-file-creator) creator))
-       (unless (or (null type) (equal type "    "))
+       (if (or (null type) (equal type "    "))
+	   (set (make-local-variable 'mac-file-type) 'none)
 	 (set (make-local-variable 'mac-file-type) type)))))
  
 (defun mac-set-creator-type-codes-for-file ()
@@ -229,14 +235,21 @@ TEXT, no matter what is was for a loaded file."
 	   buffer-file-name
 	   (not (file-remote-p buffer-file-name))
 	   (fboundp 'mac-set-file-creator) (fboundp 'mac-set-file-type))
-    (mac-set-file-type buffer-file-name 
-		       (if (eq aquamacs-set-creator-codes-after-writing-files 'force) 
-			   "TEXT"
-			 (or mac-file-type "TEXT"))) ;; set to old type, or "TEXT" if not set
-    (mac-set-file-creator buffer-file-name  
-			  (and (not (eq aquamacs-set-creator-codes-after-writing-files 'force))
-			       mac-file-creator)))  ;; set to old creator, or "EMAx" if not set
-  (mac-read-file-creator-and-type))
+    (cond
+     ;; always set if configured so
+     ((eq aquamacs-set-creator-codes-after-writing-files 'force)
+      (mac-set-file-type buffer-file-name "TEXT"))
+     ((eq mac-file-type 'none) nil) ;; do not set if not set originally
+     ;; set to TEXT if a newly created file
+     ;; or leave untouched otherwise
+     (t (mac-set-file-type buffer-file-name (or mac-file-type "TEXT"))))
+
+    (cond
+     ((eq aquamacs-set-creator-codes-after-writing-files 'force)
+      (mac-set-file-creator buffer-file-name "EMAx"))
+     ((eq mac-file-creator 'none) nil)
+     (t (mac-set-file-creator buffer-file-name (or mac-file-creator "EMAx"))))
+  (mac-read-file-creator-and-type)))
  
 
 ;; (do-applescript (format "try
