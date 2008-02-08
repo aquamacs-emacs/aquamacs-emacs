@@ -1468,8 +1468,10 @@ name(\\([^)]+\\))\\)\\|\
       ;; error to be displayed to the value it has in the current buffer.
       (with-current-buffer error-file-buffer
 	(set (make-local-variable 'TeX-command-buffer) command-buffer))
-      (print (+ offset line))
-      (goto-line (+ offset line))
+      (if (fboundp 'buffer-line-number)
+	  ;; To Do: move buffer/file-line-number out of auctex-config
+	  (goto-line (+ offset (buffer-line-number line)))
+	(goto-line (+ offset line)))
       (if (not (string= string " "))
 	  (search-forward string nil t))
       
@@ -1544,7 +1546,10 @@ name(\\([^)]+\\))\\)\\|\
 	(set (make-local-variable 'TeX-command-buffer) command-buffer))
       ;; Find line and string
       (when line
-	(goto-line (+ offset line))
+	(if (fboundp 'buffer-line-number)
+	  ;; To Do: move buffer/file-line-number out of auctex-config
+	  (goto-line (+ offset (buffer-line-number line)))
+	(goto-line (+ offset line)))
 	(beginning-of-line 0)
 	(let ((start (point)))
 	  (goto-line (+ offset line-end))
