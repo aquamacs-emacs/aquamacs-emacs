@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.42 2008/01/15 00:42:46 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.43 2008/02/08 11:49:53 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -103,10 +103,10 @@ should be used as the interface to this function."
     ;; the frame creation function doesn't set all parameters
     ;; set the remaining ones manually
     ;; bug reported to pretest bug list 13/Jan/2006
-
-    (mapc (lambda (x)
-	    (assq-delete-all (car x) newparms))
-		 (frame-parameters f))
+   ; (make-frame-visible f) ; DEBUG REMOVE MEEE!!!!
+    ;; (mapc (lambda (x)
+;; 	    (assq-delete-all (car x) newparms))
+;; 		 (frame-parameters f))
     ;; set remaining parameters
     (modify-frame-parameters f newparms)
   
@@ -114,6 +114,7 @@ should be used as the interface to this function."
     (run-hook-with-args 'smart-frame-positioning-hook f)
       
     (setq newpos (find-good-frame-position oldframe f))  
+
     (when (frame-parameter f 'fit-frame)
 	;; delete height and width - these parameters
 	;; are preserved and will stay untouched
@@ -125,6 +126,7 @@ should be used as the interface to this function."
 		 (assq-delete-all 'width newpos))))
     ; make sure we don't make it visible prematurely
     (setq newpos (assq-delete-all 'visibility newpos))
+
     (modify-frame-parameters f newpos)
     ;; stay within the available screen
     (smart-move-frame-inside-screen f)
@@ -217,8 +219,9 @@ pixels apart if possible."
 	     (max-y (nth 3 rect))
 	     (preassigned 
 	      (smart-fp--get-frame-position-assigned-to-buffer-name)))
-	
-	(or preassigned	;; if preassigned, return that.
+
+	(smart-fp--convert-negative-ordinates 
+	 (or preassigned	;; if preassigned, return that.
 	    (let* ( ;; eval is necessary, because left can be (+ -1000)
 		  ;; which is not an integer!
 		  ( y (eval (frame-parameter old-frame 'top)) )
@@ -331,8 +334,7 @@ pixels apart if possible."
 		(assq-set 'height (smart-fp--pixel-to-char-height
 				   next-h new-frame) 'new-frame-parameters)
 		;; return this 
-		(smart-fp--convert-negative-ordinates 
-		 new-frame-parameters))))))))
+		new-frame-parameters))))))))
 
 (defvar smart-frame-positioning-old-frame-creation-function 
 	(smart-fp--get-frame-creation-function))
@@ -461,6 +463,59 @@ The file is specified in `smart-frame-position-file'."
       (cdr (assq-string-equal (buffer-name) smart-frame-prior-positions)))
 
 
+;; The following functions provide heuristics that attempt to deal with the fact that
+;; Emacs 22 has no notion of multiple monitors and resulting, non-rectangular displays.
+
+(defun smart--mac-display-width-valid-p ()
+  "Return non-nil if the display width covers the whole viewable area.
+`mac-display-available-pixel-bounds' only returns results for one 
+monitor, even if several monitors are used. This function contains
+a heuristic that tries to tell whether we have a multiple-monitor
+situation."
+  (and (fboundp 'mac-display-available-pixel-bounds)
+       (> (+ (nth 2 (mac-display-available-pixel-bounds)) 500)
+	  (x-display-pixel-width))))
+
+(defun smart--mac-display-height-valid-p ()
+  "Return non-nil if the display width covers the whole viewable area.
+`mac-display-available-pixel-bounds' only returns results for one 
+monitor, even if several monitors are used. This function contains
+a heuristic that tries to tell whether we have a multiple-monitor
+situation."
+  (and (fboundp 'mac-display-available-pixel-bounds)
+       (> (+ (nth 3 (mac-display-available-pixel-bounds)) 300)
+	  (x-display-pixel-height))))
+
+ 
+(defun smart--frame-on-primary-display-p (frame)
+  "Return non-nil if frame is probably completely on primary display"
+   (if (fboundp 'mac-display-available-pixel-bounds)
+       (let ( (x (eval (frame-parameter frame 'left)))
+	      (y (eval (frame-parameter frame 'top)))
+	      (w (smart-fp--char-to-pixel-width (eval (frame-parameter frame 'width)) frame))
+	      (h (smart-fp--char-to-pixel-height (eval (frame-parameter frame 'height)) frame))
+	      (b (mac-display-available-pixel-bounds)))
+	 ;; heuristic
+	 (and (>= (+ x 300) (nth 0 b))
+	      (>= (+ y 150) (nth 1 b))
+	      (<= (- (+ x w) 300) (nth 2 b))
+	      (<= (- (+ y h) 150) (nth 3 b))))
+     t))
+
+
+(defun smart-fp--convert-negative-ordinates (parms)
+  "Converts screen ordinates of the form -x to a list (+ -x)."
+  (mapcar (lambda (o)
+	    (if (and (integerp (cdr-safe o))
+		     (< (cdr o) 0))
+		`(,(car o) . (+ ,(cdr o)))
+		; else
+		o))
+	  parms))
+
+
+
+
 (defun smart-move-frame-inside-screen (&optional frame)
   "Move a frame inside the available screen boundaries. 
 The frame specified in FRAME is moved so it is entirely visible on
@@ -513,45 +568,49 @@ on the main screen, i.e. where the menu is."
       (setq min-y max-y)
       (setq max-y (* 2 max-y)))
  
-    (modify-frame-parameters 
-     frame
-     (let* ((next-x (max min-x 
-			 (min
-			  (- max-x next-w )
-			  next-x)))
-	    (next-y (max min-y 
-			 (min 
-			   (- max-y next-h smart-fp--frame-title-bar-height)  ;; why subtract smart-fp--frame-title-bar-height ???
-			  next-y)))
-	    (next-wc  (if (<= next-w (- max-x next-x))
-			  next-wc
-			(smart-fp--pixel-to-char-width (- max-x next-x) 
-						       frame 'round-lower)))
-	    (next-hc (if (<= next-h (- max-y next-y ))
-			 next-hc
-		       (smart-fp--pixel-to-char-height (- max-y next-y)
-						       frame 'round-lower))))
-       `((left .
-	       ,next-x)
-	 (top .
-	      ,next-y)
-	 (width .
-		,next-wc)   
-	 (height .
-		 ,next-hc)))))) 
+    (when (smart--frame-on-primary-display-p frame)
+      (if (smart--mac-display-width-valid-p)
+	(modify-frame-parameters 
+	 frame
+	 (let* ((next-x (max min-x 
+			     (min
+			      (- max-x next-w )
+			      next-x)))
+	    
+		(next-wc  (if (<= next-w (- max-x next-x))
+			      next-wc
+			    (smart-fp--pixel-to-char-width (- max-x next-x) 
+							   frame 'round-lower)))
+		)
+	   `((left .
+		   ,next-x)
+	 
+	     (width .
+		    ,next-wc)   
+	     ))))
+      (if (smart--mac-display-height-valid-p)
+	(modify-frame-parameters 
+	 frame
+	 (let* (
+		(next-y (max min-y 
+			     (min 
+			      (- max-y next-h smart-fp--frame-title-bar-height)	
+			      ;; why subtract smart-fp--frame-title-bar-height ???
+			      next-y)))
+	    
+		(next-hc (if (<= next-h (- max-y next-y ))
+			     next-hc
+			   (smart-fp--pixel-to-char-height (- max-y next-y)
+							   frame 'round-lower))))
+	   `(
+	     (top .
+		  ,next-y)
+	    
+	     (height .
+		     ,next-hc))))))))
 
 	 
     
-(defun smart-fp--convert-negative-ordinates (parms)
-  "Converts screen ordinates of the form -x to a list (+ -x)."
-  (mapcar (lambda (o)
-	    (if (and (integerp (cdr-safe o))
-		     (< (cdr o) 0))
-		`(,(car o) . (+ ,(cdr o)))
-		; else
-		o))
-	  parms))
-
 
 (require 'fit-frame)
 (defun scatter-frames ()
