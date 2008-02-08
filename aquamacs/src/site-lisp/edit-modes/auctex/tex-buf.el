@@ -27,6 +27,11 @@
 
 ;; This file provides support for external commands.
 
+;; This file has been patched in Aquamacs to
+;; - not use `pop-to-buffer' when a local set-buffer should be used
+;; - and convert file to buffer line numbers when in longlines-mode
+;; David Reitter 01/2008
+
 ;;; Code:
 
 (require 'tex)
