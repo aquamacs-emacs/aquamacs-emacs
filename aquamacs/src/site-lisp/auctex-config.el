@@ -4,7 +4,7 @@
 ;; originally authored by Kevin Walzer
 ;; Keywords: auctex
  
-;; Last change: $Id: auctex-config.el,v 1.34 2008/02/04 23:33:52 davidswelt Exp $
+;; Last change: $Id: auctex-config.el,v 1.35 2008/02/08 19:12:45 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -134,6 +134,7 @@ This will normally be the line number at that position, unless
   (if longlines-mode
       (let ((pos 1) (count 0))
 	(while (and (> file-line-number 0)
+		    (< pos (buffer-size))
 		    (setq pos (text-property-any pos (buffer-size) 'hard t)))
 	  (if (eq (char-after pos) 10)
 	      (setq file-line-number (1- file-line-number)))
