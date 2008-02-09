@@ -1354,7 +1354,7 @@ You might want to examine and modify the free variables `file',
 \\(?:/+\\(?:\\.+[^()\r\n{} /]*\\|[^()\r\n{} ./]+\
 \\(?: [^()\r\n{} ./]+\\)*\\(?:\\.[-0-9a-zA-Z_.]*\\)?\\)?\\)*\\)\
 )*\\(?: \\|\r?$\\)\\|\
-\\()\\))*\\(?:[ >]\\|\r?$\\)\\|\
+\\()\\))*\\|\
  !\\(?:offset(\\([---0-9]+\\))\\|\
 name(\\([^)]+\\))\\)\\|\
 ^\\(\\(?:Overfull\\|Underfull\\|Tight\\|Loose\\)\
@@ -1608,7 +1608,7 @@ name(\\([^)]+\\))\\)\\|\
 			 (goto-line (point-min))
 			 (search-forward error nil t 1)))
 		  (progn
-		    (re-search-forward "^l.")
+		    (re-search-forward "^l\\.")
 		    (re-search-forward "^ [^\n]+$")
 		    (forward-char 1)
 		    (let ((start (point)))
