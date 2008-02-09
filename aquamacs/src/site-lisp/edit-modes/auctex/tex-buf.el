@@ -206,7 +206,7 @@ at bottom if LINE is nil."
   (let ((buffer (TeX-active-buffer)))
     (if buffer
 	(let ((old-buffer (current-buffer)))
-	  ;; (pop-to-buffer buffer t)
+	  (pop-to-buffer buffer t)
 	  (bury-buffer buffer)
 	  (goto-char (point-max))
 	  (recenter (if line
