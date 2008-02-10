@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: site-start.el,v 1.36 2008/02/04 23:01:41 davidswelt Exp $
+;; Last change: $Id: site-start.el,v 1.37 2008/02/10 23:27:29 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -37,7 +37,7 @@
 
 ;; Version information
 
-(defvar aquamacs-version "1.3rc2"
+(defvar aquamacs-version "1.3rc3"
 "A string with Aquamacs' version number.
 The format of the string is undefined. 
 For a reliable numerical representation, use `aquamacs-version-id'.")
@@ -82,9 +82,11 @@ Changes in this code are ignored during the online version check.")
 	      (setq features (delete p features)))
 	    aq-preloaded))
 
-  (require 'aquamacs)
-  (aquamacs-setup)
 
+  (require 'aquamacs)
+  (require 'aquamacs-aux) ;; calls (aquamacs-setup)
+  ;; fix function associations in load-history
+  (aquamacs-cleanup-load-history)
 
 
 
