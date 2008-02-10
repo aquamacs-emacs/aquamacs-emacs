@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.26 2007/07/20 19:56:18 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.27 2008/02/10 22:53:24 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -128,10 +128,15 @@ are still subtracted."
     ret))
 
 (defun assq-set (key val alist)
+"Sets value associated with KEY to VAL in ALIST.
+Comparison of keys is done with `eq'."
   (set alist (assq-delete-all key (eval alist)))
   (add-to-list alist (cons key  val))) 
 
 (defun assq-set-equal (key val alist)
+"Sets value associated with the string KEY to VAL in ALIST.
+Comparison of keys is done with `equal'."
+
   (set alist (assq-delete-all-equal key (eval alist)))
   (add-to-list alist (cons key  val))) 
 
