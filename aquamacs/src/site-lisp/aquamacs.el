@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.129 2008/02/06 11:56:22 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.130 2008/02/10 23:11:41 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -38,10 +38,16 @@
 (setq aq-starttime (current-time))
 (ats "started")
 
+(defvar aquamacs--aquamacs-el-file load-file-name)
+
+
 (defun aquamacs-setup ()
  
 
   (aquamacs-mac-initialize) ;; call at runtime only
+  (defvar aquamacs-mac-application-bundle-directory
+    "This is actually defined in mac-extra-functions.el")
+
   (ats "aquamacs-mac-initialize done")
 
 
