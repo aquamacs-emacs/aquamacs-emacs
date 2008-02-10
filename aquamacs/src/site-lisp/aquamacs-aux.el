@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-aux.el,v 1.1 2008/02/10 23:26:45 davidswelt Exp $ 
+;; Last change: $Id: aquamacs-aux.el,v 1.2 2008/02/10 23:29:04 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -39,7 +39,7 @@ in `aquamacs-setup'."
 
   (add-to-list 'load-history 
 	       (cons aquamacs--aquamacs-el-file
-		     (assoc aquamacs--aquamacs-aux-file load-history)))
+		     (cdr (assoc aquamacs--aquamacs-aux-file load-history))))
   (setq load-history (assq-delete-all-equal aquamacs--aquamacs-aux-file 
 					    load-history)))
 
