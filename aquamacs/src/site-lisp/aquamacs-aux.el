@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-aux.el,v 1.2 2008/02/10 23:29:04 davidswelt Exp $ 
+;; Last change: $Id: aquamacs-aux.el,v 1.3 2008/02/11 08:48:59 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -38,7 +38,10 @@ in `aquamacs-setup'."
 ;; assoc (as opposed to assoc-string) works fine in this case
 
   (add-to-list 'load-history 
-	       (cons aquamacs--aquamacs-el-file
+	       (cons (concat (directory-file-name 
+			      (file-name-directory
+			       (file-truename aquamacs--aquamacs-aux-file)))
+			     "/aquamacs.el")
 		     (cdr (assoc aquamacs--aquamacs-aux-file load-history))))
   (setq load-history (assq-delete-all-equal aquamacs--aquamacs-aux-file 
 					    load-history)))
