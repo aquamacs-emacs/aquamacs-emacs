@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.130 2008/02/10 23:11:41 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.131 2008/02/11 08:48:25 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -38,7 +38,6 @@
 (setq aq-starttime (current-time))
 (ats "started")
 
-(defvar aquamacs--aquamacs-el-file load-file-name)
 
 
 (defun aquamacs-setup ()
