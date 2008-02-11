@@ -4,7 +4,7 @@
 ;; originally authored by Kevin Walzer
 ;; Keywords: auctex
  
-;; Last change: $Id: auctex-config.el,v 1.35 2008/02/08 19:12:45 davidswelt Exp $
+;; Last change: $Id: auctex-config.el,v 1.36 2008/02/11 10:22:49 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -258,17 +258,18 @@ Calls `aquamacs-tex-pdf-viewer' to display the PDF file THE-FILE."
       (move-to-column (1- column-number)))))
 
 
-(aquamacs-set-defaults 
- '((TeX-PDF-mode t)
-;; Toolbar business
-   (TeX-bar-TeX-all-button-alists
-    (TeX-bar-TeX-button-alist aquamacs-default-toolbarx-meaning-alist))
-   (TeX-bar-LaTeX-all-button-alists
-    (TeX-bar-LaTeX-button-alist aquamacs-default-toolbarx-meaning-alist))
-
-   (TeX-bar-TeX-buttons
-    (open-file save-buffer write-file cut copy paste undo
-	       [separator nil]   tex next-error view bibtex))))
+(if (boundp 'aquamacs-default-toolbarx-meaning-alist) ;; not on TTY
+    (aquamacs-set-defaults 
+     '((TeX-PDF-mode t)
+       ;; Toolbar business
+       (TeX-bar-TeX-all-button-alists
+	(TeX-bar-TeX-button-alist aquamacs-default-toolbarx-meaning-alist))
+       (TeX-bar-LaTeX-all-button-alists
+	(TeX-bar-LaTeX-button-alist aquamacs-default-toolbarx-meaning-alist))
+       
+       (TeX-bar-TeX-buttons
+	(open-file save-buffer write-file cut copy paste undo
+		   [separator nil]   tex next-error view bibtex)))))
 
 
  
