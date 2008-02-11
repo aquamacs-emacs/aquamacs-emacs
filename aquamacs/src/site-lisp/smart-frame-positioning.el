@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.43 2008/02/08 11:49:53 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.44 2008/02/11 10:21:16 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -524,6 +524,7 @@ boundaries.
 The function will fail to do its job when the Dock is not displayed
 on the main screen, i.e. where the menu is."
   (interactive)
+  (when window-system
   (let* ((frame (or frame (selected-frame)))
 	 ;; on some systems, we can retrieve the available pixel width with
 	 ;; non-standard methods.
@@ -607,7 +608,7 @@ on the main screen, i.e. where the menu is."
 		  ,next-y)
 	    
 	     (height .
-		     ,next-hc))))))))
+		     ,next-hc)))))))))
 
 	 
     
