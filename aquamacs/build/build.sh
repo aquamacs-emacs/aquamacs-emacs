@@ -158,9 +158,8 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
 
     rm -rvf ${DEST}/Aquamacs*.tar.bz2  >>$LOG 2>>$LOG 
     cd ${DEST}
-	ls -la
     if [ -e "${DEST}/Aquamacs Emacs.app" ]; then
-	tar cvjf ${NAME}.tar.bz2 Aquamacs\ Emacs.app  >>$LOG 2>>$LOG
+	tar cjf ${NAME}.tar.bz2 Aquamacs\ Emacs.app  >>$LOG 2>>$LOG
 	echo "Result (if successful) in " ${NAME}.tar.bz2  >>$LOG  
 	
     else
