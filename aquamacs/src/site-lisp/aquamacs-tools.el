@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.27 2008/02/10 22:53:24 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.28 2008/02/11 10:15:00 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -65,6 +65,7 @@
 	   (or ;; ensure that the minibuffer shows up on screen
 	    (not (fboundp 'mac-display-available-pixel-bounds))
 	    (not (fboundp 'frame-total-pixel-height))
+	    (null (frame-parameter f 'top)) ;; for TTY use
 	    (< (+ (eval (frame-parameter f 'top)) 
 		  (frame-total-pixel-height f))
 	       (nth 3 (mac-display-available-pixel-bounds))))
