@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.133 2008/02/11 09:45:03 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.134 2008/02/11 10:23:56 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -359,7 +359,6 @@ Separate paths from file names with --."
    )
 
 ;; on by default
-
 (if (and (fboundp 'mac-inline-input-method-mode) 
 	 (not (boundp 'mac-inline-input-method-missing)) 
 	 window-system)
@@ -1086,8 +1085,10 @@ if modified buffers exist."
 	(aquamacs-save-buffers-kill-emacs)
       ;; Reaches here if the user has canceled the quit.
       (mac-resume-apple-event ae -128))))
-(define-key mac-apple-event-map [core-event quit-application]
-  'aquamacs-mac-ae-quit-application)
+
+(if (and (boundp 'mac-apple-event-map) mac-apple-event-map)
+    (define-key mac-apple-event-map [core-event quit-application]
+      'aquamacs-mac-ae-quit-application))
 
 
   ;; workaround for people who still call this in their .emacs
