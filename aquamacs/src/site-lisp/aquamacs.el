@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.132 2008/02/11 08:52:31 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.133 2008/02/11 09:45:03 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -360,28 +360,20 @@ Separate paths from file names with --."
 
 ;; on by default
 
-(unless (fboundp 'mac-inline-input-method-mode)
-  (defun mac-inline-input-method-mode ( &optional onoff)
-      (interactive)
-      (message 
-       "mac-inline-input-method-mode not available without window system."))
-  (defvar mac-inline-input-method-mode nil))
-
-
 (if (and (fboundp 'mac-inline-input-method-mode) 
-	 (not (boundp 'mac-inline-input-method-missing)) window-system)
+	 (not (boundp 'mac-inline-input-method-missing)) 
+	 window-system)
     (progn
       (aquamacs-set-defaults '((mac-inline-input-method-mode t)))
- ;     (mac-inline-input-method-mode t)
-)
+      )
   ;; otherwise, redefine the mode function
   ;; so that it won't be called when loading custom-file.
-;  (aquamacs-set-defaults '((mac-inline-input-method-mode nil)))
   (defvar mac-inline-input-method-missing t)
+  (defvar mac-inline-input-method-mode nil)
   (defun mac-inline-input-method-mode ( &optional onoff)
       (interactive)
       (message 
-       "mac-inline-input-method-mode not available without window system.")))
+       "mac-input-method-mode not available without window system.")))
 
 
   ;; set a nntp server if there's none
