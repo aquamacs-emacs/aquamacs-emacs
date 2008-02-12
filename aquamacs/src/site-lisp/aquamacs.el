@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.134 2008/02/11 10:23:56 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.135 2008/02/12 08:48:06 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -790,7 +790,7 @@ un-Mac-like way when you select text and copy&paste it.")))
         (propertize 
 	 "Aquamacs is based on GNU Emacs 22, a part of the GNU/Linux system."
 	 'face (list :family "Lucida Grande" :height 140))
-	(floor (/ (frame-pixel-width) 8)))
+	(if window-system (floor (/ (frame-pixel-width) 8)) (frame-width)))
      ;;The GPL stipulates that the following message is shown.
 					;(aquamacs-wrap-string
      (aquamacs-wrap-string
@@ -799,7 +799,8 @@ un-Mac-like way when you select text and copy&paste it.")))
 It is Free Software: you can improve and redistribute it under the GNU General Public License, version 3 or later. Copyright (C) 2008 Free Software Foundation, Inc. (C) 2008 D. Reitter. No Warranty.") 
       'face (list :family "Lucida Grande" :height 110)) 
       ;; this one is rather ad-hoc, but should work:
-      (floor (/ (frame-pixel-width) 5.75)))))
+      (if window-system (floor (/ (frame-pixel-width) 5.75)) 
+	(frame-width)))))
 
 ;; (progn (message "%s" (startup-echo-area-message)) (sit-for 4))
 ;; 
