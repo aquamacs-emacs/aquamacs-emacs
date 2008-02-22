@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: site-start.el,v 1.37 2008/02/10 23:27:29 davidswelt Exp $
+;; Last change: $Id: site-start.el,v 1.38 2008/02/22 09:58:48 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -37,7 +37,7 @@
 
 ;; Version information
 
-(defvar aquamacs-version "1.3rc3"
+(defvar aquamacs-version "1.3"
 "A string with Aquamacs' version number.
 The format of the string is undefined. 
 For a reliable numerical representation, use `aquamacs-version-id'.")
