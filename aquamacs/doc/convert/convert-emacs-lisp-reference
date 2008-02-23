@@ -1,0 +1,61 @@
+#!/bin/sh
+
+P=`pwd`
+
+echo "Give path to manual, e.g. ./convert-emacs-manual ~/Projects/emacs/elisp/manual"
+echo "If no path given, manual is downloaded from GNU."
+
+rm -r /tmp/emanual 2>/dev/null
+
+if [ "$1" ]; then 
+    cp -r "$1"/html_node /tmp/emanual
+    cp "$1"/index.html /tmp/manual.html # needed for GNU head / last change
+    cd /tmp/emanual 
+else
+
+# untested:
+#    mkdir /tmp/emanual
+    curl -o /tmp/manual.tgz http://www.gnu.org/software/emacs/manual/elisp.html_node.tar.gz 
+    cd /tmp
+    tar xvzf /tmp/manual.tgz  
+    tar xvzf manual.tgz html_node/Index.html
+    mv html_node/Index.html html_node/Index_general.html
+    tar xvzf manual.tgz html_node/index.html
+
+    mv html_node emanual
+    curl -o /tmp/manual.html  http://www.gnu.org/software/emacs/manual/elisp.html
+    
+    perl -i -p -e 's/Index\.html/Index_general.html/sg' /tmp/emanual/*.html
+
+fi
+
+
+
+cp $P/manual-sources/aquamacs.css /tmp/emanual/
+
+cp $P/manual-sources/gnu-head-sm.jpg /tmp/emanual/
+
+# contains OS X specific information now - don't delete any more
+#rm /tmp/emanual/Mac-*.html /tmp/emanual/Windows-*.html
+# leave Windows info for now
+
+
+perl -i -p -e 's/<\/head>/<link rel="stylesheet" href="aquamacs.css" type="text\/css" \/><\/head>/i' /tmp/emanual/*.html
+ 
+
+$P/convert-emacs-manual-pages /tmp/emanual/*.html
+$P/convert-emacs-reference-title /tmp/emanual/index.html 
+
+rm -r "$P"/../EmacsLispReference
+mv /tmp/emanual $P/../EmacsLispReference
+
+cd "$P"
+pwd
+open ../EmacsLispReference
+echo "Now go ahead and run the Help Indexer on this folder!"
+echo "Press Return when done!"
+
+read
+
+cd ..
+tar czf EmacsLispReference.tgz EmacsLispReference
