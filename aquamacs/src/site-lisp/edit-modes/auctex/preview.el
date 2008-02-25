@@ -2485,7 +2485,7 @@ to add the preview functionality."
   (easy-menu-define preview-menu LaTeX-mode-map
     "This is the menu for preview-latex."
     '("Preview"
-      "Generate previews"
+      ["Generate previews" nil :active nil]
       ["(or toggle) at point" preview-at-point]
       ["for environment" preview-environment]
       ["for section" preview-section]
@@ -2493,14 +2493,14 @@ to add the preview functionality."
       ["for buffer" preview-buffer]
       ["for document" preview-document]
       "---"
-      "Remove previews"
+      ["Remove previews" nil :active nil]
       ["at point" preview-clearout-at-point]
       ["from section" preview-clearout-section]
       ["from region" preview-clearout (preview-mark-active)]
       ["from buffer" preview-clearout-buffer]
       ["from document" preview-clearout-document]
       "---"
-      "Turn preamble cache"
+      ["Turn preamble cache" nil :active nil]
       ["on" preview-cache-preamble]
       ["off" preview-cache-preamble-off]
       "---"
