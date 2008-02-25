@@ -1,13 +1,27 @@
-;;; -*- emacs-lisp -*-
-;;; scrlttr2.el -- AUC TeX style for scrlttr2.cls
+;;; scrlttr2.el --- AUCTeX style for scrlttr2.cls.
 
-;; Copyright (C) 2002 Free Software Foundation
-;; License: GPL, see the file COPYING in the base directory of AUC TeX
+;; Copyright (C) 2002, 2007 Free Software Foundation
 
 ;; Author: Mark Trettin <Mark.Trettin@gmx.de>
 ;; Created: 2002-10-26
-;; Version: $Id: scrlttr2.el,v 1.4 2007/03/15 19:22:04 davidswelt Exp $
 ;; Keywords: tex
+
+;; This file is part of AUCTeX.
+
+;; AUCTeX is free software; you can redistribute it and/or modify it
+;; under the terms of the GNU General Public License as published by
+;; the Free Software Foundation; either version 3, or (at your option)
+;; any later version.
+
+;; AUCTeX is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with AUCTeX; see the file COPYING.  If not, write to the Free
+;; Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+;; 02110-1301, USA.
 
 ;;; Commentary: 
 
@@ -21,9 +35,8 @@
 ;; I left out any length and positioning macros since those should be
 ;; set in a personal `*.lco'-File. IMHO.
 
-;; This file is part of AUCTeX.
-
 ;;; Code
+
 (TeX-add-style-hook "scrlttr2"
   (lambda ()
     (TeX-add-symbols
@@ -127,72 +140,64 @@
    (when (and (featurep 'font-latex)
 	      (eq TeX-install-font-lock 'font-latex-setup))
      ;; Textual keywords
-     (setq font-latex-match-textual-keywords-local
-	   (append font-latex-match-textual-keywords-local
-		   '("addrentry"
-		     "adrentry"
-		     "bankname"
-		     "cc"
-		     "ccname"
-		     "closing"
-		     "customername"
-		     "datename"
-		     "emailname"
-		     "encl"
-		     "enclname"
-		     "faxname"
-		     "firstfoot"
-		     "firsthead"
-		     "headfromname"
-		     "headtoname"
-		     "invoicename"
-		     "myrefname"
-		     "nextfoot"
-		     "nexthead"
-		     "opening"
-		     "pagename"
-		     "phonename"
-		     "ps"
-		     "subjectname"
-		     "wwwname"
-		     "yourmailname"
-		     "yourrefname")))
-     (font-latex-match-textual-make)
+     (font-latex-add-keywords '(("addrentry" "{{{{{{{{{")
+				("adrentry" "{{{{{{{{")
+				("bankname" "{")
+				("cc" "{")
+				("ccname" "{")
+				("closing" "{")
+				("customername" "{")
+				("datename" "{")
+				("emailname" "{")
+				("encl" "{")
+				("enclname" "{")
+				("faxname" "{")
+				("firstfoot" "{")
+				("firsthead" "{")
+				("headfromname" "{")
+				("headtoname" "{")
+				("invoicename" "{")
+				("myrefname" "{")
+				("nextfoot" "{")
+				("nexthead" "{")
+				("opening" "{")
+				("pagename" "{")
+				("phonename" "{")
+				("ps" "")
+				("subjectname" "{")
+				("wwwname" "{")
+				("yourmailname" "{")
+				("yourrefname" "{"))
+			      'textual)
      ;; Function keywords
-     (setq font-latex-match-function-keywords-local
-	   (append font-latex-match-function-keywords-local
-		   '("AtBeginLetter"
-		     "LetterOptionNeedsPapersize"
-		     "LoadLetterOption"
-		     "addrchar"
-		     "adrchar"
-		     "ifkomavarempty")))
-     (font-latex-match-function-make)
+     (font-latex-add-keywords '(("AtBeginLetter" "{")
+				("LetterOptionNeedsPapersize" "{{")
+				("LoadLetterOption" "{")
+				("addrchar" "{")
+				("adrchar" "{")
+				("ifkomavarempty" "*{{{"))
+			      'function)
      ;; Variable keywords
-     (setq font-latex-match-variable-keywords-local
-	   (append font-latex-match-variable-keywords-local
-		   '("KOMAoptions"
-		     "addtokomafont"
-		     "addtolengthplength"
-		     "addtoreffields"
-		     "newcaptionname"
-		     "newkomavar"
-		     "providecaptionname"
-		     "renewcaptionname"
-		     "setkomafont"
-		     "setkomavar"
-		     "setlengthtoplength"
-		     "usekomafont"
-		     "usekomavar"
-		     "useplength")))
-     (font-latex-match-variable-make)
+     (font-latex-add-keywords '(("KOMAoptions" "{")
+				("addtokomafont" "{{")
+				("addtolengthplength" "[{{")
+				("addtoreffields" "{")
+				("newcaptionname" "{{{")
+				("newkomavar" "*[{")
+				("providecaptionname" "{{{")
+				("renewcaptionname" "{{{")
+				("setkomafont" "{{")
+				("setkomavar" "*{[{")
+				("setlengthtoplength" "[{{")
+				("usekomafont" "{")
+				("usekomavar" "*[{")
+				("useplength" "{"))
+			      'variable)
      ;; Warning keywords
-     (setq font-latex-match-warning-keywords-local
-	   (append font-latex-match-warning-keywords-local
-		   '("cleardoublestandardpage"
-		     "cleardoubleplainpage"
-		     "cleardoubleemptypage")))
-     (font-latex-match-warning-make))))
+     (font-latex-add-keywords '("cleardoublestandardpage"
+				"cleardoubleplainpage"
+				"cleardoubleemptypage")
+			      'warning))))
 
 (defun TeX-arg-KOMA-scrlttr-vars (optional &optional prompt)
   "Prompt for KOMA-Script's scrlttr2 predefined variables with completion."
@@ -230,4 +235,5 @@
       ("title"))
     nil t)
    optional))
+
 ;;; scrlttr2.el ends here

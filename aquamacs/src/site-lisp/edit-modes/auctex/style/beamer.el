@@ -1,11 +1,27 @@
 ;;; beamer.el --- AUCTeX style for the latex-beamer class
 
 ;; Copyright (C) 2003, 2004, 2005 Free Software Foundation
-;; License: GPL, see the file COPYING in the base directory of AUCTeX
 
 ;; Author: Thomas Baumann <thomas.baumann@ch.tum.de>
 ;; Created: 2003-12-20
 ;; Keywords: tex
+
+;; This file is part of AUCTeX.
+
+;; AUCTeX is free software; you can redistribute it and/or modify it
+;; under the terms of the GNU General Public License as published by
+;; the Free Software Foundation; either version 3, or (at your option)
+;; any later version.
+
+;; AUCTeX is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with AUCTeX; see the file COPYING.  If not, write to the Free
+;; Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+;; 02110-1301, USA.
 
 ;;; Commentary:
 
@@ -114,12 +130,7 @@
    ;; Fontification
    (when (and (featurep 'font-latex)
 	      (eq TeX-install-font-lock 'font-latex-setup))
-     (add-to-list 'font-latex-match-slide-title-keywords-local
-		  "frametitle")
-     (font-latex-match-slide-title-make)
-     ;; Tell font-lock about the update.
-     (setq font-lock-set-defaults nil)
-     (font-lock-set-defaults))))
+     (font-latex-add-keywords '(("frametitle" "<[{")) 'slide-title))))
 
 (defun TeX-arg-beamer-overlay-spec (optional &optional prompt)
   "Prompt for overlay specification." 
@@ -282,3 +293,5 @@ also be a string.  Then the length of the string is used."
 		      LaTeX-beamer-font-themes))))
     nil nil nil)
    t))
+
+;;; beamer.el ends here

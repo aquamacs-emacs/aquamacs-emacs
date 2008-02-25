@@ -1,9 +1,28 @@
 ;;; paralist.el -- AUCTeX style for paralist.sty
 
-;; License:  GPL, see the file COPYING in the base directory of AUCTeX
+;; Copyright (C) 2003, 2004, 2005 Free Software Foundation, Inc.
+
 ;; Author:   Ralf Angeli <angeli@iwi.uni-sb.de>
+;; Maintainer: auctex-devel@gnu.org
 ;; Created:  2003-10-22
 ;; Keywords: tex
+
+;; This file is part of AUCTeX.
+
+;; AUCTeX is free software; you can redistribute it and/or modify it
+;; under the terms of the GNU General Public License as published by
+;; the Free Software Foundation; either version 3, or (at your option)
+;; any later version.
+
+;; AUCTeX is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with AUCTeX; see the file COPYING.  If not, write to the Free
+;; Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+;; 02110-1301, USA.
 
 ;;; Commentary:
 
@@ -68,12 +87,10 @@
    ;; Fontification
    (when (and (featurep 'font-latex)
 	      (eq TeX-install-font-lock 'font-latex-setup))
-     (setq font-latex-match-variable-keywords-local
-	   (append font-latex-match-variable-keywords-local
-		   '("setdefaultitem"
-		     "setdefaultenum"
-		     "setdefaultleftmargin")))
-     (font-latex-match-variable-make))))
+     (font-latex-add-keywords '(("setdefaultitem" "{{{{")
+				("setdefaultenum" "{{{{")
+				("setdefaultleftmargin" "{{{{{{"))
+			      'variable))))
 
 (defvar LaTeX-paralist-package-options '("newitem" "olditem" "newenum"
 					 "oldenum" "alwaysadjust"

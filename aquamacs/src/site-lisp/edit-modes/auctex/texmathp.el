@@ -1,34 +1,28 @@
-;; texmathp.el -- Code to check if point is inside LaTeX math environment
-;; Copyright (c) 1998 Carsten Dominik
-;; Copyright (C) 2004 Free Software Foundation, Inc.
+;;; texmathp.el -- Code to check if point is inside LaTeX math environment
 
-;; texmathp.el,v 1.28 1998/11/23 15:19:44 dominik Exp
+;; Copyright (C) 1998, 2004 Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <dominik@strw.LeidenUniv.nl>
+;; Maintainer: auctex-devel@gnu.org
 ;; Keywords: tex
-;;
-;; New versions: http://strw.leidenuniv.nl/~dominik/Tools
-;;
-;; This file is not part of GNU Emacs
-;;
-;; COPYRIGHT NOTICE
-;;
-;; This program is free software you can redistribute it and/or modify it
-;; under the terms of the GNU General Public License as published by the Free
-;; Software Foundation; either version 2 of the License, or (at your option)
+
+;; This file is part of AUCTeX.
+
+;; AUCTeX is free software; you can redistribute it and/or modify it
+;; under the terms of the GNU General Public License as published by
+;; the Free Software Foundation; either version 3, or (at your option)
 ;; any later version.
-;;
-;; This program is distributed in the hope that it will be useful, but
-;; WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-;; or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-;; for more details.
-;;
-;; You should have received a copy of the GNU General Public License along
-;; with GNU Emacs.  If you did not, write to the Free Software Foundation,
-;; Inc., 675 Mass Ave., Cambridge, MA 02139, USA.
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
+
+;; AUCTeX is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with AUCTeX; see the file COPYING.  If not, write to the Free
+;; Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+;; 02110-1301, USA.
+
 ;;; Commentary:
 ;;
 ;;  This code provides a function to determine if point in a buffer is
@@ -96,15 +90,6 @@
 ;;--------------------------------------------------------------------------
 
 ;;; Code:
-
-;; Safety-check for the old customize package.
-(eval-and-compile
-  (condition-case () (require 'custom) (error nil))
-  (if (and (featurep 'custom) (fboundp 'custom-declare-variable))
-      nil
-    (defmacro defgroup (&rest args) nil)
-    (defmacro defcustom (var value doc &rest args)
-      (` (defvar (, var) (, value) (, doc))))))
 
 (defgroup texmathp nil
   "Testing TeX and LaTeX documents for math mode."

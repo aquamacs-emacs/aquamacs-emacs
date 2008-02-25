@@ -3,11 +3,11 @@
 ;; Copyright (C) 1993 Marc Gemis <makke@wins.uia.ac.be>
 
 ;; Author: Marc Gemis <makke@wins.uia.ac.be>
-;; Version: $Id: latexinfo.el,v 1.4 2007/03/15 19:21:49 davidswelt Exp $
+;; Version: $Id: latexinfo.el,v 1.5 2008/02/25 18:02:10 davidswelt Exp $
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
+;; the Free Software Foundation; either version 3, or (at your option)
 ;; any later version.
 ;; 
 ;; This program is distributed in the hope that it will be useful,

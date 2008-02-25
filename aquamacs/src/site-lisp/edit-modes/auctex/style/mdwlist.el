@@ -9,7 +9,7 @@
 
 ;; AUCTeX is free software; you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
+;; the Free Software Foundation; either version 3, or (at your option)
 ;; any later version.
 
 ;; AUCTeX is distributed in the hope that it will be useful, but
@@ -52,10 +52,10 @@
    ;; Fontification
    (when (and (featurep 'font-latex)
 	      (eq TeX-install-font-lock 'font-latex-setup))
-     (setq font-latex-match-function-keywords-local
-	   (append font-latex-match-function-keywords-local
-		   '("makecompactlist" "suspend" "resume")))
-     (font-latex-match-function-make))))
+     (font-latex-add-keywords '(("makecompactlist" "{{")
+				("suspend" "[{")
+				("resume" "[{["))
+			      'function))))
 
 (defvar LaTeX-mdwlist-package-options nil
   "Package options for the mdwlist package.")

@@ -1,9 +1,25 @@
-;;; scrpage2.el -- AUCTeX style for scrpage2.sty
+;;; scrpage2.el --- AUCTeX style for scrpage2.sty.
 
-;; License:  GPL, see the file COPYING in the base directory of AUCTeX
 ;; Author:   Ralf Angeli <angeli@iwi.uni-sb.de>
 ;; Created:  2003-11-01
 ;; Keywords: tex
+
+;; This file is part of AUCTeX.
+
+;; AUCTeX is free software; you can redistribute it and/or modify it
+;; under the terms of the GNU General Public License as published by
+;; the Free Software Foundation; either version 3, or (at your option)
+;; any later version.
+
+;; AUCTeX is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with AUCTeX; see the file COPYING.  If not, write to the Free
+;; Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+;; 02110-1301, USA.
 
 ;;; Commentary:
 
@@ -63,42 +79,38 @@
     ;; Fontification
    (when (and (featurep 'font-latex)
 	      (eq TeX-install-font-lock 'font-latex-setup))
-     (setq font-latex-match-variable-keywords-local
-	   (append font-latex-match-variable-keywords-local
-		   '("lehead"
-		     "cehead"
-		     "rehead"
-		     "lefoot"
-		     "cefoot"
-		     "refoot"
-		     "lohead"
-		     "cohead"
-		     "rohead"
-		     "lofoot"
-		     "cofoot"
-		     "rofoot"
-		     "ihead"
-		     "chead"
-		     "ohead"
-		     "ifoot"
-		     "cfoot"
-		     "ofoot"
-		     "automark"
-		     "setfootwidth"
-		     "setheadwidth"
-		     "setfootbotline"
-		     "setfootsepline"
-		     "setheadtopline"
-		     "setheadsepline")))
-     (font-latex-match-variable-make)
-     (setq font-latex-match-function-keywords-local
-	   (append font-latex-match-function-keywords-local
-		   '("deftripstyle"
-		     "defpagestyle"
-		     "newpagestyle"
-		     "renewpagestyle"
-		     "providepagestyle")))
-     (font-latex-match-function-make))))
+     (font-latex-add-keywords '(("lehead" "[{")
+				("cehead" "[{")
+				("rehead" "[{")
+				("lefoot" "[{")
+				("cefoot" "[{")
+				("refoot" "[{")
+				("lohead" "[{")
+				("cohead" "[{")
+				("rohead" "[{")
+				("lofoot" "[{")
+				("cofoot" "[{")
+				("rofoot" "[{")
+				("ihead" "[{")
+				("chead" "[{")
+				("ohead" "[{")
+				("ifoot" "[{")
+				("cfoot" "[{")
+				("ofoot" "[{")
+				("automark" "[{")
+				("setfootwidth" "[{")
+				("setheadwidth" "[{")
+				("setfootbotline" "[{")
+				("setfootsepline" "[{")
+				("setheadtopline" "[{")
+				("setheadsepline" "[{"))
+			      'variable)
+     (font-latex-add-keywords '(("deftripstyle" "{[[{{{{{{")
+				("defpagestyle" "{{{")
+				("newpagestyle" "{{{")
+				("renewpagestyle" "{{{")
+				("providepagestyle" "{{{"))
+			      'function))))
 
 (defvar LaTeX-scrpage2-package-options '("headinclude" "headexclude"
 					 "footinclude" "footexclude"

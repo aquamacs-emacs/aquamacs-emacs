@@ -10,7 +10,7 @@
 
 ;; AUCTeX is free software; you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
+;; the Free Software Foundation; either version 3, or (at your option)
 ;; any later version.
 
 ;; AUCTeX is distributed in the hope that it will be useful, but
@@ -28,6 +28,11 @@
 (require 'tex)
 
 (require 'texinfo)
+;; Make sure the Texinfo mode of AUCTeX is still used after loading
+;; texinfo.el.  (This is only an issue on Emacs 21.)
+(when (and (boundp 'TeX-modes)
+	   (memq 'texinfo-mode TeX-modes))
+  (defalias 'texinfo-mode 'TeX-texinfo-mode))
 
 ;;; Environments:
 
@@ -156,7 +161,7 @@ a comment on the following line indicating the order of arguments
 for @node."
   (interactive)
   (let ((active-mark (and (TeX-active-mark) (not (eq (mark) (point)))))
-	nodes node-name next-node preview-node up-node)
+	nodes node-name next-node previous-node up-node)
     ;; Build list of nodes in current buffer.
     ;; (What about using `imenu--index-alist'?)
     ;; FIXME: Support multi-file documents.

@@ -1,11 +1,31 @@
 ;;; amsmath.el --- Style hook for the AMS-LaTeX amsmath package.
-;;;
-;;; This will also load the amstext, amsbsy and amsopn style files.
-;;; AUTHOR: Carsten Dominik <dominik@strw.leidenuniv.nl>
 
-;; FIXME: What about the copyright for <= 2004?
+;; Copyright (C) 2002, 2005  Free Software Foundation, Inc.
+;; FIXME: What about the copyright for <= 2001?
 
-;; Copyright (C) 2005  Free Software Foundation, Inc.
+;; Author: Carsten Dominik <dominik@strw.leidenuniv.nl>
+;; Maintainer: auctex-devel@gnu.org
+
+;; This file is part of AUCTeX.
+
+;; AUCTeX is free software; you can redistribute it and/or modify it
+;; under the terms of the GNU General Public License as published by
+;; the Free Software Foundation; either version 3, or (at your option)
+;; any later version.
+
+;; AUCTeX is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with AUCTeX; see the file COPYING.  If not, write to the Free
+;; Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+;; 02110-1301, USA.
+
+;;; Commentary:
+
+;; This will also load the amstext, amsbsy and amsopn style files.
 
 ;;; Code:
 
@@ -120,9 +140,8 @@
     (TeX-run-style-hooks "amstext" "amsbsy" "amsopn")
 
     ;; If RefTeX is loaded, make it recognize the amsmath environments.
-    (if (featurep 'reftex)
-	(reftex-add-to-label-alist '(AMSTeX)))
-    )))
+    (when (fboundp 'reftex-add-to-label-alist)
+      (reftex-add-to-label-alist '(AMSTeX))))))
 
 (defun LaTeX-amsmath-env-alignat (env)
   (let ((ncols (read-string "Number of columns: ")))

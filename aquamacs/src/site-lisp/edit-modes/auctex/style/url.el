@@ -11,7 +11,7 @@
 
 ;; AUCTeX is free software; you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
+;; the Free Software Foundation; either version 3, or (at your option)
 ;; any later version.
 
 ;; AUCTeX is distributed in the hope that it will be useful, but
@@ -59,25 +59,21 @@
    ;; Fontification
    (when (and (featurep 'font-latex)
 	      (eq TeX-install-font-lock 'font-latex-setup))
-     (add-to-list 'font-latex-match-reference-keywords-local "path")
-     (add-to-list 'font-latex-match-reference-keywords-local "url")
-     (font-latex-match-reference-make)
-     (mapcar (lambda (keyword)
-	       (add-to-list 'font-latex-match-variable-keywords-local keyword))
-	     '("Url"
-	       "UrlBigBreakPenalty"
-	       "UrlBigBreaks"
-	       "UrlBreakPenalty"
-	       "UrlBreaks"
-	       "UrlFont"
-	       "UrlLeft"
-	       "UrlNoBreaks"
-	       "UrlOrds"
-	       "UrlRight"
-	       "UrlSpecials"
-	       "urldef"
-	       "urlstyle"))
-     (font-latex-match-variable-make)
+     (font-latex-add-keywords '(("path" "{") ("url" "{")) 'reference)
+     (font-latex-add-keywords '(("Url" "")
+				("UrlBigBreakPenalty" "")
+				("UrlBigBreaks" "")
+				("UrlBreakPenalty" "")
+				("UrlBreaks" "")
+				("UrlFont" "")
+				("UrlLeft" "")
+				("UrlNoBreaks" "")
+				("UrlOrds" "")
+				("UrlRight" "")
+				("UrlSpecials" "")
+				("urldef" "")
+				("urlstyle" "{"))
+			      'variable)
      ;; For syntactic fontification, e.g. verbatim constructs.
      (font-latex-set-syntactic-keywords)
      ;; Tell font-lock about the update.

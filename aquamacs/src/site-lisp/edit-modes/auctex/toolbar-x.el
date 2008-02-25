@@ -1,10 +1,10 @@
 ;;; toolbar-x.el --- fancy toolbar handling in Emacs and XEmacs
 
-;; Copyright (C) 2004, 2005,2007 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005 Free Software Foundation, Inc.
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
-;; published by the Free Software Foundation; either version 2 of
+;; published by the Free Software Foundation; either version 3 of
 ;; the License, or (at your option) any later version.
 
 ;; This program is distributed in the hope that it will be
@@ -125,7 +125,7 @@
 			      x))
 		     load-path))
    (list data-directory))
-  "This is where toolbarx finds its images.")
+  "List of directories where toolbarx finds its images.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; First engine: Parsing buttons
@@ -502,10 +502,10 @@ documentation of function `toolbarx-process-symbol')."
 					    ; (defined with `defimage')
 			      (consp (eval val))
 			      (eq (car (eval val)) 'image))
-			 (and (sequencep val) ; or list or vector with 
-					  ; 4 strings or image descriptors
+			 (and (listp val) ; or list with 4 strings or
+					  ; image descriptors
 			      (= (length val) 4)
-			      (dolist (i (append val nil) all-obj-ok)
+			      (dolist (i val all-obj-ok)
 				(setq all-obj-ok
 				      (and all-obj-ok
 					   (or (stringp i)
@@ -1099,15 +1099,15 @@ in the end of SWITCHES, which is returned."
 
 ;; look at function `image-type-available-p' for Emacs !!!!
 
-(defun toolbarx-find-image (name)
-  "Return an image object from image on NAME, a string.
-In Emacs, return a image descriptor from NAME and in XEmacs,
+(defun toolbarx-find-image (image)
+  "Return image descriptor or glyph for IMAGE.
+In Emacs, return an image descriptor for IMAGE.  In XEmacs,
 return a glyph.
 
-Usually it should NAME does not contain a directory or an
-extension.  If the extension is omitted, `xpm', `xbm' and `pbm'
-are tried.  If the directory is omitted, `toolbarx-image-path' is
-searched."
+IMAGE is string.  Usually IMAGE neither contains a directory nor
+an extension.  If the extension is omitted, `xpm', `xbm' and
+`pbm' are tried.  If the directory is omitted,
+`toolbarx-image-path' is searched."
   ;; `find-image' in Emacs 21 looks in `load-path' and `data-directory'.  In
   ;; Emacs 22, we have `image-load-path' which includes `load-path' and
   ;; `data-directory'.
@@ -1121,14 +1121,14 @@ searched."
   (let ((file))
     (dolist (i '("" ".xpm" ".xbm" ".pbm"))
       (unless file
-	(setq file (locate-library (concat name i) t toolbarx-image-path))))
+	(setq file (locate-library (concat image i) t toolbarx-image-path))))
     (if (featurep 'xemacs)
 	(and file (make-glyph file))
       (if file
 	  (create-image file)
-	(find-image `((:type xpm :file ,(concat name ".xpm"))
-		      (:type xbm :file ,(concat name ".xbm"))
-		      (:type pbm :file ,(concat name ".pbm"))))))))
+	(find-image `((:type xpm :file ,(concat image ".xpm"))
+		      (:type xbm :file ,(concat image ".xbm"))
+		      (:type pbm :file ,(concat image ".pbm"))))))))
 
 ;; next variable interfaces between parsing and display engines
 (defvar toolbarx-internal-button-switches nil

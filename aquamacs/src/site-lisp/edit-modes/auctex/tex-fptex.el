@@ -11,7 +11,7 @@
 
 ;; AUCTeX is free software; you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
+;; the Free Software Foundation; either version 3, or (at your option)
 ;; any later version.
 
 ;; AUCTeX is distributed in the hope that it will be useful, but
@@ -56,25 +56,25 @@
 (unless (get 'TeX-view-style 'saved-value)
   (setq TeX-view-style '(("^a5\\(?:comb\\|paper\\)?$" "windvi %d -qpaper a5")
 			 ("^landscape$" "windvi %d -qpaper a4r -s 4")
-			 ("^epsf$" "start %f")
+			 ("^epsf$" "start \"\" %f")
 			 ("." "windvi %d"))))
 
 (unless (get 'TeX-output-view-style 'saved-value)
   (setq TeX-output-view-style
-	'(("^dvi$" "^pstricks$\\|^pst-\\|^psfrag$" "dvips %d -o && start %f")
+	'(("^dvi$" "^pstricks$\\|^pst-\\|^psfrag$" "dvips %d -o && start \"\" %f")
 	  ("^dvi$" ("^a5\\(?:comb\\|paper\\)$" "^landscape$")
 	   "windvi %d %dS -qpaper a5r -s 0")
 	  ("^dvi$" "^a5\\(?:comb\\|paper\\)$" "windvi %d %dS -qpaper a5")
 	  ("^dvi$" "^b5paper$" "windvi %d %dS -qpaper b5")
 	  ("^dvi$" ("^landscape$" "^pstricks$\\|^psfrag$")
-	   "dvips -t landscape %d -o && start %f")
+	   "dvips -t landscape %d -o && start \"\" %f")
 	  ("^dvi$" "^letterpaper$" "windvi %d %dS -qpaper us")
 	  ("^dvi$" "^legalpaper$" "windvi %d %dS -qpaper legal")
 	  ("^dvi$" "^executivepaper$" "windvi %d %dS -qpaper 7.25x10.5in")
 	  ("^dvi$" "^landscape$" "windvi %d %dS -qpaper a4r")
 	  ("^dvi$" "." "windvi %d %dS")
-	  ("^pdf$" "." "start %o")
-	  ("^html?$" "." "start %o"))))
+	  ("^pdf$" "." "start \"\" %o")
+	  ("^html?$" "." "start \"\" %o"))))
 
 ;; WinDVI does not support source specials?
 (unless (get 'TeX-source-specials-view-position-flags 'saved-value)

@@ -1,6 +1,6 @@
 ;;; jbook.el - Special code for jbook style.
 
-;; $Id: jbook.el,v 1.4 2007/03/15 19:21:46 davidswelt Exp $
+;; $Id: jbook.el,v 1.5 2008/02/25 18:02:10 davidswelt Exp $
 
 ;;; Code:
 

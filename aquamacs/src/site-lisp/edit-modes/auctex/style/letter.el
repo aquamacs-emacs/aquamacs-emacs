@@ -1,6 +1,6 @@
 ;;; letter.el - Special code for letter style.
 
-;; $Id: letter.el,v 1.4 2007/03/15 19:21:50 davidswelt Exp $
+;; $Id: letter.el,v 1.5 2008/02/25 18:02:10 davidswelt Exp $
 
 ;;; Code:
 

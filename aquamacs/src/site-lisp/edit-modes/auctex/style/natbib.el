@@ -67,16 +67,19 @@
 		"\\)\\(\\[[^]\n\r\\%]*\\]\\)*{\\([^{}\n\r\\%,]*,\\)*\\([^{}\n\r\\%,]*\\)")
 	4 'LaTeX-bibitem-list "}")))
 
-    ;; Add fontification for references
+    ;; Fontification
     (when (and (featurep 'font-latex)
 	       (eq TeX-install-font-lock 'font-latex-setup))
-      (setq font-latex-match-reference-keywords-local
-	    (append font-latex-match-reference-keywords-local
-		    '("cite" "citet" "citet*" "citealt" "citealt*"
-		      "citep" "citep*" "citealp" "citealp*" 
-		      "citeauthor" "citeauthor*" "citefullauthor"
-		      "citeyear" "citeyearpar""shortcites")))
-      (font-latex-match-reference-make))
+      (font-latex-add-keywords '(("citet" "*[[{")
+				 ("citealt" "*[[{")
+				 ("citep" "*[[{")
+				 ("citealp" "*[[{")
+				 ("citeauthor" "*[[{")
+				 ("citefullauthor" "[[{")
+				 ("citeyear" "[[{")
+				 ("citeyearpar" "[[{")
+				 ("shortcites" "{"))
+			       'reference))
 
     ;; Tell RefTeX
     (if (fboundp 'reftex-set-cite-format)

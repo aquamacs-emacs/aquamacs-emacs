@@ -1,11 +1,30 @@
-;; subfigure.el --- AUCTeX style file for subfigure.sty
-;; Copyright (C) 2003, 2005 Reiner Steib
+;;; subfigure.el --- AUCTeX style file for subfigure.sty
+
+;; Copyright (C) 2003, 2005 Free Software Foundation, Inc.
 
 ;; Author: Reiner Steib  <Reiner.Steib@gmx.de>
+;; Maintainer: auctex-devel@gnu.org
 ;; Keywords: tex
 
+;; This file is part of AUCTeX.
+
+;; AUCTeX is free software; you can redistribute it and/or modify it
+;; under the terms of the GNU General Public License as published by
+;; the Free Software Foundation; either version 3, or (at your option)
+;; any later version.
+
+;; AUCTeX is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with AUCTeX; see the file COPYING.  If not, write to the Free
+;; Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+;; 02110-1301, USA.
+
 ;;; Commentary:
-;;
+
 ;; AUCTeX style file for subfigure.sty
 
 ;;; Code:
@@ -26,15 +45,15 @@
 	  '(("\\\\subref{\\([^{}\n\r\\%,]*\\)" 1 LaTeX-label-list "}")
 	    ("\\\\Subref{\\([^{}\n\r\\%,]*\\)" 1 LaTeX-label-list "}"))
 	  TeX-complete-list))
-   ;; font-lock:
+   ;; Fontification
    (when (and (featurep 'font-latex)
 	      (eq TeX-install-font-lock 'font-latex-setup))
-     (add-to-list 'font-latex-match-textual-keywords-local "subfigure")
-     (add-to-list 'font-latex-match-textual-keywords-local "subtable")
-     (font-latex-match-textual-make)
-     (add-to-list 'font-latex-match-reference-keywords-local "Subref")
-     (add-to-list 'font-latex-match-reference-keywords-local "subref")
-     (font-latex-match-reference-make))))
+     (font-latex-add-keywords '(("subfigure" "[[{")
+				("subtable" "[[{"))
+			      'textual)
+     (font-latex-add-keywords '(("Subref" "{")
+				("subref" "{"))
+			      'reference))))
 
 (defvar LaTeX-subfigure-package-options '("normal" "hang" "center"
 					  "centerlast" "nooneline"
@@ -51,4 +70,4 @@
 					  "TABTOPCAP" "loose" "tight")
   "Package options for the subfigure package.")
 
-;; subfigure.el ends here
+;;; subfigure.el ends here

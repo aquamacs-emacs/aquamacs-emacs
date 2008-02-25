@@ -11,7 +11,7 @@
 
 ;; AUCTeX is free software; you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
+;; the Free Software Foundation; either version 3, or (at your option)
 ;; any later version.
 
 ;; AUCTeX is distributed in the hope that it will be useful, but
@@ -26,7 +26,7 @@
 
 ;;; Commentary:
 
-;; This file adds support for `csquotes.sty', version 3.5.
+;; This file adds support for `csquotes.sty', version 3.7.
 
 
 ;;; Code:
@@ -100,7 +100,12 @@ the insertion of optional arguments."
       '("MakeInnerQuote" "Character")
       '("MakeOuterQuote" "Character")
       '("MakeAutoQuote" "Opening quotation mark" "Closing quotation mark")
+      '("MakeAutoQuote*" "Opening quotation mark" "Closing quotation mark")
       '("MakeForeignQuote" "Babel's language name"
+	"Opening quotation mark" "Closing quotation mark")
+      '("MakeForeignQuote*" "Babel's language name"
+	"Opening quotation mark" "Closing quotation mark")
+      '("MakeHyphenQuote" "Babel's language name"
 	"Opening quotation mark" "Closing quotation mark")
       '("MakeHyphenQuote" "Babel's language name"
 	"Opening quotation mark" "Closing quotation mark")
@@ -155,10 +160,13 @@ the insertion of optional arguments."
     '("SetCiteCommand" "Command")
     "mkcitation"
     "mkccitation"
+    "mkpreblockpunct"
     "mkmidblockpunct"
     "mkfinblockpunct"
+    "mkpretextpunct"
     "mkmidtextpunct"
     "mkfintextpunct"
+    "mkpredisppunct"
     "mkmiddisppunct"
     "mkfindisppunct"
     '("ifblockquote" 2)
@@ -170,7 +178,8 @@ the insertion of optional arguments."
     '("ifquotecolon" 2)
     '("ifquoteexclam" 2)
     '("ifquotequestion" 2)
-    '("ifstringblank" 2))
+    '("ifstringblank" 2)
+    '("BlockquoteDisable" 1))
    ;; New environments
    (LaTeX-add-environments
     "quoteblock"
@@ -196,55 +205,41 @@ the insertion of optional arguments."
    ;; Fontification
    (when (and (featurep 'font-latex)
 	      (eq TeX-install-font-lock 'font-latex-setup))
-     (add-to-list 'font-latex-match-function-keywords-local "DisableQuotes")
-     (add-to-list 'font-latex-match-function-keywords-local "RestoreQuotes")
-     (font-latex-match-function-make)
-     (mapcar (lambda (keyword)
-	       (add-to-list 'font-latex-match-textual-keywords-local keyword))
-	     '("enquote"
-	       "foreignquote"
-	       "hyphenquote"
-	       "textcquote"
-	       "textcquote*"
-	       "foreigntextcquote"
-	       "foreigntextcquote*"
-	       "hyphentextcquote"
-	       "hyphentextcquote*"
-	       "textquote"
-	       "textquote*"
-	       "foreigntextquote"
-	       "foreigntextquote*"
-	       "hyphentextquote"
-	       "hyphentextquote*"
-	       "blockquote"
-	       "foreignblockquote"
-	       "hyphenblockquote"
-	       "blockcquote"
-	       "foreignblockcquote"
-	       "hyphenblockcquote"))
-     (font-latex-match-textual-make)
-     (mapcar (lambda (keyword)
-	       (add-to-list 'font-latex-match-variable-keywords-local keyword))
-	     '("setquotestyle"
-	       "setquotestyle"
-	       "MakeOuterQuote"
-	       "MakeInnerQuote"
-	       "MakeAutoQuote"
-	       "MakeForeignQuote"
-	       "MakeHyphenQuote"
-	       "MakeBlockQuote"
-	       "MakeForeignBlockQuote"
-	       "MakeHyphenBlockQuote"
-	       "DeclareQuoteStyle"
-	       "DeclareQuoteAlias"
-	       "DeclareQuoteOption"
-	       "DeclarePlainStyle"
-	       "SetBlockThreshold"
-	       "SetBlockEnvironment"
-	       "SetCiteCommand"))
-     (font-latex-match-variable-make)
-     ;; Tell font-lock about the update.
-     (setq font-lock-set-defaults nil)
-     (font-lock-set-defaults)))))
+     (font-latex-add-keywords '(("DisableQuotes" "")
+				("RestoreQuotes" ""))
+			      'function)
+     (font-latex-add-keywords '(("enquote" "*{")
+				("foreignquote" "*{{")
+				("hyphenquote" "*{{")
+				("textcquote" "*[[{[{")
+				("foreigntextcquote" "*{[[{[{")
+				("hyphentextcquote" "*{[[{[{")
+				("textquote" "*[[{")
+				("foreigntextquote" "*{[[{")
+				("hyphentextquote" "*{[[{")
+				("blockquote" "[[{")
+				("foreignblockquote" "{[[{")
+				("hyphenblockquote" "{[[{")
+				("blockcquote" "[[{[{")
+				("foreignblockcquote" "{[[{[{")
+				("hyphenblockcquote" "{[[{[{"))
+			      'textual)
+     (font-latex-add-keywords '(("setquotestyle" "[{")
+				("MakeOuterQuote" "{")
+				("MakeInnerQuote" "{")
+				("MakeAutoQuote" "*{{")
+				("MakeForeignQuote" "*{{{")
+				("MakeHyphenQuote" "*{{{")
+				("MakeBlockQuote" "{{{")
+				("MakeForeignBlockQuote" "{{{{")
+				("MakeHyphenBlockQuote" "{{{{")
+				("DeclareQuoteStyle" "[{[[{[{[{[{")
+				("DeclareQuoteAlias" "[{{")
+				("DeclareQuoteOption" "{")
+				("DeclarePlainStyle" "{{{{")
+				("SetBlockThreshold" "{")
+				("SetBlockEnvironment" "{")
+				("SetCiteCommand" "{"))
+			      'variable)))))
 
 ;;; csquotes.el ends here

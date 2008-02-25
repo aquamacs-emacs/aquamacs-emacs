@@ -11,7 +11,7 @@
 
 ;; AUCTeX is free software; you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
+;; the Free Software Foundation; either version 3, or (at your option)
 ;; any later version.
 
 ;; AUCTeX is distributed in the hope that it will be useful, but
@@ -91,23 +91,18 @@
    ;; Fontification
    (when (and (featurep 'font-latex)
 	      (eq TeX-install-font-lock 'font-latex-setup))
-     (mapcar (lambda (keyword)
-	       (add-to-list 'font-latex-match-function-keywords-local keyword))
-	     '("selectlanguage"
-	       ;; "foreignlanguage" ; Enable once we support proper
-	       ;; "iflanguage"      ; highlighting of multiple arguments.
-	       "languagename"
-	       "useshorthands"
-	       "languageshorthands"
-	       "shorthandon"
-	       "shorthandoff"))
-     (font-latex-match-function-make)
-     (add-to-list 'font-latex-match-variable-keywords-local "defineshorthand")
-     (add-to-list 'font-latex-match-variable-keywords-local "aliasshorthand")
-     (add-to-list 'font-latex-match-variable-keywords-local "languageattribute")
-     (font-latex-match-variable-make)
-     ;; Tell font-lock about the update.
-     (setq font-lock-set-defaults nil)
-     (font-lock-set-defaults))))
+     (font-latex-add-keywords '(("selectlanguage" "{")
+				("foreignlanguage" "{{")
+				("iflanguage" "{{{")
+				("languagename" "")
+				("useshorthands" "{")
+				("languageshorthands" "{")
+				("shorthandon" "{")
+				("shorthandoff" "{"))
+			      'function)
+     (font-latex-add-keywords '(("defineshorthand" "{{")
+				("aliasshorthand" "{{")
+				("languageattribute" "{{"))
+			      'variable))))
 
 ;;; babel.el ends here

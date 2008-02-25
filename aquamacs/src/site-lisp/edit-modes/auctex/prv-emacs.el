@@ -7,7 +7,7 @@
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
+;; the Free Software Foundation; either version 3, or (at your option)
 ;; any later version.
 
 ;; This file is distributed in the hope that it will be useful,
@@ -203,7 +203,7 @@ are functions to call on preview's clicks."
   "List of tentatively changed overlays.")
 
 (defcustom preview-dump-threshold
-  "^ *\\\\begin *{document}"
+  "^ *\\\\begin *{document}[ %]*$"
   "*Regexp denoting end of preamble.
 This is the location up to which preamble changes are considered
 to require redumping of a format."

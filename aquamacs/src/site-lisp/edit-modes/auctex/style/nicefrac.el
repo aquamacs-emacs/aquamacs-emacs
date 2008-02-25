@@ -10,7 +10,7 @@
 
 ;; AUCTeX is free software; you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
+;; the Free Software Foundation; either version 3, or (at your option)
 ;; any later version.
 
 ;; AUCTeX is distributed in the hope that it will be useful, but
@@ -34,11 +34,10 @@
  (lambda ()
    (TeX-add-symbols
     '("nicefrac" [ "Font changing command" ] "Numerator" "Denominator"))
-   ;; enable fontifying
+   ;; Fontification
    (when (and (featurep 'font-latex)
 	      (eq TeX-install-font-lock 'font-latex-setup))
-     (add-to-list 'font-latex-match-textual-keywords-local "nicefrac")
-     (font-latex-match-textual-make))))
+     (font-latex-add-keywords '(("nicefrac" "[{{")) 'textual))))
 
 (defvar LaTeX-nicefrac-package-options '("nice" "ugly")
   "Package options for the nicefrac package.")

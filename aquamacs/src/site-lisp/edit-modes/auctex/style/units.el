@@ -10,7 +10,7 @@
 
 ;; AUCTeX is free software; you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
+;; the Free Software Foundation; either version 3, or (at your option)
 ;; any later version.
 
 ;; AUCTeX is distributed in the hope that it will be useful, but
@@ -38,12 +38,10 @@
    ;; units.sty requires the package nicefrac.sty, thus we enable the
    ;; macros of nicefrac.sty, too
    (TeX-run-style-hooks "nicefrac")
-   ;; enable fontifying
+   ;; Fontification
    (when (and (featurep 'font-latex)
 	      (eq TeX-install-font-lock 'font-latex-setup))
-     (add-to-list 'font-latex-match-textual-keywords-local "unit")
-     (add-to-list 'font-latex-match-textual-keywords-local "unitfrac")
-     (font-latex-match-textual-make))))
+     (font-latex-add-keywords '(("unit" "[{") ("unitfrac" "[{{")) 'textual))))
 
 (defvar LaTeX-units-package-options '("tight" "loose")
   "Package options for the units package.")

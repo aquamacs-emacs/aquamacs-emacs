@@ -8,7 +8,7 @@
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
+;; the Free Software Foundation; either version 3, or (at your option)
 ;; any later version.
 
 ;; This file is distributed in the hope that it will be useful,
@@ -23,7 +23,7 @@
 
 ;;; Commentary:
 
-;; $Id: preview.el,v 1.279 2006/10/24 16:02:21 dak Exp $
+;; $Id: preview.el,v 1.282 2008/02/03 14:53:31 angeli Exp $
 ;;
 ;; This style is for the "seamless" embedding of generated images
 ;; into LaTeX source code.  Please see the README and INSTALL files
@@ -2474,7 +2474,7 @@ pp")
       (customize-save-variable 'preview-TeX-style-dir nil)
     (customize-set-variable 'preview-TeX-style-dir nil)))
 
-;;;###autoload (LaTeX-preview-setup)
+;;;###autoload
 (defun LaTeX-preview-setup ()
   "Hook function for embedding the preview package into AUCTeX.
 This is called by `LaTeX-mode-hook' and changes AUCTeX variables
@@ -2485,7 +2485,7 @@ to add the preview functionality."
   (easy-menu-define preview-menu LaTeX-mode-map
     "This is the menu for preview-latex."
     '("Preview"
-      ["Generate previews:" nil :active nil]
+      "Generate previews"
       ["(or toggle) at point" preview-at-point]
       ["for environment" preview-environment]
       ["for section" preview-section]
@@ -2493,14 +2493,14 @@ to add the preview functionality."
       ["for buffer" preview-buffer]
       ["for document" preview-document]
       "---"
-      ["Remove previews:" nil :active nil ]
+      "Remove previews"
       ["at point" preview-clearout-at-point]
       ["from section" preview-clearout-section]
       ["from region" preview-clearout (preview-mark-active)]
       ["from buffer" preview-clearout-buffer]
       ["from document" preview-clearout-document]
       "---"
-      ["Turn preamble cache:" nil :active nil]
+      "Turn preamble cache"
       ["on" preview-cache-preamble]
       ["off" preview-cache-preamble-off]
       "---"
@@ -2674,7 +2674,7 @@ call, and in its CDR the final stuff for the placement hook."
 \\(?:/+\\(?:\\.+[^()\r\n{} /]*\\|[^()\r\n{} ./]+\
 \\(?: [^()\r\n{} ./]+\\)*\\(?:\\.[-0-9a-zA-Z_.]*\\)?\\)?\\)*\\)\
 )*\\(?: \\|\r?$\\)\\|\
-)+\\([ >]\\|\r?$\\)\\|\
+\\()+\\)\\|\
  !\\(?:offset(\\([---0-9]+\\))\\|\
 name(\\([^)]+\\))\\)\\|\
 ^Preview: \\([a-zA-Z]+\\) \\([^\n\r]*\\)\r?$" nil t)
@@ -3511,8 +3511,8 @@ internal parameters, STR may be a log to insert into the current log."
 	     (preview-reraise-error process)))))
 
 (defconst preview-version (eval-when-compile
-  (let ((name "$Name: release_11_84 $")
-	(rev "$Revision: 1.279 $"))
+  (let ((name "$Name: release_11_85 $")
+	(rev "$Revision: 1.282 $"))
     (or (when (string-match "\\`[$]Name: *release_\\([^ ]+\\) *[$]\\'" name)
 	  (setq name (match-string 1 name))
 	  (while (string-match "_" name)
@@ -3526,7 +3526,7 @@ If not a regular release, CVS revision of `preview.el'.")
 
 (defconst preview-release-date
   (eval-when-compile
-    (let ((date "$Date: 2006/10/24 16:02:21 $"))
+    (let ((date "$Date: 2008/02/03 14:53:31 $"))
       (string-match
        "\\`[$]Date: *\\([0-9]+\\)/\\([0-9]+\\)/\\([0-9]+\\)"
        date)
@@ -3561,7 +3561,7 @@ In the form of yyyy.mmdd")
      (if (string-match "^CVS-" preview-version)
 	 (concat "preview-" (substring preview-version 4))
        preview-version)
-     '(AUC-TeX-version
+     '(AUCTeX-version
        LaTeX-command-style
        image-types
        preview-image-type

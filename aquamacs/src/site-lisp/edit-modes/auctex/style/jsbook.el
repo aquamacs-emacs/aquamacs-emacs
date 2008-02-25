@@ -1,6 +1,6 @@
 ;;; jsbook.el - Special code for jsbook style.
 
-;; $Id: jsbook.el,v 1.4 2007/03/15 19:21:48 davidswelt Exp $
+;; $Id: jsbook.el,v 1.5 2008/02/25 18:02:10 davidswelt Exp $
 
 ;;; Code:
 

@@ -1,6 +1,6 @@
 ;;; jarticle.el - Special code for jarticle style.
 
-;; $Id: jarticle.el,v 1.4 2007/03/15 19:21:45 davidswelt Exp $
+;; $Id: jarticle.el,v 1.5 2008/02/25 18:02:10 davidswelt Exp $
 
 ;;; Code:
 

@@ -7,7 +7,7 @@
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
+;; the Free Software Foundation; either version 3, or (at your option)
 ;; any later version.
 
 ;; This file is distributed in the hope that it will be useful,
@@ -212,6 +212,15 @@ It can be a list of themes or a function.  If it is the symbol
      (repeat :inline t
 	     :tag "Other"
 	     (string)))))
+
+;; style/comment.el
+
+(defcustom LaTeX-comment-env-list '("comment")
+  "List of environment names defined with comment.sty.
+Setting this variable does not take effect unless you
+reinitialize affected buffers."
+  :type '(repeat string)
+  :group 'LaTeX-style)
 
 ;; style/csquotes.el
 

@@ -3,7 +3,7 @@
 ;; Harvard citation style is from Peter Williams
 ;; available on the CTAN servers
 
-;; Version: $Id: harvard.el,v 1.4 2007/03/15 19:21:40 davidswelt Exp $
+;; Version: $Id: harvard.el,v 1.5 2008/02/25 18:02:09 davidswelt Exp $
 
 ;; Copyright (C) 1994 Berwin Turlach <berwin@core.ucl.ac.be>
 ;; Copyright (C) 1997 Berwin Turlach <berwin.turlach@anu.edu.au>
@@ -11,7 +11,7 @@
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
+;; the Free Software Foundation; either version 3, or (at your option)
 ;; any later version.
 ;; 
 ;; This program is distributed in the hope that it will be useful,

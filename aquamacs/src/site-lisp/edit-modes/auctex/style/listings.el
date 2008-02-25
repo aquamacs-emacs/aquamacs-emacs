@@ -11,7 +11,7 @@
 
 ;; AUCTeX is free software; you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
+;; the Free Software Foundation; either version 3, or (at your option)
 ;; any later version.
 
 ;; AUCTeX is distributed in the hope that it will be useful, but
@@ -60,18 +60,16 @@
    ;; Fontification
    (when (and (featurep 'font-latex)
 	      (eq TeX-install-font-lock 'font-latex-setup))
-     (add-to-list 'font-latex-match-function-keywords-local "lstnewenvironment")
-     (font-latex-match-function-make)
-     (add-to-list 'font-latex-match-reference-keywords-local "lstinputlisting")
-     (font-latex-match-reference-make)
-     (add-to-list 'font-latex-match-textual-keywords-local "lstinline")	; Better
-									; idea?
-     (add-to-list 'font-latex-match-textual-keywords-local "lstlistoflistings")
-     (font-latex-match-textual-make)
-     (add-to-list 'font-latex-match-variable-keywords-local "lstalias")
-     (add-to-list 'font-latex-match-variable-keywords-local "lstdefinestyle")
-     (add-to-list 'font-latex-match-variable-keywords-local "lstset")
-     (font-latex-match-variable-make)
+     (font-latex-add-keywords '(("lstnewenvironment" "{[[{{")) 'function)
+     (font-latex-add-keywords '(("lstinputlisting" "[{")) 'reference)
+     (font-latex-add-keywords '(("lstinline" "[{") ; The second argument should
+						   ; actually be verbatim.
+				("lstlistoflistings" ""))
+			      'textual)
+     (font-latex-add-keywords '(("lstalias" "{{")
+				("lstdefinestyle" "{{")
+				("lstset" "{"))
+			      'variable)
      ;; For syntactic fontification, e.g. verbatim constructs.
      (font-latex-set-syntactic-keywords)
      ;; Tell font-lock about the update.

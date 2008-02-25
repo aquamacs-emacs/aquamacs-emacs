@@ -1,6 +1,6 @@
 ;;; foils.el - Special code for FoilTeX.
 
-;; $Id: foils.el,v 1.4 2007/03/15 19:21:37 davidswelt Exp $
+;; $Id: foils.el,v 1.5 2008/02/25 18:02:09 davidswelt Exp $
 
 ;;; Code:
 

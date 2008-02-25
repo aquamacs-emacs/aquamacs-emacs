@@ -11,7 +11,7 @@
 
 ;; AUCTeX is free software; you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
+;; the Free Software Foundation; either version 3, or (at your option)
 ;; any later version.
 
 ;; AUCTeX is distributed in the hope that it will be useful, but
@@ -48,20 +48,17 @@
     '("textssc" 1)
     "sscshape"
     "swshape")
+   ;; Run style hook for amsmath which is loaded via MnSymbol
+   (TeX-run-style-hooks "amsmath")
    ;; Fontification
-   ;; FIXME: fontification for the textcommands suck
    (when (and (featurep 'font-latex)
 	      (eq TeX-install-font-lock 'font-latex-setup))
-     (setq font-latex-match-textual-keywords-local
-	   (append font-latex-match-textual-keywords-local
-		   '("smallfrac"
-		     "slantfrac"
-		     "textsw"
-		     "textssc")))
-     (font-latex-match-textual-make)
-     (add-to-list 'font-latex-match-variable-keywords-local
-		  "figureversion")
-     (font-latex-match-variable-make))))
+     (font-latex-add-keywords '(("smallfrac" "{{")
+				("slantfrac" "{{")
+				("textsw" "{")
+				("textssc" "{"))
+			      'textual)
+     (font-latex-add-keywords '(("figureversion" "{")) 'variable))))
 
 (defvar LaTeX-MinionPro-package-options
   '("smallfamily" "medfamily" "fullfamily" "noopticals" "opticals"

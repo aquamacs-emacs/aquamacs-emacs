@@ -1,6 +1,6 @@
 ;;; jurabib.el --- AUCTeX style for the `jurabib' package
 
-;; Copyright (C) 2004 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2007 Free Software Foundation, Inc.
 
 ;; Author: Ralf Angeli <angeli@iwi.uni-sb.de>
 ;; Maintainer: auctex-devel@gnu.org
@@ -11,7 +11,7 @@
 
 ;; AUCTeX is free software; you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
+;; the Free Software Foundation; either version 3, or (at your option)
 ;; any later version.
 
 ;; AUCTeX is distributed in the hope that it will be useful, but
@@ -110,25 +110,38 @@
      ;; Fontification
      (when (and (featurep 'font-latex)
 		(eq TeX-install-font-lock 'font-latex-setup))
-       (mapcar (lambda (item)
-		 (add-to-list 'font-latex-match-reference-keywords-local
-			      (car item)))
-	       citecmds)
-       ;; FIXME: Second argument does not get fontified.
-       (add-to-list 'font-latex-match-reference-keywords-local "citefield")
-       (add-to-list 'font-latex-match-reference-keywords-local "footcitefield")
-       (font-latex-match-reference-make)
-       (mapcar (lambda (keyword)
-		 (add-to-list 'font-latex-match-function-keywords-local
-			      keyword))
-	       '("citeswithoutentry" "nextcitefull" "nextcitenotitle"
-		 "nextcitereset" "nextciteshort"))
-       (font-latex-match-function-make)
-       (mapcar (lambda (keyword)
-		 (add-to-list 'font-latex-match-variable-keywords-local
-			      keyword))
-	       '("citenotitlefortype" "citetitlefortype" "jurabibsetup"))
-       (font-latex-match-variable-make))
+       (font-latex-add-keywords '(("cite" "*[[{")
+				  ("citetitle" "[[{")
+				  ("fullcite" "[[{")
+				  ("citet" "[{")
+				  ("citealt" "[{")
+				  ("citep" "[[{")
+				  ("citealp" "[[{")
+				  ("citeauthor" "[[{")
+				  ("citeyear" "[[{")
+				  ("footcite" "[[{")
+				  ("footcite*" "[[{")
+				  ("footcitetitle" "[[{")
+				  ("footfullcite" "[[{")
+				  ("footcitet" "[{")
+				  ("footcitealt" "[{")
+				  ("footcitep" "[[{")
+				  ("footcitealp" "[[{")
+				  ("footciteauthor" "[[{")
+				  ("footciteyear" "[[{")
+				  ("citefield" "[{{")
+				  ("footcitefield" "[{{"))
+				'reference)
+       (font-latex-add-keywords '(("citeswithoutentry" "{")
+				  ("nextcitefull" "{")
+				  ("nextcitenotitle" "{")
+				  ("nextcitereset" "{")
+				  ("nextciteshort" "{"))
+				'function)
+       (font-latex-add-keywords '(("citenotitlefortype" "{")
+				  ("citetitlefortype" "{")
+				  ("jurabibsetup" "{"))
+				'variable))
 
      ;; Tell RefTeX (Thanks, Carsten)
      (when (and (fboundp 'reftex-set-cite-format)

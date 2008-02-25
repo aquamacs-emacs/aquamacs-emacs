@@ -1,10 +1,10 @@
-;;; tex-bar.el --- toolbar icons on AUC-TeX in GNU emacs and XEmacs
+;;; tex-bar.el --- toolbar icons on AUCTeX in GNU emacs and XEmacs
 
 ;; Copyright (C) 2004, 2005 Free Software Foundation, Inc.
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
-;; published by the Free Software Foundation; either version 2 of
+;; published by the Free Software Foundation; either version 3 of
 ;; the License, or (at your option) any later version.
 
 ;; This program is distributed in the hope that it will be
@@ -451,7 +451,8 @@ format of the argument MEANING-ALIST in the mentioned function."
 			 (setq list-str-temp (cons (car i)
 						   list-str-temp))))))
   (defvar LaTeX-symbols-toolbar-visible-flag nil
-    "Non-nil means that the LaTeX symbols on toolbar are visible.")
+    "Non-nil means that the LaTeX symbols on toolbar are visible.
+Internal variable.")
   (defconst LaTeX-symbols-toolbar-switch-contents
     `(;; the on-off switch button
       (latex-symbols-switch

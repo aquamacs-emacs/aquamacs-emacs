@@ -1,7 +1,7 @@
 ;;; latex.el --- Support for LaTeX documents.
 
 ;; Copyright (C) 1991, 1993, 1994, 1995, 1996, 1997, 1999, 2000,
-;;   2003, 2004, 2005, 2006 Free Software Foundation, Inc.
+;;   2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
 
 ;; Maintainer: auctex-devel@gnu.org
 ;; Keywords: tex
@@ -10,7 +10,7 @@
 
 ;; AUCTeX is free software; you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
+;; the Free Software Foundation; either version 3, or (at your option)
 ;; any later version.
 
 ;; AUCTeX is distributed in the hope that it will be useful, but
@@ -558,16 +558,19 @@ It may be customized with the following variables:
 	       (setq args (concat args TeX-grop TeX-grcl))
 	       (setq count (- count 1)))
 	     (LaTeX-insert-environment environment args)))
-	  ((stringp (nth 1 entry))
+	  ((or (stringp (nth 1 entry)) (vectorp (nth 1 entry)))
 	   (let ((prompts (cdr entry))
 		 (args ""))
-	     (while prompts
-	       (setq args (concat args
-				  TeX-grop
-				  (read-from-minibuffer
-				   (concat (car prompts) ": "))
-				  TeX-grcl))
-	       (setq prompts (cdr prompts)))
+	     (dolist (elt prompts)
+	       (let* ((optional (vectorp elt))
+		      (elt (if optional (elt elt 0) elt))
+		      (arg (read-string (concat (when optional "(Optional) ")
+						elt ": "))))
+		 (setq args (concat args
+				    (cond ((and optional (> (length arg) 0))
+					   (concat LaTeX-optop arg LaTeX-optcl))
+					  ((not optional)
+					   (concat TeX-grop arg TeX-grcl)))))))
 	     (LaTeX-insert-environment environment args)))
 	  (t
 	   (apply (nth 1 entry) environment (nthcdr 2 entry))))))
@@ -1124,10 +1127,10 @@ You may use `LaTeX-item-list' to change the routines used to insert the item."
 
 (defvar LaTeX-auto-minimal-regexp-list
   '(("\\\\document\\(style\\|class\\)\
-\\(\\[\\(\\([^#\\.%]\\|%[^\n\r]*[\n\r]\\)*\\)\\]\\)?\
-{\\([^#\\\\\\.\n\r]+?\\)}"
+\\(\\[\\(\\([^#\\%]\\|%[^\n\r]*[\n\r]\\)*\\)\\]\\)?\
+{\\([^#\\.\n\r]+?\\)}"
      (3 5 1) LaTeX-auto-style)
-    ("\\\\use\\(package\\)\\(\\[\\([^\]\\\\]*\\)\\]\\)?\
+    ("\\\\use\\(package\\)\\(\\[\\([^\]\\]*\\)\\]\\)?\
 {\\(\\([^#}\\.%]\\|%[^\n\r]*[\n\r]\\)+?\\)}"
      (3 4 1) LaTeX-auto-style))
   "Minimal list of regular expressions matching LaTeX macro definitions.")
@@ -1583,8 +1586,8 @@ ELSE as an argument list."
 		(setq options (funcall var))
 	      (when (symbol-value var)
 		(setq options
-		      (mapconcat 'identity 
-				 (TeX-completing-read-multiple 
+		      (mapconcat 'identity
+				 (TeX-completing-read-multiple
 				  "Options: " (mapcar 'list (symbol-value var)))
 				 ","))))
 	  (setq options (read-string "Options: ")))
@@ -1605,7 +1608,7 @@ ELSE as an argument list."
   "List of the non-local TeX input files.
 
 Initialized once at the first time you prompt for an input file.
-May be reset with `C-u \\[TeX-normal-mode]'.")
+May be reset with `\\[universal-argument] \\[TeX-normal-mode]'.")
 
 (defun TeX-arg-input-file (optionel &optional prompt local)
   "Prompt for a tex or sty file.
@@ -1640,7 +1643,7 @@ If the flag is set, only complete with local files."
   "Association list of BibTeX style files.
 
 Initialized once at the first time you prompt for an input file.
-May be reset with `C-u \\[TeX-normal-mode]'.")
+May be reset with `\\[universal-argument] \\[TeX-normal-mode]'.")
 
 (defun TeX-arg-bibstyle (optional &optional prompt)
   "Prompt for a BibTeX style file."
@@ -1665,7 +1668,7 @@ May be reset with `C-u \\[TeX-normal-mode]'.")
   "Association list of BibTeX files.
 
 Initialized once at the first time you prompt for an BibTeX file.
-May be reset with `C-u \\[TeX-normal-mode]'.")
+May be reset with `\\[universal-argument] \\[TeX-normal-mode]'.")
 
 (defun TeX-arg-bibliography (optional &optional prompt)
   "Prompt for a BibTeX database file."
@@ -1725,10 +1728,14 @@ May be reset with `C-u \\[TeX-normal-mode]'.")
   "Prompt for delimiter and text."
   (let ((del (read-quoted-char
 	      (concat "Delimiter: (default "
-		      (char-to-string LaTeX-default-verb-delimiter) ") ")))
-	(text (read-from-minibuffer "Text: ")))
+		      (char-to-string LaTeX-default-verb-delimiter) ") "))))
     (when (<= del ?\ ) (setq del LaTeX-default-verb-delimiter))
-    (insert del text del)
+    (if (TeX-active-mark)
+	(progn
+	  (insert del)
+	  (goto-char (mark))
+	  (insert del))
+      (insert del (read-from-minibuffer "Text: ") del))
     (setq LaTeX-default-verb-delimiter del)))
 
 (defun TeX-arg-pair (optional first second)
@@ -1870,7 +1877,7 @@ including values of the variable
 Programs should not use this variable directly but the function
 `LaTeX-verbatim-environments' which returns a value including
 buffer-local keyword additions via
-`LaTeX-verbatim-environemts-local' as well."
+`LaTeX-verbatim-environments-local' as well."
   :group 'LaTeX-environment
   :type '(repeat (string)))
 
@@ -2876,18 +2883,26 @@ space does not end a sentence, so don't break a line there."
 	(verb-macros (regexp-opt (append (LaTeX-verbatim-macros-with-delims)
 					 (LaTeX-verbatim-macros-with-braces)))))
     (save-excursion
+      ;; Look for the start of a verbatim macro in the current line.
       (when (re-search-backward (concat (regexp-quote TeX-esc)
 					"\\(?:" verb-macros "\\)\\([^a-z@*]\\)")
 				(line-beginning-position) t)
+	;; Determine start and end of verbatim macro.
 	(let ((beg (point))
 	      (end (if (not (string-match "[ [{]" (match-string 1)))
 		       (cdr (LaTeX-verbatim-macro-boundaries))
 		     (TeX-find-macro-end))))
-	  (when (and end (> (- end (line-beginning-position))
-			    (current-fill-column)))
+	  ;; Determine if macro end is behind fill column.
+	  (when (and end
+		     (> (- end (line-beginning-position))
+			(current-fill-column))
+		     (> end final-breakpoint))
+	    ;; Search backwards for place to break before the macro.
 	    (goto-char beg)
 	    (skip-chars-backward "^ \n")
-	    (when (bolp)
+	    ;; Determine if point ended up at the beginning of the line.
+	    (when (save-excursion (skip-chars-backward " \t%") (bolp))
+	      ;; Search forward for a place to break after the macro.
 	      (goto-char end)
 	      (skip-chars-forward "^ \n" (point-max)))
 	    (setq final-breakpoint (point))))))
@@ -3081,8 +3096,7 @@ depends on the value of `LaTeX-syntactic-comments'."
 	  (looking-at (concat "^[ \t]*" TeX-comment-start-regexp
 			      "\\(" TeX-comment-start-regexp "\\|[ \t]\\)*")))
 	(setq has-comment t
-	      comment-fill-prefix (buffer-substring-no-properties
-				   (match-beginning 0) (match-end 0))))
+	      comment-fill-prefix (TeX-match-buffer 0)))
        ;; A line with some code, followed by a comment?
        ((and (setq code-comment-start (save-excursion
 					(beginning-of-line)
@@ -3213,7 +3227,7 @@ depends on the value of `LaTeX-syntactic-comments'."
 	       (make-string (current-column) ?\ ))
 	     (progn
 	       (looking-at (concat TeX-comment-start-regexp "+[ \t]*"))
-	       (buffer-substring (match-beginning 0) (match-end 0)))))
+	       (TeX-match-buffer 0))))
       (fill-region-as-paragraph beg (line-beginning-position 2)
 				justify-flag  nil
 				(save-excursion
@@ -3525,44 +3539,48 @@ If COUNT is non-nil, do it COUNT times."
 		(save-excursion
 		  (TeX-backward-comment-skip 1 limit)
 		  (point))
-		;; Search for possible paragraph commands.
+		;; Search for paragraph commands.
 		(save-excursion
-		  (let (end-point)
-		    (catch 'found
-		      (while (and (> (point) limit)
-				  (not (bobp))
-				  (forward-line -1))
-			(when (looking-at
-			       (concat "^[ \t]*" TeX-comment-start-regexp "*"
-				       "[ \t]*\\("
-				       LaTeX-paragraph-commands-regexp "\\)"))
-			  (save-excursion
-			    (goto-char (match-beginning 1))
-			    (save-match-data
-			      (goto-char (TeX-find-macro-end)))
-			    ;; For an explanation of this distinction
-			    ;; see `LaTeX-forward-paragraph'.
-			    (if (save-match-data
-				  (looking-at
-				   (concat (regexp-quote TeX-esc) "[@A-Za-z]+"
-					   "\\|[ \t]*\\($\\|"
-					   TeX-comment-start-regexp "\\)")))
-				(progn
-				  (when (string=
-					 (buffer-substring-no-properties
-					  (point) (+ (point) (length TeX-esc)))
-					 TeX-esc)
-				    (goto-char (TeX-find-macro-end)))
-				  (forward-line 1)
-				  (setq end-point (if (< (point) start)
-						      (point)
-						    0)))
-			      (setq end-point (match-beginning 0))))
-			  (throw 'found nil))))
-		      (if end-point
-			end-point
-		      0))))))
-	(beginning-of-line)))))
+		  (let ((end-point 0) macro-bol)
+		    (when (setq macro-bol
+				(re-search-backward
+				 (format "^[ \t]*%s*[ \t]*\\(%s\\)"
+					 TeX-comment-start-regexp
+					 LaTeX-paragraph-commands-regexp)
+				 limit t))
+		      (if (and (string= (match-string 1) "\\begin")
+			       (progn
+				 (goto-char (match-end 1))
+				 (skip-chars-forward "{ \t")
+				 (member (buffer-substring-no-properties
+					  (point) (progn (skip-chars-forward
+							  "A-Za-z*") (point)))
+					 LaTeX-verbatim-environments)))
+			  ;; If inside a verbatim environment, just
+			  ;; use the next line.  In such environments
+			  ;; `TeX-find-macro-end' could otherwise
+			  ;; think brackets or braces belong to the
+			  ;; \begin macro.
+			  (setq end-point (line-beginning-position 2))
+			;; Jump to the macro end otherwise.
+			(goto-char (match-beginning 1))
+			(goto-char (TeX-find-macro-end))
+			;; For an explanation of this distinction see
+			;; `LaTeX-forward-paragraph'.
+			(if (looking-at (concat (regexp-quote TeX-esc)
+						"[@A-Za-z]+\\|[ \t]*\\($\\|"
+						TeX-comment-start-regexp "\\)"))
+			    (progn
+			      (when (string= (buffer-substring-no-properties
+					      (point) (+ (point)
+							 (length TeX-esc)))
+					     TeX-esc)
+				(goto-char (TeX-find-macro-end)))
+			      (forward-line 1)
+			      (when (< (point) start)
+				(setq end-point (point))))
+			  (setq end-point macro-bol))))
+		    end-point)))))))))
 
 (defun LaTeX-search-forward-comment-start (&optional limit)
   "Search forward for a comment start from current position till LIMIT.
@@ -3897,6 +3915,17 @@ See also `LaTeX-math-menu'."
     (nil "beth" ("AMS" "Hebrew") 8502) ;; #X2136
     (nil "daleth" ("AMS" "Hebrew") 8504) ;; #X2138
     (nil "gimel" ("AMS" "Hebrew") 8503) ;; #X2137
+    ("v G" "varGamma" ("AMS" "Greek Uppercase"))
+    ("v D" "varDelta" ("AMS" "Greek Uppercase"))
+    ("v J" "varTheta" ("AMS" "Greek Uppercase"))
+    ("v L" "varLambda" ("AMS" "Greek Uppercase"))
+    ("v X" "varXi" ("AMS" "Greek Uppercase"))
+    ("v P" "varPi" ("AMS" "Greek Uppercase"))
+    ("v S" "varSigma" ("AMS" "Greek Uppercase"))
+    ("v U" "varUpsilon" ("AMS" "Greek Uppercase"))
+    ("v F" "varPhi" ("AMS" "Greek Uppercase"))
+    ("v Y" "varPsi" ("AMS" "Greek Uppercase"))
+    ("v W" "varOmega" ("AMS" "Greek Uppercase"))
     (nil "dashrightarrow" ("AMS" "Arrows"))
     (nil "dashleftarrow" ("AMS" "Arrows"))
     (nil "leftleftarrows" ("AMS" "Arrows") 8647) ;; #X21C7
@@ -4281,7 +4310,49 @@ commands are defined:
     (insert "{\\cal " (char-to-string char) "}"))
   (if dollar (insert "$")))
 
-(provide 'latex)
+
+;;; Folding
+
+(defcustom LaTeX-fold-macro-spec-list nil
+  "List of display strings and macros to fold in LaTeX mode."
+  :type '(repeat (group (choice (string :tag "Display String")
+				(integer :tag "Number of argument" :value 1))
+			(repeat :tag "Macros" (string))))
+  :group 'TeX-fold)
+
+(defcustom LaTeX-fold-env-spec-list nil
+  "List of display strings and environments to fold in LaTeX mode."
+  :type '(repeat (group (choice (string :tag "Display String")
+				(integer :tag "Number of argument" :value 1))
+			(repeat :tag "Environments" (string))))
+  :group 'TeX-fold)
+
+(defcustom LaTeX-fold-math-spec-list
+  (delete nil
+	  (mapcar (lambda (elt)
+		    (let ((tex-token (nth 1 elt))
+			  (submenu   (nth 2 elt))
+			  (unicode   (nth 3 elt))
+			  uchar noargp)
+		      (when (and (fboundp 'decode-char) (integerp unicode))
+			(setq uchar (decode-char 'ucs unicode)))
+		      (when (listp submenu) (setq submenu (nth 1 submenu)))
+		      (setq noargp
+			    (not (string-match
+				  (concat "^" (regexp-opt '("Constructs"
+							    "Accents")))
+				  submenu)))
+		      (when (and (stringp tex-token) (integerp uchar) noargp)
+			`(,(char-to-string uchar) (,tex-token)))))
+		  `((nil "to" "" 8594)
+		    (nil "gets" "" 8592)
+		    ,@LaTeX-math-default)))
+  "List of display strings and math macros to fold in LaTeX mode."
+  :type '(repeat (group (choice (string :tag "Display String")
+				(integer :tag "Number of argument" :value 1))
+			(repeat :tag "Math Macros" (string))))
+  :group 'TeX-fold)
+
 
 ;;; Keymap
 
@@ -5167,8 +5238,11 @@ i.e. you do _not_ have to cater for this yourself by adding \\\\' or $."
   ;; parsing properly.  -- dak
   (TeX-add-style-hook "pdftex" 'TeX-PDF-mode-on)
   (TeX-add-style-hook "pdftricks" 'TeX-PDF-mode-on)
+  (TeX-add-style-hook "pst-pdf" 'TeX-PDF-mode-on)
   (TeX-add-style-hook "dvips" 'TeX-PDF-mode-off)
-  (TeX-add-style-hook "pstricks" 'TeX-PDF-mode-off)
+;; This is now done in style/pstricks.el because it prevents other
+;; pstricks style files from being loaded.
+;;   (TeX-add-style-hook "pstricks" 'TeX-PDF-mode-off)
   (TeX-add-style-hook "psfrag" 'TeX-PDF-mode-off)
   (TeX-add-style-hook "dvipdf" 'TeX-PDF-mode-off)
   (TeX-add-style-hook "dvipdfm" 'TeX-PDF-mode-off)
@@ -5224,15 +5298,13 @@ i.e. you do _not_ have to cater for this yourself by adding \\\\' or $."
 	(search-forward-regexp
 	 "\\documentstyle\\[\\([^]]*\\)\\]{\\([^}]*\\)}"
 	 (point-max) t)
-	(setq optstr (buffer-substring-no-properties (match-beginning 1) (match-end 1))
-	      docstyle (buffer-substring-no-properties (match-beginning 2)
-	      (match-end 2))
+	(setq optstr (TeX-match-buffer 1)
+	      docstyle (TeX-match-buffer 2)
 	      optlist (TeX-split-string "," optstr))
       (if (search-forward-regexp
 	   "\\documentstyle{\\([^}]*\\)}"
 	   (point-max) t)
-	  (setq docstyle (buffer-substring-no-properties (match-beginning 1)
-	  (match-end 1)))
+	  (setq docstyle (TeX-match-buffer 1))
 	(error "No documentstyle defined")))
     (beginning-of-line 1)
     (setq docline (point))
@@ -5261,5 +5333,7 @@ i.e. you do _not_ have to cater for this yourself by adding \\\\' or $."
 	(while (re-search-forward "\\\\blackandwhite{" nil t)
       (replace-match "\\\\input{" nil nil)))))
   (TeX-normal-mode nil))
+
+(provide 'latex)
 
 ;;; latex.el ends here
