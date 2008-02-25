@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.59 2008/02/03 11:38:58 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.60 2008/02/25 17:25:55 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -623,10 +623,10 @@ even if it's the only visible frame."
 
 (defun aquamacs-delete-frame (&optional frame)
   (condition-case nil 
-      (delete-frame)
+      (delete-frame (or frame (selected-frame)))
     (error   
-	     
      (let ((f (or frame (selected-frame))))
+       (run-hook-with-args 'delete-frame-functions f)
        (make-frame-invisible f t)
        ;; select messages to it gets any input
        (if (find-all-frames-internal (get-buffer "*Messages*"))
@@ -673,7 +673,9 @@ even if it's the only visible frame."
 		)
 	    (error   
 	     
-	     (let ((f (selected-frame)))
+	     (let ((f (window-frame win))) ;;(selected-frame)))
+	       ;; hook can contain smart-frame-pos call
+	       (run-hook-with-args 'delete-frame-functions f)
 	       (make-frame-invisible f t)
 	        
 	       (if (find-all-frames-internal (get-buffer "*Messages*"))
@@ -683,9 +685,7 @@ even if it's the only visible frame."
       ;; decide not to delete / make invisible
       ;; then switch buffer
       ;; to whatever was shown previously (does this work well???)
-      (next-buffer-here)
-
-      )))
+      (next-buffer-here))))
 
 
 (if window-system
