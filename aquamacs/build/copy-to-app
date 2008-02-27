@@ -46,6 +46,7 @@ mv  "Contents/Resources/site-lisp" /tmp/backup.site-lisp
 
 mkdir Contents/Resources/site-lisp 2>/dev/null
 mkdir Contents/Resources/site-lisp/oneonone 2>/dev/null
+mkdir Contents/Resources/site-lisp/tabbar 2>/dev/null
 mkdir Contents/Resources/site-lisp/macosx 2>/dev/null
 mkdir Contents/Resources/site-lisp/edit-modes 2>/dev/null
 
@@ -93,6 +94,7 @@ cp -Rp "$projdir"/src/site-lisp/edit-modes/* Contents/Resources/site-lisp/edit-m
 
 cp -Rp "$projdir"/src/site-lisp/macosx/*.el Contents/Resources/site-lisp/macosx/
 cp -Rp "$projdir"/src/site-lisp/oneonone/*.el Contents/Resources/site-lisp/oneonone/
+cp -Rp "$projdir"/src/site-lisp/tabbar/*.el Contents/Resources/site-lisp/tabbar/
 
 if [ $compile ]; then
     # prevent the site-start.el from being loaded all the time (gives error)
@@ -104,6 +106,9 @@ if [ $compile ]; then
     "$em"  -batch -f batch-byte-compile Contents/Resources/site-lisp/macosx/*.el 
     echo "Compiling oneonone"
     "$em"  -batch -f batch-byte-compile Contents/Resources/site-lisp/oneonone/*.el
+    echo "Compiling tabbar"
+    "$em"  -batch -f batch-byte-compile Contents/Resources/site-lisp/tabbar/*.el
+
     #mv Contents/Resources/site-lisp/site-start.elx Contents/Resources/site-lisp/site-start.el
     # echo "(Note: ignore the --no-splash error!)"
 fi
