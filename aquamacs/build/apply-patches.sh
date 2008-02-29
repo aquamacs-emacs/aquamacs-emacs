@@ -29,8 +29,9 @@ PATCHES="fix-configure test ui-strings
          calm-startup startup-load-preferences
          available-screen mouse-button launch-browser
          org-gnu-Aquamacs about-aquamacs puresize
-         macfns-dialog-menu menu-bar-visible-frame eval-depth
-          shut-up python-mode intel"
+         mac-functions macfns-dialog-menu menu-bar-visible-frame 
+         eval-depth
+         shut-up python-mode intel"
 #  longlines-fillcolumn  out temporarily
 
 
