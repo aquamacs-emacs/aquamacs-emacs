@@ -20,30 +20,12 @@ diff -c -r1.70 macfns.c
   extern Lisp_Object Vwindow_system_version;
 ***************
 *** 4326,4331 ****
---- 4355,4483 ----
+--- 4355,4465 ----
        void *data ;
   {
   }
 + 
 + #if MAC_OSX
-+ DEFUN ("mac-show-menu-bar", Fmac_show_menu_bar, Smac_show_menu_bar, 0, 1, "",
-+        doc: /* Show the menu bar.  */)
-+   (display)
-+      Lisp_Object display;
-+ {
-+   if ( EQ (Vwindow_system, intern ("mac")))
-+     ShowMenuBar();
-+   return Qnil;
-+ }
-+ DEFUN ("mac-hide-menu-bar", Fmac_hide_menu_bar, Smac_hide_menu_bar, 0, 1, "",
-+        doc: /* Hide the menu bar.  */)
-+   (display)
-+      Lisp_Object display;
-+ {
-+   if ( EQ (Vwindow_system, intern ("mac")))
-+     HideMenuBar();
-+   return Qnil;
-+ }
 + DEFUN ("mac-dialog", Fmac_dialog, Smac_dialog, 2, 2, "",
 +        doc: /* Show a dialog.  */)
 +   (message, explanation)
@@ -163,25 +145,12 @@ diff -c -r1.70 macfns.c
     Vtext_property_default_nonsticky
       = Fcons (Fcons (Qdisplay, Qt), Vtext_property_default_nonsticky);
 ***************
-*** 4508,4513 ****
---- 4663,4670 ----
-    defsubr (&Sx_display_list);
-    defsubr (&Sx_synchronize);
-  
-+   defsubr (&Smac_display_available_pixel_bounds);
-+ 
-    /* Setting callback functions for fontset handler.  */
-    get_font_info_func = x_get_font_info;
-  
-***************
 *** 4537,4542 ****
---- 4694,4705 ----
+--- 4694,4703 ----
   
   #if TARGET_API_MAC_CARBON
     defsubr (&Sx_file_dialog);
 + #if MAC_OSX
-+   defsubr (&Smac_show_menu_bar);
-+   defsubr (&Smac_hide_menu_bar);
 +   defsubr (&Smac_dialog);
 +   defsubr (&Smac_dialog_y_or_n_p);
 + #endif
