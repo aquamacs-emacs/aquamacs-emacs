@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs version check
  
-;; Last change: $Id: check-for-updates.el,v 1.20 2008/02/26 15:50:17 davidswelt Exp $
+;; Last change: $Id: check-for-updates.el,v 1.21 2008/02/29 08:10:13 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -74,7 +74,6 @@ nil  )
 (setq aquamacs-version-check-buffer nil) 
 (setq url-show-status nil) ;;don't annoy user
 (defun aquamacs-compare-version ()
-(message "!!!")
   (if aquamacs-version-check-buffer ;; just for safety
       (save-excursion 
 	(set-buffer aquamacs-version-check-buffer)
@@ -264,10 +263,7 @@ and show user a message if there is."
 	)
 	(error nil))
       )
-    
-  nil
-
-  )
+  nil)
 
 ; (aquamacs-check-for-updates-if-necessary t)
 
