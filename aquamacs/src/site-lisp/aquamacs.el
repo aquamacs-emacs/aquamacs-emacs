@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.135 2008/02/12 08:48:06 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.136 2008/03/01 07:11:05 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -345,10 +345,9 @@ Separate paths from file names with --."
  
      (longlines-wrap-follows-window-size t)
 
-   
+     ;; Do not require users to insert two spaces after a sentence
+     (sentence-end-double-space nil)
      
-     
-
      ;; do not allow user to mess with minibuffer prompt
 
      (minibuffer-prompt-properties
