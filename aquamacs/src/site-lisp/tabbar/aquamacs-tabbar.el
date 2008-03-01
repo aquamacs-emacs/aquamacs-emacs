@@ -1,5 +1,5 @@
 ;; load original tabbar-mode
-(load "tabbar.el")
+(require 'tabbar)
 
 ;; modify various settings:
 ;; eliminate gap between header-line and toolbar
@@ -245,3 +245,5 @@ TABSET is the tab set used to choose the appropriate buttons."
 ;; This must be done after turning on tabbar-mode, as it overwrites
 ;;   variable values that are set when tabbar-mode is initialized.
 (load "tabbar-window.el")
+
+(provide 'aquamacs-tabbar)
