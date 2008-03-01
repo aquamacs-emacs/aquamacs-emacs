@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: site-start.el,v 1.39 2008/02/29 11:50:23 davidswelt Exp $
+;; Last change: $Id: site-start.el,v 1.40 2008/03/01 16:18:33 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -60,6 +60,7 @@ Changes in this code are ignored during the online version check.")
  (setq load-path (cons "~/src" load-path))
  (setq load-path (cons "~/src/oneonone" load-path))
  (setq load-path (cons "~/src/macosx" load-path))
+ (setq load-path (cons "~/src/tabbar" load-path))
  (setq unicode-emacs 0)
 )
 
