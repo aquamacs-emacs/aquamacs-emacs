@@ -236,9 +236,22 @@ TABSET is the tab set used to choose the appropriate buttons."
        (car tabbar-scroll-right-button-value)
      (cdr tabbar-scroll-right-button-value))
    tabbar-separator-value))
+(defsubst tabbar-line-buttons (tabset)
+  "Return a list of propertized strings for tab bar buttons.
+TABSET is the tab set used to choose the appropriate buttons."
+  (list
+   (if tabbar-home-function
+       (car tabbar-home-button-value)
+     (cdr tabbar-home-button-value))
+   (if (> (tabbar-start tabset) 0)
+       (car tabbar-scroll-left-button-value))
+   (if (< (tabbar-start tabset)
+          (1- (length (tabbar-tabs tabset))))
+       (car tabbar-scroll-right-button-value))
+   tabbar-separator-value))
 
 ; turn on tabbar mode
-(tabbar-mode t)
+; (tabbar-mode t)
 
 ;; changes behavior of "buffer tabs", so that tabs are associated with a
 ;;   window instead of a major mode.
