@@ -28,6 +28,7 @@ PATCHES="fix-configure test ui-strings
          faces-speedup
          calm-startup startup-load-preferences
          available-screen mouse-button launch-browser
+         header-line
          org-gnu-Aquamacs about-aquamacs puresize
          mac-functions macfns-dialog-menu menu-bar-visible-frame 
          eval-depth
