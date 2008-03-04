@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.93 2008/01/02 01:22:44 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.94 2008/03/04 20:22:09 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -661,7 +661,10 @@ left and right margin"))
 (easy-menu-remove-item global-map  '("menu-bar" "file") 'ps-print-buffer-faces) 
 (easy-menu-remove-item global-map  '("menu-bar" "file") 'print-region) 
 (easy-menu-remove-item global-map  '("menu-bar" "file") 'print-buffer) 
+
  
+
+
 (defun menu-bar-print-region-or-buffer ()
   "Prints the current buffer or the region, if mark is active."
   (interactive)
@@ -852,6 +855,10 @@ both existing buffers and buffers that you subsequently create."
 	      :help "Narrow fringe, left only"
 	      :visible ,(display-graphic-p)
 	      :button (:radio . (equal fringe-mode '(1 . 1)))) 'none)
+
+
+;; not important enough to warrant a menu entry
+(easy-menu-remove-item global-map  '("menu-bar" "options") 'save-place) 
 
  
 
