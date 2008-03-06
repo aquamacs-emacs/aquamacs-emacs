@@ -15,11 +15,11 @@
 	 (push (window-number window) window-numbers)) 'nomini t)
     window-numbers))
 
-(defun tabbar-window-update-alist (window)
+(defun tabbar-window-alist-update (window)
   "Update the list of windows and corresponding buffers to be
-shown in tabs.  Add a tabset for current window if it does not
+shown in tabs.  Add a tabset for specified window if it does not
 yet exist, and update list of tabs to include the currently
-displayed buffer"
+displayed buffer."
   (let* ((wnumber (window-number window))
 	 (wbuffer (window-buffer window))
 	 (wbname (buffer-name wbuffer))
@@ -49,7 +49,7 @@ displayed buffer"
 	   (setq window-id window))) 'nomini t)
     window-id))
 
-(defun tabbar-window-cleanup-alist ()
+(defun tabbar-window-alist-cleanup ()
   "Remove from tabbar-window-alist any elements (windows OR
 buffers) that no longer exist, or buffers that don't get tabs.
 Displayed buffers always get tabs."
@@ -62,25 +62,36 @@ Displayed buffers always get tabs."
 	     (newlist blist)
 	     newelt)
 	;; remove entire elt from alist
-	(setq tabbar-window-alist (remove elt tabbar-window-alist))
+	(setq tabbar-window-alist (delq elt tabbar-window-alist))
 	;; if the window still exists, delete any buffers as needed
-	(when (memq wnumber wnumber-list)
-	  ;; for extant windows, loop through buffers
-	  ;; delete any that aren't listed by
-	  ;; (tabbar-buffer-list-function) 
-	  ;; later, make this UNLESS they're displayed in that window
-	  (dolist (thisbuffer blist)
-	    (unless (and
-		     ;; in order to keep tab,
-		     ;; must be an existing buffer that should get a tab
-		     (member (car thisbuffer) tabbar-buffers-list)
-		     ;; must have buffer-name current for this buffer
-		     (equal (buffer-name (car thisbuffer)) (cadr thisbuffer)))
-	      (setq newlist (remove thisbuffer newlist))))
-	  (when newlist
-	    (setq newelt (cons wnumber newlist)))
-	  ;; replace elt with newelt -- at END to preserve alist order
-	  (setq tabbar-window-alist (append tabbar-window-alist (list newelt))) )
+	(if (memq wnumber wnumber-list)
+	    ;; for extant windows, loop through buffers
+	    ;; delete any that aren't listed by tabbar-buffer-list-function 
+	    ;; later, make this UNLESS they're displayed in that window
+	    (progn
+	      (dolist (thisbuffer blist)
+		(unless (and
+			 ;; in order to keep tab,
+			 ;; must be an existing buffer that should get a tab
+		       (memq (car thisbuffer) tabbar-buffers-list)
+		       ;; must have buffer-name current for this buffer
+		       (equal (buffer-name (car thisbuffer)) (cadr thisbuffer)))
+		  (setq newlist (delq thisbuffer newlist))))
+	      (when newlist
+		(setq newelt (cons wnumber newlist))
+		(if (eq (length newlist) 1)
+		    (add-to-list 'header-line-inhibit-window-list
+				 (window-number-get-window wnumber))
+		  (setq header-line-inhibit-window-list
+			(delq (window-number-get-window wnumber)
+			      header-line-inhibit-window-list)) )
+		)
+	      ;; replace elt with newelt -- at END to preserve alist order
+	      (add-to-list 'tabbar-window-alist newelt t))
+	  (setq header-line-inhibit-window-list
+		(delq (window-number-get-window wnumber)
+		      header-line-inhibit-window-list))
+	  )
 	)))
   tabbar-window-alist)
 
@@ -91,10 +102,12 @@ Displayed buffers always get tabs."
 (defun tabbar-window-update-tabsets ()
   "Update tab sets from tabbar-window-alist.
 Return the current tabset, which corresponds to (selected-window)."
-  ;; run tabbar-window-update-alist for all windows
-  (walk-windows 'tabbar-window-update-alist 'nomini t)
-  ;; run tabbar-window-cleanup-alist to remove defunct entries
-  (tabbar-window-cleanup-alist)
+  ;; run tabbar-window-alist-update for all windows
+  ;; could probably change this to only windows in current frame,
+  ;; since modified frame is active for 'window-configuration-change-hook
+  (walk-windows 'tabbar-window-alist-update 'nomini t)
+  ;; run tabbar-window-alist-cleanup to remove defunct entries
+  (tabbar-window-alist-cleanup)
   ;; if the alist has changed, update the tab sets (compare against cache)
   (unless (equal tabbar-window-alist tabbar-window-cache)
     ;; cycle through alist.
@@ -111,16 +124,16 @@ Return the current tabset, which corresponds to (selected-window)."
 	      (dolist (buf buflist)
 		(unless (memq buf old-buflist)
 		  (tabbar-add-tab tabset (car buf) t)
-		  ;;Update the tabs display
+		  ;;Update the tabset template when we modify the tabset
+		  ;;actually don't need to here; tabbar-add-tab does that for us
+		  ;;(tabbar-set-template tabset nil)
 		  (tabbar-set-template tabset nil))))
 	  ;; if tabset doesn't exist, create new containing first buffer
 	  (tabbar-make-tabset groupname (car (car buflist)))
 	  ;; then add any remaining buffers
 	  (dolist (buf (cdr buflist))
-	    (tabbar-add-tab tabset (car buf) t))
-	  ;;Update the tabs display
-;	  (tabbar-set-template tabset nil)
-)))
+	    ;; don't have to update the template, since tabset has no such prop. yet
+	    (tabbar-add-tab tabset (car buf) t)))))
     ;; cycle through tabsets
     (dolist (tabset-name (tabbar-tabset-names))
       (let* ((tabset (tabbar-get-tabset tabset-name))
@@ -138,18 +151,14 @@ Return the current tabset, which corresponds to (selected-window)."
 	  ;;delete all containted tabs and tabset
 	  (dolist (tab (tabbar-tabs tabset))
 	    (tabbar-delete-tab tab))
+	  ;; if we are deleting the tabset, we don't have to worry about its template
 	  (tabbar-delete-tabset tabset))))
     ;; duplicate tabbar-window-alist, so we can detect changes (have
     ;; to ensure that changes within tabbar-window-alist don't affect
     ;; tabbar-window cache)
     (setq tabbar-window-cache (copy-alist tabbar-window-alist)))
-  (number-to-string (window-number (selected-window))))
-
-(defun tabbar-window-tabs ()
-  "Return the buffers to display on the tab bar, in a tab set."
-  (let ((tabset (tabbar-get-tabset (tabbar-window-update-tabsets))))
-    (tabbar-select-tab-value (current-buffer) tabset)
-    tabset))
+  (number-to-string (window-number (selected-window)))
+  )
 
 (defun tabbar-window-button-label (name)
   ;; Use empty string for HOME button, so it doesn't show up.
@@ -192,43 +201,16 @@ That is, a string used to represent it on the tab bar."
       (switch-to-buffer buffer)))
     ))
 
-;; (defun tabbar-window-track-killed ()
-;;   "Hook run just before actually killing a buffer.
-;; In Tabbar mode, try to switch to a buffer in the current tab bar,
-;; after the current buffer has been killed.  Try first the buffer in tab
-;; after the current one, then the buffer in tab before.  On success, put
-;; the sibling buffer in front of the buffer list, so it will be selected
-;; first."
-;;   (and (eq header-line-format tabbar-header-line-format)
-;;        (eq tabbar-current-tabset-function 'tabbar-window-tabs)
-;;        (eq (current-buffer) (window-buffer (selected-window)))
-;;        (let ((bl (tabbar-tab-values (tabbar-current-tabset)))
-;;              (b  (current-buffer))
-;;              found sibling)
-;;          (while (and bl (not found))
-;;            (if (eq b (car bl))
-;;                (setq found t)
-;;              (setq sibling (car bl)))
-;;            (setq bl (cdr bl)))
-;;          (when (and (setq sibling (or (car bl) sibling))
-;;                     (buffer-live-p sibling))
-;;            ;; Move sibling buffer in front of the buffer list.
-;;            (save-current-buffer
-;;              (switch-to-buffer sibling))))))
-
 (defun tabbar-windows-per-buffer (buffer)
-  "Return a list of numbers corresponding to window tabsets the
+  "Return a list of numbers corresponding to window tabsets to which the
 current buffer belongs."
-  (let* ((count 0)
-	(count-elt (nth count tabbar-window-alist))
+  (let ((blist (list buffer (buffer-name buffer)))
 	buffer-window-list)
-    (while count-elt
-      (let ((wnumber (car count-elt))
-	    (wbuffers (cdr count-elt)))
-	(when (memq buffer wbuffers)
-	  (setq buffer-window-list (cons wnumber buffer-window-list)))
-	(setq count (+ count 1)
-	      count-elt (nth count tabbar-window-alist))))
+    (dolist (elt tabbar-window-alist)
+      (let ((wnumber (car elt))
+	    (wbuffers (cdr elt)))
+	(when (member blist wbuffers)
+	  (setq buffer-window-list (cons wnumber buffer-window-list)))))
     buffer-window-list))
 
 (defun tabbar-window-other-instances (tab)
@@ -257,17 +239,18 @@ current buffer belongs."
 	     (buffer (car tab))
 	     (bname (buffer-name buffer))
 	     newelt)
-	(setq tabbar-window-alist (remove window-elt tabbar-window-alist))
+	(setq tabbar-window-alist (delq window-elt tabbar-window-alist))
 	(setq buflist (remove (list buffer bname) buflist))
 	(when buflist
 	  (setq newelt (cons wnumber buflist))
-	  (setq tabbar-window-alist (append tabbar-window-alist (list newelt)))))))
-;; can't delete the selected tab.  Gets automatically recreated, I think...
+	  (add-to-list 'tabbar-window-alist newelt t)
+	  ))))
 
 (defun tabbar-window-remove-tab (tab)
   (let* ((tabset (tabbar-tab-tabset tab))
 	 (sel    (eq tab (tabbar-selected-tab tabset)))
-	 (wind (window-number-get-window (string-to-number (symbol-name (cdr tab))))))
+	 (wind (window-number-get-window
+		(string-to-number (symbol-name (cdr tab))))))
     ;; function to close the named tab.  first check whether there are
     ;; tabs remaining after this one.  If so, we move to the next tab if
     ;; available, otherwise previous; delete the named tab.
@@ -277,7 +260,11 @@ current buffer belongs."
 	 (if (tabbar-tab-next tabset tab)
 	     (tabbar-forward-tab)
 	   (tabbar-backward-tab)))
-       (tabbar-window-delete-tab tab))))
+       (tabbar-window-delete-tab tab)
+       ;; manually update tabsets now, to ensure that deleted tab is no
+       ;;  longer displayed
+       (tabbar-window-update-tabsets)
+       )))
 
 (defun tabbar-window-close-tab (tab)
   (let* ((buffer (car tab))
@@ -298,7 +285,8 @@ current buffer belongs."
 		  (unless (minibuffer-window)
 		    (setq last-nonmenu-event nil)
 		    )
-		  (y-or-n-p (format "Save buffer %s to file before closing tab? " (buffer-name)))
+		  (y-or-n-p (format "Save buffer %s to file before closing tab? " 
+				    (buffer-name)))
 		  )
 		(progn
 		  (save-buffer)
@@ -310,23 +298,29 @@ current buffer belongs."
 	  (message ""))))
     (tabbar-window-remove-tab tab)
     (when (and killable (not dont-kill))
-      (kill-buffer buffer))))
+      (kill-buffer buffer)))
+  ;; do we need to delete tab right here?
+  (tabbar-delete-tab tab)
+  )
 
 (defun tabbar-window-close-current-tab ()
   (interactive)
   (let ((tab (tabbar-selected-tab (tabbar-current-tabset t))))
     (tabbar-window-close-tab tab)))
 
-(defun tabbar-window-inhibit-function ()
-  "Inhibit display of the tab bar in specified windows.
-That is dedicated windows, and `checkdoc' status windows."
-;  (or (window-dedicated-p (selected-window))
-      (member (buffer-name)
-              (list " *Checkdoc Status*"
-		 ;;   "*Completions*"
-                    (if (boundp 'ispell-choices-buffer)
-                        ispell-choices-buffer
-                      "*Choices*"))));)
+(defun tabbar-line ()
+  "Return the header line templates that represent the tab bar.
+Inhibit display of the tab bar in current window if any of the
+`tabbar-inhibit-functions' return non-nil."
+  (tabbar-current-tabset t)
+  (or (tabbar-template tabbar-current-tabset)
+      (tabbar-line-format tabbar-current-tabset)))
+
+(defun tabbar-window-current-tabset ()
+       (let ((tabset (tabbar-get-tabset
+		      (number-to-string (window-number (selected-window))))))
+	 (tabbar-select-tab-value (current-buffer) tabset)
+	 tabset))
 
 
 ;;; Tab bar window setup
@@ -336,7 +330,7 @@ That is dedicated windows, and `checkdoc' status windows."
 Run as `tabbar-init-hook'."
   (setq tabbar-window-alist nil
 	tabbar-window-cache nil
-        tabbar-current-tabset-function 'tabbar-window-tabs
+        tabbar-current-tabset-function 'tabbar-window-current-tabset
         tabbar-tab-label-function 'tabbar-window-tab-label
         tabbar-select-tab-function 'tabbar-window-select-tab
         tabbar-help-on-tab-function 'tabbar-window-help-on-tab
@@ -345,9 +339,9 @@ Run as `tabbar-init-hook'."
         tabbar-home-help-function nil
 	tabbar-home-button-value nil
 	tabbar-cycle-scope 'tabs
-	tabbar-inhibit-functions '(tabbar-window-inhibit-function)
-        )
-;;  (add-hook 'kill-buffer-hook 'tabbar-window-track-killed)
+	tabbar-inhibit-functions nil
+	)
+  (add-hook 'window-configuration-change-hook 'tabbar-window-update-tabsets)
 )
 
 (defun tabbar-window-quit ()
@@ -366,7 +360,7 @@ Run as `tabbar-quit-hook'."
 	tabbar-cycle-scope nil
 	tabbar-inhibit-functions nil
         )
-;;  (remove-hook 'kill-buffer-hook 'tabbar-window-track-killed)
+  (remove-hook 'window-configuration-change-hook 'tabbar-window-update-tabsets)
 )
 
 ;;-----------------------------------------------

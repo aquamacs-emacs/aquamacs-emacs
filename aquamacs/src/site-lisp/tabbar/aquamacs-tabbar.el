@@ -80,25 +80,42 @@ That is, a string used to represent it on the tab bar."
 	    (tabbar-window-close-tab thistab))))));)
 
 ;; function to open a new tab, suppressing new frame creation
-(defun tabbar-new-tab-with-new-scratch  ()
+(defun tabbar-new-tab-with-new-scratch  (&optional mode)
   "Opens a new frame containing an empty buffer."
   (interactive)			
   (let ((one-buffer-one-frame-inhibit t)
 	(buf (generate-new-buffer (mac-new-buffer-name "untitled"))))
     (save-excursion
       (set-buffer buf)
-      (if default-major-mode
-	  (funcall default-major-mode)))
+      (if (or mode default-major-mode)
+	  (funcall (or mode default-major-mode))))
     (switch-to-buffer buf)
     (setq buffer-offer-save t)
     (set-buffer-modified-p nil)))
+
+;; have to use tabbar-new-frame-with-buffer instead of make-frame-command
+;; otherwise current window shows new window's tabs instead of its own
+(defun tabbar-new-frame-with-buffer (&optional buffer)
+  (interactive)
+  (let ((buf (or buffer (current-buffer))))
+    (switch-to-buffer-other-frame buf)))
+
+(defun tabbar-new-frame-with-clicked-buffer (event)
+  (interactive "@e")
+  (when (tabbar-click-p event)
+    (let* ((clicklocation (posn-string (event-start event)))
+	   (clickedtab (get-text-property (cdr clicklocation)
+						  'tabbar-tab (car clicklocation)))
+	   (buffer (car clickedtab)))
+      (tabbar-new-frame-with-buffer buffer))))
 
 ;; keymap for tabbar context menu
 (defvar tabbar-context-menu-map
   (let ((map (make-sparse-keymap)))
     (define-key map [closeothers] (cons "Close Other Tabs" 'tabbar-close-other-tabs))
     (define-key map [closetab] (cons "Close Tab" 'tabbar-close-clicked-tab))
-    (define-key map [newwindow] (cons "Open This Tab in New Window" 'make-frame-command))
+    (define-key map [newwindow]
+      (cons "Open This Tab in New Window" 'tabbar-new-frame-with-clicked-buffer))
     (define-key map [newtab] (cons "New Tab" 'tabbar-new-tab-with-new-scratch))
     map) "Keymap for the Tabbar context menu.")
 
@@ -236,22 +253,9 @@ TABSET is the tab set used to choose the appropriate buttons."
        (car tabbar-scroll-right-button-value)
      (cdr tabbar-scroll-right-button-value))
    tabbar-separator-value))
-(defsubst tabbar-line-buttons (tabset)
-  "Return a list of propertized strings for tab bar buttons.
-TABSET is the tab set used to choose the appropriate buttons."
-  (list
-   (if tabbar-home-function
-       (car tabbar-home-button-value)
-     (cdr tabbar-home-button-value))
-   (if (> (tabbar-start tabset) 0)
-       (car tabbar-scroll-left-button-value))
-   (if (< (tabbar-start tabset)
-          (1- (length (tabbar-tabs tabset))))
-       (car tabbar-scroll-right-button-value))
-   tabbar-separator-value))
 
 ; turn on tabbar mode
-; (tabbar-mode t)
+(tabbar-mode t)
 
 ;; changes behavior of "buffer tabs", so that tabs are associated with a
 ;;   window instead of a major mode.

@@ -6,7 +6,7 @@
 ;; Maintainer: David Ponce <david@dponce.com>
 ;; Created: 25 February 2003
 ;; Keywords: convenience
-;; Revision: $Id: tabbar.el,v 1.1 2008/02/26 00:13:36 davidswelt Exp $
+;; Revision: $Id: tabbar.el,v 1.2 2008/03/06 06:01:22 champo Exp $
 
 (defconst tabbar-version "2.0")
 
@@ -1712,6 +1712,8 @@ Return a list of one element based on major mode."
 Return the the first group where the current buffer is."
   (let ((bl (sort
              (mapcar
+	      ;; for each buffer, create list: buffer, buffer name, groups-list
+	      ;; sort on buffer name; store to bl (buffer list)
               #'(lambda (b)
                   (with-current-buffer b
                     (list (current-buffer)
@@ -1726,31 +1728,34 @@ Return the the first group where the current buffer is."
     ;; If the cache has changed, update the tab sets.
     (unless (equal bl tabbar--buffers)
       ;; Add new buffers, or update changed ones.
-      (dolist (e bl)
-        (dolist (g (nth 2 e))
-          (let ((tabset (tabbar-get-tabset g)))
-            (if tabset
-                (unless (equal e (assq (car e) tabbar--buffers))
+      (dolist (e bl) ;; loop through buffer list
+        (dolist (g (nth 2 e)) ;; for each member of groups-list for current buffer
+          (let ((tabset (tabbar-get-tabset g))) ;; get group from group name
+            (if tabset ;; if group exists
+		;; check if current buffer is same as any cached buffer
+		;; (search buffer list for matching buffer)
+                (unless (equal e (assq (car e) tabbar--buffers)) ;; if not,...
                   ;; This is a new buffer, or a previously existing
                   ;; buffer that has been renamed, or moved to another
                   ;; group.  Update the tab set, and the display.
-                  (tabbar-add-tab tabset (car e) t)
+                  (tabbar-add-tab tabset (car e) t) ;; add to end of tabset
                   (tabbar-set-template tabset nil))
+	      ;;if tabset doesn't exist, make a new tabset with this buffer
               (tabbar-make-tabset g (car e))))))
       ;; Remove tabs for buffers not found in cache or moved to other
       ;; groups, and remove empty tabsets.
-      (mapc 'tabbar-delete-tabset
-            (tabbar-map-tabsets
+      (mapc 'tabbar-delete-tabset ;; delete each tabset named in following list:
+            (tabbar-map-tabsets ;; apply following function to each tabset:
              #'(lambda (tabset)
-                 (dolist (tab (tabbar-tabs tabset))
-                   (let ((e (assq (tabbar-tab-value tab) bl)))
-                     (or (and e (memq tabset
+                 (dolist (tab (tabbar-tabs tabset)) ;; for each tab in tabset
+                   (let ((e (assq (tabbar-tab-value tab) bl))) ;; get buffer
+                     (or (and e (memq tabset ;; skip if buffer exists and tabset is a member of groups-list for this buffer
                                       (mapcar 'tabbar-get-tabset
                                               (nth 2 e))))
-                         (tabbar-delete-tab tab))))
+                         (tabbar-delete-tab tab)))) ;; else remove tab from this set
                  ;; Return empty tab sets
                  (unless (tabbar-tabs tabset)
-                   tabset))))
+                   tabset)))) ;; return list of tabsets, replacing non-empties with nil
       ;; The new cache becomes the current one.
       (setq tabbar--buffers bl)))
   ;; Return the first group the current buffer belongs to.
