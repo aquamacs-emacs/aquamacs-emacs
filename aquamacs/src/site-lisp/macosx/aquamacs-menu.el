@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.94 2008/03/04 20:22:09 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.95 2008/03/06 22:23:39 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -751,11 +751,20 @@ both existing buffers and buffers that you subsequently create."
 
 
 
+(define-key menu-bar-options-menu [auto-fill-mode]
+  '(menu-item "Word Wrap in Text Modes"
+              menu-bar-text-mode-auto-fill
+	      :help "Automatically fill text between left and right margins (Auto Fill)"
+	      :enable (or (derived-mode-p 'text-mode) text-mode-variant)
+              :button (:toggle . (if (listp text-mode-hook)
+				     (member 'turn-on-auto-fill text-mode-hook)
+				   (eq 'turn-on-auto-fill text-mode-hook)))))
 
 (define-key-after menu-bar-options-menu [longlines]
   '(menu-item "Soft Word Wrap in Text Modes"
 	      menu-bar-text-mode-longlines
 	      :help "Wrap long lines without inserting carriage returns (Longlines)"
+	      :enable (or (derived-mode-p 'text-mode) text-mode-variant)
 	      :button (:toggle . (if (listp text-mode-hook)
 				     (member 'turn-on-longlines text-mode-hook)
 				   (eq 'turn-on-longlines text-mode-hook))))
@@ -848,7 +857,6 @@ both existing buffers and buffers that you subsequently create."
   ) 
 
 
- 
 (define-key-after menu-bar-showhide-fringe-menu [small]
   `(menu-item "Small left fringe" 
 	      aquamacs-menu-bar-showhide-fringe-menu-customize-small
@@ -856,6 +864,13 @@ both existing buffers and buffers that you subsequently create."
 	      :visible ,(display-graphic-p)
 	      :button (:radio . (equal fringe-mode '(1 . 1)))) 'none)
 
+  
+(define-key-after menu-bar-options-menu [file-backups]
+  (menu-bar-make-toggle toggle-make-backup-files make-backup-files  
+			(format "Make Backup Files %s" (if backup-inhibited "(inhibited here)" ""))
+			"Making backup files: %s"
+			"Create a backup file when saving"
+			) 'save-place)
 
 ;; not important enough to warrant a menu entry
 (easy-menu-remove-item global-map  '("menu-bar" "options") 'save-place) 
