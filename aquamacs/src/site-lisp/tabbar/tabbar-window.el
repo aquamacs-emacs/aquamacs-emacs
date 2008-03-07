@@ -1,3 +1,5 @@
+(require 'tabbar)
+
 (defvar tabbar-window-alist nil)
 (defvar tabbar-window-cache nil) 
 
@@ -303,6 +305,8 @@ current buffer belongs."
   (tabbar-delete-tab tab)
   )
 
+(setq tabbar-close-tab-function 'tabbar-buffer-close-tab)
+
 (defun tabbar-window-close-current-tab ()
   (interactive)
   (let ((tab (tabbar-selected-tab (tabbar-current-tabset t))))
@@ -342,6 +346,8 @@ Run as `tabbar-init-hook'."
 	tabbar-inhibit-functions nil
 	)
   (add-hook 'window-configuration-change-hook 'tabbar-window-update-tabsets)
+  (add-hook 'after-save-hook 'tabbar-window-update-tabsets)
+  (tabbar-window-update-tabsets)
 )
 
 (defun tabbar-window-quit ()
@@ -361,6 +367,7 @@ Run as `tabbar-quit-hook'."
 	tabbar-inhibit-functions nil
         )
   (remove-hook 'window-configuration-change-hook 'tabbar-window-update-tabsets)
+  (remove-hook 'after-save-hook 'tabbar-window-update-tabsets)
 )
 
 ;;-----------------------------------------------
@@ -371,4 +378,4 @@ Run as `tabbar-quit-hook'."
 (add-hook 'tabbar-init-hook 'tabbar-window-init)
 (add-hook 'tabbar-quit-hook 'tabbar-window-quit)
 
-(run-hooks 'tabbar-init-hook)
+(provide 'tabbar-window)
