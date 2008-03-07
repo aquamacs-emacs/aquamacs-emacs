@@ -3,7 +3,30 @@
 
 ;; modify various settings:
 ;; eliminate gap between header-line and toolbar
-(setq tool-bar-border 0)
+;; save current value of tool-bar-border, to reset when tabbar-mode is turned off
+(setq tool-bar-border-saved tool-bar-border)
+(add-hook 'tabbar-init-hook (lambda () (setq tool-bar-border 0)))
+(add-hook 'tabbar-quit-hook (lambda () (setq tool-bar-border tool-bar-border-saved
+					     tool-bar-border-saved nil)))
+
+(defvar tabbar-close-tab-function nil
+  "Function to call to close a tabbar tab.  Passed a single argument, the tab
+construct to be closed.")
+
+;; for buffer tabs, use the usual command to close/kill a buffer
+(defun tabbar-buffer-close-tab (tab)
+  (let ((buffer (car tab))
+	(one-buffer-one-frame-inhibit t))
+    (with-current-buffer buffer
+      (close-current-window-asktosave))))
+
+(setq tabbar-close-tab-function 'tabbar-buffer-close-tab)
+
+(defun tabbar-close-tab (tab)
+  "Generic function to close a tabbar tab.  Calls function named in
+tabbar-close-tab-function.  Passes a single argument: the tab construct
+to be closed."
+  (funcall tabbar-close-tab-function tab))
 
 ;; change faces for better-looking tabs (and more obvious selected tab!)
 (set-face-attribute 'tabbar-default nil
@@ -13,13 +36,6 @@
 		    :background "gray80"
 		    :foreground "gray30"
 		    :family "helvetica")
-
-;(set-face-attribute 'tabbar-default nil
-;		    :inherit 'variable-pitch
-;		    :height 1.0
-;		    :width 'normal
-;		    :background "gray80"
-;		    :foreground "gray30")
 
 (set-face-attribute 'tabbar-selected nil
 		    :background "gray95"
@@ -63,7 +79,8 @@ That is, a string used to represent it on the tab bar."
 	   (clickedtab (get-text-property (cdr clicklocation)
 						  'tabbar-tab (car clicklocation))))
       (save-current-buffer
-	(tabbar-window-close-tab clickedtab)))))
+;;	(tabbar-window-close-tab clickedtab)))))
+	(tabbar-close-tab clickedtab)))))
 
 ;; function for closing all other tabs via context menu
 (defun tabbar-close-other-tabs (event)
@@ -77,7 +94,8 @@ That is, a string used to represent it on the tab bar."
 ;      (save-current-buffer
 	(dolist (thistab tablist (car clickedtab))
 	  (unless (equal thistab clickedtab)
-	    (tabbar-window-close-tab thistab))))));)
+;;	    (tabbar-window-close-tab thistab))))));)
+	(tabbar-close-tab thistab))))))
 
 ;; function to open a new tab, suppressing new frame creation
 (defun tabbar-new-tab-with-new-scratch  (&optional mode)
@@ -254,13 +272,11 @@ TABSET is the tab set used to choose the appropriate buttons."
      (cdr tabbar-scroll-right-button-value))
    tabbar-separator-value))
 
-; turn on tabbar mode
-(tabbar-mode t)
-
-;; changes behavior of "buffer tabs", so that tabs are associated with a
-;;   window instead of a major mode.
-;; This must be done after turning on tabbar-mode, as it overwrites
-;;   variable values that are set when tabbar-mode is initialized.
-(load "tabbar-window.el")
+;; default tabbar behavior (buffer tabs grouped by major-mode) can be
+;;  retained by setting tabbar-inhibit-window-tabs to non-nil
+(unless (and (boundp 'tabbar-inhibit-window-tabs) tabbar-inhibit-window-tabs)
+  ;; changes behavior of "buffer tabs", so that tabs are associated with a
+  ;;   window instead of a major mode.
+  (require 'tabbar-window))
 
 (provide 'aquamacs-tabbar)
