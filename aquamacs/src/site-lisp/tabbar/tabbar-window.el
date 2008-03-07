@@ -305,8 +305,6 @@ current buffer belongs."
   (tabbar-delete-tab tab)
   )
 
-(setq tabbar-close-tab-function 'tabbar-buffer-close-tab)
-
 (defun tabbar-window-close-current-tab ()
   (interactive)
   (let ((tab (tabbar-selected-tab (tabbar-current-tabset t))))
@@ -339,6 +337,7 @@ Run as `tabbar-init-hook'."
         tabbar-select-tab-function 'tabbar-window-select-tab
         tabbar-help-on-tab-function 'tabbar-window-help-on-tab
         tabbar-button-label-function 'tabbar-window-button-label
+	tabbar-close-tab-function 'tabbar-window-close-tab)
         tabbar-home-function nil
         tabbar-home-help-function nil
 	tabbar-home-button-value nil
