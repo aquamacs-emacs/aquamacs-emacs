@@ -1,7 +1,29 @@
 (require 'tabbar)
 
 (defvar tabbar-window-alist nil)
-(defvar tabbar-window-cache nil) 
+(defvar tabbar-window-cache nil)
+
+;; for "buffer tabs", it makes sense to have tabbar-current-tabset always
+;; buffer-local.  This is not sensible for "window tabs".  Window-local variables
+;; do not exist in emacs; therefore we use frame-local.
+;; Probably doesn't matter much, now that we always update tabbar-current-tabset
+;; when (tabbar-current-tabset) is called.
+(makunbound 'tabbar-current-tabset)
+(defvar tabbar-current-tabset nil
+  "The tab set currently displayed on the tab bar.")
+(make-variable-frame-local 'tabbar-current-tabset)
+
+;; redefine tabbar-current-tabset to ALWAYS update the value
+;; of tabbar-current-tabset.  Required since the same buffer can have tabs
+;; in multiple tabsets.  Reasonable to do, as this does not redefine all tabsets
+;; when "window tabs" are on -- see tabbar-window-current-tabset below.
+(defun tabbar-current-tabset (&optional update)
+  "Return the tab set currently displayed on the tab bar.
+If optional argument UPDATE is non-nil, call the user defined function
+`tabbar-current-tabset-function' to obtain it.  Otherwise return the
+current cached copy."
+  (setq tabbar-current-tabset
+	(funcall tabbar-current-tabset-function)))
 
 (defun window-number (window)
   "Return window ID as a number."
@@ -162,6 +184,13 @@ Return the current tabset, which corresponds to (selected-window)."
   (number-to-string (window-number (selected-window)))
   )
 
+(defun tabbar-window-update-tabsets-when-idle ()
+  "Wait for emacs to be idle before updating tabsets.  This prevents tabs from
+updating when a new window shows the current buffer, just before the window shows
+new buffer."
+  (run-with-idle-timer 0 nil
+		       'tabbar-window-update-tabsets))
+
 (defun tabbar-window-button-label (name)
   ;; Use empty string for HOME button, so it doesn't show up.
   "Return a label for button NAME.
@@ -194,7 +223,7 @@ That is, a string used to represent it on the tab bar."
 (defun tabbar-window-select-tab (event tab &optional prefix)
   "On mouse EVENT, select TAB."
   (let ((mouse-button (event-basic-type event))
-	(one-buffer-one-frame-inhibit t)
+	(one-buffer-one-frame nil)
         (buffer (tabbar-tab-value tab)))
     (cond
      ((eq mouse-button 'mouse-3)
@@ -266,6 +295,7 @@ current buffer belongs."
        ;; manually update tabsets now, to ensure that deleted tab is no
        ;;  longer displayed
        (tabbar-window-update-tabsets)
+       (tabbar-scroll tabset -1)
        )))
 
 (defun tabbar-window-close-tab (tab)
@@ -300,15 +330,12 @@ current buffer belongs."
 	  (message ""))))
     (tabbar-window-remove-tab tab)
     (when (and killable (not dont-kill))
-      (kill-buffer buffer)))
-  ;; do we need to delete tab right here?
-  (tabbar-delete-tab tab)
-  )
+      (kill-buffer buffer))))
 
-(defun tabbar-window-close-current-tab ()
-  (interactive)
-  (let ((tab (tabbar-selected-tab (tabbar-current-tabset t))))
-    (tabbar-window-close-tab tab)))
+;; (defun tabbar-window-close-current-tab ()
+;;   (interactive)
+;;   (let ((tab (tabbar-selected-tab (tabbar-current-tabset t))))
+;;     (tabbar-window-close-tab tab)))
 
 (defun tabbar-line ()
   "Return the header line templates that represent the tab bar.
@@ -344,7 +371,7 @@ Run as `tabbar-init-hook'."
 	tabbar-cycle-scope 'tabs
 	tabbar-inhibit-functions nil
 	)
-  (add-hook 'window-configuration-change-hook 'tabbar-window-update-tabsets)
+  (add-hook 'window-configuration-change-hook 'tabbar-window-update-tabsets-when-idle)
   (add-hook 'after-save-hook 'tabbar-window-update-tabsets)
   (tabbar-window-update-tabsets)
 )
@@ -359,13 +386,15 @@ Run as `tabbar-quit-hook'."
         tabbar-select-tab-function nil
         tabbar-help-on-tab-function nil
         tabbar-button-label-function nil
+	tabbar-close-tab-function nil
         tabbar-home-function nil
         tabbar-home-help-function nil
 	tabbar-home-button-value nil
 	tabbar-cycle-scope nil
 	tabbar-inhibit-functions nil
         )
-  (remove-hook 'window-configuration-change-hook 'tabbar-window-update-tabsets)
+  (remove-hook 'window-configuration-change-hook
+	       'tabbar-window-update-tabsets-when-idle)
   (remove-hook 'after-save-hook 'tabbar-window-update-tabsets)
 )
 

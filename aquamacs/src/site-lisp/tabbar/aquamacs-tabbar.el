@@ -4,29 +4,40 @@
 ;; modify various settings:
 ;; eliminate gap between header-line and toolbar
 ;; save current value of tool-bar-border, to reset when tabbar-mode is turned off
-(setq tool-bar-border-saved tool-bar-border)
-(add-hook 'tabbar-init-hook (lambda () (setq tool-bar-border 0)))
-(add-hook 'tabbar-quit-hook (lambda () (setq tool-bar-border tool-bar-border-saved
-					     tool-bar-border-saved nil)))
+(add-hook 'tabbar-init-hook (lambda ()
+			      (setq tool-bar-border-saved tool-bar-border
+				    tool-bar-border 0)))
+(add-hook 'tabbar-quit-hook (lambda ()
+			      (setq tool-bar-border tool-bar-border-saved
+				    tool-bar-border-saved nil)))
+
+;; improve tabbar-selected-tab such that it defaults to (tabbar-current-tabset)
+;; if no tabset is passed
+(defsubst tabbar-selected-tab (&optional tabset)
+  "Return the tab selected in TABSET.  If no TABSET is specified,
+use (tabbar-current-tabset)."
+  (get (or tabset (tabbar-current-tabset) (tabbar-current-tabset t)) 'select))
 
 (defvar tabbar-close-tab-function nil
   "Function to call to close a tabbar tab.  Passed a single argument, the tab
 construct to be closed.")
-
+  
 ;; for buffer tabs, use the usual command to close/kill a buffer
 (defun tabbar-buffer-close-tab (tab)
   (let ((buffer (car tab))
-	(one-buffer-one-frame-inhibit t))
+	(one-buffer-one-frame nil))
     (with-current-buffer buffer
       (close-current-window-asktosave))))
 
 (setq tabbar-close-tab-function 'tabbar-buffer-close-tab)
 
-(defun tabbar-close-tab (tab)
+(defun tabbar-close-tab (&optional tab)
   "Generic function to close a tabbar tab.  Calls function named in
 tabbar-close-tab-function.  Passes a single argument: the tab construct
-to be closed."
-  (funcall tabbar-close-tab-function tab))
+to be closed.  If no tab is specified, (tabbar-selected-tab) is used"
+  (interactive)
+  (let ((thetab (or tab (tabbar-selected-tab))))
+    (funcall tabbar-close-tab-function thetab)))
 
 ;; change faces for better-looking tabs (and more obvious selected tab!)
 (set-face-attribute 'tabbar-default nil
@@ -98,25 +109,11 @@ That is, a string used to represent it on the tab bar."
 	(tabbar-close-tab thistab))))))
 
 ;; function to open a new tab, suppressing new frame creation
-(defun tabbar-new-tab-with-new-scratch  (&optional mode)
+(defun tabbar-new-tab (&optional mode)
   "Opens a new frame containing an empty buffer."
   (interactive)			
-  (let ((one-buffer-one-frame-inhibit t)
-	(buf (generate-new-buffer (mac-new-buffer-name "untitled"))))
-    (save-excursion
-      (set-buffer buf)
-      (if (or mode default-major-mode)
-	  (funcall (or mode default-major-mode))))
-    (switch-to-buffer buf)
-    (setq buffer-offer-save t)
-    (set-buffer-modified-p nil)))
-
-;; have to use tabbar-new-frame-with-buffer instead of make-frame-command
-;; otherwise current window shows new window's tabs instead of its own
-(defun tabbar-new-frame-with-buffer (&optional buffer)
-  (interactive)
-  (let ((buf (or buffer (current-buffer))))
-    (switch-to-buffer-other-frame buf)))
+  (let ((one-buffer-one-frame nil))
+    (new-frame-with-new-scratch nil mode)))
 
 (defun tabbar-new-frame-with-clicked-buffer (event)
   (interactive "@e")
@@ -125,7 +122,8 @@ That is, a string used to represent it on the tab bar."
 	   (clickedtab (get-text-property (cdr clicklocation)
 						  'tabbar-tab (car clicklocation)))
 	   (buffer (car clickedtab)))
-      (tabbar-new-frame-with-buffer buffer))))
+      (with-current-buffer buffer
+      (make-frame-command)))))
 
 ;; keymap for tabbar context menu
 (defvar tabbar-context-menu-map
@@ -134,7 +132,7 @@ That is, a string used to represent it on the tab bar."
     (define-key map [closetab] (cons "Close Tab" 'tabbar-close-clicked-tab))
     (define-key map [newwindow]
       (cons "Open This Tab in New Window" 'tabbar-new-frame-with-clicked-buffer))
-    (define-key map [newtab] (cons "New Tab" 'tabbar-new-tab-with-new-scratch))
+    (define-key map [newtab] (cons "New Tab" 'tabbar-new-tab))
     map) "Keymap for the Tabbar context menu.")
 
 ;; modify hints to give only the buffer name
@@ -153,7 +151,7 @@ That is, a string used to represent it on the tab bar."
 (defun tabbar-buffer-select-tab (event tab &optional prefix)
   "On mouse EVENT, select TAB."
   (let ((mouse-button (event-basic-type event))
-		      (one-buffer-one-frame-inhibit t)
+		      (one-buffer-one-frame nil)
         (buffer (tabbar-tab-value tab)))
     (cond
      ((eq mouse-button 'mouse-3)
@@ -187,11 +185,40 @@ by the variable `tabbar-NAME-button'."
      (propertize (or (caar btn) " ") 'display on)
      (propertize (or (cadr btn) " ") 'display off))))
 
+(defun tabbar-buffer-button-label (name)
+ ;; redefine tabbar-buffer-button-label to eliminate 1-pixel border around images
+  "Return a label for button NAME.
+That is a pair (ENABLED . DISABLED), where ENABLED and DISABLED are
+respectively the appearance of the button when enabled and disabled.
+They are propertized strings which could display images, as specified
+by the variable `tabbar-button-label'.
+When NAME is 'home, return a different ENABLED button if showing tabs
+or groups.  Call the function `tabbar-button-label' otherwise."
+  (let ((lab (tabbar-button-label name)))
+    (when (eq name 'home)
+      (let* ((btn tabbar-buffer-home-button)
+             (on  (tabbar-find-image (cdar btn)))
+             (off (tabbar-find-image (cddr btn))))
+        ;; When `tabbar-buffer-home-button' does not provide a value,
+        ;; default to the enabled value of `tabbar-home-button'.
+        (if on
+            (tabbar-normalize-image on)
+          (setq on (get-text-property 0 'display (car lab))))
+        (if off
+            (tabbar-normalize-image off)
+          (setq off (get-text-property 0 'display (car lab))))
+        (setcar lab
+                (if tabbar--buffer-show-groups
+                    (propertize (or (caar btn) (car lab)) 'display on)
+                  (propertize (or (cadr btn) (car lab)) 'display off)))
+        ))
+    lab))
+
 (setq tabbar-home-button-enabled-image
   '((:type png :file "home_sm.png")))
 
-(setq tabbar-home-button-disabled-image nil)
-;  '((:type png :file "home_sm.png")))
+(setq tabbar-home-button-disabled-image
+  '((:type png :file "home_sm.png")))
 
 (setq tabbar-home-button
   (cons (cons "[o]" tabbar-home-button-enabled-image)
@@ -228,7 +255,9 @@ by the variable `tabbar-NAME-button'."
        (not (memq 'drag (event-modifiers event))))
   )
 
-(defun tabbar-check-overflow (tabset)
+(defun tabbar-check-overflow (tabset &optional noscroll)
+  "Return t if the current tabbar is longer than the header line.  If NOSCROLL
+is non-nil, exclude the tabbar-scroll buttons in the check."
   (let ((tabs (tabbar-view tabset))
 	elts)
     (while tabs
@@ -242,7 +271,7 @@ by the variable `tabbar-NAME-button'."
 	    start)
 	(setq truncate-lines nil
 	      buffer-undo-list t)
-	(apply 'insert (tabbar-dummy-line-buttons))
+	(apply 'insert (tabbar-dummy-line-buttons noscroll))
 	(setq start (point))
 	(delete-region start (point-max))
 	(goto-char (point-max))
@@ -250,27 +279,143 @@ by the variable `tabbar-NAME-button'."
 	(goto-char (point-min))
 	(> (vertical-motion 1) 0)))))
 
-(defun tabbar-dummy-line-buttons ()
-  (list
-   (cdr tabbar-home-button-value)
-   (cdr tabbar-scroll-left-button-value)
-   (cdr tabbar-scroll-right-button-value)
-   tabbar-separator-value))
+(defun tabbar-dummy-line-buttons (&optional noscroll)
+  "Return a list of propertized strings for placeholders for the tab bar buttons.
+These are used to determine the size of the tab bar -- and hence the enabled/
+disabled state of the tab bar buttons -- so they always carry a disabled state.
+This avoids an infinite loop.  If NOSCROLL is non-nil, exclude the tabbar-scroll
+buttons."
+  (append (cons
+	   (cdr tabbar-home-button-value)
+	   (unless noscroll
+	     (list
+	      (cdr tabbar-scroll-left-button-value)
+	      (cdr tabbar-scroll-right-button-value))))
+	  (list tabbar-separator-value)))
 
-(defsubst tabbar-line-buttons (tabset)
+(defsubst tabbar-line-buttons (tabset &optional noscroll)
   "Return a list of propertized strings for tab bar buttons.
-TABSET is the tab set used to choose the appropriate buttons."
-  (list
+TABSET is the tab set used to choose the appropriate buttons.  If
+NOSCROLL is non-nil, exclude the tabbar-scroll buttons."
+  (append (cons
    (if tabbar-home-function
        (car tabbar-home-button-value)
      (cdr tabbar-home-button-value))
-   (if (> (tabbar-start tabset) 0)
-       (car tabbar-scroll-left-button-value)
-     (cdr tabbar-scroll-left-button-value))
-   (if (tabbar-check-overflow tabset)
-       (car tabbar-scroll-right-button-value)
-     (cdr tabbar-scroll-right-button-value))
-   tabbar-separator-value))
+   (unless noscroll
+     (list (if (> (tabbar-start tabset) 0)
+	       (car tabbar-scroll-left-button-value)
+	     (cdr tabbar-scroll-left-button-value))
+	   (if (tabbar-check-overflow tabset)
+	       (car tabbar-scroll-right-button-value)
+	     (cdr tabbar-scroll-right-button-value)))))
+   (list tabbar-separator-value)))
+
+(defun tabbar-line-format (tabset)
+  "Return the `header-line-format' value to display TABSET."
+  (let* ((sel (tabbar-selected-tab tabset))
+         (tabs (tabbar-view tabset))
+         (padcolor (tabbar-background-color))
+	 (noscroll t)
+         atsel elts scrolled)
+    ;; Initialize buttons and separator values.
+    (or tabbar-separator-value
+        (tabbar-line-separator))
+    (or tabbar-home-button-value
+        (tabbar-line-button 'home))
+    (or tabbar-scroll-left-button-value
+        (tabbar-line-button 'scroll-left))
+    (or tabbar-scroll-right-button-value
+        (tabbar-line-button 'scroll-right))
+    ;; Make sure we're showing as many tabs as possible.
+    ;; If we're not showing the 1st tab, and we're not overflowing the tab bar,
+    ;;  then scroll backward.  If this leads to overflowing the tab bar, scroll
+    ;;  forward 1 at the end.
+    (while (and (> (get tabset 'start) 0)
+		(not (tabbar-check-overflow tabset)))
+      (tabbar-scroll tabset -1)
+      (setq scrolled t))
+    ;; if we scrolled until the tabbar overflowed, we went too far.  Back up 1 slot.
+    (when (and scrolled (tabbar-check-overflow tabset))
+      (tabbar-scroll tabset 1))
+    (when (or (> (tabbar-start tabset) 0) (tabbar-check-overflow tabset))
+      ;; not all tabs fit -- include scroll buttons
+      (setq noscroll nil))
+    ;; Track the selected tab to ensure it is always visible.
+    (when tabbar--track-selected
+      (while (not (memq sel tabs))
+        (tabbar-scroll tabset -1)
+        (setq tabs (tabbar-view tabset)))
+      (while (and tabs (not atsel))
+        (setq elts  (cons (tabbar-line-tab (car tabs)) elts)
+              atsel (eq (car tabs) sel)
+              tabs  (cdr tabs)))
+      (setq elts (nreverse elts))
+      ;; At this point the selected tab is the last elt in ELTS.
+      ;; Scroll TABSET and ELTS until the selected tab becomes
+      ;; visible.
+      (with-temp-buffer
+        (let ((truncate-partial-width-windows nil)
+              (inhibit-modification-hooks t)
+              deactivate-mark ;; Prevent deactivation of the mark!
+              start)
+          (setq truncate-lines nil
+                buffer-undo-list t)
+          (apply 'insert (tabbar-line-buttons tabset noscroll))
+          (setq start (point))
+          (while (and (cdr elts) ;; Always show the selected tab!
+                      (progn
+                        (delete-region start (point-max))
+                        (goto-char (point-max))
+                        (apply 'insert elts)
+                        (goto-char (point-min))
+                        (> (vertical-motion 1) 0)))
+            (tabbar-scroll tabset 1)
+            (setq elts (cdr elts)))))
+      (setq elts (nreverse elts))
+      (setq tabbar--track-selected nil))
+    ;; Format remaining tabs.
+    (while tabs
+      (setq elts (cons (tabbar-line-tab (car tabs)) elts)
+            tabs (cdr tabs)))
+    ;; Cache and return the new tab bar.
+    (tabbar-set-template
+     tabset
+     (list (tabbar-line-buttons tabset noscroll)
+           (nreverse elts)
+           (propertize "%-"
+                       'face (list :background padcolor
+                                   :foreground padcolor)
+                       'pointer 'arrow)))
+    ))
+
+(defun close-current-tab-or-buffer ()
+  "Closes current tab if tabbar-mode is on; otherwise, closes current buffer."
+  (interactive)
+  (if (and (boundp tabbar-mode) tabbar-mode)
+      (tabbar-close-tab)
+    (close-current-window-asktosave)))
+
+(defun new-tab-or-buffer (&optional mode)
+  "Creates a new tab in current tabset if tabbar-mode is on; otherwise,
+creates a new buffer.  Mode for new buffer can optionally be specified."
+    (interactive)
+  (if (and (boundp tabbar-mode) tabbar-mode)
+      (tabbar-new-tab mode)
+    (new-frame-with-new-scratch one-buffer-one-frame mode)))
+
+(defun next-tab-or-buffer ()
+  "Call (tabbar-forward) if tabbar-mode is on; otherwise, call (next-buffer)."
+  (interactive)
+  (if (and (boundp tabbar-mode) tabbar-mode)
+      (tabbar-forward)
+    (next-buffer)))
+
+(defun previous-tab-or-buffer ()
+  "Call (tabbar-forward) if tabbar-mode is on; otherwise, call (next-buffer)."
+  (interactive)
+  (if (and (boundp tabbar-mode) tabbar-mode)
+      (tabbar-backward)
+    (previous-buffer)))
 
 ;; default tabbar behavior (buffer tabs grouped by major-mode) can be
 ;;  retained by setting tabbar-inhibit-window-tabs to non-nil
