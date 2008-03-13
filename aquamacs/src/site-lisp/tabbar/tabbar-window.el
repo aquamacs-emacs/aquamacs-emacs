@@ -1,7 +1,34 @@
+;; Tabbar-window.el --- "Window Tabs" for tabbar-mode: Tab-set is
+;;   specific to each window, and tabbar is hidden when only a
+;;   single tab exists for that window.  Requires that tabbar.el and
+;;   aquamacs-tabbar.el be loaded first.
+
+;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
+;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
+;; Created: February 2008
+;; Revision: $Id: tabbar-window.el,v 1.7 2008/03/13 14:28:40 champo Exp $
+
 (require 'tabbar)
 
 (defvar tabbar-window-alist nil)
 (defvar tabbar-window-cache nil)
+
+(defcustom tabbar-window-new-buffers nil
+  "*Specify the behavior when a new buffer is opened in tabbar-mode.
+The following options are available:
+
+- `no-tab'
+    Buffer is created in current window, with no tab or tab bar; window's
+previous tabset is deleted, although buffers are not closed or killed.
+- `new-frame'
+    Buffer is created in a new frame.
+- default
+    Buffer is created in current window and assigned a new tab."
+  :group 'tabbar
+  :type '(choice :tag "New buffer gets created in..."
+                 (const :tag "Current Window without a Tab" no-tab)
+                 (const :tag "New Frame" new-frame)
+                 (const :tag "Current Window with New Tab" nil)))
 
 ;; for "buffer tabs", it makes sense to have tabbar-current-tabset always
 ;; buffer-local.  This is not sensible for "window tabs".  Window-local variables
@@ -97,9 +124,9 @@ Displayed buffers always get tabs."
 		(unless (and
 			 ;; in order to keep tab,
 			 ;; must be an existing buffer that should get a tab
-		       (memq (car thisbuffer) tabbar-buffers-list)
-		       ;; must have buffer-name current for this buffer
-		       (equal (buffer-name (car thisbuffer)) (cadr thisbuffer)))
+			 (memq (car thisbuffer) tabbar-buffers-list)
+			 ;; must have buffer-name current for this buffer
+			 (equal (buffer-name (car thisbuffer)) (cadr thisbuffer)))
 		  (setq newlist (delq thisbuffer newlist))))
 	      (when newlist
 		(setq newelt (cons wnumber newlist))
@@ -288,15 +315,15 @@ current buffer belongs."
     (if (tabbar-tabset-only-tab tab)
 	(aquamacs-delete-window wind)
       (when sel
-	 (if (tabbar-tab-next tabset tab)
-	     (tabbar-forward-tab)
-	   (tabbar-backward-tab)))
-       (tabbar-window-delete-tab tab)
-       ;; manually update tabsets now, to ensure that deleted tab is no
-       ;;  longer displayed
-       (tabbar-window-update-tabsets)
-       (tabbar-scroll tabset -1)
-       )))
+	(if (tabbar-tab-next tabset tab)
+	    (tabbar-forward-tab)
+	  (tabbar-backward-tab)))
+      (tabbar-window-delete-tab tab)
+      ;; manually update tabsets now, to ensure that deleted tab is no
+      ;;  longer displayed
+      (tabbar-window-update-tabsets)
+      (tabbar-scroll tabset -1)
+      )))
 
 (defun tabbar-window-close-tab (tab)
   (let* ((buffer (car tab))
@@ -332,24 +359,37 @@ current buffer belongs."
     (when (and killable (not dont-kill))
       (kill-buffer buffer))))
 
-;; (defun tabbar-window-close-current-tab ()
-;;   (interactive)
-;;   (let ((tab (tabbar-selected-tab (tabbar-current-tabset t))))
-;;     (tabbar-window-close-tab tab)))
+(defun tabbar-window-new-buffer (&optional mode)
+  "Create a new buffer, with different behavior depending on the value of
+tabbar-window-new-buffers: 'no-tab, create new buffer in current window, with
+no tabbar (deletes all tabs in the window); 'new-frame, create new buffer
+in new frame; default, create new buffer in current window with a new tab."
+  (cond
+   ((eq tabbar-window-new-buffers 'no-tab)
+    ;; remove current window's alist from tabbar-window-alist
+    (let ((wnumber (window-number (selected-window))))
+      (setq tabbar-window-alist (assq-delete-all wnumber tabbar-window-alist)))
+    ;; then create a new tab as usual -- lone tab will show no tabbar
+    (tabbar-new-tab mode))
+   ((eq tabbar-window-new-buffers 'new-frame)
+    ;; create a new tab in a new frame -- lone tab will show no tabbar
+    (new-frame-with-new-scratch t))
+   (t
+    ;; create a new tab in current window
+    (tabbar-new-tab mode))))
 
 (defun tabbar-line ()
   "Return the header line templates that represent the tab bar.
-Inhibit display of the tab bar in current window if any of the
-`tabbar-inhibit-functions' return non-nil."
+Update the templates if tabbar-template is currently nil."
   (tabbar-current-tabset t)
   (or (tabbar-template tabbar-current-tabset)
       (tabbar-line-format tabbar-current-tabset)))
 
 (defun tabbar-window-current-tabset ()
-       (let ((tabset (tabbar-get-tabset
-		      (number-to-string (window-number (selected-window))))))
-	 (tabbar-select-tab-value (current-buffer) tabset)
-	 tabset))
+  (let ((tabset (tabbar-get-tabset
+		 (number-to-string (window-number (selected-window))))))
+    (tabbar-select-tab-value (current-buffer) tabset)
+    tabset))
 
 
 ;;; Tab bar window setup
@@ -359,14 +399,15 @@ Inhibit display of the tab bar in current window if any of the
 Run as `tabbar-init-hook'."
   (setq tabbar-window-alist nil
 	tabbar-window-cache nil
-        tabbar-current-tabset-function 'tabbar-window-current-tabset
-        tabbar-tab-label-function 'tabbar-window-tab-label
-        tabbar-select-tab-function 'tabbar-window-select-tab
-        tabbar-help-on-tab-function 'tabbar-window-help-on-tab
-        tabbar-button-label-function 'tabbar-window-button-label
+	tabbar-current-tabset-function 'tabbar-window-current-tabset
+	tabbar-tab-label-function 'tabbar-window-tab-label
+	tabbar-select-tab-function 'tabbar-window-select-tab
+	tabbar-help-on-tab-function 'tabbar-window-help-on-tab
+	tabbar-button-label-function 'tabbar-window-button-label
 	tabbar-close-tab-function 'tabbar-window-close-tab
-        tabbar-home-function nil
-        tabbar-home-help-function nil
+	tabbar-new-tab-function 'tabbar-window-new-buffer
+	tabbar-home-function nil
+	tabbar-home-help-function nil
 	tabbar-home-button-value nil
 	tabbar-cycle-scope 'tabs
 	tabbar-inhibit-functions nil
@@ -374,29 +415,29 @@ Run as `tabbar-init-hook'."
   (add-hook 'window-configuration-change-hook 'tabbar-window-update-tabsets-when-idle)
   (add-hook 'after-save-hook 'tabbar-window-update-tabsets)
   (tabbar-window-update-tabsets)
-)
+  )
 
 (defun tabbar-window-quit ()
   "Quit tab bar \"tabbar-window\" mode.
 Run as `tabbar-quit-hook'."
   (setq tabbar-window-alist nil
 	tabbar-window-cache nil
-        tabbar-current-tabset-function nil
-        tabbar-tab-label-function nil
-        tabbar-select-tab-function nil
-        tabbar-help-on-tab-function nil
-        tabbar-button-label-function nil
+	tabbar-current-tabset-function nil
+	tabbar-tab-label-function nil
+	tabbar-select-tab-function nil
+	tabbar-help-on-tab-function nil
+	tabbar-button-label-function nil
 	tabbar-close-tab-function nil
-        tabbar-home-function nil
-        tabbar-home-help-function nil
+	tabbar-home-function nil
+	tabbar-home-help-function nil
 	tabbar-home-button-value nil
 	tabbar-cycle-scope nil
 	tabbar-inhibit-functions nil
-        )
+	)
   (remove-hook 'window-configuration-change-hook
 	       'tabbar-window-update-tabsets-when-idle)
   (remove-hook 'after-save-hook 'tabbar-window-update-tabsets)
-)
+  )
 
 ;;-----------------------------------------------
 (remove-hook 'tabbar-init-hook 'tabbar-buffer-init)

@@ -1,9 +1,19 @@
+;; Aquamacs-tabbar.el --- "Look and feel" improvements to tabbar.el.  Uses
+;;   Window Tabs by default: Tab-set is specific to each window, and tabbar
+;;   is hidden when only a single tab exists for that window.
+
+;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
+;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
+;; Created: February 2008
+;; Revision: $Id: aquamacs-tabbar.el,v 1.6 2008/03/13 14:28:40 champo Exp $
+
 ;; load original tabbar-mode
 (require 'tabbar)
 
 ;; modify various settings:
 ;; eliminate gap between header-line and toolbar
-;; save current value of tool-bar-border, to reset when tabbar-mode is turned off
+;; save current value of tool-bar-border,
+;;      to reset when tabbar-mode is turned off
 (add-hook 'tabbar-init-hook (lambda ()
 			      (setq tool-bar-border-saved tool-bar-border
 				    tool-bar-border 0)))
@@ -21,6 +31,10 @@ use (tabbar-current-tabset)."
 (defvar tabbar-close-tab-function nil
   "Function to call to close a tabbar tab.  Passed a single argument, the tab
 construct to be closed.")
+
+(defvar tabbar-new-tab-function nil
+  "Function to call to create a new buffer in tabbar-mode.  Optional single
+argument is the MODE for the new buffer.")
   
 ;; for buffer tabs, use the usual command to close/kill a buffer
 (defun tabbar-buffer-close-tab (tab)
@@ -110,10 +124,13 @@ That is, a string used to represent it on the tab bar."
 
 ;; function to open a new tab, suppressing new frame creation
 (defun tabbar-new-tab (&optional mode)
-  "Opens a new frame containing an empty buffer."
+  "Creates a new tab, containing an empty buffer (with major-mode MODE
+if specified), in current window."
   (interactive)			
   (let ((one-buffer-one-frame nil))
     (new-frame-with-new-scratch nil mode)))
+
+(setq tabbar-new-tab-function 'tabbar-new-tab)
 
 (defun tabbar-new-frame-with-clicked-buffer (event)
   (interactive "@e")
@@ -396,11 +413,11 @@ NOSCROLL is non-nil, exclude the tabbar-scroll buttons."
     (close-current-window-asktosave)))
 
 (defun new-tab-or-buffer (&optional mode)
-  "Creates a new tab in current tabset if tabbar-mode is on; otherwise,
+  "Calls tabbar-new-tab-function if tabbar-mode is on; otherwise,
 creates a new buffer.  Mode for new buffer can optionally be specified."
     (interactive)
   (if (and (boundp tabbar-mode) tabbar-mode)
-      (tabbar-new-tab mode)
+      (funcall tabbar-new-tab-function mode)
     (new-frame-with-new-scratch one-buffer-one-frame mode)))
 
 (defun next-tab-or-buffer ()
