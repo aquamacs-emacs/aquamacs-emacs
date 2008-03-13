@@ -6,7 +6,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: tabbar-window.el,v 1.7 2008/03/13 14:28:40 champo Exp $
+;; Revision: $Id: tabbar-window.el,v 1.8 2008/03/13 20:25:54 champo Exp $
 
 (require 'tabbar)
 
@@ -17,18 +17,18 @@
   "*Specify the behavior when a new buffer is opened in tabbar-mode.
 The following options are available:
 
+- `tab'
+    Buffer is created in current window and assigned a new tab.
 - `no-tab'
     Buffer is created in current window, with no tab or tab bar; window's
 previous tabset is deleted, although buffers are not closed or killed.
-- `new-frame'
-    Buffer is created in a new frame.
 - default
-    Buffer is created in current window and assigned a new tab."
+    Buffer is created in a new frame.  (Lone buffers show no tabs.)"
   :group 'tabbar
   :type '(choice :tag "New buffer gets created in..."
+                 (const :tag "Current Window with New Tab" nil)
                  (const :tag "Current Window without a Tab" no-tab)
-                 (const :tag "New Frame" new-frame)
-                 (const :tag "Current Window with New Tab" nil)))
+                 (const :tag "New Frame" nil)))
 
 ;; for "buffer tabs", it makes sense to have tabbar-current-tabset always
 ;; buffer-local.  This is not sensible for "window tabs".  Window-local variables
@@ -361,22 +361,23 @@ current buffer belongs."
 
 (defun tabbar-window-new-buffer (&optional mode)
   "Create a new buffer, with different behavior depending on the value of
-tabbar-window-new-buffers: 'no-tab, create new buffer in current window, with
-no tabbar (deletes all tabs in the window); 'new-frame, create new buffer
-in new frame; default, create new buffer in current window with a new tab."
+tabbar-window-new-buffers: 'tab, create new buffer in current window
+with a new tab; 'no-tab, create new buffer in current window, with
+no tabbar (deletes all tabs in the window); default, create new buffer
+in new frame."
   (cond
+   ((eq tabbar-window-new-buffers 'tab)
+    ;; create a new tab in current window
+    (tabbar-new-tab mode))
    ((eq tabbar-window-new-buffers 'no-tab)
     ;; remove current window's alist from tabbar-window-alist
     (let ((wnumber (window-number (selected-window))))
       (setq tabbar-window-alist (assq-delete-all wnumber tabbar-window-alist)))
     ;; then create a new tab as usual -- lone tab will show no tabbar
     (tabbar-new-tab mode))
-   ((eq tabbar-window-new-buffers 'new-frame)
-    ;; create a new tab in a new frame -- lone tab will show no tabbar
-    (new-frame-with-new-scratch t))
    (t
-    ;; create a new tab in current window
-    (tabbar-new-tab mode))))
+    ;; create a new tab in a new frame -- lone tab will show no tabbar
+    (new-frame-with-new-scratch t))))
 
 (defun tabbar-line ()
   "Return the header line templates that represent the tab bar.
