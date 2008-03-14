@@ -6,7 +6,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: tabbar-window.el,v 1.8 2008/03/13 20:25:54 champo Exp $
+;; Revision: $Id: tabbar-window.el,v 1.9 2008/03/14 14:17:59 champo Exp $
 
 (require 'tabbar)
 
@@ -207,7 +207,7 @@ Return the current tabset, which corresponds to (selected-window)."
     ;; duplicate tabbar-window-alist, so we can detect changes (have
     ;; to ensure that changes within tabbar-window-alist don't affect
     ;; tabbar-window cache)
-    (setq tabbar-window-cache (copy-alist tabbar-window-alist)))
+    (setq tabbar-window-cache (copy-tree tabbar-window-alist)))
   (number-to-string (window-number (selected-window)))
   )
 
@@ -355,9 +355,11 @@ current buffer belongs."
 	      (set-buffer-modified-p nil)
 	      )
 	  (message ""))))
-    (tabbar-window-remove-tab tab)
-    (when (and killable (not dont-kill))
-      (kill-buffer buffer))))
+    (if (and killable (not dont-kill))
+	;; 'kill-buffer-hook will call tabbar-window-remove-tab, so don't
+	;;   do that here, unless not actually killing the buffer.
+	(kill-buffer buffer)
+      (tabbar-window-remove-tab tab))))
 
 (defun tabbar-window-new-buffer (&optional mode)
   "Create a new buffer, with different behavior depending on the value of
@@ -392,6 +394,23 @@ Update the templates if tabbar-template is currently nil."
     (tabbar-select-tab-value (current-buffer) tabset)
     tabset))
 
+(defun tabbar-window-track-killed ()
+  "Hook run just before actually killing a buffer.
+In Tabbar mode, switch to an adjacent tab if available.  Delete the
+window if no other tabs exist.  Run once for each window where current
+tab is displayed."
+  (let* ((buffer (current-buffer))
+	 (window-list (get-buffer-window-list buffer 'nomini t)))
+    (dolist (window window-list)
+      (let* ((wnumber (window-number window))
+	     (tabset (tabbar-get-tabset (number-to-string wnumber)))
+	     (tab (tabbar-get-tab buffer tabset)))
+	;; ensure that there is currently a tabbar...
+	(and (eq header-line-format tabbar-header-line-format)
+	     ;; ... and only bother with windows currently displayed.
+	     (eq buffer (window-buffer window))
+	     (tabbar-window-remove-tab tab))))))
+
 
 ;;; Tab bar window setup
 ;;
@@ -415,6 +434,7 @@ Run as `tabbar-init-hook'."
 	)
   (add-hook 'window-configuration-change-hook 'tabbar-window-update-tabsets-when-idle)
   (add-hook 'after-save-hook 'tabbar-window-update-tabsets)
+  (add-hook 'kill-buffer-hook 'tabbar-window-track-killed)
   (tabbar-window-update-tabsets)
   )
 
@@ -438,6 +458,7 @@ Run as `tabbar-quit-hook'."
   (remove-hook 'window-configuration-change-hook
 	       'tabbar-window-update-tabsets-when-idle)
   (remove-hook 'after-save-hook 'tabbar-window-update-tabsets)
+  (remove-hook 'kill-buffer-hook 'tabbar-window-track-killed)
   )
 
 ;;-----------------------------------------------
