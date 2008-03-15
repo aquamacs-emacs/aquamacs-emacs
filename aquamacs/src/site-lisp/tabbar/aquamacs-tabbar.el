@@ -5,7 +5,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: aquamacs-tabbar.el,v 1.6 2008/03/13 14:28:40 champo Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.7 2008/03/15 11:11:33 davidswelt Exp $
 
 ;; load original tabbar-mode
 (require 'tabbar)
@@ -121,6 +121,10 @@ That is, a string used to represent it on the tab bar."
 	  (unless (equal thistab clickedtab)
 ;;	    (tabbar-window-close-tab thistab))))));)
 	(tabbar-close-tab thistab))))))
+
+;; function to unconditionally open a new tab
+
+
 
 ;; function to open a new tab, suppressing new frame creation
 (defun tabbar-new-tab (&optional mode)
@@ -411,6 +415,15 @@ NOSCROLL is non-nil, exclude the tabbar-scroll buttons."
   (if (and (boundp tabbar-mode) tabbar-mode)
       (tabbar-close-tab)
     (close-current-window-asktosave)))
+
+(defun new-tab (&optional major-mode)
+  "Creates a new tab.
+Turns on `tabbar-mode'."
+  (interactive)
+  (tabbar-mode 1)
+  (let ((tabbar-window-new-buffers 'tab))
+    (new-tab-or-buffer major-mode)))
+  
 
 (defun new-tab-or-buffer (&optional mode)
   "Calls tabbar-new-tab-function if tabbar-mode is on; otherwise,

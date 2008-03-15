@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.83 2008/03/15 10:52:12 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.84 2008/03/15 11:11:04 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -1078,7 +1078,7 @@ default."
     (define-key map `[(,osxkeys-command-key \<)] 'raise-next-frame)
     (define-key map `[(,osxkeys-command-key \>)] 'raise-previous-frame)
 
-    (define-key map `[(,osxkeys-command-key t)] 'new-tab-or-buffer)
+    (define-key map `[(,osxkeys-command-key t)] 'new-tab)
 
     (if (fboundp 'mac-font-panel-mode)
 	(define-key map `[(,osxkeys-command-key shift t)] 'mac-font-panel-mode))
