@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.81 2007/12/30 13:55:01 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.82 2008/03/15 03:33:18 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -948,7 +948,7 @@ behavior)."
 
 (defun make-osx-key-low-priority-map (&optional command-key)
 
-(if command-key
+  (if command-key
       (setq osxkeys-command-key command-key)
     (if mac-command-modifier
 	(setq osxkeys-command-key mac-command-modifier)
@@ -1034,7 +1034,9 @@ default."
     (define-key map `[(,osxkeys-command-key g)] 'isearch-repeat-forward)  
     (define-key map `[(,osxkeys-command-key shift g)] 'isearch-repeat-backward)
     (define-key map `[(,osxkeys-command-key e)] 'aquamacs-use-selection-for-find)
-    (define-key map `[(,osxkeys-command-key w)] 'close-current-window-asktosave)
+    (if (fboundp 'close-current-tab-or-buffer)
+	(define-key map `[(,osxkeys-command-key w)] 'close-current-tab-or-buffer)
+      (define-key map `[(,osxkeys-command-key w)] 'close-current-window-asktosave))
     (define-key map `[(,osxkeys-command-key m)] 'iconify-or-deiconify-frame) 
     (define-key map `[(,osxkeys-command-key .)] 'keyboard-quit)
     (define-key map `[(,osxkeys-command-key 49)] 'delete-other-windows) ; 49='1'
@@ -1045,9 +1047,20 @@ default."
     (define-key map `[(,osxkeys-command-key :)] 'ispell-buffer)
 
 
-    (define-key global-map `[(,osxkeys-command-key {)] 'comment-region-or-line)
-    (define-key global-map `[(,osxkeys-command-key })] 'uncomment-region-or-line)
-    (define-key global-map `[(,osxkeys-command-key \')] 'comment-or-uncomment-region-or-line)
+;; these go away in 1.4
+;;    (define-key global-map `[(,osxkeys-command-key {)] 'comment-region-or-line)
+;;    (define-key global-map `[(,osxkeys-command-key })] 'uncomment-region-or-line)
+   (define-key global-map `[(,osxkeys-command-key meta \')] 'uncomment-region-or-line)
+   
+   (define-key global-map `[(,osxkeys-command-key \')] 'comment-or-uncomment-region-or-line)
+
+    ;; tabbar stuff
+
+    (when (fboundp 'previous-tab-or-buffer)
+      (global-set-key [(,osxkeys-command-key {)] 'previous-tab-or-buffer)
+      (global-set-key [(,osxkeys-command-key shift left)] 'previous-tab-or-buffer)
+      (global-set-key [(,osxkeys-command-key })] 'next-tab-or-buffer)
+      (global-set-key [(,osxkeys-command-key shift right)] 'next-tab-or-buffer))
 
 
 
@@ -1064,8 +1077,11 @@ default."
     (define-key map `[(,osxkeys-command-key \`)] 'raise-next-frame)
     (define-key map `[(,osxkeys-command-key \<)] 'raise-next-frame)
     (define-key map `[(,osxkeys-command-key \>)] 'raise-previous-frame)
+
+    (define-key map `[(,osxkeys-command-key t)] 'new-tab-or-buffer)
+
     (if (fboundp 'mac-font-panel-mode)
-	(define-key map `[(,osxkeys-command-key t)] 'mac-font-panel-mode))
+	(define-key map `[(,osxkeys-command-key shift t)] 'mac-font-panel-mode))
 
     map)
   )
