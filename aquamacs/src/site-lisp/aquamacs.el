@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.138 2008/03/15 03:32:04 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.139 2008/03/15 03:34:30 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -141,7 +141,8 @@ yes-or-no prompts - y or n will do."
       )
     )
 
-   
+
+  (require 'aquamacs-tabbar) ;; need to load this before other osxkeys   
 
   ;; Mac OS X specific stuff 
 
