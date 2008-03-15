@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.137 2008/03/06 22:22:27 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.138 2008/03/15 03:32:04 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -651,6 +651,8 @@ Aquamacs 0.9.7 on. `mac-option-modifier' has been set for you.")))))
 
   (require 'one-buffer-one-frame)
   (one-buffer-one-frame-mode 1)
+  (require 'aquamacs-tabbar)
+   
   ;; necessary to ensure the value is saved with the Options
   ;; (setting the default)
   (aquamacs-set-defaults '((one-buffer-one-frame-mode t)))
