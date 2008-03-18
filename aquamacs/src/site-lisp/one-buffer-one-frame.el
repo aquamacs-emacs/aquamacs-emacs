@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.60 2008/02/25 17:25:55 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.61 2008/03/18 21:08:31 champo Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -618,7 +618,8 @@ even if it's the only visible frame."
 
 
 (defun delete-window-if-one-buffer-one-frame ()
-  (if one-buffer-one-frame
+  ;; only delete window when tabbar-mode is not on!
+ (if (and one-buffer-one-frame (not (and (boundp 'tabbar-mode) tabbar-mode)))
       (delete-window-if-created-for-buffer)))
 
 (defun aquamacs-delete-frame (&optional frame)
