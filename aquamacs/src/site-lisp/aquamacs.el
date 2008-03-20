@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.140 2008/03/15 03:52:53 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.141 2008/03/20 13:59:59 champo Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -141,8 +141,6 @@ yes-or-no prompts - y or n will do."
       )
     )
 
-
-  (require 'aquamacs-tabbar) ;; need to load this before other osxkeys   
 
   ;; Mac OS X specific stuff 
 
@@ -652,8 +650,6 @@ Aquamacs 0.9.7 on. `mac-option-modifier' has been set for you.")))))
 
   (require 'one-buffer-one-frame)
   (one-buffer-one-frame-mode 1)
-  (require 'aquamacs-tabbar)
-  (tabbar-mode 1)
 
   ;; necessary to ensure the value is saved with the Options
   ;; (setting the default)
@@ -1210,7 +1206,10 @@ information given would otherwise be irrelevant to Aquamacs users.
 (when window-system 
   (require 'aquamacs-tool-bar)
   (aquamacs-tool-bar-setup))
-(ats "aquamacs-tool-bar-setup done") 
+(ats "aquamacs-tool-bar-setup done")
+
+  (require 'aquamacs-tabbar)
+  (tabbar-mode 1)
   ) ;; aquamacs-setup
  
 
