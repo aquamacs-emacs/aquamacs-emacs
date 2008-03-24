@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.96 2008/03/07 08:29:46 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.97 2008/03/24 16:52:10 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -225,11 +225,11 @@ The elements of LIST are not copied, just the list structure itself."
 (defvar menu-bar-new-file-menu nil)
 (defun aquamacs-update-new-file-menu ()
    (setq menu-bar-new-file-menu 
-	 (aquamacs-define-mode-menu (make-sparse-keymap "New Buffer")
+	 (aquamacs-define-mode-menu (make-sparse-keymap "New Buffer in Mode")
 				    "aquamacs-new-buffer-" 'new-frame-with-new-scratch
 				    "Create a new buffer in `%s' mode."))
    (define-key-after menu-bar-file-menu [new-file-menu]
-     (list 'menu-item "New Buffer" menu-bar-new-file-menu
+     (list 'menu-item "New Buffer in Mode" menu-bar-new-file-menu
 	   :help "Create a new buffer with a specific major mode.")
      'new-file))
 
@@ -389,7 +389,7 @@ customization buffer."
 
 
 (define-key menu-bar-file-menu [new-file]
-  `(menu-item ,(aq-shortcut  "New                                        "
+  `(menu-item ,(aq-shortcut  "New Buffer                               "
 			    'new-frame-with-new-scratch)  
 	      new-frame-with-new-scratch
 	      :key-sequence nil
