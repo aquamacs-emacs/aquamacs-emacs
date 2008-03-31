@@ -1,13 +1,21 @@
-Index: lisp/startup.el
-===================================================================
-RCS file: /sources/emacs/emacs/lisp/startup.el,v
-retrieving revision 1.436.2.7
-diff -c -r1.436.2.7 startup.el
-*** lisp/startup.el	11 Nov 2007 20:23:23 -0000	1.436.2.7
---- lisp/startup.el	18 Dec 2007 01:59:15 -0000
+*** lisp/startup.el	29 Feb 2008 05:10:09 +0000	1.436.2.14
+--- lisp/startup.el	31 Mar 2008 22:57:55 +0100	
 ***************
-*** 889,894 ****
---- 889,896 ----
+*** 828,837 ****
+      (if site-run-file
+  	(load site-run-file t t))
+  
+-     ;; Sites should not disable this.  Only individuals should disable
+-     ;; the startup screen.
+-     (setq inhibit-startup-screen nil)
+- 
+      ;; Warn for invalid user name.
+      (when init-file-user
+        (if (string-match "[~/:\n]" init-file-user)
+--- 828,833 ----
+***************
+*** 888,893 ****
+--- 884,891 ----
   		      ;; into user-init-file.
   		      (setq user-init-file t)
   		      (load user-init-file-1 t t)
@@ -16,6 +24,28 @@ diff -c -r1.436.2.7 startup.el
   
   		      (when (eq user-init-file t)
   			;; If we did not find ~/.emacs, try
+***************
+*** 924,935 ****
+  			    (setq user-init-file source))))
+  
+  		      (unless inhibit-default-init
+!                         (let ((inhibit-startup-screen nil))
+!                           ;; Users are supposed to be told their rights.
+!                           ;; (Plus how to get help and how to undo.)
+!                           ;; Don't you dare turn this off for anyone
+!                           ;; except yourself.
+!                           (load "default" t t)))))))))
+  	(if init-file-debug
+  	    ;; Do this without a condition-case if the user wants to debug.
+  	    (funcall inner)
+--- 922,928 ----
+  			    (setq user-init-file source))))
+  
+  		      (unless inhibit-default-init
+!                           (load "default" t t))))))))
+  	(if init-file-debug
+  	    ;; Do this without a condition-case if the user wants to debug.
+  	    (funcall inner)
 ***************
 *** 1849,1881 ****
     (let ((resize-mini-windows t))
@@ -51,7 +81,7 @@ diff -c -r1.436.2.7 startup.el
   	(message "%s" (startup-echo-area-message)))))
   
   (defun display-startup-screen (&optional concise)
---- 1851,1857 ----
+--- 1842,1848 ----
     (let ((resize-mini-windows t))
       (or noninteractive ;(input-pending-p) init-file-had-error
   	;; t if the init file says to inhibit the echo area startup message.
