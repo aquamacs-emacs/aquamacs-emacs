@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.141 2008/03/20 13:59:59 champo Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.142 2008/03/31 22:00:43 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -772,8 +772,7 @@ un-Mac-like way when you select text and copy&paste it.")))
      
 					; applications on OS X don't display a splash screen 
  
-  (setq command-line-args  (append command-line-args (list "--no-splash")))
-  (setq inhibit-startup-message t)
+  (aquamacs-set-defaults '((inhibit-startup-message t)))
 
   (defun aquamacs-wrap-string (str width)
     (with-temp-buffer 
