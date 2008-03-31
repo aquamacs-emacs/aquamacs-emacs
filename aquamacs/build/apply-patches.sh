@@ -17,9 +17,11 @@
 # toolbar-png:  taken out, because it's slow and we don't need it yet
 # DR 12/2006: inserted again, maybe useful for the "sel" images.
 #    is it slow with xpm as well?
+# taken out (temp):          capslock   causes trouble Qappevent
+
 PATCHES="fix-configure test ui-strings
          toolbar-png custom-verbosity pretty-modeline transparency
-         capslock mouse-echo
+         mouse-echo
          recentf-track-minibuf
          pop-to-buffer display-buffer-reuse
          emacs-inline
