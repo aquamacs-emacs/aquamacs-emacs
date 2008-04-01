@@ -39,8 +39,10 @@ oldem="$dest/Contents/MacOS/Emacs"
 
 em="$dest/Contents/MacOS/Aquamacs Emacs"
 
+echo "Installing in " $dest
 cd "$dest" || exit 1
- 
+
+
 rm -rf /tmp/backup.site-lisp
 mv  "Contents/Resources/site-lisp" /tmp/backup.site-lisp
 
@@ -81,7 +83,9 @@ echo "CFBundleGetInfoString = \"Aquamacs $AQUAMACS_VERSION, Copyright (C) 2008 b
 
 cp -pr "$projdir/src/emacs-document.icns" Contents/Resources/
 
-cp "$projdir/Icons/build"/* Contents/Resources/etc/images/
+#cp "$projdir/Icons/build"/* Contents/Resources/etc/images/
+cp "$projdir/Icons/"*.png Contents/Resources/etc/images/
+
 # can't produce icons without ImageMagick / freetype in build env.
 # so we won't do that here.
 # ${AQUAMACS_ROOT}/Icons/make-xpm ${AQUAMACS_ROOT}/Icons ${EMACS_ROOT}/etc/images 
