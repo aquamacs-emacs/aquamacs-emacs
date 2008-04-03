@@ -1,3 +1,28 @@
+Index: src/image.c
+===================================================================
+RCS file: /sources/emacs/emacs/src/image.c,v
+retrieving revision 1.65.2.13
+diff -c -r1.65.2.13 image.c
+*** src/image.c	28 Mar 2008 14:57:32 -0000	1.65.2.13
+--- src/image.c	3 Apr 2008 15:01:11 -0000
+***************
+*** 2767,2773 ****
+     }
+   CGContextDrawImage (context, rectangle, image);
+   QDEndCGContext (ximg, &context);
+!   CGImageRelease (image);
+
+   /* Maybe fill in the background field while we have ximg handy. */
+   if (NILP (image_spec_value (img->spec, QCbackground, NULL)))
+--- 2767,2774 ----
+     }
+   CGContextDrawImage (context, rectangle, image);
+   QDEndCGContext (ximg, &context);
+!
+!   img->data.ptr_val = image; /* retain original data */
+
+   /* Maybe fill in the background field while we have ximg handy. */
+   if (NILP (image_spec_value (img->spec, QCbackground, NULL)))
 Index: lisp/tool-bar.el
 ===================================================================
 RCS file: /sources/emacs/emacs/lisp/tool-bar.el,v
