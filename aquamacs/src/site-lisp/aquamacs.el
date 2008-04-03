@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.142 2008/03/31 22:00:43 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.143 2008/04/03 18:57:48 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -141,8 +141,16 @@ yes-or-no prompts - y or n will do."
       )
     )
 
+  ;; tabbar needs to be defined before osxkeys
+  (aquamacs-set-defaults '(
+			 (tool-bar-button-relief 1)
+			 (tool-bar-button-margin 4)
+			 (tool-bar-border 5)))
+  (require 'aquamacs-tabbar)
+  (tabbar-mode 1)
 
   ;; Mac OS X specific stuff 
+
 
   (ats "osx_defaults ...")
 
@@ -1197,18 +1205,13 @@ information given would otherwise be irrelevant to Aquamacs users.
 					; via hook so it can be turned off
   (add-hook 'after-init-hook 'aquamacs-check-for-updates-if-necessary 'append) 
 
-(aquamacs-set-defaults '(
-			 (tool-bar-button-relief 1)
-			 (tool-bar-button-margin 4)
-			 (tool-bar-border 5)))
+
 (ats "aquamacs-tool-bar-setup ...")
 (when window-system 
   (require 'aquamacs-tool-bar)
   (aquamacs-tool-bar-setup))
 (ats "aquamacs-tool-bar-setup done")
 
-  (require 'aquamacs-tabbar)
-  (tabbar-mode 1)
   ) ;; aquamacs-setup
  
 
