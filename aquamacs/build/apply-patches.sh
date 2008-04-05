@@ -101,7 +101,7 @@ do
     if [ $exec -ne 0 ]
     then
 	# -l is to ignore whitespace
-	patch -p0 -l < "$file"
+	patch -lp0 < "$file"
     else
 	echo "patch -p0 < '$file'"
     fi
