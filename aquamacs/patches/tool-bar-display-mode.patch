@@ -1,0 +1,126 @@
+Index: src/macterm.c
+===================================================================
+RCS file: /sources/emacs/emacs/src/macterm.c,v
+retrieving revision 1.214.2.16
+diff -c -r1.214.2.16 macterm.c
+*** src/macterm.c	29 Mar 2008 00:46:51 -0000	1.214.2.16
+--- src/macterm.c	5 Apr 2008 07:42:28 -0000
+***************
+*** 87,92 ****
+--- 87,97 ----
+  
+  Lisp_Object Vx_toolkit_scroll_bars;
+  
++ #if USE_MAC_TOOLBAR
++ /* Specify whether to display the tool bar as icons with labels. */
++ Lisp_Object Vmac_tool_bar_display_mode;
++ #endif
++ 
+  /* If non-zero, the text will be rendered using Core Graphics text
+     rendering which may anti-alias the text.  */
+  int mac_use_core_graphics;
+***************
+*** 5955,5961 ****
+      }
+  
+    if (err == noErr)
+!     err = HIToolbarSetDisplayMode (toolbar, kHIToolbarDisplayModeIconOnly);
+    if (err == noErr)
+      {
+        static const EventTypeSpec specs[] =
+--- 5985,5991 ----
+      }
+  
+    if (err == noErr)
+!     err = HIToolbarSetDisplayMode (toolbar, kHIToolbarDisplayModeDefault);
+    if (err == noErr)
+      {
+        static const EventTypeSpec specs[] =
+*** 6099,6104 ****
+--- 6130,6148 ----
+    while (pos < old_count)
+      HIToolbarRemoveItemAtIndex (toolbar, --old_count);
+  
++   if (EQ (Vmac_tool_bar_display_mode, intern ("labels")))
++     {
++       HIToolbarSetDisplayMode (toolbar, kHIToolbarDisplayModeIconAndLabel);
++     }
++   else if (EQ (Vmac_tool_bar_display_mode, intern ("icons")))
++     {
++       HIToolbarSetDisplayMode (toolbar, kHIToolbarDisplayModeIconOnly);
++     }
++   else
++     {
++       HIToolbarSetDisplayMode (toolbar, kHIToolbarDisplayModeDefault);
++     } 
++   
+    ShowHideWindowToolbar (FRAME_MAC_WINDOW (f), true,
+  			 !win_gravity && f == mac_focus_frame (dpyinfo));
+    /* Mac OS X 10.3 does not issue kEventWindowBoundsChanged events on
+***************
+*** 12984,12989 ****
+--- 13028,13042 ----
+  mouse-3 and the command-key will register for mouse-2.  */);
+    Vmac_emulate_three_button_mouse = Qnil;
+  
++ #if USE_MAC_TOOLBAR
++   DEFVAR_LISP ("mac-tool-bar-display-mode", &Vmac_tool_bar_display_mode,
++     doc: /* *Specify whether to display the tool bar as icons with labels.
++ The value can be `icons' (for icons only), `labels' (for icons with labels)
++ and nil, in which case the system default is assumed.
++ The default is nil.  */);
++   Vmac_tool_bar_display_mode = Qnil;
++ #endif
++ 
+  #if TARGET_API_MAC_CARBON
+    DEFVAR_BOOL ("mac-wheel-button-is-mouse-2", &mac_wheel_button_is_mouse_2,
+      doc: /* *Non-nil if the wheel button is mouse-2 and the right click mouse-3.
+*** lisp/tool-bar.el	05 Apr 2008 01:23:45 +0100	1.7.2.2
+--- lisp/tool-bar.el	05 Apr 2008 01:24:23 +0100	
+***************
+*** 141,147 ****
+        (unless (image-mask-p image)
+  	(setq image (append image '(:mask heuristic))))
+        (define-key-after map (vector key)
+! 	`(menu-item ,(symbol-name key) ,def :image ,image ,@props)))))
+  
+  ;;;###autoload
+  (defun tool-bar-add-item-from-menu (command icon &optional map &rest props)
+--- 141,148 ----
+        (unless (image-mask-p image)
+  	(setq image (append image '(:mask heuristic))))
+        (define-key-after map (vector key)
+! 	`(menu-item ,(if (stringp key) key (symbol-name key))
+! 		    ,def :image ,image ,@props)))))
+  
+  ;;;###autoload
+  (defun tool-bar-add-item-from-menu (command icon &optional map &rest props)
+***************
+*** 273,285 ****
+    ;; we must explicitly operate on the default value.
+  
+    (let ((tool-bar-map (default-value 'tool-bar-map)))
+!     (tool-bar-add-item "preferences" 'customize 'customize
+  		       :help "Edit preferences (customize)")
+  
+      (tool-bar-add-item "help" (lambda ()
+  				(interactive)
+  				(popup-menu menu-bar-help-menu))
+! 		       'help
+  		       :help "Pop up the Help menu"))
+    )
+  
+--- 274,286 ----
+    ;; we must explicitly operate on the default value.
+  
+    (let ((tool-bar-map (default-value 'tool-bar-map)))
+!     (tool-bar-add-item "preferences" 'customize "Customize"
+  		       :help "Edit preferences (customize)")
+  
+      (tool-bar-add-item "help" (lambda ()
+  				(interactive)
+  				(popup-menu menu-bar-help-menu))
+! 		       "Help"
+  		       :help "Pop up the Help menu"))
+    )
+  
