@@ -1,110 +1,105 @@
-Index: src/image.c
-===================================================================
-RCS file: /sources/emacs/emacs/src/image.c,v
-retrieving revision 1.65.2.13
-diff -c -r1.65.2.13 image.c
 *** src/image.c	28 Mar 2008 14:57:32 -0000	1.65.2.13
---- src/image.c	4 Apr 2008 15:05:11 -0000
+--- src/image.c	5 Apr 2008 22:33:31 -0000
 ***************
 *** 1135,1140 ****
 --- 1135,1146 ----
-       struct image *img = IMAGE_FROM_ID (f, id);
-       if (img->mask)
- 	mask = Qt;
+        struct image *img = IMAGE_FROM_ID (f, id);
+        if (img->mask)
+  	mask = Qt;
 + #if USE_CG_DRAWING
 +       /* Mask may be in an Alpha channel in the image data */
-+       if (img->data.ptr_val != NULL &&
++       if (img->data.ptr_val != NULL && 
 + 	  CGImageGetAlphaInfo(img->data.ptr_val) != kCGImageAlphaNone)
 + 	mask = Qt;
 + #endif
-     }
-   else
-     error ("Invalid image specification");
+      }
+    else
+      error ("Invalid image specification");
 ***************
 *** 1549,1555 ****
-     }
-
- #if defined (MAC_OS) && USE_CG_DRAWING
+      }
+  
+  #if defined (MAC_OS) && USE_CG_DRAWING
 !   if (img->data.ptr_val)
-     {
-       CGImageRelease (img->data.ptr_val);
-       img->data.ptr_val = NULL;
+      {
+        CGImageRelease (img->data.ptr_val);
+        img->data.ptr_val = NULL;
 --- 1555,1561 ----
-     }
-
- #if defined (MAC_OS) && USE_CG_DRAWING
+      }
+  
+  #if defined (MAC_OS) && USE_CG_DRAWING
 !   if (img->data.ptr_val != NULL)
-     {
-       CGImageRelease (img->data.ptr_val);
-       img->data.ptr_val = NULL;
+      {
+        CGImageRelease (img->data.ptr_val);
+        img->data.ptr_val = NULL;
 ***************
 *** 1835,1840 ****
 --- 1841,1848 ----
-     {
-       Lisp_Object conversion, spec;
-       Lisp_Object mask;
+      {
+        Lisp_Object conversion, spec;
+        Lisp_Object mask;
 +       int release = 0;
 +       int found_p = 0;
-
-       spec = img->spec;
-
+  
+        spec = img->spec;
+  
 ***************
 *** 1850,1862 ****
-
-       mask = image_spec_value (spec, QCheuristic_mask, NULL);
-       if (!NILP (mask))
+  
+        mask = image_spec_value (spec, QCheuristic_mask, NULL);
+        if (!NILP (mask))
 ! 	x_build_heuristic_mask (f, img, mask);
-       else
- 	{
+        else
+  	{
 - 	  int found_p;
--
- 	  mask = image_spec_value (spec, QCmask, &found_p);
-!
- 	  if (EQ (mask, Qheuristic))
- 	    x_build_heuristic_mask (f, img, Qt);
- 	  else if (CONSP (mask)
+- 
+  	  mask = image_spec_value (spec, QCmask, &found_p);
+! 
+  	  if (EQ (mask, Qheuristic))
+  	    x_build_heuristic_mask (f, img, Qt);
+  	  else if (CONSP (mask)
 --- 1858,1872 ----
-
-       mask = image_spec_value (spec, QCheuristic_mask, NULL);
-       if (!NILP (mask))
+  
+        mask = image_spec_value (spec, QCheuristic_mask, NULL);
+        if (!NILP (mask))
 ! 	{
 ! 	  release = 1;
 ! 	  x_build_heuristic_mask (f, img, mask);
 ! 	}
-       else
- 	{
- 	  mask = image_spec_value (spec, QCmask, &found_p);
+        else
+  	{
+  	  mask = image_spec_value (spec, QCmask, &found_p);
 ! 	  if (found_p)
 ! 	    release = 1;
- 	  if (EQ (mask, Qheuristic))
- 	    x_build_heuristic_mask (f, img, Qt);
- 	  else if (CONSP (mask)
+  	  if (EQ (mask, Qheuristic))
+  	    x_build_heuristic_mask (f, img, Qt);
+  	  else if (CONSP (mask)
 ***************
 *** 1876,1882 ****
-
-
-       /* Should we apply an image transformation algorithm?  */
+  
+  
+        /* Should we apply an image transformation algorithm?  */
 !       conversion = image_spec_value (spec, QCconversion, NULL);
-       if (EQ (conversion, Qdisabled))
- 	x_disable_image (f, img);
-       else if (EQ (conversion, Qlaplace))
+        if (EQ (conversion, Qdisabled))
+  	x_disable_image (f, img);
+        else if (EQ (conversion, Qlaplace))
 --- 1886,1895 ----
-
-
-       /* Should we apply an image transformation algorithm?  */
+  
+  
+        /* Should we apply an image transformation algorithm?  */
 !       found_p = 0;
 !       conversion = image_spec_value (spec, QCconversion, &found_p);
 !       if (found_p)
 ! 	release = 1;
-       if (EQ (conversion, Qdisabled))
- 	x_disable_image (f, img);
-       else if (EQ (conversion, Qlaplace))
+        if (EQ (conversion, Qdisabled))
+  	x_disable_image (f, img);
+        else if (EQ (conversion, Qlaplace))
 ***************
 *** 1893,1898 ****
 --- 1906,1918 ----
- 			      Fplist_get (tem, QCmatrix),
- 			      Fplist_get (tem, QCcolor_adjustment));
- 	}
+  			      Fplist_get (tem, QCmatrix),
+  			      Fplist_get (tem, QCcolor_adjustment));
+  	}
 + #if defined (MAC_OS) && USE_CG_DRAWING
 +       if (release && img->data.ptr_val != NULL)
 + 	{
@@ -112,26 +107,26 @@ diff -c -r1.65.2.13 image.c
 + 	  img->data.ptr_val = NULL;
 + 	}
 + #endif
-     }
- }
-
+      }
+  }
+  
 ***************
 *** 2767,2773 ****
 --- 2787,2798 ----
-     }
-   CGContextDrawImage (context, rectangle, image);
-   QDEndCGContext (ximg, &context);
-+
+      }
+    CGContextDrawImage (context, rectangle, image);
+    QDEndCGContext (ximg, &context);
++ 
 + #if USE_CG_DRAWING
 +   img->data.ptr_val = image; /* retain original data */
 + #else
-   CGImageRelease (image);
+    CGImageRelease (image);
 + #endif
-
-   /* Maybe fill in the background field while we have ximg handy. */
-   if (NILP (image_spec_value (img->spec, QCbackground, NULL)))
-*** tool-bar.el	05 Apr 2008 01:23:45 +0100	1.7.2.2
---- tool-bar.el	05 Apr 2008 14:30:07 +0100	
+  
+    /* Maybe fill in the background field while we have ximg handy. */
+    if (NILP (image_spec_value (img->spec, QCbackground, NULL)))
+*** lisp/tool-bar.el	05 Apr 2008 01:23:45 +0100	1.7.2.2
+--- lisp/tool-bar.el	05 Apr 2008 14:30:07 +0100	
 ***************
 *** 90,95 ****
 --- 90,166 ----
