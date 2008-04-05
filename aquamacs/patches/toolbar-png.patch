@@ -130,8 +130,8 @@ diff -c -r1.65.2.13 image.c
 
    /* Maybe fill in the background field while we have ximg handy. */
    if (NILP (image_spec_value (img->spec, QCbackground, NULL)))
-*** lisp/tool-bar.el	05 Apr 2008 01:23:45 +0100	1.7.2.2
---- lisp/tool-bar.el	05 Apr 2008 13:01:29 +0100	
+*** tool-bar.el	05 Apr 2008 01:23:45 +0100	1.7.2.2
+--- tool-bar.el	05 Apr 2008 14:30:07 +0100	
 ***************
 *** 90,95 ****
 --- 90,166 ----
@@ -366,7 +366,7 @@ diff -c -r1.65.2.13 image.c
         (let ((defn (assq key (cdr submap))))
   	(if (eq (cadr defn) 'menu-item)
   	    (define-key-after in-map (vector key)
-! 	      (append `(menu-item ,(or label (car (cdr defn)))) (cdddr defn) 
+! 	      (append `(menu-item ,(or label (car (cddr defn)))) (cdddr defn) 
 ! 		      (list :image image) props))
   	  (setq defn (cdr defn))
   	  (define-key-after in-map (vector key)
@@ -384,7 +384,7 @@ diff -c -r1.65.2.13 image.c
   	      ;; with a list of menu cache info, get rid of that.
   	      (if (and (consp rest) (consp (car rest)))
   		  (setq rest (cdr rest)))
-! 	      (append `(menu-item ,(or label (car defn)) ,rest)
+! 	      (append `(menu-item ,(or label (car (cdr rest))) ,(cdr rest))
   		      (list :image image) props))))))))
   
   ;;; Set up some global items.  Additions/deletions up for grabs.
