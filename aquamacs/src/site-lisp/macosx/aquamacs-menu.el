@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.97 2008/03/24 16:52:10 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.98 2008/04/05 09:11:28 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -389,7 +389,7 @@ customization buffer."
 
 
 (define-key menu-bar-file-menu [new-file]
-  `(menu-item ,(aq-shortcut  "New Buffer                               "
+  `(menu-item ,(aq-shortcut  "New Buffer                              "
 			    'new-frame-with-new-scratch)  
 	      new-frame-with-new-scratch
 	      :key-sequence nil
@@ -780,17 +780,42 @@ both existing buffers and buffers that you subsequently create."
 			"Ignore letter-case in search"))
 
 
-
+(defun toggle-tabbar-window-new-buffers ()
+"Toggle state of `tabbar-window-new-buffers'."
+  (interactive)
+  (customize-set-variable 'tabbar-window-new-buffers
+			  (not tabbar-window-new-buffers))
+  (when tabbar-window-new-buffers
+    (tabbar-mode 1)
+    (customize-set-variable 'one-buffer-one-frame-mode nil)))
+(defun toggle-one-buffer-one-frame-mode ()
+"Toggle state of `one-buffer-one-frame-mode'."
+  (interactive)
+  (customize-set-variable 'one-buffer-one-frame-mode
+			  (not one-buffer-one-frame-mode))
+  (if one-buffer-one-frame-mode
+      (customize-set-variable 'tabbar-window-new-buffers nil)))
 
 (when (string= "mac" window-system)
     (require 'aquamacs-frame-setup)
     (define-key-after menu-bar-options-menu [oneonone]
-      (menu-bar-make-mm-toggle 
-       one-buffer-one-frame-mode
-       "Display Buffers in Separate Frames"
-       "Open a new Frame (window) for each new buffer."
-       (:visible (boundp 'one-buffer-one-frame-mode)))
-       'edit-options-separator))
+      '(menu-item
+	"Display Buffers in Separate Frames"
+	toggle-one-buffer-one-frame-mode
+	:button (:toggle . one-buffer-one-frame-mode)
+	:help "Open a new Frame (window) for each new buffer."
+	:visible (boundp 'one-buffer-one-frame-mode))
+       'edit-options-separator)
+    (define-key-after menu-bar-options-menu [autotabs]
+      '(menu-item 
+	"Display Buffers in New Tabs"
+	toggle-tabbar-window-new-buffers
+	:button (:toggle . tabbar-window-new-buffers)
+	:help "Open a new Tab for each new buffer."
+	:visible (and (boundp 'tabbar-mode) (boundp 'tabbar-window-new-buffers)))
+       'oneonone)
+    (define-key-after menu-bar-options-menu [obof-separator]  '(menu-item "--") 'autotabs)
+)
 
 (when (fboundp 'mac-font-panel-mode)
 
@@ -1045,11 +1070,21 @@ both existing buffers and buffers that you subsequently create."
 
 
  
+
+(define-key menu-bar-file-menu [make-tab]
+  `(menu-item (aq-shortcut  "New Tab                                 "
+			    'new-tab) new-tab
+	      :enable (and (fboundp 'new-tab)
+			   (menu-bar-menu-frame-live-and-visible-p)
+			   (menu-bar-non-minibuffer-window-p))
+	      :help "Add a new tab to the window"))
+
 (define-key menu-bar-file-menu [split-window]
   `(menu-item "Split Window" split-window-vertically
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
 			   (menu-bar-non-minibuffer-window-p))
 	      :help "Split selected window in two"))
+
 (define-key menu-bar-file-menu [tile-frames]
   `(menu-item "Scatter frames" scatter-frames
 	      :enable (menu-bar-menu-frame-live-and-visible-p)
@@ -1075,6 +1110,7 @@ both existing buffers and buffers that you subsequently create."
 	       (list 
 		'(command-separator "--")
 		(assq 'make-frame menu-bar-file-menu)
+		(assq 'make-tab menu-bar-file-menu)
 		(assq 'one-window menu-bar-file-menu)
 		(assq 'split-window menu-bar-file-menu)
 		'(command-separator "--")
@@ -1091,6 +1127,7 @@ both existing buffers and buffers that you subsequently create."
 ;(assq-delete-all 'list-all-buffers menu-bar-buffers-menu-command-entries)
 
 (assq-delete-all 'make-frame menu-bar-file-menu)
+(assq-delete-all 'make-tab menu-bar-file-menu)
 (assq-delete-all 'one-window menu-bar-file-menu)
 (assq-delete-all 'split-window menu-bar-file-menu) 
 (assq-delete-all 'delete-this-frame menu-bar-file-menu)
