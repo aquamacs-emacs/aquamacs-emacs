@@ -130,13 +130,8 @@ diff -c -r1.65.2.13 image.c
 
    /* Maybe fill in the background field while we have ximg handy. */
    if (NILP (image_spec_value (img->spec, QCbackground, NULL)))
-Index: lisp/tool-bar.el
-===================================================================
-RCS file: /sources/emacs/emacs/lisp/tool-bar.el,v
-retrieving revision 1.5
-diff -c -r1.5 tool-bar.el
-*** lisp/tool-bar.el	6 Feb 2006 14:33:35 -0000	1.5
---- lisp/tool-bar.el	2 May 2006 11:18:01 -0000
+*** lisp/tool-bar.el	05 Apr 2008 01:23:45 +0100	1.7.2.2
+--- lisp/tool-bar.el	05 Apr 2008 13:01:29 +0100	
 ***************
 *** 90,95 ****
 --- 90,166 ----
@@ -166,7 +161,6 @@ diff -c -r1.5 tool-bar.el
 + 	  )))
 +    image-spec-list))
 + 
-+ ;; (cdr (tool-bar-get-image-spec "new"))
 + (defun tool-bar-get-image-spec (icon)
 +   (let* ((fg (face-attribute 'tool-bar :foreground))
 + 	 (bg (face-attribute 'tool-bar :background))
@@ -177,8 +171,9 @@ diff -c -r1.5 tool-bar.el
 + 			  nil
 + 			(list :type 'xpm :file
 +                               (concat "low-color/" icon ".xpm"))))
-+ 	 (png-spec (list :type 'png
-+ 			   :file (concat icon ".png")) )
++ 	 (png-spec (if (image-type-available-p 'png)
++ 		       (list :type 'png :file (concat icon ".png") 
++ 			     :background "grey")))
 + 	 (pbm-spec (append (list :type 'pbm :file
 +                                  (concat icon ".pbm")) colors))
 + 	 (xbm-spec (append (list :type 'xbm :file
@@ -200,8 +195,8 @@ diff -c -r1.5 tool-bar.el
 + 			  "_dis")
 + 		       nil)))
 + 	 (images (when image ;; image may be nil if not found.
-+ 		   (unless (image-mask-p image)
-+ 		     (setq image (append image '(:mask heuristic))))
++ 		    (unless (image-mask-p image)
++  		     (setq image (append image '(:mask heuristic))))
 + 		   (if (and image-sel image-dis)
 + 		       (progn		     
 + 			 (unless (image-mask-p image-sel)
@@ -218,10 +213,19 @@ diff -c -r1.5 tool-bar.el
   (defun tool-bar-add-item (icon def key &rest props)
     "Add an item to the tool bar.
 ***************
-*** 119,147 ****
-  function will first try to use low-color/ICON.xpm if display-color-cells
-  is less or equal to 256, then ICON.xpm, then ICON.pbm, and finally
-  ICON.xbm, using `find-image'."
+*** 110,147 ****
+  ;;;###autoload
+  (defun tool-bar-local-item (icon def key map &rest props)
+    "Add an item to the tool bar in map MAP.
+! ICON names the image, DEF is the key definition and KEY is a symbol
+! for the fake function key in the menu keymap.  Remaining arguments
+! PROPS are additional items to add to the menu item specification.  See
+! Info node `(elisp)Tool Bar'.  Items are added from left to right.
+! 
+! ICON is the base name of a file containing the image to use.  The
+! function will first try to use low-color/ICON.xpm if display-color-cells
+! is less or equal to 256, then ICON.xpm, then ICON.pbm, and finally
+! ICON.xbm, using `find-image'."
 !   (let* ((fg (face-attribute 'tool-bar :foreground))
 ! 	 (bg (face-attribute 'tool-bar :background))
 ! 	 (colors (nconc (if (eq fg 'unspecified) nil (list :foreground fg))
@@ -239,34 +243,60 @@ diff -c -r1.5 tool-bar.el
 ! 		(if (display-color-p)
 ! 		    (list xpm-lo-spec xpm-spec pbm-spec xbm-spec)
 ! 		  (list pbm-spec xbm-spec xpm-lo-spec xpm-spec)))))
-  
+! 
       (when (and (display-images-p) image)
-!       (unless (image-mask-p image)
-! 	(setq image (append image '(:mask heuristic))))
+-       (unless (image-mask-p image)
+- 	(setq image (append image '(:mask heuristic))))
         (define-key-after map (vector key)
 ! 	`(menu-item ,(symbol-name key) ,def :image ,image ,@props)))))
   
   ;;;###autoload
   (defun tool-bar-add-item-from-menu (command icon &optional map &rest props)
---- 190,203 ----
-  function will first try to use low-color/ICON.xpm if display-color-cells
-  is less or equal to 256, then ICON.xpm, then ICON.pbm, and finally
-  ICON.xbm, using `find-image'."
-!   (let* ((is (tool-bar-get-image-spec icon))
+--- 181,208 ----
+  ;;;###autoload
+  (defun tool-bar-local-item (icon def key map &rest props)
+    "Add an item to the tool bar in map MAP.
+! ICON names the image, or is structure of the form (IMG . LABEL),
+! with the image name IMG, and a string with the label of the icon
+! displayed in the tool-bar as LABEL. LABEL defaults to the symbol
+! name of KEY.  DEF is the key definition and KEY is a symbol for
+! the fake function key in the menu keymap Remaining arguments
+! PROPS are additional items to add to the menu item specification.
+! See Info node `(elisp)Tool Bar'. Items are added from left to
+! right.
+! 
+! ICON or IMG is the base name of a file containing the image to
+! use. The function will first try to use low-color/ICON.xpm if
+! display-color-cells is less or equal to 256, then ICON.xpm, then
+! ICON.pbm, and finally ICON.xbm, using `find-image'."
+!   (let* ((icon-name (if (consp icon) (car icon) icon))
+! 	 (label (if (consp icon) (cdr icon) (symbol-name key)))
+! 	 (is (tool-bar-get-image-spec icon-name))
 ! 	 (image (car is))
 ! 	 (images (cdr is))) 
-  
       (when (and (display-images-p) image)
-!       
         (define-key-after map (vector key)
-! 	`(menu-item ,(symbol-name key) ,def :image ,images ,@props)))))
+! 	`(menu-item ,label 
+! 		    ,def :image ,images ,@props)))))
   
   ;;;###autoload
   (defun tool-bar-add-item-from-menu (command icon &optional map &rest props)
 ***************
-*** 174,196 ****
+*** 162,196 ****
+  ;;;###autoload
+  (defun tool-bar-local-item-from-menu (command icon in-map &optional from-map &rest props)
+    "Define local tool bar binding for COMMAND using the given ICON.
+! This makes a binding for COMMAND in IN-MAP, copying its binding from
+! the menu bar in FROM-MAP (which defaults to `global-map'), but
+! modifies the binding by adding an image specification for ICON.  It
+! finds ICON just like `tool-bar-add-item'.  PROPS are additional
+  properties to add to the binding.
+  
+  FROM-MAP must contain appropriate binding for `[menu-bar]' which
+  holds a keymap."
+    (unless from-map
       (setq from-map global-map))
-    (let* ((menu-bar-map (lookup-key from-map [menu-bar]))
+!   (let* ((menu-bar-map (lookup-key from-map [menu-bar]))
   	 (keys (where-is-internal command menu-bar-map))
 ! 	 (fg (face-attribute 'tool-bar :foreground))
 ! 	 (bg (face-attribute 'tool-bar :background))
@@ -288,11 +318,28 @@ diff -c -r1.5 tool-bar.el
   	 submap key)
       (when (and (display-images-p) image)
         ;; We'll pick up the last valid entry in the list of keys if
---- 230,238 ----
+--- 223,248 ----
+  ;;;###autoload
+  (defun tool-bar-local-item-from-menu (command icon in-map &optional from-map &rest props)
+    "Define local tool bar binding for COMMAND using the given ICON.
+! ICON names the image, or is structure of the form (IMG . LABEL),
+! with the image name IMG, and a string with the label of the icon
+! displyed in the tool-bar as LABEL. This function creates a
+! binding for COMMAND in IN-MAP, copying its binding from the menu
+! bar in FROM-MAP (which defaults to `global-map'), but modifies
+! the binding by adding an image specification for ICON. It finds
+! ICON just like `tool-bar-add-item'. PROPS are additional
+  properties to add to the binding.
+  
+  FROM-MAP must contain appropriate binding for `[menu-bar]' which
+  holds a keymap."
+    (unless from-map
       (setq from-map global-map))
-    (let* ((menu-bar-map (lookup-key from-map [menu-bar]))
+!   (let* ((icon-name (if (consp icon) (car icon) icon))
+! 	 (label (if (consp icon) (cdr icon)))
+! 	 (menu-bar-map (lookup-key from-map [menu-bar]))
   	 (keys (where-is-internal command menu-bar-map))
-! 	 (is (tool-bar-get-image-spec icon))
+! 	 (is (tool-bar-get-image-spec icon-name))
 ! 	 (image (car is))
 ! 	 (images (cdr is)) 
   	 submap key)
@@ -312,14 +359,90 @@ diff -c -r1.5 tool-bar.el
   	  (setq defn (cdr defn))
   	  (define-key-after in-map (vector key)
   	    (let ((rest (cdr defn)))
---- 252,261 ----
+--- 262,272 ----
   			key kk)))))
         (when (and (symbolp submap) (boundp submap))
   	(setq submap (eval submap)))
         (let ((defn (assq key (cdr submap))))
   	(if (eq (cadr defn) 'menu-item)
   	    (define-key-after in-map (vector key)
-! 	      (append (cdr defn) (list :image images) props))
+! 	      (append `(menu-item ,(or label (car (cdr defn)))) (cdddr defn) 
+! 		      (list :image image) props))
   	  (setq defn (cdr defn))
   	  (define-key-after in-map (vector key)
   	    (let ((rest (cdr defn)))
+***************
+*** 223,229 ****
+  	      ;; with a list of menu cache info, get rid of that.
+  	      (if (and (consp rest) (consp (car rest)))
+  		  (setq rest (cdr rest)))
+! 	      (append `(menu-item ,(car defn) ,rest)
+  		      (list :image image) props))))))))
+  
+  ;;; Set up some global items.  Additions/deletions up for grabs.
+--- 274,280 ----
+  	      ;; with a list of menu cache info, get rid of that.
+  	      (if (and (consp rest) (consp (car rest)))
+  		  (setq rest (cdr rest)))
+! 	      (append `(menu-item ,(or label (car defn)) ,rest)
+  		      (list :image image) props))))))))
+  
+  ;;; Set up some global items.  Additions/deletions up for grabs.
+***************
+*** 232,247 ****
+    ;; People say it's bad to have EXIT on the tool bar, since users
+    ;; might inadvertently click that button.
+    ;;(tool-bar-add-item-from-menu 'save-buffers-kill-emacs "exit")
+!   (tool-bar-add-item-from-menu 'find-file "new")
+!   (tool-bar-add-item-from-menu 'menu-find-file-existing "open")
+!   (tool-bar-add-item-from-menu 'dired "diropen")
+    (tool-bar-add-item-from-menu 'kill-this-buffer "close")
+!   (tool-bar-add-item-from-menu 'save-buffer "save" nil
+  			       :visible '(or buffer-file-name
+  					     (not (eq 'special
+  						      (get major-mode
+  							   'mode-class)))))
+!   (tool-bar-add-item-from-menu 'write-file "saveas" nil
+  			       :visible '(or buffer-file-name
+  					     (not (eq 'special
+  						      (get major-mode
+--- 283,298 ----
+    ;; People say it's bad to have EXIT on the tool bar, since users
+    ;; might inadvertently click that button.
+    ;;(tool-bar-add-item-from-menu 'save-buffers-kill-emacs "exit")
+!   (tool-bar-add-item-from-menu 'find-file '("new" . "New"))
+!   (tool-bar-add-item-from-menu 'menu-find-file-existing '("open" . "Open"))
+!   (tool-bar-add-item-from-menu 'dired '("diropen" . "Directory"))
+    (tool-bar-add-item-from-menu 'kill-this-buffer "close")
+!   (tool-bar-add-item-from-menu 'save-buffer '("save" . "Save") nil
+  			       :visible '(or buffer-file-name
+  					     (not (eq 'special
+  						      (get major-mode
+  							   'mode-class)))))
+!   (tool-bar-add-item-from-menu 'write-file '("saveas" . "Save As") nil
+  			       :visible '(or buffer-file-name
+  					     (not (eq 'special
+  						      (get major-mode
+***************
+*** 273,282 ****
+    ;; we must explicitly operate on the default value.
+  
+    (let ((tool-bar-map (default-value 'tool-bar-map)))
+!     (tool-bar-add-item "preferences" 'customize 'customize
+  		       :help "Edit preferences (customize)")
+  
+!     (tool-bar-add-item "help" (lambda ()
+  				(interactive)
+  				(popup-menu menu-bar-help-menu))
+  		       'help
+--- 324,333 ----
+    ;; we must explicitly operate on the default value.
+  
+    (let ((tool-bar-map (default-value 'tool-bar-map)))
+!     (tool-bar-add-item '("preferences" . "Customize") 'customize 'customize
+  		       :help "Edit preferences (customize)")
+  
+!     (tool-bar-add-item '("help" . "Help") (lambda ()
+  				(interactive)
+  				(popup-menu menu-bar-help-menu))
+  		       'help
