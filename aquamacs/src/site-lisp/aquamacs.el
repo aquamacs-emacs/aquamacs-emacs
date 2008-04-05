@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.143 2008/04/03 18:57:48 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.144 2008/04/05 09:02:00 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -969,7 +969,10 @@ listed here."
      aquamacs-default-styles 
      aquamacs-customization-version-id
      mac-print-monochrome-mode
-     make-backup-files))
+     make-backup-files
+     tabbar-window-new-buffers
+     tabbar-mode
+     ))
 
   (defun aquamacs-menu-bar-options-save ()
     "Save current values of Options menu items using Custom.
