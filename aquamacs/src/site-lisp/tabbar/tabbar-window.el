@@ -6,7 +6,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: tabbar-window.el,v 1.10 2008/03/18 21:08:32 champo Exp $
+;; Revision: $Id: tabbar-window.el,v 1.11 2008/04/05 08:41:34 davidswelt Exp $
 
 (require 'tabbar)
 
@@ -17,7 +17,7 @@
   "*Specify the behavior when a new buffer is opened in tabbar-mode.
 The following options are available:
 
-- `tab'
+- `tab' or t
     Buffer is created in current window and assigned a new tab.
 - `no-tab'
     Buffer is created in current window, with no tab or tab bar; window's
@@ -26,7 +26,7 @@ previous tabset is deleted, although buffers are not closed or killed.
     Buffer is created in a new frame.  (Lone buffers show no tabs.)"
   :group 'tabbar
   :type '(choice :tag "New buffer gets created in..."
-                 (const :tag "Current Window with New Tab" nil)
+                 (const :tag "Current Window with New Tab" t)
                  (const :tag "Current Window without a Tab" no-tab)
                  (const :tag "New Frame" nil)))
 
@@ -465,7 +465,7 @@ with a new tab; 'no-tab, create new buffer in current window, with
 no tabbar (deletes all tabs in the window); default, create new buffer
 in new frame."
   (cond
-   ((eq tabbar-window-new-buffers 'tab)
+   ((or (eq tabbar-window-new-buffers 'tab) (eq tabbar-window-new-buffers t))
     ;; create a new tab in current window
     (tabbar-new-tab mode))
    ((eq tabbar-window-new-buffers 'no-tab)
