@@ -6,7 +6,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: tabbar-window.el,v 1.11 2008/04/05 08:41:34 davidswelt Exp $
+;; Revision: $Id: tabbar-window.el,v 1.12 2008/04/05 08:42:14 davidswelt Exp $
 
 (require 'tabbar)
 
@@ -22,7 +22,7 @@ The following options are available:
 - `no-tab'
     Buffer is created in current window, with no tab or tab bar; window's
 previous tabset is deleted, although buffers are not closed or killed.
-- default
+- nil (default)
     Buffer is created in a new frame.  (Lone buffers show no tabs.)"
   :group 'tabbar
   :type '(choice :tag "New buffer gets created in..."
