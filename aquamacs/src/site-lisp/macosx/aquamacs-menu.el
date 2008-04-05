@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.98 2008/04/05 09:11:28 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.99 2008/04/05 09:31:35 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -895,7 +895,10 @@ both existing buffers and buffers that you subsequently create."
 			(format "Make Backup Files %s" (if backup-inhibited "(inhibited here)" ""))
 			"Making backup files: %s"
 			"Create a backup file when saving"
-			) 'oneonone)
+			) 'obof-separator)
+;(define-key-after menu-bar-options-menu [backup-separator]  
+;  '(menu-item "--") 'file-backups)
+
 
 ;; not important enough to warrant a menu entry
 (easy-menu-remove-item global-map  '("menu-bar" "options") 'save-place) 

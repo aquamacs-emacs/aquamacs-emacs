@@ -207,7 +207,8 @@ This command is part of `%s'." string-rep language mode-name mode-name)
     (intern (format "emulate-mac-%s-keyboard-mode" lang))))
 
 (defvar aquamacs-emkm-current-keymap nil 
-  "Keymap currently in use by `emulate-mac-<language>-keyboard-mode'.")
+  "Keymap currently in use by `emulate-mac-<lan
+guage>-keyboard-mode'.")
 
 (defun turn-off-emulate-mac-keyboard-modes (&optional except-language)
   "Turn off all emulate-mac-keyboard minor modes"
@@ -364,10 +365,13 @@ do not let it produce special characters (passing the key to the system)."
     :button (:toggle . (not mac-option-modifier))))
  
 
+(define-key-after menu-bar-options-menu [option-key-separator]  
+  '(menu-item "--") 'edit-options-separator)
 
 (define-key-after menu-bar-options-menu [option-key-menu]
   `(menu-item "Option Key" ,menu-bar-option-key-menu)
-  'edit-options-separator)
+  'option-key-separator)
+
 
 ;; doesn't work:
 ;; ;;;; Keyboard layout/language change events
