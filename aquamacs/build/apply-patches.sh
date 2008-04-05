@@ -20,7 +20,7 @@
 # taken out (temp):          capslock   causes trouble Qappevent
 
 PATCHES="fix-configure test ui-strings
-         toolbar-png tool-bar-display-mode
+         toolbar-png 
          custom-verbosity pretty-modeline transparency
          mouse-echo
          recentf-track-minibuf
