@@ -19,13 +19,13 @@
 #    is it slow with xpm as well?
 # taken out (temp):          capslock   causes trouble Qappevent
 
-PATCHES="fix-configure test ui-strings
+PATCHES="mac-functions emacs-inline transparency
+         fix-configure test ui-strings
          toolbar-png 
-         custom-verbosity pretty-modeline transparency
+         custom-verbosity pretty-modeline 
          mouse-echo
          recentf-track-minibuf
          pop-to-buffer display-buffer-reuse
-         emacs-inline
          cus-edit-switch
          ediff-workaround
          faces-speedup
@@ -34,7 +34,7 @@ PATCHES="fix-configure test ui-strings
          minibuffer-filename
          header-line
          org-gnu-Aquamacs about-aquamacs puresize
-         mac-functions macfns-dialog-menu menu-bar-visible-frame 
+         macfns-dialog-menu menu-bar-visible-frame 
          eval-depth
          shut-up python-mode intel"
 #  longlines-fillcolumn  out temporarily
