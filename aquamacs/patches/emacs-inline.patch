@@ -1,6 +1,6 @@
 diff -Naur emacs.orig/lisp/loadup.el emacs/lisp/loadup.el
---- emacs.orig/lisp/loadup.el	2008-01-06 21:44:35.000000000 -0500
-+++ emacs/lisp/loadup.el	2008-04-05 16:44:11.000000000 -0400
+--- lisp/loadup.el	2008-01-06 21:44:35.000000000 -0500
++++ lisp/loadup.el	2008-04-05 16:44:11.000000000 -0400
 @@ -209,6 +209,9 @@
  (if (fboundp 'atan)	; preload some constants and
      (progn		; floating pt. functions if we have float support.
@@ -12,8 +12,8 @@ diff -Naur emacs.orig/lisp/loadup.el emacs/lisp/loadup.el
  
  (load "vc-hooks")
 diff -Naur emacs.orig/lisp/term/mac-im.el emacs/lisp/term/mac-im.el
---- emacs.orig/lisp/term/mac-im.el	1969-12-31 19:00:00.000000000 -0500
-+++ emacs/lisp/term/mac-im.el	2008-04-05 16:44:11.000000000 -0400
+--- lisp/term/mac-im.el	1969-12-31 19:00:00.000000000 -0500
++++ lisp/term/mac-im.el	2008-04-05 16:44:11.000000000 -0400
 @@ -0,0 +1,226 @@
 +;; mac-im.el --- Input Method for Mac OS X -*-coding: iso-2022-7bit;-*-
 +
@@ -242,8 +242,8 @@ diff -Naur emacs.orig/lisp/term/mac-im.el emacs/lisp/term/mac-im.el
 +  (define-key function-key-map [201328805] [?\C-\M-\\])
 +)
 diff -Naur emacs.orig/lisp/term/mac-win.el emacs/lisp/term/mac-win.el
---- emacs.orig/lisp/term/mac-win.el	2008-03-28 20:48:33.000000000 -0400
-+++ emacs/lisp/term/mac-win.el	2008-04-05 16:44:11.000000000 -0400
+--- lisp/term/mac-win.el	2008-03-28 20:48:33.000000000 -0400
++++ lisp/term/mac-win.el	2008-04-05 16:44:11.000000000 -0400
 @@ -2098,9 +2098,19 @@
  				      (concat msg active-input-string)))
  	      (setq msg active-input-string))
@@ -316,8 +316,8 @@ diff -c -r1.340.2.3 Makefile.in
   ${emacsapp}Contents/Resources/English.lproj:
   	mkdir -p $@
 diff -Naur emacs.orig/src/keyboard.c emacs/src/keyboard.c
---- emacs.orig/src/keyboard.c	2008-02-25 11:04:54.000000000 -0500
-+++ emacs/src/keyboard.c	2008-04-05 16:44:12.000000000 -0400
+--- src/keyboard.c	2008-02-25 11:04:54.000000000 -0500
++++ src/keyboard.c	2008-04-05 16:44:12.000000000 -0400
 @@ -532,6 +532,9 @@
  #if defined (WINDOWSNT) || defined (MAC_OS)
  Lisp_Object Qlanguage_change;
@@ -356,8 +356,8 @@ diff -Naur emacs.orig/src/keyboard.c emacs/src/keyboard.c
    staticpro (&Qdrag_n_drop);
  
 diff -Naur emacs.orig/src/macim.c emacs/src/macim.c
---- emacs.orig/src/macim.c	1969-12-31 19:00:00.000000000 -0500
-+++ emacs/src/macim.c	2008-04-05 16:44:12.000000000 -0400
+--- src/macim.c	1969-12-31 19:00:00.000000000 -0500
++++ src/macim.c	2008-04-05 16:44:12.000000000 -0400
 @@ -0,0 +1,267 @@
 +/* Implementation of Inline Input Method for MacOS X.
 +   Copyright (C) 2004, 2005, 2006, 2007
@@ -626,22 +626,9 @@ diff -Naur emacs.orig/src/macim.c emacs/src/macim.c
 +
 +#endif
 +
-diff -c -r1.214.2.17 macterm.c
-*** emacs.orig/src/macterm.c	6 Apr 2008 01:58:59 -0000	1.214.2.17
---- emacs/src/macterm.c	6 Apr 2008 11:23:34 -0000
-***************
-*** 9167,9172 ****
---- 9167,9173 ----
-  	    }
-  	  tail = XCDR (tail);
-  	}
-+       count += mac_store_change_input_method_event (timestamp);
-      }
-  
-    if (x_display_list == dpyinfo)
 diff -c -r1.1.2.1 mactoolbox.c
-*** emacs.orig/src/mactoolbox.c	6 Apr 2008 01:54:44 -0000	1.1.2.1
---- emacs/src/mactoolbox.c	6 Apr 2008 11:19:27 -0000
+*** mactoolbox.c	6 Apr 2008 01:54:44 -0000	1.1.2.1
+--- mactoolbox.c	6 Apr 2008 11:48:18 -0000
 ***************
 *** 175,180 ****
 --- 175,181 ----
@@ -672,9 +659,19 @@ diff -c -r1.1.2.1 mactoolbox.c
   	      goto OTHER;
   	    else
   #endif
+***************
+*** 3865,3870 ****
+--- 3869,3875 ----
+  	    }
+  	  count++;
+  	}
++       count += mac_store_change_input_method_event (timestamp);
+      }
+  
+    /* If the focus was just given to an autoraising frame,
 diff -Naur emacs.orig/src/termhooks.h emacs/src/termhooks.h
---- emacs.orig/src/termhooks.h	2008-01-07 23:29:50.000000000 -0500
-+++ emacs/src/termhooks.h	2008-04-05 16:44:12.000000000 -0400
+--- src/termhooks.h	2008-01-07 23:29:50.000000000 -0500
++++ src/termhooks.h	2008-04-05 16:44:12.000000000 -0400
 @@ -265,6 +265,10 @@
  				   language is changed by the
  				   user.  */
