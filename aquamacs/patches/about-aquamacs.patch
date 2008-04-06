@@ -1,7 +1,12 @@
-*** src/macterm.c	Wed Sep 28 00:40:52 2005
---- src/macterm.c	Wed Sep 28 00:41:16 2005
+Index: mactoolbox.c
+===================================================================
+RCS file: /sources/emacs/emacs/src/Attic/mactoolbox.c,v
+retrieving revision 1.1.2.1
+diff -c -r1.1.2.1 mactoolbox.c
+*** src/mactoolbox.c	6 Apr 2008 01:54:44 -0000	1.1.2.1
+--- src/mactoolbox.c	6 Apr 2008 13:00:25 -0000
 ***************
-*** 12691,12697 ****
+*** 4773,4780 ****
         SetMenuItemCommandKey (menu, menu_index, false, 0);
         InsertMenuItemTextWithCFString (menu, NULL,
   				      0, kMenuItemAttrSeparator, 0);
@@ -9,11 +14,16 @@
   				      0, 0, kHICommandAbout);
       }
   #else	/* !MAC_OSX */
---- 12734,12740 ----
+  #if TARGET_API_MAC_CARBON
+--- 4778,4788 ----
         SetMenuItemCommandKey (menu, menu_index, false, 0);
         InsertMenuItemTextWithCFString (menu, NULL,
   				      0, kMenuItemAttrSeparator, 0);
 !       InsertMenuItemTextWithCFString (menu, CFSTR ("About Aquamacs Emacs"),
   				      0, 0, kHICommandAbout);
++       InsertMenuItemTextWithCFString (menu, CFSTR ("Check for Updates..."),
++ 				      1, 0, 'chku');
++ 
       }
   #else	/* !MAC_OSX */
+  #if TARGET_API_MAC_CARBON
