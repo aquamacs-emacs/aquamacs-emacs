@@ -135,6 +135,13 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
     echo "CVS update: aquamacs" >>$LOG  
     $CVS_PREFIX update -dP >>$LOG 2>>$LOG 
 
+    echo "Downloading online patches" >>$LOG
+
+    curl 'http://svn.sourceforge.jp/cgi-bin/viewcvs.cgi/*checkout*/zenitani/CarbonEmacs/src/patch/mac-functions.patch?root=macwiki' >${AQUAMACS_ROOT}/patches/mac-functions.patch
+    curl 'http://svn.sourceforge.jp/cgi-bin/viewcvs.cgi/*checkout*/zenitani/CarbonEmacs/src/patch/transparency4.patch?root=macwiki' >${AQUAMACS_ROOT}/patches/transparency.patch
+    curl 'http://svn.sourceforge.jp/cgi-bin/viewcvs.cgi/*checkout*/zenitani/CarbonEmacs/src/patch/emacs-inline.patch?root=macwiki' >${AQUAMACS_ROOT}/patches/emacs-inline.patch
+
+
     echo "Applying Aquamacs patches..." >>$LOG  
     . ${AQUAMACS_ROOT}/build/apply-patches.sh >>$LOG 2>>$LOG
 
