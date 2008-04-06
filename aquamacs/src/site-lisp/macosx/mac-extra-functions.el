@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.57 2008/02/07 22:34:08 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.58 2008/04/06 17:23:20 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -87,8 +87,13 @@ handles files of type HTML."
   (substring data-directory 0 -4))
 
 ;; New documents
-(defun new-frame-with-new-scratch  (&optional other-frame mode)
+(defun new-empty-buffer-other-frame (&optional mode)
   "Opens a new frame containing an empty buffer."
+  (interactive)
+  (new-empty-buffer t mode))
+
+(defun new-empty-buffer  (&optional other-frame mode)
+  "Visits an empty buffer."
   (interactive)			
   (let ((buf (generate-new-buffer (mac-new-buffer-name "untitled"))))
     ;; setting mode is done before showing the new frame
@@ -104,6 +109,7 @@ handles files of type HTML."
 	(switch-to-buffer buf)))
     (setq buffer-offer-save t)
     (set-buffer-modified-p nil)))
+(defalias  'new-frame-with-new-scratch 'new-empty-buffer)
 
 (defun aquamacs-find-file ()
 "Open a new buffer. If `one-buffer-one-frame' is non-nil,
