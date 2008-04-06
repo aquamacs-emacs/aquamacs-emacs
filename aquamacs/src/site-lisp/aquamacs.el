@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.144 2008/04/05 09:02:00 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.145 2008/04/06 17:34:36 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -630,7 +630,14 @@ to the selected frame."
 				 (cdr-safe (cdr-safe (car-safe 
 						      (cdr-safe formode))))))
 	      aquamacs-default-styles))
-
+    (when (< aquamacs-customization-version-id 131)
+      ;; turn on tool bar only once to show the nice new tool bar
+      (add-hook 'after-init-functions 
+		(lambda () 
+		  (mapc (lambda (frame)
+			  (modify-frame-parameters frame (list (cons 'tool-bar-lines 1))))
+			(frame-list)))))
+      
 ;; todo before 0.9.9:
 ;; how to deal with tool-bar-mode set in user's custom-file?
 ;; for now, ignore it
