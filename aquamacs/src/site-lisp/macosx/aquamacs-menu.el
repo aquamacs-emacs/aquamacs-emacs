@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.103 2008/04/06 18:01:59 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.104 2008/04/06 22:34:45 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -787,41 +787,41 @@ both existing buffers and buffers that you subsequently create."
 			"Ignore letter-case in search"))
 
 
-(defun toggle-tabbar-window-new-buffers ()
-"Toggle state of `tabbar-window-new-buffers'."
+(defun toggle-tabbar-mode ()
+"Toggle state of `tabbar-mode'."
   (interactive)
-  (customize-set-variable 'tabbar-window-new-buffers
-			  (not tabbar-window-new-buffers))
-  (when tabbar-window-new-buffers
-    (tabbar-mode 1)
-    (customize-set-variable 'one-buffer-one-frame-mode nil)))
+  (customize-set-variable 'tabbar-mode
+			  (not tabbar-mode))
+  (if tabbar-mode
+      (customize-set-variable 'one-buffer-one-frame-mode nil)))
+
 (defun toggle-one-buffer-one-frame-mode ()
 "Toggle state of `one-buffer-one-frame-mode'."
   (interactive)
   (customize-set-variable 'one-buffer-one-frame-mode
 			  (not one-buffer-one-frame-mode))
   (if one-buffer-one-frame-mode
-      (customize-set-variable 'tabbar-window-new-buffers nil)))
+      (customize-set-variable 'tabbar-mode nil)))
 
 (when (string= "mac" window-system)
     (require 'aquamacs-frame-setup)
+    (define-key-after menu-bar-options-menu [tabbar]
+      '(menu-item
+	"Display Buffers in Tabs"
+	toggle-tabbar-mode
+	:button (:toggle . tabbar-mode)
+	:help "Open a new tab for each new buffer."
+	:visible (boundp 'tabbar-mode))
+       'edit-options-separator)
     (define-key-after menu-bar-options-menu [oneonone]
       '(menu-item
-	"Display Buffers in Separate Frames"
+	"Display Buffers in Frames"
 	toggle-one-buffer-one-frame-mode
 	:button (:toggle . one-buffer-one-frame-mode)
 	:help "Open a new Frame (window) for each new buffer."
 	:visible (boundp 'one-buffer-one-frame-mode))
-       'edit-options-separator)
-    (define-key-after menu-bar-options-menu [autotabs]
-      '(menu-item 
-	"Display Buffers in New Tabs"
-	toggle-tabbar-window-new-buffers
-	:button (:toggle . tabbar-window-new-buffers)
-	:help "Open a new Tab for each new buffer."
-	:visible (and (boundp 'tabbar-mode) (boundp 'tabbar-window-new-buffers)))
-       'oneonone)
-    (define-key-after menu-bar-options-menu [obof-separator]  '(menu-item "--") 'autotabs)
+       'tabbar)
+    (define-key-after menu-bar-options-menu [obof-separator]  '(menu-item "--") 'oneonone)
 )
 
 (when (fboundp 'mac-font-panel-mode)
