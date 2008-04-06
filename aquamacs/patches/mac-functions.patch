@@ -116,7 +116,7 @@
 +     free(h);
 + }
 + 
-+ void MacToggleMaxWindow(WindowRef frame);
++ void MacToggleFullFrame(WindowRef frame);
 + static pascal void MacOnReconfigMaximizedWindow(
 +     CGDirectDisplayID           dispID,
 +     CGDisplayChangeSummaryFlags flags,
@@ -125,13 +125,13 @@
 +     if (flags & kCGDisplayRemoveFlag)
 +     {
 +         /*
-+           NB: We choose to un-maximize any full-screen window during a
++           NB: We choose to un-maximize any full-screen frame during a
 +           display reconfiguration involving the removal of a display.
 +         */
 + 
 +         CGDirectDisplayID inDispID;
 +         WindowRef         frame = (WindowRef) userInfo;
-+         MacToggleMaxWindow(frame);
++         MacToggleFullFrame(frame);
 +     }
 + }
 + 
@@ -288,13 +288,13 @@
 +     return h;
 + }
 + 
-+ /* This function is the workhorse routine for the toggle max-size window
++ /* This function is the workhorse routine for the toggle max-size frame
 +    behavior. */
 + 
 + /* workaround for compiling on pre-10.4 systems */ 
 + #define FNS_kWindowNoTitleBarAttribute 512
 + 
-+ void MacToggleMaxWindow(
++ void MacToggleFullFrame(
 +     WindowRef frame)
 + {
 +     OSStatus              st;
@@ -447,7 +447,7 @@
 +     }
 + }
 + 
-+ DEFUN ("mac-toggle-max-window", Fmac_toggle_max_window, Smac_toggle_max_window, 0, 0, "",
++ DEFUN ("mac-toggle-full-frame", Fmac_toggle_full_frame, Smac_toggle_full_frame, 0, 0, "",
 +        doc: /* Makes the current frame use as much of the display as
 + possible, or reverts it to its previous size and position if already
 + maximized.  If mac-autohide-menubar-on-maximize is non-nil, maximized
@@ -460,7 +460,7 @@
 +     BLOCK_INPUT;
 +     
 +     WindowRef frame = GetUserFocusWindow();
-+     MacToggleMaxWindow(frame);
++     MacToggleFullFrame(frame);
 + 
 +     UNBLOCK_INPUT;
 +     return Qnil;
@@ -553,7 +553,7 @@
 + 
 +   DEFVAR_BOOL ("mac-autohide-menubar-on-maximize", &mac_autohide_menubar_on_maximize,
 + 	       doc: /* Non-nil means auto-hide the menubar when a frame is maximized
-+                      with mac-toggle-max-window */);
++                      with mac-toggle-full-frame */);
 +   mac_autohide_menubar_on_maximize = 1;
 + 
   #endif	/* TARGET_API_MAC_CARBON */
@@ -566,7 +566,7 @@
   #if TARGET_API_MAC_CARBON
     defsubr (&Sx_file_dialog);
 + #if MAC_OSX
-+   defsubr (&Smac_toggle_max_window);
++   defsubr (&Smac_toggle_full_frame);
 +   defsubr (&Smac_show_menu_bar);
 +   defsubr (&Smac_hide_menu_bar);
 +   defsubr (&Smac_spotlight_search);
