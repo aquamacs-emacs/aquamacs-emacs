@@ -1,3 +1,80 @@
+diff -c -r1.1.2.1 mactoolbox.c
+*** src/mactoolbox.c	6 Apr 2008 01:54:44 -0000	1.1.2.1
+--- src/mactoolbox.c	6 Apr 2008 13:52:32 -0000
+***************
+*** 2463,2469 ****
+      }
+  
+    if (err == noErr)
+!     err = HIToolbarSetDisplayMode (toolbar, kHIToolbarDisplayModeIconOnly);
+    if (err == noErr)
+      {
+        static const EventTypeSpec specs[] =
+--- 2464,2470 ----
+      }
+  
+    if (err == noErr)
+!     err = HIToolbarSetDisplayMode (toolbar, kHIToolbarDisplayModeDefault);
+    if (err == noErr)
+      {
+        static const EventTypeSpec specs[] =
+***************
+*** 2607,2612 ****
+--- 2608,2626 ----
+    while (pos < old_count)
+      HIToolbarRemoveItemAtIndex (toolbar, --old_count);
+  
++   if (EQ (Vmac_tool_bar_display_mode, intern ("labels")))
++     {
++       HIToolbarSetDisplayMode (toolbar, kHIToolbarDisplayModeIconAndLabel);
++     }
++   else if (EQ (Vmac_tool_bar_display_mode, intern ("icons")))
++     {
++       HIToolbarSetDisplayMode (toolbar, kHIToolbarDisplayModeIconOnly);
++     }
++   else
++     {
++       HIToolbarSetDisplayMode (toolbar, kHIToolbarDisplayModeDefault);
++     } 
++ 
+    ShowHideWindowToolbar (FRAME_MAC_WINDOW (f), true,
+  			 !win_gravity && f == mac_focus_frame (dpyinfo));
+    /* Mac OS X 10.3 does not issue kEventWindowBoundsChanged events on
+diff -c -r1.214.2.16 macterm.c
+*** src/macterm.c	29 Mar 2008 00:46:51 -0000	1.214.2.16
+--- src/macterm.c	5 Apr 2008 07:42:28 -0000
+***************
+*** 87,92 ****
+--- 87,97 ----
+  
+  Lisp_Object Vx_toolkit_scroll_bars;
+  
++ #if USE_MAC_TOOLBAR
++ /* Specify whether to display the tool bar as icons with labels. */
++ Lisp_Object Vmac_tool_bar_display_mode;
++ #endif
++ 
+  /* If non-zero, the text will be rendered using Core Graphics text
+     rendering which may anti-alias the text.  */
+  int mac_use_core_graphics;
+***************
+*** 12984,12989 ****
+--- 13028,13042 ----
+  mouse-3 and the command-key will register for mouse-2.  */);
+    Vmac_emulate_three_button_mouse = Qnil;
+  
++ #if USE_MAC_TOOLBAR
++   DEFVAR_LISP ("mac-tool-bar-display-mode", &Vmac_tool_bar_display_mode,
++     doc: /* *Specify whether to display the tool bar as icons with labels.
++ The value can be `icons' (for icons only), `labels' (for icons with labels)
++ and nil, in which case the system default is assumed.
++ The default is nil.  */);
++   Vmac_tool_bar_display_mode = Qnil;
++ #endif
++ 
+  #if TARGET_API_MAC_CARBON
+    DEFVAR_BOOL ("mac-wheel-button-is-mouse-2", &mac_wheel_button_is_mouse_2,
+      doc: /* *Non-nil if the wheel button is mouse-2 and the right click mouse-3.
 *** src/image.c	28 Mar 2008 14:57:33 -0000	1.65.2.13
 --- src/image.c	5 Apr 2008 22:33:31 -0000
 ***************
