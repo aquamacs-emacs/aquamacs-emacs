@@ -1,803 +1,337 @@
-Index: lisp/frame.el
-===================================================================
-RCS file: /sources/emacs/emacs/lisp/frame.el,v
-retrieving revision 1.243.2.8
-diff -c -r1.243.2.8 frame.el
-*** lisp/frame.el	16 Jan 2008 16:17:19 -0000	1.243.2.8
---- lisp/frame.el	4 Apr 2008 16:09:19 -0000
-***************
-*** 927,932 ****
---- 927,942 ----
-    (modify-frame-parameters (selected-frame)
-  			   (list (cons 'border-color color-name))))
-  
-+   (defun set-alpha (alpha &optional frame)
-+     "Set the opacity of FRAME to ALPHA.  First argument ALPHA 
-+ should range from 0 (invisible) to 100 (completely opaque).
-+ When called interactively, prompt for the value of the opacity to set.
-+ FRAME defaults to the selected frame.  To get the frame's current
-+ alpha value state, use `frame-parameters'."
-+     (interactive "XWindow Opacity (0-100) : ")
-+     (modify-frame-parameters frame
-+                              (list (cons 'alpha alpha))))
-+ 
-  (defun auto-raise-mode (arg)
-    "Toggle whether or not the selected frame should auto-raise.
-  With arg, turn auto-raise mode on if and only if arg is positive.
-Index: src/frame.c
-===================================================================
-RCS file: /sources/emacs/emacs/src/frame.c,v
-retrieving revision 1.340.2.6
-diff -c -r1.340.2.6 frame.c
-*** src/frame.c	8 Jan 2008 04:30:09 -0000	1.340.2.6
---- src/frame.c	4 Apr 2008 16:09:20 -0000
-***************
-*** 106,111 ****
---- 106,112 ----
-  Lisp_Object Qleft_fringe, Qright_fringe;
-  Lisp_Object Qbuffer_predicate, Qbuffer_list;
-  Lisp_Object Qtty_color_mode;
-+ Lisp_Object Qalpha;
-  
-  Lisp_Object Qfullscreen, Qfullwidth, Qfullheight, Qfullboth;
-  
-***************
-*** 2583,2588 ****
---- 2584,2590 ----
-    {"right-fringe",		&Qright_fringe},
-    {"wait-for-wm",		&Qwait_for_wm},
-    {"fullscreen",                &Qfullscreen},
-+   {"alpha",			 &Qalpha},
-  };
-  
-  #ifdef HAVE_WINDOW_SYSTEM
-Index: src/frame.h
-===================================================================
-RCS file: /sources/emacs/emacs/src/frame.h,v
-retrieving revision 1.118.2.5
-diff -c -r1.118.2.5 frame.h
-*** src/frame.h	29 Mar 2008 00:45:27 -0000	1.118.2.5
---- src/frame.h	4 Apr 2008 16:09:20 -0000
-***************
-*** 458,463 ****
---- 458,466 ----
-    /* Additional space to put between text lines on this frame.  */
-    int extra_line_spacing;
-  
-+   /* Opacity of the Frame  */
-+   int alpha[2];
-+ 
-    /* Set to non-zero in change_frame_size when size of frame changed
-       Clear the frame in clear_garbaged_frames if set.  */
-    unsigned resized_p : 1;
-***************
-*** 990,995 ****
---- 993,1006 ----
-    (FRAME_PIXEL_Y_TO_LINE (f, ((height) \
-  			      - FRAME_INTERNAL_BORDER_WIDTH (f))))
-  
-+ /***********************************************************************
-+ 				Transparency
-+  ***********************************************************************/
-+ 
-+ #define CHECK_ALPHA_RANGE(alpha) if (alpha < 0 || alpha > 100)	\
-+     args_out_of_range (make_number (0), make_number (100));
-+ 
-+ #define NUM_OF_ALPHAS 2
-  
-  /***********************************************************************
-  				Frame Parameters
-***************
-*** 1014,1019 ****
---- 1025,1031 ----
-  extern Lisp_Object Qline_spacing;
-  extern Lisp_Object Qwait_for_wm;
-  extern Lisp_Object Qfullscreen;
-+ extern Lisp_Object Qalpha;
-  
-  extern Lisp_Object Qleft_fringe, Qright_fringe;
-  extern Lisp_Object Qheight, Qwidth;
-Index: src/macfns.c
-===================================================================
-RCS file: /sources/emacs/emacs/src/macfns.c,v
-retrieving revision 1.106.2.6
-diff -c -r1.106.2.6 macfns.c
-*** src/macfns.c	29 Mar 2008 00:45:58 -0000	1.106.2.6
---- src/macfns.c	4 Apr 2008 16:09:20 -0000
-***************
-*** 56,61 ****
---- 56,62 ----
-  /* Carbon version info */
-  
-  static Lisp_Object Vmac_carbon_version_string;
-+ static int frame_alpha_lower_limit;
-  
-  #endif	/* TARGET_API_MAC_CARBON */
-  
-***************
-*** 220,225 ****
---- 221,228 ----
-  void x_set_tool_bar_lines P_ ((struct frame *, Lisp_Object, Lisp_Object));
-  
-  
-+ extern void x_set_frame_alpha P_ ((struct frame *));
-+ 
-  /* Store the screen positions of frame F into XPTR and YPTR.
-     These are the positions of the containing window manager window,
-     not Emacs's own window.  */
-***************
-*** 1894,1899 ****
---- 1897,1975 ----
-    x_set_name_internal (f, name);
-  }
-  
-+ /* Change the opacity of frame F to ALPHA.
-+    ALPHA must be an integer between 0 and 100.  */
-+ 
-+ #define CHECK_ALPHA_RANGE(alpha) if (alpha < 0 || alpha > 100)	\
-+     args_out_of_range (make_number (0), make_number (100));
-+ #define NUM_OF_ALPHAS 2
-+ 
-+ static void
-+ x_set_alpha (f, arg, oldval)
-+      struct frame *f;
-+      Lisp_Object arg, oldval;
-+ {
-+   int newalpha[NUM_OF_ALPHAS];
-+   int i, tmp;
-+   Lisp_Object obj;
-+ 
-+   if (NILP (arg)
-+       || (CONSP (arg) && NILP (CAR (arg))))
-+     tmp = -1;
-+   else if (NUMBERP (arg))
-+     {
-+       tmp = XINT (arg);
-+       CHECK_ALPHA_RANGE (tmp);
-+     }
-+   else if (CONSP (arg) && NUMBERP (CAR (arg)))
-+     {
-+       tmp = XINT (CAR (arg));
-+       CHECK_ALPHA_RANGE (tmp);
-+     }
-+   else
-+     wrong_type_argument (Qnumberp, (arg));
-+ 
-+   for (i = 0 ; i < NUM_OF_ALPHAS ; i++)
-+     newalpha[i] = tmp;
-+ 
-+   if (CONSP (arg))
-+     {
-+       obj = CDR (arg);
-+       for (i = 1 ;
-+ 	   i < NUM_OF_ALPHAS && CONSP (obj) ;
-+ 	   i++, obj = CDR (obj))
-+ 	{
-+ 	  if (NILP (CAR (obj)))
-+ 	    tmp = -1;
-+ 	  else if (NUMBERP (CAR (obj)))
-+ 	    {
-+ 	      tmp = XINT (CAR (obj));
-+ 	      CHECK_ALPHA_RANGE (tmp);
-+ 	    }
-+ 	  else
-+ 	    wrong_type_argument (Qnumberp, (CAR (obj)));
-+ 
-+ 	  newalpha[i] = tmp;
-+ 	}
-+     }
-+ 
-+   for (i = 0 ; i < NUM_OF_ALPHAS ; i++)
-+     {
-+       /* Apply lower limit silently */
-+       if (newalpha[i] != -1 && newalpha[i] < frame_alpha_lower_limit)
-+       newalpha[i] = frame_alpha_lower_limit;
-+       f->alpha[i] = newalpha[i];
-+     }
-+ 
-+ #if TARGET_API_MAC_CARBON
-+   BLOCK_INPUT;
-+   x_set_frame_alpha (f);
-+   UNBLOCK_INPUT;
-+ #endif
-+ 
-+   return;
-+ }
-+ 
-  void
-  x_set_scroll_bar_default_width (f)
-       struct frame *f;
-***************
-*** 2778,2783 ****
---- 2854,2861 ----
-    x_default_parameter (f, parms, Qscroll_bar_width, Qnil,
-  		       "scrollBarWidth", "ScrollBarWidth",
-  		       RES_TYPE_NUMBER);
-+   x_default_parameter (f, parms, Qalpha, Qnil,
-+ 		       "alpha", "Alpha", RES_TYPE_NUMBER);
-  
-    /* Dimensions, especially FRAME_LINES (f), must be done via change_frame_size.
-       Change will not be effected unless different from the current
-***************
-*** 4699,4704 ****
---- 4777,4783 ----
-    x_set_fringe_width,
-    0, /* x_set_wait_for_wm, */
-    x_set_fullscreen,
-+   x_set_alpha,
-  };
-  
-  void
-***************
-*** 4829,4834 ****
---- 4908,4919 ----
-    }
-  #endif	/* TARGET_API_MAC_CARBON */
-  
-+ #if TARGET_API_MAC_CARBON
-+   DEFVAR_INT ("frame-alpha-lower-limit", &frame_alpha_lower_limit,
-+     doc: /* Lower limit of alpha value of frame. */);
-+   frame_alpha_lower_limit = 20;
-+ #endif	/* TARGET_API_MAC_CARBON */
-+ 
-    /* X window properties.  */
-    defsubr (&Sx_change_window_property);
-    defsubr (&Sx_delete_window_property);
-Index: src/macterm.c
-===================================================================
-RCS file: /sources/emacs/emacs/src/macterm.c,v
-retrieving revision 1.214.2.16
-diff -c -r1.214.2.16 macterm.c
-*** src/macterm.c	29 Mar 2008 00:46:51 -0000	1.214.2.16
---- src/macterm.c	4 Apr 2008 16:09:20 -0000
-***************
-*** 2632,2637 ****
---- 2632,2660 ----
-    return FONT_TYPE_UNKNOWN;
-  }
-  
-+ void
-+ x_set_frame_alpha (f)
-+      struct frame *f;
-+ {
-+   struct mac_display_info *dpyinfo = FRAME_MAC_DISPLAY_INFO (f);
-+   SInt32 response;
-+   OSErr err;
-+   double alpha = 1.0;
-+ 
-+   BLOCK_INPUT;
-+   err = Gestalt (gestaltSystemVersion, &response);
-+   UNBLOCK_INPUT;
-+ 
-+   if (dpyinfo->x_highlight_frame == f)
-+     alpha = f->alpha[0] / 100.0;
-+   else
-+     alpha = f->alpha[1] / 100.0;
-+   if (alpha < 0.0) alpha = 1.0;
-+ 
-+   if ((err == noErr) && (response >= 0x1020)) {
-+     SetWindowAlpha (FRAME_MAC_WINDOW(f), alpha );
-+   }
-+ }
-  
-  
-  /***********************************************************************
-***************
-*** 4350,4355 ****
---- 4373,4379 ----
-       struct frame *f;
-  {
-    x_update_cursor (f, 1);
-+   x_set_frame_alpha (f);
-  }
-  
-  static void
-***************
-*** 4357,4362 ****
---- 4381,4387 ----
-       struct frame *f;
-  {
-    x_update_cursor (f, 1);
-+   x_set_frame_alpha (f);
-  }
-  
-  /* The focus has changed.  Update the frames as necessary to reflect
-Index: src/xfns.c
-===================================================================
-RCS file: /sources/emacs/emacs/src/xfns.c,v
-retrieving revision 1.681.2.10
-diff -c -r1.681.2.10 xfns.c
-*** src/xfns.c	8 Jan 2008 04:29:40 -0000	1.681.2.10
---- src/xfns.c	4 Apr 2008 16:09:20 -0000
-***************
-*** 95,100 ****
---- 95,102 ----
-  #include <Xm/FileSB.h>
-  #endif
-  
-+ static int frame_alpha_lower_limit;
-+ 
-  /* Do the EDITRES protocol if running X11R5
-     Exception: HP-UX (at least version A.09.05) has X11R5 without EditRes */
-  
-***************
-*** 566,571 ****
---- 568,575 ----
-  							     Lisp_Object,
-  							     char *, char *,
-  							     int));
-+ extern void x_set_frame_alpha P_ ((struct frame *));
-+ 
-  
-  
-  /* Store the screen positions of frame F into XPTR and YPTR.
-***************
-*** 1810,1815 ****
---- 1814,1886 ----
-  #endif
-  }
-  
-+ /* Change the opacity of frame F to ALPHA.
-+    ALPHA must be an integer between 0 and 100.  */
-+ 
-+ static void
-+ x_set_alpha (f, arg, oldval)
-+      struct frame *f;
-+      Lisp_Object arg, oldval;
-+ {
-+   int newalpha[NUM_OF_ALPHAS];
-+   int i, tmp;
-+   Lisp_Object obj;
-+ 
-+   if (NILP (arg)
-+       || (CONSP (arg) && NILP (CAR (arg))))
-+     tmp = -1;
-+   else if (NUMBERP (arg))
-+     {
-+       tmp = XINT (arg);
-+       CHECK_ALPHA_RANGE (tmp);
-+     }
-+   else if (CONSP (arg) && NUMBERP (CAR (arg)))
-+     {
-+       tmp = XINT (CAR (arg));
-+       CHECK_ALPHA_RANGE (tmp);
-+     }
-+   else
-+     wrong_type_argument (Qnumberp, (arg));
-+ 
-+   for (i = 0 ; i < NUM_OF_ALPHAS ; i++)
-+     newalpha[i] = tmp;
-+ 
-+   if (CONSP (arg))
-+     {
-+       obj = CDR (arg);
-+       for (i = 1 ;
-+ 	   i < NUM_OF_ALPHAS && CONSP (obj) ;
-+ 	   i++, obj = CDR (obj))
-+ 	{
-+ 	  if (NILP (CAR (obj)))
-+ 	    tmp = -1;
-+ 	  else if (NUMBERP (CAR (obj)))
-+ 	    {
-+ 	      tmp = XINT (CAR (obj));
-+ 	      CHECK_ALPHA_RANGE (tmp);
-+ 	    }
-+ 	  else
-+ 	    wrong_type_argument (Qnumberp, (CAR (obj)));
-+ 
-+ 	  newalpha[i] = tmp;
-+ 	}
-+     }
-+ 
-+   for (i = 0 ; i < NUM_OF_ALPHAS ; i++)
-+     {
-+       /* Apply lower limit silently */
-+       if (newalpha[i] != -1 && newalpha[i] < frame_alpha_lower_limit)
-+       newalpha[i] = frame_alpha_lower_limit;
-+       f->alpha[i] = newalpha[i];
-+     }
-+ 
-+   BLOCK_INPUT;
-+   x_set_frame_alpha (f);
-+   UNBLOCK_INPUT;
-+ 
-+   return;
-+ }
-+ 
-  
-  /* Record in frame F the specified or default value according to ALIST
-     of the parameter named PROP (a Lisp symbol).  If no value is
-***************
-*** 3365,3370 ****
---- 3436,3443 ----
-    x_default_parameter (f, parms, Qscroll_bar_width, Qnil,
-  		       "scrollBarWidth", "ScrollBarWidth",
-  		       RES_TYPE_NUMBER);
-+   x_default_parameter (f, parms, Qalpha, Qnil,
-+ 		       "alpha", "Alpha", RES_TYPE_NUMBER);
-  
-    /* Dimensions, especially FRAME_LINES (f), must be done via change_frame_size.
-       Change will not be effected unless different from the current
-***************
-*** 5768,5773 ****
---- 5841,5847 ----
-    x_set_fringe_width,
-    x_set_wait_for_wm,
-    x_set_fullscreen,
-+   x_set_alpha,
-  };
-  
-  void
-***************
-*** 5936,5941 ****
---- 6010,6019 ----
-    }
-  #endif /* USE_GTK */
-  
-+   DEFVAR_INT ("frame-alpha-lower-limit", &frame_alpha_lower_limit,
-+     doc: /* Lower limit of alpha value of frame. */);
-+   frame_alpha_lower_limit = 20;
-+ 
-    /* X window properties.  */
-    defsubr (&Sx_change_window_property);
-    defsubr (&Sx_delete_window_property);
-Index: src/xterm.c
-===================================================================
-RCS file: /sources/emacs/emacs/src/xterm.c,v
-retrieving revision 1.943.2.14
-diff -c -r1.943.2.14 xterm.c
-*** src/xterm.c	24 Feb 2008 01:04:51 -0000	1.943.2.14
---- src/xterm.c	4 Apr 2008 16:09:20 -0000
-***************
-*** 955,960 ****
---- 955,1012 ----
-    return FONT_TYPE_UNKNOWN;
-  }
-  
-+ #define OPAQUE  0xffffffff
-+ #define OPACITY "_NET_WM_WINDOW_OPACITY"
-+ 
-+ void
-+ x_set_frame_alpha (f)
-+      struct frame *f;
-+ {
-+   struct x_display_info *dpyinfo = FRAME_X_DISPLAY_INFO (f);
-+   Display *dpy = FRAME_X_DISPLAY (f);
-+   Window win = FRAME_OUTER_WINDOW (f);
-+   if (FRAME_X_DISPLAY_INFO (f)->root_window != FRAME_X_OUTPUT (f)->parent_desc)
-+     /* Since the WM decoration lies under the FRAME_OUTER_WINDOW,
-+        we must treat the former instead of the latter. */
-+     win = FRAME_X_OUTPUT(f)->parent_desc;
-+ 
-+   unsigned int opac = (unsigned int)(alpha * OPAQUE);
-+   double alpha = 1.0;
-+ 
-+   if (dpyinfo->x_highlight_frame == f)
-+     alpha = f->alpha[0] / 100.0;
-+   else
-+     alpha = f->alpha[1] / 100.0;
-+   if (alpha < 0.0) alpha = 1.0;
-+ 
-+   /* Courtesy of Nakayama-san [Macemacsjp-users 1211] */
-+   {
-+     unsigned char *data;
-+     Atom actual;
-+     int format;
-+     unsigned long n, left;
-+ 
-+     XGetWindowProperty(dpy, win, XInternAtom(dpy, OPACITY, False),
-+ 		       0L, 1L, False, XA_CARDINAL, &actual, &format, &n, &left,
-+ 		       (unsigned char **) &data);
-+     if (data != None)
-+       if (*(unsigned int *)data == opac)
-+ 	{
-+ 	  XFree ((void *) data);
-+ 	  return;
-+ 	}
-+       else
+diff -Naur emacs.orig/src/frame.c emacs/src/frame.c
+--- emacs.orig/src/frame.c	2008-01-07 23:30:09.000000000 -0500
++++ emacs/src/frame.c	2008-04-05 16:11:13.000000000 -0400
+@@ -62,6 +62,12 @@
+ 
+ Lisp_Object Vx_resource_class;
+ 
++#if defined (HAVE_X_WINDOWS) || defined (HAVE_CARBON)
++/* Lower limit value of frame transparency.  */
++
++Lisp_Object Vframe_alpha_lower_limit;
++#endif
++
+ #endif
+ 
+ Lisp_Object Qframep, Qframe_live_p;
+@@ -106,6 +112,9 @@
+ Lisp_Object Qleft_fringe, Qright_fringe;
+ Lisp_Object Qbuffer_predicate, Qbuffer_list;
+ Lisp_Object Qtty_color_mode;
++#if defined (HAVE_X_WINDOWS) || defined (HAVE_CARBON)
++Lisp_Object Qalpha;
++#endif
+ 
+ Lisp_Object Qfullscreen, Qfullwidth, Qfullheight, Qfullboth;
+ 
+@@ -2583,6 +2592,9 @@
+   {"right-fringe",		&Qright_fringe},
+   {"wait-for-wm",		&Qwait_for_wm},
+   {"fullscreen",                &Qfullscreen},
++#if defined (HAVE_X_WINDOWS) || defined (HAVE_CARBON)
++  {"alpha",			 &Qalpha},
++#endif
+ };
+ 
+ #ifdef HAVE_WINDOW_SYSTEM
+@@ -3328,6 +3340,61 @@
+     return Qnil;
+ }
+ 
++#if defined (HAVE_X_WINDOWS) || defined (HAVE_CARBON)
++void
++x_set_alpha (f, arg, oldval)
++     struct frame *f;
++     Lisp_Object arg, oldval;
++{
++  double alpha = 1.0;
++  double newval[2];
++  int i, ialpha;
++  Lisp_Object item;
++
++  for (i=0;i<2;i++)
++    {
++      newval[i] = 1.0;
++      if (CONSP (arg))
 +        {
-+ 	  XFree ((void *) data);
++          item = CAR (arg);
++          arg  = CDR (arg);
 +        }
-+   }
-+   /****/
-+ 
-+   XChangeProperty (dpy, win, XInternAtom (dpy, OPACITY, False),
-+ 		   XA_CARDINAL, 32, PropModeReplace,
-+ 		   (unsigned char *) &opac, 1L);
-+   XSync (dpy, False);
-+ }
-  
-  
-  /***********************************************************************
-***************
-*** 3157,3162 ****
---- 3209,3215 ----
-  		    f->output_data.x->border_pixel);
-    UNBLOCK_INPUT;
-    x_update_cursor (f, 1);
-+   x_set_frame_alpha (f);
-  }
-  
-  static void
-***************
-*** 3172,3177 ****
---- 3225,3231 ----
-  			  f->output_data.x->border_tile);
-    UNBLOCK_INPUT;
-    x_update_cursor (f, 1);
-+   x_set_frame_alpha (f);
-  }
-  
-  /* The focus has changed.  Update the frames as necessary to reflect
-Index: src/w32fns.c
-===================================================================
-RCS file: /sources/emacs/emacs/src/w32fns.c,v
-retrieving revision 1.288.2.15
-diff -c -r1.288.2.15 w32fns.c
-*** src/w32fns.c	24 Feb 2008 22:02:47 -0000	1.288.2.15
---- src/w32fns.c	4 Apr 2008 16:09:20 -0000
-***************
-*** 60,65 ****
---- 60,67 ----
-  #include <dlgs.h>
-  #define FILE_NAME_TEXT_FIELD edt1
-  
-+ static int frame_alpha_lower_limit;
-+ 
-  void syms_of_w32fns ();
-  void globals_of_w32fns ();
-  
-***************
-*** 74,79 ****
---- 76,83 ----
-  
-  extern char *lispy_function_keys[];
-  
-+ extern void x_set_frame_alpha P_ ((struct frame *));
-+ 
-  /* The colormap for converting color names to RGB values */
-  Lisp_Object Vw32_color_map;
-  
-***************
-*** 258,263 ****
---- 262,268 ----
-  TrackMouseEvent_Proc track_mouse_event_fn = NULL;
-  ClipboardSequence_Proc clipboard_sequence_fn = NULL;
-  extern AppendMenuW_Proc unicode_append_menu;
-+ extern SetLayeredWindowAttributes_Proc set_layered_window_attributes_fn;
-  
-  /* W95 mousewheel handler */
-  unsigned int msh_mousewheel = 0;
-***************
-*** 1970,1975 ****
---- 1975,2046 ----
-  				      wid - 1) / wid;
-  }
-  
-+ /* Change the opacity of frame F to ALPHA.
-+    ALPHA must be an integer between 0 and 100.  */
-+ 
-+ static void
-+ x_set_alpha (f, arg, oldval)
-+      struct frame *f;
-+      Lisp_Object arg, oldval;
-+ {
-+   int newalpha[NUM_OF_ALPHAS];
-+   int i, tmp;
-+   Lisp_Object obj;
-+ 
-+   if (NILP (arg)
-+       || (CONSP (arg) && NILP (CAR (arg))))
-+     tmp = -1;
-+   else if (NUMBERP (arg))
-+     {
-+       tmp = XINT (arg);
-+       CHECK_ALPHA_RANGE (tmp);
-+     }
-+   else if (CONSP (arg) && NUMBERP (CAR (arg)))
-+     {
-+       tmp = XINT (CAR (arg));
-+       CHECK_ALPHA_RANGE (tmp);
-+     }
-+   else
-+     wrong_type_argument (Qnumberp, (arg));
-+ 
-+   for (i = 0 ; i < NUM_OF_ALPHAS ; i++)
-+     newalpha[i] = tmp;
-+ 
-+   if (CONSP (arg))
-+     {
-+       obj = CDR (arg);
-+       for (i = 1 ;
-+ 	   i < NUM_OF_ALPHAS && CONSP (obj) ;
-+ 	   i++, obj = CDR (obj))
-+ 	{
-+ 	  if (NILP (CAR (obj)))
-+ 	    tmp = -1;
-+ 	  else if (NUMBERP (CAR (obj)))
-+ 	    {
-+ 	      tmp = XINT (CAR (obj));
-+ 	      CHECK_ALPHA_RANGE (tmp);
-+ 	    }
-+ 	  else
-+ 	    wrong_type_argument (Qnumberp, (CAR (obj)));
-+ 
-+ 	  newalpha[i] = tmp;
-+ 	}
-+     }
-+ 
-+   for (i = 0 ; i < NUM_OF_ALPHAS ; i++)
-+     {
-+       /* Apply lower limit silently */
-+       if (newalpha[i] != -1 && newalpha[i] < frame_alpha_lower_limit)
-+       newalpha[i] = frame_alpha_lower_limit;
-+       f->alpha[i] = newalpha[i];
-+     }
-+ 
-+   BLOCK_INPUT;
-+   x_set_frame_alpha (f);
-+   UNBLOCK_INPUT;
-+ 
-+   return;
-+ }
-  
-  /* Subroutines of creating a frame.  */
-  
-***************
-*** 4392,4397 ****
---- 4463,4470 ----
-  		       "cursorType", "CursorType", RES_TYPE_SYMBOL);
-    x_default_parameter (f, parameters, Qscroll_bar_width, Qnil,
-  		       "scrollBarWidth", "ScrollBarWidth", RES_TYPE_NUMBER);
-+   x_default_parameter (f, parameters, Qalpha, Qnil,
-+ 		       "alpha", "Alpha", RES_TYPE_NUMBER);
-  
-    /* Dimensions, especially FRAME_LINES (f), must be done via change_frame_size.
-       Change will not be effected unless different from the current
-***************
-*** 8609,8614 ****
---- 8682,8688 ----
-    x_set_fringe_width,
-    0, /* x_set_wait_for_wm, */
-    x_set_fullscreen,
-+   x_set_alpha,
-  };
-  
-  void
-***************
-*** 8972,8977 ****
---- 9046,9055 ----
-    }
-  #endif
-  
-+   DEFVAR_INT ("frame-alpha-lower-limit", &frame_alpha_lower_limit,
-+     doc: /* Lower limit of alpha value of frame. */);
-+   frame_alpha_lower_limit = 20;
-+ 
-  #if 0 /* TODO: Port to W32 */
-    defsubr (&Sx_change_window_property);
-    defsubr (&Sx_delete_window_property);
-***************
-*** 9072,9077 ****
---- 9150,9158 ----
-    /* ditto for GetClipboardSequenceNumber.  */
-    clipboard_sequence_fn = (ClipboardSequence_Proc)
-      GetProcAddress (user32_lib, "GetClipboardSequenceNumber");
-+   /* ditto for SetLayeredWindowAttributes.  */
-+   set_layered_window_attributes_fn = (SetLayeredWindowAttributes_Proc)
-+     GetProcAddress (user32_lib, "SetLayeredWindowAttributes");
-  
-    DEFVAR_INT ("w32-ansi-code-page",
-  	      &w32_ansi_code_page,
-Index: src/w32term.c
-===================================================================
-RCS file: /sources/emacs/emacs/src/w32term.c,v
-retrieving revision 1.259.2.11
-diff -c -r1.259.2.11 w32term.c
-*** src/w32term.c	15 Feb 2008 17:15:08 -0000	1.259.2.11
---- src/w32term.c	4 Apr 2008 16:09:21 -0000
-***************
-*** 260,265 ****
---- 260,267 ----
-  
-  static Lisp_Object Qvendor_specific_keysyms;
-  
-+ SetLayeredWindowAttributes_Proc set_layered_window_attributes_fn = NULL;
-+ 
-  
-  /***********************************************************************
-  			      Debugging
-***************
-*** 1191,1196 ****
---- 1193,1228 ----
-      return ANSI_FONT;
-  }
-  
-+ void
-+ x_set_frame_alpha (f)
-+      struct frame *f;
-+ {
-+   struct w32_display_info *dpyinfo = FRAME_W32_DISPLAY_INFO (f);
-+   Window window = FRAME_W32_WINDOW (f);
-+   double alpha = 1.0;
-+   LONG wndlong;
-+   int i_alpha, ex_flg;
-+ 
-+   if (dpyinfo->x_highlight_frame == f)
-+     alpha = f->alpha[0] / 100.0;
-+   else
-+     alpha = f->alpha[1] / 100.0;
-+ 
-+   if (alpha < 0.0) alpha = 1.0;
-+   i_alpha = (int)(alpha * 255.0);
-+ 
-+   if (set_layered_window_attributes_fn != NULL) {
-+     wndlong = GetWindowLong (window, GWL_EXSTYLE);
-+     ex_flg = (int)(( wndlong & WS_EX_LAYERED ) / WS_EX_LAYERED) ;
-+ 
-+     if(i_alpha!=255) {
-+       if(!ex_flg) SetWindowLong (window, GWL_EXSTYLE, wndlong | WS_EX_LAYERED);
-+       set_layered_window_attributes_fn (window, RGB (255, 255, 255),
-+                                         i_alpha, LWA_ALPHA);
-+     }
-+     else if(ex_flg) SetWindowLong (window, GWL_EXSTYLE, wndlong & ~WS_EX_LAYERED);
-+   }
-+ }
-  
-  
-  /***********************************************************************
-***************
-*** 2821,2826 ****
---- 2853,2859 ----
-       struct frame *f;
-  {
-    x_update_cursor (f, 1);
-+   x_set_frame_alpha (f);
-  }
-  
-  static void
-***************
-*** 2828,2833 ****
---- 2861,2867 ----
-       struct frame *f;
-  {
-    x_update_cursor (f, 1);
-+   x_set_frame_alpha (f);
-  }
-  
-  /* The focus has changed.  Update the frames as necessary to reflect
-Index: src/w32term.h
-===================================================================
-RCS file: /sources/emacs/emacs/src/w32term.h,v
-retrieving revision 1.68.2.3
-diff -c -r1.68.2.3 w32term.h
-*** src/w32term.h	8 Jan 2008 04:29:44 -0000	1.68.2.3
---- src/w32term.h	4 Apr 2008 16:09:21 -0000
-***************
-*** 638,643 ****
---- 638,651 ----
-  
-  #define WND_EXTRA_BYTES     (WND_LAST_INDEX)
-  
-+ /* for transparency functions */
-+ #ifndef LWA_ALPHA
-+ #define LWA_ALPHA 2
-+ #endif
-+ #ifndef WS_EX_LAYERED
-+ #define WS_EX_LAYERED 0x80000   /* w2k */
-+ #endif
-+ 
-  extern DWORD dwWindowsThreadId;
-  extern HANDLE hWindowsThread;
-  extern DWORD dwMainThreadId;
-***************
-*** 750,755 ****
---- 758,765 ----
-        ? BDF_1D_FONT : BDF_2D_FONT))
-  
-  typedef DWORD (WINAPI * ClipboardSequence_Proc) ();
-+ typedef DWORD (WINAPI * SetLayeredWindowAttributes_Proc)
-+   (HWND, DWORD, BYTE, DWORD);
-  typedef BOOL (WINAPI * AppendMenuW_Proc) (
-      IN HMENU,
-      IN UINT,
++      else
++        item=arg;
++
++      if (!NILP (item))
++        {
++          if (FLOATP (item))
++            {
++              alpha = XFLOAT_DATA (item);
++              if (alpha < 0.0 || 1.0 < alpha)
++                args_out_of_range (make_float (0.0), make_float (1.0));
++            }
++          else if (INTEGERP (item))
++            {
++              ialpha = XINT (item);
++              if (ialpha < 0 || 100 < ialpha)
++                args_out_of_range (make_number (0), make_number (100));
++              else
++                alpha = ialpha / 100.0;
++            }
++          else
++            wrong_type_argument (Qnumberp, item);
++        }
++      newval[i] = alpha;
++    }
++
++  for (i=0;i<2;i++)
++    f->alpha[i] = newval[i];
++
++  BLOCK_INPUT;
++  x_set_frame_alpha (f);
++  UNBLOCK_INPUT;
++
++  return;
++}
++#endif
++
+ 
+ /* Subroutines of creating an X frame.  */
+ 
+@@ -4084,6 +4151,15 @@
+ but binding this variable locally around a call to `x-get-resource'
+ is a reasonable practice.  See also the variable `x-resource-name'.  */);
+   Vx_resource_class = build_string (EMACS_CLASS);
++
++#if defined (HAVE_X_WINDOWS) || defined (HAVE_CARBON)
++  DEFVAR_LISP ("frame-alpha-lower-limit", &Vframe_alpha_lower_limit,
++    doc: /* The lower limit of the frame opacity (alpha transparency).
++The value should range from 0 (invisible) to 100 (completely opaque).
++The user can also use a floating number between 0.0 and 1.0.
++The default is 20.  */);
++  Vframe_alpha_lower_limit = make_number (20);
++#endif
+ #endif
+ 
+   DEFVAR_LISP ("default-frame-alist", &Vdefault_frame_alist,
+diff -Naur emacs.orig/src/frame.h emacs/src/frame.h
+--- emacs.orig/src/frame.h	2008-03-28 20:45:27.000000000 -0400
++++ emacs/src/frame.h	2008-04-05 16:11:13.000000000 -0400
+@@ -458,6 +458,13 @@
+   /* Additional space to put between text lines on this frame.  */
+   int extra_line_spacing;
+ 
++#if defined (HAVE_X_WINDOWS) || defined (HAVE_CARBON)
++  /* frame opacity
++     alpha[0]: alpha transparency of the active frame
++     alpha[1]: alpha transparency of inactive frames   */
++  double alpha[2];
++#endif
++
+   /* Set to non-zero in change_frame_size when size of frame changed
+      Clear the frame in clear_garbaged_frames if set.  */
+   unsigned resized_p : 1;
+@@ -1014,6 +1021,9 @@
+ extern Lisp_Object Qline_spacing;
+ extern Lisp_Object Qwait_for_wm;
+ extern Lisp_Object Qfullscreen;
++#if defined (HAVE_X_WINDOWS) || defined (HAVE_CARBON)
++extern Lisp_Object Qalpha;
++#endif
+ 
+ extern Lisp_Object Qleft_fringe, Qright_fringe;
+ extern Lisp_Object Qheight, Qwidth;
+@@ -1090,6 +1100,10 @@
+ 
+ extern int x_figure_window_size P_ ((struct frame *, Lisp_Object, int));
+ 
++#if defined (HAVE_X_WINDOWS) || defined (HAVE_CARBON)
++extern Lisp_Object Vframe_alpha_lower_limit;
++extern void x_set_alpha P_ ((struct frame *, Lisp_Object, Lisp_Object));
++#endif
+ 
+ extern void validate_x_resource_name P_ ((void));
+ 
+diff -Naur emacs.orig/src/macfns.c emacs/src/macfns.c
+--- emacs.orig/src/macfns.c	2008-03-28 20:45:58.000000000 -0400
++++ emacs/src/macfns.c	2008-04-05 16:11:13.000000000 -0400
+@@ -2778,6 +2778,8 @@
+   x_default_parameter (f, parms, Qscroll_bar_width, Qnil,
+ 		       "scrollBarWidth", "ScrollBarWidth",
+ 		       RES_TYPE_NUMBER);
++  x_default_parameter (f, parms, Qalpha, Qnil,
++		       "alpha", "Alpha", RES_TYPE_NUMBER);
+ 
+   /* Dimensions, especially FRAME_LINES (f), must be done via change_frame_size.
+      Change will not be effected unless different from the current
+@@ -4699,6 +4701,7 @@
+   x_set_fringe_width,
+   0, /* x_set_wait_for_wm, */
+   x_set_fullscreen,
++  x_set_alpha,
+ };
+ 
+ void
+diff -Naur emacs.orig/src/macterm.c emacs/src/macterm.c
+--- emacs.orig/src/macterm.c	2008-03-28 20:46:51.000000000 -0400
++++ emacs/src/macterm.c	2008-04-05 16:11:52.000000000 -0400
+@@ -2632,6 +2632,38 @@
+   return FONT_TYPE_UNKNOWN;
+ }
+ 
++void
++x_set_frame_alpha (f)
++     struct frame *f;
++{
++  struct mac_display_info *dpyinfo = FRAME_MAC_DISPLAY_INFO (f);
++  SInt32 response;
++  OSErr err;
++  double alpha = 1.0, alpha_min = 1.0;
++
++  BLOCK_INPUT;
++  err = Gestalt (gestaltSystemVersion, &response);
++  UNBLOCK_INPUT;
++
++  if (dpyinfo->x_highlight_frame == f)
++    alpha = f->alpha[0];
++  else
++    alpha = f->alpha[1];
++
++  if (FLOATP (Vframe_alpha_lower_limit))
++    alpha_min = XFLOAT_DATA (Vframe_alpha_lower_limit);
++  else if (INTEGERP(Vframe_alpha_lower_limit))
++    alpha_min = (XINT (Vframe_alpha_lower_limit)) / 100.0;
++
++  if (alpha < 0.0 || 1.0 < alpha)
++    alpha = 1.0;
++  else if (0.0 <= alpha && alpha < alpha_min && alpha_min <= 1.0)
++    alpha = alpha_min;
++
++  if ((err == noErr) && (response >= 0x1020)) {
++    SetWindowAlpha (FRAME_MAC_WINDOW(f), alpha);
++  }
++}
+ 
+ 
+ /***********************************************************************
+@@ -4350,6 +4382,7 @@
+      struct frame *f;
+ {
+   x_update_cursor (f, 1);
++  x_set_frame_alpha (f);
+ }
+ 
+ static void
+@@ -4357,6 +4390,7 @@
+      struct frame *f;
+ {
+   x_update_cursor (f, 1);
++  x_set_frame_alpha (f);
+ }
+ 
+ /* The focus has changed.  Update the frames as necessary to reflect
+diff -Naur emacs.orig/src/xfns.c emacs/src/xfns.c
+--- emacs.orig/src/xfns.c	2008-01-07 23:29:40.000000000 -0500
++++ emacs/src/xfns.c	2008-04-05 16:11:13.000000000 -0400
+@@ -3365,6 +3365,8 @@
+   x_default_parameter (f, parms, Qscroll_bar_width, Qnil,
+ 		       "scrollBarWidth", "ScrollBarWidth",
+ 		       RES_TYPE_NUMBER);
++  x_default_parameter (f, parms, Qalpha, Qnil,
++		       "alpha", "Alpha", RES_TYPE_NUMBER);
+ 
+   /* Dimensions, especially FRAME_LINES (f), must be done via change_frame_size.
+      Change will not be effected unless different from the current
+@@ -5768,6 +5770,7 @@
+   x_set_fringe_width,
+   x_set_wait_for_wm,
+   x_set_fullscreen,
++  x_set_alpha,
+ };
+ 
+ void
+diff -Naur emacs.orig/src/xterm.c emacs/src/xterm.c
+--- emacs.orig/src/xterm.c	2008-02-23 20:04:51.000000000 -0500
++++ emacs/src/xterm.c	2008-04-05 16:11:13.000000000 -0400
+@@ -955,6 +955,67 @@
+   return FONT_TYPE_UNKNOWN;
+ }
+ 
++#define OPAQUE  0xffffffff
++#define OPACITY "_NET_WM_WINDOW_OPACITY"
++
++void
++x_set_frame_alpha (f)
++     struct frame *f;
++{
++  struct x_display_info *dpyinfo = FRAME_X_DISPLAY_INFO (f);
++  Display *dpy = FRAME_X_DISPLAY (f);
++  Window win = FRAME_OUTER_WINDOW (f);
++  if (FRAME_X_DISPLAY_INFO (f)->root_window != FRAME_X_OUTPUT (f)->parent_desc)
++    /* Since the WM decoration lies under the FRAME_OUTER_WINDOW,
++       we must treat the former instead of the latter. */
++    win = FRAME_X_OUTPUT(f)->parent_desc;
++
++  double alpha = 1.0, alpha_min = 1.0;
++
++  if (dpyinfo->x_highlight_frame == f)
++    alpha = f->alpha[0];
++  else
++    alpha = f->alpha[1];
++
++  if (FLOATP (Vframe_alpha_lower_limit))
++    alpha_min = XFLOAT_DATA (Vframe_alpha_lower_limit);
++  else if (INTEGERP (Vframe_alpha_lower_limit))
++    alpha_min = (XINT (Vframe_alpha_lower_limit)) / 100.0;
++
++  if (alpha < 0.0 || 1.0 < alpha)
++    alpha = 1.0;
++  else if (0.0 <= alpha && alpha < alpha_min && alpha_min <= 1.0)
++    alpha = alpha_min;
++
++  unsigned int opac = (unsigned int)(alpha * OPAQUE);
++
++  /* return unless necessary */
++  {
++    unsigned char *data;
++    Atom actual;
++    int format;
++    unsigned long n, left;
++
++    XGetWindowProperty(dpy, win, XInternAtom(dpy, OPACITY, False),
++		       0L, 1L, False, XA_CARDINAL, &actual, &format, &n, &left,
++		       (unsigned char **) &data);
++    if (data != None)
++      if (*(unsigned int *)data == opac)
++	{
++	  XFree ((void *) data);
++	  return;
++	}
++      else
++       {
++	  XFree ((void *) data);
++       }
++  }
++
++  XChangeProperty (dpy, win, XInternAtom (dpy, OPACITY, False),
++		   XA_CARDINAL, 32, PropModeReplace,
++		   (unsigned char *) &opac, 1L);
++  XSync (dpy, False);
++}
+ 
+ 
+ /***********************************************************************
+@@ -3157,6 +3218,7 @@
+ 		    f->output_data.x->border_pixel);
+   UNBLOCK_INPUT;
+   x_update_cursor (f, 1);
++  x_set_frame_alpha (f);
+ }
+ 
+ static void
+@@ -3172,6 +3234,7 @@
+ 			  f->output_data.x->border_tile);
+   UNBLOCK_INPUT;
+   x_update_cursor (f, 1);
++  x_set_frame_alpha (f);
+ }
+ 
+ /* The focus has changed.  Update the frames as necessary to reflect
