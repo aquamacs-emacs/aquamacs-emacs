@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tool-bar.el,v 1.17 2008/04/06 16:14:03 davidswelt Exp $ 
+;; Last change: $Id: aquamacs-tool-bar.el,v 1.18 2008/04/06 17:26:58 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -142,7 +142,7 @@ This will update the keymap `aquamacs-menu-bar-showhide-toolbar-items-menu'."
     (put face 'face-defface-spec spec))
   ;; will be overwritten by color themes
 
-  (tool-bar-add-item-from-menu 'new-frame-with-new-scratch '("new" . "New"))
+  (tool-bar-add-item-from-menu 'new-empty-buffer-other-frame '("new" . "New"))
   (tool-bar-add-item-from-menu 'mac-key-open-file '("open" . "Open"))
 
   (tool-bar-add-item '("history" . "Recent") (lambda ()

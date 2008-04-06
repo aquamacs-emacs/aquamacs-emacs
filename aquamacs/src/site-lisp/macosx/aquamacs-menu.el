@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.100 2008/04/05 12:19:42 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.101 2008/04/06 17:26:08 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -226,7 +226,7 @@ The elements of LIST are not copied, just the list structure itself."
 (defun aquamacs-update-new-file-menu ()
    (setq menu-bar-new-file-menu 
 	 (aquamacs-define-mode-menu (make-sparse-keymap "New Buffer in Mode")
-				    "aquamacs-new-buffer-" 'new-frame-with-new-scratch
+				    "aquamacs-new-buffer-" 'new-empty-buffer-other-frame
 				    "Create a new buffer in `%s' mode."))
    (define-key-after menu-bar-file-menu [new-file-menu]
      (list 'menu-item "New Buffer in Mode" menu-bar-new-file-menu
@@ -390,15 +390,22 @@ customization buffer."
 
 (define-key menu-bar-file-menu [new-file]
   `(menu-item ,(aq-shortcut  "New Buffer                              "
-			    'new-frame-with-new-scratch)  
-	      new-frame-with-new-scratch
+			    'new-empty-buffer-other-frame)  
+	      new-empty-buffer-other-frame
 	      :key-sequence nil
 	      :enable (or (and (boundp 'one-buffer-one-frame-mode)
 			       one-buffer-one-frame-mode)
 			  (not (window-minibuffer-p
 			    (frame-selected-window menu-updating-frame))))
 	      :help "Create a new buffer"))
- 
+ (define-key-after menu-bar-file-menu [make-tab]
+  `(menu-item (aq-shortcut  "New Buffer in New Tab            "
+			    'new-tab) new-tab
+	      :enable (and (fboundp 'new-tab)
+			   (menu-bar-menu-frame-live-and-visible-p)
+			   (menu-bar-non-minibuffer-window-p))
+	      :help "Add a new tab to the window") 'new-file)
+
 
 (define-key menu-bar-file-menu [open-file] 
   `(menu-item
@@ -1074,13 +1081,6 @@ both existing buffers and buffers that you subsequently create."
 
  
 
-(define-key menu-bar-file-menu [make-tab]
-  `(menu-item (aq-shortcut  "New Tab                                 "
-			    'new-tab) new-tab
-	      :enable (and (fboundp 'new-tab)
-			   (menu-bar-menu-frame-live-and-visible-p)
-			   (menu-bar-non-minibuffer-window-p))
-	      :help "Add a new tab to the window"))
 
 (define-key menu-bar-file-menu [split-window]
   `(menu-item "Split Window" split-window-vertically
@@ -1116,7 +1116,7 @@ both existing buffers and buffers that you subsequently create."
 	       (list 
 		'(command-separator "--")
 		(assq 'make-frame menu-bar-file-menu)
-		(assq 'make-tab menu-bar-file-menu)
+;		(assq 'make-tab menu-bar-file-menu)
 		(assq 'one-window menu-bar-file-menu)
 		(assq 'split-window menu-bar-file-menu)
 		'(command-separator "--")
