@@ -137,9 +137,9 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
 
     echo "Downloading online patches" >>$LOG
 
-    curl 'http://svn.sourceforge.jp/cgi-bin/viewcvs.cgi/*checkout*/zenitani/CarbonEmacs/src/patch/mac-functions.patch?root=macwiki' >${AQUAMACS_ROOT}/patches/mac-functions.patch
-    curl 'http://svn.sourceforge.jp/cgi-bin/viewcvs.cgi/*checkout*/zenitani/CarbonEmacs/src/patch/transparency4.patch?root=macwiki' >${AQUAMACS_ROOT}/patches/transparency.patch
-    curl 'http://svn.sourceforge.jp/cgi-bin/viewcvs.cgi/*checkout*/zenitani/CarbonEmacs/src/patch/emacs-inline.patch?root=macwiki' >${AQUAMACS_ROOT}/patches/emacs-inline.patch
+    curl 'http://svn.sourceforge.jp/cgi-bin/viewcvs.cgi/*checkout*/zenitani/CarbonEmacs/src/patch/mac-functions.patch?root=macwiki' -o ${AQUAMACS_ROOT}/patches/mac-functions.patch 2>>$LOG
+    curl 'http://svn.sourceforge.jp/cgi-bin/viewcvs.cgi/*checkout*/zenitani/CarbonEmacs/src/patch/transparency4.patch?root=macwiki' -o ${AQUAMACS_ROOT}/patches/transparency.patch 2>>$LOG
+    curl 'http://svn.sourceforge.jp/cgi-bin/viewcvs.cgi/*checkout*/zenitani/CarbonEmacs/src/patch/emacs-inline.patch?root=macwiki' -o ${AQUAMACS_ROOT}/patches/emacs-inline.patch 2>>$LOG
 
 
     echo "Applying Aquamacs patches..." >>$LOG  
