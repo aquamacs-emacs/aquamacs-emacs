@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tool-bar.el,v 1.14 2008/04/06 09:50:32 davidswelt Exp $ 
+;; Last change: $Id: aquamacs-tool-bar.el,v 1.15 2008/04/06 15:55:23 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -142,8 +142,8 @@ This will update the keymap `aquamacs-menu-bar-showhide-toolbar-items-menu'."
     (put face 'face-defface-spec spec))
   ;; will be overwritten by color themes
 
-  (tool-bar-add-item-from-menu 'new-frame-with-new-scratch "new")
-  (tool-bar-add-item-from-menu 'mac-key-open-file "open")
+  (tool-bar-add-item-from-menu 'new-frame-with-new-scratch '("new" . "New"))
+  (tool-bar-add-item-from-menu 'mac-key-open-file '("open" . "Open"))
 
   (tool-bar-add-item '("history" . "Recent") (lambda ()
 			      (interactive)
@@ -170,7 +170,7 @@ This will update the keymap `aquamacs-menu-bar-showhide-toolbar-items-menu'."
 					     (not (eq 'special
 						      (get major-mode
   							   'mode-class)))))
-  (tool-bar-add-item "space" nil 'space-1 :enable nil )
+  (tool-bar-add-item '("space" . "") nil 'space-1 :enable nil )
 
   (tool-bar-add-item-from-menu 'aquamacs-redo '("redo" . "Redo") nil
 			       :visible '(not (eq 'special (get major-mode
@@ -203,7 +203,7 @@ This will update the keymap `aquamacs-menu-bar-showhide-toolbar-items-menu'."
 
   (tool-bar-add-item-from-menu 'aquamacs-print '("print" . "Print"))
 
-  (tool-bar-add-item "space" nil 'space-2 :enable nil )
+  (tool-bar-add-item '("space" . "") nil 'space-2 :enable nil )
   
   (tool-bar-add-item-from-menu 'make-frame-command '("new_window" . "Duplicate") nil)
 
