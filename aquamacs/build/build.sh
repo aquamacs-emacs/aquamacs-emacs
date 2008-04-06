@@ -137,12 +137,12 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
 
     echo "Downloading online patches" >>$LOG
 
-    curl 'http://svn.sourceforge.jp/cgi-bin/viewcvs.cgi/*checkout*/zenitani/CarbonEmacs/src/patch/mac-functions.patch?root=macwiki' -o ${AQUAMACS_ROOT}/patches/mac-functions.patch 2>>$LOG
-    curl 'http://svn.sourceforge.jp/cgi-bin/viewcvs.cgi/*checkout*/zenitani/CarbonEmacs/src/patch/transparency4.patch?root=macwiki' -o ${AQUAMACS_ROOT}/patches/transparency.z.patch 2>>$LOG
-    curl 'http://svn.sourceforge.jp/cgi-bin/viewcvs.cgi/*checkout*/zenitani/CarbonEmacs/src/patch/emacs-inline.patch?root=macwiki' -o ${AQUAMACS_ROOT}/patches/emacs-inline.z.patch 2>>$LOG
+#     curl 'http://svn.sourceforge.jp/cgi-bin/viewcvs.cgi/*checkout*/zenitani/CarbonEmacs/src/patch/mac-functions.patch?root=macwiki' -o ${AQUAMACS_ROOT}/patches/mac-functions.patch 2>>$LOG
+#     curl 'http://svn.sourceforge.jp/cgi-bin/viewcvs.cgi/*checkout*/zenitani/CarbonEmacs/src/patch/transparency4.patch?root=macwiki' -o ${AQUAMACS_ROOT}/patches/transparency.z.patch 2>>$LOG
+#     curl 'http://svn.sourceforge.jp/cgi-bin/viewcvs.cgi/*checkout*/zenitani/CarbonEmacs/src/patch/emacs-inline.patch?root=macwiki' -o ${AQUAMACS_ROOT}/patches/emacs-inline.z.patch 2>>$LOG
 
-    sed -e 's/^--- emacs.orig\//--- /g' -e 's/+++ emacs\//+++ /g'  ${AQUAMACS_ROOT}/patches/emacs-inline.z.patch >${AQUAMACS_ROOT}/patches/emacs-inline.patch
-    sed -e 's/^--- emacs.orig\//--- /g' -e 's/+++ emacs\//+++ /g'  ${AQUAMACS_ROOT}/patches/transparency.z.patch >${AQUAMACS_ROOT}/patches/transparency.patch
+#     sed -e 's/^--- emacs.orig\//--- /g' -e 's/+++ emacs\//+++ /g'  ${AQUAMACS_ROOT}/patches/emacs-inline.z.patch >${AQUAMACS_ROOT}/patches/emacs-inline.patch
+#     sed -e 's/^--- emacs.orig\//--- /g' -e 's/+++ emacs\//+++ /g'  ${AQUAMACS_ROOT}/patches/transparency.z.patch >${AQUAMACS_ROOT}/patches/transparency.patch
 
 
     echo "Applying Aquamacs patches..." >>$LOG  
