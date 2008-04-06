@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tool-bar.el,v 1.16 2008/04/06 16:00:38 davidswelt Exp $ 
+;; Last change: $Id: aquamacs-tool-bar.el,v 1.17 2008/04/06 16:14:03 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -170,7 +170,7 @@ This will update the keymap `aquamacs-menu-bar-showhide-toolbar-items-menu'."
 					     (not (eq 'special
 						      (get major-mode
   							   'mode-class)))))
-  (tool-bar-add-item '("space" . "") nil 'space-1 :enable nil )
+  (tool-bar-add-item '("space2" . "") nil 'space-1 :enable nil )
 
   (tool-bar-add-item-from-menu 'aquamacs-redo '("redo" . "Redo") nil
 			       :visible '(not (eq 'special (get major-mode
@@ -203,7 +203,7 @@ This will update the keymap `aquamacs-menu-bar-showhide-toolbar-items-menu'."
 
   (tool-bar-add-item-from-menu 'aquamacs-print '("print" . "Print"))
 
-  (tool-bar-add-item '("space" . "") nil 'space-2 :enable nil )
+  (tool-bar-add-item '("space2" . "") nil 'space-2 :enable nil )
   
   (tool-bar-add-item-from-menu 'make-frame-command '("new_window" . "Duplicate") nil)
 
