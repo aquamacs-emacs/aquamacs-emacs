@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.84 2008/03/15 11:11:04 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.85 2008/04/06 17:23:43 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -1010,7 +1010,7 @@ default."
     (define-key map `[(,osxkeys-command-key \?)] 'aquamacs-user-help)
     (define-key map `[(,osxkeys-command-key shift \?)] 'aquamacs-emacs-manual)
 
-    (define-key map `[(,osxkeys-command-key n)] 'new-frame-with-new-scratch) 
+    (define-key map `[(,osxkeys-command-key n)] 'new-empty-buffer-other-frame) 
 					;open new frame empty
     (define-key map `[(,osxkeys-command-key o)] 'mac-key-open-file) 
 					;open new frame with a file
