@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.101 2008/04/06 17:26:08 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.102 2008/04/06 17:56:52 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -29,7 +29,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, 2006, 2007 David Reitter
+;; Copyright (C) 2005, 2006, 2007, 2008 David Reitter
  
 
 (require 'easymenu)
@@ -1079,6 +1079,11 @@ both existing buffers and buffers that you subsequently create."
 (easy-menu-remove-item global-map  '("menu-bar" "tools") 'compose-mail)
 
 
+
+(defun aquamacs-toggle-full-frame ()
+  (interactive)
+  (mac-toggle-full-frame)
+  (message "Press Apple-Shift Enter (A-S-RET) to exit full screen editing."))
  
 
 
@@ -1103,6 +1108,12 @@ both existing buffers and buffers that you subsequently create."
   `(menu-item "Tile frames horizontally" tile-frames-horizontally
 	      :enable (menu-bar-menu-frame-live-and-visible-p)
 	      :help "Tile frames horizontally"))
+(define-key menu-bar-file-menu [full-frame]
+  `(menu-item ,(aq-shortcut "Full Screen Editing   " 'mac-toggle-full-frame) 
+	      mac-toggle-full-frame
+	      :enable (menu-bar-menu-frame-live-and-visible-p)
+	      :help "Use full screen for the selected frame"))
+
 
 ;; will be moved to Buffers menu later on 
 ;; but is created here
@@ -1116,7 +1127,7 @@ both existing buffers and buffers that you subsequently create."
 	       (list 
 		'(command-separator "--")
 		(assq 'make-frame menu-bar-file-menu)
-;		(assq 'make-tab menu-bar-file-menu)
+		(assq 'full-frame menu-bar-file-menu)
 		(assq 'one-window menu-bar-file-menu)
 		(assq 'split-window menu-bar-file-menu)
 		'(command-separator "--")
