@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tool-bar.el,v 1.15 2008/04/06 15:55:23 davidswelt Exp $ 
+;; Last change: $Id: aquamacs-tool-bar.el,v 1.16 2008/04/06 16:00:38 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -231,7 +231,7 @@ This will update the keymap `aquamacs-menu-bar-showhide-toolbar-items-menu'."
   (aquamacs-set-defaults '(
 			   (toolbar-menu-show--aquamacs-print  t)
 			   (toolbar-menu-show--copy t)
-			   (toolbar-menu-show--customize t)	   
+			   (toolbar-menu-show--customize nil)	   
 			   (toolbar-menu-show--cut t)
 			   (toolbar-menu-show--help t)		   
 			   (toolbar-menu-show--new-file t)	   
@@ -241,7 +241,8 @@ This will update the keymap `aquamacs-menu-bar-showhide-toolbar-items-menu'."
 			   (toolbar-menu-show--save-buffer t)	   
 			   (toolbar-menu-show--undo t)
 			   (toolbar-menu-show--write-file t)
-			 (toolbar-menu-show--isearch-forward t)))
+			   (toolbar-menu-show--recent-files t)
+			   (toolbar-menu-show--isearch-forward t)))
 
 
   (defvar aquamacs-default-toolbarx-meaning-alist
