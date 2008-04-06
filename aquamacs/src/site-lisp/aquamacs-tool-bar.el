@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tool-bar.el,v 1.13 2008/04/05 12:24:02 davidswelt Exp $ 
+;; Last change: $Id: aquamacs-tool-bar.el,v 1.14 2008/04/06 09:50:32 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -154,7 +154,7 @@ This will update the keymap `aquamacs-menu-bar-showhide-toolbar-items-menu'."
 		     :visible '(and (boundp 'recentf-mode) recentf-mode)
 		     :help "Pop up the Recent Files menu")
 
-  (tool-bar-add-item ("circle_stop" . "Close") 'kill-this-buffer  'kill-current-buffer
+  (tool-bar-add-item '("circle_stop" . "Close") 'kill-this-buffer  'kill-current-buffer
 		     :visible '(or (not (boundp 'one-buffer-one-frame-mode))
 				   (not one-buffer-one-frame-mode)))
  
