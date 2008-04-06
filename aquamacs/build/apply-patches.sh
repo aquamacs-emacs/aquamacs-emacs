@@ -40,8 +40,6 @@ PATCHES="fix-configure test ui-strings
 #  longlines-fillcolumn  out temporarily
 
 
-# sendmail-mac - probably not needed any longer - CHECK CHECK CHECK
-
 # The patches here are specified separately so their order can be defined.
 
 # It might also be useful(?) to touch a .applied file in the patches
@@ -103,7 +101,7 @@ do
 	# -l is to ignore whitespace
 	patch -lp0 < "$file"
     else
-	echo "patch -p0 < '$file'"
+	echo "patch -lp0 < '$file'"
     fi
 
     if [ $? -ne 0 ]
