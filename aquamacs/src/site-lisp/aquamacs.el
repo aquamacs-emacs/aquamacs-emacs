@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.147 2008/04/07 09:57:13 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.148 2008/04/07 09:57:59 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -512,13 +512,14 @@ Use this argument instead of explicitly setting `view-exit-action'."
   (assq-set 'user-position nil 'special-display-frame-alist)
 
   
-  ;; turn on mode-spec styles AFTER setting default-frame-alist
+  ;; here would be the place to turn on mode-spec styles AFTER setting default-frame-alist
   ;; so everything is copied over to the 'default style as appropriate
   ;; mode-specific font settings
+  ;;  if turned on, default-frame-alist should be empty now
+
   (aquamacs-set-defaults '((aquamacs-styles-mode nil)))
   (require 'aquamacs-styles) 
-  ;; default-frame-alist should be empty now
-
+  
 
   ;; local toolbars
 
