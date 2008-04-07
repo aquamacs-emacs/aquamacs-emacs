@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.87 2008/04/07 11:11:15 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.88 2008/04/07 11:17:29 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -1044,8 +1044,9 @@ default."
     (define-key map `[(,osxkeys-command-key .)] 'keyboard-quit)
     (define-key map `[(,osxkeys-command-key 49)] 'delete-other-windows) ; 49='1'
     (define-key map `[(,osxkeys-command-key 50)] 'split-window-vertically) ; 50='2'
-    (define-key map `[(,osxkeys-command-key shift return)] 
-      'aquamacs-toggle-full-frame)
+    (if (fboundp 'mac-toggle-full-frame)
+	(define-key map `[(,osxkeys-command-key shift return)] 
+	  'aquamacs-toggle-full-frame))
     (define-key map `[(,osxkeys-command-key escape)] 'keyboard-escape-quit)
  
     (define-key map `[(,osxkeys-command-key :)] 'ispell-buffer)
