@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.145 2008/04/06 17:34:36 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.146 2008/04/07 07:29:13 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -147,7 +147,6 @@ yes-or-no prompts - y or n will do."
 			 (tool-bar-button-margin 4)
 			 (tool-bar-border 5)))
   (require 'aquamacs-tabbar)
-  (tabbar-mode 1)
 
   ;; Mac OS X specific stuff 
 
@@ -977,7 +976,6 @@ listed here."
      aquamacs-customization-version-id
      mac-print-monochrome-mode
      make-backup-files
-     tabbar-window-new-buffers
      tabbar-mode
      ))
 
