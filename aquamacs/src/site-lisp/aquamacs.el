@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.146 2008/04/07 07:29:13 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.147 2008/04/07 09:57:13 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -515,7 +515,7 @@ Use this argument instead of explicitly setting `view-exit-action'."
   ;; turn on mode-spec styles AFTER setting default-frame-alist
   ;; so everything is copied over to the 'default style as appropriate
   ;; mode-specific font settings
-  (aquamacs-set-defaults '((aquamacs-styles-mode t)))
+  (aquamacs-set-defaults '((aquamacs-styles-mode nil)))
   (require 'aquamacs-styles) 
   ;; default-frame-alist should be empty now
 
