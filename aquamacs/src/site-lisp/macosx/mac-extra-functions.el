@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.59 2008/04/07 10:12:27 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.60 2008/04/07 10:13:16 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -119,7 +119,7 @@ right there as well."
   (interactive)
 
   (if (or (not one-buffer-one-frame)
-	  (tabbar-mode)
+	  tabbar-mode
 	  (< (buffer-size (window-buffer (frame-first-window))) 2))
       (call-interactively 'find-file)
 
