@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.104 2008/04/06 22:34:45 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.105 2008/04/07 10:08:19 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -786,43 +786,19 @@ both existing buffers and buffers that you subsequently create."
 			"Case-Insensitive Search %s"
 			"Ignore letter-case in search"))
 
-
-(defun toggle-tabbar-mode ()
-"Toggle state of `tabbar-mode'."
-  (interactive)
-  (customize-set-variable 'tabbar-mode
-			  (not tabbar-mode))
-  (if tabbar-mode
-      (customize-set-variable 'one-buffer-one-frame-mode nil)))
-
-(defun toggle-one-buffer-one-frame-mode ()
-"Toggle state of `one-buffer-one-frame-mode'."
-  (interactive)
-  (customize-set-variable 'one-buffer-one-frame-mode
-			  (not one-buffer-one-frame-mode))
-  (if one-buffer-one-frame-mode
-      (customize-set-variable 'tabbar-mode nil)))
-
 (when (string= "mac" window-system)
     (require 'aquamacs-frame-setup)
     (define-key-after menu-bar-options-menu [tabbar]
-      '(menu-item
-	"Display Buffers in Tabs"
-	toggle-tabbar-mode
-	:button (:toggle . tabbar-mode)
-	:help "Open a new tab for each new buffer."
-	:visible (boundp 'tabbar-mode))
-       'edit-options-separator)
+      (menu-bar-make-mm-toggle
+       tabbar-mode
+       "Switch to Buffers with Tabs"
+       "Open a new tab for each new buffer.") 'edit-options-separator)
     (define-key-after menu-bar-options-menu [oneonone]
-      '(menu-item
-	"Display Buffers in Frames"
-	toggle-one-buffer-one-frame-mode
-	:button (:toggle . one-buffer-one-frame-mode)
-	:help "Open a new Frame (window) for each new buffer."
-	:visible (boundp 'one-buffer-one-frame-mode))
-       'tabbar)
-    (define-key-after menu-bar-options-menu [obof-separator]  '(menu-item "--") 'oneonone)
-)
+      (menu-bar-make-mm-toggle 
+       one-buffer-one-frame-mode
+       (if tabbar-mode "Pop up Other Buffers in Frames" "Pop up Buffers in Frames")
+       "Make new frames to switch or pop to other buffers.") 'tabbar)
+    (define-key-after menu-bar-options-menu [obof-separator]  '(menu-item "--") 'oneonone))
 
 (when (fboundp 'mac-font-panel-mode)
 
