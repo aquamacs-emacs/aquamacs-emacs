@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.86 2008/04/06 17:54:37 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.87 2008/04/07 11:11:15 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -1026,7 +1026,8 @@ default."
     ;; this because the combination control-space usually activates Spotlight
     (define-key map `[(control ,osxkeys-command-key space)] 'set-mark)
     (define-key map `[(,osxkeys-command-key x)] 'clipboard-kill-region)
-    (define-key map `[(meta ,osxkeys-command-key x)] 'aquamacs-clipboard-kill-secondary)
+    (define-key map `[(meta ,osxkeys-command-key x)] 
+      'aquamacs-clipboard-kill-secondary)
     (define-key map `[(,osxkeys-command-key s)] 'mac-key-save-file)
     (define-key map `[(,osxkeys-command-key p)] 'aquamacs-print)
     (define-key map `[(,osxkeys-command-key l)] 'goto-line)
@@ -1035,13 +1036,16 @@ default."
     (define-key map `[(,osxkeys-command-key shift g)] 'isearch-repeat-backward)
     (define-key map `[(,osxkeys-command-key e)] 'aquamacs-use-selection-for-find)
     (if (fboundp 'close-current-tab-or-buffer)
-	(define-key map `[(,osxkeys-command-key w)] 'close-current-tab-or-buffer)
-      (define-key map `[(,osxkeys-command-key w)] 'close-current-window-asktosave))
+	(define-key map `[(,osxkeys-command-key w)] 
+	  'close-current-tab-or-buffer)
+      (define-key map `[(,osxkeys-command-key w)] 
+	'close-current-window-asktosave))
     (define-key map `[(,osxkeys-command-key m)] 'iconify-or-deiconify-frame) 
     (define-key map `[(,osxkeys-command-key .)] 'keyboard-quit)
     (define-key map `[(,osxkeys-command-key 49)] 'delete-other-windows) ; 49='1'
     (define-key map `[(,osxkeys-command-key 50)] 'split-window-vertically) ; 50='2'
-    (define-key map `[(,osxkeys-command-key shift return)] 'mac-toggle-full-frame)
+    (define-key map `[(,osxkeys-command-key shift return)] 
+      'aquamacs-toggle-full-frame)
     (define-key map `[(,osxkeys-command-key escape)] 'keyboard-escape-quit)
  
     (define-key map `[(,osxkeys-command-key :)] 'ispell-buffer)
@@ -1050,9 +1054,11 @@ default."
 ;; these go away in 1.4
 ;;    (define-key global-map `[(,osxkeys-command-key {)] 'comment-region-or-line)
 ;;    (define-key global-map `[(,osxkeys-command-key })] 'uncomment-region-or-line)
-   (define-key global-map `[(,osxkeys-command-key meta \')] 'uncomment-region-or-line)
+   (define-key global-map `[(,osxkeys-command-key meta \')]
+     'uncomment-region-or-line)
    
-   (define-key global-map `[(,osxkeys-command-key \')] 'comment-or-uncomment-region-or-line)
+   (define-key global-map `[(,osxkeys-command-key \')]
+     'comment-or-uncomment-region-or-line)
 
     ;; tabbar stuff
 
