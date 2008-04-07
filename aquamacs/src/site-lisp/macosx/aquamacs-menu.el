@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.106 2008/04/07 11:10:07 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.107 2008/04/07 11:12:37 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -791,12 +791,13 @@ both existing buffers and buffers that you subsequently create."
     (define-key-after menu-bar-options-menu [tabbar]
       (menu-bar-make-mm-toggle
        tabbar-mode
-       "Switch to Buffers with Tabs"
+       "Show Tabs"
        "Open a new tab for each new buffer.") 'edit-options-separator)
     (define-key-after menu-bar-options-menu [oneonone]
       (menu-bar-make-mm-toggle 
        one-buffer-one-frame-mode
-       (if tabbar-mode "Pop up Other Buffers in Frames" "Pop up Buffers in Frames")
+       (if tabbar-mode "Pop up Other Buffers in Frames" 
+	 "Pop up Buffers in Frames")
        "Make new frames to switch or pop to other buffers.") 'tabbar)
     (define-key-after menu-bar-options-menu [obof-separator]  '(menu-item "--") 'oneonone))
 
