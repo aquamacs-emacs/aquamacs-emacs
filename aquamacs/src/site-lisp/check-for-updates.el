@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs version check
  
-;; Last change: $Id: check-for-updates.el,v 1.23 2008/04/06 13:43:53 davidswelt Exp $
+;; Last change: $Id: check-for-updates.el,v 1.24 2008/04/07 07:41:46 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -73,7 +73,7 @@ nil  )
 (setq aquamacs-user-likes-beta 0) ;; this is 0 or 1, not nil / t
 (setq aquamacs-version-check-buffer nil) 
 (setq url-show-status nil) ;;don't annoy user
-(defun aquamacs-compare-version ()
+(defun aquamacs-compare-version (&optional interactive-request)
   (if aquamacs-version-check-buffer ;; just for safety
       (save-excursion 
 	(set-buffer aquamacs-version-check-buffer)
@@ -97,9 +97,15 @@ nil  )
 		  nil
 		  nil)
 	      (aquamacs-new-version-notify (match-string 1)))
-	  (with-temp-message (format "%s is the most recent Aquamacs version available."
-				     (concat aquamacs-version 
-				       aquamacs-minor-version)) nil)))))
+	  (let ((txt (format "%s is the most recent Aquamacs version available."
+			     (concat aquamacs-version 
+				     aquamacs-minor-version))))
+	    (if interactive-request
+		(if (eq interactive-request 'gui)
+		    (mac-dialog "No news is good news..." txt)
+		  (message txt))
+	      (with-temp-message txt ;; only send it to *Messages*
+		nil)))))))
  
 (defun aquamacs-new-version-notify (v)
   ;; show right away and show when idle
@@ -131,7 +137,12 @@ Would you like to see the donations site now?
 
 (defun aquamacs-check-for-updates ()
   (interactive)
-  (aquamacs-check-for-updates-if-necessary 'force)
+  (aquamacs-check-for-updates-if-necessary 
+   'force nil 
+   (if (interactive-p)
+       (if (and last-nonmenu-event 
+		 (not (consp last-nonmenu-event)))
+	   t 'gui) nil))
   ;; re-run the check after three days
   (if aquamacs-check-update-timer
       (cancel-timer aquamacs-check-update-timer))
@@ -140,7 +151,7 @@ Would you like to see the donations site now?
 	  (run-with-timer secs secs 
 			  'aquamacs-check-for-updates-if-necessary 'force 'nonewstart))))
 
-(defun aquamacs-check-for-updates-if-necessary (&optional force-check no-new-start)
+(defun aquamacs-check-for-updates-if-necessary (&optional force-check no-new-start interactively)
   "Check (periodically) if there's an update for Aquamacs available, 
 and show user a message if there is."
   (let (  
@@ -188,7 +199,8 @@ and show user a message if there is."
  
     (if (or force-check (>= (- today last-update-check)  aquamacs-check-update-time-period))
 	(progn
-	  (aquamacs-check-for-updates-internal session-id call-number)
+	  (aquamacs-check-for-updates-internal session-id call-number
+					       interactively)
 	  (setq last-update-check today)
 	  )
       )
@@ -214,9 +226,7 @@ and show user a message if there is."
 ;; "&afpf=" (if aquamacs-auto-frame-parameters-flag "1" "0")
 ;; "&sfpm=" (if smart-frame-positioning-mode "1" "0")
 
-(defun aquamacs-check-for-updates-internal (session-id calls)
- 
- 
+(defun aquamacs-check-for-updates-internal (session-id calls &optional interactively)
     (when aquamacs-version-check-url
       ;; do not autoload (avoid messages)
       (require 'mail-utils)
@@ -251,18 +261,13 @@ and show user a message if there is."
 	; HTTP-GET
 	(setq aquamacs-version-check-buffer   
 	      (url-http url 
-			'aquamacs-compare-version  nil ))
-
+			'aquamacs-compare-version (list interactively )))
 	; now make sure that the Emacs won't ask to kill this 
 	; process when quitting
 	(dolist ( p (process-list))
 	  (if (string-match (elt url 3) (process-name p))
-	      (set-process-query-on-exit-flag p nil)
-	    )
-	  )
-	)
-	(error nil))
-      )
+	      (set-process-query-on-exit-flag p nil))))
+	(error nil)))
   nil)
 
 ; (aquamacs-check-for-updates-if-necessary t)
@@ -270,7 +275,7 @@ and show user a message if there is."
 ;; menu item (Aquamacs menu)
 ;; needs about-emacs.patch
 (when (and (boundp 'mac-apple-event-map) mac-apple-event-map)
-    (put 'check-for-updates                'mac-apple-event-id "chku")
+    (put 'check-for-updates 'mac-apple-event-id "chku")
     (define-key mac-apple-event-map [hi-command check-for-updates]
       'aquamacs-check-for-updates))
 
