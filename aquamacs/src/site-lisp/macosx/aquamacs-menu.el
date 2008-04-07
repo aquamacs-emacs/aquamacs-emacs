@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.105 2008/04/07 10:08:19 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.106 2008/04/07 11:10:07 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -1086,7 +1086,8 @@ both existing buffers and buffers that you subsequently create."
 	      :enable (menu-bar-menu-frame-live-and-visible-p)
 	      :help "Tile frames horizontally"))
 (define-key menu-bar-file-menu [full-frame]
-  `(menu-item ,(aq-shortcut "Full Screen Editing   " 'mac-toggle-full-frame) 
+  `(menu-item ,(aq-shortcut "Full Screen Editing   " 
+			    'aquamacs-toggle-full-frame) 
 	      aquamacs-toggle-full-frame
 	      :enable (menu-bar-menu-frame-live-and-visible-p)
 	      :help "Use full screen for the selected frame"))
@@ -1120,6 +1121,7 @@ both existing buffers and buffers that you subsequently create."
 ;(assq-delete-all 'select-named-buffer menu-bar-buffers-menu-command-entries)
 ;(assq-delete-all 'list-all-buffers menu-bar-buffers-menu-command-entries)
 
+(assq-delete-all 'full-frame menu-bar-file-menu)
 (assq-delete-all 'make-frame menu-bar-file-menu)
 (assq-delete-all 'make-tab menu-bar-file-menu)
 (assq-delete-all 'one-window menu-bar-file-menu)
