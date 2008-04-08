@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.44 2008/02/11 10:21:16 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.45 2008/04/08 16:03:58 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -85,7 +85,14 @@ by any of the hook functions, will normally be preserved."
  
 
 
-
+(defun smart-tool-bar-pixel-height (&optional frame) 
+(if (> (frame-parameter frame 'tool-bar-lines) 0)
+    (if (eq mac-tool-bar-display-mode 'icons)
+	40
+      56)
+  0))
+; (smart-tool-bar-pixel-height nil)
+; (frame-total-pixel-height nil)
 
 (defun smart-position-and-create-frame (&optional parameters) 
  "Create a frame in a useful screen position.
@@ -167,7 +174,8 @@ pixels apart if possible."
 ;; and check for presence of those elements etc etc.
 ;; it's just an approximation right now.
   (+ smart-fp--frame-title-bar-height ;; this is for the title bar of the window
-   (smart-fp--char-to-pixel-height
+     (smart-tool-bar-pixel-height f)
+     (smart-fp--char-to-pixel-height
      (eval (frame-parameter f 'height)) f
    )))
  ; (frame-total-pixel-height (selected-frame))
@@ -219,7 +227,6 @@ pixels apart if possible."
 	     (max-y (nth 3 rect))
 	     (preassigned 
 	      (smart-fp--get-frame-position-assigned-to-buffer-name)))
-
 	(smart-fp--convert-negative-ordinates 
 	 (or preassigned	;; if preassigned, return that.
 	    (let* ( ;; eval is necessary, because left can be (+ -1000)
@@ -323,16 +330,23 @@ pixels apart if possible."
 				      (min next-y (- max-y next-h 25))))
 		  (setq next-y min-y)) ;; if all else fails
 		;; do we need to change the height as well?
-		(when (and next-y (> (+ 25 next-y next-h) max-y))
-		  (setq next-h (- max-y next-y 25)))
-	      
+		(when (and next-y 
+			   (> (+ 25 next-y 
+				 smart-fp--frame-title-bar-height
+				 (smart-tool-bar-pixel-height f) next-h) max-y))
+		  (setq next-h (- max-y 
+				  next-y 
+				  (smart-tool-bar-pixel-height f) 
+				  smart-fp--frame-title-bar-height
+				  25)))
 		(assq-set 'left next-x 'new-frame-parameters)
 		(assq-set 'top next-y 'new-frame-parameters)
 		;;  (assq-set 'width next-w 'new-frame-parameters)
 	     
 		;; why this? (why? enabled)
 		(assq-set 'height (smart-fp--pixel-to-char-height
-				   next-h new-frame) 'new-frame-parameters)
+				   next-h new-frame 'round-to-lower)
+			  'new-frame-parameters)
 		;; return this 
 		new-frame-parameters))))))))
 
