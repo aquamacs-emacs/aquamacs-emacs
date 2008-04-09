@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tool-bar.el,v 1.18 2008/04/06 17:26:58 davidswelt Exp $ 
+;; Last change: $Id: aquamacs-tool-bar.el,v 1.19 2008/04/09 07:31:20 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -172,15 +172,14 @@ This will update the keymap `aquamacs-menu-bar-showhide-toolbar-items-menu'."
   							   'mode-class)))))
   (tool-bar-add-item '("space2" . "") nil 'space-1 :enable nil )
 
+  (tool-bar-add-item-from-menu 'aquamacs-undo '("undo" . "Undo") nil
+			       :visible '(not (eq 'special (get major-mode
+	  							'mode-class))))
+
   (tool-bar-add-item-from-menu 'aquamacs-redo '("redo" . "Redo") nil
 			       :visible '(not (eq 'special (get major-mode
 	  							'mode-class))))
   
-  (tool-bar-add-item-from-menu 'aquamacs-undo '("undo" . "Undo") nil
-			       :visible '(not (eq 'special (get major-mode
-	  							'mode-class))))
- 
-
  (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [cut])
 			       '("cut" . "Cut") nil
 			       :visible '(not (eq 'special (get major-mode
