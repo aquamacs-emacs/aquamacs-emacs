@@ -4,7 +4,7 @@
 ;; originally authored by Kevin Walzer
 ;; Keywords: auctex
  
-;; Last change: $Id: auctex-config.el,v 1.36 2008/02/11 10:22:49 davidswelt Exp $
+;; Last change: $Id: auctex-config.el,v 1.37 2008/04/10 07:26:33 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -208,15 +208,21 @@ Calls `aquamacs-tex-pdf-viewer' to display the PDF file THE-FILE."
   (and (equal major-mode 'latex-mode) (boundp 'TeX-PDF-mode) TeX-PDF-mode 
        (file-readable-p (expand-file-name 
 			 (TeX-master-file (TeX-output-extension)) 
-			 (and buffer-file-name (file-name-directory buffer-file-name))))
+			 (and buffer-file-name 
+			      (file-name-directory buffer-file-name))))
      ;; check for running 
      (aquamacs-skim-running-p)
-     (if (member '("^pdf$" "." "open -a Skim.app %o") TeX-output-view-style)
+     (if (not (equal (cdr-safe 
+		      (cdr-safe 
+		       (assq-string-equal "^pdf$" TeX-output-view-style)))
+		     "open %o"))
+	      ;; has not been changed by us or the user
 	 t
        ;; this variable should not be automatically saved by "Save Options"
        ;; (unless user customizes it explicitly)
-       (setq TeX-output-view-style (cons '("^pdf$" "." "open -a Skim.app %o")
-					 TeX-output-view-style)))
+       (setq TeX-output-view-style 
+	     (cons '("^pdf$" "." "open -a Skim.app %o")
+		   TeX-output-view-style)))
      (cancel-timer aquamacs-skim-timer)
      aquamacs-skim-show-info-message
      (message 
