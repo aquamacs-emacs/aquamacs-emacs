@@ -18,6 +18,11 @@
 ;;;
 ;;; Send bug reports to kyle_jones@wonderworks.com
 
+;; This version has been patched to add the
+;; filladapt-token-match-empty feature.  Patch made by Martin
+;; Stjernholm <bug-cc-mode@gnu.org>; see
+;; <http://cc-mode.sourceforge.net/filladapt.php> for details.
+
 ;; LCD Archive Entry: 
 ;; filladapt|Kyle Jones|kyle_jones@wonderworks.com| 
 ;; Minor mode to adaptively set fill-prefix and overload filling functions|
@@ -322,6 +327,13 @@ HOWTO specifies how to do the conversion.
       the fill prefix."
   :type '(repeat (cons symbol (choice (const exact)
 				      (const spaces))))
+  :group 'filladapt)
+
+(defcustom filladapt-token-match-empty '(beginning-of-line end-of-line)
+  "List of tokens that may match the empty string.
+Normally a token is ignored if it matches the empty string.  This list
+contains the tokens that should be excluded from that rule."
+  :type '(repeat symbol)
   :group 'filladapt)
 
 (defvar filladapt-function-table
@@ -665,7 +677,10 @@ STRING is the token's text."
 	  (setq token-table filladapt-token-table
 		done t)
 	  (while token-table
-	    (if (null (looking-at (car (car token-table))))
+	    (if (or (null (looking-at (car (car token-table))))
+		    (and (not (memq (car (cdr (car token-table)))
+				    filladapt-token-match-empty))
+			 (eq (match-beginning 0) (match-end 0))))
 		(setq token-table (cdr token-table))
 	      (goto-char (match-end 0))
 	      (setq token-list (cons (list (nth 1 (car token-table))
