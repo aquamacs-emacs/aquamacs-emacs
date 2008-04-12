@@ -146,13 +146,15 @@
 (defun toolbarx-make-string-from-symbol (symbol)
   "Return a string from the name of a SYMBOL.
 Upcase initials and replace dashes by spaces."
-  (let* ((str (upcase-initials (symbol-name symbol)))
-	 (str2))
-    (dolist (i (append str nil))
-      (if (eq i 45)			; if dash, push space
-	  (push 32 str2)
-	(push i str2)))			; else push identical
-    (concat (nreverse str2))))
+  (if (eq symbol 'separator)
+      ""
+    (let* ((str (upcase-initials (symbol-name symbol)))
+	   (str2))
+      (dolist (i (append str nil))
+	(if (eq i 45)			; if dash, push space
+	    (push 32 str2)
+	  (push i str2)))			; else push identical
+      (concat (nreverse str2)))))
 
 (defun toolbarx-make-symbol-from-string (string)
   "Return a (intern) symbol from STRING.
