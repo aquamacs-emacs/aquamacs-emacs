@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tool-bar.el,v 1.19 2008/04/09 07:31:20 davidswelt Exp $ 
+;; Last change: $Id: aquamacs-tool-bar.el,v 1.20 2008/04/12 23:07:27 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -48,45 +48,74 @@
 
 (defvar aquamacs-menu-bar-showhide-toolbar-items-menu (make-sparse-keymap)
 "Keymap with items that allow toggling items on the tool-bar.")
+(defvar aquamacs-menu-bar-showhide-toolbar--hash nil)
 
-(defun aquamacs-toolbar-create-showhide-menu ()
+(defun aquamacs-toolbar-update-showhide-menu ()
   "Updates the toolbar items toggle menu.
-This will update the keymap `aquamacs-menu-bar-showhide-toolbar-items-menu'."
-  (setq aquamacs-menu-bar-showhide-toolbar-items-menu (make-sparse-keymap))
-  (mapc
-   (lambda (item)
-     (and (car item)
-	  (if (nth 3 item)
-	      (let ((name (let ((osx-key-mode)) (eval (car (cdr (cdr item))))))
-		    (toggle-var (intern (format "toolbar-menu-show--%s" (car item)))))
-		(eval `(defcustom ,toggle-var nil 
-			 (format "If non-nil, an icon for \"%s\" is shown in the toolbar." name) 
-			 :group 'Aquamacs :group 'tool-bar :version "22.0" :type 'boolean))
-		(add-to-list 'aquamacs-menu-bar-customize-options-to-save
-			     toggle-var 'append)
-		(define-key aquamacs-menu-bar-showhide-toolbar-items-menu (vector toggle-var)
-		  (eval `(menu-bar-make-toggle 
-			  ,(intern (format "toggle-toolbar-show--%s" (car item)))
-			  ,toggle-var
-			  ,(format "%s" name)
-			  (if (eval ,(aq-list-has-property-element item :visible t))
-			      ,(format "Toolbar icon for %s %%s" name)
-			      (message (format "Item not visible due to current configuration or state:
+This will update the keymap `aquamacs-menu-bar-showhide-toolbar-items-menu'
+if `tool-bar-map' has changed since the last call.  If not, this returns
+quickly."
+
+  ;; has the tool-bar-map changed?
+  (when (not (equal aquamacs-menu-bar-showhide-toolbar--hash
+		    (sxhash tool-bar-map)))
+    (setq aquamacs-menu-bar-showhide-toolbar-items-menu (make-sparse-keymap))
+    (mapc
+     (lambda (item)
+       (and 
+	(car item)
+	(if (nth 3 item)
+	    (let ((name (let ((osx-key-mode)) 
+			  (eval (car (cdr (cdr item))))))
+		  (toggle-var (intern 
+			       (format "toolbar-menu-show--%s" 
+				       (car item)))))
+	      (eval 
+	       `(defcustom ,toggle-var nil 
+		  (format 
+		   "If non-nil, an icon for \"%s\" is shown in the toolbar." 
+		   name) 
+		  :group 'Aquamacs :group 'tool-bar :version "22.0" 
+		  :type 'boolean))
+	      (add-to-list 'aquamacs-menu-bar-customize-options-to-save
+			   toggle-var 'append)
+	      (define-key aquamacs-menu-bar-showhide-toolbar-items-menu 
+		(vector toggle-var)
+		(eval
+		 `(menu-bar-make-toggle 
+		   ,(intern (format "toggle-toolbar-show--%s" (car item)))
+		   ,toggle-var
+		   ,(format "%s" name)
+		   (if (eval ,(aq-list-has-property-element
+			       item 
+			       :visible t))
+		       ,(format "Toolbar icon for %s %%s" name)
+		     (message
+		      (format
+		       "Item not visible due to current configuration or state:
 %s"  (quote ,(aq-list-has-property-element item :visible)))))
-			  "Show an icon in the toolbar for this function."
-			  )))
-		(let ((l (aq-list-has-property-element item :visible)))
-		  (if l
-		      (setq l `(and ,l ,toggle-var))
-		    (setq l toggle-var))
-	 
-		  (define-key tool-bar-map (vector (car item))
-		    (append (cdr item)
-			    `(:visible ,l)))))
-	    (define-key aquamacs-menu-bar-showhide-toolbar-items-menu 
-	      (vector (intern (format "%s-sep" (car item)))) 
-	      '(menu-item "--" nil)))))
-   (reverse (cdr tool-bar-map))) nil)
+		   "Show an icon in the toolbar for this function."
+		   )))
+	      (let ((l (aq-list-has-property-element item :visible)))
+		(if l
+		    (setq l `(and ,l ,toggle-var))
+		  (setq l toggle-var))
+		(define-key tool-bar-map (vector (car item))
+		  (append (cdr item)
+			  `(:visible ,l)))))
+	  (define-key aquamacs-menu-bar-showhide-toolbar-items-menu 
+	    (vector (intern (format "%s-sep" (car item)))) 
+	    '(menu-item "--" nil)))))
+     (reverse (cdr tool-bar-map))) 
+    (define-key-after menu-bar-showhide-menu [small]
+      `(menu-item "Toolbar items" 
+		  ,aquamacs-menu-bar-showhide-toolbar-items-menu
+		  :help "Select items to show in the toolbar"
+		  :visible ,(display-graphic-p))
+      'showhide-tool-bar)
+    (setq aquamacs-menu-bar-showhide-toolbar--hash
+	  (sxhash tool-bar-map))))
+
 
 
 (defun aquamacs-toolbar-x-create-meaning-list (keymap)
@@ -111,7 +140,7 @@ This will update the keymap `aquamacs-menu-bar-showhide-toolbar-items-menu'."
 		  :help (aq-list-has-property-element item :help)))
 	     (let ((img (aq-list-has-property-element item :image)))
 		  (list 'separator
-			:command t
+			:command (lambda nil (interactive) t)
 			:visible t
 			:enable nil
 			:image (vector img img) ;; 1st: Emacs, 2nd: XEma
@@ -219,14 +248,9 @@ This will update the keymap `aquamacs-menu-bar-showhide-toolbar-items-menu'."
   ;; (Toolbar button - on systems that support it!)
   (global-set-key [toggle-frame-toolbar] 'handle-toggle-tool-bar)
 
-  (aquamacs-toolbar-create-showhide-menu)
-  (define-key-after menu-bar-showhide-menu [small]
-    `(menu-item "Toolbar items" 
-		,aquamacs-menu-bar-showhide-toolbar-items-menu
-		:help "Select items to show in the toolbar"
-		:visible ,(display-graphic-p))
-    'showhide-tool-bar)
-  
+  (aquamacs-toolbar-update-showhide-menu) 
+  (add-hook 'menu-bar-update-hook 'aquamacs-toolbar-update-showhide-menu)
+
   (aquamacs-set-defaults '(
 			   (toolbar-menu-show--aquamacs-print  t)
 			   (toolbar-menu-show--copy t)
