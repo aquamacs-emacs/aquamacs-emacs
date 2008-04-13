@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tool-bar.el,v 1.20 2008/04/12 23:07:27 davidswelt Exp $ 
+;; Last change: $Id: aquamacs-tool-bar.el,v 1.21 2008/04/13 08:01:14 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -78,7 +78,7 @@ quickly."
 		  :group 'Aquamacs :group 'tool-bar :version "22.0" 
 		  :type 'boolean))
 	      (add-to-list 'aquamacs-menu-bar-customize-options-to-save
-			   toggle-var 'append)
+			   toggle-var 'append 'eq)
 	      (define-key aquamacs-menu-bar-showhide-toolbar-items-menu 
 		(vector toggle-var)
 		(eval
@@ -93,12 +93,17 @@ quickly."
 		     (message
 		      (format
 		       "Item not visible due to current configuration or state:
-%s"  (quote ,(aq-list-has-property-element item :visible)))))
+%s"  
+		       (quote ,(aq-list-has-property-element item :visible)))))
 		   "Show an icon in the toolbar for this function."
 		   )))
 	      (let ((l (aq-list-has-property-element item :visible)))
 		(if l
-		    (setq l `(and ,l ,toggle-var))
+		    ;; check if variable influences this
+		    (unless (or (eq l toggle-var)
+				(and (eq (car-safe l) 'and) 
+				     (eq (car-safe (cdr-safe l)) toggle-var)))
+		      (setq l `(and ,toggle-var ,l)))
 		  (setq l toggle-var))
 		(define-key tool-bar-map (vector (car item))
 		  (append (cdr item)
@@ -116,6 +121,10 @@ quickly."
     (setq aquamacs-menu-bar-showhide-toolbar--hash
 	  (sxhash tool-bar-map))))
 
+
+;;  (remove-hook 'menu-bar-update-hook 'aquamacs-toolbar-update-showhide-menu)
+;; (progn  (setq aquamacs-menu-bar-showhide-toolbar--hash 0)
+;; 	(aquamacs-toolbar-update-showhide-menu)) 
 
 
 (defun aquamacs-toolbar-x-create-meaning-list (keymap)
