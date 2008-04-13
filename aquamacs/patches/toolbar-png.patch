@@ -12,6 +12,29 @@ diff -c -r1.1.2.1 mactoolbox.c
   static int mac_event_to_emacs_modifiers P_ ((EventRef));
   static OSStatus install_menu_target_item_handler P_ ((void));
   #ifdef MAC_OSX
+*** 2581,2589 ****
+        else
+  	{
+  	  item = NULL;
+! 	  HIToolbarCreateItemWithIdentifier (toolbar,
+! 					     TOOLBAR_ICON_ITEM_IDENTIFIER,
+! 					     NULL, &item);
+  	  if (item)
+  	    {
+  	      HIToolbarItemSetImage (item, cg_image);
+--- 2584,2595 ----
+        else
+  	{
+  	  item = NULL;
+! 	  HIToolbarCreateItemWithIdentifier 
+! 	    (toolbar,
+! 	     ((CFStringCompare (label,  CFSTR ("--"), 0) == kCFCompareEqualTo) 
+! 	      ? kHIToolbarFlexibleSpaceIdentifier
+! 	      : TOOLBAR_ICON_ITEM_IDENTIFIER), 
+! 	     NULL, &item);
+  	  if (item)
+  	    {
+  	      HIToolbarItemSetImage (item, cg_image);
 ***************
 *** 2463,2469 ****
       }
