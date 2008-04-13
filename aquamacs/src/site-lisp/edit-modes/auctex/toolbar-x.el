@@ -147,7 +147,7 @@
   "Return a string from the name of a SYMBOL.
 Upcase initials and replace dashes by spaces."
   (if (eq symbol 'separator)
-      ""
+      "--"
     (let* ((str (upcase-initials (symbol-name symbol)))
 	   (str2))
       (dolist (i (append str nil))
