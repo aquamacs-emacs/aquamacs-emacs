@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tool-bar.el,v 1.26 2008/04/14 19:17:30 davidswelt Exp $ 
+;; Last change: $Id: aquamacs-tool-bar.el,v 1.27 2008/04/14 21:21:28 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -65,11 +65,14 @@ quickly."
        (and 
 	(car item)
 	(if (nth 3 item)
-	    (let ((name (let ((osx-key-mode)) 
-			  (eval (car (cdr (cdr item))))))
-		  (toggle-var (intern 
-			       (format "toolbar-menu-show--%s" 
-				       (car item)))))
+	    (let* ((name (let ((osx-key-mode)) 
+			   (eval (car (cdr (cdr item))))))
+		   (local-var (if (eq (type-of (variable-binding-locus 'tool-bar-map)) 'buffer)
+				  (symbol-name major-mode) 
+				nil))
+		   (toggle-var (intern 
+				(format "toolbar-menu-show-%s-%s" 
+					local-var (car item)))))
 	      (eval 
 	       `(defcustom ,toggle-var t 
 		  (format 
@@ -83,10 +86,10 @@ quickly."
 		(vector toggle-var)
 		(eval
 		 `(menu-bar-make-toggle 
-		   ,(intern (format "toggle-toolbar-show--%s" (car item)))
+		   ,(intern (format "toggle-toolbar-show-%s-%s" local-var (car item)))
 		   ,toggle-var
-		   ,(format "%s" name)
-		   (if (eval ,(aq-list-has-property-element
+		   ,(format "%s%s" name (if local-var (format " (%s)" local-var) ""))
+		   (if (eval ,(aq-list-has-property-element 
 			       item 
 			       :visible t))
 		       ,(format "Toolbar icon for %s %%s" name)
@@ -124,7 +127,7 @@ quickly."
 
 ;;  (remove-hook 'menu-bar-update-hook 'aquamacs-toolbar-update-showhide-menu)
  ;; (progn  (setq aquamacs-menu-bar-showhide-toolbar--hash 0) (aquamacs-toolbar-update-showhide-menu))
-
+;; 
 
 (defun aquamacs-toolbar-x-create-meaning-list (keymap)
   "Creates a meaning list for `toolbar-x' from a toolbar keymap."
