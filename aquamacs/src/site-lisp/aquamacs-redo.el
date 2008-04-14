@@ -72,6 +72,21 @@
 ;; Emacs 20 variable
 (defvar undo-in-progress)
 
+
+(defun aquamacs-can-redo-p ()
+  "Return non-nil if `aquamacs-redo' can redo anything."
+  (and (not buffer-read-only)
+       (not (eq buffer-undo-list t))
+       (not (eq last-buffer-undo-list nil))
+       (or (eq last-buffer-undo-list buffer-undo-list)
+	   (let ((p buffer-undo-list))
+	     (and (null (car-safe p)) (setq p (cdr-safe p)))
+	     (while (and p (integerp (car-safe p)))
+	       (setq p (cdr-safe p)))
+	     (eq last-buffer-undo-list p)))
+       (not (or (eq buffer-undo-list pending-undo-list)
+		(eq (cdr buffer-undo-list) pending-undo-list)))))
+
 (defun aquamacs-redo (&optional count)
   "Redo the the most recent undo.
 Prefix arg COUNT means redo the COUNT most recent undos.
@@ -155,6 +170,18 @@ See also `aquamacs-undo'."
     (setq last-buffer-undo-list buffer-undo-list)))
 
 (defalias 'redo 'aquamacs-redo) ;; backwards compatibility and convenience
+
+(defun aquamacs-can-undo-p ()
+  "Return non-nil if `aquamacs-undo' has something to undo."
+  (and (not buffer-read-only)
+       (if (or (eq last-buffer-undo-list buffer-undo-list)
+	       (let ((p buffer-undo-list))
+		 (and (null (car-safe p)) (setq p (cdr-safe p)))
+		 (while (and p (integerp (car-safe p)))
+		   (setq p (cdr-safe p)))
+		 (eq last-buffer-undo-list p)))
+	   (listp pending-undo-list)
+	 (or (not (eq buffer-undo-list t))))))
 
 (defun aquamacs-undo (&optional arg)
   "Undo some previous changes.
