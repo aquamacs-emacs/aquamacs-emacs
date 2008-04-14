@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tool-bar.el,v 1.23 2008/04/14 08:19:15 davidswelt Exp $ 
+;; Last change: $Id: aquamacs-tool-bar.el,v 1.24 2008/04/14 08:22:32 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -269,7 +269,7 @@ quickly."
 			   (toolbar-menu-show--new-file t)	   
 			   (toolbar-menu-show--open-file t)
 			   (toolbar-menu-show--paste t)	   
-			   (toolbar-menu-show--redo nil)
+			   (toolbar-menu-show--redo t)
 			   (toolbar-menu-show--save-buffer t)	   
 			   (toolbar-menu-show--undo t)
 			   (toolbar-menu-show--write-file t)
