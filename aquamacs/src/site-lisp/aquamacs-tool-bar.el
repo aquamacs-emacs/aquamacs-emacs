@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tool-bar.el,v 1.25 2008/04/14 18:38:08 davidswelt Exp $ 
+;; Last change: $Id: aquamacs-tool-bar.el,v 1.26 2008/04/14 19:17:30 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -71,9 +71,9 @@ quickly."
 			       (format "toolbar-menu-show--%s" 
 				       (car item)))))
 	      (eval 
-	       `(defcustom ,toggle-var nil 
+	       `(defcustom ,toggle-var t 
 		  (format 
-		   "If non-nil, an icon for \"%s\" is shown in the toolbar." 
+		   "If nil, the \"%s\" icon will be hidden from the toolbar." 
 		   name) 
 		  :group 'Aquamacs :group 'tool-bar :version "22.0" 
 		  :type 'boolean))
@@ -123,8 +123,7 @@ quickly."
 
 
 ;;  (remove-hook 'menu-bar-update-hook 'aquamacs-toolbar-update-showhide-menu)
-;; (progn  (setq aquamacs-menu-bar-showhide-toolbar--hash 0)
-;; 	(aquamacs-toolbar-update-showhide-menu)) 
+ ;; (progn  (setq aquamacs-menu-bar-showhide-toolbar--hash 0) (aquamacs-toolbar-update-showhide-menu))
 
 
 (defun aquamacs-toolbar-x-create-meaning-list (keymap)
