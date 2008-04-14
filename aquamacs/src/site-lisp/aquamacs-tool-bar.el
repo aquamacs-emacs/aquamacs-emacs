@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tool-bar.el,v 1.24 2008/04/14 08:22:32 davidswelt Exp $ 
+;; Last change: $Id: aquamacs-tool-bar.el,v 1.25 2008/04/14 18:38:08 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -208,6 +208,9 @@ quickly."
 					     (not (eq 'special
 						      (get major-mode
   							   'mode-class)))))
+
+  (tool-bar-add-item-from-menu 'aquamacs-print '("print" . "Print"))
+
   (tool-bar-add-item '("space2" . "--") nil 'space-1 :enable nil )
 
   (tool-bar-add-item-from-menu 'aquamacs-undo '("undo" . "Undo") nil
@@ -238,7 +241,6 @@ quickly."
   ;;(tool-bar-add-item-from-menu 'compose-mail "mail/compose")
 
 
-  (tool-bar-add-item-from-menu 'aquamacs-print '("print" . "Print"))
 
   (tool-bar-add-item '("space2" . "--") nil 'space-2 :enable nil )
   
@@ -261,7 +263,7 @@ quickly."
   (add-hook 'menu-bar-update-hook 'aquamacs-toolbar-update-showhide-menu)
 
   (aquamacs-set-defaults '(
-			   (toolbar-menu-show--aquamacs-print  t)
+			   (toolbar-menu-show--aquamacs-print nil)
 			   (toolbar-menu-show--copy t)
 			   (toolbar-menu-show--customize nil)	   
 			   (toolbar-menu-show--cut t)
