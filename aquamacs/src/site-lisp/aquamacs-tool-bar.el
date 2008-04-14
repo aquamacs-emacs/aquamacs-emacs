@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tool-bar.el,v 1.22 2008/04/13 09:56:27 davidswelt Exp $ 
+;; Last change: $Id: aquamacs-tool-bar.el,v 1.23 2008/04/14 08:19:15 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -208,7 +208,7 @@ quickly."
 					     (not (eq 'special
 						      (get major-mode
   							   'mode-class)))))
-  (tool-bar-add-item '("space2" . "") nil 'space-1 :enable nil )
+  (tool-bar-add-item '("space2" . "--") nil 'space-1 :enable nil )
 
   (tool-bar-add-item-from-menu 'aquamacs-undo '("undo" . "Undo") nil
 			       :visible '(not (eq 'special (get major-mode
@@ -240,7 +240,7 @@ quickly."
 
   (tool-bar-add-item-from-menu 'aquamacs-print '("print" . "Print"))
 
-  (tool-bar-add-item '("space2" . "") nil 'space-2 :enable nil )
+  (tool-bar-add-item '("space2" . "--") nil 'space-2 :enable nil )
   
   (tool-bar-add-item-from-menu 'make-frame-command '("new_window" . "Duplicate") nil)
 
