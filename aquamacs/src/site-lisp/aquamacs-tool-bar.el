@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tool-bar.el,v 1.27 2008/04/14 21:21:28 davidswelt Exp $ 
+;; Last change: $Id: aquamacs-tool-bar.el,v 1.28 2008/04/14 22:04:27 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -50,6 +50,8 @@
 "Keymap with items that allow toggling items on the tool-bar.")
 (defvar aquamacs-menu-bar-showhide-toolbar--hash nil)
 
+
+;(require 'aquamacs-menu) ; for aquamacs-pretty-mode-name
 (defun aquamacs-toolbar-update-showhide-menu ()
   "Updates the toolbar items toggle menu.
 This will update the keymap `aquamacs-menu-bar-showhide-toolbar-items-menu'
@@ -88,7 +90,10 @@ quickly."
 		 `(menu-bar-make-toggle 
 		   ,(intern (format "toggle-toolbar-show-%s-%s" local-var (car item)))
 		   ,toggle-var
-		   ,(format "%s%s" name (if local-var (format " (%s)" local-var) ""))
+		   ,(format "%s%s" name (if local-var 
+					    (format " (%s)" 
+						    (aquamacs-pretty-mode-name major-mode)) 
+					  ""))
 		   (if (eval ,(aq-list-has-property-element 
 			       item 
 			       :visible t))
