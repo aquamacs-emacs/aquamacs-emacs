@@ -13,7 +13,7 @@ diff -c -r1.1.2.1 mactoolbox.c
   static OSStatus install_menu_target_item_handler P_ ((void));
   #ifdef MAC_OSX
 ***************
-*** 2581,2589 ****
+*** 2581,2593 ****
         else
   	{
   	  item = NULL;
@@ -23,19 +23,29 @@ diff -c -r1.1.2.1 mactoolbox.c
   	  if (item)
   	    {
   	      HIToolbarItemSetImage (item, cg_image);
---- 2584,2595 ----
+! 	      HIToolbarItemSetLabel (item, label);
+  	      HIToolbarItemSetEnabled (item, (enabled_p || idx >= 0));
+  	      HIToolbarAppendItem (toolbar, item);
+  	      CFRelease (item);
+--- 2584,2601 ----
         else
   	{
   	  item = NULL;
 ! 	  HIToolbarCreateItemWithIdentifier 
 ! 	    (toolbar,
-! 	     ((CFStringCompare (label,  CFSTR ("--"), 0) == kCFCompareEqualTo) 
+! 	     ((CFStringCompare (label,  CFSTR ("--"), 0) == kCFCompareEqualTo)
 ! 	      ? kHIToolbarFlexibleSpaceIdentifier
 ! 	      : TOOLBAR_ICON_ITEM_IDENTIFIER), 
 ! 	     NULL, &item);
   	  if (item)
   	    {
   	      HIToolbarItemSetImage (item, cg_image);
+! 	      HIToolbarItemSetLabel (item, 
+! 				     ((CFStringCompare (label,  CFSTR ("--"), 0) == kCFCompareEqualTo) 
+! 				      ? CFSTR ("") : label));
+  	      HIToolbarItemSetEnabled (item, (enabled_p || idx >= 0));
+  	      HIToolbarAppendItem (toolbar, item);
+  	      CFRelease (item);
 ***************
 *** 2463,2469 ****
       }
