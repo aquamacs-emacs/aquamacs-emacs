@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tool-bar.el,v 1.28 2008/04/14 22:04:27 davidswelt Exp $ 
+;; Last change: $Id: aquamacs-tool-bar.el,v 1.29 2008/04/15 08:36:10 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -69,12 +69,11 @@ quickly."
 	(if (nth 3 item)
 	    (let* ((name (let ((osx-key-mode)) 
 			   (eval (car (cdr (cdr item))))))
-		   (local-var (if (eq (type-of (variable-binding-locus 'tool-bar-map)) 'buffer)
-				  (symbol-name major-mode) 
-				nil))
+		   (item-is-local (eq (type-of (variable-binding-locus 'tool-bar-map)) 'buffer))
+		   (local-var-str (if item-is-local (symbol-name major-mode) ""))
 		   (toggle-var (intern 
 				(format "toolbar-menu-show-%s-%s" 
-					local-var (car item)))))
+					local-var-str (car item)))))
 	      (eval 
 	       `(defcustom ,toggle-var t 
 		  (format 
@@ -88,9 +87,9 @@ quickly."
 		(vector toggle-var)
 		(eval
 		 `(menu-bar-make-toggle 
-		   ,(intern (format "toggle-toolbar-show-%s-%s" local-var (car item)))
+		   ,(intern (format "toggle-toolbar-show-%s-%s" local-var-str (car item)))
 		   ,toggle-var
-		   ,(format "%s%s" name (if local-var 
+		   ,(format "%s%s" name (if item-is-local 
 					    (format " (%s)" 
 						    (aquamacs-pretty-mode-name major-mode)) 
 					  ""))
