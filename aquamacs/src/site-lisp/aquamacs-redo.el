@@ -174,13 +174,13 @@ See also `aquamacs-undo'."
 (defun aquamacs-can-undo-p ()
   "Return non-nil if `aquamacs-undo' has something to undo."
   (and (not buffer-read-only)
-       (if (or (eq last-buffer-undo-list buffer-undo-list)
+       (if (or (and buffer-undo-list (eq last-buffer-undo-list buffer-undo-list))
 	       (let ((p buffer-undo-list))
 		 (and (null (car-safe p)) (setq p (cdr-safe p)))
 		 (while (and p (integerp (car-safe p)))
 		   (setq p (cdr-safe p)))
 		 (eq last-buffer-undo-list p)))
-	   (listp pending-undo-list)
+	   (and pending-undo-list (listp pending-undo-list))
 	 (or (not (eq buffer-undo-list t))))))
 
 (defun aquamacs-undo (&optional arg)
