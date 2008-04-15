@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.61 2008/03/18 21:08:31 champo Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.62 2008/04/15 17:12:56 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -734,12 +734,7 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
 	     (buffer-modified-p))
 		   ;; a lot of buffers (e.g. dired) may be modified,
 		   ;; but have no file name
-	    (if (progn
-		  (unless (minibuffer-window)
-		    (setq last-nonmenu-event nil)
-		    )
-		  (y-or-n-p (format "Save buffer %s to file before closing window? " (buffer-name)))
-		  )
+	    (if (y-or-n-p (format "Save buffer %s to file before closing window? " (buffer-name)))
 		(progn
 		  (save-buffer)
 		  (message "File saved.")
@@ -774,26 +769,21 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
 	  )	
       ;; else not one-buffer=one-frame
       (progn
-	(if killable  
-	    (kill-buffer (window-buffer wind))   
-	  )
+	(if killable (kill-buffer (window-buffer wind)))
 	(when (window-live-p wind)
 	  (if (or force-delete-frame ;; called via frame closer button
-		  (window-dedicated-p wind)
-		  )
+		  (window-dedicated-p wind))
 	      (aquamacs-delete-frame (window-frame wind) ) 
 					; delete window/frame, hide if
 					; necessary
 	    ;; else
 	    (progn
-	   
 	      (select-window wind)
 	      (if (one-window-p 'nomini 'only_selected_frame)
 		  (if (not killable)
 		      ;; if it's not killable, we need to jump to the
 		      ;; next buffer
-		      (next-buffer)
-		    )
+		      (next-buffer))
 		(aquamacs-delete-window wind) ) ) ) ) ) ) ) ))
 
 (if window-system
@@ -802,8 +792,7 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
   (interactive "e")
   (let ((frame (posn-window (event-start event)))
 	(i 0)
-	(delw nil)
-	)
+	(delw nil))
     (select-frame frame)
     (while 
 	(and (frame-first-window frame) 
