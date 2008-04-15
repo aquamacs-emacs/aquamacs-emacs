@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tool-bar.el,v 1.31 2008/04/15 14:01:07 davidswelt Exp $ 
+;; Last change: $Id: aquamacs-tool-bar.el,v 1.32 2008/04/15 22:36:49 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -148,7 +148,7 @@ quickly."
 (defun aquamacs-toolbar-x-create-meaning-list (keymap)
   "Creates a meaning list for `toolbar-x' from a toolbar keymap."
 ;; FIXME: is "sep" from AUCTeX?
-  (let ((meaning '((bar-separator :image "sep" :command t :enable nil :help ""))))
+  (let ((meaning '((bar-separator :image "space2" :command (lambda nil (interactive) t) :enable nil :help ""))))
   (mapc
    (lambda (item)
      (and (car item)
@@ -220,8 +220,10 @@ quickly."
 			       :visible '(and buffer-file-name
 					     (not (eq 'special
 						      (get major-mode
-							   'mode-class))))) 
-  (tool-bar-add-item-from-menu 'write-file '("saveas" . "Save As") nil
+							   'mode-class)))))
+  ;; Save and Save As are both called "Save" in order to keep the width the same:
+  ;; these icons just get swap as soon as there is a buffer-file-name.
+  (tool-bar-add-item-from-menu 'write-file '("saveas" . "Save") nil  
 			       :visible '(and (not buffer-file-name)
 					     (not (eq 'special
 						      (get major-mode
