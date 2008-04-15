@@ -6,7 +6,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: tabbar-window.el,v 1.12 2008/04/05 08:42:14 davidswelt Exp $
+;; Revision: $Id: tabbar-window.el,v 1.13 2008/04/15 17:12:13 davidswelt Exp $
 
 (require 'tabbar)
 
@@ -324,18 +324,14 @@ current buffer belongs."
     (when (and killable (not dont-kill))
       ;; ask before killing
       (with-current-buffer buffer
+(print last-nonmenu-event)
 	(if (and
 	     (or buffer-file-name buffer-offer-save)
 	     (buffer-modified-p))
 	    ;; a lot of buffers (e.g. dired) may be modified,
 	    ;; but have no file name
-	    (if (progn
-		  (unless (minibuffer-window)
-		    (setq last-nonmenu-event nil)
-		    )
-		  (y-or-n-p (format "Save buffer %s to file before closing tab? " 
+	    (if (y-or-n-p (format "Save buffer %s to file before killing it? " 
 				    (buffer-name)))
-		  )
 		(progn
 		  (save-buffer)
 		  (message "File saved.")
