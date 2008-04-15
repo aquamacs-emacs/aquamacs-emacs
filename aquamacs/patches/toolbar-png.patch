@@ -30,7 +30,37 @@ diff -c -r1.1.2.1 mactoolbox.c
       {
         static const EventTypeSpec specs[] =
 ***************
-*** 2581,2593 ****
+*** 2552,2567 ****
+--- 2555,2581 ----
+        if (cg_image == NULL)
+  	continue;
+  
++       
+        label = cfstring_create_with_string (PROP (TOOL_BAR_ITEM_CAPTION));
+        if (label == NULL)
+  	label = CFSTR ("");
+  
++       CFStringRef itemIdentifier = TOOLBAR_ICON_ITEM_IDENTIFIER;
++       if (CFStringCompare (label,  CFSTR ("--"), 0) == kCFCompareEqualTo)
++ 	{
++ 	  itemIdentifier = kHIToolbarFlexibleSpaceIdentifier;
++ 	  label = CFSTR ("");
++ 	}
++ 
+        if (pos < old_count)
+  	{
+  	  CGImageRef old_cg_image = NULL;
+  	  CFStringRef old_label = NULL;
+  	  Boolean old_enabled_p;
+  
++ 	  /* Caveat: this will not change an item identifier from a regular
++ 	     item to a separtor. */
++ 
+  	  item = (HIToolbarItemRef) CFArrayGetValueAtIndex (old_items, pos);
+  
+  	  HIToolbarItemCopyImage (item, &old_cg_image);
+***************
+*** 2581,2589 ****
         else
   	{
   	  item = NULL;
@@ -40,29 +70,15 @@ diff -c -r1.1.2.1 mactoolbox.c
   	  if (item)
   	    {
   	      HIToolbarItemSetImage (item, cg_image);
-! 	      HIToolbarItemSetLabel (item, label);
-  	      HIToolbarItemSetEnabled (item, (enabled_p || idx >= 0));
-  	      HIToolbarAppendItem (toolbar, item);
-  	      CFRelease (item);
---- 2584,2601 ----
+--- 2595,2602 ----
         else
   	{
   	  item = NULL;
 ! 	  HIToolbarCreateItemWithIdentifier 
-! 	    (toolbar,
-! 	     ((CFStringCompare (label,  CFSTR ("--"), 0) == kCFCompareEqualTo)
-! 	      ? kHIToolbarFlexibleSpaceIdentifier
-! 	      : TOOLBAR_ICON_ITEM_IDENTIFIER), 
-! 	     NULL, &item);
+! 	    (toolbar, itemIdentifier, NULL, &item);
   	  if (item)
   	    {
   	      HIToolbarItemSetImage (item, cg_image);
-! 	      HIToolbarItemSetLabel (item, 
-! 				     ((CFStringCompare (label,  CFSTR ("--"), 0) == kCFCompareEqualTo) 
-! 				      ? CFSTR ("") : label));
-  	      HIToolbarItemSetEnabled (item, (enabled_p || idx >= 0));
-  	      HIToolbarAppendItem (toolbar, item);
-  	      CFRelease (item);
 ***************
 *** 2607,2612 ****
 --- 2608,2626 ----
