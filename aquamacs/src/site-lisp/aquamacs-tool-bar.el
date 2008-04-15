@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tool-bar.el,v 1.29 2008/04/15 08:36:10 davidswelt Exp $ 
+;; Last change: $Id: aquamacs-tool-bar.el,v 1.30 2008/04/15 13:57:45 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -31,7 +31,7 @@
 
 
 ; go over tool-bar-map to find out what's in there
-
+;; unlik plist-get/put, these will work
 (defun aq-list-has-property-element (list elem &optional default)
   (let ((ret default))
     (and (listp list)
@@ -42,9 +42,19 @@
 	  
 	  (setq ret (if (cdr-safe list) (aq-list-has-property-element (cdr-safe list) elem default) default))))
     ret))
-
 ; (aq-list-has-property-element (list :hello 1 :you "me") :yoou 'not-there)
 
+(defun aq-list-set-property-element (list elem value)
+  (and (listp list)
+       (or
+	(if (not (eq (car-safe list) elem))
+	    (if (cdr-safe list) 
+		(aq-list-set-property-element (cdr-safe list) elem value)
+	      (if (consp list)
+		  (setcdr list (list elem value))))
+	  ;; set the cdr
+	  (setcdr list (cons value (cdr-safe (cdr-safe list))))))) ;overwrite
+  list)
 
 (defvar aquamacs-menu-bar-showhide-toolbar-items-menu (make-sparse-keymap)
 "Keymap with items that allow toggling items on the tool-bar.")
@@ -104,7 +114,7 @@ quickly."
 		       (quote ,(aq-list-has-property-element item :visible)))))
 		   "Show an icon in the toolbar for this function."
 		   )))
-	      (let ((l (aq-list-has-property-element item :visible)))
+	      (let ((l (aq-list-has-property-element item :visible) ));;(aq-list-has-property-element item :visible)))
 		(if l
 		    ;; check if variable influences this
 		    (unless (or (eq l toggle-var)
@@ -112,9 +122,10 @@ quickly."
 				     (eq (car-safe (cdr-safe l)) toggle-var)))
 		      (setq l `(and ,toggle-var ,l)))
 		  (setq l toggle-var))
-		(define-key tool-bar-map (vector (car item))
-		  (append (cdr item)
-			  `(:visible ,l)))))
+		(aq-list-set-property-element item :visible l)
+		;; (define-key tool-bar-map (vector (car item))
+;; 		  (aq-list-set-property-element item :visible l))
+))
 	  (define-key aquamacs-menu-bar-showhide-toolbar-items-menu 
 	    (vector (intern (format "%s-sep" (car item)))) 
 	    '(menu-item "--" nil)))))
@@ -130,6 +141,7 @@ quickly."
 
 
 ;;  (remove-hook 'menu-bar-update-hook 'aquamacs-toolbar-update-showhide-menu)
+;; (aquamacs-tool-bar-setup)
  ;; (progn  (setq aquamacs-menu-bar-showhide-toolbar--hash 0) (aquamacs-toolbar-update-showhide-menu))
 ;; 
 
@@ -227,7 +239,7 @@ quickly."
 			       :visible '(not (eq 'special (get major-mode
 	  							'mode-class))))
   
- (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [cut])
+  (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [cut])
 			       '("cut" . "Cut") nil
 			       :visible '(not (eq 'special (get major-mode
 								'mode-class))))
@@ -248,7 +260,7 @@ quickly."
 
 
 
-  (tool-bar-add-item '("space2" . "--") nil 'space-2 :enable nil )
+  (tool-bar-add-item '("space2" . "--") nil 'space-2 :enable nil)
   
   (tool-bar-add-item-from-menu 'make-frame-command '("new_window" . "Duplicate") nil)
 
