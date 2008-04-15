@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tool-bar.el,v 1.30 2008/04/15 13:57:45 davidswelt Exp $ 
+;; Last change: $Id: aquamacs-tool-bar.el,v 1.31 2008/04/15 14:01:07 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -114,8 +114,8 @@ quickly."
 		       (quote ,(aq-list-has-property-element item :visible)))))
 		   "Show an icon in the toolbar for this function."
 		   )))
-	      (let ((l (aq-list-has-property-element item :visible) ));;(aq-list-has-property-element item :visible)))
-		(if l
+	      (let ((l (aq-list-has-property-element item :visible 'vis-missing) ));;(aq-list-has-property-element item :visible)))
+		(if (not (eq l 'vis-missing))
 		    ;; check if variable influences this
 		    (unless (or (eq l toggle-var)
 				(and (eq (car-safe l) 'and) 
