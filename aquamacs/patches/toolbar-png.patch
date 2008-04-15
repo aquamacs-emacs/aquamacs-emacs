@@ -30,13 +30,42 @@ diff -c -r1.1.2.1 mactoolbox.c
       {
         static const EventTypeSpec specs[] =
 ***************
-*** 2552,2567 ****
---- 2555,2581 ----
-        if (cg_image == NULL)
-  	continue;
+*** 2556,2589 ****
+        if (label == NULL)
+  	label = CFSTR ("");
   
-+       
-        label = cfstring_create_with_string (PROP (TOOL_BAR_ITEM_CAPTION));
+        if (pos < old_count)
+  	{
+  	  CGImageRef old_cg_image = NULL;
+  	  CFStringRef old_label = NULL;
+  	  Boolean old_enabled_p;
+  
+  	  item = (HIToolbarItemRef) CFArrayGetValueAtIndex (old_items, pos);
+  
+! 	  HIToolbarItemCopyImage (item, &old_cg_image);
+! 	  if (cg_image != old_cg_image)
+! 	    HIToolbarItemSetImage (item, cg_image);
+! 	  CGImageRelease (old_cg_image);
+! 
+! 	  HIToolbarItemCopyLabel (item, &old_label);
+! 	  if (CFStringCompare (label, old_label, 0) != kCFCompareEqualTo)
+! 	    HIToolbarItemSetLabel (item, label);
+! 	  CFRelease (old_label);
+! 
+! 	  old_enabled_p = HIToolbarItemIsEnabled (item);
+! 	  if ((enabled_p || idx >= 0) != old_enabled_p)
+! 	    HIToolbarItemSetEnabled (item, (enabled_p || idx >= 0));
+  	}
+        else
+  	{
+  	  item = NULL;
+! 	  HIToolbarCreateItemWithIdentifier (toolbar,
+! 					     TOOLBAR_ICON_ITEM_IDENTIFIER,
+! 					     NULL, &item);
+  	  if (item)
+  	    {
+  	      HIToolbarItemSetImage (item, cg_image);
+--- 2559,2622 ----
         if (label == NULL)
   	label = CFSTR ("");
   
@@ -51,26 +80,48 @@ diff -c -r1.1.2.1 mactoolbox.c
   	{
   	  CGImageRef old_cg_image = NULL;
   	  CFStringRef old_label = NULL;
++ 	  CFStringRef old_itemIdentifier = NULL;
   	  Boolean old_enabled_p;
   
-+ 	  /* Caveat: this will not change an item identifier from a regular
-+ 	     item to a separtor. */
-+ 
   	  item = (HIToolbarItemRef) CFArrayGetValueAtIndex (old_items, pos);
   
-  	  HIToolbarItemCopyImage (item, &old_cg_image);
-***************
-*** 2581,2589 ****
-        else
-  	{
-  	  item = NULL;
-! 	  HIToolbarCreateItemWithIdentifier (toolbar,
-! 					     TOOLBAR_ICON_ITEM_IDENTIFIER,
-! 					     NULL, &item);
-  	  if (item)
-  	    {
-  	      HIToolbarItemSetImage (item, cg_image);
---- 2595,2602 ----
+! 	  HIToolbarItemCopyLabel (item, &old_itemIdentifier);
+! 	  if (CFStringCompare (itemIdentifier, old_itemIdentifier, 0) 
+! 	      != kCFCompareEqualTo)
+! 	    {
+! 	      
+! 	      /* identifier has changed, need to recreate */
+! 	      item = NULL;
+! 	      HIToolbarCreateItemWithIdentifier 
+! 		(toolbar, itemIdentifier, NULL, &item);
+! 	      if (item)
+! 		{
+! 		  HIToolbarItemSetImage (item, cg_image);
+! 		  HIToolbarItemSetLabel (item, label);
+! 		  HIToolbarItemSetEnabled (item, (enabled_p || idx >= 0));
+! 		  HIToolbarInsertItemAtIndex (toolbar, item, pos+1);
+! 		  HIToolbarRemoveItemAtIndex (toolbar, pos);
+! 		  CFRelease(item);
+! 		}
+! 	    }
+! 	  else
+! 	    {
+! 	      HIToolbarItemCopyImage (item, &old_cg_image);
+! 	      if (cg_image != old_cg_image)
+! 		HIToolbarItemSetImage (item, cg_image);
+! 	      CGImageRelease (old_cg_image);
+! 	      
+! 	      HIToolbarItemCopyLabel (item, &old_label);
+! 	      if (CFStringCompare (label, old_label, 0) != kCFCompareEqualTo)
+! 		HIToolbarItemSetLabel (item, label);
+! 	      CFRelease (old_label);
+! 
+! 	      old_enabled_p = HIToolbarItemIsEnabled (item);
+! 	      if ((enabled_p || idx >= 0) != old_enabled_p)
+! 		HIToolbarItemSetEnabled (item, (enabled_p || idx >= 0));
+! 	    }
+! 	  CFRelease (old_itemIdentifier);
+  	}
         else
   	{
   	  item = NULL;
