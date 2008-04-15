@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.148 2008/04/07 09:57:59 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.149 2008/04/15 10:53:45 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -307,10 +307,11 @@ Separate paths from file names with --."
 (ats "aquamacs-busg done")
   
 
-
+(require 'saveplace)
   (require 'longlines) 
   (aquamacs-set-defaults 
    `(
+     (save-place t)
      (send-mail-function mailclient-send-it)
      (mail-setup-with-from nil)  
 					; Colorized fonts
@@ -960,7 +961,7 @@ listed here."
     '(scroll-bar-mode
      debug-on-quit debug-on-error
      tooltip-mode menu-bar-mode	;; tool-bar-mode
-     save-place uniquify-buffer-name-style fringe-mode
+     uniquify-buffer-name-style fringe-mode
      indicate-empty-lines indicate-buffer-boundaries
      case-fold-search
      current-language-environment default-input-method
