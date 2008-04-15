@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.28 2008/02/11 10:15:00 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.29 2008/04/15 17:10:47 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -67,6 +67,7 @@
 	    (not (fboundp 'frame-total-pixel-height))
 	    (null (frame-parameter f 'top)) ;; for TTY use
 	    (< (+ (eval (frame-parameter f 'top)) 
+		  -5 ;; 5 grace pixels, because the user will still be able to read the prompt
 		  (frame-total-pixel-height f))
 	       (nth 3 (mac-display-available-pixel-bounds))))
 	   (or  
