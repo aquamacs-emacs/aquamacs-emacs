@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.110 2008/04/14 08:19:43 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.111 2008/04/15 20:22:50 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -651,7 +651,7 @@ left and right margin"))
 	      :key-sequence nil
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
 			   (menu-bar-non-minibuffer-window-p))
-	      :help "Print current buffer or region with page headings"))
+	      :help "Print current buffer or region"))
 
 
 
