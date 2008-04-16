@@ -63,6 +63,9 @@
 (defvar aquamacs-redo-version "2.0aq"
   "Version number for the Aquamcas-Redo package.")
 
+
+(defvar after-undo-hook nil "Functions called after undo or redo operations.")
+
 (defvar last-buffer-undo-list nil
   "The head of buffer-undo-list at the last time an undo or redo was done.")
 
@@ -167,7 +170,8 @@ See also `aquamacs-undo'."
 	 (delete-auto-save-file-if-necessary recent-save))
     (or (eq (selected-window) (minibuffer-window))
 	(message "Redo!"))
-    (setq last-buffer-undo-list buffer-undo-list)))
+    (setq last-buffer-undo-list buffer-undo-list))
+  (run-hooks 'after-undo-hook))
 
 (defalias 'redo 'aquamacs-redo) ;; backwards compatibility and convenience
 
@@ -229,7 +233,9 @@ mark and point, and it will collaborate with `aquamacs-redo'."
 	   (delete-auto-save-file-if-necessary recent-save))))
   (or (eq (selected-window) (minibuffer-window))
       (message "Undo!"))
-  (setq last-buffer-undo-list buffer-undo-list))
+  (setq last-buffer-undo-list buffer-undo-list)
+  (run-hooks 'after-undo-hook))
+
 
 
 ;; Save and restore point and mark
