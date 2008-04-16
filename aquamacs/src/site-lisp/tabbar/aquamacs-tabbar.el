@@ -5,7 +5,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: aquamacs-tabbar.el,v 1.9 2008/04/16 05:44:13 champo Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.10 2008/04/16 05:58:42 champo Exp $
 
 ;; load original tabbar-mode
 (require 'tabbar)
@@ -239,6 +239,23 @@ if specified), in current window."
     (tabbar-buffer-show-groups nil)
     ))
 
+(defsubst tabbar-normalize-image (image &optional margin nomask)
+  "Make IMAGE centered and transparent.
+If optional MARGIN is non-nil, it must be a number of pixels to add as
+an extra margin around the image.  If optional NOMASK is non-nil, no mask
+property is included."
+  (let ((plist (cdr image)))
+    (or (plist-get plist :ascent)
+        (setq plist (plist-put plist :ascent 'center)))
+    (or (plist-get plist :mask)
+        (unless nomask
+	    (setq plist (plist-put plist :mask '(heuristic t)))))
+    (or (not (natnump margin))
+        (plist-get plist :margin)
+        (plist-put plist :margin margin))
+    (setcdr image plist))
+  image)
+
 ;; use images for tabbar buttons
 (defun tabbar-button-label (name)
  ;; redefine tabbar-button-label to eliminate 1-pixel border around images
@@ -252,9 +269,9 @@ by the variable `tabbar-NAME-button'."
          (on  (tabbar-find-image (cdar btn)))
          (off (and on (tabbar-find-image (cddr btn)))))
     (when on
-      (tabbar-normalize-image on)
+      (tabbar-normalize-image on 0 t)
       (if off
-          (tabbar-normalize-image off)
+          (tabbar-normalize-image off 0 t)
         ;; If there is no disabled button image, derive one from the
         ;; button enabled image.
         (setq off (tabbar-disable-image on))))
@@ -279,10 +296,10 @@ or groups.  Call the function `tabbar-button-label' otherwise."
         ;; When `tabbar-buffer-home-button' does not provide a value,
         ;; default to the enabled value of `tabbar-home-button'.
         (if on
-            (tabbar-normalize-image on)
+            (tabbar-normalize-image on 0 t)
           (setq on (get-text-property 0 'display (car lab))))
         (if off
-            (tabbar-normalize-image off)
+            (tabbar-normalize-image off 0 t)
           (setq off (get-text-property 0 'display (car lab))))
         (setcar lab
                 (if tabbar--buffer-show-groups
@@ -292,10 +309,10 @@ or groups.  Call the function `tabbar-button-label' otherwise."
     lab))
 
 (setq tabbar-home-button-enabled-image
-  '((:type png :file "home_sm.png")))
+  '((:type png :file "down_sm.png")))
 
 (setq tabbar-home-button-disabled-image
-  '((:type png :file "home_sm.png")))
+  '((:type png :file "up_sm.png")))
 
 (setq tabbar-home-button
   (cons (cons "[o]" tabbar-home-button-enabled-image)
@@ -306,7 +323,7 @@ or groups.  Call the function `tabbar-button-label' otherwise."
         (cons "[-]" tabbar-home-button-disabled-image)))
 
 (setq tabbar-scroll-left-button-enabled-image
-  '((:type png :file "back_sm.png")))
+  '((:type png :file "backward_sm.png")))
 
 (setq tabbar-scroll-left-button
   (cons (cons " <" tabbar-scroll-left-button-enabled-image)
