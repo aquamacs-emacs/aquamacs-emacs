@@ -5,7 +5,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: aquamacs-tabbar.el,v 1.7 2008/03/15 11:11:33 davidswelt Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.8 2008/04/16 05:38:47 champo Exp $
 
 ;; load original tabbar-mode
 (require 'tabbar)
@@ -38,7 +38,7 @@ argument is the MODE for the new buffer.")
   
 ;; for buffer tabs, use the usual command to close/kill a buffer
 (defun tabbar-buffer-close-tab (tab)
-  (let ((buffer (car tab))
+  (let ((buffer (tabbar-tab-value tab))
 	(one-buffer-one-frame nil))
     (with-current-buffer buffer
       (close-current-window-asktosave))))
@@ -96,7 +96,8 @@ That is, a string used to represent it on the tab bar."
                        (length (tabbar-view
                                 (tabbar-current-tabset)))))))))
 
-;; function for closing a tab via context menu
+;; function for closing a tab via context menu.  Kills buffer if doesn't
+;;  appear in other tabs.
 (defun tabbar-close-clicked-tab (event)
   (interactive "@e")
   (when (tabbar-click-p event)
@@ -122,9 +123,16 @@ That is, a string used to represent it on the tab bar."
 ;;	    (tabbar-window-close-tab thistab))))));)
 	(tabbar-close-tab thistab))))))
 
-;; function to unconditionally open a new tab
-
-
+;; function for removing a tab via context menu, without killing buffer
+(defun tabbar-delete-clicked-tab (event)
+  (interactive "@e")
+  (when (tabbar-click-p event)
+    (let* ((clicklocation (posn-string (event-start event)))
+	   (clickedtab (get-text-property (cdr clicklocation)
+						  'tabbar-tab (car clicklocation))))
+;;       (save-current-buffer
+;;	(tabbar-window-close-tab clickedtab)))))
+	(tabbar-window-delete-tab clickedtab))))
 
 ;; function to open a new tab, suppressing new frame creation
 (defun tabbar-new-tab (&optional mode)
@@ -136,23 +144,44 @@ if specified), in current window."
 
 (setq tabbar-new-tab-function 'tabbar-new-tab)
 
+;; function for duplicating an existing tab in a new frame
 (defun tabbar-new-frame-with-clicked-buffer (event)
   (interactive "@e")
   (when (tabbar-click-p event)
     (let* ((clicklocation (posn-string (event-start event)))
 	   (clickedtab (get-text-property (cdr clicklocation)
-						  'tabbar-tab (car clicklocation)))
+					  'tabbar-tab (car clicklocation)))
 	   (buffer (car clickedtab)))
       (with-current-buffer buffer
-      (make-frame-command)))))
+	(make-frame-command)))))
+
+;; Opens clicked tab in a new frame, and deletes clicked tab
+;; This function/implementation is specific to `window tabs' -- can't be done
+;;   with `buffer tabs'
+(defun tabbar-move-clicked-buffer-to-new-frame (event)
+  (interactive "@e")
+  (when (tabbar-click-p event)
+    (let* ((clicklocation (posn-string (event-start event)))
+	   (clickedtab (get-text-property (cdr clicklocation)
+					  'tabbar-tab (car clicklocation)))
+	   (buffer (car clickedtab))
+	   (wnumber (string-to-number (symbol-name (tabbar-tab-tabset tab))))
+	   (wind (window-number-get-window wnumber)))
+      (with-current-buffer buffer
+	(make-frame-command))
+      (with-selected-window wind
+	(tabbar-close-tab clickedtab)))))
 
 ;; keymap for tabbar context menu
 (defvar tabbar-context-menu-map
   (let ((map (make-sparse-keymap)))
+    (define-key map [removetab] (cons "Remove Tab" 'tabbar-delete-clicked-tab))
     (define-key map [closeothers] (cons "Close Other Tabs" 'tabbar-close-other-tabs))
     (define-key map [closetab] (cons "Close Tab" 'tabbar-close-clicked-tab))
+;;     (define-key map [newwindow]
+;;       (cons "Open This Tab in New Frame" 'tabbar-new-frame-with-clicked-buffer))
     (define-key map [newwindow]
-      (cons "Open This Tab in New Window" 'tabbar-new-frame-with-clicked-buffer))
+      (cons "Move This Tab to New Frame" 'tabbar-move-clicked-buffer-to-new-frame))
     (define-key map [newtab] (cons "New Tab" 'tabbar-new-tab))
     map) "Keymap for the Tabbar context menu.")
 
@@ -416,15 +445,14 @@ NOSCROLL is non-nil, exclude the tabbar-scroll buttons."
       (tabbar-close-tab)
     (close-current-window-asktosave)))
 
+;; function to unconditionally open a new tab
 (defun new-tab (&optional major-mode)
   "Creates a new tab.
 Turns on `tabbar-mode'."
   (interactive)
   (tabbar-mode 1)
-  (let ((tabbar-window-new-buffers 'tab))
-    (new-tab-or-buffer major-mode)))
+  (tabbar-new-tab major-mode))
   
-
 (defun new-tab-or-buffer (&optional mode)
   "Calls tabbar-new-tab-function if tabbar-mode is on; otherwise,
 creates a new buffer.  Mode for new buffer can optionally be specified."
@@ -449,9 +477,14 @@ creates a new buffer.  Mode for new buffer can optionally be specified."
 
 ;; default tabbar behavior (buffer tabs grouped by major-mode) can be
 ;;  retained by setting tabbar-inhibit-window-tabs to non-nil
-(unless (and (boundp 'tabbar-inhibit-window-tabs) tabbar-inhibit-window-tabs)
-  ;; changes behavior of "buffer tabs", so that tabs are associated with a
-  ;;   window instead of a major mode.
-  (require 'tabbar-window))
+;; (unless (and (boundp 'tabbar-inhibit-window-tabs) tabbar-inhibit-window-tabs)
+;;   ;; changes behavior of "buffer tabs", so that tabs are associated with a
+;;   ;;   window instead of a major mode.
+;;   (require 'tabbar-window))
+
+;; will have to do a bit more work to make different tabbar styles work smoothly.
+;; (i.e., no conditional loading of lisp!)
+;; for now, stick with window tabs
+(require 'tabbar-window)
 
 (provide 'aquamacs-tabbar)
