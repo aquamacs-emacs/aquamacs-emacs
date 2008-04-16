@@ -6,29 +6,29 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: tabbar-window.el,v 1.13 2008/04/15 17:12:13 davidswelt Exp $
+;; Revision: $Id: tabbar-window.el,v 1.14 2008/04/16 06:07:42 champo Exp $
 
 (require 'tabbar)
 
 (defvar tabbar-window-alist nil)
 (defvar tabbar-window-cache nil)
 
-(defcustom tabbar-window-new-buffers nil
-  "*Specify the behavior when a new buffer is opened in tabbar-mode.
-The following options are available:
+;; (defcustom tabbar-window-new-buffers nil
+;;   "*Specify the behavior when a new buffer is opened in tabbar-mode.
+;; The following options are available:
 
-- `tab' or t
-    Buffer is created in current window and assigned a new tab.
-- `no-tab'
-    Buffer is created in current window, with no tab or tab bar; window's
-previous tabset is deleted, although buffers are not closed or killed.
-- nil (default)
-    Buffer is created in a new frame.  (Lone buffers show no tabs.)"
-  :group 'tabbar
-  :type '(choice :tag "New buffer gets created in..."
-                 (const :tag "Current Window with New Tab" t)
-                 (const :tag "Current Window without a Tab" no-tab)
-                 (const :tag "New Frame" nil)))
+;; - `tab'
+;;     Buffer is created in current window and assigned a new tab.
+;; - `no-tab'
+;;     Buffer is created in current window, with no tab or tab bar; window's
+;; previous tabset is deleted, although buffers are not closed or killed.
+;; - default
+;;     Buffer is created in a new frame.  (Lone buffers show no tabs.)"
+;;   :group 'tabbar
+;;   :type '(choice :tag "New buffer gets created in..."
+;;                  (const :tag "Current Window with New Tab" nil)
+;;                  (const :tag "Current Window without a Tab" no-tab)
+;;                  (const :tag "New Frame" nil)))
 
 ;; for "buffer tabs", it makes sense to have tabbar-current-tabset always
 ;; buffer-local.  This is not sensible for "window tabs".  Window-local variables
@@ -412,8 +412,6 @@ Updates tabbar-window-alist in the same way."
   ;; store list of tab names to restore in desktop's list of global variables
   (add-to-list 'desktop-globals-to-save 'tabbar-desktop-saved-tabsets))
 
-(add-hook 'desktop-save-hook 'tabbar-desktop-tabsets-to-save)
-
 (defun tabbar-desktop-rebuild-saved-tabsets ()
   (or tabbar-mode (tabbar-mode 1))
 ;;   (tabbar-window-update-tabsets)  ;; taken care of by tabbar-current-tabset
@@ -452,27 +450,25 @@ Updates tabbar-window-alist in the same way."
 	  ;; delete tab from blank buffer
 	  (tabbar-close-tab temp-tab)))))))
 
-(add-hook 'desktop-after-read-hook 'tabbar-desktop-rebuild-saved-tabsets)
-
-(defun tabbar-window-new-buffer (&optional mode)
-  "Create a new buffer, with different behavior depending on the value of
-tabbar-window-new-buffers: 'tab, create new buffer in current window
-with a new tab; 'no-tab, create new buffer in current window, with
-no tabbar (deletes all tabs in the window); default, create new buffer
-in new frame."
-  (cond
-   ((or (eq tabbar-window-new-buffers 'tab) (eq tabbar-window-new-buffers t))
-    ;; create a new tab in current window
-    (tabbar-new-tab mode))
-   ((eq tabbar-window-new-buffers 'no-tab)
-    ;; remove current window's alist from tabbar-window-alist
-    (let ((wnumber (window-number (selected-window))))
-      (setq tabbar-window-alist (assq-delete-all wnumber tabbar-window-alist)))
-    ;; then create a new tab as usual -- lone tab will show no tabbar
-    (tabbar-new-tab mode))
-   (t
-    ;; create a new tab in a new frame -- lone tab will show no tabbar
-    (new-frame-with-new-scratch t))))
+;; (defun tabbar-window-new-buffer (&optional mode)
+;;   "Create a new buffer, with different behavior depending on the value of
+;; tabbar-window-new-buffers: 'tab, create new buffer in current window
+;; with a new tab; 'no-tab, create new buffer in current window, with
+;; no tabbar (deletes all tabs in the window); default, create new buffer
+;; in new frame."
+;;   (cond
+;;    ((eq tabbar-window-new-buffers 'tab)
+;;     ;; create a new tab in current window
+;;     (tabbar-new-tab mode))
+;;    ((eq tabbar-window-new-buffers 'no-tab)
+;;     ;; remove current window's alist from tabbar-window-alist
+;;     (let ((wnumber (window-number (selected-window))))
+;;       (setq tabbar-window-alist (assq-delete-all wnumber tabbar-window-alist)))
+;;     ;; then create a new tab as usual -- lone tab will show no tabbar
+;;     (tabbar-new-tab mode))
+;;    (t
+;;     ;; create a new tab in a new frame -- lone tab will show no tabbar
+;;     (new-frame-with-new-scratch t))))
 
 (defun tabbar-line ()
   "Return the header line templates that represent the tab bar.
@@ -485,7 +481,7 @@ Update the templates if tabbar-template is currently nil."
   (let ((tabset (tabbar-get-tabset
 		 (number-to-string (window-number (selected-window))))))
     ;; in the case where tabs have not yet been created, tabset will still be nil
-    ;;  properly initialize all tabsets by runnin tabbar-window-update-tabsets
+    ;;  properly initialize all tabsets by running tabbar-window-update-tabsets
     (unless tabset 
       (setq tabset (tabbar-window-update-tabsets)))
     (tabbar-select-tab-value (current-buffer) tabset)
@@ -535,6 +531,8 @@ Run as `tabbar-init-hook'."
   (add-hook 'window-configuration-change-hook 'tabbar-window-update-tabsets-when-idle)
   (add-hook 'after-save-hook 'tabbar-window-update-tabsets)
   (add-hook 'kill-buffer-hook 'tabbar-window-track-killed)
+  (add-hook 'desktop-save-hook 'tabbar-desktop-tabsets-to-save)
+  (add-hook 'desktop-after-read-hook 'tabbar-desktop-rebuild-saved-tabsets)
   (tabbar-window-update-tabsets)
   )
 
@@ -559,6 +557,8 @@ Run as `tabbar-quit-hook'."
 	       'tabbar-window-update-tabsets-when-idle)
   (remove-hook 'after-save-hook 'tabbar-window-update-tabsets)
   (remove-hook 'kill-buffer-hook 'tabbar-window-track-killed)
+  (remove-hook 'desktop-save-hook 'tabbar-desktop-tabsets-to-save)
+  (remove-hook 'desktop-after-read-hook 'tabbar-desktop-rebuild-saved-tabsets)
   )
 
 ;;-----------------------------------------------
