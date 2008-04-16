@@ -6,7 +6,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: tabbar-window.el,v 1.14 2008/04/16 06:07:42 champo Exp $
+;; Revision: $Id: tabbar-window.el,v 1.15 2008/04/16 06:11:34 champo Exp $
 
 (require 'tabbar)
 
@@ -74,8 +74,9 @@ displayed buffer.  Result is an alist of alists."
   (let* ((wnumber (window-number window))
 	 (buffer (window-buffer window))
 	 (bufname (buffer-name buffer))
+	 (bufmod (buffer-modified-p buffer))
 	 ;; use buffer AND its name, so we can update it if name changes on save
-	 (bufpair (cons buffer bufname))
+	 (bufpair (list buffer bufname bufmod))
 	 (window-elt (assq wnumber tabbar-window-alist))
 	 (tabbar-buffers-list (funcall tabbar-buffer-list-function)))
     ;; only include buffers that should have tabs (ignore tooltip windows, etc.)
@@ -121,8 +122,11 @@ Displayed buffers always get tabs."
 		(let* ((buffer (car thisbuffer)))
 		  (if (buffer-live-p buffer)
 		      ;; if it's a current buffer, make sure it has current buffer-name
-		      (unless (equal (buffer-name buffer) (cdr thisbuffer))
-			(setcdr thisbuffer (buffer-name buffer)))
+		      (progn
+			(unless (equal (buffer-name buffer) (nth 1 thisbuffer))
+			  (setcar (cdr thisbuffer) (buffer-name buffer)))
+			(unless (eq (buffer-modified-p buffer) (cddr thisbuffer))
+			  (setcdr (cdr thisbuffer) (list (buffer-modified-p buffer)))))
 		    ;; buffer is not live: remove it from buffer list for this window
 		    (setq buflist (assq-delete-all buffer buflist))
 		    ;; put modified list back into tabbar-window-alist for this window
@@ -192,7 +196,7 @@ Return the current tabset, which corresponds to (selected-window)."
 	    (let ((buflist (cdr tabset-alist-elt)))
 	      (dolist (tab (tabbar-tabs tabset))
 		;; delete any tabs for buffers not listed with this window
-		(unless (assq (car tab) buflist)
+		(unless (assq (tabbar-tab-value tab) buflist)
 		  (tabbar-delete-tab tab))))
 	  ;;if no corresponding window in tabbar-window-alist,
 	  ;;delete all containted tabs and tabset
@@ -213,6 +217,16 @@ updating when a new window shows the current buffer, just before the window show
 new buffer."
   (run-with-idle-timer 0 nil
 		       'tabbar-window-update-tabsets))
+
+(defun tabbar-update-if-changes-undone (&optional arg1 arg2 arg3)
+  ;; use dummy arguments so we can call this via after-change-functions
+  ;; only run this when we're performing an undo
+  (when undo-in-progress
+    ;; have to wait until idle, or buffer's modified status isn't updated yet
+    (run-with-idle-timer 0 nil (lambda ()
+				 ;; update tabsets if the last undo made this unmodified
+				 (unless (buffer-modified-p (current-buffer))
+				   (tabbar-window-update-tabsets))))))
 
 (defun tabbar-window-button-label (name)
   ;; Use empty string for HOME button, so it doesn't show up.
@@ -269,7 +283,7 @@ current buffer belongs."
 (defun tabbar-window-other-instances (tab)
   "Return t if the buffer in this tab appears in any other tabsets or windows."
   (let* ((tabset (tabbar-tab-tabset tab))
-	 (buffer (car tab))
+	 (buffer (tabbar-tab-value tab))
 	 (tab-tabsets (tabbar-windows-per-buffer buffer))
 	 (tabset-window-number (string-to-number (symbol-name tabset)))
 	 (buffer-windows (get-buffer-window-list buffer 'nomini t))
@@ -279,7 +293,7 @@ current buffer belongs."
 
 (defun tabbar-tabset-only-tab (tab)
   "Return t if this tab is the only member of its tabset, nil otherwise."
-  (let ((buffer (car tab))
+  (let ((buffer (tabbar-tab-value tab))
 	(tabset (tabbar-tab-tabset tab)))
     (not (remq tab (tabbar-tabs tabset)))))
 
@@ -289,11 +303,11 @@ current buffer belongs."
  available, otherwise previous, before deleting."
   (let* ((tabset (tabbar-tab-tabset tab))
 	 (sel    (eq tab (tabbar-selected-tab tabset)))
-	 (wnumber (string-to-number (symbol-name (cdr tab))))
+	 (wnumber (string-to-number (symbol-name (tabbar-tab-tabset tab))))
 	 (wind (window-number-get-window wnumber))
 	 (window-elt (assq wnumber tabbar-window-alist))
 	 (buflist (cdr window-elt))
-	 (buffer (car tab)))
+	 (buffer (tabbar-tab-value tab)))
     ;; remove tab from tabbar-window-alist before deleting, so it won't be
     ;;   regenerated
     (setq buflist (assq-delete-all buffer buflist))
@@ -315,7 +329,7 @@ current buffer belongs."
       )))
 
 (defun tabbar-window-close-tab (tab)
-  (let* ((buffer (car tab))
+  (let* ((buffer (tabbar-tab-value tab))
 	 (killable (and
 		    (killable-buffer-p buffer)
 		    (eq   (string-match "\\*.*\\*" (buffer-name buffer)) nil)
@@ -361,7 +375,7 @@ Updates tabbar-window-alist in the same way."
 	       (not (assq buffer buflist))) ;; and not already in tabbar-window-alist
       (tabbar-add-tab tabset buffer append)
       ;; to them, add current buffer in new tab.
-      (let ((bufpair (cons buffer (buffer-name buffer))))
+      (let ((bufpair (list buffer (buffer-name buffer) (buffer-modified-p buffer))))
 	(add-to-list 'buflist bufpair append)
 	(setcdr elt buflist)
       ;; determine whether or not to show tabbar for this window:
@@ -398,7 +412,7 @@ Updates tabbar-window-alist in the same way."
 			       ;;   in desktop-save-buffer)
 			       (mapcar
 				(function (lambda (tab)
-					    (let ((buffer (car tab)))
+					    (let ((buffer (tabbar-tab-value tab)))
 					      (setcdr tab nil)
 					      (with-current-buffer buffer
 						(if (or (buffer-file-name buffer)
@@ -529,6 +543,8 @@ Run as `tabbar-init-hook'."
 	tabbar-inhibit-functions nil
 	)
   (add-hook 'window-configuration-change-hook 'tabbar-window-update-tabsets-when-idle)
+  (add-hook 'first-change-hook 'tabbar-window-update-tabsets-when-idle)
+  (add-hook 'after-change-functions 'tabbar-update-if-changes-undone)
   (add-hook 'after-save-hook 'tabbar-window-update-tabsets)
   (add-hook 'kill-buffer-hook 'tabbar-window-track-killed)
   (add-hook 'desktop-save-hook 'tabbar-desktop-tabsets-to-save)
@@ -555,6 +571,8 @@ Run as `tabbar-quit-hook'."
 	)
   (remove-hook 'window-configuration-change-hook
 	       'tabbar-window-update-tabsets-when-idle)
+  (remove-hook 'first-change-hook 'tabbar-window-update-tabsets-when-idle)
+  (remove-hook 'after-change-functions 'tabbar-update-if-changes-undone)
   (remove-hook 'after-save-hook 'tabbar-window-update-tabsets)
   (remove-hook 'kill-buffer-hook 'tabbar-window-track-killed)
   (remove-hook 'desktop-save-hook 'tabbar-desktop-tabsets-to-save)
