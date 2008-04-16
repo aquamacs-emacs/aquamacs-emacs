@@ -6,7 +6,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: tabbar-window.el,v 1.15 2008/04/16 06:11:34 champo Exp $
+;; Revision: $Id: tabbar-window.el,v 1.16 2008/04/16 15:32:14 champo Exp $
 
 (require 'tabbar)
 
@@ -85,7 +85,7 @@ displayed buffer.  Result is an alist of alists."
 	  ;;if window already included, check whether window-buffer is listed
 	  ;; for this window
 	  (let ((window-buffer-list (cdr window-elt)))
-	    (unless (member bufpair window-buffer-list)
+	    (unless (assq buffer window-buffer-list)
 	      ;;add this buffer if not
 	      (nconc window-buffer-list (list bufpair))
 	      ))
