@@ -5,7 +5,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: aquamacs-tabbar.el,v 1.8 2008/04/16 05:38:47 champo Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.9 2008/04/16 05:44:13 champo Exp $
 
 ;; load original tabbar-mode
 (require 'tabbar)
@@ -57,7 +57,7 @@ to be closed.  If no tab is specified, (tabbar-selected-tab) is used"
 (set-face-attribute 'tabbar-default nil
 		    :inherit nil
 		    :height 110
-		    :width 'normal
+		    :weight 'normal
 		    :background "gray80"
 		    :foreground "gray30"
 		    :family "helvetica")
@@ -65,19 +65,46 @@ to be closed.  If no tab is specified, (tabbar-selected-tab) is used"
 (set-face-attribute 'tabbar-selected nil
 		    :background "gray95"
 		    :foreground "gray20"
+		    :inherit 'tabbar-default
 		    :box '(:line-width 1 :color "gray95" :style nil))
-;		    :box '(:line-width 2 :color "white" :style released-button))
+;; 		    :box '(:line-width 2 :color "white" :style released-button))
 
 (set-face-attribute 'tabbar-unselected nil
+		    :inherit 'tabbar-default
 		    :box '(:line-width 1 :color "gray50" :style nil))
-;		    :box '(:line-width 2 :color "white" :style pressed-button))
+;; 		    :box '(:line-width 2 :color "white" :style pressed-button))
 
 (set-face-attribute 'tabbar-highlight nil
+		    :inherit 'tabbar-default
 		    :underline nil
 		    :background "gray87")
 
 (set-face-attribute 'tabbar-button nil
+		    :inherit 'tabbar-default
 		    :box nil)
+
+(set-face-attribute 'tabbar-separator nil
+		    :height 1.0)
+
+(setq tabbar-separator '(1)) ;; set tabbar-separator size to 1 pixel
+
+(defface tabbar-selected-modified
+  '((t
+     :inherit 'tabbar-selected
+     :weight bold
+     :height 110
+     ))
+  "Face used for unselected tabs."
+  :group 'tabbar)
+
+(defface tabbar-unselected-modified
+  '((t
+     :inherit 'tabbar-unselected
+     :weight bold
+     :height 110
+     ))
+  "Face used for unselected tabs."
+  :group 'tabbar)
 
 ;; redefine tab labels, adding leading and trailing spaces for clarity
 (defun tabbar-buffer-tab-label (tab)
@@ -329,25 +356,78 @@ is non-nil, exclude the tabbar-scroll buttons in the check."
 	(goto-char (point-min))
 	(> (vertical-motion 1) 0)))))
 
+(defsubst tabbar-line-tab (tab)
+  "Return the display representation of tab TAB.
+That is, a propertized string used as an `header-line-format' template
+element.
+Call `tabbar-tab-label-function' to obtain a label for TAB."
+  (let ((display-label
+	 (propertize
+	  (if tabbar-tab-label-function
+	      (funcall tabbar-tab-label-function tab)
+	    tab)
+	  'tabbar-tab tab
+	  'local-map (tabbar-make-tab-keymap tab)
+	  'help-echo 'tabbar-help-on-tab
+	  'mouse-face 'tabbar-highlight
+	  'face (cond ((and (tabbar-selected-p tab (tabbar-current-tabset))
+			    (buffer-modified-p (tabbar-tab-value tab)))
+		       'tabbar-selected-modified)
+		      ((and (not (tabbar-selected-p tab (tabbar-current-tabset)))
+			    (buffer-modified-p (tabbar-tab-value tab)))
+		       'tabbar-unselected-modified)
+		      ((and (tabbar-selected-p tab (tabbar-current-tabset))
+			    (not (buffer-modified-p (tabbar-tab-value tab))))
+		       'tabbar-selected)
+		      (t 'tabbar-unselected)
+		      )
+	  'pointer 'hand)))
+    (concat display-label
+	    tabbar-separator-value)))
+
 (defun tabbar-dummy-line-buttons (&optional noscroll)
   "Return a list of propertized strings for placeholders for the tab bar buttons.
 These are used to determine the size of the tab bar -- and hence the enabled/
 disabled state of the tab bar buttons -- so they always carry a disabled state.
 This avoids an infinite loop.  If NOSCROLL is non-nil, exclude the tabbar-scroll
 buttons."
-  (append (cons
-	   (cdr tabbar-home-button-value)
-	   (unless noscroll
-	     (list
-	      (cdr tabbar-scroll-left-button-value)
-	      (cdr tabbar-scroll-right-button-value))))
-	  (list tabbar-separator-value)))
+  (cons
+   (cdr tabbar-home-button-value)
+   (unless noscroll
+     (list
+      (cdr tabbar-scroll-left-button-value)
+      (cdr tabbar-scroll-right-button-value)))))
+
+(defun tabbar-line-separator ()
+  "Return the display representation of a tab bar separator.
+That is, a propertized string used as an `header-line-format' template
+element."
+  (let ((image (tabbar-find-image (cdr tabbar-separator))))
+    ;; Cache the separator display value in variable
+    ;; `tabbar-separator-value'.
+    (setq tabbar-separator-value
+          (cond
+           (image
+            (propertize " "
+                        'face 'tabbar-separator
+                        'pointer 'arrow
+                        'display (tabbar-normalize-image image)))
+           ((numberp (car tabbar-separator))
+            (propertize " "
+                        'face 'tabbar-separator
+                        'pointer 'arrow
+                        'display (list 'space
+                                       :width (list (car tabbar-separator)))))
+           ((propertize (or (car tabbar-separator) " ")
+                        'face 'tabbar-separator
+                        'pointer 'arrow))))
+    ))
 
 (defsubst tabbar-line-buttons (tabset &optional noscroll)
   "Return a list of propertized strings for tab bar buttons.
 TABSET is the tab set used to choose the appropriate buttons.  If
 NOSCROLL is non-nil, exclude the tabbar-scroll buttons."
-  (append (cons
+  (cons
    (if tabbar-home-function
        (car tabbar-home-button-value)
      (cdr tabbar-home-button-value))
@@ -357,8 +437,7 @@ NOSCROLL is non-nil, exclude the tabbar-scroll buttons."
 	     (cdr tabbar-scroll-left-button-value))
 	   (if (tabbar-check-overflow tabset)
 	       (car tabbar-scroll-right-button-value)
-	     (cdr tabbar-scroll-right-button-value)))))
-   (list tabbar-separator-value)))
+	     (cdr tabbar-scroll-right-button-value))))))
 
 (defun tabbar-line-format (tabset)
   "Return the `header-line-format' value to display TABSET."
@@ -433,7 +512,8 @@ NOSCROLL is non-nil, exclude the tabbar-scroll buttons."
      (list (tabbar-line-buttons tabset noscroll)
            (nreverse elts)
            (propertize "%-"
-                       'face (list :background padcolor
+                       'face (list :inherit 'tabbar-default
+				   :background padcolor
                                    :foreground padcolor)
                        'pointer 'arrow)))
     ))
