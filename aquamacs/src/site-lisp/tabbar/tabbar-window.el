@@ -6,7 +6,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: tabbar-window.el,v 1.17 2008/04/17 13:48:59 champo Exp $
+;; Revision: $Id: tabbar-window.el,v 1.18 2008/04/17 19:57:33 champo Exp $
 
 (require 'tabbar)
 
@@ -268,7 +268,7 @@ That is, a string used to represent it on the tab bar."
 
 (defun tabbar-windows-per-buffer (buffer)
   "Return a list of numbers corresponding to window tabsets to which the
-current buffer belongs."
+specified BUFFER belongs."
   (let (buffer-window-list)
     (dolist (elt tabbar-window-alist)
       (let ((wnumber (car elt))
@@ -335,7 +335,6 @@ current buffer belongs."
     (when (and killable (not dont-kill))
       ;; ask before killing
       (with-current-buffer buffer
-(print last-nonmenu-event)
 	(if (and
 	     (or buffer-file-name buffer-offer-save)
 	     (buffer-modified-p))
@@ -504,18 +503,16 @@ In Tabbar mode, switch to an adjacent tab if available.  Delete the
 window if no other tabs exist.  Run once for each window where current
 tab is displayed."
   (let* ((buffer (current-buffer))
-	 (window-list (get-buffer-window-list buffer 'nomini t)))
-    (dolist (window window-list)
-      (let* ((wnumber (window-number window))
-	     (tabset (tabbar-get-tabset (number-to-string wnumber)))
+ 	 (window-numbers-list (tabbar-windows-per-buffer buffer)))
+    ;; loop over all tabsets that contain a tab for this buffer
+     (dolist (wnumber window-numbers-list)
+      (let* ((tabset (tabbar-get-tabset (number-to-string wnumber)))
 	     (tab (tabbar-get-tab buffer tabset)))
 	;; ensure that tab still exists (some functions delete it
 	;;     before killing buffer) ...
 	(and tab
-	     ;; ... and that there is currently a tabbar...
+	     ;; ... and that there is currently a tabbar
 	     (eq header-line-format tabbar-header-line-format)
-	     ;; ... and only bother with windows currently displayed.
-	     (eq buffer (window-buffer window))
 	     (tabbar-window-delete-tab tab))))))
 
 
