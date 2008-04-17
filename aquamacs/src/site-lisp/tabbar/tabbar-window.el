@@ -6,7 +6,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: tabbar-window.el,v 1.16 2008/04/16 15:32:14 champo Exp $
+;; Revision: $Id: tabbar-window.el,v 1.17 2008/04/17 13:48:59 champo Exp $
 
 (require 'tabbar)
 
@@ -218,15 +218,12 @@ new buffer."
   (run-with-idle-timer 0 nil
 		       'tabbar-window-update-tabsets))
 
-(defun tabbar-update-if-changes-undone (&optional arg1 arg2 arg3)
-  ;; use dummy arguments so we can call this via after-change-functions
-  ;; only run this when we're performing an undo
-  (when undo-in-progress
-    ;; have to wait until idle, or buffer's modified status isn't updated yet
-    (run-with-idle-timer 0 nil (lambda ()
-				 ;; update tabsets if the last undo made this unmodified
-				 (unless (buffer-modified-p (current-buffer))
-				   (tabbar-window-update-tabsets))))))
+(defun tabbar-update-if-changes-undone ()
+  ;; have to wait until idle, or buffer's modified status isn't updated yet
+  (run-with-idle-timer 0 nil (lambda ()
+			       ;; update tabsets if the last undo made this unmodified
+			       (unless (buffer-modified-p (current-buffer))
+				 (tabbar-window-update-tabsets)))))
 
 (defun tabbar-window-button-label (name)
   ;; Use empty string for HOME button, so it doesn't show up.
@@ -544,7 +541,7 @@ Run as `tabbar-init-hook'."
 	)
   (add-hook 'window-configuration-change-hook 'tabbar-window-update-tabsets-when-idle)
   (add-hook 'first-change-hook 'tabbar-window-update-tabsets-when-idle)
-  (add-hook 'after-change-functions 'tabbar-update-if-changes-undone)
+  (add-hook 'after-undo-hook 'tabbar-update-if-changes-undone)
   (add-hook 'after-save-hook 'tabbar-window-update-tabsets)
   (add-hook 'kill-buffer-hook 'tabbar-window-track-killed)
   (add-hook 'desktop-save-hook 'tabbar-desktop-tabsets-to-save)
@@ -572,7 +569,7 @@ Run as `tabbar-quit-hook'."
   (remove-hook 'window-configuration-change-hook
 	       'tabbar-window-update-tabsets-when-idle)
   (remove-hook 'first-change-hook 'tabbar-window-update-tabsets-when-idle)
-  (remove-hook 'after-change-functions 'tabbar-update-if-changes-undone)
+  (remove-hook 'after-undo-hook 'tabbar-update-if-changes-undone)
   (remove-hook 'after-save-hook 'tabbar-window-update-tabsets)
   (remove-hook 'kill-buffer-hook 'tabbar-window-track-killed)
   (remove-hook 'desktop-save-hook 'tabbar-desktop-tabsets-to-save)
