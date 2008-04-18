@@ -5,7 +5,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: aquamacs-tabbar.el,v 1.10 2008/04/16 05:58:42 champo Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.11 2008/04/18 05:08:41 champo Exp $
 
 ;; load original tabbar-mode
 (require 'tabbar)
@@ -202,13 +202,13 @@ if specified), in current window."
 ;; keymap for tabbar context menu
 (defvar tabbar-context-menu-map
   (let ((map (make-sparse-keymap)))
-    (define-key map [removetab] (cons "Remove Tab" 'tabbar-delete-clicked-tab))
+;;     (define-key map [removetab] (cons "Remove Tab" 'tabbar-delete-clicked-tab))
+    (define-key map [duptab]
+      (cons "Duplicate This Tab in New Frame" 'tabbar-new-frame-with-clicked-buffer))
+    (define-key map [movetab]
+      (cons "Move This Tab to New Frame" 'tabbar-move-clicked-buffer-to-new-frame))
     (define-key map [closeothers] (cons "Close Other Tabs" 'tabbar-close-other-tabs))
     (define-key map [closetab] (cons "Close Tab" 'tabbar-close-clicked-tab))
-;;     (define-key map [newwindow]
-;;       (cons "Open This Tab in New Frame" 'tabbar-new-frame-with-clicked-buffer))
-    (define-key map [newwindow]
-      (cons "Move This Tab to New Frame" 'tabbar-move-clicked-buffer-to-new-frame))
     (define-key map [newtab] (cons "New Tab" 'tabbar-new-tab))
     map) "Keymap for the Tabbar context menu.")
 
