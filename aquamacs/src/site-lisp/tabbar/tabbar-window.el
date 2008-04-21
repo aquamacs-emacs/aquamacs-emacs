@@ -6,7 +6,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: tabbar-window.el,v 1.18 2008/04/17 19:57:33 champo Exp $
+;; Revision: $Id: tabbar-window.el,v 1.19 2008/04/21 22:43:09 champo Exp $
 
 (require 'tabbar)
 
@@ -511,6 +511,8 @@ tab is displayed."
 	;; ensure that tab still exists (some functions delete it
 	;;     before killing buffer) ...
 	(and tab
+	     ;; ... and that the tab's window still exists ...
+	     (window-number-get-window wnumber)
 	     ;; ... and that there is currently a tabbar
 	     (eq header-line-format tabbar-header-line-format)
 	     (tabbar-window-delete-tab tab))))))
