@@ -1,0 +1,31 @@
+*** lisp/menu-bar.el	06 Apr 2008 12:51:37 +0100	1.302.2.11
+--- lisp/menu-bar.el	25 Apr 2008 09:45:51 +0100	
+***************
+*** 53,65 ****
+  (setq menu-bar-final-items '(help-menu))
+  
+  (define-key global-map [menu-bar help-menu] (cons "Help" menu-bar-help-menu))
+- (defvar menu-bar-tools-menu (make-sparse-keymap "Tools"))
+- (define-key global-map [menu-bar tools] (cons "Tools" menu-bar-tools-menu))
+  ;; This definition is just to show what this looks like.
+  ;; It gets modified in place when menu-bar-update-buffers is called.
+  (defvar global-buffers-menu-map (make-sparse-keymap "Buffers"))
+  (define-key global-map [menu-bar buffer]
+!   (cons "Buffers" global-buffers-menu-map))
+  (defvar menu-bar-options-menu (make-sparse-keymap "Options"))
+  (define-key global-map [menu-bar options]
+    (cons "Options" menu-bar-options-menu))
+--- 53,65 ----
+  (setq menu-bar-final-items '(help-menu))
+  
+  (define-key global-map [menu-bar help-menu] (cons "Help" menu-bar-help-menu))
+  ;; This definition is just to show what this looks like.
+  ;; It gets modified in place when menu-bar-update-buffers is called.
+  (defvar global-buffers-menu-map (make-sparse-keymap "Buffers"))
+  (define-key global-map [menu-bar buffer]
+!   (cons "Window" global-buffers-menu-map))
+! (defvar menu-bar-tools-menu (make-sparse-keymap "Tools"))
+! (define-key global-map [menu-bar tools] (cons "Tools" menu-bar-tools-menu))
+  (defvar menu-bar-options-menu (make-sparse-keymap "Options"))
+  (define-key global-map [menu-bar options]
+    (cons "Options" menu-bar-options-menu))
