@@ -20,7 +20,7 @@
 # taken out (temp):          capslock   causes trouble Qappevent
 
 PATCHES="mac-functions emacs-inline transparency
-         fix-configure test ui-strings
+         fix-configure test ui-strings menu-bar
          toolbar-png 
          custom-verbosity pretty-modeline 
          mouse-echo
