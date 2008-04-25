@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.149 2008/04/15 10:53:45 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.150 2008/04/25 22:10:31 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -1192,7 +1192,7 @@ information given would otherwise be irrelevant to Aquamacs users.
 	   :face (variable-pitch :slant oblique)
 	   "ABSOLUTELY NO WARRANTY\n"
 	   )
-  (:face variable-pitch
+	(:face variable-pitch
 	 "Use the Help menu to view manuals or go to helpful websites.\n"
 	 
 	 "To quit a partially entered command, type "
@@ -1200,20 +1200,51 @@ information given would otherwise be irrelevant to Aquamacs users.
 	 "Control-g"
 	 :face variable-pitch
 	 ".\n"
-	   )))
+	 )))
 
 
 
-  (setq emacs-build-system 
-	(concat 
-	 emacs-build-system
-	 " - Aquamacs Distribution " 
-	 (if (boundp 'aquamacs-version) aquamacs-version "?") 
-	 (if (boundp 'aquamacs-minor-version) aquamacs-minor-version "?")))
+(setq emacs-build-system 
+      (concat 
+       emacs-build-system
+       " - Aquamacs Distribution " 
+       (if (boundp 'aquamacs-version) aquamacs-version "?") 
+       (if (boundp 'aquamacs-minor-version) aquamacs-minor-version "?")))
 
-  (require 'check-for-updates)
-					; via hook so it can be turned off
-  (add-hook 'after-init-hook 'aquamacs-check-for-updates-if-necessary 'append) 
+(require 'check-for-updates)
+;; via hook so it can be turned off
+(add-hook 'after-init-hook 'aquamacs-check-for-updates-if-necessary 'append) 
+
+;; restore *scratch*
+
+(defcustom aquamacs-scratch-file 
+  "~/Library/Application Support/Aquamacs Emacs/scratch buffer"
+  "File name to save the scratch file. Set to nil to not save it.")
+
+; (aquamacs-save-scratch-file)
+(defun aquamacs-save-scratch-file ()
+"Save the scratch buffer.
+The *scratch* buffer is saved to `aquamacs-scratch-file'.
+No errors are signaled."
+  (if aquamacs-scratch-file
+      (condition-case nil
+	  (with-current-buffer "*scratch*"
+	    (let ((coding-system-for-write 'utf-8))
+	      (write-region nil nil aquamacs-scratch-file nil nil nil))))))
+
+(add-hook 'kill-emacs-hook 'aquamacs-save-scratch-file)
+;; read scratch file
+(defun aquamacs-load-scratch-file ()
+"Load the scratch buffer.
+The *scratch* buffer is loaded from `aquamacs-scratch-file'.
+No errors are signaled."
+(condition-case nil
+    (with-current-buffer "*scratch*"
+      (let ((coding-system-for-read 'utf-8))
+	(insert-file-contents aquamacs-scratch-file nil nil nil 'replace)))
+      (error nil)))
+
+(aquamacs-load-scratch-file)
 
 
 (ats "aquamacs-tool-bar-setup ...")
