@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.111 2008/04/15 20:22:50 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.112 2008/04/25 14:07:10 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -457,6 +457,10 @@ customization buffer."
 		       (menu-bar-menu-frame-live-and-visible-p))
 	      :help "Paste (yank) text most recently cut/copied"))
 
+(define-key menu-bar-edit-menu [paste-from-menu]
+  '(menu-item "Paste Previous" yank-menu
+	      :enable (and (cdr yank-menu) (not buffer-read-only))
+	      :help "Choose a string from the kill ring and paste it"))
 
 (require 'aquamacs-redo)
 (define-key menu-bar-edit-menu [undo]
@@ -536,7 +540,7 @@ customization buffer."
 
 (require 'aquamacs-editing)
 (define-key menu-bar-edit-menu [fill]
-`(menu-item ,(aq-shortcut "Re-Wrap Lines (fill)          " 
+`(menu-item ,(aq-shortcut "Wrap and Re-Format (fill)                " 
 			   (key-binding [menu-bar edit fill]))
 	    fill-paragraph-or-region
 	    :key-sequence nil
@@ -546,7 +550,7 @@ customization buffer."
 left and right margin"))
 
 (define-key-after menu-bar-edit-menu [unfill]
-`(menu-item ,(aq-shortcut "Unwrap Lines (unfill)     " 
+`(menu-item ,(aq-shortcut "Remove Hard Line Breaks (unfill)     " 
 			   (key-binding [menu-bar edit unfill]))
 	    unfill-paragraph-or-region
 	    :key-sequence nil
@@ -554,7 +558,9 @@ left and right margin"))
 	    :help
 	    "Remove line-breaks from paragraph or region.")
 'fill)
-
+(define-key-after menu-bar-edit-menu [separator-fill]
+  '(menu-item "--")
+  'unfill)
   
 ;; this needs an extension to show the keyboard shortcut
 ;; interesting extensions to menu-item: (:visible nil), (:key-sequence)
@@ -764,6 +770,17 @@ both existing buffers and buffers that you subsequently create."
 
 (define-key-after menu-bar-options-menu [longlines]
   '(menu-item "Soft Word Wrap in Text Modes"
+	      menu-bar-text-mode-longlines
+	      :help "Wrap long lines without inserting carriage returns (Longlines)"
+	      :enable (or (derived-mode-p 'text-mode) text-mode-variant)
+	      :button (:toggle . (if (listp text-mode-hook)
+				     (member 'turn-on-longlines text-mode-hook)
+				   (eq 'turn-on-longlines text-mode-hook))))
+  'auto-fill-mode
+  )
+
+(define-key-after menu-bar-options-menu [longlines]
+  '(menu-item "Auto Word Wrap in Text Modes"
 	      menu-bar-text-mode-longlines
 	      :help "Wrap long lines without inserting carriage returns (Longlines)"
 	      :enable (or (derived-mode-p 'text-mode) text-mode-variant)
