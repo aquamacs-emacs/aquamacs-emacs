@@ -5,7 +5,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: aquamacs-tabbar.el,v 1.13 2008/04/26 14:49:46 davidswelt Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.14 2008/04/26 15:10:22 davidswelt Exp $
 
 ;; load original tabbar-mode
 (require 'tabbar)
@@ -74,11 +74,17 @@ to be closed.  If no tab is specified, (tabbar-selected-tab) is used"
 		    :background "gray80"
 		    :box '(:line-width 2 :color "grey80" :style nil))
 
-(set-face-attribute 'tabbar-highlight nil
-		    :inherit 'tabbar-default
-		    :underline nil
-		    :box '(:line-width 2 :color "grey95" :style nil)
-		    :background "gray95") 
+(defface tabbar-selected-highlight '((t
+		    :background "gray95"))
+  "Face for selected, highlighted tabs."
+  :group 'tabbar)
+
+(defface tabbar-unselected-highlight '((t
+		    :background "grey75"
+		    :box (:line-width 2 :color "grey75" :style nil)))
+  "Face for unselected, highlighted tabs."
+  :group 'tabbar)
+
 
 (set-face-attribute 'tabbar-button nil
 		    :inherit 'tabbar-default
@@ -388,9 +394,11 @@ Call `tabbar-tab-label-function' to obtain a label for TAB."
 	      (funcall tabbar-tab-label-function tab)
 	    tab)
 	  'tabbar-tab tab
-	  'local-map (tabbar-make-tab-keymap tab)
-	  'help-echo 'tabbar-help-on-tab
-	  'mouse-face 'tabbar-highlight
+	  'local-map (tabbar-make-tab-keymap tab)	 
+;;	  'help-echo 'tabbar-help-on-tab ;; no help echo: it's redundant
+	  'mouse-face (if (tabbar-selected-p tab (tabbar-current-tabset))
+			  'tabbar-selected-highlight
+			'tabbar-unselected-highlight)
 	  'face (cond ((and (tabbar-selected-p tab (tabbar-current-tabset))
 			    (buffer-modified-p (tabbar-tab-value tab)))
 		       'tabbar-selected-modified)
