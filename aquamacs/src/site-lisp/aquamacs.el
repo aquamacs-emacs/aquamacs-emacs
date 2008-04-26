@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.150 2008/04/25 22:10:31 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.151 2008/04/26 16:54:06 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -1219,7 +1219,9 @@ information given would otherwise be irrelevant to Aquamacs users.
 
 (defcustom aquamacs-scratch-file 
   "~/Library/Application Support/Aquamacs Emacs/scratch buffer"
-  "File name to save the scratch file. Set to nil to not save it.")
+  "File name to save the scratch file. Set to nil to not save it."
+  :group 'Aquamacs
+  :version "22.0")
 
 ; (aquamacs-save-scratch-file)
 (defun aquamacs-save-scratch-file ()
