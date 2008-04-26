@@ -4,7 +4,7 @@
 ;; originally authored by Kevin Walzer
 ;; Keywords: auctex
  
-;; Last change: $Id: auctex-config.el,v 1.39 2008/04/15 17:26:03 davidswelt Exp $
+;; Last change: $Id: auctex-config.el,v 1.40 2008/04/26 08:56:48 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -277,7 +277,7 @@ Calls `aquamacs-tex-pdf-viewer' to display the PDF file THE-FILE."
 		   [separator nil]   tex next-error view bibtex))
        (TeX-bar-LaTeX-buttons
 	(open-file save-buffer write-file [separator nil] cut copy paste undo
-		   [separator nil]   tex next-error view bibtex)))))
+		   [separator nil]   latex next-error view bibtex)))))
 
 
  
