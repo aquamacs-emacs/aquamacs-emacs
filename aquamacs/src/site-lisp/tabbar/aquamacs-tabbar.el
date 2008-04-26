@@ -5,7 +5,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: aquamacs-tabbar.el,v 1.12 2008/04/26 14:45:12 davidswelt Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.13 2008/04/26 14:49:46 davidswelt Exp $
 
 ;; load original tabbar-mode
 (require 'tabbar)
@@ -87,7 +87,7 @@ to be closed.  If no tab is specified, (tabbar-selected-tab) is used"
 (set-face-attribute 'tabbar-separator nil
 		    :background "grey50"
  		    :foreground "grey50"		
-		    :height 1.2)
+		    :height 1.0)
 
 
 (setq tabbar-separator '(1)) ;; set tabbar-separator size to 1 pixel
