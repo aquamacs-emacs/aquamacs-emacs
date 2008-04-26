@@ -5,7 +5,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: aquamacs-tabbar.el,v 1.11 2008/04/18 05:08:41 champo Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.12 2008/04/26 14:45:12 davidswelt Exp $
 
 ;; load original tabbar-mode
 (require 'tabbar)
@@ -58,33 +58,37 @@ to be closed.  If no tab is specified, (tabbar-selected-tab) is used"
 		    :inherit nil
 		    :height 110
 		    :weight 'normal
-		    :background "gray80"
-		    :foreground "gray30"
-		    :family "helvetica")
+		    :background "gray50"
+		    :foreground "black"
+		    :family "lucida grande")
 
 (set-face-attribute 'tabbar-selected nil
 		    :background "gray95"
 		    :foreground "gray20"
 		    :inherit 'tabbar-default
-		    :box '(:line-width 1 :color "gray95" :style nil))
+		    :box '(:line-width 2 :color "grey95" :style nil))
 ;; 		    :box '(:line-width 2 :color "white" :style released-button))
 
 (set-face-attribute 'tabbar-unselected nil
 		    :inherit 'tabbar-default
-		    :box '(:line-width 1 :color "gray50" :style nil))
-;; 		    :box '(:line-width 2 :color "white" :style pressed-button))
+		    :background "gray80"
+		    :box '(:line-width 2 :color "grey80" :style nil))
 
 (set-face-attribute 'tabbar-highlight nil
 		    :inherit 'tabbar-default
 		    :underline nil
-		    :background "gray87")
+		    :box '(:line-width 2 :color "grey95" :style nil)
+		    :background "gray95") 
 
 (set-face-attribute 'tabbar-button nil
 		    :inherit 'tabbar-default
 		    :box nil)
 
 (set-face-attribute 'tabbar-separator nil
-		    :height 1.0)
+		    :background "grey50"
+ 		    :foreground "grey50"		
+		    :height 1.2)
+
 
 (setq tabbar-separator '(1)) ;; set tabbar-separator size to 1 pixel
 
