@@ -124,7 +124,7 @@
 			      ;;(file-directory-p x)
 			      x))
 		     load-path))
-   (list data-directory))
+   (list (concat data-directory "images/")))
   "List of directories where toolbarx finds its images.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1121,14 +1121,15 @@ an extension.  If the extension is omitted, `xpm', `xbm' and
   ;; following should hopefully get us to all images ultimately.
 
   (let ((file))
-    (dolist (i '("" ".xpm" ".xbm" ".pbm"))
+    (dolist (i '("" ".png" ".xpm" ".xbm" ".pbm"))
       (unless file
 	(setq file (locate-library (concat image i) t toolbarx-image-path))))
     (if (featurep 'xemacs)
 	(and file (make-glyph file))
       (if file
 	  (create-image file)
-	(find-image `((:type xpm :file ,(concat image ".xpm"))
+	(find-image `((:type png :file ,(concat image ".png"))
+		      (:type xpm :file ,(concat image ".xpm"))
 		      (:type xbm :file ,(concat image ".xbm"))
 		      (:type pbm :file ,(concat image ".pbm"))))))))
 
