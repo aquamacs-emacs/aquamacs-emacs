@@ -293,37 +293,44 @@ the argument BUTTON-ALIST in function `toolbarx-install-toolbar'."
 
 (defcustom TeX-bar-LaTeX-button-alist
   '((latex :image (lambda nil (if TeX-PDF-mode "pdftex" "tex"))
+	   :title "Typeset"
 	   :command (progn
 		      (TeX-save-document (TeX-master-file))
 		      (TeX-command "LaTeX" 'TeX-master-file -1))
 	   :help (lambda (&rest ignored)
 		   (TeX-bar-help-from-command-list "LaTeX")))
     (pdflatex :image "pdftex"
+	      :title "Typeset"
 	      :command (progn
 			 (TeX-save-document (TeX-master-file))
 			 (TeX-command "PDFLaTeX" 'TeX-master-file -1))
 	      :help (lambda (&rest ignored)
 		      (TeX-bar-help-from-command-list "PDFLaTeX")))
     (next-error :image "error"
+		:title "Next Error"
 		:command TeX-next-error
 		:enable (plist-get TeX-error-report-switches
 				   (intern (TeX-master-file)))
 		:visible (plist-get TeX-error-report-switches
 				    (intern (TeX-master-file))))
     (view :image (lambda nil (if TeX-PDF-mode "viewpdf" "viewdvi"))
+	  :title "View"
 	  :command (TeX-command "View" 'TeX-master-file -1)
 	  :help (lambda (&rest ignored)
 		  (TeX-bar-help-from-command-list "View")))
     (file :image "dvips"
+	  :title "DVI>PS"
 	  :command (TeX-command "File" 'TeX-master-file -1)
 	  :visible (not TeX-PDF-mode)
 	  :help (lambda (&rest ignored)
 		  (TeX-bar-help-from-command-list "File")))
     (bibtex :image "bibtex"
+	    :title "BibTeX"
 	    :command (TeX-command "BibTeX" 'TeX-master-file -1)
 	    :help (lambda (&rest ignored)
 		    (TeX-bar-help-from-command-list "BibTeX")))
     (clean  :image "delete"
+	    :title "Clean"
 	    :command (TeX-command "Clean" 'TeX-master-file -1)
 	    :help (lambda (&rest ignored)
 		    (TeX-bar-help-from-command-list "Clean")))
