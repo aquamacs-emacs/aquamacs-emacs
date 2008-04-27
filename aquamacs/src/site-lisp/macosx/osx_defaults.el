@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.64 2007/12/02 16:58:32 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.65 2008/04/27 07:16:13 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -126,16 +126,57 @@ from earlier versions of the distribution."
 	(error (message "Loading `custom-file' failed.")))
       (aquamacs-activate-features-new-in-this-version)) t)
 
+(defun mac-is-mounted-volume-p (file)
+  (if (string-match "/Volumes/.*" file ) t nil))
+
+
+
+  ;; de-iconify
+  ;; when application gains focus, de-iconfiy
+
+
+(defun aquamacs-de-iconify-some-frame (event)
+  (interactive "e")
+  ;; run AFTER unhiding any hidden frames - we don't want
+  ;; to de-minimize something in addition to that
+  (run-with-idle-timer 0 nil 'aquamacs-de-iconify-some-frame-1))
+
+(defun aquamacs-de-iconify-some-frame-1 ()
+     
+  (unless (visible-frame-list)
+    (unless (eq 'found
+		(catch 'exit 
+		  (mapc (lambda (f)
+			  (when (frame-iconified-p f)
+			    (select-frame f)
+			    (make-frame-visible)
+			    (throw 'exit 'found)))
+
+			;; if current frame is iconified, use that
+			;; if selected frame is not iconified, but hidden,
+			;; then try to select an iconified frame
+			(append (list (selected-frame))
+				(frame-list)))))
+      ;; this should work with and without one-buffer-one-frame
+      (switch-to-buffer "*scratch*"))))
+
+
 (defun aquamacs-osx-defaults-setup ()
 
+(ats "osx defaults setup running...")
+
   (require 'aquamacs-tools)
+(ats "tools done")
 
   (require 'mac-extra-functions)
+(ats "mac-extra done")
 
   (mac-add-standard-directories)
+(ats "add dirs done")
 
  
   (aquamacs-create-preferences-file)
+(ats "create prefs done")
 
   ;; load files (give full paths and load all files)
   ;; this will be called after .emacs has been loaded
@@ -148,6 +189,8 @@ from earlier versions of the distribution."
 
 
   (mac-read-environment-vars-from-shell)
+(ats "read env vars done")
+
   (mac-add-path-to-exec-path)
   (mac-add-local-directory-to-exec-path) ;; needed for CocoAspell
 
@@ -199,10 +242,13 @@ from earlier versions of the distribution."
     (set-file-name-coding-system 'utf-8m)
     )
 
+(ats "before frame setup")
 
 
   ;; do this early, so we can override settings
   (require 'aquamacs-frame-setup)
+(ats "frame setup done")
+
   ;; one-on-one is called later
   (setq osxkeys-command-key (or (if (boundp 'mac-command-modifier)
 				    mac-command-modifier nil) 'alt))
@@ -223,7 +269,8 @@ from earlier versions of the distribution."
     
 
   (require 'aquamacs-mac-fontsets)
- 
+ (ats "font sets done")
+
   (setq mac-allow-anti-aliasing t) 
 
 
@@ -235,9 +282,11 @@ from earlier versions of the distribution."
 					; os x like key bindings
   (require 'osxkeys)
   ;; turn on mac key mode by default
+(ats "osx key loaded")
 
   (osx-key-mode 1) 
 
+(ats "osx key done")
 
   ;; need to enforce a coding system (problems with Jap locale otherwise)
   (let ((coding-system-for-read 'iso-latin-1-unix))
@@ -262,12 +311,11 @@ from earlier versions of the distribution."
     '((custom-file "~/Library/Preferences/Aquamacs Emacs/customizations.el")
       ))
 
-  (defun mac-is-mounted-volume-p (file)
-    (if (string-match "/Volumes/.*" file ) t nil)
-    )
 
+(ats "before recentf...")
 
   (require 'recentf)
+(ats "recentf done")
 
   ;; create temporary directory if necessary
   
@@ -275,6 +323,7 @@ from earlier versions of the distribution."
   (aquamacs-set-defaults 
    '(
      (savehist-file "~/Library/Preferences/Aquamacs Emacs/minibuffer-history.el")
+     (desktop-path ("~/Library/Preferences/Aquamacs Emacs" "." "~"))
      (auto-save-list-file-prefix 
       "~/Library/Preferences/Aquamacs Emacs/auto-save-list/.saves-")
      ( save-place-file "~/Library/Preferences/Aquamacs Emacs/places.el")
@@ -282,36 +331,6 @@ from earlier versions of the distribution."
      ( abbrev-file-name "~/Library/Preferences/Aquamacs Emacs/Abbreviations")
      ( mail-default-directory "~/Library/Application Support/Aquamacs Emacs/Temporary Files")))
 
-
-
-  ;; de-iconify
-  ;; when application gains focus, de-iconfiy
-
-
-  (defun aquamacs-de-iconify-some-frame (event)
-    (interactive "e")
-    ;; run AFTER unhiding any hidden frames - we don't want
-    ;; to de-minimize something in addition to that
-    (run-with-idle-timer 0 nil 'aquamacs-de-iconify-some-frame-1))
-
-  (defun aquamacs-de-iconify-some-frame-1 ()
-     
-    (unless (visible-frame-list)
-	(unless (eq 'found
-		    (catch 'exit 
-		      (mapc (lambda (f)
-			      (when (frame-iconified-p f)
-				(select-frame f)
-				(make-frame-visible)
-				(throw 'exit 'found)))
-
-			    ;; if current frame is iconified, use that
-			    ;; if selected frame is not iconified, but hidden,
-			    ;; then try to select an iconified frame
-			    (append (list (selected-frame))
-				    (frame-list)))))
-	  ;; this should work with and without one-buffer-one-frame
-	  (switch-to-buffer "*scratch*"))))
 
     (when (and (boundp 'mac-apple-event-map) mac-apple-event-map)
       (define-key mac-apple-event-map [core-event reopen-application ]
