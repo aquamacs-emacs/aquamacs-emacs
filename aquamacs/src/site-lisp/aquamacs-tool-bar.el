@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tool-bar.el,v 1.32 2008/04/15 22:36:49 davidswelt Exp $ 
+;; Last change: $Id: aquamacs-tool-bar.el,v 1.33 2008/04/27 20:03:35 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -160,6 +160,7 @@ quickly."
 		      (vis (aq-list-has-property-element item :visible 'none))
 		      (ena (aq-list-has-property-element item :enable 'none)))
 		  (list (car item) 
+			:title (nth 2 item)
 			:command (nth 3 item)
 		  :visible (if (eq vis 'none) t vis)
 		  :enable (if (eq ena 'none) t ena)
