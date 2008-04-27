@@ -38,14 +38,18 @@ diff -c -r1.368 startup.el
     (when (fboundp 'frame-initialize)
       (frame-initialize))
 ***************
-*** 1730,1735 ****
---- 1736,1744 ----
-      ;; keystroke, and that's distracting.
-      (when (fboundp 'frame-notice-user-settings)
-        (frame-notice-user-settings))
-+ 
-+     ;; time to make the frame visible (Aquamacs)
-+     (make-frame-visible) 
+*** 2146,2151 ****
+--- 2119,2131 ----
+  	   (run-hooks 'term-setup-hook))
+        (setq inhibit-startup-hooks t)
   
-      ;; If there are no switches to process, we might as well
-      ;; run this hook now, and there may be some need to do it
++       ;; time to make the frame visible (Aquamacs)
++       ;; done before calling `frame-notice-user-settings'
++       ;; as a workaround because the modificiation of 
++       ;; frame position does not appear to work while the
++       ;; the frame is hidden.  dr. 04/2008
++       (make-frame-visible) 
++ 
+        ;; It's important to notice the user settings before we
+        ;; display the startup message; otherwise, the settings
+        ;; won't take effect until the user gives the first
