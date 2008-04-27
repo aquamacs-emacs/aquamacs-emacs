@@ -6,7 +6,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: tabbar-window.el,v 1.19 2008/04/21 22:43:09 champo Exp $
+;; Revision: $Id: tabbar-window.el,v 1.20 2008/04/27 21:49:08 davidswelt Exp $
 
 (require 'tabbar)
 
@@ -135,7 +135,8 @@ Displayed buffers always get tabs."
 	      (if (eq (length buflist) 1)
 		  ;; if there is only 1 buffer associated with this tabset, then
 		  ;;  display no tabbar (no header line).
-		  (add-to-list 'header-line-inhibit-window-list window t)
+		  (progn (add-to-list 'header-line-inhibit-window-list window t)
+			 (redraw-frame (window-frame window)))
 		;; otherwise, ensure this window has a tabbar
 		(setq header-line-inhibit-window-list
 		      (delq window header-line-inhibit-window-list))))
@@ -158,7 +159,7 @@ Return the current tabset, which corresponds to (selected-window)."
   ;; since modified frame is active for 'window-configuration-change-hook
   (walk-windows 'tabbar-window-alist-update 'nomini t)
   ;; run tabbar-window-alist-cleanup to remove defunct entries
-  (tabbar-window-alist-cleanup)
+  (tabbar-window-alist-cleanup) 
   ;; if the alist has changed, update the tab sets (compare against cache)
   (unless (equal tabbar-window-alist tabbar-window-cache)
     ;; cycle through alist.
@@ -326,11 +327,15 @@ specified BUFFER belongs."
       )))
 
 (defun tabbar-window-close-tab (tab)
+  "Remove tab and kill buffer if shown exclusively."
+  ;; quit current command if in minibuffer
+  (when (minibuffer-window-active-p 
+       (minibuffer-window (selected-frame)))
+      (abort-recursive-edit))
   (let* ((buffer (tabbar-tab-value tab))
 	 (killable (and
 		    (killable-buffer-p buffer)
-		    (eq   (string-match "\\*.*\\*" (buffer-name buffer)) nil)
-		    (eq   (string-match " SPEEDBAR" (buffer-name buffer)) nil))) 
+		    (eq   (string-match "\\*.*\\*" (buffer-name buffer)) nil))) 
 	 (dont-kill (tabbar-window-other-instances tab)))
     (when (and killable (not dont-kill))
       ;; ask before killing
