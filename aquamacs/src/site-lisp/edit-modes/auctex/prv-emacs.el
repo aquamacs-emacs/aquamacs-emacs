@@ -386,7 +386,7 @@ run buffer.  A noop for Emacs."
     (setq preview-tb-icon (preview-filter-specs preview-tb-icon-specs)))
   (when preview-tb-icon
     (define-key LaTeX-mode-map [tool-bar preview]
-      `(menu-item "Preview at point" preview-at-point
+      `(menu-item "Preview Here" preview-at-point
 		  :image ,preview-tb-icon
 		  :help "Preview on/off at point")))
   (when buffer-file-name
