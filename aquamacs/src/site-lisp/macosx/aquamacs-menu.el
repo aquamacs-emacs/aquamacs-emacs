@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.112 2008/04/25 14:07:10 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.113 2008/04/27 19:17:53 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -869,13 +869,16 @@ both existing buffers and buffers that you subsequently create."
   (customize-set-variable 'fringes-outside-margins 1)
   (customize-set-variable 'left-fringe-width 1)
   (customize-set-variable 'left-margin-width 1)
+  (customize-set-variable 'right-fringe-width 1)
+  (customize-set-variable 'right-margin-width 1)
 
   (setq default-fringes-outside-margins 1)
-  (setq default-left-fringe-width 3)
+  (setq default-left-fringe-width 1)
   (setq default-left-margin-width 0)
+  (setq default-right-fringe-width 1)
+  (setq default-right-margin-width 0)
   (aquamacs-define-the-fringe-bitmap) ;; redefine 
-  (customize-set-variable 'fringe-mode '(1 . 1))
-  ) 
+  (customize-set-variable 'fringe-mode '(1 . 1))) 
 
 
 (define-key-after menu-bar-showhide-fringe-menu [small]
