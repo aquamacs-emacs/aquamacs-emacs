@@ -630,6 +630,7 @@ object VAL of a dropdown group (see documentation of function
   (let* ((props-types-alist
 	  '((:image	      toolbarx-test-image-type)
 	    (:command	      toolbarx-test-any-type)
+	    (:title	      toolbarx-test-string-or-nil)
 	    (:enable	      toolbarx-test-any-type)
 	    (:visible	      toolbarx-test-any-type)
 	    (:help	      toolbarx-test-string-or-nil)
@@ -1240,7 +1241,8 @@ function `toolbar-install-toolbar'."
 			     (cadr (memq :button filtered-props))))
 	       (menuitem (append
 			  (list 'menu-item
-				(toolbarx-make-string-from-symbol symbol)
+				(or (cadr (memq :title filtered-props)) 
+				    (toolbarx-make-string-from-symbol symbol))
 				command
 				:image image-descriptor)
 			  (when (car help)
