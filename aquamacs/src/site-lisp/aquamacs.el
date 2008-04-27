@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.151 2008/04/26 16:54:06 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.152 2008/04/27 07:01:09 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -31,8 +31,8 @@
 ;; Copyright (C) 2005,2006, 2007, 2008: David Reitter
  
 (defvar aq-starttime 0)
-;; (defun ats (txt) 
-;;     (message "%s:  %s" (time-since aq-starttime) txt))
+;;  (defun ats (txt) 
+;;      (message "ATS %s:  %s" (time-since aq-starttime) txt))
 (defun ats (txt) nil)
 
 (setq aq-starttime (current-time))
@@ -398,7 +398,7 @@ Separate paths from file names with --."
 
 					; ------- Frames (OSX Windows) ----------
 
- 
+  (ats "before view")
   (require 'view)
   ;; redefine view-buffer
   (defun view-buffer (buffer &optional exit-action)
@@ -457,15 +457,16 @@ Use this argument instead of explicitly setting `view-exit-action'."
 					; append it, so the user's choice has priority
   
 
-
   (require 'aquamacs-styles)
   (add-hook 'after-init-hook
 	    'make-help-mode-not-use-frame-fitting
 	    'append) ;; move to the end: after loading customizations
 	
 	
+ (ats "styles done")
       
   (provide 'drews_init)	; migration from 0.9.1 (require in customizations)
+ (ats "drew done")
 
   ;; http://www.emacswiki.org/cgi-bin/wiki/DrewsElispLibraries
   
@@ -512,7 +513,8 @@ Use this argument instead of explicitly setting `view-exit-action'."
   (assq-set 'width 75 'special-display-frame-alist)
   (assq-set 'user-position nil 'special-display-frame-alist)
 
-  
+   (ats "fontsets done")
+
   ;; here would be the place to turn on mode-spec styles AFTER setting default-frame-alist
   ;; so everything is copied over to the 'default style as appropriate
   ;; mode-specific font settings
@@ -547,7 +549,8 @@ to the selected frame."
   (when window-system
 
   (require 'smart-frame-positioning)
-  
+   (ats "sfp loaded")
+
   (aquamacs-set-defaults 
    '((smart-frame-positioning-mode t)
      ( smart-frame-positioning-enforce t) ;; and enforce it
