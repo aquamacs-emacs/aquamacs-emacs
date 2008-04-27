@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.60 2008/04/07 10:13:16 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.61 2008/04/27 22:38:38 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -518,9 +518,24 @@ Aquamacs Emacs.app may have been moved or renamed. Please restart Aquamacs!")
 (defun aquamacs-show-change-log ()
   (interactive)
   (aquamacs-init-user-help) ; make sure it's registered
-  (and (aq-run-python-command
-   "from Carbon import AH; AH.AHGotoPage('Aquamacs Help', 'current-changelog.html', None)")
-      (message "Sorry, change log unavailable (python, OS problem?)"))) 
+;; check node1.html
+;; relativ complex check because of bug in 10.5.2 that causes crashes
+;; when we use a symlinked file.
+  (let ((change-log-file
+	 (with-temp-buffer
+	   ;; extract language names selected in Spelling prefpane
+	   (insert-file-contents (format "%s/Contents/Resources/Aquamacs Help/node1.html" 
+					 aquamacs-mac-application-bundle-directory))
+	   ;; move point to just before first language name
+	   (let ((case-fold-search t))
+	     (re-search-forward "HREF=\"\\(node[0-9]+.html\\)\">\s*Changes")
+	     (match-string 1)))))
+    
+    (if change-log-file
+	(and (aq-run-python-command
+	      (format "from Carbon import AH; AH.AHGotoPage('Aquamacs Help', '%s', None)" change-log-file))
+	     (message "Sorry, change log unavailable (python, OS problem?)"))
+      (message "Sorry, change log unavailable (not found)"))))
 
 (provide 'mac-extra-functions)
 
