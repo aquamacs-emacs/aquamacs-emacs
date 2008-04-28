@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.62 2008/04/15 17:12:56 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.63 2008/04/28 18:30:58 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -693,17 +693,27 @@ even if it's the only visible frame."
     (add-hook 'kill-buffer-hook 'delete-window-if-one-buffer-one-frame t)
   )
  
+;; this is what's bound to Apple-W
+;; and what can called programmatically (instead of bury-buffer, etc.)
+(defun close-buffer ()
+  "Closes the tab, window or frame and maybe kills buffer.
+Closes the selected tab, window or frame showing the current buffer.
+If the tab, window or frame is the only one showing the buffer,
+kill the buffer, too.  Ask user whether to kill it if appropriate."
+  (interactive)
+  ;; quit current command if in minibuffer
+  (when (minibuffer-window-active-p 
+       (minibuffer-window (selected-frame)))
+      (abort-recursive-edit))
+  ;; else, close tab or window+frame
+  (if (and (boundp tabbar-mode) tabbar-mode)
+      (tabbar-close-tab)
+    (close-current-window-asktosave)))
+
 (defun close-current-window-asktosave (&optional force-delete-frame)
   "Delete current buffer, close selected window (and its frame
 if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
   (interactive) 
-
-  
-  ;; quit current command
-  (when (minibuffer-window-active-p 
-       (minibuffer-window (selected-frame)))
-      (abort-recursive-edit))
-  
  
   (let ((wind (selected-window))
 	(killable (and (killable-buffer-p (window-buffer))
