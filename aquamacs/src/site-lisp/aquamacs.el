@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.155 2008/04/28 17:26:53 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.156 2008/04/28 17:34:10 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -362,9 +362,15 @@ No errors are signaled."
       (with-current-buffer "*scratch*"
 	(let ((coding-system-for-read 'utf-8)
 	      (buffer-undo-list t))
-	  (insert-file-contents aquamacs-scratch-file nil nil nil 'replace)
+	  (if (file-exists-p aquamacs-scratch-file)
+	      ;; if file unreadable, this will trip the condition-case
+	      (insert-file-contents aquamacs-scratch-file nil nil nil 'replace))
 	  (set-buffer-modified-p nil))
-	(setq buffer-undo-list nil))
+	(setq buffer-undo-list nil)
+	;; do this here so that we never save the scratch file
+	;; if it hasn't been successfully loaded initially
+	;; (or if the file simply doesn't exist yet)
+	(add-hook 'kill-emacs-hook 'aquamacs-save-scratch-file))
     (error nil)))
 
 
@@ -1269,7 +1275,6 @@ information given would otherwise be irrelevant to Aquamacs users.
 (require 'check-for-updates)
 ;; via hook so it can be turned off
 (add-hook 'after-init-hook 'aquamacs-check-for-updates-if-necessary 'append) 
-(add-hook 'kill-emacs-hook 'aquamacs-save-scratch-file)
 
 (aquamacs-load-scratch-file)
 
