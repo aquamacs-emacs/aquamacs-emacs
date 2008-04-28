@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.30 2008/04/28 17:49:01 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.31 2008/04/28 19:21:55 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -421,8 +421,7 @@ Sets default-frame-alist. (Aquamacs)"
 
 (defun aquamacs-set-style-as-mode-default (&optional mode) 
   (interactive)
-  "Activate current style as default for a given mode.
-(Aquamacs)"
+  "Activate current style as default for a given mode."
   (setq mode (or mode major-mode))
   (customize-set-variable 'aquamacs-default-styles
 			  (cons (cons mode (aquamacs-get-style-snapshot)) 
@@ -456,7 +455,7 @@ Use Save Options before restart to retain setting."
    (if (eq mode 'default) "all frames" mode)
 		   (if aquamacs-styles-mode
 		       ""
-		     "Note: aquamacs-styles-mode is nil - hence functionality is off!"
+		     "Note: aquamacs-styles-mode is nil - no functionality!"
 		     ))))
 
 ; 
@@ -481,8 +480,15 @@ Use Save Options before restart to retain setting."
   (set-to-custom-standard-value 'aquamacs-default-styles)
   (set-to-custom-standard-value 'aquamacs-buffer-default-styles)
   (message "All styles reset to defaults. Add new ones or use customize to 
-modify them. Use Save Options before restart to retain setting.")
+modify them.")
   )
+(defun aquamacs-clear-styles ()
+  "Resets all styles (mode-specific and the default style)"
+  (interactive)
+  (setq aquamacs-default-styles nil)
+  (setq aquamacs-buffer-default-styles nil)
+  (message "All styles cleared. Add new ones or use customize to 
+modify them."))
 
 (defun aquamacs-delete-one-style ()
   "Deletes mode-specific styles for current major mode"
@@ -794,31 +800,34 @@ Frame Appearance Styles to make the setting stick.")
 			 (modename-to-string (aquamacs-updated-major-mode)) 
 			 "current mode"))   
 		aquamacs-delete-one-style 
-		:enable (and aquamacs-styles-mode
-			     (menu-bar-menu-frame-live-and-visible-p)
+		:enable (and (menu-bar-menu-frame-live-and-visible-p)
 			     (assq (aquamacs-updated-major-mode) 
 				   aquamacs-default-styles))
 		:help "Removes a mode-specific style."))
   (define-key-after aquamacs-frame-style-menu [menu-reset-styles]
     '(menu-item  "Reset All Styles"     aquamacs-reset-styles 
 		 :help "Resets all styles to the default."
-		 :enable aquamacs-styles-mode))
+		 :enable t))
+  (define-key-after aquamacs-frame-style-menu [menu-clear-styles]
+    '(menu-item  "Clear All Styles"     aquamacs-clear-styles 
+		 :help "Clear all styles."
+		 :enable t))
 
-  (define-key aquamacs-frame-style-menu [menu-set-style-as-default]
-    '(menu-item  "Use Current Style as Default"     aquamacs-set-style-as-default
-		 :enable  (and aquamacs-styles-mode
-			       (menu-bar-menu-frame-live-and-visible-p))
-		 :help ""))
 
   (define-key aquamacs-frame-style-menu [menu-set-style-as-mode-default]
     '(menu-item (format "Use Current Style for %s" (or (modename-to-string (aquamacs-updated-major-mode)) "Current Mode"))
 		aquamacs-set-style-as-mode-default 
 		:help "Set the current frame parameters as default 
 for all frames with the current major-mode."
-		:enable   (and aquamacs-styles-mode
-			       (menu-bar-menu-frame-live-and-visible-p))
+		:enable   (menu-bar-menu-frame-live-and-visible-p)
 		 	  
-		)) 
+		))
+  (define-key aquamacs-frame-style-menu [menu-set-style-as-default]
+    '(menu-item  "Use Current Style as Default"     aquamacs-set-style-as-default
+		 :enable (menu-bar-menu-frame-live-and-visible-p)
+		 :help ""))
+
+ 
 
 (defun modename-to-string (modename)
   (capitalize
@@ -867,7 +876,7 @@ for all frames with the current major-mode."
   (define-key aquamacs-frame-style-menu [menu-aquamacs-styles]
     (menu-bar-make-mm-toggle 
      aquamacs-styles-mode
-     "Frame Appearance Styles"
+     "Auto Frame Appearance Styles"
      "adapt the frame parameters to the major-mode"))
       
 
