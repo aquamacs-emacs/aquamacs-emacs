@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.114 2008/04/28 18:31:35 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.115 2008/04/28 18:58:45 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -1079,15 +1079,25 @@ both existing buffers and buffers that you subsequently create."
   nil)
  
 
-
+(define-key menu-bar-file-menu [one-window]
+  '(menu-item (aq-shortcut "Remove Splits              " 
+			   'delete-other-windows)
+			   delete-other-windows
+	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
+			   (menu-bar-non-minibuffer-window-p)
+			   (not (one-window-p t nil)))
+	      :help "Selected window grows to fill the whole frame"))
 (define-key menu-bar-file-menu [split-window]
-  `(menu-item "Split Window" split-window-vertically
+  `(menu-item  (aq-shortcut "Split Window                " 
+			    'split-window-vertically)
+	       split-window-vertically
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
 			   (menu-bar-non-minibuffer-window-p))
 	      :help "Split selected window in two"))
 (define-key menu-bar-file-menu [make-frame]
-  '(menu-item "Duplicate Frame" make-frame-command
+  '(menu-item "Show Buffer in New Frame" make-frame-command
 	      :visible (fboundp 'make-frame-command)
+	      :enable (menu-bar-menu-frame-live-and-visible-p)
 	      :help "Open a new frame"))
 (define-key menu-bar-file-menu [tile-frames]
   `(menu-item "Scatter frames" scatter-frames
