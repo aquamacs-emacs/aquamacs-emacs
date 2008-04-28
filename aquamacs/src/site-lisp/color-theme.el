@@ -4,13 +4,20 @@
 ;; Copyright (C) 2000, 2001, 2002, 2003  Alex Schroeder <alex@gnu.org>
 ;; Copyright (C) 2003, 2004, 2005, 2006  Xavier Maillard <zedek@gnu.org>
 
-;; Version: 6.6.0
+;; Version: 6.6.0/Aquamacs
 ;; Keywords: faces
 ;; Author: Jonadab the Unsightly One <jonadab@bright.net>
 ;; Maintainer: Xavier Maillard <zedek@gnu.org>
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki.pl?ColorTheme
 
 ;; This file is not (YET) part of GNU Emacs.
+
+;; This file is part of Aquamacs.
+;; some modifications (bury-buffer -> kill-buffer, different menu)
+;; by dr. 05/2005
+;; mod to color-theme-install: store name of theme in color-theme-name
+;; frame parameter - useful to aquamacs-styles
+;; update to 6.6.0 04/2008
 
 ;; This is free software; you can redistribute it and/or modify it under
 ;; the terms of the GNU General Public License as published by the Free
@@ -50,7 +57,8 @@
   (require 'reporter)
   (require 'sendmail))
 
-(require 'cl); set-difference is a function...
+;;(require 'cl); set-difference is a function...
+(eval-when-compile (require 'cl))
 
 ;; for custom-face-attributes-get or face-custom-attributes-get
 (require 'cus-face)
@@ -319,7 +327,8 @@ of `color-theme-history-max-length'.")
 ;; buffer.
 
 (defvar color-themes
-  '((color-theme-aalto-dark "Aalto Dark" "Jari Aalto <jari.aalto@poboxes.com>")
+  '((color-theme-tiger-xcode "Tiger / Xcode" "Kevin D. Smith <kevin.smith@themorgue.org>")
+    (color-theme-aalto-dark "Aalto Dark" "Jari Aalto <jari.aalto@poboxes.com>")
     (color-theme-aalto-light "Aalto Light" "Jari Aalto <jari.aalto@poboxes.com>")
     (color-theme-aliceblue "Alice Blue" "Girish Bharadwaj <girishb@gbvsoft.com>")
     (color-theme-andreas "Andreas" "Andreas Busch <Andreas.Busch@politics.ox.ac.uk>")
@@ -458,7 +467,8 @@ used as part of another color theme to be useful.  Thus, color theme
 libraries are mainly useful for color theme authors."
   (interactive "P")
   (unless color-theme-initialized (color-theme-initialize))
-  (switch-to-buffer (get-buffer-create color-theme-buffer-name))
+  (pop-to-buffer color-theme-buffer-name)
+;;  (switch-to-buffer (get-buffer-create color-theme-buffer-name))
   (setq buffer-read-only nil)
   (erase-buffer)
   ;; recreate the snapshot if necessary
@@ -1551,6 +1561,7 @@ with `color-theme-install-faces'.
 
 If `color-theme-is-cumulative' is nil, a color theme will undo face and
 frame-parameter settings of previous color themes."
+  (modify-frame-parameters nil `((color-theme-name . ,(car theme))))
   (setq theme (color-theme-canonic theme))
   (color-theme-install-variables (color-theme-variables theme))
   (color-theme-install-faces (color-theme-faces theme))
