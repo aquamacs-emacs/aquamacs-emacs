@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.88 2008/04/07 11:17:29 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.89 2008/04/28 18:31:35 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -1035,11 +1035,7 @@ default."
     (define-key map `[(,osxkeys-command-key g)] 'isearch-repeat-forward)  
     (define-key map `[(,osxkeys-command-key shift g)] 'isearch-repeat-backward)
     (define-key map `[(,osxkeys-command-key e)] 'aquamacs-use-selection-for-find)
-    (if (fboundp 'close-current-tab-or-buffer)
-	(define-key map `[(,osxkeys-command-key w)] 
-	  'close-current-tab-or-buffer)
-      (define-key map `[(,osxkeys-command-key w)] 
-	'close-current-window-asktosave))
+    (define-key map `[(,osxkeys-command-key w)] 'close-buffer)
     (define-key map `[(,osxkeys-command-key m)] 'iconify-or-deiconify-frame) 
     (define-key map `[(,osxkeys-command-key .)] 'keyboard-quit)
     (define-key map `[(,osxkeys-command-key 49)] 'delete-other-windows) ; 49='1'

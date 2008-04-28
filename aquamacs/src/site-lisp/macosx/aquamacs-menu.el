@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.113 2008/04/27 19:17:53 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.114 2008/04/28 18:31:35 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -428,7 +428,7 @@ customization buffer."
 (define-key-after menu-bar-file-menu [kill-buffer]
   `(menu-item ,(aq-shortcut "Close Buffer                            " 
 			   (key-binding [menu-bar file kill-buffer])) 
-	      close-current-window-asktosave
+	      close-buffer
 	      :key-sequence nil
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
 			   (menu-bar-non-minibuffer-window-p))
