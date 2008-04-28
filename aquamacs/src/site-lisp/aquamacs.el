@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.153 2008/04/27 07:24:49 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.154 2008/04/28 11:55:13 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -754,7 +754,7 @@ Use this argument instead of explicitly setting `view-exit-action'."
 					; update the help-mode specification with a fit-frame
 					; append it, so the user's choice has priority
   
-
+  (require 'color-theme-autoloads)
   (require 'aquamacs-styles)
   (add-hook 'after-init-hook
 	    'make-help-mode-not-use-frame-fitting
