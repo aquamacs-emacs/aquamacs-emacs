@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.29 2008/02/03 00:43:32 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.30 2008/04/28 17:49:01 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -60,21 +60,15 @@
   "Return the frame parameter set resulting from two alists.
 Parameters from DEFAULT-ALIST receive priority over those from STYLE.
 If `aquamacs-styles-mode' is nil, returns nil."
-  (if aquamacs-styles-mode
-      (progn
-	;; style has priority over default-frame-alist
-	(setq style (append (assq-subtract  default-alist style 'ign)
-			    style))
-
-	;; delete a few things as we don't want them here
-	(mapc
-	 (lambda (e) (setq style (assq-delete-all e style)))
-	 '(user-position menu-bar-lines top height left width scroll-bar-width))
-	;; workaround
-	(assq-set 'scroll-bar-width 0 'style)
-	style)
-    ;; else
-    nil))
+  ;; style has priority over default-frame-alist
+  (setq style (append (assq-subtract  default-alist style 'ign)
+		      style))
+  
+  ;; delete a few things as we don't want them here
+  (mapc
+   (lambda (e) (setq style (assq-delete-all e style)))
+   '(user-position menu-bar-lines top height left width scroll-bar-width))
+  style)
 
 ;; (aquamacs-style-relevant-buffer)
 (defun aquamacs-style-relevant-buffer (&optional frame)
@@ -108,7 +102,7 @@ ability. The following rules are followed:
  (selected frame if nil), unless it is already set (or
 FORCE is non-nil). Use style of major mode FOR-MODE if given."
  
-  (when aquamacs-styles-mode
+  (when (or force aquamacs-styles-mode)
 
     (unless frame (setq frame (selected-frame) ))
 
@@ -123,7 +117,7 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 	    ;; will cause another menu-bar-update-hook call, so we can end up 
 	    ;; with this function called again and again...  
 
-	    (let ((buffer (aquamacs-style-relevant-buffer frame)))
+	    (let ((buffer (aquamacs-style-relevant-buffer   frame)))
 	    
 	      (when (or 
 		   (and force (or buffer for-mode))
@@ -170,7 +164,7 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 			 (cons (cons 'frame-configured-for-buffer 
 				     buffer) 
 			       style))
-			
+		
 			(save-window-excursion
 			  (select-frame frame)
 			  ;; color-style-target-frame seems deprecated
@@ -258,13 +252,11 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 
 
 (defun aquamacs-get-style (mode) 
-  (if aquamacs-styles-mode
-      (or (cdr (assq mode aquamacs-default-styles)) 
-	  ;(progn (print "resorting to default") nil)
-	  (cdr (assq 'default aquamacs-default-styles))
-	  ;(progn (print "nothing found") nil)
-	  )
-    nil))
+  (or (cdr (assq mode aquamacs-default-styles)) 
+      ;;(progn (print "resorting to default") nil)
+      (cdr (assq 'default aquamacs-default-styles))
+					;(progn (print "nothing found") nil)
+      ))
 
 (defun set-mode-style-after-change-major-mode ()       			      
   ;; delete the configuration cache parameter
@@ -327,19 +319,16 @@ to be appropriate for its first buffer"
   "Update the styles (colors, font) of all frames
 to be appropriate for its first buffer. (Aquamacs)"
    
-  (mapc (lambda (frame)
-  (condition-case err
-      ;; we must catch errors here, because
-      ;; otherwise Emacs would clear menu-bar-update-hook
-      ;; which would be not good at all.
-       
- 
-	  (aquamacs-set-style frame 'force)
-	    
-    (error nil)
-    )) (frame-list))
-  t
-  ) 
+  (when aquamacs-styles-mode
+    (mapc (lambda (frame)
+	    (condition-case err
+		;; we must catch errors here, because
+		;; otherwise Emacs would clear menu-bar-update-hook
+		;; which would be not good at all.
+		(aquamacs-set-style frame 'force)
+	      (error nil)
+	      )) (frame-list))
+    t))
 (defun aquamacs-get-style-snapshot ()
  
 
