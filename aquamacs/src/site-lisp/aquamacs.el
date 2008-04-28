@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.154 2008/04/28 11:55:13 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.155 2008/04/28 17:26:53 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -341,24 +341,31 @@ if modified buffers exist."
 
 ; (aquamacs-save-scratch-file)
 (defun aquamacs-save-scratch-file ()
-"Save the scratch buffer.
+  "Save the scratch buffer.
 The *scratch* buffer is saved to `aquamacs-scratch-file'.
 No errors are signaled."
   (if aquamacs-scratch-file
       (condition-case nil
-	  (with-current-buffer "*scratch*"
-	    (let ((coding-system-for-write 'utf-8))
-	      (write-region nil nil aquamacs-scratch-file nil nil nil))))))
+	  (if (get-buffer "*scratch*")
+	      (with-current-buffer "*scratch*"
+		(let ((coding-system-for-write 'utf-8))
+		  (write-region nil nil aquamacs-scratch-file nil nil nil)))
+	    (write-region "" nil aquamacs-scratch-file nil nil nil))
+	(error nil))))
+
 ;; read scratch file
 (defun aquamacs-load-scratch-file ()
-"Load the scratch buffer.
+  "Load the scratch buffer.
 The *scratch* buffer is loaded from `aquamacs-scratch-file'.
 No errors are signaled."
-(condition-case nil
-    (with-current-buffer "*scratch*"
-      (let ((coding-system-for-read 'utf-8))
-	(insert-file-contents aquamacs-scratch-file nil nil nil 'replace)))
-      (error nil)))
+  (condition-case nil
+      (with-current-buffer "*scratch*"
+	(let ((coding-system-for-read 'utf-8)
+	      (buffer-undo-list t))
+	  (insert-file-contents aquamacs-scratch-file nil nil nil 'replace)
+	  (set-buffer-modified-p nil))
+	(setq buffer-undo-list nil))
+    (error nil)))
 
 
 (defun aquamacs-setup ()
