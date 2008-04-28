@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.115 2008/04/28 18:58:45 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.116 2008/04/28 19:09:56 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -824,7 +824,7 @@ both existing buffers and buffers that you subsequently create."
   (define-key menu-bar-showhide-menu [mac-font-panel-mode]
     nil)
   (define-key menu-bar-options-menu [mouse-set-font]
-  `(menu-item ,(aq-shortcut "Show Fonts (this Frame)...                 " 
+  `(menu-item ,(aq-shortcut "Font (this Frame)...                 " 
 			    'mac-font-panel-mode)
 	      turn-on-mac-font-panel-mode
 	       :visible ,(display-multi-font-p)
@@ -849,7 +849,7 @@ both existing buffers and buffers that you subsequently create."
 
 
 (define-key-after menu-bar-options-menu [aquamacs-color-theme-select]
-  `(menu-item "Show Color Themes (this Frame)..." aquamacs-color-theme-select
+  `(menu-item "Color Theme (this Frame)..." aquamacs-color-theme-select
 	       :visible (and (display-multi-font-p)
 			     (fboundp 'aquamacs-color-theme-select)
 			     )
