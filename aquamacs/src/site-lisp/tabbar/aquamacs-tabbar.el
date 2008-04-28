@@ -5,7 +5,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: aquamacs-tabbar.el,v 1.14 2008/04/26 15:10:22 davidswelt Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.15 2008/04/28 11:56:57 davidswelt Exp $
 
 ;; load original tabbar-mode
 (require 'tabbar)
@@ -60,6 +60,8 @@ to be closed.  If no tab is specified, (tabbar-selected-tab) is used"
 		    :weight 'normal
 		    :background "gray50"
 		    :foreground "black"
+;;		    :box '(:line-width 2 :color "white" :style nil)
+		    :box nil
 		    :family "lucida grande")
 
 (set-face-attribute 'tabbar-selected nil
@@ -92,7 +94,7 @@ to be closed.  If no tab is specified, (tabbar-selected-tab) is used"
 
 (set-face-attribute 'tabbar-separator nil
 		    :background "grey50"
- 		    :foreground "grey50"		
+ 		    :foreground "grey50"
 		    :height 1.0)
 
 
@@ -115,6 +117,9 @@ to be closed.  If no tab is specified, (tabbar-selected-tab) is used"
      ))
   "Face used for unselected tabs."
   :group 'tabbar)
+
+;; do not let color themes override tabbar faces 
+(aquamacs-set-defaults '((color-theme-illegal-faces "^\\(w3-\\|tabbar-\\)")))
 
 ;; redefine tab labels, adding leading and trailing spaces for clarity
 (defun tabbar-buffer-tab-label (tab)
