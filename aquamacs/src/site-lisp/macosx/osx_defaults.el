@@ -9,14 +9,14 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.66 2008/04/28 17:24:16 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.67 2008/04/28 17:28:02 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
 ;; Aquamacs Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
+;; the Free Software Foundation; either version 3, or (at your option)
 ;; any later version.
 
 ;; Aquamacs Emacs is distributed in the hope that it will be useful,
@@ -29,22 +29,15 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, 2006 David Reitter
+;; Copyright (C) 2005, 2006,2007,2008 David Reitter
 
  
-
 ; remaining issues
 
-; we need a proper font selection dialogue
 ; we need to go through Quartz / Carbon to print
-
-; don't open scratch window at start
-;; hide the frame
- 
 
 ; this file needs cleaning up!
 ; move menu stuff to extra package
-; move one-buffer-one-frame to extra mode
 
 
 (defun aquamacs-create-preferences-dirs ()
