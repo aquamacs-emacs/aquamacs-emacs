@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.31 2008/04/28 19:21:55 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.32 2008/04/28 19:25:51 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -557,7 +557,7 @@ for which the menu is being updated."
 
 
 (defvar aquamacs-frame-style-menu 
-  (make-sparse-keymap "Frame Appearance Styles"))
+  (make-sparse-keymap "Frame Styles"))
 
 
 (defvar appstyle-mode-menu nil)
@@ -780,7 +780,7 @@ the frame font is set as a default in `default-frame-alist'."
 
   (if aquamacs-styles-mode
       (message "Font set for current frame only. Use functions in 
-Frame Appearance Styles to make the setting stick.")
+Frame Styles to make the setting stick.")
     (progn
       (modify-all-frames-parameters `((font . ,(frame-parameter nil 'font))))
       (message "Font set for this and all future frames.")
@@ -876,13 +876,13 @@ for all frames with the current major-mode."
   (define-key aquamacs-frame-style-menu [menu-aquamacs-styles]
     (menu-bar-make-mm-toggle 
      aquamacs-styles-mode
-     "Auto Frame Appearance Styles"
+     "Auto Frame Style"
      "adapt the frame parameters to the major-mode"))
       
 
   (define-key-after menu-bar-options-menu [aquamacs-frame-styles]
 
-    (list 'menu-item "Frame Appearance Styles" aquamacs-frame-style-menu 
+    (list 'menu-item "Frame Styles" aquamacs-frame-style-menu 
 	  :help "Set styles for frames depending on major mode in buffer")
     'aquamacs-color-theme-select)
 
