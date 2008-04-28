@@ -494,10 +494,10 @@ libraries are mainly useful for color theme authors."
   (set-buffer-modified-p nil)
   (color-theme-mode))
 
-(when (require 'easymenu)
-  (easy-menu-add-item nil color-theme-entry-path "--")
-  (easy-menu-add-item  nil color-theme-entry-path
-                       ["Color Themes" color-theme-select t]))
+;; (when (require 'easymenu)
+;;   (easy-menu-add-item nil color-theme-entry-path "--")
+;;   (easy-menu-add-item  nil color-theme-entry-path
+;;                        ["Color Themes" color-theme-select t]))
 
 (defun color-theme-mode ()
   "Major mode to select and install color themes.
