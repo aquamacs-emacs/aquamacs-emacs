@@ -5,7 +5,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: aquamacs-tabbar.el,v 1.16 2008/04/28 18:32:26 davidswelt Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.17 2008/04/28 19:29:18 champo Exp $
 
 ;; load original tabbar-mode
 (require 'tabbar)
@@ -219,9 +219,9 @@ if specified), in current window."
   (let ((map (make-sparse-keymap)))
 ;;     (define-key map [removetab] (cons "Remove Tab" 'tabbar-delete-clicked-tab))
     (define-key map [duptab]
-      (cons "Duplicate This Tab in New Frame" 'tabbar-new-frame-with-clicked-buffer))
+      (cons "Duplicate Tab in New Frame" 'tabbar-new-frame-with-clicked-buffer))
     (define-key map [movetab]
-      (cons "Move This Tab to New Frame" 'tabbar-move-clicked-buffer-to-new-frame))
+      (cons "Move Tab to New Frame" 'tabbar-move-clicked-buffer-to-new-frame))
     (define-key map [closeothers] (cons "Close Other Tabs" 'tabbar-close-other-tabs))
     (define-key map [closetab] (cons "Close Tab" 'tabbar-close-clicked-tab))
     (define-key map [newtab] (cons "New Tab" 'tabbar-new-tab))
