@@ -5,7 +5,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: aquamacs-tabbar.el,v 1.15 2008/04/28 11:56:57 davidswelt Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.16 2008/04/28 18:32:26 davidswelt Exp $
 
 ;; load original tabbar-mode
 (require 'tabbar)
@@ -551,13 +551,6 @@ NOSCROLL is non-nil, exclude the tabbar-scroll buttons."
                                    :foreground padcolor)
                        'pointer 'arrow)))
     ))
-
-(defun close-current-tab-or-buffer ()
-  "Closes current tab if tabbar-mode is on; otherwise, closes current buffer."
-  (interactive)
-  (if (and (boundp tabbar-mode) tabbar-mode)
-      (tabbar-close-tab)
-    (close-current-window-asktosave)))
 
 ;; function to unconditionally open a new tab
 (defun new-tab (&optional major-mode)
