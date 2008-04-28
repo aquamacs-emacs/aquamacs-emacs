@@ -2,22 +2,15 @@
 
 ;; Copyright (C) 1999, 2000  Jonadab the Unsightly One <jonadab@bright.net>
 ;; Copyright (C) 2000, 2001, 2002, 2003  Alex Schroeder <alex@gnu.org>
-;; Copyright (C) 2003  Xavier Maillard <zedek@gnu-rox.org>
-;; Copyright (C) 2005,2006  David Reitter <david.reitter@gmail.com>
+;; Copyright (C) 2003, 2004, 2005, 2006  Xavier Maillard <zedek@gnu.org>
 
-;; Version: 6.5.5Aquamacs2
+;; Version: 6.6.0
 ;; Keywords: faces
 ;; Author: Jonadab the Unsightly One <jonadab@bright.net>
-;; Maintainer: Xavier Maillard <zedek@gnu-rox.org>
-;; Original URL: http://www.emacswiki.org/cgi-bin/wiki.pl?ColorTheme
+;; Maintainer: Xavier Maillard <zedek@gnu.org>
+;; URL: http://www.emacswiki.org/cgi-bin/wiki.pl?ColorTheme
 
-;; This file is not part of GNU Emacs.
-
-;; This file is part of Aquamacs.
-;; some modifications (bury-buffer -> kill-buffer, different menu)
-;; by dr. 05/2005
-;; mod to color-theme-install: store name of theme in color-theme-name
-;; frame parameter - useful to aquamacs-styles
+;; This file is not (YET) part of GNU Emacs.
 
 ;; This is free software; you can redistribute it and/or modify it under
 ;; the terms of the GNU General Public License as published by the Free
@@ -36,92 +29,8 @@
 
 ;;; Commentary:
 
-;; Sharing your current color setup:
-;;
-;; Use `color-theme-submit'.  If you have already invested time in
-;; customizing Emacs faces, please consider sharing your current setup.
-;; Make sure that color-theme.el is in your `load-path'.  Type M-x
-;; load-library RET color-theme RET to load all the functions.  Type M-x
-;; color-theme-submit RET and mail the result to the maintainer of this
-;; package (see above for mail addres).
-;;
-;; If you want to make sure that all your customization was exported,
-;; type M-x list-faces-display RET to get a list of all faces currently
-;; defined.  This is the list of faces that `color-theme-print' uses.
-
-;; Installing a color theme:
-;;
-;; Make sure that color-theme.el is in your `load-path'.  Type M-x
-;; load-library RET color-theme RET to load all the functions.
-;;
-;; The main function to call is color-theme-select.  Type M-x
-;; color-theme-select RET.  That creates a Color Theme Selection
-;; buffer.  Press RET or `i' on a color theme to install it for the
-;; rest of your session.
-;;
-;; If you want to install the color theme as soon as Emacs is started
-;; up, read the description of the theme you like and remember the
-;; name of the color theme function.  Press `d' on a color theme in
-;; the Color Theme Selection buffer to read the description.  Assuming
-;; you like the Gnome2 theme, you'll find that the function to use is
-;; called `color-theme-gnome2'.  Add the following to the end of your
-;; .emacs (removing the leading `;;').
-;;
-;; (require 'color-theme)
-;; (color-theme-gnome2)
-
-;; Changing menu colors:
-;;
-;; In Emacs 21 on X, you can set the menu colors and font using the
-;; menu face.  Example for your .emacs file:
-;;
-;;   (set-face-font 'menu "7x14")
-;;   (set-face-foreground 'menu "white").
-;;
-;; If are using X, you can set the menu foreground and background using
-;; a resource file, usually .Xdefaults or .Xresources.  Usually
-;; .Xdefaults is used when you start your session using a display
-;; manager such as xdm or gdm.  .Xresources is usually used when you
-;; start X directly via a shell script such as startx.  If you set
-;; Emacs*Background and Emacs*Foreground in such a resource file, the
-;; foreground and background of Emacs including the menu will be set.
-;; If your .emacs then loads a color theme, the foreground and
-;; background are changed -- with the exception of the menu.  There is
-;; no way to manipulate the menu foreground and background color from
-;; elisp.  You can also set more specific menu resources for Emacs in
-;; the resource file.  Here is a sample entry for your resource file:
-;;
-;;   Emacs*Background:		DarkSlateGray
-;;   Emacs*Foreground:		wheat
-
-;; Creating your own color theme:
-;;
-;; Use M-x customize-face and customize the faces.  Make sure to "Set
-;; for Current Session" -- you don't want to save these using custom!
-;; When you are done, call M-x color-theme-print to produce the elisp
-;; code required to recreate your theme.  Better yet, use M-x
-;; color-theme-submit to mail it to the maintainer.  That way it will be
-;; added to future versions of color-theme.el.
-;;
-;; For more information on the elisp format of a color theme, start with
-;; the documentation of `color-theme-install' using C-h f
-;; color-theme-install.
-;;
-;; When your color theme is just a variation of an existing color theme,
-;; take a look at `color-theme-robin-hood' in order to see an example of
-;; how to do it.  Essentially you want to call all the parent color
-;; themes before installing your changes.  For all but the first parent
-;; color theme, you need to make sure that `color-theme-is-cumulative'
-;; is bound to t.  If you don't do that, users that set
-;; `color-theme-is-cumulative' to nil will only install your changes
-;; without the parent color themes.
-
-;; Making a color theme work for both Emacs and XEmacs:
-;;
-;; Once you have printed the color-theme, you can make sure it looks
-;; similar in both Emacs and XEmacs by running
-;; `color-theme-analyze-defun' on the printed theme.  This function
-;; will check for missing faces for the other editor...
+;; Please read README and BUGS files for any relevant help.
+;; Contributors (not themers) should also read HACKING file.
 
 ;;; Thanks
 
@@ -130,88 +39,24 @@
 ;; Gordon Messmer <gordon@dragonsdawn.net> for ideas and discussion.
 ;; Sriram Karra <karra@cs.utah.edu> for the color-theme-submit stuff.
 ;; Olgierd `Kingsajz' Ziolko <kingsajz@rpg.pl> for the spec-filter idea.
+;; Brian Palmer for color-theme-library ideas and code
 ;; All the users that contributed their color themes.
-
-;;; Bugs:
-
-;; Emacs 20.7: Some faces are created using copy-face; these faces are
-;; not printed correctly using M-x color-theme-print.  They will have
-;; (nil) in their spec.  M-x customize-face has the same problem.
-;; Example:
-;; (copy-face 'bold 'new-bold)
-;; (color-theme-spec 'bold)
-;;   => (bold ((t (:bold t))))
-;; (color-theme-spec 'new-bold)
-;;   => (new-bold ((t (nil))))
-;;
-;; XEmacs 21.1: Some faces are defined using a certain font instead of
-;; of the correct attribute.  They will have (nil) in their spec.
-;; M-x customize-face has the same problem.
-;; Example:
-;; (color-theme-spec 'bold)
-;;   => (bold ((t (nil))))
-;;
-;; XEmacs 21.2 and up, Emacs 21: Not compatible with the custom-theme
-;; mode.  It should be easy to transform the color-theme source into
-;; custom-theme source, however.
-;;
-;; If you are running XEmacs, then only foreground and background color
-;; of the default face and only the background color of the text-cursor
-;; face will used.  This is due to the fact that these three pieces of
-;; information are stored as frame parameters in Emacs.
-;;
-;; If you are running XEmacs, variables cannot have a frame-local
-;; binding.  Therefore, if color-theme-is-global is set to nil, the
-;; variable settings in a color theme are ignored.
-;;
-;; Using Emacs and a non-nil value for color-theme-is-global will
-;; install a new color theme for all frames.  Using XEmacs and a non-nil
-;; value for color-theme-is-global will install a new color theme only
-;; on those frames that are not using a local color theme.
-;;
-;; If your system does not define the color names used, you will get the
-;; error "undefined color".  See the output of `list-colors-display' for
-;; a list of colors defined on your display.
-;;
-;; The :box, :height, and other new attributes will be honored in Emacs
-;; 21, but when you print such a color-theme on Emacs 20 or XEmacs 21,
-;; the information will get lost.  So don't do that.  Furthermore,
-;; customizing these faces may end up showing you a lisp expression
-;; instead of the real widgets on Emacs 20 or XEmacs 21 because these
-;; attributes are not understood.
-;;
-;; :inverse-video handling differs in Emacs and XEmacs.  We therefore do
-;; away with it.  When printing a color-theme, the inverse-video
-;; attribute should be handled correctly without ever appearing in color
-;; themes.  For maintenance, the following might be usefull for
-;; query-replace-regexp.
-;; :background "\([^"]*\)"\(.*\):foreground "\([^"]*\)"\(.*\) :inverse-video t
-;; :background "\3"\2:foreground "\1"\4
-;;
-;; In XEmacs 21.1, some of the face tests don't work.  Example:
-;; (custom-face-bold 'bold) returns nil on my system.  A bug report was
-;; submitted.
-;;
-;; Emacs 20 users will loose with new color themes, because these will
-;; set the colors of the default face only, leaving frame background
-;; untouched.  In Emacs 20, the colors of the default face and of the
-;; frame could be changed independently.  In Emacs 21, this is no longer
-;; true.  New color themes will not be made backwards compatible.
-;;
-;; This release was superficially tested with Emacs 21.2 and XEmacs 21.4.
 
 
 
 ;;; Code:
+(eval-when-compile
+  (require 'easymenu)
+  (require 'reporter)
+  (require 'sendmail))
 
-;; (require 'cl); set-difference is a function...
-(eval-when-compile (require 'cl))
+(require 'cl); set-difference is a function...
 
 ;; for custom-face-attributes-get or face-custom-attributes-get
 (require 'cus-face)
 (require 'wid-edit); for widget-apply stuff in cus-face.el
 
-(defconst color-theme-maintainer-address "zedek@gnu-rox.org"
+(defconst color-theme-maintainer-address "zedek@gnu.org"
   "Address used by `submit-color-theme'.")
 
 ;; Emacs / XEmacs compatibility and workaround layer
@@ -223,8 +68,14 @@
 	    (not (facep 'tool-bar)))
        (put 'tool-bar 'face-alias 'toolbar)))
 
-(defvar color-theme-xemacs-p (string-match "XEmacs" emacs-version)
+(defvar color-theme-xemacs-p (and (featurep 'xemacs) 
+                                  (string-match "XEmacs" emacs-version))
   "Non-nil if running XEmacs.")
+
+;; Add this since it appears to miss in emacs-2x
+(or (fboundp 'replace-in-string)
+    (defun replace-in-string (target old new)
+      (replace-regexp-in-string old new  target)))
 
 ;; face-attr-construct has a problem in Emacs 20.7 and older when
 ;; dealing with inverse-video faces.  Here is a short test to check
@@ -243,8 +94,12 @@
 ;; That's why we depend on cus-face.el functionality.
 
 (cond ((fboundp 'custom-face-attributes-get)
-       (defalias 'color-theme-face-attr-construct
-	 'custom-face-attributes-get))
+       (defun color-theme-face-attr-construct (face frame)
+         (if (atom face)
+             (custom-face-attributes-get face frame)
+             (if (and (consp face) (eq (car face) 'quote))
+                 (custom-face-attributes-get (cadr face) frame)
+                 (custom-face-attributes-get (car face) frame)))))
       ((fboundp 'face-custom-attributes-get)
        (defalias 'color-theme-face-attr-construct
 	 'face-custom-attributes-get))
@@ -266,7 +121,7 @@ a plist.  In XEmacs, the alist is deprecated; a plist is used instead."
 	 plist)
 	((not (symbolp (car plist)))
 	 (error "Wrong type argument: plist, %S" plist))
-	(t
+	((featurep 'xemacs)
 	 (plist-to-alist plist)))); XEmacs only
 
 ;; Customization
@@ -352,6 +207,34 @@ previous color themes."
   :type 'boolean
   :group 'color-theme)
 
+(defcustom color-theme-directory nil
+  "Directory where we can find additionnal themes (personnal).
+Note that there is at least one directory shipped with the official
+color-theme distribution where all contributed themes are located.
+This official selection can't be changed with that variable. 
+However, you still can decide to turn it on or off and thus,
+not be shown with all themes but yours."
+  :type '(repeat string)
+  :group 'color-theme)
+
+(defcustom color-theme-libraries (directory-files 
+                                  (concat 
+                                   (file-name-directory (locate-library "color-theme"))
+                                   "") t "^color-theme") ;; aquamacs
+  "A list of files, which will be loaded in color-theme-initialize depending
+on `color-theme-load-all-themes' value. 
+This allows a user to prune the default color-themes (which can take a while
+to load)."
+  :type '(repeat string)
+  :group 'color-theme)
+
+(defcustom color-theme-load-all-themes t
+  "When t, load all color-theme theme files
+as presented by `color-theme-libraries'. Else
+do not load any of this themes."
+  :type 'boolean
+  :group 'color-theme)
+
 (defcustom color-theme-mode-hook nil
   "Hook for color-theme-mode."
   :type 'hook
@@ -366,14 +249,16 @@ previous color themes."
     (define-key map (kbd "i") 'color-theme-install-at-point)
     (define-key map (kbd "l") 'color-theme-install-at-point-for-current-frame)
     (define-key map (kbd "p") 'color-theme-print)
-    (define-key map (kbd "q") 'kill-buffer-and-window)
+    (define-key map (kbd "q") 'kill-buffer-and-window)       ;; aquamacs
     (define-key map (kbd "?") 'color-theme-describe)
     (if color-theme-xemacs-p
 	(define-key map (kbd "<button2>") 'color-theme-install-at-mouse)
-      ;; aquamacs dr: changed mouse-2 to mouse-1
-      (define-key map [mouse-1] 'color-theme-install-at-mouse))
+      (define-key map (kbd "<mouse-1>") 'color-theme-install-at-mouse))  ;; aquamacs
     map)
   "Mode map used for the buffer created by `color-theme-select'.")
+
+(defvar color-theme-initialized nil
+  "Internal variable determining whether color-theme-initialize has been invoked yet")
 
 (defvar color-theme-buffer-name "*Color Theme Selection*"
   "Name of the color theme selection buffer.")
@@ -397,6 +282,18 @@ nil means that no history is maintained."
   "Counter for every addition to `color-theme-history'.
 This counts how many themes were installed, regardless
 of `color-theme-history-max-length'.")
+
+(defvar color-theme-entry-path (cond
+                                ;; Emacs 22.x and later
+                                ((lookup-key global-map [menu-bar tools])
+                                 '("tools"))
+                                ;; XEmacs
+                                ((featurep 'xemacs)
+                                 (setq tool-entry '("Tools")))
+                                ;; Emacs < 22
+                                (t
+                                 '("Tools")))
+  "Menu tool entry path.")
 
 (defun color-theme-add-to-history (name)
   "Add color-theme NAME to `color-theme-history'."
@@ -422,8 +319,7 @@ of `color-theme-history-max-length'.")
 ;; buffer.
 
 (defvar color-themes
-  '((color-theme-tiger-xcode "Tiger / Xcode" "Kevin D. Smith <kevin.smith@themorgue.org>")
-    (color-theme-aalto-dark "Aalto Dark" "Jari Aalto <jari.aalto@poboxes.com>")
+  '((color-theme-aalto-dark "Aalto Dark" "Jari Aalto <jari.aalto@poboxes.com>")
     (color-theme-aalto-light "Aalto Light" "Jari Aalto <jari.aalto@poboxes.com>")
     (color-theme-aliceblue "Alice Blue" "Girish Bharadwaj <girishb@gbvsoft.com>")
     (color-theme-andreas "Andreas" "Andreas Busch <Andreas.Busch@politics.ox.ac.uk>")
@@ -488,6 +384,7 @@ of `color-theme-history-max-length'.")
     (color-theme-pierson "Pierson" "Dan L. Pierson <dan@sol.control.com>")
     (color-theme-ramangalahy "Ramangalahy" "Solofo Ramangalahy <solofo@irisa.fr>")
     (color-theme-raspopovic "Raspopovic" "Pedja Raspopovic <pedja@lsil.com>")
+    (color-theme-renegade "Renegade" "Dave Benjamin <ramen@ramenfest.com>")
     (color-theme-resolve "Resolve" "Damien Elmes <resolve@repose.cx>")
     (color-theme-retro-green "Retro Green" "Alex Schroeder <alex@gnu.org>")
     (color-theme-retro-orange "Retro Orange" "Alex Schroeder <alex@gnu.org>")
@@ -552,6 +449,7 @@ startup."
 				color-theme-legal-frame-parameters))))
 (add-hook 'after-init-hook 'color-theme-backup-original-values)
 
+;;;###autoload
 (defun color-theme-select (&optional arg)
   "Displays a special buffer for selecting and installing a color theme.
 With optional prefix ARG, this buffer will include color theme libraries
@@ -559,8 +457,8 @@ as well.  A color theme library is in itself not complete, it must be
 used as part of another color theme to be useful.  Thus, color theme
 libraries are mainly useful for color theme authors."
   (interactive "P")
-  (pop-to-buffer color-theme-buffer-name)
-;;  (switch-to-buffer (get-buffer-create color-theme-buffer-name))
+  (unless color-theme-initialized (color-theme-initialize))
+  (switch-to-buffer (get-buffer-create color-theme-buffer-name))
   (setq buffer-read-only nil)
   (erase-buffer)
   ;; recreate the snapshot if necessary
@@ -569,12 +467,12 @@ libraries are mainly useful for color theme authors."
     (fset 'color-theme-snapshot (color-theme-make-snapshot))
     (setq color-themes (delq (assq 'color-theme-snapshot color-themes)
 			     color-themes)
-	  color-themes (delq (assq 'kill-buffer-and-window color-themes)
+	  color-themes (delq (assq 'kill-buffer-and-window color-themes)  ;; aquamacs
 			     color-themes)
 	  color-themes (append '((color-theme-snapshot
 				  "[Reset]" "Undo changes, if possible.")
-				 (kill-buffer-and-window
-				  "[Quit]" "Kill this buffer."))
+				 (kill-buffer-and-window ;; aquamacs
+				  "[Quit]" "Kill this buffer."))  ;; aquamacs
 			     color-themes)))
   (dolist (theme color-themes)
     (let ((func (nth 0 theme))
@@ -591,15 +489,15 @@ libraries are mainly useful for color theme authors."
 	(put-text-property 0 (length name) 'mouse-face 'highlight desc)
 	(insert desc)
 	(newline))))
-  (beginning-of-buffer)
+  (goto-char (point-min))
   (setq buffer-read-only t)
   (set-buffer-modified-p nil)
-  (set-window-dedicated-p (selected-window) t) ;; added dr 05/2005
   (color-theme-mode))
 
-(require 'easymenu)
-; (easy-menu-add-item nil '("Options") "--")
-; aquamacs mod / david reitter 05/2005
+(when (require 'easymenu)
+  (easy-menu-add-item nil color-theme-entry-path "--")
+  (easy-menu-add-item  nil color-theme-entry-path
+                       ["Color Themes" color-theme-select t]))
 
 (defun color-theme-mode ()
   "Major mode to select and install color themes.
@@ -652,6 +550,7 @@ The color themes are listed in `color-themes', which see."
 
 ;;; Commands in Color Theme Selection mode
 
+;;;###autoload
 (defun color-theme-describe ()
   "Describe color theme listed at point.
 This shows the documentation of the value of text-property color-theme
@@ -660,6 +559,7 @@ function.  See `color-themes'."
   (interactive)
   (describe-function (get-text-property (point) 'color-theme)))
 
+;;;###autoload
 (defun color-theme-install-at-mouse (event)
   "Install color theme clicked upon using the mouse.
 First argument EVENT is used to set point.  Then
@@ -669,6 +569,7 @@ First argument EVENT is used to set point.  Then
     (mouse-set-point event)
     (color-theme-install-at-point)))
 
+;;;autoload
 (defun color-theme-install-at-point ()
   "Install color theme at point.
 This calls the value of the text-property `color-theme' at point.
@@ -689,6 +590,7 @@ See `color-themes'."
 	(delete-overlay o))
       (goto-address))))
 
+;;;###autoload
 (defun color-theme-install-at-point-for-current-frame ()
   "Install color theme at point for current frame only.
 Binds `color-theme-is-global' to nil and calls
@@ -1040,9 +942,12 @@ the list of faces and their specs."
   (color-theme-print-alist vars)
   ;; remaining elements of snapshot: face specs
   (color-theme-print-faces faces)
-  (insert ")))")
+  (insert ")))\n")
+  (insert "(add-to-list 'color-themes '(" (symbol-name func) " "
+          " \"THEME NAME\" \"YOUR NAME\"))")
   (goto-char (point-min)))
 
+;;;###autoload
 (defun color-theme-print (&optional buf)
   "Print the current color theme function.
 
@@ -1078,6 +983,8 @@ Example:
     (setq buffer-read-only nil)
     (erase-buffer))
   ;; insert defun
+  (insert "(eval-when-compile"
+          "    (require 'color-theme))\n")
   (color-theme-print-theme 'my-color-theme
 			   (concat "Color theme by "
 				   (if (string= "" user-full-name)
@@ -1255,6 +1162,7 @@ If REGEXP is given, this is only done if faces contains a match for regexps."
 ;;        '((blue ((t (:foreground "blue"))))
 ;; 	 (bold ((t (:bold t :height 1.0))))))
 
+;;;###autoload
 (defun color-theme-analyze-defun ()
   "Once you have a color-theme printed, check for missing faces.
 This is used by maintainers who receive a color-theme submission
@@ -1310,6 +1218,7 @@ author."
 
 (defun color-theme-snapshot nil)
 
+;;;###autoload
 (defun color-theme-make-snapshot ()
   "Return the definition of the current color-theme.
 The function returned will recreate the color-theme in use at the moment."
@@ -1339,6 +1248,7 @@ The snapshot is created via `color-theme-snapshot'."
 This is only necessary for XEmacs, because in Emacs 21 changing the
 frame paramters automatically affects the relevant faces.")
 
+;; fixme: silent the bytecompiler with set-face-property
 (defun color-theme-frob-faces (params)
   "Change certain faces according to PARAMS.
 This uses `color-theme-frame-param-frobbing-rules'."
@@ -1553,6 +1463,7 @@ alist.  Membership will be tested using `assq'."
 ;; (color-theme-merge-alists '((a . 1) (b . 2)) '((c . 3) (d . 4)))
 ;; (color-theme-merge-alists '((a . 1) (b . 2)) '((c . 3) (d . 4) (b . 5)))
 
+;;;###autoload
 (defun color-theme-compare (theme-a theme-b)
   "Compare two color themes.
 This will print the differences between installing THEME-A and
@@ -1607,7 +1518,7 @@ a difference."
 
 
 ;;; Installing a color theme
-
+;;;###autoload
 (defun color-theme-install (theme)
   "Install a color theme defined by frame parameters, variables and faces.
 
@@ -1640,7 +1551,6 @@ with `color-theme-install-faces'.
 
 If `color-theme-is-cumulative' is nil, a color theme will undo face and
 frame-parameter settings of previous color themes."
-  (modify-frame-parameters nil `((color-theme-name . ,(car theme))))
   (setq theme (color-theme-canonic theme))
   (color-theme-install-variables (color-theme-variables theme))
   (color-theme-install-faces (color-theme-faces theme))
@@ -1650,8 +1560,10 @@ frame-parameter settings of previous color themes."
     (color-theme-add-to-history
      (car theme))))
 
-;; Sharing your stuff
+
 
+;; Sharing your stuff
+;;;###autoload
 (defun color-theme-submit ()
   "Submit your color-theme to the maintainer."
   (interactive)
@@ -1705,50 +1617,51 @@ frame-parameter settings of previous color themes."
       (message "Enter a message and type %s to send or %s to abort."
 	       sendkey abortkey))))
 
-
-;; inserted by david reitter 07/2005
-;; this way the basic color-theme can be loaded without time penalty...
-(defun define-color-theme-autoloads ()
-"Defines the color theme functions as autoloads, so they are not
-loaded when the color-theme package is loaded."
-  (mapc
-
-   (lambda (th)
-     (let ((name (car th)))
-       (autoload name "color-theme-themes")
-       )
-     )
-   color-themes
-   )
-)
-
-(define-color-theme-autoloads)
-
-
-;; workaround (patch)
-
-
-(defun color-theme-face-attr-construct (face frame)
-    (unless frame (setq frame (selected-frame)))
-    (let (plist liste)
-      (if (atom face)
-	  (setq plist (custom-face-attributes-get face frame))
-	(cond ((and (consp face) (eq (car face) 'quote))
-	       (message "On est dans le bloc quote")
-	       (setq liste (cadr face)))
-	      ((and (consp face) (eq (car face) 'list))
-	       (message "On est dans le bloc list")
-	       (setq liste (cdr face))))
-	(when liste
-	  (dolist (elem  liste)
-	    (message "Face to get attributes: %s" elem)
-	    (push (custom-face-attributes-get elem frame) plist)))
-	(apply 'append plist))))
-
-
- 
-
 
+
+;; Use this to define themes
+(defmacro define-color-theme (name author description &rest forms)
+  (let ((n name))
+    `(progn 
+       (add-to-list 'color-themes
+                    (list ',n
+                          (upcase-initials
+                           (replace-in-string
+                            (replace-in-string 
+                             (symbol-name ',n) "^color-theme-" "") "-" " "))
+                          ,author))
+       (defun ,n ()
+	 ,description
+	 (interactive)
+         ,@forms))))
+
+
+;;; FIXME: is this useful ??
+;;;###autoload
+(defun color-theme-initialize ()
+  "Initialize the color theme package by loading color-theme-libraries."
+  (interactive)
+
+  (cond ((and (not color-theme-load-all-themes)
+              color-theme-directory)
+         (setq color-theme-libraries 
+               (directory-files color-theme-directory t "^color-theme")))
+        (color-theme-directory
+         (push (cdr (directory-files color-theme-directory t "^color-theme")) 
+               color-theme-libraries)))
+  (dolist (library color-theme-libraries)
+    (load library)))
+
+(when nil
+  (setq color-theme-directory "themes/"
+        color-theme-load-all-themes nil)
+  (color-theme-initialize)
+)
+;; TODO: I don't like all those function names cluttering up my namespace.
+;; Instead, a hashtable for the color-themes should be created. Now that 
+;; define-color-theme is around, it should be easy to change in just the
+;; one place. 
+
 
 (provide 'color-theme)
 
