@@ -6,7 +6,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: tabbar-window.el,v 1.21 2008/04/28 10:40:01 davidswelt Exp $
+;; Revision: $Id: tabbar-window.el,v 1.22 2008/04/28 18:52:30 davidswelt Exp $
 
 (require 'tabbar)
 
@@ -102,6 +102,11 @@ displayed buffer.  Result is an alist of alists."
 	 (when (eq wnumber (window-number window))
 	   (setq window-id window))) 'nomini t)
     window-id))
+
+
+;; (setq oh header-line-inhibit-window-list)
+;; (setq header-line-inhibit-window-list nil)
+;; (setq header-line-inhibit-window-list oh)
 
 (defun tabbar-window-alist-cleanup ()
   "Remove from tabbar-window-alist any elements (windows OR
@@ -336,8 +341,7 @@ specified BUFFER belongs."
       (abort-recursive-edit))
   (let* ((buffer (tabbar-tab-value tab))
 	 (killable (and
-		    (killable-buffer-p buffer)
-		    (eq   (string-match "\\*.*\\*" (buffer-name buffer)) nil))) 
+		    (killable-buffer-p buffer))) 
 	 (dont-kill (tabbar-window-other-instances tab)))
     (when (and killable (not dont-kill))
       ;; ask before killing
