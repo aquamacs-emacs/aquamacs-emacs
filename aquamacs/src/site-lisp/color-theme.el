@@ -208,7 +208,7 @@ only on those frames that are not using a local color theme."
   :type 'boolean
   :group 'color-theme)
 
-(defcustom color-theme-is-cumulative t
+(defcustom color-theme-is-cumulative nil
   "*Determines wether new color themes are installed on top of each other.
 If non-nil, installing a color theme will undo all settings made by
 previous color themes."
