@@ -6,7 +6,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: tabbar-window.el,v 1.20 2008/04/27 21:49:08 davidswelt Exp $
+;; Revision: $Id: tabbar-window.el,v 1.21 2008/04/28 10:40:01 davidswelt Exp $
 
 (require 'tabbar)
 
@@ -135,8 +135,10 @@ Displayed buffers always get tabs."
 	      (if (eq (length buflist) 1)
 		  ;; if there is only 1 buffer associated with this tabset, then
 		  ;;  display no tabbar (no header line).
-		  (progn (add-to-list 'header-line-inhibit-window-list window t)
-			 (redraw-frame (window-frame window)))
+		  (add-to-list 'header-line-inhibit-window-list window t)
+;; the following causes too many redraws
+;;		  (progn (add-to-list 'header-line-inhibit-window-list window t)
+;;			 (redraw-frame (window-frame window)))
 		;; otherwise, ensure this window has a tabbar
 		(setq header-line-inhibit-window-list
 		      (delq window header-line-inhibit-window-list))))
