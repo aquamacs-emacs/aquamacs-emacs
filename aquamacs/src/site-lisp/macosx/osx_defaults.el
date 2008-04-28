@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.65 2008/04/27 07:16:13 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.66 2008/04/28 17:24:16 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -47,6 +47,16 @@
 ; move one-buffer-one-frame to extra mode
 
 
+(defun aquamacs-create-preferences-dirs ()
+  (condition-case nil
+      (progn 
+	(unless (file-exists-p "~/Library/Preferences/Aquamacs Emacs")	
+	  (make-directory "~/Library/Preferences/Aquamacs Emacs" 'parents))
+	(unless (file-exists-p "~/Library/Application Support/Aquamacs Emacs/Temporary Files")	
+	  (make-directory "~/Library/Application Support/Aquamacs Emacs/Temporary Files" 'parents)))
+    (error nil)))
+
+  
 (defun aquamacs-create-preferences-file ()
   "Creates a Preferences.el in the right place if needed."
   (let ((pf (expand-file-name 
@@ -174,7 +184,7 @@ from earlier versions of the distribution."
   (mac-add-standard-directories)
 (ats "add dirs done")
 
- 
+  (aquamacs-create-preferences-dirs)
   (aquamacs-create-preferences-file)
 (ats "create prefs done")
 
@@ -294,16 +304,12 @@ from earlier versions of the distribution."
     (require 'emulate-mac-keyboard-mode) )  
 
 
-  (condition-case 
-      nil 
-      (progn 
-	(make-directory "~/Library/Preferences/Aquamacs Emacs")
-	(make-directory "~/Library/Application Support/Aquamacs Emacs")
-	(make-directory "~/Library/Application Support/Aquamacs Emacs/Temporary Files")
-	;; problem with this: could be started from /Volumes/.. (DMG) for first time, then moved		
-	(aquamacs-init-user-help) ;; init help system (first start)
-	)
-    (error t)) 
+  ;; initialize help
+  (condition-case nil 
+      ;; problem with this: could be started from /Volumes/.. 
+      ;; <DM> for first time, then moved		
+      (aquamacs-init-user-help) ;; init help system (first start)
+    (error t))
 
   (require 'cus-edit) ;; because of some autoload weirdness 
   
