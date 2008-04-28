@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.67 2008/04/28 17:28:02 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.68 2008/04/28 19:37:41 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -87,8 +87,11 @@ Aquamacs also executes compatibility code to allow transitions
 from earlier versions of the distribution."
     (interactive)
     (unless (equal init-file-user nil) ;; no .emacs was read (-q option)
-	(if init-file-debug
-	    ;; Do this without a condition-case if the user wants to debug.
+      (condition-case nil
+	  (load custom-file)
+	(error (message "Loading `custom-file' failed.")))
+      (if init-file-debug
+	  ;; Do this without a condition-case if the user wants to debug.
 	    (mapc (lambda (file)
 		    (let ((user-init-file file))
 		      (load user-init-file t)))
@@ -123,10 +126,6 @@ from earlier versions of the distribution."
 			     (setq init-file-had-error t)))
 			  )))
 		    aquamacs-preference-files))
-      ;; the customization file is loaded even if the Preferences fail.
-      (condition-case nil
-	  (load custom-file)
-	(error (message "Loading `custom-file' failed.")))
       (aquamacs-activate-features-new-in-this-version)) t)
 
 (defun mac-is-mounted-volume-p (file)
