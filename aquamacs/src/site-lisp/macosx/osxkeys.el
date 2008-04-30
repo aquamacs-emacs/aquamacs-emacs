@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.89 2008/04/28 18:31:35 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.90 2008/04/30 22:46:08 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -1061,9 +1061,9 @@ default."
 
     (when (fboundp 'previous-tab-or-buffer)
       (define-key map `[(,osxkeys-command-key {)] 'previous-tab-or-buffer)
-      (define-key map `[(,osxkeys-command-key S left)] 'previous-tab-or-buffer)
+      (define-key map `[(,osxkeys-command-key meta left)] 'previous-tab-or-buffer)
       (define-key map `[(,osxkeys-command-key })] 'next-tab-or-buffer)
-      (define-key map `[(,osxkeys-command-key shift right)] 'next-tab-or-buffer))
+      (define-key map `[(,osxkeys-command-key meta right)] 'next-tab-or-buffer))
 
 
 
@@ -1138,43 +1138,6 @@ mac-command-modifier osxkeys-command-key))))
 "Bindings in the global map overwritten when osx-key-mode was turned on.")
 
 (define-minor-mode osx-key-mode
-  "Toggle Mac Key mode.
-With arg, turn Mac Key mode on iff arg is positive.
-When Mac Key mode is enabled, mac-style key bindings are provided.
-Setting the `osx-key-mode' variable has limited effect - call
-the `osx-key-mode' function to switch mode on or off.
-`osx-key-mode-map' and `osx-key-low-priority-key-map' contain the
-keymaps used by this mode. They may be modified where necessary."
-  :global t
-  :group 'osx-key-mode 
-  :keymap 'osx-key-mode-map  
-
-
-;; Change encoding so you can use alt-e and alt-u accents (and others) 
-  (set-terminal-coding-system 'iso-8859-1) 
-  (set-keyboard-coding-system 'mac-roman) ;; keyboard
-  (set-selection-coding-system 'mac-roman) ;; copy'n'paste
- 
-  (setq mac-emulate-three-button-mouse (if osx-key-mode 'control
-					   nil))
-
-
-  ;; use right mouse click as mouse-3
-  (setq mac-wheel-button-is-mouse-2 osx-key-mode)
-
-  (if osx-key-mode
-      ;; install low priority map
-      (setq osx-key--saved-low-priority-map 
-	    (aquamacs-install-low-priority-global-key-map
-	    osx-key-low-priority-key-map))
-    ;; restore old map
-    (when osx-key--saved-low-priority-map
-      (aquamacs-install-low-priority-global-key-map
-       osx-key--saved-low-priority-map)
-      (setq osx-key--saved-low-priority-map (make-sparse-keymap)))
-    )
-
-  (osx-key-mode-command-key-warning))(define-minor-mode osx-key-mode
   "Toggle Mac Key mode.
 With arg, turn Mac Key mode on iff arg is positive.
 When Mac Key mode is enabled, mac-style key bindings are provided.
