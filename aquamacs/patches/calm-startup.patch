@@ -1,12 +1,31 @@
 Index: lisp/startup.el
 ===================================================================
-RCS file: /cvsroot/emacs/emacs/lisp/startup.el,v
-retrieving revision 1.368
-diff -c -r1.368 startup.el
-*** lisp/startup.el	15 Jul 2005 14:47:06 -0000	1.368
---- lisp/startup.el	17 Jul 2005 22:07:56 -0000
+RCS file: /sources/emacs/emacs/lisp/startup.el,v
+retrieving revision 1.436.2.16
+diff -c -r1.436.2.16 startup.el
+*** lisp/startup.el	6 Mar 2008 00:08:01 -0000	1.436.2.16
+--- lisp/startup.el	30 Apr 2008 16:33:28 -0000
 ***************
-*** 463,469 ****
+*** 44,51 ****
+    "Non-nil inhibits the startup screen.
+  It also inhibits display of the initial message in the `*scratch*' buffer.
+  
+! This is for use in your personal init file (but NOT site-start.el), once
+! you are familiar with the contents of the startup screen."
+    :type 'boolean
+    :group 'initialization)
+  
+--- 44,51 ----
+    "Non-nil inhibits the startup screen.
+  It also inhibits display of the initial message in the `*scratch*' buffer.
+  
+! This is for use in your personal init file, in case you
+! would like to use the extra functionality of the startup screen."
+    :type 'boolean
+    :group 'initialization)
+  
+***************
+*** 473,479 ****
   		  (if (string-match "^\\(xterm\\|rxvt\\|dtterm\\|eterm\\)"
   				    term)
   		      (setq default-frame-background-mode 'light)))
@@ -14,7 +33,7 @@ diff -c -r1.368 startup.el
   
   	;; Now we know the user's default font, so add it to the menu.
   	(if (fboundp 'font-menu-add-default)
---- 463,472 ----
+--- 473,482 ----
   		  (if (string-match "^\\(xterm\\|rxvt\\|dtterm\\|eterm\\)"
   				    term)
   		      (setq default-frame-background-mode 'light)))
@@ -26,30 +45,121 @@ diff -c -r1.368 startup.el
   	;; Now we know the user's default font, so add it to the menu.
   	(if (fboundp 'font-menu-add-default)
 ***************
-*** 721,726 ****
---- 724,732 ----
-      (and command-line-args
-           (setcdr command-line-args args)))
+*** 756,765 ****
+--- 759,773 ----
+  
+    (run-hooks 'before-init-hook)
   
 +   ;; the initial frame is hidden in Aquamacs
-+   (setq initial-frame-alist (cons '(visibility . nil) initial-frame-alist))
++   (let ((initial-frame-alist (cons '(visibility . nil) initial-frame-alist)))
 + 
     ;; Under X Window, this creates the X frame and deletes the terminal frame.
     (when (fboundp 'frame-initialize)
       (frame-initialize))
+  
++   )
++ 
+    ;; Turn off blinking cursor if so specified in X resources.  This is here
+    ;; only because all other settings of no-blinking-cursor are here.
+    (unless (or noninteractive
 ***************
-*** 2146,2151 ****
---- 2119,2131 ----
-  	   (run-hooks 'term-setup-hook))
-        (setq inhibit-startup-hooks t)
+*** 829,838 ****
+      (if site-run-file
+  	(load site-run-file t t))
+  
+-     ;; Sites should not disable this.  Only individuals should disable
+-     ;; the startup screen.
+-     (setq inhibit-startup-screen nil)
+- 
+      ;; Warn for invalid user name.
+      (when init-file-user
+        (if (string-match "[~/:\n]" init-file-user)
+--- 837,842 ----
+***************
+*** 889,894 ****
+--- 893,900 ----
+  		      ;; into user-init-file.
+  		      (setq user-init-file t)
+  		      (load user-init-file-1 t t)
++ 		      (if (fboundp 'aquamacs-load-preferences) 
++ 			  (aquamacs-load-preferences))
+  
+  		      (when (eq user-init-file t)
+  			;; If we did not find ~/.emacs, try
+***************
+*** 925,936 ****
+  			    (setq user-init-file source))))
+  
+  		      (unless inhibit-default-init
+!                         (let ((inhibit-startup-screen nil))
+!                           ;; Users are supposed to be told their rights.
+!                           ;; (Plus how to get help and how to undo.)
+!                           ;; Don't you dare turn this off for anyone
+!                           ;; except yourself.
+!                           (load "default" t t)))))))))
+  	(if init-file-debug
+  	    ;; Do this without a condition-case if the user wants to debug.
+  	    (funcall inner)
+--- 931,937 ----
+  			    (setq user-init-file source))))
+  
+  		      (unless inhibit-default-init
+!                           (load "default" t t))))))))
+  	(if init-file-debug
+  	    ;; Do this without a condition-case if the user wants to debug.
+  	    (funcall inner)
+***************
+*** 1852,1884 ****
+    (let ((resize-mini-windows t))
+      (or noninteractive ;(input-pending-p) init-file-had-error
+  	;; t if the init file says to inhibit the echo area startup message.
+! 	(and inhibit-startup-echo-area-message
+! 	     user-init-file
+! 	     (or (and (get 'inhibit-startup-echo-area-message 'saved-value)
+! 		      (equal inhibit-startup-echo-area-message
+! 			     (if (equal init-file-user "")
+! 				 (user-login-name)
+! 			       init-file-user)))
+! 		 ;; Wasn't set with custom; see if .emacs has a setq.
+! 		 (let ((buffer (get-buffer-create " *temp*")))
+! 		   (prog1
+! 		       (condition-case nil
+! 			   (save-excursion
+! 			     (set-buffer buffer)
+! 			     (insert-file-contents user-init-file)
+! 			     (re-search-forward
+! 			      (concat
+! 			       "([ \t\n]*setq[ \t\n]+"
+! 			       "inhibit-startup-echo-area-message[ \t\n]+"
+! 			       (regexp-quote
+! 				(prin1-to-string
+! 				 (if (equal init-file-user "")
+! 				     (user-login-name)
+! 				   init-file-user)))
+! 			       "[ \t\n]*)")
+! 			      nil t))
+! 			 (error nil))
+! 		     (kill-buffer buffer)))))
+  	(message "%s" (startup-echo-area-message)))))
+  
+  (defun display-startup-screen (&optional concise)
+--- 1853,1859 ----
+    (let ((resize-mini-windows t))
+      (or noninteractive ;(input-pending-p) init-file-had-error
+  	;; t if the init file says to inhibit the echo area startup message.
+! 	inhibit-startup-echo-area-message
+  	(message "%s" (startup-echo-area-message)))))
+  
+  (defun display-startup-screen (&optional concise)
+***************
+*** 2153,2158 ****
+--- 2128,2136 ----
+        (when (fboundp 'frame-notice-user-settings)
+  	(frame-notice-user-settings))
   
 +       ;; time to make the frame visible (Aquamacs)
-+       ;; done before calling `frame-notice-user-settings'
-+       ;; as a workaround because the modificiation of 
-+       ;; frame position does not appear to work while the
-+       ;; the frame is hidden.  dr. 04/2008
 +       (make-frame-visible) 
 + 
-        ;; It's important to notice the user settings before we
-        ;; display the startup message; otherwise, the settings
-        ;; won't take effect until the user gives the first
+        ;; If there are no switches to process, we might as well
+        ;; run this hook now, and there may be some need to do it
+        ;; before doing any output.
