@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.157 2008/04/29 19:20:55 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.158 2008/04/30 17:32:55 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -632,7 +632,6 @@ yes-or-no prompts - y or n will do."
 
 					; Make Text mode the default mode for new buffers
 					; turn on Auto Fill mode automatically in Text mode  
-     (default-major-mode text-mode)
      (initial-major-mode text-mode)
 
 
