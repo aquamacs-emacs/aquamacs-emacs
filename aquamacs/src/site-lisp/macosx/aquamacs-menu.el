@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.117 2008/04/30 23:18:19 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.118 2008/05/01 08:42:35 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -1080,7 +1080,7 @@ both existing buffers and buffers that you subsequently create."
  
 
 (define-key menu-bar-file-menu [one-window]
-  '(menu-item (aq-shortcut "Remove Splits              " 
+  '(menu-item (aq-shortcut "Remove Splits                   " 
 			   'delete-other-windows)
 			   delete-other-windows
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
@@ -1088,7 +1088,7 @@ both existing buffers and buffers that you subsequently create."
 			   (not (one-window-p t nil)))
 	      :help "Selected window grows to fill the whole frame"))
 (define-key menu-bar-file-menu [split-window]
-  `(menu-item  (aq-shortcut "Split Window                " 
+  `(menu-item  (aq-shortcut "Split Window                     " 
 			    'split-window-vertically)
 	       split-window-vertically
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
@@ -1113,7 +1113,7 @@ both existing buffers and buffers that you subsequently create."
 	      :help "Tile frames horizontally"))
 (if (fboundp 'mac-toggle-full-frame)
     (define-key menu-bar-file-menu [full-frame]
-      `(menu-item (aq-shortcut "Full Screen Editing          " 
+      `(menu-item (aq-shortcut "Full Screen Editing             " 
 				'aquamacs-toggle-full-frame) 
 		  aquamacs-toggle-full-frame
 		  :key-sequence nil
@@ -1144,13 +1144,13 @@ both existing buffers and buffers that you subsequently create."
 		'(command-separator "--")
 		(list 'next-buffer
 		      'menu-item
-		      (aq-shortcut "Select Next Buffer          " 'next-tab-or-buffer)
-		      'next-buffer
+		      (aq-shortcut "Select Next Buffer             " 'next-tab-or-buffer)
+		      'next-tab-or-buffer
 		      :help "Switch to the \"next\" buffer in a cyclic order")
 		(list 'previous-buffer
 		      'menu-item
-		      (aq-shortcut "Select Previous Buffer    " 'previous-tab-or-buffer)
-		      'previous-buffer
+		      (aq-shortcut "Select Previous Buffer       " 'previous-tab-or-buffer)
+		      'previous-tab-or-buffer
 		      :help "Switch to the \"previous\" buffer in a cyclic order")
 		)))
 
