@@ -6,7 +6,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: tabbar-window.el,v 1.22 2008/04/28 18:52:30 davidswelt Exp $
+;; Revision: $Id: tabbar-window.el,v 1.23 2008/05/01 23:14:11 champo Exp $
 
 (require 'tabbar)
 
@@ -267,11 +267,14 @@ That is, a string used to represent it on the tab bar."
   (let ((mouse-button (event-basic-type event))
 	(one-buffer-one-frame nil)
         (buffer (tabbar-tab-value tab)))
-    (cond
-     ((eq mouse-button 'mouse-3)
-      (popup-menu tabbar-context-menu-map event prefix))
-     (t
-      (switch-to-buffer buffer)))
+    (if buffer
+	(cond
+	 ((eq mouse-button 'mouse-3)
+	  (popup-menu tabbar-context-menu-map event prefix))
+	 (t
+	  (switch-to-buffer buffer)))
+      (when (eq mouse-button 'mouse-3)
+	(popup-menu tabbar-empty-context-menu-map event prefix)))
     ))
 
 (defun tabbar-windows-per-buffer (buffer)

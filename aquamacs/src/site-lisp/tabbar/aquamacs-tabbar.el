@@ -5,7 +5,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: aquamacs-tabbar.el,v 1.17 2008/04/28 19:29:18 champo Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.18 2008/05/01 23:14:10 champo Exp $
 
 ;; load original tabbar-mode
 (require 'tabbar)
@@ -227,6 +227,12 @@ if specified), in current window."
     (define-key map [newtab] (cons "New Tab" 'tabbar-new-tab))
     map) "Keymap for the Tabbar context menu.")
 
+;; keymap for tabbar context menu
+(defvar tabbar-empty-context-menu-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map [newtab] (cons "New Tab" 'tabbar-new-tab))
+    map) "Keymap for the context menu of the empty portion of tab bar.")
+
 ;; modify hints to give only the buffer name
 (defun tabbar-buffer-help-on-tab (tab)
   "Return the help string shown when mouse is onto TAB."
@@ -351,6 +357,9 @@ or groups.  Call the function `tabbar-button-label' otherwise."
   (cons (cons " >" tabbar-scroll-right-button-enabled-image)
         (cons " =" nil)))
 
+(setq tabbar-close-tab-button
+      '((:type png :file "close-tab.png")))
+
 ;; allow fast-clicking through lists of tabs
 (defsubst tabbar-click-p (event)
   "Return non-nil if EVENT is a mouse click event."
@@ -388,36 +397,80 @@ is non-nil, exclude the tabbar-scroll buttons in the check."
 	(goto-char (point-min))
 	(> (vertical-motion 1) 0)))))
 
+;; redefine tabbar-click-on-tab with an additional argument that can
+;; trigger closing the tab instead of selecting it!
+(defsubst tabbar-click-on-tab (tab &optional type action)
+  "Handle a mouse click event on tab TAB.
+Call `tabbar-select-tab-function' with the received, or simulated
+mouse click event, and TAB.
+Optional argument TYPE is a mouse click event type (see the function
+`tabbar-make-mouse-event' for details)."
+  (let* ((mouse-event (tabbar-make-mouse-event type))
+	 (mouse-button (event-basic-type mouse-event)))
+    (if (eq action 'close-tab)
+	(when (and (eq mouse-button 'mouse-1) tabbar-close-tab-function)
+	  (funcall tabbar-close-tab-function tab))
+      (when tabbar-select-tab-function
+	(funcall tabbar-select-tab-function
+		 (tabbar-make-mouse-event type) tab)
+	(tabbar-display-update)))))
+
+(defun tabbar-select-tab-callback (event)
+  "Handle a mouse EVENT on a tab.
+Pass mouse click events on a tab to `tabbar-click-on-tab'."
+  (interactive "@e")
+  (when (tabbar-click-p event)
+    (let ((target (posn-string (event-start event))))
+      (tabbar-click-on-tab
+       (get-text-property (cdr target) 'tabbar-tab (car target))
+       event
+       (get-text-property (cdr target) 'tabbar-action (car target))))))
+
 (defsubst tabbar-line-tab (tab)
   "Return the display representation of tab TAB.
 That is, a propertized string used as an `header-line-format' template
 element.
 Call `tabbar-tab-label-function' to obtain a label for TAB."
-  (let ((display-label
-	 (propertize
-	  (if tabbar-tab-label-function
-	      (funcall tabbar-tab-label-function tab)
-	    tab)
-	  'tabbar-tab tab
-	  'local-map (tabbar-make-tab-keymap tab)	 
-;;	  'help-echo 'tabbar-help-on-tab ;; no help echo: it's redundant
-	  'mouse-face (if (tabbar-selected-p tab (tabbar-current-tabset))
-			  'tabbar-selected-highlight
-			'tabbar-unselected-highlight)
-	  'face (cond ((and (tabbar-selected-p tab (tabbar-current-tabset))
-			    (buffer-modified-p (tabbar-tab-value tab)))
-		       'tabbar-selected-modified)
-		      ((and (not (tabbar-selected-p tab (tabbar-current-tabset)))
-			    (buffer-modified-p (tabbar-tab-value tab)))
-		       'tabbar-unselected-modified)
-		      ((and (tabbar-selected-p tab (tabbar-current-tabset))
-			    (not (buffer-modified-p (tabbar-tab-value tab))))
-		       'tabbar-selected)
-		      (t 'tabbar-unselected)
-		      )
-	  'pointer 'hand)))
-    (concat display-label
-	    tabbar-separator-value)))
+  (let* ((close-button-image (tabbar-find-image tabbar-close-tab-button))
+	 (close-button
+	 (propertize "[x]"
+		     'tabbar-tab tab
+		     'local-map (tabbar-make-tab-keymap tab)
+		     'tabbar-action 'close-tab
+		     ;;	  'help-echo 'tabbar-help-on-tab ;; no help echo: it's redundant
+		     'mouse-face (if (tabbar-selected-p tab (tabbar-current-tabset))
+				     'tabbar-selected-highlight
+				   'tabbar-unselected-highlight)
+		     'face (if (tabbar-selected-p tab (tabbar-current-tabset))
+			       'tabbar-selected
+			     'tabbar-unselected)
+		     'pointer 'arrow
+		     'display (tabbar-normalize-image close-button-image)
+		     ))
+	(display-label
+	 (propertize (if tabbar-tab-label-function
+			 (funcall tabbar-tab-label-function tab)
+		       tab)
+		     'tabbar-tab tab
+		     'local-map (tabbar-make-tab-keymap tab)	 
+		     ;;	  'help-echo 'tabbar-help-on-tab ;; no help echo: it's redundant
+		     'mouse-face (if (tabbar-selected-p tab (tabbar-current-tabset))
+				     'tabbar-selected-highlight
+				   'tabbar-unselected-highlight)
+		     'face (cond ((and (tabbar-selected-p tab (tabbar-current-tabset))
+				       (buffer-modified-p (tabbar-tab-value tab)))
+				  'tabbar-selected-modified)
+				 ((and (not (tabbar-selected-p tab (tabbar-current-tabset)))
+				       (buffer-modified-p (tabbar-tab-value tab)))
+				  'tabbar-unselected-modified)
+				 ((and (tabbar-selected-p tab (tabbar-current-tabset))
+				       (not (buffer-modified-p (tabbar-tab-value tab))))
+				  'tabbar-selected)
+				 (t 'tabbar-unselected)
+				 )
+		     'pointer 'arrow
+		     )))
+    (concat close-button display-label tabbar-separator-value)))
 
 (defun tabbar-dummy-line-buttons (&optional noscroll)
   "Return a list of propertized strings for placeholders for the tab bar buttons.
@@ -549,7 +602,8 @@ NOSCROLL is non-nil, exclude the tabbar-scroll buttons."
                        'face (list :inherit 'tabbar-default
 				   :background padcolor
                                    :foreground padcolor)
-                       'pointer 'arrow)))
+                       'pointer 'arrow
+		       'local-map (tabbar-make-tab-keymap "empty tab bar"))))
     ))
 
 ;; function to unconditionally open a new tab
