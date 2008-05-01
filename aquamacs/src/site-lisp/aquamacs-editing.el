@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-editing.el,v 1.3 2008/05/01 11:32:56 davidswelt Exp $
+;; Last change: $Id: aquamacs-editing.el,v 1.4 2008/05/01 14:07:20 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -130,9 +130,11 @@ like `unfill-region'."
       (if (> count 0)
 	  (let ((mean-line-length 
 		 (/ (- (point) start-point empty-lines) count)))
-	    (when  (> mean-line-length (* 1.3 fill-column)) 
+	    (if  (< mean-line-length (* 1.3 fill-column))
+		(auto-fill-mode 1)
 	      ;; long lines on average
 	      (longlines-mode 1) ;; turn on longlines mode
-	      (message "Soft word wrap (longlines-mode) auto-enabled.")))))))
+	      (message "Soft word wrap (longlines-mode) auto-enabled.")))
+	(auto-fill-mode 1)))))
  
 (provide 'aquamacs-editing)
