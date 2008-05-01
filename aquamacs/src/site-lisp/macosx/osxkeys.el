@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.90 2008/04/30 22:46:08 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.91 2008/05/01 08:39:07 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -1060,10 +1060,10 @@ default."
     ;; tabbar stuff
 
     (when (fboundp 'previous-tab-or-buffer)
-      (define-key map `[(,osxkeys-command-key {)] 'previous-tab-or-buffer)
       (define-key map `[(,osxkeys-command-key meta left)] 'previous-tab-or-buffer)
-      (define-key map `[(,osxkeys-command-key })] 'next-tab-or-buffer)
-      (define-key map `[(,osxkeys-command-key meta right)] 'next-tab-or-buffer))
+      (define-key map `[(,osxkeys-command-key {)] 'previous-tab-or-buffer)
+      (define-key map `[(,osxkeys-command-key meta right)] 'next-tab-or-buffer)
+      (define-key map `[(,osxkeys-command-key })] 'next-tab-or-buffer))
 
 
 
