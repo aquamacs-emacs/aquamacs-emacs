@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.61 2008/04/27 22:38:38 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.62 2008/05/01 13:49:52 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -100,8 +100,8 @@ handles files of type HTML."
     ;; because otherwise, we get a nasty animation effect
     (save-excursion
       (set-buffer buf)
-      (if (or mode default-major-mode)
-	  (funcall  (or mode default-major-mode))))
+      (if (or mode initial-major-mode)
+	  (funcall  (or mode initial-major-mode))))
     (if other-frame
 	(switch-to-buffer-other-frame buf)
       (let ((one-buffer-one-frame-force one-buffer-one-frame-mode))
@@ -184,9 +184,7 @@ right there as well."
    (let ((last-nonmenu-event nil))
      (find-file-read-args "Save buffer to file: " nil)))
   (write-file filename))
- 
-  
-  
+
 
 ;; when saving a file, set its creator code
 
