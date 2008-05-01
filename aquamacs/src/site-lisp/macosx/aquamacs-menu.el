@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.118 2008/05/01 08:42:35 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.119 2008/05/01 14:08:25 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -695,7 +695,7 @@ left and right margin"))
 
 (require 'longlines) 
  
-;; goes in simple.el
+;;  backward compatibility (in case users have it in their customizations)
 (defun turn-on-longlines ()
   "Turn on Longlines mode.
 ... unless buffer is read-only."
@@ -705,90 +705,71 @@ left and right margin"))
 (defun turn-off-longlines ()
   "Unconditionally turn off Longlines mode."
   (longlines-mode -1))
-
 (custom-add-option 'text-mode-hook 'turn-on-longlines)
 
-;; goes in textmodes/text-mode
-(defun toggle-text-mode-longlines ()
-  "Toggle whether to use Auto Fill in Text mode and related modes.
+(defun toggle-longlines ()
+  "Toggle whether to use Longlines Mode."
+  (interactive)
+  (unless longlines-mode 
+    (auto-fill-mode -1))
+  (longlines-mode))
+(defun toggle-auto-fill ()
+  "Toggle whether to use Auto Fill Mode."
+  (interactive)
+  (unless auto-fill-function 
+      (longlines-mode -1)) ;; turn this off first if it is on
+  (auto-fill-mode))
+  
+(require 'aquamacs-editing)
+(custom-add-option 'text-mode-hook 'auto-detect-longlines)
+(defun toggle-auto-text-mode-longlines ()
+  "Toggle whether to automatically turn on longlines-mode in Text mode and related modes.
 This command affects all buffers that use modes related to Text mode,
 both existing buffers and buffers that you subsequently create."
   (interactive)
-  (let ((enable-mode (not (memq 'turn-on-longlines text-mode-hook))))
+  ;; remove leftover customizations from previous versions
+  (remove-hook 'text-mode-hook 'turn-on-auto-fill)
+  (remove-hook 'text-mode-hook 'turn-on-longlines)
+  (let ((enable-mode (not (memq 'auto-detect-longlines text-mode-hook))))
     (if enable-mode
-	(add-hook 'text-mode-hook 'turn-on-longlines)
-      (remove-hook 'text-mode-hook 'turn-on-longlines))
+	(add-hook 'text-mode-hook 'auto-detect-longlines)
+      (remove-hook 'text-mode-hook 'auto-detect-longlines))
     (dolist (buffer (buffer-list))
       (with-current-buffer buffer
 	(if (or (derived-mode-p 'text-mode) text-mode-variant)
-	    (longlines-mode (if enable-mode 1 0)))))
-    (message "Longlines %s in Text modes"
+	    (auto-detect-longlines))))
+    (message "Auto Soft Wrap %s in Text modes"
 	     (if enable-mode "enabled" "disabled"))))
 
-;; This should go into menu-bar.el
-(defun menu-bar-text-mode-longlines ()
+(defun menu-bar-auto-text-mode-longlines ()
   (interactive)
-  ;; First turn off auto-fill
-  (if
-      (if (listp text-mode-hook)
-	  (member 'turn-on-auto-fill text-mode-hook)
-	(eq 'turn-on-auto-fill text-mode-hook))
-      (toggle-text-mode-auto-fill)
-      )
-  (toggle-text-mode-longlines)
-  ;; This is somewhat questionable, as `text-mode-hook'
-  ;; might have changed outside customize.
-  ;; -- Per Abrahamsen <abraham@dina.kvl.dk> 2002-02-11.
+  (toggle-auto-text-mode-longlines)
   (customize-mark-as-set 'text-mode-hook))
- 
-
-(defun menu-bar-text-mode-auto-fill ()
-  (interactive)
-  ;; First turn off longlines
-  (if
-      (if (listp text-mode-hook)
-	  (member 'turn-on-longlines text-mode-hook)
-	(eq 'turn-on-longlines text-mode-hook))
-      (toggle-text-mode-longlines)
-      )
-  (toggle-text-mode-auto-fill)
-  ;; This is somewhat questionable, as `text-mode-hook'
-  ;; might have changed outside customize.
-  ;; -- Per Abrahamsen <abraham@dina.kvl.dk> 2002-02-11.
-  (customize-mark-as-set 'text-mode-hook))
-
+  
 
 
 (define-key menu-bar-options-menu [auto-fill-mode]
-  '(menu-item "Word Wrap in Text Modes"
-              menu-bar-text-mode-auto-fill
+  '(menu-item "Hard Word Wrap"
+              toggle-auto-fill
 	      :help "Automatically fill text between left and right margins (Auto Fill)"
-	      :enable (or (derived-mode-p 'text-mode) text-mode-variant)
-              :button (:toggle . (if (listp text-mode-hook)
-				     (member 'turn-on-auto-fill text-mode-hook)
-				   (eq 'turn-on-auto-fill text-mode-hook)))))
+	      :enable (menu-bar-menu-frame-live-and-visible-p)
+              :button (:toggle . auto-fill-function)))
 
 (define-key-after menu-bar-options-menu [longlines]
-  '(menu-item "Soft Word Wrap in Text Modes"
-	      menu-bar-text-mode-longlines
+  '(menu-item "Soft Word Wrap"
+	      longlines-mode
 	      :help "Wrap long lines without inserting carriage returns (Longlines)"
-	      :enable (or (derived-mode-p 'text-mode) text-mode-variant)
-	      :button (:toggle . (if (listp text-mode-hook)
-				     (member 'turn-on-longlines text-mode-hook)
-				   (eq 'turn-on-longlines text-mode-hook))))
-  'auto-fill-mode
-  )
+	      :enable (menu-bar-menu-frame-live-and-visible-p)
+              :button (:toggle . longlines-mode)) 'auto-fill-mode)
 
-(define-key-after menu-bar-options-menu [longlines]
+(define-key-after menu-bar-options-menu [auto-longlines]
   '(menu-item "Auto Word Wrap in Text Modes"
-	      menu-bar-text-mode-longlines
-	      :help "Wrap long lines without inserting carriage returns (Longlines)"
-	      :enable (or (derived-mode-p 'text-mode) text-mode-variant)
+	      menu-bar-auto-text-mode-longlines
+	      :help "Automatically switch to Soft Word Wrap (Longlines) in Text Modes."
 	      :button (:toggle . (if (listp text-mode-hook)
-				     (member 'turn-on-longlines text-mode-hook)
-				   (eq 'turn-on-longlines text-mode-hook))))
-  'auto-fill-mode
-  )
+				     (member 'auto-detect-longlines text-mode-hook)
+				   (eq 'auto-detect-longlines text-mode-hook))))
+  'longlines)
  
 ;; in edit menu
 
