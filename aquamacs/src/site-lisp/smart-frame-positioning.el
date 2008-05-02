@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.46 2008/04/30 16:46:31 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.47 2008/05/02 10:59:04 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -502,8 +502,11 @@ The file is specified in `smart-frame-position-file'."
       (princ ";; Saved Frame Positions\n\n" (current-buffer))
       (let ((print-length nil)
             (print-level nil))
-        (print `(smart-frame-set-initial-frame-alist 
-		      ',(smart-fp--get-initial-frame-position))
+	;; for compatibility with older Aquamacs versions,
+	;; check (fboundp 'smart-frame-set-initial-frame-alist)
+        (print `(if (fboundp 'smart-frame-set-initial-frame-alist)
+		    (smart-frame-set-initial-frame-alist 
+		     ',(smart-fp--get-initial-frame-position)))
 	       (current-buffer))
 	(princ "\n\n" (current-buffer))
 	(print `(setq smart-frame-prior-positions
