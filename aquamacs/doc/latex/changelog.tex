@@ -7,31 +7,36 @@
 
 \begin{itemize}
 
-\item Aquamacs has tabs. Press Apple-T to create one. You can switch the general use of tabs on in the Options menu. (Note that while the `tabbar' package is provided and used internally, the actual functionality is different.)
-Concept and Code by Nathaniel Cunningham, David Ponce and David Reitter.
+\item \textbf{Aquamacs has tabs}. Press Apple-T to create one. You can switch the general use of tabs on in the Options menu. (Note that while the `tabbar' package is provided and used internally, the actual functionality is different.)
+Concept and Code by Nathaniel Cunningham, David~Ponce and David Reitter.
+
+\item \textbf{``Frame Styles'' are turned off} by default now.  This means that there are no major mode specific settings (fonts, colors) unless the styles are turned back on (Options menu).  
+
+\item \textbf{Revised word wrapping}: Soft and hard wrapping can now be recognized automatically (Options / Auto Word Wrap for Text Modes). Also, Soft and Hard wrap modes are now enabled just for the current buffer.  (The former option to automatically enable this is still available via customization of the `text-mode-hook' setting.)
+
+\item \textbf{Full screen editing}: Press Apple-Shift-Return to get into full screen mode. 
+Code by Joel Stanley.
+
+\item \textbf{Aquamacs does not create backup files (foo.bar~) any longer} by default. This way, no unnecessary files won't get in your way any longer. (No Mac application creates these. Use Time Machine or a dedicated backup solution for backup needs.) There is an Option in the ``Options'' menu which will turn backups on again. 
+
+\item \textbf{The *scratch* buffer is now persistent} across sessions.  (To switch this off, customize the `aquamacs-scratch-file' variable to nil.)
+
+\item The position (and height and width) of the (main) frame is now persistent across sessions. (Customize `initial-frame-alist' as documented to open the first frame somewhere else.)
 
 \item The tool bar looks like other toolbars on OS X now. Code by Yamamoto Mitsuharu.
 
-\item We've got better-looking icons (``alpha channel'') for the tool bar, and labels under the icons like in other OS X programs. (You can save the space for that by customizing `"mac-tool-bar-display-mode' to `icons'.)
+\item We've got better-looking icons (``alpha channel'') for the tool bar, and labels under the icons like in other OS X programs. (You can save the space for that by customizing `mac-tool-bar-display-mode' to `icons'.)
 
 \item Toolbar items of other modes (such as for LaTeX editing) can be configured via Options / Show/Hide / Toolbar items.
 
-\item Full screen editing: Press Apple-Shift-Return to get into full screen mode. 
-Code by Joel Stanley.
-
-\item ``Aquamacs Frame Appearance Styles'' are turned off by default now.  This means that there are no major mode specific settings (fonts, colors), unless the styles are turned back on (Options menu).  
-
-\item Aquamacs does not create backup files (foo.bar~) any longer by default. This way, no unnecessary files won't get in your way any longer. (No Mac application creates these. Use Time Machine or a dedicated backup solution for backup needs.) There is an Option in the ``Options'' menu which will turn backups on again. 
-
-\item The *scratch* buffer is now persistent across sessions.  (To switch this off, customize the `aquamacs-scratch-file' variable to nil.)
-
-\item The position (and height and width) of the (main) frame is now persistent across sessions. (Customize `initial-frame-alist' as documented to open the first frame somewhere else.)
+\item Multi-lingual CocoAspell support: installed dictionaries can now be changed from within Aquamacs.
+Code by Nathaniel Cunningham
 
 \item Preferences and other code defined in Preferences.el now override any customizations: the customization file (`custom-file', i.e. customizations.el) is now loaded before the Emacs Lisp code in Preferences.el.  This may have consequences for individual configurations, but it ultimately allows users to override any semi-automatic customizations in their Emacs Lisp code. (Note that ~/.emacs is still loaded before the customization file in order to maintain compatibility with GNU Emacs.)
 
 %\item With CocoAspell present, support for additional dictionaries is improved.  Code by Nathaniel Cunningham.
 
-\item AUCTeX 11.85 included. This brings a number of improvements for LaTeX users, in particular:
+\item \textbf{Improved LaTeX support}: AUCTeX 11.85 included. This brings a number of advantages for LaTeX users, in particular:
 \begin{itemize}
 \item Better analysis of errors reported by the LaTeX compiler.
 \item Improved syntax highlighting when editing .tex documents.
@@ -59,6 +64,7 @@ Code by Xavier Maillard and Jonadab the Unsightly One.
 
 \item Frame Styles: there is a new ``Clear All Styles'' menu item, and the wording has been improved.
 
+\item Files are loaded (visited) a little faster now.  `default-major-mode' now defaults to `fundamental-mode' rather than `text-mode', which should have no practical consequences apart from the speed-up. 
 
 \end{itemize}
 
@@ -71,7 +77,7 @@ Code by Xavier Maillard and Jonadab the Unsightly One.
 \item LaTeX editing: better support for jumping from and to the PDF if Skim.app is installed and used. No configuration is necessary. You can jump from Aquamacs to Skim with Shift-Command-Click, or with the AUCTeX command ``Jump to PDF'' (enter C-c C-c J RET) and back. You will need to {\tt $\backslash$usepackage\{pdfsync\}} in your document preamble and re-compile before you can use the feature.
 \item Press Command-E to use the region (selected text) for the next  search operation (Command-F).
 Suggested by Mathieu Godart.
-\item When using Frame Appearance Styles (especially with One Buffer One Frame Mode switched off), frames should (mostly) retain their original sizes now. Less jumping around!
+\item When using Frame Styles (especially with One Buffer One Frame Mode switched off), frames should (mostly) retain their original sizes now. Less jumping around!
 \item Aquamacs now remembers the positions of frames containing *Help*, *Messages* and other buffers.
 \item Improved frame positioning and sizing. In particular, *Help* frames should not come up too small any longer.
 \item Frames can now be tiled (horizontally/vertically) and scattered (automatic placement) with functions in the Buffers menu.
