@@ -5,7 +5,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: aquamacs-tabbar.el,v 1.19 2008/05/02 18:27:15 davidswelt Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.20 2008/05/02 19:31:56 champo Exp $
 
 ;; load original tabbar-mode
 (require 'tabbar)
@@ -445,7 +445,7 @@ Call `tabbar-tab-label-function' to obtain a label for TAB."
 			       'tabbar-selected
 			     'tabbar-unselected)
 		     'pointer 'arrow
-		     'display (tabbar-normalize-image close-button-image)
+		     'display (tabbar-normalize-image close-button-image 0 'nomask)
 		     ))
 	(display-label
 	 (propertize (if tabbar-tab-label-function
