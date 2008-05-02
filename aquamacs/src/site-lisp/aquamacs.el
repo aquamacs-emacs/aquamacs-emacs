@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.159 2008/05/01 09:00:36 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.160 2008/05/02 10:40:10 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -476,10 +476,6 @@ yes-or-no prompts - y or n will do."
     )
 
   ;; tabbar needs to be defined before osxkeys
-  (aquamacs-set-defaults '(
-			 (tool-bar-button-relief 1)
-			 (tool-bar-button-margin 4)
-			 (tool-bar-border 5)))
   (require 'aquamacs-tabbar)
 
   ;; Mac OS X specific stuff 
@@ -554,7 +550,7 @@ yes-or-no prompts - y or n will do."
 
 
   (require 'aquamacs-editing)
-
+  
 ;; set ispell-program-name to correct name, or to nil
 ;; if neither aspell nor ispell are available.
 ;; original definition in Emacs always uses "ispell",
@@ -622,6 +618,7 @@ yes-or-no prompts - y or n will do."
   (require 'longlines) 
   (aquamacs-set-defaults 
    `(
+     (text-mode-hook (auto-detect-longlines)) 
      (save-place t)
      (send-mail-function mailclient-send-it)
      (mail-setup-with-from nil)  
