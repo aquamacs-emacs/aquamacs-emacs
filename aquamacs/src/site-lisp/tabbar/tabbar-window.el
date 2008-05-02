@@ -6,7 +6,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: tabbar-window.el,v 1.23 2008/05/01 23:14:11 champo Exp $
+;; Revision: $Id: tabbar-window.el,v 1.24 2008/05/02 18:28:01 davidswelt Exp $
 
 (require 'tabbar)
 
@@ -247,16 +247,17 @@ by the variable `tabbar-button-label'."
 (defun tabbar-window-tab-label (tab)
   "Return a label for TAB.
 That is, a string used to represent it on the tab bar."
-  (let ((label (format " %s " (tabbar-tab-value tab))))
+  (let ((label (format " %s " (tabbar-tab-value tab)))
+	(width (max 1 (/ (window-width)
+                       (length (tabbar-view
+                                (tabbar-current-tabset)))))))
     ;; Unless the tab bar auto scrolls to keep the selected tab
     ;; visible, shorten the tab label to keep as many tabs as possible
     ;; in the visible area of the tab bar.
     (if tabbar-auto-scroll-flag
-        label
+        (tabbar-expand label width)
       (tabbar-shorten
-       label (max 1 (/ (window-width)
-                       (length (tabbar-view
-                                (tabbar-current-tabset)))))))))
+       label width))))
 
 (defun tabbar-window-help-on-tab (tab)
   "Return the help string shown when mouse is onto TAB."
