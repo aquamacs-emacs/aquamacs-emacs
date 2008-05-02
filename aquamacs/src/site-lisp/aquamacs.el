@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.160 2008/05/02 10:40:10 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.161 2008/05/02 11:29:20 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -147,6 +147,14 @@ Separate paths from file names with --."
 		  (mapc (lambda (frame)
 			  (modify-frame-parameters frame (list (cons 'tool-bar-lines 1))))
 			(frame-list)))))
+    (when (< aquamacs-customization-version-id 140)
+      (condition-case nil
+	  (with-temp-buffer 
+	    (princ ";; for compatibility with older Aquamacs versions
+ (unless (fboundp 'auto-detect-longlines) (defun auto-detect-longlines () t))"
+		   (current-buffer))
+	    (append-to-file (point-min) (point-max) custom-file))
+	(error nil)))
       
 ;; todo before 0.9.9:
 ;; how to deal with tool-bar-mode set in user's custom-file?
