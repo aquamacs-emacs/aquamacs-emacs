@@ -5,7 +5,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: aquamacs-tabbar.el,v 1.18 2008/05/01 23:14:10 champo Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.19 2008/05/02 18:27:15 davidswelt Exp $
 
 ;; load original tabbar-mode
 (require 'tabbar)
@@ -605,6 +605,29 @@ NOSCROLL is non-nil, exclude the tabbar-scroll buttons."
                        'pointer 'arrow
 		       'local-map (tabbar-make-tab-keymap "empty tab bar"))))
     ))
+   
+(defvar tabbar-char-width 5) ;; average width of Lucida Grande character. Hack!
+(defun tabbar-expand (str width)
+  "Return an expanded string from STR that fits in the given display WIDTH.
+WIDTH is specified in terms of character display width in the current
+buffer; see also `char-width'."
+  (let* ((n  (length str))
+         (sw (string-width str))
+         (el "...")
+         (ew (string-width el))
+         (w  0)
+         (i  0))
+    (cond
+     ((< sw width)
+      (let ((sp  (propertize 
+		  " " 'display 
+		  `(space 
+		    :width 
+		    (,(max 4 (min (- 100 (/ (* tabbar-char-width n) 2) )
+				  (floor (/ (* (frame-char-width) (- width sw)) 2)))))))))
+	(concat sp str sp)))
+     (t str))))
+          
 
 ;; function to unconditionally open a new tab
 (defun new-tab (&optional major-mode)
