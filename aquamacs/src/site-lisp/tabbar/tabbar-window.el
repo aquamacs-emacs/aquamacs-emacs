@@ -6,7 +6,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: tabbar-window.el,v 1.24 2008/05/02 18:28:01 davidswelt Exp $
+;; Revision: $Id: tabbar-window.el,v 1.25 2008/05/03 09:07:52 davidswelt Exp $
 
 (require 'tabbar)
 
@@ -244,6 +244,7 @@ by the variable `tabbar-button-label'."
       (cons "" "")
     (tabbar-button-label name)))
 
+;; redefine tab labels, adding leading and trailing spaces for clarity
 (defun tabbar-window-tab-label (tab)
   "Return a label for TAB.
 That is, a string used to represent it on the tab bar."
