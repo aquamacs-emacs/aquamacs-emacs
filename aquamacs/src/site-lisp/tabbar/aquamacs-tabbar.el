@@ -5,7 +5,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: aquamacs-tabbar.el,v 1.20 2008/05/02 19:31:56 champo Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.21 2008/05/03 09:06:09 davidswelt Exp $
 
 ;; load original tabbar-mode
 (require 'tabbar)
@@ -120,23 +120,6 @@ to be closed.  If no tab is specified, (tabbar-selected-tab) is used"
 
 ;; do not let color themes override tabbar faces 
 (aquamacs-set-defaults '((color-theme-illegal-faces "^\\(w3-\\|tabbar-\\)")))
-
-;; redefine tab labels, adding leading and trailing spaces for clarity
-(defun tabbar-buffer-tab-label (tab)
-  "Return a label for TAB.
-That is, a string used to represent it on the tab bar."
-  (let ((label  (if tabbar--buffer-show-groups
-                    (format " [%s] " (tabbar-tab-tabset tab))
-                  (format " %s " (tabbar-tab-value tab)))))
-    ;; Unless the tab bar auto scrolls to keep the selected tab
-    ;; visible, shorten the tab label to keep as many tabs as possible
-    ;; in the visible area of the tab bar.
-    (if tabbar-auto-scroll-flag
-        label
-      (tabbar-shorten
-       label (max 1 (/ (window-width)
-                       (length (tabbar-view
-                                (tabbar-current-tabset)))))))))
 
 ;; function for closing a tab via context menu.  Kills buffer if doesn't
 ;;  appear in other tabs.
@@ -623,7 +606,7 @@ buffer; see also `char-width'."
 		  " " 'display 
 		  `(space 
 		    :width 
-		    (,(max 4 (min (- 100 (/ (* tabbar-char-width n) 2) )
+		    (,(max 4 (min (- 75 (/ (* tabbar-char-width n) 2) )
 				  (floor (/ (* (frame-char-width) (- width sw)) 2)))))))))
 	(concat sp str sp)))
      (t str))))
