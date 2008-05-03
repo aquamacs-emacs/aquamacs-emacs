@@ -5,7 +5,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: aquamacs-tabbar.el,v 1.21 2008/05/03 09:06:09 davidswelt Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.22 2008/05/03 09:13:49 davidswelt Exp $
 
 ;; load original tabbar-mode
 (require 'tabbar)
@@ -58,7 +58,7 @@ to be closed.  If no tab is specified, (tabbar-selected-tab) is used"
 		    :inherit nil
 		    :height 110
 		    :weight 'normal
-		    :background "gray50"
+		    :background "gray80"
 		    :foreground "black"
 ;;		    :box '(:line-width 2 :color "white" :style nil)
 		    :box nil
