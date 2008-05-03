@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.120 2008/05/03 13:00:45 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.121 2008/05/03 14:39:07 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -715,12 +715,16 @@ left and right margin"))
   (unless longlines-mode 
     (auto-fill-mode -1))
   (longlines-mode))
+
 (defun toggle-auto-fill ()
   "Toggle whether to use Auto Fill Mode."
   (interactive)
   (unless auto-fill-function 
       (longlines-mode -1)) ;; turn this off first if it is on
-  (auto-fill-mode))
+  (auto-fill-mode)
+  (message "Hard word wrap %s"
+	     (if auto-fill-function
+		 "enabled" "disabled")))
   
 (require 'aquamacs-editing)
 (custom-add-option 'text-mode-hook 'auto-detect-longlines)
