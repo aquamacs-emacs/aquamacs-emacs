@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.119 2008/05/01 14:08:25 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.120 2008/05/03 13:00:45 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -434,6 +434,8 @@ customization buffer."
 			   (menu-bar-non-minibuffer-window-p))
 	      :help "Discard current buffer") 'separator-save)
  
+(define-key menu-bar-file-menu [recover-session] nil)
+
 (define-key menu-bar-edit-menu [copy]
   `(menu-item ,(aq-shortcut  "Copy                              " 
 			    (key-binding [menu-bar edit copy])) 
