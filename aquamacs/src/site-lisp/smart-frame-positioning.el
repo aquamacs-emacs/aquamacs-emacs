@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.48 2008/05/04 15:58:07 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.49 2008/05/04 18:19:51 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -169,17 +169,16 @@ pixels apart if possible."
 (defvar smart-fp--frame-title-bar-height 22) ;; how to determine this?
 
 
+
 (defun frame-total-pixel-height (f) ;;(frame-pixel-height f))
 ;; this should use the correct faces for minibuffer/modeline
 ;; and check for presence of those elements etc etc.
 ;; it's just an approximation right now.
   (+ smart-fp--frame-title-bar-height ;; this is for the title bar of the window
      (smart-tool-bar-pixel-height f)
-     (smart-fp--char-to-pixel-height
-     (eval (frame-parameter f 'height)) f
-   )))
+     (frame-pixel-height)))
  ; (frame-total-pixel-height (selected-frame))
-; (frame-pixel-height)
+; 
 
 (defun smart-fp--char-to-pixel-width (chars frame)
        (* chars (frame-char-width frame)))
@@ -387,6 +386,8 @@ can be customized to configure this mode."
       (add-hook 'delete-frame-functions
 		'smart-fp--store-frame-position-for-buffer)
 
+      (add-hook 'minibuffer-setup-hook 'smart-move-minibuffer-inside-screen)
+
       ;; the first frame should be in a good position
 
       ;; (let* ((rect (if (fboundp 'winmgr-display-available-pixel-bounds)
@@ -405,6 +406,7 @@ can be customized to configure this mode."
     ;; else (turning off)
     (smart-fp--set-frame-creation-function
      smart-frame-positioning-old-frame-creation-function)
+    (remove-hook 'minibuffer-setup-hook 'smart-move-minibuffer-inside-screen)
     (remove-hook 'delete-frame-functions
 		 'smart-fp--store-frame-position-for-buffer))
   smart-frame-positioning-mode)
@@ -538,45 +540,7 @@ The file is specified in `smart-frame-position-file'."
 (defun smart-fp--get-frame-position-assigned-to-buffer-name ()
       (cdr (assq-string-equal (buffer-name) smart-frame-prior-positions)))
 
-
-;; The following functions provide heuristics that attempt to deal with the fact that
-;; Emacs 22 has no notion of multiple monitors and resulting, non-rectangular displays.
-
-(defun smart--mac-display-width-valid-p ()
-  "Return non-nil if the display width covers the whole viewable area.
-`mac-display-available-pixel-bounds' only returns results for one 
-monitor, even if several monitors are used. This function contains
-a heuristic that tries to tell whether we have a multiple-monitor
-situation."
-  (and (fboundp 'mac-display-available-pixel-bounds)
-       (> (+ (nth 2 (mac-display-available-pixel-bounds)) 500)
-	  (x-display-pixel-width))))
-
-(defun smart--mac-display-height-valid-p ()
-  "Return non-nil if the display width covers the whole viewable area.
-`mac-display-available-pixel-bounds' only returns results for one 
-monitor, even if several monitors are used. This function contains
-a heuristic that tries to tell whether we have a multiple-monitor
-situation."
-  (and (fboundp 'mac-display-available-pixel-bounds)
-       (> (+ (nth 3 (mac-display-available-pixel-bounds)) 300)
-	  (x-display-pixel-height))))
-
  
-(defun smart--frame-on-primary-display-p (frame)
-  "Return non-nil if frame is probably completely on primary display"
-   (if (fboundp 'mac-display-available-pixel-bounds)
-       (let ( (x (eval (frame-parameter frame 'left)))
-	      (y (eval (frame-parameter frame 'top)))
-	      (w (smart-fp--char-to-pixel-width (eval (frame-parameter frame 'width)) frame))
-	      (h (smart-fp--char-to-pixel-height (eval (frame-parameter frame 'height)) frame))
-	      (b (mac-display-available-pixel-bounds)))
-	 ;; heuristic
-	 (and (>= (+ x 300) (nth 0 b))
-	      (>= (+ y 150) (nth 1 b))
-	      (<= (- (+ x w) 300) (nth 2 b))
-	      (<= (- (+ y h) 150) (nth 3 b))))
-     t))
 
 
 (defun smart-fp--convert-negative-ordinates (parms)
@@ -589,7 +553,40 @@ situation."
 		o))
 	  parms))
 
-
+; (setq frame (selected-frame))
+; (smart-move-minibuffer-inside-screen)
+(defun smart-move-minibuffer-inside-screen (&optional frame)
+  (when window-system
+    (unless
+	(let* ((frame (or frame (selected-frame)))
+	       ;; on some systems, we can retrieve the available pixel width with
+	       ;; non-standard methods.
+	       ;; on OS X, e.g. mac-display-available-pixel-bounds (patch!!) returns
+	       ;; available screen region, excluding the Dock.
+	       (minib-window (frame-parameter frame 'minibuffer))
+	       (edges (if (windowp minib-window) (window-inside-pixel-edges minib-window)
+			(list 0 (- (frame-pixel-height frame) (frame-char-height frame))
+			      (frame-pixel-width) (frame-pixel-height frame)))
+		      )
+	       (left (+ (nth 0 edges) (eval (frame-parameter frame 'left))))
+	       (top (+ (nth 1 edges) (eval (frame-parameter frame 'top))
+		       smart-fp--frame-title-bar-height (smart-tool-bar-pixel-height frame)))
+	       (right (+ (* (nth 2 edges) 0.666) (eval (frame-parameter frame 'left)))) ;; just half the width
+	       (bottom (+ (eval (frame-parameter frame 'top)) smart-fp--frame-title-bar-height
+			  (smart-tool-bar-pixel-height frame)
+			  (nth 3 edges) 
+			  ))
+	       (bounds (if (fboundp 'mac-display-available-pixel-bounds)
+			   (mac-display-available-pixel-bounds frame)
+			 (list 0 0 
+			       (display-pixel-width) (display-pixel-height)))))
+	  ;; is the area visible? 
+	  ;; we cut a corner here and only check the display that shows the majority of the frame
+	  (and  (>= left (- (nth 0 bounds) 4))
+		(>= top (nth 1 bounds))
+		(<= right (nth 2 bounds))
+		(<= bottom (+ (nth 3 bounds) 4))))
+      (smart-move-frame-inside-screen frame))))
 
 
 (defun smart-move-frame-inside-screen (&optional frame)
@@ -645,8 +642,6 @@ on the main screen, i.e. where the menu is."
       (setq min-y max-y)
       (setq max-y (* 2 max-y)))
  
-;    (when (smart--frame-on-primary-display-p frame)
-;      (if (smart--mac-display-width-valid-p)
 	(modify-frame-parameters 
 	 frame
 	 (let* ((next-x (max min-x 
@@ -665,7 +660,6 @@ on the main screen, i.e. where the menu is."
 	     (width .
 		    ,next-wc)   
 	     )))
-;      (if (smart--mac-display-height-valid-p)
 	(modify-frame-parameters 
 	 frame
 	 (let* (
