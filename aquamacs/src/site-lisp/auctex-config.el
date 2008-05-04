@@ -4,7 +4,7 @@
 ;; originally authored by Kevin Walzer
 ;; Keywords: auctex
  
-;; Last change: $Id: auctex-config.el,v 1.40 2008/04/26 08:56:48 davidswelt Exp $
+;; Last change: $Id: auctex-config.el,v 1.41 2008/05/04 22:30:48 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -58,7 +58,7 @@
 
 (aquamacs-set-defaults '(
 			 ( TeX-parse-self t)
-			 ( TeX-master nil) ;; was set with setq-default
+			 ( TeX-master t) ;; set default
 			 ( reftex-plug-into-AUCTeX t)
 			 ( reftex-save-parse-info t)
 			 ( reftex-use-multiple-selection-buffers t)
