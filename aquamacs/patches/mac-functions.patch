@@ -12,10 +12,10 @@
   
   /* Non-zero means we're allowed to display an hourglass cursor.  */
 ***************
-*** 4588,4593 ****
---- 4590,5119 ----
-       void *data ;
-  {
+*** 4301,4306 ****
+--- 4352,4889 ----
+    UNBLOCK_INPUT;
+    return result;
   }
 + 
 + #if MAC_OSX 
@@ -33,7 +33,7 @@
 + {
 +     OSStatus s;
 +     
-+ #if MAC_OS_X_VERSION_MAX_ALLOWED >= 1050
++ #if MAC_OS_X_VERSION_MIN_REQUIRED >= 1050
 +     s = HIWindowGetGreatestAreaDisplay(
 +         wnd,
 +         kWindowContentRgn,
@@ -150,35 +150,44 @@
 + }
 + 
 + static int mac_maximized_frame_count = 0;
-+ void MacHandleMenuBarBehavior(bool isMaximizing)
++ int MacHandleMenuBarBehavior(bool isMaximizing, WindowRef frame)
 + {
 +     OSStatus st;
++     GDHandle device_handle = NULL;
++ 
++     st = GetWindowGreatestAreaDevice (frame, kWindowContentRgn, &device_handle, NULL);
++ 
++     if (st != noErr || device_handle != LMGetMainDevice())
++       {
++ 	return 0; /* no menu bar on secondary display. */
++       }
 +     if (isMaximizing)
-+     {
-+         ++mac_maximized_frame_count;
-+         if (mac_autohide_menubar_on_maximize)
-+         {
-+             st = SetSystemUIMode(kUIModeAllHidden,
-+                                  kUIOptionAutoShowMenuBar);
-+             if (st != noErr)
-+                 error("Error while handling menubar behavior.");
-+         }
-+         else
-+         {
-+             st = SetSystemUIMode(kUIModeNormal, 0);
-+             if (st != noErr)
-+                 error("Error while handling menubar behavior.");
-+         }
-+     }
++       {
++ 	++mac_maximized_frame_count;
++ 	if (mac_autohide_menubar_on_maximize)
++ 	  {
++ 	    st = SetSystemUIMode(kUIModeAllHidden,
++ 				 kUIOptionAutoShowMenuBar);
++ 	    if (st != noErr)
++ 	      error("Error while handling menubar behavior.");
++ 	  }
++ 	else
++ 	  {
++ 	    st = SetSystemUIMode(kUIModeNormal, 0);
++ 	    if (st != noErr)
++ 	      error("Error while handling menubar behavior.");
++ 	  }
++       }
 +     else
-+     {
-+         if (0 == --mac_maximized_frame_count)
-+         {
-+             st = SetSystemUIMode(kUIModeNormal, 0);
-+             if (st != noErr)
-+                 error("Error while handling menubar behavior.");
-+         }
-+     }
++       {
++ 	if (0 == --mac_maximized_frame_count)
++ 	  {
++ 	    st = SetSystemUIMode(kUIModeNormal, 0);
++ 	    if (st != noErr)
++ 	      error("Error while handling menubar behavior.");
++ 	  }
++       }
++     return GetMBarHeight(); /* return resulting height of menu bar */
 + }
 + 
 + static pascal OSStatus MacHandleMaxWndClose(
@@ -194,7 +203,7 @@
 +     if (MacGetWindowCustomState(wnd, &h))
 +     {
 +         MacReleaseWindowCustomState(h);
-+         MacHandleMenuBarBehavior(false);
++         MacHandleMenuBarBehavior(false, wnd);
 +     }
 + 
 +     UNBLOCK_INPUT;
@@ -335,7 +344,7 @@
 +             goto unmax_cleanup;
 +         }
 + 
-+         MacHandleMenuBarBehavior(false);
++         MacHandleMenuBarBehavior(false,frame);
 + 
 +         /* Resize and/or move the frame as needed in case the saved
 +            bounds aren't acceptable for the current display */
@@ -386,7 +395,7 @@
 +         if (savedState_h == NULL)
 +             return;
 + 
-+         MacHandleMenuBarBehavior(true);
++         mbarHeight = MacHandleMenuBarBehavior(true, frame);
 +         
 +         /* Remove title bar & resizability from the window */
 +         st = ChangeWindowAttributes(
@@ -410,7 +419,6 @@
 +            for the menubar to if it is visible (this can be
 +            controlled by the user via mac-autohide-menubar-on-maximize */
 + 
-+         mbarHeight      = GetMBarHeight();
 +         screenBnds      = MacConvertCGRectToRect(CGDisplayBounds(inDispID));
 +         screenBnds.top += mbarHeight;
 + 
@@ -542,8 +550,8 @@
 + #endif /*MAC_OSX*/
 + 
   #endif
+  
   
-  /***********************************************************************
 ***************
 *** 4827,4832 ****
 --- 5353,5364 ----
