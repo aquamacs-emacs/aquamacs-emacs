@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.121 2008/05/03 14:39:07 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.122 2008/05/04 12:58:38 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -401,6 +401,7 @@ customization buffer."
  (define-key-after menu-bar-file-menu [make-tab]
   `(menu-item (aq-shortcut  "New Buffer in New Tab            "
 			    'new-tab) new-tab
+	      :key-sequence nil
 	      :enable (and (fboundp 'new-tab)
 			   (menu-bar-menu-frame-live-and-visible-p)
 			   (menu-bar-non-minibuffer-window-p))
