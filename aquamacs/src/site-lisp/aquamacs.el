@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.161 2008/05/02 11:29:20 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.162 2008/05/04 08:26:57 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -31,8 +31,10 @@
 ;; Copyright (C) 2005,2006, 2007, 2008: David Reitter
  
 (defvar aq-starttime 0)
-;;   (defun ats (txt) 
-;;       (message "ATS %s:  %s" (time-since aq-starttime) txt))
+ ;;   (defun ats (txt) 
+;;        (message "ATS %s:  %s" (time-since aq-starttime) txt))
+;; 
+
 (defun ats (txt) nil)
 
 (setq aq-starttime (current-time))
@@ -78,7 +80,8 @@ Separate paths from file names with --."
     ;; aquamacs-customization-version-id contains the version id
     ;; of aquamacs when the customization file was written
 
-    (when (and aquamacs-customization-version-id
+    (when (not (equal init-file-user nil)) ;; no .emacs was read (-q option)
+      (and aquamacs-customization-version-id
 	       (> aquamacs-customization-version-id 0))
 
     (if (< aquamacs-customization-version-id 092.5)
@@ -149,13 +152,16 @@ Separate paths from file names with --."
 			(frame-list)))))
     (when (< aquamacs-customization-version-id 140)
       (condition-case nil
-	  (with-temp-buffer 
-	    (princ ";; for compatibility with older Aquamacs versions
+	  (unless (boundp 'aquamacs-140-custom-file-upgraded)
+	    (with-temp-buffer 
+	      (princ "
+;; for compatibility with older Aquamacs versions
+ (defvar aquamacs-140-custom-file-upgraded t)
  (unless (fboundp 'auto-detect-longlines) (defun auto-detect-longlines () t))"
-		   (current-buffer))
-	    (append-to-file (point-min) (point-max) custom-file))
+		     (current-buffer))
+	      (append-to-file (point-min) (point-max) custom-file)))
 	(error nil)))
-      
+       
 ;; todo before 0.9.9:
 ;; how to deal with tool-bar-mode set in user's custom-file?
 ;; for now, ignore it
@@ -619,7 +625,7 @@ yes-or-no prompts - y or n will do."
   (require 'aquamacs-menu)
 (ats "aquamacs-menu done")
   (require 'aquamacs-bug) ;; successfully send bug reports on the Mac
-(ats "aquamacs-busg done")
+(ats "aquamacs-bug done")
   
 
 (require 'saveplace)
