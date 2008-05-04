@@ -5,7 +5,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: aquamacs-tabbar.el,v 1.22 2008/05/03 09:13:49 davidswelt Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.23 2008/05/04 12:59:15 davidswelt Exp $
 
 ;; load original tabbar-mode
 (require 'tabbar)
@@ -602,14 +602,22 @@ buffer; see also `char-width'."
          (i  0))
     (cond
      ((< sw width)
-      (let ((sp  (propertize 
-		  " " 'display 
-		  `(space 
-		    :width 
-		    (,(max 4 (min (- 75 (/ (* tabbar-char-width n) 2) )
-				  (floor (/ (* (frame-char-width) (- width sw)) 2)))))))))
-	(concat sp str sp)))
-     (t str))))
+      (let* ((l-l (max 4 (min (- 75 (/ (* tabbar-char-width n) 2) )
+				  (floor (/ (* (frame-char-width) (- width sw)) 2)))))
+	     (sp-r  (propertize 
+		     " " 'display 
+		     `(space 
+		       :width 
+		       (, l-l))))
+	     (sp-l  (propertize 
+		     " " 'display 
+		     `(space 
+		       :width
+		       ;; subtract half the width of closer button
+		       ;; the full width wouldn't look as good
+		       (,(max 4 (- l-l 7)))))))
+	(concat sp-l str sp-r)))
+     (t str)))) 
           
 
 ;; function to unconditionally open a new tab
