@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.122 2008/05/04 12:58:38 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.123 2008/05/04 21:27:21 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -389,7 +389,7 @@ customization buffer."
 
 
 (define-key menu-bar-file-menu [new-file]
-  `(menu-item ,(aq-shortcut  "New Buffer                              "
+  `(menu-item ,(aq-shortcut  "New Buffer in New Frame        "
 			    'new-empty-buffer-other-frame)  
 	      new-empty-buffer-other-frame
 	      :key-sequence nil
@@ -397,7 +397,7 @@ customization buffer."
 			       one-buffer-one-frame-mode)
 			  (not (window-minibuffer-p
 			    (frame-selected-window menu-updating-frame))))
-	      :help "Create a new buffer"))
+	      :help "Create a new buffer in a New Frame"))
  (define-key-after menu-bar-file-menu [make-tab]
   `(menu-item (aq-shortcut  "New Buffer in New Tab            "
 			    'new-tab) new-tab
