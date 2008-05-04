@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.47 2008/05/02 10:59:04 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.48 2008/05/04 15:58:07 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -41,15 +41,15 @@
 ;; when screens with very different resolutions are used.
 ;;  
 ;; In the Carbon port, the function
-;; `winmgr-get-available-screen-bounds' returns the available screen
-;; coordinates for the main screen, and the position of the current
+;; `mac-display-available-pixel-bounds' returns the available screen
+;; coordinates for a screen, and the position of the current
 ;; window in relation to that one is only guessed.  Via GetDeviceList
 ;; and GetNextDevice (Quickdraw), all screens can be retrieved.  A
 ;; better implementation could be done once the Cocoa port is
 ;; available, so we're not going to invest much time in the Carbon
 ;; portion here.
 ;;
-;; `winmgr-get-available-screen-bounds' could be implemented for different
+;; `mac-display-available-pixel-bounds' could be implemented for different
 ;; platforms. It should return a list of four ordinates (x y w h), giving the
 ;; available screen real estate for the main screen.
 ;; An optional parameter (currently not used) could identify the screen.
@@ -218,7 +218,7 @@ pixels apart if possible."
       (let* (
 	     ;; on some systems, we can retrieve the available pixel width.
 	     (rect (if (fboundp 'winmgr-display-available-pixel-bounds)
-		       (winmgr-display-available-pixel-bounds)
+		       (winmgr-display-available-pixel-bounds old-frame)
 		     (list 0 0 
 			   (display-pixel-width) (display-pixel-height))))
 	     (min-x (+ 5 (nth 0 rect)))
@@ -607,7 +607,7 @@ on the main screen, i.e. where the menu is."
 	 ;; on OS X, e.g. mac-display-available-pixel-bounds (patch!!) returns
 	 ;; available screen region, excluding the Dock.
 	 (rect (if (fboundp 'mac-display-available-pixel-bounds)
-		   (mac-display-available-pixel-bounds)
+		   (mac-display-available-pixel-bounds frame)
 		 (list 0 0 
 		       (display-pixel-width) (display-pixel-height))))
 	 (min-x (nth 0 rect))
@@ -622,12 +622,12 @@ on the main screen, i.e. where the menu is."
 		 ;(smart-fp--char-to-pixel-width next-wc frame)
 		  )
 	 (next-h (frame-pixel-height frame))
-
+	 (next-h-total (frame-total-pixel-height frame))
 	 (w-offset (- next-w (smart-fp--char-to-pixel-width next-wc frame)))
 	 (h-offset (- next-h (smart-fp--char-to-pixel-height next-hc frame)))
 
 	 (next-x2 (+ next-x next-w))
-	 (next-y2 (+ next-y next-h)))
+	 (next-y2 (+ next-y next-h-total)))
     (when (< (+ next-x next-w) min-x) ; to the left
       (let ((new-max-x min-x))
 	(setq min-x (- min-x max-x))
@@ -645,8 +645,8 @@ on the main screen, i.e. where the menu is."
       (setq min-y max-y)
       (setq max-y (* 2 max-y)))
  
-    (when (smart--frame-on-primary-display-p frame)
-      (if (smart--mac-display-width-valid-p)
+;    (when (smart--frame-on-primary-display-p frame)
+;      (if (smart--mac-display-width-valid-p)
 	(modify-frame-parameters 
 	 frame
 	 (let* ((next-x (max min-x 
@@ -664,15 +664,14 @@ on the main screen, i.e. where the menu is."
 	 
 	     (width .
 		    ,next-wc)   
-	     ))))
-      (if (smart--mac-display-height-valid-p)
+	     )))
+;      (if (smart--mac-display-height-valid-p)
 	(modify-frame-parameters 
 	 frame
 	 (let* (
 		(next-y (max min-y 
 			     (min 
-			      (- max-y next-h smart-fp--frame-title-bar-height)	
-			      ;; why subtract smart-fp--frame-title-bar-height ???
+			      (- max-y next-h-total)	
 			      next-y)))
 	    
 		(next-hc (if (<= next-h (- max-y next-y ))
@@ -684,7 +683,7 @@ on the main screen, i.e. where the menu is."
 		  ,next-y)
 	    
 	     (height .
-		     ,next-hc)))))))))
+		     ,next-hc)))))))
 
 	 
     
