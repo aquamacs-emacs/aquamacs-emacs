@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.29 2008/04/15 17:10:47 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.30 2008/05/04 18:19:09 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -55,38 +55,26 @@
 (defun aquamacs-ask-for-confirmation (text long)
     (let ((f (window-frame (minibuffer-window))))
       (raise-frame f)			; make sure frame is visible
-;;       (let ((y (- (display-pixel-height) (frame-total-pixel-height f) 30 ))) ; extra 30 pix for typical Dock
-;; 	(print y)
-;; 	(if (< y (eval (frame-parameter f 'top)))
-;; 	    (modify-frame-parameters f (list (cons 'top y)))
-;; 	  )
-;; 	)
-      (if (and
-	   (or ;; ensure that the minibuffer shows up on screen
-	    (not (fboundp 'mac-display-available-pixel-bounds))
-	    (not (fboundp 'frame-total-pixel-height))
-	    (null (frame-parameter f 'top)) ;; for TTY use
-	    (< (+ (eval (frame-parameter f 'top)) 
-		  -5 ;; 5 grace pixels, because the user will still be able to read the prompt
-		  (frame-total-pixel-height f))
-	       (nth 3 (mac-display-available-pixel-bounds))))
-	   (or  
-	    (and last-nonmenu-event 
-		 (not (consp last-nonmenu-event))) 
-		 ;;(not (eq (car-safe last-nonmenu-event)  
-		;;	  'mac-apple-event)))
-	      (not use-dialog-box)
-	      (not (fboundp 'mac-dialog-y-or-n-p))
-	      (not window-system)))
-	  (if (and long (not aquamacs-quick-yes-or-no-prompt))
-	      (old-yes-or-no-p text)
-	    (old-y-or-n-p text))
+      (if (or  
+	   (and last-nonmenu-event 
+		(not (consp last-nonmenu-event))) 
+	   ;;(not (eq (car-safe last-nonmenu-event)  
+	   ;;	  'mac-apple-event)))
+	   (not use-dialog-box)
+	   (not (fboundp 'mac-dialog-y-or-n-p))
+	   (not window-system))
+	  (progn
+	    ;; make sure the frame's minibuffer is actually visible
+	    ;; this should be done automatically by smart-frame-positioning-mode
+	    ;; (if (fboundp 'smart-move-minibuffer-inside-screen)
+	    ;;	(smart-move-minibuffer-inside-screen f))
+	    (if (and long (not aquamacs-quick-yes-or-no-prompt))
+		(old-yes-or-no-p text)
+	      (old-y-or-n-p text)))
 	(let ((ret (mac-dialog-y-or-n-p text "" t)))
 	  (if (eq ret 'cancel)
 	      (keyboard-quit))
-	  ret))))          
-  ;; it would be nice to offer a "cancel" option like C-g in the dialog
-
+	  ret))))
 
 
 (defun filter-list (lst elements)
