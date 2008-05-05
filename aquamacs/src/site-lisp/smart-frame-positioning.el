@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.50 2008/05/05 11:49:40 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.51 2008/05/05 23:32:47 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -54,6 +54,8 @@
 ;; available screen real estate for the main screen.
 ;; An optional parameter (currently not used) could identify the screen.
 
+
+
 (defcustom save-frame-position-file 
   (convert-standard-filename
    "~/Library/Preferences/Aquamacs Emacs/frame-positions.el")
@@ -100,13 +102,12 @@ May be used in `frame-creation-function' or
 `frame-creation-function-alist'. `smart-frame-positioning-mode' 
 should be used as the interface to this function."
   (let* ((newpos)
-	 
 	 (oldframe (selected-frame))
-	 (newparms (append (list '(visibility . nil)) 
-			   parameters))
 	 ;; create the frame
 	 (f (funcall smart-frame-positioning-old-frame-creation-function
-		     newparms)))
+		     (append parameters '((visibility . nil) (left . 1)))))) 
+    ;; left  . 1: frame creation bug workaround: bug #166
+
     ;; the frame creation function doesn't set all parameters
     ;; set the remaining ones manually
     ;; bug reported to pretest bug list 13/Jan/2006
@@ -115,7 +116,8 @@ should be used as the interface to this function."
 ;; 	    (assq-delete-all (car x) newparms))
 ;; 		 (frame-parameters f))
     ;; set remaining parameters
-    (modify-frame-parameters f newparms)
+    (if parameters
+	(modify-frame-parameters f parameters))
   
 
     (run-hook-with-args 'smart-frame-positioning-hook f)
@@ -471,7 +473,7 @@ Aquamacs was last terminated.")
 ;; this is called after the user's customizations have been read.
 ;; so we need to take care not to override their customizations.
   (when smart-frame-keep-initial-frame-alist
-    (let ((new-initial-frame-alist '((visibility . t))))
+    (let ((new-initial-frame-alist '((visibility . nil))))
       (mapc
        (lambda (item)
 	 (unless (assq (car item)  initial-frame-alist)
