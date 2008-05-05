@@ -6,7 +6,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: tabbar-window.el,v 1.25 2008/05/03 09:07:52 davidswelt Exp $
+;; Revision: $Id: tabbar-window.el,v 1.26 2008/05/05 14:56:57 champo Exp $
 
 (require 'tabbar)
 
@@ -399,6 +399,25 @@ Updates tabbar-window-alist in the same way."
 	(setq header-line-inhibit-window-list
 	      (delq window header-line-inhibit-window-list)))))))
 
+(defun tabbar-window-merge-windows (&optional tabset)
+  "Assign tabs from all tabsets to current tabset, or TABSET
+if specified, then close all other tabs and windows.
+Result is a single window containing all displayed buffers as tabs.
+Turns on tabbar-mode if not already on."
+  (interactive)
+  (tabbar-mode 1)
+  (let ((tabset-keep (or tabset (tabbar-current-tabset)))
+	(all-tabsets (mapcar 'tabbar-get-tabset (tabbar-tabset-names))))
+    ;; cycle through tabsets, except for current one
+    (dolist (this-tabset all-tabsets)
+      ;; for each tabset, cycle through buffers
+      (unless (eq this-tabset tabset-keep)
+	(dolist (this-tab (tabbar-tabs this-tabset))
+	  (let ((this-buffer (tabbar-tab-value this-tab)))
+	    ;; add buffer to tabset-keep
+	    (tabbar-window-add-tab tabset-keep this-buffer t))
+	  ;; delete tab from prior tabset
+	  (tabbar-window-delete-tab this-tab))))))
 
 (defun tabbar-desktop-tabsets-to-save ()
   (let* ((tabset-names (tabbar-tabset-names))
