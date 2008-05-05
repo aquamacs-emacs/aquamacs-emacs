@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.49 2008/05/04 18:19:51 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.50 2008/05/05 11:49:40 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -588,7 +588,7 @@ The file is specified in `smart-frame-position-file'."
 		(<= bottom (+ (nth 3 bounds) 4))))
       (smart-move-frame-inside-screen frame))))
 
-
+;; this is a lisp implementation of Carbon's ConstrainWindowToScreen
 (defun smart-move-frame-inside-screen (&optional frame)
   "Move a frame inside the available screen boundaries. 
 The frame specified in FRAME is moved so it is entirely visible on
@@ -654,12 +654,12 @@ on the main screen, i.e. where the menu is."
 			    (smart-fp--pixel-to-char-width (- max-x next-x) 
 							   frame 'round-lower)))
 		)
-	   `((left .
+	   (smart-fp--convert-negative-ordinates `((left .
 		   ,next-x)
 	 
 	     (width .
 		    ,next-wc)   
-	     )))
+	     ))))
 	(modify-frame-parameters 
 	 frame
 	 (let* (
@@ -672,12 +672,12 @@ on the main screen, i.e. where the menu is."
 			     next-hc
 			   (smart-fp--pixel-to-char-height (- max-y next-y)
 							   frame 'round-lower))))
-	   `(
+	   (smart-fp--convert-negative-ordinates `(
 	     (top .
 		  ,next-y)
 	    
 	     (height .
-		     ,next-hc)))))))
+		     ,next-hc))))))))
 
 	 
     
