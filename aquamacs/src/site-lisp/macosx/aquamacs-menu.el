@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.123 2008/05/04 21:27:21 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.124 2008/05/05 13:51:51 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -1017,7 +1017,14 @@ both existing buffers and buffers that you subsequently create."
 ;; from the Aquamacs website, not from the FSF
 (define-key menu-bar-help-menu [describe-distribution]
     nil)
-
+(define-key menu-bar-help-menu [getting-new-versions]
+    nil)
+(define-key menu-bar-help-menu [about-emacs]
+    nil)
+(define-key menu-bar-help-menu [about-gnu-project]
+    nil) ;; this is available from the general About screen
+(define-key menu-bar-help-menu [sep4]
+    nil)
 )
 
 ;;; ONE TIME SETUP
