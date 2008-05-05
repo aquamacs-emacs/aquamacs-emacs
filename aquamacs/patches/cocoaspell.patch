@@ -1,5 +1,5 @@
 *** lisp/textmodes/ispell.el	06 Apr 2008 12:51:35 +0100	1.209.2.8
---- lisp/textmodes/ispell.el	01 May 2008 09:48:16 +0100	
+--- lisp/textmodes/ispell.el	05 May 2008 22:44:26 +0100	
 ***************
 *** 2,18 ****
   
@@ -50,13 +50,11 @@
   ;; Filtered process calls with duplicate dictionary entries.
 ***************
 *** 227,232 ****
---- 229,463 ----
+--- 229,461 ----
   (defalias 'check-ispell-version 'ispell-check-version)
   
   ;;; **********************************************************************
 + ;;; new settings to use cocoAspell preferences (from Spelling prefpane)
-+ 
-+ (require 'aquamacs-tools)
 + 
 + (aquamacs-set-defaults 
 +  `((ispell-program-name
@@ -288,7 +286,7 @@
   ;;; **********************************************************************
 ***************
 *** 520,525 ****
---- 751,757 ----
+--- 749,755 ----
     :group 'ispell)
   
   
@@ -305,7 +303,7 @@
   ;;;###autoload
   (defvar ispell-dictionary-alist
     (append ispell-dictionary-alist-1 ispell-dictionary-alist-2
---- 894,899 ----
+--- 892,897 ----
 ***************
 *** 912,941 ****
     (unless ispell-really-aspell
@@ -338,7 +336,7 @@
   
   (defvar ispell-aspell-data-dir nil
     "Data directory of Aspell.")
---- 1143,1197 ----
+--- 1141,1195 ----
     (unless ispell-really-aspell
       (error "This function only works with aspell"))
     (let* ((dictionaries
@@ -436,7 +434,7 @@
   		;; Here we specify the encoding to use while communicating with
   		;; aspell.  This doesn't apply to command line arguments, so
   		;; just don't pass words to spellcheck as arguments...
---- 1210,1267 ----
+--- 1208,1265 ----
     ;; This returns nil if the data file does not exist.
     ;; Can someone please explain the return value format when the
     ;; file does exist -- rms?
@@ -535,7 +533,7 @@
   
   ;;;###autoload
   (if ispell-menu-map-needed
---- 1325,1371 ----
+--- 1323,1369 ----
   (if ispell-menu-map-needed
       (progn
         (setq ispell-menu-map (make-sparse-keymap "Spell"))
@@ -607,7 +605,7 @@
       (if ispell-current-personal-dictionary	; use specified pers dict
   	(setq args
   	      (append args
---- 2772,2797 ----
+--- 2770,2795 ----
   (defun ispell-start-process ()
     "Start the ispell process, with support for no asynchronous processes.
   Keeps argument list for future ispell invocations for no async support."
@@ -644,7 +642,7 @@
   (defun ispell-init-process ()
     "Check status of Ispell process and start if necessary."
     (if (and ispell-process
---- 2815,2820 ----
+--- 2813,2818 ----
 ***************
 *** 2625,2636 ****
   
@@ -659,7 +657,7 @@
     (ispell-maybe-find-aspell-dictionaries)
     (unless arg (ispell-buffer-local-dict 'no-reload))
     (if (equal dict "default") (setq dict nil))
---- 2910,2922 ----
+--- 2908,2920 ----
   
   By just answering RET you can find out what the current dictionary is."
     (interactive
@@ -675,14 +673,11 @@
     (if (equal dict "default") (setq dict nil))
 ***************
 *** 3799,3804 ****
---- 4085,4158 ----
+--- 4083,4154 ----
   
   (add-to-list 'debug-ignored-errors "^No word found to check!$")
   
 + (setq ispell-use-cocoaspell-dicts nil)
-+ 
-+ (if ispell-use-cocoaspell
-+   (ispell-find-aspell-dictionaries)
 + 
 + ;; (and (equal ispell-program-name "aspell")
 + ;; 				       (not (getenv "ASPELL_CONF"))
@@ -691,57 +686,58 @@
 + ;; if we find aspell but no configuration for it, assume we use cocoAspell
 + ;;  dictionaries, but not cocoaspell configuration.
 + ;; find cocoAspell's directories automatically:
-+   ;;otherwise, use previous method to access cocoAspell dictionaries
-+ ;;   (defun aquamacs--configure-aspell ()
-+ ;;     "Configure Aspell automatically if it hasn't been configured already."
-+ ;;     (remove-hook 'ispell-kill-ispell-hook 'aquamacs--configure-aspell) 
-+     ;; only once please
-+ ;;     (when (and (equal ispell-program-name "aspell")
-+ 	       ;;	     (not ispell-dictionary-alist) ;; nothing found yet
-+ ;; 	       (not (getenv "ASPELL_CONF")))
-+       ;; don't do this - would assume default dirs 	
-+       ;;(ispell-maybe-find-aspell-dictionaries) ;; try to find dictionaries
-+ ;;       (setq ispell-have-aspell-dictionaries nil)
-+       ;; to find out if it's already configured
-+ ;;       (unless ispell-dictionary-alist
-+ (condition-case nil
-+     (if (with-temp-buffer
-+ 	  ;; is there a stored cocoaSpell configuration?
-+ 	  (ispell-call-process ispell-program-name nil t nil "dicts")
-+ 	  (eq (point-min) (point-max))) ;; no output?
-+ 	;; OK, aspell has not been configured by user on Unix level
-+ 	;; or in Emacs
-+ 	(progn
-+ 	  (print "no dicts!")
-+ 	  (setenv 
-+ 	   "ASPELL_CONF"
-+ 	   (let ((config-dir (expand-file-name 
-+ 			      "~/Library/Preferences/cocoAspell")))
-+ 	     ;; 		     (dict-dir 
-+ 	     ;; 		      (car ;; use the first subdir in that path
-+ 	     ;; 		       (file-expand-wildcards 
-+ 	     ;; 			"/Library/Application Support/cocoAspell/aspell*"))))
-+ 	     ;; check if the directories are readable
-+ 	     (if (file-readable-p config-dir) 
-+ 		 (setq config-dir (concat "conf-dir " config-dir))
-+ 	       (setq config-dir nil))))
-+ 	  (setq ispell-use-cocoaspell-dicts t)
-+ 	  (print "just set ispell-use-cocoaspell-dicts to t!")
-+ 	  (setq ispell-cocoaspell-dict-dir-list
-+ 		(file-expand-wildcards
-+ 		 "/Library/Application Support/cocoAspell/aspell*-*-*"))
-+ 	  (setq ispell-cocoaspell-dict-aliases
-+ 		(mapcar (lambda (dict-alias)
-+ 			  (file-name-sans-extension
-+ 			   (file-name-nondirectory dict-alias)))
-+ 			(file-expand-wildcards
-+ 			 "/Library/Application Support/cocoAspell/aspell*-*-*/*.alias")))))
++ ;;otherwise, use previous method to access cocoAspell dictionaries
++ (defun aquamacs--configure-aspell ()
++   "Configure Aspell automatically if it hasn't been configured already."
++   (remove-hook 'ispell-kill-ispell-hook 'aquamacs--configure-aspell) 
++   ;; only once please
++ 
++   (if ispell-use-cocoaspell
++       (ispell-find-aspell-dictionaries)
++     ;;     (when (and (equal ispell-program-name "aspell")
++     ;;	     (not ispell-dictionary-alist) ;; nothing found yet
++     ;; 	       (not (getenv "ASPELL_CONF")))
++     ;; don't do this - would assume default dirs 	
++     ;;(ispell-maybe-find-aspell-dictionaries) ;; try to find dictionaries
++     ;;       (setq ispell-have-aspell-dictionaries nil)
++     ;; to find out if it's already configured
++     ;;       (unless ispell-dictionary-alist
++     (condition-case nil
++ 	(if (with-temp-buffer
++ 	      ;; is there a stored cocoaSpell configuration?
++ 	      (ispell-call-process ispell-program-name nil t nil "dicts")
++ 	      (eq (point-min) (point-max))) ;; no output?
++ 	    ;; OK, aspell has not been configured by user on Unix level
++ 	    ;; or in Emacs
++ 	    (progn
++ 	      (setenv 
++ 	      "ASPELL_CONF"
++ 	      (let ((config-dir (expand-file-name 
++ 				 "~/Library/Preferences/cocoAspell")))
++ 		;; 		     (dict-dir 
++ 		;; 		      (car ;; use the first subdir in that path
++ 		;; 		       (file-expand-wildcards 
++ 		;; 			"/Library/Application Support/cocoAspell/aspell*"))))
++ 		;; check if the directories are readable
++ 		(if (file-readable-p config-dir) 
++ 		    (setq config-dir (concat "conf-dir " config-dir))
++ 		  (setq config-dir nil))))
++ 	      (setq ispell-use-cocoaspell-dicts t)
++ 	      (setq ispell-cocoaspell-dict-dir-list
++ 	      (file-expand-wildcards
++ 	       "/Library/Application Support/cocoAspell/aspell*-*-*"))
++ 	      (setq ispell-cocoaspell-dict-aliases
++ 	      (mapcar (lambda (dict-alias)
++ 			(file-name-sans-extension
++ 			 (file-name-nondirectory dict-alias)))
++ 		      (file-expand-wildcards
++ 		       "/Library/Application Support/cocoAspell/aspell*-*-*/*.alias")))))
 +       ;; 		 (if (file-readable-p dict-dir) 
 +       ;; 		     (setq dict-dir (concat ";dict-dir " dict-dir))
 +       ;; 		   (setq dict-dir nil))
 +       ;; 		 (concat config-dir dict-dir))))
-+       (error nil)));)
-+ ;;   (add-hook 'ispell-kill-ispell-hook 'aquamacs--configure-aspell)
++       (error nil))))
++ (add-hook 'ispell-kill-ispell-hook 'aquamacs--configure-aspell)
 + ;; unit test:
 + ;; (setenv "ASPELL_CONF" nil)
 + ;; (aquamacs--configure-aspell) 
