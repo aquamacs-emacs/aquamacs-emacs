@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.125 2008/05/06 09:00:27 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.126 2008/05/06 12:43:44 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -226,7 +226,7 @@ The elements of LIST are not copied, just the list structure itself."
 (defun aquamacs-update-new-file-menu ()
    (setq menu-bar-new-file-menu 
 	 (aquamacs-define-mode-menu (make-sparse-keymap "New Buffer in Mode")
-				    "aquamacs-new-buffer-" 'new-empty-buffer-other-frame
+				    'aquamacs-menu-new-empty-buffer-in-mode
 				    "Create a new buffer in `%s' mode."))
    (define-key-after menu-bar-file-menu [new-file-menu]
      (list 'menu-item "New Buffer in Mode" menu-bar-new-file-menu
@@ -253,17 +253,32 @@ The elements of LIST are not copied, just the list structure itself."
  
 (add-hook 'after-change-major-mode-hook 'aquamacs-record-mode-change)
  
-(defun aquamacs-change-mode (buffer mode)
-  (with-current-buffer (or buffer (current-buffer))
-    (if (eq major-mode mode)
-	(fundamental-mode))
-    (funcall mode)))
+(defun aquamacs-menu-new-empty-buffer-in-mode (&optional mode)  
+  "Create a blan buffer in a given major mode"
+  (interactive)
+  (let ((the-mode (or last-command-event mode)))
+	(new-empty-buffer nil the-mode)
+	(message "New %s buffer" (aquamacs-pretty-mode-name major-mode))))
+
+(defun aquamacs-change-major-mode (&optional mode)  
+  "Change the current buffer's major mode to another one."
+  (interactive)
+  (let ((the-mode (or last-command-event mode))
+	(buffer (if (minibufferp) (window-buffer (minibuffer-selected-window)) (current-buffer))))
+	(with-current-buffer buffer
+	  (if (eq major-mode the-mode)
+	      (fundamental-mode))
+	  (funcall the-mode)
+	  (message "Changed to %s Mode" (aquamacs-pretty-mode-name major-mode))
+	  )))
+
 
 (defvar menu-bar-change-mode-menu nil)
+; (aquamacs-update-change-mode-menu)
 (defun aquamacs-update-change-mode-menu ()
    (setq menu-bar-change-mode-menu 
 	 (aquamacs-define-mode-menu (make-sparse-keymap "Change Mode")
-				    "aquamacs-change-mode-" 'aquamacs-change-mode
+				    'aquamacs-change-major-mode
 				    "Change the major mode of the current buffer to `%s'."
 				    ;; do not slow things down
 				    ;;'(menu-bar-non-minibuffer-window-p)
@@ -276,14 +291,13 @@ The elements of LIST are not copied, just the list structure itself."
      'insert-file)) 
 
 (defun aquamacs-define-mode-menu 
-  (keymap symbol-prefix function-to-call docstring &optional enable-if)
+  (keymap function-to-call docstring &optional enable-if)
   "Defines a menu consisting of recently and commonly used major modes,
 using `aquamacs-recent-major-modes' and `aquamacs-known-major-modes'."
 
   (unless enable-if
     (setq enable-if 't))
   (aquamacs-define-mode-menu-1 aquamacs-known-major-modes keymap 
-			       symbol-prefix
 			       function-to-call docstring enable-if)
   (define-key keymap [separator]  '(menu-item "--"))
   (aquamacs-define-mode-menu-1 
@@ -293,7 +307,6 @@ using `aquamacs-recent-major-modes' and `aquamacs-known-major-modes'."
 		 m))
 	   (reverse aquamacs-recent-major-modes)) 
    keymap 
-   (aq-concat-symbol symbol-prefix "recent-") 
    function-to-call docstring enable-if))
 
  
@@ -303,33 +316,27 @@ using `aquamacs-recent-major-modes' and `aquamacs-known-major-modes'."
    (replace-regexp-in-string "-mode" "" (symbol-name mode))))
 
 (defun aquamacs-define-mode-menu-1
-  (the-list keymap symbol-prefix function-to-call docstring enable-if)
+  (the-list keymap function-to-call docstring enable-if)
   (mapc
    (lambda (modeentry)
      (let ((modename (if (consp modeentry) (car modeentry) modeentry))
 	   (displayname (if (consp modeentry) (cdr modeentry) 
 			  (aquamacs-pretty-mode-name modeentry))))
-
      (when (fboundp modename)
-       (define-key ;;-after doesn't work with after- why?>? 
-	 keymap 
-	 (vector (aq-concat-symbol symbol-prefix modename))
-	 `(menu-item  
-	   ,displayname
-	    ,(eval 
-	     (list 'defun (aq-concat-symbol symbol-prefix modename) '() 
-		   ;;(format docstring modename)
-		   '(interactive)
-		   (list function-to-call nil `(quote ,modename))
-		   ))
-	   :help ,(format docstring modename)
- 	   :enable ,enable-if
-	   )))))
+         (define-key ;;-after doesn't work with after- why?>? 
+	 keymap
+	 (vector (list modename)) ;; use mode name as event type (as done in menu-bar.el for buffers)
+	 `(menu-item ,displayname ,function-to-call 
+		     :help ,(format docstring modename)
+		     :enable ,enable-if))))) 
    (reverse (sort (aq-copy-list the-list)
 		  (lambda (a b) (string< 
 				 (upcase (if (consp a) (cdr a) (symbol-name a))) 
 				 (upcase (if (consp b) (cdr b) (symbol-name b))))))))
   keymap)
+  
+ 
+
 
 (defun set-aquamacs-known-major-modes (variable value)
   "Like `custom-set-default', but for `aquamacs-known-major-modes'."
@@ -387,7 +394,6 @@ customization buffer."
 
 (defun aquamacs-menu-bar-setup ()
 
-
 (define-key menu-bar-file-menu [new-file]
   `(menu-item ,(aq-shortcut  "New Buffer in New Frame        "
 			    'new-empty-buffer-other-frame)  
@@ -406,7 +412,6 @@ customization buffer."
 			   (menu-bar-menu-frame-live-and-visible-p)
 			   (menu-bar-non-minibuffer-window-p))
 	      :help "Add a new tab to the window") 'new-file)
-
 
 (define-key menu-bar-file-menu [open-file] 
   `(menu-item
