@@ -1,5 +1,5 @@
 *** lisp/textmodes/ispell.el	06 Apr 2008 12:51:35 +0100	1.209.2.8
---- lisp/textmodes/ispell.el	05 May 2008 22:44:26 +0100	
+--- lisp/textmodes/ispell.el	06 May 2008 22:44:26 +0100	
 ***************
 *** 2,18 ****
   
@@ -50,18 +50,23 @@
   ;; Filtered process calls with duplicate dictionary entries.
 ***************
 *** 227,232 ****
---- 229,461 ----
+--- 229,466 ----
   (defalias 'check-ispell-version 'ispell-check-version)
   
   ;;; **********************************************************************
 + ;;; new settings to use cocoAspell preferences (from Spelling prefpane)
 + 
-+ (aquamacs-set-defaults 
-+  `((ispell-program-name
-+     ,(or (if (locate-file "aspell" exec-path exec-suffixes 'file-executable-p) 
++ ;; needs to be autoloaded to make the menus work
++ ;;;###autoload
++ (defcustom ispell-program-name
++   (or (if (locate-file "aspell" exec-path exec-suffixes 'file-executable-p) 
 + 	     "aspell")
 + 	 (if (locate-file "ispell" exec-path exec-suffixes 'file-executable-p)
-+ 	     "ispell")))))
++ 	     "ispell"))
++   "Program invoked by \\[ispell-word] and \\[ispell-region] commands."
++   :type 'string
++   :group 'ispell)
++ 
 + 
 + ;; Should we use cocoAspell preferences to determine dictionaries for spellchecking?
 + (aquamacs-set-defaults
@@ -285,8 +290,23 @@
   ;;; and location of binaries:
   ;;; **********************************************************************
 ***************
+*** 304,315 ****
+    :type 'integer
+    :group 'ispell)
+  
+- (defcustom ispell-program-name
+-   (or (locate-file "aspell" exec-path exec-suffixes 'file-executable-p)
+-       "ispell")
+-   "Program invoked by \\[ispell-word] and \\[ispell-region] commands."
+-   :type 'string
+-   :group 'ispell)
+  
+  (defcustom ispell-alternate-dictionary
+    (cond ((file-exists-p "/usr/dict/web2") "/usr/dict/web2")
+--- 538,543 ----
+***************
 *** 520,525 ****
---- 749,755 ----
+--- 748,754 ----
     :group 'ispell)
   
   
@@ -303,7 +323,7 @@
   ;;;###autoload
   (defvar ispell-dictionary-alist
     (append ispell-dictionary-alist-1 ispell-dictionary-alist-2
---- 892,897 ----
+--- 891,896 ----
 ***************
 *** 912,941 ****
     (unless ispell-really-aspell
@@ -336,7 +356,7 @@
   
   (defvar ispell-aspell-data-dir nil
     "Data directory of Aspell.")
---- 1141,1195 ----
+--- 1140,1194 ----
     (unless ispell-really-aspell
       (error "This function only works with aspell"))
     (let* ((dictionaries
@@ -434,7 +454,7 @@
   		;; Here we specify the encoding to use while communicating with
   		;; aspell.  This doesn't apply to command line arguments, so
   		;; just don't pass words to spellcheck as arguments...
---- 1208,1265 ----
+--- 1207,1264 ----
     ;; This returns nil if the data file does not exist.
     ;; Can someone please explain the return value format when the
     ;; file does exist -- rms?
@@ -533,7 +553,7 @@
   
   ;;;###autoload
   (if ispell-menu-map-needed
---- 1323,1369 ----
+--- 1322,1368 ----
   (if ispell-menu-map-needed
       (progn
         (setq ispell-menu-map (make-sparse-keymap "Spell"))
@@ -605,7 +625,7 @@
       (if ispell-current-personal-dictionary	; use specified pers dict
   	(setq args
   	      (append args
---- 2770,2795 ----
+--- 2769,2794 ----
   (defun ispell-start-process ()
     "Start the ispell process, with support for no asynchronous processes.
   Keeps argument list for future ispell invocations for no async support."
@@ -642,7 +662,7 @@
   (defun ispell-init-process ()
     "Check status of Ispell process and start if necessary."
     (if (and ispell-process
---- 2813,2818 ----
+--- 2812,2817 ----
 ***************
 *** 2625,2636 ****
   
@@ -657,7 +677,7 @@
     (ispell-maybe-find-aspell-dictionaries)
     (unless arg (ispell-buffer-local-dict 'no-reload))
     (if (equal dict "default") (setq dict nil))
---- 2908,2920 ----
+--- 2907,2919 ----
   
   By just answering RET you can find out what the current dictionary is."
     (interactive
@@ -673,7 +693,7 @@
     (if (equal dict "default") (setq dict nil))
 ***************
 *** 3799,3804 ****
---- 4083,4154 ----
+--- 4082,4153 ----
   
   (add-to-list 'debug-ignored-errors "^No word found to check!$")
   
