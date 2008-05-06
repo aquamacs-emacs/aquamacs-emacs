@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.127 2008/05/06 12:50:07 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.128 2008/05/06 18:15:39 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -251,8 +251,6 @@ The elements of LIST are not copied, just the list structure itself."
       (aquamacs-update-change-mode-menu)))
 
  
-(add-hook 'after-change-major-mode-hook 'aquamacs-record-mode-change)
- 
 (defun aquamacs-menu-new-empty-buffer-in-mode (&optional mode)  
   "Create a blan buffer in a given major mode"
   (interactive)
@@ -389,8 +387,6 @@ customization buffer."
 
 ;; compatibility (old symbol used in 0.9.6)
 (defalias 'aquamacs-menu-new-buffer-modes 'aquamacs-known-major-modes)
-
-(add-hook 'after-init-hook 'aquamacs-update-new-file-menu)
 
 (defun aquamacs-menu-bar-setup ()
 
@@ -1191,8 +1187,6 @@ that should be represented in the Aquamacs menus."
       (aquamacs-menu-bar-setup)))
   (error nil)))
 
-(add-hook 'menu-bar-update-hook 'aquamacs-update-menu)
-
  
  (defun aquamacs-user-wiki ()
   (interactive)
@@ -1293,6 +1287,12 @@ that should be represented in the Aquamacs menus."
 )
 )
 ;; --done
+
+(add-hook 'menu-bar-update-hook 'aquamacs-update-menu)
+
+(add-hook 'after-change-major-mode-hook 'aquamacs-record-mode-change)
+ 
+(add-hook 'after-init-hook 'aquamacs-update-new-file-menu)
 
 (provide 'aquamacs-menu)
   
