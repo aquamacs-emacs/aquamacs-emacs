@@ -6,7 +6,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: tabbar-window.el,v 1.26 2008/05/05 14:56:57 champo Exp $
+;; Revision: $Id: tabbar-window.el,v 1.27 2008/05/06 04:18:08 champo Exp $
 
 (require 'tabbar)
 
@@ -51,6 +51,20 @@ If optional argument UPDATE is non-nil, call the user defined function
 current cached copy."
   (setq tabbar-current-tabset
 	(funcall tabbar-current-tabset-function)))
+
+(defun tabbar-window-buffer-list ()
+  "Return the list of buffers to show in tabs.
+Exclude buffers whose name starts with a space, when they are not
+visiting a file.  The current buffer is always included."
+  (delq nil
+        (mapcar #'(lambda (b)
+                    (cond
+                     ;; Don't always include the current buffer -- esp. if minibuffer
+;;                      ((eq (current-buffer) b) b)
+                     ((buffer-file-name b) b)
+                     ((char-equal ?\  (aref (buffer-name b) 0)) nil)
+                     ((buffer-live-p b) b)))
+                (buffer-list))))
 
 (defun window-number (window)
   "Return window ID as a number."
@@ -567,6 +581,7 @@ Run as `tabbar-init-hook'."
 	tabbar-button-label-function 'tabbar-window-button-label
 	tabbar-close-tab-function 'tabbar-window-close-tab
 	tabbar-new-tab-function 'tabbar-window-new-buffer
+	tabbar-buffer-list-function 'tabbar-window-buffer-list
 	tabbar-home-function nil
 	tabbar-home-help-function nil
 	tabbar-home-button-value nil
@@ -594,6 +609,8 @@ Run as `tabbar-quit-hook'."
 	tabbar-help-on-tab-function nil
 	tabbar-button-label-function nil
 	tabbar-close-tab-function nil
+	tabbar-new-tab-function nil
+	tabbar-buffer-list-function nil
 	tabbar-home-function nil
 	tabbar-home-help-function nil
 	tabbar-home-button-value nil
