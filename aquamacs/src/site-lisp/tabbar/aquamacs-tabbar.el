@@ -5,7 +5,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: aquamacs-tabbar.el,v 1.27 2008/05/06 12:54:18 davidswelt Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.28 2008/05/06 18:21:32 davidswelt Exp $
 
 ;; load original tabbar-mode
 (require 'tabbar)
@@ -68,13 +68,13 @@ to be closed.  If no tab is specified, (tabbar-selected-tab) is used"
 		    :background "gray95"
 		    :foreground "gray20"
 		    :inherit 'tabbar-default
-		    :box '(:line-width 2 :color "grey95" :style nil))
+		    :box '(:line-width 3 :color "grey95" :style nil))
 ;; 		    :box '(:line-width 2 :color "white" :style released-button))
 
 (set-face-attribute 'tabbar-unselected nil
 		    :inherit 'tabbar-default
 		    :background "gray80"
-		    :box '(:line-width 2 :color "grey80" :style nil))
+		    :box '(:line-width 3 :color "grey80" :style nil))
 
 (defface tabbar-selected-highlight '((t
 		    :background "gray95"))
@@ -83,7 +83,7 @@ to be closed.  If no tab is specified, (tabbar-selected-tab) is used"
 
 (defface tabbar-unselected-highlight '((t
 		    :background "grey75"
-		    :box (:line-width 2 :color "grey75" :style nil)))
+		    :box (:line-width 3 :color "grey75" :style nil)))
   "Face for unselected, highlighted tabs."
   :group 'tabbar)
 
@@ -503,7 +503,7 @@ NOSCROLL is non-nil, exclude the tabbar-scroll buttons."
        (list (propertize " "
                         'face 'tabbar-default
                         'display (list 'space :width (list 8)))
-	     tabbar-separator-value)
+	     ) ;; insert tabbar-separator-value here?
      (list (if (> (tabbar-start tabset) 0)
 	       (car tabbar-scroll-left-button-value)
 	     (cdr tabbar-scroll-left-button-value))
