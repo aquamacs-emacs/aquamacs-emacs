@@ -5,7 +5,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: aquamacs-tabbar.el,v 1.24 2008/05/06 04:12:34 champo Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.25 2008/05/06 06:50:22 davidswelt Exp $
 
 ;; load original tabbar-mode
 (require 'tabbar)
@@ -417,7 +417,7 @@ element.
 Call `tabbar-tab-label-function' to obtain a label for TAB."
   (let* ((close-button-image (tabbar-find-image tabbar-close-tab-button))
 	 (close-button
-	 (propertize "[x]"
+	  (propertize "[x]"
 		     'tabbar-tab tab
 		     'local-map (tabbar-make-tab-keymap tab)
 		     'tabbar-action 'close-tab
@@ -429,8 +429,7 @@ Call `tabbar-tab-label-function' to obtain a label for TAB."
 			       'tabbar-selected
 			     'tabbar-unselected)
 		     'pointer 'arrow
-		     'display (tabbar-normalize-image close-button-image 0 'nomask)
-		     ))
+		     'display (tabbar-normalize-image close-button-image 0 'nomask)))
 	(display-label
 	 (propertize (if tabbar-tab-label-function
 			 (funcall tabbar-tab-label-function tab)
@@ -450,10 +449,8 @@ Call `tabbar-tab-label-function' to obtain a label for TAB."
 				 ((and (tabbar-selected-p tab (tabbar-current-tabset))
 				       (not (buffer-modified-p (tabbar-tab-value tab))))
 				  'tabbar-selected)
-				 (t 'tabbar-unselected)
-				 )
-		     'pointer 'arrow
-		     )))
+				 (t 'tabbar-unselected))
+		     'pointer 'arrow)))
     (concat close-button display-label tabbar-separator-value)))
 
 (defun tabbar-dummy-line-buttons (&optional noscroll)
@@ -614,9 +611,8 @@ buffer; see also `char-width'."
 		     " " 'display 
 		     `(space 
 		       :width
-		       ;; subtract half the width of closer button
-		       ;; the full width wouldn't look as good
-		       (,(max 4 (- l-l 7)))))))
+		       ;; subtract the width of closer button. hard-coded for speed.
+		       (,(max 4 (- l-l 14)))))))
 	(concat sp-l str sp-r)))
      (t str)))) 
           
