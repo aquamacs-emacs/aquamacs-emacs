@@ -19,8 +19,18 @@
 *** lisp/bindings.el	7 Jan 2008 02:45:03 -0000	1.178.2.5
 --- lisp/bindings.el	6 May 2008 22:07:59 -0000
 ***************
+*** 156,161 ****
+--- 156,162 ----
+        (setq desc
+  	    (propertize
+  	     mnemonic
++ 	     'face 'mode-line-mule-info-face
+  	     'help-echo (format "%s end-of-line; mouse-1 to cycle"
+  				(if (eq eol 0) "Unix-style LF"
+  				  (if (eq eol 1) "Dos-style CRLF"
+***************
 *** 174,179 ****
---- 174,180 ----
+--- 175,181 ----
     `(""
       (current-input-method
        (:propertize ("" current-input-method-title)
@@ -30,7 +40,7 @@
   			     current-input-method
 ***************
 *** 182,187 ****
---- 183,189 ----
+--- 184,190 ----
   		  mouse-face mode-line-highlight))
       ,(propertize
         "%z"
@@ -58,7 +68,7 @@
   	 'mode-line-mule-info
   	 'mode-line-modified
   	 'mode-line-frame-identification
---- 275,297 ----
+--- 276,298 ----
       map) "\
   Keymap to display on minor modes.")
   
@@ -91,7 +101,7 @@
          (standard-mode-line-modes
   	(list
   	 (propertize "%[(" 'help-echo help-echo)
---- 303,309 ----
+--- 304,310 ----
   	 'mode-line-modes
   	 `(which-func-mode ("" which-func-format ,dashes))
   	 `(global-mode-string (,dashes global-mode-string))
@@ -108,7 +118,7 @@
          (standard-mode-line-position
   	`((-3 ,(propertize "%p" 'help-echo help-echo))
   	  (size-indication-mode
---- 320,326 ----
+--- 321,327 ----
   		     'mouse-face 'mode-line-highlight
   		     'local-map (make-mode-line-mouse-map
   				 'mouse-2 #'mode-line-widen))
@@ -125,7 +135,7 @@
   
   (defvar mode-line-buffer-identification-keymap
     ;; Add menu of buffer operations to the buffer identification part
---- 342,348 ----
+--- 343,349 ----
   
     (setq-default mode-line-position standard-mode-line-position)
     (put 'mode-line-position 'standard-value
