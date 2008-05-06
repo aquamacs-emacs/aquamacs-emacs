@@ -1,10 +1,43 @@
-Index: lisp/bindings.el
-===================================================================
-RCS file: /sources/emacs/emacs/lisp/bindings.el,v
-retrieving revision 1.173
-diff -c -r1.173 bindings.el
-*** lisp/bindings.el	6 Nov 2006 15:49:22 -0000	1.173
---- lisp/bindings.el	9 Nov 2006 16:50:57 -0000
+*** lisp/faces.el	06 Apr 2008 12:51:37 +0100	1.370.2.8
+--- lisp/faces.el	06 May 2008 23:07:32 +0100	
+***************
+*** 2084,2089 ****
+--- 2084,2096 ----
+    :group 'mode-line-faces
+    :group 'basic-faces)
+  
++ (defface mode-line-mule-info
++   '((t (:family "sansserif")))
++   "Face used for MULE parts of the mode line."
++   :version "22.1"
++   :group 'mode-line-faces
++   :group 'basic-faces)
++ 
+  ;; Make `modeline' an alias for `mode-line', for compatibility.
+  (put 'modeline 'face-alias 'mode-line)
+  (put 'modeline-inactive 'face-alias 'mode-line-inactive)
+*** lisp/bindings.el	7 Jan 2008 02:45:03 -0000	1.178.2.5
+--- lisp/bindings.el	6 May 2008 22:07:59 -0000
+***************
+*** 174,179 ****
+--- 174,180 ----
+    `(""
+      (current-input-method
+       (:propertize ("" current-input-method-title)
++ 		  face mode-line-mule-info-face
+  		  help-echo (concat
+  			     "Input method: "
+  			     current-input-method
+***************
+*** 182,187 ****
+--- 183,189 ----
+  		  mouse-face mode-line-highlight))
+      ,(propertize
+        "%z"
++       'face 'mode-line-mule-info-face
+        'help-echo
+        #'(lambda (window object point)
+  	  (with-current-buffer (window-buffer window)
 ***************
 *** 273,290 ****
       map) "\
@@ -25,7 +58,7 @@ diff -c -r1.173 bindings.el
   	 'mode-line-mule-info
   	 'mode-line-modified
   	 'mode-line-frame-identification
---- 273,295 ----
+--- 275,297 ----
       map) "\
   Keymap to display on minor modes.")
   
@@ -58,7 +91,7 @@ diff -c -r1.173 bindings.el
          (standard-mode-line-modes
   	(list
   	 (propertize "%[(" 'help-echo help-echo)
---- 301,307 ----
+--- 303,309 ----
   	 'mode-line-modes
   	 `(which-func-mode ("" which-func-format ,dashes))
   	 `(global-mode-string (,dashes global-mode-string))
@@ -75,7 +108,7 @@ diff -c -r1.173 bindings.el
          (standard-mode-line-position
   	`((-3 ,(propertize "%p" 'help-echo help-echo))
   	  (size-indication-mode
---- 318,324 ----
+--- 320,326 ----
   		     'mouse-face 'mode-line-highlight
   		     'local-map (make-mode-line-mouse-map
   				 'mouse-2 #'mode-line-widen))
@@ -92,7 +125,7 @@ diff -c -r1.173 bindings.el
   
   (defvar mode-line-buffer-identification-keymap
     ;; Add menu of buffer operations to the buffer identification part
---- 340,346 ----
+--- 342,348 ----
   
     (setq-default mode-line-position standard-mode-line-position)
     (put 'mode-line-position 'standard-value
