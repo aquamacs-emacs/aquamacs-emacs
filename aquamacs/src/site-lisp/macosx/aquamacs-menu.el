@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.126 2008/05/06 12:43:44 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.127 2008/05/06 12:50:07 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -231,7 +231,7 @@ The elements of LIST are not copied, just the list structure itself."
    (define-key-after menu-bar-file-menu [new-file-menu]
      (list 'menu-item "New Buffer in Mode" menu-bar-new-file-menu
 	   :help "Create a new buffer with a specific major mode.")
-     'new-file))
+     'make-tab))
 
 ;; record recently used major modes
 
@@ -576,7 +576,7 @@ left and right margin"))
  (define-key-after menu-bar-file-menu [my-file-separator]
           '(menu-item "--") 'recover-session)
  (define-key-after menu-bar-file-menu [mac-show-in-finder]
-          '(menu-item "Show In Finder" mac-key-show-in-finder
+          '(menu-item "Reveal in Finder" mac-key-show-in-finder
 
 		      :enable (and  (menu-bar-menu-frame-live-and-visible-p)
 				    (menu-bar-non-minibuffer-window-p)
