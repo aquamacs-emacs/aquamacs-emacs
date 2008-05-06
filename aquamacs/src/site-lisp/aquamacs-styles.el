@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.32 2008/04/28 19:25:51 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.33 2008/05/06 18:12:43 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -562,8 +562,9 @@ for which the menu is being updated."
 
 (defvar appstyle-mode-menu nil)
 
-(defun aquamacs-apply-style-for-mode (ignored modename)
-  (aquamacs-set-style nil t modename))
+(defun aquamacs-apply-style-for-mode (&optional ignored modename)
+  (interactive)
+  (aquamacs-set-style nil t (or modename last-command-event)))
  
 
 (defun aquamacs-update-apply-style-for-mode-menu ()
@@ -577,7 +578,6 @@ for which the menu is being updated."
 				       (upcase (symbol-name b))))))
 
 	 (make-sparse-keymap "Set Mode") 
-	 "set-style-of-"
 	 'aquamacs-apply-style-for-mode
 	 "Apply frame style assigned to %s." 
 	 '(menu-bar-non-minibuffer-window-p)
