@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.162 2008/05/04 08:26:57 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.163 2008/05/06 22:24:11 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -489,11 +489,20 @@ yes-or-no prompts - y or n will do."
       )
     )
 
+  ;; Mode-Line Faces
+  ;; face (defined and) applied using pretty-modeline.patch
+  
+  (set-face-attribute 'mode-line nil
+		    :family "Lucida Grande")
+
+  (set-face-attribute 'mode-line-mule-info nil
+		    :family "Monaco")
+  
+
   ;; tabbar needs to be defined before osxkeys
   (require 'aquamacs-tabbar)
 
   ;; Mac OS X specific stuff 
-
 
   (ats "osx_defaults ...")
 
@@ -564,7 +573,7 @@ yes-or-no prompts - y or n will do."
 
 
   (require 'aquamacs-editing)
-  
+
 ;; set ispell-program-name to correct name, or to nil
 ;; if neither aspell nor ispell are available.
 ;; original definition in Emacs always uses "ispell",
