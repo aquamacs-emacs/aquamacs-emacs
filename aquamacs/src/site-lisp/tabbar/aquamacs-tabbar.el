@@ -5,7 +5,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: aquamacs-tabbar.el,v 1.26 2008/05/06 08:37:52 davidswelt Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.27 2008/05/06 12:54:18 davidswelt Exp $
 
 ;; load original tabbar-mode
 (require 'tabbar)
@@ -500,7 +500,10 @@ NOSCROLL is non-nil, exclude the tabbar-scroll buttons."
        (car tabbar-home-button-value)
      (cdr tabbar-home-button-value))
    (if noscroll
-       (list " " tabbar-separator-value)
+       (list (propertize " "
+                        'face 'tabbar-default
+                        'display (list 'space :width (list 8)))
+	     tabbar-separator-value)
      (list (if (> (tabbar-start tabset) 0)
 	       (car tabbar-scroll-left-button-value)
 	     (cdr tabbar-scroll-left-button-value))
