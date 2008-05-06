@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.128 2008/05/06 18:15:39 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.129 2008/05/06 21:21:38 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -934,6 +934,13 @@ both existing buffers and buffers that you subsequently create."
 (define-key-after menu-bar-edit-menu [separator-spell]
   '(menu-item "--")
   'separator-bookmark)
+
+;; ispell is not loaded at startup
+(defvar ispell-program-name
+  (or (if (locate-file "aspell" exec-path exec-suffixes 'file-executable-p) 
+	  "aspell")
+      (if (locate-file "ispell" exec-path exec-suffixes 'file-executable-p)
+	  "ispell")))
 
 (define-key-after menu-bar-edit-menu [spell]
   '(menu-item "Spelling" ispell-menu-map 
