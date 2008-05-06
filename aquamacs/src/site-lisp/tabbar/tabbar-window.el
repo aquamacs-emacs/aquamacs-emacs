@@ -6,7 +6,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: tabbar-window.el,v 1.27 2008/05/06 04:18:08 champo Exp $
+;; Revision: $Id: tabbar-window.el,v 1.28 2008/05/06 18:59:46 davidswelt Exp $
 
 (require 'tabbar)
 
@@ -154,10 +154,9 @@ Displayed buffers always get tabs."
 	      (if (eq (length buflist) 1)
 		  ;; if there is only 1 buffer associated with this tabset, then
 		  ;;  display no tabbar (no header line).
-		  (add-to-list 'header-line-inhibit-window-list window t)
-;; the following causes too many redraws
-;;		  (progn (add-to-list 'header-line-inhibit-window-list window t)
-;;			 (redraw-frame (window-frame window)))
+		  ;; (add-to-list 'header-line-inhibit-window-list window t)
+		  ; workaround for redisplay bug 
+		  (run-with-idle-timer 0 nil 'add-to-list 'header-line-inhibit-window-list window t)
 		;; otherwise, ensure this window has a tabbar
 		(setq header-line-inhibit-window-list
 		      (delq window header-line-inhibit-window-list))))
@@ -167,7 +166,7 @@ Displayed buffers always get tabs."
 	  (setq header-line-inhibit-window-list
 		(delq window header-line-inhibit-window-list))))))
   tabbar-window-alist)
-
+; (add-to-list 'header-line-inhibit-window-list (selected-window) t)
 (defun tabbar-tabset-names ()
   "Return list of strings giving names of all tabsets"
   (tabbar-map-tabsets 'symbol-name))
