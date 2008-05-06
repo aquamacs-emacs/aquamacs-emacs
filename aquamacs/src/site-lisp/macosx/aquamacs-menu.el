@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.124 2008/05/05 13:51:51 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.125 2008/05/06 09:00:27 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -941,7 +941,8 @@ both existing buffers and buffers that you subsequently create."
 (define-key-after menu-bar-edit-menu [spell-download-aspell]
 	'(menu-item "Download Spell-Checking..." aquamacs-ispell-install
 		    :help "Download spell-checking package"
-		    :visible (not ispell-program-name))
+		    :visible (and (boundp 'ispell-program-name)
+				  (not ispell-program-name)))
 	'spell) 
 
 (define-key ispell-menu-map [ispell-buffer]
