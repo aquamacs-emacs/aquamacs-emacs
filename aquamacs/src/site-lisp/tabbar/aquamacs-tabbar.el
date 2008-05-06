@@ -5,7 +5,7 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: aquamacs-tabbar.el,v 1.23 2008/05/04 12:59:15 davidswelt Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.24 2008/05/06 04:12:34 champo Exp $
 
 ;; load original tabbar-mode
 (require 'tabbar)
@@ -207,13 +207,14 @@ if specified), in current window."
       (cons "Move Tab to New Frame" 'tabbar-move-clicked-buffer-to-new-frame))
     (define-key map [closeothers] (cons "Close Other Tabs" 'tabbar-close-other-tabs))
     (define-key map [closetab] (cons "Close Tab" 'tabbar-close-clicked-tab))
-    (define-key map [newtab] (cons "New Tab" 'tabbar-new-tab))
+    (define-key map [newtab] (cons "New Buffer in New Tab" 'tabbar-new-tab))
     map) "Keymap for the Tabbar context menu.")
 
 ;; keymap for tabbar context menu
 (defvar tabbar-empty-context-menu-map
   (let ((map (make-sparse-keymap)))
-    (define-key map [newtab] (cons "New Tab" 'tabbar-new-tab))
+    (define-key map [mergetabs] (cons "Merge All Windows" 'tabbar-window-merge-windows))
+    (define-key map [newtab] (cons "New Buffer in New Tab" 'tabbar-new-tab))
     map) "Keymap for the context menu of the empty portion of tab bar.")
 
 ;; modify hints to give only the buffer name
