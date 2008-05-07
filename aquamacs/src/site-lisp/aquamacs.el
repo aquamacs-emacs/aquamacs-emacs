@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.163 2008/05/06 22:24:11 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.164 2008/05/07 07:39:31 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -495,7 +495,7 @@ yes-or-no prompts - y or n will do."
   (set-face-attribute 'mode-line nil
 		    :family "Lucida Grande")
 
-  (set-face-attribute 'mode-line-mule-info nil
+  (set-face-attribute 'mode-line-flags nil
 		    :family "Monaco")
   
 
