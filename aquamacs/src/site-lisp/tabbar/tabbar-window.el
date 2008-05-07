@@ -6,9 +6,11 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: tabbar-window.el,v 1.28 2008/05/06 18:59:46 davidswelt Exp $
+;; (C) Copyright 2008, the Aquamacs Project
+;; Revision: $Id: tabbar-window.el,v 1.29 2008/05/07 16:49:23 davidswelt Exp $
 
 (require 'tabbar)
+(require 'aquamacs-tools)
 
 (defvar tabbar-window-alist nil)
 (defvar tabbar-window-cache nil)
@@ -62,7 +64,7 @@ visiting a file.  The current buffer is always included."
                      ;; Don't always include the current buffer -- esp. if minibuffer
 ;;                      ((eq (current-buffer) b) b)
                      ((buffer-file-name b) b)
-                     ((char-equal ?\  (aref (buffer-name b) 0)) nil)
+                     ((char-equal ?\ (aref (buffer-name b) 0)) nil)
                      ((buffer-live-p b) b)))
                 (buffer-list))))
 
@@ -289,8 +291,7 @@ That is, a string used to represent it on the tab bar."
 	 (t
 	  (switch-to-buffer buffer)))
       (when (eq mouse-button 'mouse-3)
-	(popup-menu tabbar-empty-context-menu-map event prefix)))
-    ))
+	(popup-menu tabbar-empty-context-menu-map event prefix)))))
 
 (defun tabbar-windows-per-buffer (buffer)
   "Return a list of numbers corresponding to window tabsets to which the
@@ -369,8 +370,8 @@ specified BUFFER belongs."
 	     (buffer-modified-p))
 	    ;; a lot of buffers (e.g. dired) may be modified,
 	    ;; but have no file name
-	    (if (y-or-n-p (format "Save buffer %s to file before killing it? " 
-				    (buffer-name)))
+	    (if (aquamacs-ask-for-confirmation
+		 (format "Save buffer %s to file before killing it? " (buffer-name)))
 		(progn
 		  (save-buffer)
 		  (message "File saved.")
