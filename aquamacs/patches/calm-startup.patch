@@ -45,23 +45,30 @@ diff -c -r1.436.2.16 startup.el
   	;; Now we know the user's default font, so add it to the menu.
   	(if (fboundp 'font-menu-add-default)
 ***************
-*** 756,765 ****
---- 759,773 ----
+*** 756,764 ****
   
     (run-hooks 'before-init-hook)
   
-+   ;; the initial frame is hidden in Aquamacs
-+   (let ((initial-frame-alist (cons '(visibility . nil) initial-frame-alist)))
-+ 
-    ;; Under X Window, this creates the X frame and deletes the terminal frame.
-    (when (fboundp 'frame-initialize)
-      (frame-initialize))
+!   ;; Under X Window, this creates the X frame and deletes the terminal frame.
+!   (when (fboundp 'frame-initialize)
+!     (frame-initialize))
   
-+   )
-+ 
     ;; Turn off blinking cursor if so specified in X resources.  This is here
     ;; only because all other settings of no-blinking-cursor are here.
-    (unless (or noninteractive
+--- 759,771 ----
+  
+    (run-hooks 'before-init-hook)
+  
+!   ;; the initial frame is hidden in Aquamacs
+!   (let ((initial-frame-alist (append '((visibility . nil) 
+! 				       (left . 1) ;; bug #166 workaround
+! 				       initial-frame-alist))))
+!     ;; Under X Window, this creates the X frame and deletes the terminal frame.
+!     (when (fboundp 'frame-initialize)
+!       (frame-initialize)))
+  
+    ;; Turn off blinking cursor if so specified in X resources.  This is here
+    ;; only because all other settings of no-blinking-cursor are here.
 ***************
 *** 829,838 ****
       (if site-run-file
