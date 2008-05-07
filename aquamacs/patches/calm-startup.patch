@@ -6,25 +6,6 @@ diff -c -r1.436.2.16 startup.el
 *** lisp/startup.el	6 Mar 2008 00:08:01 -0000	1.436.2.16
 --- lisp/startup.el	30 Apr 2008 16:33:28 -0000
 ***************
-*** 44,51 ****
-    "Non-nil inhibits the startup screen.
-  It also inhibits display of the initial message in the `*scratch*' buffer.
-  
-! This is for use in your personal init file (but NOT site-start.el), once
-! you are familiar with the contents of the startup screen."
-    :type 'boolean
-    :group 'initialization)
-  
---- 44,51 ----
-    "Non-nil inhibits the startup screen.
-  It also inhibits display of the initial message in the `*scratch*' buffer.
-  
-! This is for use in your personal init file, in case you
-! would like to use the extra functionality of the startup screen."
-    :type 'boolean
-    :group 'initialization)
-  
-***************
 *** 473,479 ****
   		  (if (string-match "^\\(xterm\\|rxvt\\|dtterm\\|eterm\\)"
   				    term)
@@ -61,8 +42,8 @@ diff -c -r1.436.2.16 startup.el
   
 !   ;; the initial frame is hidden in Aquamacs
 !   (let ((initial-frame-alist (append '((visibility . nil) 
-! 				       (left . 1) ;; bug #166 workaround
-! 				       initial-frame-alist))))
+! 				       (left . 1)) ;; bug #166 workaround
+! 				       initial-frame-alist)))
 !     ;; Under X Window, this creates the X frame and deletes the terminal frame.
 !     (when (fboundp 'frame-initialize)
 !       (frame-initialize)))
@@ -82,17 +63,6 @@ diff -c -r1.436.2.16 startup.el
       (when init-file-user
         (if (string-match "[~/:\n]" init-file-user)
 --- 837,842 ----
-***************
-*** 889,894 ****
---- 893,900 ----
-  		      ;; into user-init-file.
-  		      (setq user-init-file t)
-  		      (load user-init-file-1 t t)
-+ 		      (if (fboundp 'aquamacs-load-preferences) 
-+ 			  (aquamacs-load-preferences))
-  
-  		      (when (eq user-init-file t)
-  			;; If we did not find ~/.emacs, try
 ***************
 *** 925,936 ****
   			    (setq user-init-file source))))
