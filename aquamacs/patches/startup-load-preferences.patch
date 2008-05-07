@@ -20,19 +20,6 @@
     :group 'initialization)
   
 ***************
-*** 828,837 ****
-      (if site-run-file
-  	(load site-run-file t t))
-  
--     ;; Sites should not disable this.  Only individuals should disable
--     ;; the startup screen.
--     (setq inhibit-startup-screen nil)
-- 
-      ;; Warn for invalid user name.
-      (when init-file-user
-        (if (string-match "[~/:\n]" init-file-user)
---- 828,833 ----
-***************
 *** 888,893 ****
 --- 884,891 ----
   		      ;; into user-init-file.
@@ -43,68 +30,3 @@
   
   		      (when (eq user-init-file t)
   			;; If we did not find ~/.emacs, try
-***************
-*** 924,935 ****
-  			    (setq user-init-file source))))
-  
-  		      (unless inhibit-default-init
-!                         (let ((inhibit-startup-screen nil))
-!                           ;; Users are supposed to be told their rights.
-!                           ;; (Plus how to get help and how to undo.)
-!                           ;; Don't you dare turn this off for anyone
-!                           ;; except yourself.
-!                           (load "default" t t)))))))))
-  	(if init-file-debug
-  	    ;; Do this without a condition-case if the user wants to debug.
-  	    (funcall inner)
---- 922,928 ----
-  			    (setq user-init-file source))))
-  
-  		      (unless inhibit-default-init
-!                           (load "default" t t))))))))
-  	(if init-file-debug
-  	    ;; Do this without a condition-case if the user wants to debug.
-  	    (funcall inner)
-***************
-*** 1849,1881 ****
-    (let ((resize-mini-windows t))
-      (or noninteractive ;(input-pending-p) init-file-had-error
-  	;; t if the init file says to inhibit the echo area startup message.
-! 	(and inhibit-startup-echo-area-message
-! 	     user-init-file
-! 	     (or (and (get 'inhibit-startup-echo-area-message 'saved-value)
-! 		      (equal inhibit-startup-echo-area-message
-! 			     (if (equal init-file-user "")
-! 				 (user-login-name)
-! 			       init-file-user)))
-! 		 ;; Wasn't set with custom; see if .emacs has a setq.
-! 		 (let ((buffer (get-buffer-create " *temp*")))
-! 		   (prog1
-! 		       (condition-case nil
-! 			   (save-excursion
-! 			     (set-buffer buffer)
-! 			     (insert-file-contents user-init-file)
-! 			     (re-search-forward
-! 			      (concat
-! 			       "([ \t\n]*setq[ \t\n]+"
-! 			       "inhibit-startup-echo-area-message[ \t\n]+"
-! 			       (regexp-quote
-! 				(prin1-to-string
-! 				 (if (equal init-file-user "")
-! 				     (user-login-name)
-! 				   init-file-user)))
-! 			       "[ \t\n]*)")
-! 			      nil t))
-! 			 (error nil))
-! 		     (kill-buffer buffer)))))
-  	(message "%s" (startup-echo-area-message)))))
-  
-  (defun display-startup-screen (&optional concise)
---- 1842,1848 ----
-    (let ((resize-mini-windows t))
-      (or noninteractive ;(input-pending-p) init-file-had-error
-  	;; t if the init file says to inhibit the echo area startup message.
-! 	inhibit-startup-echo-area-message
-  	(message "%s" (startup-echo-area-message)))))
-  
-  (defun display-startup-screen (&optional concise)
