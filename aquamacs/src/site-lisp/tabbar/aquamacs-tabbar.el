@@ -5,10 +5,12 @@
 ;; Author: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
-;; Revision: $Id: aquamacs-tabbar.el,v 1.28 2008/05/06 18:21:32 davidswelt Exp $
+;; (C) Copyright 2008, the Aquamacs Project
+;; Revision: $Id: aquamacs-tabbar.el,v 1.29 2008/05/07 16:50:23 davidswelt Exp $
 
 ;; load original tabbar-mode
 (require 'tabbar)
+(require 'aquamacs-tools)
 
 ;; modify various settings:
 ;; eliminate gap between header-line and toolbar
