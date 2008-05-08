@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: tabbar-window.el,v 1.29 2008/05/07 16:49:23 davidswelt Exp $
+;; Revision: $Id: tabbar-window.el,v 1.30 2008/05/08 09:07:59 davidswelt Exp $
 
 (require 'tabbar)
 (require 'aquamacs-tools)
@@ -371,7 +371,7 @@ specified BUFFER belongs."
 	    ;; a lot of buffers (e.g. dired) may be modified,
 	    ;; but have no file name
 	    (if (aquamacs-ask-for-confirmation
-		 (format "Save buffer %s to file before killing it? " (buffer-name)))
+		 (format "Save buffer %s to file before killing it? " (buffer-name)) nil)
 		(progn
 		  (save-buffer)
 		  (message "File saved.")
