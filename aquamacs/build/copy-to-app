@@ -99,12 +99,11 @@ cp -Rp "$projdir"/src/site-lisp/macosx/*.el Contents/Resources/site-lisp/macosx/
 cp -Rp "$projdir"/src/site-lisp/oneonone/*.el Contents/Resources/site-lisp/oneonone/
 cp -Rp "$projdir"/src/site-lisp/tabbar/*.el Contents/Resources/site-lisp/tabbar/
 cp -Rp "$projdir"/src/site-lisp/tabbar/*.png Contents/Resources/site-lisp/tabbar/
-
+ 
 if [ $compile ]; then
     # prevent the site-start.el from being loaded all the time (gives error)
     # doesn't work yet
     # mv Contents/Resources/site-lisp/site-start.el Contents/Resources/site-lisp/site-start.elx
-    em="Contents/MacOS/Aquamacs\ Emacs"
     echo "Compiling site-lisp"
     "$em" -Q -batch -f batch-byte-compile Contents/Resources/site-lisp/*.el
     echo "Compiling macosx"
