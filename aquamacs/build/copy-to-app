@@ -104,21 +104,22 @@ if [ $compile ]; then
     # prevent the site-start.el from being loaded all the time (gives error)
     # doesn't work yet
     # mv Contents/Resources/site-lisp/site-start.el Contents/Resources/site-lisp/site-start.elx
+    em="Contents/MacOS/Aquamacs\ Emacs"
     echo "Compiling site-lisp"
-    "$em"  -batch -f batch-byte-compile Contents/Resources/site-lisp/*.el
+    "$em" -Q -batch -f batch-byte-compile Contents/Resources/site-lisp/*.el
     echo "Compiling macosx"
-    "$em"  -batch -f batch-byte-compile Contents/Resources/site-lisp/macosx/*.el 
+    "$em" -Q -batch -f batch-byte-compile Contents/Resources/site-lisp/macosx/*.el 
     echo "Compiling oneonone"
-    "$em"  -batch -f batch-byte-compile Contents/Resources/site-lisp/oneonone/*.el
+    "$em" -Q -batch -f batch-byte-compile Contents/Resources/site-lisp/oneonone/*.el
     echo "Compiling tabbar"
-    "$em"  -batch -f batch-byte-compile Contents/Resources/site-lisp/tabbar/*.el
+    "$em" -Q -batch -f batch-byte-compile Contents/Resources/site-lisp/tabbar/*.el
 
     #mv Contents/Resources/site-lisp/site-start.elx Contents/Resources/site-lisp/site-start.el
     # echo "(Note: ignore the --no-splash error!)"
 fi
  
 # .el is too large
-gzip Contents/Resources/site-lisp/color-theme-themes.el
+gzip Contents/Resources/site-lisp/color-theme-library.el
 
 # for LaunchServices (on local machine)
 touch .
