@@ -6,7 +6,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: aquamacs-tabbar.el,v 1.30 2008/05/09 16:31:20 davidswelt Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.31 2008/05/09 19:04:26 champo Exp $
 
 ;; load original tabbar-mode
 (require 'tabbar)
@@ -600,6 +600,14 @@ NOSCROLL is non-nil, exclude the tabbar-scroll buttons."
                        'pointer 'arrow
 		       'local-map (tabbar-make-tab-keymap "empty tab bar"))))
     ))
+
+(defun tabbar-reformat-tabset (tabset)
+  (tabbar-set-template tabset nil))
+
+(defun tabbar-reformat-all-tabsets ()
+  (tabbar-map-tabsets 'tabbar-reformat-tabset))
+
+(add-hook 'window-configuration-change-hook 'tabbar-reformat-all-tabsets)
    
 (defvar tabbar-char-width 5) ;; average width of Lucida Grande character. Hack!
 (defun tabbar-expand (str width)
