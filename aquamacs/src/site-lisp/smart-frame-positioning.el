@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.51 2008/05/05 23:32:47 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.52 2008/05/09 13:10:55 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -123,6 +123,11 @@ should be used as the interface to this function."
     (run-hook-with-args 'smart-frame-positioning-hook f)
       
     (setq newpos (find-good-frame-position oldframe f))  
+    
+    (mapc (lambda (key)
+	    (if (assq key default-frame-alist)
+		(assq-set key (assq key default-frame-alist) 'newpos)))
+	      '(left top width height))
 
     (when (frame-parameter f 'fit-frame)
 	;; delete height and width - these parameters
