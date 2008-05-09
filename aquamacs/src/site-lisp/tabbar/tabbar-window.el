@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: tabbar-window.el,v 1.30 2008/05/08 09:07:59 davidswelt Exp $
+;; Revision: $Id: tabbar-window.el,v 1.31 2008/05/09 17:45:28 davidswelt Exp $
 
 (require 'tabbar)
 (require 'aquamacs-tools)
@@ -124,10 +124,27 @@ displayed buffer.  Result is an alist of alists."
 ;; (setq header-line-inhibit-window-list nil)
 ;; (setq header-line-inhibit-window-list oh)
 
+;; the following idle timer management exists to make sure that
+;; idle timers are still executed in the same order.  Otherwise, 
+;; we would remove a window from the tabbar (by inhibiting it)
+;; too late (when it should exist again, e.g. due to delayed visit of new buffer).
+
+(defvar tabbar-timer-idle-list nil)
+(defun tabbar-window-run-all-idle-timers ()
+  (condition-case nil
+      (mapc (lambda (ti)
+	      (apply (elt ti 5)
+		     (elt ti 6))
+	      (cancel-timer ti))
+	    tabbar-timer-idle-list)
+    (setq tabbar-timer-idle-list nil) (error nil)))
+
+
 (defun tabbar-window-alist-cleanup ()
   "Remove from tabbar-window-alist any elements (windows OR
 buffers) that no longer exist, or buffers that don't get tabs.
 Displayed buffers always get tabs."
+  (tabbar-window-run-all-idle-timers)
   (let ((wnumber-list (window-number-list)))
     ;; loop through alist
     (dolist (elt tabbar-window-alist)
@@ -156,9 +173,14 @@ Displayed buffers always get tabs."
 	      (if (eq (length buflist) 1)
 		  ;; if there is only 1 buffer associated with this tabset, then
 		  ;;  display no tabbar (no header line).
-		  ;; (add-to-list 'header-line-inhibit-window-list window t)
-		  ; workaround for redisplay bug 
-		  (run-with-idle-timer 0 nil 'add-to-list 'header-line-inhibit-window-list window t)
+		  ;; (add-to-list 'header-line-inhibit-window-list window)
+		  ;; workaround for redisplay bug
+		  ;; this can cause a bit of flicker, but that's still better 
+		  ;;than seeing junk on the screen
+		  (add-to-list 
+		   'tabbar-timer-idle-list 
+		   (run-with-idle-timer 0 nil 'add-to-list 
+					'header-line-inhibit-window-list window t))
 		;; otherwise, ensure this window has a tabbar
 		(setq header-line-inhibit-window-list
 		      (delq window header-line-inhibit-window-list))))
