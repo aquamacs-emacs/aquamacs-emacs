@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.164 2008/05/07 07:39:31 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.165 2008/05/09 16:28:28 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -31,11 +31,11 @@
 ;; Copyright (C) 2005,2006, 2007, 2008: David Reitter
  
 (defvar aq-starttime 0)
- ;;   (defun ats (txt) 
-;;        (message "ATS %s:  %s" (time-since aq-starttime) txt))
-;; 
+    (defun ats (txt) 
+        (message "ATS %s:  %s" (time-since aq-starttime) txt))
 
-(defun ats (txt) nil)
+
+;; (defun ats (txt) nil)
 
 (setq aq-starttime (current-time))
 (ats "started")
@@ -493,7 +493,14 @@ yes-or-no prompts - y or n will do."
   ;; face (defined and) applied using pretty-modeline.patch
   
   (set-face-attribute 'mode-line nil
-		    :family "Lucida Grande")
+		    :family "Lucida Grande"
+		    :inherit nil
+;;		    :height 140 ;; use the frame-wide setting
+		    :weight 'normal
+		    :width 'normal
+		    :slant 'normal
+		    :underline nil
+		    :strike-through nil)
 
   (set-face-attribute 'mode-line-flags nil
 		    :family "Monaco")
