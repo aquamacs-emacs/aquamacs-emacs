@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: tabbar-window.el,v 1.31 2008/05/09 17:45:28 davidswelt Exp $
+;; Revision: $Id: tabbar-window.el,v 1.32 2008/05/09 17:49:46 davidswelt Exp $
 
 (require 'tabbar)
 (require 'aquamacs-tools)
@@ -190,7 +190,7 @@ Displayed buffers always get tabs."
 	  (setq header-line-inhibit-window-list
 		(delq window header-line-inhibit-window-list))))))
   tabbar-window-alist)
-; (add-to-list 'header-line-inhibit-window-list (selected-window) t)
+
 (defun tabbar-tabset-names ()
   "Return list of strings giving names of all tabsets"
   (tabbar-map-tabsets 'symbol-name))
