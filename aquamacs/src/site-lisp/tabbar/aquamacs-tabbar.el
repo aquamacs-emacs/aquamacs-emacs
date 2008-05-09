@@ -6,7 +6,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: aquamacs-tabbar.el,v 1.29 2008/05/07 16:50:23 davidswelt Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.30 2008/05/09 16:31:20 davidswelt Exp $
 
 ;; load original tabbar-mode
 (require 'tabbar)
@@ -56,10 +56,18 @@ to be closed.  If no tab is specified, (tabbar-selected-tab) is used"
     (funcall tabbar-close-tab-function thetab)))
 
 ;; change faces for better-looking tabs (and more obvious selected tab!)
+;; full face specification to avoid inheriting from the frame font
+;; or from mode-line
 (set-face-attribute 'tabbar-default nil
 		    :inherit nil
 		    :height 110
 		    :weight 'normal
+		    :width 'normal
+		    :slant 'normal
+		    :underline nil
+		    :strike-through nil
+;; inherit from frame		    :inverse-video
+		    :stipple nil
 		    :background "gray80"
 		    :foreground "black"
 ;;		    :box '(:line-width 2 :color "white" :style nil)
