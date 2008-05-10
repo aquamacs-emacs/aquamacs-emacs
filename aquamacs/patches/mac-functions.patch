@@ -13,7 +13,7 @@
   /* Non-zero means we're allowed to display an hourglass cursor.  */
 ***************
 *** 4230,4235 ****
---- 4284,4848 ----
+--- 4284,4851 ----
   {
     return mac_file_dialog (prompt, dir, default_filename, mustmatch, only_dir_p);
   }
@@ -512,6 +512,8 @@
 +     HideMenuBar();
 +   return Qnil;
 + }
++ /* HISearchWindowShow is not available on build systems prior to 10.4 */
++ #ifdef AVAILABLE_MAC_OS_X_VERSION_10_4_AND_LATER
 + DEFUN ("mac-spotlight-search", Fmac_spotlight_search,
 +        Smac_spotlight_search, 1, 1, "MSearch in Spotlight: ",
 +        doc: /* Search STRING with Spotlight. */)
@@ -533,6 +535,7 @@
 +     }
 +   return Qnil;
 + }
++ #endif
 + /* Originally from Kurita-san's SmartActivate (Cocoa) */
 + DEFUN ("mac-process-activate", Fmac_process_activate,
 +        Smac_process_activate, 1, 1, 0,
@@ -596,7 +599,7 @@
     /* X window properties.  */
 ***************
 *** 4887,4892 ****
---- 5419,5431 ----
+--- 5419,5433 ----
   
   #if TARGET_API_MAC_CARBON
     defsubr (&Sx_file_dialog);
@@ -604,7 +607,9 @@
 +   defsubr (&Smac_toggle_full_frame);
 +   defsubr (&Smac_show_menu_bar);
 +   defsubr (&Smac_hide_menu_bar);
++ #ifdef AVAILABLE_MAC_OS_X_VERSION_10_4_AND_LATER
 +   defsubr (&Smac_spotlight_search);
++ #endif
 +   defsubr (&Smac_process_activate);
 + #endif
   #endif
