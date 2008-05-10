@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.91 2008/05/01 08:39:07 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.92 2008/05/10 17:43:43 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -718,6 +718,15 @@ tell application \"System Events\"
 		end tell
 	end tell
 end tell")))))
+(if (fboundp 'mac-spotlight-search)
+    (defun aquamacs-spotlight-lookup ()
+      "Search marked word in Spotlight
+OS X 10.4 and up only."
+      (interactive)
+      (let ((word (aquamacs-mouse-get-word)))
+	(if word
+	    (mac-spotlight-search word)))))
+
 
 (defun aquamacs-make-mouse-buffer-menu ( )
   "Return a menu keymap of buffers for selection with the mouse.
@@ -866,6 +875,9 @@ An Aquamacs-only function."
 				   'aquamacs-dictionary-lookup))
     (define-key map [google] (cons "Search in Google" 
 				   'aquamacs-google-lookup))
+    (if (fboundp 'aquamacs-spotlight-lookup)
+	(define-key map [spotlight] (cons "Search on this Mac" 
+				       'aquamacs-spotlight-lookup)))
     (define-key map [aq-cm-sep3] '(menu-item "--"))
     (define-key map [switch-buffer] nil)
     (define-key map [change-mode] nil)
