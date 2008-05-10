@@ -12,10 +12,10 @@
   
   /* Non-zero means we're allowed to display an hourglass cursor.  */
 ***************
-*** 4301,4306 ****
---- 4352,4889 ----
-    UNBLOCK_INPUT;
-    return result;
+*** 4230,4235 ****
+--- 4284,4848 ----
+  {
+    return mac_file_dialog (prompt, dir, default_filename, mustmatch, only_dir_p);
   }
 + 
 + #if MAC_OSX 
@@ -314,10 +314,10 @@
 +     if (MacGetWindowCustomState(frame, &savedState_h))
 +     {
 +         /* We're un-maximizing the current frame. */
-+ 
++       printf("1\n");
 +         Rect* bounds_p =
 +             MAC_WINSTATE_HANDLE_FIELD_PTR(savedState_h, bounds);
-+ 
++ printf("2\n");
 +         /*
 +            Saved window state only exists when frame has already been
 +            maximized, so we need to restore the window to its initial,
@@ -336,6 +336,7 @@
 +             goto unmax_cleanup;
 +         }
 + 
++ printf("3\n");
 +         /* Reset window size */
 +         st = SetWindowBounds(frame, kWindowStructureRgn, bounds_p);
 +         if (st != noErr)
@@ -343,9 +344,9 @@
 +             error ("Error during unmaximize: couldn't reset window bounds.");
 +             goto unmax_cleanup;
 +         }
-+ 
++ printf("4\n");
 +         MacHandleMenuBarBehavior(false,frame);
-+ 
++ printf("5\n");
 +         /* Resize and/or move the frame as needed in case the saved
 +            bounds aren't acceptable for the current display */
 + 
@@ -355,12 +356,12 @@
 +             kWindowConstrainStandardOptions,
 +             NULL,
 +             NULL);
-+ 
 +         if (st != noErr)
 +         {
 +             error("Error during unmaximize: couldn't constrain window.");
 +             goto unmax_cleanup;
 +         }
++ printf("6\n");
 + 
 +         /* Toss the saved data */
 +         st = RemoveWindowProperty(
@@ -372,16 +373,22 @@
 +             error ("Error during unmaximize: couldn't remove window state.");
 +             goto unmax_cleanup;
 +         }
++ printf("7\n");
 +         
 +     unmax_cleanup:
++ printf("8\n");
++ 
 +         MacReleaseWindowCustomState(savedState_h);
-+         
++         printf("9\n");
++ 
 +         /* Unregister the display reconfiguration cb */
 +         e = CGDisplayRemoveReconfigurationCallback(
 +             MacOnReconfigMaximizedWindow,
 +             frame);
 +         if (e != noErr)
 +             error ("Error during unmaximize: couldn't unregister cb");
++ printf("10\n");
++ 
 +     }
 +     else
 +     {
@@ -390,12 +397,15 @@
 +         Rect                  screenBnds;
 +         CGDirectDisplayID     inDispID;
 +         short                 mbarHeight;
++ printf("11\n");
 + 
 +         savedState_h = MacSaveWindowCustomState(frame);
 +         if (savedState_h == NULL)
 +             return;
++ printf("12\n");
 + 
 +         mbarHeight = MacHandleMenuBarBehavior(true, frame);
++ printf("13\n");
 +         
 +         /* Remove title bar & resizability from the window */
 +         st = ChangeWindowAttributes(
@@ -407,6 +417,7 @@
 +             error("Error during maximize: couldn't set window attributes.");
 +             goto max_cleanup;
 +         }
++ printf("14\n");
 + 
 +         st = MacGetDisplayIdForWindow(frame, &inDispID);
 +         if (st != noErr)
@@ -414,6 +425,7 @@
 +             error ("Error during maximize: couldn't get display id");
 +             goto max_cleanup;
 +         }
++ printf("15\n");
 + 
 +         /* Maximize the window to the screen bounds, , leaving room
 +            for the menubar to if it is visible (this can be
@@ -421,6 +433,7 @@
 + 
 +         screenBnds      = MacConvertCGRectToRect(CGDisplayBounds(inDispID));
 +         screenBnds.top += mbarHeight;
++ printf("16\n");
 + 
 +         st = SetWindowBounds(frame, kWindowStructureRgn, &screenBnds);
 +         if (st != noErr)
@@ -428,7 +441,8 @@
 +             error ("Error during maximize: couldn't set window bounds.");
 +             goto max_cleanup;
 +         }
-+         
++         printf("17\n");
++ 
 +         /*
 +           Register a callback to restore the window to its old size when
 +           the displays are reconfigured; if we don't do this, we can end
@@ -444,13 +458,18 @@
 +             error ("Error during maximize: couldn't register reconfig cb");
 +             goto max_cleanup;
 +         }
++ printf("18\n");
 + 
 +         goto max_done;
 +         
 +     max_cleanup:
++ printf("19\n");
++ 
 +         MacReleaseWindowCustomState(savedState_h);
 + 
 +     max_done:
++ printf("20\n");
++ 
 +         return;
 +     }
 + }
@@ -500,10 +519,18 @@
 +      Lisp_Object string;
 + {
 +   CFStringRef search_str;
-+   search_str = cfstring_create_with_string ( string );
-+   if( search_str != NULL )
-+     HISearchWindowShow(search_str,kNilOptions);
-+   CFRelease (search_str);
++   UInt32 response;
++   if ((Gestalt(gestaltSystemVersion, (SInt32 *) &response) == noErr) && (response >= 0x1040))
++     {
++       search_str = cfstring_create_with_string ( string );
++       if( search_str != NULL )
++ 	HISearchWindowShow(search_str,kNilOptions);
++       CFRelease (search_str);
++     } 
++   else
++     {
++        error("Spotlight is not available on OS X prior to version 10.4.");
++     }
 +   return Qnil;
 + }
 + /* Originally from Kurita-san's SmartActivate (Cocoa) */
