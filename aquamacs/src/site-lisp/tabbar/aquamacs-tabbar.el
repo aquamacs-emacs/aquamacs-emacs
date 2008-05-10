@@ -6,7 +6,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: aquamacs-tabbar.el,v 1.31 2008/05/09 19:04:26 champo Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.32 2008/05/10 15:41:54 champo Exp $
 
 ;; load original tabbar-mode
 (require 'tabbar)
@@ -324,10 +324,10 @@ or groups.  Call the function `tabbar-button-label' otherwise."
     lab))
 
 (setq tabbar-home-button-enabled-image
-  '((:type png :file "down_sm.png")))
+  '((:type png :file "down.png")))
 
 (setq tabbar-home-button-disabled-image
-  '((:type png :file "up_sm.png")))
+  '((:type png :file "up.png")))
 
 (setq tabbar-home-button
   (cons (cons "[o]" tabbar-home-button-enabled-image)
@@ -338,18 +338,24 @@ or groups.  Call the function `tabbar-button-label' otherwise."
         (cons "[-]" tabbar-home-button-disabled-image)))
 
 (setq tabbar-scroll-left-button-enabled-image
-  '((:type png :file "backward_sm.png")))
+  '((:type png :file "left.png")))
+
+(setq tabbar-scroll-left-button-disabled-image
+  '((:type png :file "left_disabled.png")))
 
 (setq tabbar-scroll-left-button
   (cons (cons " <" tabbar-scroll-left-button-enabled-image)
-        (cons " =" nil)))
+        (cons " =" tabbar-scroll-left-button-disabled-image)))
 
 (setq tabbar-scroll-right-button-enabled-image
-  '((:type png :file "forward_sm.png")))
+  '((:type png :file "right.png")))
+
+(setq tabbar-scroll-right-button-disabled-image
+  '((:type png :file "right_disabled.png")))
 
 (setq tabbar-scroll-right-button
   (cons (cons " >" tabbar-scroll-right-button-enabled-image)
-        (cons " =" nil)))
+        (cons " =" tabbar-scroll-right-button-disabled-image)))
 
 (setq tabbar-close-tab-button
       '((:type png :file "close-tab.png")))
@@ -519,7 +525,8 @@ NOSCROLL is non-nil, exclude the tabbar-scroll buttons."
 	     (cdr tabbar-scroll-left-button-value))
 	   (if (tabbar-check-overflow tabset)
 	       (car tabbar-scroll-right-button-value)
-	     (cdr tabbar-scroll-right-button-value))))))
+	     (cdr tabbar-scroll-right-button-value))
+	   tabbar-separator-value))))
 
 (defun tabbar-line-format (tabset)
   "Return the `header-line-format' value to display TABSET."
