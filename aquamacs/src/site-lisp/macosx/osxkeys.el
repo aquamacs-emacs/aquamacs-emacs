@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.92 2008/05/10 17:43:43 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.93 2008/05/11 06:04:45 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -631,6 +631,20 @@ is called."
 					; else
      (message "The secondary selection is not set.")))
 
+(defun clipboard-yank ()
+"Insert the clipboard contents, or the last stretch of killed text."
+(interactive "*")
+(let ((x-select-enable-clipboard t))
+  (yank)))
+
+(defun aquamacs-isearch-yank-kill ()
+  (interactive)			
+  (if (and isearch-string (> (length isearch-string) 0))
+      (call-interactively 'clipboard-yank)
+    (let ((x-select-enable-clipboard t))
+      (call-interactively 'isearch-yank-kill))))
+
+
 (defmacro allow-line-as-region-for-function (orig-function)
 `(defun ,(intern (concat (symbol-name orig-function) "-or-line")) 
    ()
@@ -1176,14 +1190,17 @@ keymaps used by this mode. They may be modified where necessary."
 
   (if osx-key-mode
       ;; install low priority map
-      (setq osx-key--saved-low-priority-map 
-	    (aquamacs-install-low-priority-global-key-map
-	    osx-key-low-priority-key-map))
+      (progn
+	(setq osx-key--saved-low-priority-map 
+	      (aquamacs-install-low-priority-global-key-map
+	       osx-key-low-priority-key-map))
+	(define-key isearch-mode-map `[(,osxkeys-command-key v)] 'aquamacs-isearch-yank-kill))
     ;; restore old map
     (when osx-key--saved-low-priority-map
       (aquamacs-install-low-priority-global-key-map
        osx-key--saved-low-priority-map)
       (setq osx-key--saved-low-priority-map (make-sparse-keymap)))
+    (define-key isearch-mode-map `[(,osxkeys-command-key v)] nil)
     )
 
   (osx-key-mode-command-key-warning))
