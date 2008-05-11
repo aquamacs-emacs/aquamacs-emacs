@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: tabbar-window.el,v 1.32 2008/05/09 17:49:46 davidswelt Exp $
+;; Revision: $Id: tabbar-window.el,v 1.33 2008/05/11 11:00:42 davidswelt Exp $
 
 (require 'tabbar)
 (require 'aquamacs-tools)
@@ -139,6 +139,10 @@ displayed buffer.  Result is an alist of alists."
 	    tabbar-timer-idle-list)
     (setq tabbar-timer-idle-list nil) (error nil)))
 
+(defvar tabbar-display-bug-workaround t
+"Should tabbar work around a display bug?
+The bug leaves horizontal lines when the window is split.")
+; (setq tabbar-display-bug-workaround nil)
 
 (defun tabbar-window-alist-cleanup ()
   "Remove from tabbar-window-alist any elements (windows OR
@@ -175,12 +179,14 @@ Displayed buffers always get tabs."
 		  ;;  display no tabbar (no header line).
 		  ;; (add-to-list 'header-line-inhibit-window-list window)
 		  ;; workaround for redisplay bug
+		  (if tabbar-display-bug-workaround
 		  ;; this can cause a bit of flicker, but that's still better 
 		  ;;than seeing junk on the screen
-		  (add-to-list 
-		   'tabbar-timer-idle-list 
-		   (run-with-idle-timer 0 nil 'add-to-list 
-					'header-line-inhibit-window-list window t))
+		      (add-to-list 
+		       'tabbar-timer-idle-list 
+		       (run-with-idle-timer 0 nil 'add-to-list 
+					    'header-line-inhibit-window-list window t))
+		    (add-to-list 'header-line-inhibit-window-list window t))
 		;; otherwise, ensure this window has a tabbar
 		(setq header-line-inhibit-window-list
 		      (delq window header-line-inhibit-window-list))))
@@ -190,7 +196,7 @@ Displayed buffers always get tabs."
 	  (setq header-line-inhibit-window-list
 		(delq window header-line-inhibit-window-list))))))
   tabbar-window-alist)
-
+   
 (defun tabbar-tabset-names ()
   "Return list of strings giving names of all tabsets"
   (tabbar-map-tabsets 'symbol-name))
