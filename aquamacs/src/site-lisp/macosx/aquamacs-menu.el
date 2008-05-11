@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.130 2008/05/11 15:24:47 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.131 2008/05/11 15:36:02 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -118,9 +118,11 @@
 	)
      list)))
 
+
+; (aq-find-good-key 'aquamacs-toggle-full-frame)
+
 (defun aq-find-best-key (list)
-  
-(or (if (not list)
+  (or (if (not list)
 	"")
     (key-description (car list))
     (aq-find-best-key (cdr list)))
@@ -143,7 +145,6 @@
       nil 
       nil t t)))))
 
-
 ;; TO DO: speed this up
 ;; should only update if there isn't already a string
 ;; or the key variables have changed
@@ -151,9 +152,10 @@
 ;(defun aq-shortcut (text symbol &rest more-args)
 ;  (apply (function format) text more-args))
  
-; (aq-find-good-key 'cua-paste)
+; (aq-find-good-key 'clipboard-yank)
 ; (aq-find-good-key #'nil)
 
+;
 (defun aq-shortcut (text symbol &rest more-args)
   ;; symbol can be nil in some circumstances 
   ;; (e.g. in tool-bar-map from early initialization)
@@ -171,7 +173,7 @@
 		     (append (list (concat text "%s")) more-args 
 			     (list 
 			      (replace-regexp-in-string 
-			       "-" ""
+			       "[-<>]" ""
 			       (replace-regexp-in-string 
 				"-\\([a-z]\\)" 'upcase
 			  
