@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.93 2008/05/11 06:04:45 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.94 2008/05/11 21:43:30 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -637,6 +637,16 @@ is called."
 (let ((x-select-enable-clipboard t))
   (yank)))
 
+(defun aquamacs-set-region-to-search-match ()
+  (set-mark (match-beginning 0))
+  (goto-char (match-end 0)))
+
+(defun aquamacs-repeat-isearch ()
+  "Repeats the last string isearch."
+  (interactive)
+  (search-forward isearch-string)
+  (aquamacs-set-region-to-search-match))
+
 (defun aquamacs-isearch-yank-kill ()
   (interactive)			
   (if (and isearch-string (> (length isearch-string) 0))
@@ -1058,7 +1068,7 @@ default."
     (define-key map `[(,osxkeys-command-key p)] 'aquamacs-print)
     (define-key map `[(,osxkeys-command-key l)] 'goto-line)
     (define-key map `[(,osxkeys-command-key f)] 'isearch-forward)
-    (define-key map `[(,osxkeys-command-key g)] 'isearch-repeat-forward)  
+    (define-key map `[(,osxkeys-command-key g)] 'aquamacs-repeat-isearch)  
     (define-key map `[(,osxkeys-command-key shift g)] 'isearch-repeat-backward)
     (define-key map `[(,osxkeys-command-key e)] 'aquamacs-use-selection-for-find)
     (define-key map `[(,osxkeys-command-key w)] 'close-buffer)
@@ -1194,14 +1204,15 @@ keymaps used by this mode. They may be modified where necessary."
 	(setq osx-key--saved-low-priority-map 
 	      (aquamacs-install-low-priority-global-key-map
 	       osx-key-low-priority-key-map))
-	(define-key isearch-mode-map `[(,osxkeys-command-key v)] 'aquamacs-isearch-yank-kill))
+	(define-key isearch-mode-map `[(,osxkeys-command-key v)] 'aquamacs-isearch-yank-kill)
+	(add-hook 'isearch-mode-end-hook 'aquamacs-set-region-to-search-match))
     ;; restore old map
     (when osx-key--saved-low-priority-map
       (aquamacs-install-low-priority-global-key-map
        osx-key--saved-low-priority-map)
       (setq osx-key--saved-low-priority-map (make-sparse-keymap)))
     (define-key isearch-mode-map `[(,osxkeys-command-key v)] nil)
-    )
+    (remove-hook 'isearch-mode-end-hook 'aquamacs-set-region-to-search-match))
 
   (osx-key-mode-command-key-warning))
 
