@@ -1,5 +1,5 @@
-*** lisp/textmodes/ispell.el	Sat May 10 10:56:13 2008
---- lisp/textmodes/ispell.el	Sat May 10 22:30:28 2008
+*** lisp/textmodes/ispell.el	06 Apr 2008 12:51:35 +0100	1.209.2.8
+--- lisp/textmodes/ispell.el	11 May 2008 08:57:55 +0100	
 ***************
 *** 2,18 ****
   
@@ -50,7 +50,7 @@
   ;; Filtered process calls with duplicate dictionary entries.
 ***************
 *** 227,232 ****
---- 229,518 ----
+--- 229,528 ----
   (defalias 'check-ispell-version 'ispell-check-version)
   
   ;;; **********************************************************************
@@ -164,6 +164,16 @@
 +   "Paired language region names and abbreviations.
 + Used to match cocoAspell language names to dictionary
 + file names.")
++ 
++ (defcustom ispell-program-name
++ ;; don't assume that ispell is installed, if we don't find aspell!
++   (or (if (locate-file "aspell" exec-path exec-suffixes 'file-executable-p) 
++ 	  "aspell")
++ 	 (if (locate-file "ispell" exec-path exec-suffixes 'file-executable-p)
++ 	     "ispell"))
++   "Program invoked by \\[ispell-word] and \\[ispell-region] commands."
++   :type 'string
++   :group 'ispell)
 + 
 + ;; does aspell have a list of dictionaries already?
 + (defvar aspell-knows-no-dicts
@@ -342,27 +352,21 @@
   ;;; and location of binaries:
   ;;; **********************************************************************
 ***************
-*** 305,312 ****
+*** 304,316 ****
+    :type 'integer
     :group 'ispell)
   
-  (defcustom ispell-program-name
-!   (or (locate-file "aspell" exec-path exec-suffixes 'file-executable-p)
-!       "ispell")
-    "Program invoked by \\[ispell-word] and \\[ispell-region] commands."
-    :type 'string
-    :group 'ispell)
---- 591,601 ----
-    :group 'ispell)
-  
-  (defcustom ispell-program-name
-! ;; don't assume that ispell is installed, if we don't find aspell!
-!   (or (if (locate-file "aspell" exec-path exec-suffixes 'file-executable-p) 
-! 	  "aspell")
-! 	 (if (locate-file "ispell" exec-path exec-suffixes 'file-executable-p)
-! 	     "ispell"))
-    "Program invoked by \\[ispell-word] and \\[ispell-region] commands."
-    :type 'string
-    :group 'ispell)
+- (defcustom ispell-program-name
+-   (or (locate-file "aspell" exec-path exec-suffixes 'file-executable-p)
+-       "ispell")
+-   "Program invoked by \\[ispell-word] and \\[ispell-region] commands."
+-   :type 'string
+-   :group 'ispell)
+- 
+  (defcustom ispell-alternate-dictionary
+    (cond ((file-exists-p "/usr/dict/web2") "/usr/dict/web2")
+  	((file-exists-p "/usr/share/dict/web2") "/usr/share/dict/web2")
+--- 600,605 ----
 ***************
 *** 912,941 ****
     (unless ispell-really-aspell
