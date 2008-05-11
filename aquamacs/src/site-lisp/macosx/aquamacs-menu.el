@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.129 2008/05/06 21:21:38 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.130 2008/05/11 15:24:47 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -1148,13 +1148,15 @@ both existing buffers and buffers that you subsequently create."
 		'(command-separator "--")
 		(list 'next-buffer
 		      'menu-item
-		      (aq-shortcut "Select Next Buffer             " 'next-tab-or-buffer)
+		      '(aq-shortcut "Select Next Buffer             " 'next-tab-or-buffer)
 		      'next-tab-or-buffer
+		      :key-sequence nil
 		      :help "Switch to the \"next\" buffer in a cyclic order")
 		(list 'previous-buffer
 		      'menu-item
-		      (aq-shortcut "Select Previous Buffer       " 'previous-tab-or-buffer)
+		      '(aq-shortcut "Select Previous Buffer       " 'previous-tab-or-buffer)
 		      'previous-tab-or-buffer
+		      :key-sequence nil
 		      :help "Switch to the \"previous\" buffer in a cyclic order")
 		)))
 
