@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.94 2008/05/11 21:43:30 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.95 2008/05/12 09:28:34 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -637,15 +637,29 @@ is called."
 (let ((x-select-enable-clipboard t))
   (yank)))
 
-(defun aquamacs-set-region-to-search-match ()
+(defun aquamacs-set-region-to-search-match (&optional invert)
+  (if invert
+      (progn
+	(set-mark (match-end 0))
+	(goto-char (match-beginning 0)))
   (set-mark (match-beginning 0))
-  (goto-char (match-end 0)))
+  (goto-char (match-end 0))))
 
 (defun aquamacs-repeat-isearch ()
   "Repeats the last string isearch."
   (interactive)
+  (deactivate-mark)
   (search-forward isearch-string)
   (aquamacs-set-region-to-search-match))
+
+(defun aquamacs-repeat-isearch-backward ()
+  "Repeats the last string isearch backwards."
+  (interactive)
+  (deactivate-mark)
+  (if (< (mark) (point))
+      (goto-char (mark)))
+  (search-backward isearch-string)
+  (aquamacs-set-region-to-search-match 'inv))
 
 (defun aquamacs-isearch-yank-kill ()
   (interactive)			
@@ -1069,7 +1083,7 @@ default."
     (define-key map `[(,osxkeys-command-key l)] 'goto-line)
     (define-key map `[(,osxkeys-command-key f)] 'isearch-forward)
     (define-key map `[(,osxkeys-command-key g)] 'aquamacs-repeat-isearch)  
-    (define-key map `[(,osxkeys-command-key shift g)] 'isearch-repeat-backward)
+    (define-key map `[(,osxkeys-command-key shift g)] 'aquamacs-repeat-isearch-backward)
     (define-key map `[(,osxkeys-command-key e)] 'aquamacs-use-selection-for-find)
     (define-key map `[(,osxkeys-command-key w)] 'close-buffer)
     (define-key map `[(,osxkeys-command-key m)] 'iconify-or-deiconify-frame) 
