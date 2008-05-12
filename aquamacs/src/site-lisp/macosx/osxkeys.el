@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.95 2008/05/12 09:28:34 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.96 2008/05/12 23:58:26 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -646,20 +646,48 @@ is called."
   (goto-char (match-end 0))))
 
 (defun aquamacs-repeat-isearch ()
-  "Repeats the last string isearch."
+  "Repeats the last string isearch.
+Set region to match.
+Wraps around after throwing and error once."
   (interactive)
-  (deactivate-mark)
-  (search-forward isearch-string)
-  (aquamacs-set-region-to-search-match))
+    (if (and (eq last-command 'aquamacs-repeat-isearch)
+	     (not mark-active)) ;; failed error has been shown once (and mark deactivated)
+	(condition-case nil
+	    (search-forward isearch-string)
+	  (error 
+	   (let ((pos (point)))
+	     (beginning-of-buffer)
+	     (condition-case x
+		 (search-forward isearch-string)
+	       (error
+		(goto-char pos)
+		(error x))))))
+      (deactivate-mark)
+      (search-forward isearch-string))
+    (aquamacs-set-region-to-search-match))
 
 (defun aquamacs-repeat-isearch-backward ()
-  "Repeats the last string isearch backwards."
+  "Repeats the last string isearch backwards.
+Set region to match. 
+Wraps around after throwing and error once."
   (interactive)
-  (deactivate-mark)
-  (if (< (mark) (point))
-      (goto-char (mark)))
-  (search-backward isearch-string)
-  (aquamacs-set-region-to-search-match 'inv))
+    (if (and (eq last-command 'aquamacs-repeat-isearch-backward)
+	     (not mark-active)) ;; failed error has been shown once (and mark deactivated)
+	(condition-case nil
+	    (search-backward isearch-string)
+	  (error 
+	   (let ((pos (point)))
+	     (end-of-buffer)
+	     (condition-case x
+		 (search-backward isearch-string)
+	       (error
+		(goto-char pos)
+		(error x))))))
+      (deactivate-mark)
+      (if (< (mark) (point))
+	  (goto-char (mark)))
+      (search-backward isearch-string))
+    (aquamacs-set-region-to-search-match 'inv))
 
 (defun aquamacs-isearch-yank-kill ()
   (interactive)			
