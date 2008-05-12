@@ -6,7 +6,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: aquamacs-tabbar.el,v 1.32 2008/05/10 15:41:54 champo Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.33 2008/05/12 16:30:11 champo Exp $
 
 ;; load original tabbar-mode
 (require 'tabbar)
@@ -675,6 +675,53 @@ creates a new buffer.  Mode for new buffer can optionally be specified."
   (if (and (boundp tabbar-mode) tabbar-mode)
       (tabbar-backward)
     (previous-buffer)))
+
+;;; Tabbar-Mwheel mode: redefine mwheel actions
+;
+(defcustom tabbar-mwheel-mode-action nil
+ "*Specify the behavior mouse wheel is used in tab bar.
+The following options are available:
+
+- `cycle-tabs'
+   Mouse wheel down/up selects next/previous tab in window's tab set.
+- default
+   Mouse wheel scrolls current buffer."
+ :group 'tabbar
+ :type '(choice :tag "Mouse wheel in tab bar..."
+                (const :tag "Cycles through tabs" cycle-tabs)
+                (const :tag "Scrolls current buffer" nil)))
+
+(defun tabbar-mwheel-up-action (event)
+ (interactive "@e")
+ (if tabbar-mwheel-mode-action
+     (tabbar-mwheel-forward-tab event)
+   (mwheel-scroll event)))
+
+(defun tabbar-mwheel-down-action (event)
+ (interactive "@e")
+ (if tabbar-mwheel-mode-action
+     (tabbar-mwheel-backward-tab event)
+   (mwheel-scroll event)))
+
+(if (get 'mouse-wheel 'event-symbol-elements)
+   ;; Use one generic mouse wheel event
+   (define-key tabbar-mwheel-mode-map [A-mouse-wheel]
+     'tabbar-mwheel-switch-tab)
+ ;; Use separate up/down mouse wheel events
+ (let ((up   (tabbar--mwheel-key tabbar--mwheel-up-event))
+	(down (tabbar--mwheel-key tabbar--mwheel-down-event)))
+   (define-key tabbar-mwheel-mode-map `[header-line ,down]
+     'tabbar-mwheel-down-action)
+   (define-key tabbar-mwheel-mode-map `[header-line ,up]
+     'tabbar-mwheel-up-action)
+   (define-key tabbar-mwheel-mode-map `[header-line (control ,down)]
+     nil)
+   (define-key tabbar-mwheel-mode-map `[header-line (control ,up)]
+     nil)
+   (define-key tabbar-mwheel-mode-map `[header-line (shift ,down)]
+     nil)
+   (define-key tabbar-mwheel-mode-map `[header-line (shift ,up)]
+     nil)))
 
 ;; default tabbar behavior (buffer tabs grouped by major-mode) can be
 ;;  retained by setting tabbar-inhibit-window-tabs to non-nil
