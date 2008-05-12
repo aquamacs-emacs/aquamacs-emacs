@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.131 2008/05/11 15:36:02 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.132 2008/05/12 09:24:19 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -512,17 +512,21 @@ customization buffer."
 (define-key menu-bar-i-search-menu [isearch-forward]
   `(menu-item ,(aq-shortcut  
 		"Forward String...                         " 
-		(key-binding [menu-bar edit search i-search isearch-forward]))
+		'isearch-forward)
 	      isearch-forward
 	      :help "Search forward for a string as you type it"))
  
 (define-key menu-bar-i-search-menu [isearch-repeat-forward]
   `(menu-item ,(aq-shortcut  
 		"Repeat Forward String...             " 
-		(key-binding [menu-bar edit search i-search 
-				       isearch-repeat-forward])) 
-	      isearch-repeat-forward
+		'aquamacs-repeat-isearch) 
+	      aquamacs-repeat-isearch
 	      :help "Search forward for a string as you type it"))
+
+(define-key menu-bar-i-search-menu [isearch-backward]
+  '(menu-item ,(aq-shortcut "Repeat Backward String...   " 'aquamacs-repeat-isearch-backward)
+	      aquamacs-repeat-isearch-backward
+	      :help "Search backwards for a string as you type it"))
 
 (define-key menu-bar-i-search-menu [isearch-use-region]
   `(menu-item ,(aq-shortcut  
@@ -1184,19 +1188,19 @@ both existing buffers and buffers that you subsequently create."
   "Updates the menu bar in Aquamacs if this is necessary.
 Call this with FORCE non-nil if you change key-bindings
 that should be represented in the Aquamacs menus."
-;; We only update if modifiers have changed.
+  ;; We only update if modifiers have changed.
   (condition-case nil
-  (let ((state 
-	(list mac-control-modifier 
-	      mac-command-modifier 
-	      mac-option-modifier 
-	      mac-function-modifier 
-	      osx-key-mode)))
-    (unless (and (null force) 
-		 (equal aquamacs-update-menu-old-state state))
-      (setq aquamacs-update-menu-old-state state)
-      (aquamacs-menu-bar-setup)))
-  (error nil)))
+      (let ((state 
+	     (list mac-control-modifier 
+		   mac-command-modifier 
+		   mac-option-modifier 
+		   mac-function-modifier 
+		   osx-key-mode)))
+	(unless (and (null force) 
+		     (equal aquamacs-update-menu-old-state state))
+	  (setq aquamacs-update-menu-old-state state)
+	  (aquamacs-menu-bar-setup)))
+    (error nil)))
 
  
  (defun aquamacs-user-wiki ()
