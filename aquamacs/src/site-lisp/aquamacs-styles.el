@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.33 2008/05/06 18:12:43 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.34 2008/05/12 21:59:29 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -220,6 +220,11 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 	 (smart-fp--pixel-to-char-width
 	  (- old-frame-pixel-width w-offset ) ,frame)))
       ret-val)))
+
+(defmacro mac-event-ae (event)
+  `(nth 2 ,event))
+(defmacro mac-event-spec (event)
+  `(nth 1 ,event))
 
 (defun mac-handle-font-selection (event)
   "Change default face attributes according to font selection EVENT."
