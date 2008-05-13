@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: tabbar-window.el,v 1.33 2008/05/11 11:00:42 davidswelt Exp $
+;; Revision: $Id: tabbar-window.el,v 1.34 2008/05/13 22:08:28 davidswelt Exp $
 
 (require 'tabbar)
 (require 'aquamacs-tools)
@@ -120,25 +120,6 @@ displayed buffer.  Result is an alist of alists."
     window-id))
 
 
-;; (setq oh header-line-inhibit-window-list)
-;; (setq header-line-inhibit-window-list nil)
-;; (setq header-line-inhibit-window-list oh)
-
-;; the following idle timer management exists to make sure that
-;; idle timers are still executed in the same order.  Otherwise, 
-;; we would remove a window from the tabbar (by inhibiting it)
-;; too late (when it should exist again, e.g. due to delayed visit of new buffer).
-
-(defvar tabbar-timer-idle-list nil)
-(defun tabbar-window-run-all-idle-timers ()
-  (condition-case nil
-      (mapc (lambda (ti)
-	      (apply (elt ti 5)
-		     (elt ti 6))
-	      (cancel-timer ti))
-	    tabbar-timer-idle-list)
-    (setq tabbar-timer-idle-list nil) (error nil)))
-
 (defvar tabbar-display-bug-workaround t
 "Should tabbar work around a display bug?
 The bug leaves horizontal lines when the window is split.")
@@ -148,14 +129,13 @@ The bug leaves horizontal lines when the window is split.")
   "Remove from tabbar-window-alist any elements (windows OR
 buffers) that no longer exist, or buffers that don't get tabs.
 Displayed buffers always get tabs."
-  (tabbar-window-run-all-idle-timers)
   (let ((wnumber-list (window-number-list)))
     ;; loop through alist
     (dolist (elt tabbar-window-alist)
       (let* ((wnumber (car elt))
 	     (window (window-number-get-window wnumber))
 	     (buflist (cdr elt)))
-	;; if the window still exists, delete any buffers as needed
+	;; if the window still exists, delete any tabs as needed
 	(if (memq wnumber wnumber-list)
 	    ;; for extant windows, loop through buffers
 	    ;; delete any that no longer exist
@@ -179,13 +159,11 @@ Displayed buffers always get tabs."
 		  ;;  display no tabbar (no header line).
 		  ;; (add-to-list 'header-line-inhibit-window-list window)
 		  ;; workaround for redisplay bug
-		  (if tabbar-display-bug-workaround
-		  ;; this can cause a bit of flicker, but that's still better 
-		  ;;than seeing junk on the screen
-		      (add-to-list 
-		       'tabbar-timer-idle-list 
+		  (if (and tabbar-display-bug-workaround
+			   (> (length (window-list (window-frame window) 'no-minibuf)) 1))
+		      ;; this can cause a bit of flicker, but that's still better 
 		       (run-with-idle-timer 0 nil 'add-to-list 
-					    'header-line-inhibit-window-list window t))
+					    'header-line-inhibit-window-list window t)
 		    (add-to-list 'header-line-inhibit-window-list window t))
 		;; otherwise, ensure this window has a tabbar
 		(setq header-line-inhibit-window-list
@@ -194,7 +172,7 @@ Displayed buffers always get tabs."
 	  (setq tabbar-window-alist (delq elt tabbar-window-alist))
 	  ;; ... and make sure it's removed from header-line-inhibit list
 	  (setq header-line-inhibit-window-list
-		(delq window header-line-inhibit-window-list))))))
+ 		(delq window header-line-inhibit-window-list))))))
   tabbar-window-alist)
    
 (defun tabbar-tabset-names ()
