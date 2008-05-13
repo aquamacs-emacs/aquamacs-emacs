@@ -1,3 +1,4 @@
+;; -*-no-byte-compile: t; -*-
 ;;; Tabbar.el --- Display a tab bar in the header line
 
 ;; Copyright (C) 2003, 2004, 2005 David Ponce
@@ -6,7 +7,7 @@
 ;; Maintainer: David Ponce <david@dponce.com>
 ;; Created: 25 February 2003
 ;; Keywords: convenience
-;; Revision: $Id: tabbar.el,v 1.2 2008/03/06 06:01:22 champo Exp $
+;; Revision: $Id: tabbar.el,v 1.3 2008/05/13 07:55:33 davidswelt Exp $
 
 (defconst tabbar-version "2.0")
 
