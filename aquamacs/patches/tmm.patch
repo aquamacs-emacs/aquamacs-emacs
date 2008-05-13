@@ -1,0 +1,32 @@
+*** lisp/isearch.el	06 Apr 2008 12:51:37 +0100	1.297.2.8
+--- lisp/isearch.el	13 May 2008 19:17:51 +0100	
+***************
+*** 1381,1386 ****
+--- 1381,1389 ----
+  	    ;; If the string was found but was completely invisible,
+  	    ;; it might now be partly visible, so try again.
+  	    (prog1 isearch-hidden (setq isearch-hidden nil)))
++     (if (and transient-mark-mode 
++ 	     (not (and cua-mode cua--explicit-region-start)))
++ 	(deactivate-mark))
+      ;; In reverse search, adding stuff at
+      ;; the end may cause zero or many more chars to be
+      ;; matched, in the string following point.
+***************
+*** 1411,1418 ****
+  		       (min isearch-opoint
+  			    isearch-barrier
+  			    (1+ isearch-other-end)))))
+!       (isearch-search)
+!       ))
+    (isearch-push-state)
+    (if isearch-op-fun (funcall isearch-op-fun))
+    (isearch-update))
+--- 1414,1420 ----
+  		       (min isearch-opoint
+  			    isearch-barrier
+  			    (1+ isearch-other-end)))))
+!       (isearch-search)))
+    (isearch-push-state)
+    (if isearch-op-fun (funcall isearch-op-fun))
+    (isearch-update))
