@@ -25,6 +25,7 @@ PATCHES="mac-functions emacs-inline transparency
          custom-verbosity pretty-modeline 
          mouse-echo
          cocoaspell
+         flyspell-aspell
          recentf-track-minibuf
          pop-to-buffer display-buffer-reuse
          cus-edit-switch
