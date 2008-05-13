@@ -35,6 +35,7 @@ PATCHES="mac-functions emacs-inline transparency
          available-screen mouse-button launch-browser
          minibuffer-filename
          header-line
+         tmm
          org-gnu-Aquamacs about-aquamacs puresize
          macfns-dialog-menu menu-bar-visible-frame 
          eval-depth
