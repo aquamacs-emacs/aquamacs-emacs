@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.97 2008/05/14 15:39:16 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.98 2008/05/14 15:45:55 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -638,12 +638,13 @@ is called."
   (yank)))
 
 (defun aquamacs-set-region-to-search-match (&optional invert)
-  (if invert
-      (progn
-	(set-mark (match-end 0))
-	(goto-char (match-beginning 0)))
-  (set-mark (match-beginning 0))
-  (goto-char (match-end 0))))
+  (when (and transient-mark-mode (not mark-active)) ; mark could have been set explicitly: don't change it
+    (if invert
+	(progn
+	  (set-mark (match-end 0))
+	  (goto-char (match-beginning 0)))
+      (set-mark (match-beginning 0))
+      (goto-char (match-end 0)))))
 
 (defun aquamacs-repeat-isearch ()
   "Repeats the last string isearch.
