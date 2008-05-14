@@ -30,3 +30,38 @@
     (isearch-push-state)
     (if isearch-op-fun (funcall isearch-op-fun))
     (isearch-update))
+*** lisp/menu-bar.el	06 Apr 2008 12:51:37 +0100	1.302.2.11
+--- lisp/menu-bar.el	14 May 2008 19:16:47 +0100	
+***************
+*** 519,532 ****
+  (defun clipboard-kill-ring-save (beg end)
+    "Copy region to kill ring, and save in the X clipboard."
+    (interactive "r")
+!   (let ((x-select-enable-clipboard t))
+!     (kill-ring-save beg end)))
+  
+  (defun clipboard-kill-region (beg end)
+    "Kill the region, and save it in the X clipboard."
+    (interactive "r")
+!   (let ((x-select-enable-clipboard t))
+!     (kill-region beg end)))
+  
+  (defun menu-bar-enable-clipboard ()
+    "Make CUT, PASTE and COPY (keys and menu bar items) use the clipboard.
+--- 549,564 ----
+  (defun clipboard-kill-ring-save (beg end)
+    "Copy region to kill ring, and save in the X clipboard."
+    (interactive "r")
+!   (when (or (not transient-mark-mode) mark-active)
+!     (let ((x-select-enable-clipboard t))
+!       (kill-ring-save beg end))))
+  
+  (defun clipboard-kill-region (beg end)
+    "Kill the region, and save it in the X clipboard."
+    (interactive "r")
+!   (when (or (not transient-mark-mode) mark-active)
+!     (let ((x-select-enable-clipboard t))
+!       (kill-region beg end))))
+  
+  (defun menu-bar-enable-clipboard ()
+    "Make CUT, PASTE and COPY (keys and menu bar items) use the clipboard.
