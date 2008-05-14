@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.132 2008/05/12 09:24:19 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.133 2008/05/14 15:30:56 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -524,7 +524,7 @@ customization buffer."
 	      :help "Search forward for a string as you type it"))
 
 (define-key menu-bar-i-search-menu [isearch-backward]
-  '(menu-item ,(aq-shortcut "Repeat Backward String...   " 'aquamacs-repeat-isearch-backward)
+  `(menu-item ,(aq-shortcut "Repeat Backward String...           " 'aquamacs-repeat-isearch-backward)
 	      aquamacs-repeat-isearch-backward
 	      :help "Search backwards for a string as you type it"))
 
