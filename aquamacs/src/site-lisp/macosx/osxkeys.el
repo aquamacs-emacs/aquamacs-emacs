@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.96 2008/05/12 23:58:26 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.97 2008/05/14 15:39:16 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -655,13 +655,14 @@ Wraps around after throwing and error once."
 	(condition-case nil
 	    (search-forward isearch-string)
 	  (error 
-	   (let ((pos (point)))
-	     (beginning-of-buffer)
-	     (condition-case x
-		 (search-forward isearch-string)
-	       (error
-		(goto-char pos)
-		(error x))))))
+
+	     ;(let ((deactivate-mark))
+	   (save-excursion
+	       (beginning-of-buffer)
+	       (condition-case x
+		   (search-forward isearch-string)
+		 (error
+		  (signal (car x) (cdr x)))))));)
       (deactivate-mark)
       (search-forward isearch-string))
     (aquamacs-set-region-to-search-match))
@@ -676,13 +677,12 @@ Wraps around after throwing and error once."
 	(condition-case nil
 	    (search-backward isearch-string)
 	  (error 
-	   (let ((pos (point)))
+	  (save-excursion
 	     (end-of-buffer)
 	     (condition-case x
 		 (search-backward isearch-string)
 	       (error
-		(goto-char pos)
-		(error x))))))
+		(signal (car x) (cdr x)))))))
       (deactivate-mark)
       (if (< (mark) (point))
 	  (goto-char (mark)))
