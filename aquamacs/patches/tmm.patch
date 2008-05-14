@@ -7,7 +7,7 @@
   	    ;; it might now be partly visible, so try again.
   	    (prog1 isearch-hidden (setq isearch-hidden nil)))
 +     (if (and transient-mark-mode 
-+ 	     (not (and cua-mode cua--explicit-region-start)))
++ 	     (not (and cua-mode (or cua--explicit-region-start cua--last-region-shifted))))
 + 	(deactivate-mark))
       ;; In reverse search, adding stuff at
       ;; the end may cause zero or many more chars to be
