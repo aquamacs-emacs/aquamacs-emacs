@@ -65,3 +65,23 @@
   
   (defun menu-bar-enable-clipboard ()
     "Make CUT, PASTE and COPY (keys and menu bar items) use the clipboard.
+*** lisp/mouse.el	06 Apr 2008 12:51:37 +0100	1.315.2.7
+--- lisp/mouse.el	14 May 2008 19:51:54 +0100	
+***************
+*** 949,955 ****
+      (mouse-move-drag-overlay mouse-drag-overlay start-point start-point
+                               click-count)
+      (overlay-put mouse-drag-overlay 'window start-window)
+!     (deactivate-mark)
+      (let (event end end-point last-end-point)
+        (track-mouse
+  	(while (progn
+--- 956,963 ----
+      (mouse-move-drag-overlay mouse-drag-overlay start-point start-point
+                               click-count)
+      (overlay-put mouse-drag-overlay 'window start-window)
+!     (unless (and  cua--explicit-region-start)
+!       (deactivate-mark))
+      (let (event end end-point last-end-point)
+        (track-mouse
+  	(while (progn
