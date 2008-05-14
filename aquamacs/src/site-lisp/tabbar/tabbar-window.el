@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: tabbar-window.el,v 1.34 2008/05/13 22:08:28 davidswelt Exp $
+;; Revision: $Id: tabbar-window.el,v 1.35 2008/05/14 14:50:58 champo Exp $
 
 (require 'tabbar)
 (require 'aquamacs-tools)
@@ -442,7 +442,8 @@ Turns on tabbar-mode if not already on."
 (defun tabbar-desktop-tabsets-to-save ()
   (let* ((tabset-names (tabbar-tabset-names))
 	 (ntabsets (length tabset-names))
-	 (current-tabset-name (symbol-name (tabbar-current-tabset)))
+	 (current-tabset (tabbar-current-tabset t))
+	 (current-tabset-name (symbol-name current-tabset))
 	 (current-tabset-position
 	  (1- (length (member current-tabset-name (reverse tabset-names)))))
 	 (tabset-tabs (tabbar-map-tabsets 'tabbar-tabs))
@@ -450,7 +451,7 @@ Turns on tabbar-mode if not already on."
 	 ;; reorder list of tabs such that current tabset's tabs are 1st
 	 (tabs-reordered (cons current-tabs
 			       (copy-tree (remove current-tabs tabset-tabs))))
-	 (selected-tab-buffer (car (tabbar-selected-tab))))
+	 (selected-tab-buffer (car (tabbar-selected-tab current-tabset))))
     ;; extract nested list of buffers in tabs (i.e. remove tabset identifiers)
     (setq tabbar-desktop-saved-tabsets
 	  ;; loop through tabsets.  For each...
