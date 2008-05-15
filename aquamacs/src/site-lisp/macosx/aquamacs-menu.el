@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.137 2008/05/15 12:01:23 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.138 2008/05/15 13:21:09 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -917,7 +917,7 @@ both existing buffers and buffers that you subsequently create."
  
 
 (define-key menu-bar-file-menu [one-window]
-  `(menu-item "Remove Splits                   " 
+  `(menu-item "Remove Splits                    " 
 	      delete-other-windows
 	      :keys ,(aq-binding 'delete-other-windows)
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
@@ -925,7 +925,7 @@ both existing buffers and buffers that you subsequently create."
 			   (not (one-window-p t nil)))
 	      :help "Selected window grows to fill the whole frame"))
 (define-key menu-bar-file-menu [split-window]
-  `(menu-item  "Split Window                     " 
+  `(menu-item  "Split Window                      " 
 	       split-window-vertically
 	       :keys ,(aq-binding 'split-window-vertically)
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
@@ -981,13 +981,13 @@ both existing buffers and buffers that you subsequently create."
 		'(command-separator "--")
 		(list 'next-buffer
 		      'menu-item
-		      "Select Next Buffer             " 
+		      "Select Next Buffer               " 
 		      'next-tab-or-buffer 
 		      :keys (aq-binding 'next-tab-or-buffer)
 		      :help "Switch to the \"next\" buffer in a cyclic order")
 		(list 'previous-buffer
 		      'menu-item
-		      "Select Previous Buffer       "
+		      "Select Previous Buffer         "
 		      'previous-tab-or-buffer
 		      :keys  (aq-binding 'next-tab-or-buffer)
 		      :help "Switch to the \"previous\" buffer in a cyclic order")
