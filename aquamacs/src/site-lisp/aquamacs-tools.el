@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.30 2008/05/04 18:19:09 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.31 2008/05/15 11:51:30 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -413,6 +413,10 @@ Optional CODING is used for encoding coding-system."
 (defun aq-print-timer ()
   (message  (format "%d" (aq-current-milliseconds))  ))
 
+
+(defun aquamacs-pretty-mode-name (mode)
+  (capitalize 
+   (replace-regexp-in-string "-mode" "" (symbol-name mode))))
 
 (provide 'aquamacs-tools)
 
