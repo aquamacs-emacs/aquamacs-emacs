@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.31 2008/05/15 11:51:30 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.32 2008/05/15 12:01:44 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -417,6 +417,141 @@ Optional CODING is used for encoding coding-system."
 (defun aquamacs-pretty-mode-name (mode)
   (capitalize 
    (replace-regexp-in-string "-mode" "" (symbol-name mode))))
+
+;; apple command character is unicode x2318  
+;; 
+(defun aq-describe-modifier (mod)
+  ;; translate modifier
+  (or
+  (cond
+   ((and (boundp 'mac-command-modifier) (eq mac-command-modifier mod))
+    (string (decode-char 'ucs #X2318)))
+   ((and (boundp 'mac-option-modifier) (eq (or mac-option-modifier 'alt)
+					   mod))
+    (string (decode-char 'ucs #X2325)))
+   ((and (boundp 'mac-control-modifier) (eq (or mac-control-modifier 'ctrl) 
+					    mod))
+    (string (decode-char 'ucs #X2303)))
+   ((eq mod 'shift)
+    (string (decode-char 'ucs #X21E7)))
+   ((and (boundp 'mac-function-modifier) (eq mac-function-modifier mod))
+    "Fn ")
+   )
+ ;; (progn (print mod) nil)
+     (signal 'search-failed nil)
+   ))
+
+(defvar apple-char (string (decode-char 'ucs #X2318)))
+
+;; The following is a big hack. The mac port can't currently cope 
+;; with putting the command key combos in the menu, for various 
+;; reasons (1. they are just secondary alternatives, 2. command is defined
+;; as 'alt' and only known as such)
+
+; redefine New
+; (define-key menu-bar-edit-menu [mark-whole-buffer] (cdr (assq 'mark-whole-buffer (key-binding [menu-bar edit]))))
+
+
+
+(defun aq-resolve-remapped (list)
+  (flatten  
+  (mapcar
+     (lambda (k)
+       (cond 
+	( (and 
+	   (vectorp k)
+	   (eq (aref k 0) 'remap)
+	   )
+	  (where-is-internal (aref k 1) nil nil t t))
+	((and 
+	   (vectorp k)
+	   (eq (aref k 0) 'menu-bar)
+	   )
+	 nil
+	 )
+	(t k))
+	)
+     list)))
+
+
+; (aq-find-good-key 'aquamacs-toggle-full-frame)
+
+(defun aq-find-best-key (list)
+  (or (if (not list)
+	"")
+    (key-description (car list))
+    (aq-find-best-key (cdr list)))
+)
+;; 
+(defun aq-find-good-key (symbol)
+  (aq-find-best-key
+   (aq-resolve-remapped
+    (or
+     (where-is-internal 
+      symbol
+      (list  osx-key-mode-map   ) 
+      )
+     (where-is-internal 
+      symbol
+      (list    global-map ) 
+      )
+     (where-is-internal 
+      symbol
+      nil 
+      nil t t)))))
+
+(defun aq-shortcut (text symbol &rest more-args)
+  ;; symbol can be nil in some circumstances 
+  ;; (e.g. in tool-bar-map from early initialization)
+  (if (and symbol (if (boundp 'osx-key-mode) osx-key-mode nil))
+      (apply (function format) 
+	     (append (list (concat text "%s")) more-args 
+		     (list (aq-binding symbol))))
+    ;; not osx-key-mode
+    (apply (function format) text more-args)))
+	  
+
+(defun aq-binding (symbol)
+   (condition-case err
+  (let* ((case-fold-search nil)
+	 (s (aq-find-good-key symbol))
+	 (s (replace-regexp-in-string 
+	     "S-." (lambda (txt) 
+		     (concat (aq-describe-modifier 'shift) "-" 
+			     (downcase (substring txt 2))))
+	     s)))
+
+   (replace-regexp-in-string 
+    "[-<>]" ""
+    (replace-regexp-in-string 
+     "-\\([a-z]\\)" 'upcase
+			  
+     (replace-regexp-in-string 
+      "C-" (lambda (txt) 
+	     (concat (aq-describe-modifier 'ctrl) 
+		     "-"))
+      (replace-regexp-in-string 
+       "H-" (lambda (txt) 
+	      (concat (aq-describe-modifier 'hyper)
+		      "-"))
+       (replace-regexp-in-string 
+	"A-" (lambda (txt) 
+	       (concat (aq-describe-modifier 'alt)
+		       "-"))
+	(replace-regexp-in-string 
+	 "M-" (lambda (txt) 
+		(concat (aq-describe-modifier 'meta)
+			"-"))
+
+	 (replace-regexp-in-string 
+	  "-\\([A-Z]\\)" 
+	  (lambda (txt) 
+	    (concat 
+	     (aq-describe-modifier 'shift) txt))
+	  s
+	  nil nil 1 ;; replace sub-exp
+	  ))))))))
+  (error "")))
 
 (provide 'aquamacs-tools)
 
