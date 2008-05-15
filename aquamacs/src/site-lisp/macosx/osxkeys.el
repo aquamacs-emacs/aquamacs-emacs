@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.98 2008/05/14 15:45:55 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.99 2008/05/15 11:52:09 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -76,9 +76,6 @@ after updating this variable.")
   
 ;; allow selection of secondary buffer
    
- 
-(require 'aquamacs-tools)
- 
  
 
 (require 'filladapt)
@@ -959,7 +956,6 @@ An Aquamacs-only function."
    map) "Keymap for the Aquamacs context menu.")
 
 (defvar aquamacs-popup-context-menu-buffers-state nil)
-(require 'aquamacs-menu) ;; for pretty mode name function
 (defun aquamacs-popup-context-menu  (event &optional  prefix)
   "Popup a context menu. 
 Its content is specified in the keymap `aquamacs-context-menu-map'."
