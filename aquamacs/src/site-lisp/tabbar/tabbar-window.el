@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: tabbar-window.el,v 1.35 2008/05/14 14:50:58 champo Exp $
+;; Revision: $Id: tabbar-window.el,v 1.36 2008/05/15 13:31:54 champo Exp $
 
 (require 'tabbar)
 (require 'aquamacs-tools)
@@ -544,13 +544,14 @@ Update the templates if tabbar-template is currently nil."
       (tabbar-line-format tabbar-current-tabset)))
 
 (defun tabbar-window-current-tabset ()
-  (let ((tabset (tabbar-get-tabset
-		 (number-to-string (window-number (selected-window))))))
+  ;; ensure we don't count minibuffer as selected window - causes infinite loop
+  (let* ((window (or (minibuffer-selected-window) (selected-window)))
+	 (tabset (tabbar-get-tabset (number-to-string (window-number window)))))
     ;; in the case where tabs have not yet been created, tabset will still be nil
     ;;  properly initialize all tabsets by running tabbar-window-update-tabsets
     (unless tabset 
       (setq tabset (tabbar-window-update-tabsets)))
-    (tabbar-select-tab-value (current-buffer) tabset)
+    (tabbar-select-tab-value (window-buffer window) tabset)
     tabset))
 
 (defun tabbar-window-track-killed ()
