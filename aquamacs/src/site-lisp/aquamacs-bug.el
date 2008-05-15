@@ -3,7 +3,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: mac bug report
  
-;; Last change: $Id: aquamacs-bug.el,v 1.12 2008/05/15 11:44:52 davidswelt Exp $
+;; Last change: $Id: aquamacs-bug.el,v 1.13 2008/05/15 12:02:36 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -33,6 +33,7 @@
 ; (require 'emacsbug)
 (provide 'aquamacs-bug)
 
+(require 'aquamacs-tools)
 ;; Request by RMS 06/2005: do not report Aquamacs bugs 
 ;; to the Emacs mailing lists.
  
