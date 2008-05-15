@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.138 2008/05/15 13:21:09 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.139 2008/05/15 15:36:36 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -289,14 +289,14 @@ customization buffer."
 (define-key menu-bar-file-menu [recover-session] nil)
 
 (define-key menu-bar-edit-menu [copy]
-  `(menu-item "Copy                              " 
+  `(menu-item "Copy                                               " 
 	      clipboard-kill-ring-save
 	      :keys ,(aq-binding (key-binding [menu-bar edit copy]))
 	      :enable mark-active
 	      :help "Copy selected text in region"))
  
 (define-key menu-bar-edit-menu [paste]
-  `(menu-item "Paste                              " 
+  `(menu-item "Paste                                               " 
 	      clipboard-yank
 	      :keys ,(aq-binding 'clipboard-yank) 
 	      :enable (and
@@ -314,7 +314,7 @@ customization buffer."
 
 (require 'aquamacs-redo)
 (define-key menu-bar-edit-menu [undo]
-  `(menu-item   "Undo                              "
+  `(menu-item   "Undo                                               "
 	      aquamacs-undo
 	      :keys ,(aq-binding (key-binding [menu-bar edit undo]))
 	      :enable (and (aquamacs-can-undo-p)
@@ -322,7 +322,7 @@ customization buffer."
 	      :help "Undo last operation"))
 
 (define-key-after menu-bar-edit-menu [redo]
-  `(menu-item "Redo                              " 
+  `(menu-item "Redo                                               " 
 	      aquamacs-redo
 	      :keys ,(aq-binding (key-binding [menu-bar edit redo]))
 	      :enable (and (aquamacs-can-redo-p) 
@@ -334,7 +334,7 @@ customization buffer."
 
 ;;done
 (define-key menu-bar-edit-menu [cut]
-  `(menu-item "Cut                                 "
+  `(menu-item "Cut                                                  "
 	      clipboard-kill-region
 	      :keys ,(aq-binding (key-binding [menu-bar edit cut]))
 	      :enable (and mark-active (not buffer-read-only))
@@ -342,7 +342,7 @@ customization buffer."
 	      "Delete text in region and copy it to the clipboard"))
 
 (define-key menu-bar-edit-menu [mark-whole-buffer]
-  `(menu-item "Select All                        " 
+  `(menu-item "Select All                                         " 
 	      mark-whole-buffer
 	      :keys ,(aq-binding (key-binding [menu-bar edit mark-whole-buffer]))
 	      :enable (menu-bar-menu-frame-live-and-visible-p)
