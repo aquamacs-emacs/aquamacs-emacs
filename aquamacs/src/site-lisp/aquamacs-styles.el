@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.34 2008/05/12 21:59:29 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.35 2008/05/15 09:23:36 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -40,6 +40,34 @@
 ; (require 'cl)
 (require 'aquamacs-cl)
  
+(defmacro save-frame-size (frame &rest body)
+  "Restore pixel size of selected frame after executing body."
+  `(let ((old-frame-pixel-width (frame-pixel-width ,frame))
+	(old-frame-pixel-height (frame-pixel-height ,frame))
+	(w-offset 
+	 (- (frame-pixel-width ,frame) 
+	    (smart-fp--char-to-pixel-width (frame-width ,frame) 
+					   ,frame)))
+	(h-offset 
+	 (- (frame-pixel-height ,frame) 
+	    (smart-fp--char-to-pixel-height (frame-height 
+					     ,frame) ,frame))))
+    
+    (let ((ret-val (progn ,@body)))
+      (when (not (equal old-frame-pixel-height 
+		      (frame-pixel-height ,frame)))
+	(set-frame-height 
+	 ,frame
+	 (smart-fp--pixel-to-char-height
+	  (- old-frame-pixel-height h-offset ) ,frame)))
+      (when (not (equal old-frame-pixel-width 
+			(frame-pixel-width ,frame)))
+	(set-frame-width 
+	 ,frame
+	 (smart-fp--pixel-to-char-width
+	  (- old-frame-pixel-width w-offset ) ,frame)))
+      ret-val)))
+
  
 ; update the help-mode specification with a fit-frame
 ; append it, so the user's choice has priority
@@ -193,33 +221,7 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 		    )))
 	  (error (print err))))))
 
-(defmacro save-frame-size (frame &rest body)
-  "Restore pixel size of selected frame after executing body."
-  `(let ((old-frame-pixel-width (frame-pixel-width ,frame))
-	(old-frame-pixel-height (frame-pixel-height ,frame))
-	(w-offset 
-	 (- (frame-pixel-width ,frame) 
-	    (smart-fp--char-to-pixel-width (frame-width ,frame) 
-					   ,frame)))
-	(h-offset 
-	 (- (frame-pixel-height ,frame) 
-	    (smart-fp--char-to-pixel-height (frame-height 
-					     ,frame) ,frame))))
-    
-    (let ((ret-val (progn ,@body)))
-      (when (not (equal old-frame-pixel-height 
-		      (frame-pixel-height ,frame)))
-	(set-frame-height 
-	 ,frame
-	 (smart-fp--pixel-to-char-height
-	  (- old-frame-pixel-height h-offset ) ,frame)))
-      (when (not (equal old-frame-pixel-width 
-			(frame-pixel-width ,frame)))
-	(set-frame-width 
-	 ,frame
-	 (smart-fp--pixel-to-char-width
-	  (- old-frame-pixel-width w-offset ) ,frame)))
-      ret-val)))
+
 
 (defmacro mac-event-ae (event)
   `(nth 2 ,event))
