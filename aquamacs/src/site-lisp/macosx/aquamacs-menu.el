@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.133 2008/05/14 15:30:56 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.134 2008/05/15 09:59:49 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -1164,6 +1164,22 @@ both existing buffers and buffers that you subsequently create."
 		      'previous-tab-or-buffer
 		      :key-sequence nil
 		      :help "Switch to the \"previous\" buffer in a cyclic order")
+(list 'movetab
+		      'menu-item 
+		      '(aq-shortcut "Move Tab to New Frame       " 'tabbar-move-current-buffer-to-new-frame)
+		      'tabbar-move-current-buffer-to-new-frame
+		      :key-sequence nil
+		      :enable (and (menu-bar-menu-frame-live-and-visible-p)
+				   (menu-bar-non-minibuffer-window-p))
+		      :help "Move the current Tab to New Frame")
+(list 'mergetabs
+		      'menu-item
+		      '(aq-shortcut "Merge All Frames       " 'tabbar-window-merge-windows)
+		      'tabbar-window-merge-windows
+		      :key-sequence nil
+		      :enable (and (menu-bar-menu-frame-live-and-visible-p)
+				   (menu-bar-non-minibuffer-window-p))
+		      :help "Merge all Frames into a single one with tabs")
 		)))
 
 ;(assq-delete-all 'select-named-buffer menu-bar-buffers-menu-command-entries)
