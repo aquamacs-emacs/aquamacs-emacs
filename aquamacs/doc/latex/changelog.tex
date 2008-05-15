@@ -10,7 +10,13 @@
 \item \textbf{Aquamacs has tabs}. Press Apple-T to create one. You can switch the general use of tabs on in the Options menu. (Note that while the `tabbar' package is provided and used internally, the actual functionality is different.)
 Concept and Code by Nathaniel Cunningham, David~Ponce and David Reitter.
 
-\item \textbf{``Frame Styles'' are turned off} by default now.  This means that there are no major mode specific settings (fonts, colors) unless the styles are turned back on (Options menu).  
+\item \textbf{``Frame Styles'' are turned off} by default now.  This
+  means that there are no major mode specific settings (fonts, colors)
+  unless the styles are turned back on (Options menu).   
+  There is a new ``Clear All Styles'' menu item, and
+  the wording has been improved.  There should be less flicker when
+  switching buffers. The frame size and position are not changed,
+  even if the frame leaves the screen.
 
 \item \textbf{Revised word wrapping}: Soft and hard wrapping can now be recognized automatically (Options / Auto Word Wrap for Text Modes). Also, Soft and Hard wrap modes are now enabled just for the current buffer.  (The former option to automatically enable this is still available via customization of the `text-mode-hook' setting.)
 
@@ -49,6 +55,18 @@ Code by Nathaniel Cunningham
 \end{itemize}
 Code by Ralf Angeli, David Kastrup and others.
 
+\item Searching with Apple-F and Apple-G (isearch) is now more
+  comfortable: it will not normally extend a region (unless started
+  with C-Space). Apple-G (repeat the search) will always set the mark
+  to the beginning of the match so that the region captures the match.
+  This allows users to replace the text of the match with something
+  else easily. 
+
+\item When the mark is set with C-Space, it is more persistent than
+  before: clicking somewhere will not disable it, but extend the
+  region, just like moving the point with arrow keys (and other
+  movement keys) would do.
+
 \item LaTeX mode comes with more appropriate icons now.
 
 \item Color Themes updated to version 6.6.0.
@@ -81,7 +99,9 @@ Suggested by Nathaniel Cunningham.
 
 \item The context menu now allows to ``search on this Mac'' with Spotlight (on OS X 10.4 or newer).
 
-\item Frame Styles: there is a new ``Clear All Styles'' menu item, and the wording has been improved.
+\item Font settings for a frame do not affect the mode-line any
+  longer. You can M-x customize-face mode-line, specifying a standard
+  OS X font as ``Font family'' (such as Monaco).
 
 \item Files are loaded (visited) a little faster now.  `default-major-mode' now defaults to `fundamental-mode' rather than `text-mode', which should have no practical consequences apart from the speed-up. 
 
