@@ -341,24 +341,21 @@ to their equivalents used on Mac OS X."
 
 (define-key menu-bar-option-key-menu [option-is-meta]
   `(menu-item
-    (aq-shortcut  "%s                                 "
-		   'toggle-mac-option-modifier 
-		   (upcase-initials (symbol-name 
-				     (or mac-option-modifier 
-					 mac-option-modifier-enabled-value))))
+    (format  "%s                                 "
+	     (upcase-initials (symbol-name 
+			       (or mac-option-modifier 
+				   mac-option-modifier-enabled-value))))
     toggle-mac-option-modifier 
-    :key-sequence nil
+    :keys ,(aq-binding 'toggle-mac-option-modifier)
     :visible (boundp 'mac-option-modifier)
     :help "Toggle whether to let Option key behave as Emacs key, 
 do not let it produce special characters (passing the key to the system)."
     :button (:toggle . (and mac-option-modifier  (not aquamacs-emkm-current-keymap)))))
  
 (define-key menu-bar-option-key-menu [option-to-system]
-  `(menu-item
-    ,(aq-shortcut  "Standard Mac characters   "
-		   'toggle-mac-option-modifier)
+  `(menu-item "Standard Mac characters   "
     toggle-mac-option-modifier 
-    :key-sequence nil
+    :keys ,(aq-binding 'toggle-mac-option-modifier)
     :visible (boundp 'mac-option-modifier)
     :help "Toggle whether to let Option key behave as Emacs key, 
 do not let it produce special characters (passing the key to the system)."
