@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.135 2008/05/15 11:43:28 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.136 2008/05/15 11:53:24 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -310,10 +310,6 @@ using `aquamacs-recent-major-modes' and `aquamacs-known-major-modes'."
    function-to-call docstring enable-if))
 
  
-;; also used by osxkeys.el
-(defun aquamacs-pretty-mode-name (mode)
-  (capitalize 
-   (replace-regexp-in-string "-mode" "" (symbol-name mode))))
 
 (defun aquamacs-define-mode-menu-1
   (the-list keymap function-to-call docstring enable-if)
@@ -442,8 +438,7 @@ customization buffer."
 	      clipboard-kill-ring-save
 	      :keys ,(aq-binding (key-binding [menu-bar edit copy]))
 	      :enable mark-active
-	      :help "Copy selected text in region"
-	      :keys "\\[clipboard-kill-ring-save]"))
+	      :help "Copy selected text in region"))
  
 (define-key menu-bar-edit-menu [paste]
   `(menu-item "Paste                              " 
