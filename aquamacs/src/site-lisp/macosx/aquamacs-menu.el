@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.139 2008/05/15 15:36:36 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.140 2008/05/16 06:11:27 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -152,7 +152,7 @@ using `aquamacs-recent-major-modes' and `aquamacs-known-major-modes'."
 
   (unless enable-if
     (setq enable-if 't))
-  (aquamacs-define-mode-menu-1 aquamacs-known-major-modes keymap 
+  (aquamacs-define-mode-menu-1 (filter-list aquamacs-known-major-modes aquamacs-recent-major-modes) keymap 
 			       function-to-call docstring enable-if)
   (define-key keymap [separator]  '(menu-item "--"))
   (aquamacs-define-mode-menu-1 
@@ -160,7 +160,7 @@ using `aquamacs-recent-major-modes' and `aquamacs-known-major-modes'."
    (mapcar (lambda (m)
 	     (or (assq m aquamacs-known-major-modes)
 		 m))
-	   (reverse aquamacs-recent-major-modes)) 
+	   (reverse (filter-list aquamacs-recent-major-modes aquamacs-exclude-major-modes))) 
    keymap 
    function-to-call docstring enable-if))
 
@@ -237,6 +237,11 @@ customization buffer."
 		  (symbol :tag "Mode-name")
 		  (cons :tag "Mode / Display name" (symbol :tag "Mode-name") (symbol :tag "Display name"))))
   :set 'set-aquamacs-known-major-modes)
+
+(defvar aquamacs-exclude-major-modes
+  '(debugger-mode help-mode completion-list-mode)
+  "Major Modes ot be excluded from menus")
+
 
 ;; compatibility (old symbol used in 0.9.6)
 (defalias 'aquamacs-menu-new-buffer-modes 'aquamacs-known-major-modes)
@@ -1145,6 +1150,25 @@ that should be represented in the Aquamacs menus."
 )
 )
 ;; --done
+
+(require 'recentf)
+(ats "recentf loaded")
+(aquamacs-set-defaults 
+ '(
+   (recentf-max-menu-items 25)
+   (recentf-menu-before  "Open Directory...                 ")
+   (recentf-keep ( mac-is-mounted-volume-p file-remote-p file-readable-p))
+   (recentf-filename-handlers '(abbreviate-file-name))
+   (recentf-menu-filter aquamacs-recentf-show-basenames)))  
+(setq recentf-menu-items-for-commands
+      (list ["Clear Menu"
+	     recentf-clearlist
+	     :help "Remove all excluded and non-kept files from the recent list"
+	     :active t]))
+(recentf-mode 1)  
+(global-set-key "\C-x\ \C-r" 'recentf-open-files)  
+
+
 
 (add-hook 'menu-bar-update-hook 'aquamacs-update-menu)
 
