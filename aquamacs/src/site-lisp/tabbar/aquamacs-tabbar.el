@@ -1,3 +1,4 @@
+;; -*-no-byte-compile: t; -*-
 ;; Aquamacs-tabbar.el --- "Look and feel" improvements to tabbar.el.  Uses
 ;;   Window Tabs by default: Tab-set is specific to each window, and tabbar
 ;;   is hidden when only a single tab exists for that window.
@@ -6,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: aquamacs-tabbar.el,v 1.33 2008/05/12 16:30:11 champo Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.34 2008/05/16 20:28:17 champo Exp $
 
 ;; load original tabbar-mode
 (require 'tabbar)
