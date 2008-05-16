@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.166 2008/05/11 00:02:12 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.167 2008/05/16 06:12:23 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -522,36 +522,8 @@ yes-or-no prompts - y or n will do."
     (aquamacs-osx-defaults-setup)
     )
   (ats "osx_defaults done")
-  (require 'easymenu) 
 
 
-  (require 'recentf)
-  (ats "recentf loaded")
-
-  
-
-  (aquamacs-set-defaults 
-   '(
-     ( recentf-max-menu-items 25)
-     (recentf-menu-before  "Open Directory...                 ")
-     (recentf-keep ( mac-is-mounted-volume-p file-remote-p file-readable-p))
-     (recentf-filename-handlers '(abbreviate-file-name))
-     (recentf-menu-filter aquamacs-recentf-show-basenames)))  
-
-
-  (setq recentf-menu-items-for-commands
-	(list ["Clear Menu"
-	       recentf-clearlist
-	       :help "Remove all excluded and non-kept files from the recent list"
-	       :active t]
-        
-	      ) 
-	)
-
-
-  (recentf-mode 1)  
-
-  (global-set-key "\C-x\ \C-r" 'recentf-open-files)  
 
  
 
