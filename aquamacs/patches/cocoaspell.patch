@@ -1,5 +1,5 @@
-*** lisp/textmodes/ispell.el	06 Apr 2008 12:51:35 +0100	1.209.2.8
---- lisp/textmodes/ispell.el	11 May 2008 08:57:55 +0100	
+*** lisp/textmodes/ispell.el	Fri May 16 00:01:14 2008
+--- lisp/textmodes/ispell.el	Thu May 15 23:52:22 2008
 ***************
 *** 2,18 ****
   
@@ -50,7 +50,7 @@
   ;; Filtered process calls with duplicate dictionary entries.
 ***************
 *** 227,232 ****
---- 229,528 ----
+--- 229,536 ----
   (defalias 'check-ispell-version 'ispell-check-version)
   
   ;;; **********************************************************************
@@ -186,15 +186,9 @@
 +   "Records whether or not aspell's default configuration can
 + locate any dictionaries.")
 + 
-+ ;; determine how to configure aspell
++ ;;;###autoload
 + (defcustom ispell-use-cocoaspell
-+   (if (equal ispell-program-name "aspell")
-+       (when aspell-knows-no-dicts
-+ 	(if (file-accessible-directory-p
-+ 	     (expand-file-name "~/Library/Services/cocoAspell.service/"))
-+ 	    'full
-+ 	  'dicts))
-+     nil)
++   'auto
 +   "Specify whether spell-checking with aspell should use
 + cocoaAspell installation.  The following options are available:
 + 
@@ -204,12 +198,26 @@
 +     Use cocoAspell dictionaries only (e.g. when
 +         Spelling prefpane isn't installed).
 + - nil
-+     Use generic aspell without cocoAspell."
++     Use generic aspell without cocoAspell.
++ - `auto'
++     Determine the proper setting at runtime,
++         based on detected aspell/cocoAspell installation."
 +   :group 'ispell
 +   :type '(choice :tag "Aspell should use..."
 +                  (const :tag "cocoAspell Preferences and Dictionaries" full)
 +                  (const :tag "cocoAspell Dictionaries Only" dicts)
-+                  (const :tag "generic install (Don't use cocoAspell)" nil)))
++                  (const :tag "generic install (Don't use cocoAspell)" nil)
++ 		 (const :tag "automatic setting" auto)))
++ 
++ ;; determine how to configure aspell
++ (when (eq ispell-use-cocoaspell 'auto)
++   (setq ispell-use-cocoaspell
++ 	(if (equal ispell-program-name "aspell")
++ 	    (when aspell-knows-no-dicts
++ 	      (if (file-accessible-directory-p
++ 		   (expand-file-name "~/Library/Services/cocoAspell.service/"))
++ 		  'full
++ 		'dicts)))))
 + 
 + (defvar ispell-cocoaspell-prefs-dir
 +   (when (eq ispell-use-cocoaspell 'full)
@@ -366,7 +374,7 @@
   (defcustom ispell-alternate-dictionary
     (cond ((file-exists-p "/usr/dict/web2") "/usr/dict/web2")
   	((file-exists-p "/usr/share/dict/web2") "/usr/share/dict/web2")
---- 600,605 ----
+--- 608,613 ----
 ***************
 *** 912,941 ****
     (unless ispell-really-aspell
@@ -399,7 +407,7 @@
   
   (defvar ispell-aspell-data-dir nil
     "Data directory of Aspell.")
---- 1201,1249 ----
+--- 1209,1257 ----
     (unless ispell-really-aspell
       (error "This function only works with aspell"))
     (let* ((dictionaries
@@ -491,7 +499,7 @@
   		;; Here we specify the encoding to use while communicating with
   		;; aspell.  This doesn't apply to command line arguments, so
   		;; just don't pass words to spellcheck as arguments...
---- 1262,1324 ----
+--- 1270,1332 ----
     ;; This returns nil if the data file does not exist.
     ;; Can someone please explain the return value format when the
     ;; file does exist -- rms?
@@ -595,7 +603,7 @@
   
   ;;;###autoload
   (if ispell-menu-map-needed
---- 1382,1428 ----
+--- 1390,1436 ----
   (if ispell-menu-map-needed
       (progn
         (setq ispell-menu-map (make-sparse-keymap "Spell"))
@@ -667,7 +675,7 @@
       (if ispell-current-personal-dictionary	; use specified pers dict
   	(setq args
   	      (append args
---- 2829,2854 ----
+--- 2837,2862 ----
   (defun ispell-start-process ()
     "Start the ispell process, with support for no asynchronous processes.
   Keeps argument list for future ispell invocations for no async support."
@@ -708,7 +716,7 @@
     (ispell-maybe-find-aspell-dictionaries)
     (unless arg (ispell-buffer-local-dict 'no-reload))
     (if (equal dict "default") (setq dict nil))
---- 2969,2981 ----
+--- 2977,2989 ----
   
   By just answering RET you can find out what the current dictionary is."
     (interactive
