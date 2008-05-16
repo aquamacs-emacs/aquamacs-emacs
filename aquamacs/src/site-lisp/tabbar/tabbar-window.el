@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: tabbar-window.el,v 1.36 2008/05/15 13:31:54 champo Exp $
+;; Revision: $Id: tabbar-window.el,v 1.37 2008/05/16 14:57:10 champo Exp $
 
 (require 'tabbar)
 (require 'aquamacs-tools)
@@ -296,8 +296,14 @@ That is, a string used to represent it on the tab bar."
 	  (popup-menu tabbar-context-menu-map event prefix))
 	 (t
 	  (switch-to-buffer buffer)))
-      (when (eq mouse-button 'mouse-3)
-	(popup-menu tabbar-empty-context-menu-map event prefix)))))
+      ;; if there's no tab associated with clicked spot, use
+      ;; special keymap for empty tab bar
+      (cond ((eq mouse-button 'mouse-3)
+	     ;; context menu on right-click
+	     (popup-menu tabbar-empty-context-menu-map event prefix))
+	    ((eq (event-click-count event) 2)
+	     ;; new tab on double-click
+	     (tabbar-new-tab))))))
 
 (defun tabbar-windows-per-buffer (buffer)
   "Return a list of numbers corresponding to window tabsets to which the
