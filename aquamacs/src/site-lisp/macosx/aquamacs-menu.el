@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.140 2008/05/16 06:11:27 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.141 2008/05/16 13:00:12 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -128,6 +128,7 @@ The elements of LIST are not copied, just the list structure itself."
 	  )))
 
 
+
 (defvar menu-bar-change-mode-menu nil)
 ; (aquamacs-update-change-mode-menu)
 (defun aquamacs-update-change-mode-menu ()
@@ -196,8 +197,13 @@ using `aquamacs-recent-major-modes' and `aquamacs-known-major-modes'."
       (aquamacs-update-new-file-menu))
   (if (fboundp 'aquamacs-update-change-mode-menu)
       (aquamacs-update-change-mode-menu)))
- 
 
+;; must come before defcustom. 
+(defvar aquamacs-exclude-major-modes
+  '(debugger-mode help-mode completion-list-mode)
+  "Major Modes ot be excluded from menus")
+
+;; must come after above definitions (setter function!)
 (defcustom aquamacs-known-major-modes
   '(text-mode 
     change-log-mode
@@ -237,10 +243,6 @@ customization buffer."
 		  (symbol :tag "Mode-name")
 		  (cons :tag "Mode / Display name" (symbol :tag "Mode-name") (symbol :tag "Display name"))))
   :set 'set-aquamacs-known-major-modes)
-
-(defvar aquamacs-exclude-major-modes
-  '(debugger-mode help-mode completion-list-mode)
-  "Major Modes ot be excluded from menus")
 
 
 ;; compatibility (old symbol used in 0.9.6)
