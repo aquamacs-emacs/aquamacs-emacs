@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.142 2008/05/17 16:04:37 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.143 2008/05/17 17:41:20 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -925,8 +925,8 @@ both existing buffers and buffers that you subsequently create."
 
 (define-key menu-bar-file-menu [one-window]
   `(menu-item "Remove Splits                    " 
-	      delete-other-windows
-	      :keys ,(aq-binding 'delete-other-windows)
+	      aquamacs-delete-other-windows
+	      :keys ,(aq-binding 'aquamacs-delete-other-windows)
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
 			   (menu-bar-non-minibuffer-window-p)
 			   (not (one-window-p t nil)))
