@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: tabbar-window.el,v 1.37 2008/05/16 14:57:10 champo Exp $
+;; Revision: $Id: tabbar-window.el,v 1.38 2008/05/17 17:34:55 davidswelt Exp $
 
 (require 'tabbar)
 (require 'aquamacs-tools)
@@ -425,7 +425,7 @@ Updates tabbar-window-alist in the same way."
 	(setq header-line-inhibit-window-list
 	      (delq window header-line-inhibit-window-list)))))))
 
-(defun tabbar-window-merge-windows (&optional tabset)
+(defun tabbar-window-merge-windows (&optional tabset source-tabsets)
   "Assign tabs from all tabsets to current tabset, or TABSET
 if specified, then close all other tabs and windows.
 Result is a single window containing all displayed buffers as tabs.
@@ -433,7 +433,7 @@ Turns on tabbar-mode if not already on."
   (interactive)
   (tabbar-mode 1)
   (let ((tabset-keep (or tabset (tabbar-current-tabset)))
-	(all-tabsets (mapcar 'tabbar-get-tabset (tabbar-tabset-names))))
+	(all-tabsets (or source-tabsets (mapcar 'tabbar-get-tabset (tabbar-tabset-names)))))
     ;; cycle through tabsets, except for current one
     (dolist (this-tabset all-tabsets)
       ;; for each tabset, cycle through buffers
@@ -444,6 +444,16 @@ Turns on tabbar-mode if not already on."
 	    (tabbar-window-add-tab tabset-keep this-buffer t))
 	  ;; delete tab from prior tabset
 	  (tabbar-window-delete-tab this-tab))))))
+
+(defun tabbar-window-merge-windows-in-frame (&optional frame window)
+  "Merges tabs from all window in a frame into a single one
+shown in DEST-WINDOW."
+(interactive)
+(tabbar-window-merge-windows
+ (tabbar-window-current-tabset window)
+ (mapcar 'tabbar-window-current-tabset
+	 (cdr-safe (window-list frame 'no-minibuf window))))) ;; exclude current window
+
 
 (defun tabbar-desktop-tabsets-to-save ()
   (let* ((tabset-names (tabbar-tabset-names))
@@ -549,9 +559,9 @@ Update the templates if tabbar-template is currently nil."
   (or (tabbar-template tabbar-current-tabset)
       (tabbar-line-format tabbar-current-tabset)))
 
-(defun tabbar-window-current-tabset ()
+(defun tabbar-window-current-tabset (&optional window)
   ;; ensure we don't count minibuffer as selected window - causes infinite loop
-  (let* ((window (or (minibuffer-selected-window) (selected-window)))
+  (let* ((window (or window (minibuffer-selected-window) (selected-window)))
 	 (tabset (tabbar-get-tabset (number-to-string (window-number window)))))
     ;; in the case where tabs have not yet been created, tabset will still be nil
     ;;  properly initialize all tabsets by running tabbar-window-update-tabsets
