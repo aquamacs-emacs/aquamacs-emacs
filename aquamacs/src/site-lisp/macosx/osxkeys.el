@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.100 2008/05/17 17:41:40 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.101 2008/05/17 17:46:45 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -928,6 +928,13 @@ An Aquamacs-only function."
   (interactive)
   (other-frame -1))
 
+(defun aquamacs-split-window-vertically ()
+  "Split window, select new window.
+Like `split-window-vertically' without further arguments, 
+but select the newly created window."
+  (interactive)
+  (select-window (split-window-vertically)))
+
 (defun aquamacs-delete-other-windows ()
   "Delete other windows in the selected frame."
   (interactive)
@@ -1120,7 +1127,7 @@ default."
     (define-key map `[(,osxkeys-command-key m)] 'iconify-or-deiconify-frame) 
     (define-key map `[(,osxkeys-command-key .)] 'keyboard-quit)
     (define-key map `[(,osxkeys-command-key 49)] 'aquamacs-delete-other-windows) ; 49='1'
-    (define-key map `[(,osxkeys-command-key 50)] 'split-window-vertically) ; 50='2'
+    (define-key map `[(,osxkeys-command-key 50)] 'aquamacs-split-window-vertically) ; 50='2'
     (if (fboundp 'mac-toggle-full-frame)
 	(define-key map `[(,osxkeys-command-key shift return)] 
 	  'aquamacs-toggle-full-frame))
