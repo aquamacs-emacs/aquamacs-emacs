@@ -8,7 +8,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-frame-setup.el,v 1.27 2008/04/30 22:37:10 davidswelt Exp $
+;; Last change: $Id: aquamacs-frame-setup.el,v 1.28 2008/05/17 20:09:28 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -105,7 +105,7 @@ even when minimal fringes are used. (Aquamacs)"
    (left-fringe . 1) (right-fringe . nil) (fringe . nil)))
 
 (special-display-frame-alist
- ((unsplittable . t)
+ ((unsplittable . nil)
  (width . 75)
  (height . 35)
  (left . 0)
