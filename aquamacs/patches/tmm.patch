@@ -7,7 +7,7 @@
   	    ;; it might now be partly visible, so try again.
   	    (prog1 isearch-hidden (setq isearch-hidden nil)))
 +     (if (and transient-mark-mode 
-+ 	     (not (and cua-mode (or cua--explicit-region-start cua--last-region-shifted))))
++ 	     (not (and cua-mode cua--explicit-region-start)))
 + 	(deactivate-mark))
       ;; In reverse search, adding stuff at
       ;; the end may cause zero or many more chars to be
@@ -80,7 +80,7 @@
       (mouse-move-drag-overlay mouse-drag-overlay start-point start-point
                                click-count)
       (overlay-put mouse-drag-overlay 'window start-window)
-!     (unless (and  cua--explicit-region-start)
+!     (unless (and cua-mode cua--explicit-region-start)
 !       (deactivate-mark))
       (let (event end end-point last-end-point)
         (track-mouse
