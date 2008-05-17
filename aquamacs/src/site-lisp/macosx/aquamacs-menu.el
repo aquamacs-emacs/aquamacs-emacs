@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.141 2008/05/16 13:00:12 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.142 2008/05/17 16:04:37 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -1003,7 +1003,7 @@ both existing buffers and buffers that you subsequently create."
 		      "Move Tab to New Frame       " 
 		      'tabbar-move-current-buffer-to-new-frame
 		      :keys  (aq-binding 'tabbar-move-current-buffer-to-new-frame)
-		      :enable (and (menu-bar-menu-frame-live-and-visible-p)
+		      :enable '(and (menu-bar-menu-frame-live-and-visible-p)
 				   (menu-bar-non-minibuffer-window-p))
 		      :help "Move the current Tab to New Frame")
 		(list 'mergetabs
@@ -1011,7 +1011,7 @@ both existing buffers and buffers that you subsequently create."
 		      "Merge All Frames       " 
 		      'tabbar-window-merge-windows
 		      :keys  (aq-binding 'tabbar-window-merge-windows)
-		      :enable (and (menu-bar-menu-frame-live-and-visible-p)
+		      :enable '(and (menu-bar-menu-frame-live-and-visible-p)
 				   (menu-bar-non-minibuffer-window-p))
 		      :help "Merge all Frames into a single one with tabs")
 		)))
