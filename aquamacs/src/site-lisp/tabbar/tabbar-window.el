@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: tabbar-window.el,v 1.38 2008/05/17 17:34:55 davidswelt Exp $
+;; Revision: $Id: tabbar-window.el,v 1.39 2008/05/17 17:36:11 davidswelt Exp $
 
 (require 'tabbar)
 (require 'aquamacs-tools)
@@ -448,11 +448,11 @@ Turns on tabbar-mode if not already on."
 (defun tabbar-window-merge-windows-in-frame (&optional frame window)
   "Merges tabs from all window in a frame into a single one
 shown in DEST-WINDOW."
-(interactive)
-(tabbar-window-merge-windows
- (tabbar-window-current-tabset window)
- (mapcar 'tabbar-window-current-tabset
-	 (cdr-safe (window-list frame 'no-minibuf window))))) ;; exclude current window
+  (interactive)
+  (tabbar-window-merge-windows
+   (tabbar-window-current-tabset window)
+   (mapcar 'tabbar-window-current-tabset
+	   (cdr-safe (window-list frame 'no-minibuf window))))) ;; exclude current window
 
 
 (defun tabbar-desktop-tabsets-to-save ()
