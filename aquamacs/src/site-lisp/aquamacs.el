@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.167 2008/05/16 06:12:23 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.168 2008/05/17 17:53:30 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -495,7 +495,17 @@ yes-or-no prompts - y or n will do."
   (set-face-attribute 'mode-line nil
 		    :family "Lucida Grande"
 		    :inherit nil
-;;		    :height 140 ;; use the frame-wide setting
+		    :height 120 ;; do use the frame-wide setting: it's very font dependent
+		    :weight 'normal
+		    :width 'normal
+		    :slant 'normal
+		    :underline nil
+		    :strike-through nil)
+
+  (set-face-attribute 'mode-line-inactive nil
+		    :family "Lucida Grande"
+		    :inherit 'mode-line
+		    :height 120 ;; do use the frame-wide setting: it's very font dependent
 		    :weight 'normal
 		    :width 'normal
 		    :slant 'normal
