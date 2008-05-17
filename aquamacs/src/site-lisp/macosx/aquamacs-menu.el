@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.143 2008/05/17 17:41:20 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.144 2008/05/17 17:46:26 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -932,9 +932,9 @@ both existing buffers and buffers that you subsequently create."
 			   (not (one-window-p t nil)))
 	      :help "Selected window grows to fill the whole frame"))
 (define-key menu-bar-file-menu [split-window]
-  `(menu-item  "Split Window                      " 
-	       split-window-vertically
-	       :keys ,(aq-binding 'split-window-vertically)
+  `(menu-item "Split Window                      " 
+	      aquamacs-split-window-vertically
+	      :keys ,(aq-binding 'split-window-vertically)
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
 			   (menu-bar-non-minibuffer-window-p))
 	      :help "Split selected window in two"))
