@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.169 2008/05/18 22:54:01 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.170 2008/05/18 22:55:52 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -197,6 +197,7 @@ un-Mac-like way when you select text and copy&paste it.")))
 
 (defun aquamacs-notice-user-settings ()
   "React to various user settings."
+  (aquamacs-load-scratch-file) 
   (aquamacs-cua-warning)
   (osx-key-mode-command-key-warning)
   (make-help-mode-not-use-frame-fitting)
@@ -1289,7 +1290,6 @@ information given would otherwise be irrelevant to Aquamacs users.
 
 (require 'check-for-updates)
 ;; via hook so it can be turned off
-(add-hook 'after-init-hook 'aquamacs-load-scratch-file 'append) 
 (add-hook 'after-init-hook 'aquamacs-check-for-updates-if-necessary 'append) 
  
 
