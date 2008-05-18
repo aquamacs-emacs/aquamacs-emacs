@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.168 2008/05/17 17:53:30 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.169 2008/05/18 22:54:01 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -194,6 +194,15 @@ Aquamacs 0.9.7 on. `mac-option-modifier' has been set for you.")))))
 or init file. Without this mode, Aquamacs will behave in an 
 un-Mac-like way when you select text and copy&paste it.")))
 
+
+(defun aquamacs-notice-user-settings ()
+  "React to various user settings."
+  (aquamacs-cua-warning)
+  (osx-key-mode-command-key-warning)
+  (make-help-mode-not-use-frame-fitting)
+  (enable-one-buffer-one-frame-mode))
+; (aquamacs-notice-user-settings)
+
 (defun aquamacs-wrap-string (str width)
     (with-temp-buffer 
       (insert str)
@@ -352,6 +361,7 @@ if modified buffers exist."
   "File name to save the scratch file. Set to nil to not save it."
   :group 'Aquamacs
   :version "22.0")
+
 
 ; (aquamacs-save-scratch-file)
 (defun aquamacs-save-scratch-file ()
@@ -777,9 +787,6 @@ Use this argument instead of explicitly setting `view-exit-action'."
   
   (require 'color-theme-autoloads)
   (require 'aquamacs-styles)
-  (add-hook 'after-init-hook
-	    'make-help-mode-not-use-frame-fitting
-	    'append) ;; move to the end: after loading customizations
 	
 	
  (ats "styles done")
@@ -922,7 +929,7 @@ to the selected frame."
   (cua-mode 1) ;; this goes first (so we can overwrite the settings)
 
   
-  (add-hook 'after-init-hook 'aquamacs-cua-warning)
+  (add-hook 'after-init-hook 'aquamacs-notice-user-settings)
   
   ;; give context menus on right click
   ;; if mac-wh is nil, we need the following
@@ -1282,10 +1289,9 @@ information given would otherwise be irrelevant to Aquamacs users.
 
 (require 'check-for-updates)
 ;; via hook so it can be turned off
+(add-hook 'after-init-hook 'aquamacs-load-scratch-file 'append) 
 (add-hook 'after-init-hook 'aquamacs-check-for-updates-if-necessary 'append) 
-
-(aquamacs-load-scratch-file)
-
+ 
 
 (ats "aquamacs-tool-bar-setup ...")
 (when window-system 
