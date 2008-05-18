@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.63 2008/04/28 18:30:58 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.64 2008/05/18 22:51:33 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -154,8 +154,6 @@ To disable `one-buffer-one-frame-mode', call
 (one-buffer-one-frame-mode 0)"
   (one-buffer-one-frame-mode (if one-buffer-one-frame 1 0)))
 
-
-(add-hook 'after-init-hook 'enable-one-buffer-one-frame-mode 'append)
 
   
 (defvar one-buffer-one-frame-force nil 
@@ -690,8 +688,7 @@ even if it's the only visible frame."
 
 
 (if window-system
-    (add-hook 'kill-buffer-hook 'delete-window-if-one-buffer-one-frame t)
-  )
+    (add-hook 'kill-buffer-hook 'delete-window-if-one-buffer-one-frame t))
  
 ;; this is what's bound to Apple-W
 ;; and what can called programmatically (instead of bury-buffer, etc.)
@@ -714,7 +711,6 @@ kill the buffer, too.  Ask user whether to kill it if appropriate."
   "Delete current buffer, close selected window (and its frame
 if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
   (interactive) 
- 
   (let ((wind (selected-window))
 	(killable (and (killable-buffer-p (window-buffer))
 		       ;; theoretically, we should check if, in case
