@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.101 2008/05/17 17:46:45 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.102 2008/05/18 22:52:09 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -1270,7 +1270,6 @@ keymaps used by this mode. They may be modified where necessary."
 
   (osx-key-mode-command-key-warning))
 
-(add-hook 'after-init-hook 'osx-key-mode-command-key-warning)
 
 ;; (osx-key-mode 1)
 (provide 'osxkeys)
