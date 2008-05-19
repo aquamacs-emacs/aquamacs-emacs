@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: tabbar-window.el,v 1.39 2008/05/17 17:36:11 davidswelt Exp $
+;; Revision: $Id: tabbar-window.el,v 1.40 2008/05/19 13:39:52 champo Exp $
 
 (require 'tabbar)
 (require 'aquamacs-tools)
@@ -354,8 +354,10 @@ specified BUFFER belongs."
       ;; otherwise, if this is selected tab, select a neighbor
       (when sel
 	(if (tabbar-tab-next tabset tab)
-	    (tabbar-forward-tab)
-	  (tabbar-backward-tab)))
+;; 	    (tabbar-forward-tab)
+	    (tabbar-click-on-tab (tabbar-tab-next tabset tab))
+;; 	  (tabbar-backward-tab)))
+	  (tabbar-click-on-tab (tabbar-tab-next tabset tab 'before))))
       ;; put trimmed buffer list back into alist
       (setcdr window-elt buflist)
       ;; manually update tabsets now, to ensure that deleted tab is no
