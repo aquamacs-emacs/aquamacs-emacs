@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.144 2008/05/17 17:46:26 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.145 2008/05/19 08:25:48 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -969,7 +969,7 @@ both existing buffers and buffers that you subsequently create."
 ;; but is created here
 
 ;; --done
-
+;; (tabbar-window-buffer-list)
 ;; move stuff from File to the Buffers menu
  
 (setq  menu-bar-buffers-menu-command-entries
@@ -988,15 +988,19 @@ both existing buffers and buffers that you subsequently create."
 		'(command-separator "--")
 		(list 'next-buffer
 		      'menu-item
-		      "Select Next Buffer               " 
+		      '(format "Select Next %s               "  
+			       (if tabbar-mode "Tab   " "Buffer"))
 		      'next-tab-or-buffer 
 		      :keys (aq-binding 'next-tab-or-buffer)
+;;		      :enable '(if tabbar-mode ????   t)
 		      :help "Switch to the \"next\" buffer in a cyclic order")
 		(list 'previous-buffer
 		      'menu-item
-		      "Select Previous Buffer         "
+		      '(format "Select Previous %s         " 
+			       (if tabbar-mode "Tab   " "Buffer"))
 		      'previous-tab-or-buffer
 		      :keys  (aq-binding 'next-tab-or-buffer)
+;;		      :enable '(if tabbar-mode ????   t)
 		      :help "Switch to the \"previous\" buffer in a cyclic order")
 		(list 'movetab
 		      'menu-item 
