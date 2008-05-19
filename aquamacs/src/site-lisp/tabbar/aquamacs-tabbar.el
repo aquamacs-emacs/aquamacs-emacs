@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: aquamacs-tabbar.el,v 1.34 2008/05/16 20:28:17 champo Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.35 2008/05/19 09:51:33 davidswelt Exp $
 
 ;; load original tabbar-mode
 (require 'tabbar)
@@ -98,7 +98,6 @@ to be closed.  If no tab is specified, (tabbar-selected-tab) is used"
   "Face for unselected, highlighted tabs."
   :group 'tabbar)
 
-
 (set-face-attribute 'tabbar-button nil
 		    :inherit 'tabbar-default
 		    :box nil)
@@ -107,7 +106,6 @@ to be closed.  If no tab is specified, (tabbar-selected-tab) is used"
 		    :background "grey50"
  		    :foreground "grey50"
 		    :height 1.0)
-
 
 (setq tabbar-separator '(1)) ;; set tabbar-separator size to 1 pixel
 
@@ -130,7 +128,7 @@ to be closed.  If no tab is specified, (tabbar-selected-tab) is used"
   :group 'tabbar)
 
 ;; do not let color themes override tabbar faces 
-(aquamacs-set-defaults '((color-theme-illegal-faces "^\\(w3-\\|tabbar-\\)")))
+(aquamacs-set-defaults '((color-theme-illegal-faces "^\\(w3-\\|tabbar-\\|mode-line)")))
 
 ;; function for closing a tab via context menu.  Kills buffer if doesn't
 ;;  appear in other tabs.
