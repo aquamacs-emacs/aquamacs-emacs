@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: aquamacs-tabbar.el,v 1.35 2008/05/19 09:51:33 davidswelt Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.36 2008/05/19 11:04:50 davidswelt Exp $
 
 ;; load original tabbar-mode
 (require 'tabbar)
@@ -128,7 +128,7 @@ to be closed.  If no tab is specified, (tabbar-selected-tab) is used"
   :group 'tabbar)
 
 ;; do not let color themes override tabbar faces 
-(aquamacs-set-defaults '((color-theme-illegal-faces "^\\(w3-\\|tabbar-\\|mode-line)")))
+(aquamacs-set-defaults '((color-theme-illegal-faces "^\\(w3-\\|tabbar-\\)")))
 
 ;; function for closing a tab via context menu.  Kills buffer if doesn't
 ;;  appear in other tabs.
