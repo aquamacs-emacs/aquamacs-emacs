@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: aquamacs-tabbar.el,v 1.36 2008/05/19 11:04:50 davidswelt Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.37 2008/05/19 13:42:55 champo Exp $
 
 ;; load original tabbar-mode
 (require 'tabbar)
@@ -152,7 +152,7 @@ to be closed.  If no tab is specified, (tabbar-selected-tab) is used"
 					  'tabbar-tab (car clicklocation)))
 	   (tablist (tabbar-tabs (tabbar-tab-tabset clickedtab))))
 ;      (save-current-buffer
-	(dolist (thistab tablist (car clickedtab))
+	(dolist (thistab tablist (tabbar-tab-value clickedtab))
 	  (unless (equal thistab clickedtab)
 ;;	    (tabbar-window-close-tab thistab))))));)
 	(tabbar-close-tab thistab))))))
@@ -185,7 +185,7 @@ if specified), in current window."
     (let* ((clicklocation (posn-string (event-start event)))
 	   (clickedtab (get-text-property (cdr clicklocation)
 					  'tabbar-tab (car clicklocation)))
-	   (buffer (car clickedtab)))
+	   (buffer (tabbar-tab-value clickedtab)))
       (with-current-buffer buffer
 	(make-frame-command)))))
 
@@ -198,13 +198,24 @@ if specified), in current window."
     (let* ((clicklocation (posn-string (event-start event)))
 	   (clickedtab (get-text-property (cdr clicklocation)
 					  'tabbar-tab (car clicklocation)))
-	   (buffer (car clickedtab))
+	   (buffer (tabbar-tab-value clickedtab))
 	   (wnumber (string-to-number (symbol-name (tabbar-tab-tabset tab))))
 	   (wind (window-number-get-window wnumber)))
       (with-current-buffer buffer
 	(make-frame-command))
       (with-selected-window wind
 	(tabbar-close-tab clickedtab)))))
+
+(defun tabbar-move-current-buffer-to-new-frame ()
+  (interactive)
+    (let* ((tab (tabbar-selected-tab (tabbar-current-tabset t)))
+	   (buffer (tabbar-tab-value tab))
+	   (wnumber (string-to-number (symbol-name (tabbar-tab-tabset tab))))
+	   (wind (window-number-get-window wnumber)))
+      (with-current-buffer buffer
+	(make-frame-command))
+      (with-selected-window wind
+	(tabbar-close-tab tab))))
 
 ;; keymap for tabbar context menu
 (defvar tabbar-context-menu-map
