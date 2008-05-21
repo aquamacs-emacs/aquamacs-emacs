@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: site-start.el,v 1.41 2008/05/02 11:10:28 davidswelt Exp $
+;; Last change: $Id: site-start.el,v 1.42 2008/05/21 05:41:57 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -96,6 +96,11 @@ Changes in this code are ignored during the online version check.")
   (require 'load-emacs-plugins)
 
   ;; workaround - Emacs doesn't do it  (0.9.9b)
-  (add-hook 'after-init-hook 'display-startup-echo-area-message 'append)
+  (defun display-startup-echo-area-message-2 ()
+    "Like `display-startup-echo-area-message', but without logging."
+    (let ((message-log-max))
+      (display-startup-echo-area-message)))
+
+  (add-hook 'after-init-hook 'display-startup-echo-area-message-2 'append)
 
   )
