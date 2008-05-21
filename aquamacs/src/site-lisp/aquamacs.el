@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.170 2008/05/18 22:55:52 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.171 2008/05/21 05:42:33 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -502,29 +502,35 @@ yes-or-no prompts - y or n will do."
 
   ;; Mode-Line Faces
   ;; face (defined and) applied using pretty-modeline.patch
-  
-  (set-face-attribute 'mode-line nil
-		    :family "Lucida Grande"
-		    :inherit nil
-		    :height 120 ;; do use the frame-wide setting: it's very font dependent
-		    :weight 'normal
-		    :width 'normal
-		    :slant 'normal
-		    :underline nil
-		    :strike-through nil)
 
-  (set-face-attribute 'mode-line-inactive nil
+  (defface aquamacs-variable-width '((t
 		    :family "Lucida Grande"
-		    :inherit 'mode-line
-		    :height 120 ;; do use the frame-wide setting: it's very font dependent
-		    :weight 'normal
-		    :width 'normal
-		    :slant 'normal
-		    :underline nil
-		    :strike-through nil)
+		    :height 120)) ;; do use the frame-wide setting: it's very font dependent
+  "Aquamcas default face (variable width)"
+  :group 'aquamacs)
 
-  (set-face-attribute 'mode-line-flags nil
-		    :family "Monaco")
+  (defun aquamacs-set-modeline-faces (&optional theme)
+    (set-face-attribute 'mode-line nil
+			:inherit 'aquamacs-variable-width
+			:weight 'normal
+			:width 'normal
+			:slant 'normal
+			:underline nil
+			:strike-through nil)
+    (set-face-attribute 'mode-line-inactive nil
+			:inherit 'aquamacs-variable-width
+			:weight 'normal
+			:width 'normal
+			:slant 'normal
+			:underline nil
+			:strike-through nil)
+    (set-face-attribute 'mode-line-flags nil
+			:family "Monaco"))
+  (defvar color-theme-install-hook nil)
+  ;; some themes override mode-line faces;
+  ;; while they should be able to set colors, they should not remove :family or :inherit attribues
+  (add-hook 'color-theme-install-hook 'aquamacs-set-modeline-faces)
+  (aquamacs-set-modeline-faces)
   
 
   ;; tabbar needs to be defined before osxkeys
