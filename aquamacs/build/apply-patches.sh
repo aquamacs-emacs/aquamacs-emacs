@@ -27,6 +27,7 @@ PATCHES="mac-functions emacs-inline transparency
          cocoaspell
          flyspell-aspell
          recentf-track-minibuf
+         window-kill
          pop-to-buffer display-buffer-reuse
          cus-edit-switch
          ediff-workaround
