@@ -228,7 +228,7 @@ not be shown with all themes but yours."
 (defcustom color-theme-libraries (directory-files 
                                   (concat 
                                    (file-name-directory (locate-library "color-theme"))
-                                   "") t "^color-theme") ;; aquamacs
+                                   "") t "^color-theme-") ;; aquamacs
   "A list of files, which will be loaded in color-theme-initialize depending
 on `color-theme-load-all-themes' value. 
 This allows a user to prune the default color-themes (which can take a while
@@ -245,6 +245,12 @@ do not load any of this themes."
 
 (defcustom color-theme-mode-hook nil
   "Hook for color-theme-mode."
+  :type 'hook
+  :group 'color-theme)
+
+(defcustom color-theme-install-hook nil
+  "Functions run after installing a color theme.
+Functions should take one argument: the installed theme."
   :type 'hook
   :group 'color-theme)
 
@@ -658,7 +664,7 @@ are included in the SPEC returned."
     `((t ,(nreverse result)))))
 
 ;; (color-theme-spec-filter '((t (:background "blue3"))))
-;; (color-theme-spec-filter '((t (:stipple nil :background "Black" :foreground "SteelBlue" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :width semi-condensed :family "misc-fixed"))))
+;; (print (color-theme-spec-filter '((t (:stipple nil :background "Black" :foreground "SteelBlue" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :width semi-condensed :family "misc-fixed")))))
 
 (defun color-theme-plist-delete (plist prop)
   "Delete property PROP from property list PLIST by side effect.
@@ -1384,7 +1390,7 @@ Called from `color-theme-install'."
 	(or (facep face)
 	    (make-empty-face face))
 	;; remove weird properties from the default face only
-	(when (eq face 'default)
+	(when (eq face 'default)  
 	  (setq spec (color-theme-spec-filter spec)))
 	;; Emacs/XEmacs customization issues: filter out :bold when
 	;; the spec contains :weight, etc, such that the spec remains
@@ -1393,6 +1399,7 @@ Called from `color-theme-install'."
 	;; using a spec of ((t (nil))) to reset a face doesn't work
 	;; in Emacs 21, we use the new function face-spec-reset-face
 	;; instead
+	(unless (eq face 'mode-line)
 	(if (and (functionp 'face-spec-reset-face)
 		 (equal spec '((t (nil)))))
 	    (face-spec-reset-face face frame)
@@ -1401,7 +1408,7 @@ Called from `color-theme-install'."
 		(face-spec-set face spec frame)
 		(if color-theme-is-global
 		    (put face 'face-defface-spec spec)))
-	    (error (message "Error using spec %S: %S" spec var))))))))
+	    (error (message "Error using spec %S: %S" spec var)))))))))
 
 ;; `custom-set-faces' is unusable here because it doesn't allow to set
 ;; the faces for one frame only.
@@ -1569,8 +1576,8 @@ frame-parameter settings of previous color themes."
   (color-theme-install-frame-params (color-theme-frame-params theme))
   (when color-theme-history-max-length
     (color-theme-add-to-history
-     (car theme))))
-
+     (car theme)))
+  (run-hook-with-args 'color-theme-install-hook theme))
 
 
 ;; Sharing your stuff
@@ -1652,7 +1659,6 @@ frame-parameter settings of previous color themes."
 (defun color-theme-initialize ()
   "Initialize the color theme package by loading color-theme-libraries."
   (interactive)
-
   (cond ((and (not color-theme-load-all-themes)
               color-theme-directory)
          (setq color-theme-libraries 
