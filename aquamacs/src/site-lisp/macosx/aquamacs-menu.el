@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.146 2008/05/19 14:16:49 champo Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.147 2008/05/21 05:44:09 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -992,11 +992,12 @@ both existing buffers and buffers that you subsequently create."
 			       (if tabbar-mode "Tab   " "Buffer"))
 		      'next-tab-or-buffer 
 		      :keys (aq-binding 'next-tab-or-buffer)
-;;		      :enable '(if tabbar-mode ????   t)
-		      :enable '(and tabbar-mode
-				       (not (tabbar-tabset-only-tab
-					     (tabbar-selected-tab
-					      (tabbar-current-tabset t)))))
+		      :enable '(and (menu-bar-menu-frame-live-and-visible-p)
+				    (menu-bar-non-minibuffer-window-p)
+				    (or (not tabbar-mode)
+					(not (tabbar-tabset-only-tab
+					      (tabbar-selected-tab
+					       (tabbar-current-tabset t))))))
 		      :help "Switch to the \"next\" buffer in a cyclic order")
 		(list 'previous-buffer
 		      'menu-item
@@ -1004,11 +1005,12 @@ both existing buffers and buffers that you subsequently create."
 			       (if tabbar-mode "Tab   " "Buffer"))
 		      'previous-tab-or-buffer
 		      :keys  (aq-binding 'next-tab-or-buffer)
-;;		      :enable '(if tabbar-mode ????   t)
-		      :enable '(and tabbar-mode
-				       (not (tabbar-tabset-only-tab
-					     (tabbar-selected-tab
-					      (tabbar-current-tabset t)))))
+		      :enable '(and (menu-bar-menu-frame-live-and-visible-p)
+				    (menu-bar-non-minibuffer-window-p)
+				    (or (not tabbar-mode)
+					(not (tabbar-tabset-only-tab
+					 (tabbar-selected-tab
+					  (tabbar-current-tabset t))))))
 		      :help "Switch to the \"previous\" buffer in a cyclic order")
 		(list 'movetab
 		      'menu-item 
@@ -1016,7 +1018,11 @@ both existing buffers and buffers that you subsequently create."
 		      'tabbar-move-current-buffer-to-new-frame
 		      :keys  (aq-binding 'tabbar-move-current-buffer-to-new-frame)
 		      :enable '(and (menu-bar-menu-frame-live-and-visible-p)
-				   (menu-bar-non-minibuffer-window-p))
+				    (menu-bar-non-minibuffer-window-p)
+				    (or (not tabbar-mode)
+					(not (tabbar-tabset-only-tab
+					      (tabbar-selected-tab
+					       (tabbar-current-tabset t))))))
 		      :help "Move the current Tab to New Frame")
 		(list 'mergetabs
 		      'menu-item
