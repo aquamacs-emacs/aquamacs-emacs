@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.171 2008/05/21 05:42:33 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.172 2008/05/21 16:43:40 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -197,10 +197,11 @@ un-Mac-like way when you select text and copy&paste it.")))
 
 (defun aquamacs-notice-user-settings ()
   "React to various user settings."
-  (aquamacs-load-scratch-file) 
-  (aquamacs-cua-warning)
-  (osx-key-mode-command-key-warning)
-  (make-help-mode-not-use-frame-fitting)
+  (unless noninteractive
+    (aquamacs-load-scratch-file) 
+    (aquamacs-cua-warning)
+    (osx-key-mode-command-key-warning)
+    (make-help-mode-not-use-frame-fitting))
   (enable-one-buffer-one-frame-mode))
 ; (aquamacs-notice-user-settings)
 
@@ -364,39 +365,37 @@ if modified buffers exist."
   :version "22.0")
 
 
-; (aquamacs-save-scratch-file)
-(defun aquamacs-save-scratch-file ()
-  "Save the scratch buffer.
-The *scratch* buffer is saved to `aquamacs-scratch-file'.
-No errors are signaled."
-  (if aquamacs-scratch-file
-      (condition-case nil
-	  (if (get-buffer "*scratch*")
-	      (with-current-buffer "*scratch*"
-		(let ((coding-system-for-write 'utf-8))
-		  (write-region nil nil aquamacs-scratch-file nil nil nil)))
-	    (write-region "" nil aquamacs-scratch-file nil nil nil))
-	(error nil))))
 
 ;; read scratch file
+;; (aquamacs-load-scratch-file)
+
 (defun aquamacs-load-scratch-file ()
   "Load the scratch buffer.
 The *scratch* buffer is loaded from `aquamacs-scratch-file'.
 No errors are signaled."
-  (condition-case nil
-      (with-current-buffer "*scratch*"
-	(let ((coding-system-for-read 'utf-8)
-	      (buffer-undo-list t))
-	  (if (file-exists-p aquamacs-scratch-file)
-	      ;; if file unreadable, this will trip the condition-case
-	      (insert-file-contents aquamacs-scratch-file nil nil nil 'replace))
-	  (set-buffer-modified-p nil))
-	(setq buffer-undo-list nil)
-	;; do this here so that we never save the scratch file
-	;; if it hasn't been successfully loaded initially
-	;; (or if the file simply doesn't exist yet)
-	(add-hook 'kill-emacs-hook 'aquamacs-save-scratch-file))
-    (error nil)))
+  (with-current-buffer "*scratch*"
+    (condition-case nil
+	(progn
+	  (let ((coding-system-for-read 'utf-8)
+		(buffer-undo-list t))
+	    (if (file-exists-p aquamacs-scratch-file)
+		;; if file unreadable, this will trip the condition-case
+		(insert-file-contents aquamacs-scratch-file 
+				      nil nil nil 'replace))
+	    (set-buffer-modified-p nil))
+	  (setq buffer-undo-list nil)
+	  (setq buffer-file-name aquamacs-scratch-file)
+	  (setq buffer-offer-save nil)	
+	  (setq auto-save-visited-file-name t)
+	  (auto-save-mode 1)
+	  (setq buffer-save-without-query t)
+	  (put 'buffer-save-without-query 'permanent-local t)
+	  (setq buffer-file-coding-system 'utf-8))
+      ;; we aso need to avoid asking whether to save this
+      ;; do this here so that we never save the scratch file
+      ;; if it hasn't been successfully loaded initially
+      ;; (or if the file simply doesn't exist yet)
+      (error (insert (format "Scratch file %s could not be read.\nThis buffer will not be saved automatically." aquamacs-scratch-file)) nil))))
 
 
 (defun aquamacs-setup ()
