@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.172 2008/05/21 16:43:40 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.173 2008/05/22 11:37:20 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -386,7 +386,7 @@ No errors are signaled."
 	  (setq buffer-undo-list nil)
 	  (setq buffer-file-name aquamacs-scratch-file)
 	  (setq buffer-offer-save nil)	
-	  (setq auto-save-visited-file-name t)
+	  (set (make-local-variable 'auto-save-visited-file-name) t)
 	  (auto-save-mode 1)
 	  (setq buffer-save-without-query t)
 	  (put 'buffer-save-without-query 'permanent-local t)
