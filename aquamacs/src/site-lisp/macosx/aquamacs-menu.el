@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.147 2008/05/21 05:44:09 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.148 2008/05/22 21:39:14 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -934,14 +934,14 @@ both existing buffers and buffers that you subsequently create."
 (define-key menu-bar-file-menu [split-window]
   `(menu-item "Split Window                      " 
 	      aquamacs-split-window-vertically
-	      :keys ,(aq-binding 'split-window-vertically)
+	      :keys ,(aq-binding 'aquamacs-split-window-vertically)
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
 			   (menu-bar-non-minibuffer-window-p))
 	      :help "Split selected window in two"))
 (define-key menu-bar-file-menu [make-frame]
   `(menu-item "Show Buffer in New Frame" make-frame-command
-	      :keys ,(aq-binding 'make-frame-command)
 	      :visible (fboundp 'make-frame-command)
+	      ;; no key: use standard notation
 	      :enable (menu-bar-menu-frame-live-and-visible-p)
 	      :help "Open a new frame"))
 (define-key menu-bar-file-menu [tile-frames]
