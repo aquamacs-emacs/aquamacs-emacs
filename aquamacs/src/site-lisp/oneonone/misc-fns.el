@@ -4,12 +4,12 @@
 ;; Description: Miscellaneous non-interactive functions.
 ;; Author: Drew Adams
 ;; Maintainer: Drew Adams
-;; Copyright (C) 1996-2007, Drew Adams, all rights reserved.
+;; Copyright (C) 1996-2008, Drew Adams, all rights reserved.
 ;; Created: Tue Mar  5 17:21:28 1996
 ;; Version: 21.0
-;; Last-Updated: Mon Apr 02 21:13:43 2007 (-25200 Pacific Daylight Time)
+;; Last-Updated: Tue Jan 01 13:36:50 2008 (-28800 Pacific Standard Time)
 ;;           By: dradams
-;;     Update #: 301
+;;     Update #: 462
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/misc-fns.el
 ;; Keywords: internal, unix, lisp, extensions, local
 ;; Compatibility: GNU Emacs 20.x, GNU Emacs 21.x, GNU Emacs 22.x
@@ -57,6 +57,15 @@
 ;;
 ;;; Change log:
 ;;
+;; 2007/09/25 dadams
+;;     buffer-modifying-cmds: Respect kill-read-only-ok.
+;; 2007/09/22 dadams
+;;     NOTE: If you upgrade this library, and you use any of these libraries, then
+;;           you MUST upgrade them also: buff-menu+.el, compile+.el, dired+.el,
+;;           start-opt.el. 
+;;     undefine-keys-bound-to, undefine-keys-bound-to: Removed optional OLD-MAP arg.
+;;     undefine-keys-bound-to: Redefined using where-is-internal and lookup-key.
+;;     buffer-modifying-cmds: Added lots more, some from Emacs 22.
 ;; 2007/04/02 dadams
 ;;     Added: region-or-buffer-limits.
 ;; 2006/12/11 dadams
@@ -159,8 +168,6 @@
 (defcustom mode-line-reminder-duration 10
   "*Maximum number of seconds to display a reminder in the mode-line."
   :type 'integer)
-(put 'mode-line-reminder-duration 'variable-interactive
-     "nMax seconds to display key reminders in mode-line: ")
 
 ;; From `show-bind.el'.
 ;;;###autoload
@@ -306,32 +313,71 @@ Optional arg KILL-BUF-AFTER non-nil means kill buffer after saving it."
 
 ;;;$ KEYS ---------------------------------------------------------------------
 
-(defun undefine-keys-bound-to (command keymap &optional oldmap)
-  "Bind to `undefined' all keys currently bound to COMMAND in KEYMAP.
-If optional argument OLDMAP is specified, rebinds in KEYMAP as
-`undefined' all keys that are currently bound to COMMAND in OLDMAP but
-are not bound in KEYMAP."
-  (unless (where-is-internal command keymap 'first-only)
-    (substitute-key-definition command 'undefined keymap oldmap)))
-
 (defcustom buffer-modifying-cmds
-  '(delete-char quoted-insert transpose-chars kill-region yank kill-word
-                indent-new-comment-line kill-sentence fill-paragraph
-                transpose-words yank-pop zap-to-char just-one-space
-                indent-for-comment delete-indentation kill-sexp split-line
-                transpose-sexps backward-kill-sentence)
+  (append
+   (and (or (not (boundp 'kill-read-only-ok)) kill-read-only-ok)
+        '(backward-kill-paragraph backward-kill-sentence backward-kill-sexp
+          backward-kill-word clipboard-kill-region comint-kill-input comment-kill 
+          kill-backward-up-list kill-comment kill-line kill-paragraph
+          kill-rectangle kill-region kill-region-wimpy kill-sentence kill-sexp
+          kill-whole-line kill-word mouse-kill))
+   '(align-newline-and-indent backward-delete-char backward-delete-char-untabify
+     bookmark-insert bookmark-insert-location canonically-space-region
+     capitalize-region capitalize-word c-backslash-region
+     c-context-line-break center-line center-paragraph center-region
+     c-fill-paragraph c-hungry-delete-backwards c-hungry-delete-forward
+     c-indent-command c-indent-defun c-indent-exp clear-rectangle
+     comint-truncate-buffer comment-dwim comment-indent-new-line comment-region
+     comment-or-uncomment-region complete-symbol compose-last-chars
+     compose-region dabbrev-completion dabbrev-expand decompose-region
+     delete-backward-char delete-blank-lines delete-char
+     delete-horizontal-space delete-indentation delete-matching-lines
+     delete-non-matching-lines delete-pair delete-rectangle delete-region
+     delete-trailing-whitespace delete-whitespace-rectangle delimit-columns-region
+     downcase-region downcase-word edit-picture expand-abbrev expand-region-abbrevs
+     fill-individual-paragraphs fill-nonuniform-paragraphs fill-paragraph
+     fill-region fill-region-as-paragraph format-insert-file flush-lines
+     ido-insert-buffer ido-insert-file increase-left-margin increase-right-margin
+     indent-code-rigidly indent-for-comment indent-for-tab-command
+     indent-line-function indent-new-comment-line indent-pp-sexp indent-region
+     indent-rigidly insert-abbrevs insert-buffer insert-file insert-file-literally
+     insert-kbd-macro insert-pair insert-parentheses insert-register
+     insert-zippyism join-line justify-current-line just-one-space keep-lines
+     lisp-complete-symbol lisp-fill-paragraph lisp-indent-line morse-region 
+     newline newline-and-indent open-line open-rectangle query-replace
+     query-replace-regexp quoted-insert reindent-then-newline-and-indent
+     replace-regexp replace-string repunctuate-sentences reverse-region rot13-region
+     self-insert-command set-justification-center set-justification-full
+     set-justification-left set-justification-none set-justification-right
+     set-left-margin set-right-margin skeleton-pair-insert-maybe smiley-region
+     sort-columns sort-fields sort-lines sort-numeric-fields sort-pages
+     sort-paragraphs split-line string-insert-rectangle string-rectangle
+     studlify-region table-delete-column table-delete-row table-heighten-cell
+     table-insert table-insert-column table-insert-row table-insert-sequence
+     table-justify table-shorten-cell table-span-cell table-split-cell
+     table-split-cell-horizontally table-split-cell-vertically table-widen-cell
+     tab-to-tab-stop tabify texinfo-format-region tildify-region time-stamp
+     todo-insert-item translate-region transpose-chars transpose-lines
+     transpose-paragraphs transpose-sentences transpose-sexps transpose-words
+     ucs-insert uncomment-region unmorse-region untabify upcase-region
+     upcase-word vc-insert-headers whitespace-cleanup
+     whitespace-cleanup-region yank yank-pop yank-rectangle zap-to-char))
   "*Buffer-modifying commands used in `undefine-killer-commands'."
   :type '(repeat symbol))
 
-(defun undefine-killer-commands (keymap &optional oldmap)
-  "Bind `undefined' to KEYMAP keys bound to buffer-modifying commands.
-If optional arg OLDMAP is specified, rebinds in KEYMAP as `undefined'
-the keys that are currently bound to buffer-modifying commands in
-OLDMAP but are not bound in KEYMAP.  The buffer-modifying commands
-used: `buffer-modifying-cmds'."
-  (mapcar (lambda (cmd) (undefine-keys-bound-to cmd keymap oldmap))
-          buffer-modifying-cmds))
+(defun undefine-keys-bound-to (command keymap)
+  "Undefine all keys bound only by inheritance to COMMAND in KEYMAP.
+If a key is bound to COMMAND in KEYMAP, but it is not bound directly
+in KEYMAP, then bind it to `undefined' in KEYMAP."
+  (dolist (key (where-is-internal command keymap))
+    (when (and key (not (lookup-key keymap key)))
+      (define-key keymap key 'undefined))))
 
+(defun undefine-killer-commands (keymap)
+  "Undefine KEYMAP keys that are bound to buffer-modifying commands.
+For each key in KEYMAP that is indirectly bound to one of the commands in
+`buffer-modifying-cmds', rebind it to `undefined'."
+  (mapcar (lambda (cmd) (undefine-keys-bound-to cmd keymap)) buffer-modifying-cmds))
 
 ;;;; ;;;###autoload
 ;;;; (defun name+key (cmd)
@@ -419,15 +465,15 @@ LIST2.  This is a non-destructive function; it copies the data if
 necessary."
   (cond ((null list1) list2)
         ((null list2) list1)
-	((equal list1 list2) list1)
-	(t
-	 (or (>= (length list1) (length list2))
-	     (setq list1 (prog1 list2 (setq list2 list1)))) ; Swap them.
-	 (while list2
+        ((equal list1 list2) list1)
+        (t
+         (or (>= (length list1) (length list2))
+             (setq list1 (prog1 list2 (setq list2 list1)))) ; Swap them.
+         (while list2
            (unless (member (car list2) list1)
                (setq list1 (cons (car list2) list1)))
-	   (setq list2 (cdr list2)))
-	 list1)))
+           (setq list2 (cdr list2)))
+         list1)))
 
 ;; From `cl-seq.el', function `intersection', without keyword treatment.
 (defun simple-set-intersection (list1 list2)
@@ -436,7 +482,7 @@ This is a non-destructive operation: it copies the data if necessary."
   (and list1 list2
        (if (equal list1 list2)
            list1
-	 (let ((result nil))
+         (let ((result nil))
            (unless (>= (length list1) (length list2))
              (setq list1 (prog1 list2 (setq list2 list1)))) ; Swap them.
            (while list2

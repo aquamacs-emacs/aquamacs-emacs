@@ -4,12 +4,12 @@
 ;; Description: Extensions to `thingatpt.el'.
 ;; Author: Drew Adams
 ;; Maintainer: Drew Adams
-;; Copyright (C) 1996-2007, Drew Adams, all rights reserved.
+;; Copyright (C) 1996-2008, Drew Adams, all rights reserved.
 ;; Created: Tue Feb 13 16:47:45 1996
 ;; Version: 21.0
-;; Last-Updated: Thu Jul 26 13:11:10 2007 (-25200 Pacific Daylight Time)
+;; Last-Updated: Tue Jan 01 13:58:55 2008 (-28800 Pacific Standard Time)
 ;;           By: dradams
-;;     Update #: 811
+;;     Update #: 813
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/thingatpt+.el
 ;; Keywords: extensions, matching, mouse
 ;; Compatibility: GNU Emacs 20.x, GNU Emacs 21.x, GNU Emacs 22.x
@@ -360,9 +360,9 @@ Optional arguments:
   PRED is a predicate that THING must satisfy to qualify.
   SYNTAX-TABLE is a syntax table to use."
   (let ((sexp (condition-case nil
-		  (read-from-whole-string (thing-at-point (or thing 'sexp)
+                  (read-from-whole-string (thing-at-point (or thing 'sexp)
                                                           syntax-table))
-		(error nil))))
+                (error nil))))
     (if (or (not pred) (funcall pred sexp)) sexp)))
 
 ;;;###autoload

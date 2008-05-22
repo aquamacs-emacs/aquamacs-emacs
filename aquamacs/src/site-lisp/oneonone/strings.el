@@ -4,12 +4,12 @@
 ;; Description: Miscellaneous string functions.
 ;; Author: Drew Adams
 ;; Maintainer: Drew Adams
-;; Copyright (C) 1996-2007, Drew Adams, all rights reserved.
+;; Copyright (C) 1996-2008, Drew Adams, all rights reserved.
 ;; Created: Tue Mar  5 17:09:08 1996
 ;; Version: 21.0
-;; Last-Updated: Fri Apr 20 10:14:08 2007 (-25200 Pacific Daylight Time)
+;; Last-Updated: Mon May 12 10:28:17 2008 (Pacific Daylight Time)
 ;;           By: dradams
-;;     Update #: 465
+;;     Update #: 472
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/strings.el
 ;; Keywords: internal, strings, text
 ;; Compatibility: GNU Emacs 20.x, GNU Emacs 21.x, GNU Emacs 22.x
@@ -64,6 +64,8 @@
 ;;
 ;;; Change log:
 ;;
+;; 2008/05/12 dadams
+;;     read-buffer: Don't use (buffer-alist t) - don't exclude hidden buffers.
 ;; 2007/04/20 dadams
 ;;     read-number: Updated for Emacs 22.
 ;; 2006/08/22 dadams
@@ -475,10 +477,10 @@ Non-nil EXISTING means to allow only names of existing buffers."
   ;; Need a string as default.
   (when (bufferp default) (setq default (buffer-name default)))
   (unless (stringp default)
-    (error
-     "Function `read-buffer': DEFAULT arg is not a live buffer or a string"))
-  (completing-read prompt (buffer-alist t) nil existing nil
-                   'minibuffer-history default t))
+    (error "Function `read-buffer': DEFAULT arg is not a live buffer or a string"))
+  (completing-read
+   prompt (mapcar (lambda (b) (list (buffer-name b))) (buffer-list))
+   nil existing nil 'minibuffer-history default t))
 
 ;;;###autoload
 (defun buffer-alist (&optional nospacep)

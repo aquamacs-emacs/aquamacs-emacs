@@ -4,12 +4,12 @@
 ;; Description: Extensions to `icomplete.el'.
 ;; Author: Drew Adams
 ;; Maintainer: Drew Adams
-;; Copyright (C) 1996-2007, Drew Adams, all rights reserved.
+;; Copyright (C) 1996-2008, Drew Adams, all rights reserved.
 ;; Created: Mon Oct 16 13:33:18 1995
 ;; Version: 21.0
-;; Last-Updated: Fri Jan 19 21:13:44 2007 (-28800 Pacific Standard Time)
+;; Last-Updated: Tue Jan 01 14:05:56 2008 (-28800 Pacific Standard Time)
 ;;           By: dradams
-;;     Update #: 635
+;;     Update #: 639
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/icomplete+.el
 ;; Keywords: help, abbrev, internal, extensions, local
 ;; Compatibility: GNU Emacs 20.x, GNU Emacs 21.x, GNU Emacs 22.x
@@ -197,14 +197,13 @@ See `icomplete-mode' and `minibuffer-setup-hook'."
              (buffer-undo-list t))
         (save-excursion
           (goto-char (point-max))
-                                        ; Register the end of input, so we
-                                        ; know where the extra stuff
-                                        ; (match-status info) begins:
+          ;; Register the end of input, so we know where the extra stuff
+          ;; (match-status info) begins:
           (unless (boundp 'icomplete-eoinput)
             ;; In case it got wiped out by major mode business:
             (make-local-variable 'icomplete-eoinput))
           (setq icomplete-eoinput (point))
-                                        ; Insert the match-status information:
+          ;; Insert the match-status information:
           (when (and (or(not (boundp 'icicle-apropos-completing-p))
                         (not icicle-apropos-completing-p))
                      (> (point-max) minibuf-begin)
@@ -288,7 +287,7 @@ following the rest of the icomplete info:
                                "\t%sNo matches%s")
                              open-bracket-determined
                              close-bracket-determined)
-      (let* ((most-try (try-completion name (mapcar (function list) comps)))
+      (let* ((most-try (try-completion name (mapcar #'list comps)))
              (most (if (stringp most-try) most-try (car comps)))
              (most-len (length most))
              (determ (and (> most-len (length name))
