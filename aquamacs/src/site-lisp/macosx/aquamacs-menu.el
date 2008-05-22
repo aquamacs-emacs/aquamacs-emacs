@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.148 2008/05/22 21:39:14 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.149 2008/05/22 21:56:22 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -939,7 +939,7 @@ both existing buffers and buffers that you subsequently create."
 			   (menu-bar-non-minibuffer-window-p))
 	      :help "Split selected window in two"))
 (define-key menu-bar-file-menu [make-frame]
-  `(menu-item "Show Buffer in New Frame" make-frame-command
+  `(menu-item "Show Buffer in New Frame " make-frame-command
 	      :visible (fboundp 'make-frame-command)
 	      ;; no key: use standard notation
 	      :enable (menu-bar-menu-frame-live-and-visible-p)
