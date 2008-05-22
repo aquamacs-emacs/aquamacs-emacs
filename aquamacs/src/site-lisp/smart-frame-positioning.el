@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.54 2008/05/22 11:03:04 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.55 2008/05/22 21:39:54 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -340,10 +340,11 @@ pixels apart if possible."
 		(when (and next-y 
 			   (> (+ 25 next-y 
 				 smart-fp--frame-title-bar-height
-				 (smart-tool-bar-pixel-height f) next-h) max-y))
+				 (smart-tool-bar-pixel-height new-frame)
+				 next-h) max-y))
 		  (setq next-h (- max-y 
 				  next-y 
-				  (smart-tool-bar-pixel-height f) 
+				  (smart-tool-bar-pixel-height new-frame) 
 				  smart-fp--frame-title-bar-height
 				  25)))
 		(assq-set 'left next-x 'new-frame-parameters)
