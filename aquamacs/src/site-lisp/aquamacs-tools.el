@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.32 2008/05/15 12:01:44 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.33 2008/05/22 21:30:35 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -419,9 +419,11 @@ Optional CODING is used for encoding coding-system."
    (replace-regexp-in-string "-mode" "" (symbol-name mode))))
 
 ;; apple command character is unicode x2318  
-;; 
+;;  (aq-describe-modifier 'hyper)
 (defun aq-describe-modifier (mod)
   ;; translate modifier
+  (if (eq mod 'ctrl)
+      (setq mod 'control))
   (or
   (cond
    ((and (boundp 'mac-command-modifier) (eq mac-command-modifier mod))
@@ -429,7 +431,7 @@ Optional CODING is used for encoding coding-system."
    ((and (boundp 'mac-option-modifier) (eq (or mac-option-modifier 'alt)
 					   mod))
     (string (decode-char 'ucs #X2325)))
-   ((and (boundp 'mac-control-modifier) (eq (or mac-control-modifier 'ctrl) 
+   ((and (boundp 'mac-control-modifier) (eq (or mac-control-modifier 'control) 
 					    mod))
     (string (decode-char 'ucs #X2303)))
    ((eq mod 'shift)
@@ -510,7 +512,7 @@ Optional CODING is used for encoding coding-system."
     ;; not osx-key-mode
     (apply (function format) text more-args)))
 	  
-
+; (aq-binding 'make-frame-command)
 (defun aq-binding (symbol)
    (condition-case err
   (let* ((case-fold-search nil)
