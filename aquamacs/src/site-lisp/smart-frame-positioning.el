@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.53 2008/05/13 17:12:48 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.54 2008/05/22 11:03:04 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -151,8 +151,7 @@ should be used as the interface to this function."
       (save-excursion
 	(select-window (frame-first-window f))
 	(set-buffer (window-buffer (selected-window)))
-	(setq fill-column 50)
-	(run-hooks 'window-configuration-change-hook)))
+	  (run-hooks 'window-configuration-change-hook)))
     (unless  (and (assq 'visibility parameters)
 		  (eq (cdr (assq 'visibility parameters)) nil))
       (make-frame-visible f))
