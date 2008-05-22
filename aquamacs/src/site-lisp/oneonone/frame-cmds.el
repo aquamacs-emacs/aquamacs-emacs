@@ -4,12 +4,12 @@
 ;; Description: Frame and window commands (interactive functions).
 ;; Author: Drew Adams
 ;; Maintainer: Drew Adams
-;; Copyright (C) 1996-2007, Drew Adams, all rights reserved.
+;; Copyright (C) 1996-2008, Drew Adams, all rights reserved.
 ;; Created: Tue Mar  5 16:30:45 1996
 ;; Version: 21.0
-;; Last-Updated: Sun Sep 02 11:19:14 2007 (-25200 Pacific Daylight Time)
+;; Last-Updated: Tue Jan 01 18:44:16 2008 (-28800 Pacific Standard Time)
 ;;           By: dradams
-;;     Update #: 2194
+;;     Update #: 2262
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/frame-cmds.el
 ;; Keywords: internal, extensions, mouse, frames, windows, convenience
 ;; Compatibility: GNU Emacs 20.x, GNU Emacs 21.x, GNU Emacs 22.x
@@ -84,7 +84,7 @@
 ;;    `frame-parameters-to-exclude',
 ;;    `move-frame-wrap-within-display-flag'
 ;;    `rename-frame-when-iconify-flag', `show-hide-show-function',
-;;    `window-mgr-title-bar-pixel-width'.
+;;    `window-mgr-title-bar-pixel-height'.
 ;;
 ;;  Commands defined here:
 ;;
@@ -108,11 +108,11 @@
 ;;
 ;;  Non-interactive functions defined here:
 ;;
-;;    `available-screen-pixel-height', `available-screen-pixel-width',
-;;    `enlarged-font-name', `frame-alist-var-names',
-;;    `frame-iconified-p', `frame-parameter-names',
-;;    `new-frame-position', `read-args-for-tile-frames',
-;;    `read-buffer-for-delete-windows'.
+;;    `assq-delete-all' (Emacs 20), `available-screen-pixel-height',
+;;    `available-screen-pixel-width', `enlarged-font-name',
+;;    `frame-alist-var-names', `frame-iconified-p',
+;;    `frame-parameter-names', `new-frame-position',
+;;    `read-args-for-tile-frames', `read-buffer-for-delete-windows'.
 ;;
 ;;
 ;;
@@ -204,6 +204,14 @@
 ;;
 ;;; Change log:
 ;;
+;; 2007/12/27 dadams
+;;      tile-frames: Restored border calculation, but using only external border.
+;;      Renamed window-mgr-*-width to window-mgr-*-height and changed default value from 32 to 27.
+;; 2007/12/20 dadams
+;;      Added: frame-extra-pixels(width|height).  Use in tile-frames.  Thx to David Reitter.
+;;      frame-horizontal-extra-pixels: Changed default value from 30 to 32.
+;; 2007/10/11 dadams
+;;      Added: assq-delete-all (for Emacs 20).
 ;; 2007/09/02 dadams
 ;;      Added: available-screen-pixel-(width|height).  Use in tile-frames, new-frame-position.
 ;; 2007/06/12 dadams
@@ -401,12 +409,14 @@ The new name is the name of the current buffer."
   "*Function to show stuff that is hidden or iconified by `show-hide'.
 Candidates include `jump-to-frame-config-register' and `show-buffer-menu'."
   :type '(choice (const :tag "Restore frame configuration" jump-to-frame-config-register)
-		 (function :tag "Another function"))
+                 (function :tag "Another function"))
   :group 'Frame-Commands)
 
-(defcustom window-mgr-title-bar-pixel-width 30
-  "*Width of frame title bar provided by the window manager, in pixels.
-There is no way for Emacs to determine this, so you must set it."
+(defcustom window-mgr-title-bar-pixel-height 27
+  "*Height of frame title bar provided by the window manager, in pixels.
+You might alternatively call this constant the title-bar \"width\" or
+\"thickness\".  There is no way for Emacs to determine this, so you
+must set it."
   :type 'integer :group 'Frame-Commands)
 
 (defcustom enlarge-font-tries 100
@@ -877,11 +887,11 @@ frames (except a standalone minibuffer frame, if any)."
              (filtered-frame-list       ; Get visible frames, except minibuffer.
               (function
                (lambda (fr)
-                 (and (eq t (frame-visible-p fr))
-                      (or (not (fboundp 'thumbnail-frame-p)) (not (thumbnail-frame-p fr)))
-                      (or (not (boundp '1on1-minibuffer-frame))
-                          (not (eq (cdr (assq 'name (frame-parameters 1on1-minibuffer-frame)))
-                                   (cdr (assq 'name (frame-parameters fr))))))))))))
+                (and (eq t (frame-visible-p fr))
+                     (or (not (fboundp 'thumbnail-frame-p)) (not (thumbnail-frame-p fr)))
+                     (or (not (boundp '1on1-minibuffer-frame))
+                         (not (eq (cdr (assq 'name (frame-parameters 1on1-minibuffer-frame)))
+                                  (cdr (assq 'name (frame-parameters fr))))))))))))
         ;; Size of a frame that uses all of the available screen area,
         ;; but leaving room for a minibuffer frame at bottom of display.
         (fr-pixel-width (available-screen-pixel-width))
@@ -894,20 +904,31 @@ frames (except a standalone minibuffer frame, if any)."
       (vertical   (setq fr-pixel-height (/ fr-pixel-height (length visible-frames))))
       (otherwise (error "Function tile-frames: DIRECTION must be `horizontal' or `vertical'")))
     (dolist (fr visible-frames)
-      (set-frame-size
+      ;; $$$$$$ (let ((borders (* 2 (+ (cdr (assq 'border-width (frame-parameters fr)))
+      ;;                               (cdr (assq 'internal-border-width (frame-parameters fr)))))))
+      (let ((borders (* 2 (cdr (assq 'border-width (frame-parameters fr))))))
+        (set-frame-size
          fr
-         (/ (- fr-pixel-width           ; Subtract borders & scroll bars.
-               (frame-horizontal-extras (selected-frame)))
-            (frame-char-width fr))      ; Divide by # pixels/char.
-         (- (/ (- fr-pixel-height       ; Subtract borders, scroll bars, & title bar.
-                  (frame-vertical-extras (selected-frame)))
-               (frame-char-height fr))  ; Divide by # pixels/line.
-            (cdr (assq 'menu-bar-lines (frame-parameters fr)))))
+         ;; Subtract borders, scroll bars, & title bar, then convert pixel sizes to char sizes.
+         (/ (- fr-pixel-width borders (frame-extra-pixels-width fr))
+            (frame-char-width fr))
+         (- (/ (- fr-pixel-height borders (frame-extra-pixels-height fr)
+                  window-mgr-title-bar-pixel-height)
+               (frame-char-height fr))
+            (cdr (assq 'menu-bar-lines (frame-parameters fr)))))) ; Subtract `menu-bar-lines'.
       (set-frame-position fr
                           (if (eq direction 'horizontal) fr-origin 0)
                           (if (eq direction 'horizontal) 0 fr-origin))
       (show-frame fr)
       (incf fr-origin (if (eq direction 'horizontal) fr-pixel-width fr-pixel-height)))))
+
+(defun frame-extra-pixels-width (frame)
+  "Pixel difference between FRAME total width and its text area width."
+  (- (frame-pixel-width frame) (* (frame-char-width frame) (frame-width frame))))
+
+(defun frame-extra-pixels-height (frame)
+  "Pixel difference between FRAME total height and its text area height."
+  (- (frame-pixel-height frame) (* (frame-char-height frame) (frame-height frame))))
 
 (defun read-args-for-tile-frames ()
   "Read arguments for `tile-frames'."
@@ -1108,6 +1129,20 @@ whose value is an alist of frame parameters."
   (set alist (assq-delete-all parameter (copy-alist (eval alist))))
   (set alist (cons (assq parameter (frame-parameters frame)) (eval alist)))
   (tell-customize-var-has-changed alist))
+
+;;; Standard Emacs 21+ function, defined here for Emacs 20.
+(unless (fboundp 'assq-delete-all)
+  (defun assq-delete-all (key alist)
+    "Delete from ALIST all elements whose car is `eq' to KEY.
+Return the modified alist.
+Elements of ALIST that are not conses are ignored."
+    (while (and (consp (car alist)) (eq (car (car alist)) key)) (setq alist (cdr alist)))
+    (let ((tail alist) tail-cdr)
+      (while (setq tail-cdr (cdr tail))
+        (if (and (consp (car tail-cdr)) (eq (car (car tail-cdr)) key))
+            (setcdr tail (cdr tail-cdr))
+          (setq tail tail-cdr))))
+    alist))
 
 ;;;###autoload
 (defun set-all-frame-alist-parameters-from-frame (alist &optional frame really-all-p)

@@ -4,12 +4,12 @@
 ;; Description: Non-interactive frame and window functions.
 ;; Author: Drew Adams
 ;; Maintainer: Drew Adams
-;; Copyright (C) 1996-2007, Drew Adams, all rights reserved.
+;; Copyright (C) 1996-2008, Drew Adams, all rights reserved.
 ;; Created: Tue Mar  5 16:15:50 1996
 ;; Version: 21.1
-;; Last-Updated: Fri Jan 19 21:05:31 2007 (-28800 Pacific Standard Time)
+;; Last-Updated: Sat Apr  5 10:30:11 2008 (Pacific Daylight Time)
 ;;           By: dradams
-;;     Update #: 170
+;;     Update #: 183
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/frame-fns.el
 ;; Keywords: internal, extensions, local, frames
 ;; Compatibility: GNU Emacs 20.x, GNU Emacs 21.x, GNU Emacs 22.x
@@ -36,6 +36,8 @@
 ;;
 ;;; Change log:
 ;;
+;; 2008/04/05 dadams
+;;     get-a-frame: Define without using member-if.
 ;; 2005/10/31 dadams
 ;;     read-frame: Swapped default and init values in call to completing-read.
 ;; 2004/11/26 dadams
@@ -69,8 +71,7 @@
 ;;
 ;;; Code:
 
-(eval-when-compile (require 'cl)) ;; member-if
-                                  ;; (plus, for Emacs 20: dolist, push
+(eval-when-compile (require 'cl)) ;; (plus, for Emacs 20: dolist, push
                                   ;;  and, for Emacs <20: cadr, when, unless)
 (require 'avoid nil t) ;; mouse-avoidance-point-position
 
@@ -236,9 +237,11 @@ If none, return nil.
 If FRAME is a frame, it is returned."
   (cond ((framep frame) frame)
         ((stringp frame)
-         (car (member-if
-               (function (lambda (fr) (string= frame (get-frame-name fr))))
-               (frame-list))))
+         (catch 'get-a-frame-found
+           (dolist (fr (frame-list))
+             (when (string= frame (get-frame-name fr))
+               (throw 'get-a-frame-found fr)))
+           nil))
         (t
          (error
           "Function `get-frame-name': Arg neither a string nor a frame: `%s'"
@@ -299,15 +302,6 @@ The optional FRAME argument is as for function `get-buffer-window'."
             (when (not (one-window-p t fr)) (push fr frs))))))
     frs))
 
-
-(defun frame-vertical-extras (frame)
-  "Return the pizel size of a frame's vertical offset from char height."
-  (- (frame-pixel-height frame) (* (frame-char-height frame) (frame-height frame))))
-(defun frame-horizontal-extras (frame)
-  "Return the pizel size of a frame's horizontal offset from char width."
-  (- (frame-pixel-width frame) (* (frame-char-width frame) (frame-width frame))))
-
-
 ;;;###autoload
 (defun flash-ding (&optional do-not-terminate frame)
   "Ring bell (`ding'), after flashing FRAME (default: current), if relevant.
@@ -317,7 +311,7 @@ Terminates any keyboard macro executing, unless arg DO-NOT-TERMINATE non-nil."
     (let ((visible-bell t))             ; Flash.
       (ding do-not-terminate)))
   (let ((visible-bell nil))
-    (ding do-not-terminate)))		; Bell.
+    (ding do-not-terminate)))           ; Bell.
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 
