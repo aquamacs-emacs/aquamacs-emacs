@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Changes--CVS</TITLE>
-<META NAME="description" CONTENT="Changes--CVS">
+<TITLE>Changes--1.4rc1</TITLE>
+<META NAME="description" CONTENT="Changes--1.4rc1">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -57,7 +57,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION000141000000000000000">
-Changes--CVS</A>
+Changes--1.4rc1</A>
 </H2>
 
 <P>
@@ -68,7 +68,13 @@ Concept and Code by Nathaniel Cunningham, David&nbsp;Ponce and David Reitter.
 
 <P>
 </LI>
-<LI><B>``Frame Styles'' are turned off</B> by default now.  This means that there are no major mode specific settings (fonts, colors) unless the styles are turned back on (Options menu).  
+<LI><B>``Frame Styles'' are turned off</B> by default now.  This
+  means that there are no major mode specific settings (fonts, colors)
+  unless the styles are turned back on (Options menu).   
+  There is a new ``Clear All Styles'' menu item, and
+  the wording has been improved.  There should be less flicker when
+  switching buffers. The frame size and position are not changed,
+  even if the frame leaves the screen.
 
 <P>
 </LI>
@@ -89,7 +95,7 @@ Code by Joel Stanley and David Reitter.
 
 <P>
 </LI>
-<LI>The position (and height and width) of the (main) frame is now persistent across sessions. (Customize `initial-frame-alist' as documented to open the first frame somewhere else.)
+<LI>The position (and height and width) of the (main) frame is now persistent across sessions.  (Customize `initial-frame-alist' as documented to open the first frame somewhere else.)  `default-frame-alist' settings for the frame position and extent of subsequent frames are now respected by default.  Aquamacs will not, however, open frames off the screen.
 
 <P>
 </LI>
@@ -138,6 +144,22 @@ Code by Ralf Angeli, David Kastrup and others.
 
 <P>
 </LI>
+<LI>Searching with Apple-F and Apple-G (isearch) is now more
+  comfortable: it will not normally extend a region (unless started
+  with C-Space). Apple-G (repeat the search) will always set the mark
+  to the beginning of the match so that the region captures the match.
+  This allows users to replace the text of the match with something
+  else easily. 
+
+<P>
+</LI>
+<LI>When the mark is set with C-Space, it is more persistent than
+  before: clicking somewhere will not disable it, but extend the
+  region, just like moving the point with arrow keys (and other
+  movement keys) would do.
+
+<P>
+</LI>
 <LI>LaTeX mode comes with more appropriate icons now.
 
 <P>
@@ -151,11 +173,30 @@ Code by Xavier Maillard and Jonadab the Unsightly One.
 
 <P>
 </LI>
+<LI>The mode line (at the bottom of each frame) now uses the
+  system's standard font.
+
+<P>
+</LI>
 <LI>C-backspace deletes a whole file name (i.e., one part of a path) instead of just a word in the minibuffer when a file is selected.
 
 <P>
 </LI>
 <LI>M-e (forward-sentence) and M-a (backward-sentence) do the right thing now even if the text does not have two spaces after each sentence. (`sentence-end-double-space' is now nil by default.)
+
+<P>
+</LI>
+<LI>Apple-F and Apple-G (search, repeat the search) will now mark
+  the found text as region as is standard. 
+
+<P>
+</LI>
+<LI>Apple-V can now me used immediately after entering isearch (Apple-F) in order to look for the text stored in the pasteboard.
+Suggested by Nathaniel Cunningham.
+
+<P>
+</LI>
+<LI>Apple-2 (split window) will now select the newly created window. 
 
 <P>
 </LI>
@@ -171,15 +212,29 @@ Code by Xavier Maillard and Jonadab the Unsightly One.
 
 <P>
 </LI>
-<LI>``Search'' toolbar item is not shown by default. ``History'' and ``Redo'' items are shown by default. 
+<LI>``Search'' toolbar item is not shown by default. ``History'' and
+  ``Redo'' items are shown by default. (Use the Options / Show/Hide /
+  Toolbar menu to configure.)
 
 <P>
 </LI>
-<LI>Frame Styles: there is a new ``Clear All Styles'' menu item, and the wording has been improved.
+<LI>The context menu now allows to ``search on this Mac'' with Spotlight (on OS X 10.4 or newer).
+
+<P>
+</LI>
+<LI>Font settings for a frame do not affect the mode-line any
+  longer. You can M-x customize-face mode-line, specifying a standard
+  OS X font as ``Font family'' (such as Monaco). 
 
 <P>
 </LI>
 <LI>Files are loaded (visited) a little faster now.  `default-major-mode' now defaults to `fundamental-mode' rather than `text-mode', which should have no practical consequences apart from the speed-up. 
+
+<P>
+</LI>
+<LI>User-supplied settings of  `fill-column' should now be respected
+  (used for hard word wrapping as enabled in the Options menu).
+Reported by Ivan Werning.
 
 <P>
 </LI>
@@ -216,7 +271,7 @@ Code by Xavier Maillard and Jonadab the Unsightly One.
 <!--End of Navigation Panel-->
 <ADDRESS>
 <I>David</I>
-<BR><I>2008-05-04</I>
+<BR><I>2008-05-23</I>
 </ADDRESS>
 </BODY>
 </HTML>
