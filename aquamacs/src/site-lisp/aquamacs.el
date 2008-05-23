@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.174 2008/05/22 11:53:24 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.175 2008/05/23 15:01:37 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -68,7 +68,8 @@ Separate paths from file names with --."
   (defun recentf-clearlist ()
     "Remove all files from the recent list."
     (interactive)
-    (setq recentf-list ()))
+    (setq recentf-list ())
+    (setq file-name-history ()))
 
 
   ;; make sure there are no old customizations around
@@ -386,8 +387,11 @@ No errors are signaled."
 	  (setq buffer-undo-list nil)
 	  (setq buffer-file-name aquamacs-scratch-file)
 	  (setq buffer-offer-save nil)	
-	  (let ((auto-save-visited-file-name t))
-	    (auto-save-mode 1))
+	  (set (make-local-variable 'auto-save-visited-file-name) t)
+	  (auto-save-mode 1)
+	  (aquamacs-set-defaults 
+	   `((recentf-exclude ,(append (list 
+					(expand-file-name aquamacs-scratch-file)) recentf-exclude))))
 	  ;; make auto save file name permanent without a
 	  ;; global auto-save-visited-file-name setting
 	  ;; (in case the user saves *scratch* somewhere else, we will
