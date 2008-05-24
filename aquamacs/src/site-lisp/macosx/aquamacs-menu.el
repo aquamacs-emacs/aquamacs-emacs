@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.149 2008/05/22 21:56:22 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.150 2008/05/24 12:12:29 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -819,23 +819,30 @@ both existing buffers and buffers that you subsequently create."
 
 ;; HELP MENU
 
-(define-key menu-bar-manuals-menu [emacs-lisp-reference]
-  '(menu-item "Emacs Lisp Reference (Info)" menu-bar-read-lispref
-	      :help "Read the Emacs Lisp Reference manual"))
+
+;; About entry is now in application menu
+(easy-menu-remove-item global-map  '("menu-bar" "Help") 'about)
+
+(easy-menu-add-item  nil '("Help")
+  (vector  "Subscribe to Mailing List..."  'emacsosx-mailing-list-subscribe) 'emacs-tutorial)
+(easy-menu-add-item  nil '("Help")
+  (vector  "Make a Donation for Aquamacs..."  'aquamacs-donate) 'emacs-tutorial)
+(easy-menu-add-item  nil '("Help")
+  (vector "-" nil nil) 'emacs-tutorial)
+(easy-menu-add-item  nil '("Help")
+  (vector "Emacs Wiki Online" 'emacs-user-wiki) 'emacs-tutorial)
+  
 
 (define-key menu-bar-manuals-menu [aquamacs-elisp]
   '(menu-item "Emacs Lisp Reference" aquamacs-elisp-reference
 	      :help "Read the Emacs Lisp Reference manual"))
+
 (define-key menu-bar-manuals-menu [emac-lisp-intro]
   '(menu-item "Introduction to Emacs Lisp (Info)" menu-bar-read-lispintro
 	      :help "Read the Introduction to Emacs Lisp Programming"))
 
-(define-key menu-bar-help-menu [emacs-manual]
-  '(menu-item "Read the Emacs Manual (Info)" info-emacs-manual
-	      :help "Full documentation of Emacs features"))
-
 (define-key menu-bar-help-menu [menu-aquamacs-help]
-  `(menu-item "Aquamacs Help                     " 
+  `(menu-item "Aquamacs Help                            " 
 	      aquamacs-user-help
 	      :keys ,(aq-binding 'aquamacs-user-help)
 	      :help "Show Aquamacs Manual in Apple Help"))
@@ -849,18 +856,18 @@ both existing buffers and buffers that you subsequently create."
 
 
 (define-key-after menu-bar-help-menu [menu-aquamacs-homepage]
-  `(menu-item "Aquamacs Homepage                       " 
+  `(menu-item "Aquamacs Homepage                              " 
 	      aquamacs-homepage
 	      :keys ,(aq-binding 'aquamacs-homepage)
 	      :help "Show Aquamacs Homepage")
   'menu-aquamacs-user-wiki)
 
 (define-key-after menu-bar-help-menu [menu-aquamacs-emacs-manual]
-  `(menu-item "Emacs Manual                       " 
+  `(menu-item "Emacs Manual                              " 
 	      aquamacs-emacs-manual
 	      :keys ,(aq-binding 'aquamacs-emacs-manual)
 	      :help "Show Emacs Manual in Apple Help")
-  'menu-aquamacs-homepage)
+  '-)
 
 ;; remove this entry, because new versions of Aquamacs are available
 ;; from the Aquamacs website, not from the FSF
@@ -873,6 +880,12 @@ both existing buffers and buffers that you subsequently create."
 (define-key menu-bar-help-menu [about-gnu-project]
     nil) ;; this is available from the general About screen
 (define-key menu-bar-help-menu [sep4]
+    nil)
+(define-key menu-bar-help-menu [emacs-problems]
+    nil)
+; these problems here are for X-based systems etc. and not relevant
+; for Aquamacs users
+(define-key menu-bar-help-menu [emacs-manual]
     nil)
 )
 
@@ -893,17 +906,10 @@ both existing buffers and buffers that you subsequently create."
 (easy-menu-remove-item global-map  '("menu-bar" "file") 'separator-exit)
 (easy-menu-remove-item global-map  '("menu-bar" "file") 'exit-emacs)
 
-;; About entry is now in application menu
-(easy-menu-remove-item global-map  '("menu-bar" "Help") 'about)
-
 ;; this is to set the action for the "Quit" function (Emacs menu)
 (global-set-key [mac-application-quit] 'save-buffers-kill-emacs)
  
 
-; these problems here are for X-based systems etc. and not relevant
-; for Aquamacs users
-(easy-menu-remove-item global-map  '("menu-bar" "Help") 'emacs-problems)
- 
      
 ;; Battery status is displayed in menu bar 
 ;; additional option for this is just confusing
@@ -1092,16 +1098,7 @@ that should be represented in the Aquamacs menus."
   (browse-url "http://www.emacswiki.org/")) 
 
 
-(easy-menu-add-item  nil '("Help")
-  (vector "Emacs Wiki Online" 'emacs-user-wiki) 'emacs-tutorial)
  
-(easy-menu-add-item  nil '("Help")
-  (vector  "Subscribe to Mailing List..."  'emacsosx-mailing-list-subscribe) 'emacs-tutorial)
-(easy-menu-add-item  nil '("Help")
-  (vector  "Make a Donation for Aquamacs..."  'aquamacs-donate) 'emacs-tutorial)
-(easy-menu-add-item  nil '("Help")
-  ["-" nil nil] 'emacs-tutorial)
-  
 
 ;; workarounds for current bugs
 
