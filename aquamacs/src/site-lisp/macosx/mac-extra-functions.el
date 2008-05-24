@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.62 2008/05/01 13:49:52 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.63 2008/05/24 11:58:56 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -46,8 +46,6 @@
 
 (defun aquamacs-delete-temp-url-files ()
   (shell-command "rm -f /tmp/aquamacs-* 2>/dev/null" 'shut-up))
-
- 
 
 
 (defun browse-url-default-macosx-browser-via-redirection (url &optional new-window)
@@ -436,12 +434,10 @@ specified in `shell-file-name'."
 	(error nil))
       (aq-run-python-command
        (concat "from Carbon import AH; AH.AHRegisterHelpBook('" 
-		 aquamacs-mac-application-bundle-directory "')"))
-    ; else
+	       aquamacs-mac-application-bundle-directory "')"))
+    ;; else
     (message "Could not register Manual.
-Aquamacs Emacs.app may have been moved or renamed. Please restart Aquamacs!")
-  )
-)
+Aquamacs Emacs.app may have been moved or renamed. Please restart Aquamacs!")))
 
 ;; install start script
 
@@ -462,39 +458,33 @@ Aquamacs Emacs.app may have been moved or renamed. Please restart Aquamacs!")
 
 ;; ))
   
-
+(defun aq-show-help-file (file &optional book)
+  (aquamacs-init-user-help) ; make sure it's registered
+  (if file
+      (and
+       (aq-run-python-command
+	(format "from Carbon import AH; AH.AHGotoPage(None, '%s/Contents/Resources/%s/%s', None)" 
+		aquamacs-mac-application-bundle-directory		      
+		(or book "Aquamacs Help")
+		file))
+       (message "Sorry, change log unavailable (python, OS problem?)"))
+    (message "Sorry, change log unavailable (not found)")))
 
 ; Call up help book
 (defun aquamacs-user-help ()
+  "Show the Aquamacs Help."
   (interactive)
+  (aq-show-help-file "index.html"))
 
-  (aquamacs-init-user-help) ; make sure it's registered
-  
-  (and (aq-run-python-command
-   "from Carbon import AH; AH.AHGotoPage('Aquamacs Help', None, None)")
-      (message "Sorry, help function unavailable (python, OS problem?)")
-  )
-)
 (defun aquamacs-emacs-manual ()
+  "Show the Emacs Manual"
   (interactive)
+  (aq-show-help-file "index.html" "Emacs Manual"))
 
-  (aquamacs-init-user-help) ; make sure it's registered
- 
-  (and (aq-run-python-command
-   "from Carbon import AH; AH.AHGotoPage('Emacs Manual', None, None)")
-      (message "Sorry, help function unavailable (python, OS problem?)")
-  )
-)
 (defun aquamacs-elisp-reference ()
   (interactive)
+  (aq-show-help-file "index.html" "Emacs Lisp Reference"))
 
-  (aquamacs-init-user-help) ; make sure it's registered
- 
-  (and (aq-run-python-command
-   "from Carbon import AH; AH.AHGotoPage('Emacs Lisp Reference', None, None)")
-      (message "Sorry, help function unavailable (python, OS problem?)")
-  )
-) 
 
 ;; it's imporant to make sure that the following are in the Info.plist file:
 ;; 	<key>CFBundleHelpBookFolder</key>
@@ -516,24 +506,18 @@ Aquamacs Emacs.app may have been moved or renamed. Please restart Aquamacs!")
 (defun aquamacs-show-change-log ()
   (interactive)
   (aquamacs-init-user-help) ; make sure it's registered
-;; check node1.html
-;; relativ complex check because of bug in 10.5.2 that causes crashes
-;; when we use a symlinked file.
+  ;; check node1.html
+  ;; relativ complex check because of bug in 10.5.2 that causes crashes
+  ;; when we use a symlinked file.
   (let ((change-log-file
 	 (with-temp-buffer
-	   ;; extract language names selected in Spelling prefpane
 	   (insert-file-contents (format "%s/Contents/Resources/Aquamacs Help/node1.html" 
 					 aquamacs-mac-application-bundle-directory))
-	   ;; move point to just before first language name
 	   (let ((case-fold-search t))
 	     (re-search-forward "HREF=\"\\(node[0-9]+.html\\)\">\s*Changes")
 	     (match-string 1)))))
-    
-    (if change-log-file
-	(and (aq-run-python-command
-	      (format "from Carbon import AH; AH.AHGotoPage('Aquamacs Help', '%s', None)" change-log-file))
-	     (message "Sorry, change log unavailable (python, OS problem?)"))
-      (message "Sorry, change log unavailable (not found)"))))
+    (aq-show-help-file change-log-file)))
+
 
 (provide 'mac-extra-functions)
 
