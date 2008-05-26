@@ -7,11 +7,26 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: aquamacs-tabbar.el,v 1.37 2008/05/19 13:42:55 champo Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.38 2008/05/26 11:15:35 davidswelt Exp $
 
 ;; load original tabbar-mode
 (require 'tabbar)
 (require 'aquamacs-tools)
+
+
+;; check version of tabbar
+(unless (and (boundp 'tabbar-version)
+	     (string< "1.9999" tabbar-version))
+  (message "Tabbar version too low. Uninstall %s." 
+	   (locate-library "tabbar"))
+  (let ((load-path (list default-directory)))
+    (load "tabbar/tabbar.el")))
+
+(when (and (boundp 'tabbar-version)
+	   (not (equal "2.0" tabbar-version)))
+  (message "Warning: possibly incompatible tabbar version installed in %s."
+	   (locate-library "tabbar")))
+
 
 ;; modify various settings:
 ;; eliminate gap between header-line and toolbar
@@ -208,13 +223,13 @@ if specified), in current window."
 
 (defun tabbar-move-current-buffer-to-new-frame ()
   (interactive)
-    (let* ((tab (tabbar-selected-tab (tabbar-current-tabset t)))
-	   (buffer (tabbar-tab-value tab))
-	   (wnumber (string-to-number (symbol-name (tabbar-tab-tabset tab))))
-	   (wind (window-number-get-window wnumber)))
-      (with-current-buffer buffer
+  (let* ((tab (tabbar-selected-tab (tabbar-current-tabset t)))
+	 (buffer (tabbar-tab-value tab))
+	 (wnumber (string-to-number (symbol-name (tabbar-tab-tabset tab))))
+	 (wind (window-number-get-window wnumber)))
+    (with-current-buffer buffer
 	(make-frame-command))
-      (with-selected-window wind
+    (with-selected-window wind
 	(tabbar-close-tab tab))))
 
 ;; keymap for tabbar context menu
