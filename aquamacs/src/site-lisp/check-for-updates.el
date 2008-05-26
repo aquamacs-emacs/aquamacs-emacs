@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs version check
  
-;; Last change: $Id: check-for-updates.el,v 1.24 2008/04/07 07:41:46 davidswelt Exp $
+;; Last change: $Id: check-for-updates.el,v 1.25 2008/05/26 11:27:52 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -187,9 +187,9 @@ and show user a message if there is."
 	  
       )
   
-    (if (string-match "beta"  aquamacs-version)
-	     (setq aquamacs-user-likes-beta 1)
-      )
+    (if (or (string-match "beta"  aquamacs-version)
+	    (string-match "rc"  aquamacs-version))
+	(setq aquamacs-user-likes-beta 1))
 
     ;; show "what's new" 
     (when (and (> previous-version 0)
