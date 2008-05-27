@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.55 2008/05/22 21:39:54 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.56 2008/05/27 07:14:15 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -103,33 +103,28 @@ May be used in `frame-creation-function' or
 should be used as the interface to this function."
   (let* ((newpos)
 	 (oldframe (selected-frame))
-	 ;; create the frame
+ 	 ;; create the frame
 	 (f (funcall smart-frame-positioning-old-frame-creation-function
-		     (append parameters '((visibility . nil) (left . 1)))))) 
+		     (append parameters '((visibility . nil) (left . 1))))))
     ;; left  . 1: frame creation bug workaround: bug #166
 
     ;; the frame creation function doesn't set all parameters
     ;; set the remaining ones manually
     ;; bug reported to pretest bug list 13/Jan/2006
-   ; (make-frame-visible f) ; DEBUG REMOVE MEEE!!!!
-    ;; (mapc (lambda (x)
-;; 	    (assq-delete-all (car x) newparms))
-;; 		 (frame-parameters f))
+    ;; was this ever fixe?
     ;; set remaining parameters
     (if parameters
 	(modify-frame-parameters f parameters))
-  
 
     (run-hook-with-args 'smart-frame-positioning-hook f)
-      
     (setq newpos (find-good-frame-position oldframe f))  
-    
-    (mapc (lambda (key)
-	    (if (assq key default-frame-alist)
-		(assq-set key 
-			  (cdr-safe (assq key default-frame-alist))
-			  'newpos)))
-	      '(left top width height))
+    (let ((overriding-parms (append parameters default-frame-alist)))
+      (mapc (lambda (key)
+	      (if (assq key overriding-parms)
+		  (assq-set key 
+			    (cdr-safe (assq key overriding-parms))
+			    'newpos)))
+	    '(left top width height)))
 
     (when (frame-parameter f 'fit-frame)
 	;; delete height and width - these parameters
@@ -144,6 +139,7 @@ should be used as the interface to this function."
     (setq newpos (assq-delete-all 'visibility newpos))
 
     (modify-frame-parameters f newpos)
+
     ;; stay within the available screen
     (smart-move-frame-inside-screen f)
     (when window-configuration-change-hook
@@ -424,8 +420,22 @@ can be customized to configure this mode."
   "Association list with buffer names and frame positions / sizes, so these
 can be remembered. This is part of Aquamacs Emacs.")
  
+(defvar smart-frame--initial-frame (selected-frame))
 (defun smart-fp--store-frame-position-for-buffer (f)
   "Store position of frame F associated with current buffer."
+
+  ;; if this is the first-ever frame (default frame), then
+  ;; save it as default for initial-frame-alist which is persistent
+  ;; other frames may be preferred in certain situations.
+
+  (when (eq f smart-frame--initial-frame)
+    (set-default 'initial-frame-alist
+	  (smart-fp--convert-negative-ordinates ( list 
+	    (cons 'left (eval (frame-parameter f 'left)))
+	    (cons 'top (eval (frame-parameter f 'top)))
+	    (cons 'width (frame-parameter f 'width))
+	    (cons 'height (frame-parameter f 'height))))))
+
   ;; (setq smart-frame-prior-positions nil)
   ;; don't store too many entries here
   (when (or buffer-file-number 
@@ -449,25 +459,32 @@ can be remembered. This is part of Aquamacs Emacs.")
   ;; choose the right frame
   ;; chose first frame that has no * in its name (i.e. avoid *Help* etc.)
 
-  (unless f
-    (let ((l (visible-frame-list)))
-      (while (car-safe l)
-	(let ((fr (car l)))
-	  (setq l (cdr l))
-	  (unless (or (frame-iconified-p fr)
-		      (string-match "\\*.*\\*" (get-frame-name fr)))
-	    (setq f fr)
-	    (setq l)))) f))
-  (unless f
-    (setq f (selected-frame)))
-  (when (frame-live-p f)
-    ;; this is meant to provide a default for initial-frame-alist later on
-    	(smart-fp--convert-negative-ordinates ( list 
-	    (cons 'left (eval (frame-parameter f 'left)))
-	    (cons 'top (eval (frame-parameter f 'top)))
-	    (cons 'width (frame-parameter f 'width))
-	    (cons 'height (frame-parameter f 'height))))))
   
+  (let ((the-f))
+    (setq f
+	  (cond
+	   (f)
+	   ;; prefer the size of the original frame
+	   ((frame-live-p smart-frame--initial-frame) ;; may be iconified
+	    smart-frame--initial-frame)
+	   ;; otherwise: exactly one frame visible?
+	   ((eq (let ((c 0))
+		  (mapc (lambda (fr)
+			  (when (and  (frame-live-p fr) (eq (frame-visible-p fr) t))
+			    (incf c) (setq f fr))) (frame-list)) c) 1)
+	    the-f)
+	   ;; otherwise: take original frame at deletion time
+	   ((default-value 'initial-frame-alist))
+	   (the-f) ;; the first visible frame
+	   (nil)))) ;; give up
+  (if f
+      (smart-fp--convert-negative-ordinates 
+       (list 
+	(cons 'left (eval (frame-parameter f 'left)))
+	(cons 'top (eval (frame-parameter f 'top)))
+	(cons 'width (frame-parameter f 'width))
+	(cons 'height (frame-parameter f 'height))))))
+
 (defvar smart-frame-keep-initial-frame-alist t
 "* Initialize `intial-frame-list' after startup from old frame position.
 If non-nil, the `intial-frame-list' will default to contain position, height
