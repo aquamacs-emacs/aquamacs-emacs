@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.64 2008/05/18 22:51:33 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.65 2008/05/27 08:54:03 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -162,6 +162,23 @@ To disable `one-buffer-one-frame-mode', call
 (defvar one-buffer-one-frame-inhibit nil
   "Enforce one-buffer-one-frame - should be set only temporarily.")
  
+(defcustom obof-same-window-buffer-names nil
+  "Like `same-window-buffer-names', but for `one-buffer-one-frame-mode'.
+This may be a list of names of buffers to be shown in the same window,
+as in `same-window-buffer-names'.
+It may also be set to the symbol `same-window-buffer-names', in which
+case the value of `same-window-buffer-names' is used."
+  :group 'Aquamacs
+  :group 'frames)
+
+(defcustom obof-same-window-regexps nil
+  "Like `same-window-regexps', but for `one-buffer-one-frame-mode'.
+This may be a list of regexps applying to names of buffers to 
+be shown in the same window, as in `same-window-regexps'.
+It may also be set to the symbol `same-window-regexps', in which
+case the value of `same-window-regexps' is used."
+  :group 'Aquamacs
+  :group 'frames)
 
 (defcustom obof-same-frame-regexps
   '(
@@ -253,6 +270,7 @@ This overrides entries in `obof-same-frame-regexps'."
     ;;(set (make-local-variable 'one-buffer-one-frame-inhibit)	   t) ;; no need?
     (set (make-local-variable 'obof-same-frame-regexps)	   `("\\`\\*Customiz.*\\*\\'" . ,obof-same-frame-regexps ))
     (set (make-local-variable 'same-window-regexps) `("\\`\\*Customiz.*\\*\\'" . ,same-window-regexps))
+    (set (make-local-variable 'obof-same-window-regexps) 'same-window-regexps)
     ;;     (set (make-local-variable 'display-buffer-function) 'display-buffer-in-same-window) ;; strong. not needed.
     (set (make-local-variable 'pop-up-windows ) nil) ;; this works for dired
     ;; this doesn't work very well
@@ -393,23 +411,30 @@ the current window is switched to the new buffer."
 	   ) t t)) ;; t = include-hidden-frame (must be t) 
       
     (if switch
-	(if (or (not (visible-frame-list))
-		(not (frame-visible-p (selected-frame)))
-		(open-in-other-frame-p (car args) t))
- 
-	    (progn
-	      (apply #'switch-to-buffer-other-frame args)
-	      (setq ad-return-value (current-buffer))
-	      ;; store the frame/buffer information
-	      (add-to-list 'aquamacs-newly-opened-frames 
-			   (cons (selected-window) (buffer-name)))) 
-	  ;; else : show in same frame
-	  (if (window-dedicated-p (selected-window))
-	      (progn 
-		(apply #'switch-to-buffer-other-window args)
-		(setq ad-return-value (current-buffer)))
-	    ;; else: show in same frame
-	    ad-do-it))
+	(let ((same-window-regexps 
+	       (if (eq obof-same-window-regexps 'same-window-regexps)
+		   same-window-regexps
+		 obof-same-window-regexps))
+	      (same-window-buffer-names 
+	       (if (eq obof-same-window-buffer-names 'same-window-buffer-names)
+		   same-window-buffer-names
+		 obof-same-window-buffer-names)))
+	  (if (or (not (visible-frame-list))
+		  (not (frame-visible-p (selected-frame)))
+		  (open-in-other-frame-p (car args) t))
+	      (progn
+		(apply #'switch-to-buffer-other-frame args)
+		(setq ad-return-value (current-buffer))
+		;; store the frame/buffer information
+		(add-to-list 'aquamacs-newly-opened-frames 
+			     (cons (selected-window) (buffer-name)))) 
+	    ;; else : show in same frame
+	    (if (window-dedicated-p (selected-window))
+		(progn 
+		  (apply #'switch-to-buffer-other-window args)
+		  (setq ad-return-value (current-buffer)))
+	      ;; else: show in same frame
+	      ad-do-it)))
       ;; else (don't switch, just activate another frame)
       ;; we need to do it here, because raise-frame / select frame are
       ;; ineffective from within walk-windows
@@ -558,7 +583,15 @@ the current window is switched to the new buffer."
 
 
 (defun aquamacs-display-buffer (&rest args)
-       (let ((display-buffer-function nil))
+  (let ((same-window-regexps 
+	 (if (eq obof-same-window-regexps 'same-window-regexps)
+	     same-window-regexps
+	   obof-same-window-regexps))
+	(same-window-buffer-names 
+	 (if (eq obof-same-window-buffer-names 'same-window-buffer-names)
+	     same-window-buffer-names
+	   obof-same-window-buffer-names))
+	(display-buffer-function nil))
 	 (if (and
 	      one-buffer-one-frame
 	      (open-in-other-frame-p (car args)))
@@ -614,10 +647,14 @@ even if it's the only visible frame."
     (old-delete-window (selected-window))))
 ;; old-delete-window is the original emacs delete-window.
 
-
 (defun delete-window-if-one-buffer-one-frame ()
   ;; only delete window when tabbar-mode is not on!
- (if (and one-buffer-one-frame (not (and (boundp 'tabbar-mode) tabbar-mode)))
+ (if (and one-buffer-one-frame (not (and (boundp 'tabbar-mode) tabbar-mode))
+	  (not (memq '(lambda ()
+			(condition-case nil
+			    (delete-window)
+			  (error nil))) kill-buffer-hook)))
+
       (delete-window-if-created-for-buffer)))
 
 (defun aquamacs-delete-frame (&optional frame)
