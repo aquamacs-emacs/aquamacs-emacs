@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.64 2008/05/30 09:22:20 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.65 2008/05/30 09:32:37 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -385,7 +385,7 @@ specified in `shell-file-name'."
 				 shell-command-switch
 				 "printenv"))))
 	  (accept-process-output prc 0 300)
-	  (delete-process prc))
+	  (delete-process prc)))
       (goto-char (point-min))
       (while (re-search-forward "^[A-Za-z_0-9]+=()\s*[^\x]*?
 \s*}\s*$" nil t)
