@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.63 2008/05/24 11:58:56 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.64 2008/05/30 09:22:20 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -350,6 +350,7 @@ This is relevant only for `mac-read-environment-vars-from-shell'.")
 	  (aq-flat-concat d)
 	nil))))
  
+;; (mac-read-environment-vars-from-shell)
 (defun mac-read-environment-vars-from-shell ()
 "Import the environment from the system's default login shell
 specified in `shell-file-name'."
@@ -357,8 +358,6 @@ specified in `shell-file-name'."
       ;; execute 'printenv' with the default login shell,
       ;; running the shell with -l (to load the environment)
       (setq default-directory "~/")	; ensure it can be executed
-      ;; To Do: use call-process instead -> this here
-      ;; will invoke two bashes
       
       (let ((shell-login-switch 
 	     (or shell-login-switch 
@@ -371,12 +370,22 @@ specified in `shell-file-name'."
 		     (message "Could not retrieve login shell environment with login shell: %s" shell-file-name)
 		   ;; won't work for csh, because it doesn't take -l -c ...
 		   ))))))
-		    
-	(call-process shell-file-name nil
-	       t nil
-	        shell-login-switch
-		shell-command-switch
-		"printenv"))
+	
+	;; this construction is intended to start bash
+	;; but use a timeout in case things go wrong.
+	;; this may address issues with path_helper program.
+	(let* ((process-connection-type nil)
+	       (prc
+		(if shell-login-switch
+		    (start-process "bash" (current-buffer) shell-file-name
+				   shell-login-switch
+				   shell-command-switch
+				   "printenv")
+		  (start-process "bash" (current-buffer) shell-file-name
+				 shell-command-switch
+				 "printenv"))))
+	  (accept-process-output prc 0 300)
+	  (delete-process prc))
       (goto-char (point-min))
       (while (re-search-forward "^[A-Za-z_0-9]+=()\s*[^\x]*?
 \s*}\s*$" nil t)
@@ -520,4 +529,3 @@ Aquamacs Emacs.app may have been moved or renamed. Please restart Aquamacs!")))
 
 
 (provide 'mac-extra-functions)
-
