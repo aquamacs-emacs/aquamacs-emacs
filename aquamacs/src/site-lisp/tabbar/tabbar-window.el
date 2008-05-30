@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: tabbar-window.el,v 1.40 2008/05/19 13:39:52 champo Exp $
+;; Revision: $Id: tabbar-window.el,v 1.41 2008/05/30 22:20:43 champo Exp $
 
 (require 'tabbar)
 (require 'aquamacs-tools)
@@ -210,6 +210,8 @@ Return the current tabset, which corresponds to (selected-window)."
 		  (tabbar-set-template tabset nil))))
 	  ;; if tabset doesn't exist, create new containing first buffer
 	  (tabbar-make-tabset groupname (car (car buflist)))
+	  ;; get the new tabset
+	  (setq tabset (tabbar-get-tabset groupname))
 	  ;; then add any remaining buffers
 	  (dolist (buf (cdr buflist))
 	    ;; don't have to update the template, since tabset has no such prop. yet
@@ -598,8 +600,9 @@ tab is displayed."
 (defun tabbar-window-init ()
   "Initialize tab bar data for tab grouping by window.
 Run as `tabbar-init-hook'."
-  (setq tabbar-window-alist nil
-	tabbar-window-cache nil
+  (setq tabbar-window-cache nil
+	;; keep previous tab data, if any
+;; 	tabbar-window-alist nil
 	tabbar-current-tabset-function 'tabbar-window-current-tabset
 	tabbar-tab-label-function 'tabbar-window-tab-label
 	tabbar-select-tab-function 'tabbar-window-select-tab
@@ -627,8 +630,10 @@ Run as `tabbar-init-hook'."
 (defun tabbar-window-quit ()
   "Quit tab bar \"tabbar-window\" mode.
 Run as `tabbar-quit-hook'."
-  (setq tabbar-window-alist nil
-	tabbar-window-cache nil
+  (setq tabbar-window-cache nil
+	;; keep tab data, so we can regenerate current tabs
+	;;  if tabbar-mode is turned back on
+;; 	tabbar-window-alist nil
 	tabbar-current-tabset-function nil
 	tabbar-tab-label-function nil
 	tabbar-select-tab-function nil
