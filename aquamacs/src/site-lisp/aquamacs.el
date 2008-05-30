@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.176 2008/05/24 06:52:04 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.177 2008/05/30 10:07:25 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -387,9 +387,13 @@ No errors are signaled."
 	  (setq buffer-undo-list nil)
 	  (setq buffer-file-name aquamacs-scratch-file)
 	  (setq buffer-offer-save nil)	
-	  (set (make-local-variable 'auto-save-visited-file-name) t)
-	  (put 'auto-save-visited-file-name 'permanent-local t)
-	  (auto-save-mode 1)
+;; Buffer auto save caused severe problems on occasion:
+;; Aquamacs would ask about the file being changed upon exit,
+;; answering "no" would cancel exiting emacs,
+;; answer "yes" would delete the file!
+;	  (set (make-local-variable 'auto-save-visited-file-name) t)
+;	  (put 'auto-save-visited-file-name 'permanent-local t)
+;	  (auto-save-mode 1)
 	  (aquamacs-set-defaults 
 	   `((recentf-exclude ,(append (list 
 					(expand-file-name aquamacs-scratch-file)) recentf-exclude))))
@@ -397,7 +401,7 @@ No errors are signaled."
 	  ;; global auto-save-visited-file-name setting
 	  ;; (in case the user saves *scratch* somewhere else, we will
 	  ;; still auto-save into the original scratch thing
-	  (setq buffer-auto-save-file-name aquamacs-scratch-file)
+;	  (setq buffer-auto-save-file-name aquamacs-scratch-file)
 	  (setq buffer-save-without-query t)
 	  (put 'buffer-save-without-query 'permanent-local t)
 	  (setq buffer-file-coding-system 'utf-8))
