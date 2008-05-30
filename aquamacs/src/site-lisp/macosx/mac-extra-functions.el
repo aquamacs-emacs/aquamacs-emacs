@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.65 2008/05/30 09:32:37 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.66 2008/05/30 11:16:03 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -386,17 +386,19 @@ specified in `shell-file-name'."
 				 "printenv"))))
 	  (accept-process-output prc 0 300)
 	  (delete-process prc)))
-      (goto-char (point-min))
-      (while (re-search-forward "^[A-Za-z_0-9]+=()\s*[^\x]*?
+      (if (eq (buffer-size) 0)
+	  (message "Warning: Login shell did not return environment.")
+	(goto-char (point-min))
+	(while (re-search-forward "^[A-Za-z_0-9]+=()\s*[^\x]*?
 \s*}\s*$" nil t)
-	(replace-match "..." nil nil))
-      (goto-char (point-min))
-      (while (search-forward-regexp "^\\([A-Za-z_0-9]+\\)=\\(.*\\)$" nil t)
-	(setenv
-	 (match-string 1)
-	 (if (equal (match-string 1) "PATH")
-	     (concat (match-string 2) ":" (getenv "PATH"))
-	     (match-string 2))))))
+	  (replace-match "..." nil nil))
+	(goto-char (point-min))
+	(while (search-forward-regexp "^\\([A-Za-z_0-9]+\\)=\\(.*\\)$" nil t)
+	  (setenv
+	   (match-string 1)
+	   (if (equal (match-string 1) "PATH")
+	       (concat (match-string 2) ":" (getenv "PATH"))
+	     (match-string 2)))))))
 
 (defun mac-add-path-to-exec-path ()
   "Add elements from environment variable `PATH' to `exec-path'."
@@ -529,3 +531,111 @@ Aquamacs Emacs.app may have been moved or renamed. Please restart Aquamacs!")))
 
 
 (provide 'mac-extra-functions)
+MANPATH=/Users/dr/local/share/man:/opt/local/share/man
+OPENCCG_HOME=/Users/dr/Projects/openccg
+NXT=/Users/dr/Projects/BEETLE-ROOT/BEETLE-SUPPORT-SW/NXT/nxt
+PILOTRATE=57600
+SHELL=/bin/bash
+HISTSIZE=2000
+CLICOLOR=yes
+TMPDIR=/var/folders/8h/8hIgrExEHNOfZGhlNEY32k+++TI/-Tmp-/
+Apple_PubSub_Socket_Render=/tmp/launch-yyy1ZC/Render
+EMACSDATA=/Applications/Aquamacs Emacs.app/Contents/Resources/etc
+CVSROOT=:ext:dreitter@staff.ssh.inf.ed.ac.uk:/home/dreitter/cvsroot
+EMACSPATH=/Applications/Aquamacs Emacs.app/Contents/MacOS/libexec:/Applications/Aquamacs Emacs.app/Contents/MacOS/bin
+EMACS_ROOT=/Users/dr/Projects/emacs
+USER=dr
+BAYESCUSTOMIZE=/Users/dr/hammie.opt
+COMMAND_MODE=unix2003
+PILOTPORT=/dev/ttyS0
+SSH_AUTH_SOCK=/tmp/launch-lwA8Bs/Listeners
+__CF_USER_TEXT_ENCODING=0x1F5:0:0
+PYTHONDOCS=/Users/dr/Info/Technical/Python-Docs-2.4.1
+USERNAME=
+BEETLE_ROOT=/Users/dr/Projects/BEETLE-ROOT/BEETLE-CURRENT
+PATH=/Library/Frameworks/Python.framework/Versions/Current/bin:/opt/local/lib/postgresql82/bin:/opt/local/bin:/opt/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/texbin:/Users/dr/Applications:/Users/dr/Applications/bin:/Users/dr/Projects/openccg/bin:/usr/texbin/powerpc-apple-darwin-current::/Developer/Platforms/iPhoneFOSS.platform/Developer/bin
+LESSEDIT=gnuclient
+BLOCKSIZE=1k
+PWD=/Users/dr/Projects/Aquamacs/aquamacs/src/site-lisp/macosx
+JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Home
+EDITOR=emacs
+LANG=C
+PYTHONSTARTUP=/Users/dr/.python.py
+PS1=\w$ 
+HISTIGNORE=*tramp_exit_status*:*tramp_file_attributes*
+EMACSLOADPATH=/Applications/Aquamacs Emacs.app/Contents/Resources/site-lisp:/Applications/Aquamacs Emacs.app/Contents/Resources/lisp:/Applications/Aquamacs Emacs.app/Contents/Resources/leim
+HOME=/Users/dr
+SHLVL=3
+BASH_ENV=/Users/dr/.bashrc
+LOGNAME=dr
+LESS=-MM -X
+CVS_RSH=ssh
+PROFILE_LOADED=1
+PGDATA=/Users/dr/var/pg/databases
+PKG_CONFIG_PATH=/Users/skip/local/lib/pkgconfig
+AQUAMACS_ROOT=/Users/dr/Projects/Aquamacs/aquamacs
+BROWSER=open
+INFOPATH=/usr/share/info:/opt/local/share/info:/opt/local/info:~/Library/Application Support/Emacs/info:/Library/Application Support/Emacs/info:/Applications/Aquamacs Emacs.app/Contents/Resources/site-lisp/edit-modes/info:/Applications/Aquamacs Emacs.app/Contents/Resources/info
+CVSEDITOR=pico
+DISPLAY=localhost:0.0
+ANNOTATION_TOOL_DIR=/Users/dr/Projects/BEETLE-ROOT/BEETLE-CURRENT/NEWBEEGLE/annotation_tools/
+SECURITYSESSIONID=ab9a30
+EMACSDOC=/Applications/Aquamacs Emacs.app/Contents/Resources/etc
+RSYNC_RSH=ssh
+NLTK_LITE_CORPORA=/usr/local/share/nltk
+AQUAMACS_CVS_PREFIX=cvs -z3 -d:ext:davidswelt@cvs.aquamacs.org:/cvsroot/aquamacs
+_=/usr/bin/printenv
+MANPATH=/Users/dr/local/share/man:/opt/local/share/man
+OPENCCG_HOME=/Users/dr/Projects/openccg
+NXT=/Users/dr/Projects/BEETLE-ROOT/BEETLE-SUPPORT-SW/NXT/nxt
+PILOTRATE=57600
+SHELL=/bin/bash
+HISTSIZE=2000
+CLICOLOR=yes
+TMPDIR=/var/folders/8h/8hIgrExEHNOfZGhlNEY32k+++TI/-Tmp-/
+Apple_PubSub_Socket_Render=/tmp/launch-yyy1ZC/Render
+EMACSDATA=/Applications/Aquamacs Emacs.app/Contents/Resources/etc
+CVSROOT=:ext:dreitter@staff.ssh.inf.ed.ac.uk:/home/dreitter/cvsroot
+EMACSPATH=/Applications/Aquamacs Emacs.app/Contents/MacOS/libexec:/Applications/Aquamacs Emacs.app/Contents/MacOS/bin
+EMACS_ROOT=/Users/dr/Projects/emacs
+USER=dr
+BAYESCUSTOMIZE=/Users/dr/hammie.opt
+COMMAND_MODE=unix2003
+PILOTPORT=/dev/ttyS0
+SSH_AUTH_SOCK=/tmp/launch-lwA8Bs/Listeners
+__CF_USER_TEXT_ENCODING=0x1F5:0:0
+PYTHONDOCS=/Users/dr/Info/Technical/Python-Docs-2.4.1
+USERNAME=
+BEETLE_ROOT=/Users/dr/Projects/BEETLE-ROOT/BEETLE-CURRENT
+PATH=/Library/Frameworks/Python.framework/Versions/Current/bin:/opt/local/lib/postgresql82/bin:/opt/local/bin:/opt/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/texbin:/Users/dr/Applications:/Users/dr/Applications/bin:/Users/dr/Projects/openccg/bin:/usr/texbin/powerpc-apple-darwin-current::/Developer/Platforms/iPhoneFOSS.platform/Developer/bin
+LESSEDIT=gnuclient
+BLOCKSIZE=1k
+PWD=/Users/dr/Projects/Aquamacs/aquamacs/src/site-lisp/macosx
+JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Home
+EDITOR=emacs
+LANG=C
+PYTHONSTARTUP=/Users/dr/.python.py
+PS1=\w$ 
+HISTIGNORE=*tramp_exit_status*:*tramp_file_attributes*
+EMACSLOADPATH=/Applications/Aquamacs Emacs.app/Contents/Resources/site-lisp:/Applications/Aquamacs Emacs.app/Contents/Resources/lisp:/Applications/Aquamacs Emacs.app/Contents/Resources/leim
+HOME=/Users/dr
+SHLVL=3
+BASH_ENV=/Users/dr/.bashrc
+LOGNAME=dr
+LESS=-MM -X
+CVS_RSH=ssh
+PROFILE_LOADED=1
+PGDATA=/Users/dr/var/pg/databases
+PKG_CONFIG_PATH=/Users/skip/local/lib/pkgconfig
+AQUAMACS_ROOT=/Users/dr/Projects/Aquamacs/aquamacs
+BROWSER=open
+INFOPATH=/usr/share/info:/opt/local/share/info:/opt/local/info:~/Library/Application Support/Emacs/info:/Library/Application Support/Emacs/info:/Applications/Aquamacs Emacs.app/Contents/Resources/site-lisp/edit-modes/info:/Applications/Aquamacs Emacs.app/Contents/Resources/info
+CVSEDITOR=pico
+DISPLAY=localhost:0.0
+ANNOTATION_TOOL_DIR=/Users/dr/Projects/BEETLE-ROOT/BEETLE-CURRENT/NEWBEEGLE/annotation_tools/
+SECURITYSESSIONID=ab9a30
+EMACSDOC=/Applications/Aquamacs Emacs.app/Contents/Resources/etc
+RSYNC_RSH=ssh
+NLTK_LITE_CORPORA=/usr/local/share/nltk
+AQUAMACS_CVS_PREFIX=cvs -z3 -d:ext:davidswelt@cvs.aquamacs.org:/cvsroot/aquamacs
+_=/usr/bin/printenv
