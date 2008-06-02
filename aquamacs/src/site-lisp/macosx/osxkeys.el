@@ -7,12 +7,13 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.102 2008/05/18 22:52:09 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.103 2008/06/02 13:44:54 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
 
-;; Attribution: Leave this header intact in case you redistribute this file.
+;; Attribution: Leave this header intact in case you redistribute this file or
+;; any of the code contained.
 ;; Attribution must be given in application About dialog or similar,
 ;; "Contains Aquamacs osx-key-mode by D Reitter" does the job.
 ;; Apart from that, released under the GPL:
@@ -32,7 +33,7 @@
 ;; Boston, MA 02111-1307, USA.
 
  
-;; Copyright (C) 2005, 2006 David Reitter
+;; Copyright (C) 2005, 2006, 2007, 2008 David Reitter
 
 
 ;; Unit test  / check requirements
@@ -623,47 +624,42 @@ is called."
 	 (clipboard-kill-region 
 	  (overlay-start mouse-secondary-overlay)
 	  (overlay-end mouse-secondary-overlay))
-	 (message "Secondary selection saved to clipboard and kill-ring, then killed.")    
-	 )
-					; else
+	 (message "Secondary selection saved to clipboard and kill-ring, then killed."))
      (message "The secondary selection is not set.")))
 
 (defun clipboard-yank ()
-"Insert the clipboard contents, or the last stretch of killed text."
-(interactive "*")
-(let ((x-select-enable-clipboard t))
-  (yank)))
+  "Insert the clipboard contents, or the last stretch of killed text."
+  (interactive "*")
+  (let ((x-select-enable-clipboard t))
+    (yank)))
 
-(defun aquamacs-set-region-to-search-match (&optional invert)
+(defun aquamacs-set-region-to-search-match ()
+  ;; match beginning / end aren't guaranteed to be defined here (e.g., in flyspell-mode)
   (when (and transient-mark-mode (not mark-active)) ; mark could have been set explicitly: don't change it
-    (if invert
-	(progn
-	  (set-mark (match-end 0))
-	  (goto-char (match-beginning 0)))
-      (set-mark (match-beginning 0))
-      (goto-char (match-end 0)))))
+      (set-mark isearch-other-end)))
 
 (defun aquamacs-repeat-isearch ()
   "Repeats the last string isearch.
 Set region to match.
 Wraps around after throwing and error once."
   (interactive)
-    (if (and (eq last-command 'aquamacs-repeat-isearch)
-	     (not mark-active)) ;; failed error has been shown once (and mark deactivated)
+    (if (or (and (eq last-command 'aquamacs-repeat-isearch)
+	     (not mark-active))) ;; failed error has been shown once (and mark deactivated)
 	(condition-case nil
 	    (search-forward isearch-string)
 	  (error 
-
-	     ;(let ((deactivate-mark))
-	   (save-excursion
+	   (let (new-point)
+	     (save-excursion
 	       (beginning-of-buffer)
 	       (condition-case x
-		   (search-forward isearch-string)
+		   (progn (search-forward isearch-string)
+			  (setq new-point (point)))
 		 (error
-		  (signal (car x) (cdr x)))))));)
+		  (signal (car x) (cdr x)))))
+	     (and new-point (goto-char new-point)))))
       (deactivate-mark)
       (search-forward isearch-string))
-    (aquamacs-set-region-to-search-match))
+      (set-mark (match-beginning 0)))
 
 (defun aquamacs-repeat-isearch-backward ()
   "Repeats the last string isearch backwards.
@@ -674,18 +670,21 @@ Wraps around after throwing and error once."
 	     (not mark-active)) ;; failed error has been shown once (and mark deactivated)
 	(condition-case nil
 	    (search-backward isearch-string)
-	  (error 
-	  (save-excursion
-	     (end-of-buffer)
-	     (condition-case x
-		 (search-backward isearch-string)
-	       (error
-		(signal (car x) (cdr x)))))))
+	  (error
+	    (let (new-point)
+	      (save-excursion
+		(end-of-buffer)
+		(condition-case x
+		    (progn (search-backward isearch-string)
+			   (setq new-point (point)))
+		  (error
+		   (signal (car x) (cdr x)))))
+	      (and new-point (goto-char new-point)))))
       (deactivate-mark)
       (if (< (mark) (point))
 	  (goto-char (mark)))
       (search-backward isearch-string))
-    (aquamacs-set-region-to-search-match 'inv))
+    (set-mark (match-end 0)))
 
 (defun aquamacs-isearch-yank-kill ()
   (interactive)			
