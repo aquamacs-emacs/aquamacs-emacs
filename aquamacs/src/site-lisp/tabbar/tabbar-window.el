@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: tabbar-window.el,v 1.41 2008/05/30 22:20:43 champo Exp $
+;; Revision: $Id: tabbar-window.el,v 1.42 2008/06/02 04:39:55 champo Exp $
 
 (require 'tabbar)
 (require 'aquamacs-tools)
@@ -56,15 +56,12 @@ current cached copy."
 
 (defun tabbar-window-buffer-list ()
   "Return the list of buffers to show in tabs.
-Exclude buffers whose name starts with a space, when they are not
-visiting a file.  The current buffer is always included."
+Explicity exclude tooltip buffers."
   (delq nil
         (mapcar #'(lambda (b)
                     (cond
-                     ;; Don't always include the current buffer -- esp. if minibuffer
-;;                      ((eq (current-buffer) b) b)
-                     ((buffer-file-name b) b)
-                     ((char-equal ?\ (aref (buffer-name b) 0)) nil)
+		     ((equal (buffer-name b) " *tip*") nil)
+;;                      ((char-equal ?\ (aref (buffer-name b) 0)) nil)
                      ((buffer-live-p b) b)))
                 (buffer-list))))
 
