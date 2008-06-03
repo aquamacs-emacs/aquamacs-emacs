@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: tabbar-window.el,v 1.42 2008/06/02 04:39:55 champo Exp $
+;; Revision: $Id: tabbar-window.el,v 1.43 2008/06/03 04:00:06 champo Exp $
 
 (require 'tabbar)
 (require 'aquamacs-tools)
@@ -425,6 +425,35 @@ Updates tabbar-window-alist in the same way."
 	;; otherwise, ensure this window has a tabbar
 	(setq header-line-inhibit-window-list
 	      (delq window header-line-inhibit-window-list)))))))
+
+(defun menu-bar-select-buffer ()
+ (interactive)
+ (if tabbar-mode
+     (switch-to-buffer-in-tab last-command-event)
+   (switch-to-buffer last-command-event)))
+
+(defun switch-to-buffer-in-tab (buffer)
+ "Switch to BUFFER, possibly switching frames.
+This will display the buffer in an already-existing tab if
+available.  Otherwise, give BUFFER a tab in the currently
+selected window.  BUFFER may be a buffer or a string (buffer name)."
+ ;; check existing tabsets for this buffer
+ ;; priority is for tabsets where this is currently selected tab
+ (let* ((buf (get-buffer buffer))
+        (buffer-tab (or (assq buf (tabbar-map-tabsets 'tabbar-selected-tab))
+                        (assq buf (tabbar-map-tabsets
+                                   (lambda (tabset)
+                                     (tabbar-get-tab buf tabset))))))
+        (window (window-number-get-window
+                 (string-to-number (symbol-name
+                                    (tabbar-tab-tabset buffer-tab))))))
+   (when buf
+     (if window
+         (progn
+           (set-window-buffer window buf)
+           (select-window window)
+           (select-frame-set-input-focus (window-frame window)))
+       (switch-to-buffer buf)))))
 
 (defun tabbar-window-merge-windows (&optional tabset source-tabsets)
   "Assign tabs from all tabsets to current tabset, or TABSET
