@@ -7,9 +7,9 @@
 ;; Copyright (C) 1996-2008, Drew Adams, all rights reserved.
 ;; Created: Tue Mar  5 16:30:45 1996
 ;; Version: 21.0
-;; Last-Updated: Tue Jan 01 18:44:16 2008 (-28800 Pacific Standard Time)
+;; Last-Updated: Mon Jun  2 11:05:19 2008 (Pacific Daylight Time)
 ;;           By: dradams
-;;     Update #: 2262
+;;     Update #: 2337
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/frame-cmds.el
 ;; Keywords: internal, extensions, mouse, frames, windows, convenience
 ;; Compatibility: GNU Emacs 20.x, GNU Emacs 21.x, GNU Emacs 22.x
@@ -80,8 +80,8 @@
 ;;
 ;;  User options defined here:
 ;;
-;;    `enlarge-font-tries', `frame-config-register',
-;;    `frame-parameters-to-exclude',
+;;    `available-screen-pixel-bounds', `enlarge-font-tries',
+;;    `frame-config-register', `frame-parameters-to-exclude',
 ;;    `move-frame-wrap-within-display-flag'
 ;;    `rename-frame-when-iconify-flag', `show-hide-show-function',
 ;;    `window-mgr-title-bar-pixel-height'.
@@ -108,11 +108,12 @@
 ;;
 ;;  Non-interactive functions defined here:
 ;;
-;;    `assq-delete-all' (Emacs 20), `available-screen-pixel-height',
-;;    `available-screen-pixel-width', `enlarged-font-name',
-;;    `frame-alist-var-names', `frame-iconified-p',
-;;    `frame-parameter-names', `new-frame-position',
-;;    `read-args-for-tile-frames', `read-buffer-for-delete-windows'.
+;;    `assq-delete-all' (Emacs 20), `available-screen-pixel-bounds',
+;;    `available-screen-pixel-height', `available-screen-pixel-width',
+;;    `enlarged-font-name', `frame-alist-var-names',
+;;    `frame-iconified-p', `frame-parameter-names',
+;;    `new-frame-position', `read-args-for-tile-frames',
+;;    `read-buffer-for-delete-windows', `smart-tool-bar-pixel-height'.
 ;;
 ;;
 ;;
@@ -204,6 +205,13 @@
 ;;
 ;;; Change log:
 ;;
+;; 2008/06/02 dadams
+;;     Added: available-screen-pixel-bounds (option and function).
+;;     tile-frames, available-screen-pixel-(width|height):
+;;       Redefined to use available-screen-pixel-bounds.  Thx to Nathaniel Cunningham for input.
+;; 2008/05/29 dadams
+;;     Fixes for Mac by Nathaniel Cunningham and David Reitter:
+;;       window-mgr-title-bar-pixel-height, tile-frames, smart-tool-bar-pixel-height (added).
 ;; 2007/12/27 dadams
 ;;      tile-frames: Restored border calculation, but using only external border.
 ;;      Renamed window-mgr-*-width to window-mgr-*-height and changed default value from 32 to 27.
@@ -352,7 +360,7 @@
 ;;
 ;;; Code:
 
-(eval-when-compile (require 'cl)) ;; incf, case, set-difference
+(eval-when-compile (require 'cl)) ;; butlast, case, incf, set-difference
                                   ;; (plus, for Emacs 20: dolist and, for Emacs <20: when, unless)
 (require 'frame-fns) ;; frame-geom-value-numeric, frames-on, get-frame-name, get-a-frame, read-frame
 (require 'strings nil t) ;; (no error if not found) read-buffer
@@ -412,7 +420,7 @@ Candidates include `jump-to-frame-config-register' and `show-buffer-menu'."
                  (function :tag "Another function"))
   :group 'Frame-Commands)
 
-(defcustom window-mgr-title-bar-pixel-height 27
+(defcustom window-mgr-title-bar-pixel-height (if (eq window-system 'mac) 22 27)
   "*Height of frame title bar provided by the window manager, in pixels.
 You might alternatively call this constant the title-bar \"width\" or
 \"thickness\".  There is no way for Emacs to determine this, so you
@@ -439,6 +447,22 @@ Commands `move-frame-up', `move-frame-down', `move-frame-left', and
 moves off of it.
 If nil, you can move the frame as far off the display as you like."
   :type 'boolean :group 'Frame-Commands)
+
+(defcustom available-screen-pixel-bounds
+  (let ((bounds (if (fboundp 'mac-display-available-pixel-bounds)
+                    (mac-display-available-pixel-bounds)
+                  (list 0 0 (x-display-pixel-width) (x-display-pixel-height)))))
+    bounds)
+  "Upper left and lower right of available screen space for tiling frames.
+Integer list: (x0 y0 x1 y1), where (x0, y0) is the upper left position
+and (x1, y1) is the lower right position.  Coordinates are in pixels,
+measured from the screen absolute origin, (0, 0), at the upper left."
+  :type '(list
+          (integer :tag "X0 (upper left) - pixels from screen left")
+          (integer :tag "Y0 (upper left) - pixels from screen top")
+          (integer :tag "X1 (lower right) - pixels from screen left" )
+          (integer :tag "Y1 (lower right) - pixels from screen top"))
+  :group 'Frame-Commands)
 
 
 
@@ -895,10 +919,10 @@ frames (except a standalone minibuffer frame, if any)."
         ;; Size of a frame that uses all of the available screen area,
         ;; but leaving room for a minibuffer frame at bottom of display.
         (fr-pixel-width (available-screen-pixel-width))
-        (fr-pixel-height (if (boundp '1on1-minibuffer-frame)
-                             (cdr (assq 'top (frame-parameters 1on1-minibuffer-frame)))
-                           (available-screen-pixel-height)))
-        (fr-origin 0))
+        (fr-pixel-height (available-screen-pixel-height))
+        (fr-origin (if (eq direction 'horizontal)
+                       (car (available-screen-pixel-bounds))
+                     (cadr (available-screen-pixel-bounds)))))
     (case direction                     ; Size of frame in pixels.
       (horizontal (setq fr-pixel-width  (/ fr-pixel-width  (length visible-frames))))
       (vertical   (setq fr-pixel-height (/ fr-pixel-height (length visible-frames))))
@@ -913,9 +937,11 @@ frames (except a standalone minibuffer frame, if any)."
          (/ (- fr-pixel-width borders (frame-extra-pixels-width fr))
             (frame-char-width fr))
          (- (/ (- fr-pixel-height borders (frame-extra-pixels-height fr)
-                  window-mgr-title-bar-pixel-height)
+                  window-mgr-title-bar-pixel-height (smart-tool-bar-pixel-height))
                (frame-char-height fr))
-            (cdr (assq 'menu-bar-lines (frame-parameters fr)))))) ; Subtract `menu-bar-lines'.
+            (if (eq window-system 'mac)
+                0                       ; Menu bar for Carbon Emacs is not in the frame.
+              (cdr (assq 'menu-bar-lines (frame-parameters fr))))))) ; Subtract `menu-bar-lines'.
       (set-frame-position fr
                           (if (eq direction 'horizontal) fr-origin 0)
                           (if (eq direction 'horizontal) 0 fr-origin))
@@ -929,6 +955,12 @@ frames (except a standalone minibuffer frame, if any)."
 (defun frame-extra-pixels-height (frame)
   "Pixel difference between FRAME total height and its text area height."
   (- (frame-pixel-height frame) (* (frame-char-height frame) (frame-height frame))))
+
+(defun smart-tool-bar-pixel-height (&optional frame)
+  "Pixel height of Mac smart tool bar."
+  (if (and (boundp 'mac-tool-bar-display-mode) (> (frame-parameter frame 'tool-bar-lines) 0))
+      (if (eq mac-tool-bar-display-mode 'icons) 40 56)
+    0))
 
 (defun read-args-for-tile-frames ()
   "Read arguments for `tile-frames'."
@@ -963,19 +995,24 @@ frames (except a standalone minibuffer frame, if any)."
         fr)
       t)))))
 
+(defun available-screen-pixel-bounds ()
+  "Upper left and lower right of available screen space for tiling frames.
+This is variable `available-screen-pixel-bounds', possibly adjusted to
+allow for the standalone minibuffer frame provided by `oneonone.el'."
+  (if (boundp '1on1-minibuffer-frame)
+      (append (butlast available-screen-pixel-bounds)
+              (list (cdr (assq 'top (frame-parameters 1on1-minibuffer-frame)))))
+    available-screen-pixel-bounds))
+
 (defun available-screen-pixel-width ()
   "Width of the usable screen, in pixels."
-  (if (fboundp 'mac-display-available-pixel-bounds)
-      (let ((bounds (mac-display-available-pixel-bounds)))
-        (- (caddr bounds) (car bounds)))
-    (x-display-pixel-width)))
+  (- (caddr (available-screen-pixel-bounds)) ; X1 - X0
+     (car (available-screen-pixel-bounds))))
 
 (defun available-screen-pixel-height ()
   "Height of the usable screen, in pixels."
-  (if (fboundp 'mac-display-available-pixel-bounds)
-      (let ((bounds (mac-display-available-pixel-bounds)))
-        (- (cadddr bounds) (cadr bounds)))
-    (x-display-pixel-height)))
+  (- (cadddr (available-screen-pixel-bounds)) ; Y1 - Y0
+     (cadr (available-screen-pixel-bounds))))
 
 ;; Inspired by `sk-grow-frame' from Sarir Khamsi [sarir.khamsi@raytheon.com]
 ;;;###autoload
