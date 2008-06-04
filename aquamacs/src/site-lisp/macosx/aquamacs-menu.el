@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.151 2008/05/27 10:08:56 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.152 2008/06/04 22:17:40 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -646,7 +646,6 @@ both existing buffers and buffers that you subsequently create."
     (define-key-after menu-bar-options-menu [obof-separator]  '(menu-item "--") 'oneonone))
 
 (when (fboundp 'mac-font-panel-mode)
-
   (defun turn-on-mac-font-panel-mode ()
     (interactive)
     (mac-font-panel-mode 1))
@@ -661,9 +660,7 @@ both existing buffers and buffers that you subsequently create."
 	       :visible ,(display-multi-font-p)
 	       :keys ,(aq-binding 'mac-font-panel-mode)
 	       :enable (menu-bar-menu-frame-live-and-visible-p) 
-	       :help "Select a font from list of known fonts/fontsets"))
-
-)
+	       :help "Select a font from list of known fonts/fontsets")))
 
 (define-key menu-bar-options-menu [highlight-paren-mode] nil)
 (define-key menu-bar-options-menu [highlight-separator] nil)
@@ -1052,6 +1049,8 @@ both existing buffers and buffers that you subsequently create."
 (assq-delete-all 'tile-frames menu-bar-file-menu)
 (assq-delete-all 'tile-frames-h menu-bar-file-menu)
 (assq-delete-all 'tile-frames-v menu-bar-file-menu)
+
+(menu-bar-update-buffers) ;; update Buffers menu now
 ;; regular setup
 (aquamacs-menu-bar-setup)
  
