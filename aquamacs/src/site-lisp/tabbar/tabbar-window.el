@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: tabbar-window.el,v 1.43 2008/06/03 04:00:06 champo Exp $
+;; Revision: $Id: tabbar-window.el,v 1.44 2008/06/05 10:20:49 davidswelt Exp $
 
 (require 'tabbar)
 (require 'aquamacs-tools)
@@ -239,12 +239,15 @@ Return the current tabset, which corresponds to (selected-window)."
   (tabbar-get-tabset (number-to-string (window-number (selected-window))))
   )
 
+
 (defun tabbar-window-update-tabsets-when-idle ()
   "Wait for emacs to be idle before updating tabsets.  This prevents tabs from
 updating when a new window shows the current buffer, just before the window shows
 new buffer."
-  (run-with-idle-timer 0 nil
-		       'tabbar-window-update-tabsets))
+ ; (if (eq this-command 'split-window-vertically)
+ ;     (tabbar-window-update-tabsets)
+    (run-with-idle-timer 0 nil
+			 'tabbar-window-update-tabsets))
 
 (defun tabbar-update-if-changes-undone ()
   ;; have to wait until idle, or buffer's modified status isn't updated yet
@@ -276,7 +279,7 @@ That is, a string used to represent it on the tab bar."
     ;; visible, shorten the tab label to keep as many tabs as possible
     ;; in the visible area of the tab bar.
     (if tabbar-auto-scroll-flag
-        (tabbar-expand label width)
+        (tabbar-expand label width tab)
       (tabbar-shorten
        label width))))
 
@@ -641,8 +644,7 @@ Run as `tabbar-init-hook'."
 	tabbar-home-help-function nil
 	tabbar-home-button-value nil
 	tabbar-cycle-scope 'tabs
-	tabbar-inhibit-functions nil
-	)
+	tabbar-inhibit-functions nil)
   (add-hook 'window-configuration-change-hook 'tabbar-window-update-tabsets-when-idle)
   (add-hook 'first-change-hook 'tabbar-window-update-tabsets-when-idle)
   (add-hook 'after-undo-hook 'tabbar-update-if-changes-undone)
@@ -650,8 +652,7 @@ Run as `tabbar-init-hook'."
   (add-hook 'kill-buffer-hook 'tabbar-window-track-killed)
   (add-hook 'desktop-save-hook 'tabbar-desktop-tabsets-to-save)
   (add-hook 'desktop-after-read-hook 'tabbar-desktop-rebuild-saved-tabsets)
-  (tabbar-window-update-tabsets)
-  )
+  (tabbar-window-update-tabsets))
 
 (defun tabbar-window-quit ()
   "Quit tab bar \"tabbar-window\" mode.
