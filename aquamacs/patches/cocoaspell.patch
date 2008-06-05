@@ -1,5 +1,5 @@
 *** lisp/textmodes/ispell.el   Wed Dec 31 18:00:00 1969
---- lisp/textmodes/ispell.el   Wed Jun  4 22:05:59 2008
+--- lisp/textmodes/ispell.el   Thu Jun  5 09:44:15 2008
 ***************
 *** 2,18 ****
   
@@ -608,7 +608,7 @@
   
   ;;;###autoload
   (if ispell-menu-map-needed
---- 1385,1474 ----
+--- 1385,1479 ----
           (setq dict-list (cons name dict-list))))
       dict-list))
   
@@ -630,6 +630,7 @@
 +     (message "Flyspell %s in Text modes"
 +            (if enable-mode "enabled" "disabled"))))
 + 
++ ;;;###autoload
 + (defun menu-bar-text-mode-flyspell ()
 +   (interactive)
 +   (toggle-text-mode-flyspell)
@@ -681,15 +682,19 @@
 !       '(menu-item "Check Spelling as You Type (in all text modes)"
 !                   menu-bar-text-mode-flyspell
 !                   :help "Sets `Check Spelling as You Type' for all buffers using text-derived modes"
+!                   ;; available only in text mode
 !                   :enable (or (derived-mode-p 'text-mode) text-mode-variant)
 !                   :button (:toggle . (if (listp text-mode-hook)
 !                                          (member 'turn-on-flyspell text-mode-hook)
 !                                        (eq 'turn-on-flyspell text-mode-hook)))))
 ! 
 !       (define-key ispell-menu-map [flyspell-mode]
-!       '(menu-item "Check Spelling as You Type"
+!       '(menu-item "Check Spelling as You Type (in this buffer)"
 !                   flyspell-mode
 !                   :help "Check spelling while you edit the text"
+!                   ;; enabled if not in a text mode,
+!                   ;; OR if in a text mode and flyspell isn't on for all
+!                   ;; text-mode buffers
 !                   :enable (if (or (derived-mode-p 'text-mode) text-mode-variant)
 !                               (not (if (listp text-mode-hook)
 !                                           (member 'turn-on-flyspell text-mode-hook)
@@ -723,7 +728,7 @@
       (if ispell-current-personal-dictionary    ; use specified pers dict
         (setq args
               (append args
---- 2875,2900 ----
+--- 2880,2905 ----
   (defun ispell-start-process ()
     "Start the ispell process, with support for no asynchronous processes.
   Keeps argument list for future ispell invocations for no async support."
@@ -764,7 +769,7 @@
     (ispell-maybe-find-aspell-dictionaries)
     (unless arg (ispell-buffer-local-dict 'no-reload))
     (if (equal dict "default") (setq dict nil))
---- 3015,3027 ----
+--- 3020,3032 ----
   
   By just answering RET you can find out what the current dictionary is."
     (interactive
