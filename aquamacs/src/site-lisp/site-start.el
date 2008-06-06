@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: site-start.el,v 1.43 2008/05/24 12:13:35 davidswelt Exp $
+;; Last change: $Id: site-start.el,v 1.44 2008/06/06 08:58:20 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -37,12 +37,12 @@
 
 ;; Version information
 
-(defvar aquamacs-version "1.4rc1"
+(defvar aquamacs-version "1.4rc2"
 "A string with Aquamacs' version number.
 The format of the string is undefined. 
 For a reliable numerical representation, use `aquamacs-version-id'.")
 
-(defvar aquamacs-version-id 141
+(defvar aquamacs-version-id 142
 "A float indicating Aquamacs' version number.
 Full integers correspond to the third position of the public
 version number, e.g. version 0.9.7 is represented as `97.x'.
@@ -61,8 +61,7 @@ Changes in this code are ignored during the online version check.")
  (setq load-path (cons "~/src/oneonone" load-path))
  (setq load-path (cons "~/src/macosx" load-path))
  (setq load-path (cons "~/src/tabbar" load-path))
- (setq unicode-emacs 0)
-)
+ (setq unicode-emacs 0))
 
 (require 'cocoa-compatibility)
 
