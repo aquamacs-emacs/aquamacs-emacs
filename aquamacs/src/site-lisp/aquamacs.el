@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.178 2008/05/30 11:02:10 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.179 2008/06/06 21:16:13 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -375,42 +375,43 @@ if modified buffers exist."
   "Load the scratch buffer.
 The *scratch* buffer is loaded from `aquamacs-scratch-file'.
 No errors are signaled."
-  (with-current-buffer "*scratch*"
-    (condition-case nil
-	(progn
-	  (let ((coding-system-for-read 'utf-8)
-		(buffer-undo-list t))
-	    (if (file-exists-p aquamacs-scratch-file)
-		;; if file unreadable, this will trip the condition-case
-		(insert-file-contents aquamacs-scratch-file 
-				      nil nil nil 'replace))
-	    (set-buffer-modified-p nil))
-	  (setq buffer-undo-list nil)
-	  (setq buffer-file-name aquamacs-scratch-file)
-	  (setq buffer-offer-save nil)	
-;; Buffer auto save caused severe problems on occasion:
-;; Aquamacs would ask about the file being changed upon exit,
-;; answering "no" would cancel exiting emacs,
-;; answer "yes" would delete the file!
+  (when aquamacs-scratch-file
+    (with-current-buffer "*scratch*"
+      (condition-case nil
+	  (progn
+	    (let ((coding-system-for-read 'utf-8)
+		  (buffer-undo-list t))
+	      (if (file-exists-p aquamacs-scratch-file)
+		  ;; if file unreadable, this will trip the condition-case
+		  (insert-file-contents aquamacs-scratch-file 
+					nil nil nil 'replace))
+	      (set-buffer-modified-p nil))
+	    (setq buffer-undo-list nil)
+	    (setq buffer-file-name aquamacs-scratch-file)
+	    (setq buffer-offer-save nil)	
+	    ;; Buffer auto save caused severe problems on occasion:
+	    ;; Aquamacs would ask about the file being changed upon exit,
+	    ;; answering "no" would cancel exiting emacs,
+	    ;; answer "yes" would delete the file!
 ;	  (set (make-local-variable 'auto-save-visited-file-name) t)
 ;	  (put 'auto-save-visited-file-name 'permanent-local t)
 ;	  (auto-save-mode 1)
-	  (aquamacs-set-defaults 
-	   `((recentf-exclude ,(append (list 
-					(expand-file-name aquamacs-scratch-file)) recentf-exclude))))
+	    (aquamacs-set-defaults 
+	     `((recentf-exclude ,(append (list 
+					  (expand-file-name aquamacs-scratch-file)) recentf-exclude))))
 	  ;; make auto save file name permanent without a
 	  ;; global auto-save-visited-file-name setting
 	  ;; (in case the user saves *scratch* somewhere else, we will
 	  ;; still auto-save into the original scratch thing
 ;	  (setq buffer-auto-save-file-name aquamacs-scratch-file)
-	  (setq buffer-save-without-query t)
-	  (put 'buffer-save-without-query 'permanent-local t)
-	  (setq buffer-file-coding-system 'utf-8))
+	    (setq buffer-save-without-query t)
+	    (put 'buffer-save-without-query 'permanent-local t)
+	    (setq buffer-file-coding-system 'utf-8))
       ;; we aso need to avoid asking whether to save this
       ;; do this here so that we never save the scratch file
       ;; if it hasn't been successfully loaded initially
       ;; (or if the file simply doesn't exist yet)
-      (error (insert (format "Scratch file %s could not be read.\nThis buffer will not be saved automatically." aquamacs-scratch-file)) nil))))
+	(error (insert (format "Scratch file %s could not be read.\nThis buffer will not be saved automatically." aquamacs-scratch-file)) nil)))))
 
 
 (defun aquamacs-setup ()
