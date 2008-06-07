@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.104 2008/06/03 12:58:21 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.105 2008/06/07 18:25:51 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -1064,6 +1064,8 @@ behavior)."
     (define-key map `[(,osxkeys-command-key down)] 'end-of-buffer)
     (define-key map `[(,osxkeys-command-key left)] 'beginning-of-line)
     (define-key map `[(,osxkeys-command-key right)] 'end-of-line)
+    (define-key map `[(control left)] 'beginning-of-line)
+    (define-key map `[(control right)] 'end-of-line)
 
     (define-key map [(home)] 'beginning-of-buffer)
     (define-key map [(end)] 'end-of-buffer)
