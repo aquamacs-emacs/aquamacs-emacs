@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: aquamacs-tabbar.el,v 1.39 2008/06/05 10:21:33 davidswelt Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.40 2008/06/07 11:17:33 davidswelt Exp $
 
 ;; load original tabbar-mode
 (require 'tabbar)
@@ -648,14 +648,14 @@ NOSCROLL is non-nil, exclude the tabbar-scroll buttons."
 ;; as it stands, we're duplicating some functions (buffer-modified check, e.g.)
 ;; and we're just guessing what face is going to be used.
 
-(defun tabbar-char-width (&optional tab)
-  "Big Hack."
-  ;; average width of Lucida Grande character. Hack!
-  (if (and tab (buffer-modified-p (tabbar-tab-value tab)))
-      7  ;; in bold
-    5))
+(defvar tabbar-char-width 5)
+;; (defun tabbar-char-width (&optional tab)
+;;   "Big Hack."
+;;   ;; average width of Lucida Grande character. Hack!
+;;   (if (and tab (buffer-modified-p (tabbar-tab-value tab)))
+;;       7  ;; in bold
+;;     5))
 
-;(defvar tabbar-char-width 5) 
 (defun tabbar-expand (str width &optional tab)
   "Return an expanded string from STR that fits in the given display WIDTH.
 WIDTH is specified in terms of character display width in the current
@@ -669,8 +669,9 @@ buffer; see also `char-width'."
          (i  0))
     (cond
      ((< sw width)
-      (let* ((l-l (max 4 (min (- 75 (/ (* (tabbar-char-width tab) n) 2) )
-				  (floor (/ (* (frame-char-width) (- width sw)) 2)))))
+      (let* ((l-l (max 4 (min (- 75 (/ (* tabbar-char-width n) 2) )
+				  (floor (/ (* (frame-char-width) 
+					       (- width sw)) 2)))))
 	     (sp-r  (propertize 
 		     " " 'display 
 		     `(space 
