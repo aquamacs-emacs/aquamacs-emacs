@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.56 2008/05/27 07:14:15 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.57 2008/06/07 10:19:47 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -416,6 +416,16 @@ can be customized to configure this mode."
 		 'smart-fp--store-frame-position-for-buffer))
   smart-frame-positioning-mode)
         
+(defun frame-full-screen-p (&optional frame)
+;; This is mostly a hack
+;; replace with test for frame parameter fullscreen
+;; once the new patch is used.
+  (let* ((f (or frame (selected-frame)))
+	 (bounds 
+	  (mac-display-available-pixel-bounds f )))
+    (eq (- (nth 3 bounds) (smart-tool-bar-pixel-height f)) (frame-pixel-height f))))
+
+
 (defvar smart-frame-prior-positions '()
   "Association list with buffer names and frame positions / sizes, so these
 can be remembered. This is part of Aquamacs Emacs.")
@@ -430,12 +440,15 @@ can be remembered. This is part of Aquamacs Emacs.")
 
   (when (eq f smart-frame--initial-frame)
     (set-default 'initial-frame-alist
-	  (smart-fp--convert-negative-ordinates ( list 
-	    (cons 'left (eval (frame-parameter f 'left)))
-	    (cons 'top (eval (frame-parameter f 'top)))
-	    (cons 'width (frame-parameter f 'width))
-	    (cons 'height (frame-parameter f 'height))))))
-
+		 (if (frame-full-screen-p f)
+		      '((fullscreen . t))
+		   (smart-fp--convert-negative-ordinates
+		    (list 
+		     (cons 'left (eval (frame-parameter f 'left)))
+		     (cons 'top (eval (frame-parameter f 'top)))
+		     (cons 'width (frame-parameter f 'width))
+		     (cons 'height (frame-parameter f 'height)))))))
+  
   ;; (setq smart-frame-prior-positions nil)
   ;; don't store too many entries here
   (when (or buffer-file-number 
@@ -457,9 +470,6 @@ can be remembered. This is part of Aquamacs Emacs.")
   "Store position of frame F as initial frame position."
 
   ;; choose the right frame
-  ;; chose first frame that has no * in its name (i.e. avoid *Help* etc.)
-
-  
   (let ((the-f))
     (setq f
 	  (cond
@@ -467,23 +477,27 @@ can be remembered. This is part of Aquamacs Emacs.")
 	   ;; prefer the size of the original frame
 	   ((frame-live-p smart-frame--initial-frame) ;; may be iconified
 	    smart-frame--initial-frame)
-	   ;; otherwise: exactly one frame visible?
+	   ;; otherwise: exactly one frame visible
 	   ((eq (let ((c 0))
 		  (mapc (lambda (fr)
 			  (when (and  (frame-live-p fr) (eq (frame-visible-p fr) t))
-			    (incf c) (setq f fr))) (frame-list)) c) 1)
+			    (incf c) (setq the-f fr))) (frame-list)) c) 1)
 	    the-f)
 	   ;; otherwise: take original frame at deletion time
 	   ((default-value 'initial-frame-alist))
 	   (the-f) ;; the first visible frame
 	   (nil)))) ;; give up
   (if f
-      (smart-fp--convert-negative-ordinates 
-       (list 
-	(cons 'left (eval (frame-parameter f 'left)))
-	(cons 'top (eval (frame-parameter f 'top)))
-	(cons 'width (frame-parameter f 'width))
-	(cons 'height (frame-parameter f 'height))))))
+      (if (listp f)
+	  f
+	 (if (frame-full-screen-p f)
+	     '((fullscreen . t))
+	   (smart-fp--convert-negative-ordinates 
+	    (list 
+	     (cons 'left (eval (frame-parameter f 'left)))
+	     (cons 'top (eval (frame-parameter f 'top)))
+	     (cons 'width (frame-parameter f 'width))
+	     (cons 'height (frame-parameter f 'height))))))))
 
 (defvar smart-frame-keep-initial-frame-alist t
 "* Initialize `intial-frame-list' after startup from old frame position.
@@ -503,20 +517,25 @@ Aquamacs was last terminated.")
 	 (unless (assq (car item)  initial-frame-alist)
 	   (setq new-initial-frame-alist (cons item new-initial-frame-alist))))
        (reverse frame-parameters))
-      (setq initial-frame-alist (append new-initial-frame-alist initial-frame-alist))
+      (when (cdr-safe (assq 'fullscreen new-initial-frame-alist)) 
+	(run-with-idle-timer 0 nil 'aquamacs-toggle-full-frame))
+
+      (setq initial-frame-alist 
+	    (append new-initial-frame-alist initial-frame-alist))
       ;; Emacs (or the system?) prevents frames that are off-screen. 
       ;; thus, we don't have to check this here. 
       ;; visibility: ugly workaround for stupid emacs bug 166 ;; FIXME
       ;; set the standard value (so it is customizable correctly)
-      (put 'initial-frame-alist 'standard-value `((quote ,frame-parameters))))))
+      (put 'initial-frame-alist 'standard-value `((quote ,frame-parameters))))
+    ))
 
 ;; modelled after `save-place-alist-to-file'
 ;; but we're saving a (setq ...) so we can just load the file
 ;; (smart-fp--save-frame-positions-to-file)
 (defun smart-fp--load-frame-positions-from-file ()
   (load (expand-file-name save-frame-position-file)
-	'noerror nil 'nosuffix )
-)
+	'noerror nil 'nosuffix ))
+
 ;; (smart-fp--save-frame-positions-to-file)
 (defun smart-fp--save-frame-positions-to-file ()
   "Save `smart-frame-prior-positions' to a file.
