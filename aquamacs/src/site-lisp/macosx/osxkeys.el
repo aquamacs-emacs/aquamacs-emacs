@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.105 2008/06/07 18:25:51 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.106 2008/06/08 16:33:00 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -927,6 +927,11 @@ An Aquamacs-only function."
   (interactive)
   (other-frame -1))
 
+(defun other-previous-window
+  "Like `next-window', but in the opposite direction."
+  (interactive)
+  (other-window -1))
+
 (defun aquamacs-split-window-vertically ()
   "Split window, select new window.
 Like `split-window-vertically' without further arguments, 
@@ -1172,14 +1177,15 @@ default."
     (define-key map `[(,osxkeys-command-key \`)] 'raise-next-frame)
     (define-key map `[(,osxkeys-command-key \<)] 'raise-next-frame)
     (define-key map `[(,osxkeys-command-key \>)] 'raise-previous-frame)
+    (define-key map `[(,osxkeys-command-key \])] 'other-window)
+    (define-key map `[(,osxkeys-command-key \[)] 'other-previous-window)
 
     (define-key map `[(,osxkeys-command-key t)] 'new-tab)
 
     (if (fboundp 'mac-font-panel-mode)
 	(define-key map `[(,osxkeys-command-key shift t)] 'mac-font-panel-mode))
 
-    map)
-  )
+    map))
  
 
 (defvar osx-key-mode-map
