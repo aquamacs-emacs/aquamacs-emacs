@@ -2310,4 +2310,5 @@ This function is suited for adding it to `newsticker-new-item-functions'."
 
 (provide 'newsticker-backend)
 
+;; arch-tag: 0e37b658-56e9-49ab-90f9-f2df57e1a659
 ;;; newsticker-backend.el ends here

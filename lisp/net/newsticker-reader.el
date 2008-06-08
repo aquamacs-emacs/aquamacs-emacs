@@ -1115,4 +1115,6 @@ static char * visit_xpm[] = {
    "Image for the browse button."))
 
 (provide 'newsticker-reader)
+
+;; arch-tag: c604b701-bdf1-4fc1-8d05-5fabd1939533
 ;;; newsticker-reader.el ends here

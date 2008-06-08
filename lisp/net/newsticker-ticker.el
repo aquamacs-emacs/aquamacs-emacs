@@ -288,4 +288,6 @@ running already."
         (setq newsticker--scrollable-text ""))))
 
 (provide 'newsticker-ticker)
+
+;; arch-tag: faee3ebb-749b-4935-9835-7f36d4b700f0
 ;;; newsticker-ticker.el ends here

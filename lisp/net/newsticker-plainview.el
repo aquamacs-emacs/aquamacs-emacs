@@ -1820,4 +1820,6 @@ Take care: end of item is at the end of its last line!"
           newsticker--cache)))
 
 (provide 'newsticker-plainview)
+
+;; arch-tag: 4e48b683-d48b-48dd-a13e-fe45baf41184
 ;;; newsticker-plainview.el ends here
