@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs version check
  
-;; Last change: $Id: check-for-updates.el,v 1.25 2008/05/26 11:27:52 davidswelt Exp $
+;; Last change: $Id: check-for-updates.el,v 1.26 2008/06/08 16:04:45 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -66,27 +66,41 @@
 nil  )
 
 
-
+(defun aquamacs-version--read-xml-tag (tag)
+  (condition-case nil
+      (if (re-search-forward (format "<%s>\\(.*\\)</%s>" tag tag)
+			     (buffer-end 1) t)
+	  (match-string 1))
+    (error nil)))
 
 ; the following is internal - shouldn't be set 
 (setq aquamacs-id-file "~/Library/Preferences/Aquamacs Emacs/.id")
 (setq aquamacs-user-likes-beta 0) ;; this is 0 or 1, not nil / t
 (setq aquamacs-version-check-buffer nil) 
 (setq url-show-status nil) ;;don't annoy user
+;; (setq aquamacs-version "1.4rc2")
+;; (setq aquamacs-version-id 142) ;; for test purposes
 (defun aquamacs-compare-version (&optional interactive-request)
   (if aquamacs-version-check-buffer ;; just for safety
       (save-excursion 
 	(set-buffer aquamacs-version-check-buffer)
  
-	(if (> aquamacs-user-likes-beta 0) ; user likes beta versions?
-	    (re-search-forward "<beta-version>\\(.*\\)</beta-version>" (buffer-end 1) t)
-	  (re-search-forward "<version>\\(.*\\)</version>" (buffer-end 1) t)
-	  )
- 
-	(if (and (not (equal (match-string 1) aquamacs-version))
-		   (not (equal (match-string 1) 
-			       (concat aquamacs-version 
-				       aquamacs-minor-version) )))
+	(let ((server-version) (server-version-id) (server-minor-version) 
+	      (server-version-qualifier) (server-version-url)
+	      (beta-str (if (> aquamacs-user-likes-beta 0) "beta-" "") ))
+
+	  (setq server-version (aquamacs-version--read-xml-tag (concat beta-str "version")))
+	  (setq server-minor-version (aquamacs-version--read-xml-tag (concat beta-str "minor-version")))
+	  (setq server-version-id
+		(string-to-number (or (aquamacs-version--read-xml-tag (concat beta-str "version-id")) "")))
+	  (setq server-version-qualifier (aquamacs-version--read-xml-tag (concat beta-str "version-qualifier")))
+	  (setq server-version-url (aquamacs-version--read-xml-tag (concat beta-str "version-url")))
+
+	(if (and (> server-version-id aquamacs-version-id)
+		 (not (equal server-version aquamacs-version))
+		 (not (equal server-version 
+			     (concat aquamacs-version 
+				     aquamacs-minor-version) )))
 	    (progn
 	      (write-region (concat "888\n") 
 			    ;; notice that a new version is available 
@@ -96,23 +110,45 @@ nil  )
 		  'shut-up
 		  nil
 		  nil)
-	      (aquamacs-new-version-notify (match-string 1)))
+	      (aquamacs-new-version-notify (concat server-version server-minor-version) server-version-qualifier
+					   server-version-url))
+	  ;; else
+	  ;; if there's just a minor version jump or we have the current release, we don't
+	  ;; show any alarming messages.
 	  (let ((txt (format "%s is the most recent Aquamacs version available."
-			     (concat aquamacs-version 
-				     aquamacs-minor-version))))
+			     (concat server-version 
+				     server-minor-version))))
 	    (if interactive-request
 		(if (eq interactive-request 'gui)
 		    (mac-dialog "No news is good news..." txt)
 		  (message txt))
 	      (with-temp-message txt ;; only send it to *Messages*
-		nil)))))))
+		nil))))))))
  
-(defun aquamacs-new-version-notify (v)
+(defvar aquamacs-download-url "")
+(defun aquamacs-new-version-notify (v &optional beta url)
   ;; show right away and show when idle
-  (message (format "Get the new Aquamacs %s from http://aquamacs.org" v))
-  (run-with-idle-timer 
-   0 nil 'message
-   (format "Get the new Aquamacs %s from http://aquamacs.org" v)))
+  (condition-case nil
+      (when url
+	(setq aquamacs-download-url url)
+	(global-set-key  [(control h) (u)] 'aquamacs-download-release))
+    (error nil))
+
+  (let ((msg (format "Get the new Aquamacs %s %s now from http://aquamacs.org!%s" v (if beta beta "")
+		     (if url (substitute-command-keys "
+Press \\[aquamacs-download-release] to download it.") "")
+		     )))
+    (message msg)
+    (run-with-idle-timer 
+     0 nil 'message msg)))
+
+
+(defun aquamacs-download-release ()
+  "Download the latest Aquamacs release in the default browser."
+  (interactive)
+  (if aquamacs-download-url
+      (browse-url aquamacs-download-url)))
+
 
 (defun aquamacs-ask-donate ()
   (if (and (fboundp 'mac-dialog-y-or-n-p)
