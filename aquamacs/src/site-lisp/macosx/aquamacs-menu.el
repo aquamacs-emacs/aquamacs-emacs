@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.152 2008/06/04 22:17:40 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.153 2008/06/09 13:41:48 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -917,9 +917,27 @@ both existing buffers and buffers that you subsequently create."
 (easy-menu-remove-item global-map  '("menu-bar" "tools") 'compose-mail)
 
 
-
 (defun aquamacs-toggle-full-frame ()
+  "Enlarge the selected frame to the full screen.
+Unlike `mac-toggle-full-frame', this will do a better job at remembering
+the previous frame size."
   (interactive)
+  (if (frame-full-screen-p)
+      (modify-frame-parameters 
+       nil (list (cons 'fullscreen nil) 
+		 (cons 'prior-left nil)  ;; needed for smart-frame-positioning (sessions persistency)
+		 (cons 'prior-top nil)
+		 (cons 'prior-width nil)
+		 (cons 'prior-height nil)))
+    ;; (frame-parameters)
+    ;; save small frame position
+    (modify-frame-parameters 
+     nil (list (cons 'fullscreen nil) 
+	       (cons 'prior-left (frame-parameter nil 'left))
+	       (cons 'prior-top (frame-parameter nil 'top))
+	       (cons 'prior-width (frame-parameter nil 'width))
+	       (cons 'prior-height (frame-parameter nil 'height)))))
+			     
   (mac-toggle-full-frame)
   (run-with-idle-timer 1 nil (lambda () (message  (substitute-command-keys "Press \\[aquamacs-toggle-full-frame] to exit full screen editing."))))
   nil)
