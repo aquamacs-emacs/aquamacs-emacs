@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.153 2008/06/09 13:41:48 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.154 2008/06/09 22:11:46 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -939,7 +939,8 @@ the previous frame size."
 	       (cons 'prior-height (frame-parameter nil 'height)))))
 			     
   (mac-toggle-full-frame)
-  (run-with-idle-timer 1 nil (lambda () (message  (substitute-command-keys "Press \\[aquamacs-toggle-full-frame] to exit full screen editing."))))
+  (if (frame-full-screen-p)
+      (run-with-idle-timer 1 nil (lambda () (message  (substitute-command-keys "Press \\[aquamacs-toggle-full-frame] to exit full screen editing.")))))
   nil)
  
 
