@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.57 2008/06/07 10:19:47 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.58 2008/06/09 13:38:12 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -423,8 +423,9 @@ can be customized to configure this mode."
   (let* ((f (or frame (selected-frame)))
 	 (bounds 
 	  (mac-display-available-pixel-bounds f )))
-    (eq (- (nth 3 bounds) (smart-tool-bar-pixel-height f)) (frame-pixel-height f))))
-
+    (<= (- (- (nth 3 bounds) (nth 1 bounds) ) (smart-tool-bar-pixel-height f)) (frame-pixel-height f))))
+; (setq f (selected-frame))
+; (frame-full-screen-p (selected-frame))
 
 (defvar smart-frame-prior-positions '()
   "Association list with buffer names and frame positions / sizes, so these
@@ -440,9 +441,14 @@ can be remembered. This is part of Aquamacs Emacs.")
 
   (when (eq f smart-frame--initial-frame)
     (set-default 'initial-frame-alist
-		 (if (frame-full-screen-p f)
-		      '((fullscreen . t))
-		   (smart-fp--convert-negative-ordinates
+		 (smart-fp--convert-negative-ordinates
+		  (if (frame-full-screen-p f)
+		      (list 
+		       (cons 'fullscreen t)
+		       (cons 'left (eval (frame-parameter f 'prior-left)))
+		       (cons 'top (eval (frame-parameter f 'prior-top)))
+		       (cons 'width (frame-parameter f 'prior-width))
+		       (cons 'height (frame-parameter f 'prior-height)))
 		    (list 
 		     (cons 'left (eval (frame-parameter f 'left)))
 		     (cons 'top (eval (frame-parameter f 'top)))
@@ -490,14 +496,19 @@ can be remembered. This is part of Aquamacs Emacs.")
   (if f
       (if (listp f)
 	  f
+	(smart-fp--convert-negative-ordinates
 	 (if (frame-full-screen-p f)
-	     '((fullscreen . t))
-	   (smart-fp--convert-negative-ordinates 
-	    (list 
-	     (cons 'left (eval (frame-parameter f 'left)))
-	     (cons 'top (eval (frame-parameter f 'top)))
-	     (cons 'width (frame-parameter f 'width))
-	     (cons 'height (frame-parameter f 'height))))))))
+	     (list 
+	      (cons 'fullscreen t)
+	      (cons 'left (eval (frame-parameter f 'prior-left)))
+	      (cons 'top (eval (frame-parameter f 'prior-top)))
+	      (cons 'width (frame-parameter f 'prior-width))
+	      (cons 'height (frame-parameter f 'prior-height)))
+	   (list 
+	    (cons 'left (eval (frame-parameter f 'left)))
+	    (cons 'top (eval (frame-parameter f 'top)))
+	    (cons 'width (frame-parameter f 'width))
+	    (cons 'height (frame-parameter f 'height))))))))
 
 (defvar smart-frame-keep-initial-frame-alist t
 "* Initialize `intial-frame-list' after startup from old frame position.
@@ -517,7 +528,7 @@ Aquamacs was last terminated.")
 	 (unless (assq (car item)  initial-frame-alist)
 	   (setq new-initial-frame-alist (cons item new-initial-frame-alist))))
        (reverse frame-parameters))
-      (when (cdr-safe (assq 'fullscreen new-initial-frame-alist)) 
+      (when (cdr-safe (assq 'fullscreen (append new-initial-frame-alist initial-frame-alist))) 
 	(run-with-idle-timer 0 nil 'aquamacs-toggle-full-frame))
 
       (setq initial-frame-alist 
@@ -526,8 +537,7 @@ Aquamacs was last terminated.")
       ;; thus, we don't have to check this here. 
       ;; visibility: ugly workaround for stupid emacs bug 166 ;; FIXME
       ;; set the standard value (so it is customizable correctly)
-      (put 'initial-frame-alist 'standard-value `((quote ,frame-parameters))))
-    ))
+      (put 'initial-frame-alist 'standard-value `((quote ,frame-parameters))))))
 
 ;; modelled after `save-place-alist-to-file'
 ;; but we're saving a (setq ...) so we can just load the file
