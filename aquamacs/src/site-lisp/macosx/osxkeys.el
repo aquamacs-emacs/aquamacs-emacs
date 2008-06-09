@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.106 2008/06/08 16:33:00 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.107 2008/06/09 14:21:04 champo Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -927,7 +927,7 @@ An Aquamacs-only function."
   (interactive)
   (other-frame -1))
 
-(defun other-previous-window
+(defun other-previous-window ()
   "Like `next-window', but in the opposite direction."
   (interactive)
   (other-window -1))
