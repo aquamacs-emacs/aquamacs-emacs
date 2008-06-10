@@ -34,7 +34,7 @@
 
 ;; ======================================================================
 ;;; History:
-;; 
+;;
 
 
 ;; ======================================================================
@@ -707,7 +707,7 @@ for the button."
         (when (and newsticker-justification
                    (not is-rendered-HTML))
           (fill-region marker1 marker2 newsticker-justification))
-        
+
         (newsticker-treeview-mode)
         (goto-char (point-min))
         ;; insert logo at top
@@ -723,7 +723,7 @@ for the button."
                                    :nt-link (newsticker--link item)
                                    'keymap newsticker--treeview-url-keymap))
         (setq pos (point))
-        
+
         (insert "\n\n")
         ;; insert title
         (setq pos (point))
@@ -1982,7 +1982,7 @@ POS gives the position where EVENT occurred."
   (interactive)
   (when newsticker--treeview-current-feed
     (newsticker-get-news newsticker--treeview-current-feed)))
-  
+
 (provide 'newsticker-treeview)
 
 ;; arch-tag: 5dbaff48-1f3e-4fc6-8ebd-e966fc90d2d4
