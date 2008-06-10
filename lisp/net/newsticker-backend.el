@@ -39,7 +39,6 @@
 (require 'xml)
 
 ;; Silence warnings
-(defvar tool-bar-map)
 (defvar w3-mode-map)
 (defvar w3m-minor-mode-map)
 
