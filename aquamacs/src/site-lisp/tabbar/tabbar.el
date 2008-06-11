@@ -7,7 +7,7 @@
 ;; Maintainer: David Ponce <david@dponce.com>
 ;; Created: 25 February 2003
 ;; Keywords: convenience
-;; Revision: $Id: tabbar.el,v 1.3 2008/05/13 07:55:33 davidswelt Exp $
+;; Revision: $Id: tabbar.el,v 1.4 2008/06/11 22:28:24 davidswelt Exp $
 
 (defconst tabbar-version "2.0")
 
@@ -391,10 +391,11 @@ You should use this hook to reset dependent data.")
          "Apply FUNCTION to each tab set, and make a list of the results.
 The result is a list just as long as the number of existing tab sets."
          (let (,result)
-           (mapatoms
-            #'(lambda (,tabset)
-                (push (funcall ,function ,tabset) ,result))
-            tabbar-tabsets)
+           (if tabbar-tabsets
+	       (mapatoms
+		#'(lambda (,tabset)
+		    (push (funcall ,function ,tabset) ,result))
+		tabbar-tabsets))
            ,result)))))
 
 (defun tabbar-make-tabset (name &rest objects)
