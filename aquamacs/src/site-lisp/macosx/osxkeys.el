@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.108 2008/06/11 03:54:25 champo Exp $
+;; Last change: $Id: osxkeys.el,v 1.109 2008/06/11 06:41:04 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -1052,8 +1052,6 @@ behavior)."
     (define-key map `[(meta shift q)] 'unfill-paragraph-or-region)
     (define-key map '[(up)] 'visual-line-up)
     (define-key map '[(down)] 'visual-line-down)
-    (define-key map `[(,osxkeys-command-key left)] 'beginning-of-visual-line)
-    (define-key map `[(,osxkeys-command-key right)] 'end-of-visual-line)
 
     (define-key map '[(control meta left)] 'backward-sexp-nomark)
     (define-key map '[(control meta right)] 'forward-sexp-nomark)
