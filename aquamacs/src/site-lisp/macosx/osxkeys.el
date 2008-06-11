@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.109 2008/06/11 06:41:04 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.110 2008/06/11 17:39:44 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -1055,8 +1055,6 @@ behavior)."
 
     (define-key map '[(control meta left)] 'backward-sexp-nomark)
     (define-key map '[(control meta right)] 'forward-sexp-nomark)
-    (define-key map '[(meta left)] 'backward-word)
-    (define-key map '[(meta right)] 'forward-word)
 
     (define-key map `[(,osxkeys-command-key delete)] 'kill-visual-line)
     (define-key map `[(,osxkeys-command-key backspace)] 'kill-whole-line)
@@ -1184,6 +1182,11 @@ default."
     (define-key map `[(,osxkeys-command-key \[)] 'other-previous-window)
 
     (define-key map `[(,osxkeys-command-key t)] 'new-tab)
+
+    ;; defined by pc-select otherwise
+    (define-key map '[(meta left)] 'backward-word-nomark)
+    (define-key map '[(meta right)] 'forward-word-nomark)
+
 
     (if (fboundp 'mac-font-panel-mode)
 	(define-key map `[(,osxkeys-command-key shift t)] 'mac-font-panel-mode))
