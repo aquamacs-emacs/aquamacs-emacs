@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: tabbar-window.el,v 1.44 2008/06/05 10:20:49 davidswelt Exp $
+;; Revision: $Id: tabbar-window.el,v 1.45 2008/06/11 20:59:05 champo Exp $
 
 (require 'tabbar)
 (require 'aquamacs-tools)
@@ -646,6 +646,7 @@ Run as `tabbar-init-hook'."
 	tabbar-cycle-scope 'tabs
 	tabbar-inhibit-functions nil)
   (add-hook 'window-configuration-change-hook 'tabbar-window-update-tabsets-when-idle)
+  (add-hook 'window-configuration-change-hook 'tabbar-reformat-all-tabsets)
   (add-hook 'first-change-hook 'tabbar-window-update-tabsets-when-idle)
   (add-hook 'after-undo-hook 'tabbar-update-if-changes-undone)
   (add-hook 'after-save-hook 'tabbar-window-update-tabsets)
@@ -677,6 +678,7 @@ Run as `tabbar-quit-hook'."
 	)
   (remove-hook 'window-configuration-change-hook
 	       'tabbar-window-update-tabsets-when-idle)
+  (remove-hook 'window-configuration-change-hook 'tabbar-reformat-all-tabsets)
   (remove-hook 'first-change-hook 'tabbar-window-update-tabsets-when-idle)
   (remove-hook 'after-undo-hook 'tabbar-update-if-changes-undone)
   (remove-hook 'after-save-hook 'tabbar-window-update-tabsets)

@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: aquamacs-tabbar.el,v 1.40 2008/06/07 11:17:33 davidswelt Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.41 2008/06/11 20:59:04 champo Exp $
 
 ;; load original tabbar-mode
 (require 'tabbar)
@@ -638,8 +638,6 @@ NOSCROLL is non-nil, exclude the tabbar-scroll buttons."
 
 (defun tabbar-reformat-all-tabsets ()
   (tabbar-map-tabsets 'tabbar-reformat-tabset))
-
-(add-hook 'window-configuration-change-hook 'tabbar-reformat-all-tabsets)
    
 
 ;; to do:
