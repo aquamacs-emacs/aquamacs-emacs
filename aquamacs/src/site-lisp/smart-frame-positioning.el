@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.58 2008/06/09 13:38:12 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.59 2008/06/12 07:06:23 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -60,7 +60,11 @@
   (convert-standard-filename
    "~/Library/Preferences/Aquamacs Emacs/frame-positions.el")
   "Name of the file that records `smart-frame-prior-positions' value."
- :type 'file)
+ :type 'file
+ :require 'smart-frame-positioning
+ :version 22.0
+ :group 'frames
+ :group 'Aquamacs)
  
 (defcustom smart-frame-positioning-hook nil
   "Functions to be run before frame creation.
