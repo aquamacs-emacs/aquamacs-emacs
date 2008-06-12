@@ -9,7 +9,6 @@
 ;; Created:     17. June 2003
 ;; Keywords:    News, RSS, Atom
 ;; Time-stamp:  "7. Juni 2008, 14:04:59 (ulf)"
-;; CVS-Version: $Id$
 
 ;; ======================================================================
 
