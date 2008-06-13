@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.179 2008/06/06 21:16:13 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.180 2008/06/13 14:24:23 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -703,9 +703,6 @@ yes-or-no prompts - y or n will do."
  
      (longlines-wrap-follows-window-size t)
 
-     ;; Do not require users to insert two spaces after a sentence
-     (sentence-end-double-space nil)
-     
      ;; do not allow user to mess with minibuffer prompt
 
      (minibuffer-prompt-properties
