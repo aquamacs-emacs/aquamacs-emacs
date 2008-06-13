@@ -37,6 +37,7 @@ PATCHES="mac-functions emacs-inline transparency
          minibuffer-filename
          header-line
          tmm
+         sentence-end
          org-gnu-Aquamacs about-aquamacs puresize
          macfns-dialog-menu menu-bar-visible-frame 
          eval-depth
