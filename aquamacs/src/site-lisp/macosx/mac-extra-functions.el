@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.67 2008/06/01 11:55:34 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.68 2008/06/13 06:57:10 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -384,7 +384,7 @@ specified in `shell-file-name'."
 		  (start-process "bash" (current-buffer) shell-file-name
 				 shell-command-switch
 				 "printenv"))))
-	  (accept-process-output prc 0 300)
+	  (accept-process-output prc 1 500) ;; 1.5 sec
 	  (delete-process prc)))
       (if (eq (buffer-size) 0)
 	  (message "Warning: Login shell did not return environment.")
