@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.68 2008/06/13 06:57:10 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.69 2008/06/14 10:35:08 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -352,8 +352,9 @@ This is relevant only for `mac-read-environment-vars-from-shell'.")
  
 ;; (mac-read-environment-vars-from-shell)
 (defun mac-read-environment-vars-from-shell ()
-"Import the environment from the system's default login shell
+  "Import the environment from the system's default login shell
 specified in `shell-file-name'."
+  (let ((num 0))
     (with-temp-buffer
       ;; execute 'printenv' with the default login shell,
       ;; running the shell with -l (to load the environment)
@@ -364,9 +365,9 @@ specified in `shell-file-name'."
 		 (if (string-match ".*/\\(ba\\|z\\)sh" shell-file-name)
 		     "-l"
 		   (if (string-match ".*/\\tcsh" shell-file-name)
-		     ""
+		     nil
 		   (if (string-match ".*/ksh" shell-file-name)
-		       "" ;; works for ksh
+		       nil ;; works for ksh
 		     (message "Could not retrieve login shell environment with login shell: %s" shell-file-name)
 		   ;; won't work for csh, because it doesn't take -l -c ...
 		   ))))))
@@ -394,11 +395,13 @@ specified in `shell-file-name'."
 	  (replace-match "..." nil nil))
 	(goto-char (point-min))
 	(while (search-forward-regexp "^\\([A-Za-z_0-9]+\\)=\\(.*\\)$" nil t)
+	  (incf num)
 	  (setenv
 	   (match-string 1)
 	   (if (equal (match-string 1) "PATH")
 	       (concat (match-string 2) ":" (getenv "PATH"))
-	     (match-string 2)))))))
+	     (match-string 2))))))
+    (message "%d environment variables imported from login shell (%s)." num shell-file-name)))
 
 (defun mac-add-path-to-exec-path ()
   "Add elements from environment variable `PATH' to `exec-path'."
