@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.112 2008/06/13 12:05:03 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.113 2008/06/14 20:00:40 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -1198,13 +1198,7 @@ default."
     (define-key map `[(,osxkeys-command-key \[)] 'other-previous-window)
 
     (define-key map `[(,osxkeys-command-key t)] 'new-tab)
-
-    ;; defined by pc-select otherwise
-    (define-key map '[(meta left)] 'backward-word-nomark)
-    (define-key map '[(meta right)] 'forward-word-nomark)
-    (define-key map '[(shift meta left)] 'backward-word-mark)
-    (define-key map '[(shift meta right)] 'forward-word-mark)
-
+ 
     ;; handle transient-mark-mode better
     (define-key map '[(meta delete)] 'aquamacs-kill-word) 
     (define-key map '[(meta backspace)] 'aquamacs-backward-kill-word) 
@@ -1240,10 +1234,7 @@ mac-command-modifier osxkeys-command-key))))
 	(overwritten (make-sparse-keymap)))
     (map-keymap
    (lambda (key command)
-
      (let ((old (lookup-key  target `[,key])))
-	   
-
        (if (keymapp command)  ; key is a prefix key
 	   (if (keymapp old)
 	       ;; recurse
@@ -1290,6 +1281,13 @@ keymaps used by this mode. They may be modified where necessary."
   (if osx-key-mode
       ;; install low priority map
       (progn
+	;; move word-wise, as per pc-selection-mode
+	(aquamacs-set-defaults '((pc-select-meta-moves-sexps nil)))
+	;; toggle to enable the new setting
+	(when pc-selection-mode
+	  (pc-selection-mode -1)
+	  (pc-selection-mode 1))
+
 	(setq osx-key--saved-low-priority-map 
 	      (aquamacs-install-low-priority-global-key-map
 	       osx-key-low-priority-key-map))
