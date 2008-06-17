@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.69 2008/06/14 10:35:08 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.70 2008/06/17 15:18:12 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -390,12 +390,13 @@ specified in `shell-file-name'."
       (if (eq (buffer-size) 0)
 	  (message "Warning: Login shell did not return environment.")
 	(goto-char (point-min))
+	;; some variables may contain a linebreak
 	(while (re-search-forward "^[A-Za-z_0-9]+=()\s*[^\x]*?
 \s*}\s*$" nil t)
 	  (replace-match "..." nil nil))
 	(goto-char (point-min))
 	(while (search-forward-regexp "^\\([A-Za-z_0-9]+\\)=\\(.*\\)$" nil t)
-	  (incf num)
+	  (setq num (1+ num))
 	  (setenv
 	   (match-string 1)
 	   (if (equal (match-string 1) "PATH")
