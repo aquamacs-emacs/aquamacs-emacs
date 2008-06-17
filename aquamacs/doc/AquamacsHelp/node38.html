@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Changes--1.4rc3</TITLE>
-<META NAME="description" CONTENT="Changes--1.4rc3">
+<TITLE>Changes--1.4</TITLE>
+<META NAME="description" CONTENT="Changes--1.4">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -57,7 +57,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION000141000000000000000">
-Changes--1.4rc3</A>
+Changes--1.4</A>
 </H2>
 
 <P>
@@ -189,7 +189,10 @@ Code by Xavier Maillard and Jonadab the Unsightly One.
 <P>
 </LI>
 <LI>Control-left and Control-right will now move to the beginning or
-  end of the line, respectively, as is standard in OS X.
+  end of the line, respectively, as is standard in OS X.  Similarly, 
+Meta-left and Meta-right will now move forward or back by single
+words (this is usually Option-left or Option-right).  (`forward-'
+and `backward-sexp-nomark' can now be invoked via C-M-right or -left.)
 Suggested by Jean-Christophe Helary.
 
 <P>
@@ -200,11 +203,17 @@ Suggested by Jean-Christophe Helary.
 
 <P>
 </LI>
-<LI>C-backspace deletes a whole file name (i.e., one part of a path) instead of just a word in the minibuffer when a file is selected.
+<LI>C-backspace deletes a whole file name (i.e., one part of a path)
+  instead of just a word in the minibuffer when a file is selected.
+  M-backspace (usually Option-backspace) deletes the portion of the word to the left, as is
+  standard, while M-delete (usually Option-delete) the one to the right.  If a region is
+  marked, that is deleted.
 
 <P>
 </LI>
-<LI>M-e (forward-sentence) and M-a (backward-sentence) do the right thing now even if the text does not have two spaces after each sentence. (`sentence-end-double-space' is now nil by default.)
+<LI>M-e (forward-sentence) and M-a (backward-sentence) do the right
+  thing now even if the text does not have two spaces after each
+  sentence. (New customization variable `sentence-end-double-space-for-recognition'.)
 
 <P>
 </LI>
@@ -252,12 +261,15 @@ Suggested by Nathaniel Cunningham.
 
 <P>
 </LI>
+<LI>Worked around a bug in OS X that caused occasional, very slow program start on some systems.
+
+<P>
+</LI>
 <LI>User-supplied settings of `fill-column' should now be   respected (used for hard word wrapping as enabled in the   Options menu). Reported by Ivan Werning.
 
 <P>
 </LI>
-<LI>Some commands (such as M-x shell) will use the current   window rather than showing a new one, unless   `one-buffer-one-frame-mode' (Options / Show Buffers in New Frames) is enabled.  
-Suggested by Jean-Christophe Helary.
+<LI>Some commands (such as M-x shell) will use the current window rather than showing a new one, unless `one-buffer-one-frame-mode' (Options / Show Buffers in New Frames) is enabled.  Suggested by Jean-Christophe Helary.
 
 <P>
 </LI>
@@ -294,7 +306,7 @@ Suggested by Jean-Christophe Helary.
 <!--End of Navigation Panel-->
 <ADDRESS>
 <I>David</I>
-<BR><I>2008-06-09</I>
+<BR><I>2008-06-17</I>
 </ADDRESS>
 </BODY>
 </HTML>
