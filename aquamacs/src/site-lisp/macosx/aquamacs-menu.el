@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.154 2008/06/09 22:11:46 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.155 2008/06/21 11:45:22 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -617,7 +617,7 @@ both existing buffers and buffers that you subsequently create."
 (define-key-after menu-bar-options-menu [auto-longlines]
   '(menu-item "Auto Word Wrap in Text Modes"
 	      menu-bar-auto-text-mode-longlines
-	      :help "Automatically switch to Soft Word Wrap (Longlines) in Text Modes."
+	      :help "Automatically use hard or soft word wrap (Auto Fill / Longlines) in text modes."
 	      :button (:toggle . (if (listp text-mode-hook)
 				     (member 'auto-detect-longlines text-mode-hook)
 				   (eq 'auto-detect-longlines text-mode-hook))))
