@@ -4,7 +4,7 @@
 ;; originally authored by Kevin Walzer
 ;; Keywords: auctex
  
-;; Last change: $Id: auctex-config.el,v 1.41 2008/05/04 22:30:48 davidswelt Exp $
+;; Last change: $Id: auctex-config.el,v 1.42 2008/06/25 16:05:25 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -25,7 +25,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, Kevin Walzer, David Reitter
+;; Copyright (C) 2005, 2008, Kevin Walzer, David Reitter
 
   
 
@@ -33,23 +33,16 @@
 
 (setenv "PATH"
 	(concat (getenv "PATH")
-		":/usr/local/teTeX/bin/powerpc-apple-darwin-current"))
+		(let ((f (file-expand-wildcards "/usr/local/texlive/20*/bin")))
+		  (if f (concat ":" (car f)) ""))
+		(let ((f (file-expand-wildcards "/usr/local/teTeX/bin/*-apple-darwin-current")))
+		  (if f (concat ":" (car f)) ""))))
 
 ;; don't set all of these paths. only what's necessary.
 ;; everything else should be initialized from PATH anyways
 (setq exec-path (append exec-path
-			'(;;"/bin"
-			  ;"/sbin"
-			  ;"/usr/bin"
-			  ;"/usr/sbin"
-			  ;"/usr/local/bin" 
-			  ;"/usr/local/sbin"
-			  ;"/sw/bin" 
-			  ;"/sw/sbin" 
- 			  ;"/usr/libexec"    
- 			  ;"/usr/X11R6/bin" 
-			  ;"/opt/local/bin"
-			  "/usr/local/teTeX/bin/powerpc-apple-darwin-current")))
+			(file-expand-wildcards "/usr/local/texlive/20*/bin")
+			(file-expand-wildcards "/usr/local/teTeX/bin/*-apple-darwin-current")))
 
 (load "edit-modes/auctex.el" nil t t)
 ;; this is not done by default
