@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.113 2008/06/14 20:00:40 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.114 2008/06/25 17:57:04 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -134,7 +134,7 @@ provided `cua-mode' and the mark are active."
 (defun aquamacs-kill-word (beg end &optional arg)
   "Kill characters forward until encountering the end of a word.
 With argument, do this that many times."
-  (interactive "rp")
+  (interactive "r\np")
   (if (and transient-mark-mode mark-active)
       (kill-region beg end)
     (kill-region (point) (progn (forward-word arg) (point)))))
@@ -142,7 +142,7 @@ With argument, do this that many times."
 (defun aquamacs-backward-kill-word (beg end &optional arg)
   "Kill characters backward until encountering the beginning of a word.
 With argument, do this that many times."
-  (interactive "rp")
+  (interactive "r\np")
   (aquamacs-kill-word beg end (- (or arg 1))))
 
 (defun aquamacs--shift-key-for-command-p ()
