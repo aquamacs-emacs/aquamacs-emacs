@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.36 2008/05/15 16:42:49 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.37 2008/06/26 22:00:58 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -460,22 +460,18 @@ Sets default-frame-alist. (Aquamacs)"
 ;;     )
    
 
-  (message (format "Style has been set as default for %s. %s
-Use Save Options before restart to retain setting." 
- 
-   (if (eq mode 'default) "all frames" mode)
+  (message (format "Style has been set as default for %s. %s" 
+		   (if (eq mode 'default) "all frames" mode)
 		   (if aquamacs-styles-mode
 		       ""
-		     "Note: aquamacs-styles-mode is nil - no functionality!"
-		     ))))
+		     (aquamacs-styles-mode 1)
+		     "\nNote: Auto Frame Styles have been turned on."))))
 
-; 
 
 (defun set-to-custom-standard-value (symbol)
   (customize-set-variable symbol 
 			  (eval (car
-			   (get symbol 'standard-value))))
-  )
+			   (get symbol 'standard-value)))))
 
 (defun aquamacs-delete-styles ()
   "Deletes all styles (mode-specific and the default style)"
@@ -490,9 +486,13 @@ Use Save Options before restart to retain setting."
   (interactive)
   (set-to-custom-standard-value 'aquamacs-default-styles)
   (set-to-custom-standard-value 'aquamacs-buffer-default-styles)
+; this doesn't work as expected...
+;  (mapc
+;   (lambda (frame) (aquamacs-set-style frame 'force))
+;   (frame-list))
   (message "All styles reset to defaults. Add new ones or use customize to 
-modify them.")
-  )
+modify them."))
+
 (defun aquamacs-clear-styles ()
   "Resets all styles (mode-specific and the default style)"
   (interactive)
