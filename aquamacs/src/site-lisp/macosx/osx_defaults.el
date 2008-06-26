@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.68 2008/04/28 19:37:41 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.69 2008/06/26 21:41:32 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -173,6 +173,9 @@ from earlier versions of the distribution."
   (require 'mac-extra-functions)
 (ats "mac-extra done")
 
+(mac-read-environment-vars-from-shell) ;; starts reading the env vars
+(ats "read env vars done")
+
   (mac-add-standard-directories)
 (ats "add dirs done")
 
@@ -189,38 +192,6 @@ from earlier versions of the distribution."
   ;; this was no good, since users could not change after-init-hook any more.
   ;; now solved via a patch to startup.el.
 
-
-  (mac-read-environment-vars-from-shell)
-(ats "read env vars done")
-
-  (mac-add-path-to-exec-path)
-  (mac-add-local-directory-to-exec-path) ;; needed for CocoAspell
-
-  ;; inferior workaround, until mac.c is fixed not to set INFOPATH any longer
-  (if (equal (concat (mac-resources-path)
-		       "info")
-	     (getenv "INFOPATH"))
-      (setenv "INFOPATH"))
-  
-;; when INFOPATH is set from outside, it will only load INFOPATH
-
-  (let ((extra-dirs (list
-		     "~/Library/Application Support/Emacs/info"
-		     "/Library/Application Support/Emacs/info"
-		     (concat (mac-resources-path)
-			     "site-lisp/edit-modes/info")
-		     (concat (mac-resources-path)
-			     "info"))))
-    
-    (setq Info-default-directory-list (append extra-dirs
-				       Info-default-directory-list
-				       ))
-    (when (getenv "INFOPATH")
-      (setenv "INFOPATH" (apply 'concat (getenv "INFOPATH")
-				(mapcar (lambda (x) (concat ":" x))
-					extra-dirs)))))
- 
-;
 
 
 

@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.180 2008/06/13 14:24:23 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.181 2008/06/26 21:41:32 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -1316,6 +1316,12 @@ information given would otherwise be irrelevant to Aquamacs users.
   (require 'aquamacs-tool-bar)
   (aquamacs-tool-bar-setup))
 (ats "aquamacs-tool-bar-setup done")
+
+;; finish reading environment vars
+
+(unless (mac-read-environment-vars-from-shell-2)    
+  (message "Warning - environment variable reading delayed.")
+  (run-with-timer 1 nil 'mac-read-environment-vars-from-shell-2))
 
   ) ;; aquamacs-setup
  

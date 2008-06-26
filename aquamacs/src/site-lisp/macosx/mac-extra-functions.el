@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.70 2008/06/17 15:18:12 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.71 2008/06/26 21:41:32 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -351,58 +351,97 @@ This is relevant only for `mac-read-environment-vars-from-shell'.")
 	nil))))
  
 ;; (mac-read-environment-vars-from-shell)
+(defvar environment-temp-file nil)
+
+
 (defun mac-read-environment-vars-from-shell ()
   "Import the environment from the system's default login shell
 specified in `shell-file-name'."
-  (let ((num 0))
-    (with-temp-buffer
-      ;; execute 'printenv' with the default login shell,
-      ;; running the shell with -l (to load the environment)
-      (setq default-directory "~/")	; ensure it can be executed
-      
-      (let ((shell-login-switch 
-	     (or shell-login-switch 
-		 (if (string-match ".*/\\(ba\\|z\\)sh" shell-file-name)
-		     "-l"
-		   (if (string-match ".*/\\tcsh" shell-file-name)
-		     nil
-		   (if (string-match ".*/ksh" shell-file-name)
-		       nil ;; works for ksh
-		     (message "Could not retrieve login shell environment with login shell: %s" shell-file-name)
+  
+  (setq environment-temp-file (make-temp-file "envvar-"))
+  ;; running the shell with -l (to load the environment)
+  (setq default-directory "~/")	; ensure it can be executed
+  
+  (let ((shell-login-switch
+	 (or shell-login-switch
+	     (if (string-match ".*/\\(ba\\|z\\)sh" shell-file-name)
+	       "-l"
+	       (if (string-match ".*/\\tcsh" shell-file-name)
+		   ""
+		 (if (string-match ".*/ksh" shell-file-name)
+		     "" ;; works for ksh
+		   (message "Could not retrieve login shell environment with login shell: %s" shell-file-name)
 		   ;; won't work for csh, because it doesn't take -l -c ...
 		   ))))))
-	
-	;; this construction is intended to start bash
-	;; but use a timeout in case things go wrong.
-	;; this may address issues with path_helper program.
-	(let* ((process-connection-type nil)
-	       (prc
-		(if shell-login-switch
-		    (start-process "bash" (current-buffer) shell-file-name
-				   shell-login-switch
-				   shell-command-switch
-				   "printenv")
-		  (start-process "bash" (current-buffer) shell-file-name
-				 shell-command-switch
-				 "printenv"))))
-	  (accept-process-output prc 1 500) ;; 1.5 sec
-	  (delete-process prc)))
-      (if (eq (buffer-size) 0)
-	  (message "Warning: Login shell did not return environment.")
-	(goto-char (point-min))
-	;; some variables may contain a linebreak
-	(while (re-search-forward "^[A-Za-z_0-9]+=()\s*[^\x]*?
+    ;; we call the process asynchronuously
+    ;; using start-process does not work for unknown reasons: sometimes it doesn't get the environment.
+    (call-process shell-file-name nil
+		  0 nil
+		  "-l"
+		  "-c"
+		  (format "printenv >%s.tmp; mv %s.tmp %s" environment-temp-file environment-temp-file environment-temp-file))))
+
+;; (mac-read-environment-vars-from-shell)
+
+(defun mac-read-environment-vars-from-shell-2 ()
+  "Reads temporary file if it exists."
+  (if (file-readable-p environment-temp-file)
+      (prog1
+	(let ((b (find-file-noselect environment-temp-file 'nowarn 'rawfile)) (num 0))
+	  (with-current-buffer b
+	     (if (eq (buffer-size) 0)
+		 (message "Warning: Login shell did not return environment.")
+	       (goto-char (point-min))
+	       (while (re-search-forward "^[A-Za-z_0-9]+=()\s*[^\x]*?
 \s*}\s*$" nil t)
-	  (replace-match "..." nil nil))
-	(goto-char (point-min))
-	(while (search-forward-regexp "^\\([A-Za-z_0-9]+\\)=\\(.*\\)$" nil t)
-	  (setq num (1+ num))
-	  (setenv
-	   (match-string 1)
-	   (if (equal (match-string 1) "PATH")
-	       (concat (match-string 2) ":" (getenv "PATH"))
-	     (match-string 2))))))
-    (message "%d environment variables imported from login shell (%s)." num shell-file-name)))
+		 (replace-match "..." nil nil))
+	       (goto-char (point-min))
+	       (while (search-forward-regexp "^\\([A-Za-z_0-9]+\\)=\\(.*\\)$" nil t)
+		 (setq num (1+ num))
+		 (setenv
+		  (match-string 1)
+		  (if (equal (match-string 1) "PATH")
+		      (concat (match-string 2) ":" (getenv "PATH"))
+		    (match-string 2))))))
+	  (message "%d environment variables imported from login shell (%s)." 
+		   num shell-file-name)
+	  (mac-post-environment-vars-function)
+	  num)
+	(condition-case nil
+	    (delete-file environment-temp-file)
+	  (error nil)))
+    nil))
+
+
+(defun mac-post-environment-vars-function ()
+
+  (mac-add-path-to-exec-path)
+  (mac-add-local-directory-to-exec-path) ;; needed for CocoAspell
+
+  ;; inferior workaround, until mac.c is fixed not to set INFOPATH any longer
+  (if (equal (concat (mac-resources-path)
+		       "info")
+	     (getenv "INFOPATH"))
+      (setenv "INFOPATH"))
+  
+;; when INFOPATH is set from outside, it will only load INFOPATH
+
+  (let ((extra-dirs (list
+		     "~/Library/Application Support/Emacs/info"
+		     "/Library/Application Support/Emacs/info"
+		     (concat (mac-resources-path)
+			     "site-lisp/edit-modes/info")
+		     (concat (mac-resources-path)
+			     "info"))))
+    
+    (setq Info-default-directory-list (append extra-dirs
+				       Info-default-directory-list
+				       ))
+    (when (getenv "INFOPATH")
+      (setenv "INFOPATH" (apply 'concat (getenv "INFOPATH")
+				(mapcar (lambda (x) (concat ":" x))
+					extra-dirs))))))
+
 
 (defun mac-add-path-to-exec-path ()
   "Add elements from environment variable `PATH' to `exec-path'."
