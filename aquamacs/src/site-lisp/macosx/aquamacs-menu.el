@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.157 2008/07/03 17:21:26 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.158 2008/07/03 17:22:27 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -932,7 +932,7 @@ the previous frame size."
     ;; (frame-parameters)
     ;; save small frame position
     (modify-frame-parameters 
-     nil (list (cons 'fullscreen t) 
+     nil (list (cons 'fullscreen 'fullboth) 
 	       (cons 'prior-left (frame-parameter nil 'left))
 	       (cons 'prior-top (frame-parameter nil 'top))
 	       (cons 'prior-width (frame-parameter nil 'width))
