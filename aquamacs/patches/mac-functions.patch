@@ -1,480 +1,21 @@
+This patch provides Mac-only extensions to GNU Emacs 22 CVS (Carbon Emacs).
+Contributors are as follows.
+mac_show_menu_bar -- S. Zenitani & T. Hiromatsu
+mac_hide_menu_bar -- S. Zenitani & T. Hiromatsu
+mac_dialog           -- S. Zenitani
+mac_dialog_y_or_n_p  -- S. Zenitani
+mac_spotlight_search -- S. Zenitani
+mac_process_activate -- S. Zenitani
 *** src/macfns.c	29 Mar 2008 00:45:58 -0000	1.106.2.6
 --- src/macfns.c	1 Apr 2008 07:07:03 -0000
 ***************
-*** 57,62 ****
---- 57,64 ----
-  
-  static Lisp_Object Vmac_carbon_version_string;
-  
-+ static int mac_autohide_menubar_on_maximize;
-+ 
-  #endif	/* TARGET_API_MAC_CARBON */
-  
-  /* Non-zero means we're allowed to display an hourglass cursor.  */
-***************
-*** 4230,4235 ****
---- 4284,4831 ----
-  {
-    return mac_file_dialog (prompt, dir, default_filename, mustmatch, only_dir_p);
+*** 4588,4593 ****
+--- 4590,4759 ----
+    UNBLOCK_INPUT;
+    return result;
   }
 + 
 + #if MAC_OSX 
-+ 
-+ #if TARGET_API_MAC_CARBON
-+ 
-+ /* === Begin support for maximizing frames to the full display. === */
-+ 
-+ #define MAC_EMACS_WINDOW_PROPTAG_MAXWIN               ('cmwt')
-+ #define MAC_EMACS_WINDOW_PROPTAG_CLOSE_HANDLER_STATUS ('cchi')
-+ 
-+ OSStatus MacGetDisplayIdForWindow(
-+     WindowRef          wnd,
-+     CGDirectDisplayID* outInDispId)
-+ {
-+     OSStatus s;
-+     
-+ #if MAC_OS_X_VERSION_MIN_REQUIRED >= 1050
-+     s = HIWindowGetGreatestAreaDisplay(
-+         wnd,
-+         kWindowContentRgn,
-+         kHICoordSpaceScreenPixel,
-+         outInDispId,
-+         NULL);
-+     if (s != noErr)
-+         error ("Error while attempting to determine display id.");
-+     return s;
-+ #else
-+     GDHandle devh;
-+     DisplayIDType id;
-+ 
-+     /*
-+       NB: HIWindowGetGreatestAreaDisplay() isn't available before 10.5,
-+       so if we want this to build in Tiger we need to use
-+       GetWindowGreatestAreaDevice() and obtain the display ID via
-+       DMGetDisplayIDByGDevice().
-+     */
-+ 
-+     s = GetWindowGreatestAreaDevice(
-+         wnd,
-+         kWindowContentRgn,
-+         &devh,
-+         NULL);
-+     
-+     if (s != noErr) {
-+        error ("Error while attempting to determine GDHandle.");
-+        return s;
-+      }
-+ 
-+     OSErr e = DMGetDisplayIDByGDevice(
-+         devh,
-+         &id,
-+         true);
-+     if (e != noErr)
-+     {
-+         error ("Error while attempting to map GDevice to DisplayID");
-+         return s;
-+     }
-+     
-+     *outInDispId = (CGDirectDisplayID) id;
-+     return s;
-+ #endif
-+ }
-+ 
-+ Rect MacConvertCGRectToRect(
-+     CGRect r)
-+ {
-+     Rect rslt;
-+     rslt.top    = (short) r.origin.y;
-+     rslt.left   = (short) r.origin.x;
-+     rslt.right  = rslt.left + ((short) r.size.width);
-+     rslt.bottom = rslt.top  + ((short) r.size.height);
-+     return rslt;
-+ }
-+ 
-+ CGRect MacConvertRectToCGRect(
-+     Rect r)
-+ {
-+     CGRect rslt;
-+     rslt.origin.x    = r.left;
-+     rslt.origin.y    = r.top;
-+     rslt.size.width  = r.right - r.left;
-+     rslt.size.height = r.bottom - r.top;
-+     return rslt;
-+ }
-+ 
-+ typedef struct 
-+ {
-+     Rect bounds;
-+ } MacWindowCustomState, **MacWindowCustomStateH;
-+ 
-+ #define MAC_WINSTATE_HANDLE_FIELD_PTR(handle, fld) (&((**handle).fld))
-+ 
-+ void MacReleaseWindowCustomState(
-+     MacWindowCustomStateH h)
-+ {
-+     free(*h);
-+     free(h);
-+ }
-+ 
-+ void MacToggleFullFrame(WindowRef frame);
-+ static pascal void MacOnReconfigMaximizedWindow(
-+     CGDirectDisplayID           dispID,
-+     CGDisplayChangeSummaryFlags flags,
-+     void*                       userInfo)
-+ {
-+     if (flags & kCGDisplayRemoveFlag)
-+     {
-+         /*
-+           NB: We choose to un-maximize any full-screen frame during a
-+           display reconfiguration involving the removal of a display.
-+         */
-+ 
-+         CGDirectDisplayID inDispID;
-+         WindowRef         frame = (WindowRef) userInfo;
-+         MacToggleFullFrame(frame);
-+     }
-+ }
-+ 
-+ Boolean MacGetWindowCustomState(
-+     WindowRef              wnd,
-+     MacWindowCustomStateH* outStateHandle)
-+ {
-+     OSStatus s = GetWindowProperty(
-+         wnd,
-+         MAC_EMACS_CREATOR_CODE,
-+         MAC_EMACS_WINDOW_PROPTAG_MAXWIN,
-+         sizeof(MacWindowCustomStateH),
-+         NULL,
-+         outStateHandle);
-+     return s == noErr;
-+ }
-+ 
-+ static int mac_maximized_frame_count = 0;
-+ int MacHandleMenuBarBehavior(bool isMaximizing, WindowRef frame)
-+ {
-+     OSStatus st;
-+     GDHandle device_handle = NULL;
-+ 
-+     st = GetWindowGreatestAreaDevice (frame, kWindowContentRgn, &device_handle, NULL);
-+ 
-+     if (st != noErr || device_handle != LMGetMainDevice())
-+       {
-+ 	return 0; /* no menu bar on secondary display. */
-+       }
-+     if (isMaximizing)
-+       {
-+ 	++mac_maximized_frame_count;
-+ 	if (mac_autohide_menubar_on_maximize)
-+ 	  {
-+ 	    st = SetSystemUIMode(kUIModeAllHidden,
-+ 				 kUIOptionAutoShowMenuBar);
-+ 	    if (st != noErr)
-+ 	      error("Error while handling menubar behavior.");
-+ 	  }
-+ 	else
-+ 	  {
-+ 	    st = SetSystemUIMode(kUIModeNormal, 0);
-+ 	    if (st != noErr)
-+ 	      error("Error while handling menubar behavior.");
-+ 	  }
-+       }
-+     else
-+       {
-+ 	if (0 == --mac_maximized_frame_count)
-+ 	  {
-+ 	    st = SetSystemUIMode(kUIModeNormal, 0);
-+ 	    if (st != noErr)
-+ 	      error("Error while handling menubar behavior.");
-+ 	  }
-+       }
-+     return GetMBarHeight(); /* return resulting height of menu bar */
-+ }
-+ 
-+ static pascal OSStatus MacHandleMaxWndClose(
-+     EventHandlerCallRef inHandlerCallRef,
-+     EventRef            inEvent,
-+     void*               inUserData)
-+ {
-+     WindowRef             wnd = (WindowRef) inUserData;
-+     MacWindowCustomStateH h;
-+ 
-+     BLOCK_INPUT;
-+ 
-+     if (MacGetWindowCustomState(wnd, &h))
-+     {
-+         MacReleaseWindowCustomState(h);
-+         MacHandleMenuBarBehavior(false, wnd);
-+     }
-+ 
-+     UNBLOCK_INPUT;
-+     return noErr;
-+ }
-+ 
-+ void MacRegisterMaxWinCloseHandler(
-+     WindowRef wnd)
-+ {
-+     /* Register the window close handler for this window if we haven't
-+        already done so. We use the property with tag
-+        MAC_EMACS_WINDOW_PROPTAG_CLOSE_HANDLER_STATUS to denote whether
-+        or not the handler has been already been registered. */
-+ 
-+     int alreadyRegisteredHandler = 0;
-+ 
-+     OSStatus s = GetWindowProperty(
-+         wnd,
-+         MAC_EMACS_CREATOR_CODE,
-+         MAC_EMACS_WINDOW_PROPTAG_CLOSE_HANDLER_STATUS,
-+         sizeof(int),
-+         NULL,
-+         &alreadyRegisteredHandler);
-+ 
-+     if (s != noErr)
-+     {
-+         /* No such property, so we haven't registered the event handler
-+            for this window yet. Do so and record the fact that we
-+            did. */
-+ 
-+         EventTypeSpec etWC = { kEventClassWindow, kEventWindowClosed };
-+ 
-+         /* Register a handler to do cleanup when this window closes */
-+         s = InstallWindowEventHandler(
-+             wnd,
-+             MacHandleMaxWndClose,
-+             1,
-+             &etWC,
-+             (void*)wnd,
-+             NULL);
-+ 
-+         if (s != noErr) {
-+             error("Error while installing window handler");
-+             return;
-+         }
-+ 
-+         alreadyRegisteredHandler = 1;
-+         s = SetWindowProperty(
-+             wnd,
-+             MAC_EMACS_CREATOR_CODE,
-+             MAC_EMACS_WINDOW_PROPTAG_CLOSE_HANDLER_STATUS,
-+             sizeof(int),
-+             &alreadyRegisteredHandler);
-+         if (s != noErr) {
-+             error("Error while saving window handler status.");
-+         }
-+     }
-+ }
-+ 
-+ MacWindowCustomStateH MacSaveWindowCustomState(
-+     WindowRef wnd)
-+ {
-+     OSStatus              s;
-+     MacWindowCustomState* state = malloc(sizeof(MacWindowCustomState));
-+     MacWindowCustomStateH h     = malloc(sizeof(MacWindowCustomStateH));
-+     *h                          = state;
-+ 
-+     MacRegisterMaxWinCloseHandler(wnd);
-+ 
-+     if (noErr != GetWindowBounds(wnd, kWindowStructureRgn, &state->bounds))
-+     {
-+         error("Error while obtaining window bounds.");
-+         MacReleaseWindowCustomState(h);
-+         return NULL;
-+     }
-+     else {
-+         s = SetWindowProperty(
-+             wnd,
-+             MAC_EMACS_CREATOR_CODE,
-+             MAC_EMACS_WINDOW_PROPTAG_MAXWIN,
-+             sizeof(MacWindowCustomStateH),
-+             &h);
-+ 
-+         if (s != noErr)
-+         {
-+             error("Error while saving window bounds.");
-+             MacReleaseWindowCustomState(h);
-+             return NULL;
-+         }
-+     }
-+     return h;
-+ }
-+ 
-+ /* This function is the workhorse routine for the toggle max-size frame
-+    behavior. */
-+ 
-+ /* workaround for compiling on pre-10.4 systems */ 
-+ #define FNS_kWindowNoTitleBarAttribute 512
-+ 
-+ void MacToggleFullFrame(
-+     WindowRef frame)
-+ {
-+     OSStatus              st;
-+     CGError               e;
-+     CGDirectDisplayID     inDispID;
-+     MacWindowCustomStateH savedState_h;
-+     
-+     if (MacGetWindowCustomState(frame, &savedState_h))
-+     {
-+         /* We're un-maximizing the current frame. */
-+         Rect* bounds_p =
-+             MAC_WINSTATE_HANDLE_FIELD_PTR(savedState_h, bounds);
-+         /*
-+            Saved window state only exists when frame has already been
-+            maximized, so we need to restore the window to its initial,
-+            pre-maximized state and then remove the saved window state
-+            from the window.
-+         */
-+ 
-+         /* Enable title bar and resizability */
-+         st = ChangeWindowAttributes(
-+             frame,
-+             kWindowResizableAttribute,
-+             FNS_kWindowNoTitleBarAttribute);
-+         if (st != noErr)
-+         {
-+             error ("Error during unmaximize: couldn't change window attributes.");
-+             goto unmax_cleanup;
-+         }
-+ 
-+         /* Reset window size */
-+         st = SetWindowBounds(frame, kWindowStructureRgn, bounds_p);
-+         if (st != noErr)
-+         {
-+             error ("Error during unmaximize: couldn't reset window bounds.");
-+             goto unmax_cleanup;
-+         }
-+         MacHandleMenuBarBehavior(false,frame);
-+         /* Resize and/or move the frame as needed in case the saved
-+            bounds aren't acceptable for the current display */
-+ 
-+         st = ConstrainWindowToScreen(
-+             frame,
-+             kWindowStructureRgn,
-+             kWindowConstrainStandardOptions,
-+             NULL,
-+             NULL);
-+         if (st != noErr)
-+         {
-+             error("Error during unmaximize: couldn't constrain window.");
-+             goto unmax_cleanup;
-+         }
-+ 
-+         /* Toss the saved data */
-+         st = RemoveWindowProperty(
-+             frame,
-+             MAC_EMACS_CREATOR_CODE,
-+             MAC_EMACS_WINDOW_PROPTAG_MAXWIN);
-+         if (st != noErr)
-+         {
-+             error ("Error during unmaximize: couldn't remove window state.");
-+             goto unmax_cleanup;
-+         }
-+         
-+     unmax_cleanup:
-+ 
-+         MacReleaseWindowCustomState(savedState_h);
-+ 
-+         /* Unregister the display reconfiguration cb */
-+         e = CGDisplayRemoveReconfigurationCallback(
-+             MacOnReconfigMaximizedWindow,
-+             frame);
-+         if (e != noErr)
-+             error ("Error during unmaximize: couldn't unregister cb");
-+ 
-+     }
-+     else
-+     {
-+         /* We're maximizing the current frame. */
-+ 
-+         Rect                  screenBnds;
-+         CGDirectDisplayID     inDispID;
-+         short                 mbarHeight;
-+ 
-+         savedState_h = MacSaveWindowCustomState(frame);
-+         if (savedState_h == NULL)
-+             return;
-+ 
-+         mbarHeight = MacHandleMenuBarBehavior(true, frame);
-+         
-+         /* Remove title bar & resizability from the window */
-+         st = ChangeWindowAttributes(
-+             frame,
-+             FNS_kWindowNoTitleBarAttribute,
-+             kWindowResizableAttribute);
-+         if (st != noErr)
-+         {
-+             error("Error during maximize: couldn't set window attributes.");
-+             goto max_cleanup;
-+         }
-+ 
-+         st = MacGetDisplayIdForWindow(frame, &inDispID);
-+         if (st != noErr)
-+         {
-+             error ("Error during maximize: couldn't get display id");
-+             goto max_cleanup;
-+         }
-+ 
-+         /* Maximize the window to the screen bounds, , leaving room
-+            for the menubar to if it is visible (this can be
-+            controlled by the user via mac-autohide-menubar-on-maximize */
-+ 
-+         screenBnds      = MacConvertCGRectToRect(CGDisplayBounds(inDispID));
-+         screenBnds.top += mbarHeight;
-+ 
-+         st = SetWindowBounds(frame, kWindowStructureRgn, &screenBnds);
-+         if (st != noErr)
-+         {
-+             error ("Error during maximize: couldn't set window bounds.");
-+             goto max_cleanup;
-+         }
-+ 
-+         /*
-+           Register a callback to restore the window to its old size when
-+           the displays are reconfigured; if we don't do this, we can end
-+           up with a maximized window that is larger than the current
-+           display.  The cb is unregistered on un-maximize.
-+         */
-+ 
-+         e = CGDisplayRegisterReconfigurationCallback(
-+             MacOnReconfigMaximizedWindow,
-+             frame);
-+         if (e != noErr)
-+         {
-+             error ("Error during maximize: couldn't register reconfig cb");
-+             goto max_cleanup;
-+         }
-+ 
-+         goto max_done;
-+         
-+     max_cleanup:
-+ 
-+         MacReleaseWindowCustomState(savedState_h);
-+ 
-+     max_done:
-+ 
-+         return;
-+     }
-+ }
-+ 
-+ DEFUN ("mac-toggle-full-frame", Fmac_toggle_full_frame, Smac_toggle_full_frame, 0, 0, "",
-+        doc: /* Makes the current frame use as much of the display as
-+ possible, or reverts it to its previous size and position if already
-+ maximized.  If mac-autohide-menubar-on-maximize is non-nil, maximized
-+ frames auto-hide the menubar.*/)
-+     ()
-+ {
-+     if (!EQ (Vwindow_system, intern ("mac")))
-+         return Qnil;
-+ 
-+     BLOCK_INPUT;
-+     
-+     WindowRef frame = GetUserFocusWindow();
-+     MacToggleFullFrame(frame);
-+ 
-+     UNBLOCK_INPUT;
-+     return Qnil;
-+ }
-+ /* === End support for maximizing frames to the full display. === */
-+ 
-+ #endif /* MAC_OSX && TARGET_API_MAC_CARBON */
 + 
 + DEFUN ("mac-show-menu-bar", Fmac_show_menu_bar, Smac_show_menu_bar, 0, 0, "",
 +        doc: /* Show the menu bar.  */)
@@ -492,8 +33,95 @@
 +     HideMenuBar();
 +   return Qnil;
 + }
-+ /* HISearchWindowShow is not available on build systems prior to 10.4 */
-+ #ifdef AVAILABLE_MAC_OS_X_VERSION_10_4_AND_LATER
++ DEFUN ("mac-dialog", Fmac_dialog, Smac_dialog, 2, 2, "",
++        doc: /* Show a dialog.  */)
++   (message, explanation)
++      Lisp_Object message, explanation;
++ {
++   DialogRef           sheet=NULL;
++   AlertStdCFStringAlertParamRec alertParams;
++   struct frame *f = XFRAME (selected_frame);
++   CHECK_STRING (message);
++   CHECK_STRING (explanation);
++ 
++   if (FRAME_MAC_WINDOW (f))
++     {
++       GetStandardAlertDefaultParams(&alertParams,kStdCFStringAlertVersionOne);
++       alertParams.defaultText=(CFStringRef)kAlertDefaultOKText;       
++       alertParams.defaultButton=kAlertStdAlertOKButton;       
++ 
++       BLOCK_INPUT;
++       {
++         CFStringRef msgTitle = NULL, msgExplanation = NULL;
++         msgTitle       = cfstring_create_with_string (message);
++         msgExplanation = cfstring_create_with_string (explanation);
++ 
++         OSStatus err;
++         err = CreateStandardAlert(kAlertNoteAlert,
++                                   msgTitle,
++                                   msgExplanation,
++                                   &alertParams,
++                                   &sheet);
++         if(err == noErr)
++           err = RunStandardAlert(sheet,
++                                  NULL,
++                                  NULL);
++         CFRelease (msgTitle);
++         CFRelease (msgExplanation);
++       }
++       UNBLOCK_INPUT;
++     }
++   return Qnil;
++ }
++ DEFUN ("mac-dialog-y-or-n-p", Fmac_dialog_y_or_n_p, Smac_dialog_y_or_n_p, 2, 2, "",
++        doc: /* Show a dialog, which asks user a "Yes or No" question.
++ Return t if answer is "Yes". Takes two arguments,
++ which is the strings to display to ask the question.  */)
++   (message, explanation)
++      Lisp_Object message, explanation;
++ {
++   DialogRef           sheet=NULL;
++   AlertStdCFStringAlertParamRec alertParams;
++   struct frame *f = XFRAME (selected_frame);
++   CHECK_STRING (message);
++   CHECK_STRING (explanation);
++   SInt16 index = 0;
++ 
++   if (FRAME_MAC_WINDOW (f))
++     {
++       GetStandardAlertDefaultParams(&alertParams,kStdCFStringAlertVersionOne);
++       alertParams.defaultText=CFSTR ("Yes");
++       alertParams.defaultButton=kAlertStdAlertOKButton;       
++       alertParams.cancelText=CFSTR ("No");
++       alertParams.cancelButton=kAlertStdAlertCancelButton;
++ 
++       BLOCK_INPUT;
++       {
++         CFStringRef msgTitle = NULL, msgExplanation = NULL;
++         msgTitle       = cfstring_create_with_string (message);
++         msgExplanation = cfstring_create_with_string (explanation);
++ 
++         OSStatus err;
++         err = CreateStandardAlert(kAlertNoteAlert,
++                                   msgTitle,
++                                   msgExplanation,
++                                   &alertParams,
++                                   &sheet);
++         if(err == noErr)
++           err = RunStandardAlert(sheet,
++                                  NULL,
++                                  &index);
++         CFRelease (msgTitle);
++         CFRelease (msgExplanation);
++       }
++       UNBLOCK_INPUT;
++     }
++   if( index==1 ){
++     return Qt;
++   }else{
++     return Qnil;
++   }
++ }
 + DEFUN ("mac-spotlight-search", Fmac_spotlight_search,
 +        Smac_spotlight_search, 1, 1, "MSearch in Spotlight: ",
 +        doc: /* Search STRING with Spotlight. */)
@@ -501,21 +129,12 @@
 +      Lisp_Object string;
 + {
 +   CFStringRef search_str;
-+   UInt32 response;
-+   if ((Gestalt(gestaltSystemVersion, (SInt32 *) &response) == noErr) && (response >= 0x1040))
-+     {
-+       search_str = cfstring_create_with_string ( string );
-+       if( search_str != NULL )
-+ 	HISearchWindowShow(search_str,kNilOptions);
-+       CFRelease (search_str);
-+     } 
-+   else
-+     {
-+        error("Spotlight is not available on OS X prior to version 10.4.");
-+     }
++   search_str = cfstring_create_with_string ( string );
++   if( search_str != NULL )
++     HISearchWindowShow(search_str,kNilOptions);
++   CFRelease (search_str);
 +   return Qnil;
 + }
-+ #endif
 + /* Originally from Kurita-san's SmartActivate (Cocoa) */
 + DEFUN ("mac-process-activate", Fmac_process_activate,
 +        Smac_process_activate, 1, 1, 0,
@@ -563,33 +182,17 @@
   
   
 ***************
-*** 4827,4832 ****
---- 5353,5364 ----
-  	       (response >> 8) & 0xf, (response >> 4) & 0xf, response & 0xf);
-      Vmac_carbon_version_string = build_string (carbon_version);
-    }
-+ 
-+   DEFVAR_BOOL ("mac-autohide-menubar-on-maximize", &mac_autohide_menubar_on_maximize,
-+ 	       doc: /* Non-nil means auto-hide the menubar when a frame is maximized
-+                      with mac-toggle-full-frame */);
-+   mac_autohide_menubar_on_maximize = 1;
-+ 
-  #endif	/* TARGET_API_MAC_CARBON */
-  
-    /* X window properties.  */
-***************
 *** 4887,4892 ****
---- 5419,5433 ----
+--- 5419,5432 ----
   
   #if TARGET_API_MAC_CARBON
     defsubr (&Sx_file_dialog);
 + #if MAC_OSX
-+   defsubr (&Smac_toggle_full_frame);
 +   defsubr (&Smac_show_menu_bar);
 +   defsubr (&Smac_hide_menu_bar);
-+ #ifdef AVAILABLE_MAC_OS_X_VERSION_10_4_AND_LATER
++   defsubr (&Smac_dialog);
++   defsubr (&Smac_dialog_y_or_n_p);
 +   defsubr (&Smac_spotlight_search);
-+ #endif
 +   defsubr (&Smac_process_activate);
 + #endif
   #endif
