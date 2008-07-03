@@ -2,14 +2,13 @@ This patch provides Mac-only extensions to GNU Emacs 22 CVS (Carbon Emacs).
 Contributors are as follows.
 mac_show_menu_bar -- S. Zenitani & T. Hiromatsu
 mac_hide_menu_bar -- S. Zenitani & T. Hiromatsu
-mac_dialog           -- S. Zenitani
 mac_spotlight_search -- S. Zenitani
 mac_process_activate -- S. Zenitani
 *** src/macfns.c	29 Mar 2008 00:45:58 -0000	1.106.2.6
 --- src/macfns.c	1 Apr 2008 07:07:03 -0000
 ***************
 *** 4588,4593 ****
---- 4590,4710 ----
+--- 4590,4670 ----
     UNBLOCK_INPUT;
     return result;
   }
@@ -30,46 +29,6 @@ mac_process_activate -- S. Zenitani
 + {
 +   if ( EQ (Vwindow_system, intern ("mac")))
 +     HideMenuBar();
-+   return Qnil;
-+ }
-+ DEFUN ("mac-dialog", Fmac_dialog, Smac_dialog, 2, 2, "",
-+        doc: /* Show a dialog.  */)
-+   (message, explanation)
-+      Lisp_Object message, explanation;
-+ {
-+   DialogRef           sheet=NULL;
-+   AlertStdCFStringAlertParamRec alertParams;
-+   struct frame *f = XFRAME (selected_frame);
-+   CHECK_STRING (message);
-+   CHECK_STRING (explanation);
-+ 
-+   if (FRAME_MAC_WINDOW (f))
-+     {
-+       GetStandardAlertDefaultParams(&alertParams,kStdCFStringAlertVersionOne);
-+       alertParams.defaultText=(CFStringRef)kAlertDefaultOKText;       
-+       alertParams.defaultButton=kAlertStdAlertOKButton;       
-+ 
-+       BLOCK_INPUT;
-+       {
-+         CFStringRef msgTitle = NULL, msgExplanation = NULL;
-+         msgTitle       = cfstring_create_with_string (message);
-+         msgExplanation = cfstring_create_with_string (explanation);
-+ 
-+         OSStatus err;
-+         err = CreateStandardAlert(kAlertNoteAlert,
-+                                   msgTitle,
-+                                   msgExplanation,
-+                                   &alertParams,
-+                                   &sheet);
-+         if(err == noErr)
-+           err = RunStandardAlert(sheet,
-+                                  NULL,
-+                                  NULL);
-+         CFRelease (msgTitle);
-+         CFRelease (msgExplanation);
-+       }
-+       UNBLOCK_INPUT;
-+     }
 +   return Qnil;
 + }
 + DEFUN ("mac-spotlight-search", Fmac_spotlight_search,
@@ -133,14 +92,13 @@ mac_process_activate -- S. Zenitani
   
 ***************
 *** 4887,4892 ****
---- 5419,5431 ----
+--- 5419,5430 ----
   
   #if TARGET_API_MAC_CARBON
     defsubr (&Sx_file_dialog);
 + #if MAC_OSX
 +   defsubr (&Smac_show_menu_bar);
 +   defsubr (&Smac_hide_menu_bar);
-+   defsubr (&Smac_dialog);
 +   defsubr (&Smac_spotlight_search);
 +   defsubr (&Smac_process_activate);
 + #endif
