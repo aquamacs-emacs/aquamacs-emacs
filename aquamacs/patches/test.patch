@@ -1,0 +1,254 @@
+*** src/xdisp.c.~1.1227.~	2008-07-03 11:54:01.000000000 -0400
+--- src/xdisp.c	2008-07-03 15:16:08.000000000 -0400
+***************
+*** 6664,6670 ****
+ {
+   enum move_it_result result = MOVE_UNDEFINED;
+   struct glyph_row *saved_glyph_row;
+!   struct it wrap_it, atpos_it;
+   int may_wrap = 0;
+
+   /* Don't produce glyphs in produce_glyphs.  */
+--- 6664,6670 ----
+ {
+   enum move_it_result result = MOVE_UNDEFINED;
+   struct glyph_row *saved_glyph_row;
+!   struct it wrap_it, atpos_it, atx_it;
+   int may_wrap = 0;
+
+   /* Don't produce glyphs in produce_glyphs.  */
+***************
+*** 6672,6682 ****
+   it->glyph_row = NULL;
+
+   /* Use wrap_it to save a copy of IT wherever a word wrap could
+!      occur.  Use atpos_it to save a copy of IT at the desired
+      position, if found, so that we can scan ahead and check if the
+!      word later overshoots the window edge.  */
+   wrap_it.sp = -1;
+   atpos_it.sp = -1;
+
+ #define BUFFER_POS_REACHED_P()					\
+   ((op & MOVE_TO_POS) != 0					\
+--- 6672,6684 ----
+   it->glyph_row = NULL;
+
+   /* Use wrap_it to save a copy of IT wherever a word wrap could
+!      occur.  Use atpos_it to save a copy of IT at the desired buffer
+      position, if found, so that we can scan ahead and check if the
+!      word later overshoots the window edge.  Use atx_it similarly, for
+!      pixel positions.  */
+   wrap_it.sp = -1;
+   atpos_it.sp = -1;
++   atx_it.sp = -1;
+
+ #define BUFFER_POS_REACHED_P()					\
+   ((op & MOVE_TO_POS) != 0					\
+***************
+*** 6705,6718 ****
+ 	{
+ 	  if (it->line_wrap == WORD_WRAP)
+ 	    {
+- 	      /* If wrap_it is valid, the current position might be in
+- 		 a word that is wrapped to the next line, so continue
+- 		 to see if that happens.  */
+ 	      if (wrap_it.sp < 0)
+ 		{
+ 		  result = MOVE_POS_MATCH_OR_ZV;
+ 		  break;
+ 		}
+ 	      if (atpos_it.sp < 0)
+ 		atpos_it = *it;
+ 	    }
+--- 6707,6720 ----
+ 	{
+ 	  if (it->line_wrap == WORD_WRAP)
+ 	    {
+ 	      if (wrap_it.sp < 0)
+ 		{
+ 		  result = MOVE_POS_MATCH_OR_ZV;
+ 		  break;
+ 		}
++ 	      /* If wrap_it is valid, the current position might be in
++ 		 a word that is wrapped to the next line, so continue
++ 		 to see if that happens.  */
+ 	      if (atpos_it.sp < 0)
+ 		atpos_it = *it;
+ 	    }
+***************
+*** 6759,6766 ****
+ 		  if (atpos_it.sp >= 0)
+ 		    {
+ 		      *it = atpos_it;
+! 		      atpos_it.sp = -1;
+! 		      goto buffer_pos_reached;
+ 		    }
+ 		  wrap_it = *it;
+ 		  may_wrap = 0;
+--- 6761,6774 ----
+ 		  if (atpos_it.sp >= 0)
+ 		    {
+ 		      *it = atpos_it;
+! 		      result = MOVE_POS_MATCH_OR_ZV;
+! 		      goto done;
+! 		    }
+! 		  if (atx_it.sp >= 0)
+! 		    {
+! 		      *it = atx_it;
+! 		      result = MOVE_X_REACHED;
+! 		      goto done;
+ 		    }
+ 		  wrap_it = *it;
+ 		  may_wrap = 0;
+***************
+*** 6816,6836 ****
+ 	      /* We want to leave anything reaching TO_X to the caller.  */
+ 	      if ((op & MOVE_TO_X) && new_x > to_x)
+ 		{
+! 		  if (BUFFER_POS_REACHED_P ())
+ 		    {
+! 		      if (it->line_wrap == WORD_WRAP)
+ 			{
+ 			  if (wrap_it.sp < 0)
+ 			    goto buffer_pos_reached;
+! 			  if (atpos_it.sp < 0)
+ 			    atpos_it = *it;
+ 			}
+! 		      else
+ 			goto buffer_pos_reached;
+ 		    }
+- 		  it->current_x = x;
+- 		  result = MOVE_X_REACHED;
+- 		  break;
+ 		}
+
+ 	      if (/* Lines are continued.  */
+--- 6824,6858 ----
+ 	      /* We want to leave anything reaching TO_X to the caller.  */
+ 	      if ((op & MOVE_TO_X) && new_x > to_x)
+ 		{
+! 		  if (it->line_wrap == WORD_WRAP)
+ 		    {
+! 		      if (BUFFER_POS_REACHED_P ())
+ 			{
+ 			  if (wrap_it.sp < 0)
+ 			    goto buffer_pos_reached;
+! 			  else if (atpos_it.sp < 0)
+ 			    atpos_it = *it;
+ 			}
+! 		      else if (wrap_it.sp < 0)
+! 			{
+! 			  it->current_x = x;
+! 			  result = MOVE_X_REACHED;
+! 			  break;
+! 			}
+! 		      else if (atx_it.sp < 0)
+! 			{
+! 			  atx_it = *it;
+! 			  atx_it.current_x = x;
+! 			}
+! 		    }
+! 		  else
+! 		    {
+! 		      if (BUFFER_POS_REACHED_P ())
+ 			goto buffer_pos_reached;
++ 		      it->current_x = x;
++ 		      result = MOVE_X_REACHED;
++ 		      break;
+ 		    }
+ 		}
+
+ 	      if (/* Lines are continued.  */
+***************
+*** 6840,6852 ****
+ 		      /* Or it fits exactly and we're on a window
+ 			 system frame.  */
+ 		      || (new_x == it->last_visible_x
+! 			  && FRAME_WINDOW_P (it->f))))
+ 		{
+ 		  if (/* IT->hpos == 0 means the very first glyph
+ 			 doesn't fit on the line, e.g. a wide image.  */
+ 		      it->hpos == 0
+ 		      || (new_x == it->last_visible_x
+! 			  && FRAME_WINDOW_P (it->f)))
+ 		    {
+ 		      ++it->hpos;
+ 		      it->current_x = new_x;
+--- 6862,6876 ----
+ 		      /* Or it fits exactly and we're on a window
+ 			 system frame.  */
+ 		      || (new_x == it->last_visible_x
+! 			  && FRAME_WINDOW_P (it->f)
+! 			  && it->line_wrap == WINDOW_WRAP)))
+ 		{
+ 		  if (/* IT->hpos == 0 means the very first glyph
+ 			 doesn't fit on the line, e.g. a wide image.  */
+ 		      it->hpos == 0
+ 		      || (new_x == it->last_visible_x
+! 			  && FRAME_WINDOW_P (it->f)
+! 			  && it->line_wrap == WINDOW_WRAP))
+ 		    {
+ 		      ++it->hpos;
+ 		      it->current_x = new_x;
+***************
+*** 6903,6908 ****
+--- 6927,6933 ----
+ 		    {
+ 		      *it = wrap_it;
+ 		      atpos_it.sp = -1;
++ 		      atx_it.sp = -1;
+ 		    }
+
+ 		  TRACE_MOVE ((stderr, "move_it_in: continued at %d\n",
+***************
+*** 6995,7003 ****
+ #undef BUFFER_POS_REACHED_P
+
+   /* If we scanned beyond to_pos and didn't find a point to wrap at,
+!      return iterator at to_pos.  */
+   if (atpos_it.sp >= 0)
+     *it = atpos_it;
+
+   /* Restore the iterator settings altered at the beginning of this
+      function.  */
+--- 7020,7032 ----
+ #undef BUFFER_POS_REACHED_P
+
+   /* If we scanned beyond to_pos and didn't find a point to wrap at,
+!      restore the saved iterator.  */
+   if (atpos_it.sp >= 0)
+     *it = atpos_it;
++   else if (atx_it.sp >= 0)
++     *it = atx_it;
++ 
++  done:
+
+   /* Restore the iterator settings altered at the beginning of this
+      function.  */
+***************
+*** 16622,16628 ****
+ 				}
+ 			    }
+ #endif /* HAVE_WINDOW_SYSTEM */
+! 			  if (wrap_row_used > 0)
+ 			    goto back_to_wrap;
+ 			}
+ 		    }
+--- 16651,16667 ----
+ 				}
+ 			    }
+ #endif /* HAVE_WINDOW_SYSTEM */
+! 
+! 			  /* If line-wrap is on, consider returning to
+! 			     a previously set wrap point, if there is
+! 			     one.  Be sure to handle the case where
+! 			     the last character on the line is a
+! 			     space, as well as the case where the
+! 			     following character is also a space.  */
+! 			  if (wrap_row_used > 0
+! 			      && (!may_wrap
+! 				  || (it->what == IT_CHARACTER
+! 				      && (it->c == ' ' || it->c == '\t'))))
+ 			    goto back_to_wrap;
+ 			}
+ 		    }
