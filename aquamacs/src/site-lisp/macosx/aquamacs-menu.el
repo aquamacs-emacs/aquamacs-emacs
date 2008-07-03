@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.155 2008/06/21 11:45:22 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.156 2008/07/03 11:36:50 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -922,7 +922,7 @@ both existing buffers and buffers that you subsequently create."
 Unlike `mac-toggle-full-frame', this will do a better job at remembering
 the previous frame size."
   (interactive)
-  (if (frame-full-screen-p)
+  (if (frame-parameter nil 'fullscreen)    ;(frame-full-screen-p)
       (modify-frame-parameters 
        nil (list (cons 'fullscreen nil) 
 		 (cons 'prior-left nil)  ;; needed for smart-frame-positioning (sessions persistency)
@@ -932,14 +932,13 @@ the previous frame size."
     ;; (frame-parameters)
     ;; save small frame position
     (modify-frame-parameters 
-     nil (list (cons 'fullscreen nil) 
+     nil (list (cons 'fullscreen t) 
 	       (cons 'prior-left (frame-parameter nil 'left))
 	       (cons 'prior-top (frame-parameter nil 'top))
 	       (cons 'prior-width (frame-parameter nil 'width))
 	       (cons 'prior-height (frame-parameter nil 'height)))))
-			     
-  (mac-toggle-full-frame)
-  (if (frame-full-screen-p)
+  
+  (if (frame-parameter nil 'fullscreen) ; (frame-full-screen-p)
       (run-with-idle-timer 1 nil (lambda () (message  (substitute-command-keys "Press \\[aquamacs-toggle-full-frame] to exit full screen editing.")))))
   nil)
  
