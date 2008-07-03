@@ -19,7 +19,7 @@
 #    is it slow with xpm as well?
 # taken out (temp):          capslock   causes trouble Qappevent
 
-PATCHES="mac-functions emacs-inline transparency
+PATCHES="mac-functions mac-fullscreen emacs-inline transparency
          fix-configure test ui-strings menu-bar
          toolbar-png 
          custom-verbosity pretty-modeline 
