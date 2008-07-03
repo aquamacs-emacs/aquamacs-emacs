@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.156 2008/07/03 11:36:50 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.157 2008/07/03 17:21:26 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -976,7 +976,7 @@ the previous frame size."
   `(menu-item "Tile frames horizontally" tile-frames-horizontally
 	      :enable (menu-bar-menu-frame-live-and-visible-p)
 	      :help "Tile frames horizontally"))
-(if (fboundp 'mac-toggle-full-frame)
+(if (boundp 'mac-autohide-menubar-on-fullscreen)
     (define-key menu-bar-file-menu [full-frame]
       `(menu-item "Full Screen Editing             " 
 		  aquamacs-toggle-full-frame
