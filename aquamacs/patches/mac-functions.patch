@@ -3,14 +3,13 @@ Contributors are as follows.
 mac_show_menu_bar -- S. Zenitani & T. Hiromatsu
 mac_hide_menu_bar -- S. Zenitani & T. Hiromatsu
 mac_dialog           -- S. Zenitani
-mac_dialog_y_or_n_p  -- S. Zenitani
 mac_spotlight_search -- S. Zenitani
 mac_process_activate -- S. Zenitani
 *** src/macfns.c	29 Mar 2008 00:45:58 -0000	1.106.2.6
 --- src/macfns.c	1 Apr 2008 07:07:03 -0000
 ***************
 *** 4588,4593 ****
---- 4590,4759 ----
+--- 4590,4710 ----
     UNBLOCK_INPUT;
     return result;
   }
@@ -73,55 +72,6 @@ mac_process_activate -- S. Zenitani
 +     }
 +   return Qnil;
 + }
-+ DEFUN ("mac-dialog-y-or-n-p", Fmac_dialog_y_or_n_p, Smac_dialog_y_or_n_p, 2, 2, "",
-+        doc: /* Show a dialog, which asks user a "Yes or No" question.
-+ Return t if answer is "Yes". Takes two arguments,
-+ which is the strings to display to ask the question.  */)
-+   (message, explanation)
-+      Lisp_Object message, explanation;
-+ {
-+   DialogRef           sheet=NULL;
-+   AlertStdCFStringAlertParamRec alertParams;
-+   struct frame *f = XFRAME (selected_frame);
-+   CHECK_STRING (message);
-+   CHECK_STRING (explanation);
-+   SInt16 index = 0;
-+ 
-+   if (FRAME_MAC_WINDOW (f))
-+     {
-+       GetStandardAlertDefaultParams(&alertParams,kStdCFStringAlertVersionOne);
-+       alertParams.defaultText=CFSTR ("Yes");
-+       alertParams.defaultButton=kAlertStdAlertOKButton;       
-+       alertParams.cancelText=CFSTR ("No");
-+       alertParams.cancelButton=kAlertStdAlertCancelButton;
-+ 
-+       BLOCK_INPUT;
-+       {
-+         CFStringRef msgTitle = NULL, msgExplanation = NULL;
-+         msgTitle       = cfstring_create_with_string (message);
-+         msgExplanation = cfstring_create_with_string (explanation);
-+ 
-+         OSStatus err;
-+         err = CreateStandardAlert(kAlertNoteAlert,
-+                                   msgTitle,
-+                                   msgExplanation,
-+                                   &alertParams,
-+                                   &sheet);
-+         if(err == noErr)
-+           err = RunStandardAlert(sheet,
-+                                  NULL,
-+                                  &index);
-+         CFRelease (msgTitle);
-+         CFRelease (msgExplanation);
-+       }
-+       UNBLOCK_INPUT;
-+     }
-+   if( index==1 ){
-+     return Qt;
-+   }else{
-+     return Qnil;
-+   }
-+ }
 + DEFUN ("mac-spotlight-search", Fmac_spotlight_search,
 +        Smac_spotlight_search, 1, 1, "MSearch in Spotlight: ",
 +        doc: /* Search STRING with Spotlight. */)
@@ -183,7 +133,7 @@ mac_process_activate -- S. Zenitani
   
 ***************
 *** 4887,4892 ****
---- 5419,5432 ----
+--- 5419,5431 ----
   
   #if TARGET_API_MAC_CARBON
     defsubr (&Sx_file_dialog);
@@ -191,7 +141,6 @@ mac_process_activate -- S. Zenitani
 +   defsubr (&Smac_show_menu_bar);
 +   defsubr (&Smac_hide_menu_bar);
 +   defsubr (&Smac_dialog);
-+   defsubr (&Smac_dialog_y_or_n_p);
 +   defsubr (&Smac_spotlight_search);
 +   defsubr (&Smac_process_activate);
 + #endif
