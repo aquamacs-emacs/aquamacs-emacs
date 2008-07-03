@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.71 2008/06/26 21:41:32 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.72 2008/07/03 07:04:59 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -350,9 +350,10 @@ This is relevant only for `mac-read-environment-vars-from-shell'.")
 	  (aq-flat-concat d)
 	nil))))
  
-;; (mac-read-environment-vars-from-shell)
 (defvar environment-temp-file nil)
 
+;; (setq shell-file-name "/bin/bash")
+;; (let ((debug-on-error)) (mac-read-environment-vars-from-shell))
 
 (defun mac-read-environment-vars-from-shell ()
   "Import the environment from the system's default login shell
@@ -362,20 +363,23 @@ specified in `shell-file-name'."
   ;; running the shell with -l (to load the environment)
   (setq default-directory "~/")	; ensure it can be executed
   
-  (let ((shell-login-switch
-	 (or shell-login-switch
-	     (if (string-match ".*/\\(ba\\|z\\)sh" shell-file-name)
+  (message "Shell: %s" shell-file-name)
+
+  (let* ((shell (or shell-file-name "/bin/bash"))   ;; can shell-file-name be nil?
+	 (shell-login-switch
+	  (or shell-login-switch
+	     (if (string-match ".*/\\(ba\\|z\\)sh" shell)
 	       "-l"
-	       (if (string-match ".*/\\tcsh" shell-file-name)
+	       (if (string-match ".*/\\tcsh" shell)
 		   ""
-		 (if (string-match ".*/ksh" shell-file-name)
+		 (if (string-match ".*/ksh" shell)
 		     "" ;; works for ksh
-		   (message "Could not retrieve login shell environment with login shell: %s" shell-file-name)
+		   (message "Could not retrieve login shell environment with login shell: %s" shell)
 		   ;; won't work for csh, because it doesn't take -l -c ...
 		   ))))))
     ;; we call the process asynchronuously
     ;; using start-process does not work for unknown reasons: sometimes it doesn't get the environment.
-    (call-process shell-file-name nil
+    (call-process shell nil
 		  0 nil
 		  "-l"
 		  "-c"
