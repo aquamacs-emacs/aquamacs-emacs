@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-editing.el,v 1.4 2008/05/01 14:07:20 davidswelt Exp $
+;; Last change: $Id: aquamacs-editing.el,v 1.5 2008/07/05 23:39:29 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -112,9 +112,9 @@ like `unfill-region'."
  
 (defun auto-detect-longlines ()
   (interactive)
-  (longlines-mode -1) ;; turn it off
+  ;; (longlines-mode -1) ;; turn it off
+  (setq word-wrap nil)
   ;; calc mean length of lines
-
   (save-excursion
     (beginning-of-buffer)
     (let ((start-point (point))
@@ -133,8 +133,9 @@ like `unfill-region'."
 	    (if  (< mean-line-length (* 1.3 fill-column))
 		(auto-fill-mode 1)
 	      ;; long lines on average
-	      (longlines-mode 1) ;; turn on longlines mode
-	      (message "Soft word wrap (longlines-mode) auto-enabled.")))
+	      ;;(longlines-mode 1) ;; turn on longlines mode
+	      (setq word-wrap t)
+	      (message "Soft word wrap auto-enabled.")))
 	(auto-fill-mode 1)))))
  
 (provide 'aquamacs-editing)
