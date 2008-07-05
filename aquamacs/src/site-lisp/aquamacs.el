@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.181 2008/06/26 21:41:32 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.182 2008/07/05 13:39:29 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -594,6 +594,10 @@ yes-or-no prompts - y or n will do."
 
 
   (require 'aquamacs-editing)
+
+(require 'ispell) ;; the autoloading appears not to work right, 
+;; so here's a SLOW workaround
+
 
 ;; set ispell-program-name to correct name, or to nil
 ;; if neither aspell nor ispell are available.
