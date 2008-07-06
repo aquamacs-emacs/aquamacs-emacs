@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.159 2008/07/06 07:43:51 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.160 2008/07/06 08:12:27 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -589,6 +589,30 @@ left and right margin"))
 	     (if auto-fill-function
 		 "enabled" "disabled")))
   
+;; redefines function from simple.el
+(defun toggle-truncate-lines (&optional arg)
+  "Toggle whether to fold or truncate long lines for the current buffer.
+With prefix argument ARG, truncate long lines if ARG is positive,
+otherwise don't truncate them.  Note that in side-by-side
+windows, truncation is always enabled."
+  (interactive "P")
+  (setq truncate-lines
+	(if (null arg)
+	    (not truncate-lines)
+	  (> (prefix-numeric-value arg) 0)))
+  (if truncate-lines
+      (setq word-wrap nil))
+  (force-mode-line-update)
+  (unless truncate-lines
+    (let ((buffer (current-buffer)))
+      (walk-windows (lambda (window)
+		      (if (eq buffer (window-buffer window))
+			  (set-window-hscroll window 0)))
+		    nil t)))
+  (message "Truncate long lines %s"
+	   (if truncate-lines "enabled" "disabled")))
+
+
 (require 'aquamacs-editing)
 (custom-add-option 'text-mode-hook 'auto-detect-wrap)
 (defun toggle-auto-text-mode-wrap ()
@@ -634,6 +658,14 @@ both existing buffers and buffers that you subsequently create."
 	      :help "Wrap long lines without inserting carriage returns (Longlines)"
 	      :enable (menu-bar-menu-frame-live-and-visible-p)
               :button (:toggle . word-wrap)) 'auto-fill-mode)
+
+(define-key-after menu-bar-options-menu [truncate-lines]
+  '(menu-item "Truncate Long Lines"
+	      toggle-truncate-lines
+	      :help "Truncate long lines on the screen"
+	      :button (:toggle . truncate-lines)
+	      :enable (menu-bar-menu-frame-live-and-visible-p)) 'word-wrap)
+
 
 (define-key-after menu-bar-options-menu [auto-wrap]
   '(menu-item "Auto Word Wrap in Text Modes"
