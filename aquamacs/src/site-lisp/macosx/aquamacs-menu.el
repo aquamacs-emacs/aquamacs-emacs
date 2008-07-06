@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.158 2008/07/03 17:22:27 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.159 2008/07/06 07:43:51 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -541,7 +541,7 @@ left and right margin"))
 
 
 
-(require 'longlines) 
+;(require 'longlines) 
  
 ;;  backward compatibility (in case users have it in their customizations)
 (defun turn-on-longlines ()
@@ -553,7 +553,7 @@ left and right margin"))
 (defun turn-off-longlines ()
   "Unconditionally turn off Longlines mode."
   (longlines-mode -1))
-(custom-add-option 'text-mode-hook 'turn-on-longlines)
+; (custom-add-option 'text-mode-hook 'turn-on-longlines)
 
 (defun toggle-longlines ()
   "Toggle whether to use Longlines Mode."
@@ -562,40 +562,61 @@ left and right margin"))
     (auto-fill-mode -1))
   (longlines-mode))
 
+
+(defun turn-on-word-wrap ()
+  "Turn on Word Wrap mode in current buffer."
+  (setq word-wrap t))
+
+(defun turn-off-word-wrap ()
+  "Turn off Word Wrap mode in current buffer."
+  (setq word-wrap nil))
+
+(defun toggle-word-wrap ()
+  "Toggle whether to use Word Wrap."
+  (interactive)
+  (setq word-wrap (not word-wrap)))
+
+
+
 (defun toggle-auto-fill ()
   "Toggle whether to use Auto Fill Mode."
   (interactive)
   (unless auto-fill-function 
-      (longlines-mode -1)) ;; turn this off first if it is on
+    (setq word-wrap nil)
+    (longlines-mode -1)) ;; turn this off first if it is on
   (auto-fill-mode)
   (message "Hard word wrap %s"
 	     (if auto-fill-function
 		 "enabled" "disabled")))
   
 (require 'aquamacs-editing)
-(custom-add-option 'text-mode-hook 'auto-detect-longlines)
-(defun toggle-auto-text-mode-longlines ()
-  "Toggle whether to automatically turn on longlines-mode in Text mode and related modes.
+(custom-add-option 'text-mode-hook 'auto-detect-wrap)
+(defun toggle-auto-text-mode-wrap ()
+  "Toggle whether to automatically turn on word-wrap in Text mode and related modes.
 This command affects all buffers that use modes related to Text mode,
 both existing buffers and buffers that you subsequently create."
   (interactive)
   ;; remove leftover customizations from previous versions
   (remove-hook 'text-mode-hook 'turn-on-auto-fill)
   (remove-hook 'text-mode-hook 'turn-on-longlines)
-  (let ((enable-mode (not (memq 'auto-detect-longlines text-mode-hook))))
+  (remove-hook 'text-mode-hook 'turn-on-word-wrap)
+  (let ((enable-mode (not (or (memq 'auto-detect-wrap text-mode-hook)
+			      (memq 'auto-detect-longlines text-mode-hook)))))
     (if enable-mode
-	(add-hook 'text-mode-hook 'auto-detect-longlines)
-      (remove-hook 'text-mode-hook 'auto-detect-longlines))
+	(add-hook 'text-mode-hook 'auto-detect-wrap)
+      (progn
+	(remove-hook 'text-mode-hook 'auto-detect-wrap)
+	(remove-hook 'text-mode-hook 'auto-detect-longlines))) ; longlines was used up to version 1.4
     (dolist (buffer (buffer-list))
       (with-current-buffer buffer
 	(if (or (derived-mode-p 'text-mode) text-mode-variant)
-	    (auto-detect-longlines))))
+	    (auto-detect-wrap))))
     (message "Auto Soft Wrap %s in Text modes"
 	     (if enable-mode "enabled" "disabled"))))
 
-(defun menu-bar-auto-text-mode-longlines ()
+(defun menu-bar-auto-text-mode-wrap ()
   (interactive)
-  (toggle-auto-text-mode-longlines)
+  (toggle-auto-text-mode-wrap)
   (customize-mark-as-set 'text-mode-hook))
   
 
@@ -607,21 +628,23 @@ both existing buffers and buffers that you subsequently create."
 	      :enable (menu-bar-menu-frame-live-and-visible-p)
               :button (:toggle . auto-fill-function)))
 
-(define-key-after menu-bar-options-menu [longlines]
+(define-key-after menu-bar-options-menu [word-wrap]
   '(menu-item "Soft Word Wrap"
-	      longlines-mode
+	      toggle-word-wrap
 	      :help "Wrap long lines without inserting carriage returns (Longlines)"
 	      :enable (menu-bar-menu-frame-live-and-visible-p)
-              :button (:toggle . longlines-mode)) 'auto-fill-mode)
+              :button (:toggle . word-wrap)) 'auto-fill-mode)
 
-(define-key-after menu-bar-options-menu [auto-longlines]
+(define-key-after menu-bar-options-menu [auto-wrap]
   '(menu-item "Auto Word Wrap in Text Modes"
-	      menu-bar-auto-text-mode-longlines
+	      menu-bar-auto-text-mode-wrap
 	      :help "Automatically use hard or soft word wrap (Auto Fill / Longlines) in text modes."
 	      :button (:toggle . (if (listp text-mode-hook)
-				     (member 'auto-detect-longlines text-mode-hook)
-				   (eq 'auto-detect-longlines text-mode-hook))))
-  'longlines)
+				     (or (member 'auto-detect-wrap text-mode-hook)
+					 (member 'auto-detect-longlines text-mode-hook))
+				   (or (eq 'auto-detect-wrap text-mode-hook)
+				       (eq 'auto-detect-longlines text-mode-hook)))))
+  'word-wrap)
  
 ;; in edit menu
 
@@ -941,6 +964,8 @@ the previous frame size."
   (if (frame-parameter nil 'fullscreen) ; (frame-full-screen-p)
       (run-with-idle-timer 1 nil (lambda () (message  (substitute-command-keys "Press \\[aquamacs-toggle-full-frame] to exit full screen editing.")))))
   nil)
+
+;; (set-frame-parameter nil 'fullscreen 'fullboth)
  
 
 (define-key menu-bar-file-menu [one-window]

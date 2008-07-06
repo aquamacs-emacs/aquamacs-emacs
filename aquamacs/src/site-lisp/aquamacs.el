@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.182 2008/07/05 13:39:29 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.183 2008/07/06 07:43:40 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -663,10 +663,10 @@ yes-or-no prompts - y or n will do."
   
 
 (require 'saveplace)
-  (require 'longlines) 
+;;  (require 'longlines) 
   (aquamacs-set-defaults 
    `(
-     (text-mode-hook (auto-detect-longlines)) 
+     (text-mode-hook (auto-detect-wrap)) 
      (save-place t)
      (send-mail-function mailclient-send-it)
      (mail-setup-with-from nil)  
