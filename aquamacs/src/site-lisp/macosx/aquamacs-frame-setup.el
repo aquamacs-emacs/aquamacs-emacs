@@ -9,7 +9,7 @@
 ;;  --- Some of this has been adapted from Drew Adams' Emacs init file. 
  
 
-;; Last change: $Id: aquamacs-frame-setup.el,v 1.29 2008/05/27 08:53:18 davidswelt Exp $
+;; Last change: $Id: aquamacs-frame-setup.el,v 1.30 2008/07/06 07:57:00 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -51,23 +51,22 @@
 (defun aquamacs-define-the-fringe-bitmap ()
   "Redefines a fringe bitmap (continuation) so that it looks good
 even when minimal fringes are used. (Aquamacs)"
-  (let ((fm fringe-mode))
-    ;;(fringe-mode 0) ;; turn off temporarily
-    ;; taken out so we don't modify default-frame-alist etc.
-    (define-fringe-bitmap  'continuation-line
-      ;; a plus sign
-      [#B0011111111
-       #B0001111111
-       #B0000110011
-       #B0000011011
-       #B0000001111
-       #B0000000111
-       #B0000000011
-       #B0000000001])
+  
+  ;; Code by Kim F. Storm
+  (define-fringe-bitmap 'right-truncation
+    "\xa9\x02\x04" nil nil 'bottom)
+  (define-fringe-bitmap 'left-truncation
+    "\x20\x40\xaa\0\0" nil nil 'bottom)
+  (define-fringe-bitmap 'right-continuation
+    "\xa8\0\0" nil nil 'bottom)
+  (define-fringe-bitmap 'left-continuation
+    "\x2a\0\0" nil nil 'bottom)
 
-    ;;(fringe-mode fm) ;; turn back on
-    )
-  )
+  (let ((tr (assoc 'truncation default-fringe-indicator-alist))
+	(co (assoc 'continuation default-fringe-indicator-alist)))
+    (if tr (setcdr tr '(left-truncation right-truncation)))
+    (if co (setcdr co '(left-continuation right-continuation)))))
+
 ;;(customize-set-variable 'fringe-indicators 'empty)
 (setq default-indicate-empty-lines t)
 
