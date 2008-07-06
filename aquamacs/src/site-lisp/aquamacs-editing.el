@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-editing.el,v 1.5 2008/07/05 23:39:29 davidswelt Exp $
+;; Last change: $Id: aquamacs-editing.el,v 1.6 2008/07/06 08:11:47 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -110,10 +110,13 @@ like `unfill-region'."
 		 "\\*\\| \\|#\\|;\\|:\\||\\|!\\|$"))))
  
  
-(defun auto-detect-longlines ()
+(defalias 'auto-detect-longlines 'auto-detect-wrap)
+(defun auto-detect-wrap ()
+  "Automatically enable word-wrap or autofill"
   (interactive)
   ;; (longlines-mode -1) ;; turn it off
   (setq word-wrap nil)
+  (toggle-truncate-lines -1)
   ;; calc mean length of lines
   (save-excursion
     (beginning-of-buffer)
