@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.183 2008/07/06 07:43:40 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.184 2008/07/07 13:24:44 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -1325,9 +1325,13 @@ information given would otherwise be irrelevant to Aquamacs users.
 
 (unless (mac-read-environment-vars-from-shell-2)    
   (message "Warning - environment variable reading delayed.")
-  (run-with-timer 1 nil 'mac-read-environment-vars-from-shell-2))
-
-  ) ;; aquamacs-setup
+  ; wait one second
+  ;; we should not delay this via run-with-timer, because
+  ;; some code may depend on the PATH (exec-path!) being set correctly,
+  ;; for example the (autoloaded!) ispell package.
+  (sit-for 1)
+  (mac-read-environment-vars-from-shell-2))
+) ;; aquamacs-setup
  
 
 			 
