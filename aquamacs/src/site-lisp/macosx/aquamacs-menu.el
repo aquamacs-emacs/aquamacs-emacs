@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.161 2008/07/07 12:07:39 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.162 2008/07/07 13:36:15 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -832,11 +832,23 @@ both existing buffers and buffers that you subsequently create."
   'separator-bookmark)
 
 ;; ispell is not loaded at startup
-(defvar ispell-program-name
-  (or (if (locate-file "aspell" exec-path exec-suffixes 'file-executable-p) 
-	  "aspell")
-      (if (locate-file "ispell" exec-path exec-suffixes 'file-executable-p)
-	  "ispell")))
+;; spell checking 
+;; potential for trouble here:
+;; if exec path isn't initialized (because PATH not read yet)
+;; then locate-file might fail and we don't know if we're going to have ispell
+
+(defun aquamacs-initialize-ispell-program-name ()
+  (let ((ipn (or (if (locate-file "aspell" exec-path exec-suffixes 'file-executable-p) 
+		     "aspell")
+		 (if (locate-file "ispell" exec-path exec-suffixes 'file-executable-p)
+		     "ispell"))))
+    (if ipn ;; do not initialize if not (yet) found
+	(defvar ispell-program-name ipn))))
+
+(aquamacs-initialize-ispell-program-name)
+(unless (boundp 'ispell-program-name)
+  (add-hook 'after-init-hook 'aquamacs-initialize-ispell-program-name 'append))
+
 
 (define-key-after menu-bar-edit-menu [spell]
   '(menu-item "Spelling" ispell-menu-map 
