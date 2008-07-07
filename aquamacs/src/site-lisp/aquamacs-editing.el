@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-editing.el,v 1.6 2008/07/06 08:11:47 davidswelt Exp $
+;; Last change: $Id: aquamacs-editing.el,v 1.7 2008/07/07 16:01:14 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -109,7 +109,15 @@ like `unfill-region'."
 	(set (make-local-variable 'paragraph-start)
 		 "\\*\\| \\|#\\|;\\|:\\||\\|!\\|$"))))
  
- 
+(defcustom auto-word-wrap-default-function nil
+  "Function to call if auto-detection of word wrapping failed.
+This serves as the default for word wrapping detection.
+Defaults to `turn-on-auto-fill' if nil."
+  :group 'Aquamacs
+  :group 'fill
+  :type '(choice (const nil)  (const turn-on-auto-fill) (const turn-on-word-wrap))
+  :version "22.0")
+
 (defalias 'auto-detect-longlines 'auto-detect-wrap)
 (defun auto-detect-wrap ()
   "Automatically enable word-wrap or autofill"
@@ -123,22 +131,27 @@ like `unfill-region'."
     (let ((start-point (point))
 	  (count 0)
 	  (empty-lines 0)
+	  (longlines-count 0)
 	  (last-point (point)))
       (while (and (< (point) (point-max)) (< count 200))
 	(search-forward "\n" nil 'noerror)
-	(if (< (- (point) last-point) 2) ;; empty line?
+	(let ((ll (- (point) last-point)))
+	(if (< ll 2) ;; empty line?
 	    (incf empty-lines)
-	  (incf count))
-	(setq last-point (point)))
+	  (incf count)
+	  (if (> ll fill-column)
+	      (incf longlines-count)))
+	(setq last-point (point))))
       (if (> count 0)
 	  (let ((mean-line-length 
 		 (/ (- (point) start-point empty-lines) count)))
-	    (if  (< mean-line-length (* 1.3 fill-column))
+	    (if (and (< longlines-count 6)
+		     (< mean-line-length (* 1.3 fill-column)))
 		(auto-fill-mode 1)
 	      ;; long lines on average
 	      ;;(longlines-mode 1) ;; turn on longlines mode
 	      (setq word-wrap t)
 	      (message "Soft word wrap auto-enabled.")))
-	(auto-fill-mode 1)))))
+	    (funcall (or auto-word-wrap-default-function 'turn-on-auto-fill))))))
  
 (provide 'aquamacs-editing)
