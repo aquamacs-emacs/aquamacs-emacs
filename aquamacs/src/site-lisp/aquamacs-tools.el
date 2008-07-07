@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.33 2008/05/22 21:30:35 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.34 2008/07/07 17:24:42 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -139,7 +139,14 @@ Comparison of keys is done with `equal'."
   )
 
 
-
+;; (setq asd (list 1 2 3 4 5))
+;; (aq-replace-in-list asd 1 'a)
+;; asd
+(defun aq-replace-in-list (list from to)
+  (if (eq (car-safe list) from)
+      (setcar list to))
+  (if (cdr-safe list)
+      (aq-replace-in-list (cdr-safe list) from to)))
 
  
 (defun assq-delete-all-equal (key alist)
