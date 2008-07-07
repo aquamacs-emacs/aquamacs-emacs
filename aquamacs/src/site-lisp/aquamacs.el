@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.185 2008/07/07 13:32:53 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.186 2008/07/07 17:27:36 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -162,7 +162,12 @@ Separate paths from file names with --."
 		     (current-buffer))
 	      (append-to-file (point-min) (point-max) custom-file)))
 	(error nil)))
-       
+    
+    (when (< aquamacs-customization-version-id 146)
+      (condition-case nil
+	  (aq-replace-in-list text-mode-hook 'turn-on-longlines 'turn-on-word-wrap)
+	(error nil)))
+
 ;; todo before 0.9.9:
 ;; how to deal with tool-bar-mode set in user's custom-file?
 ;; for now, ignore it
