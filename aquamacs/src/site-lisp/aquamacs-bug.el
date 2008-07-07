@@ -3,7 +3,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: mac bug report
  
-;; Last change: $Id: aquamacs-bug.el,v 1.13 2008/05/15 12:02:36 davidswelt Exp $
+;; Last change: $Id: aquamacs-bug.el,v 1.14 2008/07/07 12:28:29 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -77,9 +77,32 @@ Prompts for bug subject.  Leaves you in a mail buffer."
 		  (rename-buffer "*mail*" t)))
 	    ))))))
 
+(defun start-vanilla-aquamacs (&optional arg)
+  "Start a vanilla Aquamacs
+Starts another instance of the current session.
+With prefix argument ARG, start without initializing
+most Aquamacs-specific code."
+  (interactive "P")
+  (start-process "vanilla-aquamacs" nil (car command-line-args) (if arg "-Q" "-q")))
 
-(define-key-after menu-bar-help-menu [send-emacs-bug-report]
+
+(defvar menu-bar-bug-help-menu (make-sparse-keymap "Diagnose and Report Bug"))
+
+(define-key menu-bar-bug-help-menu [send-emacs-bug-report]
   `(menu-item "Send Bug Report...                 "  
 	      report-aquamacs-bug
 	      :help "Report a Bug in Aquamacs Emacs"
-	      :keys ,(aq-binding 'report-aquamacs-bug)) 'menu-aquamacs-homepage)
+	      :keys ,(aq-binding 'report-aquamacs-bug)) )
+
+
+(define-key menu-bar-bug-help-menu [start-vanilla-aquamacs]
+  `(menu-item "Start Aquamacs without customizations"  
+	      start-vanilla-aquamacs
+	      :help "Start Aquamacs Emacs without any user-specific settings."
+	      :keys ,(aq-binding 'start-vanilla-aquamacs)) )
+
+(define-key-after menu-bar-help-menu [bug-diagnosis]
+  `(menu-item "Diagnose and Report Bug " 
+	      ,menu-bar-bug-help-menu
+	      :help "Bug diagnosis")
+  'menu-aquamacs-homepage)
