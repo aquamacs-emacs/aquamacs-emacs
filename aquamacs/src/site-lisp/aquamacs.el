@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.186 2008/07/07 17:27:36 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.187 2008/07/09 18:27:56 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -556,6 +556,10 @@ yes-or-no prompts - y or n will do."
   ;; tabbar needs to be defined before osxkeys
   (require 'aquamacs-tabbar)
 
+  ;; visual line navigation
+  (require 'visual-line)
+  
+
   ;; Mac OS X specific stuff 
 
   (ats "osx_defaults ...")
@@ -668,8 +672,10 @@ yes-or-no prompts - y or n will do."
 
 (require 'saveplace)
 ;;  (require 'longlines) 
+(global-visual-line-mode 1)
   (aquamacs-set-defaults 
    `(
+     (global-visual-line-mode t)
      (text-mode-hook (auto-detect-wrap)) 
      (save-place t)
      (send-mail-function mailclient-send-it)
@@ -1240,7 +1246,7 @@ listed here."
 This is modified in Aquamacs compared to GNU Emacs, because most
 information given would otherwise be irrelevant to Aquamacs users.
 "
-(longlines-mode -1)
+  (and (boundp 'longlines-mode) (longlines-mode -1))
   (let* ((image-file (cond ((stringp fancy-splash-image)
 			    fancy-splash-image)
 			   ((and (display-color-p)
