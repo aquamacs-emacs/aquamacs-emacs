@@ -3,7 +3,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: mac bug report
  
-;; Last change: $Id: aquamacs-bug.el,v 1.15 2008/07/09 18:28:38 davidswelt Exp $
+;; Last change: $Id: aquamacs-bug.el,v 1.16 2008/07/09 22:06:41 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -69,6 +69,9 @@ Prompts for bug subject.  Leaves you in a mail buffer."
 		(setq backup-buffer (rename-buffer "mail-backup" t))))
 	    (report-emacs-bug topic recent-keys)
 	    (insert "Enter your bug report here.")
+	    (end-of-buffer)
+	    (insert (format "\nCommand line: %s\n\nPATH: %s\n\nexec-path: %s" 
+			    command-line-args (getenv "PATH") exec-path))
 	    (set-buffer-modified-p t)
 	    (mail-send)
 	    (kill-buffer "*mail*")
@@ -107,3 +110,13 @@ most Aquamacs-specific code."
 	      :help "Bug diagnosis")
   'menu-aquamacs-homepage)
 (define-key menu-bar-help-menu [send-emacs-bug-report] nil)
+
+;; code to print non-standard values
+;; (mapatoms 
+;;  (lambda (sym)
+;;    (when (default-boundp sym)
+;;      (princ (format "%s:" sym))
+;;      (let ((print-level 2)
+;; 	   (print-length 3))
+;;        (prin1 (eval sym)))
+;;      (princ "\n"))))
