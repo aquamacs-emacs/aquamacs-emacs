@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.163 2008/07/09 18:29:37 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.164 2008/07/09 21:04:31 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -1005,9 +1005,11 @@ both existing buffers and buffers that you subsequently create."
 (define-key menu-bar-manuals-menu [lookup-subject-in-all-manuals]
   '(menu-item "Lookup Subject in all manuals..." info-apropos
 	      :help "Find description of a subject in all installed manuals"))
-(define-key menu-bar-manuals-menu [other-manuals]
-  '(menu-item "All Other Manuals (Info)" Info-directory
-	      :help "Read any of the installed manuals"))
+(define-key menu-bar-manuals-menu [other-manuals] nil)
+
+(define-key-after menu-bar-help-menu [other-manuals]
+  '(menu-item "Package Manuals" Info-directory
+	      :help "Read any of the installed manuals") 'emacs-known-problems)
 
 
 
