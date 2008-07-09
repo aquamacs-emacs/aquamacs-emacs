@@ -52,15 +52,31 @@ mkdir Contents/Resources/site-lisp/tabbar 2>/dev/null
 mkdir Contents/Resources/site-lisp/macosx 2>/dev/null
 mkdir Contents/Resources/site-lisp/edit-modes 2>/dev/null
 
-rm -r Contents/Resources/Aquamacs\ Help
-cp -pr "$projdir/doc/AquamacsHelp" "Contents/Resources/Aquamacs Help"
-rm -rf "Contents/Resources/Emacs Manual"
 cd Contents/Resources
+rm -rf "Aquamacs Help" "Emacs Manual" "Emacs Lisp Reference"
+
+cp -pr "$projdir/doc/AquamacsHelp" "Aquamacs Help"
+rm "Aquamacs Help/Aquamacs* idx"  2>/dev/null
+
 tar xzf "$projdir/doc/EmacsManual.tgz"
+rm "EmacsManual/Emacs* idx"   2>/dev/null
 mv "EmacsManual" "Emacs Manual"
+
 tar xzf "$projdir/doc/EmacsLispReference.tgz"
+rm "EmacsLispReference/Emacs* idx" 2>/dev/null
 mv "EmacsLispReference" "Emacs Lisp Reference"
+
 ln -s "Emacs Lisp Reference" elisp  # needed because there are crossrefs
+
+# these links allow the Help Indexer to index everything
+# just indexing every book separately will not make the Help menu work
+cd "Aquamacs Help"
+ln -s ../"Emacs Lisp Reference" .
+ln -s ../"Emacs Manual" .
+cd ..
+
+"/Developer/Applications/Utilities/Help Indexer.app/Contents/MacOS/Help Indexer" Aquamacs\ Help -PantherIndexing NO -Tokenizer 1 -ShowProgress YES -UseRemoteRoot NO -GenerateSummaries YES -LogStyle 1
+# no index for the other books
 
 cd ../../
 #cp -pr "$projdir/doc/EmacsManual" "Contents/Resources/Emacs Manual"
