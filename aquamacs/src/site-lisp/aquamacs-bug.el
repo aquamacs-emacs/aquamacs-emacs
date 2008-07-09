@@ -3,7 +3,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: mac bug report
  
-;; Last change: $Id: aquamacs-bug.el,v 1.14 2008/07/07 12:28:29 davidswelt Exp $
+;; Last change: $Id: aquamacs-bug.el,v 1.15 2008/07/09 18:28:38 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -106,3 +106,4 @@ most Aquamacs-specific code."
 	      ,menu-bar-bug-help-menu
 	      :help "Bug diagnosis")
   'menu-aquamacs-homepage)
+(define-key menu-bar-help-menu [send-emacs-bug-report] nil)
