@@ -4,7 +4,7 @@
 ;; originally authored by Kevin Walzer
 ;; Keywords: auctex
  
-;; Last change: $Id: auctex-config.el,v 1.42 2008/06/25 16:05:25 davidswelt Exp $
+;; Last change: $Id: auctex-config.el,v 1.43 2008/07/09 18:29:11 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -97,7 +97,7 @@ if nil). The function evaluates to the corresponding number of a line in
 the file that the buffer visits (assuming the file has been saved).
 This will normally be the line number at that position, unless 
 `longlines-mode' is active."
-  (if longlines-mode
+  (if (and (boundp 'longlines-mode) longlines-mode)
       (let ((pos 1)  ;; use 1 for pos, not (point-min), to ignore narrowing
 	    (count 1))
 	(while (and (< pos (buffer-size)) 
@@ -124,7 +124,7 @@ This will normally be the line number at that position, unless
 
 (defun buffer-line-number (file-line-number)
   "Returns the buffer line number given a line in the visited file."
-  (if longlines-mode
+  (if (and (boundp 'longlines-mode) longlines-mode)
       (let ((pos 1) (count 0))
 	(while (and (> file-line-number 0)
 		    (< pos (buffer-size))
