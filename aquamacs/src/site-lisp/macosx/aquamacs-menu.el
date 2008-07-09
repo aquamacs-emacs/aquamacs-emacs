@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.162 2008/07/07 13:36:15 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.163 2008/07/09 18:29:37 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -548,16 +548,19 @@ left and right margin"))
   "Turn on Longlines mode.
 ... unless buffer is read-only."
   (unless buffer-read-only
+    (require 'longlines)
     (longlines-mode 1)))
 
 (defun turn-off-longlines ()
   "Unconditionally turn off Longlines mode."
-  (longlines-mode -1))
+  (and (boundp 'longlines-mode)
+       (longlines-mode -1)))
 ; (custom-add-option 'text-mode-hook 'turn-on-longlines)
 
 (defun toggle-longlines ()
   "Toggle whether to use Longlines Mode."
   (interactive)
+  (require 'longlines-mode)
   (unless longlines-mode 
     (auto-fill-mode -1))
   (longlines-mode))
@@ -585,7 +588,8 @@ left and right margin"))
   (interactive)
   (unless auto-fill-function 
     (setq word-wrap nil)
-    (longlines-mode -1)) ;; turn this off first if it is on
+    (and (boundp 'longlines-mode)
+	 (longlines-mode -1))) ;; turn this off first if it is on
   (auto-fill-mode)
   (message "Hard word wrap %s"
 	     (if auto-fill-function
@@ -898,13 +902,6 @@ both existing buffers and buffers that you subsequently create."
   (vector "Emacs Wiki Online" 'emacs-user-wiki) 'emacs-tutorial)
   
 
-(define-key menu-bar-manuals-menu [aquamacs-elisp]
-  '(menu-item "Emacs Lisp Reference" aquamacs-elisp-reference
-	      :help "Read the Emacs Lisp Reference manual"))
-
-(define-key menu-bar-manuals-menu [emac-lisp-intro]
-  '(menu-item "Introduction to Emacs Lisp (Info)" menu-bar-read-lispintro
-	      :help "Read the Introduction to Emacs Lisp Programming"))
 
 (define-key menu-bar-help-menu [menu-aquamacs-help]
   `(menu-item "Aquamacs Help                            " 
@@ -934,6 +931,47 @@ both existing buffers and buffers that you subsequently create."
 	      :help "Show Emacs Manual in Apple Help")
   '-)
 
+
+(define-key-after menu-bar-help-menu [sep3]
+  '("--")
+  'sep1)
+(define-key-after menu-bar-help-menu [emac-lisp-intro]
+  '(menu-item "Introduction to Emacs Lisp (Info)" menu-bar-read-lispintro
+	      :help "Read the Introduction to Emacs Lisp Programming")
+  'sep1)
+(define-key-after menu-bar-help-menu [emacs-lisp-reference]
+  '(menu-item "Emacs Lisp Reference (Info)" menu-bar-read-lispref
+	      :help "Read the Emacs Lisp Reference manual")
+  'sep1)
+(define-key-after menu-bar-help-menu [aquamacs-elisp]
+  '(menu-item "Emacs Lisp Reference" aquamacs-elisp-reference
+	      :help "Read the Emacs Lisp Reference manual")
+  'sep1)
+(define-key menu-bar-manuals-menu [emacs-lisp-reference] nil)
+(define-key menu-bar-manuals-menu [emacs-lisp-intro] nil)
+
+
+(define-key menu-bar-manuals-menu [sep]
+  '("--"))
+(define-key menu-bar-manuals-menu [emacs-psychotherapist]
+  '(menu-item "Emacs Psychotherapist" doctor
+	      :help "Our doctor will help you feel better"))
+(define-key menu-bar-help-menu [emacs-psychotherapist] nil)
+
+(define-key menu-bar-manuals-menu [lookup-subject-in-all-manuals] nil)
+
+(define-key menu-bar-search-documentation-menu [lookup-subject-in-all-manuals]
+  '(menu-item "Look Up Subject in All Manuals..." info-apropos
+	      :help "Find description of a subject in all installed manuals"))
+
+(define-key menu-bar-search-documentation-menu [emacs-terminology] nil)
+
+(define-key-after menu-bar-help-menu [emacs-terminology]
+  '(menu-item "Emacs Terminology" search-emacs-glossary
+	      :help "Display the Glossary section of the Emacs manual")
+  'emacs-tutorial-language-specific)
+
+
 ;; remove this entry, because new versions of Aquamacs are available
 ;; from the Aquamacs website, not from the FSF
 (define-key menu-bar-help-menu [describe-distribution]
@@ -952,6 +990,27 @@ both existing buffers and buffers that you subsequently create."
 ; for Aquamacs users
 (define-key menu-bar-help-menu [emacs-manual]
     nil)
+
+;;defvar
+(setq menu-bar-manuals-menu (make-sparse-keymap "More Manuals"))
+
+(define-key menu-bar-manuals-menu [man]
+  '(menu-item "Read Man Page..." manual-entry
+	      :help "Man-page docs for external commands and libraries"))
+(define-key menu-bar-manuals-menu [sep2]
+  '("--"))
+(define-key menu-bar-manuals-menu [order-emacs-manuals]
+  '(menu-item "Ordering Manuals" view-order-manuals
+	      :help "How to order manuals from the Free Software Foundation"))
+(define-key menu-bar-manuals-menu [lookup-subject-in-all-manuals]
+  '(menu-item "Lookup Subject in all manuals..." info-apropos
+	      :help "Find description of a subject in all installed manuals"))
+(define-key menu-bar-manuals-menu [other-manuals]
+  '(menu-item "All Other Manuals (Info)" Info-directory
+	      :help "Read any of the installed manuals"))
+
+
+
 )
 
 ;;; ONE TIME SETUP
