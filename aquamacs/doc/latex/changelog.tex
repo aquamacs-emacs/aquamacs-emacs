@@ -17,15 +17,21 @@ Code by Kim F. Storm.
 
 \item Automatic wrapping detection (hard word wrap = auto-fill, vs.~soft word wrap) improved.  A new customization option `auto-word-wrap-default-function' may be used to configure the default, which is hard word wrapping.
 
+\item Navigation in buffers (up/down) optimized and improved.  This is also a new buffer-local mode (`visual-line-mode'), which is enabled globally (`global-visual-line-mode').  That's also what the ``vl'' mode line indicator stands for.
+
+\item Command-Backspace will remove the whole visual line now (`kill-whole-visual-line'), while Command-Shift-Backspace will remove the entire buffer line (which may be a paragraph, when soft wrap is on). 
+
 \item Environment variables are imported again in most situations despite bugs in OS X / Emacs.  This issue could cause LaTeX calls to fail. The *Messages* buffer contains helpful notices. Reported by Thomas S. Dye and others.
 
 \item The Help menu (in ``Diagnose and Report Bug'') provides a way to start another Aquamacs Emacs instance without any personal customizations.  This should be used to reproduce any potential bugs before reporting them.
 
 \item LaTeX configuration (standard paths) simplified.
 
-\item Auto Frame Styles are turned on automatically when the user
-  chooses to retain frame settings (colors, fonts) for a mode or as a
-  default.
+\item Auto Frame Styles are turned on automatically when the user chooses to retain frame settings (colors, fonts) for a mode or as a default.
+
+\item Searching for keywords in the Help menu now includes the Emacs Manual and the Emacs Lisp Reference.
+
+\item Structure of Help menu revised.
 
 \item Internal change: Full-screen editing is now handled via the
   frame parameter `fullscreen'.
@@ -165,7 +171,7 @@ Suggested by Nathaniel Cunningham.
 
 \item Bug fix: On OS X 10.5 ``Leopard'', Aquamacs consumed a lot of CPU power in certain rare circumstances.
 \item The minibuffer history is now retained between Aquamacs sessions.
-\item LaTeX editing: better support for jumping from and to the PDF if Skim.app is installed and used. No configuration is necessary. You can jump from Aquamacs to Skim with Shift-Command-Click, or with the AUCTeX command ``Jump to PDF'' (enter C-c C-c J RET) and back. You will need to {\tt $\backslash$usepackage\{pdfsync\}} in your document preamble and re-compile before you can use the feature.
+\item LaTeX editing: better support for jumping from and to the PDF if Skim.app is installed and used. No configuration is necessary. You can jump from Aquamacs to Skim with Shift-Command-Click, or with the AUCTeX command ``Jump to PDF'' (enter C-c C-c J RET) and back. You will need to {\tt $\backslash$usepackage\{pdfsync\}} in your document preamble and re-compile before you can use the feature.    
 \item Press Command-E to use the region (selected text) for the next  search operation (Command-F).
 Suggested by Mathieu Godart.
 \item When using Frame Styles (especially with One Buffer One Frame Mode switched off), frames should (mostly) retain their original sizes now. Less jumping around!
