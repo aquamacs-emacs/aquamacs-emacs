@@ -7,8 +7,38 @@ Index: xdisp.c
 RCS file: /sources/emacs/emacs/src/xdisp.c,v
 retrieving revision 1.1149.2.27
 diff -c -r1.1149.2.27 xdisp.c
-*** src/xdisp.c	23 Apr 2008 08:56:30 -0000	1.1149.2.27
---- src/xdisp.c	5 Jul 2008 12:51:32 -0000
+*** xdisp.c	23 Apr 2008 08:56:30 -0000	1.1149.2.27
+--- xdisp.c	10 Jul 2008 12:45:18 -0000
+***************
+*** 341,350 ****
+    (!NILP (Voverflow_newline_into_fringe)	\
+     && FRAME_WINDOW_P (it->f)			\
+     && WINDOW_RIGHT_FRINGE_WIDTH (it->w) > 0	\
+!    && it->current_x == it->last_visible_x)
+  
+  #endif /* HAVE_WINDOW_SYSTEM */
+  
+  /* Non-nil means show the text cursor in void text areas
+     i.e. in blank areas after eol and eob.  This used to be
+     the default in 21.3.  */
+--- 341,357 ----
+    (!NILP (Voverflow_newline_into_fringe)	\
+     && FRAME_WINDOW_P (it->f)			\
+     && WINDOW_RIGHT_FRINGE_WIDTH (it->w) > 0	\
+!    && it->current_x == it->last_visible_x	\
+!    && it->line_wrap != WORD_WRAP)
+  
+  #endif /* HAVE_WINDOW_SYSTEM */
+  
++ /* Test if the display element loaded in IT is a space or tab
++    character.  This is used to determine word wrapping.  */
++ 
++ #define IT_DISPLAYING_WHITESPACE(it)				\
++   (it->what == IT_CHARACTER && (it->c == ' ' || it->c == '\t'))
++ 
+  /* Non-nil means show the text cursor in void text areas
+     i.e. in blank areas after eol and eob.  This used to be
+     the default in 21.3.  */
 ***************
 *** 418,424 ****
   /* Nonzero means truncate lines in all windows less wide than the
@@ -18,7 +48,7 @@ diff -c -r1.1149.2.27 xdisp.c
   
   /* A flag to control how to display unibyte 8-bit character.  */
   
---- 418,424 ----
+--- 425,431 ----
   /* Nonzero means truncate lines in all windows less wide than the
      frame.  */
   
@@ -47,7 +77,7 @@ diff -c -r1.1149.2.27 xdisp.c
   	{
   	  /* We will need the truncation glyph.  */
   	  xassert (it->glyph_row == NULL);
---- 2603,2629 ----
+--- 2610,2636 ----
       it->tab_width = 8;
   
     /* Are lines in the display truncated?  */
@@ -84,7 +114,7 @@ diff -c -r1.1149.2.27 xdisp.c
   	    it->last_visible_x -= it->truncation_pixel_width;
   	  else
   	    it->last_visible_x -= it->continuation_pixel_width;
---- 2673,2679 ----
+--- 2680,2686 ----
   	 for window-based redisplay.  */
         if (!FRAME_WINDOW_P (it->f))
   	{
@@ -101,7 +131,7 @@ diff -c -r1.1149.2.27 xdisp.c
       {
         int start_at_line_beg_p;
         int first_y = it->current_y;
---- 2746,2752 ----
+--- 2753,2759 ----
   
     /* Don't reseat to previous visible line start if current start
        position is in a string or image.  */
@@ -118,7 +148,7 @@ diff -c -r1.1149.2.27 xdisp.c
   	      && (/* And glyph doesn't fit on the line.  */
   		  new_x > it->last_visible_x
   		  /* Or it fits exactly and we're on a window
---- 2771,2777 ----
+--- 2778,2784 ----
   	     taken us to the start of the continuation line but to the
   	     end of the continued line.  */
   	  if (it->current_x > 0
@@ -128,7 +158,7 @@ diff -c -r1.1149.2.27 xdisp.c
   		  /* Or it fits exactly and we're on a window
 ***************
 *** 5278,5283 ****
---- 5286,5292 ----
+--- 5293,5299 ----
   	pos = --IT_CHARPOS (it2);
   	--IT_BYTEPOS (it2);
   	it2.sp = 0;
@@ -138,7 +168,7 @@ diff -c -r1.1149.2.27 xdisp.c
   		      (make_number (pos), Qdisplay, Qnil, &overlay))
 ***************
 *** 5428,5433 ****
---- 5437,5443 ----
+--- 5444,5450 ----
     IT_STRING_CHARPOS (*it) = -1;
     IT_STRING_BYTEPOS (*it) = -1;
     it->string = Qnil;
@@ -148,7 +178,7 @@ diff -c -r1.1149.2.27 xdisp.c
     it->area = TEXT_AREA;
 ***************
 *** 6488,6498 ****
---- 6498,6520 ----
+--- 6505,6527 ----
   {
     enum move_it_result result = MOVE_UNDEFINED;
     struct glyph_row *saved_glyph_row;
@@ -173,7 +203,13 @@ diff -c -r1.1149.2.27 xdisp.c
     ((op & MOVE_TO_POS) != 0					\
      && BUFFERP (it->object)					\
 ***************
-*** 6512,6547 ****
+*** 6506,6546 ****
+      {
+        int x, i, ascent = 0, descent = 0;
+  
+!       /* Stop if we move beyond TO_CHARPOS (after an image or stretch glyph).  */
+        if ((op & MOVE_TO_POS) != 0
+  	  && BUFFERP (it->object)
   	  && it->method == GET_FROM_BUFFER
   	  && IT_CHARPOS (*it) > to_charpos)
   	{
@@ -203,35 +239,38 @@ diff -c -r1.1149.2.27 xdisp.c
 ! 	 fit on the line.  */
 !       if (!it->truncate_lines_p)
   	{
-  	  ascent = it->max_ascent;
-  	  descent = it->max_descent;
+! 	  ascent = it->max_ascent;
+! 	  descent = it->max_descent;
   	}
   
         PRODUCE_GLYPHS (it);
   
-        if (it->area != TEXT_AREA)
---- 6534,6616 ----
+--- 6535,6622 ----
+      {
+        int x, i, ascent = 0, descent = 0;
+  
+!       /* Utility macro to reset an iterator with x, ascent, and descent.  */
+! #define IT_RESET_X_ASCENT_DESCENT(IT)			\
+!       ((IT)->current_x = x, (IT)->max_ascent = ascent,	\
+!        (IT)->max_descent = descent)
+!       
+!       /* Stop if we move beyond TO_CHARPOS (after an image or stretch
+! 	 glyph).  */
+        if ((op & MOVE_TO_POS) != 0
+  	  && BUFFERP (it->object)
   	  && it->method == GET_FROM_BUFFER
   	  && IT_CHARPOS (*it) > to_charpos)
   	{
-! 	  if (it->line_wrap == WORD_WRAP)
-! 	    {
-! 	       /* If wrap_it is valid, the current position might be in
-!  		 a word that is wrapped to the next line, so continue
-!  		 to see if that happens.  */
-! 	      if (wrap_it.sp < 0)
-! 		{
-! 		  result = MOVE_POS_MATCH_OR_ZV;
-! 		  break;
-! 		}
-! 	      if (atpos_it.sp < 0)
-! 		atpos_it = *it;
-! 	    }
-! 	  else
+! 	  if (it->line_wrap != WORD_WRAP || wrap_it.sp < 0)
 ! 	    {
 ! 	      result = MOVE_POS_MATCH_OR_ZV;
 ! 	      break;
 ! 	    }
+! 	  else if (it->line_wrap == WORD_WRAP && atpos_it.sp < 0)
+! 	    /* If wrap_it is valid, the current position might be in a
+! 	       word that is wrapped.  So, save the iterator in
+! 	       atpos_it and continue to see if wrapping happens.  */
+! 	    atpos_it = *it;
   	}
   
         /* Stop when ZV reached.
@@ -246,54 +285,55 @@ diff -c -r1.1149.2.27 xdisp.c
   
 !       if (it->line_wrap == TRUNCATE)
   	{
-+ 	  if (BUFFER_POS_REACHED_P ())
-+ 	    {
-+ 	      result = MOVE_POS_MATCH_OR_ZV;
-+ 	      break;
-+ 	    }
-+ 	}
-+       else
-+ 	{
-+ 	  /* Remember the line height so far in case the next element
-+ 	     doesn't fit on the line.  */
-  	  ascent = it->max_ascent;
-  	  descent = it->max_descent;
-+ 
-+ 	  if (it->line_wrap == WORD_WRAP)
-+ 	    {
-+ 	      if (it->what == IT_CHARACTER
-+ 		  && (it->c == ' ' || it->c == '\t'))
-+ 		may_wrap = 1;
-+ 	      else if (may_wrap)
-+ 		{
-+ 		  /* We are done if the position is already found.  */
-+ 		  if (atpos_it.sp >= 0)
-+ 		    {
-+ 		      *it = atpos_it;
-+ 		      result = MOVE_POS_MATCH_OR_ZV;
-+ 		      goto done;
-+ 		    }
-+ 		  if (atx_it.sp >= 0)
-+ 		    {
-+ 		      *it = atx_it;
-+ 		      result = MOVE_X_REACHED;
-+ 		      goto done;
-+ 		    }
-+ 		  wrap_it = *it;
-+ 		  may_wrap = 0;
-+ 		}
-+ 	    }
+! 	  if (BUFFER_POS_REACHED_P ())
+! 	    {
+! 	      result = MOVE_POS_MATCH_OR_ZV;
+! 	      break;
+! 	    }
+! 	}
+!       else
+! 	{
+! 
+! 	  if (it->line_wrap == WORD_WRAP)
+! 	    {
+! 	      if (IT_DISPLAYING_WHITESPACE (it))
+! 		may_wrap = 1;
+! 	      else if (may_wrap)
+! 		{
+! 		  /* We have reached a glyph that follows one or more
+! 		     whitespace characters.  If the position is
+! 		     already found, we are done.  */
+! 		  if (atpos_it.sp >= 0)
+! 		    {
+! 		      *it = atpos_it;
+! 		      result = MOVE_POS_MATCH_OR_ZV;
+! 		      goto done;
+! 		    }
+! 		  if (atx_it.sp >= 0)
+! 		    {
+! 		      *it = atx_it;
+! 		      result = MOVE_X_REACHED;
+! 		      goto done;
+! 		    }
+! 		  /* Otherwise, we can wrap here.  */
+! 		  wrap_it = *it;
+! 		  may_wrap = 0;
+! 		}
+! 	    }
   	}
-  
++       /* Remember the line height for the current line, in case
++ 	 the next element doesn't fit on the line.  */
++       ascent = it->max_ascent;
++       descent = it->max_descent;
++ 
 +       /* The call to produce_glyphs will get the metrics of the
 + 	 display element IT is loaded with.  Record the x-position
 + 	 before this display element, in case it doesn't fit on the
 + 	 line.  */
 +       x = it->current_x;
-+ 
+  
         PRODUCE_GLYPHS (it);
   
-        if (it->area != TEXT_AREA)
 ***************
 *** 6581,6609 ****
   	    {
@@ -301,13 +341,13 @@ diff -c -r1.1149.2.27 xdisp.c
   
 ! 	      /* We want to leave anything reaching TO_X to the caller.  */
 ! 	      if ((op & MOVE_TO_X) && new_x > to_x)
-  		{
-- 		  if (BUFFER_POS_REACHED_P ())
-- 		    goto buffer_pos_reached;
-  		  it->current_x = x;
-  		  result = MOVE_X_REACHED;
-  		  break;
-  		}
+! 		{
+! 		  if (BUFFER_POS_REACHED_P ())
+! 		    goto buffer_pos_reached;
+! 		  it->current_x = x;
+! 		  result = MOVE_X_REACHED;
+! 		  break;
+! 		}
 ! 	      else if (/* Lines are continued.  */
 ! 		       !it->truncate_lines_p
 ! 		       && (/* And glyph doesn't fit on the line.  */
@@ -316,7 +356,7 @@ diff -c -r1.1149.2.27 xdisp.c
 ! 			      system frame.  */
 ! 			   || (new_x == it->last_visible_x
 ! 			       && FRAME_WINDOW_P (it->f))))
-  		{
+! 		{
   		  if (/* IT->hpos == 0 means the very first glyph
   			 doesn't fit on the line, e.g. a wide image.  */
   		      it->hpos == 0
@@ -325,57 +365,49 @@ diff -c -r1.1149.2.27 xdisp.c
   		    {
   		      ++it->hpos;
   		      it->current_x = new_x;
---- 6650,6708 ----
+--- 6657,6707 ----
   	    {
   	      new_x = x + single_glyph_width;
   
 !         /* We want to leave anything reaching TO_X to the caller.  */
 !         if ((op & MOVE_TO_X) && new_x > to_x)
-!   	{
-! 	  if (it->line_wrap == WORD_WRAP)
-!   	    {
-! 	      if (BUFFER_POS_REACHED_P ())
-!   		{
-!   		  if (wrap_it.sp < 0)
-!   		    goto buffer_pos_reached;
-! 		  else if (atpos_it.sp < 0)
-! 		    {
-! 		      atpos_it = *it;
-! 		      atpos_it.current_x = x;
-! 		    }
-!   		}
-! 	      else if (wrap_it.sp < 0)
-  		{
-  		  it->current_x = x;
-  		  result = MOVE_X_REACHED;
-  		  break;
-  		}
-! 	      else if (atx_it.sp < 0)
-  		{
-+ 		  atx_it = *it;
-+ 		  atx_it.current_x = x;
-+ 		}
-+ 	    }
-+ 	  else
-+ 	    {
-+ 	      if (BUFFER_POS_REACHED_P ())
-+   		goto buffer_pos_reached;
-+ 	      it->current_x = x;
-+ 	      result = MOVE_X_REACHED;
-+ 	      break;
-+   	    }
-+   	}
-+   
-+         if (/* Lines are continued.  */
-+ 		  it->line_wrap != TRUNCATE
-+ 		  && (/* And glyph doesn't fit on the line.  */
-+ 		      new_x > it->last_visible_x
-+ 		      /* Or it fits exactly and we're on a window
-+ 			 system frame.  */
-+ 		      || (new_x == it->last_visible_x
-+  			  && FRAME_WINDOW_P (it->f)
-+  			  && it->line_wrap == WINDOW_WRAP)))		
-+ 	  {
+! 	  {
+! 	    if (BUFFER_POS_REACHED_P ())
+! 	      {
+! 		if (it->line_wrap != WORD_WRAP || wrap_it.sp < 0)
+! 		  goto buffer_pos_reached;
+! 		if (atpos_it.sp < 0)
+! 		  {
+! 		    atpos_it = *it;
+! 		    IT_RESET_X_ASCENT_DESCENT (&atpos_it);
+! 		  }
+! 	      }
+! 	    else
+! 	      {
+! 		if (it->line_wrap != WORD_WRAP || wrap_it.sp < 0)
+! 		  {
+! 		    it->current_x = x;
+! 		    result = MOVE_X_REACHED;
+! 		    break;
+! 		  }
+! 		if (atx_it.sp < 0)
+! 		  {
+! 		    atx_it = *it;
+! 		    IT_RESET_X_ASCENT_DESCENT (&atx_it);
+! 		  }
+! 	      }
+! 	  }
+!   
+!         if (/* Lines are continued.  */
+! 		  it->line_wrap != TRUNCATE
+! 		  && (/* And glyph doesn't fit on the line.  */
+! 		      new_x > it->last_visible_x
+! 		      /* Or it fits exactly and we're on a window
+! 			 system frame.  */
+! 		      || (new_x == it->last_visible_x
+!  			  && FRAME_WINDOW_P (it->f)
+!  			  && it->line_wrap == WINDOW_WRAP)))		
+! 	  {
   		  if (/* IT->hpos == 0 means the very first glyph
   			 doesn't fit on the line, e.g. a wide image.  */
   		      it->hpos == 0
@@ -386,8 +418,42 @@ diff -c -r1.1149.2.27 xdisp.c
   		      ++it->hpos;
   		      it->current_x = new_x;
 ***************
+*** 6617,6626 ****
+  			     now that we know it fits in this row.  */
+  			  if (BUFFER_POS_REACHED_P ())
+  			    {
+! 			      it->hpos = hpos_before_this_char;
+! 			      it->current_x = x_before_this_char;
+! 			      result = MOVE_POS_MATCH_OR_ZV;
+! 			      break;
+  			    }
+  
+  			  set_iterator_to_next (it, 1);
+--- 6715,6735 ----
+  			     now that we know it fits in this row.  */
+  			  if (BUFFER_POS_REACHED_P ())
+  			    {
+! 			      if (it->line_wrap != WORD_WRAP
+! 				  || wrap_it.sp < 0)
+! 				{
+! 				  it->hpos = hpos_before_this_char;
+! 				  it->current_x = x_before_this_char;
+! 				  result = MOVE_POS_MATCH_OR_ZV;
+! 				  break;
+! 				}
+! 			      if (it->line_wrap == WORD_WRAP
+! 				  && atpos_it.sp < 0)
+! 				{
+! 				  atpos_it = *it;
+! 				  atpos_it.current_x = x_before_this_char;
+! 				  atpos_it.hpos = hpos_before_this_char;
+! 				}
+  			    }
+  
+  			  set_iterator_to_next (it, 1);
+***************
 *** 6641,6646 ****
---- 6740,6746 ----
+--- 6750,6756 ----
   				  break;
   				}
   			      if (ITERATOR_AT_END_OF_LINE_P (it))
@@ -396,12 +462,33 @@ diff -c -r1.1149.2.27 xdisp.c
   				  result = MOVE_NEWLINE_OR_CR;
   				  break;
 ***************
-*** 6656,6679 ****
-  		      it->max_descent = descent;
+*** 6650,6659 ****
+  			}
+  		    }
+  		  else
+  		    {
+! 		      it->current_x = x;
+! 		      it->max_ascent = ascent;
+! 		      it->max_descent = descent;
   		    }
   
   		  TRACE_MOVE ((stderr, "move_it_in: continued at %d\n",
-  			       IT_CHARPOS (*it)));
+--- 6760,6772 ----
+  			}
+  		    }
+  		  else
++ 		    IT_RESET_X_ASCENT_DESCENT (it);
++ 
++ 		  if (wrap_it.sp >= 0)
+  		    {
+! 		      *it = wrap_it;
+! 		      atpos_it.sp = -1;
+! 		      atx_it.sp = -1;
+  		    }
+  
+  		  TRACE_MOVE ((stderr, "move_it_in: continued at %d\n",
+***************
+*** 6661,6679 ****
   		  result = MOVE_LINE_CONTINUED;
   		  break;
   		}
@@ -421,37 +508,20 @@ diff -c -r1.1149.2.27 xdisp.c
   	    }
   
   	  if (result != MOVE_UNDEFINED)
---- 6756,6796 ----
-  		      it->max_descent = descent;
-  		    }
-  
-+ 		  if (wrap_it.sp >= 0)
-+ 		    {
-+ 		      *it = wrap_it;
-+ 		      atpos_it.sp = -1;
-+ 		      atx_it.sp = -1;
-+ 		    }
-+ 
-  		  TRACE_MOVE ((stderr, "move_it_in: continued at %d\n",
-  			       IT_CHARPOS (*it)));
+--- 6774,6797 ----
   		  result = MOVE_LINE_CONTINUED;
   		  break;
   		}
 ! 
 ! 	      if (BUFFER_POS_REACHED_P ())
 ! 		{
-! 		  if (it->line_wrap == WORD_WRAP)
-! 		    {
-! 		      if (wrap_it.sp < 0)
-! 			goto buffer_pos_reached;
-! 		      if (atpos_it.sp < 0)
-!  			{
-!  			  atpos_it = *it;
-!  			  atpos_it.current_x = x;
-!  			}
-! 		    }
-! 		  else
+! 		  if (it->line_wrap != WORD_WRAP || wrap_it.sp < 0)
 ! 		    goto buffer_pos_reached;
+! 		  if (it->line_wrap == WORD_WRAP && atpos_it.sp < 0)
+! 		    {
+! 		      atpos_it = *it;
+! 		      IT_RESET_X_ASCENT_DESCENT (&atpos_it);
+! 		    }
 ! 		}
 ! 
 ! 	      if (new_x > it->first_visible_x)
@@ -464,6 +534,25 @@ diff -c -r1.1149.2.27 xdisp.c
   
   	  if (result != MOVE_UNDEFINED)
 ***************
+*** 6682,6690 ****
+        else if (BUFFER_POS_REACHED_P ())
+  	{
+  	buffer_pos_reached:
+! 	  it->current_x = x;
+! 	  it->max_ascent = ascent;
+! 	  it->max_descent = descent;
+  	  result = MOVE_POS_MATCH_OR_ZV;
+  	  break;
+  	}
+--- 6800,6806 ----
+        else if (BUFFER_POS_REACHED_P ())
+  	{
+  	buffer_pos_reached:
+! 	  IT_RESET_X_ASCENT_DESCENT (it);
+  	  result = MOVE_POS_MATCH_OR_ZV;
+  	  break;
+  	}
+***************
 *** 6712,6718 ****
   
         /* Stop if lines are truncated and IT's current x-position is
@@ -472,7 +561,7 @@ diff -c -r1.1149.2.27 xdisp.c
   	  && it->current_x >= it->last_visible_x)
   	{
   #ifdef HAVE_WINDOW_SYSTEM
---- 6829,6835 ----
+--- 6828,6834 ----
   
         /* Stop if lines are truncated and IT's current x-position is
   	 past the right edge of the window now.  */
@@ -481,8 +570,13 @@ diff -c -r1.1149.2.27 xdisp.c
   	{
   #ifdef HAVE_WINDOW_SYSTEM
 ***************
-*** 6738,6743 ****
---- 6855,6868 ----
+*** 6734,6743 ****
+--- 6850,6868 ----
+  	  result = MOVE_LINE_TRUNCATED;
+  	  break;
+  	}
++ #undef IT_RESET_X_ASCENT_DESCENT
+      }
   
   #undef BUFFER_POS_REACHED_P
   
@@ -515,26 +609,66 @@ diff -c -r1.1149.2.27 xdisp.c
         else
   	{
 ***************
-*** 15790,15796 ****
-        && it->glyph_row->displays_text_p
-        && face->box == FACE_NO_BOX
-        && face->background == FRAME_BACKGROUND_PIXEL (f)
-!       && !face->stipple)
-      return;
+*** 14188,14196 ****
+    int yb = window_text_bottom_y (w);
   
-    /* Set the glyph row flag indicating that the face of the last glyph
---- 15915,15922 ----
-        && it->glyph_row->displays_text_p
-        && face->box == FACE_NO_BOX
-        && face->background == FRAME_BACKGROUND_PIXEL (f)
-!       && !face->stipple
-!       && it->line_wrap != WORD_WRAP)
-      return;
+    /* Find the last row displaying unchanged text.  */
+!   row = MATRIX_FIRST_TEXT_ROW (w->current_matrix);
+!   while (MATRIX_ROW_DISPLAYS_TEXT_P (row)
+! 	 && MATRIX_ROW_START_CHARPOS (row) < first_changed_pos)
+      {
+        if (/* If row ends before first_changed_pos, it is unchanged,
+  	     except in some case.  */
+--- 14313,14322 ----
+    int yb = window_text_bottom_y (w);
   
-    /* Set the glyph row flag indicating that the face of the last glyph
+    /* Find the last row displaying unchanged text.  */
+!   for (row = MATRIX_FIRST_TEXT_ROW (w->current_matrix);
+!        MATRIX_ROW_DISPLAYS_TEXT_P (row)
+! 	 && MATRIX_ROW_START_CHARPOS (row) < first_changed_pos;
+!        ++row)
+      {
+        if (/* If row ends before first_changed_pos, it is unchanged,
+  	     except in some case.  */
+***************
+*** 14207,14216 ****
+  	row_found = row;
+  
+        /* Stop if last visible row.  */
+!      if (MATRIX_ROW_BOTTOM_Y (row) >= yb)
+  	break;
+- 
+-       ++row;
+      }
+  
+    return row_found;
+--- 14333,14340 ----
+  	row_found = row;
+  
+        /* Stop if last visible row.  */
+!       if (MATRIX_ROW_BOTTOM_Y (row) >= yb)
+  	break;
+      }
+  
+    return row_found;
+***************
+*** 14528,14533 ****
+--- 14652,14663 ----
+    if (overlay_arrows_changed_p ())
+      GIVE_UP (12);
+  
++   /* When word-wrap is on, adding a space to the first word of a
++      wrapped line can change the wrap position, altering the line
++      above it.  It might be worthwhile to handle this more
++      intelligently, but for now just redisplay from scratch.  */
++   if (!NILP (XBUFFER (w->buffer)->word_wrap))
++     GIVE_UP (21);
+  
+    /* Make sure beg_unchanged and end_unchanged are up to date.  Do it
+       only if buffer has really changed.  The reason is that the gap is
 ***************
 *** 16005,16010 ****
---- 16131,16141 ----
+--- 16135,16145 ----
   {
     struct glyph_row *row = it->glyph_row;
     Lisp_Object overlay_arrow_string;
@@ -560,7 +694,7 @@ diff -c -r1.1149.2.27 xdisp.c
   	}
   
         PRODUCE_GLYPHS (it);
---- 16230,16260 ----
+--- 16234,16263 ----
   
         /* Remember the line height so far in case the next element doesn't
   	 fit on the line.  */
@@ -573,8 +707,7 @@ diff -c -r1.1149.2.27 xdisp.c
 + 
 + 	  if (it->line_wrap == WORD_WRAP && it->area == TEXT_AREA)
 + 	    {
-+ 	      if (it->what == IT_CHARACTER
-+ 		  && (it->c == ' ' || it->c == '\t'))
++ 	      if (IT_DISPLAYING_WHITESPACE (it))
 + 		may_wrap = 1;
 + 	      else if (may_wrap)
 + 		{
@@ -601,7 +734,7 @@ diff -c -r1.1149.2.27 xdisp.c
   		  && (/* Glyph doesn't fit on the line.  */
   		      new_x > it->last_visible_x
   		      /* Or it fits exactly on a window system frame.  */
---- 16314,16320 ----
+--- 16317,16323 ----
   	      new_x = x + glyph->pixel_width;
   
   	      if (/* Lines are continued.  */
@@ -610,29 +743,29 @@ diff -c -r1.1149.2.27 xdisp.c
   		      new_x > it->last_visible_x
   		      /* Or it fits exactly on a window system frame.  */
 ***************
-*** 16205,16210 ****
---- 16355,16372 ----
-  				}
-  			    }
-  #endif /* HAVE_WINDOW_SYSTEM */
-+ 
-+ 			  /* If line-wrap is on, consider returning to
-+ 			     a previously set wrap point, if there is
-+ 			     one.  Be sure to handle the case where
-+ 			     the last character on the line is a
-+ 			     space, as well as the case where the
-+ 			     following character is also a space.  */
+*** 16187,16192 ****
+--- 16340,16357 ----
+  		      ++it->hpos;
+  		      if (i == nglyphs - 1)
+  			{
++ 			  /* If line-wrap is on, check if a previous
++ 			     wrap point was found.  */
 + 			  if (wrap_row_used > 0
++ 			      /* Even if there is a previous wrap
++ 				 point, continue the line here as
++ 				 usual, if (i) the previous character
++ 				 was a space or tab AND (ii) the
++ 				 current character is not.  */
 + 			      && (!may_wrap
-+ 				  || (it->what == IT_CHARACTER
-+ 				      && (it->c == ' ' || it->c == '\t'))))
++ 				  || IT_DISPLAYING_WHITESPACE (it)))
 + 			    goto back_to_wrap;
-  			}
-  		    }
-  		  else if (CHAR_GLYPH_PADDING_P (*glyph)
++ 
+  			  set_iterator_to_next (it, 1);
+  #ifdef HAVE_WINDOW_SYSTEM
+  			  if (IT_OVERFLOW_NEWLINE_INTO_FRINGE (it))
 ***************
 *** 16232,16237 ****
---- 16394,16419 ----
+--- 16397,16422 ----
   		      it->max_phys_ascent = phys_ascent;
   		      it->max_phys_descent = phys_descent;
   		    }
@@ -668,7 +801,7 @@ diff -c -r1.1149.2.27 xdisp.c
   	  && (FRAME_WINDOW_P (it->f)
   	      ? (it->current_x >= it->last_visible_x)
   	      : (it->current_x > it->last_visible_x)))
---- 16529,16535 ----
+--- 16532,16538 ----
   
         /* If we truncate lines, we are done when the last displayed
   	 glyphs reach past the right margin of the window.  */
@@ -685,7 +818,7 @@ diff -c -r1.1149.2.27 xdisp.c
   	      && x + glyph->pixel_width > max_x)
   	    {
   	      /* End of continued line or max_x reached.  */
---- 18538,18544 ----
+--- 18541,18547 ----
   	{
   	  struct glyph *glyph = row->glyphs[TEXT_AREA] + n_glyphs_before + i;
   
@@ -702,7 +835,7 @@ diff -c -r1.1149.2.27 xdisp.c
   	  && it->current_x >= it->last_visible_x)
   	{
   	  /* Add truncation mark, but don't do it if the line is
---- 18594,18600 ----
+--- 18597,18603 ----
         set_iterator_to_next (it, 1);
   
         /* Stop if truncating at the right edge.  */
@@ -719,7 +852,7 @@ diff -c -r1.1149.2.27 xdisp.c
         && it->current_x + width > it->last_visible_x)
       width = it->last_visible_x - it->current_x - 1;
   
---- 20457,20463 ----
+--- 20460,20466 ----
     else
       ascent = (height * FONT_BASE (font)) / FONT_HEIGHT (font);
   
@@ -739,7 +872,7 @@ diff -c -r1.1149.2.27 xdisp.c
   
     DEFVAR_BOOL ("mode-line-inverse-video", &mode_line_inverse_video,
       doc: /* When nil, display the mode-line/header-line/menu-bar in the default face.
---- 24331,24348 ----
+--- 24334,24351 ----
     DEFVAR_INT ("debug-end-pos", &debug_end_pos, doc: /* Don't ask.  */);
   #endif
   
