@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.72 2008/07/03 07:04:59 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.73 2008/07/10 13:58:36 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -355,6 +355,15 @@ This is relevant only for `mac-read-environment-vars-from-shell'.")
 ;; (setq shell-file-name "/bin/bash")
 ;; (let ((debug-on-error)) (mac-read-environment-vars-from-shell))
 
+;; Reading the environment variables is complex, primarily due to
+;; bugs in OS X.  On some systems, starting the login shell and
+;; printing all variables takes an hour, so we need to have a
+;; timeout.  However, starting the process asynchronuously using
+;; `start-process' fails as well on some other systems.  Hence the
+;; need to run it with `call-process' and "&", storing the output in
+;; a temporary file.
+;; dr. 07/2008
+
 (defun mac-read-environment-vars-from-shell ()
   "Import the environment from the system's default login shell
 specified in `shell-file-name'."
@@ -378,7 +387,8 @@ specified in `shell-file-name'."
 		   ;; won't work for csh, because it doesn't take -l -c ...
 		   ))))))
     ;; we call the process asynchronuously
-    ;; using start-process does not work for unknown reasons: sometimes it doesn't get the environment.
+    ;; using start-process does not work for unknown reasons: 
+    ;; sometimes it doesn't get the environment.
     (call-process shell nil
 		  0 nil
 		  "-l"
@@ -386,13 +396,19 @@ specified in `shell-file-name'."
 		  (format "printenv >%s.tmp; mv %s.tmp %s" environment-temp-file environment-temp-file environment-temp-file))))
 
 ;; (mac-read-environment-vars-from-shell)
+;; (mac-read-environment-vars-from-shell-2)
 
 (defun mac-read-environment-vars-from-shell-2 ()
   "Reads temporary file if it exists."
   (if (file-readable-p environment-temp-file)
       (prog1
-	(let ((b (find-file-noselect environment-temp-file 'nowarn 'rawfile)) (num 0))
-	  (with-current-buffer b
+	  (with-temp-buffer
+	    (condition-case nil
+		(progn
+		  (insert-file-contents-literally environment-temp-file nil)
+		  (delete-file environment-temp-file))
+	      (error nil))
+	    (let ((num 0))
 	     (if (eq (buffer-size) 0)
 		 (message "Warning: Login shell did not return environment.")
 	       (goto-char (point-min))
@@ -406,14 +422,11 @@ specified in `shell-file-name'."
 		  (match-string 1)
 		  (if (equal (match-string 1) "PATH")
 		      (concat (match-string 2) ":" (getenv "PATH"))
-		    (match-string 2))))))
+		    (match-string 2)))))
 	  (message "%d environment variables imported from login shell (%s)." 
 		   num shell-file-name)
 	  (mac-post-environment-vars-function)
-	  num)
-	(condition-case nil
-	    (delete-file environment-temp-file)
-	  (error nil)))
+	  num)))
     nil))
 
 
