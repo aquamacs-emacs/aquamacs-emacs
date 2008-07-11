@@ -8,7 +8,7 @@ RCS file: /sources/emacs/emacs/src/xdisp.c,v
 retrieving revision 1.1149.2.27
 diff -c -r1.1149.2.27 xdisp.c
 *** src/xdisp.c	23 Apr 2008 08:56:30 -0000	1.1149.2.27
---- src/xdisp.c	10 Jul 2008 12:45:18 -0000
+--- src/xdisp.c	11 Jul 2008 14:56:46 -0000
 ***************
 *** 341,350 ****
     (!NILP (Voverflow_newline_into_fringe)	\
@@ -592,6 +592,157 @@ diff -c -r1.1149.2.27 xdisp.c
        function.  */
     it->glyph_row = saved_glyph_row;
 ***************
+*** 6745,6750 ****
+--- 6870,6885 ----
+  }
+  
+  
++ /* For external use.  */
++ void
++ move_it_in_display_line (struct it *it,
++ 			 EMACS_INT to_charpos, int to_x,
++ 			 enum move_operation_enum op)
++ {
++   move_it_in_display_line_to (it, to_charpos, to_x, op);
++ }
++ 
++ 
+  /* Move IT forward until it satisfies one or more of the criteria in
+     TO_CHARPOS, TO_X, TO_Y, and TO_VPOS.
+  
+***************
+*** 6816,6821 ****
+--- 6951,6959 ----
+  	{
+  	  struct it it_backup;
+  
++ 	  if (it->line_wrap == WORD_WRAP)
++ 	    it_backup = *it;
++ 
+  	  /* TO_Y specified means stop at TO_X in the line containing
+  	     TO_Y---or at TO_CHARPOS if this is reached first.  The
+  	     problem is that we can't really tell whether the line
+***************
+*** 6828,6878 ****
+  	     If we didn't use TO_X == 0, we would stop at the end of
+  	     the line which is probably not what a caller would expect
+  	     to happen.  */
+! 	  skip = move_it_in_display_line_to (it, to_charpos,
+! 					     ((op & MOVE_TO_X)
+! 					      ? to_x : 0),
+! 					     (MOVE_TO_X
+! 					      | (op & MOVE_TO_POS)));
+  
+  	  /* If TO_CHARPOS is reached or ZV, we don't have to do more.  */
+  	  if (skip == MOVE_POS_MATCH_OR_ZV)
+  	    {
+! 	      reached = 5;
+! 	      break;
+! 	    }
+! 
+! 	  /* If TO_X was reached, we would like to know whether TO_Y
+  	     is in the line.  This can only be said if we know the
+  	     total line height which requires us to scan the rest of
+  	     the line.  */
+- 	  if (skip == MOVE_X_REACHED)
+- 	    {
+  	      it_backup = *it;
+  	      TRACE_MOVE ((stderr, "move_it: from %d\n", IT_CHARPOS (*it)));
+  	      skip2 = move_it_in_display_line_to (it, to_charpos, -1,
+  						  op & MOVE_TO_POS);
+  	      TRACE_MOVE ((stderr, "move_it: to %d\n", IT_CHARPOS (*it)));
+! 	    }
+  
+! 	  /* Now, decide whether TO_Y is in this line.  */
+! 	  line_height = it->max_ascent + it->max_descent;
+! 	  TRACE_MOVE ((stderr, "move_it: line_height = %d\n", line_height));
+! 
+! 	  if (to_y >= it->current_y
+! 	      && to_y < it->current_y + line_height)
+! 	    {
+! 	      if (skip == MOVE_X_REACHED)
+! 		/* If TO_Y is in this line and TO_X was reached above,
+! 		   we scanned too far.  We have to restore IT's settings
+! 		   to the ones before skipping.  */
+! 		*it = it_backup;
+! 	      reached = 6;
+  	    }
+! 	  else if (skip == MOVE_X_REACHED)
+  	    {
+! 	      skip = skip2;
+! 	      if (skip == MOVE_POS_MATCH_OR_ZV)
+! 		reached = 7;
+  	    }
+  
+  	  if (reached)
+--- 6966,7031 ----
+  	     If we didn't use TO_X == 0, we would stop at the end of
+  	     the line which is probably not what a caller would expect
+  	     to happen.  */
+! 	  skip = move_it_in_display_line_to
+! 	    (it, to_charpos, ((op & MOVE_TO_X) ? to_x : 0),
+! 	     (MOVE_TO_X | (op & MOVE_TO_POS)));
+  
+  	  /* If TO_CHARPOS is reached or ZV, we don't have to do more.  */
+  	  if (skip == MOVE_POS_MATCH_OR_ZV)
++ 	    reached = 5;
++ 	  else if (skip == MOVE_X_REACHED)
+  	    {
+! 	     /* If TO_X was reached, we would like to know whether TO_Y
+  	     is in the line.  This can only be said if we know the
+  	     total line height which requires us to scan the rest of
+  	     the line.  */
+  	      it_backup = *it;
+  	      TRACE_MOVE ((stderr, "move_it: from %d\n", IT_CHARPOS (*it)));
+  	      skip2 = move_it_in_display_line_to (it, to_charpos, -1,
+  						  op & MOVE_TO_POS);
+  	      TRACE_MOVE ((stderr, "move_it: to %d\n", IT_CHARPOS (*it)));
+! 	      line_height = it->max_ascent + it->max_descent;
+! 	      TRACE_MOVE ((stderr, "move_it: line_height = %d\n", line_height));
+  
+! 	      if (to_y >= it->current_y
+! 		  && to_y < it->current_y + line_height)
+! 		{
+! 		  /* If TO_Y is in this line and TO_X was reached
+! 		     above, we scanned too far.  We have to restore
+! 		     IT's settings to the ones before skipping.  */
+! 		  *it = it_backup;
+! 		  reached = 6;
+! 		}
+! 	      else
+! 		{
+! 		  skip = skip2;
+! 		  if (skip == MOVE_POS_MATCH_OR_ZV)
+! 		    reached = 7;
+! 		}
+  	    }
+! 	  else
+  	    {
+! 	      /* Check whether TO_Y is in this line.  */
+! 	      line_height = it->max_ascent + it->max_descent;
+! 	      TRACE_MOVE ((stderr, "move_it: line_height = %d\n", line_height));
+! 
+! 	      if (to_y >= it->current_y
+! 		  && to_y < it->current_y + line_height)
+! 		{
+! 		  /* When word-wrap is on, TO_X may lie past the end
+! 		     of a wrapped line.  Then it->current is the
+! 		     character on the next line, so backtrack to the
+! 		     space before the wrap point.  */
+! 		  if (skip == MOVE_LINE_CONTINUED
+! 		      && it->line_wrap == WORD_WRAP)
+! 		    {
+! 		      int prev_x = max (it->current_x - 1, 0);
+! 		      *it = it_backup;
+! 		      skip = move_it_in_display_line_to
+! 			(it, -1, prev_x, MOVE_TO_X);
+! 		    }
+! 		  reached = 6;
+! 		}
+  	    }
+  
+  	  if (reached)
+***************
 *** 8365,8371 ****
         max_height = min (total_height, max_height);
   
@@ -600,7 +751,7 @@ diff -c -r1.1149.2.27 xdisp.c
   	height = 1;
         else
   	{
---- 8490,8496 ----
+--- 8518,8524 ----
         max_height = min (total_height, max_height);
   
         /* Find out the height of the text in the window.  */
@@ -619,7 +770,7 @@ diff -c -r1.1149.2.27 xdisp.c
       {
         if (/* If row ends before first_changed_pos, it is unchanged,
   	     except in some case.  */
---- 14313,14322 ----
+--- 14341,14350 ----
     int yb = window_text_bottom_y (w);
   
     /* Find the last row displaying unchanged text.  */
@@ -642,7 +793,7 @@ diff -c -r1.1149.2.27 xdisp.c
       }
   
     return row_found;
---- 14333,14340 ----
+--- 14361,14368 ----
   	row_found = row;
   
         /* Stop if last visible row.  */
@@ -652,8 +803,18 @@ diff -c -r1.1149.2.27 xdisp.c
   
     return row_found;
 ***************
+*** 14396,14402 ****
+      }
+  }
+  
+- 
+  /* Try to redisplay window W by reusing its existing display.  W's
+     current matrix must be up to date when this function is called,
+     i.e. window_end_valid must not be nil.
+--- 14548,14553 ----
+***************
 *** 14528,14533 ****
---- 14652,14663 ----
+--- 14679,14690 ----
     if (overlay_arrows_changed_p ())
       GIVE_UP (12);
   
@@ -668,7 +829,7 @@ diff -c -r1.1149.2.27 xdisp.c
        only if buffer has really changed.  The reason is that the gap is
 ***************
 *** 16005,16010 ****
---- 16135,16145 ----
+--- 16162,16172 ----
   {
     struct glyph_row *row = it->glyph_row;
     Lisp_Object overlay_arrow_string;
@@ -694,7 +855,7 @@ diff -c -r1.1149.2.27 xdisp.c
   	}
   
         PRODUCE_GLYPHS (it);
---- 16234,16263 ----
+--- 16261,16290 ----
   
         /* Remember the line height so far in case the next element doesn't
   	 fit on the line.  */
@@ -734,7 +895,7 @@ diff -c -r1.1149.2.27 xdisp.c
   		  && (/* Glyph doesn't fit on the line.  */
   		      new_x > it->last_visible_x
   		      /* Or it fits exactly on a window system frame.  */
---- 16317,16323 ----
+--- 16344,16350 ----
   	      new_x = x + glyph->pixel_width;
   
   	      if (/* Lines are continued.  */
@@ -744,7 +905,7 @@ diff -c -r1.1149.2.27 xdisp.c
   		      /* Or it fits exactly on a window system frame.  */
 ***************
 *** 16187,16192 ****
---- 16340,16357 ----
+--- 16367,16384 ----
   		      ++it->hpos;
   		      if (i == nglyphs - 1)
   			{
@@ -765,7 +926,7 @@ diff -c -r1.1149.2.27 xdisp.c
   			  if (IT_OVERFLOW_NEWLINE_INTO_FRINGE (it))
 ***************
 *** 16232,16237 ****
---- 16397,16422 ----
+--- 16424,16449 ----
   		      it->max_phys_ascent = phys_ascent;
   		      it->max_phys_descent = phys_descent;
   		    }
@@ -801,7 +962,7 @@ diff -c -r1.1149.2.27 xdisp.c
   	  && (FRAME_WINDOW_P (it->f)
   	      ? (it->current_x >= it->last_visible_x)
   	      : (it->current_x > it->last_visible_x)))
---- 16532,16538 ----
+--- 16559,16565 ----
   
         /* If we truncate lines, we are done when the last displayed
   	 glyphs reach past the right margin of the window.  */
@@ -818,7 +979,7 @@ diff -c -r1.1149.2.27 xdisp.c
   	      && x + glyph->pixel_width > max_x)
   	    {
   	      /* End of continued line or max_x reached.  */
---- 18541,18547 ----
+--- 18568,18574 ----
   	{
   	  struct glyph *glyph = row->glyphs[TEXT_AREA] + n_glyphs_before + i;
   
@@ -835,7 +996,7 @@ diff -c -r1.1149.2.27 xdisp.c
   	  && it->current_x >= it->last_visible_x)
   	{
   	  /* Add truncation mark, but don't do it if the line is
---- 18597,18603 ----
+--- 18624,18630 ----
         set_iterator_to_next (it, 1);
   
         /* Stop if truncating at the right edge.  */
@@ -852,7 +1013,7 @@ diff -c -r1.1149.2.27 xdisp.c
         && it->current_x + width > it->last_visible_x)
       width = it->last_visible_x - it->current_x - 1;
   
---- 20460,20466 ----
+--- 20487,20493 ----
     else
       ascent = (height * FONT_BASE (font)) / FONT_HEIGHT (font);
   
@@ -872,7 +1033,7 @@ diff -c -r1.1149.2.27 xdisp.c
   
     DEFVAR_BOOL ("mode-line-inverse-video", &mode_line_inverse_video,
       doc: /* When nil, display the mode-line/header-line/menu-bar in the default face.
---- 24334,24351 ----
+--- 24361,24378 ----
     DEFVAR_INT ("debug-end-pos", &debug_end_pos, doc: /* Don't ask.  */);
   #endif
   
@@ -891,13 +1052,13 @@ diff -c -r1.1149.2.27 xdisp.c
   
     DEFVAR_BOOL ("mode-line-inverse-video", &mode_line_inverse_video,
       doc: /* When nil, display the mode-line/header-line/menu-bar in the default face.
-Index: indent.c
+Index: src/indent.c
 ===================================================================
 RCS file: /sources/emacs/emacs/src/indent.c,v
 retrieving revision 1.192.2.3
 diff -c -r1.192.2.3 indent.c
 *** src/indent.c	8 Jan 2008 04:30:04 -0000	1.192.2.3
---- src/indent.c	5 Jul 2008 12:51:33 -0000
+--- src/indent.c	11 Jul 2008 14:57:25 -0000
 ***************
 *** 1395,1404 ****
   
@@ -931,6 +1092,73 @@ diff -c -r1.192.2.3 indent.c
   	      || !NILP (current_buffer->truncate_lines))
   	    {
   	      /* Truncating: skip to newline, unless we are already past
+***************
+*** 2023,2028 ****
+--- 2033,2039 ----
+  			 w);
+  }
+  
++ 
+  DEFUN ("vertical-motion", Fvertical_motion, Svertical_motion, 1, 2, 0,
+         doc: /* Move point to start of the screen line LINES lines down.
+  If LINES is negative, this means moving up.
+***************
+*** 2039,2044 ****
+--- 2050,2059 ----
+  parameters such as width, horizontal scrolling, and so on.
+  The default is to use the selected window's parameters.
+  
++ LINES can optionally take the form (COLS . LINES), in which case
++ the motion will not stop at the start of a screen line but on
++ its column COLS (if such exists on that line, that is).
++ 
+  `vertical-motion' always uses the current buffer,
+  regardless of which buffer is displayed in WINDOW.
+  This is consistent with other cursor motion functions
+***************
+*** 2052,2057 ****
+--- 2067,2082 ----
+    struct window *w;
+    Lisp_Object old_buffer;
+    struct gcpro gcpro1;
++   Lisp_Object lcols = Qnil;
++   double cols;
++ 
++   /* Allow LINES to be of the form (HPOS . VPOS) aka (COLUMNS . LINES).  */
++   if (CONSP (lines) && (NUMBERP (XCAR (lines))))
++     {
++       lcols = XCAR (lines);
++       cols = INTEGERP (lcols) ? (double) XINT (lcols) : XFLOAT_DATA (lcols);
++       lines = XCDR (lines);
++     }
+  
+    CHECK_NUMBER (lines);
+    if (! NILP (window))
+***************
+*** 2140,2145 ****
+--- 2165,2176 ----
+        if (XINT (lines) >= 0 || IT_CHARPOS (it) > 0)
+  	move_it_by_lines (&it, XINT (lines), 0);
+  
++       if (!NILP (lcols))
++ 	move_it_in_display_line
++ 	  (&it, ZV,
++ 	   (int)(cols * FRAME_COLUMN_WIDTH (XFRAME (w->frame)) + 0.5),
++ 	   MOVE_TO_X);
++ 
+        SET_PT_BOTH (IT_CHARPOS (it), IT_BYTEPOS (it));
+      }
+  
+***************
+*** 2150,2155 ****
+--- 2181,2187 ----
+  }
+  
+  
++ 
+  
+  /* File's initialization.  */
+  
 Index: dispnew.c
 ===================================================================
 RCS file: /sources/emacs/emacs/src/dispnew.c,v
