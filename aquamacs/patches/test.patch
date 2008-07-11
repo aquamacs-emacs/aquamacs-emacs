@@ -1,3 +1,31 @@
+--- src/macterm.c	2008-07-11 15:16:15.000000000 -0400
++++ src/macterm.c	2008-07-11 15:11:48.000000000 -0400
+@@ -5763,7 +5763,6 @@
+
+  check_frame_size (f, &rows, &cols);
+
+-  /* Refuse to set cols, rows, or both if in full-screen mode. */
+  if (f->want_fullscreen & FULLSCREEN_HEIGHT)
+    rows = FRAME_LINES (f);
+  if (f->want_fullscreen & FULLSCREEN_WIDTH)
+@@ -5780,2 +5779,2 @@
+  f->win_gravity = NorthWestGravity;
+  x_wm_set_size_hint (f, (long) 0, 0);
+
++  /* Refuse to change height, width, or both if in full-screen mode. */
++  Rect b;
++  OSStatus st = GetWindowBounds(FRAME_MAC_WINDOW (f), kWindowContentRgn, &b);
++  if (st == noErr)
++    {
++      if (f->want_fullscreen & FULLSCREEN_HEIGHT)
++        pixelheight = b.bottom - b.top;
++      if (f->want_fullscreen & FULLSCREEN_WIDTH)
++        pixelwidth = b.right - b.left;
++    }
++
+  mac_size_window (FRAME_MAC_WINDOW (f), pixelwidth, pixelheight, 0);
+
+#if TARGET_API_MAC_CARBON
 Index: src/mactoolbox.c
 ===================================================================
 RCS file: /cvsroot/emacs/emacs/src/mactoolbox.c,v
