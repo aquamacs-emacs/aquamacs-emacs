@@ -1,4 +1,3 @@
-
 ;;; visual-line.el
 ;; Copyright (C) 2008 Free Software Foundation
 
@@ -392,6 +391,53 @@ If arg is zero, kill current line but exclude the trailing newline."
  visual-line-mode turn-on-visual-line-mode
  :lighter " vl")
 
+
+(defface blank-newline
+  '((((class color) (background dark))
+     (:foreground "lightgrey" :bold nil))
+    (((class color) (background light))
+     ( :foreground "lightgrey" :bold nil))
+    (t (:bold nil :underline t)))
+  "Face used to visualize NEWLINE char mapping.
+
+See `blank-display-mappings'."
+  :group 'blank)
+
+
+ ;; 2230 = \x8B6
+(defvar show-newlines-newline-code (vector (make-glyph-code 2230 'blank-newline) 10))
+(define-minor-mode show-newlines-mode
+  "Mark newlines in current buffer"
+ :group 'convenience
+
+ (unless buffer-display-table
+   (setq buffer-display-table (or standard-display-table (make-display-table))))
+ (if show-newlines-mode
+     (aset buffer-display-table 10 show-newlines-newline-code)
+   (aset buffer-display-table 10 nil)))
+
+(define-minor-mode global-show-newlines-mode
+  "Mark newlines in all buffers"
+  :group 'convenience
+  :global t
+
+ (unless standard-display-table
+   (setq standard-display-table (make-display-table)))
+ (if global-show-newlines-mode
+     (aset standard-display-table 10 show-newlines-newline-code)
+   (aset standard-display-table 10 nil))
+ (dolist (buffer (buffer-list))
+   (with-current-buffer buffer
+     (if buffer-display-table
+	 (show-newlines-mode (if global-show-newlines-mode 1 -1))))))
+       
+;;(setq  show-newlines-newline-code (vector (make-glyph-code 2230 'blank-newline) 10))
+;;(setf (aref show-newlines-newline-code 0) (make-glyph-code 34 'blank-newline))
+
+(define-key-after menu-bar-showhide-menu [show-newlines-mode]
+  (menu-bar-make-mm-toggle global-show-newlines-mode
+			   "Show newlines"
+			   "Show hard newlines") 'highlight-paren-mode)
 
 
 (provide 'visual-line)
