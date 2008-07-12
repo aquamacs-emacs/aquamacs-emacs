@@ -436,7 +436,7 @@ See `blank-display-mappings'."
 
 (define-key-after menu-bar-showhide-menu [show-newlines-mode]
   (menu-bar-make-mm-toggle global-show-newlines-mode
-			   "Show newlines"
+			   "Show Newlines"
 			   "Show hard newlines") 'highlight-paren-mode)
 
 
