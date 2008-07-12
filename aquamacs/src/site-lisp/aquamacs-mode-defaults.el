@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-mode-defaults.el,v 1.21 2007/05/18 08:41:55 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-defaults.el,v 1.22 2008/07/12 20:38:43 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -89,6 +89,9 @@
 
  
 ;;(aquamacs-set-defaults '((inferior-lisp-program "/opt/sbcl/bin/sbcl") ))
+
+;; we don't want header lines (tab uses them)
+(aquamacs-set-defaults '((slime-header-line-p nil)))
 
 (defun load-and-setup-slime ()
   "Load and setup SLIME"
