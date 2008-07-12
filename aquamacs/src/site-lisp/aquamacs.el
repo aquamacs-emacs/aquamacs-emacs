@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.187 2008/07/09 18:27:56 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.188 2008/07/12 15:06:05 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -556,10 +556,6 @@ yes-or-no prompts - y or n will do."
   ;; tabbar needs to be defined before osxkeys
   (require 'aquamacs-tabbar)
 
-  ;; visual line navigation
-  (require 'visual-line)
-  
-
   ;; Mac OS X specific stuff 
 
   (ats "osx_defaults ...")
@@ -576,7 +572,6 @@ yes-or-no prompts - y or n will do."
 
 
 
- 
 
 ;; Page scrolling
 
@@ -669,6 +664,11 @@ yes-or-no prompts - y or n will do."
   (require 'aquamacs-bug) ;; successfully send bug reports on the Mac
 (ats "aquamacs-bug done")
   
+
+
+;; visual line navigation
+(require 'visual-line)
+
 
 (require 'saveplace)
 ;;  (require 'longlines) 
