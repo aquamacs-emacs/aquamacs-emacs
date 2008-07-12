@@ -1,14 +1,19 @@
 --- src/macterm.c	2008-07-11 15:16:15.000000000 -0400
 +++ src/macterm.c	2008-07-11 15:11:48.000000000 -0400
-@@ -5763,7 +5763,6 @@
+@@ -5763,12 +5763,6 @@
 
   check_frame_size (f, &rows, &cols);
 
 -  /* Refuse to set cols, rows, or both if in full-screen mode. */
-  if (f->want_fullscreen & FULLSCREEN_HEIGHT)
-    rows = FRAME_LINES (f);
-  if (f->want_fullscreen & FULLSCREEN_WIDTH)
-@@ -5780,2 +5779,2 @@
+-  if (f->want_fullscreen & FULLSCREEN_HEIGHT)
+-    rows = FRAME_LINES (f);
+-  if (f->want_fullscreen & FULLSCREEN_WIDTH)
+-    cols = FRAME_COLS (f);
+-
+  f->scroll_bar_actual_width
+    = FRAME_SCROLL_BAR_COLS (f) * FRAME_COLUMN_WIDTH (f);
+
+@@ -5780,2 +5774,2 @@
   f->win_gravity = NorthWestGravity;
   x_wm_set_size_hint (f, (long) 0, 0);
 
