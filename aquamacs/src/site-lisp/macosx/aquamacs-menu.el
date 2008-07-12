@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.164 2008/07/09 21:04:31 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.165 2008/07/12 13:35:26 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -661,7 +661,7 @@ both existing buffers and buffers that you subsequently create."
 (define-key-after menu-bar-options-menu [word-wrap]
   '(menu-item "Soft Word Wrap"
 	      toggle-word-wrap
-	      :help "Wrap long lines without inserting carriage returns (Longlines)"
+	      :help "Wrap long lines without inserting carriage returns (Word Wrap)"
 	      :enable (menu-bar-menu-frame-live-and-visible-p)
               :button (:toggle . word-wrap)) 'auto-fill-mode)
 
@@ -753,30 +753,31 @@ both existing buffers and buffers that you subsequently create."
   "Display small fringes only on the left of each window."
   (interactive)
   (require 'fringe) 
-
+  (fringe-mode (cons 4 0)))
   ;; Unfortunately, fringe-mode likes to round up fringes.
   ;; Therefore, we set both to 1.
-  (customize-set-variable 'fringes-outside-margins 1)
-  (customize-set-variable 'left-fringe-width 1)
-  (customize-set-variable 'left-margin-width 1)
-  (customize-set-variable 'right-fringe-width 1)
-  (customize-set-variable 'right-margin-width 1)
+ ;;  (customize-set-variable 'fringes-outside-margins 1)
+;;   (customize-set-variable 'left-fringe-width 4)
+;;   (customize-set-variable 'left-margin-width 1)
+;;   (customize-set-variable 'right-fringe-width 1)
+;;   (customize-set-variable 'right-margin-width 1)
 
-  (setq default-fringes-outside-margins 1)
-  (setq default-left-fringe-width 1)
-  (setq default-left-margin-width 0)
-  (setq default-right-fringe-width 1)
-  (setq default-right-margin-width 0)
-  (aquamacs-define-the-fringe-bitmap) ;; redefine 
-  (customize-set-variable 'fringe-mode '(1 . 1))) 
-
+;;   (setq default-fringes-outside-margins 1)
+;;   (setq default-left-fringe-width 1)
+;;   (setq default-left-margin-width 0)
+;;   (setq default-right-fringe-width 1)
+;;   (setq default-right-margin-width 0)
+;;  (aquamacs-define-the-fringe-bitmap) ;; redefine (NOT HERE)
+;  (customize-set-variable 'fringe-mode '(4 . 0))) 
+; fringe-mode
+; (fringe-mode (cons 4  0))
 
 (define-key-after menu-bar-showhide-fringe-menu [small]
   `(menu-item "Small left fringe" 
 	      aquamacs-menu-bar-showhide-fringe-menu-customize-small
 	      :help "Narrow fringe, left only"
 	      :visible ,(display-graphic-p)
-	      :button (:radio . (equal fringe-mode '(1 . 1)))) 'none)
+	      :button (:radio . (equal fringe-mode '(4 . 0)))) 'none)
 
   
 (define-key-after menu-bar-options-menu [file-backups]
