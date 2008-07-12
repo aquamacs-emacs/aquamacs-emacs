@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.117 2008/07/09 18:31:59 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.118 2008/07/12 20:27:01 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -131,19 +131,20 @@ provided `cua-mode' and the mark are active."
 	 '(aquamacs-backward-char aquamacs-forward-char))
   (put cmd 'CUA 'move))
 
-(defun aquamacs-kill-word (beg end &optional arg)
+
+(defun aquamacs-kill-word (&optional arg)
   "Kill characters forward until encountering the end of a word.
 With argument, do this that many times."
-  (interactive "r\np")
+  (interactive "p")
   (if (and transient-mark-mode mark-active)
-      (kill-region beg end)
+      (kill-region (region-beginning) (region-end))
     (kill-region (point) (progn (forward-word arg) (point)))))
 
-(defun aquamacs-backward-kill-word (beg end &optional arg)
+(defun aquamacs-backward-kill-word (&optional arg)
   "Kill characters backward until encountering the beginning of a word.
 With argument, do this that many times."
-  (interactive "r\np")
-  (aquamacs-kill-word beg end (- (or arg 1))))
+  (interactive "p")
+  (aquamacs-kill-word (- (or arg 1))))
 
 (defun aquamacs--shift-key-for-command-p ()
 ;; code from cua-base.el
@@ -751,7 +752,9 @@ default."
  
     ;; handle transient-mark-mode better
     (define-key map '[(meta delete)] 'aquamacs-kill-word) 
+    (define-key map '[(control delete)] 'aquamacs-kill-word) 
     (define-key map '[(meta backspace)] 'aquamacs-backward-kill-word) 
+    (define-key map '[(control backspace)] 'aquamacs-backward-kill-word) 
 
     (if (fboundp 'mac-font-panel-mode)
 	(define-key map `[(,osxkeys-command-key shift t)] 'mac-font-panel-mode))
