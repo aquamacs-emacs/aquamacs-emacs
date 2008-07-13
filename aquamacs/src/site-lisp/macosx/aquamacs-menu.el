@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.165 2008/07/12 13:35:26 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.166 2008/07/13 14:11:17 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -1200,10 +1200,6 @@ the previous frame size."
 (assq-delete-all 'tile-frames menu-bar-file-menu)
 (assq-delete-all 'tile-frames-h menu-bar-file-menu)
 (assq-delete-all 'tile-frames-v menu-bar-file-menu)
-
-(menu-bar-update-buffers) ;; update Buffers menu now
-;; regular setup
-(aquamacs-menu-bar-setup)
  
 (defvar aquamacs-update-menu-old-state nil)
 
@@ -1225,6 +1221,9 @@ that should be represented in the Aquamacs menus."
 	  (aquamacs-menu-bar-setup)))
     (error nil)))
 
+
+(menu-bar-update-buffers) ;; update Buffers menu now
+(aquamacs-update-menu t) ;; initial setup of the menu
  
  (defun aquamacs-user-wiki ()
   (interactive)
