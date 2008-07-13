@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs version check
  
-;; Last change: $Id: check-for-updates.el,v 1.26 2008/06/08 16:04:45 davidswelt Exp $
+;; Last change: $Id: check-for-updates.el,v 1.27 2008/07/13 14:15:04 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -115,15 +115,16 @@ nil  )
 	  ;; else
 	  ;; if there's just a minor version jump or we have the current release, we don't
 	  ;; show any alarming messages.
-	  (let ((txt (format "%s is the most recent Aquamacs version available."
-			     (concat server-version 
-				     server-minor-version))))
-	    (if interactive-request
-		(if (eq interactive-request 'gui)
-		    (mac-dialog "No news is good news..." txt)
-		  (message txt))
-	      (with-temp-message txt ;; only send it to *Messages*
-		nil))))))))
+	  (if server-version
+	      (let ((txt (format "%s is the most recent Aquamacs version available."
+				 (concat server-version 
+					 server-minor-version))))
+		(if interactive-request
+		    (if (eq interactive-request 'gui)
+			(mac-dialog "No news is good news..." txt)
+		      (message txt))
+		  (with-temp-message txt ;; only send it to *Messages*
+		    nil)))))))))
  
 (defvar aquamacs-download-url "")
 (defun aquamacs-new-version-notify (v &optional beta url)
