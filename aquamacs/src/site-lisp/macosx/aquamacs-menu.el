@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.166 2008/07/13 14:11:17 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.167 2008/07/13 14:12:45 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -730,6 +730,14 @@ both existing buffers and buffers that you subsequently create."
   (menu-bar-make-mm-toggle show-paren-mode
 			   "Paren Match Highlighting"
 			   "Highlight matching/mismatched parentheses at cursor (Show Paren mode)"))
+
+;; do this here as well to make sure it follows highlight-paren-mode
+(if (fboundp 'global-show-newlines-mode)
+    (define-key-after menu-bar-showhide-menu [show-newlines-mode]
+      (menu-bar-make-mm-toggle global-show-newlines-mode
+			       "Show Newlines"
+			       "Show hard newlines") 'highlight-paren-mode))
+
 
 (easy-menu-add-item  nil '("Options")
   ["-" nil nil] 'mouse-set-font)
