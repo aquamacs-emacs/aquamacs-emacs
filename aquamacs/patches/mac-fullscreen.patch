@@ -78,7 +78,7 @@ diff -u ../old/emacs.orig/src/macterm.c src/macterm.c
  
  /* Modifier associated with the control key, or nil to ignore. */
  Lisp_Object Vmac_control_modifier;
-@@ -9494,6 +9525,225 @@
+@@ -9494,6 +9525,227 @@
        bzero (dpyinfo, sizeof (*dpyinfo));
      }
  }
@@ -211,6 +211,7 @@ diff -u ../old/emacs.orig/src/macterm.c src/macterm.c
 +    {
 +      /* May signal errors, so do before blocking input. */
 +      struct fullscreen_state *s = get_fullscreen_state (f);
++      int was_fullscreen = s->mode;
 +
 +      BLOCK_INPUT;
 +
@@ -273,7 +274,8 @@ diff -u ../old/emacs.orig/src/macterm.c src/macterm.c
 +           b.left = (short)screen_bounds.origin.x;
 +           b.right = b.left + (short)screen_bounds.size.width;
 +        }
-+      if (f->want_fullscreen) {
++      if (was_fullscreen != FULLSCREEN_NONE) {
++      /* only resize window if we're leaving fullscreen */
 +      SetWindowBounds(FRAME_MAC_WINDOW (f), kWindowStructureRgn, &b);
 +
 +      /* Resize and/or move the frame as needed in case the saved
