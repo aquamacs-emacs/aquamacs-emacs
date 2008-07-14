@@ -18,7 +18,7 @@ diff -u ../old/emacs.orig/src/macterm.c src/macterm.c
  static XCharStruct *mac_per_char_metric P_ ((XFontStruct *, XChar2b *, int));
  static void XSetFont P_ ((Display *, GC, XFontStruct *));
  
-@@ -4361,6 +4364,19 @@
+@@ -4361,6 +4364,23 @@
      }
  
    x_frame_rehighlight (dpyinfo);
@@ -31,8 +31,12 @@ diff -u ../old/emacs.orig/src/macterm.c src/macterm.c
 +        {
 +          if (frame->want_fullscreen == FULLSCREEN_BOTH)
 +            SetSystemUIMode(kUIModeAllHidden, kUIOptionAutoShowMenuBar);
-+          else
-+            SetSystemUIMode(kUIModeNormal, 0);
++          else {
++	     SystemUIMode m;
++	     GetSystemUIMode(&m, NULL);
++            if (m == kUIModeAllHidden)
++              SetSystemUIMode(kUIModeNormal, 0);
++ 	     }
 +        }
 +    }
  }
