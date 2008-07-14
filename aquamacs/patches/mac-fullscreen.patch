@@ -273,7 +273,7 @@ diff -u ../old/emacs.orig/src/macterm.c src/macterm.c
 +           b.left = (short)screen_bounds.origin.x;
 +           b.right = b.left + (short)screen_bounds.size.width;
 +        }
-+
++      if (f->want_fullscreen) {
 +      SetWindowBounds(FRAME_MAC_WINDOW (f), kWindowStructureRgn, &b);
 +
 +      /* Resize and/or move the frame as needed in case the saved
@@ -289,7 +289,7 @@ diff -u ../old/emacs.orig/src/macterm.c src/macterm.c
 +          mac_handle_size_change (f, b.right - b.left, b.bottom - b.top);
 +          mac_handle_origin_change (f);
 +        }
-+
++      }
 +      if (f->want_fullscreen & FULLSCREEN_BOTH)
 +           CGDisplayRegisterReconfigurationCallback 
 +                (mac_handle_display_reconfiguration, f);
