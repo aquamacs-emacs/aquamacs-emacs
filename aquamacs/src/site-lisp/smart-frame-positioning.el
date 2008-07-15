@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.59 2008/06/12 07:06:23 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.60 2008/07/15 15:46:07 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -193,10 +193,10 @@ pixels apart if possible."
 (defun smart-fp--char-to-pixel-height (chars frame)
         (* chars (frame-char-height frame)))
 (defun smart-fp--pixel-to-char-width (pixels frame &optional round-to-lower)
-       (round (- (/ pixels (frame-char-width frame)) 
+       (round (- (/ (float pixels) (frame-char-width frame)) 
 		 (if round-to-lower .5 0))))
 (defun smart-fp--pixel-to-char-height (pixels frame &optional round-to-lower)
-       (round (- (/ pixels (frame-char-height frame)) 
+       (round (- (/ (float pixels) (frame-char-height frame)) 
 		 (if round-to-lower .5 0))))
 
 (defun smart-fp--get-frame-creation-function ()
@@ -648,6 +648,8 @@ The file is specified in `smart-frame-position-file'."
       (smart-move-frame-inside-screen frame))))
 
 ;; this is a lisp implementation of Carbon's ConstrainWindowToScreen
+; (smart-move-frame-inside-screen)
+; (setq frame nil)
 (defun smart-move-frame-inside-screen (&optional frame)
   "Move a frame inside the available screen boundaries. 
 The frame specified in FRAME is moved so it is entirely visible on
@@ -727,19 +729,19 @@ on the main screen, i.e. where the menu is."
 			      (- max-y next-h-total)	
 			      next-y)))
 	    
-		(next-hc (if (<= next-h (- max-y next-y ))
+		(next-hc (if (<= next-h-total (- max-y next-y ))
 			     next-hc
-			   (smart-fp--pixel-to-char-height (- max-y next-y)
-							   frame 'round-lower))))
+			   (smart-fp--pixel-to-char-height 
+			    (- max-y next-y 
+			       (smart-tool-bar-pixel-height frame)
+			       smart-fp--frame-title-bar-height)
+			    frame 'round-lower))))
 	   (smart-fp--convert-negative-ordinates `(
 	     (top .
 		  ,next-y)
 	    
 	     (height .
 		     ,next-hc))))))))
-
-	 
-    
 
 (require 'fit-frame)
 (defun scatter-frames ()
