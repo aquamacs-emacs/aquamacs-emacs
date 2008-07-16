@@ -1,27 +1,26 @@
-diff -u ../old/emacs.orig/src/macterm.c src/macterm.c
---- ../old/emacs.orig/src/macterm.c	2008-06-02 16:25:51.000000000 -0400
-+++ src/macterm.c	2008-06-03 10:13:27.000000000 -0400
+--- src/macterm.c	2008-05-15 05:35:33.000000000 -0400
++++ src/macterm.c	2008-07-16 06:54:33.000000000 -0400
 @@ -83,6 +83,8 @@
- 
- 
- 
+
+
+
 +int mac_autohide_menubar_on_fullscreen;
 +
- /* Non-nil means Emacs uses toolkit scroll bars.  */
- 
- Lisp_Object Vx_toolkit_scroll_bars;
-@@ -242,6 +244,7 @@
- static void x_update_window_begin P_ ((struct window *));
- static void x_after_update_window_line P_ ((struct glyph_row *));
- 
+/* Non-nil means Emacs uses toolkit scroll bars.  */
+
+Lisp_Object Vx_toolkit_scroll_bars;
+@@ -237,6 +239,7 @@
+static void x_update_window_begin P_ ((struct window *));
+static void x_after_update_window_line P_ ((struct glyph_row *));
+
 +static CGDirectDisplayID mac_display_id P_ ((WindowRef));
- static XCharStruct *mac_per_char_metric P_ ((XFontStruct *, XChar2b *, int));
- static void XSetFont P_ ((Display *, GC, XFontStruct *));
- 
-@@ -4361,6 +4364,23 @@
-     }
- 
-   x_frame_rehighlight (dpyinfo);
+static XCharStruct *mac_per_char_metric P_ ((XFontStruct *, XChar2b *, int));
+static void XSetFont P_ ((Display *, GC, XFontStruct *));
+
+@@ -4321,6 +4324,19 @@
+    }
+
+  x_frame_rehighlight (dpyinfo);
 +
 +  if (frame)
 +    {
@@ -31,57 +30,65 @@ diff -u ../old/emacs.orig/src/macterm.c src/macterm.c
 +        {
 +          if (frame->want_fullscreen == FULLSCREEN_BOTH)
 +            SetSystemUIMode(kUIModeAllHidden, kUIOptionAutoShowMenuBar);
-+          else {
-+	     SystemUIMode m;
-+	     GetSystemUIMode(&m, NULL);
-+            if (m == kUIModeAllHidden)
-+              SetSystemUIMode(kUIModeNormal, 0);
-+ 	     }
++          else
++            SetSystemUIMode(kUIModeNormal, 0);
 +        }
 +    }
- }
- 
- /* Handle FocusIn and FocusOut state changes for FRAME.
-@@ -5654,6 +5670,12 @@
-      register int xoff, yoff;
-      int change_gravity;
- {
+}
+
+/* Handle FocusIn and FocusOut state changes for FRAME.
+@@ -5614,6 +5630,12 @@
+     register int xoff, yoff;
+     int change_gravity;
+{
 +  /* Refuse to change one or both offsets if in full-screen mode. */
 +  if (f->want_fullscreen & FULLSCREEN_HEIGHT)
 +    yoff = f->top_pos;
 +  if (f->want_fullscreen & FULLSCREEN_WIDTH)
 +    xoff = f->left_pos;
 +
-   if (change_gravity > 0)
-     {
-       f->top_pos = yoff;
-@@ -5740,6 +5762,13 @@
-   BLOCK_INPUT;
- 
-   check_frame_size (f, &rows, &cols);
+  if (change_gravity > 0)
+    {
+      f->top_pos = yoff;
+@@ -5700,6 +5722,7 @@
+  BLOCK_INPUT;
+
+  check_frame_size (f, &rows, &cols);
 +
-+  /* Refuse to set cols, rows, or both if in full-screen mode. */
-+  if (f->want_fullscreen & FULLSCREEN_HEIGHT)
-+    rows = FRAME_LINES (f);
-+  if (f->want_fullscreen & FULLSCREEN_WIDTH)
-+    cols = FRAME_COLS (f);
+  f->scroll_bar_actual_width
+    = FRAME_SCROLL_BAR_COLS (f) * FRAME_COLUMN_WIDTH (f);
+
+@@ -5711,6 +5734,17 @@
+  f->win_gravity = NorthWestGravity;
+  x_wm_set_size_hint (f, (long) 0, 0);
+
++  /* Refuse to change height, width, or both if in full-screen mode. */
++  Rect b;
++  OSStatus st = GetWindowBounds(FRAME_MAC_WINDOW (f), kWindowContentRgn, &b);
++  if (st == noErr)
++    {
++      if (f->want_fullscreen & FULLSCREEN_HEIGHT)
++        pixelheight = b.bottom - b.top;
++      if (f->want_fullscreen & FULLSCREEN_WIDTH)
++        pixelwidth = b.right - b.left;
++    }
 +
-   f->scroll_bar_actual_width
-     = FRAME_SCROLL_BAR_COLS (f) * FRAME_COLUMN_WIDTH (f);
- 
-@@ -8247,6 +8276,8 @@
- /* Contains the string "reverse", which is a constant for mouse button emu.*/
- Lisp_Object Qreverse;
- 
+  mac_size_window (FRAME_MAC_WINDOW (f), pixelwidth, pixelheight, 0);
+
+#if TARGET_API_MAC_CARBON
+@@ -8207,6 +8241,8 @@
+/* Contains the string "reverse", which is a constant for mouse button emu.*/
+Lisp_Object Qreverse;
+
 +Lisp_Object Qfullscreen_saved_state;
 +
- 
- /* Modifier associated with the control key, or nil to ignore. */
- Lisp_Object Vmac_control_modifier;
-@@ -9494,6 +9525,227 @@
-       bzero (dpyinfo, sizeof (*dpyinfo));
-     }
- }
+
+/* Modifier associated with the control key, or nil to ignore. */
+Lisp_Object Vmac_control_modifier;
+@@ -9455,6 +9491,220 @@
+      bzero (dpyinfo, sizeof (*dpyinfo));
+    }
+}
 +
 +/* Full-screen mode */
 +
@@ -211,24 +218,23 @@ diff -u ../old/emacs.orig/src/macterm.c src/macterm.c
 +    {
 +      /* May signal errors, so do before blocking input. */
 +      struct fullscreen_state *s = get_fullscreen_state (f);
-+      int was_fullscreen = s->mode;
 +
 +      BLOCK_INPUT;
 +
-+      /* Must get the current bounds before removing the title bar,
++      /* Must get the current bounds _before_ removing the title bar,
 +         otherwise the window will be too short when restored. */
 +      st = GetWindowBounds (FRAME_MAC_WINDOW (f), kWindowStructureRgn, &b);
 +      if (st != noErr)
 +        {
 +          UNBLOCK_INPUT;
-+          error("Failed to get current window bounds.");
++          error ("Failed to get current window bounds.");
 +        }
 +
 +      CGDirectDisplayID display = mac_display_id (FRAME_MAC_WINDOW(f));
 +      if (!display)
 +        {
 +          UNBLOCK_INPUT;
-+          error("Failed to get display ID.");
++          error ("Failed to get display ID.");
 +        }
 +      CGDirectDisplayID main_display = CGMainDisplayID ();
 +      if ((f->want_fullscreen & FULLSCREEN_BOTH) == FULLSCREEN_BOTH)
@@ -274,15 +280,8 @@ diff -u ../old/emacs.orig/src/macterm.c src/macterm.c
 +           b.left = (short)screen_bounds.origin.x;
 +           b.right = b.left + (short)screen_bounds.size.width;
 +        }
-+      SetWindowBounds(FRAME_MAC_WINDOW (f), kWindowStructureRgn, &b);
 +
-+      if (was_fullscreen != FULLSCREEN_NONE) {
-+      /* only resize window if we're leaving fullscreen */
-+      /* Resize and/or move the frame as needed in case the saved
-+         bounds aren't acceptable for the current display. */
-+      ConstrainWindowToScreen (FRAME_MAC_WINDOW (f), kWindowStructureRgn, 
-+                               kWindowConstrainAllowPartial, NULL, NULL);
-+      }
++      SetWindowBounds(FRAME_MAC_WINDOW (f), kWindowStructureRgn, &b);
 +
 +      /* Necessary because x_set_offset and x_set_window_size refuse
 +         to change the offset and size of a full-screen frame. */
@@ -292,6 +291,7 @@ diff -u ../old/emacs.orig/src/macterm.c src/macterm.c
 +          mac_handle_size_change (f, b.right - b.left, b.bottom - b.top);
 +          mac_handle_origin_change (f);
 +        }
++
 +      if (f->want_fullscreen & FULLSCREEN_BOTH)
 +           CGDisplayRegisterReconfigurationCallback 
 +                (mac_handle_display_reconfiguration, f);
@@ -303,49 +303,49 @@ diff -u ../old/emacs.orig/src/macterm.c src/macterm.c
 +      do_pending_window_change(0);
 +    }
 +}
- 
- 
- /* Set up use of X before we make the first connection.  */
-@@ -9564,6 +9814,7 @@
-   condemn_scroll_bars_hook = XTcondemn_scroll_bars;
-   redeem_scroll_bar_hook = XTredeem_scroll_bar;
-   judge_scroll_bars_hook = XTjudge_scroll_bars;
+
+
+/* Set up use of X before we make the first connection.  */
+@@ -9525,6 +9775,7 @@
+  condemn_scroll_bars_hook = XTcondemn_scroll_bars;
+  redeem_scroll_bar_hook = XTredeem_scroll_bar;
+  judge_scroll_bars_hook = XTjudge_scroll_bars;
 +  fullscreen_hook = mac_fullscreen_hook;
- 
-   scroll_region_ok = 1;         /* we'll scroll partial frames */
-   char_ins_del_ok = 1;
-@@ -9666,6 +9917,9 @@
-   staticpro (&Qreverse);
-   Qreverse = intern ("reverse");
- 
+
+  scroll_region_ok = 1;         /* we'll scroll partial frames */
+  char_ins_del_ok = 1;
+@@ -9627,6 +9878,9 @@
+  staticpro (&Qreverse);
+  Qreverse = intern ("reverse");
+
 +  staticpro (&Qfullscreen_saved_state);
 +  Qfullscreen_saved_state = intern ("fullscreen-saved-state");
 +
-   staticpro (&x_display_name_list);
-   x_display_name_list = Qnil;
- 
-@@ -9813,6 +10067,11 @@
-     Fcons (list3 (build_string ("mac-roman"),
- 		  make_number (smRoman), Qnil), Qnil);
- 
+  staticpro (&x_display_name_list);
+  x_display_name_list = Qnil;
+
+@@ -9765,6 +10019,11 @@
+    Fcons (list3 (build_string ("mac-roman"),
+		  make_number (smRoman), Qnil), Qnil);
+
 +  DEFVAR_BOOL ("mac-autohide-menubar-on-fullscreen", &mac_autohide_menubar_on_fullscreen,
 +	       doc: /* Non-nil means auto-hide the menubar when a frame's fullscreen parameter is 'fullboth. */);
 +  mac_autohide_menubar_on_fullscreen = 1;
 +
 +
- #if USE_MAC_TSM
-   DEFVAR_LISP ("mac-ts-active-input-overlay", &Vmac_ts_active_input_overlay,
-     doc: /* Overlay used to display Mac TSM active input area.  */);
-diff -u ../old/emacs.orig/src/frame.c src/frame.c
---- ../old/emacs.orig/src/frame.c    2008-06-02 16:25:50.000000000 -0400
-+++ src/frame.c     2008-06-09 14:57:20.000000000 -0400
-@@ -3142,6 +3142,9 @@
-   else
-     abort ();
- 
+#if USE_MAC_TSM
+  DEFVAR_LISP ("mac-ts-active-input-overlay", &Vmac_ts_active_input_overlay,
+    doc: /* Overlay used to display Mac TSM active input area.  */);
+diff -Naur -x '*.orig' -x '*.elc' -x emacs -x info ../emacs.orig/src/frame.c ./src/frame.c
+--- ../emacs.orig/src/frame.c	2008-01-07 23:30:09.000000000 -0500
++++ ./src/frame.c	2008-07-16 06:46:05.000000000 -0400
+@@ -3136,6 +3136,9 @@
+  else
+    abort ();
+
 +  if (fullscreen_hook != NULL) 
 +    fullscreen_hook (f);
 +
-   do_pending_window_change (0);
- 
-   /* Don't call `face-set-after-frame-default' when faces haven't been
+  do_pending_window_change (0);
+
+  /* Don't call `face-set-after-frame-default' when faces haven't been
