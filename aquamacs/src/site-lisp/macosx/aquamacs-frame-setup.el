@@ -9,7 +9,7 @@
 ;;  --- Some of this has been adapted from Drew Adams' Emacs init file. 
  
 
-;; Last change: $Id: aquamacs-frame-setup.el,v 1.30 2008/07/06 07:57:00 davidswelt Exp $
+;; Last change: $Id: aquamacs-frame-setup.el,v 1.31 2008/07/19 22:36:52 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -82,7 +82,7 @@ even when minimal fringes are used. (Aquamacs)"
 ;; checking that the fonts actually exist.
    (default-frame-alist 
      ((foreground-color . "Black") (background-color . "White") 
-      (cursor-color . "Red")   (vertical-scroll-bars . right)  
+      (cursor-type . box) (cursor-color . "Red")   (vertical-scroll-bars . right)  
       (tool-bar-lines . 1 ) 
       (left-fringe . 1) (right-fringe . nil) (fringe . nil)))
    
