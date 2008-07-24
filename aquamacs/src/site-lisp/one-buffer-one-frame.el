@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.65 2008/05/27 08:54:03 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.66 2008/07/24 14:56:10 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -57,6 +57,7 @@
 
 ;; CODE
 
+(require 'aquamacs-tools)  
 
 (defvar one-buffer-one-frame-mode-map (make-sparse-keymap))
 
@@ -583,45 +584,50 @@ the current window is switched to the new buffer."
 
 
 (defun aquamacs-display-buffer (&rest args)
-  (let ((same-window-regexps 
-	 (if (eq obof-same-window-regexps 'same-window-regexps)
-	     same-window-regexps
-	   obof-same-window-regexps))
-	(same-window-buffer-names 
-	 (if (eq obof-same-window-buffer-names 'same-window-buffer-names)
-	     same-window-buffer-names
-	   obof-same-window-buffer-names))
-	(display-buffer-function nil))
-	 (if (and
-	      one-buffer-one-frame
-	      (open-in-other-frame-p (car args)))
-	     (let ((pop-up-frames t) ;; open in a new frame!
-		   (sframe (selected-frame))
-		   (swin (selected-window)))
-	      ; (message "Pop-up-frames is %s" pop-up-frames)
-	       (let ((ret 
-		      (apply (function display-buffer) args)))
-		 ;; make sure the old frame stays the selected one
-		 ;; this is to maintain compatibility with opening
-		 ;; a new window inside the frame, where the input focus
-		 ;; stays in the original window.
+  (if one-buffer-one-frame-mode
+      (let ((same-window-regexps 
+	     (if (eq obof-same-window-regexps 'same-window-regexps)
+		 same-window-regexps
+	       obof-same-window-regexps))
+	    (same-window-buffer-names 
+	     (if (eq obof-same-window-buffer-names 'same-window-buffer-names)
+		 same-window-buffer-names
+	       obof-same-window-buffer-names))
+	    (display-buffer-function nil))
+	(if (and
+	     one-buffer-one-frame
+	     (open-in-other-frame-p (car args)))
+	    (let ((pop-up-frames t) ;; open in a new frame!
+		  (sframe (selected-frame))
+		  (swin (selected-window)))
+					; (message "Pop-up-frames is %s" pop-up-frames)
+	      (let ((ret 
+		     (apply (function display-buffer) args)))
+		;; make sure the old frame stays the selected one
+		;; this is to maintain compatibility with opening
+		;; a new window inside the frame, where the input focus
+		;; stays in the original window.
 		 
-		 ;; dr 12/2006 - we'll try this again, because
-		 ;; that's the way display-buffer is supposed to work.
+		;; dr 12/2006 - we'll try this again, because
+		;; that's the way display-buffer is supposed to work.
 		  
-		 (unless (eq display-buffer-reuse-frames 'select)
-		   ;; we can't use select-frame-set-input-focus because
-		   ;; that would raise the (main) frame over the newly
-		   ;; opened one, and we don't want that.
-		   (select-frame sframe)
-		   (cond ((memq window-system '(x mac))
-			  (x-focus-frame sframe))
-			 ((eq window-system 'w32)
-			  (w32-focus-frame sframe)))
-		   (select-window swin)) 
-	      ret) 
-	       )
-	   (apply (function display-buffer) args))))
+		(unless (eq display-buffer-reuse-frames 'select)
+		  ;; we can't use select-frame-set-input-focus because
+		  ;; that would raise the (main) frame over the newly
+		  ;; opened one, and we don't want that.
+		  (select-frame sframe)
+		  (cond ((memq window-system '(x mac))
+			 (x-focus-frame sframe))
+			((eq window-system 'ns)
+			 (ns-focus-frame sframe))
+			((eq window-system 'w32)
+			 (w32-focus-frame sframe)))
+		  (select-window swin)) 
+		ret) 
+	      )
+	  (apply (function display-buffer) args)))
+    (let ((display-buffer-function nil))
+      (apply (function display-buffer) args))))
 
 (defun display-buffer-in-same-window (&rest args)
 
