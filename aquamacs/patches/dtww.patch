@@ -1046,7 +1046,7 @@ RCS file: /sources/emacs/emacs/src/indent.c,v
 retrieving revision 1.192.2.3
 diff -c -r1.192.2.3 indent.c
 *** src/indent.c	8 Jan 2008 04:30:04 -0000	1.192.2.3
---- src/indent.c	25 Jul 2008 02:14:46 -0000
+--- src/indent.c	25 Jul 2008 02:19:08 -0000
 ***************
 *** 1395,1404 ****
   
@@ -1123,11 +1123,38 @@ diff -c -r1.192.2.3 indent.c
     CHECK_NUMBER (lines);
     if (! NILP (window))
 ***************
+*** 2077,2088 ****
+      }
+    else
+      {
+!       int it_start;
+!       int oselective;
+!       int it_overshoot_expected;
+  
+        SET_TEXT_POS (pt, PT, PT_BYTE);
+        start_display (&it, w, pt);
+  
+        /* Scan from the start of the line containing PT.  If we don't
+  	 do this, we start moving with IT->current_x == 0, while PT is
+--- 2102,2112 ----
+      }
+    else
+      {
+!       int it_start, oselective, it_overshoot_expected, first_x;
+  
+        SET_TEXT_POS (pt, PT, PT_BYTE);
+        start_display (&it, w, pt);
++       first_x = it.first_visible_x;
+  
+        /* Scan from the start of the line containing PT.  If we don't
+  	 do this, we start moving with IT->current_x == 0, while PT is
+***************
 *** 2140,2145 ****
---- 2165,2185 ----
+--- 2164,2185 ----
         if (XINT (lines) >= 0 || IT_CHARPOS (it) > 0)
   	move_it_by_lines (&it, XINT (lines), 0);
   
++       /* Move to the goal column, if one was specified.  */
 +       if (!NILP (lcols))
 + 	{
 + 	  /* If the window was originally hscrolled, move forward by
