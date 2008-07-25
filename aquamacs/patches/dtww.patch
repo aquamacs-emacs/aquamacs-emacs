@@ -2,13 +2,13 @@ DTWW patch
 authored by Kim Storm and Chong Yidong
 backported to 22 for Aquamacs by David Reitter Jul2008
 This patch is part of Aquamacs.
-Index: src/xdisp.c
+Index: xdisp.c
 ===================================================================
 RCS file: /sources/emacs/emacs/src/xdisp.c,v
 retrieving revision 1.1149.2.27
 diff -c -r1.1149.2.27 xdisp.c
 *** src/xdisp.c	23 Apr 2008 08:56:30 -0000	1.1149.2.27
---- src/xdisp.c	11 Jul 2008 14:56:46 -0000
+--- src/xdisp.c	25 Jul 2008 01:58:41 -0000
 ***************
 *** 341,350 ****
     (!NILP (Voverflow_newline_into_fringe)	\
@@ -365,7 +365,7 @@ diff -c -r1.1149.2.27 xdisp.c
   		    {
   		      ++it->hpos;
   		      it->current_x = new_x;
---- 6657,6707 ----
+--- 6657,6705 ----
   	    {
   	      new_x = x + single_glyph_width;
   
@@ -405,15 +405,13 @@ diff -c -r1.1149.2.27 xdisp.c
 ! 		      /* Or it fits exactly and we're on a window
 ! 			 system frame.  */
 ! 		      || (new_x == it->last_visible_x
-!  			  && FRAME_WINDOW_P (it->f)
-!  			  && it->line_wrap == WINDOW_WRAP)))		
+!  			  && FRAME_WINDOW_P (it->f))))		
 ! 	  {
   		  if (/* IT->hpos == 0 means the very first glyph
   			 doesn't fit on the line, e.g. a wide image.  */
   		      it->hpos == 0
   		      || (new_x == it->last_visible_x
-!  			  && FRAME_WINDOW_P (it->f)
-!  			  && it->line_wrap == WINDOW_WRAP))
+!  			  && FRAME_WINDOW_P (it->f)))
   		    {
   		      ++it->hpos;
   		      it->current_x = new_x;
@@ -429,7 +427,7 @@ diff -c -r1.1149.2.27 xdisp.c
   			    }
   
   			  set_iterator_to_next (it, 1);
---- 6715,6735 ----
+--- 6713,6733 ----
   			     now that we know it fits in this row.  */
   			  if (BUFFER_POS_REACHED_P ())
   			    {
@@ -452,16 +450,6 @@ diff -c -r1.1149.2.27 xdisp.c
   
   			  set_iterator_to_next (it, 1);
 ***************
-*** 6641,6646 ****
---- 6750,6756 ----
-  				  break;
-  				}
-  			      if (ITERATOR_AT_END_OF_LINE_P (it))
-+ 		      atx_it.sp = -1;
-  				{
-  				  result = MOVE_NEWLINE_OR_CR;
-  				  break;
-***************
 *** 6650,6659 ****
   			}
   		    }
@@ -473,7 +461,7 @@ diff -c -r1.1149.2.27 xdisp.c
   		    }
   
   		  TRACE_MOVE ((stderr, "move_it_in: continued at %d\n",
---- 6760,6772 ----
+--- 6757,6769 ----
   			}
   		    }
   		  else
@@ -508,7 +496,7 @@ diff -c -r1.1149.2.27 xdisp.c
   	    }
   
   	  if (result != MOVE_UNDEFINED)
---- 6774,6797 ----
+--- 6771,6794 ----
   		  result = MOVE_LINE_CONTINUED;
   		  break;
   		}
@@ -544,7 +532,7 @@ diff -c -r1.1149.2.27 xdisp.c
   	  result = MOVE_POS_MATCH_OR_ZV;
   	  break;
   	}
---- 6800,6806 ----
+--- 6797,6803 ----
         else if (BUFFER_POS_REACHED_P ())
   	{
   	buffer_pos_reached:
@@ -561,7 +549,7 @@ diff -c -r1.1149.2.27 xdisp.c
   	  && it->current_x >= it->last_visible_x)
   	{
   #ifdef HAVE_WINDOW_SYSTEM
---- 6828,6834 ----
+--- 6825,6831 ----
   
         /* Stop if lines are truncated and IT's current x-position is
   	 past the right edge of the window now.  */
@@ -571,7 +559,7 @@ diff -c -r1.1149.2.27 xdisp.c
   #ifdef HAVE_WINDOW_SYSTEM
 ***************
 *** 6734,6743 ****
---- 6850,6868 ----
+--- 6847,6865 ----
   	  result = MOVE_LINE_TRUNCATED;
   	  break;
   	}
@@ -593,7 +581,7 @@ diff -c -r1.1149.2.27 xdisp.c
     it->glyph_row = saved_glyph_row;
 ***************
 *** 6745,6750 ****
---- 6870,6885 ----
+--- 6867,6882 ----
   }
   
   
@@ -612,7 +600,7 @@ diff -c -r1.1149.2.27 xdisp.c
   
 ***************
 *** 6816,6821 ****
---- 6951,6959 ----
+--- 6948,6956 ----
   	{
   	  struct it it_backup;
   
@@ -675,7 +663,7 @@ diff -c -r1.1149.2.27 xdisp.c
   	    }
   
   	  if (reached)
---- 6966,7031 ----
+--- 6963,7028 ----
   	     If we didn't use TO_X == 0, we would stop at the end of
   	     the line which is probably not what a caller would expect
   	     to happen.  */
@@ -751,7 +739,7 @@ diff -c -r1.1149.2.27 xdisp.c
   	height = 1;
         else
   	{
---- 8518,8524 ----
+--- 8515,8521 ----
         max_height = min (total_height, max_height);
   
         /* Find out the height of the text in the window.  */
@@ -770,7 +758,7 @@ diff -c -r1.1149.2.27 xdisp.c
       {
         if (/* If row ends before first_changed_pos, it is unchanged,
   	     except in some case.  */
---- 14341,14350 ----
+--- 14338,14347 ----
     int yb = window_text_bottom_y (w);
   
     /* Find the last row displaying unchanged text.  */
@@ -793,7 +781,7 @@ diff -c -r1.1149.2.27 xdisp.c
       }
   
     return row_found;
---- 14361,14368 ----
+--- 14358,14365 ----
   	row_found = row;
   
         /* Stop if last visible row.  */
@@ -811,10 +799,10 @@ diff -c -r1.1149.2.27 xdisp.c
   /* Try to redisplay window W by reusing its existing display.  W's
      current matrix must be up to date when this function is called,
      i.e. window_end_valid must not be nil.
---- 14548,14553 ----
+--- 14545,14550 ----
 ***************
 *** 14528,14533 ****
---- 14679,14690 ----
+--- 14676,14687 ----
     if (overlay_arrows_changed_p ())
       GIVE_UP (12);
   
@@ -829,7 +817,7 @@ diff -c -r1.1149.2.27 xdisp.c
        only if buffer has really changed.  The reason is that the gap is
 ***************
 *** 16005,16010 ****
---- 16162,16172 ----
+--- 16159,16169 ----
   {
     struct glyph_row *row = it->glyph_row;
     Lisp_Object overlay_arrow_string;
@@ -855,7 +843,7 @@ diff -c -r1.1149.2.27 xdisp.c
   	}
   
         PRODUCE_GLYPHS (it);
---- 16261,16290 ----
+--- 16258,16287 ----
   
         /* Remember the line height so far in case the next element doesn't
   	 fit on the line.  */
@@ -895,7 +883,7 @@ diff -c -r1.1149.2.27 xdisp.c
   		  && (/* Glyph doesn't fit on the line.  */
   		      new_x > it->last_visible_x
   		      /* Or it fits exactly on a window system frame.  */
---- 16344,16350 ----
+--- 16341,16347 ----
   	      new_x = x + glyph->pixel_width;
   
   	      if (/* Lines are continued.  */
@@ -905,7 +893,7 @@ diff -c -r1.1149.2.27 xdisp.c
   		      /* Or it fits exactly on a window system frame.  */
 ***************
 *** 16187,16192 ****
---- 16367,16384 ----
+--- 16364,16381 ----
   		      ++it->hpos;
   		      if (i == nglyphs - 1)
   			{
@@ -926,7 +914,7 @@ diff -c -r1.1149.2.27 xdisp.c
   			  if (IT_OVERFLOW_NEWLINE_INTO_FRINGE (it))
 ***************
 *** 16232,16237 ****
---- 16424,16449 ----
+--- 16421,16446 ----
   		      it->max_phys_ascent = phys_ascent;
   		      it->max_phys_descent = phys_descent;
   		    }
@@ -962,7 +950,7 @@ diff -c -r1.1149.2.27 xdisp.c
   	  && (FRAME_WINDOW_P (it->f)
   	      ? (it->current_x >= it->last_visible_x)
   	      : (it->current_x > it->last_visible_x)))
---- 16559,16565 ----
+--- 16556,16562 ----
   
         /* If we truncate lines, we are done when the last displayed
   	 glyphs reach past the right margin of the window.  */
@@ -979,7 +967,7 @@ diff -c -r1.1149.2.27 xdisp.c
   	      && x + glyph->pixel_width > max_x)
   	    {
   	      /* End of continued line or max_x reached.  */
---- 18568,18574 ----
+--- 18565,18571 ----
   	{
   	  struct glyph *glyph = row->glyphs[TEXT_AREA] + n_glyphs_before + i;
   
@@ -996,7 +984,7 @@ diff -c -r1.1149.2.27 xdisp.c
   	  && it->current_x >= it->last_visible_x)
   	{
   	  /* Add truncation mark, but don't do it if the line is
---- 18624,18630 ----
+--- 18621,18627 ----
         set_iterator_to_next (it, 1);
   
         /* Stop if truncating at the right edge.  */
@@ -1013,7 +1001,7 @@ diff -c -r1.1149.2.27 xdisp.c
         && it->current_x + width > it->last_visible_x)
       width = it->last_visible_x - it->current_x - 1;
   
---- 20487,20493 ----
+--- 20484,20490 ----
     else
       ascent = (height * FONT_BASE (font)) / FONT_HEIGHT (font);
   
@@ -1033,7 +1021,7 @@ diff -c -r1.1149.2.27 xdisp.c
   
     DEFVAR_BOOL ("mode-line-inverse-video", &mode_line_inverse_video,
       doc: /* When nil, display the mode-line/header-line/menu-bar in the default face.
---- 24361,24378 ----
+--- 24358,24375 ----
     DEFVAR_INT ("debug-end-pos", &debug_end_pos, doc: /* Don't ask.  */);
   #endif
   
