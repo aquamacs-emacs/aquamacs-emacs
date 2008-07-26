@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: site-start.el,v 1.49 2008/07/26 14:49:10 davidswelt Exp $
+;; Last change: $Id: site-start.el,v 1.50 2008/07/26 15:08:19 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -56,7 +56,7 @@ for A, then B is newer than A.")
 Changes in this code are ignored during the online version check.")
 
 ;; only for Emacs.app
-(when t
+(when nil
  (setq load-path (cons "~/src" load-path))
  (setq load-path (cons "~/src/oneonone" load-path))
  (setq load-path (cons "~/src/macosx" load-path))
