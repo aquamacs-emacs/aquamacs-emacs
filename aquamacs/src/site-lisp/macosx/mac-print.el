@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-print.el,v 1.13 2008/01/22 17:48:46 davidswelt Exp $
+;; Last change: $Id: mac-print.el,v 1.14 2008/07/26 05:22:05 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -131,16 +131,20 @@ in PDF format.
 	  mac-print-font-size-scaling-factor
 	  htmlize-font-size-scaling-factor)))
     (export-to-html html-file)
-    (message
-     (with-temp-buffer
-       (call-process html-to-pdf nil t nil  
-		      "-f" html-file 
-		      "-o" target-file
-		      "-a" (concat "media=" 
-				   (capitalize (symbol-name ps-paper-type)))
-		      "-j" "application/pdf"
-		      "-D")
-       (buffer-string))))
+;;     (with-current-buffer "*Messages*"
+;;       (save-excursion
+;;       (end-of-buffer)
+;;       (insert
+;;        (with-temp-buffer
+	 (call-process html-to-pdf nil "*Messages*" nil  
+		       "-f" html-file 
+		       "-o" target-file
+		       "-a" (concat "media=" 
+				    (capitalize (symbol-name ps-paper-type)))
+		       "-j" "application/pdf"
+		       "-D")
+;	 (buffer-string))))
+)
   target-file)
 
 (defun export-to-html (target-file)
