@@ -7,9 +7,9 @@
 ;; Copyright (C) 1996-2008, Drew Adams, all rights reserved.
 ;; Created: Tue Mar  5 16:30:45 1996
 ;; Version: 21.0
-;; Last-Updated: Mon Jun  2 11:05:19 2008 (Pacific Daylight Time)
+;; Last-Updated: Tue Jul 29 13:48:03 2008 (Pacific Daylight Time)
 ;;           By: dradams
-;;     Update #: 2337
+;;     Update #: 2372
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/frame-cmds.el
 ;; Keywords: internal, extensions, mouse, frames, windows, convenience
 ;; Compatibility: GNU Emacs 20.x, GNU Emacs 21.x, GNU Emacs 22.x
@@ -205,6 +205,12 @@
 ;;
 ;;; Change log:
 ;;
+;; 2008/07/29 dadams
+;;     available-screen-pixel-bounds: Convert frame geom value to numeric.
+;;     available-screen-pixel-(width|height): Added optional INCLUDE-MINI-P arg.
+;;     new-frame-position: Call available-screen-pixel-(width|height) with arg.
+;;     save-frame-config: push-current-frame-config -> doremi-push-current-frame-config.
+;;     Soft-require doremi-frm.el when byte-compile.
 ;; 2008/06/02 dadams
 ;;     Added: available-screen-pixel-bounds (option and function).
 ;;     tile-frames, available-screen-pixel-(width|height):
@@ -365,6 +371,8 @@
 (require 'frame-fns) ;; frame-geom-value-numeric, frames-on, get-frame-name, get-a-frame, read-frame
 (require 'strings nil t) ;; (no error if not found) read-buffer
 (require 'misc-fns nil t) ;; (no error if not found) another-buffer
+(eval-when-compile (require 'doremi-frm nil t)) ;; (no error if not found)
+                                                ;; doremi-push-current-frame-config
 
 ;; Not required here, because this library requires `frame-cmds.el': `thumb-frm.el'.
 ;; However, `frame-cmds.el' soft-uses `thumbnail-frame-p', which is defined in `thumb-frm.el'.
@@ -456,7 +464,10 @@ If nil, you can move the frame as far off the display as you like."
   "Upper left and lower right of available screen space for tiling frames.
 Integer list: (x0 y0 x1 y1), where (x0, y0) is the upper left position
 and (x1, y1) is the lower right position.  Coordinates are in pixels,
-measured from the screen absolute origin, (0, 0), at the upper left."
+measured from the screen absolute origin, (0, 0), at the upper left.
+
+See also function `available-screen-pixel-bounds', which subtracts the
+space taken up by a standalone minibuffer frame (if any)."
   :type '(list
           (integer :tag "X0 (upper left) - pixels from screen left")
           (integer :tag "Y0 (upper left) - pixels from screen top")
@@ -475,7 +486,7 @@ measured from the screen absolute origin, (0, 0), at the upper left."
 You can restore it with \\[jump-to-frame-config-register]."
   (interactive)
   (frame-configuration-to-register frame-config-register)
-  (when (featurep 'doremi-frm) (push-current-frame-config))
+  (when (featurep 'doremi-frm) (doremi-push-current-frame-config))
   (message
    (substitute-command-keys
     (if (featurep 'doremi-frm)
@@ -1001,18 +1012,23 @@ This is variable `available-screen-pixel-bounds', possibly adjusted to
 allow for the standalone minibuffer frame provided by `oneonone.el'."
   (if (boundp '1on1-minibuffer-frame)
       (append (butlast available-screen-pixel-bounds)
-              (list (cdr (assq 'top (frame-parameters 1on1-minibuffer-frame)))))
+              (list (frame-geom-value-numeric 'top (cdr (assq 'top (frame-parameters
+                                                                    1on1-minibuffer-frame))))))
     available-screen-pixel-bounds))
 
-(defun available-screen-pixel-width ()
-  "Width of the usable screen, in pixels."
-  (- (caddr (available-screen-pixel-bounds)) ; X1 - X0
-     (car (available-screen-pixel-bounds))))
+(defun available-screen-pixel-width (&optional include-mini-p)
+  "Width of the usable screen, in pixels.
+Non-nil optional argument `include-mini-p' means include the space
+occupied by a standalone minibuffer, if any."
+  (let ((bounds (if include-mini-p available-screen-pixel-bounds (available-screen-pixel-bounds))))
+    (- (caddr bounds) (car bounds)))) ; X1 - X0
 
-(defun available-screen-pixel-height ()
-  "Height of the usable screen, in pixels."
-  (- (cadddr (available-screen-pixel-bounds)) ; Y1 - Y0
-     (cadr (available-screen-pixel-bounds))))
+(defun available-screen-pixel-height (&optional include-mini-p)
+  "Height of the usable screen, in pixels.
+Non-nil optional argument `include-mini-p' means include the
+space occupied by a standalone minibuffer, if any."
+  (let ((bounds (if include-mini-p available-screen-pixel-bounds (available-screen-pixel-bounds))))
+    (- (cadddr bounds) (cadr bounds)))) ; Y1 - Y0
 
 ;; Inspired by `sk-grow-frame' from Sarir Khamsi [sarir.khamsi@raytheon.com]
 ;;;###autoload
@@ -1091,11 +1107,11 @@ Interactively, it is given by the prefix argument."
 TYPE is `left' or `top'.
 INCR is the increment to use when changing the position."
   (let ((new-pos
-         (+ incr
-            (cadr (frame-geom-value-cons type
-                                         (cdr (assq type (frame-parameters frame)))))))
+         (+ incr (cadr (frame-geom-value-cons type (cdr (assq type (frame-parameters frame)))))))
         (display-dimension
-         (if (eq 'left type) (available-screen-pixel-width) (available-screen-pixel-height)))
+         (if (eq 'left type)
+             (available-screen-pixel-width t)
+           (available-screen-pixel-height t)))
         (frame-dimension
          (if (eq 'left type) (frame-pixel-width frame) (frame-pixel-height frame))))
     (if (not move-frame-wrap-within-display-flag)
