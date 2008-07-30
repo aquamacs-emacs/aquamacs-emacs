@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.118 2008/07/12 20:27:01 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.119 2008/07/30 00:32:41 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -42,6 +42,7 @@
 (aquamacs-require  '(boundp 'mac-control-modifier))
 (aquamacs-require  '(boundp 'mac-option-modifier))
 
+(require 'emulate-mac-keyboard-mode)
 
 ;; To do: this should only happen when the mode is switched on
 
@@ -205,58 +206,75 @@ With argument, do this that many times."
   (let ((x-select-enable-clipboard t))
     (yank)))
 
+(defcustom set-region-to-isearch-match t
+  "Whether to set the region after searching.
+If non-nil, the mark will be set after searching with
+`aquamacs-repeat-isearch', `aquamacs-repeat-isearch-backward' and
+whenever isearch-mode is existed, such that the region matches the
+search match"
+  :group 'Aquamacs
+  :type 'boolean)
+
 (defun aquamacs-set-region-to-search-match ()
   ;; match beginning / end aren't guaranteed to be defined here (e.g., in flyspell-mode)
-  (when (and transient-mark-mode (not mark-active)) ; mark could have been set explicitly: don't change it
+  (when (and set-region-to-isearch-match
+	     transient-mark-mode (not mark-active)) ; mark could have been set explicitly: don't change it
       (set-mark isearch-other-end)))
+
 
 (defun aquamacs-repeat-isearch ()
   "Repeats the last string isearch.
-Set region to match.
+Set region to match if `set-region-to-isearch-match'.
 Wraps around after throwing and error once."
   (interactive)
-    (if (or (and (eq last-command 'aquamacs-repeat-isearch)
-	     (not mark-active))) ;; failed error has been shown once (and mark deactivated)
-	(condition-case nil
-	    (search-forward isearch-string)
-	  (error 
-	   (let (new-point)
-	     (save-excursion
-	       (beginning-of-buffer)
-	       (condition-case x
-		   (progn (search-forward isearch-string)
-			  (setq new-point (point)))
-		 (error
-		  (signal (car x) (cdr x)))))
-	     (and new-point (goto-char new-point)))))
+  (if set-region-to-isearch-match
+    (progn
+      (if (or (and (eq last-command 'aquamacs-repeat-isearch)
+		   (not mark-active))) ;; failed error has been shown once (and mark deactivated)
+	  (condition-case nil
+	      (search-forward isearch-string)
+	    (error 
+	     (let (new-point)
+	       (save-excursion
+		 (beginning-of-buffer)
+		 (condition-case x
+		     (progn (search-forward isearch-string)
+			    (setq new-point (point)))
+		   (error
+		    (signal (car x) (cdr x)))))
+	       (and new-poinept (goto-char new-point)))))
       (deactivate-mark)
       (search-forward isearch-string))
       (set-mark (match-beginning 0)))
+    (isearch-repeat 'forward)))
 
 (defun aquamacs-repeat-isearch-backward ()
   "Repeats the last string isearch backwards.
 Set region to match. 
 Wraps around after throwing and error once."
   (interactive)
-    (if (and (eq last-command 'aquamacs-repeat-isearch-backward)
-	     (not mark-active)) ;; failed error has been shown once (and mark deactivated)
-	(condition-case nil
-	    (search-backward isearch-string)
-	  (error
-	    (let (new-point)
-	      (save-excursion
-		(end-of-buffer)
-		(condition-case x
-		    (progn (search-backward isearch-string)
-			   (setq new-point (point)))
-		  (error
-		   (signal (car x) (cdr x)))))
-	      (and new-point (goto-char new-point)))))
-      (deactivate-mark)
-      (if (< (mark) (point))
-	  (goto-char (mark)))
-      (search-backward isearch-string))
-    (set-mark (match-end 0)))
+  (if set-region-to-isearch-match
+      (progn
+	(if (and (eq last-command 'aquamacs-repeat-isearch-backward)
+		 (not mark-active)) ;; failed error has been shown once (and mark deactivated)
+	    (condition-case nil
+		(search-backward isearch-string)
+	      (error
+	       (let (new-point)
+		 (save-excursion
+		   (end-of-buffer)
+		   (condition-case x
+		       (progn (search-backward isearch-string)
+			      (setq new-point (point)))
+		     (error
+		      (signal (car x) (cdr x)))))
+		 (and new-point (goto-char new-point)))))
+	  (deactivate-mark)
+	  (if (< (mark) (point))
+	      (goto-char (mark)))
+	  (search-backward isearch-string))
+	(set-mark (match-end 0)))
+    (isearch-repeat 'backward)))
 
 (defun aquamacs-isearch-yank-kill ()
   (interactive)			
