@@ -238,18 +238,22 @@ to the desired margin."
   (interactive)
   (if (bobp)
       (signal 'beginning-of-buffer nil))
-  (vertical-motion 0))
+  (if word-wrap
+      (vertical-motion 0)
+    (beginning-of-line)))
 
 (defun end-of-visual-line ()
   "Move point to the end of the current visual line."
   (interactive)
   (if (eobp)
       (signal 'end-of-buffer nil))
-  (let ((end-of-line (line-end-position)))
-    (vertical-motion 1)
-    (unless (eobp)
-      ;;or: (< (point) end-of-line) ;; jumping over wrapped text
-      (backward-char 1))))
+  (if word-wrap
+      (let ((end-of-line (line-end-position)))
+	(vertical-motion 1)
+	(unless (eobp)
+	  ;;or: (< (point) end-of-line) ;; jumping over wrapped text
+	  (backward-char 1)))
+    (end-of-line)))
 
 ;; this code based on simple.el
 (defun kill-visual-line (&optional arg)
