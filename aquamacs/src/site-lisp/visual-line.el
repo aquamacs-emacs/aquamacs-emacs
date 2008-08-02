@@ -234,7 +234,10 @@ to the desired margin."
 
 
 (defun beginning-of-visual-line ()
-  "Move point to the beginning of the current visual line."
+  "Move point to the beginning of the current line.
+If `word-wrap' is nil, we move to the beginning of the buffer
+line; otherwise, point is moved to the beginning of the visual
+line."
   (interactive)
   (if (bobp)
       (signal 'beginning-of-buffer nil))
@@ -243,16 +246,16 @@ to the desired margin."
     (beginning-of-line)))
 
 (defun end-of-visual-line ()
-  "Move point to the end of the current visual line."
+  "Move point to the end of the current line.
+If `word-wrap' is nil, we move to the end of the line; otherwise,
+point is moved to the end of the visual line."
   (interactive)
   (if (eobp)
       (signal 'end-of-buffer nil))
   (if word-wrap
-      (let ((end-of-line (line-end-position)))
+      (progn
 	(vertical-motion 1)
-	(unless (eobp)
-	  ;;or: (< (point) end-of-line) ;; jumping over wrapped text
-	  (backward-char 1)))
+	  (backward-char 1))
     (end-of-line)))
 
 ;; this code based on simple.el
@@ -283,31 +286,35 @@ you can use this command to copy text from a read-only buffer.
 \(If the variable `kill-read-only-ok' is non-nil, then this won't
 even beep.)"
   (interactive "P")
-  (kill-region (point)
-	       ;; It is better to move point to the other end of the
-	       ;; kill before killing.  That way, in a read-only
-	       ;; buffer, point moves across the text that is copied
-	       ;; to the kill ring.  The choice has no effect on undo
-	       ;; now that undo records the value of point from before
-	       ;; the command was run.
-	       (progn
-		 (if arg
-		     (vertical-motion (prefix-numeric-value arg))
-		   (if (eobp)
-		       (signal 'end-of-buffer nil))
-		   (let ((end
-			  (save-excursion
-			    (end-of-visual-line) (point))))
-		     (if (or (save-excursion
-			       ;; If trailing whitespace is visible,
-			       ;; don't treat it as nothing.
-			       (unless show-trailing-whitespace
-				 (skip-chars-forward " \t" end))
-			       (= (point) end))
-			     (and kill-whole-line (bolp)))
-			 (visual-line-down 1)
-		       (goto-char end))))
-		 (point))))
+  (kill-region 
+   (point)
+   ;; It is better to move point to the other end of the
+   ;; kill before killing.  That way, in a read-only
+   ;; buffer, point moves across the text that is copied
+   ;; to the kill ring.  The choice has no ef
+   ;; now that undo records the value of point from before
+   ;; the command was run.
+   (progn
+     (if arg
+	 (vertical-motion (prefix-numeric-value arg))
+       (if (eobp)
+	   (signal 'end-of-buffer nil))
+       (let ((end
+	      (save-excursion
+		(vertical-motion 1) 
+		; we're possibly one too far
+		(skip-chars-backward "\r\n" (- (point) 1))
+		(point))))
+	 (if (or (save-excursion
+		   ;; If trailing whitespace is visible,
+		   ;; don't treat it as nothing.
+		   (unless show-trailing-whitespace
+		     (skip-chars-forward " \t" end))
+		   (= (point) end))
+		 (and kill-whole-line (bolp)))
+	     (forward-visible-line 1)
+	   (goto-char end))))
+     (point))))
 
 (defun kill-whole-visual-line (&optional arg)
   "Kill current visual line.
