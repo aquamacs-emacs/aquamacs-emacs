@@ -312,7 +312,7 @@ even beep.)"
 		     (skip-chars-forward " \t" end))
 		   (= (point) end))
 		 (and kill-whole-line (bolp)))
-	     (forward-visible-line 1)
+	     (vertical-motion 1)
 	   (goto-char end))))
      (point))))
 
