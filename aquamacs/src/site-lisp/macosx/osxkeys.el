@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.120 2008/08/03 21:03:51 champo Exp $
+;; Last change: $Id: osxkeys.el,v 1.121 2008/08/03 21:07:45 champo Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -852,13 +852,6 @@ keymaps used by this mode. They may be modified where necessary."
   (if osx-key-mode
       ;; install low priority map
       (progn
-	;; move word-wise, as per pc-selection-mode
-	(aquamacs-set-defaults '((pc-select-meta-moves-sexps nil)))
-	;; toggle to enable the new setting
-	(when pc-selection-mode
-	  (pc-selection-mode -1)
-	  (pc-selection-mode 1))
-
 	(setq osx-key--saved-low-priority-map 
 	      (aquamacs-install-low-priority-global-key-map
 	       osx-key-low-priority-key-map))

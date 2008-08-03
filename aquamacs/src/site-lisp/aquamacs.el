@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.188 2008/07/12 15:06:05 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.189 2008/08/03 21:07:45 champo Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -1089,7 +1089,7 @@ to the selected frame."
      (mouse-wheel-progessive-speed nil)
    ;;  (mouse-wheel-scroll-amount (1 (shift . 0.5) (control . 0.2) ))
      (mouse-wheel-scroll-amount (1 ((shift) . 0.5) ((control) . 0.2) ))
-     (pc-select-meta-moves-sexps t)
+   ;;  (pc-select-meta-moves-sexps t) ;; leave nil so we can otherwise assign M-left/right
      (pc-select-selection-keys-only t)
      (pc-selection-mode t)
      (show-paren-mode t)
