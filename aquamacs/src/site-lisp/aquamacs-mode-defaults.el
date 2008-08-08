@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-mode-defaults.el,v 1.22 2008/07/12 20:38:43 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-defaults.el,v 1.23 2008/08/08 13:46:15 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -91,7 +91,10 @@
 ;;(aquamacs-set-defaults '((inferior-lisp-program "/opt/sbcl/bin/sbcl") ))
 
 ;; we don't want header lines (tab uses them)
-(aquamacs-set-defaults '((slime-header-line-p nil)))
+(aquamacs-set-defaults 
+ '((slime-header-line-p nil)
+   (erc-mode-line-format "%s %a. %n on %t (%m,%l) %o")
+   (erc-header-line-format nil)))
 
 (defun load-and-setup-slime ()
   "Load and setup SLIME"
