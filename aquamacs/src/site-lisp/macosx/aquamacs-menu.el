@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.167 2008/07/13 14:12:45 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.168 2008/08/09 22:12:58 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -248,6 +248,7 @@ customization buffer."
 ;; compatibility (old symbol used in 0.9.6)
 (defalias 'aquamacs-menu-new-buffer-modes 'aquamacs-known-major-modes)
 
+; (aquamacs-menu-bar-setup)
 (defun aquamacs-menu-bar-setup ()
 
 (define-key menu-bar-file-menu [new-file]
@@ -692,7 +693,7 @@ both existing buffers and buffers that you subsequently create."
 			"Case-Insensitive Search %s"
 			"Ignore letter-case in search"))
 
-(when (string= "mac" window-system)
+(when window-system
     (require 'aquamacs-frame-setup)
     (define-key-after menu-bar-options-menu [tabbar]
       (menu-bar-make-mm-toggle
@@ -1185,6 +1186,14 @@ the previous frame size."
 					      (tabbar-selected-tab
 					       (tabbar-current-tabset t))))))
 		      :help "Move the current Tab to New Frame")
+		(list 'removetab
+		      'menu-item 
+		      '(format "Remove %s" 
+			       (if tabbar-mode "Tab" "Window")) 
+		      'tabbar-delete-current-tab
+		      :enable '(and (menu-bar-menu-frame-live-and-visible-p)
+				    (menu-bar-non-minibuffer-window-p))
+		      :help "Remove the current Tab without killing the buffer.")
 		(list 'mergetabs
 		      'menu-item
 		      "Merge All Frames       " 
