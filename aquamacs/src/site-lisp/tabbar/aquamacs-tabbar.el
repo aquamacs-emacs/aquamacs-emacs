@@ -7,9 +7,10 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: aquamacs-tabbar.el,v 1.41 2008/06/11 20:59:04 champo Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.42 2008/08/09 22:12:20 davidswelt Exp $
 
 ;; load original tabbar-mode
+
 (require 'tabbar)
 (require 'aquamacs-tools)
 
@@ -70,6 +71,7 @@ to be closed.  If no tab is specified, (tabbar-selected-tab) is used"
   (interactive)
   (let ((thetab (or tab (tabbar-selected-tab))))
     (funcall tabbar-close-tab-function thetab)))
+
 
 ;; change faces for better-looking tabs (and more obvious selected tab!)
 ;; full face specification to avoid inheriting from the frame font
@@ -183,6 +185,13 @@ to be closed.  If no tab is specified, (tabbar-selected-tab) is used"
 ;;	(tabbar-window-close-tab clickedtab)))))
 	(tabbar-window-delete-tab clickedtab))))
 
+(defun tabbar-delete-current-tab ()
+  "Delete the current tab."
+  (interactive)
+  (if tabbar-mode
+      (tabbar-window-delete-tab (tabbar-selected-tab))
+    (delete-window)))
+
 ;; function to open a new tab, suppressing new frame creation
 (defun tabbar-new-tab (&optional mode)
   "Creates a new tab, containing an empty buffer (with major-mode MODE
@@ -235,7 +244,7 @@ if specified), in current window."
 ;; keymap for tabbar context menu
 (defvar tabbar-context-menu-map
   (let ((map (make-sparse-keymap)))
-;;     (define-key map [removetab] (cons "Remove Tab" 'tabbar-delete-clicked-tab))
+    (define-key map [removetab] (cons "Remove Tab" 'tabbar-delete-clicked-tab))
     (define-key map [duptab]
       (cons "Duplicate Tab in New Frame" 'tabbar-new-frame-with-clicked-buffer))
     (define-key map [movetab]
@@ -399,8 +408,9 @@ or groups.  Call the function `tabbar-button-label' otherwise."
   )
 
 (defun tabbar-check-overflow (tabset &optional noscroll)
-  "Return t if the current tabbar is longer than the header line.  If NOSCROLL
-is non-nil, exclude the tabbar-scroll buttons in the check."
+  "Return t if the current tabbar is longer than the header line.  
+If NOSCROLL is non-nil, exclude the tabbar-scroll buttons in the
+check."
   (let ((tabs (tabbar-view tabset))
 	elts)
     (while tabs
@@ -772,6 +782,8 @@ The following options are available:
 ;; will have to do a bit more work to make different tabbar styles work smoothly.
 ;; (i.e., no conditional loading of lisp!)
 ;; for now, stick with window tabs
+(condition-case nil
 (require 'tabbar-window)
+(error nil))
 
 (provide 'aquamacs-tabbar)
