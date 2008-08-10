@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.60 2008/07/15 15:46:07 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.61 2008/08/10 16:51:49 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -80,6 +80,10 @@ by any of the hook functions, will normally be preserved."
   :version 22.0
   :group 'frames)
 
+(unless (fboundp 'mac-display-available-pixel-bounds)
+  (defun mac-display-available-pixel-bounds (&optional frame)
+    (list 0 0 
+	  (display-pixel-width) (display-pixel-height))))
 
 (unless (fboundp 'winmgr-display-available-pixel-bounds)
   (if (fboundp 'mac-display-available-pixel-bounds)
@@ -424,12 +428,8 @@ can be customized to configure this mode."
 ;; This is mostly a hack
 ;; replace with test for frame parameter fullscreen
 ;; once the new patch is used.
-  (let* ((f (or frame (selected-frame)))
-	 (bounds 
-	  (mac-display-available-pixel-bounds f )))
-    (<= (- (- (nth 3 bounds) (nth 1 bounds) ) (smart-tool-bar-pixel-height f)) (frame-pixel-height f))))
-; (setq f (selected-frame))
-; (frame-full-screen-p (selected-frame))
+  (eq (frame-parameter nil 'fullscreen) 'fullboth))
+ 
 
 (defvar smart-frame-prior-positions '()
   "Association list with buffer names and frame positions / sizes, so these
@@ -457,7 +457,10 @@ can be remembered. This is part of Aquamacs Emacs.")
 		     (cons 'left (eval (frame-parameter f 'left)))
 		     (cons 'top (eval (frame-parameter f 'top)))
 		     (cons 'width (frame-parameter f 'width))
-		     (cons 'height (frame-parameter f 'height)))))))
+		     (cons 'height (frame-parameter f 'height))
+;		     (cons 'pixel-width (frame-pixel-width f))
+;		     (cons 'pixel-height (frame-pixel-height f))
+		     )))))
   
   ;; (setq smart-frame-prior-positions nil)
   ;; don't store too many entries here
@@ -472,7 +475,10 @@ can be remembered. This is part of Aquamacs Emacs.")
 		      (cons 'left (eval (frame-parameter f 'left)))
 		      (cons 'top (eval (frame-parameter f 'top)))
 		      (cons 'width (frame-parameter f 'width))
-		      (cons 'height (frame-parameter f 'height))) 
+		      (cons 'height (frame-parameter f 'height))
+		      ;;(cons 'pixel-width (frame-pixel-width f))
+		      ;;(cons 'pixel-height (frame-pixel-height f))
+		      ) 
 		    'smart-frame-prior-positions)))
 
 ;  (smart-fp--get-initial-frame-position)
@@ -503,7 +509,7 @@ can be remembered. This is part of Aquamacs Emacs.")
 	(smart-fp--convert-negative-ordinates
 	 (if (frame-full-screen-p f)
 	     (list 
-	      (cons 'fullscreen t)
+	      (cons 'fullscreen 'fullboth)
 	      (cons 'left (eval (frame-parameter f 'prior-left)))
 	      (cons 'top (eval (frame-parameter f 'prior-top)))
 	      (cons 'width (frame-parameter f 'prior-width))
@@ -512,7 +518,10 @@ can be remembered. This is part of Aquamacs Emacs.")
 	    (cons 'left (eval (frame-parameter f 'left)))
 	    (cons 'top (eval (frame-parameter f 'top)))
 	    (cons 'width (frame-parameter f 'width))
-	    (cons 'height (frame-parameter f 'height))))))))
+	    (cons 'height (frame-parameter f 'height))
+	    ;; (cons 'pixel-width (frame-pixel-width f))
+	    ;; (cons 'pixel-height (frame-pixel-height f))
+	    ))))))
 
 (defvar smart-frame-keep-initial-frame-alist t
 "* Initialize `intial-frame-list' after startup from old frame position.
@@ -527,13 +536,34 @@ Aquamacs was last terminated.")
 ;; so we need to take care not to override their customizations.
   (when smart-frame-keep-initial-frame-alist
     (let ((new-initial-frame-alist '((visibility . nil))))
+  
+      ;; convert frame parameters
+      ;; the new frame probably doesn't have the right 
+      ;; font at this time, or tool-bar is unclear, etc.
+;;       (when smart-frame--initial-frame
+;; 	(when (assq 'pixel-width frame-parameters)
+;; 	  (assq-set 'width (smart-fp--pixel-to-char-width 
+;; 			    (cdr (assq 'pixel-width frame-parameters))
+;; 			    smart-frame--initial-frame)
+;; 		    'frame-parameters)
+;; 	  (assq-set 'height (smart-fp--pixel-to-char-height 
+;; 			    (cdr (assq 'pixel-height frame-parameters))
+;; 			    smart-frame--initial-frame)
+;; 		    'frame-parameters)))
+      ;; if dimensions are set 
+      (when (not (or (assq 'height initial-frame-alist) 
+		     (assq 'width initial-frame-alist)))
+	;; can't use after-init-hook
+	(defadvice frame-notice-user-settings (after keep-inside-screen activate)
+	  (smart-move-frame-inside-screen smart-frame--initial-frame)))
       (mapc
        (lambda (item)
 	 (unless (assq (car item)  initial-frame-alist)
 	   (setq new-initial-frame-alist (cons item new-initial-frame-alist))))
        (reverse frame-parameters))
-      (when (cdr-safe (assq 'fullscreen (append new-initial-frame-alist initial-frame-alist))) 
-	(run-with-idle-timer 0 nil 'aquamacs-toggle-full-frame))
+;;       (when (cdr-safe (assq 'fullscreen 
+;; 			    (append new-initial-frame-alist initial-frame-alist)))
+;;  	(run-with-idle-timer 0 nil 'aquamacs-toggle-full-frame))
 
       (setq initial-frame-alist 
 	    (append new-initial-frame-alist initial-frame-alist))
@@ -615,7 +645,8 @@ The file is specified in `smart-frame-position-file'."
 ; (setq frame (selected-frame))
 ; (smart-move-minibuffer-inside-screen)
 (defun smart-move-minibuffer-inside-screen (&optional frame)
-  (when window-system
+  (when (and window-system
+	     (not (frame-parameter frame 'fullscreen)))
     (unless
 	(let* ((frame (or frame (selected-frame)))
 	       ;; on some systems, we can retrieve the available pixel width with
@@ -635,10 +666,7 @@ The file is specified in `smart-frame-position-file'."
 			  (smart-tool-bar-pixel-height frame)
 			  (nth 3 edges) 
 			  ))
-	       (bounds (if (fboundp 'mac-display-available-pixel-bounds)
-			   (mac-display-available-pixel-bounds frame)
-			 (list 0 0 
-			       (display-pixel-width) (display-pixel-height)))))
+	       (bounds  (mac-display-available-pixel-bounds frame)))
 	  ;; is the area visible? 
 	  ;; we cut a corner here and only check the display that shows the majority of the frame
 	  (and  (>= left (- (nth 0 bounds) 4))
@@ -664,10 +692,7 @@ on the main screen, i.e. where the menu is."
 	 ;; non-standard methods.
 	 ;; on OS X, e.g. mac-display-available-pixel-bounds (patch!!) returns
 	 ;; available screen region, excluding the Dock.
-	 (rect (if (fboundp 'mac-display-available-pixel-bounds)
-		   (mac-display-available-pixel-bounds frame)
-		 (list 0 0 
-		       (display-pixel-width) (display-pixel-height))))
+	 (rect (mac-display-available-pixel-bounds frame))
 	 (min-x (nth 0 rect))
 	 (min-y (nth 1 rect))
 	 (max-x (nth 2 rect))
