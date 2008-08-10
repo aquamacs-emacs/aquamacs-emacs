@@ -1,0 +1,21 @@
+*** lisp/recentf.el	06 Apr 2008 13:51:37 +0200	1.56.2.2
+--- lisp/recentf.el	10 Aug 2008 19:04:41 +0200	
+***************
+*** 394,400 ****
+    "Convert file NAME to absolute, and canonicalize it.
+  NAME is first passed to the function `expand-file-name', then to
+  `recentf-filename-handlers' to post process it."
+!   (recentf-apply-filename-handlers (expand-file-name name)))
+  
+  (defun recentf-include-p (filename)
+    "Return non-nil if FILENAME should be included in the recent list.
+--- 394,402 ----
+    "Convert file NAME to absolute, and canonicalize it.
+  NAME is first passed to the function `expand-file-name', then to
+  `recentf-filename-handlers' to post process it."
+!   (condition-case nil
+!       (recentf-apply-filename-handlers (expand-file-name name))
+!     (error name)))
+  
+  (defun recentf-include-p (filename)
+    "Return non-nil if FILENAME should be included in the recent list.
