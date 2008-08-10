@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tool-bar.el,v 1.33 2008/04/27 20:03:35 davidswelt Exp $ 
+;; Last change: $Id: aquamacs-tool-bar.el,v 1.34 2008/08/10 13:53:45 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -28,7 +28,7 @@
 
 
 
-
+(require 'aquamacs-tools)
 
 ; go over tool-bar-map to find out what's in there
 ;; unlik plist-get/put, these will work
@@ -68,6 +68,8 @@ This will update the keymap `aquamacs-menu-bar-showhide-toolbar-items-menu'
 if `tool-bar-map' has changed since the last call.  If not, this returns
 quickly."
 
+(when (boundp 'aquamacs-menu-bar-showhide-toolbar-items-menu)
+
   ;; has the tool-bar-map changed?
   (when (not (equal aquamacs-menu-bar-showhide-toolbar--hash
 		    (sxhash tool-bar-map)))
@@ -91,8 +93,10 @@ quickly."
 		   name) 
 		  :group 'Aquamacs :group 'tool-bar :version "22.0" 
 		  :type 'boolean))
-	      (add-to-list 'aquamacs-menu-bar-customize-options-to-save
-			   toggle-var 'append 'eq)
+	      (if (boundp 'aquamacs-menu-bar-customize-options-to-save)
+		  (add-to-list 'aquamacs-menu-bar-customize-options-to-save
+			       toggle-var 'append 'eq))
+	      
 	      (define-key aquamacs-menu-bar-showhide-toolbar-items-menu 
 		(vector toggle-var)
 		(eval
@@ -131,13 +135,13 @@ quickly."
 	    '(menu-item "--" nil)))))
      (reverse (cdr tool-bar-map))) 
     (define-key-after menu-bar-showhide-menu [small]
-      `(menu-item "Toolbar items" 
+      `(menu-item "Toolbar Items" 
 		  ,aquamacs-menu-bar-showhide-toolbar-items-menu
 		  :help "Select items to show in the toolbar"
 		  :visible ,(display-graphic-p))
       'showhide-tool-bar)
     (setq aquamacs-menu-bar-showhide-toolbar--hash
-	  (sxhash tool-bar-map))))
+	  (sxhash tool-bar-map)))))
 
 
 ;;  (remove-hook 'menu-bar-update-hook 'aquamacs-toolbar-update-showhide-menu)
