@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-print.el,v 1.14 2008/07/26 05:22:05 davidswelt Exp $
+;; Last change: $Id: mac-print.el,v 1.15 2008/08/10 13:32:13 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -52,10 +52,8 @@ face colors are printed."
   :group 'print)
 
 (defun aquamacs-delete-temp-files ()
-  (shell-command "rm -f /tmp/Aquamacs\\ Printing\\ * 2>/dev/null" 'shut-up))
-
-;; (aquamacs-delete-temp-files)
-
+  (with-temp-buffer
+    (shell-command "rm -f /tmp/Aquamacs\\ Printing\\ * 2>/dev/null" t nil)))
 
 (defun aquamacs-print ()
   "Prints the current buffer or, if the mark is active, the current region.
