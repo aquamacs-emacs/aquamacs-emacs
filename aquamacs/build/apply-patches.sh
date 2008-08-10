@@ -21,6 +21,7 @@
 
 PATCHES="mac-functions mac-fullscreen emacs-inline transparency
          dtww
+         dnd
          fix-configure test ui-strings menu-bar
          toolbar-png 
          custom-verbosity pretty-modeline 
