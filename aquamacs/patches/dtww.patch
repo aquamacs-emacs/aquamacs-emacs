@@ -731,6 +731,23 @@ diff -c -r1.1149.2.27 xdisp.c
   
   	  if (reached)
 ***************
+*** 6942,6948 ****
+        && IT_CHARPOS (*it) == to_charpos
+        && it->what == IT_CHARACTER
+        && it->nglyphs > 1
+!       && !it->truncate_lines_p
+        && it->current_x == it->last_visible_x - 1
+        && it->c != '\n'
+        && it->c != '\t'
+--- 7092,7098 ----
+        && IT_CHARPOS (*it) == to_charpos
+        && it->what == IT_CHARACTER
+        && it->nglyphs > 1
+!       && it->line_wrap != TRUNCATE
+        && it->current_x == it->last_visible_x - 1
+        && it->c != '\n'
+        && it->c != '\t'
+***************
 *** 8365,8371 ****
         max_height = min (total_height, max_height);
   
