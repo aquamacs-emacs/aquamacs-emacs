@@ -748,6 +748,16 @@ diff -c -r1.1149.2.27 xdisp.c
         && it->c != '\n'
         && it->c != '\t'
 ***************
+*** 7955,7960 ****
+--- 8105,8111 ----
+  	sprintf (name, " *Echo Area %d*", i);
+  	echo_buffer[i] = Fget_buffer_create (build_string (name));
+  	XBUFFER (echo_buffer[i])->truncate_lines = Qnil;
++ 	XBUFFER (echo_buffer[i])->word_wrap = Qt;
+  
+  	for (j = 0; j < 2; ++j)
+  	  if (EQ (old_buffer, echo_area_buffer[j]))
+***************
 *** 8365,8371 ****
         max_height = min (total_height, max_height);
   
