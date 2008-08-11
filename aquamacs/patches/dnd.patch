@@ -33,34 +33,3 @@ diff -c -r1.88.2.11 mac-win.el
       (let ((selection-range (mac-ae-selection-range ae))
   	  (search-text (mac-ae-text-for-search ae)))
         (cond (selection-range
-***************
-*** 2097,2105 ****
-  				      (concat msg active-input-string)))
-  	      (setq msg active-input-string))
-  	    (message "%s" msg)
-  	    (overlay-put mac-ts-active-input-overlay 'before-string nil))
-  	(move-overlay mac-ts-active-input-overlay
-! 		      (point) (point) (current-buffer))
-  	(overlay-put mac-ts-active-input-overlay 'before-string
-  		     active-input-string))
-        (mac-unread-string (funcall decode-fun confirmed coding)))
---- 2102,2120 ----
-  				      (concat msg active-input-string)))
-  	      (setq msg active-input-string))
-  	    (message "%s" msg)
-+ 	    (overlay-put mac-ts-active-input-overlay 'face nil)
-  	    (overlay-put mac-ts-active-input-overlay 'before-string nil))
-+ 	(overlay-put mac-ts-active-input-overlay 'face nil)
-+ 	(let ((overlays (overlays-in (point) (point)))
-+ 	      (face nil))
-+ 	  (while overlays
-+ 	    (setq face (overlay-get (car overlays) 'face))
-+ 	    (and face
-+ 		 (overlay-put mac-ts-active-input-overlay 'face face))
-+ 	    (setq overlays (cdr overlays))))
-  	(move-overlay mac-ts-active-input-overlay
-! 		      (point) (+ (point) (length active-input-string))
-! 		      (current-buffer))
-  	(overlay-put mac-ts-active-input-overlay 'before-string
-  		     active-input-string))
-        (mac-unread-string (funcall decode-fun confirmed coding)))
