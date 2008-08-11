@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.189 2008/08/03 21:07:45 champo Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.190 2008/08/11 13:40:49 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -212,33 +212,18 @@ un-Mac-like way when you select text and copy&paste it.")))
   (enable-one-buffer-one-frame-mode))
 ; (aquamacs-notice-user-settings)
 
-(defun aquamacs-wrap-string (str width)
-    (with-temp-buffer 
-      (insert str)
-      (let ((fill-column width))
-	(fill-region (point-min) (point-max)))
-      (buffer-string)))
-
-
 ;; redefine this
 ;; can be redefined at dump time
   (defun startup-echo-area-message ()
     (concat
-     (aquamacs-wrap-string
-      (propertize 
+     (propertize 
        "Aquamacs is based on GNU Emacs 22, a part of the GNU/Linux system."
        'face (list :family "Lucida Grande" :height 140))
-      (if window-system (floor (/ (frame-pixel-width) 8)) (frame-width)))
      ;;The GPL stipulates that the following message is shown.
-					;(aquamacs-wrap-string
-     (aquamacs-wrap-string
-      (propertize 	
-       (substitute-command-keys "
+     (propertize 	
+      (substitute-command-keys "
 It is Free Software: you can improve and redistribute it under the GNU General Public License, version 3 or later. Copyright (C) 2008 Free Software Foundation, Inc. (C) 2008 D. Reitter. No Warranty.") 
-       'face (list :family "Lucida Grande" :height 110)) 
-      ;; this one is rather ad-hoc, but should work:
-      (if window-system (floor (/ (frame-pixel-width) 5.75)) 
-	(frame-width)))))
+      'face (list :family "Lucida Grande" :height 110))))
 
 ;; (progn (message "%s" (startup-echo-area-message)) (sit-for 4))
 ;; 
@@ -560,8 +545,12 @@ yes-or-no prompts - y or n will do."
 
   (ats "osx_defaults ...")
 
-  (when (eq window-system 'mac)
+  (when (running-on-a-mac-p)
+  (ats "load..")
+
     (require 'osx_defaults)
+  (ats "setup...")
+
     (aquamacs-osx-defaults-setup)
     )
   (eval-when-compile
@@ -729,7 +718,7 @@ yes-or-no prompts - y or n will do."
 ;; on by default
 (if (and (fboundp 'mac-inline-input-method-mode) 
 	 (not (boundp 'mac-inline-input-method-missing)) 
-	 window-system)
+	 (running-on-a-mac-p))
     (progn
       (aquamacs-set-defaults '((mac-inline-input-method-mode t)))
       )
@@ -922,13 +911,15 @@ to the selected frame."
 
   (defvar mac-pass-option-to-system 'deprecated)
 
-
+   (ats "loading obof")
   (require 'one-buffer-one-frame)
+   (ats "enabling obof")
   (one-buffer-one-frame-mode 1)
 
   ;; necessary to ensure the value is saved with the Options
   ;; (setting the default)
   (aquamacs-set-defaults '((one-buffer-one-frame-mode t)))
+   (ats "obof done.")
 
 ;; ----------- MISC STUFF ----------------
 
@@ -1109,7 +1100,7 @@ to the selected frame."
   
 					; activate the modes
 
-
+   (ats "enabling pc-sel")
   (pc-selection-mode 1) 
   (show-paren-mode 1) 
   (blink-cursor-mode 1)
