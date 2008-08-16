@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: tabbar-window.el,v 1.45 2008/06/11 20:59:05 champo Exp $
+;; Revision: $Id: tabbar-window.el,v 1.46 2008/08/16 19:33:36 davidswelt Exp $
 
 (require 'tabbar)
 (require 'aquamacs-tools)
@@ -335,10 +335,15 @@ specified BUFFER belongs."
 	(tabset (tabbar-tab-tabset tab)))
     (not (remq tab (tabbar-tabs tabset)))))
 
+(defvar tabbar-retain-windows-when-buffer-killed '(not one-buffer-one-frame-mode)
+  "Expression that evaluates to t when windows are to be retained 
+... after their buffer is killed.")
+
 (defun tabbar-window-delete-tab (tab)
-  "Delete the named TAB.  first check whether there are other
- tabs remaining in the tabset.  If so, we move to the next tab if
- available, otherwise previous, before deleting."
+  "Delete the named TAB.  
+First check whether there are other tabs remaining in the tabset.
+If so, we move to the next tab if available, otherwise previous,
+before deleting."
   (let* ((tabset (tabbar-tab-tabset tab))
 	 (sel    (eq tab (tabbar-selected-tab tabset)))
 	 (wnumber (string-to-number (symbol-name (tabbar-tab-tabset tab))))
@@ -351,7 +356,8 @@ specified BUFFER belongs."
     (setq buflist (assq-delete-all buffer buflist))
     ;; delete window and its member in alist if no other tabs in tabset
     (if (tabbar-tabset-only-tab tab)
-	(progn (aquamacs-delete-window wind)
+	(progn (unless (eval tabbar-retain-windows-when-buffer-killed)
+		 (aquamacs-delete-window wind))
 	       (setq tabbar-window-alist (delq window-elt tabbar-window-alist)))
       ;; otherwise, if this is selected tab, select a neighbor
       (when sel
