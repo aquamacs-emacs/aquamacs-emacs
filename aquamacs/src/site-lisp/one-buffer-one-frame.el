@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.67 2008/08/16 19:34:14 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.68 2008/08/18 11:39:57 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -747,7 +747,7 @@ kill the buffer, too.  Ask user whether to kill it if appropriate."
       (abort-recursive-edit))
   ;; else, close tab or window+frame
   (if (and (boundp tabbar-mode) tabbar-mode)
-      (let ((tabbar-retain-windows-when-buffer-killed nil))
+      (let ((tabbar-retain-windows-when-tab-deleted nil))
 	(tabbar-close-tab))
     (close-current-window-asktosave)))
 
