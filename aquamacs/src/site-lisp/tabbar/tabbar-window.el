@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: tabbar-window.el,v 1.46 2008/08/16 19:33:36 davidswelt Exp $
+;; Revision: $Id: tabbar-window.el,v 1.47 2008/08/18 11:03:35 davidswelt Exp $
 
 (require 'tabbar)
 (require 'aquamacs-tools)
@@ -345,34 +345,37 @@ First check whether there are other tabs remaining in the tabset.
 If so, we move to the next tab if available, otherwise previous,
 before deleting."
   (let* ((tabset (tabbar-tab-tabset tab))
-	 (sel    (eq tab (tabbar-selected-tab tabset)))
 	 (wnumber (string-to-number (symbol-name (tabbar-tab-tabset tab))))
 	 (wind (window-number-get-window wnumber))
 	 (window-elt (assq wnumber tabbar-window-alist))
 	 (buflist (cdr window-elt))
-	 (buffer (tabbar-tab-value tab)))
+	 (buffer (tabbar-tab-value tab))
+	 (sel    (and (eq tab (tabbar-selected-tab tabset))
+		      ;; we need to ensure that the selected tab
+		      ;; corresponds to the currently shown buffer,
+		      ;; because we possibly haven't updated 
+		      ;; the tabset since the last change
+		      ;; (e.g. find-alternate-file)
+		      (eq (window-buffer wind) (tabbar-tab-value (tabbar-selected-tab (tabbar-current-tabset)))))))
     ;; remove tab from tabbar-window-alist before deleting, so it won't be
-    ;;   regenerated
+    ;; regenerated
     (setq buflist (assq-delete-all buffer buflist))
     ;; delete window and its member in alist if no other tabs in tabset
     (if (tabbar-tabset-only-tab tab)
 	(progn (unless (eval tabbar-retain-windows-when-buffer-killed)
 		 (aquamacs-delete-window wind))
 	       (setq tabbar-window-alist (delq window-elt tabbar-window-alist)))
-      ;; otherwise, if this is selected tab, select a neighbor
+      ;; otherwise, if this was selected tab, select a neighbor
       (when sel
 	(if (tabbar-tab-next tabset tab)
-;; 	    (tabbar-forward-tab)
 	    (tabbar-click-on-tab (tabbar-tab-next tabset tab))
-;; 	  (tabbar-backward-tab)))
 	  (tabbar-click-on-tab (tabbar-tab-next tabset tab 'before))))
       ;; put trimmed buffer list back into alist
       (setcdr window-elt buflist)
       ;; manually update tabsets now, to ensure that deleted tab is no
       ;;  longer displayed
       (tabbar-window-update-tabsets)
-      (tabbar-scroll tabset -1)
-      )))
+      (tabbar-scroll tabset -1))))
 
 (defun tabbar-window-close-tab (tab)
   "Remove tab and kill buffer if shown exclusively."
