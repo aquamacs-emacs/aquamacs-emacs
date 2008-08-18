@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: tabbar-window.el,v 1.47 2008/08/18 11:03:35 davidswelt Exp $
+;; Revision: $Id: tabbar-window.el,v 1.48 2008/08/18 11:40:29 davidswelt Exp $
 
 (require 'tabbar)
 (require 'aquamacs-tools)
@@ -335,7 +335,7 @@ specified BUFFER belongs."
 	(tabset (tabbar-tab-tabset tab)))
     (not (remq tab (tabbar-tabs tabset)))))
 
-(defvar tabbar-retain-windows-when-buffer-killed '(not one-buffer-one-frame-mode)
+(defvar tabbar-retain-windows-when-tab-deleted '(not one-buffer-one-frame-mode)
   "Expression that evaluates to t when windows are to be retained 
 ... after their buffer is killed.")
 
@@ -350,19 +350,22 @@ before deleting."
 	 (window-elt (assq wnumber tabbar-window-alist))
 	 (buflist (cdr window-elt))
 	 (buffer (tabbar-tab-value tab))
-	 (sel    (and (eq tab (tabbar-selected-tab tabset))
-		      ;; we need to ensure that the selected tab
-		      ;; corresponds to the currently shown buffer,
-		      ;; because we possibly haven't updated 
-		      ;; the tabset since the last change
-		      ;; (e.g. find-alternate-file)
-		      (eq (window-buffer wind) (tabbar-tab-value (tabbar-selected-tab (tabbar-current-tabset)))))))
+	 (sel    
+	  (and (eq tab (tabbar-selected-tab tabset))
+	       ;; we need to ensure that the selected tab
+	       ;; corresponds to the currently shown buffer,
+	       ;; because we possibly haven't updated 
+	       ;; the tabset since the last change
+	       ;; (e.g. find-alternate-file)
+	       (eq (window-buffer wind) 
+		   (tabbar-tab-value (tabbar-selected-tab 
+				      (tabbar-current-tabset)))))))
     ;; remove tab from tabbar-window-alist before deleting, so it won't be
     ;; regenerated
     (setq buflist (assq-delete-all buffer buflist))
     ;; delete window and its member in alist if no other tabs in tabset
     (if (tabbar-tabset-only-tab tab)
-	(progn (unless (eval tabbar-retain-windows-when-buffer-killed)
+	(progn (unless (eval tabbar-retain-windows-when-tab-deleted)
 		 (aquamacs-delete-window wind))
 	       (setq tabbar-window-alist (delq window-elt tabbar-window-alist)))
       ;; otherwise, if this was selected tab, select a neighbor
@@ -485,7 +488,8 @@ Turns on tabbar-mode if not already on."
 	    ;; add buffer to tabset-keep
 	    (tabbar-window-add-tab tabset-keep this-buffer t))
 	  ;; delete tab from prior tabset
-	  (tabbar-window-delete-tab this-tab))))))
+	  (let ((tabbar-retain-windows-when-tab-deleted nil))
+	    (tabbar-window-delete-tab this-tab)))))))
 
 (defun tabbar-window-merge-windows-in-frame (&optional frame window)
   "Merges tabs from all window in a frame into a single one
