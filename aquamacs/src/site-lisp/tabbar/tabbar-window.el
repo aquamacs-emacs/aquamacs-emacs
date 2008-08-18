@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: tabbar-window.el,v 1.48 2008/08/18 11:40:29 davidswelt Exp $
+;; Revision: $Id: tabbar-window.el,v 1.49 2008/08/18 11:46:13 davidswelt Exp $
 
 (require 'tabbar)
 (require 'aquamacs-tools)
@@ -489,7 +489,8 @@ Turns on tabbar-mode if not already on."
 	    (tabbar-window-add-tab tabset-keep this-buffer t))
 	  ;; delete tab from prior tabset
 	  (let ((tabbar-retain-windows-when-tab-deleted nil))
-	    (tabbar-window-delete-tab this-tab)))))))
+	    (tabbar-window-delete-tab this-tab))
+	  (unless (one-window-p 'nomini) (delete-other-windows)))))))
 
 (defun tabbar-window-merge-windows-in-frame (&optional frame window)
   "Merges tabs from all window in a frame into a single one
