@@ -22,7 +22,7 @@ diff -c -r1.88.2.11 mac-win.el
       (dolist (file-name (mac-ae-list ae nil 'undecoded-file-name))
         (if file-name
 ! 	  (with-selected-window
-! 	      (if (special-display-p (buffer-name (window-buffer (selected-window))))
+! 	      (if (and (window-live-p (selected-window)) (special-display-p (or (buffer-name (window-buffer (selected-window))) "")))
 ! 		  ;; are we in a special display window?
 ! 		  (previous-window nil 'no 'visible)
 ! 		(selected-window))
