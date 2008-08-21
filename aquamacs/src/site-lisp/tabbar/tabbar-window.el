@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: tabbar-window.el,v 1.49 2008/08/18 11:46:13 davidswelt Exp $
+;; Revision: $Id: tabbar-window.el,v 1.50 2008/08/21 10:24:27 davidswelt Exp $
 
 (require 'tabbar)
 (require 'aquamacs-tools)
@@ -151,7 +151,9 @@ Displayed buffers always get tabs."
 		    ;; put modified list back into tabbar-window-alist for this window
 		    (setcdr elt buflist))))
 
-	      (if (eq (length buflist) 1)
+	      (if (and (eq (length buflist) 1)
+		       ;; no other mode has installed another header line, right?
+		       (eq header-line-format tabbar-header-line-format))
 		  ;; if there is only 1 buffer associated with this tabset, then
 		  ;;  display no tabbar (no header line).
 		  ;; (add-to-list 'header-line-inhibit-window-list window)
@@ -478,7 +480,9 @@ Turns on tabbar-mode if not already on."
   (interactive)
   (tabbar-mode 1)
   (let ((tabset-keep (or tabset (tabbar-current-tabset)))
-	(all-tabsets (or source-tabsets (mapcar 'tabbar-get-tabset (tabbar-tabset-names)))))
+	(all-tabsets 
+	 (or source-tabsets 
+	     (mapcar 'tabbar-get-tabset (tabbar-tabset-names)))))
     ;; cycle through tabsets, except for current one
     (dolist (this-tabset all-tabsets)
       ;; for each tabset, cycle through buffers
@@ -489,8 +493,8 @@ Turns on tabbar-mode if not already on."
 	    (tabbar-window-add-tab tabset-keep this-buffer t))
 	  ;; delete tab from prior tabset
 	  (let ((tabbar-retain-windows-when-tab-deleted nil))
-	    (tabbar-window-delete-tab this-tab))
-	  (unless (one-window-p 'nomini) (delete-other-windows)))))))
+	    (tabbar-window-delete-tab this-tab)))))
+    (unless (one-window-p 'nomini) (delete-other-windows))))
 
 (defun tabbar-window-merge-windows-in-frame (&optional frame window)
   "Merges tabs from all window in a frame into a single one
@@ -500,7 +504,6 @@ shown in DEST-WINDOW."
    (tabbar-window-current-tabset window)
    (mapcar 'tabbar-window-current-tabset
 	   (cdr-safe (window-list frame 'no-minibuf window))))) ;; exclude current window
-
 
 (defun tabbar-desktop-tabsets-to-save ()
   (let* ((tabset-names (tabbar-tabset-names))
@@ -618,7 +621,7 @@ Update the templates if tabbar-template is currently nil."
     tabset))
 
 (defun tabbar-window-track-killed ()
-  "Hook run just before actually killing a buffer.
+  "Hook function run just before actually killing a buffer.
 In Tabbar mode, switch to an adjacent tab if available.  Delete the
 window if no other tabs exist.  Run once for each window where current
 tab is displayed."
@@ -634,7 +637,9 @@ tab is displayed."
 	     ;; ... and that the tab's window still exists ...
 	     (window-number-get-window wnumber)
 	     ;; ... and that there is currently a tabbar
-	     (eq header-line-format tabbar-header-line-format)
+	     ;; do not do this check: this function should
+	     ;; also remove the window if there is an alternative header line
+	     ;;     (eq header-line-format tabbar-header-line-format)
 	     (tabbar-window-delete-tab tab))))))
 
 
