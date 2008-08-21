@@ -24,7 +24,7 @@ diff -c -r1.88.2.11 mac-win.el
 ! 	  (with-selected-window
 ! 	      (if (and (window-live-p (selected-window)) (special-display-p (or (buffer-name (window-buffer (selected-window))) "")))
 ! 		  ;; are we in a special display window?
-! 		  (previous-window nil 'no 'visible)
+! 		  (progn (select-frame-set-input-focus (window-frame (previous-window nil 'no 'visible))) (previous-window nil 'no 'visible) )
 ! 		(selected-window))
 ! 	    (dnd-open-local-file
 ! 	     (concat "file://"
