@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-editing.el,v 1.7 2008/07/07 16:01:14 davidswelt Exp $
+;; Last change: $Id: aquamacs-editing.el,v 1.8 2008/08/22 22:28:26 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -45,7 +45,11 @@ are deleted."
   (save-excursion
 	(narrow-to-region (point) (mark))
     (goto-char (point-min))
-    (while (re-search-forward ".\\(\n\\)\\([^# *;:|!\n]\\|----\\)" nil t)
+    (while (re-search-forward ".\\(\n\\)\\([^\n]\\|----\\)" nil t)
+      (replace-match " " nil nil nil 1))
+    (goto-char (point-min))
+    (while (re-search-forward "[^\\.]\\( +\\)" nil t)
+      ;; todo: use a negated (sentence-end) here instead.
       (replace-match " " nil nil nil 1)))
   (message "Region unfilled. Stand-alone newlines deleted")
   (widen))
