@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: tabbar-window.el,v 1.50 2008/08/21 10:24:27 davidswelt Exp $
+;; Revision: $Id: tabbar-window.el,v 1.51 2008/08/24 01:53:25 davidswelt Exp $
 
 (require 'tabbar)
 (require 'aquamacs-tools)
@@ -503,7 +503,8 @@ shown in DEST-WINDOW."
   (tabbar-window-merge-windows
    (tabbar-window-current-tabset window)
    (mapcar 'tabbar-window-current-tabset
-	   (cdr-safe (window-list frame 'no-minibuf window))))) ;; exclude current window
+	   (cdr-safe (window-list frame 'no-minibuf window))))) 
+;; exclude current window
 
 (defun tabbar-desktop-tabsets-to-save ()
   (let* ((tabset-names (tabbar-tabset-names))
@@ -626,7 +627,8 @@ In Tabbar mode, switch to an adjacent tab if available.  Delete the
 window if no other tabs exist.  Run once for each window where current
 tab is displayed."
   (let* ((buffer (current-buffer))
- 	 (window-numbers-list (tabbar-windows-per-buffer buffer)))
+ 	 (window-numbers-list (tabbar-windows-per-buffer buffer))
+	 (upd nil))
     ;; loop over all tabsets that contain a tab for this buffer
      (dolist (wnumber window-numbers-list)
       (let* ((tabset (tabbar-get-tabset (number-to-string wnumber)))
@@ -636,10 +638,15 @@ tab is displayed."
 	(and tab
 	     ;; ... and that the tab's window still exists ...
 	     (window-number-get-window wnumber)
+	     ;; ... and that we have created all necessary tabs here
+	     ;; i.e. we don't over-zealously delete the window/frame
+	     ;; when there are actually other buffer(s) to be shown
+	     ;; as in find-alternate-file
+	     (or upd (tabbar-window-update-tabsets) (setq upd t))
 	     ;; ... and that there is currently a tabbar
 	     ;; do not do this check: this function should
 	     ;; also remove the window if there is an alternative header line
-	     ;;     (eq header-line-format tabbar-header-line-format)
+	     ;; (eq header-line-format tabbar-header-line-format)
 	     (tabbar-window-delete-tab tab))))))
 
 
