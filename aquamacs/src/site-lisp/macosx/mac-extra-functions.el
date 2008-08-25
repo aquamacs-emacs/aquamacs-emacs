@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.73 2008/07/10 13:58:36 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.74 2008/08/25 14:14:28 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -332,12 +332,6 @@ end tell"
 	(setq default-directory ddir)	; restore
 	)))
 
-(defvar shell-login-switch nil
-"Command-line switch to be used with the shell to get a login shell.
-If nil, a switch is automatically chosen depending on
-`shell-file-name'.
-This is relevant only for `mac-read-environment-vars-from-shell'.")
-
 (defun aq-flat-concat (list)
   "Produces a list of all non-nil elements of list."
   (let ((c (car-safe list))
@@ -375,27 +369,34 @@ specified in `shell-file-name'."
   (message "Shell: %s" shell-file-name)
 
   (let* ((shell (or shell-file-name "/bin/bash"))   ;; can shell-file-name be nil?
-	 (shell-login-switch
-	  (or shell-login-switch
-	     (if (string-match ".*/\\(ba\\|z\\)sh" shell)
-	       "-l"
-	       (if (string-match ".*/\\tcsh" shell)
-		   ""
-		 (if (string-match ".*/ksh" shell)
-		     "" ;; works for ksh
-		   (message "Could not retrieve login shell environment with login shell: %s" shell)
-		   ;; won't work for csh, because it doesn't take -l -c ...
-		   ))))))
-    ;; we call the process asynchronuously
-    ;; using start-process does not work for unknown reasons: 
-    ;; sometimes it doesn't get the environment.
-    (call-process shell nil
-		  0 nil
-		  "-l"
-		  "-c"
-		  (format "printenv >%s.tmp; mv %s.tmp %s" environment-temp-file environment-temp-file environment-temp-file))))
+	 (command (format "printenv >%s.tmp; mv %s.tmp %s"
+			  environment-temp-file 
+			  environment-temp-file 
+			  environment-temp-file)))
+
+    (if (string-match ".*/\\(ba\\|z\\)sh" shell)
+	(call-process shell nil
+		      0 nil
+		      "-l" "-c" command)
+      (if (or (string-match ".*/\\tcsh" shell)
+	      (string-match ".*/ksh" shell))
+	  (call-process shell nil
+			0 nil
+			;; we can't start tcsh as a login shell
+			;; because it doesn't accept -l in combination
+			;; with a command.
+			;; call-process-region wouldn't work because it's
+			;; not interactive.
+			"-c" command)
+	(message "Could not retrieve login shell environment with login shell: %s" shell)
+	;; won't work for csh, because it doesn't take -l -c ...
+	))))
+;; we call the process asynchronuously
+;; using start-process does not work for unknown reasons: 
+;; sometimes it doesn't get the environment.
 
 ;; (mac-read-environment-vars-from-shell)
+;; (sit-for 1)
 ;; (mac-read-environment-vars-from-shell-2)
 
 (defun mac-read-environment-vars-from-shell-2 ()
