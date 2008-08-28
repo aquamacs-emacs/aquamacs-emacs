@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.121 2008/08/03 21:07:45 champo Exp $
+;; Last change: $Id: osxkeys.el,v 1.122 2008/08/28 21:40:16 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -774,6 +774,7 @@ default."
     (define-key map '[(meta backspace)] 'aquamacs-backward-kill-word) 
     (define-key map '[(control backspace)] 'aquamacs-backward-kill-word) 
 
+
     (if (fboundp 'mac-font-panel-mode)
 	(define-key map `[(,osxkeys-command-key shift t)] 'mac-font-panel-mode))
 
@@ -819,6 +820,11 @@ mac-command-modifier osxkeys-command-key))))
 
 ;(aquamacs-install-low-priority-global-key-map osx-key-low-priority-key-map)
 
+
+
+;; ensure that we remap the right backward-kill-word 
+(define-key minibuffer-local-filename-completion-map 
+  [remap aquamacs-backward-kill-word] 'backward-kill-filename)
  
 
 (defvar osx-key--saved-low-priority-map (make-sparse-keymap)
