@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.122 2008/08/28 21:40:16 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.123 2008/08/31 23:37:00 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -206,27 +206,47 @@ With argument, do this that many times."
   (let ((x-select-enable-clipboard t))
     (yank)))
 
+
+
 (defcustom set-region-to-isearch-match t
   "Whether to set the region after searching.
 If non-nil, the mark will be set after searching with
-`aquamacs-repeat-isearch', `aquamacs-repeat-isearch-backward' and
-whenever isearch-mode is existed, such that the region matches the
-search match"
+`aquamacs-repeat-isearch', `aquamacs-repeat-isearch-backward'
+such that the region matches the search match, provided
+`transient-mark-mode' is on.
+If it is `always', it will also be set 
+whenever isearch-mode is exited, even if it was invoked with
+`isearch-foward' and friends."
   :group 'Aquamacs
-  :type 'boolean)
+  :type '(choice (const nil) (const t) (const always)))
 
 (defun aquamacs-set-region-to-search-match ()
   ;; match beginning / end aren't guaranteed to be defined here (e.g., in flyspell-mode)
   (when (and set-region-to-isearch-match
+	     (or aquamacs-isearching
+		 (eq set-region-to-isearch-match 'always))
 	     transient-mark-mode (not mark-active)) ; mark could have been set explicitly: don't change it
-      (set-mark isearch-other-end)))
+      (set-mark isearch-other-end))
+  (setq aquamacs-isearching))
 
+(defvar aquamacs-isearching nil)
+
+(defun aquamacs-isearch-forward ()
+  (interactive)
+  (setq aquamacs-isearching t)
+  (call-interactively 'isearch-forward))
+
+(defun aquamacs-isearch-backward ()
+  (interactive)
+  (setq aquamacs-isearching t)
+  (call-interactively 'isearch-backward)) 
 
 (defun aquamacs-repeat-isearch ()
   "Repeats the last string isearch.
 Set region to match if `set-region-to-isearch-match'.
 Wraps around after throwing and error once."
   (interactive)
+  (setq aquamacs-isearching t)
   (if set-region-to-isearch-match
     (progn
       (if (or (and (eq last-command 'aquamacs-repeat-isearch)
@@ -253,6 +273,7 @@ Wraps around after throwing and error once."
 Set region to match. 
 Wraps around after throwing and error once."
   (interactive)
+  (setq aquamacs-isearching t)
   (if set-region-to-isearch-match
       (progn
 	(if (and (eq last-command 'aquamacs-repeat-isearch-backward)
@@ -712,7 +733,7 @@ default."
     (define-key map `[(,osxkeys-command-key s)] 'mac-key-save-file)
     (define-key map `[(,osxkeys-command-key p)] 'aquamacs-print)
     (define-key map `[(,osxkeys-command-key l)] 'goto-line)
-    (define-key map `[(,osxkeys-command-key f)] 'isearch-forward)
+    (define-key map `[(,osxkeys-command-key f)] 'aquamacs-isearch-forward)
     (define-key map `[(,osxkeys-command-key g)] 'aquamacs-repeat-isearch)  
     (define-key map `[(,osxkeys-command-key shift g)] 'aquamacs-repeat-isearch-backward)
     (define-key map `[(,osxkeys-command-key e)] 'aquamacs-use-selection-for-find)
