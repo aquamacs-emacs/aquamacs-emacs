@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.190 2008/08/11 13:40:49 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.191 2008/09/03 03:13:49 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -334,16 +334,28 @@ if modified buffers exist."
 	 (or (null confirm-kill-emacs)
 	     (funcall confirm-kill-emacs "Really exit Emacs? "))
 	 (kill-emacs)))
-(defun aquamacs-mac-ae-quit-application (event)
-  "Quit the application Emacs with the Apple event EVENT."
-  (interactive "e")
-  (let ((ae (mac-event-ae event)))
-    (unwind-protect
-	(aquamacs-save-buffers-kill-emacs)
-      ;; Reaches here if the user has canceled the quit.
-      (mac-resume-apple-event ae -128))))
+;; (defun aquamacs-mac-ae-quit-application (event)
+;;   "Quit the application Emacs with the Apple event EVENT."
+;;   (interactive "e")
+;; ;;  (aquamacs-save-buffers-kill-emacs)
+;;   (let ((ae (mac-event-ae event)))
+;;     (unwind-protect ; IT APPEARS THAT THIS CAN'T BE COMPILED.
+;; 	(aquamacs-save-buffers-kill-emacs)
+;;       ;; Reaches here if the user has canceled the quit.
+;;       (message "Quit application: canceled.")
+;;       (mac-resume-apple-event ae -128))))
 
- ;; workaround for people who still call this in their .emacs
+;; unwind-protect form is non-functional for some reason
+;; potentially because of byte-compiling this file.
+;; using `eval' doesn't work...
+ (defun aquamacs-mac-ae-quit-application (event)
+   "Quit the application Emacs with the Apple event EVENT."
+   (interactive "e")
+   (aquamacs-save-buffers-kill-emacs)
+   (mac-resume-apple-event ae -128))
+
+
+;; workaround for people who still call this in their .emacs
   (defun mwheel-install ()
     (message "mwheel-install ignored in Aquamacs- mouse wheel support is present by default.")
     t)
@@ -1214,8 +1226,12 @@ listed here."
     (define-key mac-apple-event-map [core-event quit-application]
       'aquamacs-mac-ae-quit-application))
 
+; (define-key mac-apple-event-map [core-event quit-application]      'mac-ae-quit-application)
+
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; temporary stuff for releases according to admin/FOR-RELEASE
+  ;; Temporary stuff for releases according to admin/FOR-RELEASE
 
   (setq undo-ask-before-discard nil)
 ;; http://sourceforge.net/tracker/index.php?func=detail&aid=1295333&group_id=138078&atid=740475				      
