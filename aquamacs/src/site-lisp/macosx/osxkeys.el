@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.123 2008/08/31 23:37:00 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.124 2008/09/05 19:55:34 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -684,8 +684,6 @@ behavior)."
     (define-key map `[(control left)] 'beginning-of-line)
     (define-key map `[(control right)] 'end-of-line)
 
-    (define-key map [(home)] 'beginning-of-buffer)
-    (define-key map [(end)] 'end-of-buffer)
     map))
 
 (defvar osx-key-low-priority-key-map
@@ -795,6 +793,10 @@ default."
     (define-key map '[(meta backspace)] 'aquamacs-backward-kill-word) 
     (define-key map '[(control backspace)] 'aquamacs-backward-kill-word) 
 
+    ;; some modes attempt to override them
+    ;; so we'll define these here.
+    (define-key map [(home)] 'beginning-of-buffer)
+    (define-key map [(end)] 'end-of-buffer)
 
     (if (fboundp 'mac-font-panel-mode)
 	(define-key map `[(,osxkeys-command-key shift t)] 'mac-font-panel-mode))
