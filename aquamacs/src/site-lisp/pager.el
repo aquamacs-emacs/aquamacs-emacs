@@ -1,7 +1,7 @@
 ;;; pager.el --- windows-scroll commands
-;;; Version 2.2 - 06-02-23
+;;; Version 2.3 -  2008-09-08
 ;;; Copyright (C) 1992-1997 Mikael Sjödin (mic@docs.uu.se)
-;;; Copyright (C) 2005-2006 David Reitter (david.reitter@gmail.com)
+;;; Copyright (C) 2005-2006,2008 David Reitter (david.reitter@gmail.com)
 ;;;
 ;;; Author: Mikael Sjödin  --  mic@docs.uu.se
 ;;;
@@ -54,6 +54,8 @@
 
 ;;; ----------------------------------------------------------------------
 ;;; Versions:
+;;; 2.3 Fixed page-wise scrolling for long wrapped lines with
+;;;     visual-line-mode turned on
 ;;; 2.2 Fixed page-wise scrolling for long (wrapped) lines
 ;;; 2.1 Fixed scrolling from top of buffer. 
 ;;;     allow scrolling to top / end of buffer to be compatible
@@ -138,7 +140,8 @@ keep the `pager-temporary-goal-column'")
     (set-window-start (selected-window) (point) t )
     )
   (vertical-motion lines)
-  (move-to-column pager-temporary-goal-column))
+  (if (bolp)  ;; we could be in a very long line
+      (move-to-column pager-temporary-goal-column)))
 ;; ??? (put 'pager-scroll-screen 'CUA 'move)
 
 ;; ----------------------------------------------------------------------
