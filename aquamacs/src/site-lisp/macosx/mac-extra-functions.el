@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.74 2008/08/25 14:14:28 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.75 2008/09/09 21:19:47 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -176,13 +176,11 @@ right there as well."
      (call-interactively (function mac-key-save-file-as))))
  
  
-(defun mac-key-save-file-as (filename &optional wildcards )
+(defun mac-key-save-file-as ()
   "Save buffer to a file, selecting file by dialog"
-  (interactive
-   (let ((last-nonmenu-event nil))
-     (find-file-read-args "Save buffer to file: " nil)))
-  (write-file filename))
-
+  (interactive)
+  (let ((last-nonmenu-event nil))
+    (call-interactively 'write-file)))
 
 ;; when saving a file, set its creator code
 
