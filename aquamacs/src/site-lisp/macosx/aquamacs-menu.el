@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.168 2008/08/09 22:12:58 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.169 2008/09/10 21:29:13 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -1188,12 +1188,15 @@ the previous frame size."
 		      :help "Move the current Tab to New Frame")
 		(list 'removetab
 		      'menu-item 
-		      '(format "Remove %s" 
-			       (if tabbar-mode "Tab" "Window")) 
+		      '(format "Hide Tab" ) 
 		      'tabbar-delete-current-tab
 		      :enable '(and (menu-bar-menu-frame-live-and-visible-p)
-				    (menu-bar-non-minibuffer-window-p))
-		      :help "Remove the current Tab without killing the buffer.")
+				    (menu-bar-non-minibuffer-window-p)
+				    (or (not tabbar-mode)
+					(not (tabbar-tabset-only-tab
+					      (tabbar-selected-tab
+					       (tabbar-current-tabset t))))))
+		      :help "Remove the current Window without killing the buffer.")
 		(list 'mergetabs
 		      'menu-item
 		      "Merge All Frames       " 

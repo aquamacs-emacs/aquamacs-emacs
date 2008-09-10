@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: aquamacs-tabbar.el,v 1.42 2008/08/09 22:12:20 davidswelt Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.43 2008/09/10 21:30:02 davidswelt Exp $
 
 ;; load original tabbar-mode
 
@@ -244,7 +244,7 @@ if specified), in current window."
 ;; keymap for tabbar context menu
 (defvar tabbar-context-menu-map
   (let ((map (make-sparse-keymap)))
-    (define-key map [removetab] (cons "Remove Tab" 'tabbar-delete-clicked-tab))
+    (define-key map [removetab] (cons "Hide Tab" 'tabbar-delete-clicked-tab))
     (define-key map [duptab]
       (cons "Duplicate Tab in New Frame" 'tabbar-new-frame-with-clicked-buffer))
     (define-key map [movetab]
