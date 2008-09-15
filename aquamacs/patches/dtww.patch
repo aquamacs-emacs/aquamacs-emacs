@@ -753,7 +753,7 @@ diff -c -r1.1149.2.27 xdisp.c
   	sprintf (name, " *Echo Area %d*", i);
   	echo_buffer[i] = Fget_buffer_create (build_string (name));
   	XBUFFER (echo_buffer[i])->truncate_lines = Qnil;
-+ 	XBUFFER (echo_buffer[i])->word_wrap = Qt;
++ 	/* XBUFFER (echo_buffer[i])->word_wrap = Qt; seems to lead to hang during redraw. disabled until fix available*/
   
   	for (j = 0; j < 2; ++j)
   	  if (EQ (old_buffer, echo_area_buffer[j]))
