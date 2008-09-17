@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.191 2008/09/03 03:13:49 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.192 2008/09/17 02:52:58 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -447,10 +447,10 @@ yes-or-no prompts - y or n will do."
   ; (aquamacs-ask-for-confirmation "asd" t)
  
   (defun aquamacs-repl-yes-or-no-p (text)
-    "Like `yes-or-no-p' - use that function instead."
+    "Like `old-yes-or-no-p' - use that function instead."
     (aquamacs-ask-for-confirmation text t))
   (defun aquamacs-y-or-n-p (text)
-    "Like `y-or-n-p' - use that function instead."
+    "Like `old-y-or-n-p' - use that function instead."
     (aquamacs-ask-for-confirmation text nil))
 
   (unless (fboundp 'old-yes-or-no-p)
