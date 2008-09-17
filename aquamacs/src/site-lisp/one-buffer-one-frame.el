@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.68 2008/08/18 11:39:57 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.69 2008/09/17 02:52:34 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -736,8 +736,8 @@ even if it's the only visible frame."
 ;; this is what's bound to Apple-W
 ;; and what can called programmatically (instead of bury-buffer, etc.)
 (defun close-buffer ()
-  "Closes the tab, window or frame and maybe kills buffer.
-Closes the selected tab, window or frame showing the current buffer.
+  "Deletes the tab, window or frame and maybe kills buffer.
+Deletes the selected tab, window or frame showing the current buffer.
 If the tab, window or frame is the only one showing the buffer,
 kill the buffer, too.  Ask user whether to kill it if appropriate."
   (interactive)
@@ -773,28 +773,28 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
       (select-frame-set-input-focus (selected-frame))
 					; ask before killing
       (with-current-buffer (window-buffer)
-      (when (and ;(eq (current-buffer) (window-buffer)) 
+	(when (and ;(eq (current-buffer) (window-buffer)) 
 					; only if a document is shown
-		 killable
-		 (eq   (string-match "\\*.*\\*" (buffer-name)) nil)
-		 (eq   (string-match " SPEEDBAR" (buffer-name)) nil)) 
+	       killable
+	       (eq   (string-match "\\*.*\\*" (buffer-name)) nil)
+	       (eq   (string-match " SPEEDBAR" (buffer-name)) nil)) 
 					; has no minibuffer!
-	(if (and
-	     (or buffer-file-name buffer-offer-save)
-	     (buffer-modified-p))
-		   ;; a lot of buffers (e.g. dired) may be modified,
-		   ;; but have no file name
-	    (if (y-or-n-p (format "Save buffer %s to file before closing window? " (buffer-name)))
-		(progn
-		  (save-buffer)
-		  (message "File saved.")
-		  )
-	      ;; mark as not modified, so it will be killed for sure
-	      (set-buffer-modified-p nil)
-	      )
-	  (message ""))))
-  
-  
+	  (if (and
+	       (or buffer-file-name buffer-offer-save)
+	       (buffer-modified-p))
+	      ;; a lot of buffers (e.g. dired) may be modified,
+	      ;; but have no file name
+	      (if (y-or-n-p 
+		   (format "Save buffer %s to file before closing window? "
+			   (buffer-name)))
+		  (progn
+		    (save-buffer)
+		    (message "File saved.")
+		    )
+		;; mark as not modified, so it will be killed for sure
+		(set-buffer-modified-p nil)
+		)
+	    (message ""))))
 	
     ;; only if not a *special* buffer
     ;; if the buffer is shown in another window , just delete the current win
@@ -802,7 +802,6 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
        (let* ((this-buf (window-buffer))
 	     (this-buf-name (buffer-name this-buf)))
 	(if
-	 
 	    (if killable 
 		(kill-buffer this-buf)    
 	      t
@@ -821,7 +820,7 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
       (progn
 	(if killable (kill-buffer (window-buffer wind)))
 	(when (window-live-p wind)
-	  (if (or force-delete-frame ;; called via frame closer button
+	  (if (or force-delete-frame ;; still needed?
 		  (window-dedicated-p wind))
 	      (aquamacs-delete-frame (window-frame wind) ) 
 					; delete window/frame, hide if
@@ -829,12 +828,7 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
 	    ;; else
 	    (progn
 	      (select-window wind)
-	      (if (one-window-p 'nomini 'only_selected_frame)
-		  (if (not killable)
-		      ;; if it's not killable, we need to jump to the
-		      ;; next buffer
-		      (next-buffer))
-		(aquamacs-delete-window wind) ) ) ) ) ) ) ) ))
+	      (aquamacs-delete-window wind) ) ) ) ) ) ) ) )   
 
 (if window-system
 (defun handle-delete-frame (event)
@@ -848,11 +842,18 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
 	(and (frame-first-window frame) 
 	     (window-live-p (frame-first-window frame))
 	     (select-window (frame-first-window frame))
-	     (setq delw (cons (frame-first-window frame) delw))
-	     (or (close-current-window-asktosave 'force-delete-window) t)
+	     (setq delw (cons (frame-first-window frame) delw)
+		   delb (window-buffer))
+	     (or (let ((last-nonmenu-event))
+		   (close-buffer)
+		   ;; (close-current-window-asktosave nil)
+		   ) t)
 	     (frame-live-p frame)
-	     (next-window (selected-window) 'nominibuf frame)
-	     (not (memq  (frame-first-window frame) delw))))))) 
+	     ;; the above closing action will have deleted the window, so
+	     ;; we have moved on.
+	     ;; ensure that this is the case (i.e. no cancels)
+	     (not (and (memq  (frame-first-window frame) delw)
+		       (eq (window-buffer) delb))))))))
 
   
 
