@@ -316,6 +316,15 @@ even beep.)"
 	   (goto-char end))))
      (point))))
 
+;; to do: we should really delete everything
+;; that is not read-only, rather than just
+;; exclude a prompt
+
+(defun skip-read-only-prompt (&optional max)
+  (while (and (get-char-property (point) 'read-only)
+	      (< (point) (or max (point-max)))
+    (forward-char))))
+
 (defun kill-whole-visual-line (&optional arg)
   "Kill current visual line.
 With prefix arg, kill that many lines starting from the current line.
@@ -335,24 +344,31 @@ If arg is zero, kill current line but exclude the trailing newline."
 	 ;; could have been a kill command, in which case the text
 	 ;; before point needs to be prepended to the current kill
 	 ;; ring entry and the text after point appended.  Also, we
-	 ;; need to use save-excursion to avoid copying the same text
+	 ;; neehd to use save-excursion to avoid copying the same text
 	 ;; twice to the kill ring in read-only buffers.
 	 (save-excursion
 	   ;; delete in one go
-	   (kill-region (progn (vertical-motion 0) (point))
+	   (kill-region (progn (vertical-motion 0) 
+			       (skip-read-only-prompt) (point))
 			(progn (vertical-motion 1) (point)))
 	   ))
 	((< arg 0)
 	 (save-excursion
 	   (kill-region (point) (progn (end-of-visual-line) (point))))
 	 (kill-region (point)
-		      (progn (vertical-motion (1+ arg))
-			     (unless (bobp) (backward-char))
-			     (point))))
+		      (progn
+			(vertical-motion (1+ arg))
+			(unless (bobp) (backward-char))
+			(point))))
 	(t
 	 (save-excursion
-	   (kill-region (progn (vertical-motion 0) (point))
-			(progn (vertical-motion arg) (point)))))))
+	   (kill-region (let ((ep (point)))
+			  (vertical-motion 0) 
+			  (skip-read-only-prompt ep)
+			  (point))
+			(progn
+			  (vertical-motion arg) 
+			  (point)))))))
 
 ;; mark functions for CUA
 (dolist (cmd
