@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.192 2008/09/17 02:52:58 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.193 2008/09/17 16:05:19 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -221,8 +221,7 @@ un-Mac-like way when you select text and copy&paste it.")))
        'face (list :family "Lucida Grande" :height 140))
      ;;The GPL stipulates that the following message is shown.
      (propertize 	
-      (substitute-command-keys "
-It is Free Software: you can improve and redistribute it under the GNU General Public License, version 3 or later. Copyright (C) 2008 Free Software Foundation, Inc. (C) 2008 D. Reitter. No Warranty.") 
+      (substitute-command-keys "It is Free Software: you can improve and redistribute it under the GNU General Public License, version 3 or later. Copyright (C) 2008 Free Software Foundation, Inc. (C) 2008 D. Reitter. No Warranty.") 
       'face (list :family "Lucida Grande" :height 110))))
 
 ;; (progn (message "%s" (startup-echo-area-message)) (sit-for 4))
