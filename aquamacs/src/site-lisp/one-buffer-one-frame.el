@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.71 2008/09/19 14:55:50 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.72 2008/09/19 21:00:32 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -727,7 +727,7 @@ even if it's the only visible frame."
       ;; decide not to delete / make invisible
       ;; then switch buffer
       ;; to whatever was shown previously (does this work well???)
-      (next-buffer-here))))
+      (previous-buffer-here))))
 
 
 (if window-system
