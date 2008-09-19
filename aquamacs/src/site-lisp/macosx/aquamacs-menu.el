@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.169 2008/09/10 21:29:13 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.170 2008/09/19 14:47:34 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -287,9 +287,11 @@ customization buffer."
 
 ;; redefine this
 (define-key-after menu-bar-file-menu [kill-buffer]
-  `(menu-item "Close Buffer                            " 
-	      close-buffer
-	      :keys ,(aq-binding (key-binding [menu-bar file kill-buffer]))
+  `(menu-item (format "Close Window %s        "  
+		      (if (or tabbar-mode one-buffer-one-frame-mode) 
+			  "and Buffer" "                "))
+	      close-window
+	      :keys , (aq-binding (key-binding [menu-bar file kill-buffer]))
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
 			   (menu-bar-non-minibuffer-window-p))
 	      :help "Discard current buffer") 'separator-save)

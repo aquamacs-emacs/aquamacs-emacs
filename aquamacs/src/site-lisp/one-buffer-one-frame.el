@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.69 2008/09/17 02:52:34 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.70 2008/09/19 14:47:53 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -735,7 +735,7 @@ even if it's the only visible frame."
  
 ;; this is what's bound to Apple-W
 ;; and what can called programmatically (instead of bury-buffer, etc.)
-(defun close-buffer ()
+(defun close-window ()
   "Deletes the tab, window or frame and maybe kills buffer.
 Deletes the selected tab, window or frame showing the current buffer.
 If the tab, window or frame is the only one showing the buffer,
@@ -845,7 +845,7 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
 	     (setq delw (cons (frame-first-window frame) delw)
 		   delb (window-buffer))
 	     (or (let ((last-nonmenu-event))
-		   (close-buffer)
+		   (close-window)
 		   ;; (close-current-window-asktosave nil)
 		   ) t)
 	     (frame-live-p frame)
