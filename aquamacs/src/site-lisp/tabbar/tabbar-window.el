@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: tabbar-window.el,v 1.51 2008/08/24 01:53:25 davidswelt Exp $
+;; Revision: $Id: tabbar-window.el,v 1.52 2008/09/19 21:14:40 davidswelt Exp $
 
 (require 'tabbar)
 (require 'aquamacs-tools)
@@ -370,11 +370,22 @@ before deleting."
 	(progn (unless (eval tabbar-retain-windows-when-tab-deleted)
 		 (aquamacs-delete-window wind))
 	       (setq tabbar-window-alist (delq window-elt tabbar-window-alist)))
-      ;; otherwise, if this was selected tab, select a neighbor
+
+      ;; otherwise, if this was selected tab, select the buffer that will be selected
+      ;; by Emacs after getting killing the current buffer
+      ;; if this one is not one of the tabs, we select an existing tab.
+      ;; we MUST select one actively here.
       (when sel
-	(if (tabbar-tab-next tabset tab)
-	    (tabbar-click-on-tab (tabbar-tab-next tabset tab))
-	  (tabbar-click-on-tab (tabbar-tab-next tabset tab 'before))))
+	(if (assq (other-buffer buffer nil (window-frame wind)) buflist)
+	    (progn
+	      (switch-to-buffer (other-buffer))
+	      ;; this avoids flicker
+	      (tabbar-display-update))
+	  (when sel
+	    (if (tabbar-tab-next tabset tab)
+		(tabbar-click-on-tab (tabbar-tab-next tabset tab))
+	      (tabbar-click-on-tab (tabbar-tab-next tabset tab 'before))))))
+
       ;; put trimmed buffer list back into alist
       (setcdr window-elt buflist)
       ;; manually update tabsets now, to ensure that deleted tab is no
