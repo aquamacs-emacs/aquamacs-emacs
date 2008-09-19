@@ -50,6 +50,8 @@ controlled with the new customization variable
 
 \item Auto Frame Styles are turned on automatically when the user chooses to retain frame settings (colors, fonts) for a mode or as a default.
 
+\item After deleting a tab, the previously selected buffer in a window is selected when possible, rather than the rightmost tab.  This resembles tabs in Firefox rather than tabs in Safari.  It is more consistent with Emacs and makes life easier for users of packages that expect the previous buffer on the stack to be selected rather than what's in the tab that happens to be at the right edge.
+
 \item Tabs and Windows can now be removed without killing the buffer shown (Window or tab context menu: Hide Tab, Emacs function `tabbar-delete-current-tab').
 
 \item Command-W (`close-window') will now delete the selected window and, if there is only one window in the frame, the frame.  When `one-buffer-one-frame-mode' and 'tabbar-mode' are off, it will not kill the buffer (or even ask to save it).   The frame's red ``close'' button will close all windows in the frame.  This should be convenient for traditional Emacs users.  \emph{Note that C-h k can still be used to just kill a buffer without affecting its window.} 
@@ -58,6 +60,8 @@ controlled with the new customization variable
 
 \item When `one-buffer-one-frame-mode' is off and tabs are on, killing the buffer (e.g., with C-h k) will now not remove the window and frame any longer (unless Command-W (`close-window') is used.  
 Reported by Ian Eure.
+
+\item Burying buffers does not always lead to deleting a window any longer when `one-buffer-one-frame-mode' is turned on.
 
 \item `find-alternate-file' (C-x C-v) now works correctly when tabs are used.  Reported by Ian Eure.
 
