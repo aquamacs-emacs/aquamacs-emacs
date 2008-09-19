@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.72 2008/09/19 21:00:32 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.73 2008/09/19 21:28:03 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -532,21 +532,24 @@ the current window is switched to the new buffer."
 ; (ad-disable-advice 'bury-buffer 'around 'always-dedicated)
  (defadvice bury-buffer (around always-dedicated (&optional buffer) 
 				activate)
-   ad-do-it
+   (let ((the-buffer (current-buffer)))
+
+     ad-do-it
 
    ;; from the documentation of bury-buffer:
    ;; Also, if buffer is nil or omitted, remove the current buffer from the
    ;; selected window if it is displayed there.
 
-   (if (and one-buffer-one-frame
-	    (null buffer)) ;; only if nil
+     (if (and one-buffer-one-frame
+	      (null buffer)) ;; only if nil
        ;; delete the frame if necessary
        ;; only delete a whole frame with only the window in it
        ;; because extra windows are usually created with pop-to-buffer etc.
        ;; so a package expects them to exist to do something with them.
        ;; if a frame was created, however, this heuristic doesn't work out
        ;; seems to work with SLIME like this...
-       (delete-window-if-created-for-buffer buffer 'only-frame))))
+
+	 (delete-window-if-created-for-buffer the-buffer 'only-frame))))
 
 ;; (defadvice pop-to-buffer (around always-dedicated (buf &rest args) 
 ;; 				 protect activate)
@@ -696,7 +699,6 @@ even if it's the only visible frame."
   ;; used by osxkeys, too
   ;; as of now, we're always forcing the deletion of a window if the user requests it.
   ;; 
- 
   (let ((elt (car (member (cons win buf-name)
 			  aquamacs-newly-opened-frames))))
     (if (and (or (not buf-name) (not (same-window-p buf-name)))
