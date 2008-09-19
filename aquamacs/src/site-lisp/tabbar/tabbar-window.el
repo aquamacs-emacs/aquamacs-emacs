@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: tabbar-window.el,v 1.52 2008/09/19 21:14:40 davidswelt Exp $
+;; Revision: $Id: tabbar-window.el,v 1.53 2008/09/19 21:28:43 davidswelt Exp $
 
 (require 'tabbar)
 (require 'aquamacs-tools)
@@ -378,7 +378,8 @@ before deleting."
       (when sel
 	(if (assq (other-buffer buffer nil (window-frame wind)) buflist)
 	    (progn
-	      (switch-to-buffer (other-buffer))
+	      (let ((one-buffer-one-frame))
+		(switch-to-buffer (other-buffer)))
 	      ;; this avoids flicker
 	      (tabbar-display-update))
 	  (when sel
