@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.70 2008/09/19 14:47:53 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.71 2008/09/19 14:55:50 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -737,19 +737,25 @@ even if it's the only visible frame."
 ;; and what can called programmatically (instead of bury-buffer, etc.)
 (defun close-window ()
   "Deletes the tab, window or frame and maybe kills buffer.
-Deletes the selected tab, window or frame showing the current buffer.
-If the tab, window or frame is the only one showing the buffer,
-kill the buffer, too.  Ask user whether to kill it if appropriate."
+Deletes the selected tab, window or frame showing the current
+buffer.  In `tabbar-mode' or in `one-buffer-one-frame-mode', and if
+the tab, window or frame is the only one showing the buffer, kill
+the buffer, too.  Ask user whether to kill it if appropriate."
   (interactive)
   ;; quit current command if in minibuffer
   (when (minibuffer-window-active-p 
        (minibuffer-window (selected-frame)))
       (abort-recursive-edit))
   ;; else, close tab or window+frame
-  (if (and (boundp tabbar-mode) tabbar-mode)
-      (let ((tabbar-retain-windows-when-tab-deleted nil))
-	(tabbar-close-tab))
-    (close-current-window-asktosave)))
+
+  (cond 
+   ((and (boundp tabbar-mode) tabbar-mode)
+    (let ((tabbar-retain-windows-when-tab-deleted nil))
+      (tabbar-close-tab)))
+   (one-buffer-one-frame-mode
+    (close-current-window-asktosave))
+   (t ;; if neither OBOF nor tabs, then we don't kill the buffer
+    (aquamacs-delete-window))))
 
 (defun close-current-window-asktosave (&optional force-delete-frame)
   "Delete current buffer, close selected window (and its frame
