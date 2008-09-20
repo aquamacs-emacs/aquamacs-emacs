@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.170 2008/09/19 14:47:34 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.171 2008/09/20 13:04:52 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -897,6 +897,18 @@ both existing buffers and buffers that you subsequently create."
 ;;       (message "Spell-checking (flyspell) on. M-x flyspell-buffer to check buffer."))))
 
 ;; (add-hook 'flyspell-mode-hook 'aquamacs-flyspell-maybe-check-buffer)
+
+;; the text properties menu appears dysfunctional, to the naive user
+;; these properties aren't commonly saved to file
+;; things like "flush right" don't work properly (variable-width fonts)
+;; indentation actually modifies the buffer text as it seems
+;; display faces leads to face customization rather than face setting
+;; as would be expected in the Edit menu
+(define-key menu-bar-edit-menu [props] nil)
+(define-key menu-bar-edit-menu [separator-fill] nil)
+
+
+
 
 ;; HELP MENU
 
