@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.75 2008/09/09 21:19:47 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.76 2008/09/20 03:05:10 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -262,10 +262,10 @@ Finder. "
 
 ;; copied here from osx-key-mode.el by Seiji Zenitani
 ;; modified to work with OS X 10.4 by David Reitter
-(defun mac-key-show-in-finder ()
+(defun mac-key-show-in-finder (&optional file)
   "Show the open buffer in Finder"
   (interactive)
-  (if (stringp (buffer-file-name))
+  (if (stringp (or file (buffer-file-name)))
       (do-applescript
        (format "
 tell application \"Finder\"
@@ -280,10 +280,10 @@ end tell"
                    (replace-regexp-in-string
                     "\\\\" "\\\\\\\\"
                     (encode-coding-string
-                     (posix-file-name-to-mac (buffer-file-name))
+                     (posix-file-name-to-mac (or file (buffer-file-name)))
                      selection-coding-system))
                  (encode-coding-string
-                  (posix-file-name-to-mac (buffer-file-name))
+                  (posix-file-name-to-mac (or file (buffer-file-name)))
                   selection-coding-system))
                ))
     (message "No existing file shown in buffer!")
