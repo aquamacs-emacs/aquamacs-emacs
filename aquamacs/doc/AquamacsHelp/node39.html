@@ -27,30 +27,30 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html653"
+<A NAME="tex2html652"
   HREF="node40.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html649"
+<A NAME="tex2html648"
   HREF="node38.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html643"
+<A NAME="tex2html642"
   HREF="node38.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html651"
+<A NAME="tex2html650"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html654"
+<B> Next:</B> <A NAME="tex2html653"
   HREF="node40.html">Changes 1.4</A>
-<B> Up:</B> <A NAME="tex2html650"
+<B> Up:</B> <A NAME="tex2html649"
   HREF="node38.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html644"
+<B> Previous:</B> <A NAME="tex2html643"
   HREF="node38.html">Aquamacs Emacs: What's New</A>
- &nbsp; <B>  <A NAME="tex2html652"
+ &nbsp; <B>  <A NAME="tex2html651"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
@@ -117,7 +117,11 @@ Code by Kim F. Storm.
 
 <P>
 </LI>
-<LI>A new customization variable `set-region-to-isearch-match' has been introduced so that users can turn off a relatively new option that lets Aquamacs set the region to the latest search match (Command-F/G and Shift-Command-G).
+<LI>isearch, when entered with C-s or C-r, will not cause the region to be
+set to the search match any longer; the region is, however, set when
+isearch is entered with A-f, A-g or A-G.  The behavior can be
+controlled with the new customization variable
+`set-region-to-isearch-match'.
 
 <P>
 </LI>
@@ -133,11 +137,28 @@ Code by Kim F. Storm.
 
 <P>
 </LI>
-<LI>Tabs and Windows can now be removed without killing the buffer shown (Window or tab context menu, Emacs function `tabbar-delete-current-tab').
+<LI>After deleting a tab, the previously selected buffer in a window is selected when possible, rather than the rightmost tab.  This resembles tabs in Firefox rather than tabs in Safari.  It is more consistent with Emacs and makes life easier for users of packages that expect the previous buffer on the stack to be selected rather than what's in the tab that happens to be at the right edge.
 
 <P>
 </LI>
-<LI>When `one-buffer-one-frame-mode' is off and tabs are on, killing the buffer will now not remove the window and frame any longer (unless Command-W (`close-buffer') is used.  Reported by Ian Eure.
+<LI>Tabs and Windows can now be removed without killing the buffer shown (Window or tab context menu: Hide Tab, Emacs function `tabbar-delete-current-tab').
+
+<P>
+</LI>
+<LI>Command-W (`close-window') will now delete the selected window and, if there is only one window in the frame, the frame.  When `one-buffer-one-frame-mode' and 'tabbar-mode' are off, it will not kill the buffer (or even ask to save it).   The frame's red ``close'' button will close all windows in the frame.  This should be convenient for traditional Emacs users.  <I>Note that C-h k can still be used to just kill a buffer without affecting its window.</I> 
+
+<P>
+</LI>
+<LI>Clicking the red `close' button will now attempt to kill all buffers shown and remove the frame when `one-buffer-one-frame-mode' or 'tabbar-mode' are on.   Because the mouse was used to start the action, dialog boxes are now shown in this situation to ask about saving the buffers, rather than minibuffer prompts. 
+
+<P>
+</LI>
+<LI>When `one-buffer-one-frame-mode' is off and tabs are on, killing the buffer (e.g., with C-h k) will now not remove the window and frame any longer (unless Command-W (`close-window') is used.  
+Reported by Ian Eure.
+
+<P>
+</LI>
+<LI>Burying buffers does not always lead to deleting a window any longer when `one-buffer-one-frame-mode' is turned on.
 
 <P>
 </LI>
@@ -145,7 +166,19 @@ Code by Kim F. Storm.
 
 <P>
 </LI>
+<LI>Command-Backspace (`kill-whole-visual-line') will not work in Comint and related modes that display a read-only prompt at the beginning of the line.
+
+<P>
+</LI>
+<LI>When applied to a region, `unfill' (Edit menu, `unfill-paragraph-or-region') will be more flexible in recognizing paragraph boundaries.  Specifically, paragraphs with indented lines will be correctly recognized.  Just mark the paragraph before pressing M-Q!
+
+<P>
+</LI>
 <LI>Searching for keywords in the Help menu now includes the Emacs Manual and the Emacs Lisp Reference.
+
+<P>
+</LI>
+<LI>Improvements for Aquamacs calls from the command line: files to be opened do not need to exist, and they are now shown in the most appropriate window available (or in a new one).
 
 <P>
 </LI>
@@ -167,7 +200,25 @@ Reported by Jos&#233; Figueroa-O'Farrill.
 
 <P>
 </LI>
+<LI>Page-wise scrolling where a single line filled more than a screen page has been fixed.
+Reported by Mac Pigman.
+
+<P>
+</LI>
+<LI>Command-Shift-S (A-S) now leads to a file selector dialog that shows the file name associated with the current buffer, as the menu item has done all along.
+Reported by Nathaniel Cunningham.
+
+<P>
+</LI>
 <LI>Further minor bug fixes.
+
+<P>
+</LI>
+<LI>Many thanks for your donations since the last version was published.  Specifically, we would like to thank William Ziemer for donating a Mac Mini as our project server.  
+
+<P>
+If you haven't done so lately, please consider making a donation to the project at <TT><A NAME="tex2html33"
+  HREF="http://aquamacs.org/donate">http://aquamacs.org/donate</A></TT>. Your donations are essential in keeping the project going-we have no other source of income from Aquamacs.  We'd like to do great things with Aquamacs, but that'll only happen with your support. 
 
 <P>
 </LI>
@@ -176,35 +227,35 @@ Reported by Jos&#233; Figueroa-O'Farrill.
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html653"
+<A NAME="tex2html652"
   HREF="node40.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html649"
+<A NAME="tex2html648"
   HREF="node38.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html643"
+<A NAME="tex2html642"
   HREF="node38.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html651"
+<A NAME="tex2html650"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html654"
+<B> Next:</B> <A NAME="tex2html653"
   HREF="node40.html">Changes 1.4</A>
-<B> Up:</B> <A NAME="tex2html650"
+<B> Up:</B> <A NAME="tex2html649"
   HREF="node38.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html644"
+<B> Previous:</B> <A NAME="tex2html643"
   HREF="node38.html">Aquamacs Emacs: What's New</A>
- &nbsp; <B>  <A NAME="tex2html652"
+ &nbsp; <B>  <A NAME="tex2html651"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 <I>David</I>
-<BR><I>2008-08-18</I>
+<BR><I>2008-09-19</I>
 </ADDRESS>
 </BODY>
 </HTML>
