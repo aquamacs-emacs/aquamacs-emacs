@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs version check
  
-;; Last change: $Id: check-for-updates.el,v 1.27 2008/07/13 14:15:04 davidswelt Exp $
+;; Last change: $Id: check-for-updates.el,v 1.28 2008/09/21 23:25:35 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -50,13 +50,17 @@
 	following anonymous connection data: an anonymous but
 	user-specific ID, the number of program starts, the
 	versions of Aquamacs and OS X and the processor type that
-	you're using.  Just as during any access to an Internet
+	you're using.  We also receive information about some
+	settings: currently, this is whether you've got
+	`one-buffer-one-frame-mode' and `tabbar-mode'
+	turnedon.  Just as during any access to an Internet
 	server, your IP address and the time of your inquiry may
-	be stored, too. This information is used to produce
+	be stored, too.  This information is used to produce
 	statistics; we will delete the original data after a
 	period of time. The statistics help us develop the
-	application further - for example, we may decide to drop
-	support for a particular operating system version.
+	application further -- for example, we may decide to
+	continue support for a particular operating system
+	version.  
 
 	If you like to turn this check off, add this to your file
 	~/Library/Preferences/Aquamacs Emacs/Preferences.el:
@@ -280,7 +284,8 @@ and show user a message if there is."
 			  "&seq=" (number-to-string (or calls 0))
 			  "&beta=" (number-to-string (or aquamacs-user-likes-beta 0)) 
 			  "&ver=" (url-encode-string (concat (or aquamacs-version "unknown") (or aquamacs-minor-version "-")))
-				 
+			  "&obof=" (if one-buffer-one-frame-mode "1" "0")
+			  "&tab=" (if tabbar-mode "1" "0")
 			  "&os=" 
 			  (url-encode-string  
 			   (replace-regexp-in-string 
