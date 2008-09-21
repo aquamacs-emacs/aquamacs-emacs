@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.73 2008/09/19 21:28:03 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.74 2008/09/21 20:23:37 champo Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -549,7 +549,7 @@ the current window is switched to the new buffer."
        ;; if a frame was created, however, this heuristic doesn't work out
        ;; seems to work with SLIME like this...
 
-	 (delete-window-if-created-for-buffer the-buffer 'only-frame))))
+	 (delete-window-if-created-for-buffer the-buffer 'only-frame)))))
 
 ;; (defadvice pop-to-buffer (around always-dedicated (buf &rest args) 
 ;; 				 protect activate)
