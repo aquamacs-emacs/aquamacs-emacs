@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: tabbar-window.el,v 1.53 2008/09/19 21:28:43 davidswelt Exp $
+;; Revision: $Id: tabbar-window.el,v 1.54 2008/09/21 02:13:29 davidswelt Exp $
 
 (require 'tabbar)
 (require 'aquamacs-tools)
@@ -382,10 +382,9 @@ before deleting."
 		(switch-to-buffer (other-buffer)))
 	      ;; this avoids flicker
 	      (tabbar-display-update))
-	  (when sel
-	    (if (tabbar-tab-next tabset tab)
-		(tabbar-click-on-tab (tabbar-tab-next tabset tab))
-	      (tabbar-click-on-tab (tabbar-tab-next tabset tab 'before))))))
+	  (if (tabbar-tab-next tabset tab)
+	      (tabbar-click-on-tab (tabbar-tab-next tabset tab))
+	    (tabbar-click-on-tab (tabbar-tab-next tabset tab 'before)))))
 
       ;; put trimmed buffer list back into alist
       (setcdr window-elt buflist)
