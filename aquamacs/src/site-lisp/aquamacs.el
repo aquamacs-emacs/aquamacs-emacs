@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.198 2008/09/24 14:57:18 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.199 2008/09/24 16:17:53 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -232,7 +232,7 @@ un-Mac-like way when you select text and copy&paste it.")))
     (unless (equal init-file-user nil) ;; no .emacs was read (-q option)
       (aquamacs-load-scratch-file))
     (aquamacs-cua-warning)
-    (osx-key-mode-command-key-warning)
+    (and (fboundp 'osx-key-mode-command-key-warning) (osx-key-mode-command-key-warning))
     (make-help-mode-not-use-frame-fitting))
 
   (if (eq tabbar-mode 'default)
