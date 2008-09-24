@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.200 2008/09/24 17:40:36 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.201 2008/09/24 18:30:39 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -582,7 +582,11 @@ yes-or-no prompts - y or n will do."
   
 
   ;; tabbar needs to be defined before osxkeys
-  (require 'aquamacs-tabbar)
+  (if (running-on-a-mac-p)
+      (require 'aquamacs-tabbar) 
+    ;; aquamacs-tabbar doesn't work without windows
+    (require 'tabbar))
+
   (aquamacs-set-defaults '((tabbar-mode t)))
   (setq tabbar-mode 'default) ;; will be set later on
 
@@ -1374,14 +1378,16 @@ information given would otherwise be irrelevant to Aquamacs users.
 
 ;; finish reading environment vars
 
-(unless (mac-read-environment-vars-from-shell-2)    
-  (message "Warning - environment variable reading delayed.")
-  ; wait one second
-  ;; we should not delay this via run-with-timer, because
-  ;; some code may depend on the PATH (exec-path!) being set correctly,
-  ;; for example the (autoloaded!) ispell package.
-  (sit-for 1)
-  (mac-read-environment-vars-from-shell-2))
+(when (running-on-a-mac-p)
+  (unless (mac-read-environment-vars-from-shell-2)    
+    (message "Warning - environment variable reading delayed.")
+					; wait one second
+    ;; we should not delay this via run-with-timer, because
+    ;; some code may depend on the PATH (exec-path!) being set correctly,
+    ;; for example the (autoloaded!) ispell package.
+    (sit-for 1)
+    (mac-read-environment-vars-from-shell-2)))
+
 ) ;; aquamacs-setup
  
 
