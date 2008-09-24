@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.197 2008/09/24 02:47:06 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.198 2008/09/24 14:57:18 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -31,8 +31,8 @@
 ;; Copyright (C) 2005,2006, 2007, 2008: David Reitter
  
 (defvar aq-starttime 0)
-    ;; (defun ats (txt) 
-;;         (message "ATS %s:  %s" (time-since aq-starttime) txt))
+;(defun ats (txt) 
+;  (message "ATS %s:  %s" (time-since aq-starttime) txt))
 
 
 (defun ats (txt) nil)
@@ -535,8 +535,7 @@ yes-or-no prompts - y or n will do."
 
   ;; Find-file may open a new frame
   (if window-system
-      (global-set-key [remap find-file] 'aquamacs-find-file)  
-    )
+      (global-set-key [remap find-file] 'aquamacs-find-file))
   
   
   (defun font-exists-p (fontorfontset)
@@ -611,6 +610,7 @@ yes-or-no prompts - y or n will do."
 ;; Page scrolling
 
 
+  (ats "pager")
   (require 'pager)
   ;; overwrites CUA stuff
  
@@ -631,7 +631,7 @@ yes-or-no prompts - y or n will do."
   ;;(global-set-key [C-down]      'pager-row-down)
  
 
-
+  (ats "aquamacs-editing")
   (require 'aquamacs-editing)
 
 ;; so here's a SLOW workaround
@@ -1096,7 +1096,7 @@ to the selected frame."
 ;; (progn  (message (startup-echo-area-message)) (sleep-for 5))
 ;; buffer-file-name
 
-(if (string= "mac" window-system)
+(if (running-on-a-mac-p)
       (defun use-fancy-splash-screens-p () t))
 
         
@@ -1203,7 +1203,7 @@ listed here."
 			  aquamacs-customization-version-id)
   
   (defvar aquamacs-menu-bar-options-to-save
-    (append '(line-number-mode 
+    (append `(line-number-mode 
 	      column-number-mode 
 	      size-indication-mode
 	      cua-mode show-paren-mode
@@ -1215,12 +1215,15 @@ listed here."
 	      one-buffer-one-frame-mode 
 	      aquamacs-styles-mode
 	      mac-option-modifier
-	      aquamacs-additional-fontsets ;; retain for backwards compatibility
+	      ,(and (boundp 'aquamacs-additional-fontsets)
+		   aquamacs-additional-fontsets)
+		   ;; retain for backwards compatibility
+
 	      )
 	    (mapcar (lambda (x) 
 		      (emkm-name (car x))) 
-		    emulate-mac-keyboard-mode-maps)
-	    ))
+		    (and (boundp 'emulate-mac-keyboard-mode-maps)
+			 emulate-mac-keyboard-mode-maps))))
 
   (defvar aquamacs-menu-bar-customize-options-to-save
     '(scroll-bar-mode
