@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.76 2008/09/20 03:05:10 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.77 2008/09/24 14:55:18 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -288,7 +288,7 @@ end tell"
                ))
     (message "No existing file shown in buffer!")
     ))
-
+; (mac-key-show-in-finder "/tmp/")
 
 (defvar aquamacs-mac-add-standard-directories-added-flag nil)
 ; (setq aquamacs-mac-add-standard-directories-added-flag nil)
@@ -399,7 +399,7 @@ specified in `shell-file-name'."
 
 (defun mac-read-environment-vars-from-shell-2 ()
   "Reads temporary file if it exists."
-  (if (file-readable-p environment-temp-file)
+  (if (and environment-temp-file (file-readable-p environment-temp-file))
       (prog1
 	  (with-temp-buffer
 	    (condition-case nil
