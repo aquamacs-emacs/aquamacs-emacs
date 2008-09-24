@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.196 2008/09/24 01:32:21 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.197 2008/09/24 02:47:06 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -75,6 +75,7 @@ Separate paths from file names with --."
   ;; make sure there are no old customizations around
   ;; N.B.: if no customization file is present, 
   ;; aquamacs-customization-version-id is 0 or nil
+  ;; activated by aquamacs-load-preferences
 
   (defun aquamacs-activate-features-new-in-this-version ()
 
@@ -168,9 +169,12 @@ Separate paths from file names with --."
 	  (aq-replace-in-list text-mode-hook 'turn-on-longlines 'turn-on-word-wrap)
 	(error nil)))
 
-;; todo before 0.9.9:
-;; how to deal with tool-bar-mode set in user's custom-file?
-;; for now, ignore it
+    (when (< aquamacs-customization-version-id 160)
+      ;; did the user not explicitly set obof or tabbar?
+      (when (eq tabbar-mode 'default)
+	  (custom-set-variables '(tabbar-mode nil)))
+      (when (eq one-buffer-one-frame-mode 'default)
+	  (custom-set-variables '(one-buffer-one-frame-mode t))))
 
 ;; Print warnings / compatibility options
     
@@ -230,6 +234,13 @@ un-Mac-like way when you select text and copy&paste it.")))
     (aquamacs-cua-warning)
     (osx-key-mode-command-key-warning)
     (make-help-mode-not-use-frame-fitting))
+
+  (if (eq tabbar-mode 'default)
+      (setq tabbar-mode (default-value 'tabbar-mode)))
+  (if (eq one-buffer-one-frame-mode 'default)
+      (setq one-buffer-one-frame-mode 
+	    (default-value 'one-buffer-one-frame-mode)))
+
   (enable-one-buffer-one-frame-mode)
   (tabbar-mode (if tabbar-mode 1 0)))
 ; (aquamacs-notice-user-settings)
@@ -573,7 +584,8 @@ yes-or-no prompts - y or n will do."
 
   ;; tabbar needs to be defined before osxkeys
   (require 'aquamacs-tabbar)
-  (tabbar-mode 1) ;; enabled by default
+  (aquamacs-set-defaults '((tabbar-mode t)))
+  (setq tabbar-mode 'default) ;; will be set later on
 
   ;; Mac OS X specific stuff 
 
@@ -947,10 +959,13 @@ to the selected frame."
 
    (ats "loading obof")
   (require 'one-buffer-one-frame)
-
   ;; necessary to ensure the value is saved with the Options
   ;; (setting the default)
   (aquamacs-set-defaults '((one-buffer-one-frame-mode t)))
+  ;; so we can detect changes to the variable by the user.
+  (setq one-buffer-one-frame-mode 'default) 
+  ;; will be set later on
+
    (ats "obof done.")
 
 ;; ----------- MISC STUFF ----------------
