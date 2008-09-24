@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.199 2008/09/24 16:17:53 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.200 2008/09/24 17:40:36 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -590,21 +590,17 @@ yes-or-no prompts - y or n will do."
 
   (ats "osx_defaults ...")
 
-  (when (running-on-a-mac-p)
   (ats "load..")
+  (require 'osx_defaults) ;; always load this to define various things
 
-    (require 'osx_defaults)
-  (ats "setup...")
+  (if (running-on-a-mac-p)
+      (progn
+	(ats "setup...")
+	(aquamacs-osx-defaults-setup))
+    (eval-when-compile
+      (aquamacs-osx-defaults-setup)))
 
-    (aquamacs-osx-defaults-setup)
-    )
-  (eval-when-compile
-    (require 'osx_defaults)
-    (aquamacs-osx-defaults-setup)
-    )
   (ats "osx_defaults done")
-
-
 
 
 ;; Page scrolling
