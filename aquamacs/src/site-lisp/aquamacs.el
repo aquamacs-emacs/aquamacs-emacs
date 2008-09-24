@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.195 2008/09/20 03:36:05 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.196 2008/09/24 01:32:21 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -230,7 +230,8 @@ un-Mac-like way when you select text and copy&paste it.")))
     (aquamacs-cua-warning)
     (osx-key-mode-command-key-warning)
     (make-help-mode-not-use-frame-fitting))
-  (enable-one-buffer-one-frame-mode))
+  (enable-one-buffer-one-frame-mode)
+  (tabbar-mode (if tabbar-mode 1 0)))
 ; (aquamacs-notice-user-settings)
 
 ;; redefine this
@@ -572,6 +573,7 @@ yes-or-no prompts - y or n will do."
 
   ;; tabbar needs to be defined before osxkeys
   (require 'aquamacs-tabbar)
+  (tabbar-mode 1) ;; enabled by default
 
   ;; Mac OS X specific stuff 
 
@@ -945,8 +947,6 @@ to the selected frame."
 
    (ats "loading obof")
   (require 'one-buffer-one-frame)
-   (ats "enabling obof")
-  (one-buffer-one-frame-mode 1)
 
   ;; necessary to ensure the value is saved with the Options
   ;; (setting the default)
