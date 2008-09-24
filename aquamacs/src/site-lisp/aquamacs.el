@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.202 2008/09/24 18:34:33 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.203 2008/09/24 18:44:59 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -587,7 +587,7 @@ yes-or-no prompts - y or n will do."
     ;; aquamacs-tabbar doesn't work without windows
     (require 'tabbar))
 
-  (aquamacs-set-defaults '((tabbar-mode t)))
+  (aquamacs-set-defaults `((tabbar-mode ,(if (running-on-a-mac-p) t nil))))
   (setq tabbar-mode 'default) ;; will be set later on
 
   ;; Mac OS X specific stuff 
