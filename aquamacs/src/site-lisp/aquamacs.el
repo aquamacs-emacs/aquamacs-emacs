@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.201 2008/09/24 18:30:39 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.202 2008/09/24 18:34:33 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -82,8 +82,8 @@ Separate paths from file names with --."
     ;; aquamacs-customization-version-id contains the version id
     ;; of aquamacs when the customization file was written
 
-    (when (not (equal init-file-user nil)) ;; no .emacs was read (-q option)
-      (and aquamacs-customization-version-id
+    (when (and (not (equal init-file-user nil)) ;; no .emacs was read (-q option)
+	       aquamacs-customization-version-id
 	       (> aquamacs-customization-version-id 0))
 
     (if (< aquamacs-customization-version-id 092.5)
