@@ -255,7 +255,7 @@ point is moved to the end of the visual line."
   (if word-wrap
       (progn
 	(vertical-motion 1)
-	  (backward-char 1))
+	(skip-chars-backward "\r\n" (- (point) 1)))
     (end-of-line)))
 
 ;; this code based on simple.el
