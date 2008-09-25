@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.203 2008/09/24 18:44:59 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.204 2008/09/25 13:13:32 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -1203,7 +1203,7 @@ listed here."
 			  aquamacs-customization-version-id)
   
   (defvar aquamacs-menu-bar-options-to-save
-    (append `(line-number-mode 
+    (append '(line-number-mode 
 	      column-number-mode 
 	      size-indication-mode
 	      cua-mode show-paren-mode
@@ -1214,12 +1214,10 @@ listed here."
 	      mac-inline-input-method-mode
 	      one-buffer-one-frame-mode 
 	      aquamacs-styles-mode
-	      mac-option-modifier
-	      ,(and (boundp 'aquamacs-additional-fontsets)
-		   aquamacs-additional-fontsets)
+	      mac-option-modifier)
+	    (and (boundp 'aquamacs-additional-fontsets)
+		   '(aquamacs-additional-fontsets))
 		   ;; retain for backwards compatibility
-
-	      )
 	    (mapcar (lambda (x) 
 		      (emkm-name (car x))) 
 		    (and (boundp 'emulate-mac-keyboard-mode-maps)
