@@ -34,6 +34,7 @@ PATCHES="mac-functions mac-fullscreen emacs-inline transparency
          cus-edit-switch
          ediff-workaround
          faces-speedup
+         face-remapping
          calm-startup startup-load-preferences
          available-screen mouse-button launch-browser
          minibuffer-filename
