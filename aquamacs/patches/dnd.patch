@@ -1,9 +1,4 @@
 this patch will select a more appropriate window to show the opened file in.  It also works with non-existent files, unlike the original.
-Index: mac-win.el
-===================================================================
-RCS file: /sources/emacs/emacs/lisp/term/Attic/mac-win.el,v
-retrieving revision 1.88.2.11
-diff -c -r1.88.2.11 mac-win.el
 *** lisp/term/mac-win.el	23 Apr 2008 08:56:55 -0000	1.88.2.11
 --- lisp/term/mac-win.el	23 Aug 2008 02:20:42 -0000
 ***************
@@ -18,7 +13,7 @@ diff -c -r1.88.2.11 mac-win.el
       (let ((selection-range (mac-ae-selection-range ae))
   	  (search-text (mac-ae-text-for-search ae)))
         (cond (selection-range
---- 1729,1750 ----
+--- 1815,1838 ----
     (let ((ae (mac-event-ae event)))
       (dolist (file-name (mac-ae-list ae nil 'undecoded-file-name))
         (if file-name
@@ -35,9 +30,47 @@ diff -c -r1.88.2.11 mac-win.el
 ! 			   (previous-window nil 'no 'visible))) 
 ! 			 (previous-window nil 'no 'visible))
 ! 		sel-win)
-! 	    ;; unlike dnd-open-local-file, find-file
-! 	    ;; is happy with new files
-! 	    (find-file file-name)))))
+! 	    (dnd-open-local-file
+! 	     (concat "file://"
+! 		     (mapconcat 'url-hexify-string
+! 				(split-string file-name "/") "/")) nil
+! 				'accept-new-files)))))
       (let ((selection-range (mac-ae-selection-range ae))
   	  (search-text (mac-ae-text-for-search ae)))
         (cond (selection-range
+*** lisp/dnd.el	06 Apr 2008 07:51:37 -0400	1.15.2.3
+--- lisp/dnd.el	25 Sep 2008 10:04:37 -0400	
+***************
+*** 158,164 ****
+  	(when (file-readable-p try-f) try-f)))))
+  
+  
+! (defun dnd-open-local-file (uri action)
+    "Open a local file.
+  The file is opened in the current window, or a new window if
+  `dnd-open-file-other-window' is set.  URI is the url for the file,
+--- 158,164 ----
+  	(when (file-readable-p try-f) try-f)))))
+  
+  
+! (defun dnd-open-local-file (uri action &optional accept-new-files)
+    "Open a local file.
+  The file is opened in the current window, or a new window if
+  `dnd-open-file-other-window' is set.  URI is the url for the file,
+***************
+*** 170,176 ****
+  `dnd-open-remote-url'. ACTION is ignored."
+  
+    (let* ((f (dnd-get-local-file-name uri t)))
+!     (if (and f (file-readable-p f))
+  	(progn
+  	  (if dnd-open-file-other-window
+  	      (find-file-other-window f)
+--- 170,176 ----
+  `dnd-open-remote-url'. ACTION is ignored."
+  
+    (let* ((f (dnd-get-local-file-name uri t)))
+!     (if (and f (or accept-new-files (file-readable-p f)))
+  	(progn
+  	  (if dnd-open-file-other-window
+  	      (find-file-other-window f)
