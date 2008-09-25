@@ -9,6 +9,11 @@
 
 \item Tabs are now on by default in new installations. ``Show buffers in new frames'' ( one-buffer-one-frame-mode) is off by default.  Use the Options menu if you'd like to configure different settings.  (That users who had previously installed and configured Aquamacs will retain their chosen settings.)
  
+\item Aquamacs will now start up again for use in a Terminal (-nw argument).
+Reported by Ian Soboroff.
+
+\item Dragging and dropping several files or opening several files from a terminal with Aquamacs with tabbar-mode will now lead to all files being shown in tabs, not just the last one.
+
 \end{itemize}
 
 \subsection{Changes---1.5}
@@ -60,11 +65,11 @@ controlled with the new customization variable
 
 \item Tabs and Windows can now be removed without killing the buffer shown (Window or tab context menu: Hide Tab, Emacs function `tabbar-delete-current-tab').
 
-\item Command-W (`close-window') will now delete the selected window and, if there is only one window in the frame, the frame.  When `one-buffer-one-frame-mode' and 'tabbar-mode' are off, it will not kill the buffer (or even ask to save it).   The frame's red ``close'' button will close all windows in the frame.  This should be convenient for traditional Emacs users.  \emph{Note that C-h k can still be used to just kill a buffer without affecting its window.} 
+\item Command-W (`close-window') will now delete the selected window and, if there is only one window in the frame, the frame.  When `one-buffer-one-frame-mode' and 'tabbar-mode' are off, it will not kill the buffer (or even ask to save it).   The frame's red ``close'' button will close all windows in the frame.  This should be convenient for traditional Emacs users.  \emph{Note that C-x k can still be used to just kill a buffer without affecting its window.} 
 
 \item Clicking the red `close' button will now attempt to kill all buffers shown and remove the frame when `one-buffer-one-frame-mode' or 'tabbar-mode' are on.   Because the mouse was used to start the action, dialog boxes are now shown in this situation to ask about saving the buffers, rather than minibuffer prompts. 
 
-\item When `one-buffer-one-frame-mode' is off and tabs are on, killing the buffer (e.g., with C-h k) will now not remove the window and frame any longer (unless Command-W (`close-window') is used.  
+\item When `one-buffer-one-frame-mode' is off and tabs are on, killing the buffer (e.g., with C-x k) will now not remove the window and frame any longer (unless Command-W (`close-window') is used.  
 Reported by Ian Eure.
 
 \item Burying buffers does not always lead to deleting a window any longer when `one-buffer-one-frame-mode' is turned on.
