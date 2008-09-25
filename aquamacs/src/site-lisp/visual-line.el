@@ -236,8 +236,8 @@ to the desired margin."
 (defun beginning-of-visual-line ()
   "Move point to the beginning of the current line.
 If `word-wrap' is nil, we move to the beginning of the buffer
-line; otherwise, point is moved to the beginning of the visual
-line."
+line (as in `beginning-of-line'); otherwise, point is moved to
+the beginning of the visual line."
   (interactive)
   (if (bobp)
       (signal 'beginning-of-buffer nil))
@@ -247,8 +247,9 @@ line."
 
 (defun end-of-visual-line ()
   "Move point to the end of the current line.
-If `word-wrap' is nil, we move to the end of the line; otherwise,
-point is moved to the end of the visual line."
+If `word-wrap' is nil, we move to the end of the line (as in
+`beginning-of-line'); otherwise, point is moved to the end of the
+visual line."
   (interactive)
   (if (eobp)
       (signal 'end-of-buffer nil))
@@ -284,37 +285,44 @@ If the buffer is read-only, Emacs will beep and refrain from deleting
 the line, but put the line in the kill ring anyway.  This means that
 you can use this command to copy text from a read-only buffer.
 \(If the variable `kill-read-only-ok' is non-nil, then this won't
-even beep.)"
+even beep.)
+
+``Line'' is defined as visual line, from the leftmost to the
+rightmost position of a single visual line, if `word-wrap' is
+non-nil.  Otherwise, this function behaves exactly like
+`kill-line'."
   (interactive "P")
-  (kill-region 
-   (point)
-   ;; It is better to move point to the other end of the
-   ;; kill before killing.  That way, in a read-only
-   ;; buffer, point moves across the text that is copied
-   ;; to the kill ring.  The choice has no ef
-   ;; now that undo records the value of point from before
-   ;; the command was run.
-   (progn
-     (if arg
-	 (vertical-motion (prefix-numeric-value arg))
-       (if (eobp)
-	   (signal 'end-of-buffer nil))
-       (let ((end
-	      (save-excursion
-		(vertical-motion 1) 
-		; we're possibly one too far
-		(skip-chars-backward "\r\n" (- (point) 1))
-		(point))))
-	 (if (or (save-excursion
-		   ;; If trailing whitespace is visible,
-		   ;; don't treat it as nothing.
-		   (unless show-trailing-whitespace
-		     (skip-chars-forward " \t" end))
-		   (= (point) end))
-		 (and kill-whole-line (bolp)))
-	     (vertical-motion 1)
-	   (goto-char end))))
-     (point))))
+  (if word-wrap
+      (kill-region 
+       (point)
+       ;; It is better to move point to the other end of the
+       ;; kill before killing.  That way, in a read-only
+       ;; buffer, point moves across the text that is copied
+       ;; to the kill ring.  The choice has no ef
+       ;; now that undo records the value of point from before
+       ;; the command was run.
+       (progn
+	 (if arg
+	     (vertical-motion (prefix-numeric-value arg))
+	   (if (eobp)
+	       (signal 'end-of-buffer nil))
+	   (let ((end
+		  (save-excursion
+		    (vertical-motion 1) 
+					; we're possibly one too far
+		    (skip-chars-backward "\r\n" (- (point) 1))
+		    (point))))
+	     (if (or (save-excursion
+		       ;; If trailing whitespace is visible,
+		       ;; don't treat it as nothing.
+		       (unless show-trailing-whitespace
+			 (skip-chars-forward " \t" end))
+		       (= (point) end))
+		     (and kill-whole-line (bolp)))
+		 (vertical-motion 1)
+	       (goto-char end))))
+	 (point)))
+    (kill-line arg)))
 
 ;; to do: we should really delete everything
 ;; that is not read-only, rather than just
@@ -330,45 +338,54 @@ even beep.)"
 With prefix arg, kill that many lines starting from the current line.
 If arg is negative, kill backward.  Also kill the preceding newline.
 \(This is meant to make \\[repeat] work well with negative arguments.\)
-If arg is zero, kill current line but exclude the trailing newline."
+If arg is zero, kill current line but exclude the trailing newline.
+
+``Line'' is defined as visual line, from the leftmost to the
+rightmost position of a single visual line, if `word-wrap' is
+non-nil.  Otherwise, this function behaves exactly like
+`kill-line'."
   (interactive "p")
-  (if (and (> arg 0) (eobp) (save-excursion (vertical-motion 0) (eobp)))
-      (signal 'end-of-buffer nil))
-  (if (and (< arg 0) (bobp) (save-excursion (vertical-motion 1) (bobp)))
-      (signal 'beginning-of-buffer nil))
-  (unless (eq last-command 'kill-region)
-    (kill-new "")
-    (setq last-command 'kill-region))
-  (cond ((zerop arg)
-	 ;; We need to kill in two steps, because the previous command
-	 ;; could have been a kill command, in which case the text
-	 ;; before point needs to be prepended to the current kill
-	 ;; ring entry and the text after point appended.  Also, we
-	 ;; neehd to use save-excursion to avoid copying the same text
-	 ;; twice to the kill ring in read-only buffers.
-	 (save-excursion
-	   ;; delete in one go
-	   (kill-region (progn (vertical-motion 0) 
-			       (skip-read-only-prompt) (point))
-			(progn (vertical-motion 1) (point)))
-	   ))
-	((< arg 0)
-	 (save-excursion
-	   (kill-region (point) (progn (end-of-visual-line) (point))))
-	 (kill-region (point)
-		      (progn
-			(vertical-motion (1+ arg))
-			(unless (bobp) (backward-char))
-			(point))))
-	(t
-	 (save-excursion
-	   (kill-region (let ((ep (point)))
-			  (vertical-motion 0) 
-			  (skip-read-only-prompt ep)
-			  (point))
+
+  (if (not word-wrap)
+      (let ((kill-whole-line t))
+	(kill-line arg))
+    (if (and (> arg 0) (eobp) (save-excursion (vertical-motion 0) (eobp)))
+	(signal 'end-of-buffer nil))
+    (if (and (< arg 0) (bobp) (save-excursion (vertical-motion 1) (bobp)))
+	(signal 'beginning-of-buffer nil))
+    (unless (eq last-command 'kill-region)
+      (kill-new "")
+      (setq last-command 'kill-region))
+    (cond ((zerop arg)
+	   ;; We need to kill in two steps, because the previous command
+	   ;; could have been a kill command, in which case the text
+	   ;; before point needs to be prepended to the current kill
+	   ;; ring entry and the text after point appended.  Also, we
+	   ;; neehd to use save-excursion to avoid copying the same text
+	   ;; twice to the kill ring in read-only buffers.
+	   (save-excursion
+	     ;; delete in one go
+	     (kill-region (progn (vertical-motion 0) 
+				 (skip-read-only-prompt) (point))
+			  (progn (vertical-motion 1) (point)))
+	     ))
+	  ((< arg 0)
+	   (save-excursion
+	     (kill-region (point) (progn (end-of-visual-line) (point))))
+	   (kill-region (point)
 			(progn
-			  (vertical-motion arg) 
-			  (point)))))))
+			  (vertical-motion (1+ arg))
+			  (unless (bobp) (backward-char))
+			  (point))))
+	  (t
+	   (save-excursion
+	     (kill-region (let ((ep (point)))
+			    (vertical-motion 0) 
+			    (skip-read-only-prompt ep)
+			    (point))
+			  (progn
+			    (vertical-motion arg) 
+			    (point))))))))
 
 ;; mark functions for CUA
 (dolist (cmd
@@ -415,9 +432,7 @@ If arg is zero, kill current line but exclude the trailing newline."
  (visual-line-mode 1))
 
 (define-globalized-minor-mode global-visual-line-mode
- visual-line-mode turn-on-visual-line-mode
- :lighter " vl")
-
+ visual-line-mode turn-on-visual-line-mode)
 
 (defface blank-newline
   '((((class color) (background dark))
