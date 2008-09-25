@@ -16,6 +16,7 @@ versions.timeline<- read.table("version-timeline.txt", header=FALSE, fill=TRUE)
 countries <- read.table("countries.txt", header=TRUE, fill=TRUE)
 
 conversionrate <- read.table("conversionrate.txt", header=TRUE, fill=TRUE)
+exposure <- read.table("user-exposure.txt", header=TRUE, fill=TRUE)
 
 
  
@@ -36,12 +37,18 @@ pdf(file="usage-duration.pdf")
 barplot(usage_duration$no.users, names.arg=usage_duration$duration, main=sprintf("%s User experience", prod), sub="Distribution of install and use duration [days]")
 dev.off()
 
+if (length(versions$version) > 2) {
+
 pdf(file="versions.pdf")
 versions <- subset(versions, !is.na(no.users))
-pie(versions$no.users, versions$version)
-title(main=sprintf("%s versions in use", prod), sub="Proportions of versions used during the last 10 days")
+numo <- sum(subset(versions, no.users<=20)$no.users)
+versions <- subset(versions, no.users>20)
+levels(versions$version) <- c(levels(versions$version), "other")
+versions <- rbind(versions, c(version="other", no.users=as.integer(numo)))
+pie(as.integer(versions$no.users), versions$version)
+title(main=sprintf("%s versions in use", prod), sub="Proportions of versions used during the last 5 days")
 dev.off()
-
+}
 
 pdf(file="version-timeline.pdf")
 # Plotting the Timeseries directly didn't produce useful effects,
@@ -57,11 +64,13 @@ for (day in 2:length(vt[,1]))
   {
     numvec <- as.numeric(vt[day,])
     s <-  sum(numvec, na.rm = TRUE)
-   vt[day,] <- numvec/s
+   vt[day,] <- numvec  #/s # let's not normalize
   }
 
  
-plot.default(x=c(0), y=c(0), xlim=c(0,rightborder), ylim=c(0,1), col=0, xlab="Days", ylab="proportion")
+#plot.default(x=c(0), y=c(0), xlim=c(0,rightborder), ylim=c(0,1), col=0, xlab="Days", ylab="proportion")
+
+plot.default(x=c(0), y=c(0),  xlim=c(0,rightborder), ylim=c(0,as.integer(max(vt, na.rm=T))), col=0, xlab="Days", ylab="queries")
 title(main=paste(prod, " versions in use"), col="Black")
 
 l.x = c() # labels
@@ -73,7 +82,7 @@ for (i in 1:length(n[,1]))
   timeseries <-  as.numeric(vt[,i])
  
   # moving average
-  fil <- rep(1/as.integer(check.period.days*1.5), as.integer(check.period.days*1.5))
+  fil <- rep(1/as.integer(check.period.days*5), as.integer(check.period.days*5))
   timeseries <-  filter(timeseries,fil)
   lastvalue <- NA
   for(j in length(timeseries):1)
@@ -103,13 +112,18 @@ for (i in 1:length(n[,1]))
 #        boxed.labels(max.i, timeseries[max.i]+0.02, bg=i%%7+1, col="black", labels=n[i,])
       }
         
-#    text(max.i, timeseries[max.i]+0.02, labels=n[i,], col=i%%7+1, bg="White" )
+   #  text(x=max.i, y=timeseries[max.i]+0.02, labels=n[i,], col=i%%7+1, bg="White" )
   }
 }
 #thigmophobe.labels(l.x, l.y, labels=l.l, col=l.c)
 par(col="black")
+ if (require("plotrix"))
+  {
 boxed.labels(l.x, l.y, labels=l.l, col=l.c, xpad=0.6, ypad=0.6, border=FALSE, family="sans" ) 
-
+} else
+{
+labels(l.x, l.y, labels=l.l, col=l.c, xpad=0.6, ypad=0.6, border=FALSE, family="sans" ) 
+}
 dev.off()
 
 
@@ -135,7 +149,7 @@ dev.off()
 pdf(file="userbase.pdf")
 
 conversionrate$ubase <- as.vector(filter(conversionrate$no.users, rep(1/7,7), sides=1))
-with(conversionrate, plot(ubase~day, type="l",     main="User Base",  ylab="# of users", xlab="Day", sub="User base estimated from number of version checks"))
+with(conversionrate, plot(ubase~day, type="l",     main="User Base (regular users)",  ylab="# of users", xlab="Day", sub="User base estimated from number of version checks"))
 dev.off()
 
 pdf(file="conversionrate.pdf")
@@ -147,3 +161,12 @@ lines(conversionrate2$avg, col="blue")
 dev.off()
 
 
+
+pdf(file="user-exposure.pdf")
+c=c()
+## for(i in exposure) {
+##   c <- append(c,  sprintf("%i-%i", i, i+1))
+## }
+#  names.arg=c, 
+barplot(exposure$no.users, main= "Different Users per Week", ylab="# users", xlab="Week")
+dev.off()
