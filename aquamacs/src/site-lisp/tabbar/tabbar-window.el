@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: tabbar-window.el,v 1.54 2008/09/21 02:13:29 davidswelt Exp $
+;; Revision: $Id: tabbar-window.el,v 1.55 2008/09/25 14:11:28 davidswelt Exp $
 
 (require 'tabbar)
 (require 'aquamacs-tools)
@@ -250,6 +250,10 @@ new buffer."
  ;     (tabbar-window-update-tabsets)
     (run-with-idle-timer 0 nil
 			 'tabbar-window-update-tabsets))
+
+(defadvice dnd-open-local-file (after dnd-update-tabs activate)
+  (if tabbar-mode
+      (tabbar-window-update-tabsets)))
 
 (defun tabbar-update-if-changes-undone ()
   ;; have to wait until idle, or buffer's modified status isn't updated yet
