@@ -290,7 +290,8 @@ and whose tail is ACCUM."
 (defun xsdre-compile-single-char (ch)
   (if (memq ch '(?. ?* ?+ ?? ?\[ ?\] ?^ ?$ ?\\))
       (string ?\\ ch)
-    (string (decode-char 'ucs ch))))
+    (let ((utf-translate-cjk-mode nil))
+      (string (decode-char 'ucs ch)))))
   
 (defun xsdre-char-class-to-range-list (cc)
   "Return a range-list for a symbolic char-class."
@@ -403,7 +404,8 @@ consisting of a single char alternative delimited with []."
       (setq range-list (cdr range-list)))
     (setq chars
 	  (mapcar (lambda (c)
-		    (decode-char 'ucs c))
+                    (let ((utf-translate-cjk-mode nil))
+                      (decode-char 'ucs c)))
 		  chars))
     (when caret
       (setq chars (cons ?^ chars)))
