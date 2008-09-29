@@ -347,7 +347,10 @@ non-nil.  Otherwise, this function behaves exactly like
   (interactive "p")
 
   (if (not word-wrap)
-      (kill-whole-line arg)
+      (progn
+	(beginning-of-line)
+	(skip-read-only-prompt)
+	(kill-line arg))
     (if (and (> arg 0) (eobp) (save-excursion (vertical-motion 0) (eobp)))
 	(signal 'end-of-buffer nil))
     (if (and (< arg 0) (bobp) (save-excursion (vertical-motion 1) (bobp)))
