@@ -14,7 +14,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.37 2008/06/26 22:00:58 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.38 2008/09/30 22:09:56 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -123,8 +123,9 @@ ability. The following rules are followed:
 	ret)
     (window-buffer (car l)))))
   
+ 
 (require 'smart-frame-positioning)
-
+;; (frame-parameter nil 'font)
 (defun aquamacs-set-style (&optional frame force for-mode)
   "Sets the mode-specific style (frame parameters) for FRAME
  (selected frame if nil), unless it is already set (or
@@ -160,7 +161,13 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 		  (save-excursion 
 
 		    (set-buffer buffer)
-		    (let* ((style (aquamacs-combined-mode-specific-settings 
+		    (let* ((style-face-id 
+			    (intern (format "default-%s" 
+					    (or for-mode 
+						(if (aquamacs-get-buffer-style (buffer-name))
+						    (format "%s---%s" (buffer-name) major-mode)
+						  major-mode)))))
+			   (style (aquamacs-combined-mode-specific-settings 
 				   (if (special-display-p (buffer-name)) 
 				       special-display-frame-alist 
 				     default-frame-alist
@@ -182,22 +189,32 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 		      ;; ensure that setting the new frame parameters doesn't resize
 		      ;; the frame significantly:
 		      ;; change width / height to adapt to new font size
-
+		      (custom-declare-face style-face-id '((t :inherit default)) "mode-specific face defined by `aquamacs-styles-mode'.
+The `default' face is remapped (in the appropriate buffers) to this face.")  
 		      
 		      (save-frame-size 
-			frame
+		       frame
 			
 			;; do not set frame parameters if they will be overridden by the later color theme
 			;; this prevents flicker 
 			(let ((col-theme-parms
-			       (condition-case nil (color-theme-frame-params (color-theme-canonic  color-theme)) (error nil))))
+			       (condition-case nil 
+				   (color-theme-frame-params 
+				    (color-theme-canonic color-theme)) (error nil))))
 			  (mapc (lambda (x)
 				  (setq style (assq-delete-all (car x) style)))
 				col-theme-parms))
+
+			(when (assq 'font style)
+			  (set-face-font style-face-id (cdr (assq 'font style)) (or frame (selected-frame)))   ; FIXME: in all frames or just here?
+			  (setq style (assq-delete-all 'font style))
+			  ;; make sure we're remapping
+			  (make-local-variable 'face-remapping-alist)
+			  (assq-set 'default style-face-id 'face-remapping-alist))
+
 			(modify-frame-parameters frame 
 			 (cons (cons 'frame-configured-for-buffer buffer) 
 			       style))
-
 		
 			(save-window-excursion
 			  (select-frame frame)
@@ -231,26 +248,7 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
   `(nth 2 ,event))
 (defmacro mac-event-spec (event)
   `(nth 1 ,event))
-
-(defun mac-handle-font-selection (event)
-  "Change default face attributes according to font selection EVENT."
-  (interactive "e")
-  (let* ((ae (mac-event-ae event))
-	 (fm-font-size (mac-ae-number ae "fmsz"))
-	 (atsu-font-id (mac-ae-number ae "auid"))
-	 (attribute-values (and atsu-font-id
-				(mac-atsu-font-face-attributes atsu-font-id))))
-    (if fm-font-size
-	(setq attribute-values
-	      `(:height ,(* 10 fm-font-size) ,@attribute-values)))
-
-    
-    (save-frame-size 
-      (selected-frame)
-      (apply 'set-face-attribute 'default (selected-frame) attribute-values)
-      )))  
-
-
+ 
 
 
 ; (aquamacs-get-buffer-style "*Help*")
@@ -728,14 +726,8 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
 :init-value  t
   :group 'Aquamacs
   :global t
-  :require 'color-theme
-
-  (and
-   aquamacs-styles-mode
-   (boundp 'one-buffer-one-frame-mode) (not one-buffer-one-frame-mode)
-   (message "Aquamacs-Styles-Mode disabled. For best results, consider turning
-on One-Buffer-One-Frame-Mode (Display Buffers in Separate Frames)!")))
-  
+  :require 'color-theme)
+      
 
 (defun aquamacs-styles-set-default-parameter (param value &optional mode)
   "Sets frame parameter PARAM of `default' frame style."
@@ -781,6 +773,19 @@ on One-Buffer-One-Frame-Mode (Display Buffers in Separate Frames)!")))
    (cdr (assq 'left-fringe default-frame-alist))))
 
 
+(define-key menu-bar-options-menu [mouse-set-font]
+  `(menu-item (format "Font for %s...                 "
+		      (if (and (boundp 'face-remapping-alist)
+			       (assq 'default face-remapping-alist))
+			  (capitalize 
+			   (replace-regexp-in-string "default-" "" (symbol-name (cdr (assq 'default face-remapping-alist)))))
+			(if aquamacs-styles-mode
+			    "this Frame's default" "this Frame")))
+	      turn-on-mac-font-panel-mode
+	      :visible ,(display-multi-font-p)
+	      :keys ,(aq-binding 'mac-font-panel-mode)
+	      :enable (menu-bar-menu-frame-live-and-visible-p) 
+	      :help "Select a font from list of known fonts/fontsets"))
 
 
 (defadvice mouse-set-font
@@ -947,16 +952,19 @@ for all frames with the current major-mode."
   (require 'color-theme)
   (setq color-theme-is-global nil)
   (setq color-theme-target-frame nil)
+  (setq color-theme-target-buffer nil)
   (defadvice color-theme-install 
     (around for-other-frame (&rest args) activate)
  
+    (let ((buffer (current-buffer)))
     (if (and
 	 (eq major-mode 'color-theme-mode)
 	 color-theme-target-frame)
-	(select-frame color-theme-target-frame)
-      )
-    ad-do-it 
-    )
+	(progn (select-frame color-theme-target-frame)
+	       (setq buffer (or color-theme-target-buffer (current-buffer)))))
+    (with-current-buffer buffer
+      ad-do-it 
+    )))
 
  
 
@@ -966,8 +974,9 @@ Display a buffer with a list of color themes, which, upon selection, are applied
 selected frame."
   (interactive) 
  
-  (setq color-theme-target-frame (selected-frame)) ;; this variable seems to be deprecated!
-   
+  (setq color-theme-target-frame  (selected-frame)) 
+  (setq color-theme-target-buffer (current-buffer))
+
   (let ((one-buffer-one-frame-force t))	
     ;; always open in new frame
     ;; because we've redefined bury->kill-buffer-and window 
