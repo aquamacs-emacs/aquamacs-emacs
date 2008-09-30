@@ -1,12 +1,11 @@
-orig = emacs@sv.gnu.org/emacs--devo--0--patch-1183
-mod = emacs@sv.gnu.org/emacs--devo--0--patch-1183
-
 A  src/ChangeLog.face-remap
 M  src/xfaces.c
 M  src/dispextern.h
 M  src/fontset.c
 M  src/xdisp.c
 M  doc/lispref/display.texi
+M  lisp/term/mac-win.el 
+M  src/mactoolbox.c
 
 --- doc/lispref/display.texi
 +++ doc/lispref/display.texi
@@ -588,3 +587,70 @@ M  doc/lispref/display.texi
    DEFVAR_LISP ("face-font-rescale-alist", &Vface_font_rescale_alist,
  	       doc: /* Alist of fonts vs the rescaling factors.
  Each element is a cons (FONT-NAME-PATTERN . RESCALE-RATIO), where
+*** lisp/term/mac-win.el	23 Apr 2008 08:56:55 -0000	1.88.2.11
+--- lisp/term/mac-win.el	30 Sep 2008 20:06:01 -0000
+***************
+*** 1816,1827 ****
+--- 1830,1849 ----
+  ;;; Font panel
+  (when (fboundp 'mac-set-font-panel-visible-p)
+  
++ (defvar mac-font-panel-target-face 'default)
++ 
+  (define-minor-mode mac-font-panel-mode
+    "Toggle use of the font panel.
+  With numeric ARG, display the font panel if and only if ARG is positive."
+    :init-value nil
+    :global t
+    :group 'mac
++   (when mac-font-panel-mode
++     (setq mac-font-panel-target-face 'default)
++     (if (and (boundp 'face-remapping-alist)
++ 	     (assq mac-font-panel-target-face face-remapping-alist))
++ 	(setq mac-font-panel-target-face 
++ 	      (cdr (assq mac-font-panel-target-face face-remapping-alist)))))
+    (mac-set-font-panel-visible-p mac-font-panel-mode))
+  
+  (defun mac-handle-font-panel-closed (event)
+***************
+*** 1841,1847 ****
+      (if fm-font-size
+  	(setq attribute-values
+  	      `(:height ,(* 10 fm-font-size) ,@attribute-values)))
+!     (apply 'set-face-attribute 'default (selected-frame) attribute-values)))
+  
+  ;; kEventClassFont/kEventFontPanelClosed
+  (define-key mac-apple-event-map [font panel-closed]
+--- 1863,1871 ----
+      (if fm-font-size
+  	(setq attribute-values
+  	      `(:height ,(* 10 fm-font-size) ,@attribute-values)))
+!     
+!       (apply 'set-face-attribute (or mac-font-panel-target-face 'default)
+! 	     (selected-frame) attribute-values)))
+  
+  ;; kEventClassFont/kEventFontPanelClosed
+  (define-key mac-apple-event-map [font panel-closed]
+*** src/mactoolbox.c	20 Aug 2008 09:05:31 -0000	1.1.2.6
+--- src/mactoolbox.c	30 Sep 2008 20:12:55 -0000
+***************
+*** 3249,3255 ****
+  	  struct face *face;
+  
+  	  face_id = FACE_FOR_CHAR (f, FACE_FROM_ID (f, face_id), c);
+! 	  face = FACE_FROM_ID (f, face_id);
+  	  font = face->font;
+  	}
+      }
+--- 3296,3306 ----
+  	  struct face *face;
+  
+  	  face_id = FACE_FOR_CHAR (f, FACE_FROM_ID (f, face_id), c);
+! 	  if (NILP (Vface_remapping_alist))
+! 	    face = FACE_FROM_ID (f, face_id);
+! 	  else
+! 	    face = FACE_FROM_ID (f, lookup_basic_face (f, face_id));
+! 
+  	  font = face->font;
+  	}
+      }
