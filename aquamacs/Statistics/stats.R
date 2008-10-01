@@ -21,7 +21,7 @@ exposure <- read.table("user-exposure.txt", header=TRUE, fill=TRUE)
 
  
 
-pdf(file="startups.pdf")
+pdf(file="startups.pdf", width=10, height=5)
 startups <- subset(startups, no.users>4)
 c=c()
 for(i in startups$no.startups) {
@@ -33,7 +33,7 @@ dev.off()
 
 
 
-pdf(file="usage-duration.pdf") 
+pdf(file="usage-duration.pdf", width=10, height=5)
 barplot(usage_duration$no.users, names.arg=usage_duration$duration, main=sprintf("%s User experience", prod), sub="Distribution of install and use duration [days]")
 dev.off()
 
@@ -137,7 +137,7 @@ pie(c$no.users, c$country, main=sprintf("%s User location", prod))
 dev.off()
 
 
-pdf(file="newusers.pdf")
+pdf(file="newusers.pdf", width=10, height=5)
 conversionrate2 <- subset(conversionrate, (!is.na(no.converted)))
  
 with(conversionrate2, barplot (rbind( no.converted,no.new-no.converted), names.arg=day,  col=c("green","red"), main="First-time Trials and Conversion Rate", sub=sprintf("Number of first-time users per day (after introduction) \n and how many of them are still using %s today.", prod), ylab="# of users", xlab="Day\n"))
@@ -146,13 +146,13 @@ dev.off()
 
 
 
-pdf(file="userbase.pdf")
+pdf(file="userbase.pdf", width=10, height=5)
 
 conversionrate$ubase <- as.vector(filter(conversionrate$no.users, rep(1/7,7), sides=1))
 with(conversionrate, plot(ubase~day, type="l",     main="User Base (regular users)",  ylab="# of users", xlab="Day", sub="User base estimated from number of version checks"))
 dev.off()
 
-pdf(file="conversionrate.pdf")
+pdf(file="conversionrate.pdf", width=10, height=5)
 conversionrate2 <- subset(conversionrate, (!is.na(no.converted) & no.converted>0))
 conversionrate2$ratio <- conversionrate2$no.converted /conversionrate2$no.new
 with(conversionrate2, plot (ratio ~ day, type="l",  main=" Conversion Rate",  ylab="ratio of users", xlab="Day\n"))
@@ -162,7 +162,7 @@ dev.off()
 
 
 
-pdf(file="user-exposure.pdf")
+pdf(file="user-exposure.pdf", width=10, height=5)
 c=c()
 ## for(i in exposure) {
 ##   c <- append(c,  sprintf("%i-%i", i, i+1))
