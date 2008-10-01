@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.61 2008/08/10 16:51:49 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.62 2008/10/01 20:54:34 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, 2006 David Reitter
+;; Copyright (C) 2005, 2006, 2007, 2008 David Reitter
 
 ;; Smart Frame Positioning Mode: In environments where many frames are
 ;;  opened, this mode shows them in useful positions on the screen so
