@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.62 2008/10/01 20:54:34 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.63 2008/10/01 20:54:58 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@
 ;; To activate:
 ;; (require 'smart-frame-positioning)
 ;; (smart-frame-positioning-mode t)
+;;
 ;;
 ;; To Do:
 ;; Multiple screens are currently handled in a simplified fashion.
