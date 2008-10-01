@@ -50,7 +50,7 @@ title(main=sprintf("%s versions in use", prod), sub="Proportions of versions use
 dev.off()
 }
 
-pdf(file="version-timeline.pdf")
+pdf(file="version-timeline.pdf", width=10, height=5)
 # Plotting the Timeseries directly didn't produce useful effects,
 # in particular since ts.plot takes several arguments with each series
 # separately instead of a matrix with all the series. 
