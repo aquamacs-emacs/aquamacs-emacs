@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.171 2008/09/20 13:04:52 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.172 2008/10/01 20:35:09 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -750,7 +750,7 @@ both existing buffers and buffers that you subsequently create."
 
 
 (define-key-after menu-bar-options-menu [aquamacs-color-theme-select]
-  `(menu-item "Color Theme (this Frame)..." aquamacs-color-theme-select
+  `(menu-item "Color Theme for this Frame..." aquamacs-color-theme-select
 	       :visible (and (display-multi-font-p)
 			     (fboundp 'aquamacs-color-theme-select)
 			     )
