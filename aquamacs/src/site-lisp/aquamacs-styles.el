@@ -67,7 +67,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.39 2008/10/02 16:53:21 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.40 2008/10/02 17:58:59 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -517,7 +517,7 @@ Sets default-frame-alist. (Aquamacs)"
 		   (if aquamacs-styles-mode
 		       ""
 		     (aquamacs-styles-mode 1)
-		     "\nNote: Auto Frame Styles have been turned on."))))
+		     "\nNote: Auto Styles have been turned on."))))
 
 
 (defun set-to-custom-standard-value (symbol)
@@ -620,7 +620,7 @@ for which the menu is being updated."
 
 
 (defvar aquamacs-frame-style-menu 
-  (make-sparse-keymap "Frame Styles"))
+  (make-sparse-keymap "Mode Styles"))
 
 
 (defvar appstyle-mode-menu nil)
@@ -943,14 +943,14 @@ for all frames with the current major-mode."
   (define-key aquamacs-frame-style-menu [menu-aquamacs-styles]
     (menu-bar-make-mm-toggle 
      aquamacs-styles-mode
-     "Auto Frame Style"
-     "adapt the frame parameters to the major-mode"))
+     "Auto Style"
+     "adapt the default face parameters to the major-mode"))
       
 
   (define-key-after menu-bar-options-menu [aquamacs-frame-styles]
 
-    (list 'menu-item "Frame Styles" aquamacs-frame-style-menu 
-	  :help "Set styles for frames depending on major mode in buffer")
+    (list 'menu-item "Mode Styles" aquamacs-frame-style-menu 
+	  :help "Set face styles for buffers depending on major mode in buffer")
     'aquamacs-color-theme-select)
 
   ;; advise frame-notice-user-settings (from frame.el)
