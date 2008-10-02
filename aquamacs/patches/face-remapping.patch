@@ -591,11 +591,12 @@ M  src/mactoolbox.c
 --- lisp/term/mac-win.el	30 Sep 2008 20:06:01 -0000
 ***************
 *** 1816,1827 ****
---- 1830,1849 ----
+--- 1830,1853 ----
   ;;; Font panel
   (when (fboundp 'mac-set-font-panel-visible-p)
   
 + (defvar mac-font-panel-target-face 'default)
++ (defvar mac-font-panel-target-frame nil)
 + 
   (define-minor-mode mac-font-panel-mode
     "Toggle use of the font panel.
@@ -604,11 +605,14 @@ M  src/mactoolbox.c
     :global t
     :group 'mac
 +   (when mac-font-panel-mode
-+     (setq mac-font-panel-target-face 'default)
-+     (if (and (boundp 'face-remapping-alist)
++     (setq mac-font-panel-target-face 'default
++ 	  mac-font-panel-target-frame (selected-frame))
++ 
++     (when (and (boundp 'face-remapping-alist)
 + 	     (assq mac-font-panel-target-face face-remapping-alist))
-+ 	(setq mac-font-panel-target-face 
-+ 	      (cdr (assq mac-font-panel-target-face face-remapping-alist)))))
++       (setq mac-font-panel-target-frame nil ;; means all frames
++ 	    mac-font-panel-target-face 
++ 	    (cdr (assq mac-font-panel-target-face face-remapping-alist)))))
     (mac-set-font-panel-visible-p mac-font-panel-mode))
   
   (defun mac-handle-font-panel-closed (event)
@@ -621,13 +625,14 @@ M  src/mactoolbox.c
   
   ;; kEventClassFont/kEventFontPanelClosed
   (define-key mac-apple-event-map [font panel-closed]
---- 1863,1871 ----
+--- 1867,1876 ----
       (if fm-font-size
   	(setq attribute-values
   	      `(:height ,(* 10 fm-font-size) ,@attribute-values)))
-!     
-!       (apply 'set-face-attribute (or mac-font-panel-target-face 'default)
-! 	     (selected-frame) attribute-values)))
+!     (if (or (null mac-font-panel-target-frame) 
+! 	    (frame-live-p mac-font-panel-target-frame))
+! 	(apply 'set-face-attribute (or mac-font-panel-target-face 'default)
+! 	       mac-font-panel-target-frame attribute-values))))
   
   ;; kEventClassFont/kEventFontPanelClosed
   (define-key mac-apple-event-map [font panel-closed]
