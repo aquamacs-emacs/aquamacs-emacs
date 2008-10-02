@@ -1,3 +1,56 @@
+;; To do here:
+
+;; use remapped default face when acquiring a new style for a mode
+
+
+;; let's give up on color themes.
+
+;; they add too much functionality that's not needed
+;; and at the same time, they don't work with faces that can be set per buffer.
+
+;; what we really need is a choice of foreground and background color.
+;; this could and should be done via the font panel.  that extension is probably easy.
+;; we only modify the default face.
+
+;; then we change the face that the font panel applies to. that's
+;; easy (mac-handle-font-selection).
+
+;; then, we shift all aquamacs-styles stuff over to just storing a single face: default. 
+;; we only apply very few frame parameters such as tool-bar-lines.
+  
+;; it appears that just changing the default face does not 
+;; do enough: background of non-text can't be changed.
+;; this is possibly easy to patch!
+
+;; (setq face-remapping-alist nil)
+;; (set (make-local-variable 'face-remapping-alist) '((default aquamacs-variable-width)))
+
+;; OK, maybe use the current solution for a while and filter "font" from the color themes as frame parameters, but leave the other ones.
+
+;; we do need to change the font seting dialog to just set the remapped face though (or create a remapped one), which should be easy.
+
+
+
+;; - make color theme stick to buffer only by using face remapping on ALL faces from the color theme - not just the main font
+;; - use same technique after color theme is selected manually
+;; - make font selector change the remapped default font and not the default font for the frame.
+
+;; - color themes should convert frame parms to face parsm as much as possible:
+;;   bg / fg colors, font
+;; - color-themes: do not install any other frame parameters
+
+;; aq-styles should set font face,but then merge it w/ the face from color themes
+;; maybe the face-set-spec in color-themes does that already
+
+;; font setter: change the remapped face where appropriate
+;; styles: the snapshot function may need to be adapted
+
+
+
+
+
+
+
 ;; aquamacs mode specific styles
 
 ;; this package realizes mode-specific styles in Aquamacs.
@@ -14,7 +67,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.38 2008/09/30 22:09:56 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.39 2008/10/02 16:53:21 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -206,7 +259,8 @@ The `default' face is remapped (in the appropriate buffers) to this face.")
 				col-theme-parms))
 
 			(when (assq 'font style)
-			  (set-face-font style-face-id (cdr (assq 'font style)) (or frame (selected-frame)))   ; FIXME: in all frames or just here?
+			  (unless (facep style-face-id) ;; do not override user's existing face choices
+			    (set-face-font style-face-id (cdr (assq 'font style)) nil))   ; FIXME: in all frames or just here?
 			  (setq style (assq-delete-all 'font style))
 			  ;; make sure we're remapping
 			  (make-local-variable 'face-remapping-alist)
@@ -799,10 +853,7 @@ the frame font is set as a default in `default-frame-alist'."
 Frame Styles to make the setting stick.")
     (progn
       (modify-all-frames-parameters `((font . ,(frame-parameter nil 'font))))
-      (message "Font set for this and all future frames.")
-      )
-    )
-  )
+      (message "Font set for this and all future frames."))))
 
 	
 	
