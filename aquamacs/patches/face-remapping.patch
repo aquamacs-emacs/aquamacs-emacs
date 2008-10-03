@@ -617,6 +617,16 @@ M  src/mactoolbox.c
   
   (defun mac-handle-font-panel-closed (event)
 ***************
+*** 1834,1839 ****
+--- 1860,1866 ----
+    "Change default face attributes according to font selection EVENT."
+    (interactive "e")
+    (let* ((ae (mac-event-ae event))
++ 	 (face (or mac-font-panel-target-face 'default))
+  	 (fm-font-size (mac-ae-number ae "fmsz"))
+  	 (atsu-font-id (mac-ae-number ae "auid"))
+  	 (attribute-values (and atsu-font-id
+***************
 *** 1841,1847 ****
       (if fm-font-size
   	(setq attribute-values
@@ -625,14 +635,20 @@ M  src/mactoolbox.c
   
   ;; kEventClassFont/kEventFontPanelClosed
   (define-key mac-apple-event-map [font panel-closed]
---- 1867,1876 ----
+--- 1868,1883 ----
       (if fm-font-size
   	(setq attribute-values
   	      `(:height ,(* 10 fm-font-size) ,@attribute-values)))
-!     (if (or (null mac-font-panel-target-frame) 
-! 	    (frame-live-p mac-font-panel-target-frame))
-! 	(apply 'set-face-attribute (or mac-font-panel-target-face 'default)
-! 	       mac-font-panel-target-frame attribute-values))))
+!     
+!     (apply 'set-face-attribute face
+! 	   mac-font-panel-target-frame attribute-values)
+!     ;; ensure this is saved as a customization
+!     (let ((value 
+! 	   (list (list t (custom-face-attributes-get 
+! 			  face nil)))))
+!       (put face 'saved-face value)
+!       (custom-push-theme 'theme-face face 'user 'set value))
+!     (message "Font set for %s face." face)))
   
   ;; kEventClassFont/kEventFontPanelClosed
   (define-key mac-apple-event-map [font panel-closed]
