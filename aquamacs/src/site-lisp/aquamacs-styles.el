@@ -72,7 +72,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.43 2008/10/04 03:46:22 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.44 2008/10/04 15:12:29 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -208,9 +208,11 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 	    ;; will cause another menu-bar-update-hook call, so we can end up 
 	    ;; with this function called again and again...  
 
-	    (let ((buffer (or		;in-buffer
-			   (aquamacs-style-relevant-buffer frame) 
-			   (window-buffer (selected-window)))))
+	    (let* ((frame-param-buffer (aquamacs-style-relevant-buffer frame))
+		   (buffer (or		;in-buffer
+			    (window-buffer (selected-window))
+			    frame-param-buffer)))
+	      ;(print (aquamacs-style-relevant-buffer frame))
 	      (with-current-buffer buffer
 		(let ((mode (or for-mode major-mode)))
 		  (when (or 
@@ -293,25 +295,25 @@ The `default' face is remapped (in the appropriate buffers) to this face.")
 		      ;; make sure we're remapping
 		      (make-local-variable 'face-remapping-alist)
 		      (assq-set 'default style-face-id 'face-remapping-alist)
-
-		      (when style ;; any frame parameters left?
-			(modify-frame-parameters frame 
-						 (cons (cons 'frame-configured-for-buffer 
-							     (cons buffer mode)) style)))
-		      (let ((after-change-major-mode-hook nil) 
-			    window-configuration-change-hook)
-			;; save-window-excursion can run this hook!
-			;; color-style-target-frame seems deprecated
-			 
-			(when aquamacs-use-color-themes
-			  (save-window-excursion
-			    (select-frame frame)
-			    (if (and (functionp (car-safe color-theme))
-				     (memq (car-safe color-theme) color-themes)
-				     (not (cdr-safe color-theme)))
-				(funcall (car color-theme)) 
-			      ;; just install the color style directly
-			      (color-theme-install color-theme))))))
+		      (modify-frame-parameters frame 
+					       `((frame-configured-for-buffer . (,buffer . ,mode))))
+		      (when frame-param-buffer ;; do not apply frame params in multi-window frames
+			(when style ;; any frame parameters left?
+			  (modify-frame-parameters frame style))
+			(let ((after-change-major-mode-hook nil) 
+			      window-configuration-change-hook)
+			  ;; save-window-excursion can run this hook!
+			  ;; color-style-target-frame seems deprecated
+			  
+			  (when aquamacs-use-color-themes
+			    (save-window-excursion
+			      (select-frame frame)
+			      (if (and (functionp (car-safe color-theme))
+				       (memq (car-safe color-theme) color-themes)
+				       (not (cdr-safe color-theme)))
+				  (funcall (car color-theme)) 
+				;; just install the color style directly
+				(color-theme-install color-theme)))))))
 		    
 		    (if window-configuration-change-hook
 			(let ((selframe (selected-frame)))
@@ -830,15 +832,18 @@ Upon click/selection, CALLBACK will be called with color name and
 then the ARGUMENTS."
   (list-colors-display nil buffer-name) ;; will pop up new window with buffer *Colors*
   (with-current-buffer (get-buffer buffer-name)
+    (beginning-of-buffer)
+    (setq buffer-read-only nil)
+    (insert-button "[Quit]" 'action 'aquamacs-quit-color-selection 'follow-link t)
+    (insert "\n\n")
     (set (make-local-variable 'aquamacs-color-selected-callback) callback)
     (set (make-local-variable 'aquamacs-color-selected-callback-args) arguments)
+    (put-text-property (point) (point-max) 
+		       'keymap colors-click-map)
+    (setq buffer-read-only t)))
 
-    (condition-case nil
-	(progn
-	  (setq buffer-read-only nil)
-	  (put-text-property (point-min) (point-max) 
-			     'keymap colors-click-map))
-      (error nil))))
+(defun aquamacs-quit-color-selection (but)
+  (View-quit))
 
 (defun aquamacs-select-color (ev)
   "Select the color at point of click."
@@ -1034,10 +1039,8 @@ for all frames with the current major-mode."
     ;; workaround for an Emacs bug
     (let ((vsb (frame-parameter nil  'vertical-scroll-bars)))
       (modify-frame-parameters nil '((vertical-scroll-bars . nil)))
-      (modify-frame-parameters nil `((vertical-scroll-bars . ,vsb)))
-      )
-    )
-
+      (modify-frame-parameters nil `((vertical-scroll-bars . ,vsb)))))
+ 
 
   ;; color styles
   
