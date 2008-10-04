@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.204 2008/09/25 13:13:32 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.205 2008/10/04 21:12:39 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -277,8 +277,10 @@ Return non-nil if options where saved."
 	     (customize-mark-to-save elt)
 	     (setq need-save (cons elt need-save))))
       ;; Save if we changed anything.
-      (when need-save
-	(custom-save-all))
+      (if need-save
+	  (progn (custom-save-all)
+		 (message "Options saved."))
+	(message "There's no need to save your options."))
       need-save))
   ;; (aquamacs-menu-bar-changed-options) 
   (defun aquamacs-menu-bar-changed-options ()
@@ -709,8 +711,7 @@ yes-or-no prompts - y or n will do."
 ;;  (require 'longlines) 
 (global-visual-line-mode 1)
   (aquamacs-set-defaults 
-   `(
-     (global-visual-line-mode t)
+   `((global-visual-line-mode t)
      (text-mode-hook (auto-detect-wrap)) 
      (save-place t)
      (send-mail-function mailclient-send-it)
@@ -756,18 +757,14 @@ yes-or-no prompts - y or n will do."
 
      (minibuffer-prompt-properties
       ,(plist-put minibuffer-prompt-properties
-		  'point-entered 'minibuffer-avoid-prompt))
-
-     )
-   )
+		  'point-entered 'minibuffer-avoid-prompt))))
 
 ;; on by default
 (if (and (fboundp 'mac-inline-input-method-mode) 
 	 (not (boundp 'mac-inline-input-method-missing)) 
 	 (running-on-a-mac-p))
     (progn
-      (aquamacs-set-defaults '((mac-inline-input-method-mode t)))
-      )
+      (aquamacs-set-defaults '((mac-inline-input-method-mode t))))
   ;; otherwise, redefine the mode function
   ;; so that it won't be called when loading custom-file.
   (defvar mac-inline-input-method-missing t)
@@ -781,13 +778,8 @@ yes-or-no prompts - y or n will do."
   ;; set a nntp server if there's none
   (if (getenv "NNTPSERVER") ;; (gnus-getenv-nntpserver)
       nil
-    (aquamacs-set-defaults '(
-
-			     (setq gnus-select-method 
-				   '(nntp "news.readfreenews.net"))
-			     )
-			   )
-    )
+    (aquamacs-set-defaults '((setq gnus-select-method 
+				   '(nntp "news.readfreenews.net")))))
 
 					; activate the modes now
   (global-font-lock-mode 1) 
