@@ -72,7 +72,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.42 2008/10/04 00:09:04 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.43 2008/10/04 03:46:22 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -419,48 +419,31 @@ to be appropriate for its first buffer. (Aquamacs)"
 	      )) (frame-list))
     t))
 (defun aquamacs-get-style-snapshot ()
- 
+  ;; retrieve theme
+  (if aquamacs-use-color-themes
+      (progn
+	(require 'color-theme)
+	(list 
+	 (cons 'color-theme (let ((theme 
+				   `(color-theme-snapshot
+				     ;; alist of frame parameters
+				     , (color-theme-get-params)
+				     ;; alist of variables
+				     ,(color-theme-get-vars)
+				     ;; remaining elements of snapshot: face specs
+				     ,@(color-theme-get-face-definitions))))
+			      ;; - not implemented -
+			      theme
+			      ))
+	 ;; replaced by default-* face customization
+	 ;; (cons 'font (frame-parameter nil 'font))
+	 (cons 'tool-bar-lines (frame-parameter nil 'tool-bar-lines))))
+    ;; else
+    (apply #'append (mapcar (lambda (pm)
+		      (if (string-match "\\(color\\|mode\\|lines\\)" (symbol-name (car pm)))
+			  (list pm)))
+		    (frame-parameters)))))
 
-;; retrieve theme
-  (require 'color-theme)
- 
-  (list 
-   (cons 'color-theme (let ((theme 
-			     `(color-theme-snapshot
-			       ;; alist of frame parameters
-			       ,(color-theme-get-params)
-			       ;; alist of variables
-			       ,(color-theme-get-vars)
-			       ;; remaining elements of snapshot: face specs
-			       ,@(color-theme-get-face-definitions))))
-			;; - not implemented -
-			theme
-			))
-   ;; replaced by default-* face customization
-   ;; (cons 'font (frame-parameter nil 'font))
-   (cons 'tool-bar-lines (frame-parameter nil 'tool-bar-lines))))
-
-;; (defun aquamacs-set-style-as-default () 
-;;   "Activate current frame settings (style) as default. Sets default-frame-alist."
-;;   (interactive)
-;; 					; need to find out if frame
-;;   (let ((frte frame-parameters-to-exclude)) ; make backup
-
-;;     (setq frame-parameters-to-exclude 
-;; 	  (append '((user-position) (visibility)  (top) (left) (width) (height)) frame-parameters-to-exclude))
-
-;;     (set-all-frame-alist-parameters-from-frame
-;;      (if (special-display-p (buffer-name (current-buffer)))
-;; 	 'special-display-frame-alist
-;;        'default-frame-alist)
-;;      )
-;;     (setq frame-parameters-to-exclude frte) ; restore old value
-;;     )
-;; 					; (setq initial-frame-alist default-frame-alist)  
-;;   (message (concat "Style has been set as default for all new " (if (special-display-p (buffer-name (current-buffer)))
-;; 								    "special, internal frames"
-;; 								  "normal frames.")))
-;;   )
 
 (defun aquamacs-set-style-as-default () 
   "Activate current frame settings (style) as default. 
@@ -606,7 +589,7 @@ for which the menu is being updated."
 
 (defvar aquamacs-frame-style-menu 
   (make-sparse-keymap "Mode Styles"))
-
+(setq aquamacs-frame-style-menu (make-sparse-keymap "Mode Styles"))
 
 (defvar appstyle-mode-menu nil)
 
@@ -628,15 +611,13 @@ for which the menu is being updated."
 	 (make-sparse-keymap "Set Mode") 
 	 'aquamacs-apply-style-for-mode
 	 "Apply frame style assigned to %s." 
-	 '(menu-bar-non-minibuffer-window-p)
-	 ))
-  (define-key-after aquamacs-frame-style-menu [set-mode]
+	 '(menu-bar-non-minibuffer-window-p)))
+   (define-key-after aquamacs-frame-style-menu [set-mode]
     `(menu-item "Apply Style of Some Mode" ,appstyle-mode-menu
-		:help "Apply frame style of some major mode."
+		:help "Apply frame style of some major mode.") 
+    'menu-aquamacs-styles))
 ;; don't do this check (speed) - higher-level menu is disabled
 ;;		:enable (menu-bar-menu-frame-live-and-visible-p)
-)
-    'menu-set-style-as-default))
 
 
 (defun set-aquamacs-default-styles (variable value)
@@ -831,6 +812,120 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
 	      :enable (menu-bar-menu-frame-live-and-visible-p) 
 	      :help "Select a font from list of known fonts/fontsets"))
 
+;; colors menu
+
+(defvar colors-click-map (make-sparse-keymap))
+(define-key colors-click-map [mouse-1]
+  'aquamacs-select-color)
+(define-key colors-click-map "\r"
+  'aquamacs-select-color-at-position)
+
+
+(defvar aquamacs-color-selected-callback nil)
+(defvar aquamacs-color-selected-callback-args nil)
+
+(defun aquamacs-show-color-selection (buffer-name callback &rest arguments)
+"Pop up color selection buffer.
+Upon click/selection, CALLBACK will be called with color name and
+then the ARGUMENTS."
+  (list-colors-display nil buffer-name) ;; will pop up new window with buffer *Colors*
+  (with-current-buffer (get-buffer buffer-name)
+    (set (make-local-variable 'aquamacs-color-selected-callback) callback)
+    (set (make-local-variable 'aquamacs-color-selected-callback-args) arguments)
+
+    (condition-case nil
+	(progn
+	  (setq buffer-read-only nil)
+	  (put-text-property (point-min) (point-max) 
+			     'keymap colors-click-map))
+      (error nil))))
+
+(defun aquamacs-select-color (ev)
+  "Select the color at point of click."
+  (interactive "e")
+  (let ((p (posn-point (event-start ev))))
+    (aquamacs-select-color-at-position p)))
+
+(defun aquamacs-select-color-at-position (&optional p)
+  "Select the color at point (or P) if given.
+The Background color, or, if not given, foreground color is used."
+  (interactive)
+  (unless p (setq p (point)))
+  (apply aquamacs-color-selected-callback
+	 (or (plist-get (get-text-property p 'face) :background)
+	     (plist-get (get-text-property p 'face) :foreground)) 
+	 aquamacs-color-selected-callback-args))
+
+(defvar aquamacs-set-color-target-face nil)
+(defvar aquamacs-set-color-target-frame nil)
+(defun aquamacs-set-face-color (color-name setter-function target-face target-frame)
+  (funcall setter-function  ;; set-face-fore/background
+	   (or target-face 'default)
+	   color-name target-frame))
+
+(defun aquamacs-select-foreground-color ()
+  "Show a list of colors that can be used to select the forground.
+The foreground color of the default face used in the current
+buffer is set.  If the face is remapped, the specific (remapped)
+face is modified in all frames.  Otherwise, the `default' face in
+the current frame is modified."
+  (interactive)
+  (aquamacs-show-color-selection (format "Foreground Color for %s" 
+					 (aquamacs-face-or-frame-name nil))
+				 'aquamacs-set-face-color
+				 'set-face-foreground
+				 (cdr-safe (assq 'default face-remapping-alist))
+				 (if (assq 'default face-remapping-alist)
+					    nil (selected-frame))))
+
+(defun aquamacs-select-background-color ()
+  "Show a list of colors that can be used to select the forground.
+The foreground color of the default face used in the current
+buffer is set.  If the face is remapped, the specific (remapped)
+face is modified in all frames.  Otherwise, the `default' face in
+the current frame is modified."
+  (interactive)
+  (aquamacs-show-color-selection (format "Background Color for %s" 
+					 (aquamacs-face-or-frame-name nil))
+				 'aquamacs-set-face-color
+				 'set-face-background
+				 (cdr-safe (assq 'default face-remapping-alist))
+				 (if (assq 'default face-remapping-alist)
+					    nil (selected-frame))))
+
+
+(defun aquamacs-face-or-frame-name (generic-frame-name)
+(if (assq 'default face-remapping-alist)
+					     (capitalize 
+					      (replace-regexp-in-string 
+					       "default-" "" 
+					       (symbol-name (cdr (assq 'default face-remapping-alist)))))
+					   (or generic-frame-name (concat "frame " (get-frame-name)))))
+
+(define-key-after menu-bar-options-menu [background-color]
+  `(menu-item (format "Background Color for %s...                 "
+		      (aquamacs-face-or-frame-name "this Frame"))
+	      aquamacs-select-background-color
+	      :visible ,(display-multi-font-p)
+	      :keys ,(aq-binding 'aquamacs-select-background-color)
+	      :enable (menu-bar-menu-frame-live-and-visible-p) 
+	      :help "Select a background color") 'mouse-set-font)
+
+(define-key-after menu-bar-options-menu [foreground-color]
+  `(menu-item (format "Foreground Color for %s...                 "
+		      (aquamacs-face-or-frame-name "this Frame"))
+	      aquamacs-select-foreground-color
+	      :visible ,(display-multi-font-p)
+	      :keys ,(aq-binding 'aquamacs-select-foreground-color)
+	      :enable (menu-bar-menu-frame-live-and-visible-p) 
+	      :help "Select a foreground color") 'mouse-set-font)
+
+
+;(setq aquamacs-set-color-target-face 'default-emacs-lisp-mode)
+;(setq aquamacs-set-color-target-frame nil)
+
+;(setq aquamacs-set-color-target-frame (selected-frame))
+
 	
   (add-hook 'after-change-major-mode-hook	
 	    'set-mode-style-after-change-major-mode
@@ -846,7 +941,9 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
 			     (assq (aquamacs-updated-major-mode) 
 				   aquamacs-default-styles))
 		:help "Removes a mode-specific style."))
-  (define-key-after aquamacs-frame-style-menu [menu-reset-styles]
+  (define-key-after aquamacs-frame-style-menu [menu-clear-sep]
+    '(menu-item  "--"))
+(define-key-after aquamacs-frame-style-menu [menu-reset-styles]
     '(menu-item  "Reset All Styles"     aquamacs-reset-styles 
 		 :help "Resets all styles to the default."
 		 :enable t))
@@ -854,22 +951,21 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
     '(menu-item  "Clear All Styles"     aquamacs-clear-styles 
 		 :help "Clear all styles."
 		 :enable t))
+  
 
 
   (define-key aquamacs-frame-style-menu [menu-set-style-as-mode-default]
-    '(menu-item (format "Use Current Style for %s" (or (modename-to-string (aquamacs-updated-major-mode)) "Current Mode"))
+    '(menu-item (format "Adopt these Frame Parameters for %s" 
+			(or (modename-to-string (aquamacs-updated-major-mode)) "Current Mode"))
 		aquamacs-set-style-as-mode-default 
 		:help "Set the current frame parameters as default 
 for all frames with the current major-mode."
-		:enable   (menu-bar-menu-frame-live-and-visible-p)
-		 	  
-		))
+		:enable   (menu-bar-menu-frame-live-and-visible-p)))
   (define-key aquamacs-frame-style-menu [menu-set-style-as-default]
-    '(menu-item  "Use Current Style as Default"     aquamacs-set-style-as-default
+    '(menu-item  "Use this Style as Default"     aquamacs-set-style-as-default
 		 :enable (menu-bar-menu-frame-live-and-visible-p)
 		 :help ""))
 
- 
 
 (defun modename-to-string (modename)
   (capitalize
@@ -881,50 +977,21 @@ for all frames with the current major-mode."
 ;; only modify the default-frame-alist etc. 
 ;; and needlessly change the current frame.
 ;; anything necessary will be done by frame notice-user-settings
-
-
-
-
-;; additionally, we should ensure that default-frame-alist
-;; is consistent with that. (see aquamacs-frame-setup)
  
-;; (setq appstyle-mode-menu (make-sparse-keymap "Set Mode")) 
-;; (mapc
-;;    (lambda (pair)
-;;      (let ((modename (car pair)))
-;;      (when (fboundp modename)
-;;        (define-key ;;-after doesn't work with after- why?>? 
-;; 	 appstyle-mode-menu 
-;; 	 (vector (intern (concat "set-style-of-" (symbol-name modename))))
-;; 	 `(menu-item  
-;; 	   ,(modename-to-string modename)
-;; 	   ,(eval 
-;; 	     (list 'lambda '() '(interactive)
-;; 		   (list 'set-style nil t `(quote ,modename))
-;; 		   ))
-;; 	   :help "Apply frame style of some major mode."
-;; 	   )))))
-      
-;;    (reverse (sort (aq-copy-list aquamacs-default-styles)
-;; 		  (lambda (a b) (string< 
-;; 				 (upcase (symbol-name (car a))) 
-;; 				 (upcase (symbol-name (car b)))))))
-;;    )
-
-  
-
-
-
-  (define-key aquamacs-frame-style-menu [menu-aquamacs-styles]
+(define-key aquamacs-frame-style-menu [menu-aquamacs-styles]
     (menu-bar-make-mm-toggle 
      aquamacs-styles-mode
      "Auto Style"
      "adapt the default face parameters to the major-mode"))
+
+(aquamacs-update-apply-style-for-mode-menu)
+(define-key-after aquamacs-frame-style-menu [menu-aquamacs-styles-sep]
+  '(menu-item "--") 'set-mode)
+
       
 
-  (define-key-after menu-bar-options-menu [aquamacs-frame-styles]
-
-    (list 'menu-item "Mode Styles" aquamacs-frame-style-menu 
+(define-key-after menu-bar-options-menu [aquamacs-frame-styles]
+  (list 'menu-item "Mode Styles" aquamacs-frame-style-menu 
 	  :help "Set face styles for buffers depending on major mode in buffer")
     'aquamacs-color-theme-select)
 
@@ -974,8 +1041,10 @@ for all frames with the current major-mode."
 
   ;; color styles
   
-  ;; is needed 
-  (require 'color-theme)
+;; is needed 
+(when aquamacs-use-color-themes
+  (require 'color-theme))
+
   (setq color-theme-is-global nil)
   (setq color-theme-target-frame nil)
   (setq color-theme-target-buffer nil)
@@ -1007,9 +1076,7 @@ selected frame."
     ;; always open in new frame
     ;; because we've redefined bury->kill-buffer-and window 
     ;; in color-theme
-    (color-theme-select)
-    )
-  )
+    (color-theme-select)))
 
 (defvar smart-frame-positioning-hook nil) ;; stub
 (add-hook 'smart-frame-positioning-hook
