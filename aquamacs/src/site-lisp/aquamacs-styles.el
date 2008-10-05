@@ -36,7 +36,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.46 2008/10/05 19:32:23 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.47 2008/10/05 22:47:20 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -400,38 +400,85 @@ to be appropriate for its first buffer. (Aquamacs)"
 	 ;; (cons 'font (frame-parameter nil 'font))
 	 (cons 'tool-bar-lines (frame-parameter nil 'tool-bar-lines))))
     ;; else
-    (apply #'append (mapcar (lambda (pm)
-		      (if (string-match "\\(color\\|mode\\|lines\\)" (symbol-name (car pm)))
-			  (list pm)))
-		    (frame-parameters)))))
+    (aquamacs-get-style-frame-parameters)))
 
+
+(defvar aquamacs-styles-relevant-frame-parameter-regexp "\\(color\\|mode\\|lines\\|fringe\\)"
+  "Regular expression to be found in frame parameters handled by aquamacs-styles.")
+
+(defun aquamacs-get-style-frame-parameters ()
+  "Return frame parameters of selected frame to be saved in a style."
+  (apply #'append (mapcar (lambda (pm)
+			    (if (string-match aquamacs-styles-relevant-frame-parameter-regexp (symbol-name (car pm)))
+				(list pm)))
+			  (frame-parameters))))
 
 (defun aquamacs-set-style-as-default () 
-  "Activate current frame settings (style) as default. 
-Sets default-frame-alist. (Aquamacs)"
+  "Activate current frame and face settings (style) as default. 
+Sets `default-frame-alist' and the `default' face."
   (interactive)
 
 ;; maybe delete mode-specific frames?
   (when 
-      (let ((existing-styles  aquamacs-default-styles))
-	(setq existing-styles (assq-delete-all 'default existing-styles)) 
+      (let ((existing-styles  (aquamacs-default-styles-list)))
 	(and existing-styles
 	     (yes-or-no-p 
-	      (format "Mode-specific styles are in-place for the following modes: %s. Do you want to delete all of them so the default style is applied to frames with buffers in those modes?"
-		      (apply 'concat  
-			     (let ((l (mapcar (lambda (x)
-						(concat
-						 (symbol-name (car x)) ", ")
-						)
-					      existing-styles)))
-			       (if (nthcdr 5 l)
-				   (setcdr (nthcdr 5 l) (list "(...)")))
-			       l))))))
+	      (format "Mode-specific styles are in place for the following modes: %s. Do you want to delete all of them so the default style is applied to frames with buffers in those modes?"
+		      (apply 
+		       'concat  
+		       (let ((l (mapcar 
+				 (lambda (x)
+				   (concat
+				    (symbol-name (car x)) ", "))
+				 existing-styles)))
+			 (if (nthcdr 5 l)
+			     (setcdr (nthcdr 5 l) (list "(...)")))
+			 l))))))
     (aquamacs-clear-styles))
 
+  ;; delete the legacy `default' style
+  (aquamacs-delete-one-style 'default)
+  ;; define the default face
   (copy-face (aquamacs-style-default-face mode) 'default)
-  (aquamacs-set-style-as-mode-default 'default))
+  (if aquamacs-use-color-themes
+      (customize-set-variable 
+       'aquamacs-default-styles
+       (cons (cons mode (aquamacs-get-style-snapshot)) 
+	     (assq-delete-all mode 
+			      aquamacs-default-styles))))
+  ;; set default-frame-alist
+  (customize-set-variable 
+   'default-frame-alist
+   (append 
+    (apply #'append
+	   (mapcar 
+	    (lambda (pm)
+	      (if (string-match 
+		   aquamacs-styles-relevant-frame-parameter-regexp 
+		   (symbol-name (car pm)))
+		  (list pm)))
+	    default-frame-alist))
+    (aquamacs-get-style-frame-parameters))))
 
+	  
+
+
+  );(aquamacs-adopt-frame-parameters-for-mode-style 'default))
+
+(defun aquamacs-default-styles-list (&optional face-names)
+  "Return list of all major modes that have a default style."
+  (let ((styles (unless face-names aquamacs-default-styles)))
+    (unless face-names
+      (setq styles (mapcar 'car (assq-delete-all 'default styles))))
+    (mapatoms
+     (lambda (symbol)
+       (when (and (get symbol 'saved-face) ;; it's a face we've customized
+		  (eq 'user (car (car-safe (get symbol 'theme-face))))
+		  (eq 0 (string-match "^default-\\(.*\\)$" (symbol-name symbol))))
+	 (nconc styles (list (if face-names symbol
+			       (intern (match-string 1 (symbol-name symbol))))))))
+     (sort styles 'string<))))
+  
 (defun aquamacs-adopt-frame-parameters-for-mode-style (&optional mode) 
   (interactive)
   "Activate current style as default for a given mode."
@@ -442,7 +489,7 @@ Sets default-frame-alist. (Aquamacs)"
 				(assq-delete-all mode 
 						 aquamacs-default-styles)))
 
-  (message (format "Style has been set as default for %s. %s" 
+  (message (format "Fram parameters have been adopted for %s. %s" 
 		   (if (eq mode 'default) "all frames" mode)
 		   (if aquamacs-styles-mode
 		       ""
@@ -482,14 +529,10 @@ modify them."))
   (customize-set-variable 'aquamacs-buffer-default-styles nil)
 
   ;; go over all faces
-  (mapatoms
-   (lambda (symbol)
-     (when (and (get symbol 'saved-face) ;; it's a face we've customized
-		(eq 'user (car (car-safe (get symbol 'theme-face))))
-		(progn  (if (eq 0 (string-match "^default-\\(.*\\)$" (symbol-name symbol)))
-			    (symbolp (intern (match-string 1 (symbol-name symbol)))))))
-       (face-spec-set symbol (list :inherit 'default)))))
-
+  (mapc
+   (lambda (face)
+     (face-spec-set symbol '((t (:inherit default)))))
+   (aquamacs-default-styles-list 'facenames))
   (message "All styles cleared."))
 
 (defun aquamacs-delete-one-style (&optional mode)
@@ -499,8 +542,10 @@ modify them."))
   (customize-set-variable  'aquamacs-default-styles 
 			   (assq-delete-all mode
 					    aquamacs-default-styles))
-  (face-spec-set (aquamacs-style-default-face mode) (list :inherit 'default))
-  (message "Mode-specific style for %s removed. Use Save Options before restart to retain setting." mode))
+  (unless (eq mode 'default)
+    (face-spec-set (aquamacs-style-default-face mode) '((t (:inherit default)))))
+  (if (interactive-p)
+      (message "Mode-specific style for %s removed. Use Save Options before restart to retain setting." mode)))
 
 (defun aquamacs-updated-major-mode ()
 "Returns the major mode of the selected window of the frame
@@ -660,9 +705,7 @@ current major mode. To turn off this behavior, see
 			       (font . "fontset-monaco11")
 			       (foreground-color . "sienna")
 			       (background-color . "light goldenrod"))
-		  ;; should the default be taken from default-frame-alist?
-		  (default (font . "fontset-monaco12")   
-			    (right-fringe . 1) (left-fringe . 1))
+		  ;; the default is taken from default-frame-alist
 		  ))
   "Association list to set mode-specific styles. Each element 
 is a list of elements of the form (mode-name style), where
@@ -947,9 +990,7 @@ for all frames with the current major-mode."
 			 (modename-to-string (aquamacs-updated-major-mode)) 
 			 "current mode"))   
 		aquamacs-delete-one-style 
-		:enable (and (menu-bar-menu-frame-live-and-visible-p)
-			     (assq (aquamacs-updated-major-mode) 
-				   aquamacs-default-styles))
+		:enable (menu-bar-menu-frame-live-and-visible-p)
 		:help "Removes a mode-specific style."))
 
 (defun modename-to-string (modename)
