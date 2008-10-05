@@ -1,28 +1,12 @@
+
 ;; To do here:
 
-;; use remapped default face when acquiring a new style for a mode
+;; new face naming convention
 
-;; default style should just be the "default" face
-;; aquamacs-set-style should just delete the face remapping
-
-
+;; *Help*-buffer-default -- perhaps we should get rid of this.
+;; text-mode-default
 
 
-;; let's give up on color themes.
-
-;; they add too much functionality that's not needed
-;; and at the same time, they don't work with faces that can be set per buffer.
-
-;; what we really need is a choice of foreground and background color.
-;; this could and should be done via the font panel.  that extension is probably easy.
-;; we only modify the default face.
-
-;; then we change the face that the font panel applies to. that's
-;; easy (mac-handle-font-selection).
-
-;; then, we shift all aquamacs-styles stuff over to just storing a single face: default. 
-;; we only apply very few frame parameters such as tool-bar-lines.
-  
 ;; it appears that just changing the default face does not 
 ;; do enough: background of non-text can't be changed.
 ;; this is possibly easy to patch!
@@ -33,27 +17,7 @@
 ;; OK, maybe use the current solution for a while and filter "font" from the color themes as frame parameters, but leave the other ones.
 
 ;; we do need to change the font seting dialog to just set the remapped face though (or create a remapped one), which should be easy.
-
-
-
-;; - make color theme stick to buffer only by using face remapping on ALL faces from the color theme - not just the main font
-;; - use same technique after color theme is selected manually
-;; - make font selector change the remapped default font and not the default font for the frame.
-
-;; - color themes should convert frame parms to face parsm as much as possible:
-;;   bg / fg colors, font
-;; - color-themes: do not install any other frame parameters
-
-;; aq-styles should set font face,but then merge it w/ the face from color themes
-;; maybe the face-set-spec in color-themes does that already
-
-;; font setter: change the remapped face where appropriate
-;; styles: the snapshot function may need to be adapted
-
-
-
-
-
+ 
 
 
 ;; aquamacs mode specific styles
@@ -72,7 +36,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.45 2008/10/05 14:42:57 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.46 2008/10/05 19:32:23 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -468,7 +432,7 @@ Sets default-frame-alist. (Aquamacs)"
   (copy-face (aquamacs-style-default-face mode) 'default)
   (aquamacs-set-style-as-mode-default 'default))
 
-(defun aquamacs-set-style-as-mode-default (&optional mode) 
+(defun aquamacs-adopt-frame-parameters-for-mode-style (&optional mode) 
   (interactive)
   "Activate current style as default for a given mode."
   (setq mode (or mode major-mode))
@@ -484,6 +448,16 @@ Sets default-frame-alist. (Aquamacs)"
 		       ""
 		     (aquamacs-styles-mode 1)
 		     "\nNote: Auto Styles have been turned on."))))
+
+(defun aquamacs-remove-frame-parameters-from-style  (&optional mode) 
+  (interactive)
+  "Remove frame paraemters from style for a given mode."
+  (setq mode (or mode major-mode))
+  (customize-set-variable 'aquamacs-default-styles
+			  (assq-delete-all mode 
+					   aquamacs-default-styles))
+  (message (format "Frame parameters have been removed from %s." 
+		   (if (eq mode 'default) "frame default" mode))))
 
 
 (defun set-to-custom-standard-value (symbol)
@@ -932,16 +906,7 @@ the current frame is modified."
 	    'set-mode-style-after-change-major-mode
 	    )
   (add-hook 'menu-bar-update-hook 'aquamacs-update-mode-style)
-  (define-key-after aquamacs-frame-style-menu [menu-delete-one-style]
-    '(menu-item (format "Remove Style for %s" 
-			(or 
-			 (modename-to-string (aquamacs-updated-major-mode)) 
-			 "current mode"))   
-		aquamacs-delete-one-style 
-		:enable (and (menu-bar-menu-frame-live-and-visible-p)
-			     (assq (aquamacs-updated-major-mode) 
-				   aquamacs-default-styles))
-		:help "Removes a mode-specific style."))
+  
   (define-key-after aquamacs-frame-style-menu [menu-clear-sep]
     '(menu-item  "--"))
 (define-key-after aquamacs-frame-style-menu [menu-reset-styles]
@@ -953,20 +918,39 @@ the current frame is modified."
 		 :help "Clear all styles."
 		 :enable t))
   
-
-
-  (define-key aquamacs-frame-style-menu [menu-set-style-as-mode-default]
-    '(menu-item (format "Adopt these Frame Parameters for %s" 
+(define-key aquamacs-frame-style-menu [menu-remove-frame-parameters-from-style]
+    '(menu-item (format "Remove Frame Parameters from %s Style" 
 			(or (modename-to-string (aquamacs-updated-major-mode)) "Current Mode"))
-		aquamacs-set-style-as-mode-default 
+		aquamacs-remove-frame-parameters-from-style 
 		:help "Set the current frame parameters as default 
 for all frames with the current major-mode."
 		:enable   (menu-bar-menu-frame-live-and-visible-p)))
-  (define-key aquamacs-frame-style-menu [menu-set-style-as-default]
-    '(menu-item  "Use this Style as Default"     aquamacs-set-style-as-default
+  (define-key aquamacs-frame-style-menu [menu-adopt-frame-parameters]
+    '(menu-item (format "Adopt these Frame Parameters for %s" 
+			(or (modename-to-string (aquamacs-updated-major-mode)) "Current Mode"))
+		aquamacs-adopt-frame-parameters-for-mode-style 
+		:help "Set the current frame parameters as default 
+for all frames with the current major-mode."
+		:enable   (menu-bar-menu-frame-live-and-visible-p)))
+ 
+
+  
+ (define-key aquamacs-frame-style-menu [menu-clear-sep-2]
+    '(menu-item  "--"))
+ (define-key aquamacs-frame-style-menu [menu-set-style-as-default]
+    '(menu-item  "Use this Style as Default for all Modes"     aquamacs-set-style-as-default
 		 :enable (menu-bar-menu-frame-live-and-visible-p)
 		 :help ""))
-
+(define-key aquamacs-frame-style-menu [menu-delete-one-style]
+    '(menu-item (format "Remove Style for %s" 
+			(or 
+			 (modename-to-string (aquamacs-updated-major-mode)) 
+			 "current mode"))   
+		aquamacs-delete-one-style 
+		:enable (and (menu-bar-menu-frame-live-and-visible-p)
+			     (assq (aquamacs-updated-major-mode) 
+				   aquamacs-default-styles))
+		:help "Removes a mode-specific style."))
 
 (defun modename-to-string (modename)
   (capitalize
