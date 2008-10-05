@@ -72,7 +72,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.44 2008/10/04 15:12:29 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.45 2008/10/05 14:42:57 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -190,12 +190,11 @@ ability. The following rules are followed:
 
 (require 'smart-frame-positioning)
 ;; (frame-parameter nil 'font)
-
+;; face-remapping-alist
 (defun aquamacs-set-style (&optional frame force for-mode in-buffer)
   "Sets the mode-specific style (frame parameters) for FRAME
  (selected frame if nil), unless it is already set (or
 FORCE is non-nil). Use style of major mode FOR-MODE if given." 
- 
   (when (or force aquamacs-styles-mode)
     (unless frame (setq frame (selected-frame) ))
     (if (frame-live-p frame)  
@@ -209,7 +208,7 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 	    ;; with this function called again and again...  
 
 	    (let* ((frame-param-buffer (aquamacs-style-relevant-buffer frame))
-		   (buffer (or		;in-buffer
+		   (buffer (or in-buffer
 			    (window-buffer (selected-window))
 			    frame-param-buffer)))
 	      ;(print (aquamacs-style-relevant-buffer frame))
@@ -224,7 +223,6 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 					   buffer 
 					   mode)  
 					  ))))
-		
 		    (let* ((style-face-id (aquamacs-style-default-face (or for-mode 
 						(if (aquamacs-get-buffer-style (buffer-name))
 						    (format "%s---%s" (buffer-name) mode)
@@ -284,7 +282,7 @@ The `default' face is remapped (in the appropriate buffers) to this face.")
 			  (set-face-font style-face-id (cdr (assq 'font style)) nil)))
 
 		      ;; ensure this is saved as a customization
-		      (let ((value (list (list t   (custom-face-attributes-get 'default-emacs-lisp-mode nil)))))
+		      (let ((value (list (list t   (custom-face-attributes-get style-face-id nil)))))
 			(put style-face-id 'saved-face   value)
 			(custom-push-theme 'theme-face style-face-id 'user 'set value))
 
@@ -293,6 +291,7 @@ The `default' face is remapped (in the appropriate buffers) to this face.")
 		      (setq style (assq-delete-all 'font style))
 					; (print style-face-id)
 		      ;; make sure we're remapping
+		     
 		      (make-local-variable 'face-remapping-alist)
 		      (assq-set 'default style-face-id 'face-remapping-alist)
 		      (modify-frame-parameters frame 
@@ -397,15 +396,11 @@ to be appropriate for its first buffer"
 	  ;;(make-variable-frame-local 'last-major-mode-style-in-this-frame)
 	  ;;(setq last-major-mode-style-in-this-frame major-mode)
 	  ;; can't call ->crash
-	  (aquamacs-set-style)
-	  )
-	
-	)
+	  (aquamacs-set-style)))
 
-    (error nil)
-    )
-  t
-  )
+    (error nil))
+  t)
+
 (defun aquamacs-update-mode-styles-everywhere ()
   "Update the styles (colors, font) of all frames
 to be appropriate for its first buffer. (Aquamacs)"
@@ -596,6 +591,7 @@ for which the menu is being updated."
 (defvar appstyle-mode-menu nil)
 
 (defun aquamacs-apply-style-for-mode (&optional ignored modename)
+;; todo: "Copy over style."
   (interactive)
   (aquamacs-set-style nil t (or modename last-command-event)))
  
@@ -771,9 +767,9 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
 	(mapcar 'car-safe aquamacs-default-styles))
   (message "Modified the styles for all modes: %s set to %s." param value))
 
+(defvar aquamacs-faces-changed nil)
 (defadvice mac-handle-font-selection
   (after mark-faced-unsaved () activate)
-  
   (setq aquamacs-faces-changed t))
 
 (defadvice modify-all-frames-parameters
@@ -1107,3 +1103,4 @@ selected frame."
     (aquamacs-styles-mode 1))
 
 (provide 'aquamacs-styles)
+
