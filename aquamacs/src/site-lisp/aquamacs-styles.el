@@ -36,7 +36,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.47 2008/10/05 22:47:20 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.48 2008/10/05 22:47:51 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -459,11 +459,7 @@ Sets `default-frame-alist' and the `default' face."
 		  (list pm)))
 	    default-frame-alist))
     (aquamacs-get-style-frame-parameters))))
-
 	  
-
-
-  );(aquamacs-adopt-frame-parameters-for-mode-style 'default))
 
 (defun aquamacs-default-styles-list (&optional face-names)
   "Return list of all major modes that have a default style."
