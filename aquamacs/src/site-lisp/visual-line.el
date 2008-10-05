@@ -335,59 +335,68 @@ non-nil.  Otherwise, this function behaves exactly like
 
 (defun kill-whole-visual-line (&optional arg)
   "Kill current visual line.
-With prefix arg, kill that many lines starting from the current line.
-If arg is negative, kill backward.  Also kill the preceding newline.
-\(This is meant to make \\[repeat] work well with negative arguments.\)
-If arg is zero, kill current line but exclude the trailing newline.
+With prefix arg, kill that many lines starting from the current
+line.  If arg is negative, kill backward.  Also kill the
+preceding newline.  \(This is meant to make \\[repeat] work well
+with negative arguments.\) 
+
+If arg is zero, kill current line but exclude the trailing
+newline. 
+
+In `transient-mark-mode', if arg is one and the mark is
+active (a region is set), kill the region.
 
 ``Line'' is defined as visual line, from the leftmost to the
 rightmost position of a single visual line, if `word-wrap' is
-non-nil.  Otherwise, this function behaves exactly like
-`kill-line'."
+non-nil.  Otherwise, lines are treated just like `kill-line'
+would do."
   (interactive "p")
 
-  (if (not word-wrap)
-      (progn
-	(beginning-of-line)
-	(skip-read-only-prompt)
-	(kill-line arg))
-    (if (and (> arg 0) (eobp) (save-excursion (vertical-motion 0) (eobp)))
-	(signal 'end-of-buffer nil))
-    (if (and (< arg 0) (bobp) (save-excursion (vertical-motion 1) (bobp)))
-	(signal 'beginning-of-buffer nil))
-    (unless (eq last-command 'kill-region)
-      (kill-new "")
-      (setq last-command 'kill-region))
-    (cond ((zerop arg)
-	   ;; We need to kill in two steps, because the previous command
-	   ;; could have been a kill command, in which case the text
-	   ;; before point needs to be prepended to the current kill
-	   ;; ring entry and the text after point appended.  Also, we
-	   ;; neehd to use save-excursion to avoid copying the same text
-	   ;; twice to the kill ring in read-only buffers.
-	   (save-excursion
-	     ;; delete in one go
-	     (kill-region (progn (vertical-motion 0) 
-				 (skip-read-only-prompt) (point))
-			  (progn (vertical-motion 1) (point)))
-	     ))
-	  ((< arg 0)
-	   (save-excursion
-	     (kill-region (point) (progn (end-of-visual-line) (point))))
-	   (kill-region (point)
-			(progn
-			  (vertical-motion (1+ arg))
-			  (unless (bobp) (backward-char))
-			  (point))))
-	  (t
-	   (save-excursion
-	     (kill-region (let ((ep (point)))
-			    (vertical-motion 0) 
-			    (skip-read-only-prompt ep)
-			    (point))
+  (if (and transient-mark-mode 
+	   (= arg 1) mark-active) ;; region defined?
+      (call-interactively #'kill-region)
+    (if (not word-wrap)
+	(progn
+	  (beginning-of-line)
+	  (skip-read-only-prompt)
+	  (kill-line arg))
+      (if (and (> arg 0) (eobp) (save-excursion (vertical-motion 0) (eobp)))
+	  (signal 'end-of-buffer nil))
+      (if (and (< arg 0) (bobp) (save-excursion (vertical-motion 1) (bobp)))
+	  (signal 'beginning-of-buffer nil))
+      (unless (eq last-command 'kill-region)
+	(kill-new "")
+	(setq last-command 'kill-region))
+      (cond ((zerop arg)
+	     ;; We need to kill in two steps, because the previous command
+	     ;; could have been a kill command, in which case the text
+	     ;; before point needs to be prepended to the current kill
+	     ;; ring entry and the text after point appended.  Also, we
+	     ;; neehd to use save-excursion to avoid copying the same text
+	     ;; twice to the kill ring in read-only buffers.
+	     (save-excursion
+	       ;; delete in one go
+	       (kill-region (progn (vertical-motion 0) 
+				   (skip-read-only-prompt) (point))
+			    (progn (vertical-motion 1) (point)))
+	       ))
+	    ((< arg 0)
+	     (save-excursion
+	       (kill-region (point) (progn (end-of-visual-line) (point))))
+	     (kill-region (point)
 			  (progn
-			    (vertical-motion arg) 
-			    (point))))))))
+			    (vertical-motion (1+ arg))
+			    (unless (bobp) (backward-char))
+			    (point))))
+	    (t
+	     (save-excursion
+	       (kill-region (let ((ep (point)))
+			      (vertical-motion 0) 
+			      (skip-read-only-prompt ep)
+			      (point))
+			    (progn
+			      (vertical-motion arg) 
+			      (point)))))))))
 
 ;; mark functions for CUA
 (dolist (cmd
