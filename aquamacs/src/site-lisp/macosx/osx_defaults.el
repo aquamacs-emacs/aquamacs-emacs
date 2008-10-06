@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.69 2008/06/26 21:41:32 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.70 2008/10/06 20:21:04 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -221,24 +221,6 @@ from earlier versions of the distribution."
   ;; do this early, so we can override settings
   (require 'aquamacs-frame-setup)
 (ats "frame setup done")
-
-  ;; one-on-one is called later
-  (setq osxkeys-command-key (or (if (boundp 'mac-command-modifier)
-				    mac-command-modifier nil) 'alt))
-  ;; we have inhibit-fit-frame set to true... can't do this
-  ;; (global-set-key [(control ?x) (control ?-)] 'fit-frame)
-  ;; use vector, not [...] in order to not allocate at load-time 
-  ;; in pure-space
-  (global-set-key (vector  `(,osxkeys-command-key control down)) 
-		  'enlarge-frame)
-  (global-set-key (vector  `(,osxkeys-command-key control right)) 
-		  'enlarge-frame-horizontally)
-  (global-set-key (vector  `(,osxkeys-command-key control up)) 
-		  'shrink-frame)
-  (global-set-key (vector  `(,osxkeys-command-key control left)) 
-		  'shrink-frame-horizontally)
-  
-
     
 
   (require 'aquamacs-mac-fontsets)
@@ -246,6 +228,11 @@ from earlier versions of the distribution."
 
   (setq mac-allow-anti-aliasing t) 
 
+  ;; NS specific defaults
+  (aquamacs-set-defaults '(
+			 (ns-use-qd-smoothing nil)
+			 (ns-use-system-highlight-color t)
+			 ))
 
   ;; -- KEYS AND MENUs ---------------------------
 
@@ -262,7 +249,7 @@ from earlier versions of the distribution."
 (ats "osx key done")
 
   ;; need to enforce a coding system (problems with Jap locale otherwise)
-  (let ((coding-system-for-read 'iso-latin-1-unix))
+  (let ((coding-system-for-read 'utf-8))
     ;; not turned on by default                    
     (require 'emulate-mac-keyboard-mode) )  
 
@@ -302,7 +289,7 @@ from earlier versions of the distribution."
 
 
     (when (and (boundp 'mac-apple-event-map) mac-apple-event-map)
-      (define-key mac-apple-event-map [core-event reopen-application ]
+      (define-key mac-apple-event-map [core-event reopen-application]
 	'aquamacs-de-iconify-some-frame))
   ) ;; aquamacs-osx-defaults-setup
 
