@@ -36,7 +36,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.50 2008/10/06 00:09:03 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.51 2008/10/06 04:03:15 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -438,8 +438,7 @@ Sets `default-frame-alist' and the `default' face."
 
   ;; delete the legacy `default' style
   (aquamacs-delete-one-style 'default)
-  ;; define the default face
-  (copy-face (aquamacs-style-default-face mode) 'default)
+ 
   (if aquamacs-use-color-themes
       (customize-set-variable 
        'aquamacs-default-styles
@@ -453,12 +452,14 @@ Sets `default-frame-alist' and the `default' face."
     (apply #'append
 	   (mapcar 
 	    (lambda (pm)
-	      (if (string-match 
+	      (unless (string-match 
 		   aquamacs-styles-relevant-frame-parameter-regexp 
 		   (symbol-name (car pm)))
 		  (list pm)))
 	    default-frame-alist))
-    (aquamacs-get-style-frame-parameters))))
+    (aquamacs-get-style-frame-parameters)))
+  ;; define the default face
+  (copy-face (aquamacs-style-default-face major-mode) 'default))
 	  
 
 (defun aquamacs-default-styles-list (&optional face-names)
