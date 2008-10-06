@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.125 2008/09/19 14:48:13 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.126 2008/10/06 20:18:45 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -801,6 +801,15 @@ default."
     (if (fboundp 'mac-font-panel-mode)
 	(define-key map `[(,osxkeys-command-key shift t)] 'mac-font-panel-mode))
 
+    ;; we have inhibit-fit-frame set to true... can't do this
+    ;; (global-set-key [(control ?x) (control ?-)] 'fit-frame)
+    ;; use vector, not [...] in order to not allocate at load-time 
+    ;; in pure-space
+    (define-key map `[(,osxkeys-command-key control down)] 'enlarge-frame)
+    (define-key map `[(,osxkeys-command-key control right)] 'enlarge-frame-horizontally)
+    (define-key map `[(,osxkeys-command-key control up)] 'shrink-frame)
+    (define-key map `[(,osxkeys-command-key control left)] 'shrink-frame-horizontally)
+ 
     map))
  
 
