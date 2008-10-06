@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.205 2008/10/04 21:12:39 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.206 2008/10/06 14:18:23 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -259,11 +259,12 @@ un-Mac-like way when you select text and copy&paste it.")))
 
 ;; (progn (message "%s" (startup-echo-area-message)) (sit-for 4))
 ;; 
+(defvar aquamacs-faces-changed)
 (defun aquamacs-menu-bar-options-save ()
     "Save current values of Options menu items using Custom.
 Return non-nil if options where saved."
     (interactive)
-    (let ((need-save nil))
+    (let ((need-save aquamacs-faces-changed))
       (setq aquamacs-customization-version-id aquamacs-version-id)
       ;; These are set with menu-bar-make-mm-toggle, which does not
       ;; put on a customized-value property.
@@ -284,7 +285,7 @@ Return non-nil if options where saved."
       need-save))
   ;; (aquamacs-menu-bar-changed-options) 
   (defun aquamacs-menu-bar-changed-options ()
-    (let ((need-save))
+    (let ((need-save aquamacs-faces-changed))
       (dolist (elt aquamacs-menu-bar-options-to-save)
 	(and (aquamacs-variable-customized-p elt)
 	     (setq need-save (cons elt need-save))))
