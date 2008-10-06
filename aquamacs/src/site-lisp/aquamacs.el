@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.207 2008/10/06 14:19:01 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.208 2008/10/06 18:25:59 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -174,8 +174,7 @@ Separate paths from file names with --."
       (when (eq tabbar-mode 'default)
 	  (custom-set-variables '(tabbar-mode nil)))
       (when (eq one-buffer-one-frame-mode 'default)
-	  (custom-set-variables '(one-buffer-one-frame-mode t))))
-
+	  (custom-set-variables '(one-buffer-one-frame-mode t)))) 
 ;; Print warnings / compatibility options
     
     (if (boundp 'mac-reverse-ctrl-meta)
@@ -955,7 +954,7 @@ to the selected frame."
   (require 'one-buffer-one-frame)
   ;; necessary to ensure the value is saved with the Options
   ;; (setting the default)
-  (aquamacs-set-defaults '((one-buffer-one-frame-mode t)))
+  (aquamacs-set-defaults '((one-buffer-one-frame-mode nil)))
   ;; so we can detect changes to the variable by the user.
   (setq one-buffer-one-frame-mode 'default) 
   ;; will be set later on
