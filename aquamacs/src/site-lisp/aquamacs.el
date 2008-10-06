@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.208 2008/10/06 18:25:59 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.209 2008/10/06 19:04:36 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -235,13 +235,10 @@ un-Mac-like way when you select text and copy&paste it.")))
     (make-help-mode-not-use-frame-fitting))
 
   (if (eq tabbar-mode 'default)
-      (setq tabbar-mode (default-value 'tabbar-mode)))
+       (customize-set-variable 'tabbar-mode t))
   (if (eq one-buffer-one-frame-mode 'default)
-      (setq one-buffer-one-frame-mode 
-	    (default-value 'one-buffer-one-frame-mode)))
+      (customize-set-variable 'one-buffer-one-frame-mode nil)))
 
-  (enable-one-buffer-one-frame-mode)
-  (tabbar-mode (if tabbar-mode 1 0)))
 ; (aquamacs-notice-user-settings)
 
 ;; redefine this
