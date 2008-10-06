@@ -36,7 +36,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.49 2008/10/06 00:07:27 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.50 2008/10/06 00:09:03 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -429,7 +429,7 @@ Sets `default-frame-alist' and the `default' face."
 		       (let ((l (mapcar 
 				 (lambda (x)
 				   (concat
-				    (symbol-name (car x)) ", "))
+				    (symbol-name x) ", "))
 				 existing-styles)))
 			 (if (nthcdr 5 l)
 			     (setcdr (nthcdr 5 l) (list "(...)")))
