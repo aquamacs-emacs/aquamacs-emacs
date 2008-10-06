@@ -1,6 +1,13 @@
 
 ;; To do here:
 
+;; adopt as default -- we shouldn't modify the default face
+;; too many other faces inherit from default
+
+;; instead, modify some kind of unassigned-default face and inherit
+;; from that face when a new mode is entered.  
+
+
 ;; new face naming convention
 
 ;; *Help*-buffer-default -- perhaps we should get rid of this.
@@ -36,7 +43,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.51 2008/10/06 04:03:15 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.52 2008/10/06 13:39:53 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -150,7 +157,7 @@ ability. The following rules are followed:
    
 
 (defun aquamacs-style-default-face (mode)
-  (intern (format "default-%s" mode)))
+  (intern (format "%s-default" mode)))
 
 (require 'smart-frame-positioning)
 ;; (frame-parameter nil 'font)
@@ -189,7 +196,7 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 					  ))))
 		    (let* ((style-face-id (aquamacs-style-default-face (or for-mode 
 						(if (aquamacs-get-buffer-style (buffer-name))
-						    (format "%s---%s" (buffer-name) mode)
+						    (format "%s-%s" (buffer-name) mode)
 						  mode))))
 					    
 			   
@@ -417,7 +424,6 @@ to be appropriate for its first buffer. (Aquamacs)"
   "Activate current frame and face settings (style) as default. 
 Sets `default-frame-alist' and the `default' face."
   (interactive)
-
 ;; maybe delete mode-specific frames?
   (when 
       (let ((existing-styles  (aquamacs-default-styles-list)))
@@ -464,18 +470,20 @@ Sets `default-frame-alist' and the `default' face."
 
 (defun aquamacs-default-styles-list (&optional face-names)
   "Return list of all major modes that have a default style."
-  (let ((styles (unless face-names aquamacs-default-styles)))
+  (let ((styles (if face-names '(0) aquamacs-default-styles)))
     (unless face-names
-      (setq styles (mapcar 'car (assq-delete-all 'default styles))))
+      (setq styles (list 0 (mapcar 'car (assq-delete-all 'default styles)))))
     (mapatoms
      (lambda (symbol)
        (when (and (get symbol 'saved-face) ;; it's a face we've customized
 		  (eq 'user (car (car-safe (get symbol 'theme-face))))
-		  (eq 0 (string-match "^default-\\(.*\\)$" (symbol-name symbol))))
+		  (eq 0 (string-match "^\\(.*\\)-default$" (symbol-name symbol))))
 	 (nconc styles (list (if face-names symbol
-			       (intern (match-string 1 (symbol-name symbol)))))))))
-     (sort styles 'string<)))
-  
+			       (intern (match-string 1 (symbol-name symbol)))))))
+       ))
+     (sort (cdr styles) 'string<)))
+;;  (aquamacs-default-styles-list)
+
 (defun aquamacs-adopt-frame-parameters-for-mode-style (&optional mode) 
   (interactive)
   "Activate current style as default for a given mode."
@@ -615,13 +623,7 @@ for which the menu is being updated."
 (defun aquamacs-update-apply-style-for-mode-menu ()
   (setq appstyle-mode-menu
 	(aquamacs-define-mode-menu-1 
-
-	 (reverse (sort (aq-copy-list 
-			 (mapcar 'car aquamacs-default-styles))
-			(lambda (a b) (string< 
-				       (upcase (symbol-name a)) 
-				       (upcase (symbol-name b))))))
-
+	 (aquamacs-default-styles-list)
 	 (make-sparse-keymap "Set Mode") 
 	 'aquamacs-apply-style-for-mode
 	 "Apply frame style assigned to %s." 
@@ -815,7 +817,9 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
 		      (if (and (boundp 'face-remapping-alist)
 			       (assq 'default face-remapping-alist))
 			  (capitalize 
-			   (replace-regexp-in-string "default-" "" (symbol-name (cdr (assq 'default face-remapping-alist)))))
+			   (replace-regexp-in-string 
+			    "-default$" ""
+			    (symbol-name (cdr (assq 'default face-remapping-alist)))))
 			(if aquamacs-styles-mode
 			    "this Frame's default" "this Frame")))
 	      turn-on-mac-font-panel-mode
@@ -910,12 +914,12 @@ the current frame is modified."
 
 
 (defun aquamacs-face-or-frame-name (generic-frame-name)
-(if (assq 'default face-remapping-alist)
-					     (capitalize 
-					      (replace-regexp-in-string 
-					       "default-" "" 
-					       (symbol-name (cdr (assq 'default face-remapping-alist)))))
-					   (or generic-frame-name (concat "frame " (get-frame-name)))))
+  (if (assq 'default face-remapping-alist)
+      (capitalize 
+       (replace-regexp-in-string 
+	"-default$" "" 
+	(symbol-name (cdr (assq 'default face-remapping-alist)))))
+    (or generic-frame-name (concat "frame " (get-frame-name)))))
 
 (define-key-after menu-bar-options-menu [background-color]
   `(menu-item (format "Background Color for %s...                 "
