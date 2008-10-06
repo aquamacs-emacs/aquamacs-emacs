@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.74 2008/09/21 20:23:37 champo Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.75 2008/10/06 19:01:07 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -97,46 +97,39 @@ The mode sets `pop-up-frames', `pop-up-windows',
 
 This mode is part of Aquamacs Emacs, http://aquamacs.org."
 
-;; the condition case is because otherwise this won't
-;; do it's job. don't know why.
-  (condition-case nil
-      (if window-system
-	  (if one-buffer-one-frame-mode
-	      (setq obofm-old-pop-up-frames  pop-up-frames
-		    pop-up-frames nil
-		    ;; if pop-up-frames is t, even *Completions* buffers
-		    ;; will spawn their own frames
-		    obofm-old-pop-up-windows pop-up-windows
-	    
-		    ;; if this is set to t, we ignore the user's preferenes
-		    ;; and it doesn't lead to good decisions (by default)
-		    ;;  pop-up-windows t
-		    obofm-old-display-buffer-reuse-frames 
-		    display-buffer-reuse-frames
-		    display-buffer-reuse-frames t
-		    obof-backups-initialized t
-		    ;; pressing q in a view should delete the frame
-		    view-remove-frame-by-deleting t)
-					; else (turning off)
-	    ;; restore settings
-	    (if obof-backups-initialized
-		(setq    pop-up-frames obofm-old-pop-up-frames
-			 ;; pop-up-windows obofm-old-pop-up-windows
-			 display-buffer-reuse-frames 
-			 obofm-old-display-buffer-reuse-frames)))
-	;; no window-system available
-	(message "one-buffer-one-frame mode won't work without frames."))
-    (error nil))
-
   :group 'Aquamacs
   :global t
   :keymap 'one-buffer-one-frame-mode-map
   :require 'aquamacs-frame-setup
 
-(and (not one-buffer-one-frame-mode)
-     (boundp 'aquamacs-styles-mode) aquamacs-styles-mode
-     (message "One-Buffer-One-Frame-Mode disabled. 
-For best results, turn off Frame Appearance Styles now.")))
+  (if window-system
+      (progn
+	(if one-buffer-one-frame-mode
+	  (setq obofm-old-pop-up-frames  pop-up-frames
+		pop-up-frames nil
+		;; if pop-up-frames is t, even *Completions* buffers
+		;; will spawn their own frames
+		obofm-old-pop-up-windows pop-up-windows
+		
+		;; if this is set to t, we ignore the user's preferenes
+		;; and it doesn't lead to good decisions (by default)
+		;;  pop-up-windows t
+		obofm-old-display-buffer-reuse-frames 
+		display-buffer-reuse-frames
+		display-buffer-reuse-frames t
+		obof-backups-initialized t
+		;; pressing q in a view should delete the frame
+		view-remove-frame-by-deleting t)
+					; else (turning off)
+	  ;; restore settings
+	  (if obof-backups-initialized
+	    (setq    pop-up-frames obofm-old-pop-up-frames
+		     ;; pop-up-windows obofm-old-pop-up-windows
+		     display-buffer-reuse-frames 
+		     obofm-old-display-buffer-reuse-frames)))
+	(message "one-buffer-one-frame-mode %sabled." (if one-buffer-one-frame-mode "en" "dis")))
+    ;; no window-system available
+    (message "one-buffer-one-frame mode won't work without frames.")))
 
 
 ;; because of the following alias, setting the mode variable will
@@ -906,7 +899,7 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
     ;; clear flag as soon as command has finished (or similar)
     (run-with-idle-timer 
      0 nil 
-     (lambda () (setq one-buffer-one-frame-inhibit nil))))) 
+     (lambda () (setq one-buffer-one-frame-inhibit nil)))))
 
 
 ;; (defadvice delete-window (before inhibit-one-buffer-one-frame 
