@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.206 2008/10/06 14:18:23 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.207 2008/10/06 14:19:01 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -280,6 +280,7 @@ Return non-nil if options where saved."
       ;; Save if we changed anything.
       (if need-save
 	  (progn (custom-save-all)
+		 (setq aquamacs-faces-changed nil)
 		 (message "Options saved."))
 	(message "There's no need to save your options."))
       need-save))
