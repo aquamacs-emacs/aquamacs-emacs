@@ -36,7 +36,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.48 2008/10/05 22:47:51 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.49 2008/10/06 00:07:27 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -472,8 +472,8 @@ Sets `default-frame-alist' and the `default' face."
 		  (eq 'user (car (car-safe (get symbol 'theme-face))))
 		  (eq 0 (string-match "^default-\\(.*\\)$" (symbol-name symbol))))
 	 (nconc styles (list (if face-names symbol
-			       (intern (match-string 1 (symbol-name symbol))))))))
-     (sort styles 'string<))))
+			       (intern (match-string 1 (symbol-name symbol)))))))))
+     (sort styles 'string<)))
   
 (defun aquamacs-adopt-frame-parameters-for-mode-style (&optional mode) 
   (interactive)
