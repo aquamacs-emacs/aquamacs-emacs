@@ -43,7 +43,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.52 2008/10/06 13:39:53 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.53 2008/10/07 22:36:11 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -159,6 +159,10 @@ ability. The following rules are followed:
 (defun aquamacs-style-default-face (mode)
   (intern (format "%s-default" mode)))
 
+(defface style-default '((t :inherit default)) 
+  "Default face for buffers when `aquamacs-styles-mode' is active.")
+
+
 (require 'smart-frame-positioning)
 ;; (frame-parameter nil 'font)
 ;; face-remapping-alist
@@ -198,8 +202,6 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 						(if (aquamacs-get-buffer-style (buffer-name))
 						    (format "%s-%s" (buffer-name) mode)
 						  mode))))
-					    
-			   
 			   (style (aquamacs-combined-mode-specific-settings 
 				   (if (special-display-p (buffer-name)) 
 				       special-display-frame-alist 
@@ -223,10 +225,12 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 		      ;; the frame significantly:
 		      ;; change width / height to adapt to new font size
 		      
-		      (custom-declare-face 
-		       style-face-id '((t :inherit default)) 
-		       "mode-specific face activated by `aquamacs-styles-mode'.
-The `default' face is remapped (in the appropriate buffers) to this face.")  
+		      
+			
+;; 		      (custom-declare-face 
+;; 		       style-face-id '((t :inherit style-default)) 
+;; 		       "mode-specific face activated by `aquamacs-styles-mode'.
+;; The `default' face is remapped (in the appropriate buffers) to this face.")  
 
 		      ;; (get 'default-lisp-mode 'saved-face)
 		      ;; (get 'font-lock-comment-face 'saved-face)
@@ -240,17 +244,26 @@ The `default' face is remapped (in the appropriate buffers) to this face.")
 				(setq style (assq-delete-all (car x) style)))
 			      col-theme-parms))
 
-		      ;; fixme: colors don't work
-		      ;; they seem to come from the color theme and not the general
-		      ;; parameters
-		      (unless (and (not force) (facep style-face-id)) 
-			;; do not override user's existing face choices
+		      ;; what about force parameter?
+		      (when (not (facep style-face-id))
+			(let ((spec '((t :inherit style-default))))
+			  (make-empty-face style-face-id)
+			  (dolist (frame (frame-list))
+			    (face-spec-set style-face-id spec frame))
+			  (if (memq window-system '(x w32 mac))
+			      (make-face-x-resource-internal style-face-id))
+			  ;; do not set face-defface-spec - this prevents it from being saved to custom-file properly
+			  ;; purecopy needed?
+			  (set-face-documentation style-face-id (purecopy "mode-specific face activated by `aquamacs-styles-mode'.
+The `default' face is remapped (in the appropriate buffers) to this face."))
+			  	;; do not override user's existing face choices
 			(when (assq 'background-color style)
 			  (set-face-background style-face-id (cdr (assq 'background-color style))))
 			(when (assq 'foreground-color style)
 			  (set-face-foreground style-face-id (cdr (assq 'foreground-color style))))
 			(when (assq 'font style)
-			  (set-face-font style-face-id (cdr (assq 'font style)) nil)))
+			  (set-face-font style-face-id (cdr (assq 'font style)) nil))))
+
 
 		      ;; ensure this is saved as a customization
 		      (let ((value (list (list t   (custom-face-attributes-get style-face-id nil)))))
@@ -465,7 +478,7 @@ Sets `default-frame-alist' and the `default' face."
 	    default-frame-alist))
     (aquamacs-get-style-frame-parameters)))
   ;; define the default face
-  (copy-face (aquamacs-style-default-face major-mode) 'default))
+  (copy-face (aquamacs-style-default-face major-mode) 'style-default))
 	  
 
 (defun aquamacs-default-styles-list (&optional face-names)
@@ -536,7 +549,7 @@ modify them."))
   ;; go over all faces
   (mapc
    (lambda (face)
-     (face-spec-set symbol '((t (:inherit default)))))
+     (face-spec-set face '((t (:inherit style-default)))))
    (aquamacs-default-styles-list 'facenames))
   (message "All styles cleared."))
 
@@ -548,7 +561,7 @@ modify them."))
 			   (assq-delete-all mode
 					    aquamacs-default-styles))
   (unless (eq mode 'default)
-    (face-spec-set (aquamacs-style-default-face mode) '((t (:inherit default)))))
+    (face-spec-set (aquamacs-style-default-face mode) '((t (:inherit style-default)))))
   (if (interactive-p)
       (message "Mode-specific style for %s removed. Use Save Options before restart to retain setting." mode)))
 
