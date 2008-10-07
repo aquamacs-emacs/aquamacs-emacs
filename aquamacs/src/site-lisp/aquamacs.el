@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.209 2008/10/06 19:04:36 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.210 2008/10/07 19:37:12 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -31,11 +31,12 @@
 ;; Copyright (C) 2005,2006, 2007, 2008: David Reitter
  
 (defvar aq-starttime 0)
-;(defun ats (txt) 
-;  (message "ATS %s:  %s" (time-since aq-starttime) txt))
+;(defun ats (txt) nil)
+
+(defun ats (txt) 
+  (message "ATS %s:  %s" (time-since aq-starttime) txt))
 
 
-(defun ats (txt) nil)
 
 (setq aq-starttime (current-time))
 (ats "started")
@@ -260,7 +261,7 @@ un-Mac-like way when you select text and copy&paste it.")))
     "Save current values of Options menu items using Custom.
 Return non-nil if options where saved."
     (interactive)
-    (let ((need-save aquamacs-faces-changed))
+    (let ((need-save nil))
       (setq aquamacs-customization-version-id aquamacs-version-id)
       ;; These are set with menu-bar-make-mm-toggle, which does not
       ;; put on a customized-value property.
@@ -274,7 +275,7 @@ Return non-nil if options where saved."
 	     (customize-mark-to-save elt)
 	     (setq need-save (cons elt need-save))))
       ;; Save if we changed anything.
-      (if need-save
+      (if (or aquamacs-faces-changed need-save)
 	  (progn (custom-save-all)
 		 (setq aquamacs-faces-changed nil)
 		 (message "Options saved."))
@@ -282,7 +283,7 @@ Return non-nil if options where saved."
       need-save))
   ;; (aquamacs-menu-bar-changed-options) 
   (defun aquamacs-menu-bar-changed-options ()
-    (let ((need-save aquamacs-faces-changed))
+    (let ((need-save nil))
       (dolist (elt aquamacs-menu-bar-options-to-save)
 	(and (aquamacs-variable-customized-p elt)
 	     (setq need-save (cons elt need-save))))
@@ -326,11 +327,12 @@ have changed."
 Returns t."
   (interactive)
   (let* ((changed (aquamacs-menu-bar-changed-options)))
-    (if (and (filter-list changed
+    (if (and (or aquamacs-faces-changed
+		 (filter-list changed
 			  (list 'aquamacs-customization-version-id
 				'smart-frame-prior-positions
 				'aquamacs-additional-fontsets
-				'transient-mark-mode))
+				'transient-mark-mode)))
 	     ;; depends on return value of `aquamacs-menu-bar-options-save'
 	     ;; NOT implemented for the standard menu-bar-options-save!
 	     ;; ask user whether to accept these saved changes
