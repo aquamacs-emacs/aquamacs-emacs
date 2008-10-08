@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.210 2008/10/07 19:37:12 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.211 2008/10/08 14:02:44 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -175,7 +175,18 @@ Separate paths from file names with --."
       (when (eq tabbar-mode 'default)
 	  (custom-set-variables '(tabbar-mode nil)))
       (when (eq one-buffer-one-frame-mode 'default)
-	  (custom-set-variables '(one-buffer-one-frame-mode t)))) 
+	  (custom-set-variables '(one-buffer-one-frame-mode t))))
+
+    (when (< aquamacs-customization-version-id 161)
+      ;; some tidying up from previous versions
+      (let ((default-frame-parms (assq 'default aquamacs-default-styles)))
+	(when default-frame-parms
+	  (setq aquamacs-default-styles
+		(cons (cons 'style-default (cdr-safe default-frame-parms))
+		      (assq-delete-all
+		       'default  
+		       aquamacs-default-styles))))))
+ 
 ;; Print warnings / compatibility options
     
     (if (boundp 'mac-reverse-ctrl-meta)
