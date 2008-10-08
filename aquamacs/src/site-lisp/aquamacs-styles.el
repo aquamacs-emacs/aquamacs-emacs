@@ -43,7 +43,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.53 2008/10/07 22:36:11 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.54 2008/10/08 14:36:04 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -327,10 +327,7 @@ The `default' face is remapped (in the appropriate buffers) to this face."))
 
 (defun aquamacs-get-style (mode) 
   (or (cdr (assq mode aquamacs-default-styles)) 
-      ;;(progn (print "resorting to default") nil)
-      (cdr (assq 'default aquamacs-default-styles))
-					;(progn (print "nothing found") nil)
-      ))
+      (cdr (assq 'style-default aquamacs-default-styles))))
 
 (defun set-mode-style-after-change-major-mode ()       			      
   ;; delete the configuration cache parameter
@@ -434,8 +431,9 @@ to be appropriate for its first buffer. (Aquamacs)"
 			  (frame-parameters))))
 
 (defun aquamacs-set-style-as-default () 
-  "Activate current frame and face settings (style) as default. 
-Sets `default-frame-alist' and the `default' face."
+  "Copy style to be used as default style.
+Sets `aquamacs-default-styles' if frame parameters as given.
+Sets the `style-default' face."
   (interactive)
 ;; maybe delete mode-specific frames?
   (when 
@@ -457,35 +455,41 @@ Sets `default-frame-alist' and the `default' face."
 
   ;; delete the legacy `default' style
   (aquamacs-delete-one-style 'default)
- 
-  (if aquamacs-use-color-themes
-      (customize-set-variable 
-       'aquamacs-default-styles
-       (cons (cons mode (aquamacs-get-style-snapshot)) 
-	     (assq-delete-all mode 
-			      aquamacs-default-styles))))
+
+  ;; copy frame parameters if any
+  (let ((mode major-mode)) ;; buffer style?
+    (let ((frame-parms (assq mode aquamacs-default-styles)))
+      (if frame-parms
+	  (customize-set-variable 'aquamacs-default-styles
+				  (cons (cons mode (cdr-safe frame-parms) )
+					(assq-delete-all mode 
+							 aquamacs-default-styles)))))
   ;; set default-frame-alist
-  (customize-set-variable 
-   'default-frame-alist
-   (append 
-    (apply #'append
-	   (mapcar 
-	    (lambda (pm)
-	      (unless (string-match 
-		   aquamacs-styles-relevant-frame-parameter-regexp 
-		   (symbol-name (car pm)))
-		  (list pm)))
-	    default-frame-alist))
-    (aquamacs-get-style-frame-parameters)))
+  ;; (customize-set-variable 
+;;    'default-frame-alist
+;;    (append 
+;;     (apply #'append
+;; 	   (mapcar 
+;; 	    (lambda (pm)
+;; 	      (unless (string-match 
+;; 		   aquamacs-styles-relevant-frame-parameter-regexp 
+;; 		   (symbol-name (car pm)))
+;; 		  (list pm)))
+;; 	    default-frame-alist))
+;;     (aquamacs-get-style-frame-parameters)))
   ;; define the default face
-  (copy-face (aquamacs-style-default-face major-mode) 'style-default))
+    (copy-face (aquamacs-style-default-face mode) 'style-default)
+    (if (interactive-p)
+	(message "Style for %s is now used as default." mode))))
+
+
 	  
 
 (defun aquamacs-default-styles-list (&optional face-names)
   "Return list of all major modes that have a default style."
   (let ((styles (if face-names '(0) aquamacs-default-styles)))
     (unless face-names
-      (setq styles (list 0 (mapcar 'car (assq-delete-all 'default styles)))))
+      (setq styles (cons 0 (mapcar 'car (assq-delete-all 'style-default styles)))))
     (mapatoms
      (lambda (symbol)
        (when (and (get symbol 'saved-face) ;; it's a face we've customized
@@ -560,8 +564,10 @@ modify them."))
   (customize-set-variable  'aquamacs-default-styles 
 			   (assq-delete-all mode
 					    aquamacs-default-styles))
-  (unless (eq mode 'default)
-    (face-spec-set (aquamacs-style-default-face mode) '((t (:inherit style-default)))))
+  (unless (memq mode '(default style-default))
+    (let ((face (aquamacs-style-default-face mode)))
+      (if (facep face)
+	  (face-spec-set face '((t (:inherit style-default)))))))
   (if (interactive-p)
       (message "Mode-specific style for %s removed. Use Save Options before restart to retain setting." mode)))
 
@@ -627,11 +633,25 @@ for which the menu is being updated."
 
 (defvar appstyle-mode-menu nil)
 
-(defun aquamacs-apply-style-for-mode (&optional ignored modename)
-;; todo: "Copy over style."
+(defun aquamacs-apply-style-for-mode (&optional ignored for-mode)
+  ;; todo: "Copy over style."
   (interactive)
-  (aquamacs-set-style nil t (or modename last-command-event)))
- 
+  (let ((src-face (if for-mode (aquamacs-style-default-face for-mode) 'style-default))
+	(dest-face (aquamacs-style-default-face
+		    (if (aquamacs-get-buffer-style (buffer-name))
+			(format "%s-%s" (buffer-name) major-mode)
+		      major-mode))))
+
+    (unless (facep src-face) (setq src-face 'style-default))
+    (unless (facep src-face) (setq src-face 'default))
+    (copy-face src-face dest-face)
+
+    (let ((src-frame-parms (assq (or for-mode 'style-default) aquamacs-default-styles)))
+      (if src-frame-parms
+	  (assq-set (or (aquamacs-get-buffer-style (buffer-name)) major-mode)
+		    (cdr-safe src-frame-parms
+			      'aquamacs-default-styles)))))
+  (aquamacs-update-mode-style))
 
 (defun aquamacs-update-apply-style-for-mode-menu ()
   (setq appstyle-mode-menu
@@ -765,20 +785,15 @@ When it is turned off, parameters are copied back.
 
 This mode is part of Aquamacs Emacs, http://aquamacs.org."
  
- 
-;; the condition case is because otherwise this won't
-;; do it's job. don't know why.
-;  (condition-case nil
- ;     (error nil))
-:init-value  t
+  :init-value  t
   :group 'Aquamacs
   :global t
   :require (if aquamacs-use-color-themes color-theme))
       
 
 (defun aquamacs-styles-set-default-parameter (param value &optional mode)
-  "Sets frame parameter PARAM of `default' frame style."
-  (let* ((x (assq (or mode 'default) aquamacs-default-styles))
+  "Sets frame parameter PARAM of default frame style."
+  (let* ((x (assq (or mode 'style-default) aquamacs-default-styles))
 	 (x2 (cdr-safe x))
 	 ;; just in case the entry is malformed (or obsolete, maybe?)
 	 (y (assq param (if (listp (cdr-safe x2)) x2 (list x2)))))
@@ -787,7 +802,7 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
       (if x
 	  (setcdr x (cons (cons param value) (cdr x)))
 	(setq aquamacs-default-styles
-	      (cons (list (or mode 'default) (cons param value)) 
+	      (cons (list (or mode 'style-default) (cons param value)) 
 		    aquamacs-default-styles))))))
  
 (defun aquamacs-styles-set-all-mode-parameters (param value)
