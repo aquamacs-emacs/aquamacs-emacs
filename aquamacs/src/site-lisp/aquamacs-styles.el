@@ -43,7 +43,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.54 2008/10/08 14:36:04 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.55 2008/10/08 15:08:36 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -485,11 +485,14 @@ Sets the `style-default' face."
 
 	  
 
-(defun aquamacs-default-styles-list (&optional face-names)
-  "Return list of all major modes that have a default style."
+(defun aquamacs-default-styles-list (&optional face-names include-default)
+  "Return list of all major modes that have a default style.
+face-names non-nil means return face names instead of mode names.
+include-default includes style-default.  face-names implies include-default."
   (let ((styles (if face-names '(0) aquamacs-default-styles)))
     (unless face-names
-      (setq styles (cons 0 (mapcar 'car (assq-delete-all 'style-default styles)))))
+      (setq styles (cons 0 (mapcar 'car 
+				   (if include-default styles (assq-delete-all 'style-default styles))))))
     (mapatoms
      (lambda (symbol)
        (when (and (get symbol 'saved-face) ;; it's a face we've customized
@@ -636,6 +639,7 @@ for which the menu is being updated."
 (defun aquamacs-apply-style-for-mode (&optional ignored for-mode)
   ;; todo: "Copy over style."
   (interactive)
+  (unless for-mode  (setq for-mode last-command-event))
   (let ((src-face (if for-mode (aquamacs-style-default-face for-mode) 'style-default))
 	(dest-face (aquamacs-style-default-face
 		    (if (aquamacs-get-buffer-style (buffer-name))
@@ -649,25 +653,32 @@ for which the menu is being updated."
     (let ((src-frame-parms (assq (or for-mode 'style-default) aquamacs-default-styles)))
       (if src-frame-parms
 	  (assq-set (or (aquamacs-get-buffer-style (buffer-name)) major-mode)
-		    (cdr-safe src-frame-parms
-			      'aquamacs-default-styles)))))
-  (aquamacs-update-mode-style))
+		    (cdr-safe src-frame-parms)
+		    'aquamacs-default-styles))))
+  (aquamacs-update-mode-style)
+  (if (interactive-p)
+      (message "Mode style copied.")))
 
 (defun aquamacs-update-apply-style-for-mode-menu ()
   (setq appstyle-mode-menu
-	(aquamacs-define-mode-menu-1 
-	 (aquamacs-default-styles-list)
+	(aquamacs-define-mode-menu-1  
+	 (aquamacs-default-styles-list nil)
 	 (make-sparse-keymap "Set Mode") 
 	 'aquamacs-apply-style-for-mode
 	 "Apply frame style assigned to %s." 
-	 '(menu-bar-non-minibuffer-window-p)))
+	 '(menu-bar-non-minibuffer-window-p) 'dont-filter))
+  (define-key-after appstyle-mode-menu [sm-sep] '(menu-item "--"))
+  (define-key-after appstyle-mode-menu [style-default]
+    '(menu-item "Default Style" aquamacs-apply-style-for-mode
+		:help "Apply default" :enable (menu-bar-non-minibuffer-window-p)))
+
    (define-key-after aquamacs-frame-style-menu [set-mode]
     `(menu-item "Apply Style of Some Mode" ,appstyle-mode-menu
 		:help "Apply frame style of some major mode.") 
     'menu-aquamacs-styles))
 ;; don't do this check (speed) - higher-level menu is disabled
 ;;		:enable (menu-bar-menu-frame-live-and-visible-p)
-
+;; (aquamacs-update-apply-style-for-mode-menu)
 
 (defun set-aquamacs-default-styles (variable value)
   "Like `custom-set-default', but for `aquamacs-default-styles'."
