@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.173 2008/10/02 17:57:25 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.174 2008/10/08 14:45:34 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -168,13 +168,13 @@ using `aquamacs-recent-major-modes' and `aquamacs-known-major-modes'."
  
 
 (defun aquamacs-define-mode-menu-1
-  (the-list keymap function-to-call docstring enable-if)
+  (the-list keymap function-to-call docstring enable-if &optional do-not-filter)
   (mapc
    (lambda (modeentry)
      (let ((modename (if (consp modeentry) (car modeentry) modeentry))
 	   (displayname (if (consp modeentry) (cdr modeentry) 
 			  (aquamacs-pretty-mode-name modeentry))))
-     (when (fboundp modename)
+     (when (or do-not-filter (fboundp modename))
          (define-key ;;-after doesn't work with after- why?>? 
 	 keymap
 	 (vector (list modename)) ;; use mode name as event type (as done in menu-bar.el for buffers)
