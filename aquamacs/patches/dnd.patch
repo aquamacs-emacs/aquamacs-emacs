@@ -2,8 +2,11 @@ this patch will select a more appropriate window to show the opened file in.  It
 *** lisp/term/mac-win.el	23 Apr 2008 08:56:55 -0000	1.88.2.11
 --- lisp/term/mac-win.el	23 Aug 2008 02:20:42 -0000
 ***************
-*** 1729,1738 ****
-    (let ((ae (mac-event-ae event)))
+*** 1726,1738 ****
+  (defun mac-ae-open-documents (event)
+    "Open the documents specified by the Apple event EVENT."
+    (interactive "e")
+!   (let ((ae (mac-event-ae event)))
       (dolist (file-name (mac-ae-list ae nil 'undecoded-file-name))
         (if file-name
 ! 	  (dnd-open-local-file
@@ -13,8 +16,12 @@ this patch will select a more appropriate window to show the opened file in.  It
       (let ((selection-range (mac-ae-selection-range ae))
   	  (search-text (mac-ae-text-for-search ae)))
         (cond (selection-range
---- 1815,1838 ----
-    (let ((ae (mac-event-ae event)))
+--- 1726,1754 ----
+  (defun mac-ae-open-documents (event)
+    "Open the documents specified by the Apple event EVENT."
+    (interactive "e")
+!   (let ((ae (mac-event-ae event))
+! 	(target-frame))
       (dolist (file-name (mac-ae-list ae nil 'undecoded-file-name))
         (if file-name
 ! 	  (let ((sel-win (or (minibuffer-selected-window) 
@@ -34,10 +41,29 @@ this patch will select a more appropriate window to show the opened file in.  It
 ! 	     (concat "file://"
 ! 		     (mapconcat 'url-hexify-string
 ! 				(split-string file-name "/") "/")) nil
-! 				'accept-new-files)))))
+! 				'accept-new-files)
+! 	    (setq target-frame (window-frame (selected-window)))))))
       (let ((selection-range (mac-ae-selection-range ae))
   	  (search-text (mac-ae-text-for-search ae)))
         (cond (selection-range
+***************
+*** 1747,1754 ****
+  	    ((stringp search-text)
+  	     (re-search-forward
+  	      (mapconcat 'regexp-quote (split-string search-text) "\\|")
+! 	      nil t)))))
+!   (select-frame-set-input-focus (selected-frame)))
+  
+  (defun mac-ae-quit-application (event)
+    "Quit the application Emacs with the Apple event EVENT."
+--- 1763,1769 ----
+  	    ((stringp search-text)
+  	     (re-search-forward
+  	      (mapconcat 'regexp-quote (split-string search-text) "\\|")
+! 	      nil t))))))
+  
+  (defun mac-ae-quit-application (event)
+    "Quit the application Emacs with the Apple event EVENT."
 *** lisp/dnd.el	06 Apr 2008 07:51:37 -0400	1.15.2.3
 --- lisp/dnd.el	25 Sep 2008 10:04:37 -0400	
 ***************
