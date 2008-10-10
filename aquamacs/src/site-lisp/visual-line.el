@@ -242,7 +242,8 @@ the beginning of the visual line."
   (if (bobp)
       (signal 'beginning-of-buffer nil))
   (if word-wrap
-      (vertical-motion 0)
+      (progn (vertical-motion 0)
+	     (skip-read-only-prompt))
     (beginning-of-line)))
 
 (defun end-of-visual-line ()
