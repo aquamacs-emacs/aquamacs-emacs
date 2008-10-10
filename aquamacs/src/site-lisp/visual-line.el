@@ -54,6 +54,7 @@
 ;; much faster when a lot of hidden text is present, but a bit slower in
 ;; all other cases.
 
+(add-to-list 'minor-mode-alist (list 'word-wrap " Wrap"))
 
 (defun visual-col-at-point ()
   "Returns the visual column at point.
