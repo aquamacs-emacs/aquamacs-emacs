@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.211 2008/10/08 14:02:44 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.212 2008/10/10 18:07:13 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -241,7 +241,7 @@ un-Mac-like way when you select text and copy&paste it.")))
   "React to various user settings."
   (unless noninteractive
     (unless (equal init-file-user nil) ;; no .emacs was read (-q option)
-      (aquamacs-load-scratch-file))
+	  (aquamacs-load-scratch-file))
     (aquamacs-cua-warning)
     (and (fboundp 'osx-key-mode-command-key-warning) (osx-key-mode-command-key-warning))
     (make-help-mode-not-use-frame-fitting))
@@ -422,7 +422,7 @@ if modified buffers exist."
   "Load the scratch buffer.
 The *scratch* buffer is loaded from `aquamacs-scratch-file'.
 No errors are signaled."
-  (when aquamacs-scratch-file
+  (when (and aquamacs-scratch-file (get-buffer "*scratch*"))
     (with-current-buffer "*scratch*"
       (condition-case nil
 	  (progn
