@@ -6,6 +6,39 @@ diff -c -r1.436.2.16 startup.el
 *** lisp/startup.el	6 Mar 2008 00:08:01 -0000	1.436.2.16
 --- lisp/startup.el	30 Apr 2008 16:33:28 -0000
 ***************
+*** 40,51 ****
+    "Emacs start-up procedure."
+    :group 'environment)
+  
+  (defcustom inhibit-startup-screen nil
+    "Non-nil inhibits the startup screen.
+  It also inhibits display of the initial message in the `*scratch*' buffer.
+  
+! This is for use in your personal init file (but NOT site-start.el), once
+! you are familiar with the contents of the startup screen."
+    :type 'boolean
+    :group 'initialization)
+  
+--- 40,57 ----
+    "Emacs start-up procedure."
+    :group 'environment)
+  
++ (defcustom show-scratch-buffer-on-startup t
++   "Show the initial frame if it contains the *scratch* buffer on startup.
++ If nil, the initial frame remains hidden if the current buffer is *scratch*."
++   :type 'boolean
++   :group 'initialization)
++ 
+  (defcustom inhibit-startup-screen nil
+    "Non-nil inhibits the startup screen.
+  It also inhibits display of the initial message in the `*scratch*' buffer.
+  
+! This is for use in your personal init file, in case you
+! would like to use the extra functionality of the startup screen."
+    :type 'boolean
+    :group 'initialization)
+  
+***************
 *** 473,479 ****
   		  (if (string-match "^\\(xterm\\|rxvt\\|dtterm\\|eterm\\)"
   				    term)
@@ -14,14 +47,16 @@ diff -c -r1.436.2.16 startup.el
   
   	;; Now we know the user's default font, so add it to the menu.
   	(if (fboundp 'font-menu-add-default)
---- 473,482 ----
+--- 479,490 ----
   		  (if (string-match "^\\(xterm\\|rxvt\\|dtterm\\|eterm\\)"
   				    term)
   		      (setq default-frame-background-mode 'light)))
 ! 		(frame-set-background-mode (selected-frame))))
 ! 
 ! 	  ;; time to make the frame visible (Aquamacs)
-! 	  (make-frame-visible))
+! 	  (if (or show-scratch-buffer-on-startup
+! 		  (not (equal (buffer-name (current-buffer)) "*scratch*")))
+! 	      (make-frame-visible)))
   
   	;; Now we know the user's default font, so add it to the menu.
   	(if (fboundp 'font-menu-add-default)
@@ -133,12 +168,14 @@ diff -c -r1.436.2.16 startup.el
   (defun display-startup-screen (&optional concise)
 ***************
 *** 2153,2158 ****
---- 2128,2136 ----
+--- 2138,2148 ----
         (when (fboundp 'frame-notice-user-settings)
   	(frame-notice-user-settings))
   
 +       ;; time to make the frame visible (Aquamacs)
-+       (make-frame-visible) 
++       (if (or show-scratch-buffer-on-startup
++ 		  (not (equal (buffer-name (current-buffer)) "*scratch*")))
++ 	      (make-frame-visible)) 
 + 
         ;; If there are no switches to process, we might as well
         ;; run this hook now, and there may be some need to do it
