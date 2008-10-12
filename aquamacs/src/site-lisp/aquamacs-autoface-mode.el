@@ -38,7 +38,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.2 2008/10/12 23:45:04 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.3 2008/10/12 23:49:14 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -75,9 +75,9 @@
 (defun aquamacs-import-frame-parameters-to-auto-faces ()
   "Read `aquamacs-default-styles', convert to faces.
 The faces are then to be used with `aquamacs-autoface-mode'."
-
   (when (boundp 'aquamacs-default-styles)
-    (mapc
+    (message "Frame styles have been converted to faces: %s."
+	     (mapcar
      (lambda (elt)
        (let* ((mode (car elt))
 	      (style (cdr elt))
@@ -94,9 +94,10 @@ The faces are then to be used with `aquamacs-autoface-mode'."
 	 (when (assq 'foreground-color style)
 	   (set-face-foreground face (cdr (assq 'foreground-color style))))
 	 (when (assq 'font style)
-	   (set-face-font face (cdr (assq 'font style)) nil))))
+	   (set-face-font face (cdr (assq 'font style)) nil))
+       mode))
      aquamacs-default-styles)
-    (setq aquamacs-faces-changed t)))
+    (setq aquamacs-faces-changed t))))
 
 (defun aquamacs-autoface-make-face (face )
   (when (not (facep face))
