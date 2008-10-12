@@ -9,7 +9,7 @@
 ;;  --- Some of this has been adapted from Drew Adams' Emacs init file. 
  
 
-;; Last change: $Id: aquamacs-frame-setup.el,v 1.31 2008/07/19 22:36:52 davidswelt Exp $
+;; Last change: $Id: aquamacs-frame-setup.el,v 1.32 2008/10/12 15:02:07 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -74,10 +74,13 @@ even when minimal fringes are used. (Aquamacs)"
 (setq fringe-mode '(1 . 1)) ;; to reflect the default.
 
 ;; This is a hack because fringe-mode likes to round up stuff.
-
+ 
 ;; set default colors
 (aquamacs-set-defaults 
- '(
+;; because we fit *Help* frames (fit-frame), we want to specify a
+ ;; minimum of 68 characters. Otherwise we'll fit, and as soon as a
+ ;; new help page is displayed, text gets wrapped.
+ '((create-frame-min-width 68)
 ;; do not set any fonts here. aquamacs.el takes care of this,
 ;; checking that the fonts actually exist.
    (default-frame-alist 
