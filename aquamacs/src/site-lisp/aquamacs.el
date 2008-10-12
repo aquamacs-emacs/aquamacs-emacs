@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.212 2008/10/10 18:07:13 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.213 2008/10/12 23:14:58 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -243,8 +243,7 @@ un-Mac-like way when you select text and copy&paste it.")))
     (unless (equal init-file-user nil) ;; no .emacs was read (-q option)
 	  (aquamacs-load-scratch-file))
     (aquamacs-cua-warning)
-    (and (fboundp 'osx-key-mode-command-key-warning) (osx-key-mode-command-key-warning))
-    (make-help-mode-not-use-frame-fitting))
+    (and (fboundp 'osx-key-mode-command-key-warning) (osx-key-mode-command-key-warning)))
 
   (if (eq tabbar-mode 'default)
        (customize-set-variable 'tabbar-mode t))
@@ -856,8 +855,8 @@ Use this argument instead of explicitly setting `view-exit-action'."
 					; update the help-mode specification with a fit-frame
 					; append it, so the user's choice has priority
   
-  (require 'color-theme-autoloads)
-  (require 'aquamacs-styles)
+(require 'color-theme-autoloads)
+(require 'aquamacs-autoface-mode)
 	
 	
  (ats "styles done")
@@ -916,10 +915,8 @@ Use this argument instead of explicitly setting `view-exit-action'."
   ;; so everything is copied over to the 'default style as appropriate
   ;; mode-specific font settings
   ;;  if turned on, default-frame-alist should be empty now
-
   (aquamacs-set-defaults '((aquamacs-styles-mode nil)))
-  (require 'aquamacs-styles) 
-  
+  ;; (require 'aquamacs-styles)   ; deprecated
 
   ;; local toolbars
 

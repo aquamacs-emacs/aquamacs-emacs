@@ -1,49 +1,14 @@
+;; aquamacs mode specific frame styles
+;; this package realizes mode-specific frame styles in Aquamacs.
 
-;; To do here:
+;; the package has been superseded by aquamacs-auto-faces.el and is no longer supported.
 
-;; adopt as default -- we shouldn't modify the default face
-;; too many other faces inherit from default
-
-;; instead, modify some kind of unassigned-default face and inherit
-;; from that face when a new mode is entered.  
-
-
-;; new face naming convention
-
-;; *Help*-buffer-default -- perhaps we should get rid of this.
-;; text-mode-default
-
-
-;; it appears that just changing the default face does not 
-;; do enough: background of non-text can't be changed.
-;; this is possibly easy to patch!
-
-;; (setq face-remapping-alist nil)
-;; (set (make-local-variable 'face-remapping-alist) '((default aquamacs-variable-width)))
-
-;; OK, maybe use the current solution for a while and filter "font" from the color themes as frame parameters, but leave the other ones.
-
-;; we do need to change the font seting dialog to just set the remapped face though (or create a remapped one), which should be easy.
- 
-
-
-;; aquamacs mode specific styles
-
-;; this package realizes mode-specific styles in Aquamacs.
-;; it is not complete - right now this files just
-;; serves as a collection of function that interact with
-;; things from osx_defaults
-
-;; Call aquamacs-styles-setup after loading to install.
-
-;; Filename: aquamacs-frame-setup.el
-;; Description: Emacs init file for use with libraries from Drew Adams
 ;; Author: David Reitter
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.55 2008/10/08 15:08:36 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.56 2008/10/12 23:14:59 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -63,15 +28,11 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
 
-;; Copyright (C) 2005, 2006, David Reitter, all rights reserved.
+;; Copyright (C) 2005, 2006, 2007, 2008, David Reitter, all rights reserved.
 
  
-; (require 'cl)
 (require 'aquamacs-cl)
  
-(defvar aquamacs-use-color-themes nil 
-  "Show Color Themes menu item if non-nil.")
-
 (defmacro save-frame-size (frame &rest body)
   "Restore pixel size of selected frame after executing body."
   `(let ((old-frame-pixel-width (frame-pixel-width ,frame))
@@ -154,25 +115,20 @@ ability. The following rules are followed:
 		l)
 	ret)
     (window-buffer (car l)))))
-   
-
-(defun aquamacs-style-default-face (mode)
-  (intern (format "%s-default" mode)))
-
-(defface style-default '((t :inherit default)) 
-  "Default face for buffers when `aquamacs-styles-mode' is active.")
-
-
+  
 (require 'smart-frame-positioning)
-;; (frame-parameter nil 'font)
-;; face-remapping-alist
-(defun aquamacs-set-style (&optional frame force for-mode in-buffer)
+
+(defun aquamacs-set-style (&optional frame force for-mode)
   "Sets the mode-specific style (frame parameters) for FRAME
  (selected frame if nil), unless it is already set (or
-FORCE is non-nil). Use style of major mode FOR-MODE if given." 
+FORCE is non-nil). Use style of major mode FOR-MODE if given."
+ 
   (when (or force aquamacs-styles-mode)
+
     (unless frame (setq frame (selected-frame) ))
+
     (if (frame-live-p frame)  
+
 	(condition-case err ;; (otherwise, Emacs hangs)  
       
 	    ;; frame-configured-for-buffer stores for which buffer  
@@ -182,27 +138,22 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 	    ;; will cause another menu-bar-update-hook call, so we can end up 
 	    ;; with this function called again and again...  
 
-	    (let* ((frame-param-buffer (aquamacs-style-relevant-buffer frame))
-		   (buffer (or in-buffer
-			    (window-buffer (selected-window))
-			    frame-param-buffer)))
-	      ;(print (aquamacs-style-relevant-buffer frame))
-	      (with-current-buffer buffer
-		(let ((mode (or for-mode major-mode)))
-		  (when (or 
-			 (and force (or buffer for-mode))
-			 (and buffer
-			      (not (equal (frame-parameter frame
-							   'frame-configured-for-buffer)
-					  (cons  
-					   buffer 
-					   mode)  
-					  ))))
-		    (let* ((style-face-id (aquamacs-style-default-face (or for-mode 
-						(if (aquamacs-get-buffer-style (buffer-name))
-						    (format "%s-%s" (buffer-name) mode)
-						  mode))))
-			   (style (aquamacs-combined-mode-specific-settings 
+	    (let ((buffer (aquamacs-style-relevant-buffer   frame)))
+	    
+	      (when (or 
+		   (and force (or buffer for-mode))
+		   (and buffer
+			(not (equal (frame-parameter frame 
+				     'frame-configured-for-buffer)
+					;(cons  
+				    buffer 
+					; major-mode)  
+			       ))))
+
+		  (save-excursion 
+
+		    (set-buffer buffer)
+		    (let* ((style (aquamacs-combined-mode-specific-settings 
 				   (if (special-display-p (buffer-name)) 
 				       special-display-frame-alist 
 				     default-frame-alist
@@ -211,9 +162,9 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 				       (aquamacs-get-style for-mode)
 				     (append
 				      (aquamacs-get-buffer-style (buffer-name))
-				      (aquamacs-get-style mode)))))
+				      (aquamacs-get-style major-mode)))))
 			   ;; read out color-theme		 
-			   ( color-theme (if aquamacs-use-color-themes (cdr (assq 'color-theme style))))
+			   ( color-theme (cdr (assq 'color-theme style)))
 			   (style (assq-delete-all 'color-theme style)
 				  ))  
 		      ;; make sure we don't move the whole frame -  
@@ -224,99 +175,56 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 		      ;; ensure that setting the new frame parameters doesn't resize
 		      ;; the frame significantly:
 		      ;; change width / height to adapt to new font size
+
 		      
-		      
-			
-;; 		      (custom-declare-face 
-;; 		       style-face-id '((t :inherit style-default)) 
-;; 		       "mode-specific face activated by `aquamacs-styles-mode'.
-;; The `default' face is remapped (in the appropriate buffers) to this face.")  
+		      ;; do not set frame parameters if they will be
+		      ;; overridden by the later color theme this
+		      ;; prevents flicker
+			(let ((col-theme-parms
+			       (condition-case 
+				   nil 
+				   (color-theme-frame-params
+				    (color-theme-canonic  color-theme)) 
+				 (error nil))))
+			  (mapc (lambda (x)
+				  (setq style (assq-delete-all (car x) style)))
+				col-theme-parms))
 
-		      ;; (get 'default-lisp-mode 'saved-face)
-		      ;; (get 'font-lock-comment-face 'saved-face)
-		      ;; do not set frame parameters if they will be overridden by the later color theme
-		      ;; this prevents flicker 
-		      (let ((col-theme-parms  (if (and aquamacs-use-color-themes color-theme)
-						  (condition-case nil 
-						      (color-theme-frame-params 
-						       (color-theme-canonic color-theme)) (error nil)))))
-			(mapc (lambda (x)
-				(setq style (assq-delete-all (car x) style)))
-			      col-theme-parms))
+			;; never set font (changes frame size)
+			(setq style (assq-delete-all 'font style))
 
-		      ;; what about force parameter?
-		      (when (not (facep style-face-id))
-			(let ((spec '((t :inherit style-default))))
-			  (make-empty-face style-face-id)
-			  (dolist (frame (frame-list))
-			    (face-spec-set style-face-id spec frame))
-			  (if (memq window-system '(x w32 mac))
-			      (make-face-x-resource-internal style-face-id))
-			  ;; do not set face-defface-spec - this prevents it from being saved to custom-file properly
-			  ;; purecopy needed?
-			  (set-face-documentation style-face-id (purecopy "mode-specific face activated by `aquamacs-styles-mode'.
-The `default' face is remapped (in the appropriate buffers) to this face."))
-			  	;; do not override user's existing face choices
-			(when (assq 'background-color style)
-			  (set-face-background style-face-id (cdr (assq 'background-color style))))
-			(when (assq 'foreground-color style)
-			  (set-face-foreground style-face-id (cdr (assq 'foreground-color style))))
-			(when (assq 'font style)
-			  (set-face-font style-face-id (cdr (assq 'font style)) nil))))
+			(modify-frame-parameters frame 
+			 (cons (cons 'frame-configured-for-buffer buffer) 
+			       style))
 
-
-		      ;; ensure this is saved as a customization
-		      (let ((value (list (list t   (custom-face-attributes-get style-face-id nil)))))
-			(put style-face-id 'saved-face   value)
-			(custom-push-theme 'theme-face style-face-id 'user 'set value))
-
-		      (setq style (assq-delete-all 'background-color style))
-		      (setq style (assq-delete-all 'foreground-color style))
-		      (setq style (assq-delete-all 'font style))
-					; (print style-face-id)
-		      ;; make sure we're remapping
-		     
-		      (make-local-variable 'face-remapping-alist)
-		      (assq-set 'default style-face-id 'face-remapping-alist)
-		      (modify-frame-parameters frame 
-					       `((frame-configured-for-buffer . (,buffer . ,mode))))
-		      (when frame-param-buffer ;; do not apply frame params in multi-window frames
-			(when style ;; any frame parameters left?
-			  (modify-frame-parameters frame style))
-			(let ((after-change-major-mode-hook nil) 
-			      window-configuration-change-hook)
-			  ;; save-window-excursion can run this hook!
+		
+			(save-window-excursion
+			  (select-frame frame)
 			  ;; color-style-target-frame seems deprecated
-			  
-			  (when aquamacs-use-color-themes
-			    (save-window-excursion
-			      (select-frame frame)
-			      (if (and (functionp (car-safe color-theme))
-				       (memq (car-safe color-theme) color-themes)
-				       (not (cdr-safe color-theme)))
-				  (funcall (car color-theme)) 
-				;; just install the color style directly
-				(color-theme-install color-theme)))))))
-		    
+			 
+			  (if (and (functionp (car-safe color-theme))
+				   (memq (car-safe color-theme) color-themes)
+				   (not (cdr-safe color-theme)))
+			      (funcall (car color-theme)) 
+			    ;; just install the color style directly
+			    (color-theme-install color-theme)))
+			 
+		      ;; do not move the frame: this can cause the frame to shrink more and more
+		      ;; e.g. when switching between tabs, and it also makes the frame jump around
+		      ;; especially on two-screen setups
+		      ;; (if (and (fboundp 'smart-move-frame-inside-screen))
+		      ;; 			     (smart-move-frame-inside-screen frame)
+		      ;; 			  )
+			)
 		    (if window-configuration-change-hook
 			(let ((selframe (selected-frame)))
 			  (select-frame frame)
 			  (run-hooks 'window-configuration-change-hook)
-			  (select-frame selframe)))))))
+			  (select-frame selframe)))
+		    
+		    )))
 	  (error (print err))))))
 
-
-
-
-
-(defmacro mac-event-ae (event)
-  `(nth 2 ,event))
-(defmacro mac-event-spec (event)
-  `(nth 1 ,event))
- 
-
-
-; (aquamacs-get-buffer-style "*Help*")
 
 (defun aquamacs-get-buffer-style (bufname) 
   (if aquamacs-styles-mode
@@ -327,7 +235,10 @@ The `default' face is remapped (in the appropriate buffers) to this face."))
 
 (defun aquamacs-get-style (mode) 
   (or (cdr (assq mode aquamacs-default-styles)) 
-      (cdr (assq 'style-default aquamacs-default-styles))))
+      ;;(progn (print "resorting to default") nil)
+      (cdr (assq 'default aquamacs-default-styles))
+					;(progn (print "nothing found") nil)
+      ))
 
 (defun set-mode-style-after-change-major-mode ()       			      
   ;; delete the configuration cache parameter
@@ -340,7 +251,7 @@ The `default' face is remapped (in the appropriate buffers) to this face."))
      (lambda (f) 
            
        ;; update the style 
-       (aquamacs-set-style f t nil (current-buffer))
+       (aquamacs-set-style f t)
        )  
      ;; list
      (find-all-frames-internal (current-buffer)))))
@@ -377,11 +288,15 @@ to be appropriate for its first buffer"
 	  ;;(make-variable-frame-local 'last-major-mode-style-in-this-frame)
 	  ;;(setq last-major-mode-style-in-this-frame major-mode)
 	  ;; can't call ->crash
-	  (aquamacs-set-style)))
+	  (aquamacs-set-style)
+	  )
+	
+	)
 
-    (error nil))
-  t)
-
+    (error nil)
+    )
+  t
+  )
 (defun aquamacs-update-mode-styles-everywhere ()
   "Update the styles (colors, font) of all frames
 to be appropriate for its first buffer. (Aquamacs)"
@@ -397,139 +312,131 @@ to be appropriate for its first buffer. (Aquamacs)"
 	      )) (frame-list))
     t))
 (defun aquamacs-get-style-snapshot ()
-  ;; retrieve theme
-  (if aquamacs-use-color-themes
-      (progn
-	(require 'color-theme)
-	(list 
-	 (cons 'color-theme (let ((theme 
-				   `(color-theme-snapshot
-				     ;; alist of frame parameters
-				     , (color-theme-get-params)
-				     ;; alist of variables
-				     ,(color-theme-get-vars)
-				     ;; remaining elements of snapshot: face specs
-				     ,@(color-theme-get-face-definitions))))
-			      ;; - not implemented -
-			      theme
-			      ))
-	 ;; replaced by default-* face customization
-	 ;; (cons 'font (frame-parameter nil 'font))
-	 (cons 'tool-bar-lines (frame-parameter nil 'tool-bar-lines))))
-    ;; else
-    (aquamacs-get-style-frame-parameters)))
+ 
+
+;; retrieve theme
+
+ 
+  (list 
+   (cons 'color-theme (let ((theme 
+			     `(color-theme-snapshot
+			       ;; alist of frame parameters
+			       ,(color-theme-get-params)
+			       ;; alist of variables
+			       ,(color-theme-get-vars)
+			       ;; remaining elements of snapshot: face specs
+			       ,@(color-theme-get-face-definitions))))
+			;; find out if this is any different from the theme that was set  
 
 
-(defvar aquamacs-styles-relevant-frame-parameter-regexp "\\(color\\|mode\\|lines\\|fringe\\)"
-  "Regular expression to be found in frame parameters handled by aquamacs-styles.")
+;; (let ((theme-name (frame-parameter nil 'color-theme-name)))
+;;   (when (and theme-name 
+;; 	     (not (eq theme-name 'color-theme-snapshot))
+;; 	     (functionp theme-name))
+;;     (let ((shelved-color-theme nil))
+;;       ;; too bad we can't do it with let...
+;;       (fset 'color-theme-backup 'color-theme-install)
+;;       (unwind-protect 
+;; 	  (progn
+;; 	    (fset 'color-theme-install
+;; 		  (lambda (theme) (setq shelved-color-theme theme)))
+;; 	    (funcall theme-name)
+;; 	    )
+;; 	(fset 'color-theme-install 'color-theme-backup))
+;;       (print shelved-color-theme))
+;;     ;; compare theme
+;;     (print (eq shelved-color-theme theme))
+;;     theme
+;;     )))
 
-(defun aquamacs-get-style-frame-parameters ()
-  "Return frame parameters of selected frame to be saved in a style."
-  (apply #'append (mapcar (lambda (pm)
-			    (if (string-match aquamacs-styles-relevant-frame-parameter-regexp (symbol-name (car pm)))
-				(list pm)))
-			  (frame-parameters))))
+			;; - not implemented -
+			theme
+			))
+   (cons 'font (frame-parameter nil 'font))
+   (cons 'tool-bar-lines (frame-parameter nil 'tool-bar-lines))))
+
+;; (defun aquamacs-set-style-as-default () 
+;;   "Activate current frame settings (style) as default. Sets default-frame-alist."
+;;   (interactive)
+;; 					; need to find out if frame
+;;   (let ((frte frame-parameters-to-exclude)) ; make backup
+
+;;     (setq frame-parameters-to-exclude 
+;; 	  (append '((user-position) (visibility)  (top) (left) (width) (height)) frame-parameters-to-exclude))
+
+;;     (set-all-frame-alist-parameters-from-frame
+;;      (if (special-display-p (buffer-name (current-buffer)))
+;; 	 'special-display-frame-alist
+;;        'default-frame-alist)
+;;      )
+;;     (setq frame-parameters-to-exclude frte) ; restore old value
+;;     )
+;; 					; (setq initial-frame-alist default-frame-alist)  
+;;   (message (concat "Style has been set as default for all new " (if (special-display-p (buffer-name (current-buffer)))
+;; 								    "special, internal frames"
+;; 								  "normal frames.")))
+;;   )
 
 (defun aquamacs-set-style-as-default () 
-  "Copy style to be used as default style.
-Sets `aquamacs-default-styles' if frame parameters as given.
-Sets the `style-default' face."
+  "Activate current frame settings (style) as default. 
+Sets default-frame-alist. (Aquamacs)"
   (interactive)
+
 ;; maybe delete mode-specific frames?
   (when 
-      (let ((existing-styles  (aquamacs-default-styles-list)))
+      (let ((existing-styles  aquamacs-default-styles))
+	(setq existing-styles (assq-delete-all 'default existing-styles)) 
 	(and existing-styles
 	     (yes-or-no-p 
-	      (format "Mode-specific styles are in place for the following modes: %s. Do you want to delete all of them so the default style is applied to frames with buffers in those modes?"
-		      (apply 
-		       'concat  
-		       (let ((l (mapcar 
-				 (lambda (x)
-				   (concat
-				    (symbol-name x) ", "))
-				 existing-styles)))
-			 (if (nthcdr 5 l)
-			     (setcdr (nthcdr 5 l) (list "(...)")))
-			 l))))))
-    (aquamacs-clear-styles))
+	      (format "Mode-specific styles are in-place for the following modes: %s. Do you want to delete all of them so the default style is applied to frames with buffers in those modes?"
+		      (apply 'concat  
+			     (let ((l (mapcar (lambda (x)
+						(concat
+						 (symbol-name (car x)) ", ")
+						)
+					      existing-styles)))
+			       (if (nthcdr 5 l)
+				   (setcdr (nthcdr 5 l) (list "(...)")))
+			       l))))))
+    (aquamacs-delete-styles)) 
+  (aquamacs-set-style-as-mode-default 'default))
 
-  ;; delete the legacy `default' style
-  (aquamacs-delete-one-style 'default)
-
-  ;; copy frame parameters if any
-  (let ((mode major-mode)) ;; buffer style?
-    (let ((frame-parms (assq mode aquamacs-default-styles)))
-      (if frame-parms
-	  (customize-set-variable 'aquamacs-default-styles
-				  (cons (cons mode (cdr-safe frame-parms) )
-					(assq-delete-all mode 
-							 aquamacs-default-styles)))))
-  ;; set default-frame-alist
-  ;; (customize-set-variable 
-;;    'default-frame-alist
-;;    (append 
-;;     (apply #'append
-;; 	   (mapcar 
-;; 	    (lambda (pm)
-;; 	      (unless (string-match 
-;; 		   aquamacs-styles-relevant-frame-parameter-regexp 
-;; 		   (symbol-name (car pm)))
-;; 		  (list pm)))
-;; 	    default-frame-alist))
-;;     (aquamacs-get-style-frame-parameters)))
-  ;; define the default face
-    (copy-face (aquamacs-style-default-face mode) 'style-default)
-    (if (interactive-p)
-	(message "Style for %s is now used as default." mode))))
-
-
-	  
-
-(defun aquamacs-default-styles-list (&optional face-names include-default)
-  "Return list of all major modes that have a default style.
-face-names non-nil means return face names instead of mode names.
-include-default includes style-default.  face-names implies include-default."
-  (let ((styles (if face-names '(0) aquamacs-default-styles)))
-    (unless face-names
-      (setq styles (cons 0 (mapcar 'car 
-				   (if include-default styles (assq-delete-all 'style-default styles))))))
-    (mapatoms
-     (lambda (symbol)
-       (when (and (get symbol 'saved-face) ;; it's a face we've customized
-		  (eq 'user (car (car-safe (get symbol 'theme-face))))
-		  (eq 0 (string-match "^\\(.*\\)-default$" (symbol-name symbol))))
-	 (nconc styles (list (if face-names symbol
-			       (intern (match-string 1 (symbol-name symbol)))))))
-       ))
-     (sort (cdr styles) 'string<)))
-;;  (aquamacs-default-styles-list)
-
-(defun aquamacs-adopt-frame-parameters-for-mode-style (&optional mode) 
+(defun aquamacs-set-style-as-mode-default (&optional mode) 
   (interactive)
   "Activate current style as default for a given mode."
   (setq mode (or mode major-mode))
- 
   (customize-set-variable 'aquamacs-default-styles
 			  (cons (cons mode (aquamacs-get-style-snapshot)) 
 				(assq-delete-all mode 
 						 aquamacs-default-styles)))
+    
+  ;; We need to set default-frame-alist so that frame-notice-user-settings
+  ;; doesn't show anything else, and so that frames are created
+  ;; (quickly) with the right parameters
 
-  (message (format "Fram parameters have been adopted for %s. %s" 
+  ;; (when (eq mode 'default)
+
+;;     (let* ( 
+;; 	   (style-parms 
+;; 	    (cdr (assq mode aquamacs-default-styles)))
+;; 	   (frame-parms 
+;; 	    (append 
+;; 	     (car (cdr (cdr (assq 'color-theme style-parms))))
+;; 	     (assq-delete-all 'color-theme style-parms))))
+;;       ;; needs to be saved to customization file
+       
+;;       (customize-set-variable 'default-frame-alist frame-parms)
+       
+;;     )
+;;     )
+   
+
+  (message (format "Style has been set as default for %s. %s" 
 		   (if (eq mode 'default) "all frames" mode)
 		   (if aquamacs-styles-mode
 		       ""
 		     (aquamacs-styles-mode 1)
-		     "\nNote: Auto Styles have been turned on."))))
-
-(defun aquamacs-remove-frame-parameters-from-style  (&optional mode) 
-  (interactive)
-  "Remove frame paraemters from style for a given mode."
-  (setq mode (or mode major-mode))
-  (customize-set-variable 'aquamacs-default-styles
-			  (assq-delete-all mode 
-					   aquamacs-default-styles))
-  (message (format "Frame parameters have been removed from %s." 
-		   (if (eq mode 'default) "frame default" mode))))
+		     "\nNote: Auto Frame Styles have been turned on."))))
 
 
 (defun set-to-custom-standard-value (symbol)
@@ -537,49 +444,50 @@ include-default includes style-default.  face-names implies include-default."
 			  (eval (car
 			   (get symbol 'standard-value)))))
 
+(defun aquamacs-delete-styles ()
+  "Deletes all styles (mode-specific and the default style)"
+  (interactive)
+  (customize-set-variable 'aquamacs-default-styles nil)
+  (customize-set-variable 'aquamacs-buffer-default-styles nil)
+  (message "All styles deleted. Use Save Options before restart to retain setting.")
+  )
+
 (defun aquamacs-reset-styles ()
   "Resets all styles (mode-specific and the default style)"
   (interactive)
-  (aquamacs-clear-styles)
   (set-to-custom-standard-value 'aquamacs-default-styles)
   (set-to-custom-standard-value 'aquamacs-buffer-default-styles)
-
+; this doesn't work as expected...
+;  (mapc
+;   (lambda (frame) (aquamacs-set-style frame 'force))
+;   (frame-list))
   (message "All styles reset to defaults. Add new ones or use customize to 
 modify them."))
 
 (defun aquamacs-clear-styles ()
   "Resets all styles (mode-specific and the default style)"
   (interactive)
-  (customize-set-variable 'aquamacs-default-styles nil)
-  (customize-set-variable 'aquamacs-buffer-default-styles nil)
+  (setq aquamacs-default-styles nil)
+  (setq aquamacs-buffer-default-styles nil)
+  (message "All styles cleared. Add new ones or use customize to 
+modify them."))
 
-  ;; go over all faces
-  (mapc
-   (lambda (face)
-     (face-spec-set face '((t (:inherit style-default)))))
-   (aquamacs-default-styles-list 'facenames))
-  (message "All styles cleared."))
-
-(defun aquamacs-delete-one-style (&optional mode)
+(defun aquamacs-delete-one-style ()
   "Deletes mode-specific styles for current major mode"
   (interactive)
-  (unless mode (setq mode major-mode))
   (customize-set-variable  'aquamacs-default-styles 
-			   (assq-delete-all mode
+			   (assq-delete-all major-mode
 					    aquamacs-default-styles))
-  (unless (memq mode '(default style-default))
-    (let ((face (aquamacs-style-default-face mode)))
-      (if (facep face)
-	  (face-spec-set face '((t (:inherit style-default)))))))
-  (if (interactive-p)
-      (message "Mode-specific style for %s removed. Use Save Options before restart to retain setting." mode)))
+  (message "Mode-specific style removed. Use Save Options before restart to retain setting.")
+  )
 
 (defun aquamacs-updated-major-mode ()
 "Returns the major mode of the selected window of the frame
 for which the menu is being updated."
   (with-current-buffer (window-buffer
    (frame-selected-window menu-updating-frame))
-    major-mode))
+    major-mode)
+)
 
 
 
@@ -631,54 +539,39 @@ for which the menu is being updated."
 
 
 (defvar aquamacs-frame-style-menu 
-  (make-sparse-keymap "Mode Styles"))
-(setq aquamacs-frame-style-menu (make-sparse-keymap "Mode Styles"))
+  (make-sparse-keymap "Frame Styles"))
+
 
 (defvar appstyle-mode-menu nil)
 
-(defun aquamacs-apply-style-for-mode (&optional ignored for-mode)
-  ;; todo: "Copy over style."
+(defun aquamacs-apply-style-for-mode (&optional ignored modename)
   (interactive)
-  (unless for-mode  (setq for-mode last-command-event))
-  (let ((src-face (if for-mode (aquamacs-style-default-face for-mode) 'style-default))
-	(dest-face (aquamacs-style-default-face
-		    (if (aquamacs-get-buffer-style (buffer-name))
-			(format "%s-%s" (buffer-name) major-mode)
-		      major-mode))))
-
-    (unless (facep src-face) (setq src-face 'style-default))
-    (unless (facep src-face) (setq src-face 'default))
-    (copy-face src-face dest-face)
-
-    (let ((src-frame-parms (assq (or for-mode 'style-default) aquamacs-default-styles)))
-      (if src-frame-parms
-	  (assq-set (or (aquamacs-get-buffer-style (buffer-name)) major-mode)
-		    (cdr-safe src-frame-parms)
-		    'aquamacs-default-styles))))
-  (aquamacs-update-mode-style)
-  (if (interactive-p)
-      (message "Mode style copied.")))
+  (aquamacs-set-style nil t (or modename last-command-event)))
+ 
 
 (defun aquamacs-update-apply-style-for-mode-menu ()
   (setq appstyle-mode-menu
-	(aquamacs-define-mode-menu-1  
-	 (aquamacs-default-styles-list nil)
+	(aquamacs-define-mode-menu-1 
+
+	 (reverse (sort (aq-copy-list 
+			 (mapcar 'car aquamacs-default-styles))
+			(lambda (a b) (string< 
+				       (upcase (symbol-name a)) 
+				       (upcase (symbol-name b))))))
+
 	 (make-sparse-keymap "Set Mode") 
 	 'aquamacs-apply-style-for-mode
 	 "Apply frame style assigned to %s." 
-	 '(menu-bar-non-minibuffer-window-p) 'dont-filter))
-  (define-key-after appstyle-mode-menu [sm-sep] '(menu-item "--"))
-  (define-key-after appstyle-mode-menu [style-default]
-    '(menu-item "Default Style" aquamacs-apply-style-for-mode
-		:help "Apply default" :enable (menu-bar-non-minibuffer-window-p)))
-
-   (define-key-after aquamacs-frame-style-menu [set-mode]
+	 '(menu-bar-non-minibuffer-window-p)
+	 ))
+  (define-key-after aquamacs-frame-style-menu [set-mode]
     `(menu-item "Apply Style of Some Mode" ,appstyle-mode-menu
-		:help "Apply frame style of some major mode.") 
-    'menu-aquamacs-styles))
+		:help "Apply frame style of some major mode."
 ;; don't do this check (speed) - higher-level menu is disabled
 ;;		:enable (menu-bar-menu-frame-live-and-visible-p)
-;; (aquamacs-update-apply-style-for-mode-menu)
+)
+    'menu-set-style-as-default))
+
 
 (defun set-aquamacs-default-styles (variable value)
   "Like `custom-set-default', but for `aquamacs-default-styles'."
@@ -692,18 +585,21 @@ for which the menu is being updated."
 		    ("*Help*" (background-color . "lightsteelblue")
 		     (foreground-color . "black")
 		     (right-fringe . 1) (left-fringe . 1)
-		     (toolbar-lines . 0))
+		     (tool-bar-lines . 0))
 		    ("*Messages*" (background-color . "khaki") ;; "light goldenrod")
 		     (foreground-color . "black")
-		     (toolbar-lines . 0))
+		     (tool-bar-lines . 0))
 		    )) 
-    "Association list to set buffer styles. Each element 
-is a list of elements of the form (buffer-name style), where
-STYLE is an association list giving frame parameters as
-in `default-frame-alist' or `frame-parameters'. The frame parameters are set
-whenever the buffer BUFFER-NAME is activated. BUFFER-NAME has to be a 
-string. Parameters set here override parameters set in 
-`aquamacs-default-styles'.
+    "Association list to set buffer styles.
+
+The `aquamacs-styles-mode' is deprecated.
+
+Each element is a list of elements of the form (buffer-name
+style), where STYLE is an association list giving frame
+parameters as in `default-frame-alist' or `frame-parameters'. The
+frame parameters are set whenever the buffer BUFFER-NAME is
+activated. BUFFER-NAME has to be a string. Parameters set here
+override parameters set in `aquamacs-default-styles'.
  
 Note that when a major mode is changed, frames are automatically
 parametrized. Parameters in `default-frame-alist' and
@@ -722,15 +618,9 @@ current major mode. To turn off this behavior, see
     )
 
 ;; create some essential fontsets
-(when (fboundp 'create-aquamacs-fontset)
-  (create-aquamacs-fontset "apple" "lucida grande*" "medium" "r" "normal" '(11 12 13 14) "lucida")
-  (create-aquamacs-fontset "apple" "monaco*" "medium" "r" "normal" '(11 12) "monaco"))
-
-(aquamacs-set-defaults 
- ;; because we fit *Help* frames (fit-frame), we want to specify a
- ;; minimum of 68 characters. Otherwise we'll fit, and as soon as a
- ;; new help page is displayed, text gets wrapped.
- '((create-frame-min-width 68)))
+;; (when (fboundp 'create-aquamacs-fontset)
+;;   (create-aquamacs-fontset "apple" "lucida grande*" "medium" "r" "normal" '(11 12 13 14) "lucida")
+;;   (create-aquamacs-fontset "apple" "monaco*" "medium" "r" "normal" '(11 12) "monaco"))
 
 
 (defcustom aquamacs-default-styles
@@ -738,17 +628,11 @@ current major mode. To turn off this behavior, see
 		  ;; do not fit the frame for *Help*
 		  ;; because the frame will not re-adjust if the buffer
 		  ;; changes. Perhaps some auto-fit-frame?
-		  (text-mode  (font . "fontset-lucida13")) 
-		  (change-log-mode  (font . "fontset-lucida13"))
-		  (tex-mode  (font . "fontset-lucida13"))
-		  (outline-mode  (font . "fontset-lucida13"))
-		  (paragraph-indent-text-mode  (font . "fontset-lucida13"))
+		 
 		  (speedbar-mode (minibuffer-auto-raise . nil))
-		  (custom-mode (tool-bar-lines . 0) (fit-frame . t) 
-			       (font . "fontset-monaco11")
-			       (foreground-color . "sienna")
-			       (background-color . "light goldenrod"))
-		  ;; the default is taken from default-frame-alist
+		  (custom-mode (tool-bar-lines . 0) (fit-frame . t))
+		  ;; should the default be taken from default-frame-alist?
+		  (default (right-fringe . 1) (left-fringe . 1))
 		  ))
   "Association list to set mode-specific styles. Each element 
 is a list of elements of the form (mode-name style), where
@@ -773,7 +657,11 @@ for the current major mode. To turn off this behavior, see
 
 
 (define-minor-mode aquamacs-styles-mode
-  "Automatically set frame style according to major mode
+  "Automatically set frame style according to major mode.
+
+This mode has been superseded by `aquamacs-auto-faces-mode'.
+`aquamacs-styles-mode' is no longer supported.
+
 This global minor mode will cause frame settings (parameters,
 faces, variables) to be set according to a style that is specific
 to the major mode of the buffer currently shown in the single
@@ -796,15 +684,26 @@ When it is turned off, parameters are copied back.
 
 This mode is part of Aquamacs Emacs, http://aquamacs.org."
  
-  :init-value  t
+ 
+;; the condition case is because otherwise this won't
+;; do it's job. don't know why.
+;  (condition-case nil
+ ;     (error nil))
+:init-value  t
   :group 'Aquamacs
   :global t
-  :require (if aquamacs-use-color-themes color-theme))
-      
+  :require 'color-theme
+
+  (and
+   aquamacs-styles-mode
+   (boundp 'one-buffer-one-frame-mode) (not one-buffer-one-frame-mode)
+   (message "Aquamacs-Styles-Mode disabled. For best results, consider turning
+on One-Buffer-One-Frame-Mode (Display Buffers in Separate Frames)!")))
+  
 
 (defun aquamacs-styles-set-default-parameter (param value &optional mode)
-  "Sets frame parameter PARAM of default frame style."
-  (let* ((x (assq (or mode 'style-default) aquamacs-default-styles))
+  "Sets frame parameter PARAM of `default' frame style."
+  (let* ((x (assq (or mode 'default) aquamacs-default-styles))
 	 (x2 (cdr-safe x))
 	 ;; just in case the entry is malformed (or obsolete, maybe?)
 	 (y (assq param (if (listp (cdr-safe x2)) x2 (list x2)))))
@@ -813,7 +712,7 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
       (if x
 	  (setcdr x (cons (cons param value) (cdr x)))
 	(setq aquamacs-default-styles
-	      (cons (list (or mode 'style-default) (cons param value)) 
+	      (cons (list (or mode 'default) (cons param value)) 
 		    aquamacs-default-styles))))))
  
 (defun aquamacs-styles-set-all-mode-parameters (param value)
@@ -822,13 +721,8 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
 	(mapcar 'car-safe aquamacs-default-styles))
   (message "Modified the styles for all modes: %s set to %s." param value))
 
-(defvar aquamacs-faces-changed nil)
-(defadvice mac-handle-font-selection
-  (after mark-faced-unsaved () activate)
-  (setq aquamacs-faces-changed t))
-
 (defadvice modify-all-frames-parameters
-  (after set-parameter-in-default-style (alist) activate)
+  (after set-parameter-in-default-stylee (alist) activate)
   (mapc (lambda (x)
 	  (aquamacs-styles-set-default-parameter (car-safe x)
 						 (cdr-safe x)))
@@ -851,148 +745,24 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
    (cdr (assq 'left-fringe default-frame-alist))))
 
 
-(define-key menu-bar-options-menu [mouse-set-font]
-  `(menu-item (format "Font for %s...                 "
-		      (if (and (boundp 'face-remapping-alist)
-			       (assq 'default face-remapping-alist))
-			  (capitalize 
-			   (replace-regexp-in-string 
-			    "-default$" ""
-			    (symbol-name (cdr (assq 'default face-remapping-alist)))))
-			(if aquamacs-styles-mode
-			    "this Frame's default" "this Frame")))
-	      turn-on-mac-font-panel-mode
-	      :visible ,(display-multi-font-p)
-	      :keys ,(aq-binding 'mac-font-panel-mode)
-	      :enable (menu-bar-menu-frame-live-and-visible-p) 
-	      :help "Select a font from list of known fonts/fontsets"))
 
-;; colors menu
-
-(defvar colors-click-map (make-sparse-keymap))
-(define-key colors-click-map [mouse-1]
-  'aquamacs-select-color)
-(define-key colors-click-map "\r"
-  'aquamacs-select-color-at-position)
-
-
-(defvar aquamacs-color-selected-callback nil)
-(defvar aquamacs-color-selected-callback-args nil)
-
-(defun aquamacs-show-color-selection (buffer-name callback &rest arguments)
-"Pop up color selection buffer.
-Upon click/selection, CALLBACK will be called with color name and
-then the ARGUMENTS."
-  (list-colors-display nil buffer-name) ;; will pop up new window with buffer *Colors*
-  (with-current-buffer (get-buffer buffer-name)
-    (beginning-of-buffer)
-    (setq buffer-read-only nil)
-    (insert-button "[Quit]" 'action 'aquamacs-quit-color-selection 'follow-link t)
-    (insert "\n\n")
-    (set (make-local-variable 'aquamacs-color-selected-callback) callback)
-    (set (make-local-variable 'aquamacs-color-selected-callback-args) arguments)
-    (put-text-property (point) (point-max) 
-		       'keymap colors-click-map)
-    (setq buffer-read-only t)))
-
-(defun aquamacs-quit-color-selection (but)
-  (View-quit))
-
-(defun aquamacs-select-color (ev)
-  "Select the color at point of click."
-  (interactive "e")
-  (let ((p (posn-point (event-start ev))))
-    (aquamacs-select-color-at-position p)))
-
-(defun aquamacs-select-color-at-position (&optional p)
-  "Select the color at point (or P) if given.
-The Background color, or, if not given, foreground color is used."
-  (interactive)
-  (unless p (setq p (point)))
-  (apply aquamacs-color-selected-callback
-	 (or (plist-get (get-text-property p 'face) :background)
-	     (plist-get (get-text-property p 'face) :foreground)) 
-	 aquamacs-color-selected-callback-args))
-
-(defvar aquamacs-set-color-target-face nil)
-(defvar aquamacs-set-color-target-frame nil)
-(defun aquamacs-set-face-color (color-name setter-function target-face target-frame)
-  (funcall setter-function  ;; set-face-fore/background
-	   (or target-face 'default)
-	   color-name target-frame))
-
-(defun aquamacs-select-foreground-color ()
-  "Show a list of colors that can be used to select the forground.
-The foreground color of the default face used in the current
-buffer is set.  If the face is remapped, the specific (remapped)
-face is modified in all frames.  Otherwise, the `default' face in
-the current frame is modified."
-  (interactive)
-  (aquamacs-show-color-selection (format "Foreground Color for %s" 
-					 (aquamacs-face-or-frame-name nil))
-				 'aquamacs-set-face-color
-				 'set-face-foreground
-				 (cdr-safe (assq 'default face-remapping-alist))
-				 (if (assq 'default face-remapping-alist)
-					    nil (selected-frame))))
-
-(defun aquamacs-select-background-color ()
-  "Show a list of colors that can be used to select the forground.
-The foreground color of the default face used in the current
-buffer is set.  If the face is remapped, the specific (remapped)
-face is modified in all frames.  Otherwise, the `default' face in
-the current frame is modified."
-  (interactive)
-  (aquamacs-show-color-selection (format "Background Color for %s" 
-					 (aquamacs-face-or-frame-name nil))
-				 'aquamacs-set-face-color
-				 'set-face-background
-				 (cdr-safe (assq 'default face-remapping-alist))
-				 (if (assq 'default face-remapping-alist)
-					    nil (selected-frame))))
-
-
-(defun aquamacs-face-or-frame-name (generic-frame-name)
-  (if (assq 'default face-remapping-alist)
-      (capitalize 
-       (replace-regexp-in-string 
-	"-default$" "" 
-	(symbol-name (cdr (assq 'default face-remapping-alist)))))
-    (or generic-frame-name (concat "frame " (get-frame-name)))))
-
-(define-key-after menu-bar-options-menu [background-color]
-  `(menu-item (format "Background Color for %s...                 "
-		      (aquamacs-face-or-frame-name "this Frame"))
-	      aquamacs-select-background-color
-	      :visible ,(display-multi-font-p)
-	      :keys ,(aq-binding 'aquamacs-select-background-color)
-	      :enable (menu-bar-menu-frame-live-and-visible-p) 
-	      :help "Select a background color") 'mouse-set-font)
-
-(define-key-after menu-bar-options-menu [foreground-color]
-  `(menu-item (format "Foreground Color for %s...                 "
-		      (aquamacs-face-or-frame-name "this Frame"))
-	      aquamacs-select-foreground-color
-	      :visible ,(display-multi-font-p)
-	      :keys ,(aq-binding 'aquamacs-select-foreground-color)
-	      :enable (menu-bar-menu-frame-live-and-visible-p) 
-	      :help "Select a foreground color") 'mouse-set-font)
-
-
-;(setq aquamacs-set-color-target-face 'default-emacs-lisp-mode)
-;(setq aquamacs-set-color-target-frame nil)
-
-;(setq aquamacs-set-color-target-frame (selected-frame))
 
 	
   (add-hook 'after-change-major-mode-hook	
 	    'set-mode-style-after-change-major-mode
 	    )
   (add-hook 'menu-bar-update-hook 'aquamacs-update-mode-style)
-  
-  (define-key-after aquamacs-frame-style-menu [menu-clear-sep]
-    '(menu-item  "--"))
-(define-key-after aquamacs-frame-style-menu [menu-reset-styles]
+  (define-key-after aquamacs-frame-style-menu [menu-delete-one-style]
+    '(menu-item (format "Remove Style for %s" 
+			(or 
+			 (modename-to-string (aquamacs-updated-major-mode)) 
+			 "current mode"))   
+		aquamacs-delete-one-style 
+		:enable (and (menu-bar-menu-frame-live-and-visible-p)
+			     (assq (aquamacs-updated-major-mode) 
+				   aquamacs-default-styles))
+		:help "Removes a mode-specific style."))
+  (define-key-after aquamacs-frame-style-menu [menu-reset-styles]
     '(menu-item  "Reset All Styles"     aquamacs-reset-styles 
 		 :help "Resets all styles to the default."
 		 :enable t))
@@ -1000,38 +770,20 @@ the current frame is modified."
     '(menu-item  "Clear All Styles"     aquamacs-clear-styles 
 		 :help "Clear all styles."
 		 :enable t))
-  
-(define-key aquamacs-frame-style-menu [menu-remove-frame-parameters-from-style]
-    '(menu-item (format "Remove Frame Parameters from %s Style" 
-			(or (modename-to-string (aquamacs-updated-major-mode)) "Current Mode"))
-		aquamacs-remove-frame-parameters-from-style 
-		:help "Set the current frame parameters as default 
-for all frames with the current major-mode."
-		:enable   (menu-bar-menu-frame-live-and-visible-p)))
-  (define-key aquamacs-frame-style-menu [menu-adopt-frame-parameters]
-    '(menu-item (format "Adopt these Frame Parameters for %s" 
-			(or (modename-to-string (aquamacs-updated-major-mode)) "Current Mode"))
-		aquamacs-adopt-frame-parameters-for-mode-style 
-		:help "Set the current frame parameters as default 
-for all frames with the current major-mode."
-		:enable   (menu-bar-menu-frame-live-and-visible-p)))
- 
 
-  
- (define-key aquamacs-frame-style-menu [menu-clear-sep-2]
-    '(menu-item  "--"))
- (define-key aquamacs-frame-style-menu [menu-set-style-as-default]
-    '(menu-item  "Use this Style as Default for all Modes"     aquamacs-set-style-as-default
+
+  (define-key aquamacs-frame-style-menu [menu-set-style-as-mode-default]
+    '(menu-item (format "Use Current Style for %s" (or (modename-to-string (aquamacs-updated-major-mode)) "Current Mode"))
+		aquamacs-set-style-as-mode-default 
+		:help "Set the current frame parameters as default 
+for all frames with the current major-mode."
+		:enable   (menu-bar-menu-frame-live-and-visible-p)
+		 	  
+		))
+  (define-key aquamacs-frame-style-menu [menu-set-style-as-default]
+    '(menu-item  "Use Current Style as Default"     aquamacs-set-style-as-default
 		 :enable (menu-bar-menu-frame-live-and-visible-p)
-		 :help ""))
-(define-key aquamacs-frame-style-menu [menu-delete-one-style]
-    '(menu-item (format "Remove Style for %s" 
-			(or 
-			 (modename-to-string (aquamacs-updated-major-mode)) 
-			 "current mode"))   
-		aquamacs-delete-one-style 
-		:enable (menu-bar-menu-frame-live-and-visible-p)
-		:help "Removes a mode-specific style."))
+		 :help "")) 
 
 (defun modename-to-string (modename)
   (capitalize
@@ -1044,21 +796,29 @@ for all frames with the current major-mode."
 ;; and needlessly change the current frame.
 ;; anything necessary will be done by frame notice-user-settings
  
-(define-key aquamacs-frame-style-menu [menu-aquamacs-styles]
+(define-key-after menu-bar-options-menu [frame-style-sep]
+  '(menu-item "--")
+  'menu-aquamacs-autofaces)
+
+(define-key-after menu-bar-options-menu [aquamacs-color-theme-select]
+  `(menu-item "Color Theme for this Frame..." aquamacs-color-theme-select
+	       :visible (and (display-multi-font-p)
+			     (fboundp 'aquamacs-color-theme-select))
+	       :enable (menu-bar-menu-frame-live-and-visible-p)  
+	       :help "Select a color theme from a list")
+  'frame-style-sep)
+
+  (define-key-after aquamacs-frame-style-menu [menu-aquamacs-styles]
     (menu-bar-make-mm-toggle 
      aquamacs-styles-mode
-     "Auto Style"
-     "adapt the default face parameters to the major-mode"))
-
-(aquamacs-update-apply-style-for-mode-menu)
-(define-key-after aquamacs-frame-style-menu [menu-aquamacs-styles-sep]
-  '(menu-item "--") 'set-mode)
-
+     "Auto Frame Style"
+     "adapt the frame parameters to the major-mode") 'aquamacs-color-theme-select)
       
 
-(define-key-after menu-bar-options-menu [aquamacs-frame-styles]
-  (list 'menu-item "Mode Styles" aquamacs-frame-style-menu 
-	  :help "Set face styles for buffers depending on major mode in buffer")
+  (define-key-after menu-bar-options-menu [aquamacs-frame-styles]
+
+    (list 'menu-item "Frame Styles" aquamacs-frame-style-menu 
+	  :help "Set styles for frames depending on major mode in buffer")
     'aquamacs-color-theme-select)
 
   ;; advise frame-notice-user-settings (from frame.el)
@@ -1100,30 +860,27 @@ for all frames with the current major-mode."
     ;; workaround for an Emacs bug
     (let ((vsb (frame-parameter nil  'vertical-scroll-bars)))
       (modify-frame-parameters nil '((vertical-scroll-bars . nil)))
-      (modify-frame-parameters nil `((vertical-scroll-bars . ,vsb)))))
- 
+      (modify-frame-parameters nil `((vertical-scroll-bars . ,vsb)))
+      )
+    )
+
 
   ;; color styles
   
-;; is needed 
-(when aquamacs-use-color-themes
-  (require 'color-theme))
-
+  ;; is needed 
+  (require 'color-theme)
   (setq color-theme-is-global nil)
   (setq color-theme-target-frame nil)
-  (setq color-theme-target-buffer nil)
   (defadvice color-theme-install 
     (around for-other-frame (&rest args) activate)
  
-    (let ((buffer (current-buffer)))
     (if (and
 	 (eq major-mode 'color-theme-mode)
 	 color-theme-target-frame)
-	(progn (select-frame color-theme-target-frame)
-	       (setq buffer (or color-theme-target-buffer (current-buffer)))))
-    (with-current-buffer buffer
-      ad-do-it 
-    )))
+	(select-frame color-theme-target-frame)
+      )
+    ad-do-it 
+    )
 
  
 
@@ -1133,14 +890,15 @@ Display a buffer with a list of color themes, which, upon selection, are applied
 selected frame."
   (interactive) 
  
-  (setq color-theme-target-frame  (selected-frame)) 
-  (setq color-theme-target-buffer (current-buffer))
-
+  (setq color-theme-target-frame (selected-frame)) ;; this variable seems to be deprecated!
+   
   (let ((one-buffer-one-frame-force t))	
     ;; always open in new frame
     ;; because we've redefined bury->kill-buffer-and window 
     ;; in color-theme
-    (color-theme-select)))
+    (color-theme-select)
+    )
+  )
 
 (defvar smart-frame-positioning-hook nil) ;; stub
 (add-hook 'smart-frame-positioning-hook
@@ -1150,9 +908,6 @@ selected frame."
 ;	    (modify-frame-parameters f (aquamacs-get-style major-mode))))
 
 ; (setq smart-frame-positioning-hook nil)
-
-
-
 
 
 ;; backwards compatibility
@@ -1168,4 +923,3 @@ selected frame."
     (aquamacs-styles-mode 1))
 
 (provide 'aquamacs-styles)
-
