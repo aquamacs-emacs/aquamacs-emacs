@@ -8,7 +8,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.56 2008/10/12 23:14:59 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.57 2008/10/12 23:43:59 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -798,7 +798,7 @@ for all frames with the current major-mode."
  
 (define-key-after menu-bar-options-menu [frame-style-sep]
   '(menu-item "--")
-  'menu-aquamacs-autofaces)
+  'aquamacs-frame-autofaces)
 
 (define-key-after menu-bar-options-menu [aquamacs-color-theme-select]
   `(menu-item "Color Theme for this Frame..." aquamacs-color-theme-select
