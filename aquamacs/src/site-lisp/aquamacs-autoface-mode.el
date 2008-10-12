@@ -38,7 +38,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.1 2008/10/12 23:14:58 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.2 2008/10/12 23:45:04 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -64,45 +64,55 @@
 ; (require 'cl)
 (require 'aquamacs-cl) 
 
+(defvar aquamacs-faces-changed nil)
+
 (defun aquamacs-autoface-face (mode)
   (intern (format "%s-default" mode)))
 
 (defface style-default '((t :inherit default)) 
   "Default face for buffers when `aquamacs-autoface-mode' is active.")
   
-(defun aquamacs-import-frame-parameters-to-mode-faces ()
-  "Read aquamacs-default-styles, convert to faces."
+(defun aquamacs-import-frame-parameters-to-auto-faces ()
+  "Read `aquamacs-default-styles', convert to faces.
+The faces are then to be used with `aquamacs-autoface-mode'."
 
-  (mapc
-   (lambda (style)
+  (when (boundp 'aquamacs-default-styles)
+    (mapc
+     (lambda (elt)
+       (let* ((mode (car elt))
+	      (style (cdr elt))
+	      (face (aquamacs-autoface-face mode))
+	      (color-theme (cdr (assq 'color-theme style)))
+	      (col-theme-parms (if color-theme
+				   (condition-case nil 
+				       (color-theme-frame-params 
+					(color-theme-canonic color-theme)) 
+				     (error nil)))))
+	 (aquamacs-autoface-make-face face)
+	 (when (assq 'background-color style)
+	   (set-face-background face (cdr (assq 'background-color style))))
+	 (when (assq 'foreground-color style)
+	   (set-face-foreground face (cdr (assq 'foreground-color style))))
+	 (when (assq 'font style)
+	   (set-face-font face (cdr (assq 'font style)) nil))))
+     aquamacs-default-styles)
+    (setq aquamacs-faces-changed t)))
 
-
-	(let* ((color-theme (cdr (assq 'color-theme style)))
-	      (col-theme-parms (if (and
-					    aquamacs-use-color-themes color-theme)
-					   (condition-case nil 
-					       (color-theme-frame-params 
-						(color-theme-canonic color-theme)) 
-					     (error nil)))))
-
-	  (when (not (facep style-face-id))
-		  (let ((spec '((t :inherit style-default))))
-		    (make-empty-face style-face-id)
-		    (dolist (frame (frame-list))
-		      (face-spec-set style-face-id spec frame))
-		    (if (memq window-system '(x w32 mac))
-			(make-face-x-resource-internal style-face-id))
-		    ;; do not set face-defface-spec - this prevents it from being saved to custom-file properly
-		    ;; purecopy needed?
-		    (set-face-documentation style-face-id (purecopy "mode-specific face activated by `aquamacs-autoface-mode'.
-The `default' face is remapped (in the appropriate buffers) to this face."))
-		    ;; do not override user's existing face choices
-		    (when (assq 'background-color style)
-		      (set-face-background style-face-id (cdr (assq 'background-color style))))
-		    (when (assq 'foreground-color style)
-		      (set-face-foreground style-face-id (cdr (assq 'foreground-color style))))
-		    (when (assq 'font style)
-		      (set-face-font style-face-id (cdr (assq 'font style)) nil))))))))
+(defun aquamacs-autoface-make-face (face )
+  (when (not (facep face))
+    (let ((spec '((t :inherit style-default))))
+      (make-empty-face face)
+      (dolist (frame (frame-list))
+	(face-spec-set face spec frame))
+      (if (memq window-system '(x w32 mac))
+	  (make-face-x-resource-internal face))
+      ;; do not set face-defface-spec - this prevents it from being
+      ;; saved to custom-file properly.
+      ;; purecopy needed?
+      (set-face-documentation
+       face 
+       (purecopy "mode-specific face activated by `aquamacs-autoface-mode'.
+The `default' face is remapped (in the appropriate buffers) to this face.")))))
 
 (defun aquamacs-set-face-style (buffer &optional for-mode)
   "Set the mode-specific style for BUFFER.
@@ -120,7 +130,7 @@ Use style of major mode FOR-MODE if given."
 ;; 									 (format "%s-%s" (buffer-name) mode)
 ;; 								       mode))
 								       )))
-		      
+		(aquamacs-autoface-make-face style-face-id)
 		(make-local-variable 'face-remapping-alist)
 		(assq-set 'default style-face-id 'face-remapping-alist)
 		))))))
@@ -299,7 +309,6 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
       
 
   
-(defvar aquamacs-faces-changed nil)
 (defadvice mac-handle-font-selection
   (after mark-faced-unsaved () activate)
   (setq aquamacs-faces-changed t))
