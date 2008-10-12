@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.213 2008/10/12 23:14:58 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.214 2008/10/12 23:49:28 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -186,8 +186,10 @@ Separate paths from file names with --."
 		      (assq-delete-all
 		       'default  
 		       aquamacs-default-styles))))))
- 
-;; Print warnings / compatibility options
+
+    (when (< aquamacs-customization-version-id 162)
+      (aquamacs-import-frame-parameters-to-auto-faces)) 
+    ;; Print warnings / compatibility options
     
     (if (boundp 'mac-reverse-ctrl-meta)
 	(message "Warning: `mac-reverse-ctrl-meta' is not used any more from
