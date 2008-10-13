@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.175 2008/10/12 22:47:58 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.176 2008/10/13 21:09:45 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -624,8 +624,10 @@ windows, truncation is always enabled."
 (custom-add-option 'text-mode-hook 'auto-detect-wrap)
 (defun toggle-auto-text-mode-wrap ()
   "Toggle whether to automatically turn on word-wrap in Text mode and related modes.
-This command affects all buffers that use modes related to Text mode,
-both existing buffers and buffers that you subsequently create."
+This command affects all buffers that use modes related to Text
+mode, both existing buffers and buffers that you subsequently
+create.  Upon entering text-mode, the function `auto-detect-wrap'
+is used to determine wrapping."
   (interactive)
   ;; remove leftover customizations from previous versions
   (remove-hook 'text-mode-hook 'turn-on-auto-fill)
@@ -646,6 +648,11 @@ both existing buffers and buffers that you subsequently create."
 	     (if enable-mode "enabled" "disabled"))))
 
 (defun menu-bar-auto-text-mode-wrap ()
+"Toggle whether to automatically turn on word-wrap in text mode and related modes.
+This command affects all buffers that use modes related to
+text-mode, both existing buffers and buffers that you
+subsequently create.  Upon entering text-mode, the function
+`auto-detect-wrap' is used to determine wrapping."
   (interactive)
   (toggle-auto-text-mode-wrap)
   (customize-mark-as-set 'text-mode-hook))
