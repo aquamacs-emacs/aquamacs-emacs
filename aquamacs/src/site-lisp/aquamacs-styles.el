@@ -8,7 +8,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.57 2008/10/12 23:43:59 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.58 2008/10/13 18:32:12 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -141,88 +141,92 @@ FORCE is non-nil). Use style of major mode FOR-MODE if given."
 	    (let ((buffer (aquamacs-style-relevant-buffer   frame)))
 	    
 	      (when (or 
-		   (and force (or buffer for-mode))
-		   (and buffer
-			(not (equal (frame-parameter frame 
-				     'frame-configured-for-buffer)
+		     (and force (or buffer for-mode))
+		     (and buffer
+			  (not (equal (frame-parameter frame 
+						       'frame-configured-for-buffer)
 					;(cons  
-				    buffer 
+				      buffer 
 					; major-mode)  
-			       ))))
+				      ))))
 
-		  (save-excursion 
+		(save-excursion 
 
-		    (set-buffer buffer)
-		    (let* ((style (aquamacs-combined-mode-specific-settings 
-				   (if (special-display-p (buffer-name)) 
-				       special-display-frame-alist 
-				     default-frame-alist
-				     )
-				   (if for-mode
-				       (aquamacs-get-style for-mode)
-				     (append
-				      (aquamacs-get-buffer-style (buffer-name))
-				      (aquamacs-get-style major-mode)))))
-			   ;; read out color-theme		 
-			   ( color-theme (cdr (assq 'color-theme style)))
-			   (style (assq-delete-all 'color-theme style)
-				  ))  
-		      ;; make sure we don't move the whole frame -  
-		      ;; it is already shown on screen, and  
-		      ;; the position is determined by `smart-frame-positioning',  
-		      ;; that is per file name and according to the 'smart' heuristic   
+		  (set-buffer buffer)
+		  (let* ((style (aquamacs-combined-mode-specific-settings 
+				 (if (special-display-p (buffer-name)) 
+				     special-display-frame-alist 
+				   default-frame-alist
+				   )
+				 (if for-mode
+				     (aquamacs-get-style for-mode)
+				   (append
+				    (aquamacs-get-buffer-style (buffer-name))
+				    (aquamacs-get-style major-mode)))))
+			 ;; read out color-theme		 
+			 ( color-theme (cdr (assq 'color-theme style)))
+			 (style (assq-delete-all 'color-theme style)
+				))  
+		    ;; make sure we don't move the whole frame -  
+		    ;; it is already shown on screen, and  
+		    ;; the position is determined by `smart-frame-positioning',  
+		    ;; that is per file name and according to the 'smart' heuristic   
 		      
-		      ;; ensure that setting the new frame parameters doesn't resize
-		      ;; the frame significantly:
-		      ;; change width / height to adapt to new font size
+		    ;; ensure that setting the new frame parameters doesn't resize
+		    ;; the frame significantly:
+		    ;; change width / height to adapt to new font size
 
 		      
-		      ;; do not set frame parameters if they will be
-		      ;; overridden by the later color theme this
-		      ;; prevents flicker
-			(let ((col-theme-parms
-			       (condition-case 
-				   nil 
-				   (color-theme-frame-params
-				    (color-theme-canonic  color-theme)) 
-				 (error nil))))
-			  (mapc (lambda (x)
-				  (setq style (assq-delete-all (car x) style)))
-				col-theme-parms))
+		    ;; ensure that setting the new frame parameters doesn't resize
+		    ;; the frame significantly:
+		    ;; change width / height to adapt to new font size
 
-			;; never set font (changes frame size)
-			(setq style (assq-delete-all 'font style))
+		      
+		    (save-frame-size 
+		     frame
+		     ;; do not set frame parameters if they will be
+		     ;; overridden by the later color theme this
+		     ;; prevents flicker
+		     (let ((col-theme-parms
+			    (condition-case 
+				nil 
+				(color-theme-frame-params
+				 (color-theme-canonic  color-theme)) 
+			      (error nil))))
+		       (mapc (lambda (x)
+			       (setq style (assq-delete-all (car x) style)))
+			     col-theme-parms))
 
-			(modify-frame-parameters frame 
-			 (cons (cons 'frame-configured-for-buffer buffer) 
-			       style))
+		     (modify-frame-parameters frame 
+					      (cons (cons 'frame-configured-for-buffer buffer) 
+						    style))
 
 		
-			(save-window-excursion
-			  (select-frame frame)
-			  ;; color-style-target-frame seems deprecated
+		     (save-window-excursion
+		       (select-frame frame)
+		       ;; color-style-target-frame seems deprecated
 			 
-			  (if (and (functionp (car-safe color-theme))
-				   (memq (car-safe color-theme) color-themes)
-				   (not (cdr-safe color-theme)))
-			      (funcall (car color-theme)) 
-			    ;; just install the color style directly
-			    (color-theme-install color-theme)))
+		       (if (and (functionp (car-safe color-theme))
+				(memq (car-safe color-theme) color-themes)
+				(not (cdr-safe color-theme)))
+			   (funcall (car color-theme)) 
+			 ;; just install the color style directly
+			 (color-theme-install color-theme))))
 			 
-		      ;; do not move the frame: this can cause the frame to shrink more and more
-		      ;; e.g. when switching between tabs, and it also makes the frame jump around
-		      ;; especially on two-screen setups
-		      ;; (if (and (fboundp 'smart-move-frame-inside-screen))
-		      ;; 			     (smart-move-frame-inside-screen frame)
-		      ;; 			  )
-			)
-		    (if window-configuration-change-hook
-			(let ((selframe (selected-frame)))
-			  (select-frame frame)
-			  (run-hooks 'window-configuration-change-hook)
-			  (select-frame selframe)))
+		    ;; do not move the frame: this can cause the frame to shrink more and more
+		    ;; e.g. when switching between tabs, and it also makes the frame jump around
+		    ;; especially on two-screen setups
+		    ;; (if (and (fboundp 'smart-move-frame-inside-screen))
+		    ;; 			     (smart-move-frame-inside-screen frame)
+		    ;; 			  )
+		    )
+		  (if window-configuration-change-hook
+		      (let ((selframe (selected-frame)))
+			(select-frame frame)
+			(run-hooks 'window-configuration-change-hook)
+			(select-frame selframe)))
 		    
-		    )))
+		  )))
 	  (error (print err))))))
 
 
