@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.176 2008/10/13 21:09:45 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.177 2008/10/13 21:17:11 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -571,11 +571,17 @@ left and right margin"))
   "Turn on Word Wrap mode in current buffer."
   (turn-off-longlines)
   (turn-off-auto-fill)
-  (setq word-wrap t))
+  (setq word-wrap t)
+  (when (interactive-p)
+    (redraw-modeline))
+  (message "Word Wrap enabled in this buffer."))
 
 (defun turn-off-word-wrap ()
   "Turn off Word Wrap mode in current buffer."
-  (setq word-wrap nil))
+  (setq word-wrap nil)
+  (when (interactive-p)
+    (redraw-modeline))
+  (message "Word Wrap disabled in this buffer."))
 
 (defun toggle-word-wrap ()
   "Toggle whether to use Word Wrap."
@@ -583,6 +589,8 @@ left and right margin"))
   (if word-wrap
       (turn-off-word-wrap)
     (turn-on-word-wrap)))
+
+(global-set-key "\C-xw" 'toggle-word-wrap)
 
 (defun toggle-auto-fill ()
   "Toggle whether to use Auto Fill Mode."
