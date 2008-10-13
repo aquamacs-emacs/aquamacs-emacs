@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-editing.el,v 1.8 2008/08/22 22:28:26 davidswelt Exp $
+;; Last change: $Id: aquamacs-editing.el,v 1.9 2008/10/13 21:08:52 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -124,7 +124,11 @@ Defaults to `turn-on-auto-fill' if nil."
 
 (defalias 'auto-detect-longlines 'auto-detect-wrap)
 (defun auto-detect-wrap ()
-  "Automatically enable word-wrap or autofill"
+  "Automatically enable word-wrap or autofill.
+The buffer contents are examined to determine whether to use hard
+word wrap (autofill) or soft word wrap (word-wrap).  The variable
+`auto-word-wrap-default-function' is used to determine the
+default in case there is not enough text."
   (interactive)
   ;; (longlines-mode -1) ;; turn it off
   (setq word-wrap nil)
