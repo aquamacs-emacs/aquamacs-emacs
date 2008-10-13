@@ -8,15 +8,16 @@
 
 \item Aquamacs Styles have seen a major overhaul.  To recap, these styles apply settings such as fonts, background and foreground colors to buffers and the frames as they show the buffers.  The settings are chosen according to the major mode used in the buffer.  This makes is possibly to automatically edit prose texts (such as LaTeX) in a variable-width (proportional) fonts, but do one's programming (e.g., Python or C) in a fixed-width font.  
 
-What's changed?  In Aquamacs 1.6, font and color settings apply primarily to the default ``face'' used in the buffer.  For each major mode, a new face is defined.  For instance, the default face for LaTeX buffers is called `default-latex-mode'.  These faces can be edited directly via the Options menu (to choose a font and fore/background colors) or with M-x customize-face.  They apply automatically and immediately to all buffers in the given major mode.  (Frame-wide parameters such as the presence of a toolbar still need to be ``adopted'' for the major mode style using the Mode Styles menu.)
+The core functionality of changing fonts and fore/background colors (in short: faces) is now provided by the new `aquamacs-autoface-mode'.  Relevant mode-specific settings from `aquamacs-styles-mode' are automatically imported.  The now deprecated functionality of `aquamacs-styles-mode' (changing frame parameters including the visibility of the toolbar) is still available to users by inserting {\tt (require 'aquamacs-styles) (aquamacs-autoface-mode 0) (aquamacs-styles-mode 1)} into their Preferences.el file.  Users can also access color themes with {\tt M-x color-theme-select}, but note that faces set using `aquamacs-autoface-mode' will override foreground and background colors.  
 
-Previously, colors of a whole plethora of faces for various occasions could be chosen via the `color-theme' package.  Now, users choose fore- and background colors of the mode-specific default face directly.  Other faces can still be customized with M-x customize-face.
+How does the new \emph{autoface} mode differ from the \emph{styles} mode?  Font and color settings now apply primarily to the default ``face'' used in the buffer.  For each major mode, a new face is defined.  For instance, the default face for LaTeX buffers is called `latex-mode-default'.  These faces can be edited directly via the Options menu (to choose a font and some new entries to choose fore- and background colors) or even with M-x customize-face.  These changes apply automatically and immediately to all buffers in the given major mode. In contrast, the \emph{styles} mode used to set frame-wide parameters, including the font, fore- and background colors, and change these parameters in a frame according to the buffer shown in the first window within the frame.  Frame parameters also included the presence of a toolbar, cursor color, fringes, and the like.  These are not available in the new mode.
+Previously, colors of a whole plethora of faces for various occasions could be chosen via the `color-theme' package.  These were needlessly tied to major modes using `aquamacs-styles'. 
 
-One advantage of the new styles is that  switching between buffers is smooth and does not involve frame resizing effects.
+One advantage of the new, lightweight implementation of `autofaces' is that switching between buffers is smooth and does not lead to ugly frame resizing effects. 
 
 {\bf This feature is in development.}
 
-\item The use of color themes is being faced out.  While still included in Aquamacs, they are not available from the Options menu.  Use is not recommended.
+\item The use of color themes is being phased out.  While still included in Aquamacs, they are not available any longer from the Options menu.  We recommend the light-weight setting of fore/background colors using the Options menu.
 
 \item Tabs are now on by default in new installations. ``Show buffers in new frames'' ( one-buffer-one-frame-mode) is off by default.  Use the Options menu if you'd like to configure different settings.  (That users who had previously installed and configured Aquamacs will retain their chosen settings.)
  
@@ -35,6 +36,9 @@ Reported by Tom van Vleck.
 Reporter unknown (thanks for letting us know though).
 
 \item The ``vl'' indicator in the mode-line has been removed. `global-visual-line-mode' is on by default in Aquamacs.
+\item The mode-line now shows ``Wrap'' to indicate that soft word wrapping (`word-wrap') is on in the buffer.
+
+\item C-a (beginning-of-visual-line in `visual-line-mode' which is the default) will now always skip a prompt (e.g., in shell-mode) at the beginning of the line.
 
 \item Functions like `enlarge-frame' are bound to A-C-left/right/up/down (Command-Control) in all cases (and depend on osx-key-mode).
 
