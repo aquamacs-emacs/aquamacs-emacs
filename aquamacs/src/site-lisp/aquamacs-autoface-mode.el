@@ -38,7 +38,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.3 2008/10/12 23:49:14 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.4 2008/10/13 15:11:21 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -58,7 +58,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
 
-;; Copyright (C) 2005, 2006, David Reitter, all rights reserved.
+;; Copyright (C) 2008 David Reitter, all rights reserved.
 
  
 ; (require 'cl)
@@ -98,6 +98,21 @@ The faces are then to be used with `aquamacs-autoface-mode'."
        mode))
      aquamacs-default-styles)
     (setq aquamacs-faces-changed t))))
+
+(defun aquamacs-autofaces-set-default-parameter (param value &optional mode)
+  "Sets frame parameter PARAM of `default' frame style."
+  (let* ((x (assq (or mode 'default) aquamacs-default-styles))
+	 (x2 (cdr-safe x))
+	 ;; just in case the entry is malformed (or obsolete, maybe?)
+	 (y (assq param (if (listp (cdr-safe x2)) x2 (list x2)))))
+    (if y
+	(setcdr y value)
+      (if x
+	  (setcdr x (cons (cons param value) (cdr x)))
+	(setq aquamacs-default-styles
+	      (cons (list (or mode 'default) (cons param value)) 
+		    aquamacs-default-styles))))))
+
 
 (defun aquamacs-autoface-make-face (face )
   (when (not (facep face))
