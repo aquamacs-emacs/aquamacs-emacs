@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.75 2008/10/06 19:01:07 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.76 2008/10/13 17:01:05 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -444,7 +444,8 @@ the current window is switched to the new buffer."
       ;; we should do it manually.
       (set-buffer (window-buffer window-to-select))
       (setq ad-return-value (current-buffer)))
-  (aquamacs-set-style))))
+    ;; (aquamacs-set-style)
+    )))
 
 ;; (select-window wts)
 
