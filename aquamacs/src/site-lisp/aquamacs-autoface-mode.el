@@ -38,7 +38,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.5 2008/10/14 02:53:44 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.6 2008/10/14 03:01:50 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -67,10 +67,14 @@
 (defvar aquamacs-faces-changed nil)
 
 (defun aquamacs-autoface-face (mode &optional bufname)
-  (intern (if bufname
-	      (format "%s-%s-default" bufname mode)
-	    (format "%s-default" mode))))
-
+  (let ((face))
+    (if (and 
+	 bufname
+	 (setq face (intern (format "%s-%s-default" bufname mode)))
+	 (facep face))
+	face
+      (format "%s-default" mode))))
+	  
 (defface style-default '((t :inherit default)) 
   "Default face for buffers when `aquamacs-autoface-mode' is active.")
   
