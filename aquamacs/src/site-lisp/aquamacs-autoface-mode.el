@@ -38,7 +38,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.7 2008/10/14 11:53:45 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.8 2008/10/14 14:07:33 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -65,6 +65,13 @@
 (require 'aquamacs-cl) 
 
 (defvar aquamacs-faces-changed nil)
+
+(defun aquamacs-updated-major-mode ()
+"Returns the major mode of the selected window of the frame
+for which the menu is being updated."
+  (with-current-buffer (window-buffer
+   (frame-selected-window menu-updating-frame))
+    major-mode))
 
 (defun aquamacs-autoface-face (mode &optional bufname)
   (let ((face))
