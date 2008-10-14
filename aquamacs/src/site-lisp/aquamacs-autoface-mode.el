@@ -38,7 +38,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.4 2008/10/13 15:11:21 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.5 2008/10/14 02:53:44 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -66,8 +66,10 @@
 
 (defvar aquamacs-faces-changed nil)
 
-(defun aquamacs-autoface-face (mode)
-  (intern (format "%s-default" mode)))
+(defun aquamacs-autoface-face (mode &optional bufname)
+  (intern (if bufname
+	      (format "%s-%s-default" bufname mode)
+	    (format "%s-default" mode))))
 
 (defface style-default '((t :inherit default)) 
   "Default face for buffers when `aquamacs-autoface-mode' is active.")
@@ -141,11 +143,7 @@ Use style of major mode FOR-MODE if given."
 		   (not (assq 'default face-remapping-alist))
 		   (not (eq (variable-binding-locus 'face-remapping-alist) 
 			    (current-buffer))))
-	      (let ((style-face-id (aquamacs-autoface-face mode ;; (or for-mode 
-;; 								     (if (aquamacs-get-buffer-style (buffer-name))
-;; 									 (format "%s-%s" (buffer-name) mode)
-;; 								       mode))
-								       )))
+	      (let ((style-face-id (aquamacs-autoface-face mode (buffer-name))))
 		(aquamacs-autoface-make-face style-face-id)
 		(make-local-variable 'face-remapping-alist)
 		(assq-set 'default style-face-id 'face-remapping-alist)
