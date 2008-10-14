@@ -38,7 +38,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.8 2008/10/14 14:07:33 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.9 2008/10/14 19:57:50 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -110,7 +110,10 @@ The faces are then to be used with `aquamacs-autoface-mode'."
 	   (set-face-font face (cdr (assq 'font style)) nil))
        mode))
      aquamacs-default-styles)
-    (setq aquamacs-faces-changed t))))
+    (setq aquamacs-faces-changed t)
+    (if (and (fboundp 'aquamacs-styles) (boundp 'aquamacs-styles) aquamacs-styles)
+	;; this should ensure that styles is not kept `on' in custom-file.
+	(aquamacs-styles 0)))))
 
 (defun aquamacs-autofaces-set-default-parameter (param value &optional mode)
   "Sets frame parameter PARAM of `default' frame style."
