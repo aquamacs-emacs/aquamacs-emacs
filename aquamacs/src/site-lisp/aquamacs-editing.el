@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-editing.el,v 1.9 2008/10/13 21:08:52 davidswelt Exp $
+;; Last change: $Id: aquamacs-editing.el,v 1.10 2008/10/14 03:48:00 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -159,7 +159,8 @@ default in case there is not enough text."
 	      ;; long lines on average
 	      ;;(longlines-mode 1) ;; turn on longlines mode
 	      (setq word-wrap t)
-	      (message "Soft word wrap auto-enabled.")))
+	      (if (interactive-p)
+		  (message "Soft word wrap auto-enabled."))))
 	    (funcall (or auto-word-wrap-default-function 'turn-on-auto-fill))))))
  
 (provide 'aquamacs-editing)
