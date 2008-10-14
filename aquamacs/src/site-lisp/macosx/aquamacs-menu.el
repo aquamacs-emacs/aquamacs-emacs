@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.177 2008/10/13 21:17:11 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.178 2008/10/14 16:25:36 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -675,7 +675,7 @@ subsequently create.  Upon entering text-mode, the function
               :button (:toggle . auto-fill-function)))
 
 (define-key-after menu-bar-options-menu [word-wrap]
-  '(menu-item "Soft Word Wrap"
+  '(menu-item "Soft Word Wrap                                  "
 	      toggle-word-wrap
 	      :help "Wrap long lines without inserting carriage returns (Word Wrap)"
 	      :enable (menu-bar-menu-frame-live-and-visible-p)
