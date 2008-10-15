@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-mode-defaults.el,v 1.23 2008/08/08 13:46:15 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-defaults.el,v 1.24 2008/10/15 22:04:32 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -115,7 +115,7 @@
 (add-hook 'lisp-mode-hook 'load-and-setup-slime)
 (autoload 'slime "slime.el" "Start an inferior/superior Lisp and connect to its Swank server." 'interactive nil)
 
-
+(autoload 'wikipedia-mode "wikipedia-mode.el" "Major mode for editing Wikipedia articles." 'interactive nil)
 
 
 ;; ESS
