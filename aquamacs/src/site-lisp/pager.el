@@ -1,5 +1,5 @@
 ;;; pager.el --- windows-scroll commands
-;;; Version 2.3 -  2008-09-08
+;;; Version 2.4 -  2008-10-15
 ;;; Copyright (C) 1992-1997 Mikael Sjödin (mic@docs.uu.se)
 ;;; Copyright (C) 2005-2006,2008 David Reitter (david.reitter@gmail.com)
 ;;;
@@ -40,20 +40,26 @@
 ;;; o Place this file in a directory in your load-path.
 ;;; o Put the following in your .emacs file:
 ;;;     (require 'pager)
-;;;     (global-set-key "\C-v"	   'pager-page-down)
-;;;     (global-set-key [next] 	   'pager-page-down)
-;;;     (global-set-key "\ev"	   'pager-page-up)
-;;;     (global-set-key [prior]	   'pager-page-up)
-;;;     (global-set-key '[M-up]    'pager-row-up)
-;;;     (global-set-key '[M-kp-8]  'pager-row-up)
-;;;     (global-set-key '[M-down]  'pager-row-down)
-;;;     (global-set-key '[M-kp-2]  'pager-row-down)
+;; (global-set-key [remap scroll-up]	      'pager-page-down)
+;; (global-set-key [remap cua-scroll-up]	      'pager-page-down)
+;; (global-set-key [remap scroll-up-mark]      'pager-page-down-extend-region)
+;; (global-set-key [next] 	      'pager-page-down)
+;; (global-set-key [\S-next] 	      'pager-page-down-extend-region)
+;; (global-set-key [\M-up]	      'pager-page-up)
+;; (global-set-key [remap scroll-down]	      'pager-page-up) 
+;; (global-set-key [remap cua-scroll-down]	      'pager-page-up)
+;; (global-set-key [remap scroll-down-mark]      'pager-page-up-extend-region)
+;; (global-set-key [prior]	      'pager-page-up)
+;; (global-set-key [\S-prior]	      'pager-page-up-extend-region)
 ;;; o Restart your Emacs. 
 ;;; o pager.el is now installed.  Use the normal keys to scroll a full page and
 ;;;   M-up resp. M-down to scroll just one row up or down.
 
 ;;; ----------------------------------------------------------------------
 ;;; Versions:
+;;; 2.4 does not scroll correctly with faces set, so taken out of Aquamacs
+;;;     as default method to scroll.  This file contains updated global-set-key
+;;;     instructions now, so it can be loaded by the user easily.
 ;;; 2.3 Fixed page-wise scrolling for long wrapped lines with
 ;;;     visual-line-mode turned on
 ;;; 2.2 Fixed page-wise scrolling for long (wrapped) lines
@@ -171,6 +177,7 @@ The effect is that the cursor stays in the same position on the screen."
   )
 
 ;; ----------------------------------------------------------------------
+
 
 (provide 'pager)
 
