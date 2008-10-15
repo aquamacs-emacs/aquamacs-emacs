@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.214 2008/10/12 23:49:28 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.215 2008/10/15 18:30:52 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -624,29 +624,26 @@ yes-or-no prompts - y or n will do."
 ;; Page scrolling
 
 
-  (ats "pager")
-  (require 'pager)
+  (ats "aquamacs-editing")
+  (require 'aquamacs-editing)
+
   ;; overwrites CUA stuff
- 
-  (global-set-key [remap scroll-up]	      'pager-page-down)
-  (global-set-key [remap cua-scroll-up]	      'pager-page-down)
-  (global-set-key [remap scroll-up-mark]      'pager-page-down-extend-region)
-  (global-set-key [next] 	      'pager-page-down)
-  (global-set-key [\S-next] 	      'pager-page-down-extend-region)
-  (global-set-key [\M-up]	      'pager-page-up)
-  (global-set-key [remap scroll-down]	      'pager-page-up) 
-  (global-set-key [remap cua-scroll-down]	      'pager-page-up)
-  (global-set-key [remap scroll-down-mark]      'pager-page-up-extend-region)
-  (global-set-key [prior]	      'pager-page-up)
-  (global-set-key [\S-prior]	      'pager-page-up-extend-region)
+  (global-set-key [remap scroll-up]	      'aquamacs-page-down)
+  (global-set-key [remap cua-scroll-up]	      'aquamacs-page-down)
+  (global-set-key [remap scroll-up-mark]      'aquamacs-page-down-extend-region)
+  (global-set-key [next] 	      'aquamacs-page-down)
+  (global-set-key [\S-next] 	      'aquamacs-page-down-extend-region)
+  (global-set-key [\M-up]	      'aquamacs-page-up)
+  (global-set-key [remap scroll-down]	      'aquamacs-page-up) 
+  (global-set-key [remap cua-scroll-down]	      'aquamacs-page-up)
+  (global-set-key [remap scroll-down-mark]      'aquamacs-page-up-extend-region)
+  (global-set-key [prior]	      'aquamacs-page-up)
+  (global-set-key [\S-prior]	      'aquamacs-page-up-extend-region)
 
   ;; was here in 0.9.5, taken out
   ;;(global-set-key [C-up]        'pager-row-up)
   ;;(global-set-key [C-down]      'pager-row-down)
  
-
-  (ats "aquamacs-editing")
-  (require 'aquamacs-editing)
 
 ;; so here's a SLOW workaround
 
@@ -825,38 +822,6 @@ Use this argument instead of explicitly setting `view-exit-action'."
 		       exit-action)))
 
 
-
-  ;; Make sure it's saved to .emacs when necessary
-  ;; we need to redefine this here - this is copied and modified from menu-bar.el
-  ;; there is no method to mark a customize-variable to save _and_ to 
-  ;; set need-save so that it will be saved to .emacs. 
-
-
-					; write the aquamacs-version to end of customizations.el
-					; warning: bug - this will add to the file
-					; so the file will grow over time
-					; because the last (setq is what actually counts,
-					; this shouldn't cause any problems.
-  ;; (defadvice custom-save-all  
-  ;;   (after save-aquamacs-customization-version (&rest args) activate)
- 
-  ;;   (write-region
-  ;;    (with-output-to-string
-  ;;      (print `(setq aquamacs-customization-version-id
-  ;;      ,aquamacs-customization-version-id))
-  ;;      )
-  ;;    nil ;end
-  ;;    custom-file
-  ;;    'append
-  ;;    'quiet
-  ;;    )
-  ;; )
- 
-
- 
-					; update the help-mode specification with a fit-frame
-					; append it, so the user's choice has priority
-  
 (require 'color-theme-autoloads)
 (require 'aquamacs-autoface-mode)
 	
@@ -1086,7 +1051,6 @@ to the selected frame."
 
   
  
-
 
 
 
