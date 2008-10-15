@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-editing.el,v 1.10 2008/10/14 03:48:00 davidswelt Exp $
+;; Last change: $Id: aquamacs-editing.el,v 1.11 2008/10/15 18:27:52 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -163,4 +163,36 @@ default in case there is not enough text."
 		  (message "Soft word wrap auto-enabled."))))
 	    (funcall (or auto-word-wrap-default-function 'turn-on-auto-fill))))))
  
+(defun aquamacs-page-up (&optional keep-mark)
+  (interactive)
+  (unless (or keep-mark
+	      (and cua-mode ;; this means transient-mark-mode, too
+		   cua--explicit-region-start))
+    (deactivate-mark))
+  (let ((scroll-preserve-screen-position t))
+    (if cua-mode 
+	(cua-scroll-down)
+      (scroll-down))))
+ 
+(defun aquamacs-page-down (&optional keep-mark)
+  (interactive)
+  (unless (or keep-mark
+	      (and cua-mode ;; this means transient-mark-mode, too
+		   cua--explicit-region-start))
+    (deactivate-mark))
+  (let ((scroll-preserve-screen-position t))
+    (if cua-mode 
+	(cua-scroll-up)
+      (scroll-up))))
+
+(defun aquamacs-page-down-extend-region ()
+  (interactive)
+  (or mark-active (set-mark-command nil))
+  (aquamacs-page-down t))
+
+(defun aquamacs-page-up-extend-region ()
+  (interactive)
+  (or mark-active (set-mark-command nil))
+  (aquamacs-page-up t))
+
 (provide 'aquamacs-editing)
