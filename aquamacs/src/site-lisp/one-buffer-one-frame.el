@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.76 2008/10/13 17:01:05 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.77 2008/10/16 00:10:44 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -390,62 +390,60 @@ the current window is switched to the new buffer."
 
 
 (if window-system
-(defadvice switch-to-buffer (around sw-force-other-frame (&rest args) 
-				    activate compile)
-  ;; is buffer shown in a frame?
-
-  (let ((switch t)
-	(window-to-select))
-    (if one-buffer-one-frame
-	(walk-windows
-	 (lambda (w)
-	   (when (equal (window-buffer w) (get-bufobj (car args)))
-	     (setq switch nil)
-	     (setq window-to-select w))
-	   ) t t)) ;; t = include-hidden-frame (must be t) 
-      
-    (if switch
-	(let ((same-window-regexps 
-	       (if (eq obof-same-window-regexps 'same-window-regexps)
-		   same-window-regexps
-		 obof-same-window-regexps))
-	      (same-window-buffer-names 
-	       (if (eq obof-same-window-buffer-names 'same-window-buffer-names)
-		   same-window-buffer-names
-		 obof-same-window-buffer-names)))
-	  (if (or (not (visible-frame-list))
-		  (not (frame-visible-p (selected-frame)))
-		  (open-in-other-frame-p (car args) t))
-	      (progn
-		(apply #'switch-to-buffer-other-frame args)
-		(setq ad-return-value (current-buffer))
-		;; store the frame/buffer information
-		(add-to-list 'aquamacs-newly-opened-frames 
-			     (cons (selected-window) (buffer-name)))) 
-	    ;; else : show in same frame
-	    (if (window-dedicated-p (selected-window))
-		(progn 
-		  (apply #'switch-to-buffer-other-window args)
-		  (setq ad-return-value (current-buffer)))
-	      ;; else: show in same frame
-	      ad-do-it)))
-      ;; else (don't switch, just activate another frame)
-      ;; we need to do it here, because raise-frame / select frame are
-      ;; ineffective from within walk-windows
-      (select-frame-set-input-focus (window-frame window-to-select))
-      
-      ;(raise-frame (switch-frame (window-frame window-to-select)))
-      ;; raise-frame doesn't select it  
-      (select-window window-to-select)
-
-      ;; normally, the following would only happen in 
-      ;; the next top-level event loop (assumption)
-      ;; but because the normal switch-to-buffer does it right away
-      ;; we should do it manually.
-      (set-buffer (window-buffer window-to-select))
-      (setq ad-return-value (current-buffer)))
-    ;; (aquamacs-set-style)
-    )))
+    (defadvice switch-to-buffer (around sw-force-other-frame (&rest args) 
+					activate compile)
+      (if  one-buffer-one-frame  
+	  ;; technically, code below should work even without this
+	  ;; "if", because it does mostly the same things as switch-to-buffer.
+	  ;; however, we want to be on the safe side, and also not
+	  ;; honor stuff like `obof-same-window-regexps' when obof is off.
+	  (let ((switch t)
+		(window-to-select))
+	    (walk-windows
+	     (lambda (w)
+	       (when (equal (window-buffer w) (get-bufobj (car args)))
+		 (setq switch nil)
+		 (setq window-to-select w))) t t) ;) ;; t = include-hidden-frame (must be t) 
+	    (if switch
+		(let ((same-window-regexps 
+		       (if (eq obof-same-window-regexps 'same-window-regexps)
+			   same-window-regexps
+			 obof-same-window-regexps))
+		      (same-window-buffer-names 
+		       (if (eq obof-same-window-buffer-names 'same-window-buffer-names)
+			   same-window-buffer-names
+			 obof-same-window-buffer-names)))
+		  (if (or (not (visible-frame-list))
+			  (not (frame-visible-p (selected-frame)))
+			  (open-in-other-frame-p (car args) t))
+		      (progn
+			(setq ad-return-value (apply #'switch-to-buffer-other-frame args))
+			;; store the frame/buffer information
+			(add-to-list 'aquamacs-newly-opened-frames 
+				     (cons (selected-window) (buffer-name)))) 
+		    ;; else : show in same frame
+		    (if (window-dedicated-p (selected-window))
+			(setq ad-return-value   (apply #'switch-to-buffer-other-window args))
+		      ;; else: show in same frame
+		      ad-do-it)))
+	      ;; else (don't switch, just activate another frame)
+	      ;; we need to do it here, because raise-frame / select frame are
+	      ;; ineffective from within walk-windows
+	      (when window-to-select
+		(select-frame-set-input-focus (window-frame window-to-select))
+		;; raise-frame doesn't select it  
+		(select-window window-to-select)
+		;; normally, the following would only happen in 
+		;; the next top-level event loop (assumption)
+		;; but because the normal switch-to-buffer does it right away
+		;; we should do it manually.
+		(set-buffer (window-buffer window-to-select)))
+	      (unless ad-return-value (setq ad-return-value (current-buffer)))))
+	;; else: not one-buffer-one-frame   
+	(setq ad-return-value 
+	      ad-do-it)
+	(unless (frame-visible-p (selected-frame))
+	  (make-frame-visible (selected-frame))))))
 
 ;; (select-window wts)
 
