@@ -38,7 +38,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.9 2008/10/14 19:57:50 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.10 2008/10/16 22:17:56 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -114,20 +114,6 @@ The faces are then to be used with `aquamacs-autoface-mode'."
     (if (and (fboundp 'aquamacs-styles) (boundp 'aquamacs-styles) aquamacs-styles)
 	;; this should ensure that styles is not kept `on' in custom-file.
 	(aquamacs-styles 0)))))
-
-(defun aquamacs-autofaces-set-default-parameter (param value &optional mode)
-  "Sets frame parameter PARAM of `default' frame style."
-  (let* ((x (assq (or mode 'default) aquamacs-default-styles))
-	 (x2 (cdr-safe x))
-	 ;; just in case the entry is malformed (or obsolete, maybe?)
-	 (y (assq param (if (listp (cdr-safe x2)) x2 (list x2)))))
-    (if y
-	(setcdr y value)
-      (if x
-	  (setcdr x (cons (cons param value) (cdr x)))
-	(setq aquamacs-default-styles
-	      (cons (list (or mode 'default) (cons param value)) 
-		    aquamacs-default-styles))))))
 
 
 (defun aquamacs-autoface-make-face (face )
@@ -325,6 +311,9 @@ For instance, text buffers can be edited using variable width
 fonts, while buffers showing code can be displayed with
 fixed-width fonts.
 
+The face used in each buffer is named after the major mode, e.g.,
+`text-mode' will be displayed in the `text-mode-default' face.
+
 A special face `style-default' is applied when no mode-specific style
 is present. Any face setting will override parameters set 
 in `default-frame-alist' or `special-display-frame-alist'.
@@ -333,7 +322,17 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
  
   :init-value  t
   :group 'Aquamacs
-  :global t)
+  :global t
+
+  (mapc (lambda (b)
+	  (with-current-buffer b
+	    (if aquamacs-autoface-mode
+		(aquamacs-set-face-style b)
+	      ;; else
+	      (if (eq (variable-binding-locus 'face-remapping-alist) b)
+		  (setq face-remapping-alist (assq-delete-all 'default
+							      face-remapping-alist))))))
+	  (buffer-list)))
       
 
   
@@ -341,21 +340,21 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
   (after mark-faced-unsaved () activate)
   (setq aquamacs-faces-changed t))
  
-(defadvice tool-bar-mode
-  (after set-tool-bar-in-default-style () activate)
+;; (defadvice tool-bar-mode
+;;   (after set-tool-bar-in-default-style () activate)
 
-  (aquamacs-autofaces-set-default-parameter 'tool-bar-lines
-					 (if tool-bar-mode 1 0)))
+;;   (aquamacs-autofaces-set-default-parameter 'tool-bar-lines
+;; 					 (if tool-bar-mode 1 0)))
 
-(defadvice set-fringe-mode
-  (after set-fringe-in-default-style () activate)
+;; (defadvice set-fringe-mode
+;;   (after set-fringe-in-default-style () activate)
 
-  (aquamacs-autofaces-set-default-parameter 
-   'right-fringe
-   (cdr (assq 'right-fringe default-frame-alist)))
-  (aquamacs-autofaces-set-default-parameter 
-   'left-fringe
-   (cdr (assq 'left-fringe default-frame-alist))))
+;;   (aquamacs-autofaces-set-default-parameter 
+;;    'right-fringe
+;;    (cdr (assq 'right-fringe default-frame-alist)))
+;;   (aquamacs-autofaces-set-default-parameter 
+;;    'left-fringe
+;;    (cdr (assq 'left-fringe default-frame-alist))))
 
 
 (define-key menu-bar-options-menu [mouse-set-font]
@@ -519,7 +518,7 @@ the current frame is modified."
    (replace-regexp-in-string "-" " " (symbol-name modename))))
 
 ;; (setq aquamacs-default-autofaces nil)
-(aquamacs-set-defaults '((tool-bar-mode 0)))
+; (aquamacs-set-defaults '((tool-bar-mode 0)))
 ;; do not turn it off globally, because that would
 ;; only modify the default-frame-alist etc. 
 ;; and needlessly change the current frame.
