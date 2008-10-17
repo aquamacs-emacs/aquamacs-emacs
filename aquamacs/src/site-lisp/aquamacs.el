@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.215 2008/10/15 18:30:52 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.216 2008/10/17 02:41:17 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -94,7 +94,8 @@ Separate paths from file names with --."
 
       )
 
-    (if (< aquamacs-customization-version-id 092.8)
+    (if (and (boundp 'aquamacs-default-styles)
+	     (< aquamacs-customization-version-id 092.8))
 	;; bring the lucida font back because
 	;; we have switched over to monaco as the default
 	(mapc 
@@ -130,6 +131,7 @@ Separate paths from file names with --."
 	  (setq special-display-frame-alist 
 		(assq-delete-all 'scroll-bar-width special-display-frame-alist))
       
+	  (if (boundp 'aquamacs-default-styles)
 	  (mapc 
 	   (lambda (th)
 	     (unless (assq (car th) aquamacs-default-styles)
@@ -139,8 +141,9 @@ Separate paths from file names with --."
 	   ;; list
 	   (filter-fonts '(
 			   (help-mode (tool-bar-lines . 0) (fit-frame . t)) 
-			   (custom-mode (tool-bar-lines . 0) (fit-frame . t)))))))
-    (if (< aquamacs-customization-version-id 99.1)
+			   (custom-mode (tool-bar-lines . 0) (fit-frame . t))))))))
+    (if (and (boundp 'aquamacs-default-styles)
+	     (< aquamacs-customization-version-id 99.1))
 	(mapc (lambda (formode)
 		(assq-delete-all 'tool-bar  
 				 (cdr-safe (cdr-safe (car-safe 
@@ -177,7 +180,8 @@ Separate paths from file names with --."
       (when (eq one-buffer-one-frame-mode 'default)
 	  (custom-set-variables '(one-buffer-one-frame-mode t))))
 
-    (when (< aquamacs-customization-version-id 161)
+    (when (and (boundp 'aquamacs-default-styles)
+	       (< aquamacs-customization-version-id 161))
       ;; some tidying up from previous versions
       (let ((default-frame-parms (assq 'default aquamacs-default-styles)))
 	(when default-frame-parms
@@ -1206,7 +1210,7 @@ listed here."
      text-mode-hook
 
      blink-cursor-mode
-     aquamacs-default-styles 
+     ;;aquamacs-default-styles 
      aquamacs-customization-version-id
      mac-print-monochrome-mode
      make-backup-files
