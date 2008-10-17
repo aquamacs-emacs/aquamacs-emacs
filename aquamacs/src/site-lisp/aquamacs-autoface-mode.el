@@ -38,7 +38,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.10 2008/10/16 22:17:56 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.11 2008/10/17 02:45:30 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -169,7 +169,7 @@ Sets the `style-default' face."
   (interactive)
 ;; maybe delete mode-specific frames?
   (when 
-      (let ((existing-styles  (aquamacs-default-styles-list)))
+      (let ((existing-styles  (aquamacs-default-autofaces-list)))
 	(and existing-styles
 	     (yes-or-no-p 
 	      (format "Mode-specific autofaces are in place for the following modes: %s. Do you want to delete all of them so the default style is applied to frames with buffers in those modes?"
@@ -185,9 +185,9 @@ Sets the `style-default' face."
 			 l))))))
     (aquamacs-clear-autofaces))
  
-  (copy-face (aquamacs-autoface-face mode) 'style-default)
+  (copy-face (aquamacs-autoface-face major-mode) 'style-default)
   (if (interactive-p)
-      (message "Face for %s is now used as default." mode)))
+      (message "Face for %s is now used as default." major-mode)))
 
 
 	  
@@ -221,8 +221,6 @@ include-default includes style-default.  face-names implies include-default."
   "Resets all auto faces (mode-specific and the default face)"
   (interactive)
   (aquamacs-clear-autofaces)
-  (set-to-custom-standard-value 'aquamacs-default-styles)
-  (set-to-custom-standard-value 'aquamacs-buffer-default-styles)
   (when aquamacs-styles-mode
     (aquamacs-styles-mode 0))
 
@@ -232,8 +230,9 @@ modify them."))
 (defun aquamacs-clear-autofaces ()
   "Resets all styles (mode-specific and the default style)"
   (interactive)
-  (customize-set-variable 'aquamacs-default-styles nil)
-  (customize-set-variable 'aquamacs-buffer-default-styles nil)
+  (when (boundp 'aquamacs-default-styles)
+      (setq aquamacs-default-styles nil)
+      (setq aquamacs-buffer-default-styles nil))
   (when aquamacs-styles-mode
     (aquamacs-styles-mode 0))
   ;; go over all faces
