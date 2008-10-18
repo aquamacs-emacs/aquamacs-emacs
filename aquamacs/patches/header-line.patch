@@ -122,3 +122,27 @@ diff -c -r1.225.2.7 dispextern.h
   /* Return proper value to be used as baseline offset of font that has
      ASCENT and DESCENT to draw characters by the font at the vertical
      center of the line of frame F.
+*** lisp/info.el	06 Apr 2008 07:51:37 -0400	1.501.2.7
+--- lisp/info.el	17 Oct 2008 22:46:43 -0400	
+***************
+*** 3454,3463 ****
+    (make-local-variable 'Info-history)
+    (make-local-variable 'Info-history-forward)
+    (make-local-variable 'Info-index-alternatives)
+!   (setq header-line-format
+! 	(if Info-use-header-line
+! 	    '(:eval (get-text-property (point-min) 'header-line))
+! 	  nil)) ; so the header line isn't displayed
+    (set (make-local-variable 'tool-bar-map) info-tool-bar-map)
+    ;; This is for the sake of the invisible text we use handling titles.
+    (make-local-variable 'line-move-ignore-invisible)
+--- 3454,3462 ----
+    (make-local-variable 'Info-history)
+    (make-local-variable 'Info-history-forward)
+    (make-local-variable 'Info-index-alternatives)
+!   (if Info-use-header-line    ; do not override global header lines
+!       (setq header-line-format
+! 	    '(:eval (get-text-property (point-min) 'header-line))))
+    (set (make-local-variable 'tool-bar-map) info-tool-bar-map)
+    ;; This is for the sake of the invisible text we use handling titles.
+    (make-local-variable 'line-move-ignore-invisible)
