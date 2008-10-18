@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-mode-defaults.el,v 1.24 2008/10/15 22:04:32 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-defaults.el,v 1.25 2008/10/18 02:51:50 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -92,7 +92,8 @@
 
 ;; we don't want header lines (tab uses them)
 (aquamacs-set-defaults 
- '((slime-header-line-p nil)
+ '((Info-use-header-line nil)
+   (slime-header-line-p nil)
    (erc-mode-line-format "%s %a. %n on %t (%m,%l) %o")
    (erc-header-line-format nil)))
 
