@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.216 2008/10/17 02:41:17 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.217 2008/10/18 03:10:07 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -1184,6 +1184,9 @@ listed here."
 	      mac-inline-input-method-mode
 	      one-buffer-one-frame-mode 
 	      aquamacs-styles-mode
+	      aquamacs-autoface-mode
+	      default-frame-alist ;; does this not prevent users from setting these?
+	      initial-frame-alist
 	      mac-option-modifier)
 	    (and (boundp 'aquamacs-additional-fontsets)
 		   '(aquamacs-additional-fontsets))
