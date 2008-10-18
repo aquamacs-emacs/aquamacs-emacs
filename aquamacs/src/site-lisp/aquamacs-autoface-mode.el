@@ -38,7 +38,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.11 2008/10/17 02:45:30 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.12 2008/10/18 03:15:01 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -163,7 +163,7 @@ Use style of major mode FOR-MODE if given."
       (aquamacs-set-face-style buf))))
 
  
-(defun aquamacs-set-style-as-default () 
+(defun aquamacs-set-face-as-default () 
   "Copy style to be used as default stle.
 Sets the `style-default' face."
   (interactive)
@@ -189,7 +189,56 @@ Sets the `style-default' face."
   (if (interactive-p)
       (message "Face for %s is now used as default." major-mode)))
 
+(defvar aquamacs-relevant-frame-parameter-regexp "\\(color\\|mode\\|lines\\|fringe\\)"
+  "Regular expression to be found in frame parameters handled by aquamacs-styles.")
 
+(defun aquamacs-set-frame-parameters-as-default () 
+  "Activate current frame settings as default.
+Sets all frame parameters in `default-frame-alist' and
+`initial-frame-alist' from the selected frame, as long as they
+match `aquamacs-relevant-frame-parameter-regexp'."
+  (interactive)
+
+  ;; set default-frame-alist
+  (customize-set-variable 
+   'default-frame-alist
+   (append 
+    (apply #'append
+	   (mapcar 
+	    (lambda (pm)
+	      (unless (string-match 
+		   aquamacs-relevant-frame-parameter-regexp 
+		   (symbol-name (car pm)))
+		  (list pm)))
+	    default-frame-alist))
+     (apply #'append
+	    (mapcar 
+	     (lambda (pm)
+	       (if (string-match 
+		    aquamacs-relevant-frame-parameter-regexp 
+		    (symbol-name (car pm)))
+		   (list pm)))
+	     (frame-parameters)))))
+  ;; set initial-frame-alist
+  (customize-set-variable 
+   'initial-frame-alist
+   (append 
+    (apply #'append
+	   (mapcar 
+	    (lambda (pm)
+	      (unless (string-match 
+		   aquamacs-relevant-frame-parameter-regexp 
+		   (symbol-name (car pm)))
+		  (list pm)))
+	    initial-frame-alist))
+     (apply #'append
+	    (mapcar 
+	     (lambda (pm)
+	       (if (string-match 
+		    aquamacs-relevant-frame-parameter-regexp 
+		    (symbol-name (car pm)))
+		   (list pm)))
+	     (frame-parameters))))))
 	  
 
 (defun aquamacs-default-autofaces-list (&optional face-names include-default)
@@ -499,8 +548,8 @@ the current frame is modified."
   
  (define-key aquamacs-autoface-menu [menu-clear-sep-2]
     '(menu-item  "--"))
- (define-key aquamacs-autoface-menu [menu-set-style-as-default]
-    '(menu-item  "Use this Face as Default for all Modes"     aquamacs-set-style-as-default
+ (define-key aquamacs-autoface-menu [menu-set-face-as-default]
+    '(menu-item  "Use this Face as Default for all Modes"     aquamacs-set-face-as-default
 		 :enable (menu-bar-menu-frame-live-and-visible-p)
 		 :help ""))
 (define-key aquamacs-autoface-menu [menu-delete-one-style]
@@ -540,6 +589,10 @@ the current frame is modified."
 	  :help "Set default face in buffers depending on major mode ")
     'background-color)
  
+(define-key-after menu-bar-options-menu [aquamacs-set-frame-defaults]
+  (list 'menu-item "Adopt frame parameters as default" 'aquamacs-set-frame-parameters-as-default 
+	  :help "Set most default frame parameters to ones of selected frame.")
+    'aquamacs-frame-autofaces)
    
 ;; turn on if desired
 (if aquamacs-autoface-mode
