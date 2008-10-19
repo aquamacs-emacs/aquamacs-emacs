@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.179 2008/10/16 22:02:23 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.180 2008/10/19 16:35:26 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -731,13 +731,6 @@ subsequently create.  Upon entering text-mode, the function
 
   (define-key menu-bar-showhide-menu [mac-font-panel-mode]
     nil)
-  (define-key menu-bar-options-menu [mouse-set-font]
-  `(menu-item "Font (this Frame)...                 " 
-	      turn-on-mac-font-panel-mode
-	       :visible ,(display-multi-font-p)
-	       :keys ,(aq-binding 'mac-font-panel-mode)
-	       :enable (menu-bar-menu-frame-live-and-visible-p) 
-	       :help "Select a font from list of known fonts/fontsets")))
 
 (define-key menu-bar-options-menu [highlight-paren-mode] nil)
 (define-key menu-bar-options-menu [highlight-separator] nil)
@@ -754,9 +747,6 @@ subsequently create.  Upon entering text-mode, the function
 			       "Show Newlines"
 			       "Show hard newlines") 'highlight-paren-mode))
 
-
-(easy-menu-add-item  nil '("Options")
-  ["-" nil nil] 'mouse-set-font)
 
 (define-key menu-bar-options-menu [blink-cursor-mode] nil)
 (define-key menu-bar-options-menu [cursor-separator] nil)
