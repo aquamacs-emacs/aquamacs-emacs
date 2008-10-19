@@ -38,7 +38,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.13 2008/10/19 16:36:23 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.14 2008/10/19 18:10:25 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -407,6 +407,7 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
 (defvar appearance-menu (make-sparse-keymap "Looks"))
 (setq appearance-menu (make-sparse-keymap "Looks"))
 
+(define-key menu-bar-options-menu [mouse-set-font] nil)
 (define-key appearance-menu [set-font]
   `(menu-item (format "Font for %s...                 "
 		      (if (and (boundp 'face-remapping-alist)
