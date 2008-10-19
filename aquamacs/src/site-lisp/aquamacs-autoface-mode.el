@@ -38,7 +38,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.12 2008/10/18 03:15:01 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.13 2008/10/19 16:36:23 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -404,8 +404,10 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
 ;;    'left-fringe
 ;;    (cdr (assq 'left-fringe default-frame-alist))))
 
+(defvar appearance-menu (make-sparse-keymap "Looks"))
+(setq appearance-menu (make-sparse-keymap "Looks"))
 
-(define-key menu-bar-options-menu [mouse-set-font]
+(define-key appearance-menu [set-font]
   `(menu-item (format "Font for %s...                 "
 		      (if (and (boundp 'face-remapping-alist)
 			       (assq 'default face-remapping-alist))
@@ -514,23 +516,23 @@ the current frame is modified."
 	(symbol-name (cdr (assq 'default face-remapping-alist)))))
     (or generic-frame-name (concat "frame " (get-frame-name)))))
 
-(define-key-after menu-bar-options-menu [background-color]
+(define-key-after appearance-menu [background-color]
   `(menu-item (format "Background Color for %s...                 "
 		      (aquamacs-face-or-frame-name "this Frame"))
 	      aquamacs-select-background-color
 	      :visible ,(display-multi-font-p)
 	      :keys ,(aq-binding 'aquamacs-select-background-color)
 	      :enable (menu-bar-menu-frame-live-and-visible-p) 
-	      :help "Select a background color") 'mouse-set-font)
+	      :help "Select a background color") 'set-font)
 
-(define-key-after menu-bar-options-menu [foreground-color]
+(define-key-after appearance-menu [foreground-color]
   `(menu-item (format "Foreground Color for %s...                 "
 		      (aquamacs-face-or-frame-name "this Frame"))
 	      aquamacs-select-foreground-color
 	      :visible ,(display-multi-font-p)
 	      :keys ,(aq-binding 'aquamacs-select-foreground-color)
 	      :enable (menu-bar-menu-frame-live-and-visible-p) 
-	      :help "Select a foreground color") 'mouse-set-font)
+	      :help "Select a foreground color") 'set-font)
 
  
 	
@@ -583,17 +585,28 @@ the current frame is modified."
   '(menu-item "--") 'set-mode)
 
       
-
-(define-key-after menu-bar-options-menu [aquamacs-frame-autofaces]
+(define-key-after appearance-menu [aquamacs-frame-autofaces]
   (list 'menu-item "Auto Faces" aquamacs-autoface-menu 
 	  :help "Set default face in buffers depending on major mode ")
     'background-color)
- 
-(define-key-after menu-bar-options-menu [aquamacs-set-frame-defaults]
-  (list 'menu-item "Adopt frame parameters as default" 'aquamacs-set-frame-parameters-as-default 
+
+
+(define-key-after appearance-menu [aquamacs-set-frame-defaults]
+  (list 'menu-item "Adopt Frame Parameters as Default"
+	'aquamacs-set-frame-parameters-as-default 
 	  :help "Set most default frame parameters to ones of selected frame.")
     'aquamacs-frame-autofaces)
-   
+
+(define-key-after appearance-menu [aquamacs-frame-sep]
+  '(menu-item "--" nil) 'aquamacs-frame-autofaces)
+
+
+(define-key-after menu-bar-options-menu [aquamacs-frame-autofaces]
+  (list 'menu-item "Appearance" appearance-menu 
+	  :help "Appearances")
+    'showhide)
+ 
+  
 ;; turn on if desired
 (if aquamacs-autoface-mode
     (aquamacs-autoface-mode 1))
