@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.180 2008/10/19 16:35:26 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.181 2008/10/19 17:39:17 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -726,11 +726,7 @@ subsequently create.  Upon entering text-mode, the function
   (defun turn-on-mac-font-panel-mode ()
     (interactive)
     (mac-font-panel-mode 1))
-
- ;; this is a redefine
-
-  (define-key menu-bar-showhide-menu [mac-font-panel-mode]
-    nil)
+  (define-key menu-bar-showhide-menu [mac-font-panel-mode] nil))
 
 (define-key menu-bar-options-menu [highlight-paren-mode] nil)
 (define-key menu-bar-options-menu [highlight-separator] nil)
