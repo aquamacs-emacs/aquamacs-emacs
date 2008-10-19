@@ -3,7 +3,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: mac bug report
  
-;; Last change: $Id: aquamacs-bug.el,v 1.16 2008/07/09 22:06:41 davidswelt Exp $
+;; Last change: $Id: aquamacs-bug.el,v 1.17 2008/10/19 16:34:26 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -39,6 +39,14 @@
  
 ;; use standard emacs bug reporting technology.
 
+(defun aquamacs-webbug-send-it ()
+  "Pass current buffer on to the Aquamacs website for bug reporting."
+
+; to be implemented.  Perhaps this is easier to do with an authenticated SSH request or so, but that might
+; make it more insecure.  HTTP post would probably do the job.
+
+)
+
 ; (report-aquamacs-bug)
 (defun report-aquamacs-bug (topic &optional recent-keys)
   "Report a bug in Aquamacs Emacs.
@@ -52,7 +60,9 @@ Prompts for bug subject.  Leaves you in a mail buffer."
   ;; If there are four numbers in emacs-version, this is a pretest
   ;; version.
   
-  (let  ((report-emacs-bug-address "aquamacs-bugs@aquamacs.org")
+  (let  (
+;;	 (send-mail-function 'aquamacs-webbug-send-it)
+	 (report-emacs-bug-address "aquamacs-bugs@aquamacs.org")
 	 (report-emacs-bug-pretest-address "aquamacs-bugs@aquamacs.org")
 	 (report-emacs-bug-no-confirmation t))
  
@@ -103,6 +113,18 @@ most Aquamacs-specific code."
 	      start-vanilla-aquamacs
 	      :help "Start Aquamacs Emacs without any user-specific settings."
 	      :keys ,(aq-binding 'start-vanilla-aquamacs)) )
+
+(define-key menu-bar-bug-help-menu [debug-on-quit]
+  (menu-bar-make-toggle toggle-debug-on-quit debug-on-quit
+			"Enter Debugger on Quit/C-g" "Debug on Quit %s"
+			"Enter Lisp debugger when C-g is pressed"))
+(define-key menu-bar-bug-help-menu [debug-on-error]
+  (menu-bar-make-toggle toggle-debug-on-error debug-on-error
+			"Enter Debugger on Error" "Debug on Error %s"
+			"Enter Lisp debugger when an error is signaled"))
+(define-key menu-bar-options-menu [debug-on-quit] nil)
+(define-key menu-bar-options-menu [debug-on-error] nil)
+(define-key menu-bar-options-menu [debugger-separator] nil)
 
 (define-key-after menu-bar-help-menu [bug-diagnosis]
   `(menu-item "Diagnose and Report Bug " 
