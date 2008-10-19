@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.217 2008/10/18 03:10:07 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.218 2008/10/19 16:42:09 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -828,7 +828,9 @@ Use this argument instead of explicitly setting `view-exit-action'."
 
 (require 'color-theme-autoloads)
 (require 'aquamacs-autoface-mode)
-	
+(autoload 'aquamacs-styles-mode "aquamacs-styles.el" "Automatically set frame style according to major mode" 'interactive nil)
+
+
 	
  (ats "styles done")
       
