@@ -8,7 +8,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-styles.el,v 1.58 2008/10/13 18:32:12 davidswelt Exp $
+;; Last change: $Id: aquamacs-styles.el,v 1.59 2008/10/19 17:34:49 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -490,8 +490,7 @@ modify them."))
 for which the menu is being updated."
   (with-current-buffer (window-buffer
    (frame-selected-window menu-updating-frame))
-    major-mode)
-)
+    major-mode))
 
 
 
@@ -794,7 +793,6 @@ for all frames with the current major-mode."
    (replace-regexp-in-string "-" " " (symbol-name modename))))
 
 ;; (setq aquamacs-default-styles nil)
-(aquamacs-set-defaults '((tool-bar-mode 0)))
 ;; do not turn it off globally, because that would
 ;; only modify the default-frame-alist etc. 
 ;; and needlessly change the current frame.
@@ -802,7 +800,7 @@ for all frames with the current major-mode."
  
 (define-key-after menu-bar-options-menu [frame-style-sep]
   '(menu-item "--")
-  'aquamacs-frame-autofaces)
+  'appearance-menu)
 
 (define-key-after menu-bar-options-menu [aquamacs-color-theme-select]
   `(menu-item "Color Theme for this Frame..." aquamacs-color-theme-select
