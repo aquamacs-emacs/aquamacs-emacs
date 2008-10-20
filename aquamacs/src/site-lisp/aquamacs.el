@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.220 2008/10/20 14:25:50 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.221 2008/10/20 21:39:00 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -348,13 +348,15 @@ Returns t."
 			  (list 'aquamacs-customization-version-id
 				'smart-frame-prior-positions
 				'aquamacs-additional-fontsets
+				'initial-frame-alist
 				'transient-mark-mode)))
 	     ;; depends on return value of `aquamacs-menu-bar-options-save'
 	     ;; NOT implemented for the standard menu-bar-options-save!
 	     ;; ask user whether to accept these saved changes
 	     (if (eq aquamacs-save-options-on-quit 'ask)
-		 (progn ;;(print changed)
-		 (y-or-n-p "Options have changed - save them? "))
+		 (progn 
+		   ;;		   (print changed)
+		   (y-or-n-p "Options have changed - save them? "))
 	       aquamacs-save-options-on-quit))
 	(aquamacs-menu-bar-options-save)))
   t)
