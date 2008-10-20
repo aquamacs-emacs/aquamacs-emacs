@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.182 2008/10/20 02:18:14 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.183 2008/10/20 21:25:59 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -675,7 +675,7 @@ subsequently create.  Upon entering text-mode, the function
               :button (:toggle . auto-fill-function)))
 
 (define-key-after menu-bar-options-menu [word-wrap]
-  '(menu-item "Soft Word Wrap                                  "
+  '(menu-item "Soft Word Wrap                    "
 	      toggle-word-wrap
 	      :help "Wrap long lines without inserting carriage returns (Word Wrap)"
 	      :enable (menu-bar-menu-frame-live-and-visible-p)
@@ -808,6 +808,8 @@ subsequently create.  Upon entering text-mode, the function
   '(menu-item "Aquamacs-Specific Options" customize-aquamacs
 	      :help "Settings that differ between Aquamacs and Emacs")
   'customize-changed-options)
+(define-key menu-bar-options-menu [customize]
+  (list 'menu-item "Customize Aquamacs" menu-bar-custom-menu))
 
 
 ;; move this down after "customize"
