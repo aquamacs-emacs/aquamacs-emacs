@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.219 2008/10/20 00:28:41 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.220 2008/10/20 14:25:50 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -428,7 +428,7 @@ if modified buffers exist."
 The *scratch* buffer is loaded from `aquamacs-scratch-file'.
 No errors are signaled."
   (when (and aquamacs-scratch-file (get-buffer "*scratch*"))
-    (aquamacs-set-default 
+    (aquamacs-set-defaults 
      '((desktop-buffers-not-to-save
 	"\\(^nn\\.a[0-9]+\\|\\.log\\|\\*scratch\\*\\)$")))
     (with-current-buffer "*scratch*"
