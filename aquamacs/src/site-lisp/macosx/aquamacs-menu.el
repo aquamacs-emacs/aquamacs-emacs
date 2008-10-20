@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.181 2008/10/19 17:39:17 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.182 2008/10/20 02:18:14 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -720,7 +720,8 @@ subsequently create.  Upon entering text-mode, the function
        one-buffer-one-frame-mode
        "Show Buffers in New Frames"
        "Make new frames to switch or pop to other buffers.") 'tabbar)
-    (define-key-after menu-bar-options-menu [obof-separator]  '(menu-item "--") 'oneonone))
+    ;; (define-key-after menu-bar-options-menu [obof-separator] '(menu-item "--") 'oneonone)
+    )
 
 (when (fboundp 'mac-font-panel-mode)
   (defun turn-on-mac-font-panel-mode ()
@@ -785,21 +786,28 @@ subsequently create.  Upon entering text-mode, the function
   (menu-bar-make-toggle toggle-make-backup-files make-backup-files  
 			(format "Make Backup Files %s" (if backup-inhibited "(inhibited here)" ""))
 			"Making backup files: %s"
-			"Create a backup file when saving"
-			) 'obof-separator)
-;(define-key-after menu-bar-options-menu [backup-separator]  
-;  '(menu-item "--") 'file-backups)
-
+			"Create a backup file when saving") 'mule)
 
 ;; not important enough to warrant a menu entry
-(easy-menu-remove-item global-map  '("menu-bar" "options") 'save-place) 
-
+(define-key menu-bar-options-menu [save-place]
+    nil)
  
 
 ;; remove this entry, because in Aquamacs, no global tool-bar-mode
 ;; is present
 (define-key menu-bar-showhide-menu [showhide-tool-bar]
     nil)
+
+
+(defun customize-aquamacs ()
+  "Customize settings that differ between Aquamacs and Emacs."
+  (interactive)
+  (customize-group 'Aquamacs-is-more-than-Emacs))
+
+(define-key-after menu-bar-custom-menu [customize-aquamacs]
+  '(menu-item "Aquamacs-Specific Options" customize-aquamacs
+	      :help "Settings that differ between Aquamacs and Emacs")
+  'customize-changed-options)
 
 
 ;; move this down after "customize"
