@@ -1,4 +1,4 @@
-;; -*-mode:emacs-lisp; coding: iso-latin-1-unix;-*-'
+;; -*-mode:emacs-lisp; coding: utf-8;-*-'
 ;; emulate-mac-*-keyboard-modes for Aquamacs
 ;; (C) 2005,2007 by David Reitter
 ;; do not copy / redistribute outside of Aquamacs. All rights reserved.
@@ -48,25 +48,25 @@ Example:
     (french . (([?\M-`] . "@")
 	       ("\M-$" . ,emmkm--euro) 
 	       ("\M-/" . "\\")
-	       ([?\M-£]  . "#") ;; was: "\M-£"
+	       ([?\M-Â£]  . "#") ;; was: "\M-Â£"
 	       ("\M-n" . "~")
 	       ("\M-L" . "|")
 	       ("\M-(" . "{")
 	       ("\M-5" . "[")
 	       ("\M-)" . "}")
-	       ([?\M-°] . "]")))
+	       ([?\M-Â°] . "]")))
     (spanish . (([?\M-`] . "[")
               ("\M-+" . "]")
               ("\M-5" . ,emmkm--euro)
-              ([?\M-´]  . "{")
-              ([?\M-ç]  . "}") 
+              ([?\M-Â´]  . "{")
+              ([?\M-Ã§]  . "}") 
               ("\M-3" . "#")
               ("\M-2" . "@")
               ("\M-1" . "|")
-              ([?\M-º] . "\\")
-	      ([?\M-ñ] . "~")))
-    (italian . (;;("\M-§" . "@")  ;; this seems to cause problems
-		([?\M-¤]  . "@") ; wont work either
+              ([?\M-Âº] . "\\")
+	      ([?\M-Ã±] . "~")))
+    (italian . (;;("\M-Â§" . "@")  ;; this seems to cause problems
+		([?\M-Â¤]  . "@") ; wont work either
 		("\M-(" . "{")
 		("\M-4" . "[")
 		("\M-)" . "}")
@@ -74,17 +74,17 @@ Example:
 		("\M-\:" . "|")))
     (italian-pro . 
 		(("\M-5" . "~") 
-		([?\M-è] . "[") ;;  was ,(kbd "M-\217")
-		([?\M-é] . "{") ;;      ,(kbd "M-\216")
+		([?\M-Ã¨] . "[") ;;  was ,(kbd "M-\217")
+		([?\M-Ã©] . "{") ;;      ,(kbd "M-\216")
 		("\M-*" . "}")
 		("\M-+" . "]")
-		([?\M-à] . "#") ;;  was  ,(kbd "M-\210")
+		([?\M-Ã ] . "#") ;;  was  ,(kbd "M-\210")
 		 ))
     (finnish . (("\M-2" . "@")
  		("\M-4" . "$")
  		("\M-/" . "\\")
-;;		(,[?\M-¨ 32] . "~") ;; won't work - prefix keybinding
-		(,[?\M-¨] . "~")
+;;		(,[?\M-Â¨ 32] . "~") ;; won't work - prefix keybinding
+		(,[?\M-Â¨] . "~")
  ;;		(,(quote [134219944]) . "~") ;; an alternative
  		("\M-7" . "|")
  		("\M-(" . "{")
@@ -95,44 +95,44 @@ Example:
     (swiss-german . (("\M-g" . "@")
 	       ("\M-/" . "\\")
 	       ("\M-3" . "#")
-	       ("\M-4" . "Ç")
+	       ("\M-4" . "Ã‡")
 	       ("\M-5" . "[")
 	       ("\M-6" . "]")
 	       ("\M-7" . "|")
 	       ("\M-8" . "{")
 	       ("\M-9" . "}")
 	       ("\M-n" . "~")
-	       ("\M-s" . "ß")
-	       ("\M-o" . "ø")
-	       ("\M-O" . "Ø") 
-	       ;; ("\M-a" . "å") ;; overlaps with Emacs default 
-	       ;; ("\M-A" . "Å") ;; overlaps with Emacs default M-a
+	       ("\M-s" . "ÃŸ")
+	       ("\M-o" . "Ã¸")
+	       ("\M-O" . "Ã˜") 
+	       ;; ("\M-a" . "Ã¥") ;; overlaps with Emacs default 
+	       ;; ("\M-A" . "Ã…") ;; overlaps with Emacs default M-a
 	       ("\M-e" . ,emmkm--euro) ;; euro symbol
 	       ))
 
     (swiss-french . (("\M-g" . "@")
 	       ("\M-/" . "\\")
 	       ("\M-3" . "#")
-	       ("\M-4" . "Ç")
+	       ("\M-4" . "Ã‡")
 	       ("\M-5" . "[")
 	       ("\M-6" . "]")
 	       ("\M-7" . "|")
 	       ("\M-8" . "{")
 	       ("\M-9" . "}")
 	       ("\M-n" . "~")
-	       ("\M-s" . "ß")
-	       ("\M-o" . "ø")
-	       ("\M-O" . "Ø") 
-	       ;; ("\M-a" . "å") ;; overlaps with Emacs default M-a
-	       ;; ("\M-A" . "Å") ;; overlaps with Emacs default M-a
+	       ("\M-s" . "ÃŸ")
+	       ("\M-o" . "Ã¸")
+	       ("\M-O" . "Ã˜") 
+	       ;; ("\M-a" . "Ã¥") ;; overlaps with Emacs default M-a
+	       ;; ("\M-A" . "Ã…") ;; overlaps with Emacs default M-a
 	       ("\M-e" . ,emmkm--euro) ;; euro symbol
 	       ))
-    (us . (     ("\M-3" . "£")
+    (us . (     ("\M-3" . "Â£")
 		("\M-@" . ,emmkm--euro) ;; euro symbol
-		("\M-6" . "§")))
+		("\M-6" . "Â§")))
     (british . (("\M-3" . "#")
 		("\M-2" . ,emmkm--euro) ;; euro symbol
-		("\M-6" . "§")))))
+		("\M-6" . "Â§")))))
 
 ;; (define-emulate-mac-keyboard-modes)
 ;; (make-emulate-mac-keyboard-mode-map 'finnish)   
@@ -142,7 +142,7 @@ Example:
 
 
 (defun emmkm-key-binding (key)
-  (let ((key-char (vector (string-to-char "£"))))
+  (let ((key-char (vector (string-to-char "Â£"))))
   (or
    (if overriding-terminal-local-map
        (lookup-key overriding-terminal-local-map key-char)
@@ -362,12 +362,9 @@ do not let it produce special characters (passing the key to the system)."
     :button (:toggle . (not mac-option-modifier))))
  
 
-(define-key-after menu-bar-options-menu [option-key-separator]  
-  '(menu-item "--") 'edit-options-separator)
-
 (define-key-after menu-bar-options-menu [option-key-menu]
   `(menu-item "Option Key" ,menu-bar-option-key-menu)
-  'option-key-separator)
+  'mule-separator)
 
 
 ;; doesn't work:
