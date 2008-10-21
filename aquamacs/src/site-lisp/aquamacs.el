@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.221 2008/10/20 21:39:00 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.222 2008/10/21 20:49:35 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -31,10 +31,10 @@
 ;; Copyright (C) 2005,2006, 2007, 2008: David Reitter
  
 (defvar aq-starttime 0)
-;(defun ats (txt) nil)
 
-(defun ats (txt) 
-  (message "ATS %s:  %s" (time-since aq-starttime) txt))
+;; (defun ats (txt) 
+;;   (message "ATS %s:  %s" (time-since aq-starttime) txt))
+(defun ats (txt) nil)
 
 
 
