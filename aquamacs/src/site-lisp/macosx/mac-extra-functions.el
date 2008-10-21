@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.77 2008/09/24 14:55:18 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.78 2008/10/21 20:43:28 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -362,7 +362,7 @@ specified in `shell-file-name'."
   
   (setq environment-temp-file (make-temp-file "envvar-"))
   ;; running the shell with -l (to load the environment)
-  (setq default-directory "~/")	; ensure it can be executed
+  (let ((default-directory "~/"))	; ensure it can be executed
   
   (message "Shell: %s" shell-file-name)
 
@@ -388,7 +388,7 @@ specified in `shell-file-name'."
 			"-c" command)
 	(message "Could not retrieve login shell environment with login shell: %s" shell)
 	;; won't work for csh, because it doesn't take -l -c ...
-	))))
+	)))))
 ;; we call the process asynchronuously
 ;; using start-process does not work for unknown reasons: 
 ;; sometimes it doesn't get the environment.
