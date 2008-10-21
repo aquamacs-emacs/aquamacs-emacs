@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.71 2008/10/14 01:32:27 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.72 2008/10/21 20:10:37 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -226,8 +226,11 @@ from earlier versions of the distribution."
   (require 'aquamacs-mac-fontsets)
 (ats "font sets done")
 
-  (aquamacs-set-defaults `((mac-allow-anti-aliasing t)
-			   (x-pointer-shape ,mac-pointer-I-beam)))
+  (aquamacs-set-defaults '((mac-allow-anti-aliasing t)))
+
+  (if (boundp 'mac-pointer-I-beam) ;; undefined in TTY mode
+      (aquamacs-set-defaults `((x-pointer-shape ,mac-pointer-I-beam))))
+
   (set-mouse-color "black") ;; to make x-pointer-shape work
 
 
