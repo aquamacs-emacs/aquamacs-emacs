@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.72 2008/10/21 20:10:37 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.73 2008/10/22 00:54:57 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -283,23 +283,28 @@ from earlier versions of the distribution."
   
 
   (aquamacs-set-defaults 
-   '(
+   `(
      (savehist-file "~/Library/Preferences/Aquamacs Emacs/minibuffer-history.el")
      (desktop-path ("~/Library/Preferences/Aquamacs Emacs" "." "~"))
+     (auto-save-file-name-transforms
+      (("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'"
+	;; Don't put "\\2" inside expand-file-name, since it will be
+	;; transformed to "/2" on DOS/Windows.
+	,(concat temporary-file-directory "\\2") t)
+       ;; put all files into the tmp dir (it's user specific)
+       ("\\`\\([^/]*/\\)*\\([^/]*\\)\\'"
+	,(concat temporary-file-directory "\\2") t)))
      (auto-save-list-file-prefix 
       "~/Library/Preferences/Aquamacs Emacs/auto-save-list/.saves-")
      ( save-place-file "~/Library/Preferences/Aquamacs Emacs/places.el")
      ( recentf-save-file "~/Library/Preferences/Aquamacs Emacs/Recent Files.el")
      ( abbrev-file-name "~/Library/Preferences/Aquamacs Emacs/Abbreviations")
-     ( mail-default-directory "~/Library/Application Support/Aquamacs Emacs/Temporary Files")))
-
+     ( mail-default-directory 
+       "~/Library/Application Support/Aquamacs Emacs/Temporary Files")))
 
     (when (and (boundp 'mac-apple-event-map) mac-apple-event-map)
       (define-key mac-apple-event-map [core-event reopen-application]
 	'aquamacs-de-iconify-some-frame))
   ) ;; aquamacs-osx-defaults-setup
-
- 
-
 
 (provide 'osx_defaults)
