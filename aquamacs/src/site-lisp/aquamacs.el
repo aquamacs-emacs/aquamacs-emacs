@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.222 2008/10/21 20:49:35 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.223 2008/10/22 17:14:27 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -297,7 +297,8 @@ Return non-nil if options where saved."
 		 (message "Options saved."))
 	(message "There's no need to save your options."))
       need-save))
-  ;; (aquamacs-menu-bar-changed-options) 
+;; (aquamacs-menu-bar-changed-options) 
+;; aquamacs-customization-version-id
   (defun aquamacs-menu-bar-changed-options ()
     (let ((need-save nil))
       (dolist (elt aquamacs-menu-bar-options-to-save)
@@ -319,6 +320,9 @@ have changed."
   ;; (aquamacs-variable-customized-p 'aquamacs-styles-mode)    
   ;; (aquamacs-variable-customized-p 'case-fold-search)
   ;; (aquamacs-variable-customized-p 'mac-option-modifier)
+;; (get 'default-frame-alist 'saved-value)
+;; (default-value 'default-frame-alist)
+
   (defun aquamacs-variable-customized-p (symbol)
     "Returns t if variable SYMBOL has a different value from what was saved."
     (custom-load-symbol symbol)
@@ -336,8 +340,15 @@ have changed."
 		   ;; not quite clear why this is doubled
 		    (equal (custom-quote cmp) (custom-quote value)))))))
 	  
+;;  (get 'default-frame-alist 'standard-value)
+;; menu-bar-lines
 
-
+;;  (filter-list (aquamacs-menu-bar-changed-options)
+;; 			  (list 'aquamacs-customization-version-id
+;; 				'smart-frame-prior-positions
+;; 				'aquamacs-additional-fontsets
+;; 				'initial-frame-alist
+;; 				'transient-mark-mode))
   (defun aquamacs-ask-to-save-options ()
   "Checks if options need saving and allows to do that.
 Returns t."
@@ -886,6 +897,14 @@ Use this argument instead of explicitly setting `view-exit-action'."
   (assq-set 'height 30 'special-display-frame-alist)
   (assq-set 'width 75 'special-display-frame-alist)
   (assq-set 'user-position nil 'special-display-frame-alist)
+
+;; set some defaults which will be set by other functions anyways
+;; just so we save them to standard-value
+  (assq-set 'menu-bar-lines 1 'default-frame-alist)
+  (assq-set 'tool-bar-lines 1 'default-frame-alist)
+
+  (aquamacs-set-defaults `((default-frame-alist ,default-frame-alist)
+			   (special-display-frame-alist ,special-display-frame-alist)))
 
    (ats "fontsets done")
 
