@@ -330,6 +330,25 @@ diff -c -r1.214.2.16 macterm.c
 *** lisp/tool-bar.el	05 Apr 2008 01:23:45 +0100	1.7.2.2
 --- lisp/tool-bar.el	05 Apr 2008 14:30:07 +0100	
 ***************
+*** 64,71 ****
+  	 ;; ...and future ones.
+  	 (let ((elt (assq 'tool-bar-lines default-frame-alist)))
+  	   (if elt
+! 	       (setcdr elt lines)
+! 	     (add-to-list 'default-frame-alist (cons 'tool-bar-lines lines)))))
+         (if (and tool-bar-mode
+  		(display-graphic-p)
+  		(= 1 (length (default-value 'tool-bar-map)))) ; not yet setup
+--- 64,71 ----
+  	 ;; ...and future ones.
+  	 (let ((elt (assq 'tool-bar-lines default-frame-alist)))
+  	   (if elt
+! 	       (delete elt default-frame-alist))
+! 	   (add-to-list 'default-frame-alist (cons 'tool-bar-lines lines))))
+         (if (and tool-bar-mode
+  		(display-graphic-p)
+  		(= 1 (length (default-value 'tool-bar-map)))) ; not yet setup
+***************
 *** 90,95 ****
 --- 90,166 ----
   		'(menu-item "tool bar" ignore
