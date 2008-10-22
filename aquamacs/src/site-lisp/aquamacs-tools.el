@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.35 2008/08/13 09:39:07 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.36 2008/10/22 16:43:58 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -300,10 +300,9 @@ Add the value to the customization group `Aquamacs-is-more-than-Emacs'."
 	    ;; saved to customizations.el (.emacs)
 	    ;; and that this appears as the new default.
 
-	    (put symbol 'standard-value `((quote  ,(eval symbol))))
+	    (put symbol 'standard-value `((quote  ,(copy-tree (eval symbol)))))
 	    ;; since the standard-value changed, put it in the
 	    ;; group
-
 
 	    (unless (or (eq s-value (get symbol 'standard-value))
 			(get symbol 'aquamacs-original-default))
@@ -321,12 +320,7 @@ The original default (in GNU Emacs or in the package) was:
 %s" 
 				s-value))))
 	      (custom-add-to-group 'Aquamacs-is-more-than-Emacs 
-				   symbol 'custom-variable))
-
-
-
-
-	    ))
+				   symbol 'custom-variable))))
 	list))
 
 ; (aquamacs-setup)
