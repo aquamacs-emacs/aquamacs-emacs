@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.223 2008/10/22 17:14:27 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.224 2008/10/23 19:54:23 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -316,14 +316,14 @@ If set to `ask' (default), the user is asked in case the options
 have changed."
     :group 'Aquamacs
     :type '(choice (const nil)  (const ask) (const t)))
-  
-  ;; (aquamacs-variable-customized-p 'aquamacs-styles-mode)    
-  ;; (aquamacs-variable-customized-p 'case-fold-search)
-  ;; (aquamacs-variable-customized-p 'mac-option-modifier)
-;; (get 'default-frame-alist 'saved-value)
-;; (default-value 'default-frame-alist)
 
-  (defun aquamacs-variable-customized-p (symbol)
+;; (aquamacs-variable-customized-p 'aquamacs-styles-mode)    
+;; (aquamacs-variable-customized-p 'case-fold-search)
+;; (aquamacs-variable-customized-p 'mac-option-modifier)
+;; (aquamacs-variable-customized-p 'default-frame-alist)
+;; (get 'default-frame-alist 'saved-value)
+
+(defun aquamacs-variable-customized-p (symbol)
     "Returns t if variable SYMBOL has a different value from what was saved."
     (custom-load-symbol symbol)
     (let* ((get (or (get symbol 'custom-get) 'default-value))
@@ -338,11 +338,13 @@ have changed."
 		       (error nil)))))
 	  (not (or (equal cmp (list (custom-quote value)))
 		   ;; not quite clear why this is doubled
-		    (equal (custom-quote cmp) (custom-quote value)))))))
+		    (equal (custom-quote cmp) (custom-quote value))
+		    (and (listp value) (string-match "-alist$" (symbol-name symbol)) ;; heuristic...
+			 (condition-case nil
+			     (equal (sort (copy-alist (eval (car cmp))) (lambda (x y) (string< (car x) (car y))))
+				     (sort (copy-alist value) (lambda (x y) (string< (car x) (car y)))))
+			   (error nil))))))))
 	  
-;;  (get 'default-frame-alist 'standard-value)
-;; menu-bar-lines
-
 ;;  (filter-list (aquamacs-menu-bar-changed-options)
 ;; 			  (list 'aquamacs-customization-version-id
 ;; 				'smart-frame-prior-positions
