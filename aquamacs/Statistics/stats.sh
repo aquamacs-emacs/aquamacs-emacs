@@ -39,5 +39,5 @@ do
 done
 
 date >>index.html
-echo "<a href=\"http://www.reitter-it-media.de/\">david.reitter@gmail.com</a></p></body></html>" >>index.html
+echo "<a href=\"http://www.david-reitter.com/\">David Reitter</a></p></body></html>" >>index.html
 
