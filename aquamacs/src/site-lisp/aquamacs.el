@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.224 2008/10/23 19:54:23 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.225 2008/10/23 20:35:43 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -1285,6 +1285,15 @@ listed here."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; this is for the About dialog
+;; when all frames are hidden, 
+;; the original fancy-splash-frame just returns nil
+;; as a bugfix, we're redefining this
+;; in order to create a new frame if all frames are invisible
+
+(defun fancy-splash-frame ()
+  (make-frame '((name . "About Aquamacs Emacs") (width . 100) (height . 60) (minibuffer . nil) (background-color . "White") (foreground-color . "Black") (tool-bar-lines . 0) 
+		    (vertical-scroll-bars . nil) (horizontal-scroll-bars . nil) (left-fringe . 0) (right-fringe . 0) (mode-line . nil) (unsplittable . t))))
+
 (defun fancy-splash-head ()
   "Insert the head part of the splash screen into the current buffer.
 This is modified in Aquamacs compared to GNU Emacs, because most
@@ -1327,18 +1336,11 @@ information given would otherwise be irrelevant to Aquamacs users.
 	  (insert-image img (propertize "xxx" 'help-echo help-echo
 					'keymap map)))
 	(insert "\n"))))
-(insert "\n\n")
-  (fancy-splash-insert
-   :face '(variable-pitch :foreground "red")
-   (if (eq system-type 'gnu/linux)
-       "GNU Emacs is one component of the GNU/Linux operating system."
-     "GNU Emacs is one component of the GNU operating system."))
-(insert "\n")
+  (insert "\n")
   (fancy-splash-insert
    :face 'variable-pitch
    "Aquamacs is a distribution of GNU Emacs that is adapted for Mac users.\n\n")
-  (insert "\n")
-)
+  (insert "\n"))
 (setq fancy-splash-text
       '((:face (variable-pitch :weight bold)
            :face variable-pitch "Aquamacs Emacs comes with "
@@ -1354,8 +1356,7 @@ information given would otherwise be irrelevant to Aquamacs users.
 	 :face variable-pitch
 	 ".\n"
 	 )))
-
-
+ 
 
 (setq emacs-build-system 
       (concat 
