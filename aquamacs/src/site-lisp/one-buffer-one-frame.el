@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.77 2008/10/16 00:10:44 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.78 2008/10/23 20:40:17 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -177,8 +177,7 @@ case the value of `same-window-regexps' is used."
 (defcustom obof-same-frame-regexps
   '(
     " SPEEDBAR"
-    "\\*.*\\*"
-    )
+    "\\*.*\\*")
   "Buffers popped up in a new window in `one-buffer-one-frame-mode'.
 In `one-buffer-one-frame-mode', if the name of a buffer to be shown matches
 one of the regular expressions in this list, it is shown in the same frame,
@@ -186,21 +185,19 @@ when shown with `pop-to-buffer' (or `display-buffer' in general). A new window
 inside the frame may be opened to show the buffer.
 Exceptions are listed in `obof-other-frame-regexps'."
   :group 'Aquamacs
-  :group 'frames
-)
+  :group 'frames)
  
 (defcustom obof-same-frame-switching-regexps
   '(
     " SPEEDBAR"
-    )
+    "*About GNU Emacs*")
   "Buffers to switch to in the same frame in `one-buffer-one-frame-mode'.
 In `one-buffer-one-frame-mode', if the name of a buffer to be shown matches
 one of the regular expressions in this list, it is shown in the same frame 
 when switched to with `switch-to-buffer'. 
 Exceptions are listed in `obof-other-frame-regexps'."
   :group 'Aquamacs
-  :group 'frames
-)
+  :group 'frames)
 
 (defcustom obof-other-frame-regexps
   '(
@@ -213,8 +210,7 @@ Exceptions are listed in `obof-other-frame-regexps'."
     "\\*grep\\*"  
     "\\*shell\\*"   
     "\\*Faces\\*"
-    "\\*Colors\\*"
-    )
+    "\\*Colors\\*")
   "Buffers always shown in a separate frame in `one-buffer-one-frame-mode'.
 In `one-buffer-one-frame-mode', if the name of a buffer to be shown matches
 one of the regular expressions in this list, it is shown in a separate frame.
@@ -868,23 +864,6 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
       (let ((one-buffer-one-frame nil))
 	ad-do-it)))
   
-
-;; when all frames are hidden, 
-;; the original fancy-splash-frame just returns nil
-;; as a bugfix, we're redefining this
-;; in order to create a new frame if all frames are invisible
-
-(defun fancy-splash-frame ()
-  (selected-frame))
-
-(if window-system
-    (defadvice fancy-splash-screens (around modify-frame (&rest args) activate)
-      (let ((one-buffer-one-frame-force t)
-	    (default-frame-alist '( (tool-bar-lines . 0)
-				    (minibuffer . t ) ) ) )    
-	ad-do-it)))
-
-
 ;; ediff-directories, e.g. uses split-window to create a new window
 ;; in a frame, and then `switch-to-buffer', which should simply show
 ;; another buffer in the newly created window. Problem is, in this
