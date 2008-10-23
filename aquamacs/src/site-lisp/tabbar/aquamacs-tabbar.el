@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: aquamacs-tabbar.el,v 1.43 2008/09/10 21:30:02 davidswelt Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.44 2008/10/23 15:13:39 nathaniel Exp $
 
 ;; load original tabbar-mode
 
@@ -128,7 +128,7 @@ to be closed.  If no tab is specified, (tabbar-selected-tab) is used"
 
 (defface tabbar-selected-modified
   '((t
-     :inherit 'tabbar-selected
+     :inherit tabbar-selected
      :weight bold
      :height 110
      ))
@@ -137,7 +137,7 @@ to be closed.  If no tab is specified, (tabbar-selected-tab) is used"
 
 (defface tabbar-unselected-modified
   '((t
-     :inherit 'tabbar-unselected
+     :inherit tabbar-unselected
      :weight bold
      :height 110
      ))
