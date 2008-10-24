@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.226 2008/10/23 20:44:16 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.227 2008/10/24 02:18:20 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -1291,8 +1291,16 @@ listed here."
 ;; in order to create a new frame if all frames are invisible
 
 (defun fancy-splash-frame ()
-  (make-frame '((name . "About Aquamacs Emacs") (width . 100) (height . 60) (minibuffer . t) (background-color . "White") (foreground-color . "Black") (tool-bar-lines . 0) 
-		    (vertical-scroll-bars . auto) (horizontal-scroll-bars . nil) (left-fringe . 5) (right-fringe . 0) (internal-border-width . 0) (unsplittable . t))))
+  (make-frame 
+   '((name . "About Aquamacs Emacs") 
+     (font . "-apple-lucida grande-medium-r-normal--0-0-0-0-m-0-mac-roman")
+     (width . 75) (height . 40) (minibuffer . t)
+     (background-color . "White") 
+     (foreground-color . "Black") (tool-bar-lines . 0)
+     (vertical-scroll-bars . auto) 
+     (horizontal-scroll-bars . nil) 
+     (left-fringe . 5) (right-fringe . 0)
+     (internal-border-width . 0) (unsplittable . t))))
 
 (defun fancy-splash-head ()
   "Insert the head part of the splash screen into the current buffer.
