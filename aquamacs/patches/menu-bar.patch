@@ -1,3 +1,6 @@
+Rename buffers menu to Window and move it.
+turn off key binding hint caching because it is buggy
+
 *** lisp/menu-bar.el	06 Apr 2008 12:51:37 +0100	1.302.2.11
 --- lisp/menu-bar.el	25 Apr 2008 09:45:51 +0100	
 ***************
@@ -35,3 +38,27 @@
   (defvar menu-bar-options-menu (make-sparse-keymap "Options"))
   (define-key global-map [menu-bar options]
     (cons "Options" menu-bar-options-menu))
+*** src/keyboard.c	25 Feb 2008 16:04:54 -0000	1.899.2.11
+--- src/keyboard.c	25 Oct 2008 16:26:30 -0000
+***************
+*** 7686,7693 ****
+    if (NILP (cachelist))
+      {
+        /* We have to create a cachelist.  */
+!       CHECK_IMPURE (start);
+!       XSETCDR (start, Fcons (Fcons (Qnil, Qnil), XCDR (start)));
+        cachelist = XCAR (XCDR (start));
+        newcache = 1;
+        tem = AREF (item_properties, ITEM_PROPERTY_KEYEQ);
+--- 7718,7728 ----
+    if (NILP (cachelist))
+      {
+        /* We have to create a cachelist.  */
+!       /* With the introduction of where_is_cache, the computation
+!          of equivalent key bindings is sufficiently fast that we
+!          do not need to cache it here any more. */
+!       /* CHECK_IMPURE (start);
+!          XSETCDR (start, Fcons (Fcons (Qnil, Qnil), XCDR (start))); */
+        cachelist = XCAR (XCDR (start));
+        newcache = 1;
+        tem = AREF (item_properties, ITEM_PROPERTY_KEYEQ);
