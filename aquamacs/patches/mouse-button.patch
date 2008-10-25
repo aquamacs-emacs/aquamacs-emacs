@@ -36,6 +36,33 @@ diff -c -r1.198 macterm.c
 *** src/macterm.c	10 Dec 2006 23:16:11 -0000	1.198
 --- src/macterm.c	12 Dec 2006 15:51:21 -0000
 ***************
+*** 1562,1572 ****
+  }
+  #endif	/* !USE_CG_DRAWING */
+  
+  
+  /* Mac replacement for XCopyArea: used only for scrolling.  */
+  
+  #if TARGET_API_MAC_CARBON
+! /* Defined in mactoolbox.c.  */
+  extern void mac_scroll_area P_ ((struct frame *, GC, int, int,
+  				 unsigned int, unsigned int, int, int));
+  #else  /* not TARGET_API_MAC_CARBON */
+--- 1686,1698 ----
+  }
+  #endif	/* !USE_CG_DRAWING */
+  
++ /* defined in mactoolbox.c */
++ #define mac_window_to_frame(wp) (((mac_output *) GetWRefCon (wp))->mFP)
+  
+  /* Mac replacement for XCopyArea: used only for scrolling.  */
+  
+  #if TARGET_API_MAC_CARBON
+! /* Defined in either mactoolbox.c or macappkit.m.  */
+  extern void mac_scroll_area P_ ((struct frame *, GC, int, int,
+  				 unsigned int, unsigned int, int, int));
+  #else  /* not TARGET_API_MAC_CARBON */
+***************
 *** 4547,4558 ****
   
         last_mouse_scroll_bar = Qnil;
