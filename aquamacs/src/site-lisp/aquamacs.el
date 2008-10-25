@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.227 2008/10/24 02:18:20 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.228 2008/10/25 16:20:26 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -848,9 +848,13 @@ Use this argument instead of explicitly setting `view-exit-action'."
 (require 'aquamacs-autoface-mode)
 (autoload 'aquamacs-styles-mode "aquamacs-styles.el" "Automatically set frame style according to major mode" 'interactive nil)
 
-
-	
  (ats "styles done")
+
+;; follow mouse autoload
+(autoload 'turn-on-follow-mouse "follow-mouse.el"   "Moving the mouse will automatically select the window under it" 'interactive nil)
+(autoload 'turn-off-follow-mouse "follow-mouse.el"   "Moving the mouse will not automatically select the window under it" 'interactive nil)
+(autoload 'toggle-follow-mouse "follow-mouse.el"   "Toggle whether moving the mouse automatically selects the window under it" 'interactive nil)
+
       
   (provide 'drews_init)	; migration from 0.9.1 (require in customizations)
  (ats "drew done")
