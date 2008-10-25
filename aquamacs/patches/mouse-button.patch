@@ -41,34 +41,35 @@ diff -c -r1.198 macterm.c
         last_mouse_scroll_bar = Qnil;
   
 !       if (FRAME_MAC_DISPLAY_INFO (*fp)->grabbed && last_mouse_frame
-  	  && FRAME_LIVE_P (last_mouse_frame))
+! 	  && FRAME_LIVE_P (last_mouse_frame))
 ! 	f1 = last_mouse_frame;
-        else
-=  	f1 = mac_focus_frame (FRAME_MAC_DISPLAY_INFO (*fp));
+!       else
+! 	f1 = mac_focus_frame (FRAME_MAC_DISPLAY_INFO (*fp));
 ! 
         if (f1)
   	{
   	  /* Ok, we found a frame.  Store all the values.
---- 4757,4778 ----
+--- 4757,4779 ----
   
         last_mouse_scroll_bar = Qnil;
   
+!       f1=NULL;
 !       Point pt;
-!       WindowRef *window;
+!       WindowRef window;
 ! 
-!       GetMouse (&pt);
-!       WindowPartCode wpc = FindWindow (pt, window);
-!       if (wpc >= inContent && *window != NULL) {
-! 	f1 = mac_window_to_frame (*window);
+!       GetGlobalMouse (&pt); 
+! 
+!       WindowPartCode wpc = FindWindow (pt, &window);
+!       if (wpc >= inContent && window != NULL) {
+! 	f1 = mac_window_to_frame (window);
 !       }
-!       else if (FRAME_MAC_DISPLAY_INFO (*fp)->grabbed && last_mouse_frame
-  	  && FRAME_LIVE_P (last_mouse_frame))
-! 	{
-! 	  f1 = last_mouse_frame; }
-        else
-+ 	{
-  	f1 = mac_focus_frame (FRAME_MAC_DISPLAY_INFO (*fp));
-! 	}
+!       if (!f1 || !FRAME_LIVE_P (f1)) {
+! 	if (FRAME_MAC_DISPLAY_INFO (*fp)->grabbed && last_mouse_frame
+! 	    && FRAME_LIVE_P (last_mouse_frame))
+! 	    f1 = last_mouse_frame;
+! 	else
+! 	  f1 = mac_focus_frame (FRAME_MAC_DISPLAY_INFO (*fp));
+!       }
         if (f1)
   	{
   	  /* Ok, we found a frame.  Store all the values.
