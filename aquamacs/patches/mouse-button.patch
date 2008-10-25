@@ -1,11 +1,52 @@
 fix modifier corrections during mouse-1/2/3
-fix mouse event localization in Carbon
+fix mouse localization in Carbon: has effects on
+   mouse events (e.g., dragging/tracking) and mouse-(pixel-)position
+fix target frame for mouse wheel events
 
 (C) 2007,2008 David Reitter
 
 diff -c -r1.1.2.1 mactoolbox.c
 *** src/mactoolbox.c	6 Apr 2008 01:54:44 -0000	1.1.2.1
 --- src/mactoolbox.c	6 Apr 2008 14:02:29 -0000
+***************
+*** 327,339 ****
+  	result = CallNextEventHandler (next_handler, event);
+  	if (result != eventNotHandledErr || read_socket_inev == NULL)
+  	  break;
+! 
+! 	f = mac_focus_frame (&one_mac_display_info);
+! 
+  	err = GetEventParameter (event, kEventParamWindowRef, typeWindowRef,
+  				 NULL, sizeof (WindowRef), NULL, &wp);
+  	if (err != noErr
+! 	    || wp != FRAME_MAC_WINDOW (f))
+  	  break;
+  
+  	err = GetEventParameter (event, kEventParamMouseWheelAxis,
+--- 329,351 ----
+  	result = CallNextEventHandler (next_handler, event);
+  	if (result != eventNotHandledErr || read_socket_inev == NULL)
+  	  break;
+!  
+! 	Point pt;
+! 	WindowRef window;
+! 
+! 	GetGlobalMouse (&pt); 
+! 	WindowPartCode wpc = FindWindow (pt, &window);
+! 	if (wpc >= inContent && window != NULL) 
+! 	  /* Normally, wheel events should go to the frame under the mouse */
+! 	    f = mac_window_to_frame (window);
+! 	else 
+! 	    /* Default: the focused frame */
+! 	    f = mac_focus_frame (&one_mac_display_info);
+! 	
+  	err = GetEventParameter (event, kEventParamWindowRef, typeWindowRef,
+  				 NULL, sizeof (WindowRef), NULL, &wp);
+  	if (err != noErr
+! 	  || wp != FRAME_MAC_WINDOW (f)) 
+  	  break;
+  
+  	err = GetEventParameter (event, kEventParamMouseWheelAxis,
 ***************
 *** 3012,3018 ****
     if (!NILP (Vmac_emulate_three_button_mouse) &&
