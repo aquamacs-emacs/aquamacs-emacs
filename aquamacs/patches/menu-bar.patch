@@ -38,19 +38,20 @@ turn off key binding hint caching because it is buggy
   (defvar menu-bar-options-menu (make-sparse-keymap "Options"))
   (define-key global-map [menu-bar options]
     (cons "Options" menu-bar-options-menu))
-*** xxx!!src/keyboard.c	25 Feb 2008 16:04:54 -0000	1.899.2.11
---- xxx!!src/keyboard.c	25 Oct 2008 16:26:30 -0000
+*** src/keyboard.c	25 Feb 2008 16:04:54 -0000	1.899.2.11
+--- src/keyboard.c	25 Oct 2008 16:26:30 -0000
 ***************
-*** 7686,7693 ****
+*** 7686,7694 ****
     if (NILP (cachelist))
       {
         /* We have to create a cachelist.  */
 !       CHECK_IMPURE (start);
 !       XSETCDR (start, Fcons (Fcons (Qnil, Qnil), XCDR (start)));
-        cachelist = XCAR (XCDR (start));
+!       cachelist = XCAR (XCDR (start));
         newcache = 1;
         tem = AREF (item_properties, ITEM_PROPERTY_KEYEQ);
---- 7718,7728 ----
+        if (!NILP (keyhint))
+--- 7718,7729 ----
     if (NILP (cachelist))
       {
         /* We have to create a cachelist.  */
@@ -59,6 +60,7 @@ turn off key binding hint caching because it is buggy
 !          do not need to cache it here any more. */
 !       /* CHECK_IMPURE (start);
 !          XSETCDR (start, Fcons (Fcons (Qnil, Qnil), XCDR (start))); */
-        cachelist = XCAR (XCDR (start));
+!       cachelist = Fcons (Qnil, Qnil);
         newcache = 1;
         tem = AREF (item_properties, ITEM_PROPERTY_KEYEQ);
+        if (!NILP (keyhint))
