@@ -1,12 +1,12 @@
 ;;; follow-mouse.el --- Automatically select the window under the mouse -*-unibyte: t; coding: iso-8859-1;-*-
 
 ;; Copyright ? 1998,2000,2003 Kevin Rodgers
+;; Copyright 2008 David Reitter
 
 ;; Author: Kevin Rodgers <ihs_4664@yahoo.com>
 ;; Created: 12 May 1998
-;; Version: $Revision: 1.1 $
+;; Version: $Revision: 1.2 $
 ;; Keywords: mouse
-;; RCS: $Id: follow-mouse.el,v 1.1 2008/10/25 15:41:41 davidswelt Exp $
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -46,6 +46,18 @@
 ;; By default, follow-mouse also raises the frame whose window is
 ;; selected; to disable that, just unset the
 ;; `follow-mouse-auto-raise-frame' option.
+
+;; (turn-on-follow-mouse)
+;; (setq follow-mouse-auto-raise-frame t)
+;; (setq follow-mouse-auto-raise-frame nil)
+;; (turn-off-follow-mouse)
+
+
+;; Revisions
+
+;; 1.17a.
+;;   set input focus to the frame containing the selected window.
+;;   select the frame after raising it.
 
 ;;; Code:
 
@@ -149,8 +161,11 @@ See `follow-mouse-deselect-active-minibuffer' and
 			     (window-buffer event-window))
 			 (run-hooks 'mouse-leave-buffer-hook))
 		     (if follow-mouse-auto-raise-frame
-			 (mouse-select-window event)
-		       (select-window event-window))))))
+			 (progn 
+			   (mouse-select-window event)
+			   (select-frame (window-frame event-window)))
+		       (select-window event-window))
+		     (x-focus-frame (window-frame event-window))))))
     ;; Enable dragging:
     (setq unread-command-events
 	  (nconc unread-command-events (list event)))))
