@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.228 2008/10/25 16:20:26 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.229 2008/10/25 18:08:31 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -1218,7 +1218,9 @@ listed here."
 	      aquamacs-styles-mode
 	      aquamacs-autoface-mode
 	      default-frame-alist ;; does this not prevent users from setting these?
-	      initial-frame-alist
+;;;	     do not save initial-frame-alist - it is stored by smart-frame-positions
+;;;  to do: frame-notice-user-settings should use default-frame-alist in addition to
+;;; initial-frame-alist, so "adopt frame parameters as default" should work.
 	      mac-option-modifier)
 	    (and (boundp 'aquamacs-additional-fontsets)
 		   '(aquamacs-additional-fontsets))
