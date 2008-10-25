@@ -1,3 +1,8 @@
+fix modifier corrections during mouse-1/2/3
+fix mouse event localization in Carbon
+
+(C) 2007,2008 David Reitter
+
 diff -c -r1.1.2.1 mactoolbox.c
 *** src/mactoolbox.c	6 Apr 2008 01:54:44 -0000	1.1.2.1
 --- src/mactoolbox.c	6 Apr 2008 14:02:29 -0000
@@ -30,6 +35,43 @@ diff -c -r1.1.2.1 mactoolbox.c
 diff -c -r1.198 macterm.c
 *** src/macterm.c	10 Dec 2006 23:16:11 -0000	1.198
 --- src/macterm.c	12 Dec 2006 15:51:21 -0000
+***************
+*** 4547,4558 ****
+  
+        last_mouse_scroll_bar = Qnil;
+  
+!       if (FRAME_MAC_DISPLAY_INFO (*fp)->grabbed && last_mouse_frame
+  	  && FRAME_LIVE_P (last_mouse_frame))
+! 	f1 = last_mouse_frame;
+        else
+=  	f1 = mac_focus_frame (FRAME_MAC_DISPLAY_INFO (*fp));
+! 
+        if (f1)
+  	{
+  	  /* Ok, we found a frame.  Store all the values.
+--- 4757,4778 ----
+  
+        last_mouse_scroll_bar = Qnil;
+  
+!       Point pt;
+!       WindowRef *window;
+! 
+!       GetMouse (&pt);
+!       WindowPartCode wpc = FindWindow (pt, window);
+!       if (wpc >= inContent && *window != NULL) {
+! 	f1 = mac_window_to_frame (*window);
+!       }
+!       else if (FRAME_MAC_DISPLAY_INFO (*fp)->grabbed && last_mouse_frame
+  	  && FRAME_LIVE_P (last_mouse_frame))
+! 	{
+! 	  f1 = last_mouse_frame; }
+        else
++ 	{
+  	f1 = mac_focus_frame (FRAME_MAC_DISPLAY_INFO (*fp));
+! 	}
+        if (f1)
+  	{
+  	  /* Ok, we found a frame.  Store all the values.
 ***************
 *** 8784,8794 ****
   {
