@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.79 2008/10/27 15:11:35 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.80 2008/10/27 15:14:59 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -124,8 +124,7 @@ right there as well."
 
     ;; open new frame with empty buffer
     (let ((default-major-mode 'fundamental-mode))
-      (new-frame-with-new-scratch nil) ;;  'fundamental-mode
-    )
+      (new-empty-buffer nil)) ;;  'fundamental-mode
     (let ((buf (current-buffer)))
       (unwind-protect 
 	  (progn 
