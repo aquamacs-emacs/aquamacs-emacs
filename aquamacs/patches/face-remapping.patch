@@ -591,7 +591,7 @@ M  src/mactoolbox.c
 --- lisp/term/mac-win.el	30 Sep 2008 20:06:01 -0000
 ***************
 *** 1816,1827 ****
---- 1830,1853 ----
+--- 1831,1852 ----
   ;;; Font panel
   (when (fboundp 'mac-set-font-panel-visible-p)
   
@@ -605,13 +605,11 @@ M  src/mactoolbox.c
     :global t
     :group 'mac
 +   (when mac-font-panel-mode
-+     (setq mac-font-panel-target-face 'default
-+ 	  mac-font-panel-target-frame (selected-frame))
++     (setq mac-font-panel-target-face 'default)
 + 
 +     (when (and (boundp 'face-remapping-alist)
 + 	     (assq mac-font-panel-target-face face-remapping-alist))
-+       (setq mac-font-panel-target-frame nil ;; means all frames
-+ 	    mac-font-panel-target-face 
++       (setq mac-font-panel-target-face 
 + 	    (cdr (assq mac-font-panel-target-face face-remapping-alist)))))
     (mac-set-font-panel-visible-p mac-font-panel-mode))
   
