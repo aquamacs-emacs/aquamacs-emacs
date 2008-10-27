@@ -38,7 +38,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.14 2008/10/19 18:10:25 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.15 2008/10/27 01:26:29 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -82,7 +82,7 @@ for which the menu is being updated."
 	face
       (intern (format "%s-default" mode)))))
 	  
-(defface style-default '((t :inherit default)) 
+(defface autoface-default '((t :inherit default)) 
   "Default face for buffers when `aquamacs-autoface-mode' is active.")
   
 (defun aquamacs-import-frame-parameters-to-auto-faces ()
@@ -117,13 +117,10 @@ The faces are then to be used with `aquamacs-autoface-mode'."
 
 
 (defun aquamacs-autoface-make-face (face )
-  (when (not (facep face))
-    (let ((spec '((t :inherit style-default))))
+  (when (not (facep face)) ; do not delete existing faces
+    (let ((spec '((t :inherit autoface-default))))
       (make-empty-face face)
-      (dolist (frame (frame-list))
-	(face-spec-set face spec frame))
-      (if (memq window-system '(x w32 mac))
-	  (make-face-x-resource-internal face))
+      (face-spec-set face spec nil)
       ;; do not set face-defface-spec - this prevents it from being
       ;; saved to custom-file properly.
       ;; purecopy needed?
@@ -165,7 +162,7 @@ Use style of major mode FOR-MODE if given."
  
 (defun aquamacs-set-face-as-default () 
   "Copy style to be used as default stle.
-Sets the `style-default' face."
+Sets the `autoface-default' face."
   (interactive)
 ;; maybe delete mode-specific frames?
   (when 
@@ -185,7 +182,9 @@ Sets the `style-default' face."
 			 l))))))
     (aquamacs-clear-autofaces))
  
-  (copy-face (aquamacs-autoface-face major-mode) 'style-default)
+  (copy-face (aquamacs-autoface-face major-mode) 'autoface-default)
+  (face-spec-set 'autoface-default '((t (:inherit default))))
+
   (if (interactive-p)
       (message "Face for %s is now used as default." major-mode)))
 
@@ -244,19 +243,19 @@ match `aquamacs-relevant-frame-parameter-regexp'."
 (defun aquamacs-default-autofaces-list (&optional face-names include-default)
   "Return list of all major modes that have a default style.
 face-names non-nil means return face names instead of mode names.
-include-default includes style-default.  face-names implies include-default."
+include-default includes autoface-default.  face-names implies include-default."
   (let ((styles (if face-names '(0) nil)))
     (unless face-names
       (setq styles (cons 0 (mapcar 'car 
-				   (if include-default styles (assq-delete-all 'style-default styles))))))
+				   (if include-default styles (assq-delete-all 'autoface-default styles))))))
     (mapatoms
      (lambda (symbol)
-       (when (and (get symbol 'saved-face) ;; it's a face we've customized
-		  (eq 'user (car (car-safe (get symbol 'theme-face))))
+       (when (and (facep symbol)
 		  (eq 0 (string-match "^\\(.*\\)-default$" (symbol-name symbol))))
-	 (nconc styles (list (if face-names symbol
-			       (intern (match-string 1 (symbol-name symbol)))))))
-       ))
+
+	 (let ((m (intern (match-string 1 (symbol-name symbol)))))
+	   (if (fboundp m)
+	       (nconc styles (list (if face-names symbol m))))))))
      (sort (cdr styles) 'string<)))
 ;;  (aquamacs-default-autofaces-list)
 
@@ -270,6 +269,7 @@ include-default includes style-default.  face-names implies include-default."
   "Resets all auto faces (mode-specific and the default face)"
   (interactive)
   (aquamacs-clear-autofaces)
+  (aquamacs-init-faces)
   (when aquamacs-styles-mode
     (aquamacs-styles-mode 0))
 
@@ -287,7 +287,9 @@ modify them."))
   ;; go over all faces
   (mapc
    (lambda (face)
-     (face-spec-set face '((t (:inherit style-default)))))
+     (if (eq face 'autoface-default)
+	 (face-spec-set face '((t (:inherit default))))
+       (face-spec-set face '((t (:inherit autoface-default))))))
    (aquamacs-default-autofaces-list 'facenames))
   (message "All styles cleared."))
 
@@ -296,10 +298,10 @@ modify them."))
   (interactive)
   (unless mode (setq mode major-mode))
   
-  (unless (memq mode '(default style-default))
+  (unless (memq mode '(default autoface-default))
     (let ((face (aquamacs-autoface-face mode)))
       (if (facep face)
-	  (face-spec-set face '((t (:inherit style-default)))))))
+	  (face-spec-set face '((t (:inherit autoface-default)))))))
   (if (interactive-p)
       (message "Mode-specific style for %s removed. Use Save Options before restart to retain setting." mode)))
  
@@ -315,13 +317,13 @@ modify them."))
   ;; todo: "Copy over style."
   (interactive)
   (unless for-mode  (setq for-mode last-command-event))
-  (let ((src-face (if for-mode (aquamacs-autoface-face for-mode) 'style-default))
+  (let ((src-face (if for-mode (aquamacs-autoface-face for-mode) 'autoface-default))
 	(dest-face (aquamacs-autoface-face
 		    (if (aquamacs-get-buffer-style (buffer-name))
 			(format "%s-%s" (buffer-name) major-mode)
 		      major-mode))))
 
-    (unless (facep src-face) (setq src-face 'style-default))
+    (unless (facep src-face) (setq src-face 'autoface-default))
     (unless (facep src-face) (setq src-face 'default))
     (copy-face src-face dest-face))
   (if (interactive-p)
@@ -336,7 +338,7 @@ modify them."))
 	 "Apply face assigned to %s." 
 	 '(menu-bar-non-minibuffer-window-p) 'dont-filter))
   (define-key-after appstyle-mode-menu [sm-sep] '(menu-item "--"))
-  (define-key-after appstyle-mode-menu [style-default]
+  (define-key-after appstyle-mode-menu [autoface-default]
     '(menu-item "Default Style" aquamacs-apply-face-for-mode
 		:help "Apply default" :enable (menu-bar-non-minibuffer-window-p)))
 
@@ -348,6 +350,10 @@ modify them."))
 ;;		:enable (menu-bar-menu-frame-live-and-visible-p)
 ;; (aquamacs-update-apply-face-for-mode-menu)
  
+
+(defmacro user-buffer-p (buf)
+  "Evaluate to t if buffer BUF is not an internal buffer."
+  `(not (string= (substring (buffer-name ,buf) 0 1) " ")))
 
 
 (define-minor-mode aquamacs-autoface-mode
@@ -362,7 +368,7 @@ fixed-width fonts.
 The face used in each buffer is named after the major mode, e.g.,
 `text-mode' will be displayed in the `text-mode-default' face.
 
-A special face `style-default' is applied when no mode-specific style
+A special face `autoface-default' is applied when no mode-specific style
 is present. Any face setting will override parameters set 
 in `default-frame-alist' or `special-display-frame-alist'.
 
@@ -373,13 +379,15 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
   :global t
 
   (mapc (lambda (b)
+	(if (and (buffer-live-p b)  
+	    (user-buffer-p b))
 	  (with-current-buffer b
 	    (if aquamacs-autoface-mode
 		(aquamacs-set-face-style b)
 	      ;; else
 	      (if (eq (variable-binding-locus 'face-remapping-alist) b)
 		  (setq face-remapping-alist (assq-delete-all 'default
-							      face-remapping-alist))))))
+							      face-remapping-alist)))))))
 	  (buffer-list)))
       
 
@@ -409,15 +417,15 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
 
 (define-key menu-bar-options-menu [mouse-set-font] nil)
 (define-key appearance-menu [set-font]
-  `(menu-item (format "Font for %s...                 "
+  `(menu-item (format "Font%s...                 "
 		      (if (and (boundp 'face-remapping-alist)
 			       (assq 'default face-remapping-alist))
-			  (capitalize 
+			  (concat " for " (capitalize 
 			   (replace-regexp-in-string 
 			    "-default$" ""
-			    (symbol-name (cdr (assq 'default face-remapping-alist)))))
+			    (symbol-name (cdr (assq 'default face-remapping-alist))))))
 			(if aquamacs-autoface-mode
-			    "this Frame's default" "this Frame")))
+			    " (default)" "")))
 	      turn-on-mac-font-panel-mode
 	      :visible ,(display-multi-font-p)
 	      :keys ,(aq-binding 'mac-font-panel-mode)
@@ -453,7 +461,11 @@ then the ARGUMENTS."
     (setq buffer-read-only t)))
 
 (defun aquamacs-quit-color-selection (but)
-  (View-quit))
+; to do: set the correct current buffer 
+  ;; workaround a bug in quit-window
+  (select-window (car (event-start last-command-event)))
+  (with-current-buffer  (overlay-buffer but)
+    (View-quit)))
 
 (defun aquamacs-select-color (ev)
   "Select the color at point of click."
@@ -478,35 +490,40 @@ The Background color, or, if not given, foreground color is used."
 	   (or target-face 'default)
 	   color-name target-frame))
 
-(defun aquamacs-select-foreground-color ()
+(defun aquamacs-select-foreground-color (&optional this-frame)
   "Show a list of colors that can be used to select the forground.
 The foreground color of the default face used in the current
 buffer is set.  If the face is remapped, the specific (remapped)
 face is modified in all frames.  Otherwise, the `default' face in
-the current frame is modified."
-  (interactive)
+the current frame is modified.   The face valid in all frames is
+modified, unless prefix argument THIS-FRAME is given, in which
+case the modification applies only to the selected frame."
+  (interactive "P")
   (aquamacs-show-color-selection (format "Foreground Color for %s" 
 					 (aquamacs-face-or-frame-name nil))
 				 'aquamacs-set-face-color
+				 ;; parameters passed to aquamacs-set-face-color
 				 'set-face-foreground
 				 (cdr-safe (assq 'default face-remapping-alist))
-				 (if (assq 'default face-remapping-alist)
-					    nil (selected-frame))))
+				  (if (assq 'default face-remapping-alist)
+					    nil (if this-frame (selected-frame) nil))))
 
-(defun aquamacs-select-background-color ()
+(defun aquamacs-select-background-color (&optional this-frame)
   "Show a list of colors that can be used to select the forground.
 The foreground color of the default face used in the current
 buffer is set.  If the face is remapped, the specific (remapped)
 face is modified in all frames.  Otherwise, the `default' face in
-the current frame is modified."
-  (interactive)
+the current frame is modified.  The face valid in all frames is
+modified, unless prefix argument THIS-FRAME is given, in which
+case the modification applies only to the selected frame."
+  (interactive "P")
   (aquamacs-show-color-selection (format "Background Color for %s" 
 					 (aquamacs-face-or-frame-name nil))
 				 'aquamacs-set-face-color
 				 'set-face-background
 				 (cdr-safe (assq 'default face-remapping-alist))
 				 (if (assq 'default face-remapping-alist)
-					    nil (selected-frame))))
+					    nil (if this-frame (selected-frame) nil))))
 
 
 (defun aquamacs-face-or-frame-name (generic-frame-name)
