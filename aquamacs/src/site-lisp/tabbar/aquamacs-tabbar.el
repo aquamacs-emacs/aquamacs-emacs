@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: aquamacs-tabbar.el,v 1.44 2008/10/23 15:13:39 nathaniel Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.45 2008/10/27 15:10:48 davidswelt Exp $
 
 ;; load original tabbar-mode
 
@@ -198,7 +198,7 @@ to be closed.  If no tab is specified, (tabbar-selected-tab) is used"
 if specified), in current window."
   (interactive)			
   (let ((one-buffer-one-frame nil))
-    (new-frame-with-new-scratch nil mode)))
+    (new-empty-buffer nil mode)))
 
 (setq tabbar-new-tab-function 'tabbar-new-tab)
 
