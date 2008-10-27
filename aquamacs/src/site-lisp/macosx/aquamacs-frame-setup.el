@@ -1,4 +1,4 @@
-;;; aquamacs-frame-setup
+;;; aquamacs-frame-setup  - Frames and Faces
 ;;
 ;; Filename: aquamacs-frame-setup.el
 ;; Description: Emacs init file for use with libraries from Drew Adams
@@ -6,10 +6,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
 
-;;  --- Some of this has been adapted from Drew Adams' Emacs init file. 
- 
-
-;; Last change: $Id: aquamacs-frame-setup.el,v 1.32 2008/10/12 15:02:07 davidswelt Exp $
+;; Last change: $Id: aquamacs-frame-setup.el,v 1.33 2008/10/27 01:21:37 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -135,3 +132,55 @@ Usable in `temp-buffer-show-hook'."
 ;; (require 'frame+ nil t)                 ; Corrections, extensions.
 (require 'frame-cmds nil t)             ; Frame and window commands.
  
+(defun aquamacs-init-faces ()
+  "Initialize the default faces in Aquamacs.
+Users may then manipulate the faces directly."
+
+;;; FACES
+;;   (defface default
+;;     nil
+;;     "Default face for frames")
+
+  (set-face-attribute 'default nil
+		 ;     :height 120
+		  ;    :weight 'normal
+		   ;   :width 'normal
+		    ;  :slant 'normal
+		     ; :underline nil
+		      ;:strike-through nil
+		      ;:stipple nil
+		      :family "lucida grande")
+
+  (defface autoface-default
+    nil
+    "Default face for all buffers for `aquamacs-autoface-mode'")
+
+  (set-face-attribute 'autoface-default nil
+		      :inherit 'default
+		      :height 120
+		      :weight 'normal
+		      :width 'normal
+		      :slant 'normal
+		      :underline nil
+		      :strike-through nil
+		      :stipple nil
+		      :family "monaco")
+
+
+  (defface text-mode-default
+    nil
+    "Default face for text and derived modes for `aquamacs-autoface-mode'")
+
+  (set-face-attribute 'text-mode-default nil
+		      :inherit 'autoface-default
+		      :height 140
+		      :weight 'normal
+		      :width 'normal
+		      :slant 'normal
+		      :underline nil
+		      :strike-through nil
+		      :stipple nil
+		      :family "lucida grande"))
+
+
+(aquamacs-init-faces)
