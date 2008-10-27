@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.229 2008/10/25 18:08:31 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.230 2008/10/27 01:26:51 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -864,29 +864,31 @@ Use this argument instead of explicitly setting `view-exit-action'."
   ;; set default fonts - after aquamacs-frame-setup has initialized things
 
 
-;; create some essential fontsets
-;; some of these are used by aquamacs-styles
-(when (fboundp 'create-aquamacs-fontset)
-  (create-aquamacs-fontset "apple" "lucida grande*" "medium" "r" "normal" '(12) "lucida")
-  (create-aquamacs-fontset "apple" "monaco*" "medium" "r" "normal"  '(12) "monaco"))
+;; with the demise of aquamacs-styles, we don't need to create
+;; fontsets any longer.
+;; this will speed up the startup.
 
-(if (fontset-exist-p "fontset-monaco12") 
-      (assq-set 'font "fontset-monaco12" 'default-frame-alist)
-    (if (fontset-exist-p "fontset-mac_roman_12") 
-	(assq-set 'font "fontset-mac_roman_12" 'default-frame-alist)
+;; (when (fboundp 'create-aquamacs-fontset)
+;;   (create-aquamacs-fontset "apple" "lucida grande*" "medium" "r" "normal" '(12) "lucida")
+;;   (create-aquamacs-fontset "apple" "monaco*" "medium" "r" "normal"  '(12) "monaco"))
 
-      (if (fontset-exist-p "fontset-lucida14") 
-	  (assq-set 'font "fontset-lucida14" 'default-frame-alist)
-	)
-      )
-    )
+;; (if (fontset-exist-p "fontset-monaco12") 
+;;       (assq-set 'font "fontset-monaco12" 'default-frame-alist)
+;;     (if (fontset-exist-p "fontset-mac_roman_12") 
+;; 	(assq-set 'font "fontset-mac_roman_12" 'default-frame-alist)
 
-  (if (fontset-exist-p "fontset-mac_roman_12") 
-      (assq-set 'font "fontset-mac_roman_12" 'special-display-frame-alist)
+;;       (if (fontset-exist-p "fontset-lucida14") 
+;; 	  (assq-set 'font "fontset-lucida14" 'default-frame-alist)
+;; 	)
+;;       )
+;;     )
 
-    (if (fontset-exist-p "fontset-monaco12") 
-	(assq-set 'font "fontset-monaco12" 'special-display-frame-alist))
-    )
+  ;; (if (fontset-exist-p "fontset-mac_roman_12") 
+;;       (assq-set 'font "fontset-mac_roman_12" 'special-display-frame-alist)
+
+;;     (if (fontset-exist-p "fontset-monaco12") 
+;; 	(assq-set 'font "fontset-monaco12" 'special-display-frame-alist))
+;;     )
 
   ;; automatic positioning please  
   ;; for normal windows
