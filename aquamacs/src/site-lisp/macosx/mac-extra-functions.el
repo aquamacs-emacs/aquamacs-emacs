@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.78 2008/10/21 20:43:28 davidswelt Exp $
+;; Last change: $Id: mac-extra-functions.el,v 1.79 2008/10/27 15:11:35 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -106,6 +106,7 @@ handles files of type HTML."
 	;; force new frame
 	(switch-to-buffer buf)))
     (setq buffer-offer-save t)
+    (put 'buffer-offer-save 'permanent-local t)
     (set-buffer-modified-p nil)))
 (defalias  'new-frame-with-new-scratch 'new-empty-buffer)
 
