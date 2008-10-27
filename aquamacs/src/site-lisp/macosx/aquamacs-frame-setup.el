@@ -6,7 +6,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
 
-;; Last change: $Id: aquamacs-frame-setup.el,v 1.34 2008/10/27 04:16:55 davidswelt Exp $
+;; Last change: $Id: aquamacs-frame-setup.el,v 1.35 2008/10/27 15:41:29 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -136,19 +136,10 @@ Usable in `temp-buffer-show-hook'."
   "Initialize the default faces in Aquamacs.
 Users may then manipulate the faces directly."
 
-;;; FACES
-;;   (defface default
-;;     nil
-;;     "Default face for frames")
+;;; FACES 
 
   (set-face-attribute 'default nil
-		 ;     :height 120
-		  ;    :weight 'normal
-		   ;   :width 'normal
-		    ;  :slant 'normal
-		     ; :underline nil
-		      ;:strike-through nil
-		      ;:stipple nil
+		      :height 140
 		      :family "lucida grande")
 
   (defface autoface-default
