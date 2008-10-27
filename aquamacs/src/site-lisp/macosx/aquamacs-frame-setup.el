@@ -6,7 +6,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
 
-;; Last change: $Id: aquamacs-frame-setup.el,v 1.33 2008/10/27 01:21:37 davidswelt Exp $
+;; Last change: $Id: aquamacs-frame-setup.el,v 1.34 2008/10/27 04:16:55 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -169,9 +169,24 @@ Users may then manipulate the faces directly."
 
   (defface text-mode-default
     nil
-    "Default face for text and derived modes for `aquamacs-autoface-mode'")
+    "Default face for text in `aquamacs-autoface-mode'")
 
   (set-face-attribute 'text-mode-default nil
+		      :inherit 'autoface-default
+		      :height 140
+		      :weight 'normal
+		      :width 'normal
+		      :slant 'normal
+		      :underline nil
+		      :strike-through nil
+		      :stipple nil
+		      :family "lucida grande")
+
+  (defface latex-mode-default
+    nil
+    "Default face for LaTeX in `aquamacs-autoface-mode'")
+
+  (set-face-attribute 'latex-mode-default nil
 		      :inherit 'autoface-default
 		      :height 140
 		      :weight 'normal
