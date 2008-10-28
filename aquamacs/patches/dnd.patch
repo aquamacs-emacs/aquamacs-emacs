@@ -16,7 +16,7 @@ this patch will select a more appropriate window to show the opened file in.  It
       (let ((selection-range (mac-ae-selection-range ae))
   	  (search-text (mac-ae-text-for-search ae)))
         (cond (selection-range
---- 1726,1754 ----
+--- 1726,1755 ----
   (defun mac-ae-open-documents (event)
     "Open the documents specified by the Apple event EVENT."
     (interactive "e")
@@ -26,23 +26,24 @@ this patch will select a more appropriate window to show the opened file in.  It
         (if file-name
 ! 	  (let ((sel-win (or (minibuffer-selected-window) 
 ! 			     (selected-window))))
-! 	  (with-selected-window
-! 	      (if (and (window-live-p sel-win) 
-! 		       (special-display-p 
-! 			(or (buffer-name 
-! 			     (window-buffer sel-win)) "")))
-! 		  ;; are we in a special display window?
-! 		  (progn (select-frame-set-input-focus 
-! 			  (window-frame 
-! 			   (previous-window nil 'no 'visible))) 
-! 			 (previous-window nil 'no 'visible))
-! 		sel-win)
-! 	    (dnd-open-local-file
-! 	     (concat "file://"
-! 		     (mapconcat 'url-hexify-string
-! 				(split-string file-name "/") "/")) nil
-! 				'accept-new-files)
-! 	    (setq target-frame (window-frame (selected-window)))))))
+! 	    (with-selected-window
+! 		(if (and (window-live-p sel-win) 
+! 			 (special-display-p 
+! 			  (or (buffer-name 
+! 			       (window-buffer sel-win)) "")))
+! 		    ;; are we in a special display window?
+! 		    (progn (select-frame-set-input-focus 
+! 			    (window-frame 
+! 			     (previous-window nil 'no 'visible))) 
+! 			   (previous-window nil 'no 'visible))
+! 		  sel-win)
+! 	      (dnd-open-local-file
+! 	       (concat "file://"
+! 		       (mapconcat 'url-hexify-string
+! 				  (split-string file-name "/") "/")) nil
+! 	       'accept-new-files)
+! 	      (setq target-frame (window-frame (selected-window)))))))
+!     (select-frame-set-input-focus target-frame)
       (let ((selection-range (mac-ae-selection-range ae))
   	  (search-text (mac-ae-text-for-search ae)))
         (cond (selection-range
@@ -56,7 +57,7 @@ this patch will select a more appropriate window to show the opened file in.  It
   
   (defun mac-ae-quit-application (event)
     "Quit the application Emacs with the Apple event EVENT."
---- 1763,1769 ----
+--- 1764,1770 ----
   	    ((stringp search-text)
   	     (re-search-forward
   	      (mapconcat 'regexp-quote (split-string search-text) "\\|")
