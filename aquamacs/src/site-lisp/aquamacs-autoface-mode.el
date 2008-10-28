@@ -38,7 +38,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.15 2008/10/27 01:26:29 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.16 2008/10/28 19:14:00 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -159,8 +159,7 @@ Use style of major mode FOR-MODE if given."
 		 (current-buffer))))
       (aquamacs-set-face-style buf))))
 
- 
-(defun aquamacs-set-face-as-default () 
+ (defun aquamacs-set-face-as-default () 
   "Copy style to be used as default stle.
 Sets the `autoface-default' face."
   (interactive)
@@ -188,56 +187,64 @@ Sets the `autoface-default' face."
   (if (interactive-p)
       (message "Face for %s is now used as default." major-mode)))
 
-(defvar aquamacs-relevant-frame-parameter-regexp "\\(color\\|mode\\|lines\\|fringe\\)"
+(defvar aquamacs-relevant-frame-parameter-regexp "\\(font\\|color\\|mode\\|lines\\|fringe\\)"
   "Regular expression to be found in frame parameters handled by aquamacs-styles.")
 
-(defun aquamacs-set-frame-parameters-as-default () 
-  "Activate current frame settings as default.
+(defun aquamacs-set-frame-parameters-as-special-display () 
+  "Use current frame settings for special display frames.
+See also `aquamacs-set-frame-parameters-as-default'."
+  (interactive)
+  (aquamacs-set-frame-parameters-as-default 'special-display-frame-alist))
+
+(defun aquamacs-set-frame-parameters-as-default (&optional target) 
+  "Use current frame settings as default for new frames.
 Sets all frame parameters in `default-frame-alist' and
 `initial-frame-alist' from the selected frame, as long as they
-match `aquamacs-relevant-frame-parameter-regexp'."
+match `aquamacs-relevant-frame-parameter-regexp'.  If TARGET is
+given, set the variable instead that TARGET names, e.g.,
+`special-display-frame-alist'."
   (interactive)
-
   ;; set default-frame-alist
   (customize-set-variable 
-   'default-frame-alist
+   (or target 'default-frame-alist)
    (append 
     (apply #'append
 	   (mapcar 
 	    (lambda (pm)
 	      (unless (string-match 
-		   aquamacs-relevant-frame-parameter-regexp 
-		   (symbol-name (car pm)))
-		  (list pm)))
+		       aquamacs-relevant-frame-parameter-regexp 
+		       (symbol-name (car pm)))
+		(list pm)))
 	    default-frame-alist))
-     (apply #'append
-	    (mapcar 
-	     (lambda (pm)
-	       (if (string-match 
-		    aquamacs-relevant-frame-parameter-regexp 
-		    (symbol-name (car pm)))
-		   (list pm)))
-	     (frame-parameters)))))
-  ;; set initial-frame-alist
-  (customize-set-variable 
-   'initial-frame-alist
-   (append 
     (apply #'append
 	   (mapcar 
 	    (lambda (pm)
-	      (unless (string-match 
+	      (if (string-match 
 		   aquamacs-relevant-frame-parameter-regexp 
 		   (symbol-name (car pm)))
 		  (list pm)))
-	    initial-frame-alist))
-     (apply #'append
-	    (mapcar 
-	     (lambda (pm)
-	       (if (string-match 
-		    aquamacs-relevant-frame-parameter-regexp 
-		    (symbol-name (car pm)))
-		   (list pm)))
-	     (frame-parameters))))))
+	    (frame-parameters)))))
+  (unless target
+    ;; set initial-frame-alist
+    (customize-set-variable 
+     'initial-frame-alist
+     (append 
+      (apply #'append
+	     (mapcar 
+	      (lambda (pm)
+		(unless (string-match 
+			 aquamacs-relevant-frame-parameter-regexp 
+			 (symbol-name (car pm)))
+		  (list pm)))
+	      initial-frame-alist))
+      (apply #'append
+	     (mapcar 
+	      (lambda (pm)
+		(if (string-match 
+		     aquamacs-relevant-frame-parameter-regexp 
+		     (symbol-name (car pm)))
+		    (list pm)))
+	      (frame-parameters)))))))
 	  
 
 (defun aquamacs-default-autofaces-list (&optional face-names include-default)
@@ -412,25 +419,13 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
 ;;    'left-fringe
 ;;    (cdr (assq 'left-fringe default-frame-alist))))
 
+(defun turn-on-mac-font-panel-mode ()
+    (interactive)
+    (mac-font-panel-mode 1)
+    (setq mac-font-panel-target-frame (selected-frame)))
+
 (defvar appearance-menu (make-sparse-keymap "Looks"))
 (setq appearance-menu (make-sparse-keymap "Looks"))
-
-(define-key menu-bar-options-menu [mouse-set-font] nil)
-(define-key appearance-menu [set-font]
-  `(menu-item (format "Font%s...                 "
-		      (if (and (boundp 'face-remapping-alist)
-			       (assq 'default face-remapping-alist))
-			  (concat " for " (capitalize 
-			   (replace-regexp-in-string 
-			    "-default$" ""
-			    (symbol-name (cdr (assq 'default face-remapping-alist))))))
-			(if aquamacs-autoface-mode
-			    " (default)" "")))
-	      turn-on-mac-font-panel-mode
-	      :visible ,(display-multi-font-p)
-	      :keys ,(aq-binding 'mac-font-panel-mode)
-	      :enable (menu-bar-menu-frame-live-and-visible-p) 
-	      :help "Select a font from list of known fonts/fontsets"))
 
 ;; colors menu
 
@@ -490,14 +485,14 @@ The Background color, or, if not given, foreground color is used."
 	   (or target-face 'default)
 	   color-name target-frame))
 
-(defun aquamacs-select-foreground-color (&optional this-frame)
+(defun aquamacs-select-foreground-color (&optional all-frames)
   "Show a list of colors that can be used to select the forground.
 The foreground color of the default face used in the current
 buffer is set.  If the face is remapped, the specific (remapped)
 face is modified in all frames.  Otherwise, the `default' face in
 the current frame is modified.   The face valid in all frames is
-modified, unless prefix argument THIS-FRAME is given, in which
-case the modification applies only to the selected frame."
+modified, if prefix argument ALL-FRAMES is given. Otherwise,
+the modification applies only to the selected frame."
   (interactive "P")
   (aquamacs-show-color-selection (format "Foreground Color for %s" 
 					 (aquamacs-face-or-frame-name nil))
@@ -506,16 +501,16 @@ case the modification applies only to the selected frame."
 				 'set-face-foreground
 				 (cdr-safe (assq 'default face-remapping-alist))
 				  (if (assq 'default face-remapping-alist)
-					    nil (if this-frame (selected-frame) nil))))
+					    nil (if all-frames nil (selected-frame)))))
 
-(defun aquamacs-select-background-color (&optional this-frame)
+(defun aquamacs-select-background-color (&optional all-frames)
   "Show a list of colors that can be used to select the forground.
 The foreground color of the default face used in the current
 buffer is set.  If the face is remapped, the specific (remapped)
 face is modified in all frames.  Otherwise, the `default' face in
-the current frame is modified.  The face valid in all frames is
-modified, unless prefix argument THIS-FRAME is given, in which
-case the modification applies only to the selected frame."
+the current frame is modified. The face valid in all frames is
+modified, if prefix argument ALL-FRAMES is given. Otherwise,
+the modification applies only to the selected frame."
   (interactive "P")
   (aquamacs-show-color-selection (format "Background Color for %s" 
 					 (aquamacs-face-or-frame-name nil))
@@ -523,7 +518,7 @@ case the modification applies only to the selected frame."
 				 'set-face-background
 				 (cdr-safe (assq 'default face-remapping-alist))
 				 (if (assq 'default face-remapping-alist)
-					    nil (if this-frame (selected-frame) nil))))
+					    nil (if all-frames nil (selected-frame)))))
 
 
 (defun aquamacs-face-or-frame-name (generic-frame-name)
@@ -533,24 +528,6 @@ case the modification applies only to the selected frame."
 	"-default$" "" 
 	(symbol-name (cdr (assq 'default face-remapping-alist)))))
     (or generic-frame-name (concat "frame " (get-frame-name)))))
-
-(define-key-after appearance-menu [background-color]
-  `(menu-item (format "Background Color for %s...                 "
-		      (aquamacs-face-or-frame-name "this Frame"))
-	      aquamacs-select-background-color
-	      :visible ,(display-multi-font-p)
-	      :keys ,(aq-binding 'aquamacs-select-background-color)
-	      :enable (menu-bar-menu-frame-live-and-visible-p) 
-	      :help "Select a background color") 'set-font)
-
-(define-key-after appearance-menu [foreground-color]
-  `(menu-item (format "Foreground Color for %s...                 "
-		      (aquamacs-face-or-frame-name "this Frame"))
-	      aquamacs-select-foreground-color
-	      :visible ,(display-multi-font-p)
-	      :keys ,(aq-binding 'aquamacs-select-foreground-color)
-	      :enable (menu-bar-menu-frame-live-and-visible-p) 
-	      :help "Select a foreground color") 'set-font)
 
  
 	
@@ -592,31 +569,71 @@ case the modification applies only to the selected frame."
 ;; and needlessly change the current frame.
 ;; anything necessary will be done by frame notice-user-settings
  
+(define-key aquamacs-autoface-menu [menu-aquamacs-autofaces-sep]
+  '(menu-item "--"))
 (define-key aquamacs-autoface-menu [menu-aquamacs-autofaces]
     (menu-bar-make-mm-toggle 
      aquamacs-autoface-mode
      "Auto Faces"
      "adapt the default face parameters to the major-mode"))
 
-(aquamacs-update-apply-face-for-mode-menu)
-(define-key-after aquamacs-autoface-menu [menu-aquamacs-autofaces-sep]
-  '(menu-item "--") 'set-mode)
-
-      
-(define-key-after appearance-menu [aquamacs-frame-autofaces]
+(define-key appearance-menu [aquamacs-frame-autofaces]
   (list 'menu-item "Auto Faces" aquamacs-autoface-menu 
-	  :help "Set default face in buffers depending on major mode ")
-    'background-color)
+	:help "Set default face in buffers depending on major mode "))
+
+(aquamacs-update-apply-face-for-mode-menu)
 
 
-(define-key-after appearance-menu [aquamacs-set-frame-defaults]
-  (list 'menu-item "Adopt Frame Parameters as Default"
+(define-key appearance-menu [aquamacs-frame-sep] '(menu-item "--" nil))
+
+
+(define-key appearance-menu [aquamacs-set-frame-display-display]
+  (list 'menu-item "Adopt Frame Parameters for Special Frames"
+	'aquamacs-set-frame-parameters-as-special-display 
+	:visible '(special-display-p (buffer-name ))
+	:help "Set most special display frame parameters to ones of selected frame."))
+
+(define-key appearance-menu [aquamacs-set-frame-defaults]
+  (list 'menu-item "Adopt Frame Parameters as Frame Default"
 	'aquamacs-set-frame-parameters-as-default 
-	  :help "Set most default frame parameters to ones of selected frame.")
-    'aquamacs-frame-autofaces)
+	:visible '(not (special-display-p (buffer-name)))
+	:help "Set most default frame parameters to ones of selected frame."))
+      
 
-(define-key-after appearance-menu [aquamacs-frame-sep]
-  '(menu-item "--" nil) 'aquamacs-frame-autofaces)
+(define-key appearance-menu [background-color]
+  `(menu-item (format "Background Color for %s...                 "
+		      (aquamacs-face-or-frame-name "this Frame"))
+	      aquamacs-select-background-color
+	      :visible ,(display-multi-font-p)
+	      :keys ,(aq-binding 'aquamacs-select-background-color)
+	      :enable (menu-bar-menu-frame-live-and-visible-p) 
+	      :help "Select a background color"))
+
+(define-key appearance-menu [foreground-color]
+  `(menu-item (format "Foreground Color for %s...                 "
+		      (aquamacs-face-or-frame-name "this Frame"))
+	      aquamacs-select-foreground-color
+	      :visible ,(display-multi-font-p)
+	      :keys ,(aq-binding 'aquamacs-select-foreground-color)
+	      :enable (menu-bar-menu-frame-live-and-visible-p) 
+	      :help "Select a foreground color"))
+
+(define-key menu-bar-options-menu [mouse-set-font] nil)
+(define-key appearance-menu [set-font]
+  `(menu-item (format "Font%s...                 "
+		      (if (and (boundp 'face-remapping-alist)
+			       (assq 'default face-remapping-alist))
+			  (concat " for " (capitalize 
+			   (replace-regexp-in-string 
+			    "-default$" ""
+			    (symbol-name (cdr (assq 'default face-remapping-alist))))))
+			(if aquamacs-autoface-mode
+			    " (default)" " in this Frame")))
+	      turn-on-mac-font-panel-mode
+	      :visible ,(display-multi-font-p)
+	      :keys ,(aq-binding 'mac-font-panel-mode)
+	      :enable (menu-bar-menu-frame-live-and-visible-p) 
+	      :help "Select a font from list of known fonts/fontsets"))
 
 
 (define-key-after menu-bar-options-menu [aquamacs-frame-autofaces]
