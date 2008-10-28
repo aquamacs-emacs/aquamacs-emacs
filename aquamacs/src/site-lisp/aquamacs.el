@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.230 2008/10/27 01:26:51 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.231 2008/10/28 18:18:49 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -195,6 +195,26 @@ Separate paths from file names with --."
       (aquamacs-import-frame-parameters-to-auto-faces)) 
     ;; Print warnings / compatibility options
     
+
+
+  ;; create fontsets where needed
+    (mapc
+     (lambda (font-string)
+       (when (and font-string (string-match "^fontset-\\([a-z]+\\)\\([0-9]+\\)$" font-string))
+	 (let ((font (intern (match-string 1 font-string)))
+	       (size (list (string-to-number (match-string 2 font-string)))))
+	   
+	   (let ((font-alist  '((monaco "apple" "monaco*" "medium" "r" "normal")
+				(lucida  "apple" "lucida grande*" "medium" "r" "normal")
+				(lucida_typewriter "apple" "lucida sans typewrite*" "medium" "r" "normal")
+				(lucida_console  "apple" "lucida console*" "medium" "r") 
+				(courier "courier*" "medium" "r" nil)
+				(vera_mono "bitstream vera sans mono" "medium" "r" "normal"))))
+	     (require 'aquamacs-mac-fontsets)
+	     (apply #'create-aquamacs-fontset (append (cdr (assq font font-alist)) (list size) (list (symbol-name font))))))))
+     (list (cdr-safe (assq 'font default-frame-alist)) (cdr-safe (assq 'font special-display-frame-alist))))
+
+
     (if (boundp 'mac-reverse-ctrl-meta)
 	(message "Warning: `mac-reverse-ctrl-meta' is not used any more from
 Aquamacs 0.9.7 on. This variable had been deprecated for several versions.
@@ -245,6 +265,7 @@ un-Mac-like way when you select text and copy&paste it.")))
 
 (defun aquamacs-notice-user-settings ()
   "React to various user settings."
+
   (unless noninteractive
     (unless (equal init-file-user nil) ;; no .emacs was read (-q option)
 	  (aquamacs-load-scratch-file))
