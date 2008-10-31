@@ -6,7 +6,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
 
-;; Last change: $Id: aquamacs-frame-setup.el,v 1.35 2008/10/27 15:41:29 davidswelt Exp $
+;; Last change: $Id: aquamacs-frame-setup.el,v 1.36 2008/10/31 16:07:09 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -139,7 +139,7 @@ Users may then manipulate the faces directly."
 ;;; FACES 
 
   (set-face-attribute 'default nil
-		      :height 140
+		      :height 130
 		      :family "lucida grande")
 
   (defface autoface-default
@@ -164,7 +164,7 @@ Users may then manipulate the faces directly."
 
   (set-face-attribute 'text-mode-default nil
 		      :inherit 'autoface-default
-		      :height 140
+		      :height 130
 		      :weight 'normal
 		      :width 'normal
 		      :slant 'normal
@@ -179,7 +179,7 @@ Users may then manipulate the faces directly."
 
   (set-face-attribute 'latex-mode-default nil
 		      :inherit 'autoface-default
-		      :height 140
+		      :height 130
 		      :weight 'normal
 		      :width 'normal
 		      :slant 'normal
