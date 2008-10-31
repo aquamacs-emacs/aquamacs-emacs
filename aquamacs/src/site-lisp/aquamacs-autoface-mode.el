@@ -38,7 +38,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.16 2008/10/28 19:14:00 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.17 2008/10/31 04:31:16 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -325,10 +325,7 @@ modify them."))
   (interactive)
   (unless for-mode  (setq for-mode last-command-event))
   (let ((src-face (if for-mode (aquamacs-autoface-face for-mode) 'autoface-default))
-	(dest-face (aquamacs-autoface-face
-		    (if (aquamacs-get-buffer-style (buffer-name))
-			(format "%s-%s" (buffer-name) major-mode)
-		      major-mode))))
+	(dest-face (aquamacs-autoface-face major-mode (buffer-name))))
 
     (unless (facep src-face) (setq src-face 'autoface-default))
     (unless (facep src-face) (setq src-face 'default))
