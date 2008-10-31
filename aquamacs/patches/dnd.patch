@@ -32,10 +32,10 @@ this patch will select a more appropriate window to show the opened file in.  It
 ! 			  (or (buffer-name 
 ! 			       (window-buffer sel-win)) "")))
 ! 		    ;; are we in a special display window?
-! 		    (progn (select-frame-set-input-focus 
-! 			    (window-frame 
-! 			     (previous-window nil 'no 'visible))) 
-! 			   (previous-window nil 'no 'visible))
+! 		    (prog1 (previous-window nil 'no 'visible)
+! 		      (select-frame-set-input-focus 
+! 		       (window-frame 
+! 			(previous-window nil 'no 'visible))))
 ! 		  sel-win)
 ! 	      (dnd-open-local-file
 ! 	       (concat "file://"
