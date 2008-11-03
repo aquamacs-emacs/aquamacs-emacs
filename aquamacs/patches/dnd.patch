@@ -16,7 +16,7 @@ this patch will select a more appropriate window to show the opened file in.  It
       (let ((selection-range (mac-ae-selection-range ae))
   	  (search-text (mac-ae-text-for-search ae)))
         (cond (selection-range
---- 1726,1755 ----
+--- 1726,1762 ----
   (defun mac-ae-open-documents (event)
     "Open the documents specified by the Apple event EVENT."
     (interactive "e")
@@ -24,19 +24,26 @@ this patch will select a more appropriate window to show the opened file in.  It
 ! 	(target-frame))
       (dolist (file-name (mac-ae-list ae nil 'undecoded-file-name))
         (if file-name
-! 	  (let ((sel-win (or (minibuffer-selected-window) 
-! 			     (selected-window))))
-! 	    (with-selected-window
-! 		(if (and (window-live-p sel-win) 
-! 			 (special-display-p 
-! 			  (or (buffer-name 
-! 			       (window-buffer sel-win)) "")))
-! 		    ;; are we in a special display window?
-! 		    (prog1 (previous-window nil 'no 'visible)
-! 		      (select-frame-set-input-focus 
-! 		       (window-frame 
-! 			(previous-window nil 'no 'visible))))
-! 		  sel-win)
+! 	  (let (
+! 		(sel-win (selected-window))) ; search all visible&iconified frames
+! 	    (unless 
+! 		(and sel-win 
+! 		     (window-live-p sel-win)
+! 		     (eq t (frame-visible-p (window-frame sel-win)))
+! 		     (not (special-display-p 
+! 			   (or (buffer-name (window-buffer sel-win)) ""))))
+! 	       ; search visible frames (but not dedicated ones)
+! 	      (setq sel-win (get-largest-window 'visible nil)))
+! 	    (unless 
+! 		(and sel-win 
+! 		     (window-live-p sel-win)
+! 		     (eq t (frame-visible-p (window-frame sel-win)))
+! 		     (not (special-display-p 
+! 			   (or (buffer-name (window-buffer sel-win)) ""))))
+! 	      ; make new frame
+! 	      (make-frame)
+! 	      (setq sel-win (selected-window)))
+! 	    (with-selected-window sel-win
 ! 	      (dnd-open-local-file
 ! 	       (concat "file://"
 ! 		       (mapconcat 'url-hexify-string
@@ -57,7 +64,7 @@ this patch will select a more appropriate window to show the opened file in.  It
   
   (defun mac-ae-quit-application (event)
     "Quit the application Emacs with the Apple event EVENT."
---- 1764,1770 ----
+--- 1771,1777 ----
   	    ((stringp search-text)
   	     (re-search-forward
   	      (mapconcat 'regexp-quote (split-string search-text) "\\|")
