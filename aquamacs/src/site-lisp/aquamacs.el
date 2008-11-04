@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.231 2008/10/28 18:18:49 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.232 2008/11/04 05:29:53 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -349,23 +349,25 @@ have changed."
     (custom-load-symbol symbol)
     (let* ((get (or (get symbol 'custom-get) 'default-value))
 	   (value (funcall get symbol))
+	   (customized-value  (car-safe (get symbol 'customized-value)))
 	   (saved (get symbol 'saved-value))
 	   (standard (get symbol 'standard-value))
 	   (comment (get symbol 'customized-variable-comment)))
 
-      (let ((cmp (or saved
-		     (condition-case nil
-			 (eval (car standard))
-		       (error nil)))))
-	  (not (or (equal cmp (list (custom-quote value)))
-		   ;; not quite clear why this is doubled
+      (if (eq customized-value value) ;; otherwise it's rogue
+	  (let ((cmp (or saved
+			 (condition-case nil
+			     (eval (car standard))
+			   (error nil)))))
+	    (not (or (equal cmp (list (custom-quote value)))
+		     ;; not quite clear why this is doubled
 		    (equal (custom-quote cmp) (custom-quote value))
 		    (and (listp value) (string-match "-alist$" (symbol-name symbol)) ;; heuristic...
 			 (condition-case nil
 			     (equal (sort (copy-alist (eval (car cmp))) (lambda (x y) (string< (car x) (car y))))
-				     (sort (copy-alist value) (lambda (x y) (string< (car x) (car y)))))
-			   (error nil))))))))
-	  
+				    (sort (copy-alist value) (lambda (x y) (string< (car x) (car y)))))
+			   (error nil)))))))))
+
 ;;  (filter-list (aquamacs-menu-bar-changed-options)
 ;; 			  (list 'aquamacs-customization-version-id
 ;; 				'smart-frame-prior-positions
@@ -932,7 +934,7 @@ Use this argument instead of explicitly setting `view-exit-action'."
   (assq-set 'menu-bar-lines 1 'default-frame-alist)
   (assq-set 'tool-bar-lines 1 'default-frame-alist)
 
-  (aquamacs-set-defaults `((default-frame-alist ,default-frame-alist)
+(aquamacs-set-defaults `((default-frame-alist ,default-frame-alist)
 			   (special-display-frame-alist ,special-display-frame-alist)))
 
    (ats "fontsets done")
