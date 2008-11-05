@@ -38,7 +38,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.17 2008/10/31 04:31:16 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.18 2008/11/05 05:18:49 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -183,6 +183,7 @@ Sets the `autoface-default' face."
  
   (copy-face (aquamacs-autoface-face major-mode) 'autoface-default)
   (face-spec-set 'autoface-default '((t (:inherit default))))
+  (setq aquamacs-faces-changed t)
 
   (if (interactive-p)
       (message "Face for %s is now used as default." major-mode)))
@@ -329,7 +330,8 @@ modify them."))
 
     (unless (facep src-face) (setq src-face 'autoface-default))
     (unless (facep src-face) (setq src-face 'default))
-    (copy-face src-face dest-face))
+    (copy-face src-face dest-face)
+    (setq aquamacs-faces-changed t))
   (if (interactive-p)
       (message "Auto face copied.")))
 
@@ -480,7 +482,8 @@ The Background color, or, if not given, foreground color is used."
 (defun aquamacs-set-face-color (color-name setter-function target-face target-frame)
   (funcall setter-function  ;; set-face-fore/background
 	   (or target-face 'default)
-	   color-name target-frame))
+	   color-name target-frame)
+  (setq aquamacs-faces-changed t))
 
 (defun aquamacs-select-foreground-color (&optional all-frames)
   "Show a list of colors that can be used to select the forground.
