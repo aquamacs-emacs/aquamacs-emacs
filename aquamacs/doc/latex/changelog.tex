@@ -8,12 +8,15 @@
 
 \item Aquamacs Styles have seen a major overhaul.  To recap, these styles apply settings such as fonts, background and foreground colors to buffers and the frames as they show the buffers.  The settings are chosen according to the major mode used in the buffer.  This makes is possibly to automatically edit prose texts (such as LaTeX) in a variable-width (proportional) fonts, but do one's programming (e.g., Python or C) in a fixed-width font.  
 
-The core functionality of changing fonts and fore/background colors (in short: faces) is now provided by the new `aquamacs-autoface-mode'.  Relevant mode-specific settings from `aquamacs-styles-mode' are automatically imported.  The now deprecated functionality of `aquamacs-styles-mode' (changing frame parameters including the visibility of the toolbar) is still available to users by inserting {\tt (require 'aquamacs-styles) (aquamacs-autoface-mode 0) (aquamacs-styles-mode 1)} into their Preferences.el file.  Users can also access color themes with {\tt M-x color-theme-select}, but note that faces set using `aquamacs-autoface-mode' will override foreground and background colors.  
+The core functionality of changing fonts and fore/background colors (in short: faces) is now provided by the new `aquamacs-autoface-mode'.  
 
 How does the new \emph{autoface} mode differ from the \emph{styles} mode?  Font and color settings now apply primarily to the default ``face'' used in the buffer.  For each major mode, a new face is defined.  For instance, the default face for LaTeX buffers is called `latex-mode-default'.  These faces can be edited directly via the Options menu (to choose a font and some new entries to choose fore- and background colors) or even with M-x customize-face.  These changes apply automatically and immediately to all buffers in the given major mode. In contrast, the \emph{styles} mode used to set frame-wide parameters, including the font, fore- and background colors, and change these parameters in a frame according to the buffer shown in the first window within the frame.  Frame parameters also included the presence of a toolbar, cursor color, fringes, and the like.  These are not available in the new mode.
 Previously, colors of a whole plethora of faces for various occasions could be chosen via the `color-theme' package.  These were needlessly tied to major modes using `aquamacs-styles'. 
 
-One advantage of the new, lightweight implementation of `autofaces' is that switching between buffers is smooth and does not lead to ugly frame resizing effects. 
+One advantage of the new, lightweight implementation of `autofaces' is that switching between buffers (e.g., with tabs) is smooth and does not lead to ugly frame resizing effects.  Multiple windows in the same frame can now display their buffers in the correct fonts.
+
+{\small Transition: relevant mode-specific settings from `aquamacs-styles-mode' are automatically imported.  The now deprecated functionality of `aquamacs-styles-mode' (changing frame parameters including the visibility of the toolbar) is still available to users by inserting {\tt (require 'aquamacs-styles) (aquamacs-autoface-mode 0) (aquamacs-styles-mode 1)} into their Preferences.el file.  Users can also access color themes with {\tt M-x color-theme-select}, but note that faces set using `aquamacs-autoface-mode' will override foreground and background colors.  }
+
 
 \item The use of color themes is being phased out.  While still included in Aquamacs, they are not available any longer from the Options menu.  We recommend the light-weight setting of fore/background colors using the Options menu.
 
@@ -55,7 +58,7 @@ Reporter unknown (thanks for letting us know though).
 
 \item The mouse cursor changes its shape when over buffer text.
 
-\item Scrolling with the mouse wheel now works without first selecting the frame -- just move the mouse cursor over the window.
+\item Scrolling with the mouse wheel now works without first selecting the frame -- just move the mouse cursor over the window.  (N.B., `mouse-wheel-follow-mouse' only applies to windows, not to frames.)
 
 \item Aquamacs can now automatically select the frame and window over which you move your mouse cursor, as provided by Apple's Terminal.app and by many X11-based window managers under Unix and GNU/Linux.  We now include the `follow-mouse' package with a few extensions to make it work on the Mac.  You can turn it on with a simple {\tt (turn-on-follow-mouse)} in your Preferences.el file.
 
