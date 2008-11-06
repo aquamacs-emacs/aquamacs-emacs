@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.64 2008/10/01 20:58:38 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.65 2008/11/06 20:00:34 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -198,10 +198,10 @@ pixels apart if possible."
         (* chars (frame-char-height frame)))
 (defun smart-fp--pixel-to-char-width (pixels frame &optional round-to-lower)
        (round (- (/ (float pixels) (frame-char-width frame)) 
-		 (if round-to-lower .5 0))))
+		 (if round-to-lower .499999 0))))
 (defun smart-fp--pixel-to-char-height (pixels frame &optional round-to-lower)
        (round (- (/ (float pixels) (frame-char-height frame)) 
-		 (if round-to-lower .5 0))))
+		 (if round-to-lower .499999 0))))
 
 (defun smart-fp--get-frame-creation-function ()
   (if (boundp 'frame-creation-function)
@@ -218,6 +218,8 @@ pixels apart if possible."
     nil))
 
  
+(defvar smart-fp--current-direction nil)
+
 (defun find-good-frame-position ( old-frame new-frame )
   "Finds a good frame position for a new frame based on the old one's position."
  
@@ -283,48 +285,64 @@ pixels apart if possible."
 		;; if we're given an invisible frame (probably no
 		;; frame visible then!), assume a sensible standard
 		(setq x (+ min-x margin)  y (+ min-y margin) w 0 h 0))
-	      (let (
+	      (let ((next-y nil)
 		    (next-x 
-		     (if (> (- x margin next-w) min-x)
-			 (- x margin next-w)
-					; if it doesn't fit to the left
-		       (if (> max-x  (+ x w margin next-w))
-			   (+ x w margin)
-			 ;; if it doesn't fit to the right
-			 ;; then position on the "other side" 
-			 ;; (where current frame is not)
-			 (if (or (equal w 0) (equal h 0) ; invisible?
-				 (> (+ x (/ w 2)) (/ max-x 2)))
-			     min-x ;; left edge
-			   ;; or on the right edge 
-			   (- max-x next-w)))))
-		    ;; now determine y position	
-		    (next-y nil))
+		     (or
+		      (let ((n-x nil) (next-direction nil) (count 2))
+			(while (and (> count 0) (not next-direction))
+			  (setq count (1- count))
+			  (cond 
+			   ((not (eq 'right smart-fp--current-direction ))
+			    (if (> (- x margin next-w) min-x)
+				(progn (setq n-x (- x margin next-w))
+				       (setq next-direction 'left))
+			      (setq smart-fp--current-direction 'right)))
+			   ((not (eq 'left smart-fp--current-direction ))
+			    (if (> max-x  (+ x w margin next-w))
+				(progn (setq n-x (+ x w margin))
+				       (setq next-direction 'right))
+			      (setq smart-fp--current-direction 'right)))))
+			(setq smart-fp--current-direction next-direction)
+			n-x)
+		      ;; if it doesn't fit to the right or left
+		      ;; then position on the "other side" 
+		      ;; (where current frame is not)
+		      (if (or (equal w 0) (equal h 0) ; invisible?
+			      (> (+ x (/ w 2)) (/ max-x 2)))
+			  min-x ;; left edge
+			;; or on the right edge 
+			(- max-x next-w)))))
+	    
 		;; we'll try to position the frame somewhere near the
 		;; original one
 		(mapc  
 		 (lambda (ny)
 		   (if next-y
 		       nil ;; no operation if next-y already found
+		     (if (< (+ 0 ny 
+				 ;smart-fp--frame-title-bar-height
+				 (smart-tool-bar-pixel-height new-frame)
+				 next-h) max-y)
 		     (let ((samerow t))
 		       (mapc  
 			(lambda (f)  
+			  ;; avoid placing frame at similar y as any visible frame
 			  (if (or (> (abs (- (eval 
 					      (frame-parameter f 'top)) 
 					     ny)) 10) 
 				  ;; different height
-				  (or (> next-x (+ (eval 
-						    (frame-parameter f 'left)) 
-						   (frame-parameter f 'width))) 
-					;or no overlap
-				      (< (+ next-x next-w) 
-					 (eval (frame-parameter f 'left)))))
+				  (> next-x (+ (eval 
+						(frame-parameter f 'left)) 
+					       (frame-parameter f 'width))) 
+				  ;; or no overlap
+				  (< (+ next-x next-w) 
+				     (eval (frame-parameter f 'left))))
 			      nil	; fine
 			    (setq samerow nil)))  
 			;; list:
 			(visible-frame-list))
 		       (if samerow
-			   (setq next-y ny)))))
+			   (setq next-y ny))))))
 		 ;; list:
 		 (list y (+ y margin) (+ y (* 3 margin)) (+ y (* 5 margin)) 
 		       (+ y (* 6 margin)) (+ y (* 4 margin))  
@@ -334,30 +352,31 @@ pixels apart if possible."
 		       (+ y (* 2 margin))))
 		(setq next-x (max next-x min-x ))
 		(if next-y
-		    ;; make sure it's not too low
-		    ;; the 20 seem to be necessary because of a bug 
 		    ;; that hasn't been fixed yet.
 		    (setq next-y (max min-y 
-				      (min next-y (- max-y next-h 25))))
+				      (min next-y (- max-y next-h))))
 		  (setq next-y min-y)) ;; if all else fails
 		;; do we need to change the height as well?
 		(when (and next-y 
-			   (> (+ 25 next-y 
-				 smart-fp--frame-title-bar-height
+			   (> (+ 0 next-y 
+				 ;smart-fp--frame-title-bar-height
 				 (smart-tool-bar-pixel-height new-frame)
 				 next-h) max-y))
 		  (setq next-h (- max-y 
 				  next-y 
 				  (smart-tool-bar-pixel-height new-frame) 
-				  smart-fp--frame-title-bar-height
-				  25)))
+				 ; smart-fp--frame-title-bar-height
+				  0)))
 		(assq-set 'left next-x 'new-frame-parameters)
 		(assq-set 'top next-y 'new-frame-parameters)
-		;;  (assq-set 'width next-w 'new-frame-parameters)
-	     
-		;; why this? (why? enabled)
-		(assq-set 'height (smart-fp--pixel-to-char-height
-				   next-h new-frame 'round-to-lower)
+		(assq-set 'width (smart-fp--pixel-to-char-width 
+				  (- next-w 32) ;; why needed??
+				  new-frame 'round-to-lower)
+			  'new-frame-parameters)
+		(assq-set 'height  (smart-fp--pixel-to-char-height
+				   ;; not sure why this works:
+				   (- next-h smart-fp--frame-title-bar-height)
+				   new-frame 'round-to-lower)
 			  'new-frame-parameters)
 		;; return this 
 		new-frame-parameters))))))))
