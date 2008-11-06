@@ -9,44 +9,62 @@ diff -c -r1.1.2.1 mactoolbox.c
 *** src/mactoolbox.c	6 Apr 2008 01:54:44 -0000	1.1.2.1
 --- src/mactoolbox.c	6 Apr 2008 14:02:29 -0000
 ***************
-*** 327,339 ****
-  	result = CallNextEventHandler (next_handler, event);
+*** 328,339 ****
   	if (result != eventNotHandledErr || read_socket_inev == NULL)
   	  break;
-! 
+  
 ! 	f = mac_focus_frame (&one_mac_display_info);
-! 
+  
   	err = GetEventParameter (event, kEventParamWindowRef, typeWindowRef,
   				 NULL, sizeof (WindowRef), NULL, &wp);
-  	if (err != noErr
+! 	if (err != noErr
 ! 	    || wp != FRAME_MAC_WINDOW (f))
   	  break;
   
   	err = GetEventParameter (event, kEventParamMouseWheelAxis,
---- 329,351 ----
-  	result = CallNextEventHandler (next_handler, event);
+--- 330,344 ----
   	if (result != eventNotHandledErr || read_socket_inev == NULL)
   	  break;
-!  
-! 	Point pt;
-! 	WindowRef window;
-! 
-! 	GetGlobalMouse (&pt); 
-! 	WindowPartCode wpc = FindWindow (pt, &window);
-! 	if (wpc >= inContent && window != NULL) 
-! 	  /* Normally, wheel events should go to the frame under the mouse */
-! 	    f = mac_window_to_frame (window);
-! 	else 
-! 	    /* Default: the focused frame */
-! 	    f = mac_focus_frame (&one_mac_display_info);
-! 	
+  
+! 	err = GetEventParameter (event, kEventParamMouseLocation,
+! 				 typeQDPoint, NULL, sizeof (Point),
+! 				 NULL, &point);
+! 	if (err != noErr)
+! 	  break;
+  
   	err = GetEventParameter (event, kEventParamWindowRef, typeWindowRef,
   				 NULL, sizeof (WindowRef), NULL, &wp);
-  	if (err != noErr
-! 	  || wp != FRAME_MAC_WINDOW (f)) 
+! 	if (err != noErr) 
   	  break;
   
   	err = GetEventParameter (event, kEventParamMouseWheelAxis,
+***************
+*** 342,352 ****
+  	if (err != noErr || axis != kEventMouseWheelAxisY)
+  	  break;
+  
+! 	err = GetEventParameter (event, kEventParamMouseLocation,
+! 				 typeQDPoint, NULL, sizeof (Point),
+! 				 NULL, &point);
+! 	if (err != noErr)
+! 	  break;
+  
+  	point.h -= f->left_pos + FRAME_OUTER_TO_INNER_DIFF_X (f);
+  	point.v -= f->top_pos + FRAME_OUTER_TO_INNER_DIFF_Y (f);
+--- 347,359 ----
+  	if (err != noErr || axis != kEventMouseWheelAxisY)
+  	  break;
+  
+! 	/* Normally, wheel events should go to the frame under the mouse */
+! 	if (wp)
+! 	  f = mac_window_to_frame (wp);
+! 	else 
+! 	  /* Default: the focused frame */
+! 	  f = mac_focus_frame (&one_mac_display_info); 
+! 
+  
+  	point.h -= f->left_pos + FRAME_OUTER_TO_INNER_DIFF_X (f);
+  	point.v -= f->top_pos + FRAME_OUTER_TO_INNER_DIFF_Y (f);
 ***************
 *** 3012,3018 ****
     if (!NILP (Vmac_emulate_three_button_mouse) &&
