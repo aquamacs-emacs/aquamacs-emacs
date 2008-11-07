@@ -19,7 +19,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.19 2008/11/07 13:24:48 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.20 2008/11/07 22:54:06 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -624,7 +624,70 @@ the modification applies only to the selected frame."
 	  :help "Appearances")
     'showhide)
  
-  
+ 
+;; ZOOM
+ 
+
+(defvar zoom-font-frame-local-flat t
+  "* Font zoom is specific for the frame")
+; (setq zoom-font-frame-local-flat t) 
+(defun zoom-font (&optional dir)
+ "Zoom default face in current buffer.
+WIth prefix argument DIR, shrink the face; otherwise enlarge.
+`zoom-font-frame-local-flat' indicates whether the zoom is local
+to the selected frame."
+  (interactive "P")
+  ;; the Zoom is per buffer and per frame.
+  ;; we can't set the frame font or change the frame's or a global default face,
+  ;; because this can get remapped via face-remapping-alist
+  ;; thus, we must go through face-remapping-alist, which will make this setting
+  ;; local to the specific buffer.
+  ;; to allow 
+  (let ((factor-delta (if dir -0.2 0.2))
+	(frame (if zoom-font-frame-local-flat (selected-frame) nil))
+	(default-face 'default)
+	(zoom-face (intern (format "zoom-%s" (buffer-name)))))
+
+    ;; set default-face to the face that default remaps to,
+    ;; but avoid the zoom face.
+    (mapc
+     (lambda (entry)
+       (if (and (eq (car entry) 'default)
+		(symbolp (cdr entry))
+		(eq default-face 'default) ;; choose the first matching entry
+		(not (string-match "zoom-.*" (symbol-name (cdr entry)))))
+	   (setq default-face (cdr entry))))
+     face-remapping-alist)
+
+    (unless (facep zoom-face)
+      (make-empty-face zoom-face)
+      (set-face-documentation
+       zoom-face 
+       (purecopy "Zoom face.")))
+    (set-face-attribute zoom-face frame :inherit default-face)
+    ;; we can't use the global (default) value for face-remapping-alist
+    ;; because global and local faces aren't merged in the same way.
+    (let ((zoom-factor (face-attribute zoom-face :height frame nil))
+	  (alist-entry (cons 'default zoom-face)))
+      (if (or (not (member alist-entry face-remapping-alist)) (eq 'unspecified zoom-factor))
+	  (setq zoom-factor 1.0))
+
+      (setq zoom-factor (/ (round (+ zoom-factor factor-delta) 0.01) 100.0))
+      (if (= zoom-factor 1.0)
+	  ;; remove zoom completely from face-remapping-alist
+	  (setq face-remapping-alist (delete alist-entry face-remapping-alist))
+	(set-face-attribute zoom-face frame :height zoom-factor) 
+	(unless (member alist-entry face-remapping-alist)
+	  (setq face-remapping-alist (cons alist-entry face-remapping-alist)))))))
+
+(defun zoom-font-out ()
+  "Shrink face in current buffer.
+`zoom-font-frame-local-flat' indicates whether the zoom
+is local to the selected frame."
+  (interactive)
+  (zoom-font t))
+
+ 
 ;; turn on if desired
 (if aquamacs-autoface-mode
     (aquamacs-autoface-mode 1))
