@@ -701,8 +701,28 @@ If no rgb.txt file is found, return nil."
 ;; missing, the value of the variable will be nil, and rgb.txt will
 ;; not be used.
 (defvar htmlize-color-rgb-hash (htmlize-get-color-rgb-hash))
+
+;; indicate the source buffer
+(defvar htmlize-source-buffer nil)
+
 
 ;;; Face handling.
+
+;;Aquamacs-specific
+(defun htmlize-face-attribute-in-buffer (face attribute &optional frame inherit buffer)
+ "Value of a face attribute in the current buffer.
+Like `face-attribute', but respects `face-remapping-alist' for
+the current buffer."
+ (with-current-buffer (or buffer (current-buffer))
+   (let* ((remapped (assq face face-remapping-alist))
+	  (value (face-attribute (or (cdr remapped) face)
+		     attribute frame inherit)))
+     (if (and remapped inherit)
+	 (setq value (face-attribute-merged-with 
+		      attribute
+		      value face frame)))
+     value)))
+
 
 (defun htmlize-face-specifies-property (face prop)
   ;; Return t if face specifies PROP, as opposed to it being inherited
@@ -728,10 +748,10 @@ If no rgb.txt file is found, return nil."
       (setq color (funcall function face))
       (when (and (null color)
 		 (fboundp 'face-attribute)
-		 (face-attribute face :inherit)
-		 (not (eq (face-attribute face :inherit) 'unspecified)))
+		 (htmlize-face-attribute-in-buffer face :inherit nil nil htmlize-source-buffer)
+		 (not (eq (htmlize-face-attribute-in-buffer face :inherit) 'unspecified)))
 	(setq color (htmlize-face-color-internal
-		     (face-attribute face :inherit) fg))))
+		     (htmlize-face-attribute-in-buffer face :inherit nil nil htmlize-source-buffer) fg))))
     (when (and (eq face 'default) (null color))
       (setq color (cdr (assq (if fg 'foreground-color 'background-color)
 			     (frame-parameters)))))
@@ -903,8 +923,8 @@ If no rgb.txt file is found, return nil."
 	   (dolist (attr '(:family :height :weight :slant :underline :overline :strike-through))
 	     (let ((value (if (>= emacs-major-version 22)
 			      ;; Use the INHERIT arg in GNU Emacs 22.
-			      (face-attribute face attr nil t)
-			    (face-attribute face attr))))
+			      (htmlize-face-attribute-in-buffer face attr nil t htmlize-source-buffer)
+			    (htmlize-face-attribute-in-buffer face attr))))
 	       (when (and value (not (eq value 'unspecified)))
 		 (htmlize-face-emacs21-attr fstruct attr value)))))
 	  (t
@@ -1358,7 +1378,8 @@ property and by buffer overlays that specify `face'."
     ;; in advance.
     (htmlize-ensure-fontified)
     (clrhash htmlize-extended-character-cache)
-    (let* ((buffer-faces (htmlize-faces-in-buffer))
+    (let* ((htmlize-source-buffer (current-buffer))
+	   (buffer-faces (htmlize-faces-in-buffer))
 	   (face-map (htmlize-make-face-map (adjoin 'default buffer-faces)))
 	   ;; Generate the new buffer.  It's important that it inherits
 	   ;; default-directory from the current buffer.
