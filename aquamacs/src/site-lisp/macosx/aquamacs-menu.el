@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.183 2008/10/20 21:25:59 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.184 2008/11/07 17:04:38 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -571,24 +571,21 @@ left and right margin"))
   "Turn on Word Wrap mode in current buffer."
   (turn-off-longlines)
   (turn-off-auto-fill)
-  (setq word-wrap t)
-  (when (interactive-p)
-    (redraw-modeline)
-    (message "Word Wrap enabled in this buffer.")))
+  (setq word-wrap t))
 
 (defun turn-off-word-wrap ()
   "Turn off Word Wrap mode in current buffer."
-  (setq word-wrap nil)
-  (when (interactive-p)
-    (redraw-modeline)
-    (message "Word Wrap disabled in this buffer.")))
+  (setq word-wrap nil))
 
 (defun toggle-word-wrap ()
   "Toggle whether to use Word Wrap."
   (interactive)
   (if word-wrap
       (turn-off-word-wrap)
-    (turn-on-word-wrap)))
+    (turn-on-word-wrap))
+  (when (interactive-p)
+    (redraw-modeline)
+    (message "Word Wrap %sabled in this buffer." (if word-wrap "en" "dis"))))
 
 (global-set-key "\C-xw" 'toggle-word-wrap)
 
@@ -723,11 +720,7 @@ subsequently create.  Upon entering text-mode, the function
     ;; (define-key-after menu-bar-options-menu [obof-separator] '(menu-item "--") 'oneonone)
     )
 
-(when (fboundp 'mac-font-panel-mode)
-  (defun turn-on-mac-font-panel-mode ()
-    (interactive)
-    (mac-font-panel-mode 1))
-  (define-key menu-bar-showhide-menu [mac-font-panel-mode] nil))
+(define-key menu-bar-showhide-menu [mac-font-panel-mode] nil)
 
 (define-key menu-bar-options-menu [highlight-paren-mode] nil)
 (define-key menu-bar-options-menu [highlight-separator] nil)
@@ -865,7 +858,6 @@ subsequently create.  Upon entering text-mode, the function
 (unless (boundp 'ispell-program-name)
   (add-hook 'after-init-hook 'aquamacs-initialize-ispell-program-name 'append))
 
-
 (define-key-after menu-bar-edit-menu [spell]
   '(menu-item "Spelling" ispell-menu-map 
 	      :visible (and (boundp 'ispell-program-name) ispell-program-name))
@@ -882,7 +874,11 @@ subsequently create.  Upon entering text-mode, the function
 		    ispell-buffer
 		    :keys ,(aq-binding 'ispell-buffer)
 		    :help "Check spelling of selected buffer"))
-
+(define-key ispell-menu-map [ispell-complete-word]
+	`(menu-item "Complete Word      " 
+		    ispell-complete-word
+		    :keys ,(aq-binding 'ispell-complete-word)
+		    :help "Complete word at cursor using dictionary"))
 ;; taken out - the standard Cocoa spell doesn't do it either
 ;; (defvar aquamacs-flyspell-buffer-checked nil)
 ;; (make-variable-buffer-local 'aquamacs-flyspell-buffer-checked)
