@@ -1,8 +1,8 @@
 ;;; -*-Emacs-Lisp-*-
 ;;;
-;;;  $Id: inf-ruby.el,v 1.1 2005/10/31 17:56:43 davidswelt Exp $
+;;;  $Id: inf-ruby.el,v 1.2 2008/11/07 13:38:01 davidswelt Exp $
 ;;;  $Author: davidswelt $
-;;;  $Date: 2005/10/31 17:56:43 $
+;;;  $Date: 2008/11/07 13:38:01 $
 ;;;
 ;;; Inferior Ruby Mode - ruby process in a buffer.
 ;;;                      adapted from cmuscheme.el
@@ -35,9 +35,13 @@
 ;;; HISTORY
 ;;; senda -  8 Apr 1998: Created.
 ;;;	 $Log: inf-ruby.el,v $
+;;;	 Revision 1.2  2008/11/07 13:38:01  davidswelt
+;;;	 run-mode-hooks rather than run-hooks, so that the "change major-mode"
+;;;	 hook is called as it shoudl.
+;;;	
 ;;;	 Revision 1.1  2005/10/31 17:56:43  davidswelt
 ;;;	 initial checkin (from Carbon Emacs JP project)
-;;;
+;;;	
 ;;;	 Revision 1.7  2004/07/27 08:11:36  matz
 ;;;	 * eval.c (rb_eval): copy on write for argument local variable
 ;;;	   assignment.
@@ -227,7 +231,7 @@ to continue it."
   (compilation-shell-minor-mode t)
   (make-local-variable 'compilation-error-regexp-alist)
   (setq compilation-error-regexp-alist inferior-ruby-error-regexp-alist)
-  (run-hooks 'inferior-ruby-mode-hook))
+  (run-mode-hooks 'inferior-ruby-mode-hook))
 
 (defvar inferior-ruby-filter-regexp "\\`\\s *\\S ?\\S ?\\s *\\'"
   "*Input matching this regexp are not saved on the history list.
