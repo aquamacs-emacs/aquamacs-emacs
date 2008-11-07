@@ -1,5 +1,5 @@
 ;;; html-helper-mode.el --- Major mode for composing html files.
-;;; v $Revision: 1.3 $
+;;; v $Revision: 1.4 $
 
 ;; Mantainer : Gian Uberto "Saint" Lauri <saint@eng.it>
 ;;                                       <saint@dei.unipd.it>*
@@ -25,7 +25,7 @@
 ;; Homepage URL: http://www.nongnu.org/baol-hth/index.html
 
 ;; Created: 01 Feb 1994
-;; $Id: html-helper-mode.el,v 1.3 2008/04/11 13:22:25 davidswelt Exp $
+;; $Id: html-helper-mode.el,v 1.4 2008/11/07 13:41:48 davidswelt Exp $
 ;; Keywords: HTML major-mode
 
 ;; LCD Archive Entry:
@@ -134,7 +134,7 @@
 
 (defconst html-helper-mode-version
   (progn
-    (let ((revs "$Revision: 1.3 $")
+    (let ((revs "$Revision: 1.4 $")
 	  (lastchar 0))
       ; revs is a string of single byte characters
       (set 'lastchar (1- (string-width revs)))
@@ -1726,10 +1726,10 @@ html-helper-build-new-buffer-flag is set to t"
 
   (easy-menu-add (html-helper-menu) html-helper-mode-map)
 
-  (run-hooks 'text-mode-hook)
-  (run-hooks 'html-mode-hook)
+  (run-mode-hooks 'text-mode-hook)
+  (run-mode-hooks 'html-mode-hook)
 ;; put keybindings here
-  (run-hooks 'html-helper-mode-hook))
+  (run-mode-hooks 'html-helper-mode-hook))
 
 (cond (html-helper-mode-uses-visual-basic
        (defun asp-html-helper-mode ()

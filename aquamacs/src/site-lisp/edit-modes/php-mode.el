@@ -213,9 +213,9 @@ Turning this on will force PEAR rules on all PHP files."
 	       (string-match "PEAR\\|pear"
 			     (buffer-file-name))
 	       (string-match "\\.php$" (buffer-file-name))))
-      (run-hooks 'php-mode-pear-hook))
+      (run-mode-hooks 'php-mode-pear-hook))
   
-  (run-hooks 'php-mode-user-hook)
+  (run-mode-hooks 'php-mode-user-hook)
   )
 
 ;; Make php-mode the default mode for PHP source code buffers.

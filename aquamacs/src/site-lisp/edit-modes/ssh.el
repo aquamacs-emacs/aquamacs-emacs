@@ -7,7 +7,7 @@
 ;; Keywords: unix, comm
 ;; Created: 1996-07-03
 
-;; $Id: ssh.el,v 1.1 2005/10/18 08:31:33 davidswelt Exp $
+;; $Id: ssh.el,v 1.2 2008/11/07 13:40:15 davidswelt Exp $
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -265,7 +265,7 @@ If `ssh-mode-hook' is set, run it."
   (use-local-map ssh-mode-map)
   (setq shell-dirtrackp ssh-directory-tracking-mode)
   (make-local-variable 'comint-file-name-prefix)
-  (run-hooks 'ssh-mode-hook))
+  (run-mode-hooks 'ssh-mode-hook))
 
 (defun ssh-directory-tracking-mode (&optional prefix)
   "Do remote or local directory tracking, or disable entirely.

@@ -245,7 +245,9 @@
 	  (forward-char 1)
 	(error nil))
       (condition-case nil
-	  (beginning-of-defun)		
+	  (let ((defun-prompt-regexp "[ \t]*"))
+	    (beginning-of-defun)
+	    (skip-syntax-forward " "))
 	(error (progn (error "Could not find start of production. Are () balanced?"))))
       (setq bod (point))
       (if (looking-at "(p")
@@ -297,6 +299,7 @@
     (looking-at "-[ \t]")))
 
 (defun actr-smart-tab (bprule)
+  (beginning-of-line)
   (let ((startpoint (point))
 	(sexp-state (parse-partial-sexp bprule (point)))
 	(words (actr-num-non-spaces-strings (point)))
@@ -394,10 +397,9 @@
 
 (defun actr-indent-line (&optional whole-exp)
   "Indents current line according to ACT-R style or Lisp style, based on context
-
-If point is in a production rule, indentation is according to the defined
-pretty print variables (see \"actr-pprint-prule\"). Otherwise, the function
-\"lisp-indent-line\" is called."
+If point is in a production rule, indentation is according to the
+defined pretty print variables. Otherwise, the function
+`lisp-indent-line' is called."
  (interactive "P") 
  (let (bprule)
    (if (condition-case nil		; Catch errors...
@@ -652,7 +654,7 @@ WWW-site: http://www.van-rijn.org/actr-mode
 	  (font-lock-comment-start-regexp . ";")
 	  (font-lock-keywords-case-fold-search . t)))
 
-  (run-hooks 'actr-mode-hook))
+  (run-mode-hooks 'actr-mode-hook))
 
 ;;; ------------------------------------------------------------------------
 ;;

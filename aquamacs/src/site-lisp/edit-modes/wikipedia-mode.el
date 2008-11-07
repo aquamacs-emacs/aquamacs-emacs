@@ -386,8 +386,8 @@
 (require 'derived)
 (require 'font-lock)
 	
-(defconst wikipedia-mode-version (concat "0." (substring "$Revision: 1.1 $" 13 14))
-	"$Id: wikipedia-mode.el,v 1.1 2008/10/15 21:57:32 davidswelt Exp $
+(defconst wikipedia-mode-version (concat "0." (substring "$Revision: 1.2 $" 13 14))
+	"$Id: wikipedia-mode.el,v 1.2 2008/11/07 13:40:39 davidswelt Exp $
 
 Report bugs to: Uwe Brauer oub at mat.ucm.es")
 
@@ -1590,7 +1590,7 @@ latter retrieval, and possible indexing.
   (use-local-map wikipedia-draft-mode-map)
   (setq major-mode 'wikipedia-draft-mode
 	mode-name "Wikipedia-Draft")
-  (run-hooks 'wikipedia-draft-mode-hook))
+  (run-mode-hooks 'wikipedia-draft-mode-hook))
 
 
 (defun wikipedia-draft-view-draft ()

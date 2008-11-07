@@ -1044,7 +1044,7 @@ All Key Bindings:
 			     ((?_ . "w"))))
   (matlab-enable-block-highlighting 1)
   (if window-system (matlab-frame-init))
-  (run-hooks 'matlab-mode-hook)
+  (run-mode-hooks 'matlab-mode-hook)
   (if matlab-vers-on-startup (matlab-show-version)))
 
 ;;; Utilities =================================================================
@@ -4733,6 +4733,10 @@ Check `matlab-mode-install-path'" filename))))
 
 ;;; Change log
 ;;; $Log: matlab.el,v $
+;;; Revision 1.2  2008/11/07 13:39:09  davidswelt
+;;; run-mode-hooks rather than run-hooks, so that the "change major-mode"
+;;; hook is called as it should.
+;;;
 ;;; Revision 1.1  2005/11/09 13:09:37  davidswelt
 ;;; initial checkin
 ;;;
