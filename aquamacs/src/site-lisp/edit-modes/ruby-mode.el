@@ -2,14 +2,15 @@
 ;;;  ruby-mode.el -
 ;;;
 ;;;  $Author: davidswelt $
-;;;  $Date: 2005/11/10 22:00:07 $
+;;;  $Date: 2008/11/07 13:27:09 $
 ;;;  created at: Fri Feb  4 14:49:13 JST 1994
 ;;;
 ;;; DO NOT UPDATE FROM EXTERNALLY.
 ;;; CONTAINS important syntax coloring patch 
+;;; CONTAINS run-mode-hooks patch
 ;;; Aquam****acs-Update-From http://cvs.sourceforge.jp/cgi-bin/viewcvs.cgi/*checkout*/macemacsjp/CarbonEmacsPackage/GPL/ruby-mode/ruby-mode.el?rev=HEAD&content-type=text/plain
 
-(defconst ruby-mode-revision "$Revision: 1.5 $")
+(defconst ruby-mode-revision "$Revision: 1.6 $")
 
 (defconst ruby-mode-version
   (progn
@@ -269,7 +270,7 @@ The variable ruby-indent-level controls the amount of indentation.
   (make-local-variable 'add-log-current-defun-function)
   (setq add-log-current-defun-function 'ruby-add-log-current-method)
 
-  (run-hooks 'ruby-mode-hook))
+  (run-mode-hooks 'ruby-mode-hook))
 
 (defun ruby-current-indentation ()
   (save-excursion
