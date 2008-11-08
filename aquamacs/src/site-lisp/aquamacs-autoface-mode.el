@@ -19,7 +19,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.20 2008/11/07 22:54:06 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.21 2008/11/08 04:59:01 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -472,6 +472,12 @@ The Background color, or, if not given, foreground color is used."
 	   color-name target-frame)
   (aquamacs-autoface-mark-face-to-save (or target-face 'default)))
 
+(defun aquamacs-default-face-in-effect ()
+  (let ((face (cdr (assq 'default face-remapping-alist))))
+    (if (get face 'theme-face)
+	face
+      (or (face-attribute face :inherit) 'default))))
+
 (defun aquamacs-select-foreground-color (&optional all-frames)
   "Show a list of colors that can be used to select the forground.
 The foreground color of the default face used in the current
@@ -486,9 +492,9 @@ the modification applies only to the selected frame."
 				 'aquamacs-set-face-color
 				 ;; parameters passed to aquamacs-set-face-color
 				 'set-face-foreground
-				 (cdr-safe (assq 'default face-remapping-alist))
-				  (if (assq 'default face-remapping-alist)
-					    nil (if all-frames nil (selected-frame)))))
+				 (aquamacs-default-face-in-effect)
+				 (if (assq 'default face-remapping-alist)
+				     nil (if all-frames nil (selected-frame)))))
 
 (defun aquamacs-select-background-color (&optional all-frames)
   "Show a list of colors that can be used to select the forground.
@@ -503,7 +509,7 @@ the modification applies only to the selected frame."
 					 (aquamacs-face-or-frame-name nil))
 				 'aquamacs-set-face-color
 				 'set-face-background
-				 (cdr-safe (assq 'default face-remapping-alist))
+				 (aquamacs-default-face-in-effect)
 				 (if (assq 'default face-remapping-alist)
 					    nil (if all-frames nil (selected-frame)))))
 
@@ -608,8 +614,12 @@ the modification applies only to the selected frame."
 			       (assq 'default face-remapping-alist))
 			  (concat " for " (capitalize 
 			   (replace-regexp-in-string 
-			    "-default$" ""
-			    (symbol-name (cdr (assq 'default face-remapping-alist))))))
+			    "-default$" "" 
+			    (symbol-name 
+			    (let ((face (cdr (assq 'default face-remapping-alist))))
+			      (if (get face 'theme-face)
+				  face
+				(or (face-attribute face :inherit) 'default)))))))
 			(if aquamacs-autoface-mode
 			    " (default)" " in this Frame")))
 	      turn-on-mac-font-panel-mode
@@ -628,13 +638,14 @@ the modification applies only to the selected frame."
 ;; ZOOM
  
 
-(defvar zoom-font-frame-local-flat t
-  "* Font zoom is specific for the frame")
-; (setq zoom-font-frame-local-flat t) 
+(defvar zoom-font-frame-local-flag t
+  "* Font zoom is specific for the frame
+Setting this is currently slightly error-prone.")
+; (setq zoom-font-frame-local-flag t) 
 (defun zoom-font (&optional dir)
  "Zoom default face in current buffer.
 WIth prefix argument DIR, shrink the face; otherwise enlarge.
-`zoom-font-frame-local-flat' indicates whether the zoom is local
+`zoom-font-frame-local-flag' indicates whether the zoom is local
 to the selected frame."
   (interactive "P")
   ;; the Zoom is per buffer and per frame.
@@ -644,27 +655,30 @@ to the selected frame."
   ;; local to the specific buffer.
   ;; to allow 
   (let ((factor-delta (if dir -0.2 0.2))
-	(frame (if zoom-font-frame-local-flat (selected-frame) nil))
+	(frame (if zoom-font-frame-local-flag (selected-frame) nil))
 	(default-face 'default)
-	(zoom-face (intern (format "zoom-%s" (buffer-name)))))
+	(zoom-face nil))
 
     ;; set default-face to the face that default remaps to,
-    ;; but avoid the zoom face.
+    ;; and find the zoom face.
     (mapc
      (lambda (entry)
-       (if (and (eq (car entry) 'default)
-		(symbolp (cdr entry))
-		(eq default-face 'default) ;; choose the first matching entry
-		(not (string-match "zoom-.*" (symbol-name (cdr entry)))))
-	   (setq default-face (cdr entry))))
+       (when (and (eq (car entry) 'default)
+		(symbolp (cdr entry)))
+	 (if (string-match "zoom-.*" (symbol-name (cdr entry)))
+	     (setq zoom-face (intern (match-string 0 (symbol-name (cdr entry)))))
+	   (if (and (eq default-face 'default) ;; choose the first matching entry
+		    (not (string-match "zoom-.*" (symbol-name (cdr entry)))))
+	   (setq default-face (cdr entry))))))
      face-remapping-alist)
 
+    (unless zoom-face (setq zoom-face (intern (make-temp-name "zoom-"))))
     (unless (facep zoom-face)
       (make-empty-face zoom-face)
       (set-face-documentation
        zoom-face 
        (purecopy "Zoom face.")))
-    (set-face-attribute zoom-face frame :inherit default-face)
+    (set-face-attribute zoom-face nil :inherit default-face) ;; on all frames
     ;; we can't use the global (default) value for face-remapping-alist
     ;; because global and local faces aren't merged in the same way.
     (let ((zoom-factor (face-attribute zoom-face :height frame nil))
@@ -673,20 +687,43 @@ to the selected frame."
 	  (setq zoom-factor 1.0))
 
       (setq zoom-factor (/ (round (+ zoom-factor factor-delta) 0.01) 100.0))
+      ;; to do; only do this if no other frame shows it.
       (if (= zoom-factor 1.0)
 	  ;; remove zoom completely from face-remapping-alist
 	  (setq face-remapping-alist (delete alist-entry face-remapping-alist))
 	(set-face-attribute zoom-face frame :height zoom-factor) 
 	(unless (member alist-entry face-remapping-alist)
-	  (setq face-remapping-alist (cons alist-entry face-remapping-alist)))))))
+	  (setq face-remapping-alist (cons alist-entry face-remapping-alist))))))
+  (if (interactive-p)
+      (message "Zoom zoom!")))
 
 (defun zoom-font-out ()
   "Shrink face in current buffer.
-`zoom-font-frame-local-flat' indicates whether the zoom
+`zoom-font-frame-local-flag' indicates whether the zoom
 is local to the selected frame."
   (interactive)
   (zoom-font t))
 
+(defun zoom-font-off ()
+  "End zoom face in current buffer."
+  (interactive)
+  (mapc
+   (lambda (entry)
+     (when (and (eq (car entry) 'default)
+		(symbolp (cdr entry)))
+       (if (string-match "zoom-.*" (symbol-name (cdr entry)))
+	   (setq zoom-face (intern (match-string 0 (symbol-name (cdr entry))))))))
+   face-remapping-alist)
+  (setq face-remapping-alist (delete (cons 'default zoom-face) face-remapping-alist))
+  (redisplay)
+  (if (interactive-p)
+      (message "Zoom off.")))
+
+(defadvice mac-handle-font-selection
+  (before zoom-off () activate)
+  (if mac-font-panel-target-frame
+      (select-frame mac-font-panel-target-frame))
+  (zoom-font-off))
  
 ;; turn on if desired
 (if aquamacs-autoface-mode
@@ -695,4 +732,4 @@ is local to the selected frame."
 (provide 'aquamacs-autoface-mode)
 
 
- 
+;; To do: use something aquamacs-default-face-in-effect to determine the target face for the font.
