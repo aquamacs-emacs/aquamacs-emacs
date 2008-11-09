@@ -19,7 +19,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.21 2008/11/08 04:59:01 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.22 2008/11/09 17:21:38 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -688,14 +688,14 @@ to the selected frame."
 
       (setq zoom-factor (/ (round (+ zoom-factor factor-delta) 0.01) 100.0))
       ;; to do; only do this if no other frame shows it.
-      (if (= zoom-factor 1.0)
-	  ;; remove zoom completely from face-remapping-alist
-	  (setq face-remapping-alist (delete alist-entry face-remapping-alist))
-	(set-face-attribute zoom-face frame :height zoom-factor) 
-	(unless (member alist-entry face-remapping-alist)
-	  (setq face-remapping-alist (cons alist-entry face-remapping-alist))))))
-  (if (interactive-p)
-      (message "Zoom zoom!")))
+      (when (> zoom-factor 0.0)
+	(if (= zoom-factor 1.0)
+	    ;; remove zoom completely from face-remapping-alist
+	    (setq face-remapping-alist (delete alist-entry face-remapping-alist))
+	  (set-face-attribute zoom-face frame :height zoom-factor) 
+	  (unless (member alist-entry face-remapping-alist)
+	    (setq face-remapping-alist (cons alist-entry face-remapping-alist))))
+	(message "Zoom: %0d%%" (* 100 zoom-factor))))))
 
 (defun zoom-font-out ()
   "Shrink face in current buffer.
