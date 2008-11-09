@@ -19,7 +19,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.23 2008/11/09 17:38:26 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.24 2008/11/09 22:51:30 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -566,21 +566,7 @@ the modification applies only to the selected frame."
      "Auto Faces"
      "adapt the default face parameters to the major-mode"))
 
-(define-key appearance-menu [aquamacs-frame-autofaces]
-  (list 'menu-item "Auto Faces" aquamacs-autoface-menu 
-	:help "Set default face in buffers depending on major mode "))
 
-(aquamacs-update-apply-face-for-mode-menu)
-
-
-(define-key appearance-menu [aquamacs-frame-sep] '(menu-item "--" nil))
-
-
-(define-key appearance-menu [aquamacs-set-frame-display-display]
-  (list 'menu-item "Adopt Frame Parameters for Special Frames"
-	'aquamacs-set-frame-parameters-as-special-display 
-	:visible '(special-display-p (buffer-name ))
-	:help "Set most special display frame parameters to ones of selected frame."))
 
 (define-key appearance-menu [aquamacs-set-frame-defaults]
   (list 'menu-item "Adopt Frame Parameters as Frame Default"
@@ -588,6 +574,22 @@ the modification applies only to the selected frame."
 	:visible '(not (special-display-p (buffer-name)))
 	:help "Set most default frame parameters to ones of selected frame."))
       
+(define-key appearance-menu [aquamacs-set-frame-display-display]
+  (list 'menu-item "Adopt Frame Parameters for Special Frames"
+	'aquamacs-set-frame-parameters-as-special-display 
+	:visible '(special-display-p (buffer-name ))
+	:help "Set most special display frame parameters to ones of selected frame."))
+
+
+(define-key appearance-menu [aquamacs-frame-sep] '(menu-item "--" nil))
+
+(define-key appearance-menu [aquamacs-frame-autofaces]
+  (list 'menu-item "Auto Faces" aquamacs-autoface-menu 
+	:help "Set default face in buffers depending on major mode "))
+
+(aquamacs-update-apply-face-for-mode-menu)
+
+
 
 (define-key appearance-menu [background-color]
   `(menu-item (format "Background Color for %s...                 "
