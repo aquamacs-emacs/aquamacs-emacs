@@ -19,7 +19,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.22 2008/11/09 17:21:38 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.23 2008/11/09 17:38:26 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -519,7 +519,7 @@ the modification applies only to the selected frame."
       (capitalize 
        (replace-regexp-in-string 
 	"-default$" "" 
-	(symbol-name (cdr (assq 'default face-remapping-alist)))))
+	(symbol-name (aquamacs-default-face-in-effect))))
     (or generic-frame-name (concat "frame " (get-frame-name)))))
 
  
@@ -616,10 +616,10 @@ the modification applies only to the selected frame."
 			   (replace-regexp-in-string 
 			    "-default$" "" 
 			    (symbol-name 
-			    (let ((face (cdr (assq 'default face-remapping-alist))))
-			      (if (get face 'theme-face)
-				  face
-				(or (face-attribute face :inherit) 'default)))))))
+			     (let ((face (cdr (assq 'default face-remapping-alist))))
+			       (if (get face 'theme-face)
+				   face
+				 (or (face-attribute face :inherit) 'default)))))))
 			(if aquamacs-autoface-mode
 			    " (default)" " in this Frame")))
 	      turn-on-mac-font-panel-mode
