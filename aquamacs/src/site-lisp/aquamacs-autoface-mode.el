@@ -19,7 +19,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.25 2008/11/10 23:39:05 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.26 2008/11/10 23:47:16 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -412,7 +412,7 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
 
 (defun turn-on-mac-font-panel-mode ()
   (interactive)
-  (mac-font-panel-mode 1)
+  (mac-font-panel-mode 1))
   ;; (unless aquamacs-autoface-mode
   ;;     (setq mac-font-panel-target-frame (selected-frame))))
 
@@ -479,15 +479,14 @@ The Background color, or, if not given, foreground color is used."
   (aquamacs-autoface-mark-face-to-save (or target-face 'default)))
 
 
-(defun aquamacs-select-foreground-color (&optional all-frames)
+(defun aquamacs-select-foreground-color (&optional frame)
   "Show a list of colors that can be used to select the forground.
 The foreground color of the default face used in the current
 buffer is set.  If the face is remapped, the specific (remapped)
 face is modified in all frames.  Otherwise, the `default' face in
 the current frame is modified.   The face valid in all frames is
-modified, if prefix argument ALL-FRAMES is given. Otherwise,
-the modification applies only to the selected frame."
-  (interactive "P")
+modified, or in FRAME if given."
+  (interactive)
   (aquamacs-show-color-selection (format "Foreground Color for %s" 
 					 (aquamacs-face-or-frame-name nil))
 				 'aquamacs-set-face-color
@@ -495,31 +494,32 @@ the modification applies only to the selected frame."
 				 'set-face-foreground
 				 (aquamacs-default-face-in-effect)
 				 (if (assq 'default face-remapping-alist)
-				     nil (if all-frames nil (selected-frame)))))
+				     nil frame)))
 
-(defun aquamacs-select-background-color (&optional all-frames)
+(defun aquamacs-select-background-color (&optional frame)
   "Show a list of colors that can be used to select the forground.
 The foreground color of the default face used in the current
 buffer is set.  If the face is remapped, the specific (remapped)
 face is modified in all frames.  Otherwise, the `default' face in
-the current frame is modified. The face valid in all frames is
-modified, if prefix argument ALL-FRAMES is given. Otherwise,
-the modification applies only to the selected frame."
-  (interactive "P")
+the current frame is modified.   The face valid in all frames is
+modified, or in FRAME if given."
+  (interactive)
   (aquamacs-show-color-selection (format "Background Color for %s" 
 					 (aquamacs-face-or-frame-name nil))
 				 'aquamacs-set-face-color
 				 'set-face-background
 				 (aquamacs-default-face-in-effect)
 				 (if (assq 'default face-remapping-alist)
-					    nil (if all-frames nil (selected-frame)))))
+					    nil frame)))
 
 (defun aquamacs-default-face-in-effect (&optional only-mode-face)
   (let ((face (cdr (assq 'default face-remapping-alist))))
-    (if (get face 'theme-face)
-	face
-      (or (face-attribute face :inherit) 
-	  (if only-mode-face nil 'default)))))
+    (if face
+	(if (get face 'theme-face)
+	    face
+	  (or (face-attribute face :inherit) 
+	      (if only-mode-face nil 'default)))
+      'default)))
 
 (defun aquamacs-face-or-frame-name (generic-frame-name)
   (if (assq 'default face-remapping-alist)
@@ -664,8 +664,10 @@ the modification applies only to the selected frame."
 ;; 	:help "Set this frame's face as default."))
 
 (define-key appearance-menu [background-color]
-  `(menu-item (format "Background Color for %s...                 "
-		      (aquamacs-face-or-frame-name "this Frame"))
+  `(menu-item (if aquamacs-autoface-mode
+		  (format "Background Color for %s..."
+			  (aquamacs-face-or-frame-name "this Frame"))
+		"Background Color...")
 	      aquamacs-select-background-color
 	      :visible ,(display-multi-font-p)
 	      :keys ,(aq-binding 'aquamacs-select-background-color)
@@ -673,8 +675,10 @@ the modification applies only to the selected frame."
 	      :help "Select a background color"))
 
 (define-key appearance-menu [foreground-color]
-  `(menu-item (format "Foreground Color for %s...                 "
+  `(menu-item  (if aquamacs-autoface-mode
+		   (format "Foreground Color for %s..."
 		      (aquamacs-face-or-frame-name "this Frame"))
+		 "Foreground Color...")
 	      aquamacs-select-foreground-color
 	      :visible ,(display-multi-font-p)
 	      :keys ,(aq-binding 'aquamacs-select-foreground-color)
@@ -695,7 +699,7 @@ the modification applies only to the selected frame."
 				   face
 				 (or (face-attribute face :inherit) 'default)))))))
 			(if aquamacs-autoface-mode
-			    " (default)" " in this Frame")))
+			    " (default)" " ")))
 	      turn-on-mac-font-panel-mode
 	      :visible ,(display-multi-font-p)
 	      :keys ,(aq-binding 'mac-font-panel-mode)
