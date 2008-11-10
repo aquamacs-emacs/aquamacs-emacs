@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.127 2008/11/07 22:56:35 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.128 2008/11/10 23:01:56 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -801,7 +801,8 @@ default."
     (define-key map [(end)] 'end-of-buffer)
 
     (if (fboundp 'mac-font-panel-mode)
-	(define-key map `[(,osxkeys-command-key shift t)] 'mac-font-panel-mode))
+	;; turn-on function provided by autofaces
+	(define-key map `[(,osxkeys-command-key shift t)] 'turn-on-mac-font-panel-mode))
 
     ;; we have inhibit-fit-frame set to true... can't do this
     ;; (global-set-key [(control ?x) (control ?-)] 'fit-frame)
