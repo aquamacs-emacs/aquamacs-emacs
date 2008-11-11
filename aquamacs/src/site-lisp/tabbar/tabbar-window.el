@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: tabbar-window.el,v 1.55 2008/09/25 14:11:28 davidswelt Exp $
+;; Revision: $Id: tabbar-window.el,v 1.56 2008/11/11 04:21:45 davidswelt Exp $
 
 (require 'tabbar)
 (require 'aquamacs-tools)
@@ -464,11 +464,25 @@ Updates tabbar-window-alist in the same way."
      (switch-to-buffer-in-tab last-command-event)
    (switch-to-buffer last-command-event)))
 
-(defun switch-to-buffer-in-tab (buffer)
+
+(when window-system
+  (defvar sw-in-tab-switching nil) 
+  (defadvice switch-to-buffer (around sw-in-tab (&rest args) 
+				      activate compile protect) 
+    (if (and display-buffer-reuse-frames tabbar-mode
+	     (not sw-in-tab-switching))
+	(let ((sw-in-tab-switching t))
+	  (setq ad-return-value (apply #'switch-to-buffer-in-tab args)))
+      (setq ad-return-value ad-do-it))))
+
+(defun switch-to-buffer-in-tab (buffer &optional norecord)
  "Switch to BUFFER, possibly switching frames.
 This will display the buffer in an already-existing tab if
 available.  Otherwise, give BUFFER a tab in the currently
-selected window.  BUFFER may be a buffer or a string (buffer name)."
+selected window.  BUFFER may be a buffer or a string (buffer name).
+Optional second arg norecord non-nil means
+do not put this buffer at the front of the list of recently selected ones.
+This function returns the buffer it switched to."
  ;; check existing tabsets for this buffer
  ;; priority is for tabsets where this is currently selected tab
  (let* ((buf (get-buffer buffer))
@@ -483,9 +497,10 @@ selected window.  BUFFER may be a buffer or a string (buffer name)."
      (if window
          (progn
            (set-window-buffer window buf)
-           (select-window window)
-           (select-frame-set-input-focus (window-frame window)))
-       (switch-to-buffer buf)))))
+           (select-window window norecord)
+	   (select-frame-set-input-focus (window-frame window)))
+       (switch-to-buffer buf norecord)))
+   buf))
 
 (defun tabbar-window-merge-windows (&optional tabset source-tabsets)
   "Assign tabs from all tabsets to current tabset, or TABSET
