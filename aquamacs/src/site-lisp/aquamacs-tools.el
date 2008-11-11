@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.36 2008/10/22 16:43:58 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.37 2008/11/11 01:23:27 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -67,9 +67,10 @@
 	   (not window-system))
 	  (progn
 	    ;; make sure the frame's minibuffer is actually visible
-	    ;; this should be done automatically by smart-frame-positioning-mode
-	    ;; (if (fboundp 'smart-move-minibuffer-inside-screen)
-	    ;;	(smart-move-minibuffer-inside-screen f))
+	    ;; because minibuffer-setup-hook is not executed.
+	    (and (fboundp 'smart-move-minibuffer-inside-screen)
+		 smart-frame-positioning-mode
+		 (smart-move-minibuffer-inside-screen f))
 	    (if (and long (not aquamacs-quick-yes-or-no-prompt))
 		(old-yes-or-no-p text)
 	      (old-y-or-n-p text)))
