@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.73 2008/10/22 00:54:57 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.74 2008/11/12 20:42:10 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -223,9 +223,6 @@ from earlier versions of the distribution."
 (ats "frame setup done")
     
 
-  (require 'aquamacs-mac-fontsets)
-(ats "font sets done")
-
   (aquamacs-set-defaults '((mac-allow-anti-aliasing t)))
 
   (if (boundp 'mac-pointer-I-beam) ;; undefined in TTY mode
@@ -283,7 +280,7 @@ from earlier versions of the distribution."
   
 
   (aquamacs-set-defaults 
-   `(
+   `((recentf-menu-action aquamacs-find-file-2)
      (savehist-file "~/Library/Preferences/Aquamacs Emacs/minibuffer-history.el")
      (desktop-path ("~/Library/Preferences/Aquamacs Emacs" "." "~"))
      (auto-save-file-name-transforms
