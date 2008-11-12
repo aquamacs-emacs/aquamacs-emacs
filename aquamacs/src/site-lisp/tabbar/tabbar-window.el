@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: tabbar-window.el,v 1.56 2008/11/11 04:21:45 davidswelt Exp $
+;; Revision: $Id: tabbar-window.el,v 1.57 2008/11/12 20:11:06 davidswelt Exp $
 
 (require 'tabbar)
 (require 'aquamacs-tools)
@@ -465,15 +465,19 @@ Updates tabbar-window-alist in the same way."
    (switch-to-buffer last-command-event)))
 
 
-(when window-system
-  (defvar sw-in-tab-switching nil) 
-  (defadvice switch-to-buffer (around sw-in-tab (&rest args) 
-				      activate compile protect) 
-    (if (and display-buffer-reuse-frames tabbar-mode
-	     (not sw-in-tab-switching))
-	(let ((sw-in-tab-switching t))
-	  (setq ad-return-value (apply #'switch-to-buffer-in-tab args)))
-      (setq ad-return-value ad-do-it))))
+;; shouldn't be done, because the normal switch-to-buffer
+;; is not sensitive to display-buffer-reuse-frames
+;; and always switches the buffer in the selected window.
+;; doing what's shown below will create incompatibilities.
+;; (when window-system
+;;   (defvar sw-in-tab-switching nil) 
+;;   (defadvice switch-to-buffer (around sw-in-tab (&rest args) 
+;; 				      activate compile protect) 
+;;     (if (and display-buffer-reuse-frames tabbar-mode
+;; 	     (not sw-in-tab-switching))
+;; 	(let ((sw-in-tab-switching t))
+;; 	  (setq ad-return-value (apply #'switch-to-buffer-in-tab args)))
+;;       (setq ad-return-value ad-do-it))))
 
 (defun switch-to-buffer-in-tab (buffer &optional norecord)
  "Switch to BUFFER, possibly switching frames.
