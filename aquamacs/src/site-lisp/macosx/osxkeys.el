@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.128 2008/11/10 23:01:56 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.129 2008/11/12 05:14:52 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -750,6 +750,8 @@ default."
     (define-key map `[(,osxkeys-command-key +)] 'zoom-font)
     (define-key map `[(,osxkeys-command-key =)] 'zoom-font) ; comapt. Safari/Firefox
     (define-key map `[(,osxkeys-command-key -)] 'zoom-font-out)
+    (define-key map `[(meta wheel-up)] 'zoom-font)
+    (define-key map `[(meta wheel-down)] 'zoom-font-out)
 
 ;; these go away in 1.4
 ;;    (define-key global-map `[(,osxkeys-command-key {)] 'comment-region-or-line)
