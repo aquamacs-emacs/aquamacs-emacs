@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.232 2008/11/04 05:29:53 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.233 2008/11/12 20:43:53 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -44,6 +44,102 @@
 
 
 ;; various functions
+
+
+;; New documents
+(defun new-empty-buffer-other-frame (&optional mode)
+  "Opens a new frame containing an empty buffer."
+  (interactive)
+  (new-empty-buffer t mode))
+
+(defun new-empty-buffer  (&optional other-frame mode)
+  "Visits an empty buffer."
+  (interactive)			
+  (let ((buf (generate-new-buffer (mac-new-buffer-name "untitled"))))
+    ;; setting mode is done before showing the new frame
+    ;; because otherwise, we get a nasty animation effect
+    (save-excursion
+      (set-buffer buf)
+      (if (or mode initial-major-mode)
+	  (funcall  (or mode initial-major-mode))))
+    (if other-frame
+	(switch-to-buffer-other-frame buf)
+      (let ((one-buffer-one-frame-force one-buffer-one-frame-mode))
+	;; force new frame
+	(switch-to-buffer buf)))
+    (setq buffer-offer-save t)
+    (put 'buffer-offer-save 'permanent-local t)
+    (set-buffer-modified-p nil)))
+(defalias  'new-frame-with-new-scratch 'new-empty-buffer)
+
+(defun aquamacs-find-file ()
+"Open a new buffer. If `one-buffer-one-frame' is non-nil,
+a new frame is opened to contain the new buffer. If find-file
+leads to opening a dired buffer, newly opened files will open
+right there as well."
+  (interactive)
+  (if (or (not one-buffer-one-frame)
+	  (< (buffer-size (window-buffer (frame-first-window))) 2))
+      (call-interactively 'aquamacs-find-file-2)
+
+    ;; open new frame with empty buffer
+    (let ((default-major-mode 'fundamental-mode))
+      (new-empty-buffer nil)) ;;  'fundamental-mode
+    (let ((buf (current-buffer)))
+      (unwind-protect 
+	  (progn 
+	    ;; the following will open the file in the given
+	    ;; frame, because the buffer shown is empty.
+	    (call-interactively 'aquamacs-find-file-2)
+	    (unless (eq (current-buffer) buf) ; get rid of old buffer
+	      (kill-buffer buf)))
+	    ;;(setq one-buffer-one-frame t))	
+	(progn 
+	  (when (eq major-mode 'dired-mode)
+	    (set (make-local-variable 'one-buffer-one-frame) nil))
+	(when (and (buffer-live-p buf)
+		 (< (buffer-size) 2))		; for safety
+	    (kill-buffer buf)))))))
+
+
+(defun aquamacs-find-file-2 (filename &optional wildcards)
+  "Edit file FILENAME.
+Switch to a buffer visiting file FILENAME, creating one if none
+already exists.  Interactively, the default if you just type RET
+is the current directory, but the visited file name is available
+through the minibuffer history: type M-n to pull it into the
+minibuffer.
+
+If the buffer is shown somewhere in tabbar-mode, select that
+window.
+
+You can visit files on remote machines by specifying something
+like /ssh:SOME_REMOTE_MACHINE:FILE for the file name.  You can
+also visit local files as a different user by specifying
+/sudo::FILE for the file name.  See the Info
+node `(tramp)Filename Syntax' in the Tramp Info manual, for more
+about this.
+
+Interactively, or if WILDCARDS is non-nil in a call from Lisp,
+expand wildcards (if any) and visit multiple files.  You can
+suppress wildcard expansion by setting `find-file-wildcards' to nil.
+
+To visit a file without any kind of conversion and without
+automatically choosing a major mode, use \\[find-file-literally]."
+
+  (interactive (find-file-read-args "Find file: " nil))
+
+  (let ((value (find-file-noselect filename nil nil wildcards)))
+
+    (if tabbar-mode
+	(if (listp value)
+	    (mapcar 'switch-to-buffer-in-tab (nreverse value))
+	  (switch-to-buffer-in-tab value))
+      (if (listp value)
+	  (mapcar 'switch-to-buffer (nreverse value)))
+      (switch-to-buffer value))))
+
+
 
 (defun aquamacs-recentf-show-basenames (l &optional no-dir)
     "Filter the list of menu elements L to show filenames sans directory.
@@ -176,10 +272,10 @@ Separate paths from file names with --."
     (when (< aquamacs-customization-version-id 160)
       ;; did the user not explicitly set obof or tabbar?
       (when (eq tabbar-mode 'default)
-	  (custom-set-variables '(tabbar-mode nil)))
+	(custom-set-variables '(tabbar-mode nil)))
       (when (eq one-buffer-one-frame-mode 'default)
-	  (custom-set-variables '(one-buffer-one-frame-mode t))))
-
+	(custom-set-variables '(one-buffer-one-frame-mode t))))
+    
     (when (and (boundp 'aquamacs-default-styles)
 	       (< aquamacs-customization-version-id 161))
       ;; some tidying up from previous versions
@@ -190,7 +286,6 @@ Separate paths from file names with --."
 		      (assq-delete-all
 		       'default  
 		       aquamacs-default-styles))))))
-
     (when (< aquamacs-customization-version-id 162)
       (aquamacs-import-frame-parameters-to-auto-faces)) 
     ;; Print warnings / compatibility options
