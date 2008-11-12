@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.184 2008/11/07 17:04:38 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.185 2008/11/12 22:45:38 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -385,6 +385,28 @@ customization buffer."
 	      :help "Use the selection for your next search"))
 
  
+;; Command line tool
+
+(defun aquamacs-install-command-line-tool ()
+  (interactive)
+  (call-process "open" nil 0 nil "-a" "Installer" 
+		(format "%s/Contents/Resources/Aquamacs Command Line Tool.pkg" 
+			aquamacs-mac-application-bundle-directory))
+  (message "Call command-line-tool from a shell as `a', e.g., as \"a file.txt\""))
+
+
+  
+(define-key-after menu-bar-tools-menu [menu-tools-command-line-tool]
+  `(menu-item "Install Command Line Tool                            " 
+	      aquamacs-install-command-line-tool
+	      :help "Install Command Line Tool...")
+  'simple-calculator)
+
+(define-key-after menu-bar-tools-menu [menu-tools-command-line-tool-sep]
+  '(menu-item "--" nil)
+  'simple-calculator)
+
+
 (define-key-after menu-bar-search-menu [grep]
   '(menu-item "Search Files (Grep)..." grep
 	      :help "Search files for strings or regexps (with Grep)")
@@ -1362,6 +1384,8 @@ that should be represented in the Aquamacs menus."
 	     :active t]))
 (recentf-mode 1)  
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)  
+
+
 
 
 
