@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.78 2008/10/23 20:40:17 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.79 2008/11/12 23:09:13 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -300,13 +300,16 @@ This overrides entries in `obof-same-frame-regexps'."
 
  ;; this will cause newly opened files to show up in the dired buffer
 ;(defvar dired-mode-hook nil)
+; to do: this should really only apply to files opened
+; from within the dired buffer.
  (add-hook 'dired-mode-hook 'obof-inhibit-frame-creation)
  (add-hook 'dired-mode-hook 'obof-inhibit-pop-up-windows)
 
 ; customization buffers
-(setq custom-mode-hook nil)
-(add-hook 'custom-mode-hook 'obof-inhibit-frame-creation)
-(add-hook 'custom-mode-hook 'obof-inhibit-pop-up-windows)
+;; (setq custom-mode-hook nil)
+;; don't do this - would apply to newly opened buffers, too
+;; (add-hook 'custom-mode-hook 'obof-inhibit-frame-creation)
+;; (add-hook 'custom-mode-hook 'obof-inhibit-pop-up-windows)
 (aquamacs-set-defaults
  '((custom-buffer-done-kill t)))
 
@@ -393,7 +396,8 @@ the current window is switched to the new buffer."
 	  ;; "if", because it does mostly the same things as switch-to-buffer.
 	  ;; however, we want to be on the safe side, and also not
 	  ;; honor stuff like `obof-same-window-regexps' when obof is off.
-	  (let ((switch t)
+	  (let ((norecord (nth 1 args))
+		(switch t)
 		(window-to-select))
 	    (walk-windows
 	     (lambda (w)
@@ -428,7 +432,7 @@ the current window is switched to the new buffer."
 	      (when window-to-select
 		(select-frame-set-input-focus (window-frame window-to-select))
 		;; raise-frame doesn't select it  
-		(select-window window-to-select)
+		(select-window window-to-select norecord)
 		;; normally, the following would only happen in 
 		;; the next top-level event loop (assumption)
 		;; but because the normal switch-to-buffer does it right away
@@ -518,7 +522,7 @@ the current window is switched to the new buffer."
 ; quit-window is usually called by some modes when the user enters 'q'
 ; e.g. in dired. we want to delete the window then.  
 ; (ad-disable-advice 'bury-buffer 'around 'always-dedicated)
- (defadvice bury-buffer (around always-dedicated (&optional buffer) 
+ (defadvice bury-buffer (around maybe-delete-window (&optional buffer) 
 				activate)
    (let ((the-buffer (current-buffer)))
 
