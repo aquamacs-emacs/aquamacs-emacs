@@ -19,7 +19,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.26 2008/11/10 23:47:16 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.27 2008/11/12 05:14:18 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -732,7 +732,9 @@ to the selected frame."
   ;; thus, we must go through face-remapping-alist, which will make this setting
   ;; local to the specific buffer.
   ;; to allow 
-  (let ((factor-delta (if dir -0.2 0.2))
+  (let ((factor-delta (if (listp last-input-event)
+			  (if dir -0.1 0.1) ;; mouse wheel event
+			(if dir -0.2 0.2)))
 	(frame (if zoom-font-frame-local-flag (selected-frame) nil))
 	(default-face 'default)
 	(zoom-face nil))
