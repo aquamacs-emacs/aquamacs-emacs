@@ -19,7 +19,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.27 2008/11/12 05:14:18 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.28 2008/11/13 02:29:48 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -100,9 +100,9 @@ The faces are then to be used with `aquamacs-autoface-mode'."
   (when (facep face)
     (let ((value (list (list t   (custom-face-attributes-get face nil)))))
       (unless dont-save
-	(put face 'saved-face value))
-      (custom-push-theme 'theme-face face 'user 'set value))
-    (setq aquamacs-faces-changed t)))
+	(put face 'saved-face value)
+	(setq aquamacs-faces-changed t))
+      (custom-push-theme 'theme-face face 'user 'set value))))
 
 (defun aquamacs-autoface-make-face (face mark-to-save)
   (when (not (facep face)) ; do not delete existing faces
