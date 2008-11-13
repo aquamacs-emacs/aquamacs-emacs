@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.79 2008/11/12 23:09:13 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.80 2008/11/13 19:29:15 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -329,7 +329,7 @@ This overrides entries in `obof-same-frame-regexps'."
 
 
 ; init
-(setq aquamacs-newly-opened-frames '() )
+(setq aquamacs-newly-opened-windows '() )
 ;; this won't work very well - the buffer names stored
 ;; here could change in the mean time.
 ;; storing objects won't work either, because
@@ -391,7 +391,7 @@ the current window is switched to the new buffer."
 (if window-system
     (defadvice switch-to-buffer (around sw-force-other-frame (&rest args) 
 					activate compile)
-      (if  one-buffer-one-frame  
+      (if one-buffer-one-frame  
 	  ;; technically, code below should work even without this
 	  ;; "if", because it does mostly the same things as switch-to-buffer.
 	  ;; however, we want to be on the safe side, and also not
@@ -419,14 +419,14 @@ the current window is switched to the new buffer."
 		      (progn
 			(setq ad-return-value (apply #'switch-to-buffer-other-frame args))
 			;; store the frame/buffer information
-			(add-to-list 'aquamacs-newly-opened-frames 
+			(add-to-list 'aquamacs-newly-opened-windows 
 				     (cons (selected-window) (buffer-name)))) 
 		    ;; else : show in same frame
 		    (if (window-dedicated-p (selected-window))
 			(setq ad-return-value   (apply #'switch-to-buffer-other-window args))
 		      ;; else: show in same frame
 		      ad-do-it)))
-	      ;; else (don't switch, just activate another frame)
+	      ;; else (don't switch, just activcate another frame)
 	      ;; we need to do it here, because raise-frame / select frame are
 	      ;; ineffective from within walk-windows
 	      (when window-to-select
@@ -440,7 +440,7 @@ the current window is switched to the new buffer."
 		(set-buffer (window-buffer window-to-select)))
 	      (unless ad-return-value (setq ad-return-value (current-buffer)))))
 	;; else: not one-buffer-one-frame   
-	(setq ad-return-value 
+   	(setq ad-return-value 
 	      ad-do-it)
 	(unless (frame-visible-p (selected-frame))
 	  (make-frame-visible (selected-frame))))))
@@ -688,40 +688,44 @@ even if it's the only visible frame."
        winlist))))
      
 (defun delete-window-if-created-for-this-buffer (win buf-name skip-check)
+  "Delete the window (sometimes)
+Deletes a window WIN if appropriate. 
+SKIP-CHECK non-nil causes the window WIN to be deleted even if
+there is no record of opening the window just for this purpose."
   ;; used by osxkeys, too
   ;; as of now, we're always forcing the deletion of a window if the user requests it.
   ;; 
-  (let ((elt (car (member (cons win buf-name)
-			  aquamacs-newly-opened-frames))))
-    (if (and (or (not buf-name) (not (same-window-p buf-name)))
-	     (or skip-check elt (window-dedicated-p win) ))
-	(progn
-	  ;; remove entry from windows list
-	  (if elt
-	      (setq aquamacs-newly-opened-frames (delq elt aquamacs-newly-opened-frames))
-	    )
-
-	  ;; delete the window (or make the frame invisible)
-	  
-	  (condition-case nil 
-	      (if (window-live-p win)
-		  (delete-window win) ;; only get rid of that current window
-		)
-	    (error   
-	     
-	     (let ((f (window-frame win))) ;;(selected-frame)))
-	       ;; hook can contain smart-frame-pos call
-	       (run-hook-with-args 'delete-frame-functions f)
-	       (make-frame-invisible f t)
-	        
+  (if (window-live-p win)
+      (let ((elt (car (member (cons win buf-name)
+			      aquamacs-newly-opened-windows))))
+	(if (and (or (not buf-name) (not (same-window-p buf-name)) ;; always open in same window, so don't close the window
+		     (window-dedicated-p win)) ;; dedicated windows should be closed
+		 (or skip-check elt)) ;; only affect frames opened for this purpose
+	    (progn
+	      ;; remove entry from windows list
+	      (if elt
+		  (setq aquamacs-newly-opened-windows (delq elt aquamacs-newly-opened-windows)))
+	      
+	      ;; delete the window (or make the frame invisible)	  
+	      (condition-case nil 
+		  (if (window-live-p win)
+		      (delete-window win)) ;; only get rid of that current window
+		(error   
+		 
+		 (let ((f (window-frame win))) ;;(selected-frame)))
+		   ;; hook can contain smart-frame-pos call
+		   (run-hook-with-args 'delete-frame-functions f)
+		   (make-frame-invisible f t)
+		   
 	       (if (find-all-frames-internal (get-buffer "*Messages*"))
 		   (select-frame (car (find-all-frames-internal 
 				       (get-buffer "*Messages*")))))))))
-      ;; else:
-      ;; decide not to delete / make invisible
-      ;; then switch buffer
-      ;; to whatever was shown previously (does this work well???)
-      (previous-buffer-here))))
+	  ;; else:
+	  ;; decide not to delete / make invisible
+	  ;; then switch buffer
+	  ;; to whatever was shown previously (does this work well???)
+	  (with-selected-window win
+	    (previous-buffer-here))))))
 
 
 (if window-system
