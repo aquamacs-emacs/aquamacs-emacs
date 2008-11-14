@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.185 2008/11/12 22:45:38 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.186 2008/11/14 03:35:13 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -390,9 +390,9 @@ customization buffer."
 (defun aquamacs-install-command-line-tool ()
   (interactive)
   (call-process "open" nil 0 nil "-a" "Installer" 
-		(format "%s/Contents/Resources/Aquamacs Command Line Tool.pkg" 
+		(format "%s/Contents/Resources/Aquamacs Command Line Tool.mpkg" 
 			aquamacs-mac-application-bundle-directory))
-  (message "Call command-line-tool from a shell as `a', e.g., as \"a file.txt\""))
+  (message "Call command-line-tool from a shell as `aquamacs', e.g., as \"aquamacs file.txt\""))
 
 
   
