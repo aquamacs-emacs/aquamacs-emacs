@@ -19,7 +19,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.28 2008/11/13 02:29:48 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.29 2008/11/15 16:34:23 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -54,6 +54,19 @@ for which the menu is being updated."
    (frame-selected-window menu-updating-frame))
     major-mode))
 
+(defun aquamacs-autoface-inherited-face ()
+  "Return non-nil if autoface inherits from something else than autoface-default"
+  (face-attribute (cdr-safe (assq 'default face-remapping-alist)) :inherit))
+
+
+(defun aquamacs-autoface-inherited-mode ()
+  "Return face that the autoface inherits from"
+  (let ((inh  (aquamacs-autoface-inherited-face)))
+    (if (eq 0 (string-match "^\\(.*\\)-default$" (symbol-name inh)))
+	(intern (match-string 1 (symbol-name inh))))))
+
+
+
 (defun aquamacs-autoface-face (mode &optional bufname)
   (let ((face))
     (if (and 
@@ -75,14 +88,13 @@ The faces are then to be used with `aquamacs-autoface-mode'."
      (lambda (elt)
        (let* ((mode (car elt))
 	      (style (cdr elt))
-	      (face (aquamacs-autoface-face mode))
+	      (face (aquamacs-autoface-make-face mode t))
 	      (color-theme (cdr (assq 'color-theme style)))
 	      (col-theme-parms (if color-theme
 				   (condition-case nil 
 				       (color-theme-frame-params 
 					(color-theme-canonic color-theme)) 
 				     (error nil)))))
-	 (aquamacs-autoface-make-face face t)
 	 (when (assq 'background-color style)
 	   (set-face-background face (cdr (assq 'background-color style))))
 	 (when (assq 'foreground-color style)
@@ -104,19 +116,28 @@ The faces are then to be used with `aquamacs-autoface-mode'."
 	(setq aquamacs-faces-changed t))
       (custom-push-theme 'theme-face face 'user 'set value))))
 
-(defun aquamacs-autoface-make-face (face mark-to-save)
-  (when (not (facep face)) ; do not delete existing faces
-    (make-empty-face face)
-    ;; purecopy needed?
-    (set-face-documentation
-     face 
-     (purecopy "mode-specific face activated by `aquamacs-autoface-mode'.
+(defun aquamacs-autoface-make-face (mode mark-to-save)
+  "Return autoface for mode
+Make the face if it doesn't exist."
+  (let ((face (aquamacs-autoface-face mode)))
+    (when (not (facep face)) ; do not delete existing faces
+      (make-empty-face face)
+      ;; purecopy needed?
+      (set-face-documentation
+       face 
+       (purecopy "mode-specific face activated by `aquamacs-autoface-mode'.
 The `default' face is remapped (in the appropriate buffers) to this face.")))
-  ;; for this and for existing faces: ensure inheritance is correct
-  (set-face-attribute face nil :inherit 'autoface-default)
-  ;; do not set face-defface-spec - this prevents it from being
-  ;; saved to custom-file properly.
-  (aquamacs-autoface-mark-face-to-save face (not mark-to-save)))
+    ;; for this and for existing faces: ensure inheritance is correct
+    (let ((derived (get mode 'derived-mode-parent)))
+      (set-face-attribute face nil :inherit     
+			  (or (and derived 
+				   (symbolp derived)
+				   (aquamacs-autoface-face derived))
+			      'autoface-default)))
+    ;; do not set face-defface-spec - this prevents it from being
+    ;; saved to custom-file properly.
+    (aquamacs-autoface-mark-face-to-save face (not mark-to-save))
+    face))
 
 (defun aquamacs-set-autoface (buffer &optional for-mode)
   "Set the mode-specific style for BUFFER.
@@ -129,8 +150,7 @@ Use style of major mode FOR-MODE if given."
 		   (not (assq 'default face-remapping-alist))
 		   (not (eq (variable-binding-locus 'face-remapping-alist) 
 			    (current-buffer))))
-	      (let ((style-face-id (aquamacs-autoface-face mode (buffer-name))))
-		(aquamacs-autoface-make-face style-face-id nil)
+	      (let ((style-face-id (aquamacs-autoface-make-face mode nil)))
 		(make-local-variable 'face-remapping-alist)
 		(assq-set 'default style-face-id 'face-remapping-alist)))))))
 
@@ -176,7 +196,6 @@ Sets the `autoface-default' face."
 			 l))))))
     (aquamacs-clear-autofaces))
   (copy-face (aquamacs-autoface-face major-mode) 'autoface-default)
-;  (set-face-attribute 'autoface-default nil :inherit 'default)
   (aquamacs-autoface-mark-face-to-save 'autoface-default)
   (if (interactive-p)
       (message "Face for %s is now used as default." major-mode)))  
@@ -286,9 +305,11 @@ modify them."))
   ;; go over all faces
   (mapc
    (lambda (face)
+     
      (if (eq face 'autoface-default)
 	 (face-spec-set face '((t (:inherit default))))
-       (face-spec-set face '((t (:inherit autoface-default))))))
+       (face-spec-set face nil) ;; inheritance will be set in make-face
+     ))
    (aquamacs-default-autofaces-list 'facenames))
   (setq aquamacs-faces-changed t)
   (message "All styles cleared."))
@@ -300,7 +321,12 @@ modify them."))
   (unless (memq mode '(default autoface-default))
     (let ((face (aquamacs-autoface-face mode)))
       (when (facep face)
-	(face-spec-set face '((t (:inherit autoface-default))))
+	(let ((derived (get mode 'derived-mode-parent)))
+	  (set-face-attribute face nil :inherit     
+			      (or (and derived 
+				       (symbolp derived)
+				       (aquamacs-autoface-face derived))
+				  'autoface-default)))
 	(aquamacs-autoface-mark-face-to-save face))))
   (if (interactive-p)
       (message "Mode-specific face for %s removed." mode)))
@@ -544,14 +570,25 @@ modified, or in FRAME if given."
   '(menu-item  "Use Current Face as Default" aquamacs-set-face-as-default
 	       :enable (and (menu-bar-menu-frame-live-and-visible-p)
 			    aquamacs-autoface-mode)
-	       :help ""))
+;;	       :visible (eq 'autoface-default (aquamacs-autoface-inherited-face))
+	       :help "Copy current face to autoface-default face."))
 
 (define-key aquamacs-autoface-menu [autoface-mode-face]
   '(menu-item (format "Default: %s" 
 		      (aquamacs-autoface-face-summary 'autoface-default))
 	      aquamacs-autoface-customize-default-face
-	      :enable nil)) ; customize window management isn't good (when quitting)
+	      :enable nil ;; customize window management isn't good (when quitting)
+;;	      :visible (eq 'autoface-default (aquamacs-autoface-inherited-face))
+	      :help "This is the autoface-default face." ))
 
+(define-key aquamacs-autoface-menu [autoface-inherited-face]
+  '(menu-item (format "Based on: %s Mode, %s"  
+		      (aquamacs-pretty-mode-name (aquamacs-autoface-inherited-mode))
+		      (aquamacs-autoface-face-summary (aquamacs-autoface-inherited-face)))
+	      nil
+	      :enable nil 
+	      :visible (not (eq 'autoface-default (aquamacs-autoface-inherited-face)))
+	      :help "This is the face the current one is based on." ))
 
 (define-key aquamacs-autoface-menu [menu-clear-sep-3]
   '(menu-item  "--"))
@@ -641,9 +678,7 @@ modified, or in FRAME if given."
   (interactive)
   (let ((face (or face
 		  (aquamacs-default-face-in-effect 'only-mode-face)
-		  (aquamacs-autoface-face major-mode (buffer-name)))))
-    (unless (facep face)
-      (aquamacs-autoface-make-face face nil))
+		  (aquamacs-autoface-make-face major-mode nil))))
     (customize-face-other-window face)))
 
 (defun aquamacs-autoface-customize-default-face ()
