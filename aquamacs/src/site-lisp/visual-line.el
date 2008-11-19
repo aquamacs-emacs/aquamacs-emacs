@@ -156,8 +156,11 @@ to the desired margin."
 	      (unless (pos-visible-in-window-p (point) nil 'partial)
 		(redisplay t))
 	      (let ((y (cdr (posn-x-y (posn-at-point)))))
-		(and y (setq to-set-point (posn-at-x-y x y))))))
-	  )))
+		(when y
+		  (if (> x 2)
+		    ;; at low x, posn-at-x-y likes to change windows if
+		    ;; windows are vertically split. 
+		    (setq to-set-point (posn-at-x-y x y))))))))))
     ;; point motion hooks aren't inhibited any longer
     (and to-set-point (posn-set-point to-set-point))
     (if (eq (point) old-point)
@@ -228,7 +231,11 @@ to the desired margin."
 		(unless (pos-visible-in-window-p (point) nil 'partial)
 		  (redisplay t))
 		(let ((y (cdr (posn-x-y (posn-at-point)))))
-		  (and y (setq to-set-point (posn-at-x-y x y))))))
+		(when y
+		  (if (> x 2)
+		    ;; at low x, posn-at-x-y likes to change windows if
+		    ;; windows are vertically split. 
+		    (setq to-set-point (posn-at-x-y x y)))))))
 	    )))
       ;; point motion hooks aren't inhibited any longer
       (and to-set-point (posn-set-point to-set-point))))
