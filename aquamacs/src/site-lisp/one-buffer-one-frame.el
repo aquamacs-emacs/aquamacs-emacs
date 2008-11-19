@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.80 2008/11/13 19:29:15 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.81 2008/11/19 22:39:39 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -857,7 +857,10 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
 	     ;; we have moved on.
 	     ;; ensure that this is the case (i.e. no cancels)
 	     (not (and (memq  (frame-first-window frame) delw)
-		       (eq (window-buffer) delb))))))))
+		       (eq (window-buffer) delb)))))) 
+  ;; needed due to bug in main event loop (first mouse event
+  ;; is interpreted with wrong current buffer)
+  (set-buffer (window-buffer (selected-window)))))
 
   
 
