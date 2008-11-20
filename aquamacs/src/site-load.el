@@ -1,5 +1,6 @@
 ;; Aquamacs core files
 ;; to be loaded and included in dumped state at compile time
+;; test
  
 (defvar aq-preloaded nil
 "List of preloaded (precomiled) features.")
