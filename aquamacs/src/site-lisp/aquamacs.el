@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.233 2008/11/12 20:43:53 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.234 2008/11/22 23:35:22 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -1505,7 +1505,7 @@ information given would otherwise be irrelevant to Aquamacs users.
  
 
 (ats "aquamacs-tool-bar-setup ...")
-(when window-system 
+(when (eq window-system 'mac) ;; not yet for Cocoa
   (require 'aquamacs-tool-bar)
   (aquamacs-tool-bar-setup))
 (ats "aquamacs-tool-bar-setup done")
