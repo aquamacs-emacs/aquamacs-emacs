@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.81 2008/11/19 22:39:39 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.82 2008/11/22 23:35:45 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -611,10 +611,8 @@ the current window is switched to the new buffer."
 		  ;; that would raise the (main) frame over the newly
 		  ;; opened one, and we don't want that.
 		  (select-frame sframe)
-		  (cond ((memq window-system '(x mac))
+		  (cond ((memq window-system '(x mac ns))
 			 (x-focus-frame sframe))
-			((eq window-system 'ns)
-			 (ns-focus-frame sframe))
 			((eq window-system 'w32)
 			 (w32-focus-frame sframe)))
 		  (select-window swin)) 
