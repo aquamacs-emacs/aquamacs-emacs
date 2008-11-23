@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.66 2008/11/22 23:38:48 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.67 2008/11/23 20:29:07 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -188,7 +188,7 @@ pixels apart if possible."
 ;; it's just an approximation right now.
   (+ smart-fp--frame-title-bar-height ;; this is for the title bar of the window
      (smart-tool-bar-pixel-height f)
-     (frame-pixel-height)))
+     (frame-pixel-height f)))
  ; (frame-total-pixel-height (selected-frame))
 ; 
 
