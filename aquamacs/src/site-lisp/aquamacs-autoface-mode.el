@@ -19,7 +19,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.29 2008/11/15 16:34:23 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.30 2008/11/23 19:28:17 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -735,7 +735,7 @@ modified, or in FRAME if given."
 				 (or (face-attribute face :inherit) 'default)))))))
 			(if aquamacs-autoface-mode
 			    " (default)" " ")))
-	      turn-on-mac-font-panel-mode
+	      mac-font-panel-mode
 	      :visible ,(display-multi-font-p)
 	      :keys ,(aq-binding 'mac-font-panel-mode)
 	      :enable (menu-bar-menu-frame-live-and-visible-p) 
