@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.67 2008/11/23 20:29:07 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.68 2008/11/23 20:39:10 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -375,7 +375,8 @@ pixels apart if possible."
 			  'new-frame-parameters)
 		(assq-set 'height  (smart-fp--pixel-to-char-height
 				   ;; not sure why this works:
-				   (- next-h smart-fp--frame-title-bar-height)
+				    (- next-h smart-fp--frame-title-bar-height  
+				       (smart-tool-bar-pixel-height new-frame))
 				   new-frame 'round-to-lower)
 			  'new-frame-parameters)
 		;; return this 
