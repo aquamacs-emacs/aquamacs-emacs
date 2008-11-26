@@ -19,7 +19,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.30 2008/11/23 19:28:17 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.31 2008/11/26 00:16:16 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -139,20 +139,18 @@ The `default' face is remapped (in the appropriate buffers) to this face.")))
     (aquamacs-autoface-mark-face-to-save face (not mark-to-save))
     face))
 
-(defun aquamacs-set-autoface (buffer &optional for-mode)
-  "Set the mode-specific style for BUFFER.
-Use style of major mode FOR-MODE if given." 
+(defun aquamacs-set-autoface (buffer)
+  "Set the major-mode-specific style for BUFFER."
   (when aquamacs-autoface-mode
 	(with-current-buffer buffer
-	  (let ((mode (or for-mode major-mode)))
-	    (when (or 
-		   (or buffer for-mode)
-		   (not (assq 'default face-remapping-alist))
-		   (not (eq (variable-binding-locus 'face-remapping-alist) 
-			    (current-buffer))))
-	      (let ((style-face-id (aquamacs-autoface-make-face mode nil)))
-		(make-local-variable 'face-remapping-alist)
-		(assq-set 'default style-face-id 'face-remapping-alist)))))))
+	  (setq aquamacs-autoface-set-for-mode major-mode)
+	  (when (or 
+		 (not (assq 'default face-remapping-alist))
+		 (not (eq (variable-binding-locus 'face-remapping-alist) 
+			  (current-buffer))))
+	    (let ((style-face-id (aquamacs-autoface-make-face major-mode nil)))
+	      (make-local-variable 'face-remapping-alist)
+	      (assq-set 'default style-face-id 'face-remapping-alist))))))
 
 
 (defmacro mac-event-ae (event)
@@ -367,7 +365,7 @@ modify them."))
    (define-key-after aquamacs-autoface-menu [set-mode]
     `(menu-item "Apply Face of Some Mode" ,appstyle-mode-menu
 		:enable (and (menu-bar-menu-frame-live-and-visible-p)
-			    aquamacs-autoface-mode)
+			    aquamacs-de)
 		:help "Apply default face of some major mode.") 
     'menu-aquamacs-autofaces))
 ;; don't do this check (speed) - higher-level menu is disabled
@@ -379,6 +377,8 @@ modify them."))
   "Evaluate to t if buffer BUF is not an internal buffer."
   `(not (string= (substring (buffer-name ,buf) 0 1) " ")))
 
+
+(defvar aquamacs-autoface-workaround-timer nil)
 
 (define-minor-mode aquamacs-autoface-mode
   "Automatically set default face according to major mode.
@@ -401,6 +401,12 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
   :init-value  t
   :group 'Aquamacs
   :global t
+
+  (if aquamacs-autoface-mode
+      (setq aquamacs-autoface-workaround-timer (run-with-idle-timer 1 'repeat 'aquamacs-set-autoface-when-idle))
+    (when aquamacs-autoface-workaround-timer
+      (cancel-timer aquamacs-autoface-workaround-timer)
+      (setq aquamacs-autoface-workaround-timer)))
 
   (mapc (lambda (b)
 	(if (and (buffer-live-p b)  
@@ -746,7 +752,26 @@ modified, or in FRAME if given."
   (list 'menu-item "Appearance" appearance-menu 
 	  :help "Appearances")
     'showhide)
- 
+
+
+;; A lot of major modes forget to use `run-mode-hooks'.
+;; here's a workaround.
+
+(defvar aquamacs-autoface-set-for-mode nil)
+(make-variable-buffer-local 'aquamacs-autoface-set-for-mode)
+
+(defun aquamacs-set-autoface-when-idle ()       			      
+  (when aquamacs-autoface-mode
+    (let ((buf (if (minibufferp) (window-buffer (minibuffer-selected-window))
+		 (current-buffer))))
+      (with-current-buffer buf
+	(unless (and 
+		 aquamacs-autoface-set-for-mode
+		 (eq aquamacs-autoface-set-for-mode major-mode))
+	  
+	  (with-temp-message (format "Warning: Bug in %s: it forgets to call `run-mode-hooks'" major-mode)
+			     (aquamacs-set-autoface buf)))))))
+  
  
 ;; ZOOM
  
