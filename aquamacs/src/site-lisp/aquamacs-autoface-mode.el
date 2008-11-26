@@ -19,7 +19,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.31 2008/11/26 00:16:16 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.32 2008/11/26 02:37:08 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -377,9 +377,6 @@ modify them."))
   "Evaluate to t if buffer BUF is not an internal buffer."
   `(not (string= (substring (buffer-name ,buf) 0 1) " ")))
 
-
-(defvar aquamacs-autoface-workaround-timer nil)
-
 (define-minor-mode aquamacs-autoface-mode
   "Automatically set default face according to major mode.
 This global minor mode will cause buffers to be displayed in
@@ -403,11 +400,10 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
   :global t
 
   (if aquamacs-autoface-mode
-      (setq aquamacs-autoface-workaround-timer (run-with-idle-timer 1 'repeat 'aquamacs-set-autoface-when-idle))
+      (run-with-idle-timer 1 'repeat 'aquamacs-set-autoface-when-idle)
     (when aquamacs-autoface-workaround-timer
-      (cancel-timer aquamacs-autoface-workaround-timer)
+      (cancel-function-timers 'aquamacs-set-autoface-when-idle)
       (setq aquamacs-autoface-workaround-timer)))
-
   (mapc (lambda (b)
 	(if (and (buffer-live-p b)  
 	    (user-buffer-p b))
