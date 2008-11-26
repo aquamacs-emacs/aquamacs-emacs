@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.234 2008/11/22 23:35:22 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.235 2008/11/26 02:46:05 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -497,26 +497,36 @@ With prefix arg, silently save all file-visiting buffers, then kill.
 Like `save-buffers-kill-emacs', except that it doesn't ask again
 if modified buffers exist."
     (interactive "P")
-    (save-some-buffers arg t)
-    (and (or (not (fboundp 'process-list))
-	     ;; process-list is not defined on VMS.
-	     (let ((processes (process-list))
-		   active)
-	       (while processes
-		 (and (memq (process-status (car processes)) 
-			    '(run stop open listen))
-		      (process-query-on-exit-flag (car processes))
-		      (setq active t))
-		 (setq processes (cdr processes)))
-	       (or (not active)
-		   (list-processes t)
-		   (yes-or-no-p 
-		    "Active processes exist; kill them and exit anyway? "))))
-	 ;; Query the user for other things, perhaps.
-	 (run-hook-with-args-until-failure 'kill-emacs-query-functions)
-	 (or (null confirm-kill-emacs)
-	     (funcall confirm-kill-emacs "Really exit Emacs? "))
-	 (kill-emacs)))
+    (let ((saved-timer-idle-list timer-idle-list))
+      (unwind-protect 
+	  (progn
+	    ;; deactivate all idle timers so that
+	    ;; our prompt is not being overwritten by obnoxious 
+	    ;; echo area messages
+	    ;; Caveat: this may impede useful functionality in "view"
+	    ;; when reviewing stuff.
+	    (setq timer-idle-list)
+	    (save-some-buffers arg t)
+	    (and (or (not (fboundp 'process-list))
+		     ;; process-list is not defined on VMS.
+		     (let ((processes (process-list))
+			   active)
+		       (while processes
+			 (and (memq (process-status (car processes)) 
+				    '(run stop open listen))
+			      (process-query-on-exit-flag (car processes))
+			      (setq active t))
+			 (setq processes (cdr processes)))
+		       (or (not active)
+			   (list-processes t)
+			   (yes-or-no-p 
+			    "Active processes exist; kill them and exit anyway? "))))
+		 ;; Query the user for other things, perhaps.
+		 (run-hook-with-args-until-failure 'kill-emacs-query-functions)
+	       (or (null confirm-kill-emacs)
+		   (funcall confirm-kill-emacs "Really exit Emacs? "))
+	       (kill-emacs)))
+	(setq timer-idle-list saved-timer-idle-list))))
 ;; (defun aquamacs-mac-ae-quit-application (event)
 ;;   "Quit the application Emacs with the Apple event EVENT."
 ;;   (interactive "e")
