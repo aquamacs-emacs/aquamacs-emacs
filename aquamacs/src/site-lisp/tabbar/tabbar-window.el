@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: tabbar-window.el,v 1.57 2008/11/12 20:11:06 davidswelt Exp $
+;; Revision: $Id: tabbar-window.el,v 1.58 2008/11/28 23:19:32 davidswelt Exp $
 
 (require 'tabbar)
 (require 'aquamacs-tools)
@@ -460,10 +460,29 @@ Updates tabbar-window-alist in the same way."
 
 (defun menu-bar-select-buffer ()
  (interactive)
- (if tabbar-mode
-     (switch-to-buffer-in-tab last-command-event)
-   (switch-to-buffer last-command-event)))
-
+ (let ((sel-win (selected-window))) ; search all visible&iconified frames
+   (unless 
+       (and sel-win 
+	    (window-live-p sel-win)
+	    (eq t (frame-visible-p (window-frame sel-win)))
+	    (not (special-display-p 
+		  (or (buffer-name (window-buffer sel-win)) ""))))
+     ;; search visible frames (but not dedicated ones)
+     (setq sel-win (get-largest-window 'visible nil)))
+   (unless 
+       (and sel-win 
+	    (window-live-p sel-win)
+	    (eq t (frame-visible-p (window-frame sel-win)))
+	    (not (special-display-p 
+		  (or (buffer-name (window-buffer sel-win)) ""))))
+     (make-frame)
+     (setq sel-win (selected-window)))
+   (with-selected-window sel-win
+     (if tabbar-mode
+       (switch-to-buffer-in-tab last-command-event)
+     (switch-to-buffer last-command-event))
+     (select-frame-set-input-focus (window-frame (selected-window))))))
+ 
 
 ;; shouldn't be done, because the normal switch-to-buffer
 ;; is not sensitive to display-buffer-reuse-frames
