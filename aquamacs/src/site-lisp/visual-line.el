@@ -241,7 +241,7 @@ to the desired margin."
       (and to-set-point (posn-set-point to-set-point))))
 
 
-(defun beginning-of-visual-line ()
+(defun beginning-of-visual-line (&optional n)
   "Move point to the beginning of the current line.
 If `word-wrap' is nil, we move to the beginning of the buffer
 line (as in `beginning-of-line'); otherwise, point is moved to
@@ -250,11 +250,16 @@ the beginning of the visual line."
   (if (bobp)
       (signal 'beginning-of-buffer nil))
   (if word-wrap
-      (progn (vertical-motion 0)
-	     (skip-read-only-prompt))
-    (beginning-of-line)))
+      (progn 
+	(or n (setq n 1))
+	(if (/= n 1)
+	    (let ((line-move-visual t))
+	      (line-move (1- n) t)))
+	(vertical-motion 0)
+	(skip-read-only-prompt))
+    (beginning-of-line n)))
 
-(defun end-of-visual-line ()
+(defun end-of-visual-line (&optional n)
   "Move point to the end of the current line.
 If `word-wrap' is nil, we move to the end of the line (as in
 `beginning-of-line'); otherwise, point is moved to the end of the
@@ -264,9 +269,13 @@ visual line."
       (signal 'end-of-buffer nil))
   (if word-wrap
       (progn
+	(or n (setq n 1))
+	(if (/= n 1)
+	    (let ((line-move-visual t))
+	      (line-move (1- n) t)))
 	(vertical-motion 1)
 	(skip-chars-backward "\r\n" (- (point) 1)))
-    (end-of-line)))
+    (end-of-line n)))
 
 ;; this code based on simple.el
 (defun kill-visual-line (&optional arg)
