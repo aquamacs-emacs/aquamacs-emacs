@@ -19,7 +19,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.32 2008/11/26 02:37:08 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.33 2008/12/05 15:36:47 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -365,7 +365,7 @@ modify them."))
    (define-key-after aquamacs-autoface-menu [set-mode]
     `(menu-item "Apply Face of Some Mode" ,appstyle-mode-menu
 		:enable (and (menu-bar-menu-frame-live-and-visible-p)
-			    aquamacs-de)
+			    aquamacs-autoface-mode)
 		:help "Apply default face of some major mode.") 
     'menu-aquamacs-autofaces))
 ;; don't do this check (speed) - higher-level menu is disabled
