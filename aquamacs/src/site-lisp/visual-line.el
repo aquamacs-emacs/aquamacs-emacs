@@ -446,7 +446,9 @@ would do."
 (define-minor-mode visual-line-mode
  "Define key binding for visual line moves."
  :keymap visual-line-map
- :group 'convenience)
+ :group 'convenience
+ (setq line-move-visual visual-line-mode))
+
 
 (defun turn-on-visual-line-mode ()
  (visual-line-mode 1))
