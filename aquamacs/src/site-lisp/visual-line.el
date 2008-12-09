@@ -100,7 +100,7 @@ to the desired margin."
 
 (defun visual-line-up (num-lines)
   (interactive "p")
-  (if (bobp) (signal 'beginning-of-buffer nil))
+  (unless (bobp) 
   (let ((to-set-point)
 	(old-point (point)))
     (let ((inhibit-point-motion-hooks t))
@@ -166,7 +166,7 @@ to the desired margin."
     (if (eq (point) old-point)
 	;; got stuck, perhaps at the end of
 	;; several visual lines of intangible text?
-	(beginning-of-line))))
+	(beginning-of-line)))))
 
 (defun visual-line-down (num-lines)
   (interactive "p")
@@ -175,8 +175,8 @@ to the desired margin."
 	  ;; When adding a newline, don't expand an abbrev.
 	  (let ((abbrev-mode nil))
 	    (end-of-line)
-	    (insert hard-newline)))
-    (if (eobp) (signal 'end-of-buffer nil)))
+	    (insert hard-newline))))
+  (unless (eobp)
   (let ((to-set-point))
     (let ((inhibit-point-motion-hooks t))
       (let ((old-point (point))
@@ -238,7 +238,7 @@ to the desired margin."
 		    (setq to-set-point (posn-at-x-y x y)))))))
 	    )))
       ;; point motion hooks aren't inhibited any longer
-      (and to-set-point (posn-set-point to-set-point))))
+      (and to-set-point (posn-set-point to-set-point)))))
 
 
 (defun beginning-of-visual-line (&optional n)
@@ -247,8 +247,7 @@ If `word-wrap' is nil, we move to the beginning of the buffer
 line (as in `beginning-of-line'); otherwise, point is moved to
 the beginning of the visual line."
   (interactive)
-  (if (bobp)
-      (signal 'beginning-of-buffer nil))
+  (unless (bobp)
   (if word-wrap
       (progn 
 	(or n (setq n 1))
@@ -257,7 +256,7 @@ the beginning of the visual line."
 	      (line-move (1- n) t)))
 	(vertical-motion 0)
 	(skip-read-only-prompt))
-    (beginning-of-line n)))
+    (beginning-of-line n))))
 
 (defun end-of-visual-line (&optional n)
   "Move point to the end of the current line.
@@ -265,8 +264,7 @@ If `word-wrap' is nil, we move to the end of the line (as in
 `beginning-of-line'); otherwise, point is moved to the end of the
 visual line."
   (interactive)
-  (if (eobp)
-      (signal 'end-of-buffer nil))
+  (unless (eobp)
   (if word-wrap
       (progn
 	(or n (setq n 1))
@@ -275,7 +273,7 @@ visual line."
 	      (line-move (1- n) t)))
 	(vertical-motion 1)
 	(skip-chars-backward "\r\n" (- (point) 1)))
-    (end-of-line n)))
+    (end-of-line n))))
 
 ;; this code based on simple.el
 (defun kill-visual-line (&optional arg)
