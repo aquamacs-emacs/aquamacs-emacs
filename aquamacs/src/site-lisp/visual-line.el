@@ -247,7 +247,6 @@ If `word-wrap' is nil, we move to the beginning of the buffer
 line (as in `beginning-of-line'); otherwise, point is moved to
 the beginning of the visual line."
   (interactive)
-  (unless (bobp)
   (if word-wrap
       (progn 
 	(or n (setq n 1))
@@ -264,7 +263,6 @@ If `word-wrap' is nil, we move to the end of the line (as in
 `beginning-of-line'); otherwise, point is moved to the end of the
 visual line."
   (interactive)
-  (unless (eobp)
   (if word-wrap
       (progn
 	(or n (setq n 1))
@@ -273,7 +271,7 @@ visual line."
 	      (line-move (1- n) t)))
 	(vertical-motion 1)
 	(skip-chars-backward "\r\n" (- (point) 1)))
-    (end-of-line n))))
+    (end-of-line n)))
 
 ;; this code based on simple.el
 (defun kill-visual-line (&optional arg)
