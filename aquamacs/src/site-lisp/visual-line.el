@@ -255,7 +255,7 @@ the beginning of the visual line."
 	      (line-move (1- n) t)))
 	(vertical-motion 0)
 	(skip-read-only-prompt))
-    (beginning-of-line n))))
+    (beginning-of-line n)))
 
 (defun end-of-visual-line (&optional n)
   "Move point to the end of the current line.
