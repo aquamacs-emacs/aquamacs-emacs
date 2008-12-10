@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.186 2008/11/14 03:35:13 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.187 2008/12/10 05:26:02 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -751,6 +751,10 @@ subsequently create.  Upon entering text-mode, the function
   (menu-bar-make-mm-toggle show-paren-mode
 			   "Paren Match Highlighting"
 			   "Highlight matching/mismatched parentheses at cursor (Show Paren mode)"))
+(define-key-after menu-bar-showhide-menu [highline-mode]
+  (menu-bar-make-mm-toggle global-highline-mode
+			   "Line Highlighting"
+			   "Highlight current line (highline-mode)"))
 
 ;; do this here as well to make sure it follows highlight-paren-mode
 (if (fboundp 'global-show-newlines-mode)
