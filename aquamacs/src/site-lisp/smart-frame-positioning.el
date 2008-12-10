@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.68 2008/11/23 20:39:10 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.69 2008/12/10 04:31:29 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -631,9 +631,9 @@ The file is specified in `smart-frame-position-file'."
       )))
 
 ;; load this after the custom-file
-(add-hook 'after-init-hook 'smart-fp--load-frame-positions-from-file 'append)
-
-(add-hook 'kill-emacs-hook 'smart-fp--save-frame-positions-to-file)
+(when user-init-file
+  (add-hook 'after-init-hook 'smart-fp--load-frame-positions-from-file 'append)
+  (add-hook 'kill-emacs-hook 'smart-fp--save-frame-positions-to-file))
 
 ;; could assoc be used instead?
 (defun assq-string-equal (key alist)
