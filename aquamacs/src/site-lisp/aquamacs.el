@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.236 2008/12/10 05:19:09 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.237 2008/12/10 05:35:03 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -425,6 +425,10 @@ Return non-nil if options where saved."
 	     (aquamacs-variable-customized-p elt)
 	     (setq need-save (cons elt need-save))))
       need-save))
+
+;; make sure the old variant isn't called, overwriting the
+;; Aquamacs settings
+(fset 'menu-bar-options-save 'aquamacs-menu-bar-options-save)
 
   (defcustom aquamacs-save-options-on-quit 'ask
     "If t, always save the options (from the options menu) when quitting.
@@ -992,9 +996,9 @@ Use this argument instead of explicitly setting `view-exit-action'."
      (:background "#EEEEDD")))  ; light red
  "Face used to highlight current line."
  :group 'highline)
+(aquamacs-set-defaults '((global-highline-mode nil)))
 (autoload 'global-highline-mode "highline.el"   "Toggle global minor mode to highlight line about point (HL on modeline)." 'interactive nil)  
 (autoload 'highline-mode "highline.el"   "Toggle local minor mode to highlight the line about point (hl on modeline)." 'interactive nil)
-
 
 
   (provide 'drews_init)	; migration from 0.9.1 (require in customizations)
@@ -1351,7 +1355,8 @@ listed here."
     (append '(line-number-mode 
 	      column-number-mode 
 	      size-indication-mode
-	      cua-mode show-paren-mode
+	      global-highline-mode
+	      show-paren-mode
 	      transient-mark-mode 
 	      global-font-lock-mode
 	      display-time-mode 
