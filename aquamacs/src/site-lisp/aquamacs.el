@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.235 2008/11/26 02:46:05 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.236 2008/12/10 05:19:09 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -983,7 +983,20 @@ Use this argument instead of explicitly setting `view-exit-action'."
 (autoload 'turn-off-follow-mouse "follow-mouse.el"   "Moving the mouse will not automatically select the window under it" 'interactive nil)
 (autoload 'toggle-follow-mouse "follow-mouse.el"   "Toggle whether moving the mouse automatically selects the window under it" 'interactive nil)
 
-      
+;; highline
+
+(defface highline-face
+  `((((background dark))
+     (:background "#551100"))   ; dark brown
+    (t
+     (:background "#EEEEDD")))  ; light red
+ "Face used to highlight current line."
+ :group 'highline)
+(autoload 'global-highline-mode "highline.el"   "Toggle global minor mode to highlight line about point (HL on modeline)." 'interactive nil)  
+(autoload 'highline-mode "highline.el"   "Toggle local minor mode to highlight the line about point (hl on modeline)." 'interactive nil)
+
+
+
   (provide 'drews_init)	; migration from 0.9.1 (require in customizations)
  (ats "drew done")
 
