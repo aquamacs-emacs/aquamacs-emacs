@@ -7,5 +7,5 @@ LOGPATH=~/Aquamacs
 
 
 mkdir $DEST 2>/dev/null
-scp $SOURCE/plugins/*.pkg.gz $DEST/
+scp $SOURCE/plugins/*.pkg.tgz $DEST/
 
