@@ -1,8 +1,5 @@
 #!/bin/sh
 
-# this script grabs the Aquamacs nightly from rodrigues
-# the build process runs at 4am on rodrigues
-# this is started via crontab at 5.30am
 
 # SSH authentication should be installed
 
@@ -22,7 +19,6 @@ then
     DEST=~/Sites/Aquamacs/intel
 #    DEST=dreitter@ssh.tardis.ed.ac.uk:/home/dreitter/public_html/Aquamacs/intel
 else
-
     SOURCE=~/Aquamacs/builds
     LOGPATH=~/Aquamacs
 
@@ -30,7 +26,6 @@ else
 #    DEST=dreitter@ssh.tardis.ed.ac.uk:/home/dreitter/public_html/pages/Aquamacs
 
 fi
-PLUGINDEST=~/Sites/Aquamacs/plugins
 
 TMP=/tmp/builds
 
@@ -100,8 +95,3 @@ fi
 echo "<HTML style=\"border: none ;\"><META HTTP-EQUIV=\"expires\" CONTENT=\"now\"><link href=\"http://aquamacs.org/iframe.css\" rel=\"stylesheet\" type=\"text/css\" /><BODY style=\"border: none ;\">" >latest.html
 cat latest-aquamacs.html latest-emacs.html >>latest.html
 echo "</BODY></HTML>" >>latest.html
-
-# Plugins
-
-mkdir $PLUGINDEST 2>/dev/null
-scp $SOURCE/plugins/*.pkg.gz $PLUGINDEST/
