@@ -103,6 +103,11 @@ if test "${UPDATE_PLUGINS}" == "yes"; then
     mkdir ${DEST}/builds/plugins 2>/dev/null
     mv Aquamacs-SLIME-*.pkg.gz builds/plugins/
     echo "Done building SLIME."
+ # copy to web dir (logs, build)
+    # done even if build failed so that the GNU Emacs build is copied
+    if test "$COPY" == "copy-to-server"; then
+        ${AQUAMACS_ROOT}/build/copy-plugins-to-server.sh 
+    fi
 
 fi
 if test "${BUILD_GNU_EMACS}" == "yes"; then
