@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-mode-defaults.el,v 1.25 2008/10/18 02:51:50 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-defaults.el,v 1.26 2008/12/13 18:51:55 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -72,49 +72,12 @@
 
 ;; SLIME
 
-
-;; update SLIME
-;; cd ~/Temp
-;; mkdir slime
-;; cd slime
-;; curl -O http://common-lisp.net/project/slime/slime-2.0.zip
-
-;; unzip slime-*.zip
-;; mv slime-* ~/src/edit-modes/slime
-;; cd ~/src/edit-modes
-;; mv slime/doc/slime.info info/
-;; rm -r slime/doc slime/ChangeLog 
-;; gzip slime/*.el
-
-
- 
-;;(aquamacs-set-defaults '((inferior-lisp-program "/opt/sbcl/bin/sbcl") ))
-
 ;; we don't want header lines (tab uses them)
 (aquamacs-set-defaults 
  '((Info-use-header-line nil)
    (slime-header-line-p nil)
    (erc-mode-line-format "%s %a. %n on %t (%m,%l) %o")
    (erc-header-line-format nil)))
-
-(defun load-and-setup-slime ()
-  "Load and setup SLIME"
-  (require 'slime)
-  (slime-setup) 
-
-  ;; slime 2.0 bug workarounds
-  (define-key sldb-mode-map [follow-link] 'mouse-face)
-  (put 'slime-space 'delete-selection t)
-
-
-  ;; run hook directly, because it wouldn't
-  ;; be picked up otherwise
-  (slime-lisp-mode-hook)
-  ;; remove this from lisp-mode-hook
-  (remove-hook 'lisp-mode-hook 'load-and-setup-slime))
-
-(add-hook 'lisp-mode-hook 'load-and-setup-slime)
-(autoload 'slime "slime.el" "Start an inferior/superior Lisp and connect to its Swank server." 'interactive nil)
 
 (autoload 'wikipedia-mode "wikipedia-mode.el" "Major mode for editing Wikipedia articles." 'interactive nil)
 
