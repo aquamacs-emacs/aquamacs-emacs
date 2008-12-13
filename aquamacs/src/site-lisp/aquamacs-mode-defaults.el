@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-mode-defaults.el,v 1.26 2008/12/13 18:51:55 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-defaults.el,v 1.27 2008/12/13 19:25:44 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -71,6 +71,14 @@
 
 
 ;; SLIME
+
+(defun aquamacs-announce-slime ()
+  "Notify users of the SLIME plugin."
+  (unless (fboundp 'slime-setup)
+    (message "For superior Lisp interaction, get the SLIME plugin at http://aquamacs.org."))
+  (remove-hook 'lisp-mode-hook 'aquamacs-announce-slime))
+
+(add-hook 'lisp-mode-hook 'aquamacs-announce-slime)
 
 ;; we don't want header lines (tab uses them)
 (aquamacs-set-defaults 
