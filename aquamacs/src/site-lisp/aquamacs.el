@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.237 2008/12/10 05:35:03 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.238 2008/12/13 06:06:08 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -95,8 +95,13 @@ right there as well."
 	      (kill-buffer buf)))
 	    ;;(setq one-buffer-one-frame t))	
 	(progn 
-	  (when (eq major-mode 'dired-mode)
-	    (set (make-local-variable 'one-buffer-one-frame) nil))
+	   (when (eq major-mode 'dired-mode)
+	     ;; do not obof variable itself buffer-local
+	     ;; other packaes will bind it temporarily with let
+	     ;; and then change the current buffer (e.g., by
+	     ;; creating a tab).
+	     ;; the behavior in that case is undefined.
+	     (set (make-local-variable 'one-buffer-one-frame-inhibit) t))
 	(when (and (buffer-live-p buf)
 		 (< (buffer-size) 2))		; for safety
 	    (kill-buffer buf)))))))
