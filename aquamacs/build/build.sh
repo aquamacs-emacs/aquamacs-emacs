@@ -101,8 +101,8 @@ if test "${UPDATE_PLUGINS}" == "yes"; then
     $AQUAMACS_ROOT/build/make-slime
     PKG=`echo Aquamacs-SLIME-*.pkg`
     tar czf $PKG.tgz $PKG
-    mkdir ${DEST}/builds/plugins 2>/dev/null
-    mv $PKG.tgz builds/plugins/
+    mkdir ${DEST}/plugins
+    mv $PKG.tgz ${DEST}/plugins/
     echo "Done building SLIME."
  # copy to web dir (logs, build)
     # done even if build failed so that the GNU Emacs build is copied
