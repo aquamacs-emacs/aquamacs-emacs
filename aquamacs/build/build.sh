@@ -25,7 +25,7 @@ do
 	    ;;
 	c)	COPY='copy-to-server'
 	    ;;
-	?)	printf "Usage:  %s [-l] [-c] {cvs|emacs|aquamacs} [<build-parameters>]\nExpects directories ./aquamacs and ./emacs.raw (by default),\nso call from top-level directory.\n\n" $(basename $0) >&2
+	?)	printf "Usage:  %s [-l] [-c] {cvs|emacs|aquamacs|plugins} [<build-parameters>]\nExpects directories ./aquamacs and ./emacs.raw (by default),\nso call from top-level directory.\n\n" $(basename $0) >&2
 	    exit 2
 	    ;;
     esac
@@ -33,7 +33,7 @@ done
 shift $(($OPTIND - 1))
 a='aquamacs'
 case $1 in 
-    aquamacs | emacs | cvs) 
+    aquamacs | emacs | plugins | cvs) 
 	a=$1
 	shift $((1))
 esac	
@@ -62,6 +62,11 @@ elif test "$a" == "cvs" ; then
     if [ $LOGPAR ]; then
 	LOG=${AQ_PREFIX}/cvs-update.log
     fi
+elif test "$a" == "plugins" ; then
+    UPDATE_PLUGINS=yes  
+    if [ $LOGPAR ]; then
+	LOG=${AQ_PREFIX}/plugins-build.log
+    fi
 fi
 
 
@@ -88,6 +93,16 @@ if test "${UPDATE_CVS}" == "yes"; then
  
 fi
 
+if test "${UPDATE_PLUGINS}" == "yes"; then
+
+    echo "Building SLIME" >>$LOG  
+
+    rm -rf builds/Aquamacs-SLIME-*.pkg
+    $AQUAMACS_ROOT/build/make-slime
+    mv Aquamacs-SLIME-*.pkg builds/
+    echo "Done building SLIME."
+
+fi
 if test "${BUILD_GNU_EMACS}" == "yes"; then
     
 
