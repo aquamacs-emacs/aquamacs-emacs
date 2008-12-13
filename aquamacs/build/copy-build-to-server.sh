@@ -30,6 +30,7 @@ else
 #    DEST=dreitter@ssh.tardis.ed.ac.uk:/home/dreitter/public_html/pages/Aquamacs
 
 fi
+PLUGINDEST=~/Sites/Aquamacs/plugins
 
 TMP=/tmp/builds
 
@@ -99,3 +100,8 @@ fi
 echo "<HTML style=\"border: none ;\"><META HTTP-EQUIV=\"expires\" CONTENT=\"now\"><link href=\"http://aquamacs.org/iframe.css\" rel=\"stylesheet\" type=\"text/css\" /><BODY style=\"border: none ;\">" >latest.html
 cat latest-aquamacs.html latest-emacs.html >>latest.html
 echo "</BODY></HTML>" >>latest.html
+
+# Plugins
+
+mkdir $PLUGINDEST 2>/dev/null
+scp $SOURCE/plugins/*.pkg.gz $PLUGINDEST/
