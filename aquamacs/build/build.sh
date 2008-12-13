@@ -99,7 +99,7 @@ if test "${UPDATE_PLUGINS}" == "yes"; then
 
     rm -rf builds/plugins/Aquamacs-SLIME-*.pkg.*
     $AQUAMACS_ROOT/build/make-slime
-    PKG=Aquamacs-SLIME-*.pkg
+    PKG=`echo Aquamacs-SLIME-*.pkg`
     tar czf $PKG.tgz $PKG
     mkdir ${DEST}/builds/plugins 2>/dev/null
     mv $PKG.tgz builds/plugins/
