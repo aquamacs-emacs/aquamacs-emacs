@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.82 2008/11/22 23:35:45 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.83 2008/12/13 05:42:36 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -498,14 +498,20 @@ the current window is switched to the new buffer."
   
 ;; (when window-system
 
+
 ;; ; quit-window is usually called by some modes when the user enters 'q'
 ;; ; e.g. in dired. we want to delete the window then.  
-;;  (defadvice quit-window (around always-dedicated (&optional kill window) 
-;; 				activate)
+;; advising quit-window like this will cause some things to fail, e.g.
+;; SLIME will switch buffers back in the wrong window after 'q' deletes
+;; the window
+;; (defadvice quit-window (around always-dedicated (&optional kill window) 
+;; 				activate protect)
 ;;    (interactive "P")
-;;    (if one-buffer-one-frame
+;;    (if (and one-buffer-one-frame
+;; 	    (or (not tabbar-mode)
+;; 		(< (length (tabbar-tabs (tabbar-current-tabset))) 2)))
 ;;        (let* ((one-buffer-one-frame nil)
-;; 	     (win (selected-window))
+;; 	     (win (or window (selected-window)))
 ;; 	     (save (window-dedicated-p win)))
 ;; 	 (set-window-dedicated-p win t)
 ;; 	 (ad-set-arg 1 win)
@@ -515,7 +521,7 @@ the current window is switched to the new buffer."
 ;; 	 )
 ;;      ;; else 
 ;;      ad-do-it 
-;;      )))
+;;      ))
 
  (when window-system
 
@@ -523,7 +529,7 @@ the current window is switched to the new buffer."
 ; e.g. in dired. we want to delete the window then.  
 ; (ad-disable-advice 'bury-buffer 'around 'always-dedicated)
  (defadvice bury-buffer (around maybe-delete-window (&optional buffer) 
-				activate)
+				activate protect)
    (let ((the-buffer (current-buffer)))
 
      ad-do-it
@@ -543,42 +549,7 @@ the current window is switched to the new buffer."
 
 	 (delete-window-if-created-for-buffer the-buffer 'only-frame)))))
 
-;; (defadvice pop-to-buffer (around always-dedicated (buf &rest args) 
-;; 				 protect activate)
-;;   ad-do-it)
-
-;; The following should not be necessary
-;; because pop-to-buffer will call display-buffer
-
-;; (if window-system
-;; (defadvice pop-to-buffer (around always-dedicated (buf &rest args) 
-;; 				 protect activate)
-;;   "Temporarily make selected window dedicated, "
-;;   (if one-buffer-one-frame
-;;       (let* (;; (pop-up-frames t) ;; leave this alone, respect config.
-;; 	     ;; setting it to t will force new windows to open.
-;; 	     ;; only force it under the conditions below
-;; 	     ;; (via set-window-dedicated)
-;; 	     (pop-up-windows t)
-;; 	   (win (selected-window))
-;; 	   (wd (window-dedicated-p win))
-;; 	    ) 
-;; 	(unless (or (obof-same-frame-p (get-bufname buf))
-;; 		     (same-window-p (get-bufname buf)))
-;; 	    (set-window-dedicated-p win t))
-;; 	ad-do-it  
-;; 	(set-window-dedicated-p win wd)  
-;; 	)
-;;     ;; else
-;;     ad-do-it
-
-;;     )
-;;   )  
-;;  )
-;; 
-
-
-(defun aquamacs-display-buffer (&rest args)
+(defun aquamacs-display-buffer (buffer &optional not-this-window frame)
   (if one-buffer-one-frame-mode
       (let ((same-window-regexps 
 	     (if (eq obof-same-window-regexps 'same-window-regexps)
@@ -591,13 +562,13 @@ the current window is switched to the new buffer."
 	    (display-buffer-function nil))
 	(if (and
 	     one-buffer-one-frame
-	     (open-in-other-frame-p (car args)))
+	     (open-in-other-frame-p buffer))
 	    (let ((pop-up-frames t) ;; open in a new frame!
 		  (sframe (selected-frame))
 		  (swin (selected-window)))
-					; (message "Pop-up-frames is %s" pop-up-frames)
+	      ;; (message "Pop-up-frames is %s" pop-up-frames)
 	      (let ((ret 
-		     (apply (function display-buffer) args)))
+		     (display-buffer buffer not-this-window frame)))
 		;; make sure the old frame stays the selected one
 		;; this is to maintain compatibility with opening
 		;; a new window inside the frame, where the input focus
@@ -616,11 +587,17 @@ the current window is switched to the new buffer."
 			((eq window-system 'w32)
 			 (w32-focus-frame sframe)))
 		  (select-window swin)) 
-		ret) 
-	      )
-	  (apply (function display-buffer) args)))
+		ret))
+	  (display-buffer buffer not-this-window frame)))
+    ;;    (if (and nil tabbar-mode (not not-this-window))
+    ;; display-buffer: "Make buffer appear in some window but don't select it."
+    ;; so perhaps this is incompatible, because we need to guarantee that the buffer is visible, but not selected
+    ;; that's not really possible with tabs.
+
+    ;;	(switch-to-buffer-in-tab buffer) ;; to do: evaluate the "frame" argument properly and only do this if there's an existing tab.
+    ;; otherwise, we'll never pop up a separate window.
     (let ((display-buffer-function nil))
-      (apply (function display-buffer) args))))
+      (display-buffer buffer not-this-window frame))))
 
 (defun display-buffer-in-same-window (&rest args)
 
