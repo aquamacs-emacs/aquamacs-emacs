@@ -2,19 +2,25 @@
 
 # Build the SLIME installer package
 
-cd /tmp
+BUILD_DIR=`pwd`
+
+cd $BUILD_DIR
 rm -rf slime
 cvs -d :pserver:anonymous:anonymous@common-lisp.net:/project/slime/cvsroot co slime
 
-cd slime/doc
+cd $BUILD_DIR/slime/doc
 make  
 
+
 # Make info file accessible for Aquamacs
-cd slime
+cd $BUILD_DIR/slime
 mkdir info
 cd info
 ln -s ../doc/slime.info .
 
-cd /tmp
-/Developer/usr/bin/packagemaker --root SLIME --install-to ~/Library/Application\ Support/Aquamacs\ Emacs/SLIME --id org.aquamacs.slime-plugin --version `date +%Y-%m-%d` --title "SLIME plugin for Aquamacs" --out Aquamacs-SLIME-`date +%Y-%m-%d`.pkg -v
+# initialization code with autoload
+echo "(require 'slime-autoloads) (slime-setup)" > $BUILD_DIR/slime/site-start.el
+
+cd $BUILD_DIR
+/Developer/usr/bin/packagemaker --root SLIME --install-to /Library/Application\ Support/Aquamacs\ Emacs/SLIME --id org.aquamacs.slime-plugin --version `date +%Y-%m-%d` --title "SLIME plugin for Aquamacs" --root-volume-only --out Aquamacs-SLIME-`date +%Y-%m-%d`.pkg -v
 
