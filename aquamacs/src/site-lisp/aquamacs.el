@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.238 2008/12/13 06:06:08 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.239 2008/12/15 21:01:02 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -61,15 +61,16 @@
     (save-excursion
       (set-buffer buf)
       (if (or mode initial-major-mode)
-	  (funcall  (or mode initial-major-mode))))
+	  (funcall  (or mode initial-major-mode)))
+      (setq buffer-offer-save t)
+      (put 'buffer-offer-save 'permanent-local t)
+      (set-buffer-modified-p nil))
     (if other-frame
 	(switch-to-buffer-other-frame buf)
       (let ((one-buffer-one-frame-force one-buffer-one-frame-mode))
 	;; force new frame
-	(switch-to-buffer buf)))
-    (setq buffer-offer-save t)
-    (put 'buffer-offer-save 'permanent-local t)
-    (set-buffer-modified-p nil)))
+	(switch-to-buffer buf)))))
+
 (defalias  'new-frame-with-new-scratch 'new-empty-buffer)
 
 (defun aquamacs-find-file ()
@@ -1313,11 +1314,14 @@ to the selected frame."
 
   ;;; for initial buffer
 ;;; for some reason
-  (add-hook 'after-init-hook (lambda ()
-			       (setq buffer-offer-save t)
-			       ))
-     
-  ;; Define customization group
+  (defun aquamacs-turn-on-buffer-offer-save-in-scratch ()
+    (if (get-buffer "*scratch*")
+	(with-current-buffer "*scratch*"
+	  (setq buffer-offer-save t))))
+
+(add-hook 'after-init-hook 'aquamacs-turn-on-buffer-offer-save-in-scratch)
+
+;; Define customization group
 ;; add items that aren't Aquamacs defcustoms
   (defgroup Aquamacs 
     '( 
