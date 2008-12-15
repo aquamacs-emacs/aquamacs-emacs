@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: tabbar-window.el,v 1.58 2008/11/28 23:19:32 davidswelt Exp $
+;; Revision: $Id: tabbar-window.el,v 1.59 2008/12/15 19:49:40 davidswelt Exp $
 
 (require 'tabbar)
 (require 'aquamacs-tools)
@@ -356,6 +356,7 @@ before deleting."
 	 (window-elt (assq wnumber tabbar-window-alist))
 	 (buflist (cdr window-elt))
 	 (buffer (tabbar-tab-value tab))
+	 (tabbar-display-bug-workaround nil)
 	 (sel    
 	  (and (eq tab (tabbar-selected-tab tabset))
 	       ;; we need to ensure that the selected tab
