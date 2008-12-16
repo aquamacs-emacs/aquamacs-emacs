@@ -6,7 +6,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
 
-;; Last change: $Id: aquamacs-frame-setup.el,v 1.36 2008/10/31 16:07:09 davidswelt Exp $
+;; Last change: $Id: aquamacs-frame-setup.el,v 1.37 2008/12/16 02:32:59 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -144,7 +144,8 @@ Users may then manipulate the faces directly."
 
   (defface autoface-default
     nil
-    "Default face for all buffers for `aquamacs-autoface-mode'")
+    "Default face for all buffers for `aquamacs-autoface-mode'"
+    :group 'Aquamacs)
 
   (set-face-attribute 'autoface-default nil
 		      :inherit 'default
@@ -160,7 +161,8 @@ Users may then manipulate the faces directly."
 
   (defface text-mode-default
     nil
-    "Default face for text in `aquamacs-autoface-mode'")
+    "Default face for text in `aquamacs-autoface-mode'"
+    :group 'Aquamacs)
 
   (set-face-attribute 'text-mode-default nil
 		      :inherit 'autoface-default
@@ -175,7 +177,8 @@ Users may then manipulate the faces directly."
 
   (defface latex-mode-default
     nil
-    "Default face for LaTeX in `aquamacs-autoface-mode'")
+    "Default face for LaTeX in `aquamacs-autoface-mode'"
+    :group 'Aquamacs)
 
   (set-face-attribute 'latex-mode-default nil
 		      :inherit 'autoface-default

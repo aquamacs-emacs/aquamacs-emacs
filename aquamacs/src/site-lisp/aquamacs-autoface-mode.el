@@ -19,7 +19,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.34 2008/12/13 05:52:21 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.35 2008/12/16 02:33:06 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -77,7 +77,8 @@ for which the menu is being updated."
       (intern (format "%s-default" mode)))))
 	  
 (defface autoface-default '((t :inherit default)) 
-  "Default face for buffers when `aquamacs-autoface-mode' is active.")
+  "Default face for buffers when `aquamacs-autoface-mode' is active."
+  :group 'Aquamacs)
   
 (defun aquamacs-import-frame-parameters-to-auto-faces ()
   "Read `aquamacs-default-styles', convert to faces.
