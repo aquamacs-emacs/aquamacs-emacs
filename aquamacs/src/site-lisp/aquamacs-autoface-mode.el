@@ -19,7 +19,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.35 2008/12/16 02:33:06 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.36 2008/12/17 04:02:45 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -402,9 +402,7 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
 
   (if aquamacs-autoface-mode
       (run-with-idle-timer 1 'repeat 'aquamacs-set-autoface-when-idle)
-    (when aquamacs-autoface-workaround-timer
-      (cancel-function-timers 'aquamacs-set-autoface-when-idle)
-      (setq aquamacs-autoface-workaround-timer)))
+    (cancel-function-timers 'aquamacs-set-autoface-when-idle))
   (mapc (lambda (b)
 	(if (and (buffer-live-p b)  
 	    (user-buffer-p b))
@@ -466,7 +464,10 @@ Upon click/selection, CALLBACK will be called with color name and
 then the ARGUMENTS."
   (list-colors-display nil buffer-name) ;; will pop up new window with buffer *Colors*
   (with-current-buffer (get-buffer buffer-name)
-    (set-window-dedicated-p (selected-window) t)
+    (let ((win (get-buffer-window (current-buffer) t)))
+      (if win 
+	  ;; we assume here that there is only one window showing this
+	  (set-window-dedicated-p win t)))
     (beginning-of-buffer)
     (setq buffer-read-only nil)
     (insert-button "[Quit]" 'action 'aquamacs-quit-color-selection 'follow-link t)
@@ -738,7 +739,7 @@ modified, or in FRAME if given."
 				   face
 				 (or (face-attribute face :inherit) 'default)))))))
 			(if aquamacs-autoface-mode
-			    " (default)" " ")))
+			    " (default)" "")))
 	      mac-font-panel-mode
 	      :visible ,(display-multi-font-p)
 	      :keys ,(aq-binding 'mac-font-panel-mode)
