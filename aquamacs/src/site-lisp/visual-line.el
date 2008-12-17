@@ -249,13 +249,12 @@ the beginning of the visual line."
   (interactive)
   (if word-wrap
       (progn 
-	(or n (setq n 1))
-	(if (/= n 1)
-	    (vertical-motion (1- n)))
+	(if (and n (/= n 1))
+	    (vertical-motion (1- n))
 ;; the following would need Emacs 23
 ;; 	    (let ((line-move-visual t))
 ;; 	      (line-move (1- n) t)))
-	(vertical-motion 0)
+	  (vertical-motion 0))
 	(skip-read-only-prompt))
     (beginning-of-line n)))
 
@@ -266,14 +265,12 @@ If `word-wrap' is nil, we move to the end of the line (as in
 visual line."
   (interactive)
   (if word-wrap
-      (progn
-	(or n (setq n 1))
-	(if (/= n 1)
-	    (vertical-motion (1- n)))
-;; 	    (let ((line-move-visual t))
-;; 	      (line-move (1- n) t)))
-	(vertical-motion 1)
-	(skip-chars-backward "\r\n" (- (point) 1)))
+      (unless (eobp)
+	(progn
+	  (if (and n (/= n 1))
+	      (vertical-motion (1- n))
+	    (vertical-motion 1))
+	  (skip-chars-backward " \r\n" (- (point) 1))))
     (end-of-line n)))
 
 ;; this code based on simple.el
