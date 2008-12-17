@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.239 2008/12/15 21:01:02 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.240 2008/12/17 03:31:28 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -372,6 +372,12 @@ un-Mac-like way when you select text and copy&paste it.")))
 	  (aquamacs-load-scratch-file))
     (aquamacs-cua-warning)
     (and (fboundp 'osx-key-mode-command-key-warning) (osx-key-mode-command-key-warning)))
+
+  (if global-highline-mode
+      (global-highline-mode 1))
+
+  (if global-show-newlines-mode
+      (global-show-newlines-mode 1))
 
   (if (eq tabbar-mode 'default)
        (customize-set-variable 'tabbar-mode t))
@@ -1365,6 +1371,7 @@ listed here."
 	      column-number-mode 
 	      size-indication-mode
 	      global-highline-mode
+	      global-show-newlines-mode
 	      show-paren-mode
 	      transient-mark-mode 
 	      global-font-lock-mode
