@@ -145,15 +145,19 @@ diff -c -r1.1.2.1 mactoolbox.c
   	      HIToolbarItemSetImage (item, cg_image);
 ***************
 *** 2607,2612 ****
---- 2608,2626 ----
+--- 2608,2630 ----
     while (pos < old_count)
       HIToolbarRemoveItemAtIndex (toolbar, --old_count);
   
 +   if (EQ (Vmac_tool_bar_display_mode, intern ("labels")))
 +     {
-+       HIToolbarSetDisplayMode (toolbar, kHIToolbarDisplayModeIconAndLabel);
++       HIToolbarSetDisplayMode (toolbar, kHIToolbarDisplayModeLabelOnly);
 +     }
 +   else if (EQ (Vmac_tool_bar_display_mode, intern ("icons")))
++     {
++       HIToolbarSetDisplayMode (toolbar, kHIToolbarDisplayModeIconOnly);
++     }
++   else if (EQ (Vmac_tool_bar_display_mode, intern ("both")))
 +     {
 +       HIToolbarSetDisplayMode (toolbar, kHIToolbarDisplayModeIconOnly);
 +     }
@@ -191,9 +195,9 @@ diff -c -r1.214.2.16 macterm.c
 + #if USE_MAC_TOOLBAR
 +   DEFVAR_LISP ("mac-tool-bar-display-mode", &Vmac_tool_bar_display_mode,
 +     doc: /* *Specify whether to display the tool bar as icons with labels.
-+ The value can be `icons' (for icons only), `labels' (for icons with labels)
-+ and nil, in which case the system default is assumed.
-+ The default is nil.  */);
++ The value can be `icons' (for icons only), `labels' (for labels),
++ `both' (for icons with labels) and nil, in which case the system default 
++ is assumed.  The default is nil.  */);
 +   Vmac_tool_bar_display_mode = Qnil;
 + #endif
 + 
