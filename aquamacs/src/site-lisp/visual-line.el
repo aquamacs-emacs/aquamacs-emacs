@@ -251,8 +251,10 @@ the beginning of the visual line."
       (progn 
 	(or n (setq n 1))
 	(if (/= n 1)
-	    (let ((line-move-visual t))
-	      (line-move (1- n) t)))
+	    (vertical-motion (1- n)))
+;; the following would need Emacs 23
+;; 	    (let ((line-move-visual t))
+;; 	      (line-move (1- n) t)))
 	(vertical-motion 0)
 	(skip-read-only-prompt))
     (beginning-of-line n)))
@@ -267,8 +269,9 @@ visual line."
       (progn
 	(or n (setq n 1))
 	(if (/= n 1)
-	    (let ((line-move-visual t))
-	      (line-move (1- n) t)))
+	    (vertical-motion (1- n)))
+;; 	    (let ((line-move-visual t))
+;; 	      (line-move (1- n) t)))
 	(vertical-motion 1)
 	(skip-chars-backward "\r\n" (- (point) 1)))
     (end-of-line n)))
