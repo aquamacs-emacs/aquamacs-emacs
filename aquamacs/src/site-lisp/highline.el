@@ -814,10 +814,10 @@ See also `highline-view-mode' for documentation."
 	     column)
 	    ;; prepare next iteration
 	    (highline-forward-line 1)
-	    (setq lines (1- lines)))
-	  ;; to avoid problems with displaying an overlay during window
-	  ;; scrolling/splitting
-	  (redisplay t))))))		; force redisplay!!!
+	    (setq lines (1- lines)))))))
+ ;; to avoid problems with displaying an overlay during window
+ ;; scrolling/splitting
+ (redisplay t))		; force redisplay!!!
 
 
 (defun highline-delete-overlays ()
@@ -970,7 +970,8 @@ If the variable `line-move-visual' is non-nil, use `next-line'
 function to move; otherwise, use `forward-line' function."
  (if line-move-visual
      (unless (eobp)
-	(next-line arg))
+       (vertical-motion arg)) ;; Aquamacs / Emacs 22 specific
+;	(next-line arg))
    (forward-line arg)))
 
 
