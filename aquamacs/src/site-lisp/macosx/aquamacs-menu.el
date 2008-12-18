@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.188 2008/12/18 18:14:19 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.189 2008/12/18 18:18:01 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -743,7 +743,7 @@ subsequently create.  Upon entering text-mode, the function
     )
 
 (define-key menu-bar-options-menu [showhide]
-  (list 'menu-item "Show" menu-bar-showhide-menu))
+  (list 'menu-item "View" menu-bar-showhide-menu))
 
 (define-key menu-bar-showhide-menu [mac-font-panel-mode] nil)
 
