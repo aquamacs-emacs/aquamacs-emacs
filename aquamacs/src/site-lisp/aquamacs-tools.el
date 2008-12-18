@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.37 2008/11/11 01:23:27 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.38 2008/12/18 05:08:02 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -49,6 +49,8 @@
 ;;         (t
 ;;           	; first of alist plus rest w/ recursion
 ;;           (get-alist-value-for-name name (cdr alist)))))
+
+
 
 (defun running-on-a-mac-p ()
   (memq window-system '(mac ns)))
@@ -558,6 +560,59 @@ Optional CODING is used for encoding coding-system."
 	  nil nil 1 ;; replace sub-exp
 	  ))))))))
   (error "")))
+
+(defun get-window-for-other-buffer ()
+  "Find a suitable window for other buffers.
+Preferably the selected one."
+  (let ((sel-win (selected-window))) ; search all visible&iconified frames
+    (unless 
+	(and sel-win 
+	     (window-live-p sel-win)
+	     (eq t (frame-visible-p (window-frame sel-win)))
+	     (not (special-display-p 
+		   (or (buffer-name (window-buffer sel-win)) ""))))
+      ;; search visible frames (but not dedicated ones)
+      (setq sel-win (get-largest-window 'visible nil)))
+    (unless 
+	(and sel-win 
+	     (window-live-p sel-win)
+	     (eq t (frame-visible-p (window-frame sel-win)))
+	     (not (special-display-p 
+		   (or (buffer-name (window-buffer sel-win)) ""))))
+      (make-frame)
+      (setq sel-win (selected-window)))
+    sel-win))
+
+;; New documents
+(defun new-empty-buffer-other-frame (&optional mode)
+  "Opens a new frame containing an empty buffer."
+  (interactive)
+  (new-empty-buffer t mode))
+
+(defun new-empty-buffer  (&optional other-frame mode)
+  "Visits an empty buffer."
+  (interactive)			
+  (let ((buf (generate-new-buffer (mac-new-buffer-name "untitled"))))
+    ;; setting mode is done before showing the new frame
+    ;; because otherwise, we get a nasty animation effect
+    (save-excursion
+      (set-buffer buf)
+      (if (or mode initial-major-mode)
+	  (funcall  (or mode initial-major-mode))))
+    (if other-frame
+	(switch-to-buffer-other-frame buf)
+      (let ((one-buffer-one-frame-force one-buffer-one-frame-mode))
+	;; change window in case its unsuitable (dedicated or special display)
+	(select-window (get-window-for-other-buffer))
+	;; force new frame
+	(switch-to-buffer buf)
+	(select-frame-set-input-focus (window-frame (selected-window)))))
+    (setq buffer-offer-save t)
+    (put 'buffer-offer-save 'permanent-local t)
+    (set-buffer-modified-p nil)))
+
+(defalias  'new-frame-with-new-scratch 'new-empty-buffer)
+ 
 
 (provide 'aquamacs-tools)
 
