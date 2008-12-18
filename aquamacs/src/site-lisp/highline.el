@@ -5,9 +5,9 @@
 
 ;; Author: Vinicius Jose Latorre <viniciusjl@ig.com.br>
 ;; Maintainer: Vinicius Jose Latorre <viniciusjl@ig.com.br>
-;; Time-stamp: <2008/11/30 16:11:59 vinicius>
+;; Time-stamp: <2008/12/17 21:45:42 vinicius>
 ;; Keywords: faces, frames, editing
-;; Version: 7.0
+;; Version: 7.2
 ;; X-URL: http://www.emacswiki.org/cgi-bin/wiki/ViniciusJoseLatorre
 
 ;; This file is *NOT* (yet?) part of GNU Emacs.
@@ -250,6 +250,9 @@
 ;; Acknowledgements
 ;; ----------------
 ;;
+;; Thanks to David Reitter <david.reitter@gmail.com> for `highline-face' less
+;; contrastive default values.
+;;
 ;; Thanks to Stefan Kamphausen <ska@skamphausen.de> and Steven Tate
 ;; <state@odnosam.com> for testing.
 ;;
@@ -310,15 +313,20 @@
 
 
 (defface highline-face
- (if (featurep 'xemacs)
-     ;; XEmacs -- it doesn't have `:inherit' face specification
-     '((((class color) (background light))
-	 (:background "darkseagreen2"))
-	(((class color) (background dark))
-	 (:background "darkolivegreen"))
-	(t (:inverse-video t)))
-   ;; GNU Emacs
-   '((t (:inherit highlight))))
+ ;; (if (featurep 'xemacs)
+ ;;    ;; XEmacs -- it doesn't have `:inherit' face specification
+ ;;    '((((class color) (background light))
+ ;;	 (:background "darkseagreen2"))
+ ;;	(((class color) (background dark))
+ ;;	 (:background "darkolivegreen"))
+ ;;	(t (:inverse-video t)))
+ ;;  ;; GNU Emacs
+ ;;  '((t (:inherit highlight))))
+ '((((class color) (background dark))
+    (:background "#231700"))		; dark brown
+   (((class color) (background light))
+    (:background "#EEEEDD"))		; light red
+   (t (:inverse-video t)))
  "Face used to highlight current line."
  :group 'highline)
 
@@ -531,11 +539,14 @@ into account variable-width characters and line continuation."))
 
 ;; GNU Emacs
 (or (fboundp 'beginning-of-visual-line)
-   (defalias 'beginning-of-visual-line 'beginning-of-line
-     "Move point to beginning of current visual line.
-With argument N not nil or 1, move forward N - 1 visual lines first.
-If point reaches the beginning or end of buffer, it stops there.
-To ignore intangibility, bind `inhibit-point-motion-hooks' to t."))
+   (defalias 'beginning-of-visual-line 'beginning-of-line))
+
+;; GNU Emacs 21 - defalias doesn't have a docstring argument.
+
+;;       "Move point to beginning of current visual line.
+;; With argument N not nil or 1, move forward N - 1 visual lines first.
+;; If point reaches the beginning or end of buffer, it stops there.
+;; To ignore intangibility, bind `inhibit-point-motion-hooks' to t."))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -583,6 +594,8 @@ Only useful with a windowing system."
 		  #'highline-maybe-unhighlight-current-line)
 	(add-hook 'post-command-hook
 		  #'highline-highlight-current-line)
+	(add-hook 'window-size-change-functions
+		  #'highline-highlight-current-line)
 	(while buffers			; adjust all local mode
 	  (set-buffer (car buffers))
 	  (unless highline-mode
@@ -591,6 +604,8 @@ Only useful with a windowing system."
 	    (add-hook 'pre-command-hook
 		      #'highline-maybe-unhighlight-current-line nil t)
 	    (add-hook 'post-command-hook
+		      #'highline-highlight-current-line nil t)
+	    (add-hook 'window-size-change-functions
 		      #'highline-highlight-current-line nil t)
 	    (highline-highlight-current-line))
 	  (setq buffers (cdr buffers)))
@@ -610,6 +625,8 @@ Only useful with a windowing system."
 		     #'highline-maybe-unhighlight-current-line)
 	(remove-hook 'post-command-hook
 		     #'highline-highlight-current-line)
+	(remove-hook 'window-size-change-functions
+		     #'highline-highlight-current-line)
 	(while buffers			; adjust all local mode
 	  (set-buffer (car buffers))
 	  (unless highline-mode
@@ -618,6 +635,8 @@ Only useful with a windowing system."
 	    (remove-hook 'pre-command-hook
 			 #'highline-maybe-unhighlight-current-line t)
 	    (remove-hook 'post-command-hook
+			 #'highline-highlight-current-line t)
+	    (remove-hook 'window-size-change-functions
 			 #'highline-highlight-current-line t)
 	    (highline-unhighlight-current-line))
 	  (setq buffers (cdr buffers)))
@@ -749,6 +768,8 @@ See also `highline-view-mode' for documentation."
 	    #'highline-maybe-unhighlight-current-line nil t)
  (add-hook (make-local-variable 'post-command-hook)
 	    #'highline-highlight-current-line nil t)
+ (add-hook (make-local-variable 'window-size-change-functions)
+	    #'highline-highlight-current-line nil t)
  (highline-highlight-current-line))
 
 
@@ -762,17 +783,20 @@ See also `highline-view-mode' for documentation."
 	       #'highline-maybe-unhighlight-current-line t)
  (remove-hook 'post-command-hook
 	       #'highline-highlight-current-line t)
+ (remove-hook 'window-size-change-functions
+	       #'highline-highlight-current-line t)
  (highline-unhighlight-current-line))
 
 
 (defun highline-maybe-unhighlight-current-line (&rest ignore)
- "Unhighlight current line only if `highline-selected-window' is non-nil."
+ "Unhighlight current line only if `highlight-nonselected-windows' is non-nil."
  (save-excursion
    (unless highlight-nonselected-windows
      (highline-delete-overlays))
    ;; to avoid problems with displaying an overlay during window
    ;; scrolling/splitting
-   (redisplay t)))			; force redisplay!!!
+   ;;(redisplay t)))			; force redisplay!!!
+   ))
 
 
 (defun highline-unhighlight-current-line (&rest ignore)
@@ -785,39 +809,42 @@ See also `highline-view-mode' for documentation."
 
 
 (defun highline-highlight-current-line (&rest ignore)
- "Highlight current line."
- (save-excursion
-   (save-match-data
-     (unless (and highline-ignore-regexp
-		   (not (equal "" highline-ignore-regexp))
-		   (string-match highline-ignore-regexp (buffer-name)))
-	(highline-unhighlight-current-line)  ; clean highline overlays
-	(let ((inhibit-field-text-motion t) ; due to line-beginning-position
-	      (column (highline-current-column))
-	      (lines  (highline-vertical))
-	      current-line)
-	  (setq current-line (cdr lines)
-		lines        (car lines))
-	  (highline-line-option)	; check highline-line value
-	  (while (> lines 0)
-	    ;; move highlight to the current line
-	    (highline-move-overlay
-	     ;; overlay
-	     (car (setq highline-overlays
-			(cons (make-overlay 1 1) ; hide it
-			      highline-overlays)))
-	     ;; overlay face
-	     (if (= lines current-line)
-		 highline-face
-	       highline-vertical-face)
-	     ;; current column
-	     column)
-	    ;; prepare next iteration
-	    (highline-forward-line 1)
-	    (setq lines (1- lines)))))))
- ;; to avoid problems with displaying an overlay during window
- ;; scrolling/splitting
- (redisplay t))		; force redisplay!!!
+ "Highlight current line."    
+ (unless (save-match-data
+	    (and highline-ignore-regexp
+		 (not (equal "" highline-ignore-regexp))
+		 (string-match highline-ignore-regexp (buffer-name))))
+   (save-excursion
+     ;; (highline-unhighlight-current-line)  ; clean highline overlays
+     (highline-delete-overlays)	  ; clean highline overlays
+     (let ((inhibit-field-text-motion t) ; due to line-beginning-position
+	    (column (highline-current-column))
+	    (lines  (highline-vertical))
+	    current-line)
+	(setq current-line (cdr lines)
+	      lines        (car lines))
+	(highline-line-option)		; check highline-line value
+	(when (> lines 0)
+	  (while (progn
+		   ;; move highlight to the current line
+		   (highline-move-overlay
+		    ;; overlay
+		    (car (setq highline-overlays
+			       (cons (make-overlay 1 1) ; hide it
+				     highline-overlays)))
+		    ;; overlay face
+		    (if (= lines current-line)
+			highline-face
+		      highline-vertical-face)
+		    ;; current column
+		    column)
+		   ;; prepare next iteration
+		   (setq lines (1- lines))
+		   (> lines 0))
+	    (highline-forward-line 1))))
+     ;; to avoid problems with displaying an overlay during window
+     ;; scrolling/splitting
+     (redisplay t))))			; force redisplay!!!
 
 
 (defun highline-delete-overlays ()
@@ -971,7 +998,7 @@ function to move; otherwise, use `forward-line' function."
  (if line-move-visual
      (unless (eobp)
        (vertical-motion arg)) ;; Aquamacs / Emacs 22 specific
-;	(next-line arg))
+;;	(next-line arg))
    (forward-line arg)))
 
 
@@ -983,7 +1010,7 @@ If the variable `line-move-visual' is non-nil, use
 position; otherwise, use `line-beginning-position' function."
  (if line-move-visual
      (save-excursion
-	(beginning-of-visual-line n);(and n (1+ n)))
+	(beginning-of-visual-line n)
 	(point))
    (line-beginning-position n)))
 
@@ -1002,6 +1029,17 @@ current visual line; otherwise, use `current-column' function."
    (current-column)))
 
 
+(defun highline-unload-function ()
+ "Unload the highline library."
+ (global-highline-mode -1)
+ (save-current-buffer
+   (dolist (buffer (buffer-list))
+     (set-buffer buffer)
+     (when highline-mode
+	(highline-mode -1))))
+ nil)					; continue standard unloading
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -1009,6 +1047,3 @@ current visual line; otherwise, use `current-column' function."
 
 
 (run-hooks 'highline-load-hook)
-
-
-;;; highline.el ends here
