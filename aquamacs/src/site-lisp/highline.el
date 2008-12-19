@@ -594,8 +594,8 @@ Only useful with a windowing system."
 		  #'highline-maybe-unhighlight-current-line)
 	(add-hook 'post-command-hook
 		  #'highline-highlight-current-line)
-	(add-hook 'window-size-change-functions
-		  #'highline-highlight-current-line)
+;;  	(add-hook 'window-size-change-functions
+;;  		  #'highline-highlight-current-line)
 	(while buffers			; adjust all local mode
 	  (set-buffer (car buffers))
 	  (unless highline-mode
@@ -605,8 +605,8 @@ Only useful with a windowing system."
 		      #'highline-maybe-unhighlight-current-line nil t)
 	    (add-hook 'post-command-hook
 		      #'highline-highlight-current-line nil t)
-	    (add-hook 'window-size-change-functions
-		      #'highline-highlight-current-line nil t)
+;; 	    (add-hook 'window-size-change-functions
+;; 		      #'highline-highlight-current-line nil t)
 	    (highline-highlight-current-line))
 	  (setq buffers (cdr buffers)))
 	(kill-buffer temp)))
