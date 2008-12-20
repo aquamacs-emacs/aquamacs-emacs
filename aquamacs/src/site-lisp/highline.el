@@ -811,6 +811,7 @@ See also `highline-view-mode' for documentation."
    ;; scrolling/splitting
    (redisplay t)))			; force redisplay!!!
 
+(defvar highline-highlight-current-line-when-idle nil)
 
 (defun highline-highlight-current-line (&rest ignore)
  "Highlight current line."    
@@ -849,7 +850,10 @@ See also `highline-view-mode' for documentation."
      ;; to avoid problems with displaying an overlay during window
      ;; scrolling/splitting
      (if (< (window-start) 2) ;; workaround (scrolling to buffer beg.)
-	 (run-with-idle-timer 0 nil 'highline-highlight-current-line)
+	 (if highline-highlight-current-line-when-idle
+	     (setq highline-highlight-current-line-when-idle nil)
+	   (setq highline-highlight-current-line-when-idle t)
+	   (run-with-idle-timer 0 nil 'highline-highlight-current-line))
        (redisplay t)))))		       
 
 
