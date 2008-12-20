@@ -1,5 +1,9 @@
 ;;; highline.el --- minor mode to highlight current line in buffer
 
+;; some changes applied for Aquamacs - DR 12/2008
+;; use of vertical-move instead of line-move
+;; redisplay (window-start) workaround 
+
 ;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008
 ;;   Vinicius Jose Latorre
 
@@ -844,7 +848,9 @@ See also `highline-view-mode' for documentation."
 	    (highline-forward-line 1))))
      ;; to avoid problems with displaying an overlay during window
      ;; scrolling/splitting
-     (redisplay t))))			; force redisplay!!!
+     (if (< (window-start) 2) ;; workaround (scrolling to buffer beg.)
+	 (run-with-idle-timer 0 nil 'highline-highlight-current-line)
+       (redisplay t)))))		       
 
 
 (defun highline-delete-overlays ()
