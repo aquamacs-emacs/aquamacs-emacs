@@ -1,17 +1,21 @@
 ;;; highline.el --- minor mode to highlight current line in buffer
 
-;; some changes applied for Aquamacs - DR 12/2008
-;; use of vertical-move instead of line-move
-;; redisplay (window-start) workaround 
-
 ;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008
 ;;   Vinicius Jose Latorre
 
+;; some changes applied for Aquamacs - DR 12/2008
+;; use of vertical-move instead of line-move
+;; do not set window-size-change-functions everywhere:
+;;  	    (unless (memq #'highline-highlight-current-line
+;;  			  window-size-change-functions)
+;;  	      (add-hook 'window-size-change-functions
+;;  			#'highline-highlight-current-line nil t))
+
 ;; Author: Vinicius Jose Latorre <viniciusjl@ig.com.br>
 ;; Maintainer: Vinicius Jose Latorre <viniciusjl@ig.com.br>
-;; Time-stamp: <2008/12/17 21:45:42 vinicius>
+;; Time-stamp: <2008/12/19 23:25:07 vinicius>
 ;; Keywords: faces, frames, editing
-;; Version: 7.2
+;; Version: 7.2.1
 ;; X-URL: http://www.emacswiki.org/cgi-bin/wiki/ViniciusJoseLatorre
 
 ;; This file is *NOT* (yet?) part of GNU Emacs.
@@ -63,7 +67,8 @@
 ;; This will generate highline.elc, which will be loaded instead of
 ;; highline.el.
 ;;
-;; highline was tested with GNU Emacs 21, 22 and 23, and XEmacs 21.4.20.
+;; highline was tested with GNU Emacs 21, 22 and 23, XEmacs 21.4.20, and
+;; Aquamacs Emacs 1.5.
 ;;
 ;;
 ;; Using highline
@@ -327,7 +332,7 @@
  ;;  ;; GNU Emacs
  ;;  '((t (:inherit highlight))))
  '((((class color) (background dark))
-    (:background "#231700"))		; dark brown
+    (:background "#551100"))		; dark brown
    (((class color) (background light))
     (:background "#EEEEDD"))		; light red
    (t (:inverse-video t)))
@@ -388,6 +393,9 @@ Valid values are:
 			beginning or end of line.
 			It must: INTEGER > 0.
 
+  FUNCTION             function symbol which is called without arguments and
+			must return one of the values above (see above).
+
 Any other value is treated as t.
 
 If the variable `line-move-visual' is non-nil, highlight only the current
@@ -405,7 +413,8 @@ visual line; otherwise, highlight the current line."
 		       (integer :tag "From"))
 		 (cons :tag "Range" :value (0 . 0)
 		       (integer :tag "From")
-		       (integer :tag "To")))
+		       (integer :tag "To"))
+		 (function :tag "Function Symbol"))
  :group 'highline)
 
 
@@ -592,14 +601,14 @@ Only useful with a windowing system."
 	(set-buffer temp)
 	(add-hook 'mouse-leave-buffer-hook
 		  #'highline-maybe-unhighlight-current-line)
-       (add-hook 'change-major-mode-hook
+	(add-hook 'change-major-mode-hook
 		  #'highline-unhighlight-current-line)
 	(add-hook 'pre-command-hook
 		  #'highline-maybe-unhighlight-current-line)
 	(add-hook 'post-command-hook
 		  #'highline-highlight-current-line)
-;;  	(add-hook 'window-size-change-functions
-;;  		  #'highline-highlight-current-line)
+ 	(add-hook 'window-size-change-functions
+ 		  #'highline-highlight-current-line)
 	(while buffers			; adjust all local mode
 	  (set-buffer (car buffers))
 	  (unless highline-mode
@@ -609,8 +618,10 @@ Only useful with a windowing system."
 		      #'highline-maybe-unhighlight-current-line nil t)
 	    (add-hook 'post-command-hook
 		      #'highline-highlight-current-line nil t)
-;; 	    (add-hook 'window-size-change-functions
-;; 		      #'highline-highlight-current-line nil t)
+	    (unless (memq #'highline-highlight-current-line
+			  window-size-change-functions)
+	      (add-hook 'window-size-change-functions
+			#'highline-highlight-current-line nil t))
 	    (highline-highlight-current-line))
 	  (setq buffers (cdr buffers)))
 	(kill-buffer temp)))
@@ -623,7 +634,7 @@ Only useful with a windowing system."
 	(set-buffer temp)
 	(remove-hook 'mouse-leave-buffer-hook
 		     #'highline-maybe-unhighlight-current-line)
-       (remove-hook 'change-major-mode-hook
+	(remove-hook 'change-major-mode-hook
 		     #'highline-unhighlight-current-line)
 	(remove-hook 'pre-command-hook
 		     #'highline-maybe-unhighlight-current-line)
@@ -761,6 +772,9 @@ See also `highline-view-mode' for documentation."
 (defvar highline-line-option nil
  "Used by `highline-overlay-start' and `highline-overlay-end'.")
 
+(defvar highline-line-value  nil
+ "Used by `highline-overlay-start' and `highline-overlay-end'.")
+
 
 (defun highline-local-on ()
  "Turn on local minor mode."
@@ -794,13 +808,12 @@ See also `highline-view-mode' for documentation."
 
 (defun highline-maybe-unhighlight-current-line (&rest ignore)
  "Unhighlight current line only if `highlight-nonselected-windows' is non-nil."
- (save-excursion
-   (unless highlight-nonselected-windows
-     (highline-delete-overlays))
-   ;; to avoid problems with displaying an overlay during window
-   ;; scrolling/splitting
-   ;;(redisplay t)))			; force redisplay!!!
-   ))
+ (unless highlight-nonselected-windows
+   (save-excursion
+     (highline-delete-overlays)
+     ;; to avoid problems with displaying an overlay during window
+     ;; scrolling/splitting
+     (redisplay t))))			; force redisplay!!!
 
 
 (defun highline-unhighlight-current-line (&rest ignore)
@@ -811,16 +824,14 @@ See also `highline-view-mode' for documentation."
    ;; scrolling/splitting
    (redisplay t)))			; force redisplay!!!
 
-(defvar highline-highlight-current-line-when-idle nil)
 
 (defun highline-highlight-current-line (&rest ignore)
- "Highlight current line."    
+ "Highlight current line."
  (unless (save-match-data
 	    (and highline-ignore-regexp
 		 (not (equal "" highline-ignore-regexp))
 		 (string-match highline-ignore-regexp (buffer-name))))
    (save-excursion
-     ;; (highline-unhighlight-current-line)  ; clean highline overlays
      (highline-delete-overlays)	  ; clean highline overlays
      (let ((inhibit-field-text-motion t) ; due to line-beginning-position
 	    (column (highline-current-column))
@@ -846,15 +857,11 @@ See also `highline-view-mode' for documentation."
 		   ;; prepare next iteration
 		   (setq lines (1- lines))
 		   (> lines 0))
-	    (highline-forward-line 1))))
+	    (highline-forward-line 1)))))
+   (save-excursion
      ;; to avoid problems with displaying an overlay during window
      ;; scrolling/splitting
-     (if (< (window-start) 2) ;; workaround (scrolling to buffer beg.)
-	 (if highline-highlight-current-line-when-idle
-	     (setq highline-highlight-current-line-when-idle nil)
-	   (setq highline-highlight-current-line-when-idle t)
-	   (run-with-idle-timer 0 nil 'highline-highlight-current-line))
-       (redisplay t)))))		       
+     (redisplay t))))			; force redisplay!!!
 
 
 (defun highline-delete-overlays ()
@@ -893,7 +900,9 @@ Return the cons:
 
 The symbol returned can be:
 
-  nil		highlight the whole line.
+  t		highlight the whole line.
+
+  nil		highlight the whole line until window border.
 
   integer	highlight from beginning of line until a column.
 
@@ -904,19 +913,25 @@ The symbol returned can be:
   range	highlight from a column until another column.
 
 The global variable `highline-line-option' is set to the symbol
-returned."
+returned.
+
+The global variable `highline-line-value' is set to an apropriate
+value."
+ (setq highline-line-value (if (functionp highline-line)
+				(funcall highline-line)
+			      highline-line))
  (setq highline-line-option
-	(cond ((null highline-line)     nil)
-	      ((integerp highline-line) 'integer)
-	      ((and (consp highline-line)
-		    (integerp (cdr highline-line))
-		    (> (cdr highline-line) 0))
-	       (cond ((eq (car highline-line) 'beyond) 'beyond)
-		     ((eq (car highline-line) 'point)  'point)
-		     ((and (integerp (car highline-line))
-			   (>= (car highline-line) 0)
-			   (< (car highline-line)
-			      (cdr highline-line)))    'range)
+	(cond ((null highline-line-value)     nil)
+	      ((integerp highline-line-value) 'integer)
+	      ((and (consp highline-line-value)
+		    (integerp (cdr highline-line-value))
+		    (> (cdr highline-line-value) 0))
+	       (cond ((eq (car highline-line-value) 'beyond) 'beyond)
+		     ((eq (car highline-line-value) 'point)  'point)
+		     ((and (integerp (car highline-line-value))
+			   (>= (car highline-line-value) 0)
+			   (< (car highline-line-value)
+			      (cdr highline-line-value)))    'range)
 		     (t t)))
 	      (t t))))
 
@@ -941,23 +956,23 @@ returned."
 (defun highline-overlay-start (column)
  "Return the overlay start considering column COLUMN.
 
-Use global variable `highline-line-option' value."
+Use global variable `highline-line-option' and `highline-line-value'."
  (cond
   ;; integer
   ((eq highline-line-option 'integer)	; INTEGER
-   (if (>= highline-line 0)
+   (if (>= highline-line-value 0)
 	(highline-line-beginning-position)
      (1- (highline-line-beginning-position 2))))
   ;; range
   ((eq highline-line-option 'range)	; (LOWER . UPPER)
-   (highline-column-position (car highline-line)))
+   (highline-column-position (car highline-line-value)))
   ;; point
   ((eq highline-line-option 'point)	; (point . INTEGER)
    (highline-column-position
-    (- column (cdr highline-line))))
+    (- column (cdr highline-line-value))))
   ;; beyond
   ((eq highline-line-option 'beyond)	; (beyond . INTEGER)
-   (highline-column-position (cdr highline-line)))
+   (highline-column-position (cdr highline-line-value)))
   ;; t or nil
   (t					; t or nil
    (highline-line-beginning-position))))
@@ -966,22 +981,22 @@ Use global variable `highline-line-option' value."
 (defun highline-overlay-end (column)
  "Return the overlay end considering column COLUMN.
 
-Use global variable `highline-line-option' value."
+Use global variable `highline-line-option' and `highline-line-value'."
  (cond
   ;; integer
   ((eq highline-line-option 'integer)	; INTEGER
    (highline-column-position
-    (if (>= highline-line 0)
-	 highline-line
+    (if (>= highline-line-value 0)
+	 highline-line-value
       (end-of-line)
-      (+ column highline-line))))
+      (+ column highline-line-value))))
   ;; range
   ((eq highline-line-option 'range)	; (LOWER . UPPER)
-   (highline-column-position (cdr highline-line)))
+   (highline-column-position (cdr highline-line-value)))
   ;; point
   ((eq highline-line-option 'point)	; (point . INTEGER)
    (highline-column-position
-    (+ column (cdr highline-line))))
+    (+ column (cdr highline-line-value))))
   ;; nil
   ((null highline-line-option)		; nil
    (min (point-max)
@@ -1003,12 +1018,12 @@ It does not move the point."
 (defun highline-forward-line (&optional arg)
  "Move ARG lines forward (backward if ARG is negative).
 
-If the variable `line-move-visual' is non-nil, use `next-line'
+If the variable `line-move-visual' is non-nil, use `vertical-move'
 function to move; otherwise, use `forward-line' function."
  (if line-move-visual
      (unless (eobp)
-       (vertical-motion arg)) ;; Aquamacs / Emacs 22 specific
-;;	(next-line arg))
+;;	(next-line arg)
+       (vertical-move arg))  ;; Aquamacs / Emacs 22 specific
    (forward-line arg)))
 
 
@@ -1057,3 +1072,6 @@ current visual line; otherwise, use `current-column' function."
 
 
 (run-hooks 'highline-load-hook)
+
+
+;;; highline.el ends here
