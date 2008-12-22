@@ -19,7 +19,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.37 2008/12/22 04:12:57 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.38 2008/12/22 04:41:13 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -196,7 +196,22 @@ Sets the `autoface-default' face."
 			     (setcdr (nthcdr 5 l) (list "(...)")))
 			 l))))))
     (aquamacs-clear-autofaces))
-  (copy-face (aquamacs-autoface-face major-mode) 'autoface-default nil)
+  ;; do not just copy the (shallow) face
+  ;;  (copy-face (aquamacs-autoface-face major-mode) 'autoface-default nil)
+  (face-spec-set
+   'autoface-default
+   ;; use full specification of the face in order to set 
+   ;; exactly what the user sees
+   `((t ,(let ((face (aquamacs-autoface-face major-mode))
+	       (result))
+	   (dolist (entry face-attribute-name-alist result)
+	     (unless (eq entry :inherit)
+	       (let* ((attribute (car entry))
+		      ;; inherit from default face
+		      (value (face-attribute face attribute nil 'default)))
+		 (unless (eq value 'unspecified)
+		   (setq result (nconc (list attribute value) result))))))
+	   result))))
   ;; ensure that the new face does not inherit from itself:
   (set-face-attribute 'autoface-default nil 
 		      :inherit 'default)
@@ -350,6 +365,8 @@ modify them."))
 
     (unless (facep src-face) (setq src-face 'autoface-default))
     (unless (facep src-face) (setq src-face 'default))
+    ;; we'll just copy the face, including its inheritance
+    ;; (by reference).  Deep copy is not needed.
     (copy-face src-face dest-face)
     (aquamacs-autoface-mark-face-to-save dest-face))
   (if (interactive-p)
