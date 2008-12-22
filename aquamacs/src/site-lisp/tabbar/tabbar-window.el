@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: tabbar-window.el,v 1.60 2008/12/18 05:09:00 davidswelt Exp $
+;; Revision: $Id: tabbar-window.el,v 1.61 2008/12/22 18:00:32 davidswelt Exp $
 
 (require 'tabbar)
 (require 'aquamacs-tools)
@@ -303,6 +303,7 @@ That is, a string used to represent it on the tab bar."
 	 ((eq mouse-button 'mouse-3)
 	  (popup-menu tabbar-context-menu-map event prefix))
 	 (t
+	  (set-window-dedicated-p (selected-window) nil)
 	  (switch-to-buffer buffer)))
       ;; if there's no tab associated with clicked spot, use
       ;; special keymap for empty tab bar
