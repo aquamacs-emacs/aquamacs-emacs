@@ -19,7 +19,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.39 2008/12/22 18:04:23 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.40 2008/12/22 21:37:50 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -322,17 +322,21 @@ modify them."))
       (setq aquamacs-buffer-default-styles nil))
   (when aquamacs-styles-mode
     (aquamacs-styles-mode 0))
-  ;; go over all faces
-  (mapc
-   (lambda (face)
-     (if (eq face 'autoface-default)
-	 (face-spec-set face '((t (:inherit default))))
-       ;; detailed inheritance will be set in make-face
-       (face-spec-set face '((t (:inherit autoface-default))))))
-   (aquamacs-default-autofaces-list 'facenames))
-  ;; ensure inheritance is set correctly:
+  ;; reset the face
+  (mapc (lambda (face) (face-spec-set face '((t (:inherit autoface-default)))))
+	(aquamacs-default-autofaces-list 'facenames))
+  ;; set correct inheritance
   (mapc (lambda (mode) (aquamacs-autoface-make-face mode t))
 	(aquamacs-default-autofaces-list))
+  ;; and now delete the face customization from user theme
+  ;; so they won't be saved to custom-file because they're 
+  ;; default
+  (mapc (lambda (face) (custom-push-theme 'theme-face face 'user 'reset))
+	(aquamacs-default-autofaces-list 'facenames))
+  ;; reset the autoface-default face
+  (custom-push-theme 'theme-face 'autoface-default 'user 'reset)
+  ;; and re-make the autoface default face
+  (face-spec-set 'autoface-default '((t (:inherit default))))
   (setq aquamacs-faces-changed t)
   (if (interactive-p)
       (message "All styles cleared.")))
@@ -345,10 +349,12 @@ modify them."))
     (let ((face (aquamacs-autoface-face mode)))
       (when (facep face)
 	  (face-spec-set face '((t (:inherit autoface-default))))
-	  ;; set inheritance, mark to save
-	  (aquamacs-autoface-make-face mode t)))) 
-  (if (interactive-p)
-      (message "Mode-specific face for %s removed." mode)))
+	  ;; set correct inheritance
+	  (aquamacs-autoface-make-face mode t)
+	  ;; and now delete the face customization from theme
+	  (custom-push-theme 'theme-face face 'user 'reset)))
+    (if (interactive-p)
+	(message "Mode-specific face for %s removed." mode))))
 
 (defvar aquamacs-autoface-menu 
   (make-sparse-keymap "Mode Styles"))
