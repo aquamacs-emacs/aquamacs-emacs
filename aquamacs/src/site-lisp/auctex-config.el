@@ -4,7 +4,7 @@
 ;; originally authored by Kevin Walzer
 ;; Keywords: auctex
  
-;; Last change: $Id: auctex-config.el,v 1.44 2008/08/01 07:19:00 davidswelt Exp $
+;; Last change: $Id: auctex-config.el,v 1.45 2008/12/22 20:52:28 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -44,7 +44,7 @@
 			(file-expand-wildcards "/usr/local/texlive/20*/bin")
 			(file-expand-wildcards "/usr/local/teTeX/bin/*-apple-darwin-current")))
 
-(load "edit-modes/auctex.el" nil t t)
+(load "auctex.el" nil t t)
 ;; this is not done by default
 ;; maybe add a menu option?
 ;;(load "preview-latex.el" nil t t)
