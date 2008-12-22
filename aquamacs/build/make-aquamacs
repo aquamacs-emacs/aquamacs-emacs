@@ -434,6 +434,8 @@ find $installprefix
     
     rm $installprefix/../MacOS/bin/emacs-*
 
+
+
 fi # this mod by david reitter - dont create a package if self-contained
 
 # Remove unnecessary .el files
@@ -569,6 +571,20 @@ cd "$dest/Contents/MacOS/";
 
 
 # delete some files that we don't need
+
+# double DOC files - we don't want those
+
+cd $dest/Contents/Resources/etc
+DOCFILE=`ls -1 DOC-* | tail -n1` 
+for f in DOC-* 
+do 
+  if test $f != $DOCFILE; then
+      rm $f
+      ln -s $DOCFILE $f
+  fi
+done
+ 
+
 
 # large, not needed
 rm -f "$dest/Contents/Resources/etc/termcap.src"
