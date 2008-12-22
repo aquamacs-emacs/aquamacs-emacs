@@ -19,7 +19,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.36 2008/12/17 04:02:45 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.37 2008/12/22 04:12:57 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -55,12 +55,14 @@ for which the menu is being updated."
     major-mode))
 
 (defun aquamacs-autoface-inherited-face ()
-  "Return non-nil if autoface inherits from something else than autoface-default"
+  "Return face name that the autoface inherits from"
   (face-attribute (cdr-safe (assq 'default face-remapping-alist)) :inherit))
 
 
-(defun aquamacs-autoface-inherited-mode ()
-  "Return face that the autoface inherits from"
+; (aquamacs-autoface-inherited-mode-name)
+
+(defun aquamacs-autoface-inherited-mode-name ()
+  "Return mode name that the autoface inherits from"
   (let ((inh  (aquamacs-autoface-inherited-face)))
     (if (eq 0 (string-match "^\\(.*\\)-default$" (symbol-name inh)))
 	(intern (match-string 1 (symbol-name inh))))))
@@ -194,7 +196,10 @@ Sets the `autoface-default' face."
 			     (setcdr (nthcdr 5 l) (list "(...)")))
 			 l))))))
     (aquamacs-clear-autofaces))
-  (copy-face (aquamacs-autoface-face major-mode) 'autoface-default)
+  (copy-face (aquamacs-autoface-face major-mode) 'autoface-default nil)
+  ;; ensure that the new face does not inherit from itself:
+  (set-face-attribute 'autoface-default nil 
+		      :inherit 'default)
   (aquamacs-autoface-mark-face-to-save 'autoface-default)
   (if (interactive-p)
       (message "Face for %s is now used as default." major-mode)))  
@@ -295,7 +300,8 @@ include-default includes autoface-default.  face-names implies include-default."
 modify them."))
 
 (defun aquamacs-clear-autofaces ()
-  "Clears autofaces."
+  "Clear all autofaces."
+  (interactive)
   (when (boundp 'aquamacs-default-styles)
       (setq aquamacs-default-styles nil)
       (setq aquamacs-buffer-default-styles nil))
@@ -304,14 +310,17 @@ modify them."))
   ;; go over all faces
   (mapc
    (lambda (face)
-     
      (if (eq face 'autoface-default)
 	 (face-spec-set face '((t (:inherit default))))
-       (face-spec-set face nil) ;; inheritance will be set in make-face
-     ))
+       ;; detailed inheritance will be set in make-face
+       (face-spec-set face '((t (:inherit autoface-default))))))
    (aquamacs-default-autofaces-list 'facenames))
+  ;; ensure inheritance is set correctly:
+  (mapc (lambda (mode) (aquamacs-autoface-make-face mode t))
+	(aquamacs-default-autofaces-list))
   (setq aquamacs-faces-changed t)
-  (message "All styles cleared."))
+  (if (interactive-p)
+      (message "All styles cleared.")))
 
 (defun aquamacs-delete-one-autoface (&optional mode)
   "Deletes mode-specific autoface for current major mode"
@@ -320,13 +329,9 @@ modify them."))
   (unless (memq mode '(default autoface-default))
     (let ((face (aquamacs-autoface-face mode)))
       (when (facep face)
-	(let ((derived (get mode 'derived-mode-parent)))
-	  (set-face-attribute face nil :inherit     
-			      (or (and derived 
-				       (symbolp derived)
-				       (aquamacs-autoface-face derived))
-				  'autoface-default)))
-	(aquamacs-autoface-mark-face-to-save face))))
+	  (face-spec-set face '((t (:inherit autoface-default))))
+	  ;; set inheritance, mark to save
+	  (aquamacs-autoface-make-face mode t)))) 
   (if (interactive-p)
       (message "Mode-specific face for %s removed." mode)))
 
@@ -403,6 +408,14 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
   (if aquamacs-autoface-mode
       (run-with-idle-timer 1 'repeat 'aquamacs-set-autoface-when-idle)
     (cancel-function-timers 'aquamacs-set-autoface-when-idle))
+
+  ;; check for circularities
+  (when  (and aquamacs-autoface-mode
+	      (eq (face-attribute 'autoface-default :inherit) 'autoface-default))
+    (set-face-attribute 'autoface-default nil 
+			:inherit 'default)
+    (message "Autoface-default face inherited from itself!"))
+  
   (mapc (lambda (b)
 	(if (and (buffer-live-p b)  
 	    (user-buffer-p b))
@@ -588,7 +601,7 @@ modified, or in FRAME if given."
 
 (define-key aquamacs-autoface-menu [autoface-inherited-face]
   '(menu-item (format "Based on: %s Mode, %s"  
-		      (aquamacs-pretty-mode-name (aquamacs-autoface-inherited-mode))
+		      (aquamacs-pretty-mode-name (aquamacs-autoface-inherited-mode-name))
 		      (aquamacs-autoface-face-summary (aquamacs-autoface-inherited-face)))
 	      nil
 	      :enable nil 
@@ -770,7 +783,29 @@ modified, or in FRAME if given."
 	  
 	  (with-temp-message (format "Warning: Bug in %s: it forgets to call `run-mode-hooks'" major-mode)
 			     (aquamacs-set-autoface buf)))))))
-  
+
+
+
+;; Windows cannot have background colors.
+;; Here's a workaround.
+
+(defun aquamacs-set-frame-background-according-to-autoface (&optional frame)
+  "Set frame background (default face) to the one in the first window."
+  (when aquamacs-autoface-mode
+    (let* ((win (frame-first-window frame))
+	   (buf (window-buffer win)))
+      (when buf
+	(with-current-buffer buf
+	  (let* ((face  (or (cdr-safe (assq 'default face-remapping-alist))
+			    'default))
+		 (bg-color (face-attribute face :background t 'default)))
+
+	    (set-face-attribute 'default (window-frame win) :background bg-color)))))))
+
+(when nil
+ (add-hook 'window-configuration-change-hook 
+ 	  'aquamacs-set-frame-background-according-to-autoface))
+
  
 ;; ZOOM
  
@@ -870,6 +905,7 @@ is local to the selected frame."
  
 ;; turn on if desired
 (if aquamacs-autoface-mode
+
     (aquamacs-autoface-mode 1))
 
 (provide 'aquamacs-autoface-mode)
