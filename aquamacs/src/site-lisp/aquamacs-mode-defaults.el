@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-mode-defaults.el,v 1.27 2008/12/13 19:25:44 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-defaults.el,v 1.28 2008/12/22 20:52:46 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -62,7 +62,7 @@
 ;; NXML
 
 (unless (boundp 'nxml-version)
-  (load "edit-modes/nxml/rng-auto")) 
+  (load "rng-auto")) 
  
 (assq-set-equal "\\.\\(xml\\|xsl\\|rng\\|xhtml\\)" 
 		'nxml-mode 'auto-mode-alist)
