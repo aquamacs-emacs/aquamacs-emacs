@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.74 2008/11/12 20:42:10 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.75 2008/12/22 22:49:32 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -176,12 +176,14 @@ from earlier versions of the distribution."
 (mac-read-environment-vars-from-shell) ;; starts reading the env vars
 (ats "read env vars done")
 
-  (mac-add-standard-directories)
-(ats "add dirs done")
 
+(when user-init-file
+  (mac-add-standard-directories)
+  (ats "add dirs done")
+  
   (aquamacs-create-preferences-dirs)
   (aquamacs-create-preferences-file)
-(ats "create prefs done")
+  (ats "create prefs done"))
 
   ;; load files (give full paths and load all files)
   ;; this will be called after .emacs has been loaded
