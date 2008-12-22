@@ -19,7 +19,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.38 2008/12/22 04:41:13 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.39 2008/12/22 18:04:23 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -494,10 +494,10 @@ Upon click/selection, CALLBACK will be called with color name and
 then the ARGUMENTS."
   (list-colors-display nil buffer-name) ;; will pop up new window with buffer *Colors*
   (with-current-buffer (get-buffer buffer-name)
-    (let ((win (get-buffer-window (current-buffer) t)))
-      (if win 
-	  ;; we assume here that there is only one window showing this
-	  (set-window-dedicated-p win t)))
+    ;; (let ((win (get-buffer-window (current-buffer) t)))
+;;       (if win 
+;; 	  ;; we assume here that there is only one window showing this
+;; 	  (set-window-dedicated-p win t)))
     (beginning-of-buffer)
     (setq buffer-read-only nil)
     (insert-button "[Quit]" 'action 'aquamacs-quit-color-selection 'follow-link t)
