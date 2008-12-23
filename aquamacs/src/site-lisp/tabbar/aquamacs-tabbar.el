@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: aquamacs-tabbar.el,v 1.45 2008/10/27 15:10:48 davidswelt Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.46 2008/12/23 21:42:08 davidswelt Exp $
 
 ;; load original tabbar-mode
 
@@ -39,6 +39,14 @@
 (add-hook 'tabbar-quit-hook (lambda ()
 			      (setq tool-bar-border tool-bar-border-saved
 				    tool-bar-border-saved nil)))
+
+;; after startup, update tabbar
+(add-hook 'tabbar-init-hook 
+	  (lambda ()
+	    (run-with-idle-timer 
+	     1 nil
+	     'tabbar-display-update
+	     )))
 
 ;; improve tabbar-selected-tab such that it defaults to (tabbar-current-tabset)
 ;; if no tabset is passed
