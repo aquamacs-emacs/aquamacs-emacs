@@ -19,7 +19,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.41 2008/12/23 17:00:39 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.42 2008/12/23 21:03:24 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -810,28 +810,6 @@ modified, or in FRAME if given."
 	  
 	  (with-temp-message (format "Warning: Bug in %s: it forgets to call `run-mode-hooks'" major-mode)
 			     (aquamacs-set-autoface buf)))))))
-
-
-
-;; Windows cannot have background colors.
-;; Here's a workaround.
-
-(defun aquamacs-set-frame-background-according-to-autoface (&optional frame)
-  "Set frame background (default face) to the one in the first window."
-  (when aquamacs-autoface-mode
-    (let* ((win (frame-first-window frame))
-	   (buf (window-buffer win)))
-      (when buf
-	(with-current-buffer buf
-	  (let* ((face  (or (cdr-safe (assq 'default face-remapping-alist))
-			    'default))
-		 (bg-color (face-attribute face :background t 'default)))
-
-	    (set-face-attribute 'default (window-frame win) :background bg-color)))))))
-
-(when nil
- (add-hook 'window-configuration-change-hook 
- 	  'aquamacs-set-frame-background-according-to-autoface))
 
  
 ;; ZOOM
