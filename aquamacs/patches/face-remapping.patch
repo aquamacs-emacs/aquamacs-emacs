@@ -647,3 +647,82 @@ M  src/mactoolbox.c
   	    next_tab_x += tab_width;
   
   	  it->pixel_width = next_tab_x - x;
+*** src/fringe.c	07 Sep 2008 16:16:36 -0400	1.44.2.5
+--- src/fringe.c	23 Dec 2008 10:03:37 -0500	
+***************
+*** 559,566 ****
+--- 559,569 ----
+    struct frame *f = XFRAME (WINDOW_FRAME (w));
+    struct draw_fringe_bitmap_params p;
+    struct fringe_bitmap *fb;
++   struct buffer *old_buffer = NULL;
++ 
+    int period;
+    int face_id = DEFAULT_FACE_ID;
++   int remapped_face;
+  
+    p.cursor_p = 0;
+    p.overlay_p = (overlay & 1) == 1;
+***************
+*** 590,595 ****
+--- 593,613 ----
+  	face_id = FRINGE_FACE_ID;
+      }
+  
++   /* Perhaps remap BASE_FACE_ID to a user-specified alternative.  */
++   if (current_buffer && XBUFFER (w->buffer) != current_buffer)
++     {
++       old_buffer = current_buffer;
++       set_buffer_internal_1 (XBUFFER (w->buffer));
++     }
++   
++   remapped_face = lookup_basic_face (XFRAME (w->frame), face_id);
++   if (remapped_face)
++     face_id = remapped_face;
++ 
++   if (old_buffer)
++     set_buffer_internal_1 (old_buffer);
++   
++ 
+    fb = fringe_bitmaps[which];
+    if (fb == NULL)
+      fb = &standard_bitmaps[which < MAX_STANDARD_FRINGE_BITMAPS
+***************
+*** 885,895 ****
+    if (row->visible_height <= 0)
+      return;
+  
+!   if (WINDOW_LEFT_FRINGE_WIDTH (w) != 0)
+      draw_fringe_bitmap (w, row, 1);
+  
+!   if (WINDOW_RIGHT_FRINGE_WIDTH (w) != 0)
+!     draw_fringe_bitmap (w, row, 0);
+  }
+  
+  /* Draw the fringes of window W.  Only fringes for rows marked for
+--- 903,917 ----
+    if (row->visible_height <= 0)
+      return;
+  
+!   /* if (WINDOW_LEFT_FRINGE_WIDTH (w) != 0) */
+      draw_fringe_bitmap (w, row, 1);
+  
+!   /* always draw the fringe, even if it is turned off:
+!      this will fill an otherwise empty (background) between
+!      window and scrollbar */
+!   /*  if (WINDOW_RIGHT_FRINGE_WIDTH (w) != 0) */
+! 
+!   draw_fringe_bitmap (w, row, 0);
+  }
+  
+  /* Draw the fringes of window W.  Only fringes for rows marked for
+***************
+*** 1073,1078 ****
+--- 1095,1101 ----
+  	row = cur;
+  
+        left_face_id = right_face_id = DEFAULT_FACE_ID;
++       /*	lookup_basic_face (XFRAME (w->frame), DEFAULT_FACE_ID); */
+  
+        /* Decide which bitmap to draw in the left fringe.  */
+        if (WINDOW_LEFT_FRINGE_WIDTH (w) == 0)
