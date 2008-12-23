@@ -650,8 +650,8 @@ M  src/mactoolbox.c
 *** src/fringe.c	07 Sep 2008 16:16:36 -0400	1.44.2.5
 --- src/fringe.c	23 Dec 2008 10:03:37 -0500	
 ***************
-*** 559,566 ****
---- 559,569 ----
+*** 559,571 ****
+--- 559,581 ----
     struct frame *f = XFRAME (WINDOW_FRAME (w));
     struct draw_fringe_bitmap_params p;
     struct fringe_bitmap *fb;
@@ -663,19 +663,30 @@ M  src/mactoolbox.c
   
     p.cursor_p = 0;
     p.overlay_p = (overlay & 1) == 1;
-***************
-*** 590,595 ****
---- 593,613 ----
-  	face_id = FRINGE_FACE_ID;
-      }
+    p.cursor_p = (overlay & 2) == 2;
   
-+   /* Perhaps remap BASE_FACE_ID to a user-specified alternative.  */
++   /* face selection may depend on the buffer */
 +   if (current_buffer && XBUFFER (w->buffer) != current_buffer)
 +     {
 +       old_buffer = current_buffer;
 +       set_buffer_internal_1 (XBUFFER (w->buffer));
 +     }
 +   
+    if (which != NO_FRINGE_BITMAP)
+      {
+      }
+***************
+*** 590,595 ****
+--- 600,619 ----
+  	face_id = FRINGE_FACE_ID;
+      }
+  
++   /* If no fringe is to be drawn, use the default face */
++   if ((which == row->left_fringe_bitmap && WINDOW_LEFT_FRINGE_WIDTH (w)<=0)
++       || (which == row->right_fringe_bitmap && WINDOW_RIGHT_FRINGE_WIDTH (w)<=0))
++     face_id = DEFAULT_FACE_ID;
++ 
++   /* Perhaps remap BASE_FACE_ID to a user-specified alternative.  */
 +   remapped_face = lookup_basic_face (XFRAME (w->frame), face_id);
 +   if (remapped_face)
 +     face_id = remapped_face;
@@ -700,7 +711,7 @@ M  src/mactoolbox.c
   }
   
   /* Draw the fringes of window W.  Only fringes for rows marked for
---- 903,917 ----
+--- 909,923 ----
     if (row->visible_height <= 0)
       return;
   
@@ -716,13 +727,3 @@ M  src/mactoolbox.c
   }
   
   /* Draw the fringes of window W.  Only fringes for rows marked for
-***************
-*** 1073,1078 ****
---- 1095,1101 ----
-  	row = cur;
-  
-        left_face_id = right_face_id = DEFAULT_FACE_ID;
-+       /*	lookup_basic_face (XFRAME (w->frame), DEFAULT_FACE_ID); */
-  
-        /* Decide which bitmap to draw in the left fringe.  */
-        if (WINDOW_LEFT_FRINGE_WIDTH (w) == 0)
