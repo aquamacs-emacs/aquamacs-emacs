@@ -19,7 +19,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.40 2008/12/22 21:37:50 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.41 2008/12/23 17:00:39 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -472,6 +472,10 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
 ;;   (aquamacs-autofaces-set-default-parameter 
 ;;    'left-fringe
 ;;    (cdr (assq 'left-fringe default-frame-alist))))
+
+;; the fringe should inherit from the buffer-specific default face
+;; rather than from the frame default face.
+(aquamacs-set-defaults '((face-remapping-alist ((fringe :inherit default)))))
 
 (defun turn-on-mac-font-panel-mode ()
   (interactive)
