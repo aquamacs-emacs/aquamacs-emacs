@@ -19,7 +19,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.42 2008/12/23 21:03:24 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.43 2008/12/24 01:11:44 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -431,7 +431,7 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
   (if aquamacs-autoface-mode
       (run-with-idle-timer 1 'repeat 'aquamacs-set-autoface-when-idle)
     (cancel-function-timers 'aquamacs-set-autoface-when-idle))
-
+  
   ;; check for circularities
   (when  (and aquamacs-autoface-mode
 	      (eq (face-attribute 'autoface-default :inherit) 'autoface-default))
@@ -808,7 +808,8 @@ modified, or in FRAME if given."
 		 aquamacs-autoface-set-for-mode
 		 (eq aquamacs-autoface-set-for-mode major-mode))
 	  
-	  (with-temp-message (format "Warning: Bug in %s: it forgets to call `run-mode-hooks'" major-mode)
+	  (with-temp-message (unless (eq major-mode default-major-mode)
+			       (format "Warning: Bug in %s: it forgets to call `run-mode-hooks'" major-mode))
 			     (aquamacs-set-autoface buf)))))))
 
  
