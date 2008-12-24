@@ -1,6 +1,6 @@
-#!/perl
+#!/usr/bin/perl
 # LaTeX2HTML l2hconf-local.pm
-# $Id: l2hconf-local.pm,v 1.3 2008/02/04 23:21:01 davidswelt Exp $
+# $Id: l2hconf-local.pm,v 1.4 2008/12/24 05:09:29 davidswelt Exp $
 
 # This file is loaded via the -init_file parameter.
 # it overwrites site-wide (machine-local) settings for the Aquamacs manual.
