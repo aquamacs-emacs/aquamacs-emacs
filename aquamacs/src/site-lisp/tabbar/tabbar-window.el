@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: tabbar-window.el,v 1.61 2008/12/22 18:00:32 davidswelt Exp $
+;; Revision: $Id: tabbar-window.el,v 1.62 2008/12/24 05:04:17 davidswelt Exp $
 
 (require 'tabbar)
 (require 'aquamacs-tools)
@@ -367,7 +367,7 @@ before deleting."
 	       ;; (e.g. find-alternate-file)
 	       (eq (window-buffer wind) 
 		   (tabbar-tab-value (tabbar-selected-tab 
-				      (tabbar-current-tabset)))))))
+				      tabset))))))
     ;; remove tab from tabbar-window-alist before deleting, so it won't be
     ;; regenerated
     (setq buflist (assq-delete-all buffer buflist))
