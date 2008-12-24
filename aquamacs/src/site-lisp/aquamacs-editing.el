@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-editing.el,v 1.11 2008/10/15 18:27:52 davidswelt Exp $
+;; Last change: $Id: aquamacs-editing.el,v 1.12 2008/12/24 00:13:22 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -113,7 +113,7 @@ like `unfill-region'."
 	(set (make-local-variable 'paragraph-start)
 		 "\\*\\| \\|#\\|;\\|:\\||\\|!\\|$"))))
  
-(defcustom auto-word-wrap-default-function nil
+(defcustom auto-word-wrap-default-function 'turn-on-word-wrap
   "Function to call if auto-detection of word wrapping failed.
 This serves as the default for word wrapping detection.
 Defaults to `turn-on-auto-fill' if nil."
