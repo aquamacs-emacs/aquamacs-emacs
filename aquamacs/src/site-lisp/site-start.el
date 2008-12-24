@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: site-start.el,v 1.58 2008/12/15 22:17:23 davidswelt Exp $
+;; Last change: $Id: site-start.el,v 1.59 2008/12/24 00:32:58 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -51,7 +51,7 @@ It is guaranteed that for any two Aquamacs releases A and B,
 if aquamacs-version-id for B is higher than aquamacs-version-id 
 for A, then B is newer than A.")
 
-(defvar aquamacs-minor-version "1"
+(defvar aquamacs-minor-version "3"
 "Version code for minor maintenance releases.
 Changes in this code are ignored during the online version check.")
 
@@ -70,7 +70,8 @@ Changes in this code are ignored during the online version check.")
  
   (provide 'aquamacs-site-start)
 
-  (require 'load-emacs-pre-plugins)
+  (if user-init-file
+      (require 'load-emacs-pre-plugins))
 
   ;; aquamacs-reload-preloaded-files should be set by a
   ;; plugin (preloaded) --> for Aquamacs developer(s) only.
@@ -92,7 +93,9 @@ Changes in this code are ignored during the online version check.")
 
   (require 'aquamacs-mode-defaults)
  
-  (require 'load-emacs-plugins)
+
+  (if user-init-file
+      (require 'load-emacs-plugins))
 
   ;; workaround - Emacs doesn't do it  (0.9.9b)
   (defun display-startup-echo-area-message-2 ()
