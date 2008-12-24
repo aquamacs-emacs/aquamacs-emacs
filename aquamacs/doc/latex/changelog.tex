@@ -3,6 +3,8 @@
 \section{Aquamacs Emacs: What's New in This Release}
 
 \subsection{Changes--- 1.6 (Preview version 3)}
+
+\paragraph{Display}
  
 \begin{itemize}
 
@@ -10,16 +12,7 @@
 Tab code by Nathaniel Cunningham, David~Ponce and David Reitter.
  
 \item Aquamacs Styles have seen a major overhaul and are now called {\em Aquamacs Autofaces}.  To recap, these autofaces apply settings such as fonts, background and foreground colors to buffers and the frames as they show the buffers.  The settings are chosen according to the major mode used in the buffer.  This makes is possibly to automatically edit prose texts (such as LaTeX) in a variable-width (proportional) font, but do one's programming (e.g., Python or C) in a fixed-width font.  
-
-{\tiny
-Technical explanation: the core functionality of changing fonts and fore/background colors (in short: faces) is now provided by the new `aquamacs-autoface-mode'.  
-
-How does the new \emph{autoface} mode differ from the \emph{styles} mode?  Font and color settings now apply primarily to the default ``face'' used in the buffer.  For each major mode, a new face is defined.  For instance, the default face for LaTeX buffers is called `latex-mode-default'.  These faces can be edited directly via the Options menu (to choose a font and some new entries to choose fore- and background colors) or even with M-x customize-face.  These changes apply automatically and immediately to all buffers in the given major mode. In contrast, the \emph{styles} mode used to set frame-wide parameters, including the font, fore- and background colors, and change these parameters in a frame according to the buffer shown in the first window within the frame.  Frame parameters also included the presence of a toolbar, cursor color, fringes, and the like.  These are not available in the new mode.
-Previously, colors of a whole plethora of faces for various occasions could be chosen via the `color-theme' package.  These were needlessly tied to major modes using `aquamacs-styles'. 
-
-One advantage of the new, lightweight implementation of `autofaces' is that switching between buffers (e.g., with tabs) is smooth and does not lead to ugly frame resizing effects.  Multiple windows in the same frame can now display their buffers in the correct fonts.
-
-Transition: relevant mode-specific settings from `aquamacs-styles-mode' are automatically imported.  The now deprecated functionality of `aquamacs-styles-mode' (changing frame parameters including the visibility of the toolbar) is still available to users by inserting {\tt (require 'aquamacs-styles) (aquamacs-autoface-mode 0) (aquamacs-styles-mode 1)} into their Preferences.el file.  Users can also access color themes with {\tt M-x color-theme-select}, but note that faces set using `aquamacs-autoface-mode' will override foreground and background colors.  }
+Refer below for a technical explanation of the change.
 
 \item The use of color themes is being phased out.  While still included in Aquamacs, they are not available any longer from the Options menu.  We recommend the new light-weight functions to set fore/background colors using the Options / Appearance menu.
 
@@ -31,6 +24,15 @@ Transition: relevant mode-specific settings from `aquamacs-styles-mode' are auto
 
 \item Zoom: press Command-+ (or Command-=) to zoom in, and Command-{}- to zoom out, changing the font size of the text shown.   You can also use your Meta key (normally Option) and the mouse wheel.  This zoom applies just to a buffer and frame.
 
+\item The line where the point (cursor) is can be highlighted with `highline-mode', available via Option / Show/Hide / Highlight Lines  (`global-highline-mode').
+Code by Vinicius Jose Latorre.
+
+\end{itemize}
+
+\paragraph{Configuring and Extending Aquamacs}
+\begin{itemize}
+\item New (text-mode) buffers will have soft word wrap enabled (rather than hard auto-fill mode), in line with the standard way of text editing on the Mac.  Soft word wrap is also used for opened files as a default, when the wrapping mode cannot be determined automatically.  (Customize `auto-word-wrap-default-function' to nil to change this back.)
+ 
 \item More user-installed files (in the {\tt /Library} and {\tt /Users/.../Library} folders now take precedence over Aquamacs-supplied packages.  Specifically, user-supplied packages contained in subdirectories, including an AUCTeX distribution (must be compiled) are loaded when present.  Thus, almost all packages that come with Aquamacs can now be replaced.
 Warning: supplying your own packages may cause errors. 
 
@@ -38,13 +40,35 @@ Warning: supplying your own packages may cause errors.
 
 \item The Options menu has been restructured. You can now find the functions ``Enter Debugger on Error'' and ``Enter Debugger on Quit'' in the ``Help / Diagnose and Report Bug'' sub-menu.
 
-\item Aquamacs will now start up again for use in a terminal (-nw argument).
-Reported by Ian Soboroff.
-
 \item When started from a shell (e.g. in a terminal), `default-directory' will be the inherited from the shell.
 Reported by Robert Goldman.
 
-\item Dragging and dropping several files or opening several files from a terminal with Aquamacs with tabbar-mode will now lead to all files being shown in tabs, not just the last one.
+\item Aquamacs can now automatically select the frame and window over which you move your mouse cursor, as provided by Apple's Terminal.app and by many X11-based window managers under Unix and GNU/Linux.  We now include the `follow-mouse' package with a few extensions to make it work on the Mac.  You can turn it on with a simple\linebreak {\tt (turn-on-follow-mouse)} in your Preferences.el file.
+
+\item The ``vl'' indicator in the mode-line has been removed. `global-visual-line-mode' is on by default in Aquamacs.
+\item The mode-line now shows ``Wrap'' to indicate that soft word wrapping (`word-wrap') is on in the buffer.  Word wrapping can be toggled with C-x w now.
+
+
+\item There is a new menu item to customize Aquamacs-specific options (as compared to GNU Emacs defaults) in the 
+Options / Customize Aquamacs menu.
+
+\item SLIME, the Superior Lisp Interaction Mode is no longer included in Aquamacs but provided as a point-and-click installer plugin, which can be downloaded from the Aquamacs website.  The SLIME developers do not release validated versions; the SLIME plugins available from the Aquamacs website are development builds that are updated regularly. 
+
+\item Wikipedia mode (version 1.5 plus Aquamacs modification) included.  This can be used to edit text for Wikipedia and other Mediawiki wikis.  Start with M-x wikipedia-mode.
+Code by Chong Yidong, Uwe Brauer.
+
+\item Python mode has been updated to use `python-mode'  (as found on Launchpad).  
+Reported by Jin Choi.  Python-mode Code maintained by Barry Warsaw.  Research by Skip Montanaro. 
+\end{itemize}
+
+\paragraph{Bugfixes}
+
+\begin{itemize}
+
+\item Aquamacs will now start up again for use in a terminal (-nw argument).
+Reported by Ian Soboroff.
+
+\item Dragging and dropping more than one file or opening several files from a terminal with Aquamacs with tabbar-mode will now lead to all files being shown in tabs, not just the last one.
 
 \item Command-1 (`aquamacs-delete-other-windows') no longer hides the tabbar in certain circumstances.  
 
@@ -64,12 +88,6 @@ Reporter unknown (thanks for letting us know though).
 
 \item Page-wise scrolling (PgUp, M-up, aquamacs-page-up and friends) now works correctly when faces with different sizes are used in buffers, such as in LaTeX-mode.  (Note that the `pager' package is not used any longer.  While the screen position of the cursor should be preserved in most cases, this is not perfect.  `pager' can still be activated using {\tt (require 'pager) } in Preferences.el.
 
-\item The line where the point (cursor) is can be highlighted with `highline-mode', available via Option / Show/Hide / Highlight Lines  (`global-highline-mode').
-Code by Vinicius Jose Latorre.
-
-\item The ``vl'' indicator in the mode-line has been removed. `global-visual-line-mode' is on by default in Aquamacs.
-\item The mode-line now shows ``Wrap'' to indicate that soft word wrapping (`word-wrap') is on in the buffer.  Word wrapping can be toggled with C-x w now.
-
 \item C-a (beginning-of-visual-line in `visual-line-mode' which is the default) will now always skip a prompt (e.g., in shell-mode) at the beginning of the line.
 
 \item Moving the cursor up and down failed in certain situations involving side-by-side windows in a frame.
@@ -86,10 +104,6 @@ Suggested by Jean-Christophe Helary.
 
 \item Scrolling with the mouse wheel now works without first selecting the frame -- just move the mouse cursor over the window.  (N.B., `mouse-wheel-follow-mouse' only applies to windows, not to frames.)
 
-\item Aquamacs can now automatically select the frame and window over which you move your mouse cursor, as provided by Apple's Terminal.app and by many X11-based window managers under Unix and GNU/Linux.  We now include the `follow-mouse' package with a few extensions to make it work on the Mac.  You can turn it on with a simple {\tt (turn-on-follow-mouse)} in your Preferences.el file.
-
-\item There is a new menu item to customize Aquamacs-specific options (as compared to GNU Emacs defaults) in the 
-Options / Customize Aquamacs menu.
 
 \item To see only labels (and not icons or icons and labels) in the tool-bar, use this setting in your {\tt Preferences.el} file:
 
@@ -110,15 +124,20 @@ Reported by Ivan Werning.
 
 \item Showing a dired buffer with ``Show Buffers in New Frames'' (one-buffer-one-frame-mode, OBOF) enabled could lead to  the minor mode (OBOF) being turned off unexceptedly. 
 
-\item SLIME, the Superior Lisp Interaction Mode is no longer included in Aquamacs but provided as a point-and-click installer plugin, which can be downloaded from the Aquamacs website.  The SLIME developers do not release validated versions; the SLIME plugins available from the Aquamacs website are development builds that are updated regularly. 
-
-\item Wikipedia mode (version 1.5 plus Aquamacs modification) included.  This can be used to edit text for Wikipedia and other Mediawiki wikis.  Start with M-x wikipedia-mode.
-Code by Chong Yidong, Uwe Brauer.
-
-\item Python mode has been updated to use `python-mode'  (as found on Launchpad).  
-Reported by Jin Choi.  Python-mode Code maintained by Barry Warsaw.  Research by Skip Montanaro. 
-
 \end{itemize}
+
+
+\paragraph{What's behind the change from Aquamacs Styles to Aquamacs Autofaces?}
+{\small
+Technical explanation: the core functionality of changing fonts and fore/background colors (in short: faces) is now provided by the new `aquamacs-autoface-mode'.  
+
+How does the new \emph{autoface} mode differ from the \emph{styles} mode?  Font and color settings now apply primarily to the default ``face'' used in the buffer.  For each major mode, a new face is defined.  For instance, the default face for LaTeX buffers is called `latex-mode-default'.  These faces can be edited directly via the Options menu (to choose a font and some new entries to choose fore- and background colors) or even with M-x customize-face.  These changes apply automatically and immediately to all buffers in the given major mode. In contrast, the \emph{styles} mode used to set frame-wide parameters, including the font, fore- and background colors, and change these parameters in a frame according to the buffer shown in the first window within the frame.  Frame parameters also included the presence of a toolbar, cursor color, fringes, and the like.  These are not available in the new mode.
+Previously, colors of a whole plethora of faces for various occasions could be chosen via the `color-theme' package.  These were needlessly tied to major modes using `aquamacs-styles'. 
+
+One advantage of the new, lightweight implementation of `autofaces' is that switching between buffers (e.g., with tabs) is smooth and does not lead to ugly frame resizing effects.  Multiple windows in the same frame can now display their buffers in the correct fonts.
+
+Transition: relevant mode-specific settings from `aquamacs-styles-mode' are automatically imported.  The now deprecated functionality of `aquamacs-styles-mode' (changing frame parameters including the visibility of the toolbar) is still available to users by inserting {\tt (require 'aquamacs-styles)}\linebreak{\tt (aquamacs-autoface-mode 0) (aquamacs-styles-mode 1)} into their Preferences.el file.  Users can also access color themes with {\tt M-x color-theme-select}, but note that faces set using `aquamacs-autoface-mode' will override foreground and background colors.  }
+
 
 \subsection{Changes---1.5}
 
