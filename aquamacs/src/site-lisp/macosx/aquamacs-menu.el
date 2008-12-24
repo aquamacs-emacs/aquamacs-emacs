@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.189 2008/12/18 18:18:01 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.190 2008/12/24 15:56:03 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -932,6 +932,14 @@ subsequently create.  Upon entering text-mode, the function
 (define-key menu-bar-edit-menu [props] nil)
 (define-key menu-bar-edit-menu [separator-fill] nil)
 
+;; Check for updates
+
+;; menu item (Aquamacs menu)
+;; needs about-emacs.patch
+(when (and (boundp 'mac-apple-event-map) mac-apple-event-map)
+    (put 'check-for-updates 'mac-apple-event-id "chku")
+    (define-key mac-apple-event-map [hi-command check-for-updates]
+      'aquamacs-check-for-updates))
 
 
 

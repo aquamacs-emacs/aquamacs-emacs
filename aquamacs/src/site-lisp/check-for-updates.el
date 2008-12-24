@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs version check
  
-;; Last change: $Id: check-for-updates.el,v 1.28 2008/09/21 23:25:35 davidswelt Exp $
+;; Last change: $Id: check-for-updates.el,v 1.29 2008/12/24 15:55:29 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -313,14 +313,6 @@ and show user a message if there is."
   nil)
 
 ; (aquamacs-check-for-updates-if-necessary t)
-
-;; menu item (Aquamacs menu)
-;; needs about-emacs.patch
-(when (and (boundp 'mac-apple-event-map) mac-apple-event-map)
-    (put 'check-for-updates 'mac-apple-event-id "chku")
-    (define-key mac-apple-event-map [hi-command check-for-updates]
-      'aquamacs-check-for-updates))
-
 
 
 (provide 'check-for-updates)
