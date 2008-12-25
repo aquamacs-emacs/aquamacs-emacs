@@ -1,5 +1,9 @@
 ;;; html-helper-mode.el --- Major mode for composing html files.
-;;; v $Revision: 1.4 $
+;;; v $Revision: 1.5 $
+;; based on beta version dated 22-Mar-2004 http://savannah.inetbridge.net/baol-hth/
+;; plus: 3.0.4Kilo's CSS mode
+;; plus: changes to set major-mode while running mode hooks  (Aquamacs compatibility)
+;;       - David Reitter, 2008
 
 ;; Mantainer : Gian Uberto "Saint" Lauri <saint@eng.it>
 ;;                                       <saint@dei.unipd.it>*
@@ -25,7 +29,6 @@
 ;; Homepage URL: http://www.nongnu.org/baol-hth/index.html
 
 ;; Created: 01 Feb 1994
-;; $Id: html-helper-mode.el,v 1.4 2008/11/07 13:41:48 davidswelt Exp $
 ;; Keywords: HTML major-mode
 
 ;; LCD Archive Entry:
@@ -134,7 +137,7 @@
 
 (defconst html-helper-mode-version
   (progn
-    (let ((revs "$Revision: 1.4 $")
+    (let ((revs "$Revision: 1.5 $")
 	  (lastchar 0))
       ; revs is a string of single byte characters
       (set 'lastchar (1- (string-width revs)))
@@ -1726,10 +1729,11 @@ html-helper-build-new-buffer-flag is set to t"
 
   (easy-menu-add (html-helper-menu) html-helper-mode-map)
 
-  (run-mode-hooks 'text-mode-hook)
-  (run-mode-hooks 'html-mode-hook)
-;; put keybindings here
-  (run-mode-hooks 'html-helper-mode-hook))
+  (let ((major-mode 'html-helper-mode))
+    (run-mode-hooks 'text-mode-hook)
+    (run-mode-hooks 'html-mode-hook)
+    ;; put keybindings here
+    (run-mode-hooks 'html-helper-mode-hook)))
 
 (cond (html-helper-mode-uses-visual-basic
        (defun asp-html-helper-mode ()
@@ -1750,7 +1754,7 @@ Uses :`visual-basic-mode'  for ASP e VBSCript
       `cc-mode'  for javascript support
       `tempo'    for templates
 Supports server (actually ASP & PHP, JSP) and client
-(JavaScript, VBScript) scripting
+\(JavaScript, VBScript) scripting
 
 Customizable flags you would like to alter
 
@@ -1780,6 +1784,7 @@ Mantained by lauri@eng.it, http:/www.gest.unipd.it/~saint/"
 (defun asp-html-helper-mode-run ()
   "Basic behaviour of the mode, to be called when returning from visual-basic-mode"
   (setq html-helper-mode-local-JSP-not-ASP-flag nil)
+  (setq major-mode 'asp-html-helper-mode)
   (base-html-helper-mode 'html-helper-insert-new-buffer-strings)
   (setq mode-name "HTML/ASP helper")
   ;; Mon Jun 25 16:14:44 2001 Saint
@@ -1814,7 +1819,7 @@ Uses :`visual-basic-mode' for VBSCript
       `java-mode' or `JDE' for Java blocks
       `tempo'    for templates
 Supports server (actually ASP & PHP, JSP) and client
-(JavaScript, VBScript) scripting
+\(JavaScript, VBScript) scripting
 
 Customizable flags you would like to alter
 
@@ -1846,8 +1851,9 @@ Mantained by lauri@eng.it, http:/www.gest.unipd.it/~saint/"
   "Basic behaviour of the mode, to be called when returning from java-mode or jde"
   (interactive)
   (setq html-helper-mode-local-JSP-not-ASP-flag t)
+  (setq major-mode 'jsp-html-helper-mode)
   (base-html-helper-mode 'html-helper-insert-new-ASP-buffer-strings)
-  (setq mode-name "HTML/JSP helper")
+  (setq mode-name "HTML/JSP helper")  
   (setq major-mode 'jsp-html-helper-mode))
 
 (defun html-helper-mode ()
@@ -1897,6 +1903,7 @@ an alternate mode"
   (interactive)
   (setq html-helper-mode-local-JSP-not-ASP-flag
 	html-helper-mode-global-JSP-not-ASP-flag)
+  (setq major-mode 'html-helper-mode)
   (base-html-helper-mode 'html-helper-insert-new-buffer-strings)
   (setq mode-name "HTML helper")
   (setq html-helper-mode-local-JSP-not-ASP-flag html-helper-mode-global-JSP-not-ASP-flag)
@@ -1921,7 +1928,7 @@ Uses :`visual-basic-mode' for VBSCript
       `tempo'    for templates
 
 Supports server (actually ASP & PHP, JSP) and client
-(JavaScript, VBScript) scripting
+\(JavaScript, VBScript) scripting
 
 Customizable flags you would like to alter
 
@@ -1952,6 +1959,7 @@ Mantained by lauri@eng.it, http:/www.gest.unipd.it/~saint/"
   (interactive)
   (setq html-helper-mode-local-JSP-not-ASP-flag
 	html-helper-mode-global-JSP-not-ASP-flag)
+  (setq major-mode 'php-html-helper-mode)
   (base-html-helper-mode 'html-helper-insert-new-PHP-buffer-strings )
   (setq mode-name "HTML/PHP helper")
   (setq major-mode 'php-html-helper-mode))
