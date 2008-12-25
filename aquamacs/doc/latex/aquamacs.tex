@@ -40,18 +40,9 @@ customization that enables it to conform better with Apple's standard
 Human Interface Guidelines (HIG) than standard versions of the editor
 do.
 
-Emacs is a text editor of legendary power and configurability, but it
-also has an enormously complex interface that, while consistent across
-platforms, is usually at odds with the specific interface conventions
-of the particular platform on which it is being used. The original GNU
-version of Emacs for the Mac, called Carbon Emacs, is no different. 
+Emacs is a text editor of legendary power and configurability, but it also has an enormously complex interface that, while consistent across platforms, is usually at odds with the specific interface conventions of the particular platform on which it is being used. The original GNU version of Emacs for the Mac, called Carbon Emacs, is no different.
 
-Aquamacs Emacs implements the standard OS X keyboard
-shortcuts and other interface conventions, integrating Emacs into the
-Aqua environment to a far greater degree than other versions of
-Emacs. This allows Mac users who might be unfamiliar with Emacs'
-complex standard interface to harness its amazing editing power in a
-familiar way. 
+Aquamacs Emacs implements the standard OS X keyboard shortcuts and other interface conventions, integrating Emacs into the Aqua environment to a far greater degree than other versions of Emacs. This allows Mac users who might be unfamiliar with Emacs' complex standard interface to harness its amazing editing power in a familiar way.
 
 \begin{figure}
 \centering
@@ -296,14 +287,18 @@ Multilingual Environment".
 \label{frame-appearance-styles}
 Aquamacs allows you to alter specific features of the current frame
 via functions in the Options menu. ``Font for *-mode...'' lets you
-choose from the installed system fonts.  You can also choose foreground and background colors.  \emph{ These settings only apply to buffers in the current major mode}, provided \emph{Autofaces} is turned on (as is by default).  Without Autofaces, the settings just apply to the current frame.  You can use ``Adopt Frame Parameters as Frame Default'' to accept the appearance of the current frame for future frames; this includes the visibility of the tool bar.
+choose from the installed system fonts.  You can also choose foreground and background colors.  \emph{ These settings only apply to buffers in the current major mode}, provided \emph{Autofaces} is turned on (as is by default).  Without Autofaces, the settings apply to all frames and set the frame default.  
 
 With \emph{Autofaces}, Aquamacs Emacs lets you pick a style specific to the current
-mode.  For example, you can use different settings when you are editing
-C or LaTeX, then when you are editing a text file.  
+mode.  For example, you can use different font settings when you are editing
+C or LaTeX, then when you are editing a text file.   Note that all settings not sepcified for the mode are taken over from the default. Specifically, color and font choices are prioritized in this order: {\it 1.} Mode-specific face, {\it 2.} Autoface Default Face, {\it 3.} Frame default.
 
-If you're more of an Emacs expert and you'd like to configure things manually by means of elisp or the customization buffer (``default-frame-alist'', etc.), just keep the Autofaces option turned off.  You can then use the customization options ``default-frame-alist'' and ``initial-frame-alist'' as documented in the Emacs manual.  With Autofaces, you can always customize the faces directly (via M-x customize-face).  The face name for a major mode is always named after the major mode, e.g. ``latex-mode-default'' is the autoface face for latex-mode
- 
+You can use ``Adopt Frame Parameters as Frame Default'' to accept the appearance of the current frame for future frames; this includes the visibility of the tool bar.
+
+If you're more of an Emacs expert and you'd like to configure things manually by means of elisp or the customization buffer, configure the following faces. With Autofaces, you can customize the faces directly (via M-x customize-face).  The face name for a major mode is always named after the major mode, e.g. ``latex-mode-default'' is the autoface face for `latex-mode'.  The Autoface default face is named `autoface-default'. 
+The default for all frames is the `default' face.
+
+You can also customize the variables for the frame default: ``default-frame-alist'' and ``initial-frame-alist'', as documented in the Emacs manual.  You can, alternatively, use ``Adopt Frame Parameters as Frame Default'' to accept the appearance of the current frame for future frames; this includes the visibility of the tool bar.
 
 \begin{figure}
 \centering
@@ -316,26 +311,11 @@ If you're more of an Emacs expert and you'd like to configure things manually by
 
 
 
-\subsection{Buffers}
-The Buffers menu allows you to navigate through the windows/frames
-that you may have open. Note that a ``buffer'' is not synonymous with
-a window or frame, in that you can split a frame and have more than
-one buffer contained within. (Multiple windows/frames is a feature of
-Aquamacs; standard Emacs does not support this.) In addition to
-standard frames that display open files, there are a few other
-important buffer types. One is the ``scratch'' buffer, which is simply
-a buffer to type notes into; this can also be the starting point for a
-file to save, and a buffer to type configuration commands for Aquamacs
-(an advanced feature). Another is the ``Messages'' buffer, which
-displays a log of output from Emacs commands and
-operations. Finally, there is the ``info'' buffer, in which Aquamacs Emacs
-displays built-in user help, tutorials and other documentation in
-Emacs' ``info'' format.
+\subsection{Window}
+The Window menu allows you to navigate through the windows and frames that you may have open. Note that a ``buffer'' is not synonymous with a window or frame, in that you can split a frame and have more than one buffer contained within. (Multiple windows/frames is a feature of Aquamacs; standard Emacs does not support this.) In addition to standard frames that display open files, there are a few other important buffer types. One is the ``scratch'' buffer, which is simply a buffer to type notes into; this can also be the starting point for a file to save, and a buffer to type configuration commands for Aquamacs (an advanced feature). Another is the ``Messages'' buffer, which displays a log of output from Emacs commands and operations. Finally, there is the ``info'' buffer, in which Aquamacs Emacs displays built-in user help, tutorials and other documentation in Emacs' ``info'' format.
 
  
-From the Buffers menu, you can also open a new ``frame,'' or window, or
-split the open window into two separate ones. The keyboard
-shortcuts for these commands are the traditional Emacs ones (see the menubar).
+From the Window menu, you can also open a new ``frame,'', or split the open window into two separate ones. The keyboard shortcuts for these commands are the traditional Emacs ones (see the menubar).
 
 
 
@@ -348,45 +328,17 @@ a powerful tool for enhancing productivity.}
 \end{figure}
 
 \subsection{Tools}
-The Tools menu provides access to a variety of functions, including
-integration with version control systems, running shell commands,
-searching external files for text, and compiling and debugging
-software code. The Tools menu also provides access to newsgroups and
-e-mail.\footnote{The functionality
-provided in the Tools menu is, to say the least, diverse, and is part
-of the attraction of Emacs for a large number of users---particularly
-advanced users. It is not necessary to use Aquamacs as an e-mail
-client to appreciate its considerable power and utility, however.}
+The Tools menu provides access to a variety of functions, including integration with version control systems, running shell commands, searching external files for text, and compiling and debugging software code. The Tools menu also provides access to newsgroups and e-mail.\footnote{The functionality provided in the Tools menu is, to say the least, diverse, and is part of the attraction of Emacs for a large number of users---particularly advanced users. It is not necessary to use Aquamacs as an e-mail client to appreciate its considerable power and utility, however.}
 
 \subsection{Help}
-The Help menu contains a wealth of information about
-Aquamacs Emacs and GNU Emacs. Except for the help provided in this document,
-Aquamacs' Help menu also provides documentation of the Mac-specific
-customizations with the present User Manual. The general Emacs
-user help is comprehensive and detailed to the point of possibly
-overwhelming the inexperienced user. The beginner should definitely
-start with the Emacs tutorial contained in the Help menu. While geared
-toward the traditional Emacs interface instead of the OS X Aquamacs
-version, the tutorial is a good introduction to Emacs' unique
-capabilities. And, as you gain more experience, you will appreciate
-the depth of the Emacs documentation. 
+The Help menu contains a wealth of information about Aquamacs Emacs and GNU Emacs. Except for the help provided in this document, Aquamacs' Help menu also provides documentation of the Mac-specific customizations with the present User Manual. The general Emacs user help is comprehensive and detailed to the point of possibly overwhelming the inexperienced user. The beginner should definitely start with the Emacs tutorial contained in the Help menu. While geared toward the traditional Emacs interface instead of the OS X Aquamacs version, the tutorial is a good introduction to Emacs' unique capabilities. And, as you gain more experience, you will appreciate the depth of the Emacs documentation.
 
 \section{Aquamacs for Emacs Veterans}
 
-While experienced users of Emacs on other platforms can continue to
-use all the key combinations to which they are accustomed, we
-recommend that they use the Aquamacs-specific conventions to get the
-most benefit from the applications.  Many of the
-standard Emacs behaviors and interface conventions have been modified
-in Aquamacs in the interest of providing a more Aqua-native
-experience. In this section, we discuss some of the ways that Emacs
-conventions are mapped to Aqua conventions, and outline some advanced ways that users can modify 
-Aquamacs to their specific preferences.
+While experienced users of Emacs on other platforms can continue to use all the key combinations to which they are accustomed, we recommend that they use the Aquamacs-specific conventions to get the most benefit from the applications.  Many of the standard Emacs behaviors and interface conventions have been modified in Aquamacs in the interest of providing a more Aqua-native experience. In this section, we discuss some of the ways that Emacs conventions are mapped to Aqua conventions, and outline some advanced ways that users can modify Aquamacs to their specific preferences.
 
 \subsection{Keyboard Shortcuts}
-Emacs has a well-defined set of keyboard shortcuts, which Aquamacs
-revises to accomodate OS X conventions. See Table \ref{tab:shortcuts}
-and Table \ref{tab:command} for details.
+Emacs has a well-defined set of keyboard shortcuts, which Aquamacs revises to accomodate OS X conventions. See Table \ref{tab:shortcuts} and Table \ref{tab:command} for details.
 
 
 
@@ -499,19 +451,7 @@ Below are some specific customization options and groups that may be of interest
 \begin{itemize} 
 \item \textbf{Frame.} Aquamacs opens new files (and other buffers) in new frames. That is usually more convenient and allows you to use the graphical user interface of today's computers, which did not exist when Emacs was conceived almost three decades ago. If you do not like this behavior, perhaps because you are used to traditional Emacs, just deselect ``Display Buffers in Separate Frames'' in the Options menu and save your choice with ``Save Options.'' (The associated global minor mode is called ``one-buffer-one-frame-mode''.)
 
-\item \textbf{Frame Styles.} These styles provide a
-  convenient way to tie bundles of frame parameters and faces to
-  specific major modes so that every frame showing a buffer in a
-  particular major mode is styled that way. Such frame parameters can
-  be the background color, they can be the faces that define syntax
-  coloring. They also comprise settings such as if and where there is
-  a fringe, or a tool-bar (icons on top). Such settings always
-  override any global choices made with, for instance,
-  ``default-frame-alist'' or ``tool-bar-mode''. Because the style
-  always applies to the frame and not the window (an Emacs
-  limitation), this mode makes most sense together with
-  ``one-buffer-one-frame-mode'', where only one (main) buffer is
-  usually shown in a frame.
+\item \textbf{Autofaces.} These styles provide a convenient way to tie default faces to specific major modes so that every frame showing a buffer in a particular major mode is styled that way. Such faces can  determine background and foreground color as well as font settings.  Such settings always override any global choices made with, for instance, `default-frame-alist' or the `default' face.   The autofaces may be customized (`customize-face') directly or set through the GUI.  Note that these faces apply {\em per buffer}.
 
 \item \textbf{mac-option-modifier.} This is  the modifier to use for the Mac alt/option key.  The value can
 be alt, hyper, or super for the respective modifier.  If the value is
@@ -529,16 +469,10 @@ setting.
 
 \item \textbf{The Scratch Buffer}
 
-As mentioned above, the Aquamacs scratch buffer is simply a buffer
-into which notes can be typed.  For this reason, the scratch buffer is
-opened in text mode, as opposed to lisp interaction mode (the default
-mode for the plain GNU Emacs). Customize `initial-major-mode' (and restart) to change this.
+  As mentioned above, the Aquamacs scratch buffer is simply a buffer into which notes can be typed.  For this reason, the scratch buffer is opened in text mode, as opposed to lisp interaction mode (the default mode for the plain GNU Emacs). Customize `initial-major-mode' (and restart) to change this.  In Aquamacs, the scratch buffer is automatically retained between sessions.  It can also be saved using the normal save commands; you are free to save its contents to another file.
 
 \item \textbf{Want some GNU Emacs 22 behavior back?} In most cases
-  that represents no problem. Aquamacs provides a customization group called ``Aquamacs-is-more-
-than-Emacs'' which contains all the settings whose default values differ from the ones in GNU Emacs 
-(22) or the appropriate package. We recommend that you tinker with these one at a time and check their 
-(often wider-than-you-think-reaching, sometimes detrimental) effects.
+  that represents no problem. Aquamacs provides a customization group called ``Aquamacs-is-more- than-Emacs'' which contains all the settings whose default values differ from the ones in GNU Emacs (22) or the appropriate package. We recommend that you tinker with these one at a time and check their (often wider-than-you-think-reaching, sometimes detrimental) effects.
 
 Also, see Table \ref{tab:variables} for a partial list of such settings.
 
@@ -578,17 +512,11 @@ customization group.}
 
 \end{itemize}
 
-The range of possible customizations---including restoring some of
-Emacs' traditional interface conventions---is beyond the scope of this
-help document. However, we provide a wiki for users to share their
-modifications. See
-\url{http://www.emacswiki.org/cgi-bin/wiki/AquamacsEmacs/} for more
-details.
+The range of possible customizations---including restoring some of Emacs' traditional interface conventions---is beyond the scope of this help document. However, we provide a wiki for users to share their modifications. See \url{http://www.emacswiki.org/cgi-bin/wiki/AquamacsEmacs/} for more details.
 
 \subsection{\LaTeX\ Support}
 
-One special feature of Aquamacs is its extensive support for the
-editing of \LaTeX documents, especially Emacs' Auc\TeX\ mode. 
+One special feature of Aquamacs is its extensive support for the editing of \LaTeX documents, especially Emacs' AUC\TeX\ mode.
 
 \begin{figure}
 \centering
@@ -599,58 +527,32 @@ editing of \LaTeX documents, especially Emacs' Auc\TeX\ mode.
 \label{aquamacs-tex}
 \end{figure}
 
-AUCTeX comes with its own manual, accessible via the LaTeX menu (when in latex mode after loading 
-a .tex file), ``Read the AUCTeX manual''. If you have a question, please consult the manual. If that 
-doesn't work, or you suspect you've found a bug in AUCTeX, please turn to the AUCTeX mailing lists, 
-accessible here: \url{http://www.gnu.org/software/auctex/mailing-lists.html}.
+AUCTeX comes with its own manual, accessible via the LaTeX menu (when in latex mode after loading a .tex file), ``Read the AUCTeX manual''. If you have a question, please consult the manual. If that doesn't work, or you suspect you've found a bug in AUCTeX, please turn to the AUCTeX mailing lists, accessible here: \url{http://www.gnu.org/software/auctex/mailing-lists.html}.
 
-To access the enhanced \LaTeX\ functionality that Aquamacs offers, you
-will need to install a LaTeX system. We recommend to install the
-\emph{MacTeX distribution}, available at
-\url{http://www.tug.org/mactex/}. Alternatively, you can install a
-smaller distribution provided by Gerben Wierda
-(\url{http://www.rna.nl/tex.html}. Both install packages are complete
-and user-friendly. (While you can obtain \TeX\ from
-other sources, the binary distributions are particularly well
-supported in Aquamacs.)
+To access the enhanced \LaTeX\ functionality that Aquamacs offers, you will need to install a LaTeX system. We recommend to install the \emph{MacTeX distribution}, available at \url{http://www.tug.org/mactex/}. Alternatively, you can install a smaller distribution provided by Gerben Wierda (\url{http://www.rna.nl/tex.html}. Both install packages are complete and user-friendly. (While you can obtain \TeX\ from other sources, the binary distributions are particularly well supported in Aquamacs.)
 
-Note that AUCTeX, as it comes with Aquamacs, is configured to compile
-documents directly to PDF, a standard on the Mac. If you prefer to
-produce DVI and Postscript documents with LaTeX, switch off PDF Mode
-in Command -> TeXing Options.
+Note that AUCTeX, as it comes with Aquamacs, is configured to compile documents directly to PDF, a standard on the Mac. If you prefer to produce DVI and Postscript documents with LaTeX, switch off PDF Mode in Command -> TeXing Options.
 
-\subsubsection{Enhanced Carbon Emacs Plugin}
-Enrico Franconi, developer of the former Enhanced Carbon Emacs
-distribution that had special support for La\TeX\ editing via its
-customizations for Auc\TeX\ mode, has revived ECE as an external
-plugin that can be installed on any Carbon Emacs,including
-Aquamacs. At this time, the ECE plugin 1.0.1 is available at
-
-\url{http://web.inf.unibz.it/~franconi/enhanced-carbon-emacs/} 
 
 
 \subsubsection{Skim: A   \LaTeX\ Previewer}
 
-When editing \LaTeX files, you will often need to view the compiled
-results. Apple's Preview.app can view pdf files in addition to other graphic formats. But for regular use 
-you may prefer  a program like Skim which has features specifically supporting \LaTeX editing. 
+When editing \LaTeX files, you will often need to view the compiled results. Apple's Preview.app can view pdf files in addition to other graphic formats. But for regular use you may prefer a program like Skim which has features specifically supporting \LaTeX editing.
 
 Skim is available here:
 
 \url{http://skim-app.sourceforge.net/}
 
-Skim can automatically reload pdfs after every they are recompiled. It also includes a preset to support 
-using Aquamacs with the \LaTeX package PDFSync. With the PDFSync installed, clicking on a position 
-in the pdf files while holding the Command and Shift keys causes Aquamacs to move your cursor to the 
-corresponding point in the underlying source file, opening it if necessary. To enable Skim with PDFSync, 
-you must install the PDFSync package and use {\tt $\backslash$usepackage\{pdfsync\}} in the preamble 
-of your \LaTeX document. Then, enable PDFSync and Aquamacs in Skim's Preferences dialog.
-Aquamacs does not need to be configured further -- it should recognize Skim once the first \LaTeX file 
-has been opened. (Details at \url{http://skim-app.sourceforge.net/wiki/index.php/
-LaTeX_and_PDFSync}).
+Skim can automatically reload pdfs after every they are recompiled. It also includes a preset to support using Aquamacs with the \LaTeX package PDFSync. With the PDFSync installed, clicking on a position in the pdf files while holding the Command and Shift keys causes Aquamacs to move your cursor to the corresponding point in the underlying source file, opening it if necessary. To enable Skim with PDFSync, you must install the PDFSync package and use {\tt $\backslash$usepackage\{pdfsync\}} in the preamble of your \LaTeX document. Then, enable PDFSync and Aquamacs in Skim's Preferences dialog.  Aquamacs does not need to be configured further -- it should recognize Skim once the first \LaTeX file has been opened. (Details at \url{http://skim-app.sourceforge.net/wiki/index.php/ LaTeX_and_PDFSync}).
 
 Older utilities that preceeded Skim were  \TeX niscope and PDFView.  They do not work out-of-the-box 
 with Aquamacs. 
+
+
+\subsection{Lisp Support}
+
+Lisp programmers will appreciate the Superior Lisp Interaction Mode for Emacs, SLIME.  This is available from the Aquamacs website as a convenient point-and-click installer package, which will result in fully integrated Lisp experience.
+
 
 \section{Extending Aquamacs}
 
@@ -660,12 +562,9 @@ Adding standard Emacs packages is easy as well.
 
 \subsection{Plug-in Interface}
 
-All files named \emph{site-start.el} anywhere in the load-path
-    are loaded at startup, before the user's init files are
-    loaded. For example, such a file may be placed in \\
-   {\ttfile /Users/User Name/Library/Application Support/Aquamacs Emacs/myPlugin}. 
+All files named \emph{site-start.el} anywhere in the load-path are loaded at startup, before the user's init files are loaded. For example, such a file may be placed in \\  {\ttfile /Users/User Name/Library/Application Support/Aquamacs Emacs/myPlugin}. 
 
-   The load-path is automatically extended to cover all subdirectories in standard paths (see Section \ref {standardpaths}).
+ The load-path is automatically extended to cover all subdirectories in standard paths (see Section \ref {standardpaths}).
 
 If a plug-in needs to execute code earlier in the initialization phase, that is, before any Aquamacs- specific code is executed (but after Emacs initilization code has been executed), this code can be provided in a file \emph{site-prestart.el} anywhere in the load-path.
 
@@ -715,18 +614,11 @@ subsequent paths to the load-path.
 
 \subsection{Changing Aquamacs source files}
 
-If you'd like to tinker with the Emacs lisp source files that come with Aquamacs,
-you can do so quite easily. When activaten a new function or evaluate an
-expression, C-x C-e is your friend. 
+If you'd like to tinker with the Emacs lisp source files that come with Aquamacs, you can do so quite easily. When activaten a new function or evaluate an expression, C-x C-e is your friend.
 
-However, you may notice that some
-of your changes aren't active after you've saved your work (into the
-Aquamacs application bundle) and restart. That is because some of the
-code is precompiled into the Aquamacs binary and not loaded from the
-source (or .elc / .el.gz) files. To alleviate that problem, create a
-file\\ 
-{\ttfile /Users/User Name/Library/Application Support/Aquamacs
-Emacs/site-prestart.el} \\ with the following content:
+However, you may notice that some of your changes aren't active after you've saved your work (into the Aquamacs application bundle) and restart. That is because some of the code is precompiled into the Aquamacs binary and not loaded from the source (or .elc / .el.gz) files. To alleviate that problem, create a
+file\\
+{\ttfile /Users/User Name/Library/Application Support/Aquamacs Emacs/site-prestart.el} \\ with the following content:
 
 \texttt{(setq aquamacs-reload-preloaded-files t)}
 
@@ -736,18 +628,9 @@ This will cause to re-read the otherwise preloaded files from disk.
 
 There are many options for getting help with Aquamacs.
 
-From within Aquamacs, you can access user documentation from the menu
-or from specific key combinations: C-h k (key/menu entry) brings up
-help for some input items; C-h f (function) gives help for an elisp
-function; autocompletion support is available with (tab); and  
-C-h a brings up apropos, a search function.
+From within Aquamacs, you can access user documentation from the menu or from specific key combinations: C-h k (key/menu entry) brings up help for some input items; C-h f (function) gives help for an elisp function; autocompletion support is available with (tab); and C-h a brings up apropos, a search function.
 
-For help from other Aquamacs/Emacs users, the best place
-to begin is the OS X Emacs mailing
-list. The searchable list archives are located at
-\url{http://dir.gmane.org/gmane.emacs.macintosh.osx}. For more
-information on subscribing to the list, see
-\url{http://email.esm.psu.edu/mailman/listinfo/macosx-emacs}.
+For help from other Aquamacs/Emacs users, the best place to begin is the OS X Emacs mailing list. The searchable list archives are located at \url{http://dir.gmane.org/gmane.emacs.macintosh.osx}. For more information on subscribing to the list, see \url{http://email.esm.psu.edu/mailman/listinfo/macosx-emacs}.
 
 Another option for general Emacs help is the gnu.emacs.help newsgroup.
 
@@ -761,11 +644,7 @@ Aquamacs Emacs is a project that depends on your support. The project
 has no other source of substantial income: the application is free,
 the downloads are free. 
 
-Free software is developed because programmers love their
-work. Donations will never remunerate them financially as a job in the
-software industry would. But every donation is a recognition of the
-programmer's hard work, and the bigger ones actually help paying some
-bills.
+Free software is developed because programmers love their work. Donations will never remunerate them financially as a job in the software industry would. But every donation is a recognition of the programmer's hard work, and the bigger ones actually help paying some bills.
 
 If you would like to say ``thank you'', or if you would like to see
 the project developed further, \emph{please make a donation.}
