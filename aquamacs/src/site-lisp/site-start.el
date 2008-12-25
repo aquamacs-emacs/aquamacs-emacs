@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: site-start.el,v 1.59 2008/12/24 00:32:58 davidswelt Exp $
+;; Last change: $Id: site-start.el,v 1.60 2008/12/25 19:02:31 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -93,8 +93,10 @@ Changes in this code are ignored during the online version check.")
 
   (require 'aquamacs-mode-defaults)
  
-
-  (if user-init-file
+  ;; init-file-user is set at this time;
+  ;; user-init-file is normally not set.
+  ;; see comment in startup.el
+  (if (or init-file-user user-init-file)
       (require 'load-emacs-plugins))
 
   ;; workaround - Emacs doesn't do it  (0.9.9b)
