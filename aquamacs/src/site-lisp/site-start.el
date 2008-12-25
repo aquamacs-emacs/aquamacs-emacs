@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: site-start.el,v 1.60 2008/12/25 19:02:31 davidswelt Exp $
+;; Last change: $Id: site-start.el,v 1.61 2008/12/25 19:07:32 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -70,7 +70,7 @@ Changes in this code are ignored during the online version check.")
  
   (provide 'aquamacs-site-start)
 
-  (if user-init-file
+  (if (or init-file-user user-init-file)
       (require 'load-emacs-pre-plugins))
 
   ;; aquamacs-reload-preloaded-files should be set by a

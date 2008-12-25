@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.75 2008/12/22 22:49:32 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.76 2008/12/25 19:06:45 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -176,8 +176,10 @@ from earlier versions of the distribution."
 (mac-read-environment-vars-from-shell) ;; starts reading the env vars
 (ats "read env vars done")
 
-
-(when user-init-file
+;; init-file-user is set at this time;
+;; user-init-file is normally not set.
+;; see comment in startup.el
+(if (or init-file-user user-init-file)
   (mac-add-standard-directories)
   (ats "add dirs done")
   
@@ -195,6 +197,11 @@ from earlier versions of the distribution."
   ;; now solved via a patch to startup.el.
 
 
+
+;; POST-LOAD-PATH adjustment
+;; from here on, the load path has been altered to include the user's 
+;; own libraries (before our own).  Users may replace libraries
+;; that we load using "require" and "load".
 
 
   (aquamacs-set-defaults '(( frame-title-format "%b")))
