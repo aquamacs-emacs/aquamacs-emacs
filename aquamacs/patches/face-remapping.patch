@@ -677,16 +677,10 @@ M  src/mactoolbox.c
       }
 ***************
 *** 590,595 ****
---- 600,620 ----
+--- 600,614 ----
   	face_id = FRINGE_FACE_ID;
       }
   
-+   /* If no fringe is to be drawn, use the default face */
-+   if ((which == row->left_fringe_bitmap && WINDOW_LEFT_FRINGE_WIDTH (w)<=0)
-+       || (which == row->right_fringe_bitmap && WINDOW_RIGHT_FRINGE_WIDTH (w)<=0)
-+       || which==NO_FRINGE_BITMAP)
-+     face_id = DEFAULT_FACE_ID;
-+ 
 +   /* Perhaps remap BASE_FACE_ID to a user-specified alternative.  */
 +   remapped_face = lookup_basic_face (XFRAME (w->frame), face_id);
 +   if (remapped_face)
