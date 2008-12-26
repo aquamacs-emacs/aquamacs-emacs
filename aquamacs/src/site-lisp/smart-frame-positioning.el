@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.69 2008/12/10 04:31:29 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.70 2008/12/26 06:57:11 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -445,15 +445,12 @@ can be customized to configure this mode."
   smart-frame-positioning-mode)
         
 (defun frame-full-screen-p (&optional frame)
-;; This is mostly a hack
-;; replace with test for frame parameter fullscreen
-;; once the new patch is used.
   (eq (frame-parameter nil 'fullscreen) 'fullboth))
  
 
 (defvar smart-frame-prior-positions '()
-  "Association list with buffer names and frame positions / sizes, so these
-can be remembered. This is part of Aquamacs Emacs.")
+  "Association list with buffer names and frame positions / sizes,
+so these can be remembered. This is part of Aquamacs Emacs.")
  
 (defvar smart-frame--initial-frame (selected-frame))
 (defun smart-fp--store-frame-position-for-buffer (f)
@@ -468,11 +465,9 @@ can be remembered. This is part of Aquamacs Emacs.")
 		 (smart-fp--convert-negative-ordinates
 		  (if (frame-full-screen-p f)
 		      (list 
-		       (cons 'fullscreen t)
-		       (cons 'left (eval (frame-parameter f 'prior-left)))
-		       (cons 'top (eval (frame-parameter f 'prior-top)))
-		       (cons 'width (frame-parameter f 'prior-width))
-		       (cons 'height (frame-parameter f 'prior-height)))
+		       (cons 'fullscreen (frame-parameter f 'fullscreen))
+		       (cons 'fullscreen-saved-state 
+			     (frame-parameter f 'fullscreen-saved-state)))
 		    (list 
 		     (cons 'left (eval (frame-parameter f 'left)))
 		     (cons 'top (eval (frame-parameter f 'top)))
@@ -529,11 +524,9 @@ can be remembered. This is part of Aquamacs Emacs.")
 	(smart-fp--convert-negative-ordinates
 	 (if (frame-full-screen-p f)
 	     (list 
-	      (cons 'fullscreen 'fullboth)
-	      (cons 'left (eval (frame-parameter f 'prior-left)))
-	      (cons 'top (eval (frame-parameter f 'prior-top)))
-	      (cons 'width (frame-parameter f 'prior-width))
-	      (cons 'height (frame-parameter f 'prior-height)))
+	      (cons 'fullscreen (frame-parameter f 'fullscreen))
+	      (cons 'fullscreen-saved-state 
+		    (frame-parameter f 'fullscreen-saved-state)))
 	   (list 
 	    (cons 'left (eval (frame-parameter f 'left)))
 	    (cons 'top (eval (frame-parameter f 'top)))
@@ -581,10 +574,6 @@ Aquamacs was last terminated.")
 	 (unless (assq (car item)  initial-frame-alist)
 	   (setq new-initial-frame-alist (cons item new-initial-frame-alist))))
        (reverse frame-parameters))
-;;       (when (cdr-safe (assq 'fullscreen 
-;; 			    (append new-initial-frame-alist initial-frame-alist)))
-;;  	(run-with-idle-timer 0 nil 'aquamacs-toggle-full-frame))
-
       (setq initial-frame-alist 
 	    (append new-initial-frame-alist initial-frame-alist))
       ;; Emacs (or the system?) prevents frames that are off-screen. 
@@ -631,7 +620,7 @@ The file is specified in `smart-frame-position-file'."
       )))
 
 ;; load this after the custom-file
-(when user-init-file
+(when (or init-file-user user-init-file)
   (add-hook 'after-init-hook 'smart-fp--load-frame-positions-from-file 'append)
   (add-hook 'kill-emacs-hook 'smart-fp--save-frame-positions-to-file))
 
@@ -648,9 +637,6 @@ The file is specified in `smart-frame-position-file'."
 
 (defun smart-fp--get-frame-position-assigned-to-buffer-name ()
       (cdr (assq-string-equal (buffer-name) smart-frame-prior-positions)))
-
- 
-
 
 (defun smart-fp--convert-negative-ordinates (parms)
   "Converts screen ordinates of the form -x to a list (+ -x)."
