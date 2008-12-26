@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.70 2008/12/26 06:57:11 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.71 2008/12/26 14:58:08 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -257,6 +257,20 @@ pixels apart if possible."
 		  (next-h h ) ;; (frame-total-pixel-height new-frame) )
 		  (margin smart-frame-positioning-margin))
 
+	      (if (frame-full-screen-p old-frame)
+		  (let ((ss (frame-parameter old-frame 'fullscreen-saved-state)))
+		    (if ss
+			(setq x (nth 2 ss) ; left
+			      y (nth 1 ss) ; top
+			      w (- (nth 4 ss) (nth 2 ss))
+			      h (- (nth 3 ss) (nth 1 ss)))
+		      ;; backup solution  - shouldn't occur
+		      (setq x (or (cdr-safe (assq 'top default-frame-alist)) 40)
+			    y (or (cdr-safe (assq 'left default-frame-alist)) 40)
+			    w 400 h 600 ;; hack
+			    ))
+		    (setq next-w w next-h h)))
+
 	      ;; in case the frame is obviously created
 	      ;; on another screen
 	      ;; these ought to use the full screen dimensions, not
@@ -479,8 +493,9 @@ so these can be remembered. This is part of Aquamacs Emacs.")
   
   ;; (setq smart-frame-prior-positions nil)
   ;; don't store too many entries here
-  (when (or buffer-file-number 
-	    (not (string-match "untitled" (buffer-name))))
+  (when (and (not (frame-full-screen-p f))
+	     (or buffer-file-number 
+		 (not (string-match "untitled" (buffer-name)))))
     ;; don't save position if 'untitled'
     ;; but do save buffers like *Messages* and *Help*
     (if (> (length smart-frame-prior-positions) 50)
