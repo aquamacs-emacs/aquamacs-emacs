@@ -19,7 +19,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.43 2008/12/24 01:11:44 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.44 2008/12/26 14:58:54 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -220,7 +220,11 @@ Sets the `autoface-default' face."
       (message "Face for %s is now used as default." major-mode)))  
 
 (defvar aquamacs-relevant-frame-parameter-regexp "\\(font\\|color\\|mode\\|lines\\|fringe\\)"
-  "Regular expression to be found in frame parameters handled by aquamacs-styles.")
+  "Regular expression to be saved in frame parameters.
+This is used by the function
+`aquamacs-set-frame-parameters-as-default' to determine which
+frame parameters to save as default. handled by
+aquamacs-styles.")
 
 (defun aquamacs-set-frame-parameters-as-special-display () 
   "Use current frame settings for special display frames.
