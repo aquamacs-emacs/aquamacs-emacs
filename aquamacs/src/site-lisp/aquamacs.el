@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.241 2008/12/26 01:08:48 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.242 2008/12/26 06:45:42 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -382,7 +382,22 @@ un-Mac-like way when you select text and copy&paste it.")))
   (if (eq tabbar-mode 'default)
        (customize-set-variable 'tabbar-mode t))
   (if (eq one-buffer-one-frame-mode 'default)
-      (customize-set-variable 'one-buffer-one-frame-mode nil)))
+      (customize-set-variable 'one-buffer-one-frame-mode nil))
+  
+  ;; run this after the frames have been established
+  ;; via default-frame-alist
+  (run-with-idle-timer 
+   0.1 nil
+   (lambda ()
+     (mapc
+      (lambda (frame) 
+	(let ((fs (frame-parameter frame 'fullscreen)))
+	  (when (memq fs '(fullboth fullheight fullwidth))	    
+	    (modify-frame-parameters 
+	     frame (list (cons 'fullscreen nil)))
+	    (modify-frame-parameters 
+	     frame (list (cons 'fullscreen fs))))))
+      (frame-list)))))
 
 ; (aquamacs-notice-user-settings)
 
@@ -465,7 +480,8 @@ have changed."
 	   (standard (get symbol 'standard-value))
 	   (comment (get symbol 'customized-variable-comment)))
 
-      (if (eq customized-value value) ;; otherwise it's rogue
+      (if (or (eq customized-value value) ;; otherwise it's rogue
+	      (eq (condition-case nil (eval customized-value) (error nil)) value))
 	  (let ((cmp (or saved
 			 (condition-case nil
 			     (eval (car standard))
