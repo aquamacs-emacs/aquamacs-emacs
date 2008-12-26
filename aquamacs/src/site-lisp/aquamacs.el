@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.240 2008/12/17 03:31:28 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.241 2008/12/26 01:08:48 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -577,10 +577,16 @@ if modified buffers exist."
   :group 'Aquamacs
   :version "22.0")
 
-
-
 ;; read scratch file
 ;; (aquamacs-load-scratch-file)
+
+;; this will prevent Aquamacs from automatically saving the buffer in
+;; case the user saves it elsewhere (under a different name)
+;; this method is not perfect: it is not called if the buffer is
+;; manually associated with a different file.
+(defun aquamacs-do-not-save-without-query-if-saved-elsewhere ()
+  (unless (equal aquamacs-scratch-file buffer-file-name)
+    (setq buffer-save-without-query nil)))
 
 (defun aquamacs-load-scratch-file ()
   "Load the scratch buffer.
@@ -607,20 +613,15 @@ No errors are signaled."
 	    ;; Aquamacs would ask about the file being changed upon exit,
 	    ;; answering "no" would cancel exiting emacs,
 	    ;; answer "yes" would delete the file!
-;	  (set (make-local-variable 'auto-save-visited-file-name) t)
-;	  (put 'auto-save-visited-file-name 'permanent-local t)
-;	  (auto-save-mode 1)
 	    (aquamacs-set-defaults 
 	     `((recentf-exclude ,(append (list 
 					  (expand-file-name aquamacs-scratch-file)) recentf-exclude))))
-	  ;; make auto save file name permanent without a
-	  ;; global auto-save-visited-file-name setting
-	  ;; (in case the user saves *scratch* somewhere else, we will
-	  ;; still auto-save into the original scratch thing
-;	  (setq buffer-auto-save-file-name aquamacs-scratch-file)
 	    (setq buffer-save-without-query t)
 	    (put 'buffer-save-without-query 'permanent-local t)
-	    (setq buffer-file-coding-system 'utf-8))
+	    (setq buffer-file-coding-system 'utf-8)
+	    (add-hook 'before-save-hook 
+		      'aquamacs-do-not-save-without-query-if-saved-elsewhere
+		      nil 'local))
       ;; we aso need to avoid asking whether to save this
       ;; do this here so that we never save the scratch file
       ;; if it hasn't been successfully loaded initially
@@ -765,6 +766,8 @@ yes-or-no prompts - y or n will do."
   (if (running-on-a-mac-p)
       (require 'aquamacs-tabbar) 
     ;; aquamacs-tabbar doesn't work without windows
+    ;; do this before osx_defaults so that the load-path is not user-infested at this time
+    ;; (to force loading of our own tabbar)
     (require 'tabbar))
 
   (aquamacs-set-defaults `((tabbar-mode ,(if (running-on-a-mac-p) t nil))))
@@ -786,6 +789,11 @@ yes-or-no prompts - y or n will do."
 
   (ats "osx_defaults done")
 
+
+;; POST-LOAD-PATH adjustment
+;; from here on, the load path has been altered to include the user's 
+;; own libraries (before our own).  Users may replace libraries
+;; that we load using "require" and "load".
 
 ;; Page scrolling
 
