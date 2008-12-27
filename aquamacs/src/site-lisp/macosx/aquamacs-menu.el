@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.191 2008/12/26 05:48:33 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.192 2008/12/27 04:06:06 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -820,6 +820,12 @@ subsequently create.  Upon entering text-mode, the function
 (define-key menu-bar-showhide-menu [showhide-tool-bar]
     nil)
 
+
+(define-key menu-bar-custom-menu [customize]
+  `(menu-item "Top-level Customization Group  " 
+	      customize
+ 	      :keys ,(aq-binding 'customize)
+	      :help "The master group called `Emacs'"))
 
 (defun customize-aquamacs ()
   "Customize settings that differ between Aquamacs and Emacs."
