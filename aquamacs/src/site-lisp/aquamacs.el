@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.242 2008/12/26 06:45:42 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.243 2008/12/27 00:59:27 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -396,7 +396,10 @@ un-Mac-like way when you select text and copy&paste it.")))
 	    (modify-frame-parameters 
 	     frame (list (cons 'fullscreen nil)))
 	    (modify-frame-parameters 
-	     frame (list (cons 'fullscreen fs))))))
+	     frame (list (cons 'fullscreen fs)))
+	    (message
+	     (substitute-command-keys 
+	      "Press \\[aquamacs-toggle-full-frame] to exit full screen editing.")))))
       (frame-list)))))
 
 ; (aquamacs-notice-user-settings)
