@@ -19,7 +19,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.45 2008/12/26 15:20:02 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.46 2008/12/27 03:08:19 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -237,9 +237,19 @@ See also `aquamacs-set-frame-parameters-as-default'."
 Sets all frame parameters in `default-frame-alist' and
 `initial-frame-alist' from the selected frame, as long as they
 match `aquamacs-relevant-frame-parameter-regexp'.  If TARGET is
-given, set the variable instead that TARGET names, e.g.,
+given, set the variable named TARGET instead, e.g.,
 `special-display-frame-alist'."
   (interactive)
+  ;; set default face, because
+  ;; this will set most relevant frame parameters as well.
+  ;; that way, we're really setting the face and frame parameters.
+  (let ((source-face (or (cdr-safe (assq 'default face-remapping-alist)) 'default)))
+    (mapcar (lambda (att-cons)
+	      (set-face-attribute 
+	       'default nil
+	       (car att-cons)
+	       (face-attribute source-face (car att-cons) nil 'default)))
+	    face-attribute-name-alist))
   ;; set default-frame-alist
   (customize-set-variable 
    (or target 'default-frame-alist)
@@ -678,13 +688,13 @@ modified, or in FRAME if given."
 
 
 (define-key appearance-menu [aquamacs-set-frame-defaults]
-  (list 'menu-item "Adopt Frame Parameters as Frame Default"
+  (list 'menu-item "Adopt Face and Frame Parameters as Frame Default"
 	'aquamacs-set-frame-parameters-as-default 
 	:visible '(not (special-display-p (buffer-name)))
 	:help "Set most default frame parameters to ones of selected frame."))
       
 (define-key appearance-menu [aquamacs-set-frame-display-display]
-  (list 'menu-item "Adopt Frame Parameters for Special Frames"
+  (list 'menu-item "Adopt Face and Frame Parameters for Special Frames"
 	'aquamacs-set-frame-parameters-as-special-display 
 	:visible '(special-display-p (buffer-name ))
 	:help "Set most special display frame parameters to ones of selected frame."))
