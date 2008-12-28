@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.244 2008/12/28 04:14:01 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.245 2008/12/28 14:07:04 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -384,6 +384,12 @@ un-Mac-like way when you select text and copy&paste it.")))
   (if (eq one-buffer-one-frame-mode 'default)
       (customize-set-variable 'one-buffer-one-frame-mode nil))
   
+  ;; have fringe-mode reflect user settings
+  (setq fringe-mode
+	(cons (cdr-safe (assq 'left-fringe default-frame-alist))
+	      (cdr-safe (assq 'right-fringe default-frame-alist))))
+  (if (eq fringe-mode '(nil)) (setq fringe-mode))
+
   ;; run this after the frames have been established
   ;; via default-frame-alist
   (run-with-idle-timer 
