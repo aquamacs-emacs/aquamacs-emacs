@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.195 2008/12/28 14:05:20 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.196 2008/12/28 17:28:07 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -1151,6 +1151,33 @@ the previous frame size."
 ;; (set-frame-parameter nil 'fullscreen 'fullboth)
  
 
+
+(defvar menu-bar-zoom-menu (make-sparse-keymap "Zoom"))
+
+(define-key ispell-menu-map [ispell-buffer]
+	`(menu-item "Spell-Check Buffer               " 
+		    ispell-buffer
+		    :keys ,(aq-binding 'ispell-buffer)
+		    :help "Check spelling of selected buffer"))
+
+
+(define-key menu-bar-zoom-menu [zoom-out]
+  `(menu-item "Shrink     " zoom-font-out
+	      :keys "⌘-" ;; aq-binding doesn't work for minus
+	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
+			   (menu-bar-non-minibuffer-window-p))
+	      :help "Zoom font out"))
+
+(define-key menu-bar-zoom-menu [zoom-in]
+  `(menu-item "Enlarge   " zoom-font
+	      :keys ,(aq-binding 'zoom-font)
+	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
+			   (menu-bar-non-minibuffer-window-p))
+	      :help "Zoom font in"))
+
+(define-key menu-bar-file-menu [zoom-menu]
+    `(menu-item "Zoom" ,menu-bar-zoom-menu))
+
 (define-key menu-bar-file-menu [one-window]
   `(menu-item "Remove Splits                    " 
 	      aquamacs-delete-other-windows
@@ -1205,6 +1232,7 @@ the previous frame size."
 	       (list 
 		'(command-separator "--")
 		(assq 'make-frame menu-bar-file-menu)
+		(assq 'zoom-menu menu-bar-file-menu)
 		(assq 'full-frame menu-bar-file-menu)
 		(assq 'one-window menu-bar-file-menu)
 		(assq 'split-window menu-bar-file-menu)
@@ -1277,6 +1305,7 @@ the previous frame size."
 ;(assq-delete-all 'list-all-buffers menu-bar-buffers-menu-command-entries)
 
 (assq-delete-all 'full-frame menu-bar-file-menu)
+(assq-delete-all 'zoom-menu menu-bar-file-menu)
 (assq-delete-all 'make-frame menu-bar-file-menu)
 (assq-delete-all 'make-tab menu-bar-file-menu)
 (assq-delete-all 'one-window menu-bar-file-menu)
