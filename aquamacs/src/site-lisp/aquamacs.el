@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.243 2008/12/27 00:59:27 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.244 2008/12/28 04:14:01 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -419,25 +419,25 @@ un-Mac-like way when you select text and copy&paste it.")))
 ;; (progn (message "%s" (startup-echo-area-message)) (sit-for 4))
 ;; 
 (defvar aquamacs-faces-changed)
-(defun aquamacs-menu-bar-options-save ()
+(defun aquamacs-menu-bar-options-save (&optional maybe-save)
     "Save current values of Options menu items using Custom.
-Return non-nil if options where saved."
+Return non-nil if options where saved.
+MAYBE-SAVE t means: only save if needed"
     (interactive)
+    (setq aquamacs-customization-version-id aquamacs-version-id)
     (let ((need-save nil))
-      (setq aquamacs-customization-version-id aquamacs-version-id)
       ;; These are set with menu-bar-make-mm-toggle, which does not
       ;; put on a customized-value property.
       (dolist (elt aquamacs-menu-bar-options-to-save)
 	(and (customize-mark-to-save elt)
 	     (setq need-save (cons elt need-save)))) 
-      ;; 
       ;; These are set with `customize-set-variable'.
       (dolist (elt aquamacs-menu-bar-customize-options-to-save)
 	(and (get elt 'customized-value) 
 	     (customize-mark-to-save elt)
 	     (setq need-save (cons elt need-save))))
       ;; Save if we changed anything.
-      (if (or aquamacs-faces-changed need-save)
+      (if (or aquamacs-faces-changed need-save (not maybe-save))
 	  (progn (custom-save-all)
 		 (setq aquamacs-faces-changed nil)
 		 (message "Options saved."))
@@ -484,6 +484,7 @@ have changed."
 	   (comment (get symbol 'customized-variable-comment)))
 
       (if (or (eq customized-value value) ;; otherwise it's rogue
+	      (and (eq customized-value nil) value)
 	      (eq (condition-case nil (eval customized-value) (error nil)) value))
 	  (let ((cmp (or saved
 			 (condition-case nil
@@ -1424,8 +1425,9 @@ listed here."
   (defvar aquamacs-menu-bar-customize-options-to-save
     '(scroll-bar-mode
      debug-on-quit debug-on-error
-     tooltip-mode menu-bar-mode	;; tool-bar-mode
-     uniquify-buffer-name-style fringe-mode
+     tooltip-mode  
+     uniquify-buffer-name-style 
+     ;; fringe-mode and tool-bar-mode saved in default-frame-alist
      indicate-empty-lines indicate-buffer-boundaries
      case-fold-search
      current-language-environment default-input-method
