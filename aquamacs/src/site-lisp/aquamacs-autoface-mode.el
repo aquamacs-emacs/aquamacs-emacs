@@ -19,7 +19,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.46 2008/12/27 03:08:19 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.47 2008/12/28 03:14:55 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -402,7 +402,7 @@ modify them."))
 	 '(menu-bar-non-minibuffer-window-p) 'dont-filter))
   (define-key-after appstyle-mode-menu [sm-sep] '(menu-item "--"))
   (define-key-after appstyle-mode-menu [autoface-default]
-    '(menu-item "Default Style" aquamacs-apply-face-for-mode
+    '(menu-item "Default" aquamacs-apply-face-for-mode
 		:help "Apply default" :enable (menu-bar-non-minibuffer-window-p)))
 
    (define-key-after aquamacs-autoface-menu [set-mode]
