@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.194 2008/12/28 05:23:55 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.195 2008/12/28 14:05:20 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -811,7 +811,7 @@ subsequently create.  Upon entering text-mode, the function
 	      :visible ,(display-graphic-p)
 	      :button (:radio . (equal fringe-mode '(4 . 0)))) 'none)
 
-(define-key-after menu-bar-showhide-fringe-menu [small]
+(define-key-after menu-bar-showhide-fringe-menu [tiny]
   `(menu-item "Tiny" 
 	      aquamacs-menu-bar-showhide-fringe-menu-customize-tiny
 	      :help "Tiny fringes, left and right"
