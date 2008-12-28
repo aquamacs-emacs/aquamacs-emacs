@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.192 2008/12/27 04:06:06 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.193 2008/12/28 04:43:56 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -746,6 +746,7 @@ subsequently create.  Upon entering text-mode, the function
   (list 'menu-item "View" menu-bar-showhide-menu))
 
 (define-key menu-bar-showhide-menu [mac-font-panel-mode] nil)
+(define-key menu-bar-showhide-menu [showhide-scroll-bar] nil)
 
 (define-key menu-bar-options-menu [highlight-paren-mode] nil)
 (define-key menu-bar-options-menu [highlight-separator] nil)
