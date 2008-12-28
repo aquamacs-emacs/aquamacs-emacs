@@ -94,6 +94,8 @@ if test "${UPDATE_CVS}" == "yes"; then
 fi
 
 if test "${UPDATE_PLUGINS}" == "yes"; then
+    rm -rf ${DEST}/plugins
+    mkdir ${DEST}/plugins
 
     echo "Building SLIME" >>$LOG  
 
@@ -101,7 +103,6 @@ if test "${UPDATE_PLUGINS}" == "yes"; then
     $AQUAMACS_ROOT/build/make-slime
     PKG=`echo Aquamacs-SLIME-*.pkg`
     tar czf $PKG.tgz $PKG
-    mkdir ${DEST}/plugins
     mv $PKG.tgz ${DEST}/plugins/
     echo "Done building SLIME."
  # copy to web dir (logs, build)
