@@ -44,8 +44,8 @@ PATCHES="mac-functions mac-fullscreen emacs-inline transparency
          org-gnu-Aquamacs about-aquamacs puresize
          macfns-dialog-menu menu-bar-visible-frame 
          eval-depth
+         fringe
          shut-up python-mode intel"
-#  longlines-fillcolumn  out temporarily
 
 
 # The patches here are specified separately so their order can be defined.
