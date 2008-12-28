@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Bugfixes</TITLE>
-<META NAME="description" CONTENT="Bugfixes">
+<TITLE>Changes--1.3b</TITLE>
+<META NAME="description" CONTENT="Changes--1.3b">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,156 +21,103 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="node43.html">
 <LINK REL="previous" HREF="node41.html">
-<LINK REL="up" HREF="node39.html">
+<LINK REL="up" HREF="node38.html">
 <LINK REL="next" HREF="node43.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html703"
+<A NAME="tex2html691"
   HREF="node43.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html699"
-  HREF="node39.html">
+<A NAME="tex2html687"
+  HREF="node38.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html693"
+<A NAME="tex2html681"
   HREF="node41.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html701"
+<A NAME="tex2html689"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html704"
-  HREF="node43.html">What's behind the change</A>
-<B> Up:</B> <A NAME="tex2html700"
-  HREF="node39.html">Changes  1.6 (Preview</A>
-<B> Previous:</B> <A NAME="tex2html694"
-  HREF="node41.html">Configuring and Extending Aquamacs</A>
- &nbsp; <B>  <A NAME="tex2html702"
+<B> Next:</B> <A NAME="tex2html692"
+  HREF="node43.html">Changes 1.2</A>
+<B> Up:</B> <A NAME="tex2html688"
+  HREF="node38.html">Aquamacs Emacs: What's New</A>
+<B> Previous:</B> <A NAME="tex2html682"
+  HREF="node41.html">Changes 1.4</A>
+ &nbsp; <B>  <A NAME="tex2html690"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H4><A NAME="SECTION000141030000000000000">
-Bugfixes</A>
-</H4>
+<H2><A NAME="SECTION000144000000000000000">
+Changes--1.3b</A>
+</H2>
 
 <P>
 
 <UL>
-<LI>Aquamacs will now start up again for use in a terminal (-nw argument).
-Reported by Ian Soboroff.
+<LI>Bug fix: On OS X 10.5 ``Leopard'', Aquamacs consumed a lot of CPU power in certain rare circumstances.
+</LI>
+<LI>The minibuffer history is now retained between Aquamacs sessions.
+</LI>
+<LI>LaTeX editing: better support for jumping from and to the PDF if Skim.app is installed and used. No configuration is necessary. You can jump from Aquamacs to Skim with Shift-Command-Click, or with the AUCTeX command ``Jump to PDF'' (enter C-c C-c J RET) and back. You will need to <TT>usepackage{pdfsync}</TT> in your document preamble and re-compile before you can use the feature.    
+</LI>
+<LI>Press Command-E to use the region (selected text) for the next  search operation (Command-F).
+Suggested by Mathieu Godart.
+</LI>
+<LI>When using Frame Styles (especially with One Buffer One Frame Mode switched off), frames should (mostly) retain their original sizes now. Less jumping around!
+</LI>
+<LI>Aquamacs now remembers the positions of frames containing *Help*, *Messages* and other buffers.
+</LI>
+<LI>Improved frame positioning and sizing. In particular, *Help* frames should not come up too small any longer.
+</LI>
+<LI>Frames can now be tiled (horizontally/vertically) and scattered (automatic placement) with functions in the Buffers menu.
+Tiling code by Drew Adams.
+</LI>
+<LI>Speedier cursor movements (up/down) in outline-minor-mode and (similar situations with hidden text).
+</LI>
+<LI>The red ``close'' button will now delete all windows of the frame and kill associated buffers (after checking back) where sensible.
+</LI>
+<LI>Setting of `mac-function-modifier' now works in conjunction with arrow keys on Leopard.
+Reported by Claude Flener. Patch by Yamamoto Mitsuharu.
+</LI>
+<LI>Spanish keyboards are now better supported, e.g., Emulate Spanish Keyboard Mode now supports typing backslashes.
+Patches by Arcadio Rubio Garc&#237;a and Elias Baixas.
+</LI>
+<LI>Swiss German and Swiss French keyboard emulations added (Emulate Spanish Keyboard Mode. See Options / Option Key menu.)
+Patch by Claude Fenner.
+</LI>
+<LI>File names with non-ASCII characters such as German Umlauts or accented characters will be displayed and dealt with correctly. 
+Reported by Ted Roden.
+</LI>
+<LI>Existing files that are edited with Aquamacs are not automatically turned into ``Aquamacs'' files, i.e. will not always be opened in Aquamacs with a double click from the Finder. This behavior can be controlled with the `aquamacs-set-creator-codes-after-writing-files' customization variable. 
+Suggested by Joshua Smith and Nathaniel Cunningham.
+</LI>
+<LI>Longlines mode (Soft wrap) has been improved: it works better with variable-width fonts and with LaTeX mode
+</LI>
+<LI>ESS Info file updated from 5.3.0 to 5.3.6
+</LI>
+<LI>Cedet was missing a file and produced errors (JDE
+  Mode). Reported by Nick Frolov.
+</LI>
+<LI>ACT-R support fixed. 
+</LI>
+<LI>Loading of preferences files revised once more.   Preferences.el and customizations.el are now loaded along   with the user's .emacs, and changes to `after-init-hook'   should work (e.g. to use the `desktop' package) just fine.   Based on an issue reported by Phil Kime.
 
 <P>
 </LI>
-<LI>Dragging and dropping more than one file or opening several files from a terminal with Aquamacs with tabbar-mode will now lead to all files being shown in tabs, not just the last one.
+<LI>The Aquamacs application icon has been revised to look better in Leopard's Dock.
 
 <P>
 </LI>
-<LI>Command-1 (`aquamacs-delete-other-windows') no longer hides the tabbar in certain circumstances.  
-
-<P>
-</LI>
-<LI>Re-opening files already shown in a buffer or switching to buffers will bring up their tab, even if the tab is shown in another frame.
-
-<P>
-</LI>
-<LI>An issue was addressed that could lead to the wrong tab being selected after killing or renaming a buffer.  The problem was evident with `find-alternate-file'.
-Reported by Tao Peng.
-
-<P>
-</LI>
-<LI>C-e (end-of-visual-line) will now work correctly in the last line of a buffer that does not end with a newline.
-  Reported by Raymond Namyst.
-
-<P>
-</LI>
-<LI>Command/Control-left/right will jump to the beginning or end of the visual line, respectively, rather than to the beginning or end of the buffer line.
-Reported by Jean-Christophe Helary.
-
-<P>
-</LI>
-<LI>When soft word wrap (`word-wrap') is off (see Options menu), then C-k (kill-visual-line) and Command-Backspace (kill-whole-visual-line) now behave like their non-visual counter-parts, i.e. they delete the whole (rest of the) buffer line, rather than the visual line.  This is in line with the extant behavior of C-a and C-e.
-Reported by Tom van Vleck.
-
-<P>
-</LI>
-<LI>When Aquamacs is given files from the command line or by some drag'n'drop event while no frames are shown, it now only shows a new or pre-existing frame with the new file(s) rather than two frames.
-Reporter unknown (thanks for letting us know though).
-
-<P>
-</LI>
-<LI>Page-wise scrolling (PgUp, M-up, aquamacs-page-up and friends) now works correctly when faces with different sizes are used in buffers, such as in LaTeX-mode.  (Note that the `pager' package is not used any longer.  While the screen position of the cursor should be preserved in most cases, this is not perfect.  `pager' can still be activated using <TT>(require 'pager) </TT> in Preferences.el.
-
-<P>
-</LI>
-<LI>C-a (beginning-of-visual-line in `visual-line-mode' which is the default) will now always skip a prompt (e.g., in shell-mode) at the beginning of the line.
-
-<P>
-</LI>
-<LI>Moving the cursor up and down failed in certain situations involving side-by-side windows in a frame.
-Reported by Jin Choi.
-
-<P>
-</LI>
-<LI>Beginning/End-of-line movement commands don't signal an error any longer in visual line mode (so there is also no echo area message).
-
-<P>
-</LI>
-<LI>Functions like `enlarge-frame' are bound to A-C-left/right/up/down (Command-Control) in all cases (and depend on osx-key-mode).
-
-<P>
-</LI>
-<LI>The mouse cursor changes its shape when over buffer text.
-
-<P>
-</LI>
-<LI>The Options / Show/Hide menu is now called View. 
-Suggested by Jean-Christophe Helary.
-
-<P>
-</LI>
-<LI>Scrolling with the mouse wheel now works without first selecting the frame - just move the mouse cursor over the window.  (N.B., `mouse-wheel-follow-mouse' only applies to windows, not to frames.)
-
-<P>
-</LI>
-<LI>To see only labels (and not icons or icons and labels) in the tool-bar, use this setting in your <TT>Preferences.el</TT> file:
-
-<P>
-<TT>(setq mac-tool-bar-display-mode 'labels)</TT>
-
-<P>
-Note that this used to cause labels and icons to be displayed.  The variable value for labels and icons is now <TT>both</TT>.
-
-<P>
-</LI>
-<LI>`ediff' (Tools menu, under ``Compare'') no longer brings up additional controller frames.  This fix may also improve the function of other modes that use a complex set of frames. (By popular demand.)
-
-<P>
-</LI>
-<LI>Info-mode is now compatible with the tabbar.
-
-<P>
-</LI>
-<LI>Desktop-save-mode does not open additional scratch buffers any longer.
-Reported by Ivan Werning.
-
-<P>
-</LI>
-<LI>Auto-save files (usually named <TT>#filename#</TT>) are now saved in a temporary directory, out of sight of the user.
-
-<P>
-</LI>
-<LI>We forgot to offer to save newly created buffers when removing them (Command-W (close-buffer) or killing) after their major mode was changed.
-
-<P>
-</LI>
-<LI>Showing a dired buffer with ``Show Buffers in New Frames'' (one-buffer-one-frame-mode, OBOF) enabled could lead to  the minor mode (OBOF) being turned off unexceptedly. 
+<LI>1.3b: Aquamacs now checks for new versions again. 
 
 <P>
 </LI>
@@ -179,35 +126,35 @@ Reported by Ivan Werning.
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html703"
+<A NAME="tex2html691"
   HREF="node43.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html699"
-  HREF="node39.html">
+<A NAME="tex2html687"
+  HREF="node38.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html693"
+<A NAME="tex2html681"
   HREF="node41.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html701"
+<A NAME="tex2html689"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html704"
-  HREF="node43.html">What's behind the change</A>
-<B> Up:</B> <A NAME="tex2html700"
-  HREF="node39.html">Changes  1.6 (Preview</A>
-<B> Previous:</B> <A NAME="tex2html694"
-  HREF="node41.html">Configuring and Extending Aquamacs</A>
- &nbsp; <B>  <A NAME="tex2html702"
+<B> Next:</B> <A NAME="tex2html692"
+  HREF="node43.html">Changes 1.2</A>
+<B> Up:</B> <A NAME="tex2html688"
+  HREF="node38.html">Aquamacs Emacs: What's New</A>
+<B> Previous:</B> <A NAME="tex2html682"
+  HREF="node41.html">Changes 1.4</A>
+ &nbsp; <B>  <A NAME="tex2html690"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 <I>David</I>
-<BR><I>2008-12-24</I>
+<BR><I>2008-12-28</I>
 </ADDRESS>
 </BODY>
 </HTML>
