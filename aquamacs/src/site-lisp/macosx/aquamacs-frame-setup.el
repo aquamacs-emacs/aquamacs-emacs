@@ -6,7 +6,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
 
-;; Last change: $Id: aquamacs-frame-setup.el,v 1.37 2008/12/16 02:32:59 davidswelt Exp $
+;; Last change: $Id: aquamacs-frame-setup.el,v 1.38 2008/12/28 03:11:10 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -44,6 +44,9 @@
 		  (progn (fit-frame-single-window-forced f))))))
 
 (require 'aquamacs-mac-fontsets)
+
+;; face should look just like the buffer
+(face-spec-set 'fringe '((t (:inherit default))))
 
 (defun aquamacs-define-the-fringe-bitmap ()
   "Redefines a fringe bitmap (continuation) so that it looks good
