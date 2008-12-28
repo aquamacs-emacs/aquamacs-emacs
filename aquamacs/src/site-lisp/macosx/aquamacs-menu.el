@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.193 2008/12/28 04:43:56 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.194 2008/12/28 05:23:55 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -779,6 +779,13 @@ subsequently create.  Upon entering text-mode, the function
   (interactive)
   (require 'fringe) 
   (fringe-mode (cons 4 0)))
+
+(defun aquamacs-menu-bar-showhide-fringe-menu-customize-tiny ()
+  "Display small fringes only on the left of each window."
+  (interactive)
+  (require 'fringe) 
+  (fringe-mode (cons 1 1)))
+
   ;; Unfortunately, fringe-mode likes to round up fringes.
   ;; Therefore, we set both to 1.
  ;;  (customize-set-variable 'fringes-outside-margins 1)
@@ -798,11 +805,24 @@ subsequently create.  Upon entering text-mode, the function
 ; (fringe-mode (cons 4  0))
 
 (define-key-after menu-bar-showhide-fringe-menu [small]
-  `(menu-item "Small left fringe" 
+  `(menu-item "Small Left" 
 	      aquamacs-menu-bar-showhide-fringe-menu-customize-small
 	      :help "Narrow fringe, left only"
 	      :visible ,(display-graphic-p)
 	      :button (:radio . (equal fringe-mode '(4 . 0)))) 'none)
+
+(define-key-after menu-bar-showhide-fringe-menu [small]
+  `(menu-item "Tiny" 
+	      aquamacs-menu-bar-showhide-fringe-menu-customize-tiny
+	      :help "Tiny fringes, left and right"
+	      :visible ,(display-graphic-p)
+	      :button (:radio . (equal fringe-mode '(1 . 1)))) 'none)
+
+(define-key menu-bar-showhide-fringe-menu [default]
+  '(menu-item "Left and Right" menu-bar-showhide-fringe-menu-customize-reset
+	      :help "Default width fringe on both left and right side"
+	      :visible (display-graphic-p)
+	      :button (:radio . (eq fringe-mode nil))))
 
   
 (define-key-after menu-bar-options-menu [file-backups]
