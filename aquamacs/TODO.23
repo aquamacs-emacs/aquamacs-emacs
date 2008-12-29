@@ -1,0 +1,112 @@
+Aquamacs Emacs 23
+
+2008-12-28 David Reitter
+
+To Do List
+
+This is an incomplete list of things that need to be done to port Aquamacs to Cocoa and Emacs 23.  If you'd like to tackle one of the problems (please do!), send me an e-mail stating what you'd like to work on, and a date not more than two weeks from the current date when you'll submit the first patch.  Most problems here require less than an hour of your time if you know a little Objective C/Cocoa and some Emacs Lisp, and if you're familiar with the format of patches (so you can read the old ones).
+
+The Emacs 22 patches are found in CVS (aquamacs/patches).  The Emacs 23 are also in CVS (aquamacs/patches.23).
+
+- david.reitter@gmail.com
+
+
+
+Priorities: 
+1- will not run without
+2- won't release without this
+3- probably won't release without it
+
+4-6: Carbon Aquamacs has it, so it should be ported
+7-10: nice to have
+
+===
+TO DO
+
+- fix faces bug  (some weird face is chosen, at least for tabs)
+- live resizing/frame redrawing: this looks uber-ugly.    Maybe disable live-resizing.
+- build system (preferably better integrated with the Emacs one)
+
+
+- Fullscreen mode (ObjC code)
+This requires writing some Objective C code in nsterm.m (and friends), porting the functionality of mac-fullscreen.patch
+This is not hard to do if you've seen such code before.
+(Candidate for Emacs 23 CVS)
+
+Priority: 3
+
+- mac-functions
+we can probably get rid of show/hide menu bar (see: fullscreen), but port mac-process-activate
+Priority: 7
+
+- DND
+the cocoa port provides the ns-drag-file event:
+(define-key global-map [ns-drag-file] 'ns-insert-file)
+right now, the convenient latex DND functions (for images dragged from finder) will not work, and tabbar support will have to be established.
+priority: 2
+
+- toolbar
+toolbar height calculation seems to fail due to current toolbar-png changes (icons/labels)
+priority: 1
+
+- pretty-modeline
+makes the mode line pretty.  patch fails, but is probably very easy to fix.
+priority: 2
+
+- cocoaspell, flyspell-aspell
+fails
+I suggest to rework this now to use the OS X spell-checker.  This is a bit of work, but it is relatively easy to do.
+DR: I volunteer to provide Lisp bindings for the relevant functions.
+The rest of the job is just a matter of integrating it with ispell.
+priority: 2
+
+
+
+- available-screen:
+this change to macfns / nsfns returns the available screen bounds (i.e., sans menu bar/dock)
+porting this to NS is an easy job.
+priority: 2
+
+- mouse-button
+the "mac-emulate-three-button-mouse" function of "control" (control-Mouse-1 maps to Mouse-3) can probably be implemented via Lisp:
+
+(global-set-key "C-mouse-1" (lambda () (call-interactively (lookup-key global-map "down-mouse-3"))))
+(this doesn't run as such)
+
+priority: 2
+
+
+- launch-browser.patch
+this needs to be ported to Cocoa/Objective C
+an easy job.  this might even run as carbon, but it wouldn't be worth the trouble.
+
+priority: 2
+
+
+
+macfns-dialog-menu:
+this needs to be replaced with a patch to x-popup-dialog in order to provide a cancel button there.
+everything else should be in place.
+easy to do.
+priority: 2
+
+
+
+
+COMPLETED / NOT NEEDED
+
+
+display-buffer-reuse:  the "select" functionality is always used now in Emacs 23, so we won't patch this further.
+faces-speedup, face-remapping: not needed any more, on by default
+org-gnu-Aquamacs: no need
+puresize: maybe not needed
+fringe: not needed, patches it to 23 anyway
+save-place: not needed, has been done in 23
+intel: probably not needed
+
+DONE header-line
+DONE about-aquamacs
+DONE pop-to-buffer   probably not needed - ptb is implemented in Lisp now, and it DTRT - DR 
+DONE calm-startup
+DONE menu-bar-visible-frame
+DONE python-mode
