@@ -1,0 +1,41 @@
+Index: cus-edit.el
+===================================================================
+RCS file: /sources/emacs/emacs/lisp/cus-edit.el,v
+retrieving revision 1.360
+diff -c -r1.360 cus-edit.el
+*** lisp/cus-edit.el	17 Nov 2008 18:05:42 -0000	1.360
+--- lisp/cus-edit.el	29 Dec 2008 02:17:20 -0000
+***************
+*** 1087,1093 ****
+    (let ((name (format "*Customize Group: %s*"
+  		      (custom-unlispify-tag-name group))))
+      (if (get-buffer name)
+!         (pop-to-buffer name)
+        (custom-buffer-create
+         (list (list group 'custom-group))
+         name
+--- 1087,1093 ----
+    (let ((name (format "*Customize Group: %s*"
+  		      (custom-unlispify-tag-name group))))
+      (if (get-buffer name)
+!         (switch-to-buffer name)
+        (custom-buffer-create
+         (list (list group 'custom-group))
+         name
+***************
+*** 1497,1503 ****
+  OPTIONS should be an alist of the form ((SYMBOL WIDGET)...), where
+  SYMBOL is a customization option, and WIDGET is a widget for editing
+  that option."
+!   (pop-to-buffer (custom-get-fresh-buffer (or name "*Customization*")))
+    (custom-buffer-create-internal options description))
+  
+  ;;;###autoload
+--- 1497,1503 ----
+  OPTIONS should be an alist of the form ((SYMBOL WIDGET)...), where
+  SYMBOL is a customization option, and WIDGET is a widget for editing
+  that option."
+!   (switch-to-buffer (custom-get-fresh-buffer (or name "*Customization*")))
+    (custom-buffer-create-internal options description))
+  
+  ;;;###autoload

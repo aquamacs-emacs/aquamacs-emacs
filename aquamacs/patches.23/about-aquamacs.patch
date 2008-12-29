@@ -1,0 +1,291 @@
+This is an Aquamacs-specific patch.
+
+*** lisp/term/ns-win.el	22 Nov 2008 17:42:48 -0500	1.28
+--- lisp/term/ns-win.el	28 Dec 2008 22:31:13 -0500	
+***************
+*** 290,297 ****
+  (define-key global-map [ns-delete-working-text] 'ns-delete-working-text)
+  (define-key global-map [ns-spi-service-call] 'ns-spi-service-call)
+  (define-key global-map [ns-new-frame] 'make-frame)
+! 
+! 
+  
+  ;; Functions to set environment variables by running a subshell.
+  ;;; Idea based on Nextstep 4.2 distribution, this version of code
+--- 290,297 ----
+  (define-key global-map [ns-delete-working-text] 'ns-delete-working-text)
+  (define-key global-map [ns-spi-service-call] 'ns-spi-service-call)
+  (define-key global-map [ns-new-frame] 'make-frame)
+! (define-key global-map [ns-show-prefs] 'customize)
+! (define-key global-map [ns-about] 'about-emacs)
+  
+  ;; Functions to set environment variables by running a subshell.
+  ;;; Idea based on Nextstep 4.2 distribution, this version of code
+***************
+*** 399,404 ****
+--- 399,407 ----
+               (cons (logior (lsh 0 16)  10) 'ns-delete-working-text)
+               (cons (logior (lsh 0 16)  11) 'ns-spi-service-call)
+               (cons (logior (lsh 0 16)  12) 'ns-new-frame)
++ 	     (cons (logior (lsh 0 16)  129) 'ns-show-prefs) ;; Aquamacs only
++ 	     (cons (logior (lsh 0 16)  130) 'ns-about) ;; Aquamacs only
++ 	     (cons (logior (lsh 0 16)  131) 'ns-check-for-updates) ;; Aquamacs only
+               (cons (logior (lsh 1 16)  32) 'f1)
+               (cons (logior (lsh 1 16)  33) 'f2)
+               (cons (logior (lsh 1 16)  34) 'f3)
+Index: nsterm.m
+===================================================================
+RCS file: /sources/emacs/emacs/src/nsterm.m,v
+retrieving revision 1.40
+diff -c -r1.40 nsterm.m
+*** src/nsterm.m	23 Dec 2008 07:28:07 -0000	1.40
+--- src/nsterm.m	29 Dec 2008 04:08:20 -0000
+***************
+*** 82,87 ****
+--- 82,90 ----
+  #define KEY_NS_DELETE_WORKING_TEXT     ((1<<28)|(0<<16)|10)
+  #define KEY_NS_SPI_SERVICE_CALL        ((1<<28)|(0<<16)|11)
+  #define KEY_NS_NEW_FRAME               ((1<<28)|(0<<16)|12)
++ #define KEY_NS_SHOW_PREFS              ((1<<28)|(0<<16)|129)
++ #define KEY_NS_ABOUT                   ((1<<28)|(0<<16)|130)
++ #define KEY_NS_CHECK_FOR_UPDATES       ((1<<28)|(0<<16)|131)
+  
+  /* Convert a symbol indexed with an NSxxx value to a value as defined
+     in keyboard.c (lispy_function_key). I hope this is a correct way
+***************
+*** 1803,1811 ****
+        if (last_mouse_frame && FRAME_LIVE_P (last_mouse_frame))
+          f = last_mouse_frame;
+        else
+!         f = dpyinfo->x_focus_frame ? dpyinfo->x_focus_frame
+!                                     : SELECTED_FRAME ();
+  
+        if (f && f->output_data.ns)  /* TODO: 2nd check no longer needed? */
+          {
+            view = FRAME_NS_VIEW (*fp);
+--- 1806,1820 ----
+        if (last_mouse_frame && FRAME_LIVE_P (last_mouse_frame))
+          f = last_mouse_frame;
+        else
+!         {
+! 	  /*mouseLoc = [NSEvent mouseLocation];
+  
++ CGFloat x = mouseLoc.x; // x location
++ CGFloat y = mouseLoc.y; // y location
++ 	  */
++ 	  f = dpyinfo->x_focus_frame ? dpyinfo->x_focus_frame
++                                     : SELECTED_FRAME ();
++ 	}
+        if (f && f->output_data.ns)  /* TODO: 2nd check no longer needed? */
+          {
+            view = FRAME_NS_VIEW (*fp);
+***************
+*** 1978,1983 ****
+--- 1987,1993 ----
+    UNBLOCK_INPUT;
+  }
+  
++ extern struct buffer *current_buffer;
+  
+  void
+  ns_clear_frame_area (struct frame *f, int x, int y, int width, int height)
+***************
+*** 1987,1997 ****
+  {
+    NSRect r = NSMakeRect (x, y, width, height);
+    NSView *view = FRAME_NS_VIEW (f);
+!   struct face *face = FRAME_DEFAULT_FACE (f);
+  
+    if (!view || !face)
+      return;
+  
+    NSTRACE (ns_clear_frame_area);
+  
+    r = NSIntersectionRect (r, [view frame]);
+--- 1997,2029 ----
+  {
+    NSRect r = NSMakeRect (x, y, width, height);
+    NSView *view = FRAME_NS_VIEW (f);
+!   struct face *face =  FRAME_DEFAULT_FACE (f);
+!   struct buffer *old_buffer = NULL;
+  
+    if (!view || !face)
+      return;
+  
++   //   struct window *w = updated_window;
++   // is the current buffer correct?
++   if (updated_window && current_buffer)
++     {
++       if (XBUFFER (updated_window->buffer) != current_buffer)
++ 	{
++ 	  old_buffer = current_buffer;
++ 	  set_buffer_internal_1 (XBUFFER (updated_window->buffer));
++ 	}
++     
++   
++   int remapped_face = lookup_basic_face (f, DEFAULT_FACE_ID);
++   if (remapped_face)
++     face = FACE_FROM_ID (f, remapped_face);
++ 
++   if (old_buffer)
++     set_buffer_internal_1 (old_buffer);
++   }
++ 
++   //      face = lookup_basic_face (XFRAME (f), DEFAULT_FACE_ID);
++   
+    NSTRACE (ns_clear_frame_area);
+  
+    r = NSIntersectionRect (r, [view frame]);
+***************
+*** 3915,3958 ****
+      /* set up the application menu */
+      svcsMenu = [[EmacsMenu alloc] initWithTitle: @"Services"];
+      [svcsMenu setAutoenablesItems: NO];
+!     appMenu = [[EmacsMenu alloc] initWithTitle: @"Emacs"];
+      [appMenu setAutoenablesItems: NO];
+      mainMenu = [[EmacsMenu alloc] initWithTitle: @""];
+      dockMenu = [[EmacsMenu alloc] initWithTitle: @""];
+  
+!     [appMenu insertItemWithTitle: @"About Emacs"
+!                           action: @selector (orderFrontStandardAboutPanel:)
+                     keyEquivalent: @""
+                           atIndex: 0];
+!     [appMenu insertItem: [NSMenuItem separatorItem] atIndex: 1];
+      [appMenu insertItemWithTitle: @"Preferences..."
+                            action: @selector (showPreferencesWindow:)
+                     keyEquivalent: @","
+!                          atIndex: 2];
+!     [appMenu insertItem: [NSMenuItem separatorItem] atIndex: 3];
+      item = [appMenu insertItemWithTitle: @"Services"
+                                   action: @selector (menuDown:)
+                            keyEquivalent: @""
+!                                 atIndex: 4];
+      [appMenu setSubmenu: svcsMenu forItem: item];
+  /*    [svcsMenu setSupercell: item]; */
+!     [appMenu insertItem: [NSMenuItem separatorItem] atIndex: 5];
+!     [appMenu insertItemWithTitle: @"Hide Emacs"
+                            action: @selector (hide:)
+                     keyEquivalent: @"h"
+!                          atIndex: 6];
+      item =  [appMenu insertItemWithTitle: @"Hide Others"
+                            action: @selector (hideOtherApplications:)
+                     keyEquivalent: @"h"
+!                          atIndex: 7];
+      [item setKeyEquivalentModifierMask: NSCommandKeyMask | NSAlternateKeyMask];
+!     [appMenu insertItem: [NSMenuItem separatorItem] atIndex: 8];
+!     [appMenu insertItemWithTitle: @"Quit Emacs"
+                            action: @selector (terminate:)
+                     keyEquivalent: @"q"
+!                          atIndex: 9];
+  
+!     item = [mainMenu insertItemWithTitle: @"Emacs"
+                                    action: @selector (menuDown:)
+                             keyEquivalent: @""
+                                   atIndex: 0];
+--- 3947,3994 ----
+      /* set up the application menu */
+      svcsMenu = [[EmacsMenu alloc] initWithTitle: @"Services"];
+      [svcsMenu setAutoenablesItems: NO];
+!     appMenu = [[EmacsMenu alloc] initWithTitle: @"Aquamacs"];
+      [appMenu setAutoenablesItems: NO];
+      mainMenu = [[EmacsMenu alloc] initWithTitle: @""];
+      dockMenu = [[EmacsMenu alloc] initWithTitle: @""];
+  
+!     [appMenu insertItemWithTitle: @"About Aquamacs Emacs"
+!                           action: @selector (showAbout:)
+                     keyEquivalent: @""
+                           atIndex: 0];
+!     [appMenu insertItemWithTitle: @"Check for Updates..."
+!                           action: @selector (checkForUpdates:)
+!                    keyEquivalent: @""
+!                          atIndex: 1];
+!     [appMenu insertItem: [NSMenuItem separatorItem] atIndex: 2];
+      [appMenu insertItemWithTitle: @"Preferences..."
+                            action: @selector (showPreferencesWindow:)
+                     keyEquivalent: @","
+!                          atIndex: 3];
+!     [appMenu insertItem: [NSMenuItem separatorItem] atIndex: 4];
+      item = [appMenu insertItemWithTitle: @"Services"
+                                   action: @selector (menuDown:)
+                            keyEquivalent: @""
+!                                 atIndex: 5];
+      [appMenu setSubmenu: svcsMenu forItem: item];
+  /*    [svcsMenu setSupercell: item]; */
+!     [appMenu insertItem: [NSMenuItem separatorItem] atIndex: 6];
+!     [appMenu insertItemWithTitle: @"Hide Aquamacs Emacs"
+                            action: @selector (hide:)
+                     keyEquivalent: @"h"
+!                          atIndex: 7];
+      item =  [appMenu insertItemWithTitle: @"Hide Others"
+                            action: @selector (hideOtherApplications:)
+                     keyEquivalent: @"h"
+!                          atIndex: 8];
+      [item setKeyEquivalentModifierMask: NSCommandKeyMask | NSAlternateKeyMask];
+!     [appMenu insertItem: [NSMenuItem separatorItem] atIndex: 9];
+!     [appMenu insertItemWithTitle: @"Quit Aquamacs Emacs"
+                            action: @selector (terminate:)
+                     keyEquivalent: @"q"
+!                          atIndex: 10];
+  
+!     item = [mainMenu insertItemWithTitle: @"Aquamacs Emacs"
+                                    action: @selector (menuDown:)
+                             keyEquivalent: @""
+                                   atIndex: 0];
+***************
+*** 4061,4071 ****
+  }
+  
+  
+  - (void)showPreferencesWindow: (id)sender
+  {
+!   if (prefsController == nil)
+!     prefsController = [[EmacsPrefsController alloc] init];
+!   [prefsController showForFrame: SELECTED_FRAME ()];
+  }
+  
+  
+--- 4097,4140 ----
+  }
+  
+  
++ - (void)checkForUpdates: (id)sender
++ {
++   struct frame *emacsframe = SELECTED_FRAME ();
++   NSEvent *theEvent = [NSApp currentEvent];
++ 
++   if (!emacs_event)
++     return;
++   emacs_event->kind = NON_ASCII_KEYSTROKE_EVENT;
++   emacs_event->code = KEY_NS_CHECK_FOR_UPDATES;
++   emacs_event->modifiers = 0;
++   EV_TRAILER (theEvent);
++ }
++ 
++ - (void)showAbout: (id)sender
++ {
++   struct frame *emacsframe = SELECTED_FRAME ();
++   NSEvent *theEvent = [NSApp currentEvent];
++ 
++   if (!emacs_event)
++     return;
++   emacs_event->kind = NON_ASCII_KEYSTROKE_EVENT;
++   emacs_event->code = KEY_NS_ABOUT;
++   emacs_event->modifiers = 0;
++   EV_TRAILER (theEvent);
++ }
++ 
++ 
+  - (void)showPreferencesWindow: (id)sender
+  {
+!   struct frame *emacsframe = SELECTED_FRAME ();
+!   NSEvent *theEvent = [NSApp currentEvent];
+! 
+!   if (!emacs_event)
+!     return;
+!   emacs_event->kind = NON_ASCII_KEYSTROKE_EVENT;
+!   emacs_event->code = KEY_NS_SHOW_PREFS;
+!   emacs_event->modifiers = 0;
+!   EV_TRAILER (theEvent);
+  }
+  
+  
