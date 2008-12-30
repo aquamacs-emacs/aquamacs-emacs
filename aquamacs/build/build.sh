@@ -99,9 +99,13 @@ if test "${UPDATE_PLUGINS}" == "yes"; then
 
     echo "Building SLIME" >>$LOG  
 
-    rm -rf builds/plugins/Aquamacs-SLIME-*.pkg.*
+    rm -rf builds/plugins/Aquamacs-SLIME-*.pkg.* 2>/dev/null
+    rm -rf Aquamacs-SLIME-*.pkg 2>/dev/null
     $AQUAMACS_ROOT/build/make-slime
+
     PKG=`echo Aquamacs-SLIME-*.pkg`
+    pwd
+    echo "tarring $PKG"
     tar czf $PKG.tgz $PKG
     mv $PKG.tgz ${DEST}/plugins/
     echo "Done building SLIME."
