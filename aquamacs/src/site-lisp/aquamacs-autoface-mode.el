@@ -19,7 +19,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.47 2008/12/28 03:14:55 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.48 2008/12/30 03:24:18 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -251,48 +251,41 @@ given, set the variable named TARGET instead, e.g.,
 	       (face-attribute source-face (car att-cons) nil 'default)))
 	    face-attribute-name-alist))
   ;; set default-frame-alist
-  (customize-set-variable 
-   (or target 'default-frame-alist)
-   (append 
-    (apply #'append
-	   (mapcar 
-	    (lambda (pm)
-	      (unless (string-match 
-		       aquamacs-relevant-frame-parameter-regexp 
-		       (symbol-name (car pm)))
-		(list pm)))
-	    default-frame-alist))
-    (apply #'append
-	   (mapcar 
-	    (lambda (pm)
-	      (if (string-match 
-		   aquamacs-relevant-frame-parameter-regexp 
-		   (symbol-name (car pm)))
-		  (list pm)))
-	    (frame-parameters)))))
-  (unless target
-    ;; set initial-frame-alist
+  (let ((new-values (append 
+		       (apply #'append
+			      (mapcar 
+			       (lambda (pm)
+				 (if (string-match 
+				      aquamacs-relevant-frame-parameter-regexp 
+				      (symbol-name (car pm)))
+				     (list pm)))
+			       (frame-parameters))))))
+    
     (customize-set-variable 
-     'initial-frame-alist
+     (or target 'default-frame-alist)
      (append 
       (apply #'append
 	     (mapcar 
 	      (lambda (pm)
-		(unless (string-match 
-			 aquamacs-relevant-frame-parameter-regexp 
-			 (symbol-name (car pm)))
+		(unless (assq (car pm) new-values)
 		  (list pm)))
-	      initial-frame-alist))
-      (apply #'append
-	     (mapcar 
-	      (lambda (pm)
-		(if (string-match 
-		     aquamacs-relevant-frame-parameter-regexp 
-		     (symbol-name (car pm)))
+	      (symbol-value (or target 'default-frame-alist))))
+      new-values)
+     )
+    (unless target
+      ;; set initial-frame-alist
+      (customize-set-variable 
+       'initial-frame-alist
+       (append 
+	(apply #'append
+	       (mapcar 
+		(lambda (pm)
+		  (unless (assq (car pm) new-values)
 		    (list pm)))
-	      (frame-parameters)))))))
-	  
-
+		initial-frame-alist))
+	new-values)))))
+  
+  
 (defun aquamacs-default-autofaces-list (&optional face-names include-default)
   "Return list of all major modes that have a default style.
 face-names non-nil means return face names instead of mode names.
