@@ -162,13 +162,18 @@ This provides labels in toolbar icons and PNG support for the icons.
     defsubr (&Sx_popup_menu);
     defsubr (&Sx_popup_dialog);
     defsubr (&Sns_reset_menu);
-*** lisp/tool-bar.el	05 Apr 2008 01:23:45 +0100	1.7.2.2
---- lisp/tool-bar.el	05 Apr 2008 14:30:07 +0100	
+Index: lisp/tool-bar.el
+===================================================================
+RCS file: /sources/emacs/emacs/lisp/tool-bar.el,v
+retrieving revision 1.22
+diff -c -r1.22 tool-bar.el
+*** lisp/tool-bar.el	27 Nov 2008 03:29:37 -0000	1.22
+--- lisp/tool-bar.el	1 Jan 2009 23:49:49 -0000
 ***************
-*** 90,95 ****
---- 90,166 ----
-  		'(menu-item "tool bar" ignore
-  			    :filter (lambda (ignore) tool-bar-map)))
+*** 127,132 ****
+--- 127,203 ----
+  	      bind))
+  	  tool-bar-map))
   
 + (defun tool-bar-set-file-extension (image-spec-list extension)
 +   "Set new file extensions for all :file properties
@@ -245,7 +250,7 @@ This provides labels in toolbar icons and PNG support for the icons.
   (defun tool-bar-add-item (icon def key &rest props)
     "Add an item to the tool bar.
 ***************
-*** 110,147 ****
+*** 147,181 ****
   ;;;###autoload
   (defun tool-bar-local-item (icon def key map &rest props)
     "Add an item to the tool bar in map MAP.
@@ -255,7 +260,7 @@ This provides labels in toolbar icons and PNG support for the icons.
 ! Info node `(elisp)Tool Bar'.  Items are added from left to right.
 ! 
 ! ICON is the base name of a file containing the image to use.  The
-! function will first try to use low-color/ICON.xpm if display-color-cells
+! function will first try to use low-color/ICON.xpm if `display-color-cells'
 ! is less or equal to 256, then ICON.xpm, then ICON.pbm, and finally
 ! ICON.xbm, using `find-image'."
 !   (let* ((fg (face-attribute 'tool-bar :foreground))
@@ -263,28 +268,25 @@ This provides labels in toolbar icons and PNG support for the icons.
 ! 	 (colors (nconc (if (eq fg 'unspecified) nil (list :foreground fg))
 ! 			(if (eq bg 'unspecified) nil (list :background bg))))
 ! 	 (xpm-spec (list :type 'xpm :file (concat icon ".xpm")))
-! 	 (xpm-lo-spec (if (> (display-color-cells) 256)
-! 			  nil
-! 			(list :type 'xpm :file
-!                               (concat "low-color/" icon ".xpm"))))
+! 	 (xpm-lo-spec (list :type 'xpm :file
+! 			    (concat "low-color/" icon ".xpm")))
 ! 	 (pbm-spec (append (list :type 'pbm :file
 !                                  (concat icon ".pbm")) colors))
 ! 	 (xbm-spec (append (list :type 'xbm :file
 !                                  (concat icon ".xbm")) colors))
-! 	 (image (find-image
-! 		(if (display-color-p)
-! 		    (list xpm-lo-spec xpm-spec pbm-spec xbm-spec)
-! 		  (list pbm-spec xbm-spec xpm-lo-spec xpm-spec)))))
-! 
-      (when (and (display-images-p) image)
--       (unless (image-mask-p image)
-- 	(setq image (append image '(:mask heuristic))))
-        (define-key-after map (vector key)
-! 	`(menu-item ,(symbol-name key) ,def :image ,image ,@props)))))
+! 	 (image-exp `(find-image
+! 		      (cond ((not (display-color-p))
+! 			     ',(list pbm-spec xbm-spec xpm-lo-spec xpm-spec))
+! 			    ((< (display-color-cells) 256)
+! 			     ',(list xpm-lo-spec xpm-spec pbm-spec xbm-spec))
+! 			    (t
+! 			     ',(list xpm-spec pbm-spec xbm-spec))))))
+!     (define-key-after map (vector key)
+!       `(menu-item ,(symbol-name key) ,def :image ,image-exp ,@props))))
   
   ;;;###autoload
   (defun tool-bar-add-item-from-menu (command icon &optional map &rest props)
---- 181,208 ----
+--- 218,245 ----
   ;;;###autoload
   (defun tool-bar-local-item (icon def key map &rest props)
     "Add an item to the tool bar in map MAP.
@@ -306,15 +308,15 @@ This provides labels in toolbar icons and PNG support for the icons.
 ! 	 (is (tool-bar-get-image-spec icon-name))
 ! 	 (image (car is))
 ! 	 (images (cdr is))) 
-      (when (and (display-images-p) image)
-        (define-key-after map (vector key)
+!       (when (and (display-images-p) image)
+!         (define-key-after map (vector key)
 ! 	`(menu-item ,label 
 ! 		    ,def :image ,images ,@props)))))
   
   ;;;###autoload
   (defun tool-bar-add-item-from-menu (command icon &optional map &rest props)
 ***************
-*** 162,196 ****
+*** 196,231 ****
   ;;;###autoload
   (defun tool-bar-local-item-from-menu (command icon in-map &optional from-map &rest props)
     "Define local tool bar binding for COMMAND using the given ICON.
@@ -329,28 +331,29 @@ This provides labels in toolbar icons and PNG support for the icons.
     (unless from-map
       (setq from-map global-map))
 !   (let* ((menu-bar-map (lookup-key from-map [menu-bar]))
-  	 (keys (where-is-internal command menu-bar-map))
+! 	 (keys (where-is-internal command menu-bar-map))
 ! 	 (fg (face-attribute 'tool-bar :foreground))
 ! 	 (bg (face-attribute 'tool-bar :background))
 ! 	 (colors (nconc (if (eq fg 'unspecified) nil (list :foreground fg))
 ! 			(if (eq bg 'unspecified) nil (list :background bg))))
 ! 	 (xpm-spec (list :type 'xpm :file (concat icon ".xpm")))
-! 	 (xpm-lo-spec (if (> (display-color-cells) 256)
-! 			  nil
-! 			(list :type 'xpm :file
-!                               (concat "low-color/" icon ".xpm"))))
+! 	 (xpm-lo-spec (list :type 'xpm :file
+! 			    (concat "low-color/" icon ".xpm")))
 ! 	 (pbm-spec (append (list :type 'pbm :file
 !                                  (concat icon ".pbm")) colors))
 ! 	 (xbm-spec (append (list :type 'xbm :file
 !                                  (concat icon ".xbm")) colors))
-! 	 (spec (if (display-color-p)
-! 		   (list xpm-lo-spec xpm-spec pbm-spec xbm-spec)
-! 		 (list pbm-spec xbm-spec xpm-lo-spec xpm-spec)))
-! 	 (image (find-image spec))
+! 	 (image-exp `(find-image
+! 		      (cond ((not (display-color-p))
+! 			     ',(list pbm-spec xbm-spec xpm-lo-spec xpm-spec))
+! 			    ((< (display-color-cells) 256)
+! 			     ',(list xpm-lo-spec xpm-spec pbm-spec xbm-spec))
+! 			    (t
+! 			     ',(list xpm-spec pbm-spec xbm-spec)))))
   	 submap key)
-      (when (and (display-images-p) image)
-        ;; We'll pick up the last valid entry in the list of keys if
---- 223,248 ----
+      ;; We'll pick up the last valid entry in the list of keys if
+      ;; there's more than one.
+--- 260,285 ----
   ;;;###autoload
   (defun tool-bar-local-item-from-menu (command icon in-map &optional from-map &rest props)
     "Define local tool bar binding for COMMAND using the given ICON.
@@ -370,65 +373,59 @@ This provides labels in toolbar icons and PNG support for the icons.
 !   (let* ((icon-name (if (consp icon) (car icon) icon))
 ! 	 (label (if (consp icon) (cdr icon)))
 ! 	 (menu-bar-map (lookup-key from-map [menu-bar]))
-  	 (keys (where-is-internal command menu-bar-map))
+!   	 (keys (where-is-internal command menu-bar-map))
 ! 	 (is (tool-bar-get-image-spec icon-name))
 ! 	 (image (car is))
 ! 	 (images (cdr is)) 
   	 submap key)
-      (when (and (display-images-p) image)
-        ;; We'll pick up the last valid entry in the list of keys if
+      ;; We'll pick up the last valid entry in the list of keys if
+      ;; there's more than one.
 ***************
-*** 210,221 ****
-  			key kk)))))
-        (when (and (symbolp submap) (boundp submap))
-  	(setq submap (eval submap)))
--       (unless (image-mask-p image)
-- 	(setq image (append image '(:mask heuristic))))
-        (let ((defn (assq key (cdr submap))))
-  	(if (eq (cadr defn) 'menu-item)
-  	    (define-key-after in-map (vector key)
-! 	      (append (cdr defn) (list :image image) props))
-  	  (setq defn (cdr defn))
-  	  (define-key-after in-map (vector key)
-  	    (let ((rest (cdr defn)))
---- 262,272 ----
-  			key kk)))))
-        (when (and (symbolp submap) (boundp submap))
-  	(setq submap (eval submap)))
-        (let ((defn (assq key (cdr submap))))
-  	(if (eq (cadr defn) 'menu-item)
-  	    (define-key-after in-map (vector key)
+*** 247,253 ****
+      (let ((defn (assq key (cdr submap))))
+        (if (eq (cadr defn) 'menu-item)
+            (define-key-after in-map (vector key)
+!             (append (cdr defn) (list :image image-exp) props))
+          (setq defn (cdr defn))
+          (define-key-after in-map (vector key)
+            (let ((rest (cdr defn)))
+--- 301,308 ----
+      (let ((defn (assq key (cdr submap))))
+        (if (eq (cadr defn) 'menu-item)
+            (define-key-after in-map (vector key)
 ! 	      (append `(menu-item ,(or label (car (cddr defn)))) (cdddr defn) 
 ! 		      (list :image image) props))
-  	  (setq defn (cdr defn))
-  	  (define-key-after in-map (vector key)
-  	    (let ((rest (cdr defn)))
+          (setq defn (cdr defn))
+          (define-key-after in-map (vector key)
+            (let ((rest (cdr defn)))
 ***************
-*** 223,229 ****
-  	      ;; with a list of menu cache info, get rid of that.
-  	      (if (and (consp rest) (consp (car rest)))
-  		  (setq rest (cdr rest)))
-! 	      (append `(menu-item ,(car defn) ,rest)
-  		      (list :image image) props))))))))
+*** 255,262 ****
+              ;; with a list of menu cache info, get rid of that.
+              (if (and (consp rest) (consp (car rest)))
+                  (setq rest (cdr rest)))
+!             (append `(menu-item ,(car defn) ,rest)
+!                     (list :image image-exp) props)))))))
   
   ;;; Set up some global items.  Additions/deletions up for grabs.
---- 274,280 ----
-  	      ;; with a list of menu cache info, get rid of that.
-  	      (if (and (consp rest) (consp (car rest)))
-  		  (setq rest (cdr rest)))
+  
+--- 310,317 ----
+              ;; with a list of menu cache info, get rid of that.
+              (if (and (consp rest) (consp (car rest)))
+                  (setq rest (cdr rest)))
 ! 	      (append `(menu-item ,(or label (car defn)) ,rest)
-  		      (list :image image) props))))))))
+!                     (list :image image) props)))))))
   
   ;;; Set up some global items.  Additions/deletions up for grabs.
+  
 ***************
-*** 232,247 ****
+*** 264,279 ****
     ;; People say it's bad to have EXIT on the tool bar, since users
     ;; might inadvertently click that button.
     ;;(tool-bar-add-item-from-menu 'save-buffers-kill-emacs "exit")
 !   (tool-bar-add-item-from-menu 'find-file "new")
 !   (tool-bar-add-item-from-menu 'menu-find-file-existing "open")
 !   (tool-bar-add-item-from-menu 'dired "diropen")
-    (tool-bar-add-item-from-menu 'kill-this-buffer "close")
+!   (tool-bar-add-item-from-menu 'kill-this-buffer "close")
 !   (tool-bar-add-item-from-menu 'save-buffer "save" nil
   			       :visible '(or buffer-file-name
   					     (not (eq 'special
@@ -438,14 +435,14 @@ This provides labels in toolbar icons and PNG support for the icons.
   			       :visible '(or buffer-file-name
   					     (not (eq 'special
   						      (get major-mode
---- 283,298 ----
+--- 319,334 ----
     ;; People say it's bad to have EXIT on the tool bar, since users
     ;; might inadvertently click that button.
     ;;(tool-bar-add-item-from-menu 'save-buffers-kill-emacs "exit")
 !   (tool-bar-add-item-from-menu 'find-file '("new" . "New"))
 !   (tool-bar-add-item-from-menu 'menu-find-file-existing '("open" . "Open"))
 !   (tool-bar-add-item-from-menu 'dired '("diropen" . "Directory"))
-    (tool-bar-add-item-from-menu 'kill-this-buffer "close")
+!     (tool-bar-add-item-from-menu 'kill-this-buffer "close")
 !   (tool-bar-add-item-from-menu 'save-buffer '("save" . "Save") nil
   			       :visible '(or buffer-file-name
   					     (not (eq 'special
@@ -456,7 +453,7 @@ This provides labels in toolbar icons and PNG support for the icons.
   					     (not (eq 'special
   						      (get major-mode
 ***************
-*** 273,282 ****
+*** 305,314 ****
     ;; we must explicitly operate on the default value.
   
     (let ((tool-bar-map (default-value 'tool-bar-map)))
@@ -467,7 +464,7 @@ This provides labels in toolbar icons and PNG support for the icons.
   				(interactive)
   				(popup-menu menu-bar-help-menu))
   		       'help
---- 324,333 ----
+--- 360,369 ----
     ;; we must explicitly operate on the default value.
   
     (let ((tool-bar-map (default-value 'tool-bar-map)))
