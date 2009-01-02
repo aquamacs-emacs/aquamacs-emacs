@@ -1,9 +1,8 @@
-This provides labels in toolbar icons and PNG support for the icons.
-*** src/nsmenu.m	09 Aug 2008 04:37:53 -0400	1.10
---- src/nsmenu.m	19 Aug 2008 18:12:56 -0400	
+*** ../emacs.temp/src/nsmenu.m	2009-01-02 13:59:45.000000000 +1300
+--- src/nsmenu.m	2009-01-02 13:59:47.000000000 +1300
 ***************
-*** 68,73 ****
---- 68,75 ----
+*** 71,76 ****
+--- 71,78 ----
   /* Nonzero means a menu is currently active.  */
   static int popup_activated_flag;
   
@@ -13,8 +12,8 @@ This provides labels in toolbar icons and PNG support for the icons.
     following complete menu implementation. */
   
 ***************
-*** 1184,1190 ****
---- 1186,1194 ----
+*** 1187,1193 ****
+--- 1189,1197 ----
         struct image *img;
         Lisp_Object image;
         Lisp_Object helpObj;
@@ -25,7 +24,7 @@ This provides labels in toolbar icons and PNG support for the icons.
         /* If image is a vector, choose the image according to the
   	 button state.  */
 ***************
-*** 1222,1229 ****
+*** 1225,1232 ****
           helpObj = TOOLPROP (TOOL_BAR_ITEM_CAPTION);
         helpText = NILP (helpObj) ? "" : (char *)SDATA (helpObj);
   
@@ -34,7 +33,7 @@ This provides labels in toolbar icons and PNG support for the icons.
   #undef TOOLPROP
       }
   
---- 1226,1236 ----
+--- 1229,1239 ----
           helpObj = TOOLPROP (TOOL_BAR_ITEM_CAPTION);
         helpText = NILP (helpObj) ? "" : (char *)SDATA (helpObj);
   
@@ -47,7 +46,7 @@ This provides labels in toolbar icons and PNG support for the icons.
       }
   
 ***************
-*** 1267,1273 ****
+*** 1270,1276 ****
   {
     self = [super initWithIdentifier: identifier];
     emacsView = view;
@@ -55,7 +54,7 @@ This provides labels in toolbar icons and PNG support for the icons.
     [self setSizeMode: NSToolbarSizeModeSmall];
     [self setDelegate: self];
     identifierToItem = [[NSMutableDictionary alloc] initWithCapacity: 10];
---- 1274,1280 ----
+--- 1277,1283 ----
   {
     self = [super initWithIdentifier: identifier];
     emacsView = view;
@@ -64,8 +63,8 @@ This provides labels in toolbar icons and PNG support for the icons.
     [self setDelegate: self];
     identifierToItem = [[NSMutableDictionary alloc] initWithCapacity: 10];
 ***************
-*** 1291,1296 ****
---- 1298,1317 ----
+*** 1294,1299 ****
+--- 1301,1320 ----
     [activeIdentifiers removeAllObjects];
     prevEnablement = enablement;
     enablement = 0L;
@@ -87,7 +86,7 @@ This provides labels in toolbar icons and PNG support for the icons.
   
   - (BOOL) changed
 ***************
-*** 1301,1311 ****
+*** 1304,1314 ****
   
   - (void) addDisplayItemWithImage: (EmacsImage *)img idx: (int)idx
                           helpText: (char *)help enabled: (BOOL)enabled
@@ -99,7 +98,7 @@ This provides labels in toolbar icons and PNG support for the icons.
     /* 2) create / reuse item */
     NSToolbarItem *item = [identifierToItem objectForKey: identifier];
     if (item == nil)
---- 1322,1342 ----
+--- 1325,1345 ----
   
   - (void) addDisplayItemWithImage: (EmacsImage *)img idx: (int)idx
                           helpText: (char *)help enabled: (BOOL)enabled
@@ -122,8 +121,8 @@ This provides labels in toolbar icons and PNG support for the icons.
     NSToolbarItem *item = [identifierToItem objectForKey: identifier];
     if (item == nil)
 ***************
-*** 1314,1319 ****
---- 1345,1351 ----
+*** 1317,1322 ****
+--- 1348,1354 ----
                  autorelease];
         [item setImage: img];
         [item setToolTip: [NSString stringWithCString: help]];
@@ -132,8 +131,8 @@ This provides labels in toolbar icons and PNG support for the icons.
         [item setAction: @selector (toolbarClicked:)];
       }
 ***************
-*** 1871,1876 ****
---- 1903,1909 ----
+*** 1874,1879 ****
+--- 1906,1912 ----
   
      ========================================================================== */
   
@@ -142,8 +141,8 @@ This provides labels in toolbar icons and PNG support for the icons.
          doc: /* Cause the NS menu to be re-calculated.  */)
        ()
 ***************
-*** 1965,1970 ****
---- 1998,2015 ----
+*** 1968,1973 ****
+--- 2001,2018 ----
   void
   syms_of_nsmenu ()
   {
@@ -162,13 +161,8 @@ This provides labels in toolbar icons and PNG support for the icons.
     defsubr (&Sx_popup_menu);
     defsubr (&Sx_popup_dialog);
     defsubr (&Sns_reset_menu);
-Index: lisp/tool-bar.el
-===================================================================
-RCS file: /sources/emacs/emacs/lisp/tool-bar.el,v
-retrieving revision 1.22
-diff -c -r1.22 tool-bar.el
-*** lisp/tool-bar.el	27 Nov 2008 03:29:37 -0000	1.22
---- lisp/tool-bar.el	1 Jan 2009 23:49:49 -0000
+*** ../emacs.temp/lisp/tool-bar.el	2009-01-02 13:59:36.000000000 +1300
+--- lisp/tool-bar.el	2009-01-02 13:59:47.000000000 +1300
 ***************
 *** 127,132 ****
 --- 127,203 ----

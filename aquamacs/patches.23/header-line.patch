@@ -1,13 +1,8 @@
-Index: src/window.c
-===================================================================
-RCS file: /sources/emacs/emacs/src/window.c,v
-retrieving revision 1.575.2.7
-diff -c -r1.575.2.7 window.c
-*** src/window.c	8 Jan 2008 04:29:43 -0000	1.575.2.7
---- src/window.c	1 Mar 2008 15:00:37 -0000
+*** ../emacs.temp/src/window.c	2009-01-02 13:59:45.000000000 +1300
+--- src/window.c	2009-01-02 13:59:46.000000000 +1300
 ***************
-*** 203,208 ****
---- 203,212 ----
+*** 157,162 ****
+--- 157,166 ----
   
   static int window_initialized;
   
@@ -17,10 +12,10 @@ diff -c -r1.575.2.7 window.c
 + 
   /* Hook to run when window config changes.  */
   
-  Lisp_Object Qwindow_configuration_change_hook;
+  static Lisp_Object Qwindow_configuration_change_hook;
 ***************
-*** 6012,6017 ****
---- 6016,6040 ----
+*** 5869,5874 ****
+--- 5873,5897 ----
     return Fvertical_motion (arg, window);
   }
   
@@ -47,8 +42,8 @@ diff -c -r1.575.2.7 window.c
   
   /***********************************************************************
 ***************
-*** 7316,7321 ****
---- 7339,7347 ----
+*** 7164,7169 ****
+--- 7187,7195 ----
   
     Qtemp_buffer_show_hook = intern ("temp-buffer-show-hook");
     staticpro (&Qtemp_buffer_show_hook);
@@ -67,7 +62,7 @@ diff -c -r1.575.2.7 window.c
     DEFVAR_LISP ("temp-buffer-show-function", &Vtemp_buffer_show_function,
   	       doc: /* Non-nil means call as function to display a help buffer.
   The function is called with one argument, the buffer to be displayed.
---- 7209,7219 ----
+--- 7200,7210 ----
     window_scroll_pixel_based_preserve_y = -1;
     window_scroll_preserve_hpos = -1;
     window_scroll_preserve_vpos = -1;
@@ -79,15 +74,10 @@ diff -c -r1.575.2.7 window.c
     DEFVAR_LISP ("temp-buffer-show-function", &Vtemp_buffer_show_function,
   	       doc: /* Non-nil means call as function to display a help buffer.
   The function is called with one argument, the buffer to be displayed.
-Index: src/dispextern.h
-===================================================================
-RCS file: /sources/emacs/emacs/src/dispextern.h,v
-retrieving revision 1.225.2.7
-diff -c -r1.225.2.7 dispextern.h
-*** src/dispextern.h	8 Jan 2008 04:30:14 -0000	1.225.2.7
---- src/dispextern.h	1 Mar 2008 15:00:37 -0000
+*** ../emacs.temp/src/dispextern.h	2009-01-02 13:59:44.000000000 +1300
+--- src/dispextern.h	2009-01-02 13:59:46.000000000 +1300
 ***************
-*** 1321,1337 ****
+*** 1356,1372 ****
         && !NILP (XBUFFER ((W)->buffer)->mode_line_format)		\
         && WINDOW_TOTAL_LINES (W) > 1)
   
@@ -105,7 +95,7 @@ diff -c -r1.225.2.7 dispextern.h
   /* Return proper value to be used as baseline offset of font that has
      ASCENT and DESCENT to draw characters by the font at the vertical
      center of the line of frame F.
---- 1321,1342 ----
+--- 1356,1377 ----
         && !NILP (XBUFFER ((W)->buffer)->mode_line_format)		\
         && WINDOW_TOTAL_LINES (W) > 1)
   

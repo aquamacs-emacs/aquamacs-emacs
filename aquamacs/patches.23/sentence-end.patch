@@ -1,10 +1,10 @@
-*** lisp/textmodes/paragraphs.el	17 Apr 2008 10:52:44 +0100	1.87.2.4
---- lisp/textmodes/paragraphs.el	13 Jun 2008 15:04:21 +0100	
+*** ../emacs.temp/lisp/textmodes/paragraphs.el	2009-01-02 13:59:36.000000000 +1300
+--- lisp/textmodes/paragraphs.el	2009-01-02 13:59:47.000000000 +1300
 ***************
-*** 130,135 ****
---- 130,148 ----
+*** 128,133 ****
+--- 128,146 ----
     :group 'fill)
-  ;;;###autoload(put 'sentence-end-double-space 'safe-local-variable 'booleanp)
+  (put 'sentence-end-double-space 'safe-local-variable 'booleanp)
   
 + (defcustom sentence-end-double-space-for-recognition nil
 +   "Non-nil means a single space does not end a sentence.
@@ -23,7 +23,7 @@
     "Non-nil means a sentence will end without a period.
   For example, a sentence in Thai text ends with double space but
 ***************
-*** 188,194 ****
+*** 186,192 ****
         (concat (if sentence-end-without-period "\\w  \\|")
   	      "\\("
   	      sentence-end-base
@@ -31,7 +31,7 @@
                     "\\($\\| $\\|\t\\|  \\)" "\\($\\|[\t ]\\)")
                 "\\|[" sentence-end-without-space "]+"
   	      "\\)"
---- 201,208 ----
+--- 199,206 ----
         (concat (if sentence-end-without-period "\\w  \\|")
   	      "\\("
   	      sentence-end-base

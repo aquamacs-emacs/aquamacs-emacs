@@ -1,10 +1,7 @@
-ensures that only the right window is deleted.
-this way it interacts better with other code that
-deletes the window as well (from kill-buffer-hook)
-*** lisp/window.el	06 Apr 2008 12:51:37 +0100	1.120.2.5
---- lisp/window.el	21 May 2008 18:57:42 +0100	
+*** ../emacs.temp/lisp/window.el	2009-01-02 13:59:36.000000000 +1300
+--- lisp/window.el	2009-01-02 13:59:47.000000000 +1300
 ***************
-*** 716,744 ****
+*** 1437,1465 ****
   	(fit-window-to-buffer window (window-height window)))))
   
   (defun kill-buffer-and-window ()
@@ -32,9 +29,9 @@ deletes the window as well (from kill-buffer-hook)
   	(error nil)))))
   
   (defun quit-window (&optional kill window)
-    "Quit the current buffer.  Bury it, and maybe delete the selected frame.
-  \(The frame is deleted if it contains a dedicated window for the buffer.)
---- 716,747 ----
+    "Quit WINDOW and bury its buffer.
+  With a prefix argument, kill the buffer instead.  WINDOW defaults
+--- 1437,1468 ----
   	(fit-window-to-buffer window (window-height window)))))
   
   (defun kill-buffer-and-window ()
@@ -65,5 +62,5 @@ deletes the window as well (from kill-buffer-hook)
   
 + 
   (defun quit-window (&optional kill window)
-    "Quit the current buffer.  Bury it, and maybe delete the selected frame.
-  \(The frame is deleted if it contains a dedicated window for the buffer.)
+    "Quit WINDOW and bury its buffer.
+  With a prefix argument, kill the buffer instead.  WINDOW defaults
