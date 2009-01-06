@@ -1,0 +1,53 @@
+provide support for word wrap in Aquamacs
+*** lisp/hl-line.el	06 Apr 2008 07:51:37 -0400	1.33.2.2
+--- lisp/hl-line.el	06 Jan 2009 18:33:20 -0500	
+***************
+*** 77,83 ****
+    :group 'editing)
+  
+  (defface hl-line
+!   '((t :inherit highlight))
+    "Default face for highlighting the current line in Hl-Line mode."
+    :version "22.1"
+    :group 'hl-line)
+--- 77,87 ----
+    :group 'editing)
+  
+  (defface hl-line
+!   '((((class color) (background dark))
+!      (:background "#551100"))		; dark brown
+!     (((class color) (background light))
+!      (:background "#EEEEDD"))		; light red
+!     (t (:inverse-video t)))
+    "Default face for highlighting the current line in Hl-Line mode."
+    :version "22.1"
+    :group 'hl-line)
+***************
+*** 202,210 ****
+  	(setq tmp (funcall hl-line-range-function)
+  	      b   (car tmp)
+  	      e   (cdr tmp))
+!       (setq tmp t
+! 	    b (line-beginning-position)
+! 	    e (line-beginning-position 2)))
+      (if tmp
+  	(move-overlay overlay b e)
+        (move-overlay overlay 1 1))))
+--- 206,222 ----
+  	(setq tmp (funcall hl-line-range-function)
+  	      b   (car tmp)
+  	      e   (cdr tmp))
+!       (if (and visual-line-mode word-wrap)
+! 	  (save-excursion
+! 	    (setq tmp t)
+! 	    (beginning-of-visual-line)
+! 	    (setq b (point))
+! 	    (end-of-visual-line)
+! 	    (skip-chars-forward " \r\n" (1+  (point)))
+! 	    (setq e (point)))
+! 	(setq tmp t
+! 	      b (line-beginning-position)
+! 	      e (line-beginning-position 2))))
+      (if tmp
+  	(move-overlay overlay b e)
+        (move-overlay overlay 1 1))))
