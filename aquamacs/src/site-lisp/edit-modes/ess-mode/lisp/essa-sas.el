@@ -48,7 +48,7 @@ or `ess-sas-data-view-insight'."
 
 (defcustom ess-sas-data-view-submit-options
   (if ess-microsoft-p "-noenhancededitor -nosysin -log NUL:"
-    "-nodms -nosysin -log /dev/null")
+    "-nodms -nosysin -log /dev/null -terminal")
   "*The command-line options necessary for your OS with respect to
 `ess-sas-data-view-fsview' and `ess-sas-data-view-insight'."
   :group 'ess-sas
@@ -88,22 +88,27 @@ or `ess-sas-data-view-insight'."
 ;;creates something like
 ;;'(("[pP][dD][fF]" . "/usr/local/bin/acroread") ("[eE]?[pP][sS]" . "/usr/local/bin/gv")))
     (let ((ess-tmp-alist nil)
-        (ess-tmp-file nil))
+        (ess-tmp-ps nil) (ess-tmp-pdf nil))
 
-    (setq ess-tmp-file (executable-find (if ess-microsoft-p "gsview32" "gsview")))
+    (setq ess-tmp-ps (executable-find (if ess-microsoft-p "gsview32" "gsview")))
 
-    (if (not ess-tmp-file) (setq ess-tmp-file (executable-find "gv")))
+    (if (not ess-tmp-ps) (setq ess-tmp-ps (executable-find "gv")))
 
-    (if (not ess-tmp-file) (setq ess-tmp-file (executable-find "ghostview")))
+    (if (not ess-tmp-ps) (setq ess-tmp-ps (executable-find "ghostview")))
 
-    (if ess-tmp-file
-	(setq ess-tmp-alist (list (cons "[eE]?[pP][sS]" ess-tmp-file)
-	    (cons "[pP][dD][fF]" ess-tmp-file)))
+    (setq ess-tmp-pdf (executable-find "evince"))
 
-	(setq ess-tmp-file (executable-find (if ess-microsoft-p "acrord32" "acroread")))
+    (if (not ess-tmp-pdf) (setq ess-tmp-pdf (executable-find "xpdf")))
 
-	(if ess-tmp-file
-	    (setq ess-tmp-alist (cons "[pP][dD][fF]" ess-tmp-file)))))
+    (if (not ess-tmp-pdf) (setq ess-tmp-pdf (if ess-microsoft-p "acrord32" "acroread"))) 
+
+    (if (and ess-tmp-ps ess-tmp-pdf)
+	(setq ess-tmp-alist (list (cons "[eE]?[pP][sS]" ess-tmp-ps)
+	    (cons "[pP][dD][fF]" ess-tmp-pdf)))
+
+	(if ess-tmp-ps
+	    (setq ess-tmp-alist (list (cons "[eE]?[pP][sS]" ess-tmp-ps)
+		(cons "[pP][dD][fF]" ess-tmp-ps))))))
 
   "*Associate file name extensions with graphics image file viewers."
   :group 'ess-sas
@@ -155,7 +160,7 @@ Virtual PC emulator on your Mac; buffer-local."
 
 (make-variable-buffer-local 'ess-sas-submit-command)
 
-(defcustom ess-sas-submit-command-options " "
+(defcustom ess-sas-submit-command-options "-rsasuser"
   "*Options to pass to SAS in batch; buffer-local."
   :group 'ess-sas
   :type  'string)
@@ -196,9 +201,9 @@ should set this variable to 'sh regardless of their local shell
   :type  'string)
 
 (defcustom ess-sas-submit-post-command
-  (if (equal ess-sas-submit-method 'sh) "-rsasuser &"
-    (if ess-microsoft-p "-rsasuser -icon"))
-  "*Command-line statement to post-modify SAS invocation, e.g. -rsasuser"
+  (if (equal ess-sas-submit-method 'sh) "&"
+    (if ess-microsoft-p "-icon"))
+  "*Command-line statement to post-modify SAS invocation"
   :group 'ess-sas
   :type  'string)
 
@@ -468,6 +473,7 @@ current buffer if nil."
 	(insert (concat ess-sas-submit-pre-command " " ess-sas-submit-command
 	    " -initstmt \"" ess-sas-data-view-libname ess-sas-data-view-fsview-command
 	    ess-sas-data ";" ess-tmp-sas-data-view-fsview-statement "; run;\" "
+	    ess-sas-submit-command-options " "
 	    ess-sas-data-view-submit-options " " ess-sas-submit-post-command))
     (comint-send-input)
 )))))
@@ -520,7 +526,7 @@ current buffer if nil."
 	(ess-tmp-graph-alist nil)
         (ess-tmp-glyph nil)
         (ess-tmp-graph-regexp
-	    (concat "[ ]RECORDS[ ]WRITTEN[ ]TO[ ]\n?[ ]*\\(\\(\n\\|[^.]\\)*"
+	    (concat "[ ]RECORDS[ ]WRITTEN[ ]+TO[ ]\n?[ ]*\\(\\(\n\\|[^.]\\)*"
 		ess-sas-graph-view-suffix-regexp "\\)")))
 ;	    (concat "['\"]\\(.*" ess-sas-graph-suffix-regexp "\\)['\"]")))
 
@@ -556,7 +562,7 @@ current buffer if nil."
 	  (if ess-tmp-glyph (progn
 		(switch-to-buffer (file-name-nondirectory ess-tmp-graph))
 		(ess-xemacs-insert-glyph
-		    (make-glyph (vector ess-tmp-glyph :file ess-tmp-graph))))
+		    (make-glyph (vector ess-tmp-glyph :file ess-tmp-graph))))    
 
           ;;else use the appropriate graphics file image viewer
 	    (while (< ess-tmp-counter ess-tmp-length)
@@ -972,9 +978,12 @@ should be ..."
     "Write region to temporary file, and submit to SAS."
     (interactive)
     (ess-sas-file-path)
+    (hack-local-variables t)
     (write-region (region-beginning) (region-end)
 	(concat (ess-sas-temp-root) ".sas"))
 
+    (let ((arg1 ess-sas-submit-command)
+	  (arg2 ess-sas-submit-command-options))
     (save-excursion
       (ess-sas-goto-shell t)
 
@@ -989,10 +998,11 @@ should be ..."
 	(file-name-directory ess-sas-file-path)) "\"")
     (comint-send-input)
 
-    (insert (concat ess-sas-submit-pre-command " " ess-sas-submit-command
+    (insert (concat ess-sas-submit-pre-command " " arg1
+	  " " arg2
           " " (ess-sas-temp-root) " " ess-sas-submit-post-command))
     (comint-send-input)
-    )
+    ))
 )
 
 (defun ess-sas-submit-sh (arg1 arg2)
@@ -1023,15 +1033,14 @@ i.e. let arg1 be your local equivalent of
       (insert ess-sas-submit-pre-command " " arg1 " "
 	(file-name-sans-extension (file-name-nondirectory ess-sas-file-path))
 	" " arg2 " " ess-sas-submit-post-command))
-    (sleep-for ess-sleep-for)
+    (ess-sleep)
     (comint-send-input))
 
 (defun ess-sas-submit-windows (arg1 arg2)
   "Windows using MS-DOS prompt in the *shell* buffer.
 Multiple processing is supported on this platform.
 On most Windows installations, SAS will not be found in your
-PATH.  You can set `ess-sas-submit-command' to
-\"sas -icon -rsasuser\" and alter your PATH to include SAS, i.e.
+PATH so you should alter your PATH to include SAS, i.e.
 
 SET PATH=%PATH%;C:\\Program Files\\SAS
 

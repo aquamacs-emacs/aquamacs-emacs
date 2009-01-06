@@ -80,7 +80,7 @@
      (inferior-ess-help-filetype        . nil)
      (inferior-ess-exit-command		. "q()")
      (inferior-ess-exit-prompt		. "Save workspace image? [y/n/c]: ")
-     (inferior-ess-primary-prompt	. "\\([A-Z][][A-Za-z0-9.]*\\)*> ")
+     (inferior-ess-primary-prompt	. "\\([A-Z][][A-Za-z0-9.]*\\)?> ")
      (inferior-ess-secondary-prompt	. "+ ?")
      ;;harmful for shell-mode's C-a: -- but "necessary" for ESS-help?
      (inferior-ess-start-file		. nil) ;; "~/.ess-R"
@@ -137,14 +137,25 @@ to R, put them in the variable `inferior-R-args'."
 	 ;;Micro$ ?: default-process-coding-system ;-breaks UTF locales on Unix:
     (if ess-microsoft-p
 	(setq default-process-coding-system '(undecided-dos . undecided-dos)))
-    (inferior-ess r-start-args) ;; (R)
+    (inferior-ess r-start-args) ;; -> .. (ess-multi ...) -> .. (inferior-ess-mode) ..
+    ;;-------------------------
     (ess-write-to-dribble-buffer
      (format "(R): inferior-ess-language-start=%s\n"
 	     inferior-ess-language-start))
-    ;; currently rely on baseenv() which is in R only since version 2.2:
-    (ess-eval-linewise
-     "if(!exists(\"baseenv\", mode=\"function\")) baseenv <- function() NULL"
-     nil nil nil 'wait-prompt);; solving "lines running together"
+    ;; can test only now that R is running:
+    (if (ess-current-R-at-least '2.5.0)
+	(progn
+	  (if ess-use-R-completion ;; use R's completion mechanism (pkg "rcompgen" or "utils")
+	      (progn ; nothing to happen here -- is all in ess-complete-object-name
+		(ess-write-to-dribble-buffer "resetting completion to 'ess-R-complete-object-name")
+		)))
+      ;; else R version <= 2.4.1
+
+      ;; for R <= 2.1.x : define baseenv() :
+      (ess-eval-linewise
+       "if(!exists(\"baseenv\", mode=\"function\")) baseenv <- function() NULL"
+       nil nil nil 'wait-prompt);; solving "lines running together"
+      )
     (if inferior-ess-language-start
 	(ess-eval-linewise inferior-ess-language-start
 			   nil nil nil 'wait-prompt))))
@@ -165,6 +176,9 @@ to R, put them in the variable `inferior-R-args'."
 	     (ess-imenu-R)))
   ;; MM:      ^^^^^^^^^^^ should really use ess-imenu-mode-function from the
   ;;     alist above!
+  ;;
+  ;; SJE: set up roxygen-fn.  Perhaps we also need a hook here?
+  (local-set-key "\C-c\C-o" 'ess-roxygen-fn)
   )
 
 
@@ -328,6 +342,21 @@ returned."
       (setq date (match-string 2 ver-string)))
     (cons  date rver)))
 
+(defun ess-current-R-version ()
+  "Get the version of R currently running in the ESS buffer as a string"
+  (ess-make-buffer-current)
+  (car (ess-get-words-from-vector "as.character(getRversion())\n")))
+
+(defun ess-current-R-at-least (version)
+  "Is the version of R (in the ESS buffer) at least (\">=\") VERSION ?
+Examples: (ess-current-R-at-least '2.7.0)
+      or  (ess-current-R-at-least \"2.5.1\")"
+  (ess-make-buffer-current)
+  (string= "TRUE"
+	   (car (ess-get-words-from-vector
+		 (format "as.character(getRversion() >= \"%s\")\n" version)))))
+
+
 (defun ess-newest-r (rvers)
   "Check all the versions of RVERS to see which is the newest.
 Return the name of the newest version of R."
@@ -390,9 +419,47 @@ in English locales) which is the default location for the R distribution."
 			  (file-name-all-completions r-prefix ess-R-root-dir))
 		       (append '("rw") ess-r-versions))))))
 	(mapcar '(lambda (dir)
-		   (concat ess-R-root-dir dir "bin/Rterm.exe"))
+		   (concat ess-R-root-dir
+			   (ess-replace-regexp-in-string "[\\]" "/" dir)
+			   "bin/Rterm.exe"))
 		R-ver))))
 
+;; From Jim (James W.) MacDonald, based on code by Deepayan Sarkar,
+;; originally named  'alt-ess-complete-object-name'.
+;; Use rcompgen in ESS
+;; Can be activated by something like
+;; (define-key inferior-ess-mode-map "\t" 'ess-R-complete-object-name)
+(defun ess-R-complete-object-name ()
+  "Completion in R via R's completion utilities (formerly 'rcompgen').
+To be used instead of ESS' completion engine for R versions >= 2.5.0
+ (or slightly older versions of R with an attached and working 'rcompgen' package)."
+  (interactive)
+  (ess-make-buffer-current)
+  (let* ((comint-completion-addsuffix nil)
+	 (beg-of-line (save-excursion (comint-bol nil) (point)))
+	 (end-of-line (point-at-eol))
+	 (line-buffer (buffer-substring beg-of-line end-of-line))
+	 (NS (if (ess-current-R-at-least '2.7.0)
+		 "utils:::"
+	       "rcompgen:::"))
+	 (token-string ;; setup, including computation of the token
+	  (progn
+	    (ess-command
+	     (format (concat NS ".assignLinebuffer('%s')\n") line-buffer))
+	    (ess-command (format (concat NS ".assignEnd(%d)\n")
+				 (- (point) beg-of-line)))
+	    (car (ess-get-words-from-vector
+		  (concat NS ".guessTokenFromLine()\n")))))
+
+	 (possible-completions ;; compute and retrieve possible completions
+	  (progn
+	    (ess-command (concat NS ".completeToken()\n"))
+	    (ess-get-words-from-vector
+	     (concat NS ".retrieveCompletions()\n")))))
+
+    (or (comint-dynamic-simple-complete token-string
+					possible-completions)
+	'none)))
 
 ;;;### autoload
 (defun Rnw-mode ()
@@ -424,10 +491,10 @@ See `noweb-mode' and `R-mode' for more help."
   (interactive "d\nP"); point and prefix (C-u)
   (save-excursion
     (goto-char from)
-    (ess-rep-regexp "\\(\\([][=,()]\\|<-\\|_\\) *\\)T\\>" "\\1TRUE"
+    (ess-rep-regexp "\\(\\([][=,()]\\|<-\\) *\\)T\\>" "\\1TRUE"
 		    'fixcase nil (not quietly))
     (goto-char from)
-    (ess-rep-regexp "\\(\\([][=,()]\\|<-\\|_\\\) *\\)F\\>" "\\1FALSE"
+    (ess-rep-regexp "\\(\\([][=,()]\\|<-\\) *\\)F\\>" "\\1FALSE"
 		    'fixcase nil (not quietly))))
 
 ;; From: Sebastian Luque <spluque@gmail.com>

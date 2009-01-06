@@ -78,9 +78,9 @@
     ;;(ess-comment-indent	    . 'S-comment-indent)
     ;;(ess-indent-line			    . 'S-indent-line)
     ;;(ess-calculate-indent	      . 'S-calculate-indent)
-    (indent-line-function	     . 'S-indent-line)
+    (indent-line-function	  . 'S-indent-line)
     (parse-sexp-ignore-comments	  . t)
-    (ess-set-style		  . ess-default-style)
+    (ess-style		  	  . ess-default-style)
     (ess-local-process-name	  . nil)
     ;;(ess-keep-dump-files	    . 'ask)
     (ess-mode-syntax-table	  . S-syntax-table)
@@ -556,7 +556,7 @@ and one that is well formatted in emacs ess-mode."
 
     ;; former C and matlab programmers leave trailing  ";" :
     (goto-char from) (ess-rep-regexp "; *$" "" nil 'literal verbose)
-    (goto-char from) (ess-rep-regexp ";\\( *\\)#" "\\1#" nil 'literal verbose)
+    (goto-char from) (ess-rep-regexp ";\\( *\\)#" "\\1#" nil nil verbose)
 
     ;;from R 1.9.x "_" is valid in names; here assume no initial / trailing '_'
     (goto-char from) (ess-rep-regexp " +_ *" " <- " nil 'literal verbose)

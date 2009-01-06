@@ -34,22 +34,6 @@
 
 ;;; Code:
 
-;; Older versions of emacs did not have these variables
-;; (emacs-major-version and emacs-minor-version.)
-;; Let's define them if they're not around, since they make
-;; it much easier to conditionalize on the emacs version.
-
-(if (and (not (boundp 'emacs-major-version))
-	 (string-match "^[0-9]+" emacs-version))
-    (setq emacs-major-version
-	  (string-to-number (substring emacs-version
-				    (match-beginning 0) (match-end 0)))))
-(if (and (not (boundp 'emacs-minor-version))
-	 (string-match "^[0-9]+\\.\\([0-9]+\\)" emacs-version))
-    (setq emacs-minor-version
-	  (string-to-number (substring emacs-version
-				    (match-beginning 1) (match-end 1)))))
-
 ;;; Define a function to make it easier to check which version we're
 ;;; running.
 
@@ -84,9 +68,11 @@ Only a concern with earlier versions of Emacs.")
 ;; XEmacs 20.x needs this
 (if (not (fboundp 'find-buffer-visiting))
     (fset 'find-buffer-visiting 'get-file-buffer))
-;; XEmacs <= 21.4.15 needs this
-(if (not (fboundp 'line-beginning-position))
-    (defalias 'line-beginning-position 'point-at-bol))
+;; XEmacs <= 21.4.15 needs this:
+(defalias 'ess-line-beginning-position
+  (if (fboundp 'line-beginning-position)
+      'line-beginning-position
+    'point-at-bol))
 
 (if (and (not (featurep 'xemacs))
 	 (string-match "XEmacs\\|Lucid" emacs-version))
@@ -246,11 +232,30 @@ and replace a sub-expression, e.g.
       "Non-nil means the buffer contents are regarded as multi-byte characters.
  This concept is handled completely differently on Xemacs."))
 
+(defvar ess-has-tooltip
+  (and (not (featurep 'xemacs))
+       (>= emacs-major-version 21))
+  "non-nil if 'tooltip can be required; typically nil for Xemacs.")
 
 ;; XEmacs on Windows needs this
 (if (and ess-microsoft-p
 	 (not (fboundp 'w32-short-file-name)))
-    (fset 'w32-short-file-name 'win32-short-file-name))
+    (cond ((fboundp 'win32-short-file-name)
+	   (fset 'w32-short-file-name 'win32-short-file-name))
+	  ((fboundp 'mswindows-short-file-name)
+	   (fset 'w32-short-file-name 'mswindows-short-file-name))
+	  (t
+	   (warn "None of 'w32-short-file-name, 'win32-short-file-name,
+or 'mswindows-short-file-name are defined!
+You will have to manually set   ess-program-files (in ess-cust.el) to
+the correct \"8.3\"-style directory name."))))
+
+
+(defun ess-sleep ()
+  "Put emacs to sleep for `ess-sleep-for' seconds (floats work).
+Sometimes its necessary to wait for a shell prompt."
+  (if (featurep 'xemacs) (sleep-for ess-sleep-for)
+    (sleep-for 0 (truncate (* ess-sleep-for 1000)))))
 
 (provide 'ess-emcs)
 

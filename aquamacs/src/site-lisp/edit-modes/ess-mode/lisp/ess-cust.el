@@ -32,22 +32,7 @@
 
 ;;; Code:
 
-;; Stolen from w3-cus.el (via Per Abrahamsen's advice on the widgets page).
-;; This code provides compatibility with non-customized Emacsen.
-(eval-and-compile
-  (require 'ess-emcs); for 'xemacs feature
-  (condition-case ()
-      (require 'custom)
-    (error nil))
-  (if (and (featurep 'custom) (fboundp 'custom-declare-variable))
-      nil ;; We've got what we needed
-    ;; We have the old custom-library, hack around it!
-    (defmacro defgroup (&rest args)
-      nil)
-    (defmacro defface (var values doc &rest args)
-       (` (make-face (, var))))
-    (defmacro defcustom (var value doc &rest args)
-      (` (defvar (, var) (, value) (, doc))))))
+(require 'custom)
 
 ;; Customization Groups
 
@@ -127,7 +112,7 @@
 
 ;; Variables (not user-changeable)
 
-(defvar ess-version "5.3.6"
+(defvar ess-version "5.3.10"
   "Version of ESS currently loaded.")
 
 (defvar no-doc
@@ -512,10 +497,11 @@ GNU, BSD, ...) map onto different settings for variables."
 		 (const BSD)
 		 (const K&R)
 		 (const C++)
-		 (const :tag "Common R" :value 'RRR)
+		 (const :tag "Common R" :value RRR)
 		 (const CLB))
   :group 'ess-edit)
 
+;; the real setting of this happens via <foo>-editing-alist:
 (defvar ess-style ess-default-style
   "*The buffer specific ESS indentation style.")
 
@@ -737,7 +723,7 @@ Used in e.g., \\[ess-execute-objects] or \\[ess-display-help-on-object]."
 
 (defcustom ess-rterm-version-paths nil
 "*To contain the full path file names of Rterm versions, computed via
-\\[ess-find-rterm].  If you have versions of R in locations other than 
+\\[ess-find-rterm].  If you have versions of R in locations other than
 in ../../R-*/bin/Rterm.exe or ../../rw*/bin/Rterm.exe, relative to the
 directory in the `exec-path' variable containing your default location
 of Rterm, you will need to redefine this variable with a
@@ -765,7 +751,9 @@ file."
        "/Insightful/splus71"
        "/Insightful/splus8.0.1"
        "/Insightful/splus8.0.4"
-       "/Insightful/splus80"))
+       "/Insightful/splus80"
+       "/TIBCO/splus81"
+))
   "*List of possible values of the environment variable SHOME for recent
 releases of S-Plus.  These are the default locations for several
 current and recent releases of S-Plus.  If any of these pathnames
@@ -869,16 +857,16 @@ different computer."
 
 (if ess-microsoft-p
     (defcustom inferior-S+6-program-name
-      (concat ess-program-files "/insigh~1/splus70/cmd/Splus.exe")
+      (concat ess-program-files "/TIBCO/splus81/cmd/Splus.exe")
       "*Program name for invoking an external GUI S+6 for Windows.
 The default value is correct for a default installation of
-S-Plus 7.0 and with bash as the shell.
+S-Plus 8.1 and with bash as the shell.
 For any other version or location, change this value in ess-site.el or
 site-start.el.  Use the 8.3 version of the pathname.
 Use double backslashes if you use the msdos shell."
       :group 'ess-SPLUS
       :type 'string)
-  (defcustom inferior-S+6-program-name "Splus6"
+  (defcustom inferior-S+6-program-name "Splus8"
     "*Program name for invoking an inferior ESS with S+6() for Unix."
     :group 'ess-SPLUS
     :type 'string))
@@ -908,16 +896,16 @@ in S+6 for Windows Commands window and in Sqpe+6 for Windows buffer."
   :type 'string)
 
 (defcustom inferior-Sqpe+6-program-name
-  (concat ess-program-files "/insigh~1/splus70/cmd/Sqpe.exe")
+  (concat ess-program-files "/TIBCO/splus81/cmd/Sqpe.exe")
   "*Program name for invoking an inferior ESS with Sqpe+6() for Windows."
   :group 'ess-S
   :type 'string)
 
 (defcustom inferior-Sqpe+6-SHOME-name
-  (if ess-microsoft-p (concat ess-program-files "/insigh~1/splus70" ""))
+  (if ess-microsoft-p (concat ess-program-files "/TIBCO/splus81" ""))
   "*SHOME name for invoking an inferior ESS with Sqpe+6() for Windows.
 The default value is correct for a default installation of
-S-Plus 7.0.  For any other version or location,
+S-Plus 8.1.  For any other version or location,
 change this value in ess-site.el or site-start.el.  Use the 8.3
 version of the pathname."
   :group 'ess-SPLUS
@@ -975,6 +963,11 @@ order for it to work right.  And Emacs is too smart for it."
   :group 'ess-Stata
   :type 'string)
 
+(defcustom ess-sta-delimiter-friendly nil
+  "*Set to t to convert embedded semi-colons to newlines for Stata processing."
+  :group 'ess-Stata
+  :type 'string)
+
 (defcustom inferior-OMG-program-name "omegahat"
   "*Program name for invoking an inferior ESS with omegahat()."
   :group 'ess-OMG
@@ -1007,10 +1000,14 @@ order for it to work right.  And Emacs is too smart for it."
   :group 'ess
   :type '(choice (const nil) string))
 
+
+;; FIXME:  For GNU emacs, "emacsclient" (without ".exe") also works on Windoze
+;;   (if (>= emacs-major-version 22) "emacsclient" ; for all platforms
 (defcustom S-editor
   (if ess-microsoft-p "gnuclient.exe"
     (if (equal system-type 'Apple-Macintosh) nil
-      (if (featurep 'xemacs) "gnuclient" "emacsclient"))) ;; unix
+      ;; unix:
+      (if (featurep 'xemacs) "gnuclient" "emacsclient")))
   "*Editor called by S process with 'edit()' command."
   :group 'ess
   :type 'string)
@@ -1121,7 +1118,7 @@ Do not anchor to bol with `^'."
 
 (defcustom inferior-ess-secondary-prompt "+ ?"
   "Regular expression used by ess-mode to detect the secondary prompt.
-(This is issued by S to continue an incomplete expression). Do not
+ (This is issued by S to continue an incomplete expression). Do not
 anchor to bol with `^'."
   :group 'ess-proc
   :type 'string)
@@ -1147,6 +1144,13 @@ Otherwise, they get their own temporary buffer."
   :group 'ess-proc
   :type 'boolean)
 
+(defcustom ess-eval-deactivate-mark nil
+  "*Non-nil means that after ess-eval- commands the mark is deactivated,
+ (see \[[deactivate-mark]).  This only affects the situation where
+`transient-mark-mode' is non-nil."
+  :group 'ess-proc
+  :type 'boolean)
+
 (defcustom ess-synchronize-evals nil
   "*Non-nil means all evaluations will synchronize with the ESS process.
 This means ess-mode will wait for S to dent a prompt before sending the next
@@ -1162,10 +1166,15 @@ of Emacs until the code has been successfully evaluated."
   :group 'ess-proc
   :type 'boolean)
 
+(defcustom ess-use-R-completion t
+  "*Non-nil means that the R-builtin completion mechanism should be used
+when available."
+  :group 'ess-proc
+  :type 'boolean)
 
 (defcustom ess-eval-ddeclient-sleep 0.06
   "*If non-nil, a number specifying *seconds* to wait after certain
-\[[ess-eval-linewise-ddeclient]] calls, such as those at startup."
+\[[ess-eval-linewise-ddeclient] calls, such as those at startup."
 ;; i.e this currently only applies to (if microsoft-p ...) !
   :group 'ess-proc
   :type '(choice (const nil) number))
@@ -1229,6 +1238,7 @@ when it searches for objects.
 Really set in <ess-lang>-customize-alist in ess[dl]-*.el")
 ;; and hence made buffer-local via that scheme...
 
+;; FIXME: this is nowhere used :
 (defcustom inferior-ess-names-command "names(%s)\n"
   "Format string for ESS command to extract names from an object.
 
@@ -1271,7 +1281,7 @@ prevent timeouts in certain processes, such as completion.")
 (defvar inferior-ess-prompt nil
   "The regular expression inferior ess mode uses for recognizing prompts.
  Constructed at run time from `inferior-ess-primary-prompt' and
-`inferior-ess-secondary-prompt' within `inferior-ess-mode'.")
+ `inferior-ess-secondary-prompt' within \\[ess-multi].")
 
 (make-variable-buffer-local 'inferior-ess-prompt)
 
@@ -1388,17 +1398,31 @@ dialects' alists.  Increase this, if you have a fast(er) machine."
 
 ;;; for programming, transcript, and inferior process modes.
 
+(defcustom ess-font-lock-mode
+  (if  (ess-running-emacs-version-or-newer 22 1)
+      global-font-lock-mode
+    ;; else for emacs 21.x and earlier
+    t)
+  "*Non-nil means we use font lock support for ESS buffers.
+Default is t, to use font lock support.
+If you change the value of this variable, restart Emacs for it to take effect."
+  :group 'ess
+  :type 'boolean)
+
 (defcustom inferior-ess-font-lock-input t
   "*Non-nil means input is syntactically font-locked.
 If nil, input is in the `font-lock-variable-name-face'."
   :group 'ess
   :type 'boolean)
 
-(defvar ess-R-constants
+(defvar ess-RS-constants
   '("TRUE" "FALSE" "NA" "NULL" "Inf" "NaN"))
-
+(defvar ess-R-constants
+  (append ess-RS-constants
+          '("NA_integer_" "NA_real_" "NA_complex_" "NA_character_")))
 (defvar ess-S-constants
-  (append ess-R-constants '("T" "F")))
+  (append ess-RS-constants
+	  '("T" "F")))
 
 ;; first the common ones
 (defvar ess-S-modifyiers
@@ -1444,7 +1468,7 @@ If nil, input is in the `font-lock-variable-name-face'."
   ess-R-function-name-regexp ; since "_" is deprecated for S-plus as well
 )
 
-(defvar ess-R-mode-font-lock-keywords
+(defvar ess-R-common-font-lock-keywords
   (list
    (cons (regexp-opt ess-R-assign-ops)
 	 'font-lock-reference-face)	; assign
@@ -1453,15 +1477,19 @@ If nil, input is in the `font-lock-variable-name-face'."
    (cons (concat "\\<" (regexp-opt ess-R-modifyiers 'enc-paren) "\\>")
 	 'font-lock-reference-face)	; modify search list or source
 					; new definitions
-   (cons (concat "\\<" (regexp-opt ess-R-keywords 'enc-paren) "\\>")
-	 'font-lock-keyword-face)	; keywords
    (cons ess-R-function-name-regexp
 	 '(1 font-lock-function-name-face t))
 					; function name
    )
+  "Font-lock patterns used in `R-mode' and R-output buffers.")
+
+(defvar ess-R-mode-font-lock-keywords
+  (append ess-R-common-font-lock-keywords
+	  (list (cons (concat "\\<" (regexp-opt ess-R-keywords 'enc-paren) "\\>")
+		      'font-lock-keyword-face))) ; keywords
   "Font-lock patterns used in `R-mode' buffers.")
 
-(defvar ess-S-mode-font-lock-keywords
+(defvar ess-S-common-font-lock-keywords
   (list
    (cons (regexp-opt ess-S-assign-ops)
 	 'font-lock-reference-face)	; assign
@@ -1470,14 +1498,17 @@ If nil, input is in the `font-lock-variable-name-face'."
    (cons (concat "\\<" (regexp-opt ess-S-modifyiers 'enc-paren) "\\>")
 	 'font-lock-reference-face)	; modify search list or source
 					; new definitions
-   (cons (concat "\\<" (regexp-opt ess-S-keywords 'enc-paren) "\\>")
-	 'font-lock-keyword-face)	; keywords
    (cons ess-S-function-name-regexp
 	 '(1 font-lock-function-name-face t))
 					; function name
    )
-  "Font-lock patterns used in `S-mode' buffers.")
+  "Font-lock patterns used in `S-mode' and S-output buffers.")
 
+(defvar ess-S-mode-font-lock-keywords
+  (append ess-S-common-font-lock-keywords
+	  (list (cons (concat "\\<" (regexp-opt ess-S-keywords 'enc-paren) "\\>")
+		'font-lock-keyword-face)))	; keywords
+  "Font-lock patterns used in `S-mode' buffers.")
 
 
 
@@ -1489,7 +1520,7 @@ If nil, input is in the `font-lock-variable-name-face'."
        (list (cons "^[a-zA-Z0-9 ]*[>+]\\(.*$\\)"
 		   '(1 font-lock-variable-name-face keep t))) )
 
-   ess-R-mode-font-lock-keywords
+   ess-R-common-font-lock-keywords
 
    (list
     (cons "^\\*\\*\\*.*\\*\\*\\*\\s *$" 'font-lock-comment-face); ess-mode msg
@@ -1509,7 +1540,7 @@ If nil, input is in the `font-lock-variable-name-face'."
        (list (cons "^[a-zA-Z0-9 ]*[>+]\\(.*$\\)"
 		   '(1 font-lock-variable-name-face keep t))) )
 
-   ess-S-mode-font-lock-keywords
+   ess-S-common-font-lock-keywords
 
    (list
     (cons "^\\*\\*\\*.*\\*\\*\\*\\s *$" 'font-lock-comment-face) ; ess-mode msg
@@ -1607,9 +1638,6 @@ Defaults to `ess-S-non-functions'."
   "*non-nil means re-assign \"(\" to \\[ess-r-args-auto-show]."
   :group 'ess-R
   :type 'boolean)
-
-(defvar ess-has-tooltip (not (featurep 'xemacs))
-  "non-nil if 'tooltip can be required; typically nil for Xemacs.")
 
 
  ; System variables

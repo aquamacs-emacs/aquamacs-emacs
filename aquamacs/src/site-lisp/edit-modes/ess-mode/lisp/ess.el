@@ -160,24 +160,7 @@
 
  ; Set up for menus, if necessary
 ;;;
-;;;	nn.	Set up the keymaps for the simple-menus
-;;;
-
-;;(if ess-use-menus
-;;    (require 'ess-menu))
-
-
-;;; Function Menu (func-menu) for XEmacs:
-;;(defvar fume-function-name-regexp-smode
-;;  " "
-;;  "Expression to get function names")
-;;
-;;(append
-;; '((s-mode  . fume-function-name-regexp-smode)
-;;   (r-mode  . fume-function-name-regexp-smode))
-;; fume-function-name-regexp-alist)
-
-;;; Imenu for Emacs...
+;;;  --> is done in ess-mode.el, ess-inf.el, etc
 
 
 ;;; Completion and Database code
@@ -246,7 +229,7 @@ Otherwise try a list of fixed known viewers."
     (nreverse list)))
 
 (defun ess-write-to-dribble-buffer (text)
-  "Write TEXT to dribble buffer."
+  "Write TEXT to dribble ('*ESS*') buffer."
   (unless (buffer-live-p ess-dribble-buffer)
     ;; ESS dribble buffer must be re-created.
     (setq ess-dribble-buffer (get-buffer-create "*ESS*")))
@@ -254,6 +237,11 @@ Otherwise try a list of fixed known viewers."
     (with-current-buffer ess-dribble-buffer
       (goto-char (point-max))
       (insert text))))
+
+;; Shortcut to render "dribbling" statements less cluttering:
+(defun ess-if-verbose-write (text)
+  "Write TEXT to dribble buffer ('*ESS*') only *if* `ess-verbose'."
+  (if ess-verbose (ess-write-to-dribble-buffer text)))
 
 (defun ess-setq-vars-local (alist &optional buf)
   "Set language variables from ALIST, in buffer BUF, if desired."

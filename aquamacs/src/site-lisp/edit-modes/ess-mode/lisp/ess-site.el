@@ -174,9 +174,10 @@ for ESS, such as icons.")
 		"../etc/ess, ../etc, ../../etc/ess or ./etc"))
       (sit-for 4))))
 
-(defvar ess-info-directory nil
-  "*Location of the ESS info/ directory.
-The ESS info directory stores the ESS info files.")
+;;-- no longer used thanks to the (unless ...) clause below --
+;; (defvar ess-info-directory nil
+;;   "*Location of the ESS info/ directory.
+;; The ESS info directory stores the ESS info files.")
 
 ;;(1.2) If ess.info is not found, then ess-lisp-directory/../doc/info is added
 ;; resurrecting Stephen's version with a bug-fix & xemacs compatibility
@@ -231,7 +232,8 @@ between .s or .S files and assembly mode.
 	(append
 	 '(("\\.sp\\'"		. S-mode) ;; re: Don MacQueen <macq@llnl.gov>
 	   ("\\.[qsS]\\'"	. S-mode) ;; q,s,S [see ess-restore-asm-extns above!]
-	   ("\\.ssc\\'"		. S-mode) ;; Splus 4.x script files.
+	   ("\\.ssc\\'"		. S-mode) ;; Splus (>= 4.x) script files.
+	   ("\\.SSC\\'"		. S-mode) ;; ditto for windoze
 	   ("\\.[rR]\\'"	. R-mode)
 	   ("\\.[rR]nw\\'"	. Rnw-mode)
 	   ("\\.[sS]nw\\'"	. Snw-mode); currently identical to Rnw-mode
@@ -279,9 +281,10 @@ between .s or .S files and assembly mode.
 ;;(setq-default inferior-S+4-program-name "Splus")
 ;;(setq-default inferior-S+5-program-name "Splus5")
 ;;(setq-default inferior-S+6-program-name "Splus7") ; unix systems
-;;(setq-default inferior-R-program-name "R")	  ; unix systems
-;;(setq-default inferior-R-program-name "Rterm")  ; msdos systems
-;;(setq-default inferior-R-program-name "C:\\Program Files\\R\rw1081\\bin\\Rterm.exe")	; msdos systems
+;;(setq-default inferior-S+6-program-name "Splus8") ; unix systems
+;;(setq-default inferior-R-program-name "R")	    ; unix systems
+;;(setq-default inferior-R-program-name "Rterm")    ; MS Windows, see below for path as well
+;;(setq-default inferior-R-program-name "C:\\Program Files\\R\\R-2.5.0\\bin\\Rterm.exe")
 ;;(setq-default inferior-XLS-program-name "xlispstat")
 ;;(setq-default inferior-ARC-program-name "arc")
 ;;(setq-default inferior-VST-program-name "vista")
@@ -369,7 +372,7 @@ sending `inferior-ess-language-start' to S-Plus.")
 ;;(ess-message "[ess-site:] require 'essd-s3 ...")
 ;;(require 'essd-s3)  ; THIS IS RARE.  You probably do not have this.
 
-;; "sp" refers to S-PLUS (MathSoft/StatSci/Insightful):
+;; "sp" refers to S-PLUS (MathSoft/StatSci/Insightful/TIBCO):
 (ess-message "[ess-site:] require 'essd-sp3 ...")
 (require 'essd-sp3)
 
@@ -453,6 +456,9 @@ sending `inferior-ess-language-start' to S-Plus.")
 (autoload 'ess-rdired "ess-rdired"
   "View *R* objects in a dired-like buffer." t)
 
+(autoload 'ess-roxygen-fn "ess-roxygen"
+  "Insert roxygen tags for function definitions." t)
+
 ;;; On a PC, the default is S+6.
 ;; Elsewhere (unix and linux) the default is S+6
 (cond (ess-microsoft-p ; MS-Windows
@@ -485,10 +491,18 @@ sending `inferior-ess-language-start' to S-Plus.")
 
 ;;; Create functions for calling different (older or newer than default)
 ;;;  versions of R and S(qpe).
-(defvar ess-r-versions-created nil)
+(defvar ess-versions-created nil
+  "list of strings of all S- and R-versions found on the current computer environment")
+
+;; is currently used (updated) by ess-find-newest-R
+(defvar ess-r-versions-created nil
+  "list of strings of all R-versions found on the current computer environment")
+;; FIXME: should then update ess-versions-created as well (easy),
+;; -----  *and* update the "Start Process" menu (below)
+;;    -> To this: wrap the following in functions that can be re-called
 
 (let ( (ess-s-versions-created)
-       (ess-versions-created)
+       ;;(ess-r-versions-created)
        (R-newest-list '("R-newest"))
        )
   (if ess-microsoft-p
@@ -503,7 +517,7 @@ sending `inferior-ess-language-start' to S-Plus.")
       )
 
   (setq ess-r-versions-created ;;  for Unix *and* Windows, using either
-	(ess-r-versions-create));; ess-r-versions or ess-rterm-version-paths
+	(ess-r-versions-create));; ess-r-versions or ess-rterm-version-paths (above!)
 
   ;; Add the new defuns, if any, to the menu.
   ;; Check that each variable exists, before adding.
@@ -525,6 +539,7 @@ sending `inferior-ess-language-start' to S-Plus.")
 
 ;; Check to see that inferior-R-program-name points to a working version
 ;; of R; if not, try to find the newest version:
+(require 'essd-r)
 (ess-check-R-program-name) ;; -> (ess-find-newest-R) if needed, in ./essd-r.el
 
 ;;; 3. Customization (and commented out examples) for your site
@@ -547,11 +562,10 @@ sending `inferior-ess-language-start' to S-Plus.")
 
 ;; FIXME: XEmacs and Emacs 21.x has font-lock for ttys, as well.
 ;; So we need a better check! [or do this unconditionally -working everywhere ??]
-(if window-system
-    (progn
-      (add-hook 'ess-mode-hook 'turn-on-font-lock t)
-      (add-hook 'ess-transcript-mode-hook 'turn-on-font-lock t)
-      (add-hook 'inferior-ess-mode-hook 'turn-on-font-lock t)))
+(when (and window-system ess-font-lock-mode)
+  (add-hook 'ess-mode-hook 'turn-on-font-lock t)
+  (add-hook 'ess-transcript-mode-hook 'turn-on-font-lock t)
+  (add-hook 'inferior-ess-mode-hook 'turn-on-font-lock t))
 
 ;; If nil, then don't font-lock the input
 ;; if t, font-lock (default).

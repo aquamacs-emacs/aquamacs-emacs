@@ -7,8 +7,7 @@
 ;; Copyright (C) 1999--2004 A.J. Rossini, Rich M. Heiberger, Martin
 ;;	Maechler, Kurt Hornik, Rodney Sparapani, and Stephen Eglen.
 
-;; ESS-related Changes for ESS added by Mark Lunt and A.J. Rossini,
-;; starting March, 1999.
+;; ESS-related Changes first added by Mark Lunt and A.J. Rossini, March, 1999.
 
 ;; Maintainers: ESS-core <ESS-core@stat.math.ethz.ch>
 
@@ -33,10 +32,6 @@
 ;; BASED ON: (from Mark Lunt).
 ;; -- Id: noweb-mode.el,v 1.11 1999/03/21 20:14:41 root Exp --
 
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; THIS IS UNRELEASED CODE: IT IS MISSING FUNCTIONALITY AND IT NEEDS CLEANUP ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Put this into your ~/.emacs to use this mode automagically.
 ;;
@@ -68,11 +63,10 @@
 ;;
 ;;  * [tho] noweb-goto-chunk proposes a default
 ;;
+;;   * commands for tangling, weaving,.. for Sweave: --> ./ess-swv.el
+;;
 
 ;; TODO:
-;;
-;;   * replace obscure hacks like `(stringp (car (noweb-find-chunk)))'
-;;     by something more reasonable like `(noweb-code-chunkp)'.
 ;;
 ;;   * _maybe_ replace our `noweb-chunk-vector' by text properties.  We
 ;;     could then use highlighting to jazz up the visual appearance.
@@ -84,13 +78,15 @@
 ;;
 ;;   * more range checks and error exits
 ;;
-;;   * commands for tangling, weaving, etc.
-;;
 ;;   * `noweb-hide-code-quotes' should be superfluous now, and could
-;;     be removed
-;;
-;;   * ...
-;;
+;;     be removed. For ESS 5.3.10, we disable these, using the new variable
+;;     noweb-code-quote-handling.  If nobody misses that code-protecting
+;;     behavior, all that should be removed entirely.
+
+;; Want to use these now in order to cater for all obscure kinds of emacsen
+(eval-and-compile
+  (require 'ess-emcs))
+
 
 
 ;;; Variables
@@ -178,7 +174,12 @@ to the next.
 Assumes mouse-1 is bound to mouse-set-point, so if you have rebound
 mouse-1, this will override your binding.")
 
-; 
+(defvar noweb-code-quotes-handling nil
+  "If not nil, the function pair  \\[noweb-hide-code-quotes] and
+\\[noweb-restore-code-quotes] are used to \"protect\" code inside
+\"[[\" .. \"]]\" pairs.  Note that rarely this has been found to be buggy
+with the \"catastrophic\" consequence of whole parts of your document being
+replaced by sequences of '*'.")
 
 ;; The following is apparently broken -- dangling code that was
 ;; commented out.  Need to see if we can get it working?
@@ -403,25 +404,27 @@ Misc:
 \\[noweb-describe-mode] \tdescribe noweb-mode
 \\[noweb-mode-version] \t\tshow noweb-mode's version in the minibuffer
 "  (interactive "P")
-; This bit is tricky: copied almost verbatim from bib-cite-mode.el
-; It seems to ensure that the variable noweb-mode is made
-; local to this buffer. It then sets noweb-mode to `t' if
-;     1) It was called with an argument greater than 0
-; or  2) It was called with no argument, and noweb-mode is
-;        currently nil
-; noweb-mode is nil if the argument was <= 0 or there
-; was no argument and noweb-mode is currently `t'
+;; This bit is tricky: copied almost verbatim from bib-cite-mode.el
+;; It seems to ensure that the variable noweb-mode is made
+;; local to this buffer. It then sets noweb-mode to `t' if
+;;     1) It was called with an argument greater than 0
+;; or  2) It was called with no argument, and noweb-mode is
+;;        currently nil
+;; noweb-mode is nil if the argument was <= 0 or there
+;; was no argument and noweb-mode is currently `t'
+  (kill-all-local-variables)
   (set (make-local-variable 'noweb-mode)
        (if arg
            (> (prefix-numeric-value arg) 0)
          (not noweb-mode)))
-; Now, if noweb-mode is true, we want to turn
-; noweb-mode on
+  ;; Now, if noweb-mode is true, we want to turn
+  ;; noweb-mode on
   (cond
-   (noweb-mode                 ;Setup the minor-mode
+   (noweb-mode				;Setup the minor-mode
     (mapcar 'noweb-make-variable-permanent-local
             '(noweb-mode
               after-change-functions
+              before-change-functions
               noweb-narrowing
               noweb-chunk-vector
               post-command-hook
@@ -438,9 +441,17 @@ Misc:
     (if font-lock-mode
         (progn
           (font-lock-mode -1)
+	  (require 'noweb-font-lock-mode); which requires noweb-mode .. hmm..
           (noweb-font-lock-mode 1)))
     (add-hook 'post-command-hook 'noweb-post-command-function)
-    (add-hook 'after-change-functions 'noweb-after-change-function)
+
+    (when (or (<= emacs-major-version 20)
+              (featurep 'xemacs)) ;; Xemacs or very old GNU Emacs
+      (make-local-hook 'after-change-functions)
+      (make-local-hook 'before-change-functions))
+    (add-hook 'after-change-functions 'noweb-after-change-function nil t)
+    (add-hook 'before-change-functions 'noweb-before-change-function nil t)
+
     (add-hook 'noweb-select-doc-mode-hook 'noweb-auto-fill-doc-mode)
     (add-hook 'noweb-select-code-mode-hook 'noweb-auto-fill-code-mode)
     (add-hook 'isearch-mode-hook 'noweb-note-isearch-mode)
@@ -453,12 +464,20 @@ Misc:
    ;; off, no matter what (hence the condition `t')
    (t
     (remove-hook 'post-command-hook 'noweb-post-command-function)
-    (remove-hook 'after-change-functions 'noweb-after-change-function)
+
+    (if (fboundp 'remove-local-hook)
+        (progn
+          (remove-local-hook 'after-change-functions 'noweb-after-change-function)
+          (remove-local-hook 'before-change-functions 'noweb-before-change-function))
+      (remove-hook 'after-change-functions 'noweb-after-change-function t)
+      (remove-hook 'before-change-functions 'noweb-before-change-function t))
+
     (remove-hook 'noweb-select-doc-mode-hook 'noweb-auto-fill-doc-mode)
     (remove-hook 'noweb-select-code-mode-hook 'noweb-auto-fill-code-mode)
     (remove-hook 'isearch-mode-hook 'noweb-note-isearch-mode)
     (remove-hook 'isearch-mode-end-hook 'noweb-note-isearch-mode-end)
-    (if noweb-font-lock-mode
+    (if (and (boundp 'noweb-font-lock-mode)
+	     noweb-font-lock-mode)
         (progn
           (noweb-font-lock-mode -1)
           (message "Noweb and Noweb-Font-Lock Modes Removed"))
@@ -482,14 +501,28 @@ by major mode changes."
   "The hook being run after each command in noweb mode."
   (noweb-select-mode))
 
-(defun noweb-after-change-function (begin end length)
-  "Function to run after every change in a noweb buffer.
-If the changed region contains a chunk start (^@ or ^<<), it will
-update the chunk vector"
+(defvar noweb-chunk-boundary-changed nil
+  "Whether the current change affects a chunk boundary.")
+
+(defvar noweb-chunk-boundary-regexp "^\\(@[^@]\\)\\|\\(<<\\)")
+
+(defun noweb-before-change-function (begin end)
+  "Record changes to chunk boundaries."
   (save-excursion
     (goto-char begin)
-    (if (re-search-forward "^\\(@[^@]\\)\\|\\(<<\\)" end t)
-      (noweb-update-chunk-vector))))
+    (setq noweb-chunk-boundary-changed
+          (re-search-forward noweb-chunk-boundary-regexp end t))))
+
+(defun noweb-after-change-function (begin end length)
+  "Function to run after every change in a noweb buffer.
+If the changed region contains a chunk boundary, it will update
+the chunk vector"
+  (save-excursion
+    (goto-char begin)
+    (when (or noweb-chunk-boundary-changed
+              (re-search-forward noweb-chunk-boundary-regexp end t))
+      (noweb-update-chunk-vector)
+      (setq noweb-chunk-boundary-changed nil))))
 
 
 ;;; Chunks
@@ -521,9 +554,9 @@ Record them in NOWEB-CHUNK-VECTOR."
           ;; Scan forward either to !/^@ %def/, which will start a docs chunk,
           ;; or to /^<<.*>>=$/, which will start a code chunk.
           (progn
-            (next-line 1)
+            (forward-line 1)
             (while (looking-at "@ %def")
-              (next-line 1))
+              (forward-line 1))
             (setq chunk-list
                   ;; Now we can tell code vs docs
                   (cons (cons (if (looking-at "<<\\(.*\\)>>=")
@@ -532,7 +565,7 @@ Record them in NOWEB-CHUNK-VECTOR."
                                 'doc)
                               (point-marker))
                         chunk-list))))
-        (next-line 1))
+        (forward-line 1))
       (setq chunk-list (cons (cons 'doc (point-max-marker)) chunk-list))
       (setq noweb-chunk-vector (vconcat (reverse chunk-list))))))
 
@@ -680,6 +713,8 @@ documentation and code chunks."
 (defun noweb-chunk-vector-aref (i)
   (if (< i 0)
       (error "Before first chunk."))
+  (if (not noweb-chunk-vector)
+      (noweb-update-chunk-vector))
   (if (>= i (length noweb-chunk-vector))
       (error "Beyond last chunk."))
   (aref noweb-chunk-vector i))
@@ -689,14 +724,14 @@ documentation and code chunks."
   (interactive)
   (if (noweb-in-code-chunk)
       (let ((end (point))
-      (beg (save-excursion
-            (if (re-search-backward "<<"
-                   (save-excursion
-                                             (beginning-of-line)
-                                             (point))
-                                           t)
-                       (match-end 0)
-                     nil))))
+	    (beg (save-excursion
+		   (if (re-search-backward "<<"
+					   (save-excursion
+					     (beginning-of-line)
+					     (point))
+					   t)
+		       (match-end 0)
+		     nil))))
         (if beg
             (let* ((pattern (buffer-substring beg end))
                    (alist (noweb-build-chunk-alist))
@@ -800,16 +835,19 @@ chunks."
             (if (or indent-region-function indent-line-function)
                 (indent-region (point-min) (point-max) nil)
               (error "No indentation functions defined in %s!" major-mode)))
-        (let ((quote-list (noweb-hide-code-quotes)))
-          (fill-region (point-min) (point-max))
-          (noweb-restore-code-quotes quote-list))))))
+	(if noweb-code-quotes-handling
+	    (let ((quote-list (noweb-hide-code-quotes)))
+	      (fill-region (point-min) (point-max))
+	      (noweb-restore-code-quotes quote-list))
+	  (fill-region (point-min) (point-max)))))))
 
 (defun noweb-indent-line ()
   "Indent the current line according to mode, after narrowing to this chunk."
   (interactive)
+  (noweb-update-chunk-vector)
   (save-restriction
     (noweb-narrow-to-chunk)
-    (if (stringp (car (noweb-find-chunk)))
+    (if (noweb-in-code-chunk)
         (progn
           ;; Narrow to the code section proper; w/o the first and any
           ;; index declaration lines.
@@ -834,7 +872,7 @@ chunks."
   (save-excursion
     (save-restriction
       (noweb-narrow-to-chunk)
-      (if (stringp (car (noweb-find-chunk)))
+      (if (noweb-in-code-chunk)
           (progn
             ;; Narrow to the code section proper; w/o the first and any
             ;; index declaration lines.
@@ -850,9 +888,11 @@ chunks."
                                 (forward-line 1)
                                 (point)))
             (fill-paragraph justify))
-        (let ((quote-list (noweb-hide-code-quotes)))
-          (fill-paragraph justify)
-          (noweb-restore-code-quotes quote-list))))))
+	(if noweb-code-quotes-handling
+	    (let ((quote-list (noweb-hide-code-quotes)))
+	      (fill-paragraph justify)
+	      (noweb-restore-code-quotes quote-list))
+          (fill-paragraph justify))))))
 
 (defun noweb-auto-fill-doc-chunk ()
   "Replacement for `do-auto-fill'."
@@ -861,9 +901,11 @@ chunks."
                       (save-excursion
                         (end-of-line)
                         (point)))
-    (let ((quote-list (noweb-hide-code-quotes)))
-      (do-auto-fill)
-      (noweb-restore-code-quotes quote-list))))
+    (if noweb-code-quotes-handling
+	(let ((quote-list (noweb-hide-code-quotes)))
+	  (do-auto-fill)
+	  (noweb-restore-code-quotes quote-list))
+      (do-auto-fill))))
 
 (defun noweb-auto-fill-doc-mode ()
   "Install the improved auto fill function, iff necessary."
@@ -985,7 +1027,7 @@ switch narrowing on."
         (setq start (+ (noweb-sign cnt) start)))
       (setq i (1+ i)))
     (goto-char (marker-position (cdr (noweb-chunk-vector-aref start))))
-    (next-line 1))
+    (forward-line 1))
   (if noweb-narrowing
       (noweb-narrow-to-chunk-pair)))
 
@@ -1079,7 +1121,7 @@ chunk from point, else goto to the -Nth code chunk from point."
             (setq i (1+ i)))
           (goto-char (marker-position
                       (cdr (noweb-chunk-vector-aref start))))
-          (next-line 1))))
+          (forward-line 1))))
   (if noweb-narrowing
       (noweb-narrow-to-chunk-pair)))
 
@@ -1146,17 +1188,17 @@ insert \"@ \" and update the chunk vector."
   "Smart incarnation of `<', starting a new code chunk, maybe.
 If given an numerical argument, it will act just like the dumb `<'.
 Otherwise and if at the beginning of a line in a documentation chunk:
-insert \"<<>>=\" and a newline if necessary.  Leave point in the middle
-and and update the chunk vector."
+insert \"<<>>=\", a closing \"@\" and a newline if necessary.  Leave point
+in the middle and and update the chunk vector."
   (interactive "P")
   (if arg
       (self-insert-command (if (numberp arg) arg 1))
     (if (and (noweb-at-beginning-of-line)
-             (not (stringp (car (noweb-find-chunk)))))
+             (not (noweb-in-code-chunk)))
         (progn
           (insert "<<")
           (save-excursion
-            (insert ">>=")
+            (insert ">>=\n@ ")
             (if (not (looking-at "\\s *$"))
                 (newline)))
           (noweb-update-chunk-vector))
@@ -1180,7 +1222,7 @@ and and update the chunk vector."
               (setq chunk-name (match-string 1))
               (widen)
               (goto-char (point-min))
-              (re-search-forward (concat "^<<" chunk-name ">>=") nil t)
+              (re-search-forward (concat "^<<" (regexp-quote chunk-name) ">>=") nil t)
               (beginning-of-line 2)
               (setq mode (noweb-in-mode-line))
               (if (functionp mode)
@@ -1277,7 +1319,7 @@ The only sensible way to do this is to add a mode line to the chunk"
               (re-search-backward "^[ \t]*<<\\(.*\\)>>=" nil t)
               (setq chunk-name (match-string 1))
               (goto-char (point-min))
-              (re-search-forward (concat "^<<" chunk-name ">>=") nil t)
+              (re-search-forward (concat "^<<" (regexp-quote chunk-name) ">>=") nil t)
               (beginning-of-line 2))
             ;; remove mode-line, if there is one
             (if (noweb-in-mode-line)
@@ -1348,13 +1390,13 @@ noweb-set-doc-mode) before calling this function"
             (let ((chunk-name (buffer-substring-no-properties
                                (match-beginning 2)
                                (match-end 2))))
-              (re-search-backward (concat "<<" chunk-name ">>") nil t))
+              (re-search-backward (concat "<<" (regexp-quote chunk-name) ">>") nil t))
           (if (and (<= (match-end 2) (point))
                    (>  (+ 2 (match-end 2)) (point)))
               (let ((chunk-name (buffer-substring-no-properties
                                  (match-beginning 2)
                                  (match-end 2))))
-                (re-search-forward (concat "<<" chunk-name ">>") nil t)))))))
+                (re-search-forward (concat "<<" (regexp-quote chunk-name) ">>") nil t)))))))
 
 
 ;;; Debugging
@@ -1527,7 +1569,7 @@ This may be useful in shell scripts, where the first line (or two) must have a
       (let ((chunk-name (match-string 1)))
         (widen)
         (goto-char (point-min))
-        (re-search-forward (concat "^<<" chunk-name ">>=") nil t)
+        (re-search-forward (concat "^<<" (regexp-quote chunk-name) ">>=") nil t)
         (beginning-of-line 2)
         (while (looking-at ".*-\*-.*-\*-")
           (let ((this-line (buffer-substring-no-properties
@@ -1650,7 +1692,7 @@ This may be useful in shell scripts, where the first line (or two) must have a
 		    (save-restriction
                       (setq thread-name-re
 			    (concat "<<"
-				    (match-string 2)
+				    (regexp-quote (match-string 2))
 				    ">>="))
                       (setq pre-chunk (match-string 1))
                       (if prefix-string
@@ -1661,7 +1703,7 @@ This may be useful in shell scripts, where the first line (or two) must have a
                       (goto-char (point-min))
                       (while (re-search-forward thread-name-re nil t)
                         (noweb-tangle-chunk tangle-buffer pre-chunk)
-                        (next-line 1)))
+                        (forward-line 1)))
                     (if post-chunk
                         (save-excursion
                           (set-buffer tangle-buffer)

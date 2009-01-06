@@ -170,7 +170,7 @@
   (define-key ess-mode-map "\C-\M-h"	'ess-mark-function)
   (if (featurep 'xemacs) ;; work around Xemacs bug (\C-\M-h redefines M-BS):
       (define-key ess-mode-map [(meta backspace)] 'backward-kill-word))
-  (define-key ess-mode-map "\177"	'backward-delete-char-untabify)
+  ;(define-key ess-mode-map [delete]	'backward-delete-char-untabify)
   (define-key ess-mode-map "\t"		'ess-indent-command)
   (define-key ess-mode-map "\C-c\C-q"	'ess-quit)
   (define-key ess-mode-map "\C-c\C-e"	ess-eval-map))
@@ -382,6 +382,7 @@ indentation style. At present, predefined style are `BSD', `GNU', `K&R', `C++',
 	   ess-mode-editing-alist))
   (ess-setq-vars-local ess-mode-editing-alist)
 
+  (ess-set-style ess-style)
   (use-local-map ess-mode-map)
   (set-syntax-table ess-mode-syntax-table)
 
@@ -581,12 +582,22 @@ Optional argument for location of beginning.  Return '(beg end)."
     (setq beginning (ess-beginning-of-function no-error)))
   (if beginning
       ;; *hack* only for S (R || S+): are we in setMethod(..) etc?
-      (let ((in-set-S4 (looking-at ess-set-function-start)))
+      (let ((in-set-S4 (looking-at ess-set-function-start))
+	    (end-pos) (npos))
 	(ess-write-to-dribble-buffer
 	 (format "ess-END-of-fun: S4=%s, beginning = %d\n" in-set-S4 beginning))
 	(forward-list 1)	; get over arguments || whole set*(..)
 	(unless in-set-S4 (forward-sexp 1)) ; move over braces
-	;;DBG (ess-write-to-dribble-buffer "ess-END-of-fun: found ok\n")
+	(ess-write-to-dribble-buffer
+	 (format "ess-END-of-fun: found #1 : %d\n" (point)))
+
+	;; For one-line functions withOUT '{ .. }' body  -- added 2008-07-23 --
+	;; particularly helpful for C-c C-c (ess-eval-function-or-paragraph-and-step):
+	(setq end-pos (ess-line-end-position))
+	(while (< (point) end-pos) ; if not at end of line, move further forward
+	  (goto-char ;; careful not to move too far; e.g. *not* over empty lines:
+	   (min (save-excursion (forward-sexp 1) (point))
+		(save-excursion (forward-paragraph 1) (point)))))
 	(list beginning (point))
 	)
     ;; else: 'no-error': we are not in a function
@@ -1102,7 +1113,7 @@ Returns nil if line starts inside a string, t if in a comment."
 		    (skip-chars-backward " \t")
 		    (or (and (> (current-column) 1)
 			     (save-excursion (backward-char 1)
-					     (looking-at "[-:+*/_><=]")))
+					     (looking-at "[-:+*/><=]")))
 			(and (> (current-column) 3)
 			     (progn (backward-char 3)
 				    (looking-at "%[^ \t]%"))))))))))

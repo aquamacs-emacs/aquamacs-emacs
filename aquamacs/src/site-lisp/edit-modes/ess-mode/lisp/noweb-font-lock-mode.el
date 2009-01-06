@@ -72,7 +72,7 @@
 ;;  good as you would get outside noweb-mode, though.
 ;;
 ;;  To use it, you must add
-;;  (require noweb-font-lock-mode) to your .emacs file.
+;;  (require 'noweb-font-lock-mode) to your .emacs file.
 ;;  Then, if you use either global-font-lock or turn-on-font-lock
 ;;  statements, any noweb-mode buffers will be fontified
 ;;  appropriately. (We have to redefine turn-on-font-lock, but it
@@ -201,7 +201,8 @@ Each chunk is fontified in accordance with its own mode"
 		  noweb-use-font-lock-mode
 		  after-change-functions))
 	(setq noweb-font-lock-mode t)
-	(make-local-hook 'after-change-functions)
+	(if (< emacs-major-version 21) ;; needed for emacs < 21.1 only :
+	    (make-local-hook 'after-change-functions))
 	(add-hook 'after-change-functions
 		  'font-lock-after-change-function nil t)
 	(add-hook 'noweb-font-lock-mode-hook 'noweb-font-lock-mode-fn)

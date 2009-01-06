@@ -1,5 +1,7 @@
 ;; Copyright (C) 2005 David Whiting, A.J. Rossini, Rich M. Heiberger, Martin
 ;;	Maechler, Kurt Hornik, Rodney Sparapani, and Stephen Eglen.
+;; Copyright (C) 2006-2008 A.J. Rossini, Rich M. Heiberger, Martin Maechler,
+;;	Kurt Hornik, Rodney Sparapani, and Stephen Eglen.
 
 ;; Original Author: David Whiting <david.whiting@ncl.ac.uk>
 ;; Created: 15 April 2005
@@ -69,25 +71,19 @@
 ;;; 2. Also need to add ess-swv-Bibtex.
 ;;;
 ;;; 3. Might be good to have a way to chain commands.
-;;
-;; 4. ADD to the ../doc/ess.texi !!
-;;
-;; 5. add a sub-menu [Sweave] to the [Noweb] menu to teach users about
-;;     the possibilities
+;;;
+;;; 4. ADD to the ../doc/ess.texi !!
+
 
 ;;; Autoloads and Requires
 
 (eval-when-compile
   (require 'ess-cust)
   (require 'ess)
-  (require 'ess-noweb)
 )
-;; MM: I think we should *not* require 'cl, but it's needed for
-;;     (search .) below ... -> ``please'' replace the (search ...) parts
-;; (string-match "\\.Rnw$"  ....)  |-->  (nil | index)  should suffice
-;; ==> replaced  ' (search ".Rnw" buf) '
-;;     by        ' (string-match "\\.Rnw$" buf '
-;; (require 'cl)
+(require 'noweb-mode)
+(require 'essd-r); for Rnw-mode
+(require 'easymenu)
 
 (defun ess-swv-run-in-R (cmd &optional choose-process)
   "Run \\[cmd] on the current .Rnw file.  Utility function not called by user."
@@ -178,7 +174,10 @@ Sweave file buffer name) and display it."
     (if (not (= 0 pdf-status))
 	(message "** OOPS: error in 'pdflatex' (%d)!" pdf-status)
       ;; else: pdflatex probably ok
-      (shell-command (concat pdfviewer " " namestem ".pdf &")))
+      (shell-command (concat
+	(if (and ess-microsoft-p (w32-shell-dos-semantics))
+	    "start \"" pdfviewer "\" \"" namestem ".pdf\""
+	          "\"" pdfviewer "\" \"" namestem ".pdf\" &"))))
     (switch-to-buffer buf)
     (display-buffer tex-buf)))
 
@@ -225,7 +224,33 @@ Sweave file buffer name) and display it."
 
 (define-key noweb-minor-mode-map "\M-nx" 'ess-insert-Sexpr)
 
+;; AND add these to the noweb menu we have anyway ! :
+(easy-menu-define ess-swv-menu
+  noweb-minor-mode-menu
+  "Submenu for use in `Rnw-mode'."
 
+  '("Sweaving, Tangling, ..."
+     ["Sweave" ess-swv-weave   t]
+     ["Tangle" ess-swv-tangle  t]
+     ["LaTeX"  ess-swv-latex   t]
+     ["PDF(LaTeX)" ess-swv-PDF t]
+     ["PS (dvips)" ess-swv-PS  t]
+     ["Insert Sexpr" ess-insert-Sexpr t]
+     ))
+
+(if (featurep 'xemacs)
+    (add-hook 'Rnw-mode-hook
+	      '(lambda ()
+		 ;; This adds to top menu:
+		 ;; (easy-menu-add ess-swv-menu noweb-minor-mode-map)
+		 ;; But that's using an unnecessary extra level -- FIXME
+		 (easy-menu-add-item noweb-minor-mode-menu
+				     '("Sweave");; 'nil' adds to top
+				     ess-swv-menu)))
+  ;; normal GNU Emacs:
+  (easy-menu-add-item noweb-minor-mode-menu
+		      nil ;; <= path
+		      ess-swv-menu))
 
  ; provides
 
