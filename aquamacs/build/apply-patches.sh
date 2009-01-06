@@ -40,6 +40,7 @@ PATCHES="mac-functions mac-fullscreen emacs-inline transparency
          minibuffer-filename
          header-line
          tmm
+         hl-line
          sentence-end
          org-gnu-Aquamacs about-aquamacs puresize
          macfns-dialog-menu menu-bar-visible-frame 
