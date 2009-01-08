@@ -6,7 +6,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
 
-;; Last change: $Id: aquamacs-frame-setup.el,v 1.39 2008/12/28 04:20:50 davidswelt Exp $
+;; Last change: $Id: aquamacs-frame-setup.el,v 1.40 2009/01/08 00:26:30 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -72,7 +72,6 @@ even when minimal fringes are used. (Aquamacs)"
 
 (aquamacs-define-the-fringe-bitmap)
 (setq fringe-mode '(1 . 1)) ;; to reflect the default.
-
 ;; This is a hack because fringe-mode likes to round up stuff.
  
 ;; set default colors
@@ -192,7 +191,22 @@ Users may then manipulate the faces directly."
 		      :underline nil
 		      :strike-through nil
 		      :stipple nil
-		      :family "lucida grande"))
+		      :family "lucida grande")
+ (defface org-mode-default
+    nil
+    "Default face for Org-Mode in `aquamacs-autoface-mode'"
+    :group 'Aquamacs)
+
+  (set-face-attribute 'org-mode-default nil
+		      :inherit 'autoface-default
+		      :height 120
+		      :weight 'normal
+		      :width 'normal
+		      :slant 'normal
+		      :underline nil
+		      :strike-through nil
+		      :stipple nil
+		      :family "monaco"))
 
 
 (aquamacs-init-faces)
