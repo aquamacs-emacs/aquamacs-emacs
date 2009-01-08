@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.245 2008/12/28 14:07:04 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.246 2009/01/08 00:36:06 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -373,8 +373,8 @@ un-Mac-like way when you select text and copy&paste it.")))
     (aquamacs-cua-warning)
     (and (fboundp 'osx-key-mode-command-key-warning) (osx-key-mode-command-key-warning)))
 
-  (if global-highline-mode
-      (global-highline-mode 1))
+  (if global-hl-line-mode
+      (global-hl-line-mode 1))
 
   (if global-show-newlines-mode
       (global-show-newlines-mode 1))
@@ -1033,19 +1033,6 @@ Use this argument instead of explicitly setting `view-exit-action'."
 (autoload 'turn-off-follow-mouse "follow-mouse.el"   "Moving the mouse will not automatically select the window under it" 'interactive nil)
 (autoload 'toggle-follow-mouse "follow-mouse.el"   "Toggle whether moving the mouse automatically selects the window under it" 'interactive nil)
 
-;; highline
-
-(defface highline-face
-  `((((background dark))
-     (:background "#551100"))   ; dark brown
-    (t
-     (:background "#EEEEDD")))  ; light red
- "Face used to highlight current line."
- :group 'highline)
-(aquamacs-set-defaults '((global-highline-mode nil)))
-(autoload 'global-highline-mode "highline.el"   "Toggle global minor mode to highlight line about point (HL on modeline)." 'interactive nil)  
-(autoload 'highline-mode "highline.el"   "Toggle local minor mode to highlight the line about point (hl on modeline)." 'interactive nil)
-
 
   (provide 'drews_init)	; migration from 0.9.1 (require in customizations)
  (ats "drew done")
@@ -1404,7 +1391,7 @@ listed here."
     (append '(line-number-mode 
 	      column-number-mode 
 	      size-indication-mode
-	      global-highline-mode
+	      global-hl-line-mode
 	      global-show-newlines-mode
 	      show-paren-mode
 	      transient-mark-mode 
