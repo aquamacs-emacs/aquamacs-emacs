@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.198 2009/01/08 21:14:34 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.199 2009/01/08 22:34:58 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -315,7 +315,8 @@ customization buffer."
 		       ;; Emacs compiled --without-x doesn't have
 		       ;; x-selection-exists-p.
 		       (fboundp 'x-selection-exists-p)
-		       (x-selection-exists-p) (not buffer-read-only)
+		       (x-selection-exists-p 'CLIPBOARD)
+		       (not buffer-read-only)
 		       (menu-bar-menu-frame-live-and-visible-p))
 	      :help "Paste (yank) text most recently cut/copied"))
 
