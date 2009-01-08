@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.197 2009/01/08 00:36:16 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.198 2009/01/08 21:14:34 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -219,6 +219,8 @@ using `aquamacs-recent-major-modes' and `aquamacs-known-major-modes'."
     tcl-mode
     c-mode 
     (objc-mode . "Objective C")
+    org-mode
+    wikipedia-mode
     c++-mode 
     (cperl-mode . "Perl")
     (php-mode . "PHP")
