@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.247 2009/01/09 16:49:48 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.248 2009/01/09 16:58:22 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -1307,7 +1307,7 @@ to the selected frame."
      (initial-scratch-message nil)
      (focus-follows-mouse nil) ;; do not mess with user's mouse!
      (resize-mini-windows t)
-     (mouse-wheel-progessive-speed nil)
+     (mouse-wheel-progressive-speed t)
    ;;  (mouse-wheel-scroll-amount (1 (shift . 0.5) (control . 0.2) ))
      (mouse-wheel-scroll-amount (1 ((shift) . 0.5) ((control) . 0.2) ))
    ;;  (pc-select-meta-moves-sexps t) ;; leave nil so we can otherwise assign M-left/right
