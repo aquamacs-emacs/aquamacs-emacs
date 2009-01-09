@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.246 2009/01/08 00:36:06 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.247 2009/01/09 16:49:48 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -761,8 +761,9 @@ yes-or-no prompts - y or n will do."
   (defface aquamacs-variable-width '((t
 		    :family "Lucida Grande"
 		    :height 120)) ;; do use the frame-wide setting: it's very font dependent
-  "Aquamcas default face (variable width)"
-  :group 'aquamacs)
+  "Aquamcas default face (variable width).
+Used by the modeline faces `mode-line' and `mode-line-inactive'."
+  :group 'Aquamacs)
 
   (defun aquamacs-set-modeline-faces (&optional theme)
     (set-face-attribute 'mode-line nil
