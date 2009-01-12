@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Changes-- 1.6 (Preview version 4)</TITLE>
-<META NAME="description" CONTENT="Changes-- 1.6 (Preview version 4)">
+<TITLE>Changes-- 1.6</TITLE>
+<META NAME="description" CONTENT="Changes-- 1.6">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -27,37 +27,37 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html655"
+<A NAME="tex2html656"
   HREF="node40.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html651"
+<A NAME="tex2html652"
   HREF="node38.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html645"
+<A NAME="tex2html646"
   HREF="node38.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html653"
+<A NAME="tex2html654"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html656"
+<B> Next:</B> <A NAME="tex2html657"
   HREF="node40.html">Changes 1.5</A>
-<B> Up:</B> <A NAME="tex2html652"
+<B> Up:</B> <A NAME="tex2html653"
   HREF="node38.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html646"
+<B> Previous:</B> <A NAME="tex2html647"
   HREF="node38.html">Aquamacs Emacs: What's New</A>
- &nbsp; <B>  <A NAME="tex2html654"
+ &nbsp; <B>  <A NAME="tex2html655"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION000141000000000000000">
-Changes-- 1.6 (Preview version 4)</A>
+Changes-- 1.6</A>
 </H2>
 
 <P>
@@ -92,7 +92,7 @@ Refer below for a technical explanation of the change.
 
 <P>
 </LI>
-<LI>Zoom: press Command-+ (or Command-=) to zoom in, and Command- to zoom out, changing the font size of the text shown.   You can also use your Meta key (normally Option) and the mouse wheel.  This zoom applies just to a buffer and frame.
+<LI>Zoom: press Command-+ (or Command-=) to zoom in, and Command-{}- to zoom out, changing the font size of the text shown.   You can also use your Meta key (normally Option) and the mouse wheel.  This zoom applies just to a buffer and frame.
 
 <P>
 </LI>
@@ -159,6 +159,18 @@ Note that this used to cause labels and icons to be displayed.  The variable val
 
 <P>
 </LI>
+<LI>Note that  the `cl' library is no longer loaded by any of the default packages that come with Aquamacs.  As a result, you may need to insert <TT>(require 'cl)</TT> into your <TT>Preferences.el</TT> file to load this package manually if you use any of the Lisp style functions or macros provided therein.
+
+<P>
+</LI>
+</UL>
+
+<P>
+<I>Major Modes</I>
+
+<P>
+
+<UL>
 <LI>SLIME, the Superior Lisp Interaction Mode is no longer included in Aquamacs but provided as a point-and-click installer plugin, which can be downloaded from the Aquamacs website.  The SLIME developers do not release validated versions; the SLIME plugins available from the Aquamacs website are development builds that are updated regularly. 
 
 <P>
@@ -170,6 +182,11 @@ Code by Chong Yidong, Uwe Brauer.
 </LI>
 <LI>Python mode has been updated to use `python-mode'  (as found on Launchpad).  
 Reported by Jin Choi.  Python-mode Code maintained by Barry Warsaw.  Research by Skip Montanaro. 
+
+<P>
+</LI>
+<LI>Emacs Speaks Statistics (ESS) has been updated to version 5.3.10 (was: 5.3.6).  Refer to the ESS website for changes (<FONT SIZE="-1"> <TT><A NAME="tex2html33"
+  HREF="http://ess.r-project.org/Manual/readme.html#New-Features">http://ess.r-project.org/Manual/readme.html#New-Features</A></TT></FONT>).
 
 <P>
 </LI>
@@ -320,41 +337,46 @@ Previously, colors of a whole plethora of faces for various occasions could be c
 <FONT SIZE="-1">One advantage of the new, lightweight implementation of `autofaces' is that switching between buffers (e.g., with tabs) is smooth and does not lead to ugly frame resizing effects.  Multiple windows in the same frame can now display their buffers in the correct fonts.
 </FONT>
 <P>
-<FONT SIZE="-1">Transition: relevant mode-specific settings from `aquamacs-styles-mode' are automatically imported.  The now deprecated functionality of `aquamacs-styles-mode' (changing frame parameters including the visibility of the toolbar) is still available to users by inserting <TT>(require 'aquamacs-styles)</TT>
-<BR><TT>(aquamacs-autoface-mode 0) (aquamacs-styles-mode 1)</TT> into their Preferences.el file.  Users can also access color themes with <TT>M-x color-theme-select</TT>, but note that faces set using `aquamacs-autoface-mode' will override foreground and background colors.  </FONT>
+<FONT SIZE="-1">Transition: relevant mode-specific settings from `aquamacs-styles-mode' are automatically imported.  The now deprecated functionality of `aquamacs-styles-mode' (changing frame parameters including the visibility of the toolbar) is still available to users by inserting
+</FONT><PRE>
+(require 'aquamacs-styles)
+(aquamacs-autoface-mode 0)
+(aquamacs-styles-mode 1)
+</PRE><FONT SIZE="-1">
+into their <TT>Preferences.el</TT> file.  Users can also access color themes with M-x color-theme-select, but note that faces set using `aquamacs-autoface-mode' will override foreground and background colors.  </FONT>
 
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html655"
+<A NAME="tex2html656"
   HREF="node40.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html651"
+<A NAME="tex2html652"
   HREF="node38.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html645"
+<A NAME="tex2html646"
   HREF="node38.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html653"
+<A NAME="tex2html654"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html656"
+<B> Next:</B> <A NAME="tex2html657"
   HREF="node40.html">Changes 1.5</A>
-<B> Up:</B> <A NAME="tex2html652"
+<B> Up:</B> <A NAME="tex2html653"
   HREF="node38.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html646"
+<B> Previous:</B> <A NAME="tex2html647"
   HREF="node38.html">Aquamacs Emacs: What's New</A>
- &nbsp; <B>  <A NAME="tex2html654"
+ &nbsp; <B>  <A NAME="tex2html655"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 <I>David</I>
-<BR><I>2008-12-28</I>
+<BR><I>2009-01-11</I>
 </ADDRESS>
 </BODY>
 </HTML>
