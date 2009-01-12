@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.133 2008/12/28 17:21:54 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.134 2009/01/12 20:22:03 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -291,7 +291,7 @@ Wraps around after throwing and error once."
 		      (signal (car x) (cdr x)))))
 		 (and new-point (goto-char new-point)))))
 	  (deactivate-mark)
-	  (if (< (mark) (point))
+	  (if (and (mark) (< (mark) (point)))
 	      (goto-char (mark)))
 	  (search-backward isearch-string))
 	(set-mark (match-end 0)))
