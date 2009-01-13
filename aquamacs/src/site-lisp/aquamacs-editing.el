@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-editing.el,v 1.12 2008/12/24 00:13:22 davidswelt Exp $
+;; Last change: $Id: aquamacs-editing.el,v 1.13 2009/01/13 23:21:14 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -58,12 +58,15 @@ are deleted."
   "Fill paragraph or region (if any).
 When no region is defined (mark is not active) or
 `transient-mark-mode' is off, call `fill-paragraph'.
-Otherwise, call `fill-region'."
+Otherwise, call `fill-region'.  
+If `word-wrap' is on, and `auto-fill-mode off, call
+`unfill-paragraph-or-region' instead."
   (interactive)
-
-  (if (and mark-active transient-mark-mode)
-      (call-interactively 'fill-region)
-    (call-interactively 'fill-paragraph)))
+  (if (and word-wrap (not auto-fill-function))
+      (call-interactively 'unfill-paragraph-or-region)
+    (if (and mark-active transient-mark-mode)
+	(call-interactively 'fill-region)
+      (call-interactively 'fill-paragraph))))
 
 (defun unfill-paragraph-or-region () ; Version:1.7dr
   "Unfill paragraph or region (if any).
