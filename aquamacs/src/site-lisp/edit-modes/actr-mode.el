@@ -1,11 +1,13 @@
 ;;; actr-mode.el --- ACT-R-mode/support for Emacs
 
 ;; This file is not part of Emacs
+;; This file is part of Aquamacs Emacs
 
 ;; Copyright (C) 1998, 2003 Hedderik van Rijn <hvr-actrmode@van-rijn.org>
+;; Copyright (C) 2008 David Reitter
 
 ;; Author:   Hedderik van Rijn <hvr-actrmode@van-rijn.org>
-;; Version:  actr-mode.el v2, 030729
+;; Version:  actr-mode.el v2.1, 080111
 ;; Keywords: ACT-R
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -31,7 +33,7 @@
 ;; Browse the code or see the web-page
 ;; http://www.van-rijn.org/actr-mode for more information.
 
-;; This code is tested with GNU Emacs 21.3.50.4.
+;; This code is tested with GNU Emacs 22.3 and Aquamacs Emacs 1.6.
 
 ;; How to install [on Unix]:
 ;;
@@ -55,6 +57,11 @@
 
 ;;; (Highlights of) History: 
 ;;
+;; 080111 - 2.1 - David Reitter <david.reitter@gmail.com>
+;; - Updated for Emacs 22
+;; - The major mode is now derived from lisp-mode as to inherit all the goodies
+;; - We call run-mode-hooks as is convention
+
 ;; 030729 - 2
 ;;
 ;; - Updated for ACT-R 5. 
@@ -504,6 +511,8 @@ defined pretty print variables. Otherwise, the function
     ()					; Do not change the keymap if already set up.
   (setq actr-mode-map (make-sparse-keymap)))
 
+(set-keymap-parent actr-mode-map lisp-mode-map)
+
 (defun actr-add-local-menu-entry (name function)
   (let ((menu-vector (vconcat [menu-bar actr Local] (vector function))))
     (define-key actr-mode-map menu-vector (cons name function))))
@@ -612,6 +621,8 @@ WWW-site: http://www.van-rijn.org/actr-mode
 "
   (interactive)
   (kill-all-local-variables)		; Kill all old mode vars
+  (delay-mode-hooks (lisp-mode)) ;; inherit from this
+  
   (use-local-map actr-mode-map)
   (setq mode-name "ACT-R")
   (setq major-mode 'actr-mode)
@@ -655,6 +666,8 @@ WWW-site: http://www.van-rijn.org/actr-mode
 	  (font-lock-keywords-case-fold-search . t)))
 
   (run-mode-hooks 'actr-mode-hook))
+
+(put 'actr-mode 'derived-mode-parent 'lisp-mode)
 
 ;;; ------------------------------------------------------------------------
 ;;
