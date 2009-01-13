@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: tabbar-window.el,v 1.62 2008/12/24 05:04:17 davidswelt Exp $
+;; Revision: $Id: tabbar-window.el,v 1.63 2009/01/13 17:13:10 davidswelt Exp $
 
 (require 'tabbar)
 (require 'aquamacs-tools)
@@ -293,6 +293,7 @@ That is, a string used to represent it on the tab bar."
   "Return the help string shown when mouse is onto TAB."
   (format "%s" (buffer-name (tabbar-tab-value tab))))
 
+(defvar tab-points nil)
 (defun tabbar-window-select-tab (event tab &optional prefix)
   "On mouse EVENT, select TAB."
   (let ((mouse-button (event-basic-type event))
@@ -304,7 +305,16 @@ That is, a string used to represent it on the tab bar."
 	  (popup-menu tabbar-context-menu-map event prefix))
 	 (t
 	  (set-window-dedicated-p (selected-window) nil)
-	  (switch-to-buffer buffer)))
+	  (let ((prevtab (tabbar-get-tab (window-buffer (selected-window)) 
+					 (tabbar-tab-tabset tab))))
+	    (assq-set prevtab  (point-marker) 'tab-points))
+	  (switch-to-buffer buffer)
+	  (let ((new-pt (cdr (assq tab tab-points))))
+	    (and new-pt 
+		 (eq (marker-buffer new-pt) (window-buffer (selected-window)))
+		 (goto-char (marker-position new-pt))
+		 (set-marker new-pt nil) ;; delete marker 
+		 ))))
       ;; if there's no tab associated with clicked spot, use
       ;; special keymap for empty tab bar
       (cond ((eq mouse-button 'mouse-3)
