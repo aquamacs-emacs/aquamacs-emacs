@@ -677,14 +677,16 @@ M  src/mactoolbox.c
       }
 ***************
 *** 590,595 ****
---- 600,614 ----
+--- 600,616 ----
   	face_id = FRINGE_FACE_ID;
       }
   
 +   /* Perhaps remap BASE_FACE_ID to a user-specified alternative.  */
-+   remapped_face = lookup_basic_face (XFRAME (w->frame), face_id);
-+   if (remapped_face)
-+     face_id = remapped_face;
++   if (face_id == FRINGE_FACE_ID || face_id == DEFAULT_FACE_ID)
++     { remapped_face = lookup_basic_face (XFRAME (w->frame), face_id);
++       if (remapped_face)
++ 	face_id = remapped_face;
++     }
 + 
 +   if (old_buffer)
 +     set_buffer_internal_1 (old_buffer);
