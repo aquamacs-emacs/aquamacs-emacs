@@ -61,6 +61,7 @@
 ;; - Updated for Emacs 22
 ;; - The major mode is now derived from lisp-mode as to inherit all the goodies
 ;; - We call run-mode-hooks as is convention
+;; - Support Imaginal abd blending buffers (ACT-R 6)
 
 ;; 030729 - 2
 ;;
@@ -555,7 +556,7 @@ defined pretty print variables. Otherwise, the function
      (2 actr-font-prule-name))			     ;;; Name of production
     ("^\\s-*[\-*\\s-]*\\s-\\sw+\\s-+\\(nil\\)\\b" 1 actr-font-nil) ; nil
 
-    ("^\\s-*\\([=+-]\\(goal\\|retrieval\\|visual\\|visual-location\\|visual-state\\|manual\\|manual-state\\|manual-location\\)\\)\>" 1 actr-font-chunk-name)  ;;; goal: =xxx>
+    ("^\\s-*\\([=+-]\\(goal\\|retrieval\\|imaginal\\|visual\\|visual-location\\|visual-state\\|manual\\|manual-state\\|manual-location\\|blending\\)\\)\>" 1 actr-font-chunk-name)  ;;; goal: =xxx>
     ("^[ \t]*==\>[ \t\n]+" . actr-font-separator)    ;;; separator: ==>
     ("!\\(\\sw+\\)!" 1 actr-font-bang-bang)	     ;;; !eval!, !pop!, etc
     ("^[ \t]+\\b\\(isa\\)[ \t]*" 
