@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.249 2009/01/17 14:31:17 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.250 2009/01/17 14:39:23 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -145,29 +145,6 @@ automatically choosing a major mode, use \\[find-file-literally]."
       (if (listp value)
 	  (mapcar 'switch-to-buffer (nreverse value)))
       (switch-to-buffer value))))
-
-
-;; redefine
-
-(defun dnd-open-local-file (uri action &optional accept-new-files)
-  "Open a local file.
-The file is opened in the current window, or a new window if
-`dnd-open-file-other-window' is set.  URI is the url for the file,
-and must have the format file:file-name or file:///file-name.
-The last / in file:/// is part of the file name.  If the system
-natively supports unc file names, then remote urls of the form
-file://server-name/file-name will also be handled by this function.
-An alternative for systems that do not support unc file names is
-`dnd-open-remote-url'. ACTION is ignored."
-
-  (let* ((f (dnd-get-local-file-name uri t)))
-    (if (and f (or accept-new-files (file-readable-p f)))
-	(progn
-	  (if dnd-open-file-other-window
-	      (find-file-other-window f)
-	    (aquamacs-find-file f))
-	  'private)
-      (error "Can not read %s" uri))))
 
 
 (defun aquamacs-recentf-show-basenames (l &optional no-dir)
