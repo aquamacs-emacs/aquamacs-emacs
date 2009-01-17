@@ -1,3 +1,4 @@
+
 ;; Aquamacs Emacs OS X defaults
 ;; these defaults attempt to turn Emacs into a nice application for 
 ;; Mac OS X that adheres to at least some of the user interface 
@@ -9,7 +10,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.76 2008/12/25 19:06:45 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.77 2009/01/17 04:45:24 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -160,7 +161,8 @@ from earlier versions of the distribution."
 			(append (list (selected-frame))
 				(frame-list)))))
       ;; this should work with and without one-buffer-one-frame
-      (switch-to-buffer "*scratch*"))))
+      (let ((one-buffer-one-frame-mode nil))
+	(switch-to-buffer "*scratch*")))))
 
 
 (defun aquamacs-osx-defaults-setup ()
