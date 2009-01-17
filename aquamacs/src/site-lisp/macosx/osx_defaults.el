@@ -10,7 +10,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.77 2009/01/17 04:45:24 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.78 2009/01/17 04:47:34 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -145,7 +145,6 @@ from earlier versions of the distribution."
   (run-with-idle-timer 0 nil 'aquamacs-de-iconify-some-frame-1))
 
 (defun aquamacs-de-iconify-some-frame-1 ()
-     
   (unless (visible-frame-list)
     (unless (eq 'found
 		(catch 'exit 
@@ -154,13 +153,11 @@ from earlier versions of the distribution."
 			    (select-frame f)
 			    (make-frame-visible)
 			    (throw 'exit 'found)))
-
 			;; if current frame is iconified, use that
 			;; if selected frame is not iconified, but hidden,
 			;; then try to select an iconified frame
 			(append (list (selected-frame))
 				(frame-list)))))
-      ;; this should work with and without one-buffer-one-frame
       (let ((one-buffer-one-frame-mode nil))
 	(switch-to-buffer "*scratch*")))))
 
