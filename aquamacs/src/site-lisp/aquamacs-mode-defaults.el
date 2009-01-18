@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-mode-defaults.el,v 1.28 2008/12/22 20:52:46 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-defaults.el,v 1.29 2009/01/18 23:05:48 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -51,12 +51,6 @@
 (add-hook 'latex-mode-hook 'smart-dnd-latex)
 (defvar LaTeX-mode-hook nil)
 (add-hook 'LaTeX-mode-hook 'smart-dnd-latex)
-
-;; JDEE
-
-(condition-case nil 
-    (require 'jde-config nil t)
-  (error nil))
 
 
 ;; NXML
