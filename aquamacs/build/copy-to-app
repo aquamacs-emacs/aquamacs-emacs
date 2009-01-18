@@ -94,10 +94,16 @@ cp -pr "$projdir/src/Info.plist" Contents/
 #AQUAMACS_VERSION=`emacs -batch -l $projdir/src/site-lisp/site-start.el -eval '(princ aquamacs-version)'`
 AQUAMACS_VERSION=`perl -ne 'print $1 if (/defvar *aquamacs-version *\"(.*?)\"/);print $1 if (/defvar *aquamacs-minor-version *\"(.*?)\"/);' < $projdir/src/site-lisp/site-start.el`
 
+# use short name for Application menu.  (i.e. localized name)
+# unlocalized name remains (for LaunchServices)
 echo "CFBundleName = \"Aquamacs\";" >Contents/Resources/English.lproj/InfoPlist.strings
 echo "CFBundleShortVersionString = \"Aquamacs $AQUAMACS_VERSION, GNU Emacs 22\";" >>Contents/Resources/English.lproj/InfoPlist.strings
 echo "CFBundleGetInfoString = \"Aquamacs $AQUAMACS_VERSION, Copyright (C) 2009 by David Reitter, Aquamacs Project; GNU Emacs 22, Copyright (C) 2009 Free Software Foundation, Inc.\";" >>Contents/Resources/English.lproj/InfoPlist.strings
 
+# write BundleVersions directly into Info.plist
+# because LaunchServices fails to pick it up otherwise
+# and the version is important (to always start the latest version)
+perl -i -pe 's/<!--\s*CFBundleVersion\s*-->/<key>CFBundleVersion<\/key>\n<string>$ENV{AQUAMACS_VERSION}<\/string>/' Contents/Info.plist
 
 cp -pr "$projdir/src/emacs-document.icns" Contents/Resources/
 
@@ -106,7 +112,6 @@ cp "$projdir/Icons/build"/*.png Contents/Resources/etc/images/
 # can't produce icons without ImageMagick / freetype in build env.
 # so we won't do that here.
 # ${AQUAMACS_ROOT}/Icons/make-xpm ${AQUAMACS_ROOT}/Icons ${EMACS_ROOT}/etc/images 
-perl -i -pe 's/<!--\s*CFBundleVersion\s*-->/<key>CFBundleVersion<\/key>\n<string>$ENV{AQUAMACS_VERSION}<\/string>/' Contents/Info.plist
 
 cp -Rp "$projdir"/src/site-lisp/*.el Contents/Resources/site-lisp/
 
