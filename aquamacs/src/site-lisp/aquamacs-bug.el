@@ -3,7 +3,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: mac bug report
  
-;; Last change: $Id: aquamacs-bug.el,v 1.17 2008/10/19 16:34:26 davidswelt Exp $
+;; Last change: $Id: aquamacs-bug.el,v 1.18 2009/01/18 19:59:52 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -26,11 +26,10 @@
 ;; Copyright (C) 1985, 1994, 1997, 1998, 2000, 2001, 2002
 ;; Free Software Foundation, Inc.
 
-;; Copyright (C) 2005, David Reitter
+;; Copyright (C) 2005, 2008 David Reitter
 
 
 
-; (require 'emacsbug)
 (provide 'aquamacs-bug)
 
 (require 'aquamacs-tools)
@@ -59,6 +58,11 @@ Prompts for bug subject.  Leaves you in a mail buffer."
 		      nil (read-string "Bug Subject: ")))))
   ;; If there are four numbers in emacs-version, this is a pretest
   ;; version.
+
+  ;; need to load emacsbug before temporarily binding any of the
+  ;; defcustom'ed variables in there, because we'd otherwise avoid
+  ;; declaring and initializing them.
+  (require 'emacsbug)
   
   (let  (
 ;;	 (send-mail-function 'aquamacs-webbug-send-it)
