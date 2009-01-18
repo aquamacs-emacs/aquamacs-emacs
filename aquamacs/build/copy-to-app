@@ -103,7 +103,8 @@ echo "CFBundleGetInfoString = \"Aquamacs $AQUAMACS_VERSION, Copyright (C) 2009 b
 # write BundleVersions directly into Info.plist
 # because LaunchServices fails to pick it up otherwise
 # and the version is important (to always start the latest version)
-perl -i -pe 's/<!--\s*CFBundleVersion\s*-->/<key>CFBundleVersion<\/key>\n<string>$ENV{AQUAMACS_VERSION}<\/string>/' Contents/Info.plist
+export AQUAMACS_VERSION
+perl -i -pe 's/<!--\s*CFBundleVersion\s*-->/        <key>CFBundleVersion<\/key>\n        <string>$ENV{AQUAMACS_VERSION}<\/string>/' Contents/Info.plist
 
 cp -pr "$projdir/src/emacs-document.icns" Contents/Resources/
 
