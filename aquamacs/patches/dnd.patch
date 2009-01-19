@@ -9,8 +9,8 @@ this patch will select a more appropriate window to show the opened file in.  It
     "Open the documents specified by the Apple event EVENT."
     (interactive "e")
 !   (let ((ae (mac-event-ae event)))
-      (dolist (file-name (mac-ae-list ae nil 'undecoded-file-name))
-        (if file-name
+!     (dolist (file-name (mac-ae-list ae nil 'undecoded-file-name))
+!       (if file-name
 ! 	  (dnd-open-local-file
 ! 	   (concat "file://"
 ! 		   (mapconcat 'url-hexify-string
@@ -18,40 +18,44 @@ this patch will select a more appropriate window to show the opened file in.  It
       (let ((selection-range (mac-ae-selection-range ae))
   	  (search-text (mac-ae-text-for-search ae)))
         (cond (selection-range
---- 1726,1762 ----
+--- 1726,1766 ----
   (defun mac-ae-open-documents (event)
     "Open the documents specified by the Apple event EVENT."
     (interactive "e")
 !   (let ((ae (mac-event-ae event))
-! 	(target-frame))
-      (dolist (file-name (mac-ae-list ae nil 'undecoded-file-name))
-        (if file-name
-! 	  (let (
-! 		(sel-win (selected-window))) ; search all visible&iconified frames
-! 	    (unless 
-! 		(and sel-win 
-! 		     (window-live-p sel-win)
-! 		     (eq t (frame-visible-p (window-frame sel-win)))
-! 		     (not (special-display-p 
-! 			   (or (buffer-name (window-buffer sel-win)) ""))))
-! 	       ; search visible frames (but not dedicated ones)
-! 	      (setq sel-win (get-largest-window 'visible nil)))
-! 	    (unless 
-! 		(and sel-win 
-! 		     (window-live-p sel-win)
-! 		     (eq t (frame-visible-p (window-frame sel-win)))
-! 		     (not (special-display-p 
-! 			   (or (buffer-name (window-buffer sel-win)) ""))))
-! 	      ; make new frame
-! 	      (make-frame)
-! 	      (setq sel-win (selected-window)))
-! 	    (with-selected-window sel-win
-! 	      (dnd-open-local-file
-! 	       (concat "file://"
-! 		       (mapconcat 'url-hexify-string
-! 				  (split-string file-name "/") "/")) nil
-! 	       'accept-new-files)
-! 	      (setq target-frame (window-frame (selected-window)))))))
+! 	(target-frame)
+! 	(save-one-buffer-one-frame one-buffer-one-frame))
+!     (unwind-protect
+! 	(dolist (file-name (mac-ae-list ae nil 'undecoded-file-name))
+! 	  (if file-name
+! 	      (let (
+! 		    (sel-win (selected-window))) ; search all visible&iconified frames
+! 		(unless 
+! 		    (and sel-win 
+! 			 (window-live-p sel-win)
+! 			 (eq t (frame-visible-p (window-frame sel-win)))
+! 			 (not (special-display-p 
+! 			       (or (buffer-name (window-buffer sel-win)) ""))))
+! 					; search visible frames (but not dedicated ones)
+! 		  (setq sel-win (get-largest-window 'visible nil)))
+! 		(unless 
+! 		    (and sel-win 
+! 			 (window-live-p sel-win)
+! 			 (eq t (frame-visible-p (window-frame sel-win)))
+! 			 (not (special-display-p 
+! 			       (or (buffer-name (window-buffer sel-win)) ""))))
+! 		  ;; make new frame
+! 		  (setq one-buffer-one-frame t)
+! 		  (setq sel-win (selected-window)))
+! 		(with-selected-window sel-win
+! 		  (dnd-open-local-file
+! 		   (concat "file://"
+! 			   (mapconcat 'url-hexify-string
+! 				      (split-string file-name "/") "/")) nil
+! 		   'accept-new-files)
+! 		  (setq target-frame (window-frame (selected-window)))))))
+!       ;; unwind
+!       (setq one-buffer-one-frame save-one-buffer-one-frame))
 !     (select-frame-set-input-focus target-frame)
       (let ((selection-range (mac-ae-selection-range ae))
   	  (search-text (mac-ae-text-for-search ae)))
@@ -66,7 +70,7 @@ this patch will select a more appropriate window to show the opened file in.  It
   
   (defun mac-ae-quit-application (event)
     "Quit the application Emacs with the Apple event EVENT."
---- 1771,1777 ----
+--- 1776,1782 ----
   	    ((stringp search-text)
   	     (re-search-forward
   	      (mapconcat 'regexp-quote (split-string search-text) "\\|")
