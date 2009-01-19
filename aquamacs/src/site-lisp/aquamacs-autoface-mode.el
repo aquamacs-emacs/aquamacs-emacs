@@ -19,7 +19,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.48 2008/12/30 03:24:18 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.49 2009/01/19 16:03:26 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -56,18 +56,16 @@ for which the menu is being updated."
 
 (defun aquamacs-autoface-inherited-face ()
   "Return face name that the autoface inherits from"
-  (face-attribute (cdr-safe (assq 'default face-remapping-alist)) :inherit))
-
-
-; (aquamacs-autoface-inherited-mode-name)
+  (let ((face (cdr-safe (assq 'default face-remapping-alist))))
+    (if face
+	(face-attribute  :inherit)
+      nil)))
 
 (defun aquamacs-autoface-inherited-mode-name ()
   "Return mode name that the autoface inherits from"
   (let ((inh  (aquamacs-autoface-inherited-face)))
-    (if (eq 0 (string-match "^\\(.*\\)-default$" (symbol-name inh)))
+    (if (and inh (eq 0 (string-match "^\\(.*\\)-default$" (symbol-name inh))))
 	(intern (match-string 1 (symbol-name inh))))))
-
-
 
 (defun aquamacs-autoface-face (mode &optional bufname)
   (let ((face))
@@ -918,7 +916,6 @@ is local to the selected frame."
  
 ;; turn on if desired
 (if aquamacs-autoface-mode
-
     (aquamacs-autoface-mode 1))
 
 (provide 'aquamacs-autoface-mode)
