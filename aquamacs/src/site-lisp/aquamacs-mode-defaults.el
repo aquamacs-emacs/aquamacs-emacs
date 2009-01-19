@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-mode-defaults.el,v 1.29 2009/01/18 23:05:48 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-defaults.el,v 1.30 2009/01/19 03:15:48 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -62,6 +62,16 @@
 		'nxml-mode 'auto-mode-alist)
  
 (assq-set-equal "<\\?xml " 'nxml-mode 'magic-mode-alist)
+
+;; JDEE
+
+(defun aquamacs-announce-jdee ()
+  "Notify users of the JDEE plugin."
+  (unless (boundp 'jde-jdk)
+    (message "For the best Java editing environment, get the JDEE plugin at http://aquamacs.org."))
+  (remove-hook 'jde-mode-hook 'aquamacs-announce-jdee))
+
+(add-hook 'jde-mode-hook 'aquamacs-announce-jdee)
 
 
 ;; SLIME
