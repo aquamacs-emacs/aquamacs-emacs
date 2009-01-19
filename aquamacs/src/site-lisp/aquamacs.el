@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.251 2009/01/19 19:57:45 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.252 2009/01/19 21:45:43 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -926,7 +926,6 @@ Used by the modeline faces `mode-line' and `mode-line-inactive'."
      (save-place t)
      (save-place-limit 500) ;; speed on quit
      (save-place-forget-unreadable-files nil) ;; too slow
-     (send-mail-function mailclient-send-it)
      (mail-setup-with-from nil)  
 					; Colorized fonts
 					; Turn on font-lock in all modes that support it
