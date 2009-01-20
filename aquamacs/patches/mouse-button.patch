@@ -9,6 +9,25 @@ diff -c -r1.1.2.1 mactoolbox.c
 *** src/mactoolbox.c	6 Apr 2008 01:54:44 -0000	1.1.2.1
 --- src/mactoolbox.c	6 Apr 2008 14:02:29 -0000
 ***************
+*** 318,325 ****
+      {
+      case kEventMouseWheelMoved:
+        {
+! 	WindowRef wp;
+! 	struct frame *f;
+  	EventMouseWheelAxis axis;
+  	SInt32 delta;
+  	Point point;
+--- 320,327 ----
+      {
+      case kEventMouseWheelMoved:
+        {
+! 	WindowRef wp = NULL;
+! 	struct frame *f = NULL;
+  	EventMouseWheelAxis axis;
+  	SInt32 delta;
+  	Point point;
+***************
 *** 328,339 ****
   	if (result != eventNotHandledErr || read_socket_inev == NULL)
   	  break;
@@ -56,7 +75,7 @@ diff -c -r1.1.2.1 mactoolbox.c
   	  break;
   
 ! 	/* Normally, wheel events should go to the frame under the mouse */
-! 	if (wp)
+! 	if (wp && IsWindowVisible(wp))
 ! 	  f = mac_window_to_frame (wp);
 ! 	else 
 ! 	  /* Default: the focused frame */
