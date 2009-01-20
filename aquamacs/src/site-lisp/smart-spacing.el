@@ -46,7 +46,7 @@ This feature is part of Aquamacs."
   (interactive)
   (smart-spacing-mode 1))
 
-(defun turn-on-smart-spacing-mode ()
+(defun turn-off-smart-spacing-mode ()
   (interactive)
   (smart-spacing-mode 0))
 
