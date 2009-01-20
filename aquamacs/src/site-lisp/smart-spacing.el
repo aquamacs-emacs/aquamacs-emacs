@@ -54,39 +54,49 @@ This feature is part of Aquamacs."
   global-smart-spacing-mode smart-spacing-mode
   turn-on-smart-spacing-mode)
 
- 
+(defvar smart-spacing-rules
+  '(("  " . 1)
+    ("--" . 1)
+    (" ." . -1)
+    (" )" . -1)
+    ("( " . 1)
+    (" :" . -1)
+    (" ," . -1)
+    (" ;" . -1)
+    (" \"" . -1)
+    ("\" " . 1) 
+    (" '" . -1)
+    ;; ("\n\n" . "\n")
+    )
+  "Assoc list for smart spacing.
+If key is at point after killing text, delete |value| chars to the left or the right.
+Negative value indicates deletion to the left.")
+
 (defun smart-spacing-filter-buffer-substring (beg end &optional delete noprops)   
  "Like `filter-buffer-substring', but add spaces around content if region is a phrase."
  (let* ((from (min beg end)) (to (max beg end))
-       (use-smart-string 
-	(and
-	 smart-spacing-mode
-	 (smart-spacing-char-is-word-boundary (1- from) from)
-	 (smart-spacing-char-is-word-boundary to (1+ to))))
-       ;; the following is destructive (side-effect).  
-       ;; do after checking for word boundaries.
-       (string (filter-buffer-substring beg end delete noprops)))
+	;; (move-point (memq (point) (list beg end)))  
+	(use-smart-string 
+	 (and
+	  smart-spacing-mode
+	  (smart-spacing-char-is-word-boundary (1- from) from)
+	  (smart-spacing-char-is-word-boundary to (1+ to))))
+	;; the following is destructive (side-effect).  
+	;; do after checking for word boundaries.
+	(string (filter-buffer-substring beg end delete noprops)))
    (if use-smart-string
        (progn
 	 (put-text-property 0 (length string)
 			    'yank-handler '(smart-spacing-yank-handler nil nil nil) string)
 
 	 (when (and delete (> from (point-min)) (< (1+ from) (point-max)))
-	   ;; remove double space
-	   (let* ((str (buffer-substring-no-properties (- from 1) (1+ from)))
-		  (repl
-		   (cond ((equal str "  ") " ")
-			 ((equal str "--") "-")
-			 ((equal str " .") ".")
-			 ((equal str " )") ")")
-			 ((equal str "( ") "(")
-			 ;; ((equal str "\n\n") "\n")
-			 (t str))))
-	     
-	   (unless (equal repl str)
-	     (save-excursion
-	       (delete-region (1- from) from)	       
-	       (goto-char (1- from))))))))
+	   ;; remove  space
+	   (let ((del (assoc (buffer-substring-no-properties (- from 1) (1+ from))
+			     smart-spacing-rules)))
+	     (if del
+		 ;; delete either to the left or to the right
+		 ;; this deletion will keep point in the right place.
+		 (delete-region from (+ (cdr del) from)))))))
      string))
 
 
