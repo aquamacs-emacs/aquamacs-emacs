@@ -19,7 +19,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.49 2009/01/19 16:03:26 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.50 2009/01/20 05:04:23 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -58,7 +58,7 @@ for which the menu is being updated."
   "Return face name that the autoface inherits from"
   (let ((face (cdr-safe (assq 'default face-remapping-alist))))
     (if face
-	(face-attribute  :inherit)
+	(face-attribute face :inherit)
       nil)))
 
 (defun aquamacs-autoface-inherited-mode-name ()
