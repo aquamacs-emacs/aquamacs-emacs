@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-editing.el,v 1.13 2009/01/13 23:21:14 davidswelt Exp $
+;; Last change: $Id: aquamacs-editing.el,v 1.14 2009/01/20 14:14:28 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -26,17 +26,14 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, 2007 David Reitter
+;; Copyright (C) 2005, 2007, 2009 David Reitter
 
-
-
-
+(require 'smart-spacing)
 
 ;; these are taken from wikipedia-mode.el by Chong Yidong, Uwe Brauer
 ;; license: GPL2, 2007-02-13
 
 ;; slightly modified by David Reitter for Aquamacs
-
 (defun unfill-region () 
 "Undo filling, deleting stand-alone newlines.
 Newlines that do not end paragraphs, list entries, etc. in the region
