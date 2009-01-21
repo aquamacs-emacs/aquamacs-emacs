@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.135 2009/01/13 23:14:43 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.136 2009/01/21 03:39:33 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -33,7 +33,7 @@
 ;; Boston, MA 02111-1307, USA.
 
  
-;; Copyright (C) 2005, 2006, 2007, 2008 David Reitter
+;; Copyright (C) 2005, 2006, 2007, 2008, 2009 David Reitter
 
 
 ;; Unit test  / check requirements
@@ -139,7 +139,18 @@ With argument, do this that many times."
   (interactive "p")
   (if (and transient-mark-mode mark-active)
       (kill-region (region-beginning) (region-end))
-    (kill-region (point) (progn (forward-word arg) (point)))))
+    (kill-region (point) 
+		 (let ((at-wb
+			(string-match 
+			 "\\w" 
+			 (buffer-substring-no-properties 
+			  (point) (min (point-max) (1+ (point)))))))
+		   (forward-word arg) 
+		   (if (not at-wb)
+		       (if (> arg 0)
+			   (skip-chars-forward " " 1)
+			 (skip-chars-backward " " 1)))
+		   (point)))))
 
 (defun aquamacs-backward-kill-word (&optional arg)
   "Kill characters backward until encountering the beginning of a word.
