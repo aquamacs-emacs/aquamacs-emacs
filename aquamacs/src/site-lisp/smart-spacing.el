@@ -66,6 +66,8 @@ This feature is part of Aquamacs."
     (" \"" . -1)
     ("\" " . 1) 
     (" '" . -1)
+    ("\n " . 1)
+    (" " . 1) ; buffer boundary
     ;; ("\n\n" . "\n")
     )
   "Assoc list for smart spacing.
@@ -88,10 +90,11 @@ Negative value indicates deletion to the left.")
        (progn
 	 (put-text-property 0 (length string)
 			    'yank-handler '(smart-spacing-yank-handler nil nil nil) string)
-
-	 (when (and delete (> from (point-min)) (< (1+ from) (point-max)))
+	 (when delete
 	   ;; remove  space
-	   (let ((del (assoc (buffer-substring-no-properties (- from 1) (1+ from))
+	   (let ((del (assoc (buffer-substring-no-properties
+			      (max (point-min) (- from 1)) 
+			      (min (1- (point-max)) (1+ from)))
 			     smart-spacing-rules)))
 	     (if del
 		 ;; delete either to the left or to the right
@@ -101,13 +104,12 @@ Negative value indicates deletion to the left.")
 
 
 (defun smart-spacing-char-is-word-boundary (pos &optional side)
-  (not (and
-	(>= pos (point-min))
-	(< pos (point-max))
-	(let ((str (buffer-substring-no-properties pos (1+ pos))))
-	  (or (string-match "\\w" str)
-	    (if (eq side 'left) (or (equal str ".") (equal str ")")))
-	    (if (eq side 'right) (equal str "(")))))))
+  (or (< pos (point-min))
+      (>= pos (point-max))
+      (not (let ((str (buffer-substring-no-properties pos (1+ pos))))
+	     (or (string-match "\\w" str)
+		 (if (eq side 'left) (or (equal str ".") (equal str ")")))
+		 (if (eq side 'right) (equal str "(")))))))
 
 (defun smart-spacing-yank-handler (string)
       (when  (and smart-spacing-mode  
