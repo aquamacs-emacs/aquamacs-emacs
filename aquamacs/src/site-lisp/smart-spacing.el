@@ -55,7 +55,7 @@ This feature is part of Aquamacs."
   turn-on-smart-spacing-mode)
 
 (defvar smart-spacing-rules
-  '(("  " . 1)
+  '(("  " . (pol . 1))
     ("--" . 1)
     (" ." . -1)
     (" )" . -1)
@@ -74,10 +74,11 @@ This feature is part of Aquamacs."
 If key is at point after killing text, delete |value| chars to the left or the right.
 Negative value indicates deletion to the left.")
 
-(defun smart-spacing-filter-buffer-substring (beg end &optional delete noprops)   
+(defun smart-spacing-filter-buffer-substring (beg end &optional delete noprops )   
  "Like `filter-buffer-substring', but add spaces around content if region is a phrase."
  (let* ((from (min beg end)) (to (max beg end))
-	;; (move-point (memq (point) (list beg end)))  
+	;; (move-point (memq (point) (list beg end))) 
+	(point-at-end (eq (point) end))
 	(use-smart-string 
 	 (and
 	  smart-spacing-mode
@@ -89,17 +90,27 @@ Negative value indicates deletion to the left.")
    (if use-smart-string
        (progn
 	 (put-text-property 0 (length string)
-			    'yank-handler '(smart-spacing-yank-handler nil nil nil) string)
+			    'yank-handler '(smart-spacing-yank-handler nil nil nil) 
+			    string)
 	 (when delete
 	   ;; remove  space
 	   (let ((del (assoc (buffer-substring-no-properties
 			      (max (point-min) (- from 1)) 
 			      (min (1- (point-max)) (1+ from)))
 			     smart-spacing-rules)))
-	     (if del
+	     (when del
+	       (setq del (cdr del))
+	       ;; in some cases we want point to end up 
+	       ;; further to the left or to the right,
+	       ;; depending on whether it was on the left or the right
+	       ;; edge of the region
+	       (when (consp del)
+		 (if point-at-end
+		     (setq del (cdr del))
+		   (setq del (- (cdr del)))))
 		 ;; delete either to the left or to the right
 		 ;; this deletion will keep point in the right place.
-		 (delete-region from (+ (cdr del) from)))))))
+	       (delete-region from (+ del from)))))))
      string))
 
 
@@ -195,6 +206,27 @@ text.  See `insert-for-yank'."
        ;; If the buffer isn't read-only, the text is.
        (signal 'text-read-only (list (current-buffer)))))))
 
+
+;; ;; cua-base.el
+
+;; (defun cua-delete-region ()
+;;   "Delete the active region.
+;; Save a copy in register 0 if `cua-delete-copy-to-register-0' is non-nil."
+;;   (interactive)
+;;   (let ((start (mark)) (end (point)))
+;;     (or (<= start end)
+;; 	(setq start (prog1 end (setq end start))))
+;;     (setq cua--last-deleted-region-text 
+;; 	  (smart-spacing-filter-buffer-substring start end))
+;;     (if cua-delete-copy-to-register-0
+;; 	(set-register ?0 cua--last-deleted-region-text))
+;;     (delete-region start end)
+;;     (setq cua--last-deleted-region-pos
+;; 	  (cons (current-buffer)
+;; 		(and (consp buffer-undo-list)
+;; 		     (car buffer-undo-list))))
+;;     (cua--deactivate)
+;;     (/= start end)))
  
 
 (provide 'smart-spacing)
