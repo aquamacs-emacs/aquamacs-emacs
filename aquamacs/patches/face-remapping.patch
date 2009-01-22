@@ -725,29 +725,23 @@ M  src/mactoolbox.c
   
   /* Draw the fringes of window W.  Only fringes for rows marked for
 ***************
-*** 1128,1133 ****
---- 1158,1168 ----
+*** 1128,1134 ****
         else
   	right = NO_FRINGE_BITMAP;
   
-+       /* fringe face may have changed (remapped in buffer).
-+ 	 rather than figuring out the exact face, we just force a redraw. */
-+       redraw_p = row->redraw_fringe_bitmaps_p = 1;
-+ 
-+ 
-        if (row->y != cur->y
+!       if (row->y != cur->y
   	  || row->visible_height != cur->visible_height
   	  || row->ends_at_zv_p != cur->ends_at_zv_p
-***************
-*** 1147,1153 ****
-  	      cur->right_fringe_face_id = right_face_id;
-  	    }
-  	}
-- 
-        if (row->overlay_arrow_bitmap < 0)
-  	row->overlay_arrow_bitmap = get_logical_fringe_bitmap (w, Qoverlay_arrow, 0, 0);
+  	  || left != cur->left_fringe_bitmap
+--- 1153,1160 ----
+        else
+  	right = NO_FRINGE_BITMAP;
   
---- 1182,1187 ----
+!       if (windows_or_buffers_changed  /* because face_remapping_alist may remap fringe face */
+! 	  || row->y != cur->y
+  	  || row->visible_height != cur->visible_height
+  	  || row->ends_at_zv_p != cur->ends_at_zv_p
+  	  || left != cur->left_fringe_bitmap
 *** src/dispnew.c	05 May 2008 18:29:44 -0400	1.392.2.3
 --- src/dispnew.c	23 Dec 2008 15:56:08 -0500	
 ***************
@@ -768,9 +762,9 @@ M  src/mactoolbox.c
     updated_area = TEXT_AREA;
     /* If rows are at different X or Y, or rows have different height,
        or the current row is marked invalid, write the entire line.  */
-!   if (0   /* window background needs to be drawn using    
-! 	     clear_end_of_line, under the visible buffer text.  maybe: !desired_row->displays_text_p 
-! 	    how do we check for that?*/
+!   if (!desired_row->displays_text_p   
+! 	    /* window background needs to be drawn using    
+! 	     clear_end_of_line, under the visible buffer text.   */
 !       ||  !current_row->enabled_p
         || desired_row->y != current_row->y
         || desired_row->ascent != current_row->ascent
