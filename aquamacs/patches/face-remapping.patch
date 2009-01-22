@@ -732,22 +732,12 @@ M  src/mactoolbox.c
   
 +       /* fringe face may have changed (remapped in buffer).
 + 	 rather than figuring out the exact face, we just force a redraw. */
-+       redraw_p = row->redraw_fringe_bitmaps_p = 1;
++    /*   redraw_p = row->redraw_fringe_bitmaps_p = 1; removed experimental */  
 + 
 + 
-        if (row->y != cur->y
++        if (row->y != cur->y || row->enabled_p || cur->enabed_p==0
   	  || row->visible_height != cur->visible_height
   	  || row->ends_at_zv_p != cur->ends_at_zv_p
-***************
-*** 1147,1153 ****
-  	      cur->right_fringe_face_id = right_face_id;
-  	    }
-  	}
-- 
-        if (row->overlay_arrow_bitmap < 0)
-  	row->overlay_arrow_bitmap = get_logical_fringe_bitmap (w, Qoverlay_arrow, 0, 0);
-  
---- 1182,1187 ----
 *** src/dispnew.c	05 May 2008 18:29:44 -0400	1.392.2.3
 --- src/dispnew.c	23 Dec 2008 15:56:08 -0500	
 ***************
