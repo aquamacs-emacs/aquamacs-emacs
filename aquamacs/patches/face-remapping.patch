@@ -1042,7 +1042,7 @@ diff -c -r1.214.2.31 macterm.c
   }
   
   
---- 5304,5319 ----
+--- 5351,5370 ----
        struct frame *f;
        int x, y, width, height;
   {
@@ -1051,7 +1051,11 @@ diff -c -r1.214.2.31 macterm.c
 !   struct face *face = NULL; //  FRAME_DEFAULT_FACE (f);
 ! 
 !   if (updated_window)
-!     face = lookup_basic_face_for_buffer (f, DEFAULT_FACE_ID, updated_window->buffer);
+!     if (current_buffer && XBUFFER (updated_window->buffer) != current_buffer)
+!       face = FACE_FROM_ID (f, lookup_basic_face_for_buffer (f, DEFAULT_FACE_ID, updated_window->buffer) );
+!     else
+!       face = FACE_FROM_ID (f, lookup_basic_face (f, DEFAULT_FACE_ID) );
+! 
 !   if (face) 
 !     mac_erase_rectangle_with_color (f, FRAME_NORMAL_GC (f), x, y, width, height, face->background);
 !   else
