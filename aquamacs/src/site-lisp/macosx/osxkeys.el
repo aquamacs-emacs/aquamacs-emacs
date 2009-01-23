@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.136 2009/01/21 03:39:33 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.137 2009/01/23 15:22:00 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -65,7 +65,7 @@
 Defaults to the value of `mac-command-modifier'.
 You will need to run
 
-(setq  osx-key-mode-map (make-osx-key-mode-map))
+\(setq  osx-key-mode-map (make-osx-key-mode-map))
 
 after updating this variable.")
 
@@ -132,7 +132,7 @@ provided `cua-mode' and the mark are active."
 	 '(aquamacs-backward-char aquamacs-forward-char))
   (put cmd 'CUA 'move))
 
-
+(require 'smart-spacing)
 (defun aquamacs-kill-word (&optional arg)
   "Kill characters forward until encountering the end of a word.
 With argument, do this that many times."
@@ -141,10 +141,13 @@ With argument, do this that many times."
       (kill-region (region-beginning) (region-end))
     (kill-region (point) 
 		 (let ((at-wb
-			(string-match 
-			 "\\w" 
-			 (buffer-substring-no-properties 
-			  (point) (min (point-max) (1+ (point)))))))
+			(or 
+			 (not smart-spacing-mode)
+			 (eolp)
+			 (string-match 
+			  "\\w" 
+			  (buffer-substring-no-properties 
+			   (point) (min (point-max) (1+ (point))))))))
 		   (forward-word arg) 
 		   (if (not at-wb)
 		       (if (> arg 0)
