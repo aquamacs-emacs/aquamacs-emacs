@@ -75,7 +75,7 @@ diff -c -r1.1.2.1 mactoolbox.c
   	  break;
   
 ! 	/* Normally, wheel events should go to the frame under the mouse */
-! 	if (wp && IsWindowVisible(wp))
+! 	if (wp && IsWindowVisible(wp) && GetWRefCon (wp)) /* prevent crash */
 ! 	  f = mac_window_to_frame (wp);
 ! 	else 
 ! 	  /* Default: the focused frame */
