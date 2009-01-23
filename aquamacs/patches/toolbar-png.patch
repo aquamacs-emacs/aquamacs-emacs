@@ -3,11 +3,12 @@ diff -c -r1.1.2.1 mactoolbox.c
 --- src/s/darwin.h	06 May 2008 08:05:10 +0100	
 ***************
 *** 274,279 ****
---- 274,281 ----
+--- 274,282 ----
   #define USE_MAC_IMAGE_IO 1
   #endif
   #endif
 + /* Do not use Image I/O because the rest of the patch depends on the older API */
++ #undef USE_MAC_IMAGE_IO
 + #define USE_MAC_IMAGE_IO 0
   
   /* If the Image I/O framework is not used, fall back on QuickTime.  */
