@@ -39,6 +39,12 @@ case $1 in
 esac	
 
 BPAR=$*
+if [ "$BPAR" ]; then
+else
+# -g -> debug symbols
+# -O3 -> max optimize (speed)
+    BPAR=-C,'CFLAGS="-DMAC_OS_X_VERSION_MIN_REQUIRED=1030 -j3 -g -O3"'
+fi
 
 echo "Building $a"
 if [ "$BPAR" ]; then
@@ -107,6 +113,7 @@ if test "${UPDATE_PLUGINS}" == "yes"; then
     pwd
     echo "tarring $PKG"
     tar czf $PKG.tgz $PKG
+    mkdir ${DEST}/plugins 2>/dev/null
     mv $PKG.tgz ${DEST}/plugins/
     echo "Done building SLIME."
  # copy to web dir (logs, build)
