@@ -183,8 +183,7 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
 
     # -g -> debug symbols
     # -O3 -> max optimize (speed)
-    export CFLAGS="-DMAC_OS_X_VERSION_MIN_REQUIRED=1030 -j3 -g -O3"
-
+    export CFLAGS="-DMAC_OS_X_VERSION_MIN_REQUIRED=1040 -j3 -g -O3"
     export MACOSX_DEPLOYMENT_TARGET=10.4
 
     cd ${AQ_PREFIX}/emacs/mac
