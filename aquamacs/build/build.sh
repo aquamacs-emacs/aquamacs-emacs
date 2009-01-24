@@ -183,7 +183,8 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
 
     # -g -> debug symbols
     # -O3 -> max optimize (speed)
-    export CFLAGS="-DMAC_OS_X_VERSION_MIN_REQUIRED=1040 -j3 -g -O3"
+    # -fno-inline-functions => to keep size down
+    export CFLAGS="-DMAC_OS_X_VERSION_MIN_REQUIRED=1040 -j3 -g -O2 -mtune=nocona -pipe" # --with-arch=apple --with-tune=generic"
     export MACOSX_DEPLOYMENT_TARGET=10.4
 
     cd ${AQ_PREFIX}/emacs/mac
