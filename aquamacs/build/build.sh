@@ -184,8 +184,7 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
     # -g -> debug symbols
     # -O3 -> max optimize (speed)
     # -fno-inline-functions => to keep size down
-    export CC="/Users/dr/Downloads/usr/local/bin/gcc"
-    export CFLAGS="-DMAC_OS_X_VERSION_MIN_REQUIRED=1040 -g -O6 -mtune=nocona -pipe -fomit-frame-pointer" 
+    export CFLAGS="-DMAC_OS_X_VERSION_MIN_REQUIRED=1040 -g -O9 -mtune=nocona -pipe -fomit-frame-pointer" 
 # (benchmark 10 '(aquamacs-setup))
 # -j3 -g -O3 -mtune=nocona -pipe
 # 10sec
