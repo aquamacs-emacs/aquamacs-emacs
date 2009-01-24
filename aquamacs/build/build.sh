@@ -184,7 +184,17 @@ if test "${BUILD_AQUAMACS}" == "yes"; then
     # -g -> debug symbols
     # -O3 -> max optimize (speed)
     # -fno-inline-functions => to keep size down
-    export CFLAGS="-DMAC_OS_X_VERSION_MIN_REQUIRED=1040 -j3 -g -O2 -mtune=nocona -pipe" # --with-arch=apple --with-tune=generic"
+    export CC="/Users/dr/Downloads/usr/local/bin/gcc"
+    export CFLAGS="-DMAC_OS_X_VERSION_MIN_REQUIRED=1040 -g -O6 -mtune=prescott -pipe" 
+# (benchmark 10 '(aquamacs-setup))
+# -j3 -g -O3 -mtune=nocona -pipe
+# 10sec
+# CFLAGS=-DMAC_OS_X_VERSION_MIN_REQUIRED=1040 -j3 -O3 -mtune=nocona -pipe -fomit-frame-pointer
+# about 10 sec  unclear if opmit-f-p did anything at all
+# 
+# (benchmark 30 '(aquamacs-setup)) - 31sec 1.7cvs Gcc4.4 with march=core2
+# 41sec 1.6 gcc4.0
+
     export MACOSX_DEPLOYMENT_TARGET=10.4
 
     cd ${AQ_PREFIX}/emacs/mac
