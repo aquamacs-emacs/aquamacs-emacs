@@ -10,7 +10,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.79 2009/01/19 21:39:16 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.80 2009/01/25 21:24:08 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -287,7 +287,7 @@ from earlier versions of the distribution."
   ;; create temporary directory if necessary
 
   (aquamacs-set-defaults 
-   `((send-mail-function auto-send-mail-function) ;; defined in mac-extra-functions
+   `((mailclient-place-body-on-clipboard-flag ,(gmail-mailclient-p))
      (recentf-menu-action aquamacs-find-file-2)
      (savehist-file "~/Library/Preferences/Aquamacs Emacs/minibuffer-history.el")
      (desktop-path ("~/Library/Preferences/Aquamacs Emacs" "." "~"))
