@@ -13,7 +13,7 @@
 ;; any later version.
 
 ;; Aquamacs Emacs is distributed in the hope that it will be useful,
-;; but WIT ANY WARRANTY; without even the implied warranty of
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANLITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU Gen Public License for more details.
 
