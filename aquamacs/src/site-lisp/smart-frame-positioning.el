@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.71 2008/12/26 14:58:08 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.72 2009/02/03 23:06:19 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -96,7 +96,7 @@ by any of the hook functions, will normally be preserved."
 
 
 (defun smart-tool-bar-pixel-height (&optional frame) 
-(if (> (frame-parameter frame 'tool-bar-lines) 0)
+(if (> (or (frame-parameter frame 'tool-bar-lines) 0) 0)
     (if (and (boundp 'mac-tool-bar-display-mode) (eq mac-tool-bar-display-mode 'icons))
 	40
       56)
