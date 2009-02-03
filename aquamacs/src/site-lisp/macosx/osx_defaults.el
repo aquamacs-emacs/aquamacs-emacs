@@ -10,7 +10,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.80 2009/01/25 21:24:08 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.81 2009/02/03 19:02:56 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -180,14 +180,17 @@ from earlier versions of the distribution."
 ;; see comment in startup.el
 (if (or init-file-user user-init-file)
   (mac-add-standard-directories)
-  (ats "add dirs done")
-  
-  (aquamacs-create-preferences-dirs)
-  (aquamacs-create-preferences-file)
-  (ats "create prefs done"))
+  (ats "add dirs done"))
 
-  ;; load files (give full paths and load all files)
-  ;; this will be called after .emacs has been loaded
+;; create preferences files (even when starting with -q)
+;; because subsequent operations may throw errors if those
+;; directories don't exist.
+(aquamacs-create-preferences-dirs)
+(aquamacs-create-preferences-file)
+(ats "create prefs done")
+
+;; load files (give full paths and load all files)
+;; this will be called after .emacs has been loaded
 ;;   (add-hook 'after-init-hook   
 ;; 	    'aquamacs-load-preferences
 ;; 	    'append)
