@@ -25,6 +25,13 @@
 ;; Copyright (C) 2009: David Reitter
 
 
+;; (defcustom smart-spacing-when-killing-words nil
+;;   "Delete extra spaces when killing words.
+;; Affects commands `aquamacs-kill-word' and `aquamacs-backwards-kill-word'."
+;;   :group 'convenience
+;;   :group 'Aquamacs
+;;   :type '(choice (const nil) (const t)))
+
 (define-minor-mode smart-spacing-mode
  "Smart spacing: word-wise kill&yank.
 When this mode is enabled, kill and yank operations support
@@ -77,6 +84,10 @@ left.  If value is a cons (xxx . num), then num characters will
 be deleted either to the left or to the right, depending on where
 the point is when the command is called.")
 
+(defmacro user-buffer-p (buf)
+  "Evaluate to t if buffer BUF is not an internal buffer."
+  `(not (string= (substring (buffer-name ,buf) 0 1) " ")))
+
 (defun smart-spacing-filter-buffer-substring (beg end &optional delete noprops )   
  "Like `filter-buffer-substring', but add spaces around content if region is a phrase."
  (let* ((from (min beg end)) (to (max beg end))
@@ -85,6 +96,7 @@ the point is when the command is called.")
 	(use-smart-string 
 	 (and
 	  smart-spacing-mode
+	  (user-buffer-p (current-buffer))
 	  (smart-spacing-char-is-word-boundary (1- from) from)
 	  (smart-spacing-char-is-word-boundary to (1+ to))))
 	;; the following is destructive (side-effect).  
@@ -99,11 +111,11 @@ the point is when the command is called.")
     string))
 
 (defun smart-delete-region (from to)
-  (if (and smart-spacing-mode (memq this-command '(cua-delete-region)))
+  (if (and smart-spacing-mode (memq this-command '(cua-delete-region mouse-save-then-kill)))
       (let* ((from (min from to)) 
 	     (to (max from to))
 	     ;; (move-point (memq (point) (list beg end))) 
-	     (point-at-end (eq (point) end))) 
+	     (point-at-end (eq (point) to))) 
 	     
 	     (delete-region from to)
 	     (smart-remove-remaining-spaces from point-at-end))
@@ -140,10 +152,11 @@ a previously deleted region (now at POS)."
 		 (if (eq side 'left) (or (equal str ".") (equal str ")")))
 		 (if (eq side 'right) (equal str "(")))))))
 
+
 (defun smart-spacing-yank-handler (string)
       (when  (and smart-spacing-mode  
 		  major-mode ; paranoia
-		  (not (eq major-mode 'fundamental-mode)))
+		  (user-buffer-p (current-buffer)))
 	(or (smart-spacing-char-is-word-boundary opoint 'right) ; to the right
 	     (setq string (concat string " ")))
 	(or (smart-spacing-char-is-word-boundary (1- opoint) 'left) ; to the left
@@ -247,5 +260,106 @@ Save a copy in register 0 if `cua-delete-copy-to-register-0' is non-nil."
 
 ;; currently not advising backward-delete-char-untabity 
 ;; or delete-char
+
+;; mouse.el
+
+(defun mouse-save-then-kill (click)
+  "Save text to point in kill ring; the second time, kill the text.
+If the text between point and the mouse is the same as what's
+at the front of the kill ring, this deletes the text.
+Otherwise, it adds the text to the kill ring, like \\[kill-ring-save],
+which prepares for a second click to delete the text.
+
+If you have selected words or lines, this command extends the
+selection through the word or line clicked on.  If you do this
+again in a different position, it extends the selection again.
+If you do this twice in the same position, the selection is killed."
+  (interactive "e")
+  (let ((before-scroll
+	 (with-current-buffer (window-buffer (posn-window (event-start click)))
+	   point-before-scroll)))
+    (mouse-minibuffer-check click)
+    (let ((click-posn (posn-point (event-start click)))
+	  ;; Don't let a subsequent kill command append to this one:
+	  ;; prevent setting this-command to kill-region.
+	  (this-command this-command))
+      (if (and (with-current-buffer
+                   (window-buffer (posn-window (event-start click)))
+		 (and (mark t) (> (mod mouse-selection-click-count 3) 0)
+		      ;; Don't be fooled by a recent click in some other buffer.
+		      (eq mouse-selection-click-count-buffer
+			  (current-buffer)))))
+	  (if (not (and (eq last-command 'mouse-save-then-kill)
+			(equal click-posn
+			       (car (cdr-safe (cdr-safe mouse-save-then-kill-posn))))))
+	      ;; Find both ends of the object selected by this click.
+	      (let* ((range
+		      (mouse-start-end click-posn click-posn
+				       mouse-selection-click-count)))
+		;; Move whichever end is closer to the click.
+		;; That's what xterm does, and it seems reasonable.
+		(if (< (abs (- click-posn (mark t)))
+		       (abs (- click-posn (point))))
+		    (set-mark (car range))
+		  (goto-char (nth 1 range)))
+		;; We have already put the old region in the kill ring.
+		;; Replace it with the extended region.
+		;; (It would be annoying to make a separate entry.)
+		(kill-new (smart-spacing-filter-buffer-substring (point) (mark t)) t)
+		(mouse-set-region-1)
+		;; Arrange for a repeated mouse-3 to kill this region.
+		(setq mouse-save-then-kill-posn
+		      (list (car kill-ring) (point) click-posn))
+		(mouse-show-mark))
+	    ;; If we click this button again without moving it,
+	    ;; that time kill.
+	    (smart-delete-region (mark) (point))
+	    (setq mouse-selection-click-count 0)
+	    (setq mouse-save-then-kill-posn nil))
+	(if (and (eq last-command 'mouse-save-then-kill)
+		 mouse-save-then-kill-posn
+		 (eq (car mouse-save-then-kill-posn) (car kill-ring))
+		 (equal (cdr mouse-save-then-kill-posn) (list (point) click-posn)))
+	    ;; If this is the second time we've called
+	    ;; mouse-save-then-kill, delete the text from the buffer.
+	    (progn
+	      (smart-delete-region (point) (mark))
+	      ;; After we kill, another click counts as "the first time".
+	      (setq mouse-save-then-kill-posn nil))
+	  ;; This is not a repetition.
+	  ;; We are adjusting an old selection or creating a new one.
+	  (if (or (and (eq last-command 'mouse-save-then-kill)
+		       mouse-save-then-kill-posn)
+		  (and mark-active transient-mark-mode)
+		  (and (memq last-command
+			     '(mouse-drag-region mouse-set-region))
+		       (or mark-even-if-inactive
+			   (not transient-mark-mode))))
+	      ;; We have a selection or suitable region, so adjust it.
+	      (let* ((posn (event-start click))
+		     (new (posn-point posn)))
+		(select-window (posn-window posn))
+		(if (numberp new)
+		    (progn
+		      ;; Move whichever end of the region is closer to the click.
+		      ;; That is what xterm does, and it seems reasonable.
+		      (if (<= (abs (- new (point))) (abs (- new (mark t))))
+			  (goto-char new)
+			(set-mark new))
+		      (setq deactivate-mark nil)))
+		(kill-new (smart-spacing-filter-buffer-substring (point) (mark t)) t))
+	    ;; Set the mark where point is, then move where clicked.
+	    (mouse-set-mark-fast click)
+	    (if before-scroll
+		(goto-char before-scroll))
+	    (exchange-point-and-mark)   ;Why??? --Stef
+	    (kill-new (smart-spacing-filter-buffer-substring (point) (mark t))))
+          (mouse-show-mark)
+	  (mouse-set-region-1)
+	  (setq mouse-save-then-kill-posn
+		(list (car kill-ring) (point) click-posn)))))))
+
+
+; (global-set-key [(met mouse-3)] 'mouse-save-then-kill)
 
 (provide 'smart-spacing)
