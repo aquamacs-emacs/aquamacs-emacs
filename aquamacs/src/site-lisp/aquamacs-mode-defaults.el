@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-mode-defaults.el,v 1.30 2009/01/19 03:15:48 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-defaults.el,v 1.31 2009/02/05 17:17:13 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -112,7 +112,7 @@
 
 ;; 
 (autoload 'actr-mode "actr-mode" "ACT-R mode" 'interactive nil)
-(autoload 'haskell-mode "haskell-mode" "Haskell mode" 'interactive nil)
+(load "haskell-site-file") ;; autoloads
 
 (setq auto-mode-alist
 	(append
