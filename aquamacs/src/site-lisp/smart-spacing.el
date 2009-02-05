@@ -362,4 +362,31 @@ If you do this twice in the same position, the selection is killed."
 
 ; (global-set-key [(met mouse-3)] 'mouse-save-then-kill)
 
+(define-key-after menu-bar-options-menu [global-smart-spacing]
+  (menu-bar-make-mm-toggle
+   global-smart-spacing-mode
+   "Smart Word Spacing"
+   "Normalize spaces between words during cut&paste"
+   (:visible (not text-mode-variant)
+	      :enable (menu-bar-menu-frame-live-and-visible-p)))
+  'truncate-lines)
+
+(defun toggle-text-mode-smart-spacing ()
+  "Toggle `smart-spacing-mode' in `text-mode-hook'"
+  (interactive)
+  (if (memq 'smart-spacing-mode text-mode-hook)
+      (remove-hook 'text-mode-hook 'smart-spacing-mode)      
+    (add-hook 'text-mode-hook 'smart-spacing-mode))
+  (message "Smart word spacing in text modes %sabled."
+	   (if (memq 'smart-spacing-mode text-mode-hook)
+	       "en" "dis")))
+
+(define-key-after menu-bar-options-menu [text-mode-smart-spacing]
+  '(menu-item "Smart Word Spacing in Text Modes"
+	      toggle-text-mode-smart-spacing
+	      :help "Normalize spaces between words during cut&paste"
+	      :button (:toggle . (memq 'smart-spacing-mode text-mode-hook))
+	      :visible text-mode-variant
+	      :enable (menu-bar-menu-frame-live-and-visible-p)) 'truncate-lines)
+
 (provide 'smart-spacing)
