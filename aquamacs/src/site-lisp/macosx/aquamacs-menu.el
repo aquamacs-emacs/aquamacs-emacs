@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.199 2009/01/08 22:34:58 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.200 2009/02/05 18:37:58 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -710,7 +710,6 @@ subsequently create.  Upon entering text-mode, the function
 	      :button (:toggle . truncate-lines)
 	      :enable (menu-bar-menu-frame-live-and-visible-p)) 'word-wrap)
 
-
 (define-key-after menu-bar-options-menu [auto-wrap]
   '(menu-item "Auto Word Wrap in Text Modes"
 	      menu-bar-auto-text-mode-wrap
@@ -722,6 +721,38 @@ subsequently create.  Upon entering text-mode, the function
 				       (eq 'auto-detect-longlines text-mode-hook)))))
   'word-wrap)
  
+(require 'smart-spacing)
+(define-key-after menu-bar-options-menu [global-smart-spacing]
+  (menu-bar-make-mm-toggle
+   global-smart-spacing-mode
+   "Smart Word Spacing"
+   "Normalize spaces between words during cut&paste"
+   (:enable (menu-bar-menu-frame-live-and-visible-p)))
+  'truncate-lines)
+
+(defun toggle-text-mode-smart-spacing ()
+  "Toggle `smart-spacing-mode' in `text-mode-hook'"
+  (interactive)
+  (let ((enable (not (memq 'smart-spacing-mode text-mode-hook))))
+    (if enable
+	(add-hook 'text-mode-hook 'smart-spacing-mode)
+      (remove-hook 'text-mode-hook 'smart-spacing-mode))
+    (dolist (buffer (buffer-list))
+      (with-current-buffer buffer
+	(if (or (derived-mode-p 'text-mode) text-mode-variant)
+	    (smart-spacing-mode (if enable 1 0)))))
+    (message "Smart word spacing in text modes %sabled."
+	     (if enable "en" "dis"))))
+
+;; (define-key-after menu-bar-options-menu [text-mode-smart-spacing]
+;;   '(menu-item "Smart Word Spacing in Text Modes"
+;; 	      toggle-text-mode-smart-spacing
+;; 	      :help "Normalize spaces between words during cut&paste"
+;; 	      :button (:toggle . (memq 'smart-spacing-mode text-mode-hook))
+;; 	      :enable (menu-bar-menu-frame-live-and-visible-p)) 'truncate-lines)
+
+
+
 ;; in edit menu
 
 (define-key menu-bar-search-menu [case-fold-search]
