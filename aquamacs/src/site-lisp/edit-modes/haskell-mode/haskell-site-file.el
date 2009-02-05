@@ -2,9 +2,6 @@
 ;;
 ;;; Code:
 
-(add-to-list 'load-path
-              (or (file-name-directory load-file-name) (car load-path)))
-
 
 
 ;;;### (autoloads (haskell-c-mode) "haskell-c" "haskell-c.el" (18170
