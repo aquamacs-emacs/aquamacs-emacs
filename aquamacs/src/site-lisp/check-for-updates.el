@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs version check
  
-;; Last change: $Id: check-for-updates.el,v 1.29 2008/12/24 15:55:29 davidswelt Exp $
+;; Last change: $Id: check-for-updates.el,v 1.30 2009/02/05 02:25:44 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -28,18 +28,19 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, 2007 David Reitter
+;; Copyright (C) 2005, 2007, 2008, 2009 David Reitter
 
 ; the following is user-settable (to "")
 (defvar aquamacs-version-check-url "http://aquamacs.org/cgi-bin/currentversion.cgi" "URL to check for updates.  ")
 ;; warning: the default used to be aquamacs.sourceforge.net until after 1.0a
 
 (defun aquamacs-check-version-information ()
+  "Show information regarding privacy."
   (interactive) 
 ;(switch-to-buffer (get-buffer-create  " *Aquamacs Privacy* "))
 (with-output-to-temp-buffer (help-buffer)
 
-(print "
+(princ "
         Aquamacs - Version update check
  
         Aquamacs automatically checks for updates and notifies
@@ -52,20 +53,28 @@
 	versions of Aquamacs and OS X and the processor type that
 	you're using.  We also receive information about some
 	settings: currently, this is whether you've got
-	`one-buffer-one-frame-mode' and `tabbar-mode'
-	turnedon.  Just as during any access to an Internet
-	server, your IP address and the time of your inquiry may
+	`one-buffer-one-frame-mode', `tabbar-mode', 
+        `global-smart-spacing-mode' and `smart-spacing-mode'
+	turned on, and the major mode currently used.  Just as
+        during any access to an Internet
+	server, your IP address and the time of your inquiry is
 	be stored, too.  This information is used to produce
 	statistics; we will delete the original data after a
 	period of time. The statistics help us develop the
 	application further -- for example, we may decide to
-	continue support for a particular operating system
+	continue support for a particular old operating system
 	version.  
 
 	If you like to turn this check off, add this to your file
 	~/Library/Preferences/Aquamacs Emacs/Preferences.el:
 
 	(setq aquamacs-version-check-url nil)
+
+        The Aquamacs project will never sell or make accessible
+        to anyone outside the project any information that would
+        permit the correlation of personally identifiable data
+        (IP address and time stamp) with any other information
+        transmitted. 
 "))
 nil  )
 
@@ -194,7 +203,9 @@ Would you like to see the donations site now?
 
 (defun aquamacs-check-for-updates-if-necessary (&optional force-check no-new-start interactively)
   "Check (periodically) if there's an update for Aquamacs available, 
-and show user a message if there is."
+and show user a message if there is.
+Enter M-x aquamacs-check-version-information to see information about
+transfered data."
   (let (  
 	( call-number 0)
 	( session-id (random t) )
@@ -286,6 +297,13 @@ and show user a message if there is."
 			  "&ver=" (url-encode-string (concat (or aquamacs-version "unknown") (or aquamacs-minor-version "-")))
 			  "&obof=" (if one-buffer-one-frame-mode "1" "0")
 			  "&tab=" (if tabbar-mode "1" "0")
+			  "&gssm=" (if global-smart-spacing-mode "1" "0")
+			  "&tgssm=" (if (memq 'smart-spacing-mode text-mode-hook) "1" "0")
+			  (if buffer-file-name
+			      (concat
+			       "&ssm=" (if smart-spacing-mode "1" "0")
+			       "&mm=" (or (symbol-name major-mode) "none"))
+			    "")
 			  "&os=" 
 			  (url-encode-string  
 			   (replace-regexp-in-string 
