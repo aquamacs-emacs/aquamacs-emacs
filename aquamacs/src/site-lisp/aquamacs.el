@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.252 2009/01/19 21:45:43 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.253 2009/02/05 03:22:21 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -1325,6 +1325,9 @@ to the selected frame."
      (savehist-mode 1)
      ;; do not create backups
      (make-backup-files nil)
+     ;; higher undo limit
+     (undo-outer-limit 12000000)
+     (undo-limit 80000)
      )) 
    
 
@@ -1404,6 +1407,7 @@ listed here."
 	      one-buffer-one-frame-mode 
 	      aquamacs-styles-mode
 	      aquamacs-autoface-mode
+	      global-smart-spacing-mode
 	      default-frame-alist ;; does this not prevent users from setting these?
 ;;;	     do not save initial-frame-alist - it is stored by smart-frame-positions
 ;;;  to do: frame-notice-user-settings should use default-frame-alist in addition to
