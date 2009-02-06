@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-print.el,v 1.15 2008/08/10 13:32:13 davidswelt Exp $
+;; Last change: $Id: mac-print.el,v 1.16 2009/02/06 22:56:29 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -174,7 +174,10 @@ Remove from your load-path for optimal printing / export results.")
       )
     (let* (
 	   (htmlize-html-major-mode nil)
-	   
+	   (htmlize-html-charset 
+	    (if buffer-file-coding-system
+		(coding-system-get buffer-file-coding-system
+				   'mime-charset)))
 	   (show-paren-mode-save show-paren-mode)
 	   
 	   (html (unwind-protect
