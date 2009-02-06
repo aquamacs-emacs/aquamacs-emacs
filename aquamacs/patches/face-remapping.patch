@@ -897,6 +897,23 @@ M  src/mactoolbox.c
   
   /* Draw the fringes of window W.  Only fringes for rows marked for
 ***************
+*** 1072,1078 ****
+        if (!row->enabled_p)
+  	row = cur;
+  
+!       left_face_id = right_face_id = DEFAULT_FACE_ID;
+  
+        /* Decide which bitmap to draw in the left fringe.  */
+        if (WINDOW_LEFT_FRINGE_WIDTH (w) == 0)
+--- 1080,1086 ----
+        if (!row->enabled_p)
+  	row = cur;
+  
+!       left_face_id = right_face_id = FRINGE_FACE_ID; /* takes priority if customized */
+  
+        /* Decide which bitmap to draw in the left fringe.  */
+        if (WINDOW_LEFT_FRINGE_WIDTH (w) == 0)
+***************
 *** 1128,1133 ****
 --- 1136,1147 ----
         else
