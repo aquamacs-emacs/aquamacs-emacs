@@ -723,7 +723,6 @@ the current buffer."
 		      value face frame)))
      value)))
 
-
 (defun htmlize-face-specifies-property (face prop)
   ;; Return t if face specifies PROP, as opposed to it being inherited
   ;; from the default face.  The problem with e.g.
@@ -1379,6 +1378,7 @@ property and by buffer overlays that specify `face'."
     (htmlize-ensure-fontified)
     (clrhash htmlize-extended-character-cache)
     (let* ((htmlize-source-buffer (current-buffer))
+	   (buffer-word-wrap word-wrap)
 	   (buffer-faces (htmlize-faces-in-buffer))
 	   (face-map (htmlize-make-face-map (adjoin 'default buffer-faces)))
 	   ;; Generate the new buffer.  It's important that it inherits
@@ -1410,7 +1410,7 @@ property and by buffer overlays that specify `face'."
 		"\n  "
 		(or (htmlize-method body-tag face-map)
 		    "<body>")
-		"\n    <pre>\n"))
+		(if buffer-word-wrap "\n<p>" "\n    <pre>\n")))
       (let ((insert-text-method
 	     ;; Get the inserter method, so we can funcall it inside
 	     ;; the loop.  Not calling `htmlize-method' in the loop
@@ -1448,6 +1448,8 @@ property and by buffer overlays that specify `face'."
 				     'htmlize-ellipsis text)))
 	  (setq text (htmlize-untabify text (current-column)))
 	  (setq text (htmlize-protect-string text))
+	  (when buffer-word-wrap
+	    (setq text (replace-regexp-in-string "\n" "<br>\n" text)))
 	  ;; Don't bother writing anything if there's no text (this
 	  ;; happens in invisible regions).
 	  (when (> (length text) 0)
@@ -1458,7 +1460,8 @@ property and by buffer overlays that specify `face'."
 
       ;; Insert the epilog and post-process the buffer.
       (with-current-buffer htmlbuf
-	(insert "</pre>\n  </body>\n</html>\n")
+	(insert (if buffer-word-wrap "</p>" "</pre>\n "))
+	(insert "</body>\n</html>\n")
 	(when htmlize-generate-hyperlinks
 	  (htmlize-make-hyperlinks))
 	(htmlize-defang-local-variables)
