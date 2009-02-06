@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-print.el,v 1.16 2009/02/06 22:56:29 davidswelt Exp $
+;; Last change: $Id: mac-print.el,v 1.17 2009/02/06 22:57:13 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -172,6 +172,7 @@ in HTML format."
       (message "Warning - outdated htmlize package installed. 
 Remove from your load-path for optimal printing / export results.")
       )
+    (require 'mule) ; for coding-system-get
     (let* (
 	   (htmlize-html-major-mode nil)
 	   (htmlize-html-charset 
