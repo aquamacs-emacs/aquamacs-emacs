@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs version check
  
-;; Last change: $Id: check-for-updates.el,v 1.30 2009/02/05 02:25:44 davidswelt Exp $
+;; Last change: $Id: check-for-updates.el,v 1.31 2009/02/07 23:52:26 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -287,7 +287,6 @@ transfered data."
       (require 'url-methods)
       (require 'url-cache)
 	(condition-case nil
-	   
 	    (let ((url (url-generic-parse-url 
 			 (concat 
 			  aquamacs-version-check-url
@@ -299,7 +298,7 @@ transfered data."
 			  "&tab=" (if tabbar-mode "1" "0")
 			  "&gssm=" (if global-smart-spacing-mode "1" "0")
 			  "&tgssm=" (if (memq 'smart-spacing-mode text-mode-hook) "1" "0")
-			  (if buffer-file-name
+			  (if (and buffer-file-name (not (eq major-mode 'fundamental-mode)))
 			      (concat
 			       "&ssm=" (if smart-spacing-mode "1" "0")
 			       "&mm=" (or (symbol-name major-mode) "none"))
