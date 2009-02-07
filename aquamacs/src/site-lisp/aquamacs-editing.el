@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-editing.el,v 1.15 2009/01/24 23:26:52 davidswelt Exp $
+;; Last change: $Id: aquamacs-editing.el,v 1.16 2009/02/07 14:07:11 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -29,7 +29,8 @@
 ;; Copyright (C) 2005, 2007, 2009 David Reitter
 
 (require 'smart-spacing)
-(global-smart-spacing-mode 1) ;; this is to solicit feedback in the pre-release builds
+(aquamacs-set-defaults '((global-smart-spacing-mode 1)))
+;; this is to solicit feedback in the pre-release builds
 
 ;; these are taken from wikipedia-mode.el by Chong Yidong, Uwe Brauer
 ;; license: GPL2, 2007-02-13
