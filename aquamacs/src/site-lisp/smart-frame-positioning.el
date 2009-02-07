@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.73 2009/02/07 20:24:03 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.74 2009/02/07 20:25:40 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -651,9 +651,7 @@ The file is specified in `smart-frame-position-file'."
     ))
 
 (defun smart-fp--get-frame-position-assigned-to-buffer-name ()
-  (when (and (or buffer-file-number 
-		 (not (string-match "untitled.*" (buffer-name)))))
-      (cdr (assq-string-equal (buffer-name) smart-frame-prior-positions))))
+  (cdr (assq-string-equal (buffer-name) smart-frame-prior-positions)))
 
 (defun smart-fp--convert-negative-ordinates (parms)
   "Converts screen ordinates of the form -x to a list (+ -x)."
