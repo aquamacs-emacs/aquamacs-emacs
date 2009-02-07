@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.253 2009/02/05 03:22:21 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.254 2009/02/07 14:08:12 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -372,6 +372,9 @@ un-Mac-like way when you select text and copy&paste it.")))
 	  (aquamacs-load-scratch-file))
     (aquamacs-cua-warning)
     (and (fboundp 'osx-key-mode-command-key-warning) (osx-key-mode-command-key-warning)))
+
+  (if global-smart-spacing-mode
+      (global-smart-spacing-mode 1))
 
   (if global-hl-line-mode
       (global-hl-line-mode 1))
