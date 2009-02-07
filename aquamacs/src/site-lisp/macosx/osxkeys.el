@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.137 2009/01/23 15:22:00 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.138 2009/02/07 21:53:32 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -132,7 +132,7 @@ provided `cua-mode' and the mark are active."
 	 '(aquamacs-backward-char aquamacs-forward-char))
   (put cmd 'CUA 'move))
 
-(require 'smart-spacing)
+
 (defun aquamacs-kill-word (&optional arg)
   "Kill characters forward until encountering the end of a word.
 With argument, do this that many times."

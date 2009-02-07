@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.200 2009/02/05 18:37:58 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.201 2009/02/07 21:52:37 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -721,7 +721,6 @@ subsequently create.  Upon entering text-mode, the function
 				       (eq 'auto-detect-longlines text-mode-hook)))))
   'word-wrap)
  
-(require 'smart-spacing)
 (define-key-after menu-bar-options-menu [global-smart-spacing]
   (menu-bar-make-mm-toggle
    global-smart-spacing-mode
