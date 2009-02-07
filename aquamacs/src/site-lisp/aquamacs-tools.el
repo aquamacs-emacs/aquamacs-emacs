@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.38 2008/12/18 05:08:02 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.39 2009/02/07 23:23:28 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -292,8 +292,12 @@ Add the value to the customization group `Aquamacs-is-more-than-Emacs'."
 		 ;; it'll get loaded now before setting its defaults
 		 ;; (e.g. standard-value), which would otherwise be
 		 ;; overwritten.
-		 (old-doc (documentation-property symbol 
-						  'variable-documentation))
+		 (old-doc 
+		  (condition-case nil
+		      (documentation-property 
+		       symbol 
+		       'variable-documentation)
+		    (error "")))
 		(value (car (cdr elt)))
 		(s-value (get symbol 'standard-value)))
 	    (set symbol value)
@@ -529,11 +533,10 @@ Optional CODING is used for encoding coding-system."
 			     (downcase (substring txt 2))))
 	     s)))
 
-   (replace-regexp-in-string 
-    "[-<>]" ""
     (replace-regexp-in-string 
-     "-\\([a-z]\\)" 'upcase
-			  
+     "[-<>]" ""
+     (replace-regexp-in-string 
+      "-\\([a-z]\\)" 'upcase
      (replace-regexp-in-string 
       "C-" (lambda (txt) 
 	     (concat (aq-describe-modifier 'ctrl) 
