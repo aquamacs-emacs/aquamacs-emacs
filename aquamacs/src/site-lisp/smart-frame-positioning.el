@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.72 2009/02/03 23:06:19 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.73 2009/02/07 20:24:03 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -495,7 +495,7 @@ so these can be remembered. This is part of Aquamacs Emacs.")
   ;; don't store too many entries here
   (when (and (not (frame-full-screen-p f))
 	     (or buffer-file-number 
-		 (not (string-match "untitled" (buffer-name)))))
+		 (not (string-match "untitled.*" (buffer-name)))))
     ;; don't save position if 'untitled'
     ;; but do save buffers like *Messages* and *Help*
     (if (> (length smart-frame-prior-positions) 50)
@@ -651,7 +651,9 @@ The file is specified in `smart-frame-position-file'."
     ))
 
 (defun smart-fp--get-frame-position-assigned-to-buffer-name ()
-      (cdr (assq-string-equal (buffer-name) smart-frame-prior-positions)))
+  (when (and (or buffer-file-number 
+		 (not (string-match "untitled.*" (buffer-name)))))
+      (cdr (assq-string-equal (buffer-name) smart-frame-prior-positions))))
 
 (defun smart-fp--convert-negative-ordinates (parms)
   "Converts screen ordinates of the form -x to a list (+ -x)."
