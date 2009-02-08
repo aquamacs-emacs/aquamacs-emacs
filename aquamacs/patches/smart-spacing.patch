@@ -219,16 +219,6 @@
 *** lisp/emulation/cua-base.el	06 Jan 2008 20:09:49 -0500	1.78.2.4
 --- lisp/emulation/cua-base.el	07 Feb 2009 15:33:39 -0500	
 ***************
-*** 795,800 ****
---- 795,801 ----
-  (defvar cua--last-deleted-region-pos nil)
-  (defvar cua--last-deleted-region-text nil)
-  
-+ (require 'smart-spacing)
-  (defun cua-delete-region ()
-    "Delete the active region.
-  Save a copy in register 0 if `cua-delete-copy-to-register-0' is non-nil."
-***************
 *** 805,812 ****
       (setq cua--last-deleted-region-text (filter-buffer-substring start end))
       (if cua-delete-copy-to-register-0
@@ -249,16 +239,6 @@
   		     (car buffer-undo-list))))
 *** lisp/mouse.el	13 Mar 2008 15:29:11 -0000	1.315.2.7
 --- lisp/mouse.el	7 Feb 2009 20:32:01 -0000
-***************
-*** 1400,1405 ****
---- 1408,1414 ----
-  	   (setcar tail (cons (car kill-ring) (min beg end))))))
-    (undo-boundary))
-  
-+ (require 'smart-spacing)
-  (defun mouse-save-then-kill (click)
-    "Save text to point in kill ring; the second time, kill the text.
-  If the text between point and the mouse is the same as what's
 ***************
 *** 1442,1448 ****
   		;; We have already put the old region in the kill ring.
