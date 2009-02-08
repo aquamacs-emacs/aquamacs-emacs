@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.254 2009/02/07 14:08:12 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.255 2009/02/08 01:31:45 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -949,7 +949,10 @@ Used by the modeline faces `mode-line' and `mode-line-inactive'."
 
      (tramp-verbose 4)                  ;; don't annoy us
 
-					; no flash instead of that annoying bell
+     ;; workaround for a bug in viper cursor color saving mechanism
+     (viper-replace-overlay-cursor-color "red4")			       
+
+     ;; no flash instead of that annoying bell
      (visible-bell nil)
 
 					; Display the column number of the point in the mode line
