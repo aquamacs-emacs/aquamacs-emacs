@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs version check
  
-;; Last change: $Id: check-for-updates.el,v 1.31 2009/02/07 23:52:26 davidswelt Exp $
+;; Last change: $Id: check-for-updates.el,v 1.32 2009/02/08 00:02:47 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -286,14 +286,16 @@ transfered data."
       (require 'url-parse)
       (require 'url-methods)
       (require 'url-cache)
-	(condition-case nil
+      (condition-case nil
 	    (let ((url (url-generic-parse-url 
 			 (concat 
 			  aquamacs-version-check-url
 			  "?sess=" (number-to-string (or session-id 0)) 
 			  "&seq=" (number-to-string (or calls 0))
 			  "&beta=" (number-to-string (or aquamacs-user-likes-beta 0)) 
-			  "&ver=" (url-encode-string (concat (or aquamacs-version "unknown") (or aquamacs-minor-version "-")))
+			  "&ver=" (url-encode-string (concat (or aquamacs-version "unknown") 
+							     (or aquamacs-minor-version "-")))
+			  "&vbt=" (format-time-string "%Y-%m-%d" emacs-build-time)
 			  "&obof=" (if one-buffer-one-frame-mode "1" "0")
 			  "&tab=" (if tabbar-mode "1" "0")
 			  "&gssm=" (if global-smart-spacing-mode "1" "0")
