@@ -20,7 +20,8 @@
 # taken out (temp):          capslock   causes trouble Qappevent
 
 PATCHES="mac-functions mac-fullscreen emacs-inline transparency
-         dtww smart-spacing
+         dtww
+         smart-spacing
          dnd
          fix-configure test ui-strings menu-bar
          toolbar-png 
