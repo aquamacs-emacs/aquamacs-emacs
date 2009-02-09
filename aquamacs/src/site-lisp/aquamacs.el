@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.255 2009/02/08 01:31:45 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.256 2009/02/09 18:46:31 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -457,7 +457,8 @@ MAYBE-SAVE t means: only save if needed"
   (defun aquamacs-menu-bar-changed-options ()
     (let ((need-save nil))
       (dolist (elt aquamacs-menu-bar-options-to-save)
-	(and (aquamacs-variable-customized-p elt)
+	(and (not (eq elt 'default-frame-alist)) ;; work around a bug: saved-value of this is incorrect for tool-bar-lines
+	     (aquamacs-variable-customized-p elt)
 	     (setq need-save (cons elt need-save))))
       (dolist (elt aquamacs-menu-bar-customize-options-to-save)
 	(and (get elt 'customized-value) 
@@ -480,7 +481,8 @@ have changed."
 ;; (aquamacs-variable-customized-p 'case-fold-search)
 ;; (aquamacs-variable-customized-p 'mac-option-modifier)
 ;; (aquamacs-variable-customized-p 'default-frame-alist)
-;; (get 'default-frame-alist 'saved-value)
+;; (print (get 'default-frame-alist 'saved-value))
+
 
 (defun aquamacs-variable-customized-p (symbol)
     "Returns t if variable SYMBOL has a different value from what was saved."
