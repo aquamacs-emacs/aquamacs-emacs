@@ -1,3 +1,33 @@
+*** lisp/emacs-lisp/map-ynp.el	06 Jan 2008 20:07:39 -0500	1.10.2.2
+--- lisp/emacs-lisp/map-ynp.el	09 Feb 2009 00:18:00 -0500	
+***************
+*** 110,120 ****
+  					  (capitalize (nth 2 elt)))
+  					(vector (nth 1 elt))))
+  				action-alist)
+! 		      (,(if help (concat action " This But No More")
+! 			  "Do This But No More") . act-and-exit)
+  		      (,(if help (concat action " All " objects)
+  			  "Do All") . automatic)
+! 		      ("No For All" . exit))
+  		use-menus t
+  		mouse-event last-nonmenu-event))
+        (setq user-keys (if action-alist
+--- 110,123 ----
+  					  (capitalize (nth 2 elt)))
+  					(vector (nth 1 elt))))
+  				action-alist)
+! 		      ;; (,(if help (concat action " This But No More")
+! 		      ;; "Do This But No More") . act-and-exit)
+  		      (,(if help (concat action " All " objects)
+  			  "Do All") . automatic)
+! 		      ("No For All" . exit)
+! 		      nil
+! 		      ("Cancel" . quit)
+! 		     )
+  		use-menus t
+  		mouse-event last-nonmenu-event))
+        (setq user-keys (if action-alist
 Index: src/macfns.c
 ===================================================================
 RCS file: /cvsroot/emacs/emacs/src/macfns.c,v
