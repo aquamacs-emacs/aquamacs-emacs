@@ -1,3 +1,43 @@
+the first patch ensures that redisplay is done before the dialog is constructed so that no implicit
+EVAL's destroy the strings.
+
+*** src/macmenu.c	30 Aug 2008 00:10:18 -0400	1.56.2.7
+--- src/macmenu.c	09 Feb 2009 13:21:20 -0500	
+***************
+*** 1882,1888 ****
+        return Qnil;
+      }
+  
+!   /* Create a tree of widget_value objects
+       representing the text label and buttons.  */
+    {
+      Lisp_Object pane_name, prefix;
+--- 1882,1893 ----
+        return Qnil;
+      }
+  
+!   /* Force a redisplay before showing the dialog.  If a frame is created
+!      just before showing the dialog, its contents may not have been fully
+!      drawn.  */
+!   Fredisplay (Qt);
+! 
+!  /* Create a tree of widget_value objects
+       representing the text label and buttons.  */
+    {
+      Lisp_Object pane_name, prefix;
+***************
+*** 1985,1994 ****
+    /* No selection has been chosen yet.  */
+    menu_item_selection = 0;
+  
+-   /* Force a redisplay before showing the dialog.  If a frame is created
+-      just before showing the dialog, its contents may not have been fully
+-      drawn.  */
+-   Fredisplay (Qt);
+  
+    /* Actually create the dialog.  */
+  #if TARGET_API_MAC_CARBON
+--- 1990,1995 ----
 *** lisp/files.el	5 Aug 2008 21:44:43 -0000	1.896.2.42
 --- lisp/files.el	9 Feb 2009 14:58:09 -0000
 ***************
