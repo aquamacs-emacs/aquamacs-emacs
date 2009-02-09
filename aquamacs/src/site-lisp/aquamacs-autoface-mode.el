@@ -19,7 +19,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.52 2009/02/06 12:58:21 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.53 2009/02/09 18:48:24 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -281,7 +281,9 @@ given, set the variable named TARGET instead, e.g.,
 		  (unless (assq (car pm) new-values)
 		    (list pm)))
 		initial-frame-alist))
-	new-values)))))
+	new-values))))
+  ;; because we're setting default-frame-alist, and changes there don't get picked up
+  (setq aquamacs-faces-changed t))
   
   
 (defun aquamacs-default-autofaces-list (&optional face-names include-default)
