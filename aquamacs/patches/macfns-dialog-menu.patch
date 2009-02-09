@@ -118,24 +118,17 @@ EVAL's destroy the strings.
 *** lisp/emacs-lisp/map-ynp.el	06 Jan 2008 20:07:39 -0500	1.10.2.2
 --- lisp/emacs-lisp/map-ynp.el	09 Feb 2009 00:18:00 -0500	
 ***************
-*** 39,45 ****
-  (defun map-y-or-n-p (prompter actor list &optional help action-alist
-  			      no-cursor-in-echo-area)
-    "Ask a series of boolean questions.
-! Takes args PROMPTER ACTOR LIST, and optional args HELP and ACTION-ALIST.
-  
-  LIST is a list of objects, or a function of no arguments to return the next
-  object or nil.
---- 39,45 ----
-  (defun map-y-or-n-p (prompter actor list &optional help action-alist
-  			      no-cursor-in-echo-area)
-    "Ask a series of boolean questions.
-!    Takes args PROMPTER ACTOR LIST, and optional args HELP and ACTION-ALIST.
-  
-  LIST is a list of objects, or a function of no arguments to return the next
-  object or nil.
+*** 82,88 ****
+  	 user-keys mouse-event map prompt char elt tail def
+  	 ;; Non-nil means we should use mouse menus to ask.
+  	 use-menus
+- 	 delayed-switch-frame
+  	 (next (if (or (and list (symbolp list))
+  		       (subrp list)
+  		       (byte-code-function-p list)
+--- 82,87 ----
 ***************
-*** 103,120 ****
+*** 103,124 ****
   	(let ((object (if help (capitalize (nth 0 help))))
   	      (objects (if help (capitalize (nth 1 help))))
   	      (action (if help (capitalize (nth 2 help)))))
@@ -154,7 +147,11 @@ EVAL's destroy the strings.
   		use-menus t
   		mouse-event last-nonmenu-event))
         (setq user-keys (if action-alist
---- 103,124 ----
+! 			  (concat (mapconcat (function
+  					      (lambda (elt)
+  						(key-description
+  						 (char-to-string (car elt)))))
+--- 102,127 ----
   	(let ((object (if help (capitalize (nth 0 help))))
   	      (objects (if help (capitalize (nth 1 help))))
   	      (action (if help (capitalize (nth 2 help)))))
@@ -177,6 +174,84 @@ EVAL's destroy the strings.
   		use-menus t
   		mouse-event last-nonmenu-event))
         (setq user-keys (if action-alist
+! 			  (concat (mapconcat (function  
+  					      (lambda (elt)
+  						(key-description
+  						 (char-to-string (car elt)))))
+***************
+*** 142,148 ****
+  	    (cond ((stringp prompt)
+  		   ;; Prompt the user about this object.
+  		   (setq quit-flag nil)
+! 		   (if use-menus
+  		       (setq def (or (x-popup-dialog (or mouse-event use-menus)
+  						     (cons prompt map))
+  				     'quit))
+--- 145,151 ----
+  	    (cond ((stringp prompt)
+  		   ;; Prompt the user about this object.
+  		   (setq quit-flag nil)
+!   		   (if use-menus
+  		       (setq def (or (x-popup-dialog (or mouse-event use-menus)
+  						     (cons prompt map))
+  				     'quit))
+***************
+*** 166,171 ****
+--- 169,175 ----
+  				(key-description (vector help-char))
+  				(single-key-description char)))
+  		     (setq def (lookup-key map (vector char))))
++ 
+  		   (cond ((eq def 'exit)
+  			  (setq next (function (lambda () nil))))
+  			 ((eq def 'act)
+***************
+*** 239,250 ****
+  					 (setq next ',next)
+  					 ',elt))))
+  			 ((and (consp char)
+! 			       (eq (car char) 'switch-frame))
+! 			  ;; switch-frame event.  Put it off until we're done.
+! 			  (setq delayed-switch-frame char)
+  			  (setq next `(lambda ()
+  				       (setq next ',next)
+! 				       ',elt)))
+  			 (t
+  			  ;; Random char.
+  			  (message "Type %s for help."
+--- 243,254 ----
+  					 (setq next ',next)
+  					 ',elt))))
+  			 ((and (consp char)
+! 				   (eq (car char) 'switch-frame))
+! 			  (handle-switch-frame char)
+  			  (setq next `(lambda ()
+  				       (setq next ',next)
+! 				       ',elt))
+! 			  )
+  			 (t
+  			  ;; Random char.
+  			  (message "Type %s for help."
+***************
+*** 256,265 ****
+  				       ',elt)))))
+  		  (prompt
+  		   (funcall actor elt)
+! 		   (setq actions (1+ actions))))))
+!       (if delayed-switch-frame
+! 	  (setq unread-command-events
+! 		(cons delayed-switch-frame unread-command-events))))
+      ;; Clear the last prompt from the minibuffer.
+      (let ((message-log-max nil))
+        (message ""))
+--- 260,266 ----
+  				       ',elt)))))
+  		  (prompt
+  		   (funcall actor elt)
+! 		   (setq actions (1+ actions)))))))
+      ;; Clear the last prompt from the minibuffer.
+      (let ((message-log-max nil))
+        (message ""))
 Index: src/macfns.c
 ===================================================================
 RCS file: /cvsroot/emacs/emacs/src/macfns.c,v
