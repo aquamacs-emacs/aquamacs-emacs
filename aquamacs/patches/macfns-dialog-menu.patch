@@ -1,27 +1,136 @@
+*** lisp/files.el	5 Aug 2008 21:44:43 -0000	1.896.2.42
+--- lisp/files.el	9 Feb 2009 14:58:09 -0000
+***************
+*** 3869,3883 ****
+    nil)
+  
+  (defvar save-some-buffers-action-alist
+!   '((?\C-r
+!      (lambda (buf)
+!        (view-buffer buf
+! 		    (lambda (ignore)
+! 		      (exit-recursive-edit)))
+!        (recursive-edit)
+!        ;; Return nil to ask about BUF again.
+!        nil)
+!      "view this buffer")
+      (?d (lambda (buf)
+  	  (save-window-excursion
+  	    (diff-buffer-with-file buf))
+--- 3900,3914 ----
+    nil)
+  
+  (defvar save-some-buffers-action-alist
+!   '(;; (?\C-r
+! ;;      (lambda (buf)
+! ;;        (view-buffer buf
+! ;; 		    (lambda (ignore)
+! ;; 		      (exit-recursive-edit)))
+! ;;        (recursive-edit)
+! ;;        ;; Return nil to ask about BUF again.
+! ;;        nil)
+! ;;      "view this buffer")
+      (?d (lambda (buf)
+  	  (save-window-excursion
+  	    (diff-buffer-with-file buf))
+***************
+*** 3911,3917 ****
+    (save-window-excursion
+      (let* (queried some-automatic
+  	   files-done abbrevs-done)
+!       (dolist (buffer (buffer-list))
+  	;; First save any buffers that we're supposed to save unconditionally.
+  	;; That way the following code won't ask about them.
+  	(with-current-buffer buffer
+--- 3942,3948 ----
+    (save-window-excursion
+      (let* (queried some-automatic
+  	   files-done abbrevs-done)
+!       (dolist (buffer (buffer-list   ))
+  	;; First save any buffers that we're supposed to save unconditionally.
+  	;; That way the following code won't ask about them.
+  	(with-current-buffer buffer
+***************
+*** 3937,3943 ****
+  		     (if arg
+  			 t
+  		       (setq queried t)
+! 		       (if (buffer-file-name buffer)
+  			   (format "Save file %s? "
+  				   (buffer-file-name buffer))
+  			 (format "Save buffer %s? "
+--- 3968,3982 ----
+  		     (if arg
+  			 t
+  		       (setq queried t)
+! 		       (let ((last-nonmenu-event))
+! 			 (with-selected-window (get-window-for-other-buffer)
+! 			   (if tabbar-mode
+! 			       (switch-to-buffer-in-tab buffer)
+! 			     (switch-to-buffer buffer))
+! 			   (select-frame-set-input-focus (window-frame (selected-window)))
+! 			   (sit-for 0)
+! 			 ))
+!  		       (if (buffer-file-name buffer)
+  			   (format "Save file %s? "
+  				   (buffer-file-name buffer))
+  			 (format "Save buffer %s? "
 *** lisp/emacs-lisp/map-ynp.el	06 Jan 2008 20:07:39 -0500	1.10.2.2
 --- lisp/emacs-lisp/map-ynp.el	09 Feb 2009 00:18:00 -0500	
 ***************
-*** 110,120 ****
+*** 39,45 ****
+  (defun map-y-or-n-p (prompter actor list &optional help action-alist
+  			      no-cursor-in-echo-area)
+    "Ask a series of boolean questions.
+! Takes args PROMPTER ACTOR LIST, and optional args HELP and ACTION-ALIST.
+  
+  LIST is a list of objects, or a function of no arguments to return the next
+  object or nil.
+--- 39,45 ----
+  (defun map-y-or-n-p (prompter actor list &optional help action-alist
+  			      no-cursor-in-echo-area)
+    "Ask a series of boolean questions.
+!    Takes args PROMPTER ACTOR LIST, and optional args HELP and ACTION-ALIST.
+  
+  LIST is a list of objects, or a function of no arguments to return the next
+  object or nil.
+***************
+*** 103,120 ****
+  	(let ((object (if help (capitalize (nth 0 help))))
+  	      (objects (if help (capitalize (nth 1 help))))
+  	      (action (if help (capitalize (nth 2 help)))))
+! 	  (setq map `(("Yes" . act) ("No" . skip)
+  		      ,@(mapcar (lambda (elt)
+  				  (cons (with-syntax-table
+  					    text-mode-syntax-table
   					  (capitalize (nth 2 elt)))
   					(vector (nth 1 elt))))
   				action-alist)
 ! 		      (,(if help (concat action " This But No More")
 ! 			  "Do This But No More") . act-and-exit)
-  		      (,(if help (concat action " All " objects)
-  			  "Do All") . automatic)
+! 		      (,(if help (concat action " All " objects)
+! 			  "Do All") . automatic)
 ! 		      ("No For All" . exit))
   		use-menus t
   		mouse-event last-nonmenu-event))
         (setq user-keys (if action-alist
---- 110,123 ----
+--- 103,124 ----
+  	(let ((object (if help (capitalize (nth 0 help))))
+  	      (objects (if help (capitalize (nth 1 help))))
+  	      (action (if help (capitalize (nth 2 help)))))
+! 	  (setq map `(("Yes" . act) 
+! 		      (,(if help (concat action " All " objects)
+! 			  "Do All") . automatic) 
+! 		      ;; (,(if help (concat action " This But No More")
+! 		      ;; "Do This But No More") . act-and-exit)
+! 		      ("No" . skip)
+! 		      ("No For All" . exit)
+  		      ,@(mapcar (lambda (elt)
+  				  (cons (with-syntax-table
+  					    text-mode-syntax-table
   					  (capitalize (nth 2 elt)))
   					(vector (nth 1 elt))))
   				action-alist)
-! 		      ;; (,(if help (concat action " This But No More")
-! 		      ;; "Do This But No More") . act-and-exit)
-  		      (,(if help (concat action " All " objects)
-  			  "Do All") . automatic)
-! 		      ("No For All" . exit)
 ! 		      nil
 ! 		      ("Cancel" . quit)
 ! 		     )
