@@ -44,6 +44,7 @@ PATCHES="mac-functions mac-fullscreen emacs-inline transparency
          hl-line
          sentence-end
          org-gnu-Aquamacs about-aquamacs puresize
+         directories
          macfns-dialog-menu menu-bar-visible-frame 
          eval-depth
          fringe
