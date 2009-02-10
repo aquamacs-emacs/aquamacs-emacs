@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.256 2009/02/09 18:46:31 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.257 2009/02/10 13:42:04 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -482,6 +482,8 @@ have changed."
 ;; (aquamacs-variable-customized-p 'mac-option-modifier)
 ;; (aquamacs-variable-customized-p 'default-frame-alist)
 ;; (print (get 'default-frame-alist 'saved-value))
+;; (aquamacs-variable-customized-p 'global-smart-spacing-mode)
+;; (print (get 'global-smart-spacing-mode 'saved-value))
 
 
 (defun aquamacs-variable-customized-p (symbol)
@@ -935,6 +937,10 @@ Used by the modeline faces `mode-line' and `mode-line-inactive'."
 					; Colorized fonts
 					; Turn on font-lock in all modes that support it
      (global-font-lock-mode t)
+
+     (global-smart-spacing-mode t)
+     ;; this is to solicit feedback in the pre-release builds
+
      (font-lock-maximum-decoration t)
 
 					; Make Text mode the default mode for new buffers
