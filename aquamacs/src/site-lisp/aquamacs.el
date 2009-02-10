@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.258 2009/02/10 14:11:21 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.259 2009/02/10 14:17:28 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -574,7 +574,7 @@ if modified buffers exist."
 		 ;; Query the user for other things, perhaps.
 		 (run-hook-with-args-until-failure 'kill-emacs-query-functions)
 	       (or (null confirm-kill-emacs)
-		   (funcall confirm-kill-emacs "Really exit Emacs? "))
+		   (funcall confirm-kill-emacs "Really exit Aquamacs? "))
 	       (kill-emacs)))
 	(setq timer-idle-list saved-timer-idle-list))))
 ;; (defun aquamacs-mac-ae-quit-application (event)
