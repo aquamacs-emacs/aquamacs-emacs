@@ -91,30 +91,22 @@ EVAL's destroy the strings.
   	;; That way the following code won't ask about them.
   	(with-current-buffer buffer
 ***************
-*** 3937,3943 ****
+*** 3937,3942 ****
+--- 3968,3981 ----
   		     (if arg
   			 t
   		       (setq queried t)
-! 		       (if (buffer-file-name buffer)
++ 		       (with-current-buffer buffer
++ 			 (with-selected-window (get-window-for-other-buffer)
++ 			   (if (and (boundp 'tabbar-mode) tabbar-mode)
++ 			       (switch-to-buffer-in-tab buffer)
++ 			     (switch-to-buffer buffer))
++ 			   (select-frame-set-input-focus (window-frame (selected-window)))
++ 			   (if (fboundp 'smart-move-minibuffer-inside-screen)
++ 			       (smart-move-minibuffer-inside-screen))))
+  		       (if (buffer-file-name buffer)
   			   (format "Save file %s? "
   				   (buffer-file-name buffer))
-  			 (format "Save buffer %s? "
---- 3968,3982 ----
-  		     (if arg
-  			 t
-  		       (setq queried t)
-! 		       (let ((last-nonmenu-event))
-! 			 (with-selected-window (get-window-for-other-buffer)
-! 			   (if tabbar-mode
-! 			       (switch-to-buffer-in-tab buffer)
-! 			     (switch-to-buffer buffer))
-! 			   (select-frame-set-input-focus (window-frame (selected-window)))
-! 			   (sit-for 0)
-! 			 ))
-!  		       (if (buffer-file-name buffer)
-  			   (format "Save file %s? "
-  				   (buffer-file-name buffer))
-  			 (format "Save buffer %s? "
 *** lisp/emacs-lisp/map-ynp.el	06 Jan 2008 20:07:39 -0500	1.10.2.2
 --- lisp/emacs-lisp/map-ynp.el	09 Feb 2009 00:18:00 -0500	
 ***************
