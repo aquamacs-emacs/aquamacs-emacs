@@ -10,7 +10,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.82 2009/02/10 18:02:09 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.83 2009/02/10 21:27:51 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -42,17 +42,13 @@
 
 
 (defun aquamacs-create-preferences-dirs ()
-;  (condition-case nil
-  (progn 
-    (unless (file-exists-p "~/Library/Preferences/Aquamacs Emacs")
-      (ats "creating preferences directory.")
-      (make-directory "~/Library/Preferences/Aquamacs Emacs" 'parents))
-    (unless (file-exists-p "~/Library/Application Support/Aquamacs Emacs/Temporary Files")	
-      (ats "creating app support directory.")
-      (make-directory "~/Library/Application Support/Aquamacs Emacs/Temporary Files" 'parents)))
-  ;; (error nil))
-  )
-
+  (condition-case err
+      (progn 
+	(unless (file-exists-p "~/Library/Preferences/Aquamacs Emacs")
+	  (make-directory "~/Library/Preferences/Aquamacs Emacs" 'parents))
+	(unless (file-exists-p "~/Library/Application Support/Aquamacs Emacs/Temporary Files")	
+	  (make-directory "~/Library/Application Support/Aquamacs Emacs/Temporary Files" 'parents)))
+    (error (message "Error %s during preference dir creation." err))))
   
 (defun aquamacs-create-preferences-file ()
   "Creates a Preferences.el in the right place if needed."
