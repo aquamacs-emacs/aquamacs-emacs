@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.257 2009/02/10 13:42:04 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.258 2009/02/10 14:11:21 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -546,6 +546,7 @@ With prefix arg, silently save all file-visiting buffers, then kill.
 Like `save-buffers-kill-emacs', except that it doesn't ask again
 if modified buffers exist."
     (interactive "P")
+    (aquamacs-create-preferences-dirs)
     (let ((saved-timer-idle-list timer-idle-list))
       (unwind-protect 
 	  (progn
