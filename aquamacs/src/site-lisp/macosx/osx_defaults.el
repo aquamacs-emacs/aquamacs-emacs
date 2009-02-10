@@ -10,7 +10,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osx_defaults.el,v 1.83 2009/02/10 21:27:51 davidswelt Exp $
+;; Last change: $Id: osx_defaults.el,v 1.84 2009/02/10 21:31:49 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -177,7 +177,7 @@ from earlier versions of the distribution."
 ;; init-file-user is set at this time;
 ;; user-init-file is normally not set.
 ;; see comment in startup.el
-(if (or init-file-user user-init-file)
+(when (or init-file-user user-init-file)
   (mac-add-standard-directories)
   (ats "add dirs done"))
 
