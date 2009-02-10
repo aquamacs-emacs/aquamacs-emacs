@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-editing.el,v 1.18 2009/02/10 13:41:32 davidswelt Exp $
+;; Last change: $Id: aquamacs-editing.el,v 1.19 2009/02/10 21:12:24 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -29,10 +29,9 @@
 ;; Copyright (C) 2005, 2007, 2009 David Reitter
 
 
-;; these are taken from wikipedia-mode.el by Chong Yidong, Uwe Brauer
-;; license: GPL2, 2007-02-13
+;; fill functions are taken from wikipedia-mode.el by Chong Yidong, Uwe Brauer
+;; license: GPL2, 2007-02-13. Modified by David Reitter for Aquamacs.
 
-;; slightly modified by David Reitter for Aquamacs
 (defun unfill-region () 
 "Undo filling, deleting stand-alone newlines.
 Newlines that do not end paragraphs, list entries, etc. in the region
@@ -50,14 +49,14 @@ are deleted."
   (message "Region unfilled. Stand-alone newlines deleted")
   (widen))
  
-(defun fill-paragraph-or-region ()  
+(defun fill-paragraph-or-region (&optional justify)  
   "Fill paragraph or region (if any).
 When no region is defined (mark is not active) or
 `transient-mark-mode' is off, call `fill-paragraph'.
 Otherwise, call `fill-region'.  
 If `word-wrap' is on, and `auto-fill-mode off, call
 `unfill-paragraph-or-region' instead."
-  (interactive)
+  (interactive "P")
   (if (and word-wrap (not auto-fill-function))
       (call-interactively 'unfill-paragraph-or-region)
     (if (and mark-active transient-mark-mode)
