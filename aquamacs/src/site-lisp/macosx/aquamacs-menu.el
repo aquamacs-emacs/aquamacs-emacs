@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.201 2009/02/07 21:52:37 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.202 2009/02/11 16:16:09 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -721,27 +721,44 @@ subsequently create.  Upon entering text-mode, the function
 				       (eq 'auto-detect-longlines text-mode-hook)))))
   'word-wrap)
  
-(define-key-after menu-bar-options-menu [global-smart-spacing]
-  (menu-bar-make-mm-toggle
-   global-smart-spacing-mode
-   "Smart Word Spacing"
-   "Normalize spaces between words during cut&paste"
-   (:enable (menu-bar-menu-frame-live-and-visible-p)))
-  'truncate-lines)
+;; (define-key-after menu-bar-options-menu [global-smart-spacing]
+;;   (menu-bar-make-mm-toggle
+;;    global-smart-spacing-mode
+;;    "Smart Word Spacing"
+;;    "Normalize spaces between words during cut&paste"
+;;    (:enable (menu-bar-menu-frame-live-and-visible-p)))
+;;   'truncate-lines)
 
-(defun toggle-text-mode-smart-spacing ()
+(define-key-after menu-bar-options-menu [smart-spacing]
+  '(menu-item "Smart Word Spacing in Text Modes"
+	      menu-bar-text-mode-smart-spacing
+	      :help "Normalize spaces between words during cut&paste"
+	      :button (:toggle . (if (listp text-mode-hook)
+				     (member 'smart-spacing-mode text-mode-hook)
+				   (eq 'smart-spacing-mode text-mode-hook))))
+	      'truncate-lines)
+
+(defun menu-bar-text-mode-smart-spacing ()
   "Toggle `smart-spacing-mode' in `text-mode-hook'"
   (interactive)
-  (let ((enable (not (memq 'smart-spacing-mode text-mode-hook))))
-    (if enable
+  (toggle-text-mode-smart-spacing)
+  (customize-mark-as-set 'text-mode-hook)
+  (message "Smart word spacing in text modes %sabled.  Use M-x global-smart-spacing-mode to toggle for all modes."
+	   (if (memq 'smart-spacing-mode text-mode-hook) "en" "dis")))
+
+(defun toggle-text-mode-smart-spacing (&optional on)
+  "Toggle `smart-spacing-mode' in `text-mode-hook'"
+  (interactive)
+  (let ((enable (cond ((eq on 1) t)
+		      ((eq on 0) nil)
+		      (t (not (memq 'smart-spacing-mode text-mode-hook))))))
+   (if enable
 	(add-hook 'text-mode-hook 'smart-spacing-mode)
       (remove-hook 'text-mode-hook 'smart-spacing-mode))
     (dolist (buffer (buffer-list))
       (with-current-buffer buffer
 	(if (or (derived-mode-p 'text-mode) text-mode-variant)
-	    (smart-spacing-mode (if enable 1 0)))))
-    (message "Smart word spacing in text modes %sabled."
-	     (if enable "en" "dis"))))
+	    (smart-spacing-mode (if enable 1 0)))))))
 
 ;; (define-key-after menu-bar-options-menu [text-mode-smart-spacing]
 ;;   '(menu-item "Smart Word Spacing in Text Modes"
