@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.262 2009/02/11 16:19:59 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.263 2009/02/11 23:08:19 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -334,28 +334,7 @@ Use `mac-command-modifier' instead."))
 	   (setq mac-option-modifier nil))
       (if (> aquamacs-customization-version-id 096.0)
 	(message "Warning: `mac-pass-option-to-system' is deprecated from
-Aquamacs 0.9.7 on. `mac-option-modifier' has been set for you."))))
-
-    ;; check if ec-emacs is installed
-    (and window-system
-	 (let ((case-fold-search nil))
-	   (string-match "/ec-emacs/" (apply #'concat load-path)))
-	 (if (y-or-n-p "You have the EC-Emacs plugin installed.  This plugin may
-not be compatible with this version of Aquamacs.  Would you like to be shown
-the location of the plugin?  You can then delete it or rename it to avoid
-seeing this message again. ")
-
-	     (let ((working t))	     
-	       (mapc
-		(lambda (fn)
-		  (when (and working fn 
-			     (string-match "^\\(.*/\\)ec-emacs/" fn 0))
-		    (print (match-string 1 fn))
-		    ;; mac-key-show-in-finder crahes for paths
-		    (shell-command (format "open \"%s\""  (match-string 1 fn)))
-		    (setq working t)
-		    ))
-		load-path)))))
+Aquamacs 0.9.7 on. `mac-option-modifier' has been set for you.")))))
 
 (defun aquamacs-cua-warning ()
     (and (not cua-mode)
