@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.261 2009/02/10 21:39:05 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.262 2009/02/11 16:19:59 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -374,8 +374,11 @@ un-Mac-like way when you select text and copy&paste it.")))
     (aquamacs-cua-warning)
     (and (fboundp 'osx-key-mode-command-key-warning) (osx-key-mode-command-key-warning)))
 
-  (if global-smart-spacing-mode
-      (global-smart-spacing-mode 1))
+;;   (if global-smart-spacing-mode
+;;       (global-smart-spacing-mode 1))
+  ;; turn on smart spacing in all text mode buffers
+  (toggle-text-mode-smart-spacing 
+   (if (memq 'smart-spacing-mode text-mode-hook) 1 0))
 
   (if global-hl-line-mode
       (global-hl-line-mode 1))
@@ -931,7 +934,7 @@ Used by the modeline faces `mode-line' and `mode-line-inactive'."
 (global-visual-line-mode 1)
   (aquamacs-set-defaults 
    `((global-visual-line-mode t)
-     (text-mode-hook (auto-detect-wrap)) 
+     (text-mode-hook (smart-spacing-mode auto-detect-wrap)) 
      (save-place t)
      (save-place-limit 500) ;; speed on quit
      (save-place-forget-unreadable-files nil) ;; too slow
@@ -939,9 +942,6 @@ Used by the modeline faces `mode-line' and `mode-line-inactive'."
 					; Colorized fonts
 					; Turn on font-lock in all modes that support it
      (global-font-lock-mode t)
-
-     (global-smart-spacing-mode t)
-     ;; this is to solicit feedback in the pre-release builds
 
      (font-lock-maximum-decoration t)
 
@@ -1423,7 +1423,6 @@ listed here."
 	      one-buffer-one-frame-mode 
 	      aquamacs-styles-mode
 	      aquamacs-autoface-mode
-	      global-smart-spacing-mode
 	      default-frame-alist ;; does this not prevent users from setting these?
 ;;;	     do not save initial-frame-alist - it is stored by smart-frame-positions
 ;;;  to do: frame-notice-user-settings should use default-frame-alist in addition to
