@@ -19,7 +19,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.53 2009/02/09 18:48:24 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.54 2009/02/12 00:20:04 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -130,10 +130,13 @@ Make the face if it doesn't exist."
 The `default' face is remapped (in the appropriate buffers) to this face.")))
     ;; for this and for existing faces: ensure inheritance is correct
     (let ((derived (get mode 'derived-mode-parent)))
-      (set-face-attribute face nil :inherit     
+     (set-face-attribute face nil :inherit     
 			  (or (and derived 
 				   (symbolp derived)
-				   (aquamacs-autoface-face derived))
+				   (if (facep (aquamacs-autoface-face derived)) 
+				       (aquamacs-autoface-face derived)
+					; prevent cycles
+				     (aquamacs-autoface-make-face derived nil)))
 			      'autoface-default)))
     ;; do not set face-defface-spec - this prevents it from being
     ;; saved to custom-file properly.
