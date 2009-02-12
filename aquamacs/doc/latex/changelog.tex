@@ -6,7 +6,7 @@
 
 \begin{itemize}
 
-\item Aquamacs now makes it easier for users to copy, cut and paste (and kill and yank) whole words, phrases or sentences by managing the spaces between words for them.  Spaces are removed and automatically inserted where needed, whenever the new `smart-spacing-mode' is turned on.  The Options menu provides a setting to turn it on automatically for all {\em text-mode} and related buffers.  To configure a default for all buffers, configure and save the option `global-smart-spacing-mode' using the customization interface.
+\item Aquamacs now makes it easier for users to copy, cut and paste (and kill and yank) whole words, phrases or sentences by managing the spaces between words for them.  Spaces are removed and automatically inserted where needed, whenever the new `smart-spacing-mode' is turned on.  The Options menu provides a setting to turn it on automatically for all {\em text-mode} and related buffers.  To set a default for all buffers, configure the option `global-smart-spacing-mode' using the customization interface.
 
 \item A problem that caused error messages upon startup and, sometimes, a failure to quit for some users (and only if Aquamacs was installed for the first time) was fixed. 
 Reported by William Triplett, Kevin Brubeck Unhammer and Jean-Christophe Helary.
@@ -22,12 +22,10 @@ Reported by William Triplett, Kevin Brubeck Unhammer and Jean-Christophe Helary.
 \item C-z is no longer bound to minimize the frame.  Users who require this feature can add the key binding in their {\tt Preferences.el} file:
 {\tt    (define-key osx-key-mode-map `[(,control z)] 'iconify-or-deiconify-frame)}
 
-\item When asking whether to save buffers before quitting, Aquamacs now displays a less ridiculous dialog box, which has a Cancel button (in case the mouse is used).  It always shows the buffer that is up for saving. 
-
-\item Cursor movement no longer sluggish when multiple windows are visible.  Generally, Aquamacs should feel  faster.
+\item Cursor movement is no longer sluggish when multiple windows are visible.  Generally, Aquamacs should feel  faster.
 Reported by Drew Hess.
 
-\item When clicking into an (unselected) window, Aquamacs no longer sets the mark and marks a region in the buffer. 
+\item When clicking into an (unselected) window, Aquamacs no longer sets the mark and marks a region in the buffer in certain circumstances. 
 Reported by Konrad Podczeck.
 
 \item Resolved a problem where clicking in the fringe to set a breakpoint when using C-mode in conjunction with `gdb' (in the Emacs debugger) caused Aquamacs to crash. 
@@ -42,24 +40,26 @@ Reported by Tim Hsu.
 \item Aquamacs no longer de-minimizes frames (from the Dock) when opening new files while all its frames are hidden.
 Reported by Tim Hsu.
 
-\item Charsets are given in HTML generated with ``Export to HTML''.  Documents now validate as HTML 4.01 Strict.
-
 \item Documents printed or exported to HTML with soft word wrapping turned on will now also exhibit soft wrapping in HTML, and wrap as expected at the page boundary on printed pages.
 Reported by Enrico Indiogine.
-
-\item A rare display problem was fixed in cases of vertically split windows, with fringes and scroll bars turned off.
-Reported by Rolf Hanson.
 
 \item OS X will now more reliably recognize the latest installed Aquamacs version in order to open documents.
 
 \item Aquamacs now remembers more and longer undo steps (maximum undo memory and number of steps increased four-fold).  
+
+\item The ``dialog from hell'', asking users whether they want to save a file, or all, or none, or view the file or the differences, is now less ridiculous and has a Cancel button.  Whether the dialog is shown or the minibuffer is used,  Aquamacs always shows the buffer that is up for saving. 
 
 \item The command line tool (installed with the Tools menu) will now find Aquamacs whereever it is installed in the system.  It will always use the latest Aquamacs Emacs that is known to the system.  (As a side-effect, you cannot use the command in connection with ``sudo'' any longer.  We recommend using Tramp.)
 Reported by Jean-Christophe Helary.
 
 \item Bug reporting, and generally, sending e-mail, works now for users whose default Email client is Gmail.  Gmail receives special treatment because of a bug on Google's server. 
 
-\item The ``dialog from hell'', asking users whether they want to save a file, or all, or none, or view the file or the differences, has been simplified, and it now has a Cancel button.
+\item Charsets are given in HTML generated with ``Export to HTML''.  Documents now validate as HTML 4.01 Strict.
+
+\item A rare display problem was fixed in cases of vertically split windows, with fringes and scroll bars turned off.
+Reported by Rolf Hanson.
+
+\item Autoface mode works better with inherited mode faces.
 
 \item Python-mode updated to version 5.1.0.  See also: \url{https://launchpad.net/python-mode/+announcements}.
 
@@ -72,6 +72,7 @@ Suggested by Kevin Brubeck Unhammer.  Code by Stefan Bruda et al.
 \item ACT-R major mode improved: it inherits `lisp-mode' key bindings now.  {\tt .actr} files are recognized automatically.
 
 \item The Enhanced Carbon Emacs plugin is no longer loaded from {\tt ec-emacs} directories, because it is incompatible with the latest Aquamacs versions.
+
 
 \end{itemize}
 
