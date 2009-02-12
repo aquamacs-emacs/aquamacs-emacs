@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.202 2009/02/11 16:16:09 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.203 2009/02/12 04:07:06 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -768,7 +768,6 @@ subsequently create.  Upon entering text-mode, the function
 ;; 	      :enable (menu-bar-menu-frame-live-and-visible-p)) 'truncate-lines)
 
 
-
 ;; in edit menu
 
 (define-key menu-bar-search-menu [case-fold-search]
@@ -943,7 +942,8 @@ subsequently create.  Upon entering text-mode, the function
 (define-key menu-bar-tools-menu [spell] nil)
 (define-key menu-bar-tools-menu [separator-spell] nil)
 (define-key-after menu-bar-edit-menu [separator-spell]
-  '(menu-item "--")
+  '(menu-item "--" nil
+	      :visible (and (boundp 'ispell-program-name) ispell-program-name))
   'separator-bookmark)
 
 ;; ispell is not loaded at startup
