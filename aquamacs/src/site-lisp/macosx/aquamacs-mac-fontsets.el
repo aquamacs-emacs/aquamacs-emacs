@@ -9,7 +9,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs fonts
  
-;; Last change: $Id: aquamacs-mac-fontsets.el,v 1.13 2007/07/23 10:47:56 davidswelt Exp $
+;; Last change: $Id: aquamacs-mac-fontsets.el,v 1.14 2009/02/12 19:08:04 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -31,6 +31,9 @@
 ;; Boston, MA 02111-1307, USA.
  
 ;; Copyright (C) 2005, David Reitter
+
+
+(eval-when-compile (require 'aquamacs-macros))
 
 ;;; FONT DEFAULTS 
 
@@ -112,21 +115,22 @@ As of Aquamacs 1.1, this is not called on startup any more."
   "Defines fontsets referred to in `custom-file'.
 Only fontsets in `aquamacs-additional-fontsets' are defined.
 This variable is changed to reflect the needed fontsets."
-  (let ((standard-fontsets nil)
-	(buf (find-file-noselect custom-file 'nowarn 'lit)))
-    (when (bufferp buf)
-      (dolist (font aquamacs-additional-fontsets)
-	(let ((fontset-name (concat (nth 6 font) (int-to-string (nth 5 font)))))
-	  (with-current-buffer buf
-	    (beginning-of-buffer)
-	    (if (search-forward fontset-name nil 'no)
-		(add-to-list 'standard-fontsets font )))))
-      (kill-buffer buf))
-    ;; reduce the fontsets - they will be saved in customizations. 
-    ;; the next time, it'll be quicker. 
-    ;; if custom-file is not readable, we'll reduce the fontsets to nil
-    (setq aquamacs-additional-fontsets standard-fontsets))
-  (aquamacs-create-additional-fontsets))
+  (protect
+   (let ((standard-fontsets nil)
+	 (buf (find-file-noselect custom-file 'nowarn 'lit)))
+     (when (bufferp buf)
+       (dolist (font aquamacs-additional-fontsets)
+	 (let ((fontset-name (concat (nth 6 font) (int-to-string (nth 5 font)))))
+	   (with-current-buffer buf
+	     (beginning-of-buffer)
+	     (if (search-forward fontset-name nil 'no)
+		 (add-to-list 'standard-fontsets font )))))
+       (kill-buffer buf))
+     ;; reduce the fontsets - they will be saved in customizations. 
+     ;; the next time, it'll be quicker. 
+     ;; if custom-file is not readable, we'll reduce the fontsets to nil
+     (setq aquamacs-additional-fontsets standard-fontsets))
+   (aquamacs-create-additional-fontsets)))
 
 (if (or (not (boundp 'aquamacs-additional-fontsets)) aquamacs-additional-fontsets)
     (add-hook 'after-init-hook 'aquamacs-create-customization-fontsets))

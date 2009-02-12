@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.263 2009/02/11 23:08:19 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.264 2009/02/12 19:08:20 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -28,8 +28,13 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005,2006, 2007, 2008: David Reitter
+;; Copyright (C) 2005,2006, 2007, 2008, 2009: David Reitter
+
+
+(require 'aquamacs-tools)
  
+(eval-when-compile (require 'aquamacs-macros))
+
 (defvar aq-starttime 0)
 
 (defun ats (txt) nil)
@@ -347,52 +352,54 @@ un-Mac-like way when you select text and copy&paste it.")))
 (defun aquamacs-notice-user-settings ()
   "React to various user settings."
 
-  (unless noninteractive
-    (unless (equal init-file-user nil) ;; no .emacs was read (-q option)
-	  (aquamacs-load-scratch-file))
-    (aquamacs-cua-warning)
-    (and (fboundp 'osx-key-mode-command-key-warning) (osx-key-mode-command-key-warning)))
+  (protect
 
-;;   (if global-smart-spacing-mode
-;;       (global-smart-spacing-mode 1))
-  ;; turn on smart spacing in all text mode buffers
-  (toggle-text-mode-smart-spacing 
-   (if (memq 'smart-spacing-mode text-mode-hook) 1 0))
+   (unless noninteractive
+     (unless (equal init-file-user nil) ;; no .emacs was read (-q option)
+       (aquamacs-load-scratch-file))
+     (aquamacs-cua-warning)
+     (and (fboundp 'osx-key-mode-command-key-warning) (osx-key-mode-command-key-warning)))
 
-  (if global-hl-line-mode
-      (global-hl-line-mode 1))
+   ;;   (if global-smart-spacing-mode
+   ;;       (global-smart-spacing-mode 1))
+   ;; turn on smart spacing in all text mode buffers
+   (toggle-text-mode-smart-spacing 
+    (if (memq 'smart-spacing-mode text-mode-hook) 1 0))
 
-  (if global-show-newlines-mode
-      (global-show-newlines-mode 1))
+   (if global-hl-line-mode
+       (global-hl-line-mode 1))
 
-  (if (eq tabbar-mode 'default)
+   (if global-show-newlines-mode
+       (global-show-newlines-mode 1))
+
+   (if (eq tabbar-mode 'default)
        (customize-set-variable 'tabbar-mode t))
-  (if (eq one-buffer-one-frame-mode 'default)
-      (customize-set-variable 'one-buffer-one-frame-mode nil))
-  
-  ;; have fringe-mode reflect user settings
-  (setq fringe-mode
-	(cons (cdr-safe (assq 'left-fringe default-frame-alist))
-	      (cdr-safe (assq 'right-fringe default-frame-alist))))
-  (if (eq fringe-mode '(nil)) (setq fringe-mode))
+   (if (eq one-buffer-one-frame-mode 'default)
+       (customize-set-variable 'one-buffer-one-frame-mode nil))
 
-  ;; run this after the frames have been established
-  ;; via default-frame-alist
-  (run-with-idle-timer 
-   0.1 nil
-   (lambda ()
-     (mapc
-      (lambda (frame) 
-	(let ((fs (frame-parameter frame 'fullscreen)))
-	  (when (memq fs '(fullboth fullheight fullwidth))	    
-	    (modify-frame-parameters 
-	     frame (list (cons 'fullscreen nil)))
-	    (modify-frame-parameters 
-	     frame (list (cons 'fullscreen fs)))
-	    (message
-	     (substitute-command-keys 
-	      "Press \\[aquamacs-toggle-full-frame] to exit full screen editing.")))))
-      (frame-list)))))
+   ;; have fringe-mode reflect user settings
+   (setq fringe-mode
+	 (cons (cdr-safe (assq 'left-fringe default-frame-alist))
+	       (cdr-safe (assq 'right-fringe default-frame-alist))))
+   (if (eq fringe-mode '(nil)) (setq fringe-mode))
+
+   ;; run this after the frames have been established
+   ;; via default-frame-alist
+   (run-with-idle-timer 
+    0.1 nil
+    (lambda ()
+      (mapc
+       (lambda (frame) 
+	 (let ((fs (frame-parameter frame 'fullscreen)))
+	   (when (memq fs '(fullboth fullheight fullwidth))	    
+	     (modify-frame-parameters 
+	      frame (list (cons 'fullscreen nil)))
+	     (modify-frame-parameters 
+	      frame (list (cons 'fullscreen fs)))
+	     (message
+	      (substitute-command-keys 
+	       "Press \\[aquamacs-toggle-full-frame] to exit full screen editing.")))))
+       (frame-list))))))
 
 ; (aquamacs-notice-user-settings)
 
@@ -1342,10 +1349,11 @@ to the selected frame."
   ;;; for initial buffer
 ;;; for some reason
   (defun aquamacs-turn-on-buffer-offer-save-in-scratch ()
-    (if (get-buffer "*scratch*")
-	(with-current-buffer "*scratch*"
-	  (setq buffer-offer-save t))))
-
+    (protect
+     (if (get-buffer "*scratch*")
+	 (with-current-buffer "*scratch*"
+	   (setq buffer-offer-save t)))))
+    
 (add-hook 'after-init-hook 'aquamacs-turn-on-buffer-offer-save-in-scratch)
 
 ;; Define customization group

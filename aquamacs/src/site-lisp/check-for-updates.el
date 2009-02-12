@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs version check
  
-;; Last change: $Id: check-for-updates.el,v 1.32 2009/02/08 00:02:47 davidswelt Exp $
+;; Last change: $Id: check-for-updates.el,v 1.33 2009/02/12 19:08:20 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -31,6 +31,11 @@
 ;; Copyright (C) 2005, 2007, 2008, 2009 David Reitter
 
 ; the following is user-settable (to "")
+
+
+(eval-when-compile (require 'aquamacs-macros))
+
+
 (defvar aquamacs-version-check-url "http://aquamacs.org/cgi-bin/currentversion.cgi" "URL to check for updates.  ")
 ;; warning: the default used to be aquamacs.sourceforge.net until after 1.0a
 
@@ -206,72 +211,67 @@ Would you like to see the donations site now?
 and show user a message if there is.
 Enter M-x aquamacs-check-version-information to see information about
 transfered data."
-  (let (  
-	( call-number 0)
-	( session-id (random t) )
-	( today (date-to-day (current-time-string)))
-	( last-update-check 0) 
-	( previous-version 0))
+  (protect
+   (let (( call-number 0)
+	 ( session-id (random t) )
+	 ( today (date-to-day (current-time-string)))
+	 ( last-update-check 0) 
+	 ( previous-version 0))
 
-    (if (file-readable-p aquamacs-id-file)
-	(with-temp-buffer
-	  (insert-file-contents-literally aquamacs-id-file)
-	    ; (set-buffer buf)
-	    ; (buffer-string)
-	    (goto-char (point-min)) 
-	    (setq call-number (or (number-at-point) 0) )
-	    (goto-line 2)
-	    (setq last-update-check (or (number-at-point) 0))
-	    (goto-line 3)
-	    (setq session-id (or (number-at-point) (random t)))
-	    (goto-line 4)
-	    (setq aquamacs-user-likes-beta (or (number-at-point) 0))
-	    (goto-line 5)
-	    ;; number-at-point doesn't like decimals
-	    (setq previous-version (or (string-to-number 
-					(thing-at-point 'line)) 0))
-	    (if (eq previous-version 888) ;; upgrade compat.
-		(setq previous-version 0))
-	    (goto-line 6)
-	    (setq force-check (or force-check (eq 888 (number-at-point)))) 
-	    ;; contains 888 if new version previously found
-	    )
-	  
-      )
-  
-    (if (or (string-match "beta"  aquamacs-version)
-	    (string-match "rc"  aquamacs-version))
-	(setq aquamacs-user-likes-beta 1))
+     (if (file-readable-p aquamacs-id-file)
+	 (with-temp-buffer
+	   (insert-file-contents-literally aquamacs-id-file)
+					; (set-buffer buf)
+					; (buffer-string)
+	   (goto-char (point-min)) 
+	   (setq call-number (or (number-at-point) 0) )
+	   (goto-line 2)
+	   (setq last-update-check (or (number-at-point) 0))
+	   (goto-line 3)
+	   (setq session-id (or (number-at-point) (random t)))
+	   (goto-line 4)
+	   (setq aquamacs-user-likes-beta (or (number-at-point) 0))
+	   (goto-line 5)
+	   ;; number-at-point doesn't like decimals
+	   (setq previous-version (or (string-to-number 
+				       (thing-at-point 'line)) 0))
+	   (if (eq previous-version 888) ;; upgrade compat.
+	       (setq previous-version 0))
+	   (goto-line 6)
+	   ;; contains 888 if new version previously found
+	   (setq force-check (or force-check (eq 888 (number-at-point))))))
+ 
+     (if (or (string-match "beta"  aquamacs-version)
+	     (string-match "rc"  aquamacs-version))
+	 (setq aquamacs-user-likes-beta 1))
 
-    ;; show "what's new" 
-    (when (and (> previous-version 0)
-	       (> (- aquamacs-version-id previous-version) 0.0))
-      (aquamacs-show-change-log)
-      (aquamacs-welcome-notify))
+     ;; show "what's new" 
+     (when (and (> previous-version 0)
+		(> (- aquamacs-version-id previous-version) 0.0))
+       (aquamacs-show-change-log)
+       (aquamacs-welcome-notify))
  
-    (if (or force-check (>= (- today last-update-check)  aquamacs-check-update-time-period))
-	(progn
-	  (aquamacs-check-for-updates-internal session-id call-number
-					       interactively)
-	  (setq last-update-check today)
-	  )
-      )
-        (write-region (concat (number-to-string (+ (if no-new-start 0 1) 
-						   (or call-number 0))) "\n"
-			  (number-to-string (or last-update-check 0)) "\n"
-			  (number-to-string (or session-id 0)) "\n"
-			   (if (> aquamacs-user-likes-beta 0) "1" "0") "\n"
-			   (number-to-string aquamacs-version-id) "\n"
-			  )
+     (if (or force-check (>= (- today last-update-check)  aquamacs-check-update-time-period))
+	 (progn
+	   (aquamacs-check-for-updates-internal session-id call-number
+						interactively)
+	   (setq last-update-check today)))
+     (write-region (concat (number-to-string (+ (if no-new-start 0 1) 
+						(or call-number 0))) "\n"
+						(number-to-string (or last-update-check 0)) "\n"
+						(number-to-string (or session-id 0)) "\n"
+						(if (> aquamacs-user-likes-beta 0) "1" "0") "\n"
+						(number-to-string aquamacs-version-id) "\n"
+						)
  
-		  nil
-		  aquamacs-id-file
-		  nil 
-		  'shut-up
-		  nil
-		  nil)
-	;; store file
-    	     ))
+		   nil
+		   aquamacs-id-file
+		   nil 
+		   'shut-up
+		   nil
+		   nil)
+     ;; store file
+     )))
 
 
     

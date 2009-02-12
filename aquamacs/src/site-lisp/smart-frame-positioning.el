@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.74 2009/02/07 20:25:40 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.75 2009/02/12 19:08:20 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -54,6 +54,8 @@
 ;; available screen real estate for the main screen.
 ;; An optional parameter (currently not used) could identify the screen.
 
+
+(eval-when-compile (require 'aquamacs-macros))
 
 
 (defcustom save-frame-position-file 
@@ -601,14 +603,16 @@ Aquamacs was last terminated.")
 ;; but we're saving a (setq ...) so we can just load the file
 ;; (smart-fp--save-frame-positions-to-file)
 (defun smart-fp--load-frame-positions-from-file ()
-  (load (expand-file-name save-frame-position-file)
-	'noerror nil 'nosuffix ))
+  (protect
+   (load (expand-file-name save-frame-position-file)
+	 'noerror nil 'nosuffix )))
 
 ;; (smart-fp--save-frame-positions-to-file)
 (defun smart-fp--save-frame-positions-to-file ()
   "Save `smart-frame-prior-positions' to a file.
 The file is specified in `smart-frame-position-file'."
-  (let ((file (expand-file-name save-frame-position-file)))
+  (protect
+   (let ((file (expand-file-name save-frame-position-file)))
     (save-excursion
       
       (set-buffer (get-buffer-create " *Saved Positions*"))
@@ -632,7 +636,7 @@ The file is specified in `smart-frame-position-file'."
 	  (write-region (point-min) (point-max) file)
 	(file-error (message "Saving frame positions: Can't write %s" file)))
       (kill-buffer (current-buffer))
-      )))
+      ))))
 
 ;; load this after the custom-file
 (when (or init-file-user user-init-file)
