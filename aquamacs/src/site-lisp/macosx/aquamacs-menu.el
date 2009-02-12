@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.203 2009/02/12 04:07:06 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.204 2009/02/12 04:21:44 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -795,7 +795,6 @@ subsequently create.  Upon entering text-mode, the function
   (list 'menu-item "View" menu-bar-showhide-menu))
 
 (define-key menu-bar-showhide-menu [mac-font-panel-mode] nil)
-(define-key menu-bar-showhide-menu [showhide-scroll-bar] nil)
 
 (define-key menu-bar-options-menu [highlight-paren-mode] nil)
 (define-key menu-bar-options-menu [highlight-separator] nil)
@@ -1156,11 +1155,6 @@ subsequently create.  Upon entering text-mode, the function
 ;; customization is always possible
 ;; the existing menu item is badly worded and the C-c/v/x don't apply anyways
 ;; done
-(easy-menu-remove-item global-map  '("menu-bar" "options") 'cua-emulation-mode) 
-(easy-menu-remove-item global-map  '("menu-bar" "options") 'uniquify)
-(easy-menu-remove-item global-map  '("menu-bar" "options") 'transient-mark-mode)
-(easy-menu-remove-item global-map  '("menu-bar" "options") 'case-fold-search)
-
 
 ;; Quit entry shouldnt be there
 (easy-menu-remove-item global-map  '("menu-bar" "file") 'separator-exit)
@@ -1169,13 +1163,7 @@ subsequently create.  Upon entering text-mode, the function
 ;; this is to set the action for the "Quit" function (Emacs menu)
 (global-set-key [mac-application-quit] 'save-buffers-kill-emacs)
  
-
-     
-;; Battery status is displayed in menu bar 
-;; additional option for this is just confusing
-(easy-menu-remove-item global-map  '("menu-bar" "options" "showhide") 'showhide-battery)
-
-
+    
 ;; SENDMAIL doesn't usually work on OS X
 ;; unless postfix is set up
 (easy-menu-remove-item global-map  '("menu-bar" "tools") 'compose-mail)
