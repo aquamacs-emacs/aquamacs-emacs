@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.264 2009/02/12 19:08:20 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.265 2009/02/13 16:49:07 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -33,7 +33,7 @@
 
 (require 'aquamacs-tools)
  
-(eval-when-compile (require 'aquamacs-macros))
+(require 'aquamacs-macros)
 
 (defvar aq-starttime 0)
 
