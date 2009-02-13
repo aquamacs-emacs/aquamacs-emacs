@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.40 2009/02/12 19:08:20 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.41 2009/02/13 16:11:26 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -50,8 +50,6 @@
 ;;           	; first of alist plus rest w/ recursion
 ;;           (get-alist-value-for-name name (cdr alist)))))
 
-(require 'aquamacs-macros)
-(eval-when-compile (require 'aquamacs-macros))
 
 (defun running-on-a-mac-p ()
   (memq window-system '(mac ns)))
