@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.265 2009/02/13 16:49:07 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.266 2009/02/13 17:44:23 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -651,6 +651,21 @@ No errors are signaled."
       ;; if it hasn't been successfully loaded initially
       ;; (or if the file simply doesn't exist yet)
 	(error (insert (format "Scratch file %s could not be read.\nThis buffer will not be saved automatically." aquamacs-scratch-file)) nil)))))
+
+
+(defun toggle-text-mode-smart-spacing (&optional on)
+  "Toggle `smart-spacing-mode' in `text-mode-hook'"
+  (interactive)
+  (let ((enable (cond ((eq on 1) t)
+		      ((eq on 0) nil)
+		      (t (not (memq 'smart-spacing-mode text-mode-hook))))))
+   (if enable
+	(add-hook 'text-mode-hook 'smart-spacing-mode)
+      (remove-hook 'text-mode-hook 'smart-spacing-mode))
+    (dolist (buffer (buffer-list))
+      (with-current-buffer buffer
+	(if (or (derived-mode-p 'text-mode) text-mode-variant)
+	    (smart-spacing-mode (if enable 1 0)))))))
 
 
 (defun aquamacs-setup ()
@@ -1441,7 +1456,6 @@ listed here."
      text-mode-hook
 
      blink-cursor-mode
-     ;;aquamacs-default-styles 
      aquamacs-customization-version-id
      mac-print-monochrome-mode
      make-backup-files

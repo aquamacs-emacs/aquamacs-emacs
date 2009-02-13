@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.204 2009/02/12 04:21:44 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.205 2009/02/13 17:44:32 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -33,7 +33,10 @@
  
 
 (require 'easymenu)
-(require 'aquamacs-tools)
+
+
+
+(eval-when-compile (require 'aquamacs-macros))
 
 
 
@@ -81,6 +84,7 @@ The elements of LIST are not copied, just the list structure itself."
 
 (defvar menu-bar-new-file-menu nil)
 (defun aquamacs-update-new-file-menu ()
+  (protect
    (setq menu-bar-new-file-menu 
 	 (aquamacs-define-mode-menu (make-sparse-keymap "New Buffer in Mode")
 				    'aquamacs-menu-new-empty-buffer-in-mode
@@ -88,7 +92,7 @@ The elements of LIST are not copied, just the list structure itself."
    (define-key-after menu-bar-file-menu [new-file-menu]
      (list 'menu-item "New Buffer in Mode" menu-bar-new-file-menu
 	   :help "Create a new buffer with a specific major mode.")
-     'make-tab))
+     'make-tab)))
 
 ;; record recently used major modes
 
@@ -746,19 +750,6 @@ subsequently create.  Upon entering text-mode, the function
   (message "Smart word spacing in text modes %sabled.  Use M-x global-smart-spacing-mode to toggle for all modes."
 	   (if (memq 'smart-spacing-mode text-mode-hook) "en" "dis")))
 
-(defun toggle-text-mode-smart-spacing (&optional on)
-  "Toggle `smart-spacing-mode' in `text-mode-hook'"
-  (interactive)
-  (let ((enable (cond ((eq on 1) t)
-		      ((eq on 0) nil)
-		      (t (not (memq 'smart-spacing-mode text-mode-hook))))))
-   (if enable
-	(add-hook 'text-mode-hook 'smart-spacing-mode)
-      (remove-hook 'text-mode-hook 'smart-spacing-mode))
-    (dolist (buffer (buffer-list))
-      (with-current-buffer buffer
-	(if (or (derived-mode-p 'text-mode) text-mode-variant)
-	    (smart-spacing-mode (if enable 1 0)))))))
 
 ;; (define-key-after menu-bar-options-menu [text-mode-smart-spacing]
 ;;   '(menu-item "Smart Word Spacing in Text Modes"
@@ -952,12 +943,14 @@ subsequently create.  Upon entering text-mode, the function
 ;; then locate-file might fail and we don't know if we're going to have ispell
 
 (defun aquamacs-initialize-ispell-program-name ()
-  (let ((ipn (or (if (locate-file "aspell" exec-path exec-suffixes 'file-executable-p) 
-		     "aspell")
-		 (if (locate-file "ispell" exec-path exec-suffixes 'file-executable-p)
-		     "ispell"))))
-    (if ipn ;; do not initialize if not (yet) found
-	(defvar ispell-program-name ipn))))
+  "Set `ispell-program-name'."
+  (protect
+   (let ((ipn (or (if (locate-file "aspell" exec-path exec-suffixes 'file-executable-p) 
+		      "aspell")
+		  (if (locate-file "ispell" exec-path exec-suffixes 'file-executable-p)
+		      "ispell"))))
+     (if ipn ;; do not initialize if not (yet) found
+	 (defvar ispell-program-name ipn)))))
 
 (aquamacs-initialize-ispell-program-name)
 (unless (boundp 'ispell-program-name)
