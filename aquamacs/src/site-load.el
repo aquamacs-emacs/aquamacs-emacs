@@ -5,7 +5,9 @@
 (defvar aq-preloaded nil
 "List of preloaded (precomiled) features.")
 (defun aq-preload (f)  
-  (let ((features-before features))
+  (let ((features-before features)
+	(load-path (cons aq-compile-path load-path)))
+    
     (load (concat aq-compile-path f))
     (mapc (lambda (e)
 	    (unless (member e features-before)
