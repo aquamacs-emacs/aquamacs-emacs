@@ -64,6 +64,7 @@
 
 ;; aquamacs
 ;; the function aq-preload is supplied by the make-aquamacs script
+(aq-preload "aquamacs-macros.el")
 (aq-preload "aquamacs-tools.el")
 (aq-preload "macosx/mac-extra-functions.el")
 ;(aq-preload "applescript-mode.el")
