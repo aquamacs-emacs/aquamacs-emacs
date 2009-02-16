@@ -1,0 +1,27 @@
+How to prepare an Aquamacs release
+
+
+Checklist:
+
+
+0. set version number in site-start.el and in doc/latex/changelog.tex.
+1. cd build; ./make-documentation
+2. add new files and commit what's in doc/AquamacsHelp and doc/latex directories.
+3. make build, for Intel and PPC.  Note that unlike that nightly build PPC build must run on 10.4 or later.  The nightly build (on 10.3) can, thus, not be used (it is feature-impaired for the lack of some header files.)
+4. download builds, arrange in /Applications/Aquamacs Emacs.app (Intel) and /Applications/Aquamacs Emacs PPC.app.
+5. cd build; ./make-release
+This will extract version numbers and make a universal build (in /Applications/Aquamacs Emacs.app).  It will copy it to a DMG (named AquamacsInstall.dmg), which provides the shell.  This shell is not part of the GPL-licensed Aquamacs Emacs application and not included in CVS (for size reasons).
+Verify the DMG, re-arrange icons.   Use Finder -> Info to hide .pdf extensions for the two PDF files.  Eject DMG.
+Then execute hdiutil command as printed by make-release program.
+6. Upload to distribution server (for ohloh, use upload script after manually updating the instruct.xml file).
+
+Website update:
+
+Website is CVS module aquamacs-web.
+
+7. Link on index.shtml  
+8. download.shtml
+9. run changelog update script (for release) - should be done on Braeburn. 
+10. cgi-bin/currentversion.cgi 
+
+- David Reitter, Feb 2009
