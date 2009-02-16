@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.205 2009/02/13 17:44:32 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.206 2009/02/16 14:32:10 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -333,7 +333,7 @@ customization buffer."
 (define-key menu-bar-edit-menu [undo]
   `(menu-item   "Undo                                               "
 	      aquamacs-undo
-	      :keys ,(aq-binding (key-binding [menu-bar edit undo]))
+	      :keys ,(aq-binding 'aquamacs-undo) ; (key-binding [menu-bar edit undo])) being set with this command
 	      :enable (and (aquamacs-can-undo-p)
 			   (menu-bar-menu-frame-live-and-visible-p))
 	      :help "Undo last operation"))
@@ -341,7 +341,7 @@ customization buffer."
 (define-key-after menu-bar-edit-menu [redo]
   `(menu-item "Redo                                               " 
 	      aquamacs-redo
-	      :keys ,(aq-binding (key-binding [menu-bar edit redo]))
+	      :keys ,(aq-binding 'aquamacs-redo) ; (key-binding [menu-bar edit redo]))
 	      :enable (and (aquamacs-can-redo-p) 
 			   (menu-bar-menu-frame-live-and-visible-p))
 	      :help "Redo undone operation") 'undo)
@@ -387,8 +387,9 @@ customization buffer."
   `(menu-item "Use Region For Search                " 
 	      aquamacs-use-selection-for-find
 	      :enable mark-active
-	      :keys ,(aq-binding (key-binding [menu-bar edit search i-search 
-							isearch-use-region]))
+	      :keys , (aq-binding ;; (key-binding [menu-bar edit search i-search 
+;; 							isearch-use-region])
+				 'aquamacs-use-selection-for-find)
 	      :help "Use the selection for your next search"))
 
  
@@ -428,7 +429,7 @@ customization buffer."
 (define-key menu-bar-edit-menu [fill]
 `(menu-item "Wrap and Re-Format (fill)                " 
 	    fill-paragraph-or-region
-	    :keys ,(aq-binding (key-binding [menu-bar edit fill]))
+	    :keys ,(aq-binding 'fill-paragraph-or-region) ;(key-binding [menu-bar edit fill]))
 	    :enable (not buffer-read-only)
 	    :help
 	    "Fill text in region (or paragraph) to fit between
@@ -437,7 +438,7 @@ left and right margin"))
 (define-key-after menu-bar-edit-menu [unfill]
 `(menu-item "Remove Hard Line Breaks (unfill)     " 
 	    unfill-paragraph-or-region
-	    :keys ,(aq-binding (key-binding [menu-bar edit unfill]))
+	    :keys ,(aq-binding 'unfill-paragraph-or-region) ;(key-binding [menu-bar edit unfill]))
 	    :enable (not buffer-read-only)
 	    :help
 	    "Remove line-breaks from paragraph or region.")
@@ -532,7 +533,7 @@ left and right margin"))
   `(menu-item (format "Preview and Print %s...       " 
 		      (if mark-active "Region" "Buffer"))
 	      aquamacs-print
-	      :keys ,(aq-binding  (key-binding [menu-bar file aquamacs-print]))
+	      :keys ,(aq-binding  'aquamacs-print) ; (key-binding [menu-bar file aquamacs-print]))
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
 			   (menu-bar-non-minibuffer-window-p))
 	      :help "Print current buffer or region"))
@@ -566,7 +567,7 @@ left and right margin"))
 	      menu-bar-print-region-or-buffer
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
 			   (menu-bar-non-minibuffer-window-p))
-	      :keys ,(aq-binding (key-binding [menu-bar file print-region-or-buffer]))
+	      :keys ,(aq-binding 'menu-bar-print-region-or-buffer); (key-binding [menu-bar file print-region-or-buffer]))
 	      :help "Print buffer, or region if active"))
 
 
