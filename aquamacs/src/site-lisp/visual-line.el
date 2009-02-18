@@ -203,11 +203,10 @@ to the desired margin."
 	    (setq rel-next-line-start  (- (point) beg-of-line 1)))
 	    (unless (= beg-of-line (point-max))
 	      ;; handle track-eol...
-	      ;; handle track-eol...
 	      (if (and track-eol (= old-point (1- next-line-start))
 		       ;; Don't count beg of empty line as end of line
 		       ;; unless we just did explicit end-of-line.
-		       (or (not (= 0 visual-col))
+		       (or (not (= 0 visual-pixel-col))
 			   (eq last-command 'end-of-line)))
 		  (setq visual-movement-temporary-goal-column 9999))
 	      
