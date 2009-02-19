@@ -4,7 +4,7 @@
 ;; originally authored by Kevin Walzer
 ;; Keywords: auctex
  
-;; Last change: $Id: auctex-config.el,v 1.46 2008/12/22 22:32:08 davidswelt Exp $
+;; Last change: $Id: auctex-config.el,v 1.47 2009/02/19 16:36:51 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -31,18 +31,23 @@
 
 ;; set the PATH to typical locations for TeX stuff
 
-(setenv "PATH"
-	(concat (getenv "PATH")
-		(let ((f (file-expand-wildcards "/usr/local/texlive/20*/bin")))
-		  (if f (concat ":" (car f)) ""))
-		(let ((f (file-expand-wildcards "/usr/local/teTeX/bin/*-apple-darwin-current")))
-		  (if f (concat ":" (car f)) ""))))
+(mapc (lambda (path)
+	(setenv "PATH"
+		(concat (getenv "PATH") ":" path))
+	
+	(add-to-list 'exec-path path 'append))
+      (append 
+       ; prefer TeXLive installation
+       '("/usr/texbin")
+       ; in case /usr/texbin is missing
+       (reverse (sort (file-expand-wildcards 
+		       "/usr/local/texlive/20*/bin") 
+		      'string<))
+       ; over older teTex. 
+       (reverse (sort (file-expand-wildcards 
+		       "/usr/local/teTeX/bin/*-apple-darwin-current") 
+		      'string<))))
 
-;; don't set all of these paths. only what's necessary.
-;; everything else should be initialized from PATH anyways
-(setq exec-path (append exec-path
-			(file-expand-wildcards "/usr/local/texlive/20*/bin")
-			(file-expand-wildcards "/usr/local/teTeX/bin/*-apple-darwin-current")))
 ;; make sure auctex is loaded from the correct place,
 ;; i.e. the first file in load-path
 ;; load the right auctex.el (first one in load-path)
