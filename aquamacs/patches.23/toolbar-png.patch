@@ -1,14 +1,31 @@
-===================================================================
-RCS file: /sources/emacs/emacs/lisp/tool-bar.el,v
-retrieving revision 1.17
-diff -c -r1.17 tool-bar.el
-*** lisp/tool-bar.el	12 Jun 2008 03:56:17 -0000	1.17
---- lisp/tool-bar.el	19 Jul 2008 20:10:39 -0000
+*** lisp/tool-bar.el	24 Jan 2009 21:16:27 -0500	1.24
+--- lisp/tool-bar.el	20 Feb 2009 11:50:29 -0500	
 ***************
-*** 59,64 ****
---- 59,135 ----
-  		(display-graphic-p))
-  	   (tool-bar-setup))))
+*** 54,69 ****
+    :group 'frames
+    (if tool-bar-mode
+        (progn
+! 	;; Make one tool-bar-line for any - including non-graphical -
+! 	;; terminal, see Bug#1754.  If this causes problems, we should
+! 	;; handle the problem in `modify-frame-parameters' or do not
+! 	;; call `modify-all-frames-parameters' when toggling the tool
+! 	;; bar off either.
+! 	(modify-all-frames-parameters (list (cons 'tool-bar-lines 1)))
+  	(if (= 1 (length (default-value 'tool-bar-map))) ; not yet setup
+  	    (tool-bar-setup)))
+      (modify-all-frames-parameters (list (cons 'tool-bar-lines 0)))))
+  
+  ;;;###autoload
+  ;; Used in the Show/Hide menu, to have the toggle reflect the current frame.
+  (defun toggle-tool-bar-mode-from-frame (&optional arg)
+--- 54,135 ----
+    :group 'frames
+    (if tool-bar-mode
+        (progn
+!   	(modify-all-frames-parameters (list (cons 'tool-bar-lines 1)))
+  	(if (= 1 (length (default-value 'tool-bar-map))) ; not yet setup
+  	    (tool-bar-setup)))
+      (modify-all-frames-parameters (list (cons 'tool-bar-lines 0)))))
   
 + (defun tool-bar-set-file-extension (image-spec-list extension)
 +   "Set new file extensions for all :file properties
@@ -85,7 +102,7 @@ diff -c -r1.17 tool-bar.el
   ;; Used in the Show/Hide menu, to have the toggle reflect the current frame.
   (defun toggle-tool-bar-mode-from-frame (&optional arg)
 ***************
-*** 69,74 ****
+*** 74,79 ****
 --- 140,216 ----
         (tool-bar-mode (if (> (frame-parameter nil 'tool-bar-lines) 0) 0 1))
       (tool-bar-mode arg)))
@@ -165,7 +182,7 @@ diff -c -r1.17 tool-bar.el
   ;; We want to pretend the toolbar by standard is on, as this will make
   ;; customize consider disabling the toolbar a customization, and save
 ***************
-*** 144,178 ****
+*** 150,184 ****
   ;;;###autoload
   (defun tool-bar-local-item (icon def key map &rest props)
     "Add an item to the tool bar in map MAP.
@@ -183,25 +200,25 @@ diff -c -r1.17 tool-bar.el
 ! 	 (colors (nconc (if (eq fg 'unspecified) nil (list :foreground fg))
 ! 			(if (eq bg 'unspecified) nil (list :background bg))))
 ! 	 (xpm-spec (list :type 'xpm :file (concat icon ".xpm")))
-! 	 (xpm-lo-spec (if (> (display-color-cells) 256)
-! 			  nil
-! 			(list :type 'xpm :file
-!                               (concat "low-color/" icon ".xpm"))))
+! 	 (xpm-lo-spec (list :type 'xpm :file
+! 			    (concat "low-color/" icon ".xpm")))
 ! 	 (pbm-spec (append (list :type 'pbm :file
 !                                  (concat icon ".pbm")) colors))
 ! 	 (xbm-spec (append (list :type 'xbm :file
 !                                  (concat icon ".xbm")) colors))
-! 	 (image-exp `(tool-bar-find-image
-!                       (if (display-color-p)
-!                           ',(list xpm-lo-spec xpm-spec pbm-spec xbm-spec)
-!                         ',(list pbm-spec xbm-spec xpm-lo-spec xpm-spec)))))
-! 
+! 	 (image-exp `(find-image
+! 		      (cond ((not (display-color-p))
+! 			     ',(list pbm-spec xbm-spec xpm-lo-spec xpm-spec))
+! 			    ((< (display-color-cells) 256)
+! 			     ',(list xpm-lo-spec xpm-spec pbm-spec xbm-spec))
+! 			    (t
+! 			     ',(list xpm-spec pbm-spec xbm-spec))))))
 !     (define-key-after map (vector key)
 !       `(menu-item ,(symbol-name key) ,def :image ,image-exp ,@props))))
   
   ;;;###autoload
   (defun tool-bar-add-item-from-menu (command icon &optional map &rest props)
---- 286,313 ----
+--- 287,315 ----
   ;;;###autoload
   (defun tool-bar-local-item (icon def key map &rest props)
     "Add an item to the tool bar in map MAP.
@@ -227,11 +244,12 @@ diff -c -r1.17 tool-bar.el
 !       (define-key-after map (vector key)
 ! 	`(menu-item ,label 
 ! 		    ,def :image ,images ,@props)))))
+!   
   
   ;;;###autoload
   (defun tool-bar-add-item-from-menu (command icon &optional map &rest props)
 ***************
-*** 193,322 ****
+*** 199,322 ****
   ;;;###autoload
   (defun tool-bar-local-item-from-menu (command icon in-map &optional from-map &rest props)
     "Define local tool bar binding for COMMAND using the given ICON.
@@ -240,31 +258,32 @@ diff -c -r1.17 tool-bar.el
 ! modifies the binding by adding an image specification for ICON.  It
 ! finds ICON just like `tool-bar-add-item'.  PROPS are additional
   properties to add to the binding.
-  
+! 
   FROM-MAP must contain appropriate binding for `[menu-bar]' which
   holds a keymap."
     (unless from-map
       (setq from-map global-map))
 !   (let* ((menu-bar-map (lookup-key from-map [menu-bar]))
-  	 (keys (where-is-internal command menu-bar-map))
+! 	 (keys (where-is-internal command menu-bar-map))
 ! 	 (fg (face-attribute 'tool-bar :foreground))
 ! 	 (bg (face-attribute 'tool-bar :background))
 ! 	 (colors (nconc (if (eq fg 'unspecified) nil (list :foreground fg))
 ! 			(if (eq bg 'unspecified) nil (list :background bg))))
 ! 	 (xpm-spec (list :type 'xpm :file (concat icon ".xpm")))
-! 	 (xpm-lo-spec (if (> (display-color-cells) 256)
-! 			  nil
-! 			(list :type 'xpm :file
-!                               (concat "low-color/" icon ".xpm"))))
+! 	 (xpm-lo-spec (list :type 'xpm :file
+! 			    (concat "low-color/" icon ".xpm")))
 ! 	 (pbm-spec (append (list :type 'pbm :file
 !                                  (concat icon ".pbm")) colors))
 ! 	 (xbm-spec (append (list :type 'xbm :file
 !                                  (concat icon ".xbm")) colors))
-! 	 (image-exp `(tool-bar-find-image
-!                       (if (display-color-p)
-!                           ',(list xpm-lo-spec xpm-spec pbm-spec xbm-spec)
-!                         ',(list pbm-spec xbm-spec xpm-lo-spec xpm-spec))))
-  	 submap key)
+! 	 (image-exp `(find-image
+! 		      (cond ((not (display-color-p))
+! 			     ',(list pbm-spec xbm-spec xpm-lo-spec xpm-spec))
+! 			    ((< (display-color-cells) 256)
+! 			     ',(list xpm-lo-spec xpm-spec pbm-spec xbm-spec))
+! 			    (t
+! 			     ',(list xpm-spec pbm-spec xbm-spec)))))
+! 	 submap key)
 !     ;; We'll pick up the last valid entry in the list of keys if
 !     ;; there's more than one.
 !     (dolist (k keys)
@@ -298,71 +317,64 @@ diff -c -r1.17 tool-bar.el
   
   ;;; Set up some global items.  Additions/deletions up for grabs.
   
-  (defvar tool-bar-setup nil
-    "Set to t if the tool-bar has been set up by `tool-bar-setup'.")
+! (defun tool-bar-setup ()
+!   ;; People say it's bad to have EXIT on the tool bar, since users
+!   ;; might inadvertently click that button.
+!   ;;(tool-bar-add-item-from-menu 'save-buffers-kill-emacs "exit")
+!   (tool-bar-add-item-from-menu 'find-file "new")
+!   (tool-bar-add-item-from-menu 'menu-find-file-existing "open")
+!   (tool-bar-add-item-from-menu 'dired "diropen")
+!   (tool-bar-add-item-from-menu 'kill-this-buffer "close")
+!   (tool-bar-add-item-from-menu 'save-buffer "save" nil
+! 			       :visible '(or buffer-file-name
+! 					     (not (eq 'special
+! 						      (get major-mode
+! 							   'mode-class)))))
+!   (tool-bar-add-item-from-menu 'write-file "saveas" nil
+! 			       :visible '(or buffer-file-name
+! 					     (not (eq 'special
+! 						      (get major-mode
+! 							   'mode-class)))))
+!   (tool-bar-add-item-from-menu 'undo "undo" nil
+! 			       :visible '(not (eq 'special (get major-mode
+! 								'mode-class))))
+!   (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [cut])
+! 			       "cut" nil
+! 			       :visible '(not (eq 'special (get major-mode
+! 								'mode-class))))
+!   (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [copy])
+! 			       "copy")
+!   (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [paste])
+! 			       "paste" nil
+! 			       :visible '(not (eq 'special (get major-mode
+! 								'mode-class))))
+!   (tool-bar-add-item-from-menu 'nonincremental-search-forward "search")
+!   ;;(tool-bar-add-item-from-menu 'ispell-buffer "spell")
+! 
+!   ;; There's no icon appropriate for News and we need a command rather
+!   ;; than a lambda for Read Mail.
+!   ;;(tool-bar-add-item-from-menu 'compose-mail "mail/compose")
+! 
+!   (tool-bar-add-item-from-menu 'print-buffer "print")
+! 
+!   ;; tool-bar-add-item-from-menu itself operates on
+!   ;; (default-value 'tool-bar-map), but when we don't use that function,
+!   ;; we must explicitly operate on the default value.
+! 
+!   (let ((tool-bar-map (default-value 'tool-bar-map)))
+!     (tool-bar-add-item "preferences" 'customize 'customize
+! 		       :help "Edit preferences (customize)")
+! 
+!     (tool-bar-add-item "help" (lambda ()
+! 				(interactive)
+! 				(popup-menu menu-bar-help-menu))
+! 		       'help
+! 		       :help "Pop up the Help menu")))
+! 
   
-  (defun tool-bar-setup (&optional frame)
-    (unless tool-bar-setup
-      (with-selected-frame (or frame (selected-frame))
-!       ;; People say it's bad to have EXIT on the tool bar, since users
-!       ;; might inadvertently click that button.
-!       ;;(tool-bar-add-item-from-menu 'save-buffers-kill-emacs "exit")
-!       (tool-bar-add-item-from-menu 'find-file "new")
-!       (tool-bar-add-item-from-menu 'menu-find-file-existing "open")
-!       (tool-bar-add-item-from-menu 'dired "diropen")
-!       (tool-bar-add-item-from-menu 'kill-this-buffer "close")
-!       (tool-bar-add-item-from-menu 'save-buffer "save" nil
-! 				   :visible '(or buffer-file-name
-! 						 (not (eq 'special
-! 							  (get major-mode
-! 							       'mode-class)))))
-!       (tool-bar-add-item-from-menu 'write-file "saveas" nil
-! 				   :visible '(or buffer-file-name
-! 						 (not (eq 'special
-! 							  (get major-mode
-! 							       'mode-class)))))
-!       (tool-bar-add-item-from-menu 'undo "undo" nil
-! 				   :visible '(not (eq 'special (get major-mode
-! 								    'mode-class))))
-!       (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [cut])
-! 				   "cut" nil
-! 				   :visible '(not (eq 'special (get major-mode
-! 								    'mode-class))))
-!       (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [copy])
-! 				   "copy")
-!       (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [paste])
-! 				   "paste" nil
-! 				   :visible '(not (eq 'special (get major-mode
-! 								    'mode-class))))
-!       (tool-bar-add-item-from-menu 'nonincremental-search-forward "search")
-!       ;;(tool-bar-add-item-from-menu 'ispell-buffer "spell")
-! 
-!       ;; There's no icon appropriate for News and we need a command rather
-!       ;; than a lambda for Read Mail.
-!       ;;(tool-bar-add-item-from-menu 'compose-mail "mail/compose")
-! 
-!       (tool-bar-add-item-from-menu 'print-buffer "print")
-! 
-!       ;; tool-bar-add-item-from-menu itself operates on
-!       ;; (default-value 'tool-bar-map), but when we don't use that function,
-!       ;; we must explicitly operate on the default value.
-! 
-!       (let ((tool-bar-map (default-value 'tool-bar-map)))
-!         (tool-bar-add-item "preferences" 'customize 'customize
-!                            :help "Edit preferences (customize)")
-! 
-!         (tool-bar-add-item "help" (lambda ()
-!                                     (interactive)
-!                                     (popup-menu menu-bar-help-menu))
-!                            'help
-!                            :help "Pop up the Help menu"))
-        (setq tool-bar-setup t))))
-  
-- 
   (provide 'tool-bar)
-! ;; arch-tag: 15f30f0a-d0d7-4d50-bbb7-f48fd0c8582f
-  ;;; tool-bar.el ends here
---- 328,451 ----
+  ;; arch-tag: 15f30f0a-d0d7-4d50-bbb7-f48fd0c8582f
+--- 330,449 ----
   ;;;###autoload
   (defun tool-bar-local-item-from-menu (command icon in-map &optional from-map &rest props)
     "Define local tool bar binding for COMMAND using the given ICON.
@@ -374,7 +386,7 @@ diff -c -r1.17 tool-bar.el
 ! the binding by adding an image specification for ICON. It finds
 ! ICON just like `tool-bar-add-item'. PROPS are additional
   properties to add to the binding.
-  
+!   
   FROM-MAP must contain appropriate binding for `[menu-bar]' which
   holds a keymap."
     (unless from-map
@@ -382,11 +394,11 @@ diff -c -r1.17 tool-bar.el
 !   (let* ((icon-name (if (consp icon) (car icon) icon))
 ! 	 (label (if (consp icon) (cdr icon)))
 ! 	 (menu-bar-map (lookup-key from-map [menu-bar]))
-  	 (keys (where-is-internal command menu-bar-map))
+!   	 (keys (where-is-internal command menu-bar-map))
 ! 	 (is (tool-bar-get-image-spec icon-name))
 ! 	 (image (car is))
 ! 	 (images (cdr is)) 
-  	 submap key)
+!   	 submap key)
 !     (when (and (display-images-p) image)
 !       ;; We'll pick up the last valid entry in the list of keys if
 !       ;; there's more than one.
@@ -422,68 +434,64 @@ diff -c -r1.17 tool-bar.el
   
   ;;; Set up some global items.  Additions/deletions up for grabs.
   
-  (defvar tool-bar-setup nil
-    "Set to t if the tool-bar has been set up by `tool-bar-setup'.")
-  
-+ (setq tool-bar-setup nil)
-  (defun tool-bar-setup (&optional frame)
-    (unless tool-bar-setup
-      (with-selected-frame (or frame (selected-frame))
-!   ;; People say it's bad to have EXIT on the tool bar, since users
-!   ;; might inadvertently click that button.
-!   ;;(tool-bar-add-item-from-menu 'save-buffers-kill-emacs "exit")
-!   (tool-bar-add-item-from-menu 'find-file '("new" . "New"))
-!   (tool-bar-add-item-from-menu 'menu-find-file-existing '("open" . "Open"))
-!   (tool-bar-add-item-from-menu 'dired '("diropen" . "Directory"))
-!   (tool-bar-add-item-from-menu 'kill-this-buffer "close")
-!   (tool-bar-add-item-from-menu 'save-buffer '("save" . "Save") nil
-! 			       :visible '(or buffer-file-name
-! 					     (not (eq 'special
-! 						      (get major-mode
-! 							   'mode-class)))))
-!   (tool-bar-add-item-from-menu 'write-file '("saveas" . "Save As") nil
-! 			       :visible '(or buffer-file-name
-! 					     (not (eq 'special
-! 						      (get major-mode
-! 							   'mode-class)))))
-!   (tool-bar-add-item-from-menu 'undo "undo" nil
-! 			       :visible '(not (eq 'special (get major-mode
-! 								'mode-class))))
-!   (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [cut])
-! 			       "cut" nil
-! 			       :visible '(not (eq 'special (get major-mode
-! 								'mode-class))))
-!   (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [copy])
-! 			       "copy")
-!   (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [paste])
-! 			       "paste" nil
-! 			       :visible '(not (eq 'special (get major-mode
-! 								'mode-class))))
-!   (tool-bar-add-item-from-menu 'nonincremental-search-forward "search")
-!   ;;(tool-bar-add-item-from-menu 'ispell-buffer "spell")
+! (setq tool-bar-setup nil)
+! (defun tool-bar-setup (&optional frame)
+!   (unless tool-bar-setup
+!     (with-selected-frame
+!      (or frame (selected-frame))
+!      ;; People say it's bad to have EXIT on the tool bar, since users
+!      ;; might inadvertently click that button.
+!      ;;(tool-bar-add-item-from-menu 'save-buffers-kill-emacs "exit")
+!      (tool-bar-add-item-from-menu 'find-file '("new" . "New"))
+!      (tool-bar-add-item-from-menu 'menu-find-file-existing '("open" . "Open"))
+!      (tool-bar-add-item-from-menu 'dired '("diropen" . "Directory"))
+!      (tool-bar-add-item-from-menu 'kill-this-buffer "close")
+!      (tool-bar-add-item-from-menu 'save-buffer '("save" . "Save") nil
+! 				  :visible '(or buffer-file-name
+! 						(not (eq 'special
+! 							 (get major-mode
+! 							      'mode-class)))))
+!      (tool-bar-add-item-from-menu 'write-file '("saveas" . "Save As") nil
+! 				  :visible '(or buffer-file-name
+! 						(not (eq 'special
+! 							 (get major-mode
+! 							      'mode-class)))))
+!      (tool-bar-add-item-from-menu 'undo "undo" nil
+! 				  :visible '(not (eq 'special (get major-mode
+! 								   'mode-class))))
+!      (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [cut])
+! 				  "cut" nil
+! 				  :visible '(not (eq 'special (get major-mode
+! 								   'mode-class))))
+!      (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [copy])
+! 				  "copy")
+!      (tool-bar-add-item-from-menu (lookup-key menu-bar-edit-menu [paste])
+! 				  "paste" nil
+! 				  :visible '(not (eq 'special (get major-mode
+! 								   'mode-class))))
+!      (tool-bar-add-item-from-menu 'nonincremental-search-forward "search")
+!      ;;(tool-bar-add-item-from-menu 'ispell-buffer "spell")
 ! 
-!   ;; There's no icon appropriate for News and we need a command rather
-!   ;; than a lambda for Read Mail.
-!   ;;(tool-bar-add-item-from-menu 'compose-mail "mail/compose")
+!      ;; There's no icon appropriate for News and we need a command rather
+!      ;; than a lambda for Read Mail.
+!      ;;(tool-bar-add-item-from-menu 'compose-mail "mail/compose")
 ! 
-!   (tool-bar-add-item-from-menu 'print-buffer "print")
+!      (tool-bar-add-item-from-menu 'print-buffer "print")
 ! 
-!   ;; tool-bar-add-item-from-menu itself operates on
-!   ;; (default-value 'tool-bar-map), but when we don't use that function,
-!   ;; we must explicitly operate on the default value.
+!      ;; tool-bar-add-item-from-menu itself operates on
+!      ;; (default-value 'tool-bar-map), but when we don't use that function,
+!      ;; we must explicitly operate on the default value.
 ! 
-!   (let ((tool-bar-map (default-value 'tool-bar-map)))
-!     (tool-bar-add-item '("preferences" . "Customize") 'customize 'customize
-! 		       :help "Edit preferences (customize)")
+!      (let ((tool-bar-map (default-value 'tool-bar-map)))
+!        (tool-bar-add-item '("preferences" . "Customize") 'customize 'customize
+! 			  :help "Edit preferences (customize)")
 ! 
-!     (tool-bar-add-item '("help" . "Help") (lambda ()
-! 				(interactive)
-! 				(popup-menu menu-bar-help-menu))
-! 		       'help
-! 		       :help "Pop up the Help menu"))
-        (setq tool-bar-setup t))))
+!        (tool-bar-add-item '("help" . "Help") (lambda ()
+! 					       (interactive)
+! 					       (popup-menu menu-bar-help-menu))
+! 			  'help
+! 			  :help "Pop up the Help menu"))
+!      (setq tool-bar-setup t))))
   
   (provide 'tool-bar)
-! 
-! ;;; arch-tag: 15f30f0a-d0d7-4d50-bbb7-f48fd0c8582f
-  ;;; tool-bar.el ends here
+  ;; arch-tag: 15f30f0a-d0d7-4d50-bbb7-f48fd0c8582f
