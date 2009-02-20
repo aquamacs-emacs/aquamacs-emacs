@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-editing.el,v 1.20 2009/02/20 14:09:08 davidswelt Exp $
+;; Last change: $Id: aquamacs-editing.el,v 1.21 2009/02/20 16:10:47 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -178,15 +178,16 @@ default in case there is not enough text."
     (if cua-mode 
 	(cua-scroll-up dir)
       (scroll-up dir))
-
-    (let ((psp page-scrolling-points))
+   (let ((psp page-scrolling-points))
       (while psp
 	(let ((mp (marker-position (caar psp))))
 	  (if (and (< mp (+ (point) 100))   ;; arbitrary range
 		   (> mp (- (point) 100)))
 	      (progn
 		(goto-char mp)
-		(set-window-start (selected-window) (cdr (car psp)))
+		;; cannot set window start, it causes problems at edges of
+		;; buffer for no apparent reason.
+	;;	(set-window-start (selected-window) (cdr (car psp)))
 		(setq psp))
 	    (setq psp (cdr psp))))))
    
