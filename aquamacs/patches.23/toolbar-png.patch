@@ -1,3 +1,23 @@
+*** src/nsterm.h	29 Jan 2009 10:35:55 -0000	1.23
+--- src/nsterm.h	20 Feb 2009 21:30:38 -0000
+***************
+*** 144,150 ****
+  - (BOOL) changed;
+  - (void) addDisplayItemWithImage: (EmacsImage *)img idx: (int)idx
+                          helpText: (char *)help
+!                          enabled: (BOOL)enabled;
+  /* delegate methods */
+  - (NSToolbarItem *)toolbar: (NSToolbar *)toolbar
+       itemForItemIdentifier: (NSString *)itemIdentifier
+--- 144,151 ----
+  - (BOOL) changed;
+  - (void) addDisplayItemWithImage: (EmacsImage *)img idx: (int)idx
+                          helpText: (char *)help
+!                          enabled: (BOOL)enabled
+!                         labelText: (char *)label;
+  /* delegate methods */
+  - (NSToolbarItem *)toolbar: (NSToolbar *)toolbar
+       itemForItemIdentifier: (NSString *)itemIdentifier
 *** ../emacs.temp/src/nsmenu.m	2009-01-02 13:59:45.000000000 +1300
 --- src/nsmenu.m	2009-01-02 13:59:47.000000000 +1300
 ***************
@@ -41,7 +61,7 @@
 +       captionText = NILP (captionObj) ? "" : (char *)SDATA (captionObj);
 + 
         [toolbar addDisplayItemWithImage: img->pixmap idx: i helpText: helpText
-! 	       enabled: enabled_p  label: captionText];
+! 	       enabled: enabled_p  labelText: captionText];
   #undef TOOLPROP
       }
   
@@ -102,7 +122,7 @@
   
   - (void) addDisplayItemWithImage: (EmacsImage *)img idx: (int)idx
                           helpText: (char *)help enabled: (BOOL)enabled
-+ 			   label: (char *)label
++ 			   labelText: (char *)label
   {
 !   /* 1) come up w/ identifier */
 !   NSString *identifier;
