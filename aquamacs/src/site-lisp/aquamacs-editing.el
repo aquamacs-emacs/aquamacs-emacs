@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-editing.el,v 1.19 2009/02/10 21:12:24 davidswelt Exp $
+;; Last change: $Id: aquamacs-editing.el,v 1.20 2009/02/20 14:09:08 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -160,28 +160,50 @@ default in case there is not enough text."
 	      (if (interactive-p)
 		  (message "Soft word wrap auto-enabled."))))
 	    (funcall (or auto-word-wrap-default-function 'turn-on-auto-fill))))))
- 
+
+;; Keep a list of page scroll positions so that we can consistenly
+;; scroll back and forth (page-wise) and end up in the same spots.
+(defvar page-scrolling-points nil)
+(make-variable-buffer-local 'page-scrolling-points)
+; (setq page-scrolling-points nil)
+
+(defun aquamacs-page-scroll (dir &optional keep-mark)
+  (interactive)
+  (unless (or keep-mark
+	      (and cua-mode ;; this means transient-mark-mode, too
+		   cua--explicit-region-start))
+    (deactivate-mark))
+  (let ((scroll-preserve-screen-position t))
+    (setq page-scrolling-points (cons (cons (point-marker) (window-start)) page-scrolling-points))
+    (if cua-mode 
+	(cua-scroll-up dir)
+      (scroll-up dir))
+
+    (let ((psp page-scrolling-points))
+      (while psp
+	(let ((mp (marker-position (caar psp))))
+	  (if (and (< mp (+ (point) 100))   ;; arbitrary range
+		   (> mp (- (point) 100)))
+	      (progn
+		(goto-char mp)
+		(set-window-start (selected-window) (cdr (car psp)))
+		(setq psp))
+	    (setq psp (cdr psp))))))
+   
+    (when (nthcdr 9 page-scrolling-points)
+      (set-marker (car (nth 9 page-scrolling-points)) nil)
+      (setf (nthcdr 9 page-scrolling-points) nil))))
+
 (defun aquamacs-page-up (&optional keep-mark)
   (interactive)
-  (unless (or keep-mark
-	      (and cua-mode ;; this means transient-mark-mode, too
-		   cua--explicit-region-start))
-    (deactivate-mark))
-  (let ((scroll-preserve-screen-position t))
-    (if cua-mode 
-	(cua-scroll-down)
-      (scroll-down))))
- 
+  (aquamacs-page-scroll '- keep-mark))
+
 (defun aquamacs-page-down (&optional keep-mark)
   (interactive)
-  (unless (or keep-mark
-	      (and cua-mode ;; this means transient-mark-mode, too
-		   cua--explicit-region-start))
-    (deactivate-mark))
-  (let ((scroll-preserve-screen-position t))
-    (if cua-mode 
-	(cua-scroll-up)
-      (scroll-up))))
+  (aquamacs-page-scroll nil keep-mark))
+
+ 
+;; possibly patch scroll-bar-toolkit-scroll?
 
 (defun aquamacs-page-down-extend-region ()
   (interactive)
