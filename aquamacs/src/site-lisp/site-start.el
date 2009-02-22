@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: site-start.el,v 1.69 2009/02/20 23:12:50 davidswelt Exp $
+;; Last change: $Id: site-start.el,v 1.70 2009/02/22 23:24:24 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -78,22 +78,8 @@ Changes in this code are ignored during the online version check.")
 	      (setq features (delete p features)))
 	    aq-preloaded))
 
-  ;; load path
-  
-  (normal-top-level-add-subdirs-to-load-path)  ; no need to do this is in site-start.
-
-  ;; remove Enhanced Carbon Emacs plugin
-	(let ((case-fold-search nil))
-	  (mapc (lambda (dir)
-		  (when (string-match "/ec-emacs" dir)
-		    (message "Enhanced Carbon Emacs plugin at %s is incompatible.  Not loaded."
-			     dir)
-		    (setq load-path (delete dir load-path))))
-		load-path ; modified during iteration
-		))
-	(setq default-directory ddir)	; restore
-	)
-
+  ;; load path  
+  ;;(normal-top-level-add-subdirs-to-load-path)  ; no need to do this is in site-start.
 
   (require 'aquamacs)
   (require 'aquamacs-aux) ;; calls (aquamacs-setup)
