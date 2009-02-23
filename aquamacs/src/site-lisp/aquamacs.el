@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.266 2009/02/13 17:44:23 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.267 2009/02/23 15:32:42 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -803,11 +803,12 @@ Used by the modeline faces `mode-line' and `mode-line-inactive'."
   
 
   ;; tabbar needs to be defined before osxkeys
+  (defvar aquamacs-pre-user-directories-load-path)
   (if (running-on-a-mac-p)
-      (require 'aquamacs-tabbar) 
+      ;; force loading of our own toolbar
+      (let ((load-path (or aquamacs-pre-user-directories-load-path load-path)))
+	(require 'aquamacs-tabbar))
     ;; aquamacs-tabbar doesn't work without windows
-    ;; do this before osx_defaults so that the load-path is not user-infested at this time
-    ;; (to force loading of our own tabbar)
     (require 'tabbar))
 
   (aquamacs-set-defaults `((tabbar-mode ,(if (running-on-a-mac-p) t nil))))
@@ -815,9 +816,10 @@ Used by the modeline faces `mode-line' and `mode-line-inactive'."
 
   ;; Mac OS X specific stuff 
 
-  (ats "osx_defaults ...")
+  (ats "aquamacs-menu ...")
+  (require 'aquamacs-menu) ; before osx_defaults
 
-  (ats "load..")
+  (ats "osx_defaults ...")
   (require 'osx_defaults) ;; always load this to define various things
 
   (if (running-on-a-mac-p)
@@ -918,8 +920,6 @@ Used by the modeline faces `mode-line' and `mode-line-inactive'."
 ; (aquamacs--configure-aspell) 
 ; (getenv "ASPELL_CONF")
 
-(ats "aquamacs-menu ...")
-  (require 'aquamacs-menu)
 (ats "aquamacs-menu done")
   (require 'aquamacs-bug) ;; successfully send bug reports on the Mac
 (ats "aquamacs-bug done")
