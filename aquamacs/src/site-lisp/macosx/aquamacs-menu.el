@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.207 2009/02/25 16:23:02 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.208 2009/02/25 17:10:01 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -289,7 +289,8 @@ customization buffer."
   '(menu-item "Open Directory...                 " dired
 	      :enable (menu-bar-non-minibuffer-window-p)
 	      :help "Read a directory, to operate on its files"))
-
+(aquamacs-set-defaults 
+ '((recentf-menu-before  "Open Directory...                 ")))
 (recentf-mode 1) 
 
 ;; redefine this
@@ -1469,8 +1470,7 @@ that should be represented in the Aquamacs menus."
 (aquamacs-set-defaults 
  '(
    (recentf-max-menu-items 25)
-   (recentf-menu-before  "Open Directory...                 ")
-   (recentf-keep ( mac-is-mounted-volume-p file-remote-p file-readable-p))
+  (recentf-keep ( mac-is-mounted-volume-p file-remote-p file-readable-p))
    (recentf-filename-handlers '(abbreviate-file-name))
    (recentf-menu-filter aquamacs-recentf-show-basenames)))  
 (setq recentf-menu-items-for-commands
