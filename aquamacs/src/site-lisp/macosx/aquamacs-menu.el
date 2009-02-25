@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.206 2009/02/16 14:32:10 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.207 2009/02/25 16:23:02 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -290,6 +290,7 @@ customization buffer."
 	      :enable (menu-bar-non-minibuffer-window-p)
 	      :help "Read a directory, to operate on its files"))
 
+(recentf-mode 1) 
 
 ;; redefine this
 (define-key-after menu-bar-file-menu [kill-buffer]
@@ -1477,7 +1478,6 @@ that should be represented in the Aquamacs menus."
 	     recentf-clearlist
 	     :help "Remove all excluded and non-kept files from the recent list"
 	     :active t]))
-(recentf-mode 1)  
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)  
 
 
