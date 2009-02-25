@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.267 2009/02/23 15:32:42 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.268 2009/02/25 16:56:03 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -816,8 +816,6 @@ Used by the modeline faces `mode-line' and `mode-line-inactive'."
 
   ;; Mac OS X specific stuff 
 
-  (ats "aquamacs-menu ...")
-  (require 'aquamacs-menu) ; before osx_defaults
 
   (ats "osx_defaults ...")
   (require 'osx_defaults) ;; always load this to define various things
@@ -920,14 +918,17 @@ Used by the modeline faces `mode-line' and `mode-line-inactive'."
 ; (aquamacs--configure-aspell) 
 ; (getenv "ASPELL_CONF")
 
-(ats "aquamacs-menu done")
+  (ats "aquamacs-menu ...")
+  (require 'aquamacs-menu) ; before osx_defaults
+
+  (ats "aquamacs-menu done")
   (require 'aquamacs-bug) ;; successfully send bug reports on the Mac
-(ats "aquamacs-bug done")
+  (ats "aquamacs-bug done")
   
 
 
-;; visual line navigation
-(require 'visual-line)
+  ;; visual line navigation
+  (require 'visual-line)
 
 
 (require 'saveplace)
