@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.138 2009/02/07 21:53:32 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.139 2009/02/26 21:30:53 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -673,6 +673,9 @@ behavior)."
     )
   (let ((map (make-sparse-keymap)))
 
+    (define-key map `[(,osxkeys-command-key 49)] 'aquamacs-delete-other-windows) ; 49='1'
+    (define-key map `[(,osxkeys-command-key 50)] 'aquamacs-split-window-vertically) ; 50='2'
+
     (define-key map `[(meta q)] 'fill-paragraph-or-region)
     (define-key map `[(meta shift q)] 'unfill-paragraph-or-region)
 
@@ -753,8 +756,6 @@ default."
     (define-key map `[(,osxkeys-command-key m)] 'iconify-or-deiconify-frame) 
     (define-key map `[(control z)] 'ignore) ;; hit by mistake often enough
     (define-key map `[(,osxkeys-command-key .)] 'keyboard-quit)
-    (define-key map `[(,osxkeys-command-key 49)] 'aquamacs-delete-other-windows) ; 49='1'
-    (define-key map `[(,osxkeys-command-key 50)] 'aquamacs-split-window-vertically) ; 50='2'
     (if (boundp 'mac-autohide-menubar-on-fullscreen)
 	(define-key map `[(,osxkeys-command-key shift return)] 
 	  'aquamacs-toggle-full-frame))
