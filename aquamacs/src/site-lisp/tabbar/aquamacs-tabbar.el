@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: aquamacs-tabbar.el,v 1.47 2008/12/24 19:52:36 davidswelt Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.48 2009/02/26 15:50:17 davidswelt Exp $
 
 ;; load original tabbar-mode
 
@@ -62,7 +62,7 @@ argument is the MODE for the new buffer.")
     (with-current-buffer buffer
       (close-current-window-asktosave))))
 
-(setq tabbar-close-tab-function 'tabbar-buffer-close-tab)
+(setq tabbar-close-tab-function 'tabbar-window-close-tab)
 
 (defun tabbar-close-tab (&optional tab)
   "Generic function to close a tabbar tab.  Calls function named in
@@ -105,11 +105,13 @@ to be closed.  If no tab is specified, (tabbar-selected-tab) is used"
 		    :box '(:line-width 3 :color "grey80" :style nil))
 
 (defface tabbar-selected-highlight '((t
+		    :foreground "black"
 		    :background "gray95"))
   "Face for selected, highlighted tabs."
   :group 'tabbar)
 
 (defface tabbar-unselected-highlight '((t
+                    :foreground "black"
 		    :background "grey75"
 		    :box (:line-width 3 :color "grey75" :style nil)))
   "Face for unselected, highlighted tabs."
@@ -144,8 +146,81 @@ to be closed.  If no tab is specified, (tabbar-selected-tab) is used"
   "Face used for unselected tabs."
   :group 'tabbar)
 
+(defface tabbar-key-binding '((t
+				 :foreground "white"))
+    "Face for unselected, highlighted tabs."
+    :group 'tabbar)
+
+
 ;; do not let color themes override tabbar faces 
 (aquamacs-set-defaults '((color-theme-illegal-faces "^\\(w3-\\|tabbar-\\)")))
+
+
+  ;; you may redefine these:
+(defvar tabbar-key-binding-modifier-list '(alt meta)
+  "List of modifiers to be used for keys bound to tabs.")
+
+(defvar tabbar-key-binding-keys '((49 kp-1) (50 kp-2) (51 kp-3) (52 kp-4) (53 kp-5) (54 kp-6) (55 kp-7) (56 kp-8) (57 kp-9) (48 kp-0))
+  "Codes of ten keys bound to tabs (without modifiers.
+This is a list with 10 elements, one for each of the first 10 tabs.
+Each element is a list of keys.")
+
+(defsubst tabbar-key-command (index)	; command name
+  (intern (format "tabbar-select-tab-%s" index)))
+
+(eval-when-compile (require 'cl))
+(loop for keys in tabbar-key-binding-keys
+      for ni from 1 to 10 do
+      (let ((name (tabbar-key-command ni)))
+	(eval `(defun ,name ()
+		 "Select tab in selected window."
+		 (interactive)
+		 (tabbar-select-tab-by-index ,(- ni 1))))
+	;; store label in property of command name symbol
+	(put name 'label 
+	     (format "%c" (car keys)))
+	(loop for key in keys do
+	      (define-key tabbar-mode-map 
+		(vector (append 
+			 tabbar-key-binding-modifier-list
+			 (list key)))
+		name))))
+ 
+(defun tabbar-select-tab-by-index (index)
+  ;; (let ((vis-index (+ index (or (get (tabbar-current-tabset) 'start) 0))))
+  (unless (> (length (tabbar-tabs (tabbar-current-tabset))) 1)
+    ;; better window (with tabs)in this frame?
+
+    (let ((better-w))
+      (walk-windows (lambda (w)
+		      (and (not better-w)
+			   (with-selected-window w
+			     (if (> (length (tabbar-tabs (tabbar-current-tabset t))) 1)
+				 (setq better-w w)))))
+		    'avoid-minibuf (selected-frame))
+      (if better-w (select-window better-w))))
+     
+  (tabbar-window-select-a-tab 
+   (nth index (tabbar-tabs (tabbar-current-tabset)))))
+
+(defun tabbar-window-select-a-tab (tab)
+  "select TAB"
+  (let ((one-buffer-one-frame nil)
+	(buffer (tabbar-tab-value tab)))
+    (when buffer
+      
+      (set-window-dedicated-p (selected-window) nil)
+      (let ((prevtab (tabbar-get-tab (window-buffer (selected-window)) 
+				     (tabbar-tab-tabset tab))))
+	(assq-set prevtab  (point-marker) 'tab-points))
+      (switch-to-buffer buffer)
+      (let ((new-pt (cdr (assq tab tab-points))))
+	(and new-pt 
+	     (eq (marker-buffer new-pt) (window-buffer (selected-window)))
+	     (goto-char (marker-position new-pt))
+	     (set-marker new-pt nil) ;; delete marker 
+	     )))))
+
 
 ;; function for closing a tab via context menu.  Kills buffer if doesn't
 ;;  appear in other tabs.
@@ -461,48 +536,69 @@ Pass mouse click events on a tab to `tabbar-click-on-tab'."
        event
        (get-text-property (cdr target) 'tabbar-action (car target))))))
 
+  (defcustom tabbar-show-key-bindings t
+    "Decide whether to number the tabs showing their key bindings."
+    :group 'Aquamacs)
+
 (defsubst tabbar-line-tab (tab)
-  "Return the display representation of tab TAB.
+    "Return the display representation of tab TAB.
 That is, a propertized string used as an `header-line-format' template
 element.
 Call `tabbar-tab-label-function' to obtain a label for TAB."
-  (let* ((close-button-image (tabbar-find-image tabbar-close-tab-button))
-	 (close-button
-	  (propertize "[x]"
-		     'tabbar-tab tab
-		     'local-map (tabbar-make-tab-keymap tab)
-		     'tabbar-action 'close-tab
-		     ;;	  'help-echo 'tabbar-help-on-tab ;; no help echo: it's redundant
-		     'mouse-face (if (tabbar-selected-p tab (tabbar-current-tabset))
-				     'tabbar-selected-highlight
-				   'tabbar-unselected-highlight)
-		     'face (if (tabbar-selected-p tab (tabbar-current-tabset))
-			       'tabbar-selected
-			     'tabbar-unselected)
-		     'pointer 'arrow
-		     'display (tabbar-normalize-image close-button-image 0 'nomask)))
-	(display-label
-	 (propertize (if tabbar-tab-label-function
-			 (funcall tabbar-tab-label-function tab)
-		       tab)
-		     'tabbar-tab tab
-		     'local-map (tabbar-make-tab-keymap tab)	 
-		     ;;	  'help-echo 'tabbar-help-on-tab ;; no help echo: it's redundant
-		     'mouse-face (if (tabbar-selected-p tab (tabbar-current-tabset))
-				     'tabbar-selected-highlight
-				   'tabbar-unselected-highlight)
-		     'face (cond ((and (tabbar-selected-p tab (tabbar-current-tabset))
-				       (buffer-modified-p (tabbar-tab-value tab)))
-				  'tabbar-selected-modified)
-				 ((and (not (tabbar-selected-p tab (tabbar-current-tabset)))
-				       (buffer-modified-p (tabbar-tab-value tab)))
-				  'tabbar-unselected-modified)
-				 ((and (tabbar-selected-p tab (tabbar-current-tabset))
-				       (not (buffer-modified-p (tabbar-tab-value tab))))
-				  'tabbar-selected)
-				 (t 'tabbar-unselected))
-		     'pointer 'arrow)))
-    (concat close-button display-label tabbar-separator-value)))
+    (let* ((close-button-image (tabbar-find-image tabbar-close-tab-button))
+	   (mouse-face (if (tabbar-selected-p tab (tabbar-current-tabset))
+			   'tabbar-selected-highlight
+			 'tabbar-unselected-highlight))
+	 
+	   (text-face (if (tabbar-selected-p tab (tabbar-current-tabset))
+			  'tabbar-selected
+			'tabbar-unselected))
+	   (close-button
+	    (propertize "[x]"
+			'tabbar-tab tab
+			'local-map (tabbar-make-tab-keymap tab)
+			'tabbar-action 'close-tab
+			;;	  'help-echo 'tabbar-help-on-tab ;; no help echo: it's redundant
+			'mouse-face mouse-face
+			'face text-face
+			'pointer 'arrow
+			'display (tabbar-normalize-image close-button-image 0 'nomask)))
+	 
+	   (display-label
+	    (propertize (if tabbar-tab-label-function
+			    (funcall tabbar-tab-label-function tab)
+			  tab)
+			'tabbar-tab tab
+			'local-map (tabbar-make-tab-keymap tab)	 
+			;;	  'help-echo 'tabbar-help-on-tab ;; no help echo: it's redundant
+			'mouse-face mouse-face
+			'face (cond ((and (tabbar-selected-p tab (tabbar-current-tabset))
+					  (buffer-modified-p (tabbar-tab-value tab)))
+				     'tabbar-selected-modified)
+				    ((and (not (tabbar-selected-p tab (tabbar-current-tabset)))
+					  (buffer-modified-p (tabbar-tab-value tab)))
+				     'tabbar-unselected-modified)
+				    ((and (tabbar-selected-p tab (tabbar-current-tabset))
+					  (not (buffer-modified-p (tabbar-tab-value tab))))
+				     'tabbar-selected)
+				    (t 'tabbar-unselected))
+			'pointer 'arrow))
+	   (key-label
+	    (if (and tabbar-show-key-bindings (boundp 'tabbar-line-tabs) tabbar-line-tabs)
+		(let* ((mm (member tab tabbar-line-tabs) )
+		       ;; calc position (i.e., like position from cl-seq)
+		       (index (if mm (- (length tabbar-line-tabs) (length mm))))) 
+		  (if (and index (fboundp (tabbar-key-command (+ 1 index))))
+		      (propertize
+		       (get (tabbar-key-command (+ 1 index)) 'label)
+		       ;(format "%s" (+ 1 index))
+		       'mouse-face mouse-face
+		       ;; same mouse-face leads to joint mouse activation for all elements
+		       'face (list 'tabbar-key-binding text-face) ;; does not work
+		       ) 
+		    "")
+		  ) "")))
+      (concat close-button display-label key-label tabbar-separator-value)))
 
 (defun tabbar-dummy-line-buttons (&optional noscroll)
   "Return a list of propertized strings for placeholders for the tab bar buttons.
@@ -564,84 +660,91 @@ NOSCROLL is non-nil, exclude the tabbar-scroll buttons."
 	   tabbar-separator-value))))
 
 (defun tabbar-line-format (tabset)
-  "Return the `header-line-format' value to display TABSET."
-  (let* ((sel (tabbar-selected-tab tabset))
-         (tabs (tabbar-view tabset))
-         (padcolor (tabbar-background-color))
-	 (noscroll t)
-         atsel elts scrolled)
-    ;; Initialize buttons and separator values.
-    (or tabbar-separator-value
-        (tabbar-line-separator))
-    (or tabbar-home-button-value
-        (tabbar-line-button 'home))
-    (or tabbar-scroll-left-button-value
-        (tabbar-line-button 'scroll-left))
-    (or tabbar-scroll-right-button-value
-        (tabbar-line-button 'scroll-right))
-    ;; Make sure we're showing as many tabs as possible.
-    ;; If we're not showing the 1st tab, and we're not overflowing the tab bar,
-    ;;  then scroll backward.  If this leads to overflowing the tab bar, scroll
-    ;;  forward 1 at the end.
-    (while (and (> (get tabset 'start) 0)
-		(not (tabbar-check-overflow tabset)))
-      (tabbar-scroll tabset -1)
-      (setq scrolled t))
-    ;; if we scrolled until the tabbar overflowed, we went too far.  Back up 1 slot.
-    (when (and scrolled (tabbar-check-overflow tabset))
-      (tabbar-scroll tabset 1))
-    (when (or (> (tabbar-start tabset) 0) (tabbar-check-overflow tabset))
-      ;; not all tabs fit -- include scroll buttons
-      (setq noscroll nil))
-    ;; Track the selected tab to ensure it is always visible.
-    (when tabbar--track-selected
-      (while (not (memq sel tabs))
-        (tabbar-scroll tabset -1)
-        (setq tabs (tabbar-view tabset)))
-      (while (and tabs (not atsel))
-        (setq elts  (cons (tabbar-line-tab (car tabs)) elts)
-              atsel (eq (car tabs) sel)
-              tabs  (cdr tabs)))
-      (setq elts (nreverse elts))
-      ;; At this point the selected tab is the last elt in ELTS.
-      ;; Scroll TABSET and ELTS until the selected tab becomes
-      ;; visible.
-      (with-temp-buffer
-        (let ((truncate-partial-width-windows nil)
-              (inhibit-modification-hooks t)
-              deactivate-mark ;; Prevent deactivation of the mark!
-              start)
-          (setq truncate-lines nil
-                buffer-undo-list t)
-          (apply 'insert (tabbar-line-buttons tabset noscroll))
-          (setq start (point))
-          (while (and (cdr elts) ;; Always show the selected tab!
-                      (progn
-                        (delete-region start (point-max))
-                        (goto-char (point-max))
-                        (apply 'insert elts)
-                        (goto-char (point-min))
-                        (> (vertical-motion 1) 0)))
-            (tabbar-scroll tabset 1)
-            (setq elts (cdr elts)))))
-      (setq elts (nreverse elts))
-      (setq tabbar--track-selected nil))
-    ;; Format remaining tabs.
-    (while tabs
-      (setq elts (cons (tabbar-line-tab (car tabs)) elts)
-            tabs (cdr tabs)))
-    ;; Cache and return the new tab bar.
-    (tabbar-set-template
-     tabset
-     (list (tabbar-line-buttons tabset noscroll)
-           (nreverse elts)
-           (propertize "%-"
-                       'face (list :inherit 'tabbar-default
-				   :background padcolor
-                                   :foreground padcolor)
-                       'pointer 'arrow
-		       'local-map (tabbar-make-tab-keymap "empty tab bar"))))
-    ))
+    "Return the `header-line-format' value to display TABSET."
+    (let* ((sel (tabbar-selected-tab tabset))
+	   (tabs (tabbar-view tabset))
+	   (padcolor (tabbar-background-color))
+	   (noscroll t)
+	   (tabbar-line-tabs (tabbar-tabs tabset))
+	   atsel elts scrolled)
+      ;; Initialize buttons and separator values.
+      (or tabbar-separator-value
+	  (tabbar-line-separator))
+      (or tabbar-home-button-value
+	  (tabbar-line-button 'home))
+      (or tabbar-scroll-left-button-value
+	  (tabbar-line-button 'scroll-left))
+      (or tabbar-scroll-right-button-value
+	  (tabbar-line-button 'scroll-right))
+      ;; Make sure we're showing as many tabs as possible.  If we're
+      ;; not showing the 1st tab, and we're not overflowing the tab
+      ;; bar, then scroll backward.  If this leads to overflowing the
+      ;; tab bar, scroll forward 1 at the end.
+      (while (and (> (get tabset 'start) 0)
+		  (not (tabbar-check-overflow tabset)))
+	(tabbar-scroll tabset -1)
+	(setq scrolled t))
+      ;; if we scrolled until the tabbar overflowed, we went too far.
+      ;; Back up 1 slot.
+      (when (and scrolled (tabbar-check-overflow tabset))
+	(tabbar-scroll tabset 1))
+      (when (or (> (tabbar-start tabset) 0) (tabbar-check-overflow tabset))
+	;; not all tabs fit -- include scroll buttons
+	(setq noscroll nil))
+      ;; Track the selected tab to ensure it is always visible.
+      (when tabbar--track-selected
+	(while (not (memq sel tabs))
+	  (tabbar-scroll tabset -1)
+	  (setq tabs (tabbar-view tabset)))
+	(while (and tabs (not atsel))
+	  (setq elts  (cons (tabbar-line-tab (car tabs)) elts)
+		atsel (eq (car tabs) sel)
+		tabs  (cdr tabs)))
+	(setq elts (nreverse elts))
+	;; At this point the selected tab is the last elt in ELTS.
+	;; Scroll TABSET and ELTS until the selected tab becomes
+	;; visible.
+
+	;; because of the post-hoc scrolling,
+	;; we can't determine the line index beforehand
+
+
+	(with-temp-buffer
+	  (let ((truncate-partial-width-windows nil)
+		(inhibit-modification-hooks t)
+		deactivate-mark ;; Prevent deactivation of the mark!
+		start)
+	    (setq truncate-lines nil
+		  buffer-undo-list t)
+	    (apply 'insert (tabbar-line-buttons tabset noscroll))
+	    (setq start (point))
+	    (while (and (cdr elts) ;; Always show the selected tab!
+			(progn
+			  (delete-region start (point-max))
+			  (goto-char (point-max))
+			  (apply 'insert elts)
+			  (goto-char (point-min))
+			  (> (vertical-motion 1) 0)))
+	      (tabbar-scroll tabset 1)
+	      (setq elts (cdr elts)))))
+	(setq elts (nreverse elts))
+	(setq tabbar--track-selected nil))
+      ;; Format remaining tabs.
+      (while tabs
+	(setq elts (cons (tabbar-line-tab (car tabs)) elts)
+	      tabs (cdr tabs)))
+      ;; Cache and return the new tab bar.
+      (tabbar-set-template
+       tabset
+       (list (tabbar-line-buttons tabset noscroll)
+	     (nreverse elts)
+	     (propertize "%-"
+			 'face (list :inherit 'tabbar-default
+				     :background padcolor
+				     :foreground padcolor)
+			 'pointer 'arrow
+			 'local-map (tabbar-make-tab-keymap "empty tab bar"))))
+      ))
 
 (defun tabbar-reformat-tabset (tabset)
   (tabbar-set-template tabset nil))
@@ -665,34 +768,37 @@ NOSCROLL is non-nil, exclude the tabbar-scroll buttons."
 ;;     5))
 
 (defun tabbar-expand (str width &optional tab)
-  "Return an expanded string from STR that fits in the given display WIDTH.
+    "Return an expanded string from STR that fits in the given display WIDTH.
 WIDTH is specified in terms of character display width in the current
 buffer; see also `char-width'."
 
-  (let* ((n  (length str))
-         (sw (string-width str))
-         (el "...")
-         (ew (string-width el))
-         (w  0)
-         (i  0))
-    (cond
-     ((< sw width)
-      (let* ((l-l (max 4 (min (- 75 (/ (* tabbar-char-width n) 2) )
-				  (floor (/ (* (frame-char-width) 
-					       (- width sw)) 2)))))
-	     (sp-r  (propertize 
-		     " " 'display 
-		     `(space 
-		       :width 
-		       (, l-l))))
-	     (sp-l  (propertize 
-		     " " 'display 
-		     `(space 
-		       :width
-		       ;; subtract the width of closer button. hard-coded for speed.
-		       (,(max 4 (- l-l 14)))))))
-	(concat sp-l str sp-r)))
-     (t str)))) 
+    (let* ((n  (length str))
+	   (sw (string-width str))
+	   (el "...")
+	   (ew (string-width el))
+	   (w  0)
+	   (i  0))
+      (cond
+       ((< sw width)
+	(let* ((l-l (max 4 (min (- 75 (/ (* tabbar-char-width n) 2) )
+				(floor (/ (* (frame-char-width) 
+					     (- width sw)) 2)))))
+	       (sp-r  (propertize 
+		       " " 'display 
+		       `(space 
+			 :width
+			 ;; subtract width of numbers
+			 (, (max 4 (- l-l 
+				      (if tabbar-show-key-bindings
+					  7 0)))))))
+	       (sp-l  (propertize 
+		       " " 'display 
+		       `(space 
+			 :width
+			 ;; subtract the width of closer button. hard-coded for speed.
+			 (,(max 4 (- l-l 14)))))))
+	  (concat sp-l str sp-r)))
+       (t str)))) 
           
 
 ;; function to unconditionally open a new tab
