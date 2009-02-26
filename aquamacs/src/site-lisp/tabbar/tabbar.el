@@ -7,7 +7,7 @@
 ;; Maintainer: David Ponce <david@dponce.com>
 ;; Created: 25 February 2003
 ;; Keywords: convenience
-;; Revision: $Id: tabbar.el,v 1.4 2008/06/11 22:28:24 davidswelt Exp $
+;; Revision: $Id: tabbar.el,v 1.5 2009/02/26 18:18:49 davidswelt Exp $
 
 (defconst tabbar-version "2.0")
 
@@ -1545,7 +1545,8 @@ Returns non-nil if the new state is enabled.
         ;; Save current default value of `header-line-format'.
         (setq tabbar--global-hlf (default-value 'header-line-format))
         (tabbar-init-tabsets-store)
-        (setq-default header-line-format tabbar-header-line-format))
+        (setq-default header-line-format tabbar-header-line-format)
+	(if (fboundp 'tabbar-define-access-keys) (tabbar-define-access-keys)))
 ;;; OFF
     (when (tabbar-mode-on-p)
       ;; Turn off Tabbar-Local mode globally.
