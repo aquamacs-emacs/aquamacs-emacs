@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: aquamacs-tabbar.el,v 1.48 2009/02/26 15:50:17 davidswelt Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.49 2009/02/26 18:21:29 davidswelt Exp $
 
 ;; load original tabbar-mode
 
@@ -158,33 +158,39 @@ to be closed.  If no tab is specified, (tabbar-selected-tab) is used"
 
   ;; you may redefine these:
 (defvar tabbar-key-binding-modifier-list '(alt meta)
-  "List of modifiers to be used for keys bound to tabs.")
+  "List of modifiers to be used for keys bound to tabs.
+Must call `tabbar-define-access-keys' or toggle `tabbar-mode' for
+changes to this variable to take effect.")
 
 (defvar tabbar-key-binding-keys '((49 kp-1) (50 kp-2) (51 kp-3) (52 kp-4) (53 kp-5) (54 kp-6) (55 kp-7) (56 kp-8) (57 kp-9) (48 kp-0))
   "Codes of ten keys bound to tabs (without modifiers.
-This is a list with 10 elements, one for each of the first 10 tabs.
-Each element is a list of keys.")
+This is a list with 10 elements, one for each of the first 10
+tabs.  Each element is a list of keys. Must call
+`tabbar-define-access-keys' or toggle `tabbar-mode' for changes
+to this variable to take effect.")
 
 (defsubst tabbar-key-command (index)	; command name
   (intern (format "tabbar-select-tab-%s" index)))
 
 (eval-when-compile (require 'cl))
-(loop for keys in tabbar-key-binding-keys
-      for ni from 1 to 10 do
-      (let ((name (tabbar-key-command ni)))
-	(eval `(defun ,name ()
-		 "Select tab in selected window."
-		 (interactive)
-		 (tabbar-select-tab-by-index ,(- ni 1))))
-	;; store label in property of command name symbol
-	(put name 'label 
-	     (format "%c" (car keys)))
-	(loop for key in keys do
-	      (define-key tabbar-mode-map 
-		(vector (append 
-			 tabbar-key-binding-modifier-list
-			 (list key)))
-		name))))
+(defun tabbar-define-access-keys ()
+  "Set tab access keys for `tabbar-mode'."
+  (loop for keys in tabbar-key-binding-keys
+	for ni from 1 to 10 do
+	(let ((name (tabbar-key-command ni)))
+	  (eval `(defun ,name ()
+		   "Select tab in selected window."
+		   (interactive)
+		   (tabbar-select-tab-by-index ,(- ni 1))))
+	  ;; store label in property of command name symbol
+	  (put name 'label 
+	       (format "%c" (car keys)))
+	  (loop for key in keys do
+		(define-key tabbar-mode-map 
+		  (vector (append 
+			   tabbar-key-binding-modifier-list
+			   (list key)))
+		  name)))))
  
 (defun tabbar-select-tab-by-index (index)
   ;; (let ((vis-index (+ index (or (get (tabbar-current-tabset) 'start) 0))))
