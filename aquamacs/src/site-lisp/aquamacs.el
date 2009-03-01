@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.268 2009/02/25 16:56:03 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.269 2009/03/01 21:55:21 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -311,10 +311,10 @@ Separate paths from file names with --."
 	 (let ((font (intern (match-string 1 font-string)))
 	       (size (list (string-to-number (match-string 2 font-string)))))
 	   
-	   (let ((font-alist  '((monaco "apple" "monaco*" "medium" "r" "normal")
-				(lucida  "apple" "lucida grande*" "medium" "r" "normal")
-				(lucida_typewriter "apple" "lucida sans typewrite*" "medium" "r" "normal")
-				(lucida_console  "apple" "lucida console*" "medium" "r") 
+	   (let ((font-alist  '((monaco "apple" "Monaco*" "medium" "r" "normal")
+				(lucida  "apple" "Lucida Grande*" "medium" "r" "normal")
+				(lucida_typewriter "apple" "Lucida sans typewrite*" "medium" "r" "normal")
+				(lucida_console  "apple" "Lucida console*" "medium" "r") 
 				(courier "courier*" "medium" "r" nil)
 				(vera_mono "bitstream vera sans mono" "medium" "r" "normal"))))
 	     (require 'aquamacs-mac-fontsets)
