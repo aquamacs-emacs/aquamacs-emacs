@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: tabbar-window.el,v 1.63 2009/01/13 17:13:10 davidswelt Exp $
+;; Revision: $Id: tabbar-window.el,v 1.64 2009/03/02 21:04:51 davidswelt Exp $
 
 (require 'tabbar)
 (require 'aquamacs-tools)
@@ -40,7 +40,7 @@
 (makunbound 'tabbar-current-tabset)
 (defvar tabbar-current-tabset nil
   "The tab set currently displayed on the tab bar.")
-(make-variable-frame-local 'tabbar-current-tabset)
+;(make-variable-frame-local 'tabbar-current-tabset)
 
 ;; redefine tabbar-current-tabset to ALWAYS update the value
 ;; of tabbar-current-tabset.  Required since the same buffer can have tabs
