@@ -7,7 +7,7 @@
 ;; Maintainer: David Ponce <david@dponce.com>
 ;; Created: 25 February 2003
 ;; Keywords: convenience
-;; Revision: $Id: tabbar.el,v 1.5 2009/02/26 18:18:49 davidswelt Exp $
+;; Revision: $Id: tabbar.el,v 1.6 2009/03/02 13:46:22 davidswelt Exp $
 
 (defconst tabbar-version "2.0")
 
@@ -626,7 +626,7 @@ current cached copy."
   '((t
      :inherit tabbar-default
      :box (:line-width 1 :color "white" :style released-button)
-     :foreground "dark red"
+     :foreground "red"
      ))
   "Face used for tab bar buttons."
   :group 'tabbar)
