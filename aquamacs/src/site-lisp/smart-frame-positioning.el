@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.75 2009/02/12 19:08:20 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.76 2009/03/02 20:31:44 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -565,7 +565,7 @@ Aquamacs was last terminated.")
 ;; this is called after the user's customizations have been read.
 ;; so we need to take care not to override their customizations.
   (when smart-frame-keep-initial-frame-alist
-    (let ((new-initial-frame-alist '((visibility . nil))))
+    (let ((new-initial-frame-alist (if (< emacs-major-version 23) '((visibility . nil))))) ;;  - not in Emacs 23
   
       ;; convert frame parameters
       ;; the new frame probably doesn't have the right 
