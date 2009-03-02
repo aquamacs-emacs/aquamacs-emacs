@@ -607,3 +607,24 @@ diff -c -r1.36 ns-win.el
   
   (put 'dired 'menu-enable '(menu-bar-non-minibuffer-window-p))
   
+*** src/nsmenu.m.~1.20.~	Tue Feb 24 23:05:47 2009
+--- src/nsmenu.m	Mon Mar  2 17:42:22 2009
+***************
+*** 637,643 ****
+  
+        keyEq = [self parseKeyEquiv: wv->key];
+        if (keyEquivModMask == 0)
+!         title = [title stringByAppendingFormat: @" (%@)", keyEq];
+  
+        item = [self addItemWithTitle: (NSString *)title
+                               action: @selector (menuDown:)
+--- 639,647 ----
+  
+        keyEq = [self parseKeyEquiv: wv->key];
+        if (keyEquivModMask == 0)
+! 	{  title = [title stringByAppendingFormat: @" %@", keyEq];
+! 	  keyEq = @"";
+! 	}
+  
+        item = [self addItemWithTitle: (NSString *)title
+                               action: @selector (menuDown:)
