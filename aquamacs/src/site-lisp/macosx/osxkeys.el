@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.140 2009/03/02 18:19:03 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.141 2009/03/02 22:32:36 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -751,6 +751,8 @@ default."
     (define-key map `[(,osxkeys-command-key f)] 'aquamacs-isearch-forward)
     (define-key map `[(,osxkeys-command-key g)] 'aquamacs-repeat-isearch)  
     (define-key map `[(,osxkeys-command-key shift g)] 'aquamacs-repeat-isearch-backward)
+    (if (fboundp 'ns-do-hide-emacs)
+	(define-key map `[(,osxkeys-command-key h)] 'ns-do-hide-emacs))
     (define-key map `[(,osxkeys-command-key e)] 'aquamacs-use-selection-for-find)
     (define-key map `[(,osxkeys-command-key w)] 'close-window)
     (define-key map `[(,osxkeys-command-key m)] 'iconify-or-deiconify-frame) 
@@ -783,10 +785,10 @@ default."
     (when (fboundp 'previous-tab-or-buffer)
       (define-key map `[(,osxkeys-command-key meta left)] 'previous-tab-or-buffer)
       (define-key map `[(,osxkeys-command-key {)] 'previous-tab-or-buffer)
-      (define-key map `[(,osxkeys-command-key meta 2294)] 'previous-tab-or-buffer) ; ö
+      (define-key map `[(,osxkeys-command-key meta 2294)] 'previous-tab-or-buffer) ; 366
       (define-key map `[(,osxkeys-command-key meta right)] 'next-tab-or-buffer)
       (define-key map `[(,osxkeys-command-key })] 'next-tab-or-buffer))
-      (define-key map `[(,osxkeys-command-key meta 2276)] 'next-tab-or-buffer) ; ä
+      (define-key map `[(,osxkeys-command-key meta 2276)] 'next-tab-or-buffer) ; 344
 
 
     ;; only those keys - C-n and C-p stay Emacs-like
