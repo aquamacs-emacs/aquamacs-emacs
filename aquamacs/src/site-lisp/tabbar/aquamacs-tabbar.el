@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: aquamacs-tabbar.el,v 1.50 2009/02/26 18:35:43 davidswelt Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.51 2009/03/02 21:00:16 davidswelt Exp $
 
 ;; load original tabbar-mode
 
@@ -90,7 +90,7 @@ to be closed.  If no tab is specified, (tabbar-selected-tab) is used"
 		    :foreground "black"
 ;;		    :box '(:line-width 2 :color "white" :style nil)
 		    :box nil
-		    :family "lucida grande")
+		    :family "Lucida Grande")
 
 (set-face-attribute 'tabbar-selected nil
 		    :background "gray95"
@@ -548,9 +548,9 @@ Pass mouse click events on a tab to `tabbar-click-on-tab'."
        event
        (get-text-property (cdr target) 'tabbar-action (car target))))))
 
-  (defcustom tabbar-show-key-bindings t
-    "Decide whether to number the tabs showing their key bindings."
-    :group 'Aquamacs)
+(defcustom tabbar-show-key-bindings t
+  "Decide whether to number the tabs showing their key bindings."
+  :group 'Aquamacs)
 
 (defsubst tabbar-line-tab (tab)
     "Return the display representation of tab TAB.
