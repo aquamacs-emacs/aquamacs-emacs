@@ -1,7 +1,9 @@
 *** src/nsterm.h	29 Jan 2009 10:35:55 -0000	1.23
 --- src/nsterm.h	20 Feb 2009 21:30:38 -0000
 ***************
-*** 144,150 ****
+*** 142,150 ****
+  - initForView: (EmacsView *)view withIdentifier: (NSString *)identifier;
+  - (void) clearActive;
   - (BOOL) changed;
   - (void) addDisplayItemWithImage: (EmacsImage *)img idx: (int)idx
                           helpText: (char *)help
@@ -9,15 +11,93 @@
   /* delegate methods */
   - (NSToolbarItem *)toolbar: (NSToolbar *)toolbar
        itemForItemIdentifier: (NSString *)itemIdentifier
---- 144,151 ----
+--- 142,152 ----
+  - initForView: (EmacsView *)view withIdentifier: (NSString *)identifier;
+  - (void) clearActive;
   - (BOOL) changed;
++ - (void) addDisplayItemSpacerWithIdx: (int)idx;
   - (void) addDisplayItemWithImage: (EmacsImage *)img idx: (int)idx
                           helpText: (char *)help
-!                          enabled: (BOOL)enabled
-!                         labelText: (char *)label;
+! 			enabled: (BOOL)enabled
+!       			labelText: (char *)label;
   /* delegate methods */
   - (NSToolbarItem *)toolbar: (NSToolbar *)toolbar
        itemForItemIdentifier: (NSString *)itemIdentifier
+*** src/nsmenu.m.~1.20.~	Tue Feb 24 23:05:47 2009
+--- src/nsmenu.m	Mon Mar  2 12:37:35 2009
+***************
+*** 1200,1207 ****
+--- 1202,1221 ----
+        struct image *img;
+        Lisp_Object image;
+        Lisp_Object helpObj;
++       Lisp_Object captionObj;
+        char *helpText;
++       char *captionText;
++       Lisp_Object label = TOOLPROP (TOOL_BAR_ITEM_CAPTION);
++  
++       if (strcmp("--", SDATA (label)) == 0)
++   {
++ 
++       [toolbar addDisplayItemSpacerWithIdx: i ];
++   }
++  else
++    {
+  
++  
+        /* If image is a vector, choose the image according to the
+  	 button state.  */
+        image = TOOLPROP (TOOL_BAR_ITEM_IMAGES);
+***************
+*** 1315,1322 ****
+--- 1347,1376 ----
+      enablement == prevEnablement ? NO : YES;
+  }
+  
++ - (void) addDisplayItemSpacerWithIdx: (int)idx
++ {
++   /* 1) come up w/identifier */
++   NSString *identifier = NSToolbarFlexibleSpaceItemIdentifier;
++ 
++   /* 2) create / reuse item */
++   NSToolbarItem *item = [identifierToItem objectForKey: identifier];
++   if (item == nil)
++     {
++       item = [[[NSToolbarItem alloc] initWithItemIdentifier: identifier]
++                autorelease];
++     }
++ 
++   //  [item setTag: idx];  can't do because more than one flex space item may be present
++ 
++   /* 3) update state */
++   [identifierToItem setObject: item forKey: identifier];
++   [activeIdentifiers addObject: identifier];
++   enablement = (enablement << 1) | false;
++ }
++ 
+  - (void) addDisplayItemWithImage: (EmacsImage *)img idx: (int)idx
+                          helpText: (char *)help enabled: (BOOL)enabled
++ 		       labelText: (char *)label;
+  {
+    /* 1) come up w/identifier */
+    NSString *identifier
+***************
+*** 1647,1653 ****
+    area.size.height= TEXTHEIGHT;
+    command = [[[NSTextField alloc] initWithFrame: area] autorelease];
+    [[self contentView] addSubview: command];
+!   [command setStringValue: @"Emacs"];
+    [command setDrawsBackground: NO];
+    [command setBezeled: NO];
+    [command setSelectable: NO];
+--- 1679,1685 ----
+    area.size.height= TEXTHEIGHT;
+    command = [[[NSTextField alloc] initWithFrame: area] autorelease];
+    [[self contentView] addSubview: command];
+!   [command setStringValue: @"Aquamacs"];
+    [command setDrawsBackground: NO];
+    [command setBezeled: NO];
+    [command setSelectable: NO];
 *** ../emacs.temp/src/nsmenu.m	2009-01-02 13:59:45.000000000 +1300
 --- src/nsmenu.m	2009-01-02 13:59:47.000000000 +1300
 ***************
@@ -32,19 +112,7 @@
     following complete menu implementation. */
   
 ***************
-*** 1187,1193 ****
---- 1189,1197 ----
-        struct image *img;
-        Lisp_Object image;
-        Lisp_Object helpObj;
-+       Lisp_Object captionObj;
-        char *helpText;
-+       char *captionText;
-  
-        /* If image is a vector, choose the image according to the
-  	 button state.  */
-***************
-*** 1225,1232 ****
+*** 1238,1247 ****
           helpObj = TOOLPROP (TOOL_BAR_ITEM_CAPTION);
         helpText = NILP (helpObj) ? "" : (char *)SDATA (helpObj);
   
@@ -53,7 +121,9 @@
   #undef TOOLPROP
       }
   
---- 1229,1239 ----
+    if (![toolbar isVisible])
+        [toolbar setVisible: YES];
+--- 1252,1265 ----
           helpObj = TOOLPROP (TOOL_BAR_ITEM_CAPTION);
         helpText = NILP (helpObj) ? "" : (char *)SDATA (helpObj);
   
@@ -64,7 +134,10 @@
 ! 	       enabled: enabled_p  labelText: captionText];
   #undef TOOLPROP
       }
++     }
   
+    if (![toolbar isVisible])
+        [toolbar setVisible: YES];
 ***************
 *** 1270,1276 ****
   {
@@ -105,41 +178,6 @@
   }
   
   - (BOOL) changed
-***************
-*** 1304,1314 ****
-  
-  - (void) addDisplayItemWithImage: (EmacsImage *)img idx: (int)idx
-                          helpText: (char *)help enabled: (BOOL)enabled
-  {
-!   /* 1) come up w/identifier */
-!   NSString *identifier
-!       = [NSString stringWithFormat: @"%u", [img hash]];
-  
-    /* 2) create / reuse item */
-    NSToolbarItem *item = [identifierToItem objectForKey: identifier];
-    if (item == nil)
---- 1325,1345 ----
-  
-  - (void) addDisplayItemWithImage: (EmacsImage *)img idx: (int)idx
-                          helpText: (char *)help enabled: (BOOL)enabled
-+ 			   labelText: (char *)label
-  {
-!   /* 1) come up w/ identifier */
-!   NSString *identifier;
-  
-+   if (strcmp (label,  "--" ) == 0)
-+     {
-+       identifier = NSToolbarFlexibleSpaceItemIdentifier;
-+       label = "";
-+     } 
-+   else 
-+     {
-+       identifier = [NSString stringWithFormat: @"%u", [img hash]];
-+     }
-+   
-    /* 2) create / reuse item */
-    NSToolbarItem *item = [identifierToItem objectForKey: identifier];
-    if (item == nil)
 ***************
 *** 1317,1322 ****
 --- 1348,1354 ----
