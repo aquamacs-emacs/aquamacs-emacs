@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.139 2009/02/26 21:30:53 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.140 2009/03/02 18:19:03 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -807,6 +807,10 @@ default."
 
     (define-key map `[(,osxkeys-command-key t)] 'new-tab)
  
+    ;; delete key (needed on 23)
+    (define-key map '[(delete)] 'delete-char) 
+    (define-key map '[(kp-delete)] 'delete-char) 
+
     ;; handle transient-mark-mode better
     (define-key map '[(meta delete)] 'aquamacs-kill-word) 
     (define-key map '[(control delete)] 'aquamacs-kill-word) 
