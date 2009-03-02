@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.269 2009/03/01 21:55:21 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.270 2009/03/02 16:26:51 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -408,11 +408,11 @@ un-Mac-like way when you select text and copy&paste it.")))
   (defun startup-echo-area-message ()
     (concat
      (propertize 
-       "Aquamacs is based on GNU Emacs 22, a part of the GNU/Linux system."
+       "Aquamacs is based on GNU Emacs, a part of the GNU/Linux system."
        'face (list :family "Lucida Grande" :height 140))
      ;;The GPL stipulates that the following message is shown.
      (propertize 	
-      (substitute-command-keys " It is Free Software: you can improve and redistribute it under the GNU General Public License, version 3 or later. Copyright (C) 2008 Free Software Foundation, Inc. (C) 2008 D. Reitter. No Warranty.") 
+      (substitute-command-keys " It is Free Software: you can improve and redistribute it under the GNU General Public License, version 3 or later. Copyright (C) 2009 Free Software Foundation, Inc. (C) 2009 D. Reitter. No Warranty.") 
       'face (list :family "Lucida Grande" :height 110))))
 
 ;; (progn (message "%s" (startup-echo-area-message)) (sit-for 4))
@@ -1594,7 +1594,7 @@ information given would otherwise be irrelevant to Aquamacs users.
  
 
 (ats "aquamacs-tool-bar-setup ...")
-(when (eq window-system 'mac) ;; not yet for Cocoa
+(when (memq window-system '(ns mac))
   (require 'aquamacs-tool-bar)
   (aquamacs-tool-bar-setup))
 (ats "aquamacs-tool-bar-setup done")
