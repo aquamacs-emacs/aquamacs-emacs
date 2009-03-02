@@ -201,7 +201,7 @@
   ;;;###autoload
   ;; Used in the Show/Hide menu, to have the toggle reflect the current frame.
   (defun toggle-tool-bar-mode-from-frame (&optional arg)
---- 54,135 ----
+--- 54,137 ----
     :group 'frames
     (if tool-bar-mode
         (progn
@@ -267,14 +267,16 @@
 + 			  "_dis")
 + 		       nil)))
 + 	 (images (when image ;; image may be nil if not found.
-+ 		    (unless (image-mask-p image)
++ 		   ;; batch-compiling may lead to non-existant frames,
++ 		   ;; in which case image-mask-p will fail.
++ 		    (unless (condition-case nil (image-mask-p image) (error t))
 +  		     (setq image (append image '(:mask heuristic))))
 + 		   (if (and image-sel image-dis)
 + 		       (progn		     
-+ 			 (unless (image-mask-p image-sel)
++ 			 (unless (condition-case nil (image-mask-p image-sel) (error t))
 + 			   (setq image-sel (append image-sel 
 + 						   '(:mask heuristic))))
-+ 			 (unless (image-mask-p image-dis)
++ 			 (unless (condition-case nil (image-mask-p image-dis) (error t))
 + 			   (setq image-dis (append image-dis 
 + 						   '(:mask heuristic))))
 + 			 (vector image-sel image image-dis image-dis))
@@ -284,6 +286,24 @@
   ;;;###autoload
   ;; Used in the Show/Hide menu, to have the toggle reflect the current frame.
   (defun toggle-tool-bar-mode-from-frame (&optional arg)
+***************
+*** 121,127 ****
+  		(if (not (display-images-p))
+  		    (setq bind nil)
+  		  (let ((image (eval image-exp)))
+! 		    (unless (and image (image-mask-p image))
+  		      (setq image (append image '(:mask heuristic))))
+  		    (setq bind (copy-sequence bind)
+  			  plist (nthcdr (if (consp (nth 4 bind)) 5 4)
+--- 189,196 ----
+  		(if (not (display-images-p))
+  		    (setq bind nil)
+  		  (let ((image (eval image-exp)))
+! 		    (unless (and image 
+! 				 (condition-case nil (image-mask-p image) (error t)))
+  		      (setq image (append image '(:mask heuristic))))
+  		    (setq bind (copy-sequence bind)
+  			  plist (nthcdr (if (consp (nth 4 bind)) 5 4)
 ***************
 *** 150,184 ****
   ;;;###autoload
