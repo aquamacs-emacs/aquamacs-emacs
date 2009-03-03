@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.209 2009/03/03 04:04:05 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.210 2009/03/03 18:49:58 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -359,7 +359,8 @@ customization buffer."
   `(menu-item "Cut                                                  "
 	      clipboard-kill-region
 	      :keys ,(aq-binding (key-binding [menu-bar edit cut]))
-	      :enable (and mark-active (not buffer-read-only))
+	      :enable (and mark-active (not buffer-read-only) 
+			   (menu-bar-menu-frame-live-and-visible-p))
 	      :help
 	      "Delete text in region and copy it to the clipboard"))
 
@@ -774,7 +775,7 @@ subsequently create.  Upon entering text-mode, the function
 			  "Case-Insensitive Search %s"
 			  "Ignore letter-case in search")))
 
-(when window-system
+(when initial-window-system
     (require 'aquamacs-frame-setup)
     (define-key-after menu-bar-options-menu [tabbar]
       (menu-bar-make-mm-toggle
@@ -1443,7 +1444,7 @@ that should be represented in the Aquamacs menus."
 ;; :group 'Aquamacs
 ;; :global t
 
-;; (when window-system
+;; (when initial-window-system
 ;; (if mac-inline-input-method-mode
 ;;     (when (fboundp 'mac-setup-inline-input-method)
 ;; 	(mac-setup-inline-input-method)
