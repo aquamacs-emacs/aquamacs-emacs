@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.76 2009/03/02 20:31:44 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.77 2009/03/03 17:09:24 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -82,20 +82,28 @@ by any of the hook functions, will normally be preserved."
   :version 22.0
   :group 'frames)
 
-(unless (fboundp 'mac-display-available-pixel-bounds)
-  (defun mac-display-available-pixel-bounds (&optional frame)
+
+(unless (fboundp 'display-available-pixel-bounds)
+
+  (cond ((eq window-system 'ns)
+	 (if (fboundp 'display-usable-bounds)
+	     (fset 'display-available-pixel-bounds 
+		   'display-usable-bounds)))
+	((eq window-system 'mac)
+	 (if (fboundp 'mac-display-available-pixel-bounds)
+	     (fset 'display-available-pixel-bounds 
+		   'mac-display-available-pixel-bounds)))
+	(t
+	 (if (fboundp 'x-display-usable-bounds)
+	     (fset 'display-available-pixel-bounds 
+		   'x-display-usable-bounds)))))
+
+(unless (fboundp 'display-available-pixel-bounds)
+  (defun display-available-pixel-bounds (&optional frame)
     (list 0 0 
 	  (display-pixel-width) (display-pixel-height))))
 
-(unless (fboundp 'winmgr-display-available-pixel-bounds)
-  (if (fboundp 'mac-display-available-pixel-bounds)
-      (fset 'winmgr-display-available-pixel-bounds 
-	    'mac-display-available-pixel-bounds))
-  (if (fboundp 'x-display-usable-bounds)
-      (fset 'winmgr-display-available-pixel-bounds 
-	    'x-display-usable-bounds)))
- 
-
+; (display-available-pixel-bounds)
 
 (defun smart-tool-bar-pixel-height (&optional frame) 
 (if (> (or (frame-parameter frame 'tool-bar-lines) 0) 0)
@@ -232,8 +240,8 @@ pixels apart if possible."
       
       (let* (
 	     ;; on some systems, we can retrieve the available pixel width.
-	     (rect (if (fboundp 'winmgr-display-available-pixel-bounds)
-		       (winmgr-display-available-pixel-bounds old-frame)
+	     (rect (if (fboundp 'display-available-pixel-bounds)
+		       (display-available-pixel-bounds old-frame)
 		     (list 0 0 
 			   (display-pixel-width) (display-pixel-height))))
 	     (min-x (+ 5 (nth 0 rect)))
@@ -439,8 +447,8 @@ can be customized to configure this mode."
 
       ;; the first frame should be in a good position
 
-      ;; (let* ((rect (if (fboundp 'winmgr-display-available-pixel-bounds)
-;; 		       (winmgr-display-available-pixel-bounds)
+      ;; (let* ((rect (if (fboundp 'display-available-pixel-bounds)
+;; 		       (display-available-pixel-bounds)
 ;; 		     (list 0 0 
 ;; 			   (display-pixel-width) (display-pixel-height))))
 ;; 	     (min-x (+ 5 (nth 0 rect)))
@@ -676,7 +684,7 @@ The file is specified in `smart-frame-position-file'."
 	(let* ((frame (or frame (selected-frame)))
 	       ;; on some systems, we can retrieve the available pixel width with
 	       ;; non-standard methods.
-	       ;; on OS X, e.g. mac-display-available-pixel-bounds (patch!!) returns
+	       ;; on OS X, e.g. display-available-pixel-bounds (patch!!) returns
 	       ;; available screen region, excluding the Dock.
 	       (minib-window (frame-parameter frame 'minibuffer))
 	       (edges (if (windowp minib-window) (window-inside-pixel-edges minib-window)
@@ -691,7 +699,7 @@ The file is specified in `smart-frame-position-file'."
 			  (smart-tool-bar-pixel-height frame)
 			  (nth 3 edges) 
 			  ))
-	       (bounds  (mac-display-available-pixel-bounds frame)))
+	       (bounds  (display-available-pixel-bounds frame)))
 	  ;; is the area visible? 
 	  ;; we cut a corner here and only check the display that shows the majority of the frame
 	  (and  (>= left (- (nth 0 bounds) 4))
@@ -700,6 +708,7 @@ The file is specified in `smart-frame-position-file'."
 		(<= bottom (+ (nth 3 bounds) 4))))
       (smart-move-frame-inside-screen frame))))
 
+; (display-available-pixel-bounds (selected-frame))
 ;; this is a lisp implementation of Carbon's ConstrainWindowToScreen
 ; (smart-move-frame-inside-screen)
 ; (setq frame nil)
@@ -712,86 +721,64 @@ The function will fail to do its job when the Dock is not displayed
 on the main screen, i.e. where the menu is."
   (interactive)
   (when window-system
-  (let* ((frame (or frame (selected-frame)))
-	 ;; on some systems, we can retrieve the available pixel width with
-	 ;; non-standard methods.
-	 ;; on OS X, e.g. mac-display-available-pixel-bounds (patch!!) returns
-	 ;; available screen region, excluding the Dock.
-	 (rect (mac-display-available-pixel-bounds frame))
-	 (min-x (nth 0 rect))
-	 (min-y (nth 1 rect))
-	 (max-x (nth 2 rect))
-	 (max-y (nth 3 rect))
-	 (next-x (eval (frame-parameter frame 'left)))
-	 (next-y (eval (frame-parameter frame 'top)))
-	 (next-wc (eval (frame-parameter frame 'width)))
-	 (next-hc (eval (frame-parameter frame 'height)))
-	 (next-w (frame-pixel-width frame)
-		 ;(smart-fp--char-to-pixel-width next-wc frame)
-		  )
-	 (next-h (frame-pixel-height frame))
-	 (next-h-total (frame-total-pixel-height frame))
-	 (w-offset (- next-w (smart-fp--char-to-pixel-width next-wc frame)))
-	 (h-offset (- next-h (smart-fp--char-to-pixel-height next-hc frame)))
-
-	 (next-x2 (+ next-x next-w))
-	 (next-y2 (+ next-y next-h-total)))
-    (when (< (+ next-x next-w) min-x) ; to the left
-      (let ((new-max-x min-x))
-	(setq min-x (- min-x max-x))
-	(setq max-x new-max-x)))
-    (when (> next-x max-x)
-      ;; there seems to be a screen right to the Dock screen
-      ;; try to guess the size
-      (setq min-x max-x) 
-      (setq max-x (* 2 max-x))) ;; crude assumption - screen size unknown
-    (when (< (+ next-y next-h) min-y) ; above
-      (let ((new-max-y min-y))
-	(setq min-y (- min-y max-y))
-	(setq max-y new-max-y)))
-    (when (> next-y max-y) ; below
-      (setq min-y max-y)
-      (setq max-y (* 2 max-y)))
- 
-	(modify-frame-parameters 
-	 frame
-	 (let* ((next-x (max min-x 
-			     (min
-			      (- max-x next-w )
-			      next-x)))
-	    
-		(next-wc  (if (<= next-w (- max-x next-x))
-			      next-wc
-			    (smart-fp--pixel-to-char-width (- max-x next-x) 
-							   frame 'round-lower)))
-		)
-	   (smart-fp--convert-negative-ordinates `((left .
-		   ,next-x)
-	 
-	     (width .
-		    ,next-wc)   
-	     ))))
-	(modify-frame-parameters 
-	 frame
-	 (let* (
-		(next-y (max min-y 
-			     (min 
-			      (- max-y next-h-total)	
-			      next-y)))
-	    
-		(next-hc (if (<= next-h-total (- max-y next-y ))
-			     next-hc
-			   (smart-fp--pixel-to-char-height 
-			    (- max-y next-y 
-			       (smart-tool-bar-pixel-height frame)
-			       smart-fp--frame-title-bar-height)
-			    frame 'round-lower))))
-	   (smart-fp--convert-negative-ordinates `(
-	     (top .
-		  ,next-y)
-	    
-	     (height .
-		     ,next-hc))))))))
+    (let* ((frame (or frame (selected-frame)))
+	   ;; on some systems, we can retrieve the available pixel width with
+	   ;; non-standard methods.
+	   ;; on OS X, e.g. display-available-pixel-bounds (patch!!) returns
+	   ;; available screen region, excluding the Dock.
+	   (rect (display-available-pixel-bounds frame))
+	   (min-x (nth 0 rect))
+	   (min-y (nth 1 rect))
+	   (max-x (nth 2 rect))
+	   (max-y (nth 3 rect))
+	   (next-x (eval (frame-parameter frame 'left)))
+	   (next-y (eval (frame-parameter frame 'top)))
+	   (next-wc (eval (frame-parameter frame 'width)))
+	   (next-hc (eval (frame-parameter frame 'height)))
+	   (next-w (frame-pixel-width frame)
+					;(smart-fp--char-to-pixel-width next-wc frame)
+		   )
+	   (next-h (frame-pixel-height frame))
+	   (next-h-total (frame-total-pixel-height frame))
+	   (w-offset (- next-w (smart-fp--char-to-pixel-width next-wc frame)))
+	   (h-offset (- next-h (smart-fp--char-to-pixel-height next-hc frame))))
+      
+      (modify-frame-parameters 
+       frame
+       (let* ((next-x (max min-x 
+			   (min
+			    (- max-x next-w )
+			    next-x)))
+	      
+	      (next-wc  (if (<= next-w (- max-x next-x))
+			    next-wc
+			  (smart-fp--pixel-to-char-width (- max-x next-x) 
+							 frame 'round-lower)))
+	      )
+	 (smart-fp--convert-negative-ordinates `((left .
+						       ,next-x)
+						 
+						 (width .
+							,next-wc)   
+						 ))))
+      (modify-frame-parameters 
+       frame
+       (let* (
+	      (next-y (max min-y 
+			   (min 
+			    (- max-y next-h-total)	
+			    next-y)))
+	      
+	      (next-hc (if (<= next-h-total (- max-y next-y ))
+			   next-hc
+			 (smart-fp--pixel-to-char-height 
+			  (- max-y next-y 
+			     (smart-tool-bar-pixel-height frame)
+			     smart-fp--frame-title-bar-height)
+			  frame 'round-lower))))
+	 (smart-fp--convert-negative-ordinates 
+	  `((top . ,next-y)
+	    (height . ,next-hc))))))))
 
 (require 'fit-frame)
 (defun scatter-frames ()
