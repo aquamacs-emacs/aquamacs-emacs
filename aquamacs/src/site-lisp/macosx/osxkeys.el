@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.141 2009/03/02 22:32:36 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.142 2009/03/03 03:53:47 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -96,6 +96,24 @@ after updating this variable.")
   
 
 (defvar cua--explicit-region-start) ;; in case CUA isn't loaded
+
+
+;; support copy&paste at the right level
+(when (> emacs-major-version 22)
+  (setq interprogram-cut-function 'x-select-text)
+  ;; overwrite x-select-text, which is called directly
+  ;; when draging mouse
+  (defun x-select-text (text &optional push)
+    "Put TEXT, a string, on the pasteboard."
+    ;; Don't send the pasteboard too much text.
+    ;; It becomes slow, and if really big it causes errors.
+    (when (or (not osx-key-mode) 
+	      (memq this-original-command '(clipboard-kill-region clipboard-kill-ring-save)))
+      ;; do not do this if just selecting text with mouse, or 
+      (ns-set-pasteboard text))
+    ;; 
+    (setq ns-last-selected-text text)))
+
 
 (defun aquamacs-backward-char ()
   "Move point to the left or the beginning of the region.
@@ -930,6 +948,8 @@ keymaps used by this mode. They may be modified where necessary."
     (remove-hook 'isearch-mode-end-hook 'aquamacs-set-region-to-search-match))
 
   (osx-key-mode-command-key-warning))
+
+
 
 
 ;; (osx-key-mode 1)
