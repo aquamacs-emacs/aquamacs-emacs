@@ -93,7 +93,7 @@ diff -c -r1.218 bindings.el
 ! mouse-2: Make current window occupy the whole frame\n\
 ! mouse-3: Remove current window from display")
          (recursive-edit-help-echo "Recursive edit, type C-M-c to get out")
-         (dashes (propertize "--" 'help-echo help-echo))
+!        (dashes (propertize "--" 'help-echo help-echo))
          (standard-mode-line-format
   	(list
   	 "%e"
@@ -101,14 +101,13 @@ diff -c -r1.218 bindings.el
   	 'mode-line-mule-info
   	 'mode-line-client
   	 'mode-line-modified
---- 334,359 ----
+--- 334,357 ----
       map) "\
   Keymap to display on column and line numbers.")
   
 + (defvar command-line-processed nil)
 + (defvar before-init-hook nil)
-+ 
-+ (eval-at-startup ;; because of initial-window-system
++ (eval-at-startup ;; because of window-system
   (let* ((help-echo
   	;; The multi-line message doesn't work terribly well on the
   	;; bottom mode line...  Better ideas?
@@ -117,10 +116,9 @@ diff -c -r1.218 bindings.el
   	;; drag-mouse-1: resize, C-mouse-2: split horizontally"
 ! 	"mouse-1: select (drag to resize), mouse-2: delete others, mouse-3: delete this")
          (recursive-edit-help-echo "Recursive edit, type C-M-c to get out")
-         (dashes (propertize "--" 'help-echo help-echo))
-+        (lotsofdashes (if initial-window-system (concat (make-string 100 32)) "%-"))
-+        (dash (propertize (if initial-window-system " " "-") 'help-echo help-echo))
-+        (dashes (propertize (if initial-window-system "  " "--") 'help-echo help-echo))
+!        (lotsofdashes (if window-system (make-string 100 32) "%-"))
+!        (dash (propertize (if window-system " " "-") 'help-echo help-echo))
+!        (dashes (propertize (if window-system "  " "--") 'help-echo help-echo))
          (standard-mode-line-format
   	(list
   	 "%e"
@@ -137,7 +135,7 @@ diff -c -r1.218 bindings.el
          (standard-mode-line-modes
   	(list
   	 (propertize "%[" 'help-echo recursive-edit-help-echo)
---- 367,373 ----
+--- 365,371 ----
   	 'mode-line-modes
   	 `(which-func-mode ("" which-func-format ,dashes))
   	 `(global-mode-string (,dashes global-mode-string))
@@ -154,7 +152,7 @@ diff -c -r1.218 bindings.el
   
          (standard-mode-line-position
   	`((-3 ,(propertize
---- 393,399 ----
+--- 391,397 ----
   				 'mouse-2 #'mode-line-widen))
   	 (propertize ")" 'help-echo help-echo)
   	 (propertize "%]" 'help-echo recursive-edit-help-echo)
@@ -171,7 +169,7 @@ diff -c -r1.218 bindings.el
   
   (defvar mode-line-buffer-identification-keymap
     ;; Add menu of buffer operations to the buffer identification part
---- 443,449 ----
+--- 441,447 ----
   
     (setq-default mode-line-position standard-mode-line-position)
     (put 'mode-line-position 'standard-value
