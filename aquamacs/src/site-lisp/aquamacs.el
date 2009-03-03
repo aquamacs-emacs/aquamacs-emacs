@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.271 2009/03/03 18:47:24 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.272 2009/03/03 23:57:34 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -1504,6 +1504,90 @@ listed here."
 ;; the original fancy-splash-frame just returns nil
 ;; as a bugfix, we're redefining this
 ;; in order to create a new frame if all frames are invisible
+(setq fancy-about-text
+  '((:face (variable-pitch (:foreground "red"))
+     "This is "
+     :link ("Aquamacs Emacs"
+	    (lambda (button) (browse-url "http://aquamacs.org/"))
+	    "Browse http://aquamacs.org")
+     ", based on "
+     :link ("GNU Emacs"
+	    (lambda (button) (browse-url "http://www.gnu.org/software/emacs/"))
+	    "Browse http://www.gnu.org/software/emacs/")
+     ",\none component of the "
+     :link
+     (lambda ()
+       (if (eq system-type 'gnu/linux)
+	   '("GNU/Linux"
+	     (lambda (button) (browse-url "http://www.gnu.org/gnu/linux-and-gnu.html"))
+	     "Browse http://www.gnu.org/gnu/linux-and-gnu.html")
+	 '("GNU" (lambda (button) (describe-gnu-project))
+	   "Display info on the GNU project")))
+     " operating system.\n\n"
+       :face (lambda ()
+	     (list 'variable-pitch
+		   (list :foreground
+			 (if (eq (frame-parameter nil 'background-mode) 'dark)
+			     "cyan" "darkblue"))))
+       :face 'variable-pitch
+       "Aquamacs is a distribution of GNU Emacs that is adapted for Mac users.\n"
+     "\n"
+     (lambda () (emacs-version))
+     "\n"
+     :face (variable-pitch (:height 0.8))
+     (lambda () emacs-copyright)
+     "\n\n"
+     :face variable-pitch
+     :link ("Authors"
+	    (lambda (button)
+	      (view-file (expand-file-name "AUTHORS" data-directory))
+	      (goto-char (point-min))))
+     "            \tMany people have contributed code included in GNU Emacs\n"
+     :link ("Contributing"
+	    (lambda (button) (browse-url "http://aquamacs.org/development.shtml")))
+     "\tHow to contribute improvements to Aquamacs\n"
+     "\n"
+     :link ("GNU and Freedom" (lambda (button) (describe-gnu-project)))
+     "\tWhy we developed GNU Emacs, and the GNU operating system\n"
+      :link ("Aquamacs Manual" (lambda (button) (aquamacs-user-help)))
+     "\tView the Aquamacs manual using Apple Help\n"
+     :link ("Emacs Manual" (lambda (button) (aquamacs-emacs-manual)))
+     "\tView the Emacs manual using Apple Help\n"
+     :link ("Absence of Warranty" (lambda (button) (describe-no-warranty)))
+     "\tAquamacs and GNU Emacs come with absolutely no warranty\n"
+     :face variable-pitch
+     :link ("Copying Conditions" (lambda (button) (describe-copying)))
+     "\tConditions for redistributing and changing Emacs\n"
+   
+     :link ("Ordering Manuals" (lambda (button) (view-order-manuals)))
+     "\tBuying printed manuals from the FSF\n"
+     "\n"
+     :link ("Emacs Tutorial" (lambda (button) (help-with-tutorial)))
+     "\tLearn basic Emacs keystroke commands"
+     (lambda ()
+       (let* ((en "TUTORIAL")
+	      (tut (or (get-language-info current-language-environment
+					  'tutorial)
+		       en))
+	      (title (with-temp-buffer
+		       (insert-file-contents
+			(expand-file-name tut tutorial-directory)
+			nil 0 256)
+		       (search-forward ".")
+		       (buffer-substring (point-min) (1- (point))))))
+	 ;; If there is a specific tutorial for the current language
+	 ;; environment and it is not English, append its title.
+	 (if (string= en tut)
+	     ""
+	   (concat " (" title ")"))))
+     "\n"
+     :link ("Emacs Guided Tour"
+	    (lambda (button) (browse-url "http://www.gnu.org/software/emacs/tour/"))
+	    "Browse http://www.gnu.org/software/emacs/tour/")
+     "\tSee an overview of the many facilities of GNU Emacs"
+     )))
+
+ 
 
 (defun fancy-splash-frame ()
   (make-frame 
@@ -1525,12 +1609,18 @@ information given would otherwise be irrelevant to Aquamacs users.
   (and (boundp 'longlines-mode) (longlines-mode -1))
   (let* ((image-file (cond ((stringp fancy-splash-image)
 			    fancy-splash-image)
-			   ((and (display-color-p)
-				 (image-type-available-p 'xpm))
-			    (if (and (fboundp 'x-display-planes)
-				     (= (funcall 'x-display-planes) 8))
-				"splash8.xpm"
-			      "splash.xpm"))
+			   ((display-color-p)
+			    (cond ((<= (display-planes) 8)
+				   (if (image-type-available-p 'xpm)
+				       "splash.xpm"
+				     "splash.pbm"))
+				  ((image-type-available-p 'svg)
+				   "splash.svg")
+				  ((image-type-available-p 'png)
+				   "splash.png")
+				  ((image-type-available-p 'xpm)
+				   "splash.xpm")
+				  (t "splash.pbm")))
 			   (t "splash.pbm")))
 	 (img (create-image image-file))
 	 (image-width (and img (car (image-size img))))
@@ -1559,12 +1649,9 @@ information given would otherwise be irrelevant to Aquamacs users.
 	  (insert-image img (propertize "xxx" 'help-echo help-echo
 					'keymap map)))
 	(insert "\n"))))
-  (insert "\n")
-  (fancy-splash-insert
-   :face 'variable-pitch
-   "Aquamacs is a distribution of GNU Emacs that is adapted for Mac users.\n\n")
   (insert "\n"))
-(setq fancy-splash-text
+(if (< emacs-major-version 23)
+    (setq fancy-splash-text
       '((:face (variable-pitch :weight bold)
            :face variable-pitch "Aquamacs Emacs comes with "
 	   :face (variable-pitch :slant oblique)
@@ -1578,7 +1665,7 @@ information given would otherwise be irrelevant to Aquamacs users.
 	 "Control-g"
 	 :face variable-pitch
 	 ".\n"
-	 )))
+	 ))))
  
 
 (setq emacs-build-system 
