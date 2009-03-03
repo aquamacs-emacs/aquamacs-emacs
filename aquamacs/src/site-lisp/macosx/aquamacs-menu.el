@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.208 2009/02/25 17:10:01 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.209 2009/03/03 04:04:05 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -39,6 +39,10 @@
 (eval-when-compile (require 'aquamacs-macros))
 
 
+(if (> emacs-major-version 22)
+    ;; unclear why this is needed 
+    ;; but clipboard-kill-ring-save isn't defined otherwise
+    (load "menu-bar.el"))
 
 ; (assq 'paste (lookup-key global-map [menu-bar edit]))
 ; (assq 'new-file (lookup-key global-map [menu-bar file]))
@@ -318,10 +322,9 @@ customization buffer."
 	      clipboard-yank
 	      :keys ,(aq-binding 'clipboard-yank) 
 	      :enable (and
+		       (cdr yank-menu)
 		       ;; Emacs compiled --without-x doesn't have
 		       ;; x-selection-exists-p.
-		       (fboundp 'x-selection-exists-p)
-		       (x-selection-exists-p 'CLIPBOARD)
 		       (not buffer-read-only)
 		       (menu-bar-menu-frame-live-and-visible-p))
 	      :help "Paste (yank) text most recently cut/copied"))
@@ -764,11 +767,12 @@ subsequently create.  Upon entering text-mode, the function
 
 ;; in edit menu
 
-(define-key menu-bar-search-menu [case-fold-search]
-  (menu-bar-make-toggle toggle-case-fold-search case-fold-search
-			"Case-Insensitive Search"
-			"Case-Insensitive Search %s"
-			"Ignore letter-case in search"))
+(when (< emacs-major-version 23)
+  (define-key menu-bar-search-menu [case-fold-search]
+    (menu-bar-make-toggle toggle-case-fold-search case-fold-search
+			  "Case-Insensitive Search"
+			  "Case-Insensitive Search %s"
+			  "Ignore letter-case in search")))
 
 (when window-system
     (require 'aquamacs-frame-setup)
@@ -790,13 +794,14 @@ subsequently create.  Upon entering text-mode, the function
 
 (define-key menu-bar-showhide-menu [mac-font-panel-mode] nil)
 
-(define-key menu-bar-options-menu [highlight-paren-mode] nil)
-(define-key menu-bar-options-menu [highlight-separator] nil)
-(define-key-after menu-bar-showhide-menu [highlight-separator] '("--"))
-(define-key-after menu-bar-showhide-menu [highlight-paren-mode]
-  (menu-bar-make-mm-toggle show-paren-mode
-			   "Paren Match Highlighting"
-			   "Highlight matching/mismatched parentheses at cursor (Show Paren mode)"))
+(when (< emacs-major-version 23)
+  (define-key menu-bar-options-menu [highlight-paren-mode] nil)
+  (define-key menu-bar-options-menu [highlight-separator] nil)
+  (define-key-after menu-bar-showhide-menu [highlight-separator] '("--"))
+  (define-key-after menu-bar-showhide-menu [highlight-paren-mode]
+    (menu-bar-make-mm-toggle show-paren-mode
+			     "Paren Match Highlighting"
+			     "Highlight matching/mismatched parentheses at cursor (Show Paren mode)")))
 (define-key-after menu-bar-showhide-menu [hl-line-mode]
   (menu-bar-make-mm-toggle global-hl-line-mode
 			   "Line Highlighting"
@@ -810,8 +815,9 @@ subsequently create.  Upon entering text-mode, the function
 			       "Show hard newlines") 'highlight-paren-mode))
 
 
-(define-key menu-bar-options-menu [blink-cursor-mode] nil)
-(define-key menu-bar-options-menu [cursor-separator] nil)
+(when (< emacs-major-version 23)
+  (define-key menu-bar-options-menu [blink-cursor-mode] nil)
+  (define-key menu-bar-options-menu [cursor-separator] nil))
 
 
 ;; Small Fringe
@@ -874,8 +880,9 @@ subsequently create.  Upon entering text-mode, the function
 			"Create a backup file when saving") 'mule)
 
 ;; not important enough to warrant a menu entry
-(define-key menu-bar-options-menu [save-place]
-    nil)
+(when (< emacs-major-version 23)
+  (define-key menu-bar-options-menu [save-place]
+    nil))
  
 
 ;; remove this entry, because in Aquamacs, no global tool-bar-mode
