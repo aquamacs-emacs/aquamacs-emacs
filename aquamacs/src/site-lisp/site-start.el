@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: site-start.el,v 1.70 2009/02/22 23:24:24 davidswelt Exp $
+;; Last change: $Id: site-start.el,v 1.71 2009/03/03 18:48:05 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -54,6 +54,10 @@ for A, then B is newer than A.")
 (defvar aquamacs-minor-version ""
 "Version code for minor maintenance releases.
 Changes in this code are ignored during the online version check.")
+
+;; compatibility for Carbon Emacs
+(unless (boundp 'initial-window-system)
+  (defvaralias 'initial-window-system 'window-system))
 
 ;; only for Emacs.app
 (when (fboundp 'ns-find-file) ;; running Cocoa?
