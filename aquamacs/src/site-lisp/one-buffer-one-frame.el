@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: one-buffer-one-frame.el,v 1.83 2008/12/13 05:42:36 davidswelt Exp $
+;; Last change: $Id: one-buffer-one-frame.el,v 1.84 2009/03/03 18:47:09 davidswelt Exp $
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -102,7 +102,7 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
   :keymap 'one-buffer-one-frame-mode-map
   :require 'aquamacs-frame-setup
 
-  (if window-system
+  (if (running-on-a-mac-p)
       (progn
 	(if one-buffer-one-frame-mode
 	  (setq obofm-old-pop-up-frames  pop-up-frames
@@ -388,7 +388,7 @@ the current window is switched to the new buffer."
   'previous-buffer-here)
 
 
-(if window-system
+(if (running-on-a-mac-p)
     (defadvice switch-to-buffer (around sw-force-other-frame (&rest args) 
 					activate compile)
       (if one-buffer-one-frame  
@@ -478,13 +478,11 @@ the current window is switched to the new buffer."
 ;; using minibuffer-auto-raise globally has unpleasant results,
 ;; with frames losing focus all the time. speedbar doesn't work either.
 
-(if window-system
-(add-hook 'minibuffer-setup-hook 
-	  (lambda () 
-	    (if one-buffer-one-frame
-		(raise-frame)))
-)
-)
+(if (running-on-a-mac-p)
+    (add-hook 'minibuffer-setup-hook 
+	      (lambda () 
+		(if one-buffer-one-frame
+		    (raise-frame)))))
 
 ;; we'd like to open new frames for some stuff
    
@@ -496,9 +494,6 @@ the current window is switched to the new buffer."
 ; maybe the previous force-other-frame should keep track of
 ; newly opened frames!
   
-;; (when window-system
-
-
 ;; ; quit-window is usually called by some modes when the user enters 'q'
 ;; ; e.g. in dired. we want to delete the window then.  
 ;; advising quit-window like this will cause some things to fail, e.g.
@@ -523,7 +518,7 @@ the current window is switched to the new buffer."
 ;;      ad-do-it 
 ;;      ))
 
- (when window-system
+ (when (running-on-a-mac-p)
 
 ; quit-window is usually called by some modes when the user enters 'q'
 ; e.g. in dired. we want to delete the window then.  
@@ -606,7 +601,7 @@ the current window is switched to the new buffer."
     (apply #'display-buffer args)))
 
 ;; (setq display-buffer-reuse-frames 'select)
-(if window-system
+(if (running-on-a-mac-p)
     (aquamacs-set-defaults 
      '((display-buffer-reuse-frames t)
        (display-buffer-function aquamacs-display-buffer))))
@@ -673,7 +668,8 @@ there is no record of opening the window just for this purpose."
   (if (window-live-p win)
       (let ((elt (car (member (cons win buf-name)
 			      aquamacs-newly-opened-windows))))
-	(if (and (or (not buf-name) (not (same-window-p buf-name)) ;; always open in same window, so don't close the window
+	(if (and (or (not buf-name) (not (same-window-p buf-name)) 
+		     ;; always open in same window, so don't close the window
 		     (window-dedicated-p win)) ;; dedicated windows should be closed
 		 (or skip-check elt)) ;; only affect frames opened for this purpose
 	    (progn
@@ -703,7 +699,7 @@ there is no record of opening the window just for this purpose."
 	    (previous-buffer-here))))))
 
 
-(if window-system
+(if (running-on-a-mac-p)
     (add-hook 'kill-buffer-hook 'delete-window-if-one-buffer-one-frame t))
  
 ;; this is what's bound to Apple-W
@@ -809,7 +805,7 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
 	      (select-window wind)
 	      (aquamacs-delete-window wind) ) ) ) ) ) ) ) )   
 
-(if window-system
+(if (running-on-a-mac-p)
 (defun handle-delete-frame (event)
   "Handle delete-frame events from the X server."
   (interactive "e")
@@ -844,9 +840,9 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
 
 
 ;; make sure that C-mouse-1 menu acts locally
-(if window-system
+(if (running-on-a-mac-p)
     (defadvice mouse-buffer-menu (around select-buffer-same-frame 
-					 (&rest args) activate) 
+					 (&rest args) activate protect) 
       (let ((one-buffer-one-frame nil))
 	ad-do-it)))
   

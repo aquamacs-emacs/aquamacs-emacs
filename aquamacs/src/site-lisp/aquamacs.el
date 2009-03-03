@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.270 2009/03/02 16:26:51 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.271 2009/03/03 18:47:24 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -754,7 +754,7 @@ yes-or-no prompts - y or n will do."
 
 
   ;; Find-file may open a new frame
-  (if window-system
+  (if (running-on-a-mac-p)
       (global-set-key [remap find-file] 'aquamacs-find-file))
   
   
@@ -1143,7 +1143,7 @@ to the selected frame."
 
 					; and turn on smart frame positioning
 
-  (when window-system
+  (when (running-on-a-mac-p)
 
   (require 'smart-frame-positioning)
    (ats "sfp loaded")
@@ -1594,7 +1594,7 @@ information given would otherwise be irrelevant to Aquamacs users.
  
 
 (ats "aquamacs-tool-bar-setup ...")
-(when (memq window-system '(ns mac))
+(when (running-on-a-mac-p)
   (require 'aquamacs-tool-bar)
   (aquamacs-tool-bar-setup))
 (ats "aquamacs-tool-bar-setup done")

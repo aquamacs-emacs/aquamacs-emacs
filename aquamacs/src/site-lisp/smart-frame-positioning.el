@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.78 2009/03/03 17:22:43 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.79 2009/03/03 18:46:50 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -85,11 +85,11 @@ by any of the hook functions, will normally be preserved."
 
 (unless (fboundp 'display-available-pixel-bounds)
 
-  (cond ((eq window-system 'ns)
+  (cond ((eq initial-window-system 'ns)
 	 (if (fboundp 'display-usable-bounds)
 	     (fset 'display-available-pixel-bounds 
 		   'display-usable-bounds)))
-	((eq window-system 'mac)
+	((eq initial-window-system 'mac)
 	 (if (fboundp 'mac-display-available-pixel-bounds)
 	     (fset 'display-available-pixel-bounds 
 		   'mac-display-available-pixel-bounds)))
@@ -220,14 +220,14 @@ pixels apart if possible."
   (if (boundp 'frame-creation-function)
       frame-creation-function
     (if (boundp 'frame-creation-function-alist)
-	(cdr (assq window-system frame-creation-function-alist))
+	(cdr (assq initial-window-system frame-creation-function-alist))
       nil)))
 (require 'aquamacs-tools)
 (defun smart-fp--set-frame-creation-function (fun)
   (if (boundp 'frame-creation-function)
       (setq frame-creation-function fun)
     (if (boundp 'frame-creation-function-alist)
-	(assq-set window-system fun 'frame-creation-function-alist))
+	(assq-set initial-window-system fun 'frame-creation-function-alist))
     nil))
 
  
@@ -681,7 +681,7 @@ The file is specified in `smart-frame-position-file'."
 ; (setq frame (selected-frame))
 ; (smart-move-minibuffer-inside-screen)
 (defun smart-move-minibuffer-inside-screen (&optional frame)
-  (when (and window-system
+  (when (and initial-window-system ; this should probably be window-system with frame selected for Multi-TTY
 	     (not (frame-parameter frame 'fullscreen)))
     (unless
 	(let* ((frame (or frame (selected-frame)))
@@ -723,7 +723,7 @@ boundaries.
 The function will fail to do its job when the Dock is not displayed
 on the main screen, i.e. where the menu is."
   (interactive)
-  (when window-system
+  (when initial-window-system ;; to do: select frame and use window-system
     (let* ((frame (or frame (selected-frame)))
 	   ;; on some systems, we can retrieve the available pixel width with
 	   ;; non-standard methods.
