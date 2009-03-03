@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.41 2009/02/13 16:11:26 davidswelt Exp $
+;; Last change: $Id: aquamacs-tools.el,v 1.42 2009/03/03 18:47:47 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -52,7 +52,7 @@
 
 
 (defun running-on-a-mac-p ()
-  (memq window-system '(mac ns)))
+  (memq initial-window-system '(mac ns)))
 
 
 (defun aquamacs-ask-for-confirmation (text long)
