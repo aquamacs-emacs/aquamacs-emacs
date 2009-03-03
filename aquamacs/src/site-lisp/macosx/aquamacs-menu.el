@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.210 2009/03/03 18:49:58 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.211 2009/03/03 19:38:15 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -699,6 +699,9 @@ subsequently create.  Upon entering text-mode, the function
   (customize-mark-as-set 'text-mode-hook))
   
 
+(when (> emacs-major-version 22)
+  (define-key menu-bar-options-menu [highlight-separator] nil)
+  (define-key menu-bar-options-menu [line-wrapping] nil))
 
 (define-key menu-bar-options-menu [auto-fill-mode]
   '(menu-item "Hard Word Wrap"
