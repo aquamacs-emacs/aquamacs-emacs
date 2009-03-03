@@ -1,5 +1,10 @@
-*** lisp/faces.el    13 Jan 2009 12:40:24 -0000      1.438
---- lisp/faces.el    22 Feb 2009 23:54:44 -0000
+Index: lisp/faces.el
+===================================================================
+RCS file: /sources/emacs/emacs/lisp/faces.el,v
+retrieving revision 1.438
+diff -c -r1.438 faces.el
+*** lisp/faces.el	13 Jan 2009 12:40:24 -0000	1.438
+--- lisp/faces.el	3 Mar 2009 18:32:19 -0000
 ***************
 *** 2382,2387 ****
 --- 2382,2394 ----
@@ -16,8 +21,13 @@
   ;; Make `modeline' an alias for `mode-line', for compatibility.
   (put 'modeline 'face-alias 'mode-line)
   (put 'modeline-inactive 'face-alias 'mode-line-inactive)
-*** ../emacs.temp/lisp/bindings.el	2009-01-02 13:59:31.000000000 +1300
---- lisp/bindings.el	2009-01-02 13:59:46.000000000 +1300
+Index: lisp/bindings.el
+===================================================================
+RCS file: /sources/emacs/emacs/lisp/bindings.el,v
+retrieving revision 1.218
+diff -c -r1.218 bindings.el
+*** lisp/bindings.el	29 Jan 2009 08:53:39 -0000	1.218
+--- lisp/bindings.el	3 Mar 2009 18:32:20 -0000
 ***************
 *** 153,158 ****
 --- 153,159 ----
@@ -27,7 +37,7 @@
 +  	     'face 'mode-line-flags
   	     'help-echo (format "End-of-line style: %s\nmouse-1 to cycle"
   				(if (eq eol 0) "Unix-style LF"
-  				  (if (eq eol 1) "Dos-style CRLF"
+  				  (if (eq eol 1) "DOS-style CRLF"
 ***************
 *** 177,182 ****
 --- 178,184 ----
@@ -91,13 +101,14 @@
   	 'mode-line-mule-info
   	 'mode-line-client
   	 'mode-line-modified
---- 334,358 ----
+--- 334,359 ----
       map) "\
   Keymap to display on column and line numbers.")
   
 + (defvar command-line-processed nil)
 + (defvar before-init-hook nil)
-+ (eval-at-startup ;; because of window-system
++ 
++ (eval-at-startup ;; because of initial-window-system
   (let* ((help-echo
   	;; The multi-line message doesn't work terribly well on the
   	;; bottom mode line...  Better ideas?
@@ -107,9 +118,9 @@
 ! 	"mouse-1: select (drag to resize), mouse-2: delete others, mouse-3: delete this")
          (recursive-edit-help-echo "Recursive edit, type C-M-c to get out")
          (dashes (propertize "--" 'help-echo help-echo))
-+        (lotsofdashes (if window-system (make-string 100 32) "%-"))
-+        (dash (propertize (if window-system " " "-") 'help-echo help-echo))
-+        (dashes (propertize (if window-system "  " "--") 'help-echo help-echo))
++        (lotsofdashes (if initial-window-system (concat (make-string 100 32)) "%-"))
++        (dash (propertize (if initial-window-system " " "-") 'help-echo help-echo))
++        (dashes (propertize (if initial-window-system "  " "--") 'help-echo help-echo))
          (standard-mode-line-format
   	(list
   	 "%e"
@@ -126,7 +137,7 @@
          (standard-mode-line-modes
   	(list
   	 (propertize "%[" 'help-echo recursive-edit-help-echo)
---- 366,372 ----
+--- 367,373 ----
   	 'mode-line-modes
   	 `(which-func-mode ("" which-func-format ,dashes))
   	 `(global-mode-string (,dashes global-mode-string))
@@ -143,7 +154,7 @@
   
          (standard-mode-line-position
   	`((-3 ,(propertize
---- 392,398 ----
+--- 393,399 ----
   				 'mouse-2 #'mode-line-widen))
   	 (propertize ")" 'help-echo help-echo)
   	 (propertize "%]" 'help-echo recursive-edit-help-echo)
@@ -160,7 +171,7 @@
   
   (defvar mode-line-buffer-identification-keymap
     ;; Add menu of buffer operations to the buffer identification part
---- 442,448 ----
+--- 443,449 ----
   
     (setq-default mode-line-position standard-mode-line-position)
     (put 'mode-line-position 'standard-value
