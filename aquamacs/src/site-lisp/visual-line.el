@@ -437,28 +437,30 @@ would do."
     (goto-char here)
     result))
 
-(defvar visual-line-map
- (let ((map (make-sparse-keymap)))
-   (define-key map [remap next-line] 'visual-line-down)
-   (define-key map [remap previous-line] 'visual-line-up)
-   (define-key map [remap kill-line] 'kill-visual-line)
-   (define-key map [(control shift ?k)] 'original-kill-line)
-   (define-key map [remap move-beginning-of-line] 'beginning-of-visual-line)
-   (define-key map [remap move-end-of-line]  'end-of-visual-line)
-   map))
+(when (< emacs-major-version 23)
+  (defvar visual-line-map
+    (let ((map (make-sparse-keymap)))
+      (define-key map [remap next-line] 'visual-line-down)
+      (define-key map [remap previous-line] 'visual-line-up)
+      (define-key map [remap kill-line] 'kill-visual-line)
+      (define-key map [(control shift ?k)] 'original-kill-line)
+      (define-key map [remap move-beginning-of-line] 'beginning-of-visual-line)
+      (define-key map [remap move-end-of-line]  'end-of-visual-line)
+      map))
+  
+  
+  (define-minor-mode visual-line-mode
+    "Define key binding for visual line moves."
+    :keymap visual-line-map
+    :group 'convenience
+    (setq line-move-visual visual-line-mode))
 
-(define-minor-mode visual-line-mode
- "Define key binding for visual line moves."
- :keymap visual-line-map
- :group 'convenience
- (setq line-move-visual visual-line-mode))
 
+  (defun turn-on-visual-line-mode ()
+    (visual-line-mode 1))
 
-(defun turn-on-visual-line-mode ()
- (visual-line-mode 1))
-
-(define-globalized-minor-mode global-visual-line-mode
- visual-line-mode turn-on-visual-line-mode)
+  (define-globalized-minor-mode global-visual-line-mode
+    visual-line-mode turn-on-visual-line-mode))
 
 (defface blank-newline
   '((((class color) (background dark))
