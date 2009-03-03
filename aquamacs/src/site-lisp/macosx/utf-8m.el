@@ -1,13 +1,13 @@
 ;;; -*- coding: iso-2022-7bit -*-
 ;;; utf-8m.el --- modified UTF-8 encoding for Mac OS X hfs plus volume format
 
-;; Copyright (C) 2004-2007  Seiji Zenitani
+;; Copyright (C) 2004-2008  Seiji Zenitani
 
 ;; Author: Seiji Zenitani <zenitani@mac.com>
-;; $Id: utf-8m.el,v 1.3 2007/02/22 17:48:34 davidswelt Exp $
+;; $Id: utf-8m.el,v 1.4 2009/03/03 04:42:46 davidswelt Exp $
 ;; Keywords: mac, multilingual, Unicode, UTF-8
 ;; Created: 2004-02-20
-;; Compatibility: Emacs 22, 23
+;; Compatibility: Emacs 22
 ;; URL(jp): http://homepage.mac.com/zenitani/emacs-j.html
 ;; URL(en): http://homepage.mac.com/zenitani/emacs-e.html
 
@@ -15,7 +15,7 @@
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
+;; the Free Software Foundation; either version 3, or (at your option)
 ;; any later version.
 
 ;; This file is distributed in the hope that it will be useful,
@@ -348,8 +348,8 @@
                  utf-translate-cjk-mode)))
   )
 
- ;; Emacs 23
- ((equal emacs-major-version 23)
+ ;; Emacs 23 (doesn't work)
+ (nil ;(equal emacs-major-version 23)
   (define-coding-system 'utf-8m
     "UTF-8 Mac file system encoding."
     :coding-type 'utf-8
