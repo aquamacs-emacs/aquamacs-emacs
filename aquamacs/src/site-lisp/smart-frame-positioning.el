@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
  
-;; Last change: $Id: smart-frame-positioning.el,v 1.77 2009/03/03 17:09:24 davidswelt Exp $
+;; Last change: $Id: smart-frame-positioning.el,v 1.78 2009/03/03 17:22:43 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -126,14 +126,18 @@ should be used as the interface to this function."
 		     (append parameters '((visibility . nil) (left . 1))))))
     ;; left  . 1: frame creation bug workaround: bug #166
 
-    ;; the frame creation function doesn't set all parameters
-    ;; set the remaining ones manually
-    ;; bug reported to pretest bug list 13/Jan/2006
-    ;; was this ever fixe?
-    ;; set remaining parameters
-    (if parameters
-	(modify-frame-parameters f parameters))
-
+    (if (< emacs-major-version 23)
+	(if parameters
+	    ;; the frame creation function doesn't set all parameters
+	    ;; set the remaining ones manually
+	    ;; bug reported to pretest bug list 13/Jan/2006
+	    ;; was this ever fixe?
+	    ;; set remaining parameters
+	    (modify-frame-parameters f parameters))
+      ;; Emacs 23 seems to tell us where to show the frame
+      (setq parameters (assq-delete-all 'left parameters))
+      (setq parameters (assq-delete-all 'top parameters)))
+    
     (run-hook-with-args 'smart-frame-positioning-hook f)
     (setq newpos (find-good-frame-position oldframe f))  
     (let ((overriding-parms (append parameters default-frame-alist)))
@@ -143,7 +147,7 @@ should be used as the interface to this function."
 			    (cdr-safe (assq key overriding-parms))
 			    'newpos)))
 	    '(left top width height)))
-
+   
     (when (frame-parameter f 'fit-frame)
 	;; delete height and width - these parameters
 	;; are preserved and will stay untouched
@@ -155,7 +159,6 @@ should be used as the interface to this function."
 		 (assq-delete-all 'width newpos))))
     ; make sure we don't make it visible prematurely
     (setq newpos (assq-delete-all 'visibility newpos))
-
     (modify-frame-parameters f newpos)
 
     ;; stay within the available screen
