@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.143 2009/03/03 04:25:37 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.144 2009/03/04 03:09:44 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -705,6 +705,7 @@ behavior)."
     (define-key map '[(control shift meta right)] 'forward-sexp-mark)
 
     (define-key map `[(,osxkeys-command-key delete)] 'kill-visual-line)
+    (define-key map `[(,osxkeys-command-key kp-delete)] 'kill-visual-line)
     (define-key map `[(,osxkeys-command-key backspace)] 'kill-whole-visual-line)
     (define-key map `[(,osxkeys-command-key shift backspace)] 'kill-whole-line)
 
@@ -835,7 +836,9 @@ default."
 
     ;; handle transient-mark-mode better
     (define-key map '[(meta delete)] 'aquamacs-kill-word) 
+    (define-key map '[(meta kp-delete)] 'aquamacs-kill-word) 
     (define-key map '[(control delete)] 'aquamacs-kill-word) 
+    (define-key map '[(control kp-delete)] 'aquamacs-kill-word) 
     (define-key map '[(meta backspace)] 'aquamacs-backward-kill-word) 
     (define-key map '[(control backspace)] 'aquamacs-backward-kill-word) 
 
