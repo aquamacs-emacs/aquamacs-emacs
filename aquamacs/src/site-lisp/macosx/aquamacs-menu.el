@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.211 2009/03/03 19:38:15 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.212 2009/03/04 00:05:56 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -329,7 +329,9 @@ customization buffer."
 		       (menu-bar-menu-frame-live-and-visible-p))
 	      :help "Paste (yank) text most recently cut/copied"))
 
-(define-key menu-bar-edit-menu [paste-from-menu]
+(define-key menu-bar-edit-menu (if (> emacs-major-version 22)
+				   [select-paste]
+				   [paste-from-menu])
   '(menu-item "Paste Previous" yank-menu
 	      :enable (and (cdr yank-menu) (not buffer-read-only))
 	      :help "Choose a string from the kill ring and paste it"))
@@ -351,8 +353,9 @@ customization buffer."
 			   (menu-bar-menu-frame-live-and-visible-p))
 	      :help "Redo undone operation") 'undo)
 
-(easy-menu-add-item  nil '("Edit")
-  ["-" nil nil] 'cut)
+(if (< emacs-major-version 23)
+    (easy-menu-add-item  nil '("Edit")
+			 ["-" nil nil] 'cut))
 
 ;;done
 (define-key menu-bar-edit-menu [cut]
