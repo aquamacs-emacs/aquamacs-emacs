@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: aquamacs-tabbar.el,v 1.51 2009/03/02 21:00:16 davidswelt Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.52 2009/03/04 03:32:44 davidswelt Exp $
 
 ;; load original tabbar-mode
 
@@ -557,12 +557,13 @@ Pass mouse click events on a tab to `tabbar-click-on-tab'."
 That is, a propertized string used as an `header-line-format' template
 element.
 Call `tabbar-tab-label-function' to obtain a label for TAB."
-    (let* ((close-button-image (tabbar-find-image tabbar-close-tab-button))
-	   (mouse-face (if (tabbar-selected-p tab (tabbar-current-tabset))
+    (let* ((selected-p (tabbar-selected-p tab (tabbar-current-tabset)))
+	   (close-button-image (tabbar-find-image tabbar-close-tab-button))
+	   (mouse-face (if selected-p
 			   'tabbar-selected-highlight
 			 'tabbar-unselected-highlight))
 	 
-	   (text-face (if (tabbar-selected-p tab (tabbar-current-tabset))
+	   (text-face (if selected-p
 			  'tabbar-selected
 			'tabbar-unselected))
 	   (close-button
@@ -584,13 +585,13 @@ Call `tabbar-tab-label-function' to obtain a label for TAB."
 			'local-map (tabbar-make-tab-keymap tab)	 
 			;;	  'help-echo 'tabbar-help-on-tab ;; no help echo: it's redundant
 			'mouse-face mouse-face
-			'face (cond ((and (tabbar-selected-p tab (tabbar-current-tabset))
+			'face (cond ((and selected-p
 					  (buffer-modified-p (tabbar-tab-value tab)))
 				     'tabbar-selected-modified)
-				    ((and (not (tabbar-selected-p tab (tabbar-current-tabset)))
+				    ((and selected-p
 					  (buffer-modified-p (tabbar-tab-value tab)))
 				     'tabbar-unselected-modified)
-				    ((and (tabbar-selected-p tab (tabbar-current-tabset))
+				    ((and selected-p
 					  (not (buffer-modified-p (tabbar-tab-value tab))))
 				     'tabbar-selected)
 				    (t 'tabbar-unselected))
