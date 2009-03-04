@@ -107,7 +107,7 @@ diff -c -r1.218 bindings.el
   
 + (defvar command-line-processed nil)
 + (defvar before-init-hook nil)
-+ (eval-at-startup ;; because of window-system
++ (eval-at-startup ;; because of initial-window-system
   (let* ((help-echo
   	;; The multi-line message doesn't work terribly well on the
   	;; bottom mode line...  Better ideas?
@@ -116,9 +116,9 @@ diff -c -r1.218 bindings.el
   	;; drag-mouse-1: resize, C-mouse-2: split horizontally"
 ! 	"mouse-1: select (drag to resize), mouse-2: delete others, mouse-3: delete this")
          (recursive-edit-help-echo "Recursive edit, type C-M-c to get out")
-!        (lotsofdashes (if window-system (make-string 100 32) "%-"))
-!        (dash (propertize (if window-system " " "-") 'help-echo help-echo))
-!        (dashes (propertize (if window-system "  " "--") 'help-echo help-echo))
+!        (lotsofdashes (if initial-window-system (make-string 100 32) "%-"))
+!        (dash (propertize (if initial-window-system " " "-") 'help-echo help-echo))
+!        (dashes (propertize (if initial-window-system "  " "--") 'help-echo help-echo))
          (standard-mode-line-format
   	(list
   	 "%e"
