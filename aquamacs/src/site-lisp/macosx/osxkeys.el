@@ -7,7 +7,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: osxkeys.el,v 1.144 2009/03/04 03:09:44 davidswelt Exp $
+;; Last change: $Id: osxkeys.el,v 1.145 2009/03/05 02:15:09 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -100,9 +100,28 @@ after updating this variable.")
 
 ;; support copy&paste at the right level
 (when (> emacs-major-version 22)
-  (setq interprogram-cut-function 'x-select-text)
+  (setq interprogram-cut-function 'x-select-text
+	interprogram-paste-function 'aquamacs-cut-buffer-or-selection-value)
+
+    (defun aquamacs-cut-buffer-or-selection-value ()
+      (unless (eq this-original-command 'yank)
+	(let (text)
+	  ;; Consult the selection, then the cut buffer.  Treat empty strings
+	  ;; as if they were unset.
+	  (or text (setq text (ns-get-pasteboard)))
+	  (if (string= text "") (setq text nil))
+	  (cond
+	   ((not text) nil)
+	   ((eq text ns-last-selected-text) nil)
+	   ((string= text ns-last-selected-text)
+	    ;; Record the newer string, so subsequent calls can use the `eq' test.
+	    (setq ns-last-selected-text text)
+	    nil)
+	   (t
+	    (setq ns-last-selected-text text))))))
+
   ;; overwrite x-select-text, which is called directly
-  ;; when draging mouse
+  ;; when dragging mouse
   (defun x-select-text (text &optional push)
     "Put TEXT, a string, on the pasteboard."
     ;; Don't send the pasteboard too much text.
@@ -112,8 +131,7 @@ after updating this variable.")
       ;; do not do this if just selecting text with mouse, or 
       (ns-set-pasteboard text))
     ;; 
-    (setq ns-last-selected-text text)))
-
+      (setq ns-last-selected-text text)))
 
 (defun aquamacs-backward-char ()
   "Move point to the left or the beginning of the region.
