@@ -1,0 +1,65 @@
+*** src/nsterm.m.orig	2009-03-05 22:45:01.000000000 +1300
+--- src/nsterm.m	2009-03-05 22:45:45.000000000 +1300
+***************
+*** 165,170 ****
+--- 165,173 ----
+     the Function modifer (laptops).  May be any of the modifier lisp symbols. */
+  Lisp_Object ns_function_modifier;
+  
++ /* Non-nil specifies that control-click maps to left mouse button, command-click to middle button */
++ Lisp_Object ns_emulate_three_button_mouse;
++ 
+  /* A floating point value specifying vertical stretch (positive) or shrink
+    (negative) of text line spacing.  Zero means default spacing.
+    YES indicates 0.5, NO indicates 0.0. */
+***************
+*** 3591,3596 ****
+--- 3594,3600 ----
+    ns_command_modifier = Qsuper;
+    ns_control_modifier = Qcontrol;
+    ns_function_modifier = Qnone;
++   ns_emulate_three_button_mouse = Qt;
+    ns_expand_space = make_float (0.0);
+    ns_antialias_text = Qt;
+    ns_antialias_threshold = 10.0; /* not exposed to lisp side */
+***************
+*** 4937,4942 ****
+--- 4941,4966 ----
+        emacs_event->code = EV_BUTTON (theEvent);
+        emacs_event->modifiers = EV_MODIFIERS (theEvent)
+                               | EV_UDMODIFIERS (theEvent);
++       if (!NILP(ns_emulate_three_button_mouse))
++ 	{
++ 	  if (emacs_event->code == 0)
++ 	    {
++ 	      if (emacs_event->modifiers & ctrl_modifier)
++ 		{
++ 		  if (emacs_event->modifiers & alt_modifier)
++ 		    {
++ 		      emacs_event->code = 3;
++ 		    } else 
++ 		    {
++ 		      emacs_event->code = 2;
++ 		    }
++ 		} else if (emacs_event->modifiers & alt_modifier)
++ 		{
++ 		  emacs_event->code = 1;
++ 		}
++ 	      emacs_event->modifiers &= ~(ctrl_modifier | alt_modifier);
++ 	    }
++ 	}
+      }
+    XSETINT (emacs_event->x, lrint (p.x));
+    XSETINT (emacs_event->y, lrint (p.y));
+***************
+*** 6525,6530 ****
+--- 6549,6557 ----
+    DEFVAR_LISP ("ns-confirm-quit", &ns_confirm_quit,
+                 "Whether to confirm application quit using dialog.");
+  
++   DEFVAR_LISP ("ns-emulate-three-button-mouse", &ns_emulate_three_button_mouse,
++                "Non-nil (the default) means to use control and command keys to emulate right and middle mouse buttons on a one-button mouse.");
++ 
+    staticpro (&ns_display_name_list);
+    ns_display_name_list = Qnil;
+  

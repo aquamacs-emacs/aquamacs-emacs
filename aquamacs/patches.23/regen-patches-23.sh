@@ -43,6 +43,7 @@ d ui-strings lisp/menu-bar.el
 
 d minibuffer-filename lisp/files.el
 d mouse-echo lisp/mouse.el
+d mouse-emulate src/nsterm.m
 d pretty-modeline lisp/bindings.el lisp/faces.el
 d python-mode lisp/progmodes/python.el
 d recentf-track-minibuf lisp/recentf.el

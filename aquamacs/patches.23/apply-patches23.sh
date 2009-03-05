@@ -28,6 +28,7 @@ PATCHES="about-aquamacs
          ui-strings
          minibuffer-filename
          mouse-echo
+         mouse-emulate
          pretty-modeline
          python-mode
          recentf-track-minibuf
