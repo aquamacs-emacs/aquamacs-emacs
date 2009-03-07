@@ -4,7 +4,7 @@
 ;; Copyright (C) 2004-2008  Seiji Zenitani
 
 ;; Author: Seiji Zenitani <zenitani@mac.com>
-;; $Id: utf-8m.el,v 1.5 2009/03/03 04:53:32 davidswelt Exp $
+;; $Id: utf-8m.el,v 1.6 2009/03/07 04:44:21 davidswelt Exp $
 ;; Keywords: mac, multilingual, Unicode, UTF-8
 ;; Created: 2004-02-20
 ;; Compatibility: Emacs 22
@@ -295,8 +295,10 @@
         (insert
          (decode-coding-string
           (or (mac-code-convert-string
-	       (encode-coding-string str 'utf-8) 'utf-8 'utf-8 'NFC)
-	      'utf-8) str))
+	       (or (encode-coding-string str 'utf-8) str) 
+	       'utf-8 'utf-8 'NFC) 
+	      str)
+	      'utf-8))
         (- (point-max) (point-min))
         ))))
 
