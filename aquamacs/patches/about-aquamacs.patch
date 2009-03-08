@@ -1,27 +1,3 @@
-*** src/mactoolbox.c	6 Apr 2008 01:54:44 -0000	1.1.2.1
---- src/mactoolbox.c	6 Apr 2008 13:00:25 -0000
-***************
-*** 4773,4780 ****
-        SetMenuItemCommandKey (menu, menu_index, false, 0);
-        InsertMenuItemTextWithCFString (menu, NULL,
-  				      0, kMenuItemAttrSeparator, 0);
-!       InsertMenuItemTextWithCFString (menu, CFSTR ("About Emacs"),
-  				      0, 0, kHICommandAbout);
-      }
-  #else	/* !MAC_OSX */
-  #if TARGET_API_MAC_CARBON
---- 4778,4788 ----
-        SetMenuItemCommandKey (menu, menu_index, false, 0);
-        InsertMenuItemTextWithCFString (menu, NULL,
-  				      0, kMenuItemAttrSeparator, 0);
-!       InsertMenuItemTextWithCFString (menu, CFSTR ("About Aquamacs Emacs"),
-  				      0, 0, kHICommandAbout);
-+       InsertMenuItemTextWithCFString (menu, CFSTR ("Check for Updates..."),
-+ 				      1, 0, 'chku');
-+ 
-      }
-  #else	/* !MAC_OSX */
-  #if TARGET_API_MAC_CARBON
 *** lisp/startup.el	6 Mar 2008 00:08:01 -0000	1.436.2.16
 --- lisp/startup.el	1 Jun 2008 12:40:50 -0000
 ***************
@@ -49,33 +25,58 @@ diff -c -r1.1.2.6 mactoolbox.c
 *** src/mactoolbox.c	20 Aug 2008 09:05:31 -0000	1.1.2.6
 --- src/mactoolbox.c	25 Dec 2008 18:13:53 -0000
 ***************
-*** 5111,5124 ****
+*** 5111,5128 ****
   
     err = GetIndMenuItemWithCommandID (NULL, kHICommandQuit, 1,
   				     &menu, &menu_index);
 !   if (err == noErr)
 !     SetMenuItemCommandKey (menu, menu_index, false, 0);
-    EnableMenuCommand (NULL, kHICommandPreferences);
-    err = GetIndMenuItemWithCommandID (NULL, kHICommandPreferences, 1,
-  				     &menu, &menu_index);
+!   EnableMenuCommand (NULL, kHICommandPreferences);
+!   err = GetIndMenuItemWithCommandID (NULL, kHICommandPreferences, 1,
+! 				     &menu, &menu_index);
     if (err == noErr)
       {
-!       SetMenuItemCommandKey (menu, menu_index, false, 0);
+        SetMenuItemCommandKey (menu, menu_index, false, 0);
         InsertMenuItemTextWithCFString (menu, NULL,
   				      0, kMenuItemAttrSeparator, 0);
-        InsertMenuItemTextWithCFString (menu, CFSTR ("About Emacs"),
---- 5173,5186 ----
+!       InsertMenuItemTextWithCFString (menu, CFSTR ("About Emacs"),
+  				      0, 0, kHICommandAbout);
+      }
+  #else	/* !MAC_OSX */
+  #if TARGET_API_MAC_CARBON
+--- 5169,5203 ----
   
     err = GetIndMenuItemWithCommandID (NULL, kHICommandQuit, 1,
   				     &menu, &menu_index);
 !    if (err == noErr) 
-!      SetMenuItemCommandKey (menu, menu_index, false, 0); 
-    EnableMenuCommand (NULL, kHICommandPreferences);
-    err = GetIndMenuItemWithCommandID (NULL, kHICommandPreferences, 1,
-  				     &menu, &menu_index);
+!      { /* so that A-Q can be remapped by Emacs if desired */
+!        SetMenuItemCommandKey (menu, menu_index, false, 0); 
+!        SetMenuItemTextWithCFString 
+! 	 (menu, menu_index, 
+! 	  CFStringCreateWithCString(NULL, 
+! 				    "Quit Aquamacs Emacs         ⌘Q",
+! 				    kCFStringEncodingUTF8));
+!      }
+!    EnableMenuCommand (NULL, kHICommandPreferences);
+!    err = GetIndMenuItemWithCommandID (NULL, kHICommandPreferences, 1,
+! 				      &menu, &menu_index);
     if (err == noErr)
       {
-! /*       SetMenuItemCommandKey (menu, menu_index, false, 0); */
++       /* so that A-, can be remapped by Emacs if desired */
+        SetMenuItemCommandKey (menu, menu_index, false, 0);
++       
++       SetMenuItemTextWithCFString 
++ 	(menu, menu_index, 
++ 	 CFStringCreateWithCString(NULL, 
++ 				   "Preferences...                      ⌘,",
++ 				   kCFStringEncodingUTF8));
         InsertMenuItemTextWithCFString (menu, NULL,
   				      0, kMenuItemAttrSeparator, 0);
-        InsertMenuItemTextWithCFString (menu, CFSTR ("About Emacs"),
+!       InsertMenuItemTextWithCFString (menu, CFSTR ("About Aquamacs Emacs"),
+  				      0, 0, kHICommandAbout);
++       InsertMenuItemTextWithCFString (menu, CFSTR ("Check for Updates..."),
++ 				      1, 0, 'chku');
++ 
+      }
+  #else	/* !MAC_OSX */
+  #if TARGET_API_MAC_CARBON
