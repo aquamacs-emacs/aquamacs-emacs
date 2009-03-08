@@ -1,8 +1,393 @@
-*** ../emacs.temp/src/nsterm.m	2009-01-02 13:59:45.000000000 +1300
---- src/nsterm.m	2009-01-02 13:59:45.000000000 +1300
+This patch adds face-remapping support for fringe faces and colors portions of windows not previously drawn in the "default" face background color.
+
+
+Index: xfaces.c
+===================================================================
+RCS file: /sources/emacs/emacs/src/xfaces.c,v
+retrieving revision 1.431
+diff -c -r1.431 xfaces.c
+*** xfaces.c	24 Feb 2009 03:39:58 -0000	1.431
+--- xfaces.c	8 Mar 2009 21:44:43 -0000
 ***************
-*** 1978,1983 ****
---- 1987,1993 ----
+*** 444,449 ****
+--- 444,466 ----
+  
+  Lisp_Object Vface_remapping_alist;
+  
++ /* Alist of face remappings.  Each element is of the form:
++    (FACE REPLACEMENT...) which causes display of the face FACE to use
++    REPLACEMENT... instead.  REPLACEMENT... is interpreted the same way
++    the value of a `face' text property is: it may be (1) A face name,
++    (2) A list of face names, (3) A property-list of face attribute/value
++    pairs, or (4) A list of face names intermixed with lists containing
++    face attribute/value pairs.
++ 
++    Multiple entries in REPLACEMENT... are merged together to form the final
++    result, with faces or attributes earlier in the list taking precedence
++    over those that are later.
++ 
++    Face-name remapping cycles are suppressed; recursive references use
++    the underlying face instead of the remapped face.  */
++ 
++ Lisp_Object Vface_remapping_alist;
++ 
+  /* The next ID to assign to Lisp faces.  */
+  
+  static int next_lface_id;
+***************
+*** 2852,2857 ****
+--- 2869,2875 ----
+  
+    xassert (LFACEP (lface));
+    check_lface (lface);
++ 
+    return lface;
+  }
+  
+***************
+*** 4828,4833 ****
+--- 4846,4907 ----
+    return remapped_face_id;
+  }
+  
++ int
++ lookup_basic_face_for_buffer (f, face_id, buffer)
++      struct frame *f;
++      int face_id;
++      Lisp_Object buffer;
++ {
++   Lisp_Object name, mapping;
++   int remapped_face_id;
++ 
++   Lisp_Object Vlocal_remapping_alist = Fbuffer_local_value (intern("face-remapping-alist"), buffer);
++ 
++ 
++   if (NILP (Vlocal_remapping_alist))
++     return face_id;		/* Nothing to do.  */
++ 
++   switch (face_id)
++     {
++     case DEFAULT_FACE_ID:		name = Qdefault;		break;
++     case MODE_LINE_FACE_ID:		name = Qmode_line;		break;
++     case MODE_LINE_INACTIVE_FACE_ID:	name = Qmode_line_inactive;	break;
++     case HEADER_LINE_FACE_ID:		name = Qheader_line;		break;
++     case TOOL_BAR_FACE_ID:		name = Qtool_bar;		break;
++     case FRINGE_FACE_ID:		name = Qfringe;			break;
++     case SCROLL_BAR_FACE_ID:		name = Qscroll_bar;		break;
++     case BORDER_FACE_ID:		name = Qborder;			break;
++     case CURSOR_FACE_ID:		name = Qcursor;			break;
++     case MOUSE_FACE_ID:			name = Qmouse;			break;
++     case MENU_FACE_ID:			name = Qmenu;			break;
++ 
++     default:
++       abort ();	    /* the caller is supposed to pass us a basic face id */
++     }
++ 
++   /* Do a quick scan through Vface_remapping_alist, and return immediately
++      if there is no remapping for face NAME.  This is just an optimization
++      for the very common no-remapping case.  */
++   mapping = assq_no_quit (name, Vlocal_remapping_alist);
++   if (NILP (mapping))
++     return face_id;		/* Give up.  */
++ 
++   /* If there is a remapping entry, lookup the face using NAME, which will
++      handle the remapping too. 
++      Avoid setting current buffer (slow).
++   */
++   Lisp_Object old_face_remapping_alist = Vface_remapping_alist;
++   Vface_remapping_alist = Vlocal_remapping_alist;
++ 
++   remapped_face_id = lookup_named_face (f, name, 0);
++   Vface_remapping_alist = old_face_remapping_alist;
++ 
++   if (remapped_face_id < 0)
++     return face_id;		/* Give up. */
++ 
++   return remapped_face_id;
++ }
++ 
+  
+  /* Return the ID of the realized ASCII face of Lisp face with ID
+     LFACE_ID on frame F.  Value is -1 if LFACE_ID isn't valid.  */
+***************
+*** 6982,6987 ****
+--- 7056,7098 ----
+          '((default my-mode-default)))).  */);
+    Vface_remapping_alist = Qnil;
+  
++   DEFVAR_LISP ("face-remapping-alist", &Vface_remapping_alist,
++ 	       doc: /* Alist of face remappings.
++ Each element is of the form:
++ 
++    (FACE REPLACEMENT...),
++ 
++ which causes display of the face FACE to use REPLACEMENT... instead.
++ REPLACEMENT... is interpreted the same way the value of a `face' text
++ property is: it may be (1) A face name, (2) A list of face names, (3) A
++ property-list of face attribute/value pairs, or (4) A list of face names
++ intermixed with lists containing face attribute/value pairs.
++ 
++ Multiple entries in REPLACEMENT... are merged together to form the final
++ result, with faces or attributes earlier in the list taking precedence
++ over those that are later.
++ 
++ Face-name remapping cycles are suppressed; recursive references use the
++ underlying face instead of the remapped face.  So a remapping of the form:
++ 
++    (FACE EXTRA-FACE... FACE)
++ 
++ or:
++ 
++    (FACE (FACE-ATTR VAL ...) FACE)
++ 
++ will cause EXTRA-FACE... or (FACE-ATTR VAL ...) to be _merged_ with the
++ existing definition of FACE.  Note that for the default face, this isn't
++ necessary, as every face inherits from the default face.
++ 
++ Making this variable buffer-local is a good way to allow buffer-specific
++ face definitions.  For instance, the mode my-mode could define a face
++ `my-mode-default', and then in the mode setup function, do:
++ 
++    (set (make-local-variable 'face-remapping-alist)
++         '((default my-mode-default)))).  */);
++   Vface_remapping_alist = Qnil;
++ 
+    DEFVAR_LISP ("face-font-rescale-alist", &Vface_font_rescale_alist,
+  	       doc: /* Alist of fonts vs the rescaling factors.
+  Each element is a cons (FONT-PATTERN . RESCALE-RATIO), where
+*** src/fringe.c	07 Sep 2008 16:16:36 -0400	1.44.2.5
+--- src/fringe.c	22 Jan 2009 16:26:27 -0500	
+***************
+*** 590,595 ****
+--- 590,599 ----
+  	face_id = FRINGE_FACE_ID;
+      }
+  
++   /* Perhaps remap BASE_FACE_ID to a user-specified alternative.  */
++   if (face_id == FRINGE_FACE_ID || face_id == DEFAULT_FACE_ID)
++     face_id = lookup_basic_face_for_buffer (XFRAME (w->frame), face_id, w->buffer);
++ 
+    fb = fringe_bitmaps[which];
+    if (fb == NULL)
+      fb = &standard_bitmaps[which < MAX_STANDARD_FRINGE_BITMAPS
+***************
+*** 885,895 ****
+    if (row->visible_height <= 0)
+      return;
+  
+!   if (WINDOW_LEFT_FRINGE_WIDTH (w) != 0)
+      draw_fringe_bitmap (w, row, 1);
+  
+!   if (WINDOW_RIGHT_FRINGE_WIDTH (w) != 0)
+!     draw_fringe_bitmap (w, row, 0);
+  }
+  
+  /* Draw the fringes of window W.  Only fringes for rows marked for
+--- 889,903 ----
+    if (row->visible_height <= 0)
+      return;
+  
+!   if (WINDOW_LEFT_FRINGE_WIDTH (w) != 0) /* keep, due to C-x 3 w/o scroll-b and fringe bug*/
+      draw_fringe_bitmap (w, row, 1);
+  
+!   /* always draw the fringe, even if it is turned off:
+!      this will fill an otherwise empty (background) between
+!      window and scrollbar */
+!   /*  if (WINDOW_RIGHT_FRINGE_WIDTH (w) != 0) */
+! 
+!   draw_fringe_bitmap (w, row, 0);
+  }
+  
+  /* Draw the fringes of window W.  Only fringes for rows marked for
+***************
+*** 1072,1078 ****
+        if (!row->enabled_p)
+  	row = cur;
+  
+!       left_face_id = right_face_id = DEFAULT_FACE_ID;
+  
+        /* Decide which bitmap to draw in the left fringe.  */
+        if (WINDOW_LEFT_FRINGE_WIDTH (w) == 0)
+--- 1080,1086 ----
+        if (!row->enabled_p)
+  	row = cur;
+  
+!       left_face_id = right_face_id = FRINGE_FACE_ID; /* takes priority if customized */
+  
+        /* Decide which bitmap to draw in the left fringe.  */
+        if (WINDOW_LEFT_FRINGE_WIDTH (w) == 0)
+***************
+*** 1128,1133 ****
+--- 1136,1147 ----
+        else
+  	right = NO_FRINGE_BITMAP;
+  
++       /* Perhaps remap BASE_FACE_ID to a user-specified alternative.  */
++       if (left_face_id == FRINGE_FACE_ID || left_face_id == DEFAULT_FACE_ID)
++ 	left_face_id = lookup_basic_face_for_buffer (XFRAME (w->frame), left_face_id, w->buffer);
++       if (right_face_id == FRINGE_FACE_ID || right_face_id == DEFAULT_FACE_ID)
++ 	right_face_id = lookup_basic_face_for_buffer (XFRAME (w->frame), right_face_id, w->buffer);
++ 	
+        if (row->y != cur->y
+  	  || row->visible_height != cur->visible_height
+  	  || row->ends_at_zv_p != cur->ends_at_zv_p
+*** src/dispnew.c	05 May 2008 18:29:44 -0400	1.392.2.3
+--- src/dispnew.c	23 Dec 2008 15:56:08 -0500	
+***************
+*** 4417,4426 ****
+    /* Let functions in xterm.c know what area subsequent X positions
+       will be relative to.  */
+    updated_area = TEXT_AREA;
+- 
+    /* If rows are at different X or Y, or rows have different height,
+       or the current row is marked invalid, write the entire line.  */
+!   if (!current_row->enabled_p
+        || desired_row->y != current_row->y
+        || desired_row->ascent != current_row->ascent
+        || desired_row->phys_ascent != current_row->phys_ascent
+--- 4418,4429 ----
+    /* Let functions in xterm.c know what area subsequent X positions
+       will be relative to.  */
+    updated_area = TEXT_AREA;
+    /* If rows are at different X or Y, or rows have different height,
+       or the current row is marked invalid, write the entire line.  */
+!   if (!desired_row->displays_text_p   
+! 	    /* window background needs to be drawn using    
+! 	     clear_end_of_line, under the visible buffer text.   */
+!       ||  !current_row->enabled_p
+        || desired_row->y != current_row->y
+        || desired_row->ascent != current_row->ascent
+        || desired_row->phys_ascent != current_row->phys_ascent
+Index: xdisp.c
+The following stuff adapts the window background color to match 
+the bg color of the default face used in the buffer.
+===================================================================
+RCS file: /sources/emacs/emacs/src/xdisp.c,v
+retrieving revision 1.1149.2.33
+diff -c -r1.1149.2.33 xdisp.c
+*** src/xdisp.c	26 Aug 2008 11:11:46 -0000	1.1149.2.33
+--- src/xdisp.c	22 Dec 2008 00:03:30 -0000
+***************
+*** 15759,15765 ****
+  	  it->len = 1;
+  
+  	  if (default_face_p)
+! 	    it->face_id = DEFAULT_FACE_ID;
+  	  else if (it->face_before_selective_p)
+  	    it->face_id = it->saved_face_id;
+  	  face = FACE_FROM_ID (it->f, it->face_id);
+--- 15920,15926 ----
+  	  it->len = 1;
+  
+  	  if (default_face_p)
+! 	    it->face_id = lookup_basic_face (it->f, DEFAULT_FACE_ID); 
+  	  else if (it->face_before_selective_p)
+  	    it->face_id = it->saved_face_id;
+  	  face = FACE_FROM_ID (it->f, it->face_id);
+Index: macterm.c
+===================================================================
+RCS file: /sources/emacs/emacs/src/Attic/macterm.c,v
+retrieving revision 1.214.2.31
+diff -c -r1.214.2.31 macterm.c
+*** src/macterm.c	2 Sep 2008 08:19:06 -0000	1.214.2.31
+--- src/macterm.c	22 Dec 2008 00:05:21 -0000
+***************
+*** 469,485 ****
+  
+  
+  static void
+! mac_erase_rectangle (f, gc, x, y, width, height)
+       struct frame *f;
+       GC gc;
+       int x, y;
+       unsigned int width, height;
+  {
+  #if USE_CG_DRAWING
+    CGContextRef context;
+  
+    context = mac_begin_cg_clip (f, gc);
+!   CG_SET_FILL_COLOR_WITH_GC_BACKGROUND (context, gc);
+    CGContextFillRect (context, mac_rect_make (f, x, y, width, height));
+    mac_end_cg_clip (f);
+  #else
+--- 509,550 ----
+  
+  
+  static void
+! mac_erase_rectangle_with_color (f, gc, x, y, width, height, color)
+       struct frame *f;
+       GC gc;
+       int x, y;
+       unsigned int width, height;
++      unsigned long color;
+  {
+  #if USE_CG_DRAWING
+    CGContextRef context;
++   context = mac_begin_cg_clip (f, gc);
++   CG_SET_FILL_COLOR (context, color); 
++   CGContextFillRect (context, mac_rect_make (f, x, y, width, height));
++   mac_end_cg_clip (f);
++ #else
++   Rect r;
++ 
++   mac_begin_clip (f, gc);
++   RGBBackColor (color);
++   SetRect (&r, x, y, x + width, y + height);
++   EraseRect (&r);
++   RGBBackColor (GC_BACK_COLOR (FRAME_NORMAL_GC (f)));
++   mac_end_clip (f, gc);
++ #endif
++ }
+  
++ static void
++ mac_erase_rectangle (f, gc, x, y, width, height)
++      struct frame *f;
++      GC gc;
++      int x, y;
++      unsigned int width, height;
++ {
++ #if USE_CG_DRAWING
++   CGContextRef context;
+    context = mac_begin_cg_clip (f, gc);
+!   CG_SET_FILL_COLOR_WITH_GC_BACKGROUND (context, gc); 
+    CGContextFillRect (context, mac_rect_make (f, x, y, width, height));
+    mac_end_cg_clip (f);
+  #else
+***************
+*** 5258,5264 ****
+       struct frame *f;
+       int x, y, width, height;
+  {
+!   mac_clear_area (f, x, y, width, height);
+  }
+  
+  
+--- 5351,5370 ----
+       struct frame *f;
+       int x, y, width, height;
+  {
+!   unsigned long color = FRAME_NORMAL_GC (f)->xgcv.background;
+! 
+!   struct face *face = NULL; //  FRAME_DEFAULT_FACE (f);
+! 
+!   if (updated_window)
+!     if (current_buffer && XBUFFER (updated_window->buffer) != current_buffer)
+!       face = FACE_FROM_ID (f, lookup_basic_face_for_buffer (f, DEFAULT_FACE_ID, updated_window->buffer) );
+!     else
+!       face = FACE_FROM_ID (f, lookup_basic_face (f, DEFAULT_FACE_ID) );
+! 
+!   if (face) 
+!     mac_erase_rectangle_with_color (f, FRAME_NORMAL_GC (f), x, y, width, height, face->background);
+!   else
+!     mac_clear_area (f, x, y, width, height);
+  }
+  
+  
+*** src/nsterm.m	6 Mar 2009 19:07:00 -0000	1.65
+--- src/nsterm.m	8 Mar 2009 21:52:05 -0000
+***************
+*** 1991,1996 ****
+--- 2006,2012 ----
     UNBLOCK_INPUT;
   }
   
@@ -11,49 +396,19 @@
   void
   ns_clear_frame_area (struct frame *f, int x, int y, int width, int height)
 ***************
-*** 1987,1997 ****
-  {
-    NSRect r = NSMakeRect (x, y, width, height);
-    NSView *view = FRAME_NS_VIEW (f);
-!   struct face *face = FRAME_DEFAULT_FACE (f);
-  
-    if (!view || !face)
-      return;
+*** 2007,2012 ****
+--- 2023,2036 ----
   
     NSTRACE (ns_clear_frame_area);
   
-    r = NSIntersectionRect (r, [view frame]);
---- 1997,2029 ----
-  {
-    NSRect r = NSMakeRect (x, y, width, height);
-    NSView *view = FRAME_NS_VIEW (f);
-!   struct face *face =  FRAME_DEFAULT_FACE (f);
-!   struct buffer *old_buffer = NULL;
-  
-    if (!view || !face)
-      return;
-  
-+   //   struct window *w = updated_window;
-+   // is the current buffer correct?
-+   if (updated_window && current_buffer)
-+     {
-+       if (XBUFFER (updated_window->buffer) != current_buffer)
-+ 	{
-+ 	  old_buffer = current_buffer;
-+ 	  set_buffer_internal_1 (XBUFFER (updated_window->buffer));
-+ 	}
-+     
-+   
-+   int remapped_face = lookup_basic_face (f, DEFAULT_FACE_ID);
-+   if (remapped_face)
-+     face = FACE_FROM_ID (f, remapped_face);
++   if (updated_window)
++     if (current_buffer && XBUFFER (updated_window->buffer) != current_buffer)
++       face = FACE_FROM_ID 
++ 	(f, lookup_basic_face_for_buffer (f, DEFAULT_FACE_ID, 
++ 					  updated_window->buffer) );
++     else
++       face = FACE_FROM_ID (f, lookup_basic_face (f, DEFAULT_FACE_ID) );
 + 
-+   if (old_buffer)
-+     set_buffer_internal_1 (old_buffer);
-+   }
-+ 
-+   //      face = lookup_basic_face (XFRAME (f), DEFAULT_FACE_ID);
-+   
-    NSTRACE (ns_clear_frame_area);
-  
     r = NSIntersectionRect (r, [view frame]);
+    ns_focus (f, &r, 1);
+    [ns_lookup_indexed_color (NS_FACE_BACKGROUND (face), f) set];
