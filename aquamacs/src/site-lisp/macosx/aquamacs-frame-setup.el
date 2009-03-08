@@ -6,7 +6,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
 
-;; Last change: $Id: aquamacs-frame-setup.el,v 1.42 2009/03/08 22:25:34 davidswelt Exp $
+;; Last change: $Id: aquamacs-frame-setup.el,v 1.43 2009/03/08 22:50:26 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -46,10 +46,11 @@
 (require 'aquamacs-mac-fontsets)
 
 ;; face should look just like the buffer
-(face-spec-set 'fringe '((t (:foreground "grey55" :inherit default)))
-	       ;; set default (not user customization)
-	       (if (> emacs-major-version 22) t))
-
+; do not use face-spec-set (prevents user customization in 23)
+(set-face-attribute 'fringe nil
+		    :inherit 'default
+		    :background 'unspecified
+		    :foreground "grey55")
 
 (defun aquamacs-define-the-fringe-bitmap ()
   "Redefines a fringe bitmap (continuation) so that it looks good
