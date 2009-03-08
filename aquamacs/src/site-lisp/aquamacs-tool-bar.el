@@ -4,7 +4,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tool-bar.el,v 1.34 2008/08/10 13:53:45 davidswelt Exp $ 
+;; Last change: $Id: aquamacs-tool-bar.el,v 1.35 2009/03/08 20:40:45 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -191,7 +191,9 @@ quickly."
 				:background "lightyellow" 
 				:foreground "black" 
 				:height 100 
-				:family "lucida sans"))) nil)
+				:family "lucida sans"))) 
+		 ;; set default (not user customization)
+		 (if (> emacs-major-version 22) t))
 
   (aquamacs-set-defaults '((auto-resize-tool-bar nil)))
 

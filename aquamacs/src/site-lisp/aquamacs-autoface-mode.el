@@ -19,7 +19,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.56 2009/02/12 22:20:11 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.57 2009/03/08 20:39:11 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -212,7 +212,9 @@ Sets the `autoface-default' face."
 		      (value (face-attribute face attribute nil 'default)))
 		 (unless (eq value 'unspecified)
 		   (setq result (nconc (list attribute value) result))))))
-	   result))))
+	   result)))
+    ;; set default (not user customization)
+	       (if (> emacs-major-version 22) t))
   ;; ensure that the new face does not inherit from itself:
   (set-face-attribute 'autoface-default nil 
 		      :inherit 'default)
@@ -333,7 +335,8 @@ modify them."))
   (when aquamacs-styles-mode
     (aquamacs-styles-mode 0))
   ;; reset the face
-  (mapc (lambda (face) (face-spec-set face '((t (:inherit autoface-default)))))
+  (mapc (lambda (face) (face-spec-set face '((t (:inherit autoface-default)))
+				      (if (> emacs-major-version 22) t)))
 	(aquamacs-default-autofaces-list 'facenames))
   ;; set correct inheritance
   (mapc (lambda (mode) (aquamacs-autoface-make-face mode t))
@@ -346,7 +349,9 @@ modify them."))
   ;; reset the autoface-default face
   (custom-push-theme 'theme-face 'autoface-default 'user 'reset)
   ;; and re-make the autoface default face
-  (face-spec-set 'autoface-default '((t (:inherit default))))
+  (face-spec-set 'autoface-default '((t (:inherit default)))
+		 ;; set default (not user customization)
+		 (if (> emacs-major-version 22) t))
   (setq aquamacs-faces-changed t)
   (if (interactive-p)
       (message "All styles cleared.")))
@@ -358,7 +363,9 @@ modify them."))
   (unless (memq mode '(default autoface-default))
     (let ((face (aquamacs-autoface-face mode)))
       (when (facep face)
-	  (face-spec-set face '((t (:inherit autoface-default))))
+	  (face-spec-set face '((t (:inherit autoface-default)))
+			 ;; set default (not user customization)
+			 (if (> emacs-major-version 22) t))
 	  ;; set correct inheritance
 	  (aquamacs-autoface-make-face mode t)
 	  ;; and now delete the face customization from theme
