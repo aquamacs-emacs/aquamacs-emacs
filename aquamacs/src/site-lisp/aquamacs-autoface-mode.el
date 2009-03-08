@@ -19,7 +19,7 @@
 ;; Keywords: aquamacs
  
 
-;; Last change: $Id: aquamacs-autoface-mode.el,v 1.57 2009/03/08 20:39:11 davidswelt Exp $
+;; Last change: $Id: aquamacs-autoface-mode.el,v 1.58 2009/03/08 21:24:13 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -832,6 +832,54 @@ modified, or in FRAME if given."
 	  (with-temp-message (unless (eq major-mode default-major-mode)
 			       (format "Warning: Bug in %s: it forgets to call `run-mode-hooks'" major-mode))
 			     (aquamacs-set-autoface buf)))))))
+
+
+;; Font Panel  (under NS)
+
+(when (and (boundp 'initial-window-system) (eq initial-window-system 'ns))
+
+(defvar mac-font-panel-target-face 'default)
+(defvar mac-font-panel-target-frame nil)
+
+
+(defun mac-font-panel-mode (&optional ignore);; not really a mode
+  "Turn on font panel."
+  (interactive)
+ (setq mac-font-panel-target-face 'default)
+  
+  (when (and (boundp 'face-remapping-alist)
+	     (assq mac-font-panel-target-face face-remapping-alist))
+    (setq mac-font-panel-target-face 
+	  (let ((face (cdr (assq mac-font-panel-target-face
+				 face-remapping-alist))))
+	    (if (get face 'theme-face)
+		face
+	      (or (face-attribute face :inherit)
+		  mac-font-panel-target-face)))))
+  ;; cannot set correct font yet  (to do!)
+  (ns-popup-font-panel))
+
+
+
+(defun ns-respond-to-change-font ()
+  "Respond to changeFont: event, expecting ns-input-font and\n\
+ns-input-fontsize of new font."
+  (interactive)
+  (let ((face (or mac-font-panel-target-face 'default))
+
+	(attribute-values (list :family ns-input-font
+				:height (* 10 ns-input-fontsize))))
+
+    (apply 'set-face-attribute face
+	   mac-font-panel-target-frame attribute-values)
+    ;; ensure this is saved as a customization
+    (let ((value 
+	   (list (list t (custom-face-attributes-get 
+			  face nil)))))
+      (put face 'saved-face value)
+      (custom-push-theme 'theme-face face 'user 'set value))
+    (message "Font set for %s face." face))))
+  
 
  
 ;; ZOOM
