@@ -6,7 +6,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
 
-;; Last change: $Id: aquamacs-frame-setup.el,v 1.43 2009/03/08 22:50:26 davidswelt Exp $
+;; Last change: $Id: aquamacs-frame-setup.el,v 1.44 2009/03/10 21:46:02 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -90,6 +90,7 @@ even when minimal fringes are used. (Aquamacs)"
      ((foreground-color . "Black") (background-color . "White") 
       (cursor-type . box) (cursor-color . "Red")   (vertical-scroll-bars . right)  
       (tool-bar-lines . 1 ) 
+      (internal-border-width . 0)
       (left-fringe . 1) (right-fringe . nil) (fringe . nil)))
    
    (special-display-frame-alist
