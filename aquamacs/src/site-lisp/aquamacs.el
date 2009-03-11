@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.272 2009/03/03 23:57:34 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.273 2009/03/11 03:27:10 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -287,7 +287,7 @@ Separate paths from file names with --."
 	(custom-set-variables '(tabbar-mode nil)))
       (when (eq one-buffer-one-frame-mode 'default)
 	(custom-set-variables '(one-buffer-one-frame-mode t))))
-    
+
     (when (and (boundp 'aquamacs-default-styles)
 	       (< aquamacs-customization-version-id 161))
       ;; some tidying up from previous versions
@@ -303,6 +303,9 @@ Separate paths from file names with --."
     ;; Print warnings / compatibility options
     
 
+;; Emacs 23 transition
+
+;; add to default-frame-alist:  (internal-border-width . 0)
 
   ;; create fontsets where needed
     (mapc
@@ -1467,8 +1470,8 @@ listed here."
   (add-hook 'kill-emacs-query-functions 'aquamacs-ask-to-save-options)
 
 
-  
-
+(when (eq initial-window-system 'ns)
+    (global-set-key [ns-power-down] 'aquamacs-save-buffers-kill-emacs))
 (global-set-key [remap save-buffers-kill-emacs] 
 		'aquamacs-save-buffers-kill-emacs)
 
