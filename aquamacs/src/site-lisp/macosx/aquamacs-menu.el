@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.212 2009/03/04 00:05:56 davidswelt Exp $
+;; Last change: $Id: aquamacs-menu.el,v 1.213 2009/03/11 21:24:54 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -1278,18 +1278,18 @@ the previous frame size."
 (setq  menu-bar-buffers-menu-command-entries
        (append 
 	       (list 
-		'(command-separator "--")
+		'(command-separator2 "--")
 		(assq 'make-frame menu-bar-file-menu)
 		(assq 'zoom-menu menu-bar-file-menu)
 		(assq 'full-frame menu-bar-file-menu)
 		(assq 'one-window menu-bar-file-menu)
 		(assq 'split-window menu-bar-file-menu)
-		'(command-separator "--")
+		'(command-separator3 "--")
 		(assq 'place-frame menu-bar-file-menu)
 		(assq 'tile-frames menu-bar-file-menu)
 		(assq 'tile-frames-h menu-bar-file-menu)
 		(assq 'tile-frames-v menu-bar-file-menu)
-		'(command-separator "--")
+		'(command-separator4 "--")
 		(list 'next-buffer
 		      'menu-item
 		      '(format "Select Next %s               "  
