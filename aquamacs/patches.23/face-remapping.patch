@@ -6,8 +6,8 @@ Index: xfaces.c
 RCS file: /sources/emacs/emacs/src/xfaces.c,v
 retrieving revision 1.431
 diff -c -r1.431 xfaces.c
-*** xfaces.c	24 Feb 2009 03:39:58 -0000	1.431
---- xfaces.c	8 Mar 2009 21:44:43 -0000
+*** src/xfaces.c	24 Feb 2009 03:39:58 -0000	1.431
+--- src/xfaces.c	8 Mar 2009 21:44:43 -0000
 ***************
 *** 444,449 ****
 --- 444,466 ----
@@ -284,105 +284,6 @@ diff -c -r1.1149.2.33 xdisp.c
   	  else if (it->face_before_selective_p)
   	    it->face_id = it->saved_face_id;
   	  face = FACE_FROM_ID (it->f, it->face_id);
-Index: macterm.c
-===================================================================
-RCS file: /sources/emacs/emacs/src/Attic/macterm.c,v
-retrieving revision 1.214.2.31
-diff -c -r1.214.2.31 macterm.c
-*** src/macterm.c	2 Sep 2008 08:19:06 -0000	1.214.2.31
---- src/macterm.c	22 Dec 2008 00:05:21 -0000
-***************
-*** 469,485 ****
-  
-  
-  static void
-! mac_erase_rectangle (f, gc, x, y, width, height)
-       struct frame *f;
-       GC gc;
-       int x, y;
-       unsigned int width, height;
-  {
-  #if USE_CG_DRAWING
-    CGContextRef context;
-  
-    context = mac_begin_cg_clip (f, gc);
-!   CG_SET_FILL_COLOR_WITH_GC_BACKGROUND (context, gc);
-    CGContextFillRect (context, mac_rect_make (f, x, y, width, height));
-    mac_end_cg_clip (f);
-  #else
---- 509,550 ----
-  
-  
-  static void
-! mac_erase_rectangle_with_color (f, gc, x, y, width, height, color)
-       struct frame *f;
-       GC gc;
-       int x, y;
-       unsigned int width, height;
-+      unsigned long color;
-  {
-  #if USE_CG_DRAWING
-    CGContextRef context;
-+   context = mac_begin_cg_clip (f, gc);
-+   CG_SET_FILL_COLOR (context, color); 
-+   CGContextFillRect (context, mac_rect_make (f, x, y, width, height));
-+   mac_end_cg_clip (f);
-+ #else
-+   Rect r;
-+ 
-+   mac_begin_clip (f, gc);
-+   RGBBackColor (color);
-+   SetRect (&r, x, y, x + width, y + height);
-+   EraseRect (&r);
-+   RGBBackColor (GC_BACK_COLOR (FRAME_NORMAL_GC (f)));
-+   mac_end_clip (f, gc);
-+ #endif
-+ }
-  
-+ static void
-+ mac_erase_rectangle (f, gc, x, y, width, height)
-+      struct frame *f;
-+      GC gc;
-+      int x, y;
-+      unsigned int width, height;
-+ {
-+ #if USE_CG_DRAWING
-+   CGContextRef context;
-    context = mac_begin_cg_clip (f, gc);
-!   CG_SET_FILL_COLOR_WITH_GC_BACKGROUND (context, gc); 
-    CGContextFillRect (context, mac_rect_make (f, x, y, width, height));
-    mac_end_cg_clip (f);
-  #else
-***************
-*** 5258,5264 ****
-       struct frame *f;
-       int x, y, width, height;
-  {
-!   mac_clear_area (f, x, y, width, height);
-  }
-  
-  
---- 5351,5370 ----
-       struct frame *f;
-       int x, y, width, height;
-  {
-!   unsigned long color = FRAME_NORMAL_GC (f)->xgcv.background;
-! 
-!   struct face *face = NULL; //  FRAME_DEFAULT_FACE (f);
-! 
-!   if (updated_window)
-!     if (current_buffer && XBUFFER (updated_window->buffer) != current_buffer)
-!       face = FACE_FROM_ID (f, lookup_basic_face_for_buffer (f, DEFAULT_FACE_ID, updated_window->buffer) );
-!     else
-!       face = FACE_FROM_ID (f, lookup_basic_face (f, DEFAULT_FACE_ID) );
-! 
-!   if (face) 
-!     mac_erase_rectangle_with_color (f, FRAME_NORMAL_GC (f), x, y, width, height, face->background);
-!   else
-!     mac_clear_area (f, x, y, width, height);
-  }
-  
-  
 *** src/nsterm.m	6 Mar 2009 19:07:00 -0000	1.65
 --- src/nsterm.m	8 Mar 2009 21:52:05 -0000
 ***************
