@@ -7,7 +7,7 @@
 ;; Maintainer: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Created: February 2008
 ;; (C) Copyright 2008, the Aquamacs Project
-;; Revision: $Id: aquamacs-tabbar.el,v 1.52 2009/03/04 03:32:44 davidswelt Exp $
+;; Revision: $Id: aquamacs-tabbar.el,v 1.53 2009/03/11 16:46:00 davidswelt Exp $
 
 ;; load original tabbar-mode
 
@@ -588,7 +588,7 @@ Call `tabbar-tab-label-function' to obtain a label for TAB."
 			'face (cond ((and selected-p
 					  (buffer-modified-p (tabbar-tab-value tab)))
 				     'tabbar-selected-modified)
-				    ((and selected-p
+				    ((and (not selected-p)
 					  (buffer-modified-p (tabbar-tab-value tab)))
 				     'tabbar-unselected-modified)
 				    ((and selected-p
