@@ -8,7 +8,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.273 2009/03/11 03:27:10 davidswelt Exp $ 
+;; Last change: $Id: aquamacs.el,v 1.274 2009/03/11 12:40:39 davidswelt Exp $ 
 
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
@@ -1471,7 +1471,8 @@ listed here."
 
 
 (when (eq initial-window-system 'ns)
-    (global-set-key [ns-power-down] 'aquamacs-save-buffers-kill-emacs))
+    (global-set-key [ns-power-off] 'aquamacs-save-buffers-kill-emacs))
+
 (global-set-key [remap save-buffers-kill-emacs] 
 		'aquamacs-save-buffers-kill-emacs)
 
