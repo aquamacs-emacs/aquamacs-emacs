@@ -40,8 +40,7 @@ PATCHES="about-aquamacs
          toolbar-png
          ui-strings
          window-background
-         window-kill
-         unknownchanges"
+         window-kill"
 
 # The patches here are specified separately so their order can be defined.
 
