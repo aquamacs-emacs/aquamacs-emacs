@@ -1,27 +1,29 @@
-*** src/nsterm.h	14 Mar 2009 21:20:08 -0000	1.24
---- src/nsterm.h	15 Mar 2009 20:40:41 -0000
+*** src/nsterm.h	29 Jan 2009 10:35:55 -0000	1.23
+--- src/nsterm.h	20 Feb 2009 21:37:06 -0000
 ***************
-*** 357,363 ****
+*** 403,409 ****
   #define KEY_NS_NEW_FRAME               ((1<<28)|(0<<16)|12)
   #define KEY_NS_TOGGLE_TOOLBAR          ((1<<28)|(0<<16)|13)
-  #define KEY_NS_SHOW_PREFS              ((1<<28)|(0<<16)|14)
+  #define KEY_NS_INFO_PREFS              ((1<<28)|(0<<16)|14)
 ! 
   /* could use list to store these, but rest of emacs has a big infrastructure
      for managing a table of bitmap "records" */
   struct ns_bitmap_record
---- 359,366 ----
+--- 404,413 ----
   #define KEY_NS_NEW_FRAME               ((1<<28)|(0<<16)|12)
   #define KEY_NS_TOGGLE_TOOLBAR          ((1<<28)|(0<<16)|13)
-  #define KEY_NS_SHOW_PREFS              ((1<<28)|(0<<16)|14)
+  #define KEY_NS_INFO_PREFS              ((1<<28)|(0<<16)|14)
+! #define KEY_NS_SHOW_PREFS              ((1<<28)|(0<<16)|129)
 ! #define KEY_NS_ABOUT                   ((1<<28)|(0<<16)|130)
 ! #define KEY_NS_CHECK_FOR_UPDATES       ((1<<28)|(0<<16)|131)
+!   
   /* could use list to store these, but rest of emacs has a big infrastructure
      for managing a table of bitmap "records" */
   struct ns_bitmap_record
-*** src/nsterm.m	14 Mar 2009 21:20:09 -0000	1.67
---- src/nsterm.m	15 Mar 2009 20:40:43 -0000
+*** ../emacs.temp/src/nsterm.m	2009-01-02 13:59:45.000000000 +1300
+--- src/nsterm.m	2009-01-02 13:59:45.000000000 +1300
 ***************
-*** 3896,3939 ****
+*** 3938,3981 ****
       /* set up the application menu */
       svcsMenu = [[EmacsMenu alloc] initWithTitle: @"Services"];
       [svcsMenu setAutoenablesItems: NO];
@@ -66,7 +68,7 @@
                                     action: @selector (menuDown:)
                              keyEquivalent: @""
                                    atIndex: 0];
---- 3940,3987 ----
+--- 3967,4014 ----
       /* set up the application menu */
       svcsMenu = [[EmacsMenu alloc] initWithTitle: @"Services"];
       [svcsMenu setAutoenablesItems: NO];
@@ -116,8 +118,19 @@
                              keyEquivalent: @""
                                    atIndex: 0];
 ***************
-*** 4060,4065 ****
---- 4108,4143 ----
+*** 4103,4113 ****
+  }
+  
+  
+  - (void)showPreferencesWindow: (id)sender
+  {
+!   if (prefsController == nil)
+!     prefsController = [[EmacsPrefsController alloc] init];
+!   [prefsController showForFrame: SELECTED_FRAME ()];
+  }
+  
+  
+--- 4136,4179 ----
   }
   
   
@@ -128,11 +141,9 @@
 + 
 +   if (!emacs_event)
 +     return;
-+   emacs_event->kind = NS_NONKEY_EVENT;
++   emacs_event->kind = NON_ASCII_KEYSTROKE_EVENT;
 +   emacs_event->code = KEY_NS_CHECK_FOR_UPDATES;
 +   emacs_event->modifiers = 0;
-+   emacs_event->arg = Qt; /* mark as non-key event */
-+ 
 +   EV_TRAILER (theEvent);
 + }
 + 
@@ -143,19 +154,29 @@
 + 
 +   if (!emacs_event)
 +     return;
-+   emacs_event->kind = NS_NONKEY_EVENT;
++   emacs_event->kind = NON_ASCII_KEYSTROKE_EVENT;
 +   emacs_event->code = KEY_NS_ABOUT;
 +   emacs_event->modifiers = 0;
-+   emacs_event->arg = Qt; /* mark as non-key event */
 +   EV_TRAILER (theEvent);
 + }
 + 
 + 
   - (void)showPreferencesWindow: (id)sender
   {
-    struct frame *emacsframe = SELECTED_FRAME ();
-*** src/nsmenu.m	6 Mar 2009 19:06:45 -0000	1.21
---- src/nsmenu.m	15 Mar 2009 20:40:40 -0000
+!   struct frame *emacsframe = SELECTED_FRAME ();
+!   NSEvent *theEvent = [NSApp currentEvent];
+! 
+!   if (!emacs_event)
+!     return;
+!   emacs_event->kind = NON_ASCII_KEYSTROKE_EVENT;
+!   emacs_event->code = KEY_NS_SHOW_PREFS;
+!   emacs_event->modifiers = 0;
+!   EV_TRAILER (theEvent);
+  }
+  
+  
+*** src/nsmenu.m.~1.20.~	Tue Feb 24 23:05:47 2009
+--- src/nsmenu.m	Mon Mar  2 12:10:23 2009
 ***************
 *** 156,162 ****
   
@@ -165,7 +186,7 @@
         needsSet = YES;
       }
     else
---- 158,164 ----
+--- 156,162 ----
   
     if (menu == nil)
       {
@@ -182,7 +203,7 @@
     wv->value = 0;
     wv->enabled = 1;
     wv->button_type = BUTTON_TYPE_NONE;
---- 176,182 ----
+--- 174,180 ----
     /* widget_value is a straightforward object translation of emacs's
        Byzantine lisp menu structures */
     wv = xmalloc_widget_value ();
@@ -191,7 +212,7 @@
     wv->enabled = 1;
     wv->button_type = BUTTON_TYPE_NONE;
 ***************
-*** 1650,1656 ****
+*** 1647,1653 ****
     area.size.height= TEXTHEIGHT;
     command = [[[NSTextField alloc] initWithFrame: area] autorelease];
     [[self contentView] addSubview: command];
@@ -199,7 +220,7 @@
     [command setDrawsBackground: NO];
     [command setBezeled: NO];
     [command setSelectable: NO];
---- 1722,1728 ----
+--- 1647,1653 ----
     area.size.height= TEXTHEIGHT;
     command = [[[NSTextField alloc] initWithFrame: area] autorelease];
     [[self contentView] addSubview: command];
@@ -207,3 +228,14 @@
     [command setDrawsBackground: NO];
     [command setBezeled: NO];
     [command setSelectable: NO];
+*** nextstep/Cocoa/Emacs.base/Contents/Resources/English.lproj/InfoPlist.strings	26 Feb 2009 01:06:53 -0000	1.6
+--- nextstep/Cocoa/Emacs.base/Contents/Resources/English.lproj/InfoPlist.strings	15 Mar 2009 20:38:45 -0000
+***************
+*** 1,6 ****
+- /* Localized versions of Info.plist keys */
+  
+- CFBundleName = "Emacs";
+- CFBundleShortVersionString = "Version 23.0.91";
+- CFBundleGetInfoString = "Emacs version 23.0.91, NS Windowing";
+- NSHumanReadableCopyright = "Copyright (C) 2009 Free Software Foundation, Inc.";
+--- 1 ----
