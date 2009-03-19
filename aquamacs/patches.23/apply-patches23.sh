@@ -75,7 +75,7 @@ fi
 
 if [ ! ${EMACS_ROOT} ]
 then
-    EMACS_ROOT="$AQUAMACS_ROOT/../emacs"
+    EMACS_ROOT="$AQUAMACS_ROOT/.."
 fi
 
 if [ ! -d "$EMACS_ROOT" ]
