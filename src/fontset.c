@@ -1612,38 +1612,41 @@ appended.  By default, FONT-SPEC overrides the previous settings.  */)
   for (; CONSP (range_list); range_list = XCDR (range_list))
     FONTSET_ADD (fontset, XCAR (range_list), font_def, add);
 
-  /* Free all realized fontsets whose base is FONTSET.  This way, the
-     specified character(s) are surely redisplayed by a correct
-     font.  */
-  free_realized_fontsets (fontset);
-
   if (ascii_changed)
     {
       Lisp_Object tail, frame, alist;
       int fontset_id = XINT (FONTSET_ID (fontset));
 
-      alist = Qnil;
       FONTSET_ASCII (fontset) = fontname;
       name = FONTSET_NAME (fontset);
       FOR_EACH_FRAME (tail, frame)
 	{
 	  FRAME_PTR f = XFRAME (frame);
 	  Lisp_Object font_object;
+	  struct face *face;
 
-	  if (FRAME_INITIAL_P(f) || FRAME_TERMCAP_P (f))
+	  if (FRAME_INITIAL_P (f) || FRAME_TERMCAP_P (f))
 	    continue;
 	  if (fontset_id != FRAME_FONTSET (f))
 	    continue;
-	  font_object = font_open_by_spec (f, font_spec);
+	  face = FACE_FROM_ID (f, DEFAULT_FACE_ID);
+	  if (face)
+	    font_object = font_load_for_lface (f, face->lface, font_spec);
+	  else
+	    font_object = font_open_by_spec (f, font_spec);
 	  if (! NILP (font_object))
 	    {
 	      update_auto_fontset_alist (font_object, fontset);
-	      if (NILP (alist))
-		alist = Fcons (Fcons (Qfont, name), Qnil);
+	      alist = Fcons (Fcons (Qfont, Fcons (name, font_object)), Qnil);
 	      Fmodify_frame_parameters (frame, alist);
 	    }
 	}
     }
+
+  /* Free all realized fontsets whose base is FONTSET.  This way, the
+     specified character(s) are surely redisplayed by a correct
+     font.  */
+  free_realized_fontsets (fontset);
 
   return Qnil;
 }
@@ -1965,7 +1968,7 @@ format is the same as above.  */)
 
   tables[0] = Fmake_char_table (Qfontset_info, Qnil);
   fontsets[0] = fontset;
-  if (fontset != Vdefault_fontset)
+  if (!EQ (fontset, Vdefault_fontset))
     {
       tables[1] = Fmake_char_table (Qnil, Qnil);
       XCHAR_TABLE (tables[0])->extras[0] = tables[1];
