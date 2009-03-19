@@ -1,10 +1,30 @@
-*** src/nsfns.m	2009-03-10 02:20:24.000000000 -0500
---- src/nsfns.m	2009-03-12 08:30:26.000000000 -0500
+*** src/nsfns.m	14 Mar 2009 21:20:06 -0000	1.41
+--- src/nsfns.m	15 Mar 2009 20:40:39 -0000
 ***************
-*** 2137,2142 ****
---- 2137,2247 ----
+*** 2038,2044 ****
+    return build_string ([utfStr UTF8String]);
   }
+  
+- 
+  #ifdef NS_IMPL_COCOA
+  
+  /* Compile and execute the AppleScript SCRIPT and return the error
+--- 2038,2043 ----
+***************
+*** 2127,2133 ****
   #endif
+  
+  
+- 
+  /* ==========================================================================
+  
+      Miscellaneous functions not called through hooks
+--- 2126,2131 ----
+***************
+*** 2142,2147 ****
+--- 2140,2250 ----
+    return check_ns_frame (frame);
+  }
   
 + DEFUN ("ns-launch-URL-with-default-browser", Fns_launch_url_with_default_browser, Sns_launch_url_with_default_browser, 1, 1, 0,
 +        doc: /* Launch the URL with the appropriate handler application.
@@ -112,11 +132,11 @@
 + 	return Qt;
 + }
   
-  
-  /* ==========================================================================
+  /* called from frame.c */
+  struct ns_display_info *
 ***************
-*** 2690,2695 ****
---- 2795,2801 ----
+*** 2679,2684 ****
+--- 2782,2788 ----
                  doc: /* Toolkit version for NS Windowing.  */);
     Vns_version_string = ns_appkit_version_str ();
   
@@ -124,15 +144,10 @@
     defsubr (&Sns_read_file_name);
     defsubr (&Sns_get_resource);
     defsubr (&Sns_set_resource);
-Index: lisp/net/browse-url.el
-===================================================================
-RCS file: /sources/emacs/emacs/lisp/net/browse-url.el,v
-retrieving revision 1.52
-diff -c -r1.52 browse-url.el
-*** lisp/net/browse-url.el	19 Nov 2005 15:57:19 -0000	1.52
---- lisp/net/browse-url.el	9 Feb 2006 08:34:51 -0000
+*** lisp/net/browse-url.el	5 Jan 2009 03:22:43 -0000	1.77
+--- lisp/net/browse-url.el	15 Mar 2009 20:31:56 -0000
 ***************
-*** 811,818 ****
+*** 834,841 ****
       (w32-shell-execute "open" url)))
   
   (defun browse-url-default-macosx-browser (url &optional new-window)
@@ -141,7 +156,7 @@ diff -c -r1.52 browse-url.el
   
   ;; --- Netscape ---
   
---- 811,825 ----
+--- 834,848 ----
       (w32-shell-execute "open" url)))
   
   (defun browse-url-default-macosx-browser (url &optional new-window)

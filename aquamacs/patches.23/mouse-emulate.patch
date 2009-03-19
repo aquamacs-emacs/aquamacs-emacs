@@ -1,30 +1,30 @@
-*** src/nsterm.m.orig	2009-03-05 22:45:01.000000000 +1300
---- src/nsterm.m	2009-03-05 22:45:45.000000000 +1300
+*** src/nsterm.m	14 Mar 2009 21:20:09 -0000	1.67
+--- src/nsterm.m	15 Mar 2009 20:40:43 -0000
 ***************
-*** 165,170 ****
---- 165,173 ----
+*** 160,165 ****
+--- 160,168 ----
      the Function modifer (laptops).  May be any of the modifier lisp symbols. */
   Lisp_Object ns_function_modifier;
   
 + /* Non-nil specifies that control-click maps to left mouse button, command-click to middle button */
 + Lisp_Object ns_emulate_three_button_mouse;
 + 
-  /* A floating point value specifying vertical stretch (positive) or shrink
-    (negative) of text line spacing.  Zero means default spacing.
-    YES indicates 0.5, NO indicates 0.0. */
+  /* Control via default 'GSFontAntiAlias' on OS X and GNUstep. */
+  Lisp_Object ns_antialias_text;
+  
 ***************
-*** 3591,3596 ****
+*** 3551,3556 ****
 --- 3594,3600 ----
     ns_command_modifier = Qsuper;
     ns_control_modifier = Qcontrol;
     ns_function_modifier = Qnone;
 +   ns_emulate_three_button_mouse = Qt;
-    ns_expand_space = make_float (0.0);
     ns_antialias_text = Qt;
     ns_antialias_threshold = 10.0; /* not exposed to lisp side */
+    ns_use_qd_smoothing = Qnil;
 ***************
-*** 4937,4942 ****
---- 4941,4966 ----
+*** 4826,4831 ****
+--- 4904,4929 ----
         emacs_event->code = EV_BUTTON (theEvent);
         emacs_event->modifiers = EV_MODIFIERS (theEvent)
                                | EV_UDMODIFIERS (theEvent);
@@ -52,8 +52,8 @@
     XSETINT (emacs_event->x, lrint (p.x));
     XSETINT (emacs_event->y, lrint (p.y));
 ***************
-*** 6525,6530 ****
---- 6549,6557 ----
+*** 6263,6268 ****
+--- 6553,6561 ----
     DEFVAR_LISP ("ns-confirm-quit", &ns_confirm_quit,
                  "Whether to confirm application quit using dialog.");
   

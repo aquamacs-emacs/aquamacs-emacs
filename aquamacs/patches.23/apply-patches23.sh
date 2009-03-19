@@ -16,26 +16,32 @@
 
 PATCHES="about-aquamacs
          calm-startup
-         startup-load-preferences
          cus-edit-switch
          custom-verbosity
+         dialogs
          eval-depth
+         face-remapping
          fix-configure
          header-line
          menu-bar-visible-frame
          menu-bar
-         tmm
-         ui-strings
          minibuffer-filename
+         mouse-button
          mouse-echo
          mouse-emulate
+         ns-launch-browser
          pretty-modeline
          python-mode
          recentf-track-minibuf
          sentence-end
-         toolbar
+         smart-spacing
+         startup-load-preferences
+         tmm
+         toolbar-png
+         ui-strings
          window-background
-         window-kill"
+         window-kill
+         unknownchanges"
 
 # The patches here are specified separately so their order can be defined.
 

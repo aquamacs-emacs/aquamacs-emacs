@@ -1,52 +1,56 @@
-Index: ns-win.el
-===================================================================
-RCS file: /sources/emacs/emacs/lisp/term/ns-win.el,v
-retrieving revision 1.36
-diff -c -r1.36 ns-win.el
-*** lisp/term/ns-win.el	4 Feb 2009 03:38:06 -0000	1.36
---- lisp/term/ns-win.el	2 Mar 2009 17:02:55 -0000
+*** lisp/term/ns-win.el	14 Mar 2009 21:20:00 -0000	1.38
+--- lisp/term/ns-win.el	15 Mar 2009 20:34:00 -0000
 ***************
-*** 295,304 ****
+*** 65,71 ****
+  
+  ;; nsterm.m
+  (defvar ns-version-string)
+- (defvar ns-expand-space)
+  (defvar ns-alternate-modifier)
+  
+  ;;;; Command line argument handling.
+--- 65,70 ----
+***************
+*** 294,303 ****
   (define-key global-map [ns-open-file-line] 'ns-open-file-select-line)
   (define-key global-map [ns-spi-service-call] 'ns-spi-service-call)
   (define-key global-map [ns-new-frame] 'make-frame)
   (define-key global-map [ns-toggle-toolbar] 'ns-toggle-toolbar)
-  (define-key global-map [ns-info-prefs] 'ns-show-preferences-help)
+  (define-key global-map [ns-show-prefs] 'customize)
   
 - 
   ;; Functions to set environment variables by running a subshell.
   ;;; Idea based on Nextstep 4.2 distribution, this version of code
   ;;; based on mac-read-environment-vars-from-shell () by David Reitter.
---- 295,305 ----
+--- 293,303 ----
   (define-key global-map [ns-open-file-line] 'ns-open-file-select-line)
   (define-key global-map [ns-spi-service-call] 'ns-spi-service-call)
   (define-key global-map [ns-new-frame] 'make-frame)
 + (define-key global-map [ns-show-prefs] 'customize)
 + (define-key global-map [ns-about] 'about-emacs)
   (define-key global-map [ns-toggle-toolbar] 'ns-toggle-toolbar)
-  (define-key global-map [ns-info-prefs] 'ns-show-preferences-help)
+  (define-key global-map [ns-show-prefs] 'customize)
   
   ;; Functions to set environment variables by running a subshell.
   ;;; Idea based on Nextstep 4.2 distribution, this version of code
   ;;; based on mac-read-environment-vars-from-shell () by David Reitter.
 ***************
-*** 405,413 ****
+*** 404,412 ****
   ;             (cons (logior (lsh 0 16)  10) 'ns-delete-working-text)
                (cons (logior (lsh 0 16)  11) 'ns-spi-service-call)
                (cons (logior (lsh 0 16)  12) 'ns-new-frame)
 !              (cons (logior (lsh 0 16)  13) 'ns-toggle-toolbar)
-               (cons (logior (lsh 0 16)  14) 'ns-info-prefs)
+!              (cons (logior (lsh 0 16)  14) 'ns-show-prefs)
 !              (cons (logior (lsh 1 16)  32) 'f1)
                (cons (logior (lsh 1 16)  33) 'f2)
                (cons (logior (lsh 1 16)  34) 'f3)
                (cons (logior (lsh 1 16)  35) 'f4)
---- 406,417 ----
+--- 404,414 ----
   ;             (cons (logior (lsh 0 16)  10) 'ns-delete-working-text)
                (cons (logior (lsh 0 16)  11) 'ns-spi-service-call)
                (cons (logior (lsh 0 16)  12) 'ns-new-frame)
 ! 	     (cons (logior (lsh 0 16)  13) 'ns-toggle-toolbar)
-               (cons (logior (lsh 0 16)  14) 'ns-info-prefs)
-! 	     (cons (logior (lsh 0 16)  129) 'ns-show-prefs) ;; Aquamacs only
+! 	     (cons (logior (lsh 0 16)  14) 'ns-show-prefs) ;; Aquamacs only
 ! 	     (cons (logior (lsh 0 16)  130) 'ns-about) ;; Aquamacs only
 ! 	     (cons (logior (lsh 0 16)  131) 'ns-check-for-updates) ;; Aquamacs only
 ! 	     (cons (logior (lsh 1 16)  32) 'f1)
@@ -54,30 +58,7 @@ diff -c -r1.36 ns-win.el
                (cons (logior (lsh 1 16)  34) 'f3)
                (cons (logior (lsh 1 16)  35) 'f4)
 ***************
-*** 494,503 ****
-  
-  ;; Must come after keybindings.
-  
-! (fmakunbound 'clipboard-yank)
-! (fmakunbound 'clipboard-kill-ring-save)
-! (fmakunbound 'clipboard-kill-region)
-! (fmakunbound 'menu-bar-enable-clipboard)
-  
-  ;; Add a couple of menus and rearrange some others; easiest just to redo toplvl
-  ;; Note keymap defns must be given last-to-first
---- 498,507 ----
-  
-  ;; Must come after keybindings.
-  
-! ;; (fmakunbound 'clipboard-yank)
-! ;; (fmakunbound 'clipboard-kill-ring-save)
-! ;; (fmakunbound 'clipboard-kill-region)
-! ;; (fmakunbound 'menu-bar-enable-clipboard)
-  
-  ;; Add a couple of menus and rearrange some others; easiest just to redo toplvl
-  ;; Note keymap defns must be given last-to-first
-***************
-*** 517,523 ****
+*** 516,522 ****
   
   (define-key global-map [menu-bar services]
     (cons "Services" (make-sparse-keymap "Services")))
@@ -85,9 +66,9 @@ diff -c -r1.36 ns-win.el
   (define-key global-map [menu-bar buffer]
     (cons "Buffers" global-buffers-menu-map))
   ;;  (cons "Buffers" (make-sparse-keymap "Buffers")))
---- 521,526 ----
+--- 518,523 ----
 ***************
-*** 627,661 ****
+*** 626,660 ****
   (define-key-after menu-bar-edit-menu [separator-undo] '("--") 'undo)
   (define-key-after menu-bar-edit-menu [spell] '("Spell" . ispell-menu-map) 'fill)
   
@@ -123,9 +104,9 @@ diff -c -r1.36 ns-win.el
   
   (defun force-menu-bar-update-buffers ()
     ;; This is a hack to get around fact that we already checked
---- 630,635 ----
+--- 627,632 ----
 ***************
-*** 663,669 ****
+*** 662,668 ****
     ;; does not pick up any change.
     (menu-bar-update-buffers t))
   
@@ -133,9 +114,30 @@ diff -c -r1.36 ns-win.el
   (add-hook 'menu-bar-update-fab-hook 'force-menu-bar-update-buffers)
   
   (defun menu-bar-update-frames-and-buffers ()
---- 637,642 ----
-*** lisp/menu-bar.el	14 Jan 2009 23:11:12 -0000	1.350
---- lisp/menu-bar.el	1 Mar 2009 22:54:40 -0000
+--- 634,639 ----
+***************
+*** 1141,1148 ****
+  
+  ;; Set to use font panel instead
+  (declare-function ns-popup-font-panel "nsfns.m" (&optional frame))
+! (defalias 'generate-fontset-menu 'ns-popup-font-panel)
+! (defalias 'mouse-set-font 'ns-popup-font-panel)
+  
+  ;; nsterm.m
+  (defvar ns-input-font)
+--- 1112,1121 ----
+  
+  ;; Set to use font panel instead
+  (declare-function ns-popup-font-panel "nsfns.m" (&optional frame))
+! (defalias 'generate-fontset-menu 'ns-popup-font-panel "Pop up the font panel.
+! This function has been overloaded in NS.")
+! (defalias 'mouse-set-font 'ns-popup-font-panel "Pop up the font panel.
+! This function has been overloaded in NS.")
+  
+  ;; nsterm.m
+  (defvar ns-input-font)
+*** lisp/menu-bar.el	4 Mar 2009 18:57:53 -0000	1.353
+--- lisp/menu-bar.el	15 Mar 2009 20:27:49 -0000
 ***************
 *** 37,52 ****
   ;; Force Help item to come last, after the major mode's own items.
@@ -299,48 +301,30 @@ diff -c -r1.36 ns-win.el
   (define-key menu-bar-edit-menu [clear]
     '(menu-item "Clear" delete-region
 ***************
-*** 452,458 ****
-  (fset 'yank-menu (cons 'keymap yank-menu))
-  (define-key menu-bar-edit-menu [paste-from-menu]
-    '(menu-item "Paste from Kill Menu" yank-menu
-! 	      :enable (and (cdr yank-menu) (not buffer-read-only))
-  	      :help "Choose a string from the kill ring and paste it"))
-  (define-key menu-bar-edit-menu [paste]
-    '(menu-item "Paste" yank
---- 478,485 ----
-  (fset 'yank-menu (cons 'keymap yank-menu))
-  (define-key menu-bar-edit-menu [paste-from-menu]
-    '(menu-item "Paste from Kill Menu" yank-menu
-! 	      :enable (and (cdr yank-menu) (not buffer-read-only)
-!  			   (menu-bar-menu-frame-live-and-visible-p))
-  	      :help "Choose a string from the kill ring and paste it"))
-  (define-key menu-bar-edit-menu [paste]
-    '(menu-item "Paste" yank
-***************
-*** 460,466 ****
-  		       ;; Emacs compiled --without-x doesn't have
-  		       ;; x-selection-exists-p.
-  		       (fboundp 'x-selection-exists-p)
-! 		       (x-selection-exists-p) (not buffer-read-only))
-  	      :help "Paste (yank) text most recently cut/copied"))
-  (define-key menu-bar-edit-menu [copy]
-    '(menu-item "Copy" menu-bar-kill-ring-save
---- 487,494 ----
-  		       ;; Emacs compiled --without-x doesn't have
-  		       ;; x-selection-exists-p.
-  		       (fboundp 'x-selection-exists-p)
-! 		       (x-selection-exists-p) (not buffer-read-only)
-! 		       (menu-bar-menu-frame-live-and-visible-p))
-  	      :help "Paste (yank) text most recently cut/copied"))
-  (define-key menu-bar-edit-menu [copy]
-    '(menu-item "Copy" menu-bar-kill-ring-save
-***************
-*** 472,480 ****
---- 500,510 ----
-  	      :enable (and mark-active (not buffer-read-only))
+*** 470,482 ****
+  	      :help "Copy text in region between mark and current position"
+  	      :keys "\\[kill-ring-save]"))
+  (define-key menu-bar-edit-menu [cut]
+!   '(menu-item "Cut" kill-region
+! 	      :enable (and mark-active (not buffer-read-only))
   	      :help
   	      "Cut (kill) text in region between mark and current position"))
-+ 			   (menu-bar-menu-frame-live-and-visible-p)
+  (define-key menu-bar-edit-menu [undo]
+    '(menu-item "Undo" undo
+  	      :enable (and (not buffer-read-only)
+  			   (not (eq t buffer-undo-list))
+  			   (if (eq last-command 'undo)
+  			       (listp pending-undo-list)
+--- 496,511 ----
+  	      :help "Copy text in region between mark and current position"
+  	      :keys "\\[kill-ring-save]"))
+  (define-key menu-bar-edit-menu [cut]
+!   '(menu-item "Cut" clipboard-kill-region
+! 	      :enable (and mark-active (not buffer-read-only)
+! 			   (menu-bar-menu-frame-live-and-visible-p))
+  	      :help
+  	      "Cut (kill) text in region between mark and current position"))
++ 
   (define-key menu-bar-edit-menu [undo]
     '(menu-item "Undo" undo
   	      :enable (and (not buffer-read-only)
@@ -349,7 +333,7 @@ diff -c -r1.36 ns-win.el
   			   (if (eq last-command 'undo)
   			       (listp pending-undo-list)
 ***************
-*** 509,522 ****
+*** 511,524 ****
   (defun clipboard-kill-ring-save (beg end)
     "Copy region to kill ring, and save in the X clipboard."
     (interactive "r")
@@ -364,7 +348,7 @@ diff -c -r1.36 ns-win.el
   
   (defun menu-bar-enable-clipboard ()
     "Make CUT, PASTE and COPY (keys and menu bar items) use the clipboard.
---- 539,554 ----
+--- 540,555 ----
   (defun clipboard-kill-ring-save (beg end)
     "Copy region to kill ring, and save in the X clipboard."
     (interactive "r")
@@ -382,7 +366,7 @@ diff -c -r1.36 ns-win.el
   (defun menu-bar-enable-clipboard ()
     "Make CUT, PASTE and COPY (keys and menu bar items) use the clipboard.
 ***************
-*** 653,668 ****
+*** 668,683 ****
     (let ((need-save nil))
       ;; These are set with menu-bar-make-mm-toggle, which does not
       ;; put on a customized-value property.
@@ -399,7 +383,7 @@ diff -c -r1.36 ns-win.el
   		   indicate-empty-lines indicate-buffer-boundaries
   		   case-fold-search
   		   current-language-environment default-input-method
---- 685,701 ----
+--- 699,715 ----
     (let ((need-save nil))
       ;; These are set with menu-bar-make-mm-toggle, which does not
       ;; put on a customized-value property.
@@ -418,7 +402,7 @@ diff -c -r1.36 ns-win.el
   		   case-fold-search
   		   current-language-environment default-input-method
 ***************
-*** 691,705 ****
+*** 706,720 ****
   (define-key menu-bar-options-menu [custom-separator]
     '("--"))
   
@@ -434,7 +418,7 @@ diff -c -r1.36 ns-win.el
   (define-key menu-bar-showhide-menu [column-number-mode]
     (menu-bar-make-mm-toggle column-number-mode
   			   "Column Numbers"
---- 724,741 ----
+--- 738,755 ----
   (define-key menu-bar-options-menu [custom-separator]
     '("--"))
   
@@ -454,7 +438,7 @@ diff -c -r1.36 ns-win.el
     (menu-bar-make-mm-toggle column-number-mode
   			   "Column Numbers"
 ***************
-*** 988,1038 ****
+*** 1003,1053 ****
   (define-key menu-bar-options-menu [debugger-separator]
     '("--"))
   
@@ -506,7 +490,7 @@ diff -c -r1.36 ns-win.el
     (menu-bar-make-toggle toggle-case-fold-search case-fold-search
   	    "Case-Insensitive Search"
   	    "Case-Insensitive Search %s"
---- 1024,1033 ----
+--- 1038,1047 ----
   (define-key menu-bar-options-menu [debugger-separator]
     '("--"))
   
@@ -518,7 +502,7 @@ diff -c -r1.36 ns-win.el
   	    "Case-Insensitive Search"
   	    "Case-Insensitive Search %s"
 ***************
-*** 1102,1116 ****
+*** 1117,1131 ****
   
   (define-key menu-bar-options-menu [highlight-separator]
     '("--"))
@@ -534,7 +518,7 @@ diff -c -r1.36 ns-win.el
   
   
   ;; The "Tools" menu items
---- 1097,1106 ----
+--- 1111,1120 ----
   
   (define-key menu-bar-options-menu [highlight-separator]
     '("--"))
@@ -546,7 +530,7 @@ diff -c -r1.36 ns-win.el
   
   ;; The "Tools" menu items
 ***************
-*** 1291,1297 ****
+*** 1306,1312 ****
     '("--"))
   
   (define-key menu-bar-tools-menu [pcl-cvs]
@@ -554,7 +538,7 @@ diff -c -r1.36 ns-win.el
   (define-key menu-bar-tools-menu [vc] nil) ;Create the place for the VC menu.
   
   (define-key menu-bar-tools-menu [separator-compare]
---- 1281,1287 ----
+--- 1295,1301 ----
     '("--"))
   
   (define-key menu-bar-tools-menu [pcl-cvs]
@@ -563,7 +547,7 @@ diff -c -r1.36 ns-win.el
   
   (define-key menu-bar-tools-menu [separator-compare]
 ***************
-*** 1541,1561 ****
+*** 1556,1576 ****
     '(menu-item "Emacs Tutorial" help-with-tutorial
   	      :help "Learn how to use Emacs"))
   
@@ -585,9 +569,9 @@ diff -c -r1.36 ns-win.el
   (defun kill-this-buffer ()	; for the menu bar
     "Kill the current buffer.
   When called in the minibuffer, get out of the minibuffer
---- 1531,1536 ----
+--- 1545,1550 ----
 ***************
-*** 1572,1579 ****
+*** 1587,1594 ****
         (or (string-match "^ " (buffer-name (car buffers)))
   	  (setq count (1+ count)))
         (setq buffers (cdr buffers)))
@@ -596,7 +580,7 @@ diff -c -r1.36 ns-win.el
   
   (put 'dired 'menu-enable '(menu-bar-non-minibuffer-window-p))
   
---- 1547,1556 ----
+--- 1561,1570 ----
         (or (string-match "^ " (buffer-name (car buffers)))
   	  (setq count (1+ count)))
         (setq buffers (cdr buffers)))
@@ -607,24 +591,24 @@ diff -c -r1.36 ns-win.el
   
   (put 'dired 'menu-enable '(menu-bar-non-minibuffer-window-p))
   
-*** src/nsmenu.m.~1.20.~	Tue Feb 24 23:05:47 2009
---- src/nsmenu.m	Mon Mar  2 17:42:22 2009
+*** src/nsmenu.m	6 Mar 2009 19:06:45 -0000	1.21
+--- src/nsmenu.m	15 Mar 2009 20:40:40 -0000
 ***************
-*** 637,643 ****
-  
-        keyEq = [self parseKeyEquiv: wv->key];
+*** 639,645 ****
+  #ifdef NS_IMPL_COCOA
+        /* OS X just ignores modifier strings longer than one character */
         if (keyEquivModMask == 0)
 !         title = [title stringByAppendingFormat: @" (%@)", keyEq];
+  #endif
   
         item = [self addItemWithTitle: (NSString *)title
-                               action: @selector (menuDown:)
---- 639,647 ----
-  
-        keyEq = [self parseKeyEquiv: wv->key];
+--- 641,649 ----
+  #ifdef NS_IMPL_COCOA
+        /* OS X just ignores modifier strings longer than one character */
         if (keyEquivModMask == 0)
 ! 	{  title = [title stringByAppendingFormat: @" %@", keyEq];
 ! 	  keyEq = @"";
 ! 	}
+  #endif
   
         item = [self addItemWithTitle: (NSString *)title
-                               action: @selector (menuDown:)

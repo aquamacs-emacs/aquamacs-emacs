@@ -1,5 +1,5 @@
-*** lisp/files.el	3 Mar 2009 01:58:07 -0000	1.1038
---- lisp/files.el	11 Mar 2009 03:38:27 -0000
+*** lisp/files.el	15 Mar 2009 02:31:45 -0000	1.1040
+--- lisp/files.el	15 Mar 2009 20:27:09 -0000
 ***************
 *** 4318,4333 ****
     nil)
@@ -100,13 +100,8 @@
                           (format "Save buffer %s? "
                                   (buffer-name buffer))))))
                (lambda (buffer)
-Index: map-ynp.el
-===================================================================
-RCS file: /sources/emacs/emacs/lisp/emacs-lisp/map-ynp.el,v
-retrieving revision 1.18
-diff -c -r1.18 map-ynp.el
 *** lisp/emacs-lisp/map-ynp.el	5 Jan 2009 03:21:06 -0000	1.18
---- lisp/emacs-lisp/map-ynp.el	11 Mar 2009 04:03:19 -0000
+--- lisp/emacs-lisp/map-ynp.el	15 Mar 2009 20:29:28 -0000
 ***************
 *** 1,4 ****
 ! ;;; map-ynp.el --- general-purpose boolean question-asker
@@ -148,7 +143,7 @@ diff -c -r1.18 map-ynp.el
   		use-menus t
   		mouse-event last-nonmenu-event))
         (setq user-keys (if action-alist
---- 96,115 ----
+--- 96,113 ----
   	(let ((object (if help (capitalize (nth 0 help))))
   	      (objects (if help (capitalize (nth 1 help))))
   	      (action (if help (capitalize (nth 2 help)))))
@@ -163,9 +158,7 @@ diff -c -r1.18 map-ynp.el
   				action-alist)
 ! 		      nil
 ! 		      ("No" . skip)
-! 		      ("No For All" . exit)
-! 		   nil
-! 		      ("Cancel" . quit))
+! 		      ("No For All" . exit))
   		use-menus t
   		mouse-event last-nonmenu-event))
         (setq user-keys (if action-alist
@@ -244,7 +237,7 @@ diff -c -r1.18 map-ynp.el
       (let ((message-log-max nil))
         (message ""))
 *** src/nsmenu.m	6 Mar 2009 19:06:45 -0000	1.21
---- src/nsmenu.m	11 Mar 2009 04:10:38 -0000
+--- src/nsmenu.m	15 Mar 2009 20:40:40 -0000
 ***************
 *** 1599,1605 ****
   
@@ -279,3 +272,74 @@ diff -c -r1.18 map-ynp.el
     NSRect area;
     char this_cmd_name[80];
     id cell;
+***************
+*** 1722,1728 ****
+        else if (XTYPE (item) == Lisp_Cons)
+          {
+            [window addButton: XSTRING (XCAR (item))->data
+!                       value: XCDR (item) row: row++];
+          }
+        else if (NILP (item))
+          {
+--- 1722,1728 ----
+        else if (XTYPE (item) == Lisp_Cons)
+          {
+            [window addButton: XSTRING (XCAR (item))->data
+! 		  value: XCDR (item) row: row++ key: nil];
+          }
+        else if (NILP (item))
+          {
+***************
+*** 1730,1739 ****
+            row = 0;
+          }
+      }
+  }
+  
+  
+! - addButton: (char *)str value: (Lisp_Object)val row: (int)row
+  {
+    id cell;
+         
+--- 1730,1741 ----
+            row = 0;
+          }
+      }
++   [window addButton: "Cancel"
++ 	  value: Qnil row: row++ key: @"\e"];
+  }
+  
+  
+! - addButton: (char *)str value: (Lisp_Object)val row: (int)row key: (NSString *)key
+  {
+    id cell;
+         
+***************
+*** 1749,1754 ****
+--- 1751,1757 ----
+    [cell setTag: XHASH (val)];	// FIXME: BIG UGLY HACK!!
+    [cell setBordered: YES];
+    [cell setEnabled: YES];
++   if (key != nil) [cell setKeyEquivalent: key];
+  
+    return self;
+  }
+*** src/nsterm.h	14 Mar 2009 21:20:08 -0000	1.24
+--- src/nsterm.h	15 Mar 2009 20:40:41 -0000
+***************
+*** 168,174 ****
+     int rows, cols;
+     }
+  - initFromContents: (Lisp_Object)menu isQuestion: (BOOL)isQ;
+! - addButton: (char *)str value: (Lisp_Object)val row: (int)row;
+  - addString: (char *)str row: (int)row;
+  - addSplit;
+  - (Lisp_Object)runDialogAt: (NSPoint)p;
+--- 168,174 ----
+     int rows, cols;
+     }
+  - initFromContents: (Lisp_Object)menu isQuestion: (BOOL)isQ;
+! - addButton: (char *)str value: (Lisp_Object)val row: (int)row key: (NSString *)key;
+  - addString: (char *)str row: (int)row;
+  - addSplit;
+  - (Lisp_Object)runDialogAt: (NSPoint)p;

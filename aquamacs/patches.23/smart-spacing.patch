@@ -1,5 +1,5 @@
-*** lisp/simple.el	11 Aug 2008 00:10:09 -0400	1.859.2.21
---- lisp/simple.el	07 Feb 2009 15:41:30 -0500	
+*** lisp/simple.el	14 Mar 2009 17:43:16 -0000	1.976
+--- lisp/simple.el	15 Mar 2009 20:28:13 -0000
 ***************
 *** 7,13 ****
   ;; Maintainer: FSF
@@ -7,7 +7,7 @@
   
 ! ;; This file is part of GNU Emacs.
   
-  ;; GNU Emacs is free software; you can redistribute it and/or modify
+  ;; GNU Emacs is free software: you can redistribute it and/or modify
   ;; it under the terms of the GNU General Public License as published by
 --- 7,14 ----
   ;; Maintainer: FSF
@@ -16,10 +16,39 @@
 ! ;; This file is part of GNU Emacs and Aquamacs Emacs.
 ! ;; Aquamacs-specific Smart Spacing code included.
   
-  ;; GNU Emacs is free software; you can redistribute it and/or modify
+  ;; GNU Emacs is free software: you can redistribute it and/or modify
   ;; it under the terms of the GNU General Public License as published by
 ***************
-*** 2570,2576 ****
+*** 2781,2793 ****
+  	(signal 'args-out-of-range
+  		(list string "yank-handler specified for empty string"))))
+    (if (fboundp 'menu-bar-update-yank-menu)
+!       (menu-bar-update-yank-menu string (and replace (car kill-ring))))
+    (if (and replace kill-ring)
+        (setcar kill-ring string)
+      (push string kill-ring)
+      (if (> (length kill-ring) kill-ring-max)
+! 	(setcdr (nthcdr (1- kill-ring-max) kill-ring) nil)))
+!   (setq kill-ring-yank-pointer kill-ring)
+    (if interprogram-cut-function
+        (funcall interprogram-cut-function string (not replace))))
+  
+--- 2782,2794 ----
+  	(signal 'args-out-of-range
+  		(list string "yank-handler specified for empty string"))))
+    (if (fboundp 'menu-bar-update-yank-menu)
+!       (menu-bar-update-yank-menu string (and replace (car kill-ring)))) 
+    (if (and replace kill-ring)
+        (setcar kill-ring string)
+      (push string kill-ring)
+      (if (> (length kill-ring) kill-ring-max)
+! 	(setcdr (nthcdr (1- kill-ring-max) kill-ring) nil))) 
+!   (setq kill-ring-yank-pointer kill-ring) 
+    (if interprogram-cut-function
+        (funcall interprogram-cut-function string (not replace))))
+  
+***************
+*** 2896,2902 ****
     (unless (and beg end)
       (error "The mark is not set now, so there is no region"))
     (condition-case nil
@@ -27,7 +56,7 @@
   	(when string			;STRING is nil if BEG = END
   	  ;; Add that string to the kill ring, one way or another.
   	  (if (eq last-command 'kill-region)
---- 2570,2576 ----
+--- 2897,2903 ----
     (unless (and beg end)
       (error "The mark is not set now, so there is no region"))
     (condition-case nil
@@ -36,7 +65,7 @@
   	  ;; Add that string to the kill ring, one way or another.
   	  (if (eq last-command 'kill-region)
 ***************
-*** 2928,2935 ****
+*** 2934,2941 ****
   This command's old key binding has been given to `kill-ring-save'."
     (interactive "r")
     (if (eq last-command 'kill-region)
@@ -45,7 +74,7 @@
     (setq deactivate-mark t)
     nil)
   
---- 2929,2936 ----
+--- 2935,2942 ----
   This command's old key binding has been given to `kill-ring-save'."
     (interactive "r")
     (if (eq last-command 'kill-region)
@@ -55,8 +84,8 @@
     nil)
   
 ***************
-*** 5690,5695 ****
---- 5690,5848 ----
+*** 6395,6400 ****
+--- 6396,6554 ----
           (eval-after-load (car elem) `(bad-package-check ',(car elem))))
         bad-packages-alist)
   
@@ -216,10 +245,10 @@
   
   (provide 'simple)
   
-*** lisp/emulation/cua-base.el	06 Jan 2008 20:09:49 -0500	1.78.2.4
---- lisp/emulation/cua-base.el	07 Feb 2009 15:33:39 -0500	
+*** lisp/emulation/cua-base.el	5 Jan 2009 03:21:14 -0000	1.100
+--- lisp/emulation/cua-base.el	15 Mar 2009 20:29:31 -0000
 ***************
-*** 805,812 ****
+*** 816,823 ****
       (setq cua--last-deleted-region-text (filter-buffer-substring start end))
       (if cua-delete-copy-to-register-0
   	(set-register ?0 cua--last-deleted-region-text))
@@ -228,7 +257,7 @@
   	  (cons (current-buffer)
   		(and (consp buffer-undo-list)
   		     (car buffer-undo-list))))
---- 806,813 ----
+--- 816,823 ----
       (setq cua--last-deleted-region-text (filter-buffer-substring start end))
       (if cua-delete-copy-to-register-0
   	(set-register ?0 cua--last-deleted-region-text))
@@ -237,10 +266,10 @@
   	  (cons (current-buffer)
   		(and (consp buffer-undo-list)
   		     (car buffer-undo-list))))
-*** lisp/mouse.el	13 Mar 2008 15:29:11 -0000	1.315.2.7
---- lisp/mouse.el	7 Feb 2009 20:32:01 -0000
+*** lisp/mouse.el	31 Jan 2009 22:14:56 -0000	1.353
+--- lisp/mouse.el	15 Mar 2009 20:27:52 -0000
 ***************
-*** 1442,1448 ****
+*** 1472,1478 ****
   		;; We have already put the old region in the kill ring.
   		;; Replace it with the extended region.
   		;; (It would be annoying to make a separate entry.)
@@ -248,7 +277,7 @@
   		(mouse-set-region-1)
   		;; Arrange for a repeated mouse-3 to kill this region.
   		(setq mouse-save-then-kill-posn
---- 1451,1457 ----
+--- 1473,1479 ----
   		;; We have already put the old region in the kill ring.
   		;; Replace it with the extended region.
   		;; (It would be annoying to make a separate entry.)
@@ -257,7 +286,7 @@
   		;; Arrange for a repeated mouse-3 to kill this region.
   		(setq mouse-save-then-kill-posn
 ***************
-*** 1450,1456 ****
+*** 1480,1486 ****
   		(mouse-show-mark))
   	    ;; If we click this button again without moving it,
   	    ;; that time kill.
@@ -265,7 +294,7 @@
   	    (setq mouse-selection-click-count 0)
   	    (setq mouse-save-then-kill-posn nil))
   	(if (and (eq last-command 'mouse-save-then-kill)
---- 1459,1465 ----
+--- 1481,1487 ----
   		(mouse-show-mark))
   	    ;; If we click this button again without moving it,
   	    ;; that time kill.
@@ -274,7 +303,7 @@
   	    (setq mouse-save-then-kill-posn nil))
   	(if (and (eq last-command 'mouse-save-then-kill)
 ***************
-*** 1460,1466 ****
+*** 1490,1496 ****
   	    ;; If this is the second time we've called
   	    ;; mouse-save-then-kill, delete the text from the buffer.
   	    (progn
@@ -282,7 +311,7 @@
   	      ;; After we kill, another click counts as "the first time".
   	      (setq mouse-save-then-kill-posn nil))
   	  ;; This is not a repetition.
---- 1469,1475 ----
+--- 1491,1497 ----
   	    ;; If this is the second time we've called
   	    ;; mouse-save-then-kill, delete the text from the buffer.
   	    (progn
@@ -291,7 +320,7 @@
   	      (setq mouse-save-then-kill-posn nil))
   	  ;; This is not a repetition.
 ***************
-*** 1484,1496 ****
+*** 1514,1526 ****
   			  (goto-char new)
   			(set-mark new))
   		      (setq deactivate-mark nil)))
@@ -305,7 +334,7 @@
             (mouse-show-mark)
   	  (mouse-set-region-1)
   	  (setq mouse-save-then-kill-posn
---- 1493,1505 ----
+--- 1515,1527 ----
   			  (goto-char new)
   			(set-mark new))
   		      (setq deactivate-mark nil)))

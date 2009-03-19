@@ -1,5 +1,5 @@
-*** src/nsterm.h	29 Jan 2009 10:35:55 -0000	1.23
---- src/nsterm.h	20 Feb 2009 21:30:38 -0000
+*** src/nsterm.h	14 Mar 2009 21:20:08 -0000	1.24
+--- src/nsterm.h	15 Mar 2009 20:40:41 -0000
 ***************
 *** 142,150 ****
   - initForView: (EmacsView *)view withIdentifier: (NSString *)identifier;
@@ -23,11 +23,22 @@
   /* delegate methods */
   - (NSToolbarItem *)toolbar: (NSToolbar *)toolbar
        itemForItemIdentifier: (NSString *)itemIdentifier
-*** src/nsmenu.m.~1.20.~	Tue Feb 24 23:05:47 2009
---- src/nsmenu.m	Mon Mar  2 12:37:35 2009
+*** src/nsmenu.m	6 Mar 2009 19:06:45 -0000	1.21
+--- src/nsmenu.m	15 Mar 2009 20:40:40 -0000
 ***************
-*** 1200,1207 ****
---- 1202,1221 ----
+*** 75,80 ****
+--- 75,82 ----
+  static int popup_activated_flag;
+  static NSModalSession popupSession;
+  
++ Lisp_Object Vns_tool_bar_display_mode;
++ 
+  /* NOTE: toolbar implementation is at end,
+    following complete menu implementation. */
+  
+***************
+*** 1203,1210 ****
+--- 1210,1229 ----
         struct image *img;
         Lisp_Object image;
         Lisp_Object helpObj;
@@ -49,8 +60,84 @@
   	 button state.  */
         image = TOOLPROP (TOOL_BAR_ITEM_IMAGES);
 ***************
-*** 1315,1322 ****
---- 1347,1376 ----
+*** 1241,1250 ****
+          helpObj = TOOLPROP (TOOL_BAR_ITEM_CAPTION);
+        helpText = NILP (helpObj) ? "" : (char *)SDATA (helpObj);
+  
+        [toolbar addDisplayItemWithImage: img->pixmap idx: i helpText: helpText
+!                                enabled: enabled_p];
+  #undef TOOLPROP
+      }
+  
+    if (![toolbar isVisible])
+        [toolbar setVisible: YES];
+--- 1260,1283 ----
+          helpObj = TOOLPROP (TOOL_BAR_ITEM_CAPTION);
+        helpText = NILP (helpObj) ? "" : (char *)SDATA (helpObj);
+  
++       captionObj = TOOLPROP (TOOL_BAR_ITEM_CAPTION);
++       captionText = NILP (captionObj) ? "" : (char *)SDATA (captionObj);
++ 
+        [toolbar addDisplayItemWithImage: img->pixmap idx: i helpText: helpText
+! 	       enabled: enabled_p  labelText: captionText];
+  #undef TOOLPROP
+      }
++     }
++ 
++   /* set correct tool-bar height because x_set_window_size can't do it
++      before the tool-bar has been drawn. */
++ 
++   // EmacsView *view = FRAME_NS_VIEW (f);
++   // NSWindow *window = [view window];
++   // FRAME_NS_TOOLBAR_HEIGHT (f) = 
++   //   NSHeight ([window frameRectForContentRect: NSMakeRect (0, 0, 0, 0)])
++   //   - FRAME_NS_TITLEBAR_HEIGHT (f);
++ 
+  
+    if (![toolbar isVisible])
+        [toolbar setVisible: YES];
+***************
+*** 1286,1292 ****
+  {
+    self = [super initWithIdentifier: identifier];
+    emacsView = view;
+!   [self setDisplayMode: NSToolbarDisplayModeIconOnly];
+    [self setSizeMode: NSToolbarSizeModeSmall];
+    [self setDelegate: self];
+    identifierToItem = [[NSMutableDictionary alloc] initWithCapacity: 10];
+--- 1322,1328 ----
+  {
+    self = [super initWithIdentifier: identifier];
+    emacsView = view;
+!   [self setDisplayMode: NSToolbarDisplayModeDefault];
+    [self setSizeMode: NSToolbarSizeModeSmall];
+    [self setDelegate: self];
+    identifierToItem = [[NSMutableDictionary alloc] initWithCapacity: 10];
+***************
+*** 1310,1315 ****
+--- 1346,1364 ----
+    [activeIdentifiers removeAllObjects];
+    prevEnablement = enablement;
+    enablement = 0L;
++ 
++   if (EQ (Vns_tool_bar_display_mode, intern ("labels")))
++     {
++       [self setDisplayMode: NSToolbarDisplayModeIconAndLabel];
++     }
++   else if (EQ (Vns_tool_bar_display_mode, intern ("icons")))
++     {
++       [self setDisplayMode: NSToolbarDisplayModeIconOnly];
++     }
++   else
++     {
++       [self setDisplayMode: NSToolbarDisplayModeDefault];
++     } 
+  }
+  
+  - (BOOL) changed
+***************
+*** 1318,1325 ****
+--- 1367,1396 ----
       enablement == prevEnablement ? NO : YES;
   }
   
@@ -82,104 +169,8 @@
     /* 1) come up w/identifier */
     NSString *identifier
 ***************
-*** 1647,1653 ****
-    area.size.height= TEXTHEIGHT;
-    command = [[[NSTextField alloc] initWithFrame: area] autorelease];
-    [[self contentView] addSubview: command];
-!   [command setStringValue: @"Emacs"];
-    [command setDrawsBackground: NO];
-    [command setBezeled: NO];
-    [command setSelectable: NO];
---- 1679,1685 ----
-    area.size.height= TEXTHEIGHT;
-    command = [[[NSTextField alloc] initWithFrame: area] autorelease];
-    [[self contentView] addSubview: command];
-!   [command setStringValue: @"Aquamacs"];
-    [command setDrawsBackground: NO];
-    [command setBezeled: NO];
-    [command setSelectable: NO];
-*** ../emacs.temp/src/nsmenu.m	2009-01-02 13:59:45.000000000 +1300
---- src/nsmenu.m	2009-01-02 13:59:47.000000000 +1300
-***************
-*** 71,76 ****
---- 71,78 ----
-  /* Nonzero means a menu is currently active.  */
-  static int popup_activated_flag;
-  
-+ Lisp_Object Vns_tool_bar_display_mode;
-+ 
-  /* NOTE: toolbar implementation is at end,
-    following complete menu implementation. */
-  
-***************
-*** 1238,1247 ****
-          helpObj = TOOLPROP (TOOL_BAR_ITEM_CAPTION);
-        helpText = NILP (helpObj) ? "" : (char *)SDATA (helpObj);
-  
-        [toolbar addDisplayItemWithImage: img->pixmap idx: i helpText: helpText
-!                                enabled: enabled_p];
-  #undef TOOLPROP
-      }
-  
-    if (![toolbar isVisible])
-        [toolbar setVisible: YES];
---- 1252,1265 ----
-          helpObj = TOOLPROP (TOOL_BAR_ITEM_CAPTION);
-        helpText = NILP (helpObj) ? "" : (char *)SDATA (helpObj);
-  
-+       captionObj = TOOLPROP (TOOL_BAR_ITEM_CAPTION);
-+       captionText = NILP (captionObj) ? "" : (char *)SDATA (captionObj);
-+ 
-        [toolbar addDisplayItemWithImage: img->pixmap idx: i helpText: helpText
-! 	       enabled: enabled_p  labelText: captionText];
-  #undef TOOLPROP
-      }
-+     }
-  
-    if (![toolbar isVisible])
-        [toolbar setVisible: YES];
-***************
-*** 1270,1276 ****
-  {
-    self = [super initWithIdentifier: identifier];
-    emacsView = view;
-!   [self setDisplayMode: NSToolbarDisplayModeIconOnly];
-    [self setSizeMode: NSToolbarSizeModeSmall];
-    [self setDelegate: self];
-    identifierToItem = [[NSMutableDictionary alloc] initWithCapacity: 10];
---- 1277,1283 ----
-  {
-    self = [super initWithIdentifier: identifier];
-    emacsView = view;
-!   [self setDisplayMode: NSToolbarDisplayModeDefault];
-    [self setSizeMode: NSToolbarSizeModeSmall];
-    [self setDelegate: self];
-    identifierToItem = [[NSMutableDictionary alloc] initWithCapacity: 10];
-***************
-*** 1294,1299 ****
---- 1301,1319 ----
-    [activeIdentifiers removeAllObjects];
-    prevEnablement = enablement;
-    enablement = 0L;
-+ 
-+   if (EQ (Vns_tool_bar_display_mode, intern ("labels")))
-+     {
-+       [self setDisplayMode: NSToolbarDisplayModeIconAndLabel];
-+     }
-+   else if (EQ (Vns_tool_bar_display_mode, intern ("icons")))
-+     {
-+       [self setDisplayMode: NSToolbarDisplayModeIconOnly];
-+     }
-+   else
-+     {
-+       [self setDisplayMode: NSToolbarDisplayModeDefault];
-+     } 
-  }
-  
-  - (BOOL) changed
-***************
-*** 1317,1322 ****
---- 1348,1354 ----
+*** 1333,1338 ****
+--- 1404,1410 ----
                  autorelease];
         [item setImage: img];
         [item setToolTip: [NSString stringWithCString: help]];
@@ -188,8 +179,8 @@
         [item setAction: @selector (toolbarClicked:)];
       }
 ***************
-*** 1874,1879 ****
---- 1906,1912 ----
+*** 1909,1914 ****
+--- 1991,1997 ----
   
      ========================================================================== */
   
@@ -198,8 +189,8 @@
          doc: /* Cause the NS menu to be re-calculated.  */)
        ()
 ***************
-*** 1968,1973 ****
---- 2001,2018 ----
+*** 2003,2008 ****
+--- 2086,2103 ----
   void
   syms_of_nsmenu ()
   {
@@ -218,8 +209,8 @@
     defsubr (&Sx_popup_menu);
     defsubr (&Sx_popup_dialog);
     defsubr (&Sns_reset_menu);
-*** lisp/tool-bar.el	23 Feb 2009 09:39:34 -0500	1.24
---- lisp/tool-bar.el	01 Mar 2009 18:30:39 -0500	
+*** lisp/tool-bar.el	10 Jan 2009 09:51:31 -0000	1.24
+--- lisp/tool-bar.el	15 Mar 2009 20:28:25 -0000
 ***************
 *** 54,69 ****
     :group 'frames
@@ -378,7 +369,7 @@
   
   ;;;###autoload
   (defun tool-bar-add-item-from-menu (command icon &optional map &rest props)
---- 216,244 ----
+--- 219,247 ----
   ;;;###autoload
   (defun tool-bar-local-item (icon def key map &rest props)
     "Add an item to the tool bar in map MAP.
@@ -534,7 +525,7 @@
   
   (provide 'tool-bar)
   ;; arch-tag: 15f30f0a-d0d7-4d50-bbb7-f48fd0c8582f
---- 259,379 ----
+--- 262,382 ----
   ;;;###autoload
   (defun tool-bar-local-item-from-menu (command icon in-map &optional from-map &rest props)
     "Define local tool bar binding for COMMAND using the given ICON.

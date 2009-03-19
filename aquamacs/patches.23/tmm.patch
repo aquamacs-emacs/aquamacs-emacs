@@ -1,5 +1,5 @@
-*** ../emacs.temp/lisp/isearch.el	2009-01-02 13:59:34.000000000 +1300
---- lisp/isearch.el	2009-01-02 13:59:46.000000000 +1300
+*** lisp/isearch.el	14 Feb 2009 09:04:46 -0000	1.345
+--- lisp/isearch.el	15 Mar 2009 20:27:30 -0000
 ***************
 *** 1564,1569 ****
 --- 1564,1572 ----
@@ -30,45 +30,10 @@
     (isearch-push-state)
     (if isearch-op-fun (funcall isearch-op-fun))
     (isearch-update))
-*** ../emacs.temp/lisp/menu-bar.el	2009-01-02 13:59:46.000000000 +1300
---- lisp/menu-bar.el	2009-01-02 13:59:46.000000000 +1300
+*** lisp/mouse.el	31 Jan 2009 22:14:56 -0000	1.353
+--- lisp/mouse.el	15 Mar 2009 20:27:52 -0000
 ***************
-*** 540,553 ****
-  (defun clipboard-kill-ring-save (beg end)
-    "Copy region to kill ring, and save in the X clipboard."
-    (interactive "r")
-!   (let ((x-select-enable-clipboard t))
-!     (kill-ring-save beg end)))
-  
-  (defun clipboard-kill-region (beg end)
-    "Kill the region, and save it in the X clipboard."
-    (interactive "r")
-!   (let ((x-select-enable-clipboard t))
-!     (kill-region beg end)))
-  
-  (defun menu-bar-enable-clipboard ()
-    "Make CUT, PASTE and COPY (keys and menu bar items) use the clipboard.
---- 540,555 ----
-  (defun clipboard-kill-ring-save (beg end)
-    "Copy region to kill ring, and save in the X clipboard."
-    (interactive "r")
-!   (when (or (not transient-mark-mode) mark-active)
-!     (let ((x-select-enable-clipboard t))
-!       (kill-ring-save beg end))))
-  
-  (defun clipboard-kill-region (beg end)
-    "Kill the region, and save it in the X clipboard."
-    (interactive "r")
-!   (when (or (not transient-mark-mode) mark-active)
-!     (let ((x-select-enable-clipboard t))
-!       (kill-region beg end))))
-  
-  (defun menu-bar-enable-clipboard ()
-    "Make CUT, PASTE and COPY (keys and menu bar items) use the clipboard.
-*** ../emacs.temp/lisp/mouse.el	2009-01-02 13:59:34.000000000 +1300
---- lisp/mouse.el	2009-01-02 13:59:46.000000000 +1300
-***************
-*** 955,961 ****
+*** 971,977 ****
       (mouse-move-drag-overlay mouse-drag-overlay start-point start-point
                                click-count)
       (overlay-put mouse-drag-overlay 'window start-window)
@@ -76,7 +41,7 @@
       (let (event end end-point last-end-point)
         (track-mouse
   	(while (progn
---- 955,962 ----
+--- 971,978 ----
       (mouse-move-drag-overlay mouse-drag-overlay start-point start-point
                                click-count)
       (overlay-put mouse-drag-overlay 'window start-window)
