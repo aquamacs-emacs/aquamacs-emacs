@@ -228,6 +228,33 @@
 *** src/nsmenu.m	6 Mar 2009 19:06:45 -0000	1.21
 --- src/nsmenu.m	15 Mar 2009 20:40:40 -0000
 ***************
+*** 65,70 ****
+--- 65,71 ----
+  extern Lisp_Object Vmenu_updating_frame;
+  
+  Lisp_Object Qdebug_on_next_call;
++ Lisp_Object Vcancel_special_indicator_flag;
+  extern Lisp_Object Voverriding_local_map, Voverriding_local_map_menu_flag,
+  		   Qoverriding_local_map, Qoverriding_terminal_local_map;
+  
+***************
+*** 1574,1580 ****
+      unbind_to (specpdl_count, Qnil);  /* calls pop_down_menu */
+    }
+    UNBLOCK_INPUT;
+! 
+    return tem;
+  }
+  
+--- 1574,1580 ----
+      unbind_to (specpdl_count, Qnil);  /* calls pop_down_menu */
+    }
+    UNBLOCK_INPUT;
+!   if (tem == XHASH(Vcancel_special_indicator_flag)) Fsignal (Qquit, Qnil); /*special button value for cancel*/
+    return tem;
+  }
+  
+***************
 *** 1599,1605 ****
   
   @implementation EmacsDialogPanel
@@ -295,7 +322,7 @@
           }
       }
 +   [window addButton: "Cancel"
-+ 	  value: Qnil row: row++ key: @"\e"];
++ 	  value: Vcancel_special_indicator_flag row: row++ key: @"\e"];
   }
   
   
@@ -313,6 +340,16 @@
   
     return self;
   }
+***************
+*** 2012,2017 ****
+--- 2016,2022 ----
+  
+    Qdebug_on_next_call = intern ("debug-on-next-call");
+    staticpro (&Qdebug_on_next_call);
++   Vcancel_special_indicator_flag = Fcons(Qnil, Qnil);
+  }
+  
+  // arch-tag: 75773656-52e5-4c44-a398-47bd87b32619
 *** src/nsterm.h	14 Mar 2009 21:20:08 -0000	1.24
 --- src/nsterm.h	15 Mar 2009 20:40:41 -0000
 ***************
