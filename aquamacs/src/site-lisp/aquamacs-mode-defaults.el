@@ -5,7 +5,7 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-mode-defaults.el,v 1.33 2009/03/02 20:56:24 davidswelt Exp $
+;; Last change: $Id: aquamacs-mode-defaults.el,v 1.34 2009/03/21 02:33:24 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -100,6 +100,7 @@
 
 (autoload 'ess-mode "ess-site" "Emacs Speaks Statistics" t)
 (autoload 'R-mode "ess-site" "Emacs Speaks Statistics" t)
+(autoload 'R "ess-site" "Emacs Speaks Statistics" t)
 (autoload 'S-mode "ess-site" "Emacs Speaks Statistics" t)
 (autoload 'Rnw-mode "ess-site" "Emacs Speaks Statistics" t)
 (autoload 'omegahat-mode "ess-site" "Emacs Speaks Statistics" t)
