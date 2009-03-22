@@ -4,7 +4,7 @@
 ;; originally authored by Kevin Walzer
 ;; Keywords: auctex
  
-;; Last change: $Id: auctex-config.el,v 1.47 2009/02/19 16:36:51 davidswelt Exp $
+;; Last change: $Id: auctex-config.el,v 1.48 2009/03/22 20:56:37 davidswelt Exp $
 
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
@@ -87,6 +87,7 @@ Only checks once - subsequent calls will not result in any action."
 ;; can't be loaded in hook later on.
 (load-preview-if-ghostscript)
 
+(autoload 'preview-mode-setup "preview")
 
 
 (defvar LaTeX-mode-hook nil) ;; make sure it's defined
