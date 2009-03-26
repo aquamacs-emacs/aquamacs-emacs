@@ -244,6 +244,8 @@
 	  (1- (current-column))
 	nil))))
 
+
+;; TO DO: this fails to work if there's an !eval! in the LHS
 (defun actr-in-prule (test-point)
   "Returns t if test-point is in a prule, nil otherwise."
   (interactive "d")
@@ -415,6 +417,16 @@ defined pretty print variables. Otherwise, the function
 	 (error nil))
        (actr-smart-tab bprule)
      (lisp-indent-line whole-exp))) )
+
+(defun actr-indent-region (&optional beg end)
+  "Indents region according to ACT-R style or Lisp style, based on context."
+  (interactive "r")
+  (goto-char beg)
+  (while (<= (point) end)
+    (beginning-of-line)
+    (actr-indent-line)
+    (next-line)))
+  
 
 ;;; ------------------------------------------------------------------------
 ;;
@@ -665,6 +677,8 @@ WWW-site: http://www.van-rijn.org/actr-mode
 	  (font-lock-mark-block-function . mark-defun)
 	  (font-lock-comment-start-regexp . ";")
 	  (font-lock-keywords-case-fold-search . t)))
+
+  (set (make-local-variable 'indent-region-function) 'actr-indent-region)
 
   (run-mode-hooks 'actr-mode-hook))
 
