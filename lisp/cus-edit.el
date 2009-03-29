@@ -1087,7 +1087,7 @@ then prompt for the MODE to customize."
   (let ((name (format "*Customize Group: %s*"
 		      (custom-unlispify-tag-name group))))
     (if (get-buffer name)
-        (pop-to-buffer name)
+        (switch-to-buffer name)
       (custom-buffer-create
        (list (list group 'custom-group))
        name
@@ -1497,7 +1497,7 @@ Optional NAME is the name of the buffer.
 OPTIONS should be an alist of the form ((SYMBOL WIDGET)...), where
 SYMBOL is a customization option, and WIDGET is a widget for editing
 that option."
-  (pop-to-buffer (custom-get-fresh-buffer (or name "*Customization*")))
+  (switch-to-buffer (custom-get-fresh-buffer (or name "*Customization*")))
   (custom-buffer-create-internal options description))
 
 ;;;###autoload
