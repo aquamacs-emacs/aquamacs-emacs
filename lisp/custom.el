@@ -623,7 +623,7 @@ The result is that the change is treated as having been made through Custom."
 	      ;; We are still loading it when we call this,
 	      ;; and it is not in load-history yet.
 	      ((equal load "cus-edit"))
-	      (t (condition-case nil (load load) (error nil))))))))
+	      (t (condition-case nil (load load nil 'quiet) (error nil))))))))
 
 (defvar custom-local-buffer nil
   "Non-nil, in a Customization buffer, means customize a specific buffer.
