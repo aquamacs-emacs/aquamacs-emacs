@@ -971,7 +971,8 @@ should only be used by mouse-drag-region."
     (mouse-move-drag-overlay mouse-drag-overlay start-point start-point
                              click-count)
     (overlay-put mouse-drag-overlay 'window start-window)
-    (deactivate-mark)
+    (unless (and cua-mode cua--explicit-region-start)
+      (deactivate-mark))
     (let (event end end-point last-end-point)
       (track-mouse
 	(while (progn
