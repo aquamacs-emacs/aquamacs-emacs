@@ -1472,7 +1472,7 @@ If you do this twice in the same position, the selection is killed."
 		;; We have already put the old region in the kill ring.
 		;; Replace it with the extended region.
 		;; (It would be annoying to make a separate entry.)
-		(kill-new (buffer-substring (point) (mark t)) t)
+		(kill-new (smart-spacing-filter-buffer-substring (point) (mark t)) t)
 		(mouse-set-region-1)
 		;; Arrange for a repeated mouse-3 to kill this region.
 		(setq mouse-save-then-kill-posn
@@ -1480,7 +1480,7 @@ If you do this twice in the same position, the selection is killed."
 		(mouse-show-mark))
 	    ;; If we click this button again without moving it,
 	    ;; that time kill.
-	    (mouse-save-then-kill-delete-region (mark) (point))
+	    (smart-delete-region (mark) (point))
 	    (setq mouse-selection-click-count 0)
 	    (setq mouse-save-then-kill-posn nil))
 	(if (and (eq last-command 'mouse-save-then-kill)
@@ -1490,7 +1490,7 @@ If you do this twice in the same position, the selection is killed."
 	    ;; If this is the second time we've called
 	    ;; mouse-save-then-kill, delete the text from the buffer.
 	    (progn
-	      (mouse-save-then-kill-delete-region (point) (mark))
+	      (smart-delete-region (point) (mark))
 	      ;; After we kill, another click counts as "the first time".
 	      (setq mouse-save-then-kill-posn nil))
 	  ;; This is not a repetition.
@@ -1514,13 +1514,13 @@ If you do this twice in the same position, the selection is killed."
 			  (goto-char new)
 			(set-mark new))
 		      (setq deactivate-mark nil)))
-		(kill-new (buffer-substring (point) (mark t)) t))
+		(kill-new (smart-spacing-filter-buffer-substring (point) (mark t)) t))
 	    ;; Set the mark where point is, then move where clicked.
 	    (mouse-set-mark-fast click)
 	    (if before-scroll
 		(goto-char before-scroll))
 	    (exchange-point-and-mark)   ;Why??? --Stef
-	    (kill-new (buffer-substring (point) (mark t))))
+	    (kill-new (smart-spacing-filter-buffer-substring (point) (mark t))))
           (mouse-show-mark)
 	  (mouse-set-region-1)
 	  (setq mouse-save-then-kill-posn
