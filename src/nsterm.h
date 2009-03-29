@@ -142,9 +142,11 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 - initForView: (EmacsView *)view withIdentifier: (NSString *)identifier;
 - (void) clearActive;
 - (BOOL) changed;
+- (void) addDisplayItemSpacerWithIdx: (int)idx;
 - (void) addDisplayItemWithImage: (EmacsImage *)img idx: (int)idx
                         helpText: (char *)help
-                         enabled: (BOOL)enabled;
+			enabled: (BOOL)enabled
+      			labelText: (char *)label;
 /* delegate methods */
 - (NSToolbarItem *)toolbar: (NSToolbar *)toolbar
      itemForItemIdentifier: (NSString *)itemIdentifier
