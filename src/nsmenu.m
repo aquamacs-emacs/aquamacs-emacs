@@ -65,6 +65,7 @@ extern Lisp_Object QCtoggle, QCradio;
 extern Lisp_Object Vmenu_updating_frame;
 
 Lisp_Object Qdebug_on_next_call;
+Lisp_Object Vcancel_special_indicator_flag;
 extern Lisp_Object Voverriding_local_map, Voverriding_local_map_menu_flag,
 		   Qoverriding_local_map, Qoverriding_terminal_local_map;
 
@@ -1574,7 +1575,7 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
     unbind_to (specpdl_count, Qnil);  /* calls pop_down_menu */
   }
   UNBLOCK_INPUT;
-
+  if (tem == XHASH(Vcancel_special_indicator_flag)) Fsignal (Qquit, Qnil); /*special button value for cancel*/
   return tem;
 }
 
@@ -1599,7 +1600,7 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
 
 @implementation EmacsDialogPanel
 
-#define SPACER		8.0
+#define SPACER		6.0
 #define ICONSIZE	64.0
 #define TEXTHEIGHT	20.0
 #define MINCELLWIDTH	90.0
@@ -1607,7 +1608,7 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
 - initWithContentRect: (NSRect)contentRect styleMask: (unsigned int)aStyle
               backing: (NSBackingStoreType)backingType defer: (BOOL)flag
 {
-  NSSize spacing = {SPACER, SPACER};
+  NSSize spacing = {SPACER};
   NSRect area;
   char this_cmd_name[80];
   id cell;
@@ -1722,7 +1723,7 @@ void process_dialog (id window, Lisp_Object list)
       else if (XTYPE (item) == Lisp_Cons)
         {
           [window addButton: XSTRING (XCAR (item))->data
-                      value: XCDR (item) row: row++];
+		  value: XCDR (item) row: row++ key: nil];
         }
       else if (NILP (item))
         {
@@ -1730,10 +1731,12 @@ void process_dialog (id window, Lisp_Object list)
           row = 0;
         }
     }
+  [window addButton: "Cancel"
+	  value: Vcancel_special_indicator_flag row: row++ key: @"\e"];
 }
 
 
-- addButton: (char *)str value: (Lisp_Object)val row: (int)row
+- addButton: (char *)str value: (Lisp_Object)val row: (int)row key: (NSString *)key
 {
   id cell;
        
@@ -1749,6 +1752,7 @@ void process_dialog (id window, Lisp_Object list)
   [cell setTag: XHASH (val)];	// FIXME: BIG UGLY HACK!!
   [cell setBordered: YES];
   [cell setEnabled: YES];
+  if (key != nil) [cell setKeyEquivalent: key];
 
   return self;
 }
@@ -2012,6 +2016,7 @@ syms_of_nsmenu ()
 
   Qdebug_on_next_call = intern ("debug-on-next-call");
   staticpro (&Qdebug_on_next_call);
+  Vcancel_special_indicator_flag = Fcons(Qnil, Qnil);
 }
 
 // arch-tag: 75773656-52e5-4c44-a398-47bd87b32619

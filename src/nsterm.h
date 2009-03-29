@@ -168,7 +168,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
    int rows, cols;
    }
 - initFromContents: (Lisp_Object)menu isQuestion: (BOOL)isQ;
-- addButton: (char *)str value: (Lisp_Object)val row: (int)row;
+- addButton: (char *)str value: (Lisp_Object)val row: (int)row key: (NSString *)key;
 - addString: (char *)str row: (int)row;
 - addSplit;
 - (Lisp_Object)runDialogAt: (NSPoint)p;
