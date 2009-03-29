@@ -157,6 +157,10 @@ static int sequence_number;
 
 static int window_initialized;
 
+/* List of windows with inhibited header lines  */
+
+Lisp_Object Vheader_line_inhibit_window_list;
+
 /* Hook to run when window config changes.  */
 
 static Lisp_Object Qwindow_configuration_change_hook;
@@ -5869,6 +5873,25 @@ zero means top of window, negative means relative to bottom of window.  */)
   return Fvertical_motion (arg, window);
 }
 
+/*
+  Return non-nil if the header line in window w is to be inhibited.
+*/
+
+int
+window_header_line_inhibited_p(w)
+     struct window *w;
+{
+  Lisp_Object window;
+
+  if (!NILP(Vheader_line_inhibit_window_list))
+    {
+      XSETWINDOW (window, w);
+      return (!NILP (Fmember(window, Vheader_line_inhibit_window_list)));
+    }
+  return 0;
+}
+
+
 
 
 /***********************************************************************
@@ -7164,6 +7187,9 @@ syms_of_window ()
 
   Qtemp_buffer_show_hook = intern ("temp-buffer-show-hook");
   staticpro (&Qtemp_buffer_show_hook);
+  
+  Vheader_line_inhibit_window_list = Qnil;
+  staticpro (&Vheader_line_inhibit_window_list);
 
   staticpro (&Vwindow_list);
 
@@ -7174,7 +7200,11 @@ syms_of_window ()
   window_scroll_pixel_based_preserve_y = -1;
   window_scroll_preserve_hpos = -1;
   window_scroll_preserve_vpos = -1;
-
+ 
+  DEFVAR_LISP ("header-line-inhibit-window-list", &Vheader_line_inhibit_window_list,
+	       doc: /* List of windows in which no header line is shown. */);
+  Vheader_line_inhibit_window_list = Qnil;
+ 
   DEFVAR_LISP ("temp-buffer-show-function", &Vtemp_buffer_show_function,
 	       doc: /* Non-nil means call as function to display a help buffer.
 The function is called with one argument, the buffer to be displayed.
