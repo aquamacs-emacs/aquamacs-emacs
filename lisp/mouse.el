@@ -660,10 +660,13 @@ resized by dragging their header-line."
   "Move point to the position clicked on with the mouse.
 This should be bound to a mouse click event type."
   (interactive "e")
-  (mouse-minibuffer-check event)
-  ;; Use event-end in case called from mouse-drag-region.
-  ;; If EVENT is a click, event-end and event-start give same value.
-  (posn-set-point (event-end event)))
+  (condition-case nil ;; prevent error message from mouse-minibuffer-check
+      (progn 
+	(mouse-minibuffer-check event)
+	;; Use event-end in case called from mouse-drag-region.
+	;; If EVENT is a click, event-end and event-start give same value.
+	(posn-set-point (event-end event)))
+    (error nil)))
 
 (defvar mouse-last-region-beg nil)
 (defvar mouse-last-region-end nil)
@@ -789,20 +792,24 @@ This must be bound to a button-down mouse event.
 In Transient Mark mode, the highlighting remains as long as the mark
 remains active.  Otherwise, it remains until the next input event.
 
-If the click is in the echo area, display the `*Messages*' buffer."
+In case of a double click in the echo area, display the `*Messages*' 
+buffer."
   (interactive "e")
-  (let ((w (posn-window (event-start start-event))))
-    (if (and (window-minibuffer-p w)
-	     (not (minibuffer-window-active-p w)))
-	(save-excursion
-	  ;; Swallow the up-event.
-	  (read-event)
-	  (set-buffer (get-buffer-create "*Messages*"))
-	  (goto-char (point-max))
-	  (display-buffer (current-buffer)))
-      ;; Give temporary modes such as isearch a chance to turn off.
-      (run-hooks 'mouse-leave-buffer-hook)
-      (mouse-drag-track start-event t))))
+  
+  (let ((click-count (1- (event-click-count start-event))))
+    (let ((w (posn-window (event-start start-event))))
+      (if (and (window-minibuffer-p w)
+	       (not (minibuffer-window-active-p w)))
+	  (save-excursion
+	    (if (= click-count 1)
+		(progn
+		  (set-buffer (get-buffer-create "*Messages*"))
+		  (read-event) ;; Swallow the up-event.
+		  (goto-char (point-max))
+		  (display-buffer (current-buffer)))))
+	;; Give temporary modes such as isearch a chance to turn off.
+	(run-hooks 'mouse-leave-buffer-hook)
+	(mouse-drag-track start-event t)))))
 
 
 (defun mouse-posn-property (pos property)
