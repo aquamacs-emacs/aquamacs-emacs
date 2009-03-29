@@ -37,16 +37,16 @@
 ;; Force Help item to come last, after the major mode's own items.
 ;; The symbol used to be called `help', but that gets confused with the
 ;; help key.
-(setq menu-bar-final-items '(help-menu))
+(setq menu-bar-final-items '(buffer help-menu))
 
 (define-key global-map [menu-bar help-menu] (cons "Help" menu-bar-help-menu))
-(defvar menu-bar-tools-menu (make-sparse-keymap "Tools"))
-(define-key global-map [menu-bar tools] (cons "Tools" menu-bar-tools-menu))
 ;; This definition is just to show what this looks like.
 ;; It gets modified in place when menu-bar-update-buffers is called.
 (defvar global-buffers-menu-map (make-sparse-keymap "Buffers"))
 (define-key global-map [menu-bar buffer]
-  (cons "Buffers" global-buffers-menu-map))
+  (cons "Window" global-buffers-menu-map))
+(defvar menu-bar-tools-menu (make-sparse-keymap "Tools"))
+(define-key global-map [menu-bar tools] (cons "Tools" menu-bar-tools-menu))
 (defvar menu-bar-options-menu (make-sparse-keymap "Options"))
 (define-key global-map [menu-bar options]
   (cons "Options" menu-bar-options-menu))
@@ -62,6 +62,24 @@
 (defvar uniquify-buffer-name-style)
 
 
+
+(defun menu-bar-menu-frame-live-and-visible-p ()
+  "Return non-nil if the menu frame is alive and visible.
+The menu frame is the frame for which we are updating the menu."
+  (let ((menu-frame (or menu-updating-frame (selected-frame))))
+    (and (frame-live-p menu-frame)
+	 ;; not icon
+	 (eq (frame-visible-p menu-frame) t))))
+
+(defun menu-bar-non-minibuffer-window-p ()
+  "Return non-nil if selected window of the menu frame is not a minibuf window.
+
+See the documentation of `menu-bar-menu-frame-live-and-visible-p'
+for the definition of the menu frame."
+  (let ((menu-frame (or menu-updating-frame (selected-frame))))
+    (not (window-minibuffer-p (frame-selected-window menu-frame)))))
+
+
 ;; The "File" menu items
 (define-key menu-bar-file-menu [exit-emacs]
   '(menu-item "Quit" save-buffers-kill-terminal
@@ -160,6 +178,7 @@
   '(menu-item "Save" save-buffer
 	      :enable (and (buffer-modified-p)
 			   (buffer-file-name)
+			   (menu-bar-menu-frame-live-and-visible-p)
 			   (menu-bar-non-minibuffer-window-p))
 	      :help "Save current buffer to its file"))
 
@@ -183,11 +202,13 @@
 	      :help "Discard (kill) current buffer"))
 (define-key menu-bar-file-menu [insert-file]
   '(menu-item "Insert File..." insert-file
-	      :enable (menu-bar-non-minibuffer-window-p)
+	      :enable (and (menu-bar-non-minibuffer-window-p)
+			   (menu-bar-menu-frame-live-and-visible-p))
 	      :help "Insert another file into current buffer"))
 (define-key menu-bar-file-menu [dired]
   '(menu-item "Open Directory..." dired
-	      :enable (menu-bar-non-minibuffer-window-p)
+	      :enable (and (menu-bar-non-minibuffer-window-p)
+			   (menu-bar-menu-frame-live-and-visible-p))
 	      :help "Read a directory, to operate on its files"))
 (define-key menu-bar-file-menu [open-file]
   '(menu-item "Open File..." menu-find-file-existing
@@ -356,7 +377,8 @@
 
 ;;; Assemble the top-level Edit menu items.
 (define-key menu-bar-edit-menu [props]
-  '(menu-item "Text Properties" facemenu-menu))
+  '(menu-item "Text Properties" facemenu-menu
+	      :enable (menu-bar-menu-frame-live-and-visible-p)))
 
 (define-key menu-bar-edit-menu [fill]
   '(menu-item "Fill" fill-region
@@ -427,19 +449,23 @@
 	      :help "Read a line number and go to that line"))
 
 (define-key menu-bar-edit-menu [goto]
-  (list 'menu-item "Go To" menu-bar-goto-menu))
+  (list 'menu-item "Go To" menu-bar-goto-menu
+	:enable (menu-bar-menu-frame-live-and-visible-p)))
 
 (define-key menu-bar-edit-menu [replace]
-  (list 'menu-item "Replace" menu-bar-replace-menu))
+  (list 'menu-item "Replace" menu-bar-replace-menu
+	:enable (menu-bar-menu-frame-live-and-visible-p)))
 
 (define-key menu-bar-edit-menu [search]
-  (list 'menu-item "Search" menu-bar-search-menu))
+  (list 'menu-item "Search" menu-bar-search-menu
+	:enable (menu-bar-menu-frame-live-and-visible-p)))
 
 (define-key menu-bar-edit-menu [separator-search]
   '(menu-item "--"))
 
 (define-key menu-bar-edit-menu [mark-whole-buffer]
   '(menu-item "Select All" mark-whole-buffer
+	      :enable (menu-bar-menu-frame-live-and-visible-p)
 	      :help "Mark the whole buffer for a subsequent cut/copy"))
 (define-key menu-bar-edit-menu [clear]
   '(menu-item "Clear" delete-region
@@ -470,13 +496,16 @@
 	      :help "Copy text in region between mark and current position"
 	      :keys "\\[kill-ring-save]"))
 (define-key menu-bar-edit-menu [cut]
-  '(menu-item "Cut" kill-region
-	      :enable (and mark-active (not buffer-read-only))
+  '(menu-item "Cut" clipboard-kill-region
+	      :enable (and mark-active (not buffer-read-only)
+			   (menu-bar-menu-frame-live-and-visible-p))
 	      :help
 	      "Cut (kill) text in region between mark and current position"))
+
 (define-key menu-bar-edit-menu [undo]
   '(menu-item "Undo" undo
 	      :enable (and (not buffer-read-only)
+			   (menu-bar-menu-frame-live-and-visible-p)
 			   (not (eq t buffer-undo-list))
 			   (if (eq last-command 'undo)
 			       (listp pending-undo-list)
@@ -511,14 +540,16 @@
 (defun clipboard-kill-ring-save (beg end)
   "Copy region to kill ring, and save in the X clipboard."
   (interactive "r")
-  (let ((x-select-enable-clipboard t))
-    (kill-ring-save beg end)))
+  (when (or (not transient-mark-mode) mark-active)
+    (let ((x-select-enable-clipboard t))
+      (kill-ring-save beg end))))
 
 (defun clipboard-kill-region (beg end)
   "Kill the region, and save it in the X clipboard."
   (interactive "r")
-  (let ((x-select-enable-clipboard t))
-    (kill-region beg end)))
+  (when (or (not transient-mark-mode) mark-active)
+    (let ((x-select-enable-clipboard t))
+      (kill-region beg end))))
 
 (defun menu-bar-enable-clipboard ()
   "Make CUT, PASTE and COPY (keys and menu bar items) use the clipboard.
@@ -668,16 +699,17 @@ by \"Save Options\" in Custom buffers.")
   (let ((need-save nil))
     ;; These are set with menu-bar-make-mm-toggle, which does not
     ;; put on a customized-value property.
-    (dolist (elt '(line-number-mode column-number-mode size-indication-mode
+    (dolist (elt '(global-show-newlines-mode line-number-mode
+		   column-number-mode size-indication-mode
 		   cua-mode show-paren-mode transient-mark-mode
-		   blink-cursor-mode display-time-mode display-battery-mode))
+		   display-time-mode display-battery-mode))
       (and (customize-mark-to-save elt)
 	   (setq need-save t)))
     ;; These are set with `customize-set-variable'.
     (dolist (elt '(scroll-bar-mode
 		   debug-on-quit debug-on-error
 		   tooltip-mode menu-bar-mode tool-bar-mode
-		   save-place uniquify-buffer-name-style fringe-mode
+		   save-place fringe-mode
 		   indicate-empty-lines indicate-buffer-boundaries
 		   case-fold-search
 		   current-language-environment default-input-method
@@ -706,14 +738,17 @@ by \"Save Options\" in Custom buffers.")
 (define-key menu-bar-options-menu [custom-separator]
   '("--"))
 
-(define-key menu-bar-options-menu [menu-set-font]
-  '(menu-item "Set Default Font..." menu-set-font
-	      :visible (display-multi-font-p)
-	      :help "Select a default font"))
-
 ;; The "Show/Hide" submenu of menu "Options"
 
 (defvar menu-bar-showhide-menu (make-sparse-keymap "Show/Hide"))
+
+(define-key menu-bar-showhide-menu [show-newlines-mode]
+ (menu-bar-make-mm-toggle global-show-newlines-mode
+			   "Show Newlines"
+			   "Show hard newlines"))
+
+(define-key menu-bar-showhide-menu [newlines-separator]
+  '("--"))
 
 (define-key menu-bar-showhide-menu [column-number-mode]
   (menu-bar-make-mm-toggle column-number-mode
@@ -1003,51 +1038,10 @@ mail status in mode line"))
 (define-key menu-bar-options-menu [debugger-separator]
   '("--"))
 
-(define-key menu-bar-options-menu [blink-cursor-mode]
-  (menu-bar-make-mm-toggle blink-cursor-mode
-			   "Blinking Cursor"
-			   "Whether the cursor blinks (Blink Cursor mode)"))
-(define-key menu-bar-options-menu [cursor-separator]
-  '("--"))
-
-(define-key menu-bar-options-menu [save-place]
-  (menu-bar-make-toggle toggle-save-place-globally save-place
-			"Save Place in Files between Sessions"
-			"Saving place in files %s"
-			"Visit files of previous session when restarting Emacs"
-                        (require 'saveplace)
-                        ;; Do it by name, to avoid a free-variable
-                        ;; warning during byte compilation.
-                        (set-default
-                         'save-place (not (symbol-value 'save-place)))))
-
-(define-key menu-bar-options-menu [uniquify]
-  (menu-bar-make-toggle toggle-uniquify-buffer-names uniquify-buffer-name-style
-			"Use Directory Names in Buffer Names"
-			"Directory name in buffer names (uniquify) %s"
-			"Uniquify buffer names by adding parent directory names"
-			(require 'uniquify)
-			(setq uniquify-buffer-name-style
-			      (if (not uniquify-buffer-name-style)
-				  'forward))))
-
 (define-key menu-bar-options-menu [edit-options-separator]
   '("--"))
-(define-key menu-bar-options-menu [cua-mode]
-  (menu-bar-make-mm-toggle cua-mode
-			   "C-x/C-c/C-v Cut and Paste (CUA)"
-			   "Use C-z/C-x/C-c/C-v keys for undo/cut/copy/paste"
-			   (:visible (or (not (boundp 'cua-enable-cua-keys))
-					 cua-enable-cua-keys))))
 
-(define-key menu-bar-options-menu [cua-emulation-mode]
-  (menu-bar-make-mm-toggle cua-mode
-			   "Shift movement mark region (CUA)"
-			   "Use shifted movement keys to set and extend the region."
-			   (:visible (and (boundp 'cua-enable-cua-keys)
-					  (not cua-enable-cua-keys)))))
-
-(define-key menu-bar-options-menu [case-fold-search]
+(define-key menu-bar-search-menu [case-fold-search]
   (menu-bar-make-toggle toggle-case-fold-search case-fold-search
 	    "Case-Insensitive Search"
 	    "Case-Insensitive Search %s"
@@ -1117,15 +1111,10 @@ mail status in mode line"))
 
 (define-key menu-bar-options-menu [highlight-separator]
   '("--"))
-(define-key menu-bar-options-menu [highlight-paren-mode]
+(define-key menu-bar-showhide-menu [highlight-paren-mode]
   (menu-bar-make-mm-toggle show-paren-mode
 			   "Paren Match Highlighting"
 			   "Highlight matching/mismatched parentheses at cursor (Show Paren mode)"))
-(define-key menu-bar-options-menu [transient-mark-mode]
-  (menu-bar-make-mm-toggle transient-mark-mode
-			   "Active Region Highlighting"
-			   "Make text in active region stand out in color (Transient Mark mode)"
-			   (:enable (not cua-mode))))
 
 
 ;; The "Tools" menu items
@@ -1306,7 +1295,7 @@ mail status in mode line"))
   '("--"))
 
 (define-key menu-bar-tools-menu [pcl-cvs]
-  '(menu-item "PCL-CVS" cvs-global-menu))
+  '(menu-item "CVS Repositories" cvs-global-menu))
 (define-key menu-bar-tools-menu [vc] nil) ;Create the place for the VC menu.
 
 (define-key menu-bar-tools-menu [separator-compare]
@@ -1556,21 +1545,6 @@ key, a click, or a menu-item"))
   '(menu-item "Emacs Tutorial" help-with-tutorial
 	      :help "Learn how to use Emacs"))
 
-(defun menu-bar-menu-frame-live-and-visible-p ()
-  "Return non-nil if the menu frame is alive and visible.
-The menu frame is the frame for which we are updating the menu."
-  (let ((menu-frame (or menu-updating-frame (selected-frame))))
-    (and (frame-live-p menu-frame)
-	 (frame-visible-p menu-frame))))
-
-(defun menu-bar-non-minibuffer-window-p ()
-  "Return non-nil if selected window of the menu frame is not a minibuf window.
-
-See the documentation of `menu-bar-menu-frame-live-and-visible-p'
-for the definition of the menu frame."
-  (let ((menu-frame (or menu-updating-frame (selected-frame))))
-    (not (window-minibuffer-p (frame-selected-window menu-frame)))))
-
 (defun kill-this-buffer ()	; for the menu bar
   "Kill the current buffer.
 When called in the minibuffer, get out of the minibuffer
@@ -1587,8 +1561,10 @@ using `abort-recursive-edit'."
       (or (string-match "^ " (buffer-name (car buffers)))
 	  (setq count (1+ count)))
       (setq buffers (cdr buffers)))
-    (or (not (menu-bar-non-minibuffer-window-p))
-	(> count 1))))
+    (and 
+     (menu-bar-menu-frame-live-and-visible-p)
+     (or (not (menu-bar-non-minibuffer-window-p))
+	 (> count 1)))))
 
 (put 'dired 'menu-enable '(menu-bar-non-minibuffer-window-p))
 
