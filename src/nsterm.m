@@ -160,6 +160,9 @@ Lisp_Object ns_control_modifier;
    the Function modifer (laptops).  May be any of the modifier lisp symbols. */
 Lisp_Object ns_function_modifier;
 
+/* Non-nil specifies that control-click maps to left mouse button, command-click to middle button */
+Lisp_Object ns_emulate_three_button_mouse;
+
 /* Control via default 'GSFontAntiAlias' on OS X and GNUstep. */
 Lisp_Object ns_antialias_text;
 
@@ -3551,6 +3554,7 @@ ns_set_default_prefs ()
   ns_command_modifier = Qsuper;
   ns_control_modifier = Qcontrol;
   ns_function_modifier = Qnone;
+  ns_emulate_three_button_mouse = Qt;
   ns_antialias_text = Qt;
   ns_antialias_threshold = 10.0; /* not exposed to lisp side */
   ns_use_qd_smoothing = Qnil;
@@ -4826,6 +4830,26 @@ extern void update_window_cursor (struct window *w, int on);
       emacs_event->code = EV_BUTTON (theEvent);
       emacs_event->modifiers = EV_MODIFIERS (theEvent)
                              | EV_UDMODIFIERS (theEvent);
+      if (!NILP(ns_emulate_three_button_mouse))
+	{
+	  if (emacs_event->code == 0)
+	    {
+	      if (emacs_event->modifiers & ctrl_modifier)
+		{
+		  if (emacs_event->modifiers & alt_modifier)
+		    {
+		      emacs_event->code = 3;
+		    } else 
+		    {
+		      emacs_event->code = 2;
+		    }
+		} else if (emacs_event->modifiers & alt_modifier)
+		{
+		  emacs_event->code = 1;
+		}
+	      emacs_event->modifiers &= ~(ctrl_modifier | alt_modifier);
+	    }
+	}
     }
   XSETINT (emacs_event->x, lrint (p.x));
   XSETINT (emacs_event->y, lrint (p.y));
@@ -6262,6 +6286,9 @@ allowing it to be used at a lower level for accented character entry.");
 
   DEFVAR_LISP ("ns-confirm-quit", &ns_confirm_quit,
                "Whether to confirm application quit using dialog.");
+
+  DEFVAR_LISP ("ns-emulate-three-button-mouse", &ns_emulate_three_button_mouse,
+               "Non-nil (the default) means to use control and command keys to emulate right and middle mouse buttons on a one-button mouse.");
 
   staticpro (&ns_display_name_list);
   ns_display_name_list = Qnil;
