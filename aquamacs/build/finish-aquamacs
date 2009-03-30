@@ -1,0 +1,32 @@
+#!/bin/sh
+ 
+cp aquamacs/Icons/build/*.png nextstep/Emacs.app/Contents/Resources/etc/images/
+
+cd nextstep/Emacs.app/Contents/Resources/
+tar xzf ../../../../aquamacs/src/commandline-tool/Aquamacs\ Command\ Line\ Tool.mpkg.tgz
+cd - >/dev/null
+
+
+cp aquamacs/src/etc/aquamacs-splash-screen.jpg nextstep/Emacs.app/Contents/Resources/etc/images/
+cp aquamacs/src/Emacs.23.icns nextstep/Emacs.app/Contents/Resources/Emacs.icns
+
+rm -r "nextstep/Emacs.app/Contents/Resources/Emacs Manual" 2>/dev/null
+cp -r aquamacs/doc/EmacsManual "nextstep/Emacs.app/Contents/Resources/Emacs Manual"
+rm -r "nextstep/Emacs.app/Contents/Resources/Aquamacs Help" 2>/dev/null
+cp -r aquamacs/doc/AquamacsHelp "nextstep/Emacs.app/Contents/Resources/Aquamacs Help"
+cd nextstep/Emacs.app/Contents/Resources
+tar xzf ../../../../aquamacs/doc/EmacsLispReference.tgz 
+cd - >/dev/null
+
+# no LaunchServices won't find new versions if declared just here
+rm nextstep/Emacs.app/Contents/Resources/English.lproj/InfoPlist.strings 2>/dev/null
+cp aquamacs/src/Info.23.plist nextstep/Emacs.app/Contents/Info.plist
+touch nextstep/Emacs.app/Contents/Info.plist
+
+rm -r nextstep/Emacs.app/Contents/Resources/site-lisp  2>/dev/null
+cp -r aquamacs/src/site-lisp nextstep/Emacs.app/Contents/Resources/site-lisp 
+
+# part of Emacs 23
+rm -r nextstep/Emacs.app/Contents/Resources/site-lisp/edit-modes/nxml 
+
+touch nextstep/Emacs.app
