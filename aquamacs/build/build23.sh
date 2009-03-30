@@ -6,4 +6,4 @@
 PATH=/bin:/sbin:/usr/bin  GZIP_PROG=  ./configure --with-ns --without-x
 make bootstrap
 make install
-./finish-aquamacs
+aquamacs/build/finish-aquamacs
