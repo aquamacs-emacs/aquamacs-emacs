@@ -223,7 +223,7 @@ The properties returned may include `top', `left', `height', and `width'."
   "Keymap of alternative meanings for some keys under NS.")
 
 ;; Here are some Nextstep-like bindings for command key sequences.
-(define-key global-map [?\s-,] 'ns-popup-prefs-panel)
+(define-key global-map [?\s-,] 'customize)
 (define-key global-map [?\s-'] 'next-multiframe-window)
 (define-key global-map [?\s-`] 'other-frame)
 (define-key global-map [?\s--] 'center-line)
@@ -626,7 +626,6 @@ this defaults to \"printenv\"."
 ;; Separate undo from cut/paste section, add spell for platform consistency.
 (define-key-after menu-bar-edit-menu [separator-undo] '("--") 'undo)
 (define-key-after menu-bar-edit-menu [spell] '("Spell" . ispell-menu-map) 'fill)
-
 
 (defun force-menu-bar-update-buffers ()
   ;; This is a hack to get around fact that we already checked

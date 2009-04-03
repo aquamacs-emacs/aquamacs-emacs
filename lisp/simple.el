@@ -1360,7 +1360,6 @@ this by calling a function defined by `minibuffer-default-add-function'.")
   "Return a list of all completions without the default value.
 This function is used to add all elements of the completion table to
 the end of the list of defaults just after the default value."
-  (interactive)
   (let ((def minibuffer-default)
 	(all (all-completions ""
 			      minibuffer-completion-table
@@ -5010,6 +5009,10 @@ unless optional argument SOFT is non-nil."
 Some major modes set this.")
 
 (put 'auto-fill-function :minor-mode-function 'auto-fill-mode)
+;; `functions' and `hooks' are usually unsafe to set, but setting
+;; auto-fill-function to nil in a file-local setting is safe and
+;; can be useful to prevent auto-filling.
+(put 'auto-fill-function 'safe-local-variable 'null)
 ;; FIXME: turn into a proper minor mode.
 ;; Add a global minor mode version of it.
 (defun auto-fill-mode (&optional arg)

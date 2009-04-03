@@ -742,13 +742,14 @@ PATH-AND-SUFFIXES is a pair of lists, (DIRECTORIES . SUFFIXES)."
 (make-obsolete 'locate-file-completion 'locate-file-completion-table "23.1")
 
 (defvar locate-dominating-stop-dir-regexp
-  "\\`\\(?:[\\/][\\/]\\|/\\(?:net\\|afs\\|\\.\\.\\.\\)/\\)\\'"
+  "\\`\\(?:[\\/][\\/][^\\/]+\\|/\\(?:net\\|afs\\|\\.\\.\\.\\)/\\)\\'"
   "Regexp of directory names which stop the search in `locate-dominating-file'.
 Any directory whose name matches this regexp will be treated like
 a kind of root directory by `locate-dominating-file' which will stop its search
 when it bumps into it.
 The default regexp prevents fruitless and time-consuming attempts to find
-special files in directories in which filenames are interpreted as hostnames.")
+special files in directories in which filenames are interpreted as hostnames,
+or mount points potentially requiring authentication as a different user.")
 
 ;; (defun locate-dominating-files (file regexp)
 ;;   "Look up the directory hierarchy from FILE for a file matching REGEXP.
@@ -5295,12 +5296,14 @@ and `list-directory-verbose-switches'."
   "Quote characters special to the shell in PATTERN, leave wildcards alone.
 
 PATTERN is assumed to represent a file-name wildcard suitable for the
-underlying filesystem.  For Unix and GNU/Linux, the characters from the
-set [ \\t\\n;<>&|()'\"#$] are quoted with a backslash; for DOS/Windows, all
+underlying filesystem.  For Unix and GNU/Linux, each character from the
+set [ \\t\\n;<>&|()'\"#$] is quoted with a backslash; for DOS/Windows, all
 the parts of the pattern which don't include wildcard characters are
 quoted with double quotes.
-Existing quote characters in PATTERN are left alone, so you can pass
-PATTERN that already quotes some of the special characters."
+
+This function leaves alone existing quote characters (\\ on Unix and \"
+on Windows), so PATTERN can use them to quote wildcard characters that
+need to be passed verbatim to shell commands."
   (save-match-data
     (cond
      ((memq system-type '(ms-dos windows-nt cygwin))

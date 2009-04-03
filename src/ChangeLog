@@ -1,4 +1,46 @@
+2009-04-03  Chong Yidong  <cyd@stupidchicken.com>
+
+	* term.c (produce_stretch_glyph): Reduce width of stretch glyphs
+	so they don't get wider than the window, matching 2006-01-23
+	change to the partner function in xdisp.c (Bug#2800).
+
+2009-04-03  Kenichi Handa  <handa@m17n.org>
+
+	* print.c (print_object): Make each lowest sub_char_table start a
+	new line (Bug#2866).
+
+2009-04-02  Kenichi Handa  <handa@m17n.org>
+
+	* fontset.c (fontset_font): Record no-font when a fontset
+	explicitly tells not to try another font-specs.
+
+2009-03-30  Pierre Poissinger  <pierre.poissinger@gmail.com>  (tiny change)
+
+	* charset.c (map_charset_for_dump): Add missing UNGCPRO.
+
+2009-03-30  Kenichi Handa  <handa@m17n.org>
+
+	* fontset.c (fontset_from_font): Specify only registry in a
+	font-spec for all characters supported by that registry.
+
+	* ftfont.c: Fix previous change.  Define ftfont_variation_glyphs
+	even if HAVE_M17N_FLT is not defined.
+
+2009-03-29  Sebastian Rose  <sebastian_rose@gmx.de>  (tiny change)
+
+	* ftfont.c: Conditionalize prototyping and use of
+	ftfont_variation_glyphs.
+
 2009-03-28  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* frame.c (delete_frame): Work around compiler bug.
+
+	* editfns.c (general_insert_function): Adjust to insdel.c changes.
+	* insdel.c (prepare_to_modify_buffer, signal_before_change):
+	Some more EMACS_INT.
+	* lisp.h (copy_text, count_size_as_multibyte): Fix last change.
+
+	* xdisp.c (dump_glyph): Fix typo.
 
 	* insdel.c (move_gap, move_gap_both, gap_left, gap_right)
 	(adjust_markers_gap_motion, adjust_markers_for_delete)

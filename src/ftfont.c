@@ -381,8 +381,11 @@ static int ftfont_anchor_point P_ ((struct font *, unsigned, int,
 				    int *, int *));
 static Lisp_Object ftfont_otf_capability P_ ((struct font *));
 static Lisp_Object ftfont_shape P_ ((Lisp_Object));
+
+#ifdef HAVE_OTF_GET_VARIATION_GLYPHS
 static int ftfont_variation_glyphs P_ ((struct font *, int c,
 					unsigned variations[256]));
+#endif /* HAVE_OTF_GET_VARIATION_GLYPHS */
 
 struct font_driver ftfont_driver =
   {
@@ -422,6 +425,7 @@ struct font_driver ftfont_driver =
     NULL,
 #endif	/* not (HAVE_M17N_FLT && HAVE_LIBOTF) */
     NULL,			/* check */
+
 #ifdef HAVE_OTF_GET_VARIATION_GLYPHS
     ftfont_variation_glyphs
 #else
@@ -2015,6 +2019,8 @@ ftfont_shape (lgstring)
   return ftfont_shape_by_flt (lgstring, font, ftfont_info->ft_size->face, otf);
 }
 
+#endif	/* HAVE_M17N_FLT */
+
 #ifdef HAVE_OTF_GET_VARIATION_GLYPHS
 
 static int
@@ -2032,7 +2038,6 @@ ftfont_variation_glyphs (font, c, variations)
 }
 
 #endif	/* HAVE_OTF_GET_VARIATION_GLYPHS */
-#endif	/* HAVE_M17N_FLT */
 #endif	/* HAVE_LIBOTF */
 
 Lisp_Object
