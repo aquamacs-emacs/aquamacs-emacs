@@ -4318,16 +4318,16 @@ This requires the external program `diff' to be in your `exec-path'."
   nil)
 
 (defvar save-some-buffers-action-alist
-  `((?\C-r
-     ,(lambda (buf)
-        (if (not enable-recursive-minibuffers)
-            (progn (display-buffer buf)
-                   (setq other-window-scroll-buffer buf))
-          (view-buffer buf (lambda (_) (exit-recursive-edit)))
-          (recursive-edit))
-        ;; Return nil to ask about BUF again.
-        nil)
-     "view this buffer")
+  `(;; (?\C-r
+;;      ,(lambda (buf)
+;;         (if (not enable-recursive-minibuffers)
+;;             (progn (display-buffer buf)
+;;                    (setq other-window-scroll-buffer buf))
+;;           (view-buffer buf (lambda (_) (exit-recursive-edit)))
+;;           (recursive-edit))
+;;         ;; Return nil to ask about BUF again.
+;;         nil)
+;;      "view this buffer")
     (?d ,(lambda (buf)
            (if (null buffer-file-name)
                (message "Not applicable: no file")
@@ -4340,7 +4340,7 @@ This requires the external program `diff' to be in your `exec-path'."
                (recursive-edit)))
            ;; Return nil to ask about BUF again.
            nil)
-	"view changes in this buffer"))
+	"view changes"))
   "ACTION-ALIST argument used in call to `map-y-or-n-p'.")
 
 (defvar buffer-save-without-query nil
@@ -4366,7 +4366,7 @@ change the additional actions you can take on files."
   (save-window-excursion
     (let* (queried some-automatic
 	   files-done abbrevs-done)
-      (dolist (buffer (buffer-list))
+      (dolist (buffer (buffer-list   ))
 	;; First save any buffers that we're supposed to save unconditionally.
 	;; That way the following code won't ask about them.
 	(with-current-buffer buffer
@@ -4394,9 +4394,19 @@ change the additional actions you can take on files."
                     (if arg
                         t
                       (setq queried t)
+		      (with-current-buffer buffer
+			(with-selected-window (get-window-for-other-buffer)
+			  (if (and (boundp 'tabbar-mode) tabbar-mode)
+			      (switch-to-buffer-in-tab buffer)
+			    (switch-to-buffer buffer))
+			  (select-frame-set-input-focus (window-frame (selected-window)))
+			  (if (fboundp 'smart-move-minibuffer-inside-screen)
+			      (smart-move-minibuffer-inside-screen))))
                       (if (buffer-file-name buffer)
                           (format "Save file %s? "
-                                  (buffer-file-name buffer))
+				  (if (> (length (buffer-file-name buffer)) 30)
+				      (concat "..." (substring (buffer-file-name buffer) -27))
+				    (buffer-file-name buffer)))
                         (format "Save buffer %s? "
                                 (buffer-name buffer))))))
              (lambda (buffer)
