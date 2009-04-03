@@ -128,6 +128,19 @@ regexp describing the end of a sentence, when the value of the variable
   :group 'fill)
 (put 'sentence-end-double-space 'safe-local-variable 'booleanp)
 
+(defcustom sentence-end-double-space-for-recognition nil
+  "Non-nil means a single space does not end a sentence.
+This is relevant for the recognition of sentence ends.  See also
+`sentence-end-without-period' and `colon-double-space'.  If non-nil, 
+the value of `sentence-end-double-space' is used.
+
+This value is used by the function `sentence-end' to construct the
+regexp describing the end of a sentence, when the value of the variable
+`sentence-end' is nil.  See Info node `(elisp)Standard Regexps'."
+  :type 'boolean
+  :group 'fill)
+;;;###autoload(put 'sentence-end-double-space-for-recognition 'safe-local-variable 'booleanp)
+
 (defcustom sentence-end-without-period nil
   "Non-nil means a sentence will end without a period.
 For example, a sentence in Thai text ends with double space but
@@ -187,9 +200,10 @@ in between.  See Info node `(elisp)Standard Regexps'."
       (concat (if sentence-end-without-period "\\w[ \u00a0][ \u00a0]\\|")
 	      "\\("
 	      sentence-end-base
-              (if sentence-end-double-space
-                  "\\($\\|[ \u00a0]$\\|\t\\|[ \u00a0][ \u00a0]\\)" "\\($\\|[\t \u00a0]\\)")
-              "\\|[" sentence-end-without-space "]+"
+             (if (and sentence-end-double-space
+		       sentence-end-double-space-for-recognition)
+                 "\\($\\|[ \u00a0]$\\|\t\\|[ \u00a0][ \u00a0]\\)" "\\($\\|[\t \u00a0]\\)")
+             "\\|[" sentence-end-without-space "]+"
 	      "\\)"
               "[ \u00a0\t\n]*")))
 

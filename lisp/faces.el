@@ -2382,6 +2382,62 @@ Use the face `mode-line-highlight' for features that can be selected."
   :group 'mode-line-faces
   :group 'basic-faces)
 
+(defface mode-line-flags
+  '((t (:family "sansserif")))
+  "Face used for MULE and Modified parts of the mode line."
+  :version "22.1"
+  :group 'mode-line-faces
+  :group 'basic-faces)
+
+(defface mode-line-flags
+  '((t (:family "sansserif")))
+  "Face used for MULE and Modified parts of the mode line."
+  :version "22.1"
+  :group 'mode-line-faces
+  :group 'basic-faces)
+
+(defface mode-line-flags
+  '((t (:family "sansserif")))
+  "Face used for MULE and Modified parts of the mode line."
+  :version "22.1"
+  :group 'mode-line-faces
+  :group 'basic-faces)
+
+(defface mode-line-flags
+  '((t (:family "sansserif")))
+  "Face used for MULE and Modified parts of the mode line."
+  :version "22.1"
+  :group 'mode-line-faces
+  :group 'basic-faces)
+
+(defface mode-line-flags
+  '((t (:family "sansserif")))
+  "Face used for MULE and Modified parts of the mode line."
+  :version "22.1"
+  :group 'mode-line-faces
+  :group 'basic-faces)
+
+(defface mode-line-flags
+  '((t (:family "sansserif")))
+  "Face used for MULE and Modified parts of the mode line."
+  :version "22.1"
+  :group 'mode-line-faces
+  :group 'basic-faces)
+
+(defface mode-line-flags
+  '((t (:family "sansserif")))
+  "Face used for MULE and Modified parts of the mode line."
+  :version "22.1"
+  :group 'mode-line-faces
+  :group 'basic-faces)
+
+(defface mode-line-flags
+  '((t (:family "sansserif")))
+  "Face used for MULE and Modified parts of the mode line."
+  :version "22.1"
+  :group 'mode-line-faces
+  :group 'basic-faces)
+
 ;; Make `modeline' an alias for `mode-line', for compatibility.
 (put 'modeline 'face-alias 'mode-line)
 (put 'modeline-inactive 'face-alias 'mode-line-inactive)
