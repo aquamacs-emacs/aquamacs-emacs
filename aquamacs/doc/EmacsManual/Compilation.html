@@ -1,0 +1,100 @@
+<html lang="en">
+<head>
+<title>Running Compilations under Emacs</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Running Compilations under Emacs">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Compilation">Compilation</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Grep-Searching.html#Grep%20Searching">Grep Searching</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Building.html#Building">Building</a>
+<hr><br>
+</div>
+
+<h3 class="section">Running Compilations under Emacs</h3>
+
+<p>Emacs can run compilers for noninteractive languages such as C and
+Fortran as inferior processes, feeding the error log into an Emacs buffer. 
+It can also parse the error messages and show you the source lines where
+compilation errors occurred.
+
+     <dl>
+<dt><kbd>M-x compile</kbd>
+     <dd>Run a compiler asynchronously under Emacs, with error messages going to
+the <code>*compilation*</code> buffer. 
+<br><dt><kbd>M-x recompile</kbd>
+     <dd>Invoke a compiler with the same command as in the last invocation of
+<kbd>M-x compile</kbd>. 
+<br><dt><kbd>M-x grep</kbd>
+     <dd>Run <code>grep</code> asynchronously under Emacs, with matching lines
+listed in the buffer named <code>*grep*</code>. 
+<br><dt><kbd>M-x grep-find</kbd>
+     <dd>Run <code>grep</code> via <code>find</code>, with user-specified arguments, and
+collect output in the buffer named <code>*grep*</code>. 
+<br><dt><kbd>M-x kill-compilation</kbd>
+     <dd><dt><kbd>M-x kill-grep</kbd>
+     <dd>Kill the running compilation or <code>grep</code> subprocess. 
+</dl>
+
+   <p>To run <code>make</code> or another compilation command, do <kbd>M-x
+compile</kbd>.  This command reads a shell command line using the minibuffer,
+and then executes the command in an inferior shell, putting output in
+the buffer named <code>*compilation*</code>.  The current buffer's default
+directory is used as the working directory for the execution of the
+command; normally, therefore, the compilation happens in this
+directory.
+
+   <p>When the shell command line is read, the minibuffer appears containing
+a default command line, which is the command you used the last time you
+did <kbd>M-x compile</kbd>.  If you type just &lt;RET&gt;, the same command
+line is used again.  For the first <kbd>M-x compile</kbd>, the default is
+<code>make -k</code>.  The default compilation command comes from the variable
+<code>compile-command</code>; if the appropriate compilation command for a
+file is something other than <code>make -k</code>, it can be useful for the
+file to specify a local value for <code>compile-command</code> (see <a href="File-Variables.html#File%20Variables">File Variables</a>).
+
+   <p>Starting a compilation displays the buffer <code>*compilation*</code> in
+another window but does not select it.  The buffer's mode line tells you
+whether compilation is finished, with the word <code>run</code> or <code>exit</code>
+inside the parentheses.  You do not have to keep this buffer visible;
+compilation continues in any case.  While a compilation is going on, the
+string <code>Compiling</code> appears in the mode lines of all windows.  When
+this string disappears, the compilation is finished.
+
+   <p>If you want to watch the compilation transcript as it appears, switch
+to the <code>*compilation*</code> buffer and move point to the end of the
+buffer.  When point is at the end, new compilation output is inserted
+above point, which remains at the end.  If point is not at the end of
+the buffer, it remains fixed while more compilation output is added at
+the end of the buffer.
+
+   <p>If you set the variable <code>compilation-scroll-output</code> to a
+non-<code>nil</code> value, then the compilation buffer always scrolls to
+follow output as it comes in.
+
+   <p>To kill the compilation process, do <kbd>M-x kill-compilation</kbd>.  When
+the compiler process terminates, the mode line of the
+<code>*compilation*</code> buffer changes to say <code>signal</code> instead of
+<code>run</code>.  Starting a new compilation also kills any running
+compilation, as only one can exist at any time.  However, <kbd>M-x
+compile</kbd> asks for confirmation before actually killing a compilation
+that is running.
+
+   <p>To rerun the last compilation with the same command, type <kbd>M-x
+recompile</kbd>.  This automatically reuses the compilation command from the
+last invocation of <kbd>M-x compile</kbd>.
+
+   </body></html>
+

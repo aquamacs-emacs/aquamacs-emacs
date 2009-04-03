@@ -1,0 +1,95 @@
+<html lang="en">
+<head>
+<title>Compilation Mode</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Compilation Mode">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Compilation%20Mode">Compilation Mode</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Compilation-Shell.html#Compilation%20Shell">Compilation Shell</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Grep-Searching.html#Grep%20Searching">Grep Searching</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Building.html#Building">Building</a>
+<hr><br>
+</div>
+
+<h3 class="section">Compilation Mode</h3>
+
+<p>The <code>*compilation*</code> buffer uses a special major mode, Compilation
+mode, whose main feature is to provide a convenient way to look at the
+source line where the error happened.
+
+   <p>If you set the variable <code>compilation-scroll-output</code> to a
+non-<code>nil</code> value, then the compilation buffer always scrolls to
+follow output as it comes in.
+
+     <dl>
+<dt><kbd>C-x `</kbd>
+     <dd>Visit the locus of the next compiler error message or <code>grep</code> match. 
+<br><dt><kbd>&lt;RET&gt;</kbd>
+     <dd>Visit the locus of the error message that point is on. 
+This command is used in the compilation buffer. 
+<br><dt><kbd>Mouse-2</kbd>
+     <dd>Visit the locus of the error message that you click on. 
+</dl>
+
+   <p>You can visit the source for any particular error message by moving
+point in the <code>*compilation*</code> buffer to that error message and
+typing &lt;RET&gt; (<code>compile-goto-error</code>).  Alternatively, you can
+click <kbd>Mouse-2</kbd> on the error message; you need not switch to the
+<code>*compilation*</code> buffer first.
+
+   <p>To parse the compiler error messages sequentially, type <kbd>C-x `</kbd>
+(<code>next-error</code>).  The character following the <kbd>C-x</kbd> is the
+backquote or "grave accent," not the single-quote.  This command is
+available in all buffers, not just in <code>*compilation*</code>; it displays
+the next error message at the top of one window and source location of
+the error in another window.
+
+   <p>The first time <kbd>C-x `</kbd> is used after the start of a compilation,
+it moves to the first error's location.  Subsequent uses of <kbd>C-x `</kbd>
+advance down to subsequent errors.  If you visit a specific error
+message with &lt;RET&gt; or <kbd>Mouse-2</kbd>, subsequent <kbd>C-x `</kbd>
+commands advance from there.  When <kbd>C-x `</kbd> gets to the end of the
+buffer and finds no more error messages to visit, it fails and signals
+an Emacs error.
+
+   <p><kbd>C-u C-x `</kbd> starts scanning from the beginning of the compilation
+buffer.  This is one way to process the same set of errors again.
+
+   <p>To parse messages from the compiler, Compilation mode uses the
+variable <code>compilation-error-regexp-alist</code> which lists various
+formats of error messages and tells Emacs how to extract the source file
+and the line number from the text of a message.  If your compiler isn't
+supported, you can tailor Compilation mode to it by adding elements to
+that list.  A similar variable <code>grep-regexp-alist</code> tells Emacs how
+to parse output of a <code>grep</code> command.
+
+   <p>Compilation mode also redefines the keys &lt;SPC&gt; and &lt;DEL&gt; to
+scroll by screenfuls, and <kbd>M-n</kbd> and <kbd>M-p</kbd> to move to the next or
+previous error message.  You can also use <kbd>M-{</kbd> and <kbd>M-}</kbd> to
+move up or down to an error message for a different source file.
+
+   <p>The features of Compilation mode are also available in a minor mode
+called Compilation Minor mode.  This lets you parse error messages in
+any buffer, not just a normal compilation output buffer.  Type <kbd>M-x
+compilation-minor-mode</kbd> to enable the minor mode.  This defines the keys
+&lt;RET&gt; and <kbd>Mouse-2</kbd>, as in the Compilation major mode.
+
+   <p>Compilation minor mode works in any buffer, as long as the contents
+are in a format that it understands.  In an Rlogin buffer (see <a href="Remote-Host.html#Remote%20Host">Remote Host</a>), Compilation minor mode automatically accesses remote source
+files by FTP (see <a href="File-Names.html#File%20Names">File Names</a>).
+
+   </body></html>
+

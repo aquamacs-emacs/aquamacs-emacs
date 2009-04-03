@@ -1,0 +1,79 @@
+<html lang="en">
+<head>
+<title>Case Conversion Commands</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Case Conversion Commands">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Case">Case</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Text-Mode.html#Text%20Mode">Text Mode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Filling.html#Filling">Filling</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
+<hr><br>
+</div>
+
+<h3 class="section">Case Conversion Commands</h3>
+
+<p>Emacs has commands for converting either a single word or any arbitrary
+range of text to upper case or to lower case.
+
+     <dl>
+<dt><kbd>M-l</kbd>
+     <dd>Convert following word to lower case (<code>downcase-word</code>). 
+<br><dt><kbd>M-u</kbd>
+     <dd>Convert following word to upper case (<code>upcase-word</code>). 
+<br><dt><kbd>M-c</kbd>
+     <dd>Capitalize the following word (<code>capitalize-word</code>). 
+<br><dt><kbd>C-x C-l</kbd>
+     <dd>Convert region to lower case (<code>downcase-region</code>). 
+<br><dt><kbd>C-x C-u</kbd>
+     <dd>Convert region to upper case (<code>upcase-region</code>). 
+</dl>
+
+   <p>The word conversion commands are the most useful.  <kbd>M-l</kbd>
+(<code>downcase-word</code>) converts the word after point to lower case, moving
+past it.  Thus, repeating <kbd>M-l</kbd> converts successive words. 
+<kbd>M-u</kbd> (<code>upcase-word</code>) converts to all capitals instead, while
+<kbd>M-c</kbd> (<code>capitalize-word</code>) puts the first letter of the word
+into upper case and the rest into lower case.  All these commands convert
+several words at once if given an argument.  They are especially convenient
+for converting a large amount of text from all upper case to mixed case,
+because you can move through the text using <kbd>M-l</kbd>, <kbd>M-u</kbd> or
+<kbd>M-c</kbd> on each word as appropriate, occasionally using <kbd>M-f</kbd> instead
+to skip a word.
+
+   <p>When given a negative argument, the word case conversion commands apply
+to the appropriate number of words before point, but do not move point. 
+This is convenient when you have just typed a word in the wrong case: you
+can give the case conversion command and continue typing.
+
+   <p>If a word case conversion command is given in the middle of a word, it
+applies only to the part of the word which follows point.  This is just
+like what <kbd>M-d</kbd> (<code>kill-word</code>) does.  With a negative argument,
+case conversion applies only to the part of the word before point.
+
+   <p>The other case conversion commands are <kbd>C-x C-u</kbd>
+(<code>upcase-region</code>) and <kbd>C-x C-l</kbd> (<code>downcase-region</code>), which
+convert everything between point and mark to the specified case.  Point and
+mark do not move.
+
+   <p>The region case conversion commands <code>upcase-region</code> and
+<code>downcase-region</code> are normally disabled.  This means that they ask
+for confirmation if you try to use them.  When you confirm, you may
+enable the command, which means it will not ask for confirmation again. 
+See <a href="Disabling.html#Disabling">Disabling</a>.
+
+   </body></html>
+

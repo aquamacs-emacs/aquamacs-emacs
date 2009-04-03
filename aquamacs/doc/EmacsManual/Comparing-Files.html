@@ -1,0 +1,78 @@
+<html lang="en">
+<head>
+<title>Comparing Files</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Comparing Files">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Comparing%20Files">Comparing Files</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Misc-File-Ops.html#Misc%20File%20Ops">Misc File Ops</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Directories.html#Directories">Directories</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
+<hr><br>
+</div>
+
+<h3 class="section">Comparing Files</h3>
+
+<p>The command <kbd>M-x diff</kbd> compares two files, displaying the
+differences in an Emacs buffer named <code>*diff*</code>.  It works by
+running the <code>diff</code> program, using options taken from the variable
+<code>diff-switches</code>.  The value of <code>diff-switches</code> should be a
+string; the default is <code>"-c"</code> to specify a context diff.
+
+   <p>The buffer <code>*diff*</code> has Compilation mode as its major mode, so
+you can use <kbd>C-x `</kbd> to visit successive changed locations in the two
+source files.  You can also move to a particular hunk of changes and
+type &lt;RET&gt; or <kbd>C-c C-c</kbd>, or click <kbd>Mouse-2</kbd> on it, to move
+to the corresponding source location.  You can also use the other
+special commands of Compilation mode: &lt;SPC&gt; and &lt;DEL&gt; for
+scrolling, and <kbd>M-p</kbd> and <kbd>M-n</kbd> for cursor motion. 
+See <a href="Compilation.html#Compilation">Compilation</a>.
+
+   <p>The command <kbd>M-x diff-backup</kbd> compares a specified file with its most
+recent backup.  If you specify the name of a backup file,
+<code>diff-backup</code> compares it with the source file that it is a backup
+of.
+
+   <p>The command <kbd>M-x compare-windows</kbd> compares the text in the current
+window with that in the next window.  Comparison starts at point in each
+window, and each starting position is pushed on the mark ring in its
+respective buffer.  Then point moves forward in each window, a character
+at a time, until a mismatch between the two windows is reached.  Then
+the command is finished.  For more information about windows in Emacs,
+<a href="Windows.html#Windows">Windows</a>.
+
+   <p>With a numeric argument, <code>compare-windows</code> ignores changes in
+whitespace.  If the variable <code>compare-ignore-case</code> is
+non-<code>nil</code>, it ignores differences in case as well.
+
+   <p>Differences between versions of files are often distributed as
+<dfn>patches</dfn>, which are the output from <code>diff</code> or a version
+control system that uses <code>diff</code>.  <kbd>M-x diff-mode</kbd> turns on
+Diff mode, a major mode for viewing and editing patches, either as
+"unified diffs" or "context diffs."
+
+   <p>You can use <kbd>M-x smerge-mode</kbd> to turn on Smerge mode, a minor
+mode for editing output from the <code>diff3</code> program.  This is
+typically the result of a failed merge from a version control system
+"update" outside VC, due to conflicting changes to a file.  Smerge
+mode provides commands to resolve conflicts by selecting specific
+changes.
+
+   <p>See also <a href="Emerge.html#Emerge">Emerge</a>, and <a href="../ediff/index.html#Top">Top</a>, for
+convenient facilities for merging two similar files.
+
+   </body></html>
+

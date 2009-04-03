@@ -1,0 +1,193 @@
+Index: src/macterm.c
+===================================================================
+RCS file: /sources/emacs/emacs/src/macterm.c,v
+retrieving revision 1.218
+diff -c -r1.218 macterm.c
+*** src/macterm.c	26 May 2007 17:21:14 -0000	1.218
+--- src/macterm.c	4 Jun 2007 22:44:41 -0000
+***************
+*** 8849,8854 ****
+--- 8849,8857 ----
+  /* Modifier associated with the function key, or nil to ignore. */
+  Lisp_Object Vmac_function_modifier;
+  
++ /* Modifier associated with the caps lock key, or nil to ignore. */
++ Lisp_Object Vmac_capslock_modifier;
++ 
+  /* True if the option and command modifiers should be used to emulate
+     a three button mouse */
+  Lisp_Object Vmac_emulate_three_button_mouse;
+***************
+*** 8879,8885 ****
+  
+  /* Apple Events */
+  #if USE_CARBON_EVENTS
+! static Lisp_Object Qhi_command;
+  #ifdef MAC_OSX
+  extern Lisp_Object Qwindow;
+  static Lisp_Object Qtoolbar_switch_mode;
+--- 8882,8888 ----
+  
+  /* Apple Events */
+  #if USE_CARBON_EVENTS
+! static Lisp_Object Qhi_command, Qappevent;
+  #ifdef MAC_OSX
+  extern Lisp_Object Qwindow;
+  static Lisp_Object Qtoolbar_switch_mode;
+***************
+*** 9050,9055 ****
+--- 9053,9063 ----
+      if (INTEGERP(val))
+        result |= XUINT(val);
+    }
++   if (!NILP (Vmac_capslock_modifier) && (mods & alphaLock)) {
++     Lisp_Object val = Fget(Vmac_capslock_modifier, Qmodifier_value);
++     if (INTEGERP(val))
++       result |= XUINT(val);
++   }
+  #endif
+  
+    return result;
+***************
+*** 9066,9072 ****
+  
+  #ifdef MAC_OSX
+    mapped_modifiers_all |=
+!     (NILP (Vmac_function_modifier) ? 0 : kEventKeyModifierFnMask);
+  #endif
+  
+    return mapped_modifiers_all & modifiers;
+--- 9074,9081 ----
+  
+  #ifdef MAC_OSX
+    mapped_modifiers_all |=
+!     (NILP (Vmac_function_modifier) ? 0 : kEventKeyModifierFnMask)
+!     | (NILP (Vmac_capslock_modifier) ? 0 : alphaLock);
+  #endif
+  
+    return mapped_modifiers_all & modifiers;
+***************
+*** 9780,9785 ****
+--- 9789,9862 ----
+  }
+  
+  static pascal OSStatus
++ mac_handle_application_event (next_handler, event, data)
++      EventHandlerCallRef next_handler;
++      EventRef event;
++      void *data;
++ {
++   OSStatus result, err;
++   Lisp_Object class_key, id_key, binding;
++   AEEventID ae_id = '    ';
++ 
++   result = CallNextEventHandler (next_handler, event);
++   if (result != eventNotHandledErr)
++     return result;
++  
++ 
++   switch (GetEventKind (event))
++     {
++     case kEventAppActivated:
++       ae_id = 'APAC';
++       break;
++     case kEventAppDeactivated:
++       ae_id = 'APDA';
++     }
++   /* An application event is mapped to an Apple event whose event class
++      symbol is `appevent' and event ID is its command ID.  */
++   class_key = Qappevent;
++ 
++   /* retrieve event from the appropriate keymap */
++   mac_find_apple_event_spec (0, ae_id,
++ 			     &class_key, &id_key, &binding);
++   if (!NILP (binding) && !EQ (binding, Qundefined))
++     {
++       if (INTEGERP (binding))
++ 	return XINT (binding);
++       else
++ 	{
++ 	  AppleEvent apple_event;
++ 	  static EventParamName names[] = {};
++ 	  static EventParamType types[] = {};
++ 	  err = create_apple_event_from_event_ref (event, 0, names, types,
++ 						   &apple_event);
++ 	  if (err == noErr)
++ 	    {
++ 	      mac_store_apple_event (class_key, id_key, &apple_event);
++ 	      AEDisposeDesc (&apple_event);
++ 	      return noErr;
++ 	    }
++ 	}
++     }
++ 
++   return eventNotHandledErr;
++ }
++ 
++ 
++ static OSErr
++ init_application_event_handler ()
++ {
++   EventTypeSpec specs[] = {{kEventClassApplication,  kEventAppActivated},
++ 			   {kEventClassApplication,  kEventAppDeactivated}};
++   static EventHandlerUPP handle_application_eventUPP = NULL;
++ 
++   if (handle_application_eventUPP == NULL)
++     handle_application_eventUPP = NewEventHandlerUPP (mac_handle_application_event);
++   return InstallApplicationEventHandler (handle_application_eventUPP,
++ 					 GetEventTypeCount (specs), specs,
++ 					 NULL, NULL);
++ }
++ 
++ static pascal OSStatus
+  mac_handle_window_event (next_handler, event, data)
+       EventHandlerCallRef next_handler;
+       EventRef event;
+***************
+*** 11905,11910 ****
+--- 11982,11988 ----
+  #endif	/* MAC_OSX */
+  
+    init_command_handler ();
++   init_application_event_handler ();
+  
+    init_menu_bar ();
+  
+***************
+*** 11963,11968 ****
+--- 12041,12047 ----
+  
+  #if USE_CARBON_EVENTS
+    Qhi_command   = intern ("hi-command");    staticpro (&Qhi_command);
++   Qappevent   = intern ("application-event");    staticpro (&Qappevent);
+  #ifdef MAC_OSX
+    Qtoolbar_switch_mode = intern ("toolbar-switch-mode");
+    staticpro (&Qtoolbar_switch_mode);
+***************
+*** 12066,12078 ****
+--- 12145,12169 ----
+  respective modifier.  The default is `meta'.  */);
+    Vmac_command_modifier = Qmeta;
+  
++ 
++ #ifdef MAC_OSX
+    DEFVAR_LISP ("mac-function-modifier", &Vmac_function_modifier,
+      doc: /* *Modifier key assumed when the Mac function key is pressed.
+  The value can be `control', `meta', `alt', `hyper', or `super' for the
+  respective modifier.  Note that remapping the function key may lead to
+  unexpected results for some keys on non-US/GB keyboards.  */);
++ #endif
+    Vmac_function_modifier = Qnil;
+  
++ #ifdef MAC_OSX
++   DEFVAR_LISP ("mac-capslock-modifier", &Vmac_capslock_modifier,
++     doc: /* *Modifier key assumed when the Mac Caps Lock key is pressed.
++ The value can be `control', `meta', `alt', `hyper', or `super' for the
++ respective modifier.  Note that Caps Lock will continue to act as a
++ toggle key.  */);
++ #endif
++   Vmac_capslock_modifier = Qnil;
++ 
+    DEFVAR_LISP ("mac-emulate-three-button-mouse",
+  	       &Vmac_emulate_three_button_mouse,
+      doc: /* *Specify a way of three button mouse emulation.

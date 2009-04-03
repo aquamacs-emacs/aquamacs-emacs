@@ -1,0 +1,38 @@
+*** lisp/menu-bar.el	Sat Apr 21 19:21:34 2007
+--- lisp/menu-bar.el	Sat Apr 21 19:20:42 2007
+***************
+*** 1161,1167 ****
+    '("--"))
+
+  (define-key menu-bar-tools-menu [pcl-cvs]
+!   '(menu-item "PCL-CVS" cvs-global-menu))
+  (define-key menu-bar-tools-menu [vc] nil) ;Create the place for the VC menu.
+
+  (define-key menu-bar-tools-menu [separator-compare]
+--- 1191,1197 ----
+    '("--"))
+
+  (define-key menu-bar-tools-menu [pcl-cvs]
+!   '(menu-item "CVS Repositories" cvs-global-menu))
+  (define-key menu-bar-tools-menu [vc] nil) ;Create the place for the VC menu.
+
+  (define-key menu-bar-tools-menu [separator-compare]
+*** src/keyboard.c	25 Feb 2008 16:04:54 -0000	1.899.2.11
+--- src/keyboard.c	15 May 2008 10:27:39 -0000
+***************
+*** 7786,7792 ****
+    tem = XCDR (cachelist);
+    if (newcache && !NILP (tem))
+      {
+!       tem = concat3 (build_string ("  ("), tem, build_string (")"));
+        XSETCDR (cachelist, tem);
+      }
+  
+--- 7798,7804 ----
+    tem = XCDR (cachelist);
+    if (newcache && !NILP (tem))
+      {
+!       tem = concat2 (build_string ("    "), tem);
+        XSETCDR (cachelist, tem);
+      }
+  

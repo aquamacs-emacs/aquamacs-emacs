@@ -1,0 +1,61 @@
+% $Id: hthtml.sty,v 1.1 2005/07/05 13:47:53 davidswelt Exp $
+%
+\ProvidesPackage{hthtml}
+  [96/11/07 v1.1 Extended interface for LaTeX2HTML]
+\RequirePackage{html}
+%
+% \htlink <text> <url>
+% 
+% a replacement for \htmladdnormallinkfoot which allows ~ and _ in the
+% url. 
+%
+\newcommand\htlink[2]{#1\footnote{\ht@url{#2}}}
+% redefine \htmladdnormallinkfoot to set in typewriterstyle
+\renewcommand\htmladdnormallinkfoot[2]{{#1}\footnote{\texttt{#2}}}
+%
+% \hturl <url>
+%
+% give an url directly (anchor and text are the same).
+%
+\newcommand{\hturl}[1]{\ht@url{#1}}
+%
+% \htmailto <mail-address>
+%
+% set <mail-address> nice.
+%
+\newcommand{\htmailto}[1]{#1}
+%
+% \htsetvar <variable> <value>
+%
+% Offer the possibility to change the configuration of latex2html: 
+% Set <variable> to <value>
+%
+\newcommand\htsetvar[2]{}
+%
+% \htaddress <text>
+%
+% Set <text> as an address.
+%
+\newcommand\htaddress[1]{\par\noindent\textit{#1}\par}
+%
+% \htmetainfo <field> <value>
+%
+\newcommand\htmetainfo[2]{}
+%
+% htdescription is like description, but allows footnotes.
+%
+\newenvironment{htdescription}{\list{}{%
+\labelwidth 0pt\itemindent-\leftmargin%
+\newcommand{\nolabel}[1]{{}}%
+\let\makelabel\nolabel%
+\let\olditem=\item%
+\def\item[##1]{\olditem[]{\bf{##1}}\hspace\labelsep\ignorespaces}%
+}}{\endlist}%
+%
+% Implement \ht@url, which converts ~ and _ tokens to text. (Taken
+% from the TeX-Book)
+\def\ht@strip#1>{}
+\def\ht@url#1{{\def\ht@next{#1}%
+    \tt\frenchspacing\expandafter\ht@strip\meaning\ht@next%
+    }}
+%

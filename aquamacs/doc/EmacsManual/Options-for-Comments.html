@@ -1,0 +1,85 @@
+<html lang="en">
+<head>
+<title>Options Controlling Comments</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Options Controlling Comments">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Options%20for%20Comments">Options for Comments</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Multi-Line-Comments.html#Multi-Line%20Comments">Multi-Line Comments</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Comments.html#Comments">Comments</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Options Controlling Comments</h4>
+
+<p>The comment column is stored in the variable <code>comment-column</code>.  You
+can set it to a number explicitly.  Alternatively, the command <kbd>C-x ;</kbd>
+(<code>comment-set-column</code>) sets the comment column to the column point is
+at.  <kbd>C-u C-x ;</kbd> sets the comment column to match the last comment
+before point in the buffer, and then does a <kbd>M-;</kbd> to align the
+current line's comment under the previous one.
+
+   <p>The variable <code>comment-column</code> is per-buffer: setting the variable
+in the normal fashion affects only the current buffer, but there is a
+default value which you can change with <code>setq-default</code>. 
+See <a href="Locals.html#Locals">Locals</a>.  Many major modes initialize this variable for the
+current buffer.
+
+   <p>The comment commands recognize comments based on the regular
+expression that is the value of the variable <code>comment-start-skip</code>. 
+Make sure this regexp does not match the null string.  It may match more
+than the comment starting delimiter in the strictest sense of the word;
+for example, in C mode the value of the variable is
+<code>"/\\*+&nbsp;*\\|//+&nbsp;*""</code>, which matches extra stars and spaces
+after the <code>/*</code> itself, and accepts C++ style comments also. 
+(Note that <code>\\</code> is needed in Lisp syntax to include a <code>\</code> in
+the string, which is needed to deny the first star its special meaning
+in regexp syntax.  See <a href="Regexps.html#Regexps">Regexps</a>.)
+
+   <p>When a comment command makes a new comment, it inserts the value of
+<code>comment-start</code> to begin it.  The value of <code>comment-end</code> is
+inserted after point, so that it will follow the text that you will insert
+into the comment.  In C mode, <code>comment-start</code> has the value
+<code>"/*&nbsp;"</code> and <code>comment-end</code> has the value <code>"&nbsp;*/"</code>.
+
+   <p>The variable <code>comment-padding</code> specifies how many spaces
+<code>comment-region</code> should insert on each line between the
+comment delimiter and the line's original text.  The default is 1,
+to insert one space.
+
+   <p>The variable <code>comment-multi-line</code> controls how <kbd>C-M-j</kbd>
+(<code>indent-new-comment-line</code>) behaves when used inside a comment.  If
+<code>comment-multi-line</code> is <code>nil</code>, as it normally is, then the
+comment on the starting line is terminated and a new comment is started
+on the new following line.  If <code>comment-multi-line</code> is not
+<code>nil</code>, then the new following line is set up as part of the same
+comment that was found on the starting line.  This is done by not
+inserting a terminator on the old line, and not inserting a starter on
+the new line.  In languages where multi-line comments work, the choice
+of value for this variable is a matter of taste.
+
+   <p>The variable <code>comment-indent-function</code> should contain a function
+that will be called to compute the indentation for a newly inserted
+comment or for aligning an existing comment.  It is set differently by
+various major modes.  The function is called with no arguments, but with
+point at the beginning of the comment, or at the end of a line if a new
+comment is to be inserted.  It should return the column in which the
+comment ought to start.  For example, in Lisp mode, the indent hook
+function bases its decision on how many semicolons begin an existing
+comment, and on the code in the preceding lines.
+
+   </body></html>
+

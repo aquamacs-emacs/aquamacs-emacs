@@ -1,0 +1,67 @@
+<html lang="en">
+<head>
+<title>Registering a File for Version Control</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Registering a File for Version Control">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Registering">Registering</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="VC-Status.html#VC%20Status">VC Status</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Secondary-VC-Commands.html#Secondary%20VC%20Commands">Secondary VC Commands</a>
+<hr><br>
+</div>
+
+<h3 class="subsubsection">Registering a File for Version Control</h5>
+
+<p>You can put any file under version control by simply visiting it, and
+then typing <kbd>C-x&nbsp;v&nbsp;i</kbd> (<code>vc-register</code>).
+
+     <dl>
+<dt><kbd>C-x v i</kbd>
+     <dd>Register the visited file for version control. 
+</dl>
+
+   <p>To register the file, Emacs must choose which version control system
+to use for it.  If the file's directory already contains files
+registered in a version control system, Emacs uses that system.  If
+there is more than one system in use for a directory, Emacs uses the one
+that appears first in <code>vc-handled-backends</code> (see <a href="Customizing-VC.html#Customizing%20VC">Customizing VC</a>). 
+On the other hand, if there are no files already registered,
+Emacs uses the first system from <code>vc-handled-backends</code> that could
+register the file--for example, you cannot register a file under CVS if
+its directory is not already part of a CVS tree.
+
+   <p>With the default value of <code>vc-handled-backends</code>, this means
+that Emacs uses RCS if there are any files under RCS control, CVS if
+there are any files under CVS, SCCS if any files are under SCCS, or
+RCS as the ultimate default.
+
+   <p>If locking is in use, <kbd>C-x v i</kbd> leaves the file unlocked and
+read-only.  Type <kbd>C-x C-q</kbd> if you wish to start editing it.  After
+registering a file with CVS, you must subsequently commit the initial
+version by typing <kbd>C-x C-q</kbd>.
+
+   <p>The initial version number for a newly registered file is 1.1, by
+default.  You can specify a different default by setting the variable
+<code>vc-default-init-version</code>, or you can give <kbd>C-x v i</kbd> a numeric
+argument; then it reads the initial version number for this particular
+file using the minibuffer.
+
+   <p>If <code>vc-initial-comment</code> is non-<code>nil</code>, <kbd>C-x v i</kbd> reads an
+initial comment to describe the purpose of this source file.  Reading
+the initial comment works like reading a log entry (see <a href="Log-Buffer.html#Log%20Buffer">Log Buffer</a>).
+
+   </body></html>
+

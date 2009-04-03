@@ -1,0 +1,88 @@
+<html lang="en">
+<head>
+<title>Dynamic Abbrev Expansion</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Dynamic Abbrev Expansion">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Dynamic%20Abbrevs">Dynamic Abbrevs</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Dabbrev-Customization.html#Dabbrev%20Customization">Dabbrev Customization</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Saving-Abbrevs.html#Saving%20Abbrevs">Saving Abbrevs</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Abbrevs.html#Abbrevs">Abbrevs</a>
+<hr><br>
+</div>
+
+<h3 class="section">Dynamic Abbrev Expansion</h3>
+
+<p>The abbrev facility described above operates automatically as you insert
+text, but all abbrevs must be defined explicitly.  By contrast,
+<dfn>dynamic abbrevs</dfn> allow the meanings of abbrevs to be determined
+automatically from the contents of the buffer, but dynamic abbrev expansion
+happens only when you request it explicitly.
+
+     <dl>
+<dt><kbd>M-/</kbd>
+     <dd>Expand the word in the buffer before point as a <dfn>dynamic abbrev</dfn>,
+by searching in the buffer for words starting with that abbreviation
+(<code>dabbrev-expand</code>).
+
+     <br><dt><kbd>C-M-/</kbd>
+     <dd>Complete the word before point as a dynamic abbrev
+(<code>dabbrev-completion</code>). 
+</dl>
+
+   <p>For example, if the buffer contains <code>does this follow </code> and you
+type <kbd>f o M-/</kbd>, the effect is to insert <code>follow</code> because that
+is the last word in the buffer that starts with <code>fo</code>.  A numeric
+argument to <kbd>M-/</kbd> says to take the second, third, etc. distinct
+expansion found looking backward from point.  Repeating <kbd>M-/</kbd>
+searches for an alternative expansion by looking farther back.  After
+scanning all the text before point, it searches the text after point. 
+The variable <code>dabbrev-limit</code>, if non-<code>nil</code>, specifies how far
+in the buffer to search for an expansion.
+
+   <p>After scanning the current buffer, <kbd>M-/</kbd> normally searches other
+buffers, unless you have set <code>dabbrev-check-all-buffers</code> to
+<code>nil</code>.
+
+   <p>For finer control over which buffers to scan, customize the variable
+<code>dabbrev-ignored-buffer-regexps</code>.  Its value is a list of regular
+expressions.  If a buffer's name matches any of these regular
+expressions, dynamic abbrev expansion skips that buffer.
+
+   <p>A negative argument to <kbd>M-/</kbd>, as in <kbd>C-u - M-/</kbd>, says to
+search first for expansions after point, and second for expansions
+before point.  If you repeat the <kbd>M-/</kbd> to look for another
+expansion, do not specify an argument.  This tries all the expansions
+after point and then the expansions before point.
+
+   <p>After you have expanded a dynamic abbrev, you can copy additional
+words that follow the expansion in its original context.  Simply type
+<kbd>&lt;SPC&gt; M-/</kbd> for each word you want to copy.  The spacing and
+punctuation between words is copied along with the words.
+
+   <p>The command <kbd>C-M-/</kbd> (<code>dabbrev-completion</code>) performs
+completion of a dynamic abbreviation.  Instead of trying the possible
+expansions one by one, it finds all of them, then inserts the text that
+they have in common.  If they have nothing in common, <kbd>C-M-/</kbd>
+displays a list of completions, from which you can select a choice in
+the usual manner.  See <a href="Completion.html#Completion">Completion</a>.
+
+   <p>Dynamic abbrev expansion is completely independent of Abbrev mode; the
+expansion of a word with <kbd>M-/</kbd> is completely independent of whether
+it has a definition as an ordinary abbrev.
+
+   </body></html>
+

@@ -1,0 +1,59 @@
+<html lang="en">
+<head>
+<title>Fortran Auto Fill Mode</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Fortran Auto Fill Mode">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Fortran%20Autofill">Fortran Autofill</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Fortran-Columns.html#Fortran%20Columns">Fortran Columns</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Fortran-Comments.html#Fortran%20Comments">Fortran Comments</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Fortran.html#Fortran">Fortran</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Fortran Auto Fill Mode</h4>
+
+<p>Fortran Auto Fill mode is a minor mode which automatically splits
+Fortran statements as you insert them when they become too wide. 
+Splitting a statement involves making continuation lines using
+<code>fortran-continuation-string</code> (see <a href="ForIndent-Cont.html#ForIndent%20Cont">ForIndent Cont</a>).  This
+splitting happens when you type &lt;SPC&gt;, &lt;RET&gt;, or &lt;TAB&gt;, and
+also in the Fortran indentation commands.
+
+   <p><kbd>M-x fortran-auto-fill-mode</kbd> turns Fortran Auto Fill mode on if it
+was off, or off if it was on.  This command works the same as <kbd>M-x
+auto-fill-mode</kbd> does for normal Auto Fill mode (see <a href="Filling.html#Filling">Filling</a>).  A
+positive numeric argument turns Fortran Auto Fill mode on, and a
+negative argument turns it off.  You can see when Fortran Auto Fill mode
+is in effect by the presence of the word <code>Fill</code> in the mode line,
+inside the parentheses.  Fortran Auto Fill mode is a minor mode, turned
+on or off for each buffer individually.  See <a href="Minor-Modes.html#Minor%20Modes">Minor Modes</a>.
+
+   <p>Fortran Auto Fill mode breaks lines at spaces or delimiters when the
+lines get longer than the desired width (the value of <code>fill-column</code>). 
+The delimiters that Fortran Auto Fill mode may break at are <code>,</code>,
+<code>'</code>, <code>+</code>, <code>-</code>, <code>/</code>, <code>*</code>, <code>=</code>, and <code>)</code>. 
+The line break comes after the delimiter if the variable
+<code>fortran-break-before-delimiters</code> is <code>nil</code>.  Otherwise (and by
+default), the break comes before the delimiter.
+
+   <p>By default, Fortran Auto Fill mode is not enabled.  If you want this
+feature turned on permanently, add a hook function to
+<code>fortran-mode-hook</code> to execute <code>(fortran-auto-fill-mode 1)</code>. 
+See <a href="Hooks.html#Hooks">Hooks</a>.
+
+   </body></html>
+

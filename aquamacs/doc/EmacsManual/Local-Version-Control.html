@@ -1,0 +1,122 @@
+<html lang="en">
+<head>
+<title>Local Version Control</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Local Version Control">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Local%20Version%20Control">Local Version Control</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Version-Backups.html#Version%20Backups">Version Backups</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Remote-Repositories.html#Remote%20Repositories">Remote Repositories</a>
+<hr><br>
+</div>
+
+<h3 class="subsubsection">Local Version Control</h5>
+
+<p>When you make many changes to a file that comes from a remote
+repository, it can be convenient to have version control on your local
+machine as well.  You can then record intermediate versions, revert to
+a previous state, etc., before you actually commit your changes to the
+remote server.
+
+   <p>VC lets you do this by putting a file under a second, local version
+control system, so that the file is effectively registered in two
+systems at the same time.  For the description here, we will assume
+that the remote system is CVS, and you use RCS locally, although the
+mechanism works with any combination of version control systems
+(<dfn>back ends</dfn>).
+
+   <p>To make it work with other back ends, you must make sure that the
+"more local" back end comes before the "more remote" back end in
+the setting of <code>vc-handled-backends</code> (see <a href="Customizing-VC.html#Customizing%20VC">Customizing VC</a>).  By
+default, this variable is set up so that you can use remote CVS and
+local RCS as described here.
+
+   <p>To start using local RCS for a file that comes from a remote CVS
+server, you must <em>register the file in RCS</em>, by typing <kbd>C-u
+C-x v v rcs &lt;RET&gt;</kbd>.  (In other words, use <code>vc-next-action</code> with a
+prefix argument, and specify RCS as the back end.)
+
+   <p>You can do this at any time; it does not matter whether you have
+already modified the file with respect to the version in the CVS
+repository.  If possible, VC tries to make the RCS master start with
+the unmodified repository version, then checks in any local changes
+as a new version.  This works if you have not made any changes yet, or
+if the unmodified repository version exists locally as a version
+backup (see <a href="Version-Backups.html#Version%20Backups">Version Backups</a>).  If the unmodified version is not
+available locally, the RCS master starts with the modified version;
+the only drawback to this is that you cannot compare your changes
+locally to what is stored in the repository.
+
+   <p>The version number of the RCS master is derived from the current CVS
+version, starting a branch from it.  For example, if the current CVS
+version is 1.23, the local RCS branch will be 1.23.1.  Version 1.23 in
+the RCS master will be identical to version 1.23 under CVS; your first
+changes are checked in as 1.23.1.1.  (If the unmodified file is not
+available locally, VC will check in the modified file twice, both as
+1.23 and 1.23.1.1, to make the revision numbers consistent.)
+
+   <p>If you do not use locking under CVS (the default), locking is also
+disabled for RCS, so that editing under RCS works exactly as under
+CVS.
+
+   <p>When you are done with local editing, you can commit the final version
+back to the CVS repository by typing <kbd>C-u C-x v v cvs &lt;RET&gt;</kbd>. 
+This initializes the log entry buffer (see <a href="Log-Buffer.html#Log%20Buffer">Log Buffer</a>) to contain
+all the log entries you have recorded in the RCS master; you can edit
+them as you wish, and then commit in CVS by typing <kbd>C-c C-c</kbd>.  If
+the commit is successful, VC removes the RCS master, so that the file
+is once again registered under CVS only.  (The RCS master is not
+actually deleted, just renamed by appending <code>~</code> to the name, so
+that you can refer to it later if you wish.)
+
+   <p>While using local RCS, you can pick up recent changes from the CVS
+repository into your local file, or commit some of your changes back
+to CVS, without terminating local RCS version control.  To do this,
+switch to the CVS back end temporarily, with the <kbd>C-x v b</kbd> command:
+
+     <dl>
+<dt><kbd>C-x v b</kbd>
+     <dd>Switch to another back end that the current file is registered
+under (<code>vc-switch-backend</code>).
+
+     <br><dt><kbd>C-u C-x v b </kbd><var>backend</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Switch to <var>backend</var> for the current file. 
+</dl>
+
+   <p><kbd>C-x v b</kbd> does not change the buffer contents, or any files; it
+only changes VC's perspective on how to handle the file.  Any
+subsequent VC commands for that file will operate on the back end that
+is currently selected.
+
+   <p>If the current file is registered in more than one back end, typing
+<kbd>C-x v b</kbd> "cycles" through all of these back ends.  With a
+prefix argument, it asks for the back end to use in the minibuffer.
+
+   <p>Thus, if you are using local RCS, and you want to pick up some recent
+changes in the file from remote CVS, first visit the file, then type
+<kbd>C-x v b</kbd> to switch to CVS, and finally use <kbd>C-x v m
+&lt;RET&gt;</kbd> to merge the news (see <a href="Merging.html#Merging">Merging</a>).  You can then switch
+back to RCS by typing <kbd>C-x v b</kbd> again, and continue to edit
+locally.
+
+   <p>But if you do this, the revision numbers in the RCS master no longer
+correspond to those of CVS.  Technically, this is not a problem, but
+it can become difficult to keep track of what is in the CVS repository
+and what is not.  So we suggest that you return from time to time to
+CVS-only operation, using <kbd>C-u C-x v v cvs &lt;RET&gt;</kbd>.
+
+   </body></html>
+

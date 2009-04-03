@@ -1,0 +1,66 @@
+<html lang="en">
+<head>
+<title>Moving in the Parenthesis Structure</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Moving in the Parenthesis Structure">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Moving%20by%20Parens">Moving by Parens</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Matching.html#Matching">Matching</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Expressions.html#Expressions">Expressions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Parentheses.html#Parentheses">Parentheses</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Moving in the Parenthesis Structure</h4>
+
+<p>The Emacs commands for handling parenthetical groupings see nothing
+except parentheses (or whatever characters must balance in the
+language you are working with), and the escape characters that might
+be used to quote those.  They are mainly intended for editing
+programs, but can be useful for editing any text that has parentheses. 
+They are sometimes called "list" commands because in Lisp these
+groupings are lists.
+
+     <dl>
+<dt><kbd>C-M-n</kbd>
+     <dd>Move forward over a parenthetical group (<code>forward-list</code>). 
+<br><dt><kbd>C-M-p</kbd>
+     <dd>Move backward over a parenthetical group(<code>backward-list</code>). 
+<br><dt><kbd>C-M-u</kbd>
+     <dd>Move up in parenthesis structure (<code>backward-up-list</code>). 
+<br><dt><kbd>C-M-d</kbd>
+     <dd>Move down in parenthesis structure (<code>down-list</code>). 
+</dl>
+
+   <p>The "list" commands <kbd>C-M-n</kbd> (<code>forward-list</code>) and
+<kbd>C-M-p</kbd> (<code>backward-list</code>) move over one (or <var>n</var>)
+parenthetical groupings, skipping blithely over any amount of text
+that doesn't include meaningful parentheses (symbols, strings, etc.).
+
+   <p><kbd>C-M-n</kbd> and <kbd>C-M-p</kbd> try to stay at the same level in the
+parenthesis structure.  To move <em>up</em> one (or <var>n</var>) levels, use
+<kbd>C-M-u</kbd> (<code>backward-up-list</code>).  <kbd>C-M-u</kbd> moves backward up
+past one unmatched opening delimiter.  A positive argument serves as a
+repeat count; a negative argument reverses the direction of motion, so
+that the command moves forward and up one or more levels.
+
+   <p>To move <em>down</em> in the parenthesis structure, use <kbd>C-M-d</kbd>
+(<code>down-list</code>).  In Lisp mode, where <code>(</code> is the only opening
+delimiter, this is nearly the same as searching for a <code>(</code>.  An
+argument specifies the number of levels to go down.
+
+   </body></html>
+

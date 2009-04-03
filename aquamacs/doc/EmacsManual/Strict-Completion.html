@@ -1,0 +1,64 @@
+<html lang="en">
+<head>
+<title>Strict Completion</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Strict Completion">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Strict%20Completion">Strict Completion</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Completion-Options.html#Completion%20Options">Completion Options</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Completion-Commands.html#Completion%20Commands">Completion Commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Completion.html#Completion">Completion</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Strict Completion</h4>
+
+<p>There are three different ways that &lt;RET&gt; can work in completing
+minibuffers, depending on how the argument will be used.
+
+     <ul>
+<li><dfn>Strict</dfn> completion is used when it is meaningless to give any
+argument except one of the known alternatives.  For example, when
+<kbd>C-x k</kbd> reads the name of a buffer to kill, it is meaningless to
+give anything but the name of an existing buffer.  In strict
+completion, &lt;RET&gt; refuses to exit if the text in the minibuffer
+does not complete to an exact match.
+
+     <li><dfn>Cautious</dfn> completion is similar to strict completion, except that
+&lt;RET&gt; exits only if the text was an exact match already, not
+needing completion.  If the text is not an exact match, &lt;RET&gt; does
+not exit, but it does complete the text.  If it completes to an exact
+match, a second &lt;RET&gt; will exit.
+
+     <p>Cautious completion is used for reading file names for files that must
+already exist.
+
+     </p><li><dfn>Permissive</dfn> completion is used when any string whatever is
+meaningful, and the list of completion alternatives is just a guide. 
+For example, when <kbd>C-x C-f</kbd> reads the name of a file to visit, any
+file name is allowed, in case you want to create a file.  In
+permissive completion, &lt;RET&gt; takes the text in the minibuffer
+exactly as given, without completing it. 
+</ul>
+
+   <p>The completion commands display a list of all possible completions in
+a window whenever there is more than one possibility for the very next
+character.  Also, typing <kbd>?</kbd> explicitly requests such a list.  If
+the list of completions is long, you can scroll it with <kbd>C-M-v</kbd>
+(see <a href="Other-Window.html#Other%20Window">Other Window</a>).
+
+   </body></html>
+

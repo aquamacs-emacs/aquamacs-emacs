@@ -1,0 +1,132 @@
+<html lang="en">
+<head>
+<title>Rectangles</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Rectangles">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Rectangles">Rectangles</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Registers.html#Registers">Registers</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Accumulating-Text.html#Accumulating%20Text">Accumulating Text</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr><br>
+</div>
+
+<h3 class="section">Rectangles</h3>
+
+<p>The rectangle commands operate on rectangular areas of the text: all
+the characters between a certain pair of columns, in a certain range of
+lines.  Commands are provided to kill rectangles, yank killed rectangles,
+clear them out, fill them with blanks or text, or delete them.  Rectangle
+commands are useful with text in multicolumn formats, and for changing
+text into or out of such formats.
+
+   <p>When you must specify a rectangle for a command to work on, you do it
+by putting the mark at one corner and point at the opposite corner.  The
+rectangle thus specified is called the <dfn>region-rectangle</dfn> because
+you control it in much the same way as the region is controlled.  But
+remember that a given combination of point and mark values can be
+interpreted either as a region or as a rectangle, depending on the
+command that uses them.
+
+   <p>If point and the mark are in the same column, the rectangle they
+delimit is empty.  If they are in the same line, the rectangle is one
+line high.  This asymmetry between lines and columns comes about
+because point (and likewise the mark) is between two columns, but within
+a line.
+
+     <dl>
+<dt><kbd>C-x r k</kbd>
+     <dd>Kill the text of the region-rectangle, saving its contents as the
+"last killed rectangle" (<code>kill-rectangle</code>). 
+<br><dt><kbd>C-x r d</kbd>
+     <dd>Delete the text of the region-rectangle (<code>delete-rectangle</code>). 
+<br><dt><kbd>C-x r y</kbd>
+     <dd>Yank the last killed rectangle with its upper left corner at point
+(<code>yank-rectangle</code>). 
+<br><dt><kbd>C-x r o</kbd>
+     <dd>Insert blank space to fill the space of the region-rectangle
+(<code>open-rectangle</code>).  This pushes the previous contents of the
+region-rectangle rightward. 
+<br><dt><kbd>M-x clear-rectangle</kbd>
+     <dd>Clear the region-rectangle by replacing its contents with spaces. 
+<br><dt><kbd>M-x delete-whitespace-rectangle</kbd>
+     <dd>Delete whitespace in each of the lines on the specified rectangle,
+starting from the left edge column of the rectangle. 
+<br><dt><kbd>C-x r t </kbd><var>string</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Replace rectangle contents with <var>string</var> on each line. 
+(<code>string-rectangle</code>). 
+<br><dt><kbd>M-x string-insert-rectangle &lt;RET&gt; </kbd><var>string</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Insert <var>string</var> on each line of the rectangle. 
+</dl>
+
+   <p>The rectangle operations fall into two classes: commands for
+deleting and inserting rectangles, and commands for blank rectangles.
+
+   <p>There are two ways to get rid of the text in a rectangle: you can
+discard the text (delete it) or save it as the "last killed"
+rectangle.  The commands for these two ways are <kbd>C-x r d</kbd>
+(<code>delete-rectangle</code>) and <kbd>C-x r k</kbd> (<code>kill-rectangle</code>).  In
+either case, the portion of each line that falls inside the rectangle's
+boundaries is deleted, causing any following text on the line to
+move left into the gap.
+
+   <p>Note that "killing" a rectangle is not killing in the usual sense; the
+rectangle is not stored in the kill ring, but in a special place that
+can only record the most recent rectangle killed.  This is because yanking
+a rectangle is so different from yanking linear text that different yank
+commands have to be used and yank-popping is hard to make sense of.
+
+   <p>To yank the last killed rectangle, type <kbd>C-x r y</kbd>
+(<code>yank-rectangle</code>).  Yanking a rectangle is the opposite of killing
+one.  Point specifies where to put the rectangle's upper left corner. 
+The rectangle's first line is inserted there, the rectangle's second
+line is inserted at the same horizontal position, but one line
+vertically down, and so on.  The number of lines affected is determined
+by the height of the saved rectangle.
+
+   <p>You can convert single-column lists into double-column lists using
+rectangle killing and yanking; kill the second half of the list as a
+rectangle and then yank it beside the first line of the list. 
+See <a href="Two-Column.html#Two-Column">Two-Column</a>, for another way to edit multi-column text.
+
+   <p>You can also copy rectangles into and out of registers with <kbd>C-x r
+r </kbd><var>r</var><kbd></kbd> and <kbd>C-x r i </kbd><var>r</var><kbd></kbd>.  See <a href="RegRect.html#RegRect">Rectangle Registers</a>.
+
+   <p>There are two commands you can use for making blank rectangles:
+<kbd>M-x clear-rectangle</kbd> which blanks out existing text, and <kbd>C-x r
+o</kbd> (<code>open-rectangle</code>) which inserts a blank rectangle.  Clearing a
+rectangle is equivalent to deleting it and then inserting a blank
+rectangle of the same size.
+
+   <p>The command <kbd>M-x delete-whitespace-rectangle</kbd> deletes horizontal
+whitespace starting from a particular column.  This applies to each of
+the lines in the rectangle, and the column is specified by the left
+edge of the rectangle.  The right edge of the rectangle does not make
+any difference to this command.
+
+   <p>The command <kbd>C-x r t</kbd> (<code>string-rectangle</code>) replaces the
+contents of a region-rectangle with a string on each line.  The
+string's width need not be the same as the width of the rectangle.  If
+the string's width is less, the text after the rectangle shifts left;
+if the string is wider than the rectangle, the text after the
+rectangle shifts right.
+
+   <p>The command <kbd>M-x string-insert-rectangle</kbd> is similar to
+<code>string-rectangle</code>, but inserts the string on each line,
+shifting the original text to the right.
+
+   </body></html>
+

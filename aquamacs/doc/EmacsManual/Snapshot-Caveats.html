@@ -1,0 +1,61 @@
+<html lang="en">
+<head>
+<title>Snapshot Caveats</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Snapshot Caveats">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Snapshot%20Caveats">Snapshot Caveats</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Making-Snapshots.html#Making%20Snapshots">Making Snapshots</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Snapshots.html#Snapshots">Snapshots</a>
+<hr><br>
+</div>
+
+<h3 class="subsubsection">Snapshot Caveats</h5>
+
+<p>VC's snapshot facilities are modeled on RCS's named-configuration
+support.  They use RCS's native facilities for this, so under VC
+snapshots made using RCS are visible even when you bypass VC.
+
+   <p>For SCCS, VC implements snapshots itself.  The files it uses contain
+name/file/version-number triples.  These snapshots are visible only
+through VC.
+
+   <p>A snapshot is a set of checked-in versions.  So make sure that all the
+files are checked in and not locked when you make a snapshot.
+
+   <p>File renaming and deletion can create some difficulties with snapshots. 
+This is not a VC-specific problem, but a general design issue in version
+control systems that no one has solved very well yet.
+
+   <p>If you rename a registered file, you need to rename its master along
+with it (the command <code>vc-rename-file</code> does this automatically).  If
+you are using SCCS, you must also update the records of the snapshot, to
+mention the file by its new name (<code>vc-rename-file</code> does this,
+too).  An old snapshot that refers to a master file that no longer
+exists under the recorded name is invalid; VC can no longer retrieve
+it.  It would be beyond the scope of this manual to explain enough about
+RCS and SCCS to explain how to update the snapshots by hand.
+
+   <p>Using <code>vc-rename-file</code> makes the snapshot remain valid for
+retrieval, but it does not solve all problems.  For example, some of the
+files in your program probably refer to others by name.  At the very
+least, the makefile probably mentions the file that you renamed.  If you
+retrieve an old snapshot, the renamed file is retrieved under its new
+name, which is not the name that the makefile expects.  So the program
+won't really work as retrieved.
+
+   </body></html>
+

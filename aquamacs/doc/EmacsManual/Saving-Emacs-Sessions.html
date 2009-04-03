@@ -1,0 +1,71 @@
+<html lang="en">
+<head>
+<title>Saving Emacs Sessions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Saving Emacs Sessions">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Saving%20Emacs%20Sessions">Saving Emacs Sessions</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Recursive-Edit.html#Recursive%20Edit">Recursive Edit</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Editing-Binary-Files.html#Editing%20Binary%20Files">Editing Binary Files</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr><br>
+</div>
+
+<h3 class="section">Saving Emacs Sessions</h3>
+
+<p>You can use the Desktop library to save the state of Emacs from one
+session to another.  Saving the state means that Emacs starts up with
+the same set of buffers, major modes, buffer positions, and so on that
+the previous Emacs session had.
+
+   <p>To use Desktop, you should use the Customization buffer (see <a href="Easy-Customization.html#Easy%20Customization">Easy Customization</a>) to set <code>desktop-enable</code> to a non-<code>nil</code> value,
+or add these lines at the end of your <code>.emacs</code> file:
+
+<pre class="example">     (desktop-load-default)
+     (desktop-read)
+     </pre>
+
+<p>The first time you save the state of the Emacs session, you must do it
+manually, with the command <kbd>M-x desktop-save</kbd>.  Once you have done
+that, exiting Emacs will save the state again--not only the present
+Emacs session, but also subsequent sessions.  You can also save the
+state at any time, without exiting Emacs, by typing <kbd>M-x
+desktop-save</kbd> again.
+
+   <p>In order for Emacs to recover the state from a previous session, you
+must start it with the same current directory as you used when you
+started the previous session.  This is because <code>desktop-read</code> looks
+in the current directory for the file to read.  This means that you can
+have separate saved sessions in different directories; the directory in
+which you start Emacs will control which saved session to use.
+
+   <p>The variable <code>desktop-files-not-to-save</code> controls which files are
+excluded from state saving.  Its value is a regular expression that
+matches the files to exclude.  By default, remote (ftp-accessed) files
+are excluded; this is because visiting them again in the subsequent
+session would be slow.  If you want to include these files in state
+saving, set <code>desktop-files-not-to-save</code> to <code>"^$"</code>. 
+See <a href="Remote-Files.html#Remote%20Files">Remote Files</a>.
+
+   <p>The Saveplace library provides a simpler feature that records your
+position in each file when you kill its buffer (or kill Emacs), and
+jumps to the same position when you visit the file again (even in
+another Emacs session).  Use <kbd>M-x toggle-save-place</kbd> to turn on
+place-saving in a given file.  Customize the option <code>save-place</code>
+to turn it on for all files in each session.
+
+   </body></html>
+

@@ -1,0 +1,125 @@
+<html lang="en">
+<head>
+<title>Special Diary Entries</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Special Diary Entries">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Special%20Diary%20Entries">Special Diary Entries</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Adding-to-Diary.html#Adding%20to%20Diary">Adding to Diary</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Diary.html#Diary">Diary</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Special Diary Entries</h4>
+
+<p>In addition to entries based on calendar dates, the diary file can
+contain <dfn>sexp entries</dfn> for regular events such as anniversaries. 
+These entries are based on Lisp expressions (sexps) that Emacs evaluates
+as it scans the diary file.  Instead of a date, a sexp entry contains
+<code>%%</code> followed by a Lisp expression which must begin and end with
+parentheses.  The Lisp expression determines which dates the entry
+applies to.
+
+   <p>Calendar mode provides commands to insert certain commonly used
+sexp entries:
+
+     <dl>
+<dt><kbd>i a</kbd>
+     <dd>Add an anniversary diary entry for the selected date
+(<code>insert-anniversary-diary-entry</code>). 
+<br><dt><kbd>i b</kbd>
+     <dd>Add a block diary entry for the current region
+(<code>insert-block-diary-entry</code>). 
+<br><dt><kbd>i c</kbd>
+     <dd>Add a cyclic diary entry starting at the date
+(<code>insert-cyclic-diary-entry</code>). 
+</dl>
+
+   <p>If you want to make a diary entry that applies to the anniversary of a
+specific date, move point to that date and use the <kbd>i a</kbd> command. 
+This displays the end of your diary file in another window and inserts
+the anniversary description; you can then type the rest of the diary
+entry.  The entry looks like this:
+
+<pre class="example">     %%(diary-anniversary 10 31 1948) Arthur's birthday
+     </pre>
+
+<p>This entry applies to October 31 in any year after 1948; <code>10 31
+1948</code> specifies the date.  (If you are using the European calendar
+style, the month and day are interchanged.)  The reason this expression
+requires a beginning year is that advanced diary functions can use it to
+calculate the number of elapsed years.
+
+   <p>A <dfn>block</dfn> diary entry applies to a specified range of consecutive
+dates.  Here is a block diary entry that applies to all dates from June
+24, 1990 through July 10, 1990:
+
+<pre class="example">     %%(diary-block 6 24 1990 7 10 1990) Vacation
+     </pre>
+
+<p>The <code>6 24 1990</code> indicates the starting date and the <code>7 10 1990</code>
+indicates the stopping date.  (Again, if you are using the European calendar
+style, the month and day are interchanged.)
+
+   <p>To insert a block entry, place point and the mark on the two
+dates that begin and end the range, and type <kbd>i b</kbd>.  This command
+displays the end of your diary file in another window and inserts the
+block description; you can then type the diary entry.
+
+   <p><dfn>Cyclic</dfn> diary entries repeat after a fixed interval of days.  To
+create one, select the starting date and use the <kbd>i c</kbd> command.  The
+command prompts for the length of interval, then inserts the entry,
+which looks like this:
+
+<pre class="example">     %%(diary-cyclic 50 3 1 1990) Renew medication
+     </pre>
+
+<p>This entry applies to March 1, 1990 and every 50th day following;
+<code>3 1 1990</code> specifies the starting date.  (If you are using the
+European calendar style, the month and day are interchanged.)
+
+   <p>All three of these commands make marking diary entries.  To insert a
+nonmarking entry, give a numeric argument to the command.  For example,
+<kbd>C-u i a</kbd> makes a nonmarking anniversary diary entry.
+
+   <p>Marking sexp diary entries in the calendar is <em>extremely</em>
+time-consuming, since every date visible in the calendar window must be
+individually checked.  So it's a good idea to make sexp diary entries
+nonmarking (with <code>&amp;</code>) when possible.
+
+   <p>Another sophisticated kind of sexp entry, a <dfn>floating</dfn> diary entry,
+specifies a regularly occurring event by offsets specified in days,
+weeks, and months.  It is comparable to a crontab entry interpreted by
+the <code>cron</code> utility.  Here is a nonmarking, floating diary entry
+that applies to the last Thursday in November:
+
+<pre class="example">     &amp;%%(diary-float 11 4 -1) American Thanksgiving
+     </pre>
+
+<p>The 11 specifies November (the eleventh month), the 4 specifies Thursday
+(the fourth day of the week, where Sunday is numbered zero), and the
+-1 specifies "last" (1 would mean "first," 2 would mean
+"second," -2 would mean "second-to-last," and so on).  The
+month can be a single month or a list of months.  Thus you could change
+the 11 above to <code>'(1 2 3)</code> and have the entry apply to the last
+Thursday of January, February, and March.  If the month is <code>t</code>, the
+entry applies to all months of the year.
+
+   <p>Most generally, sexp diary entries can perform arbitrary
+computations to determine when they apply.  See <a href="../elisp/Sexp-Diary-Entries.html#Sexp%20Diary%20Entries">Sexp Diary Entries</a>.
+
+   </body></html>
+

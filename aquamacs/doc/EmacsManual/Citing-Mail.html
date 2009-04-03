@@ -1,0 +1,74 @@
+<html lang="en">
+<head>
+<title>Citing Mail</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Citing Mail">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Citing%20Mail">Citing Mail</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Mail-Mode-Misc.html#Mail%20Mode%20Misc">Mail Mode Misc</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Header-Editing.html#Header%20Editing">Header Editing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Mail-Mode.html#Mail%20Mode">Mail Mode</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Citing Mail</h4>
+
+<p>Mail mode also has commands for yanking or <dfn>citing</dfn> all or part of
+a message that you are replying to.  These commands are active only when
+you started sending a message using an Rmail command.
+
+     <dl>
+<dt><kbd>C-c C-y</kbd>
+     <dd>Yank the selected message from Rmail (<code>mail-yank-original</code>). 
+<br><dt><kbd>C-c C-r</kbd>
+     <dd>Yank the region from the Rmail buffer (<code>mail-yank-region</code>). 
+<br><dt><kbd>C-c C-q</kbd>
+     <dd>Fill each paragraph cited from another message
+(<code>mail-fill-yanked-message</code>). 
+</dl>
+
+   <p>When mail sending is invoked from the Rmail mail reader using an Rmail
+command, <kbd>C-c C-y</kbd> can be used inside the mail buffer to insert
+the text of the message you are replying to.  Normally it indents each line
+of that message three spaces and eliminates most header fields.  A numeric
+argument specifies the number of spaces to indent.  An argument of just
+<kbd>C-u</kbd> says not to indent at all and not to eliminate anything. 
+<kbd>C-c C-y</kbd> always uses the current message from the Rmail buffer,
+so you can insert several old messages by selecting one in Rmail,
+switching to <code>*mail*</code> and yanking it, then switching back to
+Rmail to select another.
+
+   <p>You can specify the text for <kbd>C-c C-y</kbd> to insert at the beginning
+of each line: set <code>mail-yank-prefix</code> to the desired string.  (A
+value of <code>nil</code> means to use indentation; this is the default.) 
+However, <kbd>C-u C-c C-y</kbd> never adds anything at the beginning of the
+inserted lines, regardless of the value of <code>mail-yank-prefix</code>.
+
+   <p>To yank just a part of an incoming message, set the region in Rmail to
+the part you want; then go to the <code>*Mail*</code> message and type
+<kbd>C-c C-r</kbd> (<code>mail-yank-region</code>).  Each line that is copied is
+indented or prefixed according to <code>mail-yank-prefix</code>.
+
+   <p>After using <kbd>C-c C-y</kbd> or <kbd>C-c C-r</kbd>, you can type <kbd>C-c C-q</kbd>
+(<code>mail-fill-yanked-message</code>) to fill the paragraphs of the yanked
+old message or messages.  One use of <kbd>C-c C-q</kbd> fills all such
+paragraphs, each one individually.  To fill a single paragraph of the
+quoted message, use <kbd>M-q</kbd>.  If filling does not automatically
+handle the type of citation prefix you use, try setting the fill prefix
+explicitly.  See <a href="Filling.html#Filling">Filling</a>.
+
+   </body></html>
+

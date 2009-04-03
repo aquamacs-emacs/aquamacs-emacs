@@ -1,0 +1,109 @@
+<html lang="en">
+<head>
+<title>Using Emacs as a Server</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Using Emacs as a Server">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Emacs%20Server">Emacs Server</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Hardcopy.html#Hardcopy">Hardcopy</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Shell.html#Shell">Shell</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr><br>
+</div>
+
+<h3 class="section">Using Emacs as a Server</h3>
+
+<p>Various programs such as <code>mail</code> can invoke your choice of editor
+to edit a particular piece of text, such as a message that you are
+sending.  By convention, most of these programs use the environment
+variable <code>EDITOR</code> to specify which editor to run.  If you set
+<code>EDITOR</code> to <code>emacs</code>, they invoke Emacs--but in an
+inconvenient fashion, by starting a new, separate Emacs process.  This
+is inconvenient because it takes time and because the new Emacs process
+doesn't share the buffers in any existing Emacs process.
+
+   <p>You can arrange to use your existing Emacs process as the editor for
+programs like <code>mail</code> by using the Emacs client and Emacs server
+programs.  Here is how.
+
+   <p>First, the preparation.  Within Emacs, call the function
+<code>server-start</code>.  (Your <code>.emacs</code> file can do this automatically
+if you add the expression <code>(server-start)</code> to it.)  Then, outside
+Emacs, set the <code>EDITOR</code> environment variable to <code>emacsclient</code>. 
+(Note that some programs use a different environment variable; for
+example, to make TeX use <code>emacsclient</code>, you should set the
+<code>TEXEDIT</code> environment variable to <code>emacsclient +%d %s</code>.)
+
+   <p>Then, whenever any program invokes your specified <code>EDITOR</code>
+program, the effect is to send a message to your principal Emacs telling
+it to visit a file.  (That's what the program <code>emacsclient</code> does.) 
+Emacs displays the buffer immediately and you can immediately begin
+editing it.
+
+   <p>When you've finished editing that buffer, type <kbd>C-x #</kbd>
+(<code>server-edit</code>).  This saves the file and sends a message back to
+the <code>emacsclient</code> program telling it to exit.  The programs that
+use <code>EDITOR</code> wait for the "editor" (actually, <code>emacsclient</code>)
+to exit.  <kbd>C-x #</kbd> also checks for other pending external requests
+to edit various files, and selects the next such file.
+
+   <p>You can switch to a server buffer manually if you wish; you don't
+have to arrive at it with <kbd>C-x #</kbd>.  But <kbd>C-x #</kbd> is the way to
+say that you are finished with one.
+
+   <p>Finishing with a server buffer also kills the buffer, unless it
+already existed in the Emacs session before the server asked to create
+it.  However, if you set <code>server-kill-new-buffers</code> to <code>nil</code>,
+then a different criterion is used: finishing with a server buffer
+kills it if the file name matches the regular expression
+<code>server-temp-file-regexp</code>.  This is set up to distinguish certain
+"temporary" files.
+
+   <p>If you set the variable <code>server-window</code> to a window or a frame,
+<kbd>C-x #</kbd> displays the server buffer in that window or in that frame.
+
+   <p>While <code>mail</code> or another application is waiting for
+<code>emacsclient</code> to finish, <code>emacsclient</code> does not read terminal
+input.  So the terminal that <code>mail</code> was using is effectively
+blocked for the duration.  In order to edit with your principal Emacs,
+you need to be able to use it without using that terminal.  There are
+three ways to do this:
+
+     <ul>
+<li>Using a window system, run <code>mail</code> and the principal Emacs in two
+separate windows.  While <code>mail</code> is waiting for <code>emacsclient</code>,
+the window where it was running is blocked, but you can use Emacs by
+switching windows.
+
+     <li>Using virtual terminals, run <code>mail</code> in one virtual terminal
+and run Emacs in another.
+
+     <li>Use Shell mode or Term mode in Emacs to run the other program such as
+<code>mail</code>; then, <code>emacsclient</code> blocks only the subshell under
+Emacs, and you can still use Emacs to edit the file. 
+</ul>
+
+   <p>If you run <code>emacsclient</code> with the option <code>--no-wait</code>, it
+returns immediately without waiting for you to "finish" the buffer
+in Emacs.  Note that server buffers created in this way are not killed
+automatically when you finish with them.
+
+<ul class="menu">
+<li><a accesskey="1" href="Invoking-emacsclient.html#Invoking%20emacsclient">Invoking emacsclient</a>: 
+</ul>
+
+   </body></html>
+

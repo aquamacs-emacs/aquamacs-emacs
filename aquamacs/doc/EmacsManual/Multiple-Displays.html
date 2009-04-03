@@ -1,0 +1,56 @@
+<html lang="en">
+<head>
+<title>Multiple Displays</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Multiple Displays">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Multiple%20Displays">Multiple Displays</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Special-Buffer-Frames.html#Special%20Buffer%20Frames">Special Buffer Frames</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Speedbar.html#Speedbar">Speedbar</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
+<hr><br>
+</div>
+
+<h3 class="section">Multiple Displays</h3>
+
+<p>A single Emacs can talk to more than one X display.  Initially, Emacs
+uses just one display--the one specified with the <code>DISPLAY</code>
+environment variable or with the <code>--display</code> option (see <a href="Initial-Options.html#Initial%20Options">Initial Options</a>).  To connect to another display, use the command
+<code>make-frame-on-display</code>:
+
+     <dl>
+<dt><kbd>M-x make-frame-on-display &lt;RET&gt; </kbd><var>display</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Create a new frame on display <var>display</var>. 
+</dl>
+
+   <p>A single X server can handle more than one screen.  When you open
+frames on two screens belonging to one server, Emacs knows they share a
+single keyboard, and it treats all the commands arriving from these
+screens as a single stream of input.
+
+   <p>When you open frames on different X servers, Emacs makes a separate
+input stream for each server.  This way, two users can type
+simultaneously on the two displays, and Emacs will not garble their
+input.  Each server also has its own selected frame.  The commands you
+enter with a particular X server apply to that server's selected frame.
+
+   <p>Despite these features, people using the same Emacs job from different
+displays can still interfere with each other if they are not careful. 
+For example, if any one types <kbd>C-x C-c</kbd>, that exits the Emacs job
+for all of them!
+
+   </body></html>
+

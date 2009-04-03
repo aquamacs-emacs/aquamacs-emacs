@@ -1,0 +1,86 @@
+<html lang="en">
+<head>
+<title>Hideshow minor mode</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Hideshow minor mode">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Hideshow">Hideshow</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Symbol-Completion.html#Symbol%20Completion">Symbol Completion</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Documentation.html#Documentation">Documentation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Programs.html#Programs">Programs</a>
+<hr><br>
+</div>
+
+<h3 class="section">Hideshow minor mode</h3>
+
+<p>Hideshow minor mode provides selective display of portions of a
+program, known as <dfn>blocks</dfn>.  You can use <kbd>M-x hs-minor-mode</kbd>
+to enable or disable this mode, or add <code>hs-minor-mode</code> to the
+mode hook for certain major modes in order to enable it automatically
+for those modes.
+
+   <p>Just what constitutes a block depends on the major mode.  In C mode
+or C++ mode, they are delimited by braces, while in Lisp mode and
+similar modes they are delimited by parentheses.  Multi-line comments
+also count as blocks.
+
+     <dl>
+<dt><kbd>C-c @ C-h</kbd>
+     <dd>Hide the current block (<code>hs-hide-block</code>). 
+<br><dt><kbd>C-c @ C-s</kbd>
+     <dd>Show the current block (<code>hs-show-block</code>). 
+<br><dt><kbd>C-c @ C-c</kbd>
+     <dd>Either hide or show the current block (<code>hs-toggle-hiding</code>)
+<br><dt><kbd>S-Mouse-2</kbd>
+     <dd>Either hide or show the block you click on (<code>hs-mouse-toggle-hiding</code>)
+<br><dt><kbd>C-c @ C-M-h</kbd>
+     <dd>Hide all top-level blocks (<code>hs-hide-all</code>). 
+<br><dt><kbd>C-c @ C-M-s</kbd>
+     <dd>Show everything in the buffer (<code>hs-show-all</code>). 
+<br><dt><kbd>C-c @ C-l</kbd>
+     <dd>Hide all blocks <var>n</var> levels below this block
+(<code>hs-hide-level</code>). 
+</dl>
+
+   <p>These user options exist for customizing Hideshow mode.
+
+     <dl>
+<dt><code>hs-hide-comments-when-hiding-all</code>
+     <dd>Non-<code>nil</code> says that <kbd>hs-hide-all</kbd> should hide comments too.
+
+     <br><dt><code>hs-isearch-open</code>
+     <dd>Specifies what kind of hidden blocks to open in Isearch mode. 
+The value should be one of these four symbols.
+
+          <dl>
+<dt><code>code</code>
+          <dd>Open only code blocks. 
+<br><dt><code>comment</code>
+          <dd>Open only comments. 
+<br><dt><code>t</code>
+          <dd>Open both code blocks and comments. 
+<br><dt><code>nil</code>
+          <dd>Open neither code blocks nor comments. 
+</dl>
+
+     <br><dt><code>hs-special-modes-alist</code>
+     <dd>A list of elements, each specifying how to initialize Hideshow
+variables for one major mode.  See the variable's documentation string
+for more information. 
+</dl>
+
+   </body></html>
+

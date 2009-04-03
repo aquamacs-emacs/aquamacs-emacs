@@ -1,0 +1,85 @@
+<html lang="en">
+<head>
+<title>Shell History Ring</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Shell History Ring">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Shell%20Ring">Shell Ring</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Shell-History-Copying.html#Shell%20History%20Copying">Shell History Copying</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Shell-History.html#Shell%20History">Shell History</a>
+<hr><br>
+</div>
+
+<h3 class="subsubsection">Shell History Ring</h5>
+
+     <dl>
+<dt><kbd>M-p</kbd>
+     <dd>Fetch the next earlier old shell command.
+
+     <br><dt><kbd>M-n</kbd>
+     <dd>Fetch the next later old shell command.
+
+     <br><dt><kbd>M-r </kbd><var>regexp</var><kbd> &lt;RET&gt;</kbd>
+     <dd><dt><kbd>M-s </kbd><var>regexp</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Search backwards or forwards for old shell commands that match <var>regexp</var>.
+
+     <br><dt><kbd>C-c C-x </kbd>(Shell mode)<kbd></kbd>
+     <dd>Fetch the next subsequent command from the history. 
+</dl>
+
+   <p>Shell buffers provide a history of previously entered shell commands.  To
+reuse shell commands from the history, use the editing commands <kbd>M-p</kbd>,
+<kbd>M-n</kbd>, <kbd>M-r</kbd> and <kbd>M-s</kbd>.  These work just like the minibuffer
+history commands except that they operate on the text at the end of the
+shell buffer, where you would normally insert text to send to the shell.
+
+   <p><kbd>M-p</kbd> fetches an earlier shell command to the end of the shell buffer. 
+Successive use of <kbd>M-p</kbd> fetches successively earlier shell commands,
+each replacing any text that was already present as potential shell input. 
+<kbd>M-n</kbd> does likewise except that it finds successively more recent shell
+commands from the buffer.
+
+   <p>The history search commands <kbd>M-r</kbd> and <kbd>M-s</kbd> read a regular
+expression and search through the history for a matching command.  Aside
+from the choice of which command to fetch, they work just like <kbd>M-p</kbd>
+and <kbd>M-n</kbd>.  If you enter an empty regexp, these commands reuse the
+same regexp used last time.
+
+   <p>When you find the previous input you want, you can resubmit it by
+typing &lt;RET&gt;, or you can edit it first and then resubmit it if you
+wish.
+
+   <p>Often it is useful to reexecute several successive shell commands that
+were previously executed in sequence.  To do this, first find and
+reexecute the first command of the sequence.  Then type <kbd>C-c C-x</kbd>;
+that will fetch the following command--the one that follows the command
+you just repeated.  Then type &lt;RET&gt; to reexecute this command.  You
+can reexecute several successive commands by typing <kbd>C-c C-x
+&lt;RET&gt;</kbd> over and over.
+
+   <p>These commands get the text of previous shell commands from a special
+history list, not from the shell buffer itself.  Thus, editing the shell
+buffer, or even killing large parts of it, does not affect the history
+that these commands access.
+
+   <p>Some shells store their command histories in files so that you can
+refer to previous commands from previous shell sessions.  Emacs reads
+the command history file for your chosen shell, to initialize its own
+command history.  The file name is <code>~/.bash_history</code> for bash,
+<code>~/.sh_history</code> for ksh, and <code>~/.history</code> for other shells.
+
+   </body></html>
+

@@ -1,0 +1,55 @@
+<html lang="en">
+<head>
+<title>Directory Tracking</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Directory Tracking">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Directory%20Tracking">Directory Tracking</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Shell-Options.html#Shell%20Options">Shell Options</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Shell-History.html#Shell%20History">Shell History</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Shell.html#Shell">Shell</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Directory Tracking</h4>
+
+<p>Shell mode keeps track of <code>cd</code>, <code>pushd</code> and <code>popd</code>
+commands given to the inferior shell, so it can keep the
+<code>*shell*</code> buffer's default directory the same as the shell's
+working directory.  It recognizes these commands syntactically, by
+examining lines of input that are sent.
+
+   <p>If you use aliases for these commands, you can tell Emacs to
+recognize them also.  For example, if the value of the variable
+<code>shell-pushd-regexp</code> matches the beginning of a shell command
+line, that line is regarded as a <code>pushd</code> command.  Change this
+variable when you add aliases for <code>pushd</code>.  Likewise,
+<code>shell-popd-regexp</code> and <code>shell-cd-regexp</code> are used to
+recognize commands with the meaning of <code>popd</code> and <code>cd</code>. 
+These commands are recognized only at the beginning of a shell command
+line.
+
+   <p>If Emacs gets confused about changes in the current directory of the
+subshell, use the command <kbd>M-x dirs</kbd> to ask the shell what its
+current directory is.  This command works for shells that support the
+most common command syntax; it may not work for unusual shells.
+
+   <p>You can also use <kbd>M-x dirtrack-mode</kbd> to enable (or disable) an
+alternative and more aggressive method of tracking changes in the
+current directory.
+
+   </body></html>
+

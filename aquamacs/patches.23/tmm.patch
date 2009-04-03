@@ -1,0 +1,52 @@
+*** lisp/isearch.el	14 Feb 2009 09:04:46 -0000	1.345
+--- lisp/isearch.el	15 Mar 2009 20:27:30 -0000
+***************
+*** 1564,1569 ****
+--- 1564,1572 ----
+  	    ;; If the string was found but was completely invisible,
+  	    ;; it might now be partly visible, so try again.
+  	    (prog1 isearch-hidden (setq isearch-hidden nil)))
++     (if (and transient-mark-mode 
++ 	     (not (and cua-mode cua--explicit-region-start)))
++ 	(deactivate-mark))
+      ;; In reverse search, adding stuff at
+      ;; the end may cause zero or many more chars to be
+      ;; matched, in the string following point.
+***************
+*** 1594,1601 ****
+  		       (min isearch-opoint
+  			    isearch-barrier
+  			    (1+ isearch-other-end)))))
+!       (isearch-search)
+!       ))
+    (isearch-push-state)
+    (if isearch-op-fun (funcall isearch-op-fun))
+    (isearch-update))
+--- 1597,1603 ----
+  		       (min isearch-opoint
+  			    isearch-barrier
+  			    (1+ isearch-other-end)))))
+!       (isearch-search)))
+    (isearch-push-state)
+    (if isearch-op-fun (funcall isearch-op-fun))
+    (isearch-update))
+*** lisp/mouse.el	31 Jan 2009 22:14:56 -0000	1.353
+--- lisp/mouse.el	15 Mar 2009 20:27:52 -0000
+***************
+*** 971,977 ****
+      (mouse-move-drag-overlay mouse-drag-overlay start-point start-point
+                               click-count)
+      (overlay-put mouse-drag-overlay 'window start-window)
+!     (deactivate-mark)
+      (let (event end end-point last-end-point)
+        (track-mouse
+  	(while (progn
+--- 971,978 ----
+      (mouse-move-drag-overlay mouse-drag-overlay start-point start-point
+                               click-count)
+      (overlay-put mouse-drag-overlay 'window start-window)
+!     (unless (and cua-mode cua--explicit-region-start)
+!       (deactivate-mark))
+      (let (event end end-point last-end-point)
+        (track-mouse
+  	(while (progn

@@ -1,0 +1,371 @@
+*** lisp/files.el	15 Mar 2009 02:31:45 -0000	1.1040
+--- lisp/files.el	15 Mar 2009 20:27:09 -0000
+***************
+*** 4318,4333 ****
+    nil)
+  
+  (defvar save-some-buffers-action-alist
+!   `((?\C-r
+!      ,(lambda (buf)
+!         (if (not enable-recursive-minibuffers)
+!             (progn (display-buffer buf)
+!                    (setq other-window-scroll-buffer buf))
+!           (view-buffer buf (lambda (_) (exit-recursive-edit)))
+!           (recursive-edit))
+!         ;; Return nil to ask about BUF again.
+!         nil)
+!      "view this buffer")
+      (?d ,(lambda (buf)
+             (if (null buffer-file-name)
+                 (message "Not applicable: no file")
+--- 4349,4364 ----
+    nil)
+  
+  (defvar save-some-buffers-action-alist
+!   `(;; (?\C-r
+! ;;      ,(lambda (buf)
+! ;;         (if (not enable-recursive-minibuffers)
+! ;;             (progn (display-buffer buf)
+! ;;                    (setq other-window-scroll-buffer buf))
+! ;;           (view-buffer buf (lambda (_) (exit-recursive-edit)))
+! ;;           (recursive-edit))
+! ;;         ;; Return nil to ask about BUF again.
+! ;;         nil)
+! ;;      "view this buffer")
+      (?d ,(lambda (buf)
+             (if (null buffer-file-name)
+                 (message "Not applicable: no file")
+***************
+*** 4340,4346 ****
+                 (recursive-edit)))
+             ;; Return nil to ask about BUF again.
+             nil)
+! 	"view changes in this buffer"))
+    "ACTION-ALIST argument used in call to `map-y-or-n-p'.")
+  
+  (defvar buffer-save-without-query nil
+--- 4371,4377 ----
+                 (recursive-edit)))
+             ;; Return nil to ask about BUF again.
+             nil)
+! 	"view changes"))
+    "ACTION-ALIST argument used in call to `map-y-or-n-p'.")
+  
+  (defvar buffer-save-without-query nil
+***************
+*** 4366,4372 ****
+    (save-window-excursion
+      (let* (queried some-automatic
+  	   files-done abbrevs-done)
+!       (dolist (buffer (buffer-list))
+  	;; First save any buffers that we're supposed to save unconditionally.
+  	;; That way the following code won't ask about them.
+  	(with-current-buffer buffer
+--- 4397,4403 ----
+    (save-window-excursion
+      (let* (queried some-automatic
+  	   files-done abbrevs-done)
+!       (dolist (buffer (buffer-list   ))
+  	;; First save any buffers that we're supposed to save unconditionally.
+  	;; That way the following code won't ask about them.
+  	(with-current-buffer buffer
+***************
+*** 4394,4402 ****
+                      (if arg
+                          t
+                        (setq queried t)
+                        (if (buffer-file-name buffer)
+                            (format "Save file %s? "
+!                                   (buffer-file-name buffer))
+                          (format "Save buffer %s? "
+                                  (buffer-name buffer))))))
+               (lambda (buffer)
+--- 4425,4443 ----
+                      (if arg
+                          t
+                        (setq queried t)
++ 		      (with-current-buffer buffer
++ 			(with-selected-window (get-window-for-other-buffer)
++ 			  (if (and (boundp 'tabbar-mode) tabbar-mode)
++ 			      (switch-to-buffer-in-tab buffer)
++ 			    (switch-to-buffer buffer))
++ 			  (select-frame-set-input-focus (window-frame (selected-window)))
++ 			  (if (fboundp 'smart-move-minibuffer-inside-screen)
++ 			      (smart-move-minibuffer-inside-screen))))
+                        (if (buffer-file-name buffer)
+                            (format "Save file %s? "
+! 				  (if (> (length (buffer-file-name buffer)) 30)
+! 				      (concat "..." (substring (buffer-file-name buffer) -27))
+! 				    (buffer-file-name buffer)))
+                          (format "Save buffer %s? "
+                                  (buffer-name buffer))))))
+               (lambda (buffer)
+*** lisp/emacs-lisp/map-ynp.el	5 Jan 2009 03:21:06 -0000	1.18
+--- lisp/emacs-lisp/map-ynp.el	15 Mar 2009 20:29:28 -0000
+***************
+*** 82,88 ****
+  	 user-keys mouse-event map prompt char elt tail def
+  	 ;; Non-nil means we should use mouse menus to ask.
+  	 use-menus
+- 	 delayed-switch-frame
+           ;; Rebind other-window-scroll-buffer so that subfunctions can set
+           ;; it temporarily, without risking affecting the caller.
+           (other-window-scroll-buffer other-window-scroll-buffer)
+--- 82,87 ----
+***************
+*** 97,114 ****
+  	(let ((object (if help (capitalize (nth 0 help))))
+  	      (objects (if help (capitalize (nth 1 help))))
+  	      (action (if help (capitalize (nth 2 help)))))
+! 	  (setq map `(("Yes" . act) ("No" . skip)
+! 		      ,@(mapcar (lambda (elt)
+  				  (cons (with-syntax-table
+  					    text-mode-syntax-table
+  					  (capitalize (nth 2 elt)))
+  					(vector (nth 1 elt))))
+  				action-alist)
+! 		      (,(if help (concat action " This But No More")
+! 			  "Do This But No More") . act-and-exit)
+! 		      (,(if help (concat action " All " objects)
+! 			  "Do All") . automatic)
+! 		      ("No For All" . exit))
+  		use-menus t
+  		mouse-event last-nonmenu-event))
+        (setq user-keys (if action-alist
+--- 96,113 ----
+  	(let ((object (if help (capitalize (nth 0 help))))
+  	      (objects (if help (capitalize (nth 1 help))))
+  	      (action (if help (capitalize (nth 2 help)))))
+! 	  (setq map `(("Yes" . act) 
+! 		      (,(if help (concat action " All " objects)
+! 			  "Do All") . automatic)
+!     ,@(mapcar (lambda (elt)
+  				  (cons (with-syntax-table
+  					    text-mode-syntax-table
+  					  (capitalize (nth 2 elt)))
+  					(vector (nth 1 elt))))
+  				action-alist)
+! 		      nil
+! 		      ("No" . skip)
+! 		      ("No For All" . exit))
+  		use-menus t
+  		mouse-event last-nonmenu-event))
+        (setq user-keys (if action-alist
+***************
+*** 146,152 ****
+  	    (cond ((stringp prompt)
+  		   ;; Prompt the user about this object.
+  		   (setq quit-flag nil)
+! 		   (if use-menus
+  		       (setq def (or (x-popup-dialog (or mouse-event use-menus)
+  						     (cons prompt map))
+  				     'quit))
+--- 147,153 ----
+  	    (cond ((stringp prompt)
+  		   ;; Prompt the user about this object.
+  		   (setq quit-flag nil)
+!   		   (if use-menus
+  		       (setq def (or (x-popup-dialog (or mouse-event use-menus)
+  						     (cons prompt map))
+  				     'quit))
+***************
+*** 170,175 ****
+--- 171,177 ----
+  				(key-description (vector help-char))
+  				(single-key-description char)))
+  		     (setq def (lookup-key map (vector char))))
++ 
+  		   (cond ((eq def 'exit)
+  			  (setq next (lambda () nil)))
+  			 ((eq def 'act)
+***************
+*** 248,259 ****
+  					 (setq next ',next)
+  					 ',elt))))
+  			 ((and (consp char)
+! 			       (eq (car char) 'switch-frame))
+! 			  ;; switch-frame event.  Put it off until we're done.
+! 			  (setq delayed-switch-frame char)
+  			  (setq next `(lambda ()
+  				       (setq next ',next)
+! 				       ',elt)))
+  			 (t
+  			  ;; Random char.
+  			  (message "Type %s for help."
+--- 250,261 ----
+  					 (setq next ',next)
+  					 ',elt))))
+  			 ((and (consp char)
+! 				   (eq (car char) 'switch-frame))
+! 			  (handle-switch-frame char)
+  			  (setq next `(lambda ()
+  				       (setq next ',next)
+! 				       ',elt))
+! 			  )
+  			 (t
+  			  ;; Random char.
+  			  (message "Type %s for help."
+***************
+*** 265,274 ****
+  				       ',elt)))))
+  		  (prompt
+  		   (funcall actor elt)
+! 		   (setq actions (1+ actions))))))
+!       (if delayed-switch-frame
+! 	  (setq unread-command-events
+! 		(cons delayed-switch-frame unread-command-events))))
+      ;; Clear the last prompt from the minibuffer.
+      (let ((message-log-max nil))
+        (message ""))
+--- 267,273 ----
+  				       ',elt)))))
+  		  (prompt
+  		   (funcall actor elt)
+! 		   (setq actions (1+ actions)))))))
+      ;; Clear the last prompt from the minibuffer.
+      (let ((message-log-max nil))
+        (message ""))
+*** src/nsmenu.m	6 Mar 2009 19:06:45 -0000	1.21
+--- src/nsmenu.m	15 Mar 2009 20:40:40 -0000
+***************
+*** 65,70 ****
+--- 65,71 ----
+  extern Lisp_Object Vmenu_updating_frame;
+  
+  Lisp_Object Qdebug_on_next_call;
++ Lisp_Object Vcancel_special_indicator_flag;
+  extern Lisp_Object Voverriding_local_map, Voverriding_local_map_menu_flag,
+  		   Qoverriding_local_map, Qoverriding_terminal_local_map;
+  
+***************
+*** 1574,1580 ****
+      unbind_to (specpdl_count, Qnil);  /* calls pop_down_menu */
+    }
+    UNBLOCK_INPUT;
+! 
+    return tem;
+  }
+  
+--- 1574,1580 ----
+      unbind_to (specpdl_count, Qnil);  /* calls pop_down_menu */
+    }
+    UNBLOCK_INPUT;
+!   if (tem == XHASH(Vcancel_special_indicator_flag)) Fsignal (Qquit, Qnil); /*special button value for cancel*/
+    return tem;
+  }
+  
+***************
+*** 1599,1605 ****
+  
+  @implementation EmacsDialogPanel
+  
+! #define SPACER		8.0
+  #define ICONSIZE	64.0
+  #define TEXTHEIGHT	20.0
+  #define MINCELLWIDTH	90.0
+--- 1671,1677 ----
+  
+  @implementation EmacsDialogPanel
+  
+! #define SPACER		6.0
+  #define ICONSIZE	64.0
+  #define TEXTHEIGHT	20.0
+  #define MINCELLWIDTH	90.0
+***************
+*** 1607,1613 ****
+  - initWithContentRect: (NSRect)contentRect styleMask: (unsigned int)aStyle
+                backing: (NSBackingStoreType)backingType defer: (BOOL)flag
+  {
+!   NSSize spacing = {SPACER, SPACER};
+    NSRect area;
+    char this_cmd_name[80];
+    id cell;
+--- 1679,1685 ----
+  - initWithContentRect: (NSRect)contentRect styleMask: (unsigned int)aStyle
+                backing: (NSBackingStoreType)backingType defer: (BOOL)flag
+  {
+!   NSSize spacing = {SPACER};
+    NSRect area;
+    char this_cmd_name[80];
+    id cell;
+***************
+*** 1722,1728 ****
+        else if (XTYPE (item) == Lisp_Cons)
+          {
+            [window addButton: XSTRING (XCAR (item))->data
+!                       value: XCDR (item) row: row++];
+          }
+        else if (NILP (item))
+          {
+--- 1722,1728 ----
+        else if (XTYPE (item) == Lisp_Cons)
+          {
+            [window addButton: XSTRING (XCAR (item))->data
+! 		  value: XCDR (item) row: row++ key: nil];
+          }
+        else if (NILP (item))
+          {
+***************
+*** 1730,1739 ****
+            row = 0;
+          }
+      }
+  }
+  
+  
+! - addButton: (char *)str value: (Lisp_Object)val row: (int)row
+  {
+    id cell;
+         
+--- 1730,1741 ----
+            row = 0;
+          }
+      }
++   [window addButton: "Cancel"
++ 	  value: Vcancel_special_indicator_flag row: row++ key: @"\e"];
+  }
+  
+  
+! - addButton: (char *)str value: (Lisp_Object)val row: (int)row key: (NSString *)key
+  {
+    id cell;
+         
+***************
+*** 1749,1754 ****
+--- 1751,1757 ----
+    [cell setTag: XHASH (val)];	// FIXME: BIG UGLY HACK!!
+    [cell setBordered: YES];
+    [cell setEnabled: YES];
++   if (key != nil) [cell setKeyEquivalent: key];
+  
+    return self;
+  }
+***************
+*** 2012,2017 ****
+--- 2016,2022 ----
+  
+    Qdebug_on_next_call = intern ("debug-on-next-call");
+    staticpro (&Qdebug_on_next_call);
++   Vcancel_special_indicator_flag = Fcons(Qnil, Qnil);
+  }
+  
+  // arch-tag: 75773656-52e5-4c44-a398-47bd87b32619
+*** src/nsterm.h	14 Mar 2009 21:20:08 -0000	1.24
+--- src/nsterm.h	15 Mar 2009 20:40:41 -0000
+***************
+*** 168,174 ****
+     int rows, cols;
+     }
+  - initFromContents: (Lisp_Object)menu isQuestion: (BOOL)isQ;
+! - addButton: (char *)str value: (Lisp_Object)val row: (int)row;
+  - addString: (char *)str row: (int)row;
+  - addSplit;
+  - (Lisp_Object)runDialogAt: (NSPoint)p;
+--- 168,174 ----
+     int rows, cols;
+     }
+  - initFromContents: (Lisp_Object)menu isQuestion: (BOOL)isQ;
+! - addButton: (char *)str value: (Lisp_Object)val row: (int)row key: (NSString *)key;
+  - addString: (char *)str row: (int)row;
+  - addSplit;
+  - (Lisp_Object)runDialogAt: (NSPoint)p;

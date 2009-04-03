@@ -1,0 +1,89 @@
+<html lang="en">
+<head>
+<title>Indentation in Formatted Text</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Indentation in Formatted Text">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Format%20Indentation">Format Indentation</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Format-Justification.html#Format%20Justification">Format Justification</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Format-Colors.html#Format%20Colors">Format Colors</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Formatted-Text.html#Formatted%20Text">Formatted Text</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Indentation in Formatted Text</h4>
+
+<p>When editing formatted text, you can specify different amounts of
+indentation for the right or left margin of an entire paragraph or a
+part of a paragraph.  The margins you specify automatically affect the
+Emacs fill commands (see <a href="Filling.html#Filling">Filling</a>) and line-breaking commands.
+
+   <p>The Indentation submenu provides a convenient interface for specifying
+these properties.  The submenu contains four items:
+
+     <dl>
+<dt><code>Indent More</code>
+     <dd>Indent the region by 4 columns (<code>increase-left-margin</code>).  In
+Enriched mode, this command is also available on <kbd>C-x &lt;TAB&gt;</kbd>; if
+you supply a numeric argument, that says how many columns to add to the
+margin (a negative argument reduces the number of columns).
+
+     <br><dt><code>Indent Less</code>
+     <dd>Remove 4 columns of indentation from the region.
+
+     <br><dt><code>Indent Right More</code>
+     <dd>Make the text narrower by indenting 4 columns at the right margin.
+
+     <br><dt><code>Indent Right Less</code>
+     <dd>Remove 4 columns of indentation from the right margin. 
+</dl>
+
+   <p>You can use these commands repeatedly to increase or decrease the
+indentation.
+
+   <p>The most common way to use these commands is to change the indentation
+of an entire paragraph.  However, that is not the only use.  You can
+change the margins at any point; the new values take effect at the end
+of the line (for right margins) or the beginning of the next line (for
+left margins).
+
+   <p>This makes it possible to format paragraphs with <dfn>hanging indents</dfn>,
+which means that the first line is indented less than subsequent lines. 
+To set up a hanging indent, increase the indentation of the region
+starting after the first word of the paragraph and running until the end
+of the paragraph.
+
+   <p>Indenting the first line of a paragraph is easier.  Set the margin for
+the whole paragraph where you want it to be for the body of the
+paragraph, then indent the first line by inserting extra spaces or tabs.
+
+   <p>Sometimes, as a result of editing, the filling of a paragraph becomes
+messed up--parts of the paragraph may extend past the left or right
+margins.  When this happens, use <kbd>M-q</kbd> (<code>fill-paragraph</code>) to
+refill the paragraph.
+
+   <p>The variable <code>standard-indent</code> specifies how many columns these
+commands should add to or subtract from the indentation.  The default
+value is 4.  The overall default right margin for Enriched mode is
+controlled by the variable <code>fill-column</code>, as usual.
+
+   <p>The fill prefix, if any, works in addition to the specified paragraph
+indentation: <kbd>C-x .</kbd> does not include the specified indentation's
+whitespace in the new value for the fill prefix, and the fill commands
+look for the fill prefix after the indentation on each line.  See <a href="Fill-Prefix.html#Fill%20Prefix">Fill Prefix</a>.
+
+   </body></html>
+

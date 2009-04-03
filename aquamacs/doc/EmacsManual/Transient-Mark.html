@@ -1,0 +1,113 @@
+<html lang="en">
+<head>
+<title>Transient Mark Mode</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Transient Mark Mode">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Transient%20Mark">Transient Mark</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Using-Region.html#Using%20Region">Using Region</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Setting-Mark.html#Setting%20Mark">Setting Mark</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Mark.html#Mark">Mark</a>
+<hr><br>
+</div>
+
+<h3 class="section">Transient Mark Mode</h3>
+
+<p>On a terminal that supports colors, Emacs can highlight the current
+region.  But normally it does not.  Why not?
+
+   <p>Highlighting the region whenever it exists would not be desirable in
+Emacs, because once you have set a mark, there is <em>always</em> a
+region (in that buffer).  And highlighting the region all the time
+would be a nuisance.  So normally Emacs highlights the region only
+immediately after you have selected one with the mouse.
+
+   <p>You can turn on region highlighting by enabling Transient Mark mode. 
+This is a more rigid mode of operation in which the region "lasts"
+only temporarily, so you must set up a region for each command that uses
+one.  In Transient Mark mode, most of the time there is no region;
+therefore, highlighting the region when it exists is useful and
+not annoying.
+
+   <p>To enable Transient Mark mode, type <kbd>M-x transient-mark-mode</kbd>. 
+This command toggles the mode, so you can repeat the command to turn off
+the mode.
+
+   <p>Here are the details of Transient Mark mode:
+
+     <ul>
+<li>To set the mark, type <kbd>C-&lt;SPC&gt;</kbd> (<code>set-mark-command</code>). 
+This makes the mark active and thus begins highlighting of the region. 
+As you move point, you will see the highlighted region grow and
+shrink.
+
+     <li>The mouse commands for specifying the mark also make it active.  So do
+keyboard commands whose purpose is to specify a region, including
+<kbd>M-@</kbd>, <kbd>C-M-@</kbd>, <kbd>M-h</kbd>, <kbd>C-M-h</kbd>, <kbd>C-x C-p</kbd>, and
+<kbd>C-x h</kbd>.
+
+     <li>When the mark is active, you can execute commands that operate on the
+region, such as killing, indenting, or writing to a file.
+
+     <li>Any change to the buffer, such as inserting or deleting a character,
+deactivates the mark.  This means any subsequent command that operates
+on a region will get an error and refuse to operate.  You can make the
+region active again by typing <kbd>C-x C-x</kbd>.
+
+     <li>Commands like <kbd>M-&gt;</kbd> and <kbd>C-s</kbd>, that "leave the mark behind" in
+addition to some other primary purpose, do not activate the new mark. 
+You can activate the new region by executing <kbd>C-x C-x</kbd>
+(<code>exchange-point-and-mark</code>).
+
+     <li><kbd>C-s</kbd> when the mark is active does not alter the mark.
+
+     <li>Quitting with <kbd>C-g</kbd> deactivates the mark.
+
+     <li>Some commands operate on the region whenever it is active.  For
+instance, <kbd>C-x u</kbd> in Transient Mark mode operates on the region
+when there is a region.  Outside Transient Mark mode, you must type
+<kbd>C-u C-x u</kbd> if you want it to operate on the region. 
+See <a href="Undo.html#Undo">Undo</a>.   Other commands that act this way are identified
+in their own documentation. 
+</ul>
+
+   <p>The highlighting of the region uses the <code>region</code> face; you can
+customize the appearance of the highlighted region by changing this
+face.  See <a href="Face-Customization.html#Face%20Customization">Face Customization</a>.
+
+   <p>When multiple windows show the same buffer, they can have different
+regions, because they can have different values of point (though they
+all share one common mark position).  Ordinarily, only the selected
+window highlights its region (see <a href="Windows.html#Windows">Windows</a>).  However, if the
+variable <code>highlight-nonselected-windows</code> is non-<code>nil</code>, then
+each window highlights its own region (provided that Transient Mark mode
+is enabled and the mark in the window's buffer is active).
+
+   <p>When Transient Mark mode is not enabled, every command that sets the
+mark also activates it, and nothing ever deactivates it.
+
+   <p>If the variable <code>mark-even-if-inactive</code> is non-<code>nil</code> in
+Transient Mark mode, then commands can use the mark and the region
+even when it is inactive.  Region highlighting appears and disappears
+just as it normally does in Transient Mark mode, but the mark doesn't
+really go away when the highlighting disappears.
+
+   <p>Transient Mark mode is also sometimes known as "Zmacs mode"
+because the Zmacs editor on the MIT Lisp Machine handled the mark in a
+similar way.
+
+   </body></html>
+

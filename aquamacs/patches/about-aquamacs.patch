@@ -1,0 +1,82 @@
+*** lisp/startup.el	6 Mar 2008 00:08:01 -0000	1.436.2.16
+--- lisp/startup.el	1 Jun 2008 12:40:50 -0000
+***************
+*** 1513,1519 ****
+        (message "%s" (startup-echo-area-message))
+        (setq buffer-read-only t)
+        (goto-char (point-min))
+!       (forward-line 3))))
+  
+  (defun fancy-splash-frame ()
+    "Return the frame to use for the fancy splash screen.
+--- 1516,1522 ----
+        (message "%s" (startup-echo-area-message))
+        (setq buffer-read-only t)
+        (goto-char (point-min))
+!       (forward-line 1))))
+  
+  (defun fancy-splash-frame ()
+    "Return the frame to use for the fancy splash screen.
+Index: mactoolbox.c
+===================================================================
+RCS file: /sources/emacs/emacs/src/Attic/mactoolbox.c,v
+retrieving revision 1.1.2.6
+diff -c -r1.1.2.6 mactoolbox.c
+*** src/mactoolbox.c	20 Aug 2008 09:05:31 -0000	1.1.2.6
+--- src/mactoolbox.c	25 Dec 2008 18:13:53 -0000
+***************
+*** 5111,5128 ****
+  
+    err = GetIndMenuItemWithCommandID (NULL, kHICommandQuit, 1,
+  				     &menu, &menu_index);
+!   if (err == noErr)
+!     SetMenuItemCommandKey (menu, menu_index, false, 0);
+!   EnableMenuCommand (NULL, kHICommandPreferences);
+!   err = GetIndMenuItemWithCommandID (NULL, kHICommandPreferences, 1,
+! 				     &menu, &menu_index);
+    if (err == noErr)
+      {
+        SetMenuItemCommandKey (menu, menu_index, false, 0);
+        InsertMenuItemTextWithCFString (menu, NULL,
+  				      0, kMenuItemAttrSeparator, 0);
+!       InsertMenuItemTextWithCFString (menu, CFSTR ("About Emacs"),
+  				      0, 0, kHICommandAbout);
+      }
+  #else	/* !MAC_OSX */
+  #if TARGET_API_MAC_CARBON
+--- 5169,5203 ----
+  
+    err = GetIndMenuItemWithCommandID (NULL, kHICommandQuit, 1,
+  				     &menu, &menu_index);
+!    if (err == noErr) 
+!      { /* so that A-Q can be remapped by Emacs if desired */
+!        SetMenuItemCommandKey (menu, menu_index, false, 0); 
+!        SetMenuItemTextWithCFString 
+! 	 (menu, menu_index, 
+! 	  CFStringCreateWithCString(NULL, 
+! 				    "Quit Aquamacs Emacs         ⌘Q",
+! 				    kCFStringEncodingUTF8));
+!      }
+!    EnableMenuCommand (NULL, kHICommandPreferences);
+!    err = GetIndMenuItemWithCommandID (NULL, kHICommandPreferences, 1,
+! 				      &menu, &menu_index);
+    if (err == noErr)
+      {
++       /* so that A-, can be remapped by Emacs if desired */
+        SetMenuItemCommandKey (menu, menu_index, false, 0);
++       
++       SetMenuItemTextWithCFString 
++ 	(menu, menu_index, 
++ 	 CFStringCreateWithCString(NULL, 
++ 				   "Preferences...                      ⌘,",
++ 				   kCFStringEncodingUTF8));
+        InsertMenuItemTextWithCFString (menu, NULL,
+  				      0, kMenuItemAttrSeparator, 0);
+!       InsertMenuItemTextWithCFString (menu, CFSTR ("About Aquamacs Emacs"),
+  				      0, 0, kHICommandAbout);
++       InsertMenuItemTextWithCFString (menu, CFSTR ("Check for Updates..."),
++ 				      1, 0, 'chku');
++ 
+      }
+  #else	/* !MAC_OSX */
+  #if TARGET_API_MAC_CARBON

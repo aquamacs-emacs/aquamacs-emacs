@@ -1,0 +1,105 @@
+<html lang="en">
+<head>
+<title>Examining And Comparing Old Versions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Examining And Comparing Old Versions">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Old%20Versions">Old Versions</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Secondary-VC-Commands.html#Secondary%20VC%20Commands">Secondary VC Commands</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Basic-VC-Editing.html#Basic%20VC%20Editing">Basic VC Editing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Version-Control.html#Version%20Control">Version Control</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Examining And Comparing Old Versions</h4>
+
+<p>One of the convenient features of version control is the ability
+to examine any version of a file, or compare two versions.
+
+     <dl>
+<dt><kbd>C-x v ~ </kbd><var>version</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Examine version <var>version</var> of the visited file, in a buffer of its
+own.
+
+     <br><dt><kbd>C-x v =</kbd>
+     <dd>Compare the current buffer contents with the latest checked-in version
+of the file.
+
+     <br><dt><kbd>C-u C-x v = </kbd><var>file</var><kbd> &lt;RET&gt; </kbd><var>oldvers</var><kbd> &lt;RET&gt; </kbd><var>newvers</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Compare the specified two versions of <var>file</var>.
+
+     <br><dt><kbd>C-x v g</kbd>
+     <dd>Display the result of the CVS annotate command using colors. 
+</dl>
+
+   <p>To examine an old version in its entirety, visit the file and then type
+<kbd>C-x v ~ </kbd><var>version</var><kbd> &lt;RET&gt;</kbd> (<code>vc-version-other-window</code>). 
+This puts the text of version <var>version</var> in a file named
+<code></code><var>filename</var><code>.~</code><var>version</var><code>~</code>, and visits it in its own buffer
+in a separate window.  (In RCS, you can also select an old version
+and create a branch from it.  See <a href="Branches.html#Branches">Branches</a>.)
+
+   <p>It is usually more convenient to compare two versions of the file,
+with the command <kbd>C-x v =</kbd> (<code>vc-diff</code>).  Plain <kbd>C-x v =</kbd>
+compares the current buffer contents (saving them in the file if
+necessary) with the last checked-in version of the file.  <kbd>C-u C-x
+v =</kbd>, with a numeric argument, reads a file name and two version
+numbers, then compares those versions of the specified file.  Both
+forms display the output in a special buffer in another window.
+
+   <p>You can specify a checked-in version by its number; an empty input
+specifies the current contents of the work file (which may be different
+from all the checked-in versions).  You can also specify a snapshot name
+(see <a href="Snapshots.html#Snapshots">Snapshots</a>) instead of one or both version numbers.
+
+   <p>If you supply a directory name instead of the name of a registered
+file, this command compares the two specified versions of all registered
+files in that directory and its subdirectories.
+
+   <p><kbd>C-x v =</kbd> works by running a variant of the <code>diff</code> utility
+designed to work with the version control system in use.  When you
+invoke <code>diff</code> this way, in addition to the options specified by
+<code>diff-switches</code> (see <a href="Comparing-Files.html#Comparing%20Files">Comparing Files</a>), it receives those
+specified by <code>vc-diff-switches</code>, plus those specified for the
+specific back end by <code>vc-</code><var>backend</var><code>-diff-switches</code>.  For
+instance, when the version control back end is RCS, <code>diff</code> uses
+the options in <code>vc-rcs-diff-switches</code>.  The
+<code>vc...diff-switches</code> variables are <code>nil</code> by default.
+
+   <p>Unlike the <kbd>M-x diff</kbd> command, <kbd>C-x v =</kbd> does not try to
+locate the changes in the old and new versions.  This is because
+normally one or both versions do not exist as files when you compare
+them; they exist only in the records of the master file. 
+See <a href="Comparing-Files.html#Comparing%20Files">Comparing Files</a>, for more information about <kbd>M-x diff</kbd>.
+
+   <p>For CVS-controlled files, you can display the result of the CVS
+annotate command, using colors to enhance the visual appearance.  Use
+the command <kbd>M-x vc-annotate</kbd> to do this.  It creates a new buffer
+to display file's text, colored to show how old each part is.  Text
+colored red is new, blue means old, and intermediate colors indicate
+intermediate ages.  By default, the time scale is 360 days, so that
+everything more than one year old is shown in blue.
+
+   <p>When you give a prefix argument to this command, it uses the
+minibuffer to read two arguments: which version number to display and
+annotate (instead of the current file contents), and a stretch factor
+for the time scale.  A stretch factor of 0.1 means that the color
+range from red to blue spans the past 36 days instead of 360 days.  A
+stretch factor greater than 1 means the color range spans more than a
+year.
+
+   </body></html>
+

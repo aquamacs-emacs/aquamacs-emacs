@@ -1,0 +1,61 @@
+<html lang="en">
+<head>
+<title>File Name Cache</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="File Name Cache">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="File%20Name%20Cache">File Name Cache</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="File-Conveniences.html#File%20Conveniences">File Conveniences</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Quoted-File-Names.html#Quoted%20File%20Names">Quoted File Names</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
+<hr><br>
+</div>
+
+<h3 class="section">File Name Cache</h3>
+
+<p>You can use the <dfn>file name cache</dfn> to make it easy to locate a
+file by name, without having to remember exactly where it is located. 
+When typing a file name in the minibuffer, <kbd>C-&lt;tab&gt;</kbd>
+(<code>file-cache-minibuffer-complete</code>) completes it using the file
+name cache.  If you repeat <kbd>C-&lt;tab&gt;</kbd>, that cycles through the
+possible completions of what you had originally typed.  Note that the
+<kbd>C-&lt;tab&gt;</kbd> character cannot be typed on most text-only
+terminals.
+
+   <p>The file name cache does not fill up automatically.  Instead, you
+load file names into the cache using these commands:
+
+     <dl>
+<dt><kbd>M-x file-cache-add-directory &lt;RET&gt; </kbd><var>directory</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Add each file name in <var>directory</var> to the file name cache. 
+<br><dt><kbd>M-x file-cache-add-directory-using-find &lt;RET&gt; </kbd><var>directory</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Add each file name in <var>directory</var> and all of its nested
+subdirectories to the file name cache. 
+<br><dt><kbd>M-x file-cache-add-directory-using-locate &lt;RET&gt; </kbd><var>directory</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Add each file name in <var>directory</var> and all of its nested
+subdirectories to the file name cache, using <code>locate</code> to find
+them all. 
+<br><dt><kbd>M-x file-cache-add-directory-list &lt;RET&gt; </kbd><var>variable</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Add each file name in each directory listed in <var>variable</var>
+to the file name cache.  <var>variable</var> should be a Lisp variable
+such as <code>load-path</code> or <code>exec-path</code>, whose value is a list
+of directory names. 
+<br><dt><kbd>M-x file-cache-clear-cache &lt;RET&gt;</kbd>
+     <dd>Clear the cache; that is, remove all file names from it. 
+</dl>
+
+   </body></html>
+

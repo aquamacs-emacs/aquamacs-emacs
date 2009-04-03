@@ -1,0 +1,42 @@
+# download, make and install ESS mode
+# run from within build directory
+
+
+FILE=ess-5.3.6
+DEST=../src/site-lisp/edit-modes/ess-mode
+INFODEST=../src/site-lisp/edit-modes/info
+EMACS="/Applications/Aquamacs Emacs.app/Contents/MacOS/Aquamacs Emacs -nw -Q"
+
+P=`pwd`
+curl -o /tmp/$FILE.tgz http://ess.r-project.org/downloads/ess/$FILE.tgz
+
+cd /tmp
+tar xvzf /tmp/$FILE.tgz
+
+cd /tmp/$FILE
+
+chmod -R u+w * 
+
+mkdir /tmp/ess
+PREFIX=/tmp/ess  make -e all
+ 
+PREFIX=/tmp/ess  make -e install
+
+cd $P
+mkdir $DEST 2>/dev/null
+mkdir $DEST/lisp 2>/dev/null
+mkdir $INFODEST 2>/dev/null
+mv /tmp/ess/share/emacs/site-lisp/*  $DEST/lisp/
+mv /tmp/ess/info/ess.info  $INFODEST/ 
+
+# icons need extra attention
+
+rm -rf $DEST/etc 
+mv /tmp/$FILE/etc $DEST/
+
+# delete some big files that arent needed
+
+rm -rf $DEST/etc/other/S-spread/*.ps
+cd $DEST/etc
+rm config.guess backbug* Makefile  R-ESS-bugs.R Makefile BACKBUG* sas-keys.*
+

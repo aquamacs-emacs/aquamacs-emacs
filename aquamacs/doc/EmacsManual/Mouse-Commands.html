@@ -1,0 +1,155 @@
+<html lang="en">
+<head>
+<title>Mouse Commands for Editing</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Mouse Commands for Editing">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Mouse%20Commands">Mouse Commands</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Secondary-Selection.html#Secondary%20Selection">Secondary Selection</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
+<hr><br>
+</div>
+
+<h3 class="section">Mouse Commands for Editing</h3>
+
+<p>The mouse commands for selecting and copying a region are mostly
+compatible with the <code>xterm</code> program.  You can use the same mouse
+commands for copying between Emacs and other X client programs.
+
+   <p>If you select a region with any of these mouse commands, and then
+immediately afterward type the &lt;DELETE&gt; function key, it deletes the
+region that you selected.  The &lt;BACKSPACE&gt; function key and the
+ASCII character &lt;DEL&gt; do not do this; if you type any other key
+in between the mouse command and &lt;DELETE&gt;, it does not do this.
+
+     <dl>
+<dt><kbd>Mouse-1</kbd>
+     <dd>Move point to where you click (<code>mouse-set-point</code>). 
+This is normally the left button.
+
+     <br><dt><kbd>Drag-Mouse-1</kbd>
+     <dd>Set the region to the text you select by dragging, and copy it to the
+kill ring (<code>mouse-set-region</code>).  You can specify both ends of the
+region with this single command.
+
+     <p>If you move the mouse off the top or bottom of the window while
+dragging, the window scrolls at a steady rate until you move the mouse
+back into the window.  This way, you can select regions that don't fit
+entirely on the screen.  The number of lines scrolled per step depends
+on how far away from the window edge the mouse has gone; the variable
+<code>mouse-scroll-min-lines</code> specifies a minimum step size.
+
+     <br><dt><kbd>Mouse-2</kbd>
+     <dd>Yank the last killed text, where you click (<code>mouse-yank-at-click</code>). 
+This is normally the middle button.
+
+     <br><dt><kbd>Mouse-3</kbd>
+     <dd>This command, <code>mouse-save-then-kill</code>, has several functions
+depending on where you click and the status of the region.
+
+     <p>The most basic case is when you click <kbd>Mouse-1</kbd> in one place and
+then <kbd>Mouse-3</kbd> in another.  This selects the text between those two
+positions as the region.  It also copies the new region to the kill
+ring, so that you can copy it to someplace else.
+
+     <p>If you click <kbd>Mouse-1</kbd> in the text, scroll with the scroll bar, and
+then click <kbd>Mouse-3</kbd>, it remembers where point was before scrolling
+(where you put it with <kbd>Mouse-1</kbd>), and uses that position as the
+other end of the region.  This is so that you can select a region that
+doesn't fit entirely on the screen.
+
+     <p>More generally, if you do not have a highlighted region, <kbd>Mouse-3</kbd>
+selects the text between point and the click position as the region.  It
+does this by setting the mark where point was, and moving point to where
+you click.
+
+     <p>If you have a highlighted region, or if the region was set just before
+by dragging button 1, <kbd>Mouse-3</kbd> adjusts the nearer end of the region
+by moving it to where you click.  The adjusted region's text also
+replaces the old region's text in the kill ring.
+
+     <p>If you originally specified the region using a double or triple
+<kbd>Mouse-1</kbd>, so that the region is defined to consist of entire words
+or lines, then adjusting the region with <kbd>Mouse-3</kbd> also proceeds by
+entire words or lines.
+
+     <p>If you use <kbd>Mouse-3</kbd> a second time consecutively, at the same place,
+that kills the region already selected.
+
+     <br><dt><kbd>Double-Mouse-1</kbd>
+     <dd>This key sets the region around the word which you click on.  If you
+click on a character with "symbol" syntax (such as underscore, in C
+mode), it sets the region around the symbol surrounding that character.
+
+     <p>If you click on a character with open-parenthesis or close-parenthesis
+syntax, it sets the region around the parenthetical grouping
+which that character starts or ends.  If you click on a character with
+string-delimiter syntax (such as a singlequote or doublequote in C), it
+sets the region around the string constant (using heuristics to figure
+out whether that character is the beginning or the end of it).
+
+     <br><dt><kbd>Double-Drag-Mouse-1</kbd>
+     <dd>This key selects a region made up of the words you drag across.
+
+     <br><dt><kbd>Triple-Mouse-1</kbd>
+     <dd>This key sets the region around the line you click on.
+
+     <br><dt><kbd>Triple-Drag-Mouse-1</kbd>
+     <dd>This key selects a region made up of the lines you drag across. 
+</dl>
+
+   <p>The simplest way to kill text with the mouse is to press <kbd>Mouse-1</kbd>
+at one end, then press <kbd>Mouse-3</kbd> twice at the other end. 
+See <a href="Killing.html#Killing">Killing</a>.  To copy the text into the kill ring without deleting it
+from the buffer, press <kbd>Mouse-3</kbd> just once--or just drag across the
+text with <kbd>Mouse-1</kbd>.  Then you can copy it elsewhere by yanking it.
+
+   <p>To yank the killed or copied text somewhere else, move the mouse there
+and press <kbd>Mouse-2</kbd>.  See <a href="Yanking.html#Yanking">Yanking</a>.  However, if
+<code>mouse-yank-at-point</code> is non-<code>nil</code>, <kbd>Mouse-2</kbd> yanks at
+point.  Then it does not matter where you click, or even which of the
+frame's windows you click on.  The default value is <code>nil</code>.  This
+variable also affects yanking the secondary selection.
+
+   <p>To copy text to another X window, kill it or save it in the kill ring. 
+Under X, this also sets the <dfn>primary selection</dfn>.  Then use the
+"paste" or "yank" command of the program operating the other window
+to insert the text from the selection.
+
+   <p>To copy text from another X window, use the "cut" or "copy"
+command of the program operating the other window, to select the text
+you want.  Then yank it in Emacs with <kbd>C-y</kbd> or <kbd>Mouse-2</kbd>.
+
+   <p>The standard coding system for X selections is <code>compound-text</code>. 
+To specify another coding system for X selections, use <kbd>C-x
+&lt;RET&gt; x</kbd> or <kbd>C-x &lt;RET&gt; X</kbd>.  See <a href="Specify-Coding.html#Specify%20Coding">Specify Coding</a>.
+
+   <p>These cutting and pasting commands also work on MS-Windows.
+
+   <p>When Emacs puts text into the kill ring, or rotates text to the front
+of the kill ring, it sets the <dfn>primary selection</dfn> in the X server. 
+This is how other X clients can access the text.  Emacs also stores the
+text in the cut buffer, but only if the text is short enough
+(the value of <code>x-cut-buffer-max</code> specifies the maximum number of
+characters); putting long strings in the cut buffer can be slow.
+
+   <p>The commands to yank the first entry in the kill ring actually check
+first for a primary selection in another program; after that, they check
+for text in the cut buffer.  If neither of those sources provides text
+to yank, the kill ring contents are used.
+
+   </body></html>
+

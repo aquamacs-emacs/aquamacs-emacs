@@ -1,0 +1,93 @@
+<html lang="en">
+<head>
+<title>Updating the Dired Buffer</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Updating the Dired Buffer">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Dired%20Updating">Dired Updating</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Dired-and-Find.html#Dired%20and%20Find">Dired and Find</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Hiding-Subdirectories.html#Hiding%20Subdirectories">Hiding Subdirectories</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Dired.html#Dired">Dired</a>
+<hr><br>
+</div>
+
+<h3 class="section">Updating the Dired Buffer</h3>
+
+<p>This section describes commands to update the Dired buffer to reflect
+outside (non-Dired) changes in the directories and files, and to delete
+part of the Dired buffer.
+
+     <dl>
+<dt><kbd>g</kbd>
+     <dd>Update the entire contents of the Dired buffer (<code>revert-buffer</code>).
+
+     <br><dt><kbd>l</kbd>
+     <dd>Update the specified files (<code>dired-do-redisplay</code>).
+
+     <br><dt><kbd>k</kbd>
+     <dd>Delete the specified <em>file lines</em>--not the files, just the lines
+(<code>dired-do-kill-lines</code>).
+
+     <br><dt><kbd>s</kbd>
+     <dd>Toggle between alphabetical order and date/time order
+(<code>dired-sort-toggle-or-edit</code>).
+
+     <br><dt><kbd>C-u s </kbd><var>switches</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Refresh the Dired buffer using <var>switches</var> as
+<code>dired-listing-switches</code>. 
+</dl>
+
+   <p>Type <kbd>g</kbd> (<code>revert-buffer</code>) to update the contents of the
+Dired buffer, based on changes in the files and directories listed. 
+This preserves all marks except for those on files that have vanished. 
+Hidden subdirectories are updated but remain hidden.
+
+   <p>To update only some of the files, type <kbd>l</kbd>
+(<code>dired-do-redisplay</code>).  Like the Dired file-operating commands,
+this command operates on the next <var>n</var> files (or previous
+-<var>n</var> files), or on the marked files if any, or on the
+current file.  Updating the files means reading their current status,
+then updating their lines in the buffer to indicate that status.
+
+   <p>If you use <kbd>l</kbd> on a subdirectory header line, it updates the
+contents of the corresponding subdirectory.
+
+   <p>To delete the specified <em>file lines</em> from the buffer--not
+delete the files--type <kbd>k</kbd> (<code>dired-do-kill-lines</code>).  Like
+the file-operating commands, this command operates on the next <var>n</var>
+files, or on the marked files if any; but it does not operate on the
+current file as a last resort.
+
+   <p>If you kill the line for a file that is a directory, the directory's
+contents are also deleted from the buffer.  Typing <kbd>C-u k</kbd> on the
+header line for a subdirectory is another way to delete a subdirectory
+from the Dired buffer.
+
+   <p>The <kbd>g</kbd> command brings back any individual lines that you have
+killed in this way, but not subdirectories--you must use <kbd>i</kbd> to
+reinsert a subdirectory.
+
+   <p>The files in a Dired buffers are normally listed in alphabetical order
+by file names.  Alternatively Dired can sort them by date/time.  The
+Dired command <kbd>s</kbd> (<code>dired-sort-toggle-or-edit</code>) switches
+between these two sorting modes.  The mode line in a Dired buffer
+indicates which way it is currently sorted--by name, or by date.
+
+   <p><kbd>C-u s </kbd><var>switches</var><kbd> &lt;RET&gt;</kbd> lets you specify a new value for
+<code>dired-listing-switches</code>.
+
+   </body></html>
+

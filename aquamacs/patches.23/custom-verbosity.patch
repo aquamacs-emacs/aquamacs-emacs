@@ -1,0 +1,19 @@
+*** lisp/custom.el	5 Jan 2009 03:18:51 -0000	1.146
+--- lisp/custom.el	15 Mar 2009 20:26:45 -0000
+***************
+*** 623,629 ****
+  	      ;; We are still loading it when we call this,
+  	      ;; and it is not in load-history yet.
+  	      ((equal load "cus-edit"))
+! 	      (t (condition-case nil (load load) (error nil))))))))
+  
+  (defvar custom-local-buffer nil
+    "Non-nil, in a Customization buffer, means customize a specific buffer.
+--- 623,629 ----
+  	      ;; We are still loading it when we call this,
+  	      ;; and it is not in load-history yet.
+  	      ((equal load "cus-edit"))
+! 	      (t (condition-case nil (load load nil 'quiet) (error nil))))))))
+  
+  (defvar custom-local-buffer nil
+    "Non-nil, in a Customization buffer, means customize a specific buffer.

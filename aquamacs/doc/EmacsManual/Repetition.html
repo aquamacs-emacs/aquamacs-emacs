@@ -1,0 +1,74 @@
+<html lang="en">
+<head>
+<title>Repeating Minibuffer Commands</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Repeating Minibuffer Commands">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Repetition">Repetition</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Minibuffer-History.html#Minibuffer%20History">Minibuffer History</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Minibuffer.html#Minibuffer">Minibuffer</a>
+<hr><br>
+</div>
+
+<h3 class="section">Repeating Minibuffer Commands</h3>
+
+<p>Every command that uses the minibuffer at least once is recorded on a
+special history list, together with the values of its arguments, so that
+you can repeat the entire command.  In particular, every use of
+<kbd>M-x</kbd> is recorded there, since <kbd>M-x</kbd> uses the minibuffer to read
+the command name.
+
+     <dl>
+<dt><kbd>C-x &lt;ESC&gt; &lt;ESC&gt;</kbd>
+     <dd>Re-execute a recent minibuffer command (<code>repeat-complex-command</code>). 
+<br><dt><kbd>M-x list-command-history</kbd>
+     <dd>Display the entire command history, showing all the commands
+<kbd>C-x &lt;ESC&gt; &lt;ESC&gt;</kbd> can repeat, most recent first. 
+</dl>
+
+   <p><kbd>C-x &lt;ESC&gt; &lt;ESC&gt;</kbd> is used to re-execute a recent
+minibuffer-using command.  With no argument, it repeats the last such
+command.  A numeric argument specifies which command to repeat; one
+means the last one, and larger numbers specify earlier ones.
+
+   <p><kbd>C-x &lt;ESC&gt; &lt;ESC&gt;</kbd> works by turning the previous command
+into a Lisp expression and then entering a minibuffer initialized with
+the text for that expression.  If you type just &lt;RET&gt;, the command
+is repeated as before.  You can also change the command by editing the
+Lisp expression.  Whatever expression you finally submit is what will be
+executed.  The repeated command is added to the front of the command
+history unless it is identical to the most recently executed command
+already there.
+
+   <p>Even if you don't understand Lisp syntax, it will probably be obvious
+which command is displayed for repetition.  If you do not change the
+text, it will repeat exactly as before.
+
+   <p>Once inside the minibuffer for <kbd>C-x &lt;ESC&gt; &lt;ESC&gt;</kbd>, you can
+use the minibuffer history commands (<kbd>M-p</kbd>, <kbd>M-n</kbd>, <kbd>M-r</kbd>,
+<kbd>M-s</kbd>; see <a href="Minibuffer-History.html#Minibuffer%20History">Minibuffer History</a>) to move through the history list
+of saved entire commands.  After finding the desired previous command,
+you can edit its expression as usual and then resubmit it by typing
+&lt;RET&gt; as usual.
+
+   <p>The list of previous minibuffer-using commands is stored as a Lisp
+list in the variable <code>command-history</code>.  Each element is a Lisp
+expression which describes one command and its arguments.  Lisp programs
+can re-execute a command by calling <code>eval</code> with the
+<code>command-history</code> element.
+
+   </body></html>
+

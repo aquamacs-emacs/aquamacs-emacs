@@ -1,0 +1,96 @@
+<html lang="en">
+<head>
+<title>Hooks</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Hooks">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Hooks">Hooks</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Locals.html#Locals">Locals</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Easy-Customization.html#Easy%20Customization">Easy Customization</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Hooks</h4>
+
+<p><dfn>Hooks</dfn> are an important mechanism for customization of Emacs.  A
+hook is a Lisp variable which holds a list of functions, to be called on
+some well-defined occasion.  (This is called <dfn>running the hook</dfn>.) 
+The individual functions in the list are called the <dfn>hook functions</dfn>
+of the hook.  With rare exceptions, hooks in Emacs are empty when Emacs
+starts up, so the only hook functions in any given hook are the ones you
+explicitly put there as customization.
+
+   <p>Most major modes run one or more <dfn>mode hooks</dfn> as the last step of
+initialization.  This makes it easy for you to customize the behavior of
+the mode, by setting up a hook function to override the local variable
+assignments already made by the mode.  But hooks are also used in other
+contexts.  For example, the hook <code>suspend-hook</code> runs just before
+Emacs suspends itself (see <a href="Exiting.html#Exiting">Exiting</a>).
+
+   <p>Most Emacs hooks are <dfn>normal hooks</dfn>.  This means that running the
+hook operates by calling all the hook functions, unconditionally, with
+no arguments.  We have made an effort to keep most hooks normal so that
+you can use them in a uniform way.  Every variable in Emacs whose name
+ends in <code>-hook</code> is a normal hook.
+
+   <p>There are also a few <dfn>abnormal hooks</dfn>.  These variables' names end
+in <code>-hooks</code> or <code>-functions</code>, instead of <code>-hook</code>.  What
+makes these hooks abnormal is that there is something peculiar about the
+way its functions are called--perhaps they are given arguments, or
+perhaps the values they return are used in some way.  For example,
+<code>find-file-not-found-hooks</code> (see <a href="Visiting.html#Visiting">Visiting</a>) is abnormal because
+as soon as one hook function returns a non-<code>nil</code> value, the rest
+are not called at all.  The documentation of each abnormal hook variable
+explains in detail what is peculiar about it.
+
+   <p>The recommended way to add a hook function to a hook (either normal or
+abnormal) is by calling <code>add-hook</code>.  You can use any valid Lisp
+function as the hook function, provided it can handle the proper number
+of arguments (zero arguments, in the case of a normal hook).  Of course,
+not every Lisp function is <em>useful</em> in any particular hook.
+
+   <p>For example, here's how to set up a hook to turn on Auto Fill mode
+when entering Text mode and other modes based on Text mode:
+
+<pre class="example">     (add-hook 'text-mode-hook 'turn-on-auto-fill)
+     </pre>
+
+   <p>The next example shows how to use a hook to customize the indentation
+of C code.  (People often have strong personal preferences for one
+format compared to another.)  Here the hook function is an anonymous
+lambda expression.
+
+<pre class="example">     (setq my-c-style
+       '((c-comment-only-line-offset . 4)
+         (c-cleanup-list . (scope-operator
+     		       empty-defun-braces
+     		       defun-close-semi))
+         (c-offsets-alist . ((arglist-close . c-lineup-arglist)
+     			(substatement-open . 0)))))
+     
+     (add-hook 'c-mode-common-hook
+       '(lambda ()
+          (c-add-style "my-style" my-c-style t)))
+     </pre>
+
+   <p>It is best to design your hook functions so that the order in which
+they are executed does not matter.  Any dependence on the order is
+"asking for trouble."  However, the order is predictable: the most
+recently added hook functions are executed first.
+
+   </body></html>
+

@@ -1,0 +1,84 @@
+<html lang="en">
+<head>
+<title>Adaptive Filling</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Adaptive Filling">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Adaptive%20Fill">Adaptive Fill</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Fill-Prefix.html#Fill%20Prefix">Fill Prefix</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Filling.html#Filling">Filling</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Adaptive Filling</h4>
+
+<p>The fill commands can deduce the proper fill prefix for a paragraph
+automatically in certain cases: either whitespace or certain punctuation
+characters at the beginning of a line are propagated to all lines of the
+paragraph.
+
+   <p>If the paragraph has two or more lines, the fill prefix is taken from
+the paragraph's second line, but only if it appears on the first line as
+well.
+
+   <p>If a paragraph has just one line, fill commands <em>may</em> take a
+prefix from that line.  The decision is complicated because there are
+three reasonable things to do in such a case:
+
+     <ul>
+<li>Use the first line's prefix on all the lines of the paragraph.
+
+     <li>Indent subsequent lines with whitespace, so that they line up under the
+text that follows the prefix on the first line, but don't actually copy
+the prefix from the first line.
+
+     <li>Don't do anything special with the second and following lines. 
+</ul>
+
+   <p>All three of these styles of formatting are commonly used.  So the
+fill commands try to determine what you would like, based on the prefix
+that appears and on the major mode.  Here is how.
+
+   <p>If the prefix found on the first line matches
+<code>adaptive-fill-first-line-regexp</code>, or if it appears to be a
+comment-starting sequence (this depends on the major mode), then the
+prefix found is used for filling the paragraph, provided it would not
+act as a paragraph starter on subsequent lines.
+
+   <p>Otherwise, the prefix found is converted to an equivalent number of
+spaces, and those spaces are used as the fill prefix for the rest of the
+lines, provided they would not act as a paragraph starter on subsequent
+lines.
+
+   <p>In Text mode, and other modes where only blank lines and page
+delimiters separate paragraphs, the prefix chosen by adaptive filling
+never acts as a paragraph starter, so it can always be used for filling.
+
+   <p>The variable <code>adaptive-fill-regexp</code> determines what kinds of line
+beginnings can serve as a fill prefix: any characters at the start of
+the line that match this regular expression are used.  If you set the
+variable <code>adaptive-fill-mode</code> to <code>nil</code>, the fill prefix is
+never chosen automatically.
+
+   <p>You can specify more complex ways of choosing a fill prefix
+automatically by setting the variable <code>adaptive-fill-function</code> to a
+function.  This function is called with point after the left margin of a
+line, and it should return the appropriate fill prefix based on that
+line.  If it returns <code>nil</code>, that means it sees no fill prefix in
+that line.
+
+   </body></html>
+

@@ -1,0 +1,80 @@
+<html lang="en">
+<head>
+<title>Editing in the Minibuffer</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Editing in the Minibuffer">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Minibuffer%20Edit">Minibuffer Edit</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Completion.html#Completion">Completion</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Minibuffer-File.html#Minibuffer%20File">Minibuffer File</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Minibuffer.html#Minibuffer">Minibuffer</a>
+<hr><br>
+</div>
+
+<h3 class="section">Editing in the Minibuffer</h3>
+
+<p>The minibuffer is an Emacs buffer (albeit a peculiar one), and the usual
+Emacs commands are available for editing the text of an argument you are
+entering.
+
+   <p>Since &lt;RET&gt; in the minibuffer is defined to exit the minibuffer,
+you can't use it to insert a newline in the minibuffer.  To do that,
+type <kbd>C-o</kbd> or <kbd>C-q C-j</kbd>.  (Recall that a newline is really the
+character control-J.)
+
+   <p>The minibuffer has its own window which always has space on the screen
+but acts as if it were not there when the minibuffer is not in use.  When
+the minibuffer is in use, its window is just like the others; you can
+switch to another window with <kbd>C-x o</kbd>, edit text in other windows and
+perhaps even visit more files, before returning to the minibuffer to submit
+the argument.  You can kill text in another window, return to the
+minibuffer window, and then yank the text to use it in the argument. 
+See <a href="Windows.html#Windows">Windows</a>.
+
+   <p>There are some restrictions on the use of the minibuffer window,
+however.  You cannot switch buffers in it--the minibuffer and its
+window are permanently attached.  Also, you cannot split or kill the
+minibuffer window.  But you can make it taller in the normal fashion
+with <kbd>C-x ^</kbd>.
+
+   <p>The minibuffer window expands vertically as necessary to hold the
+text that you put in the minibuffer, if <code>resize-mini-windows</code> is
+non-<code>nil</code>.  If <code>resize-mini-windows</code> is <code>t</code>, the window
+is always resized to fit the size of the text it displays.  If
+<code>resize-mini-windows</code> is the symbol <code>grow-only</code>, the window
+grows when the size of displayed text increases, but shrinks (back to
+the normal size) only when the minibuffer becomes inactive.
+
+   <p>The variable <code>max-mini-window-height</code> controls the maximum
+height for resizing the minibuffer window: a floating-point number
+specifies a fraction of the frame's height; an integer specifies the
+maximum number of lines; <code>nil</code> means do not resize the minibuffer
+window automatically.  The default value is 0.25.
+
+   <p>If while in the minibuffer you issue a command that displays help text
+of any sort in another window, you can use the <kbd>C-M-v</kbd> command while
+in the minibuffer to scroll the help text.  This lasts until you exit
+the minibuffer.  This feature is especially useful when you display
+a buffer listing possible completions.  See <a href="Other-Window.html#Other%20Window">Other Window</a>.
+
+   <p>Emacs normally disallows most commands that use the minibuffer while
+the minibuffer is active.  This rule is to prevent recursive minibuffers
+from confusing novice users.  If you want to be able to use such
+commands in the minibuffer, set the variable
+<code>enable-recursive-minibuffers</code> to a non-<code>nil</code> value.
+
+   </body></html>
+

@@ -1,0 +1,90 @@
+<html lang="en">
+<head>
+<title>Completion Commands</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Completion Commands">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Completion%20Commands">Completion Commands</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Strict-Completion.html#Strict%20Completion">Strict Completion</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Completion-Example.html#Completion%20Example">Completion Example</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Completion.html#Completion">Completion</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Completion Commands</h4>
+
+<p>Here is a list of the completion commands defined in the minibuffer
+when completion is available.
+
+     <dl>
+<dt><kbd>&lt;TAB&gt;</kbd>
+     <dd>Complete the text in the minibuffer as much as possible
+(<code>minibuffer-complete</code>). 
+<br><dt><kbd>&lt;SPC&gt;</kbd>
+     <dd>Complete the minibuffer text, but don't go beyond one word
+(<code>minibuffer-complete-word</code>). 
+<br><dt><kbd>&lt;RET&gt;</kbd>
+     <dd>Submit the text in the minibuffer as the argument, possibly completing
+first as described below (<code>minibuffer-complete-and-exit</code>). 
+<br><dt><kbd>?</kbd>
+     <dd>Display a list of all possible completions of the text in the minibuffer
+(<code>minibuffer-list-completions</code>). 
+</dl>
+
+   <p>&lt;SPC&gt; completes much like &lt;TAB&gt;, but never goes beyond the
+next hyphen or space.  If you have <code>auto-f</code> in the minibuffer and
+type &lt;SPC&gt;, it finds that the completion is <code>auto-fill-mode</code>,
+but it stops completing after <code>fill-</code>.  This gives
+<code>auto-fill-</code>.  Another &lt;SPC&gt; at this point completes all the
+way to <code>auto-fill-mode</code>.  The command that implements this
+behavior is called <code>minibuffer-complete-word</code>.
+
+   <p>Here are some commands you can use to choose a completion from a
+window that displays a list of completions:
+
+     <dl>
+<dt><kbd>Mouse-2</kbd>
+     <dd>Clicking mouse button 2 on a completion in the list of possible
+completions chooses that completion (<code>mouse-choose-completion</code>). 
+You normally use this command while point is in the minibuffer, but you
+must click in the list of completions, not in the minibuffer itself.
+
+     <br><dt><kbd>&lt;PRIOR&gt;</kbd>
+     <dd><dt><kbd>M-v</kbd>
+     <dd>Typing &lt;PRIOR&gt; or &lt;PAGE-UP&gt;, or <kbd>M-v</kbd>, while in the
+minibuffer, selects the window showing the completion list buffer
+(<code>switch-to-completions</code>).  This paves the way for using the
+commands below.  (Selecting that window in the usual ways has the same
+effect, but this way is more convenient.)
+
+     <br><dt><kbd>&lt;RET&gt;</kbd>
+     <dd>Typing &lt;RET&gt; <em>in the completion list buffer</em> chooses the
+completion that point is in or next to (<code>choose-completion</code>).  To
+use this command, you must first switch windows to the window that shows
+the list of completions.
+
+     <br><dt><kbd>&lt;RIGHT&gt;</kbd>
+     <dd>Typing the right-arrow key &lt;RIGHT&gt; <em>in the completion list
+buffer</em> moves point to the following completion (<code>next-completion</code>).
+
+     <br><dt><kbd>&lt;LEFT&gt;</kbd>
+     <dd>Typing the left-arrow key &lt;LEFT&gt; <em>in the completion list
+buffer</em> moves point toward the beginning of the buffer, to the previous
+completion (<code>previous-completion</code>). 
+</dl>
+
+   </body></html>
+

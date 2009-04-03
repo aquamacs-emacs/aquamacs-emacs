@@ -1,0 +1,147 @@
+this patches fringe mode to the fringe in 23
+because it fixes an important bug, which may prevent options from being saved.
+Index: fringe.el
+===================================================================
+RCS file: /sources/emacs/emacs/lisp/fringe.el,v
+retrieving revision 1.28.2.2
+diff -c -r1.28.2.2 fringe.el
+*** lisp/fringe.el	7 Jan 2008 02:44:45 -0000	1.28.2.2
+--- lisp/fringe.el	28 Dec 2008 04:00:19 -0000
+***************
+*** 8,17 ****
+  
+  ;; This file is part of GNU Emacs.
+  
+! ;; GNU Emacs is free software; you can redistribute it and/or modify
+  ;; it under the terms of the GNU General Public License as published by
+! ;; the Free Software Foundation; either version 3, or (at your option)
+! ;; any later version.
+  
+  ;; GNU Emacs is distributed in the hope that it will be useful,
+  ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+--- 8,17 ----
+  
+  ;; This file is part of GNU Emacs.
+  
+! ;; GNU Emacs is free software: you can redistribute it and/or modify
+  ;; it under the terms of the GNU General Public License as published by
+! ;; the Free Software Foundation, either version 3 of the License, or
+! ;; (at your option) any later version.
+  
+  ;; GNU Emacs is distributed in the hope that it will be useful,
+  ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+***************
+*** 19,27 ****
+  ;; GNU General Public License for more details.
+  
+  ;; You should have received a copy of the GNU General Public License
+! ;; along with GNU Emacs; see the file COPYING.  If not, write to the
+! ;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+! ;; Boston, MA 02110-1301, USA.
+  
+  ;;; Commentary:
+  
+--- 19,25 ----
+  ;; GNU General Public License for more details.
+  
+  ;; You should have received a copy of the GNU General Public License
+! ;; along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
+  
+  ;;; Commentary:
+  
+***************
+*** 93,98 ****
+--- 91,100 ----
+  
+  (defvar fringe-mode)
+  
++ (defvar fringe-mode-explicit nil
++   "Non-nil means `set-fringe-mode' should really do something.
++ This is nil while loading `fringe.el', and t afterward.")
++ 
+  (defun set-fringe-mode-1 (ignore value)
+    "Call `set-fringe-mode' with VALUE.
+  See `fringe-mode' for valid values and their effect.
+***************
+*** 104,143 ****
+  See `fringe-mode' for possible values and their effect."
+    (setq fringe-mode value)
+  
+!   ;; Apply it to default-frame-alist.
+!   (let ((parameter (assq 'left-fringe default-frame-alist)))
+!     (if (consp parameter)
+! 	(setcdr parameter (if (consp fringe-mode)
+! 			      (car fringe-mode)
+! 			    fringe-mode))
+!       (setq default-frame-alist
+! 	    (cons (cons 'left-fringe (if (consp fringe-mode)
+! 					 (car fringe-mode)
+! 				       fringe-mode))
+! 		  default-frame-alist))))
+!   (let ((parameter (assq 'right-fringe default-frame-alist)))
+!     (if (consp parameter)
+! 	(setcdr parameter (if (consp fringe-mode)
+! 			      (cdr fringe-mode)
+! 			    fringe-mode))
+!       (setq default-frame-alist
+! 	    (cons (cons 'right-fringe (if (consp fringe-mode)
+! 					  (cdr fringe-mode)
+! 					fringe-mode))
+! 		  default-frame-alist))))
+! 
+!   ;; Apply it to existing frames.
+!   (let ((frames (frame-list)))
+!     (while frames
+!       (modify-frame-parameters
+!        (car frames)
+!        (list (cons 'left-fringe (if (consp fringe-mode)
+! 				    (car fringe-mode)
+! 				  fringe-mode))
+! 	     (cons 'right-fringe (if (consp fringe-mode)
+! 				     (cdr fringe-mode)
+! 				   fringe-mode))))
+!       (setq frames (cdr frames)))))
+  
+  ;; For initialization of fringe-mode, take account of changes
+  ;; made explicitly to default-frame-alist.
+--- 106,119 ----
+  See `fringe-mode' for possible values and their effect."
+    (setq fringe-mode value)
+  
+!   (when fringe-mode-explicit
+!     (modify-all-frames-parameters
+!      (list (cons 'left-fringe (if (consp fringe-mode)
+! 				  (car fringe-mode)
+! 				fringe-mode))
+! 	   (cons 'right-fringe (if (consp fringe-mode)
+! 				   (cdr fringe-mode)
+! 				 fringe-mode))))))
+  
+  ;; For initialization of fringe-mode, take account of changes
+  ;; made explicitly to default-frame-alist.
+***************
+*** 186,191 ****
+--- 162,171 ----
+    :initialize 'fringe-mode-initialize
+    :set 'set-fringe-mode-1)
+  
++ ;; We just set fringe-mode, but that was the default.
++ ;; If it is set again, that is for real.
++ (setq fringe-mode-explicit t)
++ 
+  (defun fringe-query-style (&optional all-frames)
+    "Query user for fringe style.
+  Returns values suitable for left-fringe and right-fringe frame parameters.
+***************
+*** 280,284 ****
+  
+  (provide 'fringe)
+  
+! ;;; arch-tag: 6611ef60-0869-47ed-8b93-587ee7d3ff5d
+  ;;; fringe.el ends here
+--- 260,264 ----
+  
+  (provide 'fringe)
+  
+! ;; arch-tag: 6611ef60-0869-47ed-8b93-587ee7d3ff5d
+  ;;; fringe.el ends here

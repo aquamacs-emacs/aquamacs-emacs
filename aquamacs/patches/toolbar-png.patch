@@ -1,0 +1,669 @@
+diff -c -r1.1.2.1 mactoolbox.c
+*** src/s/darwin.h	03 May 2008 11:50:06 +0100	1.28.2.3
+--- src/s/darwin.h	06 May 2008 08:05:10 +0100	
+***************
+*** 274,279 ****
+--- 274,282 ----
+  #define USE_MAC_IMAGE_IO 1
+  #endif
+  #endif
++ /* Do not use Image I/O because the rest of the patch depends on the older API */
++ #undef USE_MAC_IMAGE_IO
++ #define USE_MAC_IMAGE_IO 0
+  
+  /* If the Image I/O framework is not used, fall back on QuickTime.  */
+  #if USE_MAC_IMAGE_IO
+*** src/mactoolbox.c	6 Apr 2008 01:54:44 -0000	1.1.2.1
+--- src/mactoolbox.c	6 Apr 2008 13:52:32 -0000
+***************
+*** 124,129 ****
+--- 124,131 ----
+  extern Lisp_Object saved_ts_script_language_on_focus;
+  #endif
+  
++ extern Lisp_Object Vmac_tool_bar_display_mode;
++ 
+  static int mac_event_to_emacs_modifiers P_ ((EventRef));
+  static OSStatus install_menu_target_item_handler P_ ((void));
+  #ifdef MAC_OSX
+***************
+*** 2463,2469 ****
+      }
+  
+    if (err == noErr)
+!     err = HIToolbarSetDisplayMode (toolbar, kHIToolbarDisplayModeIconOnly);
+    if (err == noErr)
+      {
+        static const EventTypeSpec specs[] =
+--- 2464,2470 ----
+      }
+  
+    if (err == noErr)
+!     err = HIToolbarSetDisplayMode (toolbar, kHIToolbarDisplayModeDefault);
+    if (err == noErr)
+      {
+        static const EventTypeSpec specs[] =
+***************
+*** 2556,2589 ****
+        if (label == NULL)
+  	label = CFSTR ("");
+  
+        if (pos < old_count)
+  	{
+  	  CGImageRef old_cg_image = NULL;
+  	  CFStringRef old_label = NULL;
+  	  Boolean old_enabled_p;
+  
+  	  item = (HIToolbarItemRef) CFArrayGetValueAtIndex (old_items, pos);
+  
+! 	  HIToolbarItemCopyImage (item, &old_cg_image);
+! 	  if (cg_image != old_cg_image)
+! 	    HIToolbarItemSetImage (item, cg_image);
+! 	  CGImageRelease (old_cg_image);
+! 
+! 	  HIToolbarItemCopyLabel (item, &old_label);
+! 	  if (CFStringCompare (label, old_label, 0) != kCFCompareEqualTo)
+! 	    HIToolbarItemSetLabel (item, label);
+! 	  CFRelease (old_label);
+! 
+! 	  old_enabled_p = HIToolbarItemIsEnabled (item);
+! 	  if ((enabled_p || idx >= 0) != old_enabled_p)
+! 	    HIToolbarItemSetEnabled (item, (enabled_p || idx >= 0));
+  	}
+        else
+  	{
+  	  item = NULL;
+! 	  HIToolbarCreateItemWithIdentifier (toolbar,
+! 					     TOOLBAR_ICON_ITEM_IDENTIFIER,
+! 					     NULL, &item);
+  	  if (item)
+  	    {
+  	      HIToolbarItemSetImage (item, cg_image);
+--- 2559,2622 ----
+        if (label == NULL)
+  	label = CFSTR ("");
+  
++       CFStringRef itemIdentifier = TOOLBAR_ICON_ITEM_IDENTIFIER;
++       if (CFStringCompare (label,  CFSTR ("--"), 0) == kCFCompareEqualTo)
++ 	{
++ 	  itemIdentifier = kHIToolbarFlexibleSpaceIdentifier;
++ 	  label = CFSTR ("");
++ 	}
++ 
+        if (pos < old_count)
+  	{
+  	  CGImageRef old_cg_image = NULL;
+  	  CFStringRef old_label = NULL;
++ 	  CFStringRef old_itemIdentifier = NULL;
+  	  Boolean old_enabled_p;
+  
+  	  item = (HIToolbarItemRef) CFArrayGetValueAtIndex (old_items, pos);
+  
+! 	  HIToolbarItemCopyIdentifier (item, &old_itemIdentifier);
+! 	  if (CFStringCompare (itemIdentifier, old_itemIdentifier, 0) 
+! 	      != kCFCompareEqualTo)
+! 	    {
+! 	      
+! 	      /* identifier has changed, need to recreate */
+! 	      item = NULL;
+! 	      HIToolbarCreateItemWithIdentifier 
+! 		(toolbar, itemIdentifier, NULL, &item);
+! 	      if (item)
+! 		{
+! 		  HIToolbarItemSetImage (item, cg_image);
+! 		  HIToolbarItemSetLabel (item, label);
+! 		  HIToolbarItemSetEnabled (item, (enabled_p || idx >= 0));
+! 		  HIToolbarInsertItemAtIndex (toolbar, item, pos+1);
+! 		  HIToolbarRemoveItemAtIndex (toolbar, pos);
+! 		  CFRelease(item);
+! 		}
+! 	    }
+! 	  else
+! 	    {
+! 	      HIToolbarItemCopyImage (item, &old_cg_image);
+! 	      if (cg_image != old_cg_image)
+! 		HIToolbarItemSetImage (item, cg_image);
+! 	      CGImageRelease (old_cg_image);
+! 	      
+! 	      HIToolbarItemCopyLabel (item, &old_label);
+! 	      if (CFStringCompare (label, old_label, 0) != kCFCompareEqualTo)
+! 		HIToolbarItemSetLabel (item, label);
+! 	      CFRelease (old_label);
+! 
+! 	      old_enabled_p = HIToolbarItemIsEnabled (item);
+! 	      if ((enabled_p || idx >= 0) != old_enabled_p)
+! 		HIToolbarItemSetEnabled (item, (enabled_p || idx >= 0));
+! 	    }
+! 	  CFRelease (old_itemIdentifier);
+  	}
+        else
+  	{
+  	  item = NULL;
+! 	  HIToolbarCreateItemWithIdentifier 
+! 	    (toolbar, itemIdentifier, NULL, &item);
+  	  if (item)
+  	    {
+  	      HIToolbarItemSetImage (item, cg_image);
+***************
+*** 2607,2612 ****
+--- 2608,2630 ----
+    while (pos < old_count)
+      HIToolbarRemoveItemAtIndex (toolbar, --old_count);
+  
++   if (EQ (Vmac_tool_bar_display_mode, intern ("labels")))
++     {
++       HIToolbarSetDisplayMode (toolbar, kHIToolbarDisplayModeLabelOnly);
++     }
++   else if (EQ (Vmac_tool_bar_display_mode, intern ("icons")))
++     {
++       HIToolbarSetDisplayMode (toolbar, kHIToolbarDisplayModeIconOnly);
++     }
++   else if (EQ (Vmac_tool_bar_display_mode, intern ("both")))
++     {
++       HIToolbarSetDisplayMode (toolbar, kHIToolbarDisplayModeIconAndLabel);
++     }
++   else
++     {
++       HIToolbarSetDisplayMode (toolbar, kHIToolbarDisplayModeDefault);
++     } 
++ 
+    ShowHideWindowToolbar (FRAME_MAC_WINDOW (f), true,
+  			 !win_gravity && f == mac_focus_frame (dpyinfo));
+    /* Mac OS X 10.3 does not issue kEventWindowBoundsChanged events on
+diff -c -r1.214.2.16 macterm.c
+*** src/macterm.c	29 Mar 2008 00:46:51 -0000	1.214.2.16
+--- src/macterm.c	5 Apr 2008 07:42:28 -0000
+***************
+*** 87,92 ****
+--- 87,97 ----
+  
+  Lisp_Object Vx_toolkit_scroll_bars;
+  
++ #if USE_MAC_TOOLBAR
++ /* Specify whether to display the tool bar as icons with labels. */
++ Lisp_Object Vmac_tool_bar_display_mode;
++ #endif
++ 
+  /* If non-zero, the text will be rendered using Core Graphics text
+     rendering which may anti-alias the text.  */
+  int mac_use_core_graphics;
+***************
+*** 12984,12989 ****
+--- 13028,13042 ----
+  mouse-3 and the command-key will register for mouse-2.  */);
+    Vmac_emulate_three_button_mouse = Qnil;
+  
++ #if USE_MAC_TOOLBAR
++   DEFVAR_LISP ("mac-tool-bar-display-mode", &Vmac_tool_bar_display_mode,
++     doc: /* *Specify whether to display the tool bar as icons with labels.
++ The value can be `icons' (for icons only), `labels' (for labels),
++ `both' (for icons with labels) and nil, in which case the system default 
++ is assumed.  The default is nil.  */);
++   Vmac_tool_bar_display_mode = Qnil;
++ #endif
++ 
+  #if TARGET_API_MAC_CARBON
+    DEFVAR_BOOL ("mac-wheel-button-is-mouse-2", &mac_wheel_button_is_mouse_2,
+      doc: /* *Non-nil if the wheel button is mouse-2 and the right click mouse-3.
+*** src/image.c	28 Mar 2008 14:57:33 -0000	1.65.2.13
+--- src/image.c	5 Apr 2008 22:33:31 -0000
+***************
+*** 1135,1140 ****
+--- 1135,1146 ----
+        struct image *img = IMAGE_FROM_ID (f, id);
+        if (img->mask)
+  	mask = Qt;
++ #if USE_CG_DRAWING
++       /* Mask may be in an Alpha channel in the image data */
++       if (img->data.ptr_val != NULL && 
++ 	  CGImageGetAlphaInfo(img->data.ptr_val) != kCGImageAlphaNone)
++ 	mask = Qt;
++ #endif
+      }
+    else
+      error ("Invalid image specification");
+***************
+*** 1549,1555 ****
+      }
+  
+  #if defined (MAC_OS) && USE_CG_DRAWING
+!   if (img->data.ptr_val)
+      {
+        CGImageRelease (img->data.ptr_val);
+        img->data.ptr_val = NULL;
+--- 1555,1561 ----
+      }
+  
+  #if defined (MAC_OS) && USE_CG_DRAWING
+!   if (img->data.ptr_val != NULL)
+      {
+        CGImageRelease (img->data.ptr_val);
+        img->data.ptr_val = NULL;
+***************
+*** 1835,1840 ****
+--- 1841,1848 ----
+      {
+        Lisp_Object conversion, spec;
+        Lisp_Object mask;
++       int release = 0;
++       int found_p = 0;
+  
+        spec = img->spec;
+  
+***************
+*** 1850,1862 ****
+  
+        mask = image_spec_value (spec, QCheuristic_mask, NULL);
+        if (!NILP (mask))
+! 	x_build_heuristic_mask (f, img, mask);
+        else
+  	{
+- 	  int found_p;
+- 
+  	  mask = image_spec_value (spec, QCmask, &found_p);
+! 
+  	  if (EQ (mask, Qheuristic))
+  	    x_build_heuristic_mask (f, img, Qt);
+  	  else if (CONSP (mask)
+--- 1858,1872 ----
+  
+        mask = image_spec_value (spec, QCheuristic_mask, NULL);
+        if (!NILP (mask))
+! 	{
+! 	  release = 1;
+! 	  x_build_heuristic_mask (f, img, mask);
+! 	}
+        else
+  	{
+  	  mask = image_spec_value (spec, QCmask, &found_p);
+! 	  if (found_p)
+! 	    release = 1;
+  	  if (EQ (mask, Qheuristic))
+  	    x_build_heuristic_mask (f, img, Qt);
+  	  else if (CONSP (mask)
+***************
+*** 1876,1882 ****
+  
+  
+        /* Should we apply an image transformation algorithm?  */
+!       conversion = image_spec_value (spec, QCconversion, NULL);
+        if (EQ (conversion, Qdisabled))
+  	x_disable_image (f, img);
+        else if (EQ (conversion, Qlaplace))
+--- 1886,1895 ----
+  
+  
+        /* Should we apply an image transformation algorithm?  */
+!       found_p = 0;
+!       conversion = image_spec_value (spec, QCconversion, &found_p);
+!       if (found_p)
+! 	release = 1;
+        if (EQ (conversion, Qdisabled))
+  	x_disable_image (f, img);
+        else if (EQ (conversion, Qlaplace))
+***************
+*** 1893,1898 ****
+--- 1906,1918 ----
+  			      Fplist_get (tem, QCmatrix),
+  			      Fplist_get (tem, QCcolor_adjustment));
+  	}
++ #if defined (MAC_OS) && USE_CG_DRAWING
++       if (release && img->data.ptr_val != NULL)
++ 	{
++ 	  CGImageRelease (img->data.ptr_val);
++ 	  img->data.ptr_val = NULL;
++ 	}
++ #endif
+      }
+  }
+  
+***************
+*** 2767,2773 ****
+--- 2787,2798 ----
+      }
+    CGContextDrawImage (context, rectangle, image);
+    QDEndCGContext (ximg, &context);
++ 
++ #if USE_CG_DRAWING
++   img->data.ptr_val = image; /* retain original data */
++ #else
+    CGImageRelease (image);
++ #endif
+  
+    /* Maybe fill in the background field while we have ximg handy. */
+    if (NILP (image_spec_value (img->spec, QCbackground, NULL)))
+*** lisp/tool-bar.el	05 Apr 2008 01:23:45 +0100	1.7.2.2
+--- lisp/tool-bar.el	05 Apr 2008 14:30:07 +0100	
+***************
+*** 64,71 ****
+  	 ;; ...and future ones.
+  	 (let ((elt (assq 'tool-bar-lines default-frame-alist)))
+  	   (if elt
+! 	       (setcdr elt lines)
+! 	     (add-to-list 'default-frame-alist (cons 'tool-bar-lines lines)))))
+         (if (and tool-bar-mode
+  		(display-graphic-p)
+  		(= 1 (length (default-value 'tool-bar-map)))) ; not yet setup
+--- 64,71 ----
+  	 ;; ...and future ones.
+  	 (let ((elt (assq 'tool-bar-lines default-frame-alist)))
+  	   (if elt
+! 	       (setq default-frame-alist (delete elt default-frame-alist)))
+! 	   (add-to-list 'default-frame-alist (cons 'tool-bar-lines lines))))
+         (if (and tool-bar-mode
+  		(display-graphic-p)
+  		(= 1 (length (default-value 'tool-bar-map)))) ; not yet setup
+***************
+*** 90,95 ****
+--- 90,166 ----
+  		'(menu-item "tool bar" ignore
+  			    :filter (lambda (ignore) tool-bar-map)))
+  
++ (defun tool-bar-set-file-extension (image-spec-list extension)
++   "Set new file extensions for all :file properties
++ Replace any extensions of :file properties in elements of
++ IMAGE-SPEC-LIST. An extension may start with a period . or an
++ underscore. EXTENSION and the original file name extension (starting
++ with a period) are added to the file name.
++ 
++ E.g. foo_dis.xpm becomes foo_sel.xpm if EXTENSION is '_sel'."
++   (mapcar
++    (lambda (spec) 
++      (let ((f (plist-get spec :file)) 
++ 	    )
++         (if (null f)
++ 	    spec
++ 	  ;; need to replace previous extensions, including those
++ 	  ;; starting with _ - 
++ 	  (plist-put spec :file (concat (replace-regexp-in-string "[\.\_].*$" 
++ 								  "" f)
++ 					extension 
++ 					(file-name-extension f t)))
++ 	  )))
++    image-spec-list))
++ 
++ (defun tool-bar-get-image-spec (icon)
++   (let* ((fg (face-attribute 'tool-bar :foreground))
++ 	 (bg (face-attribute 'tool-bar :background))
++ 	 (colors (nconc (if (eq fg 'unspecified) nil (list :foreground fg))
++ 			(if (eq bg 'unspecified) nil (list :background bg))))
++ 	 (xpm-spec (list :type 'xpm :file (concat icon ".xpm")))
++ 	 (xpm-lo-spec (if (> (display-color-cells) 256)
++ 			  nil
++ 			(list :type 'xpm :file
++                               (concat "low-color/" icon ".xpm"))))
++ 	 (png-spec (if (image-type-available-p 'png)
++ 		       (list :type 'png :file (concat icon ".png") 
++ 			     :background "grey")))
++ 	 (pbm-spec (append (list :type 'pbm :file
++                                  (concat icon ".pbm")) colors))
++ 	 (xbm-spec (append (list :type 'xbm :file
++                                  (concat icon ".xbm")) colors))
++ 	 (image (find-image
++ 		(if (display-color-p)
++ 		    (list png-spec xpm-lo-spec xpm-spec pbm-spec xbm-spec)
++ 		  (list pbm-spec xbm-spec xpm-lo-spec xpm-spec))))
++ 	 (image-sel (find-image
++ 		     (if (display-color-p)
++ 			 (tool-bar-set-file-extension
++ 			  (list png-spec xpm-lo-spec xpm-spec pbm-spec xbm-spec)
++ 			  "_sel")
++ 		       nil)))
++ 	 (image-dis (find-image
++ 		     (if (display-color-p)
++ 			 (tool-bar-set-file-extension
++ 			  (list png-spec xpm-lo-spec xpm-spec pbm-spec xbm-spec)
++ 			  "_dis")
++ 		       nil)))
++ 	 (images (when image ;; image may be nil if not found.
++ 		    (unless (image-mask-p image)
++  		     (setq image (append image '(:mask heuristic))))
++ 		   (if (and image-sel image-dis)
++ 		       (progn		     
++ 			 (unless (image-mask-p image-sel)
++ 			   (setq image-sel (append image-sel 
++ 						   '(:mask heuristic))))
++ 			 (unless (image-mask-p image-dis)
++ 			   (setq image-dis (append image-dis 
++ 						   '(:mask heuristic))))
++ 			 (vector image-sel image image-dis image-dis))
++ 		     image)))) 
++     (cons image images)))
++ 
+  ;;;###autoload
+  (defun tool-bar-add-item (icon def key &rest props)
+    "Add an item to the tool bar.
+***************
+*** 110,147 ****
+  ;;;###autoload
+  (defun tool-bar-local-item (icon def key map &rest props)
+    "Add an item to the tool bar in map MAP.
+! ICON names the image, DEF is the key definition and KEY is a symbol
+! for the fake function key in the menu keymap.  Remaining arguments
+! PROPS are additional items to add to the menu item specification.  See
+! Info node `(elisp)Tool Bar'.  Items are added from left to right.
+! 
+! ICON is the base name of a file containing the image to use.  The
+! function will first try to use low-color/ICON.xpm if display-color-cells
+! is less or equal to 256, then ICON.xpm, then ICON.pbm, and finally
+! ICON.xbm, using `find-image'."
+!   (let* ((fg (face-attribute 'tool-bar :foreground))
+! 	 (bg (face-attribute 'tool-bar :background))
+! 	 (colors (nconc (if (eq fg 'unspecified) nil (list :foreground fg))
+! 			(if (eq bg 'unspecified) nil (list :background bg))))
+! 	 (xpm-spec (list :type 'xpm :file (concat icon ".xpm")))
+! 	 (xpm-lo-spec (if (> (display-color-cells) 256)
+! 			  nil
+! 			(list :type 'xpm :file
+!                               (concat "low-color/" icon ".xpm"))))
+! 	 (pbm-spec (append (list :type 'pbm :file
+!                                  (concat icon ".pbm")) colors))
+! 	 (xbm-spec (append (list :type 'xbm :file
+!                                  (concat icon ".xbm")) colors))
+! 	 (image (find-image
+! 		(if (display-color-p)
+! 		    (list xpm-lo-spec xpm-spec pbm-spec xbm-spec)
+! 		  (list pbm-spec xbm-spec xpm-lo-spec xpm-spec)))))
+! 
+      (when (and (display-images-p) image)
+-       (unless (image-mask-p image)
+- 	(setq image (append image '(:mask heuristic))))
+        (define-key-after map (vector key)
+! 	`(menu-item ,(symbol-name key) ,def :image ,image ,@props)))))
+  
+  ;;;###autoload
+  (defun tool-bar-add-item-from-menu (command icon &optional map &rest props)
+--- 181,208 ----
+  ;;;###autoload
+  (defun tool-bar-local-item (icon def key map &rest props)
+    "Add an item to the tool bar in map MAP.
+! ICON names the image, or is structure of the form (IMG . LABEL),
+! with the image name IMG, and a string with the label of the icon
+! displayed in the tool-bar as LABEL. LABEL defaults to the symbol
+! name of KEY.  DEF is the key definition and KEY is a symbol for
+! the fake function key in the menu keymap Remaining arguments
+! PROPS are additional items to add to the menu item specification.
+! See Info node `(elisp)Tool Bar'. Items are added from left to
+! right.
+! 
+! ICON or IMG is the base name of a file containing the image to
+! use. The function will first try to use low-color/ICON.xpm if
+! display-color-cells is less or equal to 256, then ICON.xpm, then
+! ICON.pbm, and finally ICON.xbm, using `find-image'."
+!   (let* ((icon-name (if (consp icon) (car icon) icon))
+! 	 (label (if (consp icon) (cdr icon) ""))
+! 	 (is (tool-bar-get-image-spec icon-name))
+! 	 (image (car is))
+! 	 (images (cdr is))) 
+      (when (and (display-images-p) image)
+        (define-key-after map (vector key)
+! 	`(menu-item ,label 
+! 		    ,def :image ,images ,@props)))))
+  
+  ;;;###autoload
+  (defun tool-bar-add-item-from-menu (command icon &optional map &rest props)
+***************
+*** 162,196 ****
+  ;;;###autoload
+  (defun tool-bar-local-item-from-menu (command icon in-map &optional from-map &rest props)
+    "Define local tool bar binding for COMMAND using the given ICON.
+! This makes a binding for COMMAND in IN-MAP, copying its binding from
+! the menu bar in FROM-MAP (which defaults to `global-map'), but
+! modifies the binding by adding an image specification for ICON.  It
+! finds ICON just like `tool-bar-add-item'.  PROPS are additional
+  properties to add to the binding.
+  
+  FROM-MAP must contain appropriate binding for `[menu-bar]' which
+  holds a keymap."
+    (unless from-map
+      (setq from-map global-map))
+!   (let* ((menu-bar-map (lookup-key from-map [menu-bar]))
+  	 (keys (where-is-internal command menu-bar-map))
+! 	 (fg (face-attribute 'tool-bar :foreground))
+! 	 (bg (face-attribute 'tool-bar :background))
+! 	 (colors (nconc (if (eq fg 'unspecified) nil (list :foreground fg))
+! 			(if (eq bg 'unspecified) nil (list :background bg))))
+! 	 (xpm-spec (list :type 'xpm :file (concat icon ".xpm")))
+! 	 (xpm-lo-spec (if (> (display-color-cells) 256)
+! 			  nil
+! 			(list :type 'xpm :file
+!                               (concat "low-color/" icon ".xpm"))))
+! 	 (pbm-spec (append (list :type 'pbm :file
+!                                  (concat icon ".pbm")) colors))
+! 	 (xbm-spec (append (list :type 'xbm :file
+!                                  (concat icon ".xbm")) colors))
+! 	 (spec (if (display-color-p)
+! 		   (list xpm-lo-spec xpm-spec pbm-spec xbm-spec)
+! 		 (list pbm-spec xbm-spec xpm-lo-spec xpm-spec)))
+! 	 (image (find-image spec))
+  	 submap key)
+      (when (and (display-images-p) image)
+        ;; We'll pick up the last valid entry in the list of keys if
+--- 223,248 ----
+  ;;;###autoload
+  (defun tool-bar-local-item-from-menu (command icon in-map &optional from-map &rest props)
+    "Define local tool bar binding for COMMAND using the given ICON.
+! ICON names the image, or is structure of the form (IMG . LABEL),
+! with the image name IMG, and a string with the label of the icon
+! displyed in the tool-bar as LABEL. This function creates a
+! binding for COMMAND in IN-MAP, copying its binding from the menu
+! bar in FROM-MAP (which defaults to `global-map'), but modifies
+! the binding by adding an image specification for ICON. It finds
+! ICON just like `tool-bar-add-item'. PROPS are additional
+  properties to add to the binding.
+  
+  FROM-MAP must contain appropriate binding for `[menu-bar]' which
+  holds a keymap."
+    (unless from-map
+      (setq from-map global-map))
+!   (let* ((icon-name (if (consp icon) (car icon) icon))
+! 	 (label (if (consp icon) (cdr icon)))
+! 	 (menu-bar-map (lookup-key from-map [menu-bar]))
+  	 (keys (where-is-internal command menu-bar-map))
+! 	 (is (tool-bar-get-image-spec icon-name))
+! 	 (image (car is))
+! 	 (images (cdr is)) 
+  	 submap key)
+      (when (and (display-images-p) image)
+        ;; We'll pick up the last valid entry in the list of keys if
+***************
+*** 210,221 ****
+  			key kk)))))
+        (when (and (symbolp submap) (boundp submap))
+  	(setq submap (eval submap)))
+-       (unless (image-mask-p image)
+- 	(setq image (append image '(:mask heuristic))))
+        (let ((defn (assq key (cdr submap))))
+  	(if (eq (cadr defn) 'menu-item)
+  	    (define-key-after in-map (vector key)
+! 	      (append (cdr defn) (list :image image) props))
+  	  (setq defn (cdr defn))
+  	  (define-key-after in-map (vector key)
+  	    (let ((rest (cdr defn)))
+--- 262,272 ----
+  			key kk)))))
+        (when (and (symbolp submap) (boundp submap))
+  	(setq submap (eval submap)))
+        (let ((defn (assq key (cdr submap))))
+  	(if (eq (cadr defn) 'menu-item)
+  	    (define-key-after in-map (vector key)
+! 	      (append `(menu-item ,(or label (car (cddr defn)))) (cdddr defn) 
+! 		      (list :image image) props))
+  	  (setq defn (cdr defn))
+  	  (define-key-after in-map (vector key)
+  	    (let ((rest (cdr defn)))
+***************
+*** 223,229 ****
+  	      ;; with a list of menu cache info, get rid of that.
+  	      (if (and (consp rest) (consp (car rest)))
+  		  (setq rest (cdr rest)))
+! 	      (append `(menu-item ,(car defn) ,rest)
+  		      (list :image image) props))))))))
+  
+  ;;; Set up some global items.  Additions/deletions up for grabs.
+--- 274,280 ----
+  	      ;; with a list of menu cache info, get rid of that.
+  	      (if (and (consp rest) (consp (car rest)))
+  		  (setq rest (cdr rest)))
+! 	      (append `(menu-item ,(or label (car defn)) ,rest)
+  		      (list :image image) props))))))))
+  
+  ;;; Set up some global items.  Additions/deletions up for grabs.
+***************
+*** 232,247 ****
+    ;; People say it's bad to have EXIT on the tool bar, since users
+    ;; might inadvertently click that button.
+    ;;(tool-bar-add-item-from-menu 'save-buffers-kill-emacs "exit")
+!   (tool-bar-add-item-from-menu 'find-file "new")
+!   (tool-bar-add-item-from-menu 'menu-find-file-existing "open")
+!   (tool-bar-add-item-from-menu 'dired "diropen")
+    (tool-bar-add-item-from-menu 'kill-this-buffer "close")
+!   (tool-bar-add-item-from-menu 'save-buffer "save" nil
+  			       :visible '(or buffer-file-name
+  					     (not (eq 'special
+  						      (get major-mode
+  							   'mode-class)))))
+!   (tool-bar-add-item-from-menu 'write-file "saveas" nil
+  			       :visible '(or buffer-file-name
+  					     (not (eq 'special
+  						      (get major-mode
+--- 283,298 ----
+    ;; People say it's bad to have EXIT on the tool bar, since users
+    ;; might inadvertently click that button.
+    ;;(tool-bar-add-item-from-menu 'save-buffers-kill-emacs "exit")
+!   (tool-bar-add-item-from-menu 'find-file '("new" . "New"))
+!   (tool-bar-add-item-from-menu 'menu-find-file-existing '("open" . "Open"))
+!   (tool-bar-add-item-from-menu 'dired '("diropen" . "Directory"))
+    (tool-bar-add-item-from-menu 'kill-this-buffer "close")
+!   (tool-bar-add-item-from-menu 'save-buffer '("save" . "Save") nil
+  			       :visible '(or buffer-file-name
+  					     (not (eq 'special
+  						      (get major-mode
+  							   'mode-class)))))
+!   (tool-bar-add-item-from-menu 'write-file '("saveas" . "Save As") nil
+  			       :visible '(or buffer-file-name
+  					     (not (eq 'special
+  						      (get major-mode
+***************
+*** 273,282 ****
+    ;; we must explicitly operate on the default value.
+  
+    (let ((tool-bar-map (default-value 'tool-bar-map)))
+!     (tool-bar-add-item "preferences" 'customize 'customize
+  		       :help "Edit preferences (customize)")
+  
+!     (tool-bar-add-item "help" (lambda ()
+  				(interactive)
+  				(popup-menu menu-bar-help-menu))
+  		       'help
+--- 324,333 ----
+    ;; we must explicitly operate on the default value.
+  
+    (let ((tool-bar-map (default-value 'tool-bar-map)))
+!     (tool-bar-add-item '("preferences" . "Customize") 'customize 'customize
+  		       :help "Edit preferences (customize)")
+  
+!     (tool-bar-add-item '("help" . "Help") (lambda ()
+  				(interactive)
+  				(popup-menu menu-bar-help-menu))
+  		       'help

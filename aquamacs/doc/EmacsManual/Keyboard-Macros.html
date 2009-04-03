@@ -1,0 +1,80 @@
+<html lang="en">
+<head>
+<title>Keyboard Macros</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Keyboard Macros">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Keyboard%20Macros">Keyboard Macros</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Key-Bindings.html#Key%20Bindings">Key Bindings</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Variables.html#Variables">Variables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customization.html#Customization">Customization</a>
+<hr><br>
+</div>
+
+<h3 class="section">Keyboard Macros</h3>
+
+<p>A <dfn>keyboard macro</dfn> is a command defined by the user to stand for
+another sequence of keys.  For example, if you discover that you are
+about to type <kbd>C-n C-d</kbd> forty times, you can speed your work by
+defining a keyboard macro to do <kbd>C-n C-d</kbd> and calling it with a
+repeat count of forty.
+
+     <dl>
+<dt><kbd>C-x (</kbd>
+     <dd>Start defining a keyboard macro (<code>start-kbd-macro</code>). 
+<br><dt><kbd>C-x )</kbd>
+     <dd>End the definition of a keyboard macro (<code>end-kbd-macro</code>). 
+<br><dt><kbd>C-x e</kbd>
+     <dd>Execute the most recent keyboard macro (<code>call-last-kbd-macro</code>). 
+<br><dt><kbd>C-u C-x (</kbd>
+     <dd>Re-execute last keyboard macro, then add more keys to its definition. 
+<br><dt><kbd>C-x q</kbd>
+     <dd>When this point is reached during macro execution, ask for confirmation
+(<code>kbd-macro-query</code>). 
+<br><dt><kbd>M-x name-last-kbd-macro</kbd>
+     <dd>Give a command name (for the duration of the session) to the most
+recently defined keyboard macro. 
+<br><dt><kbd>M-x insert-kbd-macro</kbd>
+     <dd>Insert in the buffer a keyboard macro's definition, as Lisp code. 
+<br><dt><kbd>C-x C-k</kbd>
+     <dd>Edit a previously defined keyboard macro (<code>edit-kbd-macro</code>). 
+<br><dt><kbd>M-x apply-macro-to-region-lines</kbd>
+     <dd>Run the last keyboard macro on each complete line in the region. 
+</dl>
+
+   <p>Keyboard macros differ from ordinary Emacs commands in that they are
+written in the Emacs command language rather than in Lisp.  This makes it
+easier for the novice to write them, and makes them more convenient as
+temporary hacks.  However, the Emacs command language is not powerful
+enough as a programming language to be useful for writing anything
+intelligent or general.  For such things, Lisp must be used.
+
+   <p>You define a keyboard macro while executing the commands which are the
+definition.  Put differently, as you define a keyboard macro, the
+definition is being executed for the first time.  This way, you can see
+what the effects of your commands are, so that you don't have to figure
+them out in your head.  When you are finished, the keyboard macro is
+defined and also has been, in effect, executed once.  You can then do the
+whole thing over again by invoking the macro.
+
+<ul class="menu">
+<li><a accesskey="1" href="Basic-Kbd-Macro.html#Basic%20Kbd%20Macro">Basic Kbd Macro</a>:      Defining and running keyboard macros. 
+<li><a accesskey="2" href="Save-Kbd-Macro.html#Save%20Kbd%20Macro">Save Kbd Macro</a>:       Giving keyboard macros names; saving them in files. 
+<li><a accesskey="3" href="Kbd-Macro-Query.html#Kbd%20Macro%20Query">Kbd Macro Query</a>:      Making keyboard macros do different things each time. 
+</ul>
+
+   </body></html>
+

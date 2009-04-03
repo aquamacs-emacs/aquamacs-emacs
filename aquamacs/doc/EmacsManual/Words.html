@@ -1,0 +1,96 @@
+<html lang="en">
+<head>
+<title>Words</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Words">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Words">Words</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Sentences.html#Sentences">Sentences</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
+<hr><br>
+</div>
+
+<h3 class="section">Words</h3>
+
+<p>Emacs has commands for moving over or operating on words.  By convention,
+the keys for them are all Meta characters.
+
+     <dl>
+<dt><kbd>M-f</kbd>
+     <dd>Move forward over a word (<code>forward-word</code>). 
+<br><dt><kbd>M-b</kbd>
+     <dd>Move backward over a word (<code>backward-word</code>). 
+<br><dt><kbd>M-d</kbd>
+     <dd>Kill up to the end of a word (<code>kill-word</code>). 
+<br><dt><kbd>M-&lt;DEL&gt;</kbd>
+     <dd>Kill back to the beginning of a word (<code>backward-kill-word</code>). 
+<br><dt><kbd>M-@</kbd>
+     <dd>Mark the end of the next word (<code>mark-word</code>). 
+<br><dt><kbd>M-t</kbd>
+     <dd>Transpose two words or drag a word across other words
+(<code>transpose-words</code>). 
+</dl>
+
+   <p>Notice how these keys form a series that parallels the character-based
+<kbd>C-f</kbd>, <kbd>C-b</kbd>, <kbd>C-d</kbd>, &lt;DEL&gt; and <kbd>C-t</kbd>.  <kbd>M-@</kbd> is
+cognate to <kbd>C-@</kbd>, which is an alias for <kbd>C-&lt;SPC&gt;</kbd>.
+
+   <p>The commands <kbd>M-f</kbd> (<code>forward-word</code>) and <kbd>M-b</kbd>
+(<code>backward-word</code>) move forward and backward over words.  These
+Meta characters are thus analogous to the corresponding control
+characters, <kbd>C-f</kbd> and <kbd>C-b</kbd>, which move over single characters
+in the text.  The analogy extends to numeric arguments, which serve as
+repeat counts.  <kbd>M-f</kbd> with a negative argument moves backward, and
+<kbd>M-b</kbd> with a negative argument moves forward.  Forward motion
+stops right after the last letter of the word, while backward motion
+stops right before the first letter.
+
+   <p><kbd>M-d</kbd> (<code>kill-word</code>) kills the word after point.  To be
+precise, it kills everything from point to the place <kbd>M-f</kbd> would
+move to.  Thus, if point is in the middle of a word, <kbd>M-d</kbd> kills
+just the part after point.  If some punctuation comes between point and the
+next word, it is killed along with the word.  (If you wish to kill only the
+next word but not the punctuation before it, simply do <kbd>M-f</kbd> to get
+the end, and kill the word backwards with <kbd>M-&lt;DEL&gt;</kbd>.) 
+<kbd>M-d</kbd> takes arguments just like <kbd>M-f</kbd>.
+
+   <p><kbd>M-&lt;DEL&gt;</kbd> (<code>backward-kill-word</code>) kills the word before
+point.  It kills everything from point back to where <kbd>M-b</kbd> would
+move to.  If point is after the space in <code>FOO,&nbsp;BAR</code>, then
+<code>FOO,&nbsp;</code> is killed.  (If you wish to kill just <code>FOO</code>, and
+not the comma and the space, use <kbd>M-b M-d</kbd> instead of
+<kbd>M-&lt;DEL&gt;</kbd>.)
+
+   <p><kbd>M-t</kbd> (<code>transpose-words</code>) exchanges the word before or
+containing point with the following word.  The delimiter characters between
+the words do not move.  For example, <code>FOO,&nbsp;BAR</code> transposes into
+<code>BAR,&nbsp;FOO</code> rather than <code>BAR&nbsp;FOO,</code>.  See <a href="Transpose.html#Transpose">Transpose</a>, for
+more on transposition and on arguments to transposition commands.
+
+   <p>To operate on the next <var>n</var> words with an operation which applies
+between point and mark, you can either set the mark at point and then move
+over the words, or you can use the command <kbd>M-@</kbd> (<code>mark-word</code>)
+which does not move point, but sets the mark where <kbd>M-f</kbd> would move
+to.  <kbd>M-@</kbd> accepts a numeric argument that says how many words to
+scan for the place to put the mark.  In Transient Mark mode, this command
+activates the mark.
+
+   <p>The word commands' understanding of syntax is completely controlled by
+the syntax table.  Any character can, for example, be declared to be a word
+delimiter.  See <a href="Syntax.html#Syntax">Syntax</a>.
+
+   </body></html>
+

@@ -1,0 +1,67 @@
+<html lang="en">
+<head>
+<title>The Mark Ring</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Mark Ring">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Mark%20Ring">Mark Ring</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Global-Mark-Ring.html#Global%20Mark%20Ring">Global Mark Ring</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Marking-Objects.html#Marking%20Objects">Marking Objects</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Mark.html#Mark">Mark</a>
+<hr><br>
+</div>
+
+<h3 class="section">The Mark Ring</h3>
+
+<p>Aside from delimiting the region, the mark is also useful for
+remembering a spot that you may want to go back to.  To make this
+feature more useful, each buffer remembers 16 previous locations of the
+mark, in the <dfn>mark ring</dfn>.  Commands that set the mark also push the
+old mark onto this ring.  To return to a marked location, use <kbd>C-u
+C-&lt;SPC&gt;</kbd> (or <kbd>C-u C-@</kbd>); this is the command
+<code>set-mark-command</code> given a numeric argument.  It moves point to
+where the mark was, and restores the mark from the ring of former
+marks.  Thus, repeated use of this command moves point to all of the old
+marks on the ring, one by one.  The mark positions you move through in
+this way are not lost; they go to the end of the ring.
+
+   <p>Each buffer has its own mark ring.  All editing commands use the current
+buffer's mark ring.  In particular, <kbd>C-u C-&lt;SPC&gt;</kbd> always stays in
+the same buffer.
+
+   <p>Many commands that can move long distances, such as <kbd>M-&lt;</kbd>
+(<code>beginning-of-buffer</code>), start by setting the mark and saving the
+old mark on the mark ring.  This is to make it easier for you to move
+back later.  Searches set the mark if they move point.  You can tell
+when a command sets the mark because it displays <code>Mark set</code> in the
+echo area.
+
+   <p>If you want to move back to the same place over and over, the mark
+ring may not be convenient enough.  If so, you can record the position
+in a register for later retrieval (see <a href="RegPos.html#RegPos">Saving Positions in Registers</a>).
+
+   <p>The variable <code>mark-ring-max</code> specifies the maximum number of
+entries to keep in the mark ring.  If that many entries exist and
+another one is pushed, the earliest one in the list is discarded.  Repeating
+<kbd>C-u C-&lt;SPC&gt;</kbd> cycles through the positions currently in the
+ring.
+
+   <p>The variable <code>mark-ring</code> holds the mark ring itself, as a list of
+marker objects, with the most recent first.  This variable is local in
+every buffer.
+
+   </body></html>
+

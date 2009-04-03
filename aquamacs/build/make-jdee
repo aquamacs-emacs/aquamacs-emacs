@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# Build the JDEE installer package
+
+JDEE_DIR=`pwd`
+
+BUILD_DIR=`pwd`/..
+
+# expects a build with jde and cedet in the working dir
+# expects site-start.el and jde-load.el to be in place!
+
+# ~/Library/Application Support/Aquamacs Emacs/jdee$ ls
+# cedet         doc           info          jde           jde-load.el   site-start.el
+
+# see:
+# http://wttools.sourceforge.net/emacs-stuff/package.html#install-jdee
+
+cd "$JDEE_DIR"
+rm -r info 2>/dev/null
+mkdir info
+cd info
+ln -s `find .. -name \*.info` .
+
+cd ..
+rm JDE-Users-Guide.html 2>/dev/null
+ln -s doc/html/jde-ug.html JDE-Users-Guide.html
+
+# copy license  
+cd "$JDEE_DIR"
+wget http://www.gnu.org/licenses/gpl-3.0.txt || { echo "failed to retrieve license file. aborting.";exit 1; }
+mv gpl-3.0.txt COPYING
+
+cd "$BUILD_DIR"
+/Developer/usr/bin/packagemaker --root JDEE --install-to /Library/Application\ Support/Aquamacs\ Emacs/JDEE --id org.aquamacs.jdee-plugin --version 2.3.5.1.aq0 --title "JDEE plugin for Aquamacs" --root-volume-only --out Aquamacs-JDEE-2.3.5.1.pkg -v
+

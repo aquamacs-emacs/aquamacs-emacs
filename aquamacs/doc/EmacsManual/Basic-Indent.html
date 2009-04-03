@@ -1,0 +1,79 @@
+<html lang="en">
+<head>
+<title>Basic Program Indentation Commands</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Basic Program Indentation Commands">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Basic%20Indent">Basic Indent</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Multi-line-Indent.html#Multi-line%20Indent">Multi-line Indent</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Program-Indent.html#Program%20Indent">Program Indent</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Basic Program Indentation Commands</h4>
+
+<p>The basic indentation commands indent a single line according to the
+usual conventions of the language you are editing.
+
+     <dl>
+<dt><kbd>&lt;TAB&gt;</kbd>
+     <dd>Adjust indentation of current line. 
+<br><dt><kbd>C-j</kbd>
+     <dd>Equivalent to &lt;RET&gt; followed by &lt;TAB&gt; (<code>newline-and-indent</code>). 
+<br><dt><kbd>&lt;LINEFEED&gt;</kbd>
+     <dd>This key, if the keyboard has it, is another way to enter <kbd>C-j</kbd>. 
+</dl>
+
+   <p>The basic indentation command is &lt;TAB&gt;, which gives the current line
+the correct indentation as determined from the previous lines.  The
+function that &lt;TAB&gt; runs depends on the major mode; it is
+<code>indent-for-tab-command</code>
+in Lisp mode, <code>c-indent-command</code> in C mode, etc.  These functions
+understand the syntax and conventions of different languages, but they all do
+conceptually the same job: &lt;TAB&gt; in any programming-language major mode
+inserts or deletes whitespace at the beginning of the current line,
+independent of where point is in the line.  If point was inside the
+whitespace at the beginning of the line, &lt;TAB&gt; puts it at the end of
+that whitespace; otherwise, &lt;TAB&gt; keeps point fixed with respect to
+the characters around it.
+
+   <p>Use <kbd>C-q &lt;TAB&gt;</kbd> to insert a tab at point.
+
+   <p>When entering lines of new code, use <kbd>C-j</kbd>
+(<code>newline-and-indent</code>), which is equivalent to a &lt;RET&gt;
+followed by a &lt;TAB&gt;.  <kbd>C-j</kbd> at the end of a line creates a
+blank line and then gives it the appropriate indentation.
+
+   <p>&lt;TAB&gt; indents lines that start within a parenthetical grouping
+each under the preceding line (or the text after the parenthesis). 
+Therefore, if you manually give one of these lines a nonstandard
+indentation, the lines below will tend to follow it.  This behavior is
+convenient in cases where you have overridden the standard result of
+&lt;TAB&gt; because you find it unaesthetic for a particular line.
+
+   <p>Remember that an open-parenthesis, open-brace or other opening delimiter
+at the left margin is assumed by Emacs (including the indentation routines)
+to be the start of a function.  Therefore, you must never have an opening
+delimiter in column zero that is not the beginning of a function, not even
+inside a string.  This restriction is vital for making the indentation
+commands fast; you must simply accept it.  See <a href="Left-Margin-Paren.html#Left%20Margin%20Paren">Left Margin Paren</a>,
+for more information on this.
+
+   <p>Normally, lines are indented with tabs and spaces.  If you want Emacs
+to use spaces only, see <a href="Just-Spaces.html#Just%20Spaces">Just Spaces</a>.
+
+   </body></html>
+

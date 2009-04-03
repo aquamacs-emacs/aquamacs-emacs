@@ -1,0 +1,66 @@
+<html lang="en">
+<head>
+<title>Left Margin Convention</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Left Margin Convention">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Left%20Margin%20Paren">Left Margin Paren</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Moving-by-Defuns.html#Moving%20by%20Defuns">Moving by Defuns</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Defuns.html#Defuns">Defuns</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Left Margin Convention</h4>
+
+<p>In most major modes, Emacs assumes that any opening delimiter found
+at the left margin is the start of a top-level definition, or defun. 
+Therefore, <strong>never put an opening delimiter at the left margin
+unless it should have that significance.</strong>  For instance, never put an
+open-parenthesis at the left margin in a Lisp file unless it is the
+start of a top-level list.  Never put an open-brace or other opening
+delimiter at the beginning of a line of C code unless it is at top
+level.
+
+   <p>If you don't follow this convention, not only will you have trouble
+when you explicitly use the commands for motion by defuns; other
+features that use them will also give you trouble.  This includes
+the indentation commands (see <a href="Program-Indent.html#Program%20Indent">Program Indent</a>) and Font Lock
+mode (see <a href="Font-Lock.html#Font%20Lock">Font Lock</a>).
+
+   <p>The most likely problem case is when you want an opening delimiter
+at the start of a line inside a string.  To avoid trouble, put an
+escape character (<code>\</code>, in C and Emacs Lisp, <code>/</code> in some
+other Lisp dialects) before the opening delimiter.  This will not
+affect the contents of the string, but will prevent that opening
+delimiter from starting a defun.  Here's an example:
+
+<pre class="example">       (insert "Foo:
+     \(bar)
+     ")
+     </pre>
+
+   <p>In the earliest days, the original Emacs found defuns by moving
+upward a level of parentheses or braces until there were no more
+levels to go up.  This always required scanning all the way back to
+the beginning of the buffer, even for a small function.  To speed up
+the operation, we changed Emacs to assume that any opening delimiter
+at the left margin is the start of a defun.  This heuristic is nearly
+always right, and avoids the need to scan back to the beginning of the
+buffer.  However, it mandates following the convention described
+above.
+
+   </body></html>
+

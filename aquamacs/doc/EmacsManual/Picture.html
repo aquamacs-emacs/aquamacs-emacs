@@ -1,0 +1,76 @@
+<html lang="en">
+<head>
+<title>Editing Pictures</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Editing Pictures">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Picture">Picture</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Sending-Mail.html#Sending%20Mail">Sending Mail</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Abbrevs.html#Abbrevs">Abbrevs</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr><br>
+</div>
+
+<h2 class="chapter">Editing Pictures</h2>
+
+<p>To edit a picture made out of text characters (for example, a picture
+of the division of a register into fields, as a comment in a program),
+use the command <kbd>M-x edit-picture</kbd> to enter Picture mode.
+
+   <p>In Picture mode, editing is based on the <dfn>quarter-plane</dfn> model of
+text, according to which the text characters lie studded on an area that
+stretches infinitely far to the right and downward.  The concept of the end
+of a line does not exist in this model; the most you can say is where the
+last nonblank character on the line is found.
+
+   <p>Of course, Emacs really always considers text as a sequence of
+characters, and lines really do have ends.  But Picture mode replaces
+the most frequently-used commands with variants that simulate the
+quarter-plane model of text.  They do this by inserting spaces or by
+converting tabs to spaces.
+
+   <p>Most of the basic editing commands of Emacs are redefined by Picture mode
+to do essentially the same thing but in a quarter-plane way.  In addition,
+Picture mode defines various keys starting with the <kbd>C-c</kbd> prefix to
+run special picture editing commands.
+
+   <p>One of these keys, <kbd>C-c C-c</kbd>, is pretty important.  Often a
+picture is part of a larger file that is usually edited in some other
+major mode.  <kbd>M-x edit-picture</kbd> records the name of the previous
+major mode so you can use the <kbd>C-c C-c</kbd> command
+(<code>picture-mode-exit</code>) later to go back to that mode.  <kbd>C-c C-c</kbd>
+also deletes spaces from the ends of lines, unless given a numeric
+argument.
+
+   <p>The special commands of Picture mode all work in other modes (provided
+the <code>picture</code> library is loaded), but are not bound to keys except
+in Picture mode.  The descriptions below talk of moving "one column"
+and so on, but all the picture mode commands handle numeric arguments as
+their normal equivalents do.
+
+   <p>Turning on Picture mode runs the hook <code>picture-mode-hook</code>
+(see <a href="Hooks.html#Hooks">Hooks</a>).
+
+<ul class="menu">
+<li><a accesskey="1" href="Basic-Picture.html#Basic%20Picture">Basic Picture</a>:          Basic concepts and simple commands of Picture Mode. 
+<li><a accesskey="2" href="Insert-in-Picture.html#Insert%20in%20Picture">Insert in Picture</a>:      Controlling direction of cursor motion
+                            after "self-inserting" characters. 
+<li><a accesskey="3" href="Tabs-in-Picture.html#Tabs%20in%20Picture">Tabs in Picture</a>:        Various features for tab stops and indentation. 
+<li><a accesskey="4" href="Rectangles-in-Picture.html#Rectangles%20in%20Picture">Rectangles in Picture</a>:  Clearing and superimposing rectangles. 
+</ul>
+
+   </body></html>
+

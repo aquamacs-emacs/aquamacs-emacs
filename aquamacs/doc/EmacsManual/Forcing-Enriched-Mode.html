@@ -1,0 +1,61 @@
+<html lang="en">
+<head>
+<title>Forcing Enriched Mode</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Forcing Enriched Mode">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Forcing%20Enriched%20Mode">Forcing Enriched Mode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Format-Properties.html#Format%20Properties">Format Properties</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Formatted-Text.html#Formatted%20Text">Formatted Text</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Forcing Enriched Mode</h4>
+
+<p>Normally, Emacs knows when you are editing formatted text because it
+recognizes the special annotations used in the file that you visited. 
+However, there are situations in which you must take special actions
+to convert file contents or turn on Enriched mode:
+
+     <ul>
+<li>When you visit a file that was created with some other editor, Emacs may
+not recognize the file as being in the text/enriched format.  In this
+case, when you visit the file you will see the formatting commands
+rather than the formatted text.  Type <kbd>M-x format-decode-buffer</kbd> to
+translate it.
+
+     <li>When you <em>insert</em> a file into a buffer, rather than visiting it. 
+Emacs does the necessary conversions on the text which you insert, but
+it does not enable Enriched mode.  If you wish to do that, type <kbd>M-x
+enriched-mode</kbd>. 
+</ul>
+
+   <p>The command <code>format-decode-buffer</code> translates text in various
+formats into Emacs's internal format.  It asks you to specify the format
+to translate from; however, normally you can type just &lt;RET&gt;, which
+tells Emacs to guess the format.
+
+   <p>If you wish to look at text/enriched file in its raw form, as a
+sequence of characters rather than as formatted text, use the <kbd>M-x
+find-file-literally</kbd> command.  This visits a file, like
+<code>find-file</code>, but does not do format conversion.  It also inhibits
+character code conversion (see <a href="Coding-Systems.html#Coding%20Systems">Coding Systems</a>) and automatic
+uncompression (see <a href="Compressed-Files.html#Compressed%20Files">Compressed Files</a>).  To disable format conversion
+but allow character code conversion and/or automatic uncompression if
+appropriate, use <code>format-find-file</code> with suitable arguments.
+
+   </body></html>
+

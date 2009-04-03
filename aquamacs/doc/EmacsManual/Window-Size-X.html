@@ -1,0 +1,91 @@
+<html lang="en">
+<head>
+<title>Options for Window Geometry</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Options for Window Geometry">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Window%20Size%20X">Window Size X</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Borders-X.html#Borders%20X">Borders X</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Colors-X.html#Colors%20X">Colors X</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Command-Arguments.html#Command%20Arguments">Command Arguments</a>
+<hr><br>
+</div>
+
+<h3 class="appendixsec">Options for Window Geometry</h3>
+
+<p>The <code>--geometry</code> option controls the size and position of the
+initial Emacs frame.  Here is the format for specifying the window
+geometry:
+
+     <dl>
+<dt><code>-g </code><var>width</var><code>x</code><var>height</var><code></code>[{<code>+-</code>}<code></code><var>xoffset</var><code></code>{<code>+-</code>}<code></code><var>yoffset</var><code></code>]]<code></code>
+     <dd>Specify window size <var>width</var> and <var>height</var> (measured in character
+columns and lines), and positions <var>xoffset</var> and <var>yoffset</var>
+(measured in pixels).
+
+     <br><dt><code>--geometry=</code><var>width</var><code>x</code><var>height</var><code></code>[{<code>+-</code>}<code></code><var>xoffset</var><code></code>{<code>+-</code>}<code></code><var>yoffset</var><code></code>]]<code></code>
+     <dd>This is another way of writing the same thing. 
+</dl>
+
+<p><code></code>{<code>+-</code>}<code></code> means either a plus sign or a minus sign.  A plus
+sign before <var>xoffset</var> means it is the distance from the left side of
+the screen; a minus sign means it counts from the right side.  A plus
+sign before <var>yoffset</var> means it is the distance from the top of the
+screen, and a minus sign there indicates the distance from the bottom. 
+The values <var>xoffset</var> and <var>yoffset</var> may themselves be positive or
+negative, but that doesn't change their meaning, only their direction.
+
+   <p>Emacs uses the same units as <code>xterm</code> does to interpret the geometry. 
+The <var>width</var> and <var>height</var> are measured in characters, so a large font
+creates a larger frame than a small font.  (If you specify a proportional
+font, Emacs uses its maximum bounds width as the width unit.)  The
+<var>xoffset</var> and <var>yoffset</var> are measured in pixels.
+
+   <p>Since the mode line and the echo area occupy the last 2 lines of the
+frame, the height of the initial text window is 2 less than the height
+specified in your geometry.  In non-X-toolkit versions of Emacs, the
+menu bar also takes one line of the specified number.  But in the X
+toolkit version, the menu bar is additional and does not count against
+the specified height.  The tool bar, if present, is also additional.
+
+   <p>You do not have to specify all of the fields in the geometry
+specification.
+
+   <p>If you omit both <var>xoffset</var> and <var>yoffset</var>, the window manager
+decides where to put the Emacs frame, possibly by letting you place
+it with the mouse.  For example, <code>164x55</code> specifies a window 164
+columns wide, enough for two ordinary width windows side by side, and 55
+lines tall.
+
+   <p>The default width for Emacs is 80 characters and the default height is
+40 lines.  You can omit either the width or the height or both.  If
+you start the geometry with an integer, Emacs interprets it as the
+width.  If you start with an <code>x</code> followed by an integer, Emacs
+interprets it as the height.  Thus, <code>81</code> specifies just the width;
+<code>x45</code> specifies just the height.
+
+   <p>If you start with <code>+</code> or <code>-</code>, that introduces an offset,
+which means both sizes are omitted.  Thus, <code>-3</code> specifies the
+<var>xoffset</var> only.  (If you give just one offset, it is always
+<var>xoffset</var>.)  <code>+3-3</code> specifies both the <var>xoffset</var> and the
+<var>yoffset</var>, placing the frame near the bottom left of the screen.
+
+   <p>You can specify a default for any or all of the fields in
+<code>.Xdefaults</code> file, and then override selected fields with a
+<code>--geometry</code> option.
+
+   </body></html>
+

@@ -1,0 +1,66 @@
+<html lang="en">
+<head>
+<title>Dired and find</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Dired and find">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Dired%20and%20Find">Dired and Find</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Dired-Updating.html#Dired%20Updating">Dired Updating</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Dired.html#Dired">Dired</a>
+<hr><br>
+</div>
+
+<h3 class="section">Dired and <code>find</code></h3>
+
+<p>You can select a set of files for display in a Dired buffer more
+flexibly by using the <code>find</code> utility to choose the files.
+
+   <p>To search for files with names matching a wildcard pattern use
+<kbd>M-x find-name-dired</kbd>.  It reads arguments <var>directory</var> and
+<var>pattern</var>, and chooses all the files in <var>directory</var> or its
+subdirectories whose individual names match <var>pattern</var>.
+
+   <p>The files thus chosen are displayed in a Dired buffer in which the
+ordinary Dired commands are available.
+
+   <p>If you want to test the contents of files, rather than their names,
+use <kbd>M-x find-grep-dired</kbd>.  This command reads two minibuffer
+arguments, <var>directory</var> and <var>regexp</var>; it chooses all the files in
+<var>directory</var> or its subdirectories that contain a match for
+<var>regexp</var>.  It works by running the programs <code>find</code> and
+<code>grep</code>.  See also <kbd>M-x grep-find</kbd>, in <a href="Compilation.html#Compilation">Compilation</a>. 
+Remember to write the regular expression for <code>grep</code>, not for Emacs. 
+(An alternative method of showing files whose contents match a given
+regexp is the <kbd>% g </kbd><var>regexp</var><kbd></kbd> command, see <a href="Marks-vs-Flags.html#Marks%20vs%20Flags">Marks vs Flags</a>.)
+
+   <p>The most general command in this series is <kbd>M-x find-dired</kbd>, which
+lets you specify any condition that <code>find</code> can test.  It takes two
+minibuffer arguments, <var>directory</var> and <var>find-args</var>; it runs
+<code>find</code> in <var>directory</var>, passing <var>find-args</var> to tell
+<code>find</code> what condition to test.  To use this command, you need to
+know how to use <code>find</code>.
+
+   <p><kbd>M-x locate</kbd> provides a similar interface to the <code>locate</code>
+program.  <kbd>M-x locate-with-filter</kbd> is similar, but keeps only lines
+matching a given regular expression.
+
+   <p>The format of listing produced by these commands is controlled by the
+variable <code>find-ls-option</code>, whose default value specifies using
+options <code>-ld</code> for <code>ls</code>.  If your listings are corrupted, you
+may need to change the value of this variable.
+
+   </body></html>
+

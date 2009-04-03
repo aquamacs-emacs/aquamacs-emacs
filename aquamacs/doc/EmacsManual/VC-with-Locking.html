@@ -1,0 +1,53 @@
+<html lang="en">
+<head>
+<title>Basic Version Control with Locking</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Basic Version Control with Locking">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="VC%20with%20Locking">VC with Locking</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Without-Locking.html#Without%20Locking">Without Locking</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Basic-VC-Editing.html#Basic%20VC%20Editing">Basic VC Editing</a>
+<hr><br>
+</div>
+
+<h3 class="subsubsection">Basic Version Control with Locking</h5>
+
+<p>If locking is used for the file (as with SCCS, and RCS in its default
+mode), <kbd>C-x C-q</kbd> can either lock a file or check it in:
+
+     <ul>
+<li>If the file is not locked, <kbd>C-x C-q</kbd> locks it, and
+makes it writable so that you can change it.
+
+     <li>If the file is locked by you, and contains changes, <kbd>C-x C-q</kbd> checks
+in the changes.  In order to do this, it first reads the log entry
+for the new version.  See <a href="Log-Buffer.html#Log%20Buffer">Log Buffer</a>.
+
+     <li>If the file is locked by you, but you have not changed it since you
+locked it, <kbd>C-x C-q</kbd> releases the lock and makes the file read-only
+again.
+
+     <li>If the file is locked by some other user, <kbd>C-x C-q</kbd> asks you whether
+you want to "steal the lock" from that user.  If you say yes, the file
+becomes locked by you, but a message is sent to the person who had
+formerly locked the file, to inform him of what has happened. 
+</ul>
+
+   <p>These rules also apply when you use CVS in locking mode, except
+that there is no such thing as stealing a lock.
+
+   </body></html>
+

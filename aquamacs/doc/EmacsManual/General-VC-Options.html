@@ -1,0 +1,71 @@
+<html lang="en">
+<head>
+<title>General Options</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="General Options">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="General%20VC%20Options">General VC Options</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="RCS-and-SCCS.html#RCS%20and%20SCCS">RCS and SCCS</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customizing-VC.html#Customizing%20VC">Customizing VC</a>
+<hr><br>
+</div>
+
+<h3 class="subsubsection">General Options</h5>
+
+<p>Emacs normally does not save backup files for source files that are
+maintained with version control.  If you want to make backup files even
+for files that use version control, set the variable
+<code>vc-make-backup-files</code> to a non-<code>nil</code> value.
+
+   <p>Normally the work file exists all the time, whether it is locked or
+not.  If you set <code>vc-keep-workfiles</code> to <code>nil</code>, then checking
+in a new version with <kbd>C-x C-q</kbd> deletes the work file; but any
+attempt to visit the file with Emacs creates it again.  (With CVS, work
+files are always kept.)
+
+   <p>Editing a version-controlled file through a symbolic link can be
+dangerous.  It bypasses the version control system--you can edit the
+file without locking it, and fail to check your changes in.  Also,
+your changes might overwrite those of another user.  To protect against
+this, VC checks each symbolic link that you visit, to see if it points
+to a file under version control.
+
+   <p>The variable <code>vc-follow-symlinks</code> controls what to do when a
+symbolic link points to a version-controlled file.  If it is <code>nil</code>,
+VC only displays a warning message.  If it is <code>t</code>, VC automatically
+follows the link, and visits the real file instead, telling you about
+this in the echo area.  If the value is <code>ask</code> (the default), VC
+asks you each time whether to follow the link.
+
+   <p>If <code>vc-suppress-confirm</code> is non-<code>nil</code>, then <kbd>C-x C-q</kbd>
+and <kbd>C-x v i</kbd> can save the current buffer without asking, and
+<kbd>C-x v u</kbd> also operates without asking for confirmation.  (This
+variable does not affect <kbd>C-x v c</kbd>; that operation is so drastic
+that it should always ask for confirmation.)
+
+   <p>VC mode does much of its work by running the shell commands for RCS,
+CVS and SCCS.  If <code>vc-command-messages</code> is non-<code>nil</code>, VC
+displays messages to indicate which shell commands it runs, and
+additional messages when the commands finish.
+
+   <p>You can specify additional directories to search for version control
+programs by setting the variable <code>vc-path</code>.  These directories
+are searched before the usual search path.  It is rarely necessary to
+set this variable, because VC normally finds the proper files
+automatically.
+
+   </body></html>
+

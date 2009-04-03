@@ -1,0 +1,82 @@
+<html lang="en">
+<head>
+<title>Paragraphs</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Paragraphs">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Paragraphs">Paragraphs</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Pages.html#Pages">Pages</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Sentences.html#Sentences">Sentences</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
+<hr><br>
+</div>
+
+<h3 class="section">Paragraphs</h3>
+
+<p>The Emacs commands for manipulating paragraphs are also Meta keys.
+
+     <dl>
+<dt><kbd>M-{</kbd>
+     <dd>Move back to previous paragraph beginning (<code>backward-paragraph</code>). 
+<br><dt><kbd>M-}</kbd>
+     <dd>Move forward to next paragraph end (<code>forward-paragraph</code>). 
+<br><dt><kbd>M-h</kbd>
+     <dd>Put point and mark around this or next paragraph (<code>mark-paragraph</code>). 
+</dl>
+
+   <p><kbd>M-{</kbd> moves to the beginning of the current or previous
+paragraph, while <kbd>M-}</kbd> moves to the end of the current or next
+paragraph.  Blank lines and text-formatter command lines separate
+paragraphs and are not considered part of any paragraph.  In Fundamental
+mode, but not in Text mode, an indented line also starts a new
+paragraph.  (If a paragraph is preceded by a blank line, these commands
+treat that blank line as the beginning of the paragraph.)
+
+   <p>In major modes for programs, paragraphs begin and end only at blank
+lines.  This makes the paragraph commands continue to be useful even
+though there are no paragraphs per se.
+
+   <p>When there is a fill prefix, then paragraphs are delimited by all lines
+which don't start with the fill prefix.  See <a href="Filling.html#Filling">Filling</a>.
+
+   <p>When you wish to operate on a paragraph, you can use the command
+<kbd>M-h</kbd> (<code>mark-paragraph</code>) to set the region around it.  Thus,
+for example, <kbd>M-h C-w</kbd> kills the paragraph around or after point. 
+The <kbd>M-h</kbd> command puts point at the beginning and mark at the end of
+the paragraph point was in.  In Transient Mark mode, it activates the
+mark.  If point is between paragraphs (in a run of blank lines, or at a
+boundary), the paragraph following point is surrounded by point and
+mark.  If there are blank lines preceding the first line of the
+paragraph, one of these blank lines is included in the region.
+
+   <p>The precise definition of a paragraph boundary is controlled by the
+variables <code>paragraph-separate</code> and <code>paragraph-start</code>.  The
+value of <code>paragraph-start</code> is a regexp that should match any line
+that either starts or separates paragraphs.  The value of
+<code>paragraph-separate</code> is another regexp that should match only lines
+that separate paragraphs without being part of any paragraph (for
+example, blank lines).  Lines that start a new paragraph and are
+contained in it must match only <code>paragraph-start</code>, not
+<code>paragraph-separate</code>.  For example, in Fundamental mode,
+<code>paragraph-start</code> is <code>"[&nbsp;\t\n\f]"</code>, and
+<code>paragraph-separate</code> is <code>"[&nbsp;\t\f]*$"</code>.
+
+   <p>Normally it is desirable for page boundaries to separate paragraphs. 
+The default values of these variables recognize the usual separator for
+pages.
+
+   </body></html>
+

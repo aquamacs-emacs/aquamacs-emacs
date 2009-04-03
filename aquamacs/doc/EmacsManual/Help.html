@@ -1,0 +1,114 @@
+<html lang="en">
+<head>
+<title>Help</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Help">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Help">Help</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Mark.html#Mark">Mark</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="M-x.html#M-x">M-x</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr><br>
+</div>
+
+<h2 class="chapter">Help</h2>
+
+<p>Emacs provides extensive help features accessible through a single
+character, <kbd>C-h</kbd>.  <kbd>C-h</kbd> is a prefix key that is used for
+commands that display documentation.  The characters that you can type after
+<kbd>C-h</kbd> are called <dfn>help options</dfn>.  One help option is <kbd>C-h</kbd>;
+that is how you ask for help about using <kbd>C-h</kbd>.  To cancel, type
+<kbd>C-g</kbd>.  The function key &lt;F1&gt; is equivalent to <kbd>C-h</kbd>.
+
+   <p><kbd>C-h C-h</kbd> (<code>help-for-help</code>) displays a list of the possible
+help options, each with a brief description.  Before you type a help
+option, you can use &lt;SPC&gt; or &lt;DEL&gt; to scroll through the list.
+
+   <p><kbd>C-h</kbd> or &lt;F1&gt; means "help" in various other contexts as
+well.  For example, in the middle of <code>query-replace</code>, it describes
+the options available for how to operate on the current match.  After a
+prefix key, it displays a list of the alternatives that can follow the
+prefix key.  (A few prefix keys don't support <kbd>C-h</kbd>, because they
+define other meanings for it, but they all support &lt;F1&gt;.)
+
+   <p>Most help buffers use a special major mode, Help mode, which lets you
+scroll conveniently with &lt;SPC&gt; and &lt;DEL&gt;.  It also offers
+hyperlinks to further help regarding cross-referenced names, Info nodes,
+customization buffers and the like.  See <a href="Help-Mode.html#Help%20Mode">Help Mode</a>.
+
+   <p>If you are looking for a certain feature, but don't know where
+exactly it is documented, and aren't sure of the name of a
+related command or option, we recommend trying these methods.  Usually
+it is best to start with an apropos command, then try searching the
+manual index, then finally look in the FAQ and the package keywords.
+
+     <dl>
+<dt><kbd>C-h a </kbd><var>topic</var><kbd> &lt;RET&gt;</kbd>
+     <dd>This searches for commands whose names match <var>topic</var>, which should
+be a regular expression (see <a href="Regexps.html#Regexps">Regexps</a>).  Browse the buffer that this
+command displays to find what you are looking for.  See <a href="Apropos.html#Apropos">Apropos</a>.
+
+     <br><dt><kbd>M-x apropos &lt;RET&gt; </kbd><var>topic</var><kbd> &lt;RET&gt;</kbd>
+     <dd>This works like <kbd>C-h a</kbd>, but it also searches for user options and
+other variables, in case the feature you are looking for is controlled
+by an option, not a command.  See <a href="Apropos.html#Apropos">Apropos</a>.
+
+     <br><dt><kbd>M-x apropos-documentation &lt;RET&gt; </kbd><var>topic</var><kbd> &lt;RET&gt;</kbd>
+     <dd>This searches the <em>documentation strings</em> (the built-in short
+descriptions) of all variables and functions (not their names) for a
+match for <var>topic</var>, a regular expression.  See <a href="Apropos.html#Apropos">Apropos</a>.
+
+     <br><dt><kbd>C-h i d m emacs &lt;RET&gt; i </kbd><var>topic</var><kbd> &lt;RET&gt;</kbd>
+     <dd>This looks up <var>topic</var> in the indices of the Emacs on-line manual. 
+If there are several matches, Emacs displays the first one.  You can then
+press &lt;,&gt; to move to other matches, until you find what you are
+looking for.
+
+     <br><dt><kbd>C-h i d m emacs &lt;RET&gt; s </kbd><var>topic</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Similar, but searches for <var>topic</var> (which can be a regular
+expression) in the <em>text</em> of the manual rather than in its
+indices.
+
+     <br><dt><kbd>C-h F</kbd>
+     <dd>This brings up the Emacs FAQ, where you can use the usual search
+commands (see <a href="Search.html#Search">Search</a>) to find the information.
+
+     <br><dt><kbd>C-h p</kbd>
+     <dd>Finally, you can try looking up a suitable package using keywords
+pertinent to the feature you need.  See <a href="Library-Keywords.html#Library%20Keywords">Library Keywords</a>. 
+</dl>
+
+   <p>To find the documentation of a key sequence or a menu item, type
+<kbd>C-h C-k</kbd> and then type that key sequence or select the menu
+item.  This looks up the description of the command invoked by the key
+or the menu in the appropriate manual (not necessarily the Emacs
+manual).  Likewise, use <kbd>C-h C-f</kbd> for reading documentation of a
+command.
+
+<ul class="menu">
+<li><a accesskey="1" href="Help-Summary.html#Help%20Summary">Help Summary</a>: 	Brief list of all Help commands. 
+<li><a accesskey="2" href="Key-Help.html#Key%20Help">Key Help</a>: 		Asking what a key does in Emacs. 
+<li><a accesskey="3" href="Name-Help.html#Name%20Help">Name Help</a>: 		Asking about a command, variable or function name. 
+<li><a accesskey="4" href="Apropos.html#Apropos">Apropos</a>: 		Asking what pertains to a given topic. 
+<li><a accesskey="5" href="Library-Keywords.html#Library%20Keywords">Library Keywords</a>: 	Finding Lisp libraries by keywords (topics). 
+<li><a accesskey="6" href="Language-Help.html#Language%20Help">Language Help</a>:        Help relating to international language support. 
+<li><a accesskey="7" href="Help-Mode.html#Help%20Mode">Help Mode</a>:            Special features of Help mode and Help buffers. 
+<li><a accesskey="8" href="Misc-Help.html#Misc%20Help">Misc Help</a>: 		Other help commands. 
+<li><a accesskey="9" href="Help-Echo.html#Help%20Echo">Help Echo</a>:            Help on active text and tooltips (`balloon help')
+</ul>
+
+   </body></html>
+

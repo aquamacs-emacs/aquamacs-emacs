@@ -1,0 +1,159 @@
+<html lang="en">
+<head>
+<title>Scrolling</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Scrolling">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Scrolling">Scrolling</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Horizontal-Scrolling.html#Horizontal%20Scrolling">Horizontal Scrolling</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Trailing-Whitespace.html#Trailing%20Whitespace">Trailing Whitespace</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
+<hr><br>
+</div>
+
+<h3 class="section">Scrolling</h3>
+
+<p>If a buffer contains text that is too large to fit entirely within a
+window that is displaying the buffer, Emacs shows a contiguous portion of
+the text.  The portion shown always contains point.
+
+   <p><dfn>Scrolling</dfn> means moving text up or down in the window so that
+different parts of the text are visible.  Scrolling forward means that text
+moves up, and new text appears at the bottom.  Scrolling backward moves
+text down and new text appears at the top.
+
+   <p>Scrolling happens automatically if you move point past the bottom or top
+of the window.  You can also explicitly request scrolling with the commands
+in this section.
+
+     <dl>
+<dt><kbd>C-l</kbd>
+     <dd>Clear screen and redisplay, scrolling the selected window to center
+point vertically within it (<code>recenter</code>). 
+<br><dt><kbd>C-v</kbd>
+     <dd>Scroll forward (a windowful or a specified number of lines) (<code>scroll-up</code>). 
+<br><dt><kbd>&lt;NEXT&gt;</kbd>
+     <dd><dt><kbd>&lt;PAGEDOWN&gt;</kbd>
+     <dd>Likewise, scroll forward. 
+<br><dt><kbd>M-v</kbd>
+     <dd>Scroll backward (<code>scroll-down</code>). 
+<br><dt><kbd>&lt;PRIOR&gt;</kbd>
+     <dd><dt><kbd>&lt;PAGEUP&gt;</kbd>
+     <dd>Likewise, scroll backward. 
+<br><dt><kbd></kbd><var>arg</var><kbd> C-l</kbd>
+     <dd>Scroll so point is on line <var>arg</var> (<code>recenter</code>). 
+<br><dt><kbd>C-M-l</kbd>
+     <dd>Scroll heuristically to bring useful information onto the screen
+(<code>reposition-window</code>). 
+</dl>
+
+   <p>The most basic scrolling command is <kbd>C-l</kbd> (<code>recenter</code>) with
+no argument.  It clears the entire screen and redisplays all windows. 
+In addition, it scrolls the selected window so that point is halfway
+down from the top of the window.
+
+   <p>To read the buffer a windowful at a time, use <kbd>C-v</kbd>
+(<code>scroll-up</code>) with no argument.  This scrolls forward by nearly
+the whole window height.  The effect is to take the two lines at the
+bottom of the window and put them at the top, followed by nearly a
+whole windowful of lines that were not previously visible.  If point
+was in the text that scrolled off the top, it ends up at the new top
+of the window.
+
+   <p><kbd>M-v</kbd> (<code>scroll-down</code>) with no argument scrolls backward in
+a similar way, also with overlap.  The number of lines of overlap
+across a <kbd>C-v</kbd> or <kbd>M-v</kbd> is controlled by the variable
+<code>next-screen-context-lines</code>; by default, it is 2.  The function
+keys &lt;NEXT&gt; and &lt;PRIOR&gt;, or &lt;PAGEDOWN&gt; and &lt;PAGEUP&gt;,
+are equivalent to <kbd>C-v</kbd> and <kbd>M-v</kbd>.
+
+   <p>The commands <kbd>C-v</kbd> and <kbd>M-v</kbd> with a numeric argument scroll
+the text in the selected window up or down a few lines.  <kbd>C-v</kbd>
+with an argument moves the text and point up, together, that many
+lines; it brings the same number of new lines into view at the bottom
+of the window.  <kbd>M-v</kbd> with numeric argument scrolls the text
+downward, bringing that many new lines into view at the top of the
+window.  <kbd>C-v</kbd> with a negative argument is like <kbd>M-v</kbd> and vice
+versa.
+
+   <p>The names of scroll commands are based on the direction that the
+text moves in the window.  Thus, the command to scroll forward is
+called <code>scroll-up</code> because it moves the text upward on the
+screen.  The keys &lt;PAGEDOWN&gt; and &lt;PAGEUP&gt; derive their names
+and customary meanings from a different convention that developed
+elsewhere; hence the strange result that &lt;PAGEDOWN&gt; runs
+<code>scroll-up</code>.
+
+   <p>Some users like the full-screen scroll commands to keep point at the
+same screen line.  To enable this behavior, set the variable
+<code>scroll-preserve-screen-position</code> to a non-<code>nil</code> value.  This
+mode is convenient for browsing through a file by scrolling by
+screenfuls; if you come back to the screen where you started, point goes
+back to the line where it started.  However, this mode is inconvenient
+when you move to the next screen in order to move point to the text
+there.
+
+   <p>Another way to do scrolling is with <kbd>C-l</kbd> with a numeric argument. 
+<kbd>C-l</kbd> does not clear the screen when given an argument; it only scrolls
+the selected window.  With a positive argument <var>n</var>, it repositions text
+to put point <var>n</var> lines down from the top.  An argument of zero puts
+point on the very top line.  Point does not move with respect to the text;
+rather, the text and point move rigidly on the screen.  <kbd>C-l</kbd> with a
+negative argument puts point that many lines from the bottom of the window. 
+For example, <kbd>C-u - 1 C-l</kbd> puts point on the bottom line, and <kbd>C-u
+- 5 C-l</kbd> puts it five lines from the bottom.  <kbd>C-u C-l</kbd> scrolls to put
+point at the center (vertically) of the selected window.
+
+   <p>The <kbd>C-M-l</kbd> command (<code>reposition-window</code>) scrolls the current
+window heuristically in a way designed to get useful information onto
+the screen.  For example, in a Lisp file, this command tries to get the
+entire current defun onto the screen if possible.
+
+   <p>Scrolling happens automatically when point moves out of the visible
+portion of the text.  Normally, automatic scrolling centers point
+vertically within the window.  However, if you set
+<code>scroll-conservatively</code> to a small number <var>n</var>, then if you
+move point just a little off the screen--less than <var>n</var>
+lines--then Emacs scrolls the text just far enough to bring point
+back on screen.  By default, <code>scroll-conservatively</code> is 0.
+
+   <p>When the window does scroll by a longer distance, you can control
+how aggressively it scrolls, by setting the variables
+<code>scroll-up-aggressively</code> and <code>scroll-down-aggressively</code>. 
+The value of <code>scroll-up-aggressively</code> should be either
+<code>nil</code>, or a fraction <var>f</var> between 0 and 1.  A fraction
+specifies where on the screen to put point when scrolling upward. 
+More precisely, when a window scrolls up because point is above the
+window start, the new start position is chosen to put point <var>f</var>
+part of the window height from the top.  The larger <var>f</var>, the more
+aggressive the scrolling.
+
+   <p><code>nil</code>, which is the default, scrolls to put point at the center. 
+So it is equivalent to .5.
+
+   <p>Likewise, <code>scroll-down-aggressively</code> is used for scrolling
+down.  The value, <var>f</var>, specifies how far point should be placed
+from the bottom of the window; thus, as with
+<code>scroll-up-aggressively</code>, a larger value is more aggressive.
+
+   <p>The variable <code>scroll-margin</code> restricts how close point can come
+to the top or bottom of a window.  Its value is a number of screen
+lines; if point comes within that many lines of the top or bottom of the
+window, Emacs recenters the window.  By default, <code>scroll-margin</code> is
+0.
+
+   </body></html>
+

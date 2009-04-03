@@ -1,0 +1,61 @@
+<html lang="en">
+<head>
+<title>Making Buffer Names Unique</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Making Buffer Names Unique">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Uniquify">Uniquify</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Iswitchb.html#Iswitchb">Iswitchb</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Buffer-Convenience.html#Buffer%20Convenience">Buffer Convenience</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Making Buffer Names Unique</h4>
+
+<p>When several buffers visit identically-named files, Emacs must give
+the buffers distinct names.  The usual method for making buffer names
+unique adds <code>&lt;2&gt;</code>, <code>&lt;3&gt;</code>, etc. to the end of the buffer
+names (all but one of them).
+
+   <p>Other methods work by adding parts of each file's directory to the
+buffer name.  To select one, customize the variable
+<code>uniquify-buffer-name-style</code> (see <a href="Easy-Customization.html#Easy%20Customization">Easy Customization</a>).
+
+   <p>For instance, the <code>forward</code> naming method puts part of the
+directory name at the beginning of the buffer name; using this method,
+buffers visiting <code>/u/mernst/tmp/Makefile</code> and
+<code>/usr/projects/zaphod/Makefile</code> would be named
+<code>tmp/Makefile</code> and <code>zaphod/Makefile</code>, respectively (instead
+of <code>Makefile</code> and <code>Makefile&lt;2&gt;</code>).
+
+   <p>By contrast, the <code>post-forward</code> naming method would call the
+buffers <code>Makefile|tmp</code> and <code>Makefile|zaphod</code>, and the
+<code>reverse</code> naming method would call them <code>Makefile\tmp</code> and
+<code>Makefile\zaphod</code>.  The nontrivial difference between
+<code>post-forward</code> and <code>reverse</code> occurs when just one directory
+name is not enough to distinguish two files; then <code>reverse</code> puts
+the directory names in reverse order, so that <code>/top/middle/file</code>
+becomes <code>file\middle\top</code>, while <code>post-forward</code> puts them in
+forward order after the file name, as in <code>file|top/middle</code>.
+
+   <p>Which rule to follow for putting the directory names in the buffer
+name is not very important if you are going to <em>look</em> at the
+buffer names before you type one.  But as an experienced user, if you
+know the rule, you won't have to look.  And then you may find that one
+rule or another is easier for you to remember and utilize fast.
+
+   </body></html>
+

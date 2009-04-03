@@ -1,0 +1,218 @@
+*** lisp/faces.el	13 Jan 2009 12:40:24 -0000	1.438
+--- lisp/faces.el	15 Mar 2009 20:27:05 -0000
+***************
+*** 2382,2387 ****
+--- 2382,2443 ----
+    :group 'mode-line-faces
+    :group 'basic-faces)
+  
++ (defface mode-line-flags
++   '((t (:family "sansserif")))
++   "Face used for MULE and Modified parts of the mode line."
++   :version "22.1"
++   :group 'mode-line-faces
++   :group 'basic-faces)
++ 
++ (defface mode-line-flags
++   '((t (:family "sansserif")))
++   "Face used for MULE and Modified parts of the mode line."
++   :version "22.1"
++   :group 'mode-line-faces
++   :group 'basic-faces)
++ 
++ (defface mode-line-flags
++   '((t (:family "sansserif")))
++   "Face used for MULE and Modified parts of the mode line."
++   :version "22.1"
++   :group 'mode-line-faces
++   :group 'basic-faces)
++ 
++ (defface mode-line-flags
++   '((t (:family "sansserif")))
++   "Face used for MULE and Modified parts of the mode line."
++   :version "22.1"
++   :group 'mode-line-faces
++   :group 'basic-faces)
++ 
++ (defface mode-line-flags
++   '((t (:family "sansserif")))
++   "Face used for MULE and Modified parts of the mode line."
++   :version "22.1"
++   :group 'mode-line-faces
++   :group 'basic-faces)
++ 
++ (defface mode-line-flags
++   '((t (:family "sansserif")))
++   "Face used for MULE and Modified parts of the mode line."
++   :version "22.1"
++   :group 'mode-line-faces
++   :group 'basic-faces)
++ 
++ (defface mode-line-flags
++   '((t (:family "sansserif")))
++   "Face used for MULE and Modified parts of the mode line."
++   :version "22.1"
++   :group 'mode-line-faces
++   :group 'basic-faces)
++ 
++ (defface mode-line-flags
++   '((t (:family "sansserif")))
++   "Face used for MULE and Modified parts of the mode line."
++   :version "22.1"
++   :group 'mode-line-faces
++   :group 'basic-faces)
++ 
+  ;; Make `modeline' an alias for `mode-line', for compatibility.
+  (put 'modeline 'face-alias 'mode-line)
+  (put 'modeline-inactive 'face-alias 'mode-line-inactive)
+*** lisp/bindings.el	29 Jan 2009 08:53:39 -0000	1.218
+--- lisp/bindings.el	15 Mar 2009 20:26:35 -0000
+***************
+*** 153,158 ****
+--- 153,159 ----
+        (setq desc
+  	    (propertize
+  	     mnemonic
++  	     'face 'mode-line-flags
+  	     'help-echo (format "End-of-line style: %s\nmouse-1 to cycle"
+  				(if (eq eol 0) "Unix-style LF"
+  				  (if (eq eol 1) "DOS-style CRLF"
+***************
+*** 177,182 ****
+--- 178,184 ----
+    `(""
+      (current-input-method
+       (:propertize ("" current-input-method-title)
++ 		  face mode-line-flags
+  		  help-echo (concat
+  			     "Current input method: "
+  			     current-input-method
+***************
+*** 187,192 ****
+--- 189,195 ----
+  		  mouse-face mode-line-highlight))
+      ,(propertize
+        "%z"
++       'face 'mode-line-flags
+        'help-echo
+        #'(lambda (window object point)
+  	  (with-current-buffer (window-buffer window)
+***************
+*** 239,244 ****
+--- 242,248 ----
+  (defvar mode-line-modified
+    (list (propertize
+  	 "%1*"
++ 	 'face 'mode-line-flags
+  	 'help-echo (purecopy (lambda (window object point)
+   				(format "Buffer is %s\nmouse-1 toggles"
+  					(save-selected-window
+***************
+*** 252,257 ****
+--- 256,262 ----
+  	 'mouse-face 'mode-line-highlight)
+  	(propertize
+  	 "%1+"
++ 	 'face 'mode-line-flags
+  	 'help-echo  (purecopy (lambda (window object point)
+  				 (format "Buffer is %sodified\nmouse-1 toggles modified state"
+  					 (save-selected-window
+***************
+*** 329,349 ****
+      map) "\
+  Keymap to display on column and line numbers.")
+  
+  (let* ((help-echo
+  	;; The multi-line message doesn't work terribly well on the
+  	;; bottom mode line...  Better ideas?
+  	;; 	  "\
+  	;; mouse-1: select window, mouse-2: delete others, mouse-3: delete,
+  	;; drag-mouse-1: resize, C-mouse-2: split horizontally"
+! 	"mouse-1: Select (drag to resize)\n\
+! mouse-2: Make current window occupy the whole frame\n\
+! mouse-3: Remove current window from display")
+         (recursive-edit-help-echo "Recursive edit, type C-M-c to get out")
+!        (dashes (propertize "--" 'help-echo help-echo))
+         (standard-mode-line-format
+  	(list
+  	 "%e"
+! 	 (propertize "-" 'help-echo help-echo)
+  	 'mode-line-mule-info
+  	 'mode-line-client
+  	 'mode-line-modified
+--- 334,357 ----
+      map) "\
+  Keymap to display on column and line numbers.")
+  
++ (defvar command-line-processed nil)
++ (defvar before-init-hook nil)
++ (eval-at-startup ;; because of initial-window-system
+  (let* ((help-echo
+  	;; The multi-line message doesn't work terribly well on the
+  	;; bottom mode line...  Better ideas?
+  	;; 	  "\
+  	;; mouse-1: select window, mouse-2: delete others, mouse-3: delete,
+  	;; drag-mouse-1: resize, C-mouse-2: split horizontally"
+! 	"mouse-1: select (drag to resize), mouse-2: delete others, mouse-3: delete this")
+         (recursive-edit-help-echo "Recursive edit, type C-M-c to get out")
+!        (lotsofdashes (if initial-window-system (make-string 100 32) "%-"))
+!        (dash (propertize (if initial-window-system " " "-") 'help-echo help-echo))
+!        (dashes (propertize (if initial-window-system "  " "--") 'help-echo help-echo))
+         (standard-mode-line-format
+  	(list
+  	 "%e"
+! 	 (propertize dash 'help-echo help-echo)
+  	 'mode-line-mule-info
+  	 'mode-line-client
+  	 'mode-line-modified
+***************
+*** 357,363 ****
+  	 'mode-line-modes
+  	 `(which-func-mode ("" which-func-format ,dashes))
+  	 `(global-mode-string (,dashes global-mode-string))
+! 	 (propertize "-%-" 'help-echo help-echo)))
+         (standard-mode-line-modes
+  	(list
+  	 (propertize "%[" 'help-echo recursive-edit-help-echo)
+--- 365,371 ----
+  	 'mode-line-modes
+  	 `(which-func-mode ("" which-func-format ,dashes))
+  	 `(global-mode-string (,dashes global-mode-string))
+! 	 (propertize (concat dash lotsofdashes) 'help-echo help-echo)))
+         (standard-mode-line-modes
+  	(list
+  	 (propertize "%[" 'help-echo recursive-edit-help-echo)
+***************
+*** 383,389 ****
+  				 'mouse-2 #'mode-line-widen))
+  	 (propertize ")" 'help-echo help-echo)
+  	 (propertize "%]" 'help-echo recursive-edit-help-echo)
+! 	 (propertize "--" 'help-echo help-echo)))
+  
+         (standard-mode-line-position
+  	`((-3 ,(propertize
+--- 391,397 ----
+  				 'mouse-2 #'mode-line-widen))
+  	 (propertize ")" 'help-echo help-echo)
+  	 (propertize "%]" 'help-echo recursive-edit-help-echo)
+! 	 (propertize dashes 'help-echo help-echo)))
+  
+         (standard-mode-line-position
+  	`((-3 ,(propertize
+***************
+*** 433,439 ****
+  
+    (setq-default mode-line-position standard-mode-line-position)
+    (put 'mode-line-position 'standard-value
+!        (list `(quote ,standard-mode-line-position))))
+  
+  (defvar mode-line-buffer-identification-keymap
+    ;; Add menu of buffer operations to the buffer identification part
+--- 441,447 ----
+  
+    (setq-default mode-line-position standard-mode-line-position)
+    (put 'mode-line-position 'standard-value
+!        (list `(quote ,standard-mode-line-position)))))
+  
+  (defvar mode-line-buffer-identification-keymap
+    ;; Add menu of buffer operations to the buffer identification part

@@ -1,0 +1,43 @@
+<html lang="en">
+<head>
+<title>How Emacs Finds Your Init File</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="How Emacs Finds Your Init File">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Find%20Init">Find Init</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Terminal-Init.html#Terminal%20Init">Terminal Init</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Init-File.html#Init%20File">Init File</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">How Emacs Finds Your Init File</h4>
+
+<p>Normally Emacs uses the environment variable <code>HOME</code> to find
+<code>.emacs</code>; that's what <code>~</code> means in a file name.  But if you
+run Emacs from a shell started by <code>su</code>, Emacs tries to find your
+own <code>.emacs</code>, not that of the user you are currently pretending
+to be.  The idea is that you should get your own editor customizations
+even if you are running as the super user.
+
+   <p>More precisely, Emacs first determines which user's init file to use. 
+It gets the user name from the environment variables <code>LOGNAME</code> and
+<code>USER</code>; if neither of those exists, it uses effective user-ID. 
+If that user name matches the real user-ID, then Emacs uses <code>HOME</code>;
+otherwise, it looks up the home directory corresponding to that user
+name in the system's data base of users.
+
+   </body></html>
+

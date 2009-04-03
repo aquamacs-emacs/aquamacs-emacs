@@ -1,0 +1,81 @@
+<html lang="en">
+<head>
+<title>Narrowing</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Narrowing">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Narrowing">Narrowing</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Two-Column.html#Two-Column">Two-Column</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Sorting.html#Sorting">Sorting</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr><br>
+</div>
+
+<h3 class="section">Narrowing</h3>
+
+<p><dfn>Narrowing</dfn> means focusing in on some portion of the buffer,
+making the rest temporarily inaccessible.  The portion which you can
+still get to is called the <dfn>accessible portion</dfn>.  Canceling the
+narrowing, which makes the entire buffer once again accessible, is
+called <dfn>widening</dfn>.  The amount of narrowing in effect in a buffer at
+any time is called the buffer's <dfn>restriction</dfn>.
+
+   <p>Narrowing can make it easier to concentrate on a single subroutine or
+paragraph by eliminating clutter.  It can also be used to restrict the
+range of operation of a replace command or repeating keyboard macro.
+
+     <dl>
+<dt><kbd>C-x n n</kbd>
+     <dd>Narrow down to between point and mark (<code>narrow-to-region</code>). 
+<br><dt><kbd>C-x n w</kbd>
+     <dd>Widen to make the entire buffer accessible again (<code>widen</code>). 
+<br><dt><kbd>C-x n p</kbd>
+     <dd>Narrow down to the current page (<code>narrow-to-page</code>). 
+<br><dt><kbd>C-x n d</kbd>
+     <dd>Narrow down to the current defun (<code>narrow-to-defun</code>). 
+</dl>
+
+   <p>When you have narrowed down to a part of the buffer, that part appears
+to be all there is.  You can't see the rest, you can't move into it
+(motion commands won't go outside the accessible part), you can't change
+it in any way.  However, it is not gone, and if you save the file all
+the inaccessible text will be saved.  The word <code>Narrow</code> appears in
+the mode line whenever narrowing is in effect.
+
+   <p>The primary narrowing command is <kbd>C-x n n</kbd> (<code>narrow-to-region</code>). 
+It sets the current buffer's restrictions so that the text in the current
+region remains accessible, but all text before the region or after the
+region is inaccessible.  Point and mark do not change.
+
+   <p>Alternatively, use <kbd>C-x n p</kbd> (<code>narrow-to-page</code>) to narrow
+down to the current page.  See <a href="Pages.html#Pages">Pages</a>, for the definition of a page. 
+<kbd>C-x n d</kbd> (<code>narrow-to-defun</code>) narrows down to the defun
+containing point (see <a href="Defuns.html#Defuns">Defuns</a>).
+
+   <p>The way to cancel narrowing is to widen with <kbd>C-x n w</kbd>
+(<code>widen</code>).  This makes all text in the buffer accessible again.
+
+   <p>You can get information on what part of the buffer you are narrowed down
+to using the <kbd>C-x =</kbd> command.  See <a href="Position-Info.html#Position%20Info">Position Info</a>.
+
+   <p>Because narrowing can easily confuse users who do not understand it,
+<code>narrow-to-region</code> is normally a disabled command.  Attempting to use
+this command asks for confirmation and gives you the option of enabling it;
+if you enable the command, confirmation will no longer be required for
+it.  See <a href="Disabling.html#Disabling">Disabling</a>.
+
+   </body></html>
+

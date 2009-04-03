@@ -1,0 +1,76 @@
+<html lang="en">
+<head>
+<title>Commands to Mark Textual Objects</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Commands to Mark Textual Objects">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Marking%20Objects">Marking Objects</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Mark-Ring.html#Mark%20Ring">Mark Ring</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Using-Region.html#Using%20Region">Using Region</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Mark.html#Mark">Mark</a>
+<hr><br>
+</div>
+
+<h3 class="section">Commands to Mark Textual Objects</h3>
+
+<p>Here are the commands for placing point and the mark around a textual
+object such as a word, list, paragraph or page.
+
+     <dl>
+<dt><kbd>M-@</kbd>
+     <dd>Set mark after end of next word (<code>mark-word</code>).  This command and
+the following one do not move point. 
+<br><dt><kbd>C-M-@</kbd>
+     <dd>Set mark after end of following balanced expression (<code>mark-sexp</code>). 
+<br><dt><kbd>M-h</kbd>
+     <dd>Put region around current paragraph (<code>mark-paragraph</code>). 
+<br><dt><kbd>C-M-h</kbd>
+     <dd>Put region around current defun (<code>mark-defun</code>). 
+<br><dt><kbd>C-x h</kbd>
+     <dd>Put region around the entire buffer (<code>mark-whole-buffer</code>). 
+<br><dt><kbd>C-x C-p</kbd>
+     <dd>Put region around current page (<code>mark-page</code>). 
+</dl>
+
+   <p><kbd>M-@</kbd> (<code>mark-word</code>) puts the mark at the end of the next
+word, while <kbd>C-M-@</kbd> (<code>mark-sexp</code>) puts it at the end of the
+next balanced expression (see <a href="Expressions.html#Expressions">Expressions</a>).  These commands handle
+arguments just like <kbd>M-f</kbd> and <kbd>C-M-f</kbd>.
+
+   <p>Other commands set both point and mark, to delimit an object in the
+buffer.  For example, <kbd>M-h</kbd> (<code>mark-paragraph</code>) moves point to
+the beginning of the paragraph that surrounds or follows point, and puts
+the mark at the end of that paragraph (see <a href="Paragraphs.html#Paragraphs">Paragraphs</a>).  It prepares
+the region so you can indent, case-convert, or kill a whole paragraph.
+
+   <p><kbd>C-M-h</kbd> (<code>mark-defun</code>) similarly puts point before, and the
+mark after, the current (or following) major top-level definition, or
+defun (see <a href="Moving-by-Defuns.html#Moving%20by%20Defuns">Moving by Defuns</a>).  <kbd>C-x C-p</kbd> (<code>mark-page</code>)
+puts point before the current page, and mark at the end
+(see <a href="Pages.html#Pages">Pages</a>).  The mark goes after the terminating page delimiter
+(to include it in the region), while point goes after the preceding
+page delimiter (to exclude it).  A numeric argument specifies a later
+page (if positive) or an earlier page (if negative) instead of the
+current page.
+
+   <p>Finally, <kbd>C-x h</kbd> (<code>mark-whole-buffer</code>) sets up the entire
+buffer as the region, by putting point at the beginning and the mark at
+the end.
+
+   <p>In Transient Mark mode, all of these commands activate the mark.
+
+   </body></html>
+

@@ -1,0 +1,36 @@
+*** lisp/cus-edit.el	18 Feb 2009 18:36:13 -0000	1.363
+--- lisp/cus-edit.el	15 Mar 2009 20:26:44 -0000
+***************
+*** 1087,1093 ****
+    (let ((name (format "*Customize Group: %s*"
+  		      (custom-unlispify-tag-name group))))
+      (if (get-buffer name)
+!         (pop-to-buffer name)
+        (custom-buffer-create
+         (list (list group 'custom-group))
+         name
+--- 1087,1093 ----
+    (let ((name (format "*Customize Group: %s*"
+  		      (custom-unlispify-tag-name group))))
+      (if (get-buffer name)
+!         (switch-to-buffer name)
+        (custom-buffer-create
+         (list (list group 'custom-group))
+         name
+***************
+*** 1497,1503 ****
+  OPTIONS should be an alist of the form ((SYMBOL WIDGET)...), where
+  SYMBOL is a customization option, and WIDGET is a widget for editing
+  that option."
+!   (pop-to-buffer (custom-get-fresh-buffer (or name "*Customization*")))
+    (custom-buffer-create-internal options description))
+  
+  ;;;###autoload
+--- 1497,1503 ----
+  OPTIONS should be an alist of the form ((SYMBOL WIDGET)...), where
+  SYMBOL is a customization option, and WIDGET is a widget for editing
+  that option."
+!   (switch-to-buffer (custom-get-fresh-buffer (or name "*Customization*")))
+    (custom-buffer-create-internal options description))
+  
+  ;;;###autoload

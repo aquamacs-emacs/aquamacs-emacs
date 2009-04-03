@@ -1,0 +1,66 @@
+<html lang="en">
+<head>
+<title>Options for RCS and SCCS</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Options for RCS and SCCS">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="RCS%20and%20SCCS">RCS and SCCS</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="CVS-Options.html#CVS%20Options">CVS Options</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="General-VC-Options.html#General%20VC%20Options">General VC Options</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customizing-VC.html#Customizing%20VC">Customizing VC</a>
+<hr><br>
+</div>
+
+<h3 class="subsubsection">Options for RCS and SCCS</h5>
+
+<p>By default, RCS uses locking to coordinate the activities of several
+users, but there is a mode called <dfn>non-strict locking</dfn> in which
+you can check-in changes without locking the file first.  Use
+<code>rcs -U</code> to switch to non-strict locking for a particular file,
+see the <code>rcs</code> manual page for details.
+
+   <p>When deducing the version control state of an RCS file, VC first
+looks for an RCS version header string in the file (see <a href="Version-Headers.html#Version%20Headers">Version Headers</a>).  If there is no header string, VC normally looks at the
+file permissions of the work file; this is fast.  But there might be
+situations when the file permissions cannot be trusted.  In this case
+the master file has to be consulted, which is rather expensive.  Also
+the master file can only tell you <em>if</em> there's any lock on the
+file, but not whether your work file really contains that locked
+version.
+
+   <p>You can tell VC not to use version headers to determine the file
+status by setting <code>vc-consult-headers</code> to <code>nil</code>.  VC then
+always uses the file permissions (if it is supposed to trust them), or
+else checks the master file.
+
+   <p>You can specify the criterion for whether to trust the file
+permissions by setting the variable <code>vc-mistrust-permissions</code>. 
+Its value can be <code>t</code> (always mistrust the file permissions and
+check the master file), <code>nil</code> (always trust the file
+permissions), or a function of one argument which makes the decision. 
+The argument is the directory name of the <code>RCS</code> subdirectory.  A
+non-<code>nil</code> value from the function says to mistrust the file
+permissions.  If you find that the file permissions of work files are
+changed erroneously, set <code>vc-mistrust-permissions</code> to <code>t</code>. 
+Then VC always checks the master file to determine the file's status.
+
+   <p>VC determines the version control state of files under SCCS much as
+with RCS.  It does not consider SCCS version headers, though.  Thus,
+the variable <code>vc-mistrust-permissions</code> affects SCCS use, but
+<code>vc-consult-headers</code> does not.
+
+   </body></html>
+

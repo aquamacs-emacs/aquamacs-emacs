@@ -1,0 +1,82 @@
+<html lang="en">
+<head>
+<title>Display of Messages</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Display of Messages">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Rmail%20Display">Rmail Display</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Rmail-Coding.html#Rmail%20Coding">Rmail Coding</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Rmail-Sorting.html#Rmail%20Sorting">Rmail Sorting</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Rmail.html#Rmail">Rmail</a>
+<hr><br>
+</div>
+
+<h3 class="section">Display of Messages</h3>
+
+<p>Rmail reformats the header of each message before displaying it for
+the first time.  Reformatting hides uninteresting header fields to
+reduce clutter.  You can use the <kbd>t</kbd> command to show the entire
+header or to repeat the header reformatting operation.
+
+     <dl>
+<dt><kbd>t</kbd>
+     <dd>Toggle display of complete header (<code>rmail-toggle-header</code>). 
+</dl>
+
+   <p>Reformatting the header involves deleting most header fields, on the
+grounds that they are not interesting.  The variable
+<code>rmail-ignored-headers</code> holds a regular expression that specifies
+which header fields to hide in this way--if it matches the beginning of
+a header field, that whole field is hidden.
+
+   <p>Rmail saves the complete original header before reformatting; to see
+it, use the <kbd>t</kbd> command (<code>rmail-toggle-header</code>).  This
+discards the reformatted headers of the current message and displays it
+with the original header.  Repeating <kbd>t</kbd> reformats the message
+again.  Selecting the message again also reformats.
+
+   <p>One consequence of this is that if you edit the reformatted header
+(using <kbd>e</kbd>; see <a href="Rmail-Editing.html#Rmail%20Editing">Rmail Editing</a>), subsequent use of <kbd>t</kbd> will
+discard your edits.  On the other hand, if you use <kbd>e</kbd> after
+<kbd>t</kbd>, to edit the original (unreformatted) header, those changes are
+permanent.
+
+   <p>When the <kbd>t</kbd> command has a prefix argument, a positive argument
+means to show the reformatted header, and a zero or negative argument
+means to show the full header.
+
+   <p>When the terminal supports multiple fonts or colors, Rmail
+highlights certain header fields that are especially interesting--by
+default, the <code>From</code> and <code>Subject</code> fields.  The variable
+<code>rmail-highlighted-headers</code> holds a regular expression that
+specifies the header fields to highlight; if it matches the beginning
+of a header field, that whole field is highlighted.
+
+   <p>If you specify unusual colors for your text foreground and
+background, the colors used for highlighting may not go well with
+them.  If so, specify different colors for the face
+<code>rmail-highlight-face</code>.  See <a href="Faces.html#Faces">Faces</a>, for how to do this.  To
+turn off highlighting entirely in Rmail, set
+<code>rmail-highlighted-headers</code> to <code>nil</code>.
+
+   <p>You can highlight and activate URLs in incoming messages by adding
+the function <code>goto-address</code> to the hook
+<code>rmail-show-message-hook</code>.  Then you can browse these URLs by
+clicking on them with <kbd>Mouse-2</kbd> or by moving to one and typing
+<kbd>C-c &lt;RET&gt;</kbd>.  See <a href="Goto-address.html#Goto-address">Activating URLs</a>.
+
+   </body></html>
+

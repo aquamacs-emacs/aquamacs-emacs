@@ -1,0 +1,72 @@
+<html lang="en">
+<head>
+<title>Deletion and Killing</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Deletion and Killing">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Killing">Killing</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Yanking.html#Yanking">Yanking</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Mark.html#Mark">Mark</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr><br>
+</div>
+
+<h3 class="section">Deletion and Killing</h3>
+
+<p>Most commands which erase text from the buffer save it in the kill
+ring so that you can move or copy it to other parts of the buffer. 
+These commands are known as <dfn>kill</dfn> commands.  The rest of the
+commands that erase text do not save it in the kill ring; they are known
+as <dfn>delete</dfn> commands.  (This distinction is made only for erasure of
+text in the buffer.)  If you do a kill or delete command by mistake, you
+can use the <kbd>C-x u</kbd> (<code>undo</code>) command to undo it
+(see <a href="Undo.html#Undo">Undo</a>).
+
+   <p>You cannot kill read-only text, since such text does not allow any
+kind of modification.  But some users like to use the kill commands to
+copy read-only text into the kill ring, without actually changing it. 
+If you set the variable <code>kill-read-only-ok</code> to a non-<code>nil</code>
+value, the kill commands work specially in a read-only buffer: they
+move over text, and copy it to the kill ring, without actually
+deleting it from the buffer.  When this happens, a message in the echo
+area tells you what is happening.
+
+   <p>The delete commands include <kbd>C-d</kbd> (<code>delete-char</code>) and
+&lt;DEL&gt; (<code>delete-backward-char</code>), which delete only one
+character at a time, and those commands that delete only spaces or
+newlines.  Commands that can destroy significant amounts of nontrivial
+data generally do a kill operation instead.  The commands' names and
+individual descriptions use the words <code>kill</code> and <code>delete</code> to
+say which kind of operation they perform.
+
+   <p>Many window systems follow the convention that insertion while text
+is selected deletes the selected text.  You can make Emacs behave this
+way by enabling Delete Selection mode, with <kbd>M-x
+delete-selection-mode</kbd>, or using Custom.  Another effect of this mode
+is that &lt;DEL&gt;, <kbd>C-d</kbd> and some other keys, when a selection
+exists, will kill the whole selection.  It also enables Transient Mark
+mode (see <a href="Transient-Mark.html#Transient%20Mark">Transient Mark</a>).
+
+<ul class="menu">
+<li><a accesskey="1" href="Deletion.html#Deletion">Deletion</a>:             Commands for deleting small amounts of text and
+                          blank areas. 
+<li><a accesskey="2" href="Killing-by-Lines.html#Killing%20by%20Lines">Killing by Lines</a>:     How to kill entire lines of text at one time. 
+<li><a accesskey="3" href="Other-Kill-Commands.html#Other%20Kill%20Commands">Other Kill Commands</a>:  Commands to kill large regions of text and
+                          syntactic units such as words and sentences. 
+</ul>
+
+   </body></html>
+

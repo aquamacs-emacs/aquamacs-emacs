@@ -1,0 +1,114 @@
+<html lang="en">
+<head>
+<title>Deleting and Rearranging Windows</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Deleting and Rearranging Windows">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Change%20Window">Change Window</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Window-Convenience.html#Window%20Convenience">Window Convenience</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Force-Same-Window.html#Force%20Same%20Window">Force Same Window</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
+<hr><br>
+</div>
+
+<h3 class="section">Deleting and Rearranging Windows</h3>
+
+     <dl>
+<dt><kbd>C-x 0</kbd>
+     <dd>Delete the selected window (<code>delete-window</code>).  The last character
+in this key sequence is a zero. 
+<br><dt><kbd>C-x 1</kbd>
+     <dd>Delete all windows in the selected frame except the selected window
+(<code>delete-other-windows</code>). 
+<br><dt><kbd>C-x 4 0</kbd>
+     <dd>Delete the selected window and kill the buffer that was showing in it
+(<code>kill-buffer-and-window</code>).  The last character in this key
+sequence is a zero. 
+<br><dt><kbd>C-x ^</kbd>
+     <dd>Make selected window taller (<code>enlarge-window</code>). 
+<br><dt><kbd>C-x }</kbd>
+     <dd>Make selected window wider (<code>enlarge-window-horizontally</code>). 
+<br><dt><kbd>C-x {</kbd>
+     <dd>Make selected window narrower (<code>shrink-window-horizontally</code>). 
+<br><dt><kbd>C-x -</kbd>
+     <dd>Shrink this window if its buffer doesn't need so many lines
+(<code>shrink-window-if-larger-than-buffer</code>). 
+<br><dt><kbd>C-x +</kbd>
+     <dd>Make all windows the same height (<code>balance-windows</code>). 
+<br><dt><kbd>Drag-Mouse-1</kbd>
+     <dd>Dragging a window's mode line up or down with <kbd>Mouse-1</kbd> changes
+window heights. 
+<br><dt><kbd>Mouse-2</kbd>
+     <dd><kbd>Mouse-2</kbd> in a window's mode line deletes all other windows in the frame
+(<code>mouse-delete-other-windows</code>). 
+<br><dt><kbd>Mouse-3</kbd>
+     <dd><kbd>Mouse-3</kbd> in a window's mode line deletes that window
+(<code>mouse-delete-window</code>), unless the frame has only one window, in
+which case it buries the current buffer instead and switches to another
+buffer. 
+</dl>
+
+   <p>To delete a window, type <kbd>C-x 0</kbd> (<code>delete-window</code>).  (That is
+a zero.)  The space occupied by the deleted window is given to an
+adjacent window (but not the minibuffer window, even if that is active
+at the time).  Once a window is deleted, its attributes are forgotten;
+only restoring a window configuration can bring it back.  Deleting the
+window has no effect on the buffer it used to display; the buffer
+continues to exist, and you can select it in any window with <kbd>C-x
+b</kbd>.
+
+   <p><kbd>C-x 4 0</kbd> (<code>kill-buffer-and-window</code>) is a stronger command
+than <kbd>C-x 0</kbd>; it kills the current buffer and then deletes the
+selected window.
+
+   <p><kbd>C-x 1</kbd> (<code>delete-other-windows</code>) is more powerful in a
+different way; it deletes all the windows except the selected one (and
+the minibuffer); the selected window expands to use the whole frame
+except for the echo area.
+
+   <p>You can also delete a window by clicking on its mode line with
+<kbd>Mouse-2</kbd>, and delete all the windows in a frame except one window
+by clicking on that window's mode line with <kbd>Mouse-3</kbd>.
+
+   <p>The easiest way to adjust window heights is with a mouse.  If you
+press <kbd>Mouse-1</kbd> on a mode line, you can drag that mode line up or
+down, changing the heights of the windows above and below it.
+
+   <p>To readjust the division of space among vertically adjacent windows,
+use <kbd>C-x ^</kbd> (<code>enlarge-window</code>).  It makes the currently
+selected window get one line bigger, or as many lines as is specified
+with a numeric argument.  With a negative argument, it makes the
+selected window smaller.  <kbd>C-x }</kbd>
+(<code>enlarge-window-horizontally</code>) makes the selected window wider by
+the specified number of columns.  <kbd>C-x {</kbd>
+(<code>shrink-window-horizontally</code>) makes the selected window narrower
+by the specified number of columns.
+
+   <p>When you make a window bigger, the space comes from one of its
+neighbors.  If this makes any window too small, it is deleted and its
+space is given to an adjacent window.  The minimum size is specified by
+the variables <code>window-min-height</code> and <code>window-min-width</code>.
+
+   <p>The command <kbd>C-x -</kbd> (<code>shrink-window-if-larger-than-buffer</code>)
+reduces the height of the selected window, if it is taller than
+necessary to show the whole text of the buffer it is displaying.  It
+gives the extra lines to other windows in the frame.
+
+   <p>You can also use <kbd>C-x +</kbd> (<code>balance-windows</code>) to even out the
+heights of all the windows in the selected frame.
+
+   </body></html>
+

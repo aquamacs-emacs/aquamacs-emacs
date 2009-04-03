@@ -1,0 +1,121 @@
+#!/bin/sh
+
+# copies 
+
+# usage: make-xpm source-dir dest-dir
+
+#cd "/Applications/Aquamacs Emacs.app/Contents/Resources/etc/images/"
+
+#P="/Users/dr/Projects/Aquamacs/Icons"
+#cp -r ~/Projects/Aquamacs/Icons/*.png .
+
+EXT=png
+
+P=$1
+
+pushd "$P"
+FILES=`ls *.$EXT *.png`
+#FILES=`ls copy.*`
+popd
+
+cd "$2"
+
+
+BGCOL='#EAEAEA'
+
+# so ImageMagick can find the freetype library
+# text looks extra-ugly otherwise
+export DYLD_LIBRARY_PATH="/usr/local/lib"
+
+# Emacs doesn't seem to support masks for PNGs, not even bitmasks
+
+for file in $FILES
+do
+
+    LABEL=`awk "/$file/ {print \\$2;}" $P/labels.txt`
+    
+#    BASE=`basename "$file" \.tif`
+    BASE=`basename "$file" \.png` 
+
+    # create PNG
+
+# this is less than ideal
+# but Emacs doesn't understand alpha
+
+# huge mess following:
+
+# convert "$P/$file" -channel matte -threshold 99% -negate -separate mask.png
+# composite -size 500x500 xc:'#BBBBBB'  -compose copy  "$P/$file" blue.png
+# composite  "$P/$file" -compose atop blue.png aliased.png
+# # now apply the mask
+# convert mask.png -fill black -opaque black mask2.png
+# #convert mask2.png -blur 6x4 mask3.png
+# composite -compose CopyOpacity mask.png aliased.png p.png
+# composite -compose atop p.png mask2.png p2.png
+# convert p2.png -resize x32 +antialias "$file"
+
+# convert "$P/$file" -channel matte -threshold 99% -negate -separate mask.png
+# convert mask.png -fill '#AAAAAA' -opaque black mask2.png
+# composite "$P/$file" -compose darken mask2.png -resize x32 "$BASE".xpm
+
+# convert "$P/$file" -channel matte -negate -separate mask.png
+# convert mask.png -channel matte -modulate 20 -threshold 50% mask2.png 
+# composite -compose CopyOpacity mask.png "$P/$file" $BASE.xpm
+
+#convert  "$P/$file" -resize x32 $file
+convert "$P/$file"  -resize x28 -matte -bordercolor none -border 2 $file
+
+
+#convert p2.png -resize x32  /Applications/Aquamacs\ Emacs.app/Contents/Resources/etc/images/print.png
+
+done
+exit
+rm mask*.png blue.png p.png p2.png aliased.png
+
+
+    # resize source file
+    convert "$P/$file"  -resize x32 small.miff
+    
+    echo $LABEL
+    LABEL=""
+    # add text label
+    montage -fill black -font $P/LucidaGrande.ttf -pointsize 10 -geometry +0+0 -label "${LABEL}" -background transparent small.miff  small-text.png
+
+    # draw same-size background
+    composite -size 48x48 xc:$BGCOL -compose copy small-text.png  mask.miff
+    # and compose the two so that alpha blended pixels (<100% transp) are mixed
+    composite small-text.png -compose atop  mask.miff   apmask.miff 
+    # convert to gif so we can pick the transparency
+    convert apmask.miff -transparent $BGCOL trans.gif
+    # and convert to target format
+    convert trans.gif  ${BASE}.xpm
+
+    convert small.miff -modulate 60 small-dark.miff
+    
+    montage -fill black -font $P/LucidaGrande.ttf -pointsize 10 -geometry +0+0 -label "${LABEL}" -background transparent small-dark.miff  small-text.png
+
+    composite -size 48x48 xc:$BGCOL -compose copy small-text.png  mask.miff
+    composite small-text.png -compose atop mask.miff apmask.miff
+    composite small-text.png -compose atop  apmask.miff   apmask.miff
+    # convert to gif so we can set 
+    convert apmask.miff -transparent $BGCOL trans.gif
+    convert trans.gif  ${BASE}_sel.xpm
+
+
+# produce greyed-out version
+
+    convert small.miff -modulate 100,40 small-grey.miff
+
+    montage -fill black -font $P/LucidaGrande.ttf -pointsize 10 -geometry +0+0 -label "${LABEL}" -background transparent small-grey.miff  small-text.png
+    composite -size 48x48 xc:$BGCOL -compose copy small-text.png  mask.miff
+    composite small-text.png -compose atop  mask.miff   apmask.miff
+
+    # convert to gif so we can set 
+    convert apmask.miff -transparent $BGCOL trans.gif
+    convert trans.gif  ${BASE}_dis.xpm
+ 
+    #convert "mask.$file" -resize x28  `basename "$file" \.png`.xpm
+done 
+rm apmask.miff mask.miff trans.gif small.miff *.png
+ 
+#   -mattecolor '#EEEEEE' 

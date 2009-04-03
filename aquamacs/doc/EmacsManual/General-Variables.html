@@ -1,0 +1,170 @@
+<html lang="en">
+<head>
+<title>General Variables</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="General Variables">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="General%20Variables">General Variables</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Misc-Variables.html#Misc%20Variables">Misc Variables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Environment.html#Environment">Environment</a>
+<hr><br>
+</div>
+
+<h3 class="appendixsubsec">General Variables</h4>
+
+<p>Here is an alphabetical list of specific environment variables that
+have special meanings in Emacs, giving the name of each variable and
+its meaning.  Most of these variables are also used by some other
+programs.  Emacs does not require any of these environment variables
+to be set, but it uses their values if they are set.
+
+     <dl>
+<dt><code>CDPATH</code>
+     <dd>Used by the <code>cd</code> command to search for the directory you specify,
+when you specify a relative directory name. 
+<br><dt><code>EMACS_UNIBYTE</code>
+     <dd>Defining this environment variable with a nonempty value directs Emacs
+to do almost everything with single-byte buffers and strings.  It is
+equivalent to using the <code>--unibyte</code> command-line option on each
+invocation.  See <a href="Initial-Options.html#Initial%20Options">Initial Options</a>. 
+<br><dt><code>EMACSDATA</code>
+     <dd>Directory for the architecture-independent files that come with Emacs. 
+This is used to initialize the Lisp variable <code>data-directory</code>. 
+<br><dt><code>EMACSDOC</code>
+     <dd>Directory for the documentation string file,
+<code>DOC-</code><var>emacsversion</var><code></code>.  This is used to initialize the Lisp
+variable <code>doc-directory</code>. 
+<br><dt><code>EMACSLOADPATH</code>
+     <dd>A colon-separated list of directories<a rel="footnote" href="#fn-1"><sup>1</sup></a>
+to search for Emacs Lisp files--used to initialize <code>load-path</code>. 
+<br><dt><code>EMACSPATH</code>
+     <dd>A colon-separated list of directories to search for executable
+files--used to initialize <code>exec-path</code>. 
+<br><dt><code>ESHELL</code>
+     <dd>Used for shell-mode to override the <code>SHELL</code> environment variable. 
+<br><dt><code>HISTFILE</code>
+     <dd>The name of the file that shell commands are saved in between logins. 
+This variable defaults to <code>~/.bash_history</code> if you use Bash, to
+<code>~/.sh_history</code> if you use ksh, and to <code>~/.history</code>
+otherwise. 
+<br><dt><code>HOME</code>
+     <dd>The location of the user's files in the directory tree; used for
+expansion of file names starting with a tilde (<code>~</code>).  On MS-DOS, it
+defaults to the directory from which Emacs was started, with <code>/bin</code>
+removed from the end if it was present.  On Windows, the default value
+of <code>HOME</code> is <code>C:/</code>, the root directory of drive <code>C:</code>. 
+<br><dt><code>HOSTNAME</code>
+     <dd>The name of the machine that Emacs is running on. 
+<br><dt><code>INCPATH</code>
+     <dd>A colon-separated list of directories.  Used by the <code>complete</code> package
+to search for files. 
+<br><dt><code>INFOPATH</code>
+     <dd>A colon-separated list of directories in which to search for Info files. 
+<br><dt><code>LC_ALL</code>
+     <dd><dt><code>LC_COLLATE</code>
+     <dd><dt><code>LC_CTYPE</code>
+     <dd><dt><code>LC_MESSAGES</code>
+     <dd><dt><code>LC_MONETARY</code>
+     <dd><dt><code>LC_NUMERIC</code>
+     <dd><dt><code>LC_TIME</code>
+     <dd><dt><code>LANG</code>
+     <dd>The user's preferred locale.  The locale has six categories, specified
+by the environment variables <code>LC_COLLATE</code> for sorting,
+<code>LC_CTYPE</code> for character encoding, <code>LC_MESSAGES</code> for system
+messages, <code>LC_MONETARY</code> for monetary formats, <code>LC_NUMERIC</code> for
+numbers, and <code>LC_TIME</code> for dates and times.  If one of these
+variables is not set, the category defaults to the value of the
+<code>LANG</code> environment variable, or to the default <code>C</code> locale if
+<code>LANG</code> is not set.  But if <code>LC_ALL</code> is specified, it overrides
+the settings of all the other locale environment variables.
+
+     <p>The value of the LC_CTYPE category is
+matched against entries in <code>locale-language-names</code>,
+<code>locale-charset-language-names</code>, and
+<code>locale-preferred-coding-systems</code>, to select a default language
+environment and coding system.  See <a href="Language-Environments.html#Language%20Environments">Language Environments</a>. 
+<br><dt><code>LOGNAME</code>
+     <dd>The user's login name.  See also <code>USER</code>. 
+<br><dt><code>MAIL</code>
+     <dd>The name of the user's system mail inbox. 
+<br><dt><code>MAILRC</code>
+     <dd>Name of file containing mail aliases.  (The default is
+<code>~/.mailrc</code>.) 
+<br><dt><code>MH</code>
+     <dd>Name of setup file for the mh system.  (The default is <code>~/.mh_profile</code>.) 
+<br><dt><code>NAME</code>
+     <dd>The real-world name of the user. 
+<br><dt><code>NNTPSERVER</code>
+     <dd>The name of the news server.  Used by the mh and Gnus packages. 
+<br><dt><code>ORGANIZATION</code>
+     <dd>The name of the organization to which you belong.  Used for setting the
+`Organization:' header in your posts from the Gnus package. 
+<br><dt><code>PATH</code>
+     <dd>A colon-separated list of directories in which executables reside.  This
+is used to initialize the Emacs Lisp variable <code>exec-path</code>. 
+<br><dt><code>PWD</code>
+     <dd>If set, this should be the default directory when Emacs was started. 
+<br><dt><code>REPLYTO</code>
+     <dd>If set, this specifies an initial value for the variable
+<code>mail-default-reply-to</code>.  See <a href="Mail-Headers.html#Mail%20Headers">Mail Headers</a>. 
+<br><dt><code>SAVEDIR</code>
+     <dd>The name of a directory in which news articles are saved by default. 
+Used by the Gnus package. 
+<br><dt><code>SHELL</code>
+     <dd>The name of an interpreter used to parse and execute programs run from
+inside Emacs. 
+<br><dt><code>TERM</code>
+     <dd>The type of the terminal that Emacs is using.  This variable must be
+set unless Emacs is run in batch mode.  On MS-DOS, it defaults to
+<code>internal</code>, which specifies a built-in terminal emulation that
+handles the machine's own display.  If the value of <code>TERM</code> indicates
+that Emacs runs in non-windowed mode from <code>xterm</code> or a similar
+terminal emulator, the background mode defaults to <code>light</code>, and
+Emacs will choose colors that are appropriate for a light background. 
+<br><dt><code>TERMCAP</code>
+     <dd>The name of the termcap library file describing how to program the
+terminal specified by the <code>TERM</code> variable.  This defaults to
+<code>/etc/termcap</code>. 
+<br><dt><code>TMPDIR</code>
+     <dd>Used by the Emerge package as a prefix for temporary files. 
+<br><dt><code>TZ</code>
+     <dd>This specifies the current time zone and possibly also daylight
+saving time information.  On MS-DOS, if <code>TZ</code> is not set in the
+environment when Emacs starts, Emacs defines a default value as
+appropriate for the country code returned by DOS.  On MS-Windows, Emacs
+does not use <code>TZ</code> at all. 
+<br><dt><code>USER</code>
+     <dd>The user's login name.  See also <code>LOGNAME</code>.  On MS-DOS, this
+defaults to <code>root</code>. 
+<br><dt><code>VERSION_CONTROL</code>
+     <dd>Used to initialize the <code>version-control</code> variable (see <a href="Backup-Names.html#Backup%20Names">Backup Names</a>). 
+</dl>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4>
+<ol type="1">
+<li><a name="fn-1"></a>
+<p>
+Here and below, whenever we say ``colon-separated list of directories'',
+it pertains to Unix and GNU/Linux systems.  On MS-DOS and MS-Windows,
+the directories are separated by semi-colons instead, since DOS/Windows
+file names might include a colon after a drive letter.</p>
+
+   </ol><hr></div>
+
+   </body></html>
+

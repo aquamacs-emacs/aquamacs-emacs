@@ -1,0 +1,96 @@
+<html lang="en">
+<head>
+<title>movemail and POP</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="movemail and POP">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Movemail">Movemail</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Rmail-Rot13.html#Rmail%20Rot13">Rmail Rot13</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Rmail.html#Rmail">Rmail</a>
+<hr><br>
+</div>
+
+<h3 class="section"><code>movemail</code> and POP</h3>
+
+<p>When getting new mail, Rmail first copies the new mail from the inbox
+file to the Rmail file; then it saves the Rmail file; then it truncates
+the inbox file.  This way, a system crash may cause duplication of mail
+between the inbox and the Rmail file, but cannot lose mail.  If
+<code>rmail-preserve-inbox</code> is non-<code>nil</code>, then Rmail will copy new
+mail from the inbox file to the Rmail file without truncating the inbox
+file.  You may wish to set this, for example, on a portable computer you
+use to check your mail via POP while traveling, so that your mail will
+remain on the server and you can save it later on your workstation.
+
+   <p>In some cases, Rmail copies the new mail from the inbox file
+indirectly.  First it runs the <code>movemail</code> program to move the mail
+from the inbox to an intermediate file called
+<code>~/.newmail-</code><var>inboxname</var><code></code>.  Then Rmail merges the new mail from
+that file, saves the Rmail file, and only then deletes the intermediate
+file.  If there is a crash at the wrong time, this file continues to
+exist, and Rmail will use it again the next time it gets new mail from
+that inbox.
+
+   <p>If Rmail is unable to convert the data in
+<code>~/.newmail-</code><var>inboxname</var><code></code> into Babyl format, it renames the file
+to <code>~/RMAILOSE.</code><var>n</var><code></code> (<var>n</var> is an integer chosen to make the
+name unique) so that Rmail will not have trouble with the data again. 
+You should look at the file, find whatever message confuses Rmail
+(probably one that includes the control-underscore character, octal code
+037), and delete it.  Then you can use <kbd>1 g</kbd> to get new mail from
+the corrected file.
+
+   <p>Some sites use a method called POP for accessing users' inbox data
+instead of storing the data in inbox files.  <code>movemail</code> can work
+with POP if you compile it with the macro <code>MAIL_USE_POP</code> defined. 
+(You can achieve that by specifying <code>--with-pop</code> when you run
+<code>configure</code> during the installation of Emacs.) 
+<code>movemail</code> only works with POP3, not with older
+versions of POP.
+
+   <p>Assuming you have compiled and installed <code>movemail</code>
+appropriately, you can specify a POP inbox by using a "file name" of
+the form <code>po:</code><var>username</var><code></code>, in the inbox list of an Rmail file. 
+<code>movemail</code> handles such a name by opening a connection to the POP
+server.  The <code>MAILHOST</code> environment variable specifies the machine
+to look for the server on; alternatively, you can specify the POP server
+host name as part of the mailbox name using the syntax
+<code>po:</code><var>username</var><code>:</code><var>hostname</var><code></code>.
+
+   <p>Accessing mail via POP may require a password.  If the variable
+<code>rmail-pop-password</code> is non-<code>nil</code>, it specifies the password
+to use for POP.  Alternatively, if <code>rmail-pop-password-required</code> is
+non-<code>nil</code>, then Rmail asks you for the password to use.
+
+   <p>If you need to pass additional command-line flags to <code>movemail</code>,
+set the variable <code>rmail-movemail-flags</code> a list of the flags you
+wish to use.  Do not use this variable to pass the <code>-p</code> flag to
+preserve your inbox contents; use <code>rmail-preserve-inbox</code> instead.
+
+   <p>The <code>movemail</code> program installed at your site may support
+Kerberos authentication.  If it is
+supported, it is used by default whenever you attempt to retrieve
+POP mail when <code>rmail-pop-password</code> and
+<code>rmail-pop-password-required</code> are unset.
+
+   <p>Some POP servers store messages in reverse order.  If your server does
+this, and you would rather read your mail in the order in which it was
+received, you can tell <code>movemail</code> to reverse the order of
+downloaded messages by adding the <code>-r</code> flag to
+<code>rmail-movemail-flags</code>.
+
+   </body></html>
+

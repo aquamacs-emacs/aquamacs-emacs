@@ -1,0 +1,95 @@
+<html lang="en">
+<head>
+<title>TeX Editing Commands</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="TeX Editing Commands">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="TeX%20Editing">TeX Editing</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="LaTeX-Editing.html#LaTeX%20Editing">LaTeX Editing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="TeX-Mode.html#TeX%20Mode">TeX Mode</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">TeX Editing Commands</h4>
+
+<p>Here are the special commands provided in TeX mode for editing the
+text of the file.
+
+     <dl>
+<dt><kbd>"</kbd>
+     <dd>Insert, according to context, either <code>``</code> or <code>"</code> or
+<code>''</code> (<code>tex-insert-quote</code>). 
+<br><dt><kbd>C-j</kbd>
+     <dd>Insert a paragraph break (two newlines) and check the previous
+paragraph for unbalanced braces or dollar signs
+(<code>tex-terminate-paragraph</code>). 
+<br><dt><kbd>M-x tex-validate-region</kbd>
+     <dd>Check each paragraph in the region for unbalanced braces or dollar signs. 
+<br><dt><kbd>C-c {</kbd>
+     <dd>Insert <code>{}</code> and position point between them (<code>tex-insert-braces</code>). 
+<br><dt><kbd>C-c }</kbd>
+     <dd>Move forward past the next unmatched close brace (<code>up-list</code>). 
+</dl>
+
+   <p>In TeX, the character <code>"</code> is not normally used; we use
+<code>``</code> to start a quotation and <code>''</code> to end one.  To make
+editing easier under this formatting convention, TeX mode overrides
+the normal meaning of the key <kbd>"</kbd> with a command that inserts a pair
+of single-quotes or backquotes (<code>tex-insert-quote</code>).  To be
+precise, this command inserts <code>``</code> after whitespace or an open
+brace, <code>"</code> after a backslash, and <code>''</code> after any other
+character.
+
+   <p>If you need the character <code>"</code> itself in unusual contexts, use
+<kbd>C-q</kbd> to insert it.  Also, <kbd>"</kbd> with a numeric argument always
+inserts that number of <code>"</code> characters.  You can turn off the
+feature of <kbd>"</kbd> expansion by eliminating that binding in the local
+map (see <a href="Key-Bindings.html#Key%20Bindings">Key Bindings</a>).
+
+   <p>In TeX mode, <code>$</code> has a special syntax code which attempts to
+understand the way TeX math mode delimiters match.  When you insert a
+<code>$</code> that is meant to exit math mode, the position of the matching
+<code>$</code> that entered math mode is displayed for a second.  This is the
+same feature that displays the open brace that matches a close brace that
+is inserted.  However, there is no way to tell whether a <code>$</code> enters
+math mode or leaves it; so when you insert a <code>$</code> that enters math
+mode, the previous <code>$</code> position is shown as if it were a match, even
+though they are actually unrelated.
+
+   <p>TeX uses braces as delimiters that must match.  Some users prefer
+to keep braces balanced at all times, rather than inserting them
+singly.  Use <kbd>C-c {</kbd> (<code>tex-insert-braces</code>) to insert a pair of
+braces.  It leaves point between the two braces so you can insert the
+text that belongs inside.  Afterward, use the command <kbd>C-c }</kbd>
+(<code>up-list</code>) to move forward past the close brace.
+
+   <p>There are two commands for checking the matching of braces.  <kbd>C-j</kbd>
+(<code>tex-terminate-paragraph</code>) checks the paragraph before point, and
+inserts two newlines to start a new paragraph.  It outputs a message in
+the echo area if any mismatch is found.  <kbd>M-x tex-validate-region</kbd>
+checks a region, paragraph by paragraph.  The errors are listed in the
+<code>*Occur*</code> buffer, and you can use <kbd>C-c C-c</kbd> or <kbd>Mouse-2</kbd> in
+that buffer to go to a particular mismatch.
+
+   <p>Note that Emacs commands count square brackets and parentheses in
+TeX mode, not just braces.  This is not strictly correct for the
+purpose of checking TeX syntax.  However, parentheses and square
+brackets are likely to be used in text as matching delimiters and it is
+useful for the various motion commands and automatic match display to
+work with them.
+
+   </body></html>
+

@@ -1,0 +1,182 @@
+<html lang="en">
+<head>
+<title>Init File Examples</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Init File Examples">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Init%20Examples">Init Examples</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Terminal-Init.html#Terminal%20Init">Terminal Init</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Init-Syntax.html#Init%20Syntax">Init Syntax</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Init-File.html#Init%20File">Init File</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Init File Examples</h4>
+
+<p>Here are some examples of doing certain commonly desired things with
+Lisp expressions:
+
+     <ul>
+<li>Make &lt;TAB&gt; in C mode just insert a tab if point is in the middle of a
+line.
+
+     <pre class="example">          (setq c-tab-always-indent nil)
+          </pre>
+
+     <p>Here we have a variable whose value is normally <code>t</code> for `true'
+and the alternative is <code>nil</code> for `false'.
+
+     </p><li>Make searches case sensitive by default (in all buffers that do not
+override this).
+
+     <pre class="example">          (setq-default case-fold-search nil)
+          </pre>
+
+     <p>This sets the default value, which is effective in all buffers that do
+not have local values for the variable.  Setting <code>case-fold-search</code>
+with <code>setq</code> affects only the current buffer's local value, which
+is not what you probably want to do in an init file.
+
+     </p><li>Specify your own email address, if Emacs can't figure it out correctly.
+
+     <pre class="example">          (setq user-mail-address "coon@yoyodyne.com")
+          </pre>
+
+     <p>Various Emacs packages that need your own email address use the value of
+<code>user-mail-address</code>.
+
+     </p><li>Make Text mode the default mode for new buffers.
+
+     <pre class="example">          (setq default-major-mode 'text-mode)
+          </pre>
+
+     <p>Note that <code>text-mode</code> is used because it is the command for
+entering Text mode.  The single-quote before it makes the symbol a
+constant; otherwise, <code>text-mode</code> would be treated as a variable
+name.
+
+     </p><li>Set up defaults for the Latin-1 character set
+which supports most of the languages of Western Europe.
+
+     <pre class="example">          (set-language-environment "Latin-1")
+          </pre>
+
+     <li>Turn on Auto Fill mode automatically in Text mode and related modes.
+
+     <pre class="example">          (add-hook 'text-mode-hook
+            '(lambda () (auto-fill-mode 1)))
+          </pre>
+
+     <p>This shows how to add a hook function to a normal hook variable
+(see <a href="Hooks.html#Hooks">Hooks</a>).  The function we supply is a list starting with
+<code>lambda</code>, with a single-quote in front of it to make it a list
+constant rather than an expression.
+
+     <p>It's beyond the scope of this manual to explain Lisp functions, but for
+this example it is enough to know that the effect is to execute
+<code>(auto-fill-mode 1)</code> when Text mode is entered.  You can replace
+that with any other expression that you like, or with several
+expressions in a row.
+
+     <p>Emacs comes with a function named <code>turn-on-auto-fill</code> whose
+definition is <code>(lambda () (auto-fill-mode 1))</code>.  Thus, a simpler
+way to write the above example is as follows:
+
+     <pre class="example">          (add-hook 'text-mode-hook 'turn-on-auto-fill)
+          </pre>
+
+     </p><li>Load the installed Lisp library named <code>foo</code> (actually a file
+<code>foo.elc</code> or <code>foo.el</code> in a standard Emacs directory).
+
+     <pre class="example">          (load "foo")
+          </pre>
+
+     <p>When the argument to <code>load</code> is a relative file name, not starting
+with <code>/</code> or <code>~</code>, <code>load</code> searches the directories in
+<code>load-path</code> (see <a href="Lisp-Libraries.html#Lisp%20Libraries">Lisp Libraries</a>).
+
+     </p><li>Load the compiled Lisp file <code>foo.elc</code> from your home directory.
+
+     <pre class="example">          (load "~/foo.elc")
+          </pre>
+
+     <p>Here an absolute file name is used, so no searching is done.
+
+     </p><li>Tell Emacs to find the definition for the function <code>myfunction</code>
+by loading a Lisp library named <code>mypackage</code> (i.e. a file
+<code>mypackage.elc</code> or <code>mypackage.el</code>):
+
+     <pre class="example">          (autoload 'myfunction "mypackage" "Do what I say." t)
+          </pre>
+
+     <p>Here the string <code>"Do what I say."</code> is the function's
+documentation string.  You specify it in the <code>autoload</code>
+definition so it will be available for help commands even when the
+package is not loaded.  The last argument, <code>t</code>, indicates that
+this function is interactive; that is, it can be invoked interactively
+by typing <kbd>M-x myfunction &lt;RET&gt;</kbd> or by binding it to a key. 
+If the function is not interactive, omit the <code>t</code> or use
+<code>nil</code>.
+
+     </p><li>Rebind the key <kbd>C-x l</kbd> to run the function <code>make-symbolic-link</code>.
+
+     <pre class="example">          (global-set-key "\C-xl" 'make-symbolic-link)
+          </pre>
+
+     <p>or
+
+     <pre class="example">          (define-key global-map "\C-xl" 'make-symbolic-link)
+          </pre>
+
+     <p>Note once again the single-quote used to refer to the symbol
+<code>make-symbolic-link</code> instead of its value as a variable.
+
+     </p><li>Do the same thing for Lisp mode only.
+
+     <pre class="example">          (define-key lisp-mode-map "\C-xl" 'make-symbolic-link)
+          </pre>
+
+     <li>Redefine all keys which now run <code>next-line</code> in Fundamental mode
+so that they run <code>forward-line</code> instead.
+
+     <pre class="example">          (substitute-key-definition 'next-line 'forward-line
+                                     global-map)
+          </pre>
+
+     <li>Make <kbd>C-x C-v</kbd> undefined.
+
+     <pre class="example">          (global-unset-key "\C-x\C-v")
+          </pre>
+
+     <p>One reason to undefine a key is so that you can make it a prefix. 
+Simply defining <kbd>C-x C-v </kbd><var>anything</var><kbd></kbd> will make <kbd>C-x C-v</kbd> a
+prefix, but <kbd>C-x C-v</kbd> must first be freed of its usual non-prefix
+definition.
+
+     </p><li>Make <code>$</code> have the syntax of punctuation in Text mode. 
+Note the use of a character constant for <code>$</code>.
+
+     <pre class="example">          (modify-syntax-entry ?\$ "." text-mode-syntax-table)
+          </pre>
+
+     <li>Enable the use of the command <code>narrow-to-region</code> without confirmation.
+
+     <pre class="example">          (put 'narrow-to-region 'disabled nil)
+          </pre>
+     </ul>
+
+   </body></html>
+

@@ -1,0 +1,71 @@
+<html lang="en">
+<head>
+<title>Emergency Escape</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Emergency Escape">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Emergency%20Escape">Emergency Escape</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Total-Frustration.html#Total%20Frustration">Total Frustration</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="After-a-Crash.html#After%20a%20Crash">After a Crash</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Lossage.html#Lossage">Lossage</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Emergency Escape</h4>
+
+<p>Because at times there have been bugs causing Emacs to loop without
+checking <code>quit-flag</code>, a special feature causes Emacs to be suspended
+immediately if you type a second <kbd>C-g</kbd> while the flag is already set,
+so you can always get out of GNU Emacs.  Normally Emacs recognizes and
+clears <code>quit-flag</code> (and quits!) quickly enough to prevent this from
+happening.  (On MS-DOS and compatible systems, type <kbd>C-&lt;BREAK&gt;</kbd>
+twice.)
+
+   <p>When you resume Emacs after a suspension caused by multiple <kbd>C-g</kbd>, it
+asks two questions before going back to what it had been doing:
+
+<pre class="example">     Auto-save? (y or n)
+     Abort (and dump core)? (y or n)
+     </pre>
+
+<p>Answer each one with <kbd>y</kbd> or <kbd>n</kbd> followed by &lt;RET&gt;.
+
+   <p>Saying <kbd>y</kbd> to <code>Auto-save?</code> causes immediate auto-saving of all
+modified buffers in which auto-saving is enabled.
+
+   <p>Saying <kbd>y</kbd> to <code>Abort (and dump core)?</code> causes an illegal instruction to be
+executed, dumping core.  This is to enable a wizard to figure out why Emacs
+was failing to quit in the first place.  Execution does not continue
+after a core dump.  If you answer <kbd>n</kbd>, execution does continue.  With
+luck, GNU Emacs will ultimately check <code>quit-flag</code> and quit normally. 
+If not, and you type another <kbd>C-g</kbd>, it is suspended again.
+
+   <p>If Emacs is not really hung, just slow, you may invoke the double
+<kbd>C-g</kbd> feature without really meaning to.  Then just resume and answer
+<kbd>n</kbd> to both questions, and you will arrive at your former state. 
+Presumably the quit you requested will happen soon.
+
+   <p>The double <kbd>C-g</kbd> feature is turned off when Emacs is running under
+the X Window System, since you can use the window manager to kill Emacs
+or to create another window and run another program.
+
+   <p>On MS-DOS and compatible systems, the emergency escape feature is
+sometimes unavailable, even if you press <kbd>C-&lt;BREAK&gt;</kbd> twice, when
+some system call (MS-DOS or BIOS) hangs, or when Emacs is stuck in a
+very tight endless loop (in C code, <strong>not</strong> in Lisp code).
+
+   </body></html>
+

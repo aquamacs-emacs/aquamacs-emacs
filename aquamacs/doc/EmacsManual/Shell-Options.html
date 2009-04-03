@@ -1,0 +1,77 @@
+<html lang="en">
+<head>
+<title>Shell Mode Options</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Shell Mode Options">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Shell%20Options">Shell Options</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Terminal-emulator.html#Terminal%20emulator">Terminal emulator</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Directory-Tracking.html#Directory%20Tracking">Directory Tracking</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Shell.html#Shell">Shell</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Shell Mode Options</h4>
+
+<p>If the variable <code>comint-scroll-to-bottom-on-input</code> is
+non-<code>nil</code>, insertion and yank commands scroll the selected window
+to the bottom before inserting.
+
+   <p>If <code>comint-scroll-show-maximum-output</code> is non-<code>nil</code>, then
+scrolling due to the arrival of output tries to place the last line of
+text at the bottom line of the window, so as to show as much useful
+text as possible.  (This mimics the scrolling behavior of many
+terminals.)  The default is <code>nil</code>.
+
+   <p>By setting <code>comint-scroll-to-bottom-on-output</code>, you can opt for
+having point jump to the end of the buffer whenever output arrives--no
+matter where in the buffer point was before.  If the value is
+<code>this</code>, point jumps in the selected window.  If the value is
+<code>all</code>, point jumps in each window that shows the Comint buffer.  If
+the value is <code>other</code>, point jumps in all nonselected windows that
+show the current buffer.  The default value is <code>nil</code>, which means
+point does not jump to the end.
+
+   <p>The variable <code>comint-input-ignoredups</code> controls whether successive
+identical inputs are stored in the input history.  A non-<code>nil</code>
+value means to omit an input that is the same as the previous input. 
+The default is <code>nil</code>, which means to store each input even if it is
+equal to the previous input.
+
+   <p>Three variables customize file name completion.  The variable
+<code>comint-completion-addsuffix</code> controls whether completion inserts a
+space or a slash to indicate a fully completed file or directory name
+(non-<code>nil</code> means do insert a space or slash). 
+<code>comint-completion-recexact</code>, if non-<code>nil</code>, directs &lt;TAB&gt;
+to choose the shortest possible completion if the usual Emacs completion
+algorithm cannot add even a single character. 
+<code>comint-completion-autolist</code>, if non-<code>nil</code>, says to list all
+the possible completions whenever completion is not exact.
+
+   <p>Command completion normally considers only executable files. 
+If you set <code>shell-completion-execonly</code> to <code>nil</code>,
+it considers nonexecutable files as well.
+
+   <p>You can configure the behavior of <code>pushd</code>.  Variables control
+whether <code>pushd</code> behaves like <code>cd</code> if no argument is given
+(<code>shell-pushd-tohome</code>), pop rather than rotate with a numeric
+argument (<code>shell-pushd-dextract</code>), and only add directories to the
+directory stack if they are not already on it
+(<code>shell-pushd-dunique</code>).  The values you choose should match the
+underlying shell, of course.
+
+   </body></html>
+

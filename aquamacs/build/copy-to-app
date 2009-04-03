@@ -1,0 +1,153 @@
+#!/bin/sh
+
+# installs files into Emacs.app to make it Aquamacs
+
+# this takes two arguments   
+
+# project-dir (Aquamacs CVS)
+# destination .app bundle, e.g. /Applications/Emacs.app
+
+# you can also give -n as first argument if you do not want to compile the .el scripts.
+
+
+if [ "$1" == "-n" ]; then
+    # do NOT compile the scripts
+     
+    dest=$3
+    projdir=$2
+else 
+    compile=1
+    dest=$2
+    projdir=$1
+
+fi
+
+
+if [ ! $dest ]; then
+
+    dest="/Applications/Aquamacs Emacs.app"
+
+fi
+
+if [ ! $projdir ]; then
+
+    projdir="$HOME/Projects/Aquamacs/aquamacs"
+
+fi
+
+oldem="$dest/Contents/MacOS/Emacs"
+
+em="$dest/Contents/MacOS/Aquamacs Emacs"
+
+echo "Installing in " $dest
+cd "$dest" || exit 1
+
+
+rm -rf /tmp/backup.site-lisp
+mv  "Contents/Resources/site-lisp" /tmp/backup.site-lisp
+
+mkdir Contents/Resources/site-lisp 2>/dev/null
+mkdir Contents/Resources/site-lisp/oneonone 2>/dev/null
+mkdir Contents/Resources/site-lisp/tabbar 2>/dev/null
+mkdir Contents/Resources/site-lisp/macosx 2>/dev/null
+mkdir Contents/Resources/site-lisp/edit-modes 2>/dev/null
+
+cd Contents/Resources
+
+tar xzf "$projdir/src/commandline-tool/Aquamacs Command Line Tool.mpkg.tgz"
+
+rm -rf "Aquamacs Help" "Emacs Manual" "Emacs Lisp Reference"
+
+cp -pr "$projdir/doc/AquamacsHelp" "Aquamacs Help"
+rm "Aquamacs Help/Aquamacs* idx"  2>/dev/null
+
+tar xzf "$projdir/doc/EmacsManual.tgz"
+rm "EmacsManual/Emacs* idx"   2>/dev/null
+mv "EmacsManual" "Emacs Manual"
+
+tar xzf "$projdir/doc/EmacsLispReference.tgz"
+rm "EmacsLispReference/Emacs* idx" 2>/dev/null
+mv "EmacsLispReference" "Emacs Lisp Reference"
+
+ln -s "Emacs Lisp Reference" elisp  # needed because there are crossrefs
+
+# these links allow the Help Indexer to index everything
+# just indexing every book separately will not make the Help menu work
+cd "Aquamacs Help"
+ln -s ../"Emacs Lisp Reference" .
+ln -s ../"Emacs Manual" .
+cd ..
+
+"/Developer/Applications/Utilities/Help Indexer.app/Contents/MacOS/Help Indexer" Aquamacs\ Help -PantherIndexing NO -Tokenizer 1 -ShowProgress YES -UseRemoteRoot NO -GenerateSummaries YES -LogStyle 1
+# no index for the other books
+
+cd ../../
+#cp -pr "$projdir/doc/EmacsManual" "Contents/Resources/Emacs Manual"
+cp -pr "$projdir/src/Emacs.icns" "Contents/Resources/Emacs.icns"
+
+cp -pr "$projdir/src/etc/aquamacs-splash-screen.jpg" "Contents/Resources/etc/"
+
+cp -pr "$projdir/src/Info.plist" Contents/
+ 
+# update this
+
+#AQUAMACS_VERSION=`emacs -batch -l $projdir/src/site-lisp/site-start.el -eval '(princ aquamacs-version)'`
+AQUAMACS_VERSION=`perl -ne 'print $1 if (/defvar *aquamacs-version *\"(.*?)\"/);print $1 if (/defvar *aquamacs-minor-version *\"(.*?)\"/);' < $projdir/src/site-lisp/site-start.el`
+
+# use short name for Application menu.  (i.e. localized name)
+# unlocalized name remains (for LaunchServices)
+echo "CFBundleName = \"Aquamacs\";" >Contents/Resources/English.lproj/InfoPlist.strings
+echo "CFBundleShortVersionString = \"Aquamacs $AQUAMACS_VERSION, GNU Emacs 22\";" >>Contents/Resources/English.lproj/InfoPlist.strings
+echo "CFBundleGetInfoString = \"Aquamacs $AQUAMACS_VERSION, Copyright (C) 2009 by David Reitter, Aquamacs Project; GNU Emacs 22, Copyright (C) 2009 Free Software Foundation, Inc.\";" >>Contents/Resources/English.lproj/InfoPlist.strings
+
+# write BundleVersions directly into Info.plist
+# because LaunchServices fails to pick it up otherwise
+# and the version is important (to always start the latest version)
+export AQUAMACS_VERSION
+perl -i -pe 's/<!--\s*CFBundleVersion\s*-->/        <key>CFBundleVersion<\/key>\n        <string>$ENV{AQUAMACS_VERSION}<\/string>/' Contents/Info.plist
+
+cp -pr "$projdir/src/emacs-document.icns" Contents/Resources/
+
+cp "$projdir/Icons/build"/*.png Contents/Resources/etc/images/
+
+# can't produce icons without ImageMagick / freetype in build env.
+# so we won't do that here.
+# ${AQUAMACS_ROOT}/Icons/make-xpm ${AQUAMACS_ROOT}/Icons ${EMACS_ROOT}/etc/images 
+
+cp -Rp "$projdir"/src/site-lisp/*.el Contents/Resources/site-lisp/
+
+cp -Rp "$projdir"/src/site-lisp/edit-modes/* Contents/Resources/site-lisp/edit-modes/
+ 
+
+cp -Rp "$projdir"/src/site-lisp/macosx/*.el Contents/Resources/site-lisp/macosx/
+cp -Rp "$projdir"/src/site-lisp/oneonone/*.el Contents/Resources/site-lisp/oneonone/
+cp -Rp "$projdir"/src/site-lisp/tabbar/*.el Contents/Resources/site-lisp/tabbar/
+cp -Rp "$projdir"/src/site-lisp/tabbar/*.png Contents/Resources/site-lisp/tabbar/
+ 
+if [ $compile ]; then
+    # prevent the site-start.el from being loaded all the time (gives error)
+    # doesn't work yet
+    # mv Contents/Resources/site-lisp/site-start.el Contents/Resources/site-lisp/site-start.elx
+    echo "Compiling site-lisp"
+    "$em" -Q -batch -f batch-byte-compile Contents/Resources/site-lisp/*.el
+    echo "Compiling macosx"
+    "$em" -Q -batch -f batch-byte-compile Contents/Resources/site-lisp/macosx/*.el 
+    echo "Compiling oneonone"
+    "$em" -Q -batch -f batch-byte-compile Contents/Resources/site-lisp/oneonone/*.el
+    echo "Compiling tabbar"
+    "$em" -Q -batch -f batch-byte-compile Contents/Resources/site-lisp/tabbar/*.el
+    #mv Contents/Resources/site-lisp/site-start.elx Contents/Resources/site-lisp/site-start.el
+    # echo "(Note: ignore the --no-splash error!)"
+fi
+ 
+# .el is too large
+gzip Contents/Resources/site-lisp/color-theme-library.el
+
+# for LaunchServices (on local machine)
+touch .
+
+# remove hardlinks - they don't work, even as symlinks they don't.
+
+rm Contents/MacOS/bin/emacs Contents/MacOS/bin/emacs-*
+
+exit 0  # return success (checked by make-aquamacs)

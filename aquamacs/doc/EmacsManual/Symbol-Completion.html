@@ -1,0 +1,65 @@
+<html lang="en">
+<head>
+<title>Completion for Symbol Names</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Completion for Symbol Names">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Symbol%20Completion">Symbol Completion</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Glasses.html#Glasses">Glasses</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Hideshow.html#Hideshow">Hideshow</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Programs.html#Programs">Programs</a>
+<hr><br>
+</div>
+
+<h3 class="section">Completion for Symbol Names</h3>
+
+<p>In Emacs, completion is something you normally do in the minibuffer. 
+But one kind of completion is available in all buffers: completion for
+symbol names.
+
+   <p>The character <kbd>M-&lt;TAB&gt;</kbd> runs a command to complete the
+partial symbol before point against the set of meaningful symbol
+names.  This command inserts at point any additional characters that
+it can determine from the partial name.
+
+   <p>If the partial name in the buffer has multiple possible completions
+that differ in the very next character, so that it is impossible to
+complete even one more character, <kbd>M-&lt;TAB&gt;</kbd> displays a list of
+all possible completions in another window.
+
+   <p>In most programming language major modes, <kbd>M-&lt;TAB&gt;</kbd> runs the
+command <code>complete-symbol</code>, which provides two kinds of completion. 
+Normally it does completion based on a tags table (see <a href="Tags.html#Tags">Tags</a>); with a
+numeric argument (regardless of the value), it does completion based on
+the names listed in the Info file indexes for your language.  Thus, to
+complete the name of a symbol defined in your own program, use
+<kbd>M-&lt;TAB&gt;</kbd> with no argument; to complete the name of a standard
+library function, use <kbd>C-u M-&lt;TAB&gt;</kbd>.  Of course, Info-based
+completion works only if there is an Info file for the standard library
+functions of your language, and only if it is installed at your site.
+
+   <p>In Emacs-Lisp mode, the name space for completion normally consists of
+nontrivial symbols present in Emacs--those that have function
+definitions, values or properties.  However, if there is an
+open-parenthesis immediately before the beginning of the partial symbol,
+only symbols with function definitions are considered as completions. 
+The command which implements this is <code>lisp-complete-symbol</code>.
+
+   <p>In Text mode and related modes, <kbd>M-&lt;TAB&gt;</kbd> completes words
+based on the spell-checker's dictionary.  See <a href="Spelling.html#Spelling">Spelling</a>.
+
+   </body></html>
+

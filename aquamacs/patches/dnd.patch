@@ -1,0 +1,126 @@
+this patch will select a more appropriate window to show the opened file in.  It also works with non-existent files, unlike the original.
+
+
+*** lisp/term/mac-win.el	23 Apr 2008 08:56:55 -0000	1.88.2.11
+--- lisp/term/mac-win.el	23 Aug 2008 02:20:42 -0000
+***************
+*** 1726,1738 ****
+  (defun mac-ae-open-documents (event)
+    "Open the documents specified by the Apple event EVENT."
+    (interactive "e")
+!   (let ((ae (mac-event-ae event)))
+!     (dolist (file-name (mac-ae-list ae nil 'undecoded-file-name))
+!       (if file-name
+! 	  (dnd-open-local-file
+! 	   (concat "file://"
+! 		   (mapconcat 'url-hexify-string
+! 			      (split-string file-name "/") "/")) nil)))
+      (let ((selection-range (mac-ae-selection-range ae))
+  	  (search-text (mac-ae-text-for-search ae)))
+        (cond (selection-range
+--- 1726,1766 ----
+  (defun mac-ae-open-documents (event)
+    "Open the documents specified by the Apple event EVENT."
+    (interactive "e")
+!   (let ((ae (mac-event-ae event))
+! 	(target-frame)
+! 	(save-one-buffer-one-frame one-buffer-one-frame))
+!     (unwind-protect
+! 	(dolist (file-name (mac-ae-list ae nil 'undecoded-file-name))
+! 	  (if file-name
+! 	      (let (
+! 		    (sel-win (selected-window))) ; search all visible&iconified frames
+! 		(unless 
+! 		    (and sel-win 
+! 			 (window-live-p sel-win)
+! 			 (eq t (frame-visible-p (window-frame sel-win)))
+! 			 (not (special-display-p 
+! 			       (or (buffer-name (window-buffer sel-win)) ""))))
+! 					; search visible frames (but not dedicated ones)
+! 		  (setq sel-win (get-largest-window 'visible nil)))
+! 		(unless 
+! 		    (and sel-win 
+! 			 (window-live-p sel-win)
+! 			 (eq t (frame-visible-p (window-frame sel-win)))
+! 			 (not (special-display-p 
+! 			       (or (buffer-name (window-buffer sel-win)) ""))))
+! 		  ;; make new frame
+! 		  (setq one-buffer-one-frame t)
+! 		  (setq sel-win (selected-window)))
+! 		(with-selected-window sel-win
+! 		  (dnd-open-local-file
+! 		   (concat "file://"
+! 			   (mapconcat 'url-hexify-string
+! 				      (split-string file-name "/") "/")) nil
+! 		   'accept-new-files)
+! 		  (setq target-frame (window-frame (selected-window)))))))
+!       ;; unwind
+!       (setq one-buffer-one-frame save-one-buffer-one-frame))
+!     (select-frame-set-input-focus target-frame)
+      (let ((selection-range (mac-ae-selection-range ae))
+  	  (search-text (mac-ae-text-for-search ae)))
+        (cond (selection-range
+***************
+*** 1747,1754 ****
+  	    ((stringp search-text)
+  	     (re-search-forward
+  	      (mapconcat 'regexp-quote (split-string search-text) "\\|")
+! 	      nil t)))))
+!   (select-frame-set-input-focus (selected-frame)))
+  
+  (defun mac-ae-quit-application (event)
+    "Quit the application Emacs with the Apple event EVENT."
+--- 1776,1782 ----
+  	    ((stringp search-text)
+  	     (re-search-forward
+  	      (mapconcat 'regexp-quote (split-string search-text) "\\|")
+! 	      nil t))))))
+  
+  (defun mac-ae-quit-application (event)
+    "Quit the application Emacs with the Apple event EVENT."
+*** lisp/dnd.el	06 Apr 2008 07:51:37 -0400	1.15.2.3
+--- lisp/dnd.el	17 Jan 2009 09:37:06 -0500	
+***************
+*** 158,164 ****
+  	(when (file-readable-p try-f) try-f)))))
+  
+  
+! (defun dnd-open-local-file (uri action)
+    "Open a local file.
+  The file is opened in the current window, or a new window if
+  `dnd-open-file-other-window' is set.  URI is the url for the file,
+--- 158,164 ----
+  	(when (file-readable-p try-f) try-f)))))
+  
+  
+! (defun dnd-open-local-file (uri action &optional accept-new-files)
+    "Open a local file.
+  The file is opened in the current window, or a new window if
+  `dnd-open-file-other-window' is set.  URI is the url for the file,
+***************
+*** 170,180 ****
+  `dnd-open-remote-url'. ACTION is ignored."
+  
+    (let* ((f (dnd-get-local-file-name uri t)))
+!     (if (and f (file-readable-p f))
+  	(progn
+  	  (if dnd-open-file-other-window
+  	      (find-file-other-window f)
+! 	    (find-file f))
+  	  'private)
+        (error "Can not read %s" uri))))
+  
+--- 170,182 ----
+  `dnd-open-remote-url'. ACTION is ignored."
+  
+    (let* ((f (dnd-get-local-file-name uri t)))
+!     (if (and f (or accept-new-files (file-readable-p f)))
+  	(progn
+  	  (if dnd-open-file-other-window
+  	      (find-file-other-window f)
+! 	    (if (fboundp 'aquamacs-find-file)
+! 		(aquamacs-find-file f)
+! 	      (find-file f)))
+  	  'private)
+        (error "Can not read %s" uri))))
+  

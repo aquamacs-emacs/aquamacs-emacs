@@ -1,0 +1,91 @@
+<html lang="en">
+<head>
+<title>Single Shell Commands</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Single Shell Commands">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Single%20Shell">Single Shell</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Interactive-Shell.html#Interactive%20Shell">Interactive Shell</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Shell.html#Shell">Shell</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Single Shell Commands</h4>
+
+<p><kbd>M-!</kbd> (<code>shell-command</code>) reads a line of text using the
+minibuffer and executes it as a shell command in a subshell made just
+for that command.  Standard input for the command comes from the null
+device.  If the shell command produces any output, the output appears
+either in the echo area (if it is short), or in an Emacs buffer named
+<code>*Shell Command Output*</code>, which is displayed in another window
+but not selected (if the output is long).
+
+   <p>For instance, one way to decompress a file <code>foo.gz</code> from Emacs
+is to type <kbd>M-! gunzip foo.gz &lt;RET&gt;</kbd>.  That shell command
+normally creates the file <code>foo</code> and produces no terminal output.
+
+   <p>A numeric argument, as in <kbd>M-1 M-!</kbd>, says to insert terminal
+output into the current buffer instead of a separate buffer.  It puts
+point before the output, and sets the mark after the output.  For
+instance, <kbd>M-1 M-! gunzip &lt; foo.gz &lt;RET&gt;</kbd> would insert the
+uncompressed equivalent of <code>foo.gz</code> into the current buffer.
+
+   <p>If the shell command line ends in <code>&amp;</code>, it runs asynchronously. 
+For a synchronous shell command, <code>shell-command</code> returns the
+command's exit status (0 means success), when it is called from a Lisp
+program.  You do not get any status information for an asynchronous
+command, since it hasn't finished yet.
+
+   <p><kbd>M-|</kbd> (<code>shell-command-on-region</code>) is like <kbd>M-!</kbd> but
+passes the contents of the region as the standard input to the shell
+command, instead of no input.  If a numeric argument is used, meaning
+insert the output in the current buffer, then the old region is deleted
+first and the output replaces it as the contents of the region.  It
+returns the command's exit status when it is called from a Lisp program.
+
+   <p>One use for <kbd>M-|</kbd> is to run <code>uudecode</code>.  For instance, if
+the buffer contains uuencoded text, type <kbd>C-x h M-| uudecode
+&lt;RET&gt;</kbd> to feed the entire buffer contents to the <code>uudecode</code>
+program.  That program will ignore everything except the encoded text,
+and will store the decoded output into the file whose name is
+specified in the encoded text.
+
+   <p>Both <kbd>M-!</kbd> and <kbd>M-|</kbd> use <code>shell-file-name</code> to specify the
+shell to use.  This variable is initialized based on your <code>SHELL</code>
+environment variable when Emacs is started.  If the file name does not
+specify a directory, the directories in the list <code>exec-path</code> are
+searched; this list is initialized based on the environment variable
+<code>PATH</code> when Emacs is started.  Your <code>.emacs</code> file can override
+either or both of these default initializations.
+
+   <p>Both <kbd>M-!</kbd> and <kbd>M-|</kbd> wait for the shell command to complete. 
+To stop waiting, type <kbd>C-g</kbd> to quit; that terminates the shell
+command with the signal <code>SIGINT</code>--the same signal that <kbd>C-c</kbd>
+normally generates in the shell.  Emacs waits until the command actually
+terminates.  If the shell command doesn't stop (because it ignores the
+<code>SIGINT</code> signal), type <kbd>C-g</kbd> again; this sends the command a
+<code>SIGKILL</code> signal which is impossible to ignore.
+
+   <p>To specify a coding system for <kbd>M-!</kbd> or <kbd>M-|</kbd>, use the command
+<kbd>C-x &lt;RET&gt; c</kbd> immediately beforehand.  See <a href="Specify-Coding.html#Specify%20Coding">Specify Coding</a>.
+
+   <p>Error output from the command is normally intermixed with the regular
+output.  If you set the variable
+<code>shell-command-default-error-buffer</code> to a string, which is a buffer
+name, error output is inserted before point in the buffer of that name.
+
+   </body></html>
+

@@ -1,0 +1,138 @@
+*** src/macfns.c	Wed Jun  8 14:57:39 2005
+--- src/macfns.c	Sun Jun 26 01:46:53 2005
+*************** mac_nav_event_callback (selector, parms,
+*** 4461,4466 ****
+--- 4461,4578 ----
+       void *data ;
+  {
+  }
++ 
++ #if MAC_OSX
++ DEFUN ("mac-show-menu-bar", Fmac_show_menu_bar, Smac_show_menu_bar, 0, 1, "",
++        doc: /* Show the menu bar.  */)
++   (display)
++      Lisp_Object display;
++ {
++   if ( EQ (Vwindow_system, intern ("mac")))
++     ShowMenuBar();
++   return Qnil;
++ }
++ DEFUN ("mac-hide-menu-bar", Fmac_hide_menu_bar, Smac_hide_menu_bar, 0, 1, "",
++        doc: /* Hide the menu bar.  */)
++   (display)
++      Lisp_Object display;
++ {
++   if ( EQ (Vwindow_system, intern ("mac")))
++     HideMenuBar();
++   return Qnil;
++ }
++ DEFUN ("mac-dialog", Fmac_dialog, Smac_dialog, 2, 2, "",
++        doc: /* Show a dialog.  */)
++   (message, explanation)
++      Lisp_Object message, explanation;
++ {
++   DialogRef 		sheet=NULL;
++   AlertStdCFStringAlertParamRec alertParams;
++   struct frame *f = XFRAME (selected_frame);
++   CHECK_STRING (message);
++   CHECK_STRING (explanation);
++  
++   if (FRAME_MAC_WINDOW (f))
++     {
++       GetStandardAlertDefaultParams(&alertParams,kStdCFStringAlertVersionOne);
++       alertParams.defaultText=(CFStringRef)kAlertDefaultOKText;	
++       alertParams.defaultButton=kAlertStdAlertOKButton;	
++ 
++       BLOCK_INPUT;
++       {
++ 	CFStringRef msgTitle = NULL, msgExplanation = NULL;
++ 	msgTitle       = cfstring_create_with_string (message);
++ 	msgExplanation = cfstring_create_with_string (explanation);
++ 
++ 	OSStatus err;
++ 	err = CreateStandardAlert(kAlertNoteAlert,
++ 				  msgTitle,
++ 				  msgExplanation,
++ 				  &alertParams,
++ 				  &sheet);
++ 	if(err == noErr)
++ 	  err = RunStandardAlert(sheet,
++ 				 NULL,
++ 				 NULL);
++ 	CFRelease (msgTitle);
++ 	CFRelease (msgExplanation);
++       }
++       UNBLOCK_INPUT;
++     }
++   return Qnil;
++ }
++ 
++ DEFUN ("mac-dialog-y-or-n-p", Fmac_dialog_y_or_n_p, Smac_dialog_y_or_n_p, 2, 2, "",
++        doc: /* Show a dialog, which asks user a "Yes or No" question.
++ Return t if answer is "Yes". Takes two arguments,
++ which is the strings to display to ask the question.  */)
++   (message, explanation)
++      Lisp_Object message, explanation;
++ {
++   DialogRef 		sheet=NULL;
++   AlertStdCFStringAlertParamRec alertParams;
++   struct frame *f = XFRAME (selected_frame);
++   CHECK_STRING (message);
++   CHECK_STRING (explanation);
++   SInt16 index = 0;
++  
++   if (FRAME_MAC_WINDOW (f))
++     {
++       GetStandardAlertDefaultParams(&alertParams,kStdCFStringAlertVersionOne);
++       alertParams.defaultText=CFSTR ("Yes");
++       alertParams.defaultButton=kAlertStdAlertOKButton;	
++       alertParams.cancelText=CFSTR ("No");
++       alertParams.cancelButton=kAlertStdAlertCancelButton;
++ 
++       BLOCK_INPUT;
++       {
++ 	CFStringRef msgTitle = NULL, msgExplanation = NULL;
++ 	msgTitle       = cfstring_create_with_string (message);
++ 	msgExplanation = cfstring_create_with_string (explanation);
++ 
++ 	OSStatus err;
++ 	err = CreateStandardAlert(kAlertNoteAlert,
++ 				  msgTitle,
++ 				  msgExplanation,
++ 				  &alertParams,
++ 				  &sheet);
++ 	if(err == noErr)
++ 	  err = RunStandardAlert(sheet,
++ 				 NULL,
++ 				 &index);
++ 	CFRelease (msgTitle);
++ 	CFRelease (msgExplanation);
++       }
++       UNBLOCK_INPUT;
++     }
++   if( index==1 ){
++     return Qt;
++   }else{
++     return Qnil;
++   }
++ }
++ #endif /*MAC_OSX*/
++ 
+  #endif
+  
+  /***********************************************************************
+*************** Chinese, Japanese, and Korean.  */);
+*** 4674,4679 ****
+--- 4696,4707 ----
+  
+  #if TARGET_API_MAC_CARBON
+    defsubr (&Sx_file_dialog);
++ #if MAC_OSX
++   defsubr (&Smac_show_menu_bar);
++   defsubr (&Smac_hide_menu_bar);
++   defsubr (&Smac_dialog);
++   defsubr (&Smac_dialog_y_or_n_p);
++ #endif
+  #endif
+  }
+  

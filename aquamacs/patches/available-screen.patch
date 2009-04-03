@@ -1,0 +1,74 @@
+Index: src/macfns.c
+===================================================================
+RCS file: /sources/emacs/emacs/src/macfns.c,v
+retrieving revision 1.106.2.7
+diff -c -r1.106.2.7 macfns.c
+*** src/macfns.c	6 Apr 2008 01:57:47 -0000	1.106.2.7
+--- src/macfns.c	4 May 2008 14:31:05 -0000
+***************
+*** 3059,3064 ****
+--- 3059,3112 ----
+    return make_number ((int) (dpyinfo->width * mm_per_pixel + 0.5f));
+  }
+  
++ /*
++ the following interface is a bit overly simplistic. 
++ we should provide a way to query the list of devices, and then get the bounds
++ for each device. 
++ but this should do for now.
++ */
++ DEFUN ("mac-display-available-pixel-bounds", Fmac_display_available_pixel_bounds, Smac_display_available_pixel_bounds, 0, 1, 0,
++        doc: /* Get the available bounds of a Mac display in pixels, excluding the Dock. 
++ Optional parameter FRAME gives the frame, whose Mac display is queried. 
++ If not given, the main display is used. Returns a 4 element list with the bounds
++ in the form of (left top right bottom). */)
++      (frame)
++      Lisp_Object frame;
++ {
++   Rect rect;
++   Lisp_Object rv = Qnil;
++   GDHandle device_handle = NULL;
++ 
++   BLOCK_INPUT;   
++ 
++   if (NILP (frame))
++     device_handle = LMGetMainDevice();
++   else
++     {
++       CHECK_FRAME (frame);
++       GetWindowGreatestAreaDevice (FRAME_MAC_WINDOW (XFRAME (frame)), kWindowContentRgn, &device_handle, NULL);
++       if (!device_handle)
++ 	device_handle = LMGetMainDevice();
++     }
++   
++   if (device_handle && 
++       GetAvailableWindowPositioningBounds(device_handle, &rect)
++       == noErr) {
++ 
++   rv = 
++     Fcons( make_number (rect.left),
++ 	   Fcons( make_number (rect.top),
++ 		  Fcons( make_number (rect.right),
++ 			 Fcons( make_number (rect.bottom), Qnil))));
++   }
++   UNBLOCK_INPUT;
++   return rv;
++ 
++ }
++ 
++ 
++ 
++ 
+  DEFUN ("x-display-backing-store", Fx_display_backing_store,
+         Sx_display_backing_store, 0, 1, 0,
+         doc: /* Return an indication of whether DISPLAY does backing store.
+***************
+*** 4500,4505 ****
+--- 4548,4554 ----
+    defsubr (&Sx_display_list);
+    defsubr (&Sx_synchronize);
+    defsubr (&Sx_focus_frame);
++   defsubr (&Smac_display_available_pixel_bounds);
+  
+    /* Setting callback functions for fontset handler.  */
+    get_font_info_func = x_get_font_info;

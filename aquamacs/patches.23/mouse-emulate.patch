@@ -1,0 +1,65 @@
+*** src/nsterm.m	14 Mar 2009 21:20:09 -0000	1.67
+--- src/nsterm.m	15 Mar 2009 20:40:43 -0000
+***************
+*** 160,165 ****
+--- 160,168 ----
+     the Function modifer (laptops).  May be any of the modifier lisp symbols. */
+  Lisp_Object ns_function_modifier;
+  
++ /* Non-nil specifies that control-click maps to left mouse button, command-click to middle button */
++ Lisp_Object ns_emulate_three_button_mouse;
++ 
+  /* Control via default 'GSFontAntiAlias' on OS X and GNUstep. */
+  Lisp_Object ns_antialias_text;
+  
+***************
+*** 3551,3556 ****
+--- 3594,3600 ----
+    ns_command_modifier = Qsuper;
+    ns_control_modifier = Qcontrol;
+    ns_function_modifier = Qnone;
++   ns_emulate_three_button_mouse = Qt;
+    ns_antialias_text = Qt;
+    ns_antialias_threshold = 10.0; /* not exposed to lisp side */
+    ns_use_qd_smoothing = Qnil;
+***************
+*** 4826,4831 ****
+--- 4904,4929 ----
+        emacs_event->code = EV_BUTTON (theEvent);
+        emacs_event->modifiers = EV_MODIFIERS (theEvent)
+                               | EV_UDMODIFIERS (theEvent);
++       if (!NILP(ns_emulate_three_button_mouse))
++ 	{
++ 	  if (emacs_event->code == 0)
++ 	    {
++ 	      if (emacs_event->modifiers & ctrl_modifier)
++ 		{
++ 		  if (emacs_event->modifiers & alt_modifier)
++ 		    {
++ 		      emacs_event->code = 3;
++ 		    } else 
++ 		    {
++ 		      emacs_event->code = 2;
++ 		    }
++ 		} else if (emacs_event->modifiers & alt_modifier)
++ 		{
++ 		  emacs_event->code = 1;
++ 		}
++ 	      emacs_event->modifiers &= ~(ctrl_modifier | alt_modifier);
++ 	    }
++ 	}
+      }
+    XSETINT (emacs_event->x, lrint (p.x));
+    XSETINT (emacs_event->y, lrint (p.y));
+***************
+*** 6263,6268 ****
+--- 6553,6561 ----
+    DEFVAR_LISP ("ns-confirm-quit", &ns_confirm_quit,
+                 "Whether to confirm application quit using dialog.");
+  
++   DEFVAR_LISP ("ns-emulate-three-button-mouse", &ns_emulate_three_button_mouse,
++                "Non-nil (the default) means to use control and command keys to emulate right and middle mouse buttons on a one-button mouse.");
++ 
+    staticpro (&ns_display_name_list);
+    ns_display_name_list = Qnil;
+  

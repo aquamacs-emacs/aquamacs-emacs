@@ -1,0 +1,147 @@
+<html lang="en">
+<head>
+<title>Minor Modes</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Minor Modes">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Minor%20Modes">Minor Modes</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Variables.html#Variables">Variables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customization.html#Customization">Customization</a>
+<hr><br>
+</div>
+
+<h3 class="section">Minor Modes</h3>
+
+<p>Minor modes are optional features which you can turn on or off.  For
+example, Auto Fill mode is a minor mode in which &lt;SPC&gt; breaks lines
+between words as you type.  All the minor modes are independent of each
+other and of the selected major mode.  Most minor modes say in the mode
+line when they are on; for example, <code>Fill</code> in the mode line means
+that Auto Fill mode is on.
+
+   <p>Append <code>-mode</code> to the name of a minor mode to get the name of a
+command function that turns the mode on or off.  Thus, the command to
+enable or disable Auto Fill mode is called <kbd>M-x auto-fill-mode</kbd>.  These
+commands are usually invoked with <kbd>M-x</kbd>, but you can bind keys to them
+if you wish.  With no argument, the function turns the mode on if it was
+off and off if it was on.  This is known as <dfn>toggling</dfn>.  A positive
+argument always turns the mode on, and an explicit zero argument or a
+negative argument always turns it off.
+
+   <p>Some minor modes are global: while enabled, they affect everything
+you do in the Emacs session, in all buffers.  Other minor modes are
+buffer-local; they apply only to the current buffer, so you can enable
+the mode in certain buffers and not others.
+
+   <p>For most minor modes, the command name is also the name of a
+variable which directly controls the mode.  The mode is enabled
+whenever this variable's value is non-<code>nil</code>, and the minor-mode
+command works by setting the variable.  For example, the command
+<code>outline-minor-mode</code> works by setting the value of
+<code>outline-minor-mode</code> as a variable; it is this variable that
+directly turns Outline minor mode on and off.  To check whether a
+given minor mode works this way, use <kbd>C-h v</kbd> to ask for
+documentation on the variable name.
+
+   <p>These minor-mode variables provide a good way for Lisp programs to turn
+minor modes on and off; they are also useful in a file's local variables
+list.  But please think twice before setting minor modes with a local
+variables list, because most minor modes are matter of user
+preference--other users editing the same file might not want the same
+minor modes you prefer.
+
+   <p>The buffer-local minor modes include Abbrev mode, Auto Fill mode,
+Auto Save mode, Font-Lock mode, Glasses mode, ISO Accents mode,
+Outline minor mode, Overwrite mode, and Binary Overwrite mode.
+
+   <p>Abbrev mode allows you to define abbreviations that automatically expand
+as you type them.  For example, <code>amd</code> might expand to <code>abbrev
+mode</code>.  See <a href="Abbrevs.html#Abbrevs">Abbrevs</a>, for full information.
+
+   <p>Auto Fill mode allows you to enter filled text without breaking lines
+explicitly.  Emacs inserts newlines as necessary to prevent lines from
+becoming too long.  See <a href="Filling.html#Filling">Filling</a>.
+
+   <p>Auto Save mode causes the contents of a buffer to be saved
+periodically to reduce the amount of work you can lose in case of a
+system crash.  See <a href="Auto-Save.html#Auto%20Save">Auto Save</a>.
+
+   <p>Enriched mode enables editing and saving of formatted text. 
+See <a href="Formatted-Text.html#Formatted%20Text">Formatted Text</a>.
+
+   <p>Flyspell mode automatically highlights misspelled words. 
+See <a href="Spelling.html#Spelling">Spelling</a>.
+
+   <p>Font-Lock mode automatically highlights certain textual units found in
+programs, such as comments, strings, and function names being defined. 
+This requires a window system that can display multiple fonts. 
+See <a href="Faces.html#Faces">Faces</a>.
+
+   <p>ISO Accents mode makes the characters <code>`</code>, <code>'</code>, <code>"</code>,
+<code>^</code>, <code>/</code> and <code>~</code> combine with the following letter, to
+produce an accented letter in the ISO Latin-1 character set.  The
+newer and more general feature of input methods more or less
+supersedes ISO Accents mode.  See <a href="Single-Byte-Character-Support.html#Single-Byte%20Character%20Support">Single-Byte Character Support</a>.
+
+   <p>Outline minor mode provides the same facilities as the major mode
+called Outline mode; but since it is a minor mode instead, you can
+combine it with any major mode.  See <a href="Outline-Mode.html#Outline%20Mode">Outline Mode</a>.
+
+   <p>Overwrite mode causes ordinary printing characters to replace existing
+text instead of shoving it to the right.  For example, if point is in
+front of the <code>B</code> in <code>FOOBAR</code>, then in Overwrite mode typing a
+<kbd>G</kbd> changes it to <code>FOOGAR</code>, instead of producing <code>FOOGBAR</code>
+as usual.  In Overwrite mode, the command <kbd>C-q</kbd> inserts the next
+character whatever it may be, even if it is a digit--this gives you a
+way to insert a character instead of replacing an existing character.
+
+   <p>The command <code>overwrite-mode</code> is an exception to the rule that
+commands which toggle minor modes are normally not bound to keys: it is
+bound to the &lt;INSERT&gt; function key.  This is because many other
+programs bind &lt;INSERT&gt; to similar functions.
+
+   <p>Binary Overwrite mode is a variant of Overwrite mode for editing
+binary files; it treats newlines and tabs like other characters, so that
+they overwrite other characters and can be overwritten by them. 
+In Binary Overwrite mode, digits after <kbd>C-q</kbd> specify an
+octal character code, as usual.
+
+   <p>The following minor modes normally apply to all buffers at once. 
+Since each is enabled or disabled by the value of a variable, you
+<em>can</em> set them differently for particular buffers, by explicitly
+making the corresponding variables local in those buffers. 
+See <a href="Locals.html#Locals">Locals</a>.
+
+   <p>Icomplete mode displays an indication of available completions when
+you are in the minibuffer and completion is active.  See <a href="Completion-Options.html#Completion%20Options">Completion Options</a>.
+
+   <p>Line Number mode enables continuous display in the mode line of the
+line number of point, and Column Number mode enables display of the
+column number.  See <a href="Mode-Line.html#Mode%20Line">Mode Line</a>.
+
+   <p>Scroll Bar mode gives each window a scroll bar (see <a href="Scroll-Bars.html#Scroll%20Bars">Scroll Bars</a>). 
+Menu Bar mode gives each frame a menu bar (see <a href="Menu-Bars.html#Menu%20Bars">Menu Bars</a>).  Both of
+these modes are enabled by default when you use the X Window System.
+
+   <p>In Transient Mark mode, every change in the buffer contents
+"deactivates" the mark, so that commands that operate on the region
+will get an error.  This means you must either set the mark, or
+explicitly "reactivate" it, before each command that uses the region. 
+The advantage of Transient Mark mode is that Emacs can display the
+region highlighted (currently only when using X).  See <a href="Mark.html#Mark">Mark</a>.
+
+   </body></html>
+

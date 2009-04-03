@@ -1,0 +1,86 @@
+#! /usr/bin/tclsh
+
+##### Developed by Kevin Walzer, WordTech Software. Copyright 2005 WordTech Communications LLC. Licensed under the GPL, http://www.gnu.org/licenses/licenses.html#TOCGPL. 
+
+proc makePDF {} {
+    global fname
+
+    
+    set fname aquamacs.tex
+    set cname changes.tex
+    set pdfdir ../doc/latex
+   # puts "Preprocessing latex document..."
+   # catch {exec ./preprocess-latex.perl $pdfdir/$fname >/tmp/aquamacs.tex}
+    cd $pdfdir
+    #file rename -force /tmp/aquamacs.tex $fname 
+    puts "Running pdflatex on $cname..."
+    catch {exec pdflatex -interaction=nonstopmode $cname}
+    puts "Running pdflatex on $fname..."
+    catch {exec pdflatex -interaction=nonstopmode $fname}
+    puts "Running pdflatex again to update references..."
+    catch {exec pdflatex -interaction=nonstopmode $fname}
+    set newpdf [string replace $fname end-2 end pdf]
+    set finalpdf  "Aquamacs Manual.pdf"
+    file copy -force $newpdf $finalpdf
+    puts "PDF conversion completed, PDF renamed to $finalpdf."
+    }
+
+
+
+proc makeHTML {} {
+    global fname   
+    puts "Running latex2html on $fname..."
+    catch {exec latex2html -init_file l2hconf-local.pm -local_icons -html_version=4.1 $fname}
+    puts "$fname converted to HTML."
+    set newdir [string replace $fname end-3 end]
+    set newcss [string replace $fname end-2 end css]
+    set newcssfile [file tail $newcss]
+    file copy -force $newcssfile $newdir/$newcssfile
+    puts "Applying Apple Help tags..."
+   set phrase  {<META NAME="description" CONTENT="Aquamacs Emacs\s*Manual">}
+
+    set newphrase  {
+<META NAME="description" CONTENT="Aquamacs Emacs - Manual">
+<META NAME="AppleTitle" content="Aquamacs Help">
+<META NAME="AppleFont" content="Lucida Grande,Helvetica">
+    }
+    set oldindex [open $newdir/index.html r]
+    set contents [read $oldindex]
+    close $oldindex
+    regsub $phrase $contents $newphrase contents
+    set newindex [open $newdir/index.html w]
+    puts -nonewline $newindex $contents
+    close $newindex
+    puts "Apple Help tags applied. HTML conversion completed."
+    set newname AquamacsHelp
+    file rename -force $newdir $newname
+    file copy "AquamacsHelp idx" $newname
+    cd ../
+    set finaldir [pwd]
+  # puts $finaldir
+    puts "Backing up old Aquamacs Help directory, copying new help files."
+    file rename AquamacsHelp AquamacsHelp-bak
+    file rename -force latex/$newname $finaldir
+    puts "Copying icon files..."
+    
+    file copy -force AquamacsHelp-bak/CVS AquamacsHelp/CVS
+    eval file copy -force [glob -nocomplain latex/*.png] AquamacsHelp/ 
+   # file copy -force latex/contents.png AquamacsHelp/contents.png
+   # file copy -force latex/next_g.png AquamacsHelp/next_g.png
+   # file copy -force latex/next.png AquamacsHelp/next.png
+   # file copy -force latex/prev_g.png AquamacsHelp/prev_g.png
+   # file copy -force latex/prev.png AquamacsHelp/prev.png
+   # file copy -force latex/up_g.png AquamacsHelp/up_g.png
+   # file copy -force latex/up.png AquamacsHelp/up.png
+    puts "Icon files copied."
+    file delete -force AquamacsHelp-bak 
+    puts "Help files copied. Old AquamacsHelp folder removed."
+}
+ 
+catch {
+        # okay, it's there, use it
+        cd $::env(AQUAMACS_ROOT)/build
+    } 
+
+makePDF
+makeHTML

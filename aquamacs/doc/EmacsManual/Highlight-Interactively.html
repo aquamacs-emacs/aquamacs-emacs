@@ -1,0 +1,78 @@
+<html lang="en">
+<head>
+<title>Interactive Highlighting by Matching</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Interactive Highlighting by Matching">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Highlight%20Interactively">Highlight Interactively</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Trailing-Whitespace.html#Trailing%20Whitespace">Trailing Whitespace</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Highlight-Changes.html#Highlight%20Changes">Highlight Changes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
+<hr><br>
+</div>
+
+<h3 class="section">Interactive Highlighting by Matching</h3>
+
+<p>It is sometimes useful to highlight the strings that match a certain
+regular expression.  For example, you might wish to see all the
+references to a certain variable in a program source file, or highlight
+certain parts in a voluminous output of some program, or make certain
+cliches stand out in an article.
+
+   <p>Use the <kbd>M-x hi-lock-mode</kbd> command to turn on a minor mode that
+allows you to specify regular expressions of the text to be
+highlighted.  Hi-lock mode works like Font Lock (see <a href="Font-Lock.html#Font%20Lock">Font Lock</a>),
+except that it lets you specify explicitly what parts of text to
+highlight.  You control Hi-lock mode with these commands:
+
+     <dl>
+<dt><kbd>C-x w h </kbd><var>regexp</var><kbd> &lt;RET&gt; </kbd><var>face</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Highlight text that matches
+<var>regexp</var> using face <var>face</var> (<code>highlight-regexp</code>). 
+By using this command more than once, you can highlight various
+parts of the text in different ways.
+
+     <br><dt><kbd>C-x w r </kbd><var>regexp</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Unhighlight <var>regexp</var> (<code>unhighlight-regexp</code>).  You must enter
+one of the regular expressions currently specified for highlighting. 
+(You can use completion, or choose from a menu, to enter one of them
+conveniently.)
+
+     <br><dt><kbd>C-x w l </kbd><var>regexp</var><kbd> &lt;RET&gt; </kbd><var>face</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Highlight entire lines containing a match for <var>regexp</var>, using face
+<var>face</var> (<code>highlight-lines-matching-regexp</code>).
+
+     <br><dt><kbd>C-x w b</kbd>
+     <dd>Insert all the current highlighting regexp/face pairs into the buffer
+at point, with comment delimiters to prevent them from changing your
+program.  This key binding runs the
+<code>hi-lock-write-interactive-patterns</code> command.
+
+     <p>These patterns will be read the next time you visit the file while
+Hi-lock mode is enabled, or whenever you use the <kbd>M-x
+hi-lock-find-patterns</kbd> command.
+
+     <br><dt><kbd>C-x w i</kbd>
+     <dd>Re-read regexp/face pairs in the current buffer
+(<code>hi-lock-write-interactive-patterns</code>).  The list of pairs is
+found no matter where in the buffer it may be.
+
+     <p>This command does nothing if the major mode is a member of the list
+<code>hi-lock-exclude-modes</code>. 
+</dl>
+
+   </body></html>
+

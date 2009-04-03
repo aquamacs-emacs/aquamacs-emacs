@@ -1,0 +1,65 @@
+<html lang="en">
+<head>
+<title>Invoking emacsclient</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Invoking emacsclient">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Invoking%20emacsclient">Invoking emacsclient</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Emacs-Server.html#Emacs%20Server">Emacs Server</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Emacs-Server.html#Emacs%20Server">Emacs Server</a>
+<hr><br>
+</div>
+
+<h3 class="section">Invoking <code>emacsclient</code></h3>
+
+<p>To run the <code>emacsclient</code> program, specify file names as arguments,
+and optionally line numbers as well.  Do it like this:
+
+<pre class="example">     emacsclient {[+<var>line</var>[<var>column</var>]] <var>filename</var>}...
+     </pre>
+
+<p>This tells Emacs to visit each of the specified files; if you specify a
+line number for a certain file, Emacs moves to that line in the file. 
+If you specify a column number as well, Emacs puts point on that column
+in the line.
+
+   <p>Ordinarily, <code>emacsclient</code> does not return until you use the
+<kbd>C-x #</kbd> command on each of these buffers.  When that happens,
+Emacs sends a message to the <code>emacsclient</code> program telling it to
+return.
+
+   <p>But if you use the option <code>-n</code> or <code>--no-wait</code> when running
+<code>emacsclient</code>, then it returns immediately.  (You can take as
+long as you like to edit the files in Emacs.)
+
+   <p>The option <code>--alternate-editor=</code><var>command</var><code></code> is useful when
+running <code>emacsclient</code> in a script.  It specifies a command to run
+if <code>emacsclient</code> fails to contact Emacs.  For example, the
+following setting for the <var>EDITOR</var> environment variable will
+always give an editor, even if Emacs is not running:
+
+<pre class="example">     EDITOR="emacsclient --alternate-editor vi +%d %s"
+     </pre>
+
+<p>The environment variable <var>ALTERNATE_EDITOR</var> has the same effect, but
+the value of the <code>--alternate-editor</code> takes precedence.
+
+   <p>Alternatively, the file <code>etc/emacs.bash</code> defines a bash
+function which will communicate with a running Emacs server, or start
+one if none exists.
+
+   </body></html>
+

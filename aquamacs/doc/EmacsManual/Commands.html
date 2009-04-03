@@ -1,0 +1,77 @@
+<html lang="en">
+<head>
+<title>Keys and Commands</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Keys and Commands">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Commands">Commands</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Text-Characters.html#Text%20Characters">Text Characters</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Keys.html#Keys">Keys</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr><br>
+</div>
+
+<h3 class="section">Keys and Commands</h3>
+
+<p>This manual is full of passages that tell you what particular keys
+do.  But Emacs does not assign meanings to keys directly.  Instead,
+Emacs assigns meanings to named <dfn>commands</dfn>, and then gives keys
+their meanings by <dfn>binding</dfn> them to commands.
+
+   <p>Every command has a name chosen by a programmer.  The name is usually
+made of a few English words separated by dashes; for example,
+<code>next-line</code> or <code>forward-word</code>.  A command also has a
+<dfn>function definition</dfn> which is a Lisp program; this is what makes
+the command do what it does.  In Emacs Lisp, a command is actually a
+special kind of Lisp function; one which specifies how to read arguments
+for it and call it interactively.  For more information on commands and
+functions, see <a href="../elisp/What-Is-a-Function.html#What%20Is%20a%20Function">What Is a Function</a>.  (The definition we use in this manual is
+simplified slightly.)
+
+   <p>The bindings between keys and commands are recorded in various tables
+called <dfn>keymaps</dfn>.  See <a href="Keymaps.html#Keymaps">Keymaps</a>.
+
+   <p>When we say that "<kbd>C-n</kbd> moves down vertically one line" we are
+glossing over a distinction that is irrelevant in ordinary use but is vital
+in understanding how to customize Emacs.  It is the command
+<code>next-line</code> that is programmed to move down vertically.  <kbd>C-n</kbd> has
+this effect <em>because</em> it is bound to that command.  If you rebind
+<kbd>C-n</kbd> to the command <code>forward-word</code> then <kbd>C-n</kbd> will move
+forward by words instead.  Rebinding keys is a common method of
+customization.
+
+   <p>In the rest of this manual, we usually ignore this subtlety to keep
+things simple.  To give the information needed for customization, we
+state the name of the command which really does the work in parentheses
+after mentioning the key that runs it.  For example, we will say that
+"The command <kbd>C-n</kbd> (<code>next-line</code>) moves point vertically
+down," meaning that <code>next-line</code> is a command that moves vertically
+down, and <kbd>C-n</kbd> is a key that is normally bound to it.
+
+   <p>While we are on the subject of information for customization only,
+it's a good time to tell you about <dfn>variables</dfn>.  Often the
+description of a command will say, "To change this, set the variable
+<code>mumble-foo</code>."  A variable is a name used to remember a value. 
+Most of the variables documented in this manual exist just to facilitate
+customization: some command or other part of Emacs examines the variable
+and behaves differently according to the value that you set.  Until you
+are interested in customizing, you can ignore the information about
+variables.  When you are ready to be interested, read the basic
+information on variables, and then the information on individual
+variables will make sense.  See <a href="Variables.html#Variables">Variables</a>.
+
+   </body></html>
+

@@ -1,0 +1,80 @@
+<html lang="en">
+<head>
+<title>Using Multiple Buffers</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Using Multiple Buffers">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Buffers">Buffers</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Windows.html#Windows">Windows</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Files.html#Files">Files</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr><br>
+</div>
+
+<h2 class="chapter">Using Multiple Buffers</h2>
+
+<p>The text you are editing in Emacs resides in an object called a
+<dfn>buffer</dfn>.  Each time you visit a file, a buffer is created to hold the
+file's text.  Each time you invoke Dired, a buffer is created to hold the
+directory listing.  If you send a message with <kbd>C-x m</kbd>, a buffer named
+<code>*mail*</code> is used to hold the text of the message.  When you ask for a
+command's documentation, that appears in a buffer called <code>*Help*</code>.
+
+   <p>At any time, one and only one buffer is <dfn>current</dfn>.  It is also
+called the <dfn>selected buffer</dfn>.  Often we say that a command operates on
+"the buffer" as if there were only one; but really this means that the
+command operates on the current buffer (most commands do).
+
+   <p>When Emacs has multiple windows, each window has its own chosen
+buffer and displays it; at any time, only one of the windows is
+selected, and its chosen buffer is the current buffer.  Each window's
+mode line normally displays the name of the window's chosen buffer
+(see <a href="Windows.html#Windows">Windows</a>).
+
+   <p>Each buffer has a name, which can be of any length, and you can select
+any buffer by giving its name.  Most buffers are made by visiting files,
+and their names are derived from the files' names.  But you can also create
+an empty buffer with any name you want.  A newly started Emacs has a buffer
+named <code>*scratch*</code> which can be used for evaluating Lisp expressions in
+Emacs.  The distinction between upper and lower case matters in buffer
+names.
+
+   <p>Each buffer records individually what file it is visiting, whether it is
+modified, and what major mode and minor modes are in effect in it
+(see <a href="Major-Modes.html#Major%20Modes">Major Modes</a>).  Any Emacs variable can be made <dfn>local to</dfn> a
+particular buffer, meaning its value in that buffer can be different from
+the value in other buffers.  See <a href="Locals.html#Locals">Locals</a>.
+
+   <p>A buffer's size cannot be larger than some maximum, which is defined
+by the largest buffer position representable by the <dfn>Emacs integer</dfn>
+data type.  This is because Emacs tracks buffer positions using that
+data type.  For 32-bit machines, the largest buffer size is 128
+megabytes.
+
+<ul class="menu">
+<li><a accesskey="1" href="Select-Buffer.html#Select%20Buffer">Select Buffer</a>:        Creating a new buffer or reselecting an old one. 
+<li><a accesskey="2" href="List-Buffers.html#List%20Buffers">List Buffers</a>:         Getting a list of buffers that exist. 
+<li><a accesskey="3" href="Misc-Buffer.html#Misc%20Buffer">Misc Buffer</a>: 	        Renaming; changing read-onlyness; copying text. 
+<li><a accesskey="4" href="Kill-Buffer.html#Kill%20Buffer">Kill Buffer</a>: 	        Killing buffers you no longer need. 
+<li><a accesskey="5" href="Several-Buffers.html#Several%20Buffers">Several Buffers</a>:      How to go through the list of all buffers
+			  and operate variously on several of them. 
+<li><a accesskey="6" href="Indirect-Buffers.html#Indirect%20Buffers">Indirect Buffers</a>:     An indirect buffer shares the text of another buffer. 
+<li><a accesskey="7" href="Buffer-Convenience.html#Buffer%20Convenience">Buffer Convenience</a>:   Convenience and customization features for
+                          buffer handling. 
+</ul>
+
+   </body></html>
+

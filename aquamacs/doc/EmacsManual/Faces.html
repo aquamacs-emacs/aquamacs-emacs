@@ -1,0 +1,168 @@
+<html lang="en">
+<head>
+<title>Using Multiple Typefaces</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Using Multiple Typefaces">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Faces">Faces</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Font-Lock.html#Font%20Lock">Font Lock</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
+<hr><br>
+</div>
+
+<h3 class="section">Using Multiple Typefaces</h3>
+
+<p>When using Emacs with a window system, you can set up multiple
+styles of displaying characters.  Each style is called a <dfn>face</dfn>. 
+Each face can specify various attributes, such as the height, weight
+and slant of the characters, the foreground and background color, and
+underlining.  But it does not have to specify all of them.
+
+   <p>Emacs on a character terminal supports only part of face attributes. 
+Which attributes are supported depends on your display type, but many
+displays support inverse video, bold, and underline attributes, and
+some support colors.
+
+   <p>Features which rely on text in multiple faces (such as Font Lock mode)
+will also work on non-windowed terminals that can display more than one
+face, whether by colors or underlining and emboldening.  This includes
+the console on GNU/Linux, an <code>xterm</code> which supports colors, the
+MS-DOS display (see <a href="MS-DOS.html#MS-DOS">MS-DOS</a>), and the MS-Windows version invoked with
+the <code>-nw</code> option.  Emacs determines automatically whether the
+terminal has this capability.
+
+   <p>You control the appearance of a part of the text in the buffer by
+specifying the face or faces to use for it.  The style of display used
+for any given character is determined by combining the attributes of
+all the applicable faces specified for that character.  Any attribute
+that isn't specified by these faces is taken from the <code>default</code> face,
+whose attributes reflect the default settings of the frame itself.
+
+   <p>Enriched mode, the mode for editing formatted text, includes several
+commands and menus for specifying faces for text in the buffer. 
+See <a href="Format-Faces.html#Format%20Faces">Format Faces</a>, for how to specify the font for text in the
+buffer.  See <a href="Format-Colors.html#Format%20Colors">Format Colors</a>, for how to specify the foreground and
+background color.
+
+   <p>To alter the appearance of a face, use the customization buffer. 
+See <a href="Face-Customization.html#Face%20Customization">Face Customization</a>.  You can also use X resources to specify
+attributes of particular faces (see <a href="Resources-X.html#Resources%20X">Resources X</a>).  Alternatively,
+you can change the foreground and background colors of a specific face
+with <kbd>M-x set-face-foreground</kbd> and <kbd>M-x set-face-background</kbd>. 
+These commands prompt in the minibuffer for a face name and a color
+name, with completion, and then set that face to use the specified
+color.  Changing the colors of the <code>default</code> face also changes
+the foreground and background colors on all frames, both existing and
+those to be created in the future.  (You can also set foreground and
+background colors for the current frame only; see <a href="Frame-Parameters.html#Frame%20Parameters">Frame Parameters</a>.)
+
+   <p>Emacs 21 can correctly display variable-width fonts, but Emacs
+commands that calculate width and indentation do not know how to
+calculate variable widths.  This can sometimes lead to incorrect
+results when you use variable-width fonts.  In particular, indentation
+commands can give inconsistent results, so we recommend you avoid
+variable-width fonts for editing program source code.  Filling will
+sometimes make lines too long or too short.  We plan to address these
+issues in future Emacs versions.
+
+   <p>To see what faces are currently defined, and what they look like, type
+<kbd>M-x list-faces-display</kbd>.  It's possible for a given face to look
+different in different frames; this command shows the appearance in the
+frame in which you type it.  Here's a list of the standard defined
+faces:
+
+     <dl>
+<dt><code>default</code>
+     <dd>This face is used for ordinary text that doesn't specify any other face. 
+<br><dt><code>mode-line</code>
+     <dd>This face is used for mode lines.  By default, it's drawn with shadows
+for a "raised" effect on window systems, and drawn as the inverse of
+the default face on non-windowed terminals.  See <a href="Display-Custom.html#Display%20Custom">Display Custom</a>. 
+<br><dt><code>header-line</code>
+     <dd>Similar to <code>mode-line</code> for a window's header line.  Most modes
+don't use the header line, but the Info mode does. 
+<br><dt><code>highlight</code>
+     <dd>This face is used for highlighting portions of text, in various modes. 
+For example, mouse-sensitive text is highlighted using this face. 
+<br><dt><code>isearch</code>
+     <dd>This face is used for highlighting Isearch matches. 
+<br><dt><code>isearch-lazy-highlight-face</code>
+     <dd>This face is used for lazy highlighting of Isearch matches other than
+the current one. 
+<br><dt><code>region</code>
+     <dd>This face is used for displaying a selected region (when Transient Mark
+mode is enabled--see below). 
+<br><dt><code>secondary-selection</code>
+     <dd>This face is used for displaying a secondary X selection (see <a href="Secondary-Selection.html#Secondary%20Selection">Secondary Selection</a>). 
+<br><dt><code>bold</code>
+     <dd>This face uses a bold variant of the default font, if it has one. 
+<br><dt><code>italic</code>
+     <dd>This face uses an italic variant of the default font, if it has one. 
+<br><dt><code>bold-italic</code>
+     <dd>This face uses a bold italic variant of the default font, if it has one. 
+<br><dt><code>underline</code>
+     <dd>This face underlines text. 
+<br><dt><code>fixed-pitch</code>
+     <dd>The basic fixed-pitch face. 
+<br><dt><code>fringe</code>
+     <dd>The face for the fringes to the left and right of windows on graphic
+displays.  (The fringes are the narrow portions of the Emacs frame
+between the text area and the window's right and left borders.) 
+<br><dt><code>scroll-bar</code>
+     <dd>This face determines the visual appearance of the scroll bar. 
+<br><dt><code>border</code>
+     <dd>This face determines the color of the frame border. 
+<br><dt><code>cursor</code>
+     <dd>This face determines the color of the cursor. 
+<br><dt><code>mouse</code>
+     <dd>This face determines the color of the mouse pointer. 
+<br><dt><code>tool-bar</code>
+     <dd>This is the basic tool-bar face.  No text appears in the tool bar, but the
+colors of this face affect the appearance of tool bar icons. 
+<br><dt><code>tooltip</code>
+     <dd>This face is used for tooltips. 
+<br><dt><code>menu</code>
+     <dd>This face determines the colors and font of Emacs's menus.  Setting the
+font of LessTif/Motif menus is currently not supported; attempts to set
+the font are ignored in this case. 
+<br><dt><code>trailing-whitespace</code>
+     <dd>The face for highlighting trailing whitespace when
+<code>show-trailing-whitespace</code> is non-nil; see <a href="Trailing-Whitespace.html#Trailing%20Whitespace">Trailing Whitespace</a>. 
+<br><dt><code>variable-pitch</code>
+     <dd>The basic variable-pitch face. 
+</dl>
+
+   <p>When Transient Mark mode is enabled, the text of the region is
+highlighted when the mark is active.  This uses the face named
+<code>region</code>; you can control the style of highlighting by changing the
+style of this face (see <a href="Face-Customization.html#Face%20Customization">Face Customization</a>).  See <a href="Transient-Mark.html#Transient%20Mark">Transient Mark</a>,
+for more information about Transient Mark mode and activation and
+deactivation of the mark.
+
+   <p>One easy way to use faces is to turn on Font Lock mode.  This minor
+mode, which is always local to a particular buffer, arranges to
+choose faces according to the syntax of the text you are editing.  It
+can recognize comments and strings in most languages; in several
+languages, it can also recognize and properly highlight various other
+important constructs.  See <a href="Font-Lock.html#Font%20Lock">Font Lock</a>, for more information about
+Font Lock mode and syntactic highlighting.
+
+   <p>You can print out the buffer with the highlighting that appears
+on your screen using the command <code>ps-print-buffer-with-faces</code>. 
+See <a href="PostScript.html#PostScript">PostScript</a>.
+
+   </body></html>
+

@@ -1,0 +1,116 @@
+<html lang="en">
+<head>
+<title>Changing the Location of Point</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Changing the Location of Point">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Moving%20Point">Moving Point</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Erasing.html#Erasing">Erasing</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Inserting-Text.html#Inserting%20Text">Inserting Text</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Basic.html#Basic">Basic</a>
+<hr><br>
+</div>
+
+<h3 class="section">Changing the Location of Point</h3>
+
+<p>To do more than insert characters, you have to know how to move point
+(see <a href="Point.html#Point">Point</a>).  The simplest way to do this is with arrow keys, or by
+clicking the left mouse button where you want to move to.
+
+   <p>There are also control and meta characters for cursor motion.  Some
+are equivalent to the arrow keys (these date back to the days before
+terminals had arrow keys, and are usable on terminals which don't have
+them).  Others do more sophisticated things.
+
+     <dl>
+<dt><kbd>C-a</kbd>
+     <dd>Move to the beginning of the line (<code>beginning-of-line</code>). 
+<br><dt><kbd>C-e</kbd>
+     <dd>Move to the end of the line (<code>end-of-line</code>). 
+<br><dt><kbd>C-f</kbd>
+     <dd>Move forward one character (<code>forward-char</code>).  The right-arrow key
+does the same thing. 
+<br><dt><kbd>C-b</kbd>
+     <dd>Move backward one character (<code>backward-char</code>).  The left-arrow
+key has the same effect. 
+<br><dt><kbd>M-f</kbd>
+     <dd>Move forward one word (<code>forward-word</code>). 
+<br><dt><kbd>M-b</kbd>
+     <dd>Move backward one word (<code>backward-word</code>). 
+<br><dt><kbd>C-n</kbd>
+     <dd>Move down one line, vertically (<code>next-line</code>).  This command
+attempts to keep the horizontal position unchanged, so if you start in
+the middle of one line, you end in the middle of the next.  The
+down-arrow key does the same thing. 
+<br><dt><kbd>C-p</kbd>
+     <dd>Move up one line, vertically (<code>previous-line</code>).  The up-arrow key
+has the same effect. 
+<br><dt><kbd>M-r</kbd>
+     <dd>Move point to left margin, vertically centered in the window
+(<code>move-to-window-line</code>).  Text does not move on the screen.
+
+     <p>A numeric argument says which screen line to place point on.  It counts
+screen lines down from the top of the window (zero for the top line).  A
+negative argument counts lines from the bottom (-1 for the bottom
+line). 
+<br><dt><kbd>M-&lt;</kbd>
+     <dd>Move to the top of the buffer (<code>beginning-of-buffer</code>).  With
+numeric argument <var>n</var>, move to <var>n</var>/10 of the way from the top. 
+See <a href="Arguments.html#Arguments">Arguments</a>, for more information on numeric arguments. 
+<br><dt><kbd>M-&gt;</kbd>
+     <dd>Move to the end of the buffer (<code>end-of-buffer</code>). 
+<br><dt><kbd>C-v</kbd>
+     <dd>Scroll the display one screen forward, and move point if necessary to put
+it on the screen (<code>scroll-up</code>).  This doesn't always
+move point, but it is commonly used to do so. 
+If your keyboard has a &lt;PAGEDOWN&gt; key, it does the same thing.
+
+     <p>Scrolling commands are further described in <a href="Scrolling.html#Scrolling">Scrolling</a>. 
+<br><dt><kbd>M-v</kbd>
+     <dd>Scroll one screen backward, and move point if necessary to put it on
+the screen (<code>scroll-down</code>).  This doesn't always move point, but
+it is commonly used to do so.  The &lt;PAGEUP&gt; key has the same
+effect. 
+<br><dt><kbd>M-x goto-char</kbd>
+     <dd>Read a number <var>n</var> and move point to buffer position <var>n</var>. 
+Position 1 is the beginning of the buffer. 
+<br><dt><kbd>M-x goto-line</kbd>
+     <dd>Read a number <var>n</var> and move point to line number <var>n</var>.  Line 1
+is the beginning of the buffer. 
+<br><dt><kbd>C-x C-n</kbd>
+     <dd>Use the current column of point as the <dfn>semipermanent goal column</dfn> for
+<kbd>C-n</kbd> and <kbd>C-p</kbd> (<code>set-goal-column</code>).  Henceforth, those
+commands always move to this column in each line moved into, or as
+close as possible given the contents of the line.  This goal column remains
+in effect until canceled. 
+<br><dt><kbd>C-u C-x C-n</kbd>
+     <dd>Cancel the goal column.  Henceforth, <kbd>C-n</kbd> and <kbd>C-p</kbd> once
+again try to stick to a fixed horizontal position, as usual. 
+</dl>
+
+   <p>If you set the variable <code>track-eol</code> to a non-<code>nil</code> value,
+then <kbd>C-n</kbd> and <kbd>C-p</kbd>, when starting at the end of the line, move
+to the end of another line.  Normally, <code>track-eol</code> is <code>nil</code>. 
+See <a href="Variables.html#Variables">Variables</a>, for how to set variables such as <code>track-eol</code>.
+
+   <p><kbd>C-n</kbd> normally gets an error when you use it on the last line of
+the buffer (just as <kbd>C-p</kbd> gets an error on the first line).  But
+if you set the variable <code>next-line-add-newlines</code> to a
+non-<code>nil</code> value, <kbd>C-n</kbd> on the last line of a buffer creates
+an additional line at the end and moves down onto it.
+
+   </body></html>
+

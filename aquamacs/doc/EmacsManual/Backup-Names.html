@@ -1,0 +1,88 @@
+<html lang="en">
+<head>
+<title>Single or Numbered Backups</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Single or Numbered Backups">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Backup%20Names">Backup Names</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Backup-Deletion.html#Backup%20Deletion">Backup Deletion</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Backup.html#Backup">Backup</a>
+<hr><br>
+</div>
+
+<h3 class="subsubsection">Single or Numbered Backups</h5>
+
+<p>If you choose to have a single backup file (this is the default),
+the backup file's name is normally constructed by appending <code>~</code> to the
+file name being edited; thus, the backup file for <code>eval.c</code> would
+be <code>eval.c~</code>.
+
+   <p>You can change this behavior by defining the variable
+<code>make-backup-file-name-function</code> to a suitable function. 
+Alternatively you can customize the variable
+<code>backup-directory-alist</code> to specify that files matching certain
+patterns should be backed up in specific directories.
+
+   <p>A typical use is to add an element <code>("." . </code><var>dir</var><code>)</code> to make
+all backups in the directory with absolute name <var>dir</var>; Emacs
+modifies the backup file names to avoid clashes between files with the
+same names originating in different directories.  Alternatively,
+adding, say, <code>("." . ".~")</code> would make backups in the invisible
+subdirectory <code>.~</code> of the original file's directory.  Emacs
+creates the directory, if necessary, to make the backup.
+
+   <p>If access control stops Emacs from writing backup files under the usual
+names, it writes the backup file as <code>%backup%~</code> in your home
+directory.  Only one such file can exist, so only the most recently
+made such backup is available.
+
+   <p>If you choose to have a series of numbered backup files, backup file
+names contain <code>.~</code>, the number, and another <code>~</code> after the
+original file name.  Thus, the backup files of <code>eval.c</code> would be
+called <code>eval.c.~1~</code>, <code>eval.c.~2~</code>, and so on, all the way
+through names like <code>eval.c.~259~</code> and beyond.  The variable
+<code>backup-directory-alist</code> applies to numbered backups just as
+usual.
+
+   <p>The choice of single backup or numbered backups is controlled by the
+variable <code>version-control</code>.  Its possible values are
+
+     <dl>
+<dt><code>t</code>
+     <dd>Make numbered backups. 
+<br><dt><code>nil</code>
+     <dd>Make numbered backups for files that have numbered backups already. 
+Otherwise, make single backups. 
+<br><dt><code>never</code>
+     <dd>Never make numbered backups; always make single backups. 
+</dl>
+
+<p>You can set <code>version-control</code> locally in an individual buffer to
+control the making of backups for that buffer's file.  For example,
+Rmail mode locally sets <code>version-control</code> to <code>never</code> to make sure
+that there is only one backup for an Rmail file.  See <a href="Locals.html#Locals">Locals</a>.
+
+   <p>If you set the environment variable <code>VERSION_CONTROL</code>, to tell
+various GNU utilities what to do with backup files, Emacs also obeys the
+environment variable by setting the Lisp variable <code>version-control</code>
+accordingly at startup.  If the environment variable's value is <code>t</code>
+or <code>numbered</code>, then <code>version-control</code> becomes <code>t</code>; if the
+value is <code>nil</code> or <code>existing</code>, then <code>version-control</code>
+becomes <code>nil</code>; if it is <code>never</code> or <code>simple</code>, then
+<code>version-control</code> becomes <code>never</code>.
+
+   </body></html>
+
