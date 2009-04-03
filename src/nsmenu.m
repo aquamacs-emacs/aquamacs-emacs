@@ -76,6 +76,8 @@ EmacsMenu *mainMenu, *svcsMenu, *dockMenu;
 static int popup_activated_flag;
 static NSModalSession popupSession;
 
+Lisp_Object Vns_tool_bar_display_mode;
+
 /* NOTE: toolbar implementation is at end,
   following complete menu implementation. */
 
@@ -1206,8 +1208,20 @@ update_frame_tool_bar (FRAME_PTR f)
       struct image *img;
       Lisp_Object image;
       Lisp_Object helpObj;
+      Lisp_Object captionObj;
       char *helpText;
+      char *captionText;
+      Lisp_Object label = TOOLPROP (TOOL_BAR_ITEM_CAPTION);
+ 
+      if (strcmp("--", SDATA (label)) == 0)
+  {
 
+      [toolbar addDisplayItemSpacerWithIdx: i ];
+  }
+ else
+   {
+
+ 
       /* If image is a vector, choose the image according to the
 	 button state.  */
       image = TOOLPROP (TOOL_BAR_ITEM_IMAGES);
@@ -1244,10 +1258,24 @@ update_frame_tool_bar (FRAME_PTR f)
         helpObj = TOOLPROP (TOOL_BAR_ITEM_CAPTION);
       helpText = NILP (helpObj) ? "" : (char *)SDATA (helpObj);
 
+      captionObj = TOOLPROP (TOOL_BAR_ITEM_CAPTION);
+      captionText = NILP (captionObj) ? "" : (char *)SDATA (captionObj);
+
       [toolbar addDisplayItemWithImage: img->pixmap idx: i helpText: helpText
-                               enabled: enabled_p];
+	       enabled: enabled_p  labelText: captionText];
 #undef TOOLPROP
     }
+    }
+
+  /* set correct tool-bar height because x_set_window_size can't do it
+     before the tool-bar has been drawn. */
+
+  // EmacsView *view = FRAME_NS_VIEW (f);
+  // NSWindow *window = [view window];
+  // FRAME_NS_TOOLBAR_HEIGHT (f) = 
+  //   NSHeight ([window frameRectForContentRect: NSMakeRect (0, 0, 0, 0)])
+  //   - FRAME_NS_TITLEBAR_HEIGHT (f);
+
 
   if (![toolbar isVisible])
       [toolbar setVisible: YES];
@@ -1289,7 +1317,7 @@ update_frame_tool_bar (FRAME_PTR f)
 {
   self = [super initWithIdentifier: identifier];
   emacsView = view;
-  [self setDisplayMode: NSToolbarDisplayModeIconOnly];
+  [self setDisplayMode: NSToolbarDisplayModeDefault];
   [self setSizeMode: NSToolbarSizeModeSmall];
   [self setDelegate: self];
   identifierToItem = [[NSMutableDictionary alloc] initWithCapacity: 10];
@@ -1313,6 +1341,19 @@ update_frame_tool_bar (FRAME_PTR f)
   [activeIdentifiers removeAllObjects];
   prevEnablement = enablement;
   enablement = 0L;
+
+  if (EQ (Vns_tool_bar_display_mode, intern ("labels")))
+    {
+      [self setDisplayMode: NSToolbarDisplayModeIconAndLabel];
+    }
+  else if (EQ (Vns_tool_bar_display_mode, intern ("icons")))
+    {
+      [self setDisplayMode: NSToolbarDisplayModeIconOnly];
+    }
+  else
+    {
+      [self setDisplayMode: NSToolbarDisplayModeDefault];
+    } 
 }
 
 - (BOOL) changed
@@ -1321,8 +1362,30 @@ update_frame_tool_bar (FRAME_PTR f)
     enablement == prevEnablement ? NO : YES;
 }
 
+- (void) addDisplayItemSpacerWithIdx: (int)idx
+{
+  /* 1) come up w/identifier */
+  NSString *identifier = NSToolbarFlexibleSpaceItemIdentifier;
+
+  /* 2) create / reuse item */
+  NSToolbarItem *item = [identifierToItem objectForKey: identifier];
+  if (item == nil)
+    {
+      item = [[[NSToolbarItem alloc] initWithItemIdentifier: identifier]
+               autorelease];
+    }
+
+  //  [item setTag: idx];  can't do because more than one flex space item may be present
+
+  /* 3) update state */
+  [identifierToItem setObject: item forKey: identifier];
+  [activeIdentifiers addObject: identifier];
+  enablement = (enablement << 1) | false;
+}
+
 - (void) addDisplayItemWithImage: (EmacsImage *)img idx: (int)idx
                         helpText: (char *)help enabled: (BOOL)enabled
+		       labelText: (char *)label;
 {
   /* 1) come up w/identifier */
   NSString *identifier
@@ -1336,6 +1399,7 @@ update_frame_tool_bar (FRAME_PTR f)
                autorelease];
       [item setImage: img];
       [item setToolTip: [NSString stringWithCString: help]];
+      [item setLabel: [NSString stringWithCString: label]];
       [item setTarget: emacsView];
       [item setAction: @selector (toolbarClicked:)];
     }
@@ -1915,6 +1979,7 @@ void process_dialog (id window, Lisp_Object list)
 
    ========================================================================== */
 
+
 DEFUN ("ns-reset-menu", Fns_reset_menu, Sns_reset_menu, 0, 0, 0,
        doc: /* Cause the NS menu to be re-calculated.  */)
      ()
@@ -2009,6 +2074,18 @@ DEFUN ("menu-or-popup-active-p", Fmenu_or_popup_active_p, Smenu_or_popup_active_
 void
 syms_of_nsmenu ()
 {
+
+
+  DEFVAR_LISP ("ns-tool-bar-display-mode", &Vns_tool_bar_display_mode,
+     doc: /* *Specify whether to display the tool bar as icons with labels.
+The value can be `icons' (for icons only), `labels' (for icons with labels)
+and nil, in which case the system default is assumed.
+The default is nil.  */);
+
+  Vns_tool_bar_display_mode = Qnil;
+
+
+
   defsubr (&Sx_popup_menu);
   defsubr (&Sx_popup_dialog);
   defsubr (&Sns_reset_menu);
