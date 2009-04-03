@@ -640,7 +640,9 @@ name_is_separator (name)
 #ifdef NS_IMPL_COCOA
       /* OS X just ignores modifier strings longer than one character */
       if (keyEquivModMask == 0)
-        title = [title stringByAppendingFormat: @" (%@)", keyEq];
+	{  title = [title stringByAppendingFormat: @" %@", keyEq];
+	  keyEq = @"";
+	}
 #endif
 
       item = [self addItemWithTitle: (NSString *)title
