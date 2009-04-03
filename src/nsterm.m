@@ -1982,6 +1982,7 @@ ns_clear_frame (struct frame *f)
   UNBLOCK_INPUT;
 }
 
+extern struct buffer *current_buffer;
 
 void
 ns_clear_frame_area (struct frame *f, int x, int y, int width, int height)
@@ -1995,11 +1996,18 @@ ns_clear_frame_area (struct frame *f, int x, int y, int width, int height)
 
   if (!view || !face)
     return;
-
   NSTRACE (ns_clear_frame_area);
 
+  if (updated_window)
+    if (current_buffer && XBUFFER (updated_window->buffer) != current_buffer)
+      face = FACE_FROM_ID 
+	(f, lookup_basic_face_for_buffer (f, DEFAULT_FACE_ID, 
+					  updated_window->buffer) );
+    else
+      face = FACE_FROM_ID (f, lookup_basic_face (f, DEFAULT_FACE_ID) );
+
   r = NSIntersectionRect (r, [view frame]);
-  ns_focus (f, &r, 1);
+  // ns_focus (f, &r, 1);
   [ns_lookup_indexed_color (NS_FACE_BACKGROUND (face), f) set];
 
 #ifdef NS_IMPL_COCOA

@@ -589,6 +589,10 @@ draw_fringe_bitmap_1 (w, row, left_p, overlay, which)
 	face_id = FRINGE_FACE_ID;
     }
 
+  /* Perhaps remap BASE_FACE_ID to a user-specified alternative.  */
+  if (face_id == FRINGE_FACE_ID || face_id == DEFAULT_FACE_ID)
+    face_id = lookup_basic_face_for_buffer (XFRAME (w->frame), face_id, w->buffer);
+
   fb = fringe_bitmaps[which];
   if (fb == NULL)
     fb = &standard_bitmaps[which < MAX_STANDARD_FRINGE_BITMAPS
@@ -884,11 +888,15 @@ draw_row_fringe_bitmaps (w, row)
   if (row->visible_height <= 0)
     return;
 
-  if (WINDOW_LEFT_FRINGE_WIDTH (w) != 0)
+  if (WINDOW_LEFT_FRINGE_WIDTH (w) != 0) /* keep, due to C-x 3 w/o scroll-b and fringe bug*/
     draw_fringe_bitmap (w, row, 1);
 
-  if (WINDOW_RIGHT_FRINGE_WIDTH (w) != 0)
-    draw_fringe_bitmap (w, row, 0);
+  /* always draw the fringe, even if it is turned off:
+     this will fill an otherwise empty (background) between
+     window and scrollbar */
+  /*  if (WINDOW_RIGHT_FRINGE_WIDTH (w) != 0) */
+
+  draw_fringe_bitmap (w, row, 0);
 }
 
 /* Draw the fringes of window W.  Only fringes for rows marked for
@@ -1071,7 +1079,7 @@ update_window_fringes (w, keep_current_p)
       if (!row->enabled_p)
 	row = cur;
 
-      left_face_id = right_face_id = DEFAULT_FACE_ID;
+      left_face_id = right_face_id = FRINGE_FACE_ID; /* takes priority if customized */
 
       /* Decide which bitmap to draw in the left fringe.  */
       if (WINDOW_LEFT_FRINGE_WIDTH (w) == 0)
@@ -1127,6 +1135,12 @@ update_window_fringes (w, keep_current_p)
       else
 	right = NO_FRINGE_BITMAP;
 
+      /* Perhaps remap BASE_FACE_ID to a user-specified alternative.  */
+      if (left_face_id == FRINGE_FACE_ID || left_face_id == DEFAULT_FACE_ID)
+	left_face_id = lookup_basic_face_for_buffer (XFRAME (w->frame), left_face_id, w->buffer);
+      if (right_face_id == FRINGE_FACE_ID || right_face_id == DEFAULT_FACE_ID)
+	right_face_id = lookup_basic_face_for_buffer (XFRAME (w->frame), right_face_id, w->buffer);
+	
       if (row->y != cur->y
 	  || row->visible_height != cur->visible_height
 	  || row->ends_at_zv_p != cur->ends_at_zv_p
