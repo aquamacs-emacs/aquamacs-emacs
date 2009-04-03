@@ -1564,6 +1564,9 @@ or it might return the position of the end of the line."
 	    ;; If the string was found but was completely invisible,
 	    ;; it might now be partly visible, so try again.
 	    (prog1 isearch-hidden (setq isearch-hidden nil)))
+    (if (and transient-mark-mode 
+	     (not (and cua-mode cua--explicit-region-start)))
+	(deactivate-mark))
     ;; In reverse search, adding stuff at
     ;; the end may cause zero or many more chars to be
     ;; matched, in the string following point.
@@ -1594,8 +1597,7 @@ or it might return the position of the end of the line."
 		       (min isearch-opoint
 			    isearch-barrier
 			    (1+ isearch-other-end)))))
-      (isearch-search)
-      ))
+      (isearch-search)))
   (isearch-push-state)
   (if isearch-op-fun (funcall isearch-op-fun))
   (isearch-update))
