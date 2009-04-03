@@ -1127,6 +1127,37 @@ use with M-x."
     (rename-file encoded new-encoded ok-if-already-exists)
     newname))
 
+(defun forward-filename (arg)
+  "Move point forward arg filenames (backward if arg is negative)."
+  (interactive "p")
+  (if (< arg 0)
+      (progn
+	(backward-char)
+	(while (< arg 0)
+	  (re-search-backward "[/\n]" nil t)
+	  (setq arg (1+ arg)))
+	(forward-char))
+    (forward-char)
+    (while (> 0 arg )
+      (re-search-forward "[/\n]" nil t)
+      (setq arg (1- arg)))
+    (backward-char)))
+
+(defun kill-filename (arg)
+  "Kill characters forward until up to the end of a filename.
+With argument, do this that many times."
+  (interactive "p")
+  (kill-region (point) (progn (forward-filename arg) (point))))
+
+(defun backward-kill-filename (arg)
+  "Kill characters backward up to the beginning of a filename.
+With argument, do this that many times."
+  (interactive "p")
+  (kill-filename (- arg)))
+
+(define-key minibuffer-local-filename-completion-map 
+  [remap backward-kill-word] 'backward-kill-filename)
+
 (defcustom confirm-nonexistent-file-or-buffer 'after-completion
   "Whether confirmation is requested before visiting a new file or buffer.
 If nil, confirmation is not requested.
