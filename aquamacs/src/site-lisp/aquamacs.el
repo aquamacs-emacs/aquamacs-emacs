@@ -1351,6 +1351,12 @@ to the selected frame."
      (undo-limit 80000)
      )) 
    
+    ;; do not skip redisplays - tabbar (header line) and other things
+    ;; are slower in the NS port.
+    (when (eq initial-window-system 'ns)
+      (aquamacs-set-defaults 
+       '((redisplay-dont-pause t))))
+
 
   
 					; activate the modes
