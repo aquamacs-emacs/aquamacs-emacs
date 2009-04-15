@@ -1,3 +1,100 @@
+2009-04-15  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* fileio.c (history_delete_duplicates): Remove unused declaration.
+
+	* callint.c (history_delete_duplicates): New declaration.
+	(Fcall_interactively): Remove command history duplicates when
+	history_delete_duplicates is true.
+
+2009-04-14  Eli Zaretskii  <eliz@gnu.org>
+
+	* buffer.c (syms_of_buffer) <line-spacing>: Doc fix.
+
+2009-04-14  Kenichi Handa  <handa@m17n.org>
+
+	* font.c (Ffont_info): Fix docstring.  Fix the second element of
+	the returned value (bug#2949).
+
+2009-04-14  Chong Yidong  <cyd@stupidchicken.com>
+
+	* xdisp.c (Vwrap_prefix, Vline_prefix): Reflow docstrings.
+
+2009-04-14  Kenichi Handa  <handa@m17n.org>
+
+	* xfont.c (xfont_has_char): The font has C if C is ASCII and the
+	encoding charset is ascii_compatible.
+
+	* charset.c (Fdefine_charset_internal): Make charset
+	ascii-compatible if the method is CHARSET_METHOD_OFFSET, the
+	code_offset is 0, and covers all ASCII characters.
+
+2009-04-13  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* nsselect.m (symbol_to_nsstring, clean_local_selection_data)
+	(ns_string_to_pasteboard_internal):
+	* nsmenu.m (process_dialog):
+	* nsimage.m (ns_load_image): Use SDATA and ASET where appropriate.
+	* nsfont.m (nsfont_open): Use XHASH to make it compile with LISP_UNION.
+	* lisp.h (Fx_load_color_file): Declare.
+
+2009-04-13  Kenichi Handa  <handa@m17n.org>
+
+	* font.c (font_delete_unmatched): Preserve the order of list
+	elements.
+	(font_select_entity): Suppress the code to optimize for the same
+	kind of fonts.
+	(font_load_for_lface): Get a font that supports at least ASCII
+	characters.
+
+	* ftfont.c (Qja, Qko): New variables.
+	(fc_charset_table): Delete uniquifier data for iso8859-1.
+	(ftfont_get_latin1_charset): New function.
+	(get_adstyle_property): New function.
+	(ftfont_pattern_entity): Set FONT_ADSTYLE_INDEX of entity for
+	bitmap fonts.
+	(ftfont_lookup_cache): Handle the case that KEY is a font-entity.
+	Delete iso-8859-1 range from the charset of fonts whose adstyle is
+	`ko' or `ja'.
+	(ftfont_get_fc_charset): Call ftfont_lookup_cache with ENTITY.
+	(ftfont_get_charset): For iso8859-1, call
+	ftfont_get_latin1_charset.
+	(ftfont_list): Don't refuse a font spec with non-nil `adstyle'
+	property.
+	(ftfont_open): Call ftfont_lookup_cache with ENTITY.
+	(syms_of_ftfont): DEFSYM Qja and Qko.
+
+2009-04-09  Kenichi Handa  <handa@m17n.org>
+
+	* charset.c (map_charset_chars): For a charset of `superset'
+	method, fix calculation of code range.
+
+	* font.c (font_put_extra): If VAL is nil, delete the slot for PROP
+	from the list of extra properties.
+	(font_clear_prop): Be sure to delete `:name' font property.
+
+2009-04-08  YAMAMOTO Mitsuharu  <mituharu@math.s.chiba-u.ac.jp>
+
+	* dispnew.c (redraw_overlapping_rows): Fix detection of
+	overlapping for topmost and bottommost rows.
+
+	* ftfont.c (ftfont_text_extents): Fix calculation of
+	metrics->descent.
+
+2009-04-06  Jason Rumney  <jasonr@gnu.org>
+
+	* frame.c (x_set_font): Avoid C99 mid-block variable declaration.
+
+2009-04-06  Kenichi Handa  <handa@m17n.org>
+
+	* ftxfont.c (ftxfont_draw_backgrond): Fix args to XFillRectangle.
+
+	* xftfont.c (xftfont_open): Fix setting font->underline_thickness.
+
+2009-04-06  YAMAMOTO Mitsuharu  <mituharu@math.s.chiba-u.ac.jp>
+
+	* ftfont.c (ftfont_open): Fix checking of the return value of
+	FT_Load_Char.  Fix setting font->underline_thickness.
+
 2009-04-04  Chong Yidong  <cyd@stupidchicken.com>
 
 	* terminal.c (Fterminal_name, Fdelete_terminal, Fterminal_name)
@@ -366,7 +463,7 @@
 
 	* coding.c (CODING_ISO_CMP_STATUS): New macro.
 	(CODING_ISO_EXTSEGMENT_LEN, CODING_ISO_EMBEDDED_UTF_8): New macros.
-	(MAX_ANNOTATION_LENGTH): Defined to 5.
+	(MAX_ANNOTATION_LENGTH): Define to 5.
 	(ADD_COMPOSITION_DATA): New arg nbytes.
 	(emacs_mule_char): New arg cmp_status.
 	(DECODE_EMACS_MULE_COMPOSITION_CHAR): Delete it.
@@ -397,9 +494,9 @@
 	to_nchars.  Callers changed.
 	(produce_chars): Don't modify charbuf.  Adjusted for the change of
 	get_translation.
-	(produce_composition): Adjusted for the new annotation sequence.
+	(produce_composition): Adjust for the new annotation sequence.
 	(handle_composition_annotation): Likewise.
-	(consume_chars): Adjusted for the change of get_translation.
+	(consume_chars): Adjust for the change of get_translation.
 
 2009-03-05  Adrian Robert  <Adrian.B.Robert@gmail.com>
 
@@ -411,10 +508,10 @@
 	(font_find_for_lface): Use font_select_entity to select a font.
 
 	* fontset.c (fontset_find_font): If a font found without
-	restricting of the characters C doen't support C, try to find a
+	restricting to the characters C doesn't support C, try to find a
 	font with C restriction.
 
-2009-03-04  Nikolaj Schumacher  <me@nschum.de>  (tiny change)
+2009-03-04  Nikolaj Schumacher  <me@nschum.de>
 
 	* nsfont.m (nsfont_draw): Compare ns_antialias_text against lisp value.
 
