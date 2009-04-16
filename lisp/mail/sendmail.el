@@ -1113,10 +1113,7 @@ external program defined by `sendmail-program'."
 	    (if (not (re-search-forward "^From:" delimline t))
 		(mail-insert-from-field))
 	    ;; Possibly add a MIME header for the current coding system
-	    (let (charset where-content-type)
-	      (goto-char (point-min))
-	      (setq where-content-type
-		    (re-search-forward "^Content-type:" delimline t))
+	    (let (charset)
 	      (goto-char (point-min))
 	      (and (eq mail-send-nonascii 'mime)
 		   (not (re-search-forward "^MIME-version:" delimline t))
@@ -1125,19 +1122,11 @@ external program defined by `sendmail-program'."
 		   selected-coding
 		   (setq charset
 			 (coding-system-get selected-coding :mime-charset))
-		   (progn
-		     (goto-char delimline)
-		     (insert "MIME-version: 1.0\n"
-			     "Content-type: text/plain; charset="
-			     (symbol-name charset)
-			     "\nContent-Transfer-Encoding: 8bit\n")
-		   ;; The character set we will actually use
-		   ;; should override any specified in the message itself.
-		     (when where-content-type
-		       (goto-char where-content-type)
-		       (beginning-of-line)
-		       (delete-region (point)
-				      (progn (forward-line 1) (point)))))))
+		   (goto-char delimline)
+		   (insert "MIME-version: 1.0\n"
+			   "Content-type: text/plain; charset="
+			   (symbol-name charset)
+			   "\nContent-Transfer-Encoding: 8bit\n")))
 	    ;; Insert an extra newline if we need it to work around
 	    ;; Sun's bug that swallows newlines.
 	    (goto-char (1+ delimline))

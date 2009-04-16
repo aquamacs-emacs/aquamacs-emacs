@@ -1932,8 +1932,7 @@ Formats current entry according to variable `bibtex-entry-format'."
 
                 ;; Do we have a crossref key?
                 (goto-char (point-min))
-                (if (setq bounds (bibtex-search-forward-field
-                                  "\\(OPT\\)?crossref"))
+                (if (setq bounds (bibtex-search-forward-field "crossref"))
                     (let ((text (bibtex-text-in-field-bounds bounds t)))
                       (unless (equal "" text)
                         (setq crossref-key text))))
@@ -3522,7 +3521,7 @@ for a crossref key, t otherwise."
             (end (cdr (bibtex-valid-entry t)))
             (_ (unless end (error "Not inside valid entry")))
             (beg (match-end 0)) ; set by `bibtex-valid-entry'
-            (bounds (bibtex-search-forward-field "\\(OPT\\)?crossref" end))
+            (bounds (bibtex-search-forward-field "crossref" end))
             case-fold-search best temp crossref-key)
        (if bounds
            (setq crossref-key (bibtex-text-in-field-bounds bounds t)

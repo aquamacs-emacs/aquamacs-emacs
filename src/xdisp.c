@@ -25276,28 +25276,26 @@ The enable predicate for a menu binding should check this variable.  */);
   inhibit_menubar_update = 0;
 
   DEFVAR_LISP ("wrap-prefix", &Vwrap_prefix,
-    doc: /* Prefix prepended to all continuation lines at display time.
-The value may be a string, an image, or a stretch-glyph; it is
-interpreted in the same way as the value of a `display' text property.
+    doc: /* Prefix added to the beginning of all continuation lines at display-time.
+May be a string, an image, or a stretch-glyph such as used by the
+`display' text-property.
 
-This variable is overridden by any `wrap-prefix' text or overlay
-property.
+This variable is overridden by any `wrap-prefix' text-property.
 
-To add a prefix to non-continuation lines, use `line-prefix'.  */);
+To add a prefix to non-continuation lines, use the `line-prefix' variable.  */);
   Vwrap_prefix = Qnil;
   staticpro (&Qwrap_prefix);
   Qwrap_prefix = intern ("wrap-prefix");
   Fmake_variable_buffer_local (Qwrap_prefix);
 
   DEFVAR_LISP ("line-prefix", &Vline_prefix,
-    doc: /* Prefix prepended to all non-continuation lines at display time.
-The value may be a string, an image, or a stretch-glyph; it is
-interpreted in the same way as the value of a `display' text property.
+    doc: /* Prefix added to the beginning of all non-continuation lines at display-time.
+May be a string, an image, or a stretch-glyph such as used by the
+`display' text-property.
 
-This variable is overridden by any `line-prefix' text or overlay
-property.
+This variable is overridden by any `line-prefix' text-property.
 
-To add a prefix to continuation lines, use `wrap-prefix'.  */);
+To add a prefix to continuation lines, use the `wrap-prefix' variable.  */);
   Vline_prefix = Qnil;
   staticpro (&Qline_prefix);
   Qline_prefix = intern ("line-prefix");

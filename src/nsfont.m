@@ -576,9 +576,7 @@ nsfont_open (FRAME_PTR f, Lisp_Object font_entity, int pixel_size)
     {
       if (NSFONT_TRACE)
         fprintf(stderr, "*** nsfont_open CACHE HIT!\n");
-      // FIXME: Cast from (unsigned long) to Lisp_Object.
-      XHASH (font_object) = [cached unsignedLongValue];
-      return font_object;
+      return (Lisp_Object)[cached unsignedLongValue];
     }
   else
     {
@@ -587,7 +585,7 @@ nsfont_open (FRAME_PTR f, Lisp_Object font_entity, int pixel_size)
       if (!synthItal)
         [fontCache
           setObject: [NSNumber numberWithUnsignedLong:
-                                 (unsigned long) XHASH (font_object)]
+                                 (unsigned long)font_object]
           forKey: nsfont];
     }
 

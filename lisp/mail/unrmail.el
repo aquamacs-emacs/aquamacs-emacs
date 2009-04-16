@@ -191,13 +191,7 @@ For example, invoke `emacs -batch -f batch-unrmail RMAIL'."
 	       (save-excursion (search-forward "\n\n" nil 'move) (point)))
 
 	      ;; Fetch or construct what we should use in the `From ' line.
-	      (setq mail-from (or (let ((from (mail-fetch-field "Mail-From")))
-				    ;; mail-mbox-from (below) returns a
-				    ;; string that ends in a newline, but
-				    ;; but mail-fetch-field does not, so
-				    ;; we append a newline here.
-				    (if from
-					(format "%s\n" from)))
+	      (setq mail-from (or (mail-fetch-field "Mail-From")
 				  (mail-mbox-from)))
 
 	      ;; If the message specifies a coding system, use it.
@@ -219,7 +213,7 @@ For example, invoke `emacs -batch -f batch-unrmail RMAIL'."
 
 	    (goto-char (point-min))
 	    ;; Insert the `From ' line.
-	    (insert mail-from)
+	    (insert mail-from "\n")
 	    ;; Record the keywords and attributes in our special way.
 	    (insert "X-RMAIL-ATTRIBUTES: " (apply 'string attrs) "\n")
 	    (when keywords

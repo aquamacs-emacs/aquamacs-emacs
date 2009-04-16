@@ -809,8 +809,8 @@ map_charset_chars (c_function, function, arg,
 
 	  charset = CHARSET_FROM_ID (XFASTINT (XCAR (XCAR (parents))));
 	  offset = XINT (XCDR (XCAR (parents)));
-	  this_from = from > offset ? from - offset : 0;
-	  this_to = to > offset ? to - offset : 0;
+	  this_from = from - offset;
+	  this_to = to - offset;
 	  if (this_from < CHARSET_MIN_CODE (charset))
 	    this_from = CHARSET_MIN_CODE (charset);
 	  if (this_to > CHARSET_MAX_CODE (charset))
@@ -1082,8 +1082,6 @@ usage: (define-charset-internal ...)  */)
       i = (i >> 12) << 12;
       for (; i <= charset.max_char; i += 0x1000)
 	CHARSET_FAST_MAP_SET (i, charset.fast_map);
-      if (charset.code_offset == 0 && charset.max_char >= 0x80)
-	charset.ascii_compatible_p = 1;
     }
   else if (! NILP (args[charset_arg_map]))
     {

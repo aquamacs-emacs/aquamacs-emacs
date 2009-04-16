@@ -3761,20 +3761,20 @@ shift-translation."
   :group 'editing-basics)
 
 (defun handle-shift-selection ()
-  "Activate/deactivate mark depending on invocation thru shift translation.
-This function is called by `call-interactively' when a command
-with a `^' character in its `interactive' spec is invoked, before
-running the command itself.
+  "Activate/deactivate mark depending on invocation thru ``shift translation.''
 
-If `shift-select-mode' is enabled and the command was invoked
-through shift translation, set the mark and activate the region
-temporarily, unless it was already set in this way.  See
-`this-command-keys-shift-translated' for the meaning of shift
-translation.
+\(See `this-command-keys-shift-translated' for the meaning of
+shift translation.)
 
-Otherwise, if the region has been activated temporarily,
-deactivate it, and restore the variable `transient-mark-mode' to
-its earlier value."
+This is called whenever a command with a `^' character in its
+`interactive' spec is invoked.
+Its behavior is controlled by `shift-select-mode'.
+
+If the command was invoked through shift translation, set the
+mark and activate the region temporarily, unless it was already
+set in this way.  If the command was invoked without shift
+translation, or if the region was activated by the mouse,
+deactivate the mark if the region is temporarily active."
   (cond ((and shift-select-mode this-command-keys-shift-translated)
          (unless (and mark-active
                       (eq (car-safe transient-mark-mode) 'only))
@@ -5615,7 +5615,6 @@ With a prefix argument, set VARIABLE to VALUE buffer-locally."
     (define-key map "\e\e\e" 'delete-completion-window)
     (define-key map [left] 'previous-completion)
     (define-key map [right] 'next-completion)
-    (define-key map "q" 'quit-window)
     map)
   "Local map for completion list buffers.")
 

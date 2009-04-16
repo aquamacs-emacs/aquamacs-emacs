@@ -719,8 +719,6 @@ font_put_extra (font, prop, val)
     {
       Lisp_Object prev = Qnil;
 
-      if (NILP (val))
-	return val;
       while (CONSP (extra)
 	     && NILP (Fstring_lessp (prop, XCAR (XCAR (extra)))))
 	prev = extra, extra = XCDR (extra);
@@ -731,8 +729,6 @@ font_put_extra (font, prop, val)
       return val;
     }
   XSETCDR (slot, val);
-  if (NILP (val))
-    ASET (font, FONT_EXTRA_INDEX, Fdelq (slot, extra));
   return val;
 }
 
@@ -2752,7 +2748,7 @@ font_delete_unmatched (list, spec, size)
       if (prop < FONT_SPEC_MAX)
 	val = Fcons (entity, val);
     }
-  return Fnreverse (val);
+  return val;
 }
 
 
@@ -3082,20 +3078,13 @@ font_clear_prop (attrs, prop)
 
   if (! FONTP (font))
     return;
-  if (! NILP (Ffont_get (font, QCname)))
-    {
-      font = Fcopy_font_spec (font);
-      font_put_extra (font, QCname, Qnil);
-    }
-
   if (NILP (AREF (font, prop))
       && prop != FONT_FAMILY_INDEX
       && prop != FONT_FOUNDRY_INDEX
       && prop != FONT_WIDTH_INDEX
       && prop != FONT_SIZE_INDEX)
     return;
-  if (EQ (font, attrs[LFACE_FONT_INDEX]))
-    font = Fcopy_font_spec (font);
+  font = Fcopy_font_spec (font);
   ASET (font, prop, Qnil);
   if (prop == FONT_FAMILY_INDEX || prop == FONT_FOUNDRY_INDEX)
     {
@@ -3223,11 +3212,6 @@ font_select_entity (frame, entities, attrs, pixel_size, c)
       int j;
 
       font_entity = AREF (entities, i);
-#if 0
-      /* The following code is intended to avoid checking of
-	 font_has_char repeatedly for bitmap fonts that differs only
-	 in pixelsize.  But, it doesn't work well if fontconfig is
-	 configured to find BDF/PFC fonts.  */
       if (i > 0)
 	{
 	  for (j = FONT_FOUNDRY_INDEX; j <= FONT_REGISTRY_INDEX; j++)
@@ -3238,7 +3222,6 @@ font_select_entity (frame, entities, attrs, pixel_size, c)
 	}
       for (j = FONT_FOUNDRY_INDEX; j <= FONT_REGISTRY_INDEX; j++)
 	props[j] = AREF (font_entity, j);
-#endif
       result = font_has_char (f, font_entity, c);
       if (result > 0)
 	return font_entity;
@@ -3461,8 +3444,7 @@ font_load_for_lface (f, attrs, spec)
 {
   Lisp_Object entity;
 
-  /* We assume that a font that supports 'A' supports ASCII chars.  */
-  entity = font_find_for_lface (f, attrs, spec, 'A');
+  entity = font_find_for_lface (f, attrs, spec, -1);
   if (NILP (entity))
     {
       /* No font is listed for SPEC, but each font-backend may have
@@ -4906,13 +4888,13 @@ Type C-l to recover what previously shown.  */)
 DEFUN ("font-info", Ffont_info, Sfont_info, 1, 2, 0,
        doc: /* Return information about a font named NAME on frame FRAME.
 If FRAME is omitted or nil, use the selected frame.
-The returned value is a vector of OPENED-NAME, FULL-NAME, SIZE,
+The returned value is a vector of OPENED-NAME, FULL-NAME, CHARSET, SIZE,
   HEIGHT, BASELINE-OFFSET, RELATIVE-COMPOSE, and DEFAULT-ASCENT,
 where
   OPENED-NAME is the name used for opening the font,
   FULL-NAME is the full name of the font,
-  SIZE is the pixelsize of the font,
-  HEIGHT is the pixel-height of the font (i.e ascent + descent),
+  SIZE is the maximum bound width of the font,
+  HEIGHT is the height of the font,
   BASELINE-OFFSET is the upward offset pixels from ASCII baseline,
   RELATIVE-COMPOSE and DEFAULT-ASCENT are the numbers controlling
     how to compose characters.
@@ -4959,7 +4941,7 @@ If the named font is not yet loaded, return nil.  */)
 
   info = Fmake_vector (make_number (7), Qnil);
   XVECTOR (info)->contents[0] = AREF (font_object, FONT_NAME_INDEX);
-  XVECTOR (info)->contents[1] = AREF (font_object, FONT_FULLNAME_INDEX);
+  XVECTOR (info)->contents[1] = AREF (font_object, FONT_NAME_INDEX);
   XVECTOR (info)->contents[2] = make_number (font->pixel_size);
   XVECTOR (info)->contents[3] = make_number (font->height);
   XVECTOR (info)->contents[4] = make_number (font->baseline_offset);

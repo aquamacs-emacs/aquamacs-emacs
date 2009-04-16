@@ -3330,7 +3330,6 @@ EXFUN (Fx_focus_frame, 1);
 
 /* Defined in xfaces.c */
 EXFUN (Fclear_face_cache, 1);
-EXFUN (Fx_load_color_file, 1);
 extern void syms_of_xfaces P_ ((void));
 
 #ifndef HAVE_GETLOADAVG
