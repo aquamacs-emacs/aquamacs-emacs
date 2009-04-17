@@ -634,7 +634,7 @@ No errors are signaled."
 					nil nil nil 'replace))
 	      (set-buffer-modified-p nil))
 	    (setq buffer-undo-list nil)
-	    (setq buffer-file-name aquamacs-scratch-file)
+	    (setq buffer-file-name (expand-file-name aquamacs-scratch-file))
 	    (setq buffer-offer-save nil)	
 	    ;; Buffer auto save caused severe problems on occasion:
 	    ;; Aquamacs would ask about the file being changed upon exit,

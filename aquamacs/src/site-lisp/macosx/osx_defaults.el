@@ -205,8 +205,11 @@ from earlier versions of the distribution."
 ;; that we load using "require" and "load".
 
 
-  (aquamacs-set-defaults '(( frame-title-format "%b")))
- 
+  (aquamacs-set-defaults `((frame-title-format
+			    ,(if (eq initial-window-system 'ns)
+				 t
+			       "%b"))))
+
   ;; emulate a three button mouse with Option / Control modifiers 
   ;; (setq mac-emulate-three-button-mouse t)
   ;; seems to prevent setting the secondary selection, so turned off for now

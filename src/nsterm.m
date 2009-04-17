@@ -54,6 +54,10 @@ GNUstep port and post-20 update by Adrian Robert (arobert@cogsci.ucsd.edu)
 
 #include "font.h"
 
+/* show size in window titles while resizing */
+/* #define AQUAMACS_RESIZING_HINT 1 */
+
+
 /* call tracing */
 #if 0
 int term_trace_num = 0;
@@ -5021,6 +5025,7 @@ extern void update_window_cursor (struct window *w, int on);
   frameSize.height = FRAME_TEXT_LINES_TO_PIXEL_HEIGHT (emacsframe, rows)
                        + FRAME_NS_TITLEBAR_HEIGHT (emacsframe)
                        + FRAME_NS_TOOLBAR_HEIGHT (emacsframe);
+#ifdef AQUAMACS_RESIZING_HINT /* do not do this in Aquamacs */
 #ifdef NS_IMPL_COCOA
   {
     /* this sets window title to have size in it; the wm does this under GS */
@@ -5054,6 +5059,7 @@ extern void update_window_cursor (struct window *w, int on);
       }
   }
 #endif /* NS_IMPL_COCOA */
+#endif /* not in Aquamacs */
 /*fprintf (stderr,"    ...size became %.0f x %.0f  (%d x %d)\n",frameSize.width,frameSize.height,cols,rows); */
 
   return frameSize;
@@ -5075,6 +5081,7 @@ extern void update_window_cursor (struct window *w, int on);
   NSTRACE (windowDidResize);
 /*fprintf (stderr,"windowDidResize: %.0f\n",[theWindow frame].size.height); */
 
+#ifdef AQUAMACS_RESIZING_HINT /* not in Aquamacs */
 #ifdef NS_IMPL_COCOA
   if (old_title != 0)
     {
@@ -5082,6 +5089,7 @@ extern void update_window_cursor (struct window *w, int on);
       old_title = 0;
     }
 #endif /* NS_IMPL_COCOA */
+#endif /* AQUAMACS_RESIZING_HINT */
 
   if (cols > 0 && rows > 0)
     x_set_window_size (emacsframe, 0, cols, rows);
@@ -5182,7 +5190,9 @@ extern void update_window_cursor (struct window *w, int on);
 
   FRAME_NS_VIEW (f) = self;
   emacsframe = f;
+#ifdef AQUAMACS_RESIZING_HINT
   old_title = 0;
+#endif
 
   win = [[EmacsWindow alloc]
             initWithContentRect: r
@@ -5701,7 +5711,6 @@ extern void update_window_cursor (struct window *w, int on);
     {
       struct frame *f = ((EmacsView *)[self delegate])->emacsframe;
       ns_in_resize = NO;
-      ns_set_name_as_filename (f);
       [self display];
       ns_send_appdefined (-1);
     }
