@@ -13,17 +13,15 @@ CHGLOGSCRIPT='~/aquamacs-web/scripts/push-nightly-changelog.sh'
 if [ "$2" == "intel" ];
 then
      
-    SOURCE=~/Aquamacs/builds
-    LOGPATH=~/Aquamacs
+    SOURCE=`pwd`/builds
+    LOGPATH=`pwd`
 
     DEST=~/Sites/Aquamacs/intel
-#    DEST=dreitter@ssh.tardis.ed.ac.uk:/home/dreitter/public_html/Aquamacs/intel
 else
-    SOURCE=~/Aquamacs/builds
-    LOGPATH=~/Aquamacs
+    SOURCE=`pwd`/builds
+    LOGPATH=`pwd`
 
     DEST=~/Sites/Aquamacs
-#    DEST=dreitter@ssh.tardis.ed.ac.uk:/home/dreitter/public_html/pages/Aquamacs
 
 fi
 
