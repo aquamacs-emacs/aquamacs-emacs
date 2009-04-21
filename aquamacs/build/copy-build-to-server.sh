@@ -54,31 +54,6 @@ if [ -e $TMP/${NAME} ]; then
     fi
 fi
 
-rm -r $TMP 2>/dev/null
-mkdir $TMP 2>/dev/null
-scp $SOURCE/${GNUNAME} $TMP/
-
-if [ -e $TMP/${GNUNAME} ]; then
-
-    SIZE=`du -sk $TMP/${GNUNAME} | awk '{print $1}'`
-    if [ $SIZE -gt 1000 ]; then
-
-        rm -rf gnubuilds
-        mv $TMP gnubuilds
-        chmod go+rx gnubuilds
-        rm GNU-Emacs-nightly.dmg.bz2 2>/dev/null
-        ${COPYORLINK} gnubuilds/$GNUNAME GNU-Emacs-nightly.dmg.bz2
-        echo "The latest GNU Emacs nightly is ${GNUNAME}" >latest-emacs.html
-        # copy the downloaded log for this step into "latest" because the build worked
-        cp emacs-build.log latest-logs/  2>/dev/null
-
-    else
-        rm -r $TMP
-
-    fi
-fi
- 
-
 echo "<HTML style=\"border: none ;\"><META HTTP-EQUIV=\"expires\" CONTENT=\"now\"><link href=\"http://aquamacs.org/iframe.css\" rel=\"stylesheet\" type=\"text/css\" /><BODY style=\"border: none ;\">" >latest.html
 cat latest-aquamacs.html latest-emacs.html >>latest.html
 echo "</BODY></HTML>" >>latest.html
