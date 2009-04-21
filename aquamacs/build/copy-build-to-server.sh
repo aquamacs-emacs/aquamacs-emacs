@@ -10,20 +10,10 @@ CHGLOGSCRIPT='~/aquamacs-web/scripts/push-nightly-changelog.sh'
 
 
 
-if [ "$2" == "intel" ];
-then
-     
-    SOURCE=`pwd`/builds
-    LOGPATH=`pwd`
+SOURCE=`pwd`/builds
+LOGPATH=`pwd`
 
-    DEST=~/Sites/Aquamacs/intel
-else
-    SOURCE=`pwd`/builds
-    LOGPATH=`pwd`
-
-    DEST=~/Sites/Aquamacs
-
-fi
+DEST=~/Sites/Aquamacs
 
 TMP=/tmp/builds
 
@@ -57,9 +47,8 @@ if [ -e $TMP/${NAME} ]; then
         cp aquamacs-build.log latest-logs/ 2>/dev/null
 
 	# update the change log 
-
-        $CHGLOGSCRIPT
-
+        cd `dirname $CHGLOGSCRIPT` ; $CHGLOGSCRIPT
+        cd $DEST
     else
         rm -r $TMP 
     fi
