@@ -628,14 +628,15 @@ The following OPTIONS are accepted:\n\
 			use the current Emacs frame\n\
 -e, --eval    		Evaluate the FILE arguments as ELisp expressions\n\
 -n, --no-wait		Don't wait for the server to return\n\
--d, --display=DISPLAY	Visit the file in the given display\n"
+-d DISPLAY, --display=DISPLAY\n\
+			Visit the file in the given display\n"
 #ifndef NO_SOCKETS_IN_FILE_SYSTEM
-"-s, --socket-name=FILENAME\n\
+"-s SOCKET, --socket-name=SOCKET\n\
 			Set filename of the UNIX socket for communication\n"
 #endif
-"-f, --server-file=FILENAME\n\
+"-f SERVER, --server-file=SERVER\n\
 			Set filename of the TCP authentication file\n\
--a, --alternate-editor=EDITOR\n\
+-a EDITOR, --alternate-editor=EDITOR\n\
 			Editor to fallback to if the server is not running\n"
 #ifndef WINDOWSNT
 "			If EDITOR is the empty string, start Emacs in daemon\n\

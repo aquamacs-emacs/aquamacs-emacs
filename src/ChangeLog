@@ -1,3 +1,144 @@
+2009-04-22  Chong Yidong  <cyd@stupidchicken.com>
+
+	* keyboard.c (Fset_input_meta_mode): Doc fix.
+
+	* dispnew.c (Fsend_string_to_terminal): Doc fix.
+
+	* data.c (Fterminal_local_value, Fset_terminal_local_value): Doc
+	fixes.
+
+	* coding.c (Fterminal_coding_system): Doc fix.
+
+	* xfns.c (Fx_display_grayscale_p, Fx_display_pixel_width)
+	(Fx_display_pixel_height, Fx_display_planes)
+	(Fx_display_color_cells, Fx_server_max_request_size)
+	(Fx_server_vendor, Fx_server_version, Fx_display_screens)
+	(Fx_display_mm_height, Fx_display_mm_width)
+	(Fx_display_backing_store, Fx_display_visual_class)
+	(Fx_display_save_under, Fx_close_connection, Fx_synchronize): Doc
+	fixes, replacing "terminal id" with "terminal object".
+	(check_x_display_info): Handle terminal objects instead of
+	terminal ids.
+
+	* term.c (Ftty_display_color_p, Ftty_display_color_cells)
+	(Ftty_type, Fcontrolling_tty_p, Ftty_no_underline, Fsuspend_tty)
+	(Fresume_tty, Vsuspend_tty_functions, Vresume_tty_functions): Doc
+	fixes, replacing "terminal id" with "terminal object".
+
+2009-04-21  Kenichi Handa  <handa@m17n.org>
+
+	* font.c (font_load_for_lface): Cancel previous change (bug#2994).
+	(font_score): Check AVGWIDTH too.
+
+	* coding.c (decode_coding_utf_16): Reduce charbuf_end for the
+	worst case.
+	(decode_coding_emacs_mule, decode_coding_iso_2022)
+	(decode_coding_sjis, decode_coding_big5, decode_coding_charset):
+	Likewise.
+
+2009-04-19  Jason Rumney  <jasonr@gnu.org>
+
+	The following changes fix Bug#3005 for wide glyphs on each platform,
+	without	reintroducing Bug#1258 for stretch glyphs.
+
+	* xterm.c (x_draw_bar_cursor): Limit cursor width differently for
+	BAR_CURSOR and HBAR_CURSOR.  Calculate width of HBAR_CURSOR using
+	get_phys_cursor_geometry.
+
+	* w32term.c (x_draw_bar_cursor):  Limit cursor width differently
+	for BAR_CURSOR and HBAR_CURSOR.  Calculate width of HBAR_CURSOR
+	using get_phys_cursor_geometry.
+
+	* nsterm.m (ns_draw_window_cursor): HBAR_CURSOR width already
+	correctly calculated.
+
+2009-04-19  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* gtkutil.c (xg_tool_bar_menu_proxy, update_frame_tool_bar): Use
+	G_CALLBACK instead of GTK_SIGNAL_FUNC which is deprecated.
+	(xg_initialize): Use g_type_class_ref instead of gtk_type_class which
+	is deprecated.
+
+2009-04-18  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* font.c (font_put_frame_data): Use xfree instead of free.
+
+2009-04-17  Juanma Barranquero  <lekktu@gmail.com>
+
+	* w32font.c (Qja, Qko): Remove declarations.
+	(syms_of_w32font): Don't DEFSYM them.
+
+2009-04-17  Chong Yidong  <cyd@stupidchicken.com>
+
+	* font.c (Qja, Qko): Move definitions here from ftfont.c.
+
+	* font.h (Qja, Qko): Extern them.
+
+	* ftfont.c (Qja, Qko): Remove declarations.
+
+	* xfont.c (Qja, Qko): Remove declarations.
+
+2009-04-17  Kenichi Handa  <handa@m17n.org>
+
+	* editfns.c (Ftranslate_region_internal): Use Fconcat to make a
+	string from a vector to handle Latin-1 characters correctly.
+
+	* ftfont.c (ftfont_pattern_entity): Return a newly allocated
+	entity even if the cache hits.
+
+2009-04-16  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* search.c (boyer_moore): Use zero as marker value for a possible
+	match instead of depending on overflow behavior.  (Bug#2844)
+
+	* search.c: Use EMACS_INT for buffer positions.  Add prototypes.
+	* lisp.h: Adjust prototypes.
+
+2009-04-16  Chong Yidong  <cyd@stupidchicken.com>
+
+	* keyboard.c (adjust_point_for_property): Disable 2009-02-12
+	change (Bug#3003).
+
+2009-04-16  Kenichi Handa  <handa@m17n.org>
+
+	* xfont.c (xfont_has_char): Special handling of `ja' and `ko'
+	adstyle.
+
+	* xftfont.c (xftfont_has_char): Special handling of `ja' and `ko'
+	adstyle.
+
+	* ftfont.c (Qja, Qko): Don't make them static.
+	(enum ftfont_cache_for): New enum.
+	(fc_charset_table): Undo the previous change.
+	(ftfont_get_latin1_charset): Delete it.
+	(ftfont_pattern_entity): Check cache by ftfont_lookup_cache.  Set
+	FONT_SIZE_INDEX of the entity to 0 for a scalable font.  For a
+	non-scarable font, try to get AVERAGE_WIDTH.
+	(ftfont_lookup_cache): Argument FOR-FACE is changed to CACHE_FOR.
+	Change ft_face_cache from a list of a hash-table.  Don't check
+	`ja' and `ko' adstyle here.
+	(ftfont_get_fc_charset): Call ftfont_lookup_cache with
+	FTFONT_CACHE_FOR_CHARET.
+	(ftfont_get_charset): Undo the previous change.
+	(ftfont_open): Call ftfont_lookup_cache with
+	FTFONT_CACHE_FOR_FACE.
+	(ftfont_close): Likewise.
+	(ftfont_has_char): Special handling of `ja' and `ko' adstyle.
+
+	* font.c (font_sort_entites): Change the meaning of the arg
+	BEST-ONLY.  Don't optimize for VEC of lenght 1.
+	(font_select_entity): Just return the value of font_sort_entites.
+
+	* xfaces.c (merge_face_vectors): Reflect font properties in
+	to[LFACE_FONT_INDEX] to the other face attributes.  Don't call
+	font_clear_prop if a face attribute doesn't change.
+
+	* charset.h (charset_ksc5601): Extern it.
+
+	* charset.c (charset_ksc5601): New variable.
+	(Fdefine_charset_internal): Set charset_ksc5601.
+	(init_charset_once): Initialize charset_ksc5601 to -1.
+
 2009-04-15  Dan Nicolaescu  <dann@ics.uci.edu>
 
 	* fileio.c (history_delete_duplicates): Remove unused declaration.

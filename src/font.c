@@ -143,6 +143,9 @@ Lisp_Object QCspacing, QCdpi, QCscalable, QCotf, QClang, QCscript, QCavgwidth;
 Lisp_Object QCantialias, QCfont_entity, QCfc_unknown_spec;
 /* Symbols representing values of font spacing property.  */
 Lisp_Object Qc, Qm, Qp, Qd;
+/* Special ADSTYLE properties to avoid fonts used for Latin
+   characters; used in xfont.c and ftfont.c.  */
+Lisp_Object Qja, Qko;
 
 Lisp_Object Vfont_encoding_alist;
 
@@ -2267,6 +2270,9 @@ font_score (entity, spec_prop)
       if (! NILP (spec_prop[FONT_DPI_INDEX])
 	  && ! EQ (spec_prop[FONT_DPI_INDEX], AREF (entity, FONT_DPI_INDEX)))
 	diff |= 1;
+      if (! NILP (spec_prop[FONT_AVGWIDTH_INDEX])
+	  && ! EQ (spec_prop[FONT_AVGWIDTH_INDEX], AREF (entity, FONT_AVGWIDTH_INDEX)))
+	diff |= 1;
       score |= min (diff, 127) << sort_shift_bits[FONT_SIZE_INDEX];
     }
 
@@ -2297,8 +2303,12 @@ struct font_sort_data
    pixel-size from QCdpi property of PREFER or from the Y-resolution
    of FRAME before sorting.
 
-   If BEST-ONLY is nonzero, return the best matching entity.  Otherwise,
-   return the sorted VEC.  */
+   If BEST-ONLY is nonzero, return the best matching entity (that
+   supports the character BEST-ONLY if BEST-ONLY is positive, or any
+   if BEST-ONLY is negative).  Otherwise, return the sorted VEC.
+
+   This function does no optimization for the case that the length of
+   VEC is 1.  The caller should avoid calling this in such a case.  */
 
 static Lisp_Object
 font_sort_entites (vec, prefer, frame, best_only)
@@ -2316,9 +2326,6 @@ font_sort_entites (vec, prefer, frame, best_only)
   USE_SAFE_ALLOCA;
 
   len = ASIZE (vec);
-  if (len <= 1)
-    return best_only ? AREF (vec, 0) : vec;
-
   for (i = FONT_WEIGHT_INDEX; i <= FONT_DPI_INDEX; i++)
     prefer_prop[i] = AREF (prefer, i);
   if (FLOATP (prefer_prop[FONT_SIZE_INDEX]))
@@ -2327,16 +2334,14 @@ font_sort_entites (vec, prefer, frame, best_only)
 
   /* Scoring and sorting.  */
   SAFE_ALLOCA (data, struct font_sort_data *, (sizeof *data) * len);
-  best_score = 0xFFFFFFFF;
   /* We are sure that the length of VEC > 1.  */
   driver_type = AREF (AREF (vec, 0), FONT_TYPE_INDEX);
   for (driver_order = 0, list = f->font_driver_list; list;
        driver_order++, list = list->next)
     if (EQ (driver_type, list->driver->type))
       break;
-  best_entity = data[0].entity = AREF (vec, 0);
-  best_score = data[0].score
-    = font_score (data[0].entity, prefer_prop) | driver_order;
+  best_score = 0xFFFFFFFF;
+  best_entity = Qnil;
   for (i = 0; i < len; i++)
     {
       if (!EQ (driver_type, AREF (AREF (vec, i), FONT_TYPE_INDEX)))
@@ -2345,7 +2350,10 @@ font_sort_entites (vec, prefer, frame, best_only)
 	  if (EQ (driver_type, list->driver->type))
 	    break;
       data[i].entity = AREF (vec, i);
-      data[i].score = font_score (data[i].entity, prefer_prop) | driver_order;
+      data[i].score
+	= (best_only <= 0 || font_has_char (f, data[i].entity, best_only) > 0
+	   ? font_score (data[i].entity, prefer_prop) | driver_order
+	   : 0xFFFFFFFF);
       if (best_only && best_score > data[i].score)
 	{
 	  best_score = data[i].score;
@@ -3213,37 +3221,8 @@ font_select_entity (frame, entities, attrs, pixel_size, c)
   if (NILP (AREF (prefer, FONT_WIDTH_INDEX)))
     FONT_SET_STYLE (prefer, FONT_WIDTH_INDEX, attrs[LFACE_SWIDTH_INDEX]);
   ASET (prefer, FONT_SIZE_INDEX, make_number (pixel_size));
-  entities = font_sort_entites (entities, prefer, frame, c < 0);
 
-  if (c < 0)
-    return entities;
-
-  for (i = 0; i < ASIZE (entities); i++)
-    {
-      int j;
-
-      font_entity = AREF (entities, i);
-#if 0
-      /* The following code is intended to avoid checking of
-	 font_has_char repeatedly for bitmap fonts that differs only
-	 in pixelsize.  But, it doesn't work well if fontconfig is
-	 configured to find BDF/PFC fonts.  */
-      if (i > 0)
-	{
-	  for (j = FONT_FOUNDRY_INDEX; j <= FONT_REGISTRY_INDEX; j++)
-	    if (! EQ (AREF (font_entity, j), props[j]))
-	      break;
-	  if (j > FONT_REGISTRY_INDEX)
-	    continue;
-	}
-      for (j = FONT_FOUNDRY_INDEX; j <= FONT_REGISTRY_INDEX; j++)
-	props[j] = AREF (font_entity, j);
-#endif
-      result = font_has_char (f, font_entity, c);
-      if (result > 0)
-	return font_entity;
-    }
-  return Qnil;
+  return font_sort_entites (entities, prefer, frame, c);
 }
 
 /* Return a font-entity satisfying SPEC and best matching with face's
@@ -3461,8 +3440,7 @@ font_load_for_lface (f, attrs, spec)
 {
   Lisp_Object entity;
 
-  /* We assume that a font that supports 'A' supports ASCII chars.  */
-  entity = font_find_for_lface (f, attrs, spec, 'A');
+  entity = font_find_for_lface (f, attrs, spec, -1);
   if (NILP (entity))
     {
       /* No font is listed for SPEC, but each font-backend may have
@@ -3706,7 +3684,7 @@ font_put_frame_data (f, driver, data)
 	    prev->next = list->next;
 	  else
 	    f->font_data_list = list->next;
-	  free (list);
+	  xfree (list);
 	}
       return 0;
     }
@@ -5161,6 +5139,9 @@ syms_of_font ()
   DEFSYM (Qm, "m");
   DEFSYM (Qp, "p");
   DEFSYM (Qd, "d");
+
+  DEFSYM (Qja, "ja");
+  DEFSYM (Qko, "ko");
 
   staticpro (&null_vector);
   null_vector = Fmake_vector (make_number (0), Qnil);
