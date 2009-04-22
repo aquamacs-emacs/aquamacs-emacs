@@ -1842,7 +1842,8 @@ This is used to map a mode number to a permission string.")
     (dired-recursive-delete-directory
      . tramp-handle-dired-recursive-delete-directory)
     (set-visited-file-modtime . tramp-handle-set-visited-file-modtime)
-    (verify-visited-file-modtime . tramp-handle-verify-visited-file-modtime))
+    (verify-visited-file-modtime . tramp-handle-verify-visited-file-modtime)
+    (vc-registered . tramp-handle-vc-registered))
   "Alist of handler functions.
 Operations not mentioned here will be handled by the normal Emacs functions.")
 
@@ -3254,8 +3255,8 @@ the uid and gid from FILENAME."
 	   ;; We can do it directly with `tramp-send-command'
 	   ((let (file-name-handler-alist)
 	      (and (file-readable-p (concat prefix localname1))
-		 (file-writable-p
-		  (file-name-directory (concat prefix localname2)))))
+		   (file-writable-p
+		    (file-name-directory (concat prefix localname2)))))
 	    (tramp-do-copy-or-rename-file-directly
 	     op (concat prefix localname1) (concat prefix localname2)
 	     ok-if-already-exists keep-date t)
@@ -3286,11 +3287,11 @@ the uid and gid from FILENAME."
 		     (t2
 		      (if (eq op 'copy)
 			  (tramp-compat-copy-file
-			   localname1 tmpfile ok-if-already-exists
+			   localname1 tmpfile t
 			   keep-date preserve-uid-gid)
 			(tramp-run-real-handler
 			 'rename-file
-			 (list localname1 tmpfile ok-if-already-exists)))
+			 (list localname1 tmpfile t)))
 		      ;; We must change the ownership as local user.
 		      (tramp-set-file-uid-gid
 		       tmpfile
@@ -3467,9 +3468,9 @@ be a local filename.  The method used must be an out-of-band method."
   "Recursively delete the directory given.
 This is like `dired-recursive-delete-directory' for Tramp files."
   (with-parsed-tramp-file-name filename nil
-    (tramp-flush-directory-property v filename)
+    (tramp-flush-directory-property v localname)
     ;; Run a shell command 'rm -r <localname>'
-    ;; Code shamelessly stolen for the dired implementation and, um, hacked :)
+    ;; Code shamelessly stolen from the dired implementation and, um, hacked :)
     (unless (file-exists-p filename)
       (tramp-error v 'file-error "No such directory: %s" filename))
     ;; Which is better, -r or -R? (-r works for me <daniel@danann.net>)
@@ -3895,7 +3896,12 @@ beginning of local filename are not substituted."
 		(with-current-buffer outbuf
 		  (insert output-string)))
 	      (when display (display-buffer outbuf))))
-	;; When the user did interrupt, we should do it also.
+	;; When the user did interrupt, we should do it also.  We use
+	;; return code -1 as marker.
+	(quit
+	 (kill-buffer (tramp-get-connection-buffer v))
+	 (setq ret -1))
+	;; Handle errors.
 	(error
 	 (kill-buffer (tramp-get-connection-buffer v))
 	 (setq ret 1)))
@@ -3904,10 +3910,14 @@ beginning of local filename are not substituted."
       (unless ret (setq ret (tramp-send-command-and-check v nil)))
       ;; Provide error file.
       (when tmpstderr (rename-file tmpstderr (cadr destination) t))
-      ;; Cleanup.
+      ;; Cleanup.  We remove all file cache values for the connection,
+      ;; because the remote process could have changed them.
       (when tmpinput (delete-file tmpinput))
+      (tramp-flush-directory-property v "")
       ;; Return exit status.
-      ret)))
+      (if (equal ret -1)
+	  (keyboard-quit)
+	ret))))
 
 (defun tramp-local-call-process
   (program &optional infile destination display &rest args)
@@ -4514,6 +4524,13 @@ Returns a file name in `tramp-auto-save-directory' for autosaving this file."
 	(when (or (eq visit t) (null visit) (stringp visit))
 	  (tramp-message v 0 "Wrote %s" filename))
 	(run-hooks 'tramp-handle-write-region-hook)))))
+
+(defun tramp-handle-vc-registered (file)
+  "Like `vc-registered' for Tramp files."
+  ;; There could be new files, created by the vc backend.  We disable
+  ;; the cache therefore, by providing a temporary one.
+  (let ((tramp-cache-data (make-hash-table :test 'equal)))
+    (tramp-run-real-handler 'vc-registered (list file))))
 
 ;;;###autoload
 (progn (defun tramp-run-real-handler (operation args)
@@ -7750,9 +7767,6 @@ Only works for Bourne-like shells."
 ;; Functions for file-name-handler-alist:
 ;; diff-latest-backup-file -- in diff.el
 ;; dired-uncache -- this will be needed when we do insert-directory caching
-;; file-name-sans-versions -- use primitive?
-;; get-file-buffer -- use primitive
-;; vc-registered
 
 ;; arch-tag: 3a21a994-182b-48fa-b0cd-c1d9fede424a
 ;;; tramp.el ends here
