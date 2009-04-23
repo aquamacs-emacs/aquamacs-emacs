@@ -446,7 +446,7 @@ commands reverses the effect of this variable.  Requires Netscape version
     ,@(if (memq system-type '(windows-nt ms-dos cygwin))
           '(("^\\([a-zA-Z]:\\)[\\/]" . "file:\\1/")
             ("^[\\/][\\/]+" . "file://")))
-    ("^/+" . "file:/"))
+    ("^/+" . "file:///"))
   "An alist of (REGEXP . STRING) pairs used by `browse-url-of-file'.
 Any substring of a filename matching one of the REGEXPs is replaced by
 the corresponding STRING using `replace-match', not treating STRING
@@ -466,7 +466,7 @@ address to an HTTP URL:
   :type '(repeat (cons :format "%v"
                        (regexp :tag "Regexp")
                        (string :tag "Replacement")))
-  :version "20.3"
+  :version "23.1"
   :group 'browse-url)
 
 (defcustom browse-url-save-file nil

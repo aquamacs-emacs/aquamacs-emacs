@@ -828,11 +828,13 @@ Property value is a character."
 	  (L (+ #x1100 (/ char 588)))
 	  ;; V = VBase + (SIndex % NCount) * TCount
 	  (V (+ #x1161 (/ (% char 588) 28)))
+	  ;; LV = SBase + (SIndex / TCount) * TCount
+	  (LV (+ #xAC00 (* (/ char 28) 28)))
 	  ;; T = TBase + SIndex % TCount
 	  (T (+ #x11A7 (% char 28))))
       (if (= T #x11A7)
 	  (list L V)
-	(list L V T))))
+	(list LV T))))
 
    ))
 
@@ -1134,8 +1136,13 @@ Property value is a character."
 	       (ON . "Other Neutrals")))))
 
 (defun unidata-describe-decomposition (val)
-  (mapconcat #'(lambda (x) (if (symbolp x) (symbol-name x) (string ?' x ?')))
-	     val " "))
+  (mapconcat
+   #'(lambda (x)
+       (if (symbolp x) (symbol-name x)
+	 (concat (string ?')
+		 (compose-string (string x) 0 1 (string ?\t x ?\t))
+		 (string ?'))))
+   val " "))
 
 ;; Verify if we can retrieve correct values from the generated
 ;; char-tables.

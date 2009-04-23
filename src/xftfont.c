@@ -360,7 +360,7 @@ xftfont_open (f, entity, pixel_size)
       int upEM = ft_face->units_per_EM;
 
       font->underline_position = -ft_face->underline_position * size / upEM;
-      font->underline_thickness = -ft_face->underline_thickness * size / upEM;
+      font->underline_thickness = ft_face->underline_thickness * size / upEM;
       if (font->underline_thickness > 2)
 	font->underline_position -= font->underline_thickness / 2;
     }
@@ -467,15 +467,27 @@ xftfont_done_face (f, face)
     }
 }
 
+extern Lisp_Object Qja, Qko;
+
 static int
 xftfont_has_char (font, c)
      Lisp_Object font;
      int c;
 {
   struct xftfont_info *xftfont_info;
+  struct charset *cs = NULL;
 
   if (FONT_ENTITY_P (font))
     return ftfont_driver.has_char (font, c);
+
+  if (EQ (AREF (font, FONT_ADSTYLE_INDEX), Qja)
+      && charset_jisx0208 >= 0)
+    cs = CHARSET_FROM_ID (charset_jisx0208);
+  else if (EQ (AREF (font, FONT_ADSTYLE_INDEX), Qko)
+      && charset_ksc5601 >= 0)
+    cs = CHARSET_FROM_ID (charset_ksc5601);
+  if (cs)
+    return (ENCODE_CHAR (cs, c) != CHARSET_INVALID_CODE (cs));
 
   xftfont_info = (struct xftfont_info *) XFONT_OBJECT (font);
   return (XftCharExists (xftfont_info->display, xftfont_info->xftfont,

@@ -60,11 +60,11 @@ you call these functions when input is available, they don't redisplay
 immediately, but the requested redisplay does happen
 eventually---after all the input has been processed.
 
-  Normally, suspending and resuming Emacs also refreshes the screen.
-Some terminal emulators record separate contents for display-oriented
-programs such as Emacs and for ordinary sequential display.  If you are
-using such a terminal, you might want to inhibit the redisplay on
-resumption.
+  On text-only terminals, suspending and resuming Emacs normally also
+refreshes the screen.  Some terminal emulators record separate
+contents for display-oriented programs such as Emacs and for ordinary
+sequential display.  If you are using such a terminal, you might want
+to inhibit the redisplay on resumption.
 
 @defvar no-redraw-on-reenter
 @cindex suspend (cf. @code{no-redraw-on-reenter})
@@ -79,13 +79,13 @@ to redraw, @code{nil} means redrawing is needed.  The default is @code{nil}.
 @cindex forcing redisplay
 
   Emacs normally tries to redisplay the screen whenever it waits for
-input.  With this function you can request an immediate attempt to
-redisplay, in the middle of Lisp code, without actually waiting for
-input.
+input.  With the following function, you can request an immediate
+attempt to redisplay, in the middle of Lisp code, without actually
+waiting for input.
 
 @defun redisplay &optional force
 This function tries immediately to redisplay, provided there are no
-pending input events.  It is equivalent to @code{(sit-for 0)}.
+pending input events.
 
 If the optional argument @var{force} is non-@code{nil}, it does all
 pending redisplay work even if input is available, with no
@@ -166,14 +166,12 @@ truncation; a @samp{\} on the rightmost column indicates a line that
 for this; @pxref{Display Tables}).
 
 @defopt truncate-lines
-This buffer-local variable controls how Emacs displays lines that extend
-beyond the right edge of the window.  The default is @code{nil}, which
-specifies continuation.  If the value is non-@code{nil}, then these
-lines are truncated.
-
-If the variable @code{truncate-partial-width-windows} is non-@code{nil},
-then truncation is always used for side-by-side windows (within one
-frame) regardless of the value of @code{truncate-lines}.
+If this buffer-local variable is non-@code{nil}, lines that extend
+beyond the right edge of the window are truncated; otherwise, they are
+continued.  As a special exception, the variable
+@code{truncate-partial-width-windows} takes precedence in
+@dfn{partial-width} windows (i.e., windows that do not occupy the
+entire frame width).
 @end defopt
 
 @defopt default-truncate-lines
@@ -182,42 +180,51 @@ buffers that do not have buffer-local values for it.
 @end defopt
 
 @defopt truncate-partial-width-windows
-This variable controls display of lines that extend beyond the right
-edge of the window, in side-by-side windows (@pxref{Splitting Windows}).
-If it is non-@code{nil}, these lines are truncated; otherwise,
-@code{truncate-lines} says what to do with them.
+This variable controls line truncation in @dfn{partial-width} windows.
+A partial-width window is one that does not occupy the entire frame
+width (@pxref{Splitting Windows}).  If the value is @code{nil}, line
+truncation is determined by the variable @code{truncate-lines} (see
+above).  If the value is an integer @var{n}, lines are truncated if
+the partial-width window has fewer than @var{n} columns, regardless of
+the value of @code{truncate-lines}; if the partial-width window has
+@var{n} or more columns, line truncation is determined by
+@code{truncate-lines}.  For any other non-@code{nil} value, lines are
+truncated in every partial-width window, regardless of the value of
+@code{truncate-lines}.
 @end defopt
 
   When horizontal scrolling (@pxref{Horizontal Scrolling}) is in use in
 a window, that forces truncation.
 
 @defvar wrap-prefix
-If this buffer-local variable is non-@code{nil}, the prefix it defines
-will be added at display-time to the beginning of every continuation
-line due to text wrapping (so if lines are truncated, the wrap-prefix
-is never used).  It may be a string, an image, or a stretch-glyph such
-as used by the `display' text-property.  @xref{Display Property}.
+If this buffer-local variable is non-@code{nil}, it defines a
+``prefix'' that is prepended to every continuation line at
+display-time.  (If lines are truncated, the wrap-prefix is never
+used.)  It may be a string, an image, or a stretch-glyph; the value is
+interpreted in the same way as a @code{display} text property.
+@xref{Display Property}.
 
-A wrap-prefix may also be specified for regions of text using the
-@code{wrap-prefix} text-property (which takes precedence over the
-value of the @code{wrap-prefix} variable).  @xref{Special Properties}.
+A wrap-prefix may also be specified for regions of text, using the
+@code{wrap-prefix} text or overlay property.  This takes precedence
+over the @code{wrap-prefix} variable.  @xref{Special Properties}.
 @end defvar
 
 @defvar line-prefix
-If this buffer-local variable is non-@code{nil}, the prefix it defines
-will be added at display-time to the beginning of every
-non-continuation line It may be a string, an image, or a stretch-glyph
-such as used by the `display' text-property.  @xref{Display Property}.
+If this buffer-local variable is non-@code{nil}, it defines a
+``prefix'' that is prepended to every non-continuation line at
+display-time.  It may be a string, an image, or a stretch-glyph; the
+value is interpreted in the same way as a @code{display} text
+property.  @xref{Display Property}.
 
 A line-prefix may also be specified for regions of text using the
-@code{line-prefix} text-property (which takes precedence over the
-value of the @code{line-prefix} variable).  @xref{Special Properties}.
+@code{line-prefix} text or overlay property.  This takes precedence
+over the @code{line-prefix} variable.  @xref{Special Properties}.
 @end defvar
 
   If your buffer contains @emph{very} long lines, and you use
-continuation to display them, just thinking about them can make Emacs
-redisplay slow.  The column computation and indentation functions also
-become slow.  Then you might find it advisable to set
+continuation to display them, computing the continuation lines can
+make Emacs redisplay slow.  The column computation and indentation
+functions also become slow.  Then you might find it advisable to set
 @code{cache-long-line-scans} to @code{t}.
 
 @defvar cache-long-line-scans
@@ -846,12 +853,25 @@ major mode should use the mode's own name as an element of
 (remove-from-invisibility-spec 'my-symbol)
 @end example
 
+  You can check for invisibility using the following function:
+
+@defun invisible-p pos-or-prop
+If @var{pos-or-prop} is a marker or number, this function returns a
+non-@code{nil} value if the text at that position is invisible.
+
+If @var{pos-or-prop} is any other kind of Lisp object, that is taken
+to mean a possible value of the @code{invisible} text or overlay
+property.  In that case, this function returns a non-@code{nil} value
+if that value would cause text to become invisible, based on the
+current value of @code{buffer-invisibility-spec}.
+@end defun
+
 @vindex line-move-ignore-invisible
   Ordinarily, functions that operate on text or move point do not care
 whether the text is invisible.  The user-level line motion commands
-explicitly ignore invisible newlines if
-@code{line-move-ignore-invisible} is non-@code{nil} (the default), but
-only because they are explicitly programmed to do so.
+ignore invisible newlines if @code{line-move-ignore-invisible} is
+non-@code{nil} (the default), but only because they are explicitly
+programmed to do so.
 
   However, if a command ends with point inside or immediately before
 invisible text, the main editing loop moves point further forward or
@@ -1147,6 +1167,14 @@ the screen, for the sake of presentation features.  An overlay is an
 object that belongs to a particular buffer, and has a specified
 beginning and end.  It also has properties that you can examine and set;
 these affect the display of the text within the overlay.
+
+@cindex scalability of overlays
+The visual effect of an overlay is the same as of the corresponding
+text property (@pxref{Text Properties}).  However, due to a different
+implementation, overlays generally don't scale well (many operations
+take a time that is proportional to the number of overlays in the
+buffer).  If you need to affect the visual appearance of many portions
+in the buffer, we recommend using text properties.
 
 An overlay uses markers to record its beginning and end; thus,
 editing the text of the buffer adjusts the beginning and end of each
@@ -1511,6 +1539,14 @@ This property's value is a string to add to the display at the end of
 the overlay.  The string does not appear in the buffer in any
 sense---only on the screen.
 
+@item line-prefix
+This property specifies a display spec to prepend to each
+non-continuation line at display-time.  @xref{Truncation}.
+
+@itemx wrap-prefix
+This property specifies a display spec to prepend to each continuation
+line at display-time.  @xref{Truncation}.
+
 @item evaporate
 @kindex evaporate @r{(overlay property)}
 If this property is non-@code{nil}, the overlay is deleted automatically
@@ -1729,20 +1765,20 @@ There are several ways to specify the line spacing for different
 parts of Emacs text.
 
 @vindex default-line-spacing
-  You can specify the line spacing for all lines in a frame with the
-@code{line-spacing} frame parameter (@pxref{Layout Parameters}).
-However, if the variable @code{default-line-spacing} is
-non-@code{nil}, it overrides the frame's @code{line-spacing}
-parameter.  An integer value specifies the number of pixels put below
-lines on graphical displays.  A floating point number specifies the
-spacing relative to the frame's default line height.
+  On graphical terminals, you can specify the line spacing for all
+lines in a frame, using the @code{line-spacing} frame parameter
+(@pxref{Layout Parameters}).  However, if the variable
+@code{default-line-spacing} is non-@code{nil}, it overrides the
+frame's @code{line-spacing} parameter.  An integer value specifies the
+number of pixels put below lines.  A floating point number specifies
+the spacing relative to the frame's default line height.
 
 @vindex line-spacing
   You can specify the line spacing for all lines in a buffer via the
 buffer-local @code{line-spacing} variable.  An integer value specifies
-the number of pixels put below lines on graphical displays.  A floating
-point number specifies the spacing relative to the default frame line
-height.  This overrides line spacings specified for the frame.
+the number of pixels put below lines.  A floating point number
+specifies the spacing relative to the default frame line height.  This
+overrides line spacings specified for the frame.
 
 @kindex line-spacing @r{(text property)}
   Finally, a newline can have a @code{line-spacing} text or overlay
@@ -1755,6 +1791,8 @@ spacing of each line.  The value is a height spec, and it translates
 into a Lisp value as described above.  However, in this case the
 numeric height value specifies the line spacing, rather than the line
 height.
+
+  On text-only terminals, the line spacing cannot be altered.
 
 @node Faces
 @section Faces
@@ -2124,6 +2162,11 @@ optional argument @var{frame} specifies the frame on which the text is
 to be displayed; if it is @code{nil}, the selected frame is used.
 @end defun
 
+@defvar underline-minimum-offset
+This variable specifies the minimum distance between the baseline and
+the underline, in pixels, when displaying underlined text.
+@end defvar
+
 @defvar x-bitmap-file-path
 This variable specifies a list of directories for searching
 for bitmap files, for the @code{:stipple} attribute.
@@ -2427,9 +2470,9 @@ face.
 @item
 If @var{remapping...} recursively references the same face name
 @var{face}, either directly remapping entry, or via the
-@code{:inherit} attribute of some other face in
-@var{remapping...}, then that reference uses normal frame-wide
-definition of @var{face} instead of the ``remapped'' definition.
+@code{:inherit} attribute of some other face in @var{remapping...},
+then that reference uses the normal definition of @var{face} in the
+selected frame, instead of the ``remapped'' definition.
 
 For instance, if the @code{mode-line} face is remapped using this
 entry in @code{face-remapping-alist}:
@@ -2464,9 +2507,9 @@ have the general form:
   (@var{face} @var{relative_specs_1} @var{relative_specs_2} @var{...} @var{base_specs})
 @end example
 
-Everything except the @var{face} is a ``face spec'', a list of face
-names or face attribute-value pairs.  All face specs are merged
-together, with earlier values taking precedence.
+Everything except @var{face} is a ``face spec'': a list of face names
+or face attribute-value pairs.  All face specs are merged together,
+with earlier values taking precedence.
 
 The @var{relative_specs_}n values are ``relative specs'', and are
 added by @code{face-remap-add-relative} (and removed by
@@ -2959,11 +3002,7 @@ should be one of @code{font-object}, @code{font-spec}, or
 
   A font object is a Lisp object that represents a font that Emacs has
 @dfn{opened}.  Font objects cannot be modified in Lisp, but they can
-be inspected.  If you call @code{set-face-attribute} and pass a font
-spec, font entity, or font name string as the value of the
-@code{:font} attribute, Emacs opens the best ``matching'' font that is
-available for display.  It then stores the corresponding font object
-as the actual value of the @code{:font} attribute for that face.
+be inspected.
 
 @defun font-at position &optional window string
 Return the font object that is being used to display the character at
@@ -3044,6 +3083,12 @@ used to control the order of the returned list; the returned font
 entities are sorted in order of decreasing ``closeness'' to that font
 spec.
 @end defun
+
+  If you call @code{set-face-attribute} and pass a font spec, font
+entity, or font name string as the value of the @code{:font}
+attribute, Emacs opens the best ``matching'' font that is available
+for display.  It then stores the corresponding font object as the
+actual value of the @code{:font} attribute for that face.
 
   The following functions can be used to obtain information about a
 font.  For these functions, the @var{font} argument can be a font
@@ -4659,40 +4704,41 @@ cache, it can always be displayed, even if the value of
 @subsection Image Cache
 @cindex image cache
 
-  Emacs stores images in an image cache so that it can display them
-again more efficiently.  When Emacs displays an image, it searches the
-image cache for an existing image specification @code{equal} to the
-desired specification.  If a match is found, the image is displayed
-from the cache; otherwise, Emacs loads the image normally.
+  Emacs caches images so that it can display them again more
+efficiently.  When Emacs displays an image, it searches the image
+cache for an existing image specification @code{equal} to the desired
+specification.  If a match is found, the image is displayed from the
+cache; otherwise, Emacs loads the image normally.
 
   Occasionally, you may need to tell Emacs to refresh the images
 associated with a given image specification.  For example, suppose you
 display an image using a specification that contains a @code{:file}
-property.  The image is loaded from the given file and stored in the
-image cache.  If you later display the image again, using the same
-image specification, the image is displayed from the image cache.
-Normally, this is not a problem.  However, if the image file has
-changed in the meantime, Emacs would be displaying the old version of
-the image.  In such a situation, it is necessary to ``refresh'' the
-image using @code{image-refresh}.
+property.  The image is automatically cached, and subsequent displays
+of that image, with the same image specification, will use the image
+cache.  If the image file changes in the meantime, Emacs would be
+displaying the old version of the image.  In such a situation, you can
+``refresh'' the image by calling @code{image-refresh}.
+
+  In Emacs' current implementation, each graphical terminal possesses
+an image cache, which is shared by all the frames on that terminal
+(@pxref{Multiple Terminals}).  Thus, refreshing an image in one frame
+also refreshes it in all other frames on the same terminal.
 
 @defun image-refresh spec &optional frame
-This function refreshes any images having image specifications
+This function refreshes any images with image specifications
 @code{equal} to @var{spec} on frame @var{frame}.  If @var{frame} is
-@code{nil}, the selected frame is used.  If @var{frame} is @code{t},
-the refresh is applied to all existing frames.
-
-This works by removing from the image cache all the images whose image
-specifications match @var{spec}.  The next time Emacs needs to display
-such an image, it will reload the image anew.
+@code{nil}, it defaults to the selected frame.  If @var{frame} is
+@code{t}, the refresh is applied to all existing frames.
 @end defun
 
 @defun clear-image-cache &optional filter
-This function clears the image cache.  If @var{filter} is
-a frame, only the cache for that frame is cleared.  If omitted or
-@code{nil}, clear the images on the selected frame.  If @code{t},
-all frames' caches are cleared.  Otherwise, @var{filter} is taken as
-a file name and only images that reference this file will be flushed.
+This function clears an image cache, removing all the images stored in
+it.  If @var{filter} is omitted or @code{nil}, it clears the cache for
+the selected frame.  If @var{filter} is a frame, it clears the cache
+for that frame.  If @var{filter} is @code{t}, all image caches are
+cleared.  Otherwise, @var{filter} is taken to be a file name, and all
+images associated with that file name are removed from all image
+caches.
 @end defun
 
 If an image in the image cache has not been displayed for a specified
@@ -4801,7 +4847,7 @@ A string displayed by the Emacs tool-tip help system; by default,
 @item follow-link
 @kindex follow-link @r{(button property)}
 The follow-link property, defining how a @key{Mouse-1} click behaves
-on this button, @xref{Links and Mouse-1}.
+on this button, @xref{Clickable Text}.
 
 @item button
 @kindex button @r{(button property)}
@@ -4985,7 +5031,7 @@ parent keymap for its keymap.
 If the button has a non-@code{nil} @code{follow-link} property, and
 @var{mouse-1-click-follows-link} is set, a quick @key{Mouse-1} click
 will also activate the @code{push-button} command.
-@xref{Links and Mouse-1}.
+@xref{Clickable Text}.
 
 @deffn Command push-button &optional pos use-mouse-action
 Perform the action specified by a button at location @var{pos}.
