@@ -6,7 +6,7 @@
 GNUNAME=GNU-Emacs-$2.dmg.bz2
 NAME=Aquamacs-$1.tar.bz2
 COPYORLINK='cp'  # 'ln -s'
-CHGLOGSCRIPT='~/aquamacs-web/scripts/push-nightly-changelog.sh'
+CHGLOGSCRIPT=~/aquamacs-web/scripts/push-nightly-changelog.sh
 
 
 

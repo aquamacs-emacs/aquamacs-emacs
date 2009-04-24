@@ -23,7 +23,7 @@ DATE=`date +"%Y-%b-%d-%a-%H%M"`
 # zip it up
 
 mkdir builds 2>/dev/null
-tar cjf builds/Aquamacs-${DATE}.tbz ${APP}
+tar cjf builds/Aquamacs-${DATE}.tar.bz2 ${APP}
 
 # copy to server
 
