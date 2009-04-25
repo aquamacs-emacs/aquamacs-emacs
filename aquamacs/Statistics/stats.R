@@ -34,7 +34,7 @@ dev.off()
 
 
 pdf(file="usage-duration.pdf", width=10, height=5)
-barplot(usage_duration$no.users, names.arg=usage_duration$duration, main=sprintf("%s User experience", prod), sub="Distribution of install and use duration [days]")
+barplot(usage_duration$no.users, names.arg=usage_duration$duration, main=sprintf("%s User experience", prod), sub="Distribution of install and use duration [days]", log="xy")
 dev.off()
 
 if (length(versions$version) > 2) {
@@ -146,7 +146,7 @@ dev.off()
 
 
 
-pdf(file="userbase.pdf", width=10, height=5)
+pdf(file="userbase.pdf", width=20, height=10)
 
 conversionrate$ubase <- as.vector(filter(conversionrate$no.users, rep(1/7,7), sides=1))
 with(conversionrate, plot(ubase~day, type="l",     main="User Base (regular users)",  ylab="# of users", xlab="Day", sub="User base estimated from number of version checks"))
