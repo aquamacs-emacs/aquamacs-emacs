@@ -2011,7 +2011,7 @@ ns_clear_frame_area (struct frame *f, int x, int y, int width, int height)
       face = FACE_FROM_ID (f, lookup_basic_face (f, DEFAULT_FACE_ID) );
 
   r = NSIntersectionRect (r, [view frame]);
-  // ns_focus (f, &r, 1);
+  ns_focus (f, &r, 1);
   [ns_lookup_indexed_color (NS_FACE_BACKGROUND (face), f) set];
 
 #ifdef NS_IMPL_COCOA
