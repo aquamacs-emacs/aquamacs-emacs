@@ -862,7 +862,7 @@ modified, or in FRAME if given."
 
 
 (defun ns-respond-to-change-font ()
-  "Respond to changeFont: event, expecting ns-input-font and\n\
+  "Respond to changeFont: event, expecting ns-input-font and
 ns-input-fontsize of new font."
   (interactive)
   (let ((face (or mac-font-panel-target-face 'default))
@@ -873,15 +873,17 @@ ns-input-fontsize of new font."
     (apply 'set-face-attribute face
 	   mac-font-panel-target-frame attribute-values)
     ;; ensure this is saved as a customization
-    (let ((value 
-	   (list (list t (custom-face-attributes-get 
-			  face nil)))))
-      (put face 'saved-face value)
-      (custom-push-theme 'theme-face face 'user 'set value))
+    (let ((spec
+	   (list (list t (face-attr-construct face)))))
+      (put face 'customized-face spec)
+      (put face 'saved-face spec)
+      (custom-push-theme 'theme-face face 'user 'set spec)
+      (put face 'face-modified nil))
     (message "Font set for %s face." face))))
   
 
- 
+
+
 ;; ZOOM
  
 
