@@ -673,7 +673,7 @@ No errors are signaled."
 
 (defun aquamacs-setup ()
  
-
+  (require 'mac-extra-functions)
   (aquamacs-mac-initialize) ;; call at runtime only
   (defvar aquamacs-mac-application-bundle-directory
     "This is actually defined in mac-extra-functions.el")
