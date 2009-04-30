@@ -1921,7 +1921,22 @@ the WIDTH times as wide as FACE on FRAME.  */)
       }
     args[0] = Flist_fonts (font_spec, frame, maximum, font_spec);
     for (tail = args[0]; CONSP (tail); tail = XCDR (tail))
-      XSETCAR (tail, Ffont_xlfd_name (XCAR (tail), Qnil));
+      {
+	Lisp_Object font_entity;
+
+	font_entity = XCAR (tail);
+	if ((NILP (AREF (font_entity, FONT_SIZE_INDEX))
+	     || XINT (AREF (font_entity, FONT_SIZE_INDEX)) == 0)
+	    && ! NILP (AREF (font_spec, FONT_SIZE_INDEX)))
+	  {
+	    /* This is a scalable font.  For backward compatibility,
+	       we set the specified size. */
+	    font_entity = Fcopy_font_spec (font_entity);
+	    ASET (font_entity, FONT_SIZE_INDEX,
+		  AREF (font_spec, FONT_SIZE_INDEX));
+	  }
+	XSETCAR (tail, Ffont_xlfd_name (font_entity, Qnil));
+      }
     if (NILP (frame))
       /* We don't have to check fontsets.  */
       return args[0];
@@ -6310,17 +6325,21 @@ compute_char_face (f, ch, prop)
 
    If MOUSE is non-zero, use the character's mouse-face, not its face.
 
+   BASE_FACE_ID, if non-negative, specifies a base face id to use
+   instead of DEFAULT_FACE_ID.
+
    The face returned is suitable for displaying ASCII characters.  */
 
 int
 face_at_buffer_position (w, pos, region_beg, region_end,
-			 endptr, limit, mouse)
+			 endptr, limit, mouse, base_face_id)
      struct window *w;
      EMACS_INT pos;
      EMACS_INT region_beg, region_end;
      EMACS_INT *endptr;
      EMACS_INT limit;
      int mouse;
+     int base_face_id;
 {
   struct frame *f = XFRAME (w->frame);
   Lisp_Object attrs[LFACE_VECTOR_SIZE];
@@ -6363,12 +6382,9 @@ face_at_buffer_position (w, pos, region_beg, region_end,
 
   *endptr = endpos;
 
-
-  /* Perhaps remap BASE_FACE_ID to a user-specified alternative.  */
-  if (NILP (Vface_remapping_alist))
-    default_face = FACE_FROM_ID (f, DEFAULT_FACE_ID);
-  else
-    default_face = FACE_FROM_ID (f, lookup_basic_face (f, DEFAULT_FACE_ID));
+  default_face = FACE_FROM_ID (f, base_face_id >= 0 ? base_face_id
+			       : NILP (Vface_remapping_alist) ? DEFAULT_FACE_ID
+			       : lookup_basic_face (f, DEFAULT_FACE_ID));
 
   /* Optimize common cases where we can use the default face.  */
   if (noverlays == 0

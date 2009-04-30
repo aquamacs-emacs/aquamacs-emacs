@@ -1698,8 +1698,6 @@ usage: (start-process NAME BUFFER PROGRAM &rest PROGRAM-ARGS)  */)
     XPROCESS (proc)->encode_coding_system = val;
   }
 
-  new_argv = (unsigned char **) alloca ((nargs - 1) * sizeof (char *));
-
   /* If program file name is not absolute, search our path for it.
      Put the name we will really use in TEM.  */
   if (!IS_DIRECTORY_SEP (SREF (program, 0))
@@ -1729,26 +1727,42 @@ usage: (start-process NAME BUFFER PROGRAM &rest PROGRAM-ARGS)  */)
       && SREF (tem, 1) == ':')
     tem = Fsubstring (tem, make_number (2), Qnil);
 
-  /* Encode the file name and put it in NEW_ARGV.
-     That's where the child will use it to execute the program.  */
-  tem = ENCODE_FILE (tem);
-  new_argv[0] = SDATA (tem);
+  {
+    struct gcpro gcpro1;
+    GCPRO1 (tem);
 
-  /* Here we encode arguments by the coding system used for sending
-     data to the process.  We don't support using different coding
-     systems for encoding arguments and for encoding data sent to the
-     process.  */
+    /* Encode the file name and put it in NEW_ARGV.
+       That's where the child will use it to execute the program.  */
+    tem = Fcons (ENCODE_FILE (tem), Qnil);
 
-  for (i = 3; i < nargs; i++)
+    /* Here we encode arguments by the coding system used for sending
+       data to the process.  We don't support using different coding
+       systems for encoding arguments and for encoding data sent to the
+       process.  */
+
+    for (i = 3; i < nargs; i++)
+      {
+	tem = Fcons (args[i], tem);
+	CHECK_STRING (XCAR (tem));
+	if (STRING_MULTIBYTE (XCAR (tem)))
+	  XSETCAR (tem,
+		   code_convert_string_norecord
+		   (XCAR (tem), XPROCESS (proc)->encode_coding_system, 1));
+      }
+
+    UNGCPRO;
+  }
+
+  /* Now that everything is encoded we can collect the strings into
+     NEW_ARGV.  */
+  new_argv = (unsigned char **) alloca ((nargs - 1) * sizeof (char *));
+  new_argv[nargs - 2] = 0;
+
+  for (i = nargs - 3; i >= 0; i--)
     {
-      tem = args[i];
-      CHECK_STRING (tem);
-      if (STRING_MULTIBYTE (tem))
-	tem = (code_convert_string_norecord
-	       (tem, XPROCESS (proc)->encode_coding_system, 1));
-      new_argv[i - 2] = SDATA (tem);
+      new_argv[i] = SDATA (XCAR (tem));
+      tem = XCDR (tem);
     }
-  new_argv[i - 2] = 0;
 
   XPROCESS (proc)->decoding_buf = make_uninit_string (0);
   XPROCESS (proc)->decoding_carryover = 0;
@@ -1861,12 +1875,6 @@ create_process (process, new_argv, current_dir)
 #endif
       if (forkin < 0)
 	report_file_error ("Opening pty", Qnil);
-#if defined (DONT_REOPEN_PTY)
-      /* In the case that vfork is defined as fork, the parent process
-	 (Emacs) may send some data before the child process completes
-	 tty options setup.  So we setup tty before forking.  */
-      child_setup_tty (forkout);
-#endif /* DONT_REOPEN_PTY */
 #else
       forkin = forkout = -1;
 #endif /* not USG, or USG_SUBTTY_WORKS */
@@ -2137,10 +2145,8 @@ create_process (process, new_argv, current_dir)
 #endif /* SIGCHLD */
 #endif /* !POSIX_SIGNALS */
 
-#if !defined (DONT_REOPEN_PTY)
 	if (pty_flag)
 	  child_setup_tty (xforkout);
-#endif /* not DONT_REOPEN_PTY */
 #ifdef WINDOWSNT
 	pid = child_setup (xforkin, xforkout, xforkout,
 			   new_argv, 1, current_dir);

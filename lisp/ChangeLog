@@ -1,3 +1,80 @@
+2009-04-30  Alan Mackenzie  <acm@muc.de>
+
+	Enhancements for Objective-C:
+	* progmodes/cc-vars.el (c-objc-method-arg-min-delta-to-bracket)
+	(c-objc-method-arg-unfinished-offset)
+	(c-objc-method-parameter-offset): New variables.
+	(c-offsets-alist): Use c-lineup-ObjC-method-call-colons in entry
+	for objc-method-call-cont.
+
+	* progmodes/cc-langs.el (c-constant-kwds): New ObjC keywords
+	"YES", "NO", "NS_DURING", "NS_HANDLER", "NS_ENDHANDLER".
+
+	* progmodes/cc-align.el (c-lineup-ObjC-method-call-colons): New
+	function.
+
+2009-04-29  Chong Yidong  <cyd@stupidchicken.com>
+
+	* subr.el (assoc-default): Doc fix.
+
+2009-04-29  Ulrich Mueller  <ulm@gentoo.org>
+
+	* files.el (hack-local-variables-prop-line)
+	(hack-local-variables, dir-locals-read-from-file): Bind
+	read-circle to nil before reading.
+
+2009-04-28  Geert Kloosterman  <g.j.kloosterman@gmail.com>  (tiny change)
+
+	* progmodes/which-func.el (which-function): Don't assume that
+	entries from `imenu--index-alist' are ordered by buffer position,
+	which fails when submenus are present (Bug#3153).
+
+2009-04-28  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* international/quail.el (quail-vunion): Remove unexplained nreverse.
+
+2009-04-28  Nick Roberts  <nickrob@snap.net.nz>
+
+	* progmodes/gdb-ui.el (gdb-tooltip-print): Avoid "Non-X frame used"
+	error with gud-tooltip-mode in the Linux console.
+
+2009-04-28  Chong Yidong  <cyd@stupidchicken.com>
+
+	* tooltip.el (tooltip-show-help): Fall back on
+	tooltip-show-help-non-mode for text-only displays.
+
+2009-04-27  Jay Belanger  <jay.p.belanger@gmail.com>
+
+	* calc/calc.el (calc-mode): Replace `copy-list' with `copy-sequence'.
+
+2009-04-26  Jay Belanger  <jay.p.belanger@gmail.com>
+
+	* calc/calc.el (calc-set-mode-line): Check to make sure that the
+	correct Calc buffer gets "Embed" in the mode line.
+	(calc-mode): Copy stack list for additional Calc buffers.
+
+2009-04-25  Chong Yidong  <cyd@stupidchicken.com>
+
+	* simple.el (line-move-visual): If point is stuck moving backwards
+	against a display string, temporarily ignore the goal
+	column (Bug#3020).
+
+	* startup.el (normal-top-level): Implement a work-around to handle
+	changes to face-font-rescale-alist during
+	initialization (Bug#1785).
+
+2009-04-24  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp.el (tramp-handle-directory-files-and-attributes-with-stat)
+	(tramp-handle-file-name-all-completions): Don't use "-b" as ls
+	arg.  It does not work on OpenBSD.  Reported by Taylor Venable
+	<taylor@metasyntax.net>.
+
+2009-04-23  Chong Yidong  <cyd@stupidchicken.com>
+
+	* hi-lock.el (hi-lock--inhibit-font-lock-hook): New var.
+	(hi-lock-set-pattern, hi-lock-font-lock-hook): Use it (Bug#3068).
+
 2009-04-21  Martin Rudalics  <rudalics@gmx.at>
 
 	* diff-mode.el (diff-find-source-location): Don't call
@@ -19,8 +96,8 @@
 
 2009-04-18  ARISAWA Akihiro  <ari@mbf.ocn.ne.jp>
 
-	* epa-file.el (epa-file-decode-and-insert): Use
-	string-to-multibyte instead of set-buffer-multibyte.
+	* epa-file.el (epa-file-decode-and-insert):
+	Use string-to-multibyte instead of set-buffer-multibyte.
 	<http://sourceforge.jp/ticket/browse.php?group_id=2267&tid=15259>
 
 2009-04-18  Yann Hodique  <yann.hodique@gmail.com>  (tiny change)
@@ -29,8 +106,8 @@
 
 2009-04-18  Chong Yidong  <cyd@stupidchicken.com>
 
-	* thingatpt.el (thing-at-point-bounds-of-list-at-point): New
-	function (Bug#3027).
+	* thingatpt.el (thing-at-point-bounds-of-list-at-point):
+	New function (Bug#3027).
 
 2009-04-17  Kenichi Handa  <handa@m17n.org>
 
@@ -40,8 +117,8 @@
 
 	* textmodes/flyspell.el (flyspell-correct-word-before-point):
 	Don't create markers.
-	(tex-mode-flyspell-verify): Don't create markers.  Use
-	line-end-position.
+	(tex-mode-flyspell-verify): Don't create markers.
+	Use line-end-position.
 	(sgml-mode-flyspell-verify): Don't create markers.  Simplify code
 	using looking-at and looking-back.
 
@@ -77,9 +154,8 @@
 
 2009-04-15  Dan Nicolaescu  <dann@ics.uci.edu>
 
-	* vc-svn.el (vc-svn-after-dir-status): Fix regexp to allow for
-	file names with leading spaces.  Ignore "." if it appears as a
-	filename.
+	* vc-svn.el (vc-svn-after-dir-status): Fix regexp to allow for file
+	names with leading spaces.  Ignore "." if it appears as a filename.
 
 2009-04-14  Juanma Barranquero  <lekktu@gmail.com>
 
@@ -107,12 +183,12 @@
 	* minibuffer.el (completion--try-word-completion): Don't disable
 	`partial-completion' any more.  Mark the added char instead.
 	(completion-pcm--string->pattern): Notice chars added by
-	completion--try-word-completion and treat them specially.
+	completion--try-word-completion and treat them specially. (bug#2957)
 
 2009-04-13  Jason Rumney  <jasonr@gnu.org>
 
 	* faces.el (frame-set-background-mode): Window system frames
-	default to light. Use default in cases where specified color
+	default to light.  Use default in cases where specified color
 	does not exist (Bug#2969).
 
 2009-04-13  Kenichi Handa  <handa@m17n.org>
@@ -196,7 +272,7 @@
 2009-04-09  Michael Albinus  <michael.albinus@gmx.de>
 
 	* net/tramp.el (tramp-file-name-handler-alist): Add `vc-registered'.
-	(tramp-handle-vc-registered ): New defun.  (Bug#1741)
+	(tramp-handle-vc-registered): New defun.  (Bug#1741)
 
 	* net/tramp-cache.el (tramp-flush-directory-property): Use the
 	localname of KEY for check.
@@ -281,7 +357,7 @@
 	`ange-ftp-set-file-modes' (Bug#2865).
 	(ange-ftp-call-chmod): Add error handling.
 
-	* net/tramp.el (tramp-default-file-modes) New defun.  Replace all
+	* net/tramp.el (tramp-default-file-modes): New defun.  Replace all
 	calls of `file-modes' by this (Bug#2869).
 	(tramp-handle-find-backup-file-name): Use `symbol-value' instead
 	of `boundp'.
@@ -1001,7 +1077,7 @@
 
 2009-02-26  Michael Albinus  <michael.albinus@gmx.de>
 
-	* net/tramp.el (tramp-remote-coding-commands): Add "base64". (Bug#2463)
+	* net/tramp.el (tramp-remote-coding-commands): Add "base64".  (Bug#2463)
 
 2009-02-26  Juanma Barranquero  <lekktu@gmail.com>
 
@@ -1342,7 +1418,7 @@
 2009-02-17  Jason Rumney  <jasonr@gnu.org>
 
 	* files.el (make-directory): Stop recursing if parent is
-	self. (Bug#2309)
+	self.  (Bug#2309)
 
 2009-02-17  Juanma Barranquero  <lekktu@gmail.com>
 
@@ -1443,8 +1519,8 @@
 
 2009-02-14  Ian Eure  <ian@digg.com>  (tiny change)
 
-	* progmodes/sql.el (sql-product-alist, sql-connect-sqlite):
-	Remove host, user, password options not applicable to SQlite. (Bug#1904)
+	* progmodes/sql.el (sql-product-alist, sql-connect-sqlite): Remove host,
+	user, password options not applicable to SQlite.  (Bug#1904)
 
 2009-02-14  Richard M Stallman  <rms@gnu.org>
 
@@ -1867,7 +1943,7 @@
 2009-02-04  Nick Roberts  <nickrob@snap.net.nz>
 
 	* vc-svn.el (vc-svn-diff): Revert previous change but add a test
-	for newvars is nil. (C-u C-x v = with default values).
+	for newvars is nil.  (C-u C-x v = with default values).
 
 2009-02-04  Dan Nicolaescu  <dann@ics.uci.edu>
 
@@ -2370,7 +2446,7 @@
 	variable to allow the user to choose icalendar UID format.
 	(icalendar--diarytime-to-isotime): Bug fix, now times in the range
 	12:00am-12:59am are correctly converted to 0000-0059, instead of 12pm.
-	(icalendar-export-region,icalendar--create-uid): Use custom
+	(icalendar-export-region, icalendar--create-uid): Use custom
 	function to compute icalendar UID for each entry.
 	(icalendar--parse-summary-and-rest): Bug fix for parsing of lines
 	with description, location, etc. fields (need to keep active count

@@ -1,3 +1,88 @@
+2009-04-30  Chong Yidong  <cyd@stupidchicken.com>
+
+	* xfaces.c (face_at_buffer_position): New arg base_face_id.
+
+	* xdisp.c (handle_face_prop): Pass base_face_id of iterator to
+	face_at_buffer_position.
+	(face_before_or_after_it_pos, get_next_display_element)
+	(note_mouse_highlight): Update face_at_buffer_position call.
+
+	* term.c (term_mouse_highlight):
+	* msdos.c (IT_note_mouse_highlight):
+	* fontset.c (Finternal_char_font):
+	* font.c (font_at, font_range): Update face_at_buffer_position
+	call.
+
+	* dispextern.h (face_at_buffer_position): Update prototype.
+
+2009-04-30  Kenichi Handa  <handa@m17n.org>
+
+	* fontset.c (fontset_find_font): Check if rfont_def is Qnil or
+	not.
+
+2009-04-29  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* callproc.c (Fcall_process): Fix GC protection.  Make sure
+	current buffer is always restored.
+
+2009-04-29  YAMAMOTO Mitsuharu  <mituharu@math.s.chiba-u.ac.jp>
+
+	* atimer.c (init_atimer): Also clear stopped_atimers.
+
+	* keyboard.c (init_keyboard) [POLL_FOR_INPUT]: Reset poll_timer.
+
+	* process.c (create_process): Clean up merger residues of
+	2008-07-17 change.
+
+2009-04-29  Ulrich Mueller  <ulm@gentoo.org>
+
+	* lread.c (Vread_circle): New variable.
+	(read1): Disable recursive read if Vread_circle is nil.
+
+2009-04-29  Kenichi Handa  <handa@m17n.org>
+
+	* fontset.h (set_default_ascii_font): Delete extern.
+
+	* fontset.c (set_default_ascii_font): Delete this unused function.
+
+	* frame.c (x_set_font): When ARG is a font-object, check if the
+	font-object matches with the ASCII font-spec of the frame's
+	fontset.  If not, create a new fontset for the frame.  (Bug #3075)
+
+2009-04-28  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* fns.c (Flocale_info): Protect vector from GC during decoding.
+
+	* process.c (Fstart_process): Protect argv strings from GC during
+	encoding.
+
+2009-04-27  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* sysdep.c: Include <ctype.h>.
+
+2009-04-27  David Reitter  <david.reitter@gmail.com>
+
+	* nsfont.m (nsfont_open): remove unused variable shrink.
+	Remove commented-out code.
+
+2009-04-26  Johan Bockgård  <bojohan@gnu.org>
+
+	* keyboard.c (syms_of_keyboard) <input-decode-map>: Doc fix.
+
+2009-04-25  Jason Rumney  <jasonr@gnu.org>
+
+	* w32font.c (clear_cached_metrics): Remove, unused since 2008-08-02.
+
+2009-04-25  YAMAMOTO Mitsuharu  <mituharu@math.s.chiba-u.ac.jp>
+
+	* fringe.c (init_fringe_bitmap) [HAVE_X_WINDOWS && WORDS_BIG_ENDIAN]:
+	Swap bytes in short integer if fringe bitmap width > 8.
+
+2009-04-23  Kenichi Handa  <handa@m17n.org>
+
+	* xfaces.c (Fx_list_fonts): If a font size is specified in
+	PATTERN, set it in returned scalable fonts.
+
 2009-04-22  Chong Yidong  <cyd@stupidchicken.com>
 
 	* keyboard.c (Fset_input_meta_mode): Doc fix.
@@ -39,13 +124,13 @@
 2009-04-19  Jason Rumney  <jasonr@gnu.org>
 
 	The following changes fix Bug#3005 for wide glyphs on each platform,
-	without	reintroducing Bug#1258 for stretch glyphs.
+	without reintroducing Bug#1258 for stretch glyphs.
 
 	* xterm.c (x_draw_bar_cursor): Limit cursor width differently for
 	BAR_CURSOR and HBAR_CURSOR.  Calculate width of HBAR_CURSOR using
 	get_phys_cursor_geometry.
 
-	* w32term.c (x_draw_bar_cursor):  Limit cursor width differently
+	* w32term.c (x_draw_bar_cursor): Limit cursor width differently
 	for BAR_CURSOR and HBAR_CURSOR.  Calculate width of HBAR_CURSOR
 	using get_phys_cursor_geometry.
 
@@ -1251,7 +1336,7 @@
 	(ns_get_color): Use unsigned long long for scanned hex string value.
 	(ns_term_shutdown): Abort on non SIGTERM signals.
 	(EmacsPrefsController-setDefaultFont:,-setColors:): Raise the frame.
-	(EmacsPrefsController-setPanelFromDefaultValues) New function.
+	(EmacsPrefsController-setPanelFromDefaultValues): New function.
 	(EmacsPrefsController-resetToDefaults:): Use it.  (Bug#1801)
 	(ns_font_to_xlfd, ns_fontname_to_xlfd): Remove, unused.
 	(ns_defined_color): Fix settings of the XColor variable fields:
@@ -2718,7 +2803,7 @@
 
 	* image.c (x_clear_image_1): Under NS, call ns_free_indexed_color with
 	correct arguments.
-	* menu.c (find_and_return_menu_selection) Add cast.
+	* menu.c (find_and_return_menu_selection): Add cast.
 
 2008-10-03  Glenn Morris  <rgm@gnu.org>
 
@@ -6064,7 +6149,7 @@
 	New functions.
 	* w32.c (_sys_read_ahead, sys_read, sys_write): Modify to handle
 	serial ports.
-	(serial_open, serial_configure) New functions.
+	(serial_open, serial_configure): New functions.
 	* w32.h: Add FILE_SERIAL.
 	(struct _child_process): Add ovl_read, ovl_write.
 
