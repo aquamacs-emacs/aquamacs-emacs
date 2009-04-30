@@ -21,11 +21,12 @@ date >>aquamacs-build.log
 LOG=`pwd`/aquamacs-build.log
 APP=`pwd`/nextstep/Aquamacs.app
 DATE=`date +"%Y-%b-%d-%a-%H%M"`
-
+BLD=`pwd`/builds/Aquamacs-${DATE}.tar.bz2
 # zip it up
 
 mkdir builds 2>/dev/null
-tar cjf builds/Aquamacs-${DATE}.tar.bz2 ${APP}
+cd `dirname ${APP}`
+tar cjf ${BLD} Aquamacs.app
 
 # copy to server
 
