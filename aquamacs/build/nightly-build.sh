@@ -10,7 +10,7 @@ date >>aquamacs-build.log
 git checkout -f master >>aquamacs-build.log  2>>aquamacs-build.log
 git pull origin master  >>aquamacs-build.log  2>>aquamacs-build.log
 
-./build-aquamacs >>aquamacs-build.log 2>>aquamacs-build.log
+aquamacs/build/build23ub.sh >>aquamacs-build.log 2>>aquamacs-build.log
 
 date >>aquamacs-build.log
 
