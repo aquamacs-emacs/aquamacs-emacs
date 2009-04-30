@@ -1,6 +1,8 @@
 #!/bin/sh
 
-cd ~/Nightly/Cocoa23/aquamacs-emacs.git
+# for internal use only
+
+cd ~/Nightly/Cocoa23ub/aquamacs-emacs.git
 
 AQUAMACS_ROOT=`pwd`/aquamacs
 
@@ -10,7 +12,7 @@ date >>aquamacs-build.log
 git checkout -f master >>aquamacs-build.log  2>>aquamacs-build.log
 git pull origin master  >>aquamacs-build.log  2>>aquamacs-build.log
 
-./build-aquamacs >>aquamacs-build.log 2>>aquamacs-build.log
+aquamacs/build/build23ub.sh >>aquamacs-build.log 2>>aquamacs-build.log
 
 date >>aquamacs-build.log
 
