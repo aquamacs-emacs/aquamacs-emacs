@@ -1,6 +1,8 @@
 #!/bin/sh
 
-cd ~/Nightly/Cocoa23/aquamacs-emacs.git
+# for internal use only
+
+cd ~/Nightly/Cocoa23ub/aquamacs-emacs.git
 
 AQUAMACS_ROOT=`pwd`/aquamacs
 
