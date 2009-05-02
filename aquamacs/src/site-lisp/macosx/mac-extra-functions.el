@@ -434,18 +434,6 @@ specified in `shell-file-name'."
 	    (delete-file (car f))
 	  (error nil))))
 
-;; register the help manuals
-(defun aquamacs-init-user-help ()
-  (if (condition-case nil 
-	  (file-exists-p aquamacs-mac-application-bundle-directory) 
-	(error nil))
-      (aq-run-python-command
-       (concat "from Carbon import AH; AH.AHRegisterHelpBook('" 
-	       aquamacs-mac-application-bundle-directory "')"))
-    ;; else
-    (message "Could not register Manual.
-Aquamacs Emacs.app may have been moved or renamed. Please restart Aquamacs!")))
-
 ;; install start script
 
 ;; (defun aquamacs-install-shell-start-script ()
@@ -466,7 +454,6 @@ Aquamacs Emacs.app may have been moved or renamed. Please restart Aquamacs!")))
 ;; ))
   
 (defun aq-show-help-file (file &optional book)
-  (aquamacs-init-user-help) ; make sure it's registered
   (if file
       (and
        (aq-run-python-command

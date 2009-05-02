@@ -261,14 +261,6 @@ from earlier versions of the distribution."
     ;; not turned on by default                    
     (require 'emulate-mac-keyboard-mode) )  
 
-
-  ;; initialize help
-  (condition-case nil 
-      ;; problem with this: could be started from /Volumes/.. 
-      ;; <DM> for first time, then moved		
-      (aquamacs-init-user-help) ;; init help system (first start)
-    (error t))
-
   (require 'cus-edit) ;; because of some autoload weirdness 
   
    (aquamacs-set-defaults
