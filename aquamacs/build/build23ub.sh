@@ -12,6 +12,7 @@ PATH=/bin:/sbin:/usr/bin ./configure --with-ns --without-x CFLAGS='-arch i386 -a
 make
 # will fail
 
+rm etc/DOC-*
 cd src
 mv temacs temacs-uni
 
