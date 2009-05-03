@@ -499,7 +499,6 @@ specified in `shell-file-name'."
 ; (aquamacs-show-change-log)
 (defun aquamacs-show-change-log ()
   (interactive)
-  (aquamacs-init-user-help) ; make sure it's registered
   ;; check node1.html
   ;; relativ complex check because of bug in 10.5.2 that causes crashes
   ;; when we use a symlinked file.
