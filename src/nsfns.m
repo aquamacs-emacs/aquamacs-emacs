@@ -1378,6 +1378,165 @@ FRAME nil means use the selected frame.  */)
   return Qnil;
 }
 
+/* Spelling */
+
+DEFUN ("ns-popup-spellchecker-panel", Fns_popup_spellchecker_panel, Sns_popup_spellchecker_panel,
+       0, 0, "",
+       doc: /* Pop up the spell checking panel.
+Shows the NS spell checking panel and brings it to the front.*/)
+     ()
+{
+  id sc;
+
+  check_ns ();
+  sc = [NSSpellChecker sharedSpellChecker];
+  
+
+  [[sc spellingPanel] orderFront: NSApp];
+
+  [sc updateSpellingPanelWithMisspelledWord:@""]; // no word, no spelling errors
+
+  return Qnil;
+}
+
+
+DEFUN ("ns-spellchecker-show-word", Fns_spellchecker_show_word, Sns_spellchecker_show_word,
+       0, 1, "",
+       doc: /* Show word WORD in the spellchecking panel. */)
+     (str)
+     Lisp_Object str;
+{
+  id sc;
+
+  CHECK_STRING (str);
+  check_ns ();
+  sc = [NSSpellChecker sharedSpellChecker];
+  
+  [sc updateSpellingPanelWithMisspelledWord:[NSString stringWithUTF8String: SDATA (str)]]; // no word, no spelling errors
+
+  return Qnil;
+}
+
+
+DEFUN ("ns-spellchecker-check-spelling", Fns_spellchecker_check_spelling, Sns_spellchecker_check_spelling,
+       0, 1, "",
+       doc: /* Check spelling of STRING
+Returns the location of the first misspelled word in a 
+cons cell of form (beginning . length), or nil if all
+words are spelled as in the dictionary.*/)
+     (string)
+     Lisp_Object string;
+{
+  id sc;
+
+  CHECK_STRING (string);
+  check_ns ();
+  sc = [NSSpellChecker sharedSpellChecker];
+
+  NSRange first_word =  [sc checkSpellingOfString:[NSString stringWithUTF8String: SDATA (string)] startingAt:((NSInteger) 0)
+					 language:nil wrap:NO inSpellDocumentWithTag:((NSInteger) 1) wordCount:nil];
+
+  if (first_word.location < 0)
+    return Qnil;
+  else
+    return Fcons (make_number (first_word.location), make_number (first_word.length));
+}
+
+
+DEFUN ("ns-spellchecker-check-grammar", Fns_spellchecker_check_grammar, Sns_spellchecker_check_grammar,
+       0, 1, "",
+       doc: /* Check spelling of sentence
+ */)
+     (sentence)
+     Lisp_Object sentence;
+{
+  id sc;
+
+  CHECK_STRING (sentence);
+  check_ns ();
+  sc = [NSSpellChecker sharedSpellChecker];
+
+  NSArray *errdetails;
+
+  /* to do: use long version */
+  NSRange first_word = [sc checkGrammarOfString: [NSString stringWithUTF8String: SDATA (sentence)] startingAt:((NSInteger) 0)
+				       language:nil wrap:NO inSpellDocumentWithTag:((NSInteger) 1) details:&errdetails];
+
+  if (first_word.location < 0)
+    return Qnil;
+  else
+    return Fcons (make_number ((int) first_word.location), make_number ((int) first_word.length));
+}
+
+
+DEFUN ("ns-spellchecker-get-suggestions", Fns_spellchecker_get_suggestions, Sns_spellchecker_get_suggestions,
+       0, 1, "",
+       doc: /* Get suggestions for WORD.
+If word contains all capital letters, or its first 
+letter is capitalized, the suggested words are
+capitalized in the same way. */)
+     (word)
+     Lisp_Object word;
+{
+  id sc;
+
+  CHECK_STRING (word);
+  check_ns ();
+  sc = [NSSpellChecker sharedSpellChecker];
+
+  Lisp_Object retval = Qnil;
+  NSArray *guesses = [sc guessesForWord: [NSString stringWithUTF8String: SDATA (word)]];
+  int arrayCount = [guesses count];
+  int i;
+  for (i = 0; i < arrayCount; i++) {
+    // build Lisp list of strings
+    retval = Fcons (build_string ([[guesses objectAtIndex:i] UTF8String]),
+		    retval);
+  }
+  return retval;
+}
+
+
+DEFUN ("ns-spellchecker-list-languages", Fns_spellchecker_list_languages, Sns_spellchecker_list_languages,
+       0, 0, "",
+       doc: /* Get all available spell-checking languages.*/)
+     ()
+{
+  id sc;
+
+  check_ns ();
+  sc = [NSSpellChecker sharedSpellChecker];
+
+  Lisp_Object retval = Qnil;
+  NSArray *langs = [sc availableLanguages];
+  int arrayCount = [langs count];
+  int i;
+  for (i = 0; i < arrayCount; i++) {
+    // build Lisp list of strings
+    retval = Fcons (build_string ([[langs objectAtIndex:i] UTF8String]),
+		    retval);
+  }
+  return retval;
+}
+
+
+DEFUN ("ns-spellchecker-set-language", Fns_spellchecker_set_language, Sns_spellchecker_set_language,
+       0, 1, "",
+       doc: /* Set spell-checking language.
+LANGUAGE must be one of the languages returned by
+`ns-spellchecker-list-langauges'.*/)
+     (language)
+     Lisp_Object language;
+{
+  id sc;
+
+  CHECK_STRING (language);
+  check_ns ();
+  sc = [NSSpellChecker sharedSpellChecker];
+
+  [sc setLanguage: [NSString stringWithUTF8String: SDATA (language)]];
+  return Qnil;
+}
 
 DEFUN ("ns-popup-font-panel", Fns_popup_font_panel, Sns_popup_font_panel,
        0, 1, "",
@@ -2822,6 +2981,13 @@ be used as the image of the icon representing the frame.  */);
   defsubr (&Sns_perform_service);
   defsubr (&Sns_convert_utf8_nfd_to_nfc);
   defsubr (&Sx_focus_frame);
+  defsubr (&Sns_popup_spellchecker_panel);
+  defsubr (&Sns_spellchecker_show_word);
+  defsubr (&Sns_spellchecker_check_spelling);
+  defsubr (&Sns_spellchecker_check_grammar);
+  defsubr (&Sns_spellchecker_get_suggestions);
+  defsubr (&Sns_spellchecker_list_languages);
+  defsubr (&Sns_spellchecker_set_language);
   defsubr (&Sns_popup_font_panel);
   defsubr (&Sns_popup_color_panel);
 
