@@ -1396,13 +1396,21 @@ Shows the NS spell checking panel and brings it to the front.*/)
 
   [sc updateSpellingPanelWithMisspelledWord:@""]; // no word, no spelling errors
 
+  // found here: http://trac.webkit.org/changeset/19670
+  // // FIXME 4811447: workaround for lack of API 
+  //  	NSSpellChecker *spellChecker = [NSSpellChecker sharedSpellChecker]; 
+  // does not work
+  // if ([sc respondsToSelector:@selector(_updateGrammar)]) 
+  //   [sc performSelector:@selector(_updateGrammar)]; 
+
   return Qnil;
 }
 
 
 DEFUN ("ns-spellchecker-show-word", Fns_spellchecker_show_word, Sns_spellchecker_show_word,
-       0, 1, "",
-       doc: /* Show word WORD in the spellchecking panel. */)
+       1, 1, 0,
+       doc: /* Show word WORD in the spellchecking panel. 
+Give empty string to delete word.*/)
      (str)
      Lisp_Object str;
 {
@@ -1419,13 +1427,13 @@ DEFUN ("ns-spellchecker-show-word", Fns_spellchecker_show_word, Sns_spellchecker
 
 
 DEFUN ("ns-spellchecker-check-spelling", Fns_spellchecker_check_spelling, Sns_spellchecker_check_spelling,
-       0, 1, "",
+       1, 2, 0,
        doc: /* Check spelling of STRING
 Returns the location of the first misspelled word in a 
 cons cell of form (beginning . length), or nil if all
 words are spelled as in the dictionary.*/)
-     (string)
-     Lisp_Object string;
+     (string, buffer)
+     Lisp_Object string, buffer;
 {
   id sc;
 
@@ -1433,8 +1441,14 @@ words are spelled as in the dictionary.*/)
   check_ns ();
   sc = [NSSpellChecker sharedSpellChecker];
 
+  NSInteger tag = 1;
+  if (! NILP (buffer) ) 
+    {
+      tag = sxhash (buffer, 0);
+    }
+
   NSRange first_word =  [sc checkSpellingOfString:[NSString stringWithUTF8String: SDATA (string)] startingAt:((NSInteger) 0)
-					 language:nil wrap:NO inSpellDocumentWithTag:((NSInteger) 1) wordCount:nil];
+					 language:nil wrap:NO inSpellDocumentWithTag:tag wordCount:nil];
 
   if (first_word.location < 0)
     return Qnil;
@@ -1444,11 +1458,12 @@ words are spelled as in the dictionary.*/)
 
 
 DEFUN ("ns-spellchecker-check-grammar", Fns_spellchecker_check_grammar, Sns_spellchecker_check_grammar,
-       0, 1, "",
-       doc: /* Check spelling of sentence
- */)
-     (sentence)
-     Lisp_Object sentence;
+       1, 2, 0,
+       doc: /* Check spelling of SENTENCE.
+BUFFER, if given, idenitifies the document containing list 
+of ignored grammatical constructions. */)
+     (sentence, buffer)
+     Lisp_Object sentence, buffer;
 {
   id sc;
 
@@ -1456,11 +1471,17 @@ DEFUN ("ns-spellchecker-check-grammar", Fns_spellchecker_check_grammar, Sns_spel
   check_ns ();
   sc = [NSSpellChecker sharedSpellChecker];
 
+  NSInteger tag = 1;
+  if (! NILP (buffer) ) 
+    {
+      tag = sxhash (buffer, 0);
+    }
+
   NSArray *errdetails;
 
   /* to do: use long version */
   NSRange first_word = [sc checkGrammarOfString: [NSString stringWithUTF8String: SDATA (sentence)] startingAt:((NSInteger) 0)
-				       language:nil wrap:NO inSpellDocumentWithTag:((NSInteger) 1) details:&errdetails];
+				       language:nil wrap:NO inSpellDocumentWithTag:tag details:&errdetails];
 
   if (first_word.location < 0)
     return Qnil;
@@ -1470,7 +1491,7 @@ DEFUN ("ns-spellchecker-check-grammar", Fns_spellchecker_check_grammar, Sns_spel
 
 
 DEFUN ("ns-spellchecker-get-suggestions", Fns_spellchecker_get_suggestions, Sns_spellchecker_get_suggestions,
-       0, 1, "",
+       1, 1, 0,
        doc: /* Get suggestions for WORD.
 If word contains all capital letters, or its first 
 letter is capitalized, the suggested words are
@@ -1498,7 +1519,7 @@ capitalized in the same way. */)
 
 
 DEFUN ("ns-spellchecker-list-languages", Fns_spellchecker_list_languages, Sns_spellchecker_list_languages,
-       0, 0, "",
+       0, 0, 0,
        doc: /* Get all available spell-checking languages.*/)
      ()
 {
@@ -1521,7 +1542,7 @@ DEFUN ("ns-spellchecker-list-languages", Fns_spellchecker_list_languages, Sns_sp
 
 
 DEFUN ("ns-spellchecker-set-language", Fns_spellchecker_set_language, Sns_spellchecker_set_language,
-       0, 1, "",
+       1, 1, 0,
        doc: /* Set spell-checking language.
 LANGUAGE must be one of the languages returned by
 `ns-spellchecker-list-langauges'.*/)
@@ -1537,6 +1558,7 @@ LANGUAGE must be one of the languages returned by
   [sc setLanguage: [NSString stringWithUTF8String: SDATA (language)]];
   return Qnil;
 }
+
 
 DEFUN ("ns-popup-font-panel", Fns_popup_font_panel, Sns_popup_font_panel,
        0, 1, "",

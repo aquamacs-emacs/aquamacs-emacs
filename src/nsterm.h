@@ -359,8 +359,11 @@ typedef unsigned long NSUInteger;
 #define KEY_NS_NEW_FRAME               ((1<<28)|(0<<16)|12)
 #define KEY_NS_TOGGLE_TOOLBAR          ((1<<28)|(0<<16)|13)
 #define KEY_NS_SHOW_PREFS              ((1<<28)|(0<<16)|14)
+#define KEY_NS_CHECK_SPELLING          ((1<<28)|(0<<16)|20)
+#define KEY_NS_SPELLING_CHANGE         ((1<<28)|(0<<16)|21)
 #define KEY_NS_ABOUT                   ((1<<28)|(0<<16)|130)
 #define KEY_NS_CHECK_FOR_UPDATES       ((1<<28)|(0<<16)|131)
+
 /* could use list to store these, but rest of emacs has a big infrastructure
    for managing a table of bitmap "records" */
 struct ns_bitmap_record
