@@ -943,11 +943,6 @@ keymaps used by this mode. They may be modified where necessary."
   :group 'osx-key-mode 
   :keymap 'osx-key-mode-map  
 
-
-;; Change encoding so you can use alt-e and alt-u accents (and others) 
-  (set-terminal-coding-system 'iso-8859-1) 
-  (set-keyboard-coding-system 'mac-roman) ;; keyboard
-  (set-selection-coding-system 'mac-roman) ;; copy'n'paste
  
   (setq mac-emulate-three-button-mouse (if osx-key-mode 'control
 					   nil))
