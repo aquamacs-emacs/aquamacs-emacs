@@ -1431,7 +1431,6 @@ listed here."
 	      global-font-lock-mode
 	      display-time-mode 
 	      display-battery-mode
-	      mac-inline-input-method-mode
 	      one-buffer-one-frame-mode 
 	      aquamacs-styles-mode
 	      aquamacs-autoface-mode

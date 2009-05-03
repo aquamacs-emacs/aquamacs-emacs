@@ -1422,61 +1422,6 @@ that should be represented in the Aquamacs menus."
 (easy-menu-remove-item global-map 
 		       '("menu-bar" "file") 'make-frame-on-display)
 
-;; language environment
-(unless (boundp 'unicode-emacs)
-(when (eq system-type 'darwin) 
-    (require 'aquamacs-mule)
-(define-key menu-bar-options-menu [mule]
-  ;; It is better not to use backquote here,
-  ;; because that makes a bootstrapping problem
-  ;; if you need to recompile all the Lisp files using interpreted code.
-  (list 'menu-item "Language" mule-menu-keymap
-;; Most of the MULE menu actually does make sense in unibyte mode,
-;; e.g. language selection.
-;;;	':visible 'default-enable-multibyte-characters
-	':help "Default language, encodings, input method")))
-
-;; (defvar inline-input-method-on nil)
-
-;; for compatibility with earlier Aquamaacs version
-(defalias 'mac-inline-input-method-mode 'mac-input-method-mode)
-
-
-;; (define-minor-mode mac-inline-input-method-mode 
-;; "Use the standard Mac input method.
-;; This is usually used to allow non-roman scripts to be input.
-;; Call this function for the mode to take effect."
-;; :init-value t
-;; :group 'Aquamacs
-;; :global t
-
-;; (when initial-window-system
-;; (if mac-inline-input-method-mode
-;;     (when (fboundp 'mac-setup-inline-input-method)
-;; 	(mac-setup-inline-input-method)
-;; 	(add-hook 'minibuffer-setup-hook 'mac-change-language-to-us)
-;; 	)
-;;   (if (fboundp 'mac-exit-inline-input-method)
-;;       (mac-exit-inline-input-method))
-;;   (remove-hook 'minibuffer-setup-hook 'mac-change-language-to-us))))
- 
-(when  (fboundp 'mac-input-method-mode)
-(define-key-after mule-menu-keymap [toggle-inline-input-method]
-  (menu-bar-make-mm-toggle mac-input-method-mode
-			   "Use System Input Method" 
-	      "Use native Mac input method")
-  'separator-mule)
-
-;; overwrite these with text and :enable
-(define-key mule-menu-keymap [toggle-input-method]
-  '(menu-item "Toggle Internal Input Method" toggle-input-method
-	      :enable (not mac-input-method-mode)))
-(define-key mule-menu-keymap [set-input-method]
-  '(menu-item "Select Internal Input Method..." set-input-method
-	       :enable (not mac-input-method-mode)))
-
-)
-)
 ;; --done
 
 (require 'recentf)

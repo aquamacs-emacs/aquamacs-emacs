@@ -934,16 +934,26 @@ mac-command-modifier osxkeys-command-key))))
 (define-minor-mode osx-key-mode
   "Toggle Mac Key mode.
 With arg, turn Mac Key mode on iff arg is positive.
-When Mac Key mode is enabled, mac-style key bindings are provided.
+When Mac Key mode is enabled, Mac-style key bindings are provided.
 Setting the `osx-key-mode' variable has limited effect - call
 the `osx-key-mode' function to switch mode on or off.
 `osx-key-mode-map' and `osx-key-low-priority-key-map' contain the
-keymaps used by this mode. They may be modified where necessary."
+keymaps used by this mode. They may be modified where necessary.
+
+No keyboard coding system is used in this mode."
   :global t
   :group 'osx-key-mode 
   :keymap 'osx-key-mode-map  
 
- 
+  ;; Emacs sets the keyboard coding system according to the locale.
+  ;; This is usually not desirable, because the system already handles
+  ;; dead keys and the like. (e.g., LANG=en_US.UTF-8 would lead to 
+  ;; composed characters first being handled by the system, then again
+  ;; by Emacs.)
+  (setq keyboard-coding-system 
+	(if osx-key-mode nil
+	  default-keyboard-coding-system))
+
   (setq mac-emulate-three-button-mouse (if osx-key-mode 'control
 					   nil))
 

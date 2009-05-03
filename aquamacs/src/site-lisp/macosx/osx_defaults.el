@@ -220,14 +220,6 @@ from earlier versions of the distribution."
   (add-hook 'after-save-hook 'mac-set-creator-type-codes-for-file)
 					
 
-  (unless (boundp 'unicode-emacs)
-    (require 'aquamacs-mule)              ; Language settings
-    ;; 
-    ;; use file name coding system for the Mac
-    (require 'utf-8m)
-    (set-file-name-coding-system 'utf-8m)
-    )
-
 (ats "before frame setup")
 
 
