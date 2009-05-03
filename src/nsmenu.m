@@ -159,7 +159,7 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
 
   if (menu == nil)
     {
-      menu = [[EmacsMenu alloc] initWithTitle: @"Emacs"];
+      menu = [[EmacsMenu alloc] initWithTitle: @"Aquamacs/Cocoa"];
       needsSet = YES;
     }
   else
@@ -177,7 +177,7 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
   /* widget_value is a straightforward object translation of emacs's
      Byzantine lisp menu structures */
   wv = xmalloc_widget_value ();
-  wv->name = "Emacs";
+  wv->name = "Aquamacs/Cocoa";
   wv->value = 0;
   wv->enabled = 1;
   wv->button_type = BUTTON_TYPE_NONE;
@@ -1717,7 +1717,7 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
   area.size.height= TEXTHEIGHT;
   command = [[[NSTextField alloc] initWithFrame: area] autorelease];
   [[self contentView] addSubview: command];
-  [command setStringValue: @"Emacs"];
+  [command setStringValue: @"Aquamacs"];
   [command setDrawsBackground: NO];
   [command setBezeled: NO];
   [command setSelectable: NO];

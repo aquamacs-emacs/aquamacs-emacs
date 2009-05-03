@@ -3911,44 +3911,48 @@ ns_term_init (Lisp_Object display_name)
     /* set up the application menu */
     svcsMenu = [[EmacsMenu alloc] initWithTitle: @"Services"];
     [svcsMenu setAutoenablesItems: NO];
-    appMenu = [[EmacsMenu alloc] initWithTitle: @"Emacs"];
+    appMenu = [[EmacsMenu alloc] initWithTitle: @"Aquamacs"];
     [appMenu setAutoenablesItems: NO];
     mainMenu = [[EmacsMenu alloc] initWithTitle: @""];
     dockMenu = [[EmacsMenu alloc] initWithTitle: @""];
 
-    [appMenu insertItemWithTitle: @"About Emacs"
-                          action: @selector (orderFrontStandardAboutPanel:)
+    [appMenu insertItemWithTitle: @"About Aquamacs Emacs"
+                          action: @selector (showAbout:)
                    keyEquivalent: @""
                          atIndex: 0];
-    [appMenu insertItem: [NSMenuItem separatorItem] atIndex: 1];
+    [appMenu insertItemWithTitle: @"Check for Updates..."
+                          action: @selector (checkForUpdates:)
+                   keyEquivalent: @""
+                         atIndex: 1];
+    [appMenu insertItem: [NSMenuItem separatorItem] atIndex: 2];
     [appMenu insertItemWithTitle: @"Preferences..."
                           action: @selector (showPreferencesWindow:)
                    keyEquivalent: @","
-                         atIndex: 2];
-    [appMenu insertItem: [NSMenuItem separatorItem] atIndex: 3];
+                         atIndex: 3];
+    [appMenu insertItem: [NSMenuItem separatorItem] atIndex: 4];
     item = [appMenu insertItemWithTitle: @"Services"
                                  action: @selector (menuDown:)
                           keyEquivalent: @""
-                                atIndex: 4];
+                                atIndex: 5];
     [appMenu setSubmenu: svcsMenu forItem: item];
 /*    [svcsMenu setSupercell: item]; */
-    [appMenu insertItem: [NSMenuItem separatorItem] atIndex: 5];
-    [appMenu insertItemWithTitle: @"Hide Emacs"
+    [appMenu insertItem: [NSMenuItem separatorItem] atIndex: 6];
+    [appMenu insertItemWithTitle: @"Hide Aquamacs Emacs"
                           action: @selector (hide:)
                    keyEquivalent: @"h"
-                         atIndex: 6];
+                         atIndex: 7];
     item =  [appMenu insertItemWithTitle: @"Hide Others"
                           action: @selector (hideOtherApplications:)
                    keyEquivalent: @"h"
-                         atIndex: 7];
+                         atIndex: 8];
     [item setKeyEquivalentModifierMask: NSCommandKeyMask | NSAlternateKeyMask];
-    [appMenu insertItem: [NSMenuItem separatorItem] atIndex: 8];
-    [appMenu insertItemWithTitle: @"Quit Emacs"
+    [appMenu insertItem: [NSMenuItem separatorItem] atIndex: 9];
+    [appMenu insertItemWithTitle: @"Quit Aquamacs Emacs"
                           action: @selector (terminate:)
                    keyEquivalent: @"q"
-                         atIndex: 9];
+                         atIndex: 10];
 
-    item = [mainMenu insertItemWithTitle: @"Emacs"
+    item = [mainMenu insertItemWithTitle: @"Aquamacs Emacs"
                                   action: @selector (menuDown:)
                            keyEquivalent: @""
                                  atIndex: 0];
@@ -4072,6 +4076,36 @@ ns_term_shutdown (int sig)
     }
 
   [super sendEvent: theEvent];
+}
+
+
+- (void)checkForUpdates: (id)sender
+{
+  struct frame *emacsframe = SELECTED_FRAME ();
+  NSEvent *theEvent = [NSApp currentEvent];
+
+  if (!emacs_event)
+    return;
+  emacs_event->kind = NS_NONKEY_EVENT;
+  emacs_event->code = KEY_NS_CHECK_FOR_UPDATES;
+  emacs_event->modifiers = 0;
+  emacs_event->arg = Qt; /* mark as non-key event */
+
+  EV_TRAILER (theEvent);
+}
+
+- (void)showAbout: (id)sender
+{
+  struct frame *emacsframe = SELECTED_FRAME ();
+  NSEvent *theEvent = [NSApp currentEvent];
+
+  if (!emacs_event)
+    return;
+  emacs_event->kind = NS_NONKEY_EVENT;
+  emacs_event->code = KEY_NS_ABOUT;
+  emacs_event->modifiers = 0;
+  emacs_event->arg = Qt; /* mark as non-key event */
+  EV_TRAILER (theEvent);
 }
 
 
