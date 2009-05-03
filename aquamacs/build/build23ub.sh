@@ -9,7 +9,7 @@
 
 # do not use MacPorts / fink libraries
 PATH=/bin:/sbin:/usr/bin ./configure --with-ns --without-x CFLAGS='-arch i386 -arch ppc' LDFLAGS='-arch i386 -arch ppc'
-make bootstrap
+make
 # will fail
 
 cd src
