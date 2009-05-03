@@ -4,6 +4,7 @@
 
 cd ~/Nightly/Cocoa23ub/aquamacs-emacs.git
 
+EMACS_ROOT=`pwd`
 AQUAMACS_ROOT=`pwd`/aquamacs
 
 rm aquamacs-build.log
@@ -30,4 +31,5 @@ tar cjf ${BLD} Aquamacs.app
 
 # copy to server
 
+cd ${EMACS_ROOT}
 aquamacs/build/copy-build-to-server.sh $DATE # $SHORTDATE  - only needed for GNU Emacs

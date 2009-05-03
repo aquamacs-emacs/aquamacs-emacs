@@ -2629,10 +2629,11 @@ See also `locale-charset-language-names', `locale-language-names',
 	  ;; leads to buggy behavior when a tty frame is opened
 	  ;; later.  Setting the keyboard coding system has no adverse
 	  ;; effect on X, so let's do it anyway. -- Lorentey
-	  (let ((kcs (or coding-system
-			 (car (get-language-info language-name
-						 'coding-system)))))
-	    (if kcs (set-keyboard-coding-system kcs frame)))
+	  (unless (memq window-system '(ns))
+	    (let ((kcs (or coding-system
+			   (car (get-language-info language-name
+						   'coding-system)))))
+	      (if kcs (set-keyboard-coding-system kcs frame))))
 
 	  (unless frame
 	    (setq locale-coding-system

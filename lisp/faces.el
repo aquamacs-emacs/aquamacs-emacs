@@ -2158,7 +2158,8 @@ terminal type to a different value."
   :group 'faces)
 
 (defface default
-  '((t nil)) ; If this were nil, face-defface-spec would not be set.
+  '((((type ns)) :height 130 :family "Lucida Grande")
+    (t nil))
   "Basic default face."
   :group 'basic-faces)
 
