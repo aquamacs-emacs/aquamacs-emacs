@@ -926,6 +926,8 @@ mac-command-modifier osxkeys-command-key))))
 ;; ensure that we remap the right backward-kill-word 
 (define-key minibuffer-local-filename-completion-map 
   [remap aquamacs-backward-kill-word] 'backward-kill-filename)
+(define-key minibuffer-local-filename-must-match-map 
+  [remap aquamacs-backward-kill-word] 'backward-kill-filename)
  
 
 (defvar osx-key--saved-low-priority-map (make-sparse-keymap)

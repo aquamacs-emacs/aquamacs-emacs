@@ -79,10 +79,28 @@
 
 (defalias  'new-frame-with-new-scratch 'new-empty-buffer)
 
+
 (defun aquamacs-find-file (&optional filename)
   "Find an existing file or create a new buffer for it.  
 If `one-buffer-one-frame' is non-nil, a new frame is created to
-contain the new buffer."
+contain the new buffer.
+Interactively, the default if you just type RET is the current directory,
+but the visited file name is available through the minibuffer history:
+type M-n to pull it into the minibuffer.
+
+You can visit files on remote machines by specifying something
+like /ssh:SOME_REMOTE_MACHINE:FILE for the file name.  You can
+also visit local files as a different user by specifying
+/sudo::FILE for the file name.
+See the Info node `(tramp)Filename Syntax' in the Tramp Info
+manual, for more about this.
+
+Interactively, or if WILDCARDS is non-nil in a call from Lisp,
+expand wildcards (if any) and visit multiple files.  You can
+suppress wildcard expansion by setting `find-file-wildcards' to nil.
+
+To visit a file without any kind of conversion and without
+automatically choosing a major mode, use \\[find-file-literally]."
   (interactive)
   (if (or (not one-buffer-one-frame)
 	  filename
@@ -114,33 +132,12 @@ contain the new buffer."
 		 (< (buffer-size) 2))		; for safety
 	    (kill-buffer buf)))))))
 
-
 (defun aquamacs-find-file-2 (filename &optional wildcards)
-  "Edit file FILENAME.
-Switch to a buffer visiting file FILENAME, creating one if none
-already exists.  Interactively, the default if you just type RET
-is the current directory, but the visited file name is available
-through the minibuffer history: type M-n to pull it into the
-minibuffer.
+  "Edit file FILENAME."
 
-If the buffer is shown somewhere in tabbar-mode, select that
-window.
-
-You can visit files on remote machines by specifying something
-like /ssh:SOME_REMOTE_MACHINE:FILE for the file name.  You can
-also visit local files as a different user by specifying
-/sudo::FILE for the file name.  See the Info
-node `(tramp)Filename Syntax' in the Tramp Info manual, for more
-about this.
-
-Interactively, or if WILDCARDS is non-nil in a call from Lisp,
-expand wildcards (if any) and visit multiple files.  You can
-suppress wildcard expansion by setting `find-file-wildcards' to nil.
-
-To visit a file without any kind of conversion and without
-automatically choosing a major mode, use \\[find-file-literally]."
-
-  (interactive (find-file-read-args "Find file: " nil))
+  (interactive
+   (find-file-read-args "Find file: "
+                        (confirm-nonexistent-file-or-buffer)))
 
   (let ((value (find-file-noselect filename nil nil wildcards)))
 
