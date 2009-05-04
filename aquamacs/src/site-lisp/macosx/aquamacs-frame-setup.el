@@ -101,6 +101,12 @@ even when minimal fringes are used. (Aquamacs)"
      (top . 30))))) 
 
 
+;; TO DO: remove once "defface" in faces.el works correctly
+(set-face-attribute 'default nil
+		    :height 130
+		    :family "Lucida Grande")
+
+
 ;;; COMMENT THIS OUT IF YOU DO *NOT* WANT MAXIMUM BUFFER HIGHLIGHTING.
 (defconst font-lock-maximum-decoration t)
 
