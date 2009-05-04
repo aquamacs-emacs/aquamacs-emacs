@@ -39,10 +39,10 @@
 (eval-when-compile (require 'aquamacs-macros))
 
 
-(if (> emacs-major-version 22)
-    ;; unclear why this is needed 
-    ;; but clipboard-kill-ring-save isn't defined otherwise
-    (load "menu-bar.el"))
+;; (if (> emacs-major-version 22)
+;;     ;; unclear why this is needed 
+;;     ;; but clipboard-kill-ring-save isn't defined otherwise
+;;     (load "menu-bar.el"))
 
 ; (assq 'paste (lookup-key global-map [menu-bar edit]))
 ; (assq 'new-file (lookup-key global-map [menu-bar file]))
@@ -285,14 +285,6 @@ customization buffer."
       mac-key-open-file
       :keys ,(aq-binding 'mac-key-open-file)))
 
-(define-key menu-bar-file-menu [insert-file]
-  '(menu-item "Insert File...                         " insert-file
-	      :enable (menu-bar-non-minibuffer-window-p)
-	      :help "Insert another file into current buffer"))
-(define-key menu-bar-file-menu [dired]
-  '(menu-item "Open Directory...                 " dired
-	      :enable (menu-bar-non-minibuffer-window-p)
-	      :help "Read a directory, to operate on its files"))
 (aquamacs-set-defaults 
  '((recentf-menu-before  "Open Directory...                 ")))
 (recentf-mode 1) 
@@ -329,13 +321,6 @@ customization buffer."
 		       (menu-bar-menu-frame-live-and-visible-p))
 	      :help "Paste (yank) text most recently cut/copied"))
 
-(define-key menu-bar-edit-menu (if (> emacs-major-version 22)
-				   [select-paste]
-				   [paste-from-menu])
-  '(menu-item "Paste Previous" yank-menu
-	      :enable (and (cdr yank-menu) (not buffer-read-only))
-	      :help "Choose a string from the kill ring and paste it"))
-
 (require 'aquamacs-redo)
 (define-key menu-bar-edit-menu [undo]
   `(menu-item   "Undo                                               "
@@ -352,10 +337,6 @@ customization buffer."
 	      :enable (and (aquamacs-can-redo-p) 
 			   (menu-bar-menu-frame-live-and-visible-p))
 	      :help "Redo undone operation") 'undo)
-
-(if (< emacs-major-version 23)
-    (easy-menu-add-item  nil '("Edit")
-			 ["-" nil nil] 'cut))
 
 ;;done
 (define-key menu-bar-edit-menu [cut]
@@ -424,16 +405,6 @@ customization buffer."
   'simple-calculator)
 
 
-(define-key-after menu-bar-search-menu [grep]
-  '(menu-item "Search Files (Grep)..." grep
-	      :help "Search files for strings or regexps (with Grep)")
-  'separator-tag-search)
-
-(define-key-after menu-bar-search-menu [separator-grep-search]
-  '(menu-item "--")
-  'grep)
-(define-key menu-bar-tools-menu [grep] nil)
-
 (require 'aquamacs-editing)
 (define-key menu-bar-edit-menu [fill]
 `(menu-item "Wrap and Re-Format (fill)                " 
@@ -456,11 +427,10 @@ left and right margin"))
   '(menu-item "--")
   'unfill)
   
-;; this needs an extension to show the keyboard shortcut
-;; interesting extensions to menu-item: (:visible nil), (:keys)
 
- (define-key-after menu-bar-file-menu [my-file-separator]
-          '(menu-item "--") 'recover-session)
+ ;; leave in - NS port crashes often
+ ;; (define-key-after menu-bar-file-menu [my-file-separator]
+ ;;          '(menu-item "--") 'recover-session)
  (define-key-after menu-bar-file-menu [mac-show-in-finder]
           '(menu-item "Reveal in Finder" mac-key-show-in-finder
 
@@ -550,16 +520,6 @@ left and right margin"))
 
 
 ;; Printing (redefinition for :enable)
- 
-(easy-menu-remove-item global-map  '("menu-bar" "file") 'ps-print-region) 
-(easy-menu-remove-item global-map  '("menu-bar" "file") 'ps-print-buffer) 
-(easy-menu-remove-item global-map  '("menu-bar" "file") 'ps-print-region-faces) 
-(easy-menu-remove-item global-map  '("menu-bar" "file") 'ps-print-buffer-faces) 
-(easy-menu-remove-item global-map  '("menu-bar" "file") 'print-region) 
-(easy-menu-remove-item global-map  '("menu-bar" "file") 'print-buffer) 
-
- 
-
 
 (defun menu-bar-print-region-or-buffer ()
   "Prints the current buffer or the region, if mark is active."

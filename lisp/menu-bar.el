@@ -28,6 +28,11 @@
 
 ;;; Code:
 
+;; useful functions (stump)
+
+(defun aq-binding (any)
+  nil)
+
 ;; Don't clobber an existing menu-bar keymap, to preserve any menu-bar key
 ;; definitions made in loaddefs.el.
 (or (lookup-key global-map [menu-bar])
@@ -118,31 +123,6 @@ for the definition of the menu frame."
 (define-key menu-bar-file-menu [separator-window]
   '(menu-item "--"))
 
-(define-key menu-bar-file-menu [ps-print-region]
-  '(menu-item "Postscript Print Region (B+W)" ps-print-region
-	      :enable mark-active
-	      :help "Pretty-print marked region in black and white to PostScript printer"))
-(define-key menu-bar-file-menu [ps-print-buffer]
-  '(menu-item "Postscript Print Buffer (B+W)" ps-print-buffer
-	      :enable (menu-bar-menu-frame-live-and-visible-p)
-	      :help "Pretty-print current buffer in black and white to PostScript printer"))
-(define-key menu-bar-file-menu [ps-print-region-faces]
-  '(menu-item "Postscript Print Region" ps-print-region-with-faces
-	      :enable mark-active
-	      :help "Pretty-print marked region to PostScript printer"))
-(define-key menu-bar-file-menu [ps-print-buffer-faces]
-  '(menu-item "Postscript Print Buffer" ps-print-buffer-with-faces
-	      :enable (menu-bar-menu-frame-live-and-visible-p)
-	      :help "Pretty-print current buffer to PostScript printer"))
-(define-key menu-bar-file-menu [print-region]
-  '(menu-item "Print Region" print-region
-	      :enable mark-active
-	      :help "Print region between mark and current position"))
-(define-key menu-bar-file-menu [print-buffer]
-  '(menu-item "Print Buffer" print-buffer
-	      :enable (menu-bar-menu-frame-live-and-visible-p)
-	      :help "Print current buffer with page headings"))
-
 (define-key menu-bar-file-menu [separator-print]
   '(menu-item "--"))
 
@@ -201,12 +181,12 @@ for the definition of the menu frame."
 	      :enable (kill-this-buffer-enabled-p)
 	      :help "Discard (kill) current buffer"))
 (define-key menu-bar-file-menu [insert-file]
-  '(menu-item "Insert File..." insert-file
+  '(menu-item "Insert File...                         " insert-file
 	      :enable (and (menu-bar-non-minibuffer-window-p)
 			   (menu-bar-menu-frame-live-and-visible-p))
 	      :help "Insert another file into current buffer"))
 (define-key menu-bar-file-menu [dired]
-  '(menu-item "Open Directory..." dired
+  '(menu-item "Open Directory...                 " dired
 	      :enable (and (menu-bar-non-minibuffer-window-p)
 			   (menu-bar-menu-frame-live-and-visible-p))
 	      :help "Read a directory, to operate on its files"))
@@ -321,7 +301,11 @@ for the definition of the menu frame."
 	      :help "Search for a regexp in all tagged files"))
 (define-key menu-bar-search-menu [separator-tag-search]
   '(menu-item "--"))
-
+(define-key menu-bar-search-menu [grep]
+  '(menu-item "Search Files (Grep)..." grep
+	      :help "Search files for strings or regexps (with Grep)"))
+(define-key menu-bar-search-menu [separator-grep-search]
+  '("--"))
 (define-key menu-bar-search-menu [repeat-search-back]
   '(menu-item "Repeat Backwards" nonincremental-repeat-search-backward
 	      :enable (or (and (eq menu-bar-last-search-type 'string)
@@ -477,7 +461,7 @@ for the definition of the menu frame."
 (defvar yank-menu (cons "Select Yank" nil))
 (fset 'yank-menu (cons 'keymap yank-menu))
 (define-key menu-bar-edit-menu [paste-from-menu]
-  '(menu-item "Paste from Kill Menu" yank-menu
+  '(menu-item "Paste Previous" yank-menu
 	      :enable (and (cdr yank-menu) (not buffer-read-only))
 	      :help "Choose a string from the kill ring and paste it"))
 (define-key menu-bar-edit-menu [paste]
@@ -1014,7 +998,7 @@ mail status in mode line"))
   ;; It is better not to use backquote here,
   ;; because that makes a bootstrapping problem
   ;; if you need to recompile all the Lisp files using interpreted code.
-  (list 'menu-item "Mule (Multilingual Environment)" mule-menu-keymap
+  (list 'menu-item "Language" mule-menu-keymap
 ;; Most of the MULE menu actually does make sense in unibyte mode,
 ;; e.g. language selection.
 ;;;	':visible 'default-enable-multibyte-characters
@@ -1332,9 +1316,6 @@ mail status in mode line"))
 (define-key menu-bar-tools-menu [compile]
   '(menu-item "Compile..." compile
 	      :help "Invoke compiler or Make, view compilation errors"))
-(define-key menu-bar-tools-menu [grep]
-  '(menu-item "Search Files (Grep)..." grep
-	      :help "Search files for strings or regexps (with Grep)"))
 
 
 ;; The "Help" menu items
