@@ -319,7 +319,6 @@ load_charset_map (charset, entries, n_entries, control_flag)
 	    {
 	      memset (temp_charset_work->table.decoder, -1,
 		      sizeof (int) * 0x10000);
-	      temp_charset_work->for_encoder = 0;
 	    }
 	  else
 	    {
@@ -646,7 +645,7 @@ load_charset (charset, control_flag)
   if (inhibit_load_charset_map
       && temp_charset_work
       && charset == temp_charset_work->current
-      && (control_flag == 2 == temp_charset_work->for_encoder))
+      && ((control_flag == 2) == temp_charset_work->for_encoder))
     return;
 
   if (CHARSET_METHOD (charset) == CHARSET_METHOD_MAP)
