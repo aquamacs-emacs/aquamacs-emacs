@@ -501,7 +501,6 @@ The properties returned may include `top', `left', `height', and `width'."
 (define-key-after menu-bar-edit-menu [separator-undo] '("--") 'undo)
 (define-key-after menu-bar-edit-menu [spell] '("Spell" . ispell-menu-map) 'fill)
 
-<<<<<<< HEAD:lisp/term/ns-win.el
 (defun force-menu-bar-update-buffers ()
   ;; This is a hack to get around fact that we already checked
   ;; frame-or-buffer-changed-p and reset it, so menu-bar-update-buffers
@@ -555,8 +554,6 @@ The properties returned may include `top', `left', `height', and `width'."
     (raise-frame frame)
     (select-frame frame)))
 
-=======
->>>>>>> emacs:lisp/term/ns-win.el
 
 ;;;; Services
 (declare-function ns-perform-service "nsfns.m" (service send))
