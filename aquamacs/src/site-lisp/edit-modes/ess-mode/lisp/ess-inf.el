@@ -1035,7 +1035,8 @@ default 100 ms and be passed to \\[accept-process-output]."
     ;; else: "normal", non-DDE behavior:
 
     ;; Use this to evaluate some code, but don't wait for output.
-    (let* ((cbuffer (current-buffer))
+    (let* ((deactivate-mark nil)
+	   (cbuffer (current-buffer))
 	   (sprocess (get-ess-process ess-current-process-name))
 	   (sbuffer (process-buffer sprocess))
 	   (text (ess-replace-in-string text-withtabs "\t" " "))
@@ -1143,7 +1144,7 @@ this does not apply when using the S-plus GUI, see `ess-eval-region-ddeclient'."
 	  (let ((sprocess (get-ess-process ess-current-process-name)))
 	    (process-send-region sprocess start end)
 	    (process-send-string sprocess "\n"))))))
-
+  
   (message "Finished evaluation")
   (if ess-eval-deactivate-mark
       (deactivate-mark))
