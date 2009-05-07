@@ -1160,10 +1160,10 @@ x_set_window_size (struct frame *f, int change_grav, int cols, int rows)
   pixelheight = FRAME_TEXT_LINES_TO_PIXEL_HEIGHT (f, rows);
 
   /* If we have a toolbar, take its height into account. */
-  /* XXX: GNUstep has not yet implemented the first method below, added
-          in Panther, however the second is incorrect under Cocoa. */
   if (tb)
     FRAME_NS_TOOLBAR_HEIGHT (f) =
+      /* XXX: GNUstep has not yet implemented the first method below, added
+	 in Panther, however the second is incorrect under Cocoa. */
 #ifdef NS_IMPL_COCOA
       NSHeight ([window frameRectForContentRect: NSMakeRect (0, 0, 0, 0)])
       /* NOTE: previously this would generate wrong result if toolbar not
@@ -2979,7 +2979,7 @@ ns_dumpglyphs_stretch (struct glyph_string *s)
 	}
       else
 	face = FACE_FROM_ID (s->f, s->first_glyph->face_id);
-
+      
       [ns_lookup_indexed_color (NS_FACE_BACKGROUND (face), s->f) set];
 
       NSRectFill (r[0]);
@@ -5162,8 +5162,14 @@ extern void update_window_cursor (struct window *w, int on);
 #endif /* NS_IMPL_COCOA */
 #endif /* AQUAMACS_RESIZING_HINT */
 
+  // Calling x_set_window_size tends to get us into inf-loops
+  // (x_set_window_size causes a resize which causes
+  // a "windowDidResize" which calls x_set_window_size).
+  // At least with GNUStep, don't know about MacOSX.  --Stef
+#ifndef NS_IMPL_GNUSTEP
   if (cols > 0 && rows > 0)
-    x_set_window_size (emacsframe, 0, cols, rows);
+     x_set_window_size (emacsframe, 0, cols, rows);
+#endif
 
   ns_send_appdefined (-1);
 }
