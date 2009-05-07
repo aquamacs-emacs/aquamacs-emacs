@@ -640,6 +640,17 @@ ns_update_window_end (struct window *w, int cursor_on_p,
   NSTRACE (update_window_end);
 }
 
+static void
+ns_flush (struct frame *f)
+/* --------------------------------------------------------------------------
+   external (RIF) call
+   -------------------------------------------------------------------------- */
+{
+    NSTRACE (ns_flush);
+
+    [[FRAME_NS_VIEW (f) window] flushWindow];
+
+}
 
 static void
 ns_update_end (struct frame *f)
@@ -663,7 +674,7 @@ ns_update_end (struct frame *f)
 #endif
 
   [view unlockFocus];
-  [[view window] flushWindow];
+  ns_flush(f);
 
   UNBLOCK_INPUT;
   ns_updating_frame = NULL;
@@ -671,15 +682,6 @@ ns_update_end (struct frame *f)
 }
 
 
-static void
-ns_flush (struct frame *f)
-/* --------------------------------------------------------------------------
-   external (RIF) call
-   NS impl is no-op since currently we flush in ns_update_end and elsewhere
-   -------------------------------------------------------------------------- */
-{
-    NSTRACE (ns_flush);
-}
 
 
 static void
@@ -2823,6 +2825,7 @@ ns_dumpglyphs_image (struct glyph_string *s, NSRect r)
   int th;
   char raised_p;
   NSRect br;
+  struct face *face;
 
   NSTRACE (ns_dumpglyphs_image);
 
@@ -2842,8 +2845,17 @@ ns_dumpglyphs_image (struct glyph_string *s, NSRect r)
   /* Draw BG: if we need larger area than image itself cleared, do that,
      otherwise, since we composite the image under NS (instead of mucking
      with its background color), we must clear just the image area. */
-  [ns_lookup_indexed_color (NS_FACE_BACKGROUND
-            (FACE_FROM_ID (s->f, s->first_glyph->face_id)), s->f) set];
+  if (s->hl == DRAW_MOUSE_FACE)
+    {
+      face = FACE_FROM_ID
+	(s->f, FRAME_NS_DISPLAY_INFO (s->f)->mouse_face_face_id);
+      if (!face)
+	face = FACE_FROM_ID (s->f, MOUSE_FACE_ID);
+    }
+  else
+    face = FACE_FROM_ID (s->f, s->first_glyph->face_id);
+
+  [ns_lookup_indexed_color (NS_FACE_BACKGROUND (face), s->f) set];
 
   if (bg_height > s->slice.height || s->img->hmargin || s->img->vmargin
       || s->img->mask || s->img->pixmap == 0 || s->width != s->background_width)
@@ -2914,6 +2926,7 @@ ns_dumpglyphs_stretch (struct glyph_string *s)
 {
   NSRect r[2];
   int n, i;
+  struct face *face;
 
   if (!s->background_filled_p)
     {
@@ -2954,9 +2967,21 @@ ns_dumpglyphs_stretch (struct glyph_string *s)
             }
         }
 
+
       ns_focus (s->f, r, n);
-      [ns_lookup_indexed_color (NS_FACE_BACKGROUND
-           (FACE_FROM_ID (s->f, s->first_glyph->face_id)), s->f) set];
+
+      if (s->hl == DRAW_MOUSE_FACE)
+	{
+	  face = FACE_FROM_ID
+	    (s->f, FRAME_NS_DISPLAY_INFO (s->f)->mouse_face_face_id);
+	  if (!face)
+	    face = FACE_FROM_ID (s->f, MOUSE_FACE_ID);
+	}
+      else
+	face = FACE_FROM_ID (s->f, s->first_glyph->face_id);
+
+      [ns_lookup_indexed_color (NS_FACE_BACKGROUND (face), s->f) set];
+
       NSRectFill (r[0]);
       NSRectFill (r[1]);
       ns_unfocus (s->f);
