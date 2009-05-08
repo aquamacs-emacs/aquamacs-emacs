@@ -1095,6 +1095,10 @@ x_set_offset (struct frame *f, int xoff, int yoff, int change_grav)
 
   NSTRACE (x_set_offset);
 
+  /* Refuse to change one or both offsets if in full-screen mode. */
+  if (f->want_fullscreen & FULLSCREEN_BOTH)
+    return;
+
   BLOCK_INPUT;
 
   f->left_pos = xoff;
@@ -1158,6 +1162,17 @@ x_set_window_size (struct frame *f, int change_grav, int cols, int rows)
 
   pixelwidth =  FRAME_TEXT_COLS_TO_PIXEL_WIDTH   (f, cols);
   pixelheight = FRAME_TEXT_LINES_TO_PIXEL_HEIGHT (f, rows);
+
+  // /* Refuse to change height, width, or both if in full-screen mode. */
+  // Rect b;
+  // OSStatus st = GetWindowBounds(FRAME_MAC_WINDOW (f), kWindowContentRgn, &b);
+  // if (st == noErr)
+  //   {
+  //     if (f->want_fullscreen & FULLSCREEN_HEIGHT)
+  //       pixelheight = b.bottom - b.top;
+  //     if (f->want_fullscreen & FULLSCREEN_WIDTH)
+  //       pixelwidth = b.right - b.left;
+  //   }
 
   /* If we have a toolbar, take its height into account. */
   if (tb)
@@ -3527,6 +3542,102 @@ x_wm_set_icon_position (struct frame *f, int icon_x, int icon_y)
 }
 
 
+/* ==========================================================================
+
+   Fullscreen
+
+   ========================================================================== */
+
+#import <Carbon/Carbon.h>
+/* avoid importing Carbon headers */
+// enum {
+//    kUIModeNormal = 0,
+//    kUIModeContentSuppressed = 1,
+//    kUIModeContentHidden = 2,
+//    kUIModeAllSuppressed = 4,
+//    kUIModeAllHidden = 3,
+// };
+// typedef UInt32 SystemUIMode;
+// enum {
+//    kUIOptionAutoShowMenuBar = 1 << 0,
+//    kUIOptionDisableAppleMenu = 1 << 2,
+//    kUIOptionDisableProcessSwitch = 1 << 3,
+//    kUIOptionDisableForceQuit = 1 << 4,
+//    kUIOptionDisableSessionTerminate = 1 << 5,
+//    kUIOptionDisableHide = 1 << 6
+// };
+// typedef OptionBits SystemUIOptions;
+
+
+static void
+ns_fullscreen_hook  (f)
+     FRAME_PTR f;
+{
+  struct frame *emacsframe = SELECTED_FRAME ();
+  int rows, cols;
+  NSSize frameSize;
+
+#ifdef NS_IMPL_COCOA
+  if (f->async_visible)
+    {
+      BLOCK_INPUT;
+
+      EmacsView *view = FRAME_NS_VIEW (f);
+
+      switch (f->want_fullscreen)
+        {
+        case FULLSCREEN_BOTH:
+        // case FULLSCREEN_WIDTH:
+        // case FULLSCREEN_HEIGHT:
+	  /* We don't support height/width alone. */
+	  [view enterFullScreenMode:[[view window] screen] withOptions:nil];
+	  break;
+	default:
+	  [view exitFullScreenModeWithOptions:nil];
+
+        }
+
+      [NSCursor setHiddenUntilMouseMoves:YES];
+
+      frameSize = [view frame].size;
+  cols = FRAME_PIXEL_WIDTH_TO_TEXT_COLS (emacsframe,
+#ifdef NS_IMPL_GNUSTEP
+                                        frameSize.width + 3);
+#else
+                                        frameSize.width);
+#endif
+  if (cols < MINWIDTH)
+    cols = MINWIDTH;
+  frameSize.width = FRAME_TEXT_COLS_TO_PIXEL_WIDTH (emacsframe, cols);
+
+  rows = FRAME_PIXEL_HEIGHT_TO_TEXT_LINES (emacsframe, frameSize.height);
+// #ifdef NS_IMPL_GNUSTEP
+//       - FRAME_NS_TITLEBAR_HEIGHT (emacsframe) + 3
+//         - FRAME_NS_TOOLBAR_HEIGHT (emacsframe));
+// #else
+//       - FRAME_NS_TITLEBAR_HEIGHT (emacsframe)
+//         - FRAME_NS_TOOLBAR_HEIGHT (emacsframe));
+// #endif
+
+  [view setRows: rows andColumns: cols];
+
+  change_frame_size (f, rows, cols, 0, 1, 0); /* pretend, delay, safe */
+  // FRAME_PIXEL_WIDTH (f) = pixelwidth;
+  // FRAME_PIXEL_HEIGHT (f) = pixelheight;
+/*  SET_FRAME_GARBAGED (f); // this short-circuits expose call in drawRect */
+
+  mark_window_cursors_off (XWINDOW (f->root_window));
+  cancel_mouse_face (f);
+
+// #ifndef NS_IMPL_GNUSTEP
+//       if (cols > 0 && rows > 0)
+// 	x_set_window_size (emacsframe, 0, cols, rows);
+// #endif
+
+      UNBLOCK_INPUT;
+    }
+#endif
+}
 
 /* ==========================================================================
 
@@ -3779,7 +3890,7 @@ ns_create_terminal (struct ns_display_info *dpyinfo)
   terminal->frame_rehighlight_hook = ns_frame_rehighlight;
   terminal->frame_raise_lower_hook = ns_frame_raise_lower;
 
-  terminal->fullscreen_hook = 0; /* see XTfullscreen_hook */
+  terminal->fullscreen_hook = ns_fullscreen_hook; /* see XTfullscreen_hook */
 
   terminal->set_vertical_scroll_bar_hook = ns_set_vertical_scroll_bar;
   terminal->condemn_scroll_bars_hook = ns_condemn_scroll_bars;
