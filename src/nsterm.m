@@ -3550,7 +3550,7 @@ x_wm_set_icon_position (struct frame *f, int icon_x, int icon_y)
    Fullscreen
 
    ========================================================================== */
- 
+
 static void
 ns_fullscreen_hook  (f)
 FRAME_PTR f;
@@ -3563,30 +3563,36 @@ FRAME_PTR f;
 #ifdef NS_IMPL_COCOA
   if (f->async_visible)
     {
-      if (1 || [NSView respondsToSelector:@selector(exitFullScreenModeWithOptions:)]) 
+      EmacsView *view = FRAME_NS_VIEW (f);
+
+      if ([view respondsToSelector:@selector(exitFullScreenModeWithOptions:)]) 
 	{
 	  BLOCK_INPUT;
-
-	  EmacsView *view = FRAME_NS_VIEW (f);
 
 	  switch (f->want_fullscreen)
 	    {
 	    case FULLSCREEN_BOTH:
-	      // case FULLSCREEN_WIDTH:
-	      // case FULLSCREEN_HEIGHT:
-	      /* We don't support height/width alone. */
-	      [view enterFullScreenMode:[[view window] screen] withOptions:nil];
+
+	      [view enterFullScreenMode:[[view window] screen] 
+			    withOptions:[NSDictionary dictionaryWithObjectsAndKeys:
+							  [NSNumber numberWithBool:NO],
+						      NSFullScreenModeAllScreens,
+						      // problem  rdar://5804777 prevents
+						      // the window level from being set correctly.
+							   [NSNumber numberWithInt:NSNormalWindowLevel],
+						      NSFullScreenModeWindowLevel, nil]];
+	      
+
+	      // causes black screen.
+	      //[[view window] setLevel:[NSNumber numberWithInt:NSNormalWindowLevel]];
 
 	      [NSCursor setHiddenUntilMouseMoves:YES];
-
-
 
 	      break;
 	    default:
 	      [view exitFullScreenModeWithOptions:nil];
 	    }
 	  
-
 	  NSRect r = [[FRAME_NS_VIEW (f) window] frame];
 	  width = r.size.width;
 	  height = r.size.height;
@@ -3614,9 +3620,6 @@ FRAME_PTR f;
 	      change_frame_size (f, rows, cols, 0, 0, 1);  /* pretend, delay, safe */
 	      SET_FRAME_GARBAGED (f);
 	      cancel_mouse_face (f);
-	      
-	      /* Wait for the change of frame size to occur */
-	      // f->want_fullscreen |= FULLSCREEN_WAIT;
 	    }
 	  
 	  FRAME_PIXEL_WIDTH (f) = width;
@@ -3625,7 +3628,7 @@ FRAME_PTR f;
 	  FRAME_NS_DISPLAY_INFO (f)->x_focus_frame = f;
 	  ns_frame_rehighlight (f);
 	  ns_raise_frame(f);
-	  
+
 	  mark_window_cursors_off (XWINDOW (f->root_window));
 	  
 	  UNBLOCK_INPUT;
