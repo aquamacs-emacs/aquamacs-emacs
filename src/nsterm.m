@@ -1145,6 +1145,9 @@ x_set_window_size (struct frame *f, int change_grav, int cols, int rows)
        && oldTB == tb))
     return;
 
+  if (f->want_fullscreen & FULLSCREEN_BOTH)
+    return;
+
 /*fprintf (stderr, "\tsetWindowSize: %d x %d, font size %d x %d\n", cols, rows, FRAME_COLUMN_WIDTH (f), FRAME_LINE_HEIGHT (f)); */
 
   BLOCK_INPUT;
@@ -3547,95 +3550,87 @@ x_wm_set_icon_position (struct frame *f, int icon_x, int icon_y)
    Fullscreen
 
    ========================================================================== */
-
-#import <Carbon/Carbon.h>
-/* avoid importing Carbon headers */
-// enum {
-//    kUIModeNormal = 0,
-//    kUIModeContentSuppressed = 1,
-//    kUIModeContentHidden = 2,
-//    kUIModeAllSuppressed = 4,
-//    kUIModeAllHidden = 3,
-// };
-// typedef UInt32 SystemUIMode;
-// enum {
-//    kUIOptionAutoShowMenuBar = 1 << 0,
-//    kUIOptionDisableAppleMenu = 1 << 2,
-//    kUIOptionDisableProcessSwitch = 1 << 3,
-//    kUIOptionDisableForceQuit = 1 << 4,
-//    kUIOptionDisableSessionTerminate = 1 << 5,
-//    kUIOptionDisableHide = 1 << 6
-// };
-// typedef OptionBits SystemUIOptions;
-
-
+ 
 static void
 ns_fullscreen_hook  (f)
-     FRAME_PTR f;
+FRAME_PTR f;
 {
   struct frame *emacsframe = SELECTED_FRAME ();
   int rows, cols;
-  NSSize frameSize;
 
+  int width, height, ign;
+      
 #ifdef NS_IMPL_COCOA
   if (f->async_visible)
     {
-      BLOCK_INPUT;
+      if (1 || [NSView respondsToSelector:@selector(exitFullScreenModeWithOptions:)]) 
+	{
+	  BLOCK_INPUT;
 
-      EmacsView *view = FRAME_NS_VIEW (f);
+	  EmacsView *view = FRAME_NS_VIEW (f);
 
-      switch (f->want_fullscreen)
-        {
-        case FULLSCREEN_BOTH:
-        // case FULLSCREEN_WIDTH:
-        // case FULLSCREEN_HEIGHT:
-	  /* We don't support height/width alone. */
-	  [view enterFullScreenMode:[[view window] screen] withOptions:nil];
-	  break;
-	default:
-	  [view exitFullScreenModeWithOptions:nil];
+	  switch (f->want_fullscreen)
+	    {
+	    case FULLSCREEN_BOTH:
+	      // case FULLSCREEN_WIDTH:
+	      // case FULLSCREEN_HEIGHT:
+	      /* We don't support height/width alone. */
+	      [view enterFullScreenMode:[[view window] screen] withOptions:nil];
 
-        }
+	      [NSCursor setHiddenUntilMouseMoves:YES];
 
-      [NSCursor setHiddenUntilMouseMoves:YES];
 
-      frameSize = [view frame].size;
-  cols = FRAME_PIXEL_WIDTH_TO_TEXT_COLS (emacsframe,
+
+	      break;
+	    default:
+	      [view exitFullScreenModeWithOptions:nil];
+	    }
+	  
+
+	  NSRect r = [[FRAME_NS_VIEW (f) window] frame];
+	  width = r.size.width;
+	  height = r.size.height;
+	  cols = FRAME_PIXEL_WIDTH_TO_TEXT_COLS (f,
 #ifdef NS_IMPL_GNUSTEP
-                                        frameSize.width + 3);
+						 width + 3);
 #else
-                                        frameSize.width);
+	                                         width);
 #endif
-  if (cols < MINWIDTH)
-    cols = MINWIDTH;
-  frameSize.width = FRAME_TEXT_COLS_TO_PIXEL_WIDTH (emacsframe, cols);
+          if (cols < MINWIDTH)
+	    cols = MINWIDTH;
+	  rows = FRAME_PIXEL_HEIGHT_TO_TEXT_LINES (f, height
+#ifdef NS_IMPL_GNUSTEP
+					       - FRAME_NS_TITLEBAR_HEIGHT (f) + 3
+					       - FRAME_NS_TOOLBAR_HEIGHT (f));
+#else
+  					       - FRAME_NS_TITLEBAR_HEIGHT (f)
+					       - FRAME_NS_TOOLBAR_HEIGHT (f));
+#endif
+          if (rows < MINHEIGHT)
+	    rows = MINHEIGHT;
 
-  rows = FRAME_PIXEL_HEIGHT_TO_TEXT_LINES (emacsframe, frameSize.height);
-// #ifdef NS_IMPL_GNUSTEP
-//       - FRAME_NS_TITLEBAR_HEIGHT (emacsframe) + 3
-//         - FRAME_NS_TOOLBAR_HEIGHT (emacsframe));
-// #else
-//       - FRAME_NS_TITLEBAR_HEIGHT (emacsframe)
-//         - FRAME_NS_TOOLBAR_HEIGHT (emacsframe));
-// #endif
-
-  [view setRows: rows andColumns: cols];
-
-  change_frame_size (f, rows, cols, 0, 1, 0); /* pretend, delay, safe */
-  // FRAME_PIXEL_WIDTH (f) = pixelwidth;
-  // FRAME_PIXEL_HEIGHT (f) = pixelheight;
-/*  SET_FRAME_GARBAGED (f); // this short-circuits expose call in drawRect */
-
-  mark_window_cursors_off (XWINDOW (f->root_window));
-  cancel_mouse_face (f);
-
-// #ifndef NS_IMPL_GNUSTEP
-//       if (cols > 0 && rows > 0)
-// 	x_set_window_size (emacsframe, 0, cols, rows);
-// #endif
-
-      UNBLOCK_INPUT;
-    }
+	  if (FRAME_COLS (f) != cols || FRAME_LINES (f) != rows)
+	    {
+	      change_frame_size (f, rows, cols, 0, 0, 1);  /* pretend, delay, safe */
+	      SET_FRAME_GARBAGED (f);
+	      cancel_mouse_face (f);
+	      
+	      /* Wait for the change of frame size to occur */
+	      // f->want_fullscreen |= FULLSCREEN_WAIT;
+	    }
+	  
+	  FRAME_PIXEL_WIDTH (f) = width;
+	  FRAME_PIXEL_HEIGHT (f) = height; 
+	  
+	  FRAME_NS_DISPLAY_INFO (f)->x_focus_frame = f;
+	  ns_frame_rehighlight (f);
+	  ns_raise_frame(f);
+	  
+	  mark_window_cursors_off (XWINDOW (f->root_window));
+	  
+	  UNBLOCK_INPUT;
+     }
+   }
 #endif
 }
 
@@ -5184,6 +5179,9 @@ extern void update_window_cursor (struct window *w, int on);
   NSTRACE (windowWillResize);
 /*fprintf (stderr,"Window will resize: %.0f x %.0f\n",frameSize.width,frameSize.height); */
 
+  if (emacsframe->want_fullscreen & FULLSCREEN_BOTH)
+    return;
+
   cols = FRAME_PIXEL_WIDTH_TO_TEXT_COLS (emacsframe,
 #ifdef NS_IMPL_GNUSTEP
                                         frameSize.width + 3);
@@ -5251,6 +5249,12 @@ extern void update_window_cursor (struct window *w, int on);
 - (void)windowDidResize: (NSNotification *)notification
 {
   NSWindow *theWindow = [notification object];
+  NSTRACE (windowDidResize);
+
+  /*fprintf (stderr,"windowDidResize: %.0f\n",[theWindow frame].size.height); */
+
+  if (emacsframe->want_fullscreen & FULLSCREEN_BOTH)
+    return;
 
 #ifdef NS_IMPL_GNUSTEP
    /* in GNUstep, at least currently, it's possible to get a didResize
@@ -5260,11 +5264,9 @@ extern void update_window_cursor (struct window *w, int on);
   sz = [self windowWillResize: theWindow toSize: sz];
 #endif /* NS_IMPL_GNUSTEP */
 
-  NSTRACE (windowDidResize);
-/*fprintf (stderr,"windowDidResize: %.0f\n",[theWindow frame].size.height); */
-
 #ifdef AQUAMACS_RESIZING_HINT /* not in Aquamacs */
 #ifdef NS_IMPL_COCOA
+
   if (old_title != 0)
     {
       xfree (old_title);
@@ -5398,9 +5400,9 @@ extern void update_window_cursor (struct window *w, int on);
   [win setDelegate: self];
   [win useOptimizedDrawing: YES];
 
-  sz.width = FRAME_COLUMN_WIDTH (f);
-  sz.height = FRAME_LINE_HEIGHT (f);
-  [win setResizeIncrements: sz];
+  // sz.width = FRAME_COLUMN_WIDTH (f);
+  // sz.height = FRAME_LINE_HEIGHT (f);
+  // [win setResizeIncrements: sz];
 
   [[win contentView] addSubview: self];
 
@@ -5463,6 +5465,9 @@ extern void update_window_cursor (struct window *w, int on);
   NSRect sr = [screen frame];
 
   NSTRACE (windowDidMove);
+
+  if (emacsframe->want_fullscreen & FULLSCREEN_BOTH)
+    return;
 
   if (!emacsframe->output_data.ns)
     return;
