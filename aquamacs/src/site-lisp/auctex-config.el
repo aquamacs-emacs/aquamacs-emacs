@@ -257,6 +257,7 @@ Calls `aquamacs-tex-pdf-viewer' to display the PDF file THE-FILE."
     (setq aquamacs-skim-timer 
 	  (run-with-idle-timer 30 t 'aquamacs-check-for-skim)))
   (unless server-process
+    (server-force-delete)
     ;; start server to make emacsclient work
     (server-start)))
 
