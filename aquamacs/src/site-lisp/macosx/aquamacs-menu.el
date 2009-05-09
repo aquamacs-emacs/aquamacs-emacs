@@ -1219,13 +1219,12 @@ the previous frame size."
   `(menu-item "Tile frames horizontally" tile-frames-horizontally
 	      :enable (menu-bar-menu-frame-live-and-visible-p)
 	      :help "Tile frames horizontally"))
-(if (boundp 'mac-autohide-menubar-on-fullscreen)
-    (define-key menu-bar-file-menu [full-frame]
-      `(menu-item "Full Screen Editing             " 
-		  aquamacs-toggle-full-frame
-		  :keys ,(aq-binding 'aquamacs-toggle-full-frame)
-		  :enable (menu-bar-menu-frame-live-and-visible-p)
-		  :help "Use full screen for the selected frame")))
+(define-key menu-bar-file-menu [full-frame]
+  `(menu-item "Full Screen Editing             " 
+	      aquamacs-toggle-full-frame
+	      :keys ,(aq-binding 'aquamacs-toggle-full-frame)
+	      :enable (menu-bar-menu-frame-live-and-visible-p)
+	      :help "Use full screen for the selected frame"))
   
 
 ;; will be moved to Buffers menu later on 

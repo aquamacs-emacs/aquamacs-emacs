@@ -799,9 +799,7 @@ default."
     (define-key map `[(,osxkeys-command-key m)] 'iconify-or-deiconify-frame) 
     (define-key map `[(control z)] 'ignore) ;; hit by mistake often enough
     (define-key map `[(,osxkeys-command-key .)] 'keyboard-quit)
-    (if (boundp 'mac-autohide-menubar-on-fullscreen)
-	(define-key map `[(,osxkeys-command-key shift return)] 
-	  'aquamacs-toggle-full-frame))
+    (define-key map `[(,osxkeys-command-key shift return)] 'aquamacs-toggle-full-frame)
     (define-key map `[(,osxkeys-command-key escape)] 'keyboard-escape-quit) 
     (define-key map `[(,osxkeys-command-key :)] 'ispell-buffer)
 
