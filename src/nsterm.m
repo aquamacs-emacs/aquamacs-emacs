@@ -1166,17 +1166,6 @@ x_set_window_size (struct frame *f, int change_grav, int cols, int rows)
   pixelwidth =  FRAME_TEXT_COLS_TO_PIXEL_WIDTH   (f, cols);
   pixelheight = FRAME_TEXT_LINES_TO_PIXEL_HEIGHT (f, rows);
 
-  // /* Refuse to change height, width, or both if in full-screen mode. */
-  // Rect b;
-  // OSStatus st = GetWindowBounds(FRAME_MAC_WINDOW (f), kWindowContentRgn, &b);
-  // if (st == noErr)
-  //   {
-  //     if (f->want_fullscreen & FULLSCREEN_HEIGHT)
-  //       pixelheight = b.bottom - b.top;
-  //     if (f->want_fullscreen & FULLSCREEN_WIDTH)
-  //       pixelwidth = b.right - b.left;
-  //   }
-
   /* If we have a toolbar, take its height into account. */
   if (tb)
     FRAME_NS_TOOLBAR_HEIGHT (f) =
@@ -3559,13 +3548,13 @@ FRAME_PTR f;
   int rows, cols;
 
   int width, height, ign;
-      
+
 #ifdef NS_IMPL_COCOA
   if (f->async_visible)
     {
       EmacsView *view = FRAME_NS_VIEW (f);
 
-      if ([view respondsToSelector:@selector(exitFullScreenModeWithOptions:)]) 
+      if ([view respondsToSelector:@selector(exitFullScreenModeWithOptions:)])
 	{
 	  BLOCK_INPUT;
 
@@ -3573,7 +3562,7 @@ FRAME_PTR f;
 	    {
 	    case FULLSCREEN_BOTH:
 
-	      [view enterFullScreenMode:[[view window] screen] 
+	      [view enterFullScreenMode:[[view window] screen]
 			    withOptions:[NSDictionary dictionaryWithObjectsAndKeys:
 							  [NSNumber numberWithBool:NO],
 						      NSFullScreenModeAllScreens,
@@ -3581,7 +3570,6 @@ FRAME_PTR f;
 						      // the window level from being set correctly.
 							   [NSNumber numberWithInt:NSNormalWindowLevel],
 						      NSFullScreenModeWindowLevel, nil]];
-	      
 
 	      // causes black screen.
 	      //[[view window] setLevel:[NSNumber numberWithInt:NSNormalWindowLevel]];
@@ -3592,7 +3580,7 @@ FRAME_PTR f;
 	    default:
 	      [view exitFullScreenModeWithOptions:nil];
 	    }
-	  
+
 	  NSRect r = [[FRAME_NS_VIEW (f) window] frame];
 	  width = r.size.width;
 	  height = r.size.height;
@@ -3600,7 +3588,7 @@ FRAME_PTR f;
 #ifdef NS_IMPL_GNUSTEP
 						 width + 3);
 #else
-	                                         width);
+						width);
 #endif
           if (cols < MINWIDTH)
 	    cols = MINWIDTH;
@@ -3609,7 +3597,7 @@ FRAME_PTR f;
 					       - FRAME_NS_TITLEBAR_HEIGHT (f) + 3
 					       - FRAME_NS_TOOLBAR_HEIGHT (f));
 #else
-  					       - FRAME_NS_TITLEBAR_HEIGHT (f)
+					       - FRAME_NS_TITLEBAR_HEIGHT (f)
 					       - FRAME_NS_TOOLBAR_HEIGHT (f));
 #endif
           if (rows < MINHEIGHT)
@@ -3621,16 +3609,16 @@ FRAME_PTR f;
 	      SET_FRAME_GARBAGED (f);
 	      cancel_mouse_face (f);
 	    }
-	  
+
 	  FRAME_PIXEL_WIDTH (f) = width;
-	  FRAME_PIXEL_HEIGHT (f) = height; 
-	  
+	  FRAME_PIXEL_HEIGHT (f) = height;
+
 	  FRAME_NS_DISPLAY_INFO (f)->x_focus_frame = f;
 	  ns_frame_rehighlight (f);
 	  ns_raise_frame(f);
 
 	  mark_window_cursors_off (XWINDOW (f->root_window));
-	  
+
 	  UNBLOCK_INPUT;
      }
    }
@@ -5254,8 +5242,6 @@ extern void update_window_cursor (struct window *w, int on);
   NSWindow *theWindow = [notification object];
   NSTRACE (windowDidResize);
 
-  /*fprintf (stderr,"windowDidResize: %.0f\n",[theWindow frame].size.height); */
-
   if (emacsframe->want_fullscreen & FULLSCREEN_BOTH)
     return;
 
@@ -5403,9 +5389,9 @@ extern void update_window_cursor (struct window *w, int on);
   [win setDelegate: self];
   [win useOptimizedDrawing: YES];
 
-  // sz.width = FRAME_COLUMN_WIDTH (f);
-  // sz.height = FRAME_LINE_HEIGHT (f);
-  // [win setResizeIncrements: sz];
+  sz.width = FRAME_COLUMN_WIDTH (f);
+  sz.height = FRAME_LINE_HEIGHT (f);
+  [win setResizeIncrements: sz];
 
   [[win contentView] addSubview: self];
 
