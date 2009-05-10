@@ -35,7 +35,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, 2006, David Reitter
+;; Copyright (C) 2005, 2006, 2009, David Reitter
  
 (defcustom mac-print-font-size-scaling-factor 0.5
   "The factor by which fonts are rescaled during PDF export and printing."
@@ -60,32 +60,37 @@ face colors are printed."
 The document is shown in Preview.app and a printing dialog is opened."
   (interactive)
   
-  (message "Rendering text ...")
-  
-  (let ((tmp-pdf-file (make-temp-file 
-		       (concat "Aquamacs Printing " 
-			       (if buffer-file-name
-				   (file-name-nondirectory buffer-file-name)
-				 "")
-			       " ") 
-		       nil)))
- 
-    (require 'htmlize) ;; needs to be loaded before let-bindings
-    (unless (boundp 'htmlize-white-background)
-      (message "Warning - incompatible htmlize package installed. 
-Remove from your load-path for optimal printing / export results.")
-      )
-    (let ((htmlize-html-charset 'utf-8)
-	  (htmlize-use-rgb-txt nil)
-	  (htmlize-before-hook nil)
-	  (htmlize-after-hook nil)
-	  (htmlize-generate-hyperlinks nil)
-	  (htmlize-white-background t))
-      (export-to-pdf tmp-pdf-file))
+  (if (or (not last-nonmenu-event)
+	  (consp last-nonmenu-event)
+	  (y-or-n-p "Really render this buffer for printing? "))
+      (progn
 
-    (add-hook 'kill-emacs-hook 'aquamacs-delete-temp-files)
-    (do-applescript (concat
-		     "tell application \"Preview\"
+	(message "Rendering text ...")
+	
+	(let ((tmp-pdf-file (make-temp-file 
+			     (concat "Aquamacs Printing " 
+				     (if buffer-file-name
+					 (file-name-nondirectory buffer-file-name)
+				       "")
+				     " ") 
+			     nil)))
+	  
+	  (require 'htmlize) ;; needs to be loaded before let-bindings
+	  (unless (boundp 'htmlize-white-background)
+	    (message "Warning - incompatible htmlize package installed. 
+Remove from your load-path for optimal printing / export results.")
+	    )
+	  (let ((htmlize-html-charset 'utf-8)
+		(htmlize-use-rgb-txt nil)
+		(htmlize-before-hook nil)
+		(htmlize-after-hook nil)
+		(htmlize-generate-hyperlinks nil)
+		(htmlize-white-background t))
+	    (export-to-pdf tmp-pdf-file))
+
+	  (add-hook 'kill-emacs-hook 'aquamacs-delete-temp-files)
+	  (do-applescript (concat
+			   "tell application \"Preview\"
         activate
 	open the POSIX file \"" tmp-pdf-file  "\"
 	activate
@@ -95,7 +100,8 @@ Remove from your load-path for optimal printing / export results.")
 		end tell
 	end tell
 end tell"  ))
-    (message "... done")))
+	  (message "... done")))
+    (message "Printing cancelled.")))
 
 (defun export-to-pdf (target-file)
   "Saves the current buffer (or region, if mark is active) to a file 
