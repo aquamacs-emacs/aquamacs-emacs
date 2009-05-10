@@ -134,21 +134,19 @@ Example:
 		("\M-2" . ,emmkm--euro) ;; euro symbol
 		("\M-6" . "§")))))
 
-;; (define-emulate-mac-keyboard-modes)
-;; (make-emulate-mac-keyboard-mode-map 'finnish)   
+;; (progn (define-emulate-mac-keyboard-modes) (make-emulate-mac-keyboard-mode-map 'german) (emulate-mac-german-keyboard-mode))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'aquamacs-tools) ;; aq-list-contains
 
-
-(defun emmkm-key-binding (key)
-  (let ((key-char (vector (string-to-char "£"))))
+;; (emmkm-key-binding emm-k)
+(defun emmkm-key-binding (key-char)
   (or
    (if overriding-terminal-local-map
        (lookup-key overriding-terminal-local-map key-char)
      (key-binding key-char))
    ;; not all keys are bound to self-insert-command -- e.g. the pound sign.
-   'self-insert-command)))
+   'self-insert-command))
 
 ;; also add it to isearch-mode-map
 (defun make-emulate-mac-keyboard-mode-map (language)
@@ -188,7 +186,7 @@ This command is part of `%s'." string-rep language mode-name mode-name)
 					    ;; we call the original binding to preserve 
 					    ;; functionality (e.g. in isearch)
 					    (call-interactively kb)))
-				     
+				   
 				   ;; otherwise: called using Esc prefix.
 				   ;; call original binding 
 				   (let* ((,mode-name nil)
