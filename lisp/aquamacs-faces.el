@@ -22,6 +22,13 @@
 ;;; Standard Aquamacs Faces
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defface aquamacs-variable-width
+  '((((type ns))
+     :height 120 :weight normal :width normal :slant normal :underline nil
+     :strike-through nil :stipple nil :family "Lucida Grande"))
+  "Default variable-width face"
+  :group 'Aquamacs)
+
 (defface autoface-default
   '((((type ns))
      :inherit default :height 120 :weight normal :width normal :slant normal

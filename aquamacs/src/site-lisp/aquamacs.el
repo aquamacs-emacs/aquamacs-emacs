@@ -771,13 +771,6 @@ yes-or-no prompts - y or n will do."
   ;; Mode-Line Faces
   ;; face (defined and) applied using pretty-modeline.patch
 
-  (defface aquamacs-variable-width '((t
-		    :family "Lucida Grande"
-		    :height 120)) ;; do use the frame-wide setting: it's very font dependent
-  "Aquamcas default face (variable width).
-Used by the modeline faces `mode-line' and `mode-line-inactive'."
-  :group 'Aquamacs)
-
   (defun aquamacs-set-modeline-faces (&optional theme)
     (set-face-attribute 'mode-line nil
 			:inherit 'aquamacs-variable-width
