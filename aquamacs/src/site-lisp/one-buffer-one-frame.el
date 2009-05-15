@@ -480,9 +480,9 @@ the current window is switched to the new buffer."
 
 (if (running-on-a-mac-p)
     (add-hook 'minibuffer-setup-hook 
-	      (lambda () 
-		(if one-buffer-one-frame
-		    (raise-frame)))))
+	      (defun maybe-raise-frame () 
+		(unless one-buffer-one-frame
+		  (raise-frame)))))
 
 ;; we'd like to open new frames for some stuff
    
