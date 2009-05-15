@@ -447,7 +447,7 @@ The properties returned may include `top', `left', `height', and `width'."
 (define-key global-map [menu-bar services]
   (cons "Services" (make-sparse-keymap "Services")))
 (define-key global-map [menu-bar buffer]
-  (cons "Buffers" global-buffers-menu-map))
+  (cons "Window" global-buffers-menu-map))
 ;;  (cons "Buffers" (make-sparse-keymap "Buffers")))
 (define-key global-map [menu-bar tools] (cons "Tools" menu-bar-tools-menu))
 (define-key global-map [menu-bar options] (cons "Options" menu-bar-options-menu))
