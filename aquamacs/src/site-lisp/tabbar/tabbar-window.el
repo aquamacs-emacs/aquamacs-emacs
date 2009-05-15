@@ -470,12 +470,12 @@ Updates tabbar-window-alist in the same way."
 	(setq header-line-inhibit-window-list
 	      (delq window header-line-inhibit-window-list)))))))
 
-(defun menu-bar-select-buffer ()
+(defun menu-bar-select-buffer (&optional buffer)
  (interactive)
  (with-selected-window (get-window-for-other-buffer)
    (if tabbar-mode
-       (switch-to-buffer-in-tab last-command-event)
-     (switch-to-buffer last-command-event))
+       (switch-to-buffer-in-tab (or buffer last-command-event))
+     (switch-to-buffer (or buffer last-command-event)))
    (select-frame-set-input-focus (window-frame (selected-window)))))
  
 

@@ -1651,9 +1651,9 @@ Buffers menu is regenerated."
 
 (defvar list-buffers-directory nil)
 
-(defun menu-bar-select-buffer ()
+(defun menu-bar-select-buffer (&optional buffer)
   (interactive)
-  (switch-to-buffer last-command-event))
+  (switch-to-buffer (or buffer last-command-event)))
 
 (defun menu-bar-select-frame (frame)
   (make-frame-visible frame)
@@ -1732,7 +1732,7 @@ Buffers menu is regenerated."
 					(cons nil nil))
 				  `(lambda ()
                                      (interactive)
-                                     (switch-to-buffer ,(cdr pair))))))
+                                     (menu-bar-select-buffer ,(cdr pair))))))
                    (list buffers-vec))))
 
 	 ;; Make a Frames menu if we have more than one frame.
