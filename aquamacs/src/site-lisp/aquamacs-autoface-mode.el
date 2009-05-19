@@ -253,6 +253,9 @@ given, set the variable named TARGET instead, e.g.,
 	       (car att-cons)
 	       (face-attribute source-face (car att-cons) nil 'default)))
 	    face-attribute-name-alist))
+  (and smart-frame-positioning-mode
+       (dolist (frame (frame-list))
+	 (smart-move-frame-inside-screen frame)))
   ;; set default-frame-alist
   (let ((new-values (append 
 		       (apply #'append
