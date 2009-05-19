@@ -36,6 +36,8 @@
 ;; Boston, MA 02111-1307, USA.
  
 ;; Copyright (C) 2005, 2006, 2009, David Reitter
+
+(require 'aquamacs-macros)
  
 (defcustom mac-print-font-size-scaling-factor 0.5
   "The factor by which fonts are rescaled during PDF export and printing."
@@ -174,10 +176,10 @@ in HTML format."
 
 
     (require 'htmlize)
-    (if (string< (substring htmlize-version 0 5) "1.23a")
-      (message "Warning - outdated htmlize package installed. 
-Remove from your load-path for optimal printing / export results.")
-      )
+    (protect
+     (if (string< (substring htmlize-version 0 5) "1.23a")
+	 (message "Warning - outdated htmlize package installed. 
+Remove from your load-path for optimal printing / export results.")))
     (require 'mule) ; for coding-system-get
     (let* (
 	   (htmlize-html-major-mode nil)
