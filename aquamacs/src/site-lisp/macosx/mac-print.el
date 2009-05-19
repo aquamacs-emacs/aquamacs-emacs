@@ -176,10 +176,9 @@ in HTML format."
 
 
     (require 'htmlize)
-    (protect
-     (if (string< (substring htmlize-version 0 5) "1.23a")
-	 (message "Warning - outdated htmlize package installed. 
-Remove from your load-path for optimal printing / export results.")))
+    (if (not (protect (equal (substring htmlize-version 0 5) "1.23a")))
+	 (message "Warning - possibly incompatible htmlize package installed. 
+Remove from your load-path for optimal printing / export results."))
     (require 'mule) ; for coding-system-get
     (let* (
 	   (htmlize-html-major-mode nil)
