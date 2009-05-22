@@ -2023,7 +2023,7 @@ doesn't support multiple overlapping frames, this function selects FRAME.  */)
   if (FRAME_TERMCAP_P (f))
     /* On a text-only terminal select FRAME.  */
     Fselect_frame (frame, Qnil);
-  else
+  else if (FRAME_ICONIFIED_P (f))
     /* Do like the documentation says. */
     Fmake_frame_visible (frame);
 
