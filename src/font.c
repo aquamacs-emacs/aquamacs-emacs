@@ -2178,7 +2178,7 @@ font_otf_Anchor (anchor)
 
 static unsigned font_score P_ ((Lisp_Object, Lisp_Object *));
 static int font_compare P_ ((const void *, const void *));
-static Lisp_Object font_sort_entites P_ ((Lisp_Object, Lisp_Object,
+static Lisp_Object font_sort_entities P_ ((Lisp_Object, Lisp_Object,
 					  Lisp_Object, int));
 
 /* Return a rescaling ratio of FONT_ENTITY.  */
@@ -2311,7 +2311,7 @@ struct font_sort_data
    VEC is 1.  The caller should avoid calling this in such a case.  */
 
 static Lisp_Object
-font_sort_entites (vec, prefer, frame, best_only)
+font_sort_entities (vec, prefer, frame, best_only)
      Lisp_Object vec, prefer, frame;
      int best_only;
 {
@@ -3222,7 +3222,7 @@ font_select_entity (frame, entities, attrs, pixel_size, c)
     FONT_SET_STYLE (prefer, FONT_WIDTH_INDEX, attrs[LFACE_SWIDTH_INDEX]);
   ASET (prefer, FONT_SIZE_INDEX, make_number (pixel_size));
 
-  return font_sort_entites (entities, prefer, frame, c);
+  return font_sort_entities (entities, prefer, frame, c);
 }
 
 /* Return a font-entity satisfying SPEC and best matching with face's
@@ -3272,6 +3272,7 @@ font_find_for_lface (f, attrs, spec, c)
     }
 
   work = Fcopy_font_spec (spec);
+  ASET (work, FONT_TYPE_INDEX, AREF (spec, FONT_TYPE_INDEX));
   XSETFRAME (frame, f);
   size = AREF (spec, FONT_SIZE_INDEX);
   pixel_size = font_pixel_size (f, spec);
@@ -4007,7 +4008,12 @@ usage: (font-spec ARGS...)  */)
 
   for (i = 0; i < nargs; i += 2)
     {
-      Lisp_Object key = args[i], val = args[i + 1];
+      Lisp_Object key = args[i], val;
+
+      CHECK_SYMBOL (key);
+      if (i + 1 >= nargs)
+	error ("No value for key `%s'", SDATA (SYMBOL_NAME (key)));
+      val = args[i + 1];
 
       if (EQ (key, QCname))
 	{
@@ -4255,7 +4261,7 @@ how close they are to PREFER.  */)
     return Fcons (AREF (vec, 0), Qnil);
 
   if (! NILP (prefer))
-    vec = font_sort_entites (vec, prefer, frame, 0);
+    vec = font_sort_entities (vec, prefer, frame, 0);
 
   list = tail = Fcons (AREF (vec, 0), Qnil);
   if (n == 0 || n > len)

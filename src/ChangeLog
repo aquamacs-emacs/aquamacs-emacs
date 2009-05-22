@@ -1,3 +1,63 @@
+2009-05-21  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* xfont.c (xfont_list_pattern): Don't initialize xfont_scripts_cache
+	and xfont_scratch_props.
+	(syms_of_xfont): Do it here instead.
+	(xfont_find_ccl_program): Delete, unused.
+	(xfont_open): Delete unused var `i'.
+
+2009-05-21  Kenichi Handa  <handa@m17n.org>
+
+	* fontset.c (Qlatin): Don't make it static.
+
+	* xfont.c (xfont_chars_supported, xfont_supported_scripts):
+	New functions.
+	(xfont_scripts_cache, xfont_scratch_props): New variables.
+	(Qlatin, Vscalable_fonts_allowed): Extern it.
+	(xfont_list_pattern): Argument changed.  Callers changed.
+	Check Vscalable_fonts_allowed.  Check the support of a script.
+	(xfont_list): Don't reject a font spec with :script property.
+	(xfont_has_char): Fix setting of encoding.
+	(syms_of_xfont): Staticpro and initialize xfont_scripts_cache and
+	xfont_scratch_props.
+
+2009-05-19  Kenichi Handa  <handa@m17n.org>
+
+	* font.c (font_sort_entities): Rename from font_sort_entites.
+	Callers changed.
+
+2009-05-18  Kenichi Handa  <handa@m17n.org>
+
+	* font.c (font_find_for_lface): Copy SPEC's FONT_TYPE too.
+
+2009-05-19  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* frame.c (do_switch_frame) [NS_IMPL_COCOA]: Don't raise any window.
+	(delete_frame) [NS_IMPL_COCOA]: Instead, do it here.
+
+2009-05-19  YAMAMOTO Mitsuharu  <mituharu@math.s.chiba-u.ac.jp>
+
+	* xterm.c (x_delete_display): Don't call XrmDestroyDatabase here.
+	(x_delete_terminal): Dissociate resource database from display and
+	then call XrmDestroyDatabase before closing display.
+
+2009-05-18  Adrian Robert  <Adrian.B.Robert@gmail.com>
+
+	* nsterm.m (ns_read_socket): Remove unused variable.
+	* frame.c (do_switch_frame): Under NS_IMPL_COCOA section, check
+	whether selected frame is viable before raising it (based on patch
+	by David Reitter), and improve commentary.
+	* nsfont.m (nsfont_make_fontset_for_font): Avoid a compiler warning.
+
+2009-05-15  Kenichi Handa  <handa@m17n.org>
+
+	* font.c (Ffont_spec): Check arguments.
+
+2009-05-14  Chong Yidong  <cyd@stupidchicken.com>
+
+	* xfaces.c (tty_supports_face_attributes_p): Recognize unspecified
+	weight when testing attributes (Bug#3282).
+
 2009-05-11  YAMAMOTO Mitsuharu  <mituharu@math.s.chiba-u.ac.jp>
 
 	* gtkutil.c (xg_frame_set_char_size): Set frame pixel width/height to
