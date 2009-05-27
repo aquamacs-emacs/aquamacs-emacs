@@ -1268,7 +1268,18 @@ NSColor *
 ns_lookup_indexed_color (unsigned long idx, struct frame *f)
 {
   struct ns_color_table *color_table = FRAME_NS_DISPLAY_INFO (f)->color_table;
-  return color_table->colors[idx];
+
+  /* for some reason, idx is 0 for undefined colors.
+     Also, this function is called with very high indices at times
+     (XXX: debug this.) */
+  if (idx > 0 && idx < color_table->size
+      && ![color_table->empty_indices containsObject: [NSNumber numberWithUnsignedInt: idx]])
+    {
+      /* fprintf(stderr, "lookup color %d\n", idx); */
+      return color_table->colors[idx];
+    }
+  /* fprintf(stderr, "DISCARDING lookup color %d\n", idx); */
+  return [NSColor orangeColor];  // mark undefined color
 }
 
 
@@ -1321,7 +1332,6 @@ ns_index_color (NSColor *color, struct frame *f)
 
   color_table->colors[idx] = color;
   [color retain];
-/*fprintf(stderr, "color_table: allocated %d\n",idx);*/
   return idx;
 }
 
@@ -1529,8 +1539,9 @@ ns_get_color (const char *name, NSColor **col)
 
   if ( new )
     *col = [new colorUsingColorSpaceName: NSCalibratedRGBColorSpace];
-/*     else
-       NSLog (@"Failed to find color '%@'", nsname); */
+  /* else
+     fprintf(stderr, "Failed to find color %s\n", [nsname UTF8String]); */
+  /* NSLog (@"Failed to find color '%@'", nsname); */
   UNBLOCK_INPUT;
   return new ? 0 : 1;
 }
@@ -1646,7 +1657,10 @@ ns_defined_color (struct frame *f, char *name, XColor *color_def, int alloc,
   NSTRACE (ns_defined_color);
 
   if (notFound)
-    return 0;
+    {
+      /* fprintf(stderr, "Color %s not found\n", name); */
+      return 0;
+    }
 
   if (makeIndex && alloc)
       color_def->pixel = ns_index_color(temp, f); /* [temp retain]; */
@@ -2652,7 +2666,7 @@ ns_draw_relief (NSRect r, int thickness, char raised_p,
       newBaseCol = ns_lookup_indexed_color (s->face->background, s->f);
     }
 
-  if (newBaseCol == nil)
+  if (! newBaseCol)
     newBaseCol = [NSColor grayColor];
 
   if (newBaseCol != baseCol)  /* TODO: better check */
