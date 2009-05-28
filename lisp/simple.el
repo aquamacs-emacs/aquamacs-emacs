@@ -6535,23 +6535,24 @@ the point is when the command is called.")
 Adheres to `smart-spacing-rules'.
 If POINT-AT-END, behaves as if point was at then end of
 a previously deleted region (now at POS)."
-  (let ((del (assoc (buffer-substring-no-properties
-		     (max (point-min) (- pos 1)) 
-		     (min (1- (point-max)) (1+ pos)))
-		    smart-spacing-rules)))
-    (when del
-      (setq del (cdr del))
-      ;; in some cases we want point to end up 
-      ;; further to the left or to the right,
-      ;; depending on whether it was on the left or the right
-      ;; edge of the region
-      (when (consp del)
-	(if point-at-end
-	    (setq del (cdr del))
-	  (setq del (- (cdr del)))))
-      ;; delete either to the left or to the right
-      ;; this deletion will keep point in the right place.
-      (delete-region pos (+ del pos)))))
+  (unless (eq (point-min) (point-max))
+    (let ((del (assoc (buffer-substring-no-properties
+		       (max (point-min) (- pos 1)) 
+		       (min (1- (point-max)) (1+ pos)))
+		      smart-spacing-rules)))
+      (when del
+	(setq del (cdr del))
+	;; in some cases we want point to end up 
+	;; further to the left or to the right,
+	;; depending on whether it was on the left or the right
+	;; edge of the region
+	(when (consp del)
+	  (if point-at-end
+	      (setq del (cdr del))
+	    (setq del (- (cdr del)))))
+	;; delete either to the left or to the right
+	;; this deletion will keep point in the right place.
+	(delete-region pos (+ del pos))))))
 
 (defun smart-spacing-char-is-word-boundary (pos &optional side)
   (or (< pos (point-min))
