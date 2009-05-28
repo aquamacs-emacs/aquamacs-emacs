@@ -5989,7 +5989,7 @@ extern void update_window_cursor (struct window *w, int on);
   win = nwin;
   condemned = NO;
   pixel_height = NSHeight (r);
-  min_portion = 20 / pixel_height;
+  min_portion = 20 / (pixel_height > 0 ? pixel_height : 1);
 
   frame = XFRAME (XWINDOW (win)->frame);
   if (FRAME_LIVE_P (frame))
@@ -6016,12 +6016,13 @@ extern void update_window_cursor (struct window *w, int on);
 - (void)setFrame: (NSRect)newRect
 {
   NSTRACE (EmacsScroller_setFrame);
-/*  BLOCK_INPUT; */
+  BLOCK_INPUT;
   pixel_height = NSHeight (newRect);
-  min_portion = 20 / pixel_height;
+  /* pixel_height may be 0 */
+  min_portion = 20 / (pixel_height > 0 ? pixel_height : 1);
   [super setFrame: newRect];
   [self display];
-/*  UNBLOCK_INPUT; */
+  UNBLOCK_INPUT;
 }
 
 
@@ -6100,7 +6101,7 @@ extern void update_window_cursor (struct window *w, int on);
   else
     {
       float pos, por;
-      portion = max ((float)whole*min_portion/pixel_height, portion);
+      portion = max ((float)whole*min_portion/(pixel_height > 0 ? pixel_height : 1), portion);
       pos = (float)position / (whole - portion);
       por = (float)portion/whole;
       [self setFloatValue: pos knobProportion: por];
