@@ -566,7 +566,7 @@ in your .emacs file.
 ;; Make sure we flush our caches when needed.  Do it here rather than in
 ;; flyspell-mode-on, since flyspell-region may be used without ever turning
 ;; on flyspell-mode.
-(add-hook 'ispell-kill-ispell-hook 'flyspell-kill-ispell-hook)
+;; (add-hook 'ispell-kill-ispell-hook 'flyspell-kill-ispell-hook)
 
 ;;*---------------------------------------------------------------------*/
 ;;*    flyspell-mode-on ...                                             */
@@ -584,10 +584,10 @@ in your .emacs file.
   ;; be forgotten!
   ;; Pass the `force' argument for the case where flyspell was active already
   ;; but the buffer's local-defs have been edited.
-  (flyspell-accept-buffer-local-defs 'force)
+  ;; (flyspell-accept-buffer-local-defs 'force)
   ;; we put the `flyspell-delayed' property on some commands
   (flyspell-delay-commands)
-  ;; we put the `flyspell-deplacement' property on some commands
+  ;; WE put the `flyspell-deplacement' property on some commands
   (flyspell-deplacement-commands)
   ;; we bound flyspell action to post-command hook
   (add-hook 'post-command-hook (function flyspell-post-command-hook) t t)
@@ -1073,29 +1073,30 @@ Mostly we check word delimiters."
 	    (setq flyspell-word-cache-end end)
 	    (setq flyspell-word-cache-word word)
 	    ;; now check spelling of word.
-	    (ispell-send-string "%\n")
+	    ;; (ispell-send-string "%\n")
 	    ;; put in verbose mode
-	    (ispell-send-string (concat "^" word "\n"))
+	    ;; (ispell-send-string (concat "^" word "\n"))
 	    ;; we mark the ispell process so it can be killed
 	    ;; when emacs is exited without query
-	    (set-process-query-on-exit-flag ispell-process nil)
+	    ;; (set-process-query-on-exit-flag ispell-process nil)
 	    ;; Wait until ispell has processed word.  Since this code is often
             ;; executed from post-command-hook but the ispell process may not
             ;; be responsive, it's important to make sure we re-enable C-g.
-	    (with-local-quit
-	      (while (progn
-		       (accept-process-output ispell-process)
-		       (not (string= "" (car ispell-filter))))))
+	    ;; (with-local-quit
+	      ;; (while (progn
+		       ;; (accept-process-output ispell-process)
+		       ;; (not (string= "" (car ispell-filter))))))
 	    ;; (ispell-send-string "!\n")
 	    ;; back to terse mode.
 	    ;; Remove leading empty element
-	    (setq ispell-filter (cdr ispell-filter))
+	    ;; (setq ispell-filter (cdr ispell-filter))
 	    ;; ispell process should return something after word is sent.
 	    ;; Tag word as valid (i.e., skip) otherwise
-	    (or ispell-filter
-		(setq ispell-filter '(*)))
-	    (if (consp ispell-filter)
-		(setq poss (ispell-parse-output (car ispell-filter))))
+	    ;; (or ispell-filter
+		;; (setq ispell-filter '(*)))
+	    ;; (if (consp ispell-filter)
+		;; (setq poss ((ispell-parse-output (car ispell-filter))))
+	    (setq poss (ns-spellchecker-parse-output word))
 	    (let ((res (cond ((eq poss t)
 			      ;; correct
 			      (setq flyspell-word-cache-result t)
@@ -1896,20 +1897,21 @@ This command proposes various successive corrections for the current word."
 		  poss ispell-filter)
 	      (setq flyspell-auto-correct-word word)
 	      ;; now check spelling of word.
-	      (ispell-send-string "%\n") ;put in verbose mode
-	      (ispell-send-string (concat "^" word "\n"))
+	      ;; (ispell-send-string "%\n") ;put in verbose mode
+	      ;; (ispell-send-string (concat "^" word "\n"))
               ;; wait until ispell has processed word.
-              (while (progn
-                       (accept-process-output ispell-process)
-                       (not (string= "" (car ispell-filter)))))
+              ;; (while (progn
+                       ;; (accept-process-output ispell-process)
+                       ;; (not (string= "" (car ispell-filter)))))
 	      ;; Remove leading empty element
-	      (setq ispell-filter (cdr ispell-filter))
+	      ;; (setq ispell-filter (cdr ispell-filter))
 	      ;; ispell process should return something after word is sent.
 	      ;; Tag word as valid (i.e., skip) otherwise
-	      (or ispell-filter
-		  (setq ispell-filter '(*)))
-	      (if (consp ispell-filter)
-		  (setq poss (ispell-parse-output (car ispell-filter))))
+	      ;; (or ispell-filter
+		  ;; (setq ispell-filter '(*)))
+	      ;; (if (consp ispell-filter)
+		  ;; (setq poss (ispell-parse-output (car ispell-filter))))
+	      (setq poss (ns-spellchecker-parse-output word))
 	      (cond
 	       ((or (eq poss t) (stringp poss))
 		;; don't correct word
@@ -2057,20 +2059,21 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 	      (word (car word))
 	      poss ispell-filter)
 	  ;; now check spelling of word.
-	  (ispell-send-string "%\n")	;put in verbose mode
-	  (ispell-send-string (concat "^" word "\n"))
+	  ;; (ispell-send-string "%\n")	;put in verbose mode
+	  ;; (ispell-send-string (concat "^" word "\n"))
 	  ;; wait until ispell has processed word
-	  (while (progn
-		   (accept-process-output ispell-process)
-		   (not (string= "" (car ispell-filter)))))
+	  ;; (while (progn
+		   ;; (accept-process-output ispell-process)
+		   ;; (not (string= "" (car ispell-filter)))))
 	  ;; Remove leading empty element
-	  (setq ispell-filter (cdr ispell-filter))
+	  ;; (setq ispell-filter (cdr ispell-filter))
 	  ;; ispell process should return something after word is sent.
 	  ;; Tag word as valid (i.e., skip) otherwise
-	  (or ispell-filter
-	      (setq ispell-filter '(*)))
-	  (if (consp ispell-filter)
-	      (setq poss (ispell-parse-output (car ispell-filter))))
+	  ;; (or ispell-filter
+	      ;; (setq ispell-filter '(*)))
+	  ;; (if (consp ispell-filter)
+	      ;; (setq poss (ispell-parse-output (car ispell-filter))))
+	  (setq poss (ns-spellchecker-parse-output word))
 	  (cond
 	   ((or (eq poss t) (stringp poss))
 	    ;; don't correct word
