@@ -192,17 +192,18 @@ quickly."
 				:foreground "black" 
 				:height 100 
 				:family "lucida sans"))) 
-		 ;; set default (not user customization)
+		 ;; can be overwritten by user customization
 		 (if (> emacs-major-version 22) t))
 
   (aquamacs-set-defaults '((auto-resize-tool-bar nil)))
 
-  (let ((face 'tool-bar)
-	;; e2e2e2 is eaeaea in imagemagick for some reason
-	(spec '((t (:background "#eaeaea" :foreground "black" 
-				:box (:line-width 1 :style released-button))))))
-    (face-spec-set face spec nil)
-    (put face 'face-defface-spec spec))
+  ;; no need with native toolbar
+  ;; (let ((face 'tool-bar)
+  ;; 	;; e2e2e2 is eaeaea in imagemagick for some reason
+  ;; 	(spec '((t (:background "#eaeaea" :foreground "black" 
+  ;; 				:box (:line-width 1 :style released-button))))))
+  ;;   (face-spec-set face spec nil)
+  ;;   (put face 'face-defface-spec spec))
   ;; will be overwritten by color themes
 
   (tool-bar-add-item-from-menu 'new-empty-buffer-other-frame '("new" . "New"))

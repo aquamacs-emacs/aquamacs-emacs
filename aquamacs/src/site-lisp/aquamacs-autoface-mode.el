@@ -213,7 +213,7 @@ Sets the `autoface-default' face."
 		 (unless (eq value 'unspecified)
 		   (setq result (nconc (list attribute value) result))))))
 	   result)))
-    ;; set default (not user customization)
+    ;; can be overwritten by user customization
 	       (if (> emacs-major-version 22) t))
   ;; ensure that the new face does not inherit from itself:
   (set-face-attribute 'autoface-default nil 
