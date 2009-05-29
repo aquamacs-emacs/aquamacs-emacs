@@ -31,8 +31,7 @@
 
 (defface autoface-default
   '((((type ns))
-     :inherit default :height 120 :weight normal :width normal :slant normal
-     :underline nil :strike-through nil :stipple nil :family "Monaco"))
+     :inherit default))
   "Default face for all buffers for `aquamacs-autoface-mode'"
   :group 'Aquamacs)
 
@@ -59,3 +58,11 @@
      :family "Monaco"))
   "Default face for Org-Mode in `aquamacs-autoface-mode'"
   :group 'Aquamacs)
+
+(defface echo-area
+ '((((type ns))
+    :inherit autoface-default :height 120 :weight normal :width normal
+    :slant normal :underline nil :strike-through nil :stipple nil
+    :family "Lucida Grande"))
+ "Face for Echo area (minibuffer and messages)."
+ :group 'Aquamacs)
