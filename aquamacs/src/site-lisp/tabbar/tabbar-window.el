@@ -312,7 +312,11 @@ That is, a string used to represent it on the tab bar."
 	  (let ((new-pt (cdr (assq tab tab-points))))
 	    (and new-pt 
 		 (eq (marker-buffer new-pt) (window-buffer (selected-window)))
-		 (goto-char (marker-position new-pt))
+		 (let ((pos (marker-position new-pt)))
+		   (unless (eq pos (point))
+		     (if transient-mark-mode
+			 (deactivate-mark))
+		     (goto-char pos)))
 		 (set-marker new-pt nil) ;; delete marker 
 		 ))))
       ;; if there's no tab associated with clicked spot, use
