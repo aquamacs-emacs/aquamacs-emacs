@@ -181,12 +181,12 @@ for the definition of the menu frame."
 	      :enable (kill-this-buffer-enabled-p)
 	      :help "Discard (kill) current buffer"))
 (define-key menu-bar-file-menu [insert-file]
-  '(menu-item "Insert File...                         " insert-file
+  '(menu-item "Insert File..." insert-file
 	      :enable (and (menu-bar-non-minibuffer-window-p)
 			   (menu-bar-menu-frame-live-and-visible-p))
 	      :help "Insert another file into current buffer"))
 (define-key menu-bar-file-menu [dired]
-  '(menu-item "Open Directory...                 " dired
+  '(menu-item "Open Directory..." dired
 	      :enable (and (menu-bar-non-minibuffer-window-p)
 			   (menu-bar-menu-frame-live-and-visible-p))
 	      :help "Read a directory, to operate on its files"))

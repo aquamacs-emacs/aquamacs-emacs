@@ -640,11 +640,10 @@ name_is_separator (name)
 
       keyEq = [self parseKeyEquiv: wv->key];
 #ifdef NS_IMPL_COCOA
-      /* OS X just ignores modifier strings longer than one character */
-      if (keyEquivModMask == 0)
-	{  title = [title stringByAppendingFormat: @" %@", keyEq];
-	  keyEq = @"";
-	}
+      /* we display all key equivalents ourselves - Cocoa
+	 won't display more than one single key */
+      title = [title stringByAppendingFormat: @"\t%@", keyEq];
+      keyEq = @"";
 #endif
 
       item = [self addItemWithTitle: (NSString *)title
@@ -688,25 +687,63 @@ name_is_separator (name)
 - (void)fillWithWidgetValue: (void *)wvptr
 {
   widget_value *wv = (widget_value *)wvptr;
+  NSFont *menuFont = [NSFont menuFontOfSize:0];
+  NSDictionary *attributes =
+    [NSDictionary dictionaryWithObject:menuFont forKey:NSFontAttributeName];
+  NSSize spaceSize = [@" " sizeWithAttributes:attributes];
+  CGFloat maxTabStop = 0;
 
   /* clear existing contents */
   [self setMenuChangedMessagesEnabled: NO];
   [self clear];
 
-  /* add new contents */
-  for (; wv != NULL; wv = wv->next)
+  /* align key bindings 
+     taken from Yamamoto Mitsuharu's AppKit port */
+  for (wv = (widget_value *)wvptr; wv != NULL; wv = wv->next)
+    if (!name_is_separator (wv->name) && wv->key)
+      {
+	NSString *itemName =
+	  [NSString stringWithUTF8String:wv->name];
+	NSSize size = [[itemName stringByAppendingString:@"\t"]
+			sizeWithAttributes:attributes];
+
+	if (maxTabStop < size.width)
+	  maxTabStop = size.width;
+      }
+
+  for (wv = (widget_value *)wvptr; wv != NULL; wv = wv->next)
     {
-      NSMenuItem *item = [self addItemWithWidgetValue: wv];
+    if (!name_is_separator (wv->name) && wv->key)
+      {
+	NSString *itemName =
+	  [NSString stringWithUTF8String:wv->name];
+	NSSize nameSize = [itemName sizeWithAttributes:attributes];
+	int name_len = strlen (wv->name);
+	int pad_len = ceil ((maxTabStop - nameSize.width) / spaceSize.width);
 
-      if (wv->contents)
-        {
-          EmacsMenu *submenu = [[EmacsMenu alloc] initWithTitle: [item title]];
+	if (pad_len > 0)
+	  {
+	    Lisp_Object name;
+	    name = make_uninit_string (name_len + pad_len);
+	    strcpy (SDATA (name), wv->name);
+	    memset (SDATA (name) + name_len, ' ', pad_len);
+	    //name[name_len+pad_len] = '\0';
+	    wv->name = SDATA (name);
+	  }
+      }
 
-          [self setSubmenu: submenu forItem: item];
-          [submenu fillWithWidgetValue: wv->contents];
-          [submenu release];
-          [item setAction: nil];
-        }
+    /* add new contents */
+
+    NSMenuItem *item = [self addItemWithWidgetValue: wv];
+    if (wv->contents)
+      {
+	EmacsMenu *submenu = [[EmacsMenu alloc] initWithTitle: [item title]];
+	
+	[self setSubmenu: submenu forItem: item];
+	[submenu fillWithWidgetValue: wv->contents];
+	[submenu release];
+	[item setAction: nil];
+      }
     }
 
   [self setMenuChangedMessagesEnabled: YES];
@@ -717,6 +754,7 @@ name_is_separator (name)
   if ([self supermenu] == nil)
     [self sizeToFit];
 #endif
+
 }
 
 
