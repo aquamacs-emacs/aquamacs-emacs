@@ -45,13 +45,6 @@
 
 (require 'aquamacs-mac-fontsets)
 
-;; face should look just like the buffer
-; do not use face-spec-set (prevents user customization in 23)
-(set-face-attribute 'fringe nil
-		    :inherit 'default
-		    :background 'unspecified
-		    :foreground "grey55")
-
 (defun aquamacs-define-the-fringe-bitmap ()
   "Redefines a fringe bitmap (continuation) so that it looks good
 even when minimal fringes are used. (Aquamacs)"
@@ -99,12 +92,6 @@ even when minimal fringes are used. (Aquamacs)"
      (height . 35)
      (left . 0)
      (top . 30))))) 
-
-
-;; TO DO: remove once "defface" in faces.el works correctly
-(set-face-attribute 'default nil
-		    :height 130
-		    :family "Lucida Grande")
 
 
 ;;; COMMENT THIS OUT IF YOU DO *NOT* WANT MAXIMUM BUFFER HIGHLIGHTING.
