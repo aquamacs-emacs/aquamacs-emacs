@@ -1628,6 +1628,8 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
   
   check_ns ();
 
+  CHECK_CONS (contents);
+
   isQ = NILP (header);
 
   if (EQ (position, Qt)
@@ -1816,18 +1818,25 @@ void process_dialog (id window, Lisp_Object list)
 {
   Lisp_Object item;
   int row = 0;
+  int cancel = 1,
+    buttons = 0;
 
-  for (; XTYPE (list) == Lisp_Cons; list = XCDR (list))
+  for (; CONSP (list); list = XCDR (list))
     {
       item = XCAR (list);
-      if (XTYPE (item) == Lisp_String)
+      if (STRINGP (item))
         {
           [window addString: SDATA (item) row: row++];
         }
-      else if (XTYPE (item) == Lisp_Cons)
+      else if (EQ (item, intern ("no-cancel")))
+        {
+          cancel = 0;
+        }
+      else if (CONSP (item) ) /*  (XTYPE (item) == Lisp_Cons) */
         {
           [window addButton: SDATA (XCAR (item))
 		  value: XCDR (item) row: row++ key:nil];
+	  buttons++;
         }
       else if (NILP (item))
         {
@@ -1835,8 +1844,9 @@ void process_dialog (id window, Lisp_Object list)
           row = 0;
         }
     }
-  [window addButton: "Cancel"
-	  value: Vcancel_special_indicator_flag row: row++ key: @"\e"];
+  if (cancel || buttons == 0)
+    [window addButton: "Cancel"
+		value: Vcancel_special_indicator_flag row: row++ key: @"\e"];
 }
 
 
