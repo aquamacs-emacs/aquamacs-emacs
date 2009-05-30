@@ -555,7 +555,8 @@ in your .emacs file.
 (defun flyspell-hack-local-variables-hook ()
   ;; When local variables are loaded, see if the dictionary context
   ;; has changed.
-  (flyspell-accept-buffer-local-defs 'force))
+  ;; (flyspell-accept-buffer-local-defs 'force)
+  )
 
 (defun flyspell-kill-ispell-hook ()
   (setq flyspell-last-buffer nil)
