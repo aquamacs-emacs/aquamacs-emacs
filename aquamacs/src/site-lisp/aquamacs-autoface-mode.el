@@ -774,7 +774,6 @@ modified, or in FRAME if given."
 		"Background Color...")
 	      aquamacs-select-background-color
 	      :visible ,(display-multi-font-p)
-	      :keys ,(aq-binding 'aquamacs-select-background-color)
 	      :enable (menu-bar-menu-frame-live-and-visible-p) 
 	      :help "Select a background color"))
 
@@ -785,7 +784,6 @@ modified, or in FRAME if given."
 		 "Foreground Color...")
 	      aquamacs-select-foreground-color
 	      :visible ,(display-multi-font-p)
-	      :keys ,(aq-binding 'aquamacs-select-foreground-color)
 	      :enable (menu-bar-menu-frame-live-and-visible-p) 
 	      :help "Select a foreground color"))
 
@@ -806,7 +804,7 @@ modified, or in FRAME if given."
 			    " (default)" "")))
 	      mac-font-panel-mode
 	      :visible ,(display-multi-font-p)
-	      :keys ,(aq-binding 'mac-font-panel-mode)
+	      :key-sequence [(,osxkeys-command-key shift t)]
 	      :enable (menu-bar-menu-frame-live-and-visible-p) 
 	      :help "Select a font from list of known fonts/fontsets"))
 

@@ -38,41 +38,6 @@
 
 (eval-when-compile (require 'aquamacs-macros))
 
-
-;; (if (> emacs-major-version 22)
-;;     ;; unclear why this is needed 
-;;     ;; but clipboard-kill-ring-save isn't defined otherwise
-;;     (load "menu-bar.el"))
-
-; (assq 'paste (lookup-key global-map [menu-bar edit]))
-; (assq 'new-file (lookup-key global-map [menu-bar file]))
-
-
-;; (defun change-menu-text-1 (list subst)
-;; ;; replace the first string or relevant element with subst
-;; ;; return new list
-;;   (cond 
-;;     ((not list) nil)
-;;     ((not (listp list)) list)
-;;     ((or
-;;       (stringp (car list))
-;;       (and (listp (car list))
-;; 	   (eq 'aq-shortcut (car (car list))))
-;;      )
-;;     (cons subst (change-menu-text-1 (cdr list) subst)))
-;;    (t  (cons (car list) (change-menu-text-1 (cdr list) subst)))
-;;       ))
-
-;; ;; this is a big hack like most other things
-;; (defun change-menu-text (keymap key str)
- 
-;;   (define-key global-map (vconcat (append keymap (list key)))
-;;     (change-menu-text-1 (cdr (assq key (lookup-key global-map keymap))) str )))
- 
- 
-;;(Defun aq-shortcut (text &rest more-args)
-;;  (append (list (function format)) (append (list text 'apple-char) more-args )))
- 
 (defun aq-copy-list (list)
   "Return a copy of LIST, which may be a dotted list.
 The elements of LIST are not copied, just the list structure itself."
@@ -264,7 +229,7 @@ customization buffer."
 (define-key menu-bar-file-menu [new-file]
   `(menu-item "New Buffer in New Frame"
 	      new-empty-buffer-other-frame
-	      :keys ,(aq-binding 'new-empty-buffer-other-frame)
+	      :key-sequence [(,osxkeys-command-key n)]
 	      :enable (or (and (boundp 'one-buffer-one-frame-mode)
 			       one-buffer-one-frame-mode)
 			  (not (window-minibuffer-p
@@ -273,7 +238,7 @@ customization buffer."
  (define-key-after menu-bar-file-menu [make-tab]
   `(menu-item "New Buffer in New Tab"
 	      new-tab
-	      :keys ,(aq-binding 'new-tab)
+	      :key-sequence [(,osxkeys-command-key t)]
 	      :enable (and (fboundp 'new-tab)
 			   (menu-bar-menu-frame-live-and-visible-p)
 			   (menu-bar-non-minibuffer-window-p))
@@ -283,7 +248,8 @@ customization buffer."
   `(menu-item
       "Open File..." 
       mac-key-open-file
-      :keys ,(aq-binding 'mac-key-open-file)))
+      :key-sequence [(,osxkeys-command-key s)]
+      ))
 
 (aquamacs-set-defaults 
  '((recentf-menu-before  "Open Directory...")))
@@ -295,7 +261,7 @@ customization buffer."
 		      (if (or tabbar-mode one-buffer-one-frame-mode) 
 			  "and Buffer" ""))
 	      close-window
-	      :keys , (aq-binding (key-binding [menu-bar file kill-buffer]))
+	      :key-sequence [(,osxkeys-command-key w)]
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
 			   (menu-bar-non-minibuffer-window-p))
 	      :help "Discard current buffer") 'separator-save)
@@ -305,14 +271,14 @@ customization buffer."
 (define-key menu-bar-edit-menu [copy]
   `(menu-item "Copy\t\t" 
 	      clipboard-kill-ring-save
-	      :keys ,(aq-binding (key-binding [menu-bar edit copy]))
+	      :key-sequence [(,osxkeys-command-key c)]
 	      :enable mark-active
 	      :help "Copy selected text in region"))
  
 (define-key menu-bar-edit-menu [paste]
   `(menu-item "Paste\t\t" 
 	      clipboard-yank
-	      :keys ,(aq-binding 'clipboard-yank) 
+	      :key-sequence [(,osxkeys-command-key v)]
 	      :enable (and
 		       (cdr yank-menu)
 		       ;; Emacs compiled --without-x doesn't have
@@ -325,7 +291,7 @@ customization buffer."
 (define-key menu-bar-edit-menu [undo]
   `(menu-item   "Undo\t\t"
 	      aquamacs-undo
-	      :keys ,(aq-binding 'aquamacs-undo) ; (key-binding [menu-bar edit undo])) being set with this command
+	      :key-sequence [(,osxkeys-command-key z)]
 	      :enable (and (aquamacs-can-undo-p)
 			   (menu-bar-menu-frame-live-and-visible-p))
 	      :help "Undo last operation"))
@@ -333,7 +299,7 @@ customization buffer."
 (define-key-after menu-bar-edit-menu [redo]
   `(menu-item "Redo" 
 	      aquamacs-redo
-	      :keys ,(aq-binding 'aquamacs-redo) ; (key-binding [menu-bar edit redo]))
+	      :key-sequence [(,osxkeys-command-key Z)]
 	      :enable (and (aquamacs-can-redo-p) 
 			   (menu-bar-menu-frame-live-and-visible-p))
 	      :help "Redo undone operation") 'undo)
@@ -342,7 +308,7 @@ customization buffer."
 (define-key menu-bar-edit-menu [cut]
   `(menu-item "Cut"
 	      clipboard-kill-region
-	      :keys ,(aq-binding (key-binding [menu-bar edit cut]))
+	      :key-sequence [(,osxkeys-command-key x)]
 	      :enable (and mark-active (not buffer-read-only) 
 			   (menu-bar-menu-frame-live-and-visible-p))
 	      :help
@@ -351,35 +317,31 @@ customization buffer."
 (define-key menu-bar-edit-menu [mark-whole-buffer]
   `(menu-item "Select All" 
 	      mark-whole-buffer
-	      :keys ,(aq-binding (key-binding [menu-bar edit mark-whole-buffer]))
+	      :key-sequence [(,osxkeys-command-key a)]
 	      :enable (menu-bar-menu-frame-live-and-visible-p)
 	      :help "Mark the whole buffer for a subsequent cut/copy."))
 
 (define-key menu-bar-i-search-menu [isearch-forward]
   `(menu-item "Forward String..." 
 	      isearch-forward
-	      :keys ,(aq-binding 'isearch-forward)
+	      :key-sequence [(,osxkeys-command-key f)]
 	      :help "Search forward for a string as you type it"))
  
 (define-key menu-bar-i-search-menu [isearch-repeat-forward]
   `(menu-item "Repeat Forward String..." 
 	      aquamacs-repeat-isearch
-	      :keys ,(aq-binding 'aquamacs-repeat-isearch)
+	      :key-sequence [(,osxkeys-command-key g)]
 	      :help "Search forward for a string as you type it"))
 
 (define-key menu-bar-i-search-menu [isearch-backward]
   `(menu-item "Repeat Backward String..."
 	      aquamacs-repeat-isearch-backward
-	      :keys ,(aq-binding 'aquamacs-repeat-isearch-backward)
 	      :help "Search backwards for a string as you type it"))
 
 (define-key menu-bar-i-search-menu [isearch-use-region]
   `(menu-item "Use Region For Search" 
 	      aquamacs-use-selection-for-find
 	      :enable mark-active
-	      :keys , (aq-binding ;; (key-binding [menu-bar edit search i-search 
-;; 							isearch-use-region])
-				 'aquamacs-use-selection-for-find)
 	      :help "Use the selection for your next search"))
 
  
@@ -409,7 +371,7 @@ customization buffer."
 (define-key menu-bar-edit-menu [fill]
 `(menu-item "Wrap and Re-Format (fill)" 
 	    fill-paragraph-or-region
-	    :keys ,(aq-binding 'fill-paragraph-or-region) ;(key-binding [menu-bar edit fill]))
+	    :key-sequence [(meta q)]
 	    :enable (not buffer-read-only)
 	    :help
 	    "Fill text in region (or paragraph) to fit between
@@ -418,7 +380,7 @@ left and right margin"))
 (define-key-after menu-bar-edit-menu [unfill]
 `(menu-item "Remove Hard Line Breaks (unfill)" 
 	    unfill-paragraph-or-region
-	    :keys ,(aq-binding 'unfill-paragraph-or-region) ;(key-binding [menu-bar edit unfill]))
+	    :key-sequence [(meta Q)]
 	    :enable (not buffer-read-only)
 	    :help
 	    "Remove line-breaks from paragraph or region.")
@@ -444,7 +406,7 @@ left and right margin"))
 (define-key menu-bar-file-menu [save-buffer ]
   `(menu-item "Save Buffer"
 	      save-buffer
-	      :keys ,(aq-binding 'mac-key-save-file)
+	      :key-sequence [(,osxkeys-command-key s)]
 	      :enable (and (buffer-modified-p)
 			   (buffer-file-name)
 			   (menu-bar-menu-frame-live-and-visible-p)
@@ -455,7 +417,7 @@ left and right margin"))
 (define-key menu-bar-file-menu [write-file]
   `(menu-item "Save Buffer As..."
 	      write-file
-	      :keys ,(aq-binding 'mac-key-save-file-as)
+	      :key-sequence [(,osxkeys-command-key S)]
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
 			   (menu-bar-non-minibuffer-window-p))
 	      :help "Write current buffer to another file"))
@@ -512,7 +474,7 @@ left and right margin"))
   `(menu-item (format "Preview and Print %s..." 
 		      (if mark-active "Region" "Buffer"))
 	      aquamacs-print
-	      :keys ,(aq-binding  'aquamacs-print) ; (key-binding [menu-bar file aquamacs-print]))
+	      :key-sequence [(,osxkeys-command-key p)]
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
 			   (menu-bar-non-minibuffer-window-p))
 	      :help "Print current buffer or region"))
@@ -536,7 +498,6 @@ left and right margin"))
 	      menu-bar-print-region-or-buffer
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
 			   (menu-bar-non-minibuffer-window-p))
-	      :keys ,(aq-binding 'menu-bar-print-region-or-buffer); (key-binding [menu-bar file print-region-or-buffer]))
 	      :help "Print buffer, or region if active"))
 
 
@@ -676,7 +637,6 @@ subsequently create.  Upon entering text-mode, the function
 (define-key-after menu-bar-options-menu [word-wrap]
   '(menu-item "Soft Word Wrap\t\t"
 	      toggle-word-wrap
-	      :keys ,(aq-binding 'toggle-word-wrap)
 	      :help "Wrap long lines without inserting carriage returns (Word Wrap)"
 	      :enable (menu-bar-menu-frame-live-and-visible-p)
               :button (:toggle . word-wrap)) 'auto-fill-mode)
@@ -862,7 +822,6 @@ subsequently create.  Upon entering text-mode, the function
 (define-key menu-bar-custom-menu [customize]
   `(menu-item "Top-level Customization Group" 
 	      customize
- 	      :keys ,(aq-binding 'customize)
 	      :help "The master group called `Emacs'"))
 
 (defun customize-aquamacs ()
@@ -893,7 +852,7 @@ subsequently create.  Upon entering text-mode, the function
 (define-key menu-bar-goto-menu [go-to-line]
   `(menu-item "Goto Line..."
 	      goto-line
-	      :keys ,(aq-binding 'goto-line)
+	      :key-sequence [(,osxkeys-command-key l)]
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
 			   (menu-bar-non-minibuffer-window-p))
 	      :help "Read a line number and go to that line"))
@@ -948,12 +907,10 @@ subsequently create.  Upon entering text-mode, the function
 (define-key ispell-menu-map [ispell-buffer]
 	`(menu-item "Spell-Check Buffer" 
 		    ispell-buffer
-		    :keys ,(aq-binding 'ispell-buffer)
 		    :help "Check spelling of selected buffer"))
 (define-key ispell-menu-map [ispell-complete-word]
 	`(menu-item "Complete Word" 
 		    ispell-complete-word
-		    :keys ,(aq-binding 'ispell-complete-word)
 		    :help "Complete word at cursor using dictionary"))
 ;; taken out - the standard Cocoa spell doesn't do it either
 ;; (defvar aquamacs-flyspell-buffer-checked nil)
@@ -1010,13 +967,11 @@ subsequently create.  Upon entering text-mode, the function
 (define-key menu-bar-help-menu [menu-aquamacs-help]
   `(menu-item "Aquamacs Help" 
 	      aquamacs-user-help
-	      :keys ,(aq-binding 'aquamacs-user-help)
 	      :help "Show Aquamacs Manual in Apple Help"))
   
 (define-key-after menu-bar-help-menu [menu-aquamacs-user-wiki]
   `(menu-item "Aquamacs Tips Wiki Online" 
 	      aquamacs-user-wiki
-	      :keys ,(aq-binding 'aquamacs-user-wiki)
 	      :help "Show Wiki (online)")
   'menu-aquamacs-help)
 
@@ -1024,14 +979,12 @@ subsequently create.  Upon entering text-mode, the function
 (define-key-after menu-bar-help-menu [menu-aquamacs-homepage]
   `(menu-item "Aquamacs Homepage" 
 	      aquamacs-homepage
-	      :keys ,(aq-binding 'aquamacs-homepage)
 	      :help "Show Aquamacs Homepage")
   'menu-aquamacs-user-wiki)
 
 (define-key-after menu-bar-help-menu [menu-aquamacs-emacs-manual]
   `(menu-item "Emacs Manual" 
 	      aquamacs-emacs-manual
-	      :keys ,(aq-binding 'aquamacs-emacs-manual)
 	      :help "Show Emacs Manual in Apple Help")
   '-)
 
@@ -1166,20 +1119,19 @@ the previous frame size."
 (define-key ispell-menu-map [ispell-buffer]
 	`(menu-item "Spell-Check Buffer" 
 		    ispell-buffer
-		    :keys ,(aq-binding 'ispell-buffer)
 		    :help "Check spelling of selected buffer"))
 
 
 (define-key menu-bar-zoom-menu [zoom-out]
   `(menu-item "Shrink" zoom-font-out
-	      :keys "⌘-" ;; aq-binding doesn't work for minus
+	      :key-sequence [(,osxkeys-command-key -)]
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
 			   (menu-bar-non-minibuffer-window-p))
 	      :help "Zoom font out"))
 
 (define-key menu-bar-zoom-menu [zoom-in]
   `(menu-item "Enlarge" zoom-font
-	      :keys ,(aq-binding 'zoom-font)
+	      :key-sequence [(,osxkeys-command-key +)]
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
 			   (menu-bar-non-minibuffer-window-p))
 	      :help "Zoom font in"))
@@ -1190,7 +1142,7 @@ the previous frame size."
 (define-key menu-bar-file-menu [one-window]
   `(menu-item "Remove Splits" 
 	      aquamacs-delete-other-windows
-	      :keys ,(aq-binding 'aquamacs-delete-other-windows)
+	      :key-sequence [(,osxkeys-command-key 1)]
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
 			   (menu-bar-non-minibuffer-window-p)
 			   (not (one-window-p t nil)))
@@ -1198,7 +1150,7 @@ the previous frame size."
 (define-key menu-bar-file-menu [split-window]
   `(menu-item "Split Window" 
 	      aquamacs-split-window-vertically
-	      :keys ,(aq-binding 'aquamacs-split-window-vertically)
+	      :key-sequence [(,osxkeys-command-key 2)]
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
 			   (menu-bar-non-minibuffer-window-p))
 	      :help "Split selected window in two"))
@@ -1223,7 +1175,7 @@ the previous frame size."
 (define-key menu-bar-file-menu [full-frame]
   `(menu-item "Full Screen Editing" 
 	      aquamacs-toggle-full-frame
-	      :keys ,(aq-binding 'aquamacs-toggle-full-frame)
+	      :key-sequence [(,osxkeys-command-key shift 13)]
 	      :enable (menu-bar-menu-frame-live-and-visible-p)
 	      :help "Use full screen for the selected frame"))
   
@@ -1255,7 +1207,7 @@ the previous frame size."
 		      '(format "Select Next %s"  
 			       (if tabbar-mode "Tab" "Buffer"))
 		      'next-tab-or-buffer 
-		      :keys (aq-binding 'next-tab-or-buffer)
+		      :key-sequence `[(,osxkeys-command-key })]
 		      :enable '(and (menu-bar-menu-frame-live-and-visible-p)
 				    (menu-bar-non-minibuffer-window-p)
 				    (or (not tabbar-mode)
@@ -1268,7 +1220,7 @@ the previous frame size."
 		      '(format "Select Previous %s" 
 			       (if tabbar-mode "Tab" "Buffer"))
 		      'previous-tab-or-buffer
-		      :keys  (aq-binding 'next-tab-or-buffer)
+		      :key-sequence `[(,osxkeys-command-key {)]
 		      :enable '(and (menu-bar-menu-frame-live-and-visible-p)
 				    (menu-bar-non-minibuffer-window-p)
 				    (or (not tabbar-mode)
@@ -1280,7 +1232,6 @@ the previous frame size."
 		      'menu-item 
 		      "Move Tab to New Frame" 
 		      'tabbar-move-current-buffer-to-new-frame
-		      :keys  (aq-binding 'tabbar-move-current-buffer-to-new-frame)
 		      :enable '(and (menu-bar-menu-frame-live-and-visible-p)
 				    (menu-bar-non-minibuffer-window-p)
 				    (or (not tabbar-mode)
@@ -1303,7 +1254,6 @@ the previous frame size."
 		      'menu-item
 		      "Merge All Frames" 
 		      'tabbar-window-merge-windows
-		      :keys  (aq-binding 'tabbar-window-merge-windows)
 		      :enable '(and (menu-bar-menu-frame-live-and-visible-p)
 				   (menu-bar-non-minibuffer-window-p))
 		      :help "Merge all Frames into a single one with tabs")

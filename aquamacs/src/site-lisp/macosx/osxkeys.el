@@ -773,7 +773,8 @@ default."
     (define-key map `[(,osxkeys-command-key o)] 'mac-key-open-file) 
 					;open new frame with a file
 
-    (define-key map `[(,osxkeys-command-key shift s)] 'mac-key-save-file-as)
+    (define-key map `[(,osxkeys-command-key s)] 'save-buffer)
+    (define-key map `[(,osxkeys-command-key shift s)] 'write-file)
     (define-key map `[(,osxkeys-command-key shift o)] 'mac-key-open-file-other-frame) 
 					;open new frame with a file
     (define-key map `[(,osxkeys-command-key a)] 'mark-whole-buffer)
@@ -786,7 +787,6 @@ default."
     (define-key map `[(,osxkeys-command-key x)] 'clipboard-kill-region)
     (define-key map `[(meta ,osxkeys-command-key x)] 
       'aquamacs-clipboard-kill-secondary)
-    (define-key map `[(,osxkeys-command-key s)] 'mac-key-save-file)
     (define-key map `[(,osxkeys-command-key p)] 'aquamacs-print)
     (define-key map `[(,osxkeys-command-key l)] 'goto-line)
     (define-key map `[(,osxkeys-command-key f)] 'aquamacs-isearch-forward)
@@ -799,6 +799,8 @@ default."
     (define-key map `[(,osxkeys-command-key m)] 'iconify-or-deiconify-frame) 
     (define-key map `[(control z)] 'ignore) ;; hit by mistake often enough
     (define-key map `[(,osxkeys-command-key .)] 'keyboard-quit)
+    ;; workaround for bug in menu key description
+    (define-key map `[(,osxkeys-command-key shift 13)] 'aquamacs-toggle-full-frame)
     (define-key map `[(,osxkeys-command-key shift return)] 'aquamacs-toggle-full-frame)
     (define-key map `[(,osxkeys-command-key escape)] 'keyboard-escape-quit) 
     (define-key map `[(,osxkeys-command-key :)] 'ispell-buffer)

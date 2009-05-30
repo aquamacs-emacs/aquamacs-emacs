@@ -3,8 +3,6 @@
 ;; Maintainer: David Reitter
 ;; Keywords: mac bug report
  
-;; Last change: $Id: aquamacs-bug.el,v 1.18 2009/01/18 19:59:52 davidswelt Exp $
-
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
 
@@ -26,7 +24,7 @@
 ;; Copyright (C) 1985, 1994, 1997, 1998, 2000, 2001, 2002
 ;; Free Software Foundation, Inc.
 
-;; Copyright (C) 2005, 2008 David Reitter
+;; Copyright (C) 2005, 2008, 2009 David Reitter
 
 
 
@@ -106,18 +104,13 @@ most Aquamacs-specific code."
 (defvar menu-bar-bug-help-menu (make-sparse-keymap "Diagnose and Report Bug"))
 
 (define-key menu-bar-bug-help-menu [send-emacs-bug-report]
-  `(menu-item "Send Bug Report...                 "  
+  `(menu-item "Send Bug Report..."  
 	      report-aquamacs-bug
-	      :help "Report a Bug in Aquamacs Emacs"
-	      :keys ,(aq-binding 'report-aquamacs-bug)) )
-
-
+	      :help "Report a Bug in Aquamacs Emacs"))
 (define-key menu-bar-bug-help-menu [start-vanilla-aquamacs]
   `(menu-item "Start Aquamacs without customizations"  
 	      start-vanilla-aquamacs
-	      :help "Start Aquamacs Emacs without any user-specific settings."
-	      :keys ,(aq-binding 'start-vanilla-aquamacs)) )
-
+	      :help "Start Aquamacs Emacs without any user-specific settings."))
 (define-key menu-bar-bug-help-menu [debug-on-quit]
   (menu-bar-make-toggle toggle-debug-on-quit debug-on-quit
 			"Enter Debugger on Quit/C-g" "Debug on Quit %s"

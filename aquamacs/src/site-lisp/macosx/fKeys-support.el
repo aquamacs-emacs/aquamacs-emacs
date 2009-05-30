@@ -117,12 +117,11 @@ Return t if successful."
 
 (define-key menu-bar-option-key-menu [capslock-modifier]
   `(menu-item
-    ,(aq-shortcut  "%s Caps Lock Key for %s (not extra characters)  "
-		   'toggle-mac-capslock-modifier 
-		   (string (decode-char 'ucs #X21EA))
-		   (upcase-initials (symbol-name 
-				     (or mac-capslock-modifier 
-					 mac-capslock-modifier-enabled-value))))
+    ,(format "%s Caps Lock Key for %s (not extra characters)  "
+	     (string (decode-char 'ucs #X21EA))
+	     (upcase-initials (symbol-name 
+			       (or mac-capslock-modifier 
+				   mac-capslock-modifier-enabled-value))))
     toggle-mac-capslock-modifier 
     :key-sequence nil
     :visible (boundp 'mac-capslock-modifier)

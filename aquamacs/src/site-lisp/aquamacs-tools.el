@@ -5,8 +5,6 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tools.el,v 1.42 2009/03/03 18:47:47 davidswelt Exp $
-
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
 
@@ -25,7 +23,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, 2007 David Reitter
+;; Copyright (C) 2005, 2007, 2009 David Reitter
 
 
 ; remove an element from an associative list (alist) 
@@ -462,106 +460,6 @@ Optional CODING is used for encoding coding-system."
 ; redefine New
 ; (define-key menu-bar-edit-menu [mark-whole-buffer] (cdr (assq 'mark-whole-buffer (key-binding [menu-bar edit]))))
 
-
-
-(defun aq-resolve-remapped (list)
-  (flatten  
-  (mapcar
-     (lambda (k)
-       (cond 
-	( (and 
-	   (vectorp k)
-	   (eq (aref k 0) 'remap)
-	   )
-	  (where-is-internal (aref k 1) nil nil t t))
-	((and 
-	   (vectorp k)
-	   (eq (aref k 0) 'menu-bar)
-	   )
-	 nil
-	 )
-	(t k))
-	)
-     list)))
-
-
-; (aq-find-good-key 'aquamacs-toggle-full-frame)
-
-(defun aq-find-best-key (list)
-  (or (if (not list)
-	"")
-    (key-description (car list))
-    (aq-find-best-key (cdr list)))
-)
-;; 
-(defun aq-find-good-key (symbol)
-  (aq-find-best-key
-   (aq-resolve-remapped
-    (or
-     (where-is-internal 
-      symbol
-      (list  osx-key-mode-map   ) 
-      )
-     (where-is-internal 
-      symbol
-      (list    global-map ) 
-      )
-     (where-is-internal 
-      symbol
-      nil 
-      nil t t)))))
-
-(defun aq-shortcut (text symbol &rest more-args)
-  ;; symbol can be nil in some circumstances 
-  ;; (e.g. in tool-bar-map from early initialization)
-  (if (and symbol (if (boundp 'osx-key-mode) osx-key-mode nil))
-      (apply (function format) 
-	     (append (list (concat text "%s")) more-args 
-		     (list (aq-binding symbol))))
-    ;; not osx-key-mode
-    (apply (function format) text more-args)))
-	  
-; (aq-binding 'make-frame-command)
-(defun aq-binding (symbol)
-   (condition-case err
-  (let* ((case-fold-search nil)
-	 (s (aq-find-good-key symbol))
-	 (s (replace-regexp-in-string 
-	     "S-." (lambda (txt) 
-		     (concat (aq-describe-modifier 'shift) "-" 
-			     (downcase (substring txt 2))))
-	     s)))
-
-    (replace-regexp-in-string 
-     "[-<>]" ""
-     (replace-regexp-in-string 
-      "-\\([a-z]\\)" 'upcase
-     (replace-regexp-in-string 
-      "C-" (lambda (txt) 
-	     (concat (aq-describe-modifier 'ctrl) 
-		     "-"))
-      (replace-regexp-in-string 
-       "H-" (lambda (txt) 
-	      (concat (aq-describe-modifier 'hyper)
-		      "-"))
-       (replace-regexp-in-string 
-	"A-" (lambda (txt) 
-	       (concat (aq-describe-modifier 'alt)
-		       "-"))
-	(replace-regexp-in-string 
-	 "M-" (lambda (txt) 
-		(concat (aq-describe-modifier 'meta)
-			"-"))
-
-	 (replace-regexp-in-string 
-	  "-\\([A-Z]\\)" 
-	  (lambda (txt) 
-	    (concat 
-	     (aq-describe-modifier 'shift) txt))
-	  s
-	  nil nil 1 ;; replace sub-exp
-	  ))))))))
-  (error "")))
 
 (defun get-window-for-other-buffer ()
   "Find a suitable window for other buffers.
