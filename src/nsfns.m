@@ -2675,16 +2675,18 @@ DEFUN ("ns-open-help-anchor", Fns_open_help_anchor, Sns_open_help_anchor, 1, 2, 
      Lisp_Object anchor, book;
 {
   check_ns ();
+  BLOCK_INPUT;
   CHECK_STRING (anchor);
 
   if (! NILP (book) )
     CHECK_STRING (book);
-  
+
   [[NSHelpManager sharedHelpManager] openHelpAnchor:[NSString stringWithUTF8String:
 								SDATA (anchor)]
 					     inBook:(NILP (book) ? nil :
 						     [NSString stringWithUTF8String:
 								 SDATA (book)])];
+  UNBLOCK_INPUT;
   return Qnil;
 }
 
