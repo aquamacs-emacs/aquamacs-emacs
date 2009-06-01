@@ -2457,7 +2457,9 @@ used to display the prompt text."
       (append minibuffer-prompt-properties (list 'face 'minibuffer-prompt)))
 
 (defface fringe
-  '((((class color) (background light))
+  '((((type ns))
+     :foreground "grey55")
+    (((class color) (background light))
      :background "grey95")
     (((class color) (background dark))
      :background "grey10")
