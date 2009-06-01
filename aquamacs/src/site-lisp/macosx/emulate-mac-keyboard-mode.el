@@ -344,7 +344,7 @@ to their equivalents used on Mac OS X."
 			       (or mac-option-modifier 
 				   mac-option-modifier-enabled-value))))
     toggle-mac-option-modifier 
-    :key-sequence [(,osxkeys-command-key \;)]
+;; not yet known.    :key-sequence [(,osxkeys-command-key \;)]
     :visible (boundp 'mac-option-modifier)
     :help "Toggle whether to let Option key behave as Emacs key, 
 do not let it produce special characters (passing the key to the system)."
@@ -353,7 +353,7 @@ do not let it produce special characters (passing the key to the system)."
 (define-key menu-bar-option-key-menu [option-to-system]
   `(menu-item "Standard Mac characters   "
     toggle-mac-option-modifier 
-    :key-sequence [(,osxkeys-command-key \;)]
+;; not yet known.    :key-sequence [(,osxkeys-command-key \;)]
     :visible (boundp 'mac-option-modifier)
     :help "Toggle whether to let Option key behave as Emacs key, 
 do not let it produce special characters (passing the key to the system)."
