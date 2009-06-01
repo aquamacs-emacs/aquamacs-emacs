@@ -146,6 +146,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 - (void) addDisplayItemWithImage: (EmacsImage *)img idx: (int)idx
                         helpText: (char *)help
 			enabled: (BOOL)enabled
+ 		        visible: (BOOL)visible
       			labelText: (char *)label;
 /* delegate methods */
 - (NSToolbarItem *)toolbar: (NSToolbar *)toolbar

@@ -76,6 +76,7 @@ EmacsMenu *mainMenu, *svcsMenu, *dockMenu;
 static int popup_activated_flag;
 static NSModalSession popupSession;
 
+Lisp_Object Vns_tool_bar_size_mode;
 Lisp_Object Vns_tool_bar_display_mode;
 
 /* NOTE: toolbar implementation is at end,
@@ -1232,6 +1233,54 @@ update_frame_tool_bar (FRAME_PTR f)
   EmacsToolbar *toolbar = [FRAME_NS_VIEW (f) toolbar];
 
   [toolbar clearActive];
+  [toolbar setAllowsUserCustomization:YES];
+  /* problematic, as it creates a defaults file
+     also, doesn't seem to work with our tool bar 
+     construction mechanism.
+     [toolbar setAutosavesConfiguration:YES];
+
+     how to store tool bar changes:
+
+     tool bars here have been set from the tool bar map so that
+     there is little access to the original (lisp) item.
+     we could create events and process them on the lisp side
+     (which will be tricky to get right).
+
+     we need to store
+     - enabled items
+     - disabled items
+     - additional items inserted somewhere
+
+     Lisp event: NS_TOOL_BAR_CONFIG_CHANGED
+     (ns-tool-bar-read-configuration)
+     => list of strings (containing indexes for current tool-bar-map)
+
+     On the Lisp side, we could then update the tool-bar-map accordingly,
+     i.e. reorder it and set visibility flags.
+     The internal rep. of the toolbar should be updated soon afterwards
+     (perhaps redraw-frame).
+
+     To make the user-mandated changes persistent, we could keep this around:
+
+     ((hash1 . tool-bar-config1)
+      (hash2 . tool-bar-config2))
+ 
+      The hashes are hashes of the set of Lisp-side toolbar menu items (via their event names)
+      (sxhash (sort (mapcar
+      (lambda (m)
+      (when (consp m)
+      (car m)))
+      tool-bar-map)))
+
+      however, as soon as an item is added to or removed from the tool bar, do we want to 
+      discard the user's tool bar configuration?
+      Maybe that's okay.
+
+      the above tool-bar-config1 would be a list of toolbar item identifiers,
+      indicating visibility (by presence) and ordering.
+      It could be used to update the toolbar when desired.
+
+  */
 
   /* update EmacsToolbar as in GtkUtils, build items list */
   for (i = 0; i < f->n_tool_bar_items; ++i)
@@ -1240,6 +1289,7 @@ update_frame_tool_bar (FRAME_PTR f)
                             i * TOOL_BAR_ITEM_NSLOTS + (IDX))
 
       BOOL enabled_p = !NILP (TOOLPROP (TOOL_BAR_ITEM_ENABLED_P));
+      BOOL visible_p = !NILP (TOOLPROP (TOOL_BAR_ITEM_VISIBLE_P));
       BOOL selected_p = !NILP (TOOLPROP (TOOL_BAR_ITEM_SELECTED_P));
       int idx;
       int img_id;
@@ -1300,7 +1350,7 @@ update_frame_tool_bar (FRAME_PTR f)
       captionText = NILP (captionObj) ? "" : (char *)SDATA (captionObj);
 
       [toolbar addDisplayItemWithImage: img->pixmap idx: i helpText: helpText
-	       enabled: enabled_p  labelText: captionText];
+			       enabled: enabled_p  visible: visible_p  labelText: captionText];
 #undef TOOLPROP
     }
     }
@@ -1351,15 +1401,29 @@ update_frame_tool_bar (FRAME_PTR f)
 
 @implementation EmacsToolbar
 
+#define NSTOOLBAR_NEEDED_DISPLAY_MODE (EQ (Vns_tool_bar_display_mode, intern ("labels")) ? \
+				       NSToolbarDisplayModeLabelOnly : \
+				       ( EQ (Vns_tool_bar_display_mode, intern ("both")) ? \
+					 NSToolbarDisplayModeIconAndLabel : \
+					 ( EQ (Vns_tool_bar_display_mode, intern ("icons")) ? \
+					   NSToolbarDisplayModeIconOnly : \
+					   NSToolbarDisplayModeDefault)))
+
+#define NSTOOLBAR_NEEDED_SIZE_MODE (EQ (Vns_tool_bar_size_mode, intern ("small")) ? \
+				    NSToolbarSizeModeSmall :		\
+				    ( EQ (Vns_tool_bar_size_mode, intern ("regular")) ? \
+				      NSToolbarSizeModeRegular :	\
+				      NSToolbarSizeModeDefault))
+
 - initForView: (EmacsView *)view withIdentifier: (NSString *)identifier
 {
   self = [super initWithIdentifier: identifier];
   emacsView = view;
-  [self setDisplayMode: NSToolbarDisplayModeDefault];
-  [self setSizeMode: NSToolbarSizeModeSmall];
+  [super setSizeMode: NSTOOLBAR_NEEDED_SIZE_MODE];
+  [super setDisplayMode: NSTOOLBAR_NEEDED_DISPLAY_MODE];
   [self setDelegate: self];
-  identifierToItem = [[NSMutableDictionary alloc] initWithCapacity: 10];
-  activeIdentifiers = [[NSMutableArray alloc] initWithCapacity: 8];
+  identifierToItem = [[NSMutableDictionary alloc] initWithCapacity: 30];
+  activeIdentifiers = [[NSMutableArray alloc] initWithCapacity: 20];
   prevEnablement = enablement = 0L;
   return self;
 }
@@ -1379,19 +1443,35 @@ update_frame_tool_bar (FRAME_PTR f)
   [activeIdentifiers removeAllObjects];
   prevEnablement = enablement;
   enablement = 0L;
+  [self setSizeMode: NSTOOLBAR_NEEDED_SIZE_MODE];
+  [self setDisplayMode: NSTOOLBAR_NEEDED_DISPLAY_MODE];
+}
 
-  if (EQ (Vns_tool_bar_display_mode, intern ("labels")))
-    {
-      [self setDisplayMode: NSToolbarDisplayModeIconAndLabel];
-    }
-  else if (EQ (Vns_tool_bar_display_mode, intern ("icons")))
-    {
-      [self setDisplayMode: NSToolbarDisplayModeIconOnly];
-    }
-  else
-    {
-      [self setDisplayMode: NSToolbarDisplayModeDefault];
-    } 
+- (void)setDisplayMode:(NSToolbarDisplayMode)displayMode
+{
+  [super setDisplayMode:displayMode];
+
+  if ([self displayMode] == NSToolbarDisplayModeDefault)
+    Vns_tool_bar_display_mode = Qnil;
+  else if ([self displayMode] == NSToolbarDisplayModeIconOnly)
+    Vns_tool_bar_display_mode = intern ("icons");
+  else if ([self displayMode] == NSToolbarDisplayModeIconAndLabel)
+    Vns_tool_bar_display_mode = intern ("both");
+  else if ([self displayMode] == NSToolbarDisplayModeLabelOnly)
+    Vns_tool_bar_display_mode = intern ("labels");
+}
+
+- (void)setSizeMode:(NSToolbarSizeMode)sizeMode
+{
+  [super setSizeMode:sizeMode];
+
+  if ([self sizeMode] == NSToolbarSizeModeDefault)
+    Vns_tool_bar_size_mode = Qnil;
+  else if ([self sizeMode] == NSToolbarSizeModeRegular)
+    Vns_tool_bar_size_mode = intern ("regular");
+  else if ([self sizeMode] == NSToolbarSizeModeSmall)
+    Vns_tool_bar_size_mode = intern ("small");
+
 }
 
 - (BOOL) changed
@@ -1403,18 +1483,18 @@ update_frame_tool_bar (FRAME_PTR f)
 - (void) addDisplayItemSpacerWithIdx: (int)idx
 {
   /* 1) come up w/identifier */
-  NSString *identifier = NSToolbarFlexibleSpaceItemIdentifier;
+  NSString *identifier = [NSString stringWithFormat: @"%s %u", NSToolbarFlexibleSpaceItemIdentifier, idx];
 
   /* 2) create / reuse item */
   NSToolbarItem *item = [identifierToItem objectForKey: identifier];
   if (item == nil)
     {
-      item = [[[NSToolbarItem alloc] initWithItemIdentifier: identifier]
+      item = [[[NSToolbarItem alloc] initWithItemIdentifier: 
+	       NSToolbarFlexibleSpaceItemIdentifier]
                autorelease];
     }
 
-  //  [item setTag: idx];  can't do because more than one flex space item may be present
-
+  [item setTag: idx]; 
   /* 3) update state */
   [identifierToItem setObject: item forKey: identifier];
   [activeIdentifiers addObject: identifier];
@@ -1423,11 +1503,12 @@ update_frame_tool_bar (FRAME_PTR f)
 
 - (void) addDisplayItemWithImage: (EmacsImage *)img idx: (int)idx
                         helpText: (char *)help enabled: (BOOL)enabled
+			 visible: (BOOL)visible
 		       labelText: (char *)label;
 {
   /* 1) come up w/identifier */
   NSString *identifier
-      = [NSString stringWithFormat: @"%u", [img hash]];
+    = [NSString stringWithFormat: @"%u", label, [img hash]];
 
   /* 2) create / reuse item */
   NSToolbarItem *item = [identifierToItem objectForKey: identifier];
@@ -1436,8 +1517,10 @@ update_frame_tool_bar (FRAME_PTR f)
       item = [[[NSToolbarItem alloc] initWithItemIdentifier: identifier]
                autorelease];
       [item setImage: img];
+      [item setTag: idx]; 
       [item setToolTip: [NSString stringWithCString: help]];
       [item setLabel: [NSString stringWithCString: label]];
+      [item setPaletteLabel: [NSString stringWithCString: label]];
       [item setTarget: emacsView];
       [item setAction: @selector (toolbarClicked:)];
     }
@@ -1447,8 +1530,9 @@ update_frame_tool_bar (FRAME_PTR f)
 
   /* 3) update state */
   [identifierToItem setObject: item forKey: identifier];
-  [activeIdentifiers addObject: identifier];
-  enablement = (enablement << 1) | (enabled == YES);
+  if (visible)
+    [activeIdentifiers addObject: identifier];
+  enablement = (enablement << 1) | (enabled == YES);   
 }
 
 /* This overrides super's implementation, which automatically sets
@@ -2124,14 +2208,26 @@ syms_of_nsmenu ()
 {
 
 
+  DEFVAR_LISP ("ns-tool-bar-size-mode", &Vns_tool_bar_size_mode,
+	       doc: /* *Specify the size of the tool bar items.
+The value can be `small' (for small items), `regular' 
+(for regular sized items) and nil for the system default.
+The default is nil.
+
+This variable only takes effect for newly created tool bars.
+*/);
+
+  Vns_tool_bar_size_mode = Qnil;
+
   DEFVAR_LISP ("ns-tool-bar-display-mode", &Vns_tool_bar_display_mode,
-     doc: /* *Specify whether to display the tool bar as icons with labels.
-The value can be `icons' (for icons only), `labels' (for icons with labels)
-and nil, in which case the system default is assumed.
-The default is nil.  */);
+     doc: /* *Specify whether to display the tool bar as icons with
+labels.  The value can be `icons' (for icons only), `labels' (for
+labels), `both' for both, and nil, in which case the system default is
+assumed.  The default is nil.
+
+This variable only takes effect for newly created tool bars.*/);
 
   Vns_tool_bar_display_mode = Qnil;
-
 
 
   defsubr (&Sx_popup_menu);

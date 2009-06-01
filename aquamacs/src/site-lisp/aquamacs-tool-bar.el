@@ -287,24 +287,24 @@ quickly."
   ;; (Toolbar button - on systems that support it!)
   (global-set-key [toggle-frame-toolbar] 'handle-toggle-tool-bar)
 
-  (aquamacs-toolbar-update-showhide-menu) 
-  (add-hook 'menu-bar-update-hook 'aquamacs-toolbar-update-showhide-menu)
+  ;; (aquamacs-toolbar-update-showhide-menu) 
+  ;; (add-hook 'menu-bar-update-hook 'aquamacs-toolbar-update-showhide-menu)
 
-  (aquamacs-set-defaults '(
-			   (toolbar-menu-show--aquamacs-print nil)
-			   (toolbar-menu-show--copy t)
-			   (toolbar-menu-show--customize nil)	   
-			   (toolbar-menu-show--cut t)
-			   (toolbar-menu-show--help t)		   
-			   (toolbar-menu-show--new-file t)	   
-			   (toolbar-menu-show--open-file t)
-			   (toolbar-menu-show--paste t)	   
-			   (toolbar-menu-show--redo t)
-			   (toolbar-menu-show--save-buffer t)	   
-			   (toolbar-menu-show--undo t)
-			   (toolbar-menu-show--write-file t)
-			   (toolbar-menu-show--recent-files t)
-			   (toolbar-menu-show--isearch-forward nil)))
+  ;; (aquamacs-set-defaults '(
+  ;; 			   (toolbar-menu-show--aquamacs-print nil)
+  ;; 			   (toolbar-menu-show--copy t)
+  ;; 			   (toolbar-menu-show--customize nil)	   
+  ;; 			   (toolbar-menu-show--cut t)
+  ;; 			   (toolbar-menu-show--help t)		   
+  ;; 			   (toolbar-menu-show--new-file t)	   
+  ;; 			   (toolbar-menu-show--open-file t)
+  ;; 			   (toolbar-menu-show--paste t)	   
+  ;; 			   (toolbar-menu-show--redo t)
+  ;; 			   (toolbar-menu-show--save-buffer t)	   
+  ;; 			   (toolbar-menu-show--undo t)
+  ;; 			   (toolbar-menu-show--write-file t)
+  ;; 			   (toolbar-menu-show--recent-files t)
+  ;; 			   (toolbar-menu-show--isearch-forward nil)))
 
 
   (defvar aquamacs-default-toolbarx-meaning-alist
