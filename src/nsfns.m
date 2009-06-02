@@ -1426,6 +1426,48 @@ Give empty string to delete word.*/)
 }
 
 
+DEFUN ("ns-spellchecker-learn-word", Fns_spellchecker_learn_word, Sns_spellchecker_learn_word,
+       1, 1, 0,
+       doc: /* Learn word WORD.*/)
+     (str)
+     Lisp_Object str;
+{
+  id sc;
+
+  CHECK_STRING (str);
+  check_ns ();
+  sc = [NSSpellChecker sharedSpellChecker];
+  
+  [sc learnWord:[NSString stringWithUTF8String: SDATA (str)]];
+
+  return Qnil;
+}
+
+
+DEFUN ("ns-spellchecker-ignore-word", Fns_spellchecker_ignore_word, Sns_spellchecker_ignore_word,
+       1, 2, 0,
+       doc: /* Ignore word WORD in buffer BUFFER.*/)
+     (str, buffer)
+     Lisp_Object str, buffer;
+{
+  id sc;
+
+  CHECK_STRING (str);
+  check_ns ();
+  sc = [NSSpellChecker sharedSpellChecker];
+  
+  NSInteger tag = 1;
+  if (! NILP (buffer)) 
+    {
+      tag = sxhash (buffer, 0);
+    }
+
+  [sc ignoreWord:[NSString stringWithUTF8String: SDATA (str)] inSpellDocumentWithTag:tag];
+
+  return Qnil;
+}
+
+
 DEFUN ("ns-spellchecker-check-spelling", Fns_spellchecker_check_spelling, Sns_spellchecker_check_spelling,
        1, 2, 0,
        doc: /* Check spelling of STRING
@@ -3004,6 +3046,8 @@ be used as the image of the icon representing the frame.  */);
   defsubr (&Sns_convert_utf8_nfd_to_nfc);
   defsubr (&Sx_focus_frame);
   defsubr (&Sns_popup_spellchecker_panel);
+  defsubr (&Sns_spellchecker_learn_word);
+  defsubr (&Sns_spellchecker_ignore_word);
   defsubr (&Sns_spellchecker_show_word);
   defsubr (&Sns_spellchecker_check_spelling);
   defsubr (&Sns_spellchecker_check_grammar);
