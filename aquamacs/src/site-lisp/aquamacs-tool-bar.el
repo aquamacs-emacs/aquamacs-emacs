@@ -239,6 +239,7 @@ This variable is used in the AUCTeX configuration.")
     (if stored
 	(set-tool-bar-configuration (cdr stored)))))
  
+;; (maybe-restore-tool-bar-configuration)
 (defun maybe-restore-tool-bar-configuration ()
   (mapc
    (lambda (f)
