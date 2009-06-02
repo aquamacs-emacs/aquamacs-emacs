@@ -76,6 +76,8 @@ EmacsMenu *mainMenu, *svcsMenu, *dockMenu;
 static int popup_activated_flag;
 static NSModalSession popupSession;
 
+Lisp_Object Qns_tool_bar_customized_hook, Vns_tool_bar_customized_hook;
+
 Lisp_Object Vns_tool_bar_size_mode;
 Lisp_Object Vns_tool_bar_display_mode;
 
@@ -1234,6 +1236,7 @@ update_frame_tool_bar (FRAME_PTR f)
 
   [toolbar clearActive];
   [toolbar setAllowsUserCustomization:YES];
+  [toolbar setAutosavesConfiguration:NO];
   /* problematic, as it creates a defaults file
      also, doesn't seem to work with our tool bar 
      construction mechanism.
@@ -1299,17 +1302,21 @@ update_frame_tool_bar (FRAME_PTR f)
       Lisp_Object captionObj;
       char *helpText;
       char *captionText;
+      char *keyText;
       Lisp_Object label = TOOLPROP (TOOL_BAR_ITEM_CAPTION);
- 
+      Lisp_Object key = TOOLPROP (TOOL_BAR_ITEM_KEY);
+
+      if (STRINGP (key))
+	keyText = (char *) SDATA (key);
+      else if (SYMBOLP (key))
+	keyText = (char *) SDATA (SYMBOL_NAME (key) );
+      else
+	keyText = "?";
+
       if (strcmp("--", SDATA (label)) == 0)
-  {
-
-      [toolbar addDisplayItemSpacerWithIdx: i ];
-  }
- else
-   {
-
- 
+	[toolbar addDisplayItemSpacerWithIdx: i key: keyText];
+      else
+	{
       /* If image is a vector, choose the image according to the
 	 button state.  */
       image = TOOLPROP (TOOL_BAR_ITEM_IMAGES);
@@ -1349,8 +1356,9 @@ update_frame_tool_bar (FRAME_PTR f)
       captionObj = TOOLPROP (TOOL_BAR_ITEM_CAPTION);
       captionText = NILP (captionObj) ? "" : (char *)SDATA (captionObj);
 
-      [toolbar addDisplayItemWithImage: img->pixmap idx: i helpText: helpText
-			       enabled: enabled_p  visible: visible_p  labelText: captionText];
+      [toolbar addDisplayItemWithImage: img->pixmap idx: i  helpText: helpText
+			       enabled: enabled_p  visible: visible_p
+				   key: keyText  labelText: captionText];
 #undef TOOLPROP
     }
     }
@@ -1392,6 +1400,41 @@ update_frame_tool_bar (FRAME_PTR f)
 
 }
 
+DEFUN ("ns-tool-bar-configuration", Fns_tool_bar_configuration, Sns_tool_bar_configuration, 0, 1, 0,
+       doc: /* Return tool bar configuration.
+Evaluates to a list of menu item keys corresponding
+to elements of the tool bar map active in frame FRAME.
+The presence of an item in this list indicates visibility,
+the order indicates order in the tool bar, both as
+set by the user.
+Items in this list are always Lisp symbols.
+*/)
+     (frame)
+     Lisp_Object frame;
+{
+
+  struct frame *f = nil;
+
+  if (NILP (frame) )
+    f = SELECTED_FRAME ();
+  else
+    {
+      CHECK_FRAME (frame);
+      f = XFRAME (frame);
+    }
+
+  BLOCK_INPUT;
+  Lisp_Object item_identifiers = Qnil;
+  NSEnumerator *itemEnum = [[[FRAME_NS_VIEW (f) toolbar] items] reverseObjectEnumerator];
+  NSToolbarItem *item = nil;
+  while (item = [itemEnum nextObject])
+    item_identifiers = Fcons (([item itemIdentifier] == NSToolbarFlexibleSpaceItemIdentifier)
+			      ? Qnil : intern ([[item itemIdentifier] UTF8String]),
+			      item_identifiers);
+  UNBLOCK_INPUT;
+  return item_identifiers;
+}
+
 
 /* ==========================================================================
 
@@ -1425,6 +1468,7 @@ update_frame_tool_bar (FRAME_PTR f)
   identifierToItem = [[NSMutableDictionary alloc] initWithCapacity: 30];
   activeIdentifiers = [[NSMutableArray alloc] initWithCapacity: 20];
   prevEnablement = enablement = 0L;
+  disableHooks = NO;
   return self;
 }
 
@@ -1480,10 +1524,10 @@ update_frame_tool_bar (FRAME_PTR f)
     enablement == prevEnablement ? NO : YES;
 }
 
-- (void) addDisplayItemSpacerWithIdx: (int)idx
+- (void) addDisplayItemSpacerWithIdx: (int)idx key: (char *) key
 {
   /* 1) come up w/identifier */
-  NSString *identifier = [NSString stringWithFormat: @"%s %u", NSToolbarFlexibleSpaceItemIdentifier, idx];
+  NSString *identifier = [NSString stringWithCString: key];
 
   /* 2) create / reuse item */
   NSToolbarItem *item = [identifierToItem objectForKey: identifier];
@@ -1501,14 +1545,16 @@ update_frame_tool_bar (FRAME_PTR f)
   enablement = (enablement << 1) | false;
 }
 
-- (void) addDisplayItemWithImage: (EmacsImage *)img idx: (int)idx
-                        helpText: (char *)help enabled: (BOOL)enabled
+- (void) addDisplayItemWithImage: (EmacsImage *)img 
+			     idx: (int)idx
+                        helpText: (char *)help 
+			 enabled: (BOOL)enabled
 			 visible: (BOOL)visible
+			     key: (char *)key
 		       labelText: (char *)label;
 {
   /* 1) come up w/identifier */
-  NSString *identifier
-    = [NSString stringWithFormat: @"%u", label, [img hash]];
+  NSString *identifier = [NSString stringWithCString: key];
 
   /* 2) create / reuse item */
   NSToolbarItem *item = [identifierToItem objectForKey: identifier];
@@ -1562,10 +1608,49 @@ update_frame_tool_bar (FRAME_PTR f)
   /* return entire set... */
   return [identifierToItem allKeys];
 }
+- (void)toolbarDidRemoveItem:(NSNotification *)notification
+{
+  if ([self customizationPaletteIsRunning])
+    [self customizationDidChange];
+}
 
+- (void)customizationDidChange
+{
+  if (disableHooks)
+    return;
+
+  BLOCK_INPUT;
+  Lisp_Object frame = Qnil;
+  XSETFRAME (frame, emacsView->emacsframe);
+  Lisp_Object args[2];
+  args[0] = Qns_tool_bar_customized_hook;
+  args[1] = frame;
+  disableHooks = YES;
+  Frun_hook_with_args (2, args);
+  disableHooks = NO;
+  UNBLOCK_INPUT;
+}
+
+// /* toolbarWillAddItem is called before the item is added,
+//    so it's useless for the purposes of running the hook. */
+// hack
+- (void)checkCustomizationChange:(NSTimer*)theTimer
+{ 
+  if (! [self customizationPaletteIsRunning])
+    { [theTimer invalidate];
+      [self customizationDidChange];
+    }
+}
+- (void)runCustomizationPalette:(id)sender
+{
+  [super runCustomizationPalette:sender];
+  [NSTimer scheduledTimerWithTimeInterval: (float)0.1 target: self
+  				 selector: @selector (checkCustomizationChange:)
+  				 userInfo: nil repeats: YES];
+}
 /* optional and unneeded */
-/* - toolbarWillAddItem: (NSNotification *)notification { } */
-/* - toolbarDidRemoveItem: (NSNotification *)notification { } */
+// - (void)insertItemWithItemIdentifier:(NSString *)itemIdentifier atIndex:(NSInteger)index
+// - (void)setConfigurationFromDictionary:(NSDictionary *)configDict
 /* - (NSArray *)toolbarSelectableItemIdentifiers: (NSToolbar *)toolbar */
 
 @end  /* EmacsToolbar */
@@ -2206,6 +2291,9 @@ DEFUN ("menu-or-popup-active-p", Fmenu_or_popup_active_p, Smenu_or_popup_active_
 void
 syms_of_nsmenu ()
 {
+  DEFVAR_LISP ("ns-tool-bar-customized-hook", &Vns_tool_bar_customized_hook,
+	       doc: /* Normal hook run after the NS toolbar has been updated. */);
+  Vns_tool_bar_customized_hook = Qnil;
 
 
   DEFVAR_LISP ("ns-tool-bar-size-mode", &Vns_tool_bar_size_mode,
@@ -2229,13 +2317,16 @@ This variable only takes effect for newly created tool bars.*/);
 
   Vns_tool_bar_display_mode = Qnil;
 
-
+  defsubr (&Sns_tool_bar_configuration);
   defsubr (&Sx_popup_menu);
   defsubr (&Sx_popup_dialog);
   defsubr (&Sns_reset_menu);
   defsubr (&Smenu_or_popup_active_p);
   staticpro (&menu_items);
   menu_items = Qnil;
+
+  Qns_tool_bar_customized_hook = intern ("ns-tool-bar-customized-hook");
+  staticpro (&Qns_tool_bar_customized_hook);
 
   Qdebug_on_next_call = intern ("debug-on-next-call");
   staticpro (&Qdebug_on_next_call);
