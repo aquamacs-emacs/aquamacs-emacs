@@ -262,12 +262,12 @@ Calls `aquamacs-tex-pdf-viewer' to display the PDF file THE-FILE."
     (server-start)))
 
 (require 'server)
-(defun server-goto-line-column (file-line-col)
-  (goto-line (buffer-line-number (nth 1 file-line-col)))
-  (let ((column-number (nth 2 file-line-col)))
-    (when (> column-number 0)
-      (move-to-column (1- column-number)))))
-
+(defun server-goto-line-column (line-col)
+  (when line-col
+    (goto-line (buffer-line-number (car line-col)))
+    (let ((column-number (cdr line-col)))
+      (when (> column-number 0)
+	(move-to-column (1- column-number))))))
 
 (if (boundp 'aquamacs-default-toolbarx-meaning-alist) ;; not on TTY
     (aquamacs-set-defaults 
