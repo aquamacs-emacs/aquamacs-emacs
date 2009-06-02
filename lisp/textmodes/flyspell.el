@@ -1586,9 +1586,11 @@ The buffer to mark them in is `flyspell-large-region-buffer'."
 	  (let ((old beg))
 	    (setq beg end)
 	    (setq end old)))
-      (if (and flyspell-large-region (> (- end beg) flyspell-large-region))
-	  (flyspell-large-region beg end)
-	(flyspell-small-region beg end)))))
+      ;; (if (and flyspell-large-region (> (- end beg) flyspell-large-region))
+	  ;; (flyspell-large-region beg end)
+      (flyspell-small-region beg end))
+      ;; )
+    ))
 
 ;;*---------------------------------------------------------------------*/
 ;;*    flyspell-buffer ...                                              */
