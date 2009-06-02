@@ -1527,7 +1527,8 @@ Items in this list are always Lisp symbols.
 - (void) addDisplayItemSpacerWithIdx: (int)idx key: (char *) key
 {
   /* 1) come up w/identifier */
-  NSString *identifier = [NSString stringWithCString: key];
+  NSString *identifier = NSToolbarFlexibleSpaceItemIdentifier;
+  // [NSString stringWithCString: key];
 
   /* 2) create / reuse item */
   NSToolbarItem *item = [identifierToItem objectForKey: identifier];
@@ -1538,7 +1539,6 @@ Items in this list are always Lisp symbols.
                autorelease];
     }
 
-  [item setTag: idx]; 
   /* 3) update state */
   [identifierToItem setObject: item forKey: identifier];
   [activeIdentifiers addObject: identifier];
@@ -1563,7 +1563,6 @@ Items in this list are always Lisp symbols.
       item = [[[NSToolbarItem alloc] initWithItemIdentifier: identifier]
                autorelease];
       [item setImage: img];
-      [item setTag: idx]; 
       [item setToolTip: [NSString stringWithCString: help]];
       [item setLabel: [NSString stringWithCString: label]];
       [item setPaletteLabel: [NSString stringWithCString: label]];
