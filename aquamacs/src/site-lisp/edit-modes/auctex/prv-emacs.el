@@ -385,7 +385,8 @@ run buffer.  A noop for Emacs."
   (unless preview-tb-icon
     (setq preview-tb-icon (preview-filter-specs preview-tb-icon-specs)))
   (when preview-tb-icon
-    (define-key LaTeX-mode-map [tool-bar preview]
+    ;; keep icon in tool-bar-map to allow for user customization in NS
+    (define-key-after tool-bar-map [preview]
       `(menu-item "Preview Here" preview-at-point
 		  :image ,preview-tb-icon
 		  :help "Preview on/off at point")))

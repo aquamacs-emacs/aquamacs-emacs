@@ -904,14 +904,13 @@ ns_raise_frame (struct frame *f)
 {
   NSView *view = FRAME_NS_VIEW (f);
   check_ns ();
-
+  BLOCK_INPUT;
   FRAME_SAMPLE_VISIBILITY (f);
   if (FRAME_VISIBLE_P (f))
     {
-      BLOCK_INPUT;
       [[view window] makeKeyAndOrderFront: NSApp];
-      UNBLOCK_INPUT;
     }
+  UNBLOCK_INPUT;
 }
 
 
@@ -999,11 +998,9 @@ x_make_frame_visible (struct frame *f)
      if this ends up the case again, comment this out again. */
   if (!FRAME_VISIBLE_P (f))
     {
-      BLOCK_INPUT;
-      [[view window] makeKeyAndOrderFront: NSApp];
-      UNBLOCK_INPUT;
+      f->async_visible = 1;
+      ns_raise_frame (f);
     }
-  f->async_visible = 1;
 }
 
 
@@ -4636,18 +4633,18 @@ extern void update_window_cursor (struct window *w, int on);
   if (!emacs_event)
     return;
 
-  if (![[self window] isKeyWindow]
-      && [[theEvent window] isKindOfClass: [EmacsWindow class]])
-    {
+ if (![[self window] isKeyWindow]
+     && [[theEvent window] isKindOfClass: [EmacsWindow class]])
+   {
      /* XXX: There is an occasional condition in which, when Emacs display
          updates a different frame from the current one, and temporarily
          selects it, then processes some interrupt-driven input
          (dispnew.c:3878), OS will send the event to the correct NSWindow, but
          for some reason that window has its first responder set to the NSView
          most recently updated (I guess), which is not the correct one. */
-      [(EmacsView *)[[theEvent window] delegate] keyDown: theEvent];
-      return;
-    }
+     [(EmacsView *)[[theEvent window] delegate] keyDown: theEvent];
+     return;
+   }
 
   if (nsEvArray == nil)
     nsEvArray = [[NSMutableArray alloc] initWithCapacity: 1];
@@ -5675,6 +5672,15 @@ extern void update_window_cursor (struct window *w, int on);
 
   ns_clear_frame_area (emacsframe, x, y, width, height);
   expose_frame (emacsframe, x, y, width, height);
+
+  /*
+    drawRect: may be called (at least in OS X 10.5) for invisible
+    views as well for some reason.  Thus, do not infer visibility 
+    here.
+
+    emacsframe->async_visible = 1;
+    emacsframe->async_iconified = 0;
+  */
 }
 
 

@@ -1429,6 +1429,9 @@ listed here."
 	      one-buffer-one-frame-mode 
 	      aquamacs-styles-mode
 	      aquamacs-autoface-mode
+	      aquamacs-tool-bar-user-customization
+	      ns-tool-bar-display-mode ;; can be set through GUI by user
+	      ns-tool-bar-size-mode ;; can be set through GUI by user
 	      default-frame-alist ;; does this not prevent users from setting these?
 ;;;	     do not save initial-frame-alist - it is stored by smart-frame-positions
 ;;;  to do: frame-notice-user-settings should use default-frame-alist in addition to

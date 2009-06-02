@@ -2632,6 +2632,9 @@ enum tool_bar_item_idx
   /* Non-nil if item is enabled.  */
   TOOL_BAR_ITEM_ENABLED_P,
 
+  /* Non-nil if item is visible.  */
+  TOOL_BAR_ITEM_VISIBLE_P,
+
   /* Non-nil if item is selected (pressed).  */
   TOOL_BAR_ITEM_SELECTED_P,
 
