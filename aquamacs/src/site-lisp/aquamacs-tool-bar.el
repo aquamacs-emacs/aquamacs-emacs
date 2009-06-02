@@ -239,6 +239,14 @@ This variable is used in the AUCTeX configuration.")
     (if stored
 	(set-tool-bar-configuration (cdr stored)))))
  
+(defun maybe-restore-tool-bar-configuration ()
+  (mapc
+   (lambda (f)
+     (with-current-buffer
+	 (window-buffer (frame-selected-window f))
+       (restore-tool-bar-configuration)))
+   (visible-frame-list)))
+
 (defun tool-bar-hash ()
   (sxhash (sort (mapcar
 		 (lambda (m)
@@ -249,7 +257,6 @@ This variable is used in the AUCTeX configuration.")
 		 tool-bar-map) 'string<)))
 
 (defun set-tool-bar-configuration (config)
-  (message "updating")
   (let ((space-idx 0))
     (setq tool-bar-map
 	  (append (make-sparse-keymap)
@@ -260,12 +267,12 @@ This variable is used in the AUCTeX configuration.")
 		       
 		       `(,(intern (format "space-%s" (incf space-idx)))
 			 menu-item "--" nil :enable nil)))
-		   user-config)
+		   config)
 		  (apply #'nconc
 			 (mapcar
 			  (lambda (item)
 			    (unless (or (memq (or (car-safe item) item) ;;needed?
-					      user-config) ;; hidden?
+					      config) ;; hidden?
 					
 					(equal (car-safe (cdr-safe (cdr-safe item)))
 					       "--"))
@@ -289,7 +296,7 @@ This variable is used in the AUCTeX configuration.")
 
  
 (add-hook 'ns-tool-bar-customized-hook 'update-tool-bar-from-user-configuration)
-
+(add-hook 'menu-bar-update-hook 'maybe-restore-tool-bar-configuration)
 
 (defun aquamacs-toolbar-update-showhide-menu ())
 
