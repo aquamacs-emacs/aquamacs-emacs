@@ -4455,13 +4455,13 @@ change the additional actions you can take on files."
                         t
                       (setq queried t)
 		      (with-current-buffer buffer
-			(with-selected-window (get-window-for-other-buffer)
+			(select-window (get-window-for-other-buffer))
 			  (if (and (boundp 'tabbar-mode) tabbar-mode)
 			      (switch-to-buffer-in-tab buffer)
 			    (switch-to-buffer buffer))
 			  (select-frame-set-input-focus (window-frame (selected-window)))
 			  (if (fboundp 'smart-move-minibuffer-inside-screen)
-			      (smart-move-minibuffer-inside-screen))))
+			      (smart-move-minibuffer-inside-screen)))
                       (if (buffer-file-name buffer)
                           (format "Save file %s? "
 				  (if (> (length (buffer-file-name buffer)) 30)
