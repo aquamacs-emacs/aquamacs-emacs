@@ -793,7 +793,16 @@ yes-or-no prompts - y or n will do."
   ;; while they should be able to set colors, they should not remove :family or :inherit attribues
   (add-hook 'color-theme-install-hook 'aquamacs-set-modeline-faces)
   (aquamacs-set-modeline-faces)
-  
+
+  ;; Give the Echo Area(s) a face
+  (defun aquamacs-setup-echo-areas (&optional frame)
+    (mapc (lambda (bname)
+	    (with-current-buffer (get-buffer-create bname)
+	      (setq face-remapping-alist '((default . echo-area)))))
+	  '(" *Echo Area 0*" " *Echo Area 1*" " *Echo Area 2*")))
+  (add-hook 'after-make-frame-functions 'aquamacs-setup-echo-areas)
+  (add-hook 'after-init-hook 'aquamacs-setup-echo-areas)
+  (aquamacs-setup-echo-areas)
 
   ;; tabbar needs to be defined before osxkeys
   (defvar aquamacs-pre-user-directories-load-path)

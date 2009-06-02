@@ -2669,6 +2669,29 @@ Value is t if tooltip was open, nil otherwise.  */)
 }
 
 
+DEFUN ("ns-open-help-anchor", Fns_open_help_anchor, Sns_open_help_anchor, 1, 2, 0,
+       doc: /* Show Apple Help  */)
+     (anchor, book)
+     Lisp_Object anchor, book;
+{
+  check_ns ();
+  BLOCK_INPUT;
+  CHECK_STRING (anchor);
+
+  if (! NILP (book) )
+    CHECK_STRING (book);
+
+  [[NSHelpManager sharedHelpManager] openHelpAnchor:[NSString stringWithUTF8String:
+								SDATA (anchor)]
+					     inBook:(NILP (book) ? nil :
+						     [NSString stringWithUTF8String:
+								 SDATA (book)])];
+  UNBLOCK_INPUT;
+  return Qnil;
+}
+
+
+
 /* ==========================================================================
 
     Class implementations
@@ -2829,6 +2852,8 @@ be used as the image of the icon representing the frame.  */);
 
   defsubr (&Sx_show_tip);
   defsubr (&Sx_hide_tip);
+
+  defsubr (&Sns_open_help_anchor);
 
   /* used only in fontset.c */
   check_window_system_func = check_ns;
