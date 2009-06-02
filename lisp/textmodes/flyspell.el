@@ -2103,22 +2103,27 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 	 nil)
 	((eq replace 'save)
          (goto-char save)
-	 (ispell-send-string (concat "*" word "\n"))
+	 (ns-spellchecker-learn-word word)
+	 ;; (ispell-send-string (concat "*" word "\n"))
          ;; This was added only to the XEmacs side in revision 1.18 of
          ;; flyspell.  I assume its absence on the Emacs side was an
          ;; oversight.  --Stef
-	 (ispell-send-string "#\n")
+	 ;; (ispell-send-string "#\n")
 	 (flyspell-unhighlight-at cursor-location)
-	 (setq ispell-pdict-modified-p '(t)))
+	 ;; (setq ispell-pdict-modified-p '(t))
+	 )
 	((or (eq replace 'buffer) (eq replace 'session))
-	 (ispell-send-string (concat "@" word "\n"))
+	 (ns-spellchecker-ignore-word word)
+	 ;; (ispell-send-string (concat "@" word "\n"))
 	 (flyspell-unhighlight-at cursor-location)
-	 (if (null ispell-pdict-modified-p)
-	     (setq ispell-pdict-modified-p
-		   (list ispell-pdict-modified-p)))
+	 ;; (if (null ispell-pdict-modified-p)
+	     ;; (setq ispell-pdict-modified-p
+		   ;; (list ispell-pdict-modified-p)))
          (goto-char save)
-	 (if (eq replace 'buffer)
-	     (ispell-add-per-file-word-list word)))
+	 ;; (if (eq replace 'buffer)
+	     ;; (ispell-add-per-file-word-list word)
+	   ;; )
+	 )
 	(replace
          ;; This was added only to the Emacs side.  I assume its absence on
          ;; the XEmacs side was an oversight.  --Stef
