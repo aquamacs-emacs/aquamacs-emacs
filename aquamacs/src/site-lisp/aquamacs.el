@@ -714,10 +714,6 @@ yes-or-no prompts - y or n will do."
   (fset 'y-or-n-p 'aquamacs-y-or-n-p)
   (fset 'yes-or-no-p 'aquamacs-repl-yes-or-no-p)
 
-  (defadvice map-y-or-n-p (around raiseframe (&rest args) activate)
-    (raise-frame)
-    ad-do-it)    
-
   ;; No more annoying bells all the time
 
   (defun aquamacs-bell ()
