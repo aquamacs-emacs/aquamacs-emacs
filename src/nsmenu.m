@@ -1400,6 +1400,32 @@ update_frame_tool_bar (FRAME_PTR f)
 
 }
 
+
+DEFUN ("ns-tool-bar-customize", Fns_tool_bar_customize, Sns_tool_bar_customize, 0, 1, "",
+       doc: /* View tool bar configuration.
+Shows the tool bar customization panel in the given frame. */)
+     (frame)
+     Lisp_Object frame;
+{
+
+  struct frame *f = nil;
+
+  if (NILP (frame) )
+    f = SELECTED_FRAME ();
+  else
+    {
+      CHECK_FRAME (frame);
+      f = XFRAME (frame);
+    }
+
+  BLOCK_INPUT;
+  Lisp_Object item_identifiers = Qnil;
+  [[FRAME_NS_VIEW (f) toolbar] setVisible: YES];
+  [[FRAME_NS_VIEW (f) toolbar] runCustomizationPalette:FRAME_NS_VIEW (f)];
+  UNBLOCK_INPUT;
+  return Qnil;
+}
+
 DEFUN ("ns-tool-bar-configuration", Fns_tool_bar_configuration, Sns_tool_bar_configuration, 0, 1, 0,
        doc: /* Return tool bar configuration.
 Evaluates to a list of menu item keys corresponding
@@ -1407,8 +1433,7 @@ to elements of the tool bar map active in frame FRAME.
 The presence of an item in this list indicates visibility,
 the order indicates order in the tool bar, both as
 set by the user.
-Items in this list are always Lisp symbols.
-*/)
+Items in this list are always Lisp symbols.*/)
      (frame)
      Lisp_Object frame;
 {
@@ -2316,6 +2341,7 @@ This variable only takes effect for newly created tool bars.*/);
 
   Vns_tool_bar_display_mode = Qnil;
 
+  defsubr (&Sns_tool_bar_customize);
   defsubr (&Sns_tool_bar_configuration);
   defsubr (&Sx_popup_menu);
   defsubr (&Sx_popup_dialog);
