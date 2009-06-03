@@ -95,6 +95,7 @@ Only checks once - subsequent calls will not result in any action."
 ;; (add-hook 'LaTeX-mode-hook 'load-preview-if-ghostscript)
 (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
 (add-hook 'LaTeX-mode-hook 'turn-on-bib-cite)
+(add-hook 'LaTeX-mode-hook 'LaTeX-install-toolbar)
 (add-hook 'LaTeX-mode-hook (lambda () (TeX-fold-mode t)))
 (add-hook 'TeX-mode-hook 'aquamacs-latex-viewer-support 'append) ;; load reftex first
 

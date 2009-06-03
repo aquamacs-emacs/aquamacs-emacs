@@ -138,23 +138,15 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
      NSMutableArray *activeIdentifiers;
      NSArray *prevIdentifiers;
      unsigned long enablement, prevEnablement;
-     BOOL disableHooks;
    }
 - initForView: (EmacsView *)view withIdentifier: (NSString *)identifier;
 - (void) clearActive;
 - (BOOL) changed;
-- (void) addDisplayItemSpacerWithIdx: (int)idx key: (char *) key;
+- (void) addDisplayItemSpacerWithIdx: (int)idx;
 - (void) addDisplayItemWithImage: (EmacsImage *)img idx: (int)idx
                         helpText: (char *)help
-		 	 enabled: (BOOL)enabled
- 		         visible: (BOOL)visible
-  		             key: (char *)key
-      		       labelText: (char *)label;
-
-
-- (void)customizationDidChange;
-- (void)checkCustomizationChange:(NSTimer*)theTimer;
-- (void)runCustomizationPalette:(id)sender;
+			enabled: (BOOL)enabled
+      			labelText: (char *)label;
 /* delegate methods */
 - (NSToolbarItem *)toolbar: (NSToolbar *)toolbar
      itemForItemIdentifier: (NSString *)itemIdentifier
