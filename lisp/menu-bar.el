@@ -769,6 +769,10 @@ mail status in mode line"))
 
 (define-key menu-bar-showhide-menu [datetime-separator]
   '("--"))
+(define-key menu-bar-showhide-menu [ns-tool-bar]
+  `(menu-item "Toolbar..." ns-tool-bar-customize
+	      :help "Display the Toolbar customization panel"
+	      :visible ,(fboundp 'ns-tool-bar-customize)))
 
 (define-key menu-bar-showhide-menu [showhide-speedbar]
   '(menu-item "Speedbar" speedbar-frame-mode
