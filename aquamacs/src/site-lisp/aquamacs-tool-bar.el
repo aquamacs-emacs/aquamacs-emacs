@@ -260,10 +260,10 @@ This variable is used in the AUCTeX configuration.")
      (lambda (f)
        (with-current-buffer
 	   (window-buffer (frame-selected-window f))
-	 (let ((tb-hash (sxhash tool-bar-map)))
+	 (let ((tb-hash (sxhash (cons tool-bar-map aquamacs-tool-bar-user-customization))))
 	   (if (or force (not (eq aq-last-tool-bar-map tb-hash)))
 	       (progn
-		 (set (if (local-variable-p 'tool-bar-map) (make-local-variable  'aq-last-tool-bar-map)
+		 (set (if (local-variable-p 'tool-bar-map) (make-local-variable 'aq-last-tool-bar-map)
 			'aq-last-tool-bar-map)
 		      tb-hash)
 		 (restore-tool-bar-configuration))
