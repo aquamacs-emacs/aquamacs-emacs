@@ -260,14 +260,13 @@ This variable is used in the AUCTeX configuration.")
      (lambda (f)
        (with-current-buffer
 	   (window-buffer (frame-selected-window f))
-
-	 (if (or force (not (eq aq-last-tool-bar-map tool-bar-map)))
-	     (progn
-	       (set (if (local-variable-p 'tool-bar-map) (make-local-variable  'aq-last-tool-bar-map)
-		      'aq-last-tool-bar-map)
-		    tool-bar-map)
-	       (restore-tool-bar-configuration)
-	       (setq aq-last-tool-bar-map tool-bar-map))
+	 (let ((tb-hash (sxhash tool-bar-map)))
+	   (if (or force (not (eq aq-last-tool-bar-map tb-hash)))
+	       (progn
+		 (set (if (local-variable-p 'tool-bar-map) (make-local-variable  'aq-last-tool-bar-map)
+			'aq-last-tool-bar-map)
+		      tb-hash)
+		 (restore-tool-bar-configuration))
 	   ;; did user change the toolbar somehow?
 	   ;; this is still not quick enough 
 	   ;; but it is the only chance we'll detect Command-Option drags of
@@ -281,7 +280,7 @@ This variable is used in the AUCTeX configuration.")
 	   ;; 	    'aq-last-tool-bar-config)
 	   ;; 	  (ns-tool-bar-configuration))
 	   ;;   (update-tool-bar-from-user-configuration))
-	   )))
+	   ))))
 
      (visible-frame-list))))
 
