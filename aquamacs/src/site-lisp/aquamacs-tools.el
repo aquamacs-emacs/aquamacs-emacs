@@ -120,25 +120,26 @@ are still subtracted."
     ret))
 
 (defun assq-set (key val alist)
-"Sets value associated with KEY to VAL in ALIST.
-Comparison of keys is done with `eq'."
-  (set alist (assq-delete-all key (eval alist)))
-  (add-to-list alist (cons key  val))) 
+  "Sets value associated with KEY to VAL in ALIST.
+ALIST must be a symbol giving the variable name.
+Comparison of keys is done with `eq'.
+New key-value pair will be in car of ALIST."
+  (set alist (cons (cons key val)
+		   (assq-delete-all key (eval alist)))))
 
 (defun assq-set-equal (key val alist)
-"Sets value associated with the string KEY to VAL in ALIST.
-Comparison of keys is done with `equal'."
-
-  (set alist (assq-delete-all-equal key (eval alist)))
-  (add-to-list alist (cons key  val))) 
+  "Sets value associated with the string KEY to VAL in ALIST.
+Comparison of keys is done with `equal'.
+ALIST must be a symbol giving the variable name.
+New key-value pair will be in car of ALIST."
+  (set alist (cons (cons key val)
+		   (assq-delete-all-equal key (eval alist)))))
 
 (defun assq-string-equal (key alist)
   
   (loop for element in alist 
         if (string-equal (car element) key)
-	return element
-	) 
-  )
+	return element))
 
 
 ;; (setq asd (list 1 2 3 4 5))
