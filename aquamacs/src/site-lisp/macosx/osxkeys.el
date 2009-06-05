@@ -104,7 +104,8 @@ after updating this variable.")
 	interprogram-paste-function 'aquamacs-cut-buffer-or-selection-value)
 
   (defun aquamacs-cut-buffer-or-selection-value ()
-    (unless (and osx-key-mode (eq this-original-command 'yank))
+    (unless (and osx-key-mode 
+		 (memq this-original-command '(yank mouse-yank-at-click)))
       (let (text)
 	;; Consult the selection, then the cut buffer.  Treat empty strings
 	;; as if they were unset.
@@ -117,8 +118,7 @@ after updating this variable.")
 	  ;; Record the newer string, so subsequent calls can use the `eq' test.
 	  (setq ns-last-selected-text text)
 	  nil)
-	 (t
-	  (setq ns-last-selected-text text))))))
+	 (t (setq ns-last-selected-text text))))))
 
   ;; overwrite x-select-text, which is called directly
   ;; (not via interprogram-cut-function) when dragging mouse
