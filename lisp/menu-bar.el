@@ -522,11 +522,15 @@ for the definition of the menu frame."
     (yank)))
 
 (defun clipboard-kill-ring-save (beg end)
-  "Copy region to kill ring, and save in the X clipboard."
+  "Copy region to kill ring, and save in the X clipboard.
+Do not copy region to kill ring if that would
+result in a duplicate entry."
   (interactive "r")
   (when (or (not transient-mark-mode) mark-active)
     (let ((x-select-enable-clipboard t))
-      (kill-ring-save beg end))))
+      (kill-ring-save beg end)
+      (if (equal (car kill-ring) (cadr kill-ring))
+      	  (setcdr kill-ring (cddr kill-ring))))))
 
 (defun clipboard-kill-region (beg end)
   "Kill the region, and save it in the X clipboard."
