@@ -1488,8 +1488,9 @@ Items in this list are always Lisp symbols.*/)
   [super setSizeMode: NSTOOLBAR_NEEDED_SIZE_MODE];
   [super setDisplayMode: NSTOOLBAR_NEEDED_DISPLAY_MODE];
   [self setDelegate: self];
-  identifierToItem = [[NSMutableDictionary alloc] initWithCapacity: 30];
+  identifierToItem = [[NSMutableDictionary alloc] initWithCapacity: 50];
   activeIdentifiers = [[NSMutableArray alloc] initWithCapacity: 20];
+  availableIdentifiers = [[NSMutableArray alloc] initWithCapacity: 50];
   prevEnablement = enablement = 0L;
   return self;
 }
@@ -1498,6 +1499,7 @@ Items in this list are always Lisp symbols.*/)
 {
   [prevIdentifiers release];
   [activeIdentifiers release];
+  [availableIdentifiers release];
   [identifierToItem release];
   [super dealloc];
 }
@@ -1507,6 +1509,8 @@ Items in this list are always Lisp symbols.*/)
   [prevIdentifiers release];
   prevIdentifiers = [activeIdentifiers copy];
   [activeIdentifiers removeAllObjects];
+  /* will be filled from invisible objects of current toolbar */
+  [availableIdentifiers removeAllObjects];
   prevEnablement = enablement;
   enablement = 0L;
   [self setSizeMode: NSTOOLBAR_NEEDED_SIZE_MODE];
@@ -1563,6 +1567,7 @@ Items in this list are always Lisp symbols.*/)
 
   /* 3) update state */
   [identifierToItem setObject: item forKey: identifier];
+  [availableIdentifiers addObject: identifier];
   [activeIdentifiers addObject: identifier];
   enablement = (enablement << 1) | false;
 }
@@ -1597,6 +1602,7 @@ Items in this list are always Lisp symbols.*/)
 
   /* 3) update state */
   [identifierToItem setObject: item forKey: identifier];
+  [availableIdentifiers addObject: identifier];
   if (visible)
     [activeIdentifiers addObject: identifier];
   enablement = (enablement << 1) | (enabled == YES);   
@@ -1623,11 +1629,11 @@ Items in this list are always Lisp symbols.*/)
   return activeIdentifiers;
 }
 
-/* for configuration palette (not yet supported) */
+/* for configuration palette */
 - (NSArray *)toolbarAllowedItemIdentifiers: (NSToolbar *)toolbar
 {
   /* return entire set... */
-  return [identifierToItem allKeys];
+  return availableIdentifiers; // [identifierToItem allKeys];
 }
 - (void)toolbarDidRemoveItem:(NSNotification *)notification
 {
@@ -1669,6 +1675,13 @@ Items in this list are always Lisp symbols.*/)
   				 selector: @selector (checkCustomizationChange:)
   				 userInfo: nil repeats: YES];
 }
+// not called upon changing tool bar 
+// - (void)validateVisibleItems:(id)sender
+
+/* it is currently impossible to have all toolbar modifications trigger
+send a message; Command-Option dragging items for instance does not trigger 
+a notification */
+
 /* optional and unneeded */
 // - (void)insertItemWithItemIdentifier:(NSString *)itemIdentifier atIndex:(NSInteger)index
 // - (void)setConfigurationFromDictionary:(NSDictionary *)configDict

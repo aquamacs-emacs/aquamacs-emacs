@@ -137,6 +137,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
      EmacsView *emacsView;
      NSMutableDictionary *identifierToItem;
      NSMutableArray *activeIdentifiers;
+     NSMutableArray *availableIdentifiers;
      NSArray *prevIdentifiers;
      unsigned long enablement, prevEnablement;
      BOOL disableHooks;

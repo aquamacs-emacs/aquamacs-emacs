@@ -255,17 +255,37 @@ This variable is used in the AUCTeX configuration.")
 	(set-tool-bar-configuration (cdr stored)))))
  
 (defvar aq-last-tool-bar-map nil)
+; (defvar aq-last-tool-bar-config nil)
+; (maybe-restore-tool-bar-configuration)
 (defun maybe-restore-tool-bar-configuration (&optional force)
   (let ((menu-bar-update-hook))
     (mapc
      (lambda (f)
        (with-current-buffer
 	   (window-buffer (frame-selected-window f))
-	 (when (or force (not (eq aq-last-tool-bar-map tool-bar-map)))
-	   (if (local-variable-p 'aq-last-tool-bar-map)
-	       (set (make-local-variable  'aq-last-tool-bar-map) tool-bar-map)
-	     (setq aq-last-tool-bar-map tool-bar-map))
-	   (restore-tool-bar-configuration))))
+
+	 (if (or force (not (eq aq-last-tool-bar-map tool-bar-map)))
+	     (progn
+	       (set (if (local-variable-p 'tool-bar-map) (make-local-variable  'aq-last-tool-bar-map)
+		      'aq-last-tool-bar-map)
+		    tool-bar-map)
+	       (restore-tool-bar-configuration)
+	       (setq aq-last-tool-bar-map tool-bar-map))
+	   ;; did user change the toolbar somehow?
+	   ;; this is still not quick enough 
+	   ;; but it is the only chance we'll detect Command-Option drags of
+	   ;; toolbar items.
+	   ;; disabled for now: update-* is potentially dangerous
+	   ;; and we don't want to run it all the time
+	   ;; but only upon receiving the change event.
+	   ;; (when (not (eq aq-last-tool-bar-config (ns-tool-bar-configuration)))
+	   ;;   (set (if (local-variable-p 'tool-bar-map)
+	   ;; 	      (make-local-variable  'aq-last-tool-bar-config)
+	   ;; 	    'aq-last-tool-bar-config)
+	   ;; 	  (ns-tool-bar-configuration))
+	   ;;   (update-tool-bar-from-user-configuration))
+	   )))
+
      (visible-frame-list))))
 
 (defun tool-bar-hash ()
@@ -289,34 +309,35 @@ If there is a user-supplied visibility term, set it."
 	(current-value (aq-list-has-property-element menu-item :visible 'not-found)))
     ;; (message "%s %s %s" (car menu-item) current-value target-value)
     (prog1
-	(cond ((eq current-value 'not-found)
-	       ;; no :visible property present
-	       (append menu-item `(:visible (and ,target-value))))
-	      ((and (consp current-value) (eq 'and (car current-value)) 
-		(memq (nth 1 current-value) '(tool-bar-user-visible tool-bar-user-invisible)))
-	   ;; previous user-configuration given
-	   ;; override
-	   (append (aq-list-remove-property :visible menu-item)
-		   `(:visible (and ,target-value ,@(cddr current-value)))))
-	  (t  
-	   ;; conditioned externally.
-
-	   (if (eval current-value) ;; previously visible?
-	       (if value 
-		   ;; and still visible.  don't touch it.
-		   menu-item
-		 ;; user has removed item: inhibit it.
-		 (append (aq-list-remove-property :visible menu-item)
-			 `(:visible (and ,target-value ,current-value))))
-	     ;; else: externally invisible
-	     (if value 
-		 ;; user is showing an externally invisible item.
-		 ;; maybe warn.
-		 ;; but do not make visible
-		 menu-item
-	       ;; previously invisible, still invisible
-	       ;; user can't have removed it.  don't touch
-	       menu-item))))
+	(cond 
+	 ((eq current-value 'not-found)
+	  ;; no :visible property present
+	  (append menu-item `(:visible (and ,target-value))))
+	 ((and (consp current-value) (eq 'and (car current-value)) 
+	       (memq (nth 1 current-value) '(tool-bar-user-visible tool-bar-user-invisible)))
+	  ;; previous user-configuration given
+	  ;; override
+	  (append (aq-list-remove-property :visible menu-item)
+		  `(:visible (and ,target-value ,@(cddr current-value)))))
+	 (t  
+	  ;; conditioned externally.
+	  
+	  (if (eval current-value) ;; previously visible?
+	      (if value 
+		  ;; and still visible.  don't touch it.
+		  menu-item
+		;; user has removed item: inhibit it.
+		(append (aq-list-remove-property :visible menu-item)
+			`(:visible (and ,target-value ,current-value))))
+	    ;; else: externally invisible
+	    (if value 
+		;; user is showing an externally invisible item.
+		;; maybe warn.
+		;; but do not make visible
+		menu-item
+	      ;; previously invisible, still invisible
+	      ;; user can't have removed it.  don't touch
+	      menu-item))))
 
 ;; there is still one problem:
 ;; if user adds items that shouldn't remain in the toolbar (because :visible evals to nil)
@@ -328,30 +349,36 @@ If there is a user-supplied visibility term, set it."
 )))
 
  
-(defun set-tool-bar-configuration (config &optional show-messsage)
+(defun set-tool-bar-configuration (config &optional show-message)
   (let ((space-idx 0))
     (setq tool-bar-map
 	  (append (make-sparse-keymap)
-		  (mapcar
-		   (lambda (key)
-		     (if (and key (assq key tool-bar-map))
-			 (tool-bar-maybe-set-visibility (assq key tool-bar-map) t show-messsage)
-		       `(,(intern (format "space-%s" (incf space-idx)))
-			 menu-item "--" nil :enable nil)))
-		   config)
-		  (apply #'append
-		  	 (mapcar
-		  	  (lambda (item)
-		  	    (unless (or (memq (or (car-safe item) item) ;;needed?
-		  			      config) ;; hidden?
-		  			(equal (car-safe (cdr-safe (cdr-safe item)))
-		  			       "--"))
-		  	      (list 
-		  	       (tool-bar-maybe-set-visibility item nil show-messsage)
-		  	       )))
-		  	  (cdr tool-bar-map)))
+		  (apply 
+		   #'append
+		   (mapcar
+		    (lambda (key)
+		      (if key
+			  (if (assq key tool-bar-map)
+			      (list (tool-bar-maybe-set-visibility (assq key tool-bar-map) t show-message))
+			    (and show-message
+				 (message "Toolbar item \"%s\" not available here." key)
+				 nil))
+			`((,(intern (format "space-%s" (incf space-idx)))
+			   menu-item "--" nil :enable nil))))
+		    config))
+		  (apply 
+		   #'append
+		   (mapcar
+		    (lambda (item)
+		      (unless (or (memq (or (car-safe item) item) ;;needed?
+					config) ;; hidden?
+				  (equal (car-safe (cdr-safe (cdr-safe item)))
+					 "--"))
+			(list 
+			 (tool-bar-maybe-set-visibility item nil show-message)
+			 )))
+		    (cdr tool-bar-map)))
 		  ))))
-
 
 ;; when global-set-key
 ;; ensure that frame parameter is correct 
