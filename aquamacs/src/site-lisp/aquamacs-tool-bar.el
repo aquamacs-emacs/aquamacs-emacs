@@ -4,8 +4,6 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tool-bar.el,v 1.35 2009/03/08 20:40:45 davidswelt Exp $ 
-
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -256,7 +254,6 @@ This variable is used in the AUCTeX configuration.")
  
 (defvar aq-last-tool-bar-map nil)
 ; (defvar aq-last-tool-bar-config nil)
-; (maybe-restore-tool-bar-configuration)
 (defun maybe-restore-tool-bar-configuration (&optional force)
   (let ((menu-bar-update-hook))
     (mapc
@@ -289,13 +286,14 @@ This variable is used in the AUCTeX configuration.")
      (visible-frame-list))))
 
 (defun tool-bar-hash ()
-  (sxhash (sort (mapcar
-		 (lambda (m)
-		   (when (and (consp m)
-			      (not (equal (car-safe (cdr-safe (cdr-safe m)))
-					  "--")))
-		     (car m)))
-		 tool-bar-map) 'string<)))
+  (sxhash (sort (apply #'append
+		       (mapcar
+			(lambda (m)
+			  (when (and (consp m)
+				     (not (equal (car-safe (cdr-safe (cdr-safe m)))
+						 "--")))
+			    (list (car m))))
+			tool-bar-map)) 'string<)))
 
 (defconst tool-bar-user-visible t)
 (defconst tool-bar-user-invisible nil)
@@ -377,8 +375,7 @@ If there is a user-supplied visibility term, set it."
 			(list 
 			 (tool-bar-maybe-set-visibility item nil show-message)
 			 )))
-		    (cdr tool-bar-map)))
-		  ))))
+		    (cdr tool-bar-map)))))))
 
 ;; when global-set-key
 ;; ensure that frame parameter is correct 
