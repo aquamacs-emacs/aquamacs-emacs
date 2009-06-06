@@ -614,10 +614,14 @@ name_is_separator (name)
   
   while (*tpos == ' ' || *tpos == '(')
     tpos++;
-  if (*tpos != 's') {
-    keyEquivModMask = 0; /* signal */
-    return [NSString stringWithUTF8String: tpos];
-  }
+
+#ifndef NS_IMPL_COCOA
+  if (*tpos != 's') 
+#endif
+    {
+      keyEquivModMask = 0; /* signal */
+      return [NSString stringWithUTF8String: tpos];
+    }
   return [NSString stringWithFormat: @"%c", tpos[2]];
 }
 
