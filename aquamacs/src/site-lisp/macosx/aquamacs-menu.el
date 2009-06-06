@@ -400,7 +400,9 @@ left and right margin"))
 				    (menu-bar-non-minibuffer-window-p)
 				    buffer-file-number)
 		      ) 'my-file-separator)
-
+(define-key-after menu-bar-file-menu [reveal-in-finder-fill]
+  '(menu-item "--") 'mac-show-in-finder)
+  
 ;; save as (redefinition for :enable)
 
 (define-key menu-bar-file-menu [save-buffer ]
