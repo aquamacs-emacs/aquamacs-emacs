@@ -1321,18 +1321,18 @@ be shared by the new frame.  */)
     {
       tem = x_get_arg (dpyinfo, parms, Qvisibility, 0, 0, RES_TYPE_SYMBOL);
       if (EQ (tem, Qunbound))
- 	tem = Qt;
+	tem = Qt;
       x_set_visibility (f, tem, Qnil);
       if (EQ (tem, Qicon))
- 	x_iconify_frame (f);
+	x_iconify_frame (f);
       else if (! NILP (tem))
- 	{
- 	  x_make_frame_visible (f);
- 	  f->async_visible=1;
- 	  [[FRAME_NS_VIEW (f) window] makeKeyWindow];
- 	}
+	{
+	  x_make_frame_visible (f);
+	  f->async_visible = 1;
+	  [[FRAME_NS_VIEW (f) window] makeKeyWindow];
+	}
       else
-	f->async_visible=0;
+	  f->async_visible = 0;
     }
 
   if (FRAME_HAS_MINIBUF_P (f)
@@ -1384,7 +1384,7 @@ DEFUN ("ns-popup-font-panel", Fns_popup_font_panel, Sns_popup_font_panel,
   struct frame *f;
 
   check_ns ();
-  fm = [NSFontManager new];
+  fm = [NSFontManager sharedFontManager];
   if (NILP (frame))
     f = SELECTED_FRAME ();
   else
