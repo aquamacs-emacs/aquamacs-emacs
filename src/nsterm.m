@@ -561,7 +561,7 @@ ns_update_begin (struct frame *f)
   NSTRACE (ns_update_begin);
 
   ns_updating_frame = f;
-  [view lockFocus];
+  [view lockFocusIfCanDraw];
 
 #ifdef NS_IMPL_GNUSTEP
   uRect = NSMakeRect (0, 0, 0, 0);

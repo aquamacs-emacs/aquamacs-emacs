@@ -909,7 +909,7 @@ opening the first frame (e.g. open a connection to an X server).")
 
   ;; Under X Window, this creates the X frame and deletes the terminal frame.
   ;; the initial frame is hidden in Aquamacs
-  (let ( (initial-frame-alist (append '((visibility . t))  ;; should be nil - causes crash.
+  (let ( (initial-frame-alist (append '((visibility . nil))  ;; should be nil - causes crash.
  ;				       (left . 99)) ;; bug #166 workaround
 				     initial-frame-alist)))
     ;; Under X Window, this creates the X frame and deletes the terminal frame.
