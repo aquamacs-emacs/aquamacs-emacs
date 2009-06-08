@@ -572,10 +572,11 @@ or `CVS', and any subdirectory that contains a file named `.nosearch'."
 	      (frame-set-background-mode (selected-frame)))
 
  	  ;; time to make the frame visible (Aquamacs)
- 	  (if (or show-scratch-buffer-on-startup
-		  (not (equal (buffer-name (current-buffer)) "*scratch*")))
- 	      (make-frame-visible))
-)
+	  (unless (and (eq initial-window-system 'ns)
+		       (ns-application-hidden-p))
+	    (if (or show-scratch-buffer-on-startup
+		    (not (equal (buffer-name (current-buffer)) "*scratch*")))
+		(make-frame-visible))))
 
 	;; Now we know the user's default font, so add it to the menu.
 	(if (fboundp 'font-menu-add-default)
@@ -2335,9 +2336,11 @@ A fancy display is used on graphic displays, normal otherwise."
 	(frame-notice-user-settings))
 
       ;; time to make the frame visible (Aquamacs)
-      (if (or show-scratch-buffer-on-startup
-	      (not (equal (buffer-name (current-buffer)) "*scratch*")))
-	  (make-frame-visible)) 
+      (unless (and (eq initial-window-system 'ns)
+		   (ns-application-hidden-p))
+	(if (or show-scratch-buffer-on-startup
+		(not (equal (buffer-name (current-buffer)) "*scratch*")))
+	    (make-frame-visible)))
 
       ;; If there are no switches to process, we might as well
       ;; run this hook now, and there may be some need to do it

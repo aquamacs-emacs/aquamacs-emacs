@@ -2120,6 +2120,15 @@ In case the execution fails, an error is signaled. */)
 }
 #endif
 
+DEFUN ("ns-application-hidden-p", Fns_application_hidden_p, Sns_application_hidden_p, 0, 0, 0,
+       doc: /* Returns non-nil if application is hidden. */)
+    ()
+{
+
+  check_ns ();
+  return ([[NSApplication sharedApplication] isHidden] == YES ?
+	  Qt : Qnil);
+}
 
 /* ==========================================================================
 
@@ -2818,6 +2827,7 @@ be used as the image of the icon representing the frame.  */);
 #ifdef NS_IMPL_COCOA
   defsubr (&Sns_do_applescript);
 #endif
+  defsubr (&Sns_application_hidden_p);
   defsubr (&Sxw_color_defined_p);
   defsubr (&Sxw_color_values);
   defsubr (&Sx_server_max_request_size);
