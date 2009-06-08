@@ -1243,8 +1243,10 @@ Note, tranparency works better on Tiger (10.4) and higher."
            ((and mark-active (< (region-beginning) p) (< p (region-end)))
             'region)
            (t
-	    (let ((faces (get-char-property p 'face window)))
-	      (if (consp faces) (car faces) faces)))))))
+	    (let* ((faces (or (get-char-property p 'face window) 'default))
+		   (face (if (consp faces) (car faces) faces)))
+	      (or (cdr-safe (assq face face-remapping-alist))
+		  face)))))))
      (t
       nil))))
 
