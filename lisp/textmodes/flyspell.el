@@ -283,15 +283,17 @@ If `flyspell-large-region' is nil, all regions are treated as small."
 ;; settings to control the use of NSSpellChecker as the spellchecking
 ;; engine, instead of ispell or aspell
 
-;; (defcustom ns-spellchecker-chunk-size 100000
-;;   "approximate size in characters of the chunks of text to be
-;; passed to `ns-spellchecker-check-spelling' when checking large
-;; regions.")
-;; :type '(choice (const :tag "Default" 100000))
-;; number )
+(defcustom ns-spellchecker-chunk-size 100000
+  "approximate size in characters of the chunks of text to be
+passed to `ns-spellchecker-check-spelling' when checking large
+regions."
+  :type '(choice (const :tag "Default" 100000)
+  number ))
 
-(setq ns-spellchecker-chunk-size 100000)
-(setq flyspell-use-ns-spellchecker t)
+(defcustom flyspell-use-ns-spellchecker-p t
+  "When non-nil, use NSSpellChecker instead of ispell/aspell for spell checking."
+  :type 'boolean
+  :group 'ispell)
 
 (defun ns-spellchecker-parse-output (word)
   (let* ((output (ns-spellchecker-check-spelling word (current-buffer)))
@@ -352,10 +354,10 @@ If `flyspell-large-region' is nil, all regions are treated as small."
 	      (goto-char misspelled-location)
 	      (flyspell-word)) 
 	  ;; no misspellings found; we've reached the end of chunk
-	  (if flyspell-issue-message-flag (message "Spell Checking completed."))
-	  ;; function returns end of this chunk
 	  (setq spellcheck-position end))
 	)
+      (if flyspell-issue-message-flag (message "Spell Checking completed."))
+      ;; function returns end of this chunk
       end)))
 
 (defun ns-flyspell-large-region (beg end)
@@ -1721,13 +1723,13 @@ The buffer to mark them in is `flyspell-large-region-buffer'."
 	  (let ((old beg))
 	    (setq beg end)
 	    (setq end old)))
-      (if flyspell-use-ns-spellchecker
+      (if flyspell-use-ns-spellchecker-p
 	  (if (> (- end beg) (* ns-spellchecker-chunk-size 1.5))
 	      (ns-flyspell-large-region beg end)
-	    (ns-flyspell-region beg end)))
-      (if (and flyspell-large-region (> (- end beg) flyspell-large-region))
-	  (flyspell-large-region beg end)
-	(flyspell-small-region beg end)))
+	    (ns-flyspell-region beg end))
+	(if (and flyspell-large-region (> (- end beg) flyspell-large-region))
+	    (flyspell-large-region beg end)
+	  (flyspell-small-region beg end))))
     ))
 
 ;;*---------------------------------------------------------------------*/
@@ -2038,21 +2040,22 @@ This command proposes various successive corrections for the current word."
 		  poss ispell-filter)
 	      (setq flyspell-auto-correct-word word)
 	      ;; now check spelling of word.
-	      ;; (ispell-send-string "%\n") ;put in verbose mode
-	      ;; (ispell-send-string (concat "^" word "\n"))
-              ;; wait until ispell has processed word.
-              ;; (while (progn
-                       ;; (accept-process-output ispell-process)
-                       ;; (not (string= "" (car ispell-filter)))))
-	      ;; Remove leading empty element
-	      ;; (setq ispell-filter (cdr ispell-filter))
-	      ;; ispell process should return something after word is sent.
-	      ;; Tag word as valid (i.e., skip) otherwise
-	      ;; (or ispell-filter
-		  ;; (setq ispell-filter '(*)))
-	      ;; (if (consp ispell-filter)
-		  ;; (setq poss (ispell-parse-output (car ispell-filter))))
-	      (setq poss (ns-spellchecker-parse-output word))
+	      (if flyspell-use-ns-spellchecker-p
+		  (setq poss (ns-spellchecker-parse-output word))
+		(ispell-send-string "%\n") ;put in verbose mode
+		(ispell-send-string (concat "^" word "\n"))
+		;; wait until ispell has processed word.
+		(while (progn
+			 (accept-process-output ispell-process)
+			 (not (string= "" (car ispell-filter)))))
+		;; Remove leading empty element
+		(setq ispell-filter (cdr ispell-filter))
+		;; ispell process should return something after word is sent.
+		;; Tag word as valid (i.e., skip) otherwise
+		(or ispell-filter
+		    (setq ispell-filter '(*)))
+		(if (consp ispell-filter)
+		    (setq poss (ispell-parse-output (car ispell-filter)))))
 	      (cond
 	       ((or (eq poss t) (stringp poss))
 		;; don't correct word
@@ -2342,9 +2345,12 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 			 save)))
 	 (menu       (cons "flyspell correction menu" base-menu)))
     (car (x-popup-menu event
-		       (list (format "%s [%s]" word (or ispell-local-dictionary
-							ispell-dictionary))
-			     menu)))))
+		       (list (if flyspell-use-ns-spellchecker-p
+				 (format "%s" word)
+			       (format "%s [%s]" word (or ispell-local-dictionary
+							  ispell-dictionary)))
+			     menu)
+		       ))))
 
 ;;*---------------------------------------------------------------------*/
 ;;*    flyspell-xemacs-popup ...                                        */
