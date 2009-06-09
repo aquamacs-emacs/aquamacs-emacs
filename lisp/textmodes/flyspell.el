@@ -279,6 +279,141 @@ If `flyspell-large-region' is nil, all regions are treated as small."
   "The key binding for flyspell auto correction."
   :group 'flyspell)
 
+;; **********************************************************************
+;; settings to control the use of NSSpellChecker as the spellchecking
+;; engine, instead of ispell or aspell
+
+;; (defcustom ns-spellchecker-chunk-size 100000
+;;   "approximate size in characters of the chunks of text to be
+;; passed to `ns-spellchecker-check-spelling' when checking large
+;; regions.")
+;; :type '(choice (const :tag "Default" 100000))
+;; number )
+
+(setq ns-spellchecker-chunk-size 100000)
+(setq flyspell-use-ns-spellchecker t)
+
+(defun ns-spellchecker-parse-output (word)
+  (let* ((output (ns-spellchecker-check-spelling word (current-buffer)))
+	 (offset (car output)))
+    (cond
+     ;; word is correct -- return t
+     ((equal output (cons -1 0)) t)
+     ;; word is incorrect -- return
+     ;; (\"ORIGINAL-WORD\" OFFSET MISS-LIST GUESS-LIST)
+     ;; don't know what the difference between miss-list and guess-list is...
+     ((> offset -1)
+      (list word offset (ns-spellchecker-get-suggestions word) nil)))))
+
+(defun ns-flyspell-region (beg end)
+  "Flyspell text between BEG and END using ns-spellchecker-check-spelling."
+  (interactive "r")
+  (save-excursion
+    (let ((spellcheck-position beg)
+	  (count 0)
+	  ;; if called by ns-flyspell-large-region, then report progress
+	  ;; relative to "large region" extents instead of simply extents of
+	  ;; the current sub-region
+	  (progress-beg
+	   (if (boundp 'ns-flyspell-large-region-beg)
+	       ns-flyspell-large-region-beg
+	     beg))
+	  (progress-end
+	   (if (boundp 'ns-flyspell-large-region-end)
+	       ns-flyspell-large-region-end
+	     end))
+	  spellcheck-text
+	  ns-spellcheck-output
+	  misspelled-location
+	  misspelled-length)
+      (while (< spellcheck-position end) 
+	;; report progress
+ 	(if flyspell-issue-message-flag
+	    (message "Spell Checking...%d%% [%s]"
+		     (* 100 (/ (float (- (point) progress-beg)) 
+			       (- progress-end progress-beg)))
+		     (word-at-point)))
+	;; extract text from last checked word to end
+	(setq spellcheck-text (buffer-substring spellcheck-position end)) 
+	;; find (position . length) of first misspelled word in extracted text
+	(setq ns-spellcheck-output 
+	      ;; returns (-1 . 0) if no misspellings found
+	      (ns-spellchecker-check-spelling spellcheck-text (current-buffer)))
+	(if (>= (car ns-spellcheck-output) 0)
+	    ;; found misspelled word
+	    (progn
+	      (setq misspelled-location
+		    (+ (car ns-spellcheck-output) spellcheck-position))
+	      (setq misspelled-length (cdr ns-spellcheck-output)) 
+	      ;; start next check after current found word
+	      (setq spellcheck-position
+		    (+ misspelled-location misspelled-length)) 
+	      ;; use flyspell-word to filter and mark misspellings
+	      (goto-char misspelled-location)
+	      (flyspell-word)) 
+	  ;; no misspellings found; we've reached the end of chunk
+	  (if flyspell-issue-message-flag (message "Spell Checking completed."))
+	  ;; function returns end of this chunk
+	  (setq spellcheck-position end))
+	)
+      end)))
+
+(defun ns-flyspell-large-region (beg end)
+  "Flyspell text between BEG and END using ns-spellchecker-check-spelling.
+Break long text into chunks of approximate size NS-SPELLCHECKER-CHUNK-SIZE,
+dividing at sentence boundaries where possible, or at word boundaries if
+sentence boundaries are too far between."
+  (interactive "r")
+  (save-excursion
+    (let ((inhibit-redisplay t)
+	  (chunk-beg beg)
+	  (ns-flyspell-large-region-beg beg)
+	  (ns-flyspell-large-region-end end)
+	  chunk-end
+	  approx-end)
+      (while
+	  (<
+	   (progn
+	     ;; if length from chunk start to overall end is less
+	     ;; than 1.5x chunk size, set chunk end to overall end
+	     (if (< (- end chunk-beg) (* 1.5 ns-spellchecker-chunk-size))
+		 (setq chunk-end end)
+	       ;; otherwise, set end to sentence boundary near desired chunk size
+	       (save-excursion
+		 (setq approx-end (+ chunk-beg ns-spellchecker-chunk-size))
+		 (goto-char approx-end)
+		 (forward-sentence)
+		 (setq chunk-end (point))
+		 ;; If sentence boundary not found within 10% after
+		 ;; specified chunk size, look for first sentence
+		 ;; boundary up to 10% before desired chunk size.
+		 ;; If not found, use first word boundary after desired chunk size
+		 (if (> (- chunk-end approx-end)
+			(* 0.1 ns-spellchecker-chunk-size))
+		     (progn
+		       ;; find nearest previous sentence boundary
+		       (backward-sentence)
+		       (setq chunk-end (point))
+		       ;; check whether it's within 10% of specified value
+		       (if (> (- approx-end chunk-end)
+			      (* 0.1 ns-spellchecker-chunk-size))
+			   (progn
+			     ;; if not, use next word boundary
+			     (goto-char approx-end)
+			     (forward-word)
+			     (setq chunk-end (point))))))))
+	     ;; make sure we haven't extended the chunk beyond the region 
+	     (if (> chunk-end end)
+		 (setq chunk-end end))
+	     ;; check spelling of chunk, returning chunk end location
+	     (ns-flyspell-region chunk-beg chunk-end))
+	   end)
+	;; if not done, start new chunk at previous chunk end
+	(setq chunk-beg chunk-end))
+      ;; when done, report completion
+      (if flyspell-issue-message-flag (message "Spell Checking completed."))
+      )))
+
 ;;*---------------------------------------------------------------------*/
 ;;*    Mode specific options                                            */
 ;;*    -------------------------------------------------------------    */
@@ -1586,10 +1721,13 @@ The buffer to mark them in is `flyspell-large-region-buffer'."
 	  (let ((old beg))
 	    (setq beg end)
 	    (setq end old)))
-      ;; (if (and flyspell-large-region (> (- end beg) flyspell-large-region))
-	  ;; (flyspell-large-region beg end)
-      (flyspell-small-region beg end))
-      ;; )
+      (if flyspell-use-ns-spellchecker
+	  (if (> (- end beg) (* ns-spellchecker-chunk-size 1.5))
+	      (ns-flyspell-large-region beg end)
+	    (ns-flyspell-region beg end)))
+      (if (and flyspell-large-region (> (- end beg) flyspell-large-region))
+	  (flyspell-large-region beg end)
+	(flyspell-small-region beg end)))
     ))
 
 ;;*---------------------------------------------------------------------*/
@@ -2115,7 +2253,7 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 	 ;; (setq ispell-pdict-modified-p '(t))
 	 )
 	((or (eq replace 'buffer) (eq replace 'session))
-	 (ns-spellchecker-ignore-word word)
+	 (ns-spellchecker-ignore-word word (current-buffer))
 	 ;; (ispell-send-string (concat "@" word "\n"))
 	 (flyspell-unhighlight-at cursor-location)
 	 ;; (if (null ispell-pdict-modified-p)
