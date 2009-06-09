@@ -332,7 +332,7 @@ regions."
 	;; report progress
  	(if flyspell-issue-message-flag
 	    (message "Spell Checking...%d%% [%s]"
-		     (* 100 (/ (float (- (point) progress-beg)) 
+		     (* 100 (/ (float (- spellcheck-position progress-beg)) 
 			       (- progress-end progress-beg)))
 		     (word-at-point)))
 	;; extract text from last checked word to end
@@ -356,7 +356,9 @@ regions."
 	  ;; no misspellings found; we've reached the end of chunk
 	  (setq spellcheck-position end))
 	)
-      (if flyspell-issue-message-flag (message "Spell Checking completed."))
+      (if (and (not (boundp 'ns-flyspell-large-region-end))
+	       flyspell-issue-message-flag)
+	  (message "Spell Checking completed."))
       ;; function returns end of this chunk
       end)))
 
@@ -1209,32 +1211,33 @@ Mostly we check word delimiters."
 	    ;; we setup the cache
 	    (setq flyspell-word-cache-start start)
 	    (setq flyspell-word-cache-end end)
-	    (setq flyspell-word-cache-word word)
+	    (setq flyspell-word-cache-word word) 
 	    ;; now check spelling of word.
-	    ;; (ispell-send-string "%\n")
-	    ;; put in verbose mode
-	    ;; (ispell-send-string (concat "^" word "\n"))
-	    ;; we mark the ispell process so it can be killed
-	    ;; when emacs is exited without query
-	    ;; (set-process-query-on-exit-flag ispell-process nil)
-	    ;; Wait until ispell has processed word.  Since this code is often
-            ;; executed from post-command-hook but the ispell process may not
-            ;; be responsive, it's important to make sure we re-enable C-g.
-	    ;; (with-local-quit
-	      ;; (while (progn
-		       ;; (accept-process-output ispell-process)
-		       ;; (not (string= "" (car ispell-filter))))))
-	    ;; (ispell-send-string "!\n")
-	    ;; back to terse mode.
-	    ;; Remove leading empty element
-	    ;; (setq ispell-filter (cdr ispell-filter))
-	    ;; ispell process should return something after word is sent.
-	    ;; Tag word as valid (i.e., skip) otherwise
-	    ;; (or ispell-filter
-		;; (setq ispell-filter '(*)))
-	    ;; (if (consp ispell-filter)
-		;; (setq poss ((ispell-parse-output (car ispell-filter))))
-	    (setq poss (ns-spellchecker-parse-output word))
+	    (if flyspell-use-ns-spellchecker-p
+		(setq poss (ns-spellchecker-parse-output word))
+	      (ispell-send-string "%\n")
+	      ;; put in verbose mode
+	      (ispell-send-string (concat "^" word "\n"))
+	      ;; we mark the ispell process so it can be killed
+	      ;; when emacs is exited without query
+	      (set-process-query-on-exit-flag ispell-process nil)
+	      ;; Wait until ispell has processed word.  Since this code is often
+	      ;; executed from post-command-hook but the ispell process may not
+	      ;; be responsive, it's important to make sure we re-enable C-g.
+	      (with-local-quit
+		(while (progn
+			 (accept-process-output ispell-process)
+			 (not (string= "" (car ispell-filter))))))
+	      (ispell-send-string "!\n")
+	      ;; back to terse mode.
+	      ;; Remove leading empty element
+	      (setq ispell-filter (cdr ispell-filter))
+	      ;; ispell process should return something after word is sent.
+	      ;; Tag word as valid (i.e., skip) otherwise
+	      (or ispell-filter
+		  (setq ispell-filter '(*)))
+	      (if (consp ispell-filter)
+		  (setq poss (ispell-parse-output (car ispell-filter)))))
 	    (let ((res (cond ((eq poss t)
 			      ;; correct
 			      (setq flyspell-word-cache-result t)
@@ -2203,21 +2206,22 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 	      (word (car word))
 	      poss ispell-filter)
 	  ;; now check spelling of word.
-	  ;; (ispell-send-string "%\n")	;put in verbose mode
-	  ;; (ispell-send-string (concat "^" word "\n"))
-	  ;; wait until ispell has processed word
-	  ;; (while (progn
-		   ;; (accept-process-output ispell-process)
-		   ;; (not (string= "" (car ispell-filter)))))
-	  ;; Remove leading empty element
-	  ;; (setq ispell-filter (cdr ispell-filter))
-	  ;; ispell process should return something after word is sent.
-	  ;; Tag word as valid (i.e., skip) otherwise
-	  ;; (or ispell-filter
-	      ;; (setq ispell-filter '(*)))
-	  ;; (if (consp ispell-filter)
-	      ;; (setq poss (ispell-parse-output (car ispell-filter))))
-	  (setq poss (ns-spellchecker-parse-output word))
+	  (if flyspell-use-ns-spellchecker-p
+	      (setq poss (ns-spellchecker-parse-output word))
+	    (ispell-send-string "%\n")	;put in verbose mode
+	    (ispell-send-string (concat "^" word "\n"))
+	    ;; wait until ispell has processed word
+	    (while (progn
+		     (accept-process-output ispell-process)
+		     (not (string= "" (car ispell-filter)))))
+	    ;; Remove leading empty element
+	    (setq ispell-filter (cdr ispell-filter))
+	    ;; ispell process should return something after word is sent.
+	    ;; Tag word as valid (i.e., skip) otherwise
+	    (or ispell-filter
+		(setq ispell-filter '(*)))
+	    (if (consp ispell-filter)
+		(setq poss (ispell-parse-output (car ispell-filter)))))
 	  (cond
 	   ((or (eq poss t) (stringp poss))
 	    ;; don't correct word
@@ -2246,26 +2250,28 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 	 nil)
 	((eq replace 'save)
          (goto-char save)
-	 (ns-spellchecker-learn-word word)
-	 ;; (ispell-send-string (concat "*" word "\n"))
-         ;; This was added only to the XEmacs side in revision 1.18 of
-         ;; flyspell.  I assume its absence on the Emacs side was an
-         ;; oversight.  --Stef
-	 ;; (ispell-send-string "#\n")
-	 (flyspell-unhighlight-at cursor-location)
-	 ;; (setq ispell-pdict-modified-p '(t))
+	 (if flyspell-use-ns-spellchecker-p
+	     (ns-spellchecker-learn-word word)
+	   (ispell-send-string (concat "*" word "\n"))
+	   ;; This was added only to the XEmacs side in revision 1.18 of
+	   ;; flyspell.  I assume its absence on the Emacs side was an
+	   ;; oversight.  --Stef
+	   (ispell-send-string "#\n")
+	   (setq ispell-pdict-modified-p '(t)) 
+	   (flyspell-unhighlight-at cursor-location))
 	 )
 	((or (eq replace 'buffer) (eq replace 'session))
-	 (ns-spellchecker-ignore-word word (current-buffer))
-	 ;; (ispell-send-string (concat "@" word "\n"))
+	 (if flyspell-use-ns-spellchecker-p
+	     (ns-spellchecker-ignore-word word (current-buffer))
+	   (ispell-send-string (concat "@" word "\n"))
+	   (if (null ispell-pdict-modified-p)
+	       (setq ispell-pdict-modified-p
+		     (list ispell-pdict-modified-p)))
+	   (goto-char save)
+	   (if (eq replace 'buffer)
+	       (ispell-add-per-file-word-list word)
+	     ))
 	 (flyspell-unhighlight-at cursor-location)
-	 ;; (if (null ispell-pdict-modified-p)
-	     ;; (setq ispell-pdict-modified-p
-		   ;; (list ispell-pdict-modified-p)))
-         (goto-char save)
-	 ;; (if (eq replace 'buffer)
-	     ;; (ispell-add-per-file-word-list word)
-	   ;; )
 	 )
 	(replace
          ;; This was added only to the Emacs side.  I assume its absence on
@@ -2281,7 +2287,7 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
              (delete-region start end)
              (goto-char start)
              (funcall flyspell-insert-function new-word)
-             (if flyspell-abbrev-p
+             (if (and (not flyspell-use-ns-spellchecker-p) flyspell-abbrev-p)
                  (flyspell-define-abbrev word new-word)))
            ;; In the original Emacs code, this was only called in the body
            ;; of the if.  I arbitrarily kept the XEmacs behavior instead.
