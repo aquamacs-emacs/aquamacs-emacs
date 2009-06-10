@@ -1,10 +1,7 @@
 ;;; Smart-frame-positioning.el 
-;; Emacs Version: 22.0 
 ;; Author: David Reitter, david.reitter@gmail.com
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs frames
- 
-;; Last change: $Id: smart-frame-positioning.el,v 1.79 2009/03/03 18:46:50 davidswelt Exp $
  
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -21,7 +18,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, 2006, 2007, 2008 David Reitter
+;; Copyright (C) 2005, 2006, 2007, 2008, 2009 David Reitter
 
 ;; Smart Frame Positioning Mode: In environments where many frames are
 ;;  opened, this mode shows them in useful positions on the screen so
@@ -249,8 +246,8 @@ pixels apart if possible."
 			   (display-pixel-width) (display-pixel-height))))
 	     (min-x (+ 5 (nth 0 rect)))
 	     (min-y (+ 5 (nth 1 rect)))
-	     (max-x (nth 2 rect))
-	     (max-y (nth 3 rect))
+	     (max-x (- (+ (nth 0 rect) (nth 2 rect)) 5))
+	     (max-y (- (+ (nth 1 rect) (nth 3 rect)) 5))
 	     (preassigned 
 	      (smart-fp--get-frame-position-assigned-to-buffer-name)))
 	(smart-fp--convert-negative-ordinates 
@@ -707,8 +704,8 @@ The file is specified in `smart-frame-position-file'."
 	  ;; we cut a corner here and only check the display that shows the majority of the frame
 	  (and  (>= left (- (nth 0 bounds) 4))
 		(>= top (nth 1 bounds))
-		(<= right (nth 2 bounds))
-		(<= bottom (+ (nth 3 bounds) 4))))
+		(<= right (+ (nth 0 bounds) (nth 2 bounds)))
+		(<= bottom (+ (nth 1 bounds) (nth 3 bounds) 4))))
       (smart-move-frame-inside-screen frame))))
 
 ; (display-available-pixel-bounds (selected-frame))
@@ -733,8 +730,8 @@ on the main screen, i.e. where the menu is."
 		     (display-available-pixel-bounds (selected-frame))))
 	   (min-x (nth 0 rect))
 	   (min-y (nth 1 rect))
-	   (max-x (nth 2 rect))
-	   (max-y (nth 3 rect))
+	   (max-x (+ min-x (nth 2 rect)))
+	   (max-y (+ min-y (nth 3 rect)))
 	   (next-x (eval (frame-parameter frame 'left)))
 	   (next-y (eval (frame-parameter frame 'top)))
 	   (next-wc (eval (frame-parameter frame 'width)))
