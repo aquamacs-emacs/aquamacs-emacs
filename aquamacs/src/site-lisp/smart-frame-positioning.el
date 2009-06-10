@@ -729,7 +729,8 @@ on the main screen, i.e. where the menu is."
 	   ;; non-standard methods.
 	   ;; on OS X, e.g. display-available-pixel-bounds (patch!!) returns
 	   ;; available screen region, excluding the Dock.
-	   (rect (display-available-pixel-bounds frame))
+	   (rect (or (display-available-pixel-bounds frame)
+		     (display-available-pixel-bounds (selected-frame))))
 	   (min-x (nth 0 rect))
 	   (min-y (nth 1 rect))
 	   (max-x (nth 2 rect))
@@ -745,43 +746,43 @@ on the main screen, i.e. where the menu is."
 	   (next-h-total (frame-total-pixel-height frame))
 	   (w-offset (- next-w (smart-fp--char-to-pixel-width next-wc frame)))
 	   (h-offset (- next-h (smart-fp--char-to-pixel-height next-hc frame))))
-      
-      (modify-frame-parameters 
-       frame
-       (let* ((next-x (max min-x 
-			   (min
-			    (- max-x next-w )
-			    next-x)))
-	      
-	      (next-wc  (if (<= next-w (- max-x next-x))
-			    next-wc
-			  (smart-fp--pixel-to-char-width (- max-x next-x) 
-							 frame 'round-lower)))
-	      )
-	 (smart-fp--convert-negative-ordinates `((left .
-						       ,next-x)
-						 
-						 (width .
-							,next-wc)   
-						 ))))
-      (modify-frame-parameters 
-       frame
-       (let* (
-	      (next-y (max min-y 
-			   (min 
-			    (- max-y next-h-total)	
-			    next-y)))
-	      
-	      (next-hc (if (<= next-h-total (- max-y next-y ))
-			   next-hc
-			 (smart-fp--pixel-to-char-height 
-			  (- max-y next-y 
-			     (smart-tool-bar-pixel-height frame)
-			     smart-fp--frame-title-bar-height)
-			  frame 'round-lower))))
-	 (smart-fp--convert-negative-ordinates 
-	  `((top . ,next-y)
-	    (height . ,next-hc))))))))
+      (when rect
+	(modify-frame-parameters 
+	 frame
+	 (let* ((next-x (max min-x 
+			     (min
+			      (- max-x next-w )
+			      next-x)))
+		
+		(next-wc  (if (<= next-w (- max-x next-x))
+			      next-wc
+			    (smart-fp--pixel-to-char-width (- max-x next-x) 
+							   frame 'round-lower)))
+		)
+	   (smart-fp--convert-negative-ordinates `((left .
+							 ,next-x)
+						   
+						   (width .
+							  ,next-wc)   
+						   ))))
+	(modify-frame-parameters 
+	 frame
+	 (let* (
+		(next-y (max min-y 
+			     (min 
+			      (- max-y next-h-total)	
+			      next-y)))
+		
+		(next-hc (if (<= next-h-total (- max-y next-y ))
+			     next-hc
+			   (smart-fp--pixel-to-char-height 
+			    (- max-y next-y 
+			       (smart-tool-bar-pixel-height frame)
+			       smart-fp--frame-title-bar-height)
+			    frame 'round-lower))))
+	   (smart-fp--convert-negative-ordinates 
+	    `((top . ,next-y)
+	      (height . ,next-hc)))))))))
 
 (require 'fit-frame)
 (defun scatter-frames ()
