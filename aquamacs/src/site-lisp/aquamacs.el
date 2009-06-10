@@ -567,25 +567,6 @@ if modified buffers exist."
 		   (funcall confirm-kill-emacs "Really exit Aquamacs? "))
 	       (kill-emacs)))
 	(setq timer-idle-list saved-timer-idle-list))))
-;; (defun aquamacs-mac-ae-quit-application (event)
-;;   "Quit the application Emacs with the Apple event EVENT."
-;;   (interactive "e")
-;; ;;  (aquamacs-save-buffers-kill-emacs)
-;;   (let ((ae (mac-event-ae event)))
-;;     (unwind-protect ; IT APPEARS THAT THIS CAN'T BE COMPILED.
-;; 	(aquamacs-save-buffers-kill-emacs)
-;;       ;; Reaches here if the user has canceled the quit.
-;;       (message "Quit application: canceled.")
-;;       (mac-resume-apple-event ae -128))))
-
-;; unwind-protect form is non-functional for some reason
-;; potentially because of byte-compiling this file.
-;; using `eval' doesn't work...
- (defun aquamacs-mac-ae-quit-application (event)
-   "Quit the application Emacs with the Apple event EVENT."
-   (interactive "e")
-   (aquamacs-save-buffers-kill-emacs)
-   (mac-resume-apple-event ae -128))
 
 
 ;; workaround for people who still call this in their .emacs
@@ -1472,20 +1453,20 @@ listed here."
   
   (add-hook 'kill-emacs-query-functions 'aquamacs-ask-to-save-options)
 
+;; (defun raise-frame-and-make-visible ()
+;;   (interactive)
+;;   ;; (if (not (eq t (frame-visible-p (selected-frame))))
+;;   (make-frame-visible)
+;;   (raise-frame))
+  
 
 (when (eq initial-window-system 'ns)
-    (global-set-key [ns-power-off] 'aquamacs-save-buffers-kill-emacs))
+  (global-set-key [ns-application-open-untitled] 'new-empty-buffer-other-frame)
+  (global-set-key [ns-application-activated] 'ignore)
+  (global-set-key [ns-power-off] 'aquamacs-save-buffers-kill-emacs))
 
 (global-set-key [remap save-buffers-kill-emacs] 
 		'aquamacs-save-buffers-kill-emacs)
-
-
-
-(if (and (boundp 'mac-apple-event-map) mac-apple-event-map)
-    (define-key mac-apple-event-map [core-event quit-application]
-      'aquamacs-mac-ae-quit-application))
-
-; (define-key mac-apple-event-map [core-event quit-application]      'mac-ae-quit-application)
 
 
 
