@@ -2126,7 +2126,7 @@ DEFUN ("ns-application-hidden-p", Fns_application_hidden_p, Sns_application_hidd
 {
 
   check_ns ();
-  return ([[NSApplication sharedApplication] isHidden] == YES ?
+  return ([NSApp isHidden] == YES ?
 	  Qt : Qnil);
 }
 

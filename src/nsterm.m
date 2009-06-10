@@ -561,7 +561,7 @@ ns_update_begin (struct frame *f)
   NSTRACE (ns_update_begin);
 
   ns_updating_frame = f;
-  [view lockFocus];
+  [view lockFocusIfCanDraw];
 
 #ifdef NS_IMPL_GNUSTEP
   uRect = NSMakeRect (0, 0, 0, 0);
@@ -4382,6 +4382,29 @@ ns_term_shutdown (int sig)
     return NSTerminateNow;  /* just in case */
 }
 
+- (void)applicationDidBecomeActive:(NSNotification *)aNotification
+{
+  struct frame *emacsframe = SELECTED_FRAME ();
+  
+  if (!emacs_event)
+    return;
+  emacs_event->kind = NS_NONKEY_EVENT;
+  emacs_event->code = KEY_NS_APPLICATION_ACTIVATED;
+  EV_TRAILER ((id)nil);
+
+}
+- (BOOL)applicationOpenUntitledFile:(NSApplication *)theApplication
+{
+  struct frame *emacsframe = SELECTED_FRAME ();
+  
+  if (!emacs_event)
+    return;
+  emacs_event->kind = NS_NONKEY_EVENT;
+  emacs_event->code = KEY_NS_APPLICATION_OPEN_UNTITLED;
+  EV_TRAILER ((id)nil);
+  return YES; /* we assume this will be handled */
+}
+
 
 /*   Notification from the Workspace to open a file */
 - (BOOL)application: sender openFile: (NSString *)file
@@ -4433,10 +4456,6 @@ ns_term_shutdown (int sig)
 
 /* TODO: these may help w/IO switching btwn terminal and NSApp */
 - (void)applicationWillBecomeActive: (NSNotification *)notification
-{
-  //ns_app_active=YES;
-}
-- (void)applicationDidBecomeActive: (NSNotification *)notification
 {
   //ns_app_active=YES;
 }
@@ -5304,12 +5323,19 @@ extern void update_window_cursor (struct window *w, int on);
   struct frame *old_focus = dpyinfo->x_focus_frame;
 
   NSTRACE (windowDidBecomeKey);
-
+ 
   if (emacsframe != old_focus)
     dpyinfo->x_focus_frame = emacsframe;
 
+  if (! FRAME_VISIBLE_P (emacsframe))
+    {
+      emacsframe->async_iconified = 0;
+      emacsframe->async_visible   = 1;
+      windows_or_buffers_changed++;
+      SET_FRAME_GARBAGED (emacsframe);
+      ns_raise_frame (emacsframe);
+    }
   ns_frame_rehighlight (emacsframe);
-
   if (emacs_event)
     {
       emacs_event->kind = FOCUS_IN_EVENT;
@@ -5535,19 +5561,6 @@ extern void update_window_cursor (struct window *w, int on);
       emacs_event->kind = ICONIFY_EVENT;
       EV_TRAILER ((id)nil);
     }
-}
-
-
-- (void)windowDidExpose: sender
-{
-  NSTRACE (windowDidExpose);
-  if (!emacsframe->output_data.ns)
-    return;
-  emacsframe->async_visible = 1;
-  SET_FRAME_GARBAGED (emacsframe);
-
-  if (send_appdefined)
-    ns_send_appdefined (-1);
 }
 
 

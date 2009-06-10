@@ -276,6 +276,8 @@ The properties returned may include `top', `left', `height', and `width'."
              (cons (logior (lsh 0 16)  12) 'ns-new-frame)
 	     (cons (logior (lsh 0 16)  13) 'ns-toggle-toolbar)
 	     (cons (logior (lsh 0 16)  14) 'ns-show-prefs) ;; Aquamacs only
+	     (cons (logior (lsh 0 16)  90) 'ns-application-activated)
+	     (cons (logior (lsh 0 16)  91) 'ns-application-open-untitled)
 	     (cons (logior (lsh 0 16)  130) 'ns-about) ;; Aquamacs only
 	     (cons (logior (lsh 0 16)  131) 'ns-check-for-updates) ;; Aquamacs only
 	     (cons (logior (lsh 0 16)  132) 'ns-tool-bar-customized) ;; Aquamacs only
