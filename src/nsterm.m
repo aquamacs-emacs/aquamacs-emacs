@@ -3567,7 +3567,7 @@ FRAME_PTR f;
 {
   struct frame *emacsframe = SELECTED_FRAME ();
   int rows, cols;
-
+  int fs =0;
   int width, height, ign;
 
 #ifdef NS_IMPL_COCOA
@@ -3584,17 +3584,17 @@ FRAME_PTR f;
 	    case FULLSCREEN_BOTH:
 
 	      [view enterFullScreenMode:[[view window] screen]
-			    withOptions:[NSDictionary dictionaryWithObjectsAndKeys:
-							  [NSNumber numberWithBool:NO],
-						      NSFullScreenModeAllScreens,
-						      // problem  rdar://5804777 prevents
-						      // the window level from being set correctly.
-							   [NSNumber numberWithInt:NSNormalWindowLevel],
-						      NSFullScreenModeWindowLevel, nil]];
+	      		    withOptions:[NSDictionary dictionaryWithObjectsAndKeys:
+	      						  [NSNumber numberWithBool:NO],
+	      					      NSFullScreenModeAllScreens,
+	      					      // problem  rdar://5804777 prevents
+	      					      // the window level from being set correctly.
+	      						   [NSNumber numberWithInt:NSNormalWindowLevel],
+	      					      NSFullScreenModeWindowLevel, nil]];
 
 	      // causes black screen.
 	      //[[view window] setLevel:[NSNumber numberWithInt:NSNormalWindowLevel]];
-
+	      fs = 1;
 	      [NSCursor setHiddenUntilMouseMoves:YES];
 
 	      break;
@@ -3602,9 +3602,60 @@ FRAME_PTR f;
 	      [view exitFullScreenModeWithOptions:nil];
 	    }
 
-	  NSRect r = [[FRAME_NS_VIEW (f) window] frame];
+	  NSRect vr = [view frame];
+
+	  NSRect r = [[view window] frame];
 	  width = r.size.width;
 	  height = r.size.height;
+
+	  /* NS removes toolbar / titlebar for fullscreen.
+	     We need to recalculate frame geometry and 
+	     update frame parameters. */
+
+	  FRAME_NS_TITLEBAR_HEIGHT (f) = height - vr.size.height;
+
+	  if ([[[view window] toolbar] isVisible])
+	    {
+	      FRAME_EXTERNAL_TOOL_BAR (f) = 1;
+	      update_frame_tool_bar (f);
+	      x_set_frame_parameters (f, Fcons (Fcons (Qtool_bar_lines, make_number(1)),
+						Qnil));
+	    }
+	  else
+	    {
+	      if (FRAME_EXTERNAL_TOOL_BAR (f))
+		{
+		  free_frame_tool_bar (f);
+		  FRAME_EXTERNAL_TOOL_BAR (f) = 0;
+		}
+	      x_set_frame_parameters (f, Fcons (Fcons (Qtool_bar_lines, make_number(0)),
+						Qnil));
+	    }
+
+	  /* to do: save and restore previous state of tool bar */
+ 
+  if (FRAME_EXTERNAL_TOOL_BAR (f))
+    {
+    
+    FRAME_NS_TOOLBAR_HEIGHT (f) =
+      /* XXX: GNUstep has not yet implemented the first method below, added
+	 in Panther, however the second is incorrect under Cocoa. */
+#ifdef NS_IMPL_COCOA
+      NSHeight ([[view window] frameRectForContentRect: NSMakeRect (0, 0, 0, 0)])
+      /* NOTE: previously this would generate wrong result if toolbar not
+               yet displayed and fixing toolbar_height=32 helped, but
+               now (200903) seems no longer needed */
+#else
+      NSHeight ([NSWindow frameRectForContentRect: NSMakeRect (0, 0, 0, 0)
+					styleMask: [[view window] styleMask]])
+#endif
+            - FRAME_NS_TITLEBAR_HEIGHT (f);
+    }
+  else
+    FRAME_NS_TOOLBAR_HEIGHT (f) = 0;
+
+
+
 	  cols = FRAME_PIXEL_WIDTH_TO_TEXT_COLS (f,
 #ifdef NS_IMPL_GNUSTEP
 						 width + 3);
@@ -3618,8 +3669,8 @@ FRAME_PTR f;
 					       - FRAME_NS_TITLEBAR_HEIGHT (f) + 3
 					       - FRAME_NS_TOOLBAR_HEIGHT (f));
 #else
-					       - FRAME_NS_TITLEBAR_HEIGHT (f)
-					       - FRAME_NS_TOOLBAR_HEIGHT (f));
+	  - FRAME_NS_TITLEBAR_HEIGHT (f)
+          - FRAME_NS_TOOLBAR_HEIGHT (f));
 #endif
           if (rows < MINHEIGHT)
 	    rows = MINHEIGHT;
@@ -3630,15 +3681,41 @@ FRAME_PTR f;
 	      SET_FRAME_GARBAGED (f);
 	      cancel_mouse_face (f);
 	    }
-
 	  FRAME_PIXEL_WIDTH (f) = width;
 	  FRAME_PIXEL_HEIGHT (f) = height;
+	  // FRAME_NS_DISPLAY_INFO (f)->x_focus_frame = f;
 
-	  FRAME_NS_DISPLAY_INFO (f)->x_focus_frame = f;
+	  // mark_window_cursors_off (XWINDOW (f->root_window));
+ 
+
+	  x_set_window_size (f, 0, f->text_cols, f->text_lines);
+
+	  emacsframe->async_iconified = 0;
+	  emacsframe->async_visible   = 1;
+	  windows_or_buffers_changed++;
+	  SET_FRAME_GARBAGED (emacsframe);
+	  ns_raise_frame (emacsframe);
 	  ns_frame_rehighlight (f);
-	  ns_raise_frame(f);
+	  
 
-	  mark_window_cursors_off (XWINDOW (f->root_window));
+	  if (fs) /* Fixme */
+	    /* scroll bars need an additional update somehow - they are not
+	       correctly tracked / added otherwise.
+	       window->vertical_scroll_bars maybe
+	       after de-fullscreen, scrollbar is broken
+	       however, in new windows opened with C-x 2, things work.
+	    */
+	    {
+	      x_set_frame_parameters (f, Fcons (Fcons (Qvertical_scroll_bars, Qnil),
+						Qnil));
+	    } else
+	    {
+	      x_set_frame_parameters (f, Fcons (Fcons (Qvertical_scroll_bars, Qright),
+						Qnil));
+	    }
+
+
+	  ns_send_appdefined (-1);
 
 	  UNBLOCK_INPUT;
      }
