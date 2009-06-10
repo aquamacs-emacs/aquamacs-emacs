@@ -3384,7 +3384,6 @@ ns_select (int nfds, fd_set *readfds, fd_set *writefds,
 
    ========================================================================== */
 
-
 static void
 ns_set_vertical_scroll_bar (struct window *window,
                            int portion, int whole, int position)
@@ -3565,9 +3564,8 @@ static void
 ns_fullscreen_hook  (f)
 FRAME_PTR f;
 {
-  struct frame *emacsframe = SELECTED_FRAME ();
   int rows, cols;
-
+  int fs =0;
   int width, height, ign;
 
 #ifdef NS_IMPL_COCOA
@@ -3578,23 +3576,24 @@ FRAME_PTR f;
       if ([view respondsToSelector:@selector(exitFullScreenModeWithOptions:)])
 	{
 	  BLOCK_INPUT;
+	  NSDisableScreenUpdates();
 
 	  switch (f->want_fullscreen)
 	    {
 	    case FULLSCREEN_BOTH:
 
 	      [view enterFullScreenMode:[[view window] screen]
-			    withOptions:[NSDictionary dictionaryWithObjectsAndKeys:
-							  [NSNumber numberWithBool:NO],
-						      NSFullScreenModeAllScreens,
-						      // problem  rdar://5804777 prevents
-						      // the window level from being set correctly.
-							   [NSNumber numberWithInt:NSNormalWindowLevel],
-						      NSFullScreenModeWindowLevel, nil]];
+	      		    withOptions:[NSDictionary dictionaryWithObjectsAndKeys:
+	      						  [NSNumber numberWithBool:NO],
+	      					      NSFullScreenModeAllScreens,
+	      					      // problem  rdar://5804777 prevents
+	      					      // the window level from being set correctly.
+	      						   [NSNumber numberWithInt:NSNormalWindowLevel],
+	      					      NSFullScreenModeWindowLevel, nil]];
 
 	      // causes black screen.
 	      //[[view window] setLevel:[NSNumber numberWithInt:NSNormalWindowLevel]];
-
+	      fs = 1;
 	      [NSCursor setHiddenUntilMouseMoves:YES];
 
 	      break;
@@ -3602,9 +3601,60 @@ FRAME_PTR f;
 	      [view exitFullScreenModeWithOptions:nil];
 	    }
 
-	  NSRect r = [[FRAME_NS_VIEW (f) window] frame];
+	  NSRect vr = [view frame];
+
+	  NSRect r = [[view window] frame];
 	  width = r.size.width;
 	  height = r.size.height;
+
+	  /* NS removes toolbar / titlebar for fullscreen.
+	     We need to recalculate frame geometry and 
+	     update frame parameters. */
+
+	  FRAME_NS_TITLEBAR_HEIGHT (f) = height - vr.size.height;
+
+	  if ([[[view window] toolbar] isVisible])
+	    {
+	      FRAME_EXTERNAL_TOOL_BAR (f) = 1;
+	      update_frame_tool_bar (f);
+	      x_set_frame_parameters (f, Fcons (Fcons (Qtool_bar_lines, make_number(1)),
+						Qnil));
+	    }
+	  else
+	    {
+	      if (FRAME_EXTERNAL_TOOL_BAR (f))
+		{
+		  free_frame_tool_bar (f);
+		  FRAME_EXTERNAL_TOOL_BAR (f) = 0;
+		}
+	      x_set_frame_parameters (f, Fcons (Fcons (Qtool_bar_lines, make_number(0)),
+						Qnil));
+	    }
+
+	  /* to do: save and restore previous state of tool bar */
+ 
+  if (FRAME_EXTERNAL_TOOL_BAR (f))
+    {
+    
+    FRAME_NS_TOOLBAR_HEIGHT (f) =
+      /* XXX: GNUstep has not yet implemented the first method below, added
+	 in Panther, however the second is incorrect under Cocoa. */
+#ifdef NS_IMPL_COCOA
+      NSHeight ([[view window] frameRectForContentRect: NSMakeRect (0, 0, 0, 0)])
+      /* NOTE: previously this would generate wrong result if toolbar not
+               yet displayed and fixing toolbar_height=32 helped, but
+               now (200903) seems no longer needed */
+#else
+      NSHeight ([NSWindow frameRectForContentRect: NSMakeRect (0, 0, 0, 0)
+					styleMask: [[view window] styleMask]])
+#endif
+            - FRAME_NS_TITLEBAR_HEIGHT (f);
+    }
+  else
+    FRAME_NS_TOOLBAR_HEIGHT (f) = 0;
+
+
+
 	  cols = FRAME_PIXEL_WIDTH_TO_TEXT_COLS (f,
 #ifdef NS_IMPL_GNUSTEP
 						 width + 3);
@@ -3618,27 +3668,60 @@ FRAME_PTR f;
 					       - FRAME_NS_TITLEBAR_HEIGHT (f) + 3
 					       - FRAME_NS_TOOLBAR_HEIGHT (f));
 #else
-					       - FRAME_NS_TITLEBAR_HEIGHT (f)
-					       - FRAME_NS_TOOLBAR_HEIGHT (f));
+	  - FRAME_NS_TITLEBAR_HEIGHT (f)
+          - FRAME_NS_TOOLBAR_HEIGHT (f));
 #endif
           if (rows < MINHEIGHT)
 	    rows = MINHEIGHT;
 
+	  /* Handle scroll bars */
+	  set_vertical_scroll_bar (XWINDOW (f->root_window)); 
+	  if (fs)
+	    {
+	      // turn off scroll bars in full screen mode
+	      // we want to hide those scroll bars for now, as they are displayed
+	      // in the wrong position, and clicks aren't processed reliably 
+	      x_set_frame_parameters (f, Fcons (Fcons (Qvertical_scroll_bars, Qnil),
+	      					Qnil));
+
+	      // we can only assume that removeFromSuperview is called
+	      // when NSView goes into fullscreen mode.
+	      // this should trigger their re-addition by the next set_vertical_scroll_bar
+	      XWINDOW (f->root_window) -> vertical_scroll_bar = Qnil;
+	    } else
+	    {
+	      // Fixme: we don't know that they were Qright in the first place.
+	      x_set_frame_parameters (f, Fcons (Fcons (Qvertical_scroll_bars, Qright),
+	      					Qnil));
+	    }
+	    
+	  /* Fixme: after going back to normal mode, scroll bars flicker heavily
+	     Miniaturizing/de-m. removes flicker.  Why? */
+
+	  FRAME_NS_DISPLAY_INFO (f)->x_focus_frame = f;
+
+	  mark_window_cursors_off (XWINDOW (f->root_window));
+
+
+	  FRAME_PIXEL_WIDTH (f) = width;
+	  FRAME_PIXEL_HEIGHT (f) = height;
 	  if (FRAME_COLS (f) != cols || FRAME_LINES (f) != rows)
 	    {
 	      change_frame_size (f, rows, cols, 0, 0, 1);  /* pretend, delay, safe */
 	      SET_FRAME_GARBAGED (f);
 	      cancel_mouse_face (f);
 	    }
+	  x_set_window_size (f, 0, f->text_cols, f->text_lines);
 
-	  FRAME_PIXEL_WIDTH (f) = width;
-	  FRAME_PIXEL_HEIGHT (f) = height;
-
-	  FRAME_NS_DISPLAY_INFO (f)->x_focus_frame = f;
+	  f->async_iconified = 0;
+	  f->async_visible   = 1;
+	  windows_or_buffers_changed++;
+	  SET_FRAME_GARBAGED (f);
+	  ns_raise_frame (f);
 	  ns_frame_rehighlight (f);
-	  ns_raise_frame(f);
+	  ns_send_appdefined (-1);
 
-	  mark_window_cursors_off (XWINDOW (f->root_window));
+	  NSEnableScreenUpdates();
 
 	  UNBLOCK_INPUT;
      }
@@ -5558,7 +5641,7 @@ extern void update_window_cursor (struct window *w, int on);
 
   if (emacs_event)
     {
-      emacs_event->kind = ICONIFY_EVENT;
+      emacs_event->kind = DEICONIFY_EVENT;
       EV_TRAILER ((id)nil);
     }
 }

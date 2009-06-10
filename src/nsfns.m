@@ -732,7 +732,6 @@ void
 x_set_tool_bar_lines (struct frame *f, Lisp_Object value, Lisp_Object oldval)
 {
   int nlines;
-  Lisp_Object root_window;
 
   if (FRAME_MINIBUF_ONLY_P (f))
     return;
