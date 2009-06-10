@@ -280,32 +280,8 @@ If `flyspell-large-region' is nil, all regions are treated as small."
   :group 'flyspell)
 
 ;; **********************************************************************
-;; settings to control the use of NSSpellChecker as the spellchecking
+;; functions that use NSSpellChecker as the spellchecking
 ;; engine, instead of ispell or aspell
-
-(defcustom ns-spellchecker-chunk-size 100000
-  "approximate size in characters of the chunks of text to be
-passed to `ns-spellchecker-check-spelling' when checking large
-regions."
-  :type '(choice (const :tag "Default" 100000)
-  number ))
-
-(defcustom flyspell-use-ns-spellchecker-p t
-  "When non-nil, use NSSpellChecker instead of ispell/aspell for spell checking."
-  :type 'boolean
-  :group 'ispell)
-
-(defun ns-spellchecker-parse-output (word)
-  (let* ((output (ns-spellchecker-check-spelling word (current-buffer)))
-	 (offset (car output)))
-    (cond
-     ;; word is correct -- return t
-     ((equal output (cons -1 0)) t)
-     ;; word is incorrect -- return
-     ;; (\"ORIGINAL-WORD\" OFFSET MISS-LIST GUESS-LIST)
-     ;; don't know what the difference between miss-list and guess-list is...
-     ((> offset -1)
-      (list word offset (ns-spellchecker-get-suggestions word) nil)))))
 
 (defun ns-flyspell-region (beg end)
   "Flyspell text between BEG and END using ns-spellchecker-check-spelling."
@@ -1213,7 +1189,7 @@ Mostly we check word delimiters."
 	    (setq flyspell-word-cache-end end)
 	    (setq flyspell-word-cache-word word) 
 	    ;; now check spelling of word.
-	    (if flyspell-use-ns-spellchecker-p
+	    (if ispell-use-ns-spellchecker-p
 		(setq poss (ns-spellchecker-parse-output word))
 	      (ispell-send-string "%\n")
 	      ;; put in verbose mode
@@ -1726,7 +1702,7 @@ The buffer to mark them in is `flyspell-large-region-buffer'."
 	  (let ((old beg))
 	    (setq beg end)
 	    (setq end old)))
-      (if flyspell-use-ns-spellchecker-p
+      (if ispell-use-ns-spellchecker-p
 	  (if (> (- end beg) (* ns-spellchecker-chunk-size 1.5))
 	      (ns-flyspell-large-region beg end)
 	    (ns-flyspell-region beg end))
@@ -2043,7 +2019,7 @@ This command proposes various successive corrections for the current word."
 		  poss ispell-filter)
 	      (setq flyspell-auto-correct-word word)
 	      ;; now check spelling of word.
-	      (if flyspell-use-ns-spellchecker-p
+	      (if ispell-use-ns-spellchecker-p
 		  (setq poss (ns-spellchecker-parse-output word))
 		(ispell-send-string "%\n") ;put in verbose mode
 		(ispell-send-string (concat "^" word "\n"))
@@ -2206,7 +2182,7 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 	      (word (car word))
 	      poss ispell-filter)
 	  ;; now check spelling of word.
-	  (if flyspell-use-ns-spellchecker-p
+	  (if ispell-use-ns-spellchecker-p
 	      (setq poss (ns-spellchecker-parse-output word))
 	    (ispell-send-string "%\n")	;put in verbose mode
 	    (ispell-send-string (concat "^" word "\n"))
@@ -2250,7 +2226,7 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 	 nil)
 	((eq replace 'save)
          (goto-char save)
-	 (if flyspell-use-ns-spellchecker-p
+	 (if ispell-use-ns-spellchecker-p
 	     (ns-spellchecker-learn-word word)
 	   (ispell-send-string (concat "*" word "\n"))
 	   ;; This was added only to the XEmacs side in revision 1.18 of
@@ -2261,7 +2237,7 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 	   (flyspell-unhighlight-at cursor-location))
 	 )
 	((or (eq replace 'buffer) (eq replace 'session))
-	 (if flyspell-use-ns-spellchecker-p
+	 (if ispell-use-ns-spellchecker-p
 	     (ns-spellchecker-ignore-word word (current-buffer))
 	   (ispell-send-string (concat "@" word "\n"))
 	   (if (null ispell-pdict-modified-p)
@@ -2287,7 +2263,7 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
              (delete-region start end)
              (goto-char start)
              (funcall flyspell-insert-function new-word)
-             (if (and (not flyspell-use-ns-spellchecker-p) flyspell-abbrev-p)
+             (if (and (not ispell-use-ns-spellchecker-p) flyspell-abbrev-p)
                  (flyspell-define-abbrev word new-word)))
            ;; In the original Emacs code, this was only called in the body
            ;; of the if.  I arbitrarily kept the XEmacs behavior instead.
@@ -2351,7 +2327,7 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 			 save)))
 	 (menu       (cons "flyspell correction menu" base-menu)))
     (car (x-popup-menu event
-		       (list (if flyspell-use-ns-spellchecker-p
+		       (list (if ispell-use-ns-spellchecker-p
 				 (format "%s" word)
 			       (format "%s [%s]" word (or ispell-local-dictionary
 							  ispell-dictionary)))

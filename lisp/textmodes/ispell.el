@@ -252,6 +252,42 @@ compatibility function in case `version<=' is not available."
 
 (defalias 'check-ispell-version 'ispell-check-version)
 
+;; **********************************************************************
+;; settings to control the use of NSSpellChecker as the spellchecking
+;; engine, instead of ispell or aspell 
+
+(defcustom ispell-use-ns-spellchecker-p t
+  "When non-nil, use NSSpellChecker instead of ispell/aspell for spell checking."
+  :type 'boolean
+  :group 'ispell)
+
+(defcustom ns-spellchecker-chunk-size 100000
+  "approximate size in characters of the chunks of text to be
+passed to `ns-spellchecker-check-spelling' when checking large
+regions."
+  :type '(choice (const :tag "Default" 100000)
+  number ))
+
+(defun ns-spellchecker-parse-output (word)
+  "NSSpellChecker replacement for ispell-parse-output.  Spellcheck WORD
+and Return:
+1: t for an exact match.
+2: A list of possible correct spellings of the format:
+   (\"ORIGINAL-WORD\" OFFSET MISS-LIST)
+   ORIGINAL-WORD is a string of the possibly misspelled word.
+   OFFSET is an integer giving the line offset of the word.
+   MISS-LIST is a possibly null list of guesses."
+  (let* ((output (ns-spellchecker-check-spelling word (current-buffer)))
+	 (offset (car output)))
+    (cond
+     ;; word is correct -- return t
+     ((equal output (cons -1 0)) t)
+     ;; word is incorrect -- return
+     ;; (\"ORIGINAL-WORD\" OFFSET MISS-LIST GUESS-LIST)
+     ;; don't know what the difference between miss-list and guess-list is...
+     ((> offset -1)
+      (list word offset (ns-spellchecker-get-suggestions word) nil)))))
+
 ;;; **********************************************************************
 ;;; The following variables should be set according to personal preference
 ;;; and location of binaries:
@@ -3715,52 +3751,52 @@ You can bind this to the key C-c i in GNUS or mail by adding to
 
 
 (defun ispell-buffer-local-parsing ()
-  "Place Ispell into parsing mode for this buffer.
-Overrides the default parsing mode.
-Includes Latex/Nroff modes and extended character mode."
-  ;; (ispell-init-process) must already be called.
-  ;; (ispell-send-string "!\n")		; Put process in terse mode.
-  ;; We assume all major modes with "tex-mode" in them should use latex parsing
-  ;; When exclusively checking comments, set to raw text mode (nroff).
-  ;; (if (and (not (eq 'exclusive ispell-check-comments))
-  ;; 	   (or (and (eq ispell-parser 'use-mode-name)
-  ;; 		    (string-match "[Tt][Ee][Xx]-mode"
-  ;; 				  (symbol-name major-mode)))
-  ;; 	       (eq ispell-parser 'tex)))
-  ;;     (progn
-  ;; 	;; (ispell-send-string "+\n")	; set ispell mode to tex
-  ;; 	(if (not (eq ispell-parser 'tex))
-  ;; 	    (set (make-local-variable 'ispell-parser) 'tex)))
-  ;;   ;; (ispell-send-string "-\n"))		; set mode to normal (nroff)
-  ;; ;; If needed, test for SGML & HTML modes and set a buffer local nil/t value.
-  ;; (if (and ispell-skip-html (not (eq ispell-skip-html t)))
-  ;;     (setq ispell-skip-html
-  ;; 	    (not (null (string-match "sgml\\|html\\|xml"
-  ;; 				     (downcase (symbol-name major-mode)))))))
-  ;; ;; Set default extended character mode for given buffer, if any.
-  ;; (let ((extended-char-mode (ispell-get-extended-character-mode)))
-  ;;   (if extended-char-mode
-  ;; 	;; (ispell-send-string (concat extended-char-mode "\n"))))
-  ;; ;; Set buffer-local parsing mode and extended character mode, if specified.
-  ;; (save-excursion
-  ;;   (goto-char (point-max))
-  ;;   ;; Uses last occurrence of ispell-parsing-keyword
-  ;;   (if (search-backward ispell-parsing-keyword nil t)
-  ;; 	(let ((end (save-excursion (end-of-line) (point)))
-  ;; 	      string)
-  ;; 	  (search-forward ispell-parsing-keyword)
-  ;; 	  (while (re-search-forward " *\\([^ \"]+\\)" end t)
-  ;; 	    ;; space separated definitions.
-  ;; 	    (setq string (downcase (match-string-no-properties 1)))
-  ;; 	    (cond ((and (string-match "latex-mode" string)
-  ;; 			(not (eq 'exclusive ispell-check-comments)))
-  ;; 		   ;; (ispell-send-string "+\n~tex\n"))
-  ;; 		  ;; ((string-match "nroff-mode" string)
-  ;; 		   ;; (ispell-send-string "-\n~nroff\n"))
-  ;; 		  ((string-match "~" string) ; Set extended character mode.
-  ;; 		   (ispell-send-string (concat string "\n")))
-  ;; 		  (t (message "Invalid Ispell Parsing argument!")
-  ;; 		     (sit-for 2)))))))
+;;   "Place Ispell into parsing mode for this buffer.
+;; Overrides the default parsing mode.
+;; Includes Latex/Nroff modes and extended character mode."
+;;   ;; (ispell-init-process) must already be called.
+;;   (ispell-send-string "!\n")		; Put process in terse mode.
+;;   ;; We assume all major modes with "tex-mode" in them should use latex parsing
+;;   ;; When exclusively checking comments, set to raw text mode (nroff).
+;;   (if (and (not (eq 'exclusive ispell-check-comments))
+;;   	   (or (and (eq ispell-parser 'use-mode-name)
+;;   		    (string-match "[Tt][Ee][Xx]-mode"
+;;   				  (symbol-name major-mode)))
+;;   	       (eq ispell-parser 'tex)))
+;;       (progn
+;;   	(ispell-send-string "+\n")	; set ispell mode to tex
+;;   	(if (not (eq ispell-parser 'tex))
+;;   	    (set (make-local-variable 'ispell-parser) 'tex)))
+;;     (ispell-send-string "-\n"))		; set mode to normal (nroff)
+;;   ;; If needed, test for SGML & HTML modes and set a buffer local nil/t value.
+;;   (if (and ispell-skip-html (not (eq ispell-skip-html t)))
+;;       (setq ispell-skip-html
+;;   	    (not (null (string-match "sgml\\|html\\|xml"
+;;   				     (downcase (symbol-name major-mode)))))))
+;;   ;; Set default extended character mode for given buffer, if any.
+;;   (let ((extended-char-mode (ispell-get-extended-character-mode)))
+;;     (if extended-char-mode
+;;   	(ispell-send-string (concat extended-char-mode "\n"))))
+;;   ;; Set buffer-local parsing mode and extended character mode, if specified.
+;;   (save-excursion
+;;     (goto-char (point-max))
+;;     ;; Uses last occurrence of ispell-parsing-keyword
+;;     (if (search-backward ispell-parsing-keyword nil t)
+;;   	(let ((end (save-excursion (end-of-line) (point)))
+;;   	      string)
+;;   	  (search-forward ispell-parsing-keyword)
+;;   	  (while (re-search-forward " *\\([^ \"]+\\)" end t)
+;;   	    ;; space separated definitions.
+;;   	    (setq string (downcase (match-string-no-properties 1)))
+;;   	    (cond ((and (string-match "latex-mode" string)
+;;   			(not (eq 'exclusive ispell-check-comments)))
+;;   		   (ispell-send-string "+\n~tex\n"))
+;;   		  ((string-match "nroff-mode" string)
+;;   		   (ispell-send-string "-\n~nroff\n"))
+;;   		  ((string-match "~" string) ; Set extended character mode.
+;;   		   (ispell-send-string (concat string "\n")))
+;;   		  (t (message "Invalid Ispell Parsing argument!")
+;;   		     (sit-for 2)))))))
 )
 
 
@@ -3801,32 +3837,32 @@ Both should not be used to define a buffer-local dictionary."
 
 
 (defun ispell-buffer-local-words ()
-  "Load the buffer-local dictionary in the current buffer."
-  ;; If there's an existing ispell process that's wrong for this use,
-  ;; kill it.
+  ;; "Load the buffer-local dictionary in the current buffer."
+  ;; ;; If there's an existing ispell process that's wrong for this use,
+  ;; ;; kill it.
   ;; (if (and ispell-buffer-local-name
-	   ;; (not (equal ispell-buffer-local-name (buffer-name))))
-      ;; (ispell-kill-ispell t))
-  ;; Actually start a new ispell process, because we need
-  ;; to send commands now to specify the local words to it.
+  ;; 	   (not (equal ispell-buffer-local-name (buffer-name))))
+  ;;     (ispell-kill-ispell t))
+  ;; ;; Actually start a new ispell process, because we need
+  ;; ;; to send commands now to specify the local words to it.
   ;; (ispell-init-process)
   ;; (save-excursion
-    ;; (goto-char (point-min))
-    ;; (while (search-forward ispell-words-keyword nil t)
-    ;;   (or ispell-buffer-local-name
-    ;; 	  (setq ispell-buffer-local-name (buffer-name)))
-    ;;   (let ((end (save-excursion (end-of-line) (point)))
-    ;; 	    (ispell-casechars (ispell-get-casechars))
-    ;; 	    string)
-    ;; 	;; buffer-local words separated by a space, and can contain
-    ;; 	;; any character other than a space.  Not rigorous enough.
-    ;; 	(while (re-search-forward " *\\([^ ]+\\)" end t)
-    ;; 	  (setq string (match-string-no-properties 1))
-    ;; 	  ;; This can fail when string contains a word with invalid chars.
-    ;; 	  ;; Error handling needs to be added between ispell and Emacs.
-    ;; 	  (if (and (< 1 (length string))
-    ;; 		   (equal 0 (string-match ispell-casechars string)))
-    ;; 	      (ispell-send-string (concat "@" string "\n")))))))
+  ;;   (goto-char (point-min))
+  ;;   (while (search-forward ispell-words-keyword nil t)
+  ;;     (or ispell-buffer-local-name
+  ;;   	  (setq ispell-buffer-local-name (buffer-name)))
+  ;;     (let ((end (save-excursion (end-of-line) (point)))
+  ;;   	    (ispell-casechars (ispell-get-casechars))
+  ;;   	    string)
+  ;;   	;; buffer-local words separated by a space, and can contain
+  ;;   	;; any character other than a space.  Not rigorous enough.
+  ;;   	(while (re-search-forward " *\\([^ ]+\\)" end t)
+  ;;   	  (setq string (match-string-no-properties 1))
+  ;;   	  ;; This can fail when string contains a word with invalid chars.
+  ;;   	  ;; Error handling needs to be added between ispell and Emacs.
+  ;;   	  (if (and (< 1 (length string))
+  ;;   		   (equal 0 (string-match ispell-casechars string)))
+  ;;   	      (ispell-send-string (concat "@" string "\n")))))))
 )
 
 
