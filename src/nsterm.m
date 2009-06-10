@@ -3384,7 +3384,6 @@ ns_select (int nfds, fd_set *readfds, fd_set *writefds,
 
    ========================================================================== */
 
-
 static void
 ns_set_vertical_scroll_bar (struct window *window,
                            int portion, int whole, int position)
@@ -3565,7 +3564,6 @@ static void
 ns_fullscreen_hook  (f)
 FRAME_PTR f;
 {
-  struct frame *emacsframe = SELECTED_FRAME ();
   int rows, cols;
   int fs =0;
   int width, height, ign;
@@ -3578,6 +3576,7 @@ FRAME_PTR f;
       if ([view respondsToSelector:@selector(exitFullScreenModeWithOptions:)])
 	{
 	  BLOCK_INPUT;
+	  NSDisableScreenUpdates();
 
 	  switch (f->want_fullscreen)
 	    {
@@ -3675,47 +3674,54 @@ FRAME_PTR f;
           if (rows < MINHEIGHT)
 	    rows = MINHEIGHT;
 
+	  /* Handle scroll bars */
+	  set_vertical_scroll_bar (XWINDOW (f->root_window)); 
+	  if (fs)
+	    {
+	      // turn off scroll bars in full screen mode
+	      // we want to hide those scroll bars for now, as they are displayed
+	      // in the wrong position, and clicks aren't processed reliably 
+	      x_set_frame_parameters (f, Fcons (Fcons (Qvertical_scroll_bars, Qnil),
+	      					Qnil));
+
+	      // we can only assume that removeFromSuperview is called
+	      // when NSView goes into fullscreen mode.
+	      // this should trigger their re-addition by the next set_vertical_scroll_bar
+	      XWINDOW (f->root_window) -> vertical_scroll_bar = Qnil;
+	    } else
+	    {
+	      // Fixme: we don't know that they were Qright in the first place.
+	      x_set_frame_parameters (f, Fcons (Fcons (Qvertical_scroll_bars, Qright),
+	      					Qnil));
+	    }
+	    
+	  /* Fixme: after going back to normal mode, scroll bars flicker heavily
+	     Miniaturizing/de-m. removes flicker.  Why? */
+
+	  FRAME_NS_DISPLAY_INFO (f)->x_focus_frame = f;
+
+	  mark_window_cursors_off (XWINDOW (f->root_window));
+
+
+	  FRAME_PIXEL_WIDTH (f) = width;
+	  FRAME_PIXEL_HEIGHT (f) = height;
 	  if (FRAME_COLS (f) != cols || FRAME_LINES (f) != rows)
 	    {
 	      change_frame_size (f, rows, cols, 0, 0, 1);  /* pretend, delay, safe */
 	      SET_FRAME_GARBAGED (f);
 	      cancel_mouse_face (f);
 	    }
-	  FRAME_PIXEL_WIDTH (f) = width;
-	  FRAME_PIXEL_HEIGHT (f) = height;
-	  // FRAME_NS_DISPLAY_INFO (f)->x_focus_frame = f;
-
-	  // mark_window_cursors_off (XWINDOW (f->root_window));
- 
-
 	  x_set_window_size (f, 0, f->text_cols, f->text_lines);
 
-	  emacsframe->async_iconified = 0;
-	  emacsframe->async_visible   = 1;
+	  f->async_iconified = 0;
+	  f->async_visible   = 1;
 	  windows_or_buffers_changed++;
-	  SET_FRAME_GARBAGED (emacsframe);
-	  ns_raise_frame (emacsframe);
+	  SET_FRAME_GARBAGED (f);
+	  ns_raise_frame (f);
 	  ns_frame_rehighlight (f);
-	  
-
-	  if (fs) /* Fixme */
-	    /* scroll bars need an additional update somehow - they are not
-	       correctly tracked / added otherwise.
-	       window->vertical_scroll_bars maybe
-	       after de-fullscreen, scrollbar is broken
-	       however, in new windows opened with C-x 2, things work.
-	    */
-	    {
-	      x_set_frame_parameters (f, Fcons (Fcons (Qvertical_scroll_bars, Qnil),
-						Qnil));
-	    } else
-	    {
-	      x_set_frame_parameters (f, Fcons (Fcons (Qvertical_scroll_bars, Qright),
-						Qnil));
-	    }
-
-
 	  ns_send_appdefined (-1);
+
+	  NSEnableScreenUpdates();
 
 	  UNBLOCK_INPUT;
      }
@@ -5635,7 +5641,7 @@ extern void update_window_cursor (struct window *w, int on);
 
   if (emacs_event)
     {
-      emacs_event->kind = ICONIFY_EVENT;
+      emacs_event->kind = DEICONIFY_EVENT;
       EV_TRAILER ((id)nil);
     }
 }
