@@ -2319,9 +2319,13 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 					    'save)
 				      '("Accept (session)" session)
 				      '("Accept (buffer)" buffer))
-				   '(("Save word" save)
-				     ("Accept (session)" session)
-				     ("Accept (buffer)" buffer)))))
+				   `(,(if ispell-use-ns-spellchecker-p
+					  '("Learn Spelling" save)
+					'("Save word" save))
+				     ,(if ispell-use-ns-spellchecker-p
+					  '("Ignore Spelling" buffer)
+					'("Accept (session)" session)
+					'("Accept (buffer)" buffer))))))
 		       (if (consp cor-menu)
 			   (append cor-menu (cons "" save))
 			 save)))
