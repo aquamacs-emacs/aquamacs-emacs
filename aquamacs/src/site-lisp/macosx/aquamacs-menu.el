@@ -1103,17 +1103,15 @@ the previous frame size."
   (if (frame-parameter nil 'fullscreen)    ;(frame-full-screen-p)
       (modify-frame-parameters 
        nil (list (cons 'fullscreen nil)))
-    ;; (frame-parameters)
     ;; save small frame position
+    (smart-move-frame-inside-screen)
     (modify-frame-parameters 
      nil (list (cons 'fullscreen 'fullboth))))
   
   (if (frame-parameter nil 'fullscreen) ; (frame-full-screen-p)
-      (run-with-idle-timer 1 nil (lambda () (message  (substitute-command-keys "Press \\[aquamacs-toggle-full-frame] to exit full screen editing.")))))
+      (message (substitute-command-keys 
+		"Press \\[aquamacs-toggle-full-frame] to exit full screen editing.")))
   nil)
-
-;; (set-frame-parameter nil 'fullscreen 'fullboth)
- 
 
 
 (defvar menu-bar-zoom-menu (make-sparse-keymap "Zoom"))
