@@ -769,14 +769,11 @@ default."
     (define-key map `[(,osxkeys-command-key shift \?)] 'aquamacs-emacs-manual)
 
     (define-key map `[(,osxkeys-command-key n)] 'new-empty-buffer-other-frame) 
-					;open new frame empty
     (define-key map `[(,osxkeys-command-key o)] 'mac-key-open-file) 
-					;open new frame with a file
-
-    (define-key map `[(,osxkeys-command-key s)] 'save-buffer)
-    (define-key map `[(,osxkeys-command-key shift s)] 'write-file)
+    (define-key map `[(,osxkeys-command-key s)] 'mac-key-save-file)
+    (define-key map `[(,osxkeys-command-key shift s)] 'mac-key-save-file-as)
     (define-key map `[(,osxkeys-command-key shift o)] 'mac-key-open-file-other-frame) 
-					;open new frame with a file
+
     (define-key map `[(,osxkeys-command-key a)] 'mark-whole-buffer)
     (define-key map `[(,osxkeys-command-key v)] 'clipboard-yank) 
     (define-key map `[(,osxkeys-command-key c)] 'clipboard-kill-ring-save)

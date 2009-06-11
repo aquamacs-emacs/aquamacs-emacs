@@ -407,7 +407,7 @@ left and right margin"))
 
 (define-key menu-bar-file-menu [save-buffer ]
   `(menu-item "Save Buffer"
-	      save-buffer
+	      mac-key-save-file
 	      :key-sequence [(,osxkeys-command-key s)]
 	      :enable (and (buffer-modified-p)
 			   (buffer-file-name)
@@ -418,7 +418,7 @@ left and right margin"))
 
 (define-key menu-bar-file-menu [write-file]
   `(menu-item "Save Buffer As..."
-	      write-file
+	      mac-key-save-file-as
 	      :key-sequence [(,osxkeys-command-key S)]
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
 			   (menu-bar-non-minibuffer-window-p))

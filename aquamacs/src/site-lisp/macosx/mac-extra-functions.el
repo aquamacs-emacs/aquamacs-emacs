@@ -64,38 +64,41 @@
   (substring data-directory 0 -4))
 
 ;; File Open / Save
-;; TO DO: these should be replaced with the file menu item 
-;; can't do this because the internal find-file function will
-;; display a file dialogue only if menu was used w/ mouse
  
+;; To do: present those panels as sheets 
+;; using extra events to handle OK / cancel
 
-(defun mac-key-open-file (filename &rest ignored)
+(defun mac-key-open-file (&optional filename &rest _wildcards)
   "Open a file, selecting file by dialog"
-  (interactive
-   (let ((last-nonmenu-event nil))
-     (find-file-read-args "Open file: " t))) ;; may return list with two el
-  (find-file-existing filename))
+  (interactive)
+  (unless filename
+    (setq filename (ns-read-file-name "Select File to Load" nil t nil)))
+  (if filename (find-file-existing filename)))
 
-(defun mac-key-open-file-other-frame (filename &rest ignored)
+(defun mac-key-open-file-other-frame (&optional filename &rest ignored)
   "Open a file in new frame, selecting file by dialog"
-  (interactive
-   (let ((last-nonmenu-event nil))
-     (find-file-read-args "Open file: " t)))  ;; may return list with two el
-  (find-file-other-frame filename))
-
+  (interactive)
+  (let ((one-buffer-one-frame-mode t))
+    (mac-key-open-file filename)))
+ 
 (defun mac-key-save-file ()
   (interactive)
   "Save buffer. If needed, select file by dialog"
    (if buffer-file-name 
        (save-buffer)
-     (call-interactively (function mac-key-save-file-as))))
+     (mac-key-save-file-as)))
  
  
-(defun mac-key-save-file-as ()
+(defun mac-key-save-file-as (&optional filename)
   "Save buffer to a file, selecting file by dialog"
   (interactive)
-  (let ((last-nonmenu-event nil))
-    (call-interactively 'write-file)))
+  (unless filename
+    (setq filename (ns-read-file-name
+		    "Select File to Save Buffer" 
+		    default-directory nil 
+		    (file-name-nondirectory buffer-file-name))))
+  (if filename (write-file filename)))
+
 
 ;; when saving a file, set its creator code
 

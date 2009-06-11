@@ -1424,7 +1424,7 @@ DEFUN ("ns-popup-color-panel", Fns_popup_color_panel, Sns_popup_color_panel,
 DEFUN ("ns-read-file-name", Fns_read_file_name, Sns_read_file_name, 1, 4, 0,
        doc: /* Use a graphical panel to read a file name, using prompt PROMPT.
 Optional arg DIR, if non-nil, supplies a default directory.
-Optional arg ISLOAD, if non-nil, means read a file name for saving.
+Optional arg ISLOAD, if non-nil, means read a file name for loading.
 Optional arg INIT, if non-nil, provides a default file name to use.  */)
      (prompt, dir, isLoad, init)
      Lisp_Object prompt, dir, isLoad, init;
