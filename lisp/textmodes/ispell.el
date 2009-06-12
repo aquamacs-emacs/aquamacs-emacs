@@ -5,14 +5,12 @@
 
 ;; Author:           Ken Stevens <k.stevens@ieee.org>
 ;; Maintainer:       Ken Stevens <k.stevens@ieee.org>
-;; Stevens Mod Date: Mon Jan  7 12:32:44 PST 2003
-;; Stevens Revision: 3.6
-;; Status          : Release with 3.1.12+ and 3.2.0+ ispell.
+;;                   in Aquamacs: Nathaniel Cunningham <nathaniel.cunningham@gmail.com>
 ;; Bug Reports     : ispell-el-bugs@itcorp.com
 ;; Web Site        : http://kdstevens.com/~stevens/ispell-page.html
 ;; Keywords: unix wp
 
-;; This file is part of GNU Emacs.
+;; This file is part of GNU Emacs and of Aquamacs Emacs.
 
 ;; GNU Emacs is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -127,6 +125,9 @@
 ;; HISTORY
 
 ;; Modifications made in latest versions:
+
+
+;; Aquamacs: 2008/05/01  aspell support
 
 ;; Revision 3.6 2003/01/07 12:32:44	kss
 ;; Removed extra -d LIB in dictionary defs. (Pavel Janik)
@@ -251,15 +252,14 @@ compatibility function in case `version<=' is not available."
       (buffer-substring start end)))
 
 (defalias 'check-ispell-version 'ispell-check-version)
-
 ;; **********************************************************************
 ;; settings to control the use of NSSpellChecker as the spellchecking
-;; engine, instead of ispell or aspell 
+;; engine, instead of ispell/aspell/hunspell 
 
 (defcustom ispell-use-ns-spellchecker-p t
   "When non-nil, use NSSpellChecker instead of ispell/aspell for spell checking."
   :type 'boolean
-  :group 'ispell)
+  :group 'ispell) 
 
 (defcustom ns-spellchecker-chunk-size 100000
   "approximate size in characters of the chunks of text to be
@@ -287,6 +287,297 @@ and Return:
      ;; don't know what the difference between miss-list and guess-list is...
      ((> offset -1)
       (list word offset (ns-spellchecker-get-suggestions word) nil)))))
+
+;;; **********************************************************************
+;;; settings to use cocoAspell preferences (from Spelling prefpane)
+;;; or cocoAspell-installed aspell dictionaries
+
+;; we need an alist or hash table pairing up language names and
+;; abbreviations
+(defvar ispell-language-abbrev-alist
+  (list
+   (cons "Afrikaans" "af")
+   (cons "Amharic" "am")
+   (cons "Arabic" "ar")
+   (cons "Azerbaijani" "az")
+   (cons "Belarusian" "be")
+   (cons "Bulgarian" "bg")
+   (cons "Bengali" "bn")
+   (cons "Breton" "br")
+   (cons "Catalan" "ca")
+   (cons "Czech" "cs")
+   (cons "Kashubian" "csb")
+   (cons "Welsh" "cy")
+   (cons "Danish" "da")
+   (cons "German" "de")
+   (cons "Greek" "el")
+   (cons "English" "en")
+   (cons "Esperanto" "eo")
+   (cons "Spanish" "es")
+   (cons "Estonian" "et")
+   (cons "Persian" "fa")
+   (cons "Finnish" "fi")
+   (cons "Faroese" "fo")
+   (cons "French" "fr")
+   (cons "Frisian" "fy")
+   (cons "Irish" "ga")
+   (cons "Scottish Gaelic" "gd")
+   (cons "Gallegan" "gl")
+   (cons "Gujarati" "gu")
+   (cons "Manx" "gv")
+   (cons "Hebrew" "he")
+   (cons "Hindi" "hi")
+   (cons "Hiligaynon" "hil")
+   (cons "Croatian" "hr")
+   (cons "Upper Sorbian" "hsb")
+   (cons "Hungarian" "hu")
+   (cons "Armenian" "hy")
+   (cons "Interlingua" "ia")
+   (cons "Indonesian" "id")
+   (cons "Icelandic" "is")
+   (cons "Italian" "it")
+   (cons "Kurdish" "ku")
+   (cons "Latin" "la")
+   (cons "Lithuanian" "lt")
+   (cons "Latvian" "lv")
+   (cons "Malagasy" "mg")
+   (cons "Maori" "mi")
+   (cons "Macedonian" "mk")
+   (cons "Malayalam" "ml")
+   (cons "Mongolian" "mn")
+   (cons "Marathi" "mr")
+   (cons "Malay" "ms")
+   (cons "Maltese" "mt")
+   (cons "Norwegian Bokmål" "nb")
+   (cons "Low German; Low Saxon" "nds")
+   (cons "Dutch" "nl")
+   (cons "Norwegian Nynorsk" "nn")
+   (cons "Nyanja; Chichewa; Chewa" "ny")
+   (cons "Oriya" "or")
+   (cons "Punjabi" "pa")
+   (cons "Polish" "pl")
+   (cons "Portuguese" "pt")
+   (cons "Quechua" "qu")
+   (cons "Romanian" "ro")
+   (cons "Russian" "ru")
+   (cons "Kinyarwanda" "rw")
+   (cons "Sardinian" "sc")
+   (cons "Slovak" "sk")
+   (cons "Slovenian" "sl")
+   (cons "Serbian" "sr")
+   (cons "Swedish" "sv")
+   (cons "Swahili" "sw")
+   (cons "Tamil" "ta")
+   (cons "Telugu" "te")
+   (cons "Tetum" "tet")
+   (cons "Turkmen" "tk")
+   (cons "Tagalog" "tl")
+   (cons "Tswana" "tn")
+   (cons "Turkish" "tr")
+   (cons "Ukrainian" "uk")
+   (cons "Uzbek" "uz")
+   (cons "Vietnamese" "vi")
+   (cons "Walloon" "wa")
+   (cons "Yiddish" "yi")
+   (cons "Zulu" "zu"))
+  "Paired language names and ISO abbreviations.
+Used to match cocoAspell language names to dictionary
+file names.")
+
+;; another alist for language region abbreviations
+(defvar ispell-lregion-abbrev-alist
+  (list
+   (cons "United States" "US")
+   (cons "Canada" "CA")
+   (cons "United Kingdom" "GB")
+   (cons "France" "FR")
+   (cons "Switzerland" "CH")
+   (cons "Austria" "AT")
+   (cons "Germany" "DE")
+   (cons "Brazil" "BR")
+   (cons "Portugal" "PT"))
+  "Paired language region names and abbreviations.
+Used to match cocoAspell language names to dictionary
+file names.")
+
+;; does aspell have a list of dictionaries already?
+(defvar aspell-knows-no-dicts
+  (condition-case nil
+      (with-temp-buffer
+      ;; is there a stored cocoaSpell configuration?
+      (call-process ispell-program-name nil t nil "dicts")
+      (eq (point-min) (point-max)))
+    (error nil))
+  "Records whether or not aspell's default configuration can
+locate any dictionaries.")
+
+;;;###autoload
+(defcustom ispell-use-cocoaspell
+  'auto
+  "Specify whether spell-checking with aspell should use
+cocoaAspell installation.  The following options are available:
+- `full'
+    Use cocoAspell preferences and dictionaries.
+- `dicts'
+    Use cocoAspell dictionaries only (e.g. when
+        Spelling prefpane isn't installed).
+- nil
+    Use generic aspell without cocoAspell.
+- `auto'
+    Determine the proper setting at runtime,
+        based on detected aspell/cocoAspell installation."
+  :group 'ispell
+  :type '(choice :tag "Aspell should use..."
+                 (const :tag "cocoAspell Preferences and Dictionaries" full)
+                 (const :tag "cocoAspell Dictionaries Only" dicts)
+                 (const :tag "generic install (Don't use cocoAspell)" nil)
+		 (const :tag "automatic setting" auto)))
+
+;; determine how to configure aspell
+(when (eq ispell-use-cocoaspell 'auto)
+  (setq ispell-use-cocoaspell
+      (if (equal ispell-program-name "aspell")
+          (when aspell-knows-no-dicts
+            (if (file-accessible-directory-p
+                 (expand-file-name "~/Library/Services/cocoAspell.service/"))
+                'full
+              'dicts)))))
+
+(defvar ispell-cocoaspell-prefs-dir
+  (when (eq ispell-use-cocoaspell 'full)
+    (expand-file-name "~/Library/Preferences/cocoAspell/"))
+  "Full path to cocoAspell's preferences directory, if cocoAspell installed")
+
+(defvar ispell-cocoaspell-prefpane-plist
+  (when (eq ispell-use-cocoaspell 'full)
+    ;; overall preferences set in Spelling prefpane
+    (expand-file-name
+     "~/Library/Services/cocoAspell.service/Contents/Info.plist"))
+  "Full path to file recording cocoAspell Spelling prefpane's preferences.
+File contents are used to determine which languages are available for
+spell checking in Aquamacs.")
+
+(defvar ispell-cocoaspell-dict-list
+  (when (eq ispell-use-cocoaspell 'full)
+    (let ((lang-list))
+      (with-temp-buffer
+      ;; extract language names selected in Spelling prefpane
+      (insert-file-contents ispell-cocoaspell-prefpane-plist)
+      ;; move point to just before first language name
+      (re-search-forward "<key>NSLanguages</key>\\s +<array>\\s +<string>")
+      (while (progn
+               ;; find each language name, and move point to just before next
+               ;; tag after current string
+               (re-search-forward "\\(.+\\)</string>\\s +<\\([/a-z]+\\)>")
+               ;; tack current language onto lang-list
+               (add-to-list 'lang-list (match-string 1))
+               ;; continue if next tag indicates another language string
+               (equal (match-string 2) "string")))
+      ;; return the language list
+      lang-list)))
+  "List of dictionaries checked in cocoAspell's Spelling prefpane.")
+
+  ;; convert from names e.g. English (United States) to en_US
+  ;; append stuff in brackets
+  ;; also include length if it exists
+(defun aspell-dict-abbrev (langstring)
+  "Given LANGSTRING, a string name for a cocoAspell dictionary, return
+abbreviated dict name, which cocoAspell uses as base filename for that
+dictionary's files.  e.g., passed `English (United States) [w_accents]'
+return 'en_US-w_accents'."
+  (unless (null langstring)
+    (let* ((lang-elts
+          ;; parse out: language
+          (string-match (concat "\\([[:alpha:]]+;?\\( [[:alpha:]]+;?\\)*\\)"
+                                ;; region
+                                "\\( (\\([[:alpha:] ]+\\))\\)?"
+                                ;; modifiers
+                                "\\( \\[\\(.+\\)\\]\\)?"
+                                ) langstring))
+         (lang (match-string 1 langstring))
+         (lregion (match-string 4 langstring))
+         (mods (match-string 6 langstring))
+         (lang-abbrev (cdr (assoc lang ispell-language-abbrev-alist)))
+         (lregion-abbrev (or (cdr (assoc lregion ispell-lregion-abbrev-alist))
+                             lregion))) ;; if no abbrev in alist, keep name
+      (if lregion-abbrev (setq lregion-abbrev (concat "_" lregion-abbrev)))
+      (if mods (setq mods (concat "-" mods)))
+      (concat lang-abbrev lregion-abbrev mods)))) ;; generate aspell conf filename
+
+(defun ispell-cocoaspell-dict-dir (dict-abbrev)
+  "Return the full path of the directory in which cocoAspell dictionary
+files for dictionary DICT-ABBREV are located."
+  (let ((filename (concat ispell-cocoaspell-prefs-dir dict-abbrev ".conf")))
+    (if (file-readable-p filename)
+      (with-temp-buffer
+        (insert-file-contents filename)
+        (when (search-forward-regexp "^dict-dir " nil t)
+          (buffer-substring (point) (progn (end-of-line) (point)))))
+      (let* ((dict-abbrev-parts (split-string dict-abbrev "-"))
+           (dict-abbrev-root (car dict-abbrev-parts))
+           (dict-abbrev-mods (nth 1 dict-abbrev-parts))
+           (dict-abbrev-root-parts (split-string dict-abbrev-root "_"))
+           (dict-lang-abbrev (car dict-abbrev-root-parts))
+           (dict-region-abbrev (nth 1 dict-abbrev-root-parts))
+           (dict-parent-dir "/Library/Application Support/cocoAspell/")
+           (dict-dir (car (or (directory-files
+                               dict-parent-dir
+                               nil
+                               (concat "aspell[0-9]?-"
+                                       dict-lang-abbrev "-"
+                                       dict-abbrev-mods "-.+"))
+                              (directory-files
+                               dict-parent-dir
+                               nil
+                               (concat "aspell[0-9]?-"
+                                       dict-lang-abbrev "-"
+                                       dict-region-abbrev "-.+"))
+                              (directory-files
+                               dict-parent-dir
+                               nil
+                               (concat "aspell[0-9]?-"
+                                       dict-lang-abbrev "-.+"))))))
+      (concat dict-parent-dir dict-dir)))))
+      
+(defun ispell-cocoaspell-aspell-args (dict-abbrev)
+  "Return the arguments to be passed to the aspell command to use dictionary
+DICT-ABBREV."
+  (let* ((lang-conf (concat ispell-cocoaspell-prefs-dir dict-abbrev ".conf"))
+       (readable (file-readable-p lang-conf)))
+    (if readable
+      (list (concat "--conf=" ispell-cocoaspell-prefs-dir "filters.conf")
+            (concat "--per-conf=" ispell-cocoaspell-prefs-dir dict-abbrev ".conf")
+            "--encoding=utf-8")
+      (let* ((dict-abbrev-parts (split-string dict-abbrev "-"))
+           (dict-abbrev-root (car dict-abbrev-parts))
+           (dict-abbrev-mods (nth 1 dict-abbrev-parts))
+           (dict-dir (ispell-cocoaspell-dict-dir dict-abbrev)))
+      (list (concat "--dict-dir=" dict-dir)
+            "--encoding=utf-8"
+            (concat "--home-dir=" ispell-cocoaspell-prefs-dir)
+            (concat "--jargon=" dict-abbrev-mods)
+            (concat "--lang=" dict-abbrev-root)
+            (concat "--personal=" dict-abbrev-root ".pws")
+            (concat "--repl=" dict-abbrev-root ".prepl"))))))
+
+(defvar ispell-cocoaspell-dict-dir-list
+  (when (eq ispell-use-cocoaspell 'dicts)
+    (file-expand-wildcards
+     "/Library/Application Support/cocoAspell/aspell*-*-*"))
+  "List of paths of directories for all cocoAspell-installed
+aspell dictionaries.")
+
+(defvar ispell-cocoaspell-dict-aliases
+  (when (eq ispell-use-cocoaspell 'dicts)
+    (mapcar (lambda (dict-alias)
+            (file-name-sans-extension
+             (file-name-nondirectory dict-alias)))
+          (file-expand-wildcards
+           "/Library/Application Support/cocoAspell/aspell*-*-*/*.alias")))
+  "List of base filenames of all *.alias files in cocoAspell-installed aspell
+dictionary directories.  These will be used to generate ispell-dictionary-alist
+when cocoAspell dictionaries are installed, but no Spelling prefpane.")
+
 
 ;;; **********************************************************************
 ;;; The following variables should be set according to personal preference
@@ -367,10 +658,11 @@ Must be greater than 1."
   :group 'ispell)
 
 (defcustom ispell-program-name
+;; don't assume that ispell is installed, if we don't find aspell/hunspell!
   (or (locate-file "aspell"   exec-path exec-suffixes 'file-executable-p)
       (locate-file "ispell"   exec-path exec-suffixes 'file-executable-p)
-      (locate-file "hunspell" exec-path exec-suffixes 'file-executable-p)
-      "ispell")
+      (locate-file "hunspell" exec-path exec-suffixes 'file-executable-p))
+      ;; "ispell")
   "Program invoked by \\[ispell-word] and \\[ispell-region] commands."
   :type 'string
   :group 'ispell)
@@ -955,10 +1247,15 @@ Internal use.")
   (unless (and ispell-really-aspell ispell-encoding8-command)
     (error "This function only works with aspell >= 0.60."))
   (let* ((dictionaries
-	  (split-string
-	   (with-temp-buffer
-	     (ispell-call-process ispell-program-name nil t nil "dicts")
-	     (buffer-string))))
+	  (cond
+	   ((eq ispell-use-cocoaspell 'full)
+	    ispell-cocoaspell-dict-list)
+	   ((eq ispell-use-cocoaspell 'dicts)
+	    ispell-cocoaspell-dict-aliases)
+	   (t (split-string
+	       (with-temp-buffer
+		 (ispell-call-process ispell-program-name nil t nil "dicts")
+		 (buffer-string))))))
 	 ;; Search for the named dictionaries.
 	 (found
 	  (delq nil
@@ -968,12 +1265,30 @@ Internal use.")
     (setq found (ispell-aspell-add-aliases found))
     ;; Merge into FOUND any elements from the standard ispell-dictionary-alist
     ;; which have no element in FOUND at all.
-    (dolist (dict ispell-dictionary-alist)
-      (unless (assoc (car dict) found)
-	(setq found (nconc found (list dict)))))
+    ;; ==SKIP this step -- don't add entries corresponding to dicts we don't have!!!==
+;;         (dolist (dict ispell-dictionary-alist)
+;;           (unless (assoc (car dict) found)
+;;            (setq found (nconc found (list dict)))))
     (setq ispell-aspell-dictionary-alist found)
     ;; Add a default entry
-    (let ((default-dict '(nil "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-B") nil utf-8)))
+    (let* ((english-dict-cdr
+	    (if ispell-use-cocoaspell
+		(or 
+		 (assoc-default "^[Ee]nglish$" ispell-aspell-dictionary-alist
+				(lambda (dict-name key)
+				  (string-match key dict-name)))
+		 (assoc-default "^[Ee]n$" ispell-aspell-dictionary-alist
+				(lambda (dict-name key)
+				  (string-match key dict-name)))
+		 (assoc-default "^[Ee]ngl.*" ispell-aspell-dictionary-alist
+				(lambda (dict-name key)
+				  (and (string-match key dict-name)
+				       (not (string-match ".*variant.*"
+							  dict-name))))))
+	      (cdr (assoc "en" ispell-aspell-dictionary-alist))))
+	   (default-dict
+	     (cons nil (or english-dict-cdr
+			   (cdr (car ispell-aspell-dictionary-alist))))))
       (push default-dict ispell-aspell-dictionary-alist))))
 
 (defvar ispell-aspell-data-dir nil
@@ -993,15 +1308,29 @@ Assumes that value contains no whitespace."
   ;; This returns nil if the data file does not exist.
   ;; Can someone please explain the return value format when the
   ;; file does exist -- rms?
-  (let* ((lang ;; Strip out region, variant, etc.
-	  (and (string-match "^[[:alpha:]]+" dict-name)
-	       (match-string 0 dict-name)))
+  (let* ((dict-abbrev (when (eq ispell-use-cocoaspell 'full)
+                      (aspell-dict-abbrev dict-name)))
+       (lang ;; Strip out region, variant, etc.
+        (and (string-match "^[[:alpha:]]+" (or dict-abbrev dict-name))
+             (match-string 0 (or dict-abbrev dict-name))))
+       (dict-dir (cond
+                  ((eq ispell-use-cocoaspell 'full)
+                   (ispell-cocoaspell-dict-dir dict-abbrev))
+                  ((eq ispell-use-cocoaspell 'dicts)
+                   (file-name-directory 
+                    (car
+                     (file-expand-wildcards
+                      (concat "/Library/Application Support/cocoAspell/aspell*-*-*/"
+                              dict-name ".alias")))))))
 	 (data-file
-	  (concat (or ispell-aspell-data-dir
-		      (setq ispell-aspell-data-dir
-			    (ispell-get-aspell-config-value "data-dir")))
-		  "/" lang ".dat"))
-	 otherchars)
+        (if ispell-use-cocoaspell
+            (concat dict-dir "/" lang ".dat")
+          (concat (or ispell-aspell-data-dir
+                      (setq ispell-aspell-data-dir
+                            (ispell-get-aspell-config-value "data-dir")))
+                  "/" lang ".dat")))
+       otherchars
+       charset)
     (condition-case ()
 	(with-temp-buffer
 	  (insert-file-contents data-file)
@@ -1025,8 +1354,16 @@ Assumes that value contains no whitespace."
 		"[^[:alpha:]]"
 		(regexp-opt otherchars)
 		t			     ; We can't tell, so set this to t
-		(list "-d" dict-name)
-		nil				; aspell doesn't support this
+              ;; set arguments for aspell
+              ;; if we use cocoAspell prefs, use conf files associated with language
+              (cond ((eq ispell-use-cocoaspell 'full)
+                     (ispell-cocoaspell-aspell-args dict-abbrev))
+                    ((eq ispell-use-cocoaspell 'dicts)
+                     (list "-d" dict-name
+                           "--dict-dir" dict-dir
+                           "--encoding=utf-8"))
+                    (t (list "-d" dict-name "--encoding=utf-8")))
+                    nil                               ; aspell doesn't support this
 		;; Here we specify the encoding to use while communicating with
 		;; aspell.  This doesn't apply to command line arguments, so
 		;; just don't pass words to spellcheck as arguments...
@@ -1104,8 +1441,8 @@ aspell is used along with Emacs).")
 
       ;; Add dicts to ``ispell-dictionary-alist'' unless already present.
       (dolist (dict (append found-dicts-alist
-			    ispell-base-dicts-override-alist
-			    ispell-dictionary-base-alist))
+			    ispell-base-dicts-override-alist))
+			    ;; ispell-dictionary-base-alist))
 	(unless (assoc (car dict) all-dicts-alist)
 	  (add-to-list 'all-dicts-alist dict)))
       (setq ispell-dictionary-alist all-dicts-alist))))
@@ -2578,22 +2915,26 @@ When asynchronous processes are not supported, `run' is always returned."
 (defun ispell-start-process ()
   "Start the ispell process, with support for no asynchronous processes.
 Keeps argument list for future ispell invocations for no async support."
-  (let ((default-directory default-directory)
+  (let* ((default-directory default-directory)
+       (current-dict-name (or ispell-local-dictionary ispell-dictionary))
+       (current-dict
+        (if (eq ispell-use-cocoaspell 'full)
+            (aspell-dict-abbrev current-dict-name)
+          current-dict-name))
 	args)
     (unless (and (file-directory-p default-directory)
 		 (file-readable-p default-directory))
       ;; Defend against bad `default-directory'.
       (setq default-directory (expand-file-name "~/")))
     ;; Local dictionary becomes the global dictionary in use.
-    (setq ispell-current-dictionary
-	  (or ispell-local-dictionary ispell-dictionary))
+    (setq ispell-current-dictionary current-dict-name)
     (setq ispell-current-personal-dictionary
 	  (or ispell-local-pdict ispell-personal-dictionary))
     (setq args (ispell-get-ispell-args))
     (if (and ispell-current-dictionary	; use specified dictionary
 	     (not (member "-d" args)))	; only define if not overridden
 	(setq args
-	      (append (list "-d" ispell-current-dictionary) args)))
+            (append (list "-d" current-dict) args)))
     (if ispell-current-personal-dictionary	; use specified pers dict
 	(setq args
 	      (append args
@@ -2723,12 +3064,13 @@ Without a prefix arg, set it \"locally\", just for this buffer.
 
 By just answering RET you can find out what the current dictionary is."
   (interactive
+   (let ((completion-ignore-case t))
    (list (completing-read
 	  "Use new dictionary (RET for current, SPC to complete): "
 	  (and (fboundp 'ispell-valid-dictionary-list)
 	       (mapcar 'list (ispell-valid-dictionary-list)))
 	  nil t)
-	 current-prefix-arg))
+	 current-prefix-arg)))
   (ispell-set-spellchecker-params) ; Initilize variables and dicts alists
   (unless arg (ispell-buffer-local-dict 'no-reload))
   (if (equal dict "default") (setq dict nil))
