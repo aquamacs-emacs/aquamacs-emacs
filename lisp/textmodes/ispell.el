@@ -2019,7 +2019,8 @@ quit          spell session exited."
    (continue (ispell-continue))
    (t
     (ispell-set-spellchecker-params)    ; Initialize variables and dicts alists
-    (ispell-accept-buffer-local-defs)	; use the correct dictionary
+    ;; use the correct dictionary
+    (unless ispell-use-ns-spellchecker-p (ispell-accept-buffer-local-defs))
     (let ((cursor-location (point))	; retain cursor location
 	  (word (ispell-get-word following))
 	  start end poss new-word replace)
@@ -2033,18 +2034,21 @@ quit          spell session exited."
       (or quietly
 	  (message "Checking spelling of %s..."
 		   (funcall ispell-format-word-function word)))
-      (ispell-send-string "%\n")	; put in verbose mode
-      (ispell-send-string (concat "^" word "\n"))
-      ;; wait until ispell has processed word
-      (while (progn
-	       (ispell-accept-output)
-	       (not (string= "" (car ispell-filter)))))
-      ;;(ispell-send-string "!\n") ;back to terse mode.
-      (setq ispell-filter (cdr ispell-filter)) ; remove extra \n
-      (if (and ispell-filter (listp ispell-filter))
-	  (if (> (length ispell-filter) 1)
-	      (error "Ispell and its process have different character maps")
-	    (setq poss (ispell-parse-output (car ispell-filter)))))
+      (if ispell-use-ns-spellchecker-p
+		(setq poss (ns-spellchecker-parse-output word))
+	(ispell-send-string "%\n")	; put in verbose mode
+	(ispell-send-string (concat "^" word "\n"))
+	;; wait until ispell has processed word
+	(while (progn
+		 (ispell-accept-output)
+		 (not (string= "" (car ispell-filter)))))
+	;;(ispell-send-string "!\n") ;back to terse mode.
+	(setq ispell-filter (cdr ispell-filter)) ; remove extra \n
+	(if (and ispell-filter (listp ispell-filter))
+	    (if (> (length ispell-filter) 1)
+		(error "Ispell and its process have different character maps")
+	      (setq poss (ispell-parse-output (car ispell-filter))))))
+      (print poss)
       (cond ((eq poss t)
 	     (or quietly
 		 (message "%s is correct"
