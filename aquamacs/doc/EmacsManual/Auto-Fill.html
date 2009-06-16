@@ -1,0 +1,77 @@
+<html lang="en">
+<head>
+<title>Auto Fill Mode</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Auto Fill Mode">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Auto%20Fill">Auto Fill</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Refill.html#Refill">Refill</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Filling.html#Filling">Filling</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Auto Fill Mode</h4>
+
+<p><dfn>Auto Fill</dfn> mode is a minor mode in which lines are broken
+automatically when they become too wide.  Breaking happens only when
+you type a &lt;SPC&gt; or &lt;RET&gt;.
+
+     <dl>
+<dt><kbd>M-x auto-fill-mode</kbd>
+     <dd>Enable or disable Auto Fill mode. 
+<br><dt><kbd>&lt;SPC&gt;</kbd>
+     <dd><dt><kbd>&lt;RET&gt;</kbd>
+     <dd>In Auto Fill mode, break lines when appropriate. 
+</dl>
+
+   <p><kbd>M-x auto-fill-mode</kbd> turns Auto Fill mode on if it was off, or off
+if it was on.  With a positive numeric argument it always turns Auto
+Fill mode on, and with a negative argument always turns it off.  You can
+see when Auto Fill mode is in effect by the presence of the word
+<code>Fill</code> in the mode line, inside the parentheses.  Auto Fill mode is
+a minor mode which is enabled or disabled for each buffer individually. 
+See <a href="Minor-Modes.html#Minor%20Modes">Minor Modes</a>.
+
+   <p>In Auto Fill mode, lines are broken automatically at spaces when they
+get longer than the desired width.  Line breaking and rearrangement
+takes place only when you type &lt;SPC&gt; or &lt;RET&gt;.  If you wish to
+insert a space or newline without permitting line-breaking, type
+<kbd>C-q &lt;SPC&gt;</kbd> or <kbd>C-q C-j</kbd> (recall that a newline is really a
+control-J).  Also, <kbd>C-o</kbd> inserts a newline without line breaking.
+
+   <p>Auto Fill mode works well with programming-language modes, because it
+indents new lines with &lt;TAB&gt;.  If a line ending in a comment gets
+too long, the text of the comment is split into two comment lines. 
+Optionally, new comment delimiters are inserted at the end of the first
+line and the beginning of the second so that each line is a separate
+comment; the variable <code>comment-multi-line</code> controls the choice
+(see <a href="Comments.html#Comments">Comments</a>).
+
+   <p>Adaptive filling (see <a href="Adaptive-Fill.html#Adaptive%20Fill">Adaptive Fill</a>) works for Auto Filling as
+well as for explicit fill commands.  It takes a fill prefix
+automatically from the second or first line of a paragraph.
+
+   <p>Auto Fill mode does not refill entire paragraphs; it can break lines but
+cannot merge lines.  So editing in the middle of a paragraph can result in
+a paragraph that is not correctly filled.  The easiest way to make the
+paragraph properly filled again is usually with the explicit fill commands.
+
+   <p>Many users like Auto Fill mode and want to use it in all text files. 
+The section on init files says how to arrange this permanently for yourself. 
+See <a href="Init-File.html#Init%20File">Init File</a>.
+
+   </body></html>
+

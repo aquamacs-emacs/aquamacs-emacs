@@ -1,0 +1,49 @@
+<html lang="en">
+<head>
+<title>Unibyte and Multibyte Non-ASCII characters</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Unibyte and Multibyte Non-ASCII characters">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Multibyte%20Conversion">Multibyte Conversion</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Coding-Systems.html#Coding%20Systems">Coding Systems</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Select-Input-Method.html#Select%20Input%20Method">Select Input Method</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="International.html#International">International</a>
+<hr><br>
+</div>
+
+<h3 class="section">Unibyte and Multibyte Non-ASCII characters</h3>
+
+<p>When multibyte characters are enabled, character codes 0240 (octal)
+through 0377 (octal) are not really legitimate in the buffer.  The valid
+non-ASCII printing characters have codes that start from 0400.
+
+   <p>If you type a self-inserting character in the range 0240 through
+0377, or if you use <kbd>C-q</kbd> to insert one, Emacs assumes you
+intended to use one of the ISO Latin-<var>n</var> character sets, and
+converts it to the Emacs code representing that Latin-<var>n</var>
+character.  You select <em>which</em> ISO Latin character set to use
+through your choice of language environment
+If you do not specify a choice, the default is Latin-1.
+
+   <p>If you insert a character in the range 0200 through 0237, which
+forms the <code>eight-bit-control</code> character set, it is inserted
+literally.  You should normally avoid doing this since buffers
+containing such characters have to be written out in either the
+<code>emacs-mule</code> or <code>raw-text</code> coding system, which is usually
+not what you want.
+
+   </body></html>
+

@@ -1,0 +1,100 @@
+<html lang="en">
+<head>
+<title>Customization Groups</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Customization Groups">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Customization%20Groups">Customization Groups</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Changing-an-Option.html#Changing%20an%20Option">Changing an Option</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Easy-Customization.html#Easy%20Customization">Easy Customization</a>
+<hr><br>
+</div>
+
+<h3 class="subsubsection">Customization Groups</h5>
+
+<p>For customization purposes, user options are organized into
+<dfn>groups</dfn> to help you find them.  Groups are collected into bigger
+groups, all the way up to a master group called <code>Emacs</code>.
+
+   <p><kbd>M-x customize</kbd> creates a customization buffer that shows the
+top-level <code>Emacs</code> group and the second-level groups immediately
+under it.  It looks like this, in part:
+
+<pre class="smallexample">     /- Emacs group: ---------------------------------------------------\
+           [State]: visible group members are all at standard settings.
+        Customization of the One True Editor.
+        See also [Manual].
+     
+     Confirm Kill Emacs: [Hide] [Value Menu] Don't confirm
+        [State]: this option is unchanged from its standard setting.
+     How to ask for confirmation when leaving Emacs. [More]
+     
+     Editing group: [Go to Group]
+     Basic text editing facilities.
+     
+     External group: [Go to Group]
+     Interfacing to external utilities.
+     
+     <var>more second-level groups</var>
+     
+     \- Emacs group end ------------------------------------------------/
+     
+     </pre>
+
+<p>This says that the buffer displays the contents of the <code>Emacs</code>
+group.  The other groups are listed because they are its contents.  But
+they are listed differently, without indentation and dashes, because
+<em>their</em> contents are not included.  Each group has a single-line
+documentation string; the <code>Emacs</code> group also has a <code>[State]</code>
+line.
+
+   <p>Most of the text in the customization buffer is read-only, but it
+typically includes some <dfn>editable fields</dfn> that you can edit.  There
+are also <dfn>active fields</dfn>; this means a field that does something
+when you <dfn>invoke</dfn> it.  To invoke an active field, either click on it
+with <kbd>Mouse-1</kbd>, or move point to it and type &lt;RET&gt;.
+
+   <p>For example, the phrase <code>[Go to Group]</code> that appears in a
+second-level group is an active field.  Invoking the <code>[Go to
+Group]</code> field for a group creates a new customization buffer, which
+shows that group and its contents.  This field is a kind of hypertext
+link to another group.
+
+   <p>The <code>Emacs</code> group includes a few user options itself, but
+mainly it contains other groups, which contain more groups, which
+contain the user options.  By browsing the hierarchy of groups, you
+will eventually find the feature you are interested in customizing. 
+Then you can use the customization buffer to set the options and faces
+pertaining to that feature.  You can also go straight to a particular
+group by name, using the command <kbd>M-x customize-group</kbd>.
+
+   <p>You can view the structure of customization groups on a larger scale
+with <kbd>M-x customize-browse</kbd>.  This command creates a special kind of
+customization buffer which shows only the names of the groups (and
+options and faces), and their structure.
+
+   <p>In this buffer, you can show the contents of a group by invoking
+<code>[+]</code>.  When the group contents are visible, this button changes to
+<code>[-]</code>; invoking that hides the group contents.
+
+   <p>Each group, option or face name in this buffer has an active field
+which says <code>[Group]</code>, <code>[Option]</code> or <code>[Face]</code>.  Invoking
+that active field creates an ordinary customization buffer showing just
+that group and its contents, just that option, or just that face. 
+This is the way to set values in it.
+
+   </body></html>
+

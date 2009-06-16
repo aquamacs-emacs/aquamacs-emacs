@@ -1,0 +1,150 @@
+<html lang="en">
+<head>
+<title>Etags Regexps</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Etags Regexps">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Etags%20Regexps">Etags Regexps</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Select-Tags-Table.html#Select%20Tags%20Table">Select Tags Table</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Create-Tags-Table.html#Create%20Tags%20Table">Create Tags Table</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Tags.html#Tags">Tags</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Etags Regexps</h4>
+
+<p>The <code>--regex</code> option provides a general way of recognizing tags
+based on regexp matching.  You can freely intermix it with file names. 
+Each <code>--regex</code> option adds to the preceding ones, and applies only
+to the following files.  The syntax is:
+
+<pre class="smallexample">     --regex=/<var>tagregexp</var>[/<var>nameregexp</var>]/
+     </pre>
+
+<p>where <var>tagregexp</var> is used to match the lines to tag.  It is always
+anchored, that is, it behaves as if preceded by <code>^</code>.  If you want
+to account for indentation, just match any initial number of blanks by
+beginning your regular expression with <code>[ \t]*</code>.  In the regular
+expressions, <code>\</code> quotes the next character, and <code>\t</code> stands
+for the tab character.  Note that <code>etags</code> does not handle the other
+C escape sequences for special characters.
+
+   <p>The syntax of regular expressions in <code>etags</code> is the same as in
+Emacs, augmented with the <dfn>interval operator</dfn>, which works as in
+<code>grep</code> and <code>ed</code>.  The syntax of an interval operator is
+<code>\{</code><var>m</var><code>,</code><var>n</var><code>\}</code>, and its meaning is to match the preceding
+expression at least <var>m</var> times and up to <var>n</var> times.
+
+   <p>You should not match more characters with <var>tagregexp</var> than that
+needed to recognize what you want to tag.  If the match is such that
+more characters than needed are unavoidably matched by <var>tagregexp</var>
+(as will usually be the case), you should add a <var>nameregexp</var>, to
+pick out just the tag.  This will enable Emacs to find tags more
+accurately and to do completion on tag names more reliably.  You can
+find some examples below.
+
+   <p>The option <code>--ignore-case-regex</code> (or <code>-c</code>) works like
+<code>--regex</code>, except that matching ignores case.  This is
+appropriate for certain programming languages.
+
+   <p>The <code>-R</code> option deletes all the regexps defined with
+<code>--regex</code> options.  It applies to the file names following it, as
+you can see from the following example:
+
+<pre class="smallexample">     etags --regex=/<var>reg1</var>/ voo.doo --regex=/<var>reg2</var>/ \
+         bar.ber -R --lang=lisp los.er
+     </pre>
+
+<p>Here <code>etags</code> chooses the parsing language for <code>voo.doo</code> and
+<code>bar.ber</code> according to their contents.  <code>etags</code> also uses
+<var>reg1</var> to recognize additional tags in <code>voo.doo</code>, and both
+<var>reg1</var> and <var>reg2</var> to recognize additional tags in
+<code>bar.ber</code>.  <code>etags</code> uses the Lisp tags rules, and no regexp
+matching, to recognize tags in <code>los.er</code>.
+
+   <p>You can specify a regular expression for a particular language, by
+writing <code>{lang}</code> in front of it.  Then <code>etags</code> will use
+the regular expression only for files of that language.  (<code>etags
+--help</code> prints the list of languages recognized by <code>etags</code>.)  The
+following example tags the <code>DEFVAR</code> macros in the Emacs source
+files, for the C language only:
+
+<pre class="smallexample">     --regex='{c}/[ \t]*DEFVAR_[A-Z_ \t(]+"\([^"]+\)"/'
+     </pre>
+
+<p>This feature is particularly useful when you store a list of regular
+expressions in a file.  The following option syntax instructs
+<code>etags</code> to read two files of regular expressions.  The regular
+expressions contained in the second file are matched without regard to
+case.
+
+<pre class="smallexample">     --regex=@first-file --ignore-case-regex=@second-file
+     </pre>
+
+<p>A regex file contains one regular expressions per line.  Empty lines,
+and lines beginning with space or tab are ignored.  When the first
+character in a line is <code>@</code>, <code>etags</code> assumes that the rest
+of the line is the name of a file of regular expressions; thus, one
+such file can include another file.  All the other lines are taken to
+be regular expressions.  If the first non-whitespace text on the line
+is <code>--</code>, that line is a comment.
+
+   <p>For example, one can create a file called <code>emacs.tags</code> with the
+following contents:
+
+<pre class="smallexample">             -- This is for GNU Emacs C source files
+     {c}/[ \t]*DEFVAR_[A-Z_ \t(]+"\([^"]+\)"/\1/
+     </pre>
+
+<p>and then use it like this:
+
+<pre class="smallexample">     etags --regex=@emacs.tags *.[ch] */*.[ch]
+     </pre>
+
+   <p>Here are some more examples.  The regexps are quoted to protect them
+from shell interpretation.
+
+     <ul>
+
+     <li>Tag Octave files:
+
+     <pre class="smallexample">          etags --language=none \
+                --regex='/[ \t]*function.*=[ \t]*\([^ \t]*\)[ \t]*(/\1/' \
+                --regex='/###key \(.*\)/\1/' \
+                --regex='/[ \t]*global[ \t].*/' \
+                *.m
+          </pre>
+
+     <p>Note that tags are not generated for scripts, so that you have to add
+a line by yourself of the form <code>###key </code><var>scriptname</var><code></code> if you
+want to jump to it.
+
+     </p><li>Tag Tcl files:
+
+     <pre class="smallexample">          etags --language=none --regex='/proc[ \t]+\([^ \t]+\)/\1/' *.tcl
+          </pre>
+
+     <li>Tag VHDL files:
+
+     <pre class="smallexample">          etags --language=none \
+            --regex='/[ \t]*\(ARCHITECTURE\|CONFIGURATION\) +[^ ]* +OF/' \
+            --regex='/[ \t]*\(ATTRIBUTE\|ENTITY\|FUNCTION\|PACKAGE\
+            \( BODY\)?\|PROCEDURE\|PROCESS\|TYPE\)[ \t]+\([^ \t(]+\)/\3/'
+          </pre>
+     </ul>
+
+   </body></html>
+

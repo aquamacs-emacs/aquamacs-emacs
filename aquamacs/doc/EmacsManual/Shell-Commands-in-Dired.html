@@ -1,0 +1,77 @@
+<html lang="en">
+<head>
+<title>Shell Commands in Dired</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Shell Commands in Dired">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Shell%20Commands%20in%20Dired">Shell Commands in Dired</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Transforming-File-Names.html#Transforming%20File%20Names">Transforming File Names</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Operating-on-Files.html#Operating%20on%20Files">Operating on Files</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Dired.html#Dired">Dired</a>
+<hr><br>
+</div>
+
+<h3 class="section">Shell Commands in Dired</h3>
+
+<p>The Dired command <kbd>!</kbd> (<code>dired-do-shell-command</code>) reads a shell
+command string in the minibuffer and runs that shell command on all the
+specified files.  <kbd>X</kbd> is a synonym for <kbd>!</kbd>.  You can specify the
+files to operate on in the usual ways for Dired commands
+(see <a href="Operating-on-Files.html#Operating%20on%20Files">Operating on Files</a>).  There are two ways of applying a shell
+command to multiple files:
+
+     <ul>
+<li>If you use <code>*</code> in the shell command, then it runs just once, with
+the list of file names substituted for the <code>*</code>.  The order of file
+names is the order of appearance in the Dired buffer.
+
+     <p>Thus, <kbd>! tar cf foo.tar * &lt;RET&gt;</kbd> runs <code>tar</code> on the entire
+list of file names, putting them into one tar file <code>foo.tar</code>.
+
+     </p><li>If the command string doesn't contain <code>*</code>, then it runs once
+<em>for each file</em>, with the file name added at the end.
+
+     <p>For example, <kbd>! uudecode &lt;RET&gt;</kbd> runs <code>uudecode</code> on each
+file. 
+</ul>
+
+   <p>What if you want to run the shell command once for each file, with the
+file name inserted in the middle?  You can use <code>?</code> in the command
+instead of <code>*</code>.  The current file name is substituted for
+<code>?</code>.  You can use <code>?</code> more than once.  For instance, here is
+how to uuencode each file, making the output file name by appending
+<code>.uu</code> to the input file name:
+
+<pre class="example">     uuencode ? ? &gt; ?.uu
+     </pre>
+
+   <p>To use the file names in a more complicated fashion, you can use a
+shell loop.  For example, this shell command is another way to
+uuencode each file:
+
+<pre class="example">     for file in *; do uuencode "$file" "$file" &gt;"$file".uu; done
+     </pre>
+
+   <p>The working directory for the shell command is the top-level directory
+of the Dired buffer.
+
+   <p>The <kbd>!</kbd> command does not attempt to update the Dired buffer to show
+new or modified files, because it doesn't really understand shell
+commands, and does not know what files the shell command changed.  Use
+the <kbd>g</kbd> command to update the Dired buffer (see <a href="Dired-Updating.html#Dired%20Updating">Dired Updating</a>).
+
+   </body></html>
+

@@ -77,6 +77,7 @@
 
 (load "cus-face")
 (load "faces")  ; after here, `defface' may be used.
+(load "aquamacs-faces")
 (load "minibuffer")
 
 (load "button")

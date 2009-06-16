@@ -1,0 +1,84 @@
+<html lang="en">
+<head>
+<title>File Archives</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="File Archives">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="File%20Archives">File Archives</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Remote-Files.html#Remote%20Files">Remote Files</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Compressed-Files.html#Compressed%20Files">Compressed Files</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
+<hr><br>
+</div>
+
+<h3 class="section">File Archives</h3>
+
+<p>A file whose name ends in <code>.tar</code> is normally an <dfn>archive</dfn>
+made by the <code>tar</code> program.  Emacs views these files in a special
+mode called Tar mode which provides a Dired-like list of the contents
+(see <a href="Dired.html#Dired">Dired</a>).  You can move around through the list just as you
+would in Dired, and visit the subfiles contained in the archive. 
+However, not all Dired commands are available in Tar mode.
+
+   <p>If you enable Auto Compression mode (see <a href="Compressed-Files.html#Compressed%20Files">Compressed Files</a>), then
+Tar mode is used also for compressed archives--files with extensions
+<code>.tgz</code>, <code>.tar.Z</code> and <code>.tar.gz</code>.
+
+   <p>The keys <kbd>e</kbd>, <kbd>f</kbd> and &lt;RET&gt; all extract a component file
+into its own buffer.  You can edit it there and when you save the buffer
+the edited version will replace the version in the Tar buffer.  <kbd>v</kbd>
+extracts a file into a buffer in View mode.  <kbd>o</kbd> extracts the file
+and displays it in another window, so you could edit the file and
+operate on the archive simultaneously.  <kbd>d</kbd> marks a file for
+deletion when you later use <kbd>x</kbd>, and <kbd>u</kbd> unmarks a file, as in
+Dired.  <kbd>C</kbd> copies a file from the archive to disk and <kbd>R</kbd>
+renames a file.  <kbd>g</kbd> reverts the buffer from the archive on disk.
+
+   <p>The keys <kbd>M</kbd>, <kbd>G</kbd>, and <kbd>O</kbd> change the file's permission
+bits, group, and owner, respectively.
+
+   <p>If your display supports colors and the mouse, moving the mouse
+pointer across a file name highlights that file name, indicating that
+you can click on it.  Clicking <kbd>Mouse-2</kbd> on the highlighted file
+name extracts the file into a buffer and displays that buffer.
+
+   <p>Saving the Tar buffer writes a new version of the archive to disk with
+the changes you made to the components.
+
+   <p>You don't need the <code>tar</code> program to use Tar mode--Emacs reads
+the archives directly.  However, accessing compressed archives
+requires the appropriate uncompression program.
+
+   <p>A separate but similar Archive mode is used for archives produced by
+the programs <code>arc</code>, <code>jar</code>, <code>lzh</code>, <code>zip</code>, and
+<code>zoo</code>, which have extensions corresponding to the program names.
+
+   <p>The key bindings of Archive mode are similar to those in Tar mode,
+with the addition of the <kbd>m</kbd> key which marks a file for subsequent
+operations, and <kbd>M-&lt;DEL&gt;</kbd> which unmarks all the marked files. 
+Also, the <kbd>a</kbd> key toggles the display of detailed file
+information, for those archive types where it won't fit in a single
+line.  Operations such as renaming a subfile, or changing its mode or
+owner, are supported only for some of the archive formats.
+
+   <p>Unlike Tar mode, Archive mode runs the archiving program to unpack
+and repack archives.  Details of the program names and their options
+can be set in the <code>Archive</code> Customize group.  However, you don't
+need these programs to look at the archive table of contents, only to
+extract or manipulate the subfiles in the archive.
+
+   </body></html>
+

@@ -1,0 +1,93 @@
+<html lang="en">
+<head>
+<title>Flagging Many Files at Once</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Flagging Many Files at Once">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Flagging%20Many%20Files">Flagging Many Files</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Dired-Visiting.html#Dired%20Visiting">Dired Visiting</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Dired-Deletion.html#Dired%20Deletion">Dired Deletion</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Dired.html#Dired">Dired</a>
+<hr><br>
+</div>
+
+<h3 class="section">Flagging Many Files at Once</h3>
+
+     <dl>
+<dt><kbd>#</kbd>
+     <dd>Flag all auto-save files (files whose names start and end with <code>#</code>)
+for deletion (see <a href="Auto-Save.html#Auto%20Save">Auto Save</a>).
+
+     <br><dt><kbd>~</kbd>
+     <dd>Flag all backup files (files whose names end with <code>~</code>) for deletion
+(see <a href="Backup.html#Backup">Backup</a>).
+
+     <br><dt><kbd>&amp;</kbd>
+     <dd>Flag for deletion all files with certain kinds of names, names that
+suggest you could easily create the files again.
+
+     <br><dt><kbd>. </kbd>(Period)<kbd></kbd>
+     <dd>Flag excess numeric backup files for deletion.  The oldest and newest
+few backup files of any one file are exempt; the middle ones are
+flagged.
+
+     <br><dt><kbd>% d </kbd><var>regexp</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Flag for deletion all files whose names match the regular expression
+<var>regexp</var>. 
+</dl>
+
+   <p>The <kbd>#</kbd>, <kbd>~</kbd>, <kbd>&amp;</kbd>, and <kbd>.</kbd> commands flag many files for
+deletion, based on their file names.  These commands are useful
+precisely because they do not themselves delete any files; you can
+remove the deletion flags from any flagged files that you really wish to
+keep.
+
+   <p><kbd>&amp;</kbd> (<code>dired-flag-garbage-files</code>) flags files whose names
+match the regular expression specified by the variable
+<code>dired-garbage-files-regexp</code>.  By default, this matches certain
+files produced by TeX, <code>.bak</code> files, and the <code>.orig</code> and
+<code>.rej</code> files produced by <code>patch</code>.
+
+   <p><kbd>#</kbd> (<code>dired-flag-auto-save-files</code>) flags for deletion all
+files whose names look like auto-save files (see <a href="Auto-Save.html#Auto%20Save">Auto Save</a>)--that
+is, files whose names begin and end with <code>#</code>.
+
+   <p><kbd>~</kbd> (<code>dired-flag-backup-files</code>) flags for deletion all files
+whose names say they are backup files (see <a href="Backup.html#Backup">Backup</a>)--that is, files
+whose names end in <code>~</code>.
+
+   <p><kbd>.</kbd> (period, <code>dired-clean-directory</code>) flags just some of the
+backup files for deletion: all but the oldest few and newest few backups
+of any one file.  Normally <code>dired-kept-versions</code> (<strong>not</strong>
+<code>kept-new-versions</code>; that applies only when saving) specifies the
+number of newest versions of each file to keep, and
+<code>kept-old-versions</code> specifies the number of oldest versions to
+keep.
+
+   <p>Period with a positive numeric argument, as in <kbd>C-u 3 .</kbd>,
+specifies the number of newest versions to keep, overriding
+<code>dired-kept-versions</code>.  A negative numeric argument overrides
+<code>kept-old-versions</code>, using minus the value of the argument to
+specify the number of oldest versions of each file to keep.
+
+   <p>The <kbd>% d</kbd> command flags all files whose names match a specified
+regular expression (<code>dired-flag-files-regexp</code>).  Only the
+non-directory part of the file name is used in matching.  You can use
+<code>^</code> and <code>$</code> to anchor matches.  You can exclude subdirectories
+by hiding them (see <a href="Hiding-Subdirectories.html#Hiding%20Subdirectories">Hiding Subdirectories</a>).
+
+   </body></html>
+

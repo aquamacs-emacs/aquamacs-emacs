@@ -1,0 +1,151 @@
+<html lang="en">
+<head>
+<title>Mail Header Fields</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Mail Header Fields">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Mail%20Headers">Mail Headers</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Mail-Aliases.html#Mail%20Aliases">Mail Aliases</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Mail-Format.html#Mail%20Format">Mail Format</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Sending-Mail.html#Sending%20Mail">Sending Mail</a>
+<hr><br>
+</div>
+
+<h3 class="section">Mail Header Fields</h3>
+
+<p>A header field in the mail buffer starts with a field name at the
+beginning of a line, terminated by a colon.  Upper and lower case are
+equivalent in field names (and in mailing addresses also).  After the
+colon and optional whitespace comes the contents of the field.
+
+   <p>You can use any name you like for a header field, but normally people
+use only standard field names with accepted meanings.  Here is a table
+of fields commonly used in outgoing messages.
+
+     <dl>
+<dt><code>To</code>
+     <dd>This field contains the mailing addresses to which the message is
+addressed.  If you list more than one address, use commas, not spaces,
+to separate them.
+
+     <br><dt><code>Subject</code>
+     <dd>The contents of the <code>Subject</code> field should be a piece of text
+that says what the message is about.  The reason <code>Subject</code> fields
+are useful is that most mail-reading programs can provide a summary of
+messages, listing the subject of each message but not its text.
+
+     <br><dt><code>CC</code>
+     <dd>This field contains additional mailing addresses to send the message to,
+like <code>To</code> except that these readers should not regard the message
+as directed at them.
+
+     <br><dt><code>BCC</code>
+     <dd>This field contains additional mailing addresses to send the message to,
+which should not appear in the header of the message actually sent. 
+Copies sent this way are called <dfn>blind carbon copies</dfn>.
+
+     <p>To send a blind carbon copy of every outgoing message to yourself, set
+the variable <code>mail-self-blind</code> to <code>t</code>.  To send a blind carbon
+copy of every message to some other <var>address</var>, set the variable
+<code>mail-default-headers</code> to <code>"Bcc: </code><var>address</var><code>\n"</code>.
+
+     <br><dt><code>FCC</code>
+     <dd>This field contains the name of one file and directs Emacs to append a
+copy of the message to that file when you send the message.  If the file
+is in Rmail format, Emacs writes the message in Rmail format; otherwise,
+Emacs writes the message in system mail file format.  To specify
+more than one file, use several <code>FCC</code> fields, with one file
+name in each field.
+
+     <p>To put a fixed file name in the <code>FCC</code> field each time you start
+editing an outgoing message, set the variable
+<code>mail-archive-file-name</code> to that file name.  Unless you remove the
+<code>FCC</code> field before sending, the message will be written into that
+file when it is sent.
+
+     <br><dt><code>From</code>
+     <dd>Use the <code>From</code> field to say who you are, when the account you are
+using to send the mail is not your own.  The contents of the <code>From</code>
+field should be a valid mailing address, since replies will normally go
+there.  If you don't specify the <code>From</code> field yourself, Emacs uses
+the value of <code>user-mail-address</code> as the default.
+
+     <br><dt><code>Reply-to</code>
+     <dd>Use this field to direct replies to a different address.  Most
+mail-reading programs (including Rmail) automatically send replies to
+the <code>Reply-to</code> address in preference to the <code>From</code> address. 
+By adding a <code>Reply-to</code> field to your header, you can work around
+any problems your <code>From</code> address may cause for replies.
+
+     <p>To put a fixed <code>Reply-to</code> address into every outgoing message, set
+the variable <code>mail-default-reply-to</code> to that address (as a string). 
+Then <code>mail</code> initializes the message with a <code>Reply-to</code> field as
+specified.  You can delete or alter that header field before you send
+the message, if you wish.  When Emacs starts up, if the environment
+variable <code>REPLYTO</code> is set, <code>mail-default-reply-to</code> is
+initialized from that environment variable.
+
+     <br><dt><code>In-reply-to</code>
+     <dd>This field contains a piece of text describing the message you are
+replying to.  Some mail systems can use this information to correlate
+related pieces of mail.  Normally this field is filled in by Rmail
+when you reply to a message in Rmail, and you never need to
+think about it (see <a href="Rmail.html#Rmail">Rmail</a>).
+
+     <br><dt><code>References</code>
+     <dd>This field lists the message IDs of related previous messages.  Rmail
+sets up this field automatically when you reply to a message. 
+</dl>
+
+   <p>The <code>To</code>, <code>CC</code>, and <code>BCC</code> header fields can appear
+any number of times, and each such header field can contain multiple
+addresses, separated by commas.  This way, you can specify any number
+of places to send the message.  These fields can also have
+continuation lines: one or more lines starting with whitespace,
+following the starting line of the field, are considered part of the
+field.  Here's an example of a <code>To</code> field with a continuation
+line:
+
+<pre class="example">     To: foo@here.net, this@there.net,
+       me@gnu.cambridge.mass.usa.earth.spiral3281
+     </pre>
+
+   <p>When you send the message, if you didn't write a <code>From</code> field
+yourself, Emacs puts in one for you.  The variable
+<code>mail-from-style</code> controls the format:
+
+     <dl>
+<dt><code>nil</code>
+     <dd>Use just the email address, as in <code>king@grassland.com</code>. 
+<br><dt><code>parens</code>
+     <dd>Use both email address and full name, as in <code>king@grassland.com (Elvis
+Parsley)</code>. 
+<br><dt><code>angles</code>
+     <dd>Use both email address and full name, as in <code>Elvis Parsley
+&lt;king@grassland.com&gt;</code>. 
+<br><dt><code>system-default</code>
+     <dd>Allow the system to insert the <code>From</code> field. 
+</dl>
+
+   <p>You can direct Emacs to insert certain default headers into the
+outgoing message by setting the variable <code>mail-default-headers</code>
+to a string.  Then <code>C-x m</code> inserts this string into the message
+headers.  If the default header fields are not appropriate for a
+particular message, edit them as appropriate before sending the
+message.
+
+   </body></html>
+

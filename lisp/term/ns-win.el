@@ -222,64 +222,6 @@ The properties returned may include `top', `left', `height', and `width'."
     map)
   "Keymap of alternative meanings for some keys under Nextstep.")
 
-;; Here are some Nextstep-like bindings for command key sequences.
-(define-key global-map [?\s-,] 'customize)
-(define-key global-map [?\s-'] 'next-multiframe-window)
-(define-key global-map [?\s-`] 'other-frame)
-(define-key global-map [?\s--] 'center-line)
-(define-key global-map [?\s-:] 'ispell)
-(define-key global-map [?\s-\;] 'ispell-next)
-(define-key global-map [?\s-?] 'info)
-(define-key global-map [?\s-^] 'kill-some-buffers)
-(define-key global-map [?\s-&] 'kill-this-buffer)
-(define-key global-map [?\s-C] 'ns-popup-color-panel)
-(define-key global-map [?\s-D] 'dired)
-(define-key global-map [?\s-E] 'edit-abbrevs)
-(define-key global-map [?\s-L] 'shell-command)
-(define-key global-map [?\s-M] 'manual-entry)
-(define-key global-map [?\s-S] 'ns-write-file-using-panel)
-(define-key global-map [?\s-a] 'mark-whole-buffer)
-(define-key global-map [?\s-c] 'ns-copy-including-secondary)
-(define-key global-map [?\s-d] 'isearch-repeat-backward)
-(define-key global-map [?\s-e] 'isearch-yank-kill)
-(define-key global-map [?\s-f] 'isearch-forward)
-(define-key global-map [?\s-g] 'isearch-repeat-forward)
-(define-key global-map [?\s-h] 'ns-do-hide-emacs)
-(define-key global-map [?\s-H] 'ns-do-hide-others)
-(define-key global-map [?\s-j] 'exchange-point-and-mark)
-(define-key global-map [?\s-k] 'kill-this-buffer)
-(define-key global-map [?\s-l] 'goto-line)
-(define-key global-map [?\s-m] 'iconify-frame)
-(define-key global-map [?\s-n] 'make-frame)
-(define-key global-map [?\s-o] 'ns-open-file-using-panel)
-(define-key global-map [?\s-p] 'ns-print-buffer)
-(define-key global-map [?\s-q] 'save-buffers-kill-emacs)
-(define-key global-map [?\s-s] 'save-buffer)
-(define-key global-map [?\s-t] 'ns-popup-font-panel)
-(define-key global-map [?\s-u] 'revert-buffer)
-(define-key global-map [?\s-v] 'yank)
-(define-key global-map [?\s-w] 'delete-frame)
-(define-key global-map [?\s-x] 'kill-region)
-(define-key global-map [?\s-y] 'ns-paste-secondary)
-(define-key global-map [?\s-z] 'undo)
-(define-key global-map [?\s-|] 'shell-command-on-region)
-(define-key global-map [s-kp-bar] 'shell-command-on-region)
-;; (as in Terminal.app)
-(define-key global-map [s-right] 'ns-next-frame)
-(define-key global-map [s-left] 'ns-prev-frame)
-
-(define-key global-map [home] 'beginning-of-buffer)
-(define-key global-map [end] 'end-of-buffer)
-(define-key global-map [kp-home] 'beginning-of-buffer)
-(define-key global-map [kp-end] 'end-of-buffer)
-(define-key global-map [kp-prior] 'scroll-down)
-(define-key global-map [kp-next] 'scroll-up)
-
-;;; Allow shift-clicks to work similarly to under Nextstep
-(define-key global-map [S-mouse-1] 'mouse-save-then-kill)
-(global-unset-key [S-down-mouse-1])
-
-
 ;; Special Nextstep-generated events are converted to function keys.  Here
 ;; are the bindings for them.
 (define-key global-map [ns-power-off] 'save-buffers-kill-emacs)
@@ -293,9 +235,10 @@ The properties returned may include `top', `left', `height', and `width'."
 (define-key global-map [ns-open-file-line] 'ns-open-file-select-line)
 (define-key global-map [ns-spi-service-call] 'ns-spi-service-call)
 (define-key global-map [ns-new-frame] 'make-frame)
+(define-key global-map [ns-show-prefs] 'customize)
+(define-key global-map [ns-about] 'about-emacs)
 (define-key global-map [ns-toggle-toolbar] 'ns-toggle-toolbar)
 (define-key global-map [ns-show-prefs] 'customize)
-
 
 ;; Set up a number of aliases and other layers to pretend we're using
 ;; the Choi/Mitsuharu Carbon port.
@@ -330,9 +273,14 @@ The properties returned may include `top', `left', `height', and `width'."
 ;             (cons (logior (lsh 0 16)   9) 'ns-insert-working-text)
 ;             (cons (logior (lsh 0 16)  10) 'ns-delete-working-text)
              (cons (logior (lsh 0 16)  11) 'ns-spi-service-call)
-	     (cons (logior (lsh 0 16)  12) 'ns-new-frame)
+             (cons (logior (lsh 0 16)  12) 'ns-new-frame)
 	     (cons (logior (lsh 0 16)  13) 'ns-toggle-toolbar)
-	     (cons (logior (lsh 0 16)  14) 'ns-show-prefs)
+	     (cons (logior (lsh 0 16)  14) 'ns-show-prefs) ;; Aquamacs only
+	     (cons (logior (lsh 0 16)  90) 'ns-application-activated)
+	     (cons (logior (lsh 0 16)  91) 'ns-application-open-untitled)
+	     (cons (logior (lsh 0 16)  130) 'ns-about) ;; Aquamacs only
+	     (cons (logior (lsh 0 16)  131) 'ns-check-for-updates) ;; Aquamacs only
+	     (cons (logior (lsh 0 16)  132) 'ns-tool-bar-customized) ;; Aquamacs only
 	     (cons (logior (lsh 1 16)  32) 'f1)
              (cons (logior (lsh 1 16)  33) 'f2)
              (cons (logior (lsh 1 16)  34) 'f3)
@@ -444,7 +392,7 @@ The properties returned may include `top', `left', `height', and `width'."
 (define-key global-map [menu-bar services]
   (cons "Services" (make-sparse-keymap "Services")))
 (define-key global-map [menu-bar buffer]
-  (cons "Buffers" global-buffers-menu-map))
+  (cons "Window" global-buffers-menu-map))
 ;;  (cons "Buffers" (make-sparse-keymap "Buffers")))
 (define-key global-map [menu-bar tools] (cons "Tools" menu-bar-tools-menu))
 (define-key global-map [menu-bar options] (cons "Options" menu-bar-options-menu))
@@ -497,6 +445,59 @@ The properties returned may include `top', `left', `height', and `width'."
 ;; Separate undo from cut/paste section, add spell for platform consistency.
 (define-key-after menu-bar-edit-menu [separator-undo] '("--") 'undo)
 (define-key-after menu-bar-edit-menu [spell] '("Spell" . ispell-menu-map) 'fill)
+
+(defun force-menu-bar-update-buffers ()
+  ;; This is a hack to get around fact that we already checked
+  ;; frame-or-buffer-changed-p and reset it, so menu-bar-update-buffers
+  ;; does not pick up any change.
+  (menu-bar-update-buffers t))
+
+(add-hook 'menu-bar-update-fab-hook 'force-menu-bar-update-buffers)
+
+(defun menu-bar-update-frames-and-buffers ()
+  (if (frame-or-buffer-changed-p)
+      (run-hooks 'menu-bar-update-fab-hook)))
+
+(setq menu-bar-update-hook
+      (delq 'menu-bar-update-buffers menu-bar-update-hook))
+(add-hook 'menu-bar-update-hook 'menu-bar-update-frames-and-buffers)
+
+(menu-bar-update-frames-and-buffers)
+
+
+;; ns-arrange functions contributed
+;; by Eberhard Mandler <mandler@dbag.ulm.DaimlerBenz.COM>
+(defun ns-arrange-all-frames ()
+  "Arranges all frames according to topline"
+  (interactive)
+  (ns-arrange-frames t))
+
+(defun ns-arrange-visible-frames ()
+  "Arranges all visible frames according to topline"
+  (interactive)
+  (ns-arrange-frames nil))
+
+(defun ns-arrange-frames (vis)
+  (let ((frame (next-frame))
+	(end-frame (selected-frame))
+	(inc-x 20)                      ;relative position of frames
+	(inc-y 22)
+	(x-pos 100)                     ;start position
+	(y-pos 40)
+	(done nil))
+    (while (not done)                   ;cycle through all frames
+      (if (not (or vis (eq (frame-visible-p frame) t)))
+          (setq x-pos x-pos); do nothing; true case
+	(set-frame-position frame x-pos y-pos)
+	(setq x-pos (+ x-pos inc-x))
+	(setq y-pos (+ y-pos inc-y))
+	(raise-frame frame))
+      (select-frame frame)
+      (setq frame (next-frame))
+      (setq done (equal frame end-frame)))
+    (set-frame-position end-frame x-pos y-pos)
+    (raise-frame frame)
+    (select-frame frame)))
 
 
 ;;;; Services
@@ -1173,8 +1174,10 @@ Note, tranparency works better on Tiger (10.4) and higher."
            ((and mark-active (< (region-beginning) p) (< p (region-end)))
             'region)
            (t
-	    (let ((faces (get-char-property p 'face window)))
-	      (if (consp faces) (car faces) faces)))))))
+	    (let* ((faces (or (get-char-property p 'face window) 'default))
+		   (face (if (consp faces) (car faces) faces)))
+	      (or (cdr-safe (assq face face-remapping-alist))
+		  face)))))))
      (t
       nil))))
 

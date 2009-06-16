@@ -1,0 +1,165 @@
+<html lang="en">
+<head>
+<title>TeX Printing Commands</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="TeX Printing Commands">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="TeX%20Print">TeX Print</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="TeX-Misc.html#TeX%20Misc">TeX Misc</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="LaTeX-Editing.html#LaTeX%20Editing">LaTeX Editing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="TeX-Mode.html#TeX%20Mode">TeX Mode</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">TeX Printing Commands</h4>
+
+<p>You can invoke TeX as an inferior of Emacs on either the entire
+contents of the buffer or just a region at a time.  Running TeX in
+this way on just one chapter is a good way to see what your changes
+look like without taking the time to format the entire file.
+
+     <dl>
+<dt><kbd>C-c C-r</kbd>
+     <dd>Invoke TeX on the current region, together with the buffer's header
+(<code>tex-region</code>). 
+<br><dt><kbd>C-c C-b</kbd>
+     <dd>Invoke TeX on the entire current buffer (<code>tex-buffer</code>). 
+<br><dt><kbd>C-c &lt;TAB&gt;</kbd>
+     <dd>Invoke BibTeX on the current file (<code>tex-bibtex-file</code>). 
+<br><dt><kbd>C-c C-f</kbd>
+     <dd>Invoke TeX on the current file (<code>tex-file</code>). 
+<br><dt><kbd>C-c C-l</kbd>
+     <dd>Recenter the window showing output from the inferior TeX so that
+the last line can be seen (<code>tex-recenter-output-buffer</code>). 
+<br><dt><kbd>C-c C-k</kbd>
+     <dd>Kill the TeX subprocess (<code>tex-kill-job</code>). 
+<br><dt><kbd>C-c C-p</kbd>
+     <dd>Print the output from the last <kbd>C-c C-r</kbd>, <kbd>C-c C-b</kbd>, or <kbd>C-c
+C-f</kbd> command (<code>tex-print</code>). 
+<br><dt><kbd>C-c C-v</kbd>
+     <dd>Preview the output from the last <kbd>C-c C-r</kbd>, <kbd>C-c C-b</kbd>, or <kbd>C-c
+C-f</kbd> command (<code>tex-view</code>). 
+<br><dt><kbd>C-c C-q</kbd>
+     <dd>Show the printer queue (<code>tex-show-print-queue</code>). 
+</dl>
+
+   <p>You can pass the current buffer through an inferior TeX by means of
+<kbd>C-c C-b</kbd> (<code>tex-buffer</code>).  The formatted output appears in a
+temporary file; to print it, type <kbd>C-c C-p</kbd> (<code>tex-print</code>). 
+Afterward, you can use <kbd>C-c C-q</kbd> (<code>tex-show-print-queue</code>) to
+view the progress of your output towards being printed.  If your terminal
+has the ability to display TeX output files, you can preview the
+output on the terminal with <kbd>C-c C-v</kbd> (<code>tex-view</code>).
+
+   <p>You can specify the directory to use for running TeX by setting the
+variable <code>tex-directory</code>.  <code>"."</code> is the default value.  If
+your environment variable <code>TEXINPUTS</code> contains relative directory
+names, or if your files contains <code>\input</code> commands with relative
+file names, then <code>tex-directory</code> <em>must</em> be <code>"."</code> or you
+will get the wrong results.  Otherwise, it is safe to specify some other
+directory, such as <code>"/tmp"</code>.
+
+   <p>If you want to specify which shell commands are used in the inferior TeX,
+you can do so by setting the values of the variables <code>tex-run-command</code>,
+<code>latex-run-command</code>, <code>slitex-run-command</code>,
+<code>tex-dvi-print-command</code>, <code>tex-dvi-view-command</code>, and
+<code>tex-show-queue-command</code>.  You <em>must</em> set the value of
+<code>tex-dvi-view-command</code> for your particular terminal; this variable
+has no default value.  The other variables have default values that may
+(or may not) be appropriate for your system.
+
+   <p>Normally, the file name given to these commands comes at the end of
+the command string; for example, <code>latex </code><var>filename</var><code></code>.  In some
+cases, however, the file name needs to be embedded in the command; an
+example is when you need to provide the file name as an argument to one
+command whose output is piped to another.  You can specify where to put
+the file name with <code>*</code> in the command string.  For example,
+
+<pre class="example">     (setq tex-dvi-print-command "dvips -f * | lpr")
+     </pre>
+
+   <p>The terminal output from TeX, including any error messages, appears
+in a buffer called <code>*tex-shell*</code>.  If TeX gets an error, you can
+switch to this buffer and feed it input (this works as in Shell mode;
+see <a href="Interactive-Shell.html#Interactive%20Shell">Interactive Shell</a>).  Without switching to this buffer you can
+scroll it so that its last line is visible by typing <kbd>C-c
+C-l</kbd>.
+
+   <p>Type <kbd>C-c C-k</kbd> (<code>tex-kill-job</code>) to kill the TeX process if
+you see that its output is no longer useful.  Using <kbd>C-c C-b</kbd> or
+<kbd>C-c C-r</kbd> also kills any TeX process still running.
+
+   <p>You can also pass an arbitrary region through an inferior TeX by typing
+<kbd>C-c C-r</kbd> (<code>tex-region</code>).  This is tricky, however, because most files
+of TeX input contain commands at the beginning to set parameters and
+define macros, without which no later part of the file will format
+correctly.  To solve this problem, <kbd>C-c C-r</kbd> allows you to designate a
+part of the file as containing essential commands; it is included before
+the specified region as part of the input to TeX.  The designated part
+of the file is called the <dfn>header</dfn>.
+
+   <p>To indicate the bounds of the header in Plain TeX mode, you insert two
+special strings in the file.  Insert <code>%**start of header</code> before the
+header, and <code>%**end of header</code> after it.  Each string must appear
+entirely on one line, but there may be other text on the line before or
+after.  The lines containing the two strings are included in the header. 
+If <code>%**start of header</code> does not appear within the first 100 lines of
+the buffer, <kbd>C-c C-r</kbd> assumes that there is no header.
+
+   <p>In LaTeX mode, the header begins with <code>\documentclass</code> or
+<code>\documentstyle</code> and ends with <code>\begin{document}</code>.  These
+are commands that LaTeX requires you to use in any case, so nothing
+special needs to be done to identify the header.
+
+   <p>The commands (<code>tex-buffer</code>) and (<code>tex-region</code>) do all of their
+work in a temporary directory, and do not have available any of the auxiliary
+files needed by TeX for cross-references; these commands are generally
+not suitable for running the final copy in which all of the cross-references
+need to be correct.
+
+   <p>When you want the auxiliary files for cross references, use <kbd>C-c
+C-f</kbd> (<code>tex-file</code>) which runs TeX on the current buffer's file,
+in that file's directory.  Before running TeX, it offers to save any
+modified buffers.  Generally, you need to use (<code>tex-file</code>) twice to
+get the cross-references right.
+
+   <p>The value of the variable <code>tex-start-options-string</code> specifies
+options for the TeX run.  The default value causes TeX to run in
+nonstop mode.  To run TeX interactively, set the variable to <code>""</code>.
+
+   <p>Large TeX documents are often split into several files--one main
+file, plus subfiles.  Running TeX on a subfile typically does not
+work; you have to run it on the main file.  In order to make
+<code>tex-file</code> useful when you are editing a subfile, you can set the
+variable <code>tex-main-file</code> to the name of the main file.  Then
+<code>tex-file</code> runs TeX on that file.
+
+   <p>The most convenient way to use <code>tex-main-file</code> is to specify it
+in a local variable list in each of the subfiles.  See <a href="File-Variables.html#File%20Variables">File Variables</a>.
+
+   <p>For LaTeX files, you can use BibTeX to process the auxiliary
+file for the current buffer's file.  BibTeX looks up bibliographic
+citations in a data base and prepares the cited references for the
+bibliography section.  The command <kbd>C-c TAB</kbd>
+(<code>tex-bibtex-file</code>) runs the shell command
+(<code>tex-bibtex-command</code>) to produce a <code>.bbl</code> file for the
+current buffer's file.  Generally, you need to do <kbd>C-c C-f</kbd>
+(<code>tex-file</code>) once to generate the <code>.aux</code> file, then do
+<kbd>C-c TAB</kbd> (<code>tex-bibtex-file</code>), and then repeat <kbd>C-c C-f</kbd>
+(<code>tex-file</code>) twice more to get the cross-references correct.
+
+   </body></html>
+

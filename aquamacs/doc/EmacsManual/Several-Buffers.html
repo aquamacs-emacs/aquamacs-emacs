@@ -1,0 +1,142 @@
+<html lang="en">
+<head>
+<title>Operating on Several Buffers</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Operating on Several Buffers">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Several%20Buffers">Several Buffers</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Indirect-Buffers.html#Indirect%20Buffers">Indirect Buffers</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Kill-Buffer.html#Kill%20Buffer">Kill Buffer</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Buffers.html#Buffers">Buffers</a>
+<hr><br>
+</div>
+
+<h3 class="section">Operating on Several Buffers</h3>
+
+<p>The <dfn>buffer-menu</dfn> facility is like a "Dired for buffers"; it allows
+you to request operations on various Emacs buffers by editing an Emacs
+buffer containing a list of them.  You can save buffers, kill them
+(here called <dfn>deleting</dfn> them, for consistency with Dired), or display
+them.
+
+     <dl>
+<dt><kbd>M-x buffer-menu</kbd>
+     <dd>Begin editing a buffer listing all Emacs buffers. 
+</dl>
+
+   <p>The command <code>buffer-menu</code> writes a list of all Emacs buffers into
+the buffer <code>*Buffer List*</code>, and selects that buffer in Buffer Menu
+mode.  The buffer is read-only, and can be changed only through the
+special commands described in this section.  The usual Emacs cursor
+motion commands can be used in the <code>*Buffer List*</code> buffer.  The
+following commands apply to the buffer described on the current line.
+
+     <dl>
+<dt><kbd>d</kbd>
+     <dd>Request to delete (kill) the buffer, then move down.  The request
+shows as a <code>D</code> on the line, before the buffer name.  Requested
+deletions take place when you type the <kbd>x</kbd> command. 
+<br><dt><kbd>C-d</kbd>
+     <dd>Like <kbd>d</kbd> but move up afterwards instead of down. 
+<br><dt><kbd>s</kbd>
+     <dd>Request to save the buffer.  The request shows as an <code>S</code> on the
+line.  Requested saves take place when you type the <kbd>x</kbd> command. 
+You may request both saving and deletion for the same buffer. 
+<br><dt><kbd>x</kbd>
+     <dd>Perform previously requested deletions and saves. 
+<br><dt><kbd>u</kbd>
+     <dd>Remove any request made for the current line, and move down. 
+<br><dt><kbd>&lt;DEL&gt;</kbd>
+     <dd>Move to previous line and remove any request made for that line. 
+</dl>
+
+   <p>The <kbd>d</kbd>, <kbd>C-d</kbd>, <kbd>s</kbd> and <kbd>u</kbd> commands to add or remove
+flags also move down (or up) one line.  They accept a numeric argument
+as a repeat count.
+
+   <p>These commands operate immediately on the buffer listed on the current
+line:
+
+     <dl>
+<dt><kbd>~</kbd>
+     <dd>Mark the buffer "unmodified."  The command <kbd>~</kbd> does this
+immediately when you type it. 
+<br><dt><kbd>%</kbd>
+     <dd>Toggle the buffer's read-only flag.  The command <kbd>%</kbd> does
+this immediately when you type it. 
+<br><dt><kbd>t</kbd>
+     <dd>Visit the buffer as a tags table.  See <a href="Select-Tags-Table.html#Select%20Tags%20Table">Select Tags Table</a>. 
+</dl>
+
+   <p>There are also commands to select another buffer or buffers:
+
+     <dl>
+<dt><kbd>q</kbd>
+     <dd>Quit the buffer menu--immediately display the most recent formerly
+visible buffer in its place. 
+<br><dt><kbd>&lt;RET&gt;</kbd>
+     <dd><dt><kbd>f</kbd>
+     <dd>Immediately select this line's buffer in place of the <code>*Buffer
+List*</code> buffer. 
+<br><dt><kbd>o</kbd>
+     <dd>Immediately select this line's buffer in another window as if by
+<kbd>C-x 4 b</kbd>, leaving <code>*Buffer List*</code> visible. 
+<br><dt><kbd>C-o</kbd>
+     <dd>Immediately display this line's buffer in another window, but don't
+select the window. 
+<br><dt><kbd>1</kbd>
+     <dd>Immediately select this line's buffer in a full-screen window. 
+<br><dt><kbd>2</kbd>
+     <dd>Immediately set up two windows, with this line's buffer in one, and the
+previously current buffer (aside from the buffer <code>*Buffer List*</code>)
+in the other. 
+<br><dt><kbd>b</kbd>
+     <dd>Bury the buffer listed on this line. 
+<br><dt><kbd>m</kbd>
+     <dd>Mark this line's buffer to be displayed in another window if you exit
+with the <kbd>v</kbd> command.  The request shows as a <code>&gt;</code> at the
+beginning of the line.  (A single buffer may not have both a delete
+request and a display request.) 
+<br><dt><kbd>v</kbd>
+     <dd>Immediately select this line's buffer, and also display in other windows
+any buffers previously marked with the <kbd>m</kbd> command.  If you have not
+marked any buffers, this command is equivalent to <kbd>1</kbd>. 
+</dl>
+
+   <p>All that <code>buffer-menu</code> does directly is create and switch to a
+suitable buffer, and turn on Buffer Menu mode.  Everything else
+described above is implemented by the special commands provided in
+Buffer Menu mode.  One consequence of this is that you can switch from
+the <code>*Buffer List*</code> buffer to another Emacs buffer, and edit there. 
+You can reselect the <code>*Buffer List*</code> buffer later, to perform the
+operations already requested, or you can kill it, or pay no further
+attention to it.
+
+   <p>The only difference between <code>buffer-menu</code> and <code>list-buffers</code>
+is that <code>buffer-menu</code> switches to the <code>*Buffer List*</code> buffer
+in the selected window; <code>list-buffers</code> displays it in another
+window.  If you run <code>list-buffers</code> (that is, type <kbd>C-x C-b</kbd>)
+and select the buffer list manually, you can use all of the commands
+described here.
+
+   <p>The buffer <code>*Buffer List*</code> is not updated automatically when
+buffers are created and killed; its contents are just text.  If you have
+created, deleted or renamed buffers, the way to update <code>*Buffer
+List*</code> to show what you have done is to type <kbd>g</kbd>
+(<code>revert-buffer</code>) or repeat the <code>buffer-menu</code> command.
+
+   </body></html>
+

@@ -1,0 +1,62 @@
+Topic branches:
+
+topic/...
+These features are intended to provide functionality that would work and make sense even in GNU Emacs, without the rest of Aquamacs.
+They are maintained as topic branches.  All development should be done in a private branch.   Only when features are stable should they be checked into the topic branch.  Then, the topic branch is merged into the master branch:
+
+git checkout master
+git merge topic-branch
+<resolve conflicts>
+git commit
+
+In case of conflicts, it is best to abandon the merge (git reset --hard), go back to the topic branch, update it to master and resolve all conflicts there:
+
+git checkout topic-branch
+git merge master
+<resolve conflicts>
+git commit
+
+Initially, I have created the following topic branches (03/2009):
+
+- face-remapping (window-background)
+
+- tmm
+- toolbar (toolbar-png)
+- python-mode
+- minibuffer  (former patches: recentf-track-minibuf, minibuffer-filename)
+- reconf: (former patches: sentence-end, pretty-modeline)
+- menu-bar (former patches: menu-bar)
+- smart-spacing
+- dialogs
+- tabbar (header-line)
+- mac-support (former patches: ns-launch-browser, mouse-emulate)
+
+Changes to GNU Emacs code base without a topic branch:
+
+Other patches from the old CVS patches.23/ directory can now be found 
+in the master branch, without an extra topic, since they are too tiny to merit an extra branch:
+
+- eval-depth
+- fix-configure
+- startup-load-preferences
+- custom (former patches: cus-edit-switch, custom-verbosity)
+- mouse-echo
+- window-kill
+
+
+
+NORMAL BRANCHES
+
+
+dr/experimental
+David Reitter, experimental things
+
+
+in dr/experimental
+- calm-startup
+
+
+
+See also:
+
+- script admin/apply-patch-make-log-message.sh

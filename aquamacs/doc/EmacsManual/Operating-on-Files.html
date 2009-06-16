@@ -1,0 +1,156 @@
+<html lang="en">
+<head>
+<title>Operating on Files</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Operating on Files">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Operating%20on%20Files">Operating on Files</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Shell-Commands-in-Dired.html#Shell%20Commands%20in%20Dired">Shell Commands in Dired</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Marks-vs-Flags.html#Marks%20vs%20Flags">Marks vs Flags</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Dired.html#Dired">Dired</a>
+<hr><br>
+</div>
+
+<h3 class="section">Operating on Files</h3>
+
+<p>This section describes the basic Dired commands to operate on one file
+or several files.  All of these commands are capital letters; all of
+them use the minibuffer, either to read an argument or to ask for
+confirmation, before they act.  All of them give you several ways to
+specify which files to manipulate:
+
+     <ul>
+<li>If you give the command a numeric prefix argument <var>n</var>, it operates
+on the next <var>n</var> files, starting with the current file.  (If <var>n</var>
+is negative, the command operates on the -<var>n</var> files preceding
+the current line.)
+
+     <li>Otherwise, if some files are marked with <code>*</code>, the command operates
+on all those files.
+
+     <li>Otherwise, the command operates on the current file only. 
+</ul>
+
+   <p>Commands which ask for a destination directory, such as those which
+copy and rename files or create links for them, try to guess the default
+target directory for the operation.  Normally, they suggest the Dired
+buffer's default directory, but if the variable <code>dired-dwim-target</code>
+is non-<code>nil</code>, and if there is another Dired buffer displayed in the
+next window, that other buffer's directory is suggested instead.
+
+   <p>Here are the file-manipulating commands that operate on files in this
+way.  (Some other Dired commands, such as <kbd>!</kbd> and the <code>%</code>
+commands, also use these conventions to decide which files to work on.)
+
+     <dl>
+<dt><kbd>C </kbd><var>new</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Copy the specified files (<code>dired-do-copy</code>).  The argument <var>new</var>
+is the directory to copy into, or (if copying a single file) the new
+name.
+
+     <p>If <code>dired-copy-preserve-time</code> is non-<code>nil</code>, then copying with
+this command sets the modification time of the new file to be the same
+as that of the old file.
+
+     <p>The variable <code>dired-recursive-copies</code> controls whether
+directories are copied recursively.  The default is to not copy
+recursively, which means that directories cannot be copied.
+
+     <br><dt><kbd>D</kbd>
+     <dd>Delete the specified files (<code>dired-do-delete</code>).  Like the other
+commands in this section, this command operates on the <em>marked</em>
+files, or the next <var>n</var> files.  By contrast, <kbd>x</kbd>
+(<code>dired-do-flagged-delete</code>) deletes all <dfn>flagged</dfn> files.
+
+     <br><dt><kbd>R </kbd><var>new</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Rename the specified files (<code>dired-do-rename</code>).  The argument
+<var>new</var> is the directory to rename into, or (if renaming a single
+file) the new name.
+
+     <p>Dired automatically changes the visited file name of buffers associated
+with renamed files so that they refer to the new names.
+
+     <br><dt><kbd>H </kbd><var>new</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Make hard links to the specified files (<code>dired-do-hardlink</code>).  The
+argument <var>new</var> is the directory to make the links in, or (if making
+just one link) the name to give the link.
+
+     <br><dt><kbd>S </kbd><var>new</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Make symbolic links to the specified files (<code>dired-do-symlink</code>). 
+The argument <var>new</var> is the directory to make the links in, or (if
+making just one link) the name to give the link.
+
+     <br><dt><kbd>M </kbd><var>modespec</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Change the mode (also called "permission bits") of the specified files
+(<code>dired-do-chmod</code>).  This uses the <code>chmod</code> program, so
+<var>modespec</var> can be any argument that <code>chmod</code> can handle.
+
+     <br><dt><kbd>G </kbd><var>newgroup</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Change the group of the specified files to <var>newgroup</var>
+(<code>dired-do-chgrp</code>).
+
+     <br><dt><kbd>O </kbd><var>newowner</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Change the owner of the specified files to <var>newowner</var>
+(<code>dired-do-chown</code>).  (On most systems, only the superuser can do
+this.)
+
+     <p>The variable <code>dired-chown-program</code> specifies the name of the
+program to use to do the work (different systems put <code>chown</code> in
+different places).
+
+     <br><dt><kbd>P </kbd><var>command</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Print the specified files (<code>dired-do-print</code>).  You must specify the
+command to print them with, but the minibuffer starts out with a
+suitable guess made using the variables <code>lpr-command</code> and
+<code>lpr-switches</code> (the same variables that <code>lpr-buffer</code> uses;
+see <a href="Hardcopy.html#Hardcopy">Hardcopy</a>).
+
+     <br><dt><kbd>Z</kbd>
+     <dd>Compress the specified files (<code>dired-do-compress</code>).  If the file
+appears to be a compressed file already, it is uncompressed instead.
+
+     <br><dt><kbd>L</kbd>
+     <dd>Load the specified Emacs Lisp files (<code>dired-do-load</code>). 
+See <a href="Lisp-Libraries.html#Lisp%20Libraries">Lisp Libraries</a>.
+
+     <br><dt><kbd>B</kbd>
+     <dd>Byte compile the specified Emacs Lisp files
+(<code>dired-do-byte-compile</code>).  See <a href="../elisp/Byte-Compilation.html#Byte%20Compilation">Byte Compilation</a>.
+
+     <br><dt><kbd>A </kbd><var>regexp</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Search all the specified files for the regular expression <var>regexp</var>
+(<code>dired-do-search</code>).
+
+     <p>This command is a variant of <code>tags-search</code>.  The search stops at
+the first match it finds; use <kbd>M-,</kbd> to resume the search and find
+the next match.  See <a href="Tags-Search.html#Tags%20Search">Tags Search</a>.
+
+     <br><dt><kbd>Q </kbd><var>regexp</var><kbd> &lt;RET&gt; </kbd><var>to</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Perform <code>query-replace-regexp</code> on each of the specified files,
+replacing matches for <var>regexp</var> with the string
+<var>to</var> (<code>dired-do-query-replace-regexp</code>).
+
+     <p>This command is a variant of <code>tags-query-replace</code>.  If you exit the
+query replace loop, you can use <kbd>M-,</kbd> to resume the scan and replace
+more matches.  See <a href="Tags-Search.html#Tags%20Search">Tags Search</a>. 
+</dl>
+
+   <p>One special file-operation command is <kbd>+</kbd>
+(<code>dired-create-directory</code>).  This command reads a directory name and
+creates the directory if it does not already exist.
+
+   </body></html>
+

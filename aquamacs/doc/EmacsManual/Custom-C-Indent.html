@@ -1,0 +1,82 @@
+<html lang="en">
+<head>
+<title>Customizing C Indentation</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Customizing C Indentation">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Custom%20C%20Indent">Custom C Indent</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="C-Indent.html#C%20Indent">C Indent</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Program-Indent.html#Program%20Indent">Program Indent</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Customizing C Indentation</h4>
+
+<p>C mode and related modes use a simple yet flexible mechanism for
+customizing indentation.  The mechanism works in two steps: first it
+classifies the line syntactically according to its contents and context;
+second, it associates each kind of syntactic construct with an
+indentation offset based on your selected <dfn>style</dfn>.
+
+     <dl>
+<dt><kbd>M-x c-set-style &lt;RET&gt; </kbd><var>style</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Select predefined indentation style <var>style</var>. 
+</dl>
+
+   <p>A style is a named collection of indentation customizations that can
+be used in C mode and the related modes.  Emacs comes with several
+predefined styles, including <code>gnu</code>, <code>k&amp;r</code>, <code>bsd</code>,
+<code>stroustrup</code>, <code>linux</code>, <code>python</code>, <code>java</code>,
+<code>whitesmith</code>, <code>ellemtel</code>, <code>cc-mode</code>, and <code>user</code>. 
+Some of these styles are primarily intended for one language, but any
+of them can be used with any of the languages supported by these
+modes.  To find out what a style looks like, select it and reindent
+some code, e.g., by typing &lt;C-M-q&gt; at the start of a function
+definition.
+
+   <p>To choose a style for the current buffer, use the command <kbd>M-x
+c-set-style</kbd>.  Specify a style name as an argument (case is not
+significant).  This command affects the current buffer only, and it
+affects only future invocations of the indentation commands; it does
+not reindent the code in the buffer.  To reindent the whole buffer in
+the new style, you can type <kbd>C-x h C-M-\</kbd>.
+
+   <p>You can also set the variable <code>c-default-style</code> to specify the
+default style for various major modes.  Its value should be an alist,
+in which each element specifies one major mode and which indentation
+style to use for it.  For example,
+
+<pre class="example">     (setq c-default-style
+           '((java-mode . "java") (other . "gnu")))
+     </pre>
+
+<p>specifies an explicit choice for Java mode, and the default <code>gnu</code>
+style for the other C-like modes.  This variable takes effect when you
+select one of the C-like major modes; thus, if you specify a new
+default style for Java mode, you can make it take effect in an
+existing Java mode buffer by typing <kbd>M-x java-mode</kbd> there.
+
+   <p>The <code>gnu</code> style specifies the formatting recommended by the GNU
+Project for C; it is the default, so as to encourage use of our
+recommended style.
+
+   <p>See <a href="../ccmode/Customizing-Indentation.html#Customizing%20Indentation">Customizing Indentation</a>, for
+more information on customizing indentation for C and related modes,
+including how to override parts of an existing style and how to define
+your own styles.
+
+   </body></html>
+

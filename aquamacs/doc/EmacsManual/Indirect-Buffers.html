@@ -1,0 +1,76 @@
+<html lang="en">
+<head>
+<title>Indirect Buffers</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Indirect Buffers">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Indirect%20Buffers">Indirect Buffers</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Buffer-Convenience.html#Buffer%20Convenience">Buffer Convenience</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Several-Buffers.html#Several%20Buffers">Several Buffers</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Buffers.html#Buffers">Buffers</a>
+<hr><br>
+</div>
+
+<h3 class="section">Indirect Buffers</h3>
+
+<p>An <dfn>indirect buffer</dfn> shares the text of some other buffer, which
+is called the <dfn>base buffer</dfn> of the indirect buffer.  In some ways it
+is the analogue, for buffers, of a symbolic link between files.
+
+     <dl>
+<dt><kbd>M-x make-indirect-buffer &lt;RET&gt; </kbd><var>base-buffer</var><kbd> &lt;RET&gt; </kbd><var>indirect-name</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Create an indirect buffer named <var>indirect-name</var> whose base buffer
+is <var>base-buffer</var>. 
+<br><dt><kbd>M-x clone-indirect-buffer &lt;RET&gt;</kbd>
+     <dd>Create an indirect buffer that is a twin copy of the current buffer. 
+<br><dt><kbd>C-x 4 c</kbd>
+     <dd>Create an indirect buffer that is a twin copy of the current buffer, and
+select it in another window (<code>clone-indirect-buffer-other-window</code>). 
+</dl>
+
+   <p>The text of the indirect buffer is always identical to the text of its
+base buffer; changes made by editing either one are visible immediately
+in the other.  But in all other respects, the indirect buffer and its
+base buffer are completely separate.  They have different names,
+different values of point, different narrowing, different markers,
+different major modes, and different local variables.
+
+   <p>An indirect buffer cannot visit a file, but its base buffer can.  If
+you try to save the indirect buffer, that actually works by saving the
+base buffer.  Killing the base buffer effectively kills the indirect
+buffer, but killing an indirect buffer has no effect on its base buffer.
+
+   <p>One way to use indirect buffers is to display multiple views of an
+outline.  See <a href="Outline-Views.html#Outline%20Views">Outline Views</a>.
+
+   <p>A quick and handy way to make an indirect buffer is with the command
+<kbd>M-x clone-indirect-buffer</kbd>.  It creates and selects an indirect
+buffer whose base buffer is the current buffer.  With a numeric
+argument, it prompts for the name of the indirect buffer; otherwise it
+defaults to the name of the current buffer, modifying it by adding a
+<code>&lt;</code><var>n</var><code>&gt;</code> prefix if required.  <kbd>C-x 4 c</kbd>
+(<code>clone-indirect-buffer-other-window</code>) works like <kbd>M-x
+clone-indirect-buffer</kbd>, but it selects the cloned buffer in another
+window.  These commands come in handy if you want to create new
+<code>*info*</code> or <code>*Help*</code> buffers, for example.
+
+   <p>The more general way is with the command <kbd>M-x
+make-indirect-buffer</kbd>.  It creates an indirect buffer from buffer
+<var>base-buffer</var>, under the name <var>indirect-name</var>.  It prompts for
+both <var>base-buffer</var> and <var>indirect-name</var> using the minibuffer.
+
+   </body></html>
+

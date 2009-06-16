@@ -1,0 +1,77 @@
+<html lang="en">
+<head>
+<title>Entering and Exiting Emacs</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Entering and Exiting Emacs">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Entering%20Emacs">Entering Emacs</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Exiting.html#Exiting">Exiting</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Text-Characters.html#Text%20Characters">Text Characters</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr><br>
+</div>
+
+<h2 class="chapter">Entering and Exiting Emacs</h2>
+
+<p>The usual way to invoke Emacs is with the shell command <code>emacs</code>. 
+Emacs clears the screen and then displays an initial help message and
+copyright notice.  Some operating systems discard all type-ahead when
+Emacs starts up; they give Emacs no way to prevent this.  Therefore, it
+is advisable to wait until Emacs clears the screen before typing your
+first editing command.
+
+   <p>If you run Emacs from a shell window under the X Window System, run it
+in the background with <code>emacs&amp;</code>.  This way, Emacs does not tie up
+the shell window, so you can use that to run other shell commands while
+Emacs operates its own X windows.  You can begin typing Emacs commands
+as soon as you direct your keyboard input to the Emacs frame.
+
+   <p>When Emacs starts up, it creates a buffer named <code>*scratch*</code>. 
+That's the buffer you start out in.  The <code>*scratch*</code> buffer uses Lisp
+Interaction mode; you can use it to type Lisp expressions and evaluate
+them, or you can ignore that capability and simply doodle.  (You can
+specify a different major mode for this buffer by setting the variable
+<code>initial-major-mode</code> in your init file.  See <a href="Init-File.html#Init%20File">Init File</a>.)
+
+   <p>It is possible to specify files to be visited, Lisp files to be
+loaded, and functions to be called, by giving Emacs arguments in the
+shell command line.  See <a href="Command-Arguments.html#Command%20Arguments">Command Arguments</a>.  But we don't recommend
+doing this.  The feature exists mainly for compatibility with other
+editors.
+
+   <p>Many other editors are designed to be started afresh each time you
+want to edit.  You edit one file and then exit the editor.  The next
+time you want to edit either another file or the same one, you must run
+the editor again.  With these editors, it makes sense to use a
+command-line argument to say which file to edit.
+
+   <p>But starting a new Emacs each time you want to edit a different file
+does not make sense.  For one thing, this would be annoyingly slow. 
+For another, this would fail to take advantage of Emacs's ability to
+visit more than one file in a single editing session.  And it would
+lose the other accumulated context, such as the kill ring, registers,
+undo history, and mark ring.
+
+   <p>The recommended way to use GNU Emacs is to start it only once, just
+after you log in, and do all your editing in the same Emacs session. 
+Each time you want to edit a different file, you visit it with the
+existing Emacs, which eventually comes to have many files in it ready
+for editing.  Usually you do not kill the Emacs until you are about to
+log out.  See <a href="Files.html#Files">Files</a>, for more information on visiting more than one
+file.
+
+   </body></html>
+

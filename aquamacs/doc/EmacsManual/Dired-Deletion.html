@@ -1,0 +1,73 @@
+<html lang="en">
+<head>
+<title>Deleting Files with Dired</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Deleting Files with Dired">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Dired%20Deletion">Dired Deletion</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Flagging-Many-Files.html#Flagging%20Many%20Files">Flagging Many Files</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Dired-Navigation.html#Dired%20Navigation">Dired Navigation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Dired.html#Dired">Dired</a>
+<hr><br>
+</div>
+
+<h3 class="section">Deleting Files with Dired</h3>
+
+<p>One of the most frequent uses of Dired is to first <dfn>flag</dfn> files for
+deletion, then delete the files that were flagged.
+
+     <dl>
+<dt><kbd>d</kbd>
+     <dd>Flag this file for deletion. 
+<br><dt><kbd>u</kbd>
+     <dd>Remove deletion flag on this line. 
+<br><dt><kbd>&lt;DEL&gt;</kbd>
+     <dd>Move point to previous line and remove the deletion flag on that line. 
+<br><dt><kbd>x</kbd>
+     <dd>Delete the files that are flagged for deletion. 
+</dl>
+
+   <p>You can flag a file for deletion by moving to the line describing the
+file and typing <kbd>d</kbd> (<code>dired-flag-file-deletion</code>).  The deletion flag is visible as a <code>D</code> at
+the beginning of the line.  This command moves point to the next line,
+so that repeated <kbd>d</kbd> commands flag successive files.  A numeric
+argument serves as a repeat count.
+
+   <p>The variable <code>dired-recursive-deletes</code> controls whether the
+delete command will delete non-empty directories (including their
+contents).  The default is to delete only empty directories.
+
+   <p>The files are flagged for deletion rather than deleted immediately to
+reduce the danger of deleting a file accidentally.  Until you direct
+Dired to delete the flagged files, you can remove deletion flags using
+the commands <kbd>u</kbd> and &lt;DEL&gt;.  <kbd>u</kbd> (<code>dired-unmark</code>) works
+just like <kbd>d</kbd>, but removes flags rather than making flags. 
+&lt;DEL&gt; (<code>dired-unmark-backward</code>) moves upward, removing flags;
+it is like <kbd>u</kbd> with argument -1.
+
+   <p>To delete the flagged files, type <kbd>x</kbd> (<code>dired-do-flagged-delete</code>). 
+(This is also known as <dfn>expunging</dfn>.) 
+This command first displays a list of all the file names flagged for
+deletion, and requests confirmation with <kbd>yes</kbd>.  If you confirm,
+Dired deletes the flagged files, then deletes their lines from the text
+of the Dired buffer.  The shortened Dired buffer remains selected.
+
+   <p>If you answer <kbd>no</kbd> or quit with <kbd>C-g</kbd> when asked to confirm, you
+return immediately to Dired, with the deletion flags still present in
+the buffer, and no files actually deleted.
+
+   </body></html>
+

@@ -1,0 +1,85 @@
+<html lang="en">
+<head>
+<title>Daylight Savings Time</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Daylight Savings Time">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Daylight%20Savings">Daylight Savings</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Time-Intervals.html#Time%20Intervals">Time Intervals</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Appointments.html#Appointments">Appointments</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Calendar-Diary.html#Calendar%2fDiary">Calendar/Diary</a>
+<hr><br>
+</div>
+
+<h3 class="section">Daylight Savings Time</h3>
+
+<p>Emacs understands the difference between standard time and daylight
+savings time--the times given for sunrise, sunset, solstices,
+equinoxes, and the phases of the moon take that into account.  The rules
+for daylight savings time vary from place to place and have also varied
+historically from year to year.  To do the job properly, Emacs needs to
+know which rules to use.
+
+   <p>Some operating systems keep track of the rules that apply to the place
+where you are; on these systems, Emacs gets the information it needs
+from the system automatically.  If some or all of this information is
+missing, Emacs fills in the gaps with the rules currently used in
+Cambridge, Massachusetts.  If the resulting rules are not what you want,
+you can tell Emacs the rules to use by setting certain variables:
+<code>calendar-daylight-savings-starts</code> and
+<code>calendar-daylight-savings-ends</code>.
+
+   <p>These values should be Lisp expressions that refer to the variable
+<code>year</code>, and evaluate to the Gregorian date on which daylight
+savings time starts or (respectively) ends, in the form of a list
+<code>(</code><var>month</var><code> </code><var>day</var><code> </code><var>year</var><code>)</code>.  The values should be
+<code>nil</code> if your area does not use daylight savings time.
+
+   <p>Emacs uses these expressions to determine the starting date of
+daylight savings time for the holiday list and for correcting times of
+day in the solar and lunar calculations.
+
+   <p>The values for Cambridge, Massachusetts are as follows:
+
+<pre class="example">     (calendar-nth-named-day 1 0 4 year)
+     (calendar-nth-named-day -1 0 10 year)
+     </pre>
+
+<p>That is, the first 0th day (Sunday) of the fourth month (April) in
+the year specified by <code>year</code>, and the last Sunday of the tenth month
+(October) of that year.  If daylight savings time were
+changed to start on October 1, you would set
+<code>calendar-daylight-savings-starts</code> to this:
+
+<pre class="example">     (list 10 1 year)
+     </pre>
+
+   <p>If there is no daylight savings time at your location, or if you want
+all times in standard time, set <code>calendar-daylight-savings-starts</code>
+and <code>calendar-daylight-savings-ends</code> to <code>nil</code>.
+
+   <p>The variable <code>calendar-daylight-time-offset</code> specifies the
+difference between daylight savings time and standard time, measured in
+minutes.  The value for Cambridge, Massachusetts is 60.
+
+   <p>The two variables <code>calendar-daylight-savings-starts-time</code> and
+<code>calendar-daylight-savings-ends-time</code> specify the number of minutes
+after midnight local time when the transition to and from daylight
+savings time should occur.  For Cambridge, Massachusetts both variables'
+values are 120.
+
+   </body></html>
+

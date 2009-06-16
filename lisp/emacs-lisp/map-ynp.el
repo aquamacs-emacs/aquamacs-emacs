@@ -82,7 +82,6 @@ Returns the number of actions taken."
 	 user-keys mouse-event map prompt char elt tail def
 	 ;; Non-nil means we should use mouse menus to ask.
 	 use-menus
-	 delayed-switch-frame
          ;; Rebind other-window-scroll-buffer so that subfunctions can set
          ;; it temporarily, without risking affecting the caller.
          (other-window-scroll-buffer other-window-scroll-buffer)
@@ -97,17 +96,17 @@ Returns the number of actions taken."
 	(let ((object (if help (capitalize (nth 0 help))))
 	      (objects (if help (capitalize (nth 1 help))))
 	      (action (if help (capitalize (nth 2 help)))))
-	  (setq map `(("Yes" . act) ("No" . skip)
-		      ,@(mapcar (lambda (elt)
+	  (setq map `(("Yes" . act) 
+		      (,(if help (concat action " All " objects)
+			  "Do All") . automatic)
+    ,@(mapcar (lambda (elt)
 				  (cons (with-syntax-table
 					    text-mode-syntax-table
 					  (capitalize (nth 2 elt)))
 					(vector (nth 1 elt))))
 				action-alist)
-		      (,(if help (concat action " This But No More")
-			  "Do This But No More") . act-and-exit)
-		      (,(if help (concat action " All " objects)
-			  "Do All") . automatic)
+		      nil
+		      ("No" . skip)
 		      ("No For All" . exit))
 		use-menus t
 		mouse-event last-nonmenu-event))
@@ -146,7 +145,7 @@ Returns the number of actions taken."
 	    (cond ((stringp prompt)
 		   ;; Prompt the user about this object.
 		   (setq quit-flag nil)
-		   (if use-menus
+  		   (if use-menus
 		       (setq def (or (x-popup-dialog (or mouse-event use-menus)
 						     (cons prompt map))
 				     'quit))
@@ -170,6 +169,7 @@ Returns the number of actions taken."
 				(key-description (vector help-char))
 				(single-key-description char)))
 		     (setq def (lookup-key map (vector char))))
+
 		   (cond ((eq def 'exit)
 			  (setq next (lambda () nil)))
 			 ((eq def 'act)
@@ -248,12 +248,12 @@ the current %s and exit."
 					 (setq next ',next)
 					 ',elt))))
 			 ((and (consp char)
-			       (eq (car char) 'switch-frame))
-			  ;; switch-frame event.  Put it off until we're done.
-			  (setq delayed-switch-frame char)
+				   (eq (car char) 'switch-frame))
+			  (handle-switch-frame char)
 			  (setq next `(lambda ()
 				       (setq next ',next)
-				       ',elt)))
+				       ',elt))
+			  )
 			 (t
 			  ;; Random char.
 			  (message "Type %s for help."
@@ -265,10 +265,7 @@ the current %s and exit."
 				       ',elt)))))
 		  (prompt
 		   (funcall actor elt)
-		   (setq actions (1+ actions))))))
-      (if delayed-switch-frame
-	  (setq unread-command-events
-		(cons delayed-switch-frame unread-command-events))))
+		   (setq actions (1+ actions)))))))
     ;; Clear the last prompt from the minibuffer.
     (let ((message-log-max nil))
       (message ""))

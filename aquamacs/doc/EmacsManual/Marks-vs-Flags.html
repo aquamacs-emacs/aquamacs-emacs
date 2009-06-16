@@ -1,0 +1,152 @@
+<html lang="en">
+<head>
+<title>Dired Marks vs. Flags</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Dired Marks vs. Flags">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Marks%20vs%20Flags">Marks vs Flags</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Operating-on-Files.html#Operating%20on%20Files">Operating on Files</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Dired-Visiting.html#Dired%20Visiting">Dired Visiting</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Dired.html#Dired">Dired</a>
+<hr><br>
+</div>
+
+<h3 class="section">Dired Marks vs. Flags</h3>
+
+<p>Instead of flagging a file with <code>D</code>, you can <dfn>mark</dfn> the
+file with some other character (usually <code>*</code>).  Most Dired
+commands to operate on files use the files marked with <code>*</code>, the
+exception being <kbd>x</kbd> which deletes the flagged files.
+
+   <p>Here are some commands for marking with <code>*</code>, or for unmarking or
+operating on marks.  (See <a href="Dired-Deletion.html#Dired%20Deletion">Dired Deletion</a>, for commands to flag and
+unflag files.)
+
+     <dl>
+<dt><kbd>m</kbd>
+     <dd><dt><kbd>* m</kbd>
+     <dd>Mark the current file with <code>*</code> (<code>dired-mark</code>).  With a numeric
+argument <var>n</var>, mark the next <var>n</var> files starting with the current
+file.  (If <var>n</var> is negative, mark the previous -<var>n</var>
+files.)
+
+     <br><dt><kbd>* *</kbd>
+     <dd>Mark all executable files with <code>*</code>
+(<code>dired-mark-executables</code>).  With a numeric argument, unmark all
+those files.
+
+     <br><dt><kbd>* @</kbd>
+     <dd>Mark all symbolic links with <code>*</code> (<code>dired-mark-symlinks</code>). 
+With a numeric argument, unmark all those files.
+
+     <br><dt><kbd>* /</kbd>
+     <dd>Mark with <code>*</code> all files which are actually directories, except for
+<code>.</code> and <code>..</code> (<code>dired-mark-directories</code>).  With a numeric
+argument, unmark all those files.
+
+     <br><dt><kbd>* s</kbd>
+     <dd>Mark all the files in the current subdirectory, aside from <code>.</code>
+and <code>..</code> (<code>dired-mark-subdir-files</code>).
+
+     <br><dt><kbd>u</kbd>
+     <dd><dt><kbd>* u</kbd>
+     <dd>Remove any mark on this line (<code>dired-unmark</code>).
+
+     <br><dt><kbd>&lt;DEL&gt;</kbd>
+     <dd><dt><kbd>* &lt;DEL&gt;</kbd>
+     <dd>Move point to previous line and remove any mark on that line
+(<code>dired-unmark-backward</code>).
+
+     <br><dt><kbd>* !</kbd>
+     <dd>Remove all marks from all the files in this Dired buffer
+(<code>dired-unmark-all-marks</code>).
+
+     <br><dt><kbd>* ? </kbd><var>markchar</var><kbd></kbd>
+     <dd>Remove all marks that use the character <var>markchar</var>
+(<code>dired-unmark-all-files</code>).  The argument is a single
+character--do not use &lt;RET&gt; to terminate it.  See the description
+of the <kbd>* c</kbd> command below, which lets you replace one mark
+character with another.
+
+     <p>With a numeric argument, this command queries about each marked file,
+asking whether to remove its mark.  You can answer <kbd>y</kbd> meaning yes,
+<kbd>n</kbd> meaning no, or <kbd>!</kbd> to remove the marks from the remaining
+files without asking about them.
+
+     <br><dt><kbd>* C-n</kbd>
+     <dd>Move down to the next marked file (<code>dired-next-marked-file</code>)
+A file is "marked" if it has any kind of mark.
+
+     <br><dt><kbd>* C-p</kbd>
+     <dd>Move up to the previous marked file (<code>dired-prev-marked-file</code>)
+
+     <br><dt><kbd>* t</kbd>
+     <dd>Toggle all marks (<code>dired-do-toggle</code>): files marked with <code>*</code>
+become unmarked, and unmarked files are marked with <code>*</code>.  Files
+marked in any other way are not affected.
+
+     <br><dt><kbd>* c </kbd><var>old-markchar</var><kbd> </kbd><var>new-markchar</var><kbd></kbd>
+     <dd>Replace all marks that use the character <var>old-markchar</var> with marks
+that use the character <var>new-markchar</var> (<code>dired-change-marks</code>). 
+This command is the primary way to create or use marks other than
+<code>*</code> or <code>D</code>.  The arguments are single characters--do not use
+&lt;RET&gt; to terminate them.
+
+     <p>You can use almost any character as a mark character by means of this
+command, to distinguish various classes of files.  If <var>old-markchar</var>
+is a space (<code> </code>), then the command operates on all unmarked files;
+if <var>new-markchar</var> is a space, then the command unmarks the files it
+acts on.
+
+     <p>To illustrate the power of this command, here is how to put <code>D</code>
+flags on all the files that have no marks, while unflagging all those
+that already have <code>D</code> flags:
+
+     <pre class="example">          * c D t  * c SPC D  * c t SPC
+          </pre>
+
+     <p>This assumes that no files were already marked with <code>t</code>.
+
+     <br><dt><kbd>% m </kbd><var>regexp</var><kbd> &lt;RET&gt;</kbd>
+     <dd><dt><kbd>* % </kbd><var>regexp</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Mark (with <code>*</code>) all files whose names match the regular expression
+<var>regexp</var> (<code>dired-mark-files-regexp</code>).  This command is like
+<kbd>% d</kbd>, except that it marks files with <code>*</code> instead of flagging
+with <code>D</code>.  See <a href="Flagging-Many-Files.html#Flagging%20Many%20Files">Flagging Many Files</a>.
+
+     <p>Only the non-directory part of the file name is used in matching.  Use
+<code>^</code> and <code>$</code> to anchor matches.  Exclude subdirectories by
+hiding them (see <a href="Hiding-Subdirectories.html#Hiding%20Subdirectories">Hiding Subdirectories</a>).
+
+     <br><dt><kbd>% g </kbd><var>regexp</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Mark (with <code>*</code>) all files whose <em>contents</em> contain a match for
+the regular expression <var>regexp</var>
+(<code>dired-mark-files-containing-regexp</code>).  This command is like
+<kbd>% m</kbd>, except that it searches the file contents instead of the file
+name.
+
+     <br><dt><kbd>C-_</kbd>
+     <dd>Undo changes in the Dired buffer, such as adding or removing
+marks (<code>dired-undo</code>).  <em>This command does not revert the
+actual file operations, nor recover lost files!</em>  It just undoes
+changes in the buffer itself.  For example, if used after renaming one
+or more files, <code>dired-undo</code> restores the original names, which
+will get the Dired buffer out of sync with the actual contents of the
+directory. 
+</dl>
+
+   </body></html>
+

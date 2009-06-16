@@ -205,29 +205,31 @@ ns_get_window (Lisp_Object maybeFrame)
 static NSScreen *
 ns_get_screen (Lisp_Object screen)
 {
+  struct frame *f;
+
+  if (EQ (Qt, screen)) /* not documented */
+    return [NSScreen mainScreen];
+
   struct terminal *terminal = get_terminal (screen, 1);
   if (terminal->type != output_ns)
-    // Not sure if this special case for nil is needed.  It does seem to be
-    // important in xfns.c for the make-frame call in frame-initialize,
-    // so let's keep it here for now.
-    return (NILP (screen) ? [NSScreen mainScreen] : NULL);
+    return NULL;
   else
     {
-      struct ns_display_info *dpyinfo = terminal->display_info.ns;
-      struct frame *f = dpyinfo->x_focus_frame;
-      if (!f)
-	f = dpyinfo->x_highlight_frame;
-      if (!f)
-	return NULL;
+      if (NILP (screen))
+	f = SELECTED_FRAME ();
+      else if (FRAMEP (screen))
+	f = XFRAME (screen);
       else
 	{
-	  id window = nil;
-	  Lisp_Object frame;
-	  eassert (FRAME_NS_P (f));
-	  XSETFRAME (frame, f);
-	  window = ns_get_window (frame);
-	  return window ? [window screen] : NULL;
+	  struct ns_display_info *dpyinfo = terminal->display_info.ns;
+	  f = dpyinfo->x_focus_frame;
+	  if (!f)
+	    f = dpyinfo->x_highlight_frame;
 	}
+      if (!f || !FRAME_NS_P (f))
+	return NULL;
+      else
+	return [[FRAME_NS_VIEW (f) window] screen];
     }
 }
 
@@ -730,7 +732,6 @@ void
 x_set_tool_bar_lines (struct frame *f, Lisp_Object value, Lisp_Object oldval)
 {
   int nlines;
-  Lisp_Object root_window;
 
   if (FRAME_MINIBUF_ONLY_P (f))
     return;
@@ -1029,7 +1030,7 @@ frame_parm_handler ns_frame_parm_handlers[] =
   x_set_fringe_width, /* generic OK */
   x_set_fringe_width, /* generic OK */
   0, /* x_set_wait_for_wm, will ignore */
-  0,  /* x_set_fullscreen will ignore */
+  x_set_fullscreen,   /* generic OK */
   x_set_font_backend, /* generic OK */
   x_set_alpha
 };
@@ -2031,7 +2032,6 @@ DEFUN ("ns-convert-utf8-nfd-to-nfc", Fns_convert_utf8_nfd_to_nfc,
   return build_string ([utfStr UTF8String]);
 }
 
-
 #ifdef NS_IMPL_COCOA
 
 /* Compile and execute the AppleScript SCRIPT and return the error
@@ -2119,7 +2119,15 @@ In case the execution fails, an error is signaled. */)
 }
 #endif
 
+DEFUN ("ns-application-hidden-p", Fns_application_hidden_p, Sns_application_hidden_p, 0, 0, 0,
+       doc: /* Returns non-nil if application is hidden. */)
+    ()
+{
 
+  check_ns ();
+  return ([NSApp isHidden] == YES ?
+	  Qt : Qnil);
+}
 
 /* ==========================================================================
 
@@ -2135,6 +2143,111 @@ check_x_frame (Lisp_Object frame)
   return check_ns_frame (frame);
 }
 
+DEFUN ("ns-launch-URL-with-default-browser", Fns_launch_url_with_default_browser, Sns_launch_url_with_default_browser, 1, 1, 0,
+       doc: /* Launch the URL with the appropriate handler application.
+ file:// URLs are always opened with the system's default browser, i.e.
+ the http:// handler. Return non-nil if the URL has been successfully 
+ launched.*/)
+(URLstring)
+Lisp_Object URLstring;
+{
+	check_ns();
+	CHECK_STRING (URLstring);
+	if (NILP (URLstring))
+    {
+		error ("URL is nil.");
+		return Qnil;
+    }
+	
+	BLOCK_INPUT;
+	// get default browser
+	
+	
+	
+	LSLaunchURLSpec spec;
+	OSStatus status;
+	
+	if (strncmp("file:/", SDATA(URLstring), 6) == 0)
+    {
+		/* Build URL to find out what the default handler for http is.
+		 Without an explicit application reference, the launch function
+		 (e.g. LSOpenFromURLSpec or ICLaunchURL) will determine the
+		 default file handler for the file, which is not neccessarily the
+		 default browser.*/
+		
+		FSRef appRef;  // will be discarded
+		char* urlStr = "http://www.gnu.org/"; // just a test URL
+		CFStringRef inURLCfs = CFStringCreateWithCString(NULL, urlStr,	
+														 kCFStringEncodingASCII);
+		CFURLRef inURLRef = CFURLCreateWithString(NULL, inURLCfs, NULL);
+		
+		/* Get application for opening html pages */
+		status = LSGetApplicationForURL(inURLRef, kLSRolesAll, &appRef,
+										&spec.appURL);
+		CFRelease(inURLRef);
+		CFRelease(inURLCfs);
+    } else
+    {
+		spec.appURL = NULL; /* use preferred application */
+		status = noErr;
+    }
+	if (status == noErr) 
+    {
+		/* Open the file / http with the http handler */
+		CFStringRef targetUrlCfs = 
+		CFStringCreateWithCString(NULL, SDATA(URLstring),
+								  kCFStringEncodingASCII);
+		
+		/* CFStringRef targetUrlCfsEscaped = 
+		 CFURLCreateStringByAddingPercentEscapes(NULL, targetUrlCfs, 
+		 NULL, NULL, 
+		 kCFStringEncodingUTF8);
+		 the URL must already be encoded. */
+		CFURLRef targetUrlRef = 
+		CFURLCreateWithString(NULL, targetUrlCfs, NULL);
+		
+		if (targetUrlRef) 
+		{
+			
+			if ( (spec.itemURLs = 
+				  CFArrayCreate(NULL, (const void **)&targetUrlRef, 1, 
+								&kCFTypeArrayCallBacks)) == NULL)
+			{
+				return Qnil;
+			}
+			spec.passThruParams = NULL;
+			spec.launchFlags = kLSLaunchDefaults;
+			spec.asyncRefCon = NULL;
+			status = LSOpenFromURLSpec(&spec, NULL);
+			
+			CFRelease(spec.itemURLs);
+			CFRelease(targetUrlRef);
+		}
+		CFRelease(targetUrlCfs);
+		/* CFRelease(targetUrlCfsEscaped); */
+		UNBLOCK_INPUT;
+		
+		if (! targetUrlRef) 
+		{
+			error ("Could not produce valid URL from string.");
+			return Qnil;
+		}
+		if (status != noErr) 
+		{
+			error ("Failed to launch default browser. Error %d", XINT(status));
+			return Qnil;
+		}
+    } 
+	else
+    {
+		UNBLOCK_INPUT;
+		error ("Could not determine default browser. Error %d", XINT(status));
+		return Qnil;
+    }
+	
+	
+	return Qt;
+}
 
 /* called from frame.c */
 struct ns_display_info *
@@ -2365,15 +2478,22 @@ that stands for the selected frame's display. */)
      Lisp_Object display;
 {
   int top;
+  NSScreen *screen;
   NSRect vScreen;
 
   check_ns ();
-  vScreen = [ns_get_screen (display) visibleFrame];
-  top = vScreen.origin.y == 0.0 ?
-    (int) [ns_get_screen (display) frame].size.height - vScreen.size.height : 0;
 
+  screen = ns_get_screen (display);
+  if (!screen)
+    return Qnil;
+
+  vScreen = [screen visibleFrame];
+
+  /* NS coordinate system is upside-down.
+     Transform to screen-specific coordinates. */
   return list4 (make_number ((int) vScreen.origin.x),
-                make_number (top),
+                make_number ((int) [screen frame].size.height
+			     - vScreen.size.height - vScreen.origin.y),
                 make_number ((int) vScreen.size.width),
                 make_number ((int) vScreen.size.height));
 }
@@ -2557,6 +2677,29 @@ Value is t if tooltip was open, nil otherwise.  */)
 }
 
 
+DEFUN ("ns-open-help-anchor", Fns_open_help_anchor, Sns_open_help_anchor, 1, 2, 0,
+       doc: /* Show Apple Help  */)
+     (anchor, book)
+     Lisp_Object anchor, book;
+{
+  check_ns ();
+  BLOCK_INPUT;
+  CHECK_STRING (anchor);
+
+  if (! NILP (book) )
+    CHECK_STRING (book);
+
+  [[NSHelpManager sharedHelpManager] openHelpAnchor:[NSString stringWithUTF8String:
+								SDATA (anchor)]
+					     inBook:(NILP (book) ? nil :
+						     [NSString stringWithUTF8String:
+								 SDATA (book)])];
+  UNBLOCK_INPUT;
+  return Qnil;
+}
+
+
+
 /* ==========================================================================
 
     Class implementations
@@ -2672,6 +2815,7 @@ be used as the image of the icon representing the frame.  */);
                doc: /* Toolkit version for NS Windowing.  */);
   Vns_version_string = ns_appkit_version_str ();
 
+  defsubr (&Sns_launch_url_with_default_browser);
   defsubr (&Sns_read_file_name);
   defsubr (&Sns_get_resource);
   defsubr (&Sns_set_resource);
@@ -2682,6 +2826,7 @@ be used as the image of the icon representing the frame.  */);
 #ifdef NS_IMPL_COCOA
   defsubr (&Sns_do_applescript);
 #endif
+  defsubr (&Sns_application_hidden_p);
   defsubr (&Sxw_color_defined_p);
   defsubr (&Sxw_color_values);
   defsubr (&Sx_server_max_request_size);
@@ -2716,6 +2861,8 @@ be used as the image of the icon representing the frame.  */);
 
   defsubr (&Sx_show_tip);
   defsubr (&Sx_hide_tip);
+
+  defsubr (&Sns_open_help_anchor);
 
   /* used only in fontset.c */
   check_window_system_func = check_ns;

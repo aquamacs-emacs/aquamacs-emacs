@@ -1,0 +1,91 @@
+<html lang="en">
+<head>
+<title>Accumulating Text</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Accumulating Text">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Accumulating%20Text">Accumulating Text</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Rectangles.html#Rectangles">Rectangles</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Yanking.html#Yanking">Yanking</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr><br>
+</div>
+
+<h3 class="section">Accumulating Text</h3>
+
+<p>Usually we copy or move text by killing it and yanking it, but there
+are other methods convenient for copying one block of text in many
+places, or for copying many scattered blocks of text into one place.  To
+copy one block to many places, store it in a register
+(see <a href="Registers.html#Registers">Registers</a>).  Here we describe the commands to accumulate
+scattered pieces of text into a buffer or into a file.
+
+     <dl>
+<dt><kbd>M-x append-to-buffer</kbd>
+     <dd>Append region to the contents of a specified buffer. 
+<br><dt><kbd>M-x prepend-to-buffer</kbd>
+     <dd>Prepend region to the contents of a specified buffer. 
+<br><dt><kbd>M-x copy-to-buffer</kbd>
+     <dd>Copy region into a specified buffer, deleting that buffer's old contents. 
+<br><dt><kbd>M-x insert-buffer</kbd>
+     <dd>Insert the contents of a specified buffer into current buffer at point. 
+<br><dt><kbd>M-x append-to-file</kbd>
+     <dd>Append region to the contents of a specified file, at the end. 
+</dl>
+
+   <p>To accumulate text into a buffer, use <kbd>M-x append-to-buffer</kbd>. 
+This reads a buffer name, then inserts a copy of the region into the
+buffer specified.  If you specify a nonexistent buffer,
+<code>append-to-buffer</code> creates the buffer.  The text is inserted
+wherever point is in that buffer.  If you have been using the buffer for
+editing, the copied text goes into the middle of the text of the buffer,
+starting from wherever point happens to be at that moment.
+
+   <p>Point in that buffer is left at the end of the copied text, so
+successive uses of <code>append-to-buffer</code> accumulate the text in the
+specified buffer in the same order as they were copied.  Strictly
+speaking, <code>append-to-buffer</code> does not always append to the text
+already in the buffer--it appends only if point in that buffer is at the end. 
+However, if <code>append-to-buffer</code> is the only command you use to alter
+a buffer, then point is always at the end.
+
+   <p><kbd>M-x prepend-to-buffer</kbd> is just like <code>append-to-buffer</code>
+except that point in the other buffer is left before the copied text, so
+successive prependings add text in reverse order.  <kbd>M-x
+copy-to-buffer</kbd> is similar, except that any existing text in the other
+buffer is deleted, so the buffer is left containing just the text newly
+copied into it.
+
+   <p>To retrieve the accumulated text from another buffer, use the
+command <kbd>M-x insert-buffer</kbd>; this too takes <var>buffername</var> as an
+argument.  It inserts a copy of the whole text in buffer
+<var>buffername</var> into the current buffer at point, and sets the mark
+after the inserted text.  Alternatively, you can select the other
+buffer for editing, then copy text from it by killing. 
+See <a href="Buffers.html#Buffers">Buffers</a>, for background information on buffers.
+
+   <p>Instead of accumulating text within Emacs, in a buffer, you can append
+text directly into a file with <kbd>M-x append-to-file</kbd>, which takes
+<var>filename</var> as an argument.  It adds the text of the region to the end
+of the specified file.  The file is changed immediately on disk.
+
+   <p>You should use <code>append-to-file</code> only with files that are
+<em>not</em> being visited in Emacs.  Using it on a file that you are
+editing in Emacs would change the file behind Emacs's back, which
+can lead to losing some of your editing.
+
+   </body></html>
+

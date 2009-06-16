@@ -1,0 +1,149 @@
+<html lang="en">
+<head>
+<title>Saving Files</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Saving Files">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Saving">Saving</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Reverting.html#Reverting">Reverting</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Visiting.html#Visiting">Visiting</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
+<hr><br>
+</div>
+
+<h3 class="section">Saving Files</h3>
+
+<p><dfn>Saving</dfn> a buffer in Emacs means writing its contents back into the file
+that was visited in the buffer.
+
+     <dl>
+<dt><kbd>C-x C-s</kbd>
+     <dd>Save the current buffer in its visited file on disk (<code>save-buffer</code>). 
+<br><dt><kbd>C-x s</kbd>
+     <dd>Save any or all buffers in their visited files (<code>save-some-buffers</code>). 
+<br><dt><kbd>M-~</kbd>
+     <dd>Forget that the current buffer has been changed (<code>not-modified</code>). 
+With prefix argument (<kbd>C-u</kbd>), mark the current buffer as changed. 
+<br><dt><kbd>C-x C-w</kbd>
+     <dd>Save the current buffer as a specified file name (<code>write-file</code>). 
+<br><dt><kbd>M-x set-visited-file-name</kbd>
+     <dd>Change the file name under which the current buffer will be saved. 
+</dl>
+
+   <p>When you wish to save the file and make your changes permanent, type
+<kbd>C-x C-s</kbd> (<code>save-buffer</code>).  After saving is finished, <kbd>C-x C-s</kbd>
+displays a message like this:
+
+<pre class="example">     Wrote /u/rms/gnu/gnu.tasks
+     </pre>
+
+<p>If the selected buffer is not modified (no changes have been made in it
+since the buffer was created or last saved), saving is not really done,
+because it would have no effect.  Instead, <kbd>C-x C-s</kbd> displays a message
+like this in the echo area:
+
+<pre class="example">     (No changes need to be saved)
+     </pre>
+
+   <p>The command <kbd>C-x s</kbd> (<code>save-some-buffers</code>) offers to save any
+or all modified buffers.  It asks you what to do with each buffer.  The
+possible responses are analogous to those of <code>query-replace</code>:
+
+     <dl>
+<dt><kbd>y</kbd>
+     <dd>Save this buffer and ask about the rest of the buffers. 
+<br><dt><kbd>n</kbd>
+     <dd>Don't save this buffer, but ask about the rest of the buffers. 
+<br><dt><kbd>!</kbd>
+     <dd>Save this buffer and all the rest with no more questions. 
+<br><dt><kbd>&lt;RET&gt;</kbd>
+     <dd>Terminate <code>save-some-buffers</code> without any more saving. 
+<br><dt><kbd>.</kbd>
+     <dd>Save this buffer, then exit <code>save-some-buffers</code> without even asking
+about other buffers. 
+<br><dt><kbd>C-r</kbd>
+     <dd>View the buffer that you are currently being asked about.  When you exit
+View mode, you get back to <code>save-some-buffers</code>, which asks the
+question again. 
+<br><dt><kbd>C-h</kbd>
+     <dd>Display a help message about these options. 
+</dl>
+
+   <p><kbd>C-x C-c</kbd>, the key sequence to exit Emacs, invokes
+<code>save-some-buffers</code> and therefore asks the same questions.
+
+   <p>If you have changed a buffer but you do not want to save the changes,
+you should take some action to prevent it.  Otherwise, each time you use
+<kbd>C-x s</kbd> or <kbd>C-x C-c</kbd>, you are liable to save this buffer by
+mistake.  One thing you can do is type <kbd>M-~</kbd> (<code>not-modified</code>),
+which clears out the indication that the buffer is modified.  If you do
+this, none of the save commands will believe that the buffer needs to be
+saved.  (<code>~</code> is often used as a mathematical symbol for `not'; thus
+<kbd>M-~</kbd> is `not', metafied.)  You could also use
+<code>set-visited-file-name</code> (see below) to mark the buffer as visiting
+a different file name, one which is not in use for anything important. 
+Alternatively, you can cancel all the changes made since the file was
+visited or saved, by reading the text from the file again.  This is
+called <dfn>reverting</dfn>.  See <a href="Reverting.html#Reverting">Reverting</a>.  You could also undo all the
+changes by repeating the undo command <kbd>C-x u</kbd> until you have undone
+all the changes; but reverting is easier.
+
+   <p><kbd>M-x set-visited-file-name</kbd> alters the name of the file that the
+current buffer is visiting.  It reads the new file name using the
+minibuffer.  Then it marks the buffer as visiting that file name, and
+changes the buffer name correspondingly.  <code>set-visited-file-name</code>
+does not save the buffer in the newly visited file; it just alters the
+records inside Emacs in case you do save later.  It also marks the
+buffer as "modified" so that <kbd>C-x C-s</kbd> in that buffer
+<em>will</em> save.
+
+   <p>If you wish to mark the buffer as visiting a different file and save it
+right away, use <kbd>C-x C-w</kbd> (<code>write-file</code>).  It is precisely
+equivalent to <code>set-visited-file-name</code> followed by <kbd>C-x C-s</kbd>. 
+<kbd>C-x C-s</kbd> used on a buffer that is not visiting a file has the
+same effect as <kbd>C-x C-w</kbd>; that is, it reads a file name, marks the
+buffer as visiting that file, and saves it there.  The default file name in
+a buffer that is not visiting a file is made by combining the buffer name
+with the buffer's default directory (see <a href="File-Names.html#File%20Names">File Names</a>).
+
+   <p>If the new file name implies a major mode, then <kbd>C-x C-w</kbd> switches
+to that major mode, in most cases.  The command
+<code>set-visited-file-name</code> also does this.  See <a href="Choosing-Modes.html#Choosing%20Modes">Choosing Modes</a>.
+
+   <p>If Emacs is about to save a file and sees that the date of the latest
+version on disk does not match what Emacs last read or wrote, Emacs
+notifies you of this fact, because it probably indicates a problem caused
+by simultaneous editing and requires your immediate attention. 
+See <a href="Interlocking.html#Interlocking">Simultaneous Editing</a>.
+
+   <p>If the value of the variable <code>require-final-newline</code> is <code>t</code>,
+Emacs silently puts a newline at the end of any file that doesn't
+already end in one, every time a file is saved or written.  If the value
+is <code>nil</code>, Emacs leaves the end of the file unchanged; if it's
+neither <code>nil</code> nor <code>t</code>, Emacs asks you whether to add a
+newline.  The default is <code>nil</code>.
+
+<ul class="menu">
+<li><a accesskey="1" href="Backup.html#Backup">Backup</a>:               How Emacs saves the old version of your file. 
+<li><a accesskey="2" href="Interlocking.html#Interlocking">Interlocking</a>:         How Emacs protects against simultaneous editing
+                          of one file by two users. 
+<li><a accesskey="3" href="File-Shadowing.html#File%20Shadowing">Shadowing</a>: 
+                        Copying files to "shadows" automatically. 
+<li><a accesskey="4" href="Time-Stamps.html#Time%20Stamps">Time Stamps</a>:          Emacs can update time stamps on saved files. 
+</ul>
+
+   </body></html>
+

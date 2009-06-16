@@ -1,0 +1,184 @@
+<html lang="en">
+<head>
+<title>Checking and Correcting Spelling</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Checking and Correcting Spelling">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Spelling">Spelling</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Fixing-Case.html#Fixing%20Case">Fixing Case</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Fixit.html#Fixit">Fixit</a>
+<hr><br>
+</div>
+
+<h3 class="section">Checking and Correcting Spelling</h3>
+
+<p>This section describes the commands to check the spelling of a single
+word or of a portion of a buffer.  These commands work with the spelling
+checker program Ispell, which is not part of Emacs.
+
+     <dl>
+<dt><kbd>M-x flyspell-mode</kbd>
+     <dd>Enable Flyspell mode, which highlights all misspelled words. 
+<br><dt><kbd>M-$</kbd>
+     <dd>Check and correct spelling of the word at point (<code>ispell-word</code>). 
+<br><dt><kbd>M-&lt;TAB&gt;</kbd>
+     <dd>Complete the word before point based on the spelling dictionary
+(<code>ispell-complete-word</code>). 
+<br><dt><kbd>M-x ispell</kbd>
+     <dd>Spell-check the active region or the current buffer. 
+<br><dt><kbd>M-x ispell-buffer</kbd>
+     <dd>Check and correct spelling of each word in the buffer. 
+<br><dt><kbd>M-x ispell-region</kbd>
+     <dd>Check and correct spelling of each word in the region. 
+<br><dt><kbd>M-x ispell-message</kbd>
+     <dd>Check and correct spelling of each word in a draft mail message,
+excluding cited material. 
+<br><dt><kbd>M-x ispell-change-dictionary &lt;RET&gt; </kbd><var>dict</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Restart the Ispell process, using <var>dict</var> as the dictionary. 
+<br><dt><kbd>M-x ispell-kill-ispell</kbd>
+     <dd>Kill the Ispell subprocess. 
+</dl>
+
+   <p>Flyspell mode is a fully-automatic way to check spelling as you edit
+in Emacs.  It operates by checking words as you change or insert them. 
+When it finds a word that it does not recognize, it highlights that
+word.  This does not interfere with your editing, but when you see the
+highlighted word, you can move to it and fix it.  Type <kbd>M-x
+flyspell-mode</kbd> to enable or disable this mode in the current buffer.
+
+   <p>When Flyspell mode highlights a word as misspelled, you can click on
+it with <kbd>Mouse-2</kbd> to display a menu of possible corrections and
+actions.  You can also correct the word by editing it manually in any
+way you like.
+
+   <p>The other Emacs spell-checking features check or look up words when
+you give an explicit command to do so.  Checking all or part of the
+buffer is useful when you have text that was written outside of this
+Emacs session and might contain any number of misspellings.
+
+   <p>To check the spelling of the word around or next to point, and
+optionally correct it as well, use the command <kbd>M-$</kbd>
+(<code>ispell-word</code>).  If the word is not correct, the command offers
+you various alternatives for what to do about it.
+
+   <p>To check the entire current buffer, use <kbd>M-x ispell-buffer</kbd>.  Use
+<kbd>M-x ispell-region</kbd> to check just the current region.  To check
+spelling in an email message you are writing, use <kbd>M-x
+ispell-message</kbd>; that command checks the whole buffer, except for
+material that is indented or appears to be cited from other messages.
+
+   <p>The <kbd>M-x ispell</kbd> command spell-checks the active region if the
+Transient Mark mode is on (see <a href="Transient-Mark.html#Transient%20Mark">Transient Mark</a>), otherwise it
+spell-checks the current buffer.
+
+   <p>Each time these commands encounter an incorrect word, they ask you
+what to do.  They display a list of alternatives, usually including
+several "near-misses"--words that are close to the word being
+checked.  Then you must type a single-character response.  Here are
+the valid responses:
+
+     <dl>
+<dt><kbd>&lt;SPC&gt;</kbd>
+     <dd>Skip this word--continue to consider it incorrect, but don't change it
+here.
+
+     <br><dt><kbd>r </kbd><var>new</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Replace the word (just this time) with <var>new</var>.
+
+     <br><dt><kbd>R </kbd><var>new</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Replace the word with <var>new</var>, and do a <code>query-replace</code> so you
+can replace it elsewhere in the buffer if you wish.
+
+     <br><dt><kbd></kbd><var>digit</var><kbd></kbd>
+     <dd>Replace the word (just this time) with one of the displayed
+near-misses.  Each near-miss is listed with a digit; type that digit to
+select it.
+
+     <br><dt><kbd>a</kbd>
+     <dd>Accept the incorrect word--treat it as correct, but only in this
+editing session.
+
+     <br><dt><kbd>A</kbd>
+     <dd>Accept the incorrect word--treat it as correct, but only in this
+editing session and for this buffer.
+
+     <br><dt><kbd>i</kbd>
+     <dd>Insert this word in your private dictionary file so that Ispell will
+consider it correct from now on, even in future sessions.
+
+     <br><dt><kbd>u</kbd>
+     <dd>Insert the lower-case version of this word in your private dictionary
+file.
+
+     <br><dt><kbd>m</kbd>
+     <dd>Like <kbd>i</kbd>, but you can also specify dictionary completion
+information.
+
+     <br><dt><kbd>l </kbd><var>word</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Look in the dictionary for words that match <var>word</var>.  These words
+become the new list of "near-misses"; you can select one of them as
+the replacement by typing a digit.  You can use <code>*</code> in <var>word</var> as a
+wildcard.
+
+     <br><dt><kbd>C-g</kbd>
+     <dd>Quit interactive spell checking.  You can restart it again afterward
+with <kbd>C-u M-$</kbd>.
+
+     <br><dt><kbd>X</kbd>
+     <dd>Same as <kbd>C-g</kbd>.
+
+     <br><dt><kbd>x</kbd>
+     <dd>Quit interactive spell checking and move point back to where it was
+when you started spell checking.
+
+     <br><dt><kbd>q</kbd>
+     <dd>Quit interactive spell checking and kill the Ispell subprocess.
+
+     <br><dt><kbd>C-l</kbd>
+     <dd>Refresh the screen.
+
+     <br><dt><kbd>C-z</kbd>
+     <dd>This key has its normal command meaning (suspend Emacs or iconify this
+frame). 
+</dl>
+
+   <p>The command <code>ispell-complete-word</code>, which is bound to the key
+<kbd>M-&lt;TAB&gt;</kbd> in Text mode and related modes, shows a list of
+completions based on spelling correction.  Insert the beginning of a
+word, and then type <kbd>M-&lt;TAB&gt;</kbd>; the command displays a completion
+list window.  To choose one of the completions listed, click
+<kbd>Mouse-2</kbd> on it, or move the cursor there in the completions window
+and type &lt;RET&gt;.  See <a href="Text-Mode.html#Text%20Mode">Text Mode</a>.
+
+   <p>Once started, the Ispell subprocess continues to run (waiting for
+something to do), so that subsequent spell checking commands complete
+more quickly.  If you want to get rid of the Ispell process, use
+<kbd>M-x ispell-kill-ispell</kbd>.  This is not usually necessary, since the
+process uses no time except when you do spelling correction.
+
+   <p>Ispell uses two dictionaries: the standard dictionary and your private
+dictionary.  The variable <code>ispell-dictionary</code> specifies the file
+name of the standard dictionary to use.  A value of <code>nil</code> says to
+use the default dictionary.  The command <kbd>M-x
+ispell-change-dictionary</kbd> sets this variable and then restarts the
+Ispell subprocess, so that it will use a different dictionary.
+
+   <p>The dictionary used by <code>ispell-complete-word</code> can be
+customized separately by setting the value of the variable
+<code>ispell-complete-word-dict</code>.
+
+   </body></html>
+

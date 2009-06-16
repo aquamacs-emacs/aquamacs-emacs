@@ -1,0 +1,82 @@
+<html lang="en">
+<head>
+<title>Miscellaneous Buffer Operations</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Miscellaneous Buffer Operations">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Misc%20Buffer">Misc Buffer</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Kill-Buffer.html#Kill%20Buffer">Kill Buffer</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="List-Buffers.html#List%20Buffers">List Buffers</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Buffers.html#Buffers">Buffers</a>
+<hr><br>
+</div>
+
+<h3 class="section">Miscellaneous Buffer Operations</h3>
+
+     <dl>
+<dt><kbd>C-x C-q</kbd>
+     <dd>Toggle read-only status of buffer (<code>vc-toggle-read-only</code>). 
+<br><dt><kbd>M-x rename-buffer &lt;RET&gt; </kbd><var>name</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Change the name of the current buffer. 
+<br><dt><kbd>M-x rename-uniquely</kbd>
+     <dd>Rename the current buffer by adding <code>&lt;</code><var>number</var><code>&gt;</code> to the end. 
+<br><dt><kbd>M-x view-buffer &lt;RET&gt; </kbd><var>buffer</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Scroll through buffer <var>buffer</var>. 
+</dl>
+
+   <p>A buffer can be <dfn>read-only</dfn>, which means that commands to change
+its contents are not allowed.  The mode line indicates read-only
+buffers with <code>%%</code> or <code>%*</code> near the left margin.  Read-only
+buffers are usually made by subsystems such as Dired and Rmail that
+have special commands to operate on the text; also by visiting a file
+whose access control says you cannot write it.
+
+   <p>If you wish to make changes in a read-only buffer, use the command
+<kbd>C-x C-q</kbd> (<code>vc-toggle-read-only</code>).  It makes a read-only buffer
+writable, and makes a writable buffer read-only.  In most cases, this
+works by setting the variable <code>buffer-read-only</code>, which has a local
+value in each buffer and makes the buffer read-only if its value is
+non-<code>nil</code>.  If the file is maintained with version control,
+<kbd>C-x C-q</kbd> works through the version control system to change the
+read-only status of the file as well as the buffer.  See <a href="Version-Control.html#Version%20Control">Version Control</a>.
+
+   <p><kbd>M-x rename-buffer</kbd> changes the name of the current buffer.  Specify
+the new name as a minibuffer argument.  There is no default.  If you
+specify a name that is in use for some other buffer, an error happens and
+no renaming is done.
+
+   <p><kbd>M-x rename-uniquely</kbd> renames the current buffer to a similar name
+with a numeric suffix added to make it both different and unique.  This
+command does not need an argument.  It is useful for creating multiple
+shell buffers: if you rename the <code>*Shell*</code> buffer, then do <kbd>M-x
+shell</kbd> again, it makes a new shell buffer named <code>*Shell*</code>;
+meanwhile, the old shell buffer continues to exist under its new name. 
+This method is also good for mail buffers, compilation buffers, and most
+Emacs features that create special buffers with particular names.
+
+   <p><kbd>M-x view-buffer</kbd> is much like <kbd>M-x view-file</kbd> (see <a href="Misc-File-Ops.html#Misc%20File%20Ops">Misc File Ops</a>) except that it examines an already existing Emacs buffer. 
+View mode provides commands for scrolling through the buffer
+conveniently but not for changing it.  When you exit View mode with
+<kbd>q</kbd>, that switches back to the buffer (and the position) which was
+previously displayed in the window.  Alternatively, if you exit View
+mode with <kbd>e</kbd>, the buffer and the value of point that resulted from
+your perusal remain in effect.
+
+   <p>The commands <kbd>M-x append-to-buffer</kbd> and <kbd>M-x insert-buffer</kbd>
+can be used to copy text from one buffer to another.  See <a href="Accumulating-Text.html#Accumulating%20Text">Accumulating Text</a>.
+
+   </body></html>
+

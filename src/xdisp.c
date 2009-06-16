@@ -2610,12 +2610,12 @@ init_iterator (it, w, charpos, bytepos, row, base_face_id)
   if (base_face_id == DEFAULT_FACE_ID
       && FRAME_WINDOW_P (it->f))
     {
-      if (NATNUMP (current_buffer->extra_line_spacing))
+      if (INTEGERP (current_buffer->extra_line_spacing))
 	it->extra_line_spacing = XFASTINT (current_buffer->extra_line_spacing);
       else if (FLOATP (current_buffer->extra_line_spacing))
 	it->extra_line_spacing = (XFLOAT_DATA (current_buffer->extra_line_spacing)
 				  * FRAME_LINE_HEIGHT (it->f));
-      else if (it->f->extra_line_spacing > 0)
+      else if (it->f->extra_line_spacing != 0)
 	it->extra_line_spacing = it->f->extra_line_spacing;
       it->max_extra_line_spacing = 0;
     }
@@ -16176,7 +16176,7 @@ append_space_for_newline (it, default_face_p)
 	  it->len = 1;
 
 	  if (default_face_p)
-	    it->face_id = DEFAULT_FACE_ID;
+	    it->face_id = lookup_basic_face (it->f, DEFAULT_FACE_ID); 
 	  else if (it->face_before_selective_p)
 	    it->face_id = it->saved_face_id;
 	  face = FACE_FROM_ID (it->f, it->face_id);
@@ -23661,10 +23661,11 @@ note_mouse_highlight (f, x, y)
   if (NILP (Vmouse_highlight)
       || !f->glyphs_initialized_p)
     return;
-
   dpyinfo->mouse_face_mouse_x = x;
   dpyinfo->mouse_face_mouse_y = y;
   dpyinfo->mouse_face_mouse_frame = f;
+
+  // printf("note_mouse_highlight %d\n", dpyinfo->mouse_face_defer);
 
   if (dpyinfo->mouse_face_defer)
     return;

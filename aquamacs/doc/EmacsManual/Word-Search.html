@@ -1,0 +1,63 @@
+<html lang="en">
+<head>
+<title>Word Search</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Word Search">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Word%20Search">Word Search</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Regexp-Search.html#Regexp%20Search">Regexp Search</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Nonincremental-Search.html#Nonincremental%20Search">Nonincremental Search</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Search.html#Search">Search</a>
+<hr><br>
+</div>
+
+<h3 class="section">Word Search</h3>
+
+<p>Word search searches for a sequence of words without regard to how the
+words are separated.  More precisely, you type a string of many words,
+using single spaces to separate them, and the string can be found even
+if there are multiple spaces, newlines, or other punctuation characters
+between these words.
+
+   <p>Word search is useful for editing a printed document made with a text
+formatter.  If you edit while looking at the printed, formatted version,
+you can't tell where the line breaks are in the source file.  With word
+search, you can search without having to know them.
+
+     <dl>
+<dt><kbd>C-s &lt;RET&gt; C-w </kbd><var>words</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Search for <var>words</var>, ignoring details of punctuation. 
+<br><dt><kbd>C-r &lt;RET&gt; C-w </kbd><var>words</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Search backward for <var>words</var>, ignoring details of punctuation. 
+</dl>
+
+   <p>Word search is a special case of nonincremental search and is invoked
+with <kbd>C-s &lt;RET&gt; C-w</kbd>.  This is followed by the search string,
+which must always be terminated with &lt;RET&gt;.  Being nonincremental,
+this search does not start until the argument is terminated.  It works
+by constructing a regular expression and searching for that; see
+<a href="Regexp-Search.html#Regexp%20Search">Regexp Search</a>.
+
+   <p>Use <kbd>C-r &lt;RET&gt; C-w</kbd> to do backward word search.
+
+   <p>Forward and backward word searches are implemented by the commands
+<code>word-search-forward</code> and <code>word-search-backward</code>.  These
+commands may be bound to keys in the usual manner.  They are available
+via the incremental search commands both for historical reasons and
+to avoid the need to find suitable key sequences for them.
+
+   </body></html>
+

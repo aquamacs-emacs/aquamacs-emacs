@@ -834,8 +834,15 @@ to use."
     (w32-shell-execute "open" url)))
 
 (defun browse-url-default-macosx-browser (url &optional new-window)
+"Launch the default browser specified in Mac OS X.
+NEW-WINDOW is ignored."
   (interactive (browse-url-interactive-arg "URL: "))
-  (start-process (concat "open " url) nil "open" url))
+  (condition-case nil
+      (ns-launch-URL-with-default-browser url)
+    (error 
+     ;; fallback - sometimes http is not registered in the
+     ;; LaunchServices database
+     (start-process (concat "open " url) nil "open" url))))
 
 ;; --- Netscape ---
 

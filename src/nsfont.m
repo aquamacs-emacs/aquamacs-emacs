@@ -778,7 +778,7 @@ nsfont_open (FRAME_PTR f, Lisp_Object font_entity, int pixel_size)
 
     /* Metrics etc.; some fonts return an unusually large max advance, so we
        only use it for fonts that have wide characters. */
-    font_info->width = ([sfont numberOfGlyphs] > 2000) ?
+    font_info->width = ([sfont numberOfGlyphs] > 3000) ?
       [sfont maximumAdvancement].width : ns_char_width (sfont, '0');
 
     brect =  [sfont boundingRectForFont];

@@ -1,0 +1,62 @@
+<html lang="en">
+<head>
+<title>Forcing Display in the Same Window</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Forcing Display in the Same Window">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Force%20Same%20Window">Force Same Window</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Change-Window.html#Change%20Window">Change Window</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Pop-Up-Window.html#Pop%20Up%20Window">Pop Up Window</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
+<hr><br>
+</div>
+
+<h3 class="section">Forcing Display in the Same Window</h3>
+
+<p>Certain Emacs commands switch to a specific buffer with special
+contents.  For example, <kbd>M-x shell</kbd> switches to a buffer named
+<code>*Shell*</code>.  By convention, all these commands are written to pop up
+the buffer in a separate window.  But you can specify that certain of
+these buffers should appear in the selected window.
+
+   <p>If you add a buffer name to the list <code>same-window-buffer-names</code>,
+the effect is that such commands display that particular buffer by
+switching to it in the selected window.  For example, if you add the
+element <code>"*grep*"</code> to the list, the <code>grep</code> command will
+display its output buffer in the selected window.
+
+   <p>The default value of <code>same-window-buffer-names</code> is not
+<code>nil</code>: it specifies buffer names <code>*info*</code>, <code>*mail*</code> and
+<code>*shell*</code> (as well as others used by more obscure Emacs packages). 
+This is why <kbd>M-x shell</kbd> normally switches to the <code>*shell*</code>
+buffer in the selected window.  If you delete this element from the
+value of <code>same-window-buffer-names</code>, the behavior of <kbd>M-x
+shell</kbd> will change--it will pop up the buffer in another window
+instead.
+
+   <p>You can specify these buffers more generally with the variable
+<code>same-window-regexps</code>.  Set it to a list of regular expressions;
+then any buffer whose name matches one of those regular expressions is
+displayed by switching to it in the selected window.  (Once again, this
+applies only to buffers that normally get displayed for you in a
+separate window.)  The default value of this variable specifies Telnet
+and rlogin buffers.
+
+   <p>An analogous feature lets you specify buffers which should be
+displayed in their own individual frames.  See <a href="Special-Buffer-Frames.html#Special%20Buffer%20Frames">Special Buffer Frames</a>.
+
+   </body></html>
+

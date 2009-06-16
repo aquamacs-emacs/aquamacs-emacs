@@ -1,0 +1,112 @@
+<html lang="en">
+<head>
+<title>Comment Commands</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Comment Commands">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Comment%20Commands">Comment Commands</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Multi-Line-Comments.html#Multi-Line%20Comments">Multi-Line Comments</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Comments.html#Comments">Comments</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Comment Commands</h4>
+
+<p>The comment commands in this table insert, kill and align comments. 
+They are described in this section and following sections.
+
+     <dl>
+<dt><kbd>M-;</kbd>
+     <dd>Insert or realign comment on current line; alternatively, comment or
+uncomment the region (<code>comment-dwim</code>). 
+<br><dt><kbd>C-u M-;</kbd>
+     <dd>Kill comment on current line (<code>comment-kill</code>). 
+<br><dt><kbd>C-x ;</kbd>
+     <dd>Set comment column (<code>comment-set-column</code>). 
+<br><dt><kbd>C-M-j</kbd>
+     <dd>Like &lt;RET&gt; followed by inserting and aligning a comment
+(<code>comment-indent-new-line</code>). 
+<br><dt><kbd>M-x comment-region</kbd>
+     <dd>Add or remove comment delimiters on all the lines in the region. 
+</dl>
+
+   <p>The command to create or align a comment is <kbd>M-;</kbd>
+(<code>comment-dwim</code>).  The word "dwim" is an acronym for "Do What
+I Mean"; it indicates that this command can be used for many
+different jobs relating to comments, depending on the situation where
+you use it.
+
+   <p>If there is no comment already on the line, <kbd>M-;</kbd> inserts a new
+comment, aligned at a specific column called the <dfn>comment column</dfn>. 
+The new comment begins with the string Emacs thinks comments should
+start with (the value of <code>comment-start</code>; see below).  Point is
+after that string, so you can insert the text of the comment right
+away.  If the major mode has specified a string to terminate comments,
+<kbd>M-;</kbd> inserts that too, to keep the syntax valid.
+
+   <p>If the text of the line extends past the comment column, then the
+comment start string is indented to a suitable boundary (usually, at
+least one space is inserted).
+
+   <p>You can also use <kbd>M-;</kbd> to align an existing comment.  If a line
+already contains the comment-start string, <kbd>M-;</kbd> reindents it to
+the conventional alignment and moves point after it.  (Exception:
+comments starting in column 0 are not moved.)  Even when an existing
+comment is properly aligned, <kbd>M-;</kbd> is still useful for moving
+directly to the start of the text inside the comment.
+
+   <p><kbd>C-u M-;</kbd> kills any comment on the current line, along with the
+whitespace before it.  To reinsert the comment on another line, move
+to the end of that line, do <kbd>C-y</kbd>, and then do <kbd>M-;</kbd> to
+realign it.
+
+   <p>Note that <kbd>C-u M-;</kbd> is not a distinct key; it is <kbd>M-;</kbd>
+(<code>comment-dwim</code>) with a prefix argument.  That command is
+programmed so that when it receives a prefix argument it calls
+<code>comment-kill</code>.  However, <code>comment-kill</code> is a valid command
+in its own right, and you can bind it directly to a key if you wish.
+
+   <p><kbd>M-;</kbd> does two other jobs when used with an active region in
+Transient Mark mode (see <a href="Transient-Mark.html#Transient%20Mark">Transient Mark</a>).  Then it either adds or
+removes comment delimiters on each line of the region.  (If every line
+is a comment, it removes comment delimiters from each; otherwise, it
+adds comment delimiters to each.)  If you are not using Transient Mark
+mode, then you should use the commands <code>comment-region</code> and
+<code>uncomment-region</code> to do these jobs (see <a href="Multi-Line-Comments.html#Multi-Line%20Comments">Multi-Line Comments</a>). 
+A prefix argument used in these circumstances specifies how many
+comment delimiters to add or how many to delete.
+
+   <p>Some major modes have special rules for indenting certain kinds of
+comments in certain contexts.  For example, in Lisp code, comments which
+start with two semicolons are indented as if they were lines of code,
+instead of at the comment column.  Comments which start with three
+semicolons are supposed to start at the left margin.  Emacs understands
+these conventions by indenting a double-semicolon comment using &lt;TAB&gt;,
+and by not changing the indentation of a triple-semicolon comment at all.
+
+<pre class="example">     ;; This function is just an example
+     ;;; Here either two or three semicolons are appropriate.
+     (defun foo (x)
+     ;;; And now, the first part of the function:
+       ;; The following line adds one.
+       (1+ x))           ; This line adds one.
+     </pre>
+
+   <p>In C code, a comment preceded on its line by nothing but whitespace
+is indented like a line of code.
+
+   </body></html>
+

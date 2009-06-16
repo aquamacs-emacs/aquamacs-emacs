@@ -1,0 +1,50 @@
+<html lang="en">
+<head>
+<title>The Kill Ring</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Kill Ring">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Kill%20Ring">Kill Ring</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Appending-Kills.html#Appending%20Kills">Appending Kills</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Yanking.html#Yanking">Yanking</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">The Kill Ring</h4>
+
+<p>All killed text is recorded in the <dfn>kill ring</dfn>, a list of blocks of
+text that have been killed.  There is only one kill ring, shared by all
+buffers, so you can kill text in one buffer and yank it in another buffer. 
+This is the usual way to move text from one file to another. 
+(See <a href="Accumulating-Text.html#Accumulating%20Text">Accumulating Text</a>, for some other ways.)
+
+   <p>The command <kbd>C-y</kbd> (<code>yank</code>) reinserts the text of the most recent
+kill.  It leaves the cursor at the end of the text.  It sets the mark at
+the beginning of the text.  See <a href="Mark.html#Mark">Mark</a>.
+
+   <p><kbd>C-u C-y</kbd> leaves the cursor in front of the text, and sets the
+mark after it.  This happens only if the argument is specified with just
+a <kbd>C-u</kbd>, precisely.  Any other sort of argument, including <kbd>C-u</kbd>
+and digits, specifies an earlier kill to yank (see <a href="Earlier-Kills.html#Earlier%20Kills">Earlier Kills</a>).
+
+   <p>To copy a block of text, you can use <kbd>M-w</kbd>
+(<code>kill-ring-save</code>), which copies the region into the kill ring
+without removing it from the buffer.  This is approximately equivalent
+to <kbd>C-w</kbd> followed by <kbd>C-x u</kbd>, except that <kbd>M-w</kbd> does not
+alter the undo history and does not temporarily change the screen.
+
+   </body></html>
+

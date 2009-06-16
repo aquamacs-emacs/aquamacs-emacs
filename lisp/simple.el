@@ -7,7 +7,8 @@
 ;; Maintainer: FSF
 ;; Keywords: internal
 
-;; This file is part of GNU Emacs.
+;; This file is part of GNU Emacs and Aquamacs Emacs.
+;; Aquamacs-specific Smart Spacing code included.
 
 ;; GNU Emacs is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -2780,13 +2781,13 @@ argument should still be a \"useful\" string for such uses."
 	(signal 'args-out-of-range
 		(list string "yank-handler specified for empty string"))))
   (if (fboundp 'menu-bar-update-yank-menu)
-      (menu-bar-update-yank-menu string (and replace (car kill-ring))))
+      (menu-bar-update-yank-menu string (and replace (car kill-ring)))) 
   (if (and replace kill-ring)
       (setcar kill-ring string)
     (push string kill-ring)
     (if (> (length kill-ring) kill-ring-max)
-	(setcdr (nthcdr (1- kill-ring-max) kill-ring) nil)))
-  (setq kill-ring-yank-pointer kill-ring)
+	(setcdr (nthcdr (1- kill-ring-max) kill-ring) nil))) 
+  (setq kill-ring-yank-pointer kill-ring) 
   (if interprogram-cut-function
       (funcall interprogram-cut-function string (not replace))))
 
@@ -2895,7 +2896,7 @@ text.  See `insert-for-yank'."
   (unless (and beg end)
     (error "The mark is not set now, so there is no region"))
   (condition-case nil
-      (let ((string (filter-buffer-substring beg end t)))
+      (let ((string (smart-spacing-filter-buffer-substring beg end t)))
 	(when string			;STRING is nil if BEG = END
 	  ;; Add that string to the kill ring, one way or another.
 	  (if (eq last-command 'kill-region)
@@ -2933,8 +2934,8 @@ system cut and paste.
 This command's old key binding has been given to `kill-ring-save'."
   (interactive "r")
   (if (eq last-command 'kill-region)
-      (kill-append (filter-buffer-substring beg end) (< end beg))
-    (kill-new (filter-buffer-substring beg end)))
+      (kill-append (smart-spacing-filter-buffer-substring beg end) (< end beg))
+    (kill-new (smart-spacing-filter-buffer-substring beg end)))
   (setq deactivate-mark t)
   nil)
 
@@ -6403,6 +6404,160 @@ warning using STRING as the message.")
 (mapc (lambda (elem)
         (eval-after-load (car elem) `(bad-package-check ',(car elem))))
       bad-packages-alist)
+
+;; Smart spacing
+
+;; Author: David Reitter, david.reitter@gmail.com
+;; Maintainer: David Reitter
+;; Keywords: aquamacs
+ 
+;; This code is part of Aquamacs Emacs
+;; http://aquamacs.org/
+;; Copyright (C) 2009: David Reitter
+
+;; (defcustom smart-spacing-when-killing-words nil
+;;   "Delete extra spaces when killing words.
+;; Affects commands `aquamacs-kill-word' and `aquamacs-backwards-kill-word'."
+;;   :group 'convenience
+;;   :group 'Aquamacs
+;;   :type '(choice (const nil) (const t)))
+
+(define-minor-mode smart-spacing-mode
+ "Smart spacing: word-wise kill&yank.
+When this mode is enabled, kill and yank operations support
+word-wise editing.  Afer killing (copying) a word or several
+words, the text will be inserted as a full phrase when
+yanking. That means that spaces around the word may be inserted
+during yanking, and spaces and other word delimiters are removed
+during killing as necessary to leave only one space between
+words.
+
+During killing, smart-spacing-mode behaves conservatively.  It
+will never delete more than one extra space at a time.
+
+This feature is part of Aquamacs."
+ :group 'convenience
+ :lighter " Spc")
+
+(defun turn-on-smart-spacing-mode ()
+  (interactive)
+  (smart-spacing-mode 1))
+
+(defun turn-off-smart-spacing-mode ()
+  (interactive)
+  (smart-spacing-mode 0))
+
+(define-globalized-minor-mode 
+  global-smart-spacing-mode smart-spacing-mode
+  turn-on-smart-spacing-mode)
+
+(defvar smart-spacing-rules
+  '(("  " . (bidi . 1))
+    ("--" . 1)
+    (" ." . -1)
+    (" )" . -1)
+    ("( " . 1)
+    (" :" . -1)
+    (" ," . -1)
+    (" ;" . -1)
+    (" \"" . -1)
+    ("\" " . 1) 
+    (" '" . -1)
+    ("\n " . 1)
+    (" " . 1) ; buffer boundary
+    ;; ("\n\n" . "\n")
+    )
+  "Assoc list for smart spacing.
+If key is at point after killing text, delete |value| chars to
+the left or the right.  Negative value indicates deletion to the
+left.  If value is a cons (xxx . num), then num characters will
+be deleted either to the left or to the right, depending on where
+the point is when the command is called.")
+
+(defmacro user-buffer-p (buf)
+  "Evaluate to t if buffer BUF is not an internal buffer."
+  `(not (string= (substring (buffer-name ,buf) 0 1) " ")))
+
+(defun smart-spacing-filter-buffer-substring (beg end &optional delete noprops )   
+ "Like `filter-buffer-substring', but add spaces around content if region is a phrase."
+ (let* ((from (min beg end)) (to (max beg end))
+	;; (move-point (memq (point) (list beg end))) 
+	(point-at-end (eq (point) end))
+	(use-smart-string 
+	 (and
+	  smart-spacing-mode
+	  (user-buffer-p (current-buffer))
+	  (smart-spacing-char-is-word-boundary (1- from) from)
+	  (smart-spacing-char-is-word-boundary to (1+ to))))
+	;; the following is destructive (side-effect).  
+	;; do after checking for word boundaries.
+	(string (filter-buffer-substring beg end delete noprops)))
+   (when use-smart-string
+     (put-text-property 0 (length string)
+			'yank-handler 
+			'(smart-spacing-yank-handler nil nil nil) 
+			string)
+     (when delete (smart-remove-remaining-spaces from point-at-end)))
+    string))
+
+(defun smart-delete-region (from to)
+  (if (and smart-spacing-mode (memq this-command '(cua-delete-region mouse-save-then-kill)))
+      (let* ((from (min from to)) 
+	     (to (max from to))
+	     ;; (move-point (memq (point) (list beg end))) 
+	     (point-at-end (eq (point) to))) 
+	     
+	     (delete-region from to)
+	     (smart-remove-remaining-spaces from point-at-end))
+    (delete-region from to)))
+
+(defun smart-remove-remaining-spaces (pos point-at-end)
+  "Remove remaining spaces.
+Adheres to `smart-spacing-rules'.
+If POINT-AT-END, behaves as if point was at then end of
+a previously deleted region (now at POS)."
+  (unless (eq (point-min) (point-max))
+    (let ((del (assoc (buffer-substring-no-properties
+		       (max (point-min) (- pos 1)) 
+		       (max (point-min) (min (1- (point-max)) (1+ pos))))
+		      smart-spacing-rules)))
+      (when del
+	(setq del (cdr del))
+	;; in some cases we want point to end up 
+	;; further to the left or to the right,
+	;; depending on whether it was on the left or the right
+	;; edge of the region
+	(when (consp del)
+	  (if point-at-end
+	      (setq del (cdr del))
+	    (setq del (- (cdr del)))))
+	;; delete either to the left or to the right
+	;; this deletion will keep point in the right place.
+	(delete-region pos (+ del pos))))))
+
+(defun smart-spacing-char-is-word-boundary (pos &optional side)
+  (or (< pos (point-min))
+      (>= pos (point-max))
+      (not (let ((str (buffer-substring-no-properties pos (1+ pos))))
+	     (or (string-match "\\w" str)
+		 (if (eq side 'left) (or (equal str ".") (equal str ")")))
+		 (if (eq side 'right) (equal str "(")))))))
+
+
+(defun smart-spacing-yank-handler (string)
+      (when  (and smart-spacing-mode  
+		  major-mode ; paranoia
+		  (user-buffer-p (current-buffer)))
+	(or (smart-spacing-char-is-word-boundary opoint 'right) ; to the right
+	     (setq string (concat string " ")))
+	(or (smart-spacing-char-is-word-boundary (1- opoint) 'left) ; to the left
+	    (setq string (concat " " string))
+	     ))
+      (insert string))
+
+;; currently not advising backward-delete-char-untabity 
+;; or delete-char
+
 
 
 (provide 'simple)

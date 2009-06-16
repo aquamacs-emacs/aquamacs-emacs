@@ -1,0 +1,77 @@
+<html lang="en">
+<head>
+<title>Appending Kills</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Appending Kills">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Appending%20Kills">Appending Kills</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Earlier-Kills.html#Earlier%20Kills">Earlier Kills</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Kill-Ring.html#Kill%20Ring">Kill Ring</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Yanking.html#Yanking">Yanking</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Appending Kills</h4>
+
+<p>Normally, each kill command pushes a new entry onto the kill ring. 
+However, two or more kill commands in a row combine their text into a
+single entry, so that a single <kbd>C-y</kbd> yanks all the text as a unit,
+just as it was before it was killed.
+
+   <p>Thus, if you want to yank text as a unit, you need not kill all of it
+with one command; you can keep killing line after line, or word after
+word, until you have killed it all, and you can still get it all back at
+once.
+
+   <p>Commands that kill forward from point add onto the end of the previous
+killed text.  Commands that kill backward from point add text onto the
+beginning.  This way, any sequence of mixed forward and backward kill
+commands puts all the killed text into one entry without rearrangement. 
+Numeric arguments do not break the sequence of appending kills.  For
+example, suppose the buffer contains this text:
+
+<pre class="example">     This is a line -!-of sample text.
+     </pre>
+
+<p>with point shown by -!-.  If you type <kbd>M-d M-&lt;DEL&gt; M-d
+M-&lt;DEL&gt;</kbd>, killing alternately forward and backward, you end up with
+<code>a line of sample</code> as one entry in the kill ring, and <code>This
+is  text.</code> in the buffer.  (Note the double space between <code>is</code>
+and <code>text</code>, which you can clean up with <kbd>M-&lt;SPC&gt;</kbd> or
+<kbd>M-q</kbd>.)
+
+   <p>Another way to kill the same text is to move back two words with
+<kbd>M-b M-b</kbd>, then kill all four words forward with <kbd>C-u M-d</kbd>. 
+This produces exactly the same results in the buffer and in the kill
+ring.  <kbd>M-f M-f C-u M-&lt;DEL&gt;</kbd> kills the same text, all going
+backward; once again, the result is the same.  The text in the kill ring
+entry always has the same order that it had in the buffer before you
+killed it.
+
+   <p>If a kill command is separated from the last kill command by other
+commands (not just numeric arguments), it starts a new entry on the kill
+ring.  But you can force it to append by first typing the command
+<kbd>C-M-w</kbd> (<code>append-next-kill</code>) right before it.  The <kbd>C-M-w</kbd>
+tells the following command, if it is a kill command, to append the text
+it kills to the last killed text, instead of starting a new entry.  With
+<kbd>C-M-w</kbd>, you can kill several separated pieces of text and
+accumulate them to be yanked back in one place.
+
+   <p>A kill command following <kbd>M-w</kbd> does not append to the text that
+<kbd>M-w</kbd> copied into the kill ring.
+
+   </body></html>
+

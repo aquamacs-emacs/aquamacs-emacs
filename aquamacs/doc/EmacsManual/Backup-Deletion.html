@@ -1,0 +1,53 @@
+<html lang="en">
+<head>
+<title>Automatic Deletion of Backups</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Automatic Deletion of Backups">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Backup%20Deletion">Backup Deletion</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Backup-Copying.html#Backup%20Copying">Backup Copying</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Backup-Names.html#Backup%20Names">Backup Names</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Backup.html#Backup">Backup</a>
+<hr><br>
+</div>
+
+<h3 class="subsubsection">Automatic Deletion of Backups</h5>
+
+<p>To prevent excessive consumption of disk space, Emacs can delete numbered
+backup versions automatically.  Generally Emacs keeps the first few backups
+and the latest few backups, deleting any in between.  This happens every
+time a new backup is made.
+
+   <p>The two variables <code>kept-old-versions</code> and
+<code>kept-new-versions</code> control this deletion.  Their values are,
+respectively, the number of oldest (lowest-numbered) backups to keep
+and the number of newest (highest-numbered) ones to keep, each time a
+new backup is made.  The backups in the middle (excluding those oldest
+and newest) are the excess middle versions--those backups are
+deleted.  These variables' values are used when it is time to delete
+excess versions, just after a new backup version is made; the newly
+made backup is included in the count in <code>kept-new-versions</code>.  By
+default, both variables are 2.
+
+   <p>If <code>delete-old-versions</code> is non-<code>nil</code>, Emacs deletes the
+excess backup files silently.  If it is <code>nil</code>, the default, Emacs
+asks you whether it should delete the excess backup versions.
+
+   <p>Dired's <kbd>.</kbd> (Period) command can also be used to delete old versions. 
+See <a href="Dired-Deletion.html#Dired%20Deletion">Dired Deletion</a>.
+
+   </body></html>
+

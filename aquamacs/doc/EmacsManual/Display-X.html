@@ -1,0 +1,78 @@
+<html lang="en">
+<head>
+<title>Specifying the Display Name</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Specifying the Display Name">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Display%20X">Display X</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Font-X.html#Font%20X">Font X</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Environment.html#Environment">Environment</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Command-Arguments.html#Command%20Arguments">Command Arguments</a>
+<hr><br>
+</div>
+
+<h3 class="appendixsec">Specifying the Display Name</h3>
+
+<p>The environment variable <code>DISPLAY</code> tells all X clients, including
+Emacs, where to display their windows.  Its value is set by default
+in ordinary circumstances, when you start an X server and run jobs
+locally.  Occasionally you may need to specify the display yourself; for
+example, if you do a remote login and want to run a client program
+remotely, displaying on your local screen.
+
+   <p>With Emacs, the main reason people change the default display is to
+let them log into another system, run Emacs on that system, but have the
+window displayed at their local terminal.  You might need to log in
+to another system because the files you want to edit are there, or
+because the Emacs executable file you want to run is there.
+
+   <p>The syntax of the <code>DISPLAY</code> environment variable is
+<code></code><var>host</var><code>:</code><var>display</var><code>.</code><var>screen</var><code></code>, where <var>host</var> is the
+host name of the X Window System server machine, <var>display</var> is an
+arbitrarily-assigned number that distinguishes your server (X terminal)
+from other servers on the same machine, and <var>screen</var> is a
+rarely-used field that allows an X server to control multiple terminal
+screens.  The period and the <var>screen</var> field are optional.  If
+included, <var>screen</var> is usually zero.
+
+   <p>For example, if your host is named <code>glasperle</code> and your server is
+the first (or perhaps the only) server listed in the configuration, your
+<code>DISPLAY</code> is <code>glasperle:0.0</code>.
+
+   <p>You can specify the display name explicitly when you run Emacs, either
+by changing the <code>DISPLAY</code> variable, or with the option <code>-d
+</code><var>display</var><code></code> or <code>--display=</code><var>display</var><code></code>.  Here is an example:
+
+<pre class="smallexample">     emacs --display=glasperle:0 &amp;
+     </pre>
+
+   <p>You can inhibit the direct use of the window system and GUI with the
+<code>-nw</code> option.  It tells Emacs to display using ordinary ASCII on
+its controlling terminal.  This is also an initial option.
+
+   <p>Sometimes, security arrangements prevent a program on a remote system
+from displaying on your local system.  In this case, trying to run Emacs
+produces messages like this:
+
+<pre class="smallexample">     Xlib:  connection to "glasperle:0.0" refused by server
+     </pre>
+
+<p>You might be able to overcome this problem by using the <code>xhost</code>
+command on the local system to give permission for access from your
+remote machine.
+
+   </body></html>
+

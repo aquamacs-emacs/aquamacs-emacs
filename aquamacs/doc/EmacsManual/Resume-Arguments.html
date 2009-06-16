@@ -1,0 +1,63 @@
+<html lang="en">
+<head>
+<title>Resuming Emacs with Arguments</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Resuming Emacs with Arguments">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Resume%20Arguments">Resume Arguments</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Environment.html#Environment">Environment</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Command-Example.html#Command%20Example">Command Example</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Command-Arguments.html#Command%20Arguments">Command Arguments</a>
+<hr><br>
+</div>
+
+<h3 class="appendixsec">Resuming Emacs with Arguments</h3>
+
+<p>You can specify action arguments for Emacs when you resume it after
+a suspension.  To prepare for this, put the following code in your
+<code>.emacs</code> file (see <a href="Hooks.html#Hooks">Hooks</a>):
+
+<pre class="example">     (add-hook 'suspend-hook 'resume-suspend-hook)
+     (add-hook 'suspend-resume-hook 'resume-process-args)
+     </pre>
+
+   <p>As further preparation, you must execute the shell script
+<code>emacs.csh</code> (if you use csh as your shell) or <code>emacs.bash</code>
+(if you use bash as your shell).  These scripts define an alias named
+<code>edit</code>, which will resume Emacs giving it new command line
+arguments such as files to visit.  The scripts are found in the
+<code>etc</code> subdirectory of the Emacs distribution.
+
+   <p>Only action arguments work properly when you resume Emacs.  Initial
+arguments are not recognized--it's too late to execute them anyway.
+
+   <p>Note that resuming Emacs (with or without arguments) must be done from
+within the shell that is the parent of the Emacs job.  This is why
+<code>edit</code> is an alias rather than a program or a shell script.  It is
+not possible to implement a resumption command that could be run from
+other subjobs of the shell; there is no way to define a command that could
+be made the value of <code>EDITOR</code>, for example.  Therefore, this feature
+does not take the place of the Emacs Server feature (see <a href="Emacs-Server.html#Emacs%20Server">Emacs Server</a>).
+
+   <p>The aliases use the Emacs Server feature if you appear to have a
+server Emacs running.  However, they cannot determine this with complete
+accuracy.  They may think that a server is still running when in
+actuality you have killed that Emacs, because the file
+<code>/tmp/esrv...</code> still exists.  If this happens, find that
+file and delete it.
+
+   </body></html>
+

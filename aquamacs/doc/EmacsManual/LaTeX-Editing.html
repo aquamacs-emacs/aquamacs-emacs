@@ -1,0 +1,61 @@
+<html lang="en">
+<head>
+<title>LaTeX Editing Commands</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="LaTeX Editing Commands">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="LaTeX%20Editing">LaTeX Editing</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="TeX-Print.html#TeX%20Print">TeX Print</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="TeX-Editing.html#TeX%20Editing">TeX Editing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="TeX-Mode.html#TeX%20Mode">TeX Mode</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">LaTeX Editing Commands</h4>
+
+<p>LaTeX mode, and its variant, SliTeX mode, provide a few extra
+features not applicable to plain TeX.
+
+     <dl>
+<dt><kbd>C-c C-o</kbd>
+     <dd>Insert <code>\begin</code> and <code>\end</code> for LaTeX block and position
+point on a line between them (<code>tex-latex-block</code>). 
+<br><dt><kbd>C-c C-e</kbd>
+     <dd>Close the innermost LaTeX block not yet closed
+(<code>tex-close-latex-block</code>). 
+</dl>
+
+   <p>In LaTeX input, <code>\begin</code> and <code>\end</code> commands are used to
+group blocks of text.  To insert a <code>\begin</code> and a matching
+<code>\end</code> (on a new line following the <code>\begin</code>), use <kbd>C-c
+C-o</kbd> (<code>tex-latex-block</code>).  A blank line is inserted between the
+two, and point is left there.  You can use completion when you enter the
+block type; to specify additional block type names beyond the standard
+list, set the variable <code>latex-block-names</code>.  For example, here's
+how to add <code>theorem</code>, <code>corollary</code>, and <code>proof</code>:
+
+<pre class="example">     (setq latex-block-names '("theorem" "corollary" "proof"))
+     </pre>
+
+   <p>In LaTeX input, <code>\begin</code> and <code>\end</code> commands must
+balance.  You can use <kbd>C-c C-e</kbd> (<code>tex-close-latex-block</code>) to
+insert automatically a matching <code>\end</code> to match the last unmatched
+<code>\begin</code>.  It indents the <code>\end</code> to match the corresponding
+<code>\begin</code>.  It inserts a newline after <code>\end</code> if point is at
+the beginning of a line.
+
+   </body></html>
+

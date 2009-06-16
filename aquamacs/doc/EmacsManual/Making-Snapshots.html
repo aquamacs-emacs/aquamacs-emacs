@@ -1,0 +1,57 @@
+<html lang="en">
+<head>
+<title>Making and Using Snapshots</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Making and Using Snapshots">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Making%20Snapshots">Making Snapshots</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Snapshot-Caveats.html#Snapshot%20Caveats">Snapshot Caveats</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Snapshots.html#Snapshots">Snapshots</a>
+<hr><br>
+</div>
+
+<h3 class="subsubsection">Making and Using Snapshots</h5>
+
+<p>There are two basic commands for snapshots; one makes a
+snapshot with a given name, the other retrieves a named snapshot.
+
+     <dl>
+<dt><code>C-x v s </code><var>name</var><code> &lt;RET&gt;</code>
+     <dd>Define the last saved versions of every registered file in or under the
+current directory as a snapshot named <var>name</var>
+(<code>vc-create-snapshot</code>).
+
+     <br><dt><code>C-x v r </code><var>name</var><code> &lt;RET&gt;</code>
+     <dd>For all registered files at or below the current directory level, select
+whatever versions correspond to the snapshot <var>name</var>
+(<code>vc-retrieve-snapshot</code>).
+
+     <p>This command reports an error if any files are locked at or below the
+current directory, without changing anything; this is to avoid
+overwriting work in progress. 
+</dl>
+
+   <p>A snapshot uses a very small amount of resources--just enough to record
+the list of file names and which version belongs to the snapshot.  Thus,
+you need not hesitate to create snapshots whenever they are useful.
+
+   <p>You can give a snapshot name as an argument to <kbd>C-x v =</kbd> or
+<kbd>C-x v ~</kbd> (see <a href="Old-Versions.html#Old%20Versions">Old Versions</a>).  Thus, you can use it to compare a
+snapshot against the current files, or two snapshots against each other,
+or a snapshot against a named version.
+
+   </body></html>
+

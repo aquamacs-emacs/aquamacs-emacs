@@ -8383,6 +8383,7 @@ parse_tool_bar_item (key, item)
   /* Set defaults.  */
   PROP (TOOL_BAR_ITEM_KEY) = key;
   PROP (TOOL_BAR_ITEM_ENABLED_P) = Qt;
+  PROP (TOOL_BAR_ITEM_VISIBLE_P) = Qt;
 
   /* Get the caption of the item.  If the caption is not a string,
      evaluate it to get a string.  If we don't get a string, skip this
@@ -8427,10 +8428,14 @@ parse_tool_bar_item (key, item)
 	}
       else if (EQ (key, QCvisible))
 	{
-	  /* `:visible FORM'.  If got a visible property and that
-	     evaluates to nil then ignore this item.  */
-	  if (NILP (menu_item_eval_property (value)))
-	    return 0;
+#ifdef HAVE_NS
+	  /* at least in NS we need all items so users
+	     can configure the toolbar. */
+	    PROP (TOOL_BAR_ITEM_VISIBLE_P) = menu_item_eval_property (value);
+#else
+	    if (NILP (menu_item_eval_property (value)))
+	      return 0;
+#endif
 	}
       else if (EQ (key, QChelp))
 	/* `:help HELP-STRING'.  */

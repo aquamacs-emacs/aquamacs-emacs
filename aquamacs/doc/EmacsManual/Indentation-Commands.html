@@ -1,0 +1,90 @@
+<html lang="en">
+<head>
+<title>Indentation Commands and Techniques</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Indentation Commands and Techniques">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Indentation%20Commands">Indentation Commands</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Tab-Stops.html#Tab%20Stops">Tab Stops</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Indentation.html#Indentation">Indentation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Indentation.html#Indentation">Indentation</a>
+<hr><br>
+</div>
+
+<h3 class="section">Indentation Commands and Techniques</h3>
+
+<p>To move over the indentation on a line, do <kbd>M-m</kbd>
+(<code>back-to-indentation</code>).  This command, given anywhere on a line,
+positions point at the first nonblank character on the line.
+
+   <p>To insert an indented line before the current line, do <kbd>C-a C-o
+&lt;TAB&gt;</kbd>.  To make an indented line after the current line, use
+<kbd>C-e C-j</kbd>.
+
+   <p>If you just want to insert a tab character in the buffer, you can type
+<kbd>C-q &lt;TAB&gt;</kbd>.
+
+   <p><kbd>C-M-o</kbd> (<code>split-line</code>) moves the text from point to the end of
+the line vertically down, so that the current line becomes two lines. 
+<kbd>C-M-o</kbd> first moves point forward over any spaces and tabs.  Then it
+inserts after point a newline and enough indentation to reach the same
+column point is on.  Point remains before the inserted newline; in this
+regard, <kbd>C-M-o</kbd> resembles <kbd>C-o</kbd>.
+
+   <p>To join two lines cleanly, use the <kbd>M-^</kbd>
+(<code>delete-indentation</code>) command.  It deletes the indentation at the
+front of the current line, and the line boundary as well, replacing them
+with a single space.  As a special case (useful for Lisp code) the
+single space is omitted if the characters to be joined are consecutive
+open parentheses or closing parentheses, or if the junction follows
+another newline.  To delete just the indentation of a line, go to the
+beginning of the line and use <kbd>M-\</kbd>
+(<code>delete-horizontal-space</code>), which deletes all spaces and tabs
+around the cursor.
+
+   <p>If you have a fill prefix, <kbd>M-^</kbd> deletes the fill prefix if it
+appears after the newline that is deleted.  See <a href="Fill-Prefix.html#Fill%20Prefix">Fill Prefix</a>.
+
+   <p>There are also commands for changing the indentation of several lines
+at once.  <kbd>C-M-\</kbd> (<code>indent-region</code>) applies to all the lines
+that begin in the region; it indents each line in the "usual" way, as
+if you had typed &lt;TAB&gt; at the beginning of the line.  A numeric
+argument specifies the column to indent to, and each line is shifted
+left or right so that its first nonblank character appears in that
+column.  <kbd>C-x &lt;TAB&gt;</kbd> (<code>indent-rigidly</code>) moves all of the
+lines in the region right by its argument (left, for negative
+arguments).  The whole group of lines moves rigidly sideways, which is
+how the command gets its name.
+
+   <p><kbd>M-x indent-relative</kbd> indents at point based on the previous line
+(actually, the last nonempty line).  It inserts whitespace at point, moving
+point, until it is underneath an indentation point in the previous line. 
+An indentation point is the end of a sequence of whitespace or the end of
+the line.  If point is farther right than any indentation point in the
+previous line, the whitespace before point is deleted and the first
+indentation point then applicable is used.  If no indentation point is
+applicable even then, <code>indent-relative</code> runs <code>tab-to-tab-stop</code>
+unless it is called with a numeric argument, in which case it does
+nothing.
+
+   <p><code>indent-relative</code> is the definition of &lt;TAB&gt; in Indented Text
+mode.  See <a href="Text.html#Text">Text</a>.
+
+   <p>See <a href="Format-Indentation.html#Format%20Indentation">Format Indentation</a>, for another way of specifying the
+indentation for part of your text.
+
+   </body></html>
+

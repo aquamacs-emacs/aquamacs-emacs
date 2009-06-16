@@ -1,0 +1,74 @@
+<html lang="en">
+<head>
+<title>Completion Options</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Completion Options">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Completion%20Options">Completion Options</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Strict-Completion.html#Strict%20Completion">Strict Completion</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Completion.html#Completion">Completion</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Completion Options</h4>
+
+<p>When completion is done on file names, certain file names are usually
+ignored.  The variable <code>completion-ignored-extensions</code> contains a
+list of strings; a file whose name ends in any of those strings is
+ignored as a possible completion.  The standard value of this variable
+has several elements including <code>".o"</code>, <code>".elc"</code>, <code>".dvi"</code>
+and <code>"~"</code>.  The effect is that, for example, <code>foo</code> can
+complete to <code>foo.c</code> even though <code>foo.o</code> exists as well. 
+However, if <em>all</em> the possible completions end in "ignored"
+strings, then they are not ignored.  Ignored extensions do not apply to
+lists of completions--those always mention all possible completions.
+
+   <p>Normally, a completion command that cannot determine even one
+additional character automatically displays a list of all possible
+completions.  If the variable <code>completion-auto-help</code> is set to
+<code>nil</code>, this automatic display is disabled, so you must type
+<kbd>?</kbd> to display the list of completions.
+
+   <p>Partial Completion mode implements a more powerful kind of
+completion that can complete multiple words in parallel.  For example,
+it can complete the command name abbreviation <code>p-b</code> into
+<code>print-buffer</code>, because no other command starts with two words
+whose initials are <code>p</code> and <code>b</code>.
+
+   <p>Partial completion of directories in file names uses <code>*</code> to
+indicate the places for completion; thus, <code>/u*/b*/f*</code> might
+complete to <code>/usr/bin/foo</code>.
+
+   <p>To enable this mode, use the command <kbd>M-x
+partial-completion-mode</kbd>, or customize the option
+<code>partial-completion-mode</code>.  This binds the partial completion
+commands to &lt;TAB&gt;, &lt;SPC&gt;, &lt;RET&gt;, and <kbd>?</kbd>.  The usual
+completion commands are available on <kbd>M-&lt;TAB&gt;</kbd>,
+<kbd>M-&lt;SPC&gt;</kbd>, <kbd>M-&lt;RET&gt;</kbd> and <kbd>M-?</kbd>.
+
+   <p>Another feature of Partial Completion mode is to extend
+<code>find-file</code> so that the <code>&lt;</code><var>include</var><code>&gt;</code> stands for the
+file named <var>include</var> in some directory in the path
+<code>PC-include-file-path</code>.  If you set <code>PC-disable-includes</code> to
+non-<code>nil</code>, this feature is disabled.
+
+   <p>Icomplete mode presents a constantly-updated display that tells you
+what completions are available for the text you've entered so far.  The
+command to enable or disable this minor mode is <kbd>M-x
+icomplete-mode</kbd>.
+
+   </body></html>
+

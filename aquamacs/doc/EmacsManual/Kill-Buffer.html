@@ -1,0 +1,81 @@
+<html lang="en">
+<head>
+<title>Killing Buffers</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Killing Buffers">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Kill%20Buffer">Kill Buffer</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Several-Buffers.html#Several%20Buffers">Several Buffers</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Misc-Buffer.html#Misc%20Buffer">Misc Buffer</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Buffers.html#Buffers">Buffers</a>
+<hr><br>
+</div>
+
+<h3 class="section">Killing Buffers</h3>
+
+<p>If you continue an Emacs session for a while, you may accumulate a
+large number of buffers.  You may then find it convenient to <dfn>kill</dfn>
+the buffers you no longer need.  On most operating systems, killing a
+buffer releases its space back to the operating system so that other
+programs can use it.  Here are some commands for killing buffers:
+
+     <dl>
+<dt><kbd>C-x k </kbd><var>bufname</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Kill buffer <var>bufname</var> (<code>kill-buffer</code>). 
+<br><dt><kbd>M-x kill-some-buffers</kbd>
+     <dd>Offer to kill each buffer, one by one. 
+</dl>
+
+   <p><kbd>C-x k</kbd> (<code>kill-buffer</code>) kills one buffer, whose name you
+specify in the minibuffer.  The default, used if you type just
+&lt;RET&gt; in the minibuffer, is to kill the current buffer.  If you
+kill the current buffer, another buffer becomes current: one that was
+current in the recent past but is not displayed in any window now.  If
+you ask to kill a file-visiting buffer that is modified (has unsaved
+editing), then you must confirm with <kbd>yes</kbd> before the buffer is
+killed.
+
+   <p>The command <kbd>M-x kill-some-buffers</kbd> asks about each buffer, one by
+one.  An answer of <kbd>y</kbd> means to kill the buffer.  Killing the current
+buffer or a buffer containing unsaved changes selects a new buffer or asks
+for confirmation just like <code>kill-buffer</code>.
+
+   <p>The buffer menu feature (see <a href="Several-Buffers.html#Several%20Buffers">Several Buffers</a>) is also convenient
+for killing various buffers.
+
+   <p>If you want to do something special every time a buffer is killed, you
+can add hook functions to the hook <code>kill-buffer-hook</code> (see <a href="Hooks.html#Hooks">Hooks</a>).
+
+   <p>If you run one Emacs session for a period of days, as many people do,
+it can fill up with buffers that you used several days ago.  The command
+<kbd>M-x clean-buffer-list</kbd> is a convenient way to purge them; it kills
+all the unmodified buffers that you have not used for a long time.  An
+ordinary buffer is killed if it has not been displayed for three days;
+however, you can specify certain buffers that should never be killed
+automatically, and others that should be killed if they have been unused
+for a mere hour.
+
+   <p>You can also have this buffer purging done for you, every day at
+midnight, by enabling Midnight mode.  Midnight mode operates each day at
+midnight; at that time, it runs <code>clean-buffer-list</code>, or whichever
+functions you have placed in the normal hook <code>midnight-hook</code>
+(see <a href="Hooks.html#Hooks">Hooks</a>).
+
+   <p>To enable Midnight mode, use the Customization buffer to set the
+variable <code>midnight-mode</code> to <code>t</code>.  See <a href="Easy-Customization.html#Easy%20Customization">Easy Customization</a>.
+
+   </body></html>
+

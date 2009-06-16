@@ -400,7 +400,7 @@ $(srcdir)/src/stamp-h.in: $(AUTOCONF_INPUTS)
 ## source exists and is distinct from the destination.
 ### We do install-arch-indep first because
 ### the executable needs the Lisp files and DOC file to work properly.
-install: all install-arch-indep install-arch-dep install-leim blessmail
+install: all install-arch-indep install-arch-dep install-leim blessmail install-aquamacs
 	@true
 
 MV_DIRS = for i in $$dir; do rm -fr `basename "$$i"` ; mv "$$i" . ; done
@@ -430,10 +430,39 @@ install-arch-dep: mkdir
 	    if test -d share/info ; then dir=share/info; $(MV_DIRS) ; fi ; \
 	    rm -fr share ) ; \
 	  ( cd ${ns_appbindir}/libexec ; dir=emacs/*/*/* ; $(MV_DIRS); \
-	    rm -fr emacs ) ; \
+	    rm -fr emacs ; \
+	    cd ${ns_appbindir} ; mv emacs Aquamacs ) ; \
 	  ( cd ${ns_appbindir}/bin ; rm -f emacs emacs-23* ; \
 	    ln -sf ../libexec/* .) ; \
 	else true ; fi
+
+## Aquamacs
+
+AQUAMACS_DIR = $(srcdir)/aquamacs
+
+install-aquamacs: mkdir 
+	if test "${ns_appdir}" != ""; then \
+	( cp $(AQUAMACS_DIR)/Icons/build/*.png $(ns_appresdir)/etc/images/ ; \
+	  cd $(ns_appresdir) ; \
+	  tar xzf $(AQUAMACS_DIR)/src/commandline-tool/Aquamacs\ Command\ Line\ Tool.mpkg.tgz ; \
+	  cd - >/dev/null ; \
+	  cp $(AQUAMACS_DIR)/src/etc/aquamacs-splash-screen.jpg $(ns_appresdir)/etc/images/ ; \
+	  cp $(AQUAMACS_DIR)/src/Emacs.23.icns $(ns_appresdir)/Emacs.icns ; \
+	  rm -r "$(ns_appresdir)/Emacs Manual" 2>/dev/null ; \
+	  cp -r $(AQUAMACS_DIR)/doc/EmacsManual "$(ns_appresdir)/Emacs Manual" ; \
+	  rm -r "$(ns_appresdir)/Aquamacs Help" 2>/dev/null ; \
+	  cp -r $(AQUAMACS_DIR)/doc/AquamacsHelp "$(ns_appresdir)/Aquamacs Help" ; \
+	  mv "$(ns_appresdir)/Aquamacs Help/AquamacsHelp.helpindex" "$(ns_appresdir)/Aquamacs Help/Aquamacs Help.helpindex" ; \
+	  cd $(ns_appresdir) ; \
+	  tar xzf $(AQUAMACS_DIR)/doc/EmacsLispReference.tgz ; \
+	  cd - >/dev/null ; \
+	  rm $(ns_appresdir)/English.lproj/InfoPlist.strings 2>/dev/null ; \
+	  rm -r $(ns_appresdir)/site-lisp  2>/dev/null ; \
+	  cp -r $(AQUAMACS_DIR)/src/site-lisp $(ns_appresdir)/site-lisp ; \
+	  touch $(ns_appdir) ) ; \
+	  else true ; fi ; \
+	  echo "Find the Aquamacs build in $(ns_appdir)"
+
 
 ## http://lists.gnu.org/archive/html/emacs-devel/2007-10/msg01672.html
 ## Needs to be the user running install, so configure can't set it.

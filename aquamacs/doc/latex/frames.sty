@@ -1,0 +1,65 @@
+%% frames.sty  by Ross Moore <ross@mpce.mq.edu.au> 29-MAY-96
+%% Mathematics Department, Macquarie University, Sydney.
+%%
+%% This style-file adds no new code to LaTeX.
+%% It is provided solely to facilitate loading of the 
+%%  frames.perl  package by Martin Wilck <martin@tropos.de> 
+%% to add support for Netscape Navigator's frame extensions,
+%% when using the LaTeX2HTML translator.
+%%
+%%
+
+\typeout{*********************}
+\typeout{The  frames.perl  package allows HTML markup to be
+produced^^J which is non-conformant with the HTML 2.0 standard.}
+\typeout{Not all Web-browsers can be expected to correctly
+display this markup.}
+\typeout{*********************}
+
+%%
+%% Usage:  \framecolor{<frame>}{<options>}
+%%	   \frameoptions[<frame>]{<options>}
+%%	   \frameColorSet[<frame>]{<colorset>}
+%%
+%%  \framecolor{<frame>}{<options>} sets <options> to be the
+%%  complete set of options for the given <frame>.
+%%
+%%  \frameoption[<frame>]{<options>} updates the existing values
+%%  of the <frame>'s parameters, using those provided in <options>.
+%%  Any unspecified parameters remain with their previous values.
+%%  If no <frame> is specied, then the TEXT frame is assumed.
+%%
+%%  \framecolorset{<frame>}{<colorset>} uses the set of 4 colors
+%%  defined by the <colorset>.
+%%
+%%  \framecolorset*{<frame>}{<colorset>} uses the set of 4 colors
+%%  defined by the <colorset>, but in reverse order.
+%%
+
+\newcommand\frameoptions[1][TEXT]{\bgroup\catcode`\#=11\framecolor@{#1}}
+\newcommand\framecolor{\bgroup\catcode`\#=11\framecolor@}
+\newcommand\DeclareColorSet[2]{\defineColorset@{#1}#2,*%
+ \write-1{new COLORSET: #1 = (#2)}}
+
+\def\framecolor@#1#2{\write-1{^^J
+ ignoring layout information for frame #1 : ^^J #2}\egroup}
+
+\newcommand\frameColorSet{\@ifstar{\@ifstar
+ {\frameColorSet@star}{\frameColorSet@starstar}}{\frameColorSet@}}
+\newcommand\frameColorSet@[2][TEXT]{}%\write-1{COLORSET: frame=#1; SET=#2}}
+\newcommand\frameColorSet@star[2][TEXT]{}%\write-1{COLORSET: frame=#1; SET=#2*}}
+\newcommand\frameColorSet@starstar[2][TEXT]{}%\write-1{COLORSET: frame=#1; SET=#2**}}
+
+\newcount\colsetcnt@
+\def\defineColorset@#1{%
+ \def\thiscolorset{#1}\colsetcnt@=0\relax\getnextColorset@}
+
+\def\getnextColorset@#1,{\advance\colsetcnt\@ne
+ \edef\next{\thiscolorset\the\colsetcnt}%
+ \DefineNamedColor{named}{\next}{named}{#1}%
+ \@ifstar{\endColorSet}{\getnextColorset}}
+
+\def\endColorSet{\ifnum\colsetcnt<4\relax
+ \typeout{only \colsetcnt colors defined for ColorSet: \thiscolorset}\fi}
+
+

@@ -1,0 +1,36 @@
+#!/bin/sh
+
+# Build the SLIME installer package
+
+BUILD_DIR=`pwd`
+
+cd $BUILD_DIR
+rm -rf slime
+cvs -d :pserver:anonymous:anonymous@common-lisp.net:/project/slime/cvsroot co slime
+
+# to build 2.0
+# curl -O http://common-lisp.net/project/slime/slime-2.0.tgz
+# tar xzf slime-2.0.tgz
+# mv slime-2.0 slime
+
+cd $BUILD_DIR/slime/doc
+make  
+
+
+# Make info file accessible for Aquamacs
+cd $BUILD_DIR/slime
+mkdir info
+cd info
+ln -s ../doc/slime.info .
+
+# Copy license
+cd $BUILD_DIR/slime
+curl -O http://www.gnu.org/licenses/gpl-3.0.txt || { echo "failed to retrieve license file. aborting.";exit 1; }
+mv gpl-3.0.txt COPYING
+
+# initialization code with autoload
+echo "(require 'slime-autoloads) (slime-setup '(slime-fancy slime-asdf slime-banner)) (setq slime-complete-symbol*-fancy t) (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)" > $BUILD_DIR/slime/site-start.el
+
+cd $BUILD_DIR
+/Developer/usr/bin/packagemaker --root slime --scripts $AQUAMACS_ROOT/build/slime-scripts --install-to /Library/Application\ Support/Aquamacs\ Emacs/SLIME --id org.aquamacs.slime-plugin --version `date +%Y-%m-%d` --title "SLIME plugin for Aquamacs" --root-volume-only --out Aquamacs-SLIME-`date +%Y-%m-%d`.pkg -v
+

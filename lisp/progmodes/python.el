@@ -2023,7 +2023,8 @@ COUNT columns."
 		 (not (looking-at "[ \t]*$")))
 	    (error "Can't shift all lines enough"))
 	(forward-line))
-      (indent-rigidly start end (- count)))))
+      (indent-rigidly start end (- count))))
+  (setq deactivate-mark nil))
 
 (add-to-list 'debug-ignored-errors "^Can't shift all lines enough")
 
@@ -2039,7 +2040,8 @@ END lie."
   (if count
       (setq count (prefix-numeric-value count))
     (setq count python-indent))
-  (indent-rigidly start end count))
+  (indent-rigidly start end count)
+  (setq deactivate-mark nil))
 
 (defun python-outline-level ()
   "`outline-level' function for Python mode.

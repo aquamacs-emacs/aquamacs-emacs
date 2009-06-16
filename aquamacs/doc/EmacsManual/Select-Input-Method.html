@@ -1,0 +1,101 @@
+<html lang="en">
+<head>
+<title>Selecting an Input Method</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Selecting an Input Method">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Select%20Input%20Method">Select Input Method</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Multibyte-Conversion.html#Multibyte%20Conversion">Multibyte Conversion</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Input-Methods.html#Input%20Methods">Input Methods</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="International.html#International">International</a>
+<hr><br>
+</div>
+
+<h3 class="section">Selecting an Input Method</h3>
+
+     <dl>
+<dt><kbd>C-\</kbd>
+     <dd>Enable or disable use of the selected input method.
+
+     <br><dt><kbd>C-x &lt;RET&gt; C-\ </kbd><var>method</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Select a new input method for the current buffer.
+
+     <br><dt><kbd>C-h I </kbd><var>method</var><kbd> &lt;RET&gt;</kbd>
+     <dd><dt><kbd>C-h C-\ </kbd><var>method</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Describe the input method <var>method</var> (<code>describe-input-method</code>). 
+By default, it describes the current input method (if any).  This
+description should give you the full details of how to use any
+particular input method.
+
+     <br><dt><kbd>M-x list-input-methods</kbd>
+     <dd>Display a list of all the supported input methods. 
+</dl>
+
+   <p>To choose an input method for the current buffer, use <kbd>C-x
+&lt;RET&gt; C-\</kbd> (<code>set-input-method</code>).  This command reads the
+input method name from the minibuffer; the name normally starts with the
+language environment that it is meant to be used with.  The variable
+<code>current-input-method</code> records which input method is selected.
+
+   <p>Input methods use various sequences of ASCII characters to stand for
+non-ASCII characters.  Sometimes it is useful to turn off the input
+method temporarily.  To do this, type <kbd>C-\</kbd>
+(<code>toggle-input-method</code>).  To reenable the input method, type
+<kbd>C-\</kbd> again.
+
+   <p>If you type <kbd>C-\</kbd> and you have not yet selected an input method,
+it prompts for you to specify one.  This has the same effect as using
+<kbd>C-x &lt;RET&gt; C-\</kbd> to specify an input method.
+
+   <p>When invoked with a numeric argument, as in <kbd>C-u C-\</kbd>,
+<code>toggle-input-method</code> always prompts you for an input method,
+suggesting the most recently selected one as the default.
+
+   <p>Selecting a language environment specifies a default input method for
+use in various buffers.  When you have a default input method, you can
+select it in the current buffer by typing <kbd>C-\</kbd>.  The variable
+<code>default-input-method</code> specifies the default input method
+(<code>nil</code> means there is none).
+
+   <p>In some language environments, which support several different input
+methods, you might want to use an input method different from the
+default chosen by <code>set-language-environment</code>.  You can instruct
+Emacs to select a different default input method for a certain
+language environment, if you wish, by using
+<code>set-language-environment-hook</code> (see <a href="Language-Environments.html#Language%20Environments">set-language-environment-hook</a>).  For example:
+
+<pre class="lisp">     (defun my-chinese-setup ()
+       "Set up my private Chinese environment."
+       (if (equal current-language-environment "Chinese-GB")
+           (setq default-input-method "chinese-tonepy")))
+     (add-hook 'set-language-environment-hook 'my-chinese-setup)
+     </pre>
+
+<p>This sets the default input method to be <code>chinese-tonepy</code>
+whenever you choose a Chinese-GB language environment.
+
+   <p>Some input methods for alphabetic scripts work by (in effect)
+remapping the keyboard to emulate various keyboard layouts commonly used
+for those scripts.  How to do this remapping properly depends on your
+actual keyboard layout.  To specify which layout your keyboard has, use
+the command <kbd>M-x quail-set-keyboard-layout</kbd>.
+
+   <p>To display a list of all the supported input methods, type <kbd>M-x
+list-input-methods</kbd>.  The list gives information about each input
+method, including the string that stands for it in the mode line.
+
+   </body></html>
+

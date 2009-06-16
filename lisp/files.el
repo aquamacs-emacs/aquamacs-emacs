@@ -1127,6 +1127,37 @@ use with M-x."
     (rename-file encoded new-encoded ok-if-already-exists)
     newname))
 
+(defun forward-filename (arg)
+  "Move point forward arg filenames (backward if arg is negative)."
+  (interactive "p")
+  (if (< arg 0)
+      (progn
+	(backward-char)
+	(while (< arg 0)
+	  (re-search-backward "[/\n]" nil t)
+	  (setq arg (1+ arg)))
+	(forward-char))
+    (forward-char)
+    (while (> 0 arg )
+      (re-search-forward "[/\n]" nil t)
+      (setq arg (1- arg)))
+    (backward-char)))
+
+(defun kill-filename (arg)
+  "Kill characters forward until up to the end of a filename.
+With argument, do this that many times."
+  (interactive "p")
+  (kill-region (point) (progn (forward-filename arg) (point))))
+
+(defun backward-kill-filename (arg)
+  "Kill characters backward up to the beginning of a filename.
+With argument, do this that many times."
+  (interactive "p")
+  (kill-filename (- arg)))
+
+(define-key minibuffer-local-filename-completion-map 
+  [remap backward-kill-word] 'backward-kill-filename)
+
 (defcustom confirm-nonexistent-file-or-buffer 'after-completion
   "Whether confirmation is requested before visiting a new file or buffer.
 If nil, confirmation is not requested.
@@ -4347,16 +4378,16 @@ This requires the external program `diff' to be in your `exec-path'."
   nil)
 
 (defvar save-some-buffers-action-alist
-  `((?\C-r
-     ,(lambda (buf)
-        (if (not enable-recursive-minibuffers)
-            (progn (display-buffer buf)
-                   (setq other-window-scroll-buffer buf))
-          (view-buffer buf (lambda (_) (exit-recursive-edit)))
-          (recursive-edit))
-        ;; Return nil to ask about BUF again.
-        nil)
-     "view this buffer")
+  `(;; (?\C-r
+;;      ,(lambda (buf)
+;;         (if (not enable-recursive-minibuffers)
+;;             (progn (display-buffer buf)
+;;                    (setq other-window-scroll-buffer buf))
+;;           (view-buffer buf (lambda (_) (exit-recursive-edit)))
+;;           (recursive-edit))
+;;         ;; Return nil to ask about BUF again.
+;;         nil)
+;;      "view this buffer")
     (?d ,(lambda (buf)
            (if (null buffer-file-name)
                (message "Not applicable: no file")
@@ -4369,7 +4400,7 @@ This requires the external program `diff' to be in your `exec-path'."
                (recursive-edit)))
            ;; Return nil to ask about BUF again.
            nil)
-	"view changes in this buffer"))
+	"view changes"))
   "ACTION-ALIST argument used in call to `map-y-or-n-p'.")
 
 (defvar buffer-save-without-query nil
@@ -4395,7 +4426,7 @@ change the additional actions you can take on files."
   (save-window-excursion
     (let* (queried some-automatic
 	   files-done abbrevs-done)
-      (dolist (buffer (buffer-list))
+      (dolist (buffer (buffer-list   ))
 	;; First save any buffers that we're supposed to save unconditionally.
 	;; That way the following code won't ask about them.
 	(with-current-buffer buffer
@@ -4423,9 +4454,19 @@ change the additional actions you can take on files."
                     (if arg
                         t
                       (setq queried t)
+		      (with-current-buffer buffer
+			(select-window (get-window-for-other-buffer))
+			  (if (and (boundp 'tabbar-mode) tabbar-mode)
+			      (switch-to-buffer-in-tab buffer)
+			    (switch-to-buffer buffer))
+			  (select-frame-set-input-focus (window-frame (selected-window)))
+			  (if (fboundp 'smart-move-minibuffer-inside-screen)
+			      (smart-move-minibuffer-inside-screen)))
                       (if (buffer-file-name buffer)
                           (format "Save file %s? "
-                                  (buffer-file-name buffer))
+				  (if (> (length (buffer-file-name buffer)) 30)
+				      (concat "..." (substring (buffer-file-name buffer) -27))
+				    (buffer-file-name buffer)))
                         (format "Save buffer %s? "
                                 (buffer-name buffer))))))
              (lambda (buffer)

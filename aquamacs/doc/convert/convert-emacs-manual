@@ -1,0 +1,50 @@
+#!/bin/sh
+
+P=`pwd`
+
+echo "Give path to manual, e.g. ./convert-emacs-manual ~/Projects/emacs/man/manual"
+echo "If no path given, manual is downloaded from GNU."
+
+rm -r /tmp/emanual 2>/dev/null
+
+if [ "$1" ]; then 
+    cp -r "$1"/html_node /tmp/emanual
+    cp "$1"/index.html /tmp/manual.html # needed for GNU head / last change
+    cd /tmp/emanual 
+else
+    mkdir /tmp/emanual
+    curl -o /tmp/manual.tgz http://www.gnu.org/software/emacs/manual/emacs_html_node.tar.gz 
+    cd /tmp/emanual
+    tar xvzf /tmp/manual.tgz  
+    curl -o /tmp/manual.html http://www.gnu.org/software/emacs/manual/
+
+fi
+
+
+cp $P/manual-sources/aquamacs.css /tmp/emanual/
+
+cp $P/manual-sources/gnu-head-sm.jpg /tmp/emanual/
+
+# contains OS X specific information now - don't delete any more
+#rm /tmp/emanual/Mac-*.html /tmp/emanual/Windows-*.html
+# leave Windows info for now
+
+
+perl -i -p -e 's/<\/head>/<link rel="stylesheet" href="aquamacs.css" type="text\/css" \/><\/head>/i' /tmp/emanual/*.html
+ 
+
+$P/convert-emacs-manual-pages /tmp/emanual/*.html
+$P/convert-emacs-manual-title /tmp/emanual/index.html 
+
+rm -r "$P"/../EmacsManual
+mv /tmp/emanual $P/../EmacsManual
+
+cd "$P"
+open ../EmacsManual
+echo "Now go ahead and run the Help Indexer on this folder!"
+echo "Press Return when done!"
+
+read
+
+cd ..
+tar czf EmacsManual.tgz EmacsManual

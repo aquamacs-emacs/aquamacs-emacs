@@ -1,0 +1,72 @@
+<html lang="en">
+<head>
+<title>Regular Expression Search</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Regular Expression Search">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Regexp%20Search">Regexp Search</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Regexps.html#Regexps">Regexps</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Word-Search.html#Word%20Search">Word Search</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Search.html#Search">Search</a>
+<hr><br>
+</div>
+
+<h3 class="section">Regular Expression Search</h3>
+
+<p>A <dfn>regular expression</dfn> (<dfn>regexp</dfn>, for short) is a pattern
+that denotes a class of alternative strings to match, possibly
+infinitely many.  GNU Emacs provides both incremental and
+nonincremental ways to search for a match for a regexp.
+
+   <p>Incremental search for a regexp is done by typing <kbd>C-M-s</kbd>
+(<code>isearch-forward-regexp</code>), or by invoking <kbd>C-s</kbd> with a
+prefix argument (whose value does not matter).  This command reads a
+search string incrementally just like <kbd>C-s</kbd>, but it treats the
+search string as a regexp rather than looking for an exact match
+against the text in the buffer.  Each time you add text to the search
+string, you make the regexp longer, and the new regexp is searched
+for.  To search backward for a regexp, use <kbd>C-M-r</kbd>
+(<code>isearch-backward-regexp</code>), or <kbd>C-r</kbd> with a prefix argument.
+
+   <p>All of the control characters that do special things within an
+ordinary incremental search have the same function in incremental regexp
+search.  Typing <kbd>C-s</kbd> or <kbd>C-r</kbd> immediately after starting the
+search retrieves the last incremental search regexp used; that is to
+say, incremental regexp and non-regexp searches have independent
+defaults.  They also have separate search rings that you can access with
+<kbd>M-p</kbd> and <kbd>M-n</kbd>.
+
+   <p>If you type &lt;SPC&gt; in incremental regexp search, it matches any
+sequence of whitespace characters, including newlines.  If you want
+to match just a space, type <kbd>C-q &lt;SPC&gt;</kbd>.
+
+   <p>Note that adding characters to the regexp in an incremental regexp
+search can make the cursor move back and start again.  For example, if
+you have searched for <code>foo</code> and you add <code>\|bar</code>, the cursor
+backs up in case the first <code>bar</code> precedes the first <code>foo</code>.
+
+   <p>Nonincremental search for a regexp is done by the functions
+<code>re-search-forward</code> and <code>re-search-backward</code>.  You can invoke
+these with <kbd>M-x</kbd>, or bind them to keys, or invoke them by way of
+incremental regexp search with <kbd>C-M-s &lt;RET&gt;</kbd> and <kbd>C-M-r
+&lt;RET&gt;</kbd>.
+
+   <p>If you use the incremental regexp search commands with a prefix
+argument, they perform ordinary string search, like
+<code>isearch-forward</code> and <code>isearch-backward</code>.  See <a href="Incremental-Search.html#Incremental%20Search">Incremental Search</a>.
+
+   </body></html>
+

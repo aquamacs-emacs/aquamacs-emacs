@@ -1,0 +1,106 @@
+<html lang="en">
+<head>
+<title>Numeric Arguments</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Numeric Arguments">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Arguments">Arguments</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Repeating.html#Repeating">Repeating</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Position-Info.html#Position%20Info">Position Info</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Basic.html#Basic">Basic</a>
+<hr><br>
+</div>
+
+<h3 class="section">Numeric Arguments</h3>
+
+<p>In mathematics and computer usage, the word <dfn>argument</dfn> means
+"data provided to a function or operation."  You can give any Emacs
+command a <dfn>numeric argument</dfn> (also called a <dfn>prefix argument</dfn>). 
+Some commands interpret the argument as a repetition count.  For
+example, <kbd>C-f</kbd> with an argument of ten moves forward ten characters
+instead of one.  With these commands, no argument is equivalent to an
+argument of one.  Negative arguments tell most such commands to move or
+act in the opposite direction.
+
+   <p>If your terminal keyboard has a &lt;META&gt; key, the easiest way to
+specify a numeric argument is to type digits and/or a minus sign while
+holding down the &lt;META&gt; key.  For example,
+
+<pre class="example">     M-5 C-n
+     </pre>
+
+<p>would move down five lines.  The characters <kbd>Meta-1</kbd>, <kbd>Meta-2</kbd>,
+and so on, as well as <kbd>Meta--</kbd>, do this because they are keys bound
+to commands (<code>digit-argument</code> and <code>negative-argument</code>) that
+are defined to contribute to an argument for the next command. 
+<kbd>Meta--</kbd> without digits normally means -1.  Digits and
+<kbd>-</kbd> modified with Control, or Control and Meta, also specify numeric
+arguments.
+
+   <p>Another way of specifying an argument is to use the <kbd>C-u</kbd>
+(<code>universal-argument</code>) command followed by the digits of the
+argument.  With <kbd>C-u</kbd>, you can type the argument digits without
+holding down modifier keys; <kbd>C-u</kbd> works on all terminals.  To type a
+negative argument, type a minus sign after <kbd>C-u</kbd>.  Just a minus sign
+without digits normally means -1.
+
+   <p><kbd>C-u</kbd> followed by a character which is neither a digit nor a minus
+sign has the special meaning of "multiply by four."  It multiplies the
+argument for the next command by four.  <kbd>C-u</kbd> twice multiplies it by
+sixteen.  Thus, <kbd>C-u C-u C-f</kbd> moves forward sixteen characters.  This
+is a good way to move forward "fast," since it moves about 1/5 of a line
+in the usual size screen.  Other useful combinations are <kbd>C-u C-n</kbd>,
+<kbd>C-u C-u C-n</kbd> (move down a good fraction of a screen), <kbd>C-u C-u
+C-o</kbd> (make "a lot" of blank lines), and <kbd>C-u C-k</kbd> (kill four
+lines).
+
+   <p>Some commands care only about whether there is an argument, and not about
+its value.  For example, the command <kbd>M-q</kbd> (<code>fill-paragraph</code>) with
+no argument fills text; with an argument, it justifies the text as well. 
+(See <a href="Filling.html#Filling">Filling</a>, for more information on <kbd>M-q</kbd>.)  Plain <kbd>C-u</kbd> is a
+handy way of providing an argument for such commands.
+
+   <p>Some commands use the value of the argument as a repeat count, but do
+something peculiar when there is no argument.  For example, the command
+<kbd>C-k</kbd> (<code>kill-line</code>) with argument <var>n</var> kills <var>n</var> lines,
+including their terminating newlines.  But <kbd>C-k</kbd> with no argument is
+special: it kills the text up to the next newline, or, if point is right at
+the end of the line, it kills the newline itself.  Thus, two <kbd>C-k</kbd>
+commands with no arguments can kill a nonblank line, just like <kbd>C-k</kbd>
+with an argument of one.  (See <a href="Killing.html#Killing">Killing</a>, for more information on
+<kbd>C-k</kbd>.)
+
+   <p>A few commands treat a plain <kbd>C-u</kbd> differently from an ordinary
+argument.  A few others may treat an argument of just a minus sign
+differently from an argument of -1.  These unusual cases are
+described when they come up; they are always for reasons of convenience
+of use of the individual command.
+
+   <p>You can use a numeric argument to insert multiple copies of a
+character.  This is straightforward unless the character is a digit; for
+example, <kbd>C-u 6 4 a</kbd> inserts 64 copies of the character <code>a</code>. 
+But this does not work for inserting digits; <kbd>C-u 6 4 1</kbd> specifies
+an argument of 641, rather than inserting anything.  To separate the
+digit to insert from the argument, type another <kbd>C-u</kbd>; for example,
+<kbd>C-u 6 4 C-u 1</kbd> does insert 64 copies of the character <code>1</code>.
+
+   <p>We use the term "prefix argument" as well as "numeric argument" to
+emphasize that you type the argument before the command, and to
+distinguish these arguments from minibuffer arguments that come after
+the command.
+
+   </body></html>
+

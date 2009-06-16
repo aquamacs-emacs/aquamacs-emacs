@@ -1,0 +1,73 @@
+<html lang="en">
+<head>
+<title>Action Arguments</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Action Arguments">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Action%20Arguments">Action Arguments</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Initial-Options.html#Initial%20Options">Initial Options</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Command-Arguments.html#Command%20Arguments">Command Arguments</a>
+<hr><br>
+</div>
+
+<h3 class="appendixsec">Action Arguments</h3>
+
+<p>Here is a table of the action arguments and options:
+
+     <dl>
+<dt><code></code><var>file</var><code></code>
+     <dd><dt><code>--visit=</code><var>file</var><code></code>
+     <dd><dt><code>--file=</code><var>file</var><code></code>
+     <dd>Visit <var>file</var> using <code>find-file</code>.  See <a href="Visiting.html#Visiting">Visiting</a>.
+
+     <br><dt><code>+</code><var>linenum</var><code> </code><var>file</var><code></code>
+     <dd>Visit <var>file</var> using <code>find-file</code>, then go to line number
+<var>linenum</var> in it.
+
+     <br><dt><code>+</code><var>linenum</var><code>:</code><var>columnnum</var><code> </code><var>file</var><code></code>
+     <dd>Visit <var>file</var> using <code>find-file</code>, then go to line number
+<var>linenum</var> and put point at column number <var>columnnum</var>.
+
+     <br><dt><code>-l </code><var>file</var><code></code>
+     <dd><dt><code>--load=</code><var>file</var><code></code>
+     <dd>Load a Lisp library named <var>file</var> with the function <code>load</code>. 
+See <a href="Lisp-Libraries.html#Lisp%20Libraries">Lisp Libraries</a>.  The library can be found either in the current
+directory, or in the Emacs library search path as specified
+with <code>EMACSLOADPATH</code> (see <a href="General-Variables.html#General%20Variables">General Variables</a>).
+
+     <br><dt><code>-f </code><var>function</var><code></code>
+     <dd><dt><code>--funcall=</code><var>function</var><code></code>
+     <dd>Call Lisp function <var>function</var> with no arguments.
+
+     <br><dt><code>--eval=</code><var>expression</var><code></code>
+     <dd><dt><code>--execute=</code><var>expression</var><code></code>
+     <dd>Evaluate Lisp expression <var>expression</var>.
+
+     <br><dt><code>--insert=</code><var>file</var><code></code>
+     <dd>Insert the contents of <var>file</var> into the current buffer.  This is like
+what <kbd>M-x insert-file</kbd> does.  See <a href="Misc-File-Ops.html#Misc%20File%20Ops">Misc File Ops</a>.
+
+     <br><dt><code>--kill</code>
+     <dd>Exit from Emacs without asking for confirmation. 
+</dl>
+
+   <p>The init file can access the values of the action arguments as the
+elements of a list in the variable <code>command-line-args</code>.  The init
+file can override the normal processing of the action arguments, or
+define new ones, by reading and setting this variable.
+
+   </body></html>
+

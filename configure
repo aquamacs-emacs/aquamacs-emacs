@@ -1372,7 +1372,7 @@ Optional Packages:
                           don't use Motif or Xaw3d scroll bars
   --without-xaw3d         don't use Xaw3d
   --without-xim           don't use X11 XIM
-  --with-ns               use nextstep (Cocoa or GNUstep) windowing system
+  --without-ns            don't use nextstep (Cocoa or GNUstep) windowing system
   --without-gpm           don't use -lgpm for mouse support on a GNU/Linux
                           console
   --without-dbus          don't compile with D-Bus support
@@ -2084,7 +2084,7 @@ fi
 if test "${with_ns+set}" = set; then
   withval=$with_ns;
 else
-      with_ns=no
+      with_ns=yes
 fi
 
 
@@ -2486,12 +2486,6 @@ _ACEOF
     opsys=darwin
     # Define CPP as follows to make autoconf work correctly.
     CPP="${CC-cc} -E -no-cpp-precomp"
-    # Use fink packages if available.
-    if test -d /sw/include && test -d /sw/lib; then
-      GCC_TEST_OPTIONS="-I/sw/include -L/sw/lib"
-      CPP="${CPP} ${GCC_TEST_OPTIONS}"
-      NON_GCC_TEST_OPTIONS=${GCC_TEST_OPTIONS}
-    fi
   ;;
 
   ## HP 9000 series 700 and 800, running HP/UX
@@ -9201,9 +9195,9 @@ CFLAGS="$CFLAGS -x objective-c"
 if test "${with_ns}" != no; then
   if test "${opsys}" = darwin; then
      NS_IMPL_COCOA=yes
-     ns_appdir=`pwd`/nextstep/Emacs.app
-     ns_appbindir=`pwd`/nextstep/Emacs.app/Contents/MacOS
-     ns_appresdir=`pwd`/nextstep/Emacs.app/Contents/Resources
+     ns_appdir="`pwd`/nextstep/Aquamacs.app"
+     ns_appbindir="`pwd`/nextstep/Aquamacs.app/Contents/MacOS"
+     ns_appresdir="`pwd`/nextstep/Aquamacs.app/Contents/Resources"
      ns_appsrc=${srcdir}/nextstep/Cocoa/Emacs.base
   elif test -f $GNUSTEP_CONFIG_FILE; then
      NS_IMPL_GNUSTEP=yes

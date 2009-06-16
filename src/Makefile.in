@@ -1268,9 +1268,19 @@ ${ns_appdir}: ${ns_appsrc}
 		rm -rf $${subdir}/CVS ; \
 		rm -f  $${subdir}/.cvsignore ; done ; )
 
+
 ${ns_appbindir}Emacs: emacs${EXEEXT}
-	mkdir -p ${ns_appbindir}
-	cp -f emacs${EXEEXT} ${ns_appbindir}Emacs
+		mkdir -p ${ns_appbindir}
+	  	(fullversion=`./emacs --version | sed -n '1 s/GNU Emacs *//p'`; 	\
+		if [ -f "../etc/DOC-$${fullversion}" ]; then \
+		     	docfile="DOC-$${fullversion}"; \
+	   	else	 \
+	     		docfile="DOC-${version}*"; \
+	   	fi; \
+		echo "Copying etc/$${docfile} to ${ns_appdir}/Contents/Resources/etc/ ..."; \
+		(cd ../etc; tar -chf - $${docfile}) \
+	     	|(cd ${ns_appdir}/Contents/Resources/etc/; umask 022; tar -xvf - && cat > /dev/null) || exit 1 )
+		cp -f emacs${EXEEXT} ${ns_appbindir}Aquamacs
 
 ns-app: ${ns_appdir} ${ns_appbindir}Emacs
 

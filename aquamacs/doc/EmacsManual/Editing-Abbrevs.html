@@ -1,0 +1,72 @@
+<html lang="en">
+<head>
+<title>Examining and Editing Abbrevs</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Examining and Editing Abbrevs">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Editing%20Abbrevs">Editing Abbrevs</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Saving-Abbrevs.html#Saving%20Abbrevs">Saving Abbrevs</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Expanding-Abbrevs.html#Expanding%20Abbrevs">Expanding Abbrevs</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Abbrevs.html#Abbrevs">Abbrevs</a>
+<hr><br>
+</div>
+
+<h3 class="section">Examining and Editing Abbrevs</h3>
+
+     <dl>
+<dt><kbd>M-x list-abbrevs</kbd>
+     <dd>Display a list of all abbrev definitions.  With a numeric argument, list
+only local abbrevs. 
+<br><dt><kbd>M-x edit-abbrevs</kbd>
+     <dd>Edit a list of abbrevs; you can add, alter or remove definitions. 
+</dl>
+
+   <p>The output from <kbd>M-x list-abbrevs</kbd> looks like this:
+
+<pre class="example">     (lisp-mode-abbrev-table)
+     "dk"	       0    "define-key"
+     (global-abbrev-table)
+     "dfn"	       0    "definition"
+     </pre>
+
+<p>(Some blank lines of no semantic significance, and some other abbrev
+tables, have been omitted.)
+
+   <p>A line containing a name in parentheses is the header for abbrevs in a
+particular abbrev table; <code>global-abbrev-table</code> contains all the global
+abbrevs, and the other abbrev tables that are named after major modes
+contain the mode-specific abbrevs.
+
+   <p>Within each abbrev table, each nonblank line defines one abbrev.  The
+word at the beginning of the line is the abbrev.  The number that
+follows is the number of times the abbrev has been expanded.  Emacs
+keeps track of this to help you see which abbrevs you actually use, so
+that you can eliminate those that you don't use often.  The string at
+the end of the line is the expansion.
+
+   <p><kbd>M-x edit-abbrevs</kbd> allows you to add, change or kill abbrev
+definitions by editing a list of them in an Emacs buffer.  The list has
+the same format described above.  The buffer of abbrevs is called
+<code>*Abbrevs*</code>, and is in Edit-Abbrevs mode.  Type <kbd>C-c C-c</kbd> in
+this buffer to install the abbrev definitions as specified in the
+buffer--and delete any abbrev definitions not listed.
+
+   <p>The command <code>edit-abbrevs</code> is actually the same as
+<code>list-abbrevs</code> except that it selects the buffer <code>*Abbrevs*</code>
+whereas <code>list-abbrevs</code> merely displays it in another window.
+
+   </body></html>
+

@@ -444,6 +444,23 @@ Lisp_Object Vface_new_frame_defaults;
 
 Lisp_Object Vface_remapping_alist;
 
+/* Alist of face remappings.  Each element is of the form:
+   (FACE REPLACEMENT...) which causes display of the face FACE to use
+   REPLACEMENT... instead.  REPLACEMENT... is interpreted the same way
+   the value of a `face' text property is: it may be (1) A face name,
+   (2) A list of face names, (3) A property-list of face attribute/value
+   pairs, or (4) A list of face names intermixed with lists containing
+   face attribute/value pairs.
+
+   Multiple entries in REPLACEMENT... are merged together to form the final
+   result, with faces or attributes earlier in the list taking precedence
+   over those that are later.
+
+   Face-name remapping cycles are suppressed; recursive references use
+   the underlying face instead of the remapped face.  */
+
+Lisp_Object Vface_remapping_alist;
+
 /* The next ID to assign to Lisp faces.  */
 
 static int next_lface_id;
@@ -2878,6 +2895,7 @@ Value is a vector of face attributes.  */)
 
   xassert (LFACEP (lface));
   check_lface (lface);
+
   return lface;
 }
 
@@ -4848,6 +4866,62 @@ lookup_basic_face (f, face_id)
   /* If there is a remapping entry, lookup the face using NAME, which will
      handle the remapping too.  */
   remapped_face_id = lookup_named_face (f, name, 0);
+  if (remapped_face_id < 0)
+    return face_id;		/* Give up. */
+
+  return remapped_face_id;
+}
+
+int
+lookup_basic_face_for_buffer (f, face_id, buffer)
+     struct frame *f;
+     int face_id;
+     Lisp_Object buffer;
+{
+  Lisp_Object name, mapping;
+  int remapped_face_id;
+
+  Lisp_Object Vlocal_remapping_alist = Fbuffer_local_value (intern("face-remapping-alist"), buffer);
+
+
+  if (NILP (Vlocal_remapping_alist))
+    return face_id;		/* Nothing to do.  */
+
+  switch (face_id)
+    {
+    case DEFAULT_FACE_ID:		name = Qdefault;		break;
+    case MODE_LINE_FACE_ID:		name = Qmode_line;		break;
+    case MODE_LINE_INACTIVE_FACE_ID:	name = Qmode_line_inactive;	break;
+    case HEADER_LINE_FACE_ID:		name = Qheader_line;		break;
+    case TOOL_BAR_FACE_ID:		name = Qtool_bar;		break;
+    case FRINGE_FACE_ID:		name = Qfringe;			break;
+    case SCROLL_BAR_FACE_ID:		name = Qscroll_bar;		break;
+    case BORDER_FACE_ID:		name = Qborder;			break;
+    case CURSOR_FACE_ID:		name = Qcursor;			break;
+    case MOUSE_FACE_ID:			name = Qmouse;			break;
+    case MENU_FACE_ID:			name = Qmenu;			break;
+
+    default:
+      abort ();	    /* the caller is supposed to pass us a basic face id */
+    }
+
+  /* Do a quick scan through Vface_remapping_alist, and return immediately
+     if there is no remapping for face NAME.  This is just an optimization
+     for the very common no-remapping case.  */
+  mapping = assq_no_quit (name, Vlocal_remapping_alist);
+  if (NILP (mapping))
+    return face_id;		/* Give up.  */
+
+  /* If there is a remapping entry, lookup the face using NAME, which will
+     handle the remapping too. 
+     Avoid setting current buffer (slow).
+  */
+  Lisp_Object old_face_remapping_alist = Vface_remapping_alist;
+  Vface_remapping_alist = Vlocal_remapping_alist;
+
+  remapped_face_id = lookup_named_face (f, name, 0);
+  Vface_remapping_alist = old_face_remapping_alist;
+
   if (remapped_face_id < 0)
     return face_id;		/* Give up. */
 
@@ -6972,6 +7046,43 @@ other font of the appropriate family and registry is available.  */);
 Each element is a regular expression that matches names of fonts to
 ignore.  */);
   Vface_ignored_fonts = Qnil;
+
+  DEFVAR_LISP ("face-remapping-alist", &Vface_remapping_alist,
+	       doc: /* Alist of face remappings.
+Each element is of the form:
+
+   (FACE REPLACEMENT...),
+
+which causes display of the face FACE to use REPLACEMENT... instead.
+REPLACEMENT... is interpreted the same way the value of a `face' text
+property is: it may be (1) A face name, (2) A list of face names, (3) A
+property-list of face attribute/value pairs, or (4) A list of face names
+intermixed with lists containing face attribute/value pairs.
+
+Multiple entries in REPLACEMENT... are merged together to form the final
+result, with faces or attributes earlier in the list taking precedence
+over those that are later.
+
+Face-name remapping cycles are suppressed; recursive references use the
+underlying face instead of the remapped face.  So a remapping of the form:
+
+   (FACE EXTRA-FACE... FACE)
+
+or:
+
+   (FACE (FACE-ATTR VAL ...) FACE)
+
+will cause EXTRA-FACE... or (FACE-ATTR VAL ...) to be _merged_ with the
+existing definition of FACE.  Note that for the default face, this isn't
+necessary, as every face inherits from the default face.
+
+Making this variable buffer-local is a good way to allow buffer-specific
+face definitions.  For instance, the mode my-mode could define a face
+`my-mode-default', and then in the mode setup function, do:
+
+   (set (make-local-variable 'face-remapping-alist)
+        '((default my-mode-default)))).  */);
+  Vface_remapping_alist = Qnil;
 
   DEFVAR_LISP ("face-remapping-alist", &Vface_remapping_alist,
 	       doc: /* Alist of face remappings.

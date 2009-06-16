@@ -1,0 +1,182 @@
+<html lang="en">
+<head>
+<title>Specifying a Coding System</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Specifying a Coding System">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Specify%20Coding">Specify Coding</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Fontsets.html#Fontsets">Fontsets</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Recognize-Coding.html#Recognize%20Coding">Recognize Coding</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="International.html#International">International</a>
+<hr><br>
+</div>
+
+<h3 class="section">Specifying a Coding System</h3>
+
+<p>In cases where Emacs does not automatically choose the right coding
+system, you can use these commands to specify one:
+
+     <dl>
+<dt><kbd>C-x &lt;RET&gt; f </kbd><var>coding</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Use coding system <var>coding</var> for the visited file
+in the current buffer.
+
+     <br><dt><kbd>C-x &lt;RET&gt; c </kbd><var>coding</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Specify coding system <var>coding</var> for the immediately following
+command.
+
+     <br><dt><kbd>C-x &lt;RET&gt; k </kbd><var>coding</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Use coding system <var>coding</var> for keyboard input.
+
+     <br><dt><kbd>C-x &lt;RET&gt; t </kbd><var>coding</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Use coding system <var>coding</var> for terminal output.
+
+     <br><dt><kbd>C-x &lt;RET&gt; p </kbd><var>input-coding</var><kbd> &lt;RET&gt; </kbd><var>output-coding</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Use coding systems <var>input-coding</var> and <var>output-coding</var> for
+subprocess input and output in the current buffer.
+
+     <br><dt><kbd>C-x &lt;RET&gt; x </kbd><var>coding</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Use coding system <var>coding</var> for transferring selections to and from
+other programs through the window system.
+
+     <br><dt><kbd>C-x &lt;RET&gt; X </kbd><var>coding</var><kbd> &lt;RET&gt;</kbd>
+     <dd>Use coding system <var>coding</var> for transferring <em>one</em>
+selection--the next one--to or from the window system. 
+</dl>
+
+   <p>The command <kbd>C-x &lt;RET&gt; f</kbd> (<code>set-buffer-file-coding-system</code>)
+specifies the file coding system for the current buffer--in other
+words, which coding system to use when saving or rereading the visited
+file.  You specify which coding system using the minibuffer.  Since this
+command applies to a file you have already visited, it affects only the
+way the file is saved.
+
+   <p>Another way to specify the coding system for a file is when you visit
+the file.  First use the command <kbd>C-x &lt;RET&gt; c</kbd>
+(<code>universal-coding-system-argument</code>); this command uses the
+minibuffer to read a coding system name.  After you exit the minibuffer,
+the specified coding system is used for <em>the immediately following
+command</em>.
+
+   <p>So if the immediately following command is <kbd>C-x C-f</kbd>, for example,
+it reads the file using that coding system (and records the coding
+system for when the file is saved).  Or if the immediately following
+command is <kbd>C-x C-w</kbd>, it writes the file using that coding system. 
+Other file commands affected by a specified coding system include
+<kbd>C-x C-i</kbd> and <kbd>C-x C-v</kbd>, as well as the other-window variants of
+<kbd>C-x C-f</kbd>.
+
+   <p><kbd>C-x &lt;RET&gt; c</kbd> also affects commands that start subprocesses,
+including <kbd>M-x shell</kbd> (see <a href="Shell.html#Shell">Shell</a>).
+
+   <p>However, if the immediately following command does not use the coding
+system, then <kbd>C-x &lt;RET&gt; c</kbd> ultimately has no effect.
+
+   <p>An easy way to visit a file with no conversion is with the <kbd>M-x
+find-file-literally</kbd> command.  See <a href="Visiting.html#Visiting">Visiting</a>.
+
+   <p>The variable <code>default-buffer-file-coding-system</code> specifies the
+choice of coding system to use when you create a new file.  It applies
+when you find a new file, and when you create a buffer and then save it
+in a file.  Selecting a language environment typically sets this
+variable to a good choice of default coding system for that language
+environment.
+
+   <p>The command <kbd>C-x &lt;RET&gt; t</kbd> (<code>set-terminal-coding-system</code>)
+specifies the coding system for terminal output.  If you specify a
+character code for terminal output, all characters output to the
+terminal are translated into that coding system.
+
+   <p>This feature is useful for certain character-only terminals built to
+support specific languages or character sets--for example, European
+terminals that support one of the ISO Latin character sets.  You need to
+specify the terminal coding system when using multibyte text, so that
+Emacs knows which characters the terminal can actually handle.
+
+   <p>By default, output to the terminal is not translated at all, unless
+Emacs can deduce the proper coding system from your terminal type or
+your locale specification (see <a href="Language-Environments.html#Language%20Environments">Language Environments</a>).
+
+   <p>The command <kbd>C-x &lt;RET&gt; k</kbd> (<code>set-keyboard-coding-system</code>)
+or the Custom option <code>keyboard-coding-system</code>
+specifies the coding system for keyboard input.  Character-code
+translation of keyboard input is useful for terminals with keys that
+send non-ASCII graphic characters--for example, some terminals designed
+for ISO Latin-1 or subsets of it.
+
+   <p>By default, keyboard input is not translated at all.
+
+   <p>There is a similarity between using a coding system translation for
+keyboard input, and using an input method: both define sequences of
+keyboard input that translate into single characters.  However, input
+methods are designed to be convenient for interactive use by humans, and
+the sequences that are translated are typically sequences of ASCII
+printing characters.  Coding systems typically translate sequences of
+non-graphic characters.
+
+   <p>The command <kbd>C-x &lt;RET&gt; x</kbd> (<code>set-selection-coding-system</code>)
+specifies the coding system for sending selected text to the window
+system, and for receiving the text of selections made in other
+applications.  This command applies to all subsequent selections, until
+you override it by using the command again.  The command <kbd>C-x
+&lt;RET&gt; X</kbd> (<code>set-next-selection-coding-system</code>) specifies the
+coding system for the next selection made in Emacs or read by Emacs.
+
+   <p>The command <kbd>C-x &lt;RET&gt; p</kbd> (<code>set-buffer-process-coding-system</code>)
+specifies the coding system for input and output to a subprocess.  This
+command applies to the current buffer; normally, each subprocess has its
+own buffer, and thus you can use this command to specify translation to
+and from a particular subprocess by giving the command in the
+corresponding buffer.
+
+   <p>The default for translation of process input and output depends on the
+current language environment.
+
+   <p>The variable <code>file-name-coding-system</code> specifies a coding system
+to use for encoding file names.  If you set the variable to a coding
+system name (as a Lisp symbol or a string), Emacs encodes file names
+using that coding system for all file operations.  This makes it
+possible to use non-ASCII characters in file names--or, at least, those
+non-ASCII characters which the specified coding system can encode.
+
+   <p>If <code>file-name-coding-system</code> is <code>nil</code>, Emacs uses a default
+coding system determined by the selected language environment.  In the
+default language environment, any non-ASCII characters in file names are
+not encoded specially; they appear in the file system using the internal
+Emacs representation.
+
+   <p><strong>Warning:</strong> if you change <code>file-name-coding-system</code> (or the
+language environment) in the middle of an Emacs session, problems can
+result if you have already visited files whose names were encoded using
+the earlier coding system and cannot be encoded (or are encoded
+differently) under the new coding system.  If you try to save one of
+these buffers under the visited file name, saving may use the wrong file
+name, or it may get an error.  If such a problem happens, use <kbd>C-x
+C-w</kbd> to specify a new file name for that buffer.
+
+   <p>The variable <code>locale-coding-system</code> specifies a coding system
+to use when encoding and decoding system strings such as system error
+messages and <code>format-time-string</code> formats and time stamps.  That
+coding system is also used for decoding non-ASCII keyboard input on X
+Window systems.  You should choose a coding system that is compatible
+with the underlying system's text representation, which is normally
+specified by one of the environment variables <code>LC_ALL</code>,
+<code>LC_CTYPE</code>, and <code>LANG</code>.  (The first one, in the order
+specified above, whose value is nonempty is the one that determines
+the text representation.)
+
+   </body></html>
+

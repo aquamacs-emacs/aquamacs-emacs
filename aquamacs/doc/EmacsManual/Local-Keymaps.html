@@ -1,0 +1,91 @@
+<html lang="en">
+<head>
+<title>Local Keymaps</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Local Keymaps">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Local%20Keymaps">Local Keymaps</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Minibuffer-Maps.html#Minibuffer%20Maps">Minibuffer Maps</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Prefix-Keymaps.html#Prefix%20Keymaps">Prefix Keymaps</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Key-Bindings.html#Key%20Bindings">Key Bindings</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Local Keymaps</h4>
+
+<p>So far we have explained the ins and outs of the global map.  Major
+modes customize Emacs by providing their own key bindings in <dfn>local
+keymaps</dfn>.  For example, C mode overrides &lt;TAB&gt; to make it indent the
+current line for C code.  Portions of text in the buffer can specify
+their own keymaps to substitute for the keymap of the buffer's major
+mode.
+
+   <p>Minor modes can also have local keymaps.  Whenever a minor mode is
+in effect, the definitions in its keymap override both the major
+mode's local keymap and the global keymap.
+
+   <p>The local keymaps for Lisp mode and several other major modes always
+exist even when not in use.  These are kept in variables named
+<code>lisp-mode-map</code> and so on.  For major modes less often used, the
+local keymap is normally constructed only when the mode is used for the
+first time in a session.  This is to save space.  If you wish to change
+one of these keymaps, you must use the major mode's <dfn>mode
+hook</dfn>--see below.
+
+   <p>All minor mode keymaps are created in advance.  There is no way to
+defer their creation until the first time the minor mode is enabled.
+
+   <p>A local keymap can locally redefine a key as a prefix key by defining
+it as a prefix keymap.  If the key is also defined globally as a prefix,
+then its local and global definitions (both keymaps) effectively
+combine: both of them are used to look up the event that follows the
+prefix key.  Thus, if the mode's local keymap defines <kbd>C-c</kbd> as
+another keymap, and that keymap defines <kbd>C-z</kbd> as a command, this
+provides a local meaning for <kbd>C-c C-z</kbd>.  This does not affect other
+sequences that start with <kbd>C-c</kbd>; if those sequences don't have their
+own local bindings, their global bindings remain in effect.
+
+   <p>Another way to think of this is that Emacs handles a multi-event key
+sequence by looking in several keymaps, one by one, for a binding of the
+whole key sequence.  First it checks the minor mode keymaps for minor
+modes that are enabled, then it checks the major mode's keymap, and then
+it checks the global keymap.  This is not precisely how key lookup
+works, but it's good enough for understanding ordinary circumstances.
+
+   <p>To change the local bindings of a major mode, you must change the
+mode's local keymap.  Normally you must wait until the first time the
+mode is used, because most major modes don't create their keymaps until
+then.  If you want to specify something in your <code>~/.emacs</code> file to
+change a major mode's bindings, you must use the mode's mode hook to
+delay the change until the mode is first used.
+
+   <p>For example, the command <code>texinfo-mode</code> to select Texinfo mode
+runs the hook <code>texinfo-mode-hook</code>.  Here's how you can use the hook
+to add local bindings (not very useful, we admit) for <kbd>C-c n</kbd> and
+<kbd>C-c p</kbd> in Texinfo mode:
+
+<pre class="example">     (add-hook 'texinfo-mode-hook
+               '(lambda ()
+                  (define-key texinfo-mode-map "\C-cp"
+                              'backward-paragraph)
+                  (define-key texinfo-mode-map "\C-cn"
+                              'forward-paragraph)))
+     </pre>
+
+   <p>See <a href="Hooks.html#Hooks">Hooks</a>.
+
+   </body></html>
+

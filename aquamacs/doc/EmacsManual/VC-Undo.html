@@ -1,0 +1,76 @@
+<html lang="en">
+<head>
+<title>Undoing Version Control Actions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Undoing Version Control Actions">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="VC%20Undo">VC Undo</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="VC-Dired-Mode.html#VC%20Dired%20Mode">VC Dired Mode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="VC-Status.html#VC%20Status">VC Status</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Secondary-VC-Commands.html#Secondary%20VC%20Commands">Secondary VC Commands</a>
+<hr><br>
+</div>
+
+<h3 class="subsubsection">Undoing Version Control Actions</h5>
+
+     <dl>
+<dt><kbd>C-x v u</kbd>
+     <dd>Revert the buffer and the file to the last checked-in version.
+
+     <br><dt><kbd>C-x v c</kbd>
+     <dd>Remove the last-entered change from the master for the visited file. 
+This undoes your last check-in. 
+</dl>
+
+   <p>If you want to discard your current set of changes and revert to the
+last version checked in, use <kbd>C-x v u</kbd> (<code>vc-revert-buffer</code>). 
+This leaves the file unlocked; if locking is in use, you must first lock
+the file again before you change it again.  <kbd>C-x v u</kbd> requires
+confirmation, unless it sees that you haven't made any changes since the
+last checked-in version.
+
+   <p><kbd>C-x v u</kbd> is also the command to unlock a file if you lock it and
+then decide not to change it.
+
+   <p>To cancel a change that you already checked in, use <kbd>C-x v c</kbd>
+(<code>vc-cancel-version</code>).  This command discards all record of the
+most recent checked-in version.  <kbd>C-x v c</kbd> also offers to revert
+your work file and buffer to the previous version (the one that precedes
+the version that is deleted).
+
+   <p>If you answer <kbd>no</kbd>, VC keeps your changes in the buffer, and locks
+the file.  The no-revert option is useful when you have checked in a
+change and then discover a trivial error in it; you can cancel the
+erroneous check-in, fix the error, and check the file in again.
+
+   <p>When <kbd>C-x v c</kbd> does not revert the buffer, it unexpands all
+version control headers in the buffer instead (see <a href="Version-Headers.html#Version%20Headers">Version Headers</a>). 
+This is because the buffer no longer corresponds to any existing
+version.  If you check it in again, the check-in process will expand the
+headers properly for the new version number.
+
+   <p>However, it is impossible to unexpand the RCS <code>$Log$</code> header
+automatically.  If you use that header feature, you have to unexpand it
+by hand--by deleting the entry for the version that you just canceled.
+
+   <p>Be careful when invoking <kbd>C-x v c</kbd>, as it is easy to lose a lot of
+work with it.  To help you be careful, this command always requires
+confirmation with <kbd>yes</kbd>.  Note also that this command is disabled
+under CVS, because canceling versions is very dangerous and discouraged
+with CVS.
+
+   </body></html>
+

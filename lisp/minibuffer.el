@@ -715,7 +715,9 @@ It also eliminates runs of equal strings."
 				      (string-width s)))
 				  strings)))
 	   (window (get-buffer-window (current-buffer) 0))
-	   (wwidth (if window (1- (window-width window)) 79))
+	   (wwidth (if (and window (not face-remapping-alist))
+		       (1- (window-width window)) 
+		     45))   ;; hardcoded 45 in Aquamacs until we have a `window-buffer-width' function
 	   (columns (min
 		     ;; At least 2 columns; at least 2 spaces between columns.
 		     (max 2 (/ wwidth (+ 2 length)))

@@ -1,0 +1,95 @@
+<html lang="en">
+<head>
+<title>Setting the Mark</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Setting the Mark">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Setting%20Mark">Setting Mark</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Transient-Mark.html#Transient%20Mark">Transient Mark</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Mark.html#Mark">Mark</a>
+<hr><br>
+</div>
+
+<h3 class="section">Setting the Mark</h3>
+
+<p>Here are some commands for setting the mark:
+
+     <dl>
+<dt><kbd>C-&lt;SPC&gt;</kbd>
+     <dd>Set the mark where point is (<code>set-mark-command</code>). 
+<br><dt><kbd>C-@</kbd>
+     <dd>The same. 
+<br><dt><kbd>C-x C-x</kbd>
+     <dd>Interchange mark and point (<code>exchange-point-and-mark</code>). 
+<br><dt><kbd>Drag-Mouse-1</kbd>
+     <dd>Set point and the mark around the text you drag across. 
+<br><dt><kbd>Mouse-3</kbd>
+     <dd>Set the mark where point is, then move point to where you click
+(<code>mouse-save-then-kill</code>). 
+</dl>
+
+   <p>For example, suppose you wish to convert part of the buffer to
+upper case, using the <kbd>C-x C-u</kbd> (<code>upcase-region</code>) command,
+which operates on the text in the region.  You can first go to the
+beginning of the text to be capitalized, type <kbd>C-&lt;SPC&gt;</kbd> to put
+the mark there, move to the end, and then type <kbd>C-x C-u</kbd>.  Or, you
+can set the mark at the end of the text, move to the beginning, and then
+type <kbd>C-x C-u</kbd>.
+
+   <p>The most common way to set the mark is with the <kbd>C-&lt;SPC&gt;</kbd> command
+(<code>set-mark-command</code>).  This sets the mark where point is.  Then you
+can move point away, leaving the mark behind.
+
+   <p>There are two ways to set the mark with the mouse.  You can drag mouse
+button one across a range of text; that puts point where you release the
+mouse button, and sets the mark at the other end of that range.  Or you
+can click mouse button three, which sets the mark at point (like
+<kbd>C-&lt;SPC&gt;</kbd>) and then moves point (like <kbd>Mouse-1</kbd>).  Both of
+these methods copy the region into the kill ring in addition to setting
+the mark; that gives behavior consistent with other window-driven
+applications, but if you don't want to modify the kill ring, you must
+use keyboard commands to set the mark.  See <a href="Mouse-Commands.html#Mouse%20Commands">Mouse Commands</a>.
+
+   <p>Ordinary terminals have only one cursor, so there is no way for Emacs
+to show you where the mark is located.  You have to remember.  The usual
+solution to this problem is to set the mark and then use it soon, before
+you forget where it is.  Alternatively, you can see where the mark is
+with the command <kbd>C-x C-x</kbd> (<code>exchange-point-and-mark</code>) which
+puts the mark where point was and point where the mark was.  The extent
+of the region is unchanged, but the cursor and point are now at the
+previous position of the mark.  In Transient Mark mode, this command
+reactivates the mark.
+
+   <p><kbd>C-x C-x</kbd> is also useful when you are satisfied with the position
+of point but want to move the other end of the region (where the mark
+is); do <kbd>C-x C-x</kbd> to put point at that end of the region, and then
+move it.  Using <kbd>C-x C-x</kbd> a second time, if necessary, puts the mark at
+the new position with point back at its original position.
+
+   <p>For more facilities that allow you to go to previously set marks, see
+<a href="Mark-Ring.html#Mark%20Ring">Mark Ring</a>.
+
+   <p>There is no such character as <kbd>C-&lt;SPC&gt;</kbd> in ASCII; when you
+type &lt;SPC&gt; while holding down &lt;CTRL&gt;, what you get on most
+ordinary terminals is the character <kbd>C-@</kbd>.  This key is actually
+bound to <code>set-mark-command</code>.  But unless you are unlucky enough to
+have a terminal where typing <kbd>C-&lt;SPC&gt;</kbd> does not produce
+<kbd>C-@</kbd>, you might as well think of this character as
+<kbd>C-&lt;SPC&gt;</kbd>.  Under X, <kbd>C-&lt;SPC&gt;</kbd> is actually a distinct
+character, but its binding is still <code>set-mark-command</code>.
+
+   </body></html>
+

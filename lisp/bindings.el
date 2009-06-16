@@ -153,6 +153,7 @@ corresponding to the mode line clicked."
       (setq desc
 	    (propertize
 	     mnemonic
+ 	     'face 'mode-line-flags
 	     'help-echo (format "End-of-line style: %s\nmouse-1 to cycle"
 				(if (eq eol 0) "Unix-style LF"
 				  (if (eq eol 1) "DOS-style CRLF"
@@ -177,6 +178,7 @@ corresponding to the mode line clicked."
   `(""
     (current-input-method
      (:propertize ("" current-input-method-title)
+		  face mode-line-flags
 		  help-echo (concat
 			     "Current input method: "
 			     current-input-method
@@ -187,6 +189,7 @@ mouse-3: Describe current input method")
 		  mouse-face mode-line-highlight))
     ,(propertize
       "%z"
+      'face 'mode-line-flags
       'help-echo
       #'(lambda (window object point)
 	  (with-current-buffer (window-buffer window)
@@ -239,6 +242,7 @@ Normally nil in most modes, since there is no process to display.")
 (defvar mode-line-modified
   (list (propertize
 	 "%1*"
+	 'face 'mode-line-flags
 	 'help-echo (purecopy (lambda (window object point)
  				(format "Buffer is %s\nmouse-1 toggles"
 					(save-selected-window
@@ -252,6 +256,7 @@ Normally nil in most modes, since there is no process to display.")
 	 'mouse-face 'mode-line-highlight)
 	(propertize
 	 "%1+"
+	 'face 'mode-line-flags
 	 'help-echo  (purecopy (lambda (window object point)
 				 (format "Buffer is %sodified\nmouse-1 toggles modified state"
 					 (save-selected-window
@@ -329,21 +334,24 @@ Keymap to display on minor modes.")
     map) "\
 Keymap to display on column and line numbers.")
 
+(defvar command-line-processed nil)
+(defvar before-init-hook nil)
+(eval-at-startup ;; because of initial-window-system
 (let* ((help-echo
 	;; The multi-line message doesn't work terribly well on the
 	;; bottom mode line...  Better ideas?
 	;; 	  "\
 	;; mouse-1: select window, mouse-2: delete others, mouse-3: delete,
 	;; drag-mouse-1: resize, C-mouse-2: split horizontally"
-	"mouse-1: Select (drag to resize)\n\
-mouse-2: Make current window occupy the whole frame\n\
-mouse-3: Remove current window from display")
+	"mouse-1: select (drag to resize), mouse-2: delete others, mouse-3: delete this")
        (recursive-edit-help-echo "Recursive edit, type C-M-c to get out")
-       (dashes (propertize "--" 'help-echo help-echo))
+       (lotsofdashes (if initial-window-system (make-string 100 32) "%-"))
+       (dash (propertize (if initial-window-system " " "-") 'help-echo help-echo))
+       (dashes (propertize (if initial-window-system "  " "--") 'help-echo help-echo))
        (standard-mode-line-format
 	(list
 	 "%e"
-	 (propertize "-" 'help-echo help-echo)
+	 (propertize dash 'help-echo help-echo)
 	 'mode-line-mule-info
 	 'mode-line-client
 	 'mode-line-modified
@@ -357,7 +365,7 @@ mouse-3: Remove current window from display")
 	 'mode-line-modes
 	 `(which-func-mode ("" which-func-format ,dashes))
 	 `(global-mode-string (,dashes global-mode-string))
-	 (propertize "-%-" 'help-echo help-echo)))
+	 (propertize (concat dash lotsofdashes) 'help-echo help-echo)))
        (standard-mode-line-modes
 	(list
 	 (propertize "%[" 'help-echo recursive-edit-help-echo)
@@ -383,7 +391,7 @@ mouse-3: Toggle minor modes"
 				 'mouse-2 #'mode-line-widen))
 	 (propertize ")" 'help-echo help-echo)
 	 (propertize "%]" 'help-echo recursive-edit-help-echo)
-	 (propertize "--" 'help-echo help-echo)))
+	 (propertize dashes 'help-echo help-echo)))
 
        (standard-mode-line-position
 	`((-3 ,(propertize
@@ -433,7 +441,7 @@ mouse-1: Display Line and Column Mode Menu"))))))))
 
   (setq-default mode-line-position standard-mode-line-position)
   (put 'mode-line-position 'standard-value
-       (list `(quote ,standard-mode-line-position))))
+       (list `(quote ,standard-mode-line-position)))))
 
 (defvar mode-line-buffer-identification-keymap
   ;; Add menu of buffer operations to the buffer identification part

@@ -1,0 +1,85 @@
+<html lang="en">
+<head>
+<title>Defining Abbrevs</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Defining Abbrevs">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Defining%20Abbrevs">Defining Abbrevs</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Expanding-Abbrevs.html#Expanding%20Abbrevs">Expanding Abbrevs</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Abbrev-Concepts.html#Abbrev%20Concepts">Abbrev Concepts</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Abbrevs.html#Abbrevs">Abbrevs</a>
+<hr><br>
+</div>
+
+<h3 class="section">Defining Abbrevs</h3>
+
+     <dl>
+<dt><kbd>C-x a g</kbd>
+     <dd>Define an abbrev, using one or more words before point as its expansion
+(<code>add-global-abbrev</code>). 
+<br><dt><kbd>C-x a l</kbd>
+     <dd>Similar, but define an abbrev specific to the current major mode
+(<code>add-mode-abbrev</code>). 
+<br><dt><kbd>C-x a i g</kbd>
+     <dd>Define a word in the buffer as an abbrev (<code>inverse-add-global-abbrev</code>). 
+<br><dt><kbd>C-x a i l</kbd>
+     <dd>Define a word in the buffer as a mode-specific abbrev
+(<code>inverse-add-mode-abbrev</code>). 
+<br><dt><kbd>M-x kill-all-abbrevs</kbd>
+     <dd>This command discards all abbrev definitions currently in effect,
+leaving a blank slate. 
+</dl>
+
+   <p>The usual way to define an abbrev is to enter the text you want the
+abbrev to expand to, position point after it, and type <kbd>C-x a g</kbd>
+(<code>add-global-abbrev</code>).  This reads the abbrev itself using the
+minibuffer, and then defines it as an abbrev for one or more words before
+point.  Use a numeric argument to say how many words before point should be
+taken as the expansion.  For example, to define the abbrev <code>foo</code> as
+mentioned above, insert the text <code>find outer otter</code> and then type
+<kbd>C-u 3 C-x a g f o o &lt;RET&gt;</kbd>.
+
+   <p>An argument of zero to <kbd>C-x a g</kbd> means to use the contents of the
+region as the expansion of the abbrev being defined.
+
+   <p>The command <kbd>C-x a l</kbd> (<code>add-mode-abbrev</code>) is similar, but
+defines a mode-specific abbrev.  Mode-specific abbrevs are active only in a
+particular major mode.  <kbd>C-x a l</kbd> defines an abbrev for the major mode
+in effect at the time <kbd>C-x a l</kbd> is typed.  The arguments work the same
+as for <kbd>C-x a g</kbd>.
+
+   <p>If the text already in the buffer is the abbrev, rather than its
+expansion, use command <kbd>C-x a i g</kbd>
+(<code>inverse-add-global-abbrev</code>) instead of <kbd>C-x a g</kbd>, or use
+<kbd>C-x a i l</kbd> (<code>inverse-add-mode-abbrev</code>) instead of <kbd>C-x a
+l</kbd>.  These commands are called "inverse" because they invert the
+meaning of the two text strings they use (one from the buffer and one
+read with the minibuffer).
+
+   <p>To change the definition of an abbrev, just define a new definition. 
+When the abbrev has a prior definition, the abbrev definition commands
+ask for confirmation before replacing it.
+
+   <p>To remove an abbrev definition, give a negative argument to the abbrev
+definition command: <kbd>C-u - C-x a g</kbd> or <kbd>C-u - C-x a l</kbd>.  The
+former removes a global definition, while the latter removes a
+mode-specific definition.
+
+   <p><kbd>M-x kill-all-abbrevs</kbd> removes all the abbrev definitions there
+are, both global and local.
+
+   </body></html>
+

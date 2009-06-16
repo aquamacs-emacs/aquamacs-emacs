@@ -1,0 +1,113 @@
+<html lang="en">
+<head>
+<title>File Names</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="File Names">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="File%20Names">File Names</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Visiting.html#Visiting">Visiting</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
+<hr><br>
+</div>
+
+<h3 class="section">File Names</h3>
+
+<p>Most Emacs commands that operate on a file require you to specify the
+file name.  (Saving and reverting are exceptions; the buffer knows which
+file name to use for them.)  You enter the file name using the
+minibuffer (see <a href="Minibuffer.html#Minibuffer">Minibuffer</a>).  <dfn>Completion</dfn> is available
+(see <a href="Completion.html#Completion">Completion</a>) to make it easier to specify long file names.  When
+completing file names, Emacs ignores those whose file-name extensions
+appear in the variable <code>completion-ignored-extensions</code>; see
+<a href="Completion-Options.html#Completion%20Options">Completion Options</a>.
+
+   <p>For most operations, there is a <dfn>default file name</dfn> which is used
+if you type just &lt;RET&gt; to enter an empty argument.  Normally the
+default file name is the name of the file visited in the current buffer;
+this makes it easy to operate on that file with any of the Emacs file
+commands.
+
+   <p>Each buffer has a default directory which is normally the same as the
+directory of the file visited in that buffer.  When you enter a file
+name without a directory, the default directory is used.  If you specify
+a directory in a relative fashion, with a name that does not start with
+a slash, it is interpreted with respect to the default directory.  The
+default directory is kept in the variable <code>default-directory</code>,
+which has a separate value in every buffer.
+
+   <p>For example, if the default file name is <code>/u/rms/gnu/gnu.tasks</code> then
+the default directory is <code>/u/rms/gnu/</code>.  If you type just <code>foo</code>,
+which does not specify a directory, it is short for <code>/u/rms/gnu/foo</code>. 
+<code>../.login</code> would stand for <code>/u/rms/.login</code>.  <code>new/foo</code>
+would stand for the file name <code>/u/rms/gnu/new/foo</code>.
+
+   <p>The command <kbd>M-x pwd</kbd> displays the current buffer's default
+directory, and the command <kbd>M-x cd</kbd> sets it (to a value read using
+the minibuffer).  A buffer's default directory changes only when the
+<code>cd</code> command is used.  A file-visiting buffer's default directory
+is initialized to the directory of the file that is visited in that buffer.  If
+you create a buffer with <kbd>C-x b</kbd>, its default directory is copied
+from that of the buffer that was current at the time.
+
+   <p>The default directory actually appears in the minibuffer when the
+minibuffer becomes active to read a file name.  This serves two
+purposes: it <em>shows</em> you what the default is, so that you can type
+a relative file name and know with certainty what it will mean, and it
+allows you to <em>edit</em> the default to specify a different directory. 
+This insertion of the default directory is inhibited if the variable
+<code>insert-default-directory</code> is set to <code>nil</code>.
+
+   <p>Note that it is legitimate to type an absolute file name after you
+enter the minibuffer, ignoring the presence of the default directory
+name as part of the text.  The final minibuffer contents may look
+invalid, but that is not so.  For example, if the minibuffer starts out
+with <code>/usr/tmp/</code> and you add <code>/x1/rms/foo</code>, you get
+<code>/usr/tmp//x1/rms/foo</code>; but Emacs ignores everything through the
+first slash in the double slash; the result is <code>/x1/rms/foo</code>. 
+See <a href="Minibuffer-File.html#Minibuffer%20File">Minibuffer File</a>.
+
+   <p><code>$</code> in a file name is used to substitute environment variables. 
+For example, if you have used the shell command <code>export
+FOO=rms/hacks</code> to set up an environment variable named <code>FOO</code>, then
+you can use <code>/u/$FOO/test.c</code> or <code>/u/${FOO}/test.c</code> as an
+abbreviation for <code>/u/rms/hacks/test.c</code>.  The environment variable
+name consists of all the alphanumeric characters after the <code>$</code>;
+alternatively, it may be enclosed in braces after the <code>$</code>.  Note
+that shell commands to set environment variables affect Emacs only if
+done before Emacs is started.
+
+   <p>You can use the <code>~/</code> in a file name to mean your home directory,
+or <code>~</code><var>user-id</var><code>/</code> to mean the home directory of a user whose
+login name is <code>user-id</code>.  (On DOS and Windows systems, where a user
+doesn't have a home directory, Emacs substitutes <code>~/</code> with the
+value of the environment variable <code>HOME</code>; see <a href="General-Variables.html#General%20Variables">General Variables</a>.)
+
+   <p>To access a file with <code>$</code> in its name, type <code>$$</code>.  This pair
+is converted to a single <code>$</code> at the same time as variable
+substitution is performed for a single <code>$</code>.  Alternatively, quote the
+whole file name with <code>/:</code> (see <a href="Quoted-File-Names.html#Quoted%20File%20Names">Quoted File Names</a>).  File names
+which begin with a literal <code>~</code> should also be quoted with <code>/:</code>.
+
+   <p>The Lisp function that performs the substitution is called
+<code>substitute-in-file-name</code>.  The substitution is performed only on
+file names read as such using the minibuffer.
+
+   <p>You can include non-ASCII characters in file names if you set the
+variable <code>file-name-coding-system</code> to a non-<code>nil</code> value. 
+See <a href="Specify-Coding.html#Specify%20Coding">Specify Coding</a>.
+
+   </body></html>
+

@@ -816,8 +816,8 @@ Save a copy in register 0 if `cua-delete-copy-to-register-0' is non-nil."
     (setq cua--last-deleted-region-text (filter-buffer-substring start end))
     (if cua-delete-copy-to-register-0
 	(set-register ?0 cua--last-deleted-region-text))
-    (delete-region start end)
-    (setq cua--last-deleted-region-pos
+    (smart-delete-region start end)
+   (setq cua--last-deleted-region-pos
 	  (cons (current-buffer)
 		(and (consp buffer-undo-list)
 		     (car buffer-undo-list))))

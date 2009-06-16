@@ -1,0 +1,71 @@
+<html lang="en">
+<head>
+<title>Continuation Lines</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Continuation Lines">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="ForIndent%20Cont">ForIndent Cont</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="ForIndent-Num.html#ForIndent%20Num">ForIndent Num</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="ForIndent-Commands.html#ForIndent%20Commands">ForIndent Commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Fortran-Indent.html#Fortran%20Indent">Fortran Indent</a>
+<hr><br>
+</div>
+
+<h3 class="subsubsection">Continuation Lines</h5>
+
+<p>Most modern Fortran compilers allow two ways of writing continuation
+lines.  If the first non-space character on a line is in column 5, then
+that line is a continuation of the previous line.  We call this
+<dfn>fixed format</dfn>.  (In GNU Emacs we always count columns from 0.)  The
+variable <code>fortran-continuation-string</code> specifies what character to
+put on column 5.  A line that starts with a tab character followed by
+any digit except <code>0</code> is also a continuation line.  We call this
+style of continuation <dfn>tab format</dfn>.
+
+   <p>Fortran mode can make either style of continuation line, but you
+must specify which one you prefer.  The value of the variable
+<code>indent-tabs-mode</code> controls the choice: <code>nil</code> for fixed
+format, and non-<code>nil</code> for tab format.  You can tell which style
+is presently in effect by the presence or absence of the string
+<code>Tab</code> in the mode line.
+
+   <p>If the text on a line starts with the conventional Fortran
+continuation marker <code>$</code>, or if it begins with any non-whitespace
+character in column 5, Fortran mode treats it as a continuation line. 
+When you indent a continuation line with &lt;TAB&gt;, it converts the line
+to the current continuation style.  When you split a Fortran statement
+with <kbd>C-M-j</kbd>, the continuation marker on the newline is created
+according to the continuation style.
+
+   <p>The setting of continuation style affects several other aspects of
+editing in Fortran mode.  In fixed format mode, the minimum column
+number for the body of a statement is 6.  Lines inside of Fortran
+blocks that are indented to larger column numbers always use only the
+space character for whitespace.  In tab format mode, the minimum
+column number for the statement body is 8, and the whitespace before
+column 8 must always consist of one tab character.
+
+   <p>When you enter Fortran mode for an existing file, it tries to deduce the
+proper continuation style automatically from the file contents.  The first
+line that begins with either a tab character or six spaces determines the
+choice.  The variable <code>fortran-analyze-depth</code> specifies how many lines
+to consider (at the beginning of the file); if none of those lines
+indicates a style, then the variable <code>fortran-tab-mode-default</code>
+specifies the style.  If it is <code>nil</code>, that specifies fixed format, and
+non-<code>nil</code> specifies tab format.
+
+   </body></html>
+

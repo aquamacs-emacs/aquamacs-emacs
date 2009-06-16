@@ -1,0 +1,156 @@
+<html lang="en">
+<head>
+<title>Source File Tag Syntax</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Source File Tag Syntax">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Tag%20Syntax">Tag Syntax</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Create-Tags-Table.html#Create%20Tags%20Table">Create Tags Table</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Tags.html#Tags">Tags</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Source File Tag Syntax</h4>
+
+<p>Here is how tag syntax is defined for the most popular languages:
+
+     <ul>
+<li>In C code, any C function or typedef is a tag, and so are definitions of
+<code>struct</code>, <code>union</code> and <code>enum</code>. 
+<code>#define</code> macro definitions and <code>enum</code> constants are also
+tags, unless you specify <code>--no-defines</code> when making the tags table. 
+Similarly, global variables are tags, unless you specify
+<code>--no-globals</code>.  Use of <code>--no-globals</code> and <code>--no-defines</code>
+can make the tags table file much smaller.
+
+     <p>You can tag function declarations and external variables in addition
+to function definitions by giving the <code>--declarations</code> option to
+<code>etags</code>.
+
+     </p><li>In C++ code, in addition to all the tag constructs of C code, member
+functions are also recognized, and optionally member variables if you
+use the <code>--members</code> option.  Tags for variables and functions in
+classes are named <code></code><var>class</var><code>::</code><var>variable</var><code></code> and
+<code></code><var>class</var><code>::</code><var>function</var><code></code>.  <code>operator</code> definitions have
+tag names like <code>operator+</code>.
+
+     <li>In Java code, tags include all the constructs recognized in C++, plus
+the <code>interface</code>, <code>extends</code> and <code>implements</code> constructs. 
+Tags for variables and functions in classes are named
+<code></code><var>class</var><code>.</code><var>variable</var><code></code> and <code></code><var>class</var><code>.</code><var>function</var><code></code>.
+
+     <li>In LaTeX text, the argument of any of the commands <code>\chapter</code>,
+<code>\section</code>, <code>\subsection</code>, <code>\subsubsection</code>,
+<code>\eqno</code>, <code>\label</code>, <code>\ref</code>, <code>\cite</code>, <code>\bibitem</code>,
+<code>\part</code>, <code>\appendix</code>, <code>\entry</code>, or <code>\index</code>, is a
+tag.
+
+     <p>Other commands can make tags as well, if you specify them in the
+environment variable <code>TEXTAGS</code> before invoking <code>etags</code>.  The
+value of this environment variable should be a colon-separated list of
+command names.  For example,
+
+     <pre class="example">          TEXTAGS="def:newcommand:newenvironment"
+          export TEXTAGS
+          </pre>
+
+     <p>specifies (using Bourne shell syntax) that the commands <code>\def</code>,
+<code>\newcommand</code> and <code>\newenvironment</code> also define tags.
+
+     </p><li>In Lisp code, any function defined with <code>defun</code>, any variable
+defined with <code>defvar</code> or <code>defconst</code>, and in general the first
+argument of any expression that starts with <code>(def</code> in column zero, is
+a tag.
+
+     <li>In Scheme code, tags include anything defined with <code>def</code> or with a
+construct whose name starts with <code>def</code>.  They also include variables
+set with <code>set!</code> at top level in the file. 
+</ul>
+
+   <p>Several other languages are also supported:
+
+     <ul>
+
+     <li>In Ada code, functions, procedures, packages, tasks, and types are
+tags.  Use the <code>--packages-only</code> option to create tags for
+packages only.
+
+     <p>In Ada, the same name can be used for different kinds of entity
+(e.g., for a procedure and for a function).  Also, for things like
+packages, procedures and functions, there is the spec (i.e. the
+interface) and the body (i.e. the implementation).  To make it
+easier to pick the definition you want, Ada tag name have suffixes
+indicating the type of entity:
+
+          <dl>
+<dt><code>/b</code>
+          <dd>package body. 
+<br><dt><code>/f</code>
+          <dd>function. 
+<br><dt><code>/k</code>
+          <dd>task. 
+<br><dt><code>/p</code>
+          <dd>procedure. 
+<br><dt><code>/s</code>
+          <dd>package spec. 
+<br><dt><code>/t</code>
+          <dd>type. 
+</dl>
+
+     <p>Thus, <kbd>M-x find-tag &lt;RET&gt; bidule/b &lt;RET&gt;</kbd> will go
+directly to the body of the package <code>bidule</code>, while <kbd>M-x
+find-tag &lt;RET&gt; bidule &lt;RET&gt;</kbd> will just search for any tag
+<code>bidule</code>.
+
+     </p><li>In assembler code, labels appearing at the beginning of a line,
+followed by a colon, are tags.
+
+     <li>In Bison or Yacc input files, each rule defines as a tag the nonterminal
+it constructs.  The portions of the file that contain C code are parsed
+as C code.
+
+     <li>In Cobol code, tags are paragraph names; that is, any word starting in
+column 8 and followed by a period.
+
+     <li>In Erlang code, the tags are the functions, records, and macros defined
+in the file.
+
+     <li>In Fortran code, functions, subroutines and block data are tags.
+
+     <li>In makefiles, targets are tags.
+
+     <li>In Objective C code, tags include Objective C definitions for classes,
+class categories, methods, and protocols.
+
+     <li>In Pascal code, the tags are the functions and procedures defined in
+the file.
+
+     <li>In Perl code, the tags are the procedures defined by the <code>sub</code>,
+<code>my</code> and <code>local</code> keywords.  Use <code>--globals</code> if you want
+to tag global variables.
+
+     <li>In PostScript code, the tags are the functions.
+
+     <li>In Prolog code, a tag name appears at the left margin.
+
+     <li>In Python code, <code>def</code> or <code>class</code> at the beginning of a line
+generate a tag. 
+</ul>
+
+   <p>You can also generate tags based on regexp matching (see <a href="Etags-Regexps.html#Etags%20Regexps">Etags Regexps</a>) to handle other formats and languages.
+
+   </body></html>
+

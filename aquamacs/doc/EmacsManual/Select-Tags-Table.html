@@ -1,0 +1,69 @@
+<html lang="en">
+<head>
+<title>Selecting a Tags Table</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Selecting a Tags Table">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Select%20Tags%20Table">Select Tags Table</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Find-Tag.html#Find%20Tag">Find Tag</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Etags-Regexps.html#Etags%20Regexps">Etags Regexps</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Tags.html#Tags">Tags</a>
+<hr><br>
+</div>
+
+<h3 class="subsection">Selecting a Tags Table</h4>
+
+<p>Emacs has at any time one <dfn>selected</dfn> tags table, and all the commands
+for working with tags tables use the selected one.  To select a tags table,
+type <kbd>M-x visit-tags-table</kbd>, which reads the tags table file name as an
+argument.  The name <code>TAGS</code> in the default directory is used as the
+default file name.
+
+   <p>All this command does is store the file name in the variable
+<code>tags-file-name</code>.  Emacs does not actually read in the tags table
+contents until you try to use them.  Setting this variable yourself is just
+as good as using <code>visit-tags-table</code>.  The variable's initial value is
+<code>nil</code>; that value tells all the commands for working with tags tables
+that they must ask for a tags table file name to use.
+
+   <p>Using <code>visit-tags-table</code> when a tags table is already loaded
+gives you a choice: you can add the new tags table to the current list
+of tags tables, or start a new list.  The tags commands use all the tags
+tables in the current list.  If you start a new list, the new tags table
+is used <em>instead</em> of others.  If you add the new table to the
+current list, it is used <em>as well as</em> the others.  When the tags
+commands scan the list of tags tables, they don't always start at the
+beginning of the list; they start with the first tags table (if any)
+that describes the current file, proceed from there to the end of the
+list, and then scan from the beginning of the list until they have
+covered all the tables in the list.
+
+   <p>You can specify a precise list of tags tables by setting the variable
+<code>tags-table-list</code> to a list of strings, like this:
+
+<pre class="example">     (setq tags-table-list
+           '("~/emacs" "/usr/local/lib/emacs/src"))
+     </pre>
+
+<p>This tells the tags commands to look at the <code>TAGS</code> files in your
+<code>~/emacs</code> directory and in the <code>/usr/local/lib/emacs/src</code>
+directory.  The order depends on which file you are in and which tags
+table mentions that file, as explained above.
+
+   <p>Do not set both <code>tags-file-name</code> and <code>tags-table-list</code>.
+
+   </body></html>
+

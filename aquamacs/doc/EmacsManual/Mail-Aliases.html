@@ -1,0 +1,122 @@
+<html lang="en">
+<head>
+<title>Mail Aliases</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Mail Aliases">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Mail%20Aliases">Mail Aliases</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Mail-Mode.html#Mail%20Mode">Mail Mode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Mail-Headers.html#Mail%20Headers">Mail Headers</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Sending-Mail.html#Sending%20Mail">Sending Mail</a>
+<hr><br>
+</div>
+
+<h3 class="section">Mail Aliases</h3>
+
+<p>You can define <dfn>mail aliases</dfn> in a file named <code>~/.mailrc</code>. 
+These are short mnemonic names which stand for mail addresses or groups of
+mail addresses.  Like many other mail programs, Emacs expands aliases
+when they occur in the <code>To</code>, <code>From</code>, <code>CC</code>, <code>BCC</code>, and
+<code>Reply-to</code> fields, plus their <code>Resent-</code> variants.
+
+   <p>To define an alias in <code>~/.mailrc</code>, write a line in the following
+format:
+
+<pre class="example">     alias <var>shortaddress</var> <var>fulladdresses</var>
+     </pre>
+
+<p>Here <var>fulladdresses</var> stands for one or more mail addresses for
+<var>shortaddress</var> to expand into.  Separate multiple addresses with
+spaces; if an address contains a space, quote the whole address with a
+pair of double-quotes.
+
+   <p>For instance, to make <code>maingnu</code> stand for
+<code>gnu@gnu.org</code> plus a local address of your own, put in
+this line:
+
+<pre class="example">     alias maingnu gnu@gnu.org local-gnu
+     </pre>
+
+   <p>Emacs also recognizes include commands in <code>.mailrc</code> files. 
+They look like this:
+
+<pre class="example">     source <var>filename</var>
+     </pre>
+
+<p>The file <code>~/.mailrc</code> is used primarily by other mail-reading
+programs; it can contain various other commands.  Emacs ignores
+everything in it except for alias definitions and include commands.
+
+   <p>Another way to define a mail alias, within Emacs alone, is with the
+<code>define-mail-alias</code> command.  It prompts for the alias and then the
+full address.  You can use it to define aliases in your <code>.emacs</code>
+file, like this:
+
+<pre class="example">     (define-mail-alias "maingnu" "gnu@gnu.org")
+     </pre>
+
+   <p><code>define-mail-alias</code> records aliases by adding them to a
+variable named <code>mail-aliases</code>.  If you are comfortable with
+manipulating Lisp lists, you can set <code>mail-aliases</code> directly.  The
+initial value of <code>mail-aliases</code> is <code>t</code>, which means that
+Emacs should read <code>.mailrc</code> to get the proper value.
+
+   <p>You can specify a different file name to use instead of
+<code>~/.mailrc</code> by setting the variable
+<code>mail-personal-alias-file</code>.
+
+   <p>Normally, Emacs expands aliases when you send the message.  You do not
+need to expand mail aliases before sending the message, but you can
+expand them if you want to see where the mail will actually go.  To do
+this, use the command <kbd>M-x expand-mail-aliases</kbd>; it expands all mail
+aliases currently present in the mail headers that hold addresses.
+
+   <p>If you like, you can have mail aliases expand as abbrevs, as soon as
+you type them in (see <a href="Abbrevs.html#Abbrevs">Abbrevs</a>).  To enable this feature, execute the
+following:
+
+<pre class="example">     (add-hook 'mail-mode-hook 'mail-abbrevs-setup)
+     </pre>
+
+<p>This can go in your <code>.emacs</code> file.  See <a href="Hooks.html#Hooks">Hooks</a>.  If you use this
+feature, you must use <code>define-mail-abbrev</code> instead of
+<code>define-mail-alias</code>; the latter does not work with this package. 
+Note that the mail abbreviation package uses the variable
+<code>mail-abbrevs</code> instead of <code>mail-aliases</code>, and that all alias
+names are converted to lower case.
+
+   <p>The mail abbreviation package also provides the <kbd>C-c C-a</kbd>
+(<code>mail-interactive-insert-alias</code>) command, which reads an alias
+name (with completion) and inserts its definition at point.  This is
+useful when editing the message text itself or a header field such as
+<code>Subject</code> in which Emacs does not normally expand aliases.
+
+   <p>Note that abbrevs expand only if you insert a word-separator character
+afterward.  However, you can rebind <kbd>C-n</kbd> and <kbd>M-&gt;</kbd> to cause
+expansion as well.  Here's how to do that:
+
+<pre class="smallexample">     (add-hook 'mail-mode-hook
+               (lambda ()
+                 (substitute-key-definition
+                   'next-line 'mail-abbrev-next-line
+                   mail-mode-map global-map)
+                 (substitute-key-definition
+                   'end-of-buffer 'mail-abbrev-end-of-buffer
+                   mail-mode-map global-map)))
+     </pre>
+
+   </body></html>
+

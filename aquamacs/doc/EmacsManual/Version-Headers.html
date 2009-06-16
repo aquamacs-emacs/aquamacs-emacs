@@ -1,0 +1,109 @@
+<html lang="en">
+<head>
+<title>Inserting Version Control Headers</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Inserting Version Control Headers">
+<meta name="generator" content="makeinfo 4.6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+--></style>
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<p>
+Node:&nbsp;<a name="Version%20Headers">Version Headers</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Renaming-and-VC.html#Renaming%20and%20VC">Renaming and VC</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Miscellaneous-VC.html#Miscellaneous%20VC">Miscellaneous VC</a>
+<hr><br>
+</div>
+
+<h3 class="subsubsection">Inserting Version Control Headers</h5>
+
+<p>Sometimes it is convenient to put version identification strings
+directly into working files.  Certain special strings called
+<dfn>version headers</dfn> are replaced in each successive version by the
+number of that version.
+
+   <p>If you are using RCS, and version headers are present in your working
+files, Emacs can use them to determine the current version and the
+locking state of the files.  This is more reliable than referring to the
+master files, which is done when there are no version headers.  Note
+that in a multi-branch environment, version headers are necessary to
+make VC behave correctly (see <a href="Multi-User-Branching.html#Multi-User%20Branching">Multi-User Branching</a>).
+
+   <p>Searching for version headers is controlled by the variable
+<code>vc-consult-headers</code>.  If it is non-<code>nil</code> (the default),
+Emacs searches for headers to determine the version number you are
+editing.  Setting it to <code>nil</code> disables this feature.
+
+   <p>You can use the <kbd>C-x v h</kbd> command (<code>vc-insert-headers</code>) to
+insert a suitable header string.
+
+     <dl>
+<dt><kbd>C-x v h</kbd>
+     <dd>Insert headers in a file for use with your version-control system. 
+</dl>
+
+   <p>The default header string is <code>$Id: Version-Headers.html,v 1.1 2005/06/26 12:58:50 davidswelt Exp $</code> for RCS and
+<code>%W%</code> for SCCS.  You can specify other headers to insert by
+setting the variable <code>vc-header-alist</code>.  Its value is a list of
+elements of the form <code>(</code><var>program</var><code> . </code><var>string</var><code>)</code> where
+<var>program</var> is <code>RCS</code> or <code>SCCS</code> and <var>string</var> is the
+string to use.
+
+   <p>Instead of a single string, you can specify a list of strings; then
+each string in the list is inserted as a separate header on a line of
+its own.
+
+   <p>It is often necessary to use "superfluous" backslashes when
+writing the strings that you put in this variable.  For instance, you
+might write <code>"$Id\$"</code> rather than <code>"$Id: Version-Headers.html,v 1.1 2005/06/26 12:58:50 davidswelt Exp $"</code>.  The extra
+backslash prevents the string constant from being interpreted as a
+header, if the Emacs Lisp file containing it is maintained with
+version control.
+
+   <p>Each header is inserted surrounded by tabs, inside comment delimiters,
+on a new line at point.  Normally the ordinary comment
+start and comment end strings of the current mode are used, but for
+certain modes, there are special comment delimiters for this purpose;
+the variable <code>vc-comment-alist</code> specifies them.  Each element of
+this list has the form <code>(</code><var>mode</var><code> </code><var>starter</var><code> </code><var>ender</var><code>)</code>.
+
+   <p>The variable <code>vc-static-header-alist</code> specifies further strings
+to add based on the name of the buffer.  Its value should be a list of
+elements of the form <code>(</code><var>regexp</var><code> . </code><var>format</var><code>)</code>.  Whenever
+<var>regexp</var> matches the buffer name, <var>format</var> is inserted as part
+of the header.  A header line is inserted for each element that matches
+the buffer name, and for each string specified by
+<code>vc-header-alist</code>.  The header line is made by processing the
+string from <code>vc-header-alist</code> with the format taken from the
+element.  The default value for <code>vc-static-header-alist</code> is as follows:
+
+<pre class="example">     (("\\.c$" .
+       "\n#ifndef lint\nstatic char vcid[] = \"\%s\";\n\
+     #endif /* lint */\n"))
+     </pre>
+
+<p>It specifies insertion of text of this form:
+
+<pre class="example">     
+     #ifndef lint
+     static char vcid[] = "<var>string</var>";
+     #endif /* lint */
+     </pre>
+
+<p>Note that the text above starts with a blank line.
+
+   <p>If you use more than one version header in a file, put them close
+together in the file.  The mechanism in <code>revert-buffer</code> that
+preserves markers may not handle markers positioned between two version
+headers.
+
+   </body></html>
+
