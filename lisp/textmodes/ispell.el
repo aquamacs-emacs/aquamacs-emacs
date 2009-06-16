@@ -288,8 +288,15 @@ and Return:
      ((> offset -1)
       (list word offset (ns-spellchecker-get-suggestions word) nil)))))
 
-(defun ispell-ns-spellcheck-string (string)
+(defun ispell-ns-spellcheck-string (string) 
+  "NSSpellChecker replacement for ispell-parse-output.  Spellcheck STRING
+and return a list of lists (one for each misspelled word) of the format:
+   (\"ORIGINAL-WORD\" OFFSET MISS-LIST nil)
+   ORIGINAL-WORD is a string of the possibly misspelled word.
+   OFFSET is an integer giving the line offset of the word.
+   MISS-LIST is a possibly null list of guesses."
   (let ((strlen (length string))
+	(prev-offset 0)
 	ns-spellcheck-output
 	offset
 	length
@@ -303,24 +310,16 @@ and Return:
 		       nil
 		     ;; misspelled word found; get word;
 		     ;;  set string to not-yet-checked portion;
-		     ;;  add (mispelled-word . (offset . length) to head of
-		     ;;  return-list
+		     ;;  add details of misspelling to head of return-list
 		     (setq word (substring string offset (+ offset length))
 			   string (substring string (+ offset length))
-			   return-list (cons (cons word ns-spellcheck-output)
-					     return-list)))))
-    return-list))		     
-
-(defun ns-spellchecker-parse-string (string)
-  "NSSpellChecker replacement for ispell-parse-output.  Spellcheck STRING
-and return:
-1: t for no misspellings.
-2: For the first misspelled word, a list of possible correct spellings
-of the format:
-   (\"ORIGINAL-WORD\" OFFSET MISS-LIST)
-   ORIGINAL-WORD is a string of the possibly misspelled word.
-   OFFSET is an integer giving the line offset of the word.
-   MISS-LIST is a possibly null list of guesses."
+			   prev-offset (+ prev-offset offset length)) 
+		     (add-to-list 'return-list
+				  (list word (+ prev-offset offset)
+					(ns-spellchecker-get-suggestions word)
+					nil))
+		     )))
+    return-list))
 
 ;;; **********************************************************************
 ;;; settings to use cocoAspell preferences (from Spelling prefpane)
