@@ -288,6 +288,40 @@ and Return:
      ((> offset -1)
       (list word offset (ns-spellchecker-get-suggestions word) nil)))))
 
+(defun ispell-ns-spellcheck-string (string)
+  (let ((strlen (length string))
+	ns-spellcheck-output
+	offset
+	length
+	return-list)
+    (while (progn
+	     (setq ns-spellcheck-output (ns-spellchecker-check-spelling string)
+		   offset (car ns-spellcheck-output)
+		   length (cdr ns-spellcheck-output))
+		   (if (< offset 0)
+		       ;; no misspelled words -- terminate while loop
+		       nil
+		     ;; misspelled word found; get word;
+		     ;;  set string to not-yet-checked portion;
+		     ;;  add (mispelled-word . (offset . length) to head of
+		     ;;  return-list
+		     (setq word (substring string offset (+ offset length))
+			   string (substring string (+ offset length))
+			   return-list (cons (cons word ns-spellcheck-output)
+					     return-list)))))
+    return-list))		     
+
+(defun ns-spellchecker-parse-string (string)
+  "NSSpellChecker replacement for ispell-parse-output.  Spellcheck STRING
+and return:
+1: t for no misspellings.
+2: For the first misspelled word, a list of possible correct spellings
+of the format:
+   (\"ORIGINAL-WORD\" OFFSET MISS-LIST)
+   ORIGINAL-WORD is a string of the possibly misspelled word.
+   OFFSET is an integer giving the line offset of the word.
+   MISS-LIST is a possibly null list of guesses."
+
 ;;; **********************************************************************
 ;;; settings to use cocoAspell preferences (from Spelling prefpane)
 ;;; or cocoAspell-installed aspell dictionaries
