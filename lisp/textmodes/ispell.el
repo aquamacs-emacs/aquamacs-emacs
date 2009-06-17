@@ -312,12 +312,12 @@ and return a list of lists (one for each misspelled word) of the format:
 		     ;;  set string to not-yet-checked portion;
 		     ;;  add details of misspelling to head of return-list
 		     (setq word (substring string offset (+ offset length))
-			   string (substring string (+ offset length))
-			   prev-offset (+ prev-offset offset length)) 
+			   string (substring string (+ offset length))) 
 		     (add-to-list 'return-list
 				  (list word (+ prev-offset offset)
 					(ns-spellchecker-get-suggestions word)
 					nil))
+		     (setq prev-offset (+ prev-offset offset length))
 		     )))
     return-list))
 
@@ -3497,18 +3497,26 @@ Returns the sum SHIFT due to changes in word replacements."
     (if (not (numberp shift))
 	(setq shift 0))
     ;; send string to spell process and get input.
-    (ispell-send-string string)
-    (while (progn
-	     (ispell-accept-output)
-	     ;; Last item of output contains a blank line.
-	     (not (string= "" (car ispell-filter)))))
+    (if ispell-use-ns-spellchecker-p
+	(setq ispell-filter (nreverse (ispell-ns-spellcheck-string string)))
+      (ispell-send-string string)
+      (while (progn
+	       (ispell-accept-output)
+	       ;; Last item of output contains a blank line.
+	       (not (string= "" (car ispell-filter)))))
     ;; parse all inputs from the stream one word at a time.
     ;; Place in FIFO order and remove the blank item.
-    (setq ispell-filter (nreverse (cdr ispell-filter)))
+      (setq ispell-filter (nreverse (cdr ispell-filter))))
     (while (and (not ispell-quit) ispell-filter)
       ;; get next word, accounting for accepted words and start shifts
-      (setq poss (ispell-parse-output (car ispell-filter)
-				      accept-list shift))
+      (setq poss (if ispell-use-ns-spellchecker-p
+		     ;; add shift to offset from ispell-ns-spellcheck-string
+		     (progn
+		       (setcar (cdr (car ispell-filter))
+			       (+ shift (cadr (car ispell-filter))))
+		       (car ispell-filter))
+		   (ispell-parse-output (car ispell-filter)
+					accept-list shift)))
       (if (and poss (listp poss))	; spelling error occurred.
 	  ;; Whenever we have misspellings, we can change
 	  ;; the buffer.  Keep boundaries as markers.
