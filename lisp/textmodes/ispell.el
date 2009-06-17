@@ -256,10 +256,10 @@ compatibility function in case `version<=' is not available."
 ;; settings to control the use of NSSpellChecker as the spellchecking
 ;; engine, instead of ispell/aspell/hunspell 
 
-(defcustom ispell-use-ns-spellchecker-p t
-  "When non-nil, use NSSpellChecker instead of ispell/aspell for spell checking."
-  :type 'boolean
-  :group 'ispell) 
+;; (defcustom ispell-use-ns-spellchecker-p t
+;;   "When non-nil, use NSSpellChecker instead of ispell/aspell for spell checking."
+;;   :type 'boolean
+;;   :group 'ispell) 
 
 (defcustom ns-spellchecker-chunk-size 100000
   "approximate size in characters of the chunks of text to be
@@ -435,12 +435,13 @@ file names.")
 
 ;; does aspell have a list of dictionaries already?
 (defvar aspell-knows-no-dicts
+  (if (string= ispell-program-name "aspell")
   (condition-case nil
       (with-temp-buffer
       ;; is there a stored cocoaSpell configuration?
       (call-process ispell-program-name nil t nil "dicts")
       (eq (point-min) (point-max)))
-    (error nil))
+    (error nil)))
   "Records whether or not aspell's default configuration can
 locate any dictionaries.")
 
@@ -691,10 +692,11 @@ Must be greater than 1."
   :group 'ispell)
 
 (defcustom ispell-program-name
+  "NSSpellChecker"
 ;; don't assume that ispell is installed, if we don't find aspell/hunspell!
-  (or (locate-file "aspell"   exec-path exec-suffixes 'file-executable-p)
-      (locate-file "ispell"   exec-path exec-suffixes 'file-executable-p)
-      (locate-file "hunspell" exec-path exec-suffixes 'file-executable-p))
+  ;; (or (locate-file "aspell"   exec-path exec-suffixes 'file-executable-p)
+  ;;     (locate-file "ispell"   exec-path exec-suffixes 'file-executable-p)
+  ;;     (locate-file "hunspell" exec-path exec-suffixes 'file-executable-p))
       ;; "ispell")
   "Program invoked by \\[ispell-word] and \\[ispell-region] commands."
   :type 'string
@@ -1123,89 +1125,97 @@ Otherwise returns the library directory name, if that is defined."
   ;; all versions, since versions earlier than 3.0.09 didn't identify
   ;; themselves on startup.
   (interactive "p")
-  (let (;; avoid bugs when syntax of `.' changes in various default modes
-	(default-major-mode 'fundamental-mode)
-	(default-directory (or (and (boundp 'temporary-file-directory)
-				    temporary-file-directory)
-			       default-directory))
-	result status ispell-program-version)
-
-    (with-temp-buffer
-      (setq status (ispell-call-process
-		    ispell-program-name nil t nil
-		    ;; aspell doesn't accept the -vv switch.
-		    (let ((case-fold-search
-			   (memq system-type '(ms-dos windows-nt)))
-			  (speller
-			   (file-name-nondirectory ispell-program-name)))
-		      ;; Assume anything that isn't `aspell' is Ispell.
-		      (if (string-match "\\`aspell" speller) "-v" "-vv"))))
-      (goto-char (point-min))
-      (if interactivep
-	  ;; report version information of ispell and ispell.el
-	  (progn
-	    (end-of-line)
-	    (setq result (concat (buffer-substring-no-properties (point-min)
-								 (point))
-				 ", "
-				 ispell-version))
-	    (message "%s" result))
-	;; return library directory.
-	(if (re-search-forward "LIBDIR = \\\"\\([^ \t\n]*\\)\\\"" nil t)
-	    (setq result (buffer-substring (match-beginning 1) (match-end 1)))))
-      (goto-char (point-min))
-      (if (not (memq status '(0 nil)))
-	  (error "%s exited with %s %s" ispell-program-name
-		 (if (stringp status) "signal" "code") status))
-
-      ;; Get relevant version strings. Only xx.yy.... format works well
-      (let (case-fold-search)
-	(setq ispell-program-version
-	      (and (search-forward-regexp "\\([0-9]+\\.[0-9\\.]+\\)" nil t)
-		   (match-string 1)))
-
+  (if (string= ispell-program-name "NSSpellChecker")
+      (progn
 	;; Make sure these variables are (re-)initialized to the default value
 	(setq ispell-really-aspell nil
 	      ispell-aspell-supports-utf8 nil
 	      ispell-really-hunspell nil
 	      ispell-encoding8-command nil)
-
+	t)
+    (let (;; avoid bugs when syntax of `.' changes in various default modes
+	  (default-major-mode 'fundamental-mode)
+	  (default-directory (or (and (boundp 'temporary-file-directory)
+				      temporary-file-directory)
+				 default-directory))
+	  result status ispell-program-version)
+      
+      (with-temp-buffer
+	(setq status (ispell-call-process
+		      ispell-program-name nil t nil
+		      ;; aspell doesn't accept the -vv switch.
+		      (let ((case-fold-search
+			     (memq system-type '(ms-dos windows-nt)))
+			    (speller
+			     (file-name-nondirectory ispell-program-name)))
+			;; Assume anything that isn't `aspell' is Ispell.
+			(if (string-match "\\`aspell" speller) "-v" "-vv"))))
 	(goto-char (point-min))
-	(or (setq ispell-really-aspell
-		  (and (search-forward-regexp
-			"(but really Aspell \\([0-9]+\\.[0-9\\.]+\\)?)" nil t)
-		       (match-string 1)))
-	    (setq ispell-really-hunspell
-		  (and (search-forward-regexp
-			"(but really Hunspell \\([0-9]+\\.[0-9\\.]+\\)?)" nil t)
-		       (match-string 1)))))
-
-      (let ((aspell-minver    "0.50")
-	    (aspell8-minver   "0.60")
-	    (ispell0-minver   "3.1.0")
-	    (ispell-minver    "3.1.12")
-	    (hunspell8-minver "1.1.6"))
-
-	(if (ispell-check-minver ispell0-minver ispell-program-version)
-	    (or (ispell-check-minver ispell-minver ispell-program-version)
-		(setq ispell-offset 0))
-	  (error "%s release %s or greater is required"
-		 ispell-program-name
-		 ispell-minver))
-
-	(cond
-	 (ispell-really-aspell
-	  (if (ispell-check-minver aspell-minver ispell-really-aspell)
-	      (if (ispell-check-minver aspell8-minver ispell-really-aspell)
-		  (progn
-		    (setq ispell-aspell-supports-utf8 t)
-		    (setq ispell-encoding8-command "--encoding=")))
-	    (setq ispell-really-aspell nil)))
-	 (ispell-really-hunspell
-	  (if (ispell-check-minver hunspell8-minver ispell-really-hunspell)
-	      (setq ispell-encoding8-command "-i ")
-	    (setq ispell-really-hunspell nil))))))
-    result))
+	(if interactivep
+	    ;; report version information of ispell and ispell.el
+	    (progn
+	      (end-of-line)
+	      (setq result (concat (buffer-substring-no-properties (point-min)
+								   (point))
+				   ", "
+				   ispell-version))
+	      (message "%s" result))
+	  ;; return library directory.
+	  (if (re-search-forward "LIBDIR = \\\"\\([^ \t\n]*\\)\\\"" nil t)
+	      (setq result (buffer-substring (match-beginning 1) (match-end 1)))))
+	(goto-char (point-min))
+	(if (not (memq status '(0 nil)))
+	    (error "%s exited with %s %s" ispell-program-name
+		   (if (stringp status) "signal" "code") status))
+	
+	;; Get relevant version strings. Only xx.yy.... format works well
+	(let (case-fold-search)
+	  (setq ispell-program-version
+		(and (search-forward-regexp "\\([0-9]+\\.[0-9\\.]+\\)" nil t)
+		     (match-string 1)))
+	  
+	  ;; Make sure these variables are (re-)initialized to the default value
+	  (setq ispell-really-aspell nil
+		ispell-aspell-supports-utf8 nil
+		ispell-really-hunspell nil
+		ispell-encoding8-command nil)
+	  
+	  (goto-char (point-min))
+	  (or (setq ispell-really-aspell
+		    (and (search-forward-regexp
+			  "(but really Aspell \\([0-9]+\\.[0-9\\.]+\\)?)" nil t)
+			 (match-string 1)))
+	      (setq ispell-really-hunspell
+		    (and (search-forward-regexp
+			  "(but really Hunspell \\([0-9]+\\.[0-9\\.]+\\)?)" nil t)
+			 (match-string 1)))))
+	
+	(let ((aspell-minver    "0.50")
+	      (aspell8-minver   "0.60")
+	      (ispell0-minver   "3.1.0")
+	      (ispell-minver    "3.1.12")
+	      (hunspell8-minver "1.1.6"))
+	  
+	  (if (ispell-check-minver ispell0-minver ispell-program-version)
+	      (or (ispell-check-minver ispell-minver ispell-program-version)
+		  (setq ispell-offset 0))
+	    (error "%s release %s or greater is required"
+		   ispell-program-name
+		   ispell-minver))
+	  
+	  (cond
+	   (ispell-really-aspell
+	    (if (ispell-check-minver aspell-minver ispell-really-aspell)
+		(if (ispell-check-minver aspell8-minver ispell-really-aspell)
+		    (progn
+		      (setq ispell-aspell-supports-utf8 t)
+		      (setq ispell-encoding8-command "--encoding=")))
+	      (setq ispell-really-aspell nil)))
+	   (ispell-really-hunspell
+	    (if (ispell-check-minver hunspell8-minver ispell-really-hunspell)
+		(setq ispell-encoding8-command "-i ")
+	      (setq ispell-really-hunspell nil))))))
+      result)))
 
 (defun ispell-call-process (&rest args)
   "Like `call-process' but defend against bad `default-directory'."
@@ -2053,7 +2063,7 @@ quit          spell session exited."
    (t
     (ispell-set-spellchecker-params)    ; Initialize variables and dicts alists
     ;; use the correct dictionary
-    (unless ispell-use-ns-spellchecker-p (ispell-accept-buffer-local-defs))
+    (unless (string= ispell-program-name "NSSpellChecker") (ispell-accept-buffer-local-defs))
     (let ((cursor-location (point))	; retain cursor location
 	  (word (ispell-get-word following))
 	  start end poss new-word replace)
@@ -2067,7 +2077,7 @@ quit          spell session exited."
       (or quietly
 	  (message "Checking spelling of %s..."
 		   (funcall ispell-format-word-function word)))
-      (if ispell-use-ns-spellchecker-p
+      (if (string= ispell-program-name "NSSpellChecker")
 		(setq poss (ns-spellchecker-parse-output word))
 	(ispell-send-string "%\n")	; put in verbose mode
 	(ispell-send-string (concat "^" word "\n"))
@@ -3006,64 +3016,66 @@ Keeps argument list for future ispell invocations for no async support."
 
 
 
-(defun ispell-init-process ()
+(defun ispell-init-process () 
   "Check status of Ispell process and start if necessary."
-  (if (and ispell-process
-	   (eq (ispell-process-status) 'run)
-	   ;; If we're using a personal dictionary, ensure
-	   ;; we're in the same default directory!
-	   (or (not ispell-personal-dictionary)
-	       (equal ispell-process-directory default-directory)))
-      (setq ispell-filter nil ispell-filter-continue nil)
-    ;; may need to restart to select new personal dictionary.
-    (ispell-kill-ispell t)
-    (message "Starting new Ispell process [%s] ..."
-	     (or ispell-local-dictionary ispell-dictionary "default"))
-    (sit-for 0)
-    (setq ispell-library-directory (ispell-check-version)
-	  ispell-process-directory default-directory
-	  ispell-process (ispell-start-process)
-	  ispell-filter nil
-	  ispell-filter-continue nil)
-    (if ispell-async-processp
-	(set-process-filter ispell-process 'ispell-filter))
-    ;; protect against bogus binding of `enable-multibyte-characters' in XEmacs
-    (if (and (or (featurep 'xemacs)
-		 (and (boundp 'enable-multibyte-characters)
-		      enable-multibyte-characters))
-	     (fboundp 'set-process-coding-system))
-	(set-process-coding-system ispell-process (ispell-get-coding-system)
-				   (ispell-get-coding-system)))
-    ;; Get version ID line
-    (ispell-accept-output 3)
-    ;; get more output if filter empty?
-    (if (null ispell-filter) (ispell-accept-output 3))
-    (cond ((null ispell-filter)
-	   (error "%s did not output version line" ispell-program-name))
-	  ((and
-	    (stringp (car ispell-filter))
-	    (if (string-match "warning: " (car ispell-filter))
-		(progn
-		  (ispell-accept-output 3) ; was warn msg.
-		  (stringp (car ispell-filter)))
-	      (null (cdr ispell-filter)))
-	    (string-match "^@(#) " (car ispell-filter)))
-	   ;; got the version line as expected (we already know it's the right
-	   ;; version, so don't bother checking again.)
-	   nil)
-	  (t
-	   ;; Otherwise, it must be an error message.  Show the user.
-	   ;; But first wait to see if some more output is going to arrive.
-	   ;; Otherwise we get cool errors like "Can't open ".
-	   (sleep-for 1)
-	   (ispell-accept-output 3)
-	   (error "%s" (mapconcat 'identity ispell-filter "\n"))))
-    (setq ispell-filter nil)		; Discard version ID line
-    (let ((extended-char-mode (ispell-get-extended-character-mode)))
-      (if extended-char-mode		; ~ extended character mode
-	  (ispell-send-string (concat extended-char-mode "\n"))))
-    (if ispell-async-processp
-	(set-process-query-on-exit-flag ispell-process nil))))
+  (if (string= ispell-program-name "NSSpellChecker")
+      t
+    (if (and ispell-process
+	     (eq (ispell-process-status) 'run)
+	     ;; If we're using a personal dictionary, ensure
+	     ;; we're in the same default directory!
+	     (or (not ispell-personal-dictionary)
+		 (equal ispell-process-directory default-directory)))
+	(setq ispell-filter nil ispell-filter-continue nil)
+      ;; may need to restart to select new personal dictionary.
+      (ispell-kill-ispell t)
+      (message "Starting new Ispell process [%s] ..."
+	       (or ispell-local-dictionary ispell-dictionary "default"))
+      (sit-for 0)
+      (setq ispell-library-directory (ispell-check-version)
+	    ispell-process-directory default-directory
+	    ispell-process (ispell-start-process)
+	    ispell-filter nil
+	    ispell-filter-continue nil)
+      (if ispell-async-processp
+	  (set-process-filter ispell-process 'ispell-filter))
+      ;; protect against bogus binding of `enable-multibyte-characters' in XEmacs
+      (if (and (or (featurep 'xemacs)
+		   (and (boundp 'enable-multibyte-characters)
+			enable-multibyte-characters))
+	       (fboundp 'set-process-coding-system))
+	  (set-process-coding-system ispell-process (ispell-get-coding-system)
+				     (ispell-get-coding-system)))
+      ;; Get version ID line
+      (ispell-accept-output 3)
+      ;; get more output if filter empty?
+      (if (null ispell-filter) (ispell-accept-output 3))
+      (cond ((null ispell-filter)
+	     (error "%s did not output version line" ispell-program-name))
+	    ((and
+	      (stringp (car ispell-filter))
+	      (if (string-match "warning: " (car ispell-filter))
+		  (progn
+		    (ispell-accept-output 3) ; was warn msg.
+		    (stringp (car ispell-filter)))
+		(null (cdr ispell-filter)))
+	      (string-match "^@(#) " (car ispell-filter)))
+	     ;; got the version line as expected (we already know it's the right
+	     ;; version, so don't bother checking again.)
+	     nil)
+	    (t
+	     ;; Otherwise, it must be an error message.  Show the user.
+	     ;; But first wait to see if some more output is going to arrive.
+	     ;; Otherwise we get cool errors like "Can't open ".
+	     (sleep-for 1)
+	     (ispell-accept-output 3)
+	     (error "%s" (mapconcat 'identity ispell-filter "\n"))))
+      (setq ispell-filter nil)		; Discard version ID line
+      (let ((extended-char-mode (ispell-get-extended-character-mode)))
+	(if extended-char-mode		; ~ extended character mode
+	    (ispell-send-string (concat extended-char-mode "\n"))))
+      (if ispell-async-processp
+	  (set-process-query-on-exit-flag ispell-process nil)))))
 
 ;;;###autoload
 (defun ispell-kill-ispell (&optional no-error)
@@ -3497,7 +3509,7 @@ Returns the sum SHIFT due to changes in word replacements."
     (if (not (numberp shift))
 	(setq shift 0))
     ;; send string to spell process and get input.
-    (if ispell-use-ns-spellchecker-p
+    (if (string= ispell-program-name "NSSpellChecker")
 	(setq ispell-filter (nreverse (ispell-ns-spellcheck-string string)))
       (ispell-send-string string)
       (while (progn
@@ -3509,7 +3521,7 @@ Returns the sum SHIFT due to changes in word replacements."
       (setq ispell-filter (nreverse (cdr ispell-filter))))
     (while (and (not ispell-quit) ispell-filter)
       ;; get next word, accounting for accepted words and start shifts
-      (setq poss (if ispell-use-ns-spellchecker-p
+      (setq poss (if (string= ispell-program-name "NSSpellChecker")
 		     ;; add shift to offset from ispell-ns-spellcheck-string
 		     (progn
 		       (setcar (cdr (car ispell-filter))
