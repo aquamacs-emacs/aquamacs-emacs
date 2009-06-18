@@ -7,15 +7,13 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.89 2009/03/12 18:35:58 davidswelt Exp $
-
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
 
 
 ;; Aquamacs Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
+;; the Free Software Foundation; either version 3, or (at your option)
 ;; any later version.
 
 ;; Aquamacs Emacs is distributed in the hope that it will be useful,
@@ -28,7 +26,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, 2006, 2007, David Reitter
+;; Copyright (C) 2005, 2006, 2007, 2008, 2009 David Reitter
 
 ;; The following  function needs to be loaded at runtime. 
 
@@ -96,7 +94,7 @@
     (setq filename (ns-read-file-name
 		    "Select File to Save Buffer" 
 		    default-directory nil 
-		    (file-name-nondirectory buffer-file-name))))
+		    (if buffer-file-name (file-name-nondirectory buffer-file-name) ""))))
   (if filename (write-file filename)))
 
 
