@@ -124,27 +124,9 @@
   ;; might inadvertently click that button.
   ;;(tool-bar-add-item-from-menu 'save-buffers-kill-emacs "exit")
   (setq tool-bar-map (make-sparse-keymap))
- 
-  (face-spec-set 'tooltip '((t (:inherit variable-pitch 
-				:background "lightyellow" 
-				:foreground "black" 
-				:height 100 
-				:family "lucida sans"))) 
-		 ;; can be overwritten by user customization
-		 (if (> emacs-major-version 22) t))
-
-  (aquamacs-set-defaults '((auto-resize-tool-bar nil)))
-
-  ;; no need with native toolbar
-  ;; (let ((face 'tool-bar)
-  ;; 	;; e2e2e2 is eaeaea in imagemagick for some reason
-  ;; 	(spec '((t (:background "#eaeaea" :foreground "black" 
-  ;; 				:box (:line-width 1 :style released-button))))))
-  ;;   (face-spec-set face spec nil)
-  ;;   (put face 'face-defface-spec spec))
-  ;; will be overwritten by color themes
 
   (tool-bar-add-item-from-menu 'new-empty-buffer-other-frame '("new" . "New"))
+
   (tool-bar-add-item-from-menu 'mac-key-open-file '("open" . "Open"))
 
   (tool-bar-add-item '("history" . "Recent") (lambda ()
@@ -162,18 +144,18 @@
  
   (tool-bar-add-item-from-menu 'revert-buffer '("update" . "Revert") nil)
   
-  (tool-bar-add-item-from-menu 'save-buffer '("save" . "Save") nil
+  (tool-bar-add-item '("save" . "Save") 'mac-key-save-file 'save-file
 			       :visible '(and buffer-file-name
 					     (not (eq 'special
 						      (get major-mode
 							   'mode-class)))))
+  (tool-bar-add-item '("saveas" . "Save") 'mac-key-save-file-as 'save-file-as
+		     :visible '(and (not buffer-file-name)
+				    (not (eq 'special
+					     (get major-mode
+						  'mode-class)))))
   ;; Save and Save As are both called "Save" in order to keep the width the same:
   ;; these icons just get swap as soon as there is a buffer-file-name.
-  (tool-bar-add-item-from-menu 'write-file '("saveas" . "Save") nil  
-			       :visible '(and (not buffer-file-name)
-					     (not (eq 'special
-						      (get major-mode
-  							   'mode-class)))))
 
   (tool-bar-add-item-from-menu 'aquamacs-print '("print" . "Print"))
 
@@ -205,8 +187,6 @@
   ;; There's no icon appropriate for News and we need a command rather
   ;; than a lambda for Read Mail.
   ;;(tool-bar-add-item-from-menu 'compose-mail "mail/compose")
-
-
 
   (tool-bar-add-item '("space2" . "--") nil 'space-2 :enable nil)
   
