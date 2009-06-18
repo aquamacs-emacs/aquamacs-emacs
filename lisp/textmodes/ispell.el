@@ -300,6 +300,7 @@ and return a list of lists (one for each misspelled word) of the format:
 	ns-spellcheck-output
 	offset
 	length
+	word
 	return-list)
     (while (progn
 	     (setq ns-spellcheck-output (ns-spellchecker-check-spelling string)
@@ -692,12 +693,12 @@ Must be greater than 1."
   :group 'ispell)
 
 (defcustom ispell-program-name
-  "NSSpellChecker"
 ;; don't assume that ispell is installed, if we don't find aspell/hunspell!
-  ;; (or (locate-file "aspell"   exec-path exec-suffixes 'file-executable-p)
-  ;;     (locate-file "ispell"   exec-path exec-suffixes 'file-executable-p)
-  ;;     (locate-file "hunspell" exec-path exec-suffixes 'file-executable-p))
-      ;; "ispell")
+  (or "NSSpellChecker"
+      (locate-file "aspell"   exec-path exec-suffixes 'file-executable-p)
+      (locate-file "ispell"   exec-path exec-suffixes 'file-executable-p)
+      (locate-file "hunspell" exec-path exec-suffixes 'file-executable-p)
+      "ispell")
   "Program invoked by \\[ispell-word] and \\[ispell-region] commands."
   :type 'string
   :group 'ispell)
@@ -1697,11 +1698,17 @@ Protects against bogus binding of `enable-multibyte-characters' in XEmacs."
     str))
 
 (defun ispell-get-casechars ()
-  (ispell-get-decoded-string 1))
-(defun ispell-get-not-casechars ()
-  (ispell-get-decoded-string 2))
-(defun ispell-get-otherchars ()
-  (ispell-get-decoded-string 3))
+  (if (string= ispell-program-name "NSSpellChecker")
+      "[[:alpha:]]"
+    (ispell-get-decoded-string 1)))
+(defun ispell-get-not-casechars () 
+  (if (string= ispell-program-name "NSSpellChecker")
+      "[^[:alpha:]]"
+    (ispell-get-decoded-string 2)))
+(defun ispell-get-otherchars () 
+  (if (string= ispell-program-name "NSSpellChecker")
+      "[']"
+    (ispell-get-decoded-string 3)))
 (defun ispell-get-many-otherchars-p ()
   (nth 4 (or (assoc ispell-current-dictionary ispell-local-dictionary-alist)
 	     (assoc ispell-current-dictionary ispell-dictionary-alist))))
@@ -2063,7 +2070,8 @@ quit          spell session exited."
    (t
     (ispell-set-spellchecker-params)    ; Initialize variables and dicts alists
     ;; use the correct dictionary
-    (unless (string= ispell-program-name "NSSpellChecker") (ispell-accept-buffer-local-defs))
+    (unless (string= ispell-program-name "NSSpellChecker")
+      (ispell-accept-buffer-local-defs))
     (let ((cursor-location (point))	; retain cursor location
 	  (word (ispell-get-word following))
 	  start end poss new-word replace)
@@ -2954,9 +2962,11 @@ Optional third arg SHIFT is an offset to apply based on previous corrections."
 (defun ispell-process-status ()
   "Return the status of the Ispell process.
 When asynchronous processes are not supported, `run' is always returned."
-  (if ispell-async-processp
-      (process-status ispell-process)
-    (and ispell-process 'run)))
+  (if (string= ispell-program-name "NSSpellChecker")
+      'run
+    (if ispell-async-processp
+	(process-status ispell-process)
+      (and ispell-process 'run))))
 
 
 (defun ispell-start-process ()
@@ -3172,7 +3182,9 @@ Return nil if spell session is quit,
  otherwise returns shift offset amount for last line processed."
   (interactive "r")			; Don't flag errors on read-only bufs.
   (ispell-set-spellchecker-params)      ; Initialize variables and dicts alists
-  (if (not recheckp)
+  (if (and
+       (not (string= ispell-program-name "NSSpellChecker"))
+       (not recheckp))
       (ispell-accept-buffer-local-defs)) ; set up dictionary, local words, etc.
   (let ((skip-region-start (make-marker))
 	(rstart (make-marker)))

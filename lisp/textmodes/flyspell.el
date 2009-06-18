@@ -1133,7 +1133,8 @@ Mostly we check word delimiters."
   (ispell-set-spellchecker-params)    ; Initialize variables and dicts alists
   (save-excursion
     ;; use the correct dictionary
-    (unless (string= ispell-program-name "NSSpellChecker") (flyspell-accept-buffer-local-defs))
+    (unless (string= ispell-program-name "NSSpellChecker") 
+      (flyspell-accept-buffer-local-defs))
     (let* ((cursor-location (point))
            (flyspell-word (flyspell-get-word following))
            start end poss word ispell-filter)
