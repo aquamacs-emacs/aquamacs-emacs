@@ -327,7 +327,7 @@ If `flyspell-large-region' is nil, all regions are treated as small."
 	      (setq spellcheck-position
 		    (+ misspelled-location misspelled-length)) 
 	      ;; use flyspell-word to filter and mark misspellings
-	      (goto-char misspelled-location)
+	      (goto-char spellcheck-position)
 	      (flyspell-word)) 
 	  ;; no misspellings found; we've reached the end of chunk
 	  (setq spellcheck-position end))
