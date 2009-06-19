@@ -2399,8 +2399,8 @@ Global `ispell-quit' set to start location to continue spell session."
 		      (ispell-send-string (concat "@" word "\n"))
 		      (if (null ispell-pdict-modified-p)
 			  (setq ispell-pdict-modified-p
-				(list ispell-pdict-modified-p)))
-		      (if (= char ?A) 0))) ; return 0 for ispell-add buffer-local
+				(list ispell-pdict-modified-p))))
+		    (if (= char ?A) 0)) ; return 0 for ispell-add buffer-local
 		   ((or (= char ?r) (= char ?R)) ; type in replacement
 		    (and (eq 'block ispell-highlight-p) ; refresh tty's
 			 (ispell-highlight-spelling-error start end nil t))
