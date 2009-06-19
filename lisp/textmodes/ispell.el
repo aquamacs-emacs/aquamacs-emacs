@@ -303,23 +303,24 @@ and return a list of lists (one for each misspelled word) of the format:
 	word
 	return-list)
     (while (progn
-	     (setq ns-spellcheck-output (ns-spellchecker-check-spelling string)
+	     (setq ns-spellcheck-output
+		   (ns-spellchecker-check-spelling string (current-buffer))
 		   offset (car ns-spellcheck-output)
 		   length (cdr ns-spellcheck-output))
-		   (if (< offset 0)
-		       ;; no misspelled words -- terminate while loop
-		       nil
-		     ;; misspelled word found; get word;
-		     ;;  set string to not-yet-checked portion;
-		     ;;  add details of misspelling to head of return-list
-		     (setq word (substring string offset (+ offset length))
-			   string (substring string (+ offset length))) 
-		     (add-to-list 'return-list
-				  (list word (+ prev-offset offset)
-					(ns-spellchecker-get-suggestions word)
-					nil))
-		     (setq prev-offset (+ prev-offset offset length))
-		     )))
+	     (if (< offset 0)
+		 ;; no misspelled words -- terminate while loop
+		 nil
+	       ;; misspelled word found; get word;
+	       ;;  set string to not-yet-checked portion;
+	       ;;  add details of misspelling to head of return-list
+	       (setq word (substring string offset (+ offset length))
+		     string (substring string (+ offset length))) 
+	       (add-to-list 'return-list
+			    (list word (+ prev-offset offset)
+				  (ns-spellchecker-get-suggestions word)
+				  nil))
+	       (setq prev-offset (+ prev-offset offset length))
+	       )))
     return-list))
 
 ;;; **********************************************************************
@@ -2387,15 +2388,19 @@ Global `ispell-quit' set to start location to continue spell session."
 		  (cond
 		   ((= char ? ) nil)	; accept word this time only
 		   ((= char ?i)		; accept and insert word into pers dict
-		    (ispell-send-string (concat "*" word "\n"))
-		    (setq ispell-pdict-modified-p '(t)) ; dictionary modified!
+		    (if (string= ispell-program-name "NSSpellChecker")
+			(ns-spellchecker-learn-word word)
+		      (ispell-send-string (concat "*" word "\n"))
+		      (setq ispell-pdict-modified-p '(t))) ; dictionary modified!
 		    nil)
 		   ((or (= char ?a) (= char ?A)) ; accept word without insert
-		    (ispell-send-string (concat "@" word "\n"))
-		    (if (null ispell-pdict-modified-p)
-			(setq ispell-pdict-modified-p
-			      (list ispell-pdict-modified-p)))
-		    (if (= char ?A) 0))	; return 0 for ispell-add buffer-local
+		    (if (string= ispell-program-name "NSSpellChecker")
+			(ns-spellchecker-ignore-word word (current-buffer))
+		      (ispell-send-string (concat "@" word "\n"))
+		      (if (null ispell-pdict-modified-p)
+			  (setq ispell-pdict-modified-p
+				(list ispell-pdict-modified-p)))
+		      (if (= char ?A) 0))) ; return 0 for ispell-add buffer-local
 		   ((or (= char ?r) (= char ?R)) ; type in replacement
 		    (and (eq 'block ispell-highlight-p) ; refresh tty's
 			 (ispell-highlight-spelling-error start end nil t))
@@ -2488,13 +2493,17 @@ Global `ispell-quit' set to start location to continue spell session."
 							  'block))
 		    t)			; reselect from new choices
 		   ((= char ?u)		; insert lowercase into dictionary
-		    (ispell-send-string (concat "*" (downcase word) "\n"))
-		    (setq ispell-pdict-modified-p '(t)) ; dictionary modified!
+		    (if (string= ispell-program-name "NSSpellChecker")
+			(ns-spellchecker-learn-word (downcase word))
+		      (ispell-send-string (concat "*" (downcase word) "\n"))
+		      (setq ispell-pdict-modified-p '(t))) ; dictionary modified!
 		    nil)
 		   ((= char ?m)		; type in what to insert
-		    (ispell-send-string
-		     (concat "*" (read-string "Insert: " word) "\n"))
-		    (setq ispell-pdict-modified-p '(t))
+		    (if (string= ispell-program-name "NSSpellChecker")
+			(ns-spellchecker-learn-word (read-string "Insert: " word))
+		      (ispell-send-string
+		       (concat "*" (read-string "Insert: " word) "\n"))
+		      (setq ispell-pdict-modified-p '(t)))
 		    (cons word nil))
 		   ((and (>= num 0) (< num count))
 		    (if ispell-query-replace-choices ; Query replace flag
