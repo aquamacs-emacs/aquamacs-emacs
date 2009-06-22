@@ -941,16 +941,17 @@ subsequently create.  Upon entering text-mode, the function
 
 ;; Spell Checking
 
-(defun aquamacs-ispell-install ()
-  (interactive)
-  (browse-url "http://aquamacs.org/spellchecking"))
+;; (defun aquamacs-ispell-install ()
+;;   (interactive)
+;;   (browse-url "http://aquamacs.org/spellchecking"))
  
 
 (define-key menu-bar-tools-menu [spell] nil)
 (define-key menu-bar-tools-menu [separator-spell] nil)
 (define-key-after menu-bar-edit-menu [separator-spell]
   '(menu-item "--" nil
-	      :visible (and (boundp 'ispell-program-name) ispell-program-name))
+	      ;; :visible (and (boundp 'ispell-program-name) ispell-program-name)
+	      )
   'separator-bookmark)
 
 ;; ispell is not loaded at startup
@@ -959,30 +960,31 @@ subsequently create.  Upon entering text-mode, the function
 ;; if exec path isn't initialized (because PATH not read yet)
 ;; then locate-file might fail and we don't know if we're going to have ispell
 
-(defun aquamacs-initialize-ispell-program-name ()
-  "Set `ispell-program-name'."
-  (protect
-   (let ((ipn (or (if (locate-file "aspell" exec-path exec-suffixes 'file-executable-p) 
-		      "aspell")
-		  (if (locate-file "ispell" exec-path exec-suffixes 'file-executable-p)
-		      "ispell"))))
-     (if ipn ;; do not initialize if not (yet) found
-	 (defvar ispell-program-name ipn)))))
+;; (defun aquamacs-initialize-ispell-program-name ()
+;;   "Set `ispell-program-name'."
+;;   (protect
+;;    (let ((ipn (or (if (locate-file "aspell" exec-path exec-suffixes 'file-executable-p) 
+;; 		      "aspell")
+;; 		  (if (locate-file "ispell" exec-path exec-suffixes 'file-executable-p)
+;; 		      "ispell"))))
+;;      (if ipn ;; do not initialize if not (yet) found
+;; 	 (defvar ispell-program-name ipn)))))
 
-(aquamacs-initialize-ispell-program-name)
-(unless (boundp 'ispell-program-name)
-  (add-hook 'after-init-hook 'aquamacs-initialize-ispell-program-name 'append))
+;; (aquamacs-initialize-ispell-program-name)
+;; (unless (boundp 'ispell-program-name)
+;;   (add-hook 'after-init-hook 'aquamacs-initialize-ispell-program-name 'append))
 
 (define-key-after menu-bar-edit-menu [spell]
   '(menu-item "Spelling" ispell-menu-map 
-	      :visible (and (boundp 'ispell-program-name) ispell-program-name))
+	      ;; :visible (and (boundp 'ispell-program-name) ispell-program-name)
+	      )
   'separator-bookmark)
-(define-key-after menu-bar-edit-menu [spell-download-aspell]
-	'(menu-item "Download Spell-Checking..." aquamacs-ispell-install
-		    :help "Download spell-checking package"
-		    :visible (and (boundp 'ispell-program-name)
-				  (not ispell-program-name)))
-	'spell) 
+;; (define-key-after menu-bar-edit-menu [spell-download-aspell]
+;; 	'(menu-item "Download Spell-Checking..." aquamacs-ispell-install
+;; 		    :help "Download spell-checking package"
+;; 		    :visible (and (boundp 'ispell-program-name)
+;; 				  (not ispell-program-name)))
+;; 	'spell)
 
 (define-key ispell-menu-map [ispell-buffer]
 	`(menu-item "Spell-Check Buffer               " 
