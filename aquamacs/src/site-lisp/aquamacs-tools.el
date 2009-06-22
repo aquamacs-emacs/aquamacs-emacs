@@ -462,26 +462,34 @@ Optional CODING is used for encoding coding-system."
 ; (define-key menu-bar-edit-menu [mark-whole-buffer] (cdr (assq 'mark-whole-buffer (key-binding [menu-bar edit]))))
 
 
-(defun get-window-for-other-buffer ()
+(defun get-window-for-other-buffer (&optional dont-make-frame buffer)
   "Find a suitable window for other buffers.
-Preferably the selected one."
+Preferably the selected one.
+If a frame is created for the other buffer,
+show BUFFER in that frame."
   (let ((sel-win (selected-window))) ; search all visible&iconified frames
-    (unless 
-	(and sel-win 
+    (unless
+	(and sel-win
 	     (window-live-p sel-win)
 	     (eq t (frame-visible-p (window-frame sel-win)))
-	     (not (special-display-p 
+	     (not (special-display-p
 		   (or (buffer-name (window-buffer sel-win)) ""))))
       ;; search visible frames (but not dedicated ones)
       (setq sel-win (get-largest-window 'visible nil)))
-    (unless 
-	(and sel-win 
+    (unless
+	(and sel-win
 	     (window-live-p sel-win)
 	     (eq t (frame-visible-p (window-frame sel-win)))
-	     (not (special-display-p 
+	     (not (special-display-p
 		   (or (buffer-name (window-buffer sel-win)) ""))))
-      (make-frame)
-      (setq sel-win (selected-window)))
+      (unless dont-make-frame
+	  (setq sel-win (frame-first-window
+			 (with-current-buffer buffer
+			   ;; make sure we're not creating some "special" frame
+			   (make-frame))))))
+    (if sel-win
+	(unless (eq t (frame-visible-p (window-frame sel-win)))
+	  (make-frame-visible (window-frame sel-win))))
     sel-win))
 
 ;; New documents
