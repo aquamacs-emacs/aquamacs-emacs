@@ -38,6 +38,8 @@ html: aquamacs.tex *.pdf
 	echo $(phrase) ; \
 	sed 's/<META NAME="description" CONTENT="Aquamacs Emacs/<META NAME="AppleTitle" content="Aquamacs Help"><META NAME="AppleFont" content="Lucida Grande,Helvetica"><META NAME="description" CONTENT="Aquamacs Emacs - /' <$(newdir)/index.html >$(newdir)/index2.html	     ; \
 	mv $(newdir)/index2.html $(newdir)/index.html
+	sed 's|<BODY >|<BODY ><a name="index"></a>|' <$(newdir)/index.html >$(newdir)/index2.html	     ; \
+	mv $(newdir)/index2.html $(newdir)/index.html
 	rm -rf $(destdir)
 	echo	mv $(newdir) ../AquamacsHelp				     ; \
 	mv $(newdir) $(destdir) ; \

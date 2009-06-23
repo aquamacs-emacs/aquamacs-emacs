@@ -469,16 +469,17 @@ specified in `shell-file-name'."
 (defun aquamacs-user-help ()
   "Show the Aquamacs Help."
   (interactive)
-  (aq-show-help-file "index.html"))
+  (ns-open-help-anchor "index" "Aquamacs Help"))
 
 (defun aquamacs-emacs-manual ()
   "Show the Emacs Manual"
   (interactive)
-  (aq-show-help-file "index.html" "Emacs Manual"))
+  (ns-open-help-anchor "index" "Emacs Manual"))
 
 (defun aquamacs-elisp-reference ()
+  "Show the Emacs Lisp Reference"
   (interactive)
-  (aq-show-help-file "index.html" "Emacs Lisp Reference"))
+  (ns-open-help-anchor "index" "Emacs Lisp Reference"))
 
 
 ;; it's imporant to make sure that the following are in the Info.plist file:

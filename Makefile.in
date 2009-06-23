@@ -450,11 +450,14 @@ install-aquamacs: mkdir
 	  cp $(AQUAMACS_DIR)/src/Emacs.23.icns $(ns_appresdir)/Emacs.icns ; \
 	  rm -r "$(ns_appresdir)/Emacs Manual" 2>/dev/null ; \
 	  cp -r $(AQUAMACS_DIR)/doc/EmacsManual "$(ns_appresdir)/Emacs Manual" ; \
+	  mv "$(ns_appresdir)/Emacs Manual/EmacsManual.helpindex" "$(ns_appresdir)/Emacs Manual/Emacs Manual.helpindex" ; \
 	  rm -r "$(ns_appresdir)/Aquamacs Help" 2>/dev/null ; \
 	  cp -r $(AQUAMACS_DIR)/doc/AquamacsHelp "$(ns_appresdir)/Aquamacs Help" ; \
 	  mv "$(ns_appresdir)/Aquamacs Help/AquamacsHelp.helpindex" "$(ns_appresdir)/Aquamacs Help/Aquamacs Help.helpindex" ; \
 	  cd $(ns_appresdir) ; \
 	  tar xzf $(AQUAMACS_DIR)/doc/EmacsLispReference.tgz ; \
+	  mv "$(ns_appresdir)/EmacsLispReference" "$(ns_appresdir)/Emacs Lisp Reference" ; \
+	  mv "$(ns_appresdir)/Emacs Lisp Reference/EmacsLispReference.helpindex" "$(ns_appresdir)/Emacs Lisp Reference/Emacs Lisp Reference.helpindex" ; \
 	  cd - >/dev/null ; \
 	  rm $(ns_appresdir)/English.lproj/InfoPlist.strings 2>/dev/null ; \
 	  rm -r $(ns_appresdir)/site-lisp  2>/dev/null ; \
