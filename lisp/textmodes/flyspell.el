@@ -327,7 +327,7 @@ If `flyspell-large-region' is nil, all regions are treated as small."
 	      (setq spellcheck-position
 		    (+ misspelled-location misspelled-length)) 
 	      ;; use flyspell-word to filter and mark misspellings
-	      (goto-char misspelled-location)
+	      (goto-char spellcheck-position)
 	      (flyspell-word)) 
 	  ;; no misspellings found; we've reached the end of chunk
 	  (setq spellcheck-position end))
@@ -1133,7 +1133,8 @@ Mostly we check word delimiters."
   (ispell-set-spellchecker-params)    ; Initialize variables and dicts alists
   (save-excursion
     ;; use the correct dictionary
-    (if (not ispell-use-ns-spellchecker-p) (flyspell-accept-buffer-local-defs))
+    (unless (string= ispell-program-name "NSSpellChecker") 
+      (flyspell-accept-buffer-local-defs))
     (let* ((cursor-location (point))
            (flyspell-word (flyspell-get-word following))
            start end poss word ispell-filter)
@@ -1189,7 +1190,7 @@ Mostly we check word delimiters."
 	    (setq flyspell-word-cache-end end)
 	    (setq flyspell-word-cache-word word) 
 	    ;; now check spelling of word.
-	    (if ispell-use-ns-spellchecker-p
+	    (if (string= ispell-program-name "NSSpellChecker")
 		(setq poss (ns-spellchecker-parse-output word))
 	      (ispell-send-string "%\n")
 	      ;; put in verbose mode
@@ -1626,7 +1627,7 @@ The buffer to mark them in is `flyspell-large-region-buffer'."
     (setq flyspell-large-region-buffer curbuf)
     (setq flyspell-large-region-beg beg)
     (setq flyspell-large-region-end end)
-    (if (not ispell-use-ns-spellchecker-p) (flyspell-accept-buffer-local-defs))
+    (unless (string= ispell-program-name "NSSpellChecker") (flyspell-accept-buffer-local-defs))
     (set-buffer buffer)
     (erase-buffer)
     ;; this is done, we can start checking...
@@ -1702,7 +1703,7 @@ The buffer to mark them in is `flyspell-large-region-buffer'."
 	  (let ((old beg))
 	    (setq beg end)
 	    (setq end old)))
-      (if ispell-use-ns-spellchecker-p
+      (if (string= ispell-program-name "NSSpellChecker")
 	  (if (> (- end beg) (* ns-spellchecker-chunk-size 1.5))
 	      (ns-flyspell-large-region beg end)
 	    (ns-flyspell-region beg end))
@@ -1985,7 +1986,7 @@ This command proposes various successive corrections for the current word."
   (let ((pos     (point))
 	(old-max (point-max)))
     ;; use the correct dictionary
-    (if (not ispell-use-ns-spellchecker-p) (flyspell-accept-buffer-local-defs))
+    (unless (string= ispell-program-name "NSSpellChecker") (flyspell-accept-buffer-local-defs))
     (if (and (eq flyspell-auto-correct-pos pos)
 	     (consp flyspell-auto-correct-region))
 	;; we have already been using the function at the same location
@@ -2019,7 +2020,7 @@ This command proposes various successive corrections for the current word."
 		  poss ispell-filter)
 	      (setq flyspell-auto-correct-word word)
 	      ;; now check spelling of word.
-	      (if ispell-use-ns-spellchecker-p
+	      (if (string= ispell-program-name "NSSpellChecker")
 		  (setq poss (ns-spellchecker-parse-output word))
 		(ispell-send-string "%\n") ;put in verbose mode
 		(ispell-send-string (concat "^" word "\n"))
@@ -2172,7 +2173,7 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
   (unless (mouse-position)
     (error "Pop-up menus do not work on this terminal"))
   ;; use the correct dictionary
-  (if (not ispell-use-ns-spellchecker-p) (flyspell-accept-buffer-local-defs))
+  (unless (string= ispell-program-name "NSSpellChecker") (flyspell-accept-buffer-local-defs))
   (or opoint (setq opoint (point)))
   (let ((cursor-location (point))
 	(word (flyspell-get-word nil)))
@@ -2182,7 +2183,7 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 	      (word (car word))
 	      poss ispell-filter)
 	  ;; now check spelling of word.
-	  (if ispell-use-ns-spellchecker-p
+	  (if (string= ispell-program-name "NSSpellChecker")
 	      (setq poss (ns-spellchecker-parse-output word))
 	    (ispell-send-string "%\n")	;put in verbose mode
 	    (ispell-send-string (concat "^" word "\n"))
@@ -2226,7 +2227,7 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 	 nil)
 	((eq replace 'save)
          (goto-char save)
-	 (if ispell-use-ns-spellchecker-p
+	 (if (string= ispell-program-name "NSSpellChecker")
 	     (ns-spellchecker-learn-word word)
 	   (ispell-send-string (concat "*" word "\n"))
 	   ;; This was added only to the XEmacs side in revision 1.18 of
@@ -2237,7 +2238,7 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 	   (flyspell-unhighlight-at cursor-location))
 	 )
 	((or (eq replace 'buffer) (eq replace 'session))
-	 (if ispell-use-ns-spellchecker-p
+	 (if (string= ispell-program-name "NSSpellChecker")
 	     (ns-spellchecker-ignore-word word (current-buffer))
 	   (ispell-send-string (concat "@" word "\n"))
 	   (if (null ispell-pdict-modified-p)
@@ -2263,7 +2264,8 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
              (delete-region start end)
              (goto-char start)
              (funcall flyspell-insert-function new-word)
-             (if (and (not ispell-use-ns-spellchecker-p) flyspell-abbrev-p)
+             (if (and (not (string= ispell-program-name "NSSpellChecker"))
+		      flyspell-abbrev-p)
                  (flyspell-define-abbrev word new-word)))
            ;; In the original Emacs code, this was only called in the body
            ;; of the if.  I arbitrarily kept the XEmacs behavior instead.
@@ -2314,20 +2316,32 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 	 (affix      (car (cdr (cdr (cdr poss)))))
 	 show-affix-info
 	 (base-menu  (let ((save (if (and (consp affix) show-affix-info)
+				     ;; no affix guesses for NSSpellchecker
 				     (list
 				      (list (concat "Save affix: " (car affix))
 					    'save)
 				      '("Accept (session)" session)
 				      '("Accept (buffer)" buffer))
-				   '(("Save word" save)
-				     ("Accept (session)" session)
-				     ("Accept (buffer)" buffer)))))
+				   (append
+				    ;; modify menu for NSSpellchecker --
+				    ;;   use usual Mac options
+				    (if (string= ispell-program-name
+						 "NSSpellChecker")
+					'(("Learn Spelling" save))
+				      '(("Save word" save)))
+				    (if (string= ispell-program-name
+						 "NSSpellChecker")
+					;; TODO: implement a session option
+					;;    for NSSpellchecker
+					'(("Ignore Spelling" buffer))
+				      (list '("Accept (session)" session)
+					    '("Accept (buffer)" buffer)))))))
 		       (if (consp cor-menu)
 			   (append cor-menu (cons "" save))
 			 save)))
 	 (menu       (cons "flyspell correction menu" base-menu)))
     (car (x-popup-menu event
-		       (list (if ispell-use-ns-spellchecker-p
+		       (list (if (string= ispell-program-name "NSSpellChecker")
 				 (format "%s" word)
 			       (format "%s [%s]" word (or ispell-local-dictionary
 							  ispell-dictionary)))
