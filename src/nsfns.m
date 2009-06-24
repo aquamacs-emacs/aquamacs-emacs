@@ -1391,7 +1391,7 @@ Shows the NS spell checking panel and brings it to the front.*/)
   check_ns ();
   sc = [NSSpellChecker sharedSpellChecker];
   
-
+  BLOCK_INPUT;
   [[sc spellingPanel] orderFront: NSApp];
 
   [sc updateSpellingPanelWithMisspelledWord:@""]; // no word, no spelling errors
@@ -1402,7 +1402,7 @@ Shows the NS spell checking panel and brings it to the front.*/)
   // does not work
   // if ([sc respondsToSelector:@selector(_updateGrammar)]) 
   //   [sc performSelector:@selector(_updateGrammar)]; 
-
+  UNBLOCK_INPUT;
   return Qnil;
 }
 
@@ -1418,10 +1418,12 @@ Give empty string to delete word.*/)
 
   CHECK_STRING (str);
   check_ns ();
+  BLOCK_INPUT;
   sc = [NSSpellChecker sharedSpellChecker];
   
   [sc updateSpellingPanelWithMisspelledWord:[NSString stringWithUTF8String: SDATA (str)]]; // no word, no spelling errors
 
+  UNBLOCK_INPUT;
   return Qnil;
 }
 
@@ -1436,10 +1438,11 @@ DEFUN ("ns-spellchecker-learn-word", Fns_spellchecker_learn_word, Sns_spellcheck
 
   CHECK_STRING (str);
   check_ns ();
+  BLOCK_INPUT;
   sc = [NSSpellChecker sharedSpellChecker];
   
   [sc learnWord:[NSString stringWithUTF8String: SDATA (str)]];
-
+  UNBLOCK_INPUT;
   return Qnil;
 }
 
@@ -1454,6 +1457,7 @@ DEFUN ("ns-spellchecker-ignore-word", Fns_spellchecker_ignore_word, Sns_spellche
 
   CHECK_STRING (str);
   check_ns ();
+  BLOCK_INPUT;
   sc = [NSSpellChecker sharedSpellChecker];
   
   NSInteger tag = 1;
@@ -1463,7 +1467,7 @@ DEFUN ("ns-spellchecker-ignore-word", Fns_spellchecker_ignore_word, Sns_spellche
     }
 
   [sc ignoreWord:[NSString stringWithUTF8String: SDATA (str)] inSpellDocumentWithTag:tag];
-
+  UNBLOCK_INPUT;
   return Qnil;
 }
 
@@ -1481,6 +1485,7 @@ words are spelled as in the dictionary.*/)
 
   CHECK_STRING (string);
   check_ns ();
+  BLOCK_INPUT;
   sc = [NSSpellChecker sharedSpellChecker];
 
   NSInteger tag = 1;
@@ -1492,6 +1497,7 @@ words are spelled as in the dictionary.*/)
   NSRange first_word =  [sc checkSpellingOfString:[NSString stringWithUTF8String: SDATA (string)] startingAt:((NSInteger) 0)
 					 language:nil wrap:NO inSpellDocumentWithTag:tag wordCount:nil];
 
+  UNBLOCK_INPUT;
   if (first_word.location < 0)
     return Qnil;
   else
@@ -1511,6 +1517,7 @@ of ignored grammatical constructions. */)
 
   CHECK_STRING (sentence);
   check_ns ();
+  BLOCK_INPUT;
   sc = [NSSpellChecker sharedSpellChecker];
 
   NSInteger tag = 1;
@@ -1525,6 +1532,7 @@ of ignored grammatical constructions. */)
   NSRange first_word = [sc checkGrammarOfString: [NSString stringWithUTF8String: SDATA (sentence)] startingAt:((NSInteger) 0)
 				       language:nil wrap:NO inSpellDocumentWithTag:tag details:&errdetails];
 
+  UNBLOCK_INPUT;
   if (first_word.location < 0)
     return Qnil;
   else
@@ -1545,6 +1553,7 @@ capitalized in the same way. */)
 
   CHECK_STRING (word);
   check_ns ();
+  BLOCK_INPUT;
   sc = [NSSpellChecker sharedSpellChecker];
 
   Lisp_Object retval = Qnil;
@@ -1556,6 +1565,7 @@ capitalized in the same way. */)
     retval = Fcons (build_string ([[guesses objectAtIndex:i] UTF8String]),
 		    retval);
   }
+  UNBLOCK_INPUT;
   return retval;
 }
 
@@ -1568,6 +1578,7 @@ DEFUN ("ns-spellchecker-list-languages", Fns_spellchecker_list_languages, Sns_sp
   id sc;
 
   check_ns ();
+  BLOCK_INPUT;
   sc = [NSSpellChecker sharedSpellChecker];
 
   Lisp_Object retval = Qnil;
@@ -1579,6 +1590,7 @@ DEFUN ("ns-spellchecker-list-languages", Fns_spellchecker_list_languages, Sns_sp
     retval = Fcons (build_string ([[langs objectAtIndex:i] UTF8String]),
 		    retval);
   }
+  UNBLOCK_INPUT;
   return retval;
 }
 
@@ -1595,9 +1607,11 @@ LANGUAGE must be one of the languages returned by
 
   CHECK_STRING (language);
   check_ns ();
+  BLOCK_INPUT;
   sc = [NSSpellChecker sharedSpellChecker];
 
   [sc setLanguage: [NSString stringWithUTF8String: SDATA (language)]];
+  UNBLOCK_INPUT;
   return Qnil;
 }
 
@@ -1612,6 +1626,7 @@ DEFUN ("ns-popup-font-panel", Fns_popup_font_panel, Sns_popup_font_panel,
   struct frame *f;
 
   check_ns ();
+  BLOCK_INPUT;
   fm = [NSFontManager new];
   if (NILP (frame))
     f = SELECTED_FRAME ();
@@ -1624,6 +1639,7 @@ DEFUN ("ns-popup-font-panel", Fns_popup_font_panel, Sns_popup_font_panel,
   [fm setSelectedFont: ((struct nsfont_info *)f->output_data.ns->font)->nsfont
            isMultiple: NO];
   [fm orderFrontFontPanel: NSApp];
+  UNBLOCK_INPUT;
   return Qnil;
 }
 
@@ -1637,6 +1653,7 @@ DEFUN ("ns-popup-color-panel", Fns_popup_color_panel, Sns_popup_color_panel,
   struct frame *f;
 
   check_ns ();
+  BLOCK_INPUT;
   if (NILP (frame))
     f = SELECTED_FRAME ();
   else
@@ -1646,6 +1663,7 @@ DEFUN ("ns-popup-color-panel", Fns_popup_color_panel, Sns_popup_color_panel,
     }
 
   [NSApp orderFrontColorPanel: NSApp];
+  UNBLOCK_INPUT;
   return Qnil;
 }
 
