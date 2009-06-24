@@ -4440,7 +4440,7 @@ extern void update_window_cursor (struct window *w, int on);
   if (!emacs_event)
     return;
 
-  SET_FRAME_GARBAGED (emacsframe); 
+  /* SET_FRAME_GARBAGED (emacsframe); needed? */
 
   emacs_event->kind = NS_NONKEY_EVENT;
   emacs_event->modifiers = 0;
