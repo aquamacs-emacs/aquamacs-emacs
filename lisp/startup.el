@@ -1346,10 +1346,14 @@ Each element in the list should be a list of strings or pairs
 (defvar fancy-about-text
   '((:face (variable-pitch (:foreground "red"))
      "This is "
+     :link ("Aquamacs Emacs"
+	    (lambda (button) (browse-url "http://aquamacs.org/"))
+	    "Browse http://aquamacs.org")
+     ", based on "
      :link ("GNU Emacs"
 	    (lambda (button) (browse-url "http://www.gnu.org/software/emacs/"))
 	    "Browse http://www.gnu.org/software/emacs/")
-     ", one component of the "
+     ",\none component of the "
      :link
      (lambda ()
        (if (eq system-type 'gnu/linux)
@@ -1357,13 +1361,15 @@ Each element in the list should be a list of strings or pairs
 	     (lambda (button) (browse-url "http://www.gnu.org/gnu/linux-and-gnu.html"))
 	     "Browse http://www.gnu.org/gnu/linux-and-gnu.html")
 	 '("GNU" (lambda (button) (describe-gnu-project))
-	   "Display info on the GNU project.")))
-     " operating system.\n"
-     :face (lambda ()
+	   "Display info on the GNU project")))
+     " operating system.\n\n"
+       :face (lambda ()
 	     (list 'variable-pitch
 		   (list :foreground
 			 (if (eq (frame-parameter nil 'background-mode) 'dark)
 			     "cyan" "darkblue"))))
+       :face 'variable-pitch
+       "Aquamacs is a distribution of GNU Emacs that is adapted for Mac users.\n"
      "\n"
      (lambda () (emacs-version))
      "\n"
@@ -1375,24 +1381,23 @@ Each element in the list should be a list of strings or pairs
 	    (lambda (button)
 	      (view-file (expand-file-name "AUTHORS" data-directory))
 	      (goto-char (point-min))))
-     "\tMany people have contributed code included in GNU Emacs\n"
+     "            \tMany people have contributed code included in GNU Emacs\n"
      :link ("Contributing"
-	    (lambda (button)
-	      (view-file (expand-file-name "CONTRIBUTE" data-directory))
-	      (goto-char (point-min))))
-     "\tHow to contribute improvements to Emacs\n"
+	    (lambda (button) (browse-url "http://aquamacs.org/development.shtml")))
+     "\tHow to contribute improvements to Aquamacs\n"
      "\n"
      :link ("GNU and Freedom" (lambda (button) (describe-gnu-project)))
      "\tWhy we developed GNU Emacs, and the GNU operating system\n"
+      :link ("Aquamacs Manual" (lambda (button) (aquamacs-user-help)))
+     "\tView the Aquamacs manual using Apple Help\n"
+     :link ("Emacs Manual" (lambda (button) (aquamacs-emacs-manual)))
+     "\tView the Emacs manual using Apple Help\n"
      :link ("Absence of Warranty" (lambda (button) (describe-no-warranty)))
-     "\tGNU Emacs comes with "
-     :face (variable-pitch (:slant oblique))
-     "ABSOLUTELY NO WARRANTY\n"
+     "\tAquamacs and GNU Emacs come with absolutely no warranty\n"
      :face variable-pitch
      :link ("Copying Conditions" (lambda (button) (describe-copying)))
      "\tConditions for redistributing and changing Emacs\n"
-     :link ("Getting New Versions" (lambda (button) (describe-distribution)))
-     "\tHow to obtain the latest version of Emacs\n"
+   
      :link ("Ordering Manuals" (lambda (button) (view-order-manuals)))
      "\tBuying printed manuals from the FSF\n"
      "\n"
@@ -1488,7 +1493,11 @@ a face or button specification."
 (declare-function image-size "image.c" (spec &optional pixels frame))
 
 (defun fancy-splash-head ()
-  "Insert the head part of the splash screen into the current buffer."
+  "Insert the head part of the splash screen into the current buffer.
+This is modified in Aquamacs compared to GNU Emacs, because most
+information given would otherwise be irrelevant to Aquamacs users.
+"
+  (and (boundp 'longlines-mode) (longlines-mode -1))
   (let* ((image-file (cond ((stringp fancy-splash-image)
 			    fancy-splash-image)
 			   ((display-color-p)
@@ -1510,8 +1519,8 @@ a face or button specification."
     (when img
       (when (> window-width image-width)
 	;; Center the image in the window.
-	(insert (propertize " " 'display
-			    `(space :align-to (+ center (-0.5 . ,img)))))
+;; 	(insert (propertize " " 'display
+;; 			    `(space :align-to (+ center (-0.5 . ,img)))))
 
 	;; Change the color of the XPM version of the splash image
 	;; so that it is visible with a dark frame background.
@@ -1519,13 +1528,19 @@ a face or button specification."
 		   (eq (frame-parameter nil 'background-mode) 'dark))
 	  (setq img (append img '(:color-symbols (("#000000" . "gray30"))))))
 
-	;; Insert the image with a help-echo and a link.
-	(make-button (prog1 (point) (insert-image img)) (point)
-		     'face 'default
-		     'help-echo "mouse-2, RET: Browse http://www.gnu.org/"
-		     'action (lambda (button) (browse-url "http://www.gnu.org/"))
-		     'follow-link t)
-	(insert "\n\n")))))
+	;; Insert the image with a help-echo and a keymap.
+	(let ((map (make-sparse-keymap))
+	      (help-echo "mouse-1: browse http://aquamacs.org/"))
+	  (define-key map [mouse-1]
+	    (lambda ()
+	      (interactive)
+	      (browse-url "http://aquamacs.org/")))
+	  (define-key map [down-mouse-1] 'ignore)
+	  (define-key map [up-mouse-1] 'ignore)
+	  (insert-image img (propertize "xxx" 'help-echo help-echo
+					'keymap map)))
+	(insert "\n"))))
+  (insert "\n"))
 
 (defun fancy-startup-tail (&optional concise)
   "Insert the tail part of the splash screen into the current buffer."
@@ -1664,7 +1679,7 @@ splash screen in another window."
   (let ((frame (fancy-splash-frame)))
     (save-selected-window
       (select-frame frame)
-      (switch-to-buffer "*About GNU Emacs*")
+      (switch-to-buffer "*About Aquamacs Emacs*")
       (setq buffer-undo-list t
 	    mode-line-format (propertize "---- %b %-"
 					 'face 'mode-line-buffer-id))
@@ -1691,12 +1706,16 @@ splash screen in another window."
 Returning non-nil does not mean we should necessarily
 use the fancy splash screen, but if we do use it,
 we put it on this frame."
-  (let (chosen-frame)
-    (dolist (frame (append (frame-list) (list (selected-frame))))
-      (if (and (frame-visible-p frame)
-	       (not (window-minibuffer-p (frame-selected-window frame))))
-	  (setq chosen-frame frame)))
-    chosen-frame))
+  (make-frame 
+   '((name . "About Aquamacs Emacs") 
+     (font . "-apple-lucida grande-medium-r-normal--0-0-0-0-m-0-mac-roman")
+     (width . 75) (height . 40) (minibuffer . t)
+     (background-color . "White") 
+     (foreground-color . "Black") (tool-bar-lines . 0)
+     (vertical-scroll-bars . auto) 
+     (horizontal-scroll-bars . nil) 
+     (left-fringe . 5) (right-fringe . 0)
+     (internal-border-width . 0) (unsplittable . t))))
 
 (defun use-fancy-splash-screens-p ()
   "Return t if fancy splash screens should be used."
@@ -1724,7 +1743,7 @@ If optional argument STARTUP is non-nil, display the startup screen
 after Emacs starts.  If STARTUP is nil, display the About screen.
 If CONCISE is non-nil, display a concise version of the
 splash screen in another window."
-  (let ((splash-buffer (get-buffer-create "*About GNU Emacs*")))
+  (let ((splash-buffer (get-buffer-create "*About Aquamacs Emacs*")))
     (with-current-buffer splash-buffer
       (setq buffer-read-only nil)
       (erase-buffer)
@@ -2061,7 +2080,7 @@ screen."
       	(normal-splash-screen t concise))))
 
 (defun display-about-screen ()
-  "Display the *About GNU Emacs* buffer.
+  "Display the *About Aquamacs Emacs* buffer.
 A fancy display is used on graphic displays, normal otherwise."
   (interactive)
   (if (use-fancy-splash-screens-p)
