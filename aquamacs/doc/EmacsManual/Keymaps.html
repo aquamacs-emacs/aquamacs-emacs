@@ -1,9 +1,36 @@
 <html lang="en">
 <head>
-<title>Keymaps</title>
+<title>Keymaps - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Keymaps">
-<meta name="generator" content="makeinfo 4.6">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.9">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Key-Bindings.html#Key-Bindings" title="Key Bindings">
+<link rel="next" href="Prefix-Keymaps.html#Prefix-Keymaps" title="Prefix Keymaps">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.0.94.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
   pre.display { font-family:inherit }
@@ -12,31 +39,35 @@
   pre.smallformat  { font-family:inherit; font-size:smaller }
   pre.smallexample { font-size:smaller }
   pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
 --></style>
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
 <p>
-Node:&nbsp;<a name="Keymaps">Keymaps</a>,
-Next:&nbsp;<a rel="next" accesskey="n" href="Prefix-Keymaps.html#Prefix%20Keymaps">Prefix Keymaps</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Key-Bindings.html#Key%20Bindings">Key Bindings</a>
-<hr><br>
+<a name="Keymaps"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Prefix-Keymaps.html#Prefix-Keymaps">Prefix Keymaps</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Key-Bindings.html#Key-Bindings">Key Bindings</a>
+<hr>
 </div>
 
-<h3 class="subsection">Keymaps</h4>
+<h4 class="subsection">57.4.1 Keymaps</h4>
 
-<p>The bindings between key sequences and command functions are recorded
+<p><a name="index-keymap-3982"></a>
+  The bindings between key sequences and command functions are recorded
 in data structures called <dfn>keymaps</dfn>.  Emacs has many of these, each
 used on particular occasions.
 
-   <p>Recall that a <dfn>key sequence</dfn> (<dfn>key</dfn>, for short) is a sequence
-of <dfn>input events</dfn> that have a meaning as a unit.  Input events
-include characters, function keys and mouse buttons--all the inputs
+   <p>A <dfn>key sequence</dfn> (<dfn>key</dfn>, for short) is a sequence of
+<dfn>input events</dfn> that have a meaning as a unit.  Input events
+include characters, function keys and mouse buttons&mdash;all the inputs
 that you can send to the computer with your terminal.  A key sequence
 gets its meaning from its <dfn>binding</dfn>, which says what command it
-runs.  The function of keymaps is to record these bindings.
+runs.  The role of keymaps is to record these bindings.
 
-   <p>The <dfn>global</dfn> keymap is the most important keymap because it is
+   <p><a name="index-global-keymap-3983"></a>  The <dfn>global</dfn> keymap is the most important keymap because it is
 always in effect.  The global keymap defines keys for Fundamental mode;
 most of these definitions are common to most or all major modes.  Each
 major or minor mode can have its own keymap which overrides the global
@@ -50,52 +81,31 @@ Commands to rebind keys, such as <kbd>M-x global-set-key</kbd>, actually work
 by storing the new binding in the proper place in the global map. 
 See <a href="Rebinding.html#Rebinding">Rebinding</a>.
 
-   <p>Meta characters work differently; Emacs translates each Meta
-character into a pair of characters starting with &lt;ESC&gt;.  When you
-type the character <kbd>M-a</kbd> in a key sequence, Emacs replaces it with
-<kbd>&lt;ESC&gt; a</kbd>.  A meta key comes in as a single input event, but
-becomes two events for purposes of key bindings.  The reason for this is
-historical, and we might change it someday.
-
-   <p>Most modern keyboards have function keys as well as character keys. 
+   <p><a name="index-function-key-3984"></a>  Most modern keyboards have function keys as well as character keys. 
 Function keys send input events just as character keys do, and keymaps
-can have bindings for them.
+can have bindings for them.  On text terminals, typing a function key
+actually sends the computer a sequence of characters; the precise
+details of the sequence depends on which function key and on the model
+of terminal you are using.  (Often the sequence starts with
+<kbd>&lt;ESC&gt; [</kbd>.)  If Emacs understands your terminal type properly,
+it recognizes the character sequences forming function keys wherever
+they occur in a key sequence.  Thus, for most purposes, you can
+pretend the function keys reach Emacs directly and ignore their
+encoding as character sequences.
 
-   <p>On many terminals, typing a function key actually sends the computer a
-sequence of characters; the precise details of the sequence depends on
-which function key and on the model of terminal you are using.  (Often
-the sequence starts with <kbd>&lt;ESC&gt; [</kbd>.)  If Emacs understands your
-terminal type properly, it recognizes the character sequences forming
-function keys wherever they occur in a key sequence (not just at the
-beginning).  Thus, for most purposes, you can pretend the function keys
-reach Emacs directly and ignore their encoding as character sequences.
+   <p>Key sequences can mix function keys and characters.  For example, if
+your keyboard has a &lt;Home&gt; function key, Emacs also recognizes key
+sequences like <kbd>C-x &lt;Home&gt;</kbd>.  You can even mix mouse events
+with keyboard events, but we recommend against it, because such key
+sequences are inconvenient to use.
 
-   <p>Mouse buttons also produce input events.  These events come with other
-data--the window and position where you pressed or released the button,
-and a time stamp.  But only the choice of button matters for key
-bindings; the other data matters only if a command looks at it. 
-(Commands designed for mouse invocation usually do look at the other
-data.)
-
-   <p>A keymap records definitions for single events.  Interpreting a key
-sequence of multiple events involves a chain of keymaps.  The first
-keymap gives a definition for the first event; this definition is
-another keymap, which is used to look up the second event in the
-sequence, and so on.
-
-   <p>Key sequences can mix function keys and characters.  For example,
-<kbd>C-x &lt;SELECT&gt;</kbd> is meaningful.  If you make &lt;SELECT&gt; a prefix
-key, then <kbd>&lt;SELECT&gt; C-n</kbd> makes sense.  You can even mix mouse
-events with keyboard events, but we recommend against it, because such
-key sequences are inconvenient to use.
-
-   <p>As a user, you can redefine any key; but it is usually best to stick
-to key sequences that consist of <kbd>C-c</kbd> followed by a letter. 
-These keys are "reserved for users," so they won't conflict with any
-properly designed Emacs extension.  The function keys &lt;F5&gt; through
-&lt;F9&gt; are also reserved for users.  If you redefine some other key,
-your definition may be overridden by certain extensions or major modes
-which redefine the same key.
+   <p>As a user, you can redefine any key, but it is usually best to stick
+to key sequences that consist of <kbd>C-c</kbd> followed by a letter (upper
+or lower case).  These keys are &ldquo;reserved for users,&rdquo; so they won't
+conflict with any properly designed Emacs extension.  The function
+keys &lt;F5&gt; through &lt;F9&gt; are also reserved for users.  If you
+redefine some other key, your definition may be overridden by certain
+extensions or major modes which redefine the same key.
 
    </body></html>
 
