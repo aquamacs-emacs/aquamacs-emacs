@@ -501,17 +501,8 @@ specified in `shell-file-name'."
 ; (aquamacs-show-change-log)
 (defun aquamacs-show-change-log ()
   (interactive)
-  ;; check node1.html
-  ;; relativ complex check because of bug in 10.5.2 that causes crashes
-  ;; when we use a symlinked file.
-  (let ((change-log-file
-	 (with-temp-buffer
-	   (insert-file-contents (format "%s/Contents/Resources/Aquamacs Help/node1.html" 
-					 aquamacs-mac-application-bundle-directory))
-	   (let ((case-fold-search t))
-	     (re-search-forward "HREF=\"\\(node[0-9]+.html\\)\">\s*Changes")
-	     (match-string 1)))))
-    (aq-show-help-file change-log-file)))
+  (ns-open-help-anchor "changelog-top" "Aquamacs Help"))
+
 
 (defun gmail-mailclient-p ()
   "non-nil if Gmail notifier is detected
