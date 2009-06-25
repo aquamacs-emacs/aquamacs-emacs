@@ -469,12 +469,12 @@ have changed."
 
 ;; (aquamacs-variable-customized-p 'aquamacs-styles-mode)    
 ;; (aquamacs-variable-customized-p 'case-fold-search)
+;; (aquamacs-variable-customized-p 'ns-alternate-modifier)
 ;; (aquamacs-variable-customized-p 'mac-option-modifier)
 ;; (aquamacs-variable-customized-p 'default-frame-alist)
 ;; (print (get 'default-frame-alist 'saved-value))
 ;; (aquamacs-variable-customized-p 'global-smart-spacing-mode)
 ;; (print (get 'global-smart-spacing-mode 'saved-value))
-
 
 (defun aquamacs-variable-customized-p (symbol)
     "Returns t if variable SYMBOL has a different value from what was saved."
@@ -482,7 +482,11 @@ have changed."
     (let* ((get (or (get symbol 'custom-get) 'default-value))
 	   (value (funcall get symbol))
 	   (customized-value  (car-safe (get symbol 'customized-value)))
-	   (saved (get symbol 'saved-value))
+	   (saved (or (get symbol 'saved-value)
+		      ;; variable alias?  (saved value may be incorrect)
+		      (if (indirect-variable symbol)
+			  (get (indirect-variable symbol) 'saved-value))))
+
 	   (standard (get symbol 'standard-value))
 	   (comment (get symbol 'customized-variable-comment)))
 
