@@ -37,6 +37,12 @@
 
 ;;; FONT DEFAULTS 
 
+(set-fontset-font
+ "fontset-default"
+ 'symbol
+ '("Lucida Grande" . "iso10646-1"))
+
+
 (setq ignore-font-errors t)
 
 (setq aquamacs-ring-bell-on-error-saved 

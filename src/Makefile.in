@@ -690,6 +690,7 @@ lisp= \
 	${lispsource}emacs-lisp/lisp.elc \
 	${lispsource}env.elc \
 	${lispsource}faces.elc \
+	${lispsource}aquamacs-faces.elc \
 	${lispsource}files.elc \
 	${lispsource}format.elc \
 	${lispsource}facemenu.elc \
@@ -783,6 +784,7 @@ shortlisp= \
 	../lisp/emacs-lisp/lisp.elc \
 	../lisp/facemenu.elc \
 	../lisp/faces.elc \
+	../lisp/aquamacs-faces.elc \
 	../lisp/files.elc \
 	../lisp/emacs-lisp/float-sup.elc \
 	../lisp/format.elc \
@@ -1268,9 +1270,19 @@ ${ns_appdir}: ${ns_appsrc}
 		rm -rf $${subdir}/CVS ; \
 		rm -f  $${subdir}/.cvsignore ; done ; )
 
+
 ${ns_appbindir}Emacs: emacs${EXEEXT}
-	mkdir -p ${ns_appbindir}
-	cp -f emacs${EXEEXT} ${ns_appbindir}Aquamacs
+		mkdir -p ${ns_appbindir}
+	  	(fullversion=`./emacs --version | sed -n '1 s/GNU Emacs *//p'`; 	\
+		if [ -f "../etc/DOC-$${fullversion}" ]; then \
+		     	docfile="DOC-$${fullversion}"; \
+	   	else	 \
+	     		docfile="DOC-${version}*"; \
+	   	fi; \
+		echo "Copying etc/$${docfile} to ${ns_appdir}/Contents/Resources/etc/ ..."; \
+		(cd ../etc; tar -chf - $${docfile}) \
+	     	|(cd ${ns_appdir}/Contents/Resources/etc/; umask 022; tar -xvf - && cat > /dev/null) || exit 1 )
+		cp -f emacs${EXEEXT} ${ns_appbindir}Aquamacs
 
 ns-app: ${ns_appdir} ${ns_appbindir}Emacs
 
@@ -1312,8 +1324,8 @@ extraclean: distclean
 /* Arrange to make a tags table TAGS-LISP for ../lisp,
    plus TAGS for the C files, which includes ../lisp/TAGS by reference.  */
 
-ctagsfiles1 = [xyzXYZ]*.[hc]
-ctagsfiles2 = [a-wA-W]*.[hc]
+ctagsfiles1 = [xyzXYZ]*.[hcm]
+ctagsfiles2 = [a-wA-W]*.[hcm]
 
 TAGS: $(srcdir)/$(ctagsfiles1) $(srcdir)/$(ctagsfiles2)
 	../lib-src/etags --include=TAGS-LISP --include=${lwlibdir}/TAGS \

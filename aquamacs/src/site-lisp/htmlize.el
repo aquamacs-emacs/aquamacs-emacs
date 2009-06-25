@@ -1,7 +1,7 @@
 ;; htmlize.el -- Convert buffer text and decorations to HTML.
 
 ;; Copyright (C) 1997,1998,1999,2000,2001,2002,2003,2005 Hrvoje Niksic
-;; Copyright (C) 2005,2006 David Reitter
+;; Copyright (C) 2005,2006,2009 David Reitter
 
 ;; Author: Hrvoje Niksic <hniksic@xemacs.org>
 ;; Keywords: hypermedia, extensions
@@ -1449,6 +1449,7 @@ property and by buffer overlays that specify `face'."
 	  (setq text (htmlize-untabify text (current-column)))
 	  (setq text (htmlize-protect-string text))
 	  (when buffer-word-wrap
+	    (setq text (replace-regexp-in-string "  " "&nbsp;&nbsp;" text))
 	    (setq text (replace-regexp-in-string "\n" "<br>\n" text)))
 	  ;; Don't bother writing anything if there's no text (this
 	  ;; happens in invisible regions).

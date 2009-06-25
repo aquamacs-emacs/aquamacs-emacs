@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Changes-- 1.7</TITLE>
-<META NAME="description" CONTENT="Changes-- 1.7">
+<TITLE>Changes-- 2.0dev</TITLE>
+<META NAME="description" CONTENT="Changes-- 2.0dev">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -27,166 +27,90 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html660"
+<A NAME="tex2html667"
   HREF="node40.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html656"
+<A NAME="tex2html663"
   HREF="node38.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html650"
+<A NAME="tex2html657"
   HREF="node38.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html658"
+<A NAME="tex2html665"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html661"
-  HREF="node40.html">Changes  1.6</A>
-<B> Up:</B> <A NAME="tex2html657"
+<B> Next:</B> <A NAME="tex2html668"
+  HREF="node40.html">Changes  1.8dev</A>
+<B> Up:</B> <A NAME="tex2html664"
   HREF="node38.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html651"
+<B> Previous:</B> <A NAME="tex2html658"
   HREF="node38.html">Aquamacs Emacs: What's New</A>
- &nbsp; <B>  <A NAME="tex2html659"
+ &nbsp; <B>  <A NAME="tex2html666"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION000141000000000000000">
-Changes-- 1.7</A>
+Changes-- 2.0dev</A>
 </H2>
 
 <P>
 
+<a name="changelog-top"></a>
+
+<P>
+
 <UL>
-<LI>Aquamacs now makes it easier for users to copy, cut and paste (and kill and yank) whole words, phrases or sentences by managing the spaces between words for them.  Spaces are removed and automatically inserted where needed, whenever the new `smart-spacing-mode' is turned on.  The Options menu provides a setting to turn it on automatically for all <EM>text-mode</EM> and related buffers.  To set a default for all buffers, configure the option `global-smart-spacing-mode' using the customization interface.
+<LI>Aquamacs is now based on Emacs 23 and the Cocoa (NextStep) port.  There are many internal changes associated with this, including the lack of a number of features.  Please help the Aquamacs team complete the transition.  Here, we report the changes between Emacs 22 and Emacs 23 with respect to the Aquamacs distribution.  Further changes can be found in the NEWS file for Emacs 23.
 
 <P>
 </LI>
-<LI>A problem that caused error messages upon startup and, sometimes, a failure to quit for some users (and only if Aquamacs was installed for the first time) was fixed. 
-Reported by William Triplett, Kevin Brubeck Unhammer and Jean-Christophe Helary.
+<LI>Aquamacs has a new icon in the Dock. 
 
 <P>
 </LI>
-<LI>Aquamacs now quits faster in some situations.
+<LI>Fullscreen mode now take over the full (current) screen, unconditionally, with no frames appearing on top.  (This is due to a bug in Mac OS X 10.5, which may be fixed by Apple at some point.)  Menu bar and the Dock cannot be brought up and there is no toolbar visible.
 
 <P>
 </LI>
-<LI>JDEE, the Java Development Environment for Emacs is no longer included in Aquamacs but provided as a point-and-click installer plugin, which can be downloaded from the Aquamacs website.  This reduces the size of the Aquamacs distribution, while maintaining an easy way for Java programmers to install the package.  Note that JDEE also includes CEDET.
+<LI>Toolbars can now be configured through the normal customization panel.  Right-click on the toolbar, use the Options/View menu item (or use M-x ns-tool-bar-customize).  The chosen icons are persistent; toolbar customizations are, however, tied to the toolbars set by modes.  That means that users can chose a different set of icons to display in latex-mode, for instance.  
 
 <P>
 </LI>
-<LI>Tabs showing a buffer that is mirrored in other windows will retain their position of point.
+<LI>Fonts and colors of all (mode-specific) faces can now be configured using the standard font and color panels.  The Options / Appearance menu provides a function to show the font panel, which leads to buttons for foreground and background colors.   We also have a menu item for the color panel separately, from where colors can be dragged&amp;dropped directly onto any piece of text to customize its face.  Holding down the Option key will, instead, set the face's background color. 
 
 <P>
 </LI>
-<LI>With soft wrapping on (Options menu), M-q now calls `unfill-paragraph-or-region', which has the same semantics as `fill-paragraph-or-region' for hard wrapped text.
+<LI>The `ns-tool-bar-display-mode' variable now supports label-only toolbars.  Right-click on the toolbar to change; or use M-x customize or <TT>Preferences.el</TT> to set it to `labels' in order to only show labels.  The former meaning of this value (showing labels and icons) is now `both' (or, usually, nil, the default).
 
 <P>
 </LI>
-<LI>C-z is no longer bound to minimize the frame.  Users who require this feature can add the key binding in their <TT>Preferences.el</TT> file:
-<TT>(define-key osx-key-mode-map `[(,control z)] 'iconify-or-deiconify-frame)</TT>
-(If you have bound C-z to something else using `global-set-key', note that the new `ignore' binding in `osx-key-mode-map' will shadow this.  You need to use `define-key' as above.)
+<LI>`aquamacs-find-file' (C-x C-f) will ask for confirmation if you first complete partial filename input in the minibuffer, but then attempt to create a new file.
+</LI>
+<LI>Completion is, in many cases, more powerful by completing to the left <I>and</I> the right of the input string.  Customize the option `completion-styles' to control this.
 
 <P>
 </LI>
-<LI>Cursor movement is no longer sluggish when multiple windows are visible.  Generally, Aquamacs should feel  faster.
-Reported by Drew Hess.
+<LI>Keyboard bindings are displayed more consistently in the menus now.  Throughout Aquamacs,  Mac standard key descriptions are used (this may be configured using the variable `ns-use-mac-modifier-symbols').  Users should be aware that manuals and tutorials will often refer to keys such as <TT>C-x</TT> (<TT>X</TT> or Control X), and that keys like <TT>M-q</TT> correspond to the chosen Meta key modifier, normally the Option key. 
 
 <P>
 </LI>
-<LI>When clicking into an (unselected) window, Aquamacs no longer sets the mark and marks a region in the buffer in certain circumstances. 
-Reported by Konrad Podczeck.
+<LI>Many more improvements. See etc/NEWS.
 
 <P>
 </LI>
-<LI>Resolved a problem where clicking in the fringe to set a breakpoint when using C-mode in conjunction with `gdb' (in the Emacs debugger) caused Aquamacs to crash. 
-Reported by Eric Martin.
+<LI>Internally, Emacs is based on a superset of Unicode now.  Emacs also uses Cocoa, a modern technology that facilitates program development and maintenance, supports 64-bit computing on Macs and allows for better integration of applications with the operating system and other applications.  
 
 <P>
 </LI>
-<LI>`gdb' and possibly other packages no longer fail to open certain additional `special display' windows.
-Reported by Eric Martin.
-
-<P>
-</LI>
-<LI>Aquamacs no longer opens additional windows when it opens files per drag&amp;drop or as directed by another application (such as Finder), if these files are already shown in a buffer.
-Reported by Tim Hsu.
-
-<P>
-</LI>
-<LI>Aquamacs no longer de-minimizes frames (from the Dock) when opening new files while all its frames are hidden.
-Reported by Tim Hsu.
-
-<P>
-</LI>
-<LI>Documents printed or exported to HTML with soft word wrapping turned on will now also exhibit soft wrapping in HTML, and wrap as expected at the page boundary on printed pages.
-Reported by Enrico Indiogine.
-
-<P>
-</LI>
-<LI>OS X will now more reliably recognize the latest installed Aquamacs version in order to open documents.
-
-<P>
-</LI>
-<LI>Aquamacs now remembers more and longer undo steps (maximum undo memory and number of steps increased four-fold).  
-
-<P>
-</LI>
-<LI>The ``dialog from hell'', asking users whether they want to save a file, or all, or none, or view the file or the differences, is now less ridiculous and has a Cancel button.  Whether the dialog is shown or the minibuffer is used,  Aquamacs always shows the buffer that is up for saving. 
-
-<P>
-</LI>
-<LI>The command line tool (installed with the Tools menu) will now find Aquamacs whereever it is installed in the system.  It will always use the latest Aquamacs Emacs that is known to the system.  (As a side-effect, you cannot use the command in connection with ``sudo'' any longer.  We recommend using Tramp.)
-Reported by Jean-Christophe Helary.
-
-<P>
-</LI>
-<LI>Bug reporting, and generally, sending e-mail, works now for users whose default Email client is Gmail.  Gmail receives special treatment because of a bug on Google's server. 
-
-<P>
-</LI>
-<LI>Charsets are given in HTML generated with ``Export to HTML''.  Documents now validate as HTML 4.01 Strict.
-
-<P>
-</LI>
-<LI>A rare display problem was fixed in cases of vertically split windows, with fringes and scroll bars turned off.
-Reported by Rolf Hanson.
-
-<P>
-</LI>
-<LI>Autoface mode works better with major modes derived from other ones.
-
-<P>
-</LI>
-<LI>More key bindings are now shown correctly in the menus (e.g., Undo/Redo).
-
-<P>
-</LI>
-<LI>Python-mode updated to version 5.1.0.  See also: <TT><A NAME="tex2html33"
-  HREF="https://launchpad.net/python-mode/+announcements">https://launchpad.net/python-mode/+announcements</A></TT>.
-
-<P>
-</LI>
-<LI>Haskell Mode updated to version 2.4.   We also provide better integration of the mode (recognition of various file types).
-Maintained by Stefan Monnier.
-
-<P>
-</LI>
-<LI>Prolog Mode 1.18 included with vast improvements (and some pre-configuration for Aquamacs).  
-Suggested by Kevin Brubeck Unhammer.  Code by Stefan Bruda et al.
-
-<P>
-</LI>
-<LI>ACT-R major mode improved: it inherits `lisp-mode' key bindings now.  <TT>.actr</TT> files are recognized automatically.
-
-<P>
-</LI>
-<LI>The Enhanced Carbon Emacs plugin is no longer loaded from <TT>ec-emacs</TT> directories, because it is incompatible with the latest Aquamacs versions.
+<LI>When printing (or exporting to PDF or HTML), double spaces are formatted as such and can be used to align text.
+Reported by George Nurser.
 
 <P>
 </LI>
@@ -195,35 +119,35 @@ Suggested by Kevin Brubeck Unhammer.  Code by Stefan Bruda et al.
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html660"
+<A NAME="tex2html667"
   HREF="node40.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html656"
+<A NAME="tex2html663"
   HREF="node38.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html650"
+<A NAME="tex2html657"
   HREF="node38.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html658"
+<A NAME="tex2html665"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html661"
-  HREF="node40.html">Changes  1.6</A>
-<B> Up:</B> <A NAME="tex2html657"
+<B> Next:</B> <A NAME="tex2html668"
+  HREF="node40.html">Changes  1.8dev</A>
+<B> Up:</B> <A NAME="tex2html664"
   HREF="node38.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html651"
+<B> Previous:</B> <A NAME="tex2html658"
   HREF="node38.html">Aquamacs Emacs: What's New</A>
- &nbsp; <B>  <A NAME="tex2html659"
+ &nbsp; <B>  <A NAME="tex2html666"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 <I>David</I>
-<BR><I>2009-02-17</I>
+<BR><I>2009-06-24</I>
 </ADDRESS>
 </BODY>
 </HTML>

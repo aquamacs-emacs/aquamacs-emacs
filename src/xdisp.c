@@ -5733,7 +5733,8 @@ get_next_display_element (it)
 		    ? (it->area != TEXT_AREA
 		       /* In mode line, treat \n, \t like other crl chars.  */
 		       || (it->c != '\t'
-			   && it->glyph_row && it->glyph_row->mode_line_p)
+			   && it->glyph_row
+			   && (it->glyph_row->mode_line_p || it->avoid_cursor_p))
 		       || (it->c != '\n' && it->c != '\t'))
 		    : (it->multibyte_p
 		       ? (!CHAR_PRINTABLE_P (it->c)
@@ -6918,7 +6919,14 @@ move_it_in_display_line_to (struct it *it,
 
 			  set_iterator_to_next (it, 1);
 #ifdef HAVE_WINDOW_SYSTEM
-			  if (IT_OVERFLOW_NEWLINE_INTO_FRINGE (it))
+			  /* One graphical terminals, newlines may
+			     "overflow" into the fringe if
+			     overflow-newline-into-fringe is non-nil.
+			     On text-only terminals, newlines may
+			     overflow into the last glyph on the
+			     display line.*/
+			  if (!FRAME_WINDOW_P (it->f)
+			      || IT_OVERFLOW_NEWLINE_INTO_FRINGE (it))
 			    {
 			      if (!get_next_display_element (it))
 				{
@@ -7015,7 +7023,8 @@ move_it_in_display_line_to (struct it *it,
 	  && it->current_x >= it->last_visible_x)
 	{
 #ifdef HAVE_WINDOW_SYSTEM
-	  if (IT_OVERFLOW_NEWLINE_INTO_FRINGE (it))
+	  if (!FRAME_WINDOW_P (it->f)
+	      || IT_OVERFLOW_NEWLINE_INTO_FRINGE (it))
 	    {
 	      if (!get_next_display_element (it)
 		  || BUFFER_POS_REACHED_P ())
@@ -9854,7 +9863,7 @@ update_tool_bar (f, save_match_data)
      struct frame *f;
      int save_match_data;
 {
-#if defined (USE_GTK) || defined (HAVE_NS) || USE_MAC_TOOLBAR
+#if defined (USE_GTK) || defined (HAVE_NS)
   int do_update = FRAME_EXTERNAL_TOOL_BAR (f);
 #else
   int do_update = WINDOWP (f->tool_bar_window)
@@ -10328,7 +10337,7 @@ redisplay_tool_bar (f)
   struct it it;
   struct glyph_row *row;
 
-#if defined (USE_GTK) || defined (HAVE_NS) || USE_MAC_TOOLBAR
+#if defined (USE_GTK) || defined (HAVE_NS)
   if (FRAME_EXTERNAL_TOOL_BAR (f))
     update_frame_tool_bar (f);
   return 0;
@@ -13959,7 +13968,7 @@ redisplay_window (window, just_this_one_p)
 #ifdef HAVE_WINDOW_SYSTEM
       if (FRAME_WINDOW_P (f))
         {
-#if defined (USE_GTK) || defined (HAVE_NS) || USE_MAC_TOOLBAR
+#if defined (USE_GTK) || defined (HAVE_NS)
           redisplay_tool_bar_p = FRAME_EXTERNAL_TOOL_BAR (f);
 #else
           redisplay_tool_bar_p = WINDOWP (f->tool_bar_window)
@@ -19904,10 +19913,10 @@ x_get_glyph_overhangs (glyph, f, left, right)
 	{
 	  struct composition *cmp = composition_table[glyph->u.cmp.id];
 
-	  if (cmp->rbearing - cmp->pixel_width)
+	  if (cmp->rbearing > cmp->pixel_width)
 	    *right = cmp->rbearing - cmp->pixel_width;
-	  if (cmp->lbearing < 0);
-	  *left = - cmp->lbearing;
+	  if (cmp->lbearing < 0)
+	    *left = - cmp->lbearing;
 	}
       else
 	{
@@ -19917,7 +19926,7 @@ x_get_glyph_overhangs (glyph, f, left, right)
 	  composition_gstring_width (gstring, glyph->u.cmp.from,
 				     glyph->u.cmp.to + 1, &metrics);
 	  if (metrics.rbearing > metrics.width)
-	    *right = metrics.rbearing;
+	    *right = metrics.rbearing - metrics.width;
 	  if (metrics.lbearing < 0)
 	    *left = - metrics.lbearing;
 	}

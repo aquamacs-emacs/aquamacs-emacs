@@ -1613,7 +1613,7 @@ If `F.~REV~' already exists, use it instead of checking it out again."
    (save-current-buffer
      (vc-ensure-vc-buffer)
      (let ((completion-table
-            (vc-call revision-completion-table buffer-file-name))
+            (vc-call revision-completion-table (list buffer-file-name)))
            (prompt "Revision to visit (default is working revision): "))
        (list
         (if completion-table
@@ -2138,6 +2138,7 @@ backend to NEW-BACKEND, and unregister FILE from the current backend.
 	      (throw 'found f)))
        (error "New file lacks a version control directory")))))
 
+;;;###autoload
 (defun vc-delete-file (file)
   "Delete file and mark it as such in the version control system."
   (interactive "fVC delete file: ")
@@ -2245,11 +2246,6 @@ log entries should be gathered."
 	  nil)))
   (vc-call-backend (vc-responsible-backend default-directory)
                    'update-changelog args))
-
-;;; The default back end.  Assumes RCS-like revision numbering.
-
-(defun vc-default-revision-granularity ()
-  (error "Your backend will not work with this version of VC mode."))
 
 ;; functions that operate on RCS revision numbers.  This code should
 ;; also be moved into the backends.  It stays for now, however, since

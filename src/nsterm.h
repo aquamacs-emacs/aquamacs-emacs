@@ -71,6 +71,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 - menuDown: sender;
 - toolbarClicked: (id)item;
 - toggleToolbar: (id)sender;
+- toolbarCustomized: (id)sender;
 - (void)keyDown: (NSEvent *)theEvent;
 - (void)mouseDown: (NSEvent *)theEvent;
 - (void)mouseUp: (NSEvent *)theEvent;
@@ -136,17 +137,26 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
      EmacsView *emacsView;
      NSMutableDictionary *identifierToItem;
      NSMutableArray *activeIdentifiers;
+     NSMutableArray *availableIdentifiers;
      NSArray *prevIdentifiers;
      unsigned long enablement, prevEnablement;
+     BOOL disableHooks;
    }
 - initForView: (EmacsView *)view withIdentifier: (NSString *)identifier;
 - (void) clearActive;
 - (BOOL) changed;
-- (void) addDisplayItemSpacerWithIdx: (int)idx;
+- (void) addDisplayItemSpacerWithIdx: (int)idx key: (char *) key;
 - (void) addDisplayItemWithImage: (EmacsImage *)img idx: (int)idx
                         helpText: (char *)help
-			enabled: (BOOL)enabled
-      			labelText: (char *)label;
+		 	 enabled: (BOOL)enabled
+ 		         visible: (BOOL)visible
+  		             key: (char *)key
+      		       labelText: (char *)label;
+
+
+- (void)customizationDidChange;
+- (void)checkCustomizationChange:(NSTimer*)theTimer;
+- (void)runCustomizationPalette:(id)sender;
 /* delegate methods */
 - (NSToolbarItem *)toolbar: (NSToolbar *)toolbar
      itemForItemIdentifier: (NSString *)itemIdentifier
@@ -361,9 +371,11 @@ typedef unsigned long NSUInteger;
 #define KEY_NS_SHOW_PREFS              ((1<<28)|(0<<16)|14)
 #define KEY_NS_CHECK_SPELLING          ((1<<28)|(0<<16)|20)
 #define KEY_NS_SPELLING_CHANGE         ((1<<28)|(0<<16)|21)
+#define KEY_NS_APPLICATION_ACTIVATED   ((1<<28)|(0<<16)|90)
+#define KEY_NS_APPLICATION_OPEN_UNTITLED ((1<<28)|(0<<16)|91)
 #define KEY_NS_ABOUT                   ((1<<28)|(0<<16)|130)
 #define KEY_NS_CHECK_FOR_UPDATES       ((1<<28)|(0<<16)|131)
-
+#define KEY_NS_TOOLBAR_CUSTOMIZED      ((1<<28)|(0<<16)|132)
 /* could use list to store these, but rest of emacs has a big infrastructure
    for managing a table of bitmap "records" */
 struct ns_bitmap_record
@@ -688,7 +700,7 @@ extern void nsfont_make_fontset_for_font (Lisp_Object name,
 
 /* In nsfont, for debugging */
 struct glyph_string;
-void dump_glyphstring (struct glyph_string *s);
+void ns_dump_glyphstring (struct glyph_string *s);
 
 /* Implemented in nsterm, published in or needed from nsfns. */
 extern Lisp_Object Qfontsize;

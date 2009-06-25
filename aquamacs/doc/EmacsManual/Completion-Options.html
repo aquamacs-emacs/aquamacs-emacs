@@ -1,9 +1,36 @@
 <html lang="en">
 <head>
-<title>Completion Options</title>
+<title>Completion Options - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Completion Options">
-<meta name="generator" content="makeinfo 4.6">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.9">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Completion.html#Completion" title="Completion">
+<link rel="prev" href="Strict-Completion.html#Strict-Completion" title="Strict Completion">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.0.94.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
   pre.display { font-family:inherit }
@@ -12,60 +39,68 @@
   pre.smallformat  { font-family:inherit; font-size:smaller }
   pre.smallexample { font-size:smaller }
   pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
 --></style>
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
 <p>
-Node:&nbsp;<a name="Completion%20Options">Completion Options</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Strict-Completion.html#Strict%20Completion">Strict Completion</a>,
+<a name="Completion-Options"></a>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Strict-Completion.html#Strict-Completion">Strict Completion</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Completion.html#Completion">Completion</a>
-<hr><br>
+<hr>
 </div>
 
-<h3 class="subsection">Completion Options</h4>
+<h4 class="subsection">8.3.4 Completion Options</h4>
 
-<p>When completion is done on file names, certain file names are usually
-ignored.  The variable <code>completion-ignored-extensions</code> contains a
-list of strings; a file whose name ends in any of those strings is
-ignored as a possible completion.  The standard value of this variable
-has several elements including <code>".o"</code>, <code>".elc"</code>, <code>".dvi"</code>
-and <code>"~"</code>.  The effect is that, for example, <code>foo</code> can
-complete to <code>foo.c</code> even though <code>foo.o</code> exists as well. 
-However, if <em>all</em> the possible completions end in "ignored"
-strings, then they are not ignored.  Ignored extensions do not apply to
-lists of completions--those always mention all possible completions.
+<p><a name="index-completion_002dauto_002dhelp-176"></a>  If <code>completion-auto-help</code> is set to <code>nil</code>, the completion
+commands never display the completion list buffer; you must type
+<kbd>?</kbd>  to display the list.  If the value is <code>lazy</code>, Emacs only
+shows the completion list buffer on the second attempt to complete. 
+In other words, if there is nothing to complete, the first &lt;TAB&gt;
+echoes `<samp><span class="samp">Next char not unique</span></samp>'; the second &lt;TAB&gt; does the
+completion list buffer.
 
-   <p>Normally, a completion command that cannot determine even one
-additional character automatically displays a list of all possible
-completions.  If the variable <code>completion-auto-help</code> is set to
-<code>nil</code>, this automatic display is disabled, so you must type
-<kbd>?</kbd> to display the list of completions.
+   <p><a name="index-completion_002dignored_002dextensions-177"></a><a name="index-ignored-file-names_002c-in-completion-178"></a>  When completing file names, certain file names are usually ignored. 
+The variable <code>completion-ignored-extensions</code> contains a list of
+strings; a file name ending in any of those strings is ignored as a
+completion candidate.  The standard value of this variable has several
+elements including <code>".o"</code>, <code>".elc"</code>, and <code>"~"</code>.  For
+example, if a directory contains `<samp><span class="samp">foo.c</span></samp>' and `<samp><span class="samp">foo.elc</span></samp>',
+`<samp><span class="samp">foo</span></samp>' completes to `<samp><span class="samp">foo.c</span></samp>'.  However, if <em>all</em> possible
+completions end in &ldquo;ignored&rdquo; strings, they are not ignored: in the
+previous example, `<samp><span class="samp">foo.e</span></samp>' completes to `<samp><span class="samp">foo.elc</span></samp>'. 
+Displaying a list of possible completions disregards
+<code>completion-ignored-extensions</code>; it shows them all.
 
-   <p>Partial Completion mode implements a more powerful kind of
-completion that can complete multiple words in parallel.  For example,
-it can complete the command name abbreviation <code>p-b</code> into
-<code>print-buffer</code>, because no other command starts with two words
-whose initials are <code>p</code> and <code>b</code>.
+   <p>If an element of <code>completion-ignored-extensions</code> ends in a
+slash (<samp><span class="file">/</span></samp>), it's a subdirectory name; that directory and its
+contents are ignored.  Elements of
+<code>completion-ignored-extensions</code> that do not end in a slash are
+ordinary file names.
 
-   <p>Partial completion of directories in file names uses <code>*</code> to
-indicate the places for completion; thus, <code>/u*/b*/f*</code> might
-complete to <code>/usr/bin/foo</code>.
+   <p><a name="index-case_002dsensitivity-and-completion-179"></a><a name="index-read_002dfile_002dname_002dcompletion_002dignore_002dcase-180"></a><a name="index-read_002dbuffer_002dcompletion_002dignore_002dcase-181"></a>  When completing file names, Emacs ignores case differences if the
+variable <code>read-file-name-completion-ignore-case</code> is
+non-<code>nil</code>.  The default value is <code>nil</code> on systems that have
+case-sensitive file-names, such as GNU/Linux; it is non-<code>nil</code> on
+systems that have case-insensitive file-names, such as Microsoft
+Windows.  When completing buffer names, Emacs ignores case differences
+if <code>read-buffer-completion-ignore-case</code> is non-<code>nil</code> (the
+default value is <code>nil</code>).
 
-   <p>To enable this mode, use the command <kbd>M-x
-partial-completion-mode</kbd>, or customize the option
-<code>partial-completion-mode</code>.  This binds the partial completion
-commands to &lt;TAB&gt;, &lt;SPC&gt;, &lt;RET&gt;, and <kbd>?</kbd>.  The usual
-completion commands are available on <kbd>M-&lt;TAB&gt;</kbd>,
-<kbd>M-&lt;SPC&gt;</kbd>, <kbd>M-&lt;RET&gt;</kbd> and <kbd>M-?</kbd>.
+   <p><a name="index-completion_002dstyles-182"></a>  You can customize the matching rules for completion alternatives
+using the variable <code>completion-styles</code>.  Its value should be a
+list of symbols, each representing a <dfn>completion style</dfn>; valid
+style symbols are <code>basic</code>, <code>partial-completion</code>,
+<code>emacs22</code>, and <code>emacs21</code>.  When completing, Emacs attempts
+to use the first completion style in the list; if this does not return
+any completion alternatives, it tries the next completion style in the
+list, and so on.  The completion rules described in <a href="Completion-Commands.html#Completion-Commands">Completion Commands</a> correspond to the default value of <code>completion-styles</code>,
+which is <code>(basic partial-completion emacs22)</code>.
 
-   <p>Another feature of Partial Completion mode is to extend
-<code>find-file</code> so that the <code>&lt;</code><var>include</var><code>&gt;</code> stands for the
-file named <var>include</var> in some directory in the path
-<code>PC-include-file-path</code>.  If you set <code>PC-disable-includes</code> to
-non-<code>nil</code>, this feature is disabled.
-
-   <p>Icomplete mode presents a constantly-updated display that tells you
+   <p><a name="index-Icomplete-mode-183"></a><a name="index-icomplete_002dmode-184"></a>  Icomplete mode presents a constantly-updated display that tells you
 what completions are available for the text you've entered so far.  The
 command to enable or disable this minor mode is <kbd>M-x
 icomplete-mode</kbd>.

@@ -742,7 +742,7 @@ PATH-AND-SUFFIXES is a pair of lists, (DIRECTORIES . SUFFIXES)."
 (make-obsolete 'locate-file-completion 'locate-file-completion-table "23.1")
 
 (defvar locate-dominating-stop-dir-regexp
-  "\\`\\(?:[\\/][\\/][^\\/]+\\|/\\(?:net\\|afs\\|\\.\\.\\.\\)/\\)\\'"
+  "\\`\\(?:[\\/][\\/][^\\/]+[\\/]\\|/\\(?:net\\|afs\\|\\.\\.\\.\\)/\\)\\'"
   "Regexp of directory names which stop the search in `locate-dominating-file'.
 Any directory whose name matches this regexp will be treated like
 a kind of root directory by `locate-dominating-file' which will stop its search
@@ -4455,13 +4455,13 @@ change the additional actions you can take on files."
                         t
                       (setq queried t)
 		      (with-current-buffer buffer
-			(with-selected-window (get-window-for-other-buffer)
+			(select-window (get-window-for-other-buffer))
 			  (if (and (boundp 'tabbar-mode) tabbar-mode)
 			      (switch-to-buffer-in-tab buffer)
 			    (switch-to-buffer buffer))
 			  (select-frame-set-input-focus (window-frame (selected-window)))
 			  (if (fboundp 'smart-move-minibuffer-inside-screen)
-			      (smart-move-minibuffer-inside-screen))))
+			      (smart-move-minibuffer-inside-screen)))
                       (if (buffer-file-name buffer)
                           (format "Save file %s? "
 				  (if (> (length (buffer-file-name buffer)) 30)

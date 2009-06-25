@@ -1,9 +1,36 @@
 <html lang="en">
 <head>
-<title>Using Emacs as a Server</title>
+<title>Emacs Server - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Using Emacs as a Server">
-<meta name="generator" content="makeinfo 4.6">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.9">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Shell.html#Shell" title="Shell">
+<link rel="next" href="Printing.html#Printing" title="Printing">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.0.94.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
   pre.display { font-family:inherit }
@@ -12,98 +39,77 @@
   pre.smallformat  { font-family:inherit; font-size:smaller }
   pre.smallexample { font-size:smaller }
   pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
 --></style>
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
 <p>
-Node:&nbsp;<a name="Emacs%20Server">Emacs Server</a>,
-Next:&nbsp;<a rel="next" accesskey="n" href="Hardcopy.html#Hardcopy">Hardcopy</a>,
+<a name="Emacs-Server"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Printing.html#Printing">Printing</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Shell.html#Shell">Shell</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr><br>
+<hr>
 </div>
 
-<h3 class="section">Using Emacs as a Server</h3>
+<h2 class="chapter">42 Using Emacs as a Server</h2>
 
-<p>Various programs such as <code>mail</code> can invoke your choice of editor
-to edit a particular piece of text, such as a message that you are
-sending.  By convention, most of these programs use the environment
-variable <code>EDITOR</code> to specify which editor to run.  If you set
-<code>EDITOR</code> to <code>emacs</code>, they invoke Emacs--but in an
-inconvenient fashion, by starting a new, separate Emacs process.  This
-is inconvenient because it takes time and because the new Emacs process
-doesn't share the buffers in any existing Emacs process.
+<p><a name="index-emacsclient-3671"></a><a name="index-Emacs-as-a-server-3672"></a><a name="index-server_002c-using-Emacs-as-3673"></a><a name="index-g_t_0040env_007bEDITOR_007d-environment-variable-3674"></a>
+  Various programs such as <samp><span class="command">mail</span></samp> can invoke your choice of
+editor to edit a particular piece of text, such as a message that you
+are sending.  By convention, most of these programs use the
+environment variable <samp><span class="env">EDITOR</span></samp> to specify which editor to run.  If
+you set <samp><span class="env">EDITOR</span></samp> to `<samp><span class="samp">emacs</span></samp>', they invoke Emacs&mdash;but in an
+inconvenient way, by starting a new Emacs process.  This is
+inconvenient because the new Emacs process doesn't share buffers, a
+command history, or other kinds of information with any existing Emacs
+process.
 
-   <p>You can arrange to use your existing Emacs process as the editor for
-programs like <code>mail</code> by using the Emacs client and Emacs server
-programs.  Here is how.
+   <p>You can solve this problem by setting up Emacs as an <dfn>edit
+server</dfn>, so that it &ldquo;listens&rdquo; for external edit requests and acts
+accordingly.  There are two ways to start an Emacs server:
 
-   <p>First, the preparation.  Within Emacs, call the function
-<code>server-start</code>.  (Your <code>.emacs</code> file can do this automatically
-if you add the expression <code>(server-start)</code> to it.)  Then, outside
-Emacs, set the <code>EDITOR</code> environment variable to <code>emacsclient</code>. 
-(Note that some programs use a different environment variable; for
-example, to make TeX use <code>emacsclient</code>, you should set the
-<code>TEXEDIT</code> environment variable to <code>emacsclient +%d %s</code>.)
+   <p><a name="index-server_002dstart-3675"></a>  The first is to run the command <code>server-start</code> in an existing
+Emacs process: either type <kbd>M-x server-start</kbd>, or put the
+expression <code>(server-start)</code> in your initialization file
+(see <a href="Init-File.html#Init-File">Init File</a>).  The existing Emacs process is the server; when
+you exit Emacs, the server dies with the Emacs process.
 
-   <p>Then, whenever any program invokes your specified <code>EDITOR</code>
-program, the effect is to send a message to your principal Emacs telling
-it to visit a file.  (That's what the program <code>emacsclient</code> does.) 
-Emacs displays the buffer immediately and you can immediately begin
-editing it.
+   <p><a name="index-daemon_002c-Emacs-3676"></a>  The second way to start an Emacs server is to run Emacs as a
+<dfn>daemon</dfn>, using the `<samp><span class="samp">--daemon</span></samp>' command-line option. 
+See <a href="Initial-Options.html#Initial-Options">Initial Options</a>.  When Emacs is started this way, it calls
+<code>server-start</code> after initialization, and returns control to the
+calling terminal instead of opening an initial frame; it then waits in
+the background, listening for edit requests.
 
-   <p>When you've finished editing that buffer, type <kbd>C-x #</kbd>
-(<code>server-edit</code>).  This saves the file and sends a message back to
-the <code>emacsclient</code> program telling it to exit.  The programs that
-use <code>EDITOR</code> wait for the "editor" (actually, <code>emacsclient</code>)
-to exit.  <kbd>C-x #</kbd> also checks for other pending external requests
-to edit various files, and selects the next such file.
+   <p><a name="index-g_t_0040env_007bTEXEDIT_007d-environment-variable-3677"></a>  Once an Emacs server is set up, you can use a shell command called
+<samp><span class="command">emacsclient</span></samp> to connect to the existing Emacs process and
+tell it to visit a file.  If you set the <samp><span class="env">EDITOR</span></samp> environment
+variable to `<samp><span class="samp">emacsclient</span></samp>', programs such as <samp><span class="command">mail</span></samp> will
+use the existing Emacs process for editing.<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>
 
-   <p>You can switch to a server buffer manually if you wish; you don't
-have to arrive at it with <kbd>C-x #</kbd>.  But <kbd>C-x #</kbd> is the way to
-say that you are finished with one.
-
-   <p>Finishing with a server buffer also kills the buffer, unless it
-already existed in the Emacs session before the server asked to create
-it.  However, if you set <code>server-kill-new-buffers</code> to <code>nil</code>,
-then a different criterion is used: finishing with a server buffer
-kills it if the file name matches the regular expression
-<code>server-temp-file-regexp</code>.  This is set up to distinguish certain
-"temporary" files.
-
-   <p>If you set the variable <code>server-window</code> to a window or a frame,
-<kbd>C-x #</kbd> displays the server buffer in that window or in that frame.
-
-   <p>While <code>mail</code> or another application is waiting for
-<code>emacsclient</code> to finish, <code>emacsclient</code> does not read terminal
-input.  So the terminal that <code>mail</code> was using is effectively
-blocked for the duration.  In order to edit with your principal Emacs,
-you need to be able to use it without using that terminal.  There are
-three ways to do this:
-
-     <ul>
-<li>Using a window system, run <code>mail</code> and the principal Emacs in two
-separate windows.  While <code>mail</code> is waiting for <code>emacsclient</code>,
-the window where it was running is blocked, but you can use Emacs by
-switching windows.
-
-     <li>Using virtual terminals, run <code>mail</code> in one virtual terminal
-and run Emacs in another.
-
-     <li>Use Shell mode or Term mode in Emacs to run the other program such as
-<code>mail</code>; then, <code>emacsclient</code> blocks only the subshell under
-Emacs, and you can still use Emacs to edit the file. 
-</ul>
-
-   <p>If you run <code>emacsclient</code> with the option <code>--no-wait</code>, it
-returns immediately without waiting for you to "finish" the buffer
-in Emacs.  Note that server buffers created in this way are not killed
-automatically when you finish with them.
+   <p><a name="index-server_002dname-3678"></a>  You can run multiple Emacs servers on the same machine by giving
+each one a unique &ldquo;server name&rdquo;, using the variable
+<code>server-name</code>.  For example, <kbd>M-x set-variable &lt;RET&gt;
+server-name &lt;RET&gt; foo &lt;RET&gt;</kbd> sets the server name to
+`<samp><span class="samp">foo</span></samp>'.  The <code>emacsclient</code> program can specify a server by
+name, using the `<samp><span class="samp">-s</span></samp>' option (see <a href="emacsclient-Options.html#emacsclient-Options">emacsclient Options</a>).
 
 <ul class="menu">
-<li><a accesskey="1" href="Invoking-emacsclient.html#Invoking%20emacsclient">Invoking emacsclient</a>: 
+<li><a accesskey="1" href="Invoking-emacsclient.html#Invoking-emacsclient">Invoking emacsclient</a>:  Connecting to the Emacs server. 
+<li><a accesskey="2" href="emacsclient-Options.html#emacsclient-Options">emacsclient Options</a>:   Emacs client startup options. 
 </ul>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Some programs use
+a different environment variable; for example, to make TeX use
+`<samp><span class="samp">emacsclient</span></samp>', set the <samp><span class="env">TEXEDIT</span></samp> environment variable to
+`<samp><span class="samp">emacsclient +%d %s</span></samp>'.</p>
+
+   <p><hr></div>
 
    </body></html>
 

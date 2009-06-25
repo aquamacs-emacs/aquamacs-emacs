@@ -28,6 +28,11 @@
 
 ;;; Code:
 
+;; useful functions (stump)
+
+(defun aq-binding (any)
+  nil)
+
 ;; Don't clobber an existing menu-bar keymap, to preserve any menu-bar key
 ;; definitions made in loaddefs.el.
 (or (lookup-key global-map [menu-bar])
@@ -117,31 +122,6 @@ for the definition of the menu frame."
 
 (define-key menu-bar-file-menu [separator-window]
   '(menu-item "--"))
-
-(define-key menu-bar-file-menu [ps-print-region]
-  '(menu-item "Postscript Print Region (B+W)" ps-print-region
-	      :enable mark-active
-	      :help "Pretty-print marked region in black and white to PostScript printer"))
-(define-key menu-bar-file-menu [ps-print-buffer]
-  '(menu-item "Postscript Print Buffer (B+W)" ps-print-buffer
-	      :enable (menu-bar-menu-frame-live-and-visible-p)
-	      :help "Pretty-print current buffer in black and white to PostScript printer"))
-(define-key menu-bar-file-menu [ps-print-region-faces]
-  '(menu-item "Postscript Print Region" ps-print-region-with-faces
-	      :enable mark-active
-	      :help "Pretty-print marked region to PostScript printer"))
-(define-key menu-bar-file-menu [ps-print-buffer-faces]
-  '(menu-item "Postscript Print Buffer" ps-print-buffer-with-faces
-	      :enable (menu-bar-menu-frame-live-and-visible-p)
-	      :help "Pretty-print current buffer to PostScript printer"))
-(define-key menu-bar-file-menu [print-region]
-  '(menu-item "Print Region" print-region
-	      :enable mark-active
-	      :help "Print region between mark and current position"))
-(define-key menu-bar-file-menu [print-buffer]
-  '(menu-item "Print Buffer" print-buffer
-	      :enable (menu-bar-menu-frame-live-and-visible-p)
-	      :help "Print current buffer with page headings"))
 
 (define-key menu-bar-file-menu [separator-print]
   '(menu-item "--"))
@@ -321,7 +301,11 @@ for the definition of the menu frame."
 	      :help "Search for a regexp in all tagged files"))
 (define-key menu-bar-search-menu [separator-tag-search]
   '(menu-item "--"))
-
+(define-key menu-bar-search-menu [grep]
+  '(menu-item "Search Files (Grep)..." grep
+	      :help "Search files for strings or regexps (with Grep)"))
+(define-key menu-bar-search-menu [separator-grep-search]
+  '("--"))
 (define-key menu-bar-search-menu [repeat-search-back]
   '(menu-item "Repeat Backwards" nonincremental-repeat-search-backward
 	      :enable (or (and (eq menu-bar-last-search-type 'string)
@@ -477,7 +461,7 @@ for the definition of the menu frame."
 (defvar yank-menu (cons "Select Yank" nil))
 (fset 'yank-menu (cons 'keymap yank-menu))
 (define-key menu-bar-edit-menu [paste-from-menu]
-  '(menu-item "Paste from Kill Menu" yank-menu
+  '(menu-item "Paste Previous" yank-menu
 	      :enable (and (cdr yank-menu) (not buffer-read-only))
 	      :help "Choose a string from the kill ring and paste it"))
 (define-key menu-bar-edit-menu [paste]
@@ -538,11 +522,15 @@ for the definition of the menu frame."
     (yank)))
 
 (defun clipboard-kill-ring-save (beg end)
-  "Copy region to kill ring, and save in the X clipboard."
+  "Copy region to kill ring, and save in the X clipboard.
+Do not copy region to kill ring if that would
+result in a duplicate entry."
   (interactive "r")
   (when (or (not transient-mark-mode) mark-active)
     (let ((x-select-enable-clipboard t))
-      (kill-ring-save beg end))))
+      (kill-ring-save beg end)
+      (if (equal (car kill-ring) (cadr kill-ring))
+      	  (setcdr kill-ring (cddr kill-ring))))))
 
 (defun clipboard-kill-region (beg end)
   "Kill the region, and save it in the X clipboard."
@@ -781,6 +769,10 @@ mail status in mode line"))
 
 (define-key menu-bar-showhide-menu [datetime-separator]
   '("--"))
+(define-key menu-bar-showhide-menu [ns-tool-bar]
+  `(menu-item "Toolbar..." ns-tool-bar-customize
+	      :help "Display the Toolbar customization panel"
+	      :visible ,(fboundp 'ns-tool-bar-customize)))
 
 (define-key menu-bar-showhide-menu [showhide-speedbar]
   '(menu-item "Speedbar" speedbar-frame-mode
@@ -1014,7 +1006,7 @@ mail status in mode line"))
   ;; It is better not to use backquote here,
   ;; because that makes a bootstrapping problem
   ;; if you need to recompile all the Lisp files using interpreted code.
-  (list 'menu-item "Mule (Multilingual Environment)" mule-menu-keymap
+  (list 'menu-item "Language" mule-menu-keymap
 ;; Most of the MULE menu actually does make sense in unibyte mode,
 ;; e.g. language selection.
 ;;;	':visible 'default-enable-multibyte-characters
@@ -1332,9 +1324,6 @@ mail status in mode line"))
 (define-key menu-bar-tools-menu [compile]
   '(menu-item "Compile..." compile
 	      :help "Invoke compiler or Make, view compilation errors"))
-(define-key menu-bar-tools-menu [grep]
-  '(menu-item "Search Files (Grep)..." grep
-	      :help "Search files for strings or regexps (with Grep)"))
 
 
 ;; The "Help" menu items
@@ -1670,9 +1659,9 @@ Buffers menu is regenerated."
 
 (defvar list-buffers-directory nil)
 
-(defun menu-bar-select-buffer ()
+(defun menu-bar-select-buffer (&optional buffer)
   (interactive)
-  (switch-to-buffer last-command-event))
+  (switch-to-buffer (or buffer last-command-event)))
 
 (defun menu-bar-select-frame (frame)
   (make-frame-visible frame)
@@ -1751,7 +1740,7 @@ Buffers menu is regenerated."
 					(cons nil nil))
 				  `(lambda ()
                                      (interactive)
-                                     (switch-to-buffer ,(cdr pair))))))
+                                     (menu-bar-select-buffer ,(cdr pair))))))
                    (list buffers-vec))))
 
 	 ;; Make a Frames menu if we have more than one frame.

@@ -773,9 +773,7 @@ Run the Viper tutorial? "))
                        current-language-environment
                      "English")))
            (filename (get-language-info lang 'tutorial))
-           ;; Choose a buffer name including the language so that
-           ;; several languages can be tested simultaneously:
-           (tut-buf-name (concat "TUTORIAL (" lang ")"))
+           (tut-buf-name filename)
            (old-tut-buf (get-buffer tut-buf-name))
            (old-tut-win (when old-tut-buf (get-buffer-window old-tut-buf t)))
            (old-tut-is-ok (when old-tut-buf
@@ -807,7 +805,7 @@ Run the Viper tutorial? "))
       ;; (Re)build the tutorial buffer if it is not ok
       (unless old-tut-is-ok
         (switch-to-buffer (get-buffer-create tut-buf-name))
-        (unless old-tut-buf (text-mode))
+        ;; (unless old-tut-buf (text-mode))
         (unless lang (error "Variable lang is nil"))
         (setq tutorial--lang lang)
         (setq old-tut-file (file-exists-p (tutorial--saved-file)))

@@ -203,46 +203,34 @@ ns_get_window (Lisp_Object maybeFrame)
 
 
 static NSScreen *
-ns_get_screen (Lisp_Object anythingUnderTheSun)
+ns_get_screen (Lisp_Object screen)
 {
-  id window =nil;
-  NSScreen *screen = 0;
+  struct frame *f;
 
-  struct terminal *terminal;
-  struct ns_display_info *dpyinfo;
-  struct frame *f = NULL;
-  Lisp_Object frame;
+  if (EQ (Qt, screen)) /* not documented */
+    return [NSScreen mainScreen];
 
-  if (INTEGERP (anythingUnderTheSun)) {
-    /* we got a terminal */
-    terminal = get_terminal (anythingUnderTheSun, 1);
-    dpyinfo = terminal->display_info.ns;
-    f = dpyinfo->x_focus_frame;
-    if (!f)
-      f = dpyinfo->x_highlight_frame;
-
-  } else if (FRAMEP (anythingUnderTheSun) &&
-             FRAME_NS_P (XFRAME (anythingUnderTheSun))) {
-    /* we got a frame */
-    f = XFRAME (anythingUnderTheSun);
-
-  } else if (STRINGP (anythingUnderTheSun)) { /* FIXME/cl for multi-display */
-  }
-
-  if (!f)
-    f = SELECTED_FRAME ();
-  if (f)
+  struct terminal *terminal = get_terminal (screen, 1);
+  if (terminal->type != output_ns)
+    return NULL;
+  else
     {
-      XSETFRAME (frame, f);
-      window = ns_get_window (frame);
+      if (NILP (screen))
+	f = SELECTED_FRAME ();
+      else if (FRAMEP (screen))
+	f = XFRAME (screen);
+      else
+	{
+	  struct ns_display_info *dpyinfo = terminal->display_info.ns;
+	  f = dpyinfo->x_focus_frame;
+	  if (!f)
+	    f = dpyinfo->x_highlight_frame;
+	}
+      if (!f || !FRAME_NS_P (f))
+	return NULL;
+      else
+	return [[FRAME_NS_VIEW (f) window] screen];
     }
-
-  if (window)
-    screen = [window screen];
-  if (!screen)
-    screen = [NSScreen mainScreen];
-
-  return screen;
 }
 
 
@@ -744,7 +732,6 @@ void
 x_set_tool_bar_lines (struct frame *f, Lisp_Object value, Lisp_Object oldval)
 {
   int nlines;
-  Lisp_Object root_window;
 
   if (FRAME_MINIBUF_ONLY_P (f))
     return;
@@ -1043,7 +1030,7 @@ frame_parm_handler ns_frame_parm_handlers[] =
   x_set_fringe_width, /* generic OK */
   x_set_fringe_width, /* generic OK */
   0, /* x_set_wait_for_wm, will ignore */
-  0,  /* x_set_fullscreen will ignore */
+  x_set_fullscreen,   /* generic OK */
   x_set_font_backend, /* generic OK */
   x_set_alpha
 };
@@ -1331,13 +1318,20 @@ be shared by the new frame.  */)
 
   if (! f->output_data.ns->explicit_parent)
     {
-        tem = x_get_arg (dpyinfo, parms, Qvisibility, 0, 0, RES_TYPE_BOOLEAN);
-        if (EQ (tem, Qunbound))
-            tem = Qnil;
-
-        x_set_visibility (f, tem, Qnil);
-        if (EQ (tem, Qt))
-            [[FRAME_NS_VIEW (f) window] makeKeyWindow];
+      tem = x_get_arg (dpyinfo, parms, Qvisibility, 0, 0, RES_TYPE_SYMBOL);
+      if (EQ (tem, Qunbound))
+	tem = Qt;
+      x_set_visibility (f, tem, Qnil);
+      if (EQ (tem, Qicon))
+	x_iconify_frame (f);
+      else if (! NILP (tem))
+	{
+	  x_make_frame_visible (f);
+	  f->async_visible = 1;
+	  [[FRAME_NS_VIEW (f) window] makeKeyWindow];
+	}
+      else
+	  f->async_visible = 0;
     }
 
   if (FRAME_HAS_MINIBUF_P (f)
@@ -1627,7 +1621,7 @@ DEFUN ("ns-popup-font-panel", Fns_popup_font_panel, Sns_popup_font_panel,
 
   check_ns ();
   BLOCK_INPUT;
-  fm = [NSFontManager new];
+  fm = [NSFontManager sharedFontManager];
   if (NILP (frame))
     f = SELECTED_FRAME ();
   else
@@ -1671,7 +1665,7 @@ DEFUN ("ns-popup-color-panel", Fns_popup_color_panel, Sns_popup_color_panel,
 DEFUN ("ns-read-file-name", Fns_read_file_name, Sns_read_file_name, 1, 4, 0,
        doc: /* Use a graphical panel to read a file name, using prompt PROMPT.
 Optional arg DIR, if non-nil, supplies a default directory.
-Optional arg ISLOAD, if non-nil, means read a file name for saving.
+Optional arg ISLOAD, if non-nil, means read a file name for loading.
 Optional arg INIT, if non-nil, provides a default file name to use.  */)
      (prompt, dir, isLoad, init)
      Lisp_Object prompt, dir, isLoad, init;
@@ -2366,6 +2360,15 @@ In case the execution fails, an error is signaled. */)
 }
 #endif
 
+DEFUN ("ns-application-hidden-p", Fns_application_hidden_p, Sns_application_hidden_p, 0, 0, 0,
+       doc: /* Returns non-nil if application is hidden. */)
+    ()
+{
+
+  check_ns ();
+  return ([NSApp isHidden] == YES ?
+	  Qt : Qnil);
+}
 
 /* ==========================================================================
 
@@ -2716,15 +2719,22 @@ that stands for the selected frame's display. */)
      Lisp_Object display;
 {
   int top;
+  NSScreen *screen;
   NSRect vScreen;
 
   check_ns ();
-  vScreen = [ns_get_screen (display) visibleFrame];
-  top = vScreen.origin.y == 0.0 ?
-    (int) [ns_get_screen (display) frame].size.height - vScreen.size.height : 0;
 
+  screen = ns_get_screen (display);
+  if (!screen)
+    return Qnil;
+
+  vScreen = [screen visibleFrame];
+
+  /* NS coordinate system is upside-down.
+     Transform to screen-specific coordinates. */
   return list4 (make_number ((int) vScreen.origin.x),
-                make_number (top),
+                make_number ((int) [screen frame].size.height
+			     - vScreen.size.height - vScreen.origin.y),
                 make_number ((int) vScreen.size.width),
                 make_number ((int) vScreen.size.height));
 }
@@ -2741,7 +2751,7 @@ If omitted or nil, that stands for the selected frame's display.  */)
 {
   check_ns ();
   return make_number
-    (NSBitsPerSampleFromDepth ([ns_get_screen (display) depth]));
+    (NSBitsPerPixelFromDepth ([ns_get_screen (display) depth]));
 }
 
 
@@ -2908,6 +2918,29 @@ Value is t if tooltip was open, nil otherwise.  */)
 }
 
 
+DEFUN ("ns-open-help-anchor", Fns_open_help_anchor, Sns_open_help_anchor, 1, 2, 0,
+       doc: /* Show Apple Help  */)
+     (anchor, book)
+     Lisp_Object anchor, book;
+{
+  check_ns ();
+  BLOCK_INPUT;
+  CHECK_STRING (anchor);
+
+  if (! NILP (book) )
+    CHECK_STRING (book);
+
+  [[NSHelpManager sharedHelpManager] openHelpAnchor:[NSString stringWithUTF8String:
+								SDATA (anchor)]
+					     inBook:(NILP (book) ? nil :
+						     [NSString stringWithUTF8String:
+								 SDATA (book)])];
+  UNBLOCK_INPUT;
+  return Qnil;
+}
+
+
+
 /* ==========================================================================
 
     Class implementations
@@ -3034,6 +3067,7 @@ be used as the image of the icon representing the frame.  */);
 #ifdef NS_IMPL_COCOA
   defsubr (&Sns_do_applescript);
 #endif
+  defsubr (&Sns_application_hidden_p);
   defsubr (&Sxw_color_defined_p);
   defsubr (&Sxw_color_values);
   defsubr (&Sx_server_max_request_size);
@@ -3077,6 +3111,8 @@ be used as the image of the icon representing the frame.  */);
 
   defsubr (&Sx_show_tip);
   defsubr (&Sx_hide_tip);
+
+  defsubr (&Sns_open_help_anchor);
 
   /* used only in fontset.c */
   check_window_system_func = check_ns;

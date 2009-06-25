@@ -8,8 +8,6 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs version check
  
-;; Last change: $Id: check-for-updates.el,v 1.33 2009/02/12 19:08:20 davidswelt Exp $
-
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
 
@@ -30,13 +28,13 @@
  
 ;; Copyright (C) 2005, 2007, 2008, 2009 David Reitter
 
-; the following is user-settable (to "")
-
 
 (eval-when-compile (require 'aquamacs-macros))
 
 
-(defvar aquamacs-version-check-url "http://aquamacs.org/cgi-bin/currentversion.cgi" "URL to check for updates.  ")
+; the following is user-settable (to "")
+(defvar aquamacs-version-check-url "http://aquamacs.org/cgi-bin/currentversion.cgi" "URL to check for updates.
+Set to nil to turn off version check.")
 ;; warning: the default used to be aquamacs.sourceforge.net until after 1.0a
 
 (defun aquamacs-check-version-information ()
@@ -139,7 +137,7 @@ nil  )
 					 server-minor-version))))
 		(if interactive-request
 		    (if (eq interactive-request 'gui)
-			(mac-dialog "No news is good news..." txt)
+			(x-popup-dialog t (list txt '("OK" . t) 'no-cancel) "No news is good news..." )
 		      (message txt))
 		  (with-temp-message txt ;; only send it to *Messages*
 		    nil)))))))))
@@ -191,7 +189,15 @@ Would you like to see the donations site now?
 (defvar aquamacs-check-update-timer nil)
 
 (defun aquamacs-check-for-updates ()
+  "Check for available updates.
+Contact Aquamacs server and inquire about 
+available Aquamacs versions.
+
+Type M-x aquamacs-check-version-information RET to
+obtain information about the data sent to the server."
   (interactive)
+  (unless aquamacs-version-check-url
+    (error "Version checks disabled (aquamacs-version-check-url variable)."))
   (aquamacs-check-for-updates-if-necessary 
    'force nil 
    (if (interactive-p)
@@ -333,9 +339,9 @@ transfered data."
 
 ; (aquamacs-check-for-updates-if-necessary t)
 
+(global-set-key [ns-check-for-updates] 'aquamacs-check-for-updates)
 
 (provide 'check-for-updates)
 
-; (url-http-debug "asd")
 
  

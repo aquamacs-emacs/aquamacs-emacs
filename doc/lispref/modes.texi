@@ -1714,14 +1714,14 @@ the top of the window is to use a list like this: @code{(-3 "%p")}.
   The variable in overall control of the mode line is
 @code{mode-line-format}.
 
-@defvar mode-line-format
+@defopt mode-line-format
 The value of this variable is a mode-line construct that controls the
 contents of the mode-line.  It is always buffer-local in all buffers.
 
 If you set this variable to @code{nil} in a buffer, that buffer does
 not have a mode line.  (A window that is just one line tall never
 displays a mode line.)
-@end defvar
+@end defopt
 
   The default value of @code{mode-line-format} is designed to use the
 values of other variables such as @code{mode-line-position} and
@@ -1821,11 +1821,11 @@ Its default value displays the buffer name, padded with spaces to at
 least 12 columns.
 @end defvar
 
-@defvar mode-line-position
+@defopt mode-line-position
 This variable indicates the position in the buffer.  Its default value
 displays the buffer percentage and, optionally, the buffer size, the
 line number and the column number.
-@end defvar
+@end defopt
 
 @defvar vc-mode
 The variable @code{vc-mode}, buffer-local in each buffer, records
@@ -1834,11 +1834,11 @@ and, if so, which kind.  Its value is a string that appears in the mode
 line, or @code{nil} for no version control.
 @end defvar
 
-@defvar mode-line-modes
+@defopt mode-line-modes
 This variable displays the buffer's major and minor modes.  Its
 default value also displays the recursive editing level, information
 on the process status, and whether narrowing is in effect.
-@end defvar
+@end defopt
 
   The following three variables are used in @code{mode-line-modes}:
 
@@ -2864,18 +2864,21 @@ wherever they appear.
 @node Precalculated Fontification
 @subsection Precalculated Fontification
 
-  In addition to using @code{font-lock-defaults} for search-based
-fontification, you may use the special character property
-@code{font-lock-face} (@pxref{Special Properties}).  This property
-acts just like the explicit @code{face} property, but its activation
-is toggled when the user calls @kbd{M-x font-lock-mode}.  Using
-@code{font-lock-face} is especially convenient for special modes
-which construct their text programmatically, such as
-@code{list-buffers} and @code{occur}.
+  Some major modes such as @code{list-buffers} and @code{occur}
+construct the buffer text programmatically.  The easiest way for them
+to support Font Lock mode is to specify the faces of text when they
+insert the text in the buffer.
 
-If your mode does not use any of the other machinery of Font Lock
-(i.e. it only uses the @code{font-lock-face} property), it should not
-set the variable @code{font-lock-defaults}.
+  The way to do this is to specify the faces in the text with the
+special text property @code{font-lock-face} (@pxref{Special
+Properties}).  When Font Lock mode is enabled, this property controls
+the display, just like the @code{face} property.  When Font Lock mode
+is disabled, @code{font-lock-face} has no effect on the display.
+
+  It is ok for a mode to use @code{font-lock-face} for some text and
+also use the normal Font Lock machinery.  But if the mode does not use
+the normal Font Lock machinery, it should not set the variable
+@code{font-lock-defaults}.
 
 @node Faces for Font Lock
 @subsection Faces for Font Lock

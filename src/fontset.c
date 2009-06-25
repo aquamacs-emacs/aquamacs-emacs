@@ -180,7 +180,7 @@ extern Lisp_Object Qfont;
 static Lisp_Object Qfontset;
 static Lisp_Object Qfontset_info;
 static Lisp_Object Qprepend, Qappend;
-static Lisp_Object Qlatin;
+Lisp_Object Qlatin;
 
 /* Vector containing all fontsets.  */
 static Lisp_Object Vfontset_table;
@@ -1775,10 +1775,6 @@ fontset_from_font (font_object)
   }
 
   FONTSET_ASCII (fontset) = font_name;
-
-#ifdef HAVE_NS
-  nsfont_make_fontset_for_font(name, font_object);
-#endif
 
   return XINT (FONTSET_ID (fontset));
 }

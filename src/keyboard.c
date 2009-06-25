@@ -4162,7 +4162,8 @@ kbd_buffer_get_event (kbp, used_mouse_menu, end_time)
           else
             obj = Fcons (intern ("ns-unput-working-text"), Qnil);
 	  kbd_fetch_ptr = event + 1;
-	  *used_mouse_menu = 1;
+          if (used_mouse_menu)
+            *used_mouse_menu = 1;
         }
 #endif
 
@@ -4319,7 +4320,8 @@ kbd_buffer_get_event (kbp, used_mouse_menu, end_time)
 #endif
 #ifdef HAVE_NS
 	      /* certain system events are non-key events */
-	      if (event->kind == NS_NONKEY_EVENT)
+	      if (used_mouse_menu
+                  && event->kind == NS_NONKEY_EVENT)
 		*used_mouse_menu = 1;
 #endif
 
@@ -4491,7 +4493,7 @@ struct input_event last_timer_event;
 
 /* List of elisp functions to call, delayed because they were generated in
    a context where Elisp could not be safely run (e.g. redisplay, signal,
-   ...).  Each lement has the form (FUN . ARGS).  */
+   ...).  Each element has the form (FUN . ARGS).  */
 Lisp_Object pending_funcalls;
 
 extern Lisp_Object Qapply;
@@ -8381,6 +8383,7 @@ parse_tool_bar_item (key, item)
   /* Set defaults.  */
   PROP (TOOL_BAR_ITEM_KEY) = key;
   PROP (TOOL_BAR_ITEM_ENABLED_P) = Qt;
+  PROP (TOOL_BAR_ITEM_VISIBLE_P) = Qt;
 
   /* Get the caption of the item.  If the caption is not a string,
      evaluate it to get a string.  If we don't get a string, skip this
@@ -8425,10 +8428,14 @@ parse_tool_bar_item (key, item)
 	}
       else if (EQ (key, QCvisible))
 	{
-	  /* `:visible FORM'.  If got a visible property and that
-	     evaluates to nil then ignore this item.  */
-	  if (NILP (menu_item_eval_property (value)))
-	    return 0;
+#ifdef HAVE_NS
+	  /* at least in NS we need all items so users
+	     can configure the toolbar. */
+	    PROP (TOOL_BAR_ITEM_VISIBLE_P) = menu_item_eval_property (value);
+#else
+	    if (NILP (menu_item_eval_property (value)))
+	      return 0;
+#endif
 	}
       else if (EQ (key, QChelp))
 	/* `:help HELP-STRING'.  */
@@ -11711,6 +11718,7 @@ void
 syms_of_keyboard ()
 {
   pending_funcalls = Qnil;
+  staticpro (&pending_funcalls);
 
   Vlispy_mouse_stem = build_string ("mouse");
   staticpro (&Vlispy_mouse_stem);

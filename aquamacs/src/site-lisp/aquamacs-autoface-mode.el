@@ -213,7 +213,7 @@ Sets the `autoface-default' face."
 		 (unless (eq value 'unspecified)
 		   (setq result (nconc (list attribute value) result))))))
 	   result)))
-    ;; set default (not user customization)
+    ;; can be overwritten by user customization
 	       (if (> emacs-major-version 22) t))
   ;; ensure that the new face does not inherit from itself:
   (set-face-attribute 'autoface-default nil 
@@ -253,6 +253,9 @@ given, set the variable named TARGET instead, e.g.,
 	       (car att-cons)
 	       (face-attribute source-face (car att-cons) nil 'default)))
 	    face-attribute-name-alist))
+  (and smart-frame-positioning-mode
+       (dolist (frame (frame-list))
+	 (smart-move-frame-inside-screen frame)))
   ;; set default-frame-alist
   (let ((new-values (append 
 		       (apply #'append
@@ -771,7 +774,6 @@ modified, or in FRAME if given."
 		"Background Color...")
 	      aquamacs-select-background-color
 	      :visible ,(display-multi-font-p)
-	      :keys ,(aq-binding 'aquamacs-select-background-color)
 	      :enable (menu-bar-menu-frame-live-and-visible-p) 
 	      :help "Select a background color"))
 
@@ -782,7 +784,6 @@ modified, or in FRAME if given."
 		 "Foreground Color...")
 	      aquamacs-select-foreground-color
 	      :visible ,(display-multi-font-p)
-	      :keys ,(aq-binding 'aquamacs-select-foreground-color)
 	      :enable (menu-bar-menu-frame-live-and-visible-p) 
 	      :help "Select a foreground color"))
 
@@ -803,7 +804,7 @@ modified, or in FRAME if given."
 			    " (default)" "")))
 	      mac-font-panel-mode
 	      :visible ,(display-multi-font-p)
-	      :keys ,(aq-binding 'mac-font-panel-mode)
+	      :key-sequence [(,osxkeys-command-key shift t)]
 	      :enable (menu-bar-menu-frame-live-and-visible-p) 
 	      :help "Select a font from list of known fonts/fontsets"))
 

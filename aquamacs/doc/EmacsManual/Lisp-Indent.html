@@ -1,9 +1,37 @@
 <html lang="en">
 <head>
-<title>Customizing Lisp Indentation</title>
+<title>Lisp Indent - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Customizing Lisp Indentation">
-<meta name="generator" content="makeinfo 4.6">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.9">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Program-Indent.html#Program-Indent" title="Program Indent">
+<link rel="prev" href="Multi_002dline-Indent.html#Multi_002dline-Indent" title="Multi-line Indent">
+<link rel="next" href="C-Indent.html#C-Indent" title="C Indent">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.0.94.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
   pre.display { font-family:inherit }
@@ -12,21 +40,25 @@
   pre.smallformat  { font-family:inherit; font-size:smaller }
   pre.smallexample { font-size:smaller }
   pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
 --></style>
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
 <p>
-Node:&nbsp;<a name="Lisp%20Indent">Lisp Indent</a>,
-Next:&nbsp;<a rel="next" accesskey="n" href="C-Indent.html#C%20Indent">C Indent</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Multi-line-Indent.html#Multi-line%20Indent">Multi-line Indent</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Program-Indent.html#Program%20Indent">Program Indent</a>
-<hr><br>
+<a name="Lisp-Indent"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="C-Indent.html#C-Indent">C Indent</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Multi_002dline-Indent.html#Multi_002dline-Indent">Multi-line Indent</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Program-Indent.html#Program-Indent">Program Indent</a>
+<hr>
 </div>
 
-<h3 class="subsection">Customizing Lisp Indentation</h4>
+<h4 class="subsection">30.3.3 Customizing Lisp Indentation</h4>
 
-<p>The indentation pattern for a Lisp expression can depend on the function
+<p><a name="index-customizing-Lisp-indentation-1981"></a>
+  The indentation pattern for a Lisp expression can depend on the function
 called by the expression.  For each Lisp function, you can choose among
 several predefined patterns of indentation, or define an arbitrary one with
 a Lisp program.
@@ -37,61 +69,21 @@ line as the beginning of the expression; otherwise, the second line is
 indented underneath the function name.  Each following line is indented
 under the previous line whose nesting depth is the same.
 
-   <p>If the variable <code>lisp-indent-offset</code> is non-<code>nil</code>, it overrides
+   <p><a name="index-lisp_002dindent_002doffset-1982"></a>  If the variable <code>lisp-indent-offset</code> is non-<code>nil</code>, it overrides
 the usual indentation pattern for the second line of an expression, so that
 such lines are always indented <code>lisp-indent-offset</code> more columns than
 the containing list.
 
-   <p>Certain functions override the standard pattern.  Functions whose
-names start with <code>def</code> treat the the second lines as the start of
+   <p><a name="index-lisp_002dbody_002dindent-1983"></a>  Certain functions override the standard pattern.  Functions whose
+names start with <code>def</code> treat the second lines as the start of
 a <dfn>body</dfn>, by indenting the second line <code>lisp-body-indent</code>
 additional columns beyond the open-parenthesis that starts the
 expression.
 
-   <p>You can override the standard pattern in various ways for individual
-functions, according to the <code>lisp-indent-function</code> property of the
-function name.  There are four possibilities for this property:
-
-     <dl>
-<dt><code>nil</code>
-     <dd>This is the same as no property--use the standard indentation pattern. 
-<br><dt><code>defun</code>
-     <dd>Handle this function like a <code>def</code> construct: treat the second
-line as the start of a <dfn>body</dfn>. 
-<br><dt>a number, <var>number</var>
-     <dd>The first <var>number</var> arguments of the function are
-<dfn>distinguished</dfn> arguments; the rest are considered the body
-of the expression.  A line in the expression is indented according to
-whether the first argument on it is distinguished or not.  If the
-argument is part of the body, the line is indented <code>lisp-body-indent</code>
-more columns than the open-parenthesis starting the containing
-expression.  If the argument is distinguished and is either the first
-or second argument, it is indented <em>twice</em> that many extra columns. 
-If the argument is distinguished and not the first or second argument,
-the line uses the standard pattern. 
-<br><dt>a symbol, <var>symbol</var>
-     <dd><var>symbol</var> should be a function name; that function is called to
-calculate the indentation of a line within this expression.  The
-function receives two arguments:
-          <dl>
-<dt><var>state</var>
-          <dd>The value returned by <code>parse-partial-sexp</code> (a Lisp primitive for
-indentation and nesting computation) when it parses up to the
-beginning of this line. 
-<br><dt><var>pos</var>
-          <dd>The position at which the line being indented begins. 
-</dl>
-
-     <p>It should return either a number, which is the number of columns of
-indentation for that line, or a list whose car is such a number.  The
-difference between returning a number and returning a list is that a
-number says that all following lines at the same nesting level should
-be indented just like this one; a list says that following lines might
-call for different indentations.  This makes a difference when the
-indentation is being computed by <kbd>C-M-q</kbd>; if the value is a
-number, <kbd>C-M-q</kbd> need not recalculate indentation for the following
-lines until the end of the list. 
-</dl>
+   <p><a name="index-g_t_0040code_007blisp_002dindent_002dfunction_007d-property-1984"></a>  You can override the standard pattern in various ways for individual
+functions, according to the <code>lisp-indent-function</code> property of
+the function name.  Normally you would use this for macro definitions
+and specify it using the <code>declare</code> construct (see <a href="../elisp/Defining-Macros.html#Defining-Macros">Defining Macros</a>).
 
    </body></html>
 

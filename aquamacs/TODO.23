@@ -21,16 +21,24 @@ Priorities:
 ===
 TO DO
 
-- Redisplay performance is much worse than in Carbon, e.g. in nsterm.m.  It appears to be correlated with whether tabs are enabled
-  and with objc-mode (vs. fundamental mode).  Tabs should be cached.
-Priority: 1
+- Redisplay performance is much worse than in Carbon, e.g. in nsterm.m.  It appears to be correlated with whether tabs are enabled and with font-locking (vs. fundamental mode).  Tabs should be cached.
+The worst of these problems have been addressed now.
+Priority: 7
+- tabs show an ugly mouse-over animation effect
+Partially Fixed - dr.  -- some animation remains when a region is active
+Priority: 2
 
-- live resizing/frame redrawing: this looks uber-ugly.    Maybe disable live-resizing.  [reported]
-Recently, things have improved somewhat, but it is unclear why.  [Appears fixed.]
+- live resizing/frame redrawing: this still looks ugly because of excessing redrawing  
+Priority: 4
 
-- build system (preferably better integrated with the Emacs one)
 
-- revise aquamacs-tool-bar and (!!) aquamasc-autoface.el: possibly do not use face-spec-set. use face-set-attribute instead, because it seems to not prevent further customization through the user.
+- integrate build system with make-documentation
+Priority: 4
+
+
+- revise default face configuration  (prevents user customization currently)
+==> Bob
+Priority: 2
 
 
 - Options/Appearance (autofaces): use NS color panel
@@ -42,15 +50,6 @@ Difficulty: Requires Interface Builder and Cocoa/ObjC know-how and is a sizeable
 
 Priority: 7   ==> Nathaniel
 
-
-- Fullscreen mode (ObjC code)
-This requires writing some Objective C code in nsterm.m (and friends), porting the functionality of mac-fullscreen.patch
-This is not hard to do if you've seen such code before.
-(Candidate for Emacs 23 CVS)
-
-DR: I have written some code for this in Cocoa, but it doesn't work too well at this point.
-
-Priority: 3  ==> David
 
 - mac-functions
 we can probably get rid of show/hide menu bar (see: fullscreen), but port mac-process-activate
@@ -69,7 +68,9 @@ fails
 I suggest to rework this now to use the OS X spell-checker.  This is a bit of work, but it is relatively easy to do.
 DR: I volunteer to provide Lisp bindings for the relevant functions.
 The rest of the job is just a matter of integrating it with ispell.
-priority: 2 ==> Nathaniel 
+priority: 2 
+==> David  [NS Lisp API implemented.  topic/spelling branch]
+==> Nathaniel 
 
 
 macfns-dialog-menu:
@@ -77,6 +78,7 @@ this needs to be replaced with a patch to x-popup-dialog in order to provide a c
 everything else should be in place.  easy to do.
 
 priority: 2  ==> Sidney
+DR: send link to blog post (quit dialog).
 
 
 Redisplay performance
@@ -85,12 +87,12 @@ Redisplay performance
    a fix has been committed; further slowness remains
 
 
-
-Option-click on window close button
--> does not ask for permission to kill buffers, but kills them 
+Quitting application: brings up various frames, but minibuffer is not echoed in those frames.
 
 
 
+Startup
+hiding the initial frame causes Emacs to crash.
 
 
 
@@ -117,3 +119,5 @@ DONE ns_emulate_three_button_mouse
 DONE availabe-screen
 DONE toolbar  [pending fix in GNU Emacs - reported]
 DONE face-remapping
+DONE Fullscreen mode (ObjC code)
+DONE revised aquamacs-tool-bar and (!!) aquamasc-autoface.e (face-set-attribute)

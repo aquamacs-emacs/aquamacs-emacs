@@ -7,15 +7,13 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: mac-extra-functions.el,v 1.89 2009/03/12 18:35:58 davidswelt Exp $
-
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
 
 
 ;; Aquamacs Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
+;; the Free Software Foundation; either version 3, or (at your option)
 ;; any later version.
 
 ;; Aquamacs Emacs is distributed in the hope that it will be useful,
@@ -28,7 +26,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, 2006, 2007, David Reitter
+;; Copyright (C) 2005, 2006, 2007, 2008, 2009 David Reitter
 
 ;; The following  function needs to be loaded at runtime. 
 
@@ -64,38 +62,41 @@
   (substring data-directory 0 -4))
 
 ;; File Open / Save
-;; TO DO: these should be replaced with the file menu item 
-;; can't do this because the internal find-file function will
-;; display a file dialogue only if menu was used w/ mouse
  
+;; To do: present those panels as sheets 
+;; using extra events to handle OK / cancel
 
-(defun mac-key-open-file (filename &rest ignored)
+(defun mac-key-open-file (&optional filename &rest _wildcards)
   "Open a file, selecting file by dialog"
-  (interactive
-   (let ((last-nonmenu-event nil))
-     (find-file-read-args "Open file: " t))) ;; may return list with two el
-  (find-file-existing filename))
+  (interactive)
+  (unless filename
+    (setq filename (ns-read-file-name "Select File to Load" nil t nil)))
+  (if filename (find-file-existing filename)))
 
-(defun mac-key-open-file-other-frame (filename &rest ignored)
+(defun mac-key-open-file-other-frame (&optional filename &rest ignored)
   "Open a file in new frame, selecting file by dialog"
-  (interactive
-   (let ((last-nonmenu-event nil))
-     (find-file-read-args "Open file: " t)))  ;; may return list with two el
-  (find-file-other-frame filename))
-
+  (interactive)
+  (let ((one-buffer-one-frame-mode t))
+    (mac-key-open-file filename)))
+ 
 (defun mac-key-save-file ()
   (interactive)
   "Save buffer. If needed, select file by dialog"
    (if buffer-file-name 
        (save-buffer)
-     (call-interactively (function mac-key-save-file-as))))
+     (mac-key-save-file-as)))
  
  
-(defun mac-key-save-file-as ()
+(defun mac-key-save-file-as (&optional filename)
   "Save buffer to a file, selecting file by dialog"
   (interactive)
-  (let ((last-nonmenu-event nil))
-    (call-interactively 'write-file)))
+  (unless filename
+    (setq filename (ns-read-file-name
+		    "Select File to Save Buffer" 
+		    default-directory nil 
+		    (if buffer-file-name (file-name-nondirectory buffer-file-name) ""))))
+  (if filename (write-file filename)))
+
 
 ;; when saving a file, set its creator code
 
@@ -468,16 +469,17 @@ specified in `shell-file-name'."
 (defun aquamacs-user-help ()
   "Show the Aquamacs Help."
   (interactive)
-  (aq-show-help-file "index.html"))
+  (ns-open-help-anchor "index" "Aquamacs Help"))
 
 (defun aquamacs-emacs-manual ()
   "Show the Emacs Manual"
   (interactive)
-  (aq-show-help-file "index.html" "Emacs Manual"))
+  (ns-open-help-anchor "index" "Emacs Manual"))
 
 (defun aquamacs-elisp-reference ()
+  "Show the Emacs Lisp Reference"
   (interactive)
-  (aq-show-help-file "index.html" "Emacs Lisp Reference"))
+  (ns-open-help-anchor "index" "Emacs Lisp Reference"))
 
 
 ;; it's imporant to make sure that the following are in the Info.plist file:
@@ -499,18 +501,8 @@ specified in `shell-file-name'."
 ; (aquamacs-show-change-log)
 (defun aquamacs-show-change-log ()
   (interactive)
-  (aquamacs-init-user-help) ; make sure it's registered
-  ;; check node1.html
-  ;; relativ complex check because of bug in 10.5.2 that causes crashes
-  ;; when we use a symlinked file.
-  (let ((change-log-file
-	 (with-temp-buffer
-	   (insert-file-contents (format "%s/Contents/Resources/Aquamacs Help/node1.html" 
-					 aquamacs-mac-application-bundle-directory))
-	   (let ((case-fold-search t))
-	     (re-search-forward "HREF=\"\\(node[0-9]+.html\\)\">\s*Changes")
-	     (match-string 1)))))
-    (aq-show-help-file change-log-file)))
+  (ns-open-help-anchor "changelog-top" "Aquamacs Help"))
+
 
 (defun gmail-mailclient-p ()
   "non-nil if Gmail notifier is detected

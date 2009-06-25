@@ -1125,7 +1125,7 @@ document xreload
   with gdb 5.0.)
   This function reloads them.
 end
-xreload
+#xreload
 
 # Flush display (X only)
 define ff
@@ -1137,14 +1137,14 @@ Works only when an inferior emacs is executing.
 end
 
 
-define hook-run
-  xreload
-end
+# define hook-run
+#   xreload
+# end
 
-# Call xreload if a new Emacs executable is loaded.
-define hookpost-run
-  xreload
-end
+# # Call xreload if a new Emacs executable is loaded.
+# define hookpost-run
+#   xreload
+# end
 
 set print pretty on
 set print sevenbit-strings
@@ -1153,23 +1153,23 @@ show environment DISPLAY
 show environment TERM
 
 # People get bothered when they see messages about non-existent functions...
-xgetptr Vsystem_type
+# xgetptr Vsystem_type
 # $ptr is NULL in temacs
-if ($ptr != 0)
-  set $tem = (struct Lisp_Symbol *) $ptr
-  xgetptr $tem->xname
-  set $tem = (struct Lisp_String *) $ptr
-  set $tem = (char *) $tem->data
+# if ($ptr != 0)
+#   set $tem = (struct Lisp_Symbol *) $ptr
+#   xgetptr $tem->xname
+#   set $tem = (struct Lisp_String *) $ptr
+#   set $tem = (char *) $tem->data
 
-  # Don't let abort actually run, as it will make stdio stop working and
-  # therefore the `pr' command above as well.
-  if $tem[0] == 'w' && $tem[1] == 'i' && $tem[2] == 'n' && $tem[3] == 'd'
-    # The windows-nt build replaces abort with its own function.
-    break w32_abort
-  else
-    break abort
-  end
-end
+#   # Don't let abort actually run, as it will make stdio stop working and
+#   # therefore the `pr' command above as well.
+#   if $tem[0] == 'w' && $tem[1] == 'i' && $tem[2] == 'n' && $tem[3] == 'd'
+#     # The windows-nt build replaces abort with its own function.
+#     break w32_abort
+#   else
+#     break abort
+#   end
+# end
 
 # x_error_quitter is defined only on X.  But window-system is set up
 # only at run time, during Emacs startup, so we need to defer setting

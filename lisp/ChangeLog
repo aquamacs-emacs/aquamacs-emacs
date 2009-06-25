@@ -1,3 +1,349 @@
+2009-06-15  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* vc.el (vc-default-revision-granularity): Remove to let the normal
+	error handling kick in (bug#3570).
+
+2009-06-13  Chong Yidong  <cyd@stupidchicken.com>
+
+	* simple.el (kill-visual-line): Rewrite (Bug#3437).  Don't try to
+	handle kill-whole-line, as it doesn't make sense in this context.
+
+2009-06-12  Sam Steingold  <sds@gnu.org>
+
+	* vc-hg.el (vc-hg-log-switches): Add defcustom.
+	(vc-hg-print-log): Use it.
+
+2009-06-12  Kenichi Handa  <handa@m17n.org>
+
+	* international/eucjp-ms.el: Re-generated.
+
+2009-06-10  Glenn Morris  <rgm@gnu.org>
+
+	* calendar/cal-dst.el (calendar-time-zone-daylight-rules):
+	Fix typo in 2008-04-02 change.
+
+2009-06-10  Kenichi Handa  <handa@m17n.org>
+
+	* composite.el (compose-gstring-for-terminal): For zero-width
+	characters of Unicode category `Cf', simply replace it with SPC.
+
+2009-06-09  Agustín Martín <agustin.martin@hispalinux.es>
+
+	* ispell.el: Make `ispell-dictionary' customizable (#2555)
+
+2009-06-08  Michael Albinus  <michael.albinus@gmx.de>
+
+	* ediff-util.el (ediff-compute-custom-diffs-maybe): Handle remote
+	files correctly.
+
+2009-06-08  Adrian Robert  <Adrian.B.Robert@gmail.com>
+
+	* term/ns-win.el (composition-function-table)
+	(script-representative-chars): Don't alter.
+
+2009-06-07  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp.el (tramp-do-copy-or-rename-file-directly): Make direct
+	copy more robust, especially when "chown" is not applicable.
+
+2009-06-07  Martin Rudalics  <rudalics@gmx.at>
+
+	* emacs-lisp/lisp-mode.el (lisp-mode-variables): Fix doc-string.
+
+2009-06-06  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp.el (tramp-open-connection-setup-interactive-shell):
+	Apply workaround for OpenSolaris bug.
+
+2009-06-05  Daiki Ueno  <ueno@unixuser.org>
+
+	* epa.el (epa-decrypt-region): Detect encoding if
+	coding-system-for-read is not specified.
+	<http://sourceforge.jp/ticket/browse.php?group_id=2267&tid=17018>
+	(epa-verify-region): Ditto.
+
+2009-06-04  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* tar-mode.el (tar-header-block-tokenize): Obey @LongLink even for
+	POSIX tar archives (bug#3410).
+
+2009-06-04  Johan Bockgård  <bojohan@gnu.org>
+
+	* vc.el (vc-revision-other-window): Fix argument to backend
+	function revision-completion-table; it expects a list.
+
+2009-06-04  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* frame.el (delete-other-frames): Only delete frames on the
+	same terminal (bug#3442).
+
+2009-06-04  Glenn Morris  <rgm@gnu.org>
+
+	* calendar/solar.el (solar-n-hemi-seasons, solar-s-hemi-seasons):
+	Make into defcustoms.  (Bug#3429)
+
+2009-06-01  Chong Yidong  <cyd@stupidchicken.com>
+
+	* international/README: New file.
+
+	* international/charprop.el:
+	* international/uni-bidi.el:
+	* international/uni-category.el:
+	* international/uni-combining.el:
+	* international/uni-comment.el:
+	* international/uni-decimal.el:
+	* international/uni-decomposition.el:
+	* international/uni-digit.el:
+	* international/uni-lowercase.el:
+	* international/uni-mirrored.el:
+	* international/uni-name.el:
+	* international/uni-numeric.el:
+	* international/uni-old-name.el:
+	* international/uni-titlecase.el:
+	* international/uni-uppercase.el: Add copyright notice (Bug#3428).
+
+	* emulation/edt.el (edt-previous-line, edt-next-line): Don't use
+	forward-line, undoing 2007-10-19 change (Bug#3188).
+
+	* textmodes/two-column.el (2C-split): Call move-to-column, to
+	compensate for the 2007-10-19 change from next-line to
+	forward-line (Bug#3435).  Account for fringe and scroll-bar when
+	setting 2C-window-width.
+
+2009-05-29  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* startup.el (normal-no-mouse-startup-screen): Use F1 rather than C-h
+	if C-h is remapped to something else like DEL.
+
+2009-05-26  Chong Yidong  <cyd@stupidchicken.com>
+
+	* edmacro.el (edmacro-parse-keys): Fix 2008-08-19 change (Bug#3387).
+
+	* view.el (view-recenter): Allow recenter to compute window height
+	normally.
+	(view-window-size): Use window-line-height to find window height.
+	(view-page-size-default): Return nil if LINES is nil, 0, or larger
+	than the window height.
+	(view-scroll-lines): Handle nil value for DEFAULT arg (Bug#3361).
+
+2009-05-26  Kenichi Handa  <handa@m17n.org>
+
+	* textmodes/table.el (table--unibyte-char-to-multibyte):
+	Delete function.
+	(*table--cell-self-insert-command, *table--cell-quoted-insert):
+	Don't call table--unibyte-char-to-multibyte (Bug#3372).
+
+2009-05-26  Chong Yidong  <cyd@stupidchicken.com>
+
+	* newcomment.el (comment-region): Doc fix (Bug#3370).
+
+2009-05-24  Roland Winkler  <Roland.Winkler@physik.uni-erlangen.de>
+
+	* mail/smtpmail.el: Indent code properly to make it more readable.
+
+2009-05-24  Chong Yidong  <cyd@stupidchicken.com>
+
+	* textmodes/ispell.el (ispell-check-version): Handle dashes in
+	version numbers.  Suggested by sdl.web@gmail.com (Bug#3369).
+
+2009-05-23  Chong Yidong  <cyd@stupidchicken.com>
+
+	* info.el (Info-mode): Doc fix (Bug#3358).
+
+2009-05-23  Johan Bockgård  <bojohan@gnu.org>
+
+	* ediff-vers.el (ediff-vc-latest-version): Use property
+	`vc-latest-revision' instead of `vc-latest-version'.  (It was
+	renamed in the big VC overhaul.)
+
+2009-05-23  Chong Yidong  <cyd@stupidchicken.com>
+
+	* progmodes/grep.el (grep-compute-defaults): Simplify how settings
+	are looked up.
+	(grep-apply-setting): New function.
+	(grep-highlight-matches, grep-command, grep-template)
+	(grep-use-null-device, grep-find-command, grep-find-template):
+	Clarify role of grep-compute-defaults in docstrings.
+	Use grep-apply-setting to apply changes (Bug#3343).
+
+2009-05-21  Glenn Morris  <rgm@gnu.org>
+
+	* calendar/cal-move.el (calendar-forward-day): Fix 2008-06-21 change -
+	always move cursor to new date.  (Bug#3338)
+
+2009-05-20  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* textmodes/tex-mode.el (tex-uptodate-p): Accept [1{/var/foo}] as
+	a page number.
+
+2009-05-20  Jason Rumney  <jasonr@gnu.org>
+
+	* files.el (locate-dominating-stop-dir-regexp): Add terminal
+	directory separator to UNC path case (Bug#3252).
+
+2009-05-20  Chong Yidong  <cyd@stupidchicken.com>
+
+	* international/encoded-kb.el (encoded-kbd-setup-display):
+	Change DISPLAY arg to TERMINAL.
+
+	* international/mule.el (set-terminal-coding-system)
+	(set-keyboard-coding-system): Change DISPLAY arg to TERMINAL.
+
+2009-05-19  Alan Mackenzie  <acm@muc.de>
+
+	* progmodes/cc-mode.el (c-extend-and-neutralize-CPP-line):
+	Rename from c-neutralize-syntax-in-CPP.  Set the variables c-new-BEG
+	and c-new-END, thus extending the font-lock region.
+	(c-font-lock-init): Don't set obsolete variable font-lock-lines-before.
+
+	* progmodes/cc-langs.el (c-before-font-lock-function): Rename a
+	value to c-extend-and-neutralize-syntax-in-CPP.
+
+2009-05-19  Kenichi Handa  <handa@m17n.org>
+
+	* faces.el (set-face-attribute): Fix handling of :family
+	"FOUNDRY-FAMILY".
+
+2009-05-18  Chong Yidong  <cyd@stupidchicken.com>
+
+	* register.el (register-alist): Doc fix (Bug#3311).
+
+2009-05-18  Richard M Stallman  <rms@gnu.org>
+
+	* progmodes/compile.el (compilation-filter): If inserting at end
+	of accessible part of buffer, keep end of output visible.
+
+	* mail/rmail.el (rmail-expunge-confirmed): Return nil if nothing to do.
+	Don't call rmail-modify-format here.
+	(rmail-expunge): Call it here after expunge is confirmed.
+	(rmail-confirm-expunge): Doc fix.  Mark as risky.
+	(rmail-convert-babyl-to-mbox): Call rmail-modify-format.
+	(rmail-set-attribute): Call rmail-dont-modify-format only for `unseen'.
+	For other attributes, call `rmail-modify-format',
+	and propagate the modified flag to rmail-buffer.
+
+2009-05-17  Richard M Stallman  <rms@gnu.org>
+
+	* mail/rmailedit.el (rmail-edit-current-message):
+	Call rmail-modify-format here.
+	(rmail-cease-edit): Not here.
+
+2009-05-17  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* vc-bzr.el (vc-bzr-state-heuristic): Fallback on vc-bzr-state in case
+	of any kind of error (e.g. when "sha1sum" is not found).
+
+2009-05-15  Martin Rudalics  <rudalics@gmx.at>
+
+	* dired.el (dired-pop-to-buffer): Try to make this behave the
+	Emacs 22 way (Bug#1806).
+
+2009-05-14  Chong Yidong  <cyd@stupidchicken.com>
+
+	* frame.el (minibuffer-frame-alist): Doc fix (Bug#3276).
+
+2009-05-12  Chong Yidong  <cyd@stupidchicken.com>
+
+	* tutorial.el (help-with-tutorial): Don't use text mode, since the
+	tutorial text assume Fundamental mode.  Use TUTORIAL.xx for the
+	tutorial buffer, since that is what the tutorial text assumes.
+
+2009-05-11  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* simple.el (completion-setup-function):
+	Only modify the default-directory in *Completions* (bug#3250).
+	Take partial-completion into account when setting default-directory.
+
+2009-05-10  Chong Yidong  <cyd@stupidchicken.com>
+
+	* emacs-lisp/cl-macs.el (lexical-let*): Doc fix (Bug#3178).
+
+2009-05-10  Kim F. Storm  <storm@cua.dk>
+
+	* ido.el: Add proper support for confirm-nonexistent-file-or-buffer
+	values `confirm' and `confirm-after-completion'.
+	(ido-read-internal, ido-buffer-internal, ido-file-internal):
+	Setup and handle require-match arg according to c-n-f-o-b.
+	(ido-show-confirm-message): New dynamic variable.
+	(ido-exit-minibuffer): Request confirmation for non-existing file
+	or buffer according to confirm-nonexistent-file-or-buffer.
+	(ido-decorations): Add 11th element for "confirm" message.
+	(ido-completions): Show confirmation message when requested.
+
+2009-05-08  Kenichi Handa  <handa@m17n.org>
+
+	* international/encoded-kb.el (encoded-kbd-setup-keymap):
+	* international/mule-diag.el (describe-coding-system): Fix for big5.
+
+2009-05-07  Martin Rudalics  <rudalics@gmx.at>
+
+	* window.el (split-window-sensibly): New function.
+	(split-height-threshold, split-width-threshold): State in
+	doc-string that these affect split-window-sensibly.
+	Change customization subtype from number to integer.
+	(window--splittable-p): Rename to window-splittable-p since it's
+	referred to in doc-string of split-window-sensibly.  Update doc-string.
+	(window--try-to-split-window): Unconditionally call
+	split-window-preferred-function and move splitting functionality
+	to split-window-sensibly (Bug#3142).
+	(split-window-preferred-function): Rewrite doc-string.
+	Don't allow nil as customization type.
+
+2009-05-07  Chong Yidong  <cyd@stupidchicken.com>
+
+	* faces.el (x-handle-named-frame-geometry): Ignore errors from
+	x-get-resource due to not yet opened X connection.  This is a
+	temporary workaround for Bug#3194.
+
+2009-05-05  Bob Rogers  <rogers-emacs@rgrjr.dyndns.org>  (tiny change)
+
+	* vc-svn.el (vc-svn-parse-status): ?D is for removed files (bug#3213).
+
+2009-05-05  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* vc.el (vc-delete-file): Add autoload cookie (bug#3209).
+
+2009-05-04  Miles Bader  <miles@gnu.org>
+
+	* emacs-lisp/bindat.el (bindat-pack): Allocate and set a string
+	directly (Bug#2878).
+
+2009-05-03  Juanma Barranquero  <lekktu@gmail.com>
+
+	* term/ns-win.el (ns-alternatives-map, ns-insert-working-text)
+	(ns-echo-working-text, ns-utf8-nfd-post-read-conversion)
+	(ns-insert-text, ns-insert-file, ns-find-file, generate-fontset-menu)
+	(mouse-set-font, ns-respond-to-change-font, ns-standard-fontset-spec)
+	(ns-set-background-alpha, ns-set-foreground-at-mouse)
+	(ns-set-background-at-mouse): Fix typos in docstrings.
+
+2009-05-03  Daiki Ueno  <ueno@unixuser.org>
+
+	* epg.el (epg-wait-for-completion): Sleep after the process
+	exits, to allow process-filter to run (Bug#2412).
+
+	* epa.el (epa--read-signature-type): Fix typo.
+
+2009-05-02  Glenn Morris  <rgm@gnu.org>
+
+	* wid-edit.el (widget-specify-field, widget-field-value-get, character):
+	Revert 2009-03-24 change, since it causes a more serious problem than
+	the one it solves.  (Closes Bug#3136, reopens Bug#2689.)
+
+2009-05-02  Martin Rudalics  <rudalics@gmx.at>
+
+	* frame.el (pop-up-frame-function): Remove choice nil since it
+	does not represent a valid value.
+
+2009-04-30  David Reitter  <david.reitter@gmail.com>
+
+	* term/ns-win.el (ns-make-command-string, ns-grabenv)
+	(ns-extended-platform-support-mode, menu-bar-ns-file-menu)
+	(ns-arrange-all-frames, ns-arrange-visible-frames)
+	(ns-arrange-frames): Remove.  These functionalities not
+	available on other (free) platforms will be provided to users
+	outside the Emacs project in the "ns-platform-support" package.
+
 2009-04-30  Alan Mackenzie  <acm@muc.de>
 
 	Enhancements for Objective-C:
@@ -10,8 +356,8 @@
 	* progmodes/cc-langs.el (c-constant-kwds): New ObjC keywords
 	"YES", "NO", "NS_DURING", "NS_HANDLER", "NS_ENDHANDLER".
 
-	* progmodes/cc-align.el (c-lineup-ObjC-method-call-colons): New
-	function.
+	* progmodes/cc-align.el (c-lineup-ObjC-method-call-colons):
+	New function.
 
 2009-04-29  Chong Yidong  <cyd@stupidchicken.com>
 
@@ -20,8 +366,8 @@
 2009-04-29  Ulrich Mueller  <ulm@gentoo.org>
 
 	* files.el (hack-local-variables-prop-line)
-	(hack-local-variables, dir-locals-read-from-file): Bind
-	read-circle to nil before reading.
+	(hack-local-variables, dir-locals-read-from-file):
+	Bind read-circle to nil before reading.
 
 2009-04-28  Geert Kloosterman  <g.j.kloosterman@gmail.com>  (tiny change)
 
@@ -239,7 +585,7 @@
 
 2009-04-09  Richard M Stallman  <rms@gnu.org>
 
-	* mail/rmailkwd.el (rmail-set-label): Warn if multipe labels spec'd.
+	* mail/rmailkwd.el (rmail-set-label): Warn if multiple labels spec'd.
 	(rmail-kill-label, rmail-add-label): Doc fixes.
 
 	* mail/rmailout.el (rmail-output): If file is visited,
@@ -323,11 +669,11 @@
 
 2009-04-07  Chong Yidong  <cyd@stupidchicken.com>
 
-	* vc-bzr.el (vc-bzr-log-view-mode): Tweak
-	log-view-message-re (Bug#2872).
+	* vc-bzr.el (vc-bzr-log-view-mode):
+	Tweak log-view-message-re (Bug#2872).
 
-	* descr-text.el (describe-property-list, describe-char): Add
-	follow-link properties to buttons that need them.
+	* descr-text.el (describe-property-list, describe-char):
+	Add follow-link properties to buttons that need them.
 
 	* tooltip.el (tooltip-show-help-non-mode): Don't save the last
 	message if it was also a help message (Bug#2895).
@@ -335,8 +681,7 @@
 2009-04-06  Roland Winkler  <Roland.Winkler@physik.uni-erlangen.de>
 
 	* textmodes/bibtex.el (bibtex-format-entry)
-	(bibtex-search-crossref): Allow OPT prefix for name of crossref
-	field.
+	(bibtex-search-crossref): Allow OPT prefix for name of crossref field.
 
 2009-04-06  Sam Steingold  <sds@gnu.org>
 
@@ -8866,8 +9211,7 @@
 
 2008-07-17  David Reitter  <david.reitter@gmail.com>
 
-	* simple.el (kill-visual-line, turn-on-visual-line-mode): New
-	functions.
+	* simple.el (kill-visual-line, turn-on-visual-line-mode): New functions.
 	(visual-line-mode, global-visual-line-mode): New minor mode.
 	(visual-line-mode-map): New variable.
 

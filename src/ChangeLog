@@ -1,3 +1,305 @@
+2009-06-15  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* coding.c (detect_coding_utf_16): Fix typo counting odd bytes.
+
+2009-06-15  Kenichi Handa  <handa@m17n.org>
+
+	* process.c (status_message): Fix previous change.  Be sure to
+	decode a localized string.
+
+2009-06-15  YAMAMOTO Mitsuharu  <mituharu@math.s.chiba-u.ac.jp>
+
+	* xterm.c (x_delete_terminal): Put previous change in #if 0 and
+	add comment explaining why.
+
+2009-06-14  Sidney Markowitz <sidney@sidney.com>
+
+	* nsmenu.m (EmacsTooltip: setText): set height of tooltip.
+
+2009-06-14  Adrian Robert  <Adrian.B.Robert@gmail.com>
+
+	* nsfont.m (ns_attribute_value): Remove.
+	(ns_attribute_fvalue): Incorporate code from ns_attribute_value.
+	(ns_has_attribute): Shrink the normal range.
+	(ns_findfonts): Don't worry about requested spec in determining
+	need for synthItal.
+	(ns_get_covering_families): Retain scriptToFamilies.
+
+2009-06-14  Seiji Zenitani  <zenitani@mac.com>
+
+	* xdisp.c [USE_MAC_TOOLBAR]: Remove obsolete definition for Mac Carbon.
+
+2009-06-11  Kenichi Handa  <handa@m17n.org>
+
+	* xdisp.c (x_get_glyph_overhangs): Fix calculation of right
+	overhang for the static composition case.
+
+2009-06-11  YAMAMOTO Mitsuharu  <mituharu@math.s.chiba-u.ac.jp>
+
+	* xdisp.c (x_get_glyph_overhangs): Fix calculation of right
+	overhang for the automatic composition case.
+
+	* xterm.c (x_compute_glyph_string_overhangs): Handle the automatic
+	composition case.
+
+2009-06-10  Chong Yidong  <cyd@stupidchicken.com>
+
+	* xdisp.c (get_next_display_element): When handling wrap-prefix
+	and line-prefix, treat \n as a control character (bug#3502).
+
+2009-06-10  Kenichi Handa  <handa@m17n.org>
+
+	* font.c (font_parse_family_registry): Fix for one-char foundry.
+	(font_sort_entities): Initialize prefer_prop[FONT_AVGWIDTH_INDEX].
+
+2009-06-09  Dmitry Dzhus  <dima@sphinx.net.ru>  (tiny change)
+
+	* process.c (status_message): Fix handling of multibyte signal
+	string (Bug#3499).
+
+2009-06-09  Jim Meyering  <meyering@redhat.com>
+
+	* xfaces.c (Fx_load_color_file): Avoid array bounds error if the
+	color name is missing.
+
+2009-06-09  Kenichi Handa  <handa@m17n.org>
+
+	* charset.c (Fmap_charset_chars): In docstring, state clearly that
+	FROM-CODE and TO-CODE are codepoints of CHARSET.
+
+2009-06-08  Adrian Robert  <Adrian.B.Robert@gmail.com>
+
+	* nsterm.m (ns_use_system_highlight_color): Drop, unused.
+
+2009-06-08  Adrian Robert  <Adrian.B.Robert@gmail.com>
+
+	Changes to support :script/:lang/:otf in NS font driver.
+	* nsfont.m (nsfont_escape_name, nsfont_unescape_name)
+	(nsfont_get_family, nsfont_char_width): Rename to ns_ prefix to
+	indicate not part of font driver interface, and change callers.
+	(ns_get_family): Remove pointless null check.
+	(nsfont_spec_to_traits, nsfont_fmember_to_entity): Replace with
+	ns_spec_to_descriptor, ns_descriptor_to_entity.
+	(nsfont_trait_distance, nsfont_make_fontset_for_font): Remove.
+	(ns_attribute_value, ns_attribute_fvalue, ns_has_attribute)
+	(ns_spec_to_descriptor, ns_descriptor_to_entity)
+	(ns_charset_covers, ns_lang_to_script, ns_otf_to_script)
+	(ns_get_req_script, ns_accumulate_script_ranges)
+	(ns_script_to_charset, ns_get_covering_families, ns_findfonts):
+	New functions.
+	(nsfont_list, nsfont_match): Use ns_findfonts.
+	(nsfont_open): Use font descriptor instead of traits.
+	(nsfont_draw): Handle "automatic" (lookup-table) compositions.
+	(dump_glyphstring): Rename to ns_dump_glyphstring.
+
+	* nsterm.h (dump_glyphstring): Rename to ns_dump_glyphstring.
+
+	* nsfns.m (Fns_popup_font_panel): Use shared font manager.
+
+	* fontset.c (fontset_from_font): Remove NS-specific code.
+
+2009-06-08  Peter Jones <pjones@pmade.com>  (tiny change)
+
+	* nsterm.m (ns_draw_window_cursor): Respect cursor_type for
+	nonactive windows.
+
+2009-06-08 Felix Mueller  <felix@enqueue.eu>  (tiny change)
+
+	* nsterm.m (ns_init_paths): Append path separator to INFOPATH
+	variable.
+
+2009-06-08  Wolfgang Lux  <wolfgang.lux@gmail.com>  (tiny change)
+
+	* keyboard.c (kbd_buffer_get_event): Null-check used_mouse_menu.
+
+2009-06-07  Chong Yidong  <cyd@stupidchicken.com>
+
+	* xdisp.c (move_it_in_display_line_to): On text-only terminals,
+	account for the overflowing of newlines into the last glyph on the
+	display line (Bug#3482).
+
+2009-06-05  David Reitter  <david.reitter@gmail.com>
+
+	* nsselect.m (Fx_own_selection_internal, Fx_selection_exists_p,
+	Fx_selection_owner_p): rename from Fns_own_selection_internal,
+	Fns_selection_exists_p, Fns_selection_owner_p.
+
+2009-06-03  Jason Rumney  <jasonr@gnu.org>
+
+	* w32fns.c (x_create_tip_frame): Use the uniscribe font backend if
+	available.  (Bug#3379)
+
+2009-05-29  Kenichi Handa  <handa@m17n.org>
+
+	* coding.c (get_translation_table): Check
+	Venable_character_translation.
+
+2009-05-25  David Reitter  <david.reitter@gmail.com>
+
+	* nsterm.m (ns_raise_frame): only raise frame if visible.
+	(x_make_frame_visible): move frame to front rather than calling
+	ns_raise_frame().
+	(keyDown:) do not swallow events that aren't re-sent if frame
+	isn't key window.
+	(drawRect:) do not set visibility/iconified flags because
+	drawRect may be called by NSView even if the frame is hidden.
+
+	* nsfns.m (Fx_create_frame): follow other ports in
+	determining visibility; default to t. Ensure async_visible is set.
+
+2009-05-23  Eli Zaretskii  <eliz@gnu.org>
+
+	* dired.c (Ffile_attributes): Doc fix.
+
+2009-05-22  Chong Yidong  <cyd@stupidchicken.com>
+
+	* m/mips.h [GNU_LINUX]: Don't define DATA_START (Bug#2685).
+
+2009-05-21  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* xfont.c (xfont_list_pattern): Don't initialize xfont_scripts_cache
+	and xfont_scratch_props.
+	(syms_of_xfont): Do it here instead.
+	(xfont_find_ccl_program): Delete, unused.
+	(xfont_open): Delete unused var `i'.
+
+2009-05-21  Kenichi Handa  <handa@m17n.org>
+
+	* fontset.c (Qlatin): Don't make it static.
+
+	* xfont.c (xfont_chars_supported, xfont_supported_scripts):
+	New functions.
+	(xfont_scripts_cache, xfont_scratch_props): New variables.
+	(Qlatin, Vscalable_fonts_allowed): Extern it.
+	(xfont_list_pattern): Argument changed.  Callers changed.
+	Check Vscalable_fonts_allowed.  Check the support of a script.
+	(xfont_list): Don't reject a font spec with :script property.
+	(xfont_has_char): Fix setting of encoding.
+	(syms_of_xfont): Staticpro and initialize xfont_scripts_cache and
+	xfont_scratch_props.
+
+2009-05-19  Kenichi Handa  <handa@m17n.org>
+
+	* font.c (font_sort_entities): Rename from font_sort_entites.
+	Callers changed.
+
+2009-05-18  Kenichi Handa  <handa@m17n.org>
+
+	* font.c (font_find_for_lface): Copy SPEC's FONT_TYPE too.
+
+2009-05-19  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* frame.c (do_switch_frame) [NS_IMPL_COCOA]: Don't raise any window.
+	(delete_frame) [NS_IMPL_COCOA]: Instead, do it here.
+
+2009-05-19  YAMAMOTO Mitsuharu  <mituharu@math.s.chiba-u.ac.jp>
+
+	* xterm.c (x_delete_display): Don't call XrmDestroyDatabase here.
+	(x_delete_terminal): Dissociate resource database from display and
+	then call XrmDestroyDatabase before closing display.
+
+2009-05-18  Adrian Robert  <Adrian.B.Robert@gmail.com>
+
+	* nsterm.m (ns_read_socket): Remove unused variable.
+	* frame.c (do_switch_frame): Under NS_IMPL_COCOA section, check
+	whether selected frame is viable before raising it (based on patch
+	by David Reitter), and improve commentary.
+	* nsfont.m (nsfont_make_fontset_for_font): Avoid a compiler warning.
+
+2009-05-15  Kenichi Handa  <handa@m17n.org>
+
+	* font.c (Ffont_spec): Check arguments.
+
+2009-05-14  Chong Yidong  <cyd@stupidchicken.com>
+
+	* xfaces.c (tty_supports_face_attributes_p): Recognize unspecified
+	weight when testing attributes (Bug#3282).
+
+2009-05-11  YAMAMOTO Mitsuharu  <mituharu@math.s.chiba-u.ac.jp>
+
+	* gtkutil.c (xg_frame_set_char_size): Set frame pixel width/height to
+	what we expect to get in the next ConfigureNotify event.
+
+	* xftfont.c (xftfont_open): Make sure that Xrender extension is added
+	before Xft one (Bug#1696).
+
+2009-05-07  David Reitter  <david.reitter@gmail.com>
+
+	* nsfns.m (Fx_display_planes): Compute bitplanes using
+	NSBitsPerPixelFromDepth (Bug#3207).
+
+2009-05-10  Chong Yidong  <cyd@stupidchicken.com>
+
+	* editfns.c (Ftranspose_regions): Doc fix (Bug#3248).
+
+2009-05-10  Ulrich Mueller  <ulm@gentoo.org>
+
+	* s/gnu-linux.h: Make GCPROs and UNGCPRO no-ops also on SuperH.
+
+2009-05-07  David Reitter  <david.reitter@gmail.com>
+
+	* nsterm.m (ns_dumpglyphs_stretch,ns_dumpglyphs_image):
+	respect mouse face background.
+
+2009-05-07  David Reitter  <david.reitter@gmail.com>
+
+	* nsterm.m (note_mouse_movement,ns_frame_up_to_date):
+	mouse movement/highlight: bracket drawing operations
+	in ns_update_begin and ns_update_end.
+
+2009-05-06  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* nsfns.m (ns_get_screen): Rewrite.
+	Don't presume selected-frame is of type `ns'.
+
+	* font.c (font_update_drivers): Sanity fallback to avoid disabling
+	all drivers.
+
+	* nsterm.m (-windowDidResize:): Avoid inf-loop under GNUStep.
+
+2009-05-06  YAMAMOTO Mitsuharu  <mituharu@math.s.chiba-u.ac.jp>
+
+	* keyboard.h (add_user_signal): Fix typo in extern.
+
+	* lisp.h (add_user_signal): Remove extern.
+
+	* unexelf.c (unexec): Consider a section to precede the .bss section
+	if its addresses overlap that of .bss.
+	(unexec) [NS_IMPL_GNUSTEP]: Copy ObjC-related data from old file
+	instead of dumping process.
+
+2009-05-06  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* keyboard.c (syms_of_keyboard): Staticpro pending_funcalls.
+
+2009-05-04  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* Makefile.in (ctagsfiles1, ctagsfiles2): Include ObjC files in TAGS.
+
+2009-05-02  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* xterm.c (x_handle_net_wm_state): Move declaration of lval before
+	any statements.
+
+2009-05-02  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* process.c (read_process_output): Make sure the current buffer is
+	always restored.
+
+	* coding.c (record_conversion_result): Don't modify
+	Vlast_code_conversion_error for successful result.
+	(alloc_destination): Don't clobber conversion result.  (Bug#1650)
+
+2009-05-01  Emanuele Giaquinta  <emanuele.giaquinta@gmail.com>  (tiny change)
+
+	* charset.c (load_charset): Reformat X==Y==Z to (X==Y)==Z.
+	(load_charset_map): Remove unnecessary code.
+
+2009-04-30  David Reitter  <david.reitter@gmail.com>
+
+	* nsterm.m (convert_ns_to_X_keysym): Define function keys f16
+	through f24.
+
 2009-04-30  Chong Yidong  <cyd@stupidchicken.com>
 
 	* xfaces.c (face_at_buffer_position): New arg base_face_id.
@@ -10,15 +312,13 @@
 	* term.c (term_mouse_highlight):
 	* msdos.c (IT_note_mouse_highlight):
 	* fontset.c (Finternal_char_font):
-	* font.c (font_at, font_range): Update face_at_buffer_position
-	call.
+	* font.c (font_at, font_range): Update face_at_buffer_position call.
 
 	* dispextern.h (face_at_buffer_position): Update prototype.
 
 2009-04-30  Kenichi Handa  <handa@m17n.org>
 
-	* fontset.c (fontset_find_font): Check if rfont_def is Qnil or
-	not.
+	* fontset.c (fontset_find_font): Check if rfont_def is Qnil or not.
 
 2009-04-29  Andreas Schwab  <schwab@linux-m68k.org>
 
@@ -62,7 +362,7 @@
 
 2009-04-27  David Reitter  <david.reitter@gmail.com>
 
-	* nsfont.m (nsfont_open): remove unused variable shrink.
+	* nsfont.m (nsfont_open): Remove unused variable shrink.
 	Remove commented-out code.
 
 2009-04-26  Johan Bockgård  <bojohan@gnu.org>

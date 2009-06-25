@@ -1,9 +1,37 @@
 <html lang="en">
 <head>
-<title>Electric C Characters</title>
+<title>Electric C - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Electric C Characters">
-<meta name="generator" content="makeinfo 4.6">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.9">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="C-Modes.html#C-Modes" title="C Modes">
+<link rel="prev" href="Motion-in-C.html#Motion-in-C" title="Motion in C">
+<link rel="next" href="Hungry-Delete.html#Hungry-Delete" title="Hungry Delete">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.0.94.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
   pre.display { font-family:inherit }
@@ -12,131 +40,56 @@
   pre.smallformat  { font-family:inherit; font-size:smaller }
   pre.smallexample { font-size:smaller }
   pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
 --></style>
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
 <p>
-Node:&nbsp;<a name="Electric%20C">Electric C</a>,
-Next:&nbsp;<a rel="next" accesskey="n" href="Hungry-Delete.html#Hungry%20Delete">Hungry Delete</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Motion-in-C.html#Motion%20in%20C">Motion in C</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="C-Modes.html#C%20Modes">C Modes</a>
-<hr><br>
+<a name="Electric-C"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Hungry-Delete.html#Hungry-Delete">Hungry Delete</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Motion-in-C.html#Motion-in-C">Motion in C</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="C-Modes.html#C-Modes">C Modes</a>
+<hr>
 </div>
 
-<h3 class="subsection">Electric C Characters</h4>
+<h4 class="subsection">30.11.2 Electric C Characters</h4>
 
 <p>In C mode and related modes, certain printing characters are
-"electric"--in addition to inserting themselves, they also reindent
-the current line and may insert newlines.  This feature is controlled by
-the variable <code>c-auto-newline</code>.  The "electric" characters are
-<kbd>{</kbd>, <kbd>}</kbd>, <kbd>:</kbd>, <kbd>#</kbd>, <kbd>;</kbd>, <kbd>,</kbd>, <kbd>&lt;</kbd>,
-<kbd>&gt;</kbd>, <kbd>/</kbd>, <kbd>*</kbd>, <kbd>(</kbd>, and <kbd>)</kbd>.
+<dfn>electric</dfn>&mdash;in addition to inserting themselves, they also
+reindent the current line, and optionally also insert newlines.  The
+&ldquo;electric&rdquo; characters are <kbd>{</kbd>, <kbd>}</kbd>, <kbd>:</kbd>, <kbd>#</kbd>,
+<kbd>;</kbd>, <kbd>,</kbd>, <kbd>&lt;</kbd>, <kbd>&gt;</kbd>, <kbd>/</kbd>, <kbd>*</kbd>, <kbd>(</kbd>, and
+<kbd>)</kbd>.
 
-   <p>Electric characters insert newlines only when the <dfn>auto-newline</dfn>
-feature is enabled (indicated by <code>/a</code> in the mode line after the
-mode name).  This feature is controlled by the variable
-<code>c-auto-newline</code>.  You can turn this feature on or off with the
-command <kbd>C-c C-a</kbd>:
+   <p>You might find electric indentation inconvenient if you are editing
+chaotically indented code.  If you are new to CC Mode, you might find
+it disconcerting.  You can toggle electric action with the command
+<kbd>C-c C-l</kbd>; when it is enabled, `<samp><span class="samp">/l</span></samp>' appears in the mode line
+after the mode name:
 
      <dl>
-<dt><kbd>C-c C-a</kbd>
-     <dd>Toggle the auto-newline feature (<code>c-toggle-auto-state</code>).  With a
+<dt><kbd>C-c C-l</kbd><dd><a name="index-C_002dc-C_002dl-_0040r_007b_0028C-mode_0029_007d-2127"></a><a name="index-c_002dtoggle_002delectric_002dstate-2128"></a>Toggle electric action (<code>c-toggle-electric-state</code>).  With a
+prefix argument, this command enables electric action if the argument
+is positive, disables it if it is negative. 
+</dl>
+
+   <p>Electric characters insert newlines only when, in addition to the
+electric state, the <dfn>auto-newline</dfn> feature is enabled (indicated
+by `<samp><span class="samp">/la</span></samp>' in the mode line after the mode name).  You can turn
+this feature on or off with the command <kbd>C-c C-a</kbd>:
+
+     <dl>
+<dt><kbd>C-c C-a</kbd><dd><a name="index-C_002dc-C_002da-_0040r_007b_0028C-mode_0029_007d-2129"></a><a name="index-c_002dtoggle_002dauto_002dnewline-2130"></a>Toggle the auto-newline feature (<code>c-toggle-auto-newline</code>).  With a
 prefix argument, this command turns the auto-newline feature on if the
 argument is positive, and off if it is negative. 
 </dl>
 
-   <p>The colon character is electric because that is appropriate for a
-single colon.  But when you want to insert a double colon in C++, the
-electric behavior of colon is inconvenient.  You can insert a double
-colon with no reindentation or newlines by typing <kbd>C-c :</kbd>:
-
-     <dl>
-<dt><kbd>C-c :</kbd>
-     <dd>Insert a double colon scope operator at point, without reindenting the
-line or adding any newlines (<code>c-scope-operator</code>). 
-</dl>
-
-   <p>The electric <kbd>#</kbd> key reindents the line if it appears to be the
-beginning of a preprocessor directive.  This happens when the value of
-<code>c-electric-pound-behavior</code> is <code>(alignleft)</code>.  You can turn
-this feature off by setting <code>c-electric-pound-behavior</code> to
-<code>nil</code>.
-
-   <p>The variable <code>c-hanging-braces-alist</code> controls the insertion of
-newlines before and after inserted braces.  It is an association list
-with elements of the following form: <code>(</code><var>syntactic-symbol</var><code>
-. </code><var>nl-list</var><code>)</code>.  Most of the syntactic symbols that appear in
-<code>c-offsets-alist</code> are meaningful here as well.
-
-   <p>The list <var>nl-list</var> may contain either of the symbols
-<code>before</code> or <code>after</code>, or both; or it may be <code>nil</code>.  When a
-brace is inserted, the syntactic context it defines is looked up in
-<code>c-hanging-braces-alist</code>; if it is found, the <var>nl-list</var> is used
-to determine where newlines are inserted: either before the brace,
-after, or both.  If not found, the default is to insert a newline both
-before and after braces.
-
-   <p>The variable <code>c-hanging-colons-alist</code> controls the insertion of
-newlines before and after inserted colons.  It is an association list
-with elements of the following form: <code>(</code><var>syntactic-symbol</var><code>
-. </code><var>nl-list</var><code>)</code>.  The list <var>nl-list</var> may contain either of the
-symbols <code>before</code> or <code>after</code>, or both; or it may be <code>nil</code>.
-
-   <p>When a colon is inserted, the syntactic symbol it defines is looked
-up in this list, and if found, the <var>nl-list</var> is used to determine
-where newlines are inserted: either before the brace, after, or both. 
-If the syntactic symbol is not found in this list, no newlines are
-inserted.
-
-   <p>Electric characters can also delete newlines automatically when the
-auto-newline feature is enabled.  This feature makes auto-newline more
-acceptable, by deleting the newlines in the most common cases where you
-do not want them.  Emacs can recognize several cases in which deleting a
-newline might be desirable; by setting the variable
-<code>c-cleanup-list</code>, you can specify <em>which</em> of these cases that
-should happen.  The variable's value is a list of symbols, each
-describing one case for possible deletion of a newline.  Here are the
-meaningful symbols, and their meanings:
-
-     <dl>
-<dt><code>brace-catch-brace</code>
-     <dd>Clean up <code>} catch (</code><var>condition</var><code>) {</code> constructs by placing the
-entire construct on a single line.  The clean-up occurs when you type
-the <code>{</code>, if there is nothing between the braces aside from
-<code>catch</code> and <var>condition</var>.
-
-     <br><dt><code>brace-else-brace</code>
-     <dd>Clean up <code>} else {</code> constructs by placing the entire construct on
-a single line.  The clean-up occurs when you type the <code>{</code> after
-the <code>else</code>, but only if there is nothing but white space between
-the braces and the <code>else</code>.
-
-     <br><dt><code>brace-elseif-brace</code>
-     <dd>Clean up <code>} else if (...) {</code> constructs by placing the entire
-construct on a single line.  The clean-up occurs when you type the
-<code>{</code>, if there is nothing but white space between the <code>}</code> and
-<code>{</code> aside from the keywords and the <code>if</code>-condition.
-
-     <br><dt><code>empty-defun-braces</code>
-     <dd>Clean up empty defun braces by placing the braces on the same
-line.  Clean-up occurs when you type the closing brace.
-
-     <br><dt><code>defun-close-semi</code>
-     <dd>Clean up the semicolon after a <code>struct</code> or similar type
-declaration, by placing the semicolon on the same line as the closing
-brace.  Clean-up occurs when you type the semicolon.
-
-     <br><dt><code>list-close-comma</code>
-     <dd>Clean up commas following braces in array and aggregate
-initializers.  Clean-up occurs when you type the comma.
-
-     <br><dt><code>scope-operator</code>
-     <dd>Clean up double colons which may designate a C++ scope operator, by
-placing the colons together.  Clean-up occurs when you type the second
-colon, but only when the two colons are separated by nothing but
-whitespace. 
-</dl>
+   <p>Usually the CC Mode style configures the exact circumstances in
+which Emacs inserts auto-newlines.  You can also configure this
+directly.  See <a href="../ccmode/Custom-Auto_002dnewlines.html#Custom-Auto_002dnewlines">Custom Auto-newlines</a>.
 
    </body></html>
 

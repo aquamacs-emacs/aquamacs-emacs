@@ -3270,16 +3270,26 @@ the uid and gid from FILENAME."
 	   (t
 	    ;; Create the temporary file.
 	    (let ((tmpfile (tramp-compat-make-temp-file localname1)))
-	      (condition-case err
+	      (unwind-protect
 		  (progn
 		    (cond
 		     (t1
-		      (tramp-send-command
-		       v (format
-			  "%s %s %s" cmd
-			  (tramp-shell-quote-argument localname1)
-			  (tramp-shell-quote-argument tmpfile)))
+		      (or
+		       (zerop
+			(tramp-send-command-and-check
+			 v (format
+			    "%s %s %s" cmd
+			    (tramp-shell-quote-argument localname1)
+			    (tramp-shell-quote-argument tmpfile))))
+		       (tramp-error-with-buffer
+			nil v 'file-error
+			"Copying directly failed, see buffer `%s' for details."
+			(tramp-get-buffer v)))
 		      ;; We must change the ownership as remote user.
+		      ;; Since this does not work reliable, we also
+		      ;; give read permissions.
+		      (set-file-modes
+		       (concat prefix tmpfile) (tramp-octal-to-decimal "0777"))
 		      (tramp-set-file-uid-gid
 		       (concat prefix tmpfile)
 		       (tramp-get-local-uid 'integer)
@@ -3293,6 +3303,9 @@ the uid and gid from FILENAME."
 			 'rename-file
 			 (list localname1 tmpfile t)))
 		      ;; We must change the ownership as local user.
+		      ;; Since this does not work reliable, we also
+		      ;; give read permissions.
+		      (set-file-modes tmpfile (tramp-octal-to-decimal "0777"))
 		      (tramp-set-file-uid-gid
 		       tmpfile
 		       (tramp-get-remote-uid v 'integer)
@@ -3301,20 +3314,26 @@ the uid and gid from FILENAME."
 		    ;; Move the temporary file to its destination.
 		    (cond
 		     (t2
-		      (tramp-send-command
-		       v (format
-			  "mv -f %s %s"
-			  (tramp-shell-quote-argument tmpfile)
-			  (tramp-shell-quote-argument localname2))))
+		      (or
+		       (zerop
+			(tramp-send-command-and-check
+			 v (format
+			    "cp -f -p %s %s"
+			    (tramp-shell-quote-argument tmpfile)
+			    (tramp-shell-quote-argument localname2))))
+		       (tramp-error-with-buffer
+			nil v 'file-error
+			"Copying directly failed, see buffer `%s' for details."
+			(tramp-get-buffer v))))
 		     (t1
 		      (tramp-run-real-handler
 		       'rename-file
 		       (list tmpfile localname2 ok-if-already-exists)))))
 
-		;; Error handling.
-		((error quit)
-		 (delete-file tmpfile)
-		 (signal (car err) (cdr err))))))))))
+		;; Save exit.
+		(condition-case nil
+		    (delete-file tmpfile)
+		  (error)))))))))
 
       ;; Set the time and mode. Mask possible errors.
       ;; Won't be applied for 'rename.
@@ -6090,6 +6109,13 @@ process to set up.  VEC specifies the connection."
 
   ;; Set the environment.
   (tramp-message vec 5 "Setting default environment")
+
+  ;; On OpenSolaris, there is a bug when HISTFILE is changed in place
+  ;; <http://bugs.opensolaris.org/view_bug.do?bug_id=6834184>.  We
+  ;; apply the workaround.
+  (if (string-equal (tramp-get-connection-property vec "uname" "") "SunOS 5.11")
+      (tramp-send-command vec "unset HISTFILE"))
+
   (let ((env (copy-sequence tramp-remote-process-environment))
 	unset item)
     (while env
@@ -7767,6 +7793,7 @@ Only works for Bourne-like shells."
 ;;   might be worthwhile to add some way to indicate that a particular
 ;;   use of process-file is (supposed to be) free of side-effects.
 ;;   (Stefan Monnier)
+;; * Use lsh instead of ssh (Alfred M. Szmidt)
 
 ;; Functions for file-name-handler-alist:
 ;; diff-latest-backup-file -- in diff.el
