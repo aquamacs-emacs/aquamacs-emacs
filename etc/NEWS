@@ -132,7 +132,7 @@ testing for the `multi-tty' feature.
 --daemon command line argument.  It disconnects from the terminal and
 starts the server.  Clients can connect and create graphical or
 terminal frames using emacsclient.
-
++++
 **** emacsclient starts emacs in daemon mode and connects to it when
 --alternate-editor="" is used (or when the evironment variable
 ALTERNATE_EDITOR is set to "") and emacsclient cannot connect to an
@@ -191,18 +191,18 @@ each dimension is no longer limited to 94 or 96.
 
 **** A dynamic charset priority list is used to infer the charset of
 characters for display.
-
++++
 *** There are new language environments for Chinese-GBK,
 Chinese-GB18030, Khmer, Bengali, Punjabi, Gujarati, Oriya, Telugu,
 Sinhala, and TaiViet.
-
++++
 *** The minor modes unify-8859-on-encoding-mode and
 unify-8859-on-decoding-mode are obsolete.
-
++++
 *** `ucs-insert' is bound to `C-x 8 RET' and in addition to hex numbers
 accepts numbers in hash notation (e.g. #o21430 for octal, or #10r8984 for
 decimal).  It also accepts Unicode character names with completion.
-
+---
 *** The `cyrillic-translit' input method supports many new characters.
 Common typographical characters available from Unicode were added to
 `cyrillic-translit': punctuation marks, accented characters, fractions,
@@ -496,10 +496,9 @@ leading `C-x', e.g. `C-x C-= C-= C-=' increases the face height by
 three steps.  Each step scales the height of the default face by the
 value of the variable `text-scale-mode-step'.
 
-*** The command `buffer-face-mode' prompts for a face name, and remaps
-the default face in the current buffer to that specified face.  The
-command `variable-pitch-mode' turns on Buffer Face mode for the
-`variable-pitch' face.
+*** The commands buffer-face-mode and buffer-face-set can be used to
+remap the default face in the current buffer.  See "Buffer Face mode",
+under New Modes and Packages.
 
 ** Primary selection changes
 +++
@@ -557,6 +556,10 @@ run processes remotely.
 *** The new command kill-matching-buffers kills buffers whose name
 matches a regexp.
 ---
+*** The value of comment-style now defaults to `indent'.
+Thefore, comment-start markers are inserted at the current indentation
+of the region to comment, rather than the leftmost column.
+---
 *** The new commands `pp-macroexpand-expression' and
 `pp-macroexpand-last-sexp' pretty-print macro expansions.
 +++
@@ -579,14 +582,19 @@ are ignored.  Customize the `tooltip' face instead.
 
 * New Modes and Packages in Emacs 23.1
 
-** FIXME add details of new packages imported from lisp/gnus.
-[Maybe some information from doc/misc/gnus-coding.texi can be reused]
-
 ** Auto Composition Mode is a minor mode that composes characters
 automatically when they are displayed.  It is globally on by default.
 It uses `auto-composition-function' (default `auto-compose-chars').
 
 ** Bubbles, a new game, is similar to SameGame.
+
+** Buffer Face mode is a minor mode for remapping the default face in
+the current buffer.  The variable `buffer-face-mode-face' specifies
+the face to remap to.  The command `buffer-face-set' prompts for a
+face name, sets `buffer-face-mode-face' to it, and enables
+buffer-face-mode.  See "Face changes", under Editing Changes, for a
+description of face remapping.
+
 ---
 ** butterfly flips the desired bit on the drive platter.
 See http://xkcd.com/378/
@@ -687,15 +695,22 @@ specifies what to do when a buffer is visited, killed, or written.
 * Changes in Specialized Modes and Packages in Emacs 23.1
 
 ** Abbrev has been rewritten in Elisp and extended with more flexibility.
++++
 *** New functions: abbrev-get, abbrev-put, abbrev-table-get, abbrev-table-put,
     abbrev-table-p, abbrev-insert, abbrev-table-menu.
++++
 *** Special hook `abbrev-expand-functions' obsoletes `pre-abbrev-expand-hook'.
++++
 *** `make-abbrev-table', `define-abbrev', `define-abbrev-table' all take
     extra arguments for arbitrary properties.
++++
 *** New variable `abbrev-minor-mode-table-alist'.
++++
 *** `local-abbrev-table' can hold a list of abbrev-tables.
++++
 *** Abbrevs have now the following special properties:
     `:count', `:system', `:enable-function', `:case-fixed'.
++++
 *** Abbrev-tables have now the following special properties:
     `:parents', `:case-fixed', `:enable-function', `:regexp',
     `abbrev-table-modiff'.
@@ -920,7 +935,7 @@ history.  See `Minibuffer changes', above.
 +++
 ** MH-E
 
-*** Upgraded to MH-E version 8.1.  See MH-E-NEWS for details.
+*** Upgraded to MH-E version 8.2.  See MH-E-NEWS for details.
 
 ** Python
 *** The file etc/emacs.py now supports both Python 2 and 3, meaning
@@ -1268,14 +1283,14 @@ Use the new function font-family-list (see Lisp Changes, below).
 ** Internationalization changes
 
 *** The value of the function `charset-id' is now always 0.
-
++++
 *** The functions `register-char-codings' and `coding-system-spec'
 have been removed.
-
++++
 *** The cpXXX coding systems are now supported automatically.
 The functions cp-...-codepage, which you had to use in Emacs 22 to
 enable support for these coding systems, have been deleted.
-
+---
 *** The following features have been removed.  They were used for
 displaying various scripts with specific fonts, and are no longer
 needed now that OpenType font support is available:
@@ -1304,6 +1319,16 @@ default fontset.
 ** The variable temp-file-name-pattern has been removed.
 This variable was only used by call-process-region, which now uses
 temporary-file-directory instead.
+
++++
+** The COUNT and SYSTEM-FLAG arguments to define-abbrev have been
+removed.  The function now takes extra arguments for specifying
+arbitrary abbrev properties.
+
+** end-of-defun-function is now guaranteed to work only when called
+from the start of a defun.  It must now leave point exactly at the end
+of defun, since `end-of-defun' now itself moves forward over
+whitespace after calling it.
 
 
 * Lisp Changes in Emacs 23.1
@@ -1363,8 +1388,9 @@ like this:
 ** clone-indirect-buffer now runs the clone-indirect-buffer-hook.
 
 +++
-** `beginning-of-defun-function' now takes one argument, the count
-given to `beginning-of-defun'.
+** `beginning-of-defun-function' now takes one argument, the count given to
+`beginning-of-defun'.  (N.B. `end-of-defun-function' doesn't take any
+arguments.)
 
 +++
 ** `file-remote-p' has new optional parameters IDENTIFICATION and CONNECTED.
@@ -1426,27 +1452,25 @@ value of `current-time' before and after Emacs loads the init files.
 Emacs initialization.
 
 ** Changes affecting display-buffer
-
 +++
-*** New value nil for split-height-threshold inhibits vertical splitting
-unless there's no other window.
-
-+++
-*** New option split-width-threshold controls horizontal splitting.
-
-+++
-*** A window can be split horizontally even when it's not full-width.
-
-+++
-*** New option split-window-preferred-function can be set to a function
-to override the default splitting mechanism of display-buffer.
+*** display-buffer tries to be smarter when splitting windows.
+The new option split-window-preferred-function lets you specify your own
+function to pop up new windows.  Its default value split-window-sensibly
+can split a window either vertically or horizontally, whichever seems
+more suitable in the current configuration.  You can tune the behavior
+of split-window-sensibly by customizing split-height-threshold and the
+new option split-width-threshold.  Both options now take the value nil
+to inhibit splitting in one direction.  Setting split-width-threshold to
+nil inhibits horizontal splitting and gets you the behavior of Emacs 22
+in this respect.  In any case, display-buffer may now split the largest
+window vertically even when it is not as wide as the containing frame.
 
 +++
 *** If pop-up-frames has the value `graphic-only', display-buffer only
 makes a separate frame on graphic displays.
 
 +++
-*** select-frame and set-frame-selected-window have new optional
+*** select-frame and set-frame-selected-window have a new optional
 argument NORECORD.  If non-nil, this will avoid messing with the order
 of recently selected windows and the buffer list.
 
@@ -1733,15 +1757,15 @@ but signals an error if STRING contains a non-ASCII, non-eight-bit
 character.
 
 ** Changes related to the new font backend
-
-Which font backends to use can be specified by the X resource "FontBackend".
-For instance, to use both X core fonts and Xft fonts:
++++
+*** Which font backends to use can be specified by the X resource
+"FontBackend".  For instance, to use both X core fonts and Xft fonts:
 
 Emacs.FontBackend: x,xft
 
 If this resource is not set, Emacs tries to use all font backends
 available on your graphic device.
-
++++
 *** New frame parameter `font-backend' specifies a list of
 font-backends supported by the frame's graphic device.  On X, they are
 currently `x' and `xft'.

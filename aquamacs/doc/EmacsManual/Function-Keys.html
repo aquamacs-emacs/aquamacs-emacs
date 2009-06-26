@@ -1,9 +1,37 @@
 <html lang="en">
 <head>
-<title>Rebinding Function Keys</title>
+<title>Function Keys - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Rebinding Function Keys">
-<meta name="generator" content="makeinfo 4.6">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.9">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Key-Bindings.html#Key-Bindings" title="Key Bindings">
+<link rel="prev" href="Modifier-Keys.html#Modifier-Keys" title="Modifier Keys">
+<link rel="next" href="Named-ASCII-Chars.html#Named-ASCII-Chars" title="Named ASCII Chars">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.0.94.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
   pre.display { font-family:inherit }
@@ -12,19 +40,22 @@
   pre.smallformat  { font-family:inherit; font-size:smaller }
   pre.smallexample { font-size:smaller }
   pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
 --></style>
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
 <p>
-Node:&nbsp;<a name="Function%20Keys">Function Keys</a>,
-Next:&nbsp;<a rel="next" accesskey="n" href="Named-ASCII-Chars.html#Named%20ASCII%20Chars">Named ASCII Chars</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Init-Rebinding.html#Init%20Rebinding">Init Rebinding</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Key-Bindings.html#Key%20Bindings">Key Bindings</a>
-<hr><br>
+<a name="Function-Keys"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Named-ASCII-Chars.html#Named-ASCII-Chars">Named ASCII Chars</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Modifier-Keys.html#Modifier-Keys">Modifier Keys</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Key-Bindings.html#Key-Bindings">Key Bindings</a>
+<hr>
 </div>
 
-<h3 class="subsection">Rebinding Function Keys</h4>
+<h4 class="subsection">57.4.8 Rebinding Function Keys</h4>
 
 <p>Key sequences can contain function keys as well as ordinary
 characters.  Just as Lisp characters (actually integers) represent
@@ -34,30 +65,19 @@ the corresponding Lisp symbol.  Here are the conventional Lisp names for
 common function keys:
 
      <dl>
-<dt><code>left</code>, <code>up</code>, <code>right</code>, <code>down</code>
-     <dd>Cursor arrow keys.
+<dt><code>left</code>, <code>up</code>, <code>right</code>, <code>down</code><dd>Cursor arrow keys.
 
-     <br><dt><code>begin</code>, <code>end</code>, <code>home</code>, <code>next</code>, <code>prior</code>
-     <dd>Other cursor repositioning keys.
+     <br><dt><code>begin</code>, <code>end</code>, <code>home</code>, <code>next</code>, <code>prior</code><dd>Other cursor repositioning keys.
 
-     <br><dt><code>select</code>, <code>print</code>, <code>execute</code>, <code>backtab</code>
-     <dd><dt><code>insert</code>, <code>undo</code>, <code>redo</code>, <code>clearline</code>
-     <dd><dt><code>insertline</code>, <code>deleteline</code>, <code>insertchar</code>, <code>deletechar</code>
-     <dd>Miscellaneous function keys.
+     <br><dt><code>select</code>, <code>print</code>, <code>execute</code>, <code>backtab</code><dt><code>insert</code>, <code>undo</code>, <code>redo</code>, <code>clearline</code><dt><code>insertline</code>, <code>deleteline</code>, <code>insertchar</code>, <code>deletechar</code><dd>Miscellaneous function keys.
 
-     <br><dt><code>f1</code>, <code>f2</code>, <small class="dots">...</small> <code>f35</code>
-     <dd>Numbered function keys (across the top of the keyboard).
+     <br><dt><code>f1</code>, <code>f2</code>, <small class="dots">...</small> <code>f35</code><dd>Numbered function keys (across the top of the keyboard).
 
-     <br><dt><code>kp-add</code>, <code>kp-subtract</code>, <code>kp-multiply</code>, <code>kp-divide</code>
-     <dd><dt><code>kp-backtab</code>, <code>kp-space</code>, <code>kp-tab</code>, <code>kp-enter</code>
-     <dd><dt><code>kp-separator</code>, <code>kp-decimal</code>, <code>kp-equal</code>
-     <dd>Keypad keys (to the right of the regular keyboard), with names or punctuation.
+     <br><dt><code>kp-add</code>, <code>kp-subtract</code>, <code>kp-multiply</code>, <code>kp-divide</code><dt><code>kp-backtab</code>, <code>kp-space</code>, <code>kp-tab</code>, <code>kp-enter</code><dt><code>kp-separator</code>, <code>kp-decimal</code>, <code>kp-equal</code><dd>Keypad keys (to the right of the regular keyboard), with names or punctuation.
 
-     <br><dt><code>kp-0</code>, <code>kp-1</code>, <small class="dots">...</small> <code>kp-9</code>
-     <dd>Keypad keys with digits.
+     <br><dt><code>kp-0</code>, <code>kp-1</code>, <small class="dots">...</small> <code>kp-9</code><dd>Keypad keys with digits.
 
-     <br><dt><code>kp-f1</code>, <code>kp-f2</code>, <code>kp-f3</code>, <code>kp-f4</code>
-     <dd>Keypad PF keys. 
+     <br><dt><code>kp-f1</code>, <code>kp-f2</code>, <code>kp-f3</code>, <code>kp-f4</code><dd>Keypad PF keys. 
 </dl>
 
    <p>These names are conventional, but some systems (especially when using
@@ -65,46 +85,30 @@ X) may use different names.  To make certain what symbol is used for a
 given function key on your terminal, type <kbd>C-h c</kbd> followed by that
 key.
 
-   <p>A key sequence which contains function key symbols (or anything but
-ASCII characters) must be a vector rather than a string.  The vector
-syntax uses spaces between the elements, and square brackets around the
-whole vector.  Thus, to bind function key <code>f1</code> to the command
-<code>rmail</code>, write the following:
+   <p>See <a href="Init-Rebinding.html#Init-Rebinding">Init Rebinding</a>, for examples of binding function keys.
 
-<pre class="example">     (global-set-key [f1] 'rmail)
-     </pre>
+   <p><a name="index-keypad-4009"></a>  Many keyboards have a &ldquo;numeric keypad&rdquo; on the right hand side. 
+The numeric keys in the keypad double up as cursor motion keys,
+toggled by a key labeled `<samp><span class="samp">Num Lock</span></samp>'.  By default, Emacs
+translates these keys to the corresponding keys in the main keyboard. 
+For example, when `<samp><span class="samp">Num Lock</span></samp>' is on, the key labeled `<samp><span class="samp">8</span></samp>' on
+the numeric keypad produces <code>kp-8</code>, which is translated to
+<kbd>8</kbd>; when `<samp><span class="samp">Num Lock</span></samp>' is off, the same key produces
+<code>kp-up</code>, which is translated to &lt;UP&gt;.  If you rebind a key
+such as <kbd>8</kbd> or &lt;UP&gt;, it affects the equivalent keypad key too. 
+However, if you rebind a `<samp><span class="samp">kp-</span></samp>' key directly, that won't affect
+its non-keypad equivalent.  Note that the modified keys are not
+translated: for instance, if you hold down the &lt;META&gt; key while
+pressing the `<samp><span class="samp">8</span></samp>' key on the numeric keypad, that generates
+<kbd>M-&lt;kp-8&gt;</kbd>.
 
-<p>To bind the right-arrow key to the command <code>forward-char</code>, you can
-use this expression:
-
-<pre class="example">     (global-set-key [right] 'forward-char)
-     </pre>
-
-<p>This uses the Lisp syntax for a vector containing the symbol
-<code>right</code>.  (This binding is present in Emacs by default.)
-
-   <p>See <a href="Init-Rebinding.html#Init%20Rebinding">Init Rebinding</a>, for more information about using vectors for
-rebinding.
-
-   <p>You can mix function keys and characters in a key sequence.  This
-example binds <kbd>C-x &lt;NEXT&gt;</kbd> to the command <code>forward-page</code>.
-
-<pre class="example">     (global-set-key [?\C-x next] 'forward-page)
-     </pre>
-
-<p>where <code>?\C-x</code> is the Lisp character constant for the character
-<kbd>C-x</kbd>.  The vector element <code>next</code> is a symbol and therefore
-does not take a question mark.
-
-   <p>You can use the modifier keys &lt;CTRL&gt;, &lt;META&gt;, &lt;HYPER&gt;,
-&lt;SUPER&gt;, &lt;ALT&gt; and &lt;SHIFT&gt; with function keys.  To represent
-these modifiers, add the strings <code>C-</code>, <code>M-</code>, <code>H-</code>,
-<code>s-</code>, <code>A-</code> and <code>S-</code> at the front of the symbol name. 
-Thus, here is how to make <kbd>Hyper-Meta-&lt;RIGHT&gt;</kbd> move forward a
-word:
-
-<pre class="example">     (global-set-key [H-M-right] 'forward-word)
-     </pre>
+   <p>Emacs provides a convenient method for binding the numeric keypad
+keys, using the variables <code>keypad-setup</code>,
+<code>keypad-numlock-setup</code>, <code>keypad-shifted-setup</code>, and
+<code>keypad-numlock-shifted-setup</code>.  These can be found in the
+`<samp><span class="samp">keyboard</span></samp>' customization group (see <a href="Easy-Customization.html#Easy-Customization">Easy Customization</a>).  You
+can rebind the keys to perform other tasks, such as issuing numeric
+prefix arguments.
 
    </body></html>
 

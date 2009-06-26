@@ -992,6 +992,8 @@ record_conversion_result (struct coding_system *coding,
     case CODING_RESULT_INSUFFICIENT_MEM:
       Vlast_code_conversion_error = Qinsufficient_memory;
       break;
+    case CODING_RESULT_SUCCESS:
+      break;
     default:
       Vlast_code_conversion_error = intern ("Unknown error");
     }
@@ -1203,7 +1205,6 @@ alloc_destination (coding, nbytes, dst)
     }
   else
     coding_alloc_by_realloc (coding, nbytes);
-  record_conversion_result (coding, CODING_RESULT_SUCCESS);
   coding_set_destination (coding);
   dst = coding->destination + offset;
   return dst;
@@ -1681,7 +1682,7 @@ detect_coding_utf_16 (coding, detect_info)
 	    }
 	  if (! o[c2])
 	    {
-	      o[c1] = 1;
+	      o[c2] = 1;
 	      o_num++;
 	      if (o_num >= 128)
 		break;
@@ -6622,6 +6623,12 @@ get_translation_table (attrs, encodep, max_lookup)
   Lisp_Object standard, translation_table;
   Lisp_Object val;
 
+  if (NILP (Venable_character_translation))
+    {
+      if (max_lookup)
+	*max_lookup = 0;
+      return Qnil;
+    }
   if (encodep)
     translation_table = CODING_ATTR_ENCODE_TBL (attrs),
       standard = Vstandard_translation_table_for_encode;

@@ -22,7 +22,7 @@ dnl  You should have received a copy of the GNU General Public License
 dnl  along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
 
 AC_PREREQ(2.61)
-AC_INIT(emacs, 23.0.92)
+AC_INIT(emacs, 23.0.94)
 AC_CONFIG_HEADER(src/config.h:src/config.in)
 AC_CONFIG_SRCDIR(src/lisp.h)
 
@@ -2094,7 +2094,6 @@ if test "${HAVE_NS}" = "yes"; then
   if test "${NS_IMPL_COCOA}" = "yes"; then
     AC_DEFINE(NS_IMPL_COCOA, 1, [Define to 1 if you are using NS windowing under MacOS X.])
     GNU_OBJC_CFLAGS=
-    LIB_SRC_EXTRA_INSTALLABLES=mac-fix-env
   fi
   if test "${NS_IMPL_GNUSTEP}" = "yes"; then
     AC_DEFINE(NS_IMPL_GNUSTEP, 1, [Define to 1 if you are using NS windowing under GNUstep.])
@@ -2605,11 +2604,6 @@ AH_BOTTOM([
 #if defined(HAVE_X_WINDOWS) || defined(HAVE_NS)
 #define HAVE_WINDOW_SYSTEM
 #define HAVE_MOUSE
-#endif
-
-/* Sadly for now, GNUstep dump does not work.  */
-#ifdef NS_IMPL_GNUSTEP
-#define CANNOT_DUMP
 #endif
 
 /* Define AMPERSAND_FULL_NAME if you use the convention

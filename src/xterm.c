@@ -1194,16 +1194,27 @@ x_compute_glyph_string_overhangs (s)
      struct glyph_string *s;
 {
   if (s->cmp == NULL
-      && s->first_glyph->type == CHAR_GLYPH)
+      && (s->first_glyph->type == CHAR_GLYPH
+	  || s->first_glyph->type == COMPOSITE_GLYPH))
     {
-      unsigned *code = alloca (sizeof (unsigned) * s->nchars);
-      struct font *font = s->font;
       struct font_metrics metrics;
-      int i;
 
-      for (i = 0; i < s->nchars; i++)
-	code[i] = (s->char2b[i].byte1 << 8) | s->char2b[i].byte2;
-      font->driver->text_extents (font, code, s->nchars, &metrics);
+      if (s->first_glyph->type == CHAR_GLYPH)
+	{
+	  unsigned *code = alloca (sizeof (unsigned) * s->nchars);
+	  struct font *font = s->font;
+	  int i;
+
+	  for (i = 0; i < s->nchars; i++)
+	    code[i] = (s->char2b[i].byte1 << 8) | s->char2b[i].byte2;
+	  font->driver->text_extents (font, code, s->nchars, &metrics);
+	}
+      else
+	{
+	  Lisp_Object gstring = composition_gstring_from_id (s->cmp_id);
+
+	  composition_gstring_width (gstring, s->cmp_from, s->cmp_to, &metrics);
+	}
       s->right_overhang = (metrics.rbearing > metrics.width
 			   ? metrics.rbearing - metrics.width : 0);
       s->left_overhang = metrics.lbearing < 0 ? - metrics.lbearing : 0;
@@ -8689,6 +8700,7 @@ x_handle_net_wm_state (f, event)
   Display *dpy = FRAME_X_DISPLAY (f);
   unsigned char *tmp_data = NULL;
   Atom target_type = XA_ATOM;
+  Lisp_Object lval;
 
   BLOCK_INPUT;
   x_catch_errors (dpy);
@@ -8718,7 +8730,7 @@ x_handle_net_wm_state (f, event)
         value |= FULLSCREEN_BOTH;
     }
 
-  Lisp_Object lval = Qnil;
+  lval = Qnil;
   switch (value) 
     {
     case FULLSCREEN_WIDTH:
@@ -10612,13 +10624,6 @@ x_delete_display (dpyinfo)
 	  tail->next = tail->next->next;
     }
 
-  /* Xt and GTK do this themselves.  */
-#if ! defined (USE_X_TOOLKIT) && ! defined (USE_GTK)
-#ifndef AIX		/* On AIX, XCloseDisplay calls this.  */
-  XrmDestroyDatabase (dpyinfo->xrdb);
-#endif
-#endif
-
   xfree (dpyinfo->x_id_name);
   xfree (dpyinfo->x_dnd_atoms);
   xfree (dpyinfo->color_cells);
@@ -10738,6 +10743,32 @@ x_delete_terminal (struct terminal *terminal)
     {
       x_destroy_all_bitmaps (dpyinfo);
       XSetCloseDownMode (dpyinfo->display, DestroyAll);
+
+      /* Whether or not XCloseDisplay destroys the associated resource
+	 database depends on the version of libX11.  To avoid both
+	 crash and memory leak, we dissociate the database from the
+	 display and then destroy dpyinfo->xrdb ourselves.
+
+	 Unfortunately, the above strategy does not work in some
+	 situations due to a bug in newer versions of libX11: because
+	 XrmSetDatabase doesn't clear the flag XlibDisplayDfltRMDB if
+	 dpy->db is NULL, XCloseDisplay destroys the associated
+	 database whereas it has not been created by XGetDefault
+	 (Bug#21974 in freedesktop.org Bugzilla).  As a workaround, we
+	 don't destroy the database here in order to avoid the crash
+	 in the above situations for now, though that may cause memory
+	 leaks in other situations.  */
+#if 0
+#ifdef HAVE_XRMSETDATABASE
+      XrmSetDatabase (dpyinfo->display, NULL);
+#else
+      dpyinfo->display->db = NULL;
+#endif
+      /* We used to call XrmDestroyDatabase from x_delete_display, but
+	 some older versions of libX11 crash if we call it after
+	 closing all the displays.  */
+      XrmDestroyDatabase (dpyinfo->xrdb);
+#endif
 
 #ifdef USE_GTK
       xg_display_close (dpyinfo->display);

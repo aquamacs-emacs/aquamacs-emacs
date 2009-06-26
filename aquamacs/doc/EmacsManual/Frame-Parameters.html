@@ -1,9 +1,37 @@
 <html lang="en">
 <head>
-<title>Setting Frame Parameters</title>
+<title>Frame Parameters - GNU Emacs Manual</title>
 <meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Setting Frame Parameters">
-<meta name="generator" content="makeinfo 4.6">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.9">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Frames.html#Frames" title="Frames">
+<link rel="prev" href="Special-Buffer-Frames.html#Special-Buffer-Frames" title="Special Buffer Frames">
+<link rel="next" href="Scroll-Bars.html#Scroll-Bars" title="Scroll Bars">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the Sixteenth edition of the `GNU Emacs Manual',
+
+updated for Emacs version 23.0.94.
+
+Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
+1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
   pre.display { font-family:inherit }
@@ -12,89 +40,58 @@
   pre.smallformat  { font-family:inherit; font-size:smaller }
   pre.smallexample { font-size:smaller }
   pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
 --></style>
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
 <p>
-Node:&nbsp;<a name="Frame%20Parameters">Frame Parameters</a>,
-Next:&nbsp;<a rel="next" accesskey="n" href="Scroll-Bars.html#Scroll%20Bars">Scroll Bars</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Special-Buffer-Frames.html#Special%20Buffer%20Frames">Special Buffer Frames</a>,
+<a name="Frame-Parameters"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Scroll-Bars.html#Scroll-Bars">Scroll Bars</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Special-Buffer-Frames.html#Special-Buffer-Frames">Special Buffer Frames</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
-<hr><br>
+<hr>
 </div>
 
-<h3 class="section">Setting Frame Parameters</h3>
+<h3 class="section">25.10 Setting Frame Parameters</h3>
 
-<p>This section describes commands for altering the display style and
-window management behavior of the selected frame.
+<p><a name="index-Auto_002dRaise-mode-1249"></a><a name="index-Auto_002dLower-mode-1250"></a>
+  These commands are available for controlling the window management
+behavior of the selected frame:
 
-     <dl>
-<dt><kbd>M-x set-foreground-color &lt;RET&gt; </kbd><var>color</var><kbd> &lt;RET&gt;</kbd>
-     <dd>Specify color <var>color</var> for the foreground of the selected frame. 
-(This also changes the foreground color of the default face.)
-
-     <br><dt><kbd>M-x set-background-color &lt;RET&gt; </kbd><var>color</var><kbd> &lt;RET&gt;</kbd>
-     <dd>Specify color <var>color</var> for the background of the selected frame. 
-(This also changes the background color of the default face.)
-
-     <br><dt><kbd>M-x set-cursor-color &lt;RET&gt; </kbd><var>color</var><kbd> &lt;RET&gt;</kbd>
-     <dd>Specify color <var>color</var> for the cursor of the selected frame.
-
-     <br><dt><kbd>M-x set-mouse-color &lt;RET&gt; </kbd><var>color</var><kbd> &lt;RET&gt;</kbd>
-     <dd>Specify color <var>color</var> for the mouse cursor when it is over the
-selected frame.
-
-     <br><dt><kbd>M-x set-border-color &lt;RET&gt; </kbd><var>color</var><kbd> &lt;RET&gt;</kbd>
-     <dd>Specify color <var>color</var> for the border of the selected frame.
-
-     <br><dt><kbd>M-x list-colors-display</kbd>
-     <dd>Display the defined color names and show what the colors look like. 
-This command is somewhat slow.
-
-     <br><dt><kbd>M-x auto-raise-mode</kbd>
-     <dd>Toggle whether or not the selected frame should auto-raise.  Auto-raise
+     
+<a name="index-auto_002draise_002dmode-1251"></a>
+<dl><dt><kbd>M-x auto-raise-mode</kbd><dd>Toggle whether or not the selected frame should auto-raise.  Auto-raise
 means that every time you move the mouse onto the frame, it raises the
 frame.
 
-     <p>Note that this auto-raise feature is implemented by Emacs itself.  Some
-window managers also implement auto-raise.  If you enable auto-raise for
-Emacs frames in your X window manager, it should work, but it is beyond
-Emacs's control and therefore <code>auto-raise-mode</code> has no effect on
-it.
+     <p>Some window managers also implement auto-raise.  If you enable
+auto-raise for Emacs frames in your window manager, it will work, but
+it is beyond Emacs' control, so <code>auto-raise-mode</code> has no effect
+on it.
 
-     <br><dt><kbd>M-x auto-lower-mode</kbd>
-     <dd>Toggle whether or not the selected frame should auto-lower. 
+     <p><a name="index-auto_002dlower_002dmode-1252"></a><br><dt><kbd>M-x auto-lower-mode</kbd><dd>Toggle whether or not the selected frame should auto-lower. 
 Auto-lower means that every time you move the mouse off the frame,
-the frame moves to the bottom of the stack of X windows.
+the frame moves to the bottom of the stack on the screen.
 
      <p>The command <code>auto-lower-mode</code> has no effect on auto-lower
-implemented by the X window manager.  To control that, you must use
-the appropriate window manager features.
-
-     <br><dt><kbd>M-x set-frame-font &lt;RET&gt; </kbd><var>font</var><kbd> &lt;RET&gt;</kbd>
-     <dd>Specify font <var>font</var> as the principal font for the selected frame. 
-The principal font controls several face attributes of the
-<code>default</code> face (see <a href="Faces.html#Faces">Faces</a>).  For example, if the principal font
-has a height of 12 pt, all text will be drawn in 12 pt fonts, unless you
-use another face that specifies a different height.  See <a href="Font-X.html#Font%20X">Font X</a>, for
-ways to list the available fonts on your system.
-
-     <p>You can also set a frame's principal font through a pop-up menu. 
-Press <kbd>S-Mouse-1</kbd> to activate this menu. 
+implemented by the window manager.  To control that, you must use the
+appropriate window manager features. 
 </dl>
 
    <p>In Emacs versions that use an X toolkit, the color-setting and
 font-setting functions don't affect menus and the menu bar, since they
 are displayed by their own widget classes.  To change the appearance of
-the menus and menu bar, you must use X resources (see <a href="Resources-X.html#Resources%20X">Resources X</a>). 
-See <a href="Colors-X.html#Colors%20X">Colors X</a>, regarding colors.  See <a href="Font-X.html#Font%20X">Font X</a>, regarding choice of
+the menus and menu bar, you must use X resources (see <a href="Resources.html#Resources">Resources</a>). 
+See <a href="Colors.html#Colors">Colors</a>, regarding colors.  See <a href="Font-X.html#Font-X">Font X</a>, regarding choice of
 font.
 
    <p>Colors, fonts, and other attributes of the frame's display can also
 be customized by setting frame parameters in the variable
-<code>default-frame-alist</code> (see <a href="Creating-Frames.html#Creating%20Frames">Creating Frames</a>).  For a detailed
-description of frame parameters and customization, see <a href="../elisp/Frame-Parameters.html#Frame%20Parameters">Frame Parameters</a>.
+<code>default-frame-alist</code> (see <a href="Creating-Frames.html#Creating-Frames">Creating Frames</a>).  For a detailed
+description of frame parameters and customization, see <a href="../elisp/Frame-Parameters.html#Frame-Parameters">Frame Parameters</a>.
 
    </body></html>
 

@@ -216,7 +216,7 @@ KEYS defines the elements to use for `tabbar-key-binding-keys'."
    (nth index (tabbar-tabs (tabbar-current-tabset)))))
 
 (defun tabbar-window-select-a-tab (tab)
-  "select TAB"
+  "Select TAB"
   (let ((one-buffer-one-frame nil)
 	(buffer (tabbar-tab-value tab)))
     (when buffer
@@ -229,7 +229,11 @@ KEYS defines the elements to use for `tabbar-key-binding-keys'."
       (let ((new-pt (cdr (assq tab tab-points))))
 	(and new-pt 
 	     (eq (marker-buffer new-pt) (window-buffer (selected-window)))
-	     (goto-char (marker-position new-pt))
+	     (let ((pos (marker-position new-pt)))
+	       (unless (eq pos (point))
+		 (if transient-mark-mode
+		     (deactivate-mark))
+		 (goto-char pos)))
 	     (set-marker new-pt nil) ;; delete marker 
 	     )))))
 

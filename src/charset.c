@@ -319,7 +319,6 @@ load_charset_map (charset, entries, n_entries, control_flag)
 	    {
 	      memset (temp_charset_work->table.decoder, -1,
 		      sizeof (int) * 0x10000);
-	      temp_charset_work->for_encoder = 0;
 	    }
 	  else
 	    {
@@ -646,7 +645,7 @@ load_charset (charset, control_flag)
   if (inhibit_load_charset_map
       && temp_charset_work
       && charset == temp_charset_work->current
-      && (control_flag == 2 == temp_charset_work->for_encoder))
+      && ((control_flag == 2) == temp_charset_work->for_encoder))
     return;
 
   if (CHARSET_METHOD (charset) == CHARSET_METHOD_MAP)
@@ -831,7 +830,7 @@ RANGE is a cons (FROM .  TO), where FROM and TO indicate a range of
 characters contained in CHARSET.
 
 The optional 4th and 5th arguments FROM-CODE and TO-CODE specify the
-range of code points of target characters.  */)
+range of code points (in CHARSET) of target characters.  */)
      (function, charset, arg, from_code, to_code)
        Lisp_Object function, charset, arg, from_code, to_code;
 {

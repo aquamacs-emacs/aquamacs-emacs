@@ -104,7 +104,8 @@ after updating this variable.")
 	interprogram-paste-function 'aquamacs-cut-buffer-or-selection-value)
 
   (defun aquamacs-cut-buffer-or-selection-value ()
-    (unless (and osx-key-mode (eq this-original-command 'yank))
+    (unless (and osx-key-mode 
+		 (memq this-original-command '(yank mouse-yank-at-click)))
       (let (text)
 	;; Consult the selection, then the cut buffer.  Treat empty strings
 	;; as if they were unset.
@@ -117,8 +118,7 @@ after updating this variable.")
 	  ;; Record the newer string, so subsequent calls can use the `eq' test.
 	  (setq ns-last-selected-text text)
 	  nil)
-	 (t
-	  (setq ns-last-selected-text text))))))
+	 (t (setq ns-last-selected-text text))))))
 
   ;; overwrite x-select-text, which is called directly
   ;; (not via interprogram-cut-function) when dragging mouse
@@ -769,13 +769,11 @@ default."
     (define-key map `[(,osxkeys-command-key shift \?)] 'aquamacs-emacs-manual)
 
     (define-key map `[(,osxkeys-command-key n)] 'new-empty-buffer-other-frame) 
-					;open new frame empty
     (define-key map `[(,osxkeys-command-key o)] 'mac-key-open-file) 
-					;open new frame with a file
-
+    (define-key map `[(,osxkeys-command-key s)] 'mac-key-save-file)
     (define-key map `[(,osxkeys-command-key shift s)] 'mac-key-save-file-as)
     (define-key map `[(,osxkeys-command-key shift o)] 'mac-key-open-file-other-frame) 
-					;open new frame with a file
+
     (define-key map `[(,osxkeys-command-key a)] 'mark-whole-buffer)
     (define-key map `[(,osxkeys-command-key v)] 'clipboard-yank) 
     (define-key map `[(,osxkeys-command-key c)] 'clipboard-kill-ring-save)
@@ -786,7 +784,6 @@ default."
     (define-key map `[(,osxkeys-command-key x)] 'clipboard-kill-region)
     (define-key map `[(meta ,osxkeys-command-key x)] 
       'aquamacs-clipboard-kill-secondary)
-    (define-key map `[(,osxkeys-command-key s)] 'mac-key-save-file)
     (define-key map `[(,osxkeys-command-key p)] 'aquamacs-print)
     (define-key map `[(,osxkeys-command-key l)] 'goto-line)
     (define-key map `[(,osxkeys-command-key f)] 'aquamacs-isearch-forward)
@@ -799,9 +796,9 @@ default."
     (define-key map `[(,osxkeys-command-key m)] 'iconify-or-deiconify-frame) 
     (define-key map `[(control z)] 'ignore) ;; hit by mistake often enough
     (define-key map `[(,osxkeys-command-key .)] 'keyboard-quit)
-    (if (boundp 'mac-autohide-menubar-on-fullscreen)
-	(define-key map `[(,osxkeys-command-key shift return)] 
-	  'aquamacs-toggle-full-frame))
+    ;; workaround for bug in menu key description
+    (define-key map `[(,osxkeys-command-key shift 13)] 'aquamacs-toggle-full-frame)
+    (define-key map `[(,osxkeys-command-key shift return)] 'aquamacs-toggle-full-frame)
     (define-key map `[(,osxkeys-command-key escape)] 'keyboard-escape-quit) 
     (define-key map `[(,osxkeys-command-key :)] 'ispell-buffer)
 
@@ -925,6 +922,8 @@ mac-command-modifier osxkeys-command-key))))
 
 ;; ensure that we remap the right backward-kill-word 
 (define-key minibuffer-local-filename-completion-map 
+  [remap aquamacs-backward-kill-word] 'backward-kill-filename)
+(define-key minibuffer-local-filename-must-match-map 
   [remap aquamacs-backward-kill-word] 'backward-kill-filename)
  
 

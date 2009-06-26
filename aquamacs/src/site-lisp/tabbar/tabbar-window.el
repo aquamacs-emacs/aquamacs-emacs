@@ -312,7 +312,11 @@ That is, a string used to represent it on the tab bar."
 	  (let ((new-pt (cdr (assq tab tab-points))))
 	    (and new-pt 
 		 (eq (marker-buffer new-pt) (window-buffer (selected-window)))
-		 (goto-char (marker-position new-pt))
+		 (let ((pos (marker-position new-pt)))
+		   (unless (eq pos (point))
+		     (if transient-mark-mode
+			 (deactivate-mark))
+		     (goto-char pos)))
 		 (set-marker new-pt nil) ;; delete marker 
 		 ))))
       ;; if there's no tab associated with clicked spot, use
@@ -470,14 +474,39 @@ Updates tabbar-window-alist in the same way."
 	(setq header-line-inhibit-window-list
 	      (delq window header-line-inhibit-window-list)))))))
 
-(defun menu-bar-select-buffer ()
- (interactive)
- (with-selected-window (get-window-for-other-buffer)
-   (if tabbar-mode
-       (switch-to-buffer-in-tab last-command-event)
-     (switch-to-buffer last-command-event))
-   (select-frame-set-input-focus (window-frame (selected-window)))))
- 
+(defun menu-bar-select-buffer (&optional buffer)
+  (interactive)
+  (if display-buffer-reuse-frames
+      (let ((buffer (or buffer last-command-event)))
+	(unless (bufferp buffer)
+	  (error "menu-bar-select-buffer: not a buffer."))
+	(if (visible-frame-list)
+	    ;; find a suitable window
+	    (progn
+	      (let ((w (get-window-for-other-buffer 'dont-make-frame buffer)))
+		(if (window-live-p w)
+		    (select-window w)))
+	      ;; (set-buffer (window-buffer (selected-window)))
+	      ;; switch to buffer (may select a different window)
+	      (if tabbar-mode
+		  (switch-to-buffer-in-tab buffer)
+		(switch-to-buffer buffer))
+	      (select-frame-set-input-focus (window-frame (selected-window))))
+	  ;; if no frame visible
+	  ;; find right frame and activate that one
+	  (let ((w (get-window-with-predicate
+		    (lambda (w) (eq (window-buffer w) buffer)) nil t )))
+	    (if w
+		(progn
+		  (make-frame-visible (window-frame w))
+		  (select-frame-set-input-focus (window-frame w))
+		  (select-window w)
+		  (let ((tabbar-mode nil) (one-buffer-one-frame-mode nil))
+		    (set-window-dedicated-p w nil)
+		    (switch-to-buffer (or buffer last-command-event))))
+	      ;; just create another frame for it
+	      (switch-to-buffer-other-frame buffer)))))
+    (switch-to-buffer (or buffer last-command-event))))
 
 ;; shouldn't be done, because the normal switch-to-buffer
 ;; is not sensitive to display-buffer-reuse-frames

@@ -5249,8 +5249,9 @@ tty_supports_face_attributes_p (f, attrs, def_face)
   /* Test for terminal `capabilities' (non-color character attributes).  */
 
   /* font weight (bold/dim) */
-  weight = FONT_WEIGHT_NAME_NUMERIC (attrs[LFACE_WEIGHT_INDEX]);
-  if (weight >= 0)
+  val = attrs[LFACE_WEIGHT_INDEX];
+  if (!UNSPECIFIEDP (val)
+      && (weight = FONT_WEIGHT_NAME_NUMERIC (val), weight >= 0))
     {
       int def_weight = FONT_WEIGHT_NAME_NUMERIC (def_attrs[LFACE_WEIGHT_INDEX]);
 
@@ -6703,7 +6704,7 @@ where R,G,B are numbers between 0 and 255 and name is an arbitrary string.  */)
 	  {
 	    char *name = buf + num;
 	    num = strlen (name) - 1;
-	    if (name[num] == '\n')
+	    if (num >= 0 && name[num] == '\n')
 	      name[num] = 0;
 	    cmap = Fcons (Fcons (build_string (name),
 #ifdef WINDOWSNT

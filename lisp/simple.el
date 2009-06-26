@@ -4472,20 +4472,10 @@ To ignore intangibility, bind `inhibit-point-motion-hooks' to t."
 
 (defun kill-visual-line (&optional arg)
   "Kill the rest of the visual line.
-If there are only whitespace characters there, kill through the
-newline as well.
-
-With prefix argument ARG, kill that many lines from point.
-Negative arguments kill lines backward.
-With zero argument, kill the text before point on the current line.
-
-When calling from a program, nil means \"no arg\",
-a number counts as a prefix arg.
-
-If `kill-whole-line' is non-nil, then this command kills the whole line
-including its terminating newline, when used at the beginning of a line
-with no argument.  As a consequence, you can always kill a whole line
-by typing \\[beginning-of-line] \\[kill-line].
+With prefix argument ARG, kill that many visual lines from point.
+If ARG is negative, kill visual lines backward.
+If ARG is zero, kill the text before point on the current visual
+line.
 
 If you want to append the killed line to the last killed text,
 use \\[append-next-kill] before \\[kill-line].
@@ -4496,29 +4486,20 @@ you can use this command to copy text from a read-only buffer.
 \(If the variable `kill-read-only-ok' is non-nil, then this won't
 even beep.)"
   (interactive "P")
-  (let ((opoint (point))
-	(line-move-visual t)
-	end)
-    ;; It is better to move point to the other end of the kill before
-    ;; killing.  That way, in a read-only buffer, point moves across
-    ;; the text that is copied to the kill ring.  The choice has no
-    ;; effect on undo now that undo records the value of point from
-    ;; before the command was run.
+  ;; Like in `kill-line', it's better to move point to the other end
+  ;; of the kill before killing.
+  (let ((opoint (point)))
     (if arg
 	(vertical-motion (prefix-numeric-value arg))
-      (if (eobp)
-	  (signal 'end-of-buffer nil))
-      (setq end (save-excursion
-		  (end-of-visual-line) (point)))
-      (if (or (save-excursion
-		;; If trailing whitespace is visible,
-		;; don't treat it as nothing.
-		(unless show-trailing-whitespace
-		  (skip-chars-forward " \t" end))
-		(= (point) end))
-	      (and kill-whole-line (bolp)))
-	  (line-move 1)
-	(goto-char end)))
+      (end-of-visual-line 1)
+      (if (= (point) opoint)
+	  (vertical-motion 1)
+	;; Skip any trailing whitespace at the end of the visual line.
+	;; We used to do this only if `show-trailing-whitespace' is
+	;; nil, but that's wrong; the correct thing would be to check
+	;; whether the trailing whitespace is highlighted.  But, it's
+	;; OK to just do this unconditionally.
+	(skip-chars-forward " \t")))
     (kill-region opoint (point))))
 
 (defun next-logical-line (&optional arg try-vscroll)
@@ -5852,20 +5833,22 @@ Called from `temp-buffer-show-hook'."
 ;; after the text of the completion list buffer is written.
 (defun completion-setup-function ()
   (let* ((mainbuf (current-buffer))
-         (mbuf-contents (minibuffer-completion-contents))
-         common-string-length)
-    ;; When reading a file name in the minibuffer,
-    ;; set default-directory in the minibuffer
-    ;; so it will get copied into the completion list buffer.
-    (if minibuffer-completing-file-name
-	(with-current-buffer mainbuf
-	  (setq default-directory
-                (file-name-directory (expand-file-name mbuf-contents)))))
+         (base-dir
+          ;; When reading a file name in the minibuffer,
+          ;; try and find the right default-directory to set in the
+          ;; completion list buffer.
+          ;; FIXME: Why do we do that, actually?  --Stef
+          (if minibuffer-completing-file-name
+              (file-name-as-directory
+               (expand-file-name
+                (substring (minibuffer-completion-contents)
+                           0 (or completion-base-size 0)))))))
     (with-current-buffer standard-output
       (let ((base-size completion-base-size)) ;Read before killing localvars.
         (completion-list-mode)
         (set (make-local-variable 'completion-base-size) base-size))
       (set (make-local-variable 'completion-reference-buffer) mainbuf)
+      (if base-dir (setq default-directory base-dir))
       (unless completion-base-size
         ;; This shouldn't be needed any more, but further analysis is needed
         ;; to make sure it's the case.
@@ -6533,23 +6516,24 @@ the point is when the command is called.")
 Adheres to `smart-spacing-rules'.
 If POINT-AT-END, behaves as if point was at then end of
 a previously deleted region (now at POS)."
-  (let ((del (assoc (buffer-substring-no-properties
-		     (max (point-min) (- pos 1)) 
-		     (min (1- (point-max)) (1+ pos)))
-		    smart-spacing-rules)))
-    (when del
-      (setq del (cdr del))
-      ;; in some cases we want point to end up 
-      ;; further to the left or to the right,
-      ;; depending on whether it was on the left or the right
-      ;; edge of the region
-      (when (consp del)
-	(if point-at-end
-	    (setq del (cdr del))
-	  (setq del (- (cdr del)))))
-      ;; delete either to the left or to the right
-      ;; this deletion will keep point in the right place.
-      (delete-region pos (+ del pos)))))
+  (unless (eq (point-min) (point-max))
+    (let ((del (assoc (buffer-substring-no-properties
+		       (max (point-min) (- pos 1)) 
+		       (max (point-min) (min (1- (point-max)) (1+ pos))))
+		      smart-spacing-rules)))
+      (when del
+	(setq del (cdr del))
+	;; in some cases we want point to end up 
+	;; further to the left or to the right,
+	;; depending on whether it was on the left or the right
+	;; edge of the region
+	(when (consp del)
+	  (if point-at-end
+	      (setq del (cdr del))
+	    (setq del (- (cdr del)))))
+	;; delete either to the left or to the right
+	;; this deletion will keep point in the right place.
+	(delete-region pos (+ del pos))))))
 
 (defun smart-spacing-char-is-word-boundary (pos &optional side)
   (or (< pos (point-min))

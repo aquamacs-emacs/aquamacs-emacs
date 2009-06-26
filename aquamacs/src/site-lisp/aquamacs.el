@@ -79,10 +79,28 @@
 
 (defalias  'new-frame-with-new-scratch 'new-empty-buffer)
 
+
 (defun aquamacs-find-file (&optional filename)
   "Find an existing file or create a new buffer for it.  
 If `one-buffer-one-frame' is non-nil, a new frame is created to
-contain the new buffer."
+contain the new buffer.
+Interactively, the default if you just type RET is the current directory,
+but the visited file name is available through the minibuffer history:
+type M-n to pull it into the minibuffer.
+
+You can visit files on remote machines by specifying something
+like /ssh:SOME_REMOTE_MACHINE:FILE for the file name.  You can
+also visit local files as a different user by specifying
+/sudo::FILE for the file name.
+See the Info node `(tramp)Filename Syntax' in the Tramp Info
+manual, for more about this.
+
+Interactively, or if WILDCARDS is non-nil in a call from Lisp,
+expand wildcards (if any) and visit multiple files.  You can
+suppress wildcard expansion by setting `find-file-wildcards' to nil.
+
+To visit a file without any kind of conversion and without
+automatically choosing a major mode, use \\[find-file-literally]."
   (interactive)
   (if (or (not one-buffer-one-frame)
 	  filename
@@ -114,33 +132,12 @@ contain the new buffer."
 		 (< (buffer-size) 2))		; for safety
 	    (kill-buffer buf)))))))
 
-
 (defun aquamacs-find-file-2 (filename &optional wildcards)
-  "Edit file FILENAME.
-Switch to a buffer visiting file FILENAME, creating one if none
-already exists.  Interactively, the default if you just type RET
-is the current directory, but the visited file name is available
-through the minibuffer history: type M-n to pull it into the
-minibuffer.
+  "Edit file FILENAME."
 
-If the buffer is shown somewhere in tabbar-mode, select that
-window.
-
-You can visit files on remote machines by specifying something
-like /ssh:SOME_REMOTE_MACHINE:FILE for the file name.  You can
-also visit local files as a different user by specifying
-/sudo::FILE for the file name.  See the Info
-node `(tramp)Filename Syntax' in the Tramp Info manual, for more
-about this.
-
-Interactively, or if WILDCARDS is non-nil in a call from Lisp,
-expand wildcards (if any) and visit multiple files.  You can
-suppress wildcard expansion by setting `find-file-wildcards' to nil.
-
-To visit a file without any kind of conversion and without
-automatically choosing a major mode, use \\[find-file-literally]."
-
-  (interactive (find-file-read-args "Find file: " nil))
+  (interactive
+   (find-file-read-args "Find file: "
+                        (confirm-nonexistent-file-or-buffer)))
 
   (let ((value (find-file-noselect filename nil nil wildcards)))
 
@@ -472,12 +469,12 @@ have changed."
 
 ;; (aquamacs-variable-customized-p 'aquamacs-styles-mode)    
 ;; (aquamacs-variable-customized-p 'case-fold-search)
+;; (aquamacs-variable-customized-p 'ns-alternate-modifier)
 ;; (aquamacs-variable-customized-p 'mac-option-modifier)
 ;; (aquamacs-variable-customized-p 'default-frame-alist)
 ;; (print (get 'default-frame-alist 'saved-value))
 ;; (aquamacs-variable-customized-p 'global-smart-spacing-mode)
 ;; (print (get 'global-smart-spacing-mode 'saved-value))
-
 
 (defun aquamacs-variable-customized-p (symbol)
     "Returns t if variable SYMBOL has a different value from what was saved."
@@ -485,7 +482,11 @@ have changed."
     (let* ((get (or (get symbol 'custom-get) 'default-value))
 	   (value (funcall get symbol))
 	   (customized-value  (car-safe (get symbol 'customized-value)))
-	   (saved (get symbol 'saved-value))
+	   (saved (or (get symbol 'saved-value)
+		      ;; variable alias?  (saved value may be incorrect)
+		      (if (indirect-variable symbol)
+			  (get (indirect-variable symbol) 'saved-value))))
+
 	   (standard (get symbol 'standard-value))
 	   (comment (get symbol 'customized-variable-comment)))
 
@@ -570,25 +571,6 @@ if modified buffers exist."
 		   (funcall confirm-kill-emacs "Really exit Aquamacs? "))
 	       (kill-emacs)))
 	(setq timer-idle-list saved-timer-idle-list))))
-;; (defun aquamacs-mac-ae-quit-application (event)
-;;   "Quit the application Emacs with the Apple event EVENT."
-;;   (interactive "e")
-;; ;;  (aquamacs-save-buffers-kill-emacs)
-;;   (let ((ae (mac-event-ae event)))
-;;     (unwind-protect ; IT APPEARS THAT THIS CAN'T BE COMPILED.
-;; 	(aquamacs-save-buffers-kill-emacs)
-;;       ;; Reaches here if the user has canceled the quit.
-;;       (message "Quit application: canceled.")
-;;       (mac-resume-apple-event ae -128))))
-
-;; unwind-protect form is non-functional for some reason
-;; potentially because of byte-compiling this file.
-;; using `eval' doesn't work...
- (defun aquamacs-mac-ae-quit-application (event)
-   "Quit the application Emacs with the Apple event EVENT."
-   (interactive "e")
-   (aquamacs-save-buffers-kill-emacs)
-   (mac-resume-apple-event ae -128))
 
 
 ;; workaround for people who still call this in their .emacs
@@ -717,10 +699,6 @@ yes-or-no prompts - y or n will do."
   (fset 'y-or-n-p 'aquamacs-y-or-n-p)
   (fset 'yes-or-no-p 'aquamacs-repl-yes-or-no-p)
 
-  (defadvice map-y-or-n-p (around raiseframe (&rest args) activate)
-    (raise-frame)
-    ad-do-it)    
-
   ;; No more annoying bells all the time
 
   (defun aquamacs-bell ()
@@ -774,13 +752,6 @@ yes-or-no prompts - y or n will do."
   ;; Mode-Line Faces
   ;; face (defined and) applied using pretty-modeline.patch
 
-  (defface aquamacs-variable-width '((t
-		    :family "Lucida Grande"
-		    :height 120)) ;; do use the frame-wide setting: it's very font dependent
-  "Aquamcas default face (variable width).
-Used by the modeline faces `mode-line' and `mode-line-inactive'."
-  :group 'Aquamacs)
-
   (defun aquamacs-set-modeline-faces (&optional theme)
     (set-face-attribute 'mode-line nil
 			:inherit 'aquamacs-variable-width
@@ -803,7 +774,16 @@ Used by the modeline faces `mode-line' and `mode-line-inactive'."
   ;; while they should be able to set colors, they should not remove :family or :inherit attribues
   (add-hook 'color-theme-install-hook 'aquamacs-set-modeline-faces)
   (aquamacs-set-modeline-faces)
-  
+
+  ;; Give the Echo Area(s) a face
+  (defun aquamacs-setup-echo-areas (&optional frame)
+    (mapc (lambda (bname)
+	    (with-current-buffer (get-buffer-create bname)
+	      (setq face-remapping-alist '((default . echo-area)))))
+	  '(" *Echo Area 0*" " *Echo Area 1*" " *Echo Area 2*")))
+  (add-hook 'after-make-frame-functions 'aquamacs-setup-echo-areas)
+  (add-hook 'after-init-hook 'aquamacs-setup-echo-areas)
+  (aquamacs-setup-echo-areas)
 
   ;; tabbar needs to be defined before osxkeys
   (defvar aquamacs-pre-user-directories-load-path)
@@ -1434,6 +1414,9 @@ listed here."
 	      one-buffer-one-frame-mode 
 	      aquamacs-styles-mode
 	      aquamacs-autoface-mode
+	      aquamacs-tool-bar-user-customization
+	      ns-tool-bar-display-mode ;; can be set through GUI by user
+	      ns-tool-bar-size-mode ;; can be set through GUI by user
 	      default-frame-alist ;; does this not prevent users from setting these?
 ;;;	     do not save initial-frame-alist - it is stored by smart-frame-positions
 ;;;  to do: frame-notice-user-settings should use default-frame-alist in addition to
@@ -1474,20 +1457,20 @@ listed here."
   
   (add-hook 'kill-emacs-query-functions 'aquamacs-ask-to-save-options)
 
+;; (defun raise-frame-and-make-visible ()
+;;   (interactive)
+;;   ;; (if (not (eq t (frame-visible-p (selected-frame))))
+;;   (make-frame-visible)
+;;   (raise-frame))
+  
 
 (when (eq initial-window-system 'ns)
-    (global-set-key [ns-power-off] 'aquamacs-save-buffers-kill-emacs))
+  (global-set-key [ns-application-open-untitled] 'new-empty-buffer-other-frame)
+  (global-set-key [ns-application-activated] 'ignore)
+  (global-set-key [ns-power-off] 'aquamacs-save-buffers-kill-emacs))
 
 (global-set-key [remap save-buffers-kill-emacs] 
 		'aquamacs-save-buffers-kill-emacs)
-
-
-
-(if (and (boundp 'mac-apple-event-map) mac-apple-event-map)
-    (define-key mac-apple-event-map [core-event quit-application]
-      'aquamacs-mac-ae-quit-application))
-
-; (define-key mac-apple-event-map [core-event quit-application]      'mac-ae-quit-application)
 
 
 
@@ -1498,185 +1481,16 @@ listed here."
 ;; http://sourceforge.net/tracker/index.php?func=detail&aid=1295333&group_id=138078&atid=740475				      
 
 
-  ;; workarounds for current bugs  
-  '			      ; can't get rid of the menu bar on a Mac
-  (easy-menu-remove-item global-map 
-			 '("menu-bar" "options" "showhide") 'menu-bar-mode)
+;; workarounds for current bugs  
+;; can't get rid of the menu bar on a Mac
+(easy-menu-remove-item global-map 
+		       '("menu-bar" "options" "showhide") 'menu-bar-mode)
 
-					;' can't show a frame on a different display
-  (easy-menu-remove-item global-map 
-			 '("menu-bar" "file") 'make-frame-on-display)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; this is for the About dialog
-;; when all frames are hidden, 
-;; the original fancy-splash-frame just returns nil
-;; as a bugfix, we're redefining this
-;; in order to create a new frame if all frames are invisible
-(setq fancy-about-text
-  '((:face (variable-pitch (:foreground "red"))
-     "This is "
-     :link ("Aquamacs Emacs"
-	    (lambda (button) (browse-url "http://aquamacs.org/"))
-	    "Browse http://aquamacs.org")
-     ", based on "
-     :link ("GNU Emacs"
-	    (lambda (button) (browse-url "http://www.gnu.org/software/emacs/"))
-	    "Browse http://www.gnu.org/software/emacs/")
-     ",\none component of the "
-     :link
-     (lambda ()
-       (if (eq system-type 'gnu/linux)
-	   '("GNU/Linux"
-	     (lambda (button) (browse-url "http://www.gnu.org/gnu/linux-and-gnu.html"))
-	     "Browse http://www.gnu.org/gnu/linux-and-gnu.html")
-	 '("GNU" (lambda (button) (describe-gnu-project))
-	   "Display info on the GNU project")))
-     " operating system.\n\n"
-       :face (lambda ()
-	     (list 'variable-pitch
-		   (list :foreground
-			 (if (eq (frame-parameter nil 'background-mode) 'dark)
-			     "cyan" "darkblue"))))
-       :face 'variable-pitch
-       "Aquamacs is a distribution of GNU Emacs that is adapted for Mac users.\n"
-     "\n"
-     (lambda () (emacs-version))
-     "\n"
-     :face (variable-pitch (:height 0.8))
-     (lambda () emacs-copyright)
-     "\n\n"
-     :face variable-pitch
-     :link ("Authors"
-	    (lambda (button)
-	      (view-file (expand-file-name "AUTHORS" data-directory))
-	      (goto-char (point-min))))
-     "            \tMany people have contributed code included in GNU Emacs\n"
-     :link ("Contributing"
-	    (lambda (button) (browse-url "http://aquamacs.org/development.shtml")))
-     "\tHow to contribute improvements to Aquamacs\n"
-     "\n"
-     :link ("GNU and Freedom" (lambda (button) (describe-gnu-project)))
-     "\tWhy we developed GNU Emacs, and the GNU operating system\n"
-      :link ("Aquamacs Manual" (lambda (button) (aquamacs-user-help)))
-     "\tView the Aquamacs manual using Apple Help\n"
-     :link ("Emacs Manual" (lambda (button) (aquamacs-emacs-manual)))
-     "\tView the Emacs manual using Apple Help\n"
-     :link ("Absence of Warranty" (lambda (button) (describe-no-warranty)))
-     "\tAquamacs and GNU Emacs come with absolutely no warranty\n"
-     :face variable-pitch
-     :link ("Copying Conditions" (lambda (button) (describe-copying)))
-     "\tConditions for redistributing and changing Emacs\n"
-   
-     :link ("Ordering Manuals" (lambda (button) (view-order-manuals)))
-     "\tBuying printed manuals from the FSF\n"
-     "\n"
-     :link ("Emacs Tutorial" (lambda (button) (help-with-tutorial)))
-     "\tLearn basic Emacs keystroke commands"
-     (lambda ()
-       (let* ((en "TUTORIAL")
-	      (tut (or (get-language-info current-language-environment
-					  'tutorial)
-		       en))
-	      (title (with-temp-buffer
-		       (insert-file-contents
-			(expand-file-name tut tutorial-directory)
-			nil 0 256)
-		       (search-forward ".")
-		       (buffer-substring (point-min) (1- (point))))))
-	 ;; If there is a specific tutorial for the current language
-	 ;; environment and it is not English, append its title.
-	 (if (string= en tut)
-	     ""
-	   (concat " (" title ")"))))
-     "\n"
-     :link ("Emacs Guided Tour"
-	    (lambda (button) (browse-url "http://www.gnu.org/software/emacs/tour/"))
-	    "Browse http://www.gnu.org/software/emacs/tour/")
-     "\tSee an overview of the many facilities of GNU Emacs"
-     )))
-
+;; can't show a frame on a different display
+(easy-menu-remove-item global-map 
+		       '("menu-bar" "file") 'make-frame-on-display)
  
-
-(defun fancy-splash-frame ()
-  (make-frame 
-   '((name . "About Aquamacs Emacs") 
-     (font . "-apple-lucida grande-medium-r-normal--0-0-0-0-m-0-mac-roman")
-     (width . 75) (height . 40) (minibuffer . t)
-     (background-color . "White") 
-     (foreground-color . "Black") (tool-bar-lines . 0)
-     (vertical-scroll-bars . auto) 
-     (horizontal-scroll-bars . nil) 
-     (left-fringe . 5) (right-fringe . 0)
-     (internal-border-width . 0) (unsplittable . t))))
-
-(defun fancy-splash-head ()
-  "Insert the head part of the splash screen into the current buffer.
-This is modified in Aquamacs compared to GNU Emacs, because most
-information given would otherwise be irrelevant to Aquamacs users.
-"
-  (and (boundp 'longlines-mode) (longlines-mode -1))
-  (let* ((image-file (cond ((stringp fancy-splash-image)
-			    fancy-splash-image)
-			   ((display-color-p)
-			    (cond ((<= (display-planes) 8)
-				   (if (image-type-available-p 'xpm)
-				       "splash.xpm"
-				     "splash.pbm"))
-				  ((image-type-available-p 'svg)
-				   "splash.svg")
-				  ((image-type-available-p 'png)
-				   "splash.png")
-				  ((image-type-available-p 'xpm)
-				   "splash.xpm")
-				  (t "splash.pbm")))
-			   (t "splash.pbm")))
-	 (img (create-image image-file))
-	 (image-width (and img (car (image-size img))))
-	 (window-width (window-width (selected-window))))
-    (when img
-      (when (> window-width image-width)
-	;; Center the image in the window.
-;; 	(insert (propertize " " 'display
-;; 			    `(space :align-to (+ center (-0.5 . ,img)))))
-
-	;; Change the color of the XPM version of the splash image
-	;; so that it is visible with a dark frame background.
-	(when (and (memq 'xpm img)
-		   (eq (frame-parameter nil 'background-mode) 'dark))
-	  (setq img (append img '(:color-symbols (("#000000" . "gray30"))))))
-
-	;; Insert the image with a help-echo and a keymap.
-	(let ((map (make-sparse-keymap))
-	      (help-echo "mouse-1: browse http://aquamacs.org/"))
-	  (define-key map [mouse-1]
-	    (lambda ()
-	      (interactive)
-	      (browse-url "http://aquamacs.org/")))
-	  (define-key map [down-mouse-1] 'ignore)
-	  (define-key map [up-mouse-1] 'ignore)
-	  (insert-image img (propertize "xxx" 'help-echo help-echo
-					'keymap map)))
-	(insert "\n"))))
-  (insert "\n"))
-(if (< emacs-major-version 23)
-    (setq fancy-splash-text
-      '((:face (variable-pitch :weight bold)
-           :face variable-pitch "Aquamacs Emacs comes with "
-	   :face (variable-pitch :slant oblique)
-	   "ABSOLUTELY NO WARRANTY\n"
-	   )
-	(:face variable-pitch
-	 "Use the Help menu to view manuals or go to helpful websites.\n"
-	 
-	 "To quit a partially entered command, type "
-	 :face default
-	 "Control-g"
-	 :face variable-pitch
-	 ".\n"
-	 ))))
- 
-
+;; shown in About dialog
 (setq emacs-build-system 
       (concat 
        emacs-build-system

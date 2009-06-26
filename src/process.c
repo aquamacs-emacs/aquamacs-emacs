@@ -467,10 +467,21 @@ status_message (p)
       synchronize_system_messages_locale ();
       signame = strsignal (code);
       if (signame == 0)
-	signame = "unknown";
-      string = build_string (signame);
+	string = build_string ("unknown");
+      else
+	{
+	  int c1, c2;
+
+	  string = make_unibyte_string (signame, strlen (signame));
+	  if (! NILP (Vlocale_coding_system))
+	    string = (code_convert_string_norecord
+		      (string, Vlocale_coding_system, 0));
+	  c1 = STRING_CHAR ((char *) SDATA (string), 0);
+	  c2 = DOWNCASE (c1);
+	  if (c1 != c2)
+	    Faset (string, 0, make_number (c2));
+	}
       string2 = build_string (coredump ? " (core dumped)\n" : "\n");
-      SSET (string, 0, DOWNCASE (SREF (string, 0)));
       return concat2 (string, string2);
     }
   else if (EQ (symbol, Qexit))
@@ -5185,7 +5196,6 @@ read_process_output (proc, channel)
   register int nbytes;
   char *chars;
   register Lisp_Object outstream;
-  register struct buffer *old = current_buffer;
   register struct Lisp_Process *p = XPROCESS (proc);
   register int opoint;
   struct coding_system *coding = proc_decode_coding_system[channel];
@@ -5385,9 +5395,11 @@ read_process_output (proc, channel)
       int opoint_byte;
       Lisp_Object text;
       struct buffer *b;
+      int count = SPECPDL_INDEX ();
 
       odeactivate = Vdeactivate_mark;
 
+      record_unwind_protect (Fset_buffer, Fcurrent_buffer ());
       Fset_buffer (p->buffer);
       opoint = PT;
       opoint_byte = PT_BYTE;
@@ -5490,7 +5502,7 @@ read_process_output (proc, channel)
 
       current_buffer->read_only = old_read_only;
       SET_PT_BOTH (opoint, opoint_byte);
-      set_buffer_internal (old);
+      unbind_to (count, Qnil);
     }
   return nbytes;
 }

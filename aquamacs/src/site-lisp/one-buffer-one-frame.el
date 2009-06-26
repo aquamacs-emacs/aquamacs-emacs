@@ -480,9 +480,9 @@ the current window is switched to the new buffer."
 
 (if (running-on-a-mac-p)
     (add-hook 'minibuffer-setup-hook 
-	      (lambda () 
-		(if one-buffer-one-frame
-		    (raise-frame)))))
+	      (defun maybe-raise-frame () 
+		(unless one-buffer-one-frame
+		  (raise-frame)))))
 
 ;; we'd like to open new frames for some stuff
    
@@ -630,15 +630,18 @@ even if it's the only visible frame."
 
 (defun aquamacs-delete-frame (&optional frame)
   (condition-case nil 
-      (delete-frame (or frame (selected-frame)))
+      (delete-frame (or frame (selected-frame)) 'force)
     (error   
      (let ((f (or frame (selected-frame))))
        (run-hook-with-args 'delete-frame-functions f)
-       (make-frame-invisible f t)
-       ;; select messages to it gets any input
-       (if (find-all-frames-internal (get-buffer "*Messages*"))
-	   (select-frame (car (find-all-frames-internal 
-			       (get-buffer "*Messages*"))))))))) 
+       (let ((confirm-nonexistent-file-or-buffer)
+       	     (one-buffer-one-frame nil)
+       	     (tabbar-mode nil))
+	 (set-window-dedicated-p (selected-window) nil)
+	 ;; select scratch in case it gets any input
+	 (if (get-buffer "*scratch*")
+	     (switch-to-buffer "*scratch*" 'norecord)))
+       (make-frame-invisible f t)))))
 
 ;; delete window when buffer is killed
 ;; but only do so if aquamacs opened a new frame&window for

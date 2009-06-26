@@ -45,13 +45,6 @@
 
 (require 'aquamacs-mac-fontsets)
 
-;; face should look just like the buffer
-; do not use face-spec-set (prevents user customization in 23)
-(set-face-attribute 'fringe nil
-		    :inherit 'default
-		    :background 'unspecified
-		    :foreground "grey55")
-
 (defun aquamacs-define-the-fringe-bitmap ()
   "Redefines a fringe bitmap (continuation) so that it looks good
 even when minimal fringes are used. (Aquamacs)"

@@ -4,8 +4,6 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-tool-bar.el,v 1.35 2009/03/08 20:40:45 davidswelt Exp $ 
-
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -32,17 +30,32 @@
 
 ; go over tool-bar-map to find out what's in there
 ;; unlik plist-get/put, these will work
-(defun aq-list-has-property-element (list elem &optional default)
-  (let ((ret default))
-    (and (listp list)
-	 (or
-	  (when (eq (car-safe list) elem)
-	    (setq ret (car-safe (cdr-safe list)))
-	    t)
+;; (defun aq-list-has-property-element (list elem &optional default)
+;;   (let ((ret default))
+;;     (and (listp list)
+;; 	 (or
+;; 	  (when (eq (car-safe list) elem)
+;; 	    (setq ret (car-safe (cdr-safe list)))
+;; 	    t)
 	  
-	  (setq ret (if (cdr-safe list) (aq-list-has-property-element (cdr-safe list) elem default) default))))
+;; 	  (setq ret (if (cdr-safe list) (aq-list-has-property-element (cdr-safe list) elem default) default))))
+;;     ret))
+
+(defun aq-list-has-property-element (list elem &optional default)
+  (let ((l2 list) (ret default))   
+    (while (and l2 (listp l2))
+      (when (eq (car l2) elem)
+  	(setq ret (car-safe (cdr l2))
+  	      ;; stop iteration
+  	      l2 nil))
+      (setq l2 (cdr-safe l2)))
     ret))
-; (aq-list-has-property-element (list :hello 1 :you "me") :yoou 'not-there)
+    
+    
+ 
+
+
+; (aq-list-has-property-element2 (list :hello 1 :you "me") :you 'not-there)
 
 (defun aq-list-set-property-element (list elem value)
   (and (listp list)
@@ -56,98 +69,23 @@
 	  (setcdr list (cons value (cdr-safe (cdr-safe list))))))) ;overwrite
   list)
 
-(defvar aquamacs-menu-bar-showhide-toolbar-items-menu (make-sparse-keymap)
-"Keymap with items that allow toggling items on the tool-bar.")
-(defvar aquamacs-menu-bar-showhide-toolbar--hash nil)
+(defun aq-list-remove-property (prop list)
+  "delete a property with its value."
+  (let ((n 0))
+    (while (and (listp list) (< n (length list)))
 
+      (if (eq (nth n list) prop)
+	  (setf (nthcdr n list) (nthcdr (+ 2 n) list)))
+      (incf n)))
+  list)
 
-;(require 'aquamacs-menu) ; for aquamacs-pretty-mode-name
-(defun aquamacs-toolbar-update-showhide-menu ()
-  "Updates the toolbar items toggle menu.
-This will update the keymap `aquamacs-menu-bar-showhide-toolbar-items-menu'
-if `tool-bar-map' has changed since the last call.  If not, this returns
-quickly."
+;; (setq ll '(2313 88 36 :v nil))
+;; (aq-list-remove-property :v ll)
+;; ll
 
-(when (boundp 'aquamacs-menu-bar-showhide-toolbar-items-menu)
+;; (setq ll '(1 2 3 4))
+;; (setf (nthcdr 3 ll) t)
 
-  ;; has the tool-bar-map changed?
-  (when (not (equal aquamacs-menu-bar-showhide-toolbar--hash
-		    (sxhash tool-bar-map)))
-    (setq aquamacs-menu-bar-showhide-toolbar-items-menu (make-sparse-keymap))
-    (mapc
-     (lambda (item)
-       (and 
-	(car item)
-	(if (nth 3 item)
-	    (let* ((name (let ((osx-key-mode)) 
-			   (eval (car (cdr (cdr item))))))
-		   (item-is-local (eq (type-of (variable-binding-locus 'tool-bar-map)) 'buffer))
-		   (local-var-str (if item-is-local (symbol-name major-mode) ""))
-		   (toggle-var (intern 
-				(format "toolbar-menu-show-%s-%s" 
-					local-var-str (car item)))))
-	      (eval 
-	       `(defcustom ,toggle-var t 
-		  (format 
-		   "If nil, the \"%s\" icon will be hidden from the toolbar." 
-		   name) 
-		  :group 'Aquamacs :group 'tool-bar :version "22.0" 
-		  :type 'boolean))
-	      (if (boundp 'aquamacs-menu-bar-customize-options-to-save)
-		  (add-to-list 'aquamacs-menu-bar-customize-options-to-save
-			       toggle-var 'append 'eq))
-	      
-	      (define-key aquamacs-menu-bar-showhide-toolbar-items-menu 
-		(vector toggle-var)
-		(eval
-		 `(menu-bar-make-toggle 
-		   ,(intern (format "toggle-toolbar-show-%s-%s" local-var-str (car item)))
-		   ,toggle-var
-		   ,(format "%s%s" name (if item-is-local 
-					    (format " (%s)" 
-						    (aquamacs-pretty-mode-name major-mode)) 
-					  ""))
-		   (if (eval ,(aq-list-has-property-element 
-			       item 
-			       :visible t))
-		       ,(format "Toolbar icon for %s %%s" name)
-		     (message
-		      (format
-		       "Item not visible due to current configuration or state:
-%s"  
-		       (quote ,(aq-list-has-property-element item :visible)))))
-		   "Show an icon in the toolbar for this function."
-		   )))
-	      (let ((l (aq-list-has-property-element item :visible 'vis-missing) ));;(aq-list-has-property-element item :visible)))
-		(if (not (eq l 'vis-missing))
-		    ;; check if variable influences this
-		    (unless (or (eq l toggle-var)
-				(and (eq (car-safe l) 'and) 
-				     (eq (car-safe (cdr-safe l)) toggle-var)))
-		      (setq l `(and ,toggle-var ,l)))
-		  (setq l toggle-var))
-		(aq-list-set-property-element item :visible l)
-		;; (define-key tool-bar-map (vector (car item))
-;; 		  (aq-list-set-property-element item :visible l))
-))
-	  (define-key aquamacs-menu-bar-showhide-toolbar-items-menu 
-	    (vector (intern (format "%s-sep" (car item)))) 
-	    '(menu-item "--" nil)))))
-     (reverse (cdr tool-bar-map))) 
-    (define-key-after menu-bar-showhide-menu [small]
-      `(menu-item "Toolbar Items" 
-		  ,aquamacs-menu-bar-showhide-toolbar-items-menu
-		  :help "Select items to show in the toolbar"
-		  :visible ,(display-graphic-p))
-      'showhide-tool-bar)
-    (setq aquamacs-menu-bar-showhide-toolbar--hash
-	  (sxhash tool-bar-map)))))
-
-
-;;  (remove-hook 'menu-bar-update-hook 'aquamacs-toolbar-update-showhide-menu)
-;; (aquamacs-tool-bar-setup)
- ;; (progn  (setq aquamacs-menu-bar-showhide-toolbar--hash 0) (aquamacs-toolbar-update-showhide-menu))
-;; 
 
 (defun aquamacs-toolbar-x-create-meaning-list (keymap)
   "Creates a meaning list for `toolbar-x' from a toolbar keymap."
@@ -186,26 +124,9 @@ quickly."
   ;; might inadvertently click that button.
   ;;(tool-bar-add-item-from-menu 'save-buffers-kill-emacs "exit")
   (setq tool-bar-map (make-sparse-keymap))
- 
-  (face-spec-set 'tooltip '((t (:inherit variable-pitch 
-				:background "lightyellow" 
-				:foreground "black" 
-				:height 100 
-				:family "lucida sans"))) 
-		 ;; set default (not user customization)
-		 (if (> emacs-major-version 22) t))
-
-  (aquamacs-set-defaults '((auto-resize-tool-bar nil)))
-
-  (let ((face 'tool-bar)
-	;; e2e2e2 is eaeaea in imagemagick for some reason
-	(spec '((t (:background "#eaeaea" :foreground "black" 
-				:box (:line-width 1 :style released-button))))))
-    (face-spec-set face spec nil)
-    (put face 'face-defface-spec spec))
-  ;; will be overwritten by color themes
 
   (tool-bar-add-item-from-menu 'new-empty-buffer-other-frame '("new" . "New"))
+
   (tool-bar-add-item-from-menu 'mac-key-open-file '("open" . "Open"))
 
   (tool-bar-add-item '("history" . "Recent") (lambda ()
@@ -223,18 +144,18 @@ quickly."
  
   (tool-bar-add-item-from-menu 'revert-buffer '("update" . "Revert") nil)
   
-  (tool-bar-add-item-from-menu 'save-buffer '("save" . "Save") nil
+  (tool-bar-add-item '("save" . "Save") 'mac-key-save-file 'save-file
 			       :visible '(and buffer-file-name
 					     (not (eq 'special
 						      (get major-mode
 							   'mode-class)))))
+  (tool-bar-add-item '("saveas" . "Save") 'mac-key-save-file-as 'save-file-as
+		     :visible '(and (not buffer-file-name)
+				    (not (eq 'special
+					     (get major-mode
+						  'mode-class)))))
   ;; Save and Save As are both called "Save" in order to keep the width the same:
   ;; these icons just get swap as soon as there is a buffer-file-name.
-  (tool-bar-add-item-from-menu 'write-file '("saveas" . "Save") nil  
-			       :visible '(and (not buffer-file-name)
-					     (not (eq 'special
-						      (get major-mode
-  							   'mode-class)))))
 
   (tool-bar-add-item-from-menu 'aquamacs-print '("print" . "Print"))
 
@@ -267,8 +188,6 @@ quickly."
   ;; than a lambda for Read Mail.
   ;;(tool-bar-add-item-from-menu 'compose-mail "mail/compose")
 
-
-
   (tool-bar-add-item '("space2" . "--") nil 'space-2 :enable nil)
   
   (tool-bar-add-item-from-menu 'make-frame-command '("new_window" . "Duplicate") nil)
@@ -286,25 +205,6 @@ quickly."
   ;; (Toolbar button - on systems that support it!)
   (global-set-key [toggle-frame-toolbar] 'handle-toggle-tool-bar)
 
-  (aquamacs-toolbar-update-showhide-menu) 
-  (add-hook 'menu-bar-update-hook 'aquamacs-toolbar-update-showhide-menu)
-
-  (aquamacs-set-defaults '(
-			   (toolbar-menu-show--aquamacs-print nil)
-			   (toolbar-menu-show--copy t)
-			   (toolbar-menu-show--customize nil)	   
-			   (toolbar-menu-show--cut t)
-			   (toolbar-menu-show--help t)		   
-			   (toolbar-menu-show--new-file t)	   
-			   (toolbar-menu-show--open-file t)
-			   (toolbar-menu-show--paste t)	   
-			   (toolbar-menu-show--redo t)
-			   (toolbar-menu-show--save-buffer t)	   
-			   (toolbar-menu-show--undo t)
-			   (toolbar-menu-show--write-file t)
-			   (toolbar-menu-show--recent-files t)
-			   (toolbar-menu-show--isearch-forward nil)))
-
 
   (defvar aquamacs-default-toolbarx-meaning-alist
     (aquamacs-toolbar-x-create-meaning-list tool-bar-map)
@@ -314,6 +214,216 @@ Changes to this variable will have no immediate effect.
 
 This variable is used in the AUCTeX configuration.")
   )
+
+;; To Do:
+;; these hashes are probably not very reliable
+;; but how can we identify toolbars otherwise?
+(defvar aquamacs-tool-bar-user-customization nil)
+(defun store-tool-bar-configuration (config)
+  (assq-set (tool-bar-hash) config
+	    'aquamacs-tool-bar-user-customization)
+  ;; ensure it doesn't get too big
+  (if (nthcdr 12 aquamacs-tool-bar-user-customization)
+      (set (nthcdr 12 aquamacs-tool-bar-user-customization) nil)))
+
+(defun restore-tool-bar-configuration ()
+  (let ((stored (assq (tool-bar-hash) 
+		      aquamacs-tool-bar-user-customization)))
+    (if stored
+	(set-tool-bar-configuration (cdr stored)))))
+ 
+(defvar aq-last-tool-bar-map nil)
+; (defvar aq-last-tool-bar-config nil)
+(defun maybe-restore-tool-bar-configuration (&optional force)
+  (let ((menu-bar-update-hook))
+    (mapc
+     (lambda (f)
+       (with-current-buffer
+	   (window-buffer (frame-selected-window f))
+	 (let ((tb-hash (sxhash (cons tool-bar-map aquamacs-tool-bar-user-customization))))
+	   (if (or force (not (eq aq-last-tool-bar-map tb-hash)))
+	       (progn
+		 (set (if (local-variable-p 'tool-bar-map) (make-local-variable 'aq-last-tool-bar-map)
+			'aq-last-tool-bar-map)
+		      tb-hash)
+		 (restore-tool-bar-configuration))
+	   ;; did user change the toolbar somehow?
+	   ;; this is still not quick enough 
+	   ;; but it is the only chance we'll detect Command-Option drags of
+	   ;; toolbar items.
+	   ;; disabled for now: update-* is potentially dangerous
+	   ;; and we don't want to run it all the time
+	   ;; but only upon receiving the change event.
+	   ;; (when (not (eq aq-last-tool-bar-config (ns-tool-bar-configuration)))
+	   ;;   (set (if (local-variable-p 'tool-bar-map)
+	   ;; 	      (make-local-variable  'aq-last-tool-bar-config)
+	   ;; 	    'aq-last-tool-bar-config)
+	   ;; 	  (ns-tool-bar-configuration))
+	   ;;   (update-tool-bar-from-user-configuration))
+	   ))))
+
+     (visible-frame-list))))
+
+(defun tool-bar-hash ()
+  (sxhash (sort (apply #'append
+		       (mapcar
+			(lambda (m)
+			  (when (and (consp m)
+				     (not (equal (car-safe (cdr-safe (cdr-safe m)))
+						 "--")))
+			    (list (car m))))
+			tool-bar-map)) 'string<)))
+
+(defconst tool-bar-user-visible t)
+(defconst tool-bar-user-invisible nil)
+
+(defun tool-bar-maybe-set-visibility (menu-item value &optional show-messsage)
+  "Maybe set visibility in menu-item
+If there is a non-user-supplied visibility term, leave it.
+If there is a user-supplied visibility term, set it."
+
+  (let ((target-value (if value 'tool-bar-user-visible 'tool-bar-user-invisible))
+	(current-value (aq-list-has-property-element menu-item :visible 'not-found)))
+    ;; (message "%s %s %s" (car menu-item) current-value target-value)
+    (prog1
+	(cond 
+	 ((eq current-value 'not-found)
+	  ;; no :visible property present
+	  (append menu-item `(:visible (and ,target-value))))
+	 ((and (consp current-value) (eq 'and (car current-value)) 
+	       (memq (nth 1 current-value) '(tool-bar-user-visible tool-bar-user-invisible)))
+	  ;; previous user-configuration given
+	  ;; override
+	  (append (aq-list-remove-property :visible menu-item)
+		  `(:visible (and ,target-value ,@(cddr current-value)))))
+	 (t  
+	  ;; conditioned externally.
+	  
+	  (if (eval current-value) ;; previously visible?
+	      (if value 
+		  ;; and still visible.  don't touch it.
+		  menu-item
+		;; user has removed item: inhibit it.
+		(append (aq-list-remove-property :visible menu-item)
+			`(:visible (and ,target-value ,current-value))))
+	    ;; else: externally invisible
+	    (if value 
+		;; user is showing an externally invisible item.
+		;; maybe warn.
+		;; but do not make visible
+		menu-item
+	      ;; previously invisible, still invisible
+	      ;; user can't have removed it.  don't touch
+	      menu-item))))
+
+;; there is still one problem:
+;; if user adds items that shouldn't remain in the toolbar (because :visible evals to nil)
+;; then the backend doesn't recognize that the toolbar structure needs to be updated.
+;; I guess this is because it thinks that the item wasn't visible in the first place
+;; (since the Cocoa palette has made it visible.)  
+      ;; (and show-message
+      ;; 	   (not (eq value (eval 
+)))
+
+ 
+(defun set-tool-bar-configuration (config &optional show-message)
+  (let ((space-idx 0))
+    (setq tool-bar-map
+	  (append (make-sparse-keymap)
+		  (apply 
+		   #'append
+		   (mapcar
+		    (lambda (key)
+		      (if key
+			  (if (assq key tool-bar-map)
+			      (list (tool-bar-maybe-set-visibility (assq key tool-bar-map) t show-message))
+			    (and show-message
+				 (message "Toolbar item \"%s\" not available here." key)
+				 nil))
+			`((,(intern (format "space-%s" (incf space-idx)))
+			   menu-item "--" nil :enable nil))))
+		    config))
+		  (apply 
+		   #'append
+		   (mapcar
+		    (lambda (item)
+		      (unless (or (memq (or (car-safe item) item) ;;needed?
+					config) ;; hidden?
+				  (equal (car-safe (cdr-safe (cdr-safe item)))
+					 "--"))
+			(list 
+			 (tool-bar-maybe-set-visibility item nil show-message)
+			 )))
+		    (cdr tool-bar-map)))))))
+
+;; when global-set-key
+;; ensure that frame parameter is correct 
+(defun update-tool-bar-from-user-configuration (&optional frame)
+  (interactive)
+  (let ((user-config (ns-tool-bar-configuration)))
+
+    (with-current-buffer (window-buffer 
+			  (frame-selected-window (or frame (selected-frame))))
+      (set-tool-bar-configuration user-config 'show-msg)
+      (store-tool-bar-configuration user-config))))
+
+ 
+(add-hook 'menu-bar-update-hook 'maybe-restore-tool-bar-configuration)
+(define-key global-map [ns-tool-bar-customized] 'update-tool-bar-from-user-configuration)
+
+
+(defun aquamacs-toolbar-update-showhide-menu ())
+
+
+
+;; this is a complicated method
+;; it probably moves around the invisible items quite a bit
+;; so it's not worth the hassle
+;; (defun update-tool-bar-from-user-configuration (&optional frame)
+
+;;   (let ((user-config (ns-tool-bar-configuration))
+;; 	(new-tool-bar nil)
+;; 	(store nil)
+;; 	(uc-index 0))
+;;     (with-current-buffer (window-buffer (frame-selected-window (or frame (selected-frame))))
+
+;;       (let ((tb (copy-tree (cdr tool-bar-map))))
+;; 	;; first set visibility
+;; 	;; changes tool-bar-map in place
+;; 	(mapc
+;; 	 (lambda (item)
+;; 	   (if (consp item)
+
+;; 	       (let* ((vise (aq-list-has-property-element item :visible t))
+;; 		      (vis (eval vise))
+;; 		      (cvis (memq (car item) user-config)))
+
+;; 		 (unless (eq vis cvis)
+;; 		   (aq-list-set-property-element item :visible (if cvis t nil)))
+		 
+;; 		 (while (and (not (eq (car item) (nth uc-index user-config)))
+;; 			     cvis
+;; 			     (assq (nth uc-index user-config) store)) ; retrievable?
+;; 		   ;; retrieve from store
+;; 		   (setq new-tool-bar (cons (cdr (assq (nth uc-index user-config) store))
+;; 					    new-tool-bar))
+;; 		   (assq-delete-all (nth uc-index user-config) 'store)
+;; 		   (incf uc-index))
+;; 		 (print store)
+;; 		 (if (and (not (eq (car item) (nth uc-index user-config)))
+;; 			  cvis)
+;; 		     ;; put in storage
+;; 		     (setq store (cons item store))
+;; 		   ;; else
+;; 		   (incf uc-index)
+;; 		   (setq new-tool-bar (cons item new-tool-bar))))
+;; 	     (setq new-tool-bar (cons item  new-tool-bar))))
+;; 	 tb)
+	
+;; 	(setq tool-bar-map2
+;; 	      (append (make-sparse-keymap)
+;; 		      (reverse new-tool-bar)))))))
+  
 
 
 (provide 'aquamacs-tool-bar)

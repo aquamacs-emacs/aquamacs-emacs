@@ -95,7 +95,6 @@ Only checks once - subsequent calls will not result in any action."
 ;; (add-hook 'LaTeX-mode-hook 'load-preview-if-ghostscript)
 (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
 (add-hook 'LaTeX-mode-hook 'turn-on-bib-cite)
-(add-hook 'LaTeX-mode-hook 'LaTeX-install-toolbar)
 (add-hook 'LaTeX-mode-hook (lambda () (TeX-fold-mode t)))
 (add-hook 'TeX-mode-hook 'aquamacs-latex-viewer-support 'append) ;; load reftex first
 
@@ -257,16 +256,17 @@ Calls `aquamacs-tex-pdf-viewer' to display the PDF file THE-FILE."
     (setq aquamacs-skim-timer 
 	  (run-with-idle-timer 30 t 'aquamacs-check-for-skim)))
   (unless server-process
+    (server-force-delete)
     ;; start server to make emacsclient work
     (server-start)))
 
 (require 'server)
-(defun server-goto-line-column (file-line-col)
-  (goto-line (buffer-line-number (nth 1 file-line-col)))
-  (let ((column-number (nth 2 file-line-col)))
-    (when (> column-number 0)
-      (move-to-column (1- column-number)))))
-
+(defun server-goto-line-column (line-col)
+  (when line-col
+    (goto-line (buffer-line-number (car line-col)))
+    (let ((column-number (cdr line-col)))
+      (when (> column-number 0)
+	(move-to-column (1- column-number))))))
 
 (if (boundp 'aquamacs-default-toolbarx-meaning-alist) ;; not on TTY
     (aquamacs-set-defaults 
