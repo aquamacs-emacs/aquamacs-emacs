@@ -91,8 +91,8 @@
    (erc-mode-line-format "%s %a. %n on %t (%m,%l) %o")
    (erc-header-line-format nil)))
 
+(assq-set-equal "\\.wiki$" 'wikipedia-mode 'auto-mode-alist) 
 (autoload 'wikipedia-mode "wikipedia-mode.el" "Major mode for editing Wikipedia articles." 'interactive nil)
-
 
 ;; ESS
 ;; Need this to prevent the tramp problem.
