@@ -283,6 +283,12 @@ If `flyspell-large-region' is nil, all regions are treated as small."
 ;; functions that use NSSpellChecker as the spellchecking
 ;; engine, instead of ispell or aspell
 
+(defun ns-find-next-misspelling
+  "Move forward in buffer to next misspelling; set region to the word,
+and apply flyspell-incorrect face"
+;; TODO -- create body!
+)
+
 (defun ns-flyspell-region (beg end)
   "Flyspell text between BEG and END using ns-spellchecker-check-spelling."
   (interactive "r")

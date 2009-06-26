@@ -290,7 +290,7 @@ The properties returned may include `top', `left', `height', and `width'."
 (define-key global-map [S-ns-drag-color] 'ns-set-background-at-mouse)
 (define-key global-map [ns-drag-text] 'ns-insert-text)
 (define-key global-map [ns-change-font] 'ns-respond-to-change-font)
-(define-key global-map [ns-check-spelling] 'ns-find-next-misspelling)
+(define-key global-map [ns-check-spelling] 'ns-respond-to-find-next-misspelling)
 (define-key global-map [ns-spelling-change] 'ns-respond-to-change-spelling)
 (define-key global-map [ns-open-file-line] 'ns-open-file-select-line)
 (define-key global-map [ns-spi-service-call] 'ns-spi-service-call)
@@ -1180,53 +1180,20 @@ See the documentation of `create-fontset-from-fontset-spec for the format.")
 
 ;;;; Spelling panel support.
 
-;; nsterm.m
-(defvar ns-spelling-text)
-
-;; (defun ns-respond-to-change-spelling (start end)
-;;   "Respond to changeSpelling: event, expecting ns-spelling-text\n\
-;; to substitute for selected buffer text."
-;;   (interactive "r")
-;;   (if mark-active
-;;       (delete-region start end))
-;;   (insert ns-spelling-text)) 
-
-;; (defun ns-respond-to-change-spelling ()
-;;   "Respond to changeSpelling: event, expecting ns-spelling-text\n\
-;; to substitute for selected buffer text."
-;;   (interactive)
-;;   (let ((start (region-beginning))
-;; 	(end (region-end)))
-;;     (prin1 start)
-;;     (prin1 " ")
-;;     (prin1 end)
-;;     (prin1 mark-active))
-;;     ;; (if mark-active
-;;     ;; 	(delete-region start end)))
-;;   (insert ns-spelling-text))
-
-;; (defun ns-respond-to-change-spelling () ;(start end)
-;;   "Respond to changeSpelling: event, expecting ns-spelling-text\n\
-;; to substitute for selected buffer text."
-;;   ;; (interactive "r")
-;;   ;; (delete-region start end)
-;;   ;; (insert ns-spelling-text))
-;;   (interactive)
-;;   ;; (delete-region 5 10)
-;;   (print (region-beginning))) 
-
-(defun ns-respond-to-change-spelling () ;(start end)
-  "Respond to changeSpelling: event, expecting ns-spelling-text\n\
+(defun ns-respond-to-change-spelling (start end)
+  "Respond to changeSpelling: event, expecting ns-spelling-text
 to substitute for selected buffer text."
-  (interactive)
-  (insert ns-spelling-text)
-  (print "this is a test"))
+  (interactive "r")
+  (if mark-active
+      (delete-region start end))
+  (insert ns-spelling-text))
 
-(defun ns-find-next-misspelling ()
+(defun ns-respond-to-find-next-misspelling ()
   "Respond to checkSpelling: event.  Also called by Spellchecker
 panel immediately after correcting a word in a buffer."
   (interactive)
-  (print "now find next misspelling"))
+  (ns-find-next-misspelling)
+  )
 
 ;;;; Pasteboard support.
 
