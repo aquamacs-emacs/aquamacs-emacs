@@ -572,6 +572,11 @@ name_is_separator (name)
    to set_frame_menubar */
 - (void)menuNeedsUpdate: (NSMenu *)menu
 {
+  /* events may be sent to recently deleted frames,
+     FRAME_NS_VIEW (frame) returns 0x0 */
+  if (! (frame && FRAME_LIVE_P (frame) && FRAME_NS_VIEW (frame)))
+    return;
+
   NSEvent *event = [[FRAME_NS_VIEW (frame) window] currentEvent];
   /* HACK: Cocoa/Carbon will request update on every keystroke
      via IsMenuKeyEvent -> CheckMenusForKeyEvent.  These are not needed
