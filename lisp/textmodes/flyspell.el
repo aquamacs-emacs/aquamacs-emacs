@@ -283,11 +283,6 @@ If `flyspell-large-region' is nil, all regions are treated as small."
 ;; functions that use NSSpellChecker as the spellchecking
 ;; engine, instead of ispell or aspell
 
-(defun ns-find-next-misspelling-in-region (beg end)
-  (interactive "r")
-  (let ((s
-  ) 
-
 (defun ns-find-next-misspelling ()
   "Move forward in buffer to next misspelling; set region to the word,
 and apply flyspell-incorrect face"
@@ -303,23 +298,25 @@ and apply flyspell-incorrect face"
 		(point)))
 	 (beg (point-min))
 	 (end (point-max))
-	 (misspell-location (cons -1 0))
-	 (chunk-begin pos)
-	 chunk-end
-	 check-start)
+	 ;; (chunk-begin pos) 
+	 misspell-location
+	 ;; chunk-end
+	 ;; check-start
+	 )
     (save-excursion ;retain point & region if no misspelling found
-      ;; TODO: mimic TextEdit: first (full or partial) word of a selection is always skipped
       (goto-char pos)
       ;; If midway through a word, start at search at next word
       (if (backward-word)
 	  (forward-word))
+      ;; When a selection is active, always skip the first word or
+      ;;  partial word (as TextEdit does)
       (if mark-active (forward-word))
       (setq pos (point))
       ;; ;; if region from point to end is larger than 1.5x
       ;; ;; NS-SPELLCHECKER-CHUNK-SIZE chars, then check text in smaller chunks
       ;; (if (< (- end pos) (* 1.5 ns-spellchecker-chunk-size))
       ;; 	  (setq chunk-end end)
-      ;; 	(setq chunk-end (+ pos ns-spellchecker-chunk-size))
+      ;; 	(setq chunk-end (+ pos ns-spellchec1ker-chunk-size))
       ;; 	;; back up to previous word boundary, to ensure we're not checking
       ;; 	;;  partial words
       ;; 	(save-excursion
@@ -334,123 +331,52 @@ and apply flyspell-incorrect face"
       ;; 	       (buffer-substring chunk-begin chunk-end)))
       ;; 	)
       (setq misspell-location
-	    (ns-spellchecker-check-spelling (buffer-substring pos end)))
+	    (ns-spellchecker-check-spelling (buffer-substring pos end))) 
+      (if (not (= (car misspell-location) -1))
+	  ;; misspelling found after point
+	  (setq misspell-beg
+		(+ pos (car misspell-location))
+		misspell-end
+		(+ pos (car misspell-location) (cdr misspell-location)))
+	;; no misspelling found after point --
+	;;  search buffer from beginning to point
+      	(setq misspell-location
+      	      (ns-spellchecker-check-spelling (buffer-substring beg pos)))
+	(if (not (= (car misspell-location) -1))
+	    (setq misspell-beg
+		  (+ beg (car misspell-location))
+		  misspell-end
+		  (+ beg (car misspell-location) (cdr misspell-location)))))
+	  ;; return start and end of the misspelled word, or nil if none found
       (if (= (car misspell-location) -1)
-	  (setq misspell-location 
-		(ns-spellchecker-check-spelling (buffer-substring beg pos))
-		check-start beg)
-	(setq check-start pos))
-      )
-    (if (= (car misspell-location) -1)
-	nil
-      (goto-char (+ (car misspell-location) (cdr misspell-location)
-		    check-start))
-      (push-mark (+ check-start (car misspell-location)) 'no-msg 'activate))
-    ))
-
-(defun ns-spellcheck-region (pos)
-  "Flyspell text between BEG and END using ns-spellchecker-check-spelling."
-  (interactive "r")
-    (let ((spellcheck-position beg)
-	  (count 0)
-	  ;; if called by ns-flyspell-large-region, then report progress
-	  ;; relative to "large region" extents instead of simply extents of
-	  ;; the current sub-region
-	  (progress-beg
-	   (if (boundp 'ns-flyspell-large-region-beg)
-	       ns-flyspell-large-region-beg
-	     beg))
-	  (progress-end
-	   (if (boundp 'ns-flyspell-large-region-end)
-	       ns-flyspell-large-region-end
-	     end))
-	  spellcheck-text
-	  ns-spellcheck-output
-	  misspelled-location
-	  misspelled-length)
-      (while (< spellcheck-position end)
-	;; extract text from last checked word to end
-	(setq spellcheck-text (buffer-substring spellcheck-position end)) 
-	;; find (position . length) of first misspelled word in extracted text
-	(setq ns-spellcheck-output 
-	      ;; returns (-1 . 0) if no misspellings found
-	      (ns-spellchecker-check-spelling spellcheck-text (current-buffer)))
-	(if (>= (car ns-spellcheck-output) 0)
-	    ;; found misspelled word
-	    (progn
-	      (setq misspelled-location
-		    (+ (car ns-spellcheck-output) spellcheck-position))
-	      (setq misspelled-length (cdr ns-spellcheck-output)) 
-	      ;; start next check after current found word
-	      (setq spellcheck-position
-		    (+ misspelled-location misspelled-length)) 
-	      ;; use flyspell-word to filter and mark misspellings
-	      (goto-char spellcheck-position)
-	      (flyspell-word)) 
-	  ;; no misspellings found; we've reached the end of chunk
-	  (setq spellcheck-position end))
-	)
-      (if (and (not (boundp 'ns-flyspell-large-region-end))
-	       flyspell-issue-message-flag)
-	  (message "Spell Checking completed."))
-      ;; function returns end of this chunk
-      end))
-
-(defun ns-spellcheck-large-region (beg end)
-  "Spellcheck text between BEG and END using ns-spellchecker-check-spelling.
-Break long text into chunks of approximate size NS-SPELLCHECKER-CHUNK-SIZE,
-dividing at sentence boundaries where possible, or at word boundaries if
-sentence boundaries are too far between."
-  (interactive "r")
-  (save-excursion
-    (let ((inhibit-redisplay t)
-	  (chunk-beg beg)
-	  (ns-flyspell-large-region-beg beg)
-	  (ns-flyspell-large-region-end end)
-	  chunk-end
-	  approx-end)
-      (while
-	  (<
-	   (progn
-	     ;; if length from chunk start to overall end is less
-	     ;; than 1.5x chunk size, set chunk end to overall end
-	     (if (< (- end chunk-beg) (* 1.5 ns-spellchecker-chunk-size))
-		 (setq chunk-end end)
-	       ;; otherwise, set end to sentence boundary near desired chunk size
-	       (save-excursion
-		 (setq approx-end (+ chunk-beg ns-spellchecker-chunk-size))
-		 (goto-char approx-end)
-		 (forward-sentence)
-		 (setq chunk-end (point))
-		 ;; If sentence boundary not found within 10% after
-		 ;; specified chunk size, look for first sentence
-		 ;; boundary up to 10% before desired chunk size.
-		 ;; If not found, use first word boundary after desired chunk size
-		 (if (> (- chunk-end approx-end)
-			(* 0.1 ns-spellchecker-chunk-size))
-		     (progn
-		       ;; find nearest previous sentence boundary
-		       (backward-sentence)
-		       (setq chunk-end (point))
-		       ;; check whether it's within 10% of specified value
-		       (if (> (- approx-end chunk-end)
-			      (* 0.1 ns-spellchecker-chunk-size))
-			   (progn
-			     ;; if not, use next word boundary
-			     (goto-char approx-end)
-			     (forward-word)
-			     (setq chunk-end (point))))))))
-	     ;; make sure we haven't extended the chunk beyond the region 
-	     (if (> chunk-end end)
-		 (setq chunk-end end))
-	     ;; check spelling of chunk, returning chunk end location
-	     (ns-flyspell-region chunk-beg chunk-end))
-	   end)
-	;; if not done, start new chunk at previous chunk end
-	(setq chunk-beg chunk-end))
-      ;; when done, report completion
-      (if flyspell-issue-message-flag (message "Spell Checking completed."))
+	  nil
+	(cons misspell-beg misspell-end))
       )))
+
+(defun ns-highlight-misspelling-and-suggest ()
+  "Search forward in current buffer for first misspelling, looping if end
+is reached.  If found, set region to the misspelling, apply face
+flyspell-incorrect, and show word in OS X spelling panel"
+  (let* ((misspell-region (ns-find-next-misspelling))
+	 (misspell-beg (car misspell-region))
+	 (misspell-end (cdr misspell-region))
+	 misspell-found-p
+	 word)
+    (if misspell-region
+	;; NSSpellChecker found a misspelling; use flyspell-word to filter
+	;; for acceptable text (e.g. TeX commands), or apply appropriate
+	;; face if misspelled
+	(save-excursion
+	  (goto-char misspell-end)
+	  (setq misspell-found-p (not (flyspell-word)))))
+    (if misspell-found-p
+	;; If flyspell-word considers the word misspelled, then set region
+	;;   to the word and send to NSSpellChecker spellingPanel
+	(progn
+	  (goto-char misspell-end)
+	  (push-mark misspell-beg 'no-msg 'activate)
+	  (setq word (buffer-substring misspell-beg misspell-end))
+	  (ns-spellchecker-show-word word)))))
 
 (defun ns-flyspell-region (beg end)
   "Flyspell text between BEG and END using ns-spellchecker-check-spelling."

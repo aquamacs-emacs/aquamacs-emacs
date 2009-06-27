@@ -999,7 +999,7 @@ to substitute for selected buffer text."
   "Respond to checkSpelling: event.  Also called by Spellchecker
 panel immediately after correcting a word in a buffer."
   (interactive)
-  (ns-find-next-misspelling)
+  (ns-highlight-misspelling-and-suggest)
   )
 
 ;;;; Pasteboard support.
