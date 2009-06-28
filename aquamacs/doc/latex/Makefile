@@ -37,10 +37,15 @@ html: aquamacs.tex *.pdf
 	echo "Apple Help tags applied. HTML conversion completed."		     ; \
 	echo $(phrase) ; \
 	sed 's/<META NAME="description" CONTENT="Aquamacs Emacs/<META NAME="AppleTitle" content="Aquamacs Help"><META NAME="AppleFont" content="Lucida Grande,Helvetica"><META NAME="description" CONTENT="Aquamacs Emacs - /' <$(newdir)/index.html >$(newdir)/index2.html	     ; \
-	mv $(newdir)/index2.html $(newdir)/index.html
+	mv $(newdir)/index2.html $(newdir)/index.html 
 	sed 's|<BODY >|<BODY ><a name="index"></a>|' <$(newdir)/index.html >$(newdir)/index2.html	     ; \
-	mv $(newdir)/index2.html $(newdir)/index.html
-	rm -rf $(destdir)
+	mv $(newdir)/index2.html $(newdir)/index.html 
+	cd $(newdir); \
+	CHGFILE=`grep -m1 -l changelog-top node*.html` ; \
+	cp $(CHGFILE) $(CHGFILE).bak ; \
+	(cat $(CHGFILE).bak | perl -e 'my $$x=join("",<STDIN>); $$x=~s!(<H2>.*?)(<a name="changelog-top"></a>)!\2\1!s; print($$x);' >$(CHGFILE) ); \
+	rm $(CHGFILE).bak ; \
+	rm -rf $(destdir) ; \
 	echo	mv $(newdir) ../AquamacsHelp				     ; \
 	mv $(newdir) $(destdir) ; \
 	cp "AquamacsHelp idx" $(destdir)/					     ; \
