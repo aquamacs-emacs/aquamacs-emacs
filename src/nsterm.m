@@ -4657,6 +4657,18 @@ extern void update_window_cursor (struct window *w, int on);
   [super dealloc];
 }
 
+- (unsigned int) validModesForFontPanel:(NSFontPanel *)fontPanel
+{
+  /* This doesn't work as intended.  Why?  Bug?/
+  return (NSFontPanelFaceModeMask |
+  	  NSFontPanelSizeModeMask |
+  	  NSFontPanelCollectionModeMask  |
+  	  NSFontPanelTextColorEffectModeMask  |
+  	  NSFontPanelDocumentColorEffectModeMask);  */
+
+  return  NSFontPanelAllModesMask
+    - NSFontPanelShadowEffectModeMask;
+}
 
 /* called on font panel selection */
 - (void)changeFont: (id)sender

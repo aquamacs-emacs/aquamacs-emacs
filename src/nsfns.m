@@ -1383,6 +1383,8 @@ DEFUN ("ns-popup-font-panel", Fns_popup_font_panel, Sns_popup_font_panel,
   struct frame *f;
 
   check_ns ();
+  BLOCK_INPUT;
+
   fm = [NSFontManager sharedFontManager];
   if (NILP (frame))
     f = SELECTED_FRAME ();
@@ -1392,9 +1394,31 @@ DEFUN ("ns-popup-font-panel", Fns_popup_font_panel, Sns_popup_font_panel,
       f = XFRAME (frame);
     }
 
-  [fm setSelectedFont: ((struct nsfont_info *)f->output_data.ns->font)->nsfont
-           isMultiple: NO];
+  /* must create instance to receive immediate events */
+  [[NSColorPanel sharedColorPanel] setTarget: FRAME_NS_VIEW (f)];
+  /* still fails to work for foreground color. */
+  // [[NSColorPanel sharedColorPanel] makeFirstResponder: [FRAME_NS_VIEW (f) window]];
+
+  if (! NILP (face))
+    {
+      int face_id = lookup_named_face (f, face, 1);
+      if (face_id)
+	{
+	  struct face *face = FACE_FROM_ID (f, face_id);
+	  if (face)
+	    {
+	      [fm setSelectedFont:  ((struct nsfont_info *)face->font)->nsfont
+		       isMultiple: NO];
+	    }
+	}
+    } 
+  else
+    [fm setSelectedFont: ((struct nsfont_info *)f->output_data.ns->font)->nsfont
+	     isMultiple: NO];
   [fm orderFrontFontPanel: NSApp];
+
+
+  UNBLOCK_INPUT;
   return Qnil;
 }
 
