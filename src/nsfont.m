@@ -231,7 +231,7 @@ ns_fallback_entity ()
 static float
 ns_char_width (NSFont *sfont, int c)
 {
-    float w;
+    float w=0;
     NSString *cstr = [NSString stringWithFormat: @"%c", c];
 #ifdef NS_IMPL_COCOA
     NSGlyph glyph = [sfont glyphWithName: cstr];
@@ -241,8 +241,10 @@ ns_char_width (NSFont *sfont, int c)
 	if (w >= 1.5)
 	    return w;
       }
-#endif
+#else
+    /* deprecated in OS X 10.4 */
     w = [sfont widthOfString: cstr];
+#endif
     return max (w, 2.0);
 }
 
