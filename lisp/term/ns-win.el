@@ -276,6 +276,7 @@ The properties returned may include `top', `left', `height', and `width'."
              (cons (logior (lsh 0 16)  12) 'ns-new-frame)
 	     (cons (logior (lsh 0 16)  13) 'ns-toggle-toolbar)
 	     (cons (logior (lsh 0 16)  14) 'ns-show-prefs) ;; Aquamacs only
+	     (cons (logior (lsh 0 16)  17) 'ns-change-color)
 	     (cons (logior (lsh 0 16)  90) 'ns-application-activated)
 	     (cons (logior (lsh 0 16)  91) 'ns-application-open-untitled)
 	     (cons (logior (lsh 0 16)  130) 'ns-about) ;; Aquamacs only
@@ -1197,7 +1198,8 @@ Note, tranparency works better on Tiger (10.4) and higher."
       (modify-frame-parameters frame (list (cons 'foreground-color
                                                  ns-input-color))))
      (t
-      (set-face-foreground face ns-input-color frame)))))
+      (set-face-foreground face ns-input-color frame)))
+    (message "Foreground color set for %s." face)))
 
 (defun ns-set-background-at-mouse ()
   "Set the background color at the mouse location to `ns-input-color'."
@@ -1213,7 +1215,8 @@ Note, tranparency works better on Tiger (10.4) and higher."
       (modify-frame-parameters frame (list (cons 'background-color
                                                  ns-input-color))))
      (t
-      (set-face-background face ns-input-color frame)))))
+      (set-face-background face ns-input-color frame)))
+    (message "Background color set for %s." face)))
 
 ;; Set some options to be as Nextstep-like as possible.
 (setq frame-title-format t
