@@ -1261,7 +1261,9 @@ textprop.o: textprop.c buffer.h window.h dispextern.h $(INTERVALS_H) \
 dispnew.o font.o fontset.o frame.o fringe.o image.o keyboard.o menu.o \
    window.o xdisp.o xfaces.o: nsgui.h
 
-${ns_appdir}: ${ns_appsrc}
+${ns_appdir}: ${ns_appsrc} ${ns_appsrc}/Contents/Info.plist \
+	      ${ns_appsrc}/Contents/Resources/Aquamacs.icns \
+	      ${ns_appsrc}/Contents/Resources/document.icns 
 	rm -fr ${ns_appdir}
 	mkdir -p ${ns_appdir}
 	( cd ${ns_appsrc} ; tar cfh - . ) | ( cd ${ns_appdir} ; tar xf - )
