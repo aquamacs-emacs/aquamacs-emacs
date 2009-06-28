@@ -838,7 +838,7 @@ nsfont_open (FRAME_PTR f, Lisp_Object font_entity, int pixel_size)
     /* set up metrics portion of font struct */
     font->ascent = [sfont ascender];
     font->descent = -[sfont descender];
-    font->min_width = [sfont widthOfString: @"|"]; /* FIXME */
+    font->min_width = ns_char_width(sfont, '|'); /* [sfont widthOfString: @"|"];  FIXME */
     font->space_width = lrint (ns_char_width (sfont, ' '));
     font->average_width = lrint (font_info->width);
     font->max_width = lrint (font_info->max_bounds.width);
