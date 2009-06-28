@@ -4707,10 +4707,8 @@ extern void update_window_cursor (struct window *w, int on);
 }
 
 - (void)ignoreSpelling:(id)sender {
-  NSInteger tag = 1;
-  if (! NILP (current_buffer) ) 
-    tag = sxhash (current_buffer, 0);
-  
+  NSInteger tag = sxhash (Fcurrent_buffer (), 0);
+
   [[NSSpellChecker sharedSpellChecker] ignoreWord:[[sender selectedCell] stringValue]
 			   inSpellDocumentWithTag: tag];
   
