@@ -140,7 +140,7 @@ static unsigned convert_ns_to_X_keysym[] =
 
 /* Lisp communications */
 Lisp_Object ns_input_file, ns_input_font, ns_input_fontsize, ns_input_line;
-Lisp_Object ns_input_color, ns_input_text, ns_working_text;
+Lisp_Object ns_input_color, ns_input_background_color, ns_input_text, ns_working_text;
 Lisp_Object ns_input_spi_name, ns_input_spi_arg;
 Lisp_Object Vx_toolkit_scroll_bars;
 static Lisp_Object Qmodifier_value;
@@ -4698,9 +4698,44 @@ extern void update_window_cursor (struct window *w, int on);
       EV_TRAILER (e);
     }
 }
+/* change font attributes */
+/*
+– (void)changeAttributes:(id)sender 
+{
+    NSDictionary *oldAttributes = [self fontAttributes];
+    NSDictionary *newAttributes = [sender convertAttributes: oldAttributes];
+    [self setFontAttributes:newAttributes];
+    return; 
+}
+*/
 
 /* called on color panel selection */
 - (void)changeColor: (id)sender
+{
+  NSEvent *e =[[self window] currentEvent];
+  id newFont;
+  float size;
+
+  NSTRACE (changeColor);
+  if (!emacs_event)
+    return;
+
+  SET_FRAME_GARBAGED (emacsframe);
+
+  NSColor *c = [[NSColorPanel sharedColorPanel] color];
+  ns_input_color = ns_color_to_lisp (c);
+  ns_input_background_color = Qnil;
+
+  emacs_event->kind = NS_NONKEY_EVENT;
+  emacs_event->modifiers = EV_MODIFIERS (e);
+  emacs_event->code = KEY_NS_CHANGE_COLOR;
+
+  EV_TRAILER (e);
+}
+
+
+/* called on color panel selection */
+- (void)changeDocumentBackgroundColor: (id)sender
 {
   NSEvent *e =[[self window] currentEvent];
   struct face *face =FRAME_DEFAULT_FACE (emacsframe);
@@ -4714,7 +4749,8 @@ extern void update_window_cursor (struct window *w, int on);
   SET_FRAME_GARBAGED (emacsframe);
 
   NSColor *c = [[NSColorPanel sharedColorPanel] color];
-  ns_input_color = ns_color_to_lisp (c);
+  ns_input_background_color = ns_color_to_lisp (c);
+  ns_input_color = Qnil;
 
   emacs_event->kind = NS_NONKEY_EVENT;
   emacs_event->modifiers = EV_MODIFIERS (e);
@@ -6615,6 +6651,10 @@ syms_of_nsterm ()
   DEFVAR_LISP ("ns-input-color", &ns_input_color,
                "The color specified in the last NS event.");
   ns_input_color =Qnil;
+
+  DEFVAR_LISP ("ns-input-background-color", &ns_input_background_color,
+               "The background color specified in the last NS event.");
+  ns_input_background_color =Qnil;
 
   DEFVAR_LISP ("ns-input-spi-name", &ns_input_spi_name,
                "The service name specified in the last NS event.");

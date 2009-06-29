@@ -473,10 +473,6 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
 
 
 
-(defadvice mac-handle-font-selection
-  (after mark-faced-unsaved () activate)
-  (aquamacs-autoface-mark-face-to-save (or mac-font-panel-target-face 'default)))
-
 ;; (defadvice tool-bar-mode
 ;;   (after set-tool-bar-in-default-style () activate)
 
@@ -500,12 +496,6 @@ This mode is part of Aquamacs Emacs, http://aquamacs.org."
 ;; it may be some problem with redisplay, of course.
 (aquamacs-set-defaults '((face-remapping-alist ((fringe . fringe)))))
 ;; (aquamacs-set-defaults '((face-remapping-alist nil)))
-
-(defun turn-on-mac-font-panel-mode ()
-  (interactive)
-  (mac-font-panel-mode 1))
-  ;; (unless aquamacs-autoface-mode
-  ;;     (setq mac-font-panel-target-frame (selected-frame))))
 
 (defvar appearance-menu (make-sparse-keymap "Looks"))
 (setq appearance-menu (make-sparse-keymap "Looks"))
@@ -708,28 +698,28 @@ modified, or in FRAME if given."
 ;; 		      (not aquamacs-autoface-mode))
 ;; 	:help "Set this frame's face as default."))
 
-(define-key appearance-menu [background-color]
-  `(menu-item (if aquamacs-autoface-mode
-		  (format "Background Color for %s..."
-			  (aquamacs-face-or-frame-name "this Frame"))
-		"Background Color...")
-	      aquamacs-select-background-color
-	      :visible ,(display-multi-font-p)
-	      :enable (menu-bar-menu-frame-live-and-visible-p)
-	      :help "Select a background color"))
+;; (define-key appearance-menu [background-color]
+;;   `(menu-item (if aquamacs-autoface-mode
+;; 		  (format "Background Color for %s..."
+;; 			  (aquamacs-face-or-frame-name "this Frame"))
+;; 		"Background Color...")
+;; 	      aquamacs-select-background-color
+;; 	      :visible ,(display-multi-font-p)
+;; 	      :enable (menu-bar-menu-frame-live-and-visible-p)
+;; 	      :help "Select a background color"))
 
-(define-key appearance-menu [foreground-color]
-  `(menu-item  (if aquamacs-autoface-mode
-		   (format "Foreground Color for %s..."
-		      (aquamacs-face-or-frame-name "this Frame"))
-		 "Foreground Color...")
-	      aquamacs-select-foreground-color
-	      :visible ,(display-multi-font-p)
-	      :enable (menu-bar-menu-frame-live-and-visible-p)
-	      :help "Select a foreground color"))
+;; (define-key appearance-menu [foreground-color]
+;;   `(menu-item  (if aquamacs-autoface-mode
+;; 		   (format "Foreground Color for %s..."
+;; 		      (aquamacs-face-or-frame-name "this Frame"))
+;; 		 "Foreground Color...")
+;; 	      aquamacs-select-foreground-color
+;; 	      :visible ,(display-multi-font-p)
+;; 	      :enable (menu-bar-menu-frame-live-and-visible-p)
+;; 	      :help "Select a foreground color"))
 
 (define-key appearance-menu [color-panel]
-  `(menu-item  "Color panel..."
+  `(menu-item  "Color Panel..."
 	      aquamacs-popup-color-panel
 	      :help "Drag and drop colors"))
 
@@ -749,7 +739,7 @@ modified, or in FRAME if given."
 				 (or (face-attribute face :inherit) 'default)))))))
 			(if aquamacs-autoface-mode
 			    " (default)" "")))
-	      mac-font-panel-mode
+	      aquamacs-popup-font-panel
 	      :visible ,(display-multi-font-p)
 	      :key-sequence [(,osxkeys-command-key shift t)]
 	      :enable (menu-bar-menu-frame-live-and-visible-p)
@@ -789,7 +779,6 @@ modified, or in FRAME if given."
 (defvar mac-font-panel-target-face 'default)
 (defvar mac-font-panel-target-frame nil)
 
-
 (defvar aquamacs-color-panel-target-face 'default)
 (defvar aquamacs-color-panel-target-frame nil)
 (defvar aquamacs-color-panel-target-prop nil)
@@ -800,7 +789,9 @@ modified, or in FRAME if given."
   (setq aquamacs-color-panel-target-face (aquamacs-default-face-in-effect)
 	aquamacs-color-panel-target-frame frame
 	aquamacs-color-panel-target-prop (or prop :foreground))
-  (ns-popup-color-panel)
+  (ns-popup-color-panel frame
+			(face-attribute aquamacs-color-panel-target-face aquamacs-color-panel-target-prop
+					frame t))
   (message "Set %s for %s face."
 	   (cond ((eq aquamacs-color-panel-target-prop :foreground)
 		  "foreground color")
@@ -819,8 +810,9 @@ modified, or in FRAME if given."
   (interactive)
   (aquamacs-set-face-prop (or aquamacs-color-panel-target-face 'default)
 			  aquamacs-color-panel-target-frame
-			  (or aquamacs-color-panel-target-prop :foreground)
-			  ns-input-color))
+			  (or aquamacs-color-panel-target-prop 
+			      (if ns-input-color :foreground :background))
+			  (or ns-input-color ns-input-background-color)))
 
 (defun aqumacs-set-face-background ()
   "Respond to changeColor: event."
@@ -833,14 +825,13 @@ modified, or in FRAME if given."
   (unless (eq aquamacs-color-panel-target-face 'none) ;; general color picker used
     (apply 'set-face-attribute face
 	   frame (list prop value))
-    ;; ensure this is saved as a customization
+    (aquamacs-autoface-mark-face-to-save face)
     (let ((spec
-	   (list (list t (face-attr-construct face)))))
+    	   (list (list t (face-attr-construct face)))))
       (put face 'customized-face spec)
       (put face 'saved-face spec)
       (custom-push-theme 'theme-face face 'user 'set spec)
       (put face 'face-modified nil))
-    
     (message "%s set for %s face."
 	     (cond ((eq prop :foreground)
 		    "Foreground color")
@@ -853,14 +844,18 @@ modified, or in FRAME if given."
 (defvar mac-font-panel-target-face 'default)
 (defvar mac-font-panel-target-frame nil)
 
-(defun mac-font-panel-mode (&optional ignore);; not really a mode
-  "Turn on font panel."
+(defun aquamacs-popup-font-panel ()
+  "Show font panel."
   (interactive)
-  (setq mac-font-panel-target-face (aquamacs-default-face-in-effect))
+  (setq mac-font-panel-target-frame nil
+	aquamacs-color-panel-target-frame nil)
+  (setq mac-font-panel-target-face (aquamacs-default-face-in-effect)
+	aquamacs-color-panel-target-face (aquamacs-default-face-in-effect))
   (setq ns-input-font (face-font (aquamacs-default-face-in-effect)))
   ;; cannot set correct font yet  (to do!)
   ;; Fns_popup_font_panel sets frame font here
-  (ns-popup-font-panel))
+  (ns-popup-font-panel mac-font-panel-target-frame mac-font-panel-target-face)
+  (message "Choose Font for %s face." mac-font-panel-target-face))
 
 
 
@@ -875,9 +870,9 @@ ns-input-fontsize of new font."
 
     (apply 'set-face-attribute face
 	   mac-font-panel-target-frame attribute-values)
-    ;; ensure this is saved as a customization
+    (aquamacs-autoface-mark-face-to-save face)
     (let ((spec
-	   (list (list t (face-attr-construct face)))))
+    	   (list (list t (face-attr-construct face)))))
       (put face 'customized-face spec)
       (put face 'saved-face spec)
       (custom-push-theme 'theme-face face 'user 'set spec)
