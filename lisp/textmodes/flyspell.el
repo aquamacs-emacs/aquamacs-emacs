@@ -318,7 +318,7 @@ and apply flyspell-incorrect face"
 ;; do flyspell-word or equivalent to see if it is really misspelled
 ;; (e.g. not TeX or other filtered expression)
 ;; if it is, then also highlight it, and put it in the spelling panel
-  (interactive) ;"d")
+  (interactive)
   (let* ((pos (if mark-active
 		  ;; use beginning of region as start point for spellchecking,
 		  ;; if there is an active region
@@ -333,6 +333,11 @@ and apply flyspell-incorrect face"
 	 )
     (save-excursion ;retain point & region if no misspelling found
       (goto-char pos)
+      (let ((word (word-at-point)))
+	(if (and word
+		 (eq (car (ns-spellchecker-check-spelling word (current-buffer)))
+		     -1))
+	  (flyspell-unhighlight-at (point))))
       ;; If midway through a word, start at search at next word
       (if (backward-word)
 	  (forward-word))
@@ -340,6 +345,10 @@ and apply flyspell-incorrect face"
       ;;  partial word (as TextEdit does)
       (if mark-active (forward-word))
       (setq pos (point))
+      ;; (print (ns-spellchecker-check-spelling (or (word-at-point) "testing") (current-buffer)))
+      ;; (flyspell-word)
+      ;; (print (flyspell-word))
+      ;; (print (current-buffer))
       ;; ;; if region from point to end is larger than 1.5x
       ;; ;; NS-SPELLCHECKER-CHUNK-SIZE chars, then check text in smaller chunks
       ;; (if (< (- end pos) (* 1.5 ns-spellchecker-chunk-size))
