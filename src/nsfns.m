@@ -1388,7 +1388,8 @@ Shows the NS spell checking panel and brings it to the front.*/)
   BLOCK_INPUT;
   [[sc spellingPanel] orderFront: NSApp];
 
-  [sc updateSpellingPanelWithMisspelledWord:@""]; // no word, no spelling errors
+  // Spelling panel should appear with previous content, not empty.
+  //  [sc updateSpellingPanelWithMisspelledWord:@""]; // no word, no spelling errors
 
   // found here: http://trac.webkit.org/changeset/19670
   // // FIXME 4811447: workaround for lack of API 

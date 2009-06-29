@@ -57,7 +57,7 @@
 (require 'fontset)
 
 ;; Not needed?
-;;(require 'ispell)
+;(require 'ispell)
 
 (defgroup ns nil
   "GNUstep/Mac OS X specific features."

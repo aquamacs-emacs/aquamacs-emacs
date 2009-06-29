@@ -910,12 +910,12 @@ subsequently create.  Upon entering text-mode, the function
 
 (define-key ispell-menu-map [ispell-buffer]
 	`(menu-item "Spell-Check Buffer" 
-		    ispell-buffer
+		    ns-start-spellchecker
 		    :help "Check spelling of selected buffer"))
-(define-key ispell-menu-map [ispell-complete-word]
-	`(menu-item "Complete Word" 
-		    ispell-complete-word
-		    :help "Complete word at cursor using dictionary"))
+;; (define-key ispell-menu-map [ispell-complete-word]
+;; 	`(menu-item "Complete Word" 
+;; 		    ispell-complete-word
+;; 		    :help "Complete word at cursor using dictionary"))
 ;; taken out - the standard Cocoa spell doesn't do it either
 ;; (defvar aquamacs-flyspell-buffer-checked nil)
 ;; (make-variable-buffer-local 'aquamacs-flyspell-buffer-checked)
@@ -1117,12 +1117,6 @@ the previous frame size."
 
 
 (defvar menu-bar-zoom-menu (make-sparse-keymap "Zoom"))
-
-(define-key ispell-menu-map [ispell-buffer]
-	`(menu-item "Spell-Check Buffer" 
-		    ispell-buffer
-		    :help "Check spelling of selected buffer"))
-
 
 (define-key menu-bar-zoom-menu [zoom-out]
   `(menu-item "Shrink" zoom-font-out

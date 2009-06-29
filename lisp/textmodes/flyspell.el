@@ -43,6 +43,7 @@
 ;;; Code:
 
 (require 'ispell)
+(require 'thingatpt) ;; use (word-at-point) in ns-spellchecking functions
 
 ;;*---------------------------------------------------------------------*/
 ;;*    Group ...                                                        */
@@ -284,7 +285,7 @@ If `flyspell-large-region' is nil, all regions are treated as small."
 ;; engine, instead of ispell or aspell
 
 (defun ns-spellcheck-and-flyspell-word (beg end)
-  "Use ns-spellcheck to locate misspelled words within range
+  "Use NSSpellChecker to locate misspelled words within range
 BEG to END in current buffer.  Run flyspell-word on the misspelling,
 and repeat search if word is not considered a misspelling by flyspell.
 Returns buffer location of misspelled word if found, or nil.  As a side
@@ -407,12 +408,22 @@ flyspell-incorrect, and show word in OS X spelling panel"
 	 (misspell-beg (car misspell-region))
 	 (misspell-end (cdr misspell-region))
 	 word)
-    (if misspell-region
-	(progn
-	  (goto-char misspell-end)
-	  (push-mark misspell-beg 'no-msg 'activate)
-	  (setq word (buffer-substring misspell-beg misspell-end))
-	  (ns-spellchecker-show-word word)))))
+    (if (not misspell-region)
+	;; no misspelling found; blank and beep the spelling panel
+	(ns-spellchecker-show-word "")
+      ;; misspelling found; set region to mispelled word, and show
+      ;;   in spelling panel
+      (goto-char misspell-end)
+      (push-mark misspell-beg 'no-msg 'activate)
+      (setq word (buffer-substring misspell-beg misspell-end))
+      (ns-spellchecker-show-word word))))
+
+(defun ns-start-spellchecker ()
+  "Show NSSpellChecker spellingPanel, and call
+ns-highlight-misspelling-and-suggest, which see"
+  (interactive)
+  (ns-popup-spellchecker-panel)
+  (ns-highlight-misspelling-and-suggest))
 
 (defun ns-flyspell-region (beg end)
   "Flyspell text between BEG and END using ns-spellchecker-check-spelling."
