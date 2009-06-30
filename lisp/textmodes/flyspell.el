@@ -420,7 +420,7 @@ flyspell-incorrect, and show word in OS X spelling panel"
 
 (defun ns-start-spellchecker ()
   "Show NSSpellChecker spellingPanel, and call
-ns-highlight-misspelling-and-suggest, which see"
+ns-highlight-misspelling-and-suggest, which see."
   (interactive)
   (ns-popup-spellchecker-panel)
   (ns-highlight-misspelling-and-suggest))

@@ -987,6 +987,15 @@ See the documentation of `create-fontset-from-fontset-spec' for the format.")
 
 ;;;; Spelling panel support.
 
+(autoload 'ns-start-spellchecker "flyspell"
+  "Show NSSpellChecker spellingPanel, and call
+ns-highlight-misspelling-and-suggest, which see." t) 
+
+(autoload 'ns-highlight-misspelling-and-suggest "flyspell"
+  "Search forward in current buffer for first misspelling, looping if end
+is reached.  If found, set region to the misspelling, apply face
+flyspell-incorrect, and show word in OS X spelling panel" nil)
+
 (defun ns-respond-to-change-spelling (start end)
   "Respond to changeSpelling: event, expecting ns-spelling-text
 to substitute for selected buffer text."
@@ -1000,7 +1009,7 @@ to substitute for selected buffer text."
 panel immediately after correcting a word in a buffer."
   (interactive)
   (ns-highlight-misspelling-and-suggest)
-  )
+  ) 
 
 ;;;; Pasteboard support.
 

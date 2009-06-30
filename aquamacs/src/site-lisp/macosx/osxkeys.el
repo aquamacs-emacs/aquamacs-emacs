@@ -800,7 +800,7 @@ default."
     (define-key map `[(,osxkeys-command-key shift 13)] 'aquamacs-toggle-full-frame)
     (define-key map `[(,osxkeys-command-key shift return)] 'aquamacs-toggle-full-frame)
     (define-key map `[(,osxkeys-command-key escape)] 'keyboard-escape-quit) 
-    (define-key map `[(,osxkeys-command-key :)] 'ispell-buffer)
+    (define-key map `[(,osxkeys-command-key :)] 'ns-start-spellchecker)
 
     ;; Zoom Zoom!
     (define-key map `[(meta wheel-up)] 'zoom-font)
