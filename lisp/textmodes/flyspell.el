@@ -330,44 +330,62 @@ and apply flyspell-incorrect face"
 	 ;; (chunk-begin pos) 
 	 misspell-location
 	 ;; chunk-end
-	 ;; check-start
+	 ;; approx-end
 	 )
     (save-excursion ;retain point & region if no misspelling found
       (goto-char pos)
+      ;; this bit is needed to unhighlight the previous word, if it
+      ;;   is ignored or learned in the spelling panel
       (let ((word (word-at-point)))
 	(if (and word
 		 (eq (car (ns-spellchecker-check-spelling word (current-buffer)))
 		     -1))
 	  (flyspell-unhighlight-at (point))))
-      ;; If midway through a word, start at search at next word
+      ;; If midway through a word, start at search at next word;
+      ;;   but don't skip an entire word
       (if (backward-word)
 	  (forward-word))
       ;; When a selection is active, always skip the first word or
-      ;;  partial word (as TextEdit does)
+      ;;   partial word (as TextEdit does), so we don't spellcheck
+      ;;   the same word again
       (if mark-active (forward-word))
       (setq pos (point))
-      ;; (print (ns-spellchecker-check-spelling (or (word-at-point) "testing") (current-buffer)))
-      ;; (flyspell-word)
-      ;; (print (flyspell-word))
-      ;; (print (current-buffer))
-      ;; ;; if region from point to end is larger than 1.5x
-      ;; ;; NS-SPELLCHECKER-CHUNK-SIZE chars, then check text in smaller chunks
+      ;; if region from point to end is larger than 1.5x
+      ;; NS-SPELLCHECKER-CHUNK-SIZE chars, then check text in smaller chunks
       ;; (if (< (- end pos) (* 1.5 ns-spellchecker-chunk-size))
       ;; 	  (setq chunk-end end)
-      ;; 	(setq chunk-end (+ pos ns-spellchec1ker-chunk-size))
-      ;; 	;; back up to previous word boundary, to ensure we're not checking
-      ;; 	;;  partial words
+      ;; 	(setq chunk-end (+ pos ns-spellchecker-chunk-size))
+      ;; 	;; try not to spellcheck across a sentence boundary, to keep
+      ;; 	;;   grammar checking happy; make sure we at least don't split words.
       ;; 	(save-excursion
-      ;; 	  (goto-char chunk-end)
-      ;; 	  (backward-word)
-      ;; 	  (setq chunk-end (point))))
+      ;; 	  (goto-char approx-end)
+      ;; 	  (forward-sentence)
+      ;; 	  (setq chunk-end (point))
+      ;; 	  ;; If sentence boundary not found within 10% after
+      ;; 	  ;; specified chunk size, look for first sentence
+      ;; 	  ;; boundary up to 10% before desired chunk size.
+      ;; 	  ;; If not found, use first word boundary after desired chunk size
+      ;; 	  (if (> (abs (- chunk-end approx-end))
+      ;; 		 (* 0.1 ns-spellchecker-chunk-size))
+      ;; 	      (progn
+      ;; 		;; find nearest previous sentence boundary
+      ;; 		(backward-sentence)
+      ;; 		(setq chunk-end (point))
+      ;; 		;; check whether it's within 10% of specified value
+      ;; 		(if (> (abs (- approx-end chunk-end))
+      ;; 		       (* 0.1 ns-spellchecker-chunk-size))
+      ;; 		    (progn
+      ;; 		      ;; if not, use next word boundary
+      ;; 		      (goto-char approx-end)
+      ;; 		      (forward-word)
+      ;; 		      (setq chunk-end (point))))))))
       ;; (while (and
       ;; 	      (eq (car misspelled-location) -1)
       ;; 	      (not overlap))
       ;; 	(setq misspell-location
       ;; 	      (ns-spellchecker-check-spelling
       ;; 	       (buffer-substring chunk-begin chunk-end)))
-      ;; 	)
+      ;; 	;; )
       ;; (setq misspell-location
       ;; 	    (ns-spellchecker-check-spelling (buffer-substring pos end)))
       ;; (if (= (car misspell-location) -1)
