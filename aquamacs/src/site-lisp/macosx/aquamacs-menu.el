@@ -5,8 +5,6 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.213 2009/03/11 21:24:54 davidswelt Exp $
-
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
 
@@ -29,7 +27,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, 2006, 2007, 2008 David Reitter
+;; Copyright (C) 2005, 2006, 2007, 2008, 2009 David Reitter
  
 
 (require 'easymenu)
@@ -255,7 +253,8 @@ customization buffer."
 (require 'recentf)
 (ats "recentf loaded")
 (aquamacs-set-defaults 
- '((recentf-menu-before "Open Directory...")
+ '((buffers-menu-max-size nil)
+   (recentf-menu-before "Open Directory...")
    (recentf-max-menu-items 25)
    ;; must be set before turning on recentf mode
    (recentf-keep ( mac-is-mounted-volume-p file-remote-p file-readable-p))
