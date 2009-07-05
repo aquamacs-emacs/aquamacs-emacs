@@ -145,7 +145,9 @@ for the definition of the menu frame."
 	      :enable (or revert-buffer-function
 			  revert-buffer-insert-file-contents-function
 			  (and buffer-file-number
-			       (or (buffer-modified-p)
+			       (or (and buffer-file-name
+					(file-remote-p buffer-file-name))
+				   (buffer-modified-p)
 				   (not (verify-visited-file-modtime
 					 (current-buffer))))))
 	      :help "Re-read current buffer from its file"))
