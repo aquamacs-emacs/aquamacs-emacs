@@ -745,7 +745,22 @@ here just for backwards compatibility.")
 
 ;; **********************************************************************
 ;; settings to control the use of NSSpellChecker as the spellchecking
-;; engine, instead of ispell/aspell/hunspell 
+;; engine, instead of ispell/aspell/hunspell
+
+(defvar ns-spellchecker-language-alist
+  "alist pairing NSSpellChecker languages with corresponding entries
+in ispell's default ispell-dictionary-alist.  This is only for the
+purposes of extracting `otherchars' and "
+'(("es" . "castellano")
+  ("da" . "dansk")
+  ("de" . "deutsch")
+  ("en" . "english")
+  ("fr" . "francais")
+  ("it" . "italiano")
+  ("nl" . "nederlands")
+  ("pt" . "portugues")
+  ("ru" . "russian")
+  ("sv" . "svenska"))
 
 (defcustom ns-spellchecker-chunk-size 100000
   "approximate size in characters of the chunks of text to be
