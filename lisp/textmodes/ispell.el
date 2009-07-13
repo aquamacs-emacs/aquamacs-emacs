@@ -748,9 +748,6 @@ here just for backwards compatibility.")
 ;; engine, instead of ispell/aspell/hunspell
 
 (defvar ns-spellchecker-language-alist
-  "alist pairing NSSpellChecker languages with corresponding entries
-in ispell's default ispell-dictionary-alist.  This is only for the
-purposes of extracting `otherchars' and "
 '(("es" . "castellano")
   ("da" . "dansk")
   ("de" . "deutsch")
@@ -761,6 +758,60 @@ purposes of extracting `otherchars' and "
   ("pt" . "portugues")
   ("ru" . "russian")
   ("sv" . "svenska"))
+  "alist pairing NSSpellChecker languages with corresponding entries
+in ispell's default ispell-dictionary-alist.  This is only for the
+purposes of extracting `otherchars' and `many-otherchars-p'")
+
+(defun ns-spellchecker-ispell-equiv-language (language)
+  "Returns the name of the language from
+ispell-dictionary-base-alist that corresponds to LANGUAGE
+of NSSpellChecker.  Returns nil if no corresponding language found."
+  (let ((lang-short-abbrev (substring language 0 2))
+	(lang-abbrev-p (or (equal (length language) 2)
+			   (equal (substring language 2 3) "_"))))
+    (if lang-abbrev-p
+	(cdr (assoc lang-short-abbrev ns-spellchecker-language-alist)))))
+
+(defun ns-spellchecker-dictionary-otherchars (language)
+  "Returns the pair (otherchars . many-otherchars-p) for the specified
+NSSpellChecker LANGUAGE, by finding the corresponding entries in
+ispell-dictionary-base-alist.  If no corresponding entry is found, assumes
+' for otherchars and t for many-otherchars-p."
+  (let* ((ispell-language (ns-spellchecker-ispell-equiv-language language))
+	 (ispell-lang-list (assoc ispell-language ispell-dictionary-base-alist))
+	otherchars
+	many-otherchars-p)
+    (if ispell-language
+	(setq otherchars
+	      (car (cdr (cdr (cdr ispell-lang-list))))
+	      many-otherchars-p
+	      (car (cdr (cdr (cdr (cdr ispell-lang-list))))))
+      (setq otherchars "[']"
+	    many-otherchars-p t))
+    (cons otherchars many-otherchars-p)))
+
+(defun ns-spellchecker-dictionary-details (language)
+  (let* ((otherchars-pair (ns-spellchecker-dictionary-otherchars language))
+	 (otherchars (car otherchars-pair))
+	 (many-otherchars-p (cdr otherchars-pair)))
+    (list
+     language
+     "[[:alpha:]]"
+     "[^[:alpha:]]"
+     otherchars
+     many-otherchars-p
+     nil
+     nil
+     "iso-8859-1")))
+
+(defun ns-spellchecker-list-dictionaries ()
+  (let ((lang-list (ns-spellchecker-list-languages))
+	dictionary-list)
+    (dolist (lang lang-list)
+      (setq dictionary-list
+	    (cons (ns-spellchecker-dictionary-details lang)
+		  dictionary-list)))
+    dictionary-list))
 
 (defcustom ns-spellchecker-chunk-size 100000
   "approximate size in characters of the chunks of text to be
