@@ -1526,27 +1526,31 @@ aspell is used along with Emacs).")
   (unless (eq ispell-last-program-name ispell-program-name)
     (setq ispell-last-program-name ispell-program-name)
     (ispell-kill-ispell t)
-    (if (and (condition-case ()
-		 (progn
-		   (setq ispell-library-directory (ispell-check-version))
-		   t)
-	       (error nil))
-	     ispell-really-aspell
-	     ispell-encoding8-command
-	     ;; XEmacs does not like [:alpha:] regexps.
-	     (string-match "^[[:alpha:]]+$" "abcde"))
-	(unless ispell-aspell-dictionary-alist
-	  (ispell-find-aspell-dictionaries)))
+    (if (string= ispell-program-name "NSSpellChecker")
+    	(setq ispell-ns-dictionary-alist (ns-spellchecker-list-dictionaries))
+      (if (and (condition-case ()
+		   (progn
+		     (setq ispell-library-directory (ispell-check-version))
+		     t)
+		 (error nil))
+	       ispell-really-aspell
+	       ispell-encoding8-command
+	       ;; XEmacs does not like [:alpha:] regexps.
+	       (string-match "^[[:alpha:]]+$" "abcde"))
+	  (unless ispell-aspell-dictionary-alist
+	    (ispell-find-aspell-dictionaries))))
 
     ;; Substitute ispell-dictionary-alist with the list of dictionaries
     ;; corresponding to the given spellchecker. If a recent aspell, use
     ;; the list of really installed dictionaries and add to it elements
     ;; of the original list that are not present there. Allow distro info.
     (let ((found-dicts-alist
-	   (if (and ispell-really-aspell
-		    ispell-encoding8-command)
-	       ispell-aspell-dictionary-alist
-	     nil))
+	   (cond ((and ispell-really-aspell
+		       ispell-encoding8-command)
+		  ispell-aspell-dictionary-alist)
+		 ((string= ispell-program-name "NSSpellChecker")
+		  ispell-ns-dictionary-alist)
+		 (t nil)))
 	  ispell-base-dicts-override-alist ; Override only base-dicts-alist
 	  all-dicts-alist)
 
@@ -1764,17 +1768,11 @@ Protects against bogus binding of `enable-multibyte-characters' in XEmacs."
     str))
 
 (defun ispell-get-casechars ()
-  (if (string= ispell-program-name "NSSpellChecker")
-      "[[:alpha:]]"
-    (ispell-get-decoded-string 1)))
-(defun ispell-get-not-casechars () 
-  (if (string= ispell-program-name "NSSpellChecker")
-      "[^[:alpha:]]"
-    (ispell-get-decoded-string 2)))
-(defun ispell-get-otherchars () 
-  (if (string= ispell-program-name "NSSpellChecker")
-      "[']"
-    (ispell-get-decoded-string 3)))
+    (ispell-get-decoded-string 1))
+(defun ispell-get-not-casechars ()
+    (ispell-get-decoded-string 2))
+(defun ispell-get-otherchars ()
+    (ispell-get-decoded-string 3))
 (defun ispell-get-many-otherchars-p ()
   (nth 4 (or (assoc ispell-current-dictionary ispell-local-dictionary-alist)
 	     (assoc ispell-current-dictionary ispell-dictionary-alist))))
