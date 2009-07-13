@@ -256,7 +256,7 @@ xftfont_open (f, entity, pixel_size)
       else if (EQ (key, QChintstyle))
 	{
 	  if (INTEGERP (val))
-	    FcPatternAddInteger (pat, FC_RGBA, XINT (val));
+	    FcPatternAddInteger (pat, FC_HINT_STYLE, XINT (val));
 	}
       else if (EQ (key, QCrgba))
 	{
@@ -287,14 +287,15 @@ xftfont_open (f, entity, pixel_size)
   match = XftFontMatch (display, FRAME_X_SCREEN_NUMBER (f), pat, &result);
   FcPatternDestroy (pat);
   xftfont = XftFontOpenPattern (display, match);
-  ft_face = XftLockFace (xftfont);
-  UNBLOCK_INPUT;
-
   if (! xftfont)
     {
+      UNBLOCK_INPUT;
       XftPatternDestroy (match);
       return Qnil;
     }
+  ft_face = XftLockFace (xftfont);
+  UNBLOCK_INPUT;
+
   /* We should not destroy PAT here because it is kept in XFTFONT and
      destroyed automatically when XFTFONT is closed.  */
   font_object = font_make_object (VECSIZE (struct xftfont_info), entity, size);

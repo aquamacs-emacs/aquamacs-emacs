@@ -2687,14 +2687,17 @@ and gid of the corresponding user is taken.  Both parameters must be integers."
   ;;      succeed in the majority of cases.
   (if (file-remote-p filename)
       (with-parsed-tramp-file-name filename nil
-	(let ((uid (or (and (integerp uid) uid)
-		       (tramp-get-remote-uid v 'integer)))
-	      (gid (or (and (integerp gid) gid)
-		       (tramp-get-remote-gid v 'integer))))
-	  (tramp-send-command
-	   v (format
-	      "chown %d:%d %s" uid gid
-	      (tramp-shell-quote-argument localname)))))
+	(if (and (zerop (user-uid)) (tramp-local-host-p v))
+	    ;; If we are root on the local host, we can do it directly.
+	    (tramp-set-file-uid-gid localname uid gid)
+	  (let ((uid (or (and (integerp uid) uid)
+			 (tramp-get-remote-uid v 'integer)))
+		(gid (or (and (integerp gid) gid)
+			 (tramp-get-remote-gid v 'integer))))
+	    (tramp-send-command
+	     v (format
+		"chown %d:%d %s" uid gid
+		(tramp-shell-quote-argument localname))))))
 
     ;; We handle also the local part, because there doesn't exist
     ;; `set-file-uid-gid'.  On Win32 "chown" might not work.
@@ -2767,8 +2770,9 @@ and gid of the corresponding user is taken.  Both parameters must be integers."
 (defun tramp-default-file-modes (filename)
   "Return file modes of FILENAME as integer.
 If the file modes of FILENAME cannot be determined, return the
-value of `default-file-modes'."
-  (or (file-modes filename) (default-file-modes)))
+value of `default-file-modes', without execute permissions."
+  (or (file-modes filename)
+      (logand (default-file-modes) (tramp-octal-to-decimal "0666"))))
 
 (defun tramp-handle-file-directory-p (filename)
   "Like `file-directory-p' for Tramp files."
@@ -3199,7 +3203,9 @@ KEEP-DATE means to make sure that NEWNAME has the same timestamp
 as FILENAME.  PRESERVE-UID-GID, when non-nil, instructs to keep
 the uid and gid from FILENAME."
   (let ((t1 (tramp-tramp-file-p filename))
-	(t2 (tramp-tramp-file-p newname)))
+	(t2 (tramp-tramp-file-p newname))
+	(file-times (nth 5 (file-attributes filename)))
+	(file-modes (tramp-default-file-modes filename)))
     (with-parsed-tramp-file-name (if t1 filename newname) nil
       (let* ((cmd (cond ((and (eq op 'copy) preserve-uid-gid) "cp -f -p")
 			((eq op 'copy) "cp -f")
@@ -3336,11 +3342,10 @@ the uid and gid from FILENAME."
 		  (error)))))))))
 
       ;; Set the time and mode. Mask possible errors.
-      ;; Won't be applied for 'rename.
       (condition-case nil
-	  (when (and keep-date (not preserve-uid-gid))
-	    (set-file-times newname (nth 5 (file-attributes filename)))
-	    (set-file-modes newname (tramp-default-file-modes filename)))
+	  (when keep-date
+	    (set-file-times newname file-times)
+	    (set-file-modes newname file-modes))
 	(error)))))
 
 (defun tramp-do-copy-or-rename-file-out-of-band (op filename newname keep-date)
@@ -4354,7 +4359,7 @@ Returns a file name in `tramp-auto-save-directory' for autosaving this file."
 		   (tramp-get-remote-gid v 'integer))))
 
       (if (and (tramp-local-host-p v)
-	       ;; `file-writable-p' calls 'file-expand-file-name'.  We
+	       ;; `file-writable-p' calls `file-expand-file-name'.  We
 	       ;; cannot use `tramp-run-real-handler' therefore.
 	       (let (file-name-handler-alist)
 		 (and
@@ -4362,9 +4367,11 @@ Returns a file name in `tramp-auto-save-directory' for autosaving this file."
 		  (or (file-directory-p localname)
 		      (file-writable-p localname)))))
 	  ;; Short track: if we are on the local host, we can run directly.
-	  (tramp-run-real-handler
-	   'write-region
-	   (list start end localname append 'no-message lockname confirm))
+	  (progn
+	    (tramp-run-real-handler
+	     'write-region
+	     (list start end localname append 'no-message lockname confirm))
+	    (tramp-flush-file-property v localname))
 
 	(let ((rem-dec (tramp-get-remote-coding v "remote-decoding"))
 	      (loc-enc (tramp-get-local-coding v "local-encoding"))
@@ -7157,7 +7164,10 @@ necessary only.  This function will be used in file name completion."
        (tramp-file-name-method vec)
        (tramp-file-name-user vec)
        host
-       (tramp-compat-temporary-file-directory))))))
+       (tramp-compat-temporary-file-directory)))
+     ;; On some systems, chown runs only for root.
+     (or (zerop (user-uid))
+	 (zerop (tramp-get-remote-uid vec 'integer))))))
 
 ;; Variables local to connection.
 

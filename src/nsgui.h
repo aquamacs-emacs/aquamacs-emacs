@@ -131,10 +131,15 @@ typedef struct {
 #ifndef __OBJC__
 typedef struct _NSPoint { float x, y; } NSPoint;
 typedef struct _NSSize  { float width, height; } NSSize;
+
 typedef struct _NSRect  { NSPoint origin; NSSize size; } NSRect;
 #endif
 
-#define NativeRectangle struct _NSRect
+#ifndef _NSRect
+#define _NSRect NSRect
+#endif
+
+#define NativeRectangle _NSRect
 
 #define CONVERT_TO_XRECT(xr, nr)		\
   ((xr).x     = (nr).origin.x,			\
