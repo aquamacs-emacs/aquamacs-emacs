@@ -1590,6 +1590,26 @@ DEFUN ("ns-spellchecker-list-languages", Fns_spellchecker_list_languages, Sns_sp
 }
 
 
+DEFUN ("ns-spellchecker-current-language", Fns_spellchecker_current_language, Sns_spellchecker_current_language,
+       0, 0, 0,
+       doc: /* Get the current spell-checking language.*/)
+     ()
+{
+  id sc;
+
+  check_ns ();
+  BLOCK_INPUT;
+  sc = [NSSpellChecker sharedSpellChecker];
+
+  Lisp_Object retval = Qnil;
+  NSString *lang = [sc language];
+  retval = build_string ([lang UTF8String]);
+
+  UNBLOCK_INPUT;
+  return retval;
+}
+
+
 DEFUN ("ns-spellchecker-set-language", Fns_spellchecker_set_language, Sns_spellchecker_set_language,
        1, 1, 0,
        doc: /* Set spell-checking language.
@@ -3106,6 +3126,7 @@ be used as the image of the icon representing the frame.  */);
   defsubr (&Sns_spellchecker_check_grammar);
   defsubr (&Sns_spellchecker_get_suggestions);
   defsubr (&Sns_spellchecker_list_languages);
+  defsubr (&Sns_spellchecker_current_language);
   defsubr (&Sns_spellchecker_set_language);
   defsubr (&Sns_popup_font_panel);
   defsubr (&Sns_popup_color_panel);
