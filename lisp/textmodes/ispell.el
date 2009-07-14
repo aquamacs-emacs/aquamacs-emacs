@@ -1562,7 +1562,9 @@ aspell is used along with Emacs).")
 			    ;; ispell-dictionary-base-alist))
 	(unless (assoc (car dict) all-dicts-alist)
 	  (add-to-list 'all-dicts-alist dict)))
-      (setq ispell-dictionary-alist all-dicts-alist))))
+      (setq ispell-dictionary-alist all-dicts-alist))
+    (if (string= ispell-program-name "NSSpellChecker")
+	(setq ispell-dictionary (ns-spellchecker-current-language)))))
 
 
 (defun ispell-valid-dictionary-list ()
@@ -2137,8 +2139,7 @@ quit          spell session exited."
    (t
     (ispell-set-spellchecker-params)    ; Initialize variables and dicts alists
     ;; use the correct dictionary
-    (unless (string= ispell-program-name "NSSpellChecker")
-      (ispell-accept-buffer-local-defs))
+    (ispell-accept-buffer-local-defs)
     (let ((cursor-location (point))	; retain cursor location
 	  (word (ispell-get-word following))
 	  start end poss new-word replace)
@@ -3103,8 +3104,11 @@ Keeps argument list for future ispell invocations for no async support."
 
 (defun ispell-init-process () 
   "Check status of Ispell process and start if necessary."
-  (if (string= ispell-program-name "NSSpellChecker")
-      t
+  ;; (if (string= ispell-program-name "NSSpellChecker")
+  ;;     (progn
+  ;; 	(setq ispell-current-dictionary
+  ;; 	      (or ispell-local-dictionary ispell-dictionary))
+  ;; 	t)
     (if (and ispell-process
 	     (eq (ispell-process-status) 'run)
 	     ;; If we're using a personal dictionary, ensure
@@ -3160,7 +3164,7 @@ Keeps argument list for future ispell invocations for no async support."
 	(if extended-char-mode		; ~ extended character mode
 	    (ispell-send-string (concat extended-char-mode "\n"))))
       (if ispell-async-processp
-	  (set-process-query-on-exit-flag ispell-process nil)))))
+	  (set-process-query-on-exit-flag ispell-process nil))));)
 
 ;;;###autoload
 (defun ispell-kill-ispell (&optional no-error)
@@ -3210,9 +3214,7 @@ By just answering RET you can find out what the current dictionary is."
   (if (equal dict "default") (setq dict nil))
   ;; This relies on completing-read's bug of returning "" for no match
   (cond ((and (equal dict nil) (string= ispell-program-name "NSSpellChecker"))
-	 (setq ispell-dictionary
-	       (assoc (ns-spellchecker-current-language)
-		      (ns-spellchecker-list-dictionaries))))
+	 (setq ispell-dictionary (ns-spellchecker-current-language)))
 	((equal dict "")
 	 (ispell-internal-change-dictionary)
 	 (message "Using %s dictionary"
@@ -3263,9 +3265,7 @@ Return nil if spell session is quit,
  otherwise returns shift offset amount for last line processed."
   (interactive "r")			; Don't flag errors on read-only bufs.
   (ispell-set-spellchecker-params)      ; Initialize variables and dicts alists
-  (if (and
-       (not (string= ispell-program-name "NSSpellChecker"))
-       (not recheckp))
+  (if (not recheckp)
       (ispell-accept-buffer-local-defs)) ; set up dictionary, local words, etc.
   (let ((skip-region-start (make-marker))
 	(rstart (make-marker)))
@@ -4237,9 +4237,12 @@ You can bind this to the key C-c i in GNUS or mail by adding to
 
 (defun ispell-accept-buffer-local-defs ()
   "Load all buffer-local information, restarting Ispell when necessary."
+  (if (string= ispell-program-name "NSSpellChecker")
+      (setq ispell-current-dictionary
+	    (or ispell-local-dictionary ispell-dictionary))
   (ispell-buffer-local-dict)		; May kill ispell-process.
   (ispell-buffer-local-words)		; Will initialize ispell-process.
-  (ispell-buffer-local-parsing))
+  (ispell-buffer-local-parsing)))
 
 
 (defun ispell-buffer-local-parsing ()

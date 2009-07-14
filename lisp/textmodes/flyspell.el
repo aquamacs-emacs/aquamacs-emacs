@@ -1293,8 +1293,7 @@ Mostly we check word delimiters."
   (ispell-set-spellchecker-params)    ; Initialize variables and dicts alists
   (save-excursion
     ;; use the correct dictionary
-    (unless (string= ispell-program-name "NSSpellChecker") 
-      (flyspell-accept-buffer-local-defs))
+    (flyspell-accept-buffer-local-defs)
     (let* ((cursor-location (point))
            (flyspell-word (flyspell-get-word following))
            start end poss word ispell-filter)
@@ -1787,7 +1786,7 @@ The buffer to mark them in is `flyspell-large-region-buffer'."
     (setq flyspell-large-region-buffer curbuf)
     (setq flyspell-large-region-beg beg)
     (setq flyspell-large-region-end end)
-    (unless (string= ispell-program-name "NSSpellChecker") (flyspell-accept-buffer-local-defs))
+    (flyspell-accept-buffer-local-defs)
     (set-buffer buffer)
     (erase-buffer)
     ;; this is done, we can start checking...
@@ -2146,7 +2145,7 @@ This command proposes various successive corrections for the current word."
   (let ((pos     (point))
 	(old-max (point-max)))
     ;; use the correct dictionary
-    (unless (string= ispell-program-name "NSSpellChecker") (flyspell-accept-buffer-local-defs))
+    (flyspell-accept-buffer-local-defs)
     (if (and (eq flyspell-auto-correct-pos pos)
 	     (consp flyspell-auto-correct-region))
 	;; we have already been using the function at the same location
@@ -2333,7 +2332,7 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
   (unless (mouse-position)
     (error "Pop-up menus do not work on this terminal"))
   ;; use the correct dictionary
-  (unless (string= ispell-program-name "NSSpellChecker") (flyspell-accept-buffer-local-defs))
+  (flyspell-accept-buffer-local-defs)
   (or opoint (setq opoint (point)))
   (let ((cursor-location (point))
 	(word (flyspell-get-word nil)))
