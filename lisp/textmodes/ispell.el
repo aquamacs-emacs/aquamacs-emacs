@@ -802,7 +802,7 @@ ispell-dictionary-base-alist.  If no corresponding entry is found, assumes
      many-otherchars-p
      nil
      nil
-     "iso-8859-1")))
+     'iso-8859-1)))
 
 (defun ns-spellchecker-list-dictionaries ()
   (let ((lang-list (ns-spellchecker-list-languages))
@@ -1575,7 +1575,9 @@ The variable `ispell-library-directory' defines the library location."
       (ispell-set-spellchecker-params))
 
   (let ((dicts (append ispell-local-dictionary-alist ispell-dictionary-alist))
-	(dict-list (cons "default" nil))
+	(dict-list (if (string= ispell-program-name "NSSpellChecker")
+		       nil
+		     (cons "default" nil)))
 	name load-dict)
     (dolist (dict dicts)
       (setq name (car dict)
@@ -1586,6 +1588,7 @@ The variable `ispell-library-directory' defines the library location."
 	   ;; include all dictionaries if lib directory not known.
 	   ;; For Aspell, we already know which dictionaries exist.
 	   (or ispell-really-aspell
+	       (string= ispell-program-name "NSSpellChecker")
 	       (not ispell-library-directory)
 	       (file-exists-p (concat ispell-library-directory
 				      "/" name ".hash"))
@@ -3206,7 +3209,11 @@ By just answering RET you can find out what the current dictionary is."
   (unless arg (ispell-buffer-local-dict 'no-reload))
   (if (equal dict "default") (setq dict nil))
   ;; This relies on completing-read's bug of returning "" for no match
-  (cond ((equal dict "")
+  (cond ((and (equal dict nil) (string= ispell-program-name "NSSpellChecker"))
+	 (setq ispell-dictionary
+	       (assoc (ns-spellchecker-current-language)
+		      (ns-spellchecker-list-dictionaries))))
+	((equal dict "")
 	 (ispell-internal-change-dictionary)
 	 (message "Using %s dictionary"
 		  (or (and (not arg) ispell-local-dictionary)
@@ -3243,7 +3250,9 @@ a new one will be started when needed."
 		 (equal ispell-current-personal-dictionary pdict))
       (ispell-kill-ispell t)
       (setq ispell-current-dictionary dict
-	    ispell-current-personal-dictionary pdict))))
+	    ispell-current-personal-dictionary pdict)
+      (if (string= ispell-program-name "NSSpellChecker")
+	  (ns-spellchecker-set-language dict)))))
 
 ;;; Spelling of comments are checked when ispell-check-comments is non-nil.
 
