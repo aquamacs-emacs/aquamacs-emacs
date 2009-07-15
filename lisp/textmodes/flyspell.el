@@ -293,6 +293,9 @@ effect, marks the misspelled word (if found) with face flyspell-incorrect."
   (let ((pos beg)
 	misspell-location
 	done)
+    (unless (string= ispell-current-dictionary
+		     (ns-spellchecker-current-language))
+      (ispell-change-dictionary (ns-spellchecker-current-language)))
     (while (not done)
       (setq misspell-location
 	    (ns-spellchecker-check-spelling (buffer-substring pos end)
@@ -320,6 +323,9 @@ and apply flyspell-incorrect face"
 ;; (e.g. not TeX or other filtered expression)
 ;; if it is, then also highlight it, and put it in the spelling panel
   (interactive)
+  (unless (string= ispell-current-dictionary
+		   (ns-spellchecker-current-language))
+    (ispell-change-dictionary (ns-spellchecker-current-language)))
   (let* ((pos (if mark-active
 		  ;; use beginning of region as start point for spellchecking,
 		  ;; if there is an active region
@@ -446,6 +452,9 @@ ns-highlight-misspelling-and-suggest, which see."
 (defun ns-flyspell-region (beg end)
   "Flyspell text between BEG and END using ns-spellchecker-check-spelling."
   (interactive "r")
+  (unless (string= ispell-current-dictionary
+		   (ns-spellchecker-current-language))
+    (ispell-change-dictionary (ns-spellchecker-current-language)))
   (save-excursion
     (let ((spellcheck-position beg)
 	  (count 0)

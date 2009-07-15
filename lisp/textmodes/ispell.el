@@ -829,6 +829,9 @@ and Return:
    ORIGINAL-WORD is a string of the possibly misspelled word.
    OFFSET is an integer giving the line offset of the word.
    MISS-LIST is a possibly null list of guesses."
+  (unless (string= ispell-current-dictionary
+		     (ns-spellchecker-current-language))
+      (ispell-change-dictionary (ns-spellchecker-current-language)))
   (let* ((output (ns-spellchecker-check-spelling word (current-buffer)))
 	 (offset (car output)))
     (cond
@@ -847,6 +850,9 @@ and return a list of lists (one for each misspelled word) of the format:
    ORIGINAL-WORD is a string of the possibly misspelled word.
    OFFSET is an integer giving the line offset of the word.
    MISS-LIST is a possibly null list of guesses."
+  (unless (string= ispell-current-dictionary
+		   (ns-spellchecker-current-language))
+    (ispell-change-dictionary (ns-spellchecker-current-language)))
   (let ((strlen (length string))
 	(prev-offset 0)
 	ns-spellcheck-output
