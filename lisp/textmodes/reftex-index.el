@@ -1873,7 +1873,8 @@ both ends."
                             (if (> nkeys 1)
                                 (concat "1-" (int-to-string nkeys))
                               ""))
-                   (setq char (if all-yes ?y (read-char-exclusive)))
+		   (setq char (if all-yes ?y     
+				(save-match-data (read-char-exclusive))))
                    (cond ((member char '(?y ?Y ?\ ))
                           ;; Yes!
                           (replace-match rpl t t)
