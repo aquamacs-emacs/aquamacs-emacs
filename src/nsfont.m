@@ -231,21 +231,19 @@ ns_fallback_entity ()
 static float
 ns_char_width (NSFont *sfont, int c)
 {
-    float w=0;
+
     NSString *cstr = [NSString stringWithFormat: @"%c", c];
+
 #ifdef NS_IMPL_COCOA
-    NSGlyph glyph = [sfont glyphWithName: cstr];
-    if (glyph)
-      {
-	float w = [sfont advancementForGlyph: glyph].width;
-	if (w >= 1.5)
-	    return w;
-      }
+
+    return [cstr sizeWithAttributes:[NSDictionary dictionaryWithObject:sfont 
+					   forKey:NSFontAttributeName]].width;
+
 #else
     /* deprecated in OS X 10.4 */
-    w = [sfont widthOfString: cstr];
+    return = max (2.0, [sfont widthOfString: cstr]);
 #endif
-    return max (w, 2.0);
+
 }
 
 
@@ -782,6 +780,15 @@ nsfont_open (FRAME_PTR f, Lisp_Object font_entity, int pixel_size)
        only use it for fonts that have wide characters. */
     font_info->width = ([sfont numberOfGlyphs] > 3000) ?
       [sfont maximumAdvancement].width : ns_char_width (sfont, '0');
+    
+    if (font_info->width == 0)
+      font_info->width = ns_char_width (sfont, 'e');
+    if (font_info->width == 0)
+      font_info->width = ns_char_width (sfont, '_');
+    if (font_info->width == 0)
+      font_info->width = ns_char_width (sfont, 'J');
+    if (font_info->width == 0)
+      font_info->width = [sfont maximumAdvancement].width;
 
     brect =  [sfont boundingRectForFont];
     full_height = brect.size.height;
