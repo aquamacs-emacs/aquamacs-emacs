@@ -1459,6 +1459,11 @@ key, a click, or a menu-item"))
 (define-key menu-bar-manuals-menu [emac-lisp-intro]
   '(menu-item "Introduction to Emacs Lisp" menu-bar-read-lispintro
 	      :help "Read the Introduction to Emacs Lisp Programming"))
+(define-key menu-bar-manuals-menu [sep]
+  '("--"))
+(define-key menu-bar-manuals-menu [emacs-psychotherapist]
+  '(menu-item "Emacs Psychotherapist" doctor
+	      :help "Our doctor will help you feel better"))
 
 (define-key menu-bar-help-menu [about-gnu-project]
   '(menu-item "About GNU" describe-gnu-project
@@ -1503,21 +1508,12 @@ key, a click, or a menu-item"))
   (list 'menu-item "Search Documentation" menu-bar-search-documentation-menu))
 (define-key menu-bar-help-menu [sep1]
   '("--"))
-(define-key menu-bar-help-menu [emacs-psychotherapist]
-  '(menu-item "Emacs Psychotherapist" doctor
-	      :help "Our doctor will help you feel better"))
 (define-key menu-bar-help-menu [send-emacs-bug-report]
   '(menu-item "Send Bug Report..." report-emacs-bug
 	      :help "Send e-mail to Emacs maintainers"))
-(define-key menu-bar-help-menu [emacs-known-problems]
-  '(menu-item "Emacs Known Problems" view-emacs-problems
-	      :help "Read about known problems with Emacs"))
 (define-key menu-bar-help-menu [emacs-news]
   '(menu-item "Emacs News" view-emacs-news
 	      :help "New features of this version"))
-(define-key menu-bar-help-menu [emacs-faq]
-  '(menu-item "Emacs FAQ" view-emacs-FAQ
-	      :help "Frequently asked (and answered) questions about Emacs"))
 
 (defun help-with-tutorial-spec-language ()
   "Use the Emacs tutorial, specifying which language you want."

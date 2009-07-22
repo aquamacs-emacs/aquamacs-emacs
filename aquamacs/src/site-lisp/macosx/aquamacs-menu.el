@@ -1024,14 +1024,6 @@ subsequently create.  Upon entering text-mode, the function
 (define-key menu-bar-manuals-menu [emacs-lisp-reference] nil)
 (define-key menu-bar-manuals-menu [emacs-lisp-intro] nil)
 
-
-(define-key menu-bar-manuals-menu [sep]
-  '("--"))
-(define-key menu-bar-manuals-menu [emacs-psychotherapist]
-  '(menu-item "Emacs Psychotherapist" doctor
-	      :help "Our doctor will help you feel better"))
-(define-key menu-bar-help-menu [emacs-psychotherapist] nil)
-
 (define-key menu-bar-manuals-menu [lookup-subject-in-all-manuals] nil)
 
 (define-key menu-bar-search-documentation-menu [lookup-subject-in-all-manuals]
