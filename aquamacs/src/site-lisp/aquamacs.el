@@ -8,8 +8,6 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.274 2009/03/11 12:40:39 davidswelt Exp $ 
-
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -1367,14 +1365,14 @@ to the selected frame."
     '( 
       (smart-frame-positioning-enforce custom-variable)
       (smart-frame-positioning-mode custom-variable)
-      (mac-option-modifier  custom-variable)
-      (mac-control-modifier  custom-variable)
-      (mac-function-modifier  custom-variable)
-      (mac-pass-control-to-system  custom-variable)
-      (mac-command-modifier  custom-variable)
-      (mac-pass-command-to-system  custom-variable)
-      (mac-emulate-three-button-mouse  custom-variable)
-      (mac-allow-anti-aliasing  custom-variable)
+      (ns-alternate-modifier  custom-variable)
+      (ns-control-modifier  custom-variable)
+      (ns-function-modifier  custom-variable)
+;;      (mac-pass-control-to-system  custom-variable)
+      (ns-command-modifier  custom-variable)
+      ;; (mac-pass-command-to-system  custom-variable)
+      (ns-emulate-three-button-mouse  custom-variable)
+      (ns-antialias-text  custom-variable)
       (x-select-enable-clipboard  custom-variable)
       (special-display-regexps custom-variable)
       )
@@ -1421,7 +1419,7 @@ listed here."
 ;;;	     do not save initial-frame-alist - it is stored by smart-frame-positions
 ;;;  to do: frame-notice-user-settings should use default-frame-alist in addition to
 ;;; initial-frame-alist, so "adopt frame parameters as default" should work.
-	      mac-option-modifier)
+	      ns-alternate-modifier)
 	    (and (boundp 'aquamacs-additional-fontsets)
 		   '(aquamacs-additional-fontsets))
 		   ;; retain for backwards compatibility
