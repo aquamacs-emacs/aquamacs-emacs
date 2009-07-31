@@ -2424,6 +2424,22 @@ push_key_description (c, p, force_multibyte)
     if ((c & 0xFF) >= 'A' && (c & 0xFF) <= 'Z')
       c |= shift_modifier;
 
+#if HAVE_NS
+  if (c & meta_modifier &&
+      ! (NILP (Vns_use_mac_modifier_symbols) ||
+	 EQ (ns_command_modifier, Qmeta) ||
+	 EQ (ns_control_modifier, Qmeta) ||
+	 EQ (ns_alternate_modifier, Qmeta)))
+    {
+      /* Meta is disabled, so prepend key description with Esc */
+      *p++ = 'E';
+      *p++ = 's';
+      *p++ = 'c';
+      *p++ = ' ';
+      c &= ~meta_modifier;
+    }
+#endif /* HAVE_NS */
+
   /* to do: shift.  upcase. */
   if (c & alt_modifier)
     { /* to do: translate ns-alt-modifier */
