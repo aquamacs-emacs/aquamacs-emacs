@@ -1,4 +1,4 @@
-v;; configuration for AUCTeX on OS X
+;; configuration for AUCTeX on OS X
 
 ;; Maintainer: David Reitter
 ;; originally authored by Kevin Walzer
