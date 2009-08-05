@@ -372,9 +372,9 @@ customization buffer."
 
   
 (define-key-after menu-bar-tools-menu [menu-tools-command-line-tool]
-  `(menu-item "Install Command Line Tool" 
+  `(menu-item "Install Command Line Tools" 
 	      aquamacs-install-command-line-tool
-	      :help "Install Command Line Tool...")
+	      :help "Install Command Line Tools...")
   'simple-calculator)
 
 (define-key-after menu-bar-tools-menu [menu-tools-command-line-tool-sep]
