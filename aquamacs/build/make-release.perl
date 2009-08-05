@@ -38,9 +38,6 @@ unless ($VOL)
 
 print "Copying to $VOL";
 
-
-&sys("cd \"$BINARY/Contents/Resources\"; rm -r leim/quail/*.el leim/ja-dic/*.el 2>/dev/null" );
-
 if ($VOL =~ /\/Volumes\/Aquam/i)
   {
 
