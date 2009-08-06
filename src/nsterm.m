@@ -3605,13 +3605,7 @@ FRAME_PTR f;
 		}
 	      
 	      [view enterFullScreenMode:[[view window] screen]
-	      		    withOptions:[NSDictionary dictionaryWithObjectsAndKeys:
-	      						  [NSNumber numberWithBool:NO],
-	      					      NSFullScreenModeAllScreens,
-	      					      // problem  rdar://5804777 prevents
-	      					      // the window level from being set correctly.
-	      						   [NSNumber numberWithInt:NSNormalWindowLevel],
-	      					      NSFullScreenModeWindowLevel, nil]];
+	      		    withOptions:opts];
 
 	      // causes black screen.
 	      //[[view window] setLevel:[NSNumber numberWithInt:NSNormalWindowLevel]];
