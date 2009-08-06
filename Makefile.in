@@ -579,7 +579,6 @@ install-arch-indep: mkdir info install-etc
 	   (cd lisp; tar -chf - *.el *.elc) \
 	     |(cd $(DESTDIR)${lispdir}; umask 022; tar -xvf - && cat > /dev/null) || exit 1; \
 	   (cd $(DESTDIR)${lispdir}; \
-	    rm ldefs-boot.el loaddefs.el; \
 	    $(set_installuser); \
 	    find . -exec chown $${installuser} {} ';') ; \
 	else true; fi
@@ -591,6 +590,8 @@ install-arch-indep: mkdir info install-etc
 		${GZIP_PROG} -9n `echo $$f|sed 's/.elc$$/.el/'` ; \
 	    done) \
 	else true; fi
+	rm $(DESTDIR)${lispdir}/ldefs-boot.el $(DESTDIR)${lispdir}/loaddefs.el
+	rm $(DESTDIR)${docdir}/refcards/*.tex
 	-unset CDPATH; \
 	thisdir=`/bin/pwd`; \
 	if [ `(cd ${srcdir}/info && /bin/pwd)` != `(cd $(DESTDIR)${infodir} && /bin/pwd)` ]; \
