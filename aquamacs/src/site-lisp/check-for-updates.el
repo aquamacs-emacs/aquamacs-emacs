@@ -248,7 +248,8 @@ transfered data."
 	   (setq force-check (or force-check (eq 888 (number-at-point))))))
  
      (if (or (string-match "beta"  aquamacs-version)
-	     (string-match "rc"  aquamacs-version))
+	     (string-match "rc"  aquamacs-version)
+	     (string-match "preview"  aquamacs-version))
 	 (setq aquamacs-user-likes-beta 1))
 
      ;; show "what's new" 
