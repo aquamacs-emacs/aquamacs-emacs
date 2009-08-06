@@ -3562,6 +3562,10 @@ x_wm_set_icon_position (struct frame *f, int icon_x, int icon_y)
 
    ========================================================================== */
 
+#ifndef NSAppKitVersionNumber10_5
+#define NSAppKitVersionNumber10_5 949
+#endif
+
 static void
 ns_fullscreen_hook  (f)
 FRAME_PTR f;
