@@ -3579,11 +3579,27 @@ FRAME_PTR f;
 	{
 	  BLOCK_INPUT;
 	  NSDisableScreenUpdates();
+	  NSDictionary *opts;
 
 	  switch (f->want_fullscreen)
 	    {
 	    case FULLSCREEN_BOTH:
-
+	      if (NSAppKitVersionNumber < NSAppKitVersionNumber10_5)
+		{
+		  opts = [NSDictionary dictionaryWithObjectsAndKeys:
+					    [NSNumber numberWithInt:NSNormalWindowLevel],
+				       NSFullScreenModeWindowLevel, nil];
+		} else
+		{
+		  opts = [NSDictionary dictionaryWithObjectsAndKeys:
+					   [NSNumber numberWithBool:NO],
+				       NSFullScreenModeAllScreens, /* defined from 10.5 on */
+						   // problem  rdar://5804777 prevents
+				       // the window level from being set correctly.
+					    [NSNumber numberWithInt:NSNormalWindowLevel],
+				       NSFullScreenModeWindowLevel, nil];
+		}
+	      
 	      [view enterFullScreenMode:[[view window] screen]
 	      		    withOptions:[NSDictionary dictionaryWithObjectsAndKeys:
 	      						  [NSNumber numberWithBool:NO],
