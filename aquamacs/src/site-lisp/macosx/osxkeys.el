@@ -99,41 +99,43 @@ after updating this variable.")
 
 
 ;; support copy&paste at the right level
-(when (> emacs-major-version 22)
-  (setq interprogram-cut-function 'x-select-text
-	interprogram-paste-function 'aquamacs-cut-buffer-or-selection-value)
+(setq interprogram-cut-function 'x-select-text
+      interprogram-paste-function 'aquamacs-cut-buffer-or-selection-value)
 
-  (defun aquamacs-cut-buffer-or-selection-value ()
-    (unless (and osx-key-mode 
-		 (memq this-original-command '(yank mouse-yank-at-click)))
-      (let (text)
-	;; Consult the selection, then the cut buffer.  Treat empty strings
-	;; as if they were unset.
-	(or text (setq text (ns-get-pasteboard)))
-	(if (string= text "") (setq text nil))
-	(cond
-	 ((not text) nil)
-	 ((eq text ns-last-selected-text) nil)
-	 ((string= text ns-last-selected-text)
-	  ;; Record the newer string, so subsequent calls can use the `eq' test.
-	  (setq ns-last-selected-text text)
-	  nil)
-	 (t (setq ns-last-selected-text text))))))
+(defun aquamacs-cut-buffer-or-selection-value ()
+  (unless (and osx-key-mode 
+	       (memq this-original-command '(yank mouse-yank-at-click)))
+    (let (text)
+      ;; Consult the selection, then the cut buffer.  Treat empty strings
+      ;; as if they were unset.
+      (or text (setq text (ns-get-pasteboard)))
+      (if (string= text "") (setq text nil))
+      (cond
+       ((not text) nil)
+       ((eq text ns-last-selected-text) nil)
+       ((string= text ns-last-selected-text)
+	;; Record the newer string, so subsequent calls can use the `eq' test.
+	(setq ns-last-selected-text text)
+	nil)
+       (t (setq ns-last-selected-text text))))))
 
-  ;; overwrite x-select-text, which is called directly
-  ;; (not via interprogram-cut-function) when dragging mouse
-  ;; and elsewhere 
-  (defun x-select-text (text &optional push)
-    "Maybe put TEXT, a string, on the pasteboard.
+;; overwrite x-select-text, which is called directly
+;; (not via interprogram-cut-function) when dragging mouse
+;; and elsewhere 
+(defun x-select-text (text &optional push)
+  "Maybe put TEXT, a string, on the pasteboard.
 PUSH is ignored."
-    ;; Don't send the pasteboard too much text.
-    ;; It becomes slow, and if really big it causes errors.
-    (when (or (not osx-key-mode) 
-	      (memq this-original-command '(clipboard-kill-region clipboard-kill-ring-save)))
-      ;; do not do this if just selecting text with mouse, or 
-      (ns-set-pasteboard text))
-    ;; 
-    (setq ns-last-selected-text text)))
+  ;; Don't send the pasteboard too much text.
+  ;; It becomes slow, and if really big it causes errors.
+  ;; (print this-original-command)
+  (when (or (not cua-mode) 
+	    ;; (memq this-original-command '(clipboard-kill-region clipboard-kill-ring-save))
+	    ;; do not copy if just selected by mouse.
+	    (not (memq this-original-command '(mouse-extend mouse-drag-region))))
+    ;; do not do this if just selecting text with mouse, or 
+    (ns-set-pasteboard text))
+  ;; 
+  (setq ns-last-selected-text text))
 
 (defun aquamacs-backward-char ()
   "Move point to the left or the beginning of the region.
