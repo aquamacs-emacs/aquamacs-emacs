@@ -208,6 +208,8 @@
 	       (objc-mode-buffer-check . objc-mode))
 	   magic-mode-alist))
 
+(assq-set-equal "\\.org\\'" 'org-mode 'auto-mode-alist) 
+
 ;; ---------------------------------------------------------
 ;; PERL EDITING  
 
