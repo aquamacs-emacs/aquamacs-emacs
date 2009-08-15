@@ -45,7 +45,26 @@ Reported by George Nurser.
 
 \end{itemize}
 
-\subsection{Changes--- 1.8dev}
+
+\subsection{Changes--- 1.9}
+
+\emph{Interested in trying out the Emacs 23 Cocoa version of Aquamacs?  As of Spring 2008, we're still working \emph{on} it, but we're also already working \emph{with} it. 
+\url{http://aquamacs.org/nightlies.shtml}}
+
+\begin{itemize}
+
+\item Copy (Command-c) works again reliably for text selected by mouse.   However, the previous improvement avoiding duplicate entries in the kill ring has been reverted.
+Reported by Tom van Vleck.
+
+\item Jumping to a LaTeX error after compilation works more reliably now.  The LaTeX-command setting has been changed to include `file-line-error' style.
+Suggested by Enrico Franconi.
+
+\item Recognize Objective C files (extensions .m and .h) by their content.
+Patch by Kendall Gelner and D.R.
+
+\end{itemize}
+
+\subsection{Changes--- 1.8c}
 
 \begin{itemize}
 
@@ -62,8 +81,14 @@ Reported by Chris Bernard.
 
 \item The mark is now deactivated when point is restored while switching tabs (in transient-mark-mode, which is on by default).
 
+\item Command-C (clipboard-kill-ring-save) will take care not to create duplicate entries in the kill ring.
+Reported by Konrad Podczeck.
+
 \item Fixed a rare failure of dired to view directories.
 Reported by Uwe Pieczynski.
+
+\item Fixed a startup failure when environment variables with values where used that could no be encoded with the coding system assigned to the system's ``input source'' language.  (`locale-coding-system' is now set according to the locale in the default login shell.)
+Reported by André Berg.
 
 \item Fixed an error when deleting the whole buffer contents while smart-spacing-mode was on.
 Patch by Jon Shea.
@@ -74,9 +99,9 @@ Code by Simon Josefsson.
 \item `LaTex-mode-hook' can now be customized and saved through the
   customization interface.
 Reported by Bruno Cadonna.
- 
-\item ESS (R-mode) will now retain an active mark (and region) after evaluating code, e.g. with C-c C-r.                                                       
-          
+
+\item ESS (R-mode) will now retain an active mark (and region) after evaluating code, e.g. with C-c C-r.  
+
 \item In the keyboard emulation modes that allow the mac-native use of Option on various keyboard layouts, while retaining Option as Meta key for Emacs, ESC key sequences always act as Meta sequences.  For instance, with the German layout, ESC-l  acts as `downcase-word' (the original M-l binding), while Option-l inserts the @ sign.
 
 \item Adopting fonts as default fonts for frames: keep frames inside screen.
@@ -92,8 +117,12 @@ Reported by Alison Lister.
 \item Version 1.8b: Avoid hang during startup when remote, now inaccessible files were edited during a previous session.
 Reported by Christopher Menzel.
 
+\item Version 1.8b: org-mode is now used automatically for all {\tt .org} files.
 
+\item Version 1.8c: AUCTeX is used again as latex-mode
+Reported by Herbert Korté.
 \end{itemize}
+
 
 \subsection{Changes--- 1.7}
 

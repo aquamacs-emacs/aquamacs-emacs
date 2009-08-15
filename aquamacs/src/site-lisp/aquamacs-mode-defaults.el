@@ -188,10 +188,25 @@
 ;; we don't have a REALBasic mode yet
 (autoload 'rails-minor-mode "rails.el" "Enter Ruby on Rails mode" 'interactive nil)
 
+;; Matlab
 (autoload 'matlab-mode "matlab" "Enter MATLAB mode." t)
 (autoload 'matlab-shell "matlab" "Interactive MATLAB mode." t)
 (assq-set-equal "\\.m$" 'matlab-mode 'auto-mode-alist) 
 
+;; Objective C
+
+(defun objc-mode-buffer-check ()
+  (if (string-match "\\.m$" buffer-file-name)
+      (save-restriction
+	(narrow-to-region (point-min)
+			  (min (point-max)
+			       (+ (point-min) magic-mode-regexp-match-limit)))
+	(looking-at "\\(.\\|\n\\)*#\\(include\\|define\\)"))))
+
+(setq magic-mode-alist
+     (append '(("\\(.\\|\n\\)*\n@\\(implementation\\|interface\\|protocol\\)" . objc-mode)
+	       (objc-mode-buffer-check . objc-mode))
+	   magic-mode-alist))
 
 ;; ---------------------------------------------------------
 ;; PERL EDITING  
