@@ -1,5 +1,31 @@
 ;; insert menu showing reference cards
 
+;; Author: David Reitter, david.reitter@gmail.com
+;; Maintainer: David Reitter
+;; Keywords: aquamacs
+ 
+;; This file is part of Aquamacs Emacs
+;; http://www.aquamacs.org/
+
+;; Aquamacs is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation; either version 2, or (at your option)
+;; any later version.
+
+;; Aquamacs is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with GNU Emacs; see the file COPYING.  If not, write to the
+;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+;; Boston, MA 02111-1307, USA.
+ 
+;; Copyright (C) 2005, 2006, 2007, 2008, 2009 David Reitter
+
+
+
 (defun aquamacs--refcard-source-update ()
   "Insert code for current reference card menu."
   (interactive)
@@ -108,3 +134,5 @@
   `(menu-item "Printable Reference Cards" 
 	      ,menu-bar-help-refcards-menu)
   'more-manuals)
+
+(provide 'menu-refcards)
