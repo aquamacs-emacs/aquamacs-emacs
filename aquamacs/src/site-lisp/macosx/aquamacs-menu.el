@@ -1326,9 +1326,9 @@ that should be represented in the Aquamacs menus."
 (defun emacs-user-wiki ()
   (interactive)
   (browse-url "http://www.emacswiki.org/")) 
+;;
 
-
- 
+(require 'menu-refcards)
 
 ;; workarounds for current bugs
 
