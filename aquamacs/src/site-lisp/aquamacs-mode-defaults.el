@@ -209,6 +209,8 @@
 	   magic-mode-alist))
 
 (assq-set-equal "\\.org\\'" 'org-mode 'auto-mode-alist) 
+(aquamacs-set-defaults 
+ '((org-support-shift-select t)))
 
 ;; ---------------------------------------------------------
 ;; PERL EDITING  
