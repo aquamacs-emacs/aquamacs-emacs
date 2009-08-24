@@ -147,7 +147,7 @@ provided `cua-mode' and the mark are active."
     (if (and cua-mode transient-mark-mode 
 	     mark-active
 	     (not cua--explicit-region-start)
-	     (not (aquamacs--shift-key-for-command-p)))
+	     (not this-command-keys-shift-translated))
 	(goto-char left)
       (let ((this-command 'backward-car)) ;; maintain compatibility
 	(call-interactively 'backward-char)))))
@@ -163,7 +163,7 @@ provided `cua-mode' and the mark are active."
     (if (and cua-mode transient-mark-mode 
 	     mark-active
 	     (not cua--explicit-region-start)
-	     (not (aquamacs--shift-key-for-command-p)))
+	     (not this-command-keys-shift-translated))
 	(goto-char right)
        (let ((this-command 'forward-car)) ;; maintain compatibility
 	 (call-interactively 'forward-char)))))
@@ -200,24 +200,6 @@ With argument, do this that many times."
 With argument, do this that many times."
   (interactive "p")
   (aquamacs-kill-word (- (or arg 1))))
-
-(defun aquamacs--shift-key-for-command-p ()
-;; code from cua-base.el
-(if window-system
-	(memq 'shift (event-modifiers
-		      (aref (this-single-command-raw-keys) 0)))
-      (or
-       (memq 'shift (event-modifiers
-		     (aref (this-single-command-keys) 0)))
-       ;; See if raw escape sequence maps to a shifted event, e.g. S-up or C-S-home.
-       (and (boundp 'function-key-map)
-	    function-key-map
-	    (let ((ev (lookup-key function-key-map
-				  (this-single-command-raw-keys))))
-	      (and (vector ev)
-		   (symbolp (setq ev (aref ev 0)))
-		   (string-match "S-" (symbol-name ev))))))))
-
 
 
 ;; respects goal-column
