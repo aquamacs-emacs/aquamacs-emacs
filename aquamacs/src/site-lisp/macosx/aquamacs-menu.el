@@ -543,16 +543,15 @@ left and right margin"))
     (auto-fill-mode -1))
   (longlines-mode))
 
-
 (defun turn-on-word-wrap ()
   "Turn on Word Wrap mode in current buffer."
   (turn-off-longlines)
   (turn-off-auto-fill)
-  (setq word-wrap t))
+  (turn-on-visual-line-mode))
 
 (defun turn-off-word-wrap ()
   "Turn off Word Wrap mode in current buffer."
-  (setq word-wrap nil))
+  (visual-line-mode 0))
 
 (defun toggle-word-wrap ()
   "Toggle whether to use Word Wrap."
@@ -570,7 +569,7 @@ left and right margin"))
   "Toggle whether to use Auto Fill Mode."
   (interactive)
   (unless auto-fill-function 
-    (setq word-wrap nil)
+    (visual-line-mode 0)
     (and (boundp 'longlines-mode)
 	 (longlines-mode -1))) ;; turn this off first if it is on
   (auto-fill-mode)
@@ -590,7 +589,7 @@ windows, truncation is always enabled."
 	    (not truncate-lines)
 	  (> (prefix-numeric-value arg) 0)))
   (if truncate-lines
-      (setq word-wrap nil))
+      (visual-line-mode 0))
   (force-mode-line-update)
   (unless truncate-lines
     (let ((buffer (current-buffer)))
@@ -601,15 +600,15 @@ windows, truncation is always enabled."
   (message "Truncate long lines %s"
 	   (if truncate-lines "enabled" "disabled")))
 
-
 (require 'aquamacs-editing)
 (custom-add-option 'text-mode-hook 'auto-detect-wrap)
 (defun toggle-auto-text-mode-wrap ()
-  "Toggle whether to automatically turn on word-wrap in Text mode and related modes.
+  "Toggle automatic word wrapping in Text and related modes.
 This command affects all buffers that use modes related to Text
 mode, both existing buffers and buffers that you subsequently
 create.  Upon entering text-mode, the function `auto-detect-wrap'
-is used to determine wrapping."
+is used to determine wrapping with either `visual-line-mode'
+or with `auto-fill-mode', which see."
   (interactive)
   ;; remove leftover customizations from previous versions
   (remove-hook 'text-mode-hook 'turn-on-auto-fill)
