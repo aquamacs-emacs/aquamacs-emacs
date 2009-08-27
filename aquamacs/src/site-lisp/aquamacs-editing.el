@@ -151,8 +151,7 @@ default in case there is not enough text."
       (if (> count 0)
 	  (let ((mean-line-length 
 		 (/ (- (point) start-point empty-lines) count)))
-	    (if (and ; (< longlines-count 6)
-		     (< mean-line-length (* 1.3 fill-column)))
+	    (if (< mean-line-length (* 1.3 fill-column))
 		(turn-on-auto-fill)
 	      ;; long lines on average
 	      ;;(longlines-mode 1) ;; turn on longlines mode
