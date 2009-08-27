@@ -172,6 +172,24 @@ provided `cua-mode' and the mark are active."
 	 '(aquamacs-backward-char aquamacs-forward-char))
   (put cmd 'CUA 'move))
 
+(defun aquamacs-previous-nonvisual-line (&optional arg try-vscroll)
+  "Move cursor vertically up ARG buffer lines.
+Like `previous-line', but always move by logical buffer lines
+rather than by visual lines.  `line-move-visual' is set to nil
+for this command."
+  (interactive "^p\np")
+  (let ((line-move-visual nil)
+	(this-command 'previous-line))
+    (previous-line arg try-vscroll)))
+(defun aquamacs-next-nonvisual-line (&optional arg try-vscroll)
+  "Move cursor vertically down ARG buffer lines.
+Like `next-line', but always move by logical buffer lines
+rather than by visual lines.  `line-move-visual' is set to nil
+for this command."
+  (interactive "^p\np")
+  (let ((line-move-visual nil)
+	(this-command 'previous-line))
+    (next-line arg try-vscroll)))
 
 (defun aquamacs-kill-word (&optional arg)
   "Kill characters forward until encountering the end of a word.
@@ -713,6 +731,8 @@ behavior)."
     (define-key map `[(,osxkeys-command-key backspace)] 'kill-whole-visual-line)
     (define-key map `[(,osxkeys-command-key shift backspace)] 'kill-whole-line)
 
+    (define-key map `[(control p)] 'aquamacs-previous-nonvisual-line)
+    (define-key map `[(control n)] 'aquamacs-next-nonvisual-line)
     (define-key map `[(meta up)] 'cua-scroll-down)
     (define-key map `[(meta down)] 'cua-scroll-up)
     ;; left / right (for transient-mark-mode)
