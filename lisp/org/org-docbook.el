@@ -1102,7 +1102,7 @@ publishing directory."
 
       (unless (plist-get opt-plist :buffer-will-be-killed)
 	(normal-mode)
-	(if (eq major-mode default-major-mode)
+	(if (eq major-mode (default-value 'major-mode))
 	    (nxml-mode)))
 
       ;; Remove empty paragraphs and lists.  Replace them with a
