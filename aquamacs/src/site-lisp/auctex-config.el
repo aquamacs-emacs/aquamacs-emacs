@@ -96,26 +96,6 @@ Only checks once - subsequent calls will not result in any action."
 (add-hook 'LaTeX-mode-hook (lambda () (TeX-fold-mode t)))
 (add-hook 'TeX-mode-hook 'aquamacs-latex-viewer-support 'append) ;; load reftex first
 
-(defun file-line-number (&optional buffer-pos)
-  "Returns the number of a line in the visited file.
-BUFFER-POS specifies a position in the current buffer (point is assumed
-if nil). The function evaluates to the corresponding number of a line in 
-the file that the buffer visits (assuming the file has been saved).
-This will normally be the line number at that position, unless 
-`longlines-mode' is active."
-  (if (and (boundp 'longlines-mode) longlines-mode)
-      (let ((pos 1)  ;; use 1 for pos, not (point-min), to ignore narrowing
-	    (count 1))
-	(while (and (< pos (buffer-size)) 
-		    (setq pos 
-			  (text-property-any pos (or buffer-pos (point)) 
-						 'hard t)))
-	  (if (eq (char-after pos) 10)
-	      (setq count (1+ count)))
-	  (setq pos (1+ pos)))
-	count)
-    (line-number-at-pos buffer-pos)))
-
 ;; this is much slower
 ;; (defun fln (&optional buffer-pos)
 ;;   (unless buffer-pos (setq buffer-pos (point)))
@@ -126,27 +106,6 @@ This will normally be the line number at that position, unless
 ;;         (if (get-text-property (match-beginning 0) 'hard)
 ;; 	    (setq count (1+ count))))
 ;;       count)))
-
-
-(defun buffer-line-number (file-line-number)
-  "Returns the buffer line number given a line in the visited file."
-  (if (and (boundp 'longlines-mode) longlines-mode)
-      (let ((pos 1) (count 0))
-	(while (and (> file-line-number 0)
-		    (< pos (buffer-size))
-		    (setq pos (text-property-any pos (buffer-size) 'hard t)))
-	  (if (eq (char-after pos) 10)
-	      (setq file-line-number (1- file-line-number)))
-	  (setq pos (1+ pos)))
-	(line-number-at-pos pos))
-    file-line-number))
-
-;;(defun goto-file-line (file-line-number)
-;;  (goto-line (buffer-line-number file-line-number)))
-
-(defun TeX-current-file-line ()
-  "The line number in the file corresponding to the current buffer line number."
-  (format "%d" (+ 1 (file-line-number))))
 
 (defvar aquamacs-tex-pdf-viewer "Skim"
   "External viewer for `aquamacs-call-viewer' and `aquamacs-latex-crossref'.
@@ -236,11 +195,9 @@ Calls `aquamacs-tex-pdf-viewer' to display the PDF file THE-FILE."
 
 (defun aquamacs-latex-viewer-support ()
   "Support for Skim as LaTeX viewer if present."
-  (add-to-list 'TeX-expand-list
-	       '("%(FileLine)" TeX-current-file-line) 'append)
   (add-to-list 'TeX-command-list
 	     '("Jump To PDF" 
-	       "(aquamacs-call-viewer \"%o\" %(FileLine) \"%b\")" 
+	       "(aquamacs-call-viewer \"%o\" %n \"%b\")" 
 	       TeX-run-function nil t 
 	       :help "Jump here in Skim") 'append)
   
@@ -259,12 +216,6 @@ Calls `aquamacs-tex-pdf-viewer' to display the PDF file THE-FILE."
     (server-start)))
 
 (require 'server)
-(defun server-goto-line-column (line-col)
-  (when line-col
-    (goto-line (buffer-line-number (car line-col)))
-    (let ((column-number (cdr line-col)))
-      (when (> column-number 0)
-	(move-to-column (1- column-number))))))
 
 (if (boundp 'aquamacs-default-toolbarx-meaning-alist) ;; not on TTY
     (aquamacs-set-defaults 
