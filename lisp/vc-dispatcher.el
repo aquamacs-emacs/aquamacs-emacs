@@ -87,7 +87,7 @@
 ;;
 ;; The main interface to the lower level is vc-do-command.  This launches a
 ;; command, synchronously or asynchronously, making the output available
-;; in a command log buffer.  Two other functions, (vc-start-annotation) and
+;; in a command log buffer.  Two other functions, (vc-start-logentry) and
 ;; (vc-finish-logentry), allow you to associate a command closure with an
 ;; annotation buffer so that when the user confirms the comment the closure
 ;; is run (with the comment as part of its context).
@@ -280,7 +280,9 @@ subprocess; if it is t it means to ignore all execution errors).
 FILE-OR-LIST is the name of a working file; it may be a list of
 files or be nil (to execute commands that don't expect a file
 name or set of files).  If an optional list of FLAGS is present,
-that is inserted into the command line before the filename."
+that is inserted into the command line before the filename.
+Return the return value of the slave command in the synchronous
+case, and the process object in the asynchronous case."
   ;; FIXME: file-relative-name can return a bogus result because
   ;; it doesn't look at the actual file-system to see if symlinks
   ;; come into play.
@@ -310,7 +312,7 @@ that is inserted into the command line before the filename."
         ;; something, we'd have used vc-eval-after.
         ;; Use `delete-process' rather than `kill-process' because we don't
         ;; want any of its output to appear from now on.
-        (if oldproc (delete-process oldproc)))
+        (when oldproc (delete-process oldproc)))
       (let ((squeezed (remq nil flags))
 	    (inhibit-read-only t)
 	    (status 0))
@@ -330,13 +332,14 @@ that is inserted into the command line before the filename."
 		     (let ((process-connection-type nil))
 		       (apply 'start-file-process command (current-buffer)
                               command squeezed))))
-		(if vc-command-messages
-		    (message "Running %s in background..." full-command))
+		(when vc-command-messages
+		  (message "Running %s in background..." full-command))
 		;;(set-process-sentinel proc (lambda (p msg) (delete-process p)))
 		(set-process-filter proc 'vc-process-filter)
-		(vc-exec-after
-		 `(if vc-command-messages
-		      (message "Running %s in background... done" ',full-command))))
+		(setq status proc)
+		(when vc-command-messages
+		  (vc-exec-after
+		   `(message "Running %s in background... done" ',full-command))))
 	    ;; Run synchronously
 	    (when vc-command-messages
 	      (message "Running %s in foreground..." full-command))
@@ -350,11 +353,9 @@ that is inserted into the command line before the filename."
                 (goto-char (point-min))
                 (shrink-window-if-larger-than-buffer))
 	      (error "Running %s...FAILED (%s)" full-command
-		     (if (integerp status) (format "status %d" status) status))))
-	  ;; We're done.  But don't emit a status message if running
-	  ;; asynchronously, it would just mislead.
-	  (if (and vc-command-messages (not (eq okstatus 'async)))
-	      (message "Running %s...OK = %d" full-command status)))
+		     (if (integerp status) (format "status %d" status) status)))
+	    (when vc-command-messages
+	      (message "Running %s...OK = %d" full-command status))))
 	(vc-exec-after
 	 `(run-hook-with-args 'vc-post-command-functions
 			      ',command ',file-or-list ',flags))
@@ -462,9 +463,10 @@ editing!"
        (if keep
 	   (progn
 	     (vc-revert-buffer-internal t noquery)
-             ;; TODO: Adjusting view mode might no longer be necessary
-             ;; after RMS change to files.el of 1999-08-08.  Investigate
-             ;; this when we install the new VC.
+
+	     ;; VC operations might toggle the read-only state.  In
+	     ;; that case we need to adjust the `view-mode' status
+	     ;; when `view-read-only' is non-nil.
              (and view-read-only
                   (if (file-writable-p file)
                       (and view-mode
@@ -473,6 +475,7 @@ editing!"
                     (and (not view-mode)
                          (not (eq (get major-mode 'mode-class) 'special))
                          (view-mode-enter))))
+
 	     (run-hook-with-args 'mode-line-hook buffer-file-name))
 	 (kill-buffer (current-buffer)))))
 
@@ -484,7 +487,8 @@ editing!"
   (dolist (buffer (buffer-list))
     (let ((fname (buffer-file-name buffer)))
       (when (and fname (vc-string-prefix-p directory fname))
-	(vc-resynch-buffer fname keep noquery)))))
+	(with-current-buffer buffer
+	  (vc-resynch-buffer fname keep noquery))))))
 
 (defun vc-resynch-buffer (file &optional keep noquery)
   "If FILE is currently visited, resynch its buffer."

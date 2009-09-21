@@ -37,13 +37,18 @@ Author: Adrian Robert (arobert@cogsci.ucsd.edu)
 #include "character.h"
 #include "font.h"
 
+/* This header is not included from GNUstep's (0.16.0) AppKit.h.  */
+#ifdef NS_IMPL_GNUSTEP
+#import <AppKit/NSFontDescriptor.h>
+#endif
+
 #define NSFONT_TRACE 0
 
 extern Lisp_Object Qns;
 extern Lisp_Object Qnormal, Qbold, Qitalic, Qcondensed, Qexpanded;
 static Lisp_Object Qapple, Qroman, Qmedium;
 extern Lisp_Object Qappend;
-extern int ns_antialias_text, ns_use_qd_smoothing;
+extern int ns_antialias_text;
 extern float ns_antialias_threshold;
 extern int ns_tmp_flags;
 extern struct nsfont_info *ns_tmp_font;
@@ -97,8 +102,6 @@ ns_get_family (Lisp_Object font_spec)
       char *tmp = strdup (SDATA (SYMBOL_NAME (tem)));
       NSString *family;
       ns_unescape_name (tmp);
-      /* For names hard-coded into emacs, like 'helvetica' for splash. */
-      tmp[0] = toupper (tmp[0]);
       family = [NSString stringWithUTF8String: tmp];
       free (tmp);
       return family;
@@ -116,15 +119,6 @@ ns_attribute_fvalue (NSFontDescriptor *fdesc, NSString *trait)
     NSDictionary *tdict = [fdesc objectForKey: NSFontTraitsAttribute];
     NSNumber *val = [tdict objectForKey: trait];
     return val == nil ? 0.0 : [val floatValue];
-}
-
-
-/* Return whether font has attribute set to non-standard value. */
-static BOOL
-ns_has_attribute (NSFontDescriptor *fdesc, NSString *trait)
-{
-    float v = ns_attribute_fvalue (fdesc, trait);
-    return v < -0.05 || v > 0.05;
 }
 
 
@@ -170,9 +164,16 @@ ns_descriptor_to_entity (NSFontDescriptor *desc, Lisp_Object extra, char *style)
     Lisp_Object font_entity = font_make_entity ();
     /*   NSString *psName = [desc postscriptName]; */
     NSString *family = [desc objectForKey: NSFontFamilyAttribute];
-    char *escapedFamily = strdup ([family UTF8String]);
     unsigned int traits = [desc symbolicTraits];
+    char *escapedFamily;
 
+    /* Shouldn't happen, but on Tiger fallback desc gets name but no family. */
+    if (family == nil)
+      family = [desc objectForKey: NSFontNameAttribute];
+    if (family == nil)
+      family = [[NSFont userFixedPitchFontOfSize: 0] familyName];
+
+    escapedFamily = strdup ([family UTF8String]);
     ns_escape_name (escapedFamily);
 
     ASET (font_entity, FONT_TYPE_INDEX, Qns);
@@ -486,10 +487,13 @@ ns_findfonts (Lisp_Object font_spec, BOOL isMatch)
 	if (![cFamilies containsObject:
 	         [desc objectForKey: NSFontFamilyAttribute]])
 	    continue;
-	list = Fcons (ns_descriptor_to_entity (desc,
+        tem = ns_descriptor_to_entity (desc,
 					 AREF (font_spec, FONT_EXTRA_INDEX),
-					 NULL), list);
-	if (ns_has_attribute (desc, NSFontSlantTrait))
+                                       NULL);
+        if (isMatch)
+          return tem;
+	list = Fcons (tem, list);
+	if (fabs (ns_attribute_fvalue (desc, NSFontSlantTrait)) > 0.05)
 	    foundItal = YES;
       }
 
@@ -504,6 +508,10 @@ ns_findfonts (Lisp_Object font_spec, BOOL isMatch)
 					 AREF (font_spec, FONT_EXTRA_INDEX),
 					 "synthItal"), list);
       }
+
+    /* Return something if was a match and nothing found. */
+    if (isMatch)
+      return ns_fallback_entity ();
 
     if (NSFONT_TRACE)
 	fprintf (stderr, "    Returning %d entities.\n", XINT (Flength (list)));
@@ -665,9 +673,13 @@ nsfont_open (FRAME_PTR f, Lisp_Object font_entity, int pixel_size)
   synthItal = !NILP (tem) && !strncmp ("synthItal", SDATA (SYMBOL_NAME (tem)),
                                        9);
   family = ns_get_family (font_entity);
-  if (ns_has_attribute (fontDesc, NSFontWeightTrait))
+  if (family == nil)
+    family = [[NSFont userFixedPitchFontOfSize: 0] familyName];
+  /* Should be > 0.23 as some font descriptors (e.g. Terminus) set to that
+     when setting family in ns_spec_to_descriptor(). */
+  if (ns_attribute_fvalue (fontDesc, NSFontWeightTrait) > 0.50)
       traits |= NSBoldFontMask;
-  if (ns_has_attribute (fontDesc, NSFontSlantTrait))
+  if (fabs (ns_attribute_fvalue (fontDesc, NSFontSlantTrait) > 0.05))
       traits |= NSItalicFontMask;
 
   /* see http://cocoadev.com/forums/comments.php?DiscussionID=74 */
@@ -876,10 +888,8 @@ nsfont_close (FRAME_PTR f, struct font *font)
 
   for (i =0; i<0x100; i++)
     {
-      if (font_info->glyphs[i])
-        xfree (font_info->glyphs[i]);
-      if (font_info->metrics[i])
-        xfree (font_info->metrics[i]);
+      xfree (font_info->glyphs[i]);
+      xfree (font_info->metrics[i]);
     }
   [font_info->nsfont release];
 #ifdef NS_IMPL_COCOA
@@ -1197,8 +1207,6 @@ nsfont_draw (struct glyph_string *s, int from, int to, int x, int y,
       CGContextSetShouldAntialias (gcontext, 0);
     else
       CGContextSetShouldAntialias (gcontext, 1);
-    if (EQ (ns_use_qd_smoothing, Qt))
-      CGContextSetFontRenderingMode (gcontext, 2); /* 0 is Cocoa, 2 is QD */
 
     CGContextSetTextMatrix (gcontext, fliptf);
 

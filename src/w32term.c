@@ -32,6 +32,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <ctype.h>
 #include <errno.h>
 #include <sys/stat.h>
+#include <imm.h>
 
 #include "charset.h"
 #include "character.h"
@@ -138,7 +139,7 @@ typedef struct tagGLYPHSET
 #endif
 
 /* Dynamic linking to SetLayeredWindowAttribute (only since 2000).  */
-BOOL (PASCAL *pfnSetLayeredWindowAttributes) (HWND, COLORREF, BYTE, DWORD);
+BOOL (WINAPI *pfnSetLayeredWindowAttributes) (HWND, COLORREF, BYTE, DWORD);
 
 #ifndef LWA_ALPHA
 #define LWA_ALPHA 0x02
@@ -2402,12 +2403,12 @@ x_draw_glyph_string (s)
           if (s->face->underline_defaulted_p)
             {
               w32_fill_area (s->f, s->hdc, s->gc->foreground, s->x,
-                             y, s->background_width, 1);
+                             y, s->width, 1);
             }
           else
             {
               w32_fill_area (s->f, s->hdc, s->face->underline_color, s->x,
-                             y, s->background_width, 1);
+                             y, s->width, 1);
             }
         }
       /* Draw overline.  */
@@ -2418,12 +2419,12 @@ x_draw_glyph_string (s)
           if (s->face->overline_color_defaulted_p)
             {
               w32_fill_area (s->f, s->hdc, s->gc->foreground, s->x,
-                             s->y + dy, s->background_width, h);
+                             s->y + dy, s->width, h);
             }
           else
             {
               w32_fill_area (s->f, s->hdc, s->face->overline_color, s->x,
-                             s->y + dy, s->background_width, h);
+                             s->y + dy, s->width, h);
             }
         }
 
@@ -5113,6 +5114,8 @@ w32_draw_window_cursor (w, glyph_row, x, y, cursor_type, cursor_width, on_p, act
 	    = (WINDOW_TO_FRAME_PIXEL_Y (w, w->phys_cursor.y)
 	       + glyph_row->ascent - w->phys_cursor_ascent);
 
+	  PostMessage (hwnd, WM_IME_STARTCOMPOSITION, 0, 0);
+
 	  /* If the size of the active cursor changed, destroy the old
 	     system caret.  */
 	  if (w32_system_caret_hwnd
@@ -6325,12 +6328,34 @@ DWORD WINAPI w32_msg_worker (void * arg);
 static void
 w32_initialize ()
 {
+  HANDLE shell;
+  HRESULT (WINAPI * set_user_model) (wchar_t * id);
+
   baud_rate = 19200;
 
   w32_system_caret_hwnd = NULL;
   w32_system_caret_height = 0;
   w32_system_caret_x = 0;
   w32_system_caret_y = 0;
+
+  /* On Windows 7 and later, we need to set the user model ID
+     to associate emacsclient launched files with Emacs frames
+     in the UI.  */
+  shell = GetModuleHandle ("shell32.dll");
+  if (shell)
+    {
+      set_user_model
+	= (void *) GetProcAddress (shell,
+				   "SetCurrentProcessExplicitAppUserModelID");
+
+      /* If the function is defined, then we are running on Windows 7
+	 or newer, and the UI uses this to group related windows
+	 together.  Since emacs, runemacs, emacsclient are related, we
+	 want them grouped even though the executables are different,
+	 so we need to set a consistent ID between them.  */
+      if (set_user_model)
+	set_user_model (L"GNU.Emacs");
+    }
 
   /* Initialize w32_use_visible_system_caret based on whether a screen
      reader is in use.  */
@@ -6381,15 +6406,13 @@ w32_initialize ()
 
   /* Dynamically link to optional system components.  */
   {
-    HANDLE user_lib = LoadLibrary ("user32.dll");
+    HMODULE user_lib = GetModuleHandle ("user32.dll");
 
 #define LOAD_PROC(lib, fn) pfn##fn = (void *) GetProcAddress (lib, #fn)
 
     LOAD_PROC (user_lib, SetLayeredWindowAttributes);
 
 #undef LOAD_PROC
-
-    FreeLibrary (user_lib);
 
     /* Ensure scrollbar handle is at least 5 pixels.  */
     vertical_scroll_bar_min_handle = 5;

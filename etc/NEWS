@@ -21,6 +21,268 @@ When you add a new item, please add it without either +++ or ---
 so we will look at it and add it to the manual.
 
 
+* Installation Changes in Emacs 23.2
+
+** New configure options for Emacs developers
+These are not new features; only the configure flags are new.
+
+*** --enable-profiling builds Emacs with profiling enabled.
+This might not work on all platforms.
+
+*** --enable-checking[=OPTIONS] builds emacs with extra runtime checks.
+
+---
+** `make install' now consistently ignores umask, creating a
+world-readable install.
+
+* Startup Changes in Emacs 23.2
+
+** Command-line option -Q (--quick) now also disables loading X resources.
+On Windows, this option causes Emacs to ignore Registry settings,
+though environment variables set on the Registry are still honored.
+
+*** The new variable `inhibit-x-resources' shows whether X resources
+were loaded.
+
+* Changes in Emacs 23.2
+
+** Unibyte sessions are now considered obsolete.
+I.e. the use of the environment variable EMACS_UNIBYTE, or command line
+arguments --unibyte, --multibyte, --no-multibyte, and --no-unibyte
+is deprecated.  Similarly for custom-izing enable-multibyte-characters, or
+setting default-enable-multibyte-characters.
+
+** The default value of `trash-directory' has changed to nil, which
+means that `move-file-to-trash' trashes files according to
+freedesktop.org specifications, the same method used by the Gnome,
+KDE, and XFCE desktops.  (This change has no effect on Windows, which
+uses `system-move-file-to-trash' for trashing.)
+
++++
+** Emacs frames can be maximized.
+The command line arguments -mm/--maximized and the value maximized to the
+frame parameter fullscreen makes the Emacs frame maximized.
+
++++
+** New frame parameter sticky makes Emacs frames sticky in virtual desktops.
+
+** The pointer now becomes invisible when typing.
+Customize make-pointer-invisible to turn it off.
+
+** Killing a buffer with a running process now asks a confirmation.
+You can remove this query in two ways: either removing
+`process-kill-buffer-query-function' from `kill-buffer-query-functions' or
+setting the appropriate process flag with `set-process-query-on-exit-flag'.
+
+** The variable `load-in-progress' won't get corrupted by binding it
+with `let'.  In certain situations, loading an Emacs Lisp file from
+source while in the midst of loading another file (e.g., with
+`require' or `autoload') could cause the value of `load-in-progress'
+to be corrupted once the outer load completed.  Most code doesn't care
+about this, but some (like c-mode) may check it.
+
+** File-local variable changes
+
+*** Specifying a minor mode as a local variables enables that mode,
+unconditionally.  The previous behavior, toggling the mode, was
+neither reliable nor generally desirable.
+
+*** New commands for adding and removing file-local variables:
+`add-file-local-variable', `delete-file-local-variable',
+`add-file-local-variable-prop-line', and
+`delete-file-local-variable-prop-line'.
+
+*** New commands for adding and removing directory-local variables,
+and copying them to and from file-local variable lists:
+`add-dir-local-variable', `delete-dir-local-variable',
+`copy-dir-locals-to-file-locals',
+`copy-dir-locals-to-file-locals-prop-line' and
+`copy-file-locals-to-dir-locals'.
+
+** New coding system `utf-8-hfs' is available in
+international/ucs-normalize.el.  It is suitable for
+default-file-name-coding-system on Mac OS X.
+
+
+* Editing Changes in Emacs 23.2
+
+** Selection changes
++++
+*** If `select-active-regions' is t, any active region automatically
+becomes the primary selection (for interaction with other window
+applications).  If you enable this, you might want to bind
+`mouse-yank-primary' to Mouse-2.
+
+*** When `save-interprogram-paste-before-kill' is non-nil, emacs will
+not clobber the the interprogram paste when something is killed in it
+by saving the former in the `kill-ring' before the latter.
+
+** When `kill-do-not-save-duplicates' is non-nil, identical subsequent
+kills are not duplicated in the `kill-ring'.
+
++++
+** The default value for `blink-matching-paren-distance' has been increased.
+
+** The new completion-style `initials' is available.
+For instance, this can complete M-x lch to list-command-history.
+
+
+* Changes in Specialized Modes and Packages in Emacs 23.2
+
+** .calc.el and .abbrev_defs obey user-emacs-directory.
+
+** Calc graphing commands (`g f' etc.) now work on MS-Windows,
+if you have the native Windows port of Gnuplot version 3.8 or later
+installed.
+
+** Calendar and diary
+
+*** Fancy diary display is now the default.
+If you prefer the simple display, customize `diary-display-function'.
+
+*** The diary's fancy display now enables view-mode.
+
+---
+*** The command `calendar-current-date' accepts an optional argument
+giving an offset from today.
+
+** Desktop
+---
+*** The default value for `desktop-buffers-not-to-save' is nil.
+This means Desktop will try restoring all buffers, when you restart
+your Emacs session.  Also, `desktop-buffers-not-to-save' is only
+effective for buffers that have no associated file.  If you want to
+exempt buffers that do correspond to files, customize the value of
+`desktop-files-not-to-save' instead.
+
+** FIXME mail-user-agent change
+This probably affects a lot of documentation.
+
+** FIXME gdb-mi
+
+** Info
+
+*** The new command `Info-virtual-index' bound to "I" displays a menu of
+matched topics found in the index.
+
+*** The new command `info-finder' replaces finder.el with a virtual Info
+manual that generates an Info file which gives the same information
+through a menu structure.
+
++++
+** New connection methods in Tramp.
+The new connection method "rsyncc" has been introduced.  On systems
+which support GVFS-Fuse, Tramp offers also the new connection methods
+"dav", "davs", "obex" and "synce".
+
+** nXML mode is now the default for editing XML files.
+
+** VC and related modes
+
+*** FIXME: add info about the new VC functions: vc-root-diff and
+vc-root-print-log once they stabilize.
+
+*** When a file is not found, VC will not try to check it out of RCS anymore.
+
+*** vc-git changes
+
+**** The new variable vc-git-add-signoff can be used to add a
+Signed-off-by line when committing.
+
+**** Support for operating with stashes has been added to vc-dir: the stash list is
+displayed in the *vc-dir* header, stashes can be created, removed and
+their content displayed.
+
+**** vc-dir displays the stash status
+
+*** log-edit-strip-single-file-name controls whether or not single filenames
+are stripped when copying text from the ChangeLog to the *VC-Log* buffer.
+
+** Miscellaneous
+
+*** The new command `async-shell-command' bound globally to `M-&' executes
+the command asynchronously without the need to manually add ampersand to
+the end of the command.  Its output appears in the buffer `*Async Shell
+Command*'.
+
++++
+*** Autorevert Tail mode now works now for remote files.
+
+---
+*** Elint now uses compilation-mode, and recognizes more built-in
+functions and variables.
+
+
+* New Modes and Packages in Emacs 23.2
+
+** js.el is a new major mode for JavaScript files.
+
+
+* Lisp changes in Emacs 23.2
+
+** eval-next-after-load is obsolete.
+** New hook `after-load-functions' run after loading an Elisp file.
+
+** You can control which binding is preferentially shown in menus and
+docstrings by adding a `:advertised-binding' property to the corresponding
+command's symbol.  That property can hold a single binding or a list
+of bindings.
+
+** New macro with-silent-modifications to tweak text properties without
+affecting the buffer's modification state.
+** All the default-FOO variables that hold the default value of the FOO
+variable, are now declared obsolete.
+
+** read-key is a function halfway between read-event and read-key-sequence.
+It reads a single key, but obeys input and escape sequence decoding.
+
+** start-process-shell-command and start-file-process-shell-command
+now only take a single `command' argument.
+
+** The variable `process-file-side-effects' shall be bound to nil, if
+a `process-file' call does not change a remote file.  By this, file
+name handlers like Tramp can apply optimizations.
+
+** Hash tables have a new printed representation that is readable.
+The feature `hashtable-print-readable' identifies this new
+functionality.
+
+** Functions performing Unicode normalization are added.  They are:
+ucs-normalize-NFD-region, ucs-normalize-NFD-string,
+ucs-normalize-NFC-region, ucs-normalize-NFC-string,
+ucs-normalize-NFKD-region, ucs-normalize-NFKD-string,
+ucs-normalize-NFKC-region, ucs-normalize-NFKC-string,
+ucs-normalize-HFS-NFD-region, ucs-normalize-HFS-NFD-string,
+ucs-normalize-HFS-NFC-region, ucs-normalize-HFS-NFC-string.
+
+** completion-annotate-function specifies how to compute annotations
+for completions displayed in *Completions*.
+
++++
+** Face aliases can now be marked as obsolete, using the macro
+`define-obsolete-face-alias'.
+
+---
+** Changing the file-names generated by byte-compilation by redefining
+the function `byte-compile-dest-file' before loading bytecomp.el is obsolete.
+Instead, customize byte-compile-dest-file-function.
+
+** Several obsolete functions removed.
+The functions have been obsolete since Emacs 19, and are unlikely to
+be in use:
+
+  time-stamp-month-dd-yyyy, time-stamp-dd/mm/yyyy, time-stamp-mon-dd-yyyy
+  time-stamp-dd-mon-yy, time-stamp-yy/mm/dd, time-stamp-yyyy/mm/dd,
+  time-stamp-yyyy-mm-dd, time-stamp-yymmdd, time-stamp-hh:mm:ss,
+  time-stamp-hhmm, baud-rate
+
+* Changes in Emacs 23.2 on non-free operating systems
+
+---
+** On MS-Windows, `display-time' now displays the system load average
+as well as the time, as it does on GNU and Unix.
+
+
 * Installation Changes in Emacs 23.1
 
 ** The default X toolkit is now Gtk+, rather than Lucid.
@@ -501,12 +763,13 @@ remap the default face in the current buffer.  See "Buffer Face mode",
 under New Modes and Packages.
 
 ** Primary selection changes
-+++
 *** If `select-active-regions' is t, setting the mark automatically
 makes the new region into the primary selection (for interaction with
 other window applications).  If you enable this, you might want to
 bind `mouse-yank-primary' to Mouse-2.
 +++
+=======
+
 *** You can disable kill ring commands from accessing the primary
 selection by setting `x-select-enable-primary' to nil.
 
@@ -1954,7 +2217,9 @@ port support (see Emacs changes, above).
 
 ** Miscellaneous new variables
 
-+++
+*** `auto-save-include-big-deletions', if non-nil, means auto-save is
+not turned off automatically after a big deletion.
+
 *** `read-circle', if nil, disables the reading of recursive Lisp
 structures using the #N= and #N# syntax.
 

@@ -1,11 +1,11 @@
 ;;; gud.el --- Grand Unified Debugger mode for running GDB and other debuggers
 
+;; Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 2000, 2001, 2002, 2003,
+;;  2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
+
 ;; Author: Eric S. Raymond <esr@snark.thyrsus.com>
 ;; Maintainer: FSF
 ;; Keywords: unix, tools
-
-;; Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 2000, 2001, 2002, 2003,
-;;  2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
 
 ;; This file is part of GNU Emacs.
 
@@ -134,14 +134,19 @@ Used to grey out relevant toolbar icons.")
 	   (and (memq gud-minor-mode '(gdbmi gdba))
 		(> (car (window-fringes)) 0)))))
 
+(declare-function gdb-gud-context-command "gdb-mi.el")
+
 (defun gud-stop-subjob ()
   (interactive)
   (with-current-buffer gud-comint-buffer
-    (if (string-equal gud-target-name "emacs")
-	(comint-stop-subjob)
-      (if (eq gud-minor-mode 'jdb)
-	  (gud-call "suspend")
-	(comint-interrupt-subjob)))))
+    (cond ((string-equal gud-target-name "emacs")
+           (comint-stop-subjob))
+          ((eq gud-minor-mode 'jdb)
+           (gud-call "suspend"))
+          ((eq gud-minor-mode 'gdbmi)
+           (gud-call (gdb-gud-context-command "-exec-interrupt")))
+          (t 
+           (comint-interrupt-subjob)))))
 
 (easy-mmode-defmap gud-menu-map
   '(([help]     "Info (debugger)" . gud-goto-info)
@@ -157,12 +162,11 @@ Used to grey out relevant toolbar icons.")
                   :enable (not gud-running)
 		  :visible (memq gud-minor-mode '(gdbmi gdb dbx jdb)))
     ([go]	menu-item (if gdb-active-process "Continue" "Run") gud-go
-		  :visible (and (not gud-running)
-				(eq gud-minor-mode 'gdba)))
+		  :visible (and (eq gud-minor-mode 'gdbmi)
+                                (gdb-show-run-p)))
     ([stop]	menu-item "Stop" gud-stop-subjob
-		  :visible (or (not (memq gud-minor-mode '(gdba pdb)))
-			       (and gud-running
-				    (eq gud-minor-mode 'gdba))))
+		  :visible (or (not (memq gud-minor-mode '(gdbmi pdb)))
+			       (gdb-show-stop-p)))
     ([until]	menu-item "Continue to selection" gud-until
                   :enable (not gud-running)
 		  :visible (and (memq gud-minor-mode '(gdbmi gdba gdb perldb))
@@ -191,10 +195,12 @@ Used to grey out relevant toolbar icons.")
 		  :visible (and (string-equal
 				 (buffer-local-value
 				  'gud-target-name gud-comint-buffer) "emacs")
-				(eq gud-minor-mode 'gdba)))
-    ([print*]	menu-item "Print Dereference" gud-pstar
+				(eq gud-minor-mode 'gdbmi)))
+    ([print*]	menu-item (if (eq gud-minor-mode 'jdb)
+			      "Dump object"
+			    "Print Dereference") gud-pstar
                   :enable (not gud-running)
-		  :visible (memq gud-minor-mode '(gdbmi gdba gdb)))
+		  :visible (memq gud-minor-mode '(gdbmi gdb jdb)))
     ([print]	menu-item "Print Expression" gud-print
                   :enable (not gud-running))
     ([watch]	menu-item "Watch Expression" gud-watch
@@ -247,12 +253,13 @@ Used to grey out relevant toolbar icons.")
 	:visible (memq gud-minor-mode '(gdbmi gdb dbx jdb)))
        ([menu-bar go] menu-item
 	,(propertize " go " 'face 'font-lock-doc-face) gud-go
-	:visible (and (not gud-running)
-		      (eq gud-minor-mode 'gdba)))
+	:visible (and (eq gud-minor-mode 'gdbmi)
+                      (gdb-show-run-p)))
        ([menu-bar stop] menu-item
 	,(propertize "stop" 'face 'font-lock-doc-face) gud-stop-subjob
-	:visible (or gud-running
-		     (not (eq gud-minor-mode 'gdba))))
+	:visible (or (and (eq gud-minor-mode 'gdbmi)
+                          (gdb-show-stop-p))
+		     (not (eq gud-minor-mode 'gdbmi))))
        ([menu-bar print]
 	. (,(propertize "print" 'face 'font-lock-doc-face) . gud-print))
        ([menu-bar tools] . undefined)
@@ -432,8 +439,8 @@ The value t means that there is no stack, and we are in display-file mode.")
 (defun gud-speedbar-item-info ()
   "Display the data type of the watch expression element."
   (let ((var (nth (- (line-number-at-pos (point)) 2) gdb-var-list)))
-    (if (nth 6 var)
-	(speedbar-message "%s: %s" (nth 6 var) (nth 3 var))
+    (if (nth 7 var)
+	(speedbar-message "%s: %s" (nth 7 var) (nth 3 var))
       (speedbar-message "%s" (nth 3 var)))))
 
 (defun gud-install-speedbar-variables ()
@@ -511,7 +518,8 @@ required by the caller."
 	    (let* (char (depth 0) (start 0) (var (car var-list))
 			(varnum (car var)) (expr (nth 1 var))
 			(type (if (nth 3 var) (nth 3 var) " "))
-			(value (nth 4 var)) (status (nth 5 var)))
+			(value (nth 4 var)) (status (nth 5 var))
+			(has-more (nth 6 var)))
 	      (put-text-property
 	       0 (length expr) 'face font-lock-variable-name-face expr)
 	      (put-text-property
@@ -520,9 +528,10 @@ required by the caller."
 		(setq depth (1+ depth)
 		      start (1+ (match-beginning 0))))
 	      (if (eq depth 0) (setq parent nil))
-	      (if (or (equal (nth 2 var) "0")
-		      (and (equal (nth 2 var) "1")
-			   (string-match "char \\*$" type)))
+	      (if (and (or (not has-more) (string-equal has-more "0"))
+		       (or (equal (nth 2 var) "0")
+			   (and (equal (nth 2 var) "1")
+			   (string-match "char \\*$" type)) ))
 		  (speedbar-make-tag-line
 		   'bracket ?? nil nil
 		   (concat expr "\t" value)
@@ -2270,7 +2279,7 @@ gud, see `gud-mode'."
 
   ;; Set gud-jdb-classpath from the CLASSPATH environment variable,
   ;; if CLASSPATH is set.
-  (setq gud-jdb-classpath-string (getenv "CLASSPATH"))
+  (setq gud-jdb-classpath-string (or (getenv "CLASSPATH") "."))
   (if gud-jdb-classpath-string
       (setq gud-jdb-classpath
 	    (gud-jdb-parse-classpath-string gud-jdb-classpath-string)))
@@ -2299,7 +2308,8 @@ gud, see `gud-mode'."
   (gud-def gud-up     "up\C-Mwhere"   "<"    "Up one stack frame.")
   (gud-def gud-down   "down\C-Mwhere" ">"    "Up one stack frame.")
   (gud-def gud-run    "run"           nil    "Run the program.") ;if VM start using jdb
-  (gud-def gud-print  "print %e"  "\C-p" "Evaluate Java expression at point.")
+  (gud-def gud-print  "print %e"  "\C-p" "Print value of expression at point.")
+  (gud-def gud-pstar  "dump %e"  nil "Print all object information at point.")
 
   (setq comint-prompt-regexp "^> \\|^[^ ]+\\[[0-9]+\\] ")
   (setq paragraph-start comint-prompt-regexp)
@@ -2708,7 +2718,8 @@ Obeying it means displaying in another window the specified file and line."
 		    (setq gud-keep-buffer t)))
 	    (save-restriction
 	      (widen)
-	      (goto-line line)
+	      (goto-char (point-min))
+	      (forward-line (1- line))
 	      (setq pos (point))
 	      (or gud-overlay-arrow-position
 		  (setq gud-overlay-arrow-position (make-marker)))
@@ -3402,8 +3413,8 @@ With arg, dereference expr if ARG is positive, otherwise do not derereference."
 (defun gud-tooltip-print-command (expr)
   "Return a suitable command to print the expression EXPR."
   (case gud-minor-mode
-	(gdba (concat "server print " expr))
-	((dbx gdbmi) (concat "print " expr))
+	(gdbmi (concat "-data-evaluate-expression " expr))
+	(dbx (concat "print " expr))
 	((xdb pdb) (concat "p " expr))
 	(sdb (concat expr "/"))))
 

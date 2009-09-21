@@ -411,16 +411,25 @@ xfont_list_pattern (Display *display, char *pattern,
 	    continue;
 	  entity = font_make_entity ();
 	  xfont_decode_coding_xlfd (indices[i], -1, buf);
-	  font_parse_xlfd (buf, entity);
+	  if (font_parse_xlfd (buf, entity) < 0)
+	    continue;
 	  ASET (entity, FONT_TYPE_INDEX, Qx);
 	  /* Avoid auto-scaled fonts.  */
-	  if (XINT (AREF (entity, FONT_DPI_INDEX)) != 0
+	  if (INTEGERP (AREF (entity, FONT_DPI_INDEX))
+	      && INTEGERP (AREF (entity, FONT_AVGWIDTH_INDEX))
+	      && XINT (AREF (entity, FONT_DPI_INDEX)) != 0
 	      && XINT (AREF (entity, FONT_AVGWIDTH_INDEX)) == 0)
 	    continue;
 	  /* Avoid not-allowed scalable fonts.  */
 	  if (NILP (Vscalable_fonts_allowed))
 	    {
-	      if (XINT (AREF (entity, FONT_SIZE_INDEX)) == 0)
+	      int size = 0;
+
+	      if (INTEGERP (AREF (entity, FONT_SIZE_INDEX)))
+		size = XINT (AREF (entity, FONT_SIZE_INDEX));
+	      else if (FLOATP (AREF (entity, FONT_SIZE_INDEX)))
+		size = XFLOAT_DATA (AREF (entity, FONT_SIZE_INDEX));
+	      if (size == 0)
 		continue;
 	    }
 	  else if (CONSP (Vscalable_fonts_allowed))
@@ -438,6 +447,10 @@ xfont_list_pattern (Display *display, char *pattern,
 	      if (! CONSP (tail))
 		continue;
 	    }
+
+	  /* Avoid fonts of invalid registry.  */
+	  if (NILP (AREF (entity, FONT_REGISTRY_INDEX)))
+	    continue;
 
 	  /* Update encoding and repertory if necessary.  */
 	  if (! EQ (registry, AREF (entity, FONT_REGISTRY_INDEX)))
@@ -476,7 +489,7 @@ xfont_list_pattern (Display *display, char *pattern,
   x_uncatch_errors ();
   UNBLOCK_INPUT;
 
-  font_add_log ("xfont-list", build_string (pattern), list);
+  FONT_ADD_LOG ("xfont-list", build_string (pattern), list);
   return list;
 }
 
@@ -615,7 +628,7 @@ xfont_match (frame, spec)
     }
   UNBLOCK_INPUT;
 
-  font_add_log ("xfont-match", spec, entity);
+  FONT_ADD_LOG ("xfont-match", spec, entity);
   return entity;
 }
 
@@ -701,7 +714,7 @@ xfont_open (f, entity, pixel_size)
   registry = AREF (entity, FONT_REGISTRY_INDEX);
   if (font_registry_charsets (registry, &encoding, &repertory) < 0)
     {
-      font_add_log ("  x:unknown registry", registry, Qnil);
+      FONT_ADD_LOG ("  x:unknown registry", registry, Qnil);
       return Qnil;
     }
 
@@ -717,7 +730,7 @@ xfont_open (f, entity, pixel_size)
   len = font_unparse_xlfd (entity, pixel_size, name, 512);
   if (len <= 0 || (len = xfont_encode_coding_xlfd (name)) < 0)
     {
-      font_add_log ("  x:unparse failed", entity, Qnil);
+      FONT_ADD_LOG ("  x:unparse failed", entity, Qnil);
       return Qnil;
     }
 
@@ -748,7 +761,7 @@ xfont_open (f, entity, pixel_size)
       len = font_unparse_xlfd (temp, pixel_size, name, 512);
       if (len <= 0 || (len = xfont_encode_coding_xlfd (name)) < 0)
 	{
-	  font_add_log ("  x:unparse failed", temp, Qnil);
+	  FONT_ADD_LOG ("  x:unparse failed", temp, Qnil);
 	  return Qnil;
 	}
       xfont = XLoadQueryFont (display, name);
@@ -792,7 +805,7 @@ xfont_open (f, entity, pixel_size)
 
   if (! xfont)
     {
-      font_add_log ("  x:open failed", build_string (name), Qnil);
+      FONT_ADD_LOG ("  x:open failed", build_string (name), Qnil);
       return Qnil;
     }
 

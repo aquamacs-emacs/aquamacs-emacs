@@ -1,12 +1,12 @@
 ;;; table.el --- create and edit WYSIWYG text based embedded tables
 
-;; Copyright (C) 2000, 2001, 2002, 2003, 2004,
-;;   2005, 2006, 2007, 2008, 2009  Free Software Foundation, Inc.
+;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
+;;   2009  Free Software Foundation, Inc.
 
 ;; Keywords: wp, convenience
 ;; Author: Takaaki Ota <Takaaki.Ota@am.sony.com>
 ;; Created: Sat Jul 08 2000 13:28:45 (PST)
-;; Revised: Thu Jan 08 2009 20:17:04 (PST)
+;; Revised: Fri Aug 21 2009 00:16:58 (PDT)
 
 ;; This file is part of GNU Emacs.
 
@@ -3002,14 +3002,14 @@ untouched.
 References used for this implementation:
 
 HTML:
-        http://www.w3.org
+        URL `http://www.w3.org'
 
 LaTeX:
-        http://www.maths.tcd.ie/~dwilkins/LaTeXPrimer/Tables.html
+        URL `http://www.maths.tcd.ie/~dwilkins/LaTeXPrimer/Tables.html'
 
 CALS (DocBook DTD):
-        http://www.oasis-open.org/html/a502.htm
-        http://www.oreilly.com/catalog/docbook/chapter/book/table.html#AEN114751
+        URL `http://www.oasis-open.org/html/a502.htm'
+        URL `http://www.oreilly.com/catalog/docbook/chapter/book/table.html#AEN114751'
 "
   (interactive
    (let* ((dummy (unless (table--probe-cell) (error "Table not found here")))
@@ -4078,7 +4078,7 @@ fit in the cell width the word is folded into the next line.  The
 folded location is marked by a continuation character which is
 specified in the variable `table-word-continuation-char'.
 ")
-      (print-help-return-message))))
+      (help-print-return-message))))
 
 (defun *table--cell-describe-bindings ()
   "Table cell version of `describe-bindings'."
@@ -4096,7 +4096,7 @@ key             binding
 			     (key-description (car binding))
 			     (cdr binding))))
 	    table-cell-bindings)
-      (print-help-return-message))))
+      (help-print-return-message))))
 
 (defun *table--cell-dabbrev-expand (arg)
   "Table cell version of `dabbrev-expand'."
@@ -5369,7 +5369,7 @@ aware of this.
 *** Warning ***
 
 Flyspell minor mode is known to be incompatible with this table
-package.  The flyspell version 1.5d at http://kaolin.unice.fr/~serrano
+package.  The flyspell version 1.5d at URL `http://kaolin.unice.fr/~serrano'
 works better than the previous versions however not fully compatible.
 
 "

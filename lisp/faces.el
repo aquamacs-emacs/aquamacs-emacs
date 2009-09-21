@@ -1,7 +1,8 @@
 ;;; faces.el --- Lisp faces
 
 ;; Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001,
-;;   2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
+;;   2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
+;;   Free Software Foundation, Inc.
 
 ;; Maintainer: FSF
 ;; Keywords: internal
@@ -552,7 +553,7 @@ If FACE is a face-alias, get the documentation for the target face."
     (if alias
         (progn
           (setq doc (get alias 'face-documentation))
-          (format "%s is an alias for the face `%s'.%s" face alias
+	  (format "%s is an alias for the face `%s'.%s" face alias
                   (if doc (format "\n%s" doc)
                     "")))
       (get face 'face-documentation))))
@@ -1368,10 +1369,29 @@ If FRAME is omitted or nil, use the selected frame."
 		    file-name)
 		(insert (concat " (" (propertize "sample" 'font-lock-face f) ")"))
 		(princ (concat " (" customize-label ")\n"))
-		(insert "Documentation: "
-			(or (face-documentation f)
-			    "Not documented as a face.")
-			"\n")
+		;; FIXME not sure how much of this belongs here, and
+		;; how much in `face-documentation'.  The latter is
+		;; not used much, but needs to return nil for
+		;; undocumented faces.
+		(let ((alias (get f 'face-alias))
+		      (face f)
+		      obsolete)
+		  (when alias
+		    (setq face alias)
+		    (insert
+		     (format "\n  %s is an alias for the face `%s'.\n%s"
+			     f alias
+			     (if (setq obsolete (get f 'obsolete-face))
+				 (format "  This face is obsolete%s; use `%s' instead.\n"
+					 (if (stringp obsolete)
+					     (format " since %s" obsolete)
+					   "")
+					 alias)
+			       ""))))
+		  (insert "\nDocumentation:\n"
+			  (or (face-documentation face)
+			      "Not documented as a face.")
+			  "\n\n"))
 		(with-current-buffer standard-output
 		  (save-excursion
 		    (re-search-backward
@@ -1921,28 +1941,25 @@ according to the `background-mode' and `display-type' frame parameters."
 (defun x-handle-named-frame-geometry (parameters)
   "Add geometry parameters for a named frame to parameter list PARAMETERS.
 Value is the new parameter list."
-  (let* ((name (or (cdr (assq 'name parameters))
-		   (cdr (assq 'name default-frame-alist))))
-	 (x-resource-name name)
-	 (res-geometry (when name
-			 ;; FIXME: x-get-resource fails if the X
-			 ;; connection is not open, e.g. if we call
-			 ;; make-frame-on-display.  We should detect
-			 ;; this case here, and open the connection.
-			 ;; (Bug#3194).
-			 (ignore-errors
-			   (x-get-resource "geometry" "Geometry")))))
-    (when res-geometry
-      (let ((parsed (x-parse-geometry res-geometry)))
-	;; If the resource specifies a position, call the position
-	;; and size "user-specified".
-	(when (or (assq 'top parsed)
-		  (assq 'left parsed))
-	  (setq parsed (append '((user-position . t) (user-size . t)) parsed)))
-	;; Put the geometry parameters at the end.  Copy
-	;; default-frame-alist so that they go after it.
-	(setq parameters (append parameters default-frame-alist parsed))))
-    parameters))
+  ;; Note that `x-resource-name' has a global meaning.
+  (let ((x-resource-name (or (cdr (assq 'name parameters))
+			     (cdr (assq 'name default-frame-alist)))))
+    (when x-resource-name
+      ;; Before checking X resources, we must have an X connection.
+      (or (window-system)
+	  (x-display-list)
+	  (x-open-connection (or (cdr (assq 'display parameters))
+				 x-display-name)))
+      (let (res-geometry parsed)
+	(and (setq res-geometry (x-get-resource "geometry" "Geometry"))
+	     (setq parsed (x-parse-geometry res-geometry))
+	     (setq parameters
+		   (append parameters default-frame-alist parsed
+			   ;; If the resource specifies a position,
+			   ;; take note of that.
+			   (if (or (assq 'top parsed) (assq 'left parsed))
+			       '((user-position . t) (user-size . t)))))))))
+  parameters)
 
 
 (defun x-handle-reverse-video (frame parameters)
@@ -2344,6 +2361,8 @@ terminal type to a different value."
   :version "21.1"
   :group 'mode-line-faces
   :group 'basic-faces)
+;; No need to define aliases of this form for new faces.
+(define-obsolete-face-alias 'modeline 'mode-line "21.1")
 
 (defface mode-line-inactive
   '((default
@@ -2360,6 +2379,7 @@ terminal type to a different value."
   :version "22.1"
   :group 'mode-line-faces
   :group 'basic-faces)
+(define-obsolete-face-alias 'modeline-inactive 'mode-line-inactive "22.1")
 
 (defface mode-line-highlight
   '((((class color) (min-colors 88))
@@ -2370,6 +2390,7 @@ terminal type to a different value."
   :version "22.1"
   :group 'mode-line-faces
   :group 'basic-faces)
+(define-obsolete-face-alias 'modeline-highlight 'mode-line-highlight "22.1")
 
 (defface mode-line-emphasis
   '((t (:weight bold)))
@@ -2397,7 +2418,7 @@ Use the face `mode-line-highlight' for features that can be selected."
 (put 'modeline 'face-alias 'mode-line)
 (put 'modeline-inactive 'face-alias 'mode-line-inactive)
 (put 'modeline-highlight 'face-alias 'mode-line-highlight)
-(put 'modeline-buffer-id 'face-alias 'mode-line-buffer-id)
+(define-obsolete-face-alias 'modeline-buffer-id 'mode-line-buffer-id "22.1")
 
 (defface header-line
   '((default
@@ -2521,6 +2542,9 @@ Note: Other faces cannot inherit from the cursor face."
   :group 'menu
   :group 'basic-faces)
 
+(defface help-argument-name '((((supports :slant italic)) :inherit italic))
+  "Face to highlight argument names in *Help* buffers."
+  :group 'help)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Manipulating font names.

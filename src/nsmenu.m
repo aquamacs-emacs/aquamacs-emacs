@@ -621,13 +621,14 @@ name_is_separator (name)
     tpos++;
 
 #ifndef NS_IMPL_COCOA
-  if (*tpos != 's') 
+  if ((*tpos == 's') && (*(tpos+1) == '-')) 
 #endif
     {
-      keyEquivModMask = 0; /* signal */
-      return [NSString stringWithUTF8String: tpos];
+      return [NSString stringWithFormat: @"%c", tpos[2]];
     }
-  return [NSString stringWithFormat: @"%c", tpos[2]];
+
+  keyEquivModMask = 0; /* signal */
+  return [NSString stringWithUTF8String: tpos];
 }
 
 
@@ -2217,6 +2218,7 @@ void process_dialog (id window, Lisp_Object list)
 - (Lisp_Object)runDialogAt: (NSPoint)p
 {
   int ret;
+  extern EMACS_TIME timer_check (int do_it_now); /* TODO: add to a header */
 
   /* initiate a session that will be ended by pop_down_menu */
   popupSession = [NSApp beginModalSessionForWindow: self];

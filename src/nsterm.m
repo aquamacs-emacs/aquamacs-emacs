@@ -148,15 +148,6 @@ static Lisp_Object Qmodifier_value;
 Lisp_Object Qalt, Qcontrol, Qhyper, Qmeta, Qsuper;
 extern Lisp_Object Qcursor_color, Qcursor_type, Qns;
 
-
-/* Some preferences equivalent to those set by X resources under X are
-   managed through the OpenStep defaults system. We depart from X
-   behavior and refuse to read defaults when started under these
-   options. */
-
-/* Set in emacs.c. */
-char ns_no_defaults;
-
 /* Specifies which emacs modifier should be generated when NS receives
    the Alternate modifer.  May be Qnone or any of the modifier lisp symbols. */
 Lisp_Object ns_alternate_modifier;
@@ -183,10 +174,6 @@ Lisp_Object ns_antialias_text;
    the maximum font size to NOT antialias.  On GNUstep there is currently
    no way to control this behavior. */
 float ns_antialias_threshold;
-
-/* Controls use of an undocumented CG function to do Quickdraw-style font
-   smoothing (less heavy) instead of regular Quartz smoothing. */
-Lisp_Object ns_use_qd_smoothing;
 
 /* Used to pick up AppleHighlightColor on OS X */
 NSString *ns_selection_color;
@@ -1116,6 +1103,7 @@ x_set_offset (struct frame *f, int xoff, int yoff, int change_grav)
   if (xoff < 100)
     f->left_pos = 100;  /* don't overlap menu */
 #endif
+
   if (view != nil && (screen = [[view window] screen]))
     [[view window] setFrameTopLeftPoint:
         NSMakePoint (SCREENMAXBOUND (f->left_pos),
@@ -1277,7 +1265,7 @@ ns_lookup_indexed_color (unsigned long idx, struct frame *f)
       return color_table->colors[idx];
     }
   /* fprintf(stderr, "DISCARDING lookup color %d\n", idx); */
-  return [NSColor orangeColor];  // mark undefined color
+  return nil;  // mark undefined color
 }
 
 
@@ -1294,6 +1282,7 @@ ns_index_color (NSColor *color, struct frame *f)
       color_table->avail = 1; /* skip idx=0 as marker */
       color_table->colors
 	= (NSColor **)xmalloc (color_table->size * sizeof (NSColor *));
+      color_table->colors[0] = nil;
       color_table->empty_indices = [[NSMutableSet alloc] init];
     }
 
@@ -1369,18 +1358,15 @@ static int
 ns_get_color (const char *name, NSColor **col)
 /* --------------------------------------------------------------------------
      Parse a color name
-/* --------------------------------------------------------------------------
-/* On *Step, we recognize several color formats, in addition to a catalog
-   of colors found in the file Emacs.clr. Color formats include:
-   - #rrggbb or RGBrrggbb where rr, gg, bb specify red, green and blue in hex
-   - ARGBaarrggbb is similar, with aa being the alpha channel (FF = opaque)
-   - HSVhhssvv and AHSVaahhssvv (or HSB/AHSB) are similar for hue, saturation,
-     value;
-   - CMYKccmmyykk is similar for cyan, magenta, yellow, black. */
+   -------------------------------------------------------------------------- */
+/* On *Step, we attempt to mimic the X11 platform here, down to installing an
+   X11 rgb.txt-compatible color list in Emacs.clr (see ns_term_init()).
+   See: http://thread.gmane.org/gmane.emacs.devel/113050/focus=113272). */
 {
-  NSColor * new = nil;
-  const char *hex = NULL;
-  enum { rgb, argb, hsv, ahsv, cmyk, gray } color_space;
+  NSColor *new = nil;
+  static char hex[20];
+  int scaling;
+  float r = -1.0, g, b;
   NSString *nsname = [NSString stringWithUTF8String: name];
 
 /*fprintf (stderr, "ns_get_color: '%s'\n", name); */
@@ -1392,121 +1378,51 @@ ns_get_color (const char *name, NSColor **col)
       name = [ns_selection_color UTF8String];
     }
 
-  if (name[0] == '0' || name[0] == '1' || name[0] == '.')
+  /* First, check for some sort of numeric specification. */
+  hex[0] = '\0';
+
+  if (name[0] == '0' || name[0] == '1' || name[0] == '.')  /* RGB decimal */
     {
-      /* RGB decimal */
       NSScanner *scanner = [NSScanner scannerWithString: nsname];
-      float r, g, b;
       [scanner scanFloat: &r];
       [scanner scanFloat: &g];
       [scanner scanFloat: &b];
+    }
+  else if (!strncmp(name, "rgb:", 4))  /* A newer X11 format -- rgb:r/g/b */
+    {
+      strcpy(hex, name + 4);
+      scaling = (strlen(hex) - 2) / 3;
+    }
+  else if (name[0] == '#')        /* An old X11 format; convert to newer */
+    {
+      int len = (strlen(name) - 1);
+      int start = (len % 3 == 0) ? 1 : len / 4 + 1;
+      int i;
+      scaling = strlen(name+start) / 3;
+      for (i=0; i<3; i++) {
+        strncpy(hex + i * (scaling + 1), name + start + i * scaling, scaling);
+        hex[(i+1) * (scaling + 1) - 1] = '/';
+      }
+      hex[3 * (scaling + 1) - 1] = '\0';
+    }
+
+  if (hex[0])
+    {
+      int rr, gg, bb;
+      float fscale = scaling == 4 ? 65535.0 : (scaling == 2 ? 255.0 : 15.0);
+      if (sscanf (hex, "%x/%x/%x", &rr, &gg, &bb))
+        {
+          r = rr / fscale;
+          g = gg / fscale;
+          b = bb / fscale;
+        }
+    }
+
+  if (r >= 0.0)
+    {
       *col = [NSColor colorWithCalibratedRed: r green: g blue: b alpha: 1.0];
       UNBLOCK_INPUT;
       return 0;
-    }
-
-  /*  FIXME: emacs seems to downcase everything before passing it here,
-        which we can work around, except for GRAY, since gray##, where ## is
-        decimal between 0 and 99, is also an X11 colorname. */
-  if (name[0] == '#')             /* X11 format */
-    {
-      hex = name + 1;
-      color_space = rgb;
-    }
-  else if (!memcmp (name, "RGB", 3) || !memcmp (name, "rgb", 3))
-    {
-      hex = name + 3;
-      color_space = rgb;
-    }
-  else if (!memcmp (name, "ARGB", 4) || !memcmp (name, "argb", 4))
-    {
-      hex = name + 4;
-      color_space = argb;
-    }
-  else if (!memcmp (name, "HSV", 3) || !memcmp (name, "hsv", 3) || 
-           !memcmp (name, "HSB", 3) || !memcmp (name, "hsb", 3))
-    {
-      hex = name + 3;
-      color_space = hsv;
-    }
-  else if (!memcmp (name, "AHSV", 4) || !memcmp (name, "ahsv", 4) ||
-           !memcmp (name, "AHSB", 4) || !memcmp (name, "ahsb", 4))
-    {
-      hex = name + 4;
-      color_space = ahsv;
-    }
-  else if (!memcmp (name, "CMYK", 4) || !memcmp (name, "cmyk", 4))
-    {
-      hex = name + 4;
-      color_space = cmyk;
-    }
-  else if (!memcmp (name, "GRAY", 4) /*|| !memcmp (name, "gray", 4)*/)
-    {
-      hex = name + 4;
-      color_space = gray;
-    }
-
-  /* Direct colors (hex values) */
-  if (hex)
-    {
-      unsigned long long color = 0;
-      if (sscanf (hex, "%x", &color))
-        {
-          float f1, f2, f3, f4;
-          /* Assume it's either 1 byte or 2 per channel... */
-          if (strlen(hex) > 8) {
-            f1 = ((color >> 48) & 0xffff) / 65535.0;
-            f2 = ((color >> 32) & 0xffff) / 65535.0;
-            f3 = ((color >> 16) & 0xffff) / 65535.0;
-            f4 = ((color      ) & 0xffff) / 65535.0;
-          } else {
-            f1 = ((color >> 24) & 0xff) / 255.0;
-            f2 = ((color >> 16) & 0xff) / 255.0;
-            f3 = ((color >>  8) & 0xff) / 255.0;
-            f4 = ((color      ) & 0xff) / 255.0;
-          }
-
-          switch (color_space)
-            {
-            case rgb:
-              *col = [NSColor colorWithCalibratedRed: f2
-                                               green: f3
-                                                blue: f4
-                                               alpha: 1.0];
-              break;
-            case argb:
-              *col = [NSColor colorWithCalibratedRed: f2
-                                               green: f3
-                                                blue: f4
-                                               alpha: f1];
-              break;
-            case hsv:
-              *col = [NSColor colorWithCalibratedHue: f2
-                                          saturation: f3
-                                          brightness: f4
-                                               alpha: 1.0];
-              break;
-            case ahsv:
-              *col = [NSColor colorWithCalibratedHue: f2
-                                          saturation: f3
-                                          brightness: f4
-                                               alpha: f1];
-              break;
-            case gray:
-              *col = [NSColor colorWithCalibratedWhite: f3 alpha: f4];
-              break;
-            case cmyk:
-              *col = [NSColor colorWithDeviceCyan: f1
-                                          magenta: f2
-                                           yellow: f3
-                                            black: f4
-                                            alpha: 1.0];
-              break;
-            }
-          *col = [*col colorUsingColorSpaceName: NSCalibratedRGBColorSpace];
-          UNBLOCK_INPUT;
-          return 0;
-        }
     }
 
   /* Otherwise, color is expected to be from a list */
@@ -1535,11 +1451,8 @@ ns_get_color (const char *name, NSColor **col)
       }
   }
 
-  if ( new )
+  if (new)
     *col = [new colorUsingColorSpaceName: NSCalibratedRGBColorSpace];
-  /* else
-     fprintf(stderr, "Failed to find color %s\n", [nsname UTF8String]); */
-  /* NSLog (@"Failed to find color '%@'", nsname); */
   UNBLOCK_INPUT;
   return new ? 0 : 1;
 }
@@ -1601,14 +1514,13 @@ ns_color_to_lisp (NSColor *col)
     {
       [[col colorUsingColorSpaceName: NSCalibratedWhiteColorSpace]
             getWhite: &gray alpha: &alpha];
-      snprintf (buf, sizeof (buf), "GRAY%02.2lx%02.2lx",
-               lrint (gray * 0xff), lrint (alpha * 0xff));
+      snprintf (buf, sizeof (buf), "#%02.2lx%02.2lx%02.2lx",
+		lrint (gray * 0xff), lrint (gray * 0xff), lrint (gray * 0xff));
       UNBLOCK_INPUT;
       return build_string (buf);
     }
 
-  snprintf (buf, sizeof (buf), "ARGB%02.2lx%02.2lx%02.2lx%02.2lx",
-            lrint (alpha*0xff),
+  snprintf (buf, sizeof (buf), "#%02.2lx%02.2lx%02.2lx",
             lrint (red*0xff), lrint (green*0xff), lrint (blue*0xff));
 
   UNBLOCK_INPUT;
@@ -2757,9 +2669,9 @@ ns_dumpglyphs_box_or_relief (struct glyph_string *s)
     r = ns_fix_rect_ibw (r, FRAME_INTERNAL_BORDER_WIDTH (s->f),
                         FRAME_PIXEL_WIDTH (s->f));
 
-  if (s->face->box == FACE_SIMPLE_BOX)
+  /* TODO: Sometimes box_color is 0 and this seems wrong; should investigate. */
+  if (s->face->box == FACE_SIMPLE_BOX && s->face->box_color)
     {
-      xassert (s->face->box_color != nil);
       ns_draw_box (r, abs (thickness),
                    ns_lookup_indexed_color (face->box_color, s->f),
                   left_p, right_p);
@@ -3821,7 +3733,6 @@ ns_set_default_prefs ()
   ns_emulate_three_button_mouse = Qt;
   ns_antialias_text = Qt;
   ns_antialias_threshold = 10.0; /* not exposed to lisp side */
-  ns_use_qd_smoothing = Qnil;
   ns_confirm_quit = Qnil;
 }
 
@@ -4090,7 +4001,7 @@ ns_term_init (Lisp_Object display_name)
 
   /* Read various user defaults. */
   ns_set_default_prefs ();
-  if (!ns_no_defaults)
+  if (!inhibit_x_resources)
     {
       ns_default ("GSFontAntiAlias", &ns_antialias_text,
                  Qt, Qnil, NO, NO);
@@ -4821,7 +4732,9 @@ extern void update_window_cursor (struct window *w, int on);
     return;
 
  if (![[self window] isKeyWindow]
-     && [[theEvent window] isKindOfClass: [EmacsWindow class]])
+     && [[theEvent window] isKindOfClass: [EmacsWindow class]]
+     /* we must avoid an infinite loop here. */
+     && (EmacsView *)[[theEvent window] delegate] != self)
    {
      /* XXX: There is an occasional condition in which, when Emacs display
          updates a different frame from the current one, and temporarily
@@ -4976,12 +4889,14 @@ extern void update_window_cursor (struct window *w, int on);
 /* Needed to pick up Ctrl-tab and possibly other events that OS X has
    decided not to send key-down for.
    See http://osdir.com/ml/editors.vim.mac/2007-10/msg00141.html
+   This only applies on Tiger and earlier.
    If it matches one of these, send it on to keyDown. */
 -(void)keyUp: (NSEvent *)theEvent
 {
   int flags = [theEvent modifierFlags];
   int code = [theEvent keyCode];
-  if (code == 0x30 && (flags & NSControlKeyMask) && !(flags & NSCommandKeyMask))
+  if (floor (NSAppKitVersionNumber) <= 824 /*NSAppKitVersionNumber10_4*/ &&
+      code == 0x30 && (flags & NSControlKeyMask) && !(flags & NSCommandKeyMask))
     {
       if (NS_KEYLOG)
         fprintf (stderr, "keyUp: passed test");
@@ -5472,10 +5387,9 @@ extern void update_window_cursor (struct window *w, int on);
 #endif /* NS_IMPL_COCOA */
 #endif /* AQUAMACS_RESIZING_HINT */
 
-  // Calling x_set_window_size tends to get us into inf-loops
-  // (x_set_window_size causes a resize which causes
-  // a "windowDidResize" which calls x_set_window_size).
-  // At least with GNUStep, don't know about MacOSX.  --Stef
+  /* Avoid loop under GNUstep due to call at beginning of this function.
+     (x_set_window_size causes a resize which causes
+     a "windowDidResize" which calls x_set_window_size).  */
 #ifndef NS_IMPL_GNUSTEP
   if (cols > 0 && rows > 0)
      x_set_window_size (emacsframe, 0, cols, rows);
@@ -5666,7 +5580,6 @@ extern void update_window_cursor (struct window *w, int on);
   NSWindow *win = [self window];
   NSRect r = [win frame];
   NSScreen *screen = [win screen];
-  NSRect sr = [screen frame];
 
   NSTRACE (windowDidMove);
 
@@ -5677,21 +5590,24 @@ extern void update_window_cursor (struct window *w, int on);
     return;
   if (screen != nil)
     {
-      emacsframe->left_pos = r.origin.x; /* - sr.origin.x; */
-      emacsframe->top_pos = sr.size.height -
-        (r.origin.y + r.size.height); /* + sr.origin.y; */
+      emacsframe->left_pos = r.origin.x;
+      emacsframe->top_pos =
+        [screen frame].size.height - (r.origin.y + r.size.height);
     }
 }
 
-#ifdef NS_IMPL_COCOA
-/* if we don't do this manually, the window will resize but not move */
+
+/* Called AFTER method below, but before our windowWillResize call there leads
+   to windowDidResize -> x_set_window_size.  Update emacs' notion of frame
+   location so set_window_size moves the frame. */
 - (BOOL)windowShouldZoom: (NSWindow *)sender toFrame: (NSRect)newFrame
 {
   NSTRACE (windowShouldZoom);
-  [[self window] setFrame: newFrame display: NO];
+  emacsframe->left_pos = (int)newFrame.origin.x;
+  emacsframe->top_pos = [[sender screen] frame].size.height
+                            - (newFrame.origin.y+newFrame.size.height);
   return YES;
 }
-#endif
 
 
 /* Override to do something slightly nonstandard, but nice.  First click on
@@ -5701,16 +5617,27 @@ extern void update_window_cursor (struct window *w, int on);
                         defaultFrame:(NSRect)defaultFrame
 {
   NSRect result = [sender frame];
+  static NSRect ns_userRect = { 0, 0, 0, 0 };
+
   NSTRACE (windowWillUseStandardFrame);
 
-  if (result.size.height == defaultFrame.size.height) {
-    result = defaultFrame;
-  } else {
-    result.size.height = defaultFrame.size.height;
-    result.origin.y = defaultFrame.origin.y;
-  }
+  if (abs (defaultFrame.size.height - result.size.height)
+      > FRAME_LINE_HEIGHT (emacsframe))
+    {
+      /* first click */
+      ns_userRect = result;
+      result.size.height = defaultFrame.size.height;
+      result.origin.y = defaultFrame.origin.y;
+    }
+  else
+    {
+      if (abs (defaultFrame.size.width - result.size.width)
+          > FRAME_COLUMN_WIDTH (emacsframe))
+        result = defaultFrame;  /* second click */
+      else
+        result = ns_userRect.size.height ? ns_userRect : result;  /* restore */
+    }
 
-  /* A windowWillResize does not get generated at least on Tiger. */
   [self windowWillResize: sender toSize: result.size];
   return result;
 }
@@ -6700,9 +6627,6 @@ allowing it to be used at a lower level for accented character entry.");
 
   DEFVAR_LISP ("ns-antialias-text", &ns_antialias_text,
                "Non-nil (the default) means to render text antialiased. Only has an effect on OS X Panther and above.");
-
-  DEFVAR_LISP ("ns-use-qd-smoothing", &ns_use_qd_smoothing,
-               "Whether to render text using QuickDraw (less heavy) antialiasing. Only has an effect on OS X Panther and above.  Default is nil (use Quartz smoothing).");
 
   DEFVAR_LISP ("ns-confirm-quit", &ns_confirm_quit,
                "Whether to confirm application quit using dialog.");

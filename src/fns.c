@@ -661,7 +661,6 @@ concat (nargs, args, target_type, last_special)
 	    }
 	  toindex_byte += thislen_byte;
 	  toindex += thisleni;
-	  STRING_SET_CHARS (val, SCHARS (val));
 	}
       /* Copy a single-byte string to a multibyte string.  */
       else if (STRINGP (this) && STRINGP (val))
@@ -4605,8 +4604,9 @@ sxhash (obj, depth)
 
     case Lisp_Float:
       {
-	unsigned char *p = (unsigned char *) &XFLOAT_DATA (obj);
-	unsigned char *e = p + sizeof XFLOAT_DATA (obj);
+	double val = XFLOAT_DATA (obj);
+	unsigned char *p = (unsigned char *) &val;
+	unsigned char *e = p + sizeof val;
 	for (hash = 0; p < e; ++p)
 	  hash = SXHASH_COMBINE (hash, *p);
 	break;
@@ -5251,9 +5251,9 @@ non-nil.  */);
   DEFVAR_BOOL ("use-file-dialog", &use_file_dialog,
     doc: /* *Non-nil means mouse commands use a file dialog to ask for files.
 This applies to commands from menus and tool bar buttons even when
-they are initiated from the keyboard.  The value of `use-dialog-box'
-takes precedence over this variable, so a file dialog is only used if
-both `use-dialog-box' and this variable are non-nil.  */);
+they are initiated from the keyboard.  If `use-dialog-box' is nil,
+that disables the use of a file dialog, regardless of the value of
+this variable.  */);
   use_file_dialog = 1;
 
   defsubr (&Sidentity);

@@ -1857,7 +1857,7 @@ encode_coding_utf_16 (coding)
     {
       ASSURE_DESTINATION (safe_room);
       c = *charbuf++;
-      if (c >= MAX_UNICODE_CHAR)
+      if (c > MAX_UNICODE_CHAR)
 	c = coding->default_char;
 
       if (c < 0x10000)
@@ -4668,6 +4668,12 @@ detect_coding_sjis (coding, detect_info)
   int consumed_chars = 0;
   int found = 0;
   int c;
+  Lisp_Object attrs, charset_list;
+  int max_first_byte_of_2_byte_code;
+
+  CODING_GET_INFO (coding, attrs, charset_list);
+  max_first_byte_of_2_byte_code
+    = (XINT (Flength (charset_list)) > 3 ? 0xFC : 0xEF);
 
   detect_info->checked |= CATEGORY_MASK_SJIS;
   /* A coding system of this category is always ASCII compatible.  */
@@ -4679,7 +4685,8 @@ detect_coding_sjis (coding, detect_info)
       ONE_MORE_BYTE (c);
       if (c < 0x80)
 	continue;
-      if ((c >= 0x81 && c <= 0x9F) || (c >= 0xE0 && c <= 0xEF))
+      if ((c >= 0x81 && c <= 0x9F)
+	  || (c >= 0xE0 && c <= max_first_byte_of_2_byte_code))
 	{
 	  ONE_MORE_BYTE (c);
 	  if (c < 0x40 || c == 0x7F || c > 0xFC)
@@ -5052,7 +5059,8 @@ encode_coding_sjis (coding)
 	      int c1, c2;
 
 	      c1 = code >> 8;
-	      if (c1 == 0x21 || (c1 >= 0x23 && c1 < 0x25)
+	      if (c1 == 0x21 || (c1 >= 0x23 && c1 <= 0x25)
+		  || c1 == 0x28
 		  || (c1 >= 0x2C && c1 <= 0x2F) || c1 >= 0x6E)
 		{
 		  JIS_TO_SJIS2 (code);
@@ -5790,6 +5798,7 @@ setup_coding_system (coding_system, coding)
   coding->max_charset_id = SCHARS (val) - 1;
   coding->safe_charsets = SDATA (val);
   coding->default_char = XINT (CODING_ATTR_DEFAULT_CHAR (attrs));
+  coding->carryover_bytes = 0;
 
   coding_type = CODING_ATTR_TYPE (attrs);
   if (EQ (coding_type, Qundecided))
@@ -9378,8 +9387,11 @@ DEFUN ("set-keyboard-coding-system-internal", Fset_keyboard_coding_system_intern
 {
   struct terminal *t = get_terminal (terminal, 1);
   CHECK_SYMBOL (coding_system);
-  setup_coding_system (Fcheck_coding_system (coding_system),
-		       TERMINAL_KEYBOARD_CODING (t));
+  if (NILP (coding_system))
+    coding_system = Qno_conversion;
+  else
+    Fcheck_coding_system (coding_system);
+  setup_coding_system (coding_system, TERMINAL_KEYBOARD_CODING (t));
   /* Characer composition should be disabled.  */
   TERMINAL_KEYBOARD_CODING (t)->common_flags
     &= ~CODING_ANNOTATE_COMPOSITION_MASK;

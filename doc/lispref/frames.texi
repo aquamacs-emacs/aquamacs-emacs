@@ -609,11 +609,15 @@ the @code{user-position} parameter (see above) does for the position
 parameters @code{top} and @code{left}.
 
 @item fullscreen
-Specify that width, height or both shall be set to the size of the screen.
-The value @code{fullwidth} specifies that width shall be the size of the
-screen.  The value @code{fullheight} specifies that height shall be the
-size of the screen.  The value @code{fullboth} specifies that both the
+Specify that width, height or both shall be maximized.
+The value @code{fullwidth} specifies that width shall be as wide as possible.
+The value @code{fullheight} specifies that height shall be as tall as
+possible.  The value @code{fullboth} specifies that both the
 width and the height shall be set to the size of the screen.
+The value @code{maximized} specifies that the frame shall be maximized.
+The difference between @code{maximized} and @code{fullboth} is that
+the first does have window manager decorations but the second does not
+and thus really covers the whole screen.
 @end table
 
 @node Layout Parameters
@@ -750,6 +754,10 @@ If non-@code{nil}, tell Xt to wait for the window manager to confirm
 geometry changes.  Some window managers, including versions of Fvwm2
 and KDE, fail to confirm, so Xt hangs.  Set this to @code{nil} to
 prevent hanging with those window managers.
+
+@item sticky
+If non-@code{nil}, the frame is visible on all virtual desktops on systems
+with virtual desktops.
 
 @ignore
 @item parent-id

@@ -1032,7 +1032,8 @@ frame_parm_handler ns_frame_parm_handlers[] =
   0, /* x_set_wait_for_wm, will ignore */
   x_set_fullscreen,   /* generic OK */
   x_set_font_backend, /* generic OK */
-  x_set_alpha
+  x_set_alpha,
+  0, /* x_set_sticky */  
 };
 
 
@@ -1365,6 +1366,7 @@ FRAME nil means use the selected frame.  */)
     {
       EmacsView *view = FRAME_NS_VIEW (f);
       BLOCK_INPUT;
+      [NSApp activateIgnoringOtherApps: YES];
       [[view window] makeKeyAndOrderFront: view];
       UNBLOCK_INPUT;
     }
@@ -1572,32 +1574,6 @@ If VALUE is nil, the default is removed.  */)
     }
 
   return Qnil;
-}
-
-
-DEFUN ("ns-set-alpha", Fns_set_alpha, Sns_set_alpha, 2, 2, 0,
-       doc: /* Return a color equivalent to COLOR with alpha setting ALPHA.
-The argument ALPHA should be a number between 0 and 1, where 0 is full
-transparency and 1 is opaque.  */)
-     (color, alpha)
-     Lisp_Object color;
-     Lisp_Object alpha;
-{
-  NSColor *col;
-  float a;
-
-  CHECK_STRING (color);
-  CHECK_NUMBER_OR_FLOAT (alpha);
-
-  if (ns_lisp_to_color (color, &col))
-    error ("Unknown color");
-
-  a = XFLOATINT (alpha);
-  if (a < 0.0 || a > 1.0)
-    error ("Alpha value should be between 0 and 1 inclusive");
-
-  col = [col colorWithAlphaComponent: a];
-  return ns_color_to_lisp (col);
 }
 
 
@@ -1827,9 +1803,6 @@ The argument DISPLAY is currently ignored.  */)
      Lisp_Object display;
 {
   check_ns ();
-#ifdef NS_IMPL_COCOA
-  PSFlush ();
-#endif
   /*ns_delete_terminal (dpyinfo->terminal); */
   [NSApp terminate: NSApp];
   return Qnil;
@@ -2307,15 +2280,12 @@ x_get_string_resource (XrmDatabase rdb, char *name, char *class)
   const char *res;
   check_ns ();
 
-  /* Support emacs-20-style face resources for backwards compatibility */
-  if (!strncmp (toCheck, "Face", 4))
-    toCheck = name + (!strncmp (name, "emacs.", 6) ? 6 : 0);
+  if (inhibit_x_resources)
+    /* --quick was passed, so this is a no-op.  */
+    return NULL;
 
-/*fprintf (stderr, "Checking '%s'\n", toCheck); */
-
-  res = ns_no_defaults ? NULL :
-    [[[NSUserDefaults standardUserDefaults] objectForKey:
-                     [NSString stringWithUTF8String: toCheck]] UTF8String];
+  res = [[[NSUserDefaults standardUserDefaults] objectForKey:
+            [NSString stringWithUTF8String: toCheck]] UTF8String];
   return !res ? NULL :
       (!strncasecmp (res, "YES", 3) ? "true" :
           (!strncasecmp (res, "NO", 2) ? "false" : res));
@@ -2400,16 +2370,12 @@ The optional argument FRAME is currently ignored.  */)
 
 
 DEFUN ("xw-color-values", Fxw_color_values, Sxw_color_values, 1, 2, 0,
-       doc: /* Return a description of the color named COLOR.
-The value is a list of integer RGBA values--(RED GREEN BLUE ALPHA).
-These values appear to range from 0 to 65280; white is (65280 65280 65280 0).
-The optional argument FRAME is currently ignored.  */)
+       doc: /* Internal function called by `color-values', which see.  */)
      (color, frame)
      Lisp_Object color, frame;
 {
   NSColor * col;
   float red, green, blue, alpha;
-  Lisp_Object rgba[4];
 
   check_ns ();
   CHECK_STRING (color);
@@ -2419,12 +2385,9 @@ The optional argument FRAME is currently ignored.  */)
 
   [[col colorUsingColorSpaceName: NSCalibratedRGBColorSpace]
         getRed: &red green: &green blue: &blue alpha: &alpha];
-  rgba[0] = make_number (lrint (red*65280));
-  rgba[1] = make_number (lrint (green*65280));
-  rgba[2] = make_number (lrint (blue*65280));
-  rgba[3] = make_number (lrint (alpha*65280));
-
-  return Flist (4, rgba);
+  return list3 (make_number (lrint (red*65280)),
+		make_number (lrint (green*65280)),
+		make_number (lrint (blue*65280)));
 }
 
 
@@ -2874,7 +2837,6 @@ be used as the image of the icon representing the frame.  */);
   defsubr (&Sx_display_backing_store);
   defsubr (&Sx_display_save_under);
   defsubr (&Sx_create_frame);
-  defsubr (&Sns_set_alpha);
   defsubr (&Sx_open_connection);
   defsubr (&Sx_close_connection);
   defsubr (&Sx_display_list);

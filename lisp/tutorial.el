@@ -138,9 +138,11 @@ options:
                     " is the command `")
             (insert (format "%s" db))
             (insert "'.  "
-                    "However, your customizations have rebound it to the command `")
-            (insert (format "%s" cb))
-            (insert "'.")
+                    "However, your customizations have "
+                    (if cb
+                        (format "rebound it to the command `%s'" cb)
+                      "unbound it"))
+            (insert ".")
             (when mapsym
               (insert "  (For the more advanced user:"
                       " This binding is in the keymap `"
@@ -161,7 +163,7 @@ options:
                       (format "%s" db)
                       "'.")))
           (fill-region (point-min) (point)))))
-      (print-help-return-message))))
+      (help-print-return-message))))
 
 (defun tutorial--sort-keys (left right)
   "Sort predicate for use with `tutorial--default-keys'.
@@ -262,8 +264,7 @@ LEFT and RIGHT are the elements to compare."
              (yank-pop [?\M-y])
 
              ;; * UNDO
-             (advertised-undo [?\C-x ?u])
-             (advertised-undo [?\C-x ?u])
+             (undo [?\C-x ?u])
 
              ;; * FILES
              (find-file [?\C-x ?\C-f])
@@ -386,7 +387,7 @@ from the Emacs default:\n\n" )
         (insert "
 It is OK to change key bindings, but changed bindings do not
 correspond to what the tutorial says.\n\n")
-        (print-help-return-message)))))
+        (help-print-return-message)))))
 
 (defun tutorial--find-changed-keys (default-keys)
   "Find the key bindings used in the tutorial that have changed.
@@ -862,6 +863,10 @@ Run the Viper tutorial? "))
               (when (< old-point 1)
                 (setq old-point 1))
               (goto-char old-point))
+          ;; Delete the arch-tag line, so as not to confuse readers.
+          (goto-char (point-max))
+          (if (search-backward ";;; arch-tag: " nil t)
+              (delete-region (point) (point-max)))
           (goto-char (point-min))
           (search-forward "\n<<")
           (beginning-of-line)

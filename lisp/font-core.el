@@ -75,6 +75,8 @@ Other variables include that for syntactic keyword fontification,
 functions, `font-lock-fontify-buffer-function',
 `font-lock-unfontify-buffer-function', `font-lock-fontify-region-function',
 `font-lock-unfontify-region-function', and `font-lock-inhibit-thing-lock'.")
+;; Autoload if this file no longer dumped.
+(put 'font-lock-defaults 'risky-local-variable t)
 (make-variable-buffer-local 'font-lock-defaults)
 
 (defvar font-lock-defaults-alist nil
@@ -297,8 +299,9 @@ means that Font Lock mode is turned on for buffers in C and C++ modes only."
 
 (define-globalized-minor-mode global-font-lock-mode
   font-lock-mode turn-on-font-lock-if-desired
-  :extra-args (dummy)
-  :initialize 'custom-initialize-safe-default
+  ;; What was this :extra-args thingy for?  --Stef
+  ;; :extra-args (dummy)
+  :initialize 'custom-initialize-delay
   :init-value (not (or noninteractive emacs-basic-display))
   :group 'font-lock
   :version "22.1")

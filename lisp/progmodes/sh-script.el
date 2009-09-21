@@ -1,7 +1,7 @@
 ;;; sh-script.el --- shell-script editing commands for Emacs
 
-;; Copyright (C) 1993, 1994, 1995, 1996, 1997, 1999, 2001, 2002,
-;;  2003, 2004, 2005, 2006, 2007, 2008, 2009  Free Software Foundation, Inc.
+;; Copyright (C) 1993, 1994, 1995, 1996, 1997, 1999, 2001, 2002, 2003,
+;;  2004, 2005, 2006, 2007, 2008, 2009  Free Software Foundation, Inc.
 
 ;; Author: Daniel Pfeiffer <occitan@esperanto.org>
 ;; Version: 2.0f
@@ -889,9 +889,7 @@ See `sh-feature'.")
      (:weight bold)))
   "Face to show quoted execs like ``"
   :group 'sh-indentation)
-
-;; backward-compatibility alias
-(put 'sh-heredoc-face 'face-alias 'sh-heredoc)
+(define-obsolete-face-alias 'sh-heredoc-face 'sh-heredoc "22.1")
 (defvar sh-heredoc-face 'sh-heredoc)
 
 (defface sh-escaped-newline '((t :inherit font-lock-string-face))
@@ -2999,7 +2997,8 @@ so that `occur-next' and `occur-prev' will work."
 
 Output in buffer \"*indent*\" shows any lines which have conflicting
 values of a variable, and the final value of all variables learned.
-This buffer is popped to automatically if there are any discrepancies.
+When called interactively, pop to this buffer automatically if
+there are any discrepancies.
 
 If no prefix ARG is given, then variables are set to numbers.
 If a prefix arg is given, then variables are set to symbols when
@@ -3211,9 +3210,9 @@ This command can often take a long time to run."
 	   )))
       ;; Are abnormal hooks considered bad form?
       (run-hook-with-args 'sh-learned-buffer-hook learned-var-list)
-      (if (or sh-popup-occur-buffer (> num-diffs 0))
-	  (pop-to-buffer out-buffer))
-      )))
+      (and (called-interactively-p)
+	   (or sh-popup-occur-buffer (> num-diffs 0))
+	   (pop-to-buffer out-buffer)))))
 
 (defun sh-guess-basic-offset (vec)
   "See if we can determine a reasonable value for `sh-basic-offset'.
@@ -3749,7 +3748,7 @@ The document is bounded by `sh-here-document-word'."
   (interactive "*P")
   (self-insert-command (prefix-numeric-value arg))
   (or arg
-      (not (eq (char-after (- (point) 2)) last-command-event))
+      (not (looking-back "[^<]<<"))
       (save-excursion
 	(backward-char 2)
 	(sh-quoted-p))

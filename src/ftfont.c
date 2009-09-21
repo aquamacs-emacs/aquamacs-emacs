@@ -177,7 +177,7 @@ get_adstyle_property (FcPattern *p)
       || xstrcasecmp (str, "Oblique") == 0
       || xstrcasecmp (str, "Italic") == 0)
     return Qnil;
-  adstyle = font_intern_prop (str, end - str, 0);
+  adstyle = font_intern_prop (str, end - str, 1);
   if (font_style_to_value (FONT_WIDTH_INDEX, adstyle, 0) >= 0)
     return Qnil;
   return adstyle;
@@ -700,13 +700,15 @@ ftfont_get_open_type_spec (Lisp_Object otf_spec)
 }
 
 static FcPattern *ftfont_spec_pattern P_ ((Lisp_Object, char *,
-					   struct OpenTypeSpec **));
+					   struct OpenTypeSpec **,
+					   char **langname));
 
 static FcPattern *
-ftfont_spec_pattern (spec, otlayout, otspec)
+ftfont_spec_pattern (spec, otlayout, otspec, langname)
      Lisp_Object spec;
      char *otlayout;
      struct OpenTypeSpec **otspec;
+     char **langname;
 {
   Lisp_Object tmp, extra;
   FcPattern *pattern = NULL;
@@ -744,7 +746,8 @@ ftfont_spec_pattern (spec, otlayout, otspec)
       if (fc_charset_idx < 0)
 	return NULL;
       charset = fc_charset_table[fc_charset_idx].fc_charset;
-      lang = (FcChar8 *) fc_charset_table[fc_charset_idx].lang;
+      *langname = fc_charset_table[fc_charset_idx].lang;
+      lang = (FcChar8 *) *langname;
       if (lang)
 	{
 	  langset = FcLangSetCreate ();
@@ -876,6 +879,7 @@ ftfont_list (frame, spec)
   char otlayout[15];		/* For "otlayout:XXXX" */
   struct OpenTypeSpec *otspec = NULL;
   int spacing = -1;
+  char *langname = NULL;
 
   if (! fc_initialized)
     {
@@ -883,7 +887,7 @@ ftfont_list (frame, spec)
       fc_initialized = 1;
     }
 
-  pattern = ftfont_spec_pattern (spec, otlayout, &otspec);
+  pattern = ftfont_spec_pattern (spec, otlayout, &otspec, &langname);
   if (! pattern)
     return Qnil;
   if (FcPatternGetCharSet (pattern, FC_CHARSET, 0, &charset) != FcResultMatch)
@@ -1023,13 +1027,18 @@ ftfont_list (frame, spec)
 	  if (j == ASIZE (chars))
 	    continue;
 	}
-      if (! NILP (adstyle))
+      if (! NILP (adstyle) || langname)
 	{
 	  Lisp_Object this_adstyle = get_adstyle_property (fontset->fonts[i]);
 
-	  if (NILP (this_adstyle)
-	      || xstrcasecmp (SDATA (SYMBOL_NAME (adstyle)),
-			      SDATA (SYMBOL_NAME (this_adstyle))) != 0)
+	  if (! NILP (adstyle)
+	      && (NILP (this_adstyle)
+		  || xstrcasecmp (SDATA (SYMBOL_NAME (adstyle)),
+				  SDATA (SYMBOL_NAME (this_adstyle))) != 0))
+	    continue;
+	  if (langname
+	      && ! NILP (this_adstyle)
+	      && xstrcasecmp (langname, SDATA (SYMBOL_NAME (this_adstyle))))
 	    continue;
 	}
       entity = ftfont_pattern_entity (fontset->fonts[i],
@@ -1046,7 +1055,7 @@ ftfont_list (frame, spec)
   val = Qnil;
 
  finish:
-  font_add_log ("ftfont-list", spec, val);
+  FONT_ADD_LOG ("ftfont-list", spec, val);
   if (objset) FcObjectSetDestroy (objset);
   if (fontset) FcFontSetDestroy (fontset);
   if (pattern) FcPatternDestroy (pattern);
@@ -1062,6 +1071,7 @@ ftfont_match (frame, spec)
   FcResult result;
   char otlayout[15];		/* For "otlayout:XXXX" */
   struct OpenTypeSpec *otspec = NULL;
+  char *langname = NULL;
 
   if (! fc_initialized)
     {
@@ -1069,7 +1079,7 @@ ftfont_match (frame, spec)
       fc_initialized = 1;
     }
 
-  pattern = ftfont_spec_pattern (spec, otlayout, &otspec);
+  pattern = ftfont_spec_pattern (spec, otlayout, &otspec, &langname);
   if (! pattern)
     return Qnil;
 
@@ -1099,7 +1109,7 @@ ftfont_match (frame, spec)
     }
   FcPatternDestroy (pattern);
 
-  font_add_log ("ftfont-match", spec, entity);
+  FONT_ADD_LOG ("ftfont-match", spec, entity);
   return entity;
 }
 
@@ -1700,13 +1710,13 @@ setup_otf_gstring (int size)
 {
   if (otf_gstring.size == 0)
     {
-      otf_gstring.glyphs = (OTF_Glyph *) malloc (sizeof (OTF_Glyph) * size);
+      otf_gstring.glyphs = (OTF_Glyph *) xmalloc (sizeof (OTF_Glyph) * size);
       otf_gstring.size = size;
     }
   else if (otf_gstring.size < size)
     {
-      otf_gstring.glyphs = (OTF_Glyph *) realloc (otf_gstring.glyphs,
-						  sizeof (OTF_Glyph) * size);
+      otf_gstring.glyphs = xrealloc (otf_gstring.glyphs,
+				     sizeof (OTF_Glyph) * size);
       otf_gstring.size = size;
     }
   otf_gstring.used = size;
@@ -2037,13 +2047,13 @@ ftfont_shape_by_flt (lgstring, font, ft_face, otf)
     {
       gstring.allocated = len * 2;
       gstring.glyph_size = sizeof (MFLTGlyph);
-      gstring.glyphs = malloc (sizeof (MFLTGlyph) * gstring.allocated);
+      gstring.glyphs = xmalloc (sizeof (MFLTGlyph) * gstring.allocated);
     }
   else if (gstring.allocated < len * 2)
     {
       gstring.allocated = len * 2;
-      gstring.glyphs = realloc (gstring.glyphs,
-				sizeof (MFLTGlyph) * gstring.allocated);
+      gstring.glyphs = xrealloc (gstring.glyphs,
+				 sizeof (MFLTGlyph) * gstring.allocated);
     }
   memset (gstring.glyphs, 0, sizeof (MFLTGlyph) * len);
   for (i = 0; i < len; i++)
@@ -2092,8 +2102,8 @@ ftfont_shape_by_flt (lgstring, font, ft_face, otf)
       if (result != -2)
 	break;
       gstring.allocated += gstring.allocated;
-      gstring.glyphs = realloc (gstring.glyphs,
-				sizeof (MFLTGlyph) * gstring.allocated);
+      gstring.glyphs = xrealloc (gstring.glyphs,
+				 sizeof (MFLTGlyph) * gstring.allocated);
     }
   if (gstring.used > LGSTRING_GLYPH_LEN (lgstring))
     return Qnil;
