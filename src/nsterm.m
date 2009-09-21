@@ -1294,7 +1294,6 @@ ns_index_color (NSColor *color, struct frame *f)
       color_table->avail = 1; /* skip idx=0 as marker */
       color_table->colors
 	= (NSColor **)xmalloc (color_table->size * sizeof (NSColor *));
-      color_table->colors[0] = nil;
       color_table->empty_indices = [[NSMutableSet alloc] init];
     }
 
@@ -2692,9 +2691,9 @@ ns_dumpglyphs_box_or_relief (struct glyph_string *s)
     r = ns_fix_rect_ibw (r, FRAME_INTERNAL_BORDER_WIDTH (s->f),
                         FRAME_PIXEL_WIDTH (s->f));
 
-  /* TODO: Sometimes box_color is 0 and this seems wrong; should investigate. */
-  if (s->face->box == FACE_SIMPLE_BOX && s->face->box_color)
+  if (s->face->box == FACE_SIMPLE_BOX)
     {
+      xassert (s->face->box_color != nil);
       ns_draw_box (r, abs (thickness),
                    ns_lookup_indexed_color (face->box_color, s->f),
                   left_p, right_p);
@@ -4917,14 +4916,12 @@ extern void update_window_cursor (struct window *w, int on);
 /* Needed to pick up Ctrl-tab and possibly other events that OS X has
    decided not to send key-down for.
    See http://osdir.com/ml/editors.vim.mac/2007-10/msg00141.html
-   This only applies on Tiger and earlier.
    If it matches one of these, send it on to keyDown. */
 -(void)keyUp: (NSEvent *)theEvent
 {
   int flags = [theEvent modifierFlags];
   int code = [theEvent keyCode];
-  if (floor (NSAppKitVersionNumber) <= 824 /*NSAppKitVersionNumber10_4*/ &&
-      code == 0x30 && (flags & NSControlKeyMask) && !(flags & NSCommandKeyMask))
+  if (code == 0x30 && (flags & NSControlKeyMask) && !(flags & NSCommandKeyMask))
     {
       if (NS_KEYLOG)
         fprintf (stderr, "keyUp: passed test");
