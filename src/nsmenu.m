@@ -160,7 +160,7 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
 
   if (menu == nil)
     {
-      menu = [[EmacsMenu alloc] initWithTitle: @"Aquamacs/Cocoa"];
+      menu = [[EmacsMenu alloc] initWithTitle: @"Aquamacs"];
       needsSet = YES;
     }
   else
@@ -178,7 +178,7 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
   /* widget_value is a straightforward object translation of emacs's
      Byzantine lisp menu structures */
   wv = xmalloc_widget_value ();
-  wv->name = "Aquamacs/Cocoa";
+  wv->name = "Aquamacs";
   wv->value = 0;
   wv->enabled = 1;
   wv->button_type = BUTTON_TYPE_NONE;
@@ -621,16 +621,14 @@ name_is_separator (name)
     tpos++;
 
 #ifndef NS_IMPL_COCOA
-  if ((*tpos == 's') && (*(tpos+1) == '-')) 
+  if (*tpos != 's') 
 #endif
     {
-      return [NSString stringWithFormat: @"%c", tpos[2]];
+      keyEquivModMask = 0; /* signal */
+      return [NSString stringWithUTF8String: tpos];
     }
-
-  keyEquivModMask = 0; /* signal */
-  return [NSString stringWithUTF8String: tpos];
+  return [NSString stringWithFormat: @"%c", tpos[2]];
 }
-
 
 - (NSMenuItem *)addItemWithWidgetValue: (void *)wvptr
 {

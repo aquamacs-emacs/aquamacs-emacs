@@ -4115,7 +4115,7 @@ ns_term_init (Lisp_Object display_name)
                    keyEquivalent: @"q"
                          atIndex: 10];
 
-    item = [mainMenu insertItemWithTitle: @"Aquamacs Emacs"
+    item = [mainMenu insertItemWithTitle: @"Aquamacs"
                                   action: @selector (menuDown:)
                            keyEquivalent: @""
                                  atIndex: 0];
