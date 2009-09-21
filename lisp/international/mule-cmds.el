@@ -2034,9 +2034,7 @@ See `set-language-info-alist' for use in programs."
   ;; coding systems of higher priorities in this environment.
   (let ((charsets (get-language-info language-name 'charset)))
     (dolist (coding (get-language-info language-name 'coding-priority))
-      (let ((list (coding-system-charset-list coding)))
-	(if (consp list)
-	    (setq charsets (append charsets list)))))
+      (setq charsets (append charsets (coding-system-charset-list coding))))
     (if charsets
 	(apply 'set-charset-priority charsets))))
 

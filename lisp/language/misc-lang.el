@@ -32,10 +32,11 @@
 
 (set-language-info-alist
  "IPA" '((charset . (ipa))
-	 (coding-priority utf-8)
-	 (coding-system utf-8)
+	 (coding-priority iso-2022-7bit)
+	 (coding-system iso-2022-7bit)
 	 (input-method . "ipa")
 	 (nonascii-translation . ipa)
+	 (unibyte-display . iso-2022-7bit)
 	 (documentation . "\
 IPA is International Phonetic Alphabet for English, French, German
 and Italian.")))

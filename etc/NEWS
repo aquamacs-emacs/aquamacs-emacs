@@ -14,6 +14,16 @@ for changes in older Emacs versions.
 You can narrow news to a specific version by calling `view-emacs-news'
 with a prefix argument or by typing C-u C-h C-n.
 
+
+Temporary note:
+ +++ indicates that the appropriate manual has already been updated.
+ --- means no change in the manuals is called for.
+When you add a new item, please add it without either +++ or ---
+so we will look at it and add it to the manual.
+
+
+* Changes in Emacs 23.2
+
 
 * Installation Changes in Emacs 23.1
 
@@ -55,9 +65,6 @@ Specify --with-ns to configure for this.  By default, a self-contained
 app will be built (containing all lisp).  To install/share lisp with
 other emacsen (e.g. X11 build) use --disable-ns-self-contained.  See
 nextstep/README and nextstep/INSTALL in the Emacs source directory.
-
-Currently, the Nextstep port is not as stable as the other existing
-ports; we hope to improve it in future releases.
 
 ** Mac OS X is no longer supported via Carbon.
 Use the NeXTSTEP port, described above.
@@ -467,6 +474,11 @@ remap the default face in the current buffer.  See "Buffer Face mode",
 under New Modes and Packages.
 
 ** Primary selection changes
+
+*** If `select-active-regions' is t, setting the mark automatically
+makes the new region into the primary selection (for interaction with
+other window applications).  If you enable this, you might want to
+bind `mouse-yank-primary' to Mouse-2.
 
 *** You can disable kill ring commands from accessing the primary
 selection by setting `x-select-enable-primary' to nil.
@@ -1796,9 +1808,6 @@ the match data.
 port support (see Emacs changes, above).
 
 ** Miscellaneous new variables
-
-*** `auto-save-include-big-deletions', if non-nil, means auto-save is
-not turned off automatically after a big deletion.
 
 *** `read-circle', if nil, disables the reading of recursive Lisp
 structures using the #N= and #N# syntax.

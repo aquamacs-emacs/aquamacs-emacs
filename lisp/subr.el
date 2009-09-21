@@ -91,11 +91,8 @@ that complains if FORM ever does return differing values."
 
 (defmacro def-edebug-spec (symbol spec)
   "Set the `edebug-form-spec' property of SYMBOL according to SPEC.
-Both SYMBOL and SPEC are unevaluated.  The SPEC can be:
-0 (instrument no arguments); t (instrument all arguments);
-a symbol (naming a function with an Edebug specification); or a list.
-The elements of the list describe the argument types; see
-\(info \"(elisp)Specification List\") for details."
+Both SYMBOL and SPEC are unevaluated.  The SPEC can be 0, t, a symbol
+\(naming a function), or a list."
   `(put (quote ,symbol) 'edebug-form-spec (quote ,spec)))
 
 (defmacro lambda (&rest cdr)

@@ -3533,25 +3533,23 @@ point otherwise."
 (defun use-region-p ()
   "Return t if the region is active and it is appropriate to act on it.
 This is used by commands that act specially on the region under
-Transient Mark mode.
+Transient Mark mode.  It returns t if and only if Transient Mark
+mode is enabled, the mark is active, and the region is non-empty.
+If `use-empty-active-region' is non-nil, it returns t even if the
+region is empty.
 
-The return value is t provided Transient Mark mode is enabled and
-the mark is active; and, when `use-empty-active-region' is
-non-nil, provided the region is empty.  Otherwise, the return
-value is nil.
-
-For some commands, it may be appropriate to ignore the value of
-`use-empty-active-region'; in that case, use `region-active-p'."
+For some commands, it may be appropriate to disregard the value
+of `use-empty-active-region'; in that case, use `region-active-p'."
   (and (region-active-p)
        (or use-empty-active-region (> (region-end) (region-beginning)))))
 
 (defun region-active-p ()
   "Return t if Transient Mark mode is enabled and the mark is active.
 
-Some commands act specially on the region when Transient Mark
-mode is enabled.  Usually, such commands should use
-`use-region-p' instead of this function, because `use-region-p'
-also checks the value of `use-empty-active-region'."
+Most commands that act on the region if it is active and
+Transient Mark mode is enabled, and on the text near point
+otherwise, should use `use-region-p' instead.  That function
+checks the value of `use-empty-active-region' as well."
   (and transient-mark-mode mark-active))
 
 (defvar mark-ring nil
@@ -4051,12 +4049,7 @@ into account variable-width characters and line continuation."
 	       (not executing-kbd-macro)
 	       (line-move-partial arg noerror to-end))
     (set-window-vscroll nil 0 t)
-    (if (and line-move-visual
-	     ;; Currently, line-move-visual does not work well with
-	     ;; truncation/hscrolling.  This is a stop-gap measure for
-	     ;; Emacs 23.1.
-	     (null truncate-lines)
-	     (null (truncated-partial-width-window-p)))
+    (if line-move-visual
 	(line-move-visual arg noerror)
       (line-move-1 arg noerror to-end))))
 

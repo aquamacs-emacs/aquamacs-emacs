@@ -119,6 +119,15 @@ ns_attribute_fvalue (NSFontDescriptor *fdesc, NSString *trait)
 }
 
 
+/* Return whether font has attribute set to non-standard value. */
+static BOOL
+ns_has_attribute (NSFontDescriptor *fdesc, NSString *trait)
+{
+    float v = ns_attribute_fvalue (fdesc, trait);
+    return v < -0.05 || v > 0.05;
+}
+
+
 /* Converts FONT_WEIGHT, FONT_SLANT, FONT_WIDTH, plus family and script/lang
    to NSFont descriptor.  Information under extra only needed for matching. */
 #define STYLE_REF 100
@@ -481,7 +490,7 @@ ns_findfonts (Lisp_Object font_spec, BOOL isMatch)
 	list = Fcons (ns_descriptor_to_entity (desc,
 					 AREF (font_spec, FONT_EXTRA_INDEX),
 					 NULL), list);
-	if (fabs (ns_attribute_fvalue (desc, NSFontSlantTrait)) > 0.05)
+	if (ns_has_attribute (desc, NSFontSlantTrait))
 	    foundItal = YES;
       }
 
@@ -657,11 +666,9 @@ nsfont_open (FRAME_PTR f, Lisp_Object font_entity, int pixel_size)
   synthItal = !NILP (tem) && !strncmp ("synthItal", SDATA (SYMBOL_NAME (tem)),
                                        9);
   family = ns_get_family (font_entity);
-  /* Should be > 0.23 as some font descriptors (e.g. Terminus) set to that
-     when setting family in ns_spec_to_descriptor(). */
-  if (ns_attribute_fvalue (fontDesc, NSFontWeightTrait) > 0.50)
+  if (ns_has_attribute (fontDesc, NSFontWeightTrait))
       traits |= NSBoldFontMask;
-  if (fabs (ns_attribute_fvalue (fontDesc, NSFontSlantTrait) > 0.05))
+  if (ns_has_attribute (fontDesc, NSFontSlantTrait))
       traits |= NSItalicFontMask;
 
   /* see http://cocoadev.com/forums/comments.php?DiscussionID=74 */
@@ -1099,19 +1106,15 @@ nsfont_draw (struct glyph_string *s, int from, int to, int x, int y,
           br.size.width -= 2*correction;
         }
 
-#if 0
       if (!s->face->stipple)
-#endif
         [(NS_FACE_BACKGROUND (face) != 0
           ? ns_lookup_indexed_color (NS_FACE_BACKGROUND (face), s->f)
           : FRAME_BACKGROUND_COLOR (s->f)) set];
-#if 0				/* This is tiling, not stippling.  */
       else
         {
           struct ns_display_info *dpyinfo = FRAME_NS_DISPLAY_INFO (s->f);
           [[dpyinfo->bitmaps[face->stipple-1].img stippleMask] set];
         }
-#endif
       NSRectFill (br);
     }
 
