@@ -1,69 +1,3 @@
-2009-06-27  Chong Yidong  <cyd@stupidchicken.com>
-
-	* frame.c (x_get_arg): Check if dpyinfo is non-NULL.
-
-2009-06-27  Glenn Morris  <rgm@gnu.org>
-
-	* m/pmax.h: Restore file.
-
-2009-06-26  Peter Jolly  <peter@jollys.org>  (tiny change)
-
-	* ftfont.c (get_adstyle_property): Call font_intern_prop with 1 as
-	the arg FORCE_SYMBOL.
-
-2009-06-25  Kenichi Handa  <handa@m17n.org>
-
-	* fontset.c (fontset_find_font): When a usable rfont_def is found
-	in a fallback font-group, make it the first element of the group.
-	(fontset_get_font_group): Return 0 if no font-group is set for C.
-	(fontset_font): Record the availability of a font for C both in
-	the realized fontsets of the current one and the default one.
-
-2009-06-23  Jim Meyering  <meyering@redhat.com>
-
-	* src/ftfont.c (setup_otf_gstring, ftfont_shape_by_flt): Use
-	xmalloc and xrealloc (not malloc and realloc), so subsequent heap
-	pointer dereferences are guaranteed to be valid.
-
-2009-06-21  Jason Rumney  <jasonr@gnu.org>
-
-	* w32term.c (keyboard_codepage): New static variable.
-	(w32_read_socket) [WM_INPUTLANGCHANGE]: Update it.
-	(w32_read_socket) [WM_CHAR]: Use it to decode character
-	input (bug#3237).
-	(w32_initialize): Initialize it.
-	(codepage_for_locale): New function.
-
-2009-06-20  Ken Raeburn  <raeburn@raeburn.org>
-
-	* process.c (status_message): Pass Faset index argument as a lisp
-	object, so as to work with USE_LISP_UNION_TYPE.
-
-2009-06-19  YAMAMOTO Mitsuharu  <mituharu@math.s.chiba-u.ac.jp>
-
-	* coding.c (Ffind_coding_systems_region_internal):
-	Cache checked characters.
-
-2009-06-18  Kenichi Handa  <handa@m17n.org>
-
-	* coding.c (decode_coding_iso_2022): Check MSB of bytes more
-	rigidly.
-
-2009-06-18  Andreas Schwab  <aschwab@redhat.com>
-
-	* xdisp.c (redisplay_internal): Check that the frame is still
-	live after redisplay of its windows.
-	(redisplay_windows): Check that the window is still live.
-
-2009-06-17  Andreas Schwab  <schwab@linux-m68k.org>
-
-	* coding.c (detect_coding_utf_16): Fix previous change.
-
-2009-06-16  Kenichi Handa  <handa@m17n.org>
-
-	* coding.c (detect_coding_utf_16): Fix the logic of rejecting
-	UTF-16 by checking the dispersion of Eth and Oth bytes.
-
 2009-06-15  Andreas Schwab  <schwab@linux-m68k.org>
 
 	* coding.c (detect_coding_utf_16): Fix typo counting odd bytes.
@@ -78,9 +12,9 @@
 	* xterm.c (x_delete_terminal): Put previous change in #if 0 and
 	add comment explaining why.
 
-2009-06-14  Sidney Markowitz  <sidney@sidney.com>
+2009-06-14  Sidney Markowitz <sidney@sidney.com>
 
-	* nsmenu.m (EmacsTooltip: setText): Set height of tooltip.
+	* nsmenu.m (EmacsTooltip: setText): set height of tooltip.
 
 2009-06-14  Adrian Robert  <Adrian.B.Robert@gmail.com>
 
@@ -164,7 +98,7 @@
 
 	* fontset.c (fontset_from_font): Remove NS-specific code.
 
-2009-06-08  Peter Jones  <pjones@pmade.com>  (tiny change)
+2009-06-08  Peter Jones <pjones@pmade.com>  (tiny change)
 
 	* nsterm.m (ns_draw_window_cursor): Respect cursor_type for
 	nonactive windows.
@@ -186,8 +120,8 @@
 
 2009-06-05  David Reitter  <david.reitter@gmail.com>
 
-	* nsselect.m (Fx_own_selection_internal, Fx_selection_exists_p)
-	(Fx_selection_owner_p): Rename from Fns_own_selection_internal,
+	* nsselect.m (Fx_own_selection_internal, Fx_selection_exists_p,
+	Fx_selection_owner_p): rename from Fns_own_selection_internal,
 	Fns_selection_exists_p, Fns_selection_owner_p.
 
 2009-06-03  Jason Rumney  <jasonr@gnu.org>
@@ -200,18 +134,18 @@
 	* coding.c (get_translation_table): Check
 	Venable_character_translation.
 
-2009-05-26  David Reitter  <david.reitter@gmail.com>
+2009-05-25  David Reitter  <david.reitter@gmail.com>
 
-	* nsterm.m (ns_raise_frame): Only raise frame if visible.
-	(x_make_frame_visible): Move frame to front rather than calling
+	* nsterm.m (ns_raise_frame): only raise frame if visible.
+	(x_make_frame_visible): move frame to front rather than calling
 	ns_raise_frame().
-	(keyDown:): Do not swallow events that aren't re-sent if frame
+	(keyDown:) do not swallow events that aren't re-sent if frame
 	isn't key window.
-	(drawRect:): Do not set visibility/iconified flags because
+	(drawRect:) do not set visibility/iconified flags because
 	drawRect may be called by NSView even if the frame is hidden.
 
-	* nsfns.m (Fx_create_frame): Follow other ports in
-	determining visibility; default to t.  Ensure async_visible is set.
+	* nsfns.m (Fx_create_frame): follow other ports in
+	determining visibility; default to t. Ensure async_visible is set.
 
 2009-05-23  Eli Zaretskii  <eliz@gnu.org>
 
@@ -304,13 +238,13 @@
 
 2009-05-07  David Reitter  <david.reitter@gmail.com>
 
-	* nsterm.m (ns_dumpglyphs_stretch, ns_dumpglyphs_image):
-	Respect mouse face background.
+	* nsterm.m (ns_dumpglyphs_stretch,ns_dumpglyphs_image):
+	respect mouse face background.
 
 2009-05-07  David Reitter  <david.reitter@gmail.com>
 
-	* nsterm.m (note_mouse_movement, ns_frame_up_to_date):
-	Mouse movement/highlight: bracket drawing operations
+	* nsterm.m (note_mouse_movement,ns_frame_up_to_date):
+	mouse movement/highlight: bracket drawing operations
 	in ns_update_begin and ns_update_end.
 
 2009-05-06  Stefan Monnier  <monnier@iro.umontreal.ca>

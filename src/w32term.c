@@ -180,6 +180,7 @@ int last_scroll_bar_drag_pos;
 /* Mouse movement. */
 
 /* Where the mouse was last time we reported a mouse event.  */
+
 static RECT last_mouse_glyph;
 static FRAME_PTR last_mouse_glyph_frame;
 static Lisp_Object last_mouse_press_frame;
@@ -214,10 +215,12 @@ static int last_mouse_scroll_bar_pos;
    along with the position query.  So, we just keep track of the time
    of the last movement we received, and return that in hopes that
    it's somewhat accurate.  */
+
 static Time last_mouse_movement_time;
 
 /* Incremented by w32_read_socket whenever it really tries to read
    events.  */
+
 #ifdef __STDC__
 static int volatile input_signal_count;
 #else
@@ -231,10 +234,8 @@ extern int errno;
 #endif
 
 /* A mask of extra modifier bits to put into every keyboard char.  */
-extern EMACS_INT extra_keyboard_modifiers;
 
-/* Keyboard code page - may be changed by language-change events.  */
-static int keyboard_codepage;
+extern EMACS_INT extra_keyboard_modifiers;
 
 static void x_update_window_end P_ ((struct window *, int, int));
 static void w32_handle_tool_bar_click P_ ((struct frame *,
@@ -2907,15 +2908,6 @@ x_get_keysym_name (keysym)
   return value;
 }
 
-static int codepage_for_locale(LCID locale)
-{
-  char cp[20];
-
-  if (GetLocaleInfo (locale, LOCALE_IDEFAULTANSICODEPAGE, cp, 20) > 0)
-    return atoi (cp);
-  else
-    return CP_ACP;
-}
 
 
 /* Mouse clicks and mouse movement.  Rah.  */
@@ -4168,11 +4160,6 @@ w32_read_socket (sd, expected, hold_quit)
 	  /* Generate a language change event.  */
 	  f = x_window_to_frame (dpyinfo, msg.msg.hwnd);
 
-	  /* lParam contains the input lang ID.  Use it to update our
-	     record of the keyboard codepage.  */
-	  keyboard_codepage = codepage_for_locale ((LCID)(msg.msg.lParam
-							  & 0xffff));
-
 	  if (f)
 	    {
 	      inev.kind = LANGUAGE_CHANGE_EVENT;
@@ -4243,8 +4230,7 @@ w32_read_socket (sd, expected, hold_quit)
                     {
                       dbcs[0] = dbcs_lead;
                       dbcs_lead = 0;
-                      if (!MultiByteToWideChar (keyboard_codepage, 0,
-						dbcs, 2, &code, 1))
+                      if (!MultiByteToWideChar (CP_ACP, 0, dbcs, 2, &code, 1))
                         {
                           /* Garbage */
                           DebPrint (("Invalid DBCS sequence: %d %d\n",
@@ -4253,8 +4239,7 @@ w32_read_socket (sd, expected, hold_quit)
                           break;
                         }
                     }
-                  else if (IsDBCSLeadByteEx (keyboard_codepage,
-					     (BYTE) msg.msg.wParam))
+                  else if (IsDBCSLeadByteEx (CP_ACP, (BYTE) msg.msg.wParam))
                     {
                       dbcs_lead = (char) msg.msg.wParam;
                       inev.kind = NO_EVENT;
@@ -4262,8 +4247,8 @@ w32_read_socket (sd, expected, hold_quit)
                     }
                   else
                     {
-                      if (!MultiByteToWideChar (keyboard_codepage, 0,
-						&dbcs[1], 1, &code, 1))
+                      if (!MultiByteToWideChar (CP_ACP, 0, &dbcs[1], 1,
+                                                &code, 1))
                         {
                           /* What to do with garbage? */
                           DebPrint (("Invalid character: %d\n", dbcs[1]));
@@ -6360,13 +6345,8 @@ w32_initialize ()
      8 bit character input, standard quit char.  */
   Fset_input_mode (Qnil, Qnil, make_number (2), Qnil);
 
-  {
-    DWORD input_locale_id = (DWORD) GetKeyboardLayout (0);
-    keyboard_codepage = codepage_for_locale ((LCID) (input_locale_id & 0xffff));
-  }
+  /* Create the window thread - it will terminate itself or when the app terminates */
 
-  /* Create the window thread - it will terminate itself when the app
-     terminates */
   init_crit ();
 
   dwMainThreadId = GetCurrentThreadId ();
@@ -6374,6 +6354,7 @@ w32_initialize ()
 		   GetCurrentProcess (), &hMainThread, 0, TRUE, DUPLICATE_SAME_ACCESS);
 
   /* Wait for thread to start */
+
   {
     MSG msg;
 

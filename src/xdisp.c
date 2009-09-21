@@ -11838,10 +11838,6 @@ redisplay_internal (preserve_echo_area)
 	      if (FRAME_VISIBLE_P (f) && !FRAME_OBSCURED_P (f))
 		redisplay_windows (FRAME_ROOT_WINDOW (f));
 
-	      /* The X error handler may have deleted that frame.  */
-	      if (!FRAME_LIVE_P (f))
-		continue;
-
 	      /* Any scroll bars which redisplay_windows should have
 		 nuked should now go away.  */
 	      if (FRAME_TERMINAL (f)->judge_scroll_bars_hook)
@@ -12259,7 +12255,7 @@ redisplay_windows (window)
 	redisplay_windows (w->hchild);
       else if (!NILP (w->vchild))
 	redisplay_windows (w->vchild);
-      else if (!NILP (w->buffer))
+      else
 	{
 	  displayed_buffer = XBUFFER (w->buffer);
 	  /* Use list_of_error, not Qerror, so that

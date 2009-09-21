@@ -3272,12 +3272,12 @@ Return the new variables list."
 	  (setq variables (dir-locals-collect-mode-variables
 			   (cdr entry) variables))))))))
 
-(defun dir-locals-set-directory-class (directory class &optional mtime)
+(defun dir-locals-set-directory-class (directory class mtime)
   "Declare that the DIRECTORY root is an instance of CLASS.
 DIRECTORY is the name of a directory, a string.
 CLASS is the name of a project class, a symbol.
 MTIME is either the modification time of the directory-local
-variables file that defined this class, or nil.
+variables file that defined this this class, or nil.
 
 When a file beneath DIRECTORY is visited, the mode-specific
 variables from CLASS are applied to the buffer.  The variables
@@ -4389,7 +4389,7 @@ This requires the external program `diff' to be in your `exec-path'."
 ;;         nil)
 ;;      "view this buffer")
     (?d ,(lambda (buf)
-           (if (null (buffer-file-name buf))
+           (if (null buffer-file-name)
                (message "Not applicable: no file")
              (save-window-excursion (diff-buffer-with-file buf))
              (if (not enable-recursive-minibuffers)

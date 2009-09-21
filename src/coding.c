@@ -1665,12 +1665,10 @@ detect_coding_utf_16 (coding, detect_info)
       e[c1] = 1;
       o[c2] = 1;
 
-      detect_info->rejected |= (CATEGORY_MASK_UTF_16_AUTO
-				|CATEGORY_MASK_UTF_16_BE
-				| CATEGORY_MASK_UTF_16_LE);
+      detect_info->rejected
+	|= (CATEGORY_MASK_UTF_16_BE | CATEGORY_MASK_UTF_16_LE);
 
-      while ((detect_info->rejected & CATEGORY_MASK_UTF_16)
-	     != CATEGORY_MASK_UTF_16)
+      while (1)
 	{
 	  TWO_MORE_BYTES (c1, c2);
 	  if (c2 < 0)
@@ -1680,16 +1678,17 @@ detect_coding_utf_16 (coding, detect_info)
 	      e[c1] = 1;
 	      e_num++;
 	      if (e_num >= 128)
-		detect_info->rejected |= CATEGORY_MASK_UTF_16_BE_NOSIG;
+		break;
 	    }
 	  if (! o[c2])
 	    {
 	      o[c2] = 1;
 	      o_num++;
 	      if (o_num >= 128)
-		detect_info->rejected |= CATEGORY_MASK_UTF_16_LE_NOSIG;
+		break;
 	    }
 	}
+      detect_info->rejected |= CATEGORY_MASK_UTF_16;
       return 0;
     }
 
@@ -3600,7 +3599,7 @@ decode_coding_iso_2022 (coding)
 
   while (1)
     {
-      int c1, c2, c3;
+      int c1, c2;
 
       src_base = src;
       consumed_chars_base = consumed_chars;
@@ -3984,28 +3983,26 @@ decode_coding_iso_2022 (coding)
 	}
 
       /* Now we know CHARSET and 1st position code C1 of a character.
-         Produce a decoded character while getting 2nd and 3rd
-         position codes C2, C3 if necessary.  */
+         Produce a decoded character while getting 2nd position code
+         C2 if necessary.  */
+      c1 &= 0x7F;
       if (CHARSET_DIMENSION (charset) > 1)
 	{
 	  ONE_MORE_BYTE (c2);
-	  if (c2 < 0x20 || (c2 >= 0x80 && c2 < 0xA0)
-	      || ((c1 & 0x80) != (c2 & 0x80)))
+	  if (c2 < 0x20 || (c2 >= 0x80 && c2 < 0xA0))
 	    /* C2 is not in a valid range.  */
 	    goto invalid_code;
-	  if (CHARSET_DIMENSION (charset) == 2)
-	    c1 = (c1 << 8) | c2;
-	  else
+	  c1 = (c1 << 8) | (c2 & 0x7F);
+	  if (CHARSET_DIMENSION (charset) > 2)
 	    {
-	      ONE_MORE_BYTE (c3);
-	      if (c3 < 0x20 || (c3 >= 0x80 && c3 < 0xA0)
-		  || ((c1 & 0x80) != (c3 & 0x80)))
-		/* C3 is not in a valid range.  */
+	      ONE_MORE_BYTE (c2);
+	      if (c2 < 0x20 || (c2 >= 0x80 && c2 < 0xA0))
+		/* C2 is not in a valid range.  */
 		goto invalid_code;
-	      c1 = (c1 << 16) | (c2 << 8) | c2;
+	      c1 = (c1 << 8) | (c2 & 0x7F);
 	    }
 	}
-      c1 &= 0x7F7F7F;
+
       CODING_DECODE_CHAR (coding, src, src_base, src_end, charset, c1, c);
       if (c < 0)
 	{
@@ -8640,7 +8637,7 @@ DEFUN ("find-coding-systems-region-internal",
   EMACS_INT start_byte, end_byte;
   const unsigned char *p, *pbeg, *pend;
   int c;
-  Lisp_Object tail, elt, work_table;
+  Lisp_Object tail, elt;
 
   if (STRINGP (start))
     {
@@ -8698,7 +8695,6 @@ DEFUN ("find-coding-systems-region-internal",
   while (p < pend && ASCII_BYTE_P (*p)) p++;
   while (p < pend && ASCII_BYTE_P (*(pend - 1))) pend--;
 
-  work_table = Fmake_char_table (Qnil, Qnil);
   while (p < pend)
     {
       if (ASCII_BYTE_P (*p))
@@ -8706,9 +8702,6 @@ DEFUN ("find-coding-systems-region-internal",
       else
 	{
 	  c = STRING_CHAR_ADVANCE (p);
-	  if (!NILP (char_table_ref (work_table, c)))
-	    /* This character was already checked.  Ignore it.  */
-	    continue;
 
 	  charset_map_loaded = 0;
 	  for (tail = coding_attrs_list; CONSP (tail);)
@@ -8740,7 +8733,6 @@ DEFUN ("find-coding-systems-region-internal",
 	      p = pbeg + p_offset;
 	      pend = pbeg + pend_offset;
 	    }
-	  char_table_set (work_table, c, Qt);
 	}
     }
 
