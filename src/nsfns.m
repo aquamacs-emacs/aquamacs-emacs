@@ -1828,7 +1828,7 @@ The argument DISPLAY is currently ignored.  */)
 {
   check_ns ();
 #ifdef NS_IMPL_COCOA
-  //  PSFlush ();
+  PSFlush ();
 #endif
   /*ns_delete_terminal (dpyinfo->terminal); */
   [NSApp terminate: NSApp];

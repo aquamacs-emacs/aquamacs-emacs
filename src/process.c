@@ -5632,8 +5632,7 @@ send_process (proc, buf, len, object)
 	}
 
       len = coding->produced;
-      object = coding->dst_object;
-      buf = SDATA (object);
+      buf = SDATA (coding->dst_object);
     }
 
   if (pty_max_bytes == 0)
@@ -5764,7 +5763,9 @@ send_process (proc, buf, len, object)
 
 		      /* Running filters might relocate buffers or strings.
 			 Arrange to relocate BUF.  */
-		      if (BUFFERP (object))
+		      if (CODING_REQUIRE_ENCODING (coding))
+			offset = buf - SDATA (coding->dst_object);
+		      else if (BUFFERP (object))
 			offset = BUF_PTR_BYTE_POS (XBUFFER (object), buf);
 		      else if (STRINGP (object))
 			offset = buf - SDATA (object);
@@ -5775,7 +5776,9 @@ send_process (proc, buf, len, object)
 		      wait_reading_process_output (1, 0, 0, 0, Qnil, NULL, 0);
 #endif
 
-		      if (BUFFERP (object))
+		      if (CODING_REQUIRE_ENCODING (coding))
+			buf = offset + SDATA (coding->dst_object);
+		      else if (BUFFERP (object))
 			buf = BUF_BYTE_ADDRESS (XBUFFER (object), offset);
 		      else if (STRINGP (object))
 			buf = offset + SDATA (object);

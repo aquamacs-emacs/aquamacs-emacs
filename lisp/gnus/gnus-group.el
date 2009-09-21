@@ -3055,21 +3055,12 @@ If there is, use Gnus to create an nnrss group"
 	(let* ((title (gnus-newsgroup-savable-name
 		       (read-from-minibuffer "Title: "
 					     (gnus-newsgroup-savable-name
-					      (mapconcat
-					       'identity
-					       (split-string
-						(or (cdr (assoc 'title
-								feedinfo))
-						    ""))
-					       " ")))))
-	       (desc  (read-from-minibuffer "Description: "
-					    (mapconcat
-					     'identity
-					     (split-string
-					      (or (cdr (assoc 'description
+					      (or (cdr (assoc 'title
 							      feedinfo))
-						  ""))
-					     " ")))
+						  "")))))
+	       (desc  (read-from-minibuffer "Description: "
+					    (cdr (assoc 'description
+							feedinfo))))
 	       (href (cdr (assoc 'href feedinfo)))
 	       (coding (gnus-group-name-charset '(nnrss "") title)))
 	  (when coding

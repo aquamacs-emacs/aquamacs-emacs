@@ -2576,7 +2576,7 @@ ns_fix_rect_ibw (NSRect r, int fibw, int frame_pixel_width)
   return r;
 }
 
-#include "nsgui.h"
+
 static int
 ns_get_glyph_string_clip_rect (struct glyph_string *s, NativeRectangle *nr)
 /* --------------------------------------------------------------------------
@@ -2588,9 +2588,7 @@ ns_get_glyph_string_clip_rect (struct glyph_string *s, NativeRectangle *nr)
   int n = get_glyph_string_clip_rects (s, nr, 2);
   if (s->row->full_width_p)
     {
-      (NativeRectangle) *nr =  ns_fix_rect_ibw 
-(*nr,
- FRAME_INTERNAL_BORDER_WIDTH (s->f),
+      *nr = ns_fix_rect_ibw (*nr, FRAME_INTERNAL_BORDER_WIDTH (s->f),
                             FRAME_PIXEL_WIDTH (s->f));
       if (n == 2)
         *nr = ns_fix_rect_ibw (*(nr+1), FRAME_INTERNAL_BORDER_WIDTH (s->f),
@@ -4823,9 +4821,7 @@ extern void update_window_cursor (struct window *w, int on);
     return;
 
  if (![[self window] isKeyWindow]
-     && [[theEvent window] isKindOfClass: [EmacsWindow class]]
-     /* we must avoid an infinite loop here. */
-     && (EmacsView *)[[theEvent window] delegate] != self)
+     && [[theEvent window] isKindOfClass: [EmacsWindow class]])
    {
      /* XXX: There is an occasional condition in which, when Emacs display
          updates a different frame from the current one, and temporarily
@@ -5167,7 +5163,7 @@ extern void update_window_cursor (struct window *w, int on);
   return NSMakeRange (NSNotFound, 0);
 }
 
-- (NSUInteger)characterIndexForPoint: (NSPoint)thePoint
+- (unsigned int)characterIndexForPoint: (NSPoint)thePoint
 {
   if (NS_KEYLOG)
     NSLog (@"characterIndexForPoint request");
@@ -5883,7 +5879,7 @@ extern void update_window_cursor (struct window *w, int on);
 /* NSDraggingDestination protocol methods.  Actually this is not really a
    protocol, but a category of Object.  O well...  */
 
--(NSDragOperation) draggingEntered: (id <NSDraggingInfo>) sender
+-(unsigned int) draggingEntered: (id <NSDraggingInfo>) sender
 {
   NSTRACE (draggingEntered);
   return NSDragOperationGeneric;
@@ -6167,7 +6163,7 @@ extern void update_window_cursor (struct window *w, int on);
 #define SCROLL_BAR_FIRST_DELAY 0.5
 #define SCROLL_BAR_CONTINUOUS_DELAY (1.0 / 15)
 
-+ (CGFloat) scrollerWidth
++ (float) scrollerWidth
 {
   /* TODO: if we want to allow variable widths, this is the place to do it,
            however neither GNUstep nor Cocoa support it very well */

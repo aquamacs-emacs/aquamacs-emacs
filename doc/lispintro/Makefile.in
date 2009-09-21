@@ -25,8 +25,7 @@ srcdir = @srcdir@
 VPATH = @srcdir@
 
 infodir = ../../info
-# Directory with the (customized) texinfo.tex file.
-texinfodir = $(srcdir)/../misc
+usermanualdir = $(srcdir)/../emacs
 
 INFO_SOURCES = ${srcdir}/emacs-lisp-intro.texi
 # The file name eintr must fit within 5 characters, to allow for
@@ -48,7 +47,7 @@ ${infodir}/eintr: ${INFO_SOURCES}
 	cd $(srcdir); $(MAKEINFO) emacs-lisp-intro.texi -o $(infodir)/eintr
 
 emacs-lisp-intro.dvi: ${INFO_SOURCES}
-	$(TEXI2DVI) -I $(srcdir) -I $(texinfodir) $(srcdir)/emacs-lisp-intro.texi
+	$(TEXI2DVI) -I $(srcdir) -I $(usermanualdir) $(srcdir)/emacs-lisp-intro.texi
 
 emacs-lisp-intro.html: $(INFO_SOURCES)
 	$(MAKEINFO) --html -o $@ $(srcdir)/emacs-lisp-intro.texi

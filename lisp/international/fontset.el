@@ -526,8 +526,7 @@
 		    mahjong-tile
 		    domino-tile))
     (set-fontset-font "fontset-default"
-		      script (font-spec :registry "iso10646-1" :script script)
-		      nil 'append))
+		      script (font-spec :registry "iso10646-1" :script script)))
 
   ;; Special settings for `MATHEMATICAL (U+1D400..U+1D7FF)'.
   (dolist (math-subgroup '((#x1D400 #x1D433 mathematical-bold)

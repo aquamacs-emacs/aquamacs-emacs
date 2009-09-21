@@ -1463,8 +1463,7 @@ expand wildcards (if any) and replace the file with multiple files."
 	    (setq file-name (file-name-nondirectory file)
 		  file-dir (file-name-directory file)))
        (list (read-file-name
-	      "Find alternate file: " file-dir nil
-              (confirm-nonexistent-file-or-buffer) file-name)
+	      "Find alternate file: " file-dir nil nil file-name)
 	     t))))
   (if (one-window-p)
       (find-file-other-window filename wildcards)
@@ -1493,8 +1492,7 @@ killed."
 	  (setq file-name (file-name-nondirectory file)
 		file-dir (file-name-directory file)))
      (list (read-file-name
-	    "Find alternate file: " file-dir nil
-            (confirm-nonexistent-file-or-buffer) file-name)
+	    "Find alternate file: " file-dir nil nil file-name)
 	   t)))
   (unless (run-hook-with-args-until-failure 'kill-buffer-query-functions)
     (error "Aborted"))

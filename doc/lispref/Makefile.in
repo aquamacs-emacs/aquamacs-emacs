@@ -27,8 +27,7 @@ srcdir = @srcdir@
 VPATH=@srcdir@
 
 infodir = ../../info
-# Directory with the (customized) texinfo.tex file.
-texinfodir = $(srcdir)/../misc
+usermanualdir = $(srcdir)/../emacs
 
 TEXI2DVI = texi2dvi
 SHELL = /bin/sh
@@ -101,11 +100,11 @@ $(infodir)/elisp: $(srcs)
 	cd $(srcdir); $(MAKEINFO) -I. -I$(infodir) elisp.texi -o $(infodir)/elisp
 
 elisp.dvi: $(srcs)
-	$(TEXI2DVI) -I $(srcdir) -I $(texinfodir) $(srcdir)/elisp.texi
+	$(TEXI2DVI) -I $(srcdir) -I $(usermanualdir) $(srcdir)/elisp.texi
 
 clean:
 	rm -f *.toc *.aux *.log *.cp *.cps *.fn *.fns *.tp *.tps \
-              *.vr *.vrs *.pg *.pgs *.ky *.kys elisp[12]*
+              *.vr *.vrs *.pg *.pgs *.ky *.kys
 	rm -f make.out core
 
 distclean: clean
