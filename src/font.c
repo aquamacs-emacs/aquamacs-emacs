@@ -1139,10 +1139,7 @@ font_parse_xlfd (name, font)
 	    }
 	}
 
-      val = INTERN_FIELD (XLFD_RESY_INDEX);
-      if (! NILP (val) && ! INTEGERP (val))
-	return -1;
-      ASET (font, FONT_DPI_INDEX, val);
+      ASET (font, FONT_DPI_INDEX, INTERN_FIELD (XLFD_RESY_INDEX));
       val = INTERN_FIELD (XLFD_SPACING_INDEX);
       if (! NILP (val))
 	{
@@ -1154,10 +1151,8 @@ font_parse_xlfd (name, font)
       p = f[XLFD_AVGWIDTH_INDEX];
       if (*p == '~')
 	p++;
-      val = font_intern_prop (p, f[XLFD_REGISTRY_INDEX] - 1 - p, 0);
-      if (! NILP (val) && ! INTEGERP (val))
-	return -1;
-      ASET (font, FONT_AVGWIDTH_INDEX, val);
+      ASET (font, FONT_AVGWIDTH_INDEX,
+	    font_intern_prop (p, f[XLFD_REGISTRY_INDEX] - 1 - p, 0));
     }
   else
     {

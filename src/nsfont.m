@@ -464,7 +464,7 @@ ns_findfonts (Lisp_Object font_spec, BOOL isMatch)
     /* If has non-unicode registry, give up. */
     tem = AREF (font_spec, FONT_REGISTRY_INDEX);
     if (! NILP (tem) && !EQ (tem, Qiso10646_1) && !EQ (tem, Qunicode_bmp))
-	return isMatch ? ns_fallback_entity () : Qnil;
+	return isMatch ? Fcons (ns_fallback_entity (), list) : Qnil;
 
     cFamilies = ns_get_covering_families (ns_get_req_script (font_spec), 0.90);
 
@@ -483,12 +483,9 @@ ns_findfonts (Lisp_Object font_spec, BOOL isMatch)
 	if (![cFamilies containsObject:
 	         [desc objectForKey: NSFontFamilyAttribute]])
 	    continue;
-        tem = ns_descriptor_to_entity (desc,
-                                       AREF (font_spec, FONT_EXTRA_INDEX),
-                                       NULL);
-        if (isMatch)
-          return tem;
-	list = Fcons (tem, list);
+	list = Fcons (ns_descriptor_to_entity (desc,
+					 AREF (font_spec, FONT_EXTRA_INDEX),
+					 NULL), list);
 	if (fabs (ns_attribute_fvalue (desc, NSFontSlantTrait)) > 0.05)
 	    foundItal = YES;
       }
@@ -506,8 +503,8 @@ ns_findfonts (Lisp_Object font_spec, BOOL isMatch)
       }
 
     /* Return something if was a match and nothing found. */
-    if (isMatch)
-      return ns_fallback_entity ();
+    if (isMatch && XINT (Flength (list)) == 0)
+      list = Fcons (ns_fallback_entity (), Qnil);
 
     if (NSFONT_TRACE)
 	fprintf (stderr, "    Returning %d entities.\n", XINT (Flength (list)));
