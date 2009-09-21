@@ -325,7 +325,6 @@ Keymap to display on column and line numbers.")
 
 (defvar command-line-processed nil)
 (defvar before-init-hook nil)
-(eval-at-startup ;; because of initial-window-system
 (let* ((help-echo
 	;; The multi-line message doesn't work terribly well on the
 	;; bottom mode line...  Better ideas?
@@ -334,9 +333,9 @@ Keymap to display on column and line numbers.")
 	;; drag-mouse-1: resize, C-mouse-2: split horizontally"
 	"mouse-1: select (drag to resize), mouse-2: delete others, mouse-3: delete this")
        (recursive-edit-help-echo "Recursive edit, type C-M-c to get out")
-       (lotsofdashes (if initial-window-system (make-string 100 32) "%-"))
-       (dash (propertize (if initial-window-system " " "-") 'help-echo help-echo))
-       (dashes (propertize (if initial-window-system "  " "--") 'help-echo help-echo))
+       (lotsofdashes (make-string 100 32))
+       (dash (propertize " " 'help-echo help-echo))
+       (dashes (propertize "  " 'help-echo help-echo))
        (standard-mode-line-format
 	(list
 	 "%e"
@@ -430,7 +429,7 @@ mouse-1: Display Line and Column Mode Menu"))))))))
 
   (setq-default mode-line-position standard-mode-line-position)
   (put 'mode-line-position 'standard-value
-       (list `(quote ,standard-mode-line-position)))))
+       (list `(quote ,standard-mode-line-position))))
 
 (defvar mode-line-buffer-identification-keymap
   ;; Add menu of buffer operations to the buffer identification part
