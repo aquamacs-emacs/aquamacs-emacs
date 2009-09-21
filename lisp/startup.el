@@ -917,6 +917,17 @@ opening the first frame (e.g. open a connection to an X server).")
                    (<= (frame-parameter nil 'menu-bar-lines) 0)))
     (menu-bar-mode 1))
 
+  ;; Re-evaluate predefined variables whose initial value depends on
+  ;; the runtime context.
+  (mapc 'custom-reevaluate-setting
+        ;; Initialize them in the same order they were loaded, in case there
+        ;; are dependencies between them.
+        (prog1 (nreverse custom-delayed-init-variables)
+          (setq custom-delayed-init-variables nil)))
+
+  ;; In Aquamacs, images are loaded when setting up tool-bar
+  ;; which requires image-load-path to be defined, which is a
+  ;; custom variable with delayed initialization.
   (unless (or noninteractive (not (fboundp 'tool-bar-mode)))
     ;; Set up the tool-bar.  Do this even in tty frames, so that there
     ;; is a tool-bar if Emacs later opens a graphical frame.
@@ -928,14 +939,6 @@ opening the first frame (e.g. open a connection to an X server).")
 	(tool-bar-setup)
       ;; Otherwise, enable tool-bar-mode.
       (tool-bar-mode 1)))
-
-  ;; Re-evaluate predefined variables whose initial value depends on
-  ;; the runtime context.
-  (mapc 'custom-reevaluate-setting
-        ;; Initialize them in the same order they were loaded, in case there
-        ;; are dependencies between them.
-        (prog1 (nreverse custom-delayed-init-variables)
-          (setq custom-delayed-init-variables nil)))
 
   (normal-erase-is-backspace-setup-frame)
 
