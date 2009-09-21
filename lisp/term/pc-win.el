@@ -185,7 +185,7 @@ created."
 On X, the display name of individual X frames is recorded in the
 `display' frame parameter.")
 (defvar x-colors (mapcar 'car msdos-color-values)
-  "List of basic colors available on color displays.
+  "List of available colors for graphical frames.
 For X, the list comes from the `rgb.txt' file,v 10.41 94/02/20.
 For Nextstep, this is a list of non-PANTONE colors returned by
 the operating system.")
@@ -201,28 +201,11 @@ the operating system.")
 
 (defcustom x-select-enable-clipboard t
   "Non-nil means cutting and pasting uses the clipboard.
-This is in addition to, but in preference to, the primary selection.
-
-On MS-Windows, this is non-nil by default, since Windows does not
-support other types of selections.  \(The primary selection that is
-set by Emacs is not accessible to other programs on Windows.\)"
+This is in addition to, but in preference to, the primary selection."
   :type 'boolean
   :group 'killing)
 
 (defun x-select-text (text &optional push)
-  "Select TEXT, a string, according to the window system.
-
-On X, put TEXT in the primary X selection.  For backward
-compatibility with older X applications, set the value of X cut
-buffer 0 as well, and if the optional argument PUSH is non-nil,
-rotate the cut buffers.  If `x-select-enable-clipboard' is
-non-nil, copy the text to the X clipboard as well.
-
-On Windows, make TEXT the current selection.  If
-`x-select-enable-clipboard' is non-nil, copy the text to the
-clipboard as well.  The argument PUSH is ignored.
-
-On Nextstep, put TEXT in the pasteboard; PUSH is ignored."
   (if x-select-enable-clipboard
       (w16-set-clipboard-data text))
   (setq x-last-selected-text text))

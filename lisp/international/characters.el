@@ -139,9 +139,10 @@ Combining diacritic or mark (Unicode General Category M)")
 (modify-category-entry '(#xF900 . #xFAFF) ?C)
 (modify-category-entry '(#xF900 . #xFAFF) ?c)
 (modify-category-entry '(#xF900 . #xFAFF) ?|)
-(modify-category-entry '(#x20000 . #x2FFFF) ?|)
-(modify-category-entry '(#x20000 . #x2FFFF) ?C)
-(modify-category-entry '(#x20000 . #x2FFFF) ?c)
+(modify-category-entry '(#x20000 . #x2AFFF) ?|)
+(modify-category-entry '(#x2F800 . #x2FFFF) ?|)
+(modify-category-entry '(#x20000 . #x2AFFF) ?C)
+(modify-category-entry '(#x2F800 . #x2FFFF) ?C)
 
 
 ;; Chinese character set (GB2312)
@@ -194,19 +195,17 @@ Combining diacritic or mark (Unicode General Category M)")
   (modify-category-entry range ?\|))
 
 ;; Katakana block
-(modify-category-entry '(#x3099 . #x309C) ?K)
-(modify-category-entry '(#x30A0 . #x30FF) ?K)
-(modify-category-entry '(#x31F0 . #x31FF) ?K)
-(modify-category-entry '(#x30A0 . #x30FA) ?\|)
-(modify-category-entry #x30FF ?\|)
+(let ((range '(#x30a0 . #x30ff)))
+  ;; ?K is double width, ?k isn't specified
+  (modify-category-entry range ?K)
+  (modify-category-entry range ?\|))
 
 ;; Hiragana block
-(modify-category-entry '(#x3040 . #x309F) ?H)
-(modify-category-entry '(#x3040 . #x3096) ?\|)
-(modify-category-entry #x309F ?\|)
-(modify-category-entry #x30A0 ?H)
-(modify-category-entry #x30FC ?H)
-
+(let ((range '(#x3040 . #x309d)))
+  ;; ?H is actually defined to be double width
+  ;;(modify-category-entry range ?H)
+  (modify-category-entry range ?\|)
+  )
 
 ;; JISX0208
 (map-charset-chars #'modify-syntax-entry 'japanese-jisx0208 "_" #x2121 #x227E)
@@ -528,8 +527,7 @@ Combining diacritic or mark (Unicode General Category M)")
 		       (#x014a . #x0177)
 		       (#x0179 . #x017E)
 		       (#x0182 . #x0185)
-		       (#x0187 . #x0188)
-		       (#x018B . #x018C)
+		       (#x0187 . #x018C)
 		       (#x0191 . #x0192)
 		       (#x0198 . #x0199)
 		       (#x01A0 . #x01A5)
@@ -551,9 +549,6 @@ Combining diacritic or mark (Unicode General Category M)")
 	(while (< from to)
 	  (set-case-syntax-pair from (1+ from) tbl)
 	  (setq from (+ from 2))))))
-
-  (set-case-syntax-pair #x189 #x256 tbl)
-  (set-case-syntax-pair #x18A #x257 tbl)
 
   ;; In some languages, such as Turkish, U+0049 LATIN CAPITAL LETTER I
   ;; and U+0131 LATIN SMALL LETTER DOTLESS I make a case pair, and so
@@ -621,9 +616,8 @@ Combining diacritic or mark (Unicode General Category M)")
   (while (<= c #x1fff)
     (and (<= (logand c #x000f) 7)
 	 (<= c #x1fa7)
-	 (not (memq c '(#x1f16 #x1f17 #x1f56 #x1f57
-			       #x1f50 #x1f52 #x1f54 #x1f56)))
-	 (/= (logand c #x00f0) #x70)
+	 (not (memq c '(#x1f50 #x1f52 #x1f54 #x1f56)))
+	 (/= (logand c #x00f0) 7)
 	 (set-case-syntax-pair (+ c 8) c tbl))
     (setq c (1+ c)))
   (set-case-syntax-pair ?Ᾰ ?ᾰ tbl)
@@ -1180,8 +1174,8 @@ Setup char-width-table appropriate for non-CJK language environment."
   (let ((table (make-char-table 'unicode-category-table nil)))
     (dotimes (i #x110000)
       (if (or (< i #xD800)
-	      (and (>= i #xF900) (< i #x30000))
-	      (and (>= i #xE0000) (< i #xE0200)))
+	      (and (> i #xF900) (< i #x30000))
+	      (and (> i #xE0000) (< i #xE0200)))
 	  (aset table i (get-char-code-property i 'general-category))))
     (set-char-table-range table '(#xE000 . #xF8FF) 'Co)
     (set-char-table-range table '(#xF0000 . #xFFFFD) 'Co)

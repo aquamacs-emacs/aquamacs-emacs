@@ -37,11 +37,6 @@ Author: Adrian Robert (arobert@cogsci.ucsd.edu)
 #include "character.h"
 #include "font.h"
 
-/* This header is not included from GNUstep's (0.16.0) AppKit.h.  */
-#ifdef NS_IMPL_GNUSTEP
-#import <AppKit/NSFontDescriptor.h>
-#endif
-
 #define NSFONT_TRACE 0
 
 extern Lisp_Object Qns;
@@ -464,7 +459,7 @@ ns_findfonts (Lisp_Object font_spec, BOOL isMatch)
     /* If has non-unicode registry, give up. */
     tem = AREF (font_spec, FONT_REGISTRY_INDEX);
     if (! NILP (tem) && !EQ (tem, Qiso10646_1) && !EQ (tem, Qunicode_bmp))
-	return isMatch ? Fcons (ns_fallback_entity (), list) : Qnil;
+	return isMatch ? ns_fallback_entity () : Qnil;
 
     cFamilies = ns_get_covering_families (ns_get_req_script (font_spec), 0.90);
 
@@ -501,10 +496,6 @@ ns_findfonts (Lisp_Object font_spec, BOOL isMatch)
 					 AREF (font_spec, FONT_EXTRA_INDEX),
 					 "synthItal"), list);
       }
-
-    /* Return something if was a match and nothing found. */
-    if (isMatch && XINT (Flength (list)) == 0)
-      list = Fcons (ns_fallback_entity (), Qnil);
 
     if (NSFONT_TRACE)
 	fprintf (stderr, "    Returning %d entities.\n", XINT (Flength (list)));
