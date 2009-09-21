@@ -1337,7 +1337,9 @@ be a cons cell (LINENUMBER . COLUMNNUMBER)."
       ;; OK, we know next-buffer is live, let's display and select it.
       (if (functionp server-window)
 	  (funcall server-window next-buffer)
-	(let ((win (get-buffer-window next-buffer 0)))
+	(let ((win (if (eq (window-buffer (selected-window)) next-buffer)
+		       (selected-window)
+		     (get-buffer-window next-buffer 0))))
 	  (if (and win (not server-window))
 	      ;; The buffer is already displayed: just reuse the
 	      ;; window.  If FILEPOS is non-nil, use it to replace the
