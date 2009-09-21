@@ -118,8 +118,10 @@ If set, the server accepts remote connections; otherwise it is local."
   :version "22.1")
 (put 'server-auth-dir 'risky-local-variable t)
 
-(defcustom server-raise-frame t
-  "If non-nil, raise frame when switching to a buffer."
+(defcustom server-raise-frame 
+  (if (eq initial-window-system 'ns) 'activate t)
+  "If non-nil, raise frame when switching to a buffer.
+On NS, if `activate', activate application as well."
   :group 'server
   :type 'boolean
   :version "22.1")
@@ -1373,7 +1375,10 @@ be a cons cell (LINENUMBER . COLUMNNUMBER)."
 	      ;; a minibuffer/dedicated-window (if there's no other).
 	      (error (pop-to-buffer next-buffer)))))))
     (when server-raise-frame
-      (select-frame-set-input-focus (window-frame (selected-window))))))
+      (select-frame-set-input-focus (window-frame (selected-window)))
+      (and (eq server-raise-frame 'activate)
+	   (eq initial-window-system 'ns)
+	   (ns-hide-emacs 'activate)))))
 
 ;;;###autoload
 (defun server-save-buffers-kill-terminal (arg)
