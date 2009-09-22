@@ -803,23 +803,33 @@ nsfont_open (FRAME_PTR f, Lisp_Object font_entity, int pixel_size)
 
     brect =  [sfont boundingRectForFont];
     full_height = brect.size.height;
-    min_height = [sfont ascender] - [sfont descender];
+    min_height = [sfont ascender] - [sfont descender] - [sfont leading];
     hd = full_height - min_height;
 
     /* standard height, similar to Carbon. Emacs.app: was 0.5 by default. */
-    expand = 0.0;
-    hshrink = 1.0;
+    expand = [sfont isFixedPitch] ? 0.2 : 0;
+    hshrink = 1;
+    float expand2 = 0;
+    /* if ascender/descender do not provide enough natural spacing, add some: 
+     this idea did not work well, so expand2 = 0 for now.*/
+   
+    float spc_ratio = expand2 * max (0, ((float) full_height) / hd - 2.8);
 
     font_info->underpos = 2; /*[sfont underlinePosition] is often clipped out */
     font_info->underwidth = [sfont underlineThickness];
     font_info->size = font->pixel_size;
-    font_info->voffset = lrint (hshrink * [sfont ascender] + expand * hd / 2);
+    font_info->voffset = lrint (hshrink * [sfont ascender] + expand * hd / 2
+				+ spc_ratio/2);
+    /* printf("leading+%f  fh/hd=%f asc=%f desc=%f spc-r=spc_ratio=%f\n",
+       [sfont leading], full_height / hd, [sfont ascender],  
+       [sfont descender], spc_ratio);
+    */
 
     /* max bounds */
     font_info->max_bounds.ascent =
-      lrint (hshrink * [sfont ascender] + expand * hd/2);
+      lrint (hshrink * [sfont ascender] + expand * hd/2 + spc_ratio/2);
     font_info->max_bounds.descent =
-      -lrint (hshrink* [sfont descender] - expand*hd/2);
+      -lrint (hshrink* [sfont descender] - expand * hd/2 - spc_ratio/2);
     font_info->height =
       font_info->max_bounds.ascent + font_info->max_bounds.descent;
     font_info->max_bounds.width = lrint (font_info->width);
