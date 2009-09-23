@@ -3481,7 +3481,6 @@ x_wm_set_icon_position (struct frame *f, int icon_x, int icon_y)
 /* Allow for compilation with pre-10.6 SDKs */
 #define _NSApplicationPresentationAutoHideDock  (1 <<  0)
 #define _NSApplicationPresentationAutoHideMenuBar  (1 <<  2)
-APPKIT_EXTERN NSString * const NSFullScreenModeApplicationPresentationOptions;
 
 static void
 ns_fullscreen_hook  (f)
@@ -3507,9 +3506,7 @@ FRAME_PTR f;
 	    case FULLSCREEN_BOTH:
 	      if (NSAppKitVersionNumber < NSAppKitVersionNumber10_5)
 		{
-		  opts = [NSDictionary dictionaryWithObjectsAndKeys:
-					    [NSNumber numberWithInt:NSNormalWindowLevel],
-				       NSFullScreenModeWindowLevel, nil];
+		  opts = [NSDictionary dictionaryWithObjectsAndKeys: nil];
 		} else if (NSAppKitVersionNumber < NSAppKitVersionNumber10_5+1) /* not 10.6 yet? */
 		{
 		  opts = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -3523,7 +3520,8 @@ FRAME_PTR f;
 				       NSFullScreenModeAllScreens, 
 				       /* let menu and Dock appear if mouse is moved there. */
 					    [NSNumber numberWithInt: (_NSApplicationPresentationAutoHideMenuBar|_NSApplicationPresentationAutoHideDock)],
-				       NSFullScreenModeApplicationPresentationOptions, /* defined from 10.6 on */
+							    /* hack: avoid using constant to allow for compilation with pre-10.6 SDKs */
+				       @"NSFullScreenModeApplicationPresentationOptions", /* defined from 10.6 on */
 				       nil];
 		}
 	      
