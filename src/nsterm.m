@@ -3223,6 +3223,8 @@ ns_select (int nfds, fd_set *readfds, fd_set *writefds,
   if (result)
     return result;
 
+  /* debugging (Aquamacs) */
+  assert (! (!timeout || timed_entry || fd_entry));
   /* if (!timeout || timed_entry || fd_entry)
        fprintf (stderr, "assertion failed: timeout null or timed_entry/fd_entry non-null in ns_select\n"); */
 
