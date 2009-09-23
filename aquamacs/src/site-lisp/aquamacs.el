@@ -899,6 +899,9 @@ yes-or-no prompts - y or n will do."
 ; (aquamacs--configure-aspell) 
 ; (getenv "ASPELL_CONF")
 
+  (require 'aquamacs-autoface-mode)
+  (autoload 'aquamacs-styles-mode "aquamacs-styles.el" "Automatically set frame style according to major mode" 'interactive nil)
+
   (ats "aquamacs-menu ...")
   (require 'aquamacs-menu) ; before osx_defaults
   (menu-bar-update-buffers) ;; update Buffers menu now
@@ -1025,10 +1028,6 @@ Use this argument instead of explicitly setting `view-exit-action'."
 
 
 (require 'color-theme-autoloads)
-(require 'aquamacs-autoface-mode)
-(autoload 'aquamacs-styles-mode "aquamacs-styles.el" "Automatically set frame style according to major mode" 'interactive nil)
-
- (ats "styles done")
 
 ;; follow mouse autoload
 (autoload 'turn-on-follow-mouse "follow-mouse.el"   "Moving the mouse will automatically select the window under it" 'interactive nil)
