@@ -3505,15 +3505,21 @@ FRAME_PTR f;
 		  opts = [NSDictionary dictionaryWithObjectsAndKeys:
 					    [NSNumber numberWithInt:NSNormalWindowLevel],
 				       NSFullScreenModeWindowLevel, nil];
-		} else
+		} else if (NSAppKitVersionNumber < NSAppKitVersionNumber10_5+1) /* not 10.6 yet? */
 		{
 		  opts = [NSDictionary dictionaryWithObjectsAndKeys:
 					   [NSNumber numberWithBool:NO],
 				       NSFullScreenModeAllScreens, /* defined from 10.5 on */
-						   // problem  rdar://5804777 prevents
-				       // the window level from being set correctly.
-					    [NSNumber numberWithInt:NSNormalWindowLevel],
-				       NSFullScreenModeWindowLevel, nil];
+				       nil];
+		} else /* 10.6 and later. */
+		{
+		  opts = [NSDictionary dictionaryWithObjectsAndKeys:
+					   [NSNumber numberWithBool:NO],
+				       NSFullScreenModeAllScreens, 
+				       /* let menu and Dock appear if mouse is moved there. */
+					    [NSNumber numberWithInt: (NSApplicationPresentationAutoHideMenuBar|NSApplicationPresentationAutoHideDock)],
+				       NSFullScreenModeApplicationPresentationOptions, /* defined from 10.6 on */
+				       nil];
 		}
 	      
 	      [view enterFullScreenMode:[[view window] screen]
