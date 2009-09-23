@@ -43,7 +43,7 @@
 
 
 ; (require 'cl)
-(require 'aquamacs-cl)
+(eval-when-compile (require 'aquamacs-cl))
 
 (defvar aquamacs-faces-changed nil)
 
@@ -718,6 +718,7 @@ modified, or in FRAME if given."
 ;; 	      :enable (menu-bar-menu-frame-live-and-visible-p)
 ;; 	      :help "Select a foreground color"))
 
+(defun aquamacs-autoface-setup-menu ()
 (define-key appearance-menu [color-panel]
   `(menu-item  "Color Panel..."
 	      aquamacs-popup-color-panel
@@ -750,6 +751,8 @@ modified, or in FRAME if given."
   (list 'menu-item "Appearance" appearance-menu
 	  :help "Appearances")
     'showhide)
+)
+(add-hook 'aquamacs-menu-setup-hook 'aquamacs-autoface-setup-menu)
 
 
 ;; A lot of major modes forget to use `run-mode-hooks'.

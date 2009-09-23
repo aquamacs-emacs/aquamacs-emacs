@@ -2,18 +2,15 @@
 ;; to be loaded and included in dumped state at compile time
 ;; test
  
-(defvar aq-preloaded nil
-"List of preloaded (precomiled) features.")
-(defun aq-preload (f)  
-  (let ((features-before features)
-	(load-path (cons aq-compile-path load-path)))
-    
-    (load (concat aq-compile-path f))
-    (mapc (lambda (e)
-	    (unless (member e features-before)
-	      (setq aq-preloaded (cons e aq-preloaded))))
-	    features)))
+(defvar aq-compile-path "../aquamacs/src/site-lisp/")
 
+(defvar aq-preloaded nil
+  "List of preloaded (precomiled) features.")
+
+(defvar aq--preloading-features-before features)
+
+(defmacro aq-preload (f)
+  `(load (concat aq-compile-path ,f)))
 
 ;(load "mwheel") ;; wants to be loaded at runtime
 (load "disp-table")
@@ -64,15 +61,31 @@
 
 ;; aquamacs
 ;; the function aq-preload is supplied by the make-aquamacs script
-(aq-preload "aquamacs-macros.el")
-(aq-preload "aquamacs-tools.el")
-(aq-preload "macosx/mac-extra-functions.el")
-;(aq-preload "applescript-mode.el")
+(aq-preload "aquamacs-macros")
+(aq-preload "aquamacs-tools")
+(aq-preload "macosx/mac-extra-functions")
+;(aq-preload "applescript-mode")
 ; the following can't be precompiled. reason unknown.
 ;; no text available if this is compiled in. 
 ;;(aq-preload "aquamacs-mode-specific-themes")
-(aq-preload "aquamacs.el")
-(aq-preload "macosx/osx_defaults.el")
+(aq-preload "aquamacs")
+(aq-preload "aquamacs-tool-bar")
+(aq-preload "macosx/osx_defaults")
+(aq-preload "macosx/aquamacs-menu")
+; these define minor modes
+;(aq-preload "macosx/emulate-mac-keyboard-mode")
+;(aq-preload "macosx/osxkeys")
+(aq-preload "macosx/mac-extra-functions")
+;; autoface must be compiled (due to require aq-cl)
+;; to do: change make scripts to require compilation of all those
+;; before dumping, not after. 
+;(aq-preload "aquamacs-autoface-mode")
+;(aq-preload "one-buffer-one-frame") [define-minor-mode]
+;(aq-preload "smart-frame-positioning")
+;(aq-preload "visual-line")
+(aq-preload "check-for-updates")
+(aq-preload "aquamacs-redo")
+;(aq-preload "auctex-config")
 
 ;; (load "mail/rfc822.el")
 ;; (load "mail/mail-utils.el")
@@ -88,7 +101,6 @@
 ;; (aq-preload "aquamacs-bug.el")
 ;(aq-preload "aquamacs-mac-fontsets.el")
 
-;(aq-preload "longlines.el")
 ;(aq-preload "aquamacs-menu.el")
 ;(aq-preload "aquamacs-mode-defaults.el")
 ; (aq-preload "aquamacs-tool-bar.el")
@@ -128,6 +140,12 @@
 ; (aq-preload "site-start.el")
 
 
+
+(mapc (lambda (e)
+	    (unless (member e aq--preloading-features-before)
+	      (setq aq-preloaded (cons e aq-preloaded))))
+	    features)
+ 
 ;; correct paths in load-history
 (setq load-history
       (mapcar

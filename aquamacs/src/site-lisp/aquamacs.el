@@ -901,7 +901,9 @@ yes-or-no prompts - y or n will do."
 
   (ats "aquamacs-menu ...")
   (require 'aquamacs-menu) ; before osx_defaults
-
+  (menu-bar-update-buffers) ;; update Buffers menu now
+  (aquamacs-update-menu t) ;; initial setup of the menu
+ 
   (ats "aquamacs-menu done")
   (require 'aquamacs-bug) ;; successfully send bug reports on the Mac
   (ats "aquamacs-bug done")

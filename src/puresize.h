@@ -37,7 +37,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #endif
 
 #ifndef SITELOAD_PURESIZE_EXTRA
-#define SITELOAD_PURESIZE_EXTRA 0
+#define SITELOAD_PURESIZE_EXTRA 400000
 #endif
 
 #ifndef BASE_PURESIZE
