@@ -435,36 +435,6 @@ specified in `shell-file-name'."
 	    (delete-file (car f))
 	  (error nil))))
 
-;; install start script
-
-;; (defun aquamacs-install-shell-start-script ()
-
-;;   (save-excursion
-
-;;     (with-current-buffer 
-;; 	(find-file-noselect 
-;; 	 (concat aquamacs-mac-application-bundle-directory 
-;; 		 "/Contents/Resources/etc/aquamacs-start.perl") 
-;;      'nowarn 'rawfile))
-    
-;;     (if (search-forward "<AQUAMACS-PATH>" nil )
-;; 	(replace-match (replace-regexp-in-string " " "\\\\ " aquamacs-mac-application-bundle-directory) t t))
-  
-;;     ;; how do we sudo?
-
-;; ))
-  
-(defun aq-show-help-file (file &optional book)
-  (if file
-      (and
-       (aq-run-python-command
-	(format "from Carbon import AH; AH.AHGotoPage(None, '%s/Contents/Resources/%s/%s', None)" 
-		aquamacs-mac-application-bundle-directory		      
-		(or book "Aquamacs Help")
-		file))
-       (message "Sorry, change log unavailable (python, OS problem?)"))
-    (message "Sorry, change log unavailable (not found)")))
-
 ; Call up help book
 (defun aquamacs-user-help ()
   "Show the Aquamacs Help."
