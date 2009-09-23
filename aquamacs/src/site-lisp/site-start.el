@@ -1,12 +1,9 @@
-;; Site startup file
-;; loads osx_defaults and auctex defaults 
+;; Aquamacs startup file
 
 ;; Author: David Reitter, david.reitter@gmail.com
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: site-start.el,v 1.71 2009/03/03 18:48:05 davidswelt Exp $
-
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
 
@@ -37,12 +34,12 @@
 
 ;; Version information
 
-(defvar aquamacs-version "2.0preview2"
+(defvar aquamacs-version "2.0dev"
 "A string with Aquamacs' version number.
 The format of the string is undefined. 
 For a reliable numerical representation, use `aquamacs-version-id'.")
 
-(defvar aquamacs-version-id 202
+(defvar aquamacs-version-id 203
 "A float indicating Aquamacs' version number.
 Full integers correspond to the third position of the public
 version number, e.g. version 0.9.7 is represented as `97.x'.
