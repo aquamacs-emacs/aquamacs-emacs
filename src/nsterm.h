@@ -118,7 +118,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 - (NSMenuItem *)addItemWithWidgetValue: (void *)wvptr;
 - (void)fillWithWidgetValue: (void *)wvptr;
 - (EmacsMenu *)addSubmenuWithTitle: (char *)title forFrame: (struct frame *)f;
-- (void) clear;
 - (Lisp_Object)runMenuAt: (NSPoint)p forFrame: (struct frame *)f
                  keymaps: (int)keymaps;
 @end

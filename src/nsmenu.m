@@ -440,7 +440,10 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
             }
         }
 
-      [menu clear];
+      /* clear menu, leaving the first item (application menu) */
+      for (i = [menu numberOfItems]-1; i>0 ; i--)
+	[menu removeItemAtIndex:1];
+      
       for (i = 0; i < XVECTOR (items)->size; i += 4)
 	{
 	  string = XVECTOR (items)->contents[i + 1];
