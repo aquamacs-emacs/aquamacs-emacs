@@ -95,33 +95,7 @@ for the definition of the menu frame."
 
 ;; Don't use delete-frame as event name because that is a special
 ;; event.
-(define-key menu-bar-file-menu [delete-this-frame]
-  `(menu-item ,(purecopy "Delete Frame") delete-frame
-	      :visible (fboundp 'delete-frame)
-	      :enable (delete-frame-enabled-p)
-	      :help ,(purecopy "Delete currently selected frame")))
-(define-key menu-bar-file-menu [make-frame-on-display]
-  `(menu-item ,(purecopy "New Frame on Display...") make-frame-on-display
-	      :visible (fboundp 'make-frame-on-display)
-	      :help ,(purecopy "Open a new frame on another display")))
-(define-key menu-bar-file-menu [make-frame]
-  `(menu-item ,(purecopy "New Frame") make-frame-command
-	      :visible (fboundp 'make-frame-command)
-	      :help ,(purecopy "Open a new frame")))
 
-(define-key menu-bar-file-menu [one-window]
-  `(menu-item ,(purecopy "Remove Splits") delete-other-windows
-	      :enable (not (one-window-p t nil))
-	      :help ,(purecopy "Selected window grows to fill the whole frame")))
-
-(define-key menu-bar-file-menu [split-window]
-  `(menu-item ,(purecopy "Split Window") split-window-vertically
-	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
-			   (menu-bar-non-minibuffer-window-p))
-	      :help ,(purecopy "Split selected window in two windows")))
-
-(define-key menu-bar-file-menu [separator-window]
-  `(menu-item ,(purecopy "--")))
 
 (define-key menu-bar-file-menu [separator-print]
   `(menu-item ,(purecopy "--")))

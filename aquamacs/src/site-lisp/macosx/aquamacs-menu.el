@@ -1225,13 +1225,6 @@ subsequently create.  Upon entering text-mode, the function
 ;(assq-delete-all 'select-named-buffer menu-bar-buffers-menu-command-entries)
 ;(assq-delete-all 'list-all-buffers menu-bar-buffers-menu-command-entries)
 
-(assq-delete-all 'make-frame menu-bar-file-menu)
-(assq-delete-all 'make-tab menu-bar-file-menu)
-(assq-delete-all 'one-window menu-bar-file-menu)
-(assq-delete-all 'split-window menu-bar-file-menu) 
-(assq-delete-all 'delete-this-frame menu-bar-file-menu)
-(assq-delete-all 'separator-window menu-bar-file-menu)
-
 (add-hook 'menu-bar-update-hook 'aquamacs-update-menu)
 (add-hook 'after-change-major-mode-hook 'aquamacs-record-mode-change)
 (add-hook 'after-init-hook 'aquamacs-update-new-file-menu)
