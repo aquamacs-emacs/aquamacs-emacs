@@ -168,7 +168,7 @@ and you have to scroll or press \\[recenter-top-bottom] to update the numbers."
             (overlay-put ov 'linum-str str))))
       (forward-line)
       (setq line (1+ line)))
-    (set-window-margins win width)))
+    (set-window-margins win (+ 1 width))))
 
 (defun linum-after-change (beg end len)
   ;; update overlays on deletions, and after newlines are inserted
