@@ -4593,17 +4593,17 @@ extern void update_window_cursor (struct window *w, int on);
   [super dealloc];
 }
 
-- (unsigned int) validModesForFontPanel:(NSFontPanel *)fontPanel
+- (NSUInteger) validModesForFontPanel:(NSFontPanel *)fontPanel
 {
-  /* This doesn't work as intended.  Why?  Bug?/
+  /* The following did not work until 10.6 (or 10.5.8 maybe) */
   return (NSFontPanelFaceModeMask |
   	  NSFontPanelSizeModeMask |
   	  NSFontPanelCollectionModeMask  |
   	  NSFontPanelTextColorEffectModeMask  |
-  	  NSFontPanelDocumentColorEffectModeMask);  */
-
+  	  NSFontPanelDocumentColorEffectModeMask); 
+  /*
   return  NSFontPanelAllModesMask
-    - NSFontPanelShadowEffectModeMask;
+  - NSFontPanelShadowEffectModeMask; */
 }
 
 /* called on font panel selection */
