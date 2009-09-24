@@ -169,10 +169,6 @@
 (autoload 'javascript-mode "javascript-mode" "JavaScript mode" t)
 (assq-set-equal "\\.js$" 'javascript-mode 'auto-mode-alist)
 
-
-(autoload 'css-mode "css-mode" "major mode for editing CSS source." t)
-(assq-set-equal "\\.css$" 'css-mode 'auto-mode-alist)
-
 (autoload 'applescript-mode "applescript-mode" 
   "major mode for editing AppleScript source." t)
 (assq-set-equal "\\.applescript$" 'applescript-mode 'auto-mode-alist)
