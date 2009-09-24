@@ -8,10 +8,8 @@
 ;;          * See below for more details
 ;; Keywords: prolog major mode sicstus swi mercury
 
-(defvar prolog-mode-version "1.18a"
+(defvar prolog-mode-version "1.19"
   "Prolog mode version number")
-
-;; minimal changes made for Aquamacs inclusion. - David Reitter 02/2009
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -113,6 +111,10 @@
 
 ;; Changelog:
 
+;; Version 1.19:
+;;  o  Minimal changes for Aquamacs inclusion and in general for
+;;     better coping with finding the Prolog executable.  Patch
+;;     provided by David Reitter 
 ;; Version 1.18:
 ;;  o  Fixed syntax highlighting for clause heads that do not begin at
 ;;     the beginning of the line.
@@ -538,11 +540,11 @@ the first column (i.e., DCG heads) inserts ` -->' and newline."
     (sicstus "sicstus")
     (swi "swipl")
     (gnu "gprolog")
-    (t ,(let ((names '("prolog" "gprolog" "swipl")))
-	  (while (and names
-		      (not (executable-find (car names))))
-	    (setq names (cdr names)))
-	  (or (car names) "prolog"))))
+    (t ,(let ((names '("prolog" "gprolog" "swipl" "pl")))
+ 	  (while (and names
+ 		      (not (executable-find (car names))))
+ 	    (setq names (cdr names)))
+ 	  (or (car names) "prolog"))))
   "*Alist of program names for invoking an inferior Prolog with `run-prolog'."
   :group 'prolog-inferior
   :type 'sexp)
