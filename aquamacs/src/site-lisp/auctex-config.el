@@ -262,7 +262,7 @@ Calls `aquamacs-tex-pdf-viewer' to display the PDF file THE-FILE."
 ;; This is duplicated from AUCTeX, unfortunately
 
 (aquamacs-set-defaults
- '((LaTeX-command "latex --file-line-error")
+ '((LaTeX-command "latex --file-line-error -synctex=1")
    ;; Directories containing the sites TeX macro files and style files
    (TeX-macro-global ("/usr/local/teTeX/share/texmf/tex/"
 		      "/usr/local/teTeX/share/texmf.os/tex/"
