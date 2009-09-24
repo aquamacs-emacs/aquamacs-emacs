@@ -176,12 +176,7 @@
 (autoload 'php-mode "php-mode" "major mode for editing PHP source." t)
 (assq-set-equal "\\.php$" 'php-mode 'auto-mode-alist)
 
-
-(autoload 'ruby-mode "ruby-mode" "major mode for editing Ruby source." t)
-(assq-set-equal "\\.rb$" 'ruby-mode 'auto-mode-alist) 
-;; watch out - .rb is also used for realbasic
 ;; do we need to distinguish?
-;; we don't have a REALBasic mode yet
 (autoload 'rails-minor-mode "rails.el" "Enter Ruby on Rails mode" 'interactive nil)
 
 ;; Matlab
