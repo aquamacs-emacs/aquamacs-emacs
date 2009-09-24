@@ -1451,9 +1451,5 @@ that should be represented in the Aquamacs menus."
 (easy-menu-remove-item global-map 
 		       '("menu-bar" "file") 'make-frame-on-display)
 
-;; --done
-
-
-
 (provide 'aquamacs-menu)
   

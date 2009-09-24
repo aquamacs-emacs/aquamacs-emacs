@@ -108,7 +108,7 @@ by any of the hook functions, will normally be preserved."
 			 mac-tool-bar-display-mode)
 			((boundp 'ns-tool-bar-display-mode)
 			 ns-tool-bar-display-mode)
-			t))
+			(t t)))
 	     (size (cond ((eq mode 'icons) 40)
 			 ((eq mode 'both) 56)
 			 ((eq mode 'labels) 20)

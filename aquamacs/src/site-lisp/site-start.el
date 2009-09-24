@@ -30,7 +30,10 @@
 ; NONE
 ;; one at the end of this file
 
-
+(unless noninteractive
+;; do not initialize Aquamacs
+;; in order to provide a clean build environment during
+;; bootstrapping
 
 ;; Version information
 
@@ -106,3 +109,4 @@ Changes in this code are ignored during the online version check.")
   (add-hook 'after-init-hook 'display-startup-echo-area-message-2 'append)
 
   )
+)

@@ -2,7 +2,7 @@
 ;; to be loaded and included in dumped state at compile time
 ;; test
  
-(defvar aq-compile-path "../aquamacs/src/site-lisp/")
+(defvar aq-compile-path "aquamacs/")
 
 (defvar aq-preloaded nil
   "List of preloaded (precomiled) features.")
@@ -77,15 +77,18 @@
 ;(aq-preload "macosx/osxkeys")
 (aq-preload "macosx/mac-extra-functions")
 ;; autoface must be compiled (due to require aq-cl)
-;; to do: change make scripts to require compilation of all those
-;; before dumping, not after. 
-;(aq-preload "aquamacs-autoface-mode")
+;; compilation is in src/Makefile.in (AQUAMACS_SUPPORT)
+;;(aq-preload "aquamacs-autoface-mode")
 ;(aq-preload "one-buffer-one-frame") [define-minor-mode]
 ;(aq-preload "smart-frame-positioning")
 ;(aq-preload "visual-line")
 (aq-preload "check-for-updates")
 (aq-preload "aquamacs-redo")
 ;(aq-preload "auctex-config")
+
+;(aq-preload "oneonone/strings")  ; loads cl must be compiled
+(aq-preload "filladapt")
+ 
 
 ;; (load "mail/rfc822.el")
 ;; (load "mail/mail-utils.el")
@@ -118,7 +121,6 @@
 
 ;(aq-preload "strings.el")
 ;(aq-preload "files+.el")
-;(aq-preload "filladapt.el")
 ;(aq-preload "fit-frame.el")
 ;(aq-preload "frame+.el")
 ;(aq-preload "frame-cmds.el")
