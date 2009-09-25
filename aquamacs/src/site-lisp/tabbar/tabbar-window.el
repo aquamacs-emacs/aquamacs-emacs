@@ -510,9 +510,17 @@ Updates tabbar-window-alist in the same way."
 		    (switch-to-buffer (or buffer last-command-event))))
 	      ;; just create another frame for it
 	      (switch-to-buffer-other-frame buffer)))))
-    (switch-to-buffer (or buffer last-command-event))))
+    (let ((previously-vis (visible-frame-list)))
+      (switch-to-buffer (or buffer last-command-event))
+      (unless (memq (window-frame (selected-window)) previously-vis)
+	;; frame was hidden before
+	;; we don't want to show any leftover tabs after the switch
+	;; so remove the buffer tab list for that window
+	(let ((window-alist (assq (window-number (selected-window)) tabbar-window-alist)))
+	  (setq tabbar-window-alist 
+		(delq window-alist tabbar-window-alist)))))))
 
-;; shouldn't be done, because the normal switch-to-buffer
+;; The following shouldn't be done, because the normal switch-to-buffer
 ;; is not sensitive to display-buffer-reuse-frames
 ;; and always switches the buffer in the selected window.
 ;; doing what's shown below will create incompatibilities.
