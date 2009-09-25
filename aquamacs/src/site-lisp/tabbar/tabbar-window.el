@@ -476,7 +476,10 @@ Updates tabbar-window-alist in the same way."
 
 (defun menu-bar-select-buffer (&optional buffer)
   (interactive)
-  (if display-buffer-reuse-frames
+  ;; if no frame visible, code below doesn't work right (why?)
+  ;; but switch-to-buffer (its one-buffer-one-frame.el advice) will
+  ;; bring up a good frame. To Do: delete tabs
+  (if (and display-buffer-reuse-frames (visible-frame-list))
       (let ((buffer (or buffer last-command-event)))
 	(unless (bufferp buffer)
 	  (error "menu-bar-select-buffer: not a buffer."))
@@ -498,6 +501,7 @@ Updates tabbar-window-alist in the same way."
 		    (lambda (w) (eq (window-buffer w) buffer)) nil t )))
 	    (if w
 		(progn
+		  ; (raise-frame (window-frame w))
 		  (make-frame-visible (window-frame w))
 		  (select-frame-set-input-focus (window-frame w))
 		  (select-window w)
