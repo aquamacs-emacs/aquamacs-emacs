@@ -2280,7 +2280,7 @@ ARC\\|ZIP\\|LZH\\|LHA\\|ZOO\\|[JEW]AR\\|XPI\\|RAR\\)\\'" . archive-mode)
      ("\\`/tmp/fol/" . text-mode)
      ("\\.oak\\'" . scheme-mode)
      ("\\.sgml?\\'" . sgml-mode)
-     ("\\.x[ms]l\\'" . nxml-mode)
+     ("\\.x[ms]l\\'" . xml-mode)
      ("\\.dtd\\'" . sgml-mode)
      ("\\.ds\\(ss\\)?l\\'" . dsssl-mode)
      ("\\.js\\'" . js-mode)		; javascript-mode would be better

@@ -205,16 +205,6 @@ int ns_tmp_flags; /* FIXME */
 struct nsfont_info *ns_tmp_font; /* FIXME */
 /*static int debug_lock = 0; */
 
-#ifdef NS_IMPL_COCOA
-/* This undocumented Quartz function controls how fonts are anti-aliased.
-   (Found from code in Mac wxWindows impl, discovered by running `nm' on
-   the "QD" framework.)
-   Mode 0 is normal anti-aliasing, mode 1 is no anti-aliasing, and mode 2 is
-   4-bit pixel-aligned anti-aliasing (the old QuickDraw standard). */
-extern void CGContextSetFontRenderingMode (CGContextRef cg, int v);
-#endif
-
-
 /* event loop */
 static BOOL send_appdefined = YES;
 static NSEvent *last_appdefined_event = 0;
@@ -265,12 +255,7 @@ static BOOL inNsSelect = 0;
      [e buttonNumber] - 1)
 
 /* Convert the time field to a timestamp in milliseconds. */
-#ifdef NS_IMPL_GNUSTEP
-/* Apple says timestamp is in seconds, but GNUstep seems to be returning msec */
-#define EV_TIMESTAMP(e) ([e timestamp])
-#else
 #define EV_TIMESTAMP(e) ([e timestamp] * 1000)
-#endif /* not gnustep */
 
 /* This is a piece of code which is common to all the event handling
    methods.  Maybe it should even be a function.  */
@@ -365,7 +350,7 @@ ns_init_paths ()
         }
       if ([resourcePaths length] > 0)
         setenv ("EMACSLOADPATH", [resourcePaths UTF8String], 1);
-/*NSLog (@"loadPath: '%s'\n", resourcePaths); */
+/*NSLog (@"loadPath: '%@'\n", resourcePaths); */
     }
 
   if (!getenv ("EMACSPATH"))
@@ -868,6 +853,7 @@ ns_reset_terminal_modes (struct terminal *terminal)
   NSTRACE (ns_reset_terminal_modes);
 }
 
+
 static void
 ns_set_terminal_modes (struct terminal *terminal)
 /*  Externally called as hook */
@@ -1165,19 +1151,12 @@ x_set_window_size (struct frame *f, int change_grav, int cols, int rows)
 
   /* If we have a toolbar, take its height into account. */
   if (tb)
+    /* NOTE: previously this would generate wrong result if toolbar not
+             yet displayed and fixing toolbar_height=32 helped, but
+             now (200903) seems no longer needed */
     FRAME_NS_TOOLBAR_HEIGHT (f) =
-      /* XXX: GNUstep has not yet implemented the first method below, added
-	 in Panther, however the second is incorrect under Cocoa. */
-#ifdef NS_IMPL_COCOA
       NSHeight ([window frameRectForContentRect: NSMakeRect (0, 0, 0, 0)])
-      /* NOTE: previously this would generate wrong result if toolbar not
-               yet displayed and fixing toolbar_height=32 helped, but
-               now (200903) seems no longer needed */
-#else
-      NSHeight ([NSWindow frameRectForContentRect: NSMakeRect (0, 0, 0, 0)
-					styleMask: [window styleMask]])
-#endif
-            - FRAME_NS_TITLEBAR_HEIGHT (f);
+        - FRAME_NS_TITLEBAR_HEIGHT (f);
   else
     FRAME_NS_TOOLBAR_HEIGHT (f) = 0;
 
@@ -3170,7 +3149,7 @@ ns_read_socket (struct terminal *terminal, int expected,
          If we're being called outside of that, it's also OK to return quickly
          after one iteration through the event loop, since other terms do
          this and emacs expects it. */
-      if (!(inNsSelect && expected))  // (!inNsSelect || !expected)
+      if (!(inNsSelect && expected))
         {
           /* Post an application defined event on the event queue.  When this is
              received the [NXApp run] will return, thus having processed all
@@ -4457,11 +4436,7 @@ ns_term_shutdown (int sig)
   while ((file = [files nextObject]) != nil)
     [ns_pending_files addObject: file];
 
-/* TODO: when GNUstep implements this (and we require that version of
-         GNUstep), remove. */
-#ifndef NS_IMPL_GNUSTEP
   [self replyToOpenOrPrint: NSApplicationDelegateReplySuccess];
-#endif /* !NS_IMPL_GNUSTEP */
 
 }
 
@@ -5506,6 +5481,7 @@ extern void update_window_cursor (struct window *w, int on);
   r = NSMakeRect (0, 0, FRAME_TEXT_COLS_TO_PIXEL_WIDTH (f, f->text_cols),
                  FRAME_TEXT_LINES_TO_PIXEL_HEIGHT (f, f->text_lines));
   [self initWithFrame: r];
+  [self setAutoresizingMask: NSViewWidthSizable | NSViewHeightSizable];
 
   FRAME_NS_VIEW (f) = self;
   emacsframe = f;
@@ -6119,8 +6095,13 @@ extern void update_window_cursor (struct window *w, int on);
   [self setEnabled: YES];
 
   /* Ensure auto resizing of scrollbars occurs within the emacs frame's view
-     locked against the right, top and bottom edges. */
+     locked against the top and bottom edges, and right edge on OS X, where
+     scrollers are on right. */
+#ifdef NS_IMPL_GNUSTEP
+  [self setAutoresizingMask: NSViewMaxXMargin | NSViewHeightSizable];
+#else
   [self setAutoresizingMask: NSViewMinXMargin | NSViewHeightSizable];
+#endif
 
   win = nwin;
   condemned = NO;
@@ -6242,9 +6223,6 @@ extern void update_window_cursor (struct window *w, int on);
       por = (float)portion/whole;
       [self setFloatValue: pos knobProportion: por];
     }
-#ifdef NS_IMPL_GNUSTEP
-  [self display];
-#endif
   return self;
 }
 
@@ -6355,7 +6333,7 @@ extern void update_window_cursor (struct window *w, int on);
 
       /* set a timer to repeat, as we can't let superclass do this modally */
       scroll_repeat_entry
-	= [[NSTimer scheduledTimerWithTimeInterval: 0.5
+	= [[NSTimer scheduledTimerWithTimeInterval: SCROLL_BAR_FIRST_DELAY
                                             target: self
                                           selector: @selector (repeatScroll:)
                                           userInfo: 0

@@ -102,9 +102,7 @@
 (require 'gud)
 (require 'json)
 (require 'bindat)
-(require 'speedbar)
-(eval-when-compile
-  (require 'cl))
+(eval-when-compile (require 'cl))
 
 (defvar tool-bar-map)
 (defvar speedbar-initial-expansion-list-name)
@@ -218,6 +216,7 @@ Emacs can't find.")
 (defvar gdb-source-window nil)
 (defvar gdb-inferior-status nil)
 (defvar gdb-continuation nil)
+(defvar gdb-version nil)
 (defvar gdb-filter-output nil
   "Message to be shown in GUD console.
 
@@ -571,9 +570,10 @@ If NOALL is t, always add --thread option no matter what
 When `gdb-non-stop' is nil, return COMMAND unchanged."
   (if gdb-non-stop
       (if (and gdb-gud-control-all-threads
-               (not noall))
+               (not noall)
+	       (string-equal gdb-version "7.0+"))
           (concat command " --all ")
-        (gdb-current-context-command command t))
+        (gdb-current-context-command command))
     command))
 
 (defmacro gdb-gud-context-call (cmd1 &optional cmd2 noall noarg)
@@ -820,7 +820,9 @@ detailed description of this mode.
   (if (re-search-forward "No symbol" nil t)
       (progn
 	(message "This version of GDB doesn't support non-stop mode.  Turning it off.")
-	(setq gdb-non-stop nil))
+	(setq gdb-non-stop nil)
+	(setq gdb-version "pre-7.0"))
+    (setq gdb-version "7.0+")
     (gdb-input (list "-gdb-set target-async 1" 'ignore))
     (gdb-input (list "-enable-pretty-printing" 'ignore))))
 
@@ -1629,16 +1631,10 @@ static char *magick[] = {
 		       (concat (car item) "\n")))
 
 ;; NOFRAME is used for gud execution control commands
-(defun gdb-current-context-command (command &optional noframe)
-  "Add --thread and --frame options to gdb COMMAND.
-
-Option values are taken from `gdb-thread-number' and
-`gdb-frame-number'. If `gdb-thread-number' is nil, COMMAND is
-returned unchanged. If `gdb-frame-number' is nil of NOFRAME is t,
-then no --frame option is added."
-  ;; gdb-frame-number may be nil while gdb-thread-number is non-nil
-  ;; (when current thread is running)
-  (if gdb-thread-number
+(defun gdb-current-context-command (command)
+  "Add --thread to gdb COMMAND when needed."
+  (if (and gdb-thread-number
+	   (string-equal gdb-version "7.0+"))
       (concat command " --thread " gdb-thread-number)
     command))
 
@@ -1920,7 +1916,9 @@ current thread and update GDB buffers."
     ;; thread
     (when (not gdb-register-names)
       (gdb-input
-       (list (concat "-data-list-register-names --thread " thread-id)
+       (list (concat "-data-list-register-names"
+		     (if (string-equal gdb-version "7.0+")
+			 (concat" --thread " thread-id)))
              'gdb-register-names-handler)))
 
 ;;; Don't set gud-last-frame here as it's currently done in gdb-frame-handler
@@ -2066,7 +2064,6 @@ incompatible with GDB/MI output syntax."
       (save-excursion
         (while (re-search-forward (concat "[\\[,]\\(" fix-key "=\\)") nil t)
           (replace-match "" nil nil nil 1))))
-    ;; Emacs bug #3794
     (when fix-list
       (save-excursion
         ;; Find positions of braces which enclose broken list
@@ -2084,9 +2081,9 @@ incompatible with GDB/MI output syntax."
               (insert "]"))))))
     (goto-char (point-min))
     (insert "{")
-    ;; TODO: This breaks badly with foo= inside constants
-    (while (re-search-forward "\\([[:alpha:]-_]+\\)=" nil t)
-      (replace-match "\"\\1\":" nil nil))
+    (while (re-search-forward
+	    "\\([[:alnum:]-_]+\\)=\\({\\|\\[\\|\"\"\\|\".*?[^\\]\"\\)" nil t)
+      (replace-match "\"\\1\":\\2" nil nil))
     (goto-char (point-max))
     (insert "}")))
 
@@ -2565,7 +2562,7 @@ corresponding to the mode line clicked."
  "Display GDB threads in a new frame.")
 
 (def-gdb-trigger-and-handler
-  gdb-invalidate-threads (gdb-current-context-command "-thread-info" gud-running)
+  gdb-invalidate-threads (gdb-current-context-command "-thread-info")
   gdb-thread-list-handler gdb-thread-list-handler-custom
   '(start update update-threads))
 
@@ -2767,7 +2764,7 @@ line."
          (let ((gdb-thread-number (bindat-get-field thread 'id))
                (gdb-gud-control-all-threads nil))
            (call-interactively #',gud-command))
-       (error "Available in non-stop mode only, customize gdb-non-stop-setting."))
+       (error "Available in non-stop mode only, customize `gdb-non-stop-setting'"))
      ,doc))
 
 (def-gdb-thread-buffer-gud-command
@@ -3474,7 +3471,7 @@ member."
               (setq gdb-frame-number new-level)
               (gdb-input (list (concat "-stack-select-frame " new-level) 'ignore))
               (gdb-update))
-          (error "Could not select frame for non-current thread."))
+          (error "Could not select frame for non-current thread"))
       (error "Not recognized as frame line"))))
 
 

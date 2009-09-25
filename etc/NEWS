@@ -46,6 +46,9 @@ were loaded.
 
 * Changes in Emacs 23.2
 
+** Function arguments in *Help* buffers are now in uppercase by default.
+You can customize the new variable `help-downcase-arguments' to change it.
+
 ** Unibyte sessions are now considered obsolete.
 I.e. the use of the environment variable EMACS_UNIBYTE, or command line
 arguments --unibyte, --multibyte, --no-multibyte, and --no-unibyte
@@ -198,6 +201,26 @@ their content displayed.
 *** log-edit-strip-single-file-name controls whether or not single filenames
 are stripped when copying text from the ChangeLog to the *VC-Log* buffer.
 
+** Elint
+
+---
+*** Elint now uses compilation-mode.
+
+---
+*** Elint can now scan individual files and whole directories,
+and can be run in batch mode.
+
+---
+*** Elint does a more thorough initialization, and recognizes more built-in
+functions and variables.  Customize `elint-scan-preloaded' if you want
+to sacrifice some accuracy for a faster startup.
+
+---
+*** Elint attempts some basic understanding of featurep and (f)boundp tests.
+
+---
+*** Customize `elint-ignored-warnings' to suppress some warnings.
+
 ** Miscellaneous
 
 *** The new command `async-shell-command' bound globally to `M-&' executes
@@ -207,10 +230,6 @@ Command*'.
 
 +++
 *** Autorevert Tail mode now works now for remote files.
-
----
-*** Elint now uses compilation-mode, and recognizes more built-in
-functions and variables.
 
 
 * New Modes and Packages in Emacs 23.2
