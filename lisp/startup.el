@@ -1319,7 +1319,7 @@ Each element in the list should be a list of strings or pairs
 `:face FACE', like `fancy-splash-insert' accepts them.")
 
 (defvar fancy-about-text
-  '((:face (variable-pitch (:foreground "red"))
+  '((:face (variable-pitch (:foreground "red"  :height 130))
      "This is "
      :link ("Aquamacs Emacs"
 	    (lambda (button) (browse-url "http://aquamacs.org/"))
@@ -1343,33 +1343,33 @@ Each element in the list should be a list of strings or pairs
 		   (list :foreground
 			 (if (eq (frame-parameter nil 'background-mode) 'dark)
 			     "cyan" "darkblue"))))
-       :face 'variable-pitch
+       :face '(variable-pitch  :height 130)
        "Aquamacs is a distribution of GNU Emacs that is adapted for Mac users.\n"
      "\n"
      (lambda () (emacs-version))
      "\n"
-     :face (variable-pitch (:height 0.8))
+     :face (variable-pitch (:height 130))
      (lambda () emacs-copyright)
      "\n\n"
-     :face variable-pitch
+     :face '(variable-pitch  :height 130)
      :link ("Authors"
 	    (lambda (button)
 	      (view-file (expand-file-name "AUTHORS" data-directory))
 	      (goto-char (point-min))))
-     "            \tMany people have contributed code included in GNU Emacs\n"
+     "            \tMany people have contributed code\n"
      :link ("Contributing"
 	    (lambda (button) (browse-url "http://aquamacs.org/development.shtml")))
-     "\tHow to contribute improvements to Aquamacs\n"
+     "            \tHow to contribute improvements to Aquamacs\n"
      "\n"
      :link ("GNU and Freedom" (lambda (button) (describe-gnu-project)))
-     "\tWhy we developed GNU Emacs, and the GNU operating system\n"
+     "\tWhy we developed GNU Emacs, and the GNU OS\n"
       :link ("Aquamacs Manual" (lambda (button) (aquamacs-user-help)))
      "\tView the Aquamacs manual using Apple Help\n"
      :link ("Emacs Manual" (lambda (button) (aquamacs-emacs-manual)))
      "\tView the Emacs manual using Apple Help\n"
      :link ("Absence of Warranty" (lambda (button) (describe-no-warranty)))
-     "\tAquamacs and GNU Emacs come with absolutely no warranty\n"
-     :face variable-pitch
+     "\tAquamacs and GNU Emacs come with no warranty\n"
+     :face '(variable-pitch  :height 130)
      :link ("Copying Conditions" (lambda (button) (describe-copying)))
      "\tConditions for redistributing and changing Emacs\n"
    
@@ -1377,7 +1377,7 @@ Each element in the list should be a list of strings or pairs
      "\tBuying printed manuals from the FSF\n"
      "\n"
      :link ("Emacs Tutorial" (lambda (button) (help-with-tutorial)))
-     "\tLearn basic Emacs keystroke commands"
+     "            \tLearn basic Emacs keystroke commands"
      (lambda ()
        (let* ((en "TUTORIAL")
 	      (tut (or (get-language-info current-language-environment
@@ -1399,7 +1399,7 @@ Each element in the list should be a list of strings or pairs
 	    (lambda (button) (browse-url "http://www.gnu.org/software/emacs/tour/"))
 	    "Browse http://www.gnu.org/software/emacs/tour/")
      "\tSee an overview of the many facilities of GNU Emacs"
-     ))
+     )) 
   "A list of texts to show in the middle part of the About screen.
 Each element in the list should be a list of strings or pairs
 `:face FACE', like `fancy-splash-insert' accepts them.")
