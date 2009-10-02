@@ -577,3 +577,5 @@ def test(HandlerClass = BaseHTTPRequestHandler,
 
 if __name__ == '__main__':
     test()
+
+# arch-tag: 567449b3-cc90-45b6-bbe3-1e113995bdae

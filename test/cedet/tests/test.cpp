@@ -591,3 +591,5 @@ wchar_t testc = L'a';
 wchar_t const *wp = L"string with a \" in it";
 wchar_t const *wq = L"string \n\t\"test" L"string2";
 wchar_t const *wr = L"string L";
+
+// arch-tag: 59828880-d72f-4059-922f-89579edf9e58

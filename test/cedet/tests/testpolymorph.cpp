@@ -129,3 +129,5 @@ namespace template_multiple_spec {
 
 
 // End of polymorphism test file.
+
+// arch-tag: e2c04959-9b3b-4b4f-b9c2-445bf4848aa4
