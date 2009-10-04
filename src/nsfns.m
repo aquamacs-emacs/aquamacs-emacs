@@ -2710,6 +2710,18 @@ DEFUN ("ns-open-help-anchor", Fns_open_help_anchor, Sns_open_help_anchor, 1, 2, 
 - (void) ok: (id)sender
 {
   [super ok: sender];
+
+  /* NSSavePanel would display a similar dialog, but it invokes ok:
+     before displaying it, so we would kill it by stopping the
+     event loop here.*/
+  if ([[NSFileManager defaultManager] fileExistsAtPath:[self.URL path]]) 
+    if (NSRunAlertPanel([NSString stringWithFormat:
+@"The file %@ already exists.  Do you want to replace it?", [self.URL lastPathComponent]],
+@"A file or folder with the same name already exists in this folder. Replacing it will overwrite its current contents.",
+                        @"Cancel", @"Replace", nil)
+	== NSAlertDefaultReturn)
+      return; /* do not discard panel */
+  
   panelOK = 1;
   [NSApp stop: self];
 }
@@ -2717,6 +2729,12 @@ DEFUN ("ns-open-help-anchor", Fns_open_help_anchor, Sns_open_help_anchor, 1, 2, 
 {
   [super cancel: sender];
   [NSApp stop: self];
+}
+- (BOOL)_overwriteExistingFileCheck:(id)fp8
+{
+  /* hack: do not ask for confirmation when a file is about
+     to be overwritten.  We will ask ourselves in ok:*/
+  return YES;
 }
 #endif
 @end
