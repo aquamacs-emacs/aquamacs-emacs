@@ -2715,7 +2715,7 @@ DEFUN ("ns-open-help-anchor", Fns_open_help_anchor, Sns_open_help_anchor, 1, 2, 
      before displaying it, so we would kill it by stopping the
      event loop here.*/
   if ([[NSFileManager defaultManager] fileExistsAtPath:[self.URL path]]) 
-    if (NSRunAlertPanel([NSString stringWithFormat:
+    if (NSRunCriticalAlertPanel([NSString stringWithFormat:
 @"The file %@ already exists.  Do you want to replace it?", [self.URL lastPathComponent]],
 @"A file or folder with the same name already exists in this folder. Replacing it will overwrite its current contents.",
                         @"Cancel", @"Replace", nil)
