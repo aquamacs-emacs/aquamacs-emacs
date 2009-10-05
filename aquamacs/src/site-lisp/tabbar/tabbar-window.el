@@ -432,7 +432,7 @@ before deleting."
 	    ;; a lot of buffers (e.g. dired) may be modified,
 	    ;; but have no file name
 	    (if (aquamacs-ask-for-confirmation
-		 (format "Save buffer %s to file before killing it? " (buffer-name)) nil)
+		 (format "Save buffer %s to file before closing tab? " (buffer-name)) nil)
 		(progn
 		  (save-buffer)
 		  (message "File saved.")
