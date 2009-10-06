@@ -2189,11 +2189,6 @@ void process_dialog (id window, Lisp_Object list)
  
 
 #ifdef NS_IMPL_COCOA
-  /* TODO: This makes drawing of cursor plus that of phys_cursor_glyph
-           atomic.  Cleaner ways of doing this should be investigated.
-           One way would be to set a global variable DRAWING_CURSOR
-  	   when making the call to draw_phys..(), don't focus in that
-  	   case, then move the ns_unfocus() here after that call. */
   NSDisableScreenUpdates ();
 #endif
 
@@ -2279,25 +2274,14 @@ void process_dialog (id window, Lisp_Object list)
     r.origin = NSMakePoint ([[FRAME_NS_VIEW (SELECTED_FRAME ()) window] frame].origin.x
 			    + ([[FRAME_NS_VIEW (SELECTED_FRAME ()) window] frame].size.width - r.size.width) / 2,
 			    [[FRAME_NS_VIEW (SELECTED_FRAME ()) window] frame].origin.y
-			    + ([[FRAME_NS_VIEW (SELECTED_FRAME ()) window] frame].size.height));
+			    + ([[FRAME_NS_VIEW (SELECTED_FRAME ()) window] frame].size.height - 40 - r.size.height));
 
     [self setFrame: r display: YES animate:NO];
  
+
 #ifdef NS_IMPL_COCOA
-  /* TODO: This makes drawing of cursor plus that of phys_cursor_glyph
-           atomic.  Cleaner ways of doing this should be investigated.
-           One way would be to set a global variable DRAWING_CURSOR
-  	   when making the call to draw_phys..(), don't focus in that
-  	   case, then move the ns_unfocus() here after that call. */
-  NSEnableScreenUpdates ();
+    NSEnableScreenUpdates ();
 #endif
-
-    r.origin = NSMakePoint (r.origin.x,
-			    [[FRAME_NS_VIEW (SELECTED_FRAME ()) window] frame].origin.y
-			    + ([[FRAME_NS_VIEW (SELECTED_FRAME ()) window] frame].size.height - 40 - r.size.height));
-
-    [self setFrame: r display: YES animate:YES];
- 
 
  }
 
@@ -2310,7 +2294,6 @@ void process_dialog (id window, Lisp_Object list)
   { [super dealloc]; return; };
 }
 
-
 - (Lisp_Object)runDialogAt: (NSPoint)p
 {
   int ret;
@@ -2318,14 +2301,16 @@ void process_dialog (id window, Lisp_Object list)
   extern EMACS_TIME timer_check (int do_it_now); /* TODO: add to a header */
 
   if ([self parentWindow]) /* is attached to a window - display as sheet */
-    {   [NSApp beginSheet:self 
+    {
+
+      [NSApp beginSheet:self 
 	   modalForWindow:self.parentWindow
 	    modalDelegate:self 
-	   didEndSelector:NULL 
-	      contextInfo:NULL];
+	   didEndSelector:nil 
+	      contextInfo:nil];
       sheet=1;
     }
-
+  
   /* initiate a session that will be ended by pop_down_menu */
   popupSession = [NSApp beginModalSessionForWindow: self];
 
