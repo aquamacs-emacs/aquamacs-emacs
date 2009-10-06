@@ -1896,7 +1896,7 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
     int specpdl_count = SPECPDL_INDEX ();
     record_unwind_protect (pop_down_menu, make_save_value (dialog, 0));
     popup_activated_flag = 1;
-    tem = [dialog runDialogAt: p];
+    tem = [dialog runDialogAt: p ];
     unbind_to (specpdl_count, Qnil);  /* calls pop_down_menu */
   }
   UNBLOCK_INPUT;
@@ -1925,10 +1925,10 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
 
 @implementation EmacsDialogPanel
 
-#define SPACER		6.0
+#define SPACER		4.0
 #define ICONSIZE	64.0
 #define TEXTHEIGHT	20.0
-#define MINCELLWIDTH	90.0
+#define MINCELLWIDTH	80.0
 
 - initWithContentRect: (NSRect)contentRect styleMask: (unsigned int)aStyle
               backing: (NSBackingStoreType)backingType defer: (BOOL)flag
@@ -1940,11 +1940,13 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
   static NSImageView *imgView;
   static FlippedView *contentView;
 
+  area.origin.x   = 6*SPACER;
+  area.origin.y   = 4*SPACER;
+
   if (imgView == nil)
     {
       NSImage *img;
-      area.origin.x   = 3*SPACER;
-      area.origin.y   = 2*SPACER;
+      
       area.size.width = ICONSIZE;
       area.size.height= ICONSIZE;
       img = [[NSImage imageNamed: @"NSApplicationIcon"] copy];
@@ -1956,12 +1958,11 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
       [img release];
     }
 
-  aStyle = NSTitledWindowMask;
-  flag = YES;
+  aStyle = NSDocModalWindowMask | NSTitledWindowMask; /* without the title, we can't assign focus to buttons... */
   rows = 0;
   cols = 1;
   [super initWithContentRect: contentRect styleMask: aStyle
-                     backing: backingType defer: flag];
+                     backing: backingType defer: YES];
   contentView = [[FlippedView alloc] initWithFrame: [[self contentView] frame]];
   [self setContentView: contentView];
 
@@ -1970,17 +1971,18 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
   [[self contentView] addSubview: imgView];
   [self setTitle: @""];
 
-  area.origin.x   += ICONSIZE+2*SPACER;
+  area.origin.x   += ICONSIZE+3*SPACER;
 /*  area.origin.y   = TEXTHEIGHT; ICONSIZE/2-10+SPACER; */
   area.size.width = 400;
   area.size.height= TEXTHEIGHT;
-  command = [[[NSTextField alloc] initWithFrame: area] autorelease];
+  command = [[[NSTextView alloc] initWithFrame: area] autorelease];
   [[self contentView] addSubview: command];
-  [command setStringValue: @"Aquamacs"];
+  [command setString: @"Aquamacs"];
   [command setDrawsBackground: NO];
-  [command setBezeled: NO];
   [command setSelectable: NO];
+  [command setAlignment: NSLeftTextAlignment];
   [command setFont: [NSFont boldSystemFontOfSize: 13.0]];
+
 
 /*  area.origin.x   = ICONSIZE+2*SPACER;
   area.origin.y   = TEXTHEIGHT + 2*SPACER;
@@ -1995,18 +1997,21 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
   area.origin.y += TEXTHEIGHT+SPACER;
   area.size.width = 400;
   area.size.height= TEXTHEIGHT;
-  title = [[[NSTextField alloc] initWithFrame: area] autorelease];
+  title = [[[NSTextView alloc] initWithFrame: area] autorelease];
   [[self contentView] addSubview: title];
   [title setDrawsBackground: NO];
-  [title setBezeled: NO];
+  // [title setBezeled: NO];
   [title setSelectable: NO];
+  [title setAlignment: NSLeftTextAlignment];
   [title setFont: [NSFont systemFontOfSize: 11.0]];
+
 
   cell = [[[NSButtonCell alloc] initTextCell: @""] autorelease];
   [cell setBordered: NO];
   [cell setEnabled: NO];
   [cell setCellAttribute: NSCellIsInsetButton to: 8];
   [cell setBezelStyle: NSRoundedBezelStyle];
+  [cell setFont: [NSFont systemFontOfSize: 13.0]];
 
   matrix = [[NSMatrix alloc] initWithFrame: contentRect 
                                       mode: NSHighlightModeMatrix 
@@ -2022,12 +2027,16 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
   [self setOneShot: YES];
   [self setReleasedWhenClosed: YES];
   [self setHidesOnDeactivate: YES];
+
+  defaultCell = nil;
   return self;
 }
 
 
 - (BOOL)windowShouldClose: (id)sender
 {
+  if ([self parentWindow])
+    [[self parentWindow] removeChildWindow: self];
   [NSApp stopModalWithCode: XHASH (Qnil)]; // FIXME: BIG UGLY HACK!!
   return NO;
 }
@@ -2040,32 +2049,70 @@ void process_dialog (id window, Lisp_Object list)
   int cancel = 1,
     buttons = 0;
 
-  for (; CONSP (list); list = XCDR (list))
+  int hor=0;
+
+  if (XINT (Fsafe_length (list) ) < 5)
+    hor = 1;
+
+  list = Freverse (list);
+
+  item = XCAR (list);
+  int special_prop = 0;
+
+  while (1)
     {
-      item = XCAR (list);
+      special_prop = 0;
       if (STRINGP (item))
-        {
-          [window addString: SDATA (item) row: row++];
-        }
-      else if (EQ (item, intern ("no-cancel")))
-        {
-          cancel = 0;
+        { /* inactive button */
+          [window addString: SDATA (item) row: row];
         }
       else if (CONSP (item) ) /*  (XTYPE (item) == Lisp_Cons) */
-        {
+        { /* normal button*/
           [window addButton: SDATA (XCAR (item))
-		  value: XCDR (item) row: row++ key:nil];
+		  value: XCDR (item) row: row key:nil];
 	  buttons++;
         }
-      else if (NILP (item))
-        {
+      else if (NILP (item) && CONSP (list) & hor==0)
+        { /* if not in horizontal mode: a NIL item means to add a space. */
           [window addSplit];
-          row = 0;
+          row = -1;
         }
+      else if (EQ (item, intern ("cancel")))
+	{ /* add cancel button */
+	  [window addButton: "Cancel"
+		      value: Vcancel_special_indicator_flag row: row key: @"\e"];
+	  cancel = 0;
+	}    
+      else if (EQ (item, intern ("no-cancel")))
+	{ /* skip cancel button */
+	  cancel = 0;
+	  special_prop = 1;
+	}     
+      /* end of list */
+      if (!list || NILP (list))
+	break;
+
+      /* next item */
+      if (CONSP (list))
+	{ list = XCDR (list);
+	  item = XCAR (list); }
+      else
+	{ item = list;
+	  list = Qnil;
+	}
+
+      if (special_prop == 0)
+	{
+	  if (hor) // move horizontally
+	    [window addSplit];
+	  else // move vertically
+	    row++;
+	}
     }
+
   if (cancel || buttons == 0)
     [window addButton: "Cancel"
-		value: Vcancel_special_indicator_flag row: row++ key: @"\e"];
+		value: Vcancel_special_indicator_flag row: row key: @"\e"];
 }
 
 
@@ -2081,12 +2128,13 @@ void process_dialog (id window, Lisp_Object list)
   cell = [matrix cellAtRow: row column: cols-1];
   [cell setTarget: self];
   [cell setAction: @selector (clicked: )];
-  [cell setTitle: [NSString stringWithUTF8String: str]];
+  [cell setTitle:  [NSString stringWithFormat:@"  %@  ",[NSString stringWithUTF8String: str]]];
   [cell setTag: XHASH (val)];	// FIXME: BIG UGLY HACK!!
   [cell setBordered: YES];
   [cell setEnabled: YES];
   if (key != nil) [cell setKeyEquivalent: key];
 
+  defaultCell = cell; /* last cell added is defaultCell */
   return self;
 }
 
@@ -2101,10 +2149,9 @@ void process_dialog (id window, Lisp_Object list)
       rows++;
     }
   cell = [matrix cellAtRow: row column: cols-1];
-  [cell setTitle: [NSString stringWithUTF8String: str]];
+  [cell setTitle: [NSString stringWithFormat:@"  %@  ",[NSString stringWithUTF8String: str]]];
   [cell setBordered: YES];
   [cell setEnabled: NO];
-
   return self;
 }
 
@@ -2122,6 +2169,9 @@ void process_dialog (id window, Lisp_Object list)
   NSArray *sellist = nil;
   EMACS_INT seltag;
 
+
+  [[self parentWindow] removeChildWindow: self];
+
   sellist = [sender selectedCells];
   if ([sellist count]<1) 
     return self;
@@ -2136,7 +2186,19 @@ void process_dialog (id window, Lisp_Object list)
 - initFromContents: (Lisp_Object)contents isQuestion: (BOOL)isQ
 {
   Lisp_Object head;
+ 
+
+#ifdef NS_IMPL_COCOA
+  /* TODO: This makes drawing of cursor plus that of phys_cursor_glyph
+           atomic.  Cleaner ways of doing this should be investigated.
+           One way would be to set a global variable DRAWING_CURSOR
+  	   when making the call to draw_phys..(), don't focus in that
+  	   case, then move the ns_unfocus() here after that call. */
+  NSDisableScreenUpdates ();
+#endif
+
   [super init];
+  defaultCell = nil;
 
   if (XTYPE (contents) == Lisp_Cons)
     {
@@ -2147,27 +2209,30 @@ void process_dialog (id window, Lisp_Object list)
     head = contents;
 
   if (XTYPE (head) == Lisp_String)
-      [title setStringValue:
-                 [NSString stringWithUTF8String: SDATA (head)]];
+    {
+      char* split = strchr( SDATA (head), '\n');
+      if ( split )
+	{
+	  split[0] = '\0'; 
+	  [command setString:
+		   [NSString stringWithUTF8String: SDATA (head)]];
+	  split[0] = '\n';  /* not nice, but works */
+	  [title setString:
+		   [NSString stringWithUTF8String: split+1]];
+	} else
+	{
+	  [title setString:
+		   [NSString stringWithUTF8String: SDATA (head)]];
+	}
+    }
   else if (isQ == YES)
-      [title setStringValue: @"Question"];
+      [title setString: @"Question"];
   else
-      [title setStringValue: @"Information"];
+      [title setString: @"Information"];
 
   {
     int i;
-    NSRect r, s, t;
-
-    if (cols == 1 && rows > 1)	/* Never told where to split */
-      {
-        [matrix addColumn];
-        for (i = 0; i<rows/2; i++)
-          {
-            [matrix putCell: [matrix cellAtRow: (rows+1)/2 column: 0]
-                      atRow: i column: 1];
-            [matrix removeRow: (rows+1)/2];
-          }
-      }
+    NSRect r, s;
 
     [matrix sizeToFit];
     {
@@ -2180,29 +2245,61 @@ void process_dialog (id window, Lisp_Object list)
         }
     }
 
-    [title sizeToFit];
+    [command setHorizontallyResizable:NO];
+    [command setVerticallyResizable:YES];
     [command sizeToFit];
+    [title setFrameOrigin: NSMakePoint([command frame].origin.x,
+				       [command frame].origin.y + [command frame].size.height + SPACER)];
+    [title setHorizontallyResizable:NO];
+    [title setVerticallyResizable:YES];
+    [title sizeToFit];
+    [matrix setFrameOrigin: NSMakePoint ([title frame].origin.x,
+					 [title frame].origin.y + (TEXTHEIGHT+3*SPACER))];
 
-    t = [matrix frame];
-    r = [title frame];
-    if (r.size.width+r.origin.x > t.size.width+t.origin.x)
+    /* to do: use the position (window) parameter given to ns_popup_dialog
+       rather than the selected frame. 
+       Possibly select/raise frame of specified window in ns_popup_dialog.*/
+    if (SELECTED_FRAME () && FRAME_NS_P (SELECTED_FRAME ())
+	&& FRAME_NS_VIEW (SELECTED_FRAME ()))
       {
-        t.origin.x   = r.origin.x;
-        t.size.width = r.size.width;
+	[[FRAME_NS_VIEW (SELECTED_FRAME ()) window] addChildWindow:self ordered: NSWindowAbove ];
       }
-    r = [command frame];
-    if (r.size.width+r.origin.x > t.size.width+t.origin.x)
-      {
-        t.origin.x   = r.origin.x;
-        t.size.width = r.size.width;
-      }
+
+    [matrix sizeToFit];
+
+    [matrix setKeyCell:[matrix cellAtRow: 0 column: 0]];
+    [self setDefaultButtonCell:defaultCell];
 
     r = [self frame];
     s = [(NSView *)[self contentView] frame];
-    r.size.width  += t.origin.x+t.size.width +2*SPACER-s.size.width;
-    r.size.height += t.origin.y+t.size.height+SPACER-s.size.height;
-    [self setFrame: r display: NO];
-  }
+    // , [matrix frame].size.width
+    r.size.width  = ICONSIZE+3*SPACER + max([command frame].size.width, [title frame].size.width) +2*SPACER;
+    r.size.height += [matrix frame].origin.y+[matrix frame].size.height+2*SPACER-s.size.height;
+ 
+    r.origin = NSMakePoint ([[FRAME_NS_VIEW (SELECTED_FRAME ()) window] frame].origin.x
+			    + ([[FRAME_NS_VIEW (SELECTED_FRAME ()) window] frame].size.width - r.size.width) / 2,
+			    [[FRAME_NS_VIEW (SELECTED_FRAME ()) window] frame].origin.y
+			    + ([[FRAME_NS_VIEW (SELECTED_FRAME ()) window] frame].size.height));
+
+    [self setFrame: r display: YES animate:NO];
+ 
+#ifdef NS_IMPL_COCOA
+  /* TODO: This makes drawing of cursor plus that of phys_cursor_glyph
+           atomic.  Cleaner ways of doing this should be investigated.
+           One way would be to set a global variable DRAWING_CURSOR
+  	   when making the call to draw_phys..(), don't focus in that
+  	   case, then move the ns_unfocus() here after that call. */
+  NSEnableScreenUpdates ();
+#endif
+
+    r.origin = NSMakePoint (r.origin.x,
+			    [[FRAME_NS_VIEW (SELECTED_FRAME ()) window] frame].origin.y
+			    + ([[FRAME_NS_VIEW (SELECTED_FRAME ()) window] frame].size.height - 40 - r.size.height));
+
+    [self setFrame: r display: YES animate:YES];
+ 
+
+ }
 
   return self;
 }
@@ -2217,10 +2314,22 @@ void process_dialog (id window, Lisp_Object list)
 - (Lisp_Object)runDialogAt: (NSPoint)p
 {
   int ret;
+  int sheet=0;
   extern EMACS_TIME timer_check (int do_it_now); /* TODO: add to a header */
+
+  if ([self parentWindow]) /* is attached to a window - display as sheet */
+    {   [NSApp beginSheet:self 
+	   modalForWindow:self.parentWindow
+	    modalDelegate:self 
+	   didEndSelector:NULL 
+	      contextInfo:NULL];
+      sheet=1;
+    }
 
   /* initiate a session that will be ended by pop_down_menu */
   popupSession = [NSApp beginModalSessionForWindow: self];
+
+
   while (popup_activated_flag
          && (ret = [NSApp runModalSession: popupSession])
               == NSRunContinuesResponse)
@@ -2230,6 +2339,9 @@ void process_dialog (id window, Lisp_Object list)
       timer_check (1);
       [NSThread sleepUntilDate: [NSDate dateWithTimeIntervalSinceNow: 0.1]];
     }
+
+  if (sheet) 
+    [NSApp endSheet:self];
 
   {				/* FIXME: BIG UGLY HACK!!! */
       Lisp_Object tmp;
@@ -2312,14 +2424,19 @@ The return value is VALUE from the chosen item.
 An ITEM may also be just a string--that makes a nonselectable item.
 An ITEM may also be nil--that means to put all preceding items
 on the left of the dialog box and all following items on the right.
-\(By default, approximately half appear on each side.)
+On NS, an ITEM may be `cancel' to insert a cancel button.  If there
+is an ITEM `no-cancel', no cancel button will be inserted at all;
+if there is no such item, a default cancel button will be inserted.
+
+The order of buttons in the dialog follows system conventions; the
+default button should be specified first in the list of ITEMs.
 
 If HEADER is non-nil, the frame title for the box is "Information",
-otherwise it is "Question".
+otherwise it is "Question".  HEADER is unused on NS.
 
 If the user gets rid of the dialog box without making a valid choice,
-for instance using the window manager, then this produces a quit and
-`x-popup-dialog' does not return.  */)
+for instance using the window manager or using a cancel button,
+then this produces a quit and `x-popup-dialog' does not return.  */)
      (position, contents, header)
      Lisp_Object position, contents, header;
 {

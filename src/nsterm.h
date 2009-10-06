@@ -173,10 +173,11 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 @interface EmacsDialogPanel : NSPanel
    {
-   NSTextField *command;
-   NSTextField *title;
-   NSMatrix *matrix;
-   int rows, cols;
+     NSTextView *command;
+     NSTextView *title;
+     NSMatrix *matrix;
+     int rows, cols;
+     NSButtonCell *defaultCell;
    }
 - initFromContents: (Lisp_Object)menu isQuestion: (BOOL)isQ;
 - addButton: (char *)str value: (Lisp_Object)val row: (int)row key: (NSString *)key;

@@ -3215,7 +3215,7 @@ ns_select (int nfds, fd_set *readfds, fd_set *writefds,
                                          selector: @selector (timeout_handler:)
                                          userInfo: 0
                                           repeats: YES] /* for safe removal */
-                                                         retain];
+							retain];
 
   /* set a periodic task to try the select () again */
   fd_entry = [[NSTimer scheduledTimerWithTimeInterval: 0.1
@@ -3223,7 +3223,7 @@ ns_select (int nfds, fd_set *readfds, fd_set *writefds,
                                              selector: @selector (fd_handler:)
                                              userInfo: 0
                                               repeats: YES]
-               retain];
+							retain];
 
   /* Let Application dispatch events until it receives an event of the type
      NX_APPDEFINED, which should only be sent by timeout_handler.
