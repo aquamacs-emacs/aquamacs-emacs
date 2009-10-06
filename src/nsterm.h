@@ -171,21 +171,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
    ========================================================================== */
 
-@interface EmacsDialogPanel : NSPanel
-   {
-     NSTextView *command;
-     NSTextView *title;
-     NSMatrix *matrix;
-     int rows, cols;
-     NSButtonCell *defaultCell;
-   }
-- initFromContents: (Lisp_Object)menu isQuestion: (BOOL)isQ;
-- addButton: (char *)str value: (Lisp_Object)val row: (int)row key: (NSString *)key;
-- addString: (char *)str row: (int)row;
-- addSplit;
-- (Lisp_Object)runDialogAt: (NSPoint)p;
-@end
-
 @interface EmacsTooltip : NSObject
   {
     NSWindow *win;

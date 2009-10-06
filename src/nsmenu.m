@@ -1826,7 +1826,7 @@ pop_down_menu (Lisp_Object arg)
       popup_activated_flag = 0;
       BLOCK_INPUT;
       [NSApp endModalSession: popupSession];
-      [((EmacsDialogPanel *) (p->pointer)) close];
+      [[((NSAlert *) (p->pointer)) window] close];
       [[FRAME_NS_VIEW (SELECTED_FRAME ()) window] makeKeyWindow];
       UNBLOCK_INPUT;
     }
@@ -1837,7 +1837,7 @@ pop_down_menu (Lisp_Object arg)
 Lisp_Object
 ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
 {
-  id dialog;
+  NSAlert *dialog;
   Lisp_Object window, tem;
   struct frame *f;
   NSPoint p;
@@ -1890,20 +1890,97 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
   p.y = (int)f->top_pos + (FRAME_LINE_HEIGHT (f) * f->text_lines)/2;
 
   BLOCK_INPUT;
-  dialog = [[EmacsDialogPanel alloc] initFromContents: contents
-                                           isQuestion: isQ];
+  dialog = [[NSAlert alloc] init];
+
+  Lisp_Object head;
+  /* read contents */
+  if (XTYPE (contents) == Lisp_Cons)
+    {
+      head = Fcar (contents);
+      process_dialog (dialog, Fcdr (contents));
+    }
+  else
+    head = contents;
+
+  if (XTYPE (head) == Lisp_String)
+    {
+      char* split = strchr( SDATA (head), '\n');
+      if ( split )
+	{
+	  split[0] = '\0'; 
+	  [dialog setMessageText:
+		   [NSString stringWithUTF8String: SDATA (head)]];
+	  split[0] = '\n';  /* not nice, but works */
+	  [dialog setInformativeText:
+		   [NSString stringWithUTF8String: split+1]];
+	} else
+	{
+	  [dialog setMessageText:
+		   [NSString stringWithUTF8String: SDATA (head)]];
+	}
+    }
+ 
+  {
+    int i;
+      
+    // /* to do: use the position (window) parameter given to ns_popup_dialog
+    //    rather than the selected frame. 
+    //    Possibly select/raise frame of specified window in ns_popup_dialog.*/
+    // if (SELECTED_FRAME () && FRAME_NS_P (SELECTED_FRAME ())
+    // 	&& FRAME_NS_VIEW (SELECTED_FRAME ()))
+    //   {
+    // 	[[FRAME_NS_VIEW (SELECTED_FRAME ()) window] addChildWindow:self ordered: NSWindowAbove ];
+    //   }
+   
+  
   {
     int specpdl_count = SPECPDL_INDEX ();
     record_unwind_protect (pop_down_menu, make_save_value (dialog, 0));
     popup_activated_flag = 1;
-    tem = [dialog runDialogAt: p ];
+    //    tem = [dialog runDialogAt: p ];
+
+  extern EMACS_TIME timer_check (int do_it_now); /* TODO: add to a header */
+
+
+
+
+  // if ([self parentWindow]) /* is attached to a window - display as sheet */
+
+  [dialog beginSheetModalForWindow:[FRAME_NS_VIEW (f) window]
+		     modalDelegate:dialog
+		    didEndSelector:NULL 
+		       contextInfo:NULL];
+    
+
+  /* initiate a session that will be ended by pop_down_menu */
+  popupSession = [NSApp beginModalSessionForWindow: [dialog window]];
+
+  NSInteger ret;
+  while (popup_activated_flag
+         && (ret = [NSApp runModalSession: popupSession])
+              == NSRunContinuesResponse)
+    {
+      /* Run this for timers.el, indep of atimers; might not return.
+         TODO: use return value to avoid calling every iteration. */
+      timer_check (1);
+      [NSThread sleepUntilDate: [NSDate dateWithTimeIntervalSinceNow: 0.1]];
+    }
+
+
+  *(EMACS_INT*)(&tem) = ret;
+
     unbind_to (specpdl_count, Qnil);  /* calls pop_down_menu */
   }
+  // if (sheet) 
+  //   
+  [NSApp endSheet:dialog];
   UNBLOCK_INPUT;
   if (tem == XHASH(Vcancel_special_indicator_flag)) Fsignal (Qquit, Qnil); /*special button value for cancel*/
+  [dialog release];
   return tem;
 }
 
+}
 
 /* ==========================================================================
 
@@ -1922,124 +1999,6 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
   return YES;
 }
 @end
-
-@implementation EmacsDialogPanel
-
-#define SPACER		4.0
-#define ICONSIZE	64.0
-#define TEXTHEIGHT	20.0
-#define MINCELLWIDTH	80.0
-
-- initWithContentRect: (NSRect)contentRect styleMask: (unsigned int)aStyle
-              backing: (NSBackingStoreType)backingType defer: (BOOL)flag
-{
-  NSSize spacing = {SPACER};
-  NSRect area;
-  char this_cmd_name[80];
-  id cell;
-  static NSImageView *imgView;
-  static FlippedView *contentView;
-
-  area.origin.x   = 6*SPACER;
-  area.origin.y   = 4*SPACER;
-
-  if (imgView == nil)
-    {
-      NSImage *img;
-      
-      area.size.width = ICONSIZE;
-      area.size.height= ICONSIZE;
-      img = [[NSImage imageNamed: @"NSApplicationIcon"] copy];
-      [img setScalesWhenResized: YES];
-      [img setSize: NSMakeSize (ICONSIZE, ICONSIZE)];
-      imgView = [[NSImageView alloc] initWithFrame: area];
-      [imgView setImage: img];
-      [imgView setEditable: NO];
-      [img release];
-    }
-
-  aStyle = NSDocModalWindowMask | NSTitledWindowMask; /* without the title, we can't assign focus to buttons... */
-  rows = 0;
-  cols = 1;
-  [super initWithContentRect: contentRect styleMask: aStyle
-                     backing: backingType defer: YES];
-  contentView = [[FlippedView alloc] initWithFrame: [[self contentView] frame]];
-  [self setContentView: contentView];
-
-  [[self contentView] setAutoresizesSubviews: YES];
-
-  [[self contentView] addSubview: imgView];
-  [self setTitle: @""];
-
-  area.origin.x   += ICONSIZE+3*SPACER;
-/*  area.origin.y   = TEXTHEIGHT; ICONSIZE/2-10+SPACER; */
-  area.size.width = 400;
-  area.size.height= TEXTHEIGHT;
-  command = [[[NSTextView alloc] initWithFrame: area] autorelease];
-  [[self contentView] addSubview: command];
-  [command setString: @"Aquamacs"];
-  [command setDrawsBackground: NO];
-  [command setSelectable: NO];
-  [command setAlignment: NSLeftTextAlignment];
-  [command setFont: [NSFont boldSystemFontOfSize: 13.0]];
-
-
-/*  area.origin.x   = ICONSIZE+2*SPACER;
-  area.origin.y   = TEXTHEIGHT + 2*SPACER;
-  area.size.width = 400;
-  area.size.height= 2;
-  tem = [[[NSBox alloc] initWithFrame: area] autorelease];
-  [[self contentView] addSubview: tem];
-  [tem setTitlePosition: NSNoTitle];
-  [tem setAutoresizingMask: NSViewWidthSizable];*/
-
-/*  area.origin.x = ICONSIZE+2*SPACER; */
-  area.origin.y += TEXTHEIGHT+SPACER;
-  area.size.width = 400;
-  area.size.height= TEXTHEIGHT;
-  title = [[[NSTextView alloc] initWithFrame: area] autorelease];
-  [[self contentView] addSubview: title];
-  [title setDrawsBackground: NO];
-  // [title setBezeled: NO];
-  [title setSelectable: NO];
-  [title setAlignment: NSLeftTextAlignment];
-  [title setFont: [NSFont systemFontOfSize: 11.0]];
-
-
-  cell = [[[NSButtonCell alloc] initTextCell: @""] autorelease];
-  [cell setBordered: NO];
-  [cell setEnabled: NO];
-  [cell setCellAttribute: NSCellIsInsetButton to: 8];
-  [cell setBezelStyle: NSRoundedBezelStyle];
-  [cell setFont: [NSFont systemFontOfSize: 13.0]];
-
-  matrix = [[NSMatrix alloc] initWithFrame: contentRect 
-                                      mode: NSHighlightModeMatrix 
-                                 prototype: cell 
-                              numberOfRows: 0 
-                           numberOfColumns: 1];
-  [[self contentView] addSubview: matrix];
-  [matrix release];
-  [matrix setFrameOrigin: NSMakePoint (area.origin.x,
-                                      area.origin.y + (TEXTHEIGHT+3*SPACER))];
-  [matrix setIntercellSpacing: spacing];
-
-  [self setOneShot: YES];
-  [self setReleasedWhenClosed: YES];
-  [self setHidesOnDeactivate: YES];
-
-  defaultCell = nil;
-  return self;
-}
-
-
-- (BOOL)windowShouldClose: (id)sender
-{
-  if ([self parentWindow])
-    [[self parentWindow] removeChildWindow: self];
-  [NSApp stopModalWithCode: XHASH (Qnil)]; // FIXME: BIG UGLY HACK!!
-  return NO;
-}
 
 
 void process_dialog (id window, Lisp_Object list)
@@ -2064,29 +2023,24 @@ void process_dialog (id window, Lisp_Object list)
       special_prop = 0;
       if (STRINGP (item))
         { /* inactive button */
-          [window addString: SDATA (item) row: row];
+          [window addButtonWithTitle: [NSString stringWithUTF8String: SDATA (item)] ];
+	  
         }
       else if (CONSP (item) ) /*  (XTYPE (item) == Lisp_Cons) */
         { /* normal button*/
-          [window addButton: SDATA (XCAR (item))
-		  value: XCDR (item) row: row key:nil];
+	  [[window addButtonWithTitle: [NSString stringWithUTF8String: SDATA (XCAR (item) )]] setTag: XHASH (XCDR (item))];
+	    
 	  buttons++;
         }
       else if (NILP (item) && CONSP (list) & hor==0)
         { /* if not in horizontal mode: a NIL item means to add a space. */
-          [window addSplit];
-          row = -1;
+	  // [window addSplit];
         }
       else if (EQ (item, intern ("cancel")))
 	{ /* add cancel button */
-	  [window addButton: "Cancel"
-		      value: Vcancel_special_indicator_flag row: row key: @"\e"];
-	  cancel = 0;
 	}    
       else if (EQ (item, intern ("no-cancel")))
 	{ /* skip cancel button */
-	  cancel = 0;
-	  special_prop = 1;
 	}     
       /* end of list */
       if (!list || NILP (list))
@@ -2100,257 +2054,13 @@ void process_dialog (id window, Lisp_Object list)
 	{ item = list;
 	  list = Qnil;
 	}
-
-      if (special_prop == 0)
-	{
-	  if (hor) // move horizontally
-	    [window addSplit];
-	  else // move vertically
-	    row++;
-	}
     }
 
-  if (cancel || buttons == 0)
-    [window addButton: "Cancel"
-		value: Vcancel_special_indicator_flag row: row key: @"\e"];
+  // if (cancel || buttons == 0)
+  //   [window addButton: "Cancel"
+  // 		value: Vcancel_special_indicator_flag row: row key: @"\e"];
 }
 
-
-- addButton: (char *)str value: (Lisp_Object)val row: (int)row key: (NSString *)key
-{
-  id cell;
-       
-  if (row >= rows)
-    {
-      [matrix addRow];
-      rows++;
-    }
-  cell = [matrix cellAtRow: row column: cols-1];
-  [cell setTarget: self];
-  [cell setAction: @selector (clicked: )];
-  [cell setTitle:  [NSString stringWithFormat:@"  %@  ",[NSString stringWithUTF8String: str]]];
-  [cell setTag: XHASH (val)];	// FIXME: BIG UGLY HACK!!
-  [cell setBordered: YES];
-  [cell setEnabled: YES];
-  if (key != nil) [cell setKeyEquivalent: key];
-
-  defaultCell = cell; /* last cell added is defaultCell */
-  return self;
-}
-
-
-- addString: (char *)str row: (int)row
-{
-  id cell;
-       
-  if (row >= rows)
-    {
-      [matrix addRow];
-      rows++;
-    }
-  cell = [matrix cellAtRow: row column: cols-1];
-  [cell setTitle: [NSString stringWithFormat:@"  %@  ",[NSString stringWithUTF8String: str]]];
-  [cell setBordered: YES];
-  [cell setEnabled: NO];
-  return self;
-}
-
-
-- addSplit
-{
-  [matrix addColumn];
-  cols++;
-  return self;
-}
-
-
-- clicked: sender
-{
-  NSArray *sellist = nil;
-  EMACS_INT seltag;
-
-
-  [[self parentWindow] removeChildWindow: self];
-
-  sellist = [sender selectedCells];
-  if ([sellist count]<1) 
-    return self;
-
-  seltag = [[sellist objectAtIndex: 0] tag];
-  if (seltag != XHASH (Qundefined)) // FIXME: BIG UGLY HACK!!
-    [NSApp stopModalWithCode: seltag];
-  return self;
-}
-
-
-- initFromContents: (Lisp_Object)contents isQuestion: (BOOL)isQ
-{
-  Lisp_Object head;
- 
-
-#ifdef NS_IMPL_COCOA
-  /* TODO: This makes drawing of cursor plus that of phys_cursor_glyph
-           atomic.  Cleaner ways of doing this should be investigated.
-           One way would be to set a global variable DRAWING_CURSOR
-  	   when making the call to draw_phys..(), don't focus in that
-  	   case, then move the ns_unfocus() here after that call. */
-  NSDisableScreenUpdates ();
-#endif
-
-  [super init];
-  defaultCell = nil;
-
-  if (XTYPE (contents) == Lisp_Cons)
-    {
-      head = Fcar (contents);
-      process_dialog (self, Fcdr (contents));
-    }
-  else
-    head = contents;
-
-  if (XTYPE (head) == Lisp_String)
-    {
-      char* split = strchr( SDATA (head), '\n');
-      if ( split )
-	{
-	  split[0] = '\0'; 
-	  [command setString:
-		   [NSString stringWithUTF8String: SDATA (head)]];
-	  split[0] = '\n';  /* not nice, but works */
-	  [title setString:
-		   [NSString stringWithUTF8String: split+1]];
-	} else
-	{
-	  [title setString:
-		   [NSString stringWithUTF8String: SDATA (head)]];
-	}
-    }
-  else if (isQ == YES)
-      [title setString: @"Question"];
-  else
-      [title setString: @"Information"];
-
-  {
-    int i;
-    NSRect r, s;
-
-    [matrix sizeToFit];
-    {
-      NSSize csize = [matrix cellSize];
-      if (csize.width < MINCELLWIDTH)
-        {
-          csize.width = MINCELLWIDTH;
-          [matrix setCellSize: csize];
-          [matrix sizeToCells];
-        }
-    }
-
-    [command setHorizontallyResizable:NO];
-    [command setVerticallyResizable:YES];
-    [command sizeToFit];
-    [title setFrameOrigin: NSMakePoint([command frame].origin.x,
-				       [command frame].origin.y + [command frame].size.height + SPACER)];
-    [title setHorizontallyResizable:NO];
-    [title setVerticallyResizable:YES];
-    [title sizeToFit];
-    [matrix setFrameOrigin: NSMakePoint ([title frame].origin.x,
-					 [title frame].origin.y + (TEXTHEIGHT+3*SPACER))];
-
-    /* to do: use the position (window) parameter given to ns_popup_dialog
-       rather than the selected frame. 
-       Possibly select/raise frame of specified window in ns_popup_dialog.*/
-    if (SELECTED_FRAME () && FRAME_NS_P (SELECTED_FRAME ())
-	&& FRAME_NS_VIEW (SELECTED_FRAME ()))
-      {
-	[[FRAME_NS_VIEW (SELECTED_FRAME ()) window] addChildWindow:self ordered: NSWindowAbove ];
-      }
-
-    [matrix sizeToFit];
-
-    [matrix setKeyCell:[matrix cellAtRow: 0 column: 0]];
-    [self setDefaultButtonCell:defaultCell];
-
-    r = [self frame];
-    s = [(NSView *)[self contentView] frame];
-    // , [matrix frame].size.width
-    r.size.width  = ICONSIZE+3*SPACER + max([command frame].size.width, [title frame].size.width) +2*SPACER;
-    r.size.height += [matrix frame].origin.y+[matrix frame].size.height+2*SPACER-s.size.height;
- 
-    r.origin = NSMakePoint ([[FRAME_NS_VIEW (SELECTED_FRAME ()) window] frame].origin.x
-			    + ([[FRAME_NS_VIEW (SELECTED_FRAME ()) window] frame].size.width - r.size.width) / 2,
-			    [[FRAME_NS_VIEW (SELECTED_FRAME ()) window] frame].origin.y
-			    + ([[FRAME_NS_VIEW (SELECTED_FRAME ()) window] frame].size.height));
-
-    [self setFrame: r display: YES animate:NO];
- 
-#ifdef NS_IMPL_COCOA
-  /* TODO: This makes drawing of cursor plus that of phys_cursor_glyph
-           atomic.  Cleaner ways of doing this should be investigated.
-           One way would be to set a global variable DRAWING_CURSOR
-  	   when making the call to draw_phys..(), don't focus in that
-  	   case, then move the ns_unfocus() here after that call. */
-  NSEnableScreenUpdates ();
-#endif
-
-    r.origin = NSMakePoint (r.origin.x,
-			    [[FRAME_NS_VIEW (SELECTED_FRAME ()) window] frame].origin.y
-			    + ([[FRAME_NS_VIEW (SELECTED_FRAME ()) window] frame].size.height - 40 - r.size.height));
-
-    [self setFrame: r display: YES animate:YES];
- 
-
- }
-
-  return self;
-}
-
-
-- (void)dealloc
-{
-  { [super dealloc]; return; };
-}
-
-
-- (Lisp_Object)runDialogAt: (NSPoint)p
-{
-  int ret;
-  int sheet=0;
-  extern EMACS_TIME timer_check (int do_it_now); /* TODO: add to a header */
-
-  if ([self parentWindow]) /* is attached to a window - display as sheet */
-    {   [NSApp beginSheet:self 
-	   modalForWindow:self.parentWindow
-	    modalDelegate:self 
-	   didEndSelector:NULL 
-	      contextInfo:NULL];
-      sheet=1;
-    }
-
-  /* initiate a session that will be ended by pop_down_menu */
-  popupSession = [NSApp beginModalSessionForWindow: self];
-
-
-  while (popup_activated_flag
-         && (ret = [NSApp runModalSession: popupSession])
-              == NSRunContinuesResponse)
-    {
-      /* Run this for timers.el, indep of atimers; might not return.
-         TODO: use return value to avoid calling every iteration. */
-      timer_check (1);
-      [NSThread sleepUntilDate: [NSDate dateWithTimeIntervalSinceNow: 0.1]];
-    }
-
-  if (sheet) 
-    [NSApp endSheet:self];
-
-  {				/* FIXME: BIG UGLY HACK!!! */
-      Lisp_Object tmp;
-      *(EMACS_INT*)(&tmp) = ret;
-      return tmp;
-  }
-}
-
-@end
 
 
 /* ==========================================================================
