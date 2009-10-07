@@ -69,14 +69,18 @@
 	    (and (fboundp 'smart-move-minibuffer-inside-screen)
 		 smart-frame-positioning-mode
 		 (smart-move-minibuffer-inside-screen f))
-	    (if (and long (not aquamacs-quick-yes-or-no-prompt))
-		(old-yes-or-no-p text)
-	      (old-y-or-n-p text)))
+	    (let ((text (if (string-match "\\(.*\\)\n" text)
+			    (match-string 1 text)
+			  text)))
+	      (if (and long (not aquamacs-quick-yes-or-no-prompt))
+		  (old-yes-or-no-p text)
+		(old-y-or-n-p text))))
 	(let ((ret (x-popup-dialog t (list text `((,(or yes-button "Yes") . "y") . t)
 					   'cancel `((,(or no-button "No") . "n") . nil)))))
 	  (if (eq ret 'cancel)
 	      (keyboard-quit))
 	  ret))))
+
 
 (defun filter-list (lst elements)
 "Returns LST sans ELEMENTS.
