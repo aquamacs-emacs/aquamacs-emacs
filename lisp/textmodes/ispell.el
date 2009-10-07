@@ -1217,7 +1217,8 @@ Otherwise returns the library directory name, if that is defined."
   ;; all versions, since versions earlier than 3.0.09 didn't identify
   ;; themselves on startup.
   (interactive "p")
-  (if (string= ispell-program-name "NSSpellChecker")
+  (if (string= ispell-program-name "NSSpellChecker") 
+      ;; If using NSSpellChecker, just initialize variables and return.
       (progn
 	;; Make sure these variables are (re-)initialized to the default value
 	(setq ispell-really-aspell nil
@@ -1225,89 +1226,88 @@ Otherwise returns the library directory name, if that is defined."
 	      ispell-really-hunspell nil
 	      ispell-encoding8-command nil)
 	t)
-    (let (;; avoid bugs when syntax of `.' changes in various default modes
-	  (default-major-mode 'fundamental-mode)
-	  (default-directory (or (and (boundp 'temporary-file-directory)
-				      temporary-file-directory)
-				 default-directory))
-	  result status ispell-program-version)
-      
-      (with-temp-buffer
-	(setq status (ispell-call-process
-		      ispell-program-name nil t nil
-		      ;; aspell doesn't accept the -vv switch.
-		      (let ((case-fold-search
-			     (memq system-type '(ms-dos windows-nt)))
-			    (speller
-			     (file-name-nondirectory ispell-program-name)))
-			;; Assume anything that isn't `aspell' is Ispell.
-			(if (string-match "\\`aspell" speller) "-v" "-vv"))))
+  (let ((default-directory (or (and (boundp 'temporary-file-directory)
+				    temporary-file-directory)
+			       default-directory))
+	result status ispell-program-version)
+
+    (with-temp-buffer
+      (setq status (ispell-call-process
+		    ispell-program-name nil t nil
+		    ;; aspell doesn't accept the -vv switch.
+		    (let ((case-fold-search
+			   (memq system-type '(ms-dos windows-nt)))
+			  (speller
+			   (file-name-nondirectory ispell-program-name)))
+		      ;; Assume anything that isn't `aspell' is Ispell.
+		      (if (string-match "\\`aspell" speller) "-v" "-vv"))))
+      (goto-char (point-min))
+      (if interactivep
+	  ;; report version information of ispell and ispell.el
+	  (progn
+	    (end-of-line)
+	    (setq result (concat (buffer-substring-no-properties (point-min)
+								 (point))
+				 ", "
+				 ispell-version))
+	    (message "%s" result))
+	;; return library directory.
+	(if (re-search-forward "LIBDIR = \\\"\\([^ \t\n]*\\)\\\"" nil t)
+	    (setq result (match-string 1))))
+      (goto-char (point-min))
+      (if (not (memq status '(0 nil)))
+	  (error "%s exited with %s %s" ispell-program-name
+		 (if (stringp status) "signal" "code") status))
+
+      ;; Get relevant version strings. Only xx.yy.... format works well
+      (let (case-fold-search)
+	(setq ispell-program-version
+	      (and (search-forward-regexp "\\([0-9]+\\.[0-9\\.]+\\)" nil t)
+		   (match-string 1)))
+
+	;; Make sure these variables are (re-)initialized to the default value
+	(setq ispell-really-aspell nil
+	      ispell-aspell-supports-utf8 nil
+	      ispell-really-hunspell nil
+	      ispell-encoding8-command nil)
+
 	(goto-char (point-min))
-	(if interactivep
-	    ;; report version information of ispell and ispell.el
-	    (progn
-	      (end-of-line)
-	      (setq result (concat (buffer-substring-no-properties (point-min)
-								   (point))
-				   ", "
-				   ispell-version))
-	      (message "%s" result))
-	  ;; return library directory.
-	  (if (re-search-forward "LIBDIR = \\\"\\([^ \t\n]*\\)\\\"" nil t)
-	      (setq result (buffer-substring (match-beginning 1) (match-end 1)))))
-	(goto-char (point-min))
-	(if (not (memq status '(0 nil)))
-	    (error "%s exited with %s %s" ispell-program-name
-		   (if (stringp status) "signal" "code") status))
-	
-	;; Get relevant version strings. Only xx.yy.... format works well
-	(let (case-fold-search)
-	  (setq ispell-program-version
-		(and (search-forward-regexp "\\([0-9]+\\.[0-9\\.]+\\)" nil t)
-		     (match-string 1)))
-	  
-	  ;; Make sure these variables are (re-)initialized to the default value
-	  (setq ispell-really-aspell nil
-		ispell-aspell-supports-utf8 nil
-		ispell-really-hunspell nil
-		ispell-encoding8-command nil)
-	  
-	  (goto-char (point-min))
-	  (or (setq ispell-really-aspell
-		    (and (search-forward-regexp
-			  "(but really Aspell \\([0-9]+\\.[0-9\\.]+\\)?)" nil t)
-			 (match-string 1)))
-	      (setq ispell-really-hunspell
-		    (and (search-forward-regexp
-			  "(but really Hunspell \\([0-9]+\\.[0-9\\.]+\\)?)" nil t)
-			 (match-string 1)))))
-	
-	(let ((aspell-minver    "0.50")
-	      (aspell8-minver   "0.60")
-	      (ispell0-minver   "3.1.0")
-	      (ispell-minver    "3.1.12")
-	      (hunspell8-minver "1.1.6"))
-	  
-	  (if (ispell-check-minver ispell0-minver ispell-program-version)
-	      (or (ispell-check-minver ispell-minver ispell-program-version)
-		  (setq ispell-offset 0))
-	    (error "%s release %s or greater is required"
-		   ispell-program-name
-		   ispell-minver))
-	  
-	  (cond
-	   (ispell-really-aspell
-	    (if (ispell-check-minver aspell-minver ispell-really-aspell)
-		(if (ispell-check-minver aspell8-minver ispell-really-aspell)
-		    (progn
-		      (setq ispell-aspell-supports-utf8 t)
-		      (setq ispell-encoding8-command "--encoding=")))
-	      (setq ispell-really-aspell nil)))
-	   (ispell-really-hunspell
-	    (if (ispell-check-minver hunspell8-minver ispell-really-hunspell)
-		(setq ispell-encoding8-command "-i ")
-	      (setq ispell-really-hunspell nil))))))
-      result)))
+	(or (setq ispell-really-aspell
+		  (and (search-forward-regexp
+			"(but really Aspell \\([0-9]+\\.[0-9\\.-]+\\)?)" nil t)
+		       (match-string 1)))
+	    (setq ispell-really-hunspell
+		  (and (search-forward-regexp
+			"(but really Hunspell \\([0-9]+\\.[0-9\\.-]+\\)?)"
+                        nil t)
+		       (match-string 1)))))
+
+      (let ((aspell-minver    "0.50")
+	    (aspell8-minver   "0.60")
+	    (ispell0-minver   "3.1.0")
+	    (ispell-minver    "3.1.12")
+	    (hunspell8-minver "1.1.6"))
+
+	(if (ispell-check-minver ispell0-minver ispell-program-version)
+	    (or (ispell-check-minver ispell-minver ispell-program-version)
+		(setq ispell-offset 0))
+	  (error "%s release %s or greater is required"
+		 ispell-program-name
+		 ispell-minver))
+
+	(cond
+	 (ispell-really-aspell
+	  (if (ispell-check-minver aspell-minver ispell-really-aspell)
+	      (if (ispell-check-minver aspell8-minver ispell-really-aspell)
+		  (progn
+		    (setq ispell-aspell-supports-utf8 t)
+		    (setq ispell-encoding8-command "--encoding=")))
+	    (setq ispell-really-aspell nil)))
+	 (ispell-really-hunspell
+	  (if (ispell-check-minver hunspell8-minver ispell-really-hunspell)
+	      (setq ispell-encoding8-command "-i ")
+	    (setq ispell-really-hunspell nil))))))
+    result)))
 
 (defun ispell-call-process (&rest args)
   "Like `call-process' but defend against bad `default-directory'."
