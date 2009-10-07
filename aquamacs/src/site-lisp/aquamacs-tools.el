@@ -62,7 +62,6 @@
 	   ;;(not (eq (car-safe last-nonmenu-event)  
 	   ;;	  'mac-apple-event)))
 	   (not use-dialog-box)
-	   (not (fboundp 'mac-dialog-y-or-n-p))
 	   (not window-system))
 	  (progn
 	    ;; make sure the frame's minibuffer is actually visible
@@ -73,11 +72,10 @@
 	    (if (and long (not aquamacs-quick-yes-or-no-prompt))
 		(old-yes-or-no-p text)
 	      (old-y-or-n-p text)))
-	(let ((ret (mac-dialog-y-or-n-p text "" t)))
+	(let ((ret (x-popup-dialog t (list text '("Yes" . t) 'cancel '("No" . nil)))))
 	  (if (eq ret 'cancel)
 	      (keyboard-quit))
 	  ret))))
-
 
 (defun filter-list (lst elements)
 "Returns LST sans ELEMENTS.
