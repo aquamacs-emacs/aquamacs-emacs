@@ -1825,7 +1825,6 @@ pop_down_menu (Lisp_Object arg)
   if (popup_activated_flag)
     {
       popup_activated_flag = 0;
-      printf("popddownmeun\n");
       BLOCK_INPUT;
       [NSApp endModalSession: popupSession];
       [NSApp endSheet:[popupSessionAlert window]];
@@ -1927,30 +1926,14 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
   {
     int i;
       
-    // /* to do: use the position (window) parameter given to ns_popup_dialog
-    //    rather than the selected frame. 
-    //    Possibly select/raise frame of specified window in ns_popup_dialog.*/
-    // if (SELECTED_FRAME () && FRAME_NS_P (SELECTED_FRAME ())
-    // 	&& FRAME_NS_VIEW (SELECTED_FRAME ()))
-    //   {
-    // 	[[FRAME_NS_VIEW (SELECTED_FRAME ()) window] addChildWindow:self ordered: NSWindowAbove ];
-    //   }
-   
-  
   NSInteger ret = -1;
 
   {
     int specpdl_count = SPECPDL_INDEX ();
     record_unwind_protect (pop_down_menu, make_save_value (dialog, 0));
     popup_activated_flag = 1;
-    //    tem = [dialog runDialogAt: p ];
 
-  extern EMACS_TIME timer_check (int do_it_now); /* TODO: add to a header */
-
-
-
-
-  // if ([self parentWindow]) /* is attached to a window - display as sheet */
+  extern EMACS_TIME timer_check (int do_it_now);  
 
   [dialog beginSheetModalForWindow:[FRAME_NS_VIEW (f) window]
 		     modalDelegate:dialog
@@ -1984,8 +1967,6 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
 	  tem = Fcons (tem, dialog->returnValues[[[dialog suppressionButton] tag]]);
 	}
     }
-  
-
     unbind_to (specpdl_count, Qnil);  /* calls pop_down_menu */
   }
   UNBLOCK_INPUT;
@@ -2042,9 +2023,7 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
 - (void) processDialogFromList: (Lisp_Object)list
 {
   Lisp_Object item;
-  int cancel = 1,
-    buttons = 0;
-
+  int cancel = 1;
   for (; CONSP (list) && returnValueCount<20; list = XCDR (list))
     {
       item = XCAR (list);
@@ -2063,19 +2042,38 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
         }
       else if (CONSP (item)) 
         { 
+	  NSString *title = @"malformed";
+	  NSString *key = nil;
+	  NSButton *button = nil;
+	  if (CONSP (XCAR (item))) /* key specified? */
+	    {
+	      if (STRINGP (XCAR (XCAR (item))))
+		title = [NSString stringWithUTF8String: SDATA (XCAR (XCAR (item)))];
+	      if (STRINGP ( XCDR (XCAR (item))))
+		key =  [NSString stringWithUTF8String: SDATA (XCDR (XCAR (item)))];
+	      else
+		key = nil;
+	    }
+	  else
+	    {
+	      if (STRINGP (XCAR (item)))
+		title = [NSString stringWithUTF8String: SDATA (XCAR (item))];
+	    }
 	  if (EQ (XCDR (item), intern ("suppress")))
 	    {
 	      [self setShowsSuppressionButton:YES];
-	      [[self suppressionButton] setTitle:[NSString stringWithUTF8String: SDATA (XCAR (item) )]];
-	      [[self suppressionButton] setTag: returnValueCount];
+	      button = [self suppressionButton];
+	      [button setTitle:title];
 	    } 
 	  else
 	    { /* normal button*/
-	      [[self addButtonWithTitle: [NSString stringWithUTF8String: SDATA (XCAR (item) )]] 
-		setTag: returnValueCount];
+	      button = [self addButtonWithTitle: title];
 	    }
+	  [button setTag: returnValueCount];
+	  if (key)
+	    [button setKeyEquivalent: key];
+
 	  returnValues[returnValueCount++] = XCDR (item);
-	  buttons++;
         }
       else if (EQ (item, intern ("cancel")))
 	{ /* add cancel button */
@@ -2088,7 +2086,7 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
 	}    
     }
 
-  if (cancel || buttons == 0)
+  if (cancel || returnValueCount == 0)
     [[self addButtonWithTitle: @"Cancel"] setTag: -2];
 }
 
@@ -2163,16 +2161,21 @@ It is a list of the form (DIALOG ITEM1 ITEM2...).
 Each ITEM is a cons cell (STRING . VALUE).
 The return value is VALUE from the chosen item.
 
+In Aquamacs, STRING may be a title string, or of the form 
+(TITLE . KEYSTRING), where TITLE is a string indicating the
+button title, and KEYSTRING a one-letter string giving the
+key equivalent for the button. 
+
 An ITEM may also be just a string--that makes a nonselectable item.
 An ITEM may also be nil--that means to put all preceding items
 on the left of the dialog box and all following items on the right.
 
-On NS, if VALUE is `suppress', the button will be shown as a 
+In Aquamacs, if VALUE is `suppress', the button will be shown as a 
 checkbox which can be selected in addition to any of the other buttons
 except Cancel. In this case, the return value is a cons cell of the
 form (VALUE . suppress).
 
-On NS, an ITEM may be `cancel' to insert a cancel button.  If there
+In Aquamacs, an ITEM may be `cancel' to insert a cancel button.  If there
 is an ITEM `no-cancel', no cancel button will be inserted at all;
 if there is no such item, a default cancel button will be inserted.
 
@@ -2180,7 +2183,7 @@ The order of buttons in the dialog follows system conventions; the
 default button should be specified first in the list of ITEMs.
 
 If HEADER is non-nil, the frame title for the box is "Information",
-otherwise it is "Question".  HEADER is unused on NS.
+otherwise it is "Question".  HEADER is unused in Aquamacs.
 
 If the user gets rid of the dialog box without making a valid choice,
 for instance using the window manager or using a cancel button,
