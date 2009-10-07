@@ -432,14 +432,17 @@ before deleting."
 	    ;; a lot of buffers (e.g. dired) may be modified,
 	    ;; but have no file name
 	    (if (aquamacs-ask-for-confirmation
-		 (format "Save buffer %s to file before closing tab? " (buffer-name)) nil)
-		(progn
-		  (save-buffer)
-		  (message "File saved.")
-		  )
+		 (format "Save buffer %s to file before closing tab? 
+The buffer contains unsaved changes which will be lost if you discard them now." (buffer-name)) nil)
+		(progn 
+		    (if (listp last-nonmenu-event)
+			(mac-key-save-file)
+		      (save-buffer))
+		    (if (buffer-modified-p)
+			(keyboard-quit)
+		      (message "File saved.")))
 	      ;; mark as not modified, so it will be killed for sure
-	      (set-buffer-modified-p nil)
-	      )
+	      (set-buffer-modified-p nil))
 	  (message ""))))
     (if (and killable (not dont-kill))
 	;; 'kill-buffer-hook will call tabbar-window-delete-tab, so don't
