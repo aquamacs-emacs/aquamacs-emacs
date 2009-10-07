@@ -2049,8 +2049,8 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
 	    {
 	      if (STRINGP (XCAR (XCAR (item))))
 		title = [NSString stringWithUTF8String: SDATA (XCAR (XCAR (item)))];
-	      if (STRINGP ( XCDR (XCAR (item))))
-		key =  [NSString stringWithUTF8String: SDATA (XCDR (XCAR (item)))];
+	      if (INTEGERP ( XCDR (XCAR (item))))
+		key =  [[NSString stringWithFormat: @"%c", XINT (XCDR (XCAR (item)))] retain];
 	      else
 		key = nil;
 	    }
@@ -2071,8 +2071,12 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
 	    }
 	  [button setTag: returnValueCount];
 	  if (key)
-	    [button setKeyEquivalent: key];
-
+	    {
+	      [button setKeyEquivalent: key];
+	      /* buttons like Don't Save have a non-nil modifier
+		 by default.  We have to reset that. */
+	      [button setKeyEquivalentModifierMask: nil];
+	    }
 	  returnValues[returnValueCount++] = XCDR (item);
         }
       else if (EQ (item, intern ("cancel")))
@@ -2162,9 +2166,9 @@ Each ITEM is a cons cell (STRING . VALUE).
 The return value is VALUE from the chosen item.
 
 In Aquamacs, STRING may be a title string, or of the form 
-(TITLE . KEYSTRING), where TITLE is a string indicating the
-button title, and KEYSTRING a one-letter string giving the
-key equivalent for the button. 
+(TITLE . KEY), where TITLE is a string indicating the
+button title, and KEY is a one-letter key code, such as \?q, 
+giving the key equivalent for the button. 
 
 An ITEM may also be just a string--that makes a nonselectable item.
 An ITEM may also be nil--that means to put all preceding items
