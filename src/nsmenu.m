@@ -75,6 +75,7 @@ EmacsMenu *mainMenu, *svcsMenu, *dockMenu;
 /* Nonzero means a menu is currently active.  */
 static int popup_activated_flag;
 static NSModalSession popupSession;
+static EmacsAlertPanel *popupSessionAlert;
 
 Lisp_Object Vns_tool_bar_size_mode;
 Lisp_Object Vns_tool_bar_display_mode;
@@ -1824,9 +1825,12 @@ pop_down_menu (Lisp_Object arg)
   if (popup_activated_flag)
     {
       popup_activated_flag = 0;
+      printf("popddownmeun\n");
       BLOCK_INPUT;
       [NSApp endModalSession: popupSession];
-      [[((NSAlert *) (p->pointer)) window] close];
+      [NSApp endSheet:[popupSessionAlert window]];
+      [popupSessionAlert release];
+      //[[((EmacsAlertPanel *) (p->pointer)) window] close];
       [[FRAME_NS_VIEW (SELECTED_FRAME ()) window] makeKeyWindow];
       UNBLOCK_INPUT;
     }
@@ -1837,8 +1841,8 @@ pop_down_menu (Lisp_Object arg)
 Lisp_Object
 ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
 {
-  NSAlert *dialog;
-  Lisp_Object window, tem;
+  EmacsAlertPanel *dialog;
+  Lisp_Object window, tem=Qnil;
   struct frame *f;
   NSPoint p;
   BOOL isQ;
@@ -1890,14 +1894,14 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
   p.y = (int)f->top_pos + (FRAME_LINE_HEIGHT (f) * f->text_lines)/2;
 
   BLOCK_INPUT;
-  dialog = [[NSAlert alloc] init];
+  dialog = [[EmacsAlertPanel alloc] init];
 
   Lisp_Object head;
   /* read contents */
   if (XTYPE (contents) == Lisp_Cons)
     {
       head = Fcar (contents);
-      process_dialog (dialog, Fcdr (contents));
+      [((EmacsAlertPanel*)dialog) processDialogFromList: Fcdr (contents)];
     }
   else
     head = contents;
@@ -1933,6 +1937,8 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
     //   }
    
   
+  NSInteger ret = -1;
+
   {
     int specpdl_count = SPECPDL_INDEX ();
     record_unwind_protect (pop_down_menu, make_save_value (dialog, 0));
@@ -1948,17 +1954,20 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
 
   [dialog beginSheetModalForWindow:[FRAME_NS_VIEW (f) window]
 		     modalDelegate:dialog
-		    didEndSelector:NULL 
-		       contextInfo:NULL];
+		    didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:)
+		       contextInfo:&ret];
     
 
+  
   /* initiate a session that will be ended by pop_down_menu */
+  popupSessionAlert = [dialog retain];  
   popupSession = [NSApp beginModalSessionForWindow: [dialog window]];
-
-  NSInteger ret;
+  
+  
   while (popup_activated_flag
-         && (ret = [NSApp runModalSession: popupSession])
-              == NSRunContinuesResponse)
+	 && ret == -1
+         && ([NSApp runModalSession: popupSession]
+	     == NSRunContinuesResponse))
     {
       /* Run this for timers.el, indep of atimers; might not return.
          TODO: use return value to avoid calling every iteration. */
@@ -1966,17 +1975,24 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
       [NSThread sleepUntilDate: [NSDate dateWithTimeIntervalSinceNow: 0.1]];
     }
 
-
-  *(EMACS_INT*)(&tem) = ret;
+  if (ret>=0 && ret<dialog->returnValueCount)
+    {
+      // *(EMACS_INT*)(&tem)
+      tem = (Lisp_Object) dialog->returnValues[ret];
+      if ([[dialog suppressionButton] state] == NSOnState)
+	{
+	  tem = Fcons (tem, dialog->returnValues[[[dialog suppressionButton] tag]]);
+	}
+    }
+  
 
     unbind_to (specpdl_count, Qnil);  /* calls pop_down_menu */
   }
-  // if (sheet) 
-  //   
-  [NSApp endSheet:dialog];
   UNBLOCK_INPUT;
-  if (tem == XHASH(Vcancel_special_indicator_flag)) Fsignal (Qquit, Qnil); /*special button value for cancel*/
   [dialog release];
+  if (ret==-2) /*cancel*/
+     Fsignal (Qquit, Qnil); /*special button value for cancel*/
+
   return tem;
 }
 
@@ -2001,66 +2017,82 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
 @end
 
 
-void process_dialog (id window, Lisp_Object list)
+
+@implementation EmacsAlertPanel
+- init
+{
+  [super init];
+  returnValues = calloc(sizeof(Lisp_Object), 20);
+  returnValueCount = 0;
+  return self;
+}
+- (void)dealloc
+{
+  free(returnValues);
+  [super dealloc];
+}
+
+
+- (void) alertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
+{
+  * ((NSInteger*) contextInfo) = returnCode;
+}
+
+/* do to: move this into init: */
+- (void) processDialogFromList: (Lisp_Object)list
 {
   Lisp_Object item;
-  int row = 0;
   int cancel = 1,
     buttons = 0;
 
-  int hor=0;
-
-  if (XINT (Fsafe_length (list) ) < 5)
-    hor = 1;
-
-  list = Freverse (list);
-
-  item = XCAR (list);
-  int special_prop = 0;
-
-  while (1)
+  for (; CONSP (list) && returnValueCount<20; list = XCDR (list))
     {
-      special_prop = 0;
+      item = XCAR (list);
+      
       if (STRINGP (item))
         { /* inactive button */
-          [window addButtonWithTitle: [NSString stringWithUTF8String: SDATA (item)] ];
-	  
+          [[self addButtonWithTitle: [NSString stringWithUTF8String: SDATA (item)] ] setEnabled:NO];
+        } 
+      else if (NILP (item))
+        { /* unfortunately, NSAlert will resize this button.  We can
+	     only customize after a call to update:, but then the
+	     other buttons are already positioned so it would be
+	     pointless.  */
+	  NSButton *space = [self addButtonWithTitle: @" " ];
+	  [space setHidden:YES];
         }
-      else if (CONSP (item) ) /*  (XTYPE (item) == Lisp_Cons) */
-        { /* normal button*/
-	  [[window addButtonWithTitle: [NSString stringWithUTF8String: SDATA (XCAR (item) )]] setTag: XHASH (XCDR (item))];
-	    
+      else if (CONSP (item)) 
+        { 
+	  if (EQ (XCDR (item), intern ("suppress")))
+	    {
+	      [self setShowsSuppressionButton:YES];
+	      [[self suppressionButton] setTitle:[NSString stringWithUTF8String: SDATA (XCAR (item) )]];
+	      [[self suppressionButton] setTag: returnValueCount];
+	    } 
+	  else
+	    { /* normal button*/
+	      [[self addButtonWithTitle: [NSString stringWithUTF8String: SDATA (XCAR (item) )]] 
+		setTag: returnValueCount];
+	    }
+	  returnValues[returnValueCount++] = XCDR (item);
 	  buttons++;
-        }
-      else if (NILP (item) && CONSP (list) & hor==0)
-        { /* if not in horizontal mode: a NIL item means to add a space. */
-	  // [window addSplit];
         }
       else if (EQ (item, intern ("cancel")))
 	{ /* add cancel button */
+	  [[self addButtonWithTitle:  @"Cancel"] setTag: -2];
+	  cancel = 0;
 	}    
       else if (EQ (item, intern ("no-cancel")))
 	{ /* skip cancel button */
-	}     
-      /* end of list */
-      if (!list || NILP (list))
-	break;
-
-      /* next item */
-      if (CONSP (list))
-	{ list = XCDR (list);
-	  item = XCAR (list); }
-      else
-	{ item = list;
-	  list = Qnil;
-	}
+	  cancel = 0;
+	}    
     }
 
-  // if (cancel || buttons == 0)
-  //   [window addButton: "Cancel"
-  // 		value: Vcancel_special_indicator_flag row: row key: @"\e"];
+  if (cancel || buttons == 0)
+    [[self addButtonWithTitle: @"Cancel"] setTag: -2];
 }
 
+@end
 
 
 /* ==========================================================================
@@ -2134,6 +2166,12 @@ The return value is VALUE from the chosen item.
 An ITEM may also be just a string--that makes a nonselectable item.
 An ITEM may also be nil--that means to put all preceding items
 on the left of the dialog box and all following items on the right.
+
+On NS, if VALUE is `suppress', the button will be shown as a 
+checkbox which can be selected in addition to any of the other buttons
+except Cancel. In this case, the return value is a cons cell of the
+form (VALUE . suppress).
+
 On NS, an ITEM may be `cancel' to insert a cancel button.  If there
 is an ITEM `no-cancel', no cancel button will be inserted at all;
 if there is no such item, a default cancel button will be inserted.

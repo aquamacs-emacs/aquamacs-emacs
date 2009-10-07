@@ -185,6 +185,18 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 - (NSRect) frame;
 @end
 
+@interface EmacsAlertPanel : NSAlert
+{
+  @public
+  Lisp_Object *returnValues;
+  int returnValueCount;
+}
+- init;
+- (void) alertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo;
+- (void) processDialogFromList: (Lisp_Object)list;
+
+@end
+
 
 /* ==========================================================================
 
