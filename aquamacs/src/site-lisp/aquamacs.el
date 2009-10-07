@@ -514,7 +514,8 @@ have changed."
   "Checks if options need saving and allows to do that.
 Returns t."
   (interactive)
-  (let* ((changed (aquamacs-menu-bar-changed-options)))
+  (condition-case nil
+      (let* ((changed (aquamacs-menu-bar-changed-options)))
     (if (and (or aquamacs-faces-changed
 		 (filter-list changed
 			  (list 'aquamacs-customization-version-id
@@ -528,9 +529,11 @@ Returns t."
 	     (if (eq aquamacs-save-options-on-quit 'ask)
 		 (progn 
 		   ;;		   (print changed)
-		   (y-or-n-p "Options have changed - save them? "))
+		   (aquamacs-ask-for-confirmation "Options have changed - save them?\nYour customizations will be lost if you don't save them." nil "Save" "Don't Save"))
 	       aquamacs-save-options-on-quit))
 	(aquamacs-menu-bar-options-save)))
+    (error nil) ;; in case of quit
+)
   t)
 (defun aquamacs-save-buffers-kill-emacs (&optional arg)
     "Offer to save each buffer, then kill this Emacs process.

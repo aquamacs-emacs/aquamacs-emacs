@@ -75,7 +75,7 @@ EmacsMenu *mainMenu, *svcsMenu, *dockMenu;
 /* Nonzero means a menu is currently active.  */
 static int popup_activated_flag;
 static NSModalSession popupSession;
-static EmacsAlertPanel *popupSessionAlert;
+static EmacsAlertPanel *popupSheetAlert;
 
 Lisp_Object Vns_tool_bar_size_mode;
 Lisp_Object Vns_tool_bar_display_mode;
@@ -1827,9 +1827,12 @@ pop_down_menu (Lisp_Object arg)
       popup_activated_flag = 0;
       BLOCK_INPUT;
       [NSApp endModalSession: popupSession];
-      [NSApp endSheet:[popupSessionAlert window]];
-      [popupSessionAlert release];
-      //[[((EmacsAlertPanel *) (p->pointer)) window] close];
+      if (popupSheetAlert)
+	{
+	  [NSApp endSheet:[popupSheetAlert window]];
+	  [popupSheetAlert release];
+	} else
+	  [[((EmacsAlertPanel *) (p->pointer)) window] close];
       [[FRAME_NS_VIEW (SELECTED_FRAME ()) window] makeKeyWindow];
       UNBLOCK_INPUT;
     }
@@ -1843,16 +1846,13 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
   EmacsAlertPanel *dialog;
   Lisp_Object window, tem=Qnil;
   struct frame *f;
-  NSPoint p;
-  BOOL isQ;
+  BOOL useSheet = YES;
 
   NSTRACE (x-popup-dialog);
   
   check_ns ();
 
   CHECK_CONS (contents);
-
-  isQ = NILP (header);
 
   if (EQ (position, Qt)
       || (CONSP (position) && (EQ (XCAR (position), Qmenu_bar)
@@ -1862,6 +1862,7 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
     }
   else if (CONSP (position))
     {
+      useSheet = NO;
       Lisp_Object tem;
       tem = Fcar (position);
       if (XTYPE (tem) == Lisp_Cons)
@@ -1877,7 +1878,10 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
       window = position;
     }
   else
-    window = Qnil;
+    {
+      useSheet = NO;
+      window = Qnil;
+    }
 
   if (FRAMEP (window))
     f = XFRAME (window);
@@ -1889,11 +1893,15 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
   else
     CHECK_WINDOW (window);
 
-  p.x = (int)f->left_pos + ((int)FRAME_COLUMN_WIDTH (f) * f->text_cols)/2;
-  p.y = (int)f->top_pos + (FRAME_LINE_HEIGHT (f) * f->text_lines)/2;
-
   BLOCK_INPUT;
   dialog = [[EmacsAlertPanel alloc] init];
+
+  if (NILP (header))
+    [dialog setAlertStyle: NSWarningAlertStyle];
+  else if (EQ (header, intern ("critical")))
+    [dialog setAlertStyle: NSCriticalAlertStyle];
+  else
+    [dialog setAlertStyle: NSInformationalAlertStyle];
 
   Lisp_Object head;
   /* read contents */
@@ -1935,21 +1943,28 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
 
   extern EMACS_TIME timer_check (int do_it_now);  
 
-  [dialog beginSheetModalForWindow:[FRAME_NS_VIEW (f) window]
-		     modalDelegate:dialog
-		    didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:)
-		       contextInfo:&ret];
-    
+  [dialog layout]; /* because we may not call beginSheet / runModal */
+
+  if (useSheet)
+    {
+      [dialog beginSheetModalForWindow:[FRAME_NS_VIEW (f) window]
+			 modalDelegate:dialog
+			didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:)
+			 contextInfo:&ret];
+      popupSheetAlert = dialog; /* store so the sheet will be ended. */
+    }
+  else
+    popupSheetAlert = nil;
 
   
   /* initiate a session that will be ended by pop_down_menu */
-  popupSessionAlert = [dialog retain];  
+  [dialog retain];  
   popupSession = [NSApp beginModalSessionForWindow: [dialog window]];
   
-  
+  int ret2 = -1;
   while (popup_activated_flag
 	 && ret == -1
-         && ([NSApp runModalSession: popupSession]
+         && ((ret2 = [NSApp runModalSession: popupSession])
 	     == NSRunContinuesResponse))
     {
       /* Run this for timers.el, indep of atimers; might not return.
@@ -1957,6 +1972,8 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
       timer_check (1);
       [NSThread sleepUntilDate: [NSDate dateWithTimeIntervalSinceNow: 0.1]];
     }
+  if (ret == -1 && ret2 != -1)
+    ret = ret2;
 
   if (ret>=0 && ret<dialog->returnValueCount)
     {
@@ -2075,7 +2092,7 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
 	      [button setKeyEquivalent: key];
 	      /* buttons like Don't Save have a non-nil modifier
 		 by default.  We have to reset that. */
-	      [button setKeyEquivalentModifierMask: nil];
+	      [button setKeyEquivalentModifierMask: 0];
 	    }
 	  returnValues[returnValueCount++] = XCDR (item);
         }
@@ -2187,7 +2204,7 @@ The order of buttons in the dialog follows system conventions; the
 default button should be specified first in the list of ITEMs.
 
 If HEADER is non-nil, the frame title for the box is "Information",
-otherwise it is "Question".  HEADER is unused in Aquamacs.
+otherwise it is "Question".
 
 If the user gets rid of the dialog box without making a valid choice,
 for instance using the window manager or using a cancel button,
