@@ -1,4 +1,4 @@
-;;; dired-aux.el --- less commonly used parts of dired  -*-byte-compile-dynamic: t;-*-
+;;; dired-aux.el --- less commonly used parts of dired
 
 ;; Copyright (C) 1985, 1986, 1992, 1994, 1998, 2000, 2001, 2002, 2003,
 ;;   2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
@@ -196,7 +196,7 @@ condition.  Two file items are considered to match if they are equal
 
 (defun dired-files-attributes (dir)
   "Return a list of all file names and attributes from DIR.
-List has a form of (file-name full-file-name (attribute-list))"
+List has a form of (file-name full-file-name (attribute-list))."
   (mapcar
    (lambda (file-name)
      (let ((full-file-name (expand-file-name file-name dir)))
@@ -488,7 +488,7 @@ to the end of the list of defaults just after the default value."
 
 ;; This is an extra function so that you can redefine it, e.g., to use gmhist.
 (defun dired-read-shell-command (prompt arg files)
-  "Read a dired shell command prompting with PROMPT (using read-shell-command).
+  "Read a dired shell command prompting with PROMPT (using `read-shell-command').
 ARG is the prefix arg and may be used to indicate in the prompt which
 FILES are affected."
   (minibuffer-with-setup-hook
@@ -551,9 +551,9 @@ This feature does not try to redisplay Dired buffers afterward, as
 there's no telling what files COMMAND may have changed.
 Type \\[dired-do-redisplay] to redisplay the marked files.
 
-When COMMAND runs, its working directory is the top-level directory of
-the Dired buffer, so output files usually are created there instead of
-in a subdir.
+When COMMAND runs, its working directory is the top-level directory
+of the Dired buffer, so output files usually are created there
+instead of in a subdir.
 
 In a noninteractive call (from Lisp code), you must specify
 the list of file names explicitly with the FILE-LIST argument, which
@@ -867,7 +867,7 @@ Otherwise, the rule is a compression rule, and compression is done with gzip.")
 	   failures)))))
 
 (defvar dired-query-alist
-  '((?\y . y) (?\040 . y)		; `y' or SPC means accept once
+  '((?y . y) (?\040 . y)		; `y' or SPC means accept once
     (?n . n) (?\177 . n)		; `n' or DEL skips once
     (?! . yes)				; `!' accepts rest
     (?q . no) (?\e . no)		; `q' or ESC skips rest
@@ -876,10 +876,10 @@ Otherwise, the rule is a compression rule, and compression is done with gzip.")
 
 ;;;###autoload
 (defun dired-query (qs-var qs-prompt &rest qs-args)
-  ;; Query user and return nil or t.
-  ;; Store answer in symbol VAR (which must initially be bound to nil).
-  ;; Format PROMPT with ARGS.
-  ;; Binding variable help-form will help the user who types the help key.
+  "Query user and return nil or t.
+Store answer in symbol VAR (which must initially be bound to nil).
+Format PROMPT with ARGS.
+Binding variable `help-form' will help the user who types the help key."
   (let* ((char (symbol-value qs-var))
 	 (action (cdr (assoc char dired-query-alist))))
     (cond ((eq 'yes action)
@@ -897,13 +897,12 @@ Otherwise, the rule is a compression rule, and compression is done with gzip.")
 	     ;; Actually it looks nicer without cursor-in-echo-area - you can
 	     ;; look at the dired buffer instead of at the prompt to decide.
 	     (apply 'message qprompt qs-args)
-	     (setq char (set qs-var (read-char)))
-	     (while (not (setq elt (assoc char dired-query-alist)))
-	       (message "Invalid char - type %c for help." help-char)
+	     (while (progn (setq char (set qs-var (read-key)))
+                           (not (setq elt (assoc char dired-query-alist))))
+	       (message "Invalid key - type %c for help." help-char)
 	       (ding)
 	       (sit-for 1)
-	       (apply 'message qprompt qs-args)
-	       (setq char (set qs-var (read-char))))
+	       (apply 'message qprompt qs-args))
 	     ;; Display the question with the answer.
 	     (message "%s" (concat (apply 'format qprompt qs-args)
 			      (char-to-string char)))
@@ -1607,7 +1606,7 @@ Optional arg HOW-TO determiness how to treat the target.
 ;; symlinks.
 
 (defvar dired-copy-how-to-fn nil
-  "nil or a function used by `dired-do-copy' to determine target.
+  "Either nil or a function used by `dired-do-copy' to determine target.
 See HOW-TO argument for `dired-do-create-files'.")
 
 ;;;###autoload
@@ -2427,15 +2426,21 @@ with the command \\[tags-loop-continue]."
 If FILE is a symbolic link and the optional argument DEREF-SYMLINKS is
 true then the type of the file linked to by FILE is printed instead."
   (interactive (list (dired-get-filename t) current-prefix-arg))
-  (with-temp-buffer
-    (if deref-symlinks
-	(call-process "file" nil t t "-L" "--" file)
-      (call-process "file" nil t t "--" file))
-    (when (bolp)
-      (backward-delete-char 1))
-    (message "%s" (buffer-string))))
+  (let (process-file-side-effects)
+    (with-temp-buffer
+      (if deref-symlinks
+	  (process-file "file" nil t t "-L" "--" file)
+	(process-file "file" nil t t "--" file))
+      (when (bolp)
+	(backward-delete-char 1))
+      (message "%s" (buffer-string)))))
 
 (provide 'dired-aux)
+
+;; Local Variables:
+;; byte-compile-dynamic: t
+;; generated-autoload-file: "dired.el"
+;; End:
 
 ;; arch-tag: 4b508de9-a153-423d-8d3f-a1bbd86f4f60
 ;;; dired-aux.el ends here

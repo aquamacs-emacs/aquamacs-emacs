@@ -1834,7 +1834,7 @@
 
 ;;;###autoload
 (defcustom ad-redefinition-action 'warn
-  "*Defines what to do with redefinitions during Advice de/activation.
+  "Defines what to do with redefinitions during Advice de/activation.
 Redefinition occurs if a previously activated function that already has an
 original definition associated with it gets redefined and then de/activated.
 In such a case we can either accept the current definition as the new
@@ -1849,7 +1849,7 @@ interpreted as `error'."
 
 ;;;###autoload
 (defcustom ad-default-compilation-action 'maybe
-  "*Defines whether to compile advised definitions during activation.
+  "Defines whether to compile advised definitions during activation.
 A value of `always' will result in unconditional compilation, `never' will
 always avoid compilation, `maybe' will compile if the byte-compiler is already
 loaded, and `like-original' will compile if the original definition of the
@@ -2781,7 +2781,8 @@ to be accessed, it returns a list with the index and name."
 	   (list (- index (length reqopt-args)) rest-arg)))))
 
 (defun ad-get-argument (arglist index)
-  "Return form to access ARGLIST's actual argument at position INDEX."
+  "Return form to access ARGLIST's actual argument at position INDEX.
+INDEX counts from zero."
   (let ((argument-access (ad-access-argument arglist index)))
     (cond ((consp argument-access)
 	   (ad-element-access
@@ -2789,7 +2790,8 @@ to be accessed, it returns a list with the index and name."
 	  (argument-access))))
 
 (defun ad-set-argument (arglist index value-form)
-  "Return form to set ARGLIST's actual arg at INDEX to VALUE-FORM."
+  "Return form to set ARGLIST's actual arg at INDEX to VALUE-FORM.
+INDEX counts from zero."
   (let ((argument-access (ad-access-argument arglist index)))
     (cond ((consp argument-access)
 	   ;; should this check whether there actually is something to set?

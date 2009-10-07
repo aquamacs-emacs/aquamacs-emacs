@@ -344,7 +344,6 @@ Changes to files in this list are not listed.")
     ("Sam Kendall" :changed "etags.c" "etags.el")
     ;; ack.texi: "We're not using his backquote.el any more."
     ("Richard King" :wrote "userlock.el" "filelock.c")
-    ("Larry Kolodney" :wrote "cvtmail.c")
     ("Sebastian Kremer" :changed "add-log.el")
     ("Mark Lambert" :changed "process.c" "process.h")
     ("Aaron Larson" :changed "bibtex.el")
@@ -867,7 +866,7 @@ buffer *Authors Errors* containing references to unknown files."
     (unless (file-exists-p (expand-file-name "src/emacs.c" root))
       (unless (y-or-n-p
 	       (format "Not the root directory of Emacs: %s, continue? " root))
-	(error "Not the root directory.")))
+	(error "Not the root directory")))
     (dolist (log logs)
       (when (string-match "ChangeLog\\(.[0-9]+\\)?$" log)
 	(message "Scanning %s..." log)

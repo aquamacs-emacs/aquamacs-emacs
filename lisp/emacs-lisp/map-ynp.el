@@ -34,6 +34,19 @@
 
 ;;; Code:
 
+;; unit test
+
+;; (defun map-test ()
+;; (interactive)
+;; (map-y-or-n-p (lambda (x) (format "Do it with %s?" x))
+;; 	     'ignore
+;; 	      '("one" "two" "three")
+;; 	      nil
+;; 	      '(((h) message "messge") )
+;; 	       )
+;; )
+;; (define-key menu-bar-file-menu [qweqwe] '(menu-item "map-test" map-test)) 
+
 (declare-function x-popup-dialog "xmenu.c" (position contents &optional header))
 
 (defun map-y-or-n-p (prompter actor list &optional help action-alist
@@ -96,18 +109,24 @@ Returns the number of actions taken."
 	(let ((object (if help (capitalize (nth 0 help))))
 	      (objects (if help (capitalize (nth 1 help))))
 	      (action (if help (capitalize (nth 2 help)))))
-	  (setq map `(("Yes" . act) 
-		      (,(if help (concat action " All " objects)
-			  "Do All") . automatic)
-    ,@(mapcar (lambda (elt)
-				  (cons (with-syntax-table
-					    text-mode-syntax-table
-					  (capitalize (nth 2 elt)))
+	  (setq map `((("Yes" . "y") . act) 
+		      ((,(format "%s this and all other%s."
+				 (if help action
+				     "Apply to")
+				 (if help (concat " " objects)
+				   "s"))
+			. "!") . suppress)
+		      cancel
+		      ,@(mapcar (lambda (elt)
+				  (cons (cons (with-syntax-table
+						  text-mode-syntax-table
+						(capitalize (nth 2 elt)))
+					      ;; key equivalent
+					      (substring (nth 2 elt) 0 1))
 					(vector (nth 1 elt))))
 				action-alist)
 		      nil
-		      ("No" . skip)
-		      ("No For All" . exit))
+		      (("No" . "n") . skip))
 		use-menus t
 		mouse-event last-nonmenu-event))
       (setq user-keys (if action-alist
@@ -170,7 +189,7 @@ Returns the number of actions taken."
 				(single-key-description char)))
 		     (setq def (lookup-key map (vector char))))
 
-		   (cond ((eq def 'exit)
+		   (cond ((or (eq def 'exit) (equal def (cons 'skip 'suppress)))
 			  (setq next (lambda () nil)))
 			 ((eq def 'act)
 			  ;; Act on the object.
@@ -189,7 +208,7 @@ Returns the number of actions taken."
 			  (setq next `(lambda ()
 					(setq next ',next)
 					',elt)))
-			 ((eq def 'automatic)
+			 ((equal def (cons 'act 'suppress)) 
 			  ;; Act on this and all following objects.
 			  (if (funcall prompter elt)
 			      (progn
@@ -238,6 +257,12 @@ the current %s and exit."
                           (setq next `(lambda ()
                                         (setq next ',next)
                                         ',elt)))
+			 ((and (consp def) (eq (cdr def) 'suppress) (symbolp (car def)) (commandp (car def)))
+			  (call-interactively (car def))
+			  (setq actions (1+ actions))
+			  (while (funcall next)
+			    (call-interactively (car def))
+			    (setq actions (1+ actions))))
 			 ((vectorp def)
 			  ;; A user-defined key.
 			  (if (funcall (aref def 0) elt) ;Call its function.
@@ -247,6 +272,23 @@ the current %s and exit."
 			    (setq next `(lambda ()
 					 (setq next ',next)
 					 ',elt))))
+			 ((and (consp def) (eq (cdr def) 'suppress) (vectorp (car def)))
+			  ;; A user-defined key.
+			  (if (funcall (aref (car def) 0) elt) ;Call its function.
+			      ;; The function has eaten this object.
+			      (setq actions (1+ actions))
+			    ;; Regurgitated; try again.
+			    (setq next `(lambda ()
+					 (setq next ',next)
+					 ',elt)))
+			  (while (funcall next)
+			    (if (funcall (aref (car def) 0) elt) ;Call its function.
+				;; The function has eaten this object.
+				(setq actions (1+ actions))
+			      ;; Regurgitated; try again.
+			      (setq next `(lambda ()
+					    (setq next ',next)
+					    ',elt)))))
 			 ((and (consp char)
 				   (eq (car char) 'switch-frame))
 			  (handle-switch-frame char)

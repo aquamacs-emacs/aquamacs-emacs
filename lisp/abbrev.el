@@ -27,7 +27,6 @@
 
 ;; Todo:
 
-;; - Make abbrev-file-name obey user-emacs-directory.
 ;; - Cleanup name space.
 
 ;;; Code:
@@ -38,6 +37,12 @@
   "Word abbreviations mode."
   :link '(custom-manual "(emacs)Abbrevs")
   :group 'abbrev)
+
+(defcustom abbrev-file-name
+  (locate-user-emacs-file "abbrev_defs" ".abbrev_defs")
+  "Default name of file from which to read abbrevs."
+  :initialize 'custom-initialize-delay
+  :type 'file)
 
 (defcustom only-global-abbrevs nil
   "Non-nil means user plans to use global abbrevs only.
@@ -887,9 +892,11 @@ Abbrevs marked as \"system abbrevs\" are omitted."
 	    (insert "\n\n"))
 	(insert "(define-abbrev-table '")
 	(prin1 name)
-	(insert " '(")
-	(mapc 'abbrev--write symbols)
-	(insert "    ))\n\n"))
+	(if (null symbols)
+	    (insert " '())\n\n")
+	  (insert "\n  '(\n")
+	  (mapc 'abbrev--write symbols)
+	  (insert "   ))\n\n")))
       nil)))
 
 (put 'define-abbrev-table 'doc-string-elt 3)

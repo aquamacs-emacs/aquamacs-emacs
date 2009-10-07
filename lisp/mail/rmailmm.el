@@ -28,6 +28,10 @@
 ;; extensions (mime-display.el and mime.el).
 ;; Call `M-x rmail-mime' when viewing an Rmail message.
 
+;; Todo:
+
+;; Handle multipart/alternative.
+
 ;;; Code:
 
 (require 'rmail)
@@ -36,21 +40,23 @@
 ;;; User options.
 
 ;; FIXME should these be in an rmail group?
-;; FIXME we ought to be able to display images in Emacs.
 (defcustom rmail-mime-media-type-handlers-alist
   '(("multipart/.*" rmail-mime-multipart-handler)
     ("text/.*" rmail-mime-text-handler)
     ("text/\\(x-\\)?patch" rmail-mime-bulk-handler)
     ;; FIXME this handler not defined anywhere?
 ;;;   ("application/pgp-signature" rmail-mime-application/pgp-signature-handler)
-    ("\\(image\\|audio\\|video\\|application\\)/.*" rmail-mime-bulk-handler))
+    ("\\(audio\\|video\\|application\\)/.*" rmail-mime-bulk-handler)
+    ("image/.*" rmail-mime-image-handler))
   "Functions to handle various content types.
 This is an alist with elements of the form (REGEXP FUNCTION ...).
 The first item is a regular expression matching a content-type.
 The remaining elements are handler functions to run, in order of
-decreasing preference.  These are called until one returns non-nil."
+decreasing preference.  These are called until one returns non-nil.
+Note that this only applies to items with an inline Content-Disposition,
+all others are handled by `rmail-mime-bulk-handler'."
   :type '(alist :key-type regexp :value-type (repeat function))
-  :version "23.1"
+  :version "23.2"			; added image-handler
   :group 'mime)
 
 (defcustom rmail-mime-attachment-dirs-alist
@@ -80,28 +86,25 @@ If more than 3, offer a way to save all attachments at once.")
   "Save the attachment using info in the BUTTON."
   (let* ((filename (button-get button 'filename))
 	 (directory (button-get button 'directory))
-	 (data (button-get button 'data)))
-    (while (file-exists-p (expand-file-name filename directory))
-      (let* ((f (file-name-sans-extension filename))
-	     (i 1))
-	(when (string-match "-\\([0-9]+\\)$" f)
-	  (setq i (1+ (string-to-number (match-string 1 f)))
-		f (substring f 0 (match-beginning 0))))
-	(setq filename (concat f "-" (number-to-string i) "."
-			       (file-name-extension filename)))))
+	 (data (button-get button 'data))
+	 (ofilename filename))
     (setq filename (expand-file-name
 		    (read-file-name (format "Save as (default: %s): " filename)
 				    directory
 				    (expand-file-name filename directory))
 		    directory))
-    (when (file-regular-p filename)
-      (error (message "File `%s' already exists" filename)))
-    (with-temp-file filename
+    ;; If arg is just a directory, use the default file name, but in
+    ;; that directory (copied from write-file).
+    (if (file-directory-p filename)
+	(setq filename (expand-file-name
+			(file-name-nondirectory ofilename)
+			(file-name-as-directory filename))))
+    (with-temp-buffer
       (set-buffer-file-coding-system 'no-conversion)
-      (insert data))))
+      (insert data)
+      (write-region nil nil filename nil nil nil t))))
 
-(define-button-type 'rmail-mime-save
-  'action 'rmail-mime-save)
+(define-button-type 'rmail-mime-save 'action 'rmail-mime-save)
 
 ;;; Handlers
 
@@ -133,8 +136,10 @@ MIME-Version: 1.0
 
 (defun rmail-mime-bulk-handler (content-type
 				content-disposition
-				content-transfer-encoding)
-  "Handle the current buffer as an attachment to download."
+				content-transfer-encoding &optional image)
+  "Handle the current buffer as an attachment to download.
+Optional argument IMAGE non-nil means if Emacs can display the
+attachment as an image, add an option to do so."
   (setq rmail-mime-total-number-of-bulk-attachments
 	(1+ rmail-mime-total-number-of-bulk-attachments))
   ;; Find the default directory for this media type
@@ -153,9 +158,34 @@ MIME-Version: 1.0
     (insert label)
     (insert-button filename
 		   :type 'rmail-mime-save
+		   'help-echo "mouse-2, RET: Save attachment"
 		   'filename filename
-		   'directory directory
-		   'data data)))
+		   'directory (file-name-as-directory directory)
+		   'data data)
+    (when (and image
+	       (string-match "image/\\(.*\\)" (setq image (car content-type)))
+	       (setq image (concat "." (match-string 1 image))
+		     image (image-type-from-file-name image))
+	       (memq image image-types)
+	       (image-type-available-p image))
+      (insert " ")
+      ;; FIXME ought to check or at least display the image size.
+      (insert-button "Display"
+		     :type 'rmail-mime-image
+		     'help-echo "mouse-2, RET: Show image"
+		     'image-type image
+		     'image-data (string-as-unibyte data)))))
+
+(defun rmail-mime-image (button)
+  "Display the image associated with BUTTON."
+  (let ((type (button-get button 'image-type))
+	(data (button-get button 'image-data))
+	(inhibit-read-only t))
+    (end-of-line)
+    (insert ?\n)
+    (insert-image (create-image data type t))))
+
+(define-button-type 'rmail-mime-image 'action 'rmail-mime-image)
 
 (defun test-rmail-mime-bulk-handler ()
   "Test of a mail used as an example in RFC 2183."
@@ -177,6 +207,15 @@ lgAAAABJRU5ErkJggg==
     (erase-buffer)
     (insert mail)
     (rmail-mime-show)))
+
+;; FIXME should rmail-mime-bulk-handler instead just always do this?
+(defun rmail-mime-image-handler (content-type content-disposition
+					      content-transfer-encoding)
+  "Handle the current buffer as an image.
+Like `rmail-mime-bulk-handler', but if possible adds a second
+button to display the image in the buffer."
+  (rmail-mime-bulk-handler content-type content-disposition
+			   content-transfer-encoding t))
 
 (defun rmail-mime-multipart-handler (content-type
 				     content-disposition
@@ -216,10 +255,10 @@ format."
       ;; If this is the last boundary according to RFC 2046, hide the
       ;; epilogue, else hide the boundary only.  Use a marker for
       ;; `next' because `rmail-mime-show' may change the buffer.
-      (cond ((looking-at "--[ \t]*\n")
+      (cond ((looking-at "--[ \t]*$")
 	     (setq next (point-max-marker)))
 	    ((looking-at "[ \t]*\n")
-	     (setq next (copy-marker (match-end 0))))
+	     (setq next (copy-marker (match-end 0) t)))
 	    (t
 	     (rmail-mm-get-boundary-error-message
 	      "Malformed boundary" content-type content-disposition
@@ -379,11 +418,15 @@ modified."
       (rmail-mime-handle content-type content-disposition
 			 content-transfer-encoding))))
 
+(define-derived-mode rmail-mime-mode fundamental-mode "RMIME"
+  "Major mode used in `rmail-mime' buffers."
+  (setq font-lock-defaults '(rmail-font-lock-keywords t t nil nil)))
+
 ;;;###autoload
 (defun rmail-mime ()
   "Process the current Rmail message as a MIME message.
 This creates a temporary \"*RMAIL*\" buffer holding a decoded
-copy of the message.  Content-types are handled according to
+copy of the message.  Inline content-types are handled according to
 `rmail-mime-media-type-handlers-alist'.  By default, this
 displays text and multipart messages, and offers to download
 attachments as specfied by `rmail-mime-attachment-dirs-alist'."
@@ -395,6 +438,7 @@ attachments as specfied by `rmail-mime-attachment-dirs-alist'."
     (let ((inhibit-read-only t))
       (erase-buffer)
       (insert data)
+      (rmail-mime-mode)
       (rmail-mime-show t)
       (set-buffer-modified-p nil))
     (view-buffer buf)))
@@ -405,6 +449,10 @@ attachments as specfied by `rmail-mime-attachment-dirs-alist'."
 	 message type disposition encoding))
 
 (provide 'rmailmm)
+
+;; Local Variables:
+;; generated-autoload-file: "rmail.el"
+;; End:
 
 ;; arch-tag: 3f2c5e5d-1aef-4512-bc20-fd737c9d5dd9
 ;;; rmailmm.el ends here

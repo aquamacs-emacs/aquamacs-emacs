@@ -216,7 +216,7 @@ If value of `bibtex-maintain-sorted-entries' is `entry-class'
 entries are ordered according to the classes they belong to.  Each
 class contains a list of entry types.  An entry `catch-all' applies
 to all entries not explicitly mentioned."
-  :group 'BibTeX
+  :group 'bibtex
   :type '(repeat (choice :tag "Class"
                          (const :tag "catch-all" (catch-all))
                          (repeat :tag "Entry type" string))))
@@ -3845,7 +3845,8 @@ Return t if test was successful, nil otherwise."
               (insert (format "%s:%d: %s\n" file (car err) (cdr err))))
             (set-buffer-modified-p nil)
             (toggle-read-only 1)
-            (goto-line 3)) ; first error message
+            (goto-char (point-min))
+            (forward-line 2)) ; first error message
           (display-buffer err-buf)
           nil) ; return `nil' (i.e., buffer is invalid)
       (message "%s is syntactically correct"
@@ -3902,7 +3903,8 @@ Return t if test was successful, nil otherwise."
             (dolist (err (sort error-list 'string-lessp)) (insert err))
             (set-buffer-modified-p nil)
             (toggle-read-only 1)
-            (goto-line 3)) ; first error message
+            (goto-char (point-min))
+            (forward-line 2)) ; first error message
           (display-buffer err-buf)
           nil) ; return `nil' (i.e., buffer is invalid)
       (message "No duplicate keys.")

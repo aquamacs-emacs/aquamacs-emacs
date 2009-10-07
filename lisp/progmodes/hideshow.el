@@ -267,10 +267,11 @@ This has effect only if `search-invisible' is set to `open'."
 
 ;;;###autoload
 (defvar hs-special-modes-alist
-  '((c-mode "{" "}" "/[*/]" nil hs-c-like-adjust-block-beginning)
-    (c++-mode "{" "}" "/[*/]" nil hs-c-like-adjust-block-beginning)
+  '((c-mode "{" "}" "/[*/]" nil nil)
+    (c++-mode "{" "}" "/[*/]" nil nil)
     (bibtex-mode ("@\\S(*\\(\\s(\\)" 1))
-    (java-mode "{" "}" "/[*/]" nil hs-c-like-adjust-block-beginning))
+    (java-mode "{" "}" "/[*/]" nil nil)
+    (js-mode "{" "}" "/[*/]" nil))
   "*Alist for initializing the hideshow variables for different modes.
 Each element has the form
   (MODE START END COMMENT-START FORWARD-SEXP-FUNC ADJUST-BEG-FUNC).
@@ -370,7 +371,7 @@ Use the command `hs-minor-mode' to toggle or set this variable.")
     ["Toggle Hiding" hs-toggle-hiding
      :help "Toggle the hiding state of the current block"]
     "----"
-    ["Hide comments when hiding all" 
+    ["Hide comments when hiding all"
      (setq hs-hide-comments-when-hiding-all
     	   (not hs-hide-comments-when-hiding-all))
      :help "If t also hide comment blocks when doing `hs-hide-all'"
@@ -565,29 +566,29 @@ and then further adjusted to be at the end of the line."
       (hs-hide-comment-region (car comment-reg) (cadr comment-reg) end)
     (when (looking-at hs-block-start-regexp)
       (let* ((mdata (match-data t))
-             (pure-p (match-end 0))
-             (p
-              ;; `p' is the point at the end of the block beginning,
-              ;; which may need to be adjusted
-              (save-excursion
-                (goto-char (funcall (or hs-adjust-block-beginning
-                                        'identity)
-                                    pure-p))
-                ;; whatever the adjustment, we move to eol
-                (line-end-position)))
-             (q
-              ;; `q' is the point at the end of the block
-              (progn (hs-forward-sexp mdata 1)
-                     (end-of-line)
-                     (point)))
-             ov)
-        (when (and (< p (point)) (> (count-lines p q) 1))
+	     (header-beg (match-beginning 0))
+             (header-end (match-end 0))
+	     p q ov)
+	;; `p' is the point at the end of the block beginning, which
+	;; may need to be adjusted
+	(save-excursion
+	  (if hs-adjust-block-beginning
+	      (goto-char (funcall hs-adjust-block-beginning
+				  header-end))
+	    (goto-char header-end))
+	  (setq p (line-end-position)))
+	;; `q' is the point at the end of the block
+	(hs-forward-sexp mdata 1)
+	(setq q (if (looking-back hs-block-end-regexp)
+		    (match-beginning 0)
+		  (point)))
+        (when (and (< p q) (> (count-lines p q) 1))
           (cond ((and hs-allow-nesting (setq ov (hs-overlay-at p)))
                  (delete-overlay ov))
                 ((not hs-allow-nesting)
                  (hs-discard-overlays p q)))
-          (hs-make-overlay p q 'code (- pure-p p)))
-        (goto-char (if end q (min p pure-p)))))))
+          (hs-make-overlay p q 'code (- header-end p)))
+        (goto-char (if end q (min p header-end)))))))
 
 (defun hs-inside-comment-p ()
   "Return non-nil if point is inside a comment, otherwise nil.
@@ -752,6 +753,7 @@ and `case-fold-search' are both t."
     (end-of-line)
     (hs-overlay-at (point))))
 
+;; This function is not used anymore (Bug#700).
 (defun hs-c-like-adjust-block-beginning (initial)
   "Adjust INITIAL, the buffer position after `hs-block-start-regexp'.
 Actually, point is never moved; a new position is returned that is
@@ -867,8 +869,8 @@ See documentation for functions `hs-hide-block' and `run-hooks'."
                    q (progn (hs-forward-sexp (match-data t) 1) (point)))))
       (when (and p q)
         (hs-discard-overlays p q)
-        (goto-char (if end q (1+ p)))))
-    (run-hooks 'hs-show-hook))))
+        (goto-char (if end q (1+ p))))))
+   (run-hooks 'hs-show-hook)))
 
 (defun hs-hide-level (arg)
   "Hide all blocks ARG levels below this block.
@@ -917,7 +919,7 @@ This can be useful if you have huge RCS logs in those comments."
 
 ;;;###autoload
 (define-minor-mode hs-minor-mode
-  "Minor mode to selectively hide/show code and comment blocks. 
+  "Minor mode to selectively hide/show code and comment blocks.
 When hideshow minor mode is on, the menu bar is augmented with hideshow
 commands and the hideshow commands are enabled.
 The value '(hs . t) is added to `buffer-invisibility-spec'.
@@ -933,7 +935,7 @@ Lastly, the normal hook `hs-minor-mode-hook' is run using `run-hooks'.
 
 Key bindings:
 \\{hs-minor-mode-map}"
-  :group 'hideshow 
+  :group 'hideshow
   :lighter " hs"
   :keymap hs-minor-mode-map
   (setq hs-headline nil)

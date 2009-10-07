@@ -1513,7 +1513,7 @@ property and by buffer overlays that specify `face'."
 
 
 ;;;###autoload
-(defun htmlize-buffer (&optional buffer ignore-colors)
+(defun htmlize-buffer (&optional buffer)
   "Convert BUFFER to HTML, preserving colors and decorations.
 
 The generated HTML is available in a new buffer, which is returned.
@@ -1528,16 +1528,13 @@ plain.  Likewise, if you don't like the choice of colors, fix the mode
 that created them, or simply alter the faces it uses."
   (interactive)
   (let ((htmlbuf (with-current-buffer (or buffer (current-buffer))
-		   (setq htmlize-ignore-colors ignore-colors)
-		   (prog1
-		       (htmlize-buffer-1)
-		     (setq htmlize-ignore-colors nil)))))
+		   (htmlize-buffer-1))))
     (when (interactive-p)
       (switch-to-buffer htmlbuf))
     htmlbuf))
 
 ;;;###autoload
-(defun htmlize-region (beg end &optional ignore-colors)
+(defun htmlize-region (beg end)
   "Convert the region to HTML, preserving colors and decorations.
 See `htmlize-buffer' for details."
   (interactive "r")
@@ -1546,10 +1543,7 @@ See `htmlize-buffer' for details."
     (zmacs-deactivate-region))
   (let ((htmlbuf (save-restriction
 		   (narrow-to-region beg end)
-		   (setq htmlize-ignore-colors ignore-colors)
-		   (prog1
-		       (htmlize-buffer-1)
-		     (setq htmlize-ignore-colors nil)))))
+		   (htmlize-buffer-1))))
     (when (interactive-p)
       (switch-to-buffer htmlbuf))
     htmlbuf))

@@ -1,7 +1,8 @@
 @c -*-texinfo-*-
 @c This is part of the GNU Emacs Lisp Reference Manual.
 @c Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1998, 1999, 2000, 2001,
-@c   2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
+@c   2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
+@c   Free Software Foundation, Inc.
 @c See the file elisp.texi for copying conditions.
 @setfilename ../../info/display
 @node Display, System Interface, Processes, Top
@@ -172,11 +173,6 @@ continued.  As a special exception, the variable
 @code{truncate-partial-width-windows} takes precedence in
 @dfn{partial-width} windows (i.e., windows that do not occupy the
 entire frame width).
-@end defopt
-
-@defopt default-truncate-lines
-This variable is the default value for @code{truncate-lines}, for
-buffers that do not have buffer-local values for it.
 @end defopt
 
 @defopt truncate-partial-width-windows
@@ -1767,8 +1763,8 @@ parts of Emacs text.
 @vindex default-line-spacing
   On graphical terminals, you can specify the line spacing for all
 lines in a frame, using the @code{line-spacing} frame parameter
-(@pxref{Layout Parameters}).  However, if the variable
-@code{default-line-spacing} is non-@code{nil}, it overrides the
+(@pxref{Layout Parameters}).  However, if the default value of
+@code{line-spacing} is non-@code{nil}, it overrides the
 frame's @code{line-spacing} parameter.  An integer value specifies the
 number of pixels put below lines.  A floating point number specifies
 the spacing relative to the frame's default line height.
@@ -2019,12 +2015,18 @@ set width.  This should be one of the symbols @code{ultra-condensed},
 @code{extra-expanded}, or @code{ultra-expanded}.
 
 @item :height
-Font height---either an integer in units of 1/10 point, or a floating
-point number specifying the amount by which to scale the height of any
-underlying face, or a function that is called with one argument (the
-height of the underlying face) and returns the height of the new face.
-If the function is passed an integer argument, it must return an
-integer.
+The height of the font.  In the simplest case, this is an integer in
+units of 1/10 point.
+
+The value can also be a floating point number or a function, which
+specifies the height relative to an @dfn{underlying face} (i.e., a
+face that has a lower priority in the list described in
+@ref{Displaying Faces}).  If the value is a floating point number,
+that specifies the amount by which to scale the height of the
+underlying face.  If the value is a function, that function is called
+with one argument, the height of the underlying face, and returns the
+height of the new face.  If the function is passed an integer
+argument, it must return an integer.
 
 The height of the default face must be specified using an integer;
 floating point and function values are not allowed.
@@ -2142,8 +2144,9 @@ this attribute also changes the values of the @code{:family},
 The name of a face from which to inherit attributes, or a list of face
 names.  Attributes from inherited faces are merged into the face like
 an underlying face would be, with higher priority than underlying
-faces.  If a list of faces is used, attributes from faces earlier in
-the list override those from later faces.
+faces (@pxref{Displaying Faces}).  If a list of faces is used,
+attributes from faces earlier in the list override those from later
+faces.
 @end table
 
 For compatibility with Emacs 20, you can also specify values for two
@@ -2626,6 +2629,12 @@ makes @code{modeline} an alias for the @code{mode-line} face.
 (put 'modeline 'face-alias 'mode-line)
 @end example
 
+@defun define-obsolete-face-alias obsolete-face current-face &optional when
+This function defines a face alias and marks it as obsolete, indicating
+that it may be removed in future.  The optional string @var{when}
+indicates when the face was made obsolete (for example, a release number).
+@end defun
+
 @node Auto Faces
 @subsection Automatic Face Assignment
 @cindex automatic face assignment
@@ -2945,7 +2954,7 @@ fontset, whose short name is @samp{fontset-default}.
 @var{character} may be a charset.  In that case, use
 @var{font-spec} for all character in the charsets.
 
-@var{character} may be a script anme.  In that case, use
+@var{character} may be a script name.  In that case, use
 @var{font-spec} for all character in the charsets.
 
 @var{font-spec} may be a cons; @code{(@var{family} . @var{registry})},
@@ -3252,11 +3261,6 @@ arrow bitmaps in right fringe.  To show the angle bitmaps in the left
 fringe, and no arrow bitmaps, use @code{((top .  left) (bottom . left))}.
 @end defopt
 
-@defvar default-indicate-buffer-boundaries
-The value of this variable is the default value for
-@code{indicate-buffer-boundaries} in buffers that do not override it.
-@end defvar
-
 @defvar fringe-indicator-alist
 This buffer-local variable specifies the mapping from logical fringe
 indicators to the actual bitmaps displayed in the window fringes.
@@ -3300,15 +3304,10 @@ used in both left and right fringes.
 
 When @code{fringe-indicator-alist} has a buffer-local value, and there
 is no bitmap defined for a logical indicator, or the bitmap is
-@code{t}, the corresponding value from the (non-local)
-@code{default-fringe-indicator-alist} is used.
+@code{t}, the corresponding value from the default value of
+@code{fringe-indicator-alist} is used.
 
 To completely hide a specific indicator, set the bitmap to @code{nil}.
-@end defvar
-
-@defvar default-fringe-indicator-alist
-The value of this variable is the default value for
-@code{fringe-indicator-alist} in buffers that do not override it.
 @end defvar
 
 Standard fringe bitmaps for indicators:
@@ -3363,12 +3362,7 @@ for that logical cursor type.
 
 When @code{fringe-cursor-alist} has a buffer-local value, and there is
 no bitmap defined for a cursor type, the corresponding value from the
-(non-local) @code{default-fringes-indicator-alist} is used.
-@end defvar
-
-@defvar default-fringes-cursor-alist
-The value of this variable is the default value for
-@code{fringe-cursor-alist} in buffers that do not override it.
+default value of @code{fringes-indicator-alist} is used.
 @end defvar
 
 Standard bitmaps for displaying the cursor in right fringe:
@@ -5157,8 +5151,8 @@ and add new nodes in their place.  Deleting a node from an ewoc deletes
 its associated textual description from buffer, as well.
 
 @menu
-* Abstract Display Functions::
-* Abstract Display Example::
+* Abstract Display Functions::  Functions in the Ewoc package.
+* Abstract Display Example::    Example of using Ewoc.
 @end menu
 
 @node Abstract Display Functions
@@ -5537,12 +5531,6 @@ followed by the character: @samp{^A}.  If it is @code{nil}, they are
 displayed as a backslash followed by three octal digits: @samp{\001}.
 @end defopt
 
-@c Following may have overfull hbox.
-@defvar default-ctl-arrow
-The value of this variable is the default value for @code{ctl-arrow} in
-buffers that do not override it.  @xref{Default Value}.
-@end defvar
-
 @defopt tab-width
 The value of this buffer-local variable is the spacing between tab
 stops used for displaying tab characters in Emacs buffers.  The value
@@ -5837,6 +5825,9 @@ for displaying the frame.  The possible values are
 Emacs is displaying the frame using X.
 @item w32
 Emacs is displaying the frame using native MS-Windows GUI.
+@item ns
+Emacs is displaying the frame using the Nextstep interface (used on
+GNUstep and Mac OS X).
 @item pc
 Emacs is displaying the frame using MS-DOS direct screen writes.
 @item nil

@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Changes-- 1.6</TITLE>
-<META NAME="description" CONTENT="Changes-- 1.6">
+<TITLE>Changes-- 1.7</TITLE>
+<META NAME="description" CONTENT="Changes-- 1.7">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,362 +21,209 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="node43.html">
 <LINK REL="previous" HREF="node41.html">
-<LINK REL="up" HREF="node38.html">
+<LINK REL="up" HREF="node39.html">
 <LINK REL="next" HREF="node43.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html703"
+<A NAME="tex2html706"
   HREF="node43.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html699"
-  HREF="node38.html">
+<A NAME="tex2html702"
+  HREF="node39.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html693"
+<A NAME="tex2html696"
   HREF="node41.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html701"
+<A NAME="tex2html704"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html704"
-  HREF="node43.html">Changes 1.5</A>
-<B> Up:</B> <A NAME="tex2html700"
-  HREF="node38.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html694"
-  HREF="node41.html">Changes  1.7</A>
- &nbsp; <B>  <A NAME="tex2html702"
+<B> Next:</B> <A NAME="tex2html707"
+  HREF="node43.html">Changes  1.6</A>
+<B> Up:</B> <A NAME="tex2html703"
+  HREF="node39.html">Aquamacs Emacs: What's New</A>
+<B> Previous:</B> <A NAME="tex2html697"
+  HREF="node41.html">Changes  1.8dev</A>
+ &nbsp; <B>  <A NAME="tex2html705"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION000144000000000000000">
-Changes-- 1.6</A>
+<H2><A NAME="SECTION000143000000000000000">
+Changes-- 1.7</A>
 </H2>
 
 <P>
-<I>Display</I>
-
-<P>
 
 <UL>
-<LI>Tabs are now on by default in new installations. ``Show buffers in new frames'' ( one-buffer-one-frame-mode) is off by default.  Use the Options menu if you'd like to configure different settings.  (That users who had previously installed and configured Aquamacs will retain their chosen settings.)  
-Tab code by Nathaniel Cunningham, David&nbsp;Ponce and David Reitter.
+<LI>Aquamacs now makes it easier for users to copy, cut and paste (and kill and yank) whole words, phrases or sentences by managing the spaces between words for them.  Spaces are removed and automatically inserted where needed, whenever the new `smart-spacing-mode' is turned on.  The Options menu provides a setting to turn it on automatically for all <EM>text-mode</EM> and related buffers.  To set a default for all buffers, configure the option `global-smart-spacing-mode' using the customization interface.
 
 <P>
 </LI>
-<LI>Aquamacs Styles have seen a major overhaul and are now called <EM>Aquamacs Autofaces</EM>.  To recap, these autofaces apply settings such as fonts, background and foreground colors to buffers and the frames as they show the buffers.  The settings are chosen according to the major mode used in the buffer.  This makes is possibly to automatically edit prose texts (such as LaTeX) in a variable-width (proportional) font, but do one's programming (e.g., Python or C) in a fixed-width font.  
-Refer below for a technical explanation of the change.
+<LI>A problem that caused error messages upon startup and, sometimes, a failure to quit for some users (and only if Aquamacs was installed for the first time) was fixed. 
+Reported by William Triplett, Kevin Brubeck Unhammer and Jean-Christophe Helary.
 
 <P>
 </LI>
-<LI>The use of color themes is being phased out.  While still included in Aquamacs, they are not available any longer from the Options menu.  We recommend the new light-weight functions to set fore/background colors using the Options / Appearance menu.
+<LI>Aquamacs now quits faster in some situations.
 
 <P>
 </LI>
-<LI>Fontsets are no longer defined on startup (with a few exceptions to ease the transition).  If your frame settings (`default-frame-alist' and `special-display-frame-alist') contain references to fontsets like <TT>fontset-monaco12</TT>, we recommend to remove them, e.g., via M-x customize-option.
+<LI>JDEE, the Java Development Environment for Emacs is no longer included in Aquamacs but provided as a point-and-click installer plugin, which can be downloaded from the Aquamacs website.  This reduces the size of the Aquamacs distribution, while maintaining an easy way for Java programmers to install the package.  Note that JDEE also includes CEDET.
 
 <P>
 </LI>
-<LI>The font used for text in the echo area (the `default' face) is now Lucida 13pt, as is customary on the Mac.  Note that the size of this font is used to express frame geometry settings, so this may need manual adjustment.  The font used for major modes that do not have a special setting (the `autoface-default' face) is Monaco, so that buffers are generally shown in a monospaced font.  The default for certain other modes such as `text-mode' (face: `text-mode-default') and `latex-mode' (face: `latex-mode-default') is Lucida 13pt.  You may change these settings using the font settings in the Options / Appearance menu, and also using M-x customize-face.
+<LI>Tabs showing a buffer that is mirrored in other windows will retain their position of point.
 
 <P>
 </LI>
-<LI>There is a new function (in Options / Appearance) that will ``Adopt the frame parameters as default'' for all new frames.  Note that this will set `default-frame-alist' (or `special-display-frame-alist'). These settings will be saved in the customizations file with ``Save Options''.  Emacs hackers need to be aware that such customization settings override any settings in <TT>.emacs</TT> files (but not those in <TT>Preferences.el</TT>).
+<LI>With soft wrapping on (Options menu), M-q now calls `unfill-paragraph-or-region', which has the same semantics as `fill-paragraph-or-region' for hard wrapped text.
 
 <P>
 </LI>
-<LI>Zoom: press Command-+ (or Command-=) to zoom in, and Command-{}- to zoom out, changing the font size of the text shown.   You can also use your Meta key (normally Option) and the mouse wheel.  This zoom applies just to a buffer and frame.
+<LI>C-z is no longer bound to minimize the frame.  Users who require this feature can add the key binding in their <TT>Preferences.el</TT> file:
+<TT>(define-key osx-key-mode-map `[(control z)] 'iconify-or-deiconify-frame)</TT>
+(If you have bound C-z to something else using `global-set-key', note that the new `ignore' binding in `osx-key-mode-map' will shadow this.  You need to use `define-key' as above.)
 
 <P>
 </LI>
-<LI>The line where the point (cursor) is can be highlighted with `highline-mode', available via Option / Show/Hide / Highlight Lines  (`global-highline-mode').
-Code by Vinicius Jose Latorre.
+<LI>Cursor movement is no longer sluggish when multiple windows are visible.  Generally, Aquamacs should feel  faster.
+Reported by Drew Hess.
 
 <P>
 </LI>
-<LI>Fringes now blend with the rest of the window (background color).  Customize the `fringe' face if you'd like more pronounced fringes.
+<LI>When clicking into an (unselected) window, Aquamacs no longer sets the mark and marks a region in the buffer in certain circumstances. 
+Reported by Konrad Podczeck.
 
 <P>
 </LI>
-</UL>
-
-<P>
-<I>Configuring and Extending Aquamacs</I>
-
-<UL>
-<LI>New (text-mode) buffers will have soft word wrap enabled (rather than hard auto-fill mode), in line with the standard way of text editing on the Mac.  Soft word wrap is also used for opened files as a default, when the wrapping mode cannot be determined automatically.  (Customize `auto-word-wrap-default-function' to nil to change this back.)
+<LI>Resolved a problem where clicking in the fringe to set a breakpoint when using C-mode in conjunction with `gdb' (in the Emacs debugger) caused Aquamacs to crash. 
+Reported by Eric Martin.
 
 <P>
 </LI>
-<LI>More user-installed files (in the <TT>/Library</TT> and <TT>/Users/.../Library</TT> folders now take precedence over Aquamacs-supplied packages.  Specifically, user-supplied packages contained in subdirectories, including an AUCTeX distribution (must be compiled) are loaded when present.  Thus, almost all packages that come with Aquamacs can now be replaced.
-Warning: supplying your own packages may cause errors. 
+<LI>`gdb' and possibly other packages no longer fail to open certain additional `special display' windows.
+Reported by Eric Martin.
 
 <P>
 </LI>
-<LI>A new function in the Tools menu will install a small tool that allows users to open files in Aquamacs from a shell (command-line / Terminal).  The command format is <TT>aquamacs filename.txt</TT>.
+<LI>Aquamacs no longer opens additional windows when it opens files per drag&amp;drop or as directed by another application (such as Finder), if these files are already shown in a buffer.
+Reported by Tim Hsu.
 
 <P>
 </LI>
-<LI>The Options menu has been restructured. You can now find the functions ``Enter Debugger on Error'' and ``Enter Debugger on Quit'' in the ``Help / Diagnose and Report Bug'' sub-menu.
+<LI>Aquamacs no longer de-minimizes frames (from the Dock) when opening new files while all its frames are hidden.
+Reported by Tim Hsu.
 
 <P>
 </LI>
-<LI>When started from a shell (e.g. in a terminal), `default-directory' will be the inherited from the shell.
-Reported by Robert Goldman.
+<LI>Documents printed or exported to HTML with soft word wrapping turned on will now also exhibit soft wrapping in HTML, and wrap as expected at the page boundary on printed pages.
+Reported by Enrico Indiogine.
 
 <P>
 </LI>
-<LI>Aquamacs can now automatically select the frame and window over which you move your mouse cursor, as provided by Apple's Terminal.app and by many X11-based window managers under Unix and GNU/Linux.  We now include the `follow-mouse' package with a few extensions to make it work on the Mac.  You can turn it on with a simple
-<BR><TT>(turn-on-follow-mouse)</TT> in your Preferences.el file.
+<LI>OS X will now more reliably recognize the latest installed Aquamacs version in order to open documents.
 
 <P>
 </LI>
-<LI>The ``vl'' indicator in the mode-line has been removed. `global-visual-line-mode' is on by default in Aquamacs.
-</LI>
-<LI>The mode-line now shows ``Wrap'' to indicate that soft word wrapping (`word-wrap') is on in the buffer.  Word wrapping can be toggled with C-x w now.
+<LI>Aquamacs now remembers more and longer undo steps (maximum undo memory and number of steps increased four-fold).  
 
 <P>
 </LI>
-<LI>There is a new menu item to customize Aquamacs-specific options (as compared to GNU Emacs defaults) in the 
-Options / Customize Aquamacs menu.
+<LI>The ``dialog from hell'', asking users whether they want to save a file, or all, or none, or view the file or the differences, is now less ridiculous and has a Cancel button.  Whether the dialog is shown or the minibuffer is used,  Aquamacs always shows the buffer that is up for saving. 
 
 <P>
 </LI>
-<LI>To see only labels (and not icons or icons and labels) in the tool-bar, use this setting in your <TT>Preferences.el</TT> file:
-
-<P>
-<TT>(setq mac-tool-bar-display-mode 'labels)</TT>
-
-<P>
-Note that this used to cause labels and icons to be displayed.  The variable value for labels and icons is now <TT>both</TT>.
-
-<P>
-</LI>
-<LI>Note that  the `cl' library is no longer loaded by any of the default packages that come with Aquamacs.  As a result, you may need to insert <TT>(require 'cl)</TT> into your <TT>Preferences.el</TT> file to load this package manually if you use any of the Lisp style functions or macros provided therein.
-
-<P>
-</LI>
-</UL>
-
-<P>
-<I>Major Modes</I>
-
-<P>
-
-<UL>
-<LI>SLIME, the Superior Lisp Interaction Mode is no longer included in Aquamacs but provided as a point-and-click installer plugin, which can be downloaded from the Aquamacs website.  The SLIME developers do not release validated versions; the SLIME plugins available from the Aquamacs website are development builds that are updated regularly. 
-
-<P>
-</LI>
-<LI>Wikipedia mode (version 1.5 plus Aquamacs modification) included.  This can be used to edit text for Wikipedia and other Mediawiki wikis.  Start with M-x wikipedia-mode.
-Code by Chong Yidong, Uwe Brauer.
-
-<P>
-</LI>
-<LI>Python mode has been updated to use `python-mode'  (as found on Launchpad).  
-Reported by Jin Choi.  Python-mode Code maintained by Barry Warsaw.  Research by Skip Montanaro. 
-
-<P>
-</LI>
-<LI>Emacs Speaks Statistics (ESS) has been updated to version 5.3.10 (was: 5.3.6).  Refer to the ESS website for changes (<FONT SIZE="-1"> <TT><A NAME="tex2html35"
-  HREF="http://ess.r-project.org/Manual/readme.html#New-Features">http://ess.r-project.org/Manual/readme.html#New-Features</A></TT></FONT>).
-
-<P>
-</LI>
-</UL>
-
-<P>
-<I>Bugfixes and Miscellany</I>
-
-<P>
-
-<UL>
-<LI>Aquamacs has a smaller footprint; The download is about 7&nbsp;MBytes smaller; the installed program about 4&nbsp;MBytes.
-
-<P>
-</LI>
-<LI>Aquamacs will now start up again for use in a terminal (-nw argument).
-Reported by Ian Soboroff.
-
-<P>
-</LI>
-<LI>The ``Check for Updates'' menu item in the Aquamacs menu should work in all circumstances now.
-
-<P>
-</LI>
-<LI>Fullscreen mode (A-S-Return, or Window menu) works again on all secondary displays.
-
-<P>
-</LI>
-<LI>Dragging and dropping more than one file or opening several files from a terminal with Aquamacs with tabbar-mode will now lead to all files being shown in tabs, not just the last one.
-
-<P>
-</LI>
-<LI>Command-1 (`aquamacs-delete-other-windows') no longer hides the tabbar in certain circumstances.  
-
-<P>
-</LI>
-<LI>Re-opening files already shown in a buffer or switching to buffers will bring up their tab, even if the tab is shown in another frame.
-
-<P>
-</LI>
-<LI>An issue was addressed that could lead to the wrong tab being selected after killing or renaming a buffer.  The problem was evident with `find-alternate-file'.
-Reported by Tao Peng.
-
-<P>
-</LI>
-<LI>C-e (end-of-visual-line) will now work correctly in the last line of a buffer that does not end with a newline.
-  Reported by Raymond Namyst.
-
-<P>
-</LI>
-<LI>Command/Control-left/right will jump to the beginning or end of the visual line, respectively, rather than to the beginning or end of the buffer line.
+<LI>The command line tool (installed with the Tools menu) will now find Aquamacs whereever it is installed in the system.  It will always use the latest Aquamacs Emacs that is known to the system.  (As a side-effect, you cannot use the command in connection with ``sudo'' any longer.  We recommend using Tramp.)
 Reported by Jean-Christophe Helary.
 
 <P>
 </LI>
-<LI>When soft word wrap (`word-wrap') is off (see Options menu), then C-k (kill-visual-line) and Command-Backspace (kill-whole-visual-line) now behave like their non-visual counter-parts, i.e. they delete the whole (rest of the) buffer line, rather than the visual line.  This is in line with the extant behavior of C-a and C-e.
-Reported by Tom van Vleck.
+<LI>Bug reporting, and generally, sending e-mail, works now for users whose default Email client is Gmail.  Gmail receives special treatment because of a bug on Google's server. 
 
 <P>
 </LI>
-<LI>When Aquamacs is given files from the command line or by some drag'n'drop event while no frames are shown, it now only shows a new or pre-existing frame with the new file(s) rather than two frames.
-Reporter unknown (thanks for letting us know though).
+<LI>Charsets are given in HTML generated with ``Export to HTML''.  Documents now validate as HTML 4.01 Strict.
 
 <P>
 </LI>
-<LI>Page-wise scrolling (PgUp, M-up, aquamacs-page-up and friends) now works correctly when faces with different sizes are used in buffers, such as in LaTeX-mode.  (Note that the `pager' package is not used any longer.  While the screen position of the cursor should be preserved in most cases, this is not perfect.  `pager' can still be activated using <TT>(require 'pager) </TT> in Preferences.el.
+<LI>A rare display problem was fixed in cases of vertically split windows, with fringes and scroll bars turned off.
+Reported by Rolf Hanson.
 
 <P>
 </LI>
-<LI>C-a (beginning-of-visual-line in `visual-line-mode' which is the default) will now always skip a prompt (e.g., in shell-mode) at the beginning of the line.
+<LI>Autoface mode works better with major modes derived from other ones.
 
 <P>
 </LI>
-<LI>Moving the cursor up and down failed in certain situations involving side-by-side windows in a frame.
-Reported by Jin Choi.
+<LI>More key bindings are now shown correctly in the menus (e.g., Undo/Redo).
 
 <P>
 </LI>
-<LI>Beginning/End-of-line movement commands don't signal an error any longer in visual line mode (so there is also no echo area message).
+<LI>Python-mode updated to version 5.1.0.  See also: <TT><A NAME="tex2html34"
+  HREF="https://launchpad.net/python-mode/+announcements">https://launchpad.net/python-mode/+announcements</A></TT>.
 
 <P>
 </LI>
-<LI>Functions like `enlarge-frame' are bound to A-C-left/right/up/down (Command-Control) in all cases (and depend on osx-key-mode).
+<LI>Haskell Mode updated to version 2.4.   We also provide better integration of the mode (recognition of various file types).
+Maintained by Stefan Monnier.
 
 <P>
 </LI>
-<LI>The mouse cursor changes its shape when over buffer text.
+<LI>Prolog Mode 1.18 included with vast improvements (and some pre-configuration for Aquamacs).  
+Suggested by Kevin Brubeck Unhammer.  Code by Stefan Bruda et al.
 
 <P>
 </LI>
-<LI>The Options / Show/Hide menu is now called View. 
-Suggested by Jean-Christophe Helary.
+<LI>ACT-R major mode improved: it inherits `lisp-mode' key bindings now.  <TT>.actr</TT> files are recognized automatically.
 
 <P>
 </LI>
-<LI>Changed fringe mode is now recongized when options are saved.  The fringe menu was revised.
-
-<P>
-</LI>
-<LI>Options -&gt; Save Options will always save the options now (whether considered needed or not).
-
-<P>
-</LI>
-<LI>Scrolling with the mouse wheel now works without first selecting the frame - just move the mouse cursor over the window.  (N.B., `mouse-wheel-follow-mouse' only applies to windows, not to frames.)
-
-<P>
-</LI>
-<LI>Maintaining full-screen frames across sessions works again; as does opening additional frames when the current frame is in full-screen mode.
-
-<P>
-</LI>
-<LI>`ediff' (Tools menu, under ``Compare'') no longer brings up additional controller frames.  This fix may also improve the function of other modes that use a complex set of frames. (By popular demand.)
-
-<P>
-</LI>
-<LI>Info-mode is now compatible with the tabbar.
-
-<P>
-</LI>
-<LI>Desktop-save-mode does not open additional scratch buffers any longer.
-Reported by Ivan Werning.
-
-<P>
-</LI>
-<LI>Auto-save files (usually named <TT>#filename#</TT>) are now saved in a temporary directory, out of sight of the user.
-
-<P>
-</LI>
-<LI>We forgot to offer to save newly created buffers when removing them (Command-W (close-buffer) or killing) after their major mode was changed.
-
-<P>
-</LI>
-<LI>Showing a dired buffer with ``Show Buffers in New Frames'' (one-buffer-one-frame-mode, OBOF) enabled could lead to  the minor mode (OBOF) being turned off unexceptedly. 
+<LI>The Enhanced Carbon Emacs plugin is no longer loaded from <TT>ec-emacs</TT> directories, because it is incompatible with the latest Aquamacs versions.
 
 <P>
 </LI>
 </UL>
 
 <P>
-<I>What's behind the change from Aquamacs Styles to Aquamacs Autofaces?</I>
-<FONT SIZE="-1">Technical explanation: the core functionality of changing fonts and fore/background colors (in short: faces) is now provided by the new `aquamacs-autoface-mode'.  
-</FONT>
-<P>
-<FONT SIZE="-1">How does the new <I>autoface</I> mode differ from the <I>styles</I> mode?  Font and color settings now apply primarily to the default ``face'' used in the buffer.  For each major mode, a new face is defined.  For instance, the default face for LaTeX buffers is called `latex-mode-default'.  These faces can be edited directly via the Options menu (to choose a font and some new entries to choose fore- and background colors) or even with M-x customize-face.  These changes apply automatically and immediately to all buffers in the given major mode. In contrast, the <I>styles</I> mode used to set frame-wide parameters, including the font, fore- and background colors, and change these parameters in a frame according to the buffer shown in the first window within the frame.  Frame parameters also included the presence of a toolbar, cursor color, fringes, and the like.  These are not available in the new mode.
-Previously, colors of a whole plethora of faces for various occasions could be chosen via the `color-theme' package.  These were needlessly tied to major modes using `aquamacs-styles'. 
-</FONT>
-<P>
-<FONT SIZE="-1">One advantage of the new, lightweight implementation of `autofaces' is that switching between buffers (e.g., with tabs) is smooth and does not lead to ugly frame resizing effects.  Multiple windows in the same frame can now display their buffers in the correct fonts.
-</FONT>
-<P>
-<FONT SIZE="-1">Transition: relevant mode-specific settings from `aquamacs-styles-mode' are automatically imported.  The now deprecated functionality of `aquamacs-styles-mode' (changing frame parameters including the visibility of the toolbar) is still available to users by inserting
-</FONT><PRE>
-(require 'aquamacs-styles)
-(aquamacs-autoface-mode 0)
-(aquamacs-styles-mode 1)
-</PRE><FONT SIZE="-1">
-into their <TT>Preferences.el</TT> file.  Users can also access color themes with M-x color-theme-select, but note that faces set using `aquamacs-autoface-mode' will override foreground and background colors.  </FONT>
-
-<P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html703"
+<A NAME="tex2html706"
   HREF="node43.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html699"
-  HREF="node38.html">
+<A NAME="tex2html702"
+  HREF="node39.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html693"
+<A NAME="tex2html696"
   HREF="node41.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html701"
+<A NAME="tex2html704"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html704"
-  HREF="node43.html">Changes 1.5</A>
-<B> Up:</B> <A NAME="tex2html700"
-  HREF="node38.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html694"
-  HREF="node41.html">Changes  1.7</A>
- &nbsp; <B>  <A NAME="tex2html702"
+<B> Next:</B> <A NAME="tex2html707"
+  HREF="node43.html">Changes  1.6</A>
+<B> Up:</B> <A NAME="tex2html703"
+  HREF="node39.html">Aquamacs Emacs: What's New</A>
+<B> Previous:</B> <A NAME="tex2html697"
+  HREF="node41.html">Changes  1.8dev</A>
+ &nbsp; <B>  <A NAME="tex2html705"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 <I>David</I>
-<BR><I>2009-06-24</I>
+<BR><I>2009-08-06</I>
 </ADDRESS>
 </BODY>
 </HTML>

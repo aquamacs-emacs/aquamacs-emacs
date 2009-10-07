@@ -102,19 +102,10 @@ it contains unibyte encoded text or binary non-text data.
 
 You cannot set this variable directly; instead, use the function
 @code{set-buffer-multibyte} to change a buffer's representation.
-@end defopt
-
-@defvar default-enable-multibyte-characters
-This variable's value is entirely equivalent to @code{(default-value
-'enable-multibyte-characters)}, and setting this variable changes that
-default value.  Setting the local binding of
-@code{enable-multibyte-characters} in a specific buffer is not allowed,
-but changing the default value is supported, and it is a reasonable
-thing to do, because it has no effect on existing buffers.
 
 The @samp{--unibyte} command line option does its job by setting the
 default value to @code{nil} early in startup.
-@end defvar
+@end defopt
 
 @defun position-bytes position
 Buffer positions are measured in character units.  This function
@@ -283,7 +274,7 @@ character codes.  The valid character codes for unibyte representation
 range from 0 to 255---the values that can fit in one byte.  The valid
 character codes for multibyte representation range from 0 to 4194303
 (#x3FFFFF).  In this code space, values 0 through 127 are for
-@acronym{ASCII} charcters, and values 129 through 4194175 (#x3FFF7F)
+@acronym{ASCII} characters, and values 128 through 4194175 (#x3FFF7F)
 are for non-@acronym{ASCII} characters.  Values 0 through 1114111
 (#10FFFF) correspond to Unicode characters of the same codepoint;
 values 1114112 (#110000) through 4194175 (#x3FFF7F) represent
@@ -349,7 +340,7 @@ specifies how the character behaves and how it should be handled
 during text processing and display.  Thus, character properties are an
 important part of specifying the character's semantics.
 
-  Emacs generally follows the Unicode Standard in its implementation
+  On the whole, Emacs follows the Unicode Standard in its implementation
 of character properties.  In particular, Emacs supports the
 @uref{http://www.unicode.org/reports/tr23/, Unicode Character Property
 Model}, and the Emacs character property database is derived from the
@@ -535,7 +526,7 @@ is printable, and if it results in @code{nil}, it is not.
 @cindex coded character set
 An Emacs @dfn{character set}, or @dfn{charset}, is a set of characters
 in which each character is assigned a numeric code point.  (The
-Unicode standard calls this a @dfn{coded character set}.)  Each Emacs
+Unicode Standard calls this a @dfn{coded character set}.)  Each Emacs
 charset has a name which is a symbol.  A single character can belong
 to any number of different character sets, but it will generally have
 a different code point in each charset.  Examples of character sets
@@ -1052,7 +1043,7 @@ decoding, the end-of-line format of the text is auto-detected, and the
 eol conversion is set to match it (e.g., DOS-style CRLF format will
 imply @code{dos} eol conversion).  For encoding, the eol conversion is
 taken from the appropriate default coding system (e.g.,
-@code{default-buffer-file-coding-system} for
+default value of @code{buffer-file-coding-system} for
 @code{buffer-file-coding-system}), or from the default eol conversion
 appropriate for the underlying platform.
 @end defun
@@ -1212,8 +1203,8 @@ coding system to try; if that can handle the text,
 also be a list of coding systems; then the function tries each of them
 one by one.  After trying all of them, it next tries the current
 buffer's value of @code{buffer-file-coding-system} (if it is not
-@code{undecided}), then the value of
-@code{default-buffer-file-coding-system} and finally the user's most
+@code{undecided}), then the default value of
+@code{buffer-file-coding-system} and finally the user's most
 preferred coding system, which the user can set using the command
 @code{prefer-coding-system} (@pxref{Recognize Coding,, Recognizing
 Coding Systems, emacs, The GNU Emacs Manual}).
@@ -1758,6 +1749,13 @@ Otherwise, @code{undecided-dos} is used.
 
 Normally this variable is set by visiting a file; it is set to
 @code{nil} if the file was visited without any actual conversion.
+
+Its default value is used to decide how to handle files for which
+@code{file-name-buffer-file-type-alist} says nothing about the type:
+If the default value is non-@code{nil}, then these files are treated as
+binary: the coding system @code{no-conversion} is used.  Otherwise,
+nothing special is done for them---the coding system is deduced solely
+from the file contents, in the usual Emacs fashion.
 @end defvar
 
 @defopt file-name-buffer-file-type-alist
@@ -1774,17 +1772,7 @@ which coding system to use when reading a file.  For a text file,
 is used.
 
 If no element in this alist matches a given file name, then
-@code{default-buffer-file-type} says how to treat the file.
-@end defopt
-
-@defopt default-buffer-file-type
-This variable says how to handle files for which
-@code{file-name-buffer-file-type-alist} says nothing about the type.
-
-If this variable is non-@code{nil}, then these files are treated as
-binary: the coding system @code{no-conversion} is used.  Otherwise,
-nothing special is done for them---the coding system is deduced solely
-from the file contents, in the usual Emacs fashion.
+the default value of @code{buffer-file-type} says how to treat the file.
 @end defopt
 
 @node Input Methods

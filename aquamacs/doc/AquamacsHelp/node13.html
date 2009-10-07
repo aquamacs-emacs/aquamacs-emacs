@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Using the Options key and more...</TITLE>
-<META NAME="description" CONTENT="Using the Options key and more...">
+<TITLE>Line wrapping</TITLE>
+<META NAME="description" CONTENT="Line wrapping">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -19,74 +19,94 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="STYLESHEET" HREF="aquamacs.css">
 
-<LINK REL="next" HREF="node15.html">
+<LINK REL="next" HREF="node14.html">
 <LINK REL="previous" HREF="node12.html">
-<LINK REL="up" HREF="node11.html">
+<LINK REL="up" HREF="node12.html">
 <LINK REL="next" HREF="node14.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html334"
+<A NAME="tex2html337"
   HREF="node14.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html330"
-  HREF="node11.html">
+<A NAME="tex2html333"
+  HREF="node12.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html324"
+<A NAME="tex2html327"
   HREF="node12.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html332"
+<A NAME="tex2html335"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html335"
-  HREF="node14.html">Inputting characters with the</A>
-<B> Up:</B> <A NAME="tex2html331"
-  HREF="node11.html">Options</A>
-<B> Previous:</B> <A NAME="tex2html325"
-  HREF="node12.html">Line wrapping</A>
- &nbsp; <B>  <A NAME="tex2html333"
+<B> Next:</B> <A NAME="tex2html338"
+  HREF="node14.html">Using the Options key</A>
+<B> Up:</B> <A NAME="tex2html334"
+  HREF="node12.html">Options</A>
+<B> Previous:</B> <A NAME="tex2html328"
+  HREF="node12.html">Options</A>
+ &nbsp; <B>  <A NAME="tex2html336"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION00044200000000000000">
-Using the Options key and more...</A>
+<H3><A NAME="SECTION00045100000000000000">
+Line wrapping</A>
 </H3>
 
 <P>
-The keyboard has always been the essential user interface to Emacs -
-it's what makes Emacs so efficient as an editor for daily
-tasks. There are keyboard bindings for pretty much every task. Many
-bindings involve pressing the ``Meta'' modifier key - it's a key just
-like Control or Shift, which all go together with another (normal)
-key. ``Meta'' has only really existed on Unix keyboards long time ago
-- nowadays, computers have other keys instead. Therefore, you will
-need to press another key on your Macintosh keyboard. <I>By default, this
-is the Option key</I>, but you can use the ESC key instead (in this case,
-you may press ESC first, then the rest of the keys).
+Text is usually shown and read line by line.  Several lines commonly form a paragraph.   However, text is not necessarily stored this way in a file:  sometimes, a <I>line</I> stored in a file is much wider than what would fit on a computer screen, and is really a paragraph.  This makes sense: authors of documents do not know how wide the reader's computer screen is, or how wide the window is going to be that is used to read and edit the text.  Aquamacs supports this mode of editing with <I>word wrapping</I>: lines are wrapped at word boundaries.  This way, a buffer line is displayed as a paragraph (several visual lines) on the screen.  In Aquamacs, this mode of operation is called <B>soft word wrap</B> and is available from the Options menu.<A NAME="tex2html7"
+  HREF="footnode.html#foot75"><SUP>2</SUP></A>
+<P>
+What's the alternative?  <B>Hard word wrap</B> means that one line shown on the screen corresponds to one line in the buffer and file.  This means that even if a window is resized, the lines still stay the same, and word wrap will occur in the same place on every machine that displays the file.  If a line is too long, it can either be <B>truncated</B> (cut off) or be continued on the next line. (The difference between hard and soft word wrap is technically whether lines are continued only at word boundaries.)
 
 <P>
-<BR><HR>
-<!--Table of Child-Links-->
-<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+Aquamacs allows you to automatically set the right type of line wrapping for text files using the ``Auto Word Wrap in Text Modes'' function.  (You can control the default, e.g.,&nbsp;for new files, by setting `auto-word-wrap-default-function' to `turn-on-word-wrap' using Options / Customize Emacs / Specific Options.)
 
-<UL>
-<LI><A NAME="tex2html336"
-  HREF="node14.html">Inputting characters with the Option key on non-English
-  keyboards.</A>
-</UL>
-<!--End of Table of Child-Links-->
-<BR><HR>
+<P>
+A useful function to convert hard wrapped text into soft wrapped text can be found in the Edit menu: <I>Remove Hard Line Breaks</I> will turn (non-indented!) paragraphs into soft-wrapped lines (turn on soft wrapping to see). 
+
+<P>
+Similarly, to manually reformat text that is laid out line by line, using hard line wraps, use <I>Wrap and Re-Format</I>.  Emacs terminology calls this process <I>filling</I>.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html337"
+  HREF="node14.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="./next.png"></A> 
+<A NAME="tex2html333"
+  HREF="node12.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="./up.png"></A> 
+<A NAME="tex2html327"
+  HREF="node12.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="./prev.png"></A> 
+<A NAME="tex2html335"
+  HREF="node1.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="./contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html338"
+  HREF="node14.html">Using the Options key</A>
+<B> Up:</B> <A NAME="tex2html334"
+  HREF="node12.html">Options</A>
+<B> Previous:</B> <A NAME="tex2html328"
+  HREF="node12.html">Options</A>
+ &nbsp; <B>  <A NAME="tex2html336"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 <I>David</I>
-<BR><I>2009-06-24</I>
+<BR><I>2009-08-06</I>
 </ADDRESS>
 </BODY>
 </HTML>

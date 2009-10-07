@@ -68,7 +68,7 @@
 ;; - merge-news (file)                         NEEDED
 ;; - steal-lock (file &optional revision)      NOT NEEDED
 ;; HISTORY FUNCTIONS
-;; * print-log (files &optional buffer)        OK
+;; * print-log (files &optional buffer shortlog)OK
 ;; - log-view-mode ()                          OK
 ;; - show-log-entry (revision)                 NOT NEEDED, DEFAULT IS GOOD
 ;; - comment-history (file)                    NOT NEEDED
@@ -92,7 +92,6 @@
 ;; - delete-file (file)                        TEST IT
 ;; - rename-file (old new)                     OK
 ;; - find-file-hook ()                         PROBABLY NOT NEEDED
-;; - find-file-not-found-hook ()               PROBABLY NOT NEEDED
 
 ;; 2) Implement Stefan Monnier's advice:
 ;; vc-hg-registered and vc-hg-state
@@ -128,9 +127,9 @@
   "String or list of strings specifying switches for Hg diff under VC.
 If nil, use the value of `vc-diff-switches'.  If t, use no switches."
   :type '(choice (const :tag "Unspecified" nil)
-		 (const :tag "None" t)
-		 (string :tag "Argument String")
-		 (repeat :tag "Argument List" :value ("") string))
+                 (const :tag "None" t)
+                 (string :tag "Argument String")
+                 (repeat :tag "Argument List" :value ("") string))
   :version "23.1"
   :group 'vc)
 
@@ -161,53 +160,53 @@ If nil, use the value of `vc-diff-switches'.  If t, use no switches."
   (let*
       ((status nil)
        (out
-	(with-output-to-string
-	  (with-current-buffer
-	      standard-output
-	    (setq status
-		  (condition-case nil
-		      ;; Ignore all errors.
-		      (call-process
-		       "hg" nil t nil "--cwd" (file-name-directory file)
-		       "status" "-A" (file-name-nondirectory file))
-		    ;; Some problem happened.  E.g. We can't find an `hg'
-		    ;; executable.
-		    (error nil)))))))
+        (with-output-to-string
+          (with-current-buffer
+              standard-output
+            (setq status
+                  (condition-case nil
+                      ;; Ignore all errors.
+                      (call-process
+                       "hg" nil t nil "--cwd" (file-name-directory file)
+                       "status" "-A" (file-name-nondirectory file))
+                    ;; Some problem happened.  E.g. We can't find an `hg'
+                    ;; executable.
+                    (error nil)))))))
     (when (eq 0 status)
-	(when (null (string-match ".*: No such file or directory$" out))
-	  (let ((state (aref out 0)))
-	    (cond
-	     ((eq state ?=) 'up-to-date)
-	     ((eq state ?A) 'added)
-	     ((eq state ?M) 'edited)
-	     ((eq state ?I) 'ignored)
-	     ((eq state ?R) 'removed)
-	     ((eq state ?!) 'missing)
-	     ((eq state ??) 'unregistered)
-	     ((eq state ?C) 'up-to-date) ;; Older mercurials use this
-	     (t 'up-to-date)))))))
+        (when (null (string-match ".*: No such file or directory$" out))
+          (let ((state (aref out 0)))
+            (cond
+             ((eq state ?=) 'up-to-date)
+             ((eq state ?A) 'added)
+             ((eq state ?M) 'edited)
+             ((eq state ?I) 'ignored)
+             ((eq state ?R) 'removed)
+             ((eq state ?!) 'missing)
+             ((eq state ??) 'unregistered)
+             ((eq state ?C) 'up-to-date) ;; Older mercurials use this
+             (t 'up-to-date)))))))
 
 (defun vc-hg-working-revision (file)
   "Hg-specific version of `vc-working-revision'."
   (let*
       ((status nil)
        (out
-	(with-output-to-string
-	  (with-current-buffer
-	      standard-output
-	    (setq status
-		  (condition-case nil
-		      ;; Ignore all errors.
-		      (call-process
-		       "hg" nil t nil "--cwd" (file-name-directory file)
-		       "log" "-l1" (file-name-nondirectory file))
-		    ;; Some problem happened.  E.g. We can't find an `hg'
-		    ;; executable.
-		    (error nil)))))))
+        (with-output-to-string
+          (with-current-buffer
+              standard-output
+            (setq status
+                  (condition-case nil
+                      ;; Ignore all errors.
+                      (call-process
+                       "hg" nil t nil "--cwd" (file-name-directory file)
+                       "log" "-l1" (file-name-nondirectory file))
+                    ;; Some problem happened.  E.g. We can't find an `hg'
+                    ;; executable.
+                    (error nil)))))))
     (when (eq 0 status)
       (if (string-match "changeset: *\\([0-9]*\\)" out)
-	  (match-string 1 out)
-	"0"))))
+          (match-string 1 out)
+        "0"))))
 
 ;;; History functions
 
@@ -218,7 +217,7 @@ If nil, use the value of `vc-diff-switches'.  If t, use no switches."
                  (repeat :tag "Argument List" :value ("") string))
   :group 'vc-hg)
 
-(defun vc-hg-print-log (files &optional buffer)
+(defun vc-hg-print-log (files &optional buffer shortlog)
   "Get change log associated with FILES."
   ;; `log-view-mode' needs to have the file names in order to function
   ;; correctly. "hg log" does not print it, so we insert it here by
@@ -232,57 +231,69 @@ If nil, use the value of `vc-diff-switches'.  If t, use no switches."
   (let ((inhibit-read-only t))
     (with-current-buffer
 	buffer
-      (apply 'vc-hg-command buffer 0 files "log" vc-hg-log-switches))))
+      (apply 'vc-hg-command buffer 0 files "log"
+	     (if shortlog
+                 (append '("--style" "compact") vc-hg-log-switches)
+                 vc-hg-log-switches)))))
 
 (defvar log-view-message-re)
 (defvar log-view-file-re)
 (defvar log-view-font-lock-keywords)
 (defvar log-view-per-file-logs)
+(defvar vc-short-log)
 
 (define-derived-mode vc-hg-log-view-mode log-view-mode "Hg-Log-View"
   (require 'add-log) ;; we need the add-log faces
   (set (make-local-variable 'log-view-file-re) "\\`a\\`")
   (set (make-local-variable 'log-view-per-file-logs) nil)
   (set (make-local-variable 'log-view-message-re)
-       "^changeset:[ \t]*\\([0-9]+\\):\\(.+\\)")
+       (if vc-short-log
+           "^\\([0-9]+\\)\\(?:\\[.*\\]\\)? +\\([0-9a-z]\\{12\\}\\) +\\(\\(?:[0-9]+\\)-\\(?:[0-9]+\\)-\\(?:[0-9]+\\) \\(?:[0-9]+\\):\\(?:[0-9]+\\) \\(?:[-+0-9]+\\)\\) +\\(.*\\)$"
+         "^changeset:[ \t]*\\([0-9]+\\):\\(.+\\)"))
   (set (make-local-variable 'log-view-font-lock-keywords)
+       (if vc-short-log
+           (append `((,log-view-message-re
+                      (1 'log-view-message-face)
+                      (2 'log-view-message-face)
+                      (3 'change-log-date)
+                      (4 'change-log-name))))
        (append
-	log-view-font-lock-keywords
-	'(
-	  ;; Handle the case:
-	  ;; user: FirstName LastName <foo@bar>
-	  ("^user:[ \t]+\\([^<(]+?\\)[ \t]*[(<]\\([A-Za-z0-9_.+-]+@[A-Za-z0-9_.-]+\\)[>)]"
-	   (1 'change-log-name)
-	   (2 'change-log-email))
-	  ;; Handle the cases:
-	  ;; user: foo@bar
-	  ;; and
-	  ;; user: foo
-	  ("^user:[ \t]+\\([A-Za-z0-9_.+-]+\\(?:@[A-Za-z0-9_.-]+\\)?\\)"
-	   (1 'change-log-email))
-	  ("^date: \\(.+\\)" (1 'change-log-date))
-	  ("^summary:[ \t]+\\(.+\\)" (1 'log-view-message))))))
+        log-view-font-lock-keywords
+        '(
+          ;; Handle the case:
+          ;; user: FirstName LastName <foo@bar>
+          ("^user:[ \t]+\\([^<(]+?\\)[ \t]*[(<]\\([A-Za-z0-9_.+-]+@[A-Za-z0-9_.-]+\\)[>)]"
+           (1 'change-log-name)
+           (2 'change-log-email))
+          ;; Handle the cases:
+          ;; user: foo@bar
+          ;; and
+          ;; user: foo
+          ("^user:[ \t]+\\([A-Za-z0-9_.+-]+\\(?:@[A-Za-z0-9_.-]+\\)?\\)"
+           (1 'change-log-email))
+          ("^date: \\(.+\\)" (1 'change-log-date))
+            ("^summary:[ \t]+\\(.+\\)" (1 'log-view-message)))))))
 
 (defun vc-hg-diff (files &optional oldvers newvers buffer)
   "Get a difference report using hg between two revisions of FILES."
   (let* ((firstfile (car files))
-	 (cwd (if firstfile (file-name-directory firstfile)
-		(expand-file-name default-directory)))
-	 (working (and firstfile (vc-working-revision firstfile))))
+         (cwd (if firstfile (file-name-directory firstfile)
+                (expand-file-name default-directory)))
+         (working (and firstfile (vc-working-revision firstfile))))
     (when (and (equal oldvers working) (not newvers))
       (setq oldvers nil))
     (when (and (not oldvers) newvers)
       (setq oldvers working))
     (apply #'vc-hg-command (or buffer "*vc-diff*") nil
-	   (mapcar (lambda (file) (file-relative-name file cwd)) files)
-	   "--cwd" cwd
-	   "diff"
-	   (append
-	    (vc-switches 'hg 'diff)
-	    (when oldvers
-	      (if newvers
-		  (list "-r" oldvers "-r" newvers)
-		(list "-r" oldvers)))))))
+           (mapcar (lambda (file) (file-relative-name file cwd)) files)
+           "--cwd" cwd
+           "diff"
+           (append
+            (vc-switches 'hg 'diff)
+            (when oldvers
+              (if newvers
+                  (list "-r" oldvers "-r" newvers)
+                (list "-r" oldvers)))))))
 
 (defun vc-hg-revision-table (files)
   (let ((default-directory (file-name-directory (car files))))
@@ -303,7 +314,7 @@ If nil, use the value of `vc-diff-switches'.  If t, use no switches."
   "Execute \"hg annotate\" on FILE, inserting the contents in BUFFER.
 Optional arg REVISION is a revision to annotate from."
   (vc-hg-command buffer 0 file "annotate" "-d" "-n"
-		 (when revision (concat "-r" revision)))
+                 (when revision (concat "-r" revision)))
   (with-current-buffer buffer
     (goto-char (point-min))
     (re-search-forward "^[ \t]*[0-9]")
@@ -338,12 +349,12 @@ Optional arg REVISION is a revision to annotate from."
 
 (defun vc-hg-next-revision (file rev)
   (let ((newrev (1+ (string-to-number rev)))
-	(tip-revision
-	 (with-temp-buffer
-	   (vc-hg-command t 0 nil "tip")
-	   (goto-char (point-min))
-	   (re-search-forward "^changeset:[ \t]*\\([0-9]+\\):")
-	   (string-to-number (match-string-no-properties 1)))))
+        (tip-revision
+         (with-temp-buffer
+           (vc-hg-command t 0 nil "tip")
+           (goto-char (point-min))
+           (re-search-forward "^changeset:[ \t]*\\([0-9]+\\):")
+           (string-to-number (match-string-no-properties 1)))))
     ;; We don't want to exceed the maximum possible revision number, ie
     ;; the tip revision.
     (when (<= newrev tip-revision)
@@ -399,7 +410,7 @@ REV is ignored."
   (let ((coding-system-for-read 'binary)
         (coding-system-for-write 'binary))
     (if rev
-	(vc-hg-command buffer 0 file "cat" "-r" rev)
+        (vc-hg-command buffer 0 file "cat" "-r" rev)
       (vc-hg-command buffer 0 file "cat"))))
 
 ;; Modeled after the similar function in vc-bzr.el
@@ -454,64 +465,64 @@ REV is the revision to check out into WORKFILE."
     (vc-default-dir-printer 'Hg info)
     (when extra
       (insert (propertize
-	       (format "   (%s %s)"
-		       (case (vc-hg-extra-fileinfo->rename-state extra)
-			 ('copied "copied from")
-			 ('renamed-from "renamed from")
-			 ('renamed-to "renamed to"))
-		       (vc-hg-extra-fileinfo->extra-name extra))
-	       'face 'font-lock-comment-face)))))
+               (format "   (%s %s)"
+                       (case (vc-hg-extra-fileinfo->rename-state extra)
+                         ('copied "copied from")
+                         ('renamed-from "renamed from")
+                         ('renamed-to "renamed to"))
+                       (vc-hg-extra-fileinfo->extra-name extra))
+               'face 'font-lock-comment-face)))))
 
 (defun vc-hg-after-dir-status (update-function)
   (let ((status-char nil)
-	(file nil)
-	(translation '((?= . up-to-date)
-		       (?C . up-to-date)
-		       (?A . added)
-		       (?R . removed)
-		       (?M . edited)
-		       (?I . ignored)
-		       (?! . missing)
-		       (?  . copy-rename-line)
-		       (?? . unregistered)))
-	(translated nil)
-	(result nil)
-	(last-added nil)
-	(last-line-copy nil))
+        (file nil)
+        (translation '((?= . up-to-date)
+                       (?C . up-to-date)
+                       (?A . added)
+                       (?R . removed)
+                       (?M . edited)
+                       (?I . ignored)
+                       (?! . missing)
+                       (?  . copy-rename-line)
+                       (?? . unregistered)))
+        (translated nil)
+        (result nil)
+        (last-added nil)
+        (last-line-copy nil))
       (goto-char (point-min))
       (while (not (eobp))
-	(setq translated (cdr (assoc (char-after) translation)))
-	(setq file
-	      (buffer-substring-no-properties (+ (point) 2)
-					      (line-end-position)))
-	(cond ((not translated)
-	       (setq last-line-copy nil))
-	      ((eq translated 'up-to-date)
-	       (setq last-line-copy nil))
-	      ((eq translated 'copy-rename-line)
-	       ;; For copied files the output looks like this:
-	       ;; A COPIED_FILE_NAME
-	       ;;   ORIGINAL_FILE_NAME
-	       (setf (nth 2 last-added)
-		     (vc-hg-create-extra-fileinfo 'copied file))
-	       (setq last-line-copy t))
-	      ((and last-line-copy (eq translated 'removed))
-	       ;; For renamed files the output looks like this:
-	       ;; A NEW_FILE_NAME
-	       ;;   ORIGINAL_FILE_NAME
-	       ;; R ORIGINAL_FILE_NAME
-	       ;; We need to adjust the previous entry to not think it is a copy.
-	       (setf (vc-hg-extra-fileinfo->rename-state (nth 2 last-added))
-		     'renamed-from)
-	       (push (list file translated
-			   (vc-hg-create-extra-fileinfo
-			    'renamed-to (nth 0 last-added))) result)
-	       (setq last-line-copy nil))
-	      (t
-	       (setq last-added (list file translated nil))
-	       (push last-added result)
-	       (setq last-line-copy nil)))
-	(forward-line))
+        (setq translated (cdr (assoc (char-after) translation)))
+        (setq file
+              (buffer-substring-no-properties (+ (point) 2)
+                                              (line-end-position)))
+        (cond ((not translated)
+               (setq last-line-copy nil))
+              ((eq translated 'up-to-date)
+               (setq last-line-copy nil))
+              ((eq translated 'copy-rename-line)
+               ;; For copied files the output looks like this:
+               ;; A COPIED_FILE_NAME
+               ;;   ORIGINAL_FILE_NAME
+               (setf (nth 2 last-added)
+                     (vc-hg-create-extra-fileinfo 'copied file))
+               (setq last-line-copy t))
+              ((and last-line-copy (eq translated 'removed))
+               ;; For renamed files the output looks like this:
+               ;; A NEW_FILE_NAME
+               ;;   ORIGINAL_FILE_NAME
+               ;; R ORIGINAL_FILE_NAME
+               ;; We need to adjust the previous entry to not think it is a copy.
+               (setf (vc-hg-extra-fileinfo->rename-state (nth 2 last-added))
+                     'renamed-from)
+               (push (list file translated
+                           (vc-hg-create-extra-fileinfo
+                            'renamed-to (nth 0 last-added))) result)
+               (setq last-line-copy nil))
+              (t
+               (setq last-added (list file translated nil))
+               (push last-added result)
+               (setq last-line-copy nil)))
+        (forward-line))
       (funcall update-function result)))
 
 (defun vc-hg-dir-status (dir update-function)
@@ -558,14 +569,14 @@ REV is the revision to check out into WORKFILE."
 
 (defun vc-hg-outgoing ()
   (interactive)
-  (let ((bname "*Hg outgoing*"))
-    (vc-hg-command bname 0 nil "outgoing" "-n")
+  (let ((bname "*Hg outgoing*") (vc-short-log nil))
+    (vc-hg-command bname 1 nil "outgoing" "-n")
     (pop-to-buffer bname)
     (vc-hg-outgoing-mode)))
 
 (defun vc-hg-incoming ()
   (interactive)
-  (let ((bname "*Hg incoming*"))
+  (let ((bname "*Hg incoming*") (vc-short-log nil))
     (vc-hg-command bname 0 nil "incoming" "-n")
     (pop-to-buffer bname)
     (vc-hg-incoming-mode)))
@@ -577,22 +588,22 @@ REV is the revision to check out into WORKFILE."
   (interactive)
   (let ((marked-list (log-view-get-marked)))
     (if marked-list
-	(vc-hg-command
-	 nil 0 nil
-	 (cons "push"
-	       (apply 'nconc
-		      (mapcar (lambda (arg) (list "-r" arg)) marked-list))))
-	 (error "No log entries selected for push"))))
+        (vc-hg-command
+         nil 0 nil
+         (cons "push"
+               (apply 'nconc
+                      (mapcar (lambda (arg) (list "-r" arg)) marked-list))))
+         (error "No log entries selected for push"))))
 
 (defun vc-hg-pull ()
   (interactive)
   (let ((marked-list (log-view-get-marked)))
     (if marked-list
-	(vc-hg-command
-	 nil 0 nil
-	 (cons "pull"
-	       (apply 'nconc
-		      (mapcar (lambda (arg) (list "-r" arg)) marked-list))))
+        (vc-hg-command
+         nil 0 nil
+         (cons "pull"
+               (apply 'nconc
+                      (mapcar (lambda (arg) (list "-r" arg)) marked-list))))
       (error "No log entries selected for pull"))))
 
 ;;; Internal functions

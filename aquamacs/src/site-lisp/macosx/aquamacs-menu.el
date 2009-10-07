@@ -5,8 +5,6 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs-menu.el,v 1.213 2009/03/11 21:24:54 davidswelt Exp $
-
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
 
@@ -29,7 +27,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, 2006, 2007, 2008 David Reitter
+;; Copyright (C) 2005, 2006, 2007, 2008, 2009 David Reitter
  
 
 (require 'easymenu)
@@ -223,6 +221,9 @@ customization buffer."
 ;; compatibility (old symbol used in 0.9.6)
 (defalias 'aquamacs-menu-new-buffer-modes 'aquamacs-known-major-modes)
 
+(defvar aquamacs-menu-setup-hook nil "Hook run after updating the Aquamacs menu")
+
+
 ; (aquamacs-menu-bar-setup)
 (defun aquamacs-menu-bar-setup ()
 
@@ -251,8 +252,25 @@ customization buffer."
       :key-sequence [(,osxkeys-command-key s)]
       ))
 
+
+(require 'recentf)
+(ats "recentf loaded")
 (aquamacs-set-defaults 
- '((recentf-menu-before  "Open Directory...")))
+ '((buffers-menu-max-size nil)
+   (recentf-menu-before "Open Directory...")
+   (recentf-max-menu-items 25)
+   ;; must be set before turning on recentf mode
+   (recentf-keep ( mac-is-mounted-volume-p file-remote-p file-readable-p))
+   (recentf-filename-handlers '(abbreviate-file-name))
+   (recentf-menu-filter aquamacs-recentf-show-basenames)))
+
+(setq recentf-menu-items-for-commands
+      (list ["Clear Menu"
+	     recentf-clearlist
+	     :help "Remove all excluded and non-kept files from the recent list"
+	     :active t]))
+(global-set-key "\C-x\ \C-r" 'recentf-open-files)  
+
 (recentf-mode 1) 
 
 ;; redefine this
@@ -357,9 +375,9 @@ customization buffer."
 
   
 (define-key-after menu-bar-tools-menu [menu-tools-command-line-tool]
-  `(menu-item "Install Command Line Tool" 
+  `(menu-item "Install Command Line Tools" 
 	      aquamacs-install-command-line-tool
-	      :help "Install Command Line Tool...")
+	      :help "Install Command Line Tools...")
   'simple-calculator)
 
 (define-key-after menu-bar-tools-menu [menu-tools-command-line-tool-sep]
@@ -528,16 +546,15 @@ left and right margin"))
     (auto-fill-mode -1))
   (longlines-mode))
 
-
 (defun turn-on-word-wrap ()
   "Turn on Word Wrap mode in current buffer."
   (turn-off-longlines)
   (turn-off-auto-fill)
-  (setq word-wrap t))
+  (turn-on-visual-line-mode))
 
 (defun turn-off-word-wrap ()
   "Turn off Word Wrap mode in current buffer."
-  (setq word-wrap nil))
+  (visual-line-mode 0))
 
 (defun toggle-word-wrap ()
   "Toggle whether to use Word Wrap."
@@ -555,7 +572,7 @@ left and right margin"))
   "Toggle whether to use Auto Fill Mode."
   (interactive)
   (unless auto-fill-function 
-    (setq word-wrap nil)
+    (visual-line-mode 0)
     (and (boundp 'longlines-mode)
 	 (longlines-mode -1))) ;; turn this off first if it is on
   (auto-fill-mode)
@@ -575,7 +592,7 @@ windows, truncation is always enabled."
 	    (not truncate-lines)
 	  (> (prefix-numeric-value arg) 0)))
   (if truncate-lines
-      (setq word-wrap nil))
+      (visual-line-mode 0))
   (force-mode-line-update)
   (unless truncate-lines
     (let ((buffer (current-buffer)))
@@ -586,15 +603,15 @@ windows, truncation is always enabled."
   (message "Truncate long lines %s"
 	   (if truncate-lines "enabled" "disabled")))
 
-
 (require 'aquamacs-editing)
 (custom-add-option 'text-mode-hook 'auto-detect-wrap)
 (defun toggle-auto-text-mode-wrap ()
-  "Toggle whether to automatically turn on word-wrap in Text mode and related modes.
+  "Toggle automatic word wrapping in Text and related modes.
 This command affects all buffers that use modes related to Text
 mode, both existing buffers and buffers that you subsequently
 create.  Upon entering text-mode, the function `auto-detect-wrap'
-is used to determine wrapping."
+is used to determine wrapping with either `visual-line-mode'
+or with `auto-fill-mode', which see."
   (interactive)
   ;; remove leftover customizations from previous versions
   (remove-hook 'text-mode-hook 'turn-on-auto-fill)
@@ -1011,14 +1028,6 @@ subsequently create.  Upon entering text-mode, the function
 (define-key menu-bar-manuals-menu [emacs-lisp-reference] nil)
 (define-key menu-bar-manuals-menu [emacs-lisp-intro] nil)
 
-
-(define-key menu-bar-manuals-menu [sep]
-  '("--"))
-(define-key menu-bar-manuals-menu [emacs-psychotherapist]
-  '(menu-item "Emacs Psychotherapist" doctor
-	      :help "Our doctor will help you feel better"))
-(define-key menu-bar-help-menu [emacs-psychotherapist] nil)
-
 (define-key menu-bar-manuals-menu [lookup-subject-in-all-manuals] nil)
 
 (define-key menu-bar-search-documentation-menu [lookup-subject-in-all-manuals]
@@ -1074,48 +1083,6 @@ subsequently create.  Upon entering text-mode, the function
 
 
 
-)
-
-;;; ONE TIME SETUP
-
-; 
-;; we will set the following ones directly
-;; customization is always possible
-;; the existing menu item is badly worded and the C-c/v/x don't apply anyways
-;; done
-
-;; Quit entry shouldnt be there
-(easy-menu-remove-item global-map  '("menu-bar" "file") 'separator-exit)
-(easy-menu-remove-item global-map  '("menu-bar" "file") 'exit-emacs)
-
-;; this is to set the action for the "Quit" function (Emacs menu)
-(global-set-key [mac-application-quit] 'save-buffers-kill-emacs)
- 
-    
-;; SENDMAIL doesn't usually work on OS X
-;; unless postfix is set up
-(easy-menu-remove-item global-map  '("menu-bar" "tools") 'compose-mail)
-
-
-(defun aquamacs-toggle-full-frame ()
-  "Enlarge the selected frame to the full screen.
-Unlike `mac-toggle-full-frame', this will do a better job at remembering
-the previous frame size."
-  (interactive)
-  (if (frame-parameter nil 'fullscreen)    ;(frame-full-screen-p)
-      (modify-frame-parameters 
-       nil (list (cons 'fullscreen nil)))
-    ;; save small frame position
-    (smart-move-frame-inside-screen)
-    (modify-frame-parameters 
-     nil (list (cons 'fullscreen 'fullboth))))
-  
-  (if (frame-parameter nil 'fullscreen) ; (frame-full-screen-p)
-      (message (substitute-command-keys 
-		"Press \\[aquamacs-toggle-full-frame] to exit full screen editing.")))
-  nil)
-
-
 (defvar menu-bar-zoom-menu (make-sparse-keymap "Zoom"))
 
 (define-key menu-bar-zoom-menu [zoom-out]
@@ -1132,10 +1099,13 @@ the previous frame size."
 			   (menu-bar-non-minibuffer-window-p))
 	      :help "Zoom font in"))
 
-(define-key menu-bar-file-menu [zoom-menu]
+
+(defvar menu-bar-window-extras-menu (make-sparse-keymap "Extras"))
+
+(define-key menu-bar-window-extras-menu [zoom-menu]
     `(menu-item "Zoom" ,menu-bar-zoom-menu))
 
-(define-key menu-bar-file-menu [one-window]
+(define-key menu-bar-window-extras-menu [one-window]
   `(menu-item "Remove Splits" 
 	      aquamacs-delete-other-windows
 	      :key-sequence [(,osxkeys-command-key 1)]
@@ -1143,60 +1113,52 @@ the previous frame size."
 			   (menu-bar-non-minibuffer-window-p)
 			   (not (one-window-p t nil)))
 	      :help "Selected window grows to fill the whole frame"))
-(define-key menu-bar-file-menu [split-window]
+(define-key menu-bar-window-extras-menu [split-window]
   `(menu-item "Split Window" 
 	      aquamacs-split-window-vertically
 	      :key-sequence [(,osxkeys-command-key 2)]
 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
 			   (menu-bar-non-minibuffer-window-p))
 	      :help "Split selected window in two"))
-(define-key menu-bar-file-menu [make-frame]
+(define-key menu-bar-window-extras-menu [make-frame]
   `(menu-item "Show Buffer in New Frame " make-frame-command
 	      :visible (fboundp 'make-frame-command)
 	      ;; no key: use standard notation
 	      :enable (menu-bar-menu-frame-live-and-visible-p)
 	      :help "Open a new frame"))
-(define-key menu-bar-file-menu [tile-frames]
+(define-key menu-bar-window-extras-menu [tile-frames]
   `(menu-item "Scatter frames" scatter-frames
 	      :enable (menu-bar-menu-frame-live-and-visible-p)
 	      :help "Place frames sensibly"))
-(define-key menu-bar-file-menu [tile-frames-v]
+(define-key menu-bar-window-extras-menu [tile-frames-v]
   `(menu-item "Tile frames vertically" tile-frames-vertically
 	      :enable (menu-bar-menu-frame-live-and-visible-p)
 	      :help "Tile frames vertically"))
-(define-key menu-bar-file-menu [tile-frames-h]
+(define-key menu-bar-window-extras-menu [tile-frames-h]
   `(menu-item "Tile frames horizontally" tile-frames-horizontally
 	      :enable (menu-bar-menu-frame-live-and-visible-p)
 	      :help "Tile frames horizontally"))
-(define-key menu-bar-file-menu [full-frame]
+(define-key menu-bar-window-extras-menu [full-frame]
   `(menu-item "Full Screen Editing" 
 	      aquamacs-toggle-full-frame
 	      :key-sequence [(,osxkeys-command-key shift 13)]
 	      :enable (menu-bar-menu-frame-live-and-visible-p)
 	      :help "Use full screen for the selected frame"))
   
-
-;; will be moved to Buffers menu later on 
-;; but is created here
-
-;; --done
-;; (tabbar-window-buffer-list)
-;; move stuff from File to the Buffers menu
- 
 (setq  menu-bar-buffers-menu-command-entries
        (append 
 	       (list 
 		'(command-separator2 "--")
-		(assq 'make-frame menu-bar-file-menu)
-		(assq 'zoom-menu menu-bar-file-menu)
-		(assq 'full-frame menu-bar-file-menu)
-		(assq 'one-window menu-bar-file-menu)
-		(assq 'split-window menu-bar-file-menu)
+		(assq 'make-frame menu-bar-window-extras-menu)
+		(assq 'zoom-menu menu-bar-window-extras-menu)
+		(assq 'full-frame menu-bar-window-extras-menu)
+		(assq 'one-window menu-bar-window-extras-menu)
+		(assq 'split-window menu-bar-window-extras-menu)
 		'(command-separator3 "--")
-		(assq 'place-frame menu-bar-file-menu)
-		(assq 'tile-frames menu-bar-file-menu)
-		(assq 'tile-frames-h menu-bar-file-menu)
-		(assq 'tile-frames-v menu-bar-file-menu)
+		(assq 'place-frame menu-bar-window-extras-menu)
+		(assq 'tile-frames menu-bar-window-extras-menu)
+		(assq 'tile-frames-h menu-bar-window-extras-menu)
+		(assq 'tile-frames-v menu-bar-window-extras-menu)
 		'(command-separator4 "--")
 		(list 'next-buffer
 		      'menu-item
@@ -1255,20 +1217,64 @@ the previous frame size."
 		      :help "Merge all Frames into a single one with tabs")
 		)))
 
+
 ;(assq-delete-all 'select-named-buffer menu-bar-buffers-menu-command-entries)
 ;(assq-delete-all 'list-all-buffers menu-bar-buffers-menu-command-entries)
 
-(assq-delete-all 'full-frame menu-bar-file-menu)
-(assq-delete-all 'zoom-menu menu-bar-file-menu)
-(assq-delete-all 'make-frame menu-bar-file-menu)
-(assq-delete-all 'make-tab menu-bar-file-menu)
-(assq-delete-all 'one-window menu-bar-file-menu)
-(assq-delete-all 'split-window menu-bar-file-menu) 
-(assq-delete-all 'delete-this-frame menu-bar-file-menu)
-(assq-delete-all 'separator-window menu-bar-file-menu)
-(assq-delete-all 'tile-frames menu-bar-file-menu)
-(assq-delete-all 'tile-frames-h menu-bar-file-menu)
-(assq-delete-all 'tile-frames-v menu-bar-file-menu)
+(add-hook 'menu-bar-update-hook 'aquamacs-update-menu)
+(add-hook 'after-change-major-mode-hook 'aquamacs-record-mode-change)
+(add-hook 'after-init-hook 'aquamacs-update-new-file-menu)
+
+(run-hooks 'aquamacs-menu-setup-hook)
+)
+
+;;; ONE TIME SETUP
+
+; 
+;; we will set the following ones directly
+;; customization is always possible
+;; the existing menu item is badly worded and the C-c/v/x don't apply anyways
+;; done
+
+;; Quit entry shouldnt be there
+(easy-menu-remove-item global-map  '("menu-bar" "file") 'separator-exit)
+(easy-menu-remove-item global-map  '("menu-bar" "file") 'exit-emacs)
+
+;; this is to set the action for the "Quit" function (Emacs menu)
+(global-set-key [mac-application-quit] 'save-buffers-kill-emacs)
+ 
+    
+;; SENDMAIL doesn't usually work on OS X
+;; unless postfix is set up
+(easy-menu-remove-item global-map  '("menu-bar" "tools") 'compose-mail)
+
+
+(defun aquamacs-toggle-full-frame ()
+  "Enlarge the selected frame to the full screen.
+Unlike `mac-toggle-full-frame', this will do a better job at remembering
+the previous frame size."
+  (interactive)
+  (if (frame-parameter nil 'fullscreen)    ;(frame-full-screen-p)
+      (modify-frame-parameters 
+       nil (list (cons 'fullscreen nil)))
+    ;; save small frame position
+    (smart-move-frame-inside-screen)
+    (modify-frame-parameters 
+     nil (list (cons 'fullscreen 'fullboth))))
+  
+  (if (frame-parameter nil 'fullscreen) ; (frame-full-screen-p)
+      (message (substitute-command-keys 
+		"Press \\[aquamacs-toggle-full-frame] to exit full screen editing.")))
+  nil)
+
+
+;; will be moved to Buffers menu later on 
+;; but is created here
+
+;; --done
+;; (tabbar-window-buffer-list)
+;; move stuff from File to the Buffers menu
+ 
  
 (defvar aquamacs-update-menu-old-state nil)
 
@@ -1293,8 +1299,9 @@ that should be represented in the Aquamacs menus."
 ;; (define-key global-map [menu-bar buffer]
 ;;   (cons "Window" global-buffers-menu-map))
 
-(menu-bar-update-buffers) ;; update Buffers menu now
-(aquamacs-update-menu t) ;; initial setup of the menu
+;; to do after loading this file (at runtime)
+;; (menu-bar-update-buffers) ;; update Buffers menu now
+;; (aquamacs-update-menu t) ;; initial setup of the menu
  
  (defun aquamacs-user-wiki ()
   (interactive)
@@ -1315,9 +1322,119 @@ that should be represented in the Aquamacs menus."
 (defun emacs-user-wiki ()
   (interactive)
   (browse-url "http://www.emacswiki.org/")) 
+;;
 
+;; insert menu showing reference cards
 
+(defun aquamacs--refcard-source-update ()
+  "Insert code for current reference card menu."
+  (interactive)
+  (let ((cards))
+       (with-temp-buffer
+	 (cd (format "%setc/refcards" (mac-resources-path)))
+	 (shell-command "grep '^\\s*\\\\title{\\(.*\\)}' *.tex" t)
+	 
+	 (beginning-of-buffer)
+	 (while
+	     (search-forward-regexp "^\\(.*?\\)\\.tex\\:\\\\title{\\(.*\\)}" nil 'noerr)
+	   (if (file-readable-p (concat (match-string 1) ".pdf"))
+	       (add-to-list 'cards (cons (match-string 1) (match-string 2))))
+	   ))
+
+       (mapc (lambda (c)
+
+	       (insert (format 
+"(define-key menu-bar-help-refcards-menu [%s]
+             (list 'menu-item \"%s\"
+                (defun show-refcard-%s () 
+                  (interactive)
+                  (show-refcard \"%s.pdf\"))))
+"
+	     (car c) (cdr c) (car c)  (car c) )))
+	       (sort cards (lambda (a b) (string-lessp (cdr a) (cdr b)))))))
+
+(defun show-refcard (pdf)
+  (interactive)
+  (call-process "open" nil 0 nil (format "%setc/refcards/%s" (mac-resources-path) pdf)))
+
+(setq menu-bar-help-refcards-menu (make-sparse-keymap "Refcards"))
  
+(define-key menu-bar-help-refcards-menu [fr-dired-ref]
+             (list 'menu-item "Carte de r\'ef\'erence de Dired"
+                (defun show-refcard-fr-dired-ref () 
+                  (interactive)
+                  (show-refcard "fr-dired-ref.pdf"))))
+(define-key menu-bar-help-refcards-menu [fr-refcard]
+             (list 'menu-item "Carte de r\'ef\'erence de GNU Emacs"
+                (defun show-refcard-fr-refcard () 
+                  (interactive)
+                  (show-refcard "fr-refcard.pdf"))))
+(define-key menu-bar-help-refcards-menu [dired-ref]
+             (list 'menu-item "Dired Reference Card"
+                (defun show-refcard-dired-ref () 
+                  (interactive)
+                  (show-refcard "dired-ref.pdf"))))
+(define-key menu-bar-help-refcards-menu [calccard]
+             (list 'menu-item "GNU Calc Reference Card"
+                (defun show-refcard-calccard () 
+                  (interactive)
+                  (show-refcard "calccard.pdf"))))
+(define-key menu-bar-help-refcards-menu [sk-refcard]
+             (list 'menu-item "GNU Emacs -- Referenèná karta"
+                (defun show-refcard-sk-refcard () 
+                  (interactive)
+                  (show-refcard "sk-refcard.pdf"))))
+(define-key menu-bar-help-refcards-menu [cs-refcard]
+             (list 'menu-item "GNU Emacs -- Referenèní karta"
+                (defun show-refcard-cs-refcard () 
+                  (interactive)
+                  (show-refcard "cs-refcard.pdf"))))
+(define-key menu-bar-help-refcards-menu [refcard]
+             (list 'menu-item "GNU Emacs Reference Card"
+                (defun show-refcard-refcard () 
+                  (interactive)
+                  (show-refcard "refcard.pdf"))))
+(define-key menu-bar-help-refcards-menu [pt-br-refcard]
+             (list 'menu-item "GNU Emacs: Cart\~ao de Refer\^encia"
+                (defun show-refcard-pt-br-refcard () 
+                  (interactive)
+                  (show-refcard "pt-br-refcard.pdf"))))
+(define-key menu-bar-help-refcards-menu [orgcard]
+             (list 'menu-item "Org-Mode Reference Card (1/2)"
+                (defun show-refcard-orgcard () 
+                  (interactive)
+                  (show-refcard "orgcard.pdf"))))
+(define-key menu-bar-help-refcards-menu [orgcard]
+             (list 'menu-item "Org-Mode Reference Card (2/2)"
+                (defun show-refcard-orgcard () 
+                  (interactive)
+                  (show-refcard "orgcard.pdf"))))
+(define-key menu-bar-help-refcards-menu [pl-refcard]
+             (list 'menu-item "Przegl/ad polece/n GNU Emacsa"
+                (defun show-refcard-pl-refcard () 
+                  (interactive)
+                  (show-refcard "pl-refcard.pdf"))))
+(define-key menu-bar-help-refcards-menu [de-refcard]
+             (list 'menu-item "Referenzkarte zu GNU Emacs"
+                (defun show-refcard-de-refcard () 
+                  (interactive)
+                  (show-refcard "de-refcard.pdf"))))
+(define-key menu-bar-help-refcards-menu [sk-dired-ref]
+             (list 'menu-item "Referenèná karta pre Dired"
+                (defun show-refcard-sk-dired-ref () 
+                  (interactive)
+                  (show-refcard "sk-dired-ref.pdf"))))
+(define-key menu-bar-help-refcards-menu [cs-dired-ref]
+             (list 'menu-item "Referenèní karta pro Dired"
+                (defun show-refcard-cs-dired-ref () 
+                  (interactive)
+                  (show-refcard "cs-dired-ref.pdf"))))
+
+(define-key-after menu-bar-help-menu [menu-refcards]
+  `(menu-item "Printable Reference Cards" 
+	      ,menu-bar-help-refcards-menu)
+  'more-manuals)
+
 
 ;; workarounds for current bugs
 
@@ -1329,33 +1446,6 @@ that should be represented in the Aquamacs menus."
 ; can't show a frame on a different display
 (easy-menu-remove-item global-map 
 		       '("menu-bar" "file") 'make-frame-on-display)
-
-;; --done
-
-(require 'recentf)
-(ats "recentf loaded")
-(aquamacs-set-defaults 
- '(
-   (recentf-max-menu-items 25)
-  (recentf-keep ( mac-is-mounted-volume-p file-remote-p file-readable-p))
-   (recentf-filename-handlers '(abbreviate-file-name))
-   (recentf-menu-filter aquamacs-recentf-show-basenames)))  
-(setq recentf-menu-items-for-commands
-      (list ["Clear Menu"
-	     recentf-clearlist
-	     :help "Remove all excluded and non-kept files from the recent list"
-	     :active t]))
-(global-set-key "\C-x\ \C-r" 'recentf-open-files)  
-
-
-
-
-
-(add-hook 'menu-bar-update-hook 'aquamacs-update-menu)
-
-(add-hook 'after-change-major-mode-hook 'aquamacs-record-mode-change)
- 
-(add-hook 'after-init-hook 'aquamacs-update-new-file-menu)
 
 (provide 'aquamacs-menu)
   

@@ -8,8 +8,6 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
-;; Last change: $Id: aquamacs.el,v 1.274 2009/03/11 12:40:39 davidswelt Exp $ 
-
 ;; This file is part of Aquamacs Emacs
 ;; http://aquamacs.org/
 
@@ -901,9 +899,14 @@ yes-or-no prompts - y or n will do."
 ; (aquamacs--configure-aspell) 
 ; (getenv "ASPELL_CONF")
 
+  (require 'aquamacs-autoface-mode)
+  (autoload 'aquamacs-styles-mode "aquamacs-styles.el" "Automatically set frame style according to major mode" 'interactive nil)
+
   (ats "aquamacs-menu ...")
   (require 'aquamacs-menu) ; before osx_defaults
-
+  (menu-bar-update-buffers) ;; update Buffers menu now
+  (aquamacs-update-menu t) ;; initial setup of the menu
+ 
   (ats "aquamacs-menu done")
   (require 'aquamacs-bug) ;; successfully send bug reports on the Mac
   (ats "aquamacs-bug done")
@@ -916,9 +919,8 @@ yes-or-no prompts - y or n will do."
 
 (require 'saveplace)
 ;;  (require 'longlines) 
-(global-visual-line-mode 1)
-  (aquamacs-set-defaults 
-   `((global-visual-line-mode t)
+(aquamacs-set-defaults 
+   `((line-move-visual t)
      (text-mode-hook (smart-spacing-mode auto-detect-wrap)) 
      (save-place t)
      (save-place-limit 500) ;; speed on quit
@@ -1026,10 +1028,6 @@ Use this argument instead of explicitly setting `view-exit-action'."
 
 
 (require 'color-theme-autoloads)
-(require 'aquamacs-autoface-mode)
-(autoload 'aquamacs-styles-mode "aquamacs-styles.el" "Automatically set frame style according to major mode" 'interactive nil)
-
- (ats "styles done")
 
 ;; follow mouse autoload
 (autoload 'turn-on-follow-mouse "follow-mouse.el"   "Moving the mouse will automatically select the window under it" 'interactive nil)
@@ -1367,14 +1365,14 @@ to the selected frame."
     '( 
       (smart-frame-positioning-enforce custom-variable)
       (smart-frame-positioning-mode custom-variable)
-      (mac-option-modifier  custom-variable)
-      (mac-control-modifier  custom-variable)
-      (mac-function-modifier  custom-variable)
-      (mac-pass-control-to-system  custom-variable)
-      (mac-command-modifier  custom-variable)
-      (mac-pass-command-to-system  custom-variable)
-      (mac-emulate-three-button-mouse  custom-variable)
-      (mac-allow-anti-aliasing  custom-variable)
+      (ns-alternate-modifier  custom-variable)
+      (ns-control-modifier  custom-variable)
+      (ns-function-modifier  custom-variable)
+;;      (mac-pass-control-to-system  custom-variable)
+      (ns-command-modifier  custom-variable)
+      ;; (mac-pass-command-to-system  custom-variable)
+      (ns-emulate-three-button-mouse  custom-variable)
+      (ns-antialias-text  custom-variable)
       (x-select-enable-clipboard  custom-variable)
       (special-display-regexps custom-variable)
       )
@@ -1421,7 +1419,7 @@ listed here."
 ;;;	     do not save initial-frame-alist - it is stored by smart-frame-positions
 ;;;  to do: frame-notice-user-settings should use default-frame-alist in addition to
 ;;; initial-frame-alist, so "adopt frame parameters as default" should work.
-	      mac-option-modifier)
+	      ns-alternate-modifier)
 	    (and (boundp 'aquamacs-additional-fontsets)
 		   '(aquamacs-additional-fontsets))
 		   ;; retain for backwards compatibility

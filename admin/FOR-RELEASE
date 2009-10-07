@@ -2,10 +2,43 @@ Tasks needed before the next release.
 
 * TO BE DONE SHORTLY BEFORE RELEASE
 
-** Check for widow and orphan lines in manuals;
-make sure all the pages really look ok in the manual as formatted.
+** Manuals
+Check cross-references between the manuals (eg from emacs to elisp)
+are correct.  You can use something like the following in the info
+directory in the Emacs build tree:
 
-** Regenerate the pdf versions of the reference cards in etc/refcards/.
+emacs -Q --eval "(setq Info-default-directory-list '(\".\"))" \
+  -f info-xref-check-all
+
+make emacs.dvi, elisp.dvi, and deal with any errors (undefined
+references etc) in the output.  Break any overfull lines.
+Underfull hboxes are not serious, but it can be nice to get rid of
+them if a simple rephrasing or rearrangement will work.
+
+Update the master menu and detailed menu (eg the antinews version).
+The command texinfo-multiple-files-update can do this, but you
+probably want to apply the results selectively (eg the current master
+menu has better line-breaks than the automatic version).  It includes
+the menu-entry name (if there is one) as well as the node name - using
+only the latter looks better.  Also, it doesn't seem to handle nested
+includes, so will miss edebug.texi etc.
+
+Check for widow and orphan lines in the printed manual; make sure all
+the pages really look ok in the manual as formatted.  Orphans/widows
+are cases where the first/last line of a paragraph is on its own at
+the end/start of a page, or where the last word in a paragraph is on
+its own at the start of a line.  It looks better if you reword/respace
+things to avoid these.  (AFAIK, there is no way to find these except
+paging through the whole manual.)  This should be the very last thing
+you do, since any change can alter the layout.
+
+** Check the keybindings in the refcards are correct, and add any new ones.
+Regenerate the pdf versions in etc/refcards/.
+What paper size are the English versions supposed to be on?
+On Debian testing, the packages texlive-lang-czechslovak and
+texlive-lang-polish will let you generate the cs-* and sk-* pdfs.
+The Makefile rules did not work for me, I had to use something like:
+csplain -output-format=pdf cs-refcard
 
 ** Ask maintainers of refcard translations to update them.
 
@@ -23,6 +56,8 @@ sk	Miroslav Vaško
 ** Remove temporary +++/--- lines in NEWS.
 
 ** Try to reorder NEWS: most important things first, related items together.
+
+** Consider bumping customize-changed-options-previous-release.
 
 * BUGS
 
@@ -92,7 +127,7 @@ names of the people who have checked it.
 
 SECTION                  READERS
 ----------------------------------
-etc/TUTORIAL             
+etc/TUTORIAL             rgm (but see Bug#3783)
 etc/TUTORIAL.bg          
 etc/TUTORIAL.cn
 etc/TUTORIAL.cs          

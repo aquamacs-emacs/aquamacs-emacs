@@ -1,4 +1,4 @@
-;;; ns-win.el n.el --- lisp side of interface with NeXT/Open/GNUstep/MacOS X window system
+;;; ns-win.el --- lisp side of interface with NeXT/Open/GNUstep/MacOS X window system
 
 ;; Copyright (C) 1993, 1994, 2005, 2006, 2007, 2008, 2009
 ;;   Free Software Foundation, Inc.
@@ -57,7 +57,7 @@
 (require 'fontset)
 
 ;; Not needed?
-;(require 'ispell)
+;;(require 'ispell)
 
 (defgroup ns nil
   "GNUstep/Mac OS X specific features."
@@ -101,7 +101,9 @@
 
 ;; Set (but not used?) in frame.el.
 (defvar x-display-name nil
-  "The name of the Nextstep display on which Emacs was started.")
+  "The name of the window display on which Emacs was started.
+On X, the display name of individual X frames is recorded in the
+`display' frame parameter.")
 
 ;; nsterm.m.
 (defvar ns-input-file)
@@ -185,33 +187,13 @@ The properties returned may include `top', `left', `height', and `width'."
 ;;;; Keyboard mapping.
 
 ;; These tell read-char how to convert these special chars to ASCII.
-;;TODO: all terms have these, and at least the return mapping is necessary
-;;      for tramp to recognize the enter key.
-;;      Perhaps they should be moved into common code somewhere
-;;      (when a window system is active).
-;;      Remove if no problems for some time after 2008-08-06.
-(put 'backspace 'ascii-character 127)
-(put 'delete 'ascii-character 127)
-(put 'tab 'ascii-character ?\t)
 (put 'S-tab 'ascii-character (logior 16 ?\t))
-(put 'linefeed 'ascii-character ?\n)
-(put 'clear 'ascii-character 12)
-(put 'return 'ascii-character 13)
-(put 'escape 'ascii-character ?\e)
-
 
 (defvar ns-alternatives-map
   (let ((map (make-sparse-keymap)))
     ;; Map certain keypad keys into ASCII characters
     ;; that people usually expect.
-    (define-key map [backspace] [?\d])
-    (define-key map [delete] [?\d])
-    (define-key map [tab] [?\t])
     (define-key map [S-tab] [25])
-    (define-key map [linefeed] [?\n])
-    (define-key map [clear] [?\C-l])
-    (define-key map [return] [?\C-m])
-    (define-key map [escape] [?\e])
     (define-key map [M-backspace] [?\M-\d])
     (define-key map [M-delete] [?\M-\d])
     (define-key map [M-tab] [?\M-\t])
@@ -227,7 +209,7 @@ The properties returned may include `top', `left', `height', and `width'."
 (define-key global-map [ns-power-off] 'save-buffers-kill-emacs)
 (define-key global-map [ns-open-file] 'ns-find-file)
 (define-key global-map [ns-open-temp-file] [ns-open-file])
-(define-key global-map [ns-drag-file] 'ns-insert-file)
+(define-key global-map [ns-drag-file] 'ns-handle-drag-file)
 (define-key global-map [ns-drag-color] 'ns-set-foreground-at-mouse)
 (define-key global-map [S-ns-drag-color] 'ns-set-background-at-mouse)
 (define-key global-map [ns-drag-text] 'ns-insert-text)
@@ -254,7 +236,7 @@ The properties returned may include `top', `left', `height', and `width'."
 (defalias 'do-applescript 'ns-do-applescript)
 
 (defun x-setup-function-keys (frame)
-  "Set up function Keys for Nextstep for frame FRAME."
+  "Set up `function-key-map' on the graphical frame FRAME."
   (unless (terminal-parameter frame 'x-setup-function-keys)
     (with-selected-frame frame
       (setq interprogram-cut-function 'x-select-text
@@ -278,6 +260,7 @@ The properties returned may include `top', `left', `height', and `width'."
              (cons (logior (lsh 0 16)  12) 'ns-new-frame)
 	     (cons (logior (lsh 0 16)  13) 'ns-toggle-toolbar)
 	     (cons (logior (lsh 0 16)  14) 'ns-show-prefs) ;; Aquamacs only
+	     (cons (logior (lsh 0 16)  17) 'ns-change-color)
 	     (cons (logior (lsh 0 16)  20) 'ns-check-spelling)
 	     (cons (logior (lsh 0 16)  21) 'ns-spelling-change)
 	     (cons (logior (lsh 0 16)  90) 'ns-application-activated)
@@ -712,6 +695,15 @@ prompting.  If file is a directory perform a `find-file' on it."
         (find-file f)
       (push-mark (+ (point) (car (cdr (insert-file-contents f))))))))
 
+(defun ns-handle-drag-file ()
+  (interactive)
+  (require 'dnd)
+  (while (car ns-input-file)
+    ;; quick and dirty hack
+    (dnd-open-local-file (concat "file://"
+			  (car ns-input-file)) nil)
+    (setq ns-input-file (cdr ns-input-file))))
+
 (defvar ns-select-overlay nil
   "Overlay used to highlight areas in files requested by Nextstep apps.")
 (make-variable-buffer-local 'ns-select-overlay)
@@ -728,23 +720,27 @@ Lines are highlighted according to `ns-input-line'."
     (if ns-select-overlay
         (setq ns-select-overlay (delete-overlay ns-select-overlay)))
     (deactivate-mark)
-    (goto-line (if (consp ns-input-line)
-                   (min (car ns-input-line) (cdr ns-input-line))
-                 ns-input-line)))
+    (goto-char (point-min))
+    (forward-line (1- (if (consp ns-input-line)
+                          (min (car ns-input-line) (cdr ns-input-line))
+                        ns-input-line))))
    (ns-input-line
     (if (not ns-select-overlay)
-        (overlay-put (setq ns-select-overlay (make-overlay (point-min) (point-min)))
+        (overlay-put (setq ns-select-overlay (make-overlay (point-min)
+                                                           (point-min)))
                      'face 'highlight))
     (let ((beg (save-excursion
-                 (goto-line (if (consp ns-input-line)
-                                (min (car ns-input-line) (cdr ns-input-line))
-                              ns-input-line))
-                 (point)))
+                 (goto-char (point-min))
+                 (line-beginning-position
+                  (if (consp ns-input-line)
+                      (min (car ns-input-line) (cdr ns-input-line))
+                    ns-input-line))))
           (end (save-excursion
-                 (goto-line (+ 1 (if (consp ns-input-line)
-                                     (max (car ns-input-line) (cdr ns-input-line))
-                                   ns-input-line)))
-                 (point))))
+                 (goto-char (point-min))
+                 (line-beginning-position
+                  (1+ (if (consp ns-input-line)
+                          (max (car ns-input-line) (cdr ns-input-line))
+                        ns-input-line))))))
       (move-overlay ns-select-overlay beg end)
       (deactivate-mark)
       (goto-char beg)))
@@ -936,7 +932,7 @@ unless the current buffer is a scratch buffer."
 
 ;; Set to use font panel instead
 (declare-function ns-popup-font-panel "nsfns.m" (&optional frame))
-(defalias 'generate-fontset-menu 'ns-popup-font-panel "Pop up the font panel.
+(defalias 'x-select-font 'ns-popup-font-panel "Pop up the font panel.
 This function has been overloaded in Nextstep.")
 (defalias 'mouse-set-font 'ns-popup-font-panel "Pop up the font panel.
 This function has been overloaded in Nextstep.")
@@ -985,6 +981,7 @@ See the documentation of `create-fontset-from-fontset-spec' for the format.")
 		(format "Creation of the standard fontset failed: %s" err)
 		:error)))))
 
+(defvar ns-reg-to-script)               ; nsfont.m
 ;;;; Spelling panel support.
 
 (autoload 'ns-start-spellchecker "flyspell"
@@ -1011,6 +1008,45 @@ panel immediately after correcting a word in a buffer."
   (ns-highlight-misspelling-and-suggest)
   ) 
 
+;; This maps font registries (not exposed by NS APIs for font selection) to
+;; unicode scripts (which can be mapped to unicode character ranges which are).
+;; See ../international/fontset.el
+(setq ns-reg-to-script
+      '(("iso8859-1" . latin)
+	("iso8859-2" . latin)
+	("iso8859-3" . latin)
+	("iso8859-4" . latin)
+	("iso8859-5" . cyrillic)
+	("microsoft-cp1251" . cyrillic)
+	("koi8-r" . cyrillic)
+	("iso8859-6" . arabic)
+	("iso8859-7" . greek)
+	("iso8859-8" . hebrew)
+	("iso8859-9" . latin)
+	("iso8859-10" . latin)
+	("iso8859-11" . thai)
+	("tis620" . thai)
+	("iso8859-13" . latin)
+	("iso8859-14" . latin)
+	("iso8859-15" . latin)
+	("iso8859-16" . latin)
+	("viscii1.1-1" . latin)
+	("jisx0201" . kana)
+	("jisx0208" . han)
+	("jisx0212" . han)
+	("jisx0213" . han)
+	("gb2312.1980" . han)
+	("gb18030" . han)
+	("gbk-0" . han)
+	("big5" . han)
+	("cns11643" . han)
+	("sisheng_cwnn" . bopomofo)
+	("ksc5601.1987" . hangul)
+	("ethiopic-unicode" . ethiopic)
+	("is13194-devanagari" . indian-is13194)
+	("iso10646.indian-1" . devanagari)))
+
+
 ;;;; Pasteboard support.
 
 (declare-function ns-get-cut-buffer-internal "nsselect.m" (buffer))
@@ -1033,7 +1069,19 @@ panel immediately after correcting a word in a buffer."
 (defvar ns-last-selected-text nil)
 
 (defun x-select-text (text &optional push)
-  "Put TEXT, a string, on the pasteboard."
+  "Select TEXT, a string, according to the window system.
+
+On X, put TEXT in the primary X selection.  For backward
+compatibility with older X applications, set the value of X cut
+buffer 0 as well, and if the optional argument PUSH is non-nil,
+rotate the cut buffers.  If `x-select-enable-clipboard' is
+non-nil, copy the text to the X clipboard as well.
+
+On Windows, make TEXT the current selection.  If
+`x-select-enable-clipboard' is non-nil, copy the text to the
+clipboard as well.  The argument PUSH is ignored.
+
+On Nextstep, put TEXT in the pasteboard; PUSH is ignored."
   ;; Don't send the pasteboard too much text.
   ;; It becomes slow, and if really big it causes errors.
   (ns-set-pasteboard text)
@@ -1068,12 +1116,6 @@ panel immediately after correcting a word in a buffer."
 (defun ns-paste-secondary ()
   (interactive)
   (insert (ns-get-cut-buffer-internal 'SECONDARY)))
-
-;; PENDING: not sure what to do here.. for now interprog- are set in
-;; init-fn-keys, and unsure whether these x- settings have an effect.
-;;(setq interprogram-cut-function 'x-select-text
-;;      interprogram-paste-function 'x-cut-buffer-or-selection-value)
-;; These only needed if above not working.
 
 (set-face-background 'region "ns_selection_color")
 
@@ -1143,12 +1185,13 @@ panel immediately after correcting a word in a buffer."
 (declare-function ns-list-colors "nsfns.m" (&optional frame))
 
 (defvar x-colors (ns-list-colors)
-  "The list of colors defined in non-PANTONE color files.")
+  "List of basic colors available on color displays.
+For X, the list comes from the `rgb.txt' file,v 10.41 94/02/20.
+For Nextstep, this is a list of non-PANTONE colors returned by
+the operating system.")
 
 (defun xw-defined-colors (&optional frame)
-  "Return a list of colors supported for a particular frame.
-The argument FRAME specifies which frame to try.
-The value may be different for frames on different Nextstep displays."
+  "Internal function called by `defined-colors'."
   (or frame (setq frame (selected-frame)))
   (let ((all-colors x-colors)
 	(this-color nil)
@@ -1159,18 +1202,6 @@ The value may be different for frames on different Nextstep displays."
       ;; (and (face-color-supported-p frame this-color t)
       (setq defined-colors (cons this-color defined-colors))) ;;)
     defined-colors))
-
-(declare-function ns-set-alpha "nsfns.m" (color alpha))
-
-;; Convenience and work-around for fact that set color fns now require named.
-(defun ns-set-background-alpha (alpha)
-  "Sets ALPHA (opacity) of background.
-Set from 0.0 (fully transparent) to 1.0 (fully opaque; default).
-Note, tranparency works better on Tiger (10.4) and higher."
-  (interactive "nSet background alpha to: ")
-  (let ((bgcolor (cdr (assq 'background-color (frame-parameters)))))
-    (set-frame-parameter (selected-frame)
-			 'background-color (ns-set-alpha bgcolor alpha))))
 
 ;; Functions for color panel + drag
 (defun ns-face-at-pos (pos)
@@ -1226,7 +1257,8 @@ Note, tranparency works better on Tiger (10.4) and higher."
       (modify-frame-parameters frame (list (cons 'foreground-color
                                                  ns-input-color))))
      (t
-      (set-face-foreground face ns-input-color frame)))))
+      (set-face-foreground face ns-input-color frame)))
+    (message "Foreground color set for %s." face)))
 
 (defun ns-set-background-at-mouse ()
   "Set the background color at the mouse location to `ns-input-color'."
@@ -1242,7 +1274,8 @@ Note, tranparency works better on Tiger (10.4) and higher."
       (modify-frame-parameters frame (list (cons 'background-color
                                                  ns-input-color))))
      (t
-      (set-face-background face ns-input-color frame)))))
+      (set-face-background face ns-input-color frame)))
+    (message "Background color set for %s." face)))
 
 ;; Set some options to be as Nextstep-like as possible.
 (setq frame-title-format t
@@ -1278,7 +1311,6 @@ Note, tranparency works better on Tiger (10.4) and higher."
 
   ;; FIXME: This will surely lead to "MODIFIED OUTSIDE CUSTOM" warnings.
   (menu-bar-mode (if (get-lisp-resource nil "Menus") 1 -1))
-  (mouse-wheel-mode 1)
 
   (setq ns-initialized t))
 

@@ -762,16 +762,19 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
 	       (buffer-modified-p))
 	      ;; a lot of buffers (e.g. dired) may be modified,
 	      ;; but have no file name
-	      (if (y-or-n-p 
-		   (format "Save buffer %s to file before closing window? "
-			   (buffer-name)))
-		  (progn
-		    (save-buffer)
-		    (message "File saved.")
-		    )
-		;; mark as not modified, so it will be killed for sure
-		(set-buffer-modified-p nil)
-		)
+	      (if (aquamacs-ask-for-confirmation
+		 (format "Save buffer %s to file before closing window? 
+The buffer contains unsaved changes which will be lost if you discard them now." (buffer-name)) 
+		 nil (format "Save%s" (if buffer-file-name "" "...")) "Don't Save")
+		(progn 
+		    (if (listp last-nonmenu-event)
+			(mac-key-save-file)
+		      (save-buffer))
+		    (if (buffer-modified-p)
+			(keyboard-quit)
+		      (message "File saved.")))
+	      ;; mark as not modified, so it will be killed for sure
+	      (set-buffer-modified-p nil))
 	    (message ""))))
 	
     ;; only if not a *special* buffer

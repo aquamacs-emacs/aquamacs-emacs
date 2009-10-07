@@ -8,12 +8,13 @@
 # 1.1 - delayed deletion of new files [2008-11-12 David Reitter]
 # 1.2 - remove hard-coding of application path; consequently, remove sudo functionality
 #     - shorter delay before deleting file
+# 1.3 - changed application name (Aquamacs 2.0)
 
 # to-do: re-implement in C (or as a shell script)
 
-# $app_path = '/Applications/Aquamacs\ Emacs.app';
+# $app_path = '/Applications/Aquamacs.app';
 # $app_path = '<AQUAMACS-PATH>';
-# $pid = qx"ps auxc | awk '/^$ENV{'USER'} .* Aquamacs Emacs\$/ {print \$2}'";
+# $pid = qx"ps auxc | awk '/^$ENV{'USER'} .* Aquamacs\$/ {print \$2}'";
 
 my $args = "";
 my $tmpfiles = "";
@@ -35,10 +36,10 @@ system("touch $args") if ($tmpfiles);
     # we can only call "open" with existing files.
     # that's why we create them just for the "open" call.
 
-    system("open -a Aquamacs\\ Emacs.app $args");
+    system("open -a Aquamacs.app $args");
      
 #  } else {
-#    system("$app_path/Contents/MacOS/Aquamacs\\ Emacs $args 2>/dev/null &");
+#    system("$app_path/Contents/MacOS/Aquamacs $args 2>/dev/null &");
 #  }
 
 # delay deletion because AE drag&drop doesn't work with non-existing documents

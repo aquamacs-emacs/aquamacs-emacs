@@ -1,5 +1,5 @@
 ;;; html-helper-mode.el --- Major mode for composing html files.
-;;; v $Revision: 1.5 $
+;;; Revision: 3.10aquamacs
 ;; based on beta version dated 22-Mar-2004 http://savannah.inetbridge.net/baol-hth/
 ;; plus: 3.0.4Kilo's CSS mode
 ;; plus: changes to set major-mode while running mode hooks  (Aquamacs compatibility)
@@ -93,7 +93,7 @@
 ;;   with the package or is at http://www.santafe.edu/~nelson/tools/
 
 ;; Thank yous:
-;;   David KÂgedal <davidk@lysator.liu.se> for the tempo code which
+;;   David K√•gedal <davidk@lysator.liu.se> for the tempo code which
 ;;     forms the core of the HTML insertion, as well as the HTML+ tag.
 ;;   Marc Hedlund <march@europa.com> for general encouragement and
 ;;     many helpful suggestions, especially with HTML/2.0 compliance
@@ -135,13 +135,7 @@
 ;;}}}
 ;;{{{ Code:
 
-(defconst html-helper-mode-version
-  (progn
-    (let ((revs "$Revision: 1.5 $")
-	  (lastchar 0))
-      ; revs is a string of single byte characters
-      (set 'lastchar (1- (string-width revs)))
-     (substring revs 11 lastchar))))
+(defconst html-helper-mode-version "3.10")
 
 ;;{{{ user variables
 
@@ -210,7 +204,7 @@ the first column"
   :require 'html-helper-mode)
 
 (defcustom html-helper-mode-using-iso-8859-15-characters t
-  "non nil to make Emacs map some iso-8859-15 characters (i.e. ‡Ï˘ÚËÈ
+  "non nil to make Emacs map some iso-8859-15 characters (i.e. √†√¨√π√≤√®√©
  to the appropriate HTML entities"
   :type 'boolean
   :initialize 'custom-initialize-default
@@ -1493,7 +1487,7 @@ Useful for adding timestamps to existing buffers."
 (defun html-helper-font-lock-syntactic-face-function (state)
   (let ((char (nth 3 state)))
     (cond
-     ;; char Ë nil
+     ;; char √® nil
      (char font-lock-string-face)
      (t
       (set 'char (char-before (point)))

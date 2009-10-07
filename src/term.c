@@ -1969,14 +1969,11 @@ turn_on_face (f, face_id)
 	}
     }
 
-  if (face->tty_bold_p)
-    {
-      if (MAY_USE_WITH_COLORS_P (tty, NC_BOLD))
-	OUTPUT1_IF (tty, tty->TS_enter_bold_mode);
-    }
-  else if (face->tty_dim_p)
-    if (MAY_USE_WITH_COLORS_P (tty, NC_DIM))
-      OUTPUT1_IF (tty, tty->TS_enter_dim_mode);
+  if (face->tty_bold_p && MAY_USE_WITH_COLORS_P (tty, NC_BOLD))
+    OUTPUT1_IF (tty, tty->TS_enter_bold_mode);
+
+  if (face->tty_dim_p && MAY_USE_WITH_COLORS_P (tty, NC_DIM))
+    OUTPUT1_IF (tty, tty->TS_enter_dim_mode);
 
   /* Alternate charset and blinking not yet used.  */
   if (face->tty_alt_charset_p
@@ -3181,6 +3178,7 @@ DEFUN ("gpm-mouse-stop", Fgpm_mouse_stop, Sgpm_mouse_stop,
 #endif /* HAVE_GPM */
 
 
+#ifndef MSDOS
 /***********************************************************************
 			    Initialization
  ***********************************************************************/
@@ -3218,6 +3216,20 @@ tty_free_frame_resources (struct frame *f)
   xfree (f->output_data.tty);
 }
 
+#else  /* MSDOS */
+
+/* Delete frame F's face cache. */
+
+static void
+tty_free_frame_resources (struct frame *f)
+{
+  if (! FRAME_TERMCAP_P (f) && ! FRAME_MSDOS_P (f))
+    abort ();
+
+  if (FRAME_FACE_CACHE (f))
+    free_frame_faces (f);
+}
+#endif	/* MSDOS */
 
 /* Reset the hooks in TERMINAL.  */
 
@@ -3452,9 +3464,7 @@ init_tty (char *name, char *terminal_type, int must_succeed)
 
   tty->type = xstrdup (terminal_type);
 
-#ifdef subprocesses
   add_keyboard_wait_descriptor (fileno (tty->input));
-#endif
 
 #endif	/* !DOS_NT */
 
@@ -3721,10 +3731,6 @@ to do `unset TERMCAP' (C-shell: `unsetenv TERMCAP') as well.",
                  "Screen size %dx%d is too small"
                  "Screen size %dx%d is too small",
                  FrameCols (tty), FrameRows (tty));
-
-#if 0  /* This is not used anywhere. */
-  tty->terminal->min_padding_speed = tgetnum ("pb");
-#endif
 
   TabWidth (tty) = tgetnum ("tw");
 
@@ -4010,10 +4016,8 @@ delete_tty (struct terminal *terminal)
 
   xfree (tty->old_tty);
   xfree (tty->Wcm);
-  if (tty->termcap_strings_buffer)
-    xfree (tty->termcap_strings_buffer);
-  if (tty->termcap_term_buffer)
-    xfree (tty->termcap_term_buffer);
+  xfree (tty->termcap_strings_buffer);
+  xfree (tty->termcap_term_buffer);
 
   bzero (tty, sizeof (struct tty_display_info));
   xfree (tty);

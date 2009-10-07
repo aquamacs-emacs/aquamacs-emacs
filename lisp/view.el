@@ -120,9 +120,6 @@ functions that enable or disable view mode.")
 (defvar view-old-Helper-return-blurb)
 (make-variable-buffer-local 'view-old-Helper-return-blurb)
 
-;; Just to avoid warnings.
-(defvar Helper-return-blurb)
-
 (defvar view-page-size nil
   "Default number of lines to scroll by View page commands.
 If nil that means use the window size.")
@@ -492,14 +489,15 @@ Entry to view-mode runs the normal hook `view-mode-hook'."
 	view-page-size nil
 	view-half-page-size nil
 	view-old-buffer-read-only buffer-read-only
-	buffer-read-only t
-	view-old-Helper-return-blurb (and (boundp 'Helper-return-blurb)
-					  Helper-return-blurb)
-	Helper-return-blurb
-	(format "continue viewing %s"
-		(if (buffer-file-name)
-		    (file-name-nondirectory (buffer-file-name))
-		  (buffer-name))))
+	buffer-read-only t)
+  (if (boundp 'Helper-return-blurb)
+      (setq view-old-Helper-return-blurb (and (boundp 'Helper-return-blurb)
+					      Helper-return-blurb)
+	    Helper-return-blurb
+	    (format "continue viewing %s"
+		    (if (buffer-file-name)
+			(file-name-nondirectory (buffer-file-name))
+		      (buffer-name)))))
   (force-mode-line-update)
   (run-hooks 'view-mode-hook))
 
@@ -516,8 +514,9 @@ Entry to view-mode runs the normal hook `view-mode-hook'."
   ;; so that View mode stays off if toggle-read-only is called.
   (if (local-variable-p 'view-read-only)
       (kill-local-variable 'view-read-only))
-  (setq view-mode nil
-	Helper-return-blurb view-old-Helper-return-blurb)
+  (setq view-mode nil)
+  (if (boundp 'Helper-return-blurb)
+      (setq Helper-return-blurb view-old-Helper-return-blurb))
   (if buffer-read-only
       (setq buffer-read-only view-old-buffer-read-only)))
 
@@ -678,7 +677,7 @@ OLD-WINDOW."
 		;; Not the only frame, so can safely be removed.
 		(if view-remove-frame-by-deleting
 		    (delete-frame frame)
-		  (setq notlost t)	   ; Keep the window. See below.
+		  (setq notlost t)	   ; Keep the window.  See below.
 		  (iconify-frame frame))))))))
 	;; If a frame is removed by iconifying it, the window is not
 	;; really lost.  In this case we keep the entry in
@@ -818,7 +817,8 @@ Display is centered at LINE.
 Also set the mark at the position where point was."
   (interactive "p")
   (push-mark)
-  (goto-line line)
+  (goto-char (point-min))
+  (forward-line (1- line))
   (view-recenter))
 
 (defun View-back-to-mark (&optional ignore)
@@ -836,7 +836,7 @@ invocations return to earlier marks."
   ;; Scroll forward LINES lines.  If BACKWARD is non-nil, scroll backwards.
   ;; If LINES is negative scroll in the other direction.
   ;; If LINES is 0 or nil, scroll DEFAULT lines (if DEFAULT is nil, scroll
-  ;; by one page). If MAXDEFAULT is non-nil, scroll no more than a window.
+  ;; by one page).  If MAXDEFAULT is non-nil, scroll no more than a window.
   (if (or (null lines) (zerop (setq lines (prefix-numeric-value lines))))
       (setq lines default))
   (when (and lines (< lines 0))
@@ -931,7 +931,7 @@ See also `View-scroll-page-forward-set-page-size'."
 
 (defun View-scroll-line-forward (&optional lines)
   "Scroll forward one line (or prefix LINES lines) in View mode.
-See also `View-scroll-page-forward,' but note that scrolling is limited
+See also `View-scroll-page-forward', but note that scrolling is limited
 to minimum of LINES and one window-full."
   (interactive "P")
   (view-scroll-lines lines nil 1 t))
@@ -1032,8 +1032,8 @@ for highlighting the match that is found."
 
 (defun view-search (times regexp)
   ;; This function does the job for all the View-search- commands.
-  ;; Search for the TIMESt match for REGEXP. If TIMES is negative
-  ;; search backwards. If REGEXP is nil use `view-last-regexp'.
+  ;; Search for the TIMESt match for REGEXP.  If TIMES is negative
+  ;; search backwards.  If REGEXP is nil use `view-last-regexp'.
   ;; Characters "!" and "@" have a special meaning at the beginning of
   ;; REGEXP and are removed from REGEXP before the search "!" means
   ;; search for lines with no match for REGEXP.  "@" means search in

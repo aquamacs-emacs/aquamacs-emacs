@@ -208,6 +208,9 @@ extern Lisp_Object Vwindow_system_version;
 int image_cache_refcount, dpyinfo_refcount;
 #endif
 
+#if defined (USE_GTK) && defined (HAVE_FREETYPE)
+char *x_last_font_name;
+#endif
 
 
 /* Error if we are not connected to X.  */
@@ -374,10 +377,7 @@ x_any_window_to_frame (dpyinfo, wdesc)
 #ifdef USE_GTK
               GtkWidget *gwdesc = xg_win_to_widget (dpyinfo->display, wdesc);
               if (gwdesc != 0
-                  && (gwdesc == x->widget
-                      || gwdesc == x->edit_widget
-                      || gwdesc == x->vbox_widget
-                      || gwdesc == x->menubar_widget))
+                  && gtk_widget_get_toplevel (gwdesc) == x->widget)
                 found = f;
 #else
 	      if (wdesc == XtWindow (x->widget)
@@ -396,54 +396,6 @@ x_any_window_to_frame (dpyinfo, wdesc)
     }
 
   return found;
-}
-
-/* Likewise, but exclude the menu bar widget.  */
-
-struct frame *
-x_non_menubar_window_to_frame (dpyinfo, wdesc)
-     struct x_display_info *dpyinfo;
-     int wdesc;
-{
-  Lisp_Object tail, frame;
-  struct frame *f;
-  struct x_output *x;
-
-  if (wdesc == None) return 0;
-
-  for (tail = Vframe_list; CONSP (tail); tail = XCDR (tail))
-    {
-      frame = XCAR (tail);
-      if (!FRAMEP (frame))
-        continue;
-      f = XFRAME (frame);
-      if (!FRAME_X_P (f) || FRAME_X_DISPLAY_INFO (f) != dpyinfo)
-	continue;
-      x = f->output_data.x;
-      /* This frame matches if the window is any of its widgets.  */
-      if (x->hourglass_window == wdesc)
-	return f;
-      else if (x->widget)
-	{
-#ifdef USE_GTK
-          GtkWidget *gwdesc = xg_win_to_widget (dpyinfo->display, wdesc);
-          if (gwdesc != 0
-              && (gwdesc == x->widget
-                  || gwdesc == x->edit_widget
-                  || gwdesc == x->vbox_widget))
-            return f;
-#else
-	  if (wdesc == XtWindow (x->widget)
-	      || wdesc == XtWindow (x->column_widget)
-	      || wdesc == XtWindow (x->edit_widget))
-	    return f;
-#endif
-	}
-      else if (FRAME_X_WINDOW (f) == wdesc)
-	/* A tooltip frame.  */
-	return f;
-    }
-  return 0;
 }
 
 /* Likewise, but consider only the menu bar widget.  */
@@ -473,15 +425,14 @@ x_menubar_window_to_frame (dpyinfo, wdesc)
       if (x->menubar_widget)
         {
           GtkWidget *gwdesc = xg_win_to_widget (dpyinfo->display, wdesc);
-          int found = 0;
 
-          BLOCK_INPUT;
+	  /* This gives false positives, but the rectangle check in xterm.c
+	     where this is called takes care of that.  */
           if (gwdesc != 0
               && (gwdesc == x->menubar_widget
-                  || gtk_widget_get_parent (gwdesc) == x->menubar_widget))
-            found = 1;
-          UNBLOCK_INPUT;
-          if (found) return f;
+                  || gtk_widget_is_ancestor (x->menubar_widget, gwdesc)
+		  || gtk_widget_is_ancestor (gwdesc, x->menubar_widget)))
+            return f;
         }
 #else
       if (x->menubar_widget
@@ -941,6 +892,35 @@ x_set_background_color (f, arg, oldval)
     }
 }
 
+static Cursor
+make_invisible_cursor (f)
+     struct frame *f;
+{
+  Display *dpy = FRAME_X_DISPLAY (f);
+  static char const no_data[] = { 0 };
+  Pixmap pix;
+  XColor col;
+  Cursor c;
+
+  x_catch_errors (dpy);
+  pix = XCreateBitmapFromData (dpy, FRAME_X_DISPLAY_INFO (f)->root_window,
+                               no_data, 1, 1);
+  if (! x_had_errors_p (dpy) && pix != None)
+    {
+      col.pixel = 0;
+      col.red = col.green = col.blue = 0;
+      col.flags = DoRed | DoGreen | DoBlue;
+      c = XCreatePixmapCursor (dpy, pix, pix, &col, &col, 0, 0);
+      if (x_had_errors_p (dpy) || c == None)
+        c = 0;
+      XFreePixmap (dpy, pix);
+    }
+
+  x_uncatch_errors ();
+
+  return c;
+}
+
 void
 x_set_mouse_color (f, arg, oldval)
      struct frame *f;
@@ -1046,8 +1026,12 @@ x_set_mouse_color (f, arg, oldval)
   }
 
   if (FRAME_X_WINDOW (f) != 0)
-    XDefineCursor (dpy, FRAME_X_WINDOW (f), cursor);
+    XDefineCursor (dpy, FRAME_X_WINDOW (f),
+                   f->output_data.x->current_cursor = cursor);
 
+  if (FRAME_X_DISPLAY_INFO (f)->invisible_cursor == 0)
+    FRAME_X_DISPLAY_INFO (f)->invisible_cursor = make_invisible_cursor (f);
+  
   if (cursor != x->text_cursor
       && x->text_cursor != 0)
     XFreeCursor (dpy, x->text_cursor);
@@ -2671,7 +2655,8 @@ x_window (f, window_prompting, minibuffer_only)
   }
 
   XDefineCursor (FRAME_X_DISPLAY (f), FRAME_X_WINDOW (f),
-		 f->output_data.x->text_cursor);
+		 f->output_data.x->current_cursor
+                 = f->output_data.x->text_cursor);
 
   UNBLOCK_INPUT;
 
@@ -2816,7 +2801,8 @@ x_window (f)
   }
 
   XDefineCursor (FRAME_X_DISPLAY (f), FRAME_X_WINDOW (f),
-		 f->output_data.x->text_cursor);
+		 f->output_data.x->current_cursor
+                 = f->output_data.x->text_cursor);
 
   UNBLOCK_INPUT;
 
@@ -5594,6 +5580,9 @@ If FRAME is omitted or nil, it defaults to the selected frame. */)
   FRAME_PTR f = check_x_frame (frame);
   char *name;
   Lisp_Object default_font, font = Qnil;
+  Lisp_Object font_param;
+  char *default_name = NULL;
+  struct gcpro gcpro1;
   int count = SPECPDL_INDEX ();
 
   check_x ();
@@ -5607,21 +5596,28 @@ If FRAME is omitted or nil, it defaults to the selected frame. */)
 
   BLOCK_INPUT;
 
-  XSETFONT (default_font, FRAME_FONT (f));
-  if (FONTP (default_font))
+  GCPRO1(font_param);
+  font_param = Fframe_parameter (frame, Qfont_param);
+
+  if (x_last_font_name != NULL)
+    default_name = x_last_font_name;
+  else if (STRINGP (font_param))
+    default_name = SDATA (font_param);
+  else if (FONTP (default_font))
     {
-      char *default_name = alloca (256);
+      XSETFONT (default_font, FRAME_FONT (f));
+      default_name = alloca (256);
       if (font_unparse_gtkname (default_font, f, default_name, 256) < 0)
 	default_name = NULL;
-      name = xg_get_font_name (f, default_name);
     }
-  else
-    name = xg_get_font_name (f, NULL);
+
+  name = xg_get_font_name (f, default_name);
 
   if (name)
     {
       font = build_string (name);
-      xfree (name);
+      g_free (x_last_font_name);
+      x_last_font_name = name;
     }
 
   UNBLOCK_INPUT;
@@ -5779,7 +5775,8 @@ frame_parm_handler x_frame_parm_handlers[] =
   x_set_wait_for_wm,
   x_set_fullscreen,
   x_set_font_backend,
-  x_set_alpha
+  x_set_alpha,
+  x_set_sticky,
 };
 
 void
@@ -5992,6 +5989,7 @@ the tool bar buttons.  */);
 
 #if defined (USE_GTK) && defined (HAVE_FREETYPE)
   defsubr (&Sx_select_font);
+  x_last_font_name = NULL;
 #endif
 }
 

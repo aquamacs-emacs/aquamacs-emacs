@@ -1,5 +1,7 @@
 ;;; longlines.el --- automatically wrap long lines   -*- coding:utf-8 -*-
 
+;; This mode is obsolete in Aquamacs 2.x.
+
 ;; Copyright (C) 2000, 2001, 2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
 
 ;; Authors:    Kai Grossjohann <Kai.Grossjohann@CS.Uni-Dortmund.DE>
@@ -45,7 +47,10 @@
   "Non-nil means long lines are automatically wrapped after each command.
 Otherwise, you can perform filling using `fill-paragraph' or
 `auto-fill-mode'.  In any case, the soft newlines will be removed
-when the file is saved to disk."
+when the file is saved to disk.
+
+`Longlines-mode' is obsolete in Aquamacs 2.x.  
+Use `visual-line-mode' instead."
   :group 'longlines
   :type 'boolean)
 
@@ -57,7 +62,10 @@ with differing widths.
 
 If the value is an integer, that specifies the distance from the
 right edge of the window at which wrapping occurs.  For any other
-non-nil value, wrapping occurs 2 characters from the right edge."
+non-nil value, wrapping occurs 2 characters from the right edge.
+
+`Longlines-mode' is obsolete in Aquamacs 2.x.  
+Use `visual-line-mode' instead."
   :group 'longlines
   :type 'boolean)
 
@@ -65,13 +73,19 @@ non-nil value, wrapping occurs 2 characters from the right edge."
   "Non-nil means each hard newline is marked on the screen.
 \(The variable `longlines-show-effect' controls what they look like.)
 You can also enable the display temporarily, using the command
-`longlines-show-hard-newlines'."
+`longlines-show-hard-newlines'.
+
+`Longlines-mode' is obsolete in Aquamacs 2.x.  
+Use `visual-line-mode' instead."
   :group 'longlines
   :type 'boolean)
 
 (defcustom longlines-show-effect (propertize "¶\n" 'face 'escape-glyph)
   "A string to display when showing hard newlines.
-This is used when `longlines-show-hard-newlines' is on."
+This is used when `longlines-show-hard-newlines' is on.
+
+`Longlines-mode' is obsolete in Aquamacs 2.x.  
+Use `visual-line-mode' instead."
   :group 'longlines
   :type 'string)
 
@@ -172,7 +186,9 @@ are indicated with a symbol."
 	(add-hook 'after-change-functions 'longlines-after-change-function nil t)
 	(add-hook 'post-command-hook 'longlines-post-command-function nil t)
         (when longlines-auto-wrap
-          (auto-fill-mode 0)))
+          (auto-fill-mode 0))
+	(message "Warning: longlines-mode is obsolete in Aquamacs 2.x.
+Use `visual-line-mode' instead."))
     ;; Turn off longlines mode
     (setq buffer-file-format (delete 'longlines buffer-file-format))
     (if longlines-showing

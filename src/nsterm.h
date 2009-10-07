@@ -118,7 +118,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 - (NSMenuItem *)addItemWithWidgetValue: (void *)wvptr;
 - (void)fillWithWidgetValue: (void *)wvptr;
 - (EmacsMenu *)addSubmenuWithTitle: (char *)title forFrame: (struct frame *)f;
-- (void) clear;
 - (Lisp_Object)runMenuAt: (NSPoint)p forFrame: (struct frame *)f
                  keymaps: (int)keymaps;
 @end
@@ -172,20 +171,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
    ========================================================================== */
 
-@interface EmacsDialogPanel : NSPanel
-   {
-   NSTextField *command;
-   NSTextField *title;
-   NSMatrix *matrix;
-   int rows, cols;
-   }
-- initFromContents: (Lisp_Object)menu isQuestion: (BOOL)isQ;
-- addButton: (char *)str value: (Lisp_Object)val row: (int)row key: (NSString *)key;
-- addString: (char *)str row: (int)row;
-- addSplit;
-- (Lisp_Object)runDialogAt: (NSPoint)p;
-@end
-
 @interface EmacsTooltip : NSObject
   {
     NSWindow *win;
@@ -198,6 +183,18 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 - (void) hide;
 - (BOOL) isActive;
 - (NSRect) frame;
+@end
+
+@interface EmacsAlertPanel : NSAlert
+{
+  @public
+  Lisp_Object *returnValues;
+  int returnValueCount;
+}
+- init;
+- (void) alertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo;
+- (void) processDialogFromList: (Lisp_Object)list;
+
 @end
 
 
@@ -369,6 +366,7 @@ typedef unsigned long NSUInteger;
 #define KEY_NS_NEW_FRAME               ((1<<28)|(0<<16)|12)
 #define KEY_NS_TOGGLE_TOOLBAR          ((1<<28)|(0<<16)|13)
 #define KEY_NS_SHOW_PREFS              ((1<<28)|(0<<16)|14)
+#define KEY_NS_CHANGE_COLOR            ((1<<28)|(0<<16)|17)
 #define KEY_NS_CHECK_SPELLING          ((1<<28)|(0<<16)|20)
 #define KEY_NS_SPELLING_CHANGE         ((1<<28)|(0<<16)|21)
 #define KEY_NS_APPLICATION_ACTIVATED   ((1<<28)|(0<<16)|90)
@@ -718,7 +716,6 @@ extern void nxatoms_of_nsselect ();
 extern int ns_lisp_to_cursor_type ();
 extern Lisp_Object ns_cursor_type_to_lisp (int arg);
 extern Lisp_Object Qnone;
-extern char ns_no_defaults;
 
 extern int
 ns_defined_color (struct frame *f, char *name, XColor *color_def, int alloc,

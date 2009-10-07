@@ -75,6 +75,7 @@ EmacsMenu *mainMenu, *svcsMenu, *dockMenu;
 /* Nonzero means a menu is currently active.  */
 static int popup_activated_flag;
 static NSModalSession popupSession;
+static EmacsAlertPanel *popupSessionAlert;
 
 Lisp_Object Vns_tool_bar_size_mode;
 Lisp_Object Vns_tool_bar_display_mode;
@@ -160,7 +161,7 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
 
   if (menu == nil)
     {
-      menu = [[EmacsMenu alloc] initWithTitle: @"Aquamacs/Cocoa"];
+      menu = [[EmacsMenu alloc] initWithTitle: @"Aquamacs"];
       needsSet = YES;
     }
   else
@@ -178,7 +179,7 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
   /* widget_value is a straightforward object translation of emacs's
      Byzantine lisp menu structures */
   wv = xmalloc_widget_value ();
-  wv->name = "Aquamacs/Cocoa";
+  wv->name = "Aquamacs";
   wv->value = 0;
   wv->enabled = 1;
   wv->button_type = BUTTON_TYPE_NONE;
@@ -572,6 +573,11 @@ name_is_separator (name)
    to set_frame_menubar */
 - (void)menuNeedsUpdate: (NSMenu *)menu
 {
+  /* events may be sent to recently deleted frames,
+     FRAME_NS_VIEW (frame) returns 0x0 */
+  if (! (frame && FRAME_LIVE_P (frame) && FRAME_NS_VIEW (frame)))
+    return;
+
   NSEvent *event = [[FRAME_NS_VIEW (frame) window] currentEvent];
   /* HACK: Cocoa/Carbon will request update on every keystroke
      via IsMenuKeyEvent -> CheckMenusForKeyEvent.  These are not needed
@@ -624,7 +630,6 @@ name_is_separator (name)
     }
   return [NSString stringWithFormat: @"%c", tpos[2]];
 }
-
 
 - (NSMenuItem *)addItemWithWidgetValue: (void *)wvptr
 {
@@ -681,7 +686,8 @@ name_is_separator (name)
     {
       NSMenuItem *item = [self itemAtIndex: n];
       NSString *title = [item title];
-      if (([title length] == 0 || [@"Apple" isEqualToString: title])
+      if (([title length] == 0 || [@"Aquamacs" isEqualToString: title]
+	   || [@"Apple" isEqualToString: title])
           && ![item isSeparatorItem])
         continue;
       [self removeItemAtIndex: n];
@@ -1821,7 +1827,9 @@ pop_down_menu (Lisp_Object arg)
       popup_activated_flag = 0;
       BLOCK_INPUT;
       [NSApp endModalSession: popupSession];
-      [((EmacsDialogPanel *) (p->pointer)) close];
+      [NSApp endSheet:[popupSessionAlert window]];
+      [popupSessionAlert release];
+      //[[((EmacsAlertPanel *) (p->pointer)) window] close];
       [[FRAME_NS_VIEW (SELECTED_FRAME ()) window] makeKeyWindow];
       UNBLOCK_INPUT;
     }
@@ -1832,8 +1840,8 @@ pop_down_menu (Lisp_Object arg)
 Lisp_Object
 ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
 {
-  id dialog;
-  Lisp_Object window, tem;
+  EmacsAlertPanel *dialog;
+  Lisp_Object window, tem=Qnil;
   struct frame *f;
   NSPoint p;
   BOOL isQ;
@@ -1885,20 +1893,91 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
   p.y = (int)f->top_pos + (FRAME_LINE_HEIGHT (f) * f->text_lines)/2;
 
   BLOCK_INPUT;
-  dialog = [[EmacsDialogPanel alloc] initFromContents: contents
-                                           isQuestion: isQ];
+  dialog = [[EmacsAlertPanel alloc] init];
+
+  Lisp_Object head;
+  /* read contents */
+  if (XTYPE (contents) == Lisp_Cons)
+    {
+      head = Fcar (contents);
+      [((EmacsAlertPanel*)dialog) processDialogFromList: Fcdr (contents)];
+    }
+  else
+    head = contents;
+
+  if (XTYPE (head) == Lisp_String)
+    {
+      char* split = strchr( SDATA (head), '\n');
+      if ( split )
+	{
+	  split[0] = '\0'; 
+	  [dialog setMessageText:
+		   [NSString stringWithUTF8String: SDATA (head)]];
+	  split[0] = '\n';  /* not nice, but works */
+	  [dialog setInformativeText:
+		   [NSString stringWithUTF8String: split+1]];
+	} else
+	{
+	  [dialog setMessageText:
+		   [NSString stringWithUTF8String: SDATA (head)]];
+	}
+    }
+ 
+  {
+    int i;
+      
+  NSInteger ret = -1;
+
   {
     int specpdl_count = SPECPDL_INDEX ();
     record_unwind_protect (pop_down_menu, make_save_value (dialog, 0));
     popup_activated_flag = 1;
-    tem = [dialog runDialogAt: p];
+
+  extern EMACS_TIME timer_check (int do_it_now);  
+
+  [dialog beginSheetModalForWindow:[FRAME_NS_VIEW (f) window]
+		     modalDelegate:dialog
+		    didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:)
+		       contextInfo:&ret];
+    
+
+  
+  /* initiate a session that will be ended by pop_down_menu */
+  popupSessionAlert = [dialog retain];  
+  popupSession = [NSApp beginModalSessionForWindow: [dialog window]];
+  
+  
+  while (popup_activated_flag
+	 && ret == -1
+         && ([NSApp runModalSession: popupSession]
+	     == NSRunContinuesResponse))
+    {
+      /* Run this for timers.el, indep of atimers; might not return.
+         TODO: use return value to avoid calling every iteration. */
+      timer_check (1);
+      [NSThread sleepUntilDate: [NSDate dateWithTimeIntervalSinceNow: 0.1]];
+    }
+
+  if (ret>=0 && ret<dialog->returnValueCount)
+    {
+      // *(EMACS_INT*)(&tem)
+      tem = (Lisp_Object) dialog->returnValues[ret];
+      if ([[dialog suppressionButton] state] == NSOnState)
+	{
+	  tem = Fcons (tem, dialog->returnValues[[[dialog suppressionButton] tag]]);
+	}
+    }
     unbind_to (specpdl_count, Qnil);  /* calls pop_down_menu */
   }
   UNBLOCK_INPUT;
-  if (tem == XHASH(Vcancel_special_indicator_flag)) Fsignal (Qquit, Qnil); /*special button value for cancel*/
+  [dialog release];
+  if (ret==-2) /*cancel*/
+     Fsignal (Qquit, Qnil); /*special button value for cancel*/
+
   return tem;
 }
 
+}
 
 /* ==========================================================================
 
@@ -1918,318 +1997,97 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object contents, Lisp_Object header)
 }
 @end
 
-@implementation EmacsDialogPanel
 
-#define SPACER		6.0
-#define ICONSIZE	64.0
-#define TEXTHEIGHT	20.0
-#define MINCELLWIDTH	90.0
 
-- initWithContentRect: (NSRect)contentRect styleMask: (unsigned int)aStyle
-              backing: (NSBackingStoreType)backingType defer: (BOOL)flag
+@implementation EmacsAlertPanel
+- init
 {
-  NSSize spacing = {SPACER};
-  NSRect area;
-  char this_cmd_name[80];
-  id cell;
-  static NSImageView *imgView;
-  static FlippedView *contentView;
-
-  if (imgView == nil)
-    {
-      NSImage *img;
-      area.origin.x   = 3*SPACER;
-      area.origin.y   = 2*SPACER;
-      area.size.width = ICONSIZE;
-      area.size.height= ICONSIZE;
-      img = [[NSImage imageNamed: @"NSApplicationIcon"] copy];
-      [img setScalesWhenResized: YES];
-      [img setSize: NSMakeSize (ICONSIZE, ICONSIZE)];
-      imgView = [[NSImageView alloc] initWithFrame: area];
-      [imgView setImage: img];
-      [imgView setEditable: NO];
-      [img release];
-    }
-
-  aStyle = NSTitledWindowMask;
-  flag = YES;
-  rows = 0;
-  cols = 1;
-  [super initWithContentRect: contentRect styleMask: aStyle
-                     backing: backingType defer: flag];
-  contentView = [[FlippedView alloc] initWithFrame: [[self contentView] frame]];
-  [self setContentView: contentView];
-
-  [[self contentView] setAutoresizesSubviews: YES];
-
-  [[self contentView] addSubview: imgView];
-  [self setTitle: @""];
-
-  area.origin.x   += ICONSIZE+2*SPACER;
-/*  area.origin.y   = TEXTHEIGHT; ICONSIZE/2-10+SPACER; */
-  area.size.width = 400;
-  area.size.height= TEXTHEIGHT;
-  command = [[[NSTextField alloc] initWithFrame: area] autorelease];
-  [[self contentView] addSubview: command];
-  [command setStringValue: @"Aquamacs"];
-  [command setDrawsBackground: NO];
-  [command setBezeled: NO];
-  [command setSelectable: NO];
-  [command setFont: [NSFont boldSystemFontOfSize: 13.0]];
-
-/*  area.origin.x   = ICONSIZE+2*SPACER;
-  area.origin.y   = TEXTHEIGHT + 2*SPACER;
-  area.size.width = 400;
-  area.size.height= 2;
-  tem = [[[NSBox alloc] initWithFrame: area] autorelease];
-  [[self contentView] addSubview: tem];
-  [tem setTitlePosition: NSNoTitle];
-  [tem setAutoresizingMask: NSViewWidthSizable];*/
-
-/*  area.origin.x = ICONSIZE+2*SPACER; */
-  area.origin.y += TEXTHEIGHT+SPACER;
-  area.size.width = 400;
-  area.size.height= TEXTHEIGHT;
-  title = [[[NSTextField alloc] initWithFrame: area] autorelease];
-  [[self contentView] addSubview: title];
-  [title setDrawsBackground: NO];
-  [title setBezeled: NO];
-  [title setSelectable: NO];
-  [title setFont: [NSFont systemFontOfSize: 11.0]];
-
-  cell = [[[NSButtonCell alloc] initTextCell: @""] autorelease];
-  [cell setBordered: NO];
-  [cell setEnabled: NO];
-  [cell setCellAttribute: NSCellIsInsetButton to: 8];
-  [cell setBezelStyle: NSRoundedBezelStyle];
-
-  matrix = [[NSMatrix alloc] initWithFrame: contentRect 
-                                      mode: NSHighlightModeMatrix 
-                                 prototype: cell 
-                              numberOfRows: 0 
-                           numberOfColumns: 1];
-  [[self contentView] addSubview: matrix];
-  [matrix release];
-  [matrix setFrameOrigin: NSMakePoint (area.origin.x,
-                                      area.origin.y + (TEXTHEIGHT+3*SPACER))];
-  [matrix setIntercellSpacing: spacing];
-
-  [self setOneShot: YES];
-  [self setReleasedWhenClosed: YES];
-  [self setHidesOnDeactivate: YES];
-  return self;
-}
-
-
-- (BOOL)windowShouldClose: (id)sender
-{
-  [NSApp stopModalWithCode: XHASH (Qnil)]; // FIXME: BIG UGLY HACK!!
-  return NO;
-}
-
-
-void process_dialog (id window, Lisp_Object list)
-{
-  Lisp_Object item;
-  int row = 0;
-  int cancel = 1,
-    buttons = 0;
-
-  for (; CONSP (list); list = XCDR (list))
-    {
-      item = XCAR (list);
-      if (STRINGP (item))
-        {
-          [window addString: SDATA (item) row: row++];
-        }
-      else if (EQ (item, intern ("no-cancel")))
-        {
-          cancel = 0;
-        }
-      else if (CONSP (item) ) /*  (XTYPE (item) == Lisp_Cons) */
-        {
-          [window addButton: SDATA (XCAR (item))
-		  value: XCDR (item) row: row++ key:nil];
-	  buttons++;
-        }
-      else if (NILP (item))
-        {
-          [window addSplit];
-          row = 0;
-        }
-    }
-  if (cancel || buttons == 0)
-    [window addButton: "Cancel"
-		value: Vcancel_special_indicator_flag row: row++ key: @"\e"];
-}
-
-
-- addButton: (char *)str value: (Lisp_Object)val row: (int)row key: (NSString *)key
-{
-  id cell;
-       
-  if (row >= rows)
-    {
-      [matrix addRow];
-      rows++;
-    }
-  cell = [matrix cellAtRow: row column: cols-1];
-  [cell setTarget: self];
-  [cell setAction: @selector (clicked: )];
-  [cell setTitle: [NSString stringWithUTF8String: str]];
-  [cell setTag: XHASH (val)];	// FIXME: BIG UGLY HACK!!
-  [cell setBordered: YES];
-  [cell setEnabled: YES];
-  if (key != nil) [cell setKeyEquivalent: key];
-
-  return self;
-}
-
-
-- addString: (char *)str row: (int)row
-{
-  id cell;
-       
-  if (row >= rows)
-    {
-      [matrix addRow];
-      rows++;
-    }
-  cell = [matrix cellAtRow: row column: cols-1];
-  [cell setTitle: [NSString stringWithUTF8String: str]];
-  [cell setBordered: YES];
-  [cell setEnabled: NO];
-
-  return self;
-}
-
-
-- addSplit
-{
-  [matrix addColumn];
-  cols++;
-  return self;
-}
-
-
-- clicked: sender
-{
-  NSArray *sellist = nil;
-  EMACS_INT seltag;
-
-  sellist = [sender selectedCells];
-  if ([sellist count]<1) 
-    return self;
-
-  seltag = [[sellist objectAtIndex: 0] tag];
-  if (seltag != XHASH (Qundefined)) // FIXME: BIG UGLY HACK!!
-    [NSApp stopModalWithCode: seltag];
-  return self;
-}
-
-
-- initFromContents: (Lisp_Object)contents isQuestion: (BOOL)isQ
-{
-  Lisp_Object head;
   [super init];
-
-  if (XTYPE (contents) == Lisp_Cons)
-    {
-      head = Fcar (contents);
-      process_dialog (self, Fcdr (contents));
-    }
-  else
-    head = contents;
-
-  if (XTYPE (head) == Lisp_String)
-      [title setStringValue:
-                 [NSString stringWithUTF8String: SDATA (head)]];
-  else if (isQ == YES)
-      [title setStringValue: @"Question"];
-  else
-      [title setStringValue: @"Information"];
-
-  {
-    int i;
-    NSRect r, s, t;
-
-    if (cols == 1 && rows > 1)	/* Never told where to split */
-      {
-        [matrix addColumn];
-        for (i = 0; i<rows/2; i++)
-          {
-            [matrix putCell: [matrix cellAtRow: (rows+1)/2 column: 0]
-                      atRow: i column: 1];
-            [matrix removeRow: (rows+1)/2];
-          }
-      }
-
-    [matrix sizeToFit];
-    {
-      NSSize csize = [matrix cellSize];
-      if (csize.width < MINCELLWIDTH)
-        {
-          csize.width = MINCELLWIDTH;
-          [matrix setCellSize: csize];
-          [matrix sizeToCells];
-        }
-    }
-
-    [title sizeToFit];
-    [command sizeToFit];
-
-    t = [matrix frame];
-    r = [title frame];
-    if (r.size.width+r.origin.x > t.size.width+t.origin.x)
-      {
-        t.origin.x   = r.origin.x;
-        t.size.width = r.size.width;
-      }
-    r = [command frame];
-    if (r.size.width+r.origin.x > t.size.width+t.origin.x)
-      {
-        t.origin.x   = r.origin.x;
-        t.size.width = r.size.width;
-      }
-
-    r = [self frame];
-    s = [(NSView *)[self contentView] frame];
-    r.size.width  += t.origin.x+t.size.width +2*SPACER-s.size.width;
-    r.size.height += t.origin.y+t.size.height+SPACER-s.size.height;
-    [self setFrame: r display: NO];
-  }
-
+  returnValues = calloc(sizeof(Lisp_Object), 20);
+  returnValueCount = 0;
   return self;
 }
-
-
 - (void)dealloc
 {
-  { [super dealloc]; return; };
+  free(returnValues);
+  [super dealloc];
 }
 
 
-- (Lisp_Object)runDialogAt: (NSPoint)p
+- (void) alertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
 {
-  int ret;
+  * ((NSInteger*) contextInfo) = returnCode;
+}
 
-  /* initiate a session that will be ended by pop_down_menu */
-  popupSession = [NSApp beginModalSessionForWindow: self];
-  while (popup_activated_flag
-         && (ret = [NSApp runModalSession: popupSession])
-              == NSRunContinuesResponse)
+/* do to: move this into init: */
+- (void) processDialogFromList: (Lisp_Object)list
+{
+  Lisp_Object item;
+  int cancel = 1;
+  for (; CONSP (list) && returnValueCount<20; list = XCDR (list))
     {
-      /* Run this for timers.el, indep of atimers; might not return.
-         TODO: use return value to avoid calling every iteration. */
-      timer_check (1);
-      [NSThread sleepUntilDate: [NSDate dateWithTimeIntervalSinceNow: 0.1]];
+      item = XCAR (list);
+      
+      if (STRINGP (item))
+        { /* inactive button */
+          [[self addButtonWithTitle: [NSString stringWithUTF8String: SDATA (item)] ] setEnabled:NO];
+        } 
+      else if (NILP (item))
+        { /* unfortunately, NSAlert will resize this button.  We can
+	     only customize after a call to update:, but then the
+	     other buttons are already positioned so it would be
+	     pointless.  */
+	  NSButton *space = [self addButtonWithTitle: @" " ];
+	  [space setHidden:YES];
+        }
+      else if (CONSP (item)) 
+        { 
+	  NSString *title = @"malformed";
+	  NSString *key = nil;
+	  NSButton *button = nil;
+	  if (CONSP (XCAR (item))) /* key specified? */
+	    {
+	      if (STRINGP (XCAR (XCAR (item))))
+		title = [NSString stringWithUTF8String: SDATA (XCAR (XCAR (item)))];
+	      if (STRINGP ( XCDR (XCAR (item))))
+		key =  [NSString stringWithUTF8String: SDATA (XCDR (XCAR (item)))];
+	      else
+		key = nil;
+	    }
+	  else
+	    {
+	      if (STRINGP (XCAR (item)))
+		title = [NSString stringWithUTF8String: SDATA (XCAR (item))];
+	    }
+	  if (EQ (XCDR (item), intern ("suppress")))
+	    {
+	      [self setShowsSuppressionButton:YES];
+	      button = [self suppressionButton];
+	      [button setTitle:title];
+	    } 
+	  else
+	    { /* normal button*/
+	      button = [self addButtonWithTitle: title];
+	    }
+	  [button setTag: returnValueCount];
+	  if (key)
+	    [button setKeyEquivalent: key];
+
+	  returnValues[returnValueCount++] = XCDR (item);
+        }
+      else if (EQ (item, intern ("cancel")))
+	{ /* add cancel button */
+	  [[self addButtonWithTitle:  @"Cancel"] setTag: -2];
+	  cancel = 0;
+	}    
+      else if (EQ (item, intern ("no-cancel")))
+	{ /* skip cancel button */
+	  cancel = 0;
+	}    
     }
 
-  {				/* FIXME: BIG UGLY HACK!!! */
-      Lisp_Object tmp;
-      *(EMACS_INT*)(&tmp) = ret;
-      return tmp;
-  }
+  if (cancel || returnValueCount == 0)
+    [[self addButtonWithTitle: @"Cancel"] setTag: -2];
 }
 
 @end
@@ -2303,17 +2161,33 @@ It is a list of the form (DIALOG ITEM1 ITEM2...).
 Each ITEM is a cons cell (STRING . VALUE).
 The return value is VALUE from the chosen item.
 
+In Aquamacs, STRING may be a title string, or of the form 
+(TITLE . KEYSTRING), where TITLE is a string indicating the
+button title, and KEYSTRING a one-letter string giving the
+key equivalent for the button. 
+
 An ITEM may also be just a string--that makes a nonselectable item.
 An ITEM may also be nil--that means to put all preceding items
 on the left of the dialog box and all following items on the right.
-\(By default, approximately half appear on each side.)
+
+In Aquamacs, if VALUE is `suppress', the button will be shown as a 
+checkbox which can be selected in addition to any of the other buttons
+except Cancel. In this case, the return value is a cons cell of the
+form (VALUE . suppress).
+
+In Aquamacs, an ITEM may be `cancel' to insert a cancel button.  If there
+is an ITEM `no-cancel', no cancel button will be inserted at all;
+if there is no such item, a default cancel button will be inserted.
+
+The order of buttons in the dialog follows system conventions; the
+default button should be specified first in the list of ITEMs.
 
 If HEADER is non-nil, the frame title for the box is "Information",
-otherwise it is "Question".
+otherwise it is "Question".  HEADER is unused in Aquamacs.
 
 If the user gets rid of the dialog box without making a valid choice,
-for instance using the window manager, then this produces a quit and
-`x-popup-dialog' does not return.  */)
+for instance using the window manager or using a cancel button,
+then this produces a quit and `x-popup-dialog' does not return.  */)
      (position, contents, header)
      Lisp_Object position, contents, header;
 {

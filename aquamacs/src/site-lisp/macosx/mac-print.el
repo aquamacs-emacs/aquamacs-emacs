@@ -180,23 +180,22 @@ in HTML format."
 	 (message "Warning - possibly incompatible htmlize package installed. 
 Remove from your load-path for optimal printing / export results."))
     (require 'mule) ; for coding-system-get
-    (let* (
+    (setq htmlize-ignore-colors mac-print-monochrome-mode)
+
+    (let* ((htmlize-ignore-colors mac-print-monochrome-mode)
 	   (htmlize-html-major-mode nil)
 	   (htmlize-html-charset 
 	    (if buffer-file-coding-system
 		(coding-system-get buffer-file-coding-system
 				   'mime-charset)))
 	   (show-paren-mode-save show-paren-mode)
-	   
 	   (html (unwind-protect
 		     (progn
 		       (show-paren-mode 0)
 		       (if mark-active
 			   (htmlize-region (region-beginning) 
-					   (region-end)
-					   mac-print-monochrome-mode)
-			 (htmlize-buffer (current-buffer)
-					 mac-print-monochrome-mode)))
+					   (region-end))
+			 (htmlize-buffer (current-buffer))))
 		   (show-paren-mode show-paren-mode-save))))
  
       (with-current-buffer html

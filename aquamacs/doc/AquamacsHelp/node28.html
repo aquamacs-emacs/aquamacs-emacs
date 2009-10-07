@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Load path</TITLE>
-<META NAME="description" CONTENT="Load path">
+<TITLE>Plug-in Interface</TITLE>
+<META NAME="description" CONTENT="Plug-in Interface">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,78 +21,66 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="node29.html">
 <LINK REL="previous" HREF="node27.html">
-<LINK REL="up" HREF="node26.html">
+<LINK REL="up" HREF="node27.html">
 <LINK REL="next" HREF="node29.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html515"
+<A NAME="tex2html518"
   HREF="node29.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html511"
-  HREF="node26.html">
+<A NAME="tex2html514"
+  HREF="node27.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html505"
+<A NAME="tex2html508"
   HREF="node27.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html513"
+<A NAME="tex2html516"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html516"
-  HREF="node29.html">Disabling a plug-in or</A>
-<B> Up:</B> <A NAME="tex2html512"
-  HREF="node26.html">Extending Aquamacs</A>
-<B> Previous:</B> <A NAME="tex2html506"
-  HREF="node27.html">Plug-in Interface</A>
- &nbsp; <B>  <A NAME="tex2html514"
+<B> Next:</B> <A NAME="tex2html519"
+  HREF="node29.html">Load path</A>
+<B> Up:</B> <A NAME="tex2html515"
+  HREF="node27.html">Extending Aquamacs</A>
+<B> Previous:</B> <A NAME="tex2html509"
+  HREF="node27.html">Extending Aquamacs</A>
+ &nbsp; <B>  <A NAME="tex2html517"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION00062000000000000000">
-Load path</A>
+<H2><A NAME="SECTION00061000000000000000">
+Plug-in Interface</A>
 </H2>
 
 <P>
-Aquamacs is able to find configuration files and Emacs packages
-from any of the following locations (load-path). 
-<A NAME="standardpaths"></A>
-<P>
-
-<UL>
-<LI><TT>/Library/Application Support/Aquamacs Emacs/</TT>
-</LI>
-<LI><TT>/Users/User Name/Library/Preferences/Aquamacs Emacs/ </TT>
-</LI>
-</UL>
-The following paths are available in the load-path for individual preference settings. <I>They should 
-not be used if you distribute a point-and-click installer package.</I>
-
-<UL>
-<LI><TT>/Library/Preferences/Aquamacs Emacs/ </TT>
-</LI>
-<LI><TT>/Users/User Name/Library/Preferences/Aquamacs Emacs/ </TT>
-</LI>
-</UL>
+All files named <I>site-start.el</I> anywhere in the load-path are loaded at startup, before the user's init files are loaded. For example, such a file may be placed in 
+<BR><TT>/Users/User Name/Library/Application Support/Aquamacs Emacs/myPlugin</TT>. 
 
 <P>
-All subsequent directories are added recursively, so Aquamacs will
-find any path that starts below. Type <TT>C-h v load-path</TT> for more
-information.<A NAME="tex2html24"
-  HREF="footnode.html#foot241"><SUP>7</SUP></A>
-<BR>
+The load-path is automatically extended to cover all subdirectories in standard paths (see Section <A HREF="node29.html#standardpaths">5.2</A>).
+
+<P>
+If a plug-in needs to execute code earlier in the initialization phase, that is, before any Aquamacs- specific code is executed (but after Emacs initilization code has been executed), this code can be provided in a file <I>site-prestart.el</I> anywhere in the load-path.
+
+<P>
+Info files (M-x info) can be provided in a directory called <TT>info</TT> inside the plugin directory. Aquamacs will automatically add this path to `Info-default-directory-list'. Plugins should provide a <TT>dir</TT> file inside the <TT>info</TT> directory containing an overview (see the Emacs documentation for `info').
+
+<P>
+Note that plug-ins should not make any assumptions about whether a frame exists or is visible.
+
 <P>
 <BR><HR>
 <ADDRESS>
 <I>David</I>
-<BR><I>2009-06-24</I>
+<BR><I>2009-08-06</I>
 </ADDRESS>
 </BODY>
 </HTML>

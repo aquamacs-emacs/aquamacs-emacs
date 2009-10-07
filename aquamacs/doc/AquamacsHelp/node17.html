@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Window</TITLE>
-<META NAME="description" CONTENT="Window">
+<TITLE>The Right Look: Colors and Fonts for Frames and Modes</TITLE>
+<META NAME="description" CONTENT="The Right Look: Colors and Fonts for Frames and Modes">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -19,63 +19,77 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="STYLESHEET" HREF="aquamacs.css">
 
-<LINK REL="next" HREF="node18.html">
-<LINK REL="previous" HREF="node11.html">
-<LINK REL="up" HREF="node7.html">
+<LINK REL="previous" HREF="node16.html">
+<LINK REL="up" HREF="node12.html">
 <LINK REL="next" HREF="node18.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html379"
+<A NAME="tex2html382"
   HREF="node18.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html375"
-  HREF="node7.html">
+<A NAME="tex2html378"
+  HREF="node12.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html369"
+<A NAME="tex2html374"
   HREF="node16.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html377"
+<A NAME="tex2html380"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html380"
-  HREF="node18.html">Tools</A>
-<B> Up:</B> <A NAME="tex2html376"
-  HREF="node7.html">In Depth: The Aquamacs</A>
-<B> Previous:</B> <A NAME="tex2html370"
-  HREF="node16.html">The Right Look: Colors</A>
- &nbsp; <B>  <A NAME="tex2html378"
+<B> Next:</B> <A NAME="tex2html383"
+  HREF="node18.html">Window</A>
+<B> Up:</B> <A NAME="tex2html379"
+  HREF="node12.html">Options</A>
+<B> Previous:</B> <A NAME="tex2html375"
+  HREF="node16.html">Languages of the World</A>
+ &nbsp; <B>  <A NAME="tex2html381"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION00045000000000000000">
-Window</A>
-</H2>
-The Window menu allows you to navigate through the windows and frames that you may have open. Note that a ``buffer'' is not synonymous with a window or frame, in that you can split a frame and have more than one buffer contained within. (Multiple windows/frames is a feature of Aquamacs; standard Emacs does not support this.) In addition to standard frames that display open files, there are a few other important buffer types. One is the ``scratch'' buffer, which is simply a buffer to type notes into; this can also be the starting point for a file to save, and a buffer to type configuration commands for Aquamacs (an advanced feature). Another is the ``Messages'' buffer, which displays a log of output from Emacs commands and operations. Finally, there is the ``info'' buffer, in which Aquamacs Emacs displays built-in user help, tutorials and other documentation in Emacs' ``info'' format.
+<H3><A NAME="SECTION00045400000000000000"></A>
+<A NAME="Look"></A><A NAME="frame-appearance-styles"></A>
+<BR>
+The Right Look: Colors and Fonts for Frames and Modes
+</H3>
+Aquamacs allows you to alter specific features of the current frame
+via functions in the Options menu. ``Font for *-mode...'' lets you
+choose from the installed system fonts.  You can also choose foreground and background colors.  <I> These settings only apply to buffers in the current major mode</I>, provided <I>Autofaces</I> is turned on (as is by default).  Without Autofaces, the settings apply to all frames and set the frame default.  
 
 <P>
-From the Window menu, you can also open a new ``frame,'', or split the open window into two separate ones. The keyboard shortcuts for these commands are the traditional Emacs ones (see the menubar).
+With <I>Autofaces</I>, Aquamacs Emacs lets you pick a style specific to the current
+mode.  For example, you can use different font settings when you are editing
+C or LaTeX, then when you are editing a text file.   Note that all settings not sepcified for the mode are taken over from the default. Specifically, color and font choices are prioritized in this order: <I>1.</I> Mode-specific face, <I>2.</I> Autoface Default Face, <I>3.</I> Frame default.
+
+<P>
+You can use ``Adopt Frame Parameters as Frame Default'' to accept the appearance of the current frame for future frames; this includes the visibility of the tool bar, fringes, and more (but not position and size).
+
+<P>
+If you're more of an Emacs expert and you'd like to configure things manually by means of elisp or the customization buffer, configure the following faces. With Autofaces, you can customize the faces directly (via M-x customize-face).  The face name for a major mode is always named after the major mode, e.g. ``latex-mode-default'' is the autoface face for `latex-mode'.  The Autoface default face is named `autoface-default'. 
+The default for all frames is the `default' face.
+
+<P>
+You can also customize the variables for the frame default: ``default-frame-alist'' and ``initial-frame-alist'', as documented in the Emacs manual.  You can, alternatively, use ``Adopt Frame Parameters as Frame Default'' to accept the appearance of the current frame for future frames; this includes the visibility of the tool bar.
 
 <P>
 
-<DIV ALIGN="CENTER"><A NAME="buffers.jpg"></A><A NAME="103"></A>
+<DIV ALIGN="CENTER"><A NAME="theme.jpg"></A><A NAME="101"></A>
 <TABLE>
-<CAPTION ALIGN="BOTTOM"><STRONG>Figure 3:</STRONG>
-Using multiple buffers and windows in Aquamacs Emacs is
-a powerful tool for enhancing productivity.</CAPTION>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 2:</STRONG>
+Aquamacs with a custom style applied.</CAPTION>
 <TR><TD>
 <DIV ALIGN="CENTER"><IMG
-  WIDTH="500" HEIGHT="375" ALIGN="BOTTOM" BORDER="0"
- SRC="./buffers.jpg"
- ALT="Image buffers">
+  WIDTH="500" HEIGHT="439" ALIGN="BOTTOM" BORDER="0"
+ SRC="./theme.jpg"
+ ALT="Image theme">
 </DIV></TD></TR>
 </TABLE>
 </DIV>
@@ -83,35 +97,35 @@ a powerful tool for enhancing productivity.</CAPTION>
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html379"
+<A NAME="tex2html382"
   HREF="node18.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html375"
-  HREF="node7.html">
+<A NAME="tex2html378"
+  HREF="node12.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html369"
+<A NAME="tex2html374"
   HREF="node16.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html377"
+<A NAME="tex2html380"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html380"
-  HREF="node18.html">Tools</A>
-<B> Up:</B> <A NAME="tex2html376"
-  HREF="node7.html">In Depth: The Aquamacs</A>
-<B> Previous:</B> <A NAME="tex2html370"
-  HREF="node16.html">The Right Look: Colors</A>
- &nbsp; <B>  <A NAME="tex2html378"
+<B> Next:</B> <A NAME="tex2html383"
+  HREF="node18.html">Window</A>
+<B> Up:</B> <A NAME="tex2html379"
+  HREF="node12.html">Options</A>
+<B> Previous:</B> <A NAME="tex2html375"
+  HREF="node16.html">Languages of the World</A>
+ &nbsp; <B>  <A NAME="tex2html381"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 <I>David</I>
-<BR><I>2009-06-24</I>
+<BR><I>2009-08-06</I>
 </ADDRESS>
 </BODY>
 </HTML>

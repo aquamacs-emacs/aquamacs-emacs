@@ -474,8 +474,10 @@ See `blank-display-mappings'."
   :group 'blank)
 
 
- ;; 2230 = \x8B6
-(defvar show-newlines-newline-code (vector (make-glyph-code 2230 'blank-newline) 10))
+;; Pilcrow Unicode 00b6
+(defvar show-newlines-newline-code
+  (vector (make-glyph-code ?\x00B6  'blank-newline) 10))
+
 (define-minor-mode show-newlines-mode
   "Mark newlines in current buffer"
  :group 'convenience

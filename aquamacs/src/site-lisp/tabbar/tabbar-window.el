@@ -432,14 +432,18 @@ before deleting."
 	    ;; a lot of buffers (e.g. dired) may be modified,
 	    ;; but have no file name
 	    (if (aquamacs-ask-for-confirmation
-		 (format "Save buffer %s to file before killing it? " (buffer-name)) nil)
-		(progn
-		  (save-buffer)
-		  (message "File saved.")
-		  )
+		  (format "Save buffer %s to file before closing tab? 
+The buffer contains unsaved changes which will be lost if you discard them now." (buffer-name)) 
+		 nil (format "Save%s" (if buffer-file-name "" "...")) "Don't Save")
+		(progn 
+		    (if (listp last-nonmenu-event)
+			(mac-key-save-file)
+		      (save-buffer))
+		    (if (buffer-modified-p)
+			(keyboard-quit)
+		      (message "File saved.")))
 	      ;; mark as not modified, so it will be killed for sure
-	      (set-buffer-modified-p nil)
-	      )
+	      (set-buffer-modified-p nil))
 	  (message ""))))
     (if (and killable (not dont-kill))
 	;; 'kill-buffer-hook will call tabbar-window-delete-tab, so don't
@@ -476,7 +480,10 @@ Updates tabbar-window-alist in the same way."
 
 (defun menu-bar-select-buffer (&optional buffer)
   (interactive)
-  (if display-buffer-reuse-frames
+  ;; if no frame visible, code below doesn't work right (why?)
+  ;; but switch-to-buffer (its one-buffer-one-frame.el advice) will
+  ;; bring up a good frame. To Do: delete tabs
+  (if (and display-buffer-reuse-frames (visible-frame-list))
       (let ((buffer (or buffer last-command-event)))
 	(unless (bufferp buffer)
 	  (error "menu-bar-select-buffer: not a buffer."))
@@ -498,6 +505,7 @@ Updates tabbar-window-alist in the same way."
 		    (lambda (w) (eq (window-buffer w) buffer)) nil t )))
 	    (if w
 		(progn
+		  ; (raise-frame (window-frame w))
 		  (make-frame-visible (window-frame w))
 		  (select-frame-set-input-focus (window-frame w))
 		  (select-window w)
@@ -506,9 +514,17 @@ Updates tabbar-window-alist in the same way."
 		    (switch-to-buffer (or buffer last-command-event))))
 	      ;; just create another frame for it
 	      (switch-to-buffer-other-frame buffer)))))
-    (switch-to-buffer (or buffer last-command-event))))
+    (let ((previously-vis (visible-frame-list)))
+      (switch-to-buffer (or buffer last-command-event))
+      (unless (memq (window-frame (selected-window)) previously-vis)
+	;; frame was hidden before
+	;; we don't want to show any leftover tabs after the switch
+	;; so remove the buffer tab list for that window
+	(let ((window-alist (assq (window-number (selected-window)) tabbar-window-alist)))
+	  (setq tabbar-window-alist 
+		(delq window-alist tabbar-window-alist)))))))
 
-;; shouldn't be done, because the normal switch-to-buffer
+;; The following shouldn't be done, because the normal switch-to-buffer
 ;; is not sensitive to display-buffer-reuse-frames
 ;; and always switches the buffer in the selected window.
 ;; doing what's shown below will create incompatibilities.

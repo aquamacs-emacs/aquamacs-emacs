@@ -120,6 +120,7 @@ Customize or call the function `grep-apply-setting'."
 The following place holders should be present in the string:
  <C> - place to put -i if case insensitive grep.
  <F> - file names and wildcards to search.
+ <X> - file names and wildcards to exclude.
  <R> - the regular expression searched for.
  <N> - place to insert null-device.
 
@@ -176,26 +177,42 @@ Customize or call the function `grep-apply-setting'."
   :group 'grep)
 
 (defcustom grep-files-aliases
-  '(("asm" .    "*.[sS]")
+  '(("all" .   "* .*")
+    ("el" .    "*.el")
+    ("ch" .    "*.[ch]")
     ("c" .     "*.c")
     ("cc" .    "*.cc *.cxx *.cpp *.C *.CC *.c++")
-    ("cchh" .    "*.cc *.[ch]xx *.[ch]pp *.[CHh] *.CC *.HH *.[ch]++")
+    ("cchh" .  "*.cc *.[ch]xx *.[ch]pp *.[CHh] *.CC *.HH *.[ch]++")
     ("hh" .    "*.hxx *.hpp *.[Hh] *.HH *.h++")
-    ("ch" .    "*.[ch]")
-    ("el" .    "*.el")
     ("h" .     "*.h")
-    ("l" .      "[Cc]hange[Ll]og*")
+    ("l" .     "[Cc]hange[Ll]og*")
     ("m" .     "[Mm]akefile*")
-    ("tex" .    "*.tex")
-    ("texi" .   "*.texi"))
+    ("tex" .   "*.tex")
+    ("texi" .  "*.texi")
+    ("asm" .   "*.[sS]"))
   "*Alist of aliases for the FILES argument to `lgrep' and `rgrep'."
   :type 'alist
   :group 'grep)
 
 (defcustom grep-find-ignored-directories
   vc-directory-exclusion-list
-  "*List of names of sub-directories which `rgrep' shall not recurse into."
-  :type '(repeat string)
+  "*List of names of sub-directories which `rgrep' shall not recurse into.
+If an element is a cons cell, the car is called on the search directory
+to determine whether cdr should not be recursed into."
+  :type '(choice (repeat :tag "Ignored directories" string)
+		 (const :tag "No ignored directories" nil))
+  :group 'grep)
+
+(defcustom grep-find-ignored-files
+  (cons ".#*" (delq nil (mapcar (lambda (s)
+				  (unless (string-match-p "/\\'" s)
+				    (concat "*" s)))
+				completion-ignored-extensions)))
+  "*List of file names which `rgrep' and `lgrep' shall exclude.
+If an element is a cons cell, the car is called on the search directory
+to determine whether cdr should not be excluded."
+  :type '(choice (repeat :tag "Ignored file" string)
+		 (const :tag "No ignored files" nil))
   :group 'grep)
 
 (defcustom grep-error-screen-columns nil
@@ -419,7 +436,7 @@ This variable's value takes effect when `grep-compute-defaults' is called.")
 
 ;; History of lgrep and rgrep regexp and files args.
 (defvar grep-regexp-history nil)
-(defvar grep-files-history '("ch" "el"))
+(defvar grep-files-history nil)
 
 ;;;###autoload
 (defun grep-process-setup ()
@@ -456,10 +473,11 @@ Set up `compilation-exit-message-function' and run `grep-setup-hook'."
   (run-hooks 'grep-setup-hook))
 
 (defun grep-probe (command args &optional func result)
-  (equal (condition-case nil
-	     (apply (or func 'process-file) command args)
-	   (error nil))
-	 (or result 0)))
+  (let (process-file-side-effects)
+    (equal (condition-case nil
+	       (apply (or func 'process-file) command args)
+	     (error nil))
+	   (or result 0))))
 
 ;;;###autoload
 (defun grep-compute-defaults ()
@@ -521,7 +539,7 @@ Set up `compilation-exit-message-function' and run `grep-setup-hook'."
 		(format "%s %s " grep-program grep-options)))
 	(unless grep-template
 	  (setq grep-template
-		(format "%s <C> %s <R> <F>" grep-program grep-options)))
+		(format "%s <X> <C> %s <R> <F>" grep-program grep-options)))
 	(unless grep-find-use-xargs
 	  (setq grep-find-use-xargs
 		(cond
@@ -745,24 +763,29 @@ substitution string.  Note dynamic scoping of variables.")
 
 (defun grep-read-files (regexp)
   "Read files arg for interactive grep."
-  (let* ((bn (or (buffer-file-name) (buffer-name)))
+  (let* ((bn (or (buffer-file-name)
+		 (replace-regexp-in-string "<[0-9]+>\\'" "" (buffer-name))))
 	 (fn (and bn
 		  (stringp bn)
 		  (file-name-nondirectory bn)))
+	 (default-alias
+	   (and fn
+		(let ((aliases grep-files-aliases)
+		      alias)
+		  (while aliases
+		    (setq alias (car aliases)
+			  aliases (cdr aliases))
+		    (if (string-match (wildcard-to-regexp (cdr alias)) fn)
+			(setq aliases nil)
+		      (setq alias nil)))
+		  (cdr alias))))
+	 (default-extension
+	   (and fn
+		(let ((ext (file-name-extension fn)))
+		  (and ext (concat "*." ext)))))
 	 (default
-	   (or (and fn
-		    (let ((aliases grep-files-aliases)
-			  alias)
-		      (while aliases
-			(setq alias (car aliases)
-			      aliases (cdr aliases))
-			(if (string-match (wildcard-to-regexp (cdr alias)) fn)
-			    (setq aliases nil)
-			  (setq alias nil)))
-		      (cdr alias)))
-	       (and fn
-		    (let ((ext (file-name-extension fn)))
-		      (and ext (concat "*." ext))))
+	   (or default-alias
+	       default-extension
 	       (car grep-files-history)
 	       (car (car grep-files-aliases))))
 	 (files (read-string
@@ -770,13 +793,16 @@ substitution string.  Note dynamic scoping of variables.")
 			 "\" in files"
 			 (if default (concat " (default " default ")"))
 			 ": ")
-		 nil 'grep-files-history default)))
+		 nil 'grep-files-history
+		 (delete-dups
+		  (delq nil (append (list default default-alias default-extension)
+				    (mapcar 'car grep-files-aliases)))))))
     (and files
 	 (or (cdr (assoc files grep-files-aliases))
 	     files))))
 
 ;;;###autoload
-(defun lgrep (regexp &optional files dir)
+(defun lgrep (regexp &optional files dir confirm)
   "Run grep, searching for REGEXP in FILES in directory DIR.
 The search is limited to file names matching shell pattern FILES.
 FILES may use abbreviations defined in `grep-files-aliases', e.g.
@@ -798,17 +824,18 @@ This command shares argument histories with \\[rgrep] and \\[grep]."
      (cond
       ((and grep-command (equal current-prefix-arg '(16)))
        (list (read-from-minibuffer "Run: " grep-command
-				   nil nil 'grep-history)
-	     nil))
+				   nil nil 'grep-history)))
       ((not grep-template)
-       (list nil
-	     (read-string "grep.el: No `grep-template' available. Press RET.")))
+       (error "grep.el: No `grep-template' available"))
       (t (let* ((regexp (grep-read-regexp))
 		(files (grep-read-files regexp))
 		(dir (read-directory-name "In directory: "
-					  nil default-directory t)))
-	   (list regexp files dir))))))
+					  nil default-directory t))
+		(confirm (equal current-prefix-arg '(4))))
+	   (list regexp files dir confirm))))))
   (when (and (stringp regexp) (> (length regexp) 0))
+    (unless (and dir (file-directory-p dir) (file-readable-p dir))
+      (setq dir default-directory))
     (let ((command regexp))
       (if (null files)
 	  (if (string= command grep-command)
@@ -817,9 +844,22 @@ This command shares argument histories with \\[rgrep] and \\[grep]."
 	(setq command (grep-expand-template
 		       grep-template
 		       regexp
-		       files))
+		       files
+		       nil
+		       (and grep-find-ignored-files
+			    (concat " --exclude="
+				    (mapconcat
+				     #'(lambda (ignore)
+					 (cond ((stringp ignore)
+						(shell-quote-argument ignore))
+					       ((consp ignore)
+						(and (funcall (car ignore) dir)
+						     (shell-quote-argument
+						      (cdr ignore))))))
+				     grep-find-ignored-files
+				     " --exclude=")))))
 	(when command
-	  (if (equal current-prefix-arg '(4))
+	  (if confirm
 	      (setq command
 		    (read-from-minibuffer "Confirm: "
 					  command nil nil 'grep-history))
@@ -839,7 +879,7 @@ This command shares argument histories with \\[rgrep] and \\[grep]."
 (defvar find-name-arg)                  ; autoloaded
 
 ;;;###autoload
-(defun rgrep (regexp &optional files dir)
+(defun rgrep (regexp &optional files dir confirm)
   "Recursively grep for REGEXP in FILES in directory tree rooted at DIR.
 The search is limited to file names matching shell pattern FILES.
 FILES may use abbreviations defined in `grep-files-aliases', e.g.
@@ -861,17 +901,18 @@ This command shares argument histories with \\[lgrep] and \\[grep-find]."
      (cond
       ((and grep-find-command (equal current-prefix-arg '(16)))
        (list (read-from-minibuffer "Run: " grep-find-command
-				   nil nil 'grep-find-history)
-	     nil))
+				   nil nil 'grep-find-history)))
       ((not grep-find-template)
-       (list nil nil
-	     (read-string "grep.el: No `grep-find-template' available. Press RET.")))
+       (error "grep.el: No `grep-find-template' available"))
       (t (let* ((regexp (grep-read-regexp))
 		(files (grep-read-files regexp))
 		(dir (read-directory-name "Base directory: "
-					  nil default-directory t)))
-	   (list regexp files dir))))))
+					  nil default-directory t))
+		(confirm (equal current-prefix-arg '(4))))
+	   (list regexp files dir confirm))))))
   (when (and (stringp regexp) (> (length regexp) 0))
+    (unless (and dir (file-directory-p dir) (file-readable-p dir))
+      (setq dir default-directory))
     (if (null files)
 	(if (not (string= regexp grep-find-command))
 	    (compilation-start regexp 'grep-mode))
@@ -886,21 +927,46 @@ This command shares argument histories with \\[lgrep] and \\[grep-find]."
 					 (concat " -o " find-name-arg " "))
 			      " "
 			      (shell-quote-argument ")"))
-		       dir
+		      dir
+		      (concat
 		       (and grep-find-ignored-directories
 			    (concat (shell-quote-argument "(")
 				    ;; we should use shell-quote-argument here
 				    " -path "
-				    (mapconcat #'(lambda (dir)
-						   (shell-quote-argument
-						    (concat "*/" dir)))
-					       grep-find-ignored-directories
-					       " -o -path ")
+				    (mapconcat
+				     #'(lambda (ignore)
+					 (cond ((stringp ignore)
+						(shell-quote-argument
+						 (concat "*/" ignore)))
+					       ((consp ignore)
+						(and (funcall (car ignore) dir)
+						     (shell-quote-argument
+						      (concat "*/"
+							      (cdr ignore)))))))
+				     grep-find-ignored-directories
+				     " -o -path ")
 				    " "
 				    (shell-quote-argument ")")
-				    " -prune -o ")))))
+				    " -prune -o "))
+		       (and grep-find-ignored-files
+			    (concat (shell-quote-argument "(")
+				    ;; we should use shell-quote-argument here
+				    " -name "
+				    (mapconcat
+				     #'(lambda (ignore)
+					 (cond ((stringp ignore)
+						(shell-quote-argument ignore))
+					       ((consp ignore)
+						(and (funcall (car ignore) dir)
+						     (shell-quote-argument
+						      (cdr ignore))))))
+				     grep-find-ignored-files
+				     " -o -name ")
+				    " "
+				    (shell-quote-argument ")")
+				    " -prune -o "))))))
 	(when command
-	  (if current-prefix-arg
+	  (if confirm
 	      (setq command
 		    (read-from-minibuffer "Confirm: "
 					  command nil nil 'grep-find-history))

@@ -7,15 +7,15 @@
 # then run this. 
 
 $PROJECT_DIR = '/Users/dr/Projects/Aquamacs';
+$REPO_DIR = '/Users/dr/ae.git';
 
-$INTEL_BINARY = '/Applications/Aquamacs Emacs.app';
-$PPC_BINARY = '/Applications/Aquamacs Emacs PPC.app';
+$BINARY = '/Applications/Aquamacs.app';
 
 
 $DMG = "$PROJECT_DIR/AquamacsInstall.dmg";
-$RELEASE_NOTES = "$PROJECT_DIR/aquamacs/doc/latex/changes.pdf";
+$RELEASE_NOTES = "$REPO_DIR/aquamacs/doc/latex/changes.pdf";
 
-$VERS=&sys("perl -ne 'print \$1 if (/defvar *aquamacs-version *\"(.*?)\"/);print \$1 if (/defvar *aquamacs-minor-version *\"(.*?)\"/);' < \"$INTEL_BINARY/Contents/Resources/site-lisp/site-start.el\"");
+$VERS=&sys("perl -ne 'print \$1 if (/defvar *aquamacs-version *\"(.*?)\"/);print \$1 if (/defvar *aquamacs-minor-version *\"(.*?)\"/);' < \"$BINARY/Contents/Resources/site-lisp/site-start.el\"");
 
 $target = "\"/Users/dr/Desktop/Aquamacs-Emacs-$VERS.dmg\"";
 
@@ -38,19 +38,12 @@ unless ($VOL)
 
 print "Copying to $VOL";
 
-
-&sys("cd \"$INTEL_BINARY/Contents/Resources\"; rm -r leim/quail/*.el leim/ja-dic/*.el 2>/dev/null" );
-
-# make universal binary
-
-&sys("./make-universal.sh \"$INTEL_BINARY\" \"$PPC_BINARY\"");
-
 if ($VOL =~ /\/Volumes\/Aquam/i)
   {
 
-&sys("rm -rf \"$VOL/Aquamacs Emacs.app\"");
+&sys("rm -rf \"$VOL/Aquamacs.app\"");
  
-&sys("cp  -pR \"$INTEL_BINARY\" \"$VOL/\"");
+&sys("cp  -pR \"$BINARY\" \"$VOL/\"");
   } else 
   {
     warn "couldnt find proper volume. abort. vol=$VOL";
@@ -59,20 +52,20 @@ if ($VOL =~ /\/Volumes\/Aquam/i)
  
 
 # do this in the target
-&sys("find \"$VOL/Aquamacs Emacs.app/Contents/Resources/\" -name \"*~\" -exec rm -f {}\\;");
-&sys("find \"$VOL/Aquamacs Emacs.app/\" -name \"#*#\" -exec rm -f {}\\;");
+&sys("find \"$VOL/Aquamacs.app/Contents/Resources/\" -name \"*~\" -exec rm -f {}\\;");
+&sys("find \"$VOL/Aquamacs.app/\" -name \"#*#\" -exec rm -f {}\\;");
 
-&sys("find \"$VOL/Aquamacs Emacs.app/\" -name \"#*#\" -exec rm -f {}\\;");
+&sys("find \"$VOL/Aquamacs.app/\" -name \"#*#\" -exec rm -f {}\\;");
 
 &sys("DeRez -only icns \"$VOL/Aquamacs Manual.pdf\" >/tmp/icon1");
 &sys("DeRez -only icns \"$VOL/Release Notes\"*.pdf >/tmp/icon2");
 
 
 
-&sys("cp -p \"$PROJECT_DIR/aquamacs/doc/latex/changes.pdf\" \"$VOL/Release Notes $VERS.pdf\"");
+&sys("cp -p \"$REPO_DIR/aquamacs/doc/latex/changes.pdf\" \"$VOL/Release Notes $VERS.pdf\"");
 # the following to keep the icon's position
 
-&sys("cp -p \"$PROJECT_DIR/aquamacs/doc/latex/aquamacs.pdf\" \"$VOL/Aquamacs Manual.pdf\"");
+&sys("cp -p \"$REPO_DIR/aquamacs/doc/latex/aquamacs.pdf\" \"$VOL/Aquamacs Manual.pdf\"");
 
 &sys("Rez /tmp/icon1 -o \"$VOL/Release Notes $VERS.pdf\" ;  SetFile -a C \"$VOL/Release Notes $VERS.pdf\"");
 &sys("Rez /tmp/icon2 -o \"$VOL/Aquamacs Manual.pdf\" ;  SetFile -a C \"$VOL/Aquamacs Manual.pdf\"");

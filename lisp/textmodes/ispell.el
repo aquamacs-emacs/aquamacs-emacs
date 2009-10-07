@@ -197,12 +197,14 @@
 ;; Improved message reference matching in `ispell-message'.
 ;; Fixed bug in returning to nroff mode from tex mode.
 
-;;; Compatibility code for xemacs and (not too) older emacsen:
+;;; Compatibility code for XEmacs and (not too) older emacsen:
 
-(eval-and-compile ;; Protect against declare-function undefined in xemacs
+(eval-and-compile ;; Protect against declare-function undefined in XEmacs
   (unless (fboundp 'declare-function) (defmacro declare-function (&rest r))))
 
 (declare-function ispell-check-minver "ispell" (v1 v2))
+(declare-function ispell-looking-back "ispell"
+		  (regexp &optional limit &rest ignored))
 
 (if (fboundp 'version<=)
     (defalias 'ispell-check-minver 'version<=)
@@ -239,6 +241,21 @@ compatibility function in case `version<=' is not available."
 	    (setq pending nil))))
       return)))
 
+;; XEmacs does not have looking-back
+(if (fboundp 'looking-back)
+    (defalias 'ispell-looking-back 'looking-back)
+  (defun ispell-looking-back (regexp &optional limit &rest ignored)
+    "Return non-nil if text before point matches regular expression REGEXP.
+Like `looking-at' except matches before point, and is slower.
+LIMIT if non-nil speeds up the search by specifying a minimum
+starting position, to avoid checking matches that would start
+before LIMIT.
+
+This is a stripped down compatibility function for use when
+full featured `looking-back' function is missing."
+    (save-excursion
+      (re-search-backward (concat "\\(?:" regexp "\\)\\=") limit t))))
+
 ;;; Code:
 
 (defvar mail-yank-prefix)
@@ -252,7 +269,6 @@ compatibility function in case `version<=' is not available."
       (buffer-substring start end)))
 
 (defalias 'check-ispell-version 'ispell-check-version)
-
 
 ;;; **********************************************************************
 ;;; The following variables should be set according to personal preference
@@ -492,7 +508,7 @@ default dictionary and LANG the two letter language code."
 The value must be a string dictionary name,
 or nil, which means use the global setting in `ispell-dictionary'.
 Dictionary names are defined in `ispell-local-dictionary-alist'
-and `ispell-dictionary-alist',
+and `ispell-dictionary-alist'.
 
 Setting `ispell-local-dictionary' to a value has the same effect as
 calling \\[ispell-change-dictionary] with that value.  This variable
@@ -1311,10 +1327,9 @@ Otherwise returns the library directory name, if that is defined."
 
 
 
-;;; The preparation of the menu bar menu must be autoloaded
-;;; because otherwise this file gets autoloaded every time Emacs starts
-;;; so that it can set up the menus and determine keyboard equivalents.
-
+;; The preparation of the menu bar menu must be autoloaded
+;; because otherwise this file gets autoloaded every time Emacs starts
+;; so that it can set up the menus and determine keyboard equivalents.
 
 ;;;###autoload
 (defvar ispell-menu-map nil "Key map for ispell menu.")
@@ -1364,7 +1379,7 @@ Internal use.")
 (defun ispell-find-aspell-dictionaries ()
   "Find Aspell's dictionaries, and record in `ispell-dictionary-alist'."
   (unless (and ispell-really-aspell ispell-encoding8-command)
-    (error "This function only works with aspell >= 0.60."))
+    (error "This function only works with aspell >= 0.60"))
   (let* ((dictionaries
 	  (cond
 	   ((eq ispell-use-cocoaspell 'full)
@@ -1779,11 +1794,11 @@ Protects against bogus binding of `enable-multibyte-characters' in XEmacs."
     str))
 
 (defun ispell-get-casechars ()
-    (ispell-get-decoded-string 1))
+  (ispell-get-decoded-string 1))
 (defun ispell-get-not-casechars ()
-    (ispell-get-decoded-string 2))
+  (ispell-get-decoded-string 2))
 (defun ispell-get-otherchars ()
-    (ispell-get-decoded-string 3))
+  (ispell-get-decoded-string 3))
 (defun ispell-get-many-otherchars-p ()
   (nth 4 (or (assoc ispell-current-dictionary ispell-local-dictionary-alist)
 	     (assoc ispell-current-dictionary ispell-dictionary-alist))))
@@ -2002,13 +2017,11 @@ pass it the output of the last ispell invocation."
 	    ispell-output)
 	(if (not (bufferp buf))
 	    (setq ispell-filter nil)
-	  (save-excursion
-	    (set-buffer buf)
+	  (with-current-buffer buf
 	    (setq ispell-output (buffer-substring-no-properties
 				 (point-min) (point-max))))
 	  (ispell-filter t ispell-output)
-	  (save-excursion
-	    (set-buffer buf)
+	  (with-current-buffer buf
 	    (erase-buffer)))))))
 
 (defun ispell-send-replacement (misspelled replacement)
@@ -2031,14 +2044,12 @@ This allows it to improve the suggestion list based on actual misspellings."
 	  ;; The following commands are not passed to Ispell until
 	  ;; we have a *real* reason to invoke it.
 	  (cmds-to-defer '(?* ?@ ?~ ?+ ?- ?! ?%))
-	  (default-major-mode 'fundamental-mode)
 	  (session-buf ispell-session-buffer)
 	  (output-buf ispell-output-buffer)
 	  (ispell-args ispell-cmd-args)
 	  (defdir ispell-process-directory)
 	  prev-pos)
-      (save-excursion
-	(set-buffer session-buf)
+      (with-current-buffer session-buf
 	(setq prev-pos (point))
 	(setq default-directory defdir)
 	(insert string)
@@ -2357,8 +2368,7 @@ Global `ispell-quit' set to start location to continue spell session."
 	char num result textwin dedicated-win)
 
     ;; setup the *Choices* buffer with valid data.
-    (save-excursion
-      (set-buffer (get-buffer-create ispell-choices-buffer))
+    (with-current-buffer (get-buffer-create ispell-choices-buffer)
       (setq mode-line-format
 	    (concat "--  %b  --  word: " word
 		    "  --  dict: " (or ispell-current-dictionary "default")
@@ -2441,7 +2451,7 @@ Global `ispell-quit' set to start location to continue spell session."
 		    ;; event), stop ispell.  As a special exception,
 		    ;; ignore mouse events occuring in the same frame.
 		    (while (and input-valid (not (characterp char)))
-		      (setq char (read-event))
+		      (setq char (read-key))
 		      (setq input-valid
 			    (or (characterp char)
 				(and (mouse-event-p char)
@@ -2528,9 +2538,8 @@ Global `ispell-quit' set to start location to continue spell session."
 				     word)))
 		      (if new-word
 			  (progn
-			    (save-excursion
-			      (set-buffer (get-buffer-create
-					   ispell-choices-buffer))
+			    (with-current-buffer (get-buffer-create
+                                                  ispell-choices-buffer)
 			      (erase-buffer)
 			      (setq count ?0
 				    skipped 0
@@ -3108,7 +3117,7 @@ Keeps argument list for future ispell invocations for no async support."
 
 
 
-(defun ispell-init-process () 
+(defun ispell-init-process ()
   "Check status of Ispell process and start if necessary."
   ;; (if (string= ispell-program-name "NSSpellChecker")
   ;;     (progn
@@ -4260,45 +4269,44 @@ Includes Latex/Nroff modes and extended character mode."
   ;; We assume all major modes with "tex-mode" in them should use latex parsing
   ;; When exclusively checking comments, set to raw text mode (nroff).
   (if (and (not (eq 'exclusive ispell-check-comments))
-  	   (or (and (eq ispell-parser 'use-mode-name)
-  		    (string-match "[Tt][Ee][Xx]-mode"
-  				  (symbol-name major-mode)))
-  	       (eq ispell-parser 'tex)))
+	   (or (and (eq ispell-parser 'use-mode-name)
+		    (string-match "[Tt][Ee][Xx]-mode"
+				  (symbol-name major-mode)))
+	       (eq ispell-parser 'tex)))
       (progn
-  	(ispell-send-string "+\n")	; set ispell mode to tex
-  	(if (not (eq ispell-parser 'tex))
-  	    (set (make-local-variable 'ispell-parser) 'tex)))
+	(ispell-send-string "+\n")	; set ispell mode to tex
+	(if (not (eq ispell-parser 'tex))
+	    (set (make-local-variable 'ispell-parser) 'tex)))
     (ispell-send-string "-\n"))		; set mode to normal (nroff)
   ;; If needed, test for SGML & HTML modes and set a buffer local nil/t value.
   (if (and ispell-skip-html (not (eq ispell-skip-html t)))
       (setq ispell-skip-html
-  	    (not (null (string-match "sgml\\|html\\|xml"
-  				     (downcase (symbol-name major-mode)))))))
+	    (not (null (string-match "sgml\\|html\\|xml"
+				     (downcase (symbol-name major-mode)))))))
   ;; Set default extended character mode for given buffer, if any.
   (let ((extended-char-mode (ispell-get-extended-character-mode)))
     (if extended-char-mode
-  	(ispell-send-string (concat extended-char-mode "\n"))))
+	(ispell-send-string (concat extended-char-mode "\n"))))
   ;; Set buffer-local parsing mode and extended character mode, if specified.
   (save-excursion
     (goto-char (point-max))
     ;; Uses last occurrence of ispell-parsing-keyword
     (if (search-backward ispell-parsing-keyword nil t)
-  	(let ((end (save-excursion (end-of-line) (point)))
-  	      string)
-  	  (search-forward ispell-parsing-keyword)
-  	  (while (re-search-forward " *\\([^ \"]+\\)" end t)
-  	    ;; space separated definitions.
-  	    (setq string (downcase (match-string-no-properties 1)))
-  	    (cond ((and (string-match "latex-mode" string)
-  			(not (eq 'exclusive ispell-check-comments)))
-  		   (ispell-send-string "+\n~tex\n"))
-  		  ((string-match "nroff-mode" string)
-  		   (ispell-send-string "-\n~nroff\n"))
-  		  ((string-match "~" string) ; Set extended character mode.
-  		   (ispell-send-string (concat string "\n")))
-  		  (t (message "Invalid Ispell Parsing argument!")
-  		     (sit-for 2)))))))
-)
+	(let ((end (save-excursion (end-of-line) (point)))
+	      string)
+	  (search-forward ispell-parsing-keyword)
+	  (while (re-search-forward " *\\([^ \"]+\\)" end t)
+	    ;; space separated definitions.
+	    (setq string (downcase (match-string-no-properties 1)))
+	    (cond ((and (string-match "latex-mode" string)
+			(not (eq 'exclusive ispell-check-comments)))
+		   (ispell-send-string "+\n~tex\n"))
+		  ((string-match "nroff-mode" string)
+		   (ispell-send-string "-\n~nroff\n"))
+		  ((string-match "~" string) ; Set extended character mode.
+		   (ispell-send-string (concat string "\n")))
+		  (t (message "Invalid Ispell Parsing argument!")
+		     (sit-for 2))))))))
 
 
 ;;; Can kill the current ispell process
@@ -4342,7 +4350,7 @@ Both should not be used to define a buffer-local dictionary."
   ;; If there's an existing ispell process that's wrong for this use,
   ;; kill it.
   (if (and ispell-buffer-local-name
-  	   (not (equal ispell-buffer-local-name (buffer-name))))
+	   (not (equal ispell-buffer-local-name (buffer-name))))
       (ispell-kill-ispell t))
   ;; Actually start a new ispell process, because we need
   ;; to send commands now to specify the local words to it.
@@ -4351,20 +4359,19 @@ Both should not be used to define a buffer-local dictionary."
     (goto-char (point-min))
     (while (search-forward ispell-words-keyword nil t)
       (or ispell-buffer-local-name
-    	  (setq ispell-buffer-local-name (buffer-name)))
+	  (setq ispell-buffer-local-name (buffer-name)))
       (let ((end (save-excursion (end-of-line) (point)))
-    	    (ispell-casechars (ispell-get-casechars))
-    	    string)
-    	;; buffer-local words separated by a space, and can contain
-    	;; any character other than a space.  Not rigorous enough.
-    	(while (re-search-forward " *\\([^ ]+\\)" end t)
-    	  (setq string (match-string-no-properties 1))
-    	  ;; This can fail when string contains a word with invalid chars.
-    	  ;; Error handling needs to be added between ispell and Emacs.
-    	  (if (and (< 1 (length string))
-    		   (equal 0 (string-match ispell-casechars string)))
-    	      (ispell-send-string (concat "@" string "\n")))))))
-)
+	    (ispell-casechars (ispell-get-casechars))
+	    string)
+	;; buffer-local words separated by a space, and can contain
+	;; any character other than a space.  Not rigorous enough.
+	(while (re-search-forward " *\\([^ ]+\\)" end t)
+	  (setq string (match-string-no-properties 1))
+	  ;; This can fail when string contains a word with invalid chars.
+	  ;; Error handling needs to be added between ispell and Emacs.
+	  (if (and (< 1 (length string))
+		   (equal 0 (string-match ispell-casechars string)))
+	      (ispell-send-string (concat "@" string "\n"))))))))
 
 
 ;;; returns optionally adjusted region-end-point.

@@ -53,7 +53,7 @@
   (memq initial-window-system '(mac ns)))
 
 
-(defun aquamacs-ask-for-confirmation (text long)
+(defun aquamacs-ask-for-confirmation (text long &optional yes-button no-button)
     (let ((f (window-frame (minibuffer-window))))
       (raise-frame f)			; make sure frame is visible
       (if (or  
@@ -62,7 +62,6 @@
 	   ;;(not (eq (car-safe last-nonmenu-event)  
 	   ;;	  'mac-apple-event)))
 	   (not use-dialog-box)
-	   (not (fboundp 'mac-dialog-y-or-n-p))
 	   (not window-system))
 	  (progn
 	    ;; make sure the frame's minibuffer is actually visible
@@ -73,11 +72,11 @@
 	    (if (and long (not aquamacs-quick-yes-or-no-prompt))
 		(old-yes-or-no-p text)
 	      (old-y-or-n-p text)))
-	(let ((ret (mac-dialog-y-or-n-p text "" t)))
+	(let ((ret (x-popup-dialog t (list text `((,(or yes-button "Yes") . "y") . t)
+					   'cancel `((,(or no-button "No") . "n") . nil)))))
 	  (if (eq ret 'cancel)
 	      (keyboard-quit))
 	  ret))))
-
 
 (defun filter-list (lst elements)
 "Returns LST sans ELEMENTS.

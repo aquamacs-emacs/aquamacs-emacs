@@ -444,10 +444,10 @@ install-aquamacs: mkdir
 	if test "${ns_appdir}" != ""; then \
 	( cp $(AQUAMACS_DIR)/Icons/build/*.png $(ns_appresdir)/etc/images/ ; \
 	  cd $(ns_appresdir) ; \
-	  tar xzf $(AQUAMACS_DIR)/src/commandline-tool/Aquamacs\ Command\ Line\ Tool.mpkg.tgz ; \
+	  cp -r $(AQUAMACS_DIR)/src/commandline-tool/Aquamacs\ Command\ Line\ Tool.mpkg .; \
 	  cd - >/dev/null ; \
+	  (cd $(ns_appresdir)/etc/images && find . -name '*.svg' -delete ; cd -) ; \
 	  cp $(AQUAMACS_DIR)/src/etc/aquamacs-splash-screen.jpg $(ns_appresdir)/etc/images/ ; \
-	  cp $(AQUAMACS_DIR)/src/Emacs.23.icns $(ns_appresdir)/Emacs.icns ; \
 	  rm -r "$(ns_appresdir)/Emacs Manual" 2>/dev/null ; \
 	  cp -r $(AQUAMACS_DIR)/doc/EmacsManual "$(ns_appresdir)/Emacs Manual" ; \
 	  mv "$(ns_appresdir)/Emacs Manual/EmacsManual.helpindex" "$(ns_appresdir)/Emacs Manual/Emacs Manual.helpindex" ; \
@@ -455,16 +455,20 @@ install-aquamacs: mkdir
 	  cp -r $(AQUAMACS_DIR)/doc/AquamacsHelp "$(ns_appresdir)/Aquamacs Help" ; \
 	  mv "$(ns_appresdir)/Aquamacs Help/AquamacsHelp.helpindex" "$(ns_appresdir)/Aquamacs Help/Aquamacs Help.helpindex" ; \
 	  cd $(ns_appresdir) ; \
+	  rm -rf "Emacs Lisp Reference" ; \
 	  tar xzf $(AQUAMACS_DIR)/doc/EmacsLispReference.tgz ; \
-	  mv "$(ns_appresdir)/EmacsLispReference" "$(ns_appresdir)/Emacs Lisp Reference" ; \
-	  mv "$(ns_appresdir)/Emacs Lisp Reference/EmacsLispReference.helpindex" "$(ns_appresdir)/Emacs Lisp Reference/Emacs Lisp Reference.helpindex" ; \
+	  mv "EmacsLispReference" "Emacs Lisp Reference" ; \
+	  mv "Emacs Lisp Reference/EmacsLispReference.helpindex" "Emacs Lisp Reference/Emacs Lisp Reference.helpindex" ; \
 	  cd - >/dev/null ; \
+	  (cd $(ns_appresdir)/leim ; rm quail/*.el quail/*.el.gz ja-dic/*.el ja-dic/*.el.gz ; cd -) ; \
+	  (cd $(DESTDIR)${docdir} ; \
+	    rm NEWS.1-17 NEWS.18 NEWS.19 NEWS.20 NEWS.21 NEWS.22 PROBLEMS MH-E-NEWS ms-kermit ; \
+	    cd -) ; \
 	  rm $(ns_appresdir)/English.lproj/InfoPlist.strings 2>/dev/null ; \
-	  rm -r $(ns_appresdir)/site-lisp  2>/dev/null ; \
-	  cp -r $(AQUAMACS_DIR)/src/site-lisp $(ns_appresdir)/site-lisp ; \
-	  touch $(ns_appdir) ) ; \
-	  else true ; fi ; \
-	  echo "Find the Aquamacs build in $(ns_appdir)"
+	  rm -r $(ns_appresdir)/site-lisp 2>/dev/null ; \
+	  touch $(ns_appdir) ; \
+	  echo "Find the Aquamacs build in $(ns_appdir)" ) ; \
+	  else echo "install-aquamacs: nextstep/Aquamacs.app not found." ; fi ; \
 
 
 ## http://lists.gnu.org/archive/html/emacs-devel/2007-10/msg01672.html
@@ -521,6 +525,7 @@ install-arch-indep: mkdir info install-etc
 		rm -f  $${subdir}/.cvsignore ; \
 		rm -f  $${subdir}/.gitignore ; \
 		rm -f  $${subdir}/.arch-inventory ; \
+		rm -f  $${subdir}/.DS_Store ; \
 		rm -f  $${subdir}/\#* ; \
 		rm -f  $${subdir}/.\#* ; \
 		rm -f  $${subdir}/*~ ; \
@@ -557,7 +562,7 @@ install-arch-indep: mkdir info install-etc
 	   then \
 	     docfile="DOC-$${fullversion}"; \
 	   else \
-	     docfile="DOC-${version}*"; \
+	     docfile="DOC"; \
 	   fi; \
 	   echo "Copying etc/$${docfile} to $(DESTDIR)${docdir} ..." ; \
 	   (cd ./etc; tar -chf - $${docfile}) \
@@ -588,6 +593,8 @@ install-arch-indep: mkdir info install-etc
 		${GZIP_PROG} -9n `echo $$f|sed 's/.elc$$/.el/'` ; \
 	    done) \
 	else true; fi
+	rm $(DESTDIR)${lispdir}/ldefs-boot.el $(DESTDIR)${lispdir}/loaddefs.el
+	rm $(DESTDIR)${docdir}/refcards/*.tex
 	-unset CDPATH; \
 	thisdir=`/bin/pwd`; \
 	if [ `(cd ${srcdir}/info && /bin/pwd)` != `(cd $(DESTDIR)${infodir} && /bin/pwd)` ]; \
@@ -605,6 +612,8 @@ install-arch-indep: mkdir info install-etc
 	      for f in `ls $$elt $$elt-[1-9] $$elt-[1-9][0-9] 2>/dev/null`; do \
 	        ${INSTALL_DATA} $$f $(DESTDIR)${infodir}/$$f; \
 	        chmod a+r $(DESTDIR)${infodir}/$$f; \
+		test "$ff" != "dir" && test "${GZIP_PROG}" && \
+		   ${GZIP_PROG} -9n $(DESTDIR)${infodir}/$$f; \
 	      done; \
 	   done); \
 	else true; fi
@@ -618,7 +627,7 @@ install-arch-indep: mkdir info install-etc
 	     ${INSTALL_INFO} --info-dir=$(DESTDIR)${infodir} $(DESTDIR)${infodir}/$$elt); \
 	  done; \
 	else true; fi
-	-chmod -R a+r $(DESTDIR)${datadir}/emacs/${version} $(DESTDIR)${datadir}/emacs/site-lisp ${COPYDESTS} $(DESTDIR)${infodir}
+	-chmod -R a+r $(DESTDIR)${datadir}/emacs/${version} ${COPYDESTS}
 	thisdir=`/bin/pwd`; \
 	cd ${mansrcdir}; \
 	for page in ${MAN_PAGES}; do \
@@ -654,11 +663,10 @@ install-strip:
 ### we may be creating several layers of directories (for example,
 ### /usr/local/lib/emacs/19.0/mips-dec-ultrix4.2), we use mkinstalldirs
 ### instead of mkdir.  Not all systems' mkdir programs have the `-p' flag.
+### We set the umask so that any created directories are world-readable.
+### FIXME it would be good to warn about non-standard permissions of
+### pre-existing directories, but that does not seem easy.
 mkdir: FRC
-	if [ -d $(DESTDIR)${datadir} ]; then true; else \
-	  $(srcdir)/mkinstalldirs $(DESTDIR)${datadir}; \
-	  chmod a+r $(DESTDIR)${datadir};\
-	fi
 	icondirs= ; \
 	for dir in $(iconsrcdir)/*/*/apps $(iconsrcdir)/*/*/mimetypes; do \
 	  if [ -d $${dir} ]; then \
@@ -666,7 +674,9 @@ mkdir: FRC
 	  fi ; \
 	done ; \
 	icondirs=`echo "$${icondirs}" | sed 's,$(srcdir)/etc/images/icons,$(DESTDIR)${icondir},g'` ; \
-	$(srcdir)/mkinstalldirs ${COPYDESTS} $(DESTDIR)${infodir} $(DESTDIR)${man1dir} \
+	umask 022 ; \
+	$(srcdir)/mkinstalldirs $(DESTDIR)${datadir} ${COPYDESTS} \
+	  $(DESTDIR)${infodir} $(DESTDIR)${man1dir} \
 	  $(DESTDIR)${bindir} $(DESTDIR)${docdir} $(DESTDIR)${libexecdir} \
 	  $(DESTDIR)${datadir}/emacs/site-lisp \
 	  $(DESTDIR)${datadir}/emacs/${version}/site-lisp \
@@ -674,8 +684,7 @@ mkdir: FRC
 	  $(DESTDIR)${desktopdir} $${icondirs}
 
 ### Delete all the installed files that the `install' target would
-### create (but not the noninstalled files such as `make all' would
-### create).
+### create (but not the noninstalled files such as `make all' would create).
 ###
 ### Don't delete the lisp and etc directories if they're in the source tree.
 uninstall:
@@ -838,21 +847,26 @@ dist:
 .PHONY: info dvi dist check html
 
 info-real: 
-	-(cd doc/emacs; $(MAKE) $(MFLAGS) info)
-	-(cd doc/misc; $(MAKE) $(MFLAGS) info)
-	-(cd doc/lispref; $(MAKE) $(MFLAGS) info)
-	-(cd doc/lispintro; $(MAKE) $(MFLAGS) info)
+	(cd doc/emacs; $(MAKE) $(MFLAGS) info)
+	(cd doc/misc; $(MAKE) $(MFLAGS) info)
+	(cd doc/lispref; $(MAKE) $(MFLAGS) info)
+	(cd doc/lispintro; $(MAKE) $(MFLAGS) info)
 
 force-info:
-# Note that man/Makefile knows how to
-# put the info files in $(srcdir),
+# Note that man/Makefile knows how to put the info files in $(srcdir),
 # so we can do ok running make in the build dir.
+# This used to have a clause that exited with an error if MAKEINFO = no.
+# But it is inappropriate to do so without checking if makeinfo is
+# actually needed - it is not if the info files are up-to-date.  (Bug#3982)
+# Only the doc/*/Makefiles can decide that, so we let those rules run
+# and give a standard error if makeinfo is needed but missing.
+# While it would be nice to give a more detailed error message, that
+# would require changing every rule in doc/ that builds an info file,
+# and it's not worth it.  This case is only relevant if you download a
+# release, then change the .texi files.
 info: force-info
 	@if test "$(MAKEINFO)" = "off"; then \
 	  echo "Configured --without-makeinfo, not building manuals" ; \
-	elif test "$(MAKEINFO)" = "no"; then \
-	  echo "makeinfo is missing - cannot build manuals" ; \
-	  exit 1 ; \
 	else \
 	  $(MAKE) $(MFLAGS) info-real ; \
 	fi

@@ -37,11 +37,11 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #endif
 
 #ifndef SITELOAD_PURESIZE_EXTRA
-#define SITELOAD_PURESIZE_EXTRA 0
+#define SITELOAD_PURESIZE_EXTRA 500000
 #endif
 
 #ifndef BASE_PURESIZE
-#define BASE_PURESIZE (1260000 + SYSTEM_PURESIZE_EXTRA + SITELOAD_PURESIZE_EXTRA)
+#define BASE_PURESIZE (1590000 + SYSTEM_PURESIZE_EXTRA + SITELOAD_PURESIZE_EXTRA)
 #endif
 
 /* Increase BASE_PURESIZE by a ratio depending on the machine's word size.  */

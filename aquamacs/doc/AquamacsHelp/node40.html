@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Changes-- 1.8dev</TITLE>
-<META NAME="description" CONTENT="Changes-- 1.8dev">
+<TITLE>Changes-- 2.0preview1</TITLE>
+<META NAME="description" CONTENT="Changes-- 2.0preview1">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,109 +21,114 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="node41.html">
 <LINK REL="previous" HREF="node39.html">
-<LINK REL="up" HREF="node38.html">
+<LINK REL="up" HREF="node39.html">
 <LINK REL="next" HREF="node41.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html679"
+<A NAME="tex2html682"
   HREF="node41.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html675"
-  HREF="node38.html">
+<A NAME="tex2html678"
+  HREF="node39.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html669"
+<A NAME="tex2html672"
   HREF="node39.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html677"
+<A NAME="tex2html680"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html680"
-  HREF="node41.html">Changes  1.7</A>
-<B> Up:</B> <A NAME="tex2html676"
-  HREF="node38.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html670"
-  HREF="node39.html">Changes  2.0dev</A>
- &nbsp; <B>  <A NAME="tex2html678"
+<B> Next:</B> <A NAME="tex2html683"
+  HREF="node41.html">Changes  1.8dev</A>
+<B> Up:</B> <A NAME="tex2html679"
+  HREF="node39.html">Aquamacs Emacs: What's New</A>
+<B> Previous:</B> <A NAME="tex2html673"
+  HREF="node39.html">Aquamacs Emacs: What's New</A>
+ &nbsp; <B>  <A NAME="tex2html681"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION000142000000000000000">
-Changes-- 1.8dev</A>
+<a name="changelog-top"></a><H2><A NAME="SECTION000141000000000000000">
+Changes-- 2.0preview1</A>
 </H2>
 
 <P>
 
+
+
 <UL>
-<LI>Tabs are now directly accessible using keys A-M-1,2,3...9,0 (normally: Command-Option-1,2,3...9,0).  The number of each tabs is marked.  For configuration, see the new customization variable `tabbar-show-key-bindings' and the function `tabbar-define-access-keys'.   For instance, use <TT>(tabbar-define-access-keys '(alt))</TT> in your <TT>Preferences.el</TT> file to use Command-1,2,3.. bindings.
+<LI><I>Aquamacs is now based on Emacs 23 and the Cocoa (NextStep) port.  There are many changes under the hood associated with this.  A few functions don't work right just yet, and we recommend neither this preview of Aquamacs 2.0 nor the Emacs 23.1 for mission-critical production use.  Please help the Aquamacs team complete the transition by contributing code and fixes or, if that's not possible, a donation.
+
+<P>
+The Aquamacs 2.0 release will contain further exciting features: we're still working on spell-checking and better graphical dialogs. 
+
+<P>
+Here, we report the changes between Emacs 22 and Emacs 23 with respect to the Aquamacs distribution.  Further changes can be found in the NEWS file for Emacs 23.
+</I>
 
 <P>
 </LI>
-<LI>Aquamacs now asks for confirmation when printing is requested via A-p.  This helps avoid long waits for rendering with large buffers when A-p is pressed by mistake.
+<LI>Aquamacs has a new icon in the Dock, designed by graphic designer Jessica Walker (jekawacaneer@gmail.com).
 
 <P>
 </LI>
-<LI>On systems with faulty LaTeX installations, Aquamacs will now do a better job at choosing the right TeXLive (or legacy teTeX) binaries.
+<LI>The Aquamacs application has been renamed to <I>Aquamacs.app</I> (from Aquamacs Emacs.app).
 
 <P>
 </LI>
-<LI>When scrolling back and forth page-wise, the point will now end up in its previous position.
+<LI>Fullscreen mode now take over the full (current) screen, unconditionally, with no frames appearing on top.  (This is due to a bug in Mac OS X 10.5, which may be fixed by Apple at some point.)  Menu bar and the Dock cannot be brought up and there is no toolbar visible.
 
 <P>
 </LI>
-<LI>Command-, can now be re-bound via the normal Aquamacs key maps (`osx-key-mode-map') .  (Note that even if rebound, the application menu will still show the A-q and A-, key bindings for Quit and Preferences, respectively).  A-h remains unmappable for now.
-Reported by Chris Bernard.
+<LI>Toolbars can now be configured through the normal customization panel.  Right-click on the toolbar, use the Options/View menu item (or use M-x ns-tool-bar-customize).  The chosen icons are persistent; toolbar customizations are, however, tied to the toolbars set by modes.  That means that users can chose a different set of icons to display in latex-mode, for instance.  
 
 <P>
 </LI>
-<LI>The mark is now deactivated when point is restored while switching tabs (in transient-mark-mode, which is on by default).
+<LI>Fonts and colors of all (mode-specific) faces can now be configured using the standard font and color panels.  The Options / Appearance menu provides a function to show the font panel, which leads to buttons for foreground and background colors.   We also have a menu item for the color panel separately, from where colors can be dragged&amp;dropped directly onto any piece of text to customize its face.  Holding down the Option key will, instead, set the face's background color. 
 
 <P>
 </LI>
-<LI>Command-C (clipboard-kill-ring-save) will take care not to create duplicate entries in the kill ring.
-Reported by Konrad Podczeck.
+<LI>Aquamacs uses ``Python-mode'' by default now for Python source files.  Users who prefer the original Emacs python package can switch by including <TT>(require 'python)</TT> in their <TT>Preferences.el</TT> file.
+Code by Barry Warsaw.
 
 <P>
 </LI>
-<LI>Fixed a rare failure of dired to view directories.
-Reported by Uwe Pieczynski.
+<LI>The `ns-tool-bar-display-mode' variable now supports label-only toolbars.  Right-click on the toolbar to change; or use M-x customize or <TT>Preferences.el</TT> to set it to `labels' in order to only show labels.  The former meaning of this value (showing labels and icons) is now `both' (or, usually, nil, the default).
 
 <P>
 </LI>
-<LI>Fixed an error when deleting the whole buffer contents while smart-spacing-mode was on.
-Patch by Jon Shea.
+<LI>`aquamacs-find-file' (C-x C-f) will ask for confirmation if you first complete partial filename input in the minibuffer, but then attempt to create a new file.
+</LI>
+<LI>Completion is, in many cases, more powerful by completing to the left <I>and</I> the right of the input string.  Customize the option `completion-styles' to control this.
 
 <P>
 </LI>
-<LI>Fixed a potential security hole in smtpmail.
-Code by Simon Josefsson.
+<LI>Keyboard bindings are displayed more consistently in the menus now.  Throughout Aquamacs,  Mac standard key descriptions are used (this may be configured using the variable `ns-use-mac-modifier-symbols').  Users should be aware that manuals and tutorials will often refer to keys such as <TT>C-x</TT> (<TT>X</TT> or Control X), and that keys like <TT>M-q</TT> correspond to the chosen Meta key modifier, normally the Option key. 
 
 <P>
 </LI>
-<LI>`LaTex-mode-hook' can now be customized and saved through the
-  customization interface.
-Reported by Bruno Cadonna.
+<LI>Many more improvements. See etc/NEWS.
 
 <P>
 </LI>
-<LI>ESS (R-mode) will now retain an active mark (and region) after evaluating code, e.g. with C-c C-r.                                                       
+<LI>Internally, Emacs is based on a superset of Unicode now.  Emacs also uses Cocoa, a modern technology that facilitates program development and maintenance, supports 64-bit computing on Macs and allows for better integration of applications with the operating system and other applications.  
 
 <P>
 </LI>
-<LI>In the keyboard emulation modes that allow the mac-native use of Option on various keyboard layouts, while retaining Option as Meta key for Emacs, ESC key sequences always act as Meta sequences.  For instance, with the German layout, ESC-l  acts as `downcase-word' (the original M-l binding), while Option-l inserts the @ sign.
+<LI><TT>.wiki</TT> files now open in wikipedia-mode.
 
 <P>
 </LI>
-<LI>Adopting fonts as default fonts for frames: keep frames inside screen.
-Reported by Stefan Vollmar.
+<LI>When printing (or exporting to PDF or HTML), double spaces are formatted as such and can be used to align text.
+Reported by George Nurser.
 
 <P>
 </LI>
@@ -132,35 +137,35 @@ Reported by Stefan Vollmar.
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html679"
+<A NAME="tex2html682"
   HREF="node41.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html675"
-  HREF="node38.html">
+<A NAME="tex2html678"
+  HREF="node39.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html669"
+<A NAME="tex2html672"
   HREF="node39.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html677"
+<A NAME="tex2html680"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html680"
-  HREF="node41.html">Changes  1.7</A>
-<B> Up:</B> <A NAME="tex2html676"
-  HREF="node38.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html670"
-  HREF="node39.html">Changes  2.0dev</A>
- &nbsp; <B>  <A NAME="tex2html678"
+<B> Next:</B> <A NAME="tex2html683"
+  HREF="node41.html">Changes  1.8dev</A>
+<B> Up:</B> <A NAME="tex2html679"
+  HREF="node39.html">Aquamacs Emacs: What's New</A>
+<B> Previous:</B> <A NAME="tex2html673"
+  HREF="node39.html">Aquamacs Emacs: What's New</A>
+ &nbsp; <B>  <A NAME="tex2html681"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 <I>David</I>
-<BR><I>2009-06-24</I>
+<BR><I>2009-08-06</I>
 </ADDRESS>
 </BODY>
 </HTML>

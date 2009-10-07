@@ -145,12 +145,23 @@
 
 (defconst cal-menu-scroll-menu
   '("Scroll"
+    ["Scroll Commands" nil :help "Commands that scroll the visible window"]
     ["Forward 1 Month" calendar-scroll-left]
     ["Forward 3 Months" calendar-scroll-left-three-months]
     ["Forward 1 Year" (calendar-scroll-left 12) :keys "4 C-v"]
     ["Backward 1 Month" calendar-scroll-right]
     ["Backward 3 Months" calendar-scroll-right-three-months]
-    ["Backward 1 Year" (calendar-scroll-right 12) :keys "4 M-v"])
+    ["Backward 1 Year" (calendar-scroll-right 12) :keys "4 M-v"]
+    "--"
+    ["Motion Commands" nil :help "Commands that move point"]
+    ["Forward 1 Day" calendar-forward-day]
+    ["Forward 1 Week" calendar-forward-week]
+    ["Forward 1 Month" calendar-forward-month]
+    ["Forward 1 Year" calendar-forward-year]
+    ["Backward 1 Day" calendar-backward-day]
+    ["Backward 1 Week" calendar-backward-week]
+    ["Backward 1 Month" calendar-backward-month]
+    ["Backward 1 Year" calendar-backward-year])
   "Key map for \"Scroll\" menu in the calendar.")
 
 (declare-function x-popup-menu "xmenu.c" (position menu))
@@ -200,22 +211,28 @@ is non-nil."
    (read-file-name "Enter diary file name: " default-directory nil t)
    event))
 
+;; In 22, the equivalent code gave an error when not called on a date,
+;; but easymenu does not seem to allow this (?).
+;; The ignore-errors is because `documentation' can end up calling
+;; this in a non-calendar buffer where displayed-month is unbound.  (Bug#3862)
 (defun cal-menu-set-date-title (menu)
   "Convert date of last event to title suitable for MENU."
-  (easy-menu-filter-return
-   menu (calendar-date-string (calendar-cursor-to-date t last-input-event)
-                              t nil)))
+  (let ((date (ignore-errors (calendar-cursor-to-date nil last-input-event))))
+    (if date
+        (easy-menu-filter-return menu (calendar-date-string date t nil))
+      (message "Not on a date!")
+      nil)))
 
 (easy-menu-define cal-menu-context-mouse-menu nil
-  "Pop up menu for Mouse-2 for selected date in the calendar window."
-  '("cal-menu-mouse2" :filter cal-menu-set-date-title
+  "Pop up mouse menu for selected date in the calendar window."
+  '("cal-menu-context-mouse-menu" :filter cal-menu-set-date-title
     "--"
     ["Holidays" calendar-cursor-holidays]
     ["Mark date" calendar-set-mark]
     ["Sunrise/sunset" calendar-sunrise-sunset]
     ["Other calendars" calendar-print-other-dates]
-    ;; FIXME there is a bug (#447) with last-nonmenu-event and submenus.
-    ;; These currently don't work if called without calendar window selected.
+    ;; There was a bug (#447; fixed) with last-nonmenu-event and submenus.
+    ;; These did not work if called without calendar window selected.
     ("Prepare LaTeX buffer"
      ["Daily (1 page)" cal-tex-cursor-day]
      ["Weekly (1 page)" cal-tex-cursor-week]

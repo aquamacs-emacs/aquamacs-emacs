@@ -91,8 +91,8 @@
    (erc-mode-line-format "%s %a. %n on %t (%m,%l) %o")
    (erc-header-line-format nil)))
 
+(assq-set-equal "\\.wiki$" 'wikipedia-mode 'auto-mode-alist) 
 (autoload 'wikipedia-mode "wikipedia-mode.el" "Major mode for editing Wikipedia articles." 'interactive nil)
-
 
 ;; ESS
 ;; Need this to prevent the tramp problem.
@@ -169,10 +169,6 @@
 (autoload 'javascript-mode "javascript-mode" "JavaScript mode" t)
 (assq-set-equal "\\.js$" 'javascript-mode 'auto-mode-alist)
 
-
-(autoload 'css-mode "css-mode" "major mode for editing CSS source." t)
-(assq-set-equal "\\.css$" 'css-mode 'auto-mode-alist)
-
 (autoload 'applescript-mode "applescript-mode" 
   "major mode for editing AppleScript source." t)
 (assq-set-equal "\\.applescript$" 'applescript-mode 'auto-mode-alist)
@@ -180,18 +176,32 @@
 (autoload 'php-mode "php-mode" "major mode for editing PHP source." t)
 (assq-set-equal "\\.php$" 'php-mode 'auto-mode-alist)
 
-
-(autoload 'ruby-mode "ruby-mode" "major mode for editing Ruby source." t)
-(assq-set-equal "\\.rb$" 'ruby-mode 'auto-mode-alist) 
-;; watch out - .rb is also used for realbasic
 ;; do we need to distinguish?
-;; we don't have a REALBasic mode yet
 (autoload 'rails-minor-mode "rails.el" "Enter Ruby on Rails mode" 'interactive nil)
 
+;; Matlab
 (autoload 'matlab-mode "matlab" "Enter MATLAB mode." t)
 (autoload 'matlab-shell "matlab" "Interactive MATLAB mode." t)
 (assq-set-equal "\\.m$" 'matlab-mode 'auto-mode-alist) 
 
+;; Objective C
+
+(defun objc-mode-buffer-check ()
+  (if (string-match "\\.m$" buffer-file-name)
+      (save-restriction
+	(narrow-to-region (point-min)
+			  (min (point-max)
+			       (+ (point-min) magic-mode-regexp-match-limit)))
+	(looking-at "\\(.\\|\n\\)*#\\(include\\|define\\)"))))
+
+(setq magic-mode-alist
+     (append '(("\\(.\\|\n\\)*\n@\\(implementation\\|interface\\|protocol\\)" . objc-mode)
+	       (objc-mode-buffer-check . objc-mode))
+	   magic-mode-alist))
+
+(assq-set-equal "\\.org\\'" 'org-mode 'auto-mode-alist) 
+(aquamacs-set-defaults 
+ '((org-support-shift-select t)))
 
 ;; ---------------------------------------------------------
 ;; PERL EDITING  
@@ -216,80 +226,23 @@
           )
 	 auto-mode-alist))
 
-;;;***
-
-;;;### (autoloads (jython-mode python-mode run-python) "python" "progmodes/python.el"
-;;;;;;  (17640 42650))
-;;; Generated autoloads from progmodes/python.el
-
 (add-to-list (quote interpreter-mode-alist) (quote ("jython" . jython-mode)))
 
 (add-to-list (quote interpreter-mode-alist) (quote ("python" . python-mode)))
 
 (add-to-list (quote auto-mode-alist) (quote ("\\.py\\'" . python-mode)))
 
-(autoload (quote run-python) "python" "\
-Run an inferior Python process, input and output via buffer *Python*.
-CMD is the Python command to run.  NOSHOW non-nil means don't show the
-buffer automatically.
 
-Normally, if there is a process already running in `python-buffer',
-switch to that buffer.  Interactively, a prefix arg allows you to edit
-the initial command line (default is `python-command'); `-i' etc. args
-will be added to this as appropriate.  A new process is started if:
-one isn't running attached to `python-buffer', or interactively the
-default `python-command', or argument NEW is non-nil.  See also the
-documentation for `python-buffer'.
+(autoload (quote py-shell) "python-mode" 
+  "Start an interactive Python interpreter in another window.")
+(defalias 'python-shell 'py-shell)
+; what about run-python - we'll leave it for now
 
-Runs the hook `inferior-python-mode-hook' (after the
-`comint-mode-hook' is run).  (Type \\[describe-mode] in the process
-buffer for a list of commands.)
+(autoload (quote python-mode) "python-mode" 
+  "Major mode for editing Python files." t nil)
 
-\(fn &optional CMD NOSHOW NEW)" t nil)
-
-(autoload (quote python-mode) "python" "\
-Major mode for editing Python files.
-Font Lock mode is currently required for correct parsing of the source.
-See also `jython-mode', which is actually invoked if the buffer appears to
-contain Jython code.  See also `run-python' and associated Python mode
-commands for running Python under Emacs.
-
-The Emacs commands which work with `defun's, e.g. \\[beginning-of-defun], deal
-with nested `def' and `class' blocks.  They take the innermost one as
-current without distinguishing method and class definitions.  Used multiple
-times, they move over others at the same indentation level until they reach
-the end of definitions at that level, when they move up a level.
-\\<python-mode-map>
-Colon is electric: it outdents the line if appropriate, e.g. for
-an else statement.  \\[python-backspace] at the beginning of an indented statement
-deletes a level of indentation to close the current block; otherwise it
-deletes a character backward.  TAB indents the current line relative to
-the preceding code.  Successive TABs, with no intervening command, cycle
-through the possibilities for indentation on the basis of enclosing blocks.
-
-\\[fill-paragraph] fills comments and multi-line strings appropriately, but has no
-effect outside them.
-
-Supports Eldoc mode (only for functions, using a Python process),
-Info-Look and Imenu.  In Outline minor mode, `class' and `def'
-lines count as headers.  Symbol completion is available in the
-same way as in the Python shell using the `rlcompleter' module
-and this is added to the Hippie Expand functions locally if
-Hippie Expand mode is turned on.  Completion of symbols of the
-form x.y only works if the components are literal
-module/attribute names, not variables.  An abbrev table is set up
-with skeleton expansions for compound statement templates.
-
-\\{python-mode-map}
-
-\(fn)" t nil)
-
-(autoload (quote jython-mode) "python" "\
-Major mode for editing Jython files.
-Like `python-mode', but sets up parameters for Jython subprocesses.
-Runs `jython-mode-hook' after `python-mode-hook'.
-
-\(fn)" t nil)
+(autoload (quote jython-mode) "python-mode" 
+  "Major mode for editing Jython/Jython files." t nil)
 
 
 (provide 'aquamacs-mode-defaults)

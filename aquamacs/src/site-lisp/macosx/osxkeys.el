@@ -99,41 +99,43 @@ after updating this variable.")
 
 
 ;; support copy&paste at the right level
-(when (> emacs-major-version 22)
-  (setq interprogram-cut-function 'x-select-text
-	interprogram-paste-function 'aquamacs-cut-buffer-or-selection-value)
+(setq interprogram-cut-function 'x-select-text
+      interprogram-paste-function 'aquamacs-cut-buffer-or-selection-value)
 
-  (defun aquamacs-cut-buffer-or-selection-value ()
-    (unless (and osx-key-mode 
-		 (memq this-original-command '(yank mouse-yank-at-click)))
-      (let (text)
-	;; Consult the selection, then the cut buffer.  Treat empty strings
-	;; as if they were unset.
-	(or text (setq text (ns-get-pasteboard)))
-	(if (string= text "") (setq text nil))
-	(cond
-	 ((not text) nil)
-	 ((eq text ns-last-selected-text) nil)
-	 ((string= text ns-last-selected-text)
-	  ;; Record the newer string, so subsequent calls can use the `eq' test.
-	  (setq ns-last-selected-text text)
-	  nil)
-	 (t (setq ns-last-selected-text text))))))
+(defun aquamacs-cut-buffer-or-selection-value ()
+  (unless (and osx-key-mode 
+	       (memq this-original-command '(yank mouse-yank-at-click)))
+    (let (text)
+      ;; Consult the selection, then the cut buffer.  Treat empty strings
+      ;; as if they were unset.
+      (or text (setq text (ns-get-pasteboard)))
+      (if (string= text "") (setq text nil))
+      (cond
+       ((not text) nil)
+       ((eq text ns-last-selected-text) nil)
+       ((string= text ns-last-selected-text)
+	;; Record the newer string, so subsequent calls can use the `eq' test.
+	(setq ns-last-selected-text text)
+	nil)
+       (t (setq ns-last-selected-text text))))))
 
-  ;; overwrite x-select-text, which is called directly
-  ;; (not via interprogram-cut-function) when dragging mouse
-  ;; and elsewhere 
-  (defun x-select-text (text &optional push)
-    "Maybe put TEXT, a string, on the pasteboard.
+;; overwrite x-select-text, which is called directly
+;; (not via interprogram-cut-function) when dragging mouse
+;; and elsewhere 
+(defun x-select-text (text &optional push)
+  "Maybe put TEXT, a string, on the pasteboard.
 PUSH is ignored."
-    ;; Don't send the pasteboard too much text.
-    ;; It becomes slow, and if really big it causes errors.
-    (when (or (not osx-key-mode) 
-	      (memq this-original-command '(clipboard-kill-region clipboard-kill-ring-save)))
-      ;; do not do this if just selecting text with mouse, or 
-      (ns-set-pasteboard text))
-    ;; 
-    (setq ns-last-selected-text text)))
+  ;; Don't send the pasteboard too much text.
+  ;; It becomes slow, and if really big it causes errors.
+  ;; (print this-original-command)
+  (when (or (not cua-mode) 
+	    ;; (memq this-original-command '(clipboard-kill-region clipboard-kill-ring-save))
+	    ;; do not copy if just selected by mouse.
+	    (not (memq this-original-command '(mouse-extend mouse-drag-region))))
+    ;; do not do this if just selecting text with mouse, or 
+    (ns-set-pasteboard text))
+  ;; 
+  (setq ns-last-selected-text text))
 
 (defun aquamacs-backward-char ()
   "Move point to the left or the beginning of the region.
@@ -145,7 +147,7 @@ provided `cua-mode' and the mark are active."
     (if (and cua-mode transient-mark-mode 
 	     mark-active
 	     (not cua--explicit-region-start)
-	     (not (aquamacs--shift-key-for-command-p)))
+	     (not this-command-keys-shift-translated))
 	(goto-char left)
       (let ((this-command 'backward-car)) ;; maintain compatibility
 	(call-interactively 'backward-char)))))
@@ -161,7 +163,7 @@ provided `cua-mode' and the mark are active."
     (if (and cua-mode transient-mark-mode 
 	     mark-active
 	     (not cua--explicit-region-start)
-	     (not (aquamacs--shift-key-for-command-p)))
+	     (not this-command-keys-shift-translated))
 	(goto-char right)
        (let ((this-command 'forward-car)) ;; maintain compatibility
 	 (call-interactively 'forward-char)))))
@@ -170,6 +172,24 @@ provided `cua-mode' and the mark are active."
 	 '(aquamacs-backward-char aquamacs-forward-char))
   (put cmd 'CUA 'move))
 
+(defun aquamacs-previous-nonvisual-line (&optional arg try-vscroll)
+  "Move cursor vertically up ARG buffer lines.
+Like `previous-line', but always move by logical buffer lines
+rather than by visual lines.  `line-move-visual' is set to nil
+for this command."
+  (interactive "^p\np")
+  (let ((line-move-visual nil)
+	(this-command 'previous-line))
+    (previous-line arg try-vscroll)))
+(defun aquamacs-next-nonvisual-line (&optional arg try-vscroll)
+  "Move cursor vertically down ARG buffer lines.
+Like `next-line', but always move by logical buffer lines
+rather than by visual lines.  `line-move-visual' is set to nil
+for this command."
+  (interactive "^p\np")
+  (let ((line-move-visual nil)
+	(this-command 'previous-line))
+    (next-line arg try-vscroll)))
 
 (defun aquamacs-kill-word (&optional arg)
   "Kill characters forward until encountering the end of a word.
@@ -198,24 +218,6 @@ With argument, do this that many times."
 With argument, do this that many times."
   (interactive "p")
   (aquamacs-kill-word (- (or arg 1))))
-
-(defun aquamacs--shift-key-for-command-p ()
-;; code from cua-base.el
-(if window-system
-	(memq 'shift (event-modifiers
-		      (aref (this-single-command-raw-keys) 0)))
-      (or
-       (memq 'shift (event-modifiers
-		     (aref (this-single-command-keys) 0)))
-       ;; See if raw escape sequence maps to a shifted event, e.g. S-up or C-S-home.
-       (and (boundp 'function-key-map)
-	    function-key-map
-	    (let ((ev (lookup-key function-key-map
-				  (this-single-command-raw-keys))))
-	      (and (vector ev)
-		   (symbolp (setq ev (aref ev 0)))
-		   (string-match "S-" (symbol-name ev))))))))
-
 
 
 ;; respects goal-column
@@ -729,6 +731,8 @@ behavior)."
     (define-key map `[(,osxkeys-command-key backspace)] 'kill-whole-visual-line)
     (define-key map `[(,osxkeys-command-key shift backspace)] 'kill-whole-line)
 
+    (define-key map `[(control p)] 'aquamacs-previous-nonvisual-line)
+    (define-key map `[(control n)] 'aquamacs-next-nonvisual-line)
     (define-key map `[(meta up)] 'cua-scroll-down)
     (define-key map `[(meta down)] 'cua-scroll-up)
     ;; left / right (for transient-mark-mode)
