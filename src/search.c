@@ -209,8 +209,8 @@ clear_regexp_cache ()
   int i;
 
   for (i = 0; i < REGEXP_CACHE_SIZE; ++i)
-    /* It's tempting to compare with the syntax-table we've actually changd,
-       but it's not sufficient because char-table inheritance mewans that
+    /* It's tempting to compare with the syntax-table we've actually changed,
+       but it's not sufficient because char-table inheritance means that
        modifying one syntax-table can change others at the same time.  */
     if (!EQ (searchbufs[i].syntax_table, Qt))
       searchbufs[i].regexp = Qnil;
@@ -564,7 +564,7 @@ fast_string_match_ignore_case (regexp, string)
   return val;
 }
 
-/* Match REGEXP atainst the characters after POS to LIMIT, and return
+/* Match REGEXP against the characters after POS to LIMIT, and return
    the number of matched characters.  If STRING is non-nil, match
    against the characters in it.  In that case, POS and LIMIT are
    indices into the string.  This function doesn't modify the match

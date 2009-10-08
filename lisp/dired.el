@@ -937,7 +937,7 @@ BEG..END is the line where the file info is located."
   ;; spaces there (and within the filename as well, of course).
   (save-excursion
     (let (file file-col other other-col)
-      ;; Check the there is indeed a file, and that there is anoter adjacent
+      ;; Check that there is indeed a file, and that there is anoter adjacent
       ;; file with which to align, and that additional spaces are needed to
       ;; align the filenames.
       (when (and (setq file (progn (goto-char beg)
@@ -1750,10 +1750,10 @@ Keybindings:
   (set (make-local-variable 'dired-directory)
        (or dirname default-directory))
   ;; list-buffers uses this to display the dir being edited in this buffer.
-  (set (make-local-variable 'list-buffers-directory)
-       (expand-file-name (if (listp dired-directory)
-			     (car dired-directory)
-			   dired-directory)))
+  (setq list-buffers-directory
+	(expand-file-name (if (listp dired-directory)
+			      (car dired-directory)
+			    dired-directory)))
   (set (make-local-variable 'dired-actual-switches)
        (or switches dired-listing-switches))
   (set (make-local-variable 'font-lock-defaults)
@@ -2373,7 +2373,7 @@ instead of `dired-actual-switches'."
 			       (goto-char (match-beginning 0))
 			       (beginning-of-line)
 			       (point-marker)))))
-      (if (and (> count 1) (interactive-p))
+      (if (and (> count 1) (called-interactively-p 'interactive))
 	  (message "Buffer includes %d directories" count)))
     ;; We don't need to sort it because it is in buffer order per
     ;; constructionem.  Return new alist:
@@ -2526,23 +2526,19 @@ nil, do not delete.
 `always', delete recursively without asking.
 `top', ask for each directory at top level.
 Anything else, ask for each sub-directory."
-  (let (files)
-     ;; This test is equivalent to
-     ;; (and (file-directory-p fn) (not (file-symlink-p fn)))
-     ;; but more efficient
-    (if (not (eq t (car (file-attributes file))))
-	(delete-file file)
-      (when (and recursive
-	       (setq files
-		     (directory-files file t dired-re-no-dot)) ; Not empty.
-	       (or (eq recursive 'always)
-		   (yes-or-no-p (format "Recursive delete of %s? "
-					(dired-make-relative file)))))
+  ;; This test is equivalent to
+  ;; (and (file-directory-p fn) (not (file-symlink-p fn)))
+  ;; but more efficient
+  (if (not (eq t (car (file-attributes file))))
+      (delete-file file)
+    (if (and recursive
+	     (directory-files file t dired-re-no-dot) ; Not empty.
+	     (or (eq recursive 'always)
+		 (yes-or-no-p (format "Recursive delete of %s? "
+				      (dired-make-relative file)))))
 	(if (eq recursive 'top) (setq recursive 'always)) ; Don't ask again.
-	(while files		; Recursively delete (possibly asking).
-	    (dired-delete-file (car files) recursive)
-	    (setq files (cdr files))))
-      (delete-directory file))))
+      (setq recursive nil))
+    (delete-directory file recursive)))
 
 (defun dired-do-flagged-delete (&optional nomessage)
   "In Dired, delete the files flagged for deletion.
@@ -3918,7 +3914,7 @@ true then the type of the file linked to by FILE is printed instead.
 ;;;***
 
 ;;;### (autoloads (dired-do-relsymlink dired-jump) "dired-x" "dired-x.el"
-;;;;;;  "1a0298749959c80c24c73b8bec5f1f74")
+;;;;;;  "7c58535b489f23d5503ef8219c7d1282")
 ;;; Generated autoloads from dired-x.el
 
 (autoload 'dired-jump "dired-x" "\

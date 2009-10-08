@@ -203,7 +203,9 @@ specifies what to do when the user exits the help buffer."
 ;; It can't find this, but nobody will look.
 (make-help-screen help-for-help-internal
   (purecopy "Type a help option: [abcCdefFgiIkKlLmnprstvw.] C-[cdefmnoptw] or ?")
-  (purecopy
+  ;; Don't purecopy this one, because it's not evaluated (it's
+  ;; directly used as a docstring in a function definition, so it'll
+  ;; be moved to the DOC file anyway: no need for purecopying it).
   "You have typed %THIS-KEY%, the help character.  Type a Help option:
 \(Use SPC or DEL to scroll through this text.  Type \\<help-map>\\[help-quit] to exit the Help command.)
 
@@ -248,7 +250,7 @@ C-n         News of recent Emacs changes.
 C-o         Emacs ordering and distribution information.
 C-p         Info about known Emacs problems.
 C-t         Emacs TODO list.
-C-w         Information on absence of warranty for GNU Emacs.")
+C-w         Information on absence of warranty for GNU Emacs."
   help-map)
 
 
@@ -321,7 +323,8 @@ If that doesn't give a function, return nil."
   (interactive)
   (describe-copying)
   (let (case-fold-search)
-    (search-forward "NO WARRANTY")
+    (search-forward "Disclaimer of Warranty")
+    (forward-line 0)
     (recenter 0)))
 
 (defun describe-prefix-bindings ()
@@ -459,7 +462,8 @@ is specified by the variable `message-log-max'."
 
 To record all your input on a file, use `open-dribble-file'."
   (interactive)
-  (help-setup-xref (list #'view-lossage) (interactive-p))
+  (help-setup-xref (list #'view-lossage)
+		   (called-interactively-p 'interactive))
   (with-help-window (help-buffer)
     (princ (mapconcat (lambda (key)
 			(if (or (integerp key) (symbolp key) (listp key))
@@ -490,7 +494,8 @@ to display (default, the current buffer).  BUFFER can be a buffer
 or a buffer name."
   (interactive)
   (or buffer (setq buffer (current-buffer)))
-  (help-setup-xref (list #'describe-bindings prefix buffer) (interactive-p))
+  (help-setup-xref (list #'describe-bindings prefix buffer)
+		   (called-interactively-p 'interactive))
   (with-current-buffer buffer
     (describe-bindings-internal nil prefix)))
 
@@ -719,7 +724,8 @@ temporarily enables it to allow getting help on disabled items and buttons."
     (if (or (null defn) (integerp defn) (equal defn 'undefined))
 	(message "%s%s is undefined"
 		 (help-key-description key untranslated) mouse-msg)
-      (help-setup-xref (list #'describe-function defn) (interactive-p))
+      (help-setup-xref (list #'describe-function defn)
+		       (called-interactively-p 'interactive))
       ;; Don't bother user with strings from (e.g.) the select-paste menu.
       (when (stringp (aref key (1- (length key))))
 	(aset key (1- (length key)) "(any string)"))
@@ -796,7 +802,7 @@ whose documentation describes the minor mode."
   (interactive "@")
   (unless buffer (setq buffer (current-buffer)))
   (help-setup-xref (list #'describe-mode buffer)
-		   (interactive-p))
+		   (called-interactively-p 'interactive))
   ;; For the sake of help-do-xref and help-xref-go-back,
   ;; don't switch buffers before calling `help-buffer'.
   (with-help-window (help-buffer)

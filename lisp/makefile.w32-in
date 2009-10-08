@@ -60,7 +60,9 @@ LOADDEFS = $(lisp)/calendar/cal-loaddefs.el \
 
 AUTOGENEL = $(lisp)/loaddefs.el $(LOADDEFS) $(lisp)/cus-load.el \
 	$(lisp)/finder-inf.el $(lisp)/subdirs.el $(lisp)/eshell/esh-groups.el \
-	$(lisp)/calc/calc-loaddefs.el $(lisp)/nxml/subdirs.el
+	$(lisp)/calc/calc-loaddefs.el $(lisp)/nxml/subdirs.el \
+	$(lisp)/cedet/semantic/loaddefs.el $(lisp)/cedet/ede/loaddefs.el \
+	$(lisp)/cedet/srecode/loaddefs.el
 
 # Files to compile before others during a bootstrap.  This is done to
 # speed up the bootstrap process.  The CC files are compiled first
@@ -83,7 +85,20 @@ COMPILE_FIRST = \
 emacs = "$(EMACS)" $(EMACSOPT)
 
 # Have to define the list of subdirs manually when not using sh.
-WINS_ALMOST=\
+WINS_CEDET=\
+	cedet \
+	cedet/ede \
+	cedet/semantic \
+	cedet/srecode
+
+WINS_CEDET_SUBDIRS=\
+	cedet/semantic/analyze \
+	cedet/semantic/bovine \
+	cedet/semantic/decorate \
+	cedet/semantic/symref \
+	cedet/semantic/wisent
+
+WINS_BASIC=\
 	calc \
 	calendar \
 	emacs-lisp \
@@ -103,6 +118,19 @@ WINS_ALMOST=\
 	textmodes \
 	url
 
+# Directories with lisp files to compile
+WINS_ALMOST=$(WINS_BASIC) \
+	$(WINS_CEDET)
+
+# Directories to extract data from (customs, autoloads, etc.)
+WINS_UPDATES=$(WINS_ALMOST) \
+	$(WINS_CEDET_SUBDIRS)
+
+# Directories to add to subdirs.el
+WINS_SUBDIR=$(WINS_BASIC) \
+	obsolete
+
+# All directories, except CEDET subdirs
 WINS= $(WINS_ALMOST) \
 	term \
 	obsolete
@@ -137,12 +165,13 @@ $(lisp)/cus-load.el:
 # WARNING: Do NOT split the part inside $(ARGQUOTE)s into multiple lines as
 #          this can break with GNU Make 3.81 and later if sh.exe is used.
 custom-deps: $(lisp)/cus-load.el $(lisp)/loaddefs.el doit
-	@echo Directories: $(WINS_ALMOST)
-	-$(emacs) -l cus-dep --eval $(ARGQUOTE)(setq find-file-hook nil)$(ARGQUOTE) -f custom-make-dependencies $(lisp) $(WINS_ALMOST)
+	@echo Directories: $(WINS_UPDATES)
+	-$(emacs) -l cus-dep --eval $(ARGQUOTE)(setq find-file-hook nil)$(ARGQUOTE) \
+		  -f custom-make-dependencies $(lisp) $(WINS_UPDATES)
 
 finder-data: $(lisp)/loaddefs.el doit
-	@echo Directories: $(WINS_ALMOST)
-	$(emacs) -l finder -f finder-compile-keywords-make-dist $(lisp) $(WINS_ALMOST)
+	@echo Directories: $(WINS_UPDATES)
+	$(emacs) -l finder -f finder-compile-keywords-make-dist $(lisp) $(WINS_UPDATES)
 
 $(lisp)/loaddefs.el:
 	$(MAKE) $(MFLAGS) loaddefs.el-$(SHELLTYPE)
@@ -182,10 +211,10 @@ loaddefs.el-CMD:
 # WARNING: Do NOT split the part inside $(ARGQUOTE)s into multiple lines as
 #          this can break with GNU Make 3.81 and later if sh.exe is used.
 autoloads: $(lisp)/loaddefs.el $(LOADDEFS) doit
-	@echo Directories: . $(WINS_ALMOST)
+	@echo Directories: . $(WINS_UPDATES)
 	$(emacs) -l autoload \
 		--eval $(ARGQUOTE)(setq find-file-hook nil find-file-suppress-same-file-warnings t)$(ARGQUOTE) \
-		-f w32-batch-update-autoloads "$(lisp)/loaddefs.el" . $(WINS_ALMOST)
+		-f w32-batch-update-autoloads "$(lisp)/loaddefs.el" . $(WINS_UPDATES)
 
 $(lisp)/subdirs.el:
 	$(MAKE) $(MFLAGS) update-subdirs
@@ -198,12 +227,12 @@ update-subdirs-CMD: doit
 	echo ;; In load-path, after this directory should come>> $(lisp)/subdirs.el
 	echo ;; certain of its subdirectories.  Here we specify them.>> $(lisp)/subdirs.el
 	echo (normal-top-level-add-to-load-path $(SQUOTE)(>> $(lisp)/subdirs.el
-	@for %%d in ($(WINS)) do if not (%%d)==(term) echo "%%d">> $(lisp)/subdirs.el
+	@for %%d in ($(WINS_SUBDIR) cedet) do echo "%%d">> $(lisp)/subdirs.el
 	echo ))>> $(lisp)/subdirs.el
 
 update-subdirs-SH: doit
 	$(srcdir)/update-subdirs $(lisp); \
-	for file in $(WINS); do \
+	for file in $(WINS_SUBDIR); do \
 	   $(srcdir)/update-subdirs $$file; \
 	done;
 
@@ -397,11 +426,12 @@ bootstrap-clean:
 bootstrap-clean-CMD:
 #	if exist "$(EMACS)" $(MAKE) $(MFLAGS) autoloads
 	-for %%f in (. $(WINS)) do for %%g in (%%f\*.elc) do @$(DEL) %%g
+	-for %%f in ($(WINS_CEDET_SUBDIRS)) do for %%g in (%%f\*.elc) do @$(DEL) %%g
 
 bootstrap-clean-SH:
 #	if test -f "$(EMACS)"; then $(MAKE) $(MFLAGS) autoloads; fi
 #	-rm -f $(lisp)/*.elc $(lisp)/*/*.elc
-	-for dir in . $(WINS); do rm -f $$dir/*.elc; done
+	-for dir in . $(WINS) $(WINS_CEDET_SUBDIRS); do rm -f $$dir/*.elc $$dir/*/*.elc $$dir/*/*/*.elc; done
 
 # Generate/update files for the bootstrap process.
 # When done, remove bootstrap-emacs from ../bin, so that

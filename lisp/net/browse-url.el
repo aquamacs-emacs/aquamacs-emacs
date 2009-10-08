@@ -669,7 +669,7 @@ for use in `interactive'."
 ;; this macro.  We use that rather than interactive-p because
 ;; use in a keyboard macro should not change this behavior.
 (defmacro browse-url-maybe-new-window (arg)
-  `(if (or noninteractive (not (called-interactively-p)))
+  `(if (or noninteractive (not (called-interactively-p 'any)))
        ,arg
      browse-url-new-window-flag))
 
@@ -770,7 +770,7 @@ narrowed."
 Prompts for a URL, defaulting to the URL at or before point.  Variable
 `browse-url-browser-function' says which browser to use."
   (interactive (browse-url-interactive-arg "URL: "))
-  (unless (interactive-p)
+  (unless (called-interactively-p 'interactive)
     (setq args (or args (list browse-url-new-window-flag))))
   (let ((process-environment (copy-sequence process-environment)))
     ;; When connected to various displays, be careful to use the display of
@@ -778,7 +778,10 @@ Prompts for a URL, defaulting to the URL at or before point.  Variable
     ;; which may not even exist any more.
     (if (stringp (frame-parameter (selected-frame) 'display))
         (setenv "DISPLAY" (frame-parameter (selected-frame) 'display)))
-    (if (functionp browse-url-browser-function)
+    ;; Send any symbol to `apply', not just fboundp ones, since void-function
+    ;; from apply is clearer than wrong-type-argument from dolist.
+    (if (or (symbolp browse-url-browser-function)
+            (functionp browse-url-browser-function))
         (apply browse-url-browser-function url args)
       ;; The `function' can be an alist; look down it for first match
       ;; and apply the function (which might be a lambda).

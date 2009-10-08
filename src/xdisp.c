@@ -4575,10 +4575,9 @@ display_prop_string_p (prop, string)
 }
 
 
-/* Determine from which buffer position in W's buffer STRING comes
-   from.  AROUND_CHARPOS is an approximate position where it could
-   be from.  Value is the buffer position or 0 if it couldn't be
-   determined.
+/* Determine which buffer position in W's buffer STRING comes from.
+   AROUND_CHARPOS is an approximate position where it could come from.
+   Value is the buffer position or 0 if it couldn't be determined.
 
    W's buffer must be current.
 
@@ -5685,6 +5684,9 @@ get_next_display_element (it)
 	{
 	  Lisp_Object dv;
 	  struct charset *unibyte = CHARSET_FROM_ID (charset_unibyte);
+	  enum { char_is_other = 0, char_is_nbsp, char_is_soft_hyphen }
+	       nbsp_or_shy = char_is_other;
+	  int decoded = it->c;
 
 	  if (it->dp
 	      && (dv = DISP_CHAR_VECTOR (it->dp, it->c),
@@ -5713,6 +5715,22 @@ get_next_display_element (it)
 	      goto get_next;
 	    }
 
+	  if (unibyte_display_via_language_environment
+	      && it->c >= 0x80)
+	    decoded = DECODE_CHAR (unibyte, it->c);
+
+	  if (it->c >= 0x80 && ! NILP (Vnobreak_char_display))
+	    {
+	      if (it->multibyte_p)
+		nbsp_or_shy = (it->c == 0xA0   ? char_is_nbsp
+			       : it->c == 0xAD ? char_is_soft_hyphen
+			       :                 char_is_other);
+	      else if (unibyte_display_via_language_environment)
+		nbsp_or_shy = (decoded == 0xA0   ? char_is_nbsp
+			       : decoded == 0xAD ? char_is_soft_hyphen
+			       :                   char_is_other);
+	    }
+
 	  /* Translate control characters into `\003' or `^C' form.
 	     Control characters coming from a display table entry are
 	     currently not translated because we use IT->dpvec to hold
@@ -5725,21 +5743,19 @@ get_next_display_element (it)
 	     If it->multibyte_p is zero, eight-bit characters that
 	     don't have corresponding multibyte char code are also
 	     translated to octal form.  */
-	  else if ((it->c < ' '
-		    ? (it->area != TEXT_AREA
-		       /* In mode line, treat \n, \t like other crl chars.  */
-		       || (it->c != '\t'
-			   && it->glyph_row
-			   && (it->glyph_row->mode_line_p || it->avoid_cursor_p))
-		       || (it->c != '\n' && it->c != '\t'))
-		    : (it->multibyte_p
-		       ? (!CHAR_PRINTABLE_P (it->c)
-			  || (!NILP (Vnobreak_char_display)
-			      && (it->c == 0xA0 /* NO-BREAK SPACE */
-				  || it->c == 0xAD /* SOFT HYPHEN */)))
-		       : (it->c >= 127
-			  && (! unibyte_display_via_language_environment
-			      || (DECODE_CHAR (unibyte, it->c) <= 0xA0))))))
+	  if ((it->c < ' '
+	       ? (it->area != TEXT_AREA
+		  /* In mode line, treat \n, \t like other crl chars.  */
+		  || (it->c != '\t'
+		      && it->glyph_row
+		      && (it->glyph_row->mode_line_p || it->avoid_cursor_p))
+		  || (it->c != '\n' && it->c != '\t'))
+	       : (nbsp_or_shy
+		  || (it->multibyte_p
+		      ? ! CHAR_PRINTABLE_P (it->c)
+		      : (! unibyte_display_via_language_environment
+			 ? it->c >= 0x80
+			 : (decoded >= 0x80 && decoded < 0xA0))))))
 	    {
 	      /* IT->c is a control character which must be displayed
 		 either as '\003' or as `^C' where the '\\' and '^'
@@ -5795,7 +5811,7 @@ get_next_display_element (it)
 		 highlighting.  */
 
 	      if (EQ (Vnobreak_char_display, Qt)
-		  && it->c == 0xA0)
+		  && nbsp_or_shy == char_is_nbsp)
 		{
 		  /* Merge the no-break-space face into the current face.  */
 		  face_id = merge_faces (it->f, Qnobreak_space, 0,
@@ -5845,7 +5861,7 @@ get_next_display_element (it)
 		 highlighting.  */
 
 	      if (EQ (Vnobreak_char_display, Qt)
-		  && it->c == 0xAD)
+		  && nbsp_or_shy == char_is_soft_hyphen)
 		{
 		  it->c = '-';
 		  XSETINT (it->ctl_chars[0], '-');
@@ -5856,10 +5872,10 @@ get_next_display_element (it)
 	      /* Handle non-break space and soft hyphen
 		 with the escape glyph.  */
 
-	      if (it->c == 0xA0 || it->c == 0xAD)
+	      if (nbsp_or_shy)
 		{
 		  XSETINT (it->ctl_chars[0], escape_glyph);
-		  it->c = (it->c == 0xA0 ? ' ' : '-');
+		  it->c = (nbsp_or_shy == char_is_nbsp ? ' ' : '-');
 		  XSETINT (it->ctl_chars[1], it->c);
 		  ctl_len = 2;
 		  goto display_control;
@@ -6812,9 +6828,9 @@ move_it_in_display_line_to (struct it *it,
       /* The number of glyphs we get back in IT->nglyphs will normally
 	 be 1 except when IT->c is (i) a TAB, or (ii) a multi-glyph
 	 character on a terminal frame, or (iii) a line end.  For the
-	 second case, IT->nglyphs - 1 padding glyphs will be present
-	 (on X frames, there is only one glyph produced for a
-	 composite character.
+	 second case, IT->nglyphs - 1 padding glyphs will be present.
+	 (On X frames, there is only one glyph produced for a
+	 composite character.)
 
 	 The behavior implemented below means, for continuation lines,
 	 that as many spaces of a TAB as fit on the current line are
@@ -6914,7 +6930,7 @@ move_it_in_display_line_to (struct it *it,
 			    }
 
 			  set_iterator_to_next (it, 1);
-			  /* One graphical terminals, newlines may
+			  /* On graphical terminals, newlines may
 			     "overflow" into the fringe if
 			     overflow-newline-into-fringe is non-nil.
 			     On text-only terminals, newlines may
@@ -12281,10 +12297,11 @@ redisplay_window_1 (window)
 
 
 /* Set cursor position of W.  PT is assumed to be displayed in ROW.
-   DELTA is the number of bytes by which positions recorded in ROW
-   differ from current buffer positions.
+   DELTA and DELTA_BYTES are the numbers of characters and bytes by
+   which positions recorded in ROW differ from current buffer
+   positions.
 
-   Return 0 if cursor is not on this row.  1 otherwise.  */
+   Return 0 if cursor is not on this row, 1 otherwise.  */
 
 int
 set_cursor_from_row (w, row, matrix, delta, delta_bytes, dy, dvpos)
@@ -12296,16 +12313,18 @@ set_cursor_from_row (w, row, matrix, delta, delta_bytes, dy, dvpos)
   struct glyph *glyph = row->glyphs[TEXT_AREA];
   struct glyph *end = glyph + row->used[TEXT_AREA];
   struct glyph *cursor = NULL;
-  /* The first glyph that starts a sequence of glyphs from string.  */
+  /* The first glyph that starts a sequence of glyphs from a string
+     that is a value of a display property.  */
   struct glyph *string_start;
   /* The X coordinate of string_start.  */
   int string_start_x;
-  /* The last known character position.  */
+  /* The last known character position in row.  */
   int last_pos = MATRIX_ROW_START_CHARPOS (row) + delta;
   /* The last known character position before string_start.  */
   int string_before_pos;
   int x = row->x;
   int cursor_x = x;
+  /* Last buffer position covered by an overlay.  */
   int cursor_from_overlay_pos = 0;
   int pt_old = PT - delta;
 
@@ -12333,11 +12352,15 @@ set_cursor_from_row (w, row, matrix, delta, delta_bytes, dy, dvpos)
 	  string_start = NULL;
 	  x += glyph->pixel_width;
 	  ++glyph;
+	  /* If we are beyond the cursor position computed from the
+	     last overlay seen, that overlay is not in effect for
+	     current cursor position.  Reset the cursor information
+	     computed from that overlay.  */
 	  if (cursor_from_overlay_pos
 	      && last_pos >= cursor_from_overlay_pos)
 	    {
 	      cursor_from_overlay_pos = 0;
-	      cursor = 0;
+	      cursor = NULL;
 	    }
 	}
       else
@@ -12348,7 +12371,7 @@ set_cursor_from_row (w, row, matrix, delta, delta_bytes, dy, dvpos)
 	      string_start = glyph;
 	      string_start_x = x;
 	    }
-	  /* Skip all glyphs from string.  */
+	  /* Skip all glyphs from a string.  */
 	  do
 	    {
 	      Lisp_Object cprop;
@@ -12359,14 +12382,14 @@ set_cursor_from_row (w, row, matrix, delta, delta_bytes, dy, dvpos)
 		      !NILP (cprop))
 		  && (pos = string_buffer_position (w, glyph->object,
 						    string_before_pos),
-		      (pos == 0	  /* From overlay */
+		      (pos == 0	  /* from overlay */
 		       || pos == pt_old)))
 		{
-		  /* Estimate overlay buffer position from the buffer
-		     positions of the glyphs before and after the overlay.
-		     Add 1 to last_pos so that if point corresponds to the
-		     glyph right after the overlay, we still use a 'cursor'
-		     property found in that overlay.  */
+		  /* Compute the first buffer position after the overlay.
+		     If the `cursor' property tells us how  many positions
+		     are associated with the overlay, use that.  Otherwise,
+		     estimate from the buffer positions of the glyphs
+		     before and after the overlay.  */
 		  cursor_from_overlay_pos = (pos ? 0 : last_pos
 					     + (INTEGERP (cprop) ? XINT (cprop) : 0));
 		  cursor = glyph;
@@ -12390,9 +12413,8 @@ set_cursor_from_row (w, row, matrix, delta, delta_bytes, dy, dvpos)
       while (glyph > row->glyphs[TEXT_AREA]
 	     && (glyph - 1)->charpos == last_pos)
 	glyph--, x -= glyph->pixel_width;
-      /* That loop always goes one position too far,
-	 including the glyph before the ellipsis.
-	 So scan forward over that one.  */
+      /* That loop always goes one position too far, including the
+	 glyph before the ellipsis.  So scan forward over that one.  */
       x += glyph->pixel_width;
       glyph++;
     }
@@ -12413,8 +12435,8 @@ set_cursor_from_row (w, row, matrix, delta, delta_bytes, dy, dvpos)
       x = string_start_x;
       string = glyph->object;
       pos = string_buffer_position (w, string, string_before_pos);
-      /* If STRING is from overlay, LAST_POS == 0.  We skip such glyphs
-	 because we always put cursor after overlay strings.  */
+      /* If POS == 0, STRING is from overlay.  We skip such glyphs
+	 because we always put the cursor after overlay strings.  */
       while (pos == 0 && glyph < stop)
 	{
 	  string = glyph->object;
@@ -12441,8 +12463,8 @@ set_cursor_from_row (w, row, matrix, delta, delta_bytes, dy, dvpos)
 	    }
 	}
 
-      /* If we reached the end of the line, and end was from a string,
-	 cursor is not on this line.  */
+      /* If we reached the end of the line, and END was from a string,
+	 the cursor is not on this line.  */
       if (glyph == end && row->continued_p)
 	return 0;
     }
@@ -16159,9 +16181,10 @@ extend_face_to_end_of_line (it)
   it->glyph_row->fill_line_p = 1;
 
   /* If current character of IT is not ASCII, make sure we have the
-         ASCII face.  This will be automatically undone the next time
-         get_next_display_element returns a multibyte character.  Note
-         that the character will always be single byte in unibyte text.  */
+     ASCII face.  This will be automatically undone the next time
+     get_next_display_element returns a multibyte character.  Note
+     that the character will always be single byte in unibyte
+     text.  */
   if (!ASCII_CHAR_P (it->c))
     {
       it->face_id = FACE_FOR_CHAR (f, face, 0, -1, Qnil);
@@ -22690,7 +22713,7 @@ x_update_cursor (f, on_p)
 /* EXPORT:
    Clear the cursor of window W to background color, and mark the
    cursor as not shown.  This is used when the text where the cursor
-   is is about to be rewritten.  */
+   is about to be rewritten.  */
 
 void
 x_clear_cursor (w)
@@ -25034,10 +25057,13 @@ fontified regions the property `fontified'.  */);
   DEFVAR_BOOL ("unibyte-display-via-language-environment",
                &unibyte_display_via_language_environment,
     doc: /* *Non-nil means display unibyte text according to language environment.
-Specifically this means that unibyte non-ASCII characters
+Specifically, this means that raw bytes in the range 160-255 decimal
 are displayed by converting them to the equivalent multibyte characters
 according to the current language environment.  As a result, they are
-displayed according to the current fontset.  */);
+displayed according to the current fontset.
+
+Note that this variable affects only how these bytes are displayed,
+but does not change the fact they are interpreted as raw bytes.  */);
   unibyte_display_via_language_environment = 0;
 
   DEFVAR_LISP ("max-mini-window-height", &Vmax_mini_window_height,

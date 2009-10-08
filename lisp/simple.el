@@ -1111,10 +1111,11 @@ display the result of expression evaluation."
 			&optional eval-expression-insert-value)
   "Evaluate EVAL-EXPRESSION-ARG and print value in the echo area.
 Value is also consed on to front of the variable `values'.
-Optional argument EVAL-EXPRESSION-INSERT-VALUE, if non-nil, means
-insert the result into the current buffer instead of printing it in
-the echo area.  Truncates long output according to the value of the
-variables `eval-expression-print-length' and `eval-expression-print-level'.
+Optional argument EVAL-EXPRESSION-INSERT-VALUE non-nil (interactively,
+with prefix argument) means insert the result into the current buffer
+instead of printing it in the echo area.  Truncates long output
+according to the value of the variables `eval-expression-print-length'
+and `eval-expression-print-level'.
 
 If `eval-expression-debug-on-error' is non-nil, which is the default,
 this command arranges for all errors to enter the debugger."
@@ -2542,7 +2543,8 @@ In the latter case, the local part of `default-directory' becomes
 the working directory of the process.
 
 PROGRAM and PROGRAM-ARGS might be file names.  They are not
-objects of file handler invocation."
+objects of file handler invocation.  File handlers might not
+support pty association, if PROGRAM is nil."
   (let ((fh (find-file-name-handler default-directory 'start-file-process)))
     (if fh (apply fh 'start-file-process name buffer program program-args)
       (apply 'start-process name buffer program program-args))))
@@ -3027,9 +3029,9 @@ This command is similar to `copy-region-as-kill', except that it gives
 visual feedback indicating the extent of the region being copied."
   (interactive "r")
   (copy-region-as-kill beg end)
-  ;; This use of interactive-p is correct
+  ;; This use of called-interactively-p is correct
   ;; because the code it controls just gives the user visual feedback.
-  (if (interactive-p)
+  (if (called-interactively-p 'interactive)
       (let ((other-end (if (= (point) beg) end beg))
 	    (opoint (point))
 	    ;; Inhibit quitting so we can make a quit here
@@ -3993,7 +3995,7 @@ and more reliable (no dependence on goal column, etc.)."
 	    (end-of-line)
 	    (insert (if use-hard-newlines hard-newline "\n")))
 	(line-move arg nil nil try-vscroll))
-    (if (interactive-p)
+    (if (called-interactively-p 'interactive)
 	(condition-case nil
 	    (line-move arg nil nil try-vscroll)
 	  ((beginning-of-buffer end-of-buffer) (ding)))
@@ -4023,7 +4025,7 @@ If you are thinking of using this in a Lisp program, consider using
 to use and more reliable (no dependence on goal column, etc.)."
   (interactive "^p\np")
   (or arg (setq arg 1))
-  (if (interactive-p)
+  (if (called-interactively-p 'interactive)
       (condition-case nil
 	  (line-move (- arg) nil nil try-vscroll)
 	((beginning-of-buffer end-of-buffer) (ding)))
@@ -6430,7 +6432,7 @@ See also `normal-erase-is-backspace'."
 	     (keyboard-translate ?\C-? ?\C-?))))
 
     (run-hooks 'normal-erase-is-backspace-hook)
-    (if (interactive-p)
+    (if (called-interactively-p 'interactive)
 	(message "Delete key deletes %s"
 		 (if (terminal-parameter nil 'normal-erase-is-backspace)
 		     "forward" "backward")))))

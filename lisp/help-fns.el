@@ -52,7 +52,8 @@
 	       fn (intern val)))))
   (if (null function)
       (message "You didn't specify a function")
-    (help-setup-xref (list #'describe-function function) (interactive-p))
+    (help-setup-xref (list #'describe-function function)
+		     (called-interactively-p 'interactive))
     (save-excursion
       (with-help-window (help-buffer)
 	(prin1 function)
@@ -456,7 +457,9 @@ suitable file is found, return nil."
 	      (terpri)))))
       ;; Note that list* etc do not get this property until
       ;; cl-hack-byte-compiler runs, after bytecomp is loaded.
-      (when (eq (get function 'byte-compile) 'cl-byte-compile-compiler-macro)
+      (when (and (symbolp function)
+                 (eq (get function 'byte-compile)
+                     'cl-byte-compile-compiler-macro))
 	(princ "This function has a compiler macro")
 	(let ((lib (get function 'compiler-macro-file)))
 	  (when (stringp lib)
@@ -466,14 +469,17 @@ suitable file is found, return nil."
 		(re-search-backward "`\\([^`']+\\)'" nil t)
 		(help-xref-button 1 'help-function-cmacro function lib)))))
 	(princ ".\n\n"))
-      (let* ((arglist (help-function-arglist def))
+      (let* ((advertised (gethash def advertised-signature-table t))
+	     (arglist (if (listp advertised)
+			  advertised (help-function-arglist def)))
 	     (doc (documentation function))
 	     (usage (help-split-fundoc doc function)))
 	(with-current-buffer standard-output
 	  ;; If definition is a keymap, skip arglist note.
 	  (unless (keymapp function)
+	    (if usage (setq doc (cdr usage)))
 	    (let* ((use (cond
-			 (usage (setq doc (cdr usage)) (car usage))
+			 ((and usage (not (listp advertised))) (car usage))
 			 ((listp arglist)
 			  (format "%S" (help-make-usage function arglist)))
 			 ((stringp arglist) arglist)
@@ -604,7 +610,7 @@ it is displayed along with the global value."
 		(setq val (symbol-value variable)
 		      locus (variable-binding-locus variable)))))
 	  (help-setup-xref (list #'describe-variable variable buffer)
-			   (interactive-p))
+			   (called-interactively-p 'interactive))
 	  (with-help-window (help-buffer)
 	    (with-current-buffer buffer
 	      (prin1 variable)
@@ -798,7 +804,8 @@ The descriptions are inserted in a help buffer, which is then displayed.
 BUFFER defaults to the current buffer."
   (interactive)
   (setq buffer (or buffer (current-buffer)))
-  (help-setup-xref (list #'describe-syntax buffer) (interactive-p))
+  (help-setup-xref (list #'describe-syntax buffer)
+		   (called-interactively-p 'interactive))
   (with-help-window (help-buffer)
     (let ((table (with-current-buffer buffer (syntax-table))))
       (with-current-buffer standard-output
@@ -823,7 +830,8 @@ If BUFFER is non-nil, then describe BUFFER's category table instead.
 BUFFER should be a buffer or a buffer name."
   (interactive)
   (setq buffer (or buffer (current-buffer)))
-  (help-setup-xref (list #'describe-categories buffer) (interactive-p))
+  (help-setup-xref (list #'describe-categories buffer)
+		   (called-interactively-p 'interactive))
   (with-help-window (help-buffer)
     (let* ((table (with-current-buffer buffer (category-table)))
 	   (docs (char-table-extra-slot table 0)))

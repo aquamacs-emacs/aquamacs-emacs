@@ -42,6 +42,18 @@ trailer starting with a FormFeed character.")
 ;;;###autoload
 (put 'generated-autoload-file 'safe-local-variable 'stringp)
 
+(defvar generated-autoload-feature nil
+  "Feature for `generated-autoload-file' to provide.
+If nil, this defaults to `generated-autoload-file', sans extension.")
+;;;###autoload
+(put 'generated-autoload-feature 'safe-local-variable 'symbolp)
+
+(defvar generated-autoload-load-name nil
+  "Load name for `autoload' statements generated from autoload cookies.
+If nil, this defaults to the file name, sans extension.")
+;;;###autoload
+(put 'generated-autoload-load-name 'safe-local-variable 'stringp)
+
 ;; This feels like it should be a defconst, but MH-E sets it to
 ;; ";;;###mh-autoload" for the autoloads that are to go into mh-loaddefs.el.
 (defvar generate-autoload-cookie ";;;###autoload"
@@ -57,6 +69,9 @@ This string is used:
 If this string appears alone on a line, the following form will be
 read and an autoload made for it.  If there is further text on the line,
 that text will be copied verbatim to `generated-autoload-file'.")
+
+(defvar autoload-excludes nil
+  "If non-nil, list of absolute file names not to scan for autoloads.")
 
 (defconst generate-autoload-section-header "\f\n;;;### "
   "String that marks the form at the start of a new file's autoload section.")
@@ -95,11 +110,12 @@ or macro definition or a defcustom)."
 		   easy-mmode-define-global-mode define-global-minor-mode
 		   define-globalized-minor-mode
 		   easy-mmode-define-minor-mode define-minor-mode
-		   defun* defmacro*))
+		   defun* defmacro* define-overloadable-function))
       (let* ((macrop (memq car '(defmacro defmacro*)))
 	     (name (nth 1 form))
 	     (args (case car
-		    ((defun defmacro defun* defmacro*) (nth 2 form))
+		    ((defun defmacro defun* defmacro*
+		       define-overloadable-function) (nth 2 form))
 		    ((define-skeleton) '(&optional str arg))
 		    ((define-generic-mode define-derived-mode
                        define-compilation-mode) nil)
@@ -121,6 +137,14 @@ or macro definition or a defcustom)."
 				    define-minor-mode)) t)
 		  (eq (car-safe (car body)) 'interactive))
 	      (if macrop (list 'quote 'macro) nil))))
+
+     ;; For defclass forms, use `eieio-defclass-autoload'.
+     ((eq car 'defclass)
+      (let ((name (nth 1 form))
+	    (superclasses (nth 2 form))
+	    (doc (nth 4 form)))
+	(list 'eieio-defclass-autoload (list 'quote name)
+	      (list 'quote superclasses) file doc)))
 
      ;; Convert defcustom to less space-consuming data.
      ((eq car 'defcustom)
@@ -245,7 +269,12 @@ information contained in FILE."
 	    ";;\n"
 	    ";;; Code:\n\n"
 	    "\n"
-	    "(provide '" (file-name-sans-extension basename) ")\n"
+	    "(provide '"
+	    (if (and generated-autoload-feature
+		     (symbolp generated-autoload-feature))
+		(format "%s" generated-autoload-feature)
+	      (file-name-sans-extension basename))
+	    ")\n"
 	    ";; Local Variables:\n"
 	    ";; version-control: never\n"
 	    ";; no-byte-compile: t\n"
@@ -336,7 +365,7 @@ Return non-nil if and only if FILE adds no autoloads to OUTFILE
 \(or OUTBUF if OUTFILE is nil)."
   (catch 'done
     (let ((autoloads-done '())
-          (load-name (autoload-file-load-name file))
+	  load-name
           (print-length nil)
 	  (print-level nil)
           (print-readably t)           ; This does something in Lucid Emacs.
@@ -347,13 +376,18 @@ Return non-nil if and only if FILE adds no autoloads to OUTFILE
           relfile
           ;; nil until we found a cookie.
           output-start)
-
+      (if (member absfile autoload-excludes)
+      	  (message "Generating autoloads for %s...skipped" file)
       (with-current-buffer (or visited
                                ;; It is faster to avoid visiting the file.
                                (autoload-find-file file))
         ;; Obey the no-update-autoloads file local variable.
         (unless no-update-autoloads
           (message "Generating autoloads for %s..." file)
+	  (setq load-name
+		(if (stringp generated-autoload-load-name)
+		    generated-autoload-load-name
+		  (autoload-file-load-name file)))
           (save-excursion
             (save-restriction
               (widen)
@@ -452,7 +486,7 @@ Return non-nil if and only if FILE adds no autoloads to OUTFILE
           (message "Generating autoloads for %s...done" file))
         (or visited
             ;; We created this buffer, so we should kill it.
-            (kill-buffer (current-buffer))))
+            (kill-buffer (current-buffer)))))
       ;; If the entries were added to some other buffer, then the file
       ;; doesn't add entries to OUTFILE.
       (or (not output-start) otherbuf))))
@@ -475,7 +509,7 @@ Return FILE if there was no autoload cookie in it, else nil."
          (no-autoloads (autoload-generate-file-autoloads file)))
     (if autoload-modified-buffers
         (if save-after (autoload-save-buffers))
-      (if (interactive-p)
+      (if (called-interactively-p 'interactive)
           (message "Autoload section for %s is up to date." file)))
     (if no-autoloads file)))
 
@@ -649,6 +683,20 @@ directory or directories specified."
 (defun batch-update-autoloads ()
   "Update loaddefs.el autoloads in batch mode.
 Calls `update-directory-autoloads' on the command line arguments."
+  ;; For use during the Emacs build process only.
+  (unless autoload-excludes
+    (let* ((ldir (file-name-directory generated-autoload-file))
+	   (mfile (expand-file-name "../src/Makefile" ldir))
+	   lim)
+      (when (file-readable-p mfile)
+	(with-temp-buffer
+	  (insert-file-contents mfile)
+	  (when (re-search-forward "^lisp= " nil t)
+	    (setq lim (line-end-position))
+	    (while (re-search-forward "\\${lispsource}\\([^ ]+\\.el\\)c?\\>"
+				      lim t)
+	      (push (expand-file-name (match-string 1) ldir)
+		    autoload-excludes)))))))
   (let ((args command-line-args-left))
     (setq command-line-args-left nil)
     (apply 'update-directory-autoloads args)))

@@ -94,7 +94,7 @@ but can be invoked directly in `fast' mode.")
   "Return string describing the version of Emerge.
 When called interactively, displays the version."
   (interactive)
-  (if (interactive-p)
+  (if (called-interactively-p 'interactive)
       (message "Emerge version %s" emacs-version)
     emacs-version))
 
@@ -3103,10 +3103,9 @@ SPC, it is ignored; if it is anything else, it is processed as a command."
 	  (progn
 	    (erase-buffer)
 	    (insert name)
-	    (if (not (pos-visible-in-window-p))
-		(while (and (not (pos-visible-in-window-p))
-			    (> (1- (frame-height)) (window-height)))
-		  (enlarge-window 1)))
+	    (while (and (not (pos-visible-in-window-p))
+			(not (window-full-height-p)))
+	      (enlarge-window 1))
 	    (let* ((echo-keystrokes 0)
 		   (c (read-event)))
 	      (if (not (eq c 32))
