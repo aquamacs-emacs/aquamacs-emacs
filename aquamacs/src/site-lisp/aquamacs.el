@@ -686,10 +686,10 @@ yes-or-no prompts - y or n will do."
  
   (defun aquamacs-repl-yes-or-no-p (text)
     "Like `old-yes-or-no-p' - use that function instead."
-    (aquamacs-ask-for-confirmation text t))
+    (aquamacs-ask-for-confirmation text t nil nil t))
   (defun aquamacs-y-or-n-p (text)
     "Like `old-y-or-n-p' - use that function instead."
-    (aquamacs-ask-for-confirmation text nil))
+    (aquamacs-ask-for-confirmation text nil nil nil t))
 
   (unless (fboundp 'old-yes-or-no-p)
     (fset 'old-yes-or-no-p (symbol-function 'yes-or-no-p)))
