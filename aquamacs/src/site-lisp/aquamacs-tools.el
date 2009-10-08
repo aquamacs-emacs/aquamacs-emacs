@@ -77,7 +77,7 @@
 		(old-y-or-n-p text))))
 	(let ((ret (x-popup-dialog (or sheet (if (mouse-event-p last-command-event) last-command-event)
 				        `(mouse-1      (,(selected-window) 100 (0 . 50) -1)))
-				   (list text    `((,(or yes-button "Yes") . ?y) . t)
+				   (list text    `((,(or yes-button "Yes") . ?\r) . t) ; use \r instead of y until we have multi-keyEquivs
 					 'cancel `((,(or no-button "No") . ?n) . nil)
 					 ))))
 	  (if (eq ret 'cancel)
