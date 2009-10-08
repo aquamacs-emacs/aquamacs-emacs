@@ -514,7 +514,8 @@ have changed."
   "Checks if options need saving and allows to do that.
 Returns t."
   (interactive)
-  (let* ((changed (aquamacs-menu-bar-changed-options)))
+  (condition-case nil
+      (let* ((changed (aquamacs-menu-bar-changed-options)))
     (if (and (or aquamacs-faces-changed
 		 (filter-list changed
 			  (list 'aquamacs-customization-version-id
@@ -528,9 +529,11 @@ Returns t."
 	     (if (eq aquamacs-save-options-on-quit 'ask)
 		 (progn 
 		   ;;		   (print changed)
-		   (y-or-n-p "Options have changed - save them? "))
+		   (aquamacs-ask-for-confirmation "Options have changed - save them?\nYour customizations will be lost if you don't save them." nil "Save" "Don't Save"))
 	       aquamacs-save-options-on-quit))
 	(aquamacs-menu-bar-options-save)))
+    (error nil) ;; in case of quit
+)
   t)
 (defun aquamacs-save-buffers-kill-emacs (&optional arg)
     "Offer to save each buffer, then kill this Emacs process.
@@ -683,10 +686,10 @@ yes-or-no prompts - y or n will do."
  
   (defun aquamacs-repl-yes-or-no-p (text)
     "Like `old-yes-or-no-p' - use that function instead."
-    (aquamacs-ask-for-confirmation text t))
+    (aquamacs-ask-for-confirmation text t nil nil t))
   (defun aquamacs-y-or-n-p (text)
     "Like `old-y-or-n-p' - use that function instead."
-    (aquamacs-ask-for-confirmation text nil))
+    (aquamacs-ask-for-confirmation text nil nil nil t))
 
   (unless (fboundp 'old-yes-or-no-p)
     (fset 'old-yes-or-no-p (symbol-function 'yes-or-no-p)))

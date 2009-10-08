@@ -765,7 +765,7 @@ if `one-buffer-one-frame'. Beforehand, ask to save file if necessary."
 	      (if (aquamacs-ask-for-confirmation
 		 (format "Save buffer %s to file before closing window? 
 The buffer contains unsaved changes which will be lost if you discard them now." (buffer-name)) 
-		 nil (format "Save%s" (if buffer-file-name "" "...")) "Don't Save")
+		 nil (format "Save%s" (if buffer-file-name "" "...")) "Don't Save" t)
 		(progn 
 		    (if (listp last-nonmenu-event)
 			(mac-key-save-file)

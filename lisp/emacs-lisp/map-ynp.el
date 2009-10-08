@@ -109,24 +109,24 @@ Returns the number of actions taken."
 	(let ((object (if help (capitalize (nth 0 help))))
 	      (objects (if help (capitalize (nth 1 help))))
 	      (action (if help (capitalize (nth 2 help)))))
-	  (setq map `((("Yes" . "y") . act) 
+	  (setq map `((("Yes" . ?y) . act) 
 		      ((,(format "%s this and all other%s."
 				 (if help action
 				     "Apply to")
 				 (if help (concat " " objects)
 				   "s"))
-			. "!") . suppress)
+			. ?!) . suppress)
 		      cancel
 		      ,@(mapcar (lambda (elt)
 				  (cons (cons (with-syntax-table
 						  text-mode-syntax-table
 						(capitalize (nth 2 elt)))
 					      ;; key equivalent
-					      (substring (nth 2 elt) 0 1))
+					      (nth 1 elt))
 					(vector (nth 1 elt))))
 				action-alist)
 		      nil
-		      (("No" . "n") . skip))
+		      (("No" . ?n) . skip))
 		use-menus t
 		mouse-event last-nonmenu-event))
       (setq user-keys (if action-alist
