@@ -53,7 +53,7 @@
   (memq initial-window-system '(mac ns)))
 
 
-(defun aquamacs-ask-for-confirmation (text long &optional yes-button no-button sheet)
+(defun aquamacs-ask-for-confirmation (text long &optional yes-button no-button sheet no-cancel)
     (let ((f (window-frame (minibuffer-window))))
       (raise-frame f)			; make sure frame is visible
       (if (or  
@@ -77,9 +77,10 @@
 		(old-y-or-n-p text))))
 	(let ((ret (x-popup-dialog (or sheet (if (mouse-event-p last-command-event) last-command-event)
 				        `(mouse-1      (,(selected-window) 100 (0 . 50) -1)))
-				   (list text    `((,(or yes-button "Yes") . ?\r) . t) ; use \r instead of y until we have multi-keyEquivs
-					 'cancel `((,(or no-button "No") . ?n) . nil)
-					 ))))
+				    (list text
+					  `((,(or yes-button "Yes") . ?\r) . t) ; use \r instead of y until we have multi-keyEquivs
+					  (if no-cancel 'no-cancel 'cancel)
+					  `((,(or no-button "No") . ?n) . nil)))))
 	  (if (eq ret 'cancel)
 	      (keyboard-quit))
 	  ret))))
