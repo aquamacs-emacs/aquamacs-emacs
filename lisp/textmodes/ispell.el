@@ -2020,13 +2020,10 @@ Global `ispell-quit' set to start location to continue spell session."
 		    (setq ispell-quit start)
 		    nil)
 		   ((= char ?q)
-		    (if (y-or-n-p "Really kill Ispell process? ")
-			(progn
-			  (ispell-kill-ispell t) ; terminate process.
-			  (setq ispell-quit (or (not ispell-checking-message)
-						(point))
-				ispell-pdict-modified-p nil))
-		      t))		; continue if they don't quit.
+		    (ispell-kill-ispell t) ; terminate process.
+		    (setq ispell-quit (or (not ispell-checking-message)
+					  (point))
+			  ispell-pdict-modified-p nil))
 		   ((= char ?l)
 		    (and (eq 'block ispell-highlight-p) ; refresh tty displays
 			 (ispell-highlight-spelling-error start end nil t))
@@ -2684,7 +2681,6 @@ With NO-ERROR, just return non-nil if there was no Ispell running."
       (setq ispell-output-buffer nil
 	    ispell-session-buffer nil))
     (setq ispell-process nil)
-    (message "Ispell process killed")
     nil))
 
 
