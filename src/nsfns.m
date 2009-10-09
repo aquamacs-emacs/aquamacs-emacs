@@ -1448,6 +1448,28 @@ DEFUN ("ns-popup-color-panel", Fns_popup_color_panel, Sns_popup_color_panel,
   return Qnil;
 }
 
+DEFUN ("ns-popup-print-panel", Fns_popup_print_panel, Sns_popup_print_panel,
+       0, 1, "",
+       doc: /* Pop up the print panel.  */)
+     (frame)
+     Lisp_Object frame;
+{
+  struct frame *f;
+  check_ns ();
+  BLOCK_INPUT;
+  if (NILP (frame))
+    f = SELECTED_FRAME ();
+  else
+    {
+      CHECK_FRAME (frame);
+      f = XFRAME (frame);
+    }
+  [[FRAME_NS_VIEW (f) window] print:NSApp];
+
+  UNBLOCK_INPUT;
+  return Qnil;
+}
+
 
 DEFUN ("ns-read-file-name", Fns_read_file_name, Sns_read_file_name, 1, 4, 0,
        doc: /* Use a graphical panel to read a file name, using prompt PROMPT.
@@ -2860,6 +2882,7 @@ be used as the image of the icon representing the frame.  */);
   defsubr (&Sx_focus_frame);
   defsubr (&Sns_popup_font_panel);
   defsubr (&Sns_popup_color_panel);
+  defsubr (&Sns_popup_print_panel);
 
   defsubr (&Sx_show_tip);
   defsubr (&Sx_hide_tip);
