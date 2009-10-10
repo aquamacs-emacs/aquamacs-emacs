@@ -170,7 +170,10 @@ Returns the number of actions taken."
 				     'quit))
 		     ;; Prompt in the echo area.
 		     (let ((cursor-in-echo-area (not no-cursor-in-echo-area))
-			   (message-log-max nil))
+			   (message-log-max nil)
+			   (prompt (if (string-match "\\(.*\\)\n" prompt)
+				       (match-string 1 prompt)
+				     prompt)))
 		       (message (apply 'propertize "%s(y, n, !, ., q, %sor %s) "
 				       minibuffer-prompt-properties)
 				prompt user-keys
