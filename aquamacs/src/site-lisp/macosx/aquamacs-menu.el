@@ -293,6 +293,13 @@ customization buffer."
 	      :enable mark-active
 	      :help "Copy selected text in region"))
  
+(define-key-after menu-bar-edit-menu [copy-html]
+  `(menu-item "Copy as HTML" 
+	      aquamacs-copy-as-html
+	      :enable mark-active
+	      :help "Copy selected text in region as formatted HTML")
+  'copy)
+
 (define-key menu-bar-edit-menu [paste]
   `(menu-item "Paste\t\t" 
 	      clipboard-yank
@@ -489,6 +496,7 @@ left and right margin"))
 ;; 		:help "Toggles color printing"
 ;; 		:button (:toggle . (not mac-print-monochrome-mode)))))
 
+(autoload 'aquamacs-copy-as-html "mac-print" "Copies the region in HTML format into the clipboard." 'interactive nil)
 (autoload 'aquamacs-print "mac-print" "Prints the current buffer or, if the mark is active, the current region." 'interactive nil)
 (autoload 'aquamacs-page-setup "mac-print" "Show the page setup dialog." 'interactive nil)
 

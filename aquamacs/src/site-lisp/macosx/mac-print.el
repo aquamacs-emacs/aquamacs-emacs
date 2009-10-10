@@ -116,7 +116,20 @@ in HTML format."
 	(write-region nil nil target-file nil 'shut-up)))
     (kill-buffer buf)))
 
-(defun aquamacs-convert-to-html-buffer ()
+(defun aquamacs-copy-as-html (beg end)
+  "Copies the region in HTML format into the clipboard."
+  (interactive "r")
+  (when (or (not transient-mark-mode) mark-active)
+    (let ((x-select-enable-clipboard t))
+      (let ((buf (aquamacs-convert-to-html-buffer beg end)))
+	;; this will reset the pasteboard types:
+	(copy-region-as-kill beg end)
+	;;(ns-store-cut-buffer-internal 'PRIMARY (buffer-substring beg end))
+	(with-current-buffer buf
+	  (ns-store-cut-buffer-internal 'PRIMARY (buffer-string) 'html))
+	(kill-buffer buf)))))
+
+(defun aquamacs-convert-to-html-buffer (&optional beg end)
   "Creates a buffer containing an HTML rendering of the current buffer."
 
   (require 'htmlize)
@@ -137,9 +150,9 @@ Remove from your load-path for optimal printing / export results."))
 	   (html (unwind-protect
 		     (progn
 		       (show-paren-mode 0)
-		       (if mark-active
-			   (htmlize-region (region-beginning) 
-					   (region-end))
+		       (if (or mark-active (not transient-mark-mode) beg)
+			   (htmlize-region (or beg (region-beginning))
+					   (or end (region-end)))
 			 (htmlize-buffer (current-buffer))))
 		   (show-paren-mode show-paren-mode-save))))
       html))

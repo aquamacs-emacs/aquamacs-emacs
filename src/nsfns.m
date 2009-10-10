@@ -1885,7 +1885,8 @@ Optional arguments XRM-STRING and MUST-SUCCEED are currently ignored.  */)
 
   /* Register our external input/output types, used for determining
      applicable services and also drag/drop eligibility. */
-  ns_send_types = [[NSArray arrayWithObject: NSStringPboardType] retain];
+  ns_send_types = [[NSArray arrayWithObject: 
+			    NSStringPboardType] retain];
   ns_return_types = [[NSArray arrayWithObject: NSStringPboardType] retain];
   ns_drag_types = [[NSArray arrayWithObjects:
                             NSStringPboardType,

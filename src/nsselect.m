@@ -62,6 +62,10 @@ symbol_to_nsstring (Lisp_Object sym)
   if (EQ (sym, QPRIMARY))     return NSGeneralPboard;
   if (EQ (sym, QSECONDARY))   return NXSecondaryPboard;
   if (EQ (sym, QTEXT))        return NSStringPboardType;
+  if (EQ (sym, intern ("html")))    return NSHTMLPboardType;
+  if (EQ (sym, intern ("rtf")))    return NSRTFPboardType;
+  if (EQ (sym, intern ("pdf")))    return NSPDFPboardType;
+  if (EQ (sym, intern ("txt")))    return NSStringPboardType;
   return [NSString stringWithUTF8String: SDATA (XSYMBOL (sym)->xname)];
 }
 
@@ -362,6 +366,17 @@ ns_string_to_pasteboard (id pb, Lisp_Object str)
   ns_string_to_pasteboard_internal (pb, str, nil);
 }
 
+void
+ns_string_to_pasteboard_with_type (id pb, Lisp_Object str, Lisp_Object type)
+{
+  NSString *ns_type = (NILP (type) ? nil :
+		       symbol_to_nsstring (type));
+  if (ns_type)
+    /* will add type at the end - this can be a problem. */
+    [pb addTypes: [NSArray arrayWithObject:ns_type] owner: NSApp];
+  ns_string_to_pasteboard_internal (pb, str, ns_type);
+}
+
 
 
 /* ==========================================================================
@@ -526,15 +541,20 @@ backward. CURRENTLY NOT IMPLEMENTED UNDER NEXTSTEP. */ )
 
 
 DEFUN ("ns-store-cut-buffer-internal", Fns_store_cut_buffer_internal,
-       Sns_store_cut_buffer_internal, 2, 2, 0,
+       Sns_store_cut_buffer_internal, 2, 3, 0,
        doc: /* Sets the value of the named cut buffer (typically CUT_BUFFER0).  */)
-     (buffer, string)
-     Lisp_Object buffer, string;
+     (buffer, string, type)
+     Lisp_Object buffer, string, type;
 {
   id pb;
   check_ns ();
   pb =[NSPasteboard pasteboardWithName: symbol_to_nsstring (buffer)];
-  ns_string_to_pasteboard (pb, string);
+  if (NILP (type))
+    ns_string_to_pasteboard (pb, string);
+  else
+    {
+      ns_string_to_pasteboard_with_type (pb, string, type);
+    }
   return Qnil;
 }
 #endif
