@@ -443,55 +443,64 @@ left and right margin"))
 	      :help "Write current buffer to another file"))
 
 
-;; Export file functions
-(require 'mac-print)
+;; ;; Export file functions
+;; (require 'mac-print)
 
-(defvar menu-bar-export-file-menu (make-sparse-keymap "Export ..."))
+;; (defvar menu-bar-export-file-menu (make-sparse-keymap "Export ..."))
 
-;; (setq menu-bar-export-file-menu (make-sparse-keymap "New Buffer"))
+;; ;; (setq menu-bar-export-file-menu (make-sparse-keymap "New Buffer"))
 
-(define-key menu-bar-export-file-menu [export-pdf]
-  '(menu-item "PDF..." export-to-pdf
-	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
-			   (menu-bar-non-minibuffer-window-p))
-	      :help "Write current buffer to another file in PDF format"))
+;; (define-key menu-bar-export-file-menu [export-pdf]
+;;   '(menu-item "PDF..." export-to-pdf
+;; 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
+;; 			   (menu-bar-non-minibuffer-window-p))
+;; 	      :help "Write current buffer to another file in PDF format"))
 
-(define-key menu-bar-export-file-menu [export-html]
-  '(menu-item "HTML..." export-to-html
-	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
-			   (menu-bar-non-minibuffer-window-p))
-	      :help "Write current buffer to another file in HTML format"))
+;; (define-key menu-bar-export-file-menu [export-html]
+;;   '(menu-item "HTML..." export-to-html
+;; 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
+;; 			   (menu-bar-non-minibuffer-window-p))
+;; 	      :help "Write current buffer to another file in HTML format"))
 
-(define-key-after menu-bar-file-menu [export-file-menu]
-  `(menu-item (concat "Export " (if mark-active "Region" "Buffer")) 
-	      ,menu-bar-export-file-menu
-	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
-			   (menu-bar-non-minibuffer-window-p))
-	      :help "Export buffer in a different format")
-    'write-file)
+;; (define-key-after menu-bar-file-menu [export-file-menu]
+;;   `(menu-item (concat "Export " (if mark-active "Region" "Buffer")) 
+;; 	      ,menu-bar-export-file-menu
+;; 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
+;; 			   (menu-bar-non-minibuffer-window-p))
+;; 	      :help "Export buffer in a different format")
+;;     'write-file)
 
  
 ;; Support for monochrome printing
 ;; Added by Norbert Zeh <nzeh@cs.dal.ca> 2007-09-23
 
-(when (boundp 'mac-print-monochrome-mode)
-  (defun menu-bar-toggle-mac-print-monochrome-mode ()
-    (interactive)
-    (customize-set-variable 'mac-print-monochrome-mode
-			    (not mac-print-monochrome-mode))
-    (message "Color printing %s"
-	     (if mac-print-monochrome-mode
-		 "disabled" "enabled")))
+;; (when (boundp 'mac-print-monochrome-mode)
+;;   (defun menu-bar-toggle-mac-print-monochrome-mode ()
+;;     (interactive)
+;;     (customize-set-variable 'mac-print-monochrome-mode
+;; 			    (not mac-print-monochrome-mode))
+;;     (message "Color printing %s"
+;; 	     (if mac-print-monochrome-mode
+;; 		 "disabled" "enabled")))
 
-  (define-key-after menu-bar-file-menu [toggle-mac-print-monochrome-mode]
-    '(menu-item "Color Printing"
-		menu-bar-toggle-mac-print-monochrome-mode
-		:help "Toggles color printing"
-		:button (:toggle . (not mac-print-monochrome-mode)))))
+;;   (define-key-after menu-bar-file-menu [toggle-mac-print-monochrome-mode]
+;;     '(menu-item "Color Printing"
+;; 		menu-bar-toggle-mac-print-monochrome-mode
+;; 		:help "Toggles color printing"
+;; 		:button (:toggle . (not mac-print-monochrome-mode)))))
 
- 
+(autoload 'aquamacs-print "mac-print" "Prints the current buffer or, if the mark is active, the current region." 'interactive nil)
+(autoload 'aquamacs-page-setup "mac-print" "Show the page setup dialog." 'interactive nil)
+
+(define-key-after menu-bar-file-menu [aquamacs-page-setup]
+  `(menu-item "Page Setup..." 
+	      aquamacs-page-setup
+	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
+			   (menu-bar-non-minibuffer-window-p))
+	      :help "Set the page layout."))
+
 (define-key-after menu-bar-file-menu [aquamacs-print]
-  `(menu-item (format "Preview and Print %s..." 
+  `(menu-item (format "Print %s..." 
 		      (if mark-active "Region" "Buffer"))
 	      aquamacs-print
 	      :key-sequence [(,osxkeys-command-key p)]
@@ -512,13 +521,13 @@ left and right margin"))
 
   
 
-(define-key-after menu-bar-file-menu [print-region-or-buffer]
-  `(menu-item ,(format "Quick Print %s" 
-		      (if mark-active "Region" "Buffer"))  
-	      menu-bar-print-region-or-buffer
-	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
-			   (menu-bar-non-minibuffer-window-p))
-	      :help "Print buffer, or region if active"))
+;; (define-key-after menu-bar-file-menu [print-region-or-buffer]
+;;   `(menu-item ,(format "Quick Print %s" 
+;; 		      (if mark-active "Region" "Buffer"))  
+;; 	      menu-bar-print-region-or-buffer
+;; 	      :enable (and (menu-bar-menu-frame-live-and-visible-p)
+;; 			   (menu-bar-non-minibuffer-window-p))
+;; 	      :help "Print buffer, or region if active"))
 
 
 

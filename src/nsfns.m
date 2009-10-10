@@ -1448,11 +1448,40 @@ DEFUN ("ns-popup-color-panel", Fns_popup_color_panel, Sns_popup_color_panel,
   return Qnil;
 }
 
+
+
+DEFUN ("ns-popup-page-setup-panel", Fns_popup_page_setup_panel, Sns_popup_page_setup_panel,
+       0, 0, "",
+       doc: /* Pop up the page setup panel.  */)
+     ()
+{
+  check_ns ();
+  BLOCK_INPUT;
+
+  NSPageLayout *pageLayout = [NSPageLayout pageLayout];
+
+  [pageLayout beginSheetWithPrintInfo:[NSPrintInfo sharedPrintInfo]
+		       modalForWindow:[FRAME_NS_VIEW (SELECTED_FRAME ()) window] /* not right. */
+			     delegate:nil
+		       didEndSelector:nil
+			  contextInfo:nil];
+  
+  /* runModal doesn't work for some reason, even though
+     it would be the right thing to do.  Use the technique from ns_popup_dialog?
+     can't get at the pageLayout window, which we'd need for that. */
+
+  // [pageLayout runModal];
+
+  // [[FRAME_NS_VIEW (SELECTED_FRAME ()) window] makeKeyWindow];
+  UNBLOCK_INPUT;
+  return Qnil;
+}
+
 DEFUN ("ns-popup-print-panel", Fns_popup_print_panel, Sns_popup_print_panel,
-       0, 1, "",
+       0, 2, "",
        doc: /* Pop up the print panel.  */)
-     (frame)
-     Lisp_Object frame;
+     (frame, source)
+     Lisp_Object frame, source;
 {
   struct frame *f;
   check_ns ();
@@ -1464,8 +1493,69 @@ DEFUN ("ns-popup-print-panel", Fns_popup_print_panel, Sns_popup_print_panel,
       CHECK_FRAME (frame);
       f = XFRAME (frame);
     }
-  [[FRAME_NS_VIEW (f) window] print:NSApp];
 
+  WebView *htmlPage = [[WebView alloc] initWithFrame:NSMakeRect(0,0,300,300)
+					   frameName:@"myFrame"
+					   groupName:@"myGroup"];
+
+
+  if (STRINGP (source))
+    {
+      [[htmlPage mainFrame] loadRequest:[NSURLRequest requestWithURL:
+					      [NSURL fileURLWithPath: 
+						       [NSString stringWithUTF8String: SDATA (source) ]]]];
+    }
+  else if (BUFFERP (source))
+    {
+      struct buffer *old_buffer = NULL;
+      if (XBUFFER (source) != current_buffer)
+	{
+	  old_buffer = current_buffer;
+	  set_buffer_internal_1 (XBUFFER (source));
+	}
+      Lisp_Object string = make_buffer_string (BEGV, ZV, 0);
+      if (old_buffer)
+	  set_buffer_internal_1 (old_buffer);
+
+      [[htmlPage mainFrame] loadHTMLString:
+	    [NSString stringWithUTF8String: SDATA (string)] /* is copied */
+				   baseURL:[NSURL fileURLWithPath: [[NSBundle mainBundle] resourcePath]]];
+    }
+  else
+    {
+      UNBLOCK_INPUT;
+      error ("Must give buffer or file path as source for ns-popup-print-panel.");
+    }
+
+  /*
+
+    works for PDF:
+
+  PDFView *pdfView = [[[PDFView alloc] init] retain];
+  PDFDocument *pdfDoc = [[[PDFDocument alloc] initWithURL: [NSURL fileURLWithPath: 
+								    [NSString stringWithUTF8String: SDATA (pdf_file) ]]] retain];
+
+  if (pdfDoc == NULL)
+    {
+      [pdfView release];
+      error("Could not load PDF file.");
+    }
+  
+
+  [pdfView setDocument: pdfDoc];
+  [pdfView setDisplayMode: kPDFDisplaySinglePageContinuous];
+  [pdfView layoutDocumentView];
+
+  [FRAME_NS_VIEW(f) addSubview:pdfView];
+  // this seems to have problems with the run loop or something
+  [pdfView printWithInfo:[NSPrintInfo sharedPrintInfo] autoRotate:NO];
+
+*/
+
+  /* call back when finished loading.
+     delegate implemented in nsterm.m */
+  [htmlPage setFrameLoadDelegate:FRAME_NS_VIEW (f)];
+  
   UNBLOCK_INPUT;
   return Qnil;
 }
@@ -2883,6 +2973,7 @@ be used as the image of the icon representing the frame.  */);
   defsubr (&Sns_popup_font_panel);
   defsubr (&Sns_popup_color_panel);
   defsubr (&Sns_popup_print_panel);
+  defsubr (&Sns_popup_page_setup_panel);
 
   defsubr (&Sx_show_tip);
   defsubr (&Sx_hide_tip);

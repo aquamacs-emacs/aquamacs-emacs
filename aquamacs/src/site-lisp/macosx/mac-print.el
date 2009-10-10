@@ -57,102 +57,39 @@ face colors are printed."
   (with-temp-buffer
     (shell-command "rm -f /tmp/Aquamacs\\ Printing\\ * 2>/dev/null" t nil)))
 
+;;;###autoload
 (defun aquamacs-print ()
   "Prints the current buffer or, if the mark is active, the current region.
 The document is shown in Preview.app and a printing dialog is opened."
   (interactive)
   
-  (if (or (not last-nonmenu-event)
-	  (consp last-nonmenu-event)
-	  (y-or-n-p "Really render this buffer for printing? "))
-      (progn
-
-	(message "Rendering text ...")
-	
-	(let ((tmp-pdf-file (make-temp-file 
-			     (concat "Aquamacs Printing " 
-				     (if buffer-file-name
-					 (file-name-nondirectory buffer-file-name)
-				       "")
-				     " ") 
-			     nil)))
-	  
-	  (require 'htmlize) ;; needs to be loaded before let-bindings
-	  (unless (boundp 'htmlize-white-background)
-	    (message "Warning - incompatible htmlize package installed. 
+  (message "Rendering text ...")
+  
+  (require 'htmlize) ;; needs to be loaded before let-bindings
+  (unless (boundp 'htmlize-white-background)
+    (message "Warning - incompatible htmlize package installed. 
 Remove from your load-path for optimal printing / export results.")
-	    )
-	  (let ((htmlize-html-charset 'utf-8)
-		(htmlize-use-rgb-txt nil)
-		(htmlize-before-hook nil)
-		(htmlize-after-hook nil)
-		(htmlize-generate-hyperlinks nil)
-		(htmlize-white-background t))
-	    (export-to-pdf tmp-pdf-file))
+    )
+  (let ((htmlize-html-charset 'utf-8)
+	(htmlize-use-rgb-txt nil)
+	(htmlize-before-hook nil)
+	(htmlize-after-hook nil)
+	(htmlize-generate-hyperlinks nil)
+	(htmlize-white-background t))
+    
+    (let ((html-buf (aquamacs-convert-to-html-buffer)))
+      (ns-popup-print-panel nil html-buf)
+      (kill-buffer html-buf)))
+  
+  (message nil))
 
-	  (add-hook 'kill-emacs-hook 'aquamacs-delete-temp-files)
-	  (do-applescript (concat
-			   "tell application \"Preview\"
-        activate
-	open the POSIX file \"" tmp-pdf-file  "\"
-	activate
-	tell application \"System Events\"
-		tell process \"Preview\"
-			keystroke \"p\" using command down
-		end tell
-	end tell
-end tell"  ))
-	  (message "... done")))
-    (message "Printing cancelled.")))
+;;;###autoload
+(defun aquamacs-page-setup ()
+  "Show the page setup dialog."
+  (interactive)
+  (ns-popup-page-setup-panel))
 
-(defun export-to-pdf (target-file)
-  "Saves the current buffer (or region, if mark is active) to a file 
-in PDF format.
- (Aquamacs / Mac only)"
-  (interactive 
-   (list 
-    (if buffer-file-name
-	(read-file-name "Write PDF file: "
-			(file-name-directory buffer-file-name)
-			(concat
-			 (file-name-sans-extension 
-			  (file-name-nondirectory buffer-file-name))
-			 ".pdf") nil nil)
-      (read-file-name "Write PDF file: " default-directory
-		      (expand-file-name
-		       (concat
-			(file-name-sans-extension 
-			 (file-name-nondirectory (buffer-name)))
-			".pdf")
-		       default-directory)
-		      nil nil))))
-  (if (file-directory-p target-file)
-      (error "Must give a full file name."))
-  (setq target-file (expand-file-name target-file))
-   
-  (let ((html-to-pdf "/System/Library/Printers/Libraries/convert")
-	(html-file (make-temp-file "aquamacs-temp-" nil ".html"))
-	(htmlize-font-size-scaling-factor 
-	 (or 
-	  mac-print-font-size-scaling-factor
-	  htmlize-font-size-scaling-factor)))
-    (export-to-html html-file)
-;;     (with-current-buffer "*Messages*"
-;;       (save-excursion
-;;       (end-of-buffer)
-;;       (insert
-;;        (with-temp-buffer
-	 (call-process html-to-pdf nil "*Messages*" nil  
-		       "-f" html-file 
-		       "-o" target-file
-		       "-a" (concat "media=" 
-				    (capitalize (symbol-name ps-paper-type)))
-		       "-j" "application/pdf"
-		       "-D")
-;	 (buffer-string))))
-)
-  target-file)
-
+;;;###autoload
 (defun export-to-html (target-file)
   "Saves the current buffer (or region, if mark is active) to a file 
 in HTML format."
@@ -173,10 +110,17 @@ in HTML format."
 			".html")
 		       default-directory)
 		      nil nil))))
+  (let ((buf (aquamacs-convert-to-html-buffer)))
+    (with-current-buffer buf
+      (let ((coding-system-for-write 'utf-8))
+	(write-region nil nil target-file nil 'shut-up)))
+    (kill-buffer buf)))
 
+(defun aquamacs-convert-to-html-buffer ()
+  "Creates a buffer containing an HTML rendering of the current buffer."
 
-    (require 'htmlize)
-    (if (not (protect (equal (substring htmlize-version 0 5) "1.23a")))
+  (require 'htmlize)
+  (if (not (protect (equal (substring htmlize-version 0 5) "1.23a")))
 	 (message "Warning - possibly incompatible htmlize package installed. 
 Remove from your load-path for optimal printing / export results."))
     (require 'mule) ; for coding-system-get
@@ -184,6 +128,7 @@ Remove from your load-path for optimal printing / export results."))
 
     (let* ((htmlize-ignore-colors mac-print-monochrome-mode)
 	   (htmlize-html-major-mode nil)
+	   (htmlize-preformat nil) ;; bug in WebKit: avoid long lines
 	   (htmlize-html-charset 
 	    (if buffer-file-coding-system
 		(coding-system-get buffer-file-coding-system
@@ -197,10 +142,6 @@ Remove from your load-path for optimal printing / export results."))
 					   (region-end))
 			 (htmlize-buffer (current-buffer))))
 		   (show-paren-mode show-paren-mode-save))))
- 
-      (with-current-buffer html
-	(let ((coding-system-for-write 'utf-8))
-	  (write-region nil nil target-file nil 'shut-up)))
-      (kill-buffer html)))
+      html))
 
 (provide 'mac-print)

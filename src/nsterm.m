@@ -4694,6 +4694,34 @@ extern void update_window_cursor (struct window *w, int on);
   [currentCursor setOnMouseEntered: YES];
 }
 
+/*****************************************************************************/
+/* printing / html rendering */
+
+- (void)webView: (WebView *)htmlPage didFinishLoadForFrame:(WebFrame *)frame
+{
+  // [FRAME_NS_VIEW(f) addSubview:[[htmlPage mainFrame] frameView]];
+  //[[[htmlPage mainFrame] frameView] printDocumentView];
+
+  NSPrintInfo *printInfo  = [NSPrintInfo sharedPrintInfo];
+
+  /* There seems to be a bug in OS X or WebKit, causing unexpected results
+     when long lines are supposed to be printed.  Using PRE in the html
+     code is best avoided for this reason. */
+
+  // [printInfo setHorizontalPagination: NSClipPagination];
+  // [printInfo setVerticalPagination: NSClipPagination];
+  [printInfo setVerticallyCentered:NO];
+
+  NSPrintOperation *printControl = [[frame frameView] printOperationWithPrintInfo:printInfo];
+
+  
+  [printControl setCanSpawnSeparateThread:NO];
+  [printControl setShowsPrintPanel:YES];
+  [printControl runOperationModalForWindow: [self window]
+  				  delegate:self /* perhaps react to dismissal? */
+  			    didRunSelector:nil
+  			       contextInfo:nil];
+}
 
 
 /*****************************************************************************/
