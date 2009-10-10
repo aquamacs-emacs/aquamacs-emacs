@@ -32,6 +32,13 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #import <AppKit/AppKit.h>
 
+#if NS_IMPL_COCOA
+// for PDFView
+//#import "/System/Library/Frameworks/Quartz.framework/Versions/A/Frameworks/PDFKit.framework/Versions/A/Headers/PDFView.h"
+#import <Quartz/Quartz.h>
+#import <WebKit/WebKit.h>
+#endif
+
 #ifdef NS_IMPL_COCOA
 #undef Cursor
 #define init_process emacs_init_process

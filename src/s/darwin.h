@@ -145,7 +145,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* Definitions for how to compile & link.  */
 
 #ifdef HAVE_NS
-#define LIBS_NSGUI -framework AppKit
+#define LIBS_NSGUI -framework AppKit -framework Quartz -framework Webkit
 #define SYSTEM_PURESIZE_EXTRA 200000
 #define HEADERPAD_EXTRA 6C8
 #else /* !HAVE_NS */

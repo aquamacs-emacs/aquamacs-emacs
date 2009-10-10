@@ -1449,6 +1449,118 @@ DEFUN ("ns-popup-color-panel", Fns_popup_color_panel, Sns_popup_color_panel,
 }
 
 
+
+DEFUN ("ns-popup-page-setup-panel", Fns_popup_page_setup_panel, Sns_popup_page_setup_panel,
+       0, 0, "",
+       doc: /* Pop up the page setup panel.  */)
+     ()
+{
+  check_ns ();
+  BLOCK_INPUT;
+
+  NSPageLayout *pageLayout = [NSPageLayout pageLayout];
+
+  [pageLayout beginSheetWithPrintInfo:[NSPrintInfo sharedPrintInfo]
+		       modalForWindow:[FRAME_NS_VIEW (SELECTED_FRAME ()) window] /* not right. */
+			     delegate:nil
+		       didEndSelector:nil
+			  contextInfo:nil];
+  
+  /* runModal doesn't work for some reason, even though
+     it would be the right thing to do.  Use the technique from ns_popup_dialog?
+     can't get at the pageLayout window, which we'd need for that. */
+
+  // [pageLayout runModal];
+
+  // [[FRAME_NS_VIEW (SELECTED_FRAME ()) window] makeKeyWindow];
+  UNBLOCK_INPUT;
+  return Qnil;
+}
+
+DEFUN ("ns-popup-print-panel", Fns_popup_print_panel, Sns_popup_print_panel,
+       0, 2, "",
+       doc: /* Pop up the print panel.  */)
+     (frame, source)
+     Lisp_Object frame, source;
+{
+  struct frame *f;
+  check_ns ();
+  BLOCK_INPUT;
+  if (NILP (frame))
+    f = SELECTED_FRAME ();
+  else
+    {
+      CHECK_FRAME (frame);
+      f = XFRAME (frame);
+    }
+
+  WebView *htmlPage = [[WebView alloc] initWithFrame:NSMakeRect(0,0,300,300)
+					   frameName:@"myFrame"
+					   groupName:@"myGroup"];
+
+
+  if (STRINGP (source))
+    {
+      [[htmlPage mainFrame] loadRequest:[NSURLRequest requestWithURL:
+					      [NSURL fileURLWithPath: 
+						       [NSString stringWithUTF8String: SDATA (source) ]]]];
+    }
+  else if (BUFFERP (source))
+    {
+      struct buffer *old_buffer = NULL;
+      if (XBUFFER (source) != current_buffer)
+	{
+	  old_buffer = current_buffer;
+	  set_buffer_internal_1 (XBUFFER (source));
+	}
+      Lisp_Object string = make_buffer_string (BEGV, ZV, 0);
+      if (old_buffer)
+	  set_buffer_internal_1 (old_buffer);
+
+      [[htmlPage mainFrame] loadHTMLString:
+	    [NSString stringWithUTF8String: SDATA (string)] /* is copied */
+				   baseURL:[NSURL fileURLWithPath: [[NSBundle mainBundle] resourcePath]]];
+    }
+  else
+    {
+      UNBLOCK_INPUT;
+      error ("Must give buffer or file path as source for ns-popup-print-panel.");
+    }
+
+  /*
+
+    works for PDF:
+
+  PDFView *pdfView = [[[PDFView alloc] init] retain];
+  PDFDocument *pdfDoc = [[[PDFDocument alloc] initWithURL: [NSURL fileURLWithPath: 
+								    [NSString stringWithUTF8String: SDATA (pdf_file) ]]] retain];
+
+  if (pdfDoc == NULL)
+    {
+      [pdfView release];
+      error("Could not load PDF file.");
+    }
+  
+
+  [pdfView setDocument: pdfDoc];
+  [pdfView setDisplayMode: kPDFDisplaySinglePageContinuous];
+  [pdfView layoutDocumentView];
+
+  [FRAME_NS_VIEW(f) addSubview:pdfView];
+  // this seems to have problems with the run loop or something
+  [pdfView printWithInfo:[NSPrintInfo sharedPrintInfo] autoRotate:NO];
+
+*/
+
+  /* call back when finished loading.
+     delegate implemented in nsterm.m */
+  [htmlPage setFrameLoadDelegate:FRAME_NS_VIEW (f)];
+  
+  UNBLOCK_INPUT;
+  return Qnil;
+}
+
+
 DEFUN ("ns-read-file-name", Fns_read_file_name, Sns_read_file_name, 1, 4, 0,
        doc: /* Use a graphical panel to read a file name, using prompt PROMPT.
 Optional arg DIR, if non-nil, supplies a default directory.
@@ -1773,7 +1885,8 @@ Optional arguments XRM-STRING and MUST-SUCCEED are currently ignored.  */)
 
   /* Register our external input/output types, used for determining
      applicable services and also drag/drop eligibility. */
-  ns_send_types = [[NSArray arrayWithObject: NSStringPboardType] retain];
+  ns_send_types = [[NSArray arrayWithObject: 
+			    NSStringPboardType] retain];
   ns_return_types = [[NSArray arrayWithObject: NSStringPboardType] retain];
   ns_drag_types = [[NSArray arrayWithObjects:
                             NSStringPboardType,
@@ -2860,6 +2973,8 @@ be used as the image of the icon representing the frame.  */);
   defsubr (&Sx_focus_frame);
   defsubr (&Sns_popup_font_panel);
   defsubr (&Sns_popup_color_panel);
+  defsubr (&Sns_popup_print_panel);
+  defsubr (&Sns_popup_page_setup_panel);
 
   defsubr (&Sx_show_tip);
   defsubr (&Sx_hide_tip);

@@ -278,6 +278,16 @@ Set this to nil if you prefer the default (fundamental) mode."
 		 (function :tag "User-defined major mode"))
   :group 'htmlize)
 
+
+(defcustom htmlize-preformat t
+  "Force HTML output to retain line-breaks.
+The HTML output will contain preformatted text with line
+breaks bracketed in <PRE>, if this variable is set to `t'
+and the buffer's `word-wrap' variable is nil.
+Otherwise, no pre-formatting is enforced.
+
+This may cause problems with printing very long lines in the buffer.")
+
 (defvar htmlize-before-hook nil
   "Hook run before htmlizing a buffer.
 The hook functions are run in the source buffer (not the resulting HTML
@@ -1378,7 +1388,7 @@ property and by buffer overlays that specify `face'."
     (htmlize-ensure-fontified)
     (clrhash htmlize-extended-character-cache)
     (let* ((htmlize-source-buffer (current-buffer))
-	   (buffer-word-wrap word-wrap)
+	   (buffer-word-wrap (or word-wrap (not htmlize-preformat)))
 	   (buffer-faces (htmlize-faces-in-buffer))
 	   (face-map (htmlize-make-face-map (adjoin 'default buffer-faces)))
 	   ;; Generate the new buffer.  It's important that it inherits

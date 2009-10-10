@@ -1020,11 +1020,12 @@ See the documentation of `create-fontset-from-fontset-spec' for the format.")
 
 (declare-function ns-store-cut-buffer-internal "nsselect.m" (buffer string))
 
-(defun ns-set-pasteboard (string)
-  "Store STRING into the pasteboard of the Nextstep display server."
+(defun ns-set-pasteboard (string &optional type)
+  "Store STRING into the pasteboard of the Nextstep display server.
+TYPE may be `txt', `html', `pdf' or `rtf', or nil (text string)."
   ;; Check the data type of STRING.
   (if (not (stringp string)) (error "Nonstring given to pasteboard"))
-  (ns-store-cut-buffer-internal 'PRIMARY string))
+  (ns-store-cut-buffer-internal 'PRIMARY string type))
 
 ;; We keep track of the last text selected here, so we can check the
 ;; current selection against it, and avoid passing back our own text
