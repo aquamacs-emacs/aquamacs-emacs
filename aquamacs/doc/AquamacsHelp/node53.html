@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Changes--0.9.9a</TITLE>
-<META NAME="description" CONTENT="Changes--0.9.9a">
+<TITLE>Changes--0.9.9b</TITLE>
+<META NAME="description" CONTENT="Changes--0.9.9b">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -27,328 +27,85 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html838"
+<A NAME="tex2html843"
   HREF="node54.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html834"
+<A NAME="tex2html839"
   HREF="node39.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html828"
+<A NAME="tex2html833"
   HREF="node52.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html836"
+<A NAME="tex2html841"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html839"
-  HREF="node54.html">Changes 0.9.8</A>
-<B> Up:</B> <A NAME="tex2html835"
+<B> Next:</B> <A NAME="tex2html844"
+  HREF="node54.html">Changes 0.9.9a</A>
+<B> Up:</B> <A NAME="tex2html840"
   HREF="node39.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html829"
-  HREF="node52.html">Changes 0.9.9b</A>
- &nbsp; <B>  <A NAME="tex2html837"
+<B> Previous:</B> <A NAME="tex2html834"
+  HREF="node52.html">Changes 0.9.9c</A>
+ &nbsp; <B>  <A NAME="tex2html842"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION0001414000000000000000">
-Changes--0.9.9a</A>
+Changes--0.9.9b</A>
 </H2>
 
 <P>
 
 <UL>
-<LI>SUMMARY: More bugs and other annoyances 
-	have been removed. Opening new frames (for new buffers) is more
-	useful now, and frame themes aren't applied when a frame is split
-	up. Options are automatically saved across sessions. A new
-	customization groups for Emacs-die-hards makes it easier to change
-	Aquamacs-specific customization defaults. 
+<LI>`mac-pass-option-to-system' didn't work as intended. There may
+	have been other input problems.
 
 <P>
 </LI>
-<LI>Intel: Aquamacs is now available as native version for Mac
-	computers with Intel CPU.  Thanks to Jonathan Shea, Mike Bennett
-	and Richard Koch for providing compile machines.
+<LI>Switching to another buffer did not change the input focus
+ 	(i.e. where things you type go), even though the frame displaying
+	the buffer was raised.
+	Reported by Rick Taube
 
 <P>
 </LI>
-<LI>Dired in one-buffer-one-frame-mode will show new
-	directories and open files in the same frame.
+<LI>tool-bar-mode calls in Preferences.el / .emacs could bring up
+	errors under certain circumstances
+	Reported by William Henney
 
 <P>
 </LI>
-<LI>Customize will show new groups etc. in the same frame and window.
+<LI>`bury-buffer' didn't work correctly, causing situations where a
+	frame was shown and was removed immediately, for example when
+	SLIME started up or, in LaTeX (AUCTeX) mode, C-c C-l was used to
+	display compiler output.
 
 <P>
 </LI>
-<LI>One-Buffer-One-Frame-Mode ("Display Buffers in Separate Frames")
-	will now show buffers such as *mail*, *grep*, *shell* in their own
-	frames. This also applies if other modes open *...* buffers, such
-	as ESS opening an inferior R shell, which previously didn't even
-	show in a separate window. One-Buffer-One-Frame-Mode is also better
-	documented now and has customization options so you can decide
-	which buffers are shown in new frames.	
+<LI>Crash in `show mouse face' fixed
+	Reported by Phil
 
 <P>
 </LI>
-<LI>Frame-Appearance-Themes reconfigure a frame only if just one
-	window is present (or all windows show buffers in the same major
-	mode). This should more effectively prevent appearance switching
-	when a second window is shown temporarily.
-
-<P>
-</LI>
-<LI>Frame-Appearance-Themes now allow the user to delete all
-	mode-specific themes when a default is defined. Hints to select
-	"Save Options" are more prominent.
-
-<P>
-</LI>
-<LI>Options are saved automatically upon quitting Aquamacs (it'll
-	ask you.) - customize `aquamacs-save-options-on-quit' to
-	configure.
-
-<P>
-</LI>
-<LI>Quitting Aquamacs: you won't be asked any more whether to quit
-	if modified buffers exist, because at that point you've always already
-	been asked to save each modified buffer.
-
-<P>
-</LI>
-<LI>Aquamacs-is-more-than-Emacs is a new customization group
-	containing all customization variables whose defaults are changed
-	in Aquamacs compared to GNU Emacs or the relevant package.
-	This is useful for Emacs veterans who want certain behaviors to be
-	more similar to GNU Emacs.
-
-<P>
-</LI>
-<LI>Bug Reporting is handled fully in the system's default mail
-	client again (unless you've set up a different
-	`send-mail-function')
-	Suggested by Robert Sloan
-
-<P>
-</LI>
-<LI>Mail composed with the Message package will now be routed
-	through the mail client by default (`message-send-mail-function')
-	and there is no "From" line. If you run postfix locally, you may
-	want to do something like the following in your .emacs or Preferences.el:
-
-<P>
-<PRE>
-	(setq send-mail-function 'sendmail-send-it)
-	(setq message-send-mail-function 'sendmail-send-it)
-	(setq mail-setup-with-from t)
-</PRE>
-
-<P>
-Alternatively do the same in customization buffers.	
-
-<P>
-</LI>
-<LI>Toolbar looks prettier now.
-	Patch by Kim F. Storm
-
-<P>
-</LI>
-<LI>`Frame-Appearance-Styles' is the new name for the former `Frame
-	Appearance Themes, so they won't be confused with GNU Emacs new
-	customization themes. A global minor mode called
-	`aquamacs-styles-mode' is now used to switch them on/off.
-
-<P>
-Some configuration variables have been renamed: 
-	`aquamacs-default-styles' 
-	       (was: `aquamacs-mode-specific-default-themes')
-	`aquamacs-styles-mode' 
-	       (was: `aquamacs-auto-frame-parameters-flag')
-	`aquamacs-buffer-default-styles' 
-	       (was: `aquamacs-buffer-specific-frame-themes')
-
-<P>
-</LI>
-<LI>A-Backspace deletes the whole logical line again, not just
-	the visual line. A-Shift-Backspace deletes the visual line now.
-
-<P>
-</LI>
-<LI>Tilde&nbsp; can now be input on German keyboards with the German
-	emulation mode via Option-N.
-
-<P>
-</LI>
-<LI>Frame-positions for individual files are now saved to/loaded
-	from a file called frame-positions.el (in&nbsp;/Library/Preferences...)
-
-<P>
-</LI>
-<LI>Help buffers (C-h f, C-h v) for certain Aquamacs functions could
-	have links to source code at nonexistant paths.
-
-<P>
-</LI>
-<LI>site-start.el files in the load path (plug-ins!) aren't loaded
-	any longer if there is a file named .ignore in the same path.
-
-<P>
-</LI>
-<LI>Bugfix in version 0.9.9: customizations weren't read if
-	aquamacs-styles (the former "Frame Appearance Themes" were
-	switched off.)
-	Reported by Brendan Dixon
-
-<P>
-</LI>
-<LI>Bugfix: Typing C-x C-f, then A-w made the newly opened frame go
-	away, but not the "Find file" prompt, which was quite persistent,
-	especially if you didn't know about C-g and the minibuffer. That
-	is fixed now. 
-	Reported by a number of people.
-
-<P>
-</LI>
-<LI>Bugfix: Setting tool-bar-mode or changing the fringes via the
-	Options menu will now affect the default frame style as well, so
-	the setting will affect new frames (even if frame appearance
-	styles are active). Note that if fringes or tool bar are set in
-	.emacs, the customized and saved styles will override your
-	settings. 
-
-<P>
-</LI>
-<LI>Bugfix: Aquamacs will not ask the user any longer whether to
-	save dired buffers and other non-file-buffers upon deleting the
-	frame (killing the buffer).
-	Reported by Carsten Bormann
-
-<P>
-</LI>
-<LI>Bugfix: desktop-mode should be able to restore the desktop on
-	startup appropriately. 
-	Reported by Rudi Schlatte
-
-<P>
-</LI>
-<LI>Bugfix: page-wise scrolling (PgUp/PgDown) with long lines
-	scrolls exactly one screen now
-
-<P>
-</LI>
-<LI>Bugfix: page-wise scrolling (PgUp/PgDown) will remove the region
-	as expected when the cursor moves. Shift-PgUp/PgDown will extend
-	the region (and set the mark if neccessary).
-
-<P>
-</LI>
-<LI>Bugfix: completing-read-multiple didn't work (icomplete+ library
-	updated)   
-
-<P>
-</LI>
-<LI>Bugfix: frames sometimes didn't open in
-	one-buffer-one-frame-mode when the buffer shown was empty.
-
-<P>
-</LI>
-<LI>Bugfix: In one-buffer-one-frame-mode, Apple-W deletes a window
-	or kills a buffer and returns to the next buffer in the buffer
-	list (i.e. the previously shown buffer) when the frame wasn't
-	created for the particular window / buffer being killed. Think of
-	it as a stack of buffers that are shown. Previously, Aquamacs
-	always switched to *scratch*.
-
-<P>
-</LI>
-<LI>Bugfix: Preview &amp; Print now works with buffers in Tramp Mode, too.
-	Reported by Tim Hodgson
-
-<P>
-</LI>
-<LI>Bugfix: Fonts (not fontsets) set in default-frame-alist and
-	similar variables are not filtered out any more after startup if
-	they haven't been explicitly loaded (or applied to a frame, and
-	thus, loaded).
-	Reported by Konstantinos Efstathiou
-
-<P>
-</LI>
-<LI>Bugfix: display copyright message at startup. 
-
-<P>
-</LI>
-<LI>Bugfix: Javascript-mode exchanged for the one borrowed from
-	XEmacs. This one will hopefully work better now.
-	Suggested by Tom Van Vleck
-
-<P>
-</LI>
-<LI>Bugfix: ediff-directories interferes less with one-buffer-one-frame-mode.
-
-<P>
-</LI>
-<LI>Compiling: Those who build Aquamacs themselves, note that the
-	make-aquamacs script will now produce a complete app bundle
-	located in (emacs-path)/mac/Aquamacs. The install-aquamacs script
-	only moves the bundle to /Applications. If you make any changes to
-	the Aquamacs source code (except for pre-loaded code in
-	site-load.el), it is usually sufficient to run 
-	"copy-to-app -n". Remember to set the AQUAMACS_ROOT and EMACS_ROOT
-	environment variables before using any of these scripts.
-
-<P>
-</LI>
-<LI>A BIG THANKYOU goes to all users who have donated
-        (<TT><A NAME="tex2html40"
-  HREF="http://aquamacs.org/donate">http://aquamacs.org/donate</A></TT>) in the past months. I'd
-        also like to thank all those who tested the beta versions,
-        reported bugs and contributed ideas and server space:
-        Nathaniel Cunningham, Peter Dyballa, Terry Jones, Jos&#233; Figuera
-        O'Farrill, Konrad Podczeck, Robert Sloan and many others.
+<LI>Russian as first application language (System Preference) does
+	not cause startup problems any more.
+	Reported by Vladimir Lech
 
 <P>
 </LI>
 </UL>
 
 <P>
-<HR>
-<!--Navigation Panel-->
-<A NAME="tex2html838"
-  HREF="node54.html">
-<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
- SRC="./next.png"></A> 
-<A NAME="tex2html834"
-  HREF="node39.html">
-<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
- SRC="./up.png"></A> 
-<A NAME="tex2html828"
-  HREF="node52.html">
-<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
- SRC="./prev.png"></A> 
-<A NAME="tex2html836"
-  HREF="node1.html">
-<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
- SRC="./contents.png"></A>  
-<BR>
-<B> Next:</B> <A NAME="tex2html839"
-  HREF="node54.html">Changes 0.9.8</A>
-<B> Up:</B> <A NAME="tex2html835"
-  HREF="node39.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html829"
-  HREF="node52.html">Changes 0.9.9b</A>
- &nbsp; <B>  <A NAME="tex2html837"
-  HREF="node1.html">Contents</A></B> 
-<!--End of Navigation Panel-->
+<BR><HR>
 <ADDRESS>
 <I>David</I>
-<BR><I>2009-08-06</I>
+<BR><I>2009-10-10</I>
 </ADDRESS>
 </BODY>
 </HTML>

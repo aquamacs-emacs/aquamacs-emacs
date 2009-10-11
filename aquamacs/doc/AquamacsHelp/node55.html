@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Changes--0.9.7</TITLE>
-<META NAME="description" CONTENT="Changes--0.9.7">
+<TITLE>Changes--0.9.8</TITLE>
+<META NAME="description" CONTENT="Changes--0.9.8">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -27,360 +27,155 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html862"
+<A NAME="tex2html867"
   HREF="node56.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html858"
+<A NAME="tex2html863"
   HREF="node39.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html852"
+<A NAME="tex2html857"
   HREF="node54.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html860"
+<A NAME="tex2html865"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html863"
-  HREF="node56.html">Changes 0.9.6</A>
-<B> Up:</B> <A NAME="tex2html859"
+<B> Next:</B> <A NAME="tex2html868"
+  HREF="node56.html">Changes 0.9.7</A>
+<B> Up:</B> <A NAME="tex2html864"
   HREF="node39.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html853"
-  HREF="node54.html">Changes 0.9.8</A>
- &nbsp; <B>  <A NAME="tex2html861"
+<B> Previous:</B> <A NAME="tex2html858"
+  HREF="node54.html">Changes 0.9.9a</A>
+ &nbsp; <B>  <A NAME="tex2html866"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION0001416000000000000000">
-Changes--0.9.7</A>
+Changes--0.9.8</A>
 </H2>
 
 <P>
 
 <UL>
-<LI><I>S</I>ummary: New functions: Mac-style printing, Export to PDF and
-	HTML, Spelling suggestions, New buffer in mode / change major mode
-	menus, a context menu (right mouse click), speed improvements,
-	nXML and AUCTeX included text display improved (international
-	characters and proportional fonts), "wrong command-p" bug fixed
-	and much more.
+<LI>Meta/Option key: New minor modes allow users of various
+	keyboard layouts (German, French, Italian, GB/US) to use the
+	Option key as Meta modifier under Emacs (as it is the
+	default), but still be able to input characters such as [ ] 
+	 | and @. This works for common characters (not all). Some
+	rarely used Emacs key bindings such as M-4 on Italian
+	keyboards are overridden by these modes. Activate them via the
+	Options menu ("Option Key"), or with M-x
+	emulate-mac-french-keyboard-mode (substitute 'french' with
+	a keyboard layout in lower case).
+	The following keyboard layouts are known:
+
+<P>
+German, Italian, Italian-Pro, French, US, British
+
+<P>
+You may define your own mappings. (Please publish them.)
 
 <P>
 </LI>
-<LI>Printing: Aquamacs now supports full What-you-see-is-what-
-	you-get printing. Choose 'Preview and Print' from the File menu,
-	and the current buffer (or the current region, if one is marked)
-	is typeset using the color theme and the syntax coloring that is
-	active. You can then preview or print it with the standard Mac OS
-	X printing dialogs, selecting a standard Mac printer. (Output to
-	US Letter format only at this point. Sorry!)
+<LI>Bug reporting: Use standard GNU Emacs bug reporting facility
+ 	(but go through the mail client when necessary.)
 
 <P>
 </LI>
-<LI>Export to PDF and HTML: The current buffer (or a region if
-	selected) can now be exported to a PDF or HTML file. Syntax
-	coloring (and the chosen color theme except for the background
-	color) are respected.
+<LI>One-Buffer-One-Frame: Change in the decision-making process
+	about when to show a buffer in a new frame. Generally, all buffers
+	with names in *'s (such as *vc*) will be shown in the same
+	frame (as directed by `obof-same-frame-regexps'), with the
+	exception of Messages, Help and Customize buffers (as listed in
+	`obof-other-frame-regexps'). This means that more buffers will
+	open as a "small" window inside the current frame. Please report
+	back to us in case you have any unwanted results with this.
 
 <P>
 </LI>
-<LI>LaTeX: Aquamacs now comes with the latest version of
-	AUCTeX, which will allow you to most comfortably edit LaTeX source
-	code and even preview some of the results (e.g. formulas) directly
-	in your document.  No need to install an additional AUCTeX
-	package. 	AUCTeX already works out-of-the box.
-
-<P>
-It is recommended that you remove any previous installations of
-	AUCTeX. 
+<LI>Special-Display-Frames such as the one with the *Help* buffer
+	can now show *Completions* buffers and other ones in a second
+	window inside the frame, just like other frames can.
+ 	(`unsplittable' property in `special-display-frame-alist').
 
 <P>
 </LI>
-<LI>nXML: Edit XML code more comfortably with the included
-	nxml-mode. It validates the document as you type. If you don't
-	like the mode, the following in your Preferences.el file will
-	bring the old XML mode back:
-
-<P>
-<PRE> 	
-(assq-set-equal "&lt;\\?xml " 'xml-mode 
-                           'magic-mode-alist)
-</PRE>
-
-<P>
-Suggestion from Tim Bray.
+<LI>Drag&amp;Drop of files in buffers with HTML/LaTeX/C modes results in
+	the appropriate code (such as IMG SRC=... or
+	includegraphics...) being inserted.
+	Patches by Seiji Zenitani
 
 <P>
 </LI>
-<LI>Speed: Aquamacs is a little faster now when opening new frames,
-	when frame appearance styles have been defined. 
+<LI>AUCTeX/PDF: TeX-PDF-mode is now the default via the default of
+	its mode variable `TeX-PDF-mode' rather than an entry in
+	`LaTeX-mode-hook', making configuring the default in the
+	customization buffer (or in .emacs) easier. Updated to AUCTeX 11.82.
 
 <P>
 </LI>
-<LI>Right-Mouse-clicks in text now bring up a context menu which
-	allows you to copy/paste, search the word under the mouse in
-	Google or look it up in the system dictionary and switch the buffer.
+<LI>DONATE: If you like the new version, please donate so we can
+	keep the development efforts going throughout 2006. Have a great
+	new year!
+</LI>
+</UL>	
+
+<P>
+Bugfixes:
+
+<P>
+
+<UL>
+<LI>Browsing a URL (as in Help menu functions, mouse clicks in Gnus
+	etc. could fail in rare circumstances.
+	Reported by Count L&#225;szl&#243; de Alm&#225;sy
 
 <P>
 </LI>
-<LI>Control-Mouse-click is always mapped to mouse-3 (right mouse
-	button) now so Apple mouse and laptop users will consistently get the same
-	functionality. To do mouse-2, just hold down the Command key while
-	clicking. (This does mouse-yank-at-click, a useful functionality that you
-	might be used to from Linux / X11 machines!)
+<LI>Tcsh environments will be correctly imported into Aquamacs now.
+	Reported by Michael Kohlhase
 
 <P>
 </LI>
-<LI>Alt-Mouse-click&amp;drag allows you to select a secondary
-	selection. (This used to be on Command-mouse-1-drag.)
+<LI>AUCTeX and RSS documentation (info) are now included.
+	Reported by Arthur Ogus and Jos&#233; Figueroa-O'Farrill
 
 <P>
 </LI>
-<LI>Spelling correction (flyspell) will make suggestions upon
-	right-clicking on a misspelled word.
+<LI>Avoid the Dock when opening or automatically resizing frames in
+	most situations. 
 
 <P>
 </LI>
-<LI>Fonts/Display: Aquamacs Emacs can now display an even wider
-	range of characters with any font available on OS X. Some
-	characters will look nicer.  
-	Patches by Yamamoto Mitsuharu
+<LI>Up/down movements of the cursor: subtle tweak (jumping to
+	temporary goal column only in series of up/down movements.)
 
 <P>
 </LI>
-<LI>Text Display: Aquamacs now displays text in variable-width fonts
-	with much better letter-spacing. It'll look like in other OS X
-	apps, and reading and editing long texts is much more fun now.
-	Patches by Yamamoto Mitsuharu
+<LI>`mouse-save-then-kill' for `osx-key-mode-mouse-3-behavior' set
+	to now works fine for double clicks (deleting the selected region)
+	Reported by Konrad Podczeck
 
 <P>
 </LI>
-<LI>Navigation in wrapped lines (not word wrap) is easier now: arrow
-	keys will jump to the next visual line, not to the next
-	buffer/file line. Also, navigation is visual now for variable
-	width fonts like Lucida: jumping up or down moves to roughly the
-	same place in the adjacent line going after what's displayed on
-	the screen rather than counting characters (jumping to the same
-	row number in the next line).  If you don't like the behavior, you
-	can turn it off with this code in your Preferences.el / .emacs
-	file:
-
-<P>
-<PRE> 
-(define-key osx-key-mode-map [remap previous-line]
-            'previous-line)
-
-(define-key osx-key-mode-map [remap next-line] 
-            'next-line)
-</PRE>
+<LI>Tcl-mode back in the "New Buffer" menu.
+	Patch by Kevin Walzer
 
 <P>
 </LI>
-<LI>Scrolling and setting the point with the mouse has improved:
-	`scroll-margin' defaults to 0 now, so scrolling won't happen until
-	you've reached the first or last line in the window - except when
-	you use the cursor up/down keys (and osx-key-mode is on). Then,
-	scrolling takes place a few lines before you reach the
-	boundary. You can configure this via Aquamacs' customization
-	variable `visual-scroll-margin'.
+<LI>CPerl mode is still the default for perl files, but perl-mode is
+	not an alias any more for cperl-mode.
 
 <P>
 </LI>
-<LI>Command-{ comments the line or the region (in programming modes)
-</LI>
-<LI>Command-} uncomments the line or the region (in programming
-	modes) 
-</LI>
-<LI>Command-' comments or uncomments (toggling) the line or
-	the region (in programming modes)
-
-<P>
-</LI>
-<LI>Command-Delete kills (erases) the rest of the current
-	line. (Command-Backspace kills the whole line.)
-
-<P>
-</LI>
-<LI>Filenames with spaces can now be entered without hassle.
-
-<P>
-</LI>
-<LI>Modifier-Key configuration: Several previously deprecated
-	variables have been removed: `mac-reverse-ctrl-meta' and
-	'mac-command-key-is-meta'. Use the much simpler, yet
-	equally powerful variables `mac-command-modifier', 
-	`mac-option-modifier', `mac-control-modifier' and 
-	`mac-function-modifier' (experimental) instead.
-	Additionally, `mac-pass-option-to-system' is deprecated now:
-	instead, set `mac-option-modifier' to nil to reach the same
-	effect. The use of the Option menu is recommended. 
-
-<P>
-To set the Apple key to Meta (not recommended), add this to your
-	Preferences.el file:
-
-<P>
-tt (setq mac-command-modifier 'meta)
-
-<P>
-</LI>
-<LI>Fn-key can act as Meta. If you have an Fn key on your laptop,
-	you can use it as Meta key now. Add this to your Preferences.el
-	file:
-
-<P>
-<TT>(setq mac-function-modifier 'meta)</TT>
-
-<P>
-Note that support of the Fn key is experimental. Rare
-	combinations may fail on non-English keyboard layouts,
-	and some keys will not work correctly in combination with Fn and Shift.
-
-<P>
-</LI>
-<LI>Modifier keys such as Command or Shift show up correctly in the
-	shortcuts (menu)
-
-<P>
-</LI>
-<LI>New-Buffer menu contains many more modes now, such as modes for
-	Fortran, ObjectiveC, C++, PHP, CSS, JavaScript...
-	You can add your own in the customization variable
-	`aquamacs-known-major-modes'. The menu is updated automatically.
-
-<P>
-</LI>
-<LI>Change-Buffer-Mode menu (in File menu) allows to change the mode
-	of the current buffer to something hopefully more useful.
-
-<P>
-</LI>
-<LI>Recently used major modes are now displayed in New-Buffer and
-	Change-Buffer-Mode menus .
-
-<P>
-</LI>
-<LI>M-w (kill-ring-save) will now deactivate the mark after saving
-	the region, that is deselect the region, just like on standard
-	Emacs. Apple-C will not deselect the region, just like it's done
-	on the Mac. 
-
-<P>
-</LI>
-<LI>Run executables from within Emacs that lie in your PATH as
-        set in shell init files. Aquamacs will set `exec-path'
-        automatically from PATH.  We don't add paths to exec-path any
-        more (except one default tetex path for AUCTeX).
-
-<P>
-</LI>
-<LI>Questions like "Save to file before closing?" will be asked with
-	a proper dialog and not with a menu appearing out of nothing - if
-	the last action was carried out with the mouse.           
-
-<P>
-Thanks to CarbonEmacsJP project for part of this.
-
-<P>
-</LI>
-<LI>Info mode: C-h i  will bring up not only up-to-date info nodes
-	for Emacs, but also info on installed packages on the system.
- 	(unless you have an INFOPATH environment variable set)
-
-<P>
-</LI>
-<LI>Mode-specific styles: With a new menu function, you can now
-	apply the style assigned to some other mode, effectively copying
-	it over.
-
-<P>
-</LI>
-<LI>Mode-specific styles are not applied any more for the major-mode
-	of buffers shown in temporary windows inside frames such as the
-</LI>
-<LI>Completions* buffer. This prevents ugly font-switching etc. for
-	the whole frame when just a small window is opened inside the frame.
-
-<P>
-</LI>
-<LI>New Packages: findr, htmlize, ruby's friends, auctex
- 	(latex-mode), nxml-mode, matlab-mode, javascript-mode, 
-
-<P>
-</LI>
-<LI>Notable Updated external packages: ruby-mode, ruby-*, carbon-font
-
-<P>
-</LI>
-<LI>Apple/Command key is now called 'A-' internally because it looks
-	like "Apple-" (while it's really the otherwise unused "Alt" key). 
-	It used to be "H-" (or: hyper), so change your configuration code
-	in case you've defined your own shortcuts.
-
-<P>
-</LI>
-<LI>One-Buffer-One-Frame is a minor mode now (called
-	one-buffer-one-frame-mode). Use the Options menu (and Save
-	Options) to turn it on/off, as before.
-	In this minor mode, you have some additional key bindings now:
-
-<P>
-C-x B, C-x C-B, C-x S-left, C-x S-right
-	they all do the same as their corresponding functions without the
-	Shift key, but they will show the buffer that they are switching
-	to in the same window, even though one-buffer-one-frame-mode is on.
-
-<P>
-The mode has been revised to open fewer extra windows when their
-	content is related to a specific frame - for example version
-	control checkin comments.
-
-<P>
-</LI>
-<LI>Manual: The Emacs Manual that comes with Aquamacs (as an Apple
-	Help document) has been updated to reflect the basis of Aquamacs,
-	namely the upcoming Emacs 22.
-
-<P>
-</LI>
-<LI>Command-p-Bugfix: For some users, Emacs locked up at random
-	times, showing a message like (wrong command-p ...) in the echo
-	area of a frame on every input. This bug in the underlying GNU
-	Emacs should be fixed now.
-	Patches by Yamamoto Mitsuharu, Richard Stallman, et al.
-
-<P>
-</LI>
-<LI>Bugfix: Aquamacs now correctly remembers the positions of frames
-	with specific files, so they open again on the same screen
-	position if the file is re-loaded (in the same session, or after
-	"Save Options" in the next session).
-</LI>
-<LI>Bugfix: Bookmarks did not work with `one-buffer-one-frame'
-	turned on.  
-</LI>
-<LI>Bugfix: Some Show/Hide options weren't saved by
-	"Save Options".
-</LI>
-<LI>Bugfix: links from describe-variable/function help buffers to the 
-	source files are correct now for the Aquamacs-specific objects
-</LI>
-<LI>Bugfix: Aquamacs works fine now on systems where, in the default
-	shell (e.g. via .bash profile), functions have been defined and
-	exported.
-	Reported by Terry Jones 
-</LI>
-<LI>Bugfix: RefTeX mode does't give constant audio signals (errors) 
-	any more in certain situations
-</LI>
-<LI>Bugfix: Allout mode should work again (saving files)
-	Reported by Gerry Brush
-	Patch by Ken Mannheimer
+<LI>Environment import (from the default login shell) works better
+	now for users of tcsh, zsh and ksh.
 
 <P>
 </LI>
@@ -389,35 +184,35 @@ The mode has been revised to open fewer extra windows when their
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html862"
+<A NAME="tex2html867"
   HREF="node56.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html858"
+<A NAME="tex2html863"
   HREF="node39.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html852"
+<A NAME="tex2html857"
   HREF="node54.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html860"
+<A NAME="tex2html865"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html863"
-  HREF="node56.html">Changes 0.9.6</A>
-<B> Up:</B> <A NAME="tex2html859"
+<B> Next:</B> <A NAME="tex2html868"
+  HREF="node56.html">Changes 0.9.7</A>
+<B> Up:</B> <A NAME="tex2html864"
   HREF="node39.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html853"
-  HREF="node54.html">Changes 0.9.8</A>
- &nbsp; <B>  <A NAME="tex2html861"
+<B> Previous:</B> <A NAME="tex2html858"
+  HREF="node54.html">Changes 0.9.9a</A>
+ &nbsp; <B>  <A NAME="tex2html866"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 <I>David</I>
-<BR><I>2009-08-06</I>
+<BR><I>2009-10-10</I>
 </ADDRESS>
 </BODY>
 </HTML>

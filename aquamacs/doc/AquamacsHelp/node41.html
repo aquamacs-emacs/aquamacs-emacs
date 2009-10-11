@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Changes-- 1.8dev</TITLE>
-<META NAME="description" CONTENT="Changes-- 1.8dev">
+<TITLE>Changes-- 1.x dev</TITLE>
+<META NAME="description" CONTENT="Changes-- 1.x dev">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -27,116 +27,76 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html694"
+<A NAME="tex2html699"
   HREF="node42.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html690"
+<A NAME="tex2html695"
   HREF="node39.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html684"
+<A NAME="tex2html689"
   HREF="node40.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html692"
+<A NAME="tex2html697"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html695"
-  HREF="node42.html">Changes  1.7</A>
-<B> Up:</B> <A NAME="tex2html691"
+<B> Next:</B> <A NAME="tex2html700"
+  HREF="node42.html">Changes  1.8c</A>
+<B> Up:</B> <A NAME="tex2html696"
   HREF="node39.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html685"
-  HREF="node40.html">Changes  2.0preview1</A>
- &nbsp; <B>  <A NAME="tex2html693"
+<B> Previous:</B> <A NAME="tex2html690"
+  HREF="node40.html">Changes  2.0preview3</A>
+ &nbsp; <B>  <A NAME="tex2html698"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION000142000000000000000">
-Changes-- 1.8dev</A>
+Changes-- 1.x dev</A>
 </H2>
+
+<P>
+<I>Interested in trying out the Emacs 23 Cocoa version of Aquamacs?  As of Summer 2008, we're still working <I>on</I> it, but we're also already working <I>with</I> it. 
+<TT><A NAME="tex2html35"
+  HREF="http://aquamacs.org/nightlies.shtml">http://aquamacs.org/nightlies.shtml</A></TT></I>
 
 <P>
 
 <UL>
-<LI>Tabs are now directly accessible using keys A-M-1,2,3...9,0 (normally: Command-Option-1,2,3...9,0).  The number of each tabs is marked.  For configuration, see the new customization variable `tabbar-show-key-bindings' and the function `tabbar-define-access-keys'.   For instance, use <TT>(tabbar-define-access-keys '(alt))</TT> in your <TT>Preferences.el</TT> file to use Command-1,2,3.. bindings.
+<LI>Copy (Command-c) works again reliably for text selected by mouse.   However, the previous improvement avoiding duplicate entries in the kill ring has been reverted.
+Reported by Tom van Vleck.
 
 <P>
 </LI>
-<LI>Aquamacs now asks for confirmation when printing is requested via A-p.  This helps avoid long waits for rendering with large buffers when A-p is pressed by mistake.
+<LI>Jumping to a LaTeX error after compilation works more reliably now.  The LaTeX-command setting has been changed to include `file-line-error' style.
+Suggested by Enrico Franconi.
 
 <P>
 </LI>
-<LI>On systems with faulty LaTeX installations, Aquamacs will now do a better job at choosing the right TeXLive (or legacy teTeX) binaries.
+<LI>Recognize Objective C files (extensions .m and .h) by their content.
+Patch by Kendall Gelner and D.R.
 
 <P>
 </LI>
-<LI>When scrolling back and forth page-wise, the point will now end up in its previous position.
+<LI>Automatic word wrapping works better in large hard-wrapped (auto-fill-mode) documents with occasional (6+) over-long lines.
 
 <P>
 </LI>
-<LI>Command-, can now be re-bound via the normal Aquamacs key maps (`osx-key-mode-map') .  (Note that even if rebound, the application menu will still show the A-q and A-, key bindings for Quit and Preferences, respectively).  A-h remains unmappable for now.
-Reported by Chris Bernard.
+<LI>The Apple Help books (for Aquamacs, Emacs and the Emacs Lisp Reference) now work on 10.6 ``Snow Leopard''.
+Reported by Philippe Sismondi.
 
 <P>
 </LI>
-<LI>The mark is now deactivated when point is restored while switching tabs (in transient-mark-mode, which is on by default).
+<LI>Aquamacs now by default enables synctex when compiling latex documents.  
 
 <P>
 </LI>
-<LI>Fixed a rare failure of dired to view directories.
-Reported by Uwe Pieczynski.
-
-<P>
-</LI>
-<LI>Fixed an error when deleting the whole buffer contents while smart-spacing-mode was on.
-Patch by Jon Shea.
-
-<P>
-</LI>
-<LI>Fixed a potential security hole in smtpmail.
-Code by Simon Josefsson.
-
-<P>
-</LI>
-<LI>`LaTex-mode-hook' can now be customized and saved through the
-  customization interface.
-Reported by Bruno Cadonna.
-
-<P>
-</LI>
-<LI>ESS (R-mode) will now retain an active mark (and region) after evaluating code, e.g. with C-c C-r.                                                       
-
-<P>
-</LI>
-<LI>In the keyboard emulation modes that allow the mac-native use of Option on various keyboard layouts, while retaining Option as Meta key for Emacs, ESC key sequences always act as Meta sequences.  For instance, with the German layout, ESC-l  acts as `downcase-word' (the original M-l binding), while Option-l inserts the @ sign.
-
-<P>
-</LI>
-<LI>Adopting fonts as default fonts for frames: keep frames inside screen.
-Reported by Stefan Vollmar.
-
-<P>
-</LI>
-<LI>The Aquamacs application bundle has shrunk by about 17 MB thanks to compression.
-
-<P>
-</LI>
-<LI>Version 1.8b: Show more buffers in Window menu.
-
-<P>
-</LI>
-<LI>Version 1.8b: Avoid slow-down of editing when Tramp is used to access a remote file.
-Reported by Alison Lister.
-
-<P>
-</LI>
-<LI>Version 1.8b: Avoid hang during startup when remote, now inaccessible files were edited during a previous session.
-Reported by Christopher Menzel.
+<LI>CSS-Mode has been revised to match the GNU Emacs 22/23 CSS mode.
 
 <P>
 </LI>
@@ -145,35 +105,35 @@ Reported by Christopher Menzel.
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html694"
+<A NAME="tex2html699"
   HREF="node42.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html690"
+<A NAME="tex2html695"
   HREF="node39.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html684"
+<A NAME="tex2html689"
   HREF="node40.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html692"
+<A NAME="tex2html697"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html695"
-  HREF="node42.html">Changes  1.7</A>
-<B> Up:</B> <A NAME="tex2html691"
+<B> Next:</B> <A NAME="tex2html700"
+  HREF="node42.html">Changes  1.8c</A>
+<B> Up:</B> <A NAME="tex2html696"
   HREF="node39.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html685"
-  HREF="node40.html">Changes  2.0preview1</A>
- &nbsp; <B>  <A NAME="tex2html693"
+<B> Previous:</B> <A NAME="tex2html690"
+  HREF="node40.html">Changes  2.0preview3</A>
+ &nbsp; <B>  <A NAME="tex2html698"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 <I>David</I>
-<BR><I>2009-08-06</I>
+<BR><I>2009-10-10</I>
 </ADDRESS>
 </BODY>
 </HTML>
