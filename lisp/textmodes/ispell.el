@@ -1624,6 +1624,45 @@ The variable `ispell-library-directory' defines the library location."
 	  (setq dict-list (cons name dict-list))))
     dict-list))
 
+
+
+(defvar ispell-submenu-map (make-sparse-keymap "Ispell"))
+(if ispell-menu-map-needed
+    (progn
+      (define-key ispell-submenu-map [ispell-complete-word]
+	'(menu-item "Complete Word" ispell-complete-word
+		    :help "Complete word at cursor using dictionary"))
+      (define-key ispell-submenu-map [ispell-complete-word-interior-frag]
+	'(menu-item "Complete Word Fragment" ispell-complete-word-interior-frag
+		    :help "Complete word fragment at cursor"))
+      (define-key ispell-submenu-map [ispell-continue]
+	'(menu-item "Continue Spell-Checking" ispell-continue
+		    :enable (and (boundp 'ispell-region-end)
+				 (marker-position ispell-region-end)
+				 (equal (marker-buffer ispell-region-end)
+					(current-buffer)))
+		    :help "Continue spell checking last region"))
+      (define-key ispell-submenu-map [ispell-word]
+	'(menu-item "Spell-Check Word" ispell-word
+		    :help "Spell-check word at cursor"))
+      (define-key ispell-submenu-map [ispell-comments-and-strings]
+	'(menu-item "Spell-Check Comments" ispell-comments-and-strings
+		    :help "Spell-check only comments and strings"))
+      (define-key ispell-submenu-map [ispell-region]
+	'(menu-item "Spell-Check Region" ispell-region
+		    :enable mark-active
+		    :help "Spell-check text in marked region"))
+      (define-key ispell-submenu-map [ispell-message]
+	'(menu-item "Spell-Check Message" ispell-message
+		    :visible (eq major-mode 'mail-mode)
+		    :help "Skip headers and included message text"))
+      (define-key ispell-submenu-map [ispell-buffer]
+	'(menu-item "Spell-Check Buffer" ispell-buffer
+		    :help "Check spelling of selected buffer"))
+      ;;(put 'ispell-region 'menu-enable 'mark-active)
+
+      (fset 'ispell-submenu-map (symbol-value 'ispell-submenu-map))))
+
 ;;; define commands in menu in opposite order you want them to appear.
 ;;;###autoload
 (if ispell-menu-map-needed
@@ -1636,10 +1675,12 @@ The variable `ispell-library-directory' defines the library location."
 	'(menu-item "Kill Process" ispell-kill-ispell
 		    :enable (and (boundp 'ispell-process) ispell-process
 				 (eq (ispell-process-status) 'run))
+		    :visible (not (string= ispell-program-name "NSSpellChecker"))
 		    :help "Terminate Ispell subprocess"))
       (define-key ispell-menu-map [ispell-pdict-save]
 	'(menu-item "Save Dictionary"
 		    (lambda () (interactive) (ispell-pdict-save t t))
+		    :visible (not (string= ispell-program-name "NSSpellChecker"))
 		    :help "Save personal dictionary"))
       (define-key ispell-menu-map [ispell-customize]
 	'(menu-item "Customize..."
@@ -1656,10 +1697,12 @@ The variable `ispell-library-directory' defines the library location."
 		    :help "Check spelling while you edit the text"
 		    :button (:toggle . (bound-and-true-p flyspell-mode))))
       (define-key ispell-menu-map [ispell-complete-word]
-	'(menu-item "Complete Word" ispell-complete-word
+	'(menu-item "Complete Word" ispell-complete-word 
+		    :visible (not (string= ispell-program-name "NSSpellChecker"))
 		    :help "Complete word at cursor using dictionary"))
       (define-key ispell-menu-map [ispell-complete-word-interior-frag]
-	'(menu-item "Complete Word Fragment" ispell-complete-word-interior-frag
+	'(menu-item "Complete Word Fragment" ispell-complete-word-interior-frag 
+		    :visible (not (string= ispell-program-name "NSSpellChecker"))
 		    :help "Complete word fragment at cursor"))))
 
 ;;;###autoload
@@ -1670,13 +1713,16 @@ The variable `ispell-library-directory' defines the library location."
 		    :enable (and (boundp 'ispell-region-end)
 				 (marker-position ispell-region-end)
 				 (equal (marker-buffer ispell-region-end)
-					(current-buffer)))
+					(current-buffer))) 
+		    :visible (not (string= ispell-program-name "NSSpellChecker"))
 		    :help "Continue spell checking last region"))
       (define-key ispell-menu-map [ispell-word]
-	'(menu-item "Spell-Check Word" ispell-word
+	'(menu-item "Spell-Check Word" ispell-word 
+		    :visible (not (string= ispell-program-name "NSSpellChecker"))
 		    :help "Spell-check word at cursor"))
       (define-key ispell-menu-map [ispell-comments-and-strings]
-	'(menu-item "Spell-Check Comments" ispell-comments-and-strings
+	'(menu-item "Spell-Check Comments" ispell-comments-and-strings 
+		    :visible (not (string= ispell-program-name "NSSpellChecker"))
 		    :help "Spell-check only comments and strings"))))
 
 ;;;###autoload
@@ -1684,16 +1730,41 @@ The variable `ispell-library-directory' defines the library location."
     (progn
       (define-key ispell-menu-map [ispell-region]
 	'(menu-item "Spell-Check Region" ispell-region
-		    :enable mark-active
+		    :enable mark-active 
+		    :visible (not (string= ispell-program-name "NSSpellChecker"))
 		    :help "Spell-check text in marked region"))
       (define-key ispell-menu-map [ispell-message]
 	'(menu-item "Spell-Check Message" ispell-message
-		    :visible (eq major-mode 'mail-mode)
+		    :visible (and (eq major-mode 'mail-mode) 
+				  (not (string= ispell-program-name
+						"NSSpellChecker")))
 		    :help "Skip headers and included message text"))
       (define-key ispell-menu-map [ispell-buffer]
-	'(menu-item "Spell-Check Buffer" ispell-buffer
+	'(menu-item "Spell-Check Buffer" ispell-buffer 
+		    :visible (not (string= ispell-program-name "NSSpellChecker"))
 		    :help "Check spelling of selected buffer"))
       ;;(put 'ispell-region 'menu-enable 'mark-active)
+
+      (define-key ispell-menu-map [ispell-submenu]
+	`(menu-item "Ispell" ,ispell-submenu-map
+		    :visible (string= ispell-program-name "NSSpellChecker")))
+
+
+      (define-key ispell-menu-map [nsspellchecker-panel-show]
+	'(menu-item "Show Spelling Panel" ns-toggle-spellchecker-panel 
+		    :visible (and (string= ispell-program-name "NSSpellChecker")
+				  (not (ns-spellchecker-panel-visible-p)))
+		    :help "Show OS X spellcheck panel"))
+       (define-key ispell-menu-map [nsspellchecker-panel-hide]
+	'(menu-item "Hide Spelling Panel" ns-toggle-spellchecker-panel 
+		    :visible (and (string= ispell-program-name "NSSpellChecker")
+				  (ns-spellchecker-panel-visible-p))
+		    :help "Show OS X spellcheck panel"))
+      (define-key ispell-menu-map [nspellcheck]
+	'(menu-item "Spellcheck Now" ns-highlight-misspelling-and-suggest
+		    :visible (string= ispell-program-name "NSSpellChecker")
+		    :help "Check spelling with OS X spellchecker")) 
+
       (fset 'ispell-menu-map (symbol-value 'ispell-menu-map))))
 
 ;;; XEmacs versions 19 & 20

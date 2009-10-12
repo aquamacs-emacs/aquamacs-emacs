@@ -984,9 +984,10 @@ See the documentation of `create-fontset-from-fontset-spec' for the format.")
 (defvar ns-reg-to-script)               ; nsfont.m
 ;;;; Spelling panel support.
 
-(autoload 'ns-start-spellchecker "flyspell"
+(autoload 'ns-toggle-spellchecker-panel "flyspell"
   "Show NSSpellChecker spellingPanel, and call
-ns-highlight-misspelling-and-suggest, which see." t) 
+ns-highlight-misspelling-and-suggest.  If panel
+is already visible, close it." t) 
 
 (autoload 'ns-highlight-misspelling-and-suggest "flyspell"
   "Search forward in current buffer for first misspelling, looping if end

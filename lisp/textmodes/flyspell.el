@@ -428,6 +428,7 @@ and apply flyspell-incorrect face"
   "Search forward in current buffer for first misspelling, looping if end
 is reached.  If found, set region to the misspelling, apply face
 flyspell-incorrect, and show word in OS X spelling panel"
+  (interactive)
   (let* ((misspell-region (ns-find-next-misspelling))
 	 (misspell-beg (car misspell-region))
 	 (misspell-end (cdr misspell-region))
@@ -440,7 +441,7 @@ flyspell-incorrect, and show word in OS X spelling panel"
       (goto-char misspell-end)
       (push-mark misspell-beg 'no-msg 'activate)
       (setq word (buffer-substring misspell-beg misspell-end))
-      (ns-spellchecker-show-word word))))
+      (ns-spellchecker-show-word word))))  
 
 (defun ns-start-spellchecker ()
   "Show NSSpellChecker spellingPanel, and call
@@ -448,6 +449,16 @@ ns-highlight-misspelling-and-suggest, which see."
   (interactive)
   (ns-popup-spellchecker-panel)
   (ns-highlight-misspelling-and-suggest))
+
+(defun ns-toggle-spellchecker-panel ()
+  "Show NSSpellChecker spellingPanel, and call
+ns-highlight-misspelling-and-suggest.  If panel
+is already visible, close it."
+  (interactive)
+  (if (ns-spellchecker-panel-visible-p)
+      (ns-close-spellchecker-panel)
+    (ns-popup-spellchecker-panel)
+    (ns-highlight-misspelling-and-suggest)))
 
 (defun ns-flyspell-region (beg end)
   "Flyspell text between BEG and END using ns-spellchecker-check-spelling."

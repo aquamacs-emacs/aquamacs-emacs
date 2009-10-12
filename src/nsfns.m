@@ -1403,6 +1403,42 @@ Shows the NS spell checking panel and brings it to the front.*/)
   return Qnil;
 }
 
+DEFUN ("ns-close-spellchecker-panel", Fns_close_spellchecker_panel, Sns_close_spellchecker_panel,
+       0, 0, "",
+       doc: /* Close the spell checking panel.*/)
+     ()
+{
+  id sc;
+
+  check_ns ();
+  sc = [NSSpellChecker sharedSpellChecker];
+  
+  BLOCK_INPUT;
+  [[sc spellingPanel] close];
+
+  UNBLOCK_INPUT;
+  return Qnil;
+}
+
+DEFUN ("ns-spellchecker-panel-visible-p", Fns_spellchecker_panel_visible_p, Sns_spellchecker_panel_visible_p,
+       0, 0, "",
+       doc: /* Return t if spellchecking panel is visible,
+nil otherwise.*/)
+     ()
+{
+  id sc;
+  BOOL visible;
+
+  check_ns ();
+  sc = [NSSpellChecker sharedSpellChecker];
+  
+  BLOCK_INPUT;
+  visible = [[sc spellingPanel] isVisible];
+
+  UNBLOCK_INPUT;
+  return visible ? Qt : Qnil;
+}
+
 
 DEFUN ("ns-spellchecker-show-word", Fns_spellchecker_show_word, Sns_spellchecker_show_word,
        1, 1, 0,
@@ -3125,6 +3161,8 @@ be used as the image of the icon representing the frame.  */);
   defsubr (&Sns_convert_utf8_nfd_to_nfc);
   defsubr (&Sx_focus_frame);
   defsubr (&Sns_popup_spellchecker_panel);
+  defsubr (&Sns_close_spellchecker_panel);
+  defsubr (&Sns_spellchecker_panel_visible_p);
   defsubr (&Sns_spellchecker_learn_word);
   defsubr (&Sns_spellchecker_ignore_word);
   defsubr (&Sns_spellchecker_show_word);
