@@ -1624,11 +1624,10 @@ The variable `ispell-library-directory' defines the library location."
 	  (setq dict-list (cons name dict-list))))
     dict-list))
 
-
-
-(defvar ispell-submenu-map (make-sparse-keymap "Ispell"))
+;;;###autoload
 (if ispell-menu-map-needed
     (progn
+      (defvar ispell-submenu-map (make-sparse-keymap "Ispell"))
       (define-key ispell-submenu-map [ispell-complete-word]
 	'(menu-item "Complete Word" ispell-complete-word
 		    :help "Complete word at cursor using dictionary"))
@@ -1750,16 +1749,16 @@ The variable `ispell-library-directory' defines the library location."
 		    :visible (string= ispell-program-name "NSSpellChecker")))
 
 
-      (define-key ispell-menu-map [nsspellchecker-panel-show]
-	'(menu-item "Show Spelling Panel" ns-toggle-spellchecker-panel 
-		    :visible (and (string= ispell-program-name "NSSpellChecker")
-				  (not (ns-spellchecker-panel-visible-p)))
-		    :help "Show OS X spellcheck panel"))
        (define-key ispell-menu-map [nsspellchecker-panel-hide]
 	'(menu-item "Hide Spelling Panel" ns-toggle-spellchecker-panel 
 		    :visible (and (string= ispell-program-name "NSSpellChecker")
 				  (ns-spellchecker-panel-visible-p))
-		    :help "Show OS X spellcheck panel"))
+		    :help "Toggle OS X spellcheck panel visibility")) 
+      (define-key ispell-menu-map [nsspellchecker-panel-show]
+	'(menu-item "Show Spelling Panel" ns-toggle-spellchecker-panel 
+		    :visible (and (string= ispell-program-name "NSSpellChecker")
+				  (not (ns-spellchecker-panel-visible-p))) 
+		    :help "Toggle OS X spellcheck panel visibility"))
       (define-key ispell-menu-map [nspellcheck]
 	'(menu-item "Spellcheck Now" ns-highlight-misspelling-and-suggest
 		    :visible (string= ispell-program-name "NSSpellChecker")
