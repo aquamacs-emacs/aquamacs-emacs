@@ -454,7 +454,7 @@ ns-highlight-misspelling-and-suggest, which see."
 (defun ns-toggle-spellchecker-panel ()
   "Show NSSpellChecker spellingPanel, and call
 ns-highlight-misspelling-and-suggest.  If panel
-is already visible, close it."
+is already visible, close it instead."
   (interactive)
   (if (ns-spellchecker-panel-visible-p)
       (ns-close-spellchecker-panel)
