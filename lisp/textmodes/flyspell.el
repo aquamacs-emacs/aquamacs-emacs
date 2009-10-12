@@ -315,7 +315,7 @@ effect, marks the misspelled word (if found) with face flyspell-incorrect."
       (cons (+ pos (car misspell-location)) misspell-end))
     ))
   
-(defun ns-find-next-misspelling ()
+(defun ns-find-next-misspelling (&optional repeat)
   "Move forward in buffer to next misspelling; set region to the word,
 and apply flyspell-incorrect face"
 ;; search forward for a spelling error according to NSSpellChecker
@@ -354,7 +354,8 @@ and apply flyspell-incorrect face"
       ;; When a selection is active, always skip the first word or
       ;;   partial word (as TextEdit does), so we don't spellcheck
       ;;   the same word again
-      (if mark-active (forward-word))
+      (if (and mark-active (not repeat)) (forward-word))
+      (flyspell-word)
       (setq pos (point))
       ;; if region from point to end is larger than 1.5x
       ;; NS-SPELLCHECKER-CHUNK-SIZE chars, then check text in smaller chunks
@@ -424,12 +425,12 @@ and apply flyspell-incorrect face"
       misspell-location
       )))
 
-(defun ns-highlight-misspelling-and-suggest ()
+(defun ns-highlight-misspelling-and-suggest (&optional repeat)
   "Search forward in current buffer for first misspelling, looping if end
 is reached.  If found, set region to the misspelling, apply face
 flyspell-incorrect, and show word in OS X spelling panel"
   (interactive)
-  (let* ((misspell-region (ns-find-next-misspelling))
+  (let* ((misspell-region (ns-find-next-misspelling repeat))
 	 (misspell-beg (car misspell-region))
 	 (misspell-end (cdr misspell-region))
 	 word)
@@ -458,7 +459,7 @@ is already visible, close it."
   (if (ns-spellchecker-panel-visible-p)
       (ns-close-spellchecker-panel)
     (ns-popup-spellchecker-panel)
-    (ns-highlight-misspelling-and-suggest)))
+    (ns-highlight-misspelling-and-suggest 'repeat)))
 
 (defun ns-flyspell-region (beg end)
   "Flyspell text between BEG and END using ns-spellchecker-check-spelling."
