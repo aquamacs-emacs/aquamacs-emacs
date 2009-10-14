@@ -1529,15 +1529,33 @@ words are spelled as in the dictionary.*/)
   BLOCK_INPUT;
   sc = [NSSpellChecker sharedSpellChecker];
 
+  NSRange first_word = nil;
   NSInteger tag = 1;
   if (! NILP (buffer) ) 
     {
       tag = sxhash (buffer, 0);
     }
 
-  NSRange first_word =  [sc checkSpellingOfString:[NSString stringWithUTF8String: SDATA (string)] startingAt:((NSInteger) 0)
-					 language:nil wrap:NO inSpellDocumentWithTag:tag wordCount:nil];
+  /* unfinished -
+  if ([sc respondsToSelector:@selector(checkString:range:types:options:inSpellDocumentWithTag:orthography:wordCount:)])
+    {
+      NSString *nsString = [NSString stringWithUTF8String: SDATA (string)];
+      NSArray *spelling_result = [sc
+				   checkString:nsString
+					 range:NSMakeRange(0,[nsString size]-1)
+					 types:NSTextCheckingAllSystemTypes - NSTextCheckingTypeGrammar
+				       options:nil
+				     inSpellDocumentWithTag:tag
+				   orthography:nil // difficult to produce 
+				     wordCount:nil];
+				   
+    } else */
+    { 
 
+      first_word =  [sc checkSpellingOfString:[NSString stringWithUTF8String: SDATA (string)] startingAt:((NSInteger) 0)
+					     language:nil wrap:NO inSpellDocumentWithTag:tag wordCount:nil];
+
+    }
   UNBLOCK_INPUT;
   if (first_word.location < 0)
     return Qnil;
