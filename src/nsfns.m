@@ -1463,18 +1463,26 @@ Give empty string to delete word.*/)
 
 DEFUN ("ns-spellchecker-learn-word", Fns_spellchecker_learn_word, Sns_spellchecker_learn_word,
        1, 1, 0,
-       doc: /* Learn word WORD.*/)
+       doc: /* Learn word WORD.
+Returns learned word if successful.
+Not available on 10.4.*/)
      (str)
      Lisp_Object str;
 {
-  id sc;
-
   CHECK_STRING (str);
   check_ns ();
   BLOCK_INPUT;
-  sc = [NSSpellChecker sharedSpellChecker];
-  
-  [sc learnWord:[NSString stringWithUTF8String: SDATA (str)]];
+  id sc = [NSSpellChecker sharedSpellChecker];
+
+#ifdef NS_IMPL_COCOA
+  if ([sc respondsToSelector:@selector(learnWord:)]) // (NSAppKitVersionNumber >= 824.0)
+    {
+      
+      [sc learnWord:[NSString stringWithUTF8String: SDATA (str)]];
+      UNBLOCK_INPUT;
+      return str;
+    }
+#endif
   UNBLOCK_INPUT;
   return Qnil;
 }
@@ -1605,24 +1613,30 @@ capitalized in the same way. */)
 
 DEFUN ("ns-spellchecker-list-languages", Fns_spellchecker_list_languages, Sns_spellchecker_list_languages,
        0, 0, 0,
-       doc: /* Get all available spell-checking languages.*/)
+       doc: /* Get all available spell-checking languages.
+Returns nil if not successful.*/)
      ()
 {
   id sc;
+  Lisp_Object retval = Qnil;
 
   check_ns ();
   BLOCK_INPUT;
   sc = [NSSpellChecker sharedSpellChecker];
 
-  Lisp_Object retval = Qnil;
-  NSArray *langs = [sc availableLanguages];
-  int arrayCount = [langs count];
-  int i;
-  for (i = 0; i < arrayCount; i++) {
-    // build Lisp list of strings
-    retval = Fcons (build_string ([[langs objectAtIndex:i] UTF8String]),
-		    retval);
-  }
+#ifdef NS_IMPL_COCOA
+  if ([sc respondsToSelector:@selector(availableLanguages)]) // (NSAppKitVersionNumber >= 824.0)
+    {
+      NSArray *langs = [sc availableLanguages];
+      int arrayCount = [langs count];
+      int i;
+      for (i = 0; i < arrayCount; i++) {
+	// build Lisp list of strings
+	retval = Fcons (build_string ([[langs objectAtIndex:i] UTF8String]),
+			retval);
+      }
+    }
+#endif
   UNBLOCK_INPUT;
   return retval;
 }
