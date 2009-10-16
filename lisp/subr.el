@@ -229,15 +229,15 @@ This function accepts any number of arguments, but ignores them."
   (interactive)
   nil)
 
+;; Signal a compile-error if the first arg is missing.
 (defun error (&rest args)
   "Signal an error, making error message by passing all args to `format'.
 In Emacs, the convention is that error messages start with a capital
 letter but *do not* end with a period.  Please follow this convention
-for the sake of consistency.
-
-\(fn STRING &rest ARGS)"
+for the sake of consistency."
   (while t
     (signal 'error (list (apply 'format args)))))
+(set-advertised-calling-convention 'error '(string &rest args))
 
 ;; We put this here instead of in frame.el so that it's defined even on
 ;; systems where frame.el isn't loaded.
@@ -2026,9 +2026,7 @@ An obsolete, but still supported form is
 \(sit-for SECONDS &optional MILLISECONDS NODISP)
 where the optional arg MILLISECONDS specifies an additional wait period,
 in milliseconds; this was useful when Emacs was built without
-floating point support.
-
-\(fn SECONDS &optional NODISP)"
+floating point support."
   (if (numberp nodisp)
       (setq seconds (+ seconds (* 1e-3 nodisp))
             nodisp obsolete)
@@ -2053,6 +2051,7 @@ floating point support.
 		(setq read (cons t read)))
 	    (push read unread-command-events)
 	    nil))))))
+(set-advertised-calling-convention 'sit-for '(seconds &optional nodisp))
 
 ;;; Atomic change groups.
 
@@ -2577,24 +2576,24 @@ COMMAND is the shell command to run.
 
 An old calling convention accepted any number of arguments after COMMAND,
 which were just concatenated to COMMAND.  This is still supported but strongly
-discouraged.
-
-\(fn NAME BUFFER COMMAND)"
+discouraged."
    ;; We used to use `exec' to replace the shell with the command,
    ;; but that failed to handle (...) and semicolon, etc.
   (start-process name buffer shell-file-name shell-command-switch
 		 (mapconcat 'identity args " ")))
+(set-advertised-calling-convention 'start-process-shell-command
+                                   '(name buffer command))
 
 (defun start-file-process-shell-command (name buffer &rest args)
   "Start a program in a subprocess.  Return the process object for it.
-Similar to `start-process-shell-command', but calls `start-file-process'.
-
-\(fn NAME BUFFER COMMAND)"
+Similar to `start-process-shell-command', but calls `start-file-process'."
   (start-file-process
    name buffer
    (if (file-remote-p default-directory) "/bin/sh" shell-file-name)
    (if (file-remote-p default-directory) "-c" shell-command-switch)
    (mapconcat 'identity args " ")))
+(set-advertised-calling-convention 'start-file-process-shell-command
+                                   '(name buffer command))
 
 (defun call-process-shell-command (command &optional infile buffer display
 					   &rest args)
