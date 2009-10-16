@@ -1342,7 +1342,7 @@ This function is called with no argument.")
 Each element has the form:
    (INPUT-METHOD LANGUAGE-ENV ACTIVATE-FUNC TITLE DESCRIPTION ARGS...)
 See the function `register-input-method' for the meanings of the elements.")
-;; Autoload if this file no longer dumped.
+;;;###autoload
 (put 'input-method-alist 'risky-local-variable t)
 
 (defun register-input-method (input-method lang-env &rest args)
@@ -2894,7 +2894,7 @@ on encoding."
 			 (and (>= c #x3400 ) (<= c #x4dbf )) ; CJK Ideograph Extension A
 			 (and (>= c #x4e00 ) (<= c #x9fff )) ; CJK Ideograph
 			 (and (>= c #xd800 ) (<= c #xfaff )) ; Private/Surrogate
-			 (and (>= c #x20000) (<= c #x2ffff)) ; CJK Ideograph Extension B
+			 (and (>= c #x20000) (<= c #x2ffff)) ; CJK Ideograph Extensions B, C
 			 )
 		  (if (setq name (get-char-code-property c 'name))
 		      (setq names (cons (cons name c) names)))

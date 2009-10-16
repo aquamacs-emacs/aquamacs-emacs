@@ -91,7 +91,7 @@ for the definition of the menu frame."
 	      :help ,(purecopy "Save unsaved buffers, then exit")))
 
 (define-key menu-bar-file-menu [separator-exit]
-  (purecopy "--"))
+  `(menu-item ,(purecopy "--")))
 
 ;; Don't use delete-frame as event name because that is a special
 ;; event.

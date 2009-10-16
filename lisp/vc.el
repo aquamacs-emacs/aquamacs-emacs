@@ -58,19 +58,6 @@
 ;; Arch, Subversion, Bzr, Git, Mercurial, Monotone and SCCS
 ;; (or its free replacement, CSSC).
 ;;
-;; Some features will not work with old RCS versions.  Where
-;; appropriate, VC finds out which version you have, and allows or
-;; disallows those features (stealing locks, for example, works only
-;; from 5.6.2 onwards).
-;; Even initial checkins will fail if your RCS version is so old that ci
-;; doesn't understand -t-; this has been known to happen to people running
-;; NExTSTEP 3.0.
-;;
-;; You can support the RCS -x option by customizing vc-rcs-master-templates.
-;;
-;; Proper function of the SCCS diff commands requires the shellscript vcdiff
-;; to be installed somewhere on Emacs's path for executables.
-;;
 ;; If your site uses the ChangeLog convention supported by Emacs, the
 ;; function `log-edit-comment-to-change-log' could prove a useful checkin hook,
 ;; although you might prefer to use C-c C-a (i.e. `log-edit-insert-changelog')
@@ -564,9 +551,6 @@
 ;;
 ;;;; Default Behavior:
 ;;
-;; - do not default to RCS anymore when the current directory is not
-;;   controlled by any VCS and the user does C-x v v
-;;
 ;; - vc-responsible-backend should not return RCS if no backend
 ;;   declares itself responsible.
 ;;
@@ -818,10 +802,13 @@ The optional argument REGISTER means that a backend suitable for
 registration should be found.
 
 If REGISTER is nil, then if FILE is already registered, return the
-backend of FILE.  If FILE is not registered, or a directory, then the
+backend of FILE.  If FILE is not registered, then the
 first backend in `vc-handled-backends' that declares itself
 responsible for FILE is returned.  If no backend declares itself
 responsible, return the first backend.
+
+If REGISTER is non-nil and FILE is a directory, create a VC
+repository that can be used to register FILE.
 
 If REGISTER is non-nil, return the first responsible backend under
 which FILE is not yet registered.  If there is no such backend, return
@@ -842,13 +829,47 @@ be registered."
 	(if (not register)
 	    ;; if this is not for registration, the first backend must do
 	    (car vc-handled-backends)
-	  ;; for registration, we need to find a new backend that
-	  ;; could register FILE
-	  (dolist (backend vc-handled-backends)
-	    (and (not (vc-call-backend backend 'registered file))
-		 (vc-call-backend backend 'could-register file)
-		 (throw 'found backend)))
-	  (error "No backend that could register")))))
+	  (if (file-directory-p file)
+	      (let* ((possible-backends
+		      (let (pos)
+			(dolist (crt vc-handled-backends)
+			  (when (vc-find-backend-function crt 'create-repo)
+			    (push crt pos)))
+			pos))
+		     (bk
+		      (intern
+		       ;; Read the VC backend from the user, only
+		       ;; complete with the backends that have the
+		       ;; 'create-repo method.
+		       (completing-read
+			(format "%s is not in a version controlled directory.\nUse VC backend: " file)
+			(mapcar 'symbol-name possible-backends) nil t)))
+		     (repo-dir
+		      (file-name-as-directory
+		       (let ((def-dir file))
+			 ;; read the directory where to create the
+			 ;; repository, make sure it's a parent of
+			 ;; file.
+			 (read-file-name
+			  (format "create %s repository in: " bk)
+			  default-directory nil t nil
+			  (lambda (arg)
+			    (and (file-directory-p arg)
+				 (vc-string-prefix-p (expand-file-name arg) def-dir))))))))
+		(let ((default-directory repo-dir))
+		  (vc-call-backend bk 'create-repo))
+		(throw 'found bk))
+
+	    ;; FIXME: this case does not happen with the current code.
+	    ;; Should we keep it?
+	    ;;
+	    ;; For registration, we need to find a new backend that
+	    ;; could register FILE.
+	    (dolist (backend vc-handled-backends)
+	      (and (not (vc-call-backend backend 'registered file))
+		   (vc-call-backend backend 'could-register file)
+		   (throw 'found backend))))
+	  (error "no backend that could register")))))
 
 (defun vc-expand-dirs (file-or-dir-list)
   "Expands directories in a file list specification.
@@ -909,13 +930,13 @@ current buffer."
      ((and allow-unregistered (not (vc-registered buffer-file-name)))
       (if state-model-only-files
 	  (list (vc-responsible-backend
-		 (file-name-directory (buffer-file-name)))
+		 (file-name-directory (buffer-file-name)) t)
 		(list buffer-file-name)
 		(list buffer-file-name)
 		(when state-model-only-files 'unregistered)
 		nil)
 	(list (vc-responsible-backend
-	       (file-name-directory (buffer-file-name)))
+	       (file-name-directory (buffer-file-name)) t)
 	      (list buffer-file-name))))
      (t (error "No fileset is available here")))))
 

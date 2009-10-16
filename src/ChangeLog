@@ -1,3 +1,75 @@
+2009-10-15  Adrian Robert  <Adrian.B.Robert@gmail.com>
+
+	* nsterm.h (NS_HAVE_NSINTEGER): Back out and augment with CGFloat,
+	still needed under Tiger.
+
+	* nsterm.m (EmacsView-conversationIdentifier): Arg is long.
+
+	* m/amdx86-64.h: Don't set LIB_STANDARD and START_FILES under
+	__Apple__.
+
+	* m/intel386.h: Remove DARWIN_OS/_LP64 special case.
+
+2009-10-15  Kenichi Handa  <handa@m17n.org>
+
+	* print.c (print_object): Escape a symbol like "2E10" too.
+
+2009-10-11  Adrian Robert  <Adrian.B.Robert@gmail.com>
+	Cleanups and changes for 64-bit compile under Snow Leopard.  Based
+	on suggestions by Erik Charlebois.
+
+	* nsfns.m (xw-color-values): Use CGFloat where appropriate.
+
+	* nsfont.m (ns_char_width): Replace deprecated call.
+	(ns_findfonts, nsfont_list_family): Use long format in printf, and
+	cast argument.
+	(nsfont_open): Use ns_char_width() everywhere.
+	(ns_uni_to_glyphs, NSGlyphStorage): Use NS[U]Integer where
+	appropriate.
+
+	* nsgui.h (NSPoint, NSSize) [!__OBJC__]: Define and use CGFloat.
+
+	* nsimage.m (EmacsImage-setXBMColor:,-getPixelAtX:Y:): Use CGFloat
+	where appropriate.
+
+	* nsmenu.m (EmacsMenu-addItemWithWidgetValue:): Use NSInteger
+	where appropriate.
+	(EmacsToolbar-addDisplayItemWithImage:idx:helpText:enabled:): Use
+	stringWithUTF8String.
+	(EmacsDialogPanel-initWithContentRect:styleMask:): Fix signature.
+
+	* nsterm.h (EmacsView, EmacsMenu, EmacsToolbar, EmacsTooltip): Add
+	formal protocol mention to inheritance.
+	[NS_HAVE_NSINTEGER]: Drop conditional and contents.
+
+	* nsterm.m (ns_color_to_lisp): Use CGFloat where appropriate.  Fix
+	printf format.
+	(ns_query_color): Use CGFloat where appropriate.
+	(EmacsView<NSTextInput>, EmacsScroller): Fix method signatures.
+	(EmacsScroller-mouseDown:) Use long format in printf, and cast
+	argument.
+
+	* config.in (NS_HAVE_NSINTEGER): Drop.
+
+	* dbusbind.c (dbus-method-return-internal)
+	(dbus-method-error-internal): Use long format in printf, and cast
+	argument.
+
+	* font.c (font_unparse_xlfd, font_unparse_fcname): Use long format
+	in printf, and cast argument.
+
+	* process.c (list_processes_1): Use long format	in printf, and
+	cast argument.
+
+2009-10-11  Glenn Morris  <rgm@gnu.org>
+
+	* frame.c (Fframe_pixel_height): Doc fix.  (Bug#4535)
+
+2009-10-08  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* gtkutil.c (create_menus): Call gtk_widget_set_size_request for
+	menu bar with a small width so it doesn't enlarge the frame.
+
 2009-10-08  Juanma Barranquero  <lekktu@gmail.com>
 
 	* fontset.c (Fset_fontset_font): Fix typos in error messages.

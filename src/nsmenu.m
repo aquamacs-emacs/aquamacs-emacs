@@ -668,7 +668,7 @@ name_is_separator (name)
       else
         [item setState: NSOffState];
 
-      [item setTag: (int)wv->call_data];
+      [item setTag: (NSInteger)wv->call_data];
     }
 
   return item;

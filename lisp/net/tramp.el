@@ -3905,11 +3905,11 @@ the result will be a local, non-Tramp, filename."
       (while (string-match "//" localname)
 	(setq localname (replace-match "/" t t localname)))
       ;; No tilde characters in file name, do normal
-      ;; expand-file-name (this does "/./" and "/../").  We bind
-      ;; `directory-sep-char' here for XEmacs on Windows, which
-      ;; would otherwise use backslash.  `default-directory' is
-      ;; bound, because on Windows there would be problems with UNC
-      ;; shares or Cygwin mounts.
+      ;; `expand-file-name' (this does "/./" and "/../").  We bind
+      ;; `directory-sep-char' here for XEmacs on Windows, which would
+      ;; otherwise use backslash.  `default-directory' is bound,
+      ;; because on Windows there would be problems with UNC shares or
+      ;; Cygwin mounts.
       (let ((directory-sep-char ?/)
 	    (default-directory (tramp-compat-temporary-file-directory)))
 	(tramp-make-tramp-file-name
@@ -3922,9 +3922,11 @@ the result will be a local, non-Tramp, filename."
   "Replace environment variables in FILENAME.
 Return the string with the replaced variables."
   (save-match-data
-    (let ((idx (string-match "$\\w+" filename)))
+    (let ((idx (string-match "$\\(\\w+\\)" filename)))
       ;; `$' is coded as `$$'.
-      (when (and idx (or (zerop idx) (not (eq ?$ (aref filename (1- idx))))))
+      (when (and idx
+		 (or (zerop idx) (not (eq ?$ (aref filename (1- idx)))))
+		 (getenv (match-string 1 filename)))
 	(setq filename
 	      (replace-match
 	       (substitute-in-file-name (match-string 0 filename))
@@ -7296,35 +7298,39 @@ Not actually used.  Use `(format \"%o\" i)' instead?"
 ;; "user%domain".  Sometimes, we must extract these parts.
 (defun tramp-file-name-real-user (vec)
   "Return the user name of VEC without domain."
-  (let ((user (tramp-file-name-user vec)))
-    (if (and (stringp user)
-	     (string-match tramp-user-with-domain-regexp user))
-	(match-string 1 user)
-      user)))
+  (save-match-data
+    (let ((user (tramp-file-name-user vec)))
+      (if (and (stringp user)
+	       (string-match tramp-user-with-domain-regexp user))
+	  (match-string 1 user)
+	user))))
 
 (defun tramp-file-name-domain (vec)
   "Return the domain name of VEC."
-  (let ((user (tramp-file-name-user vec)))
-    (and (stringp user)
-	 (string-match tramp-user-with-domain-regexp user)
-	 (match-string 2 user))))
+  (save-match-data
+    (let ((user (tramp-file-name-user vec)))
+      (and (stringp user)
+	   (string-match tramp-user-with-domain-regexp user)
+	   (match-string 2 user)))))
 
 ;; The host part of a Tramp file name vector can be of kind
 ;; "host#port".  Sometimes, we must extract these parts.
 (defun tramp-file-name-real-host (vec)
   "Return the host name of VEC without port."
-  (let ((host (tramp-file-name-host vec)))
-    (if (and (stringp host)
-	     (string-match tramp-host-with-port-regexp host))
-	(match-string 1 host)
-      host)))
+  (save-match-data
+    (let ((host (tramp-file-name-host vec)))
+      (if (and (stringp host)
+	       (string-match tramp-host-with-port-regexp host))
+	  (match-string 1 host)
+	host))))
 
 (defun tramp-file-name-port (vec)
   "Return the port number of VEC."
-  (let ((host (tramp-file-name-host vec)))
-    (and (stringp host)
-	 (string-match tramp-host-with-port-regexp host)
-	 (string-to-number (match-string 2 host)))))
+  (save-match-data
+    (let ((host (tramp-file-name-host vec)))
+      (and (stringp host)
+	   (string-match tramp-host-with-port-regexp host)
+	   (string-to-number (match-string 2 host))))))
 
 (defun tramp-tramp-file-p (name)
   "Return t if NAME is a Tramp file."
@@ -7476,6 +7482,11 @@ necessary only.  This function will be used in file name completion."
     (and
      (stringp host)
      (string-match tramp-local-host-regexp host)
+     ;; The method shall be applied to one of the shell file name
+     ;; handler.  `tramp-local-host-p' is also called for "smb" and
+     ;; alike, where it must fail.
+     (tramp-get-method-parameter
+      (tramp-file-name-method vec) 'tramp-login-program)
      ;; The local temp directory must be writable for the other user.
      (file-writable-p
       (tramp-make-tramp-file-name

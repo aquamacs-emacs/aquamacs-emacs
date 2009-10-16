@@ -873,19 +873,12 @@ the completions buffer."
 	  (display-completion-list completions common-substring))
 	(princ (buffer-string)))
 
-    (let ((mainbuf (current-buffer)))
-      (with-current-buffer standard-output
-	(goto-char (point-max))
-	(if (null completions)
-	    (insert "There are no possible completions of what you have typed.")
-	  (insert "Possible completions are:\n")
-	  (let ((last (last completions)))
-	    ;; Set base-size from the tail of the list.
-	    (set (make-local-variable 'completion-base-size)
-		 (or (cdr last)
-		     (and (minibufferp mainbuf) 0)))
-	    (setcdr last nil)) ; Make completions a properly nil-terminated list.
-	  (completion--insert-strings completions)))))
+    (with-current-buffer standard-output
+      (goto-char (point-max))
+      (if (null completions)
+          (insert "There are no possible completions of what you have typed.")
+        (insert "Possible completions are:\n")
+        (completion--insert-strings completions))))
 
   ;; The hilit used to be applied via completion-setup-hook, so there
   ;; may still be some code that uses completion-common-substring.
@@ -915,7 +908,8 @@ variables.")
   "Display a list of possible completions of the current minibuffer contents."
   (interactive)
   (message "Making completion list...")
-  (let* ((string (field-string))
+  (let* ((start (field-beginning))
+         (string (field-string))
          (completions (completion-all-completions
                        string
                        minibuffer-completion-table
@@ -939,7 +933,13 @@ variables.")
                                      (funcall completion-annotate-function s)))
                                 (if ann (list s ann) s)))
                             completions)))
-            (display-completion-list (nconc completions base-size))))
+            (with-current-buffer standard-output
+	      (set (make-local-variable 'completion-base-position)
+		   ;; FIXME: We should provide the END part as well, but
+		   ;; currently completion-all-completions does not give
+		   ;; us the necessary information.
+		   (list (+ start base-size) nil)))
+            (display-completion-list completions)))
 
       ;; If there are no completions, or if the current input is already the
       ;; only possible completion, then hide (previous&stale) completions.
@@ -1080,16 +1080,18 @@ variables.")
        ((null action)
         (let ((comp (file-name-completion name realdir
                                           read-file-name-predicate)))
-          (if (stringp comp)
-              ;; Requote the $s before returning the completion.
-              (minibuffer--double-dollars (concat specdir comp))
+          (cond
+           ((stringp comp)
+            ;; Requote the $s before returning the completion.
+            (minibuffer--double-dollars (concat specdir comp)))
+           (comp
             ;; Requote the $s before checking for changes.
             (setq str (minibuffer--double-dollars str))
             (if (string-equal string str)
                 comp
               ;; If there's no real completion, but substitute-in-file-name
               ;; changed the string, then return the new string.
-              str))))
+              str)))))
 
        ((eq action t)
         (let ((all (file-name-all-completions name realdir)))
@@ -1661,6 +1663,15 @@ filter out additional entries (because TABLE migth not obey PRED)."
 
 (defun completion-pcm--merge-completions (strs pattern)
   "Extract the commonality in STRS, with the help of PATTERN."
+  ;; When completing while ignoring case, we want to try and avoid
+  ;; completing "fo" to "foO" when completing against "FOO" (bug#4219).
+  ;; So we try and make sure that the string we return is all made up
+  ;; of text from the completions rather than part from the
+  ;; completions and part from the input.
+  ;; FIXME: This reduces the problems of inconsistent capitalization
+  ;; but it doesn't fully fix it: we may still end up completing
+  ;; "fo-ba" to "foo-BAR" or "FOO-bar" when completing against
+  ;; '("foo-barr" "FOO-BARD").
   (cond
    ((null (cdr strs)) (list (car strs)))
    (t
@@ -1674,28 +1685,35 @@ filter out additional entries (because TABLE migth not obey PRED)."
           (unless (string-match re str)
             (error "Internal error: %s doesn't match %s" str re))
           (let ((chopped ())
-                (i 1))
-            (while (match-beginning i)
-              (push (match-string i str) chopped)
+                (last 0)
+                (i 1)
+                next)
+            (while (setq next (match-end i))
+              (push (substring str last next) chopped)
+              (setq last next)
               (setq i (1+ i)))
             ;; Add the text corresponding to the implicit trailing `any'.
-            (push (substring str (match-end 0)) chopped)
+            (push (substring str last) chopped)
             (push (nreverse chopped) ccs))))
 
       ;; Then for each of those non-constant elements, extract the
       ;; commonality between them.
-      (let ((res ()))
-        ;; Make the implicit `any' explicit.  We could make it explicit
-        ;; everywhere, but it would slow down regexp-matching a little bit.
+      (let ((res ())
+            (fixed ""))
+        ;; Make the implicit trailing `any' explicit.
         (dolist (elem (append pattern '(any)))
           (if (stringp elem)
-              (push elem res)
+              (setq fixed (concat fixed elem))
             (let ((comps ()))
               (dolist (cc (prog1 ccs (setq ccs nil)))
                 (push (car cc) comps)
                 (push (cdr cc) ccs))
-              (let* ((prefix (try-completion "" comps))
-                     (unique (or (and (eq prefix t) (setq prefix ""))
+              ;; Might improve the likelihood to avoid choosing
+              ;; different capitalizations in different parts.
+              ;; In practice, it doesn't seem to make any difference.
+              (setq ccs (nreverse ccs))
+              (let* ((prefix (try-completion fixed comps))
+                     (unique (or (and (eq prefix t) (setq prefix fixed))
                                  (eq t (try-completion prefix comps)))))
                 (unless (equal prefix "") (push prefix res))
                 ;; If there's only one completion, `elem' is not useful
@@ -1704,7 +1722,8 @@ filter out additional entries (because TABLE migth not obey PRED)."
                 ;; `any' into a `star' because the surrounding context has
                 ;; changed such that string->pattern wouldn't add an `any'
                 ;; here any more.
-                (unless unique (push elem res))))))
+                (unless unique (push elem res))
+                (setq fixed "")))))
         ;; We return it in reverse order.
         res)))))
 

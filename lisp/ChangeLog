@@ -1,8 +1,306 @@
+2009-10-16  Taichi Kawabata  <kawabata.taichi@gmail.com>
+
+	* international/ucs-normalize.el (ucs-normalize-version): Changed
+	to 1.2.
+	(check-range): Adjusted for Unicode 5.2.
+
+2009-10-15  Juri Linkov  <juri@jurta.org>
+
+	* menu-bar.el (menu-bar-file-menu): Convert `separator-exit'
+	to the `menu-item' format.
+
+2009-10-15  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp.el (tramp-replace-environment-variables): Do not fail
+	if the environment variable does not exist.
+
+	* net/tramp-smb.el (tramp-smb-errors): Add error messages.
+	(tramp-smb-get-share, tramp-smb-get-localname): Use only VEC as
+	parameter.
+	(tramp-smb-handle-add-name-to-file)
+	(tramp-smb-handle-copy-directory, tramp-smb-handle-copy-file)
+	(tramp-smb-handle-delete-directory, tramp-smb-handle-delete-file)
+	(tramp-smb-handle-file-attributes)
+	(tramp-smb-do-file-attributes-with-stat)
+	(tramp-smb-handle-file-local-copy)
+	(tramp-smb-handle-insert-directory)
+	(tramp-smb-handle-make-directory)
+	(tramp-smb-handle-make-directory-internal)
+	(tramp-smb-handle-make-symbolic-link)
+	(tramp-smb-handle-rename-file, tramp-smb-handle-set-file-modes)
+	(tramp-smb-handle-write-region, tramp-smb-get-file-entries)
+	(tramp-smb-maybe-open-connection): Apply the changed parameters.
+	(tramp-smb-read-file-entry): Read Disk names in compressed format.
+	Handle long file names.
+	(tramp-smb-get-cifs-capabilities): Check, whether the connection
+	process is running.
+	(tramp-smb-maybe-open-connection): Trace "smbclient -V" command.
+	Read share names with "-g" option.
+
+2009-10-15  Ryan Yeske  <rcyeske@gmail.com>
+
+	* net/rcirc.el (rcirc-view-log-file): New command.
+	(rcirc-track-minor-mode-map): Remove C-c ` binding.
+	(rcirc-authenticate, rcirc-authinfo): Allow nickserv-nick to be
+	specified.
+
+2009-10-15  Glenn Morris  <rgm@gnu.org>
+
+	* w32-fns.el (w32-batch-update-autoloads): Take autoload-make-program
+	from the second command-line argument.
+	* makefile.w32-in (autoloads, $(lisp)/calendar/cal-loaddefs.el)
+	($(lisp)/calendar/diary-loaddefs.el, $(lisp)/calendar/hol-loaddefs.el)
+	($(lisp)/mh-e/mh-loaddefs.el): Pass $(MAKE) as second argument to
+	w32-batch-update-autoloads.
+	* emacs-lisp/autoload.el (autoload-make-program): New variable.
+	(batch-update-autoloads): Handle autoload-excludes on windows-nt.
+
+	* mail/rmailedit.el (rmail-cease-edit): Give an error if the end of
+	the headers cannot be located.  Simplify, subtracting superflous
+	save-excursions.
+
+2009-10-15  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	Replace completion-base-size by completion-base-position to fix bugs
+	such as (bug#4699).
+	* simple.el (completion-base-position): New var.
+	(completion-base-size): Mark as obsolete.
+	(choose-completion): Make it work for mouse events as well.
+	Pass the new base-position to choose-completion-string.
+	(choose-completion-guess-base-position): New function, extracted from
+	choose-completion-delete-max-match.
+	(choose-completion-delete-max-match): Use it.  Make obsolete.
+	(choose-completion-string): Use the new base-position info.
+	(completion-root-regexp): Delete.
+	(completion-setup-function): Preserve completion-base-position.
+	Eliminate obsolete base-size manipulation.
+	* minibuffer.el (display-completion-list): Don't mess with base-size.
+	(minibuffer-completion-help): Set completion-base-position instead.
+	* mouse.el (mouse-choose-completion): Redefine as a mere alias to
+	choose-completion.
+	* textmodes/bibtex.el (bibtex-complete):
+	* emacs-lisp/crm.el (crm--choose-completion-string):
+	Adjust to new calling convention.
+	* complete.el (partial-completion-mode): Use minibufferp to avoid
+	bumping into incompatible change to choose-completion-string-functions.
+	* ido.el (ido-choose-completion-string): Make its calling convention
+	more permissive.
+	* comint.el (comint-dynamic-list-input-ring-select): Remove obsolete
+	base-size manipulation.
+	(comint-dynamic-list-input-ring): Use dotimes and push.
+	* iswitchb.el (iswitchb-completion-help): Remove dead-code call to
+	fundamental-mode.  Use `or'.
+
+2009-10-14  Juri Linkov  <juri@jurta.org>
+
+	* misearch.el (multi-isearch-next-buffer-from-list)
+	(multi-isearch-next-file-buffer-from-list): Doc fix.  (Bug#4723)
+
+2009-10-14  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* Makefile.in (compile-onefile): Load `bytecomp' rather than
+	`bytecomp.el'.
+
+	* minibuffer.el (completion-pcm--merge-completions): Make sure the
+	string we return is all made up of text from the completions rather
+	than part from the completions and part from the input (bug#4219).
+
+	* ido.el (ido-everywhere): Use define-minor-mode.
+
+	* buff-menu.el (list-buffers, ctl-x-map):
+	Mark the entry points with ;;;###autoload cookies.
+
+
+2009-10-14  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* vc-git.el (vc-git-dir-extra-headers): Set the branch name
+	correctly in the detached head case.
+	(vc-git-print-log): Remove unused binding.
+
+	* vc.el (vc-responsible-backend): When a directory is passed for
+	for registration create a VC repository if no backend is
+	responsible for the directory argument.
+	(vc-deduce-fileset): Tell vc-responsible-backend to register.
+
+	* vc.el: Move comments about RCS and SCCS ...
+	* vc-rcs.el:
+	* vc-sccs.el: ... here, respectively.
+
+2009-10-14  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* minibuffer.el (completion--file-name-table): Return nil if there's
+	no file completion, even if substitute-in-file-name changed
+	the string (bug#4708).
+
+2009-10-13  Juri Linkov  <juri@jurta.org>
+
+	* files-x.el (read-file-local-variable-value): Don't filter out
+	minor modes from mode name completion (bug#4664).
+
+2009-10-13  Juanma Barranquero  <lekktu@gmail.com>
+
+	* international/mule-cmds.el (ucs-names): Remove exclusion of
+	"Enclosed Ideographic Supplement" range (U+1F200..U+1F2FF).
+
+2009-10-13  Kenichi Handa  <handa@m17n.org>
+
+	* international/uni-name.el: Regenerated.
+
+2009-10-13  Juanma Barranquero  <lekktu@gmail.com>
+
+	* bs.el (bs-mode): Fix last change.  (`revert-buffer-function'
+	should be automatically buffer-local, but isn't.)
+
+2009-10-12  Sam Steingold  <sds@gnu.org>
+
+	* progmodes/compile.el (compilation-next-error-function): Fix the
+	timestamps if the buffer has been visited before.
+
+	(compilation-mode-font-lock-keywords): Do not prepend "^ *" to
+	non-anchored patterns, like the perl one (bug#3928).
+
+2009-10-12  Glenn Morris  <rgm@gnu.org>
+
+	* net/tramp-smb.el (tramp-smb-do-file-attributes-with-stat):
+	Let-bind `size'.
+
+2009-10-12  Juanma Barranquero  <lekktu@gmail.com>
+
+	* proced.el (proced-unload-function): New function.
+
+	* bs.el (bs-mode): Set `revert-buffer-function' to `bs-refresh'.
+	(bs-refresh): Add IGNORED arg for `revert-buffer' compatibility.
+	Doc fix.
+
+	* menu-bar.el (menu-bar-file-menu): Fix format of `separator-exit' item.
+
+2009-10-11  Juri Linkov  <juri@jurta.org>
+
+	* files-x.el (read-file-local-variable-value):
+	Provide default value only for bound variables (bug#4664).
+
+2009-10-11  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp.el (tramp-local-host-p): Function shall return nil for
+	connection methods like smb.
+
+	* net/tramp-cache.el (tramp-flush-connection-property): The hash
+	can be empty.
+
+	* net/tramp-smb.el (tramp-smb-errors): Add error messages.
+	(tramp-smb-file-name-handler-alist): Add handlers for
+	`add-name-to-file', `make-symbolic-link'.
+	(tramp-smb-handle-add-name-to-file)
+	(tramp-smb-do-file-attributes-with-stat)
+	(tramp-smb-handle-make-symbolic-link)
+	(tramp-smb-get-cifs-capabilities): New defuns.
+	(tramp-smb-handle-copy-directory, tramp-smb-handle-copy-file)
+	(tramp-smb-handle-delete-directory, tramp-smb-handle-delete-file)
+	(tramp-smb-handle-file-local-copy)
+	(tramp-smb-handle-make-directory-internal)
+	(tramp-smb-handle-rename-file, tramp-smb-handle-write-region):
+	The file name syntax depends on cifs capabilities.
+	(tramp-smb-handle-file-attributes):
+	Call `tramp-smb-do-file-attributes-with-stat' if possible.
+	(tramp-smb-handle-insert-directory): Use posix attributes if possible.
+	(tramp-smb-handle-set-file-modes): It is applicable for posix only.
+
+2009-10-11  Chong Yidong  <cyd@stupidchicken.com>
+
+	* emacs-lisp/eieio.el: Avoid requiring cl at runtime.
+	(eieio-defclass): Apply deftype handler and setf-method properties
+	directly.
+	(eieio-add-new-slot): Avoid union function from cl library.
+	(eieio--typep): New function.
+	(eieio-perform-slot-validation): Use it.
+
+2009-10-10  Karl Fogel  <kfogel@red-bean.com>
+
+	* bookmark.el (bookmark-yank-word, bookmark-insert-current-bookmark):
+	Update documentation to refer to the variables documented in r1.135.
+	(Bug#4188)
+
+2009-10-10  Karl Fogel  <kfogel@red-bean.com>
+
+	* bookmark.el (Info-suffix-list): Remove this unused variable.
+	(bookmark-current-point): Remove this obsolete variable.
+	(bookmark-set, bookmark-rename, bookmark-send-edited-annotation):
+	Adjust for removal of bookmark-current-point.
+
+	(bookmarks-already-loaded, bookmark-current-buffer)
+	(bookmark-yank-point): Document.  (Bug#4188)
+
+2009-10-10  Glenn Morris  <rgm@gnu.org>
+
+	* frame.el (frame-height): Doc fix.
+
+	* calendar/calendar.el (calendar-split-width-threshold): New option.
+	(calendar-basic-setup): Use calendar-split-width-threshold.
+
+2009-10-10  Sascha Wilde  <wilde@sha-bang.de>
+
+	* cedet/ede/proj-shared.el (ede-proj-makefile-target-name):
+	Use .la for Automake.
+
+2009-10-09  Chong Yidong  <cyd@stupidchicken.com>
+
+	* cedet/ede/pconf.el (ede-proj-configure-synchronize):
+	Use "autoreconf -i".  Suggested by Andreas Schwab.
+
+2009-10-09  Juanma Barranquero  <lekktu@gmail.com>
+
+	* international/mule-cmds.el (ucs-names): Exclude new "Enclosed
+	Ideographic Supplement" range (U+1F200..U+1F2FF).
+
+2009-10-09  Karl Fogel  <kfogel@red-bean.com>
+
+	* bookmark.el (bookmark-bmenu-rename): Don't call bookmark-bmenu-list,
+	since the list will have been rebuilt anyway.  (Bug#4349)
+
+2009-10-09  Karl Fogel  <kfogel@red-bean.com>
+
+	* bookmark.el (bookmark-delete): Don't let batch arg prevent saving.
+	(bookmark-bmenu-execute-deletions): Don't save here, as
+	bookmark-delete will now do so if necessary.
+	Suggested by Thierry Volpiatto <thierry.volpiatto {_AT_} gmail.com>.
+	(Bug#4348)
+
+2009-10-09  Glenn Morris  <rgm@gnu.org>
+
+	* mail/emacsbug.el (report-emacs-bug): Also print `features'.
+
+2009-10-09  Karl Fogel  <kfogel@red-bean.com>
+
+	* bookmark.el (bookmark-jump): Add new `display-func' parameter.
+	(bookmark-jump-other-window): Just invoke bookmark-jump with new
+	argument now, so the two function's behaviors will match.  (Bug#3645)
+
 2009-10-08  Chong Yidong  <cyd@stupidchicken.com>
 
+	* cedet/ede/proj.el (project-make-dist, project-compile-project):
+	Fix filename test.
+	(ede-proj-dist-makefile): Use expand-file-name instead of concat
+	to expand file names.
+
+2009-10-08  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp.el (tramp-file-name-real-user, tramp-file-name-domain)
+	(tramp-file-name-real-host, tramp-file-name-port):
+	Apply `save-match-data.
+
+	* net/tramp-smb.el (tramp-smb-handle-copy-directory): Handle the
+	case both directories are remote.
+	(tramp-smb-handle-expand-file-name): Implement "~" expansion.
+	(tramp-smb-maybe-open-connection): Flush the cache only if necessary.
+
+2009-10-08  Chong Yidong  <cyd@stupidchicken.com>
+
+	* cedet/ede/proj-obj.el (ede-gcc-linker): New var.
+	(ede-proj-target-makefile-objectcode): Use it.
+
 	* cedet/ede/source.el (ede-want-any-source-files-p)
-	(ede-want-any-auxiliary-files-p, ede-want-any-files-p): Return
-	search result.  This error was introduced while merging.
+	(ede-want-any-auxiliary-files-p, ede-want-any-files-p):
+	Return search result.  This error was introduced while merging.
 
 2009-10-07  Juanma Barranquero  <lekktu@gmail.com>
 
@@ -10,8 +308,8 @@
 
 2009-10-07  Glenn Morris  <rgm@gnu.org>
 
-	* emacs-lisp/autoload.el (batch-update-autoloads): Remove useless use of
-	concat.
+	* emacs-lisp/autoload.el (batch-update-autoloads): Remove useless use
+	of concat.
 
 2009-10-07  Stefan Monnier  <monnier@iro.umontreal.ca>
 
@@ -112,7 +410,7 @@
 
 2009-10-05  Stefan Monnier  <monnier@iro.umontreal.ca>
 
-	* help-fns.el (describe-function-1): Don't burp is the function is not
+	* help-fns.el (describe-function-1): Don't burp if the function is not
 	a symbol.
 
 2009-10-05  Juanma Barranquero  <lekktu@gmail.com>

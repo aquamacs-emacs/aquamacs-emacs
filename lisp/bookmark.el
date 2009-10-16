@@ -278,7 +278,8 @@ will be used to open this bookmark instead of `bookmark-default-handler',
 whose calling discipline HANDLER-FUNC should of course match.")
 
 
-(defvar bookmarks-already-loaded nil)
+(defvar bookmarks-already-loaded nil
+  "Non-nil iff bookmarks have been loaded from `bookmark-default-file'.")
 
 
 ;; more stuff added by db.
@@ -299,11 +300,18 @@ through a file easier.")
   "Length of the context strings recorded on either side of a bookmark.")
 
 
-(defvar bookmark-current-point 0)
-(defvar bookmark-yank-point 0)
-(defvar bookmark-current-buffer nil)
+(defvar bookmark-current-buffer nil
+  "The buffer in which a bookmark is currently being set or renamed.
+Functions that insert strings into the minibuffer use this to know
+the source buffer for that information; see `bookmark-yank-word' and
+`bookmark-insert-current-bookmark' for example.")
 
-(defvar Info-suffix-list)
+
+(defvar bookmark-yank-point 0
+  "The next point from which to pull source text for `bookmark-yank-word'.
+This point is in `bookmark-curent-buffer'.")
+
+
 
 ;; Helper functions.
 
@@ -762,7 +770,6 @@ the list of bookmarks.\)"
 
     (bookmark-maybe-load-default-file)
 
-    (setq bookmark-current-point (point))
     (setq bookmark-yank-point (point))
     (setq bookmark-current-buffer (current-buffer))
 
@@ -777,9 +784,8 @@ the list of bookmarks.\)"
       (bookmark-store str (cdr record) no-overwrite)
 
       ;; Ask for an annotation buffer for this bookmark
-      (if bookmark-use-annotations
-          (bookmark-edit-annotation str)
-        (goto-char bookmark-current-point)))))
+      (when bookmark-use-annotations
+        (bookmark-edit-annotation str)))))
 
 (defun bookmark-kill-line (&optional newline-too)
   "Kill from point to end of line.
@@ -860,8 +866,7 @@ Lines beginning with `#' are ignored."
   (let ((annotation (buffer-substring-no-properties (point-min) (point-max)))
 	(bookmark bookmark-annotation-name))
     (bookmark-set-annotation bookmark annotation)
-    (bookmark-bmenu-surreptitiously-rebuild-list)
-    (goto-char bookmark-current-point))
+    (bookmark-bmenu-surreptitiously-rebuild-list))
   (kill-buffer (current-buffer)))
 
 
@@ -873,8 +878,9 @@ BOOKMARK is a bookmark name (a string) or a bookmark record."
 
 
 (defun bookmark-insert-current-bookmark ()
-  "Insert this buffer's value of `bookmark-current-bookmark'.
-Default to file name if it's nil."
+  "Insert into the bookmark name currently being set the value of
+`bookmark-current-bookmark' in `bookmark-current-buffer', defaulting
+to the buffer's file name if `bookmark-current-bookmark' is nil."
   (interactive)
   (let ((str
 	 (with-current-buffer bookmark-current-buffer
@@ -906,8 +912,9 @@ way that is suitable as a bookmark name."
 
 
 (defun bookmark-yank-word ()
-  "Get the next word from the buffer and append it to the name of the
-bookmark currently being set, advancing point by one word."
+  "Get the next word from buffer `bookmark-current-buffer' and append
+it to the name of the bookmark currently being set, advancing
+`bookmark-yank-point' by one word." 
   (interactive)
   (let ((string (with-current-buffer bookmark-current-buffer
                   (goto-char bookmark-yank-point)
@@ -989,7 +996,7 @@ any annotations for this bookmark."
 
 
 ;;;###autoload
-(defun bookmark-jump (bookmark)
+(defun bookmark-jump (bookmark &optional display-func)
   "Jump to bookmark BOOKMARK (a point in some file).
 You may have a problem using this function if the value of variable
 `bookmark-alist' is nil.  If that happens, you need to load in some
@@ -1002,27 +1009,27 @@ will then jump to the new location, as well as recording it in place
 of the old one in the permanent bookmark record.
 
 BOOKMARK may be a bookmark name (a string) or a bookmark record, but
-the latter is usually only used by programmatic callers."
+the latter is usually only used by programmatic callers.
+
+If DISPLAY-FUNC is non-nil, it is a function to invoke to display the
+bookmark.  It defaults to `switch-to-buffer'; a typical other value
+would be, e.g., `switch-to-buffer-other-window'."
   (interactive
    (list (bookmark-completing-read "Jump to bookmark"
 				   bookmark-current-bookmark)))
   (unless bookmark
     (error "No bookmark specified"))
   (bookmark-maybe-historicize-string bookmark)
-  (bookmark--jump-via bookmark 'switch-to-buffer))
+  (bookmark--jump-via bookmark (or display-func 'switch-to-buffer)))
 
 
 ;;;###autoload
 (defun bookmark-jump-other-window (bookmark)
   "Jump to BOOKMARK in another window.  See `bookmark-jump' for more."
   (interactive
-   (let ((bkm (bookmark-completing-read "Jump to bookmark (in another window)"
-                                        bookmark-current-bookmark)))
-     (if (> emacs-major-version 21)
-         (list bkm) bkm)))
-  (when bookmark
-    (bookmark-maybe-historicize-string bookmark)
-    (bookmark--jump-via bookmark 'switch-to-buffer-other-window)))
+   (list (bookmark-completing-read "Jump to bookmark (in another window)"
+                                   bookmark-current-bookmark)))
+  (bookmark-jump bookmark 'switch-to-buffer-other-window))
 
 
 (defun bookmark-jump-noselect (bookmark)
@@ -1195,7 +1202,6 @@ name."
   (bookmark-maybe-historicize-string old)
   (bookmark-maybe-load-default-file)
 
-  (setq bookmark-current-point (point))
   (setq bookmark-yank-point (point))
   (setq bookmark-current-buffer (current-buffer))
   (let ((newname
@@ -1261,14 +1267,12 @@ probably because we were called from there."
     ;; occurrence has been deleted
     (or (bookmark-get-bookmark bookmark-current-bookmark 'noerror)
         (setq bookmark-current-bookmark nil)))
-  ;; Don't rebuild the list
-  (if batch
-      nil
-    (bookmark-bmenu-surreptitiously-rebuild-list)
-    (setq bookmark-alist-modification-count
-          (1+ bookmark-alist-modification-count))
-    (if (bookmark-time-to-save-p)
-        (bookmark-save))))
+  (unless batch
+    (bookmark-bmenu-surreptitiously-rebuild-list))
+  (setq bookmark-alist-modification-count
+        (1+ bookmark-alist-modification-count))
+  (when (bookmark-time-to-save-p)
+    (bookmark-save)))
 
 
 (defun bookmark-time-to-save-p (&optional final-time)
@@ -2018,10 +2022,6 @@ To carry out the deletions that you've marked, use \\<bookmark-bmenu-mode-map>\\
           (forward-char o-col))
       (goto-char o-point))
     (beginning-of-line)
-    (setq bookmark-alist-modification-count
-          (1+ bookmark-alist-modification-count))
-    (if (bookmark-time-to-save-p)
-        (bookmark-save))
     (message "Deleting bookmarks...done")
     ))
 
@@ -2033,7 +2033,6 @@ To carry out the deletions that you've marked, use \\<bookmark-bmenu-mode-map>\\
       (let ((bmrk (bookmark-bmenu-bookmark))
             (thispoint (point)))
         (bookmark-rename bmrk)
-        (bookmark-bmenu-list)
         (goto-char thispoint))))
 
 
