@@ -823,6 +823,10 @@ ispell-dictionary-base-alist.  If no corresponding entry is found, assumes
 (defun ns-spellchecker-list-dictionaries ()
   (let ((lang-list (ns-spellchecker-list-languages))
 	dictionary-list)
+    ;; if (ns-spellchecker-current-language) returns a language not
+    ;; included by (ns-spellchecker-list-languages) --
+    ;; e.g. "Multilingual" in OS 10.6 -- append it to the list.
+    (add-to-list 'lang-list (ns-spellchecker-current-language))
     (dolist (lang lang-list)
       (setq dictionary-list
 	    (cons (ns-spellchecker-dictionary-details lang)
