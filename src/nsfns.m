@@ -1529,7 +1529,7 @@ words are spelled as in the dictionary.*/)
   BLOCK_INPUT;
   sc = [NSSpellChecker sharedSpellChecker];
 
-  NSRange first_word = nil;
+  /*  NSRange first_word = nil;   // Invalid initializer!  NSRange is a struct */
   NSInteger tag = 1;
   if (! NILP (buffer) ) 
     {
@@ -1550,12 +1550,12 @@ words are spelled as in the dictionary.*/)
 				     wordCount:nil];
 				   
     } else */
-    { 
+    // { 
 
-      first_word =  [sc checkSpellingOfString:[NSString stringWithUTF8String: SDATA (string)] startingAt:((NSInteger) 0)
+      NSRange first_word =  [sc checkSpellingOfString:[NSString stringWithUTF8String: SDATA (string)] startingAt:((NSInteger) 0)
 					     language:nil wrap:NO inSpellDocumentWithTag:tag wordCount:nil];
 
-    }
+    // }
   UNBLOCK_INPUT;
   if (first_word.location < 0)
     return Qnil;
