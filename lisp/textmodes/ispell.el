@@ -348,13 +348,14 @@ Must be greater than 1."
   :type 'integer
   :group 'ispell)
 
+;;;###autoload
 (defcustom ispell-program-name
 ;; set NSSpellChecker as the default; no need to see if it's installed
-  (or "NSSpellChecker"
-      (locate-file "aspell"   exec-path exec-suffixes 'file-executable-p)
-      (locate-file "ispell"   exec-path exec-suffixes 'file-executable-p)
-      (locate-file "hunspell" exec-path exec-suffixes 'file-executable-p)
-      "ispell")
+  "NSSpellChecker"
+  ;; (or (locate-file "aspell"   exec-path exec-suffixes 'file-executable-p)
+      ;; (locate-file "ispell"   exec-path exec-suffixes 'file-executable-p)
+      ;; (locate-file "hunspell" exec-path exec-suffixes 'file-executable-p)
+      ;; "ispell")
   "Program invoked by \\[ispell-word] and \\[ispell-region] commands."
   :type 'string
   :group 'ispell)
@@ -1763,7 +1764,7 @@ The variable `ispell-library-directory' defines the library location."
 		    :visible (and (string= ispell-program-name "NSSpellChecker")
 				  (not (ns-spellchecker-panel-visible-p))) 
 		    :help "Toggle OS X spellcheck panel visibility"))
-      (define-key ispell-menu-map [nspellcheck]
+      (define-key ispell-menu-map [nsspellcheck]
 	'(menu-item "Spellcheck Now" ns-highlight-misspelling-and-suggest
 		    :visible (string= ispell-program-name "NSSpellChecker")
 		    :help "Check spelling with OS X spellchecker")) 

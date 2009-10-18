@@ -925,10 +925,10 @@ subsequently create.  Upon entering text-mode, the function
 ;; 				  (not ispell-program-name)))
 ;; 	'spell)
 
-(define-key ispell-menu-map [ispell-buffer]
-	`(menu-item "Spell-Check Buffer" 
-		    ns-start-spellchecker
-		    :help "Check spelling of selected buffer"))
+;; (define-key ispell-menu-map [ispell-buffer]
+	;; `(menu-item "Spell-Check Buffer" 
+		    ;; ns-start-spellchecker
+		    ;; :help "Check spelling of selected buffer"))
 ;; (define-key ispell-menu-map [ispell-complete-word]
 ;; 	`(menu-item "Complete Word" 
 ;; 		    ispell-complete-word
