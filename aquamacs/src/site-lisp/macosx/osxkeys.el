@@ -804,7 +804,8 @@ default."
     (define-key map `[(,osxkeys-command-key shift 13)] 'aquamacs-toggle-full-frame)
     (define-key map `[(,osxkeys-command-key shift return)] 'aquamacs-toggle-full-frame)
     (define-key map `[(,osxkeys-command-key escape)] 'keyboard-escape-quit) 
-    (define-key map `[(,osxkeys-command-key :)] 'ns-toggle-spellchecker-panel)
+    (define-key map `[(,osxkeys-command-key :)] 'ns-toggle-spellchecker-panel) 
+    (define-key map `[(,osxkeys-command-key \;)] 'ns-highlight-misspelling-and-suggest)
 
     ;; Zoom Zoom!
     (define-key map `[(meta wheel-up)] 'zoom-font)
@@ -835,7 +836,7 @@ default."
 
     ;; only those keys - C-n and C-p stay Emacs-like
     
-    (define-key map `[(,osxkeys-command-key \;)] 'toggle-mac-option-modifier)
+    (define-key map '[(control \;)] 'toggle-mac-option-modifier)
 
     (define-key map `[(control ,osxkeys-command-key q)] 'kill-emacs)
     (define-key map `[(,osxkeys-command-key q)] 'save-buffers-kill-emacs)

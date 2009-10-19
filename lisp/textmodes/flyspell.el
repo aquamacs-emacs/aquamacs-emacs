@@ -276,7 +276,7 @@ If `flyspell-large-region' is nil, all regions are treated as small."
 	       'flyspell-auto-correct-word))))
 
 (defcustom flyspell-auto-correct-binding
-  [(control ?\;)]
+  [(control ?\')]
   "The key binding for flyspell auto correction."
   :group 'flyspell)
 
