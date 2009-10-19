@@ -347,7 +347,7 @@ A value of nil means highlight all matches."
 (eval-when-compile (require 'help-macro))
 
 (make-help-screen isearch-help-for-help-internal
-  "Type a help option: [bkm] or ?"
+  (purecopy "Type a help option: [bkm] or ?")
   "You have typed %THIS-KEY%, the help character.  Type a Help option:
 \(Type \\<help-map>\\[help-quit] to exit the Help command.)
 
@@ -1401,7 +1401,6 @@ string.  NLINES has the same meaning as in `occur'."
 	(search-upper-case nil))
     (occur regexp nlines)))
 
-(declare-function hi-lock-regexp-okay "hi-lock" (regexp))
 (declare-function hi-lock-read-face-name "hi-lock" ())
 
 (defun isearch-highlight-regexp ()

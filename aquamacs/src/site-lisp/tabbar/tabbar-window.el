@@ -433,7 +433,7 @@ before deleting."
 	    ;; but have no file name
 	    (if (aquamacs-ask-for-confirmation
 		  (format "Save buffer %s to file before closing tab? 
-The buffer contains unsaved changes which will be lost if you discard them now." (buffer-name)) 
+The buffer contains unsaved changes, which will be lost if you discard them now." (buffer-name)) 
 		 nil (format "Save%s" (if buffer-file-name "" "...")) "Don't Save" t)
 		(progn 
 		    (if (listp last-nonmenu-event)

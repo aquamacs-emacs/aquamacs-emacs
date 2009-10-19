@@ -4,8 +4,6 @@ To Do List
 
 This is an incomplete list of things that need to be done to port Aquamacs to Cocoa and Emacs 23.  If you'd like to tackle one of the problems (please do!), send me an e-mail stating what you'd like to work on, and a date not more than two weeks from the current date when you'll submit the first patch.  Most problems here require less than an hour of your time if you know a little Objective C/Cocoa and some Emacs Lisp, and if you're familiar with the format of patches (so you can read the old ones).
 
-The Emacs 22 patches are found in CVS (aquamacs/patches).  The Emacs 23 are also in CVS (aquamacs/patches.23).
-
 - david.reitter@gmail.com
 
 
@@ -26,26 +24,14 @@ Partially Fixed - dr.  -- some animation remains when a region is active
 Priority: 2
 
 - live resizing/frame redrawing: this still looks ugly because of excessing redrawing  
+Looking better but not great.  Plenty of time spent on investigating, not to much effect. - dr.
 Priority: 4
-
-
-
-- Options/Appearance (autofaces): use NS color panel
-Priority: 3    ==> Nathaniel
-David: mostly done.  Need to revise font selection so that the right font is shown in the panel to begin with.
-
 
 
 - Preferences panel: design a Cocoa/NS preferences panel and move the Options menu there.
 Difficulty: Requires Interface Builder and Cocoa/ObjC know-how and is a sizeable chunk of work, but not very difficult. The code is already there (NS Prefs panel, as removed from GNU Emacs 23 on 3/14, and the .nib).   Some code will need to be written to port the Lisp-level menu over.  "Language" can go into the Edit menu.  "Customize Aquamacs" should go directly into the Aquamacs application menu (maybe a bit tricky to do).
 
 Priority: 7   ==> Nathaniel
-
-
-- mac-functions
-we can probably get rid of show/hide menu bar (see: fullscreen), but port mac-process-activate
-Priority: 7
-
 
 - DND
 the cocoa port provides the ns-drag-file event:
@@ -64,17 +50,11 @@ priority: 2
 ==> Nathaniel 
 
 
-macfns-dialog-menu:
-this needs to be replaced with a patch to x-popup-dialog in order to provide a cancel button there.
-everything else should be in place.  easy to do.
-priority: 2  ==> Sidney
-
 
 Redisplay performance
 - cache (tab) ==> Nathaniel
 - performance issues (upstream report) ==> David
    a fix has been committed; further slowness remains
-
 
 
 Startup
@@ -91,6 +71,8 @@ puresize: maybe not needed
 fringe: not needed, patches it to 23 anyway
 save-place: not needed, has been done in 23
 intel: probably not needed
+mac-process-activate: do not implement
+
 
 DONE header-line
 DONE about-aquamacs
@@ -111,3 +93,6 @@ DONE Quitting application: brings up various frames, but minibuffer is not echoe
 DONE toolbar config panel
 DONE Redisplay performance is much worse than in Carbon, e.g. in nsterm.m.  It appears to be correlated with whether tabs are enabled and with font-locking (vs. fundamental mode). 
 DONE Startup: hiding the initial frame causes Emacs to crash.
+DONE Options/Appearance (autofaces): use NS color panel - dr.
+DONE dialogs in Cocoa (implemented as sheets)
+

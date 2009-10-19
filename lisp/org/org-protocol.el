@@ -9,7 +9,7 @@
 ;; Author: Ross Patterson <me AT rpatterson DOT net>
 ;; Maintainer: Sebastian Rose <sebastian_rose AT gmx DOT de>
 ;; Keywords: org, emacsclient, wp
-;; Version: 6.30c
+;; Version: 6.31a
 
 ;; This file is part of GNU Emacs.
 ;;
@@ -125,7 +125,7 @@
 		  (&optional refresh))
 (declare-function org-publish-get-project-from-filename "org-publish"
 		  (filename &optional up))
-(declare-function server-edit "server" ())
+(declare-function server-edit "server" (&optional arg))
 
 
 (defgroup org-protocol nil

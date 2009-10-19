@@ -648,7 +648,12 @@ Directories are separated by occurrences of `path-separator'
   ;; Put the name into directory syntax now,
   ;; because otherwise expand-file-name may give some bad results.
   (setq dir (file-name-as-directory dir))
-  (setq dir (abbreviate-file-name (expand-file-name dir)))
+  ;; We used to additionally call abbreviate-file-name here, for an
+  ;; unknown reason.  Problem is that most buffers are setup
+  ;; without going through cd-absolute and don't call
+  ;; abbreviate-file-name on their default-directory, so the few that
+  ;; do end up using a superficially different directory.
+  (setq dir (expand-file-name dir))
   (if (not (file-directory-p dir))
       (if (file-exists-p dir)
 	  (error "%s is not a directory" dir)
@@ -656,7 +661,7 @@ Directories are separated by occurrences of `path-separator'
     (unless (file-executable-p dir)
       (error "Cannot cd to %s:  Permission denied" dir))
     (setq default-directory dir)
-    (set (make-local-variable 'list-buffers-directory) dir)))
+    (setq list-buffers-directory dir)))
 
 (defun cd (dir)
   "Make DIR become the current buffer's default directory.
@@ -1408,7 +1413,8 @@ expand wildcards (if any) and visit multiple files."
 Like \\[find-file], but only allow a file that exists, and do not allow
 file names with wildcards."
    (interactive (nbutlast (find-file-read-args "Find existing file: " t)))
-   (if (and (not (interactive-p)) (not (file-exists-p filename)))
+   (if (and (not (called-interactively-p 'interactive))
+	    (not (file-exists-p filename)))
        (error "%s does not exist" filename)
      (find-file filename)
      (current-buffer)))
@@ -2203,6 +2209,7 @@ since only a single case-insensitive search through the alist is made."
      ("\\.dtx\\'" . doctex-mode)
      ("\\.org\\'" . org-mode)
      ("\\.el\\'" . emacs-lisp-mode)
+     ("Project\\.ede\\'" . emacs-lisp-mode)
      ("\\.\\(scm\\|stk\\|ss\\|sch\\)\\'" . scheme-mode)
      ("\\.l\\'" . lisp-mode)
      ("\\.li?sp\\'" . lisp-mode)
@@ -2262,6 +2269,7 @@ since only a single case-insensitive search through the alist is made."
      ("\\.f9[05]\\'" . f90-mode)
      ("\\.indent\\.pro\\'" . fundamental-mode) ; to avoid idlwave-mode
      ("\\.\\(pro\\|PRO\\)\\'" . idlwave-mode)
+     ("\\.srt\\'" . srecode-template-mode)
      ("\\.prolog\\'" . prolog-mode)
      ("\\.tar\\'" . tar-mode)
      ;; The list of archive file extensions should be in sync with
@@ -2301,7 +2309,8 @@ ARC\\|ZIP\\|LZH\\|LHA\\|ZOO\\|[JEW]AR\\|XPI\\|RAR\\)\\'" . archive-mode)
      ("\\.\\(diffs?\\|patch\\|rej\\)\\'" . diff-mode)
      ("\\.\\(dif\\|pat\\)\\'" . diff-mode) ; for MSDOG
      ("\\.[eE]?[pP][sS]\\'" . ps-mode)
-     ("\\.\\(?:PDF\\|DVI\\|pdf\\|dvi\\)\\'" . doc-view-mode)
+;; DocView disabled in Aquamacs due to crashes and extra software requirements. 
+;;     ("\\.\\(?:PDF\\|DVI\\|pdf\\|dvi\\)\\'" . doc-view-mode)
      ("configure\\.\\(ac\\|in\\)\\'" . autoconf-mode)
      ("\\.s\\(v\\|iv\\|ieve\\)\\'" . sieve-mode)
      ("BROWSE\\'" . ebrowse-tree-mode)
@@ -2718,7 +2727,9 @@ symbol and VAL is a value that is considered safe."
   :group 'find-file
   :type 'alist)
 
-(defcustom safe-local-eval-forms '((add-hook 'write-file-hooks 'time-stamp))
+(defcustom safe-local-eval-forms
+  '((add-hook 'write-file-functions 'time-stamp)
+    (add-hook 'before-save-hook 'time-stamp))
   "Expressions that are considered safe in an `eval:' local variable.
 Add expressions to this list if you want Emacs to evaluate them, when
 they appear in an `eval' local variable specification, without first
@@ -4666,6 +4677,94 @@ this happens by default."
 	  (while create-list
 	    (make-directory-internal (car create-list))
 	    (setq create-list (cdr create-list))))))))
+
+(defconst directory-files-no-dot-files-regexp
+  "^\\([^.]\\|\\.\\([^.]\\|\\..\\)\\).*"
+  "Regexp of file names excluging \".\" an \"..\".")
+
+(defun delete-directory (directory &optional recursive)
+  "Delete the directory named DIRECTORY.  Does not follow symlinks.
+If RECURSIVE is non-nil, all files in DIRECTORY are deleted as well."
+  (interactive
+   (let ((dir (expand-file-name
+	       (read-file-name
+		"Delete directory: "
+		default-directory default-directory nil nil))))
+     (list dir
+	   (if (directory-files	dir nil directory-files-no-dot-files-regexp)
+	       (y-or-n-p
+		(format "Directory `%s' is not empty, really delete? " dir))
+	     nil))))
+  ;; If default-directory is a remote directory, make sure we find its
+  ;; delete-directory handler.
+  (setq directory (directory-file-name (expand-file-name directory)))
+  (let ((handler (find-file-name-handler directory 'delete-directory)))
+    (if handler
+	(funcall handler 'delete-directory directory recursive)
+      (if (and recursive (not (file-symlink-p directory)))
+	  (mapc
+	   (lambda (file)
+	     (if (file-directory-p file)
+		 (delete-directory file recursive)
+	       (delete-file file)))
+	   ;; We do not want to delete "." and "..".
+	   (directory-files
+	    directory 'full directory-files-no-dot-files-regexp)))
+      (delete-directory-internal directory))))
+
+(defun copy-directory (directory newname &optional keep-time parents)
+  "Copy DIRECTORY to NEWNAME.  Both args must be strings.
+If NEWNAME names an existing directory, copy DIRECTORY as subdirectory there.
+
+This function always sets the file modes of the output files to match
+the corresponding input file.
+
+The third arg KEEP-TIME non-nil means give the output files the same
+last-modified time as the old ones.  (This works on only some systems.)
+
+A prefix arg makes KEEP-TIME non-nil.
+
+Noninteractively, the last argument PARENTS says whether to
+create parent directories if they don't exist.  Interactively,
+this happens by default."
+  (interactive
+   (let ((dir (read-directory-name
+	       "Copy directory: " default-directory default-directory t nil)))
+     (list dir
+	   (read-file-name
+	    (format "Copy directory %s to: " dir)
+	    default-directory default-directory nil nil)
+	   current-prefix-arg t)))
+  ;; If default-directory is a remote directory, make sure we find its
+  ;; copy-directory handler.
+  (let ((handler (or (find-file-name-handler directory 'copy-directory)
+		     (find-file-name-handler newname 'copy-directory))))
+    (if handler
+	(funcall handler 'copy-directory directory newname keep-time parents)
+
+      ;; Compute target name.
+      (setq directory (directory-file-name (expand-file-name directory))
+	    newname   (directory-file-name (expand-file-name newname)))
+      (if (and (file-directory-p newname)
+	       (not (string-equal (file-name-nondirectory directory)
+				  (file-name-nondirectory newname))))
+	  (setq newname
+		(expand-file-name (file-name-nondirectory directory) newname)))
+      (if (not (file-directory-p newname)) (make-directory newname parents))
+
+      ;; Copy recursively.
+      (mapc
+       (lambda (file)
+	 (if (file-directory-p file)
+	     (copy-directory file newname keep-time parents)
+	   (copy-file file newname t keep-time)))
+       ;; We do not want to delete "." and "..".
+       (directory-files	directory 'full directory-files-no-dot-files-regexp))
+
+      ;; Set directory attributes.
+      (set-file-modes newname (file-modes directory))
+      (if keep-time
+	  (set-file-times newname (nth 5 (file-attributes directory)))))))
 
 (put 'revert-buffer-function 'permanent-local t)
 (defvar revert-buffer-function nil
@@ -5070,7 +5169,7 @@ With prefix argument ARG, turn auto-saving on if positive, else off."
   ;; turn it back on.
   (and (< buffer-saved-size 0)
        (setq buffer-saved-size 0))
-  (if (interactive-p)
+  (if (called-interactively-p 'interactive)
       (message "Auto-save %s (in this buffer)"
 	       (if buffer-auto-save-file-name "on" "off")))
   buffer-auto-save-file-name)

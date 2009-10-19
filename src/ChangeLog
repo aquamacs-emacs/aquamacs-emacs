@@ -1,3 +1,99 @@
+2009-10-08  Juanma Barranquero  <lekktu@gmail.com>
+
+	* fontset.c (Fset_fontset_font): Fix typos in error messages.
+
+2009-10-06  Glenn Morris  <rgm@gnu.org>
+
+	* Makefile.in (emacs${EXEEXT}): Remove direct dependence on
+	SOME_MACHINE_LISP (this enters indirectly via DOC).
+
+2009-10-05  Eli Zaretskii  <eliz@gnu.org>
+
+	* dired.c (Ffile_attributes): Doc fix.  (Bug#4638)
+
+2009-10-04  Eli Zaretskii  <eliz@gnu.org>
+
+	* xdisp.c (syms_of_xdisp) <unibyte-display-via-language-environment>:
+	Doc fix.
+
+2009-10-03  Martin Rudalics  <rudalics@gmx.at>
+
+	* window.c (Fdelete_window): Check WINDOW argument.  (Bug#4618)
+
+2009-10-02  Michael Albinus  <michael.albinus@gmx.de>
+
+	* lisp.h (Qdelete_directory_internal): Removed, because it is not
+	used anymore outside fileio.c.
+
+	* w32fns.c (Fsystem_move_file_to_trash): Use delete-directory.
+
+2009-10-01  Juanma Barranquero  <lekktu@gmail.com>
+
+	* lisp.h (Qdelete_directory_internal):
+	Declare, instead of Qdelete_directory.
+
+	* w32fns.c (Fsystem_move_file_to_trash): Use it.
+
+2009-10-01  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* eval.c (Fcalled_interactively_p): Add `kind' argument.
+
+2009-10-01  Michael Albinus  <michael.albinus@gmx.de>
+
+	* fileio.c (Fdelete_directory_internal): Rename from
+	Fdelete_directory.  It is not a command anymore.  It has no file
+	name handler.
+
+2009-09-28  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* xdisp.c (get_next_display_element): Use an enum in last change.
+
+2009-09-28  Kenichi Handa  <handa@m17n.org>
+
+	* xdisp.c (get_next_display_element): Pay attention to
+	unibyte_display_via_language_environment in handling
+	Vnobreak_char_display.
+
+2009-09-27  Adrian Robert  <Adrian.B.Robert@gmail.com>
+
+	* nsterm.h (ns_app_name): New extern variable.
+
+	* nsterm.m (ns_app_name): New variable.
+	(ns_term_init): Set and use it.
+	(ns_term_shutdown): Use it.
+
+	* nsmenu.m (ns_update_menubar): Use ns_app_name.  Sync with xmenu.c.
+	(EmacsMenu-clear:, ns_popup_dialog): Use ns_app_name.
+
+	* nsfns.m (ns_set_name_iconic, ns_set_name)
+	(ns_set_name_as_filename, x-create-frame, ns-get-resource)
+	(ns-set-resource): Use ns_app_name instead of NSProcessInfo call.
+
+	* menu.c (find_and_return_menu_selection) [HAVE_NS]:
+	Remove double-casting in client_data comparison.
+
+2009-09-27  YAMAMOTO Mitsuharu  <mituharu@math.s.chiba-u.ac.jp>
+
+	* keyboard.c (make_lispy_event): Remember last wheel direction.
+	(syms_of_keyboard) <wheel_syms>: Compute array size at compile time.
+
+2009-09-26  Glenn Morris  <rgm@gnu.org>
+
+	* Makefile.in (MSDOS_SUPPORT) [MSDOS]: Remove unneeded '/' in
+	internal.elc.  Add term/pc-win.elc.
+	(WINDOW_SUPPORT) [HAVE_X_WINDOWS]: Add term/common-win.elc and
+	term/x-win.elc.
+	(WINNT_SUPPORT) [WINDOWSNT]: Add term/common-win.elc and
+	term/w32-win.elc.
+	(NS_SUPPORT): New.
+	(lisp): Add NS_SUPPORT.
+	(SOME_MACHINE_LISP): Add term/w32-win.elc and emacs-lisp/easymenu.elc.
+
+2009-09-25  David Reitter  <david.reitter@gmail.com>
+
+	* nsmenu.m (EmacsMenu-clear): Recognize application menu
+	on Mac OS X 10.6+ (bug#4513).
+
 2009-09-24  Juanma Barranquero  <lekktu@gmail.com>
 
 	* frame.c (xrdb_get_resource): Return nil for empty string resources;

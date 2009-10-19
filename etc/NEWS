@@ -38,8 +38,10 @@ world-readable install.
 * Startup Changes in Emacs 23.2
 
 ** Command-line option -Q (--quick) now also disables loading X resources.
-On Windows, this option causes Emacs to ignore Registry settings,
-though environment variables set on the Registry are still honored.
+Note however that this does not affect Lucid or Motif widgets, if you
+are using those toolkits.  On Windows, this option causes Emacs to
+ignore Registry settings, though environment variables set on the
+Registry are still honored.
 
 *** The new variable `inhibit-x-resources' shows whether X resources
 were loaded.
@@ -174,9 +176,9 @@ through a menu structure.
 
 +++
 ** New connection methods in Tramp.
-The new connection method "rsyncc" has been introduced.  On systems
-which support GVFS-Fuse, Tramp offers also the new connection methods
-"dav", "davs", "obex" and "synce".
+The new connection methods "rsyncc", "imap" and "imaps" have been
+introduced.  On systems which support GVFS-Fuse, Tramp offers also the
+new connection methods "dav", "davs", "obex" and "synce".
 
 ** nXML mode is now the default for editing XML files.
 
@@ -234,11 +236,19 @@ Command*'.
 
 * New Modes and Packages in Emacs 23.2
 
+** FIXME CEDET
+
 ** js.el is a new major mode for JavaScript files.
+
+** imap-hash.el is a new library to address IMAP mailboxes as hashtables.
 
 
 * Lisp changes in Emacs 23.2
 
+** called-interactively-p now takes one argument and replaces interactive-p
+which is now marked obsolete.
+** New function set-advertised-calling-convention makes it possible
+to obsolete arguments as well as make some arguments mandatory.
 ** eval-next-after-load is obsolete.
 ** New hook `after-load-functions' run after loading an Elisp file.
 
@@ -295,6 +305,13 @@ be in use:
   time-stamp-yyyy-mm-dd, time-stamp-yymmdd, time-stamp-hh:mm:ss,
   time-stamp-hhmm, baud-rate
 
+** `delete-directory' has an optional parameter RECURSIVE.
+
+** New function `copy-directory', which copies a directory recursively.
+
+** New function `window-full-height-p', analogous to the full-width version.
+
+
 * Changes in Emacs 23.2 on non-free operating systems
 
 ---

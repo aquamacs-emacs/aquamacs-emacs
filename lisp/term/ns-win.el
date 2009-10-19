@@ -352,14 +352,6 @@ The properties returned may include `top', `left', `height', and `width'."
     (set-terminal-parameter frame 'x-setup-function-keys t)))
 
 
-
-;; Must come after keybindings.
-
-;; (fmakunbound 'clipboard-yank)
-;; (fmakunbound 'clipboard-kill-ring-save)
-;; (fmakunbound 'clipboard-kill-region)
-;; (fmakunbound 'menu-bar-enable-clipboard)
-
 ;; Add a couple of menus and rearrange some others; easiest just to redo toplvl
 ;; Note keymap defns must be given last-to-first
 (define-key global-map [menu-bar] (make-sparse-keymap "menu-bar"))
@@ -911,7 +903,7 @@ unless the current buffer is a scratch buffer."
 (defun ns-print-buffer ()
   "Interactive front-end to `print-buffer': asks for user confirmation first."
   (interactive)
-  (if (and (interactive-p)
+  (if (and (called-interactively-p 'interactive)
            (or (listp last-nonmenu-event)
                (and (char-or-string-p (event-basic-type last-command-event))
                     (memq 'super (event-modifiers last-command-event)))))
@@ -1058,11 +1050,12 @@ panel immediately after correcting a word in a buffer."
 
 (declare-function ns-store-cut-buffer-internal "nsselect.m" (buffer string))
 
-(defun ns-set-pasteboard (string)
-  "Store STRING into the pasteboard of the Nextstep display server."
+(defun ns-set-pasteboard (string &optional type)
+  "Store STRING into the pasteboard of the Nextstep display server.
+TYPE may be `txt', `html', `pdf' or `rtf', or nil (text string)."
   ;; Check the data type of STRING.
   (if (not (stringp string)) (error "Nonstring given to pasteboard"))
-  (ns-store-cut-buffer-internal 'PRIMARY string))
+  (ns-store-cut-buffer-internal 'PRIMARY string type))
 
 ;; We keep track of the last text selected here, so we can check the
 ;; current selection against it, and avoid passing back our own text
@@ -1117,8 +1110,6 @@ On Nextstep, put TEXT in the pasteboard; PUSH is ignored."
 (defun ns-paste-secondary ()
   (interactive)
   (insert (ns-get-cut-buffer-internal 'SECONDARY)))
-
-(set-face-background 'region "ns_selection_color")
 
 
 

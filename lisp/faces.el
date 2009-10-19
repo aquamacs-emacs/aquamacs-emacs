@@ -1348,7 +1348,8 @@ If FRAME is omitted or nil, use the selected frame."
 		  (:inherit . "Inherit")))
 	(max-width (apply #'max (mapcar #'(lambda (x) (length (cdr x)))
 					attrs))))
-    (help-setup-xref (list #'describe-face face) (interactive-p))
+    (help-setup-xref (list #'describe-face face)
+		     (called-interactively-p 'interactive))
     (unless face
       (setq face 'default))
     (if (not (listp face))
@@ -2281,9 +2282,14 @@ terminal type to a different value."
   "Basic face for highlighting."
   :group 'basic-faces)
 
+;; Region face: under NS, default to the system-defined selection
+;; color (optimized for the fixed white background of other apps),
+;; if background is light.
 (defface region
   '((((class color) (min-colors 88) (background dark))
      :background "blue3")
+    (((class color) (min-colors 88) (background light) (type ns))
+     :background "ns_selection_color")
     (((class color) (min-colors 88) (background light))
      :background "lightgoldenrod2")
     (((class color) (min-colors 16) (background dark))

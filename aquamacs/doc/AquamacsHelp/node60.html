@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Bug Fixes--0.9.4</TITLE>
-<META NAME="description" CONTENT="Bug Fixes--0.9.4">
+<TITLE>Bug Fixes--0.9.5</TITLE>
+<META NAME="description" CONTENT="Bug Fixes--0.9.5">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -27,163 +27,144 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html922"
+<A NAME="tex2html927"
   HREF="node61.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html918"
+<A NAME="tex2html923"
   HREF="node39.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html912"
+<A NAME="tex2html917"
   HREF="node59.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html920"
+<A NAME="tex2html925"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html923"
-  HREF="node61.html">Bug Fixes 0.9.3a and</A>
-<B> Up:</B> <A NAME="tex2html919"
+<B> Next:</B> <A NAME="tex2html928"
+  HREF="node61.html">Bug Fixes 0.9.4</A>
+<B> Up:</B> <A NAME="tex2html924"
   HREF="node39.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html913"
-  HREF="node59.html">Bug Fixes 0.9.5</A>
- &nbsp; <B>  <A NAME="tex2html921"
+<B> Previous:</B> <A NAME="tex2html918"
+  HREF="node59.html">New and Updated Major</A>
+ &nbsp; <B>  <A NAME="tex2html926"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION0001421000000000000000">
-Bug Fixes--0.9.4</A>
+Bug Fixes--0.9.5</A>
 </H2>
 
 <P>
 
 <UL>
-<LI>Bug reports contain the subject line that the user entered.
+<LI>Font ``Bitstream Vera Sans'' works again.  	
 
 <P>
 </LI>
-<LI>No more (delay due to) tramp mode on startup in cases where tramp
-    mode had been used before (recentf).
+<LI>Exiting view mode (e.g. help) with 'q' deletes the frame instead of
+	iconifying it.
 
 <P>
 </LI>
-<LI>Files on externally mounted volumes are not checked for readability
-    any more for exclusion from recent files list.
-    (Reported by Bill Clementson)
+<LI>The (Apple Help) manuals work now on systems where tcsh
+	is the default shell.  (Reported by Arthur Ogus)
 
 <P>
 </LI>
-<LI>No more warnings when fonts are missing (on startup).
+<LI>Startup with arguments -nw (tty / in terminal) revised.
 
 <P>
 </LI>
-<LI>Drag and Drop while in minibuffer works again.
+<LI>You can now redefine Aquamacs keys like this:
+
+<P>
+<TT>(define-key osx-key-mode-map [end] 'end-of-line)</TT>
+
+<P>
+(Thanks for reporting: Andreas Hess.)
 
 <P>
 </LI>
-<LI>Mouse-2 works again.
+<LI>If the user changes mac-command-modifier, it may be advisable to call
+
+<P>
+<TT>(osx-key-reset-mode-map)</TT>
+
+<P>
+This will ensure that the keymap is updated and Aquamacs installs
+	its Mac-like keyboard commands (provided you want this).
 
 <P>
 </LI>
-<LI>default-major-mode and initial-major-mode are respected now.
-    initial-frame-alist is not modified any more.
-    Note that other than in any standard Emacs, mode-specific settings
-    always take precedence over default-frame-alist (but not over
-    initial-frame-alist).
-    (Reported by Rick Zaccone, Joe Davison and Peter Dyballa)
+<LI>New frames will not open behind the Dock any more.
 
 <P>
 </LI>
-<LI>No more warnings in customization buffers that the values have
-    been changed outside customize (for certain variables).
+<LI>An error message (harmless) when clicking on "Finish" in customize is gone.
 
 <P>
 </LI>
-<LI>Gnus articles (newsreader) open in same frame now.
+<LI>Error message during version check on startup removed (occurred in
+	certain cases where users had upgraded their system.)
 
 <P>
 </LI>
-<LI>Gnus has a useful (free) nntp server set so you can start right
-    away.
+<LI>In particular in TeX mode, Aquamacs tended to give audio signals all the
+	time when there were internal exceptions (internal errors signaled) with parsing the TeX code. Therefore, we do not ring the bell any more,
+	i.e. aquamacs-ring-bell-on-error-flag is nil by default.
+	(Reported by Ken Bloom and Andreas Hess)
+</LI>
+<LI>Speedbar works when one-buffer-one-frame (``Open Buffers in Separate
+	Frames'') is turned off. 
+</LI>
+<LI>Option-up/down (if Option is meta) now scrolls page-wise.
 
 <P>
 </LI>
-<LI>Send Email with Sendmail is gone from menu (doesn't usually work
-    on  OS X).
+<LI>Other bug-fixes.
 
 <P>
-</LI>
-<LI>Fonts corrected: Some glyphs in some fonts turned out wrong when
-    in bold or italic. Also, font sizes are correct again (Lucida 14
-    is Lucida Grande 14, not 12 or so). The default font size for
-    text-mode (and similar ones) is set to Lucida 13 to make up for
-    the change.  Apologies for any inconvenience this may cause with
-    your default settings. (Reported by William Henney)
-
-<P>
-</LI>
-<LI>Better customization for aquamacs-mode-specific-default-themes
-
-<P>
-</LI>
-<LI>The customizations file (customizations.el) doesn't grow any more.
-    (Reported by Alastair Rankine.)
-
-<P>
-</LI>
-<LI>Various corrections in the Aquamacs Manual.
-
-<P>
-</LI>
-<LI>Plugin support: All files named site-start.el anywhere in the load-path
-    are loaded at startup, before the user's init files are
-    loaded. For example, such a file may be placed in
-&nbsp;/Library/Application Support/Aquamacs Emacs/myPlugin. This
-    feature enables support for easily installable plugins.
-
-<P>
-</LI>
-<LI>We anticipate shorter startup times in the next release. Stay tuned.
 </LI>
 </UL>
 
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html922"
+<A NAME="tex2html927"
   HREF="node61.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html918"
+<A NAME="tex2html923"
   HREF="node39.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html912"
+<A NAME="tex2html917"
   HREF="node59.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html920"
+<A NAME="tex2html925"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html923"
-  HREF="node61.html">Bug Fixes 0.9.3a and</A>
-<B> Up:</B> <A NAME="tex2html919"
+<B> Next:</B> <A NAME="tex2html928"
+  HREF="node61.html">Bug Fixes 0.9.4</A>
+<B> Up:</B> <A NAME="tex2html924"
   HREF="node39.html">Aquamacs Emacs: What's New</A>
-<B> Previous:</B> <A NAME="tex2html913"
-  HREF="node59.html">Bug Fixes 0.9.5</A>
- &nbsp; <B>  <A NAME="tex2html921"
+<B> Previous:</B> <A NAME="tex2html918"
+  HREF="node59.html">New and Updated Major</A>
+ &nbsp; <B>  <A NAME="tex2html926"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 <I>David</I>
-<BR><I>2009-08-06</I>
+<BR><I>2009-10-10</I>
 </ADDRESS>
 </BODY>
 </HTML>

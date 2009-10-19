@@ -2574,7 +2574,8 @@ choose a font."
 					 (if (eq choice 'x-select-font)
 					     (x-select-font)
 					   (symbol-name choice)))
-					t (interactive-p))))))))
+					t
+					(called-interactively-p 'interactive))))))))
 
 
 ;;; Bindings for mouse commands.

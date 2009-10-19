@@ -1294,11 +1294,15 @@ Instead, these commands are available:
 (defun rmail-generate-viewer-buffer ()
   "Return a reusable buffer suitable for viewing messages.
 Create the buffer if necessary."
-  (let* ((suffix (file-name-nondirectory (or buffer-file-name (buffer-name))))
-	 (name (format " *message-viewer %s*" suffix))
-	 (buf (get-buffer name)))
-    (or buf
-	(generate-new-buffer name))))
+  ;; We want to reuse any existing view buffer, so as not to create an
+  ;; endless number of them.  But we must avoid clashes if we visit
+  ;; two different rmail files with the same basename (Bug#4593).
+  (if (and (local-variable-p 'rmail-view-buffer)
+	   (buffer-live-p rmail-view-buffer))
+      rmail-view-buffer
+    (generate-new-buffer
+     (format " *message-viewer %s*"
+	     (file-name-nondirectory (or buffer-file-name (buffer-name)))))))
 
 (defun rmail-swap-buffers ()
   "Swap text between current buffer and `rmail-view-buffer'.
@@ -1367,6 +1371,9 @@ If so restore the actual mbox message collection."
   (set-buffer-multibyte nil)
   (with-current-buffer (setq rmail-view-buffer (rmail-generate-viewer-buffer))
     (setq buffer-undo-list t)
+    ;; Note that this does not erase the buffer.  Should it?
+    ;; It depends on how this is called.  If somehow called with the
+    ;; rmail buffers swapped, it would erase the message collection.
     (set (make-local-variable 'rmail-overlay-list) nil)
     (set-buffer-multibyte t)
     ;; Force C-x C-s write Unix EOLs.
@@ -4176,7 +4183,7 @@ encoded string (and the same mask) will decode the string."
 ;;; Start of automatically extracted autoloads.
 
 ;;;### (autoloads (rmail-edit-current-message) "rmailedit" "rmailedit.el"
-;;;;;;  "c70c6c35b8c5bbdb73787a48b83e5adc")
+;;;;;;  "71405ac2040af35d8147b0ddfe4d3197")
 ;;; Generated autoloads from rmailedit.el
 
 (autoload 'rmail-edit-current-message "rmailedit" "\
@@ -4231,7 +4238,7 @@ With prefix argument N moves forward N messages with these labels.
 
 ;;;***
 
-;;;### (autoloads (rmail-mime) "rmailmm" "rmailmm.el" "9f436f1c6b99e08f4d7c1827ec90b088")
+;;;### (autoloads (rmail-mime) "rmailmm" "rmailmm.el" "ab34439779d8036dbd5cdc80fb4cea64")
 ;;; Generated autoloads from rmailmm.el
 
 (autoload 'rmail-mime "rmailmm" "\

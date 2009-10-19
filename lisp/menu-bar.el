@@ -1261,8 +1261,6 @@ mail status in mode line"))
 (define-key menu-bar-tools-menu [separator-compare]
   '("--"))
 
-(define-key menu-bar-tools-menu [ediff-misc]
-  `(menu-item ,(purecopy "Ediff Miscellanea") menu-bar-ediff-misc-menu))
 (define-key menu-bar-tools-menu [epatch]
   `(menu-item ,(purecopy "Apply Patch") menu-bar-epatch-menu))
 (define-key menu-bar-tools-menu [ediff-merge]
@@ -1619,7 +1617,9 @@ Buffers menu is regenerated."
   :type 'boolean
   :group 'menu)
 
-(defvar list-buffers-directory nil)
+(defvar list-buffers-directory nil
+  "String to display in buffer listings for buffers not visiting a file.")
+(make-variable-buffer-local 'list-buffers-directory)
 
 (defun menu-bar-select-buffer (&optional buffer)
   (interactive)
@@ -1852,7 +1852,7 @@ turn on menu bars; otherwise, turn off menu bars."
   ;; Make the message appear when Emacs is idle.  We can not call message
   ;; directly.  The minor-mode message "Menu-bar mode disabled" comes
   ;; after this function returns, overwriting any message we do here.
-  (when (and (interactive-p) (not menu-bar-mode))
+  (when (and (called-interactively-p 'interactive) (not menu-bar-mode))
     (run-with-idle-timer 0 nil 'message
 			 "Menu-bar mode disabled.  Use M-x menu-bar-mode to make the menu bar appear."))
   menu-bar-mode)

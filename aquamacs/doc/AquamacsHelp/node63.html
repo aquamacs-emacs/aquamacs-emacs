@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Fonts</TITLE>
-<META NAME="description" CONTENT="Fonts">
+<TITLE>Bug Fixes, Features and Changes--0.9.3</TITLE>
+<META NAME="description" CONTENT="Bug Fixes, Features and Changes--0.9.3">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -20,265 +20,310 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <LINK REL="STYLESHEET" HREF="aquamacs.css">
 
 <LINK REL="previous" HREF="node62.html">
-<LINK REL="up" HREF="node62.html">
+<LINK REL="up" HREF="node39.html">
+<LINK REL="next" HREF="node64.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
+<A NAME="tex2html961"
+  HREF="node64.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
- SRC="./next_g.png"> 
-<A NAME="tex2html951"
-  HREF="node62.html">
+ SRC="./next.png"></A> 
+<A NAME="tex2html957"
+  HREF="node39.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html947"
+<A NAME="tex2html953"
   HREF="node62.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html953"
+<A NAME="tex2html959"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Up:</B> <A NAME="tex2html952"
-  HREF="node62.html">Bug Fixes, Features and</A>
-<B> Previous:</B> <A NAME="tex2html948"
-  HREF="node62.html">Bug Fixes, Features and</A>
- &nbsp; <B>  <A NAME="tex2html954"
+<B> Next:</B> <A NAME="tex2html962"
+  HREF="node64.html">Fonts</A>
+<B> Up:</B> <A NAME="tex2html958"
+  HREF="node39.html">Aquamacs Emacs: What's New</A>
+<B> Previous:</B> <A NAME="tex2html954"
+  HREF="node62.html">Bug Fixes 0.9.3a and</A>
+ &nbsp; <B>  <A NAME="tex2html960"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H4><A NAME="SECTION0001423010000000000000">
-Fonts</A>
-</H4>
+<H2><A NAME="SECTION0001424000000000000000">
+Bug Fixes, Features and Changes--0.9.3</A>
+</H2>
 
 <P>
 
 <UL>
-<LI>Aquamacs should not complain about missing fonts any more when
-    you have upgraded from earlier versions and set scalable fonts as
-    default fonts for modes or all frames. They get filtered  automatically.
+<LI>Initial-frame-alist is respected. (Reported by Alastair Rankine)
 
 <P>
 </LI>
-<LI>Users with certain setups (cyrillic Lucida Grande) should not get
-    a ``default font not found'' error any more.
+<LI>When saving a buffer and the Finder is not running, 
+	the Finder is not opened any more. (Reported by George W. Gilchrist.)
 
 <P>
 </LI>
-<LI>``Recursive Minibuffers'' are enabled. 
+<LI>Using dead-keys (like Option-u or Option-n on most
+	keyboards) works again. (Reported by Howard Melman and Pierre Albarede
+</LI>
+<LI>When modified files existed, but no frame was visible and
+    one tried to quit Aquamacs, the application seemed to hang while
+    prompting for keyboard input (Save file? y/n) in an invisible
+    window. This has been fixed. 
 
 <P>
 </LI>
-<LI>``Subscribe to mailing list'' in Help menu.
+<LI>If no frame is visible and you input text, the frame is  made
+    visible so you can see what you are doing.
 
 <P>
 </LI>
-<LI>PHP-Mode included (M-x php-mode).
+<LI>Closing windows consistently with the mouse now works properly. 
 
 <P>
 </LI>
-<LI>Ruby-Mode included (M-x ruby-mode)
+<LI>Clicking on links to source files in help buffers properly
+    opens a new frame (if ``open buffers in separate frames'' is on).
 
 <P>
 </LI>
-<LI>yes-or-no-p is customizable now. Use the new customization
- 	variable aquamacs-quick-yes-or-no-prompt. (Thanks: Pavel Hlavnicka.)
+<LI>When the buffer shown in a frame changes, sometimes the
+    color theme and font were not set correctly; this has been addressed. This could happen when
+    ``Show Buffers in Separate Frames'' was off, and one killed a
+    buffer. (Reported by Peter Dyballa.)
 
 <P>
 </LI>
-<LI>Soft word wrap (longlines-mode) is available from the Options
-	menu. To make it the default, add this to your preferences
-	file:	
-	<TT>(set-default 'longlines-mode t)</TT>
+<LI>When ``Show Buffers in Separate Frames'' was off, and one killed a
+    buffer (kill-buffer, C-x k), the frame was deleted.
 
 <P>
 </LI>
-<LI>Case-insensitive search option has gone into ``search'' submenu (in ``Edit'').
+<LI>You have the option to save newly created buffers (Command-N)
+    that have not been saved yet when you quit Aquamacs.
 
 <P>
 </LI>
-<LI>If you are in an empty frame (i.e. a frame with an empty buffer)
-	and you load (find) a file, Aquamacs will not open an additional frame.
-	This is useful also for drag and drops, when a scratch frame is open.
+<LI>Less frame-dancing (resizing) on startup.
 
 <P>
 </LI>
-<LI>The secondary selection is back: use the Command (Apple) key
-    together with clicking/dragging the mouse cursor over text in
-    order to select text that is not related to the point
-    (cursor). This way, you can select text and then scroll somewhere
-    else. Extend your selection with shift-command-mouse1.
-    To copy/cut the text in the secondary selection to the  clipboard, use
-    Shift-Command-C/X, respectively.
+<LI>AUCT<SMALL>E</SMALL>X uses the standard commands again. The menu is
+  unstructured for this reason. (Reported by Robert Sloan.)
 
 <P>
 </LI>
-<LI>Some key-bindings are more like the original Emacs ones-in
-    particular M-w, which does kill-ring-save again.
-    (Idea: Joe Davison)   Also, Home and End keys work as expected.
+<LI>No frames could be opened when using a two-screen setup
+    with the menu bar on the right screen, and a currently selected
+    frame on the left screen. This has been addressed.  (Reported by George W. Gilchrist.)
 
 <P>
 </LI>
-<LI>No more annoying system ``ding'' (bell ringing) all the time.  The bell is
-    turned off completely, until Emacs developers eliminate the use of
-    the bell on user-initiated abort actions (such as ESC ESC ESC when
-    in minibuffer, of pressing Cancel in the file selection dialog).
+<LI>Customizing a style for a special display frame (e.g.  help or
+    customization) works now.
 
 <P>
 </LI>
-<LI>The toolbar is only displayed in normal frames, but not
-    in frames that show help/info buffers. (tool-bar+ and
-    aquamacs-tool-bar packages). Turn such toolbars on/off in
-    Options/Show/Hide menu.
+<LI>Recent Files/Clear Menu works again.
 
 <P>
 </LI>
-<LI>The ``About Emacs'' dialogue has been improved.
+<LI>Paths and other environment variables are now derived
+    from the shell  when
+    you start Aquamacs. 
 
 <P>
 </LI>
-<LI>Key combinations with the option key that  involve
-    another modifier (that is, ctrl or command) will now work, even
-    though simple option combinations are handled by the system to
-    produce special characters.
+<LI>Your settings for highlight parens,``Blinking Cursor,'' etc.  are now
+    persistent. The function Options/Save Options
+    (menu-bar-option-save) now correctly saves such settings. This
+    should include most customization settings except some that
+    Aquamacs relies on for proper clipboard copy/paste functionality.
 
 <P>
 </LI>
-<LI>The Speedbar is back. Activate in Options/ Show/Hide.
+<LI>The font menu (Options) no longer includes non-existent fonts. 
 
 <P>
 </LI>
-<LI>The redo function is in the Edit menu now.
+<LI>Option/Show-Hide/Menu Bar is gone because you cannot turn off  the
+    menu bar on OS X.
 
 <P>
 </LI>
-<LI>New buffers (File / New) open in Text Adapt Fill mode now.
+<LI>``Send Emacs Bug Report'' now uses the OS X
+    default mail program to compose
+    a message. This ensures that bug reports actually go through.
+    Before, they did not, unless you were running a local SMTP server
+    (sendmail/postfix), which is not enabled by default.
 
 <P>
 </LI>
-<LI>.save-places and customizations.el do not show up in the recent  files list
-    any more.
+<LI>Fixed loading of files when file names contain certain  Kanji characters,
+    due to a bug in AppleScript.
 
 <P>
 </LI>
-<LI>auto-save-files (in / Users / yourname /.emacs.d) are now saved to / Users / yourname/Library/Preferences.
+<LI>The menu shortcut entries were corrected.
 
 <P>
 </LI>
-<LI>``Save Place in Files in between sessions'' will not generate  files in the
-    user's home folder any more. Instead, the file goes into
-    / Users / yourname/Library/Preferences/Aquamacs Emacs/ where it belongs.
+<LI>Characters that require the use of the option key work again. For
+    example, Alt-3 produces the pound sign (&#163;) on a US keyboard,
+    Alt-L the `at' sign @ and Alt-Shift-7 the backslash  on a
+    German one. Inputting the Euro sign works, too. <I>However, that means that the option key is not used to emulate
+    the `meta' modifier;  you will have to use Esc to do that.</I>
+    Alternatively, you can map the option key to meta in your .emacs
+    file:
+
+<P>
+<TT>    (setq mac-option-modifier 'meta)</TT>
 
 <P>
 </LI>
-<LI>Command-' now cycles between different windows (suggested  by Joseph Kiniry.)
+<LI>Improvements in the fontset selection allow you to display the  Euro sign
+    with the default font.
 
 <P>
 </LI>
-<LI>Option is mapped to Meta by default, allowing you to enter key
-    combinations such as C-M- easily. If you'd like to map it to
-    alt instead, just add this to your .emacs:
+<LI>We have moved Aquamacs to <TT><A NAME="tex2html43"
+  HREF="http://aquamacs.org">http://aquamacs.org</A></TT>.
 
 <P>
-<TT>(setq mac-option-modifier 'alt)</TT>
+The Aquamacs wiki is now at <TT><A NAME="tex2html44"
+  HREF="http://www.emacswiki.org/cgi-bin/wiki/AquamacsEmacs/">http://www.emacswiki.org/cgi-bin/wiki/AquamacsEmacs/</A></TT>.
 
 <P>
-</LI>
-<LI>Color Themes: The color-themes package has been integrated in
-    Aquamacs. Use the Option/Color Theme... menu command to choose a
-    set of predefined colors for editing source code or writing
-    texts. This applies to the current frame only, but you can make it
-    the default for all new frames or for all frames in a specific
-    mode with the according menu commands.
+The Aquamacs bug reporting address is now <TT><A NAME="tex2html45"
+  HREF="mailto:aquamacs-bugs@aquamacs.org">mailto:aquamacs-bugs@aquamacs.org</A></TT>. This can be accessed from directly within the Aquamacs Help menu.
 
 <P>
-</LI>
-<LI>There is a new customization group called ``Aquamacs'' that
-    allows you to modify the customizations introduced by Aquamacs.
-    This is fairly untested - unexpected results may occur. If so, try
-    to locate and fix the bug and send us a patch. If you couldn't
-    find the problem, please report via Help/Send Bug Report...
-    PLEASE NOTE that a lot of customization variables have changed
-    their names--usually, you just need to prepend 1on1  to them.
+The general Aquamacs mailing list is still <TT><A NAME="tex2html46"
+  HREF="mailto:macosx-emacs@email.esm.psu.edu">mailto:macosx-emacs@email.esm.psu.edu</A></TT>; e-mail <TT><A NAME="tex2html47"
+  HREF="mailto:macosx-emacs-on@email.esm.psu.edu">mailto:macosx-emacs-on@email.esm.psu.edu</A></TT> to subscribe.
 
 <P>
 </LI>
-<LI>Aquamacs will load your configuration files not just from
-    / Users / yourname/.emacs, but also from the location that is appropriate for a Mac
-    OS X installation:
-
-<P>
-/ Library/ Preferences /Aquamacs Emacs / Preferences.el
-<BR>/ Users / yourname/Library/Preferences/Aquamacs Emacs/Preferences.el
-<BR>  /Library/Preferences / Emacs / Preferences.el
-<BR> / Users / yourname / Library/Preferences/Emacs/Preferences.el
-<BR>
-<P>
-It is recommended to use these instead of / Users / yourname/.emacs on OS X-only
-    installations. The first two files should be used for the
-    host-wide and user-specific Aquamacs configs, the latter two for
-    general Emacs configurations.
+<LI>Slightly faster startup.
 
 <P>
 </LI>
-<LI>There is a new configuration option that gives you more fine-grained
-    control over how the option modifier key is handled.
+<LI>Runs on OS X 10.3.9, 10.4.0 and 10.4.--tested.
 
 <P>
 </LI>
-<LI>If mac-pass-option-to system is nil, your Aquamacs will get all key
-    combinations. If you press option-3, Aquamacs will see ``M-3'' (or,
-    depending on mac-option-modifier ``A-3''). If it is non-nil, you
-    will simply get the pound sign  on a US keyboard.
+<LI>Aquamacs automatically checks for updates and notifies the user
+    if there is something new. This function communicates with an internet server; it does not
+    transmit any information identifying the user. If you would like to
+    know more about what is transmitted, use M-x
+    aquamacs-check-version-information. If you like to turn this check off, add this to your file
+ /Users/yourname/Library/Preferences/Aquamacs Emacs/Preferences.el:
+
+<P>
+<TT>(setq aquamacs-version-check-url nil)</TT>
 
 <P>
 </LI>
-<LI>TeXniScope support in LaTeX mode (if installed in /Applications).
+<LI>Adding Emacs packages is easier now: Emacs automatically finds
+    packages in subdirectories within the /Library/Preferences| Application
+    Support/Emacs|Aquamacs Emacs/ paths.
 
 <P>
 </LI>
-<LI>We have two great manuals available comfortably via Apple Help  now,
-    directly from within Aquamacs Emacs (Help menu). There is a
-    brand-new Aquamacs manual, and there is Richard
-    Stallman's original Emacs manual. They can be searched (e.g. via
-    Spotlight on OS X 10.4). We also provide direct access to the online configuration Wiki, which has been filling up with content nicely.  Please contribute; everybody has write access!
-	
+<LI>Aquamacs now sets the file creator information of files it
+    writes. This helps to open the file from Finder with Aquamacs when
+    you double-click it. Feature can be turned off via customization
+    option ``aquamacs-set-creator-codes-after-writing-files.''  Also,
+    Emacs will appear in the Finder's context menu under ``Open With''
+    for a lot of files that it is commonly used to edit.
+
+<P>
+</LI>
+<LI>You can start Aquamacs in a terminal (by running
+    /Applications/ Emacs.app /Contents/ MacOS/ Emacs) with parameter -nw
+    and will show up in the terminal rather than as a  Carbon
+    application. Basic file editing and all traditional commands
+    work. However, Aquamacs-specific keyboard commands (with the
+    Command key) will not work and other functionality may be limited,
+    too. <I>Warning: </I>This mode of use, which may break in future versions, is not
+    supported by the Aquamacs team.
+
+<P>
+</LI>
+<LI>We make sure that the *Completions* buffer (and similar things)
+    open as a window inside the frame directly above the Minibuffer,
+    and not in a new frame.
+
+<P>
+</LI>
+<LI>All newly opened frames open in a somewhat useful position, so
+they are not in the way. (If you do not like this, we suggest you set
+    your own static frame positions via ``set current style as default''
+    and also add this to your file /Users/yourname/Library/Preferences/Aquamacs
+    Emacs/Preferences.el:
+
+<P>
+<TT> (setq smart-frame-positioning-enforce nil)</TT>
+
+<P>
+Or, if you would like to go with the default position all the time,
+    turn the global minor mode off:
+
+<P>
+<TT>(smart-frame-positioning-mode nil)</TT>
 </LI>
 </UL>
 
 <P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<P>
+<UL>
+<LI><UL>
+<LI><A NAME="tex2html963"
+  HREF="node64.html">Fonts</A>
+</UL></UL>
+<!--End of Table of Child-Links-->
 <HR>
 <!--Navigation Panel-->
+<A NAME="tex2html961"
+  HREF="node64.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
- SRC="./next_g.png"> 
-<A NAME="tex2html951"
-  HREF="node62.html">
+ SRC="./next.png"></A> 
+<A NAME="tex2html957"
+  HREF="node39.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html947"
+<A NAME="tex2html953"
   HREF="node62.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html953"
+<A NAME="tex2html959"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Up:</B> <A NAME="tex2html952"
-  HREF="node62.html">Bug Fixes, Features and</A>
-<B> Previous:</B> <A NAME="tex2html948"
-  HREF="node62.html">Bug Fixes, Features and</A>
- &nbsp; <B>  <A NAME="tex2html954"
+<B> Next:</B> <A NAME="tex2html962"
+  HREF="node64.html">Fonts</A>
+<B> Up:</B> <A NAME="tex2html958"
+  HREF="node39.html">Aquamacs Emacs: What's New</A>
+<B> Previous:</B> <A NAME="tex2html954"
+  HREF="node62.html">Bug Fixes 0.9.3a and</A>
+ &nbsp; <B>  <A NAME="tex2html960"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 <I>David</I>
-<BR><I>2009-08-06</I>
+<BR><I>2009-10-10</I>
 </ADDRESS>
 </BODY>
 </HTML>

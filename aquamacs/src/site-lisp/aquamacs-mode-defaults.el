@@ -192,7 +192,7 @@
 	(narrow-to-region (point-min)
 			  (min (point-max)
 			       (+ (point-min) magic-mode-regexp-match-limit)))
-	(looking-at "\\(.\\|\n\\)*#\\(include\\|define\\)"))))
+	(looking-at "\\(.\\|\n\\)*#\\(include\\|import\\|define\\)"))))
 
 (setq magic-mode-alist
      (append '(("\\(.\\|\n\\)*\n@\\(implementation\\|interface\\|protocol\\)" . objc-mode)

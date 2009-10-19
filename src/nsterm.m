@@ -183,6 +183,7 @@ NSString *ns_selection_color;
 Lisp_Object ns_confirm_quit;
 
 NSArray *ns_send_types =0, *ns_return_types =0, *ns_drag_types =0;
+NSString *ns_app_name = @"Aquamacs";  /* default changed later */
 
 /* Display variables */
 struct ns_display_info *x_display_list; /* Chain of existing displays */
@@ -4057,6 +4058,8 @@ ns_term_init (Lisp_Object display_name)
 
   delete_keyboard_wait_descriptor (0);
 
+  ns_app_name = [[NSProcessInfo processInfo] processName];
+
 /* Set up OS X app menu */
 #ifdef NS_IMPL_COCOA
   {
@@ -4106,7 +4109,7 @@ ns_term_init (Lisp_Object display_name)
                    keyEquivalent: @"q"
                          atIndex: 10];
 
-    item = [mainMenu insertItemWithTitle: @"Aquamacs"
+    item = [mainMenu insertItemWithTitle: ns_app_name                       
                                   action: @selector (menuDown:)
                            keyEquivalent: @""
                                  atIndex: 0];
@@ -4370,7 +4373,7 @@ ns_term_shutdown (int sig)
   if (NILP (ns_confirm_quit)) //   || ns_shutdown_properly  --> TO DO
     return NSTerminateNow;
 
-    ret = NSRunAlertPanel([[NSProcessInfo processInfo] processName],
+    ret = NSRunAlertPanel(ns_app_name,
                           [NSString stringWithUTF8String:"Exit requested.  Would you like to Save Buffers and Exit, or Cancel the request?"],
                           @"Save Buffers and Exit", @"Cancel", nil);
 
@@ -4740,6 +4743,34 @@ extern void update_window_cursor (struct window *w, int on);
   [currentCursor setOnMouseEntered: YES];
 }
 
+/*****************************************************************************/
+/* printing / html rendering */
+
+- (void)webView: (WebView *)htmlPage didFinishLoadForFrame:(WebFrame *)frame
+{
+  // [FRAME_NS_VIEW(f) addSubview:[[htmlPage mainFrame] frameView]];
+  //[[[htmlPage mainFrame] frameView] printDocumentView];
+
+  NSPrintInfo *printInfo  = [NSPrintInfo sharedPrintInfo];
+
+  /* There seems to be a bug in OS X or WebKit, causing unexpected results
+     when long lines are supposed to be printed.  Using PRE in the html
+     code is best avoided for this reason. */
+
+  // [printInfo setHorizontalPagination: NSClipPagination];
+  // [printInfo setVerticalPagination: NSClipPagination];
+  [printInfo setVerticallyCentered:NO];
+
+  NSPrintOperation *printControl = [[frame frameView] printOperationWithPrintInfo:printInfo];
+
+  
+  [printControl setCanSpawnSeparateThread:NO];
+  [printControl setShowsPrintPanel:YES];
+  [printControl runOperationModalForWindow: [self window]
+  				  delegate:self /* perhaps react to dismissal? */
+  			    didRunSelector:nil
+  			       contextInfo:nil];
+}
 
 
 /*****************************************************************************/

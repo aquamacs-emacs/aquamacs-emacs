@@ -6,7 +6,7 @@
 ;; Author: Carsten Dominik <carsten at orgmode dot org>
 ;; Keywords: outlines, hypermedia, calendar, wp
 ;; Homepage: http://orgmode.org
-;; Version: 6.30c
+;; Version: 6.31a
 ;;
 ;; This file is part of GNU Emacs.
 ;;
@@ -201,6 +201,12 @@ string as argument."
 	  (string :tag "Program")
 	  (function :tag "Function")))
 
+(defcustom org-clock-clocktable-default-properties '(:maxlevel 2 :scope file)
+  "Default properties for new clocktables."
+  :group 'org-clock
+  :type 'plist)
+
+
 (defvar org-clock-in-prepare-hook nil
   "Hook run when preparing the clock.
 This hook is run before anything happens to the task that
@@ -387,7 +393,7 @@ If not, show simply the clocked time like 01:50."
 
 (defun org-clock-get-clocked-time ()
   "Get the clocked time for the current item in minutes.
-The time returned includes the the time spent on this task in
+The time returned includes the time spent on this task in
 previous clocking intervals."
   (let ((currently-clocked-time
 	 (floor (- (org-float-time)
@@ -1035,8 +1041,8 @@ buffer and update it."
     (org-show-entry))
   (if (org-in-clocktable-p)
       (goto-char (org-in-clocktable-p))
-    (org-create-dblock (list :name "clocktable"
-			     :maxlevel 2 :scope 'file)))
+    (org-create-dblock (append (list :name "clocktable")
+			       org-clock-clocktable-default-properties)))
   (org-update-dblock))
 
 (defun org-in-clocktable-p ()
