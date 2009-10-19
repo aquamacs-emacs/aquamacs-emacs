@@ -760,6 +760,13 @@ here just for backwards compatibility.")
 (make-obsolete-variable 'ispell-aspell-supports-utf8
                         'ispell-encoding8-command "23.1")
 
+;;; This variable contains the current dictionary being used if the ispell
+;;; process is running.
+(defvar ispell-current-dictionary nil
+  "The name of the current dictionary, or nil for the default.
+This is passed to the ispell process using the `-d' switch and is
+used as key in `ispell-local-dictionary-alist' and `ispell-dictionary-alist'.")
+
 ;; **********************************************************************
 ;; settings to control the use of NSSpellChecker as the spellchecking
 ;; engine, instead of ispell/aspell/hunspell
@@ -1549,22 +1556,23 @@ aspell is used along with Emacs).")
 
 (defun ispell-set-spellchecker-params ()
   "Initialize some spellchecker parameters when changed or first used."
-  (unless (eq ispell-last-program-name ispell-program-name)
-    (setq ispell-last-program-name ispell-program-name)
-    (ispell-kill-ispell t)
-    (if (string= ispell-program-name "NSSpellChecker")
-    	(setq ispell-ns-dictionary-alist (ns-spellchecker-list-dictionaries))
-      (if (and (condition-case ()
-		   (progn
-		     (setq ispell-library-directory (ispell-check-version))
-		     t)
-		 (error nil))
-	       ispell-really-aspell
-	       ispell-encoding8-command
-	       ;; XEmacs does not like [:alpha:] regexps.
-	       (string-match "^[[:alpha:]]+$" "abcde"))
-	  (unless ispell-aspell-dictionary-alist
-	    (ispell-find-aspell-dictionaries))))
+  (let (ispell-ns-dictionary-alist)
+    (unless (eq ispell-last-program-name ispell-program-name)
+      (setq ispell-last-program-name ispell-program-name)
+      (ispell-kill-ispell t)
+      (if (string= ispell-program-name "NSSpellChecker")
+	  (setq ispell-ns-dictionary-alist (ns-spellchecker-list-dictionaries))
+	(if (and (condition-case ()
+		     (progn
+		       (setq ispell-library-directory (ispell-check-version))
+		       t)
+		   (error nil))
+		 ispell-really-aspell
+		 ispell-encoding8-command
+		 ;; XEmacs does not like [:alpha:] regexps.
+		 (string-match "^[[:alpha:]]+$" "abcde"))
+	    (unless ispell-aspell-dictionary-alist
+	      (ispell-find-aspell-dictionaries))))
 
     ;; Substitute ispell-dictionary-alist with the list of dictionaries
     ;; corresponding to the given spellchecker. If a recent aspell, use
@@ -1590,7 +1598,7 @@ aspell is used along with Emacs).")
 	  (add-to-list 'all-dicts-alist dict)))
       (setq ispell-dictionary-alist all-dicts-alist))
     (if (string= ispell-program-name "NSSpellChecker")
-	(setq ispell-dictionary (ns-spellchecker-current-language)))))
+	(setq ispell-dictionary (ns-spellchecker-current-language))))))
 
 
 (defun ispell-valid-dictionary-list ()
@@ -1830,13 +1838,6 @@ The variable `ispell-library-directory' defines the library location."
 
 ;;; **********************************************************************
 
-
-;;; This variable contains the current dictionary being used if the ispell
-;;; process is running.
-(defvar ispell-current-dictionary nil
-  "The name of the current dictionary, or nil for the default.
-This is passed to the ispell process using the `-d' switch and is
-used as key in `ispell-local-dictionary-alist' and `ispell-dictionary-alist'.")
 
 (defvar ispell-current-personal-dictionary nil
   "The name of the current personal dictionary, or nil for the default.

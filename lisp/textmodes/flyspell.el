@@ -292,6 +292,7 @@ Returns buffer location of misspelled word if found, or nil.  As a side
 effect, marks the misspelled word (if found) with face flyspell-incorrect."
   (let ((pos beg)
 	misspell-location
+	misspell-end
 	done)
     (unless (string= ispell-current-dictionary
 		     (ns-spellchecker-current-language))
