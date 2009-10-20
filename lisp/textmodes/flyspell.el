@@ -43,6 +43,7 @@
 ;;; Code:
 
 (require 'ispell)
+(require 'thingatpt) ;; use (word-at-point) in ns-spellchecking functions
 
 ;;*---------------------------------------------------------------------*/
 ;;*    Group ...                                                        */
@@ -275,9 +276,308 @@ If `flyspell-large-region' is nil, all regions are treated as small."
 	       'flyspell-auto-correct-word))))
 
 (defcustom flyspell-auto-correct-binding
-  [(control ?\;)]
+  [(control ?\')]
   "The key binding for flyspell auto correction."
   :group 'flyspell)
+
+;; **********************************************************************
+;; functions that use NSSpellChecker as the spellchecking
+;; engine, instead of ispell or aspell
+
+(defun ns-spellcheck-and-flyspell-word (beg end)
+  "Use NSSpellChecker to locate misspelled words within range
+BEG to END in current buffer.  Run flyspell-word on the misspelling,
+and repeat search if word is not considered a misspelling by flyspell.
+Returns buffer location of misspelled word if found, or nil.  As a side
+effect, marks the misspelled word (if found) with face flyspell-incorrect."
+  (let ((pos beg)
+	misspell-location
+	misspell-end
+	done)
+    (unless (string= ispell-current-dictionary
+		     (ns-spellchecker-current-language))
+      (ispell-change-dictionary (ns-spellchecker-current-language)))
+    (while (not done)
+      (setq misspell-location
+	    (ns-spellchecker-check-spelling (buffer-substring pos end)
+					    (current-buffer))
+	    misspell-end (+ pos (car misspell-location) (cdr misspell-location)))
+      (if (= (car misspell-location) -1)
+	  (setq done t)
+	(save-excursion
+	  (goto-char misspell-end)
+	  (if (flyspell-word)
+	      (setq misspell-location nil)
+	    (setq done t))))
+      (unless done
+	  (setq pos misspell-end)))
+    (if (= (car misspell-location) -1)
+	nil
+      (cons (+ pos (car misspell-location)) misspell-end))
+    ))
+  
+(defun ns-find-next-misspelling (&optional noskip)
+  "Move forward in buffer to next misspelling; set region to the word,
+and apply flyspell-incorrect face.   If NOSKIP is non-nil, don't skip
+the current highlighted word (if any)."
+;; search forward for a spelling error according to NSSpellChecker
+;; do flyspell-word or equivalent to see if it is really misspelled
+;; (e.g. not TeX or other filtered expression)
+;; if it is, then also highlight it, and put it in the spelling panel
+  (interactive)
+  (unless (string= ispell-current-dictionary
+		   (ns-spellchecker-current-language))
+    (ispell-change-dictionary (ns-spellchecker-current-language)))
+  (let* ((pos (if mark-active
+		  ;; use beginning of region as start point for spellchecking,
+		  ;; if there is an active region
+		  (min (mark) (point))
+		(point)))
+	 (beg (point-min))
+	 (end (point-max))
+	 ;; (chunk-begin pos) 
+	 misspell-location
+	 ;; chunk-end
+	 ;; approx-end
+	 )
+    (save-excursion ;retain point & region if no misspelling found
+      (goto-char pos)
+      ;; this bit is needed to unhighlight the previous word, if it
+      ;;   is ignored or learned in the spelling panel
+      (let ((word (word-at-point)))
+	(if (and word
+		 (eq (car (ns-spellchecker-check-spelling word (current-buffer)))
+		     -1))
+	  (flyspell-unhighlight-at (point))))
+      ;; If midway through a word, start at search at next word;
+      ;;   but don't skip an entire word
+      (if (backward-word)
+	  (forward-word))
+      ;; When a selection is active, always skip the first word or
+      ;;   partial word (as TextEdit does), so we don't spellcheck
+      ;;   the same word again
+      (if (and mark-active (not noskip)) (forward-word))
+      (flyspell-word)
+      (setq pos (point))
+      ;; if region from point to end is larger than 1.5x
+      ;; NS-SPELLCHECKER-CHUNK-SIZE chars, then check text in smaller chunks
+      ;; (if (< (- end pos) (* 1.5 ns-spellchecker-chunk-size))
+      ;; 	  (setq chunk-end end)
+      ;; 	(setq chunk-end (+ pos ns-spellchecker-chunk-size))
+      ;; 	;; try not to spellcheck across a sentence boundary, to keep
+      ;; 	;;   grammar checking happy; make sure we at least don't split words.
+      ;; 	(save-excursion
+      ;; 	  (goto-char approx-end)
+      ;; 	  (forward-sentence)
+      ;; 	  (setq chunk-end (point))
+      ;; 	  ;; If sentence boundary not found within 10% after
+      ;; 	  ;; specified chunk size, look for first sentence
+      ;; 	  ;; boundary up to 10% before desired chunk size.
+      ;; 	  ;; If not found, use first word boundary after desired chunk size
+      ;; 	  (if (> (abs (- chunk-end approx-end))
+      ;; 		 (* 0.1 ns-spellchecker-chunk-size))
+      ;; 	      (progn
+      ;; 		;; find nearest previous sentence boundary
+      ;; 		(backward-sentence)
+      ;; 		(setq chunk-end (point))
+      ;; 		;; check whether it's within 10% of specified value
+      ;; 		(if (> (abs (- approx-end chunk-end))
+      ;; 		       (* 0.1 ns-spellchecker-chunk-size))
+      ;; 		    (progn
+      ;; 		      ;; if not, use next word boundary
+      ;; 		      (goto-char approx-end)
+      ;; 		      (forward-word)
+      ;; 		      (setq chunk-end (point))))))))
+      ;; (while (and
+      ;; 	      (eq (car misspelled-location) -1)
+      ;; 	      (not overlap))
+      ;; 	(setq misspell-location
+      ;; 	      (ns-spellchecker-check-spelling
+      ;; 	       (buffer-substring chunk-begin chunk-end)))
+      ;; 	;; )
+      ;; (setq misspell-location
+      ;; 	    (ns-spellchecker-check-spelling (buffer-substring pos end)))
+      ;; (if (= (car misspell-location) -1)
+      ;; 	  nil
+      ;; 	(setq misspell-beg
+      ;; 	      (+ pos (car misspell-location))
+      ;; 	      misspell-end
+      ;; 	      (+ pos (car misspell-location) (cdr misspell-location)))
+      ;; 	  (goto-char misspell-end)
+      ;; 	  (setq misspell-found-p (not (flyspell-word))))
+      ;; (unless misspell-found-p
+      ;; 	(setq misspell-location
+      ;; 	      (ns-spellchecker-check-spelling (buffer-substring beg pos)))
+      ;; 	(if (= (car misspell-location) -1)
+      ;; 	    nil
+      ;; 	  (setq misspell-beg
+      ;; 		(+ beg (car misspell-location))
+      ;; 		misspell-end
+      ;; 		(+ beg (car misspell-location) (cdr misspell-location)))
+      ;; 	  (goto-char misspell-end)
+      ;; 	  (setq misspell-found-p (not (flyspell-word)))))
+      ;; (if misspell-found-p
+	  ;; return start and end of the misspelled word, or nil if none found
+	  ;; (cons misspell-beg misspell-end))
+      (setq misspell-location
+	    (ns-spellcheck-and-flyspell-word pos end)) 
+      (if (not misspell-location)
+	  (setq misspell-location (ns-spellcheck-and-flyspell-word beg pos)))
+      ;; returns nil if we haven't found a misspelling 
+      misspell-location
+      )))
+
+(defun ns-highlight-misspelling-and-suggest (&optional noskip)
+  "Search forward in current buffer for first misspelling, looping if end
+is reached.  If found, set region to the misspelling, apply face
+flyspell-incorrect, and show word in OS X spelling panel.  If
+NOSKIP is non-nil, don't skip the current highlighted word (if any)."
+  (interactive)
+  (let* ((misspell-region (ns-find-next-misspelling noskip))
+	 (misspell-beg (car misspell-region))
+	 (misspell-end (cdr misspell-region))
+	 word)
+    (if (not misspell-region)
+	;; no misspelling found; blank and beep the spelling panel
+	(ns-spellchecker-show-word "")
+      ;; misspelling found; set region to mispelled word, and show
+      ;;   in spelling panel
+      (goto-char misspell-end)
+      (push-mark misspell-beg 'no-msg 'activate)
+      (setq word (buffer-substring misspell-beg misspell-end))
+      (ns-spellchecker-show-word word))))  
+
+(defun ns-start-spellchecker ()
+  "Show NSSpellChecker spellingPanel, and call
+ns-highlight-misspelling-and-suggest, which see."
+  (interactive)
+  (ns-popup-spellchecker-panel)
+  (ns-highlight-misspelling-and-suggest))
+
+(defun ns-toggle-spellchecker-panel ()
+  "Show NSSpellChecker spellingPanel, and call
+ns-highlight-misspelling-and-suggest.  If panel
+is already visible, close it instead."
+  (interactive)
+  (if (ns-spellchecker-panel-visible-p)
+      (ns-close-spellchecker-panel)
+    (ns-popup-spellchecker-panel)
+    ;; panel shouldn't skip past currently selected word, if there is one
+    (ns-highlight-misspelling-and-suggest 'noskip)))
+
+(defun ns-flyspell-region (beg end)
+  "Flyspell text between BEG and END using ns-spellchecker-check-spelling."
+  (interactive "r")
+  (unless (string= ispell-current-dictionary
+		   (ns-spellchecker-current-language))
+    (ispell-change-dictionary (ns-spellchecker-current-language)))
+  (save-excursion
+    (let ((spellcheck-position beg)
+	  (count 0)
+	  ;; if called by ns-flyspell-large-region, then report progress
+	  ;; relative to "large region" extents instead of simply extents of
+	  ;; the current sub-region
+	  (progress-beg
+	   (if (boundp 'ns-flyspell-large-region-beg)
+	       ns-flyspell-large-region-beg
+	     beg))
+	  (progress-end
+	   (if (boundp 'ns-flyspell-large-region-end)
+	       ns-flyspell-large-region-end
+	     end))
+	  spellcheck-text
+	  ns-spellcheck-output
+	  misspelled-location
+	  misspelled-length)
+      (while (< spellcheck-position end) 
+	;; report progress
+ 	(if flyspell-issue-message-flag
+	    (message "Spell Checking...%d%% [%s]"
+		     (* 100 (/ (float (- spellcheck-position progress-beg)) 
+			       (- progress-end progress-beg)))
+		     (word-at-point)))
+	;; extract text from last checked word to end
+	(setq spellcheck-text (buffer-substring spellcheck-position end)) 
+	;; find (position . length) of first misspelled word in extracted text
+	(setq ns-spellcheck-output 
+	      ;; returns (-1 . 0) if no misspellings found
+	      (ns-spellchecker-check-spelling spellcheck-text (current-buffer)))
+	(if (>= (car ns-spellcheck-output) 0)
+	    ;; found misspelled word
+	    (progn
+	      (setq misspelled-location
+		    (+ (car ns-spellcheck-output) spellcheck-position))
+	      (setq misspelled-length (cdr ns-spellcheck-output)) 
+	      ;; start next check after current found word
+	      (setq spellcheck-position
+		    (+ misspelled-location misspelled-length)) 
+	      ;; use flyspell-word to filter and mark misspellings
+	      (goto-char spellcheck-position)
+	      (flyspell-word)) 
+	  ;; no misspellings found; we've reached the end of chunk
+	  (setq spellcheck-position end))
+	)
+      (if (and (not (boundp 'ns-flyspell-large-region-end))
+	       flyspell-issue-message-flag)
+	  (message "Spell Checking completed."))
+      ;; function returns end of this chunk
+      end)))
+
+(defun ns-flyspell-large-region (beg end)
+  "Flyspell text between BEG and END using ns-spellchecker-check-spelling.
+Break long text into chunks of approximate size NS-SPELLCHECKER-CHUNK-SIZE,
+dividing at sentence boundaries where possible, or at word boundaries if
+sentence boundaries are too far between."
+  (interactive "r")
+  (save-excursion
+    (let ((inhibit-redisplay t)
+	  (chunk-beg beg)
+	  (ns-flyspell-large-region-beg beg)
+	  (ns-flyspell-large-region-end end)
+	  chunk-end
+	  approx-end)
+      (while
+	  (<
+	   (progn
+	     ;; if length from chunk start to overall end is less
+	     ;; than 1.5x chunk size, set chunk end to overall end
+	     (if (< (- end chunk-beg) (* 1.5 ns-spellchecker-chunk-size))
+		 (setq chunk-end end)
+	       ;; otherwise, set end to sentence boundary near desired chunk size
+	       (save-excursion
+		 (setq approx-end (+ chunk-beg ns-spellchecker-chunk-size))
+		 (goto-char approx-end)
+		 (forward-sentence)
+		 (setq chunk-end (point))
+		 ;; If sentence boundary not found within 10% after
+		 ;; specified chunk size, look for first sentence
+		 ;; boundary up to 10% before desired chunk size.
+		 ;; If not found, use first word boundary after desired chunk size
+		 (if (> (- chunk-end approx-end)
+			(* 0.1 ns-spellchecker-chunk-size))
+		     (progn
+		       ;; find nearest previous sentence boundary
+		       (backward-sentence)
+		       (setq chunk-end (point))
+		       ;; check whether it's within 10% of specified value
+		       (if (> (- approx-end chunk-end)
+			      (* 0.1 ns-spellchecker-chunk-size))
+			   (progn
+			     ;; if not, use next word boundary
+			     (goto-char approx-end)
+			     (forward-word)
+			     (setq chunk-end (point))))))))
+	     ;; make sure we haven't extended the chunk beyond the region 
+	     (if (> chunk-end end)
+		 (setq chunk-end end))
+	     ;; check spelling of chunk, returning chunk end location
+	     (ns-flyspell-region chunk-beg chunk-end))
+	   end)
+	;; if not done, start new chunk at previous chunk end
+	(setq chunk-beg chunk-end))
+      ;; when done, report completion
+      (if flyspell-issue-message-flag (message "Spell Checking completed."))
+      )))
 
 ;;*---------------------------------------------------------------------*/
 ;;*    Mode specific options                                            */
@@ -554,7 +854,8 @@ in your .emacs file.
 (defun flyspell-hack-local-variables-hook ()
   ;; When local variables are loaded, see if the dictionary context
   ;; has changed.
-  (flyspell-accept-buffer-local-defs 'force))
+  ;; (flyspell-accept-buffer-local-defs 'force)
+  )
 
 (defun flyspell-kill-ispell-hook ()
   (setq flyspell-last-buffer nil)
@@ -565,7 +866,7 @@ in your .emacs file.
 ;; Make sure we flush our caches when needed.  Do it here rather than in
 ;; flyspell-mode-on, since flyspell-region may be used without ever turning
 ;; on flyspell-mode.
-(add-hook 'ispell-kill-ispell-hook 'flyspell-kill-ispell-hook)
+;; (add-hook 'ispell-kill-ispell-hook 'flyspell-kill-ispell-hook)
 
 ;;*---------------------------------------------------------------------*/
 ;;*    flyspell-mode-on ...                                             */
@@ -583,10 +884,10 @@ in your .emacs file.
   ;; be forgotten!
   ;; Pass the `force' argument for the case where flyspell was active already
   ;; but the buffer's local-defs have been edited.
-  (flyspell-accept-buffer-local-defs 'force)
+  ;; (flyspell-accept-buffer-local-defs 'force)
   ;; we put the `flyspell-delayed' property on some commands
   (flyspell-delay-commands)
-  ;; we put the `flyspell-deplacement' property on some commands
+  ;; WE put the `flyspell-deplacement' property on some commands
   (flyspell-deplacement-commands)
   ;; we bound flyspell action to post-command hook
   (add-hook 'post-command-hook (function flyspell-post-command-hook) t t)
@@ -1070,31 +1371,33 @@ Mostly we check word delimiters."
 	    ;; we setup the cache
 	    (setq flyspell-word-cache-start start)
 	    (setq flyspell-word-cache-end end)
-	    (setq flyspell-word-cache-word word)
+	    (setq flyspell-word-cache-word word) 
 	    ;; now check spelling of word.
-	    (ispell-send-string "%\n")
-	    ;; put in verbose mode
-	    (ispell-send-string (concat "^" word "\n"))
-	    ;; we mark the ispell process so it can be killed
-	    ;; when emacs is exited without query
-	    (set-process-query-on-exit-flag ispell-process nil)
-	    ;; Wait until ispell has processed word.  Since this code is often
-            ;; executed from post-command-hook but the ispell process may not
-            ;; be responsive, it's important to make sure we re-enable C-g.
-	    (with-local-quit
-	      (while (progn
-		       (accept-process-output ispell-process)
-		       (not (string= "" (car ispell-filter))))))
-	    ;; (ispell-send-string "!\n")
-	    ;; back to terse mode.
-	    ;; Remove leading empty element
-	    (setq ispell-filter (cdr ispell-filter))
-	    ;; ispell process should return something after word is sent.
-	    ;; Tag word as valid (i.e., skip) otherwise
-	    (or ispell-filter
-		(setq ispell-filter '(*)))
-	    (if (consp ispell-filter)
-		(setq poss (ispell-parse-output (car ispell-filter))))
+	    (if (string= ispell-program-name "NSSpellChecker")
+		(setq poss (ns-spellchecker-parse-output word))
+	      (ispell-send-string "%\n")
+	      ;; put in verbose mode
+	      (ispell-send-string (concat "^" word "\n"))
+	      ;; we mark the ispell process so it can be killed
+	      ;; when emacs is exited without query
+	      (set-process-query-on-exit-flag ispell-process nil)
+	      ;; Wait until ispell has processed word.  Since this code is often
+	      ;; executed from post-command-hook but the ispell process may not
+	      ;; be responsive, it's important to make sure we re-enable C-g.
+	      (with-local-quit
+		(while (progn
+			 (accept-process-output ispell-process)
+			 (not (string= "" (car ispell-filter))))))
+	      (ispell-send-string "!\n")
+	      ;; back to terse mode.
+	      ;; Remove leading empty element
+	      (setq ispell-filter (cdr ispell-filter))
+	      ;; ispell process should return something after word is sent.
+	      ;; Tag word as valid (i.e., skip) otherwise
+	      (or ispell-filter
+		  (setq ispell-filter '(*)))
+	      (if (consp ispell-filter)
+		  (setq poss (ispell-parse-output (car ispell-filter)))))
 	    (let ((res (cond ((eq poss t)
 			      ;; correct
 			      (setq flyspell-word-cache-result t)
@@ -1583,9 +1886,14 @@ The buffer to mark them in is `flyspell-large-region-buffer'."
 	  (let ((old beg))
 	    (setq beg end)
 	    (setq end old)))
-      (if (and flyspell-large-region (> (- end beg) flyspell-large-region))
-	  (flyspell-large-region beg end)
-	(flyspell-small-region beg end)))))
+      (if (string= ispell-program-name "NSSpellChecker")
+	  (if (> (- end beg) (* ns-spellchecker-chunk-size 1.5))
+	      (ns-flyspell-large-region beg end)
+	    (ns-flyspell-region beg end))
+	(if (and flyspell-large-region (> (- end beg) flyspell-large-region))
+	    (flyspell-large-region beg end)
+	  (flyspell-small-region beg end))))
+    ))
 
 ;;*---------------------------------------------------------------------*/
 ;;*    flyspell-buffer ...                                              */
@@ -1895,20 +2203,22 @@ This command proposes various successive corrections for the current word."
 		  poss ispell-filter)
 	      (setq flyspell-auto-correct-word word)
 	      ;; now check spelling of word.
-	      (ispell-send-string "%\n") ;put in verbose mode
-	      (ispell-send-string (concat "^" word "\n"))
-              ;; wait until ispell has processed word.
-              (while (progn
-                       (accept-process-output ispell-process)
-                       (not (string= "" (car ispell-filter)))))
-	      ;; Remove leading empty element
-	      (setq ispell-filter (cdr ispell-filter))
-	      ;; ispell process should return something after word is sent.
-	      ;; Tag word as valid (i.e., skip) otherwise
-	      (or ispell-filter
-		  (setq ispell-filter '(*)))
-	      (if (consp ispell-filter)
-		  (setq poss (ispell-parse-output (car ispell-filter))))
+	      (if (string= ispell-program-name "NSSpellChecker")
+		  (setq poss (ns-spellchecker-parse-output word))
+		(ispell-send-string "%\n") ;put in verbose mode
+		(ispell-send-string (concat "^" word "\n"))
+		;; wait until ispell has processed word.
+		(while (progn
+			 (accept-process-output ispell-process)
+			 (not (string= "" (car ispell-filter)))))
+		;; Remove leading empty element
+		(setq ispell-filter (cdr ispell-filter))
+		;; ispell process should return something after word is sent.
+		;; Tag word as valid (i.e., skip) otherwise
+		(or ispell-filter
+		    (setq ispell-filter '(*)))
+		(if (consp ispell-filter)
+		    (setq poss (ispell-parse-output (car ispell-filter)))))
 	      (cond
 	       ((or (eq poss t) (stringp poss))
 		;; don't correct word
@@ -2056,20 +2366,22 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 	      (word (car word))
 	      poss ispell-filter)
 	  ;; now check spelling of word.
-	  (ispell-send-string "%\n")	;put in verbose mode
-	  (ispell-send-string (concat "^" word "\n"))
-	  ;; wait until ispell has processed word
-	  (while (progn
-		   (accept-process-output ispell-process)
-		   (not (string= "" (car ispell-filter)))))
-	  ;; Remove leading empty element
-	  (setq ispell-filter (cdr ispell-filter))
-	  ;; ispell process should return something after word is sent.
-	  ;; Tag word as valid (i.e., skip) otherwise
-	  (or ispell-filter
-	      (setq ispell-filter '(*)))
-	  (if (consp ispell-filter)
-	      (setq poss (ispell-parse-output (car ispell-filter))))
+	  (if (string= ispell-program-name "NSSpellChecker")
+	      (setq poss (ns-spellchecker-parse-output word))
+	    (ispell-send-string "%\n")	;put in verbose mode
+	    (ispell-send-string (concat "^" word "\n"))
+	    ;; wait until ispell has processed word
+	    (while (progn
+		     (accept-process-output ispell-process)
+		     (not (string= "" (car ispell-filter)))))
+	    ;; Remove leading empty element
+	    (setq ispell-filter (cdr ispell-filter))
+	    ;; ispell process should return something after word is sent.
+	    ;; Tag word as valid (i.e., skip) otherwise
+	    (or ispell-filter
+		(setq ispell-filter '(*)))
+	    (if (consp ispell-filter)
+		(setq poss (ispell-parse-output (car ispell-filter)))))
 	  (cond
 	   ((or (eq poss t) (stringp poss))
 	    ;; don't correct word
@@ -2098,22 +2410,29 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 	 nil)
 	((eq replace 'save)
          (goto-char save)
-	 (ispell-send-string (concat "*" word "\n"))
-         ;; This was added only to the XEmacs side in revision 1.18 of
-         ;; flyspell.  I assume its absence on the Emacs side was an
-         ;; oversight.  --Stef
-	 (ispell-send-string "#\n")
-	 (flyspell-unhighlight-at cursor-location)
-	 (setq ispell-pdict-modified-p '(t)))
+	 (if (string= ispell-program-name "NSSpellChecker")
+	     (ns-spellchecker-learn-word word)
+	   (ispell-send-string (concat "*" word "\n"))
+	   ;; This was added only to the XEmacs side in revision 1.18 of
+	   ;; flyspell.  I assume its absence on the Emacs side was an
+	   ;; oversight.  --Stef
+	   (ispell-send-string "#\n")
+	   (setq ispell-pdict-modified-p '(t)) 
+	   (flyspell-unhighlight-at cursor-location))
+	 )
 	((or (eq replace 'buffer) (eq replace 'session))
-	 (ispell-send-string (concat "@" word "\n"))
+	 (if (string= ispell-program-name "NSSpellChecker")
+	     (ns-spellchecker-ignore-word word (current-buffer))
+	   (ispell-send-string (concat "@" word "\n"))
+	   (if (null ispell-pdict-modified-p)
+	       (setq ispell-pdict-modified-p
+		     (list ispell-pdict-modified-p)))
+	   (goto-char save)
+	   (if (eq replace 'buffer)
+	       (ispell-add-per-file-word-list word)
+	     ))
 	 (flyspell-unhighlight-at cursor-location)
-	 (if (null ispell-pdict-modified-p)
-	     (setq ispell-pdict-modified-p
-		   (list ispell-pdict-modified-p)))
-         (goto-char save)
-	 (if (eq replace 'buffer)
-	     (ispell-add-per-file-word-list word)))
+	 )
 	(replace
          ;; This was added only to the Emacs side.  I assume its absence on
          ;; the XEmacs side was an oversight.  --Stef
@@ -2128,7 +2447,8 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
              (delete-region start end)
              (goto-char start)
              (funcall flyspell-insert-function new-word)
-             (if flyspell-abbrev-p
+             (if (and (not (string= ispell-program-name "NSSpellChecker"))
+		      flyspell-abbrev-p)
                  (flyspell-define-abbrev word new-word)))
            ;; In the original Emacs code, this was only called in the body
            ;; of the if.  I arbitrarily kept the XEmacs behavior instead.
@@ -2179,22 +2499,37 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 	 (affix      (car (cdr (cdr (cdr poss)))))
 	 show-affix-info
 	 (base-menu  (let ((save (if (and (consp affix) show-affix-info)
+				     ;; no affix guesses for NSSpellchecker
 				     (list
 				      (list (concat "Save affix: " (car affix))
 					    'save)
 				      '("Accept (session)" session)
 				      '("Accept (buffer)" buffer))
-				   '(("Save word" save)
-				     ("Accept (session)" session)
-				     ("Accept (buffer)" buffer)))))
+				   (append
+				    ;; modify menu for NSSpellchecker --
+				    ;;   use usual Mac options
+				    (if (string= ispell-program-name
+						 "NSSpellChecker")
+					'(("Learn Spelling" save))
+				      '(("Save word" save)))
+				    (if (string= ispell-program-name
+						 "NSSpellChecker")
+					;; TODO: implement a session option
+					;;    for NSSpellchecker
+					'(("Ignore Spelling" buffer))
+				      (list '("Accept (session)" session)
+					    '("Accept (buffer)" buffer)))))))
 		       (if (consp cor-menu)
 			   (append cor-menu (cons "" save))
 			 save)))
 	 (menu       (cons "flyspell correction menu" base-menu)))
     (car (x-popup-menu event
-		       (list (format "%s [%s]" word (or ispell-local-dictionary
-							ispell-dictionary))
-			     menu)))))
+		       (list (if (string= ispell-program-name "NSSpellChecker")
+				 (format "%s" word)
+			       (format "%s [%s]" word (or ispell-local-dictionary
+							  ispell-dictionary)))
+			     menu)
+		       ))))
 
 ;;*---------------------------------------------------------------------*/
 ;;*    flyspell-xemacs-popup ...                                        */
