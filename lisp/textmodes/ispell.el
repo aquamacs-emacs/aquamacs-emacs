@@ -1752,7 +1752,7 @@ The variable `ispell-library-directory' defines the library location."
 						"NSSpellChecker")))
 		    :help "Skip headers and included message text"))
       (define-key ispell-menu-map [ispell-buffer]
-	'(menu-item "Spell-Check Buffer" ispell-buffer 
+	'(menu-item "Spell-Check Buffer" spellcheck-now 
 		    :visible (not (string= ispell-program-name "NSSpellChecker"))
 		    :help "Check spelling of selected buffer"))
       ;;(put 'ispell-region 'menu-enable 'mark-active)
@@ -1763,17 +1763,17 @@ The variable `ispell-library-directory' defines the library location."
 
 
        (define-key ispell-menu-map [nsspellchecker-panel-hide]
-	'(menu-item "Hide Spelling Panel" ns-toggle-spellchecker-panel 
+	'(menu-item "Hide Spelling Panel" spellchecker-panel-or-ispell 
 		    :visible (and (string= ispell-program-name "NSSpellChecker")
 				  (ns-spellchecker-panel-visible-p))
 		    :help "Toggle OS X spellcheck panel visibility")) 
       (define-key ispell-menu-map [nsspellchecker-panel-show]
-	'(menu-item "Show Spelling Panel" ns-toggle-spellchecker-panel 
+	'(menu-item "Show Spelling Panel" spellchecker-panel-or-ispell 
 		    :visible (and (string= ispell-program-name "NSSpellChecker")
 				  (not (ns-spellchecker-panel-visible-p))) 
 		    :help "Toggle OS X spellcheck panel visibility"))
       (define-key ispell-menu-map [nsspellcheck]
-	'(menu-item "Spellcheck Now" ns-highlight-misspelling-and-suggest
+	'(menu-item "Spellcheck Now" spellcheck-now
 		    :visible (string= ispell-program-name "NSSpellChecker")
 		    :help "Check spelling with OS X spellchecker")) 
 

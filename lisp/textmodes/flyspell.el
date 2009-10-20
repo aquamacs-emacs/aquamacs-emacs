@@ -467,16 +467,13 @@ is already visible, close it instead."
 
 ;;;###autoload
 (defun spellcheck-now ()
-  "Start spellchecking, using OS X spellchecker or ispell depending on 
-value of `ispell-program-name'.  Checking begins at beginning of region
-if active, or at beginning of buffer."
+  "Start spellchecking, using OS X spellchecker
+(`ns-highlight-misspelling-and-suggest') or `ispell-buffer' (which see),
+depending on value of `ispell-program-name'."
   (interactive) 
   (if (string= ispell-program-name "NSSpellChecker")
       (ns-highlight-misspelling-and-suggest)
-    (if (and (boundp 'transient-mark-mode) transient-mark-mode
-	     (boundp 'mark-active) mark-active)
-	(ispell-region (region-beginning) (region-end))
-    (ispell-region (point) (point-max)))))
+    (ispell-buffer)))
 
 ;;;###autoload
 (defun spellchecker-panel-or-ispell ()
