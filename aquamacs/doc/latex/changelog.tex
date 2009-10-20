@@ -9,7 +9,6 @@
 
 \item \emph{Aquamacs is now based on Emacs 23 and the Cocoa (NextStep) port.  There are many changes under the hood associated with this.  A few functions don't work right just yet, and we recommend neither this preview of Aquamacs 2.0 nor the Emacs 23.1 for mission-critical production use.  Please help the Aquamacs team complete the transition by contributing code and fixes or, if that's not possible, a donation.
 
-The Aquamacs 2.0 release will contain further exciting features: we're still working on spell-checking and better graphical dialogs. 
 Here, we report the changes between Emacs 22 and Emacs 23 with respect to the Aquamacs distribution.  Further changes can be found in the NEWS file for Emacs 23.
 }
 
@@ -17,12 +16,10 @@ Here, we report the changes between Emacs 22 and Emacs 23 with respect to the Aq
 
 \item The Aquamacs application has been renamed to \emph{Aquamacs.app} (from Aquamacs Emacs.app).
 
-\item Fullscreen mode works largely as before in 10.6; in older versions of OS X, it will unconditionally take over the full screen (Dock and menu are not visible).
+\item Spell-checking now uses the system-wide dictionaries in all the languages supported on OS X.  The standard spelling user interface is available as well as the traditional Emacs `ispell' interface (which also uses the system-wide spelling mechanism).  Configure the use of GNU `aspell' through the `ispell-program-name' variable if desired. 
+Code by Nathaniel Cunningham.
 
-\item `aquamacs-find-file' (C-x C-f) will ask for confirmation if you first complete partial filename input in the minibuffer, but then attempt to create a new file.
-\item Completion is, in many cases, more powerful by completing to the left \emph{and} the right of the input string.  Customize the option `completion-styles' to control this.
-
-\item Dialogs have been vastly improved: they appear over the frames where they belong, contain better UI elements (as in the case of the dialog displayed before quitting Aquamacs, which was once called ``dialog from hell'' before receiving a makeover).  The standard Enter, Space and Esc keys (and more) are supported.
+\item Dialogs have been vastly improved: they appear as sheets over the frames where they belong, contain better UI elements (as in the case of the dialog displayed before quitting Aquamacs, which was once called ``dialog from hell'' before receiving a makeover).  The standard Enter, Space and Esc keys (and more) are supported.
 
 \item Toolbars can now be configured through the normal customization panel.  Right-click on the toolbar, use the Options/View menu item (or use M-x ns-tool-bar-customize).  The chosen icons are persistent; toolbar customizations are, however, tied to the toolbars set by modes.  That means that users can chose a different set of icons to display in latex-mode, for instance.  
 
@@ -38,6 +35,11 @@ Reported by George Nurser.
 \item HTML and PDF export functions have changed: PDF export can be achieved as in any Mac application via the Print dialog.  Use the new \emph{Copy as HTML} function in the \emph{Edit} menu to copy formatted text including all the coloring into the clipboard in HTML format.  Many other applications, including presentation software, can then display the formatted text and keep it editable.
 
 \item Keyboard bindings are displayed more consistently in the menus now.  Throughout Aquamacs,  Mac standard key descriptions are used (this may be configured using the variable `ns-use-mac-modifier-symbols').  Users should be aware that manuals and tutorials will often refer to keys such as {\tt C-x} ({\tt \^X} or Control X), and that keys like {\tt M-q} correspond to the chosen Meta key modifier, normally the Option key. 
+
+\item Fullscreen mode works largely as before in 10.6; in older versions of OS X, it will unconditionally take over the full screen (Dock and menu are not visible).
+
+\item `aquamacs-find-file' (C-x C-f) will ask for confirmation if you first complete partial filename input in the minibuffer, but then attempt to create a new file.
+\item Completion is, in many cases, more powerful by completing to the left \emph{and} the right of the input string.  Customize the option `completion-styles' to control this.
 
 \item Internally, Emacs is based on a superset of Unicode now.  Emacs also uses Cocoa, a modern technology that facilitates program development and maintenance, supports 64-bit computing on Macs and allows for better integration of applications with the operating system and other applications.  
 
