@@ -199,7 +199,9 @@ static EmacsScroller *last_mouse_scroll_bar = nil;
 static struct frame *ns_updating_frame;
 static NSView *focus_view = NULL;
 static int ns_window_num =0;
+#ifdef NS_IMPL_GNUSTEP
 static NSRect uRect;
+#endif
 static BOOL gsaved = NO;
 BOOL ns_in_resize = NO;
 static BOOL ns_fake_keydown = NO;
@@ -524,7 +526,7 @@ ns_resize_handle_rect (NSWindow *window)
 }
 
 
-static void
+static int
 ns_update_begin (struct frame *f)
 /* --------------------------------------------------------------------------
    Prepare for a grouped sequence of drawing calls
@@ -535,11 +537,12 @@ ns_update_begin (struct frame *f)
   NSTRACE (ns_update_begin);
 
   ns_updating_frame = f;
-  [view lockFocusIfCanDraw];
+  int succ = [view lockFocusIfCanDraw];
 
 #ifdef NS_IMPL_GNUSTEP
   uRect = NSMakeRect (0, 0, 0, 0);
 #endif
+  return succ;
 }
 
 
@@ -1684,11 +1687,13 @@ note_mouse_movement (struct frame *frame, float x, float y)
       y < last_mouse_glyph.origin.y ||
       y >= (last_mouse_glyph.origin.y + last_mouse_glyph.size.height))
     {
-      ns_update_begin(frame);
-      frame->mouse_moved = 1;
-      note_mouse_highlight (frame, x, y);
-      remember_mouse_glyph (frame, x, y, &last_mouse_glyph);
-      ns_update_end(frame);
+      if (ns_update_begin(frame))
+	{
+	  frame->mouse_moved = 1;
+	  note_mouse_highlight (frame, x, y);
+	  remember_mouse_glyph (frame, x, y, &last_mouse_glyph);
+	  ns_update_end(frame);
+	}
       return 1;
     }
 
@@ -1790,13 +1795,15 @@ ns_frame_up_to_date (struct frame *f)
       /*&& dpyinfo->mouse_face_mouse_frame*/)
         {
           BLOCK_INPUT;
-	  ns_update_begin(f);
-          if (dpyinfo->mouse_face_mouse_frame)
-            note_mouse_highlight (dpyinfo->mouse_face_mouse_frame,
-                                  dpyinfo->mouse_face_mouse_x,
-                                  dpyinfo->mouse_face_mouse_y);
-          dpyinfo->mouse_face_deferred_gc = 0;
-	  ns_update_end(f);
+	  if (ns_update_begin(f))
+	    {
+	      if (dpyinfo->mouse_face_mouse_frame)
+		note_mouse_highlight (dpyinfo->mouse_face_mouse_frame,
+				      dpyinfo->mouse_face_mouse_x,
+				      dpyinfo->mouse_face_mouse_y);
+	      dpyinfo->mouse_face_deferred_gc = 0;
+	      ns_update_end(f);
+	    }
           UNBLOCK_INPUT;
         }
     }
@@ -1910,11 +1917,13 @@ ns_clear_frame (struct frame *f)
   r = [view bounds];
 
   BLOCK_INPUT;
-  ns_focus (f, &r, 1);
-  [ns_lookup_indexed_color (NS_FACE_BACKGROUND (FRAME_DEFAULT_FACE (f)), f) set];
-  NSRectFill (r);
-  ns_unfocus (f);
-
+  if ([FRAME_NS_VIEW (f) canDraw])
+    {
+      ns_focus (f, &r, 1);
+      [ns_lookup_indexed_color (NS_FACE_BACKGROUND (FRAME_DEFAULT_FACE (f)), f) set];
+      NSRectFill (r);
+      ns_unfocus (f);
+    }
 #ifdef NS_IMPL_COCOA
   [[view window] display];  /* redraw resize handle */
 #endif
