@@ -463,7 +463,29 @@ is already visible, close it instead."
       (ns-close-spellchecker-panel)
     (ns-popup-spellchecker-panel)
     ;; panel shouldn't skip past currently selected word, if there is one
-    (ns-highlight-misspelling-and-suggest 'noskip)))
+    (ns-highlight-misspelling-and-suggest 'noskip))) 
+
+;;;###autoload
+(defun spellcheck-now ()
+  "Start spellchecking, using OS X spellchecker or ispell depending on 
+value of `ispell-program-name'.  Checking begins at beginning of region
+if active, or at beginning of buffer."
+  (interactive) 
+  (if (string= ispell-program-name "NSSpellChecker")
+      (ns-highlight-misspelling-and-suggest)
+    (if (and (boundp 'transient-mark-mode) transient-mark-mode
+	     (boundp 'mark-active) mark-active)
+	(ispell-region (region-beginning) (region-end))
+    (ispell-region (point) (point-max)))))
+
+;;;###autoload
+(defun spellchecker-panel-or-ispell ()
+  "Calls `ns-toggle-spellchecker-panel' or `ispell' (which see), depending
+on current value of `ispell-program-name'."
+  (interactive)
+  (if (string= ispell-program-name "NSSpellChecker")
+      (ns-toggle-spellchecker-panel)
+    (ispell)))
 
 (defun ns-flyspell-region (beg end)
   "Flyspell text between BEG and END using ns-spellchecker-check-spelling."
