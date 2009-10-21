@@ -1637,6 +1637,28 @@ The variable `ispell-library-directory' defines the library location."
 	  (setq dict-list (cons name dict-list))))
     dict-list))
 
+(defun toggle-text-mode-flyspell ()
+  "Toggle whether to use Flyspell in Text mode and related modes.
+This command affects all buffers that use modes related to Text mode,
+both existing buffers and buffers that you subsequently create."
+  (interactive)
+  (let ((enable-mode (not (memq 'turn-on-flyspell text-mode-hook))))
+    (if enable-mode
+      (add-hook 'text-mode-hook 'turn-on-flyspell)
+      (remove-hook 'text-mode-hook 'turn-on-flyspell))
+    (dolist (buffer (buffer-list))
+      (with-current-buffer buffer
+      (if (or (derived-mode-p 'text-mode) text-mode-variant)
+          (flyspell-mode (if enable-mode 1 0)))))
+    (message "Flyspell %s in Text modes"
+           (if enable-mode "enabled" "disabled"))))
+
+;;;###autoload
+(defun menu-bar-text-mode-flyspell ()
+  (interactive)
+  (toggle-text-mode-flyspell)
+  (customize-mark-as-set 'text-mode-hook))
+
 ;;;###autoload
 (if ispell-menu-map-needed
     (progn
@@ -1702,12 +1724,35 @@ The variable `ispell-library-directory' defines the library location."
 	;; use (x-popup-menu last-nonmenu-event(list "" ispell-help-list)) ?
 	'(menu-item "Help"
 		    (lambda () (interactive) (describe-function 'ispell-help))
-		    :help "Show standard Ispell keybindings and commands"))
+		    :help "Show standard Ispell keybindings and commands")) 
+
+      (define-key ispell-menu-map [ispell-submenu]
+	`(menu-item "Ispell" ,ispell-submenu-map
+		    :visible (string= ispell-program-name "NSSpellChecker")))
+      (define-key ispell-menu-map [spellcheck-menu-separator]
+	'(menu-item "--"))
+
+      (define-key ispell-menu-map [flyspell-text-modes]
+      '(menu-item "Check Spelling While You Type (in all text modes)"
+                  menu-bar-text-mode-flyspell
+                  :help "Sets `Check Spelling While You Type' for all buffers using text-derived modes"
+                  ;; available only in text mode
+                  :enable (or (derived-mode-p 'text-mode) text-mode-variant)
+                  :button (:toggle . (if (listp text-mode-hook)
+                                         (member 'turn-on-flyspell text-mode-hook)
+                                       (eq 'turn-on-flyspell text-mode-hook)))))
       (define-key ispell-menu-map [flyspell-mode]
-	'(menu-item "Automatic spell checking (Flyspell)"
+	'(menu-item "Check Spelling While You Type (in this buffer)"
 		    flyspell-mode
-		    :help "Check spelling while you edit the text"
-		    :button (:toggle . (bound-and-true-p flyspell-mode))))
+		    :help "Check spelling while you edit the text"                ;; enabled if not in a text mode,
+                  ;; OR if in a text mode and flyspell isn't on for all
+                  ;; text-mode buffers
+                  :enable (if (or (derived-mode-p 'text-mode) text-mode-variant)
+                              (not (if (listp text-mode-hook)
+                                          (member 'turn-on-flyspell text-mode-hook)
+                                        (eq 'turn-on-flyspell text-mode-hook)))
+                            t)
+                  :button (:toggle . (bound-and-true-p flyspell-mode))))
       (define-key ispell-menu-map [ispell-complete-word]
 	'(menu-item "Complete Word" ispell-complete-word 
 		    :visible (not (string= ispell-program-name "NSSpellChecker"))
@@ -1756,11 +1801,6 @@ The variable `ispell-library-directory' defines the library location."
 		    :visible (not (string= ispell-program-name "NSSpellChecker"))
 		    :help "Check spelling of selected buffer"))
       ;;(put 'ispell-region 'menu-enable 'mark-active)
-
-      (define-key ispell-menu-map [ispell-submenu]
-	`(menu-item "Ispell" ,ispell-submenu-map
-		    :visible (string= ispell-program-name "NSSpellChecker")))
-
 
        (define-key ispell-menu-map [nsspellchecker-panel-hide]
 	'(menu-item "Hide Spelling Panel" spellchecker-panel-or-ispell 
