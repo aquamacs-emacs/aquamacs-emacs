@@ -903,7 +903,7 @@ in your .emacs file.
   ;; be forgotten!
   ;; Pass the `force' argument for the case where flyspell was active already
   ;; but the buffer's local-defs have been edited.
-  ;; (flyspell-accept-buffer-local-defs 'force)
+  (flyspell-accept-buffer-local-defs 'force)
   ;; we put the `flyspell-delayed' property on some commands
   (flyspell-delay-commands)
   ;; WE put the `flyspell-deplacement' property on some commands

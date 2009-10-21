@@ -2260,7 +2260,6 @@ quit          spell session exited."
 	    (if (> (length ispell-filter) 1)
 		(error "Ispell and its process have different character maps")
 	      (setq poss (ispell-parse-output (car ispell-filter))))))
-      (print poss)
       (cond ((eq poss t)
 	     (or quietly
 		 (message "%s is correct"
