@@ -192,6 +192,11 @@ file.
 *** FIXME: add info about the new VC functions: vc-root-diff and
 vc-root-print-log once they stabilize.
 
+*** vc-annotate supports annotations through file copies and renames,
+it displays the old names for the files and it can show logs/diffs for
+the corresponding lines.  Currently only Git and Mercurial take
+advantage of this feature.
+
 *** When a file is not found, VC will not try to check it out of RCS anymore.
 
 *** vc-git changes
@@ -249,6 +254,11 @@ Command*'.
 
 
 * Lisp changes in Emacs 23.2
+
+** read-file-name-predicate is obsolete.  It was used to pass the predicate
+to read-file-name-internal because read-file-name-internal abused its `pred'
+argument to pass the current directory, but this hack is not needed
+any more.
 
 ** completion-base-size is obsoleted by completion-base-position.
 This change causes a few backward incompatibilities, mostly with

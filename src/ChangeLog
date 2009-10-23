@@ -1,3 +1,211 @@
+2009-10-21  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* doprnt.c (doprnt): Fix overflow check.
+
+2009-10-21  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* xterm.c (x_term_init): Remove XSynchronize call done for debugging.
+
+	* xterm.h (x_wait_for_event): Declare it.
+
+	* xterm.c (pending_event_wait): New variable.
+	(handle_one_xevent): Set pending_event_wait.eventtype to 0 if we
+	see pending_event_wait.eventtype.
+	(handle_one_xevent): Don't change gravity when parent changes.
+	(x_new_font): Call change_frame_size with new rows/columns before we try
+	to resize the frame.
+	(x_wait_for_event): New function.
+	(x_set_window_size_1): Don't change gravity unless change_gravity is set.
+	Call XResizeWindow with FRAME_OUTER_WINDOW.  If we are visible,
+	don't change frame size, instead wait for the ConfigureNotify.
+	(x_set_window_size): Call x_set_window_size_1 for USE_X_TOOLKIT also.
+	(x_wm_set_size_hint): Remove ifdefs for USE_X_TOOLKIT.
+	(x_initialize): Initialize pending_event_wait.
+
+	* xmenu.c (set_frame_menubar): Add internal border width to menu bar
+	size.
+
+	* widget.c (EmacsFrameSetValues): Add comment.
+	(EmacsFrameSetCharSize): Just call x_set_window_size.
+
+	* gtkutil.c (xg_frame_set_char_size): Flush events and call
+	x_wait_for_event.
+	(flush_and_sync): Removed again.
+	(xg_get_font_name): Suggest monospace if no previous font is known.
+
+2009-10-20  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* character.c (char_resolve_modifier_mask): Don't resolve meta to the
+	8th bit, since that only made sense in the ASCII world (bug#4751).
+
+2009-10-20  YAMAMOTO Mitsuharu  <mituharu@math.s.chiba-u.ac.jp>
+
+	* xterm.c (XTread_socket) [!USE_GTK && HAVE_X_I18N]: Don't quit
+	processing pending events when event is filtered for input method.
+	(Bug#3681)
+
+2009-10-20  Juanma Barranquero  <lekktu@gmail.com>
+
+	* fns.c: Add #endif accidentally removed in previous change.
+
+2009-10-19  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* fns.c: Remove code for unsupported system: MAC_OS.
+	* image.c: Likewise.  Include setjmp.h.
+
+2009-10-19  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* xterm.c (x_create_toolkit_scroll_bar): Don't allocate color for
+	pixel -1 (bug #4742).
+
+2009-10-19  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* process.c (create_pty): Remove conditionals for no longer
+	supported systems: UNIPLUS and RTU.
+
+	* xterm.c:
+	* xfns.c: Remove always true condition: XtSpecificationRelease >= 5.
+
+	* alloc.c: Do not define struct catchtag.
+	* eval.c: Move struct catchtag definition ...
+	* lisp.h: ... here.
+
+	* image.c: Move png.h #include earlier to avoid warnings.
+
+	* xterm.c:
+	* xsmfns.c:
+	* xselect.c:
+	* xrdb.c:
+	* xmenu.c:
+	* xftfont.c:
+	* xfont.c:
+	* xfns.c:
+	* xfaces.c:
+	* xdisp.c:
+	* window.c:
+	* widget.c:
+	* w32xfns.c:
+	* w32uniscribe.c:
+	* w32term.c:
+	* w32select.c:
+	* w32reg.c:
+	* w32proc.c:
+	* w32menu.c:
+	* w32inevt.c:
+	* w32heap.c:
+	* w32font.c:
+	* w32fns.c:
+	* w32console.c:
+	* w32.c:
+	* w16select.c:
+	* vm-limit.c:
+	* unexsol.c:
+	* unexec.c:
+	* unexcw.c:
+	* unexaix.c:
+	* undo.c:
+	* tparam.c:
+	* textprop.c:
+	* terminfo.c:
+	* terminal.c:
+	* termcap.c:
+	* term.c:
+	* syntax.c:
+	* sound.c:
+	* sheap.c:
+	* search.c:
+	* scroll.c:
+	* region-cache.c:
+	* regex.c:
+	* ralloc.c:
+	* process.c:
+	* print.c:
+	* nsterm.m:
+	* nsselect.m:
+	* nsmenu.m:
+	* nsimage.m:
+	* nsfont.m:
+	* nsfns.m:
+	* msdos.c:
+	* minibuf.c:
+	* menu.c:
+	* marker.c:
+	* macros.c:
+	* keymap.c:
+	* keyboard.c:
+	* intervals.c:
+	* insdel.c:
+	* indent.c:
+	* gtkutil.c:
+	* ftxfont.c:
+	* ftfont.c:
+	* fringe.c:
+	* frame.c:
+	* fontset.c:
+	* font.c:
+	* fns.c:
+	* floatfns.c:
+	* filelock.c:
+	* fileio.c:
+	* emacs.c:
+	* editfns.c:
+	* dosfns.c:
+	* doprnt.c:
+	* doc.c:
+	* dispnew.c:
+	* dired.c:
+	* dbusbind.c:
+	* data.c:
+	* composite.c:
+	* coding.c:
+	* cmds.c:
+	* cm.c:
+	* chartab.c:
+	* charset.c:
+	* character.c:
+	* ccl.c:
+	* category.c:
+	* casetab.c:
+	* casefiddle.c:
+	* callproc.c:
+	* callint.c:
+	* bytecode.c:
+	* buffer.c:
+	* atimer.c: Include setjmp.h.  (Bug#4643)
+
+2009-10-18  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	Remove leftover table unibyte_to_multibyte_table.
+	* character.c (unibyte_to_multibyte_table): Remove.
+	(Funibyte_char_to_multibyte): Use MAKE_CHAR_MULTIBYTE.
+	* charset.c (init_charset_once): Don't init unibyte_to_multibyte_table.
+	* character.h (UNIBYTE_TO_CHAR): New macro.
+	(MAKE_CHAR_MULTIBYTE): Use it.
+	(unibyte_to_multibyte_table, unibyte_char_to_multibyte): Remove.
+	* xdisp.c (get_next_display_element): USE ASCII_CHAR_P.
+	(message_dolog, set_message_1):
+	* search.c (Freplace_match):
+	* editfns.c (Fcompare_buffer_substrings):
+	* fns.c (Fcompare_strings): Use MAKE_CHAR_MULTIBYTE.
+	(concat):
+	* insdel.c (copy_text, count_size_as_multibyte):
+	Use ASCII_CHAR_P and BYTE8_TO_CHAR.
+	* term.c (produce_glyphs):
+	* syntax.c (skip_chars): Use BYTE8_TO_CHAR.
+	* regex.c (RE_CHAR_TO_MULTIBYTE):
+	* cmds.c (internal_self_insert):
+	* buffer.h (FETCH_CHAR_AS_MULTIBYTE): Use UNIBYTE_TO_CHAR.
+
+	* cmds.c (internal_self_insert): `c' is already in "multibyte" form.
+
+2009-10-17  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* puresize.h (BASE_PURESIZE): Increase to 1310000.
+
+2009-10-16  Juanma Barranquero  <lekktu@gmail.com>
+
+	* buffer.c (Fbuffer_name): Doc fix.  (Bug#4728)
+
 2009-10-15  Adrian Robert  <Adrian.B.Robert@gmail.com>
 
 	* nsterm.h (NS_HAVE_NSINTEGER): Back out and augment with CGFloat,
@@ -59,7 +267,7 @@
 	* font.c (font_unparse_xlfd, font_unparse_fcname): Use long format
 	in printf, and cast argument.
 
-	* process.c (list_processes_1): Use long format	in printf, and
+	* process.c (list_processes_1): Use long format in printf, and
 	cast argument.
 
 2009-10-11  Glenn Morris  <rgm@gnu.org>
@@ -361,6 +569,9 @@
 	* nsfont.m (ns_get_family): Don't force first letter to uppercase.
 
 2009-09-09  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* xdisp.c (Vtruncate_partial_width_windows): Improve docstring.
+	(Bug#4334)
 
 	* keymap.c (where_is_internal): Filter out shadowed remappings.
 	Assume that where_is_internal returns unshadowed bindings to simplify
@@ -6562,11 +6773,11 @@
 	* s/msdos.h: Remove boilerplate comments.
 
 	* m/iris4d.h: Remove boilerplate comments and code for systems that
-	 do not use this file.
+	do not use this file.
 	(IRIS_4D): Remove, unused.
 
 	* m/mips.h: Remove boilerplate comments and code for systems that
-	 do not use this file.
+	do not use this file.
 	(SIGN_EXTEND_CHAR):
 	* m/arm.h (SIGN_EXTEND_CHAR): Remove, unused.
 	* unexmips.c: Remove file, unused.

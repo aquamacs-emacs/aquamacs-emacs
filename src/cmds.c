@@ -20,6 +20,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 
 #include <config.h>
+#include <setjmp.h>
 #include "lisp.h"
 #include "commands.h"
 #include "buffer.h"
@@ -495,8 +496,6 @@ internal_self_insert (c, noautofill)
       hairy = 2;
     }
 
-  if (NILP (current_buffer->enable_multibyte_characters))
-    MAKE_CHAR_MULTIBYTE (c);
   synt = SYNTAX (c);
 
   if (!NILP (current_buffer->abbrev_mode)
@@ -505,7 +504,7 @@ internal_self_insert (c, noautofill)
       && PT > BEGV
       && (!NILP (current_buffer->enable_multibyte_characters)
 	  ? SYNTAX (XFASTINT (Fprevious_char ())) == Sword
-	  : (SYNTAX (unibyte_char_to_multibyte (XFASTINT (Fprevious_char ())))
+	  : (SYNTAX (UNIBYTE_TO_CHAR (XFASTINT (Fprevious_char ())))
 	     == Sword)))
     {
       int modiff = MODIFF;

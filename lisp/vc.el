@@ -418,6 +418,9 @@
 ;;   Invoked from a buffer in vc-annotate-mode, return the revision
 ;;   corresponding to the current line, or nil if there is no revision
 ;;   corresponding to the current line.
+;;   If the backend supports annotating through copies and renames,
+;;   and displays a file name and a revision, then return a cons
+;;   (REVISION . FILENAME).
 ;;
 ;; TAG SYSTEM
 ;;
@@ -930,13 +933,13 @@ current buffer."
      ((and allow-unregistered (not (vc-registered buffer-file-name)))
       (if state-model-only-files
 	  (list (vc-responsible-backend
-		 (file-name-directory (buffer-file-name)) t)
+		 (file-name-directory (buffer-file-name)))
 		(list buffer-file-name)
 		(list buffer-file-name)
 		(when state-model-only-files 'unregistered)
 		nil)
 	(list (vc-responsible-backend
-	       (file-name-directory (buffer-file-name)) t)
+	       (file-name-directory (buffer-file-name)))
 	      (list buffer-file-name))))
      (t (error "No fileset is available here")))))
 

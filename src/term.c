@@ -37,6 +37,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include <signal.h>
 #include <stdarg.h>
+#include <setjmp.h>
 
 #include "lisp.h"
 #include "termchar.h"
@@ -1650,7 +1651,7 @@ produce_glyphs (it)
       if (unibyte_display_via_language_environment
 	  && (it->c >= 0240))
 	{
-	  it->char_to_display = unibyte_char_to_multibyte (it->c);
+	  it->char_to_display = BYTE8_TO_CHAR (it->c);
 	  it->pixel_width = CHAR_WIDTH (it->char_to_display);
 	  it->nglyphs = it->pixel_width;
 	  if (it->glyph_row)
