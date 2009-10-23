@@ -463,7 +463,26 @@ is already visible, close it instead."
       (ns-close-spellchecker-panel)
     (ns-popup-spellchecker-panel)
     ;; panel shouldn't skip past currently selected word, if there is one
-    (ns-highlight-misspelling-and-suggest 'noskip)))
+    (ns-highlight-misspelling-and-suggest 'noskip))) 
+
+;;;###autoload
+(defun spellcheck-now ()
+  "Start spellchecking, using OS X spellchecker
+(`ns-highlight-misspelling-and-suggest') or `ispell-buffer' (which see),
+depending on value of `ispell-program-name'."
+  (interactive) 
+  (if (string= ispell-program-name "NSSpellChecker")
+      (ns-highlight-misspelling-and-suggest)
+    (ispell-buffer)))
+
+;;;###autoload
+(defun spellchecker-panel-or-ispell ()
+  "Calls `ns-toggle-spellchecker-panel' or `ispell' (which see), depending
+on current value of `ispell-program-name'."
+  (interactive)
+  (if (string= ispell-program-name "NSSpellChecker")
+      (ns-toggle-spellchecker-panel)
+    (ispell)))
 
 (defun ns-flyspell-region (beg end)
   "Flyspell text between BEG and END using ns-spellchecker-check-spelling."
@@ -884,7 +903,7 @@ in your .emacs file.
   ;; be forgotten!
   ;; Pass the `force' argument for the case where flyspell was active already
   ;; but the buffer's local-defs have been edited.
-  ;; (flyspell-accept-buffer-local-defs 'force)
+  (flyspell-accept-buffer-local-defs 'force)
   ;; we put the `flyspell-delayed' property on some commands
   (flyspell-delay-commands)
   ;; WE put the `flyspell-deplacement' property on some commands
