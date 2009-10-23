@@ -1637,6 +1637,28 @@ The variable `ispell-library-directory' defines the library location."
 	  (setq dict-list (cons name dict-list))))
     dict-list))
 
+(defun toggle-text-mode-flyspell ()
+  "Toggle whether to use Flyspell in Text mode and related modes.
+This command affects all buffers that use modes related to Text mode,
+both existing buffers and buffers that you subsequently create."
+  (interactive)
+  (let ((enable-mode (not (memq 'turn-on-flyspell text-mode-hook))))
+    (if enable-mode
+      (add-hook 'text-mode-hook 'turn-on-flyspell)
+      (remove-hook 'text-mode-hook 'turn-on-flyspell))
+    (dolist (buffer (buffer-list))
+      (with-current-buffer buffer
+      (if (or (derived-mode-p 'text-mode) text-mode-variant)
+          (flyspell-mode (if enable-mode 1 0)))))
+    (message "Flyspell %s in Text modes"
+           (if enable-mode "enabled" "disabled"))))
+
+;;;###autoload
+(defun menu-bar-text-mode-flyspell ()
+  (interactive)
+  (toggle-text-mode-flyspell)
+  (customize-mark-as-set 'text-mode-hook))
+
 ;;;###autoload
 (if ispell-menu-map-needed
     (progn
@@ -1702,12 +1724,35 @@ The variable `ispell-library-directory' defines the library location."
 	;; use (x-popup-menu last-nonmenu-event(list "" ispell-help-list)) ?
 	'(menu-item "Help"
 		    (lambda () (interactive) (describe-function 'ispell-help))
-		    :help "Show standard Ispell keybindings and commands"))
+		    :help "Show standard Ispell keybindings and commands")) 
+
+      (define-key ispell-menu-map [ispell-submenu]
+	`(menu-item "Ispell" ,ispell-submenu-map
+		    :visible (string= ispell-program-name "NSSpellChecker")))
+      (define-key ispell-menu-map [spellcheck-menu-separator]
+	'(menu-item "--"))
+
+      (define-key ispell-menu-map [flyspell-text-modes]
+      '(menu-item "Check Spelling While You Type (in all text modes)"
+                  menu-bar-text-mode-flyspell
+                  :help "Sets `Check Spelling While You Type' for all buffers using text-derived modes"
+                  ;; available only in text mode
+                  :enable (or (derived-mode-p 'text-mode) text-mode-variant)
+                  :button (:toggle . (if (listp text-mode-hook)
+                                         (member 'turn-on-flyspell text-mode-hook)
+                                       (eq 'turn-on-flyspell text-mode-hook)))))
       (define-key ispell-menu-map [flyspell-mode]
-	'(menu-item "Automatic spell checking (Flyspell)"
+	'(menu-item "Check Spelling While You Type (in this buffer)"
 		    flyspell-mode
-		    :help "Check spelling while you edit the text"
-		    :button (:toggle . (bound-and-true-p flyspell-mode))))
+		    :help "Check spelling while you edit the text"                ;; enabled if not in a text mode,
+                  ;; OR if in a text mode and flyspell isn't on for all
+                  ;; text-mode buffers
+                  :enable (if (or (derived-mode-p 'text-mode) text-mode-variant)
+                              (not (if (listp text-mode-hook)
+                                          (member 'turn-on-flyspell text-mode-hook)
+                                        (eq 'turn-on-flyspell text-mode-hook)))
+                            t)
+                  :button (:toggle . (bound-and-true-p flyspell-mode))))
       (define-key ispell-menu-map [ispell-complete-word]
 	'(menu-item "Complete Word" ispell-complete-word 
 		    :visible (not (string= ispell-program-name "NSSpellChecker"))
@@ -1756,11 +1801,6 @@ The variable `ispell-library-directory' defines the library location."
 		    :visible (not (string= ispell-program-name "NSSpellChecker"))
 		    :help "Check spelling of selected buffer"))
       ;;(put 'ispell-region 'menu-enable 'mark-active)
-
-      (define-key ispell-menu-map [ispell-submenu]
-	`(menu-item "Ispell" ,ispell-submenu-map
-		    :visible (string= ispell-program-name "NSSpellChecker")))
-
 
        (define-key ispell-menu-map [nsspellchecker-panel-hide]
 	'(menu-item "Hide Spelling Panel" spellchecker-panel-or-ispell 
@@ -2245,7 +2285,7 @@ quit          spell session exited."
       ;; But that is silly; if the user asks for it, we should do it. - rms.
       (or quietly
 	  (message "Checking spelling of %s..."
-		   (funcall ispell-format-word-function word)))
+		   (funcall ispell-format-word-function word))) 
       (if (string= ispell-program-name "NSSpellChecker")
 		(setq poss (ns-spellchecker-parse-output word))
 	(ispell-send-string "%\n")	; put in verbose mode
@@ -4328,10 +4368,10 @@ You can bind this to the key C-c i in GNUS or mail by adding to
   "Load all buffer-local information, restarting Ispell when necessary."
   (if (string= ispell-program-name "NSSpellChecker")
       (setq ispell-current-dictionary
-	    (or ispell-local-dictionary ispell-dictionary))
+	    (or ispell-local-dictionary ispell-dictionary)))
   (ispell-buffer-local-dict)		; May kill ispell-process.
   (ispell-buffer-local-words)		; Will initialize ispell-process.
-  (ispell-buffer-local-parsing)))
+  (ispell-buffer-local-parsing))
 
 
 (defun ispell-buffer-local-parsing ()
@@ -4339,7 +4379,8 @@ You can bind this to the key C-c i in GNUS or mail by adding to
 Overrides the default parsing mode.
 Includes Latex/Nroff modes and extended character mode."
   ;; (ispell-init-process) must already be called.
-  (ispell-send-string "!\n")		; Put process in terse mode.
+  (if (not (string= ispell-program-name "NSSpellChecker"))
+      (ispell-send-string "!\n"))		; Put process in terse mode.
   ;; We assume all major modes with "tex-mode" in them should use latex parsing
   ;; When exclusively checking comments, set to raw text mode (nroff).
   (if (and (not (eq 'exclusive ispell-check-comments))
@@ -4348,39 +4389,42 @@ Includes Latex/Nroff modes and extended character mode."
 				  (symbol-name major-mode)))
 	       (eq ispell-parser 'tex)))
       (progn
-	(ispell-send-string "+\n")	; set ispell mode to tex
+	(if (not (string= ispell-program-name "NSSpellChecker")) 
+	    (ispell-send-string "+\n"))	; set ispell mode to tex
 	(if (not (eq ispell-parser 'tex))
 	    (set (make-local-variable 'ispell-parser) 'tex)))
-    (ispell-send-string "-\n"))		; set mode to normal (nroff)
+    (if (not (string= ispell-program-name "NSSpellChecker")) 
+	(ispell-send-string "-\n")))		; set mode to normal (nroff)
   ;; If needed, test for SGML & HTML modes and set a buffer local nil/t value.
   (if (and ispell-skip-html (not (eq ispell-skip-html t)))
       (setq ispell-skip-html
 	    (not (null (string-match "sgml\\|html\\|xml"
 				     (downcase (symbol-name major-mode)))))))
   ;; Set default extended character mode for given buffer, if any.
-  (let ((extended-char-mode (ispell-get-extended-character-mode)))
-    (if extended-char-mode
-	(ispell-send-string (concat extended-char-mode "\n"))))
-  ;; Set buffer-local parsing mode and extended character mode, if specified.
-  (save-excursion
-    (goto-char (point-max))
-    ;; Uses last occurrence of ispell-parsing-keyword
-    (if (search-backward ispell-parsing-keyword nil t)
-	(let ((end (save-excursion (end-of-line) (point)))
-	      string)
-	  (search-forward ispell-parsing-keyword)
-	  (while (re-search-forward " *\\([^ \"]+\\)" end t)
-	    ;; space separated definitions.
-	    (setq string (downcase (match-string-no-properties 1)))
-	    (cond ((and (string-match "latex-mode" string)
-			(not (eq 'exclusive ispell-check-comments)))
-		   (ispell-send-string "+\n~tex\n"))
-		  ((string-match "nroff-mode" string)
-		   (ispell-send-string "-\n~nroff\n"))
-		  ((string-match "~" string) ; Set extended character mode.
-		   (ispell-send-string (concat string "\n")))
-		  (t (message "Invalid Ispell Parsing argument!")
-		     (sit-for 2))))))))
+  (when (not (string= ispell-program-name "NSSpellChecker"))
+    (let ((extended-char-mode (ispell-get-extended-character-mode)))
+      (if extended-char-mode
+	  (ispell-send-string (concat extended-char-mode "\n"))))
+    ;; Set buffer-local parsing mode and extended character mode, if specified.
+    (save-excursion
+      (goto-char (point-max))
+      ;; Uses last occurrence of ispell-parsing-keyword
+      (if (search-backward ispell-parsing-keyword nil t)
+	  (let ((end (save-excursion (end-of-line) (point)))
+		string)
+	    (search-forward ispell-parsing-keyword)
+	    (while (re-search-forward " *\\([^ \"]+\\)" end t)
+	      ;; space separated definitions.
+	      (setq string (downcase (match-string-no-properties 1)))
+	      (cond ((and (string-match "latex-mode" string)
+			  (not (eq 'exclusive ispell-check-comments)))
+		     (ispell-send-string "+\n~tex\n"))
+		    ((string-match "nroff-mode" string)
+		     (ispell-send-string "-\n~nroff\n"))
+		    ((string-match "~" string) ; Set extended character mode.
+		     (ispell-send-string (concat string "\n")))
+		    (t (message "Invalid Ispell Parsing argument!")
+		       (sit-for 2)))))))))
 
 
 ;;; Can kill the current ispell process
@@ -4424,11 +4468,13 @@ Both should not be used to define a buffer-local dictionary."
   ;; If there's an existing ispell process that's wrong for this use,
   ;; kill it.
   (if (and ispell-buffer-local-name
-	   (not (equal ispell-buffer-local-name (buffer-name))))
+	   (not (equal ispell-buffer-local-name (buffer-name)))
+	   (not (string= ispell-program-name "NSSpellChecker")))
       (ispell-kill-ispell t))
   ;; Actually start a new ispell process, because we need
   ;; to send commands now to specify the local words to it.
-  (ispell-init-process)
+  (if (not (string= ispell-program-name "NSSpellChecker"))
+      (ispell-init-process))
   (save-excursion
     (goto-char (point-min))
     (while (search-forward ispell-words-keyword nil t)
@@ -4445,7 +4491,14 @@ Both should not be used to define a buffer-local dictionary."
 	  ;; Error handling needs to be added between ispell and Emacs.
 	  (if (and (< 1 (length string))
 		   (equal 0 (string-match ispell-casechars string)))
-	      (ispell-send-string (concat "@" string "\n"))))))))
+	      (if (string= ispell-program-name "NSSpellChecker")
+		  (progn
+		    ;; dummy spellcheck to ensure that NSSpellChecker
+		    ;;   is initialized
+		    (ns-spellchecker-check-spelling "test")
+		    (ns-spellchecker-ignore-word string (current-buffer)))
+		(ispell-send-string (concat "@" string "\n")))
+	    ))))))
 
 
 ;;; returns optionally adjusted region-end-point.

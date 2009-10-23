@@ -96,6 +96,11 @@ Only checks once - subsequent calls will not result in any action."
 (add-hook 'LaTeX-mode-hook (lambda () (TeX-fold-mode t)))
 (add-hook 'TeX-mode-hook 'aquamacs-latex-viewer-support 'append) ;; load reftex first
 
+;; Allow open buffers in latex-mode to be processed identically to new
+;; buffers processed according to text-mode-hook (specifically for
+;; Flyspell)
+(put 'latex-mode 'derived-mode-parent 'text-mode)
+
 ;; this is much slower
 ;; (defun fln (&optional buffer-pos)
 ;;   (unless buffer-pos (setq buffer-pos (point)))
