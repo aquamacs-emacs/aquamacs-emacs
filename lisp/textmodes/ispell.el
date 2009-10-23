@@ -2285,7 +2285,7 @@ quit          spell session exited."
       ;; But that is silly; if the user asks for it, we should do it. - rms.
       (or quietly
 	  (message "Checking spelling of %s..."
-		   (funcall ispell-format-word-function word)))
+		   (funcall ispell-format-word-function word))) 
       (if (string= ispell-program-name "NSSpellChecker")
 		(setq poss (ns-spellchecker-parse-output word))
 	(ispell-send-string "%\n")	; put in verbose mode
@@ -4492,7 +4492,11 @@ Both should not be used to define a buffer-local dictionary."
 	  (if (and (< 1 (length string))
 		   (equal 0 (string-match ispell-casechars string)))
 	      (if (string= ispell-program-name "NSSpellChecker")
-		(ns-spellchecker-ignore-word string (current-buffer))
+		  (progn
+		    ;; dummy spellcheck to ensure that NSSpellChecker
+		    ;;   is initialized
+		    (ns-spellchecker-check-spelling "test")
+		    (ns-spellchecker-ignore-word string (current-buffer)))
 		(ispell-send-string (concat "@" string "\n")))
 	    ))))))
 

@@ -1509,7 +1509,40 @@ DEFUN ("ns-spellchecker-ignore-word", Fns_spellchecker_ignore_word, Sns_spellche
 }
 
 
-DEFUN ("ns-spellchecker-check-spelling", Fns_spellchecker_check_spelling, Sns_spellchecker_check_spelling,
+DEFUN ("ns-spellchecker-ignored-words", Fns_spellchecker_ignored_words, Sns_spellchecker_ignored_words,
+       1, 1, 0,
+       doc: /* Return list of words ignored by NSSpellChecker
+for buffer BUFFER */)
+     (buffer)
+     Lisp_Object buffer;
+{
+  id sc;
+
+  check_ns ();
+  BLOCK_INPUT;
+  sc = [NSSpellChecker sharedSpellChecker];
+  
+  NSInteger tag = 1;
+  if (! NILP (buffer)) 
+    {
+      tag = sxhash (buffer, 0);
+    }
+
+  Lisp_Object retval = Qnil;
+  NSArray *words = [sc ignoredWordsInSpellDocumentWithTag:tag];
+  int arrayCount = [words count];
+  int i;
+  for (i = 0; i < arrayCount; i++) {
+    // build Lisp list of strings
+    retval = Fcons (build_string ([[words objectAtIndex:i] UTF8String]),
+		    retval);
+  }
+  UNBLOCK_INPUT;
+  return retval;
+}
+
+
+DEFUN ("ns-spellchecker-check-spelling", Fns_spellchecker_check_spellingg, Sns_spellchecker_check_spelling,
        1, 2, 0,
        doc: /* Check spelling of STRING
 Returns the location of the first misspelled word in a 
@@ -3302,6 +3335,7 @@ be used as the image of the icon representing the frame.  */);
   defsubr (&Sns_spellchecker_panel_visible_p);
   defsubr (&Sns_spellchecker_learn_word);
   defsubr (&Sns_spellchecker_ignore_word);
+  defsubr (&Sns_spellchecker_ignored_words);
   defsubr (&Sns_spellchecker_show_word);
   defsubr (&Sns_spellchecker_check_spelling);
   defsubr (&Sns_spellchecker_check_grammar);
