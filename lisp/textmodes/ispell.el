@@ -1733,16 +1733,16 @@ both existing buffers and buffers that you subsequently create."
 	'(menu-item "--"))
 
       (define-key ispell-menu-map [flyspell-text-modes]
-      '(menu-item "Check Spelling While You Type (in all text modes)"
+      '(menu-item "Check Spelling While Typing (in all text modes)"
                   menu-bar-text-mode-flyspell
-                  :help "Sets `Check Spelling While You Type' for all buffers using text-derived modes"
+                  :help "Sets `Check Spelling While Typing' for all buffers using text-derived modes"
                   ;; available only in text mode
                   :enable (or (derived-mode-p 'text-mode) text-mode-variant)
                   :button (:toggle . (if (listp text-mode-hook)
                                          (member 'turn-on-flyspell text-mode-hook)
                                        (eq 'turn-on-flyspell text-mode-hook)))))
       (define-key ispell-menu-map [flyspell-mode]
-	'(menu-item "Check Spelling While You Type (in this buffer)"
+	'(menu-item "Check Spelling While Typing (in this buffer)"
 		    flyspell-mode
 		    :help "Check spelling while you edit the text"                ;; enabled if not in a text mode,
                   ;; OR if in a text mode and flyspell isn't on for all
