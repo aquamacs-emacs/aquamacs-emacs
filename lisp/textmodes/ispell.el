@@ -1653,10 +1653,20 @@ both existing buffers and buffers that you subsequently create."
     (message "Flyspell %s in Text modes"
            (if enable-mode "enabled" "disabled"))))
 
+;;;###autoload
+(defun menu-bar-text-mode-flyspell ()
+  (interactive)
+  (toggle-text-mode-flyspell)
+  (customize-mark-as-set 'text-mode-hook))
+
+;;;###autoload
 (defvar flyspell-by-mode "none"
   "Internal setting for tracking which modes have
-flyspell automatically turned on.")
+flyspell automatically turned on.  Do not set directly;
+use functions `text-mode-flyspell', `all-modes-flyspell',
+and `no-modes-flyspell' instead")
 
+;;;###autoload
 (defun text-mode-flyspell ()
   "Use Flyspell in Text mode and related modes.
 Applies to all buffers that use modes related to Text mode,
@@ -1677,6 +1687,7 @@ Turns off `all-modes-flyspell' if on."
     (setq flyspell-by-mode "text")
     (message "Flyspell enabled in Text modes"))) 
 
+;;;###autoload
 (defun all-modes-flyspell ()
   "Use Flyspell in all major modes.
 Applies both to existing buffers and buffers that you subsequently
@@ -1693,6 +1704,7 @@ create. Turns off `text-mode-flyspell' if on."
     (setq flyspell-by-mode "all")
     (message "Flyspell enabled in all modes"))) 
 
+;;;###autoload
 (defun no-modes-flyspell ()
   "Turn off `text-mode-flyspell' or `all-modes-flyspell' if on.
 Also turns off flyspell-mode in all existing buffers."
@@ -1710,12 +1722,6 @@ Also turns off flyspell-mode in all existing buffers."
 	(turn-off-flyspell))) 
     (setq flyspell-by-mode "none")
     (message "Flyspell disabled in all modes")))
-
-;;;###autoload
-(defun menu-bar-text-mode-flyspell ()
-  (interactive)
-  (toggle-text-mode-flyspell)
-  (customize-mark-as-set 'text-mode-hook))
 
 ;;;###autoload
 (if ispell-menu-map-needed
