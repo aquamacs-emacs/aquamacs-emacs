@@ -528,6 +528,10 @@ is automatically set when defined in the file with either
 		 (const :tag "default" nil))
   :group 'ispell)
 
+(defvar ispell-dictionary-internal ispell-dictionary
+  "Internal copy of `ispell-dictionary'; can be modified by NSSpellChecker
+panel without disturbing `ispell-dictionary' setting.")
+
 (defcustom ispell-extra-args nil
   "*If non-nil, a list of extra switches to pass to the Ispell program.
 For example, (\"-W\" \"3\") to cause it to accept all 1-3 character
@@ -1623,8 +1627,12 @@ aspell is used along with Emacs).")
 	(unless (assoc (car dict) all-dicts-alist)
 	  (add-to-list 'all-dicts-alist dict)))
       (setq ispell-dictionary-alist all-dicts-alist))
-    (if (string= ispell-program-name "NSSpellChecker")
-	(setq ispell-dictionary (ns-spellchecker-current-language))))))
+    (setq ispell-dictionary-internal
+	  (if (string= ispell-program-name "NSSpellChecker")
+	  ;; get working value of ispell-dictionary from spellingPanel
+	      (ns-spellchecker-current-language)
+	    ;; or set from global value
+	    ispell-dictionary)))))
 
 
 (defun ispell-valid-dictionary-list ()
@@ -3205,7 +3213,7 @@ When asynchronous processes are not supported, `run' is always returned."
   "Start the ispell process, with support for no asynchronous processes.
 Keeps argument list for future ispell invocations for no async support."
   (let* ((default-directory default-directory)
-       (current-dict-name (or ispell-local-dictionary ispell-dictionary))
+       (current-dict-name (or ispell-local-dictionary ispell-dictionary-internal))
        (current-dict
         (if (eq ispell-use-cocoaspell-internal 'full)
             (aspell-dict-abbrev current-dict-name)
@@ -3275,7 +3283,7 @@ Keeps argument list for future ispell invocations for no async support."
       ;; may need to restart to select new personal dictionary.
       (ispell-kill-ispell t)
       (message "Starting new Ispell process [%s] ..."
-	       (or ispell-local-dictionary ispell-dictionary "default"))
+	       (or ispell-local-dictionary ispell-dictionary-internal "default"))
       (sit-for 0)
       (setq ispell-library-directory (ispell-check-version)
 	    ispell-process-directory default-directory
@@ -3369,14 +3377,14 @@ By just answering RET you can find out what the current dictionary is."
   (if (equal dict "default") (setq dict nil))
   ;; This relies on completing-read's bug of returning "" for no match
   (cond ((and (equal dict nil) (string= ispell-program-name "NSSpellChecker"))
-	 (setq ispell-dictionary (ns-spellchecker-current-language)))
+	 (setq ispell-dictionary-internal (ns-spellchecker-current-language)))
 	((equal dict "")
 	 (ispell-internal-change-dictionary)
 	 (message "Using %s dictionary"
 		  (or (and (not arg) ispell-local-dictionary)
-		      ispell-dictionary "default")))
+		      ispell-dictionary-internal "default")))
 	((equal dict (or (and (not arg) ispell-local-dictionary)
-			 ispell-dictionary "default"))
+			 ispell-dictionary-internal "default"))
 	 ;; Specified dictionary is the default already. Could reload
 	 ;; the dictionaries if needed.
 	 (ispell-internal-change-dictionary)
@@ -3387,7 +3395,8 @@ By just answering RET you can find out what the current dictionary is."
 		 (assoc dict ispell-dictionary-alist))
 	     (if arg
 		 ;; set default dictionary
-		 (setq ispell-dictionary dict)
+		 (setq ispell-dictionary dict
+		       ispell-dictionary-internal dict)
 	       ;; set local dictionary
 	       (setq ispell-local-dictionary dict)
 	       (setq ispell-local-dictionary-overridden t))
@@ -3401,7 +3410,7 @@ By just answering RET you can find out what the current dictionary is."
   "Update the dictionary and the personal dictionary used by Ispell.
 This may kill the Ispell process; if so,
 a new one will be started when needed."
-  (let ((dict (or ispell-local-dictionary ispell-dictionary))
+  (let ((dict (or ispell-local-dictionary ispell-dictionary-internal))
 	(pdict (or ispell-local-pdict ispell-personal-dictionary)))
     (unless (and (equal ispell-current-dictionary dict)
 		 (equal ispell-current-personal-dictionary pdict))
@@ -4394,7 +4403,7 @@ You can bind this to the key C-c i in GNUS or mail by adding to
   "Load all buffer-local information, restarting Ispell when necessary."
   (if (string= ispell-program-name "NSSpellChecker")
       (setq ispell-current-dictionary
-	    (or ispell-local-dictionary ispell-dictionary)))
+	    (or ispell-local-dictionary ispell-dictionary-internal)))
   (ispell-buffer-local-dict)		; May kill ispell-process.
   (ispell-buffer-local-words)		; Will initialize ispell-process.
   (ispell-buffer-local-parsing))
