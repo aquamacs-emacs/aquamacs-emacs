@@ -1583,7 +1583,9 @@ aspell is used along with Emacs).")
       (setq ispell-last-program-name ispell-program-name)
       (ispell-kill-ispell t)
       (if (string= ispell-program-name "NSSpellChecker")
-	  (setq ispell-ns-dictionary-alist (ns-spellchecker-list-dictionaries))
+	  (setq ispell-ns-dictionary-alist (ns-spellchecker-list-dictionaries)
+		;; run ispell-check-version to initialize some variables
+		ispell-library-directory (ispell-check-version))
 	(if (and (condition-case ()
 		     (progn
 		       (setq ispell-library-directory (ispell-check-version))
