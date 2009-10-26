@@ -1021,19 +1021,10 @@ file names.")
 Used to match cocoAspell language names to dictionary
 file names.")
 
-;; does aspell have a list of dictionaries already?
-(defvar aspell-knows-no-dicts
-  (if (string= ispell-program-name "aspell")
-  (condition-case nil
-      (with-temp-buffer
-      ;; is there a stored cocoaSpell configuration?
-      (call-process ispell-program-name nil t nil "dicts")
-      (eq (point-min) (point-max)))
-    (error nil)))
+(defvar aspell-knows-no-dicts  nil
   "Records whether or not aspell's default configuration can
 locate any dictionaries.")
 
-;;;###autoload
 (defcustom ispell-use-cocoaspell
   'auto
   "Specify whether spell-checking with aspell should use
@@ -1055,50 +1046,99 @@ cocoaAspell installation.  The following options are available:
                  (const :tag "generic install (Don't use cocoAspell)" nil)
 		 (const :tag "automatic setting" auto)))
 
-;; determine how to configure aspell
-(when (eq ispell-use-cocoaspell 'auto)
-  (setq ispell-use-cocoaspell
-      (if (equal ispell-program-name "aspell")
-          (when aspell-knows-no-dicts
-            (if (file-accessible-directory-p
-                 (expand-file-name "~/Library/Services/cocoAspell.service/"))
-                'full
-              'dicts)))))
+(defvar ispell-use-cocoaspell-internal nil
+  "Internal value based on `ispell-use-cocoaspell', after checking
+aspell/cocoaspell installation if needed.  Do not set directly.")
 
-(defvar ispell-cocoaspell-prefs-dir
-  (when (eq ispell-use-cocoaspell 'full)
-    (expand-file-name "~/Library/Preferences/cocoAspell/"))
+(defvar ispell-cocoaspell-prefs-dir nil
   "Full path to cocoAspell's preferences directory, if cocoAspell installed")
 
-(defvar ispell-cocoaspell-prefpane-plist
-  (when (eq ispell-use-cocoaspell 'full)
-    ;; overall preferences set in Spelling prefpane
-    (expand-file-name
-     "~/Library/Services/cocoAspell.service/Contents/Info.plist"))
+(defvar ispell-cocoaspell-prefpane-plist nil
   "Full path to file recording cocoAspell Spelling prefpane's preferences.
 File contents are used to determine which languages are available for
 spell checking in Aquamacs.")
 
-(defvar ispell-cocoaspell-dict-list
-  (when (eq ispell-use-cocoaspell 'full)
-    (let ((lang-list))
-      (with-temp-buffer
-      ;; extract language names selected in Spelling prefpane
-      (insert-file-contents ispell-cocoaspell-prefpane-plist)
-      ;; move point to just before first language name
-      (re-search-forward "<key>NSLanguages</key>\\s +<array>\\s +<string>")
-      (while (progn
-               ;; find each language name, and move point to just before next
-               ;; tag after current string
-               (re-search-forward "\\(.+\\)</string>\\s +<\\([/a-z]+\\)>")
-               ;; tack current language onto lang-list
-               (add-to-list 'lang-list (match-string 1))
-               ;; continue if next tag indicates another language string
-               (equal (match-string 2) "string")))
-      ;; return the language list
-      lang-list)))
+(defvar ispell-cocoaspell-dict-list nil 
   "List of dictionaries checked in cocoAspell's Spelling prefpane.")
 
+(defvar ispell-cocoaspell-dict-dir-list nil
+  "List of paths of directories for all cocoAspell-installed
+aspell dictionaries.")
+
+(defvar ispell-cocoaspell-dict-aliases nil
+  "List of base filenames of all *.alias files in cocoAspell-installed aspell
+dictionary directories.  These will be used to generate ispell-dictionary-alist
+when cocoAspell dictionaries are installed, but no Spelling prefpane.")
+
+(defun ispell-update-cocoaspell-settings ()
+  (setq aspell-knows-no-dicts
+	(condition-case nil
+	    (with-temp-buffer
+	      ;; is there a stored cocoaSpell configuration?
+	      (call-process ispell-program-name nil t nil "dicts")
+	      (eq (point-min) (point-max)))
+	  (error nil)))
+  
+  ;; determine how to configure aspell
+  (setq ispell-use-cocoaspell-internal
+	(if (eq ispell-use-cocoaspell 'auto)
+	    ;; automatically determine appropriate setting
+	    (when aspell-knows-no-dicts 
+	      ;; assume cocoaspell if no dictionaries known to aspell
+	      (if (file-accessible-directory-p
+		   (expand-file-name "~/Library/Services/cocoAspell.service/"))
+		  ;; if cocoaSpell service is installed, use full cocoaspell support
+		  'full
+		;; else just use cocoaSpell-installed dictionaries
+		'dicts))
+	  ;; use setting as specified by user
+	  ispell-use-cocoaspell))
+
+  (setq ispell-cocoaspell-prefs-dir
+	(when (eq ispell-use-cocoaspell-internal 'full)
+	  (expand-file-name "~/Library/Preferences/cocoAspell/")))
+
+  (setq ispell-cocoaspell-prefpane-plist
+	(when (eq ispell-use-cocoaspell-internal 'full)
+	  ;; overall preferences set in Spelling prefpane
+	  (expand-file-name
+	   "~/Library/Services/cocoAspell.service/Contents/Info.plist")))
+
+  (setq ispell-cocoaspell-dict-list
+	(when (eq ispell-use-cocoaspell-internal 'full)
+	  (let ((lang-list))
+	    (with-temp-buffer
+	      ;; extract language names selected in Spelling prefpane
+	      (insert-file-contents ispell-cocoaspell-prefpane-plist)
+	      ;; (call-process "plutil" nil t t "-convert" "xml1" "-o" "-"
+			    ;; ispell-cocoaspell-prefpane-plist)
+	      ;; (goto-char (point-min))
+	      ;; move point to just before first language name
+	      (re-search-forward "<key>NSLanguages</key>\\s +<array>\\s +<string>")
+	      (while (progn
+		       ;; find each language name, and move point to just before next
+		       ;; tag after current string
+		       (re-search-forward "\\(.+\\)</string>\\s +<\\([/a-z]+\\)>")
+		       ;; tack current language onto lang-list
+		       (add-to-list 'lang-list (match-string 1))
+		       ;; continue if next tag indicates another language string
+		       (equal (match-string 2) "string")))
+	      ;; return the language list
+	      lang-list))))
+
+  (setq ispell-cocoaspell-dict-dir-list
+	(when (eq ispell-use-cocoaspell-internal 'dicts)
+	  (file-expand-wildcards
+	   "/Library/Application Support/cocoAspell/aspell*-*-*")))
+
+  (setq ispell-cocoaspell-dict-aliases
+	(when (eq ispell-use-cocoaspell-internal 'dicts)
+	  (mapcar (lambda (dict-alias)
+		    (file-name-sans-extension
+		     (file-name-nondirectory dict-alias)))
+		  (file-expand-wildcards
+		   "/Library/Application Support/cocoAspell/aspell*-*-*/*.alias"))))
+  )
   ;; convert from names e.g. English (United States) to en_US
   ;; append stuff in brackets
   ;; also include length if it exists
@@ -1181,24 +1221,6 @@ DICT-ABBREV."
             (concat "--lang=" dict-abbrev-root)
             (concat "--personal=" dict-abbrev-root ".pws")
             (concat "--repl=" dict-abbrev-root ".prepl"))))))
-
-(defvar ispell-cocoaspell-dict-dir-list
-  (when (eq ispell-use-cocoaspell 'dicts)
-    (file-expand-wildcards
-     "/Library/Application Support/cocoAspell/aspell*-*-*"))
-  "List of paths of directories for all cocoAspell-installed
-aspell dictionaries.")
-
-(defvar ispell-cocoaspell-dict-aliases
-  (when (eq ispell-use-cocoaspell 'dicts)
-    (mapcar (lambda (dict-alias)
-            (file-name-sans-extension
-             (file-name-nondirectory dict-alias)))
-          (file-expand-wildcards
-           "/Library/Application Support/cocoAspell/aspell*-*-*/*.alias")))
-  "List of base filenames of all *.alias files in cocoAspell-installed aspell
-dictionary directories.  These will be used to generate ispell-dictionary-alist
-when cocoAspell dictionaries are installed, but no Spelling prefpane.")
 
 
 ;;; **********************************************************************
@@ -1389,14 +1411,14 @@ and added as a submenu of the \"Edit\" menu.")
 Internal use.")
 
 (defun ispell-find-aspell-dictionaries ()
-  "Find Aspell's dictionaries, and record in `ispell-dictionary-alist'."
+  "Find Aspell's dictionaries, and record in `ispell-aspell-dictionary-alist'."
   (unless (and ispell-really-aspell ispell-encoding8-command)
     (error "This function only works with aspell >= 0.60"))
   (let* ((dictionaries
 	  (cond
-	   ((eq ispell-use-cocoaspell 'full)
+	   ((eq ispell-use-cocoaspell-internal 'full)
 	    ispell-cocoaspell-dict-list)
-	   ((eq ispell-use-cocoaspell 'dicts)
+	   ((eq ispell-use-cocoaspell-internal 'dicts)
 	    ispell-cocoaspell-dict-aliases)
 	   (t (split-string
 	       (with-temp-buffer
@@ -1418,7 +1440,7 @@ Internal use.")
     (setq ispell-aspell-dictionary-alist found)
     ;; Add a default entry
     (let* ((english-dict-cdr
-	    (if ispell-use-cocoaspell
+	    (if ispell-use-cocoaspell-internal
 		(or 
 		 (assoc-default "^[Ee]nglish$" ispell-aspell-dictionary-alist
 				(lambda (dict-name key)
@@ -1454,22 +1476,22 @@ Assumes that value contains no whitespace."
   ;; This returns nil if the data file does not exist.
   ;; Can someone please explain the return value format when the
   ;; file does exist -- rms?
-  (let* ((dict-abbrev (when (eq ispell-use-cocoaspell 'full)
+  (let* ((dict-abbrev (when (eq ispell-use-cocoaspell-internal 'full)
                       (aspell-dict-abbrev dict-name)))
        (lang ;; Strip out region, variant, etc.
         (and (string-match "^[[:alpha:]]+" (or dict-abbrev dict-name))
              (match-string 0 (or dict-abbrev dict-name))))
        (dict-dir (cond
-                  ((eq ispell-use-cocoaspell 'full)
+                  ((eq ispell-use-cocoaspell-internal 'full)
                    (ispell-cocoaspell-dict-dir dict-abbrev))
-                  ((eq ispell-use-cocoaspell 'dicts)
+                  ((eq ispell-use-cocoaspell-internal 'dicts)
                    (file-name-directory 
                     (car
                      (file-expand-wildcards
                       (concat "/Library/Application Support/cocoAspell/aspell*-*-*/"
                               dict-name ".alias")))))))
 	 (data-file
-        (if ispell-use-cocoaspell
+        (if ispell-use-cocoaspell-internal
             (concat dict-dir "/" lang ".dat")
           (concat (or ispell-aspell-data-dir
                       (setq ispell-aspell-data-dir
@@ -1502,9 +1524,9 @@ Assumes that value contains no whitespace."
 		t			     ; We can't tell, so set this to t
               ;; set arguments for aspell
               ;; if we use cocoAspell prefs, use conf files associated with language
-              (cond ((eq ispell-use-cocoaspell 'full)
+              (cond ((eq ispell-use-cocoaspell-internal 'full)
                      (ispell-cocoaspell-aspell-args dict-abbrev))
-                    ((eq ispell-use-cocoaspell 'dicts)
+                    ((eq ispell-use-cocoaspell-internal 'dicts)
                      (list "-d" dict-name
                            "--dict-dir" dict-dir
                            "--encoding=utf-8"))
@@ -1571,8 +1593,10 @@ aspell is used along with Emacs).")
 		 ispell-encoding8-command
 		 ;; XEmacs does not like [:alpha:] regexps.
 		 (string-match "^[[:alpha:]]+$" "abcde"))
-	    (unless ispell-aspell-dictionary-alist
-	      (ispell-find-aspell-dictionaries))))
+	    (progn
+	      (ispell-update-cocoaspell-settings)
+	      (unless ispell-aspell-dictionary-alist
+		(ispell-find-aspell-dictionaries)))))
 
     ;; Substitute ispell-dictionary-alist with the list of dictionaries
     ;; corresponding to the given spellchecker. If a recent aspell, use
@@ -3181,7 +3205,7 @@ Keeps argument list for future ispell invocations for no async support."
   (let* ((default-directory default-directory)
        (current-dict-name (or ispell-local-dictionary ispell-dictionary))
        (current-dict
-        (if (eq ispell-use-cocoaspell 'full)
+        (if (eq ispell-use-cocoaspell-internal 'full)
             (aspell-dict-abbrev current-dict-name)
           current-dict-name))
 	args)
