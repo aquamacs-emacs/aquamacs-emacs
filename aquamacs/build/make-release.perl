@@ -15,7 +15,7 @@ $BINARY = '/Applications/Aquamacs.app';
 $DMG = "$PROJECT_DIR/AquamacsInstall.dmg";
 $RELEASE_NOTES = "$REPO_DIR/aquamacs/doc/latex/changes.pdf";
 
-$VERS=&sys("perl -ne 'print \$1 if (/defvar *aquamacs-version *\"(.*?)\"/);print \$1 if (/defvar *aquamacs-minor-version *\"(.*?)\"/);' < \"$BINARY/Contents/Resources/site-lisp/site-start.el\"");
+$VERS=&sys("perl -ne 'print \$1 if (/defvar *aquamacs-version *\"(.*?)\"/);print \$1 if (/defvar *aquamacs-minor-version *\"(.*?)\"/);' < \"$BINARY/Contents/Resources/lisp/aquamacs/site-start.el\"");
 
 $target = "\"/Users/dr/Desktop/Aquamacs-Emacs-$VERS.dmg\"";
 
