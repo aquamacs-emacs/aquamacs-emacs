@@ -1582,27 +1582,23 @@ aspell is used along with Emacs).")
 
 (defun ispell-set-spellchecker-params ()
   "Initialize some spellchecker parameters when changed or first used."
-  (let (ispell-ns-dictionary-alist)
-    (unless (eq ispell-last-program-name ispell-program-name)
-      (setq ispell-last-program-name ispell-program-name)
-      (ispell-kill-ispell t)
-      (if (string= ispell-program-name "NSSpellChecker")
-	  (setq ispell-ns-dictionary-alist (ns-spellchecker-list-dictionaries)
-		;; run ispell-check-version to initialize some variables
-		ispell-library-directory (ispell-check-version))
-	(if (and (condition-case ()
-		     (progn
-		       (setq ispell-library-directory (ispell-check-version))
-		       t)
-		   (error nil))
-		 ispell-really-aspell
-		 ispell-encoding8-command
-		 ;; XEmacs does not like [:alpha:] regexps.
-		 (string-match "^[[:alpha:]]+$" "abcde"))
-	    (progn
-	      (ispell-update-cocoaspell-settings)
-	      (unless ispell-aspell-dictionary-alist
-		(ispell-find-aspell-dictionaries)))))
+  (unless (eq ispell-last-program-name ispell-program-name)
+    (setq ispell-last-program-name ispell-program-name)
+    (ispell-kill-ispell t)
+    (if (and (condition-case ()
+		 (progn
+		   ;; ispell-check-version updates ispell-really-aspell
+		   (setq ispell-library-directory (ispell-check-version))
+		   t)
+	       (error nil))
+	     ispell-really-aspell
+	     ispell-encoding8-command
+	     ;; XEmacs does not like [:alpha:] regexps.
+	     (string-match "^[[:alpha:]]+$" "abcde"))
+	(progn
+	  (ispell-update-cocoaspell-settings)
+	  (unless ispell-aspell-dictionary-alist
+	    (ispell-find-aspell-dictionaries))))
 
     ;; Substitute ispell-dictionary-alist with the list of dictionaries
     ;; corresponding to the given spellchecker. If a recent aspell, use
@@ -1613,7 +1609,7 @@ aspell is used along with Emacs).")
 		       ispell-encoding8-command)
 		  ispell-aspell-dictionary-alist)
 		 ((string= ispell-program-name "NSSpellChecker")
-		  ispell-ns-dictionary-alist)
+		  (ns-spellchecker-list-dictionaries))
 		 (t nil)))
 	  ispell-base-dicts-override-alist ; Override only base-dicts-alist
 	  all-dicts-alist)
@@ -1623,16 +1619,16 @@ aspell is used along with Emacs).")
       ;; Add dicts to ``ispell-dictionary-alist'' unless already present.
       (dolist (dict (append found-dicts-alist
 			    ispell-base-dicts-override-alist))
-			    ;; ispell-dictionary-base-alist))
+	;; ispell-dictionary-base-alist))
 	(unless (assoc (car dict) all-dicts-alist)
 	  (add-to-list 'all-dicts-alist dict)))
       (setq ispell-dictionary-alist all-dicts-alist))
     (setq ispell-dictionary-internal
 	  (if (string= ispell-program-name "NSSpellChecker")
-	  ;; get working value of ispell-dictionary from spellingPanel
+	      ;; get working value of ispell-dictionary from spellingPanel
 	      (ns-spellchecker-current-language)
 	    ;; or set from global value
-	    ispell-dictionary)))))
+	    ispell-dictionary))))
 
 
 (defun ispell-valid-dictionary-list ()
