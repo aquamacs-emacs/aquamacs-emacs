@@ -1653,64 +1653,6 @@ both existing buffers and buffers that you subsequently create."
     (message "Flyspell %s in Text modes"
            (if enable-mode "enabled" "disabled"))))
 
-(defvar flyspell-by-mode "none"
-  "Internal setting for tracking which modes have
-flyspell automatically turned on.")
-
-(defun text-mode-flyspell ()
-  "Use Flyspell in Text mode and related modes.
-Applies to all buffers that use modes related to Text mode,
-both existing buffers and buffers that you subsequently create.
-Turns off `all-modes-flyspell' if on."
-  (interactive)
-  (let ((disable-for-others (memq 'turn-on-flyspell
-				  after-change-major-mode-hook)))
-    (if disable-for-others
-	(remove-hook 'after-change-major-mode-hook 'turn-on-flyspell))
-    (add-hook 'text-mode-hook 'turn-on-flyspell)
-    (dolist (buffer (buffer-list))
-      (with-current-buffer buffer
-	(let ((textual (or (derived-mode-p 'text-mode) text-mode-variant)))
-	  (if textual
-	      (turn-on-flyspell)
-	    (if flyspell-mode (turn-off-flyspell))))))
-    (setq flyspell-by-mode "text")
-    (message "Flyspell enabled in Text modes"))) 
-
-(defun all-modes-flyspell ()
-  "Use Flyspell in all major modes.
-Applies both to existing buffers and buffers that you subsequently
-create. Turns off `text-mode-flyspell' if on."
-  (interactive)
-  (let ((disable-for-text (memq 'turn-on-flyspell
-				text-mode-hook)))
-    (if disable-for-text
-	(remove-hook 'text-mode-hook 'turn-on-flyspell))
-    (add-hook 'after-change-major-mode-hook 'turn-on-flyspell)
-    (dolist (buffer (buffer-list))
-      (with-current-buffer buffer
-	(turn-on-flyspell))) 
-    (setq flyspell-by-mode "all")
-    (message "Flyspell enabled in all modes"))) 
-
-(defun no-modes-flyspell ()
-  "Turn off `text-mode-flyspell' or `all-modes-flyspell' if on.
-Also turns off flyspell-mode in all existing buffers."
-  (interactive)
-  (let ((disable-for-text (memq 'turn-on-flyspell
-				text-mode-hook))
-	(disable-for-others (memq 'turn-on-flyspell
-				  after-change-major-mode-hook))) 
-    (if disable-for-text
-	(remove-hook 'text-mode-hook 'turn-on-flyspell))
-    (if disable-for-others
-	(remove-hook 'after-change-major-mode-hook 'turn-on-flyspell))
-    (dolist (buffer (buffer-list))
-      (with-current-buffer buffer
-	(turn-off-flyspell))) 
-    (setq flyspell-by-mode "none")
-    (message "Flyspell disabled in all modes")))
-
 ;;;###autoload
 (defun menu-bar-text-mode-flyspell ()
   (interactive)
@@ -1753,27 +1695,7 @@ Also turns off flyspell-mode in all existing buffers."
 		    :help "Check spelling of selected buffer"))
       ;;(put 'ispell-region 'menu-enable 'mark-active)
 
-      (fset 'ispell-submenu-map (symbol-value 'ispell-submenu-map)))) 
-
-;;;###autoload
-(if ispell-menu-map-needed
-    (progn
-      (defvar flyspell-modes-submenu-map (make-sparse-keymap "Flyspell modes")) 
-      (define-key flyspell-modes-submenu-map [no-modes-flyspell]
-	'(menu-item "No Modes" no-modes-flyspell
-		    :button (:radio . (string= flyspell-by-mode "none"))
-		    :help "Turn off automatic spellchecking by mode"))
-      (define-key flyspell-modes-submenu-map [text-mode-flyspell]
-	'(menu-item "Text Modes" text-mode-flyspell
-		    :button (:radio . (string= flyspell-by-mode "text"))
-		    :help "Turn on flyspell in text modes only")) 
-      (define-key flyspell-modes-submenu-map [all-modes-flyspell]
-	'(menu-item "All Modes" all-modes-flyspell
-		    :button (:radio . (string= flyspell-by-mode "all"))
-		    :help "Turn on flyspell in all modes")) 
-
-      (fset 'flyspell-modes-submenu-map
-	    (symbol-value 'flyspell-modes-submenu-map))))
+      (fset 'ispell-submenu-map (symbol-value 'ispell-submenu-map))))
 
 ;;; define commands in menu in opposite order you want them to appear.
 ;;;###autoload
@@ -1810,16 +1732,27 @@ Also turns off flyspell-mode in all existing buffers."
       (define-key ispell-menu-map [spellcheck-menu-separator]
 	'(menu-item "--"))
 
-      (define-key ispell-menu-map [flyspell-modes-submenu]
-	`(menu-item "Check Spelling While Typing in Modes"
-		    ,flyspell-modes-submenu-map))
-
+      (define-key ispell-menu-map [flyspell-text-modes]
+      '(menu-item "Check Spelling While Typing (in all text modes)"
+                  menu-bar-text-mode-flyspell
+                  :help "Sets `Check Spelling While Typing' for all buffers using text-derived modes"
+                  ;; available only in text mode
+                  :enable (or (derived-mode-p 'text-mode) text-mode-variant)
+                  :button (:toggle . (if (listp text-mode-hook)
+                                         (member 'turn-on-flyspell text-mode-hook)
+                                       (eq 'turn-on-flyspell text-mode-hook)))))
       (define-key ispell-menu-map [flyspell-mode]
 	'(menu-item "Check Spelling While Typing (in this buffer)"
 		    flyspell-mode
-		    :help "Check spelling while you edit the text"
-		    ;; allow toggling regardless of mode-related flyspell settings
-		    :button (:toggle . (bound-and-true-p flyspell-mode))))
+		    :help "Check spelling while you edit the text"                ;; enabled if not in a text mode,
+                  ;; OR if in a text mode and flyspell isn't on for all
+                  ;; text-mode buffers
+                  :enable (if (or (derived-mode-p 'text-mode) text-mode-variant)
+                              (not (if (listp text-mode-hook)
+                                          (member 'turn-on-flyspell text-mode-hook)
+                                        (eq 'turn-on-flyspell text-mode-hook)))
+                            t)
+                  :button (:toggle . (bound-and-true-p flyspell-mode))))
       (define-key ispell-menu-map [ispell-complete-word]
 	'(menu-item "Complete Word" ispell-complete-word 
 		    :visible (not (string= ispell-program-name "NSSpellChecker"))
