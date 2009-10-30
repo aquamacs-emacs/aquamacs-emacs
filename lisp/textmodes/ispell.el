@@ -1725,7 +1725,30 @@ both existing buffers and buffers that you subsequently create."
 		    :help "Check spelling of selected buffer"))
       ;;(put 'ispell-region 'menu-enable 'mark-active)
 
-      (fset 'ispell-submenu-map (symbol-value 'ispell-submenu-map))))
+      (fset 'ispell-submenu-map (symbol-value 'ispell-submenu-map)))) 
+
+;;;###autoload
+(if ispell-menu-map-needed
+    (progn
+      (defvar flyspell-modes-submenu-map (make-sparse-keymap "Flyspell modes")) 
+      (define-key flyspell-modes-submenu-map [flyspell-no-modes]
+	'(menu-item "No Modes" flyspell-no-modes
+		    :button (:radio . (and (not (memq 'turn-on-flyspell
+						      text-mode-hook))
+					   (not global-flyspell-mode)))
+		    :help "Turn off automatic spellchecking by mode"))
+      (define-key flyspell-modes-submenu-map [flyspell-text-modes]
+	'(menu-item "Text Modes" flyspell-text-modes
+		    :button (:radio . (and (memq 'turn-on-flyspell text-mode-hook)
+					   (not global-flyspell-mode)))
+		    :help "Turn on flyspell in text modes only")) 
+      (define-key flyspell-modes-submenu-map [flyspell-all-modes]
+	'(menu-item "All Modes" flyspell-all-modes
+		    :button (:radio . global-flyspell-mode)
+		    :help "Turn on flyspell in all modes"))
+
+      (fset 'flyspell-modes-submenu-map
+	    (symbol-value 'flyspell-modes-submenu-map))))
 
 ;;; define commands in menu in opposite order you want them to appear.
 ;;;###autoload
@@ -1762,27 +1785,16 @@ both existing buffers and buffers that you subsequently create."
       (define-key ispell-menu-map [spellcheck-menu-separator]
 	'(menu-item "--"))
 
-      (define-key ispell-menu-map [flyspell-text-modes]
-      '(menu-item "Check Spelling While Typing (in all text modes)"
-                  menu-bar-text-mode-flyspell
-                  :help "Sets `Check Spelling While Typing' for all buffers using text-derived modes"
-                  ;; available only in text mode
-                  :enable (or (derived-mode-p 'text-mode) text-mode-variant)
-                  :button (:toggle . (if (listp text-mode-hook)
-                                         (member 'turn-on-flyspell text-mode-hook)
-                                       (eq 'turn-on-flyspell text-mode-hook)))))
+      (define-key ispell-menu-map [flyspell-modes-submenu]
+	`(menu-item "Check Spelling While Typing in Modes"
+		    ,flyspell-modes-submenu-map))
+
       (define-key ispell-menu-map [flyspell-mode]
 	'(menu-item "Check Spelling While Typing (in this buffer)"
 		    flyspell-mode
-		    :help "Check spelling while you edit the text"                ;; enabled if not in a text mode,
-                  ;; OR if in a text mode and flyspell isn't on for all
-                  ;; text-mode buffers
-                  :enable (if (or (derived-mode-p 'text-mode) text-mode-variant)
-                              (not (if (listp text-mode-hook)
-                                          (member 'turn-on-flyspell text-mode-hook)
-                                        (eq 'turn-on-flyspell text-mode-hook)))
-                            t)
-                  :button (:toggle . (bound-and-true-p flyspell-mode))))
+		    :help "Check spelling while you edit the text"
+		    ;; allow toggling regardless of mode-related flyspell settings
+		    :button (:toggle . (bound-and-true-p flyspell-mode))))
       (define-key ispell-menu-map [ispell-complete-word]
 	'(menu-item "Complete Word" ispell-complete-word 
 		    :visible (not (string= ispell-program-name "NSSpellChecker"))

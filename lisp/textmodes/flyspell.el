@@ -596,7 +596,95 @@ sentence boundaries are too far between."
 	(setq chunk-beg chunk-end))
       ;; when done, report completion
       (if flyspell-issue-message-flag (message "Spell Checking completed."))
-      )))
+      ))) 
+
+;; **********************************************************************
+;; global-flyspell-mode and automatic text-mode flyspelling
+
+(defun maybe-turn-on-flyspell ()
+  "Run `turn-on-flyspell' for current buffer, unless one of
+`global-flyspell-inhibit-functions' returns t"
+  (unless (run-hook-with-args-until-success
+	   'global-flyspell-inhibit-functions)
+    (turn-on-flyspell)))
+
+;; turn on flyspell-mode for all buffers, with exception of new fundamental-mode
+;; buffers and those returning t for any function listed in
+;; `global-flyspell-inhibit-functions'
+(define-globalized-minor-mode global-flyspell-mode flyspell-mode
+  maybe-turn-on-flyspell)
+;; (global-flyspell-mode 1)
+;; (global-flyspell-mode -1)
+
+(defcustom global-flyspell-inhibit-functions
+  '(global-flyspell-default-inhibit-function)
+  "List of functions to be called before global-flyspell-mode activates
+flyspell in a buffer.  Those functions are called one by one, with no
+arguments, until one of them returns a non-nil value, and thus, prevents
+activation of flyspell-mode (but only via global-flyspell-mode)."
+  :group 'flyspell
+  :type 'hook)
+
+(defun global-flyspell-default-inhibit-function ()
+  "Return t if current buffer is read-only, or has a name
+starting with a space and is not visiting a file.  This is used
+to indicate that the buffer should not have flyspell-mode
+turned on by `global-flyspell-mode'."
+  (or buffer-read-only
+      (and (char-equal ?\  (aref (buffer-name) 0))
+	   (not (buffer-file-name)))))
+
+;;;###autoload
+(defun flyspell-text-modes ()
+  "Use Flyspell in Text mode and related modes.
+Applies to all buffers that use modes related to Text mode,
+both existing buffers and buffers that you subsequently create.
+Turns off `flyspell-all-modes' if on."
+  (interactive)
+  (if global-flyspell-mode
+      (global-flyspell-mode -1)
+    )
+  (add-hook 'text-mode-hook 'turn-on-flyspell)
+  (customize-mark-as-set 'text-mode-hook)
+  (dolist (buffer (buffer-list))
+    (with-current-buffer buffer
+      (let ((textual (or (derived-mode-p 'text-mode) text-mode-variant)))
+	(if textual
+	    (turn-on-flyspell)
+	  (if flyspell-mode (turn-off-flyspell))))))
+  (setq flyspell-by-mode "text")
+  (message "Flyspell activated in Text modes"))
+
+;;;###autoload
+(defun flyspell-all-modes ()
+  "Use Flyspell in all major modes.
+Applies both to existing buffers and buffers that you subsequently
+create. Turns off `flyspell-text-modes' if on."
+  (interactive)
+  (let ((disable-for-text (memq 'turn-on-flyspell
+				  text-mode-hook)))
+      (if disable-for-text
+	  (progn
+	    (remove-hook 'text-mode-hook 'turn-on-flyspell)
+	    (customize-mark-as-set 'text-mode-hook)))
+      (global-flyspell-mode 1)
+      (setq flyspell-by-mode "all")
+      (message "Flyspell activated in all modes")))
+
+;;;###autoload
+(defun flyspell-no-modes ()
+  "Turn off `flyspell-text-modes' or `flyspell-all-modes' if on.
+Also turns off flyspell-mode in all existing buffers."
+  (interactive) 
+  (let ((disable-for-text (memq 'turn-on-flyspell
+				text-mode-hook))) 
+    (if disable-for-text
+	(remove-hook 'text-mode-hook 'turn-on-flyspell))
+    ;; this turns of flyspell everywhere, whether or not the global mode was
+    ;; previously on:
+    (global-flyspell-mode -1)
+    (setq flyspell-by-mode "none")
+    (message "Flyspell deactivated in all modes")))
 
 ;;*---------------------------------------------------------------------*/
 ;;*    Mode specific options                                            */
