@@ -368,7 +368,10 @@ un-Mac-like way when you select text and copy&paste it.")))
        (global-hl-line-mode 1))
 
    (if global-show-newlines-mode
-       (global-show-newlines-mode 1))
+       (global-show-newlines-mode 1)) 
+
+   (if global-flyspell-mode
+       (global-flyspell-mode 1))
 
    (if (eq tabbar-mode 'default)
        (customize-set-variable 'tabbar-mode t))
@@ -1407,6 +1410,7 @@ listed here."
 	      size-indication-mode
 	      global-hl-line-mode
 	      global-show-newlines-mode
+	      global-flyspell-mode
 	      show-paren-mode
 	      transient-mark-mode 
 	      global-font-lock-mode
