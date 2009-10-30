@@ -1735,16 +1735,18 @@ both existing buffers and buffers that you subsequently create."
 	'(menu-item "No Modes" flyspell-no-modes
 		    :button (:radio . (and (not (memq 'turn-on-flyspell
 						      text-mode-hook))
-					   (not global-flyspell-mode)))
+					   (not (bound-and-true-p 
+						 global-flyspell-mode))))
 		    :help "Turn off automatic spellchecking by mode"))
       (define-key flyspell-modes-submenu-map [flyspell-text-modes]
 	'(menu-item "Text Modes" flyspell-text-modes
 		    :button (:radio . (and (memq 'turn-on-flyspell text-mode-hook)
-					   (not global-flyspell-mode)))
+					   (not (bound-and-true-p 
+						 global-flyspell-mode))))
 		    :help "Turn on flyspell in text modes only")) 
       (define-key flyspell-modes-submenu-map [flyspell-all-modes]
 	'(menu-item "All Modes" flyspell-all-modes
-		    :button (:radio . global-flyspell-mode)
+		    :button (:radio . (bound-and-true-p global-flyspell-mode))
 		    :help "Turn on flyspell in all modes"))
 
       (fset 'flyspell-modes-submenu-map

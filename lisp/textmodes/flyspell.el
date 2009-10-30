@@ -611,6 +611,7 @@ sentence boundaries are too far between."
 ;; turn on flyspell-mode for all buffers, with exception of new fundamental-mode
 ;; buffers and those returning t for any function listed in
 ;; `global-flyspell-inhibit-functions'
+;;;###autoload
 (define-globalized-minor-mode global-flyspell-mode flyspell-mode
   maybe-turn-on-flyspell)
 
