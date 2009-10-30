@@ -613,8 +613,6 @@ sentence boundaries are too far between."
 ;; `global-flyspell-inhibit-functions'
 (define-globalized-minor-mode global-flyspell-mode flyspell-mode
   maybe-turn-on-flyspell)
-;; (global-flyspell-mode 1)
-;; (global-flyspell-mode -1)
 
 (defcustom global-flyspell-inhibit-functions
   '(global-flyspell-default-inhibit-function)
@@ -642,8 +640,7 @@ both existing buffers and buffers that you subsequently create.
 Turns off `flyspell-all-modes' if on."
   (interactive)
   (if global-flyspell-mode
-      (global-flyspell-mode -1)
-    )
+      (global-flyspell-mode -1))
   (add-hook 'text-mode-hook 'turn-on-flyspell)
   (customize-mark-as-set 'text-mode-hook)
   (dolist (buffer (buffer-list))
@@ -662,14 +659,14 @@ Applies both to existing buffers and buffers that you subsequently
 create. Turns off `flyspell-text-modes' if on."
   (interactive)
   (let ((disable-for-text (memq 'turn-on-flyspell
-				  text-mode-hook)))
-      (if disable-for-text
-	  (progn
-	    (remove-hook 'text-mode-hook 'turn-on-flyspell)
-	    (customize-mark-as-set 'text-mode-hook)))
-      (global-flyspell-mode 1)
-      (setq flyspell-by-mode "all")
-      (message "Flyspell activated in all modes")))
+				text-mode-hook)))
+    (if disable-for-text
+	(progn
+	  (remove-hook 'text-mode-hook 'turn-on-flyspell)
+	  (customize-mark-as-set 'text-mode-hook)))
+    (global-flyspell-mode 1)
+    (setq flyspell-by-mode "all")
+    (message "Flyspell activated in all modes")))
 
 ;;;###autoload
 (defun flyspell-no-modes ()
@@ -679,8 +676,10 @@ Also turns off flyspell-mode in all existing buffers."
   (let ((disable-for-text (memq 'turn-on-flyspell
 				text-mode-hook))) 
     (if disable-for-text
-	(remove-hook 'text-mode-hook 'turn-on-flyspell))
-    ;; this turns of flyspell everywhere, whether or not the global mode was
+	(progn
+	  (remove-hook 'text-mode-hook 'turn-on-flyspell)
+	  (customize-mark-as-set 'text-mode-hook)))
+    ;; this turns off flyspell everywhere, whether or not the global mode was
     ;; previously on:
     (global-flyspell-mode -1)
     (setq flyspell-by-mode "none")
