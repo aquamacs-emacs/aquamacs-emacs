@@ -148,12 +148,12 @@ Remove self from `post-command-hook' if it is empty."
 	(intern (substring sym-name (match-end 0)))
       name)))
 
-(defun semantic-alias-obsolete (oldfnalias newfn)
+(defun semantic-alias-obsolete (oldfnalias newfn when)
   "Make OLDFNALIAS an alias for NEWFN.
 Mark OLDFNALIAS as obsolete, such that the byte compiler
 will throw a warning when it encounters this symbol."
   (defalias oldfnalias newfn)
-  (make-obsolete oldfnalias newfn)
+  (make-obsolete oldfnalias newfn when)
   (when (and (function-overload-p newfn)
              (not (overload-obsoleted-by newfn))
              ;; Only throw this warning when byte compiling things.
@@ -161,7 +161,7 @@ will throw a warning when it encounters this symbol."
              byte-compile-current-file
 	     (not (string-match "cedet" byte-compile-current-file))
 	     )
-    (make-obsolete-overload oldfnalias newfn)
+    (make-obsolete-overload oldfnalias newfn when)
     (semantic-compile-warn
      "%s: `%s' obsoletes overload `%s'"
      byte-compile-current-file
@@ -169,11 +169,11 @@ will throw a warning when it encounters this symbol."
      (semantic-overload-symbol-from-function oldfnalias))
     ))
 
-(defun semantic-varalias-obsolete (oldvaralias newvar)
+(defun semantic-varalias-obsolete (oldvaralias newvar when)
   "Make OLDVARALIAS an alias for variable NEWVAR.
 Mark OLDVARALIAS as obsolete, such that the byte compiler
 will throw a warning when it encounters this symbol."
-  (make-obsolete-variable oldvaralias newvar)
+  (make-obsolete-variable oldvaralias newvar when)
   (condition-case nil
       (defvaralias oldvaralias newvar)
     (error
@@ -219,7 +219,7 @@ FUNCTION does not have arguments.  When FUNCTION is entered
 (defalias 'semantic-map-mode-buffers 'mode-local-map-mode-buffers)
 
 (semantic-alias-obsolete 'define-mode-overload-implementation
-                         'define-mode-local-override)
+                         'define-mode-local-override "23.2")
 
 (defun semantic-install-function-overrides (overrides &optional transient mode)
   "Install the function OVERRIDES in the specified environment.

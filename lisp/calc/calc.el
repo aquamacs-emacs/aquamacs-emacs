@@ -1427,8 +1427,7 @@ commands given here will actually operate on the *Calculator* stack."
                       (set-window-buffer w (current-buffer))
                       (select-window w))
                   (pop-to-buffer (current-buffer)))))))
-	(save-excursion
-	  (set-buffer (calc-trail-buffer))
+	(with-current-buffer (calc-trail-buffer)
 	  (and calc-display-trail
 	       (= (window-width) (frame-width))
 	       (calc-trail-display 1 t)))
@@ -1979,8 +1978,7 @@ See calc-keypad for details."
 	   (goto-char save-point))
 	 (if save-mark (set-mark save-mark))))
   (and calc-embedded-info (not (eq major-mode 'calc-mode))
-       (save-excursion
-	 (set-buffer (aref calc-embedded-info 1))
+       (with-current-buffer (aref calc-embedded-info 1)
 	 (calc-refresh align)))
   (setq calc-refresh-count (1+ calc-refresh-count)))
 
@@ -2005,8 +2003,7 @@ See calc-keypad for details."
 	       (calc-trail-mode buf)))))
   (or (and calc-trail-pointer
 	   (eq (marker-buffer calc-trail-pointer) calc-trail-buffer))
-      (save-excursion
-	(set-buffer calc-trail-buffer)
+      (with-current-buffer calc-trail-buffer
 	(goto-char (point-min))
 	(forward-line 1)
 	(setq calc-trail-pointer (point-marker))))
@@ -2025,8 +2022,7 @@ See calc-keypad for details."
 			 (math-showing-full-precision
 			  (math-format-flat-expr val 0)))
 		     "")))
-	(save-excursion
-	  (set-buffer buf)
+	(with-current-buffer buf
 	  (let ((aligned (calc-check-trail-aligned))
 		(buffer-read-only nil))
 	    (goto-char (point-max))
@@ -2262,8 +2258,7 @@ See calc-keypad for details."
   (or (boundp 'calc-buffer)
       (use-local-map minibuffer-local-map))
   (let ((str (minibuffer-contents)))
-    (setq calc-digit-value (save-excursion
-			     (set-buffer calc-buffer)
+    (setq calc-digit-value (with-current-buffer calc-buffer
 			     (math-read-number str))))
   (if (and (null calc-digit-value) (> (calc-minibuffer-size) 0))
       (progn
@@ -3526,88 +3521,90 @@ largest Emacs integer.")
 (defun math-read-number (s &optional decimal)
   "Convert the string S into a Calc number."
   (math-normalize
-   (cond
-
-    ;; Integers (most common case)
-    ((string-match "\\` *\\([0-9]+\\) *\\'" s)
-     (let ((digs (math-match-substring s 1)))
-       (if (and (memq calc-language calc-lang-c-type-hex)
-		(> (length digs) 1)
-		(eq (aref digs 0) ?0)
-                (null decimal))
-	   (math-read-number (concat "8#" digs))
-	 (if (<= (length digs) (* 2 math-bignum-digit-length))
-	     (string-to-number digs)
-	   (cons 'bigpos (math-read-bignum digs))))))
-
-    ;; Clean up the string if necessary
-    ((string-match "\\`\\(.*\\)[ \t\n]+\\([^\001]*\\)\\'" s)
-     (math-read-number (concat (math-match-substring s 1)
-			       (math-match-substring s 2))))
-
-    ;; Plus and minus signs
-    ((string-match "^[-_+]\\(.*\\)$" s)
-     (let ((val (math-read-number (math-match-substring s 1))))
-       (and val (if (eq (aref s 0) ?+) val (math-neg val)))))
-
-    ;; Forms that require extensions module
-    ((string-match "[^-+0-9eE.]" s)
-     (require 'calc-ext)
-     (math-read-number-fancy s))
-
-    ;; Decimal point
-    ((string-match "^\\([0-9]*\\)\\.\\([0-9]*\\)$" s)
-     (let ((int (math-match-substring s 1))
-	   (frac (math-match-substring s 2)))
-       (let ((ilen (length int))
-	     (flen (length frac)))
-	 (let ((int (if (> ilen 0) (math-read-number int t) 0))
-	       (frac (if (> flen 0) (math-read-number frac t) 0)))
-	   (and int frac (or (> ilen 0) (> flen 0))
-		(list 'float
-		      (math-add (math-scale-int int flen) frac)
-		      (- flen)))))))
-
-    ;; "e" notation
-    ((string-match "^\\(.*\\)[eE]\\([-+]?[0-9]+\\)$" s)
-     (let ((mant (math-match-substring s 1))
-	   (exp (math-match-substring s 2)))
-       (let ((mant (if (> (length mant) 0) (math-read-number mant t) 1))
-	     (exp (if (<= (length exp) (if (memq (aref exp 0) '(?+ ?-)) 8 7))
-		      (string-to-number exp))))
-	 (and mant exp (Math-realp mant) (> exp -4000000) (< exp 4000000)
-	      (let ((mant (math-float mant)))
-		(list 'float (nth 1 mant) (+ (nth 2 mant) exp)))))))
-
-    ;; Syntax error!
-    (t nil))))
+   (save-match-data
+     (cond
+      
+      ;; Integers (most common case)
+      ((string-match "\\` *\\([0-9]+\\) *\\'" s)
+       (let ((digs (math-match-substring s 1)))
+         (if (and (memq calc-language calc-lang-c-type-hex)
+                  (> (length digs) 1)
+                  (eq (aref digs 0) ?0)
+                  (null decimal))
+             (math-read-number (concat "8#" digs))
+           (if (<= (length digs) (* 2 math-bignum-digit-length))
+               (string-to-number digs)
+             (cons 'bigpos (math-read-bignum digs))))))
+      
+      ;; Clean up the string if necessary
+      ((string-match "\\`\\(.*\\)[ \t\n]+\\([^\001]*\\)\\'" s)
+       (math-read-number (concat (math-match-substring s 1)
+                                 (math-match-substring s 2))))
+      
+      ;; Plus and minus signs
+      ((string-match "^[-_+]\\(.*\\)$" s)
+       (let ((val (math-read-number (math-match-substring s 1))))
+         (and val (if (eq (aref s 0) ?+) val (math-neg val)))))
+      
+      ;; Forms that require extensions module
+      ((string-match "[^-+0-9eE.]" s)
+       (require 'calc-ext)
+       (math-read-number-fancy s))
+      
+      ;; Decimal point
+      ((string-match "^\\([0-9]*\\)\\.\\([0-9]*\\)$" s)
+       (let ((int (math-match-substring s 1))
+             (frac (math-match-substring s 2)))
+         (let ((ilen (length int))
+               (flen (length frac)))
+           (let ((int (if (> ilen 0) (math-read-number int t) 0))
+                 (frac (if (> flen 0) (math-read-number frac t) 0)))
+             (and int frac (or (> ilen 0) (> flen 0))
+                  (list 'float
+                        (math-add (math-scale-int int flen) frac)
+                        (- flen)))))))
+      
+      ;; "e" notation
+      ((string-match "^\\(.*\\)[eE]\\([-+]?[0-9]+\\)$" s)
+       (let ((mant (math-match-substring s 1))
+             (exp (math-match-substring s 2)))
+         (let ((mant (if (> (length mant) 0) (math-read-number mant t) 1))
+               (exp (if (<= (length exp) (if (memq (aref exp 0) '(?+ ?-)) 8 7))
+                        (string-to-number exp))))
+           (and mant exp (Math-realp mant) (> exp -4000000) (< exp 4000000)
+                (let ((mant (math-float mant)))
+                  (list 'float (nth 1 mant) (+ (nth 2 mant) exp)))))))
+      
+      ;; Syntax error!
+      (t nil)))))
 
 ;;; Parse a very simple number, keeping all digits.
 (defun math-read-number-simple (s)
   "Convert the string S into a Calc number.
 S is assumed to be a simple number (integer or float without an exponent)
 and all digits are kept, regardless of Calc's current precision."
-   (cond
-    ;; Integer
-    ((string-match "^[0-9]+$" s)
-     (if (string-match "^\\(0+\\)" s)
-         (setq s (substring s (match-end 0))))
-     (if (<= (length s) (* 2 math-bignum-digit-length))
-         (string-to-number s)
-       (cons 'bigpos (math-read-bignum s))))
-    ;; Minus sign
-    ((string-match "^-[0-9]+$" s)
-     (if (<= (length s) (1+ (* 2 math-bignum-digit-length)))
-         (string-to-number s)
-       (cons 'bigneg (math-read-bignum (substring s 1)))))
-    ;; Decimal point
-    ((string-match "^\\(-?[0-9]*\\)\\.\\([0-9]*\\)$" s)
-     (let ((int (math-match-substring s 1))
-	   (frac (math-match-substring s 2)))
-       (list 'float (math-read-number-simple (concat int frac))
-             (- (length frac)))))
-    ;; Syntax error!
-    (t nil)))
+  (save-match-data
+    (cond
+     ;; Integer
+     ((string-match "^[0-9]+$" s)
+      (if (string-match "^\\(0+\\)" s)
+          (setq s (substring s (match-end 0))))
+      (if (<= (length s) (* 2 math-bignum-digit-length))
+          (string-to-number s)
+        (cons 'bigpos (math-read-bignum s))))
+     ;; Minus sign
+     ((string-match "^-[0-9]+$" s)
+      (if (<= (length s) (1+ (* 2 math-bignum-digit-length)))
+          (string-to-number s)
+        (cons 'bigneg (math-read-bignum (substring s 1)))))
+     ;; Decimal point
+     ((string-match "^\\(-?[0-9]*\\)\\.\\([0-9]*\\)$" s)
+      (let ((int (math-match-substring s 1))
+            (frac (math-match-substring s 2)))
+        (list 'float (math-read-number-simple (concat int frac))
+              (- (length frac)))))
+     ;; Syntax error!
+     (t nil))))
 
 (defun math-match-substring (s n)
   (if (match-beginning n)

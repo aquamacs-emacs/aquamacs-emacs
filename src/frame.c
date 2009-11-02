@@ -892,8 +892,8 @@ The selection of FRAME lasts until the next time the user does
 something to select a different frame, or until the next time
 this function is called.  If you are using a window system, the
 previously selected frame may be restored as the selected frame
-when returning to the command loop, because it still may have 
-the window system's input focus.  On a text-only terminal, the 
+when returning to the command loop, because it still may have
+the window system's input focus.  On a text-only terminal, the
 next redisplay will display FRAME.
 
 This function returns FRAME, or nil if FRAME has been deleted.  */)
@@ -1880,10 +1880,17 @@ make_frame_visible_1 (window)
 
 DEFUN ("make-frame-invisible", Fmake_frame_invisible, Smake_frame_invisible,
        0, 2, "",
-       doc: /* Make the frame FRAME invisible (assuming it is an X window).
+       doc: /* Make the frame FRAME invisible.
 If omitted, FRAME defaults to the currently selected frame.
+On graphical displays, invisible frames are not updated and are
+usually not displayed at all, even in a window system's \"taskbar\".
+
 Normally you may not make FRAME invisible if all other frames are invisible,
-but if the second optional argument FORCE is non-nil, you may do so.  */)
+but if the second optional argument FORCE is non-nil, you may do so.
+
+This function has no effect on text-only terminal frames.  Such frames
+are always considered visible, whether or not they are currently being
+displayed in the terminal.  */)
   (frame, force)
      Lisp_Object frame, force;
 {
@@ -1963,14 +1970,15 @@ If omitted, FRAME defaults to the currently selected frame.  */)
 
 DEFUN ("frame-visible-p", Fframe_visible_p, Sframe_visible_p,
        1, 1, 0,
-       doc: /* Return t if FRAME is now \"visible\" (actually in use for display).
-A frame that is not \"visible\" is not updated and, if it works through
-a window system, it may not show at all.
-Return the symbol `icon' if frame is visible only as an icon.
+       doc: /* Return t if FRAME is \"visible\" (actually in use for display).
+Return the symbol `icon' if FRAME is iconified or \"minimized\".
+Return nil if FRAME was made invisible, via `make-frame-invisible'.
+On graphical displays, invisible frames are not updated and are
+usually not displayed at all, even in a window system's \"taskbar\".
 
-On a text-only terminal, all frames are considered visible, whether
-they are currently being displayed or not, and this function returns t
-for all frames.  */)
+If FRAME is a text-only terminal frame, this always returns t.
+Such frames are always considered visible, whether or not they are
+currently being displayed on the terminal.  */)
      (frame)
      Lisp_Object frame;
 {
@@ -3398,7 +3406,7 @@ x_set_font (f, arg, oldval)
     {
       font_object = arg;
       /* This is to store the XLFD font name in the frame parameter for
-	 backward compatiblity.  We should store the font-object
+	 backward compatibility.  We should store the font-object
 	 itself in the future.  */
       arg = AREF (font_object, FONT_NAME_INDEX);
       fontset = FRAME_FONTSET (f);
@@ -3419,7 +3427,7 @@ x_set_font (f, arg, oldval)
   if (! NILP (Fequal (font_object, oldval)))
     return;
 
-  
+
   x_new_font (f, font_object, fontset);
   store_frame_param (f, Qfont, arg);
   /* Recalculate toolbar height.  */

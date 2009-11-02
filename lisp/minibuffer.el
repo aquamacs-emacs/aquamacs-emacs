@@ -40,9 +40,17 @@
 ;;   corresponding to the displayed completions because we only
 ;;   provide the start info but not the end info in
 ;;   completion-base-position.
+;; - quoting is problematic.  E.g. the double-dollar quoting used in
+;;   substitie-in-file-name (and hence read-file-name-internal) bumps
+;;   into various bugs:
 ;; - choose-completion doesn't know how to quote the text it inserts.
 ;;   E.g. it fails to double the dollars in file-name completion, or
 ;;   to backslash-escape spaces and other chars in comint completion.
+;;   - when completing ~/tmp/fo$$o, the highligting in *Completions*
+;;     is off by one position.
+;;   - all code like PCM which relies on all-completions to match
+;;     its argument gets confused because all-completions returns unquoted
+;;     texts (as desired for *Completions* output).
 ;; - C-x C-f ~/*/sr ? should not list "~/./src".
 ;; - minibuffer-force-complete completes ~/src/emacs/t<!>/lisp/minibuffer.el
 ;;   to ~/src/emacs/trunk/ and throws away lisp/minibuffer.el.
@@ -72,8 +80,6 @@
 ;; - add support for ** to pcm.
 ;; - Add vc-file-name-completion-table to read-file-name-internal.
 ;; - A feature like completing-help.el.
-;; - make lisp/complete.el obsolete.
-;; - Make the `hide-spaces' arg of all-completions obsolete?
 
 ;;; Code:
 
@@ -1070,11 +1076,25 @@ variables.")
           "$\\([[:alnum:]_]*\\|{\\([^}]*\\)\\)\\'"))
 
 (defun completion--embedded-envvar-table (string pred action)
+  "Completion table for envvars embedded in a string.
+The envvar syntax (and escaping) rules followed by this table are the
+same as `substitute-in-file-name'."
+  ;; We ignore `pred', because the predicates passed to us via
+  ;; read-file-name-internal are not 100% correct and fail here:
+  ;; e.g. we get predicates like file-directory-p there, whereas the filename
+  ;; completed needs to be passed through substitute-in-file-name before it
+  ;; can be passed to file-directory-p.
   (when (string-match completion--embedded-envvar-re string)
     (let* ((beg (or (match-beginning 2) (match-beginning 1)))
            (table (completion--make-envvar-table))
            (prefix (substring string 0 beg)))
-      (if (eq (car-safe action) 'boundaries)
+      (cond
+       ((eq action 'lambda)
+        ;; This table is expected to be used in conjunction with some
+        ;; other table that provides the "main" completion.  Let the
+        ;; other table handle the test-completion case.
+        nil)
+       ((eq (car-safe action) 'boundaries)
           ;; Only return boundaries if there's something to complete,
           ;; since otherwise when we're used in
           ;; completion-table-in-turn, we could return boundaries and
@@ -1082,14 +1102,15 @@ variables.")
           ;; FIXME: Maybe it should rather be fixed in
           ;; completion-table-in-turn instead, but it's difficult to
           ;; do it efficiently there.
-          (when (try-completion prefix table pred)
+        (when (try-completion (substring string beg) table nil)
             ;; Compute the boundaries of the subfield to which this
             ;; completion applies.
             (let ((suffix (cdr action)))
               (list* 'boundaries
                      (or (match-beginning 2) (match-beginning 1))
                      (when (string-match "[^[:alnum:]_]" suffix)
-                       (match-beginning 0)))))
+                     (match-beginning 0))))))
+       (t
         (if (eq (aref string (1- beg)) ?{)
             (setq table (apply-partially 'completion-table-with-terminator
                                          "}" table)))
@@ -1097,7 +1118,7 @@ variables.")
         ;; envvar completion to be case-sensitive.
         (let ((completion-ignore-case nil))
           (completion-table-with-context
-           prefix table (substring string beg) pred action))))))
+           prefix table (substring string beg) nil action)))))))
 
 (defun completion-file-name-table (string pred action)
   "Completion table for file names."
@@ -1273,9 +1294,10 @@ DIR should be an absolute directory name.  It defaults to the value of
 
 If this command was invoked with the mouse, use a graphical file
 dialog if `use-dialog-box' is non-nil, and the window system or X
-toolkit in use provides a file dialog box.  For graphical file
-dialogs, any the special values of MUSTMATCH; `confirm' and
-`confirm-after-completion' are treated as equivalent to nil.
+toolkit in use provides a file dialog box, and DIR is not a
+remote file.  For graphical file dialogs, any the special values
+of MUSTMATCH; `confirm' and `confirm-after-completion' are
+treated as equivalent to nil.
 
 See also `read-file-name-completion-ignore-case'
 and `read-file-name-function'."
@@ -1306,7 +1328,10 @@ and `read-file-name-function'."
             (add-to-history nil))
 
         (let* ((val
-                (if (not (next-read-file-uses-dialog-p))
+                (if (or (not (next-read-file-uses-dialog-p))
+			;; Graphical file dialogs can't handle remote
+			;; files (Bug#99).
+			(file-remote-p dir))
                     ;; We used to pass `dir' to `read-file-name-internal' by
                     ;; abusing the `predicate' argument.  It's better to
                     ;; just use `default-directory', but in order to avoid

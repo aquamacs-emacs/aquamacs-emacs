@@ -613,12 +613,15 @@ Afterwards the end-trigger value is reset to nil.  */)
 
 DEFUN ("window-edges", Fwindow_edges, Swindow_edges, 0, 1, 0,
        doc: /* Return a list of the edge coordinates of WINDOW.
-\(LEFT TOP RIGHT BOTTOM), all relative to 0, 0 at top left corner of frame.
-RIGHT is one more than the rightmost column occupied by WINDOW,
-and BOTTOM is one more than the bottommost row occupied by WINDOW.
-The edges include the space used by the window's scroll bar,
-display margins, fringes, header line, and mode line, if it has them.
-To get the edges of the actual text area, use `window-inside-edges'.  */)
+The list has the form (LEFT TOP RIGHT BOTTOM).
+TOP and BOTTOM count by lines, and LEFT and RIGHT count by columns,
+all relative to 0, 0 at top left corner of frame.
+
+RIGHT is one more than the rightmost column occupied by WINDOW.
+BOTTOM is one more than the bottommost row occupied by WINDOW.
+The edges include the space used by WINDOW's scroll bar, display
+margins, fringes, header line, and/or mode line.  For the edges of
+just the text area, use `window-inside-edges'.  */)
      (window)
      Lisp_Object window;
 {
@@ -633,12 +636,14 @@ To get the edges of the actual text area, use `window-inside-edges'.  */)
 
 DEFUN ("window-pixel-edges", Fwindow_pixel_edges, Swindow_pixel_edges, 0, 1, 0,
        doc: /* Return a list of the edge pixel coordinates of WINDOW.
-\(LEFT TOP RIGHT BOTTOM), all relative to 0, 0 at top left corner of frame.
-RIGHT is one more than the rightmost x position occupied by WINDOW,
-and BOTTOM is one more than the bottommost y position occupied by WINDOW.
-The pixel edges include the space used by the window's scroll bar,
-display margins, fringes, header line, and mode line, if it has them.
-To get the edges of the actual text area, use `window-inside-pixel-edges'.  */)
+The list has the form (LEFT TOP RIGHT BOTTOM), all relative to 0, 0 at
+the top left corner of the frame.
+
+RIGHT is one more than the rightmost x position occupied by WINDOW.
+BOTTOM is one more than the bottommost y position occupied by WINDOW.
+The pixel edges include the space used by WINDOW's scroll bar, display
+margins, fringes, header line, and/or mode line.  For the pixel edges
+of just the text area, use `window-inside-pixel-edges'.  */)
      (window)
      Lisp_Object window;
 {
@@ -653,11 +658,14 @@ To get the edges of the actual text area, use `window-inside-pixel-edges'.  */)
 
 DEFUN ("window-inside-edges", Fwindow_inside_edges, Swindow_inside_edges, 0, 1, 0,
        doc: /* Return a list of the edge coordinates of WINDOW.
-\(LEFT TOP RIGHT BOTTOM), all relative to 0, 0 at top left corner of frame.
-RIGHT is one more than the rightmost column used by text in WINDOW,
-and BOTTOM is one more than the bottommost row used by text in WINDOW.
-The inside edges do not include the space used by the window's scroll bar,
-display margins, fringes, header line, and/or mode line.  */)
+The list has the form (LEFT TOP RIGHT BOTTOM).
+TOP and BOTTOM count by lines, and LEFT and RIGHT count by columns,
+all relative to 0, 0 at top left corner of frame.
+
+RIGHT is one more than the rightmost column of WINDOW's text area.
+BOTTOM is one more than the bottommost row of WINDOW's text area.
+The inside edges do not include the space used by the WINDOW's scroll
+bar, display margins, fringes, header line, and/or mode line.  */)
      (window)
      Lisp_Object window;
 {
@@ -677,10 +685,12 @@ display margins, fringes, header line, and/or mode line.  */)
 
 DEFUN ("window-inside-pixel-edges", Fwindow_inside_pixel_edges, Swindow_inside_pixel_edges, 0, 1, 0,
        doc: /* Return a list of the edge pixel coordinates of WINDOW.
-\(LEFT TOP RIGHT BOTTOM), all relative to 0, 0 at top left corner of frame.
-RIGHT is one more than the rightmost x position used by text in WINDOW,
-and BOTTOM is one more than the bottommost y position used by text in WINDOW.
-The inside edges do not include the space used by the window's scroll bar,
+The list has the form (LEFT TOP RIGHT BOTTOM), all relative to 0, 0 at
+the top left corner of the frame.
+
+RIGHT is one more than the rightmost x position of WINDOW's text area.
+BOTTOM is one more than the bottommost y position of WINDOW's text area.
+The inside edges do not include the space used by WINDOW's scroll bar,
 display margins, fringes, header line, and/or mode line.  */)
      (window)
      Lisp_Object window;
@@ -4642,12 +4652,15 @@ grow_mini_window (w, delta)
   struct window *root;
 
   xassert (MINI_WINDOW_P (w));
-  xassert (delta >= 0);
+  /* Commenting out the following assertion goes against the stated interface
+     of the function, but it currently does not seem to do anything useful.
+     See discussion of this issue in the thread for bug#4534.
+     xassert (delta >= 0); */
 
   /* Compute how much we can enlarge the mini-window without deleting
      other windows.  */
   root = XWINDOW (FRAME_ROOT_WINDOW (f));
-  if (delta)
+  if (delta > 0)
     {
       int min_height = window_min_size (root, 0, 0, 0, 0);
       if (XFASTINT (root->total_lines) - delta < min_height)

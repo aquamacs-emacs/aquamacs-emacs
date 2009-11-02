@@ -388,9 +388,9 @@ from being initialized."
 (defvar pure-space-overflow nil
   "Non-nil if building Emacs overflowed pure space.")
 
-(defvar pure-space-overflow-message "\
+(defvar pure-space-overflow-message (purecopy "\
 Warning Warning!!!  Pure space overflow    !!!Warning Warning
-\(See the node Pure Storage in the Lisp manual for details.)\n")
+\(See the node Pure Storage in the Lisp manual for details.)\n"))
 
 (defcustom tutorial-directory
   (file-name-as-directory (expand-file-name "tutorials" data-directory))
@@ -1262,7 +1262,7 @@ If this is nil, no message will be displayed."
 ;;; Fancy splash screen
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar fancy-startup-text
+(defconst fancy-startup-text
   '((:face (variable-pitch (:foreground "red"))
      "Welcome to "
      :link ("GNU Emacs"
@@ -1318,7 +1318,7 @@ If this is nil, no message will be displayed."
 Each element in the list should be a list of strings or pairs
 `:face FACE', like `fancy-splash-insert' accepts them.")
 
-(defvar fancy-about-text
+(defconst fancy-about-text
   '((:face (variable-pitch (:foreground "red"  :height 130))
      "This is "
      :link ("Aquamacs Emacs"

@@ -585,27 +585,31 @@ Argument LIST-O-O is the list of objects to choose from."
 ;; Activate the EDE items in cedet-menu-map
 
 (define-key cedet-menu-map [ede-find-file]
-  '(menu-item "Find File in Project..." ede-find-file :enable ede-object))
+  '(menu-item "Find File in Project..." ede-find-file :enable ede-object
+	      :visible global-ede-mode))
 (define-key cedet-menu-map [ede-speedbar]
-  '(menu-item "View Project Tree" ede-speedbar :enable ede-object))
+  '(menu-item "View Project Tree" ede-speedbar :enable ede-object
+	      :visible global-ede-mode))
 (define-key cedet-menu-map [ede]
-  '(menu-item "Load Project" ede))
+  '(menu-item "Load Project" ede
+	      :visible global-ede-mode))
 (define-key cedet-menu-map [ede-new]
   '(menu-item "Create Project" ede-new
-	      :enable (not ede-object)))
+	      :enable (not ede-object)
+	      :visible global-ede-mode))
 (define-key cedet-menu-map [ede-target-options]
   '(menu-item "Target Options" ede-target-options
-	      :filter ede-target-forms-menu))
+	      :filter ede-target-forms-menu
+	      :visible global-ede-mode))
 (define-key cedet-menu-map [ede-project-options]
   '(menu-item "Project Options" ede-project-options
-	      :filter ede-project-forms-menu))
+	      :filter ede-project-forms-menu
+	      :visible global-ede-mode))
 (define-key cedet-menu-map [ede-build-forms-menu]
   '(menu-item "Build Project" ede-build-forms-menu
 	      :filter ede-build-forms-menu
-	      :enable ede-object))
-(define-key cedet-menu-map [semantic-menu-separator] 'undefined)
-(define-key cedet-menu-map [cedet-menu-separator] 'undefined)
-(define-key cedet-menu-map [ede-menu-separator] '("--"))
+	      :enable ede-object
+	      :visible global-ede-mode))
 
 (defun ede-menu-obj-of-class-p (class)
   "Return non-nil if some member of `ede-object' is a child of CLASS."
@@ -841,6 +845,8 @@ an EDE controlled project."
   (if global-ede-mode
       ;; Turn on global-ede-mode
       (progn
+	(if semantic-mode
+	    (define-key cedet-menu-map [cedet-menu-separator] '("--")))
 	(add-hook 'semanticdb-project-predicate-functions 'ede-directory-project-p)
 	(add-hook 'semanticdb-project-root-functions 'ede-toplevel-project-or-nil)
 	(add-hook 'ecb-source-path-functions 'ede-ecb-project-paths)
@@ -850,6 +856,7 @@ an EDE controlled project."
 	(ede-load-cache)
 	(ede-reset-all-buffers 1))
     ;; Turn off global-ede-mode
+    (define-key cedet-menu-map [cedet-menu-separator] nil)
     (remove-hook 'semanticdb-project-predicate-functions 'ede-directory-project-p)
     (remove-hook 'semanticdb-project-root-functions 'ede-toplevel-project-or-nil)
     (remove-hook 'ecb-source-path-functions 'ede-ecb-project-paths)
@@ -1467,8 +1474,7 @@ Not all buffers need headers, so return nil if no applicable."
 (defmethod ede-buffer-header-file ((this ede-target) buffer)
   "There are no default header files in EDE.
 Do a quick check to see if there is a Header tag in this buffer."
-  (save-excursion
-    (set-buffer buffer)
+  (with-current-buffer buffer
     (if (re-search-forward "::Header:: \\([a-zA-Z0-9.]+\\)" nil t)
 	(buffer-substring-no-properties (match-beginning 1)
 					(match-end 1))
@@ -1495,8 +1501,7 @@ Some projects may have multiple documentation files, so return a list."
 (defmethod ede-buffer-documentation-files ((this ede-target) buffer)
   "Check for some documentation files for THIS.
 Also do a quick check to see if there is a Documentation tag in this BUFFER."
-  (save-excursion
-    (set-buffer buffer)
+  (with-current-buffer buffer
     (if (re-search-forward "::Documentation:: \\([a-zA-Z0-9.]+\\)" nil t)
 	(buffer-substring-no-properties (match-beginning 1)
 					(match-end 1))
@@ -1743,8 +1748,7 @@ could become slow in time."
 
 (defmethod ede-find-target ((proj ede-project) buffer)
   "Fetch the target in PROJ belonging to BUFFER or nil."
-  (save-excursion
-    (set-buffer buffer)
+  (with-current-buffer buffer
     (or ede-object
 	(if (ede-buffer-mine proj buffer)
 	    proj
@@ -1781,8 +1785,7 @@ This includes buffers controlled by a specific target of PROJECT."
   (let ((bl (buffer-list))
 	(pl nil))
     (while bl
-      (save-excursion
-	(set-buffer (car bl))
+      (with-current-buffer (car bl)
 	(if (and ede-object (eq (ede-current-project) project))
 	    (setq pl (cons (car bl) pl))))
       (setq bl (cdr bl)))
@@ -1793,8 +1796,7 @@ This includes buffers controlled by a specific target of PROJECT."
   (let ((bl (buffer-list))
 	(pl nil))
     (while bl
-      (save-excursion
-	(set-buffer (car bl))
+      (with-current-buffer (car bl)
 	(if (if (listp ede-object)
 		(memq target ede-object)
 	      (eq ede-object target))
@@ -1807,8 +1809,7 @@ This includes buffers controlled by a specific target of PROJECT."
   (let ((bl (buffer-list))
 	(pl nil))
     (while bl
-      (save-excursion
-	(set-buffer (car bl))
+      (with-current-buffer (car bl)
 	(if ede-object
 	    (setq pl (cons (car bl) pl))))
       (setq bl (cdr bl)))
@@ -1897,22 +1898,18 @@ Return the first non-nil value returned by PROC."
       nil
     (oset project local-variables (cons (list variable)
 					(oref project local-variables)))
-    (mapcar (lambda (b) (save-excursion
-			  (set-buffer  b)
-			  (make-local-variable variable)))
-	    (ede-project-buffers project))))
+    (dolist (b (ede-project-buffers project))
+      (with-current-buffer b
+        (make-local-variable variable)))))
 
 (defmethod ede-set-project-variables ((project ede-project) &optional buffer)
   "Set variables local to PROJECT in BUFFER."
   (if (not buffer) (setq buffer (current-buffer)))
-  (save-excursion
-   (set-buffer buffer)
-   (mapcar (lambda (v)
-	     (make-local-variable (car v))
-	     ;; set it's value here?
-	     (set (car v) (cdr v))
-	     )
-	   (oref project local-variables))))
+  (with-current-buffer buffer
+    (dolist (v (oref project local-variables))
+      (make-local-variable (car v))
+      ;; set it's value here?
+      (set (car v) (cdr v)))))
 
 (defun ede-set (variable value &optional proj)
   "Set the project local VARIABLE to VALUE.
@@ -1923,10 +1920,9 @@ is the project to use, instead of `ede-current-project'."
     (if (and p (setq a (assoc variable (oref p local-variables))))
 	(progn
 	  (setcdr a value)
-	  (mapc (lambda (b) (save-excursion
-			      (set-buffer b)
-			      (set variable value)))
-		(ede-project-buffers p)))
+	  (dolist (b (ede-project-buffers p))
+            (with-current-buffer b
+              (set variable value))))
       (set variable value))
     (ede-commit-local-variables p))
   value)

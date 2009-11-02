@@ -397,12 +397,24 @@ a DOCTYPE or an XML declaration."
     (comment-indent-new-line soft)))
 
 (defun sgml-mode-facemenu-add-face-function (face end)
-  (if (setq face (cdr (assq face sgml-face-tag-alist)))
-      (progn
-	(setq face (funcall skeleton-transformation-function face))
-	(setq facemenu-end-add-face (concat "</" face ">"))
-	(concat "<" face ">"))
-    (error "Face not configured for %s mode" (format-mode-line mode-name))))
+  (let ((tag-face (cdr (assq face sgml-face-tag-alist))))
+    (cond (tag-face
+	   (setq tag-face (funcall skeleton-transformation-function tag-face))
+	   (setq facemenu-end-add-face (concat "</" tag-face ">"))
+	   (concat "<" tag-face ">"))
+	  ((and (consp face)
+		(consp (car face))
+		(null  (cdr face))
+		(memq (caar face) '(:foreground :background)))
+	   (setq facemenu-end-add-face "</span>")
+	   (format "<span style=\"%s:%s\">"
+		   (if (eq (caar face) :foreground)
+		       "color"
+		     "background-color")
+		   (cadr (car face))))
+	  (t
+	   (error "Face not configured for %s mode"
+		  (format-mode-line mode-name))))))
 
 (defun sgml-fill-nobreak ()
   ;; Don't break between a tag name and its first argument.
@@ -873,6 +885,12 @@ Return t if after a closing tag."
 	(setq arg (1- arg)))
       return)))
 
+(defsubst sgml-looking-back-at (str)
+  "Return t if the test before point matches STR."
+  (let ((start (- (point) (length str))))
+    (and (>= start (point-min))
+         (equal str (buffer-substring-no-properties start (point))))))
+
 (defun sgml-delete-tag (arg)
   ;; FIXME: Should be called sgml-kill-tag or should not touch the kill-ring.
   "Delete tag on or after cursor, and matching closing or opening tag.
@@ -1158,12 +1176,6 @@ You might want to turn on `auto-fill-mode' to get better results."
   "Skip past a tag-name, and return the name."
   (buffer-substring-no-properties
    (point) (progn (skip-syntax-forward "w_") (point))))
-
-(defsubst sgml-looking-back-at (str)
-  "Return t if the test before point matches STR."
-  (let ((start (- (point) (length str))))
-    (and (>= start (point-min))
-         (equal str (buffer-substring-no-properties start (point))))))
 
 (defun sgml-tag-text-p (start end)
   "Return non-nil if text between START and END is a tag.

@@ -44,27 +44,30 @@
 ;; help key.
 (setq menu-bar-final-items '(buffer help-menu))
 
-(define-key global-map [menu-bar help-menu] (cons "Help" menu-bar-help-menu))
+(define-key global-map [menu-bar help-menu] (cons (purecopy "Help") menu-bar-help-menu))
+(defvar menu-bar-tools-menu (make-sparse-keymap "Tools"))
+(define-key global-map [menu-bar tools] (cons (purecopy "Tools") menu-bar-tools-menu))
 ;; This definition is just to show what this looks like.
 ;; It gets modified in place when menu-bar-update-buffers is called.
 (defvar global-buffers-menu-map (make-sparse-keymap "Buffers"))
 (define-key global-map [menu-bar buffer]
-  (cons "Window" global-buffers-menu-map))
-(defvar menu-bar-tools-menu (make-sparse-keymap "Tools"))
-(define-key global-map [menu-bar tools] (cons "Tools" menu-bar-tools-menu))
+  (cons (purecopy "Window") global-buffers-menu-map))
 (defvar menu-bar-options-menu (make-sparse-keymap "Options"))
 (define-key global-map [menu-bar options]
-  (cons "Options" menu-bar-options-menu))
+  (cons (purecopy "Options") menu-bar-options-menu))
 (defvar menu-bar-edit-menu (make-sparse-keymap "Edit"))
-(define-key global-map [menu-bar edit] (cons "Edit" menu-bar-edit-menu))
+(define-key global-map [menu-bar edit] (cons (purecopy "Edit") menu-bar-edit-menu))
 (defvar menu-bar-file-menu (make-sparse-keymap "File"))
-(define-key global-map [menu-bar file] (cons "File" menu-bar-file-menu))
+(define-key global-map [menu-bar file] (cons (purecopy "File") menu-bar-file-menu))
 
 ;; This alias is for compatibility with 19.28 and before.
 (defvar menu-bar-files-menu menu-bar-file-menu)
 
 ;; This is referenced by some code below; it is defined in uniquify.el
 (defvar uniquify-buffer-name-style)
+
+;; From emulation/cua-base.el; used below
+(defvar cua-enable-cua-keys)
 
 
 
@@ -435,7 +438,7 @@ for the definition of the menu frame."
 			   (not (mouse-region-match)))
 	      :help
 	      ,(purecopy "Delete the text in region between mark and current position")))
-(defvar yank-menu (cons "Select Yank" nil))
+(defvar yank-menu (cons (purecopy "Select Yank") nil))
 (fset 'yank-menu (cons 'keymap yank-menu))
 (define-key menu-bar-edit-menu [paste-from-menu]
   `(menu-item ,(purecopy "Paste Previous") yank-menu
@@ -588,11 +591,11 @@ FNAME is the minor mode's name (variable and function).
 DOC is the text to use for the menu entry.
 HELP is the text to use for the tooltip.
 PROPS are additional properties."
-  `'(menu-item ,(purecopy doc) ,fname
-     ,@props
-     :help ,(purecopy help)
-     :button (:toggle . (and (default-boundp ',fname)
-			     (default-value ',fname)))))
+  `(list 'menu-item  (purecopy ,doc) ',fname
+	 ,@props
+	 ':help (purecopy ,help)
+	 ':button '(:toggle . (and (default-boundp ',fname)
+				   (default-value ',fname)))))
 
 (defmacro menu-bar-make-toggle (name variable doc message help &rest body)
   `(progn
@@ -615,9 +618,9 @@ by \"Save Options\" in Custom buffers.")
        ;; a candidate for "Save Options", and we do not want to save options
        ;; the user have already set explicitly in his init file.
        (if interactively (customize-mark-as-set ',variable)))
-     '(menu-item ,(purecopy doc) ,name
-		 :help ,(purecopy help)
-                 :button (:toggle . (and (default-boundp ',variable)
+     (list 'menu-item (purecopy ,doc) ',name
+		 ':help (purecopy ,help)
+                 ':button '(:toggle . (and (default-boundp ',variable)
 					 (default-value ',variable))))))
 
 ;; Function for setting/saving default font.
@@ -1277,6 +1280,18 @@ mail status in mode line"))
 (define-key menu-bar-tools-menu [separator-prog]
   '("--"))
 
+(define-key menu-bar-tools-menu [semantic]
+  `(menu-item ,(purecopy "Source Code Parsers (Semantic)")
+	      semantic-mode
+	      :help ,(purecopy "Toggle automatic parsing in source code buffers (Semantic mode)")
+	      :button (:toggle . (bound-and-true-p semantic-mode))))
+
+(define-key menu-bar-tools-menu [ede]
+  `(menu-item ,(purecopy "Project support (EDE)")
+	      global-ede-mode
+	      :help ,(purecopy "Toggle the Emacs Development Environment (Global EDE mode)")
+	      :button (:toggle . (bound-and-true-p global-ede-mode))))
+
 (define-key menu-bar-tools-menu [gdb]
   `(menu-item ,(purecopy "Debugger (GDB)...") gdb
 	      :help ,(purecopy "Debug a program from within Emacs with GDB")))
@@ -1792,7 +1807,7 @@ Buffers menu is regenerated."
 		   ;; bug in keymap.c that I don't understand yet.  -stef
 		   minibuffer-local-completion-map))
   (define-key map [menu-bar minibuf]
-    (cons "Minibuf" (make-sparse-keymap "Minibuf"))))
+    (cons (purecopy "Minibuf") (make-sparse-keymap "Minibuf"))))
 
 (let ((map minibuffer-local-completion-map))
   (define-key map [menu-bar minibuf ?\?]

@@ -172,7 +172,7 @@ This is used by the default mail-sending commands.  See also
   :group 'sendmail)
 
 ;;;###autoload
-(defcustom mail-header-separator "--text follows this line--"
+(defcustom mail-header-separator (purecopy "--text follows this line--")
   "Line used to separate headers from text in messages being composed."
   :type 'string
   :group 'sendmail)
@@ -212,7 +212,7 @@ This variable has no effect unless your system uses sendmail as its mailer."
   :group 'sendmail)
 
 ;;;###autoload
-(defcustom mail-personal-alias-file "~/.mailrc"
+(defcustom mail-personal-alias-file (purecopy "~/.mailrc")
   "If non-nil, the name of the user's personal mail alias file.
 This file typically should be in same format as the `.mailrc' file used by
 the `Mail' or `mailx' program.
@@ -1645,7 +1645,7 @@ If the current line has `mail-yank-prefix', insert it on the new line."
 ;; Put these commands last, to reduce chance of lossage from quitting
 ;; in middle of loading the file.
 
-;;;###autoload (add-hook 'same-window-buffer-names "*mail*")
+;;;###autoload (add-hook 'same-window-buffer-names (purecopy "*mail*"))
 
 ;;;###autoload
 (defun mail (&optional noerase to subject in-reply-to cc replybuffer actions)

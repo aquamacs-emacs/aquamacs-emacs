@@ -486,11 +486,13 @@ extern size_t pure_size;
    I.e. (x & INTMASK) == XUINT (make_number (x)).  */
 #define INTMASK ((((EMACS_INT) 1) << VALBITS) - 1)
 
-/* Value is non-zero if C integer I doesn't fit into a Lisp fixnum.  */
+/* Value is non-zero if I doesn't fit into a Lisp fixnum.  It is
+   written this way so that it also works if I is of unsigned
+   type.  */
 
 #define FIXNUM_OVERFLOW_P(i) \
-  ((EMACS_INT)(i) > MOST_POSITIVE_FIXNUM \
-   || (EMACS_INT) (i) < MOST_NEGATIVE_FIXNUM)
+  ((i) > MOST_POSITIVE_FIXNUM \
+   || ((i) < 0 && (i) < MOST_NEGATIVE_FIXNUM))
 
 /* Extract a value or address from a Lisp_Object.  */
 
@@ -2984,7 +2986,6 @@ extern Lisp_Object close_file_unwind P_ ((Lisp_Object));
 extern void report_file_error P_ ((const char *, Lisp_Object)) NO_RETURN;
 extern int internal_delete_file P_ ((Lisp_Object));
 extern void syms_of_fileio P_ ((void));
-extern void init_fileio_once P_ ((void));
 extern Lisp_Object make_temp_name P_ ((Lisp_Object, int));
 EXFUN (Fmake_symbolic_link, 3);
 extern Lisp_Object Qdelete_file;

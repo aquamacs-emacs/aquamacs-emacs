@@ -386,6 +386,7 @@ files conditionalize this setup based on the TERM environment variable."
 	     (tramp-copy-program         "rsync")
 	     (tramp-copy-args            (("-e" "ssh") ("-t" "%k") ("-r")))
 	     (tramp-copy-keep-date       t)
+	     (tramp-copy-keep-tmpfile    t)
 	     (tramp-copy-recursive       t)
 	     (tramp-password-end-of-line nil))
     ("rsyncc"
@@ -403,6 +404,7 @@ files conditionalize this setup based on the TERM environment variable."
 					     " -o ControlPath=%t.%%r@%%h:%%p"
 					     " -o ControlMaster=auto"))))
 	     (tramp-copy-keep-date       t)
+	     (tramp-copy-keep-tmpfile    t)
 	     (tramp-copy-recursive       t)
 	     (tramp-password-end-of-line nil))
     ("remcp" (tramp-login-program        "remsh")
@@ -654,6 +656,11 @@ pair of the form (KEY VALUE).  The following KEYs are defined:
   * `tramp-copy-keep-date'
     This specifies whether the copying program when the preserves the
     timestamp of the original file.
+  * `tramp-copy-keep-tmpfile'
+    This specifies whether a temporary local file shall be kept
+    for optimization reasons (useful for \"rsync\" methods).
+  * `tramp-copy-recursive'
+    Whether the operation copies directories recursively.
   * `tramp-default-port'
     The default port of a method is needed in case of gateway connections.
     Additionally, it is used as indication which method is prepared for
@@ -1146,6 +1153,11 @@ part, though."
   "Buffer name for a temporary buffer.
 It shall be used in combination with `generate-new-buffer-name'.")
 
+(defvar tramp-temp-buffer-file-name nil
+  "File name of a persistent local temporary file.
+Useful for \"rsync\" like methods.")
+(make-variable-buffer-local 'tramp-temp-buffer-file-name)
+
 (defcustom tramp-sh-extra-args '(("/bash\\'" . "-norc -noprofile"))
   "*Alist specifying extra arguments to pass to the remote shell.
 Entries are (REGEXP . ARGS) where REGEXP is a regular expression
@@ -1601,6 +1613,75 @@ Many systems support `uudecode -o /dev/stdout' or `uudecode -o -'
 for this or `uudecode -p', but some systems don't, and for them
 we have this shell function.")
 
+(defconst tramp-perl-file-truename
+  "%s -e '
+use File::Spec;
+use Cwd \"realpath\";
+
+sub recursive {
+    my ($volume, @dirs) = @_;
+    my $real = realpath(File::Spec->catpath(
+                   $volume, File::Spec->catdir(@dirs), \"\"));
+    if ($real) {
+        my ($vol, $dir) = File::Spec->splitpath($real, 1);
+        return ($vol, File::Spec->splitdir($dir));
+    }
+    else {
+        my $last = pop(@dirs);
+        ($volume, @dirs) = recursive($volume, @dirs);
+        push(@dirs, $last);
+        return ($volume, @dirs);
+    }
+}
+
+$result = realpath($ARGV[0]);
+if (!$result) {
+    my ($vol, $dir) = File::Spec->splitpath($ARGV[0], 1);
+    ($vol, @dirs) = recursive($vol, File::Spec->splitdir($dir));
+
+    $result = File::Spec->catpath($vol, File::Spec->catdir(@dirs), \"\");
+}
+
+if ($ARGV[0] =~ /\\/$/) {
+    $result = $result . \"/\";
+}
+
+print \"\\\"$result\\\"\\n\";
+' \"$1\" 2>/dev/null"
+  "Perl script to produce output suitable for use with `file-truename'
+on the remote file system.
+Escape sequence %s is replaced with name of Perl binary.
+This string is passed to `format', so percent characters need to be doubled.")
+
+(defconst tramp-perl-file-name-all-completions
+  "%s -e 'sub case {
+ my $str = shift;
+ if ($ARGV[2]) {
+  return lc($str);
+ }
+ else {
+  return $str;
+ }
+}
+opendir(d, $ARGV[0]) || die(\"$ARGV[0]: $!\\nfail\\n\");
+@files = readdir(d); closedir(d);
+foreach $f (@files) {
+ if (case(substr($f, 0, length($ARGV[1]))) eq case($ARGV[1])) {
+  if (-d \"$ARGV[0]/$f\") {
+   print \"$f/\\n\";
+  }
+  else {
+   print \"$f\\n\";
+  }
+ }
+}
+print \"ok\\n\"
+' \"$1\" \"$2\" \"$3\" 2>/dev/null"
+  "Perl script to produce output suitable for use with
+`file-name-all-completions' on the remote file system.  Escape
+sequence %s is replaced with name of Perl binary.  This string is
+passed to `format', so percent characters need to be doubled.")
+
 ;; Perl script to implement `file-attributes' in a Lisp `read'able
 ;; output.  If you are hacking on this, note that you get *no* output
 ;; unless this spits out a complete line, including the '\n' at the
@@ -1942,7 +2023,7 @@ normal Emacs functions.")
 ;; Handlers for foreign methods, like FTP or SMB, shall be plugged here.
 (defvar tramp-foreign-file-name-handler-alist
   ;; (identity . tramp-sh-file-name-handler) should always be the last
-  ;; entry, since `identity' always matches.
+  ;; entry, because `identity' always matches.
   '((identity . tramp-sh-file-name-handler))
   "Alist of elements (FUNCTION . HANDLER) for foreign methods handled specially.
 If (FUNCTION FILENAME) returns non-nil, then all I/O on that file is done by
@@ -2295,7 +2376,11 @@ been set up by `rfn-eshadow-setup-minibuffer'."
 
 (when (boundp 'rfn-eshadow-update-overlay-hook)
   (add-hook 'rfn-eshadow-update-overlay-hook
-	    'tramp-rfn-eshadow-update-overlay))
+	    'tramp-rfn-eshadow-update-overlay)
+  (add-hook 'tramp-unload-hook
+	    (lambda ()
+	      (remove-hook 'rfn-eshadow-update-overlay-hook
+			   'tramp-rfn-eshadow-update-overlay))))
 
 
 ;;; File Name Handler Functions:
@@ -2414,78 +2499,105 @@ target of the symlink differ."
   "Like `file-truename' for Tramp files."
   (with-parsed-tramp-file-name (expand-file-name filename) nil
     (with-file-property v localname "file-truename"
-      (let* ((directory-sep-char ?/) ; for XEmacs
-	     (steps (tramp-compat-split-string localname "/"))
-	     (localnamedir (tramp-run-real-handler
-			    'file-name-as-directory (list localname)))
-	     (is-dir (string= localname localnamedir))
-	     (thisstep nil)
-	     (numchase 0)
-	     ;; Don't make the following value larger than necessary.
-	     ;; People expect an error message in a timely fashion when
-	     ;; something is wrong; otherwise they might think that Emacs
-	     ;; is hung.  Of course, correctness has to come first.
-	     (numchase-limit 20)
-	     (result nil)			;result steps in reverse order
-	     symlink-target)
+      (let ((result nil))			; result steps in reverse order
 	(tramp-message v 4 "Finding true name for `%s'" filename)
-	(while (and steps (< numchase numchase-limit))
-	  (setq thisstep (pop steps))
-	  (tramp-message
-	   v 5 "Check %s"
-	   (mapconcat 'identity
-		      (append '("") (reverse result) (list thisstep))
+	(cond
+	 ;; Use GNU readlink --canonicalize-missing where available.
+	 ((tramp-get-remote-readlink v)
+	  (setq result
+		(tramp-send-command-and-read
+		 v
+		 (format "echo \"\\\"`%s --canonicalize-missing %s`\\\"\""
+			 (tramp-get-remote-readlink v)
+			 (tramp-shell-quote-argument localname)))))
+
+	 ;; Use Perl implementation.
+	 ((and (tramp-get-remote-perl v)
+	       (tramp-get-connection-property v "perl-file-spec" nil)
+	       (tramp-get-connection-property v "perl-cwd-realpath" nil))
+	  (tramp-maybe-send-script
+	   v tramp-perl-file-truename "tramp_perl_file_truename")
+	  (setq result
+		(tramp-send-command-and-read
+		 v
+		 (format "tramp_perl_file_truename %s"
+			 (tramp-shell-quote-argument localname)))))
+
+	 ;; Do it yourself.  We bind `directory-sep-char' here for
+	 ;; XEmacs on Windows, which would otherwise use backslash.
+	 (t (let* ((directory-sep-char ?/)
+		   (steps (tramp-compat-split-string localname "/"))
+		   (localnamedir (tramp-run-real-handler
+				  'file-name-as-directory (list localname)))
+		   (is-dir (string= localname localnamedir))
+		   (thisstep nil)
+		   (numchase 0)
+		   ;; Don't make the following value larger than
+		   ;; necessary.  People expect an error message in a
+		   ;; timely fashion when something is wrong;
+		   ;; otherwise they might think that Emacs is hung.
+		   ;; Of course, correctness has to come first.
+		   (numchase-limit 20)
+		   symlink-target)
+	      (while (and steps (< numchase numchase-limit))
+		(setq thisstep (pop steps))
+		(tramp-message
+		 v 5 "Check %s"
+		 (mapconcat 'identity
+			    (append '("") (reverse result) (list thisstep))
+			    "/"))
+		(setq symlink-target
+		      (nth 0 (file-attributes
+			      (tramp-make-tramp-file-name
+			       method user host
+			       (mapconcat 'identity
+					  (append '("")
+						  (reverse result)
+						  (list thisstep))
+					  "/")))))
+		(cond ((string= "." thisstep)
+		       (tramp-message v 5 "Ignoring step `.'"))
+		      ((string= ".." thisstep)
+		       (tramp-message v 5 "Processing step `..'")
+		       (pop result))
+		      ((stringp symlink-target)
+		       ;; It's a symlink, follow it.
+		       (tramp-message v 5 "Follow symlink to %s" symlink-target)
+		       (setq numchase (1+ numchase))
+		       (when (file-name-absolute-p symlink-target)
+			 (setq result nil))
+		       ;; If the symlink was absolute, we'll get a string like
+		       ;; "/user@host:/some/target"; extract the
+		       ;; "/some/target" part from it.
+		       (when (tramp-tramp-file-p symlink-target)
+			 (unless (tramp-equal-remote filename symlink-target)
+			   (tramp-error
+			    v 'file-error
+			    "Symlink target `%s' on wrong host" symlink-target))
+			 (setq symlink-target localname))
+		       (setq steps
+			     (append (tramp-compat-split-string
+				      symlink-target "/")
+				     steps)))
+		      (t
+		       ;; It's a file.
+		       (setq result (cons thisstep result)))))
+	      (when (>= numchase numchase-limit)
+		(tramp-error
+		 v 'file-error
+		 "Maximum number (%d) of symlinks exceeded" numchase-limit))
+	      (setq result (reverse result))
+	      ;; Combine list to form string.
+	      (setq result
+		    (if result
+			(mapconcat 'identity (cons "" result) "/")
 		      "/"))
-	  (setq symlink-target
-		(nth 0 (file-attributes
-			(tramp-make-tramp-file-name
-			 method user host
-			 (mapconcat 'identity
-				    (append '("")
-					    (reverse result)
-					    (list thisstep))
-				    "/")))))
-	  (cond ((string= "." thisstep)
-		 (tramp-message v 5 "Ignoring step `.'"))
-		((string= ".." thisstep)
-		 (tramp-message v 5 "Processing step `..'")
-		 (pop result))
-		((stringp symlink-target)
-		 ;; It's a symlink, follow it.
-		 (tramp-message v 5 "Follow symlink to %s" symlink-target)
-		 (setq numchase (1+ numchase))
-		 (when (file-name-absolute-p symlink-target)
-		   (setq result nil))
-		 ;; If the symlink was absolute, we'll get a string like
-		 ;; "/user@host:/some/target"; extract the
-		 ;; "/some/target" part from it.
-		 (when (tramp-tramp-file-p symlink-target)
-		   (unless (tramp-equal-remote filename symlink-target)
-		     (tramp-error
-		      v 'file-error
-		      "Symlink target `%s' on wrong host" symlink-target))
-		   (setq symlink-target localname))
-		 (setq steps
-		       (append (tramp-compat-split-string symlink-target "/")
-			       steps)))
-		(t
-		 ;; It's a file.
-		 (setq result (cons thisstep result)))))
-	(when (>= numchase numchase-limit)
-	  (tramp-error
-	   v 'file-error
-	   "Maximum number (%d) of symlinks exceeded" numchase-limit))
-	(setq result (reverse result))
-	;; Combine list to form string.
-	(setq result
-	      (if result
-		  (mapconcat 'identity (cons "" result) "/")
-		"/"))
-	(when (and is-dir (or (string= "" result)
-			      (not (string= (substring result -1) "/"))))
-	  (setq result (concat result "/")))
-	(tramp-message v 4 "True name of `%s' is `%s'" filename result)
-	(tramp-make-tramp-file-name method user host result)))))
+	      (when (and is-dir (or (string= "" result)
+				    (not (string= (substring result -1) "/"))))
+		(setq result (concat result "/"))))))
+
+        (tramp-message v 4 "True name of `%s' is `%s'" filename result)
+        (tramp-make-tramp-file-name method user host result)))))
 
 ;; Basic functions.
 
@@ -2493,12 +2605,16 @@ target of the symlink differ."
   "Like `file-exists-p' for Tramp files."
   (with-parsed-tramp-file-name filename nil
     (with-file-property v localname "file-exists-p"
-      (zerop (tramp-send-command-and-check
-	      v
-	      (format
-	       "%s %s"
-	       (tramp-get-file-exists-command v)
-	       (tramp-shell-quote-argument localname)))))))
+      (or (not (null (tramp-get-file-property
+                      v localname "file-attributes-integer" nil)))
+          (not (null (tramp-get-file-property
+                      v localname "file-attributes-string" nil)))
+          (zerop (tramp-send-command-and-check
+                  v
+                  (format
+                   "%s %s"
+                   (tramp-get-file-exists-command v)
+                   (tramp-shell-quote-argument localname))))))))
 
 ;; Inodes don't exist for some file systems.  Therefore we must
 ;; generate virtual ones.  Used in `find-buffer-visiting'.  The method
@@ -2827,13 +2943,19 @@ and gid of the corresponding user is taken.  Both parameters must be integers."
   "Like `file-executable-p' for Tramp files."
   (with-parsed-tramp-file-name filename nil
     (with-file-property v localname "file-executable-p"
-      (zerop (tramp-run-test "-x" filename)))))
+      ;; Examine `file-attributes' cache to see if request can be
+      ;; satisfied without remote operation.
+      (or (tramp-check-cached-permissions v ?x)
+          (zerop (tramp-run-test "-x" filename))))))
 
 (defun tramp-handle-file-readable-p (filename)
   "Like `file-readable-p' for Tramp files."
   (with-parsed-tramp-file-name filename nil
     (with-file-property v localname "file-readable-p"
-      (zerop (tramp-run-test "-r" filename)))))
+      ;; Examine `file-attributes' cache to see if request can be
+      ;; satisfied without remote operation.
+      (or (tramp-check-cached-permissions v ?r)
+          (zerop (tramp-run-test "-r" filename))))))
 
 ;; When the remote shell is started, it looks for a shell which groks
 ;; tilde expansion.  Here, we assume that all shells which grok tilde
@@ -2923,8 +3045,10 @@ value of `default-file-modes', without execute permissions."
   (with-parsed-tramp-file-name filename nil
     (with-file-property v localname "file-writable-p"
       (if (file-exists-p filename)
-	  ;; Existing files must be writable.
-	  (zerop (tramp-run-test "-w" filename))
+	  ;; Examine `file-attributes' cache to see if request can be
+	  ;; satisfied without remote operation.
+          (or (tramp-check-cached-permissions v ?w)
+              (zerop (tramp-run-test "-w" filename)))
 	;; If file doesn't exist, check if directory is writable.
 	(and (zerop (tramp-run-test
 		     "-d" (file-name-directory filename)))
@@ -3058,50 +3182,149 @@ value of `default-file-modes', without execute permissions."
   "Like `file-name-all-completions' for Tramp files."
   (unless (save-match-data (string-match "/" filename))
     (with-parsed-tramp-file-name (expand-file-name directory) nil
-      ;; Flush the directory cache.  There could be changed directory
-      ;; contents.
-      (when (and (integerp tramp-completion-reread-directory-timeout)
-		 (> (tramp-time-diff
-		     (current-time)
-		     (tramp-get-file-property
-		      v localname "last-completion" '(0 0 0)))
-		    tramp-completion-reread-directory-timeout))
-	(tramp-flush-file-property v localname))
 
       (all-completions
        filename
        (mapcar
 	'list
-	(with-file-property v localname "file-name-all-completions"
-	  (let (result)
-	   (tramp-barf-unless-okay
-	    v
-	    (format "cd %s" (tramp-shell-quote-argument localname))
-	    "tramp-handle-file-name-all-completions: Couldn't `cd %s'"
-	    (tramp-shell-quote-argument localname))
+        (or
+         ;; Try cache first
+         (and
+          ;; Ignore if expired
+          (or (not (integerp tramp-completion-reread-directory-timeout))
+              (<= (tramp-time-diff
+                   (current-time)
+                   (tramp-get-file-property
+                    v localname "last-completion" '(0 0 0)))
+                  tramp-completion-reread-directory-timeout))
 
-	   ;; Get a list of directories and files, including reliably
-	   ;; tagging the directories with a trailing '/'.  Because I
-	   ;; rock.  --daniel@danann.net
-	   (tramp-send-command
-	    v
-	    (format (concat "%s -a 2>/dev/null | while read f; do "
-			    "if %s -d \"$f\" 2>/dev/null; "
-			    "then echo \"$f/\"; else echo \"$f\"; fi; done")
-		    (tramp-get-ls-command v)
-		    (tramp-get-test-command v)))
+          ;; Try cache entries for filename, filename with last
+          ;; character removed, filename with last two characters
+          ;; removed, ..., and finally the empty string - all
+          ;; concatenated to the local directory name
 
-	   ;; Now grab the output.
-	   (with-current-buffer (tramp-get-buffer v)
-	     (goto-char (point-max))
-	     (while (zerop (forward-line -1))
-	       (push (buffer-substring
-		      (point) (tramp-compat-line-end-position))
-		     result)))
+          ;; This is inefficient for very long filenames, pity
+          ;; `reduce' is not available...
+          (car
+           (apply
+            'append
+            (mapcar
+             (lambda (x)
+               (let ((cache-hit
+                      (tramp-get-file-property
+                       v
+                       (concat localname (substring filename 0 x))
+                       "file-name-all-completions"
+                       nil)))
+                 (when cache-hit (list cache-hit))))
+             (tramp-compat-number-sequence (length filename) 0 -1)))))
 
-	   (tramp-set-file-property
-	    v localname "last-completion" (current-time))
-	   result)))))))
+         ;; Cache expired or no matching cache entry found so we need
+         ;; to perform a remote operation
+         (let (result)
+           ;; Get a list of directories and files, including reliably
+           ;; tagging the directories with a trailing '/'.  Because I
+           ;; rock.  --daniel@danann.net
+
+           ;; Changed to perform `cd' in the same remote op and only
+           ;; get entries starting with `filename'. Capture any `cd'
+           ;; error messages.  Ensure any `cd' and `echo' aliases are
+           ;; ignored.
+           (tramp-send-command
+            v
+            (if (tramp-get-remote-perl v)
+                (progn
+                  (tramp-maybe-send-script
+                   v tramp-perl-file-name-all-completions
+                   "tramp_perl_file_name_all_completions")
+                  (format "tramp_perl_file_name_all_completions %s %s %d"
+                          (tramp-shell-quote-argument localname)
+                          (tramp-shell-quote-argument filename)
+                          (if (symbol-value
+			       'read-file-name-completion-ignore-case)
+			      1 0)))
+
+              (format (concat
+                       "(\\cd %s 2>&1 && (%s %s -a 2>/dev/null"
+                       ;; `ls' with wildcard might fail with `Argument
+                       ;; list too long' error in some corner cases; if
+                       ;; `ls' fails after `cd' succeeded, chances are
+                       ;; that's the case, so let's retry without
+                       ;; wildcard.  This will return "too many" entries
+                       ;; but that isn't harmful.
+                       " || %s -a 2>/dev/null)"
+                       " | while read f; do"
+                       " if %s -d \"$f\" 2>/dev/null;"
+                       " then \\echo \"$f/\"; else \\echo \"$f\"; fi; done"
+                       " && \\echo ok) || \\echo fail")
+                      (tramp-shell-quote-argument localname)
+                      (tramp-get-ls-command v)
+                      ;; When `filename' is empty, just `ls' without
+                      ;; filename argument is more efficient than `ls *'
+                      ;; for very large directories and might avoid the
+                      ;; `Argument list too long' error.
+                      ;;
+                      ;; With and only with wildcard, we need to add
+                      ;; `-d' to prevent `ls' from descending into
+                      ;; sub-directories.
+                      (if (zerop (length filename))
+                          "."
+                        (concat (tramp-shell-quote-argument filename) "* -d"))
+                      (tramp-get-ls-command v)
+                      (tramp-get-test-command v))))
+
+           ;; Now grab the output.
+           (with-current-buffer (tramp-get-buffer v)
+             (goto-char (point-max))
+
+             ;; Check result code, found in last line of output
+             (forward-line -1)
+             (if (looking-at "^fail$")
+                 (progn
+                   ;; Grab error message from line before last line
+                   ;; (it was put there by `cd 2>&1')
+                   (forward-line -1)
+                   (tramp-error
+                    v 'file-error
+                    "tramp-handle-file-name-all-completions: %s"
+                    (buffer-substring
+                     (point) (tramp-compat-line-end-position))))
+               ;; For peace of mind, if buffer doesn't end in `fail'
+               ;; then it should end in `ok'.  If neither are in the
+               ;; buffer something went seriously wrong on the remote
+               ;; side.
+               (unless (looking-at "^ok$")
+                 (tramp-error
+                  v 'file-error
+                  "\
+tramp-handle-file-name-all-completions: internal error accessing `%s': `%s'"
+                  (tramp-shell-quote-argument localname) (buffer-string))))
+
+             (while (zerop (forward-line -1))
+               (push (buffer-substring
+                      (point) (tramp-compat-line-end-position))
+                     result)))
+
+           ;; Because the remote op went through OK we know the
+           ;; directory we `cd'-ed to exists
+           (tramp-set-file-property
+            v localname "file-exists-p" t)
+
+           ;; Because the remote op went through OK we know every
+           ;; file listed by `ls' exists.
+           (mapc (lambda (entry)
+		   (tramp-set-file-property
+		    v (concat localname entry) "file-exists-p" t))
+		 result)
+
+           (tramp-set-file-property
+            v localname "last-completion" (current-time))
+
+           ;; Store result in the cache
+           (tramp-set-file-property
+            v (concat localname filename)
+            "file-name-all-completions"
+            result))))))))
 
 ;; The following isn't needed for Emacs 20 but for 19.34?
 (defun tramp-handle-file-name-completion
@@ -3364,16 +3587,18 @@ the uid and gid from FILENAME."
 	      (if t1 (tramp-handle-file-remote-p filename 'localname) filename))
 	     (localname2
 	      (if t2 (tramp-handle-file-remote-p newname 'localname) newname))
-	     (prefix (file-remote-p (if t1 filename newname))))
+	     (prefix (file-remote-p (if t1 filename newname)))
+             cmd-result)
 
 	(cond
 	 ;; Both files are on a remote host, with same user.
 	 ((and t1 t2)
-	  (tramp-send-command
-	   v
-	   (format "%s %s %s" cmd
-		   (tramp-shell-quote-argument localname1)
-		   (tramp-shell-quote-argument localname2)))
+          (setq cmd-result
+                (tramp-send-command-and-check
+                 v
+                 (format "%s %s %s" cmd
+                         (tramp-shell-quote-argument localname1)
+                         (tramp-shell-quote-argument localname2))))
 	  (with-current-buffer (tramp-get-buffer v)
 	    (goto-char (point-min))
 	    (unless
@@ -3382,7 +3607,7 @@ the uid and gid from FILENAME."
 		      ;; Mask cp -f error.
 		      (re-search-forward
 		       tramp-operation-not-permitted-regexp nil t))
-		 (zerop (tramp-send-command-and-check v nil)))
+		 (zerop cmd-result))
 	      (tramp-error-with-buffer
 	       nil v 'file-error
 	       "Copying directly failed, see buffer `%s' for details."
@@ -4112,20 +4337,20 @@ beginning of local filename are not substituted."
 	(setq outbuf (current-buffer))))
       (when stderr (setq command (format "%s 2>%s" command stderr)))
 
-      ;; Goto working directory.
-      (tramp-send-command
-       v (format "cd %s" (tramp-shell-quote-argument localname)))
       ;; Send the command.  It might not return in time, so we protect it.
       (condition-case nil
 	  (unwind-protect
-	      (tramp-send-command v command)
+              (setq ret
+                    (tramp-send-command-and-check
+                     v (format "\\cd %s; %s"
+                               (tramp-shell-quote-argument localname)
+                               command)))
 	    ;; We should show the output anyway.
 	    (when outbuf
-	      (let ((output-string
-		     (with-current-buffer (tramp-get-connection-buffer v)
-		       (buffer-substring (point-min) (point-max)))))
-		(with-current-buffer outbuf
-		  (insert output-string)))
+	      (with-current-buffer outbuf
+                (insert
+                 (with-current-buffer (tramp-get-connection-buffer v)
+                   (buffer-string))))
 	      (when display (display-buffer outbuf))))
 	;; When the user did interrupt, we should do it also.  We use
 	;; return code -1 as marker.
@@ -4137,8 +4362,6 @@ beginning of local filename are not substituted."
 	 (kill-buffer (tramp-get-connection-buffer v))
 	 (setq ret 1)))
 
-      ;; Check return code.
-      (unless ret (setq ret (tramp-send-command-and-check v nil)))
       ;; Provide error file.
       (when tmpstderr (rename-file tmpstderr (cadr destination) t))
 
@@ -4431,11 +4654,25 @@ coding system might not be determined.  This function repairs it."
 			   (when (eq inhibit-file-name-operation
 				     'insert-file-contents)
 			     'file-local-copy)))
-		      (file-local-copy
-		       (if (stringp remote-copy)
-			   (tramp-make-tramp-file-name
-			    method user host remote-copy)
-			 filename))))
+		      (cond
+		       ((stringp remote-copy)
+			(file-local-copy
+			 (tramp-make-tramp-file-name
+			  method user host remote-copy)))
+		       ((stringp tramp-temp-buffer-file-name)
+			(copy-file filename tramp-temp-buffer-file-name 'ok)
+			tramp-temp-buffer-file-name)
+		       (t (file-local-copy filename)))))
+
+	      (when (and (null remote-copy)
+			 (tramp-get-method-parameter
+			  method 'tramp-copy-keep-tmpfile))
+		;; We keep the local file for performance reasons,
+		;; useful for "rsync".
+		(set-file-modes local-copy (tramp-octal-to-decimal "0600"))
+		(setq tramp-temp-buffer-file-name local-copy)
+		(put 'tramp-temp-buffer-file-name 'permanent-local t))
+
 	      (tramp-message
 	       v 4 "Inserting local temp file `%s'..." local-copy)
 
@@ -4465,7 +4702,8 @@ coding system might not be determined.  This function repairs it."
 	    (setq buffer-read-only (not (file-writable-p filename)))
 	    (set-visited-file-modtime)
 	    (set-buffer-modified-p nil))
-	  (when (stringp local-copy)
+	  (when (and (stringp local-copy)
+		     (or remote-copy (null tramp-temp-buffer-file-name)))
 	    (delete-file local-copy))
 	  (when (stringp remote-copy)
 	    (delete-file
@@ -4585,15 +4823,12 @@ Returns a file name in `tramp-auto-save-directory' for autosaving this file."
 (defvar tramp-handle-write-region-hook nil
   "Normal hook to be run at the end of `tramp-handle-write-region'.")
 
-;; CCC grok APPEND, LOCKNAME
+;; CCC grok LOCKNAME
 (defun tramp-handle-write-region
   (start end filename &optional append visit lockname confirm)
   "Like `write-region' for Tramp files."
   (setq filename (expand-file-name filename))
   (with-parsed-tramp-file-name filename nil
-    (unless (null append)
-      (tramp-error
-       v 'file-error "Cannot append to file using Tramp (`%s')" filename))
     ;; Following part commented out because we don't know what to do about
     ;; file locking, and it does not appear to be a problem to ignore it.
     ;; Ange-ftp ignores it, too.
@@ -4645,7 +4880,12 @@ Returns a file name in `tramp-auto-save-directory' for autosaving this file."
 	      ;; needed if we use an encoding function, but currently
 	      ;; we use it always because this makes the logic
 	      ;; simpler.
-	      (tmpfile (tramp-compat-make-temp-file filename)))
+	      (tmpfile (or tramp-temp-buffer-file-name
+			   (tramp-compat-make-temp-file filename))))
+
+	  ;; If `append' is non-nil, we copy the file locally, and let
+	  ;; the native `write-region' implementation do the job.
+	  (when append (copy-file filename tmpfile 'ok))
 
 	  ;; We say `no-message' here because we don't want the
 	  ;; visited file modtime data to be clobbered from the temp
@@ -4659,6 +4899,7 @@ Returns a file name in `tramp-auto-save-directory' for autosaving this file."
 		 'write-region
 		 (list start end tmpfile append 'no-message lockname confirm))
 	      ((error quit)
+	       (setq tramp-temp-buffer-file-name nil)
 	       (delete-file tmpfile)
 	       (signal (car err) (cdr err))))
 
@@ -4686,8 +4927,19 @@ Returns a file name in `tramp-auto-save-directory' for autosaving this file."
 		(tramp-method-out-of-band-p
 		 v (- (or end (point-max)) (or start (point-min)))))
 	    (condition-case err
-		(rename-file tmpfile filename t)
+		(if (and (= (or end (point-max)) (point-max))
+			 (= (or start (point-min)) (point-min))
+			 (tramp-get-method-parameter
+			  method 'tramp-copy-keep-tmpfile))
+		    (progn
+		      ;; We keep the local file for performance
+		      ;; reasons, useful for "rsync".
+		      (setq tramp-temp-buffer-file-name tmpfile)
+		      (copy-file tmpfile filename t))
+		  (setq tramp-temp-buffer-file-name nil)
+		  (rename-file tmpfile filename t))
 	      ((error quit)
+	       (setq tramp-temp-buffer-file-name nil)
 	       (delete-file tmpfile)
 	       (signal (car err) (cdr err)))))
 
@@ -4791,17 +5043,22 @@ Returns a file name in `tramp-auto-save-directory' for autosaving this file."
 
       ;; We must protect `last-coding-system-used', now we have set it
       ;; to its correct value.
-      (let (last-coding-system-used)
+      (let (last-coding-system-used (need-chown t))
 	;; Set file modification time.
 	(when (or (eq visit t) (stringp visit))
-	  (set-visited-file-modtime
-	   ;; We must pass modtime explicitely, because filename can
-	   ;; be different from (buffer-file-name), f.e. if
-	   ;; `file-precious-flag' is set.
-	   (nth 5 (file-attributes filename))))
+          (let ((file-attr (file-attributes filename)))
+            (set-visited-file-modtime
+             ;; We must pass modtime explicitely, because filename can
+             ;; be different from (buffer-file-name), f.e. if
+             ;; `file-precious-flag' is set.
+             (nth 5 file-attr))
+            (when (and (eq (nth 2 file-attr) uid)
+                       (eq (nth 3 file-attr) gid))
+              (setq need-chown nil))))
 
 	;; Set the ownership.
-	(tramp-set-file-uid-gid filename uid gid)
+        (when need-chown
+          (tramp-set-file-uid-gid filename uid gid))
 	(when (or (eq visit t) (null visit) (stringp visit))
 	  (tramp-message v 0 "Wrote %s" filename))
 	(run-hooks 'tramp-handle-write-region-hook)))))
@@ -5815,6 +6072,19 @@ hosts, or files, disagree."
     (if (not (zerop (length user)))
 	(format "*tramp/%s %s@%s*" method user host)
       (format "*tramp/%s %s*" method host))))
+
+(defun tramp-delete-temp-file-function ()
+  "Remove temporary files related to current buffer."
+  (when (stringp tramp-temp-buffer-file-name)
+    (condition-case nil
+	(delete-file tramp-temp-buffer-file-name)
+      (error nil))))
+
+(add-hook 'kill-buffer-hook 'tramp-delete-temp-file-function)
+(add-hook 'tramp-cache-unload-hook
+	  (lambda ()
+	    (remove-hook 'kill-buffer-hook
+			 'tramp-delete-temp-file-function)))
 
 (defun tramp-get-buffer (vec)
   "Get the connection buffer to be used for VEC."
@@ -7186,6 +7456,49 @@ Return ATTR."
             (tramp-get-device vec))
     attr))
 
+(defun tramp-check-cached-permissions (vec access)
+  "Check `file-attributes' caches for VEC.
+Return t if according to the cache access type ACCESS is known to
+be granted."
+  (let ((result nil)
+        (offset (cond
+                 ((eq ?r access) 1)
+                 ((eq ?w access) 2)
+                 ((eq ?x access) 3))))
+    (dolist (suffix '("string" "integer") result)
+      (setq
+       result
+       (or
+        result
+        (let ((file-attr
+               (tramp-get-file-property
+                vec (tramp-file-name-localname vec)
+                (concat "file-attributes-" suffix) nil))
+              (remote-uid
+               (tramp-get-connection-property
+                vec (concat "uid-" suffix) nil))
+              (remote-gid
+               (tramp-get-connection-property
+                vec (concat "gid-" suffix) nil)))
+          (and
+           file-attr
+           (or
+            ;; Not a symlink
+            (eq t (car file-attr))
+            (null (car file-attr)))
+           (or
+            ;; World accessible.
+            (eq access (aref (nth 8 file-attr) (+ offset 6)))
+            ;; User accessible and owned by user.
+            (and
+             (eq access (aref (nth 8 file-attr) offset))
+             (equal remote-uid (nth 2 file-attr)))
+            ;; Group accessible and owned by user's
+            ;; principal group.
+            (and
+             (eq access (aref (nth 8 file-attr) (+ offset 3)))
+             (equal remote-gid (nth 3 file-attr)))))))))))
+
 (defun tramp-get-inode (vec)
   "Returns the virtual inode number.
 If it doesn't exist, generate a new one."
@@ -7649,8 +7962,21 @@ necessary only.  This function will be used in file name completion."
 (defun tramp-get-remote-perl (vec)
   (with-connection-property vec "perl"
     (tramp-message vec 5 "Finding a suitable `perl' command")
-    (or (tramp-find-executable vec "perl5" (tramp-get-remote-path vec))
-	(tramp-find-executable vec "perl" (tramp-get-remote-path vec)))))
+    (let ((result
+	   (or (tramp-find-executable vec "perl5" (tramp-get-remote-path vec))
+	       (tramp-find-executable
+		vec "perl" (tramp-get-remote-path vec)))))
+      ;; We must check also for some Perl modules.
+      (when result
+	(with-connection-property vec "perl-file-spec"
+	  (zerop
+	   (tramp-send-command-and-check
+	    vec (format "%s -e 'use File::Spec;'" result))))
+	(with-connection-property vec "perl-cwd-realpath"
+	  (zerop
+	   (tramp-send-command-and-check
+	    vec (format "%s -e 'use Cwd \"realpath\";'" result)))))
+      result)))
 
 (defun tramp-get-remote-stat (vec)
   (with-connection-property vec "stat"
@@ -7673,6 +7999,21 @@ necessary only.  This function will be used in file name completion."
 		     (integerp (cadr tmp)))
 	  (setq result nil)))
       result)))
+
+(defun tramp-get-remote-readlink (vec)
+  (with-connection-property vec "readlink"
+    (tramp-message vec 5 "Finding a suitable `readlink' command")
+    (let ((result (tramp-find-executable
+		   vec "readlink" (tramp-get-remote-path vec))))
+      (when (and result
+		 ;; We don't want to display an error message.
+		 (with-temp-message (or (current-message) "")
+		   (condition-case nil
+		       (zerop
+			(tramp-send-command-and-check
+			 vec (format "%s --canonicalize-missing /" result)))
+		     (error nil))))
+	result))))
 
 (defun tramp-get-remote-id (vec)
   (with-connection-property vec "id"
@@ -8069,14 +8410,11 @@ Only works for Bourne-like shells."
 ;; * `vc-directory' does not work.  It never displays any files, even
 ;;   if it does show files when run locally.
 ;; * How to deal with MULE in `insert-file-contents' and `write-region'?
-;; * Grok `append' parameter for `write-region'.
 ;; * Test remote ksh or bash for tilde expansion in `tramp-find-shell'?
 ;; * abbreviate-file-name
 ;; * Better error checking.  At least whenever we see something
 ;;   strange when doing zerop, we should kill the process and start
 ;;   again.  (Greg Stark)
-;; * Provide a local cache of old versions of remote files for the rsync
-;;   transfer method to use.  (Greg Stark)
 ;; * Remove unneeded parameters from methods.
 ;; * Make it work for different encodings, and for different file name
 ;;   encodings, too.  (Daniel Pittman)

@@ -350,8 +350,7 @@ Disable to prevent lots of excessive parsing in idle time."
   "Do long-processing work for for BUFFER.
 Uses `semantic-safe' and returns the output.
 Returns t of all processing succeeded."
-  (save-excursion
-    (set-buffer buffer)
+  (with-current-buffer buffer
     (not (and
 	  ;; Just in case
 	  (semantic-safe "Idle Work Parse Error: %S"
@@ -493,9 +492,9 @@ If any hook function throws an error, this variable is reset to nil.
 This hook is not protected from lexical errors.")
 
 (semantic-varalias-obsolete 'semantic-before-idle-scheduler-reparse-hooks
-			    'semantic-before-idle-scheduler-reparse-hook)
+			    'semantic-before-idle-scheduler-reparse-hook "23.2")
 (semantic-varalias-obsolete 'semantic-after-idle-scheduler-reparse-hooks
-			    'semantic-after-idle-scheduler-reparse-hook)
+			    'semantic-after-idle-scheduler-reparse-hook "23.2")
 
 (defun semantic-idle-scheduler-refresh-tags ()
   "Refreshes the current buffer's tags.
@@ -795,7 +794,8 @@ specific to a major mode.  For example, in jde mode:
   "Return a string message describing the current context.")
 
 (make-obsolete-overload 'semantic-eldoc-current-symbol-info
-                        'semantic-idle-summary-current-symbol-info)
+                        'semantic-idle-summary-current-symbol-info
+                        "23.2")
 
 (define-semantic-idle-service semantic-idle-summary
   "Display a tag summary of the lexical token under the cursor.
@@ -844,8 +844,7 @@ visible, then highlight it."
 	 (pulse-flag nil)
 	 )
     (cond ((semantic-overlay-p region)
-	   (save-excursion
-	     (set-buffer (semantic-overlay-buffer region))
+	   (with-current-buffer (semantic-overlay-buffer region)
 	     (goto-char (semantic-overlay-start region))
 	     (when (pos-visible-in-window-p
 		    (point) (get-buffer-window (current-buffer) 'visible))

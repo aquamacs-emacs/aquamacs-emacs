@@ -3509,7 +3509,7 @@ START and END specify the portion of the current buffer to be copied."
 	(insert-buffer-substring oldbuf start end)))))
 
 (put 'mark-inactive 'error-conditions '(mark-inactive error))
-(put 'mark-inactive 'error-message "The mark is not active now")
+(put 'mark-inactive 'error-message (purecopy "The mark is not active now"))
 
 (defvar activate-mark-hook nil
   "Hook run when the mark becomes active.
@@ -4853,7 +4853,7 @@ With argument 0, interchanges line point is in with line mark is in."
      ((= arg 0)
       (save-excursion
 	(setq pos1 (funcall aux 1))
-	(goto-char (mark))
+	(goto-char (or (mark) (error "No mark set in this buffer")))
 	(setq pos2 (funcall aux 1))
 	(transpose-subr-1 pos1 pos2))
       (exchange-point-and-mark))
@@ -5229,9 +5229,9 @@ if long lines are truncated."
   (message "Word wrapping %s"
 	   (if word-wrap "enabled" "disabled")))
 
-(defvar overwrite-mode-textual " Ovwrt"
+(defvar overwrite-mode-textual (purecopy " Ovwrt")
   "The string displayed in the mode line when in overwrite mode.")
-(defvar overwrite-mode-binary " Bin Ovwrt"
+(defvar overwrite-mode-binary (purecopy " Bin Ovwrt")
   "The string displayed in the mode line when in binary overwrite mode.")
 
 (defun overwrite-mode (arg)
@@ -6416,31 +6416,27 @@ See also `normal-erase-is-backspace'."
 	   (let* ((bindings
 		   `(([M-delete] [M-backspace])
 		     ([C-M-delete] [C-M-backspace])
-		     (,esc-map
-		      [C-delete] [C-backspace])))
+		     ([?\e C-delete] [?\e C-backspace])))
 		  (old-state (lookup-key local-function-key-map [delete])))
 
 	     (if enabled
 		 (progn
 		   (define-key local-function-key-map [delete] [?\C-d])
 		   (define-key local-function-key-map [kp-delete] [?\C-d])
-		   (define-key local-function-key-map [backspace] [?\C-?]))
+		   (define-key local-function-key-map [backspace] [?\C-?])
+                   (dolist (b bindings)
+                     ;; Not sure if input-decode-map is really right, but
+                     ;; keyboard-translate-table (used below) only works
+                     ;; for integer events, and key-translation-table is
+                     ;; global (like the global-map, used earlier).
+                     (define-key input-decode-map (car b) nil)
+                     (define-key input-decode-map (cadr b) nil)))
 	       (define-key local-function-key-map [delete] [?\C-?])
 	       (define-key local-function-key-map [kp-delete] [?\C-?])
-	       (define-key local-function-key-map [backspace] [?\C-?]))
-
-	     ;; Maybe swap bindings of C-delete and C-backspace, etc.
-	     (unless (equal old-state (lookup-key local-function-key-map [delete]))
-	       (dolist (binding bindings)
-		 (let ((map global-map))
-		   (when (keymapp (car binding))
-		     (setq map (car binding) binding (cdr binding)))
-		   (let* ((key1 (nth 0 binding))
-			  (key2 (nth 1 binding))
-			  (binding1 (lookup-key map key1))
-			  (binding2 (lookup-key map key2)))
-		     (define-key map key1 binding2)
-		     (define-key map key2 binding1)))))))
+	       (define-key local-function-key-map [backspace] [?\C-?])
+               (dolist (b bindings)
+                 (define-key input-decode-map (car b) (cadr b))
+                 (define-key input-decode-map (cadr b) (car b))))))
 	  (t
 	   (if enabled
 	       (progn
