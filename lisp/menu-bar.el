@@ -593,9 +593,9 @@ HELP is the text to use for the tooltip.
 PROPS are additional properties."
   `(list 'menu-item  (purecopy ,doc) ',fname
 	 ,@props
-	 ':help (purecopy ,help)
-	 ':button '(:toggle . (and (default-boundp ',fname)
-				   (default-value ',fname)))))
+	 :help (purecopy ,help)
+	 :button '(:toggle . (and (default-boundp ',fname)
+				  (default-value ',fname)))))
 
 (defmacro menu-bar-make-toggle (name variable doc message help &rest body)
   `(progn
@@ -619,9 +619,9 @@ by \"Save Options\" in Custom buffers.")
        ;; the user have already set explicitly in his init file.
        (if interactively (customize-mark-as-set ',variable)))
      (list 'menu-item (purecopy ,doc) ',name
-		 ':help (purecopy ,help)
-                 ':button '(:toggle . (and (default-boundp ',variable)
-					 (default-value ',variable))))))
+	   :help (purecopy ,help)
+	   :button '(:toggle . (and (default-boundp ',variable)
+				    (default-value ',variable))))))
 
 ;; Function for setting/saving default font.
 
