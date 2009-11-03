@@ -6317,7 +6317,7 @@ front of the list of recently selected ones."
 
 ;;; Handling of Backspace and Delete keys.
 
-(defcustom normal-erase-is-backspace 'maybe
+(defcustom normal-erase-is-backspace t
   "Set the default behavior of the Delete and Backspace keys.
 
 If set to t, Delete key deletes forward and Backspace key deletes
