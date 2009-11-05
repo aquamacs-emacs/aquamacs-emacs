@@ -617,21 +617,39 @@ sentence boundaries are too far between."
 
 (defcustom global-flyspell-inhibit-functions
   '(global-flyspell-default-inhibit-function)
-  "List of functions to be called before global-flyspell-mode activates
+  "List of functions to be called before `global-flyspell-mode' activates
 flyspell in a buffer.  Those functions are called one by one, with no
 arguments, until one of them returns a non-nil value, and thus, prevents
-activation of flyspell-mode (but only via global-flyspell-mode)."
+activation of `flyspell-mode' (but only via `global-flyspell-mode')."
   :group 'flyspell
   :type 'hook)
 
+(defcustom global-flyspell-inhibit-buffer-names
+  nil
+  "List of buffer names in which `global-flyspell-mode' will not
+  activate `flyspell-mode'"
+  :group 'flyspell
+  :type '(repeat (string)))
+
 (defun global-flyspell-default-inhibit-function ()
-  "Return t if current buffer is read-only, or has a name
-starting with a space and is not visiting a file.  This is used
-to indicate that the buffer should not have flyspell-mode
-turned on by `global-flyspell-mode'."
-  (or buffer-read-only
-      (and (char-equal ?\  (aref (buffer-name) 0))
-	   (not (buffer-file-name)))))
+  "Return non-nil if current buffer: has a major mode with a
+property named mode-class with value special; has a name starting
+with a space and is not visiting a file; is designated by its
+name as a buffer to be displayed specially; or is listed by name
+in `global-flyspell-inhibit-buffer-names'.  This is used to
+indicate that the buffer should not have `flyspell-mode' turned on
+by `global-flyspell-mode'."
+  (or 
+   ;; buffers whose major-mode is marked as "special"
+   (eq (get major-mode 'mode-class) 'special)
+   ;; buffers whose name starts with space, if not visiting a file
+   (and (char-equal ?\  (aref (buffer-name) 0))
+	(not (buffer-file-name)))
+   ;; buffers designated for special display (e.g. dedicated frame)
+   (special-display-p (buffer-name))
+   ;; buffer with name listed in global-flyspell-inhibit-buffer-names
+   (member (buffer-name) global-flyspell-inhibit-buffer-names)
+   ))
 
 ;;;###autoload
 (defun flyspell-text-modes ()
