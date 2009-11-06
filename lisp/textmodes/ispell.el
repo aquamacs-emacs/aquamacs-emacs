@@ -1698,35 +1698,36 @@ both existing buffers and buffers that you subsequently create."
     (progn
       (defvar ispell-submenu-map (make-sparse-keymap "Ispell"))
       (define-key ispell-submenu-map [ispell-complete-word]
-	'(menu-item "Complete Word" ispell-complete-word
-		    :help "Complete word at cursor using dictionary"))
+	`(menu-item ,(purecopy "Complete Word") ispell-complete-word
+		    :help ,(purecopy "Complete word at cursor using dictionary")))
       (define-key ispell-submenu-map [ispell-complete-word-interior-frag]
-	'(menu-item "Complete Word Fragment" ispell-complete-word-interior-frag
-		    :help "Complete word fragment at cursor"))
+	`(menu-item ,(purecopy "Complete Word Fragment")
+		    ispell-complete-word-interior-frag
+		    :help ,(purecopy "Complete word fragment at cursor")))
       (define-key ispell-submenu-map [ispell-continue]
-	'(menu-item "Continue Spell-Checking" ispell-continue
+	`(menu-item ,(purecopy "Continue Spell-Checking") ispell-continue
 		    :enable (and (boundp 'ispell-region-end)
 				 (marker-position ispell-region-end)
 				 (equal (marker-buffer ispell-region-end)
 					(current-buffer)))
-		    :help "Continue spell checking last region"))
+		    :help ,(purecopy "Continue spell checking last region")))
       (define-key ispell-submenu-map [ispell-word]
-	'(menu-item "Spell-Check Word" ispell-word
-		    :help "Spell-check word at cursor"))
+	`(menu-item ,(purecopy "Spell-Check Word") ispell-word
+		    :help ,(purecopy "Spell-check word at cursor")))
       (define-key ispell-submenu-map [ispell-comments-and-strings]
-	'(menu-item "Spell-Check Comments" ispell-comments-and-strings
-		    :help "Spell-check only comments and strings"))
+	`(menu-item ,(purecopy "Spell-Check Comments") ispell-comments-and-strings
+		    :help ,(purecopy "Spell-check only comments and strings")))
       (define-key ispell-submenu-map [ispell-region]
-	'(menu-item "Spell-Check Region" ispell-region
+	`(menu-item ,(purecopy "Spell-Check Region") ispell-region
 		    :enable mark-active
-		    :help "Spell-check text in marked region"))
+		    :help ,(purecopy "Spell-check text in marked region")))
       (define-key ispell-submenu-map [ispell-message]
-	'(menu-item "Spell-Check Message" ispell-message
+	`(menu-item ,(purecopy "Spell-Check Message") ispell-message
 		    :visible (eq major-mode 'mail-mode)
-		    :help "Skip headers and included message text"))
+		    :help ,(purecopy "Skip headers and included message text")))
       (define-key ispell-submenu-map [ispell-buffer]
-	'(menu-item "Spell-Check Buffer" ispell-buffer
-		    :help "Check spelling of selected buffer"))
+	`(menu-item ,(purecopy "Spell-Check Buffer") ispell-buffer
+		    :help ,(purecopy "Check spelling of selected buffer")))
       ;;(put 'ispell-region 'menu-enable 'mark-active)
 
       (fset 'ispell-submenu-map (symbol-value 'ispell-submenu-map))))
@@ -1783,22 +1784,23 @@ both existing buffers and buffers that you subsequently create."
 	;; use (x-popup-menu last-nonmenu-event(list "" ispell-help-list)) ?
 	`(menu-item ,(purecopy "Help")
 		    (lambda () (interactive) (describe-function 'ispell-help))
-		    :help ,(purecopy "Show standard Ispell keybindings and commands")))
+		    :help ,(purecopy
+			    "Show standard Ispell keybindings and commands")))
 
       (define-key ispell-menu-map [ispell-submenu]
-	`(menu-item "Ispell" ,ispell-submenu-map
+	`(menu-item ,(purecopy "Ispell") ,ispell-submenu-map
 		    :visible (string= ispell-program-name "NSSpellChecker")))
       (define-key ispell-menu-map [spellcheck-menu-separator]
-	'(menu-item "--"))
+	`(menu-item ,(purecopy "--")))
 
       (define-key ispell-menu-map [flyspell-modes-submenu]
-	`(menu-item "Check Spelling While Typing in Modes"
+	`(menu-item ,(purecopy "Check Spelling While Typing in Modes")
 		    ,flyspell-modes-submenu-map))
 
       (define-key ispell-menu-map [flyspell-mode]
 	`(menu-item ,(purecopy "Check Spelling While Typing (in this buffer)")
 		    flyspell-mode
-		    :help "Check spelling while you edit the text"
+		    :help ,(purecopy "Check spelling while you edit the text")
 		    ;; allow toggling regardless of mode-related flyspell settings
 		    :button (:toggle . (bound-and-true-p flyspell-mode))))
       (define-key ispell-menu-map [ispell-complete-word]
@@ -1806,7 +1808,8 @@ both existing buffers and buffers that you subsequently create."
 		    :visible (not (string= ispell-program-name "NSSpellChecker"))
 		    :help ,(purecopy "Complete word at cursor using dictionary")))
       (define-key ispell-menu-map [ispell-complete-word-interior-frag]
-	`(menu-item ,(purecopy "Complete Word Fragment") ispell-complete-word-interior-frag 
+	`(menu-item ,(purecopy "Complete Word Fragment")
+		    ispell-complete-word-interior-frag 
 		    :visible (not (string= ispell-program-name "NSSpellChecker"))
 		    :help ,(purecopy "Complete word fragment at cursor")))))
 
@@ -1818,15 +1821,15 @@ both existing buffers and buffers that you subsequently create."
 		    :enable (and (boundp 'ispell-region-end)
 				 (marker-position ispell-region-end)
 				 (equal (marker-buffer ispell-region-end)
-					(current-buffer))) 
+					(current-buffer)))
 		    :visible (not (string= ispell-program-name "NSSpellChecker"))
 		    :help ,(purecopy "Continue spell checking last region")))
       (define-key ispell-menu-map [ispell-word]
-	'(menu-item ,(purecopy "Spell-Check Word") ispell-word 
+	`(menu-item ,(purecopy "Spell-Check Word") ispell-word 
 		    :visible (not (string= ispell-program-name "NSSpellChecker"))
 		    :help ,(purecopy "Spell-check word at cursor")))
       (define-key ispell-menu-map [ispell-comments-and-strings]
-	'(menu-item ,(purecopy "Spell-Check Comments") ispell-comments-and-strings 
+	`(menu-item ,(purecopy "Spell-Check Comments") ispell-comments-and-strings 
 		    :visible (not (string= ispell-program-name "NSSpellChecker"))
 		    :help ,(purecopy "Spell-check only comments and strings")))))
 
@@ -1851,19 +1854,19 @@ both existing buffers and buffers that you subsequently create."
       ;;(put 'ispell-region 'menu-enable 'mark-active)
 
        (define-key ispell-menu-map [nsspellchecker-panel-hide]
-	'(menu-item "Hide Spelling Panel" spellchecker-panel-or-ispell 
+	`(menu-item ,(purecopy "Hide Spelling Panel") spellchecker-panel-or-ispell 
 		    :visible (and (string= ispell-program-name "NSSpellChecker")
 				  (ns-spellchecker-panel-visible-p))
-		    :help "Toggle OS X spellcheck panel visibility")) 
+		    :help ,(purecopy "Toggle OS X spellcheck panel visibility"))) 
       (define-key ispell-menu-map [nsspellchecker-panel-show]
-	'(menu-item "Show Spelling Panel" spellchecker-panel-or-ispell 
+	`(menu-item ,(purecopy "Show Spelling Panel") spellchecker-panel-or-ispell 
 		    :visible (and (string= ispell-program-name "NSSpellChecker")
 				  (not (ns-spellchecker-panel-visible-p))) 
-		    :help "Toggle OS X spellcheck panel visibility"))
+		    :help ,(purecopy "Toggle OS X spellcheck panel visibility")))
       (define-key ispell-menu-map [nsspellcheck]
-	'(menu-item "Spellcheck Now" spellcheck-now
+	`(menu-item ,(purecopy "Spellcheck Now") spellcheck-now
 		    :visible (string= ispell-program-name "NSSpellChecker")
-		    :help "Check spelling with OS X spellchecker")) 
+		    :help ,(purecopy "Check spelling with OS X spellchecker"))) 
 
       (fset 'ispell-menu-map (symbol-value 'ispell-menu-map))))
 
