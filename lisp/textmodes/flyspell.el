@@ -2542,8 +2542,8 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 	   ;; flyspell.  I assume its absence on the Emacs side was an
 	   ;; oversight.  --Stef
 	   (ispell-send-string "#\n")
-	   (setq ispell-pdict-modified-p '(t)) 
-	   (flyspell-unhighlight-at cursor-location))
+	   (setq ispell-pdict-modified-p '(t)))
+	 (flyspell-unhighlight-at cursor-location)
 	 )
 	((or (eq replace 'buffer) (eq replace 'session))
 	 (if (string= ispell-program-name "NSSpellChecker")
