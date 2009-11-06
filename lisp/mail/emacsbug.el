@@ -7,7 +7,6 @@
 ;; Maintainer: FSF
 ;; Keywords: maint mail
 
-;; Not fully installed because it can work only on Internet hosts.
 ;; This file is part of GNU Emacs.
 
 ;; GNU Emacs is free software: you can redistribute it and/or modify
@@ -130,7 +129,8 @@ usually do not have translators to read other languages for them.\n\n")
 	(insert ",\nand to the gnu.emacs.bug news group.\n\n")))
 
     (insert "Please describe exactly what actions triggered the bug\n"
-	    "and the precise symptoms of the bug:\n\n")
+	    "and the precise symptoms of the bug.  If you can, give\n"
+	    "a recipe starting from `emacs -Q':\n\n")
     (add-text-properties (point) (save-excursion (mail-text) (point))
                          prompt-properties)
 
@@ -143,8 +143,8 @@ usually do not have translators to read other languages for them.\n\n")
 
     (let ((debug-file (expand-file-name "DEBUG" data-directory)))
       (if (file-readable-p debug-file)
-	  (insert "If you would like to further debug the crash, please read the file\n"
-		  debug-file " for instructions.\n")))
+	  (insert "For information about debugging Emacs, please read the file\n"
+		  debug-file ".\n")))
     (add-text-properties (1+ user-point) (point) prompt-properties)
 
     (insert "\n\nIn " (emacs-version) "\n")
@@ -218,23 +218,25 @@ usually do not have translators to read other languages for them.\n\n")
       (insert (if (zerop (length shadows))
                   "None found.\n"
                 shadows)))
-    ;; This is so the user has to type something
-    ;; in order to send easily.
+    (insert (format "\nFeatures:\n%s\n" features))
+    (fill-region (line-beginning-position 0) (point))
+    ;; This is so the user has to type something in order to send easily.
     (use-local-map (nconc (make-sparse-keymap) (current-local-map)))
     (define-key (current-local-map) "\C-c\C-i" 'report-emacs-bug-info)
     (unless report-emacs-bug-no-explanations
       (with-output-to-temp-buffer "*Bug Help*"
+	(princ "While in the mail buffer:\n\n")
 	(if (eq mail-user-agent 'sendmail-user-agent)
 	    (princ (substitute-command-keys
-		    "Type \\[mail-send-and-exit] to send the bug report.\n")))
+		    "  Type \\[mail-send-and-exit] to send the bug report.\n")))
 	(princ (substitute-command-keys
-		"Type \\[kill-buffer] RET to cancel (don't send it).\n"))
+		"  Type \\[kill-buffer] RET to cancel (don't send it).\n"))
 	(terpri)
 	(princ (substitute-command-keys
-		"Type \\[report-emacs-bug-info] to visit in Info the Emacs Manual section
-about when and how to write a bug report,
-and what information to supply so that the bug can be fixed.
-Type SPC to scroll through this section and its subsections."))))
+		"  Type \\[report-emacs-bug-info] to visit in Info the Emacs Manual section
+    about when and how to write a bug report, and what
+    information you should include to help fix the bug.")))
+      (shrink-window-if-larger-than-buffer (get-buffer-window "*Bug Help*")))
     ;; Make it less likely people will send empty messages.
     (make-local-variable 'mail-send-hook)
     (add-hook 'mail-send-hook 'report-emacs-bug-hook)

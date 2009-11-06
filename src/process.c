@@ -38,6 +38,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <sys/types.h>		/* some typedefs are used in sys/file.h */
 #include <sys/file.h>
 #include <sys/stat.h>
+#include <setjmp.h>
 #ifdef HAVE_INTTYPES_H
 #include <inttypes.h>
 #endif
@@ -1522,7 +1523,7 @@ list_processes_1 (query_only)
 	    insert_string ("?");
 	  if (INTEGERP (speed))
 	    {
-	      sprintf (tembuf, " at %d b/s", XINT (speed));
+	      sprintf (tembuf, " at %ld b/s", (long) XINT (speed));
 	      insert_string (tembuf);
 	    }
 	  insert_string (")\n");
@@ -2316,12 +2317,12 @@ create_pty (process)
 #endif
       if (forkin < 0)
 	report_file_error ("Opening pty", Qnil);
-#if defined (RTU) || defined (UNIPLUS) || defined (DONT_REOPEN_PTY)
+#if defined (DONT_REOPEN_PTY)
       /* In the case that vfork is defined as fork, the parent process
 	 (Emacs) may send some data before the child process completes
 	 tty options setup.  So we setup tty before forking.  */
       child_setup_tty (forkout);
-#endif /* RTU or UNIPLUS or DONT_REOPEN_PTY */
+#endif /* DONT_REOPEN_PTY */
 #else
       forkin = forkout = -1;
 #endif /* not USG, or USG_SUBTTY_WORKS */
@@ -7641,6 +7642,7 @@ The variable takes effect when `start-process' is called.  */);
 #include <sys/stat.h>
 #include <stdlib.h>
 #include <fcntl.h>
+#include <setjmp.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif

@@ -64,6 +64,7 @@
 ;;       constant.  These need to be returned as there would be no
 ;;       other possible completions.
 
+(eval-when-compile (require 'cl))
 (require 'semantic)
 (require 'semantic/format)
 (require 'semantic/ctxt)
@@ -709,8 +710,7 @@ Optional argument CTXT is the context to show."
 (defmethod semantic-analyze-pulse ((context semantic-analyze-context))
   "Pulse the region that CONTEXT affects."
   (require 'pulse)
-  (save-excursion
-    (set-buffer (oref context :buffer))
+  (with-current-buffer (oref context :buffer)
     (let ((bounds (oref context :bounds)))
       (when bounds
 	(pulse-momentary-highlight-region (car bounds) (cdr bounds))))))

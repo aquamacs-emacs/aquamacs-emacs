@@ -49,8 +49,7 @@ search locally, then semanticdb for that tag (when enabled.)")
 (defun semantic-tag-calculate-parent-default (tag)
   "Attempt to calculate the parent of TAG."
   (when (semantic-tag-in-buffer-p tag)
-    (save-excursion
-      (set-buffer (semantic-tag-buffer tag))
+    (with-current-buffer (semantic-tag-buffer tag)
       (save-excursion
 	(goto-char (semantic-tag-start tag))
 	(semantic-current-tag-parent))
@@ -76,7 +75,7 @@ is to return a symbol based on type modifiers."
   (:override))
 
 (make-obsolete-overload 'semantic-nonterminal-protection
-                        'semantic-tag-protection)
+                        'semantic-tag-protection "23.2")
 
 (defun semantic-tag-protection-default (tag &optional parent)
   "Return the protection of TAG as a child of PARENT default action.
@@ -138,7 +137,7 @@ The default behavior (if not overridden with `tag-abstract-p'
 is to return true if `abstract' is in the type modifiers.")
 
 (make-obsolete-overload 'semantic-nonterminal-abstract
-                        'semantic-tag-abstract-p)
+                        'semantic-tag-abstract-p "23.2")
 
 (defun semantic-tag-abstract-p-default (tag &optional parent)
   "Return non-nil if TAG is abstract as a child of PARENT default action.
@@ -161,7 +160,7 @@ The default behavior (if not overridden with `tag-leaf-p'
 is to return true if `leaf' is in the type modifiers.")
 
 (make-obsolete-overload 'semantic-nonterminal-leaf
-                        'semantic-tag-leaf-p)
+                        'semantic-tag-leaf-p "23.2")
 
 (defun semantic-tag-leaf-p-default (tag &optional parent)
   "Return non-nil if TAG is leaf as a child of PARENT default action.
@@ -238,7 +237,7 @@ STREAM-OR-BUFFER with a tag stream value, or nil."
     (:override-with-args (tag stream))))
 
 (make-obsolete-overload 'semantic-nonterminal-full-name
-                        'semantic-tag-full-name)
+                        'semantic-tag-full-name "23.2")
 
 (defun semantic-tag-full-name-default (tag stream)
   "Default method for `semantic-tag-full-name'.

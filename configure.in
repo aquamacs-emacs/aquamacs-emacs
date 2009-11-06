@@ -456,6 +456,7 @@ dnl see the `changequote' comment above.
     case "${canonical}" in
       i[3456]86-* )  machine=intel386 ;;
       powerpc-* )    machine=macppc ;;
+      x86_64-* )     machine=amdx86-64 ;;
       * )            unported=yes ;;
     esac
     opsys=darwin
@@ -575,15 +576,6 @@ dnl see the `changequote' comment above.
 		fi
 		;;
       *) ;;
-    esac
-  ;;
-
-  ## Vaxen.
-  vax-dec-* )
-    machine=vax
-    case "${canonical}" in
-      *-vms* ) 						opsys=vms ;;
-      * ) 						unported=yes
     esac
   ;;
 
@@ -3065,7 +3057,7 @@ echo creating lib-src/Makefile
   sed -e '1,/start of cpp stuff/d'\
       -e 's,/\*\*/#\(.*\)$,/* \1 */,' \
       < Makefile.c > junk.c
-  $CPP $cpp_undefs -I. -I$srcdir/src $CPPFLAGS junk.c | \
+  $CPP -P $cpp_undefs -I. -I$srcdir/src $CPPFLAGS junk.c | \
       sed -e 's/^ /	/' -e '/^#/d' -e '/^[ 	]*$/d' > junk2.c
   cat junk1.c junk2.c > Makefile.new
   rm -f junk.c junk1.c junk2.c
@@ -3081,7 +3073,7 @@ echo creating src/Makefile
   sed -e '1,/start of cpp stuff/d'\
       -e 's,/\*\*/#\(.*\)$,/* \1 */,' \
       < Makefile.c > junk.c
-  $CPP $cpp_undefs -I. -I$srcdir/src $CPPFLAGS junk.c | \
+  $CPP -P $cpp_undefs -I. -I$srcdir/src $CPPFLAGS junk.c | \
       sed -e 's/^ /	/' -e '/^#/d' -e '/^[ 	]*$/d' > junk2.c
   cat junk1.c junk2.c > Makefile.new
   rm -f junk.c junk1.c junk2.c

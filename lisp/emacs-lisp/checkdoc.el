@@ -173,6 +173,9 @@
 (defvar checkdoc-version "0.6.1"
   "Release version of checkdoc you are currently running.")
 
+(require 'help-mode) ;; for help-xref-info-regexp
+(require 'thingatpt) ;; for handy thing-at-point-looking-at
+
 (defvar compilation-error-regexp-alist)
 (defvar compilation-mode-font-lock-keywords)
 
@@ -2016,7 +2019,12 @@ If the offending word is in a piece of quoted text, then it is skipped."
 			 ;; surrounded by /, as in a URL or filename: /emacs/
 			 (not (and (= ?/ (char-after e))
 				   (= ?/ (char-before b))))
-			 (not (checkdoc-in-example-string-p begin end)))
+			 (not (checkdoc-in-example-string-p begin end))
+			 ;; info or url links left alone
+ 			 (not (thing-at-point-looking-at
+ 			       help-xref-info-regexp))
+			 (not (thing-at-point-looking-at
+ 			       help-xref-url-regexp)))
 		    (if (checkdoc-autofix-ask-replace
 			 b e (format "Text %s should be capitalized.  Fix? "
 				     text)
@@ -2061,6 +2069,7 @@ If the offending word is in a piece of quoted text, then it is skipped."
 				      (progn
 					(forward-sexp -1)
 					;; piece of an abbreviation
+					;; FIXME etc
 					(looking-at
 					 "\\([a-z]\\|[iI]\\.?e\\|[eE]\\.?g\\)\\."))
 				    (error t))))
@@ -2211,6 +2220,8 @@ News agents may remove it"
   ;; b) determine if we have lm-history symbol which doesn't always exist
   (require 'lisp-mnt))
 
+(defvar generate-autoload-cookie)
+
 (defun checkdoc-file-comments-engine ()
   "Return a message list if this file does not match the Emacs standard.
 This checks for style only, such as the first line, Commentary:,
@@ -2307,15 +2318,24 @@ Code:, and others referenced in the style guide."
        (or
 	;; * Code section
 	(if (not (lm-code-mark))
-	    (let ((cont t))
+	    (let ((cont t)
+		  pos)
 	      (goto-char (point-min))
-	      (while (and cont (re-search-forward "^(" nil t))
-		(setq cont (looking-at "require\\s-+")))
+	      ;; match ";;;###autoload" cookie to keep it with the form
+	      (require 'autoload)
+	      (while (and cont (re-search-forward
+				(concat "^\\("
+					(regexp-quote generate-autoload-cookie)
+					"\n\\)?"
+					"(")
+				nil t))
+		(setq pos (match-beginning 0)
+		      cont (looking-at "require\\s-+")))
 	      (if (and (not cont)
 		       (checkdoc-y-or-n-p
 			"There is no ;;; Code: marker.  Insert one? "))
-		  (progn (beginning-of-line)
-			 (insert ";;; Code:\n")
+		  (progn (goto-char pos)
+			 (insert ";;; Code:\n\n")
 			 nil)
 		(checkdoc-create-error
 		 "You should have a section marked \";;; Code:\""

@@ -21,6 +21,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include <config.h>
 #include <stdio.h>
+#include <setjmp.h>
 #if HAVE_ALLOCA_H
 # include <alloca.h>
 #endif
@@ -173,7 +174,11 @@ in case you use it as a menu with `x-popup-menu'.  */)
      Lisp_Object string;
 {
   if (!NILP (string))
-    return Fcons (Qkeymap, Fcons (string, Qnil));
+    {
+      if (!NILP (Vpurify_flag))
+	string = Fpurecopy (string);
+      return Fcons (Qkeymap, Fcons (string, Qnil));
+    }
   return Fcons (Qkeymap, Qnil);
 }
 

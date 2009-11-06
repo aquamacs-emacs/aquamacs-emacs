@@ -127,7 +127,8 @@ was first made obsolete, for example a date or a release number."
     (if (eq 'byte-compile-obsolete handler)
 	(setq handler (nth 1 (get obsolete-name 'byte-obsolete-info)))
       (put obsolete-name 'byte-compile 'byte-compile-obsolete))
-    (put obsolete-name 'byte-obsolete-info (list current-name handler when)))
+    (put obsolete-name 'byte-obsolete-info
+	 (list (purecopy current-name) handler (purecopy when))))
   obsolete-name)
 (set-advertised-calling-convention
  ;; New code should always provide the `when' argument.
@@ -166,7 +167,11 @@ was first made obsolete, for example a date or a release number."
       (if (equal str "") (error ""))
       (intern str))
     (car (read-from-string (read-string "Obsoletion replacement: ")))))
-  (put obsolete-name 'byte-obsolete-variable (cons current-name when))
+  (put obsolete-name 'byte-obsolete-variable
+       (cons
+	(if (stringp current-name)
+	    (purecopy current-name)
+	  current-name) (purecopy when)))
   obsolete-name)
 (set-advertised-calling-convention
  ;; New code should always provide the `when' argument.
@@ -175,28 +180,32 @@ was first made obsolete, for example a date or a release number."
 (defmacro define-obsolete-variable-alias (obsolete-name current-name
 						 &optional when docstring)
   "Make OBSOLETE-NAME a variable alias for CURRENT-NAME and mark it obsolete.
-
-\(define-obsolete-variable-alias 'old-var 'new-var \"22.1\" \"old-var's doc.\")
-
-is equivalent to the following two lines of code:
-
-\(defvaralias 'old-var 'new-var \"old-var's doc.\")
-\(make-obsolete-variable 'old-var 'new-var \"22.1\")
+This uses `defvaralias' and `make-obsolete-variable' (which see).
+See the Info node `(elisp)Variable Aliases' for more details.
 
 If CURRENT-NAME is a defcustom (more generally, any variable
 where OBSOLETE-NAME may be set, e.g. in a .emacs file, before the
 alias is defined), then the define-obsolete-variable-alias
-statement should be placed before the defcustom.  This is so that
-any user customizations are applied before the defcustom tries to
-initialize the variable (this is due to the way `defvaralias' works).
-Exceptions to this rule occur for define-obsolete-variable-alias
-statements that are autoloaded, or in files dumped with Emacs.
+statement should be evaluated before the defcustom, if user
+customizations are to be respected.  The simplest way to achieve
+this is to place the alias statement before the defcustom (this
+is not necessary for aliases that are autoloaded, or in files
+dumped with Emacs).  This is so that any user customizations are
+applied before the defcustom tries to initialize the
+variable (this is due to the way `defvaralias' works).
 
-See the docstrings of `defvaralias' and `make-obsolete-variable' or
-Info node `(elisp)Variable Aliases' for more details."
+For the benefit of `custom-set-variables', if OBSOLETE-NAME has
+any of the following properties, they are copied to
+CURRENT-NAME, if it does not already have them:
+'saved-value, 'saved-variable-comment."
   (declare (doc-string 4))
   `(progn
      (defvaralias ,obsolete-name ,current-name ,docstring)
+     ;; See Bug#4706.
+     (dolist (prop '(saved-value saved-variable-comment))
+       (and (get ,obsolete-name prop)
+            (null (get ,current-name prop))
+            (put ,current-name prop (get ,obsolete-name prop))))
      (make-obsolete-variable ,obsolete-name ,current-name ,when)))
 (set-advertised-calling-convention
  ;; New code should always provide the `when' argument.

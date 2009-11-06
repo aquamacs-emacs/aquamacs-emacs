@@ -24,6 +24,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <unistd.h>
 #endif
 #include <time.h>
+#include <setjmp.h>
 
 /* Note on some machines this defines `vector' as a typedef,
    so make sure we don't use that name in this file.  */
@@ -44,10 +45,8 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #ifdef HAVE_MENUS
 #if defined (HAVE_X_WINDOWS)
 #include "xterm.h"
-#elif defined (MAC_OS)
-#include "macterm.h"
 #endif
-#endif
+#endif /* HAVE_MENUS */
 
 #ifndef NULL
 #define NULL ((POINTER_TYPE *)0)
@@ -297,7 +296,7 @@ If string STR1 is greater, the value is a positive number N;
       else
 	{
 	  c1 = SREF (str1, i1++);
-	  c1 = unibyte_char_to_multibyte (c1);
+	  MAKE_CHAR_MULTIBYTE (c1);
 	}
 
       if (STRING_MULTIBYTE (str2))
@@ -305,7 +304,7 @@ If string STR1 is greater, the value is a positive number N;
       else
 	{
 	  c2 = SREF (str2, i2++);
-	  c2 = unibyte_char_to_multibyte (c2);
+	  MAKE_CHAR_MULTIBYTE (c2);
 	}
 
       if (c1 == c2)
@@ -703,10 +702,10 @@ concat (nargs, args, target_type, last_special)
 		  {
 		    XSETFASTINT (elt, SREF (this, thisindex)); thisindex++;
 		    if (some_multibyte
-			&& XINT (elt) >= 0200
+			&& !ASCII_CHAR_P (XINT (elt))
 			&& XINT (elt) < 0400)
 		      {
-			c = unibyte_char_to_multibyte (XINT (elt));
+			c = BYTE8_TO_CHAR (XINT (elt));
 			XSETINT (elt, c);
 		      }
 		  }

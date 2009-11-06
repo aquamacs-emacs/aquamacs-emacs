@@ -69,8 +69,7 @@ Intended to be used in the `interactive' spec of
 	       (format "Add %s with value: " variable))
 	     obarray
 	     (lambda (sym)
-	       (and (string-match-p "-mode\\'" (symbol-name sym))
-		    (not (string-match-p "-minor-mode\\'" (symbol-name sym)))))
+	       (string-match-p "-mode\\'" (symbol-name sym)))
 	     nil nil nil default nil))
       (and (stringp value)
 	   (intern (replace-regexp-in-string "-mode\\'" "" value))))
@@ -92,7 +91,8 @@ Intended to be used in the `interactive' spec of
 			 nil 'set-variable-value-history
 			 (format "%S"
 				 (cond ((eq variable 'unibyte) t)
-				       (t (symbol-value variable))))))))))
+				       ((boundp variable)
+					(symbol-value variable))))))))))
 
 (defun read-file-local-variable-mode ()
   "Read per-directory file-local variable's mode using completion.

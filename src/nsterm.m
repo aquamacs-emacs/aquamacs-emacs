@@ -34,6 +34,7 @@ GNUstep port and post-20 update by Adrian Robert (arobert@cogsci.ucsd.edu)
 #include <time.h>
 #include <signal.h>
 #include <unistd.h>
+#include <setjmp.h>
 
 #include "lisp.h"
 #include "blockinput.h"
@@ -199,7 +200,9 @@ static EmacsScroller *last_mouse_scroll_bar = nil;
 static struct frame *ns_updating_frame;
 static NSView *focus_view = NULL;
 static int ns_window_num =0;
+#ifdef NS_IMPL_GNUSTEP
 static NSRect uRect;
+#endif
 static BOOL gsaved = NO;
 BOOL ns_in_resize = NO;
 static BOOL ns_fake_keydown = NO;
@@ -524,7 +527,7 @@ ns_resize_handle_rect (NSWindow *window)
 }
 
 
-static void
+static int
 ns_update_begin (struct frame *f)
 /* --------------------------------------------------------------------------
    Prepare for a grouped sequence of drawing calls
@@ -535,11 +538,12 @@ ns_update_begin (struct frame *f)
   NSTRACE (ns_update_begin);
 
   ns_updating_frame = f;
-  [view lockFocusIfCanDraw];
+  int succ = [view lockFocusIfCanDraw];
 
 #ifdef NS_IMPL_GNUSTEP
   uRect = NSMakeRect (0, 0, 0, 0);
 #endif
+  return succ;
 }
 
 
@@ -1475,7 +1479,7 @@ ns_color_to_lisp (NSColor *col)
      Convert a color to a lisp string with the RGB equivalent
    -------------------------------------------------------------------------- */
 {
-  float red, green, blue, alpha, gray;
+  CGFloat red, green, blue, alpha, gray;
   char buf[1024];
   const char *str;
   NSTRACE (ns_color_to_lisp);
@@ -1495,13 +1499,13 @@ ns_color_to_lisp (NSColor *col)
     {
       [[col colorUsingColorSpaceName: NSCalibratedWhiteColorSpace]
             getWhite: &gray alpha: &alpha];
-      snprintf (buf, sizeof (buf), "#%02.2lx%02.2lx%02.2lx",
+      snprintf (buf, sizeof (buf), "#%2.2lx%2.2lx%2.2lx",
 		lrint (gray * 0xff), lrint (gray * 0xff), lrint (gray * 0xff));
       UNBLOCK_INPUT;
       return build_string (buf);
     }
 
-  snprintf (buf, sizeof (buf), "#%02.2lx%02.2lx%02.2lx",
+  snprintf (buf, sizeof (buf), "#%2.2lx%2.2lx%2.2lx",
             lrint (red*0xff), lrint (green*0xff), lrint (blue*0xff));
 
   UNBLOCK_INPUT;
@@ -1517,7 +1521,7 @@ ns_query_color(void *col, XColor *color_def, int setPixel)
          and set color_def pixel to the resulting index.
    -------------------------------------------------------------------------- */
 {
-  float r, g, b, a;
+  CGFloat r, g, b, a;
 
   [((NSColor *)col) getRed: &r green: &g blue: &b alpha: &a];
   color_def->red   = r * 65535;
@@ -1684,11 +1688,13 @@ note_mouse_movement (struct frame *frame, float x, float y)
       y < last_mouse_glyph.origin.y ||
       y >= (last_mouse_glyph.origin.y + last_mouse_glyph.size.height))
     {
-      ns_update_begin(frame);
-      frame->mouse_moved = 1;
-      note_mouse_highlight (frame, x, y);
-      remember_mouse_glyph (frame, x, y, &last_mouse_glyph);
-      ns_update_end(frame);
+      if (ns_update_begin(frame))
+	{
+	  frame->mouse_moved = 1;
+	  note_mouse_highlight (frame, x, y);
+	  remember_mouse_glyph (frame, x, y, &last_mouse_glyph);
+	  ns_update_end(frame);
+	}
       return 1;
     }
 
@@ -1790,13 +1796,15 @@ ns_frame_up_to_date (struct frame *f)
       /*&& dpyinfo->mouse_face_mouse_frame*/)
         {
           BLOCK_INPUT;
-	  ns_update_begin(f);
-          if (dpyinfo->mouse_face_mouse_frame)
-            note_mouse_highlight (dpyinfo->mouse_face_mouse_frame,
-                                  dpyinfo->mouse_face_mouse_x,
-                                  dpyinfo->mouse_face_mouse_y);
-          dpyinfo->mouse_face_deferred_gc = 0;
-	  ns_update_end(f);
+	  if (ns_update_begin(f))
+	    {
+	      if (dpyinfo->mouse_face_mouse_frame)
+		note_mouse_highlight (dpyinfo->mouse_face_mouse_frame,
+				      dpyinfo->mouse_face_mouse_x,
+				      dpyinfo->mouse_face_mouse_y);
+	      dpyinfo->mouse_face_deferred_gc = 0;
+	      ns_update_end(f);
+	    }
           UNBLOCK_INPUT;
         }
     }
@@ -1910,11 +1918,13 @@ ns_clear_frame (struct frame *f)
   r = [view bounds];
 
   BLOCK_INPUT;
-  ns_focus (f, &r, 1);
-  [ns_lookup_indexed_color (NS_FACE_BACKGROUND (FRAME_DEFAULT_FACE (f)), f) set];
-  NSRectFill (r);
-  ns_unfocus (f);
-
+  if ([FRAME_NS_VIEW (f) canDraw])
+    {
+      ns_focus (f, &r, 1);
+      [ns_lookup_indexed_color (NS_FACE_BACKGROUND (FRAME_DEFAULT_FACE (f)), f) set];
+      NSRectFill (r);
+      ns_unfocus (f);
+    }
 #ifdef NS_IMPL_COCOA
   [[view window] display];  /* redraw resize handle */
 #endif
@@ -5106,9 +5116,9 @@ extern void update_window_cursor (struct window *w, int on);
 }
 
 
-- (NSInteger)conversationIdentifier
+- (long)conversationIdentifier
 {
-  return (NSInteger)self;
+  return (long)self;
 }
 
 
@@ -5144,7 +5154,7 @@ extern void update_window_cursor (struct window *w, int on);
   return NSMakeRange (NSNotFound, 0);
 }
 
-- (unsigned int)characterIndexForPoint: (NSPoint)thePoint
+- (NSUInteger)characterIndexForPoint: (NSPoint)thePoint
 {
   if (NS_KEYLOG)
     NSLog (@"characterIndexForPoint request");
@@ -5873,7 +5883,7 @@ extern void update_window_cursor (struct window *w, int on);
 /* NSDraggingDestination protocol methods.  Actually this is not really a
    protocol, but a category of Object.  O well...  */
 
--(unsigned int) draggingEntered: (id <NSDraggingInfo>) sender
+-(NSUInteger) draggingEntered: (id <NSDraggingInfo>) sender
 {
   NSTRACE (draggingEntered);
   return NSDragOperationGeneric;
@@ -6157,7 +6167,7 @@ extern void update_window_cursor (struct window *w, int on);
 #define SCROLL_BAR_FIRST_DELAY 0.5
 #define SCROLL_BAR_CONTINUOUS_DELAY (1.0 / 15)
 
-+ (float) scrollerWidth
++ (CGFloat) scrollerWidth
 {
   /* TODO: if we want to allow variable widths, this is the place to do it,
            however neither GNUstep nor Cocoa support it very well */
@@ -6403,7 +6413,8 @@ extern void update_window_cursor (struct window *w, int on);
     case NSScrollerKnobSlot:  /* GNUstep-only */
       last_hit_part = scroll_bar_move_ratio; break;
     default:  /* NSScrollerNoPart? */
-      fprintf (stderr, "EmacsScoller-mouseDown: unexpected part %d\n", part);
+      fprintf (stderr, "EmacsScoller-mouseDown: unexpected part %ld\n",
+               (long) part);
       return;
     }
 

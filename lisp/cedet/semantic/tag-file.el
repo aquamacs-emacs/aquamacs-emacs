@@ -103,7 +103,7 @@ PARENT can also be a `semanticdb-table' object."
   )
 
 (make-obsolete-overload 'semantic-find-nonterminal
-                        'semantic-go-to-tag)
+                        'semantic-go-to-tag "23.2")
 
 ;;; Dependencies
 ;;
@@ -177,7 +177,7 @@ Depends on `semantic-dependency-include-path' for searching.  Always searches
       )))
 
 (make-obsolete-overload 'semantic-find-dependency
-                        'semantic-dependency-tag-file)
+                        'semantic-dependency-tag-file "23.2")
 
 ;;; PROTOTYPE FILE
 ;;
@@ -193,20 +193,18 @@ file prototypes belong in."
   (:override
    ;; Perform some default behaviors
    (if (and (fboundp 'ede-header-file) ede-minor-mode)
-       (save-excursion
-         (set-buffer buffer)
+       (with-current-buffer buffer
          (ede-header-file))
      ;; No EDE options for a quick answer.  Search.
-     (save-excursion
-       (set-buffer buffer)
+     (with-current-buffer buffer
        (if (re-search-forward "::Header:: \\([a-zA-Z0-9.]+\\)" nil t)
            (match-string 1))))))
 
 (semantic-alias-obsolete 'semantic-find-nonterminal
-                         'semantic-go-to-tag)
+                         'semantic-go-to-tag "23.2")
 
 (semantic-alias-obsolete 'semantic-find-dependency
-                         'semantic-dependency-tag-file)
+                         'semantic-dependency-tag-file "23.2")
 
 
 (provide 'semantic/tag-file)

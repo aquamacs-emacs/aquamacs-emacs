@@ -37,10 +37,11 @@
 
 ;;; FONT DEFAULTS 
 
-(set-fontset-font
- "fontset-default"
- 'symbol
- '("Lucida Grande" . "iso10646-1"))
+;; commented out, doesn't work (e.g. unicode 2208, "element of", math)
+;;(set-fontset-font
+;; "fontset-default"
+;; 'symbol
+;; '("Lucida Grande" . "iso10646-1"))
 
 
 (setq ignore-font-errors t)

@@ -20,12 +20,12 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 
 #include <config.h>
+#include <setjmp.h>
 #include "lisp.h"
 #include "blockinput.h"
 #include "commands.h"
 #include "keyboard.h"
 #include "dispextern.h"
-#include <setjmp.h>
 
 #if HAVE_X_WINDOWS
 #include "xterm.h"
@@ -48,41 +48,6 @@ struct backtrace
 };
 
 struct backtrace *backtrace_list;
-
-/* This structure helps implement the `catch' and `throw' control
-   structure.  A struct catchtag contains all the information needed
-   to restore the state of the interpreter after a non-local jump.
-
-   Handlers for error conditions (represented by `struct handler'
-   structures) just point to a catch tag to do the cleanup required
-   for their jumps.
-
-   catchtag structures are chained together in the C calling stack;
-   the `next' member points to the next outer catchtag.
-
-   A call like (throw TAG VAL) searches for a catchtag whose `tag'
-   member is TAG, and then unbinds to it.  The `val' member is used to
-   hold VAL while the stack is unwound; `val' is returned as the value
-   of the catch form.
-
-   All the other members are concerned with restoring the interpreter
-   state.  */
-
-struct catchtag
-{
-  Lisp_Object tag;
-  Lisp_Object val;
-  struct catchtag *next;
-  struct gcpro *gcpro;
-  jmp_buf jmp;
-  struct backtrace *backlist;
-  struct handler *handlerlist;
-  int lisp_eval_depth;
-  int pdlcount;
-  int poll_suppress_count;
-  int interrupt_input_blocked;
-  struct byte_stack *byte_stack;
-};
 
 struct catchtag *catchlist;
 
@@ -2131,7 +2096,6 @@ then strings and vectors are not accepted.  */)
     return Qnil;
 }
 
-/* ARGSUSED */
 DEFUN ("autoload", Fautoload, Sautoload, 2, 5, 0,
        doc: /* Define FUNCTION to autoload from FILE.
 FUNCTION is a symbol; FILE is a file name string to pass to `load'.
@@ -2148,9 +2112,7 @@ this does nothing and returns nil.  */)
      (function, file, docstring, interactive, type)
      Lisp_Object function, file, docstring, interactive, type;
 {
-#ifdef NO_ARG_ARRAY
   Lisp_Object args[4];
-#endif
 
   CHECK_SYMBOL (function);
   CHECK_STRING (file);
@@ -2166,16 +2128,15 @@ this does nothing and returns nil.  */)
        not useful and else we get loads of them from the loaddefs.el.  */
     LOADHIST_ATTACH (Fcons (Qautoload, function));
 
-#ifdef NO_ARG_ARRAY
-  args[0] = file;
+  if (NILP (Vpurify_flag))
+    args[0] = file;
+  else
+    args[0] = Fpurecopy (file);
   args[1] = docstring;
   args[2] = interactive;
   args[3] = type;
 
   return Ffset (function, Fcons (Qautoload, Flist (4, &args[0])));
-#else /* NO_ARG_ARRAY */
-  return Ffset (function, Fcons (Qautoload, Flist (4, &file)));
-#endif /* not NO_ARG_ARRAY */
 }
 
 Lisp_Object

@@ -24,6 +24,7 @@ Carbon version by Yamamoto Mitsuharu. */
 /* This should be the first include, as it may set up #defines affecting
    interpretation of even the system includes. */
 #include "config.h"
+#include <setjmp.h>
 
 #include "lisp.h"
 #include "window.h"
@@ -668,7 +669,7 @@ name_is_separator (name)
       else
         [item setState: NSOffState];
 
-      [item setTag: (int)wv->call_data];
+      [item setTag: (NSInteger)wv->call_data];
     }
 
   return item;

@@ -690,7 +690,7 @@ The symbols in the list are local variables in
                  (car delim-spec) (symbolp (car delim-spec))
                  (cadr delim-spec) (symbolp (cadr delim-spec)))
             delim-spec
-          (error)))
+          (error "Invalid delimiter")))
     (error
      (error "Invalid delimiters specification %s in block token %s"
             (cdr block-spec) (car block-spec)))))
@@ -1877,8 +1877,7 @@ Optional argument COLOR determines if color is added to the text."
   (if (semantic-grammar-in-lisp-p)
       (with-mode-local emacs-lisp-mode
 	(semantic-analyze-possible-completions context))
-    (save-excursion
-      (set-buffer (oref context buffer))
+    (with-current-buffer (oref context buffer)
       (let* ((prefix (car (oref context :prefix)))
 	     (completetext (cond ((semantic-tag-p prefix)
 				  (semantic-tag-name prefix))

@@ -1,8 +1,1417 @@
+2009-11-03  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/byte-run.el (define-obsolete-variable-alias): Use dolist,
+	and only put a prop if it is non-nil.
+
+2009-11-03  Juri Linkov  <juri@jurta.org>
+
+	* menu-bar.el (menu-bar-make-mm-toggle, menu-bar-make-toggle)
+	(menu-bar-options-menu): Fix list quoting (Bug#4429).
+
+	* buff-menu.el (Buffer-menu-mode-map): Add hyphen between "Buffer"
+	and "Menu" to make top-level menu item visually one unit (like
+	it's done for "Lisp-Interaction", "Emacs-Lisp" and other
+	multi-word menu items).  Fix :help string for quit-window.
+
+2009-11-03  Glenn Morris  <rgm@gnu.org>
+
+	* cedet/mode-local.el (with-mode-local): Doc fix.
+
+	* emacs-lisp/bytecomp.el (byte-compile-file-form-defvar)
+	(byte-compile-file-form-define-abbrev-table)
+	(byte-compile-file-form-custom-declare-variable)
+	(byte-compile-variable-ref, byte-compile-defvar):
+	Whether or not a warning is enabled should only affect whether we issue
+	the warning, not whether or not we collect the relevant data.
+	Eg warnings can be turned on and off throughout the course of a file.
+
+	* eshell/esh-mode.el (ansi-color-apply-on-region): Autoload it...
+	(eshell-handle-ansi-color): ... Rather than requiring ansi-color.
+
+2009-11-03  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* term/ns-win.el (ns-scroll-bar-move, ns-face-at-pos):
+	* play/mpuz.el (mpuz-create-buffer):
+	* play/landmark.el (lm-prompt-for-move, lm-print-wts, lm-print-smell)
+	(lm-print-y,s,noise, lm-print-w0, lm-init):
+	* play/gomoku.el (gomoku-prompt-for-move):
+	* play/fortune.el (fortune-in-buffer):
+	* play/dissociate.el (dissociated-press):
+	* play/decipher.el (decipher-adjacency-list, decipher-display-regexp)
+	(decipher-analyze-buffer, decipher-stats-buffer,decipher-stats-buffer):
+	* mail/supercite.el (sc-eref-show):
+	* mail/smtpmail.el (smtpmail-send-it):
+	* mail/rmailsum.el (rmail-summary-next-labeled-message)
+	(rmail-summary-previous-labeled-message, rmail-summary-wipe)
+	(rmail-summary-undelete-many, rmail-summary-rmail-update)
+	(rmail-summary-goto-msg, rmail-summary-expunge)
+	(rmail-summary-get-new-mail, rmail-summary-search-backward)
+	(rmail-summary-add-label, rmail-summary-output-menu)
+	(rmail-summary-output-body):
+	* mail/rfc822.el (rfc822-addresses):
+	* mail/reporter.el (reporter-dump-variable, reporter-dump-state):
+	* mail/mailpost.el (post-mail-send-it):
+	* mail/hashcash.el (hashcash-generate-payment):
+	* mail/feedmail.el (feedmail-run-the-queue)
+	(feedmail-queue-send-edit-prompt-help-first)
+	(feedmail-send-it-immediately, feedmail-give-it-to-buffer-eater)
+	(feedmail-deduce-address-list):
+	* eshell/esh-ext.el (eshell-remote-command):
+	* eshell/em-unix.el (eshell-occur-mode-mouse-goto):
+	* emulation/viper-util.el (viper-glob-unix-files, viper-save-setting)
+	(viper-wildcard-to-regexp, viper-glob-mswindows-files)
+	(viper-save-string-in-file, viper-valid-marker):
+	* emulation/viper-keym.el (viper-toggle-key):
+	* emulation/viper-ex.el (ex-expand-filsyms, viper-get-ex-file)
+	(ex-edit, ex-global, ex-mark, ex-next-related-buffer, ex-quit)
+	(ex-get-inline-cmd-args, ex-tag, ex-command, ex-compile):
+	* emulation/viper-cmd.el (viper-exec-form-in-vi)
+	(viper-exec-form-in-emacs, viper-brac-function):
+	* emulation/viper.el (viper-delocalize-var):
+	* emulation/vip.el (vip-mode, vip-get-ex-token, vip-ex, vip-get-ex-pat)
+	(vip-get-ex-command, vip-get-ex-opt-gc, vip-get-ex-buffer)
+	(vip-get-ex-count, vip-get-ex-file, ex-edit, ex-global, ex-mark)
+	(ex-map, ex-unmap, ex-quit, ex-read, ex-tag, ex-command):
+	* emulation/vi.el (vi-switch-mode, vi-ex-cmd):
+	* emulation/edt.el (edt-electric-helpify):
+	* emulation/cua-rect.el (cua--rectangle-aux-replace):
+	* emulation/cua-gmrk.el (cua--insert-at-global-mark)
+	(cua--delete-at-global-mark, cua--copy-rectangle-to-global-mark)
+	(cua-indent-to-global-mark-column):
+	* calendar/diary-lib.el (calendar-mark-1):
+	* calendar/cal-hebrew.el (calendar-hebrew-mark-date-pattern):
+	Use with-current-buffer.
+	* emulation/viper.el (viper-delocalize-var): Use dolist.
+
+2009-11-03  Chong Yidong  <cyd@stupidchicken.com>
+
+	* comint.el (comint-replace-by-expanded-history-before-point):
+	Replace !! with the previous input string literally (Bug#1795).
+
+2009-11-02  Jay Belanger  <jay.p.belanger@gmail.com>
+
+	* calc/calc-forms.el (calc-date-notation): Allow a "blank string"
+	to be made up of whitespace.
+
+2009-11-02  Chong Yidong  <cyd@stupidchicken.com>
+
+	* minibuffer.el (read-file-name): Don't use file dialogs for
+	remote directories (Bug#99).
+
+2009-11-01  Chong Yidong  <cyd@stupidchicken.com>
+
+	* progmodes/sh-script.el (sh-font-lock-paren): Fix last change.
+
+2009-11-01  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* view.el (view-mode-exit): If OLD-BUF is dead bury the buffer
+	instead of deleting the window or frame.
+
+2009-10-31  Chong Yidong  <cyd@stupidchicken.com>
+
+	* textmodes/sgml-mode.el (sgml-mode-facemenu-add-face-function):
+	Support face colors.
+
+	* textmodes/tex-mode.el (tex-facemenu-add-face-function):
+	New function.  Support face colors (Bug#1168).
+	(tex-common-initialization): Use it.
+
+	* facemenu.el (facemenu-enable-faces-p): Enable facemenu if the
+	mode allows it (Bug#1168).
+
+2009-10-31  Juri Linkov  <juri@jurta.org>
+
+	* facemenu.el (list-colors-display): Don't mark buffer as
+	modified (Bug#3948).
+
+2009-10-31  Chong Yidong  <cyd@stupidchicken.com>
+
+	* international/mule-diag.el (list-character-sets-1): Minor
+	message fix (Bug#3526).
+
+	* progmodes/etags.el (etags-list-tags, etags-tags-apropos): Fix
+	face property (Bug#4834).
+	(etags-list-tags, etags-tags-apropos-additional)
+	(etags-tags-apropos, tags-select-tags-table): Add follow-link
+	property.
+
+	* menu-bar.el (menu-bar-tools-menu): Add Semantic and EDE menu
+	items.
+
+	* cedet/cedet.el (cedet-menu-map): Remove Semantic and EDE menu
+	items.
+
+	* cedet/ede.el (ede-minor-mode):
+	* cedet/semantic.el (semantic-mode): Toggle menu separators.
+
+2009-10-31  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* textmodes/two-column.el (2C-split):
+	* textmodes/texnfo-upd.el (texinfo-multi-file-included-list):
+	* textmodes/tex-mode.el (tex-set-buffer-directory):
+	* textmodes/spell.el (spell-region, spell-string):
+	* textmodes/reftex.el (reftex-erase-buffer):
+	(reftex-get-file-buffer-force, reftex-kill-temporary-buffers):
+	* textmodes/reftex-toc.el (reftex-toc-promote-action):
+	* textmodes/reftex-sel.el (reftex-get-offset, reftex-insert-docstruct)
+	(reftex-select-item):
+	* textmodes/reftex-ref.el (reftex-label-info-update)
+	(reftex-offer-label-menu):
+	* textmodes/reftex-index.el (reftex-index-change-entry)
+	(reftex-index-phrases-info):
+	* textmodes/reftex-global.el (reftex-create-tags-file)
+	(reftex-save-all-document-buffers, reftex-ensure-write-access):
+	* textmodes/reftex-dcr.el (reftex-echo-ref, reftex-echo-cite)
+	(reftex-view-crossref-from-bibtex):
+	* textmodes/reftex-cite.el (reftex-bibtex-selection-callback)
+	(reftex-extract-bib-entries-from-thebibliography)
+	(reftex-all-used-citation-keys, reftex-create-bibtex-file):
+	* textmodes/refbib.el (r2b-capitalize-title):
+	(r2b-convert-buffer, r2b-help):
+	* textmodes/page-ext.el (pages-directory)
+	(pages-directory-goto-with-mouse):
+	* textmodes/bibtex.el (bibtex-validate-globally):
+	* textmodes/bib-mode.el (bib-capitalize-title):
+	* textmodes/artist.el (artist-clear-buffer, artist-system):
+	* progmodes/xscheme.el (global-set-scheme-interaction-buffer):
+	(local-set-scheme-interaction-buffer, xscheme-process-filter)
+	(verify-xscheme-buffer, xscheme-enter-interaction-mode)
+	(xscheme-enter-debugger-mode, xscheme-debugger-mode-p)
+	(xscheme-send-control-g-interrupt, xscheme-start-process)
+	(xscheme-process-sentinel, xscheme-cd):
+	* progmodes/verilog-mode.el (verilog-read-always-signals)
+	(verilog-set-define, verilog-getopt-file)
+	(verilog-module-inside-filename-p):
+	* progmodes/sh-script.el:
+	* progmodes/python.el (python-pdbtrack-get-source-buffer)
+	(python-pdbtrack-grub-for-buffer, python-execute-file):
+	* progmodes/octave-inf.el (inferior-octave):
+	* progmodes/idlwave.el (idlwave-scan-user-lib-files)
+	(idlwave-shell-compile-helper-routines, idlwave-set-local)
+	(idlwave-display-completion-list-xemacs, idlwave-list-abbrevs)
+	(idlwave-display-completion-list-emacs, idlwave-list-load-path-shadows)
+	(idlwave-completion-fontify-classes, idlwave-display-calling-sequence):
+	* progmodes/idlw-shell.el (idlwave-shell-examine-display-clear)
+	(idlwave-shell-filter, idlwave-shell-examine-highlight)
+	(idlwave-shell-sentinel, idlwave-shell-filter-directory)
+	(idlwave-shell-display-line, idlwave-shell-set-bp-in-module)
+	(idlwave-shell-examine-display, idlwave-shell-run-region)
+	(idlwave-shell-filter-bp, idlwave-shell-save-and-action)
+	(idlwave-shell-sources-filter, idlwave-shell-goto-next-error):
+	* progmodes/idlw-help.el (idlwave-help-get-special-help)
+	(idlwave-help-get-help-buffer):
+	* progmodes/gud.el (gud-basic-call, gud-find-class)
+	(gud-tooltip-activate-mouse-motions-if-enabled):
+	* progmodes/gdb-mi.el (gdb-mouse-toggle-breakpoint-fringe):
+	* progmodes/ebrowse.el (ebrowse-member-table, ebrowse-save-tree-as)
+	(ebrowse-view-exit-fn, ebrowse-tags-list-members-in-file)
+	(ebrowse-tags-next-file):
+	* progmodes/ebnf2ps.el (ebnf-generate-eps, ebnf-generate-eps)
+	(ebnf-eps-production-list, ebnf-begin-file, ebnf-log)
+	(ebnf-eps-finish-and-write):
+	* progmodes/cpp.el (cpp-edit-save):
+	* progmodes/cperl-mode.el (cperl-pod-to-manpage):
+	* progmodes/cc-defs.el (c-emacs-features):
+	* progmodes/antlr-mode.el (antlr-invalidate-context-cache)
+	(antlr-directory-dependencies):
+	* progmodes/ada-xref.el (ada-gnat-parse-gpr, ada-get-ali-file-name)
+	(ada-run-application, ada-find-in-src-path, ada-goto-parent)
+	(ada-find-any-references, ada-make-filename-from-adaname)
+	(ada-make-body-gnatstub):
+	* obsolete/rnews.el (news-list-news-groups):
+	* obsolete/resume.el (resume-suspend-hook,resume-write-buffer-to-file):
+	* obsolete/iso-acc.el (iso-acc-minibuf-setup):
+	* net/rcirc.el (rcirc-debug):
+	* net/newst-treeview.el (newsticker--treeview-list-add-item)
+	(newsticker--treeview-list-clear, newsticker-treeview-browse-url)
+	(newsticker--treeview-list-update-faces, newsticker-treeview-save)
+	(newsticker--treeview-item-show-text, newsticker--treeview-item-show)
+	(newsticker--treeview-tree-update-tag,newsticker--treeview-buffer-init)
+	(newsticker-treeview-show-item, newsticker--treeview-unfold-node)
+	(newsticker--treeview-list-clear-highlight)
+	(newsticker--treeview-list-update-highlight)
+	(newsticker--treeview-list-highlight-start)
+	(newsticker--treeview-tree-update-highlight)
+	(newsticker--treeview-get-selected-item)
+	(newsticker-treeview-mark-list-items-old)
+	(newsticker--treeview-set-current-node):
+	* net/newst-plainview.el (newsticker--buffer-set-uptodate):
+	* net/newst-backend.el (newsticker--get-news-by-funcall)
+	(newsticker--get-news-by-wget, newsticker--image-get)
+	(newsticker--image-sentinel):
+	* net/mairix.el (mairix-rmail-fetch-field, mairix-gnus-fetch-field):
+	* net/eudcb-ph.el (eudc-ph-do-request, eudc-ph-open-session):
+	(eudc-ph-close-session):
+	* net/eudc.el (eudc-save-options):
+	* language/thai-word.el (thai-update-word-table):
+	* language/japan-util.el (japanese-string-conversion):
+	* international/titdic-cnv.el (tsang-quick-converter)
+	(ziranma-converter, ctlau-converter):
+	* international/mule-cmds.el (describe-language-environment):
+	* international/ja-dic-cnv.el (skkdic-convert-okuri-ari)
+	(skkdic-convert-postfix, skkdic-convert-prefix):
+	(skkdic-convert-okuri-nasi, skkdic-convert):
+	* emacs-lisp/re-builder.el (reb-update-overlays):
+	* emacs-lisp/pp.el (pp-to-string, pp-display-expression):
+	* emacs-lisp/gulp.el (gulp-send-requests):
+	* emacs-lisp/find-gc.el (trace-call-tree):
+	* emacs-lisp/eieio-opt.el (eieio-browse, eieio-describe-class)
+	(eieio-describe-generic):
+	* emacs-lisp/eieio-base.el (eieio-persistent-read):
+	* emacs-lisp/edebug.el (edebug-outside-excursion):
+	* emacs-lisp/debug.el (debugger-make-xrefs):
+	* emacs-lisp/cust-print.el (custom-prin1-to-string):
+	* emacs-lisp/chart.el (chart-new-buffer):
+	* emacs-lisp/authors.el (authors-scan-el, authors-scan-change-log):
+	Use with-current-buffer.
+	* textmodes/artist.el (artist-system): Don't call
+	copy-sequence on a fresh string.
+	* progmodes/idlw-shell.el (easymenu setup): Use dolist.
+
+2009-10-31  Stephen Berman  <stephen.berman@gmx.net>
+
+	* calendar/todo-mode.el (todo-edit-item): Signal an error if there
+	is no item to edit. (Bug#4820)
+	(todo-top-priorities): Restore point and restore narrowing in Todo
+	buffer. (Bug#4820)
+
+2009-10-31  Glenn Morris  <rgm@gnu.org>
+
+	* net/ange-ftp.el (top-level): Don't require dired when compiling.
+	(comint-last-output-start, comint-last-input-start)
+	(comint-last-input-end): Don't defvar when compiling.
+	(ange-ftp-process-file): Use bound-and-true-p.
+
+	* pcmpl-rpm.el (top-level): Move provide statement to end.
+	(pcmpl-rpm): Remove unused custom group.
+
+	* pcmpl-gnu.el (tar-parse-info, tar-header-name): Declare for compiler.
+
+	* mail/emacsbug.el (report-emacs-bug): Request `emacs -Q' recipes.
+
+	* emacs-lisp/bytecomp.el (byte-compile-warning-types)
+	(byte-compile-warnings): Add `constants' as an option.
+	(byte-compile-callargs-warn, byte-compile-arglist-warn)
+	(display-call-tree): Update for byte-compile-fdefinition possibly
+	returning `(macro lambda ...)'.  (Bug#4778)
+	(byte-compile-variable-ref, byte-compile-setq-default):
+	Respect `constants' member of byte-compile-warnings.
+
+	* cedet/semantic/tag.el (semantic--tag-link-list-to-buffer):
+	Use mapc rather than mapcar because the return value is never used.
+
+	* cedet/srecode/template.el, cedet/semantic/wisent/javascript.el:
+	* cedet/semantic/wisent/java-tags.el, cedet/semantic/texi.el:
+	* cedet/semantic/html.el:
+	Suppress harmless warnings about setting up semantic-imenu (not
+	part of Emacs) variables.
+
+2009-10-30  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* vc-bzr.el (vc-bzr-revision-keywords): New var.
+	(vc-bzr-revision-completion-table): Use it to fix completion of "s:"
+	to "submit:".
+
+	* cedet/srecode/srt-mode.el (semantic-analyze-possible-completions):
+	* cedet/semantic/symref/list.el (semantic-symref-rb-toggle-expand-tag):
+	* cedet/semantic/symref/grep.el (semantic-symref-perform-search):
+	* cedet/semantic/bovine/gcc.el (semantic-gcc-query):
+	* cedet/semantic/bovine/c.el (semantic-c-parse-lexical-token):
+	* cedet/semantic/analyze/debug.el (semantic-analyzer-debug-add-buttons)
+	(semantic-analyzer-debug-global-symbol)
+	(semantic-analyzer-debug-missing-innertype)
+	(semantic-analyzer-debug-insert-include-summary):
+	* cedet/semantic/util.el (semantic-file-tag-table):
+	(semantic-describe-buffer-var-helper, semantic-something-to-tag-table)
+	(semantic-recursive-find-nonterminal-by-name):
+	* cedet/semantic/tag-ls.el (semantic-tag-calculate-parent-default):
+	* cedet/semantic/tag-file.el (semantic-prototype-file):
+	* cedet/semantic/symref.el (semantic-symref-parse-tool-output):
+	* cedet/semantic/sb.el (semantic-sb-fetch-tag-table):
+	* cedet/semantic/lex-spp.el (semantic-lex-spp-lex-text-string):
+	* cedet/semantic/idle.el (semantic-idle-work-for-one-buffer):
+	(semantic-idle-summary-maybe-highlight):
+	* cedet/semantic/ia-sb.el (semantic-ia-speedbar)
+	(semantic-ia-sb-tag-info):
+	* cedet/semantic/grammar.el (semantic-analyze-possible-completions):
+	* cedet/semantic/find.el (semantic-brute-find-tag-by-position):
+	* cedet/semantic/ede-grammar.el (project-compile-target):
+	(ede-proj-makefile-insert-variables):
+	* cedet/semantic/debug.el (semantic-debug-set-parser-location):
+	(semantic-debug-set-source-location, semantic-debug-interface-layout)
+	(semantic-debug-mode, semantic-debug):
+	* cedet/semantic/db.el (semanticdb-needs-refresh-p):
+	* cedet/semantic/db-typecache.el (semanticdb-typecache-refresh-for-buffer):
+	* cedet/semantic/db-javascript.el (semanticdb-equivalent-mode):
+	* cedet/semantic/db-find.el (semanticdb-find-log-new-search)
+	(semanticdb-find-translate-path-includes--internal)
+	(semanticdb-reset-log, semanticdb-find-log-activity):
+	* cedet/semantic/db-file.el (object-write):
+	* cedet/semantic/db-el.el (semanticdb-equivalent-mode):
+	* cedet/semantic/db-ebrowse.el (semanticdb-ebrowse-C-file-p)
+	(semanticdb-create-ebrowse-database):
+	* cedet/semantic/db-debug.el (semanticdb-table-sanity-check):
+	* cedet/semantic/complete.el (semantic-displayor-focus-request)
+	(semantic-collector-calculate-completions-raw)
+	(semantic-complete-read-tag-analyzer):
+	* cedet/semantic/analyze.el (semantic-analyze-pulse):
+	* cedet/ede/util.el (ede-update-version-in-source):
+	* cedet/ede/proj.el (project-delete-target):
+	* cedet/ede/proj-elisp.el (ede-update-version-in-source)
+	(ede-proj-flush-autoconf):
+	* cedet/ede/pconf.el (ede-proj-configure-synchronize)
+	(ede-proj-configure-synchronize):
+	* cedet/ede/locate.el (ede-locate-file-in-project-impl):
+	* cedet/ede/linux.el (ede-linux-version):
+	* cedet/ede/emacs.el (ede-emacs-version):
+	* cedet/ede/dired.el (ede-dired-add-to-target):
+	* cedet/ede.el (ede-buffer-header-file, ede-find-target)
+	(ede-buffer-documentation-files, ede-project-buffers, ede-set)
+	(ede-target-buffers, ede-buffers, ede-make-project-local-variable):
+	* cedet/cedet-idutils.el (cedet-idutils-fnid-call):
+	(cedet-idutils-lid-call, cedet-idutils-expand-filename)
+	(cedet-idutils-version-check):
+	* cedet/cedet-global.el (cedet-gnu-global-call):
+	(cedet-gnu-global-expand-filename, cedet-gnu-global-root)
+	(cedet-gnu-global-version-check, cedet-gnu-global-scan-hits):
+	* cedet/cedet-cscope.el (cedet-cscope-call)
+	(cedet-cscope-expand-filename, cedet-cscope-version-check):
+	Use with-current-buffer.
+	* cedet/ede.el (ede-make-project-local-variable)
+	(ede-set-project-variables, ede-set): Use dolist.
+
+2009-10-30  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* textmodes/ispell.el (ispell-skip-region-alist):
+	* international/mule-conf.el (eight-bit):
+	* international/fontset.el (font-encoding-alist):
+	* startup.el (pure-space-overflow-message):
+	* simple.el (overwrite-mode-textual, overwrite-mode-binary):
+	* paths.el (gnus-nntp-service, rmail-spool-directory)
+	(term-file-prefix):
+	* files.el (save-some-buffers-action-alist):
+	* cmuscheme.el (same-window-buffer-names):
+	* ielm.el (same-window-buffer-names):
+	* shell.el (same-window-buffer-names):
+	* mail/sendmail.el (same-window-buffer-names):
+	* progmodes/inf-lisp.el (same-window-buffer-names):
+	* bindings.el (mode-line-client)
+	(mode-line-column-line-number-mode-map):
+	* language/tibetan.el (tibetan-precomposition-rule-regexp)
+	(tibetan-precomposed-regexp): Purecopy string arguments.
+
+2009-10-28  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* calc/calc.el (calc, calc-refresh, calc-trail-buffer, calc-record)
+	(calcDigit-nondigit):
+	* calc/calc-yank.el (calc-copy-to-buffer):
+	* calc/calc-units.el (calc-invalidate-units-table):
+	* calc/calc-trail.el (calc-trail-yank):
+	* calc/calc-store.el (calc-insert-variables):
+	* calc/calc-rewr.el (math-rewrite, math-rewrite-phase):
+	* calc/calc-prog.el (calc-read-parse-table):
+	* calc/calc-keypd.el (calc-do-keypad, calc-keypad-right-click):
+	* calc/calc-help.el (calc-describe-bindings, calc-describe-key):
+	* calc/calc-graph.el (calc-graph-delete, calc-graph-add-curve)
+	(calc-graph-juggle, calc-graph-count-curves, calc-graph-plot)
+	(calc-graph-plot, calc-graph-format-data, calc-graph-set-styles)
+	(calc-graph-name, calc-graph-find-command, calc-graph-view)
+	(calc-graph-view, calc-gnuplot-command, calc-graph-init):
+	* calc/calc-ext.el (calc-realign):
+	* calc/calc-embed.el (calc-do-embedded, calc-do-embedded)
+	(calc-embedded-finish-edit, calc-embedded-make-info)
+	(calc-embedded-finish-command, calc-embedded-stack-change):
+	* calc/calc-aent.el (calcAlg-enter): Use with-current-buffer.
+
+	* cedet/mode-local.el (make-obsolete-overload): Add `when' argument.
+	(overload-docstring-extension): Use that info.
+	* cedet/semantic/fw.el (semantic-alias-obsolete): Pass the `when' info.
+	* cedet/semantic/idle.el (semantic-eldoc-current-symbol-info):
+	* cedet/semantic/tag-ls.el (semantic-nonterminal-protection)
+	(semantic-nonterminal-abstract, semantic-nonterminal-leaf)
+	(semantic-nonterminal-full-name): Add the new `when' info.
+	* cedet/semantic/decorate/mode.el (semantic/decorate): Require CL for
+	`assert'.
+
+	* pcomplete.el (pcomplete-comint-setup): If there's a choice, replace
+	shell-dynamic-complete-filename in preference to
+	comint-dynamic-complete-filename.
+
+	* bookmark.el (bookmark-insert-location, bookmark-bmenu-list)
+	(bookmark-bmenu-show-filenames, bookmark-bmenu-hide-filenames):
+	Don't consider whether the display supports colors.
+	(bookmark-import-new-list): Use dolist.
+	(bookmark-bmenu-mode-map): Move initialization into declaration.
+	(bookmark-bmenu-list): Use dolist, simplify.
+	(bookmark-show-all-annotations): Use save-selected-window and dolist.
+	(menu-bar-final-items): Use push.
+
+2009-10-28  Bernhard Herzog  <bernhard.herzog@intevation.de>  (tiny change)
+
+	* vc-hg.el (vc-hg-state, vc-hg-working-revision): Use process-file so
+	it works on remote files.
+	(vc-hg-diff): Don't pass any `--cwd' argument.
+
+2009-10-27  Kevin Ryde  <user42@zip.com.au>
+
+	* emacs-lisp/checkdoc.el (checkdoc-proper-noun-region-engine):
+	Use help-xref-info-regexp and help-xref-url-regexp to identify links.
+	(Further to Bug#3921).
+
+2009-10-27  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp-imap.el (top): Add `X-Size' to `imap-hash-headers'.
+	(tramp-imap-do-copy-or-rename-file): Don't use the inode, when
+	calling `tramp-imap-put-file'.  Add file size to the call.
+	(tramp-imap-get-file-entries): Compute also user name, file size,
+	and date.
+	(tramp-imap-handle-insert-directory): Insert uid and gid.
+	(tramp-imap-handle-file-attributes): Transform uid and gid
+	according to `id-format'.
+	(tramp-imap-put-file): New optional parameter SIZE.  Encode file
+	size in header X-Size.
+
+2009-10-26  Juanma Barranquero  <lekktu@gmail.com>
+
+	* simple.el (transpose-subr): Give clearer error when the mark
+	is not set.  (Bug#4807)
+
+2009-10-26  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp.el (tramp-perl-file-truename): New defconst.
+	Perl code contributed by yary <not.com@gmail.com> (tiny change).
+	(tramp-handle-file-truename, tramp-get-remote-perl): Use it.
+	Check also for "perl-file-spec" and "perl-cwd-realpath" properties.
+	(tramp-handle-write-region): In case of APPEND, reuse the tmpfile name.
+
+	* net/tramp-imap.el (tramp-imap-file-name-handler-alist):
+	Ignore `dired-call-process'.
+	(tramp-imap-make-iht): Use `user' and `ssl' with `imap-hash-make'.
+
+2009-10-26  Julian Scheid  <julians37@gmail.com>
+
+	* net/tramp.el (tramp-perl-file-name-all-completions): New defconst.
+	(tramp-get-remote-readlink): New defun.
+	(tramp-handle-file-truename): Use it.
+	(tramp-handle-file-exists-p): Check file-attributes cache, assume
+	file exists if cache value present.
+	(tramp-check-cached-permissions) New defun.
+	(tramp-handle-file-readable-p): Use it.
+	(tramp-handle-file-writable-p): Likewise.
+	(tramp-handle-file-executable-p): Likewise.
+	(tramp-handle-file-name-all-completions): Try using Perl to get
+	partial completions.  When perl not available, combine `cd' and
+	`ls' into single remote operation and use shell expansion to get
+	partial remote directory contents.  Set `file-exists-p' cache for
+	directory and any files returned by ls.  Change cache handling to
+	support partial directory contents.  Use error message emitted by
+	remote `cd' or Perl code for local tramp-error.
+	(tramp-do-copy-or-rename-file-directly): Avoid separate
+	tramp-send-command-and-check call.
+	(tramp-handle-process-file): Merge three remote ops into one.
+	Do not flush all caches when `process-file-side-effects' is set.
+	(tramp-handle-write-region): Avoid tramp-set-file-uid-gid if
+	file-attributes shows uid/gid to be set already.
+
+2009-10-26  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* textmodes/tex-mode.el (tex-dvi-view-command)
+	(tex-show-queue-command, tex-open-quote):
+	* progmodes/ruby-mode.el (auto-mode-alist)
+	(interpreter-mode-alist): Purecopy strings.
+
+	* emacs-lisp/lisp-mode.el (emacs-lisp-mode-map): Purecopy item names.
+
+	* emacs-lisp/derived.el (define-derived-mode): Purecopy the doc
+	string for the hook, keymap and abbrev table.
+
+	* emacs-lisp/byte-run.el (make-obsolete): Purecopy the current name.
+
+	* x-dnd.el (x-dnd-xdnd-to-action):
+	* startup.el (fancy-startup-text, fancy-about-text): Change to
+	defconst from defvar.
+
+	* ps-print.el (ps-page-dimensions-database): Purecopy initial value.
+
+	* mouse.el (mouse-buffer-menu-mode-groups, x-fixed-font-alist):
+	Purecopy initialization strings.
+
+	* mail/sendmail.el (mail-header-separator)
+	(mail-personal-alias-file):
+	* mail/rmail.el (rmail-default-dont-reply-to-names)
+	(rmail-ignored-headers, rmail-retry-ignored-headers)
+	(rmail-highlighted-headers, rmail-secondary-file-directory)
+	(rmail-secondary-file-regexp):
+	* files.el (null-device, file-name-invalid-regexp)
+	(locate-dominating-stop-dir-regexp)
+	(inhibit-first-line-modes-regexps): Purecopy initialization strings.
+	(interpreter-mode-alist): Use mapcar instead of mapc.
+
+	* buff-menu.el (Buffer-menu-mode-map): Purecopy name.
+
+	* bindings.el (mode-line-major-mode-keymap): Purecopy name.
+	(completion-ignored-extensions):
+	(debug-ignored-errors): Purecopy strings.
+
+2009-10-26  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* pcomplete.el (pcomplete-std-complete): Obey pcomplete-use-paring.
+	(pcomplete, pcomplete-parse-buffer-arguments, pcomplete-opt)
+	(pcomplete--here): Use push.
+
+	* subr.el (all-completions): Declare the 4th arg obsolete.
+
+2009-10-25  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* pcomplete.el (pcomplete-unquote-argument-function): New var.
+	(pcomplete-unquote-argument): New function.
+	(pcomplete--common-suffix): Always pay attention to case.
+	(pcomplete--table-subvert): Quote and unquote the text.
+	(pcomplete--common-quoted-suffix): New function.
+	(pcomplete-std-complete): Use it and pcomplete-begin.
+
+	* bookmark.el (bookmark-bmenu-list): Don't use switch-to-buffer if
+	we're inside a dedicated or minibuffer window.
+
+2009-10-25  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* cedet/semantic/fw.el (semantic-alias-obsolete)
+	(semantic-varalias-obsolete): Make the `when' arg mandatory.
+	(define-mode-overload-implementation):
+	* cedet/semantic/decorate/mode.el (semantic-decorate-pending-decoration-hooks):
+	* cedet/semantic/wisent.el (wisent-lex-make-token-table):
+	* cedet/semantic/util.el (semantic-file-token-stream)
+	(semantic-something-to-stream):
+	* cedet/semantic/tag.el (semantic-tag-make-assoc-list)
+	(semantic-expand-nonterminal):
+	* cedet/semantic/tag-file.el (semantic-find-nonterminal)
+	(semantic-find-dependency, semantic-find-nonterminal)
+	(semantic-find-dependency):
+	* cedet/semantic/lex.el (semantic-flex-start, semantic-flex-end)
+	(semantic-flex-text, semantic-flex-make-keyword-table)
+	(semantic-flex-keyword-p, semantic-flex-keyword-put)
+	(semantic-flex-keyword-get, semantic-flex-map-keywords)
+	(semantic-flex-keywords, semantic-flex-buffer, semantic-flex-list):
+	* cedet/semantic/java.el (semantic-java-prototype-nonterminal):
+	* cedet/semantic/idle.el (semantic-before-idle-scheduler-reparse-hooks)
+	(semantic-after-idle-scheduler-reparse-hooks):
+	* cedet/semantic/edit.el (semantic-edits-incremental-reparse-failed-hooks):
+	* cedet/semantic/db-mode.el (semanticdb-mode-hooks):
+	* cedet/semantic.el (semantic-toplevel-bovine-table)
+	(semantic-toplevel-bovine-cache)
+	(semantic-before-toplevel-bovination-hook, semantic-init-hooks)
+	(semantic-init-mode-hooks, semantic-init-db-hooks)
+	(semantic-bovination-working-type): Provide the `when' arg.
+
+2009-10-24  Karl Fogel  <kfogel@red-bean.com>
+
+	* bookmark.el: Update documentation, especially documentation
+	of `bookmark-alist' and of the bookmark file format.
+	Patch by Drew Adams, with minor tweaks from me.  (Bug#4195)
+
+2009-10-24  Chong Yidong  <cyd@stupidchicken.com>
+
+	* mail/emacsbug.el (report-emacs-bug): Clarify that the
+	keybindings apply to the mail buffer (Bug#4003).  Shrink help
+	window to buffer.
+
+	* whitespace.el (whitespace-mode, whitespace-newline-mode)
+	(global-whitespace-mode, global-whitespace-newline-mode)
+	(whitespace-toggle-options, global-whitespace-toggle-options):
+	Doc fix (Bug#3660).
+
+	* nxml/nxml-mode.el (nxml-balanced-close-start-tag): Use the value
+	of xmltok-start before the end tag was inserted (Bug#2840).
+
+	* progmodes/sh-script.el (sh-font-lock-paren): Handle case
+	patterns that are preceded by an open-paren (Bug#1320).
+
+2009-10-24  Sven Joachim  <svenjoac@gmx.de>
+
+	* files.el (delete-directory): Delete symlinks to directories with
+	delete-file (Bug#4739).
+
+2009-10-24  Chong Yidong  <cyd@stupidchicken.com>
+
+	* cedet/semantic/util.el (semantic-recursive-find-nonterminal-by-name):
+	* cedet/semantic/tag.el (semantic-token-type-parent): Add WHEN
+	argument to make-obsolete.
+
+	* cedet/semantic/fw.el (semantic-alias-obsolete)
+	(semantic-varalias-obsolete): Add optional WHEN argument.
+
+2009-10-24  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* vc.el (vc-backend-for-registration): Rename from
+	vc-get-backend-for-registration.  Update callers.
+
+	* international/mule-cmds.el (set-language-info-alist):
+	Purecopy lang-env.
+	(leim-list-header, leim-list-entry-regexp): Change defvars to defconst.
+	(charset): Purecopy the name.
+	(define-char-code-property): Purecopy string arguments.
+
+	* emacs-lisp/byte-run.el (make-obsolete, make-obsolete-variable):
+	Purecopy string arguments.
+
+	* emacs-lisp/lisp-mode.el (emacs-lisp-mode-map):
+	* ediff-hook.el (menu-bar-ediff-menu):
+	* buff-menu.el (Buffer-menu-mode-map): Purecopy names and tooltips.
+	* bookmark.el (menu-bar-bookmark-map): Add :help and purecopy the name.
+
+2009-10-24  Glenn Morris  <rgm@gnu.org>
+
+	* comint.el (comint-dynamic-list-completions):
+	* term.el (term-dynamic-list-completions): Use choose-completion rather
+	than obsolete alias mouse-choose-completion.
+
+	* filecache.el (file-cache-completions-keymap): Bind mouse-2 to
+	file-cache-choose-completion.
+	(file-cache-choose-completion): Handle an optional event argument.
+	(file-cache-mouse-choose-completion): Make it an obsolete alias.
+
+	* progmodes/octave-mod.el (octave-complete-symbol):
+	Use choose-completion if mouse-choose-completion is ever removed.
+
+	* textmodes/sgml-mode.el (sgml-looking-back-at): Move definition before
+	use.
+
+	* emacs-lisp/checkdoc.el (generate-autoload-cookie): Define for
+	compiler.
+
+	* vc-hooks.el (vc-responsible-backend): Fix declaration.
+
+2009-10-24  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* minibuffer.el (completion--embedded-envvar-table): Fix last change.
+	Ignore `pred' now that we receive one.
+	Handle test-completion specially.
+
+2009-10-23  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* vc.el (vc-responsible-backend): Throw an error if not backend is
+	found.  Remove the REGISTER argument. Move the code dealing with
+	REGISTER ...
+	(vc-get-backend-for-registration): ... here.  New function.
+	(vc-deduce-fileset): Call vc-get-backend-for-registration instead
+	of vc-responsible-backend, pass the file name instead of the
+	directory name.
+
+2009-10-23  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* pcomplete.el (pcomplete-common-suffix, pcomplete-table-subvert):
+	New funs.
+	(pcomplete-std-complete): Use them.  Obey pcomplete-termination-string.
+	(pcomplete-comint-setup): Don't modify a global var via
+	accidental side-effects.
+	(pcomplete-shell-setup): Adjust call accordingly.
+	(pcomplete-parse-comint-arguments): Use push.
+
+2009-10-23  Chong Yidong  <cyd@stupidchicken.com>
+
+	* emacs-lisp/checkdoc.el (checkdoc-proper-noun-region-engine):
+	Allow uncapitalized info node names (Bug#3921).
+
+	* mail/emacsbug.el (report-emacs-bug): Tweak the sentence pointing
+	to the DEBUG file (Bug#3781).
+
+2009-10-23  Jari Aalto  <jari.aalto@cante.net>
+
+	* textmodes/ispell.el (ispell-dictionary-base-alist): Add finnish
+	dictionary entry (Bug#4579).
+
+2009-10-23  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp.el (top): Remove `tramp-rfn-eshadow-update-overlay'
+	from `rfn-eshadow-update-overlay-hook' when unloading.
+	(tramp-methods): Add `tramp-copy-keep-tmpfile' for "rsync" and
+	"rsyncc".  Adjust doc string.
+	(tramp-temp-buffer-file-name) New buffer-local defvar.
+	(tramp-handle-insert-file-contents, tramp-handle-write-region):
+	Keep temporary file when indicated by method ("rsync" and
+	"rsyncc").
+	(tramp-handle-write-region): Handle APPEND.
+	(tramp-delete-temp-file-function): New defun.  Added to
+	`kill-buffer-hook'.
+
+2009-10-23  Juanma Barranquero  <lekktu@gmail.com>
+
+	* menu-bar.el (cua-enable-cua-keys): Declare for the byte-compiler.
+
+2009-10-23  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* term/tty-colors.el (msdos-color-values): Remove declaration, unused.
+	(color-name-rgb-alist, tty-standard-colors)
+	(tty-color-mode-alist): Change to defconst.
+
+	* simple.el (mark-inactive): Purecopy message.
+
+	* menu-bar.el (menu-bar-make-mm-toggle, menu-bar-make-toggle): Fix macro.
+	(global-map, yank-menu):
+	* textmodes/ispell.el (ispell-menu-map):
+	* net/eudc.el (eudc-tools-menu):
+	* international/mule-cmds.el (describe-language-environment-map)
+	(setup-language-environment-map, set-coding-system-map)
+	(mule-menu-keymap):
+	* vc-hooks.el (vc-menu-entry, vc-menu-map):
+	* replace.el (occur-mode-map):
+	* pcvs-defs.el (cvs-global-menu): Purecopy names and tooltips.
+
+2009-10-23  Jay Belanger  <jay.p.belanger@gmail.com>
+
+	* calc/calc.el (math-read-number, math-read-number-simple): Use
+	`save-match-data'.
+
+2009-10-22  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* simple.el (normal-erase-is-backspace-mode): Use input-decode-map
+	rather than fiddling with global-map bindings, since it should only
+	affect per-terminal settings.
+	See http://bugs.gentoo.org/show_bug.cgi?id=289709.
+
+	* minibuffer.el (completion-table-with-terminator): Allow to specify
+	the terminator-regexp.
+
+	* simple.el (switch-to-completions): Look for *Completions* in other
+	frames as well.
+
+	* pcomplete.el: Allow the use of completion-tables.
+	(pcomplete-std-complete): New command.
+	(pcomplete-dirs-or-entries): Use a single call to pcomplete-entries.
+	(pcomplete--here): Use a function for `form' rather than an expression,
+	so it can be byte-compiled.
+	(pcomplete-here, pcomplete-here*): Adjust accordingly.
+	Add edebug declaration.
+	(pcomplete-show-completions): Remove unused var `curbuf'.
+	(pcomplete-do-complete, pcomplete-stub):
+	Don't assume `completions' is a list of strings any more.
+
+2009-10-22  Juanma Barranquero  <lekktu@gmail.com>
+
+	* find-dired.el (find-name-arg): Fix typo in docstring.
+
+2009-10-22  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* pcmpl-linux.el (pcomplete/kill): Don't abuse pcomplete-entries.
+	(pcmpl-linux-fs-types): Same, and update to new modules layout.
+
+	* pcmpl-gnu.el (pcmpl-gnu-makefile-names): Use a single call to
+	pcomplete-entries.
+
+	* comint.el (comint-read-input-ring, comint-write-input-ring)
+	(comint-substitute-in-file-name)
+	(comint-dynamic-complete-as-filename)
+	(comint-dynamic-simple-complete)
+	(comint-dynamic-list-filename-completions)
+	(comint-dynamic-list-completions)
+	(comint-redirect-results-list-from-process): Minor simplifications.
+
+2009-10-21  Kevin Ryde  <user42@zip.com.au>
+
+	* emacs-lisp/checkdoc.el (checkdoc-file-comments-engine):
+	When inserting ";;; Code" put it before any ";;;###autoload" cookie on
+	the first form.  And insert a blank line after ";;; Code" since
+	that's usual style.  (My Bug#4612.)
+
+	* net/dns.el: Add "Keywords: comm", as per net/net-utils.el.
+
+2009-10-21  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* minibuffer.el (completion-table-with-terminator): Properly implement
+	boundaries, in case `terminator' appears in the suffix.
+	(completion--embedded-envvar-table): Don't return boundaries if
+	there's no valid completion.  Simplify.
+	(completion-file-name-table): New completion table extracted from
+	completion--file-name-table.
+	(completion--file-name-table): Use it.
+	(read-file-name-predicate): Declare obsolete.
+	(read-file-name): Use the pred arg i.s.o read-file-name-predicate.
+	* vc-bzr.el (vc-bzr-revision-completion-table): Use the new
+	completion-file-name-table, and use the `pred' argument.
+	* files.el (locate-file-completion-table): Use the `pred' arg rather
+	than read-file-name-predicate.
+	(abbreviate-file-name): Use \` rather than ^ for BOS.
+
+2009-10-21  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* vc.el (vc-deduce-fileset): Undo previous change, do not tell
+	vc-responsible-backend to register, it causes problems.
+
+2009-10-21  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* help-fns.el: Don't require help-mode (to avoid bootstrap issues).
+
+2009-10-21  Eric Ludlam  <zappo@gnu.org>
+
+	* cedet/semantic/bovine/c.el (semantic-c-debug-mode-init)
+	(semantic-c-debug-mode-init-pch): New functions.
+	(semantic-c-debug-mode-init-last-mode): New var.
+	(semantic-c-parse-lexical-token): Use them.
+
+	* cedet/semantic/lex-spp.el (semantic-lex-spp-anlyzer-do-replace):
+	When extracting the argument list, limit only by point-max.
+
+2009-10-21  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp-smb.el (tramp-smb-get-stat-capability): New defun.
+	(tramp-smb-handle-file-attributes): Use it.
+	(tramp-smb-do-file-attributes-with-stat): Don't raise an error.
+	(tramp-smb-handle-insert-directory): Use `mapc' rather than
+	`mapcar'.  Use `tramp-smb-get-stat-capability'.
+	Add `dired-filename' text properties.
+	(tramp-smb-get-cifs-capabilities): Apply `save-match-data'.
+	(tramp-smb-maybe-open-connection): Simplify check for smbclient
+	version.
+
+2009-10-20  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* subr.el (read-key-delay): Reduce to 0.01.
+	(read-key): Use read-key-sequence-vector to avoid turning M-t into 244
+	(bug#4751).
+
+2009-10-19  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* bindings.el (function-key-map): Map C-@ to C-SPC if C-@ is unbound.
+
+	* info.el (Info-complete-menu-item): Handle `boundaries' explicitly.
+	(Info-menu): Remove unused vars `last' and `completions'.
+	(Info-index-nodes): Remove unused var `node'.
+
+	* info.el (Info-complete-menu-item): Use complete-with-action.
+
+2009-10-19  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	Make vc-annotate work through copies and renames.
+	* vc-annotate.el (vc-annotate-extract-revision-at-line):
+	Return the file name too.
+	(vc-annotate-revision-at-line)
+	(vc-annotate-find-revision-at-line)
+	(vc-annotate-revision-previous-to-line)
+	(vc-annotate-show-log-revision-at-line): Update to get the file
+	name from vc-annotate-extract-revision-at-line.
+	(vc-annotate-show-diff-revision-at-line-internal): Change the
+	argument to mean whether to show a file diff or not.  Get the file
+	name from vc-annotate-extract-revision-at-line.
+	(vc-annotate-show-diff-revision-at-line):
+	Update vc-annotate-show-diff-revision-at-line call.
+	(vc-annotate-warp-revision): Add an optional file argument.
+
+	* vc-git.el (vc-git-annotate-command): Pass -C -C to the blame command.
+	(vc-git-annotate-extract-revision-at-line): Also return the file
+	name if found.
+
+	* vc-hg.el (vc-hg-annotate-command): Pass --follow to the annotate
+	command.  Remove unused code.
+	(vc-hg-annotate-re): Update to match --follow output.
+	(vc-hg-annotate-extract-revision-at-line): Also return the file
+	name if found.
+
+	* vc.el: Update annotate-extract-revision-at-line documentation.
+
+2009-10-18  Kevin Ryde  <user42@zip.com.au>
+
+	* ibuffer.el (ibuffer-confirm-operation-on): Correction to error
+	re-throw, `err' is a pair not a list so can't use apply (Bug#4740).
+
+	* net/browse-url.el (browse-url): Identify alist with "consp and
+	not functionp" and let all other things go down the `apply' leg,
+	as suggested by Stefan.  (Further to bug#4531.)
+
+2009-10-18  Chong Yidong  <cyd@stupidchicken.com>
+
+	* minibuffer.el (read-file-name): Check for repeat before putting
+	a default argument in file-name-history (Bug#4657).
+
+	* emacs-lisp/lisp-mode.el (preceding-sexp): Recognize hash table
+	read syntax (Bug#4737).
+
+	* textmodes/sgml-mode.el (sgml-delete-tag): Use sgml-looking-back-at.
+
+2009-10-18  Aaron S. Hawley  <aaron.s.hawley@gmail.com>
+
+	* textmodes/sgml-mode.el (sgml-tag-help): Prompt user for tag.
+	(html-tag-alist, html-tag-help): Add descriptions for undocumented
+	entries and make note of obsolete tags.
+
+2009-10-18  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* net/ange-ftp.el (ange-ftp-file-size): Use unwind-protect.
+
+2009-10-18  Glenn Morris  <rgm@gnu.org>
+
+	* Makefile.in (compile-last): Ensure GREP_OPTIONS is null before calling
+	grep, so that binary files (eg international/uni-bidi.el) can match.
+	Remove test for "UnicodeData" files, since it is hopefully unnecessary
+	now, and in any case the file header format has changed.
+
+2009-10-17  Glenn Morris  <rgm@gnu.org>
+
+	* textmodes/flyspell.el (flyspell-large-region, flyspell-word)
+	(flyspell-get-word, flyspell-large-region)
+	(flyspell-auto-correct-previous-word): Doc/error message fixes.
+
+2009-10-17  Chong Yidong  <cyd@stupidchicken.com>
+
+	* Makefile.in (ELCFILES): Add ede/shell.
+
+2009-10-17  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* term/common-win.el (x-colors): Purecopy it.
+
+2009-10-17  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* tar-mode.el (tar-data-swapped-p): Make the assertion a bit more
+	permissive for when the buffer is empty.
+	(tar-header-block-tokenize): Decode the username and groupname.
+	(tar-chown-entry, tar-chgrp-entry): Encode the names (bug#4730).
+
+2009-10-17  Chong Yidong  <cyd@stupidchicken.com>
+
+	* cedet/srecode/srt.el:
+	* cedet/srecode/compile.el:
+	* cedet/semantic/mru-bookmark.el:
+	* cedet/semantic/debug.el:
+	* cedet/semantic/complete.el:
+	* cedet/semantic/analyze.el: Require CL when compiling.
+
+2009-10-17  Eric Ludlam  <zappo@gnu.org>
+
+	* cedet/semantic/scope.el
+	(semantic-analyze-scoped-inherited-tag-map): Wrap calculation of
+	tmpscope so that the regular scope will continue to work.
+
+	* cedet/semantic/idle.el (semantic-idle-tag-highlight):
+	Use semantic-idle-summary-highlight-face as the highlighting.
+
+	* emacs-lisp/eieio-base.el (eieio-persistent-save): If buffer
+	contains multibyte characters, choose first applicable coding
+	system automatically.
+
+	* cedet/ede/project-am.el (project-run-target): New method.
+	(project-run-target): New method.
+
+	* cedet/ede.el (ede-target): Add run target menu item.
+	(ede-project, ede-minor-keymap): Add ede-run-target binding.
+	(ede-run-target): New function.
+	(ede-target::project-run-target): New method.
+
+	* cedet/ede/proj.el (project-run-target): New method.
+
+	* cedet/ede/proj-shared.el (ede-gcc-libtool-shared-compiler)
+	(ede-g++-libtool-shared-compiler): Remove SHELL.  Remove COMMANDS.
+	Add :rules.
+	(ede-proj-target-makefile-shared-object): Only libtool compilers
+	now available.  Add linkers for libtool.
+	(ede-cc-linker-libtool, ede-g++-linker-libtool): New.
+	(ede-proj-makefile-target-name): Always use .la extension.
+
+	* cedet/ede/proj-prog.el (project-run-target): New method.
+
+	* cedet/ede/proj-obj.el (ede-cc-linker): Rename from ede-gcc-linker.
+	(ede-g++-linker): Change Change link lines.
+
+	* cedet/ede/pmake.el (ede-pmake-insert-variable-shared):
+	When searching for old variables, go to the end of the buffer and
+	search backward from there.
+	(ede-proj-makefile-automake-insert-subdirs)
+	(ede-proj-makefile-automake-insert-extradist): New methods.
+	(ede-proj-makefile-create): Use them.
+
+	* cedet/ede/pconf.el (ede-proj-configure-test-required-file):
+	Force FILE to expand to the current target.  Use file-exists-p to
+	check that it exists.
+
+	* cedet/ede/linux.el (ede-linux-version): Don't call "head".
+	(ede-linux-load): Wrap dir in file-name-as-directory.
+	Set :version slot.
+
+	* cedet/ede/files.el (ede-get-locator-object): When enabling
+	locate, do so on "top".
+
+	* cedet/ede/emacs.el (ede-emacs-file-existing): Wrap "dir" in
+	file-name-as-directory during compare.
+	(ede-emacs-version): Return Emacs/XEmacs differentiator.
+	Get version number from different places.  Don't call egrep.
+	(ede-emacs-load): Set :version slot.  Call file-name-as-directory
+	to set the directory.
+
+	* cedet/ede/shell.el: New file.
+
+	* cedet/inversion.el (inversion-decoders): Allow for stray . in
+	alpha/beta variants.
+
+2009-10-17  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* international/mule-cmds.el (select-safe-coding-system): If the file
+	has a coding cookie, use it regardless of any other setting (bug#4712).
+
+2009-10-17  Glenn Morris  <rgm@gnu.org>
+
+	* cedet/semantic/grammar.el (semantic-grammar--lex-delim-spec):
+	All errors should have messages.
+
+	* foldout.el (foldout-mouse-swallow-events):
+	* gs.el (gs-load-image): Replace obsolete forms of sit-for, sleep-for.
+
+	* dired.el (dired-ls-F-marks-symlinks, dired-keep-marker-rename)
+	(dired-keep-marker-copy, dired-keep-marker-hardlink)
+	(dired-keep-marker-symlink, dired-dwim-target)
+	(dired-copy-preserve-time): Do not autoload these defcustoms.
+
+	* mail/rmail.el (rmail-write-region-annotate): Prevent viewing different
+	messages from messing up the file coding.  (Bug#4623)
+
+2009-10-17  Jari Aalto  <jari.aalto@cante.net>
+
+	* textmodes/ispell.el (ispell-get-decoded-string): Give an error
+	if no match is found for the current dictionary.  (Bug#4578)
+
+	* textmodes/flyspell.el (flyspell-get-word): Make `following' argument
+	optional, since that is how it is documented, and this is often called
+	with a nil argument.  (Bug#4577)
+	(flyspell-external-point-words, flyspell-auto-correct-word)
+	(flyspell-correct-word-before-point, flyspell-word-search-forward)
+	(flyspell-word-search-backward): Remove nil argument in calls to
+	flyspell-get-word, since it is not needed now.
+
+2009-10-17  Ulrich Mueller  <ulm@gentoo.org>
+
+	* play/doctor.el (doctor-adverbp): Exclude some nouns.  (Bug#4565)
+
+2009-10-16  Glenn Morris  <rgm@gnu.org>
+
+	* net/rcirc.el (rcirc-authenticate): Simplify previous change.
+
+2009-10-16  Toru TSUNEYOSHI  <t_tuneyosi@hotmail.com>
+
+	* net/ange-ftp.el (ange-ftp-send-cmd): Handle `size' like `mdtm'.
+	(ange-ftp-file-size): New function.
+	(ange-ftp-file-attributes): Use it.
+
+2009-10-16  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp-smb.el (tramp-smb-version): New defvar.
+	(tramp-smb-maybe-open-connection): Use it, in order to avoid
+	repeated checks.
+
+2009-10-16  Glenn Morris  <rgm@gnu.org>
+
+	* emacs-lisp/byte-run.el (define-obsolete-variable-alias): Doc fix.
+	Maybe copy some custom properties from old to new name.  (Bug#4706)
+
+2009-10-16  Juanma Barranquero  <lekktu@gmail.com>
+
+	* subr.el (error, sit-for, start-process-shell-command)
+	(start-file-process-shell-command): Set the calling convention
+	after the function definition.
+
+2009-10-16  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* subr.el (error, sit-for, start-process-shell-command)
+	(start-file-process-shell-command): Use the new
+	set-advertised-calling-convention feature.
+
+2009-10-16  Taichi Kawabata  <kawabata.taichi@gmail.com>
+
+	* international/ucs-normalize.el (ucs-normalize-version):
+	Change to 1.2.
+	(check-range): Adjust for Unicode 5.2.
+
+2009-10-15  Juri Linkov  <juri@jurta.org>
+
+	* menu-bar.el (menu-bar-file-menu): Convert `separator-exit'
+	to the `menu-item' format.
+
+2009-10-15  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp.el (tramp-replace-environment-variables): Do not fail
+	if the environment variable does not exist.
+
+	* net/tramp-smb.el (tramp-smb-errors): Add error messages.
+	(tramp-smb-get-share, tramp-smb-get-localname): Use only VEC as
+	parameter.
+	(tramp-smb-handle-add-name-to-file)
+	(tramp-smb-handle-copy-directory, tramp-smb-handle-copy-file)
+	(tramp-smb-handle-delete-directory, tramp-smb-handle-delete-file)
+	(tramp-smb-handle-file-attributes)
+	(tramp-smb-do-file-attributes-with-stat)
+	(tramp-smb-handle-file-local-copy)
+	(tramp-smb-handle-insert-directory)
+	(tramp-smb-handle-make-directory)
+	(tramp-smb-handle-make-directory-internal)
+	(tramp-smb-handle-make-symbolic-link)
+	(tramp-smb-handle-rename-file, tramp-smb-handle-set-file-modes)
+	(tramp-smb-handle-write-region, tramp-smb-get-file-entries)
+	(tramp-smb-maybe-open-connection): Apply the changed parameters.
+	(tramp-smb-read-file-entry): Read Disk names in compressed format.
+	Handle long file names.
+	(tramp-smb-get-cifs-capabilities): Check, whether the connection
+	process is running.
+	(tramp-smb-maybe-open-connection): Trace "smbclient -V" command.
+	Read share names with "-g" option.
+
+2009-10-15  Ryan Yeske  <rcyeske@gmail.com>
+
+	* net/rcirc.el (rcirc-view-log-file): New command.
+	(rcirc-track-minor-mode-map): Remove C-c ` binding.
+	(rcirc-authenticate, rcirc-authinfo): Allow nickserv-nick to be
+	specified.
+
+2009-10-15  Glenn Morris  <rgm@gnu.org>
+
+	* w32-fns.el (w32-batch-update-autoloads): Take autoload-make-program
+	from the second command-line argument.
+	* makefile.w32-in (autoloads, $(lisp)/calendar/cal-loaddefs.el)
+	($(lisp)/calendar/diary-loaddefs.el, $(lisp)/calendar/hol-loaddefs.el)
+	($(lisp)/mh-e/mh-loaddefs.el): Pass $(MAKE) as second argument to
+	w32-batch-update-autoloads.
+	* emacs-lisp/autoload.el (autoload-make-program): New variable.
+	(batch-update-autoloads): Handle autoload-excludes on windows-nt.
+
+	* mail/rmailedit.el (rmail-cease-edit): Give an error if the end of
+	the headers cannot be located.  Simplify, subtracting superflous
+	save-excursions.
+
+2009-10-15  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	Replace completion-base-size by completion-base-position to fix bugs
+	such as (bug#4699).
+	* simple.el (completion-base-position): New var.
+	(completion-base-size): Mark as obsolete.
+	(choose-completion): Make it work for mouse events as well.
+	Pass the new base-position to choose-completion-string.
+	(choose-completion-guess-base-position): New function, extracted from
+	choose-completion-delete-max-match.
+	(choose-completion-delete-max-match): Use it.  Make obsolete.
+	(choose-completion-string): Use the new base-position info.
+	(completion-root-regexp): Delete.
+	(completion-setup-function): Preserve completion-base-position.
+	Eliminate obsolete base-size manipulation.
+	* minibuffer.el (display-completion-list): Don't mess with base-size.
+	(minibuffer-completion-help): Set completion-base-position instead.
+	* mouse.el (mouse-choose-completion): Redefine as a mere alias to
+	choose-completion.
+	* textmodes/bibtex.el (bibtex-complete):
+	* emacs-lisp/crm.el (crm--choose-completion-string):
+	Adjust to new calling convention.
+	* complete.el (partial-completion-mode): Use minibufferp to avoid
+	bumping into incompatible change to choose-completion-string-functions.
+	* ido.el (ido-choose-completion-string): Make its calling convention
+	more permissive.
+	* comint.el (comint-dynamic-list-input-ring-select): Remove obsolete
+	base-size manipulation.
+	(comint-dynamic-list-input-ring): Use dotimes and push.
+	* iswitchb.el (iswitchb-completion-help): Remove dead-code call to
+	fundamental-mode.  Use `or'.
+
+2009-10-14  Juri Linkov  <juri@jurta.org>
+
+	* misearch.el (multi-isearch-next-buffer-from-list)
+	(multi-isearch-next-file-buffer-from-list): Doc fix.  (Bug#4723)
+
+2009-10-14  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* Makefile.in (compile-onefile): Load `bytecomp' rather than
+	`bytecomp.el'.
+
+	* minibuffer.el (completion-pcm--merge-completions): Make sure the
+	string we return is all made up of text from the completions rather
+	than part from the completions and part from the input (bug#4219).
+
+	* ido.el (ido-everywhere): Use define-minor-mode.
+
+	* buff-menu.el (list-buffers, ctl-x-map):
+	Mark the entry points with ;;;###autoload cookies.
+
+2009-10-14  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* vc-git.el (vc-git-dir-extra-headers): Set the branch name
+	correctly in the detached head case.
+	(vc-git-print-log): Remove unused binding.
+
+	* vc.el (vc-responsible-backend): When a directory is passed for
+	for registration create a VC repository if no backend is
+	responsible for the directory argument.
+	(vc-deduce-fileset): Tell vc-responsible-backend to register.
+
+	* vc.el: Move comments about RCS and SCCS ...
+	* vc-rcs.el:
+	* vc-sccs.el: ... here, respectively.
+
+2009-10-14  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* minibuffer.el (completion--file-name-table): Return nil if there's
+	no file completion, even if substitute-in-file-name changed
+	the string (bug#4708).
+
+2009-10-13  Juri Linkov  <juri@jurta.org>
+
+	* files-x.el (read-file-local-variable-value): Don't filter out
+	minor modes from mode name completion (bug#4664).
+
+2009-10-13  Juanma Barranquero  <lekktu@gmail.com>
+
+	* international/mule-cmds.el (ucs-names): Remove exclusion of
+	"Enclosed Ideographic Supplement" range (U+1F200..U+1F2FF).
+
+2009-10-13  Kenichi Handa  <handa@m17n.org>
+
+	* international/uni-name.el: Regenerated.
+
+2009-10-13  Juanma Barranquero  <lekktu@gmail.com>
+
+	* bs.el (bs-mode): Fix last change.  (`revert-buffer-function'
+	should be automatically buffer-local, but isn't.)
+
+2009-10-12  Sam Steingold  <sds@gnu.org>
+
+	* progmodes/compile.el (compilation-next-error-function): Fix the
+	timestamps if the buffer has been visited before.
+	(compilation-mode-font-lock-keywords): Do not prepend "^ *" to
+	non-anchored patterns, like the perl one (bug#3928).
+
+2009-10-12  Glenn Morris  <rgm@gnu.org>
+
+	* net/tramp-smb.el (tramp-smb-do-file-attributes-with-stat):
+	Let-bind `size'.
+
+2009-10-12  Juanma Barranquero  <lekktu@gmail.com>
+
+	* proced.el (proced-unload-function): New function.
+
+	* bs.el (bs-mode): Set `revert-buffer-function' to `bs-refresh'.
+	(bs-refresh): Add IGNORED arg for `revert-buffer' compatibility.
+	Doc fix.
+
+	* menu-bar.el (menu-bar-file-menu): Fix format of `separator-exit' item.
+
+2009-10-11  Juri Linkov  <juri@jurta.org>
+
+	* files-x.el (read-file-local-variable-value):
+	Provide default value only for bound variables (bug#4664).
+
+2009-10-11  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp.el (tramp-local-host-p): Function shall return nil for
+	connection methods like smb.
+
+	* net/tramp-cache.el (tramp-flush-connection-property): The hash
+	can be empty.
+
+	* net/tramp-smb.el (tramp-smb-errors): Add error messages.
+	(tramp-smb-file-name-handler-alist): Add handlers for
+	`add-name-to-file', `make-symbolic-link'.
+	(tramp-smb-handle-add-name-to-file)
+	(tramp-smb-do-file-attributes-with-stat)
+	(tramp-smb-handle-make-symbolic-link)
+	(tramp-smb-get-cifs-capabilities): New defuns.
+	(tramp-smb-handle-copy-directory, tramp-smb-handle-copy-file)
+	(tramp-smb-handle-delete-directory, tramp-smb-handle-delete-file)
+	(tramp-smb-handle-file-local-copy)
+	(tramp-smb-handle-make-directory-internal)
+	(tramp-smb-handle-rename-file, tramp-smb-handle-write-region):
+	The file name syntax depends on cifs capabilities.
+	(tramp-smb-handle-file-attributes):
+	Call `tramp-smb-do-file-attributes-with-stat' if possible.
+	(tramp-smb-handle-insert-directory): Use posix attributes if possible.
+	(tramp-smb-handle-set-file-modes): It is applicable for posix only.
+
+2009-10-11  Chong Yidong  <cyd@stupidchicken.com>
+
+	* emacs-lisp/eieio.el: Avoid requiring cl at runtime.
+	(eieio-defclass): Apply deftype handler and setf-method properties
+	directly.
+	(eieio-add-new-slot): Avoid union function from cl library.
+	(eieio--typep): New function.
+	(eieio-perform-slot-validation): Use it.
+
+2009-10-10  Karl Fogel  <kfogel@red-bean.com>
+
+	* bookmark.el (bookmark-yank-word, bookmark-insert-current-bookmark):
+	Update documentation to refer to the variables documented in r1.135.
+	(Bug#4188)
+
+2009-10-10  Karl Fogel  <kfogel@red-bean.com>
+
+	* bookmark.el (Info-suffix-list): Remove this unused variable.
+	(bookmark-current-point): Remove this obsolete variable.
+	(bookmark-set, bookmark-rename, bookmark-send-edited-annotation):
+	Adjust for removal of bookmark-current-point.
+
+	(bookmarks-already-loaded, bookmark-current-buffer)
+	(bookmark-yank-point): Document.  (Bug#4188)
+
+2009-10-10  Glenn Morris  <rgm@gnu.org>
+
+	* frame.el (frame-height): Doc fix.
+
+	* calendar/calendar.el (calendar-split-width-threshold): New option.
+	(calendar-basic-setup): Use calendar-split-width-threshold.
+
+2009-10-10  Sascha Wilde  <wilde@sha-bang.de>
+
+	* cedet/ede/proj-shared.el (ede-proj-makefile-target-name):
+	Use .la for Automake.
+
+2009-10-09  Chong Yidong  <cyd@stupidchicken.com>
+
+	* cedet/ede/pconf.el (ede-proj-configure-synchronize):
+	Use "autoreconf -i".  Suggested by Andreas Schwab.
+
+2009-10-09  Juanma Barranquero  <lekktu@gmail.com>
+
+	* international/mule-cmds.el (ucs-names): Exclude new "Enclosed
+	Ideographic Supplement" range (U+1F200..U+1F2FF).
+
+2009-10-09  Karl Fogel  <kfogel@red-bean.com>
+
+	* bookmark.el (bookmark-bmenu-rename): Don't call bookmark-bmenu-list,
+	since the list will have been rebuilt anyway.  (Bug#4349)
+
+2009-10-09  Karl Fogel  <kfogel@red-bean.com>
+
+	* bookmark.el (bookmark-delete): Don't let batch arg prevent saving.
+	(bookmark-bmenu-execute-deletions): Don't save here, as
+	bookmark-delete will now do so if necessary.
+	Suggested by Thierry Volpiatto <thierry.volpiatto {_AT_} gmail.com>.
+	(Bug#4348)
+
+2009-10-09  Glenn Morris  <rgm@gnu.org>
+
+	* mail/emacsbug.el (report-emacs-bug): Also print `features'.
+
+2009-10-09  Karl Fogel  <kfogel@red-bean.com>
+
+	* bookmark.el (bookmark-jump): Add new `display-func' parameter.
+	(bookmark-jump-other-window): Just invoke bookmark-jump with new
+	argument now, so the two function's behaviors will match.  (Bug#3645)
+
 2009-10-08  Chong Yidong  <cyd@stupidchicken.com>
 
+	* cedet/ede/proj.el (project-make-dist, project-compile-project):
+	Fix filename test.
+	(ede-proj-dist-makefile): Use expand-file-name instead of concat
+	to expand file names.
+
+2009-10-08  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp.el (tramp-file-name-real-user, tramp-file-name-domain)
+	(tramp-file-name-real-host, tramp-file-name-port):
+	Apply `save-match-data'.
+
+	* net/tramp-smb.el (tramp-smb-handle-copy-directory): Handle the
+	case both directories are remote.
+	(tramp-smb-handle-expand-file-name): Implement "~" expansion.
+	(tramp-smb-maybe-open-connection): Flush the cache only if necessary.
+
+2009-10-08  Chong Yidong  <cyd@stupidchicken.com>
+
+	* cedet/ede/proj-obj.el (ede-gcc-linker): New var.
+	(ede-proj-target-makefile-objectcode): Use it.
+
 	* cedet/ede/source.el (ede-want-any-source-files-p)
-	(ede-want-any-auxiliary-files-p, ede-want-any-files-p): Return
-	search result.  This error was introduced while merging.
+	(ede-want-any-auxiliary-files-p, ede-want-any-files-p):
+	Return search result.  This error was introduced while merging.
 
 2009-10-07  Juanma Barranquero  <lekktu@gmail.com>
 
@@ -10,8 +1419,8 @@
 
 2009-10-07  Glenn Morris  <rgm@gnu.org>
 
-	* emacs-lisp/autoload.el (batch-update-autoloads): Remove useless use of
-	concat.
+	* emacs-lisp/autoload.el (batch-update-autoloads): Remove useless use
+	of concat.
 
 2009-10-07  Stefan Monnier  <monnier@iro.umontreal.ca>
 
@@ -112,7 +1521,7 @@
 
 2009-10-05  Stefan Monnier  <monnier@iro.umontreal.ca>
 
-	* help-fns.el (describe-function-1): Don't burp is the function is not
+	* help-fns.el (describe-function-1): Don't burp if the function is not
 	a symbol.
 
 2009-10-05  Juanma Barranquero  <lekktu@gmail.com>
@@ -1022,7 +2431,7 @@
 
 2009-09-27  Adrian Robert  <Adrian.B.Robert@gmail.com>
 
-	* term/ns-win.el: Don't set the region face background. (Bug#4381)
+	* term/ns-win.el: Don't set the region face background.  (Bug#4381)
 
 	* faces.el: Default light-background background for region face to
 	ns_selection_color under NS.
@@ -1055,10 +2464,10 @@
 2009-09-26  Alan Mackenzie  <acm@muc.de>
 
 	* progmodes/cc-engine.el (c-beginning-of-statement-1): Correct
-	buggy bracketing.
+	buggy bracketing.  (Bug#4289)
 
 	* progmodes/cc-langs.el (c-nonlabel-token-key): Allow quoted
-	character constants (as case labels).
+	character constants (as case labels).  (Bug#4289)
 
 2009-09-25  Juri Linkov  <juri@jurta.org>
 
@@ -1453,7 +2862,7 @@
 
 	* vc-dispatcher.el (vc-do-command): Return the process object in
 	the asynchronous case.  Use when instead of if.  Do not run
-	vc-exec-after to display a message if not enabled.
+	vc-exec-after to display a message if not enabled.  (Bug#4463)
 
 	* vc-git.el (vc-git-dir-extra-headers): Add keymap and mouse-face
 	properties to the stash strings.

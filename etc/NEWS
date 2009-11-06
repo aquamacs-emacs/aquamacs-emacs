@@ -74,10 +74,10 @@ frame parameter fullscreen makes the Emacs frame maximized.
 ** The pointer now becomes invisible when typing.
 Customize make-pointer-invisible to turn it off.
 
-** Killing a buffer with a running process now asks a confirmation.
-You can remove this query in two ways: either removing
-`process-kill-buffer-query-function' from `kill-buffer-query-functions' or
-setting the appropriate process flag with `set-process-query-on-exit-flag'.
+** Killing a buffer with a running process now asks for confirmation.
+You can remove this query in two ways: either remove
+`process-kill-buffer-query-function' from `kill-buffer-query-functions',
+or set the appropriate process flag with `set-process-query-on-exit-flag'.
 
 ** The variable `load-in-progress' won't get corrupted by binding it
 with `let'.  In certain situations, loading an Emacs Lisp file from
@@ -134,6 +134,9 @@ For instance, this can complete M-x lch to list-command-history.
 
 * Changes in Specialized Modes and Packages in Emacs 23.2
 
+** pcomplete provides a new command `pcomplete-std-completion' which
+is similar to `pcomplete' but using the standard completion UI code.
+
 ** .calc.el and .abbrev_defs obey user-emacs-directory.
 
 ** Calc graphing commands (`g f' etc.) now work on MS-Windows,
@@ -184,8 +187,18 @@ new connection methods "dav", "davs", "obex" and "synce".
 
 ** VC and related modes
 
+*** When using C-x v v or C-x v i on a unregistered file that is in a
+directory not controlled by any VCS, ask the user what VC backend to
+use to create a repository, create a new repository and register the
+file.
+
 *** FIXME: add info about the new VC functions: vc-root-diff and
 vc-root-print-log once they stabilize.
+
+*** vc-annotate supports annotations through file copies and renames,
+it displays the old names for the files and it can show logs/diffs for
+the corresponding lines.  Currently only Git and Mercurial take
+advantage of this feature.
 
 *** When a file is not found, VC will not try to check it out of RCS anymore.
 
@@ -245,6 +258,19 @@ Command*'.
 
 * Lisp changes in Emacs 23.2
 
+** The 4th arg to all-completions (aka hide-spaces) is declared obsolete.
+
+** read-file-name-predicate is obsolete.  It was used to pass the predicate
+to read-file-name-internal because read-file-name-internal abused its `pred'
+argument to pass the current directory, but this hack is not needed
+any more.
+
+** completion-base-size is obsoleted by completion-base-position.
+This change causes a few backward incompatibilities, mostly with
+choose-completion-string-functions where the `mini-p' argument has
+been replaced by a `base-position' argument, and where the `base-size'
+argument is now always nil.
+
 ** called-interactively-p now takes one argument and replaces interactive-p
 which is now marked obsolete.
 ** New function set-advertised-calling-convention makes it possible
@@ -296,6 +322,9 @@ for completions displayed in *Completions*.
 the function `byte-compile-dest-file' before loading bytecomp.el is obsolete.
 Instead, customize byte-compile-dest-file-function.
 
+---
+** `byte-compile-warnings' can have a new member, `constants'.
+
 ** Several obsolete functions removed.
 The functions have been obsolete since Emacs 19, and are unlikely to
 be in use:
@@ -309,6 +338,7 @@ be in use:
 
 ** New function `copy-directory', which copies a directory recursively.
 
++++
 ** New function `window-full-height-p', analogous to the full-width version.
 
 
@@ -1035,6 +1065,12 @@ versions 1 and 2 of the Rar format.
 identify cited keys in BibTeX entries, used by `bibtex-find-crossref'.
 
 *** Command `bibtex-url' allows multiple URLs per entry.
+
+** Bookmarks
+
+*** bookmark.el saves bookmarks in a pre-Emacs-23-incompatible file format
+bookmark.el can read a .emacs.bmk file saved by an older Emacs, but an
+older Emacs cannot read one saved by Emacs 23.
 
 ** Calendar and diary
 
@@ -2289,7 +2325,7 @@ declare-function macros (see Lisp Changes, above).
 ** The package misearch.el has been added.  It allows Isearch to search
 through multiple buffers.  A variable `multi-isearch-next-buffer-function'
 defines the function to call to get the next buffer to search in the series
-of multiple buffers.  Top-level commands `multi-isearch-buffers',
+of multiple buffers.  Top-level functions `multi-isearch-buffers',
 `multi-isearch-buffers-regexp', `multi-isearch-files' and
 `multi-isearch-files-regexp' accept a single argument that specifies
 a list of buffers/files to search for a string/regexp.

@@ -332,6 +332,7 @@ ELCFILES = \
 	$(lisp)/cedet/ede/proj-shared.elc \
 	$(lisp)/cedet/ede/proj.elc \
 	$(lisp)/cedet/ede/project-am.elc \
+	$(lisp)/cedet/ede/shell.elc \
 	$(lisp)/cedet/ede/simple.elc \
 	$(lisp)/cedet/ede/source.elc \
 	$(lisp)/cedet/ede/speedbar.elc \
@@ -1456,7 +1457,9 @@ ELCFILES = \
 # the most common problems of not bootstrapping from a clean state.
 compile-onefile:
 	@echo Compiling $(THEFILE)
-	@$(emacs) -l bytecomp.el -f byte-compile-refresh-preloaded $(BYTE_COMPILE_EXTRA_FLAGS) -f batch-byte-compile $(THEFILE)
+	@# Use byte-compile-refresh-preloaded to try and work around some of
+	@# the most common bootstrapping problems.
+	@$(emacs) -l bytecomp -f byte-compile-refresh-preloaded $(BYTE_COMPILE_EXTRA_FLAGS) -f batch-byte-compile $(THEFILE)
 
 # Files MUST be compiled one by one. If we compile several files in a
 # row (i.e., in the same instance of Emacs) we can't make sure that
@@ -1502,15 +1505,13 @@ compile-always: doit
 	$(MAKE) $(MFLAGS) compile EMACS=$(EMACS)
 
 ## In case any files are missing from ELCFILES.
-## Why is the UnicodeData check needed, when these files are no-byte-compile?
 compile-last:
 	@wd=$(lisp); $(setwins); \
 	els=`echo "$$wins " | sed -e 's|/\./|/|g' -e 's|/\. | |g' -e 's| |/*.el |g'`; \
 	for el in $$els; do \
 	  test -f $$el || continue; \
 	  test -f $${el}c && continue; \
-	  grep 'no-byte-compile: t' $$el > /dev/null && continue; \
-	  head -n 1 $$el | grep '^;; Automatically generated from UnicodeData.txt.' > /dev/null && continue; \
+	  GREP_OPTIONS= grep 'no-byte-compile: t' $$el > /dev/null && continue; \
 	  sel=`echo $$el | sed "s|^$(lisp)|\\$$(lisp)|"`; \
 	  echo "Maintainer warning: $$sel missing from \$$ELCFILES?"; \
 	  echo "Compiling $$el"; \

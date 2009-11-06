@@ -3863,8 +3863,7 @@ Return t if test was successful, nil otherwise."
         buffer-key-list current-buf current-keys error-list)
     ;; Check for duplicate keys within BibTeX buffer
     (dolist (buffer buffer-list)
-      (save-excursion
-        (set-buffer buffer)
+      (with-current-buffer buffer
         (let (entry-type key key-list)
           (goto-char (point-min))
           (while (re-search-forward bibtex-entry-head nil t)
@@ -4527,9 +4526,9 @@ An error is signaled if point is outside key or BibTeX field."
            ;; is requested.
            (let (completion-ignore-case)
              (setq choose-completion-string-functions
-                   (lambda (choice buffer mini-p base-size)
+                   (lambda (choice buffer base-position &rest ignored)
                      (setq choose-completion-string-functions nil)
-                     (choose-completion-string choice buffer base-size)
+                     (choose-completion-string choice buffer base-position)
                      (bibtex-complete-crossref-cleanup choice)
                      t)) ; needed by choose-completion-string-functions
              (bibtex-complete-crossref-cleanup
@@ -4545,9 +4544,9 @@ An error is signaled if point is outside key or BibTeX field."
            ;; string completion
            (let ((completion-ignore-case t))
              (setq choose-completion-string-functions
-                   `(lambda (choice buffer mini-p base-size)
+                   `(lambda (choice buffer base-position &rest ignored)
                       (setq choose-completion-string-functions nil)
-                      (choose-completion-string choice buffer base-size)
+                      (choose-completion-string choice buffer base-position)
                       (bibtex-complete-string-cleanup choice ',compl)
                       t)) ; needed by `choose-completion-string-functions'
              (bibtex-complete-string-cleanup (bibtex-complete-internal compl)

@@ -31,6 +31,7 @@ GNUstep port and post-20 update by Adrian Robert (arobert@cogsci.ucsd.edu)
 
 #include <signal.h>
 #include <math.h>
+#include <setjmp.h>
 
 #include "lisp.h"
 #include "blockinput.h"
@@ -522,7 +523,7 @@ ns_set_name_iconic (struct frame *f, Lisp_Object name, int explicit)
 static void
 ns_set_name (struct frame *f, Lisp_Object name, int explicit)
 {
-  NSView *view = FRAME_NS_VIEW (f);
+  NSView *view;
   NSTRACE (ns_set_name);
 
   if (ns_in_resize)
@@ -552,6 +553,8 @@ ns_set_name (struct frame *f, Lisp_Object name, int explicit)
     name = f->title;
 
   CHECK_STRING (name);
+
+  view = FRAME_NS_VIEW (f);
 
   /* Don't change the name if it's already NAME.  */
   if ([[[view window] title]
@@ -616,7 +619,7 @@ x_set_title (struct frame *f, Lisp_Object name, Lisp_Object old_name)
 void
 ns_set_name_as_filename (struct frame *f)
 {
-  NSView *view = FRAME_NS_VIEW (f);
+  NSView *view;
   Lisp_Object name;
   Lisp_Object buf = XWINDOW (f->selected_window)->buffer;
   const char *title;
@@ -638,6 +641,8 @@ ns_set_name_as_filename (struct frame *f)
     name = build_string([ns_app_name UTF8String]);
   else
     CHECK_STRING (name);
+
+  view = FRAME_NS_VIEW (f);
 
   title = FRAME_ICONIFIED_P (f) ? [[[view window] miniwindowTitle] UTF8String]
                                 : [[[view window] title] UTF8String];
@@ -2839,7 +2844,7 @@ DEFUN ("xw-color-values", Fxw_color_values, Sxw_color_values, 1, 2, 0,
      Lisp_Object color, frame;
 {
   NSColor * col;
-  float red, green, blue, alpha;
+  CGFloat red, green, blue, alpha;
 
   check_ns ();
   CHECK_STRING (color);

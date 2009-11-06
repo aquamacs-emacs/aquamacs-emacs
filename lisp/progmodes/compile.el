@@ -988,11 +988,10 @@ FMTS is a list of format specs for transforming the file name.
           ;; another solution is to modify (some?) regexps in
           ;; `compilation-error-regexp-alist'.
           ;; note that omake usage is not limited to ocaml and C (for stubs).
-          (unless (string-match (concat "^" (regexp-quote "^ *")) pat)
-            (setq pat (concat "^ *"
-                              (if (= ?^ (aref pat 0))
-                                  (substring pat 1)
-                                  pat))))
+          (when (and (= ?^ (aref pat 0)) ; anchored: starts with "^"
+                     ;; but does not allow an arbitrary number of leading spaces
+                     (not (and (= ?  (aref pat 1)) (= ?* (aref pat 2)))))
+            (setq pat (concat "^ *" (substring pat 1))))
 	  (if (consp file)	(setq fmt (cdr file)	  file (car file)))
 	  (if (consp line)	(setq end-line (cdr line) line (car line)))
 	  (if (consp col)	(setq end-col (cdr col)	  col (car col)))
@@ -1943,16 +1942,13 @@ This is the value of `next-error-function' in Compilation buffers."
     ;; (`omake -P' polls filesystem for changes and recompiles when needed
     ;;  in the same process and buffer).
     ;; So, recalculate all markers for that file.
-    (unless (and (nth 3 loc) (marker-buffer (nth 3 loc))
-                 ;; There may be no timestamp info if the loc is a `fake-loc'.
-                 ;; So we skip the time-check here, although we should maybe
-                 ;; change `compilation-fake-loc' to add timestamp info.
-                 (or (null (nth 4 loc))
-                     (equal (nth 4 loc)
-                            (setq timestamp
-                                  (with-current-buffer
-                                      (marker-buffer (nth 3 loc))
-                                    (visited-file-modtime))))))
+    (unless (and (nth 3 loc) (marker-buffer (nth 3 loc)) (nthcdr 4 loc)
+                 ;; There may be no timestamp info if the loc is a `fake-loc',
+                 ;; but we just checked that the file has been visited before!
+                 (equal (nth 4 loc)
+                        (setq timestamp
+                              (with-current-buffer (marker-buffer (nth 3 loc))
+                                (visited-file-modtime)))))
       (with-current-buffer (compilation-find-file marker (caar (nth 2 loc))
 						  (cadr (car (nth 2 loc))))
 	(save-restriction
@@ -2342,7 +2338,7 @@ The file-structure looks like this:
   (goto-char limit)
   nil)
 
-;; Beware: this is not only compatiblity code.  New code stil uses it.  --Stef
+;; Beware: this is not only compatibility code.  New code stil uses it.  --Stef
 (defun compilation-forget-errors ()
   ;; In case we hit the same file/line specs, we want to recompute a new
   ;; marker for them, so flush our cache.

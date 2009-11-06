@@ -209,7 +209,7 @@ have fast storage with limited space, such as a RAM disk."
   :type '(choice (const nil) directory))
 
 ;; The system null device. (Should reference NULL_DEVICE from C.)
-(defvar null-device "/dev/null" "The system null device.")
+(defvar null-device (purecopy "/dev/null") "The system null device.")
 
 (declare-function msdos-long-file-names "msdos.c")
 (declare-function w32-long-file-name "w32proc.c")
@@ -222,15 +222,17 @@ have fast storage with limited space, such as a RAM disk."
 
 (defvar file-name-invalid-regexp
   (cond ((and (eq system-type 'ms-dos) (not (msdos-long-file-names)))
+	 (purecopy
 	 (concat "^\\([^A-Z[-`a-z]\\|..+\\)?:\\|" ; colon except after drive
 		 "[+, ;=|<>\"?*]\\|\\[\\|\\]\\|"  ; invalid characters
 		 "[\000-\037]\\|"		  ; control characters
 		 "\\(/\\.\\.?[^/]\\)\\|"	  ; leading dots
-		 "\\(/[^/.]+\\.[^/.]*\\.\\)"))	  ; more than a single dot
+		 "\\(/[^/.]+\\.[^/.]*\\.\\)")))	  ; more than a single dot
 	((memq system-type '(ms-dos windows-nt cygwin))
+	 (purecopy
 	 (concat "^\\([^A-Z[-`a-z]\\|..+\\)?:\\|" ; colon except after drive
-		 "[|<>\"?*\000-\037]"))		  ; invalid characters
-	(t "[\000]"))
+		 "[|<>\"?*\000-\037]")))		  ; invalid characters
+	(t (purecopy "[\000]")))
   "Regexp recognizing file names which aren't allowed by the filesystem.")
 
 (defcustom file-precious-flag nil
@@ -728,8 +730,10 @@ one or more of those symbols."
   "Do completion for file names passed to `locate-file'."
   (cond
    ((file-name-absolute-p string)
-    (let ((read-file-name-predicate pred))
-      (read-file-name-internal string nil action)))
+    ;; FIXME: maybe we should use completion-file-name-table instead,
+    ;; tho at least for `load', the arg is passed through
+    ;; substitute-in-file-name for historical reasons.
+    (read-file-name-internal string pred action))
    ((eq (car-safe action) 'boundaries)
     (let ((suffix (cdr action)))
       (list* 'boundaries
@@ -764,7 +768,7 @@ PATH-AND-SUFFIXES is a pair of lists, (DIRECTORIES . SUFFIXES)."
 (make-obsolete 'locate-file-completion 'locate-file-completion-table "23.1")
 
 (defvar locate-dominating-stop-dir-regexp
-  "\\`\\(?:[\\/][\\/][^\\/]+[\\/]\\|/\\(?:net\\|afs\\|\\.\\.\\.\\)/\\)\\'"
+  (purecopy "\\`\\(?:[\\/][\\/][^\\/]+[\\/]\\|/\\(?:net\\|afs\\|\\.\\.\\.\\)/\\)\\'")
   "Regexp of directory names which stop the search in `locate-dominating-file'.
 Any directory whose name matches this regexp will be treated like
 a kind of root directory by `locate-dominating-file' which will stop its search
@@ -1634,7 +1638,7 @@ home directory is a root directory) and removes automounter prefixes
       (or abbreviated-home-dir
 	  (setq abbreviated-home-dir
 		(let ((abbreviated-home-dir "$foo"))
-		  (concat "^" (abbreviate-file-name (expand-file-name "~"))
+		  (concat "\\`" (abbreviate-file-name (expand-file-name "~"))
 			  "\\(/\\|\\'\\)"))))
 
       ;; If FILENAME starts with the abbreviated homedir,
@@ -1645,9 +1649,7 @@ home directory is a root directory) and removes automounter prefixes
 			 (= (aref filename 0) ?/)))
 	       ;; MS-DOS root directories can come with a drive letter;
 	       ;; Novell Netware allows drive letters beyond `Z:'.
-	       (not (and (or (eq system-type 'ms-dos)
-			     (eq system-type 'cygwin)
-			     (eq system-type 'windows-nt))
+	       (not (and (memq system-type '(ms-dos windows-nt cygwin))
 			 (save-match-data
 			   (string-match "^[a-zA-`]:/$" filename)))))
 	  (setq filename
@@ -1674,8 +1676,7 @@ If there is no such live buffer, return nil."
           (when (and buf (funcall predicate buf)) buf))
         (let ((list (buffer-list)) found)
           (while (and (not found) list)
-            (save-excursion
-              (set-buffer (car list))
+            (with-current-buffer (car list)
               (if (and buffer-file-name
                        (string= buffer-file-truename truename)
                        (funcall predicate (current-buffer)))
@@ -2392,7 +2393,7 @@ and `magic-mode-alist', which determines modes based on file contents.")
   ;; and pike-mode) are added through autoload directives in that
   ;; file.  That way is discouraged since it spreads out the
   ;; definition of the initial value.
-  (mapc
+  (mapcar
    (lambda (l)
      (cons (purecopy (car l)) (cdr l)))
    '(("perl" . perl-mode)
@@ -2437,7 +2438,7 @@ of a script, mode MODE is enabled.
 
 See also `auto-mode-alist'.")
 
-(defvar inhibit-first-line-modes-regexps '("\\.tar\\'" "\\.tgz\\'")
+(defvar inhibit-first-line-modes-regexps (mapcar 'purecopy '("\\.tar\\'" "\\.tgz\\'"))
   "List of regexps; if one matches a file name, don't look for `-*-'.")
 
 (defvar inhibit-first-line-modes-suffixes nil
@@ -4423,15 +4424,15 @@ This requires the external program `diff' to be in your `exec-path'."
 
 (defvar save-some-buffers-action-alist
   `(;; (?\C-r
-;;      ,(lambda (buf)
-;;         (if (not enable-recursive-minibuffers)
-;;             (progn (display-buffer buf)
-;;                    (setq other-window-scroll-buffer buf))
-;;           (view-buffer buf (lambda (_) (exit-recursive-edit)))
-;;           (recursive-edit))
-;;         ;; Return nil to ask about BUF again.
-;;         nil)
-;;      "view this buffer")
+    ;;  ,(lambda (buf)
+    ;;     (if (not enable-recursive-minibuffers)
+    ;;         (progn (display-buffer buf)
+    ;;                (setq other-window-scroll-buffer buf))
+    ;;       (view-buffer buf (lambda (_) (exit-recursive-edit)))
+    ;;       (recursive-edit))
+    ;;     ;; Return nil to ask about BUF again.
+    ;;     nil)
+    ;;  ,(purecopy "view this buffer"))
     (?d ,(lambda (buf)
            (if (null buffer-file-name)
                (message "Not applicable: no file")
@@ -4444,7 +4445,7 @@ This requires the external program `diff' to be in your `exec-path'."
                (recursive-edit)))
            ;; Return nil to ask about BUF again.
            nil)
-	"view changes"))
+	,(purecopy "view changes")))
   "ACTION-ALIST argument used in call to `map-y-or-n-p'.")
 (put 'save-some-buffers-action-alist 'risky-local-variable t)
 
@@ -4704,7 +4705,10 @@ If RECURSIVE is non-nil, all files in DIRECTORY are deleted as well."
       (if (and recursive (not (file-symlink-p directory)))
 	  (mapc
 	   (lambda (file)
-	     (if (file-directory-p file)
+	     ;; This test is equivalent to
+	     ;; (and (file-directory-p fn) (not (file-symlink-p fn)))
+	     ;; but more efficient
+	     (if (eq t (car (file-attributes file)))
 		 (delete-directory file recursive)
 	       (delete-file file)))
 	   ;; We do not want to delete "." and "..".
@@ -4877,7 +4881,7 @@ non-nil, it is called instead of rereading visited file contents."
 					file-name)))
 	       (run-hooks 'before-revert-hook)
 	       ;; If file was backed up but has changed since,
-	       ;; we shd make another backup.
+	       ;; we should make another backup.
 	       (and (not auto-save-p)
 		    (not (verify-visited-file-modtime (current-buffer)))
 		    (setq buffer-backed-up nil))

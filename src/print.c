@@ -21,6 +21,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include <config.h>
 #include <stdio.h>
+#include <setjmp.h>
 #include "lisp.h"
 #include "buffer.h"
 #include "character.h"
@@ -1753,7 +1754,7 @@ print_object (obj, printcharfun, escapeflag)
 	  {
 	    while (p != end && ((*p >= '0' && *p <= '9')
 				/* Needed for \2e10.  */
-				|| *p == 'e'))
+				|| *p == 'e' || *p == 'E'))
 	      p++;
 	    confusing = (end == p);
 	  }

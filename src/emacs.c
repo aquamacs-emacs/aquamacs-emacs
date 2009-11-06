@@ -26,6 +26,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include <sys/types.h>
 #include <sys/file.h>
+#include <setjmp.h>
 
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
@@ -1383,7 +1384,6 @@ main (int argc, char **argv)
       syms_of_coding ();	/* This should be after syms_of_fileio.  */
 
       init_window_once ();	/* Init the window system.  */
-      init_fileio_once ();	/* Must precede any path manipulation.  */
 #ifdef HAVE_WINDOW_SYSTEM
       init_fringe_once ();	/* Swap bitmaps if necessary. */
 #endif /* HAVE_WINDOW_SYSTEM */

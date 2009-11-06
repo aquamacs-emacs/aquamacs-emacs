@@ -42,21 +42,22 @@ don't do it.  A value of nil means to just do it.")
 
 (defmethod ede-proj-configure-test-required-file ((this ede-proj-project) file)
   "For project THIS, test that the file FILE exists, or create it."
-  (when (not (ede-expand-filename (ede-toplevel this) file))
-    (save-excursion
-      (find-file (ede-expand-filename (ede-toplevel this) file t))
-      (cond ((string= file "AUTHORS")
-	     (insert (user-full-name) " <" (user-login-name) ">"))
-	    ((string= file "NEWS")
-	     (insert "NEWS file for " (ede-name this)))
-	    (t (insert "\n")))
-      (save-buffer)
-      (when
-	  (and (eq ede-pconf-create-file-query 'ask)
-	       (not (eq ede-pconf-create-file-query 'never))
-	       (not (y-or-n-p
-		     (format "I had to create the %s file for you.  Ok? " file)))
-	       (error "Quit"))))))
+  (let ((f (ede-expand-filename (ede-toplevel this) file t)))
+    (when (not (file-exists-p f))
+      (save-excursion
+	(find-file f)
+	(cond ((string= file "AUTHORS")
+	       (insert (user-full-name) " <" (user-login-name) ">"))
+	      ((string= file "NEWS")
+	       (insert "NEWS file for " (ede-name this)))
+	      (t (insert "\n")))
+	(save-buffer)
+	(when
+	    (and (eq ede-pconf-create-file-query 'ask)
+		 (not (eq ede-pconf-create-file-query 'never))
+		 (not (y-or-n-p
+		       (format "I had to create the %s file for you.  Ok? " file)))
+		 (error "Quit")))))))
 
 
 (defmethod ede-proj-configure-synchronize ((this ede-proj-project))
@@ -99,13 +100,8 @@ don't do it.  A value of nil means to just do it.")
        (ede-map-targets this 'ede-proj-tweak-autoconf)))
     ;; Now save
     (save-buffer)
-    ;; Verify aclocal
-    (setq postcmd "aclocal;")
-    ;; Always add missing files as needed.
-    (setq postcmd (concat postcmd "automake --add-missing;"))
+    (setq postcmd "autoreconf -i;")
 
-    ;; Always do autoreconf
-    (setq postcmd (concat postcmd "autoreconf;"))
     ;; Verify a bunch of files that are required by automake.
     (ede-proj-configure-test-required-file this "AUTHORS")
     (ede-proj-configure-test-required-file this "NEWS")
@@ -116,10 +112,10 @@ don't do it.  A value of nil means to just do it.")
     ;; Verify that we have a make system.
     (if (or (not (ede-expand-filename (ede-toplevel this) "Makefile"))
 	    ;; Now is this one of our old Makefiles?
-	    (save-excursion
-	      (set-buffer (find-file-noselect
-			   (ede-expand-filename (ede-toplevel this)
-						"Makefile" t) t))
+	    (with-current-buffer
+                (find-file-noselect
+                 (ede-expand-filename (ede-toplevel this)
+                                      "Makefile" t) t)
 	      (goto-char (point-min))
 	      ;; Here is the unique piece for our makefiles.
 	      (re-search-forward "For use with: make" nil t)))
@@ -132,8 +128,7 @@ don't do it.  A value of nil means to just do it.")
 	    (accept-process-output)
 	    (sit-for 1))
 
-	  (save-excursion
-	    (set-buffer "*compilation*")
+	  (with-current-buffer "*compilation*"
 	    (goto-char (point-max))
 
 	    (when (not (string= mode-line-process ":exit [0]"))

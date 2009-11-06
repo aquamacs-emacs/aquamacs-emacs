@@ -230,8 +230,7 @@ a file.  Optional argument NAME specifies a default file name."
 	(buffstr nil))
     (unwind-protect
 	(progn
-	  (save-excursion
-	    (set-buffer (get-buffer-create " *tmp eieio read*"))
+	  (with-current-buffer (get-buffer-create " *tmp eieio read*")
 	    (insert-file-contents filename nil nil nil t)
 	    (goto-char (point-min))
 	    (setq buffstr (buffer-string)))
@@ -273,7 +272,11 @@ instance."
 			(eieio-persistent-path-relative this file)
 		      (file-name-nondirectory cfn)))
 	      (object-write this (oref this file-header-line)))
-	    (let ((backup-inhibited (not (oref this do-backups))))
+	    (let ((backup-inhibited (not (oref this do-backups)))
+		  (cs (car (find-coding-systems-region
+			    (point-min) (point-max)))))
+	      (unless (eq cs 'undecided)
+		(setq buffer-file-coding-system cs))
 	      ;; Old way - write file.  Leaves message behind.
 	      ;;(write-file cfn nil)
 

@@ -439,6 +439,7 @@ install-arch-dep: mkdir
 ## Aquamacs
 
 AQUAMACS_DIR = $(srcdir)/aquamacs
+AQUAMACS_VERSION = $(shell perl -ne 'print $$1 if (/defvar *aquamacs-version *\"(.*?)\"/);print $$1 if (/defvar *aquamacs-minor-version *\"(.*?)\"/);' < $(AQUAMACS_DIR)/src/site-lisp/site-start.el)
 
 install-aquamacs: mkdir 
 	if test "${ns_appdir}" != ""; then \
@@ -465,6 +466,8 @@ install-aquamacs: mkdir
 	    rm NEWS.1-17 NEWS.18 NEWS.19 NEWS.20 NEWS.21 NEWS.22 PROBLEMS MH-E-NEWS ms-kermit ; \
 	    cd -) ; \
 	  rm $(ns_appresdir)/English.lproj/InfoPlist.strings 2>/dev/null ; \
+	  ( echo "Setting Aquamacs version: $(AQUAMACS_VERSION)" ; \
+	    perl -p0777i -e 's/<key>CFBundleShortVersionString<\/key>\s*<string>.*?<\/string>/<key>CFBundleShortVersionString<\/key>\n<string>$(AQUAMACS_VERSION)<\/string>/sg' ${ns_appdir}/Contents/Info.plist ) ; \
 	  rm -r $(ns_appresdir)/site-lisp 2>/dev/null ; \
 	  touch $(ns_appdir) ; \
 	  echo "Find the Aquamacs build in $(ns_appdir)" ) ; \

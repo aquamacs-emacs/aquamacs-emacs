@@ -152,7 +152,14 @@ SORT-KEY should be `name' or `iso-spec' (default `name')."
     ;; Insert information of character sets.
     (dolist (elt (append charset-info-list (list t) supplementary-list))
       (if (eq elt t)
-	  (insert "-------------- Supplementary Character Sets --------------")
+	  (progn
+	    (insert "\n-------------- ")
+	    (insert-text-button "Supplementary Character Sets"
+				'type 'help-info
+				'help-args '("(emacs)Charsets"))
+	    (insert " --------------
+Character sets for defining other charsets, or for backward compatibility
+"))
 	(insert-text-button (symbol-name (car elt)) ; NAME
 			    :type 'list-charset-chars
 			    'help-args (list (car elt)))

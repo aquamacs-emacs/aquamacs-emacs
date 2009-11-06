@@ -60,6 +60,9 @@
 (require 'epa)
 (autoload 'auth-source-user-or-password "auth-source")
 
+;; We use the additional header "X-Size" for encoding the size of a file.
+(add-to-list 'imap-hash-headers 'X-Size 'append)
+
 ;; Define Tramp IMAP method ...
 (defconst tramp-imap-method "imap"
   "*Method to connect via IMAP protocol.")
@@ -92,6 +95,7 @@
     ;; `access-file' performed by default handler
     (add-name-to-file . ignore)
     ;; `byte-compiler-base-file-name' performed by default handler
+    ;; `copy-directory' performed by default handler
     (copy-file . tramp-imap-handle-copy-file)
     (delete-directory . ignore) ;; tramp-imap-handle-delete-directory)
     (delete-file . tramp-imap-handle-delete-file)
@@ -100,7 +104,7 @@
     (directory-files . tramp-handle-directory-files)
     (directory-files-and-attributes
      . tramp-imap-handle-directory-files-and-attributes)
-    ;; `dired-call-process' performed by default handler
+    (dired-call-process . ignore)
     ;; `dired-compress-file' performed by default handler
     ;; `dired-uncache' performed by default handler
     (expand-file-name . tramp-imap-handle-expand-file-name)
@@ -242,8 +246,7 @@ of `copy' and `rename'."
 	    (tramp-imap-put-file
 	     v (current-buffer)
 	     (tramp-imap-file-name-name v)
-	     (tramp-imap-get-file-inode newname)
-	     nil))
+	     nil nil (nth 7 (file-attributes filename))))
 	;; One of them is not located on a IMAP mailbox.
 	(insert-file-contents filename)
 	(write-region (point-min) (point-max) newname)))
@@ -318,17 +321,25 @@ SIZE MODE WEIRD INODE DEVICE)."
     (imap-hash-map (lambda (uid headers body)
 		     (let ((subject (substring
 				     (aget headers 'Subject "")
-				     (length tramp-imap-subject-marker))))
+				     (length tramp-imap-subject-marker)))
+			   (from (aget headers 'From ""))
+			   (date (date-to-time (aget headers 'Date "")))
+			   (size (string-to-number
+				  (or (aget headers 'X-Size "0") "0"))))
+		       (setq from
+			     (if (string-match "<\\([^@]+\\)@" from)
+				 (match-string 1 from)
+			       "nobody"))
 		       (list
 			subject
 			nil
 			-1
-			1
-			1
-			'(0 0)
-			'(0 0)
-			'(0 0)
-			1
+			from
+			"nogroup"
+			date
+			date
+			date
+			size
 			"-rw-rw-rw-"
 			nil
 			uid
@@ -439,7 +450,8 @@ SIZE MODE WEIRD INODE DEVICE)."
 	       "%10s %3d %-8s %-8s %8s %s "
 	       (nth 9 x) ; mode
 	       (nth 11 x) ; inode
-	       "nobody" "nogroup"
+	       (nth 3 x) ; uid
+	       (nth 4 x) ; gid
 	       (nth 8 x) ; size
 	       (format-time-string
 		(if (tramp-time-less-p
@@ -498,7 +510,11 @@ SIZE MODE WEIRD INODE DEVICE)."
 (defun tramp-imap-handle-file-attributes (filename &optional id-format)
   "Like `file-attributes' for Tramp-IMAP FILENAME."
   (with-parsed-tramp-file-name (expand-file-name filename) nil
-    (cdr-safe (nth 0 (tramp-imap-get-file-entries v localname)))))
+    (let ((res (cdr-safe (nth 0 (tramp-imap-get-file-entries v localname)))))
+      (unless (or (null res) (eq id-format 'string))
+	(setcar (nthcdr 2 res) 1)
+	(setcar (nthcdr 3 res) 1))
+      res)))
 
 (defun tramp-imap-get-file-inode (filename &optional id-format)
   "Get inode equivalent \(actually the UID) for Tramp-IMAP FILENAME."
@@ -559,10 +575,13 @@ SIZE MODE WEIRD INODE DEVICE)."
  	(tramp-message v 4 "Fetching %s to tmp file %s...done" filename tmpfile)
  	tmpfile))))
 
-(defun tramp-imap-put-file (vec filename-or-buffer &optional subject inode encode)
+(defun tramp-imap-put-file
+  (vec filename-or-buffer &optional subject inode encode size)
   "Write contents of FILENAME-OR-BUFFER to Tramp-IMAP file VEC with name SUBJECT.
 When INODE is given, delete that old remote file after writing the new one
-\(normally this is the old file with the same name)."
+\(normally this is the old file with the same name).  A non-nil ENCODE
+forces the encoding of the buffer or file.  SIZE, when available, indicates
+the file size; this is needed, if the file or buffer is already encoded."
   ;; `tramp-current-host' is used in `tramp-imap-passphrase-callback-function'.
   (let ((tramp-current-host (tramp-file-name-real-host vec))
 	(iht (tramp-imap-make-iht vec)))
@@ -572,7 +591,18 @@ When INODE is given, delete that old remote file after writing the new one
 			   (format
 			    "%s%s"
 			    tramp-imap-subject-marker
-			    (or subject "no subject"))))
+			    (or subject "no subject")))
+			  (cons
+			   'X-Size
+			   (number-to-string
+			    (cond
+			     ((numberp size) size)
+			     ((bufferp filename-or-buffer)
+			      (buffer-size filename-or-buffer))
+			     ((stringp filename-or-buffer)
+			      (nth 7 (file-attributes filename-or-buffer)))
+			     ;; We don't know the size.
+			     (t -1)))))
 		    (cond ((bufferp filename-or-buffer)
 			   (with-current-buffer filename-or-buffer
 			     (if encode
@@ -718,16 +748,14 @@ With NEEDED-SUBJECT, alters the imap-hash test accordingly."
 	 (ssl (string-equal method tramp-imaps-method))
 	 (port (or (tramp-file-name-port vec)
 		   (tramp-get-method-parameter method 'tramp-default-port)))
-	 (result (imap-hash-make server port mbox)))
+	 (result (imap-hash-make server port mbox user nil ssl)))
     ;; Return the IHT with a test override to look for the subject
-    ;; marker.  Set also user and ssl tags.
-    (setq result (plist-put result :user user)
-	  result (plist-put result :ssl ssl)
-	  result (plist-put
-		  result
-		  :test (format "^%s%s"
-				tramp-imap-subject-marker
-				(if needed-subject needed-subject ""))))))
+    ;; marker.
+    (plist-put
+     result
+     :test (format "^%s%s"
+		   tramp-imap-subject-marker
+		   (if needed-subject needed-subject "")))))
 
 ;;; TODO:
 
@@ -747,7 +775,18 @@ With NEEDED-SUBJECT, alters the imap-hash test accordingly."
 
 ;; * imaps works for local IMAP servers.  Accessing
 ;;   "/imaps:imap.gmail.com:/INBOX.test/" results in error
-;;   "error in process filter: Internal error, tag 5 status BAD code nil text UNSELECT not allowed now.
+;;   "error in process filter: Internal error, tag 5 status BAD code nil text UNSELECT not allowed now."
+
+;; * Improve `tramp-imap-handle-file-attributes' for directories.
+
+;; * Saving a file creates a second one, instead of overwriting.
+
+;; * Backup files: just *one* is kept.
+
+;; * Password requests shall have a descriptive prompt.
+
+;; * Exiting Emacs, there are running IMAP processes.  Make them quiet
+;;   by `set-process-query-on-exit-flag'.
 
 (provide 'tramp-imap)
 ;;; tramp-imap.el ends here

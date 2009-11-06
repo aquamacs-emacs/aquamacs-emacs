@@ -31,6 +31,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <unistd.h>
 #include <ctype.h>
 #include <sys/types.h>
+#include <setjmp.h>
 #include "lisp.h"
 #include "character.h"
 #include "charset.h"
@@ -2331,11 +2332,6 @@ init_charset_once ()
   charset_jisx0208_1978 = -1;
   charset_jisx0208 = -1;
   charset_ksc5601 = -1;
-
-  for (i = 0; i < 128; i++)
-    unibyte_to_multibyte_table[i] = i;
-  for (; i < 256; i++)
-    unibyte_to_multibyte_table[i] = BYTE8_TO_CHAR (i);
 }
 
 #ifdef emacs

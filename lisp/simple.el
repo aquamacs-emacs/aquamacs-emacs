@@ -3509,7 +3509,7 @@ START and END specify the portion of the current buffer to be copied."
 	(insert-buffer-substring oldbuf start end)))))
 
 (put 'mark-inactive 'error-conditions '(mark-inactive error))
-(put 'mark-inactive 'error-message "The mark is not active now")
+(put 'mark-inactive 'error-message (purecopy "The mark is not active now"))
 
 (defvar activate-mark-hook nil
   "Hook run when the mark becomes active.
@@ -4853,7 +4853,7 @@ With argument 0, interchanges line point is in with line mark is in."
      ((= arg 0)
       (save-excursion
 	(setq pos1 (funcall aux 1))
-	(goto-char (mark))
+	(goto-char (or (mark) (error "No mark set in this buffer")))
 	(setq pos2 (funcall aux 1))
 	(transpose-subr-1 pos1 pos2))
       (exchange-point-and-mark))
@@ -5229,9 +5229,9 @@ if long lines are truncated."
   (message "Word wrapping %s"
 	   (if word-wrap "enabled" "disabled")))
 
-(defvar overwrite-mode-textual " Ovwrt"
+(defvar overwrite-mode-textual (purecopy " Ovwrt")
   "The string displayed in the mode line when in overwrite mode.")
-(defvar overwrite-mode-binary " Bin Ovwrt"
+(defvar overwrite-mode-binary (purecopy " Bin Ovwrt")
   "The string displayed in the mode line when in binary overwrite mode.")
 
 (defun overwrite-mode (arg)
@@ -5739,6 +5739,13 @@ Initial value is nil to avoid some compiler warnings.")
 This also applies to other functions such as `choose-completion'
 and `mouse-choose-completion'.")
 
+(defvar completion-base-position nil
+  "Position of the base of the text corresponding to the shown completions.
+This variable is used in the *Completions* buffers.
+Its value is a list of the form (START END) where START is the place
+where the completion should be inserted and END (if non-nil) is the end
+of the text to replace.  If END is nil, point is used instead.")
+
 (defvar completion-base-size nil
   "Number of chars before point not involved in completion.
 This is a local variable in the completion list buffer.
@@ -5749,6 +5756,7 @@ Only characters in the field at point are included.
 If nil, Emacs determines which part of the tail end of the
 buffer's text is involved in completion by comparing the text
 directly.")
+(make-obsolete-variable 'completion-base-size 'completion-base-position "23.2")
 
 (defun delete-completion-window ()
   "Delete the completion list window.
@@ -5795,54 +5803,82 @@ With prefix argument N, move N items (negative N means move backward)."
 		    (point) 'mouse-face nil beg))
 	(setq n (1+ n))))))
 
-(defun choose-completion ()
-  "Choose the completion that point is in or next to."
-  (interactive)
-  (let (beg end completion (buffer completion-reference-buffer)
-	(base-size completion-base-size))
-    (if (and (not (eobp)) (get-text-property (point) 'mouse-face))
-	(setq end (point) beg (1+ (point))))
-    (if (and (not (bobp)) (get-text-property (1- (point)) 'mouse-face))
-	(setq end (1- (point)) beg (point)))
-    (if (null beg)
-	(error "No completion here"))
-    (setq beg (previous-single-property-change beg 'mouse-face))
-    (setq end (or (next-single-property-change end 'mouse-face) (point-max)))
-    (setq completion (buffer-substring-no-properties beg end))
+(defun choose-completion (&optional event)
+  "Choose the completion at point."
+  (interactive (list last-nonmenu-event))
+  ;; In case this is run via the mouse, give temporary modes such as
+  ;; isearch a chance to turn off.
+  (run-hooks 'mouse-leave-buffer-hook)
+  (let (buffer base-size base-position choice)
+    (with-current-buffer (window-buffer (posn-window (event-start event)))
+      (setq buffer completion-reference-buffer)
+      (setq base-size completion-base-size)
+      (setq base-position completion-base-position)
+      (save-excursion
+        (goto-char (posn-point (event-start event)))
+        (let (beg end)
+          (if (and (not (eobp)) (get-text-property (point) 'mouse-face))
+              (setq end (point) beg (1+ (point))))
+          (if (and (not (bobp)) (get-text-property (1- (point)) 'mouse-face))
+              (setq end (1- (point)) beg (point)))
+          (if (null beg)
+              (error "No completion here"))
+          (setq beg (previous-single-property-change beg 'mouse-face))
+          (setq end (or (next-single-property-change end 'mouse-face)
+                        (point-max)))
+          (setq choice (buffer-substring-no-properties beg end)))))
+
     (let ((owindow (selected-window)))
+      (select-window (posn-window (event-start event)))
       (if (and (one-window-p t 'selected-frame)
-	       (window-dedicated-p owindow))
+	       (window-dedicated-p (selected-window)))
 	  ;; This is a special buffer's frame
 	  (iconify-frame (selected-frame))
 	(or (window-dedicated-p (selected-window))
 	    (bury-buffer)))
       (select-window
        (or (and (buffer-live-p buffer)
-		(get-buffer-window buffer))
+		(get-buffer-window buffer 0))
 	   owindow)))
-    (choose-completion-string completion buffer base-size)))
+    
+    (choose-completion-string
+     choice buffer
+     (or base-position
+         (when base-size
+           ;; Someone's using old completion code that doesn't know
+           ;; about base-position yet.
+           (list (+ base-size (with-current-buffer buffer (field-beginning)))))
+         ;; If all else fails, just guess.
+         (with-current-buffer buffer
+           (list (choose-completion-guess-base-position choice)))))))
 
 ;; Delete the longest partial match for STRING
 ;; that can be found before POINT.
+(defun choose-completion-guess-base-position (string)
+  (save-excursion
+    (let ((opoint (point))
+          len)
+      ;; Try moving back by the length of the string.
+      (goto-char (max (- (point) (length string))
+                      (minibuffer-prompt-end)))
+      ;; See how far back we were actually able to move.  That is the
+      ;; upper bound on how much we can match and delete.
+      (setq len (- opoint (point)))
+      (if completion-ignore-case
+          (setq string (downcase string)))
+      (while (and (> len 0)
+                  (let ((tail (buffer-substring (point) opoint)))
+                    (if completion-ignore-case
+                        (setq tail (downcase tail)))
+                    (not (string= tail (substring string 0 len)))))
+        (setq len (1- len))
+        (forward-char 1))
+      (point))))
+
 (defun choose-completion-delete-max-match (string)
-  (let ((opoint (point))
-	len)
-    ;; Try moving back by the length of the string.
-    (goto-char (max (- (point) (length string))
-		    (minibuffer-prompt-end)))
-    ;; See how far back we were actually able to move.  That is the
-    ;; upper bound on how much we can match and delete.
-    (setq len (- opoint (point)))
-    (if completion-ignore-case
-	(setq string (downcase string)))
-    (while (and (> len 0)
-		(let ((tail (buffer-substring (point) opoint)))
-		  (if completion-ignore-case
-		      (setq tail (downcase tail)))
-		  (not (string= tail (substring string 0 len)))))
-      (setq len (1- len))
-      (forward-char 1))
-    (delete-char len)))
+  (delete-region (choose-completion-guess-base-position string) (point)))
+(make-obsolete 'choose-completion-delete-max-match
+               'choose-completion-guess-base-position "23.2")
 
 (defvar choose-completion-string-functions nil
   "Functions that may override the normal insertion of a completion choice.
@@ -5860,15 +5896,20 @@ the minibuffer; no further functions will be called.
 If all functions in the list return nil, that means to use
 the default method of inserting the completion in BUFFER.")
 
-(defun choose-completion-string (choice &optional buffer base-size)
+(defun choose-completion-string (choice &optional buffer base-position)
   "Switch to BUFFER and insert the completion choice CHOICE.
-BASE-SIZE, if non-nil, says how many characters of BUFFER's text
-to keep.  If it is nil, we call `choose-completion-delete-max-match'
-to decide what to delete."
+BASE-POSITION, says where to insert the completion."
 
   ;; If BUFFER is the minibuffer, exit the minibuffer
   ;; unless it is reading a file name and CHOICE is a directory,
   ;; or completion-no-auto-exit is non-nil.
+
+  ;; Some older code may call us passing `base-size' instead of
+  ;; `base-position'.  It's difficult to make any use of `base-size',
+  ;; so we just ignore it.
+  (unless (consp base-position)
+    (message "Obsolete `base-size' passed to choose-completion-string")
+    (setq base-position nil))
 
   (let* ((buffer (or buffer completion-reference-buffer))
 	 (mini-p (minibufferp buffer)))
@@ -5883,18 +5924,14 @@ to decide what to delete."
       (set-buffer buffer)
       (unless (run-hook-with-args-until-success
 	       'choose-completion-string-functions
-	       choice buffer mini-p base-size)
+               ;; The fourth arg used to be `mini-p' but was useless
+               ;; (since minibufferp can be used on the `buffer' arg)
+               ;; and indeed unused.  The last used to be `base-size', so we
+               ;; keep it to try and avoid breaking old code.
+	       choice buffer base-position nil)
 	;; Insert the completion into the buffer where it was requested.
-        ;; FIXME:
-        ;; - There may not be a field at point, or there may be a field but
-        ;;   it's not a "completion field", in which case we have to
-        ;;   call choose-completion-delete-max-match even if base-size is set.
-        ;; - we may need to delete further than (point) to (field-end),
-        ;;   depending on the completion-style, and for that we need to
-        ;;   extra data `completion-extra-size'.
-	(if base-size
-	    (delete-region (+ base-size (field-beginning)) (point))
-	  (choose-completion-delete-max-match choice))
+        (delete-region (or (car base-position) (point))
+                       (or (cadr base-position) (point)))
 	(insert choice)
 	(remove-text-properties (- (point) (length choice)) (point)
 				'(mouse-face nil))
@@ -5948,12 +5985,6 @@ Called from `temp-buffer-show-hook'."
   :version "22.1"
   :group 'completion)
 
-;; This is for packages that need to bind it to a non-default regexp
-;; in order to make the first-differing character highlight work
-;; to their liking
-(defvar completion-root-regexp "^/"
-  "Regexp to use in `completion-setup-function' to find the root directory.")
-
 ;; This function goes in completion-setup-hook, so that it is called
 ;; after the text of the completion list buffer is written.
 (defun completion-setup-function ()
@@ -5969,26 +6000,13 @@ Called from `temp-buffer-show-hook'."
                 (substring (minibuffer-completion-contents)
                            0 (or completion-base-size 0)))))))
     (with-current-buffer standard-output
-      (let ((base-size completion-base-size)) ;Read before killing localvars.
+      (let ((base-size completion-base-size) ;Read before killing localvars.
+            (base-position completion-base-position))
         (completion-list-mode)
-        (set (make-local-variable 'completion-base-size) base-size))
+        (set (make-local-variable 'completion-base-size) base-size)
+        (set (make-local-variable 'completion-base-position) base-position))
       (set (make-local-variable 'completion-reference-buffer) mainbuf)
       (if base-dir (setq default-directory base-dir))
-      (unless completion-base-size
-        ;; This shouldn't be needed any more, but further analysis is needed
-        ;; to make sure it's the case.
-        (setq completion-base-size
-              (cond
-               (minibuffer-completing-file-name
-                ;; For file name completion, use the number of chars before
-                ;; the start of the file name component at point.
-                (with-current-buffer mainbuf
-                  (save-excursion
-                    (skip-chars-backward completion-root-regexp)
-                    (- (point) (minibuffer-prompt-end)))))
-               (minibuffer-completing-symbol nil)
-               ;; Otherwise, in minibuffer, the base size is 0.
-               ((minibufferp mainbuf) 0))))
       ;; Maybe insert help string.
       (when completion-show-help
 	(goto-char (point-min))
@@ -6007,10 +6025,10 @@ select the completion near point.\n\n"))))))
 (defun switch-to-completions ()
   "Select the completion list window."
   (interactive)
+  (let ((window (or (get-buffer-window "*Completions*" 0)
   ;; Make sure we have a completions window.
-  (or (get-buffer-window "*Completions*")
-      (minibuffer-completion-help))
-  (let ((window (get-buffer-window "*Completions*")))
+                    (progn (minibuffer-completion-help)
+                           (get-buffer-window "*Completions*" 0)))))
     (when window
       (select-window window)
       (goto-char (point-min))
@@ -6299,7 +6317,7 @@ front of the list of recently selected ones."
 
 ;;; Handling of Backspace and Delete keys.
 
-(defcustom normal-erase-is-backspace 'maybe
+(defcustom normal-erase-is-backspace t
   "Set the default behavior of the Delete and Backspace keys.
 
 If set to t, Delete key deletes forward and Backspace key deletes
@@ -6398,31 +6416,27 @@ See also `normal-erase-is-backspace'."
 	   (let* ((bindings
 		   `(([M-delete] [M-backspace])
 		     ([C-M-delete] [C-M-backspace])
-		     (,esc-map
-		      [C-delete] [C-backspace])))
+		     ([?\e C-delete] [?\e C-backspace])))
 		  (old-state (lookup-key local-function-key-map [delete])))
 
 	     (if enabled
 		 (progn
 		   (define-key local-function-key-map [delete] [?\C-d])
 		   (define-key local-function-key-map [kp-delete] [?\C-d])
-		   (define-key local-function-key-map [backspace] [?\C-?]))
+		   (define-key local-function-key-map [backspace] [?\C-?])
+                   (dolist (b bindings)
+                     ;; Not sure if input-decode-map is really right, but
+                     ;; keyboard-translate-table (used below) only works
+                     ;; for integer events, and key-translation-table is
+                     ;; global (like the global-map, used earlier).
+                     (define-key input-decode-map (car b) nil)
+                     (define-key input-decode-map (cadr b) nil)))
 	       (define-key local-function-key-map [delete] [?\C-?])
 	       (define-key local-function-key-map [kp-delete] [?\C-?])
-	       (define-key local-function-key-map [backspace] [?\C-?]))
-
-	     ;; Maybe swap bindings of C-delete and C-backspace, etc.
-	     (unless (equal old-state (lookup-key local-function-key-map [delete]))
-	       (dolist (binding bindings)
-		 (let ((map global-map))
-		   (when (keymapp (car binding))
-		     (setq map (car binding) binding (cdr binding)))
-		   (let* ((key1 (nth 0 binding))
-			  (key2 (nth 1 binding))
-			  (binding1 (lookup-key map key1))
-			  (binding2 (lookup-key map key2)))
-		     (define-key map key1 binding2)
-		     (define-key map key2 binding1)))))))
+	       (define-key local-function-key-map [backspace] [?\C-?])
+               (dolist (b bindings)
+                 (define-key input-decode-map (car b) (cadr b))
+                 (define-key input-decode-map (cadr b) (car b))))))
 	  (t
 	   (if enabled
 	       (progn

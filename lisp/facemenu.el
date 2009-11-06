@@ -187,7 +187,10 @@ it will remove any faces not explicitly in the list."
 
 ;;; Condition for enabling menu items that set faces.
 (defun facemenu-enable-faces-p ()
-  (not (and font-lock-mode font-lock-defaults)))
+  ;; Enable the facemenu if facemenu-add-face-function is defined
+  ;; (e.g. in Tex-mode and SGML mode), or if font-lock is off.
+  (or (not (and font-lock-mode font-lock-defaults))
+      facemenu-add-face-function))
 
 (defvar facemenu-special-menu
   (let ((map (make-sparse-keymap "Special")))
@@ -499,7 +502,11 @@ argument BUFFER-NAME is nil, it defaults to *Colors*."
 	;; to get the right value of window-width in list-colors-print
 	;; after the buffer is displayed.
 	(add-hook 'temp-buffer-show-hook
-		  (lambda () (list-colors-print list)) nil t)))))
+		  (lambda ()
+		    (set-buffer-modified-p
+		     (prog1 (buffer-modified-p)
+		       (list-colors-print list))))
+		  nil t)))))
 
 (defun list-colors-print (list)
   (dolist (color list)

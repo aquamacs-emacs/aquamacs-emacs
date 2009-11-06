@@ -168,6 +168,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <config.h>
 #include <stdio.h>
 #include <limits.h>
+#include <setjmp.h>
 
 #include "lisp.h"
 #include "keyboard.h"
@@ -5716,7 +5717,7 @@ get_next_display_element (it)
 	    }
 
 	  if (unibyte_display_via_language_environment
-	      && it->c >= 0x80)
+	      && !ASCII_CHAR_P (it->c))
 	    decoded = DECODE_CHAR (unibyte, it->c);
 
 	  if (it->c >= 0x80 && ! NILP (Vnobreak_char_display))
@@ -7773,7 +7774,7 @@ message_dolog (m, nbytes, nlflag, multibyte)
 	  for (i = 0; i < nbytes; i++)
 	    {
 	      c = msg[i];
-	      c = unibyte_char_to_multibyte (c);
+	      MAKE_CHAR_MULTIBYTE (c);
 	      char_bytes = CHAR_STRING (c, str);
 	      insert_1_both (str, 1, char_bytes, 1, 0, 0);
 	    }
@@ -9079,7 +9080,7 @@ set_message_1 (a1, a2, nbytes, multibyte_p)
 	  for (i = 0; i < nbytes; i++)
 	    {
 	      c = msg[i];
-	      c = unibyte_char_to_multibyte (c);
+	      MAKE_CHAR_MULTIBYTE (c);
 	      n = CHAR_STRING (c, str);
 	      insert_1_both (str, 1, n, 1, 0, 0);
 	    }
@@ -11607,7 +11608,7 @@ redisplay_internal (preserve_echo_area)
       && PT >= CHARPOS (tlbufpos)
       && PT <= Z - CHARPOS (tlendpos)
       /* All text outside that line, including its final newline,
-	 must be unchanged */
+	 must be unchanged.  */
       && text_outside_line_unchanged_p (w, CHARPOS (tlbufpos),
 					CHARPOS (tlendpos)))
     {
@@ -11615,15 +11616,15 @@ redisplay_internal (preserve_echo_area)
 	  && FETCH_BYTE (BYTEPOS (tlbufpos) - 1) != '\n'
 	  && (CHARPOS (tlbufpos) == ZV
 	      || FETCH_BYTE (BYTEPOS (tlbufpos)) == '\n'))
-	/* Former continuation line has disappeared by becoming empty */
+	/* Former continuation line has disappeared by becoming empty.  */
 	goto cancel;
       else if (XFASTINT (w->last_modified) < MODIFF
 	       || XFASTINT (w->last_overlay_modified) < OVERLAY_MODIFF
 	       || MINI_WINDOW_P (w))
 	{
 	  /* We have to handle the case of continuation around a
-	     wide-column character (See the comment in indent.c around
-	     line 885).
+	     wide-column character (see the comment in indent.c around
+	     line 1340).
 
 	     For instance, in the following case:
 
@@ -11633,13 +11634,14 @@ redisplay_internal (preserve_echo_area)
 	     ^^                ^^
 	     --------          --------
 
-	     As we have to redraw the line above, we should goto cancel.  */
+	     As we have to redraw the line above, we cannot use this
+	     optimization.  */
 
 	  struct it it;
 	  int line_height_before = this_line_pixel_height;
 
 	  /* Note that start_display will handle the case that the
-	     line starting at tlbufpos is a continuation lines.  */
+	     line starting at tlbufpos is a continuation line.  */
 	  start_display (&it, w, tlbufpos);
 
 	  /* Implementation note: It this still necessary?  */
@@ -11655,7 +11657,7 @@ redisplay_internal (preserve_echo_area)
 	  display_line (&it);
 
 	  /* If line contains point, is not continued,
-             and ends at same distance from eob as before, we win */
+             and ends at same distance from eob as before, we win.  */
 	  if (w->cursor.vpos >= 0
               /* Line is not continued, otherwise this_line_start_pos
                  would have been set to 0 in display_line.  */
@@ -14874,7 +14876,7 @@ try_window_id (w)
 	  || !WINDOW_FULL_WIDTH_P (w)))
     GIVE_UP (4);
 
-  /* Give up if point is not known NOT to appear in W.  */
+  /* Give up if point is known NOT to appear in W.  */
   if (PT < CHARPOS (start))
     GIVE_UP (5);
 
@@ -14904,7 +14906,7 @@ try_window_id (w)
   if (!NILP (w->region_showing))
     GIVE_UP (10);
 
-  /* Can't use this if overlay arrow position and or string have
+  /* Can't use this if overlay arrow position and/or string have
      changed.  */
   if (overlay_arrows_changed_p ())
     GIVE_UP (12);
@@ -21111,10 +21113,10 @@ x_produce_glyphs (it)
 	 later.
 
 	 Note: It seems that we don't have to record multibyte_p in
-	 struct glyph because the character code itself tells if or
-	 not the character is multibyte.  Thus, in the future, we must
-	 consider eliminating the field `multibyte_p' in the struct
-	 glyph.  */
+	 struct glyph because the character code itself tells whether
+	 or not the character is multibyte.  Thus, in the future, we
+	 must consider eliminating the field `multibyte_p' in the
+	 struct glyph.  */
       int saved_multibyte_p = it->multibyte_p;
 
       /* Maybe translate single-byte characters to multibyte, or the
@@ -21280,9 +21282,9 @@ x_produce_glyphs (it)
 	}
       else if (it->char_to_display == '\n')
 	{
-	  /* A newline has no width but we need the height of the line.
-	     But if previous part of the line set a height, don't
-	     increase that height */
+	  /* A newline has no width, but we need the height of the
+	     line.  But if previous part of the line sets a height,
+	     don't increase that height */
 
 	  Lisp_Object height;
 	  Lisp_Object total_height = Qnil;
@@ -21477,12 +21479,12 @@ x_produce_glyphs (it)
     }
   else if (it->what == IT_COMPOSITION && it->cmp_it.ch < 0)
     {
-      /* A static compositoin.
+      /* A static composition.
 
 	 Note: A composition is represented as one glyph in the
 	 glyph matrix.  There are no padding glyphs.
 
-	 Important is that pixel_width, ascent, and descent are the
+	 Important note: pixel_width, ascent, and descent are the
 	 values of what is drawn by draw_glyphs (i.e. the values of
 	 the overall glyphs composed).  */
       struct face *face = FACE_FROM_ID (it->f, it->face_id);
@@ -21497,15 +21499,15 @@ x_produce_glyphs (it)
 	 the composition for the current face font, calculate them
 	 now.  Theoretically, we have to check all fonts for the
 	 glyphs, but that requires much time and memory space.  So,
-	 here we check only the font of the first glyph.  This leads
-	 to incorrect display, but it's very rare, and C-l (recenter)
-	 can correct the display anyway.  */
+	 here we check only the font of the first glyph.  This may
+	 lead to incorrect display, but it's very rare, and C-l
+	 (recenter-top-bottom) can correct the display anyway.  */
       if (! cmp->font || cmp->font != font)
 	{
 	  /* Ascent and descent of the font of the first character
 	     of this composition (adjusted by baseline offset).
 	     Ascent and descent of overall glyphs should not be less
-	     than them respectively.  */
+	     than these, respectively.  */
 	  int font_ascent, font_descent, font_height;
 	  /* Bounding box of the overall glyphs.  */
 	  int leftmost, rightmost, lowest, highest;
@@ -21534,7 +21536,7 @@ x_produce_glyphs (it)
 
 	  pos = (STRINGP (it->string) ? IT_STRING_CHARPOS (*it)
 		 : IT_CHARPOS (*it));
-	  /* When no suitable font found, use the default font.  */
+	  /* If no suitable font is found, use the default font.  */
 	  font_not_found_p = font == NULL;
 	  if (font_not_found_p)
 	    {

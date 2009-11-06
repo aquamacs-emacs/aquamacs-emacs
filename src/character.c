@@ -34,6 +34,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #ifdef emacs
 
 #include <sys/types.h>
+#include <setjmp.h>
 #include "lisp.h"
 #include "character.h"
 #include "buffer.h"
@@ -86,10 +87,6 @@ Lisp_Object Vscript_representative_chars;
 static Lisp_Object Qchar_script_table;
 
 Lisp_Object Vunicode_category_table;
-
-/* Mapping table from unibyte chars to multibyte chars.  */
-int unibyte_to_multibyte_table[256];
-
 
 
 /* If character code C has modifier masks, reflect them to the
@@ -130,11 +127,13 @@ char_resolve_modifier_mask (c)
       else if ((c & 0177) >= 0100 && (c & 0177) <= 0137)
 	c &= (037 | (~0177 & ~CHAR_CTL));
     }
+#if 0	/* This is outside the scope of this function.  (bug#4751)  */
   if (c & CHAR_META)
     {
       /* Move the meta bit to the right place for a string.  */
       c = (c & ~CHAR_META) | 0x80;
     }
+#endif
 
   return c;
 }
@@ -325,8 +324,7 @@ DEFUN ("unibyte-char-to-multibyte", Funibyte_char_to_multibyte,
   c = XFASTINT (ch);
   if (c >= 0x100)
     error ("Not a unibyte character: %d", c);
-  if (c >= 0x80)
-    c = BYTE8_TO_CHAR (c);
+  MAKE_CHAR_MULTIBYTE (c);
   return make_number (c);
 }
 

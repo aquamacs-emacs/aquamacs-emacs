@@ -421,7 +421,7 @@ If nil, use the value of `vc-diff-switches'.  If t, use no switches."
 		      (vc-git--out-ok "config" (concat "remote." remote ".url"))))))
 	  (when (string-match "\\([^\n]+\\)" remote-url)
 	    (setq remote-url (match-string 1 remote-url))))
-      "not (detached HEAD)")
+      (setq branch "not (detached HEAD)"))
     ;; FIXME: maybe use a different face when nothing is stashed.
     (concat
      (propertize "Branch     : " 'face 'font-lock-type-face)
@@ -503,10 +503,7 @@ If nil, use the value of `vc-diff-switches'.  If t, use no switches."
 
 (defun vc-git-print-log (files &optional buffer shortlog)
   "Get change log associated with FILES."
-  (let ((coding-system-for-read git-commits-coding-system)
-	;; Support both the old print-log interface that passes a
-	;; single file, and the new one that passes a file list.
-	(flist (if (listp files) files (list files))))
+  (let ((coding-system-for-read git-commits-coding-system))
     ;; `vc-do-command' creates the buffer, but we need it before running
     ;; the command.
     (vc-setup-buffer buffer)
@@ -613,7 +610,7 @@ or BRANCH^ (where \"^\" can be repeated)."
 
 (defun vc-git-annotate-command (file buf &optional rev)
   (let ((name (file-relative-name file)))
-    (vc-git-command buf 'async name "blame" "--date=iso" rev "--")))
+    (vc-git-command buf 'async name "blame" "--date=iso" "-C" "-C" rev)))
 
 (declare-function vc-annotate-convert-time "vc-annotate" (time))
 
@@ -627,8 +624,11 @@ or BRANCH^ (where \"^\" can be repeated)."
 (defun vc-git-annotate-extract-revision-at-line ()
   (save-excursion
     (move-beginning-of-line 1)
-    (and (looking-at "[0-9a-f^][0-9a-f]+")
-         (buffer-substring-no-properties (match-beginning 0) (match-end 0)))))
+    (when (looking-at "\\([0-9a-f^][0-9a-f]+\\) \\(\\([^(]+\\) \\)?")
+      (let ((revision (match-string-no-properties 1)))
+	(if (match-beginning 2)
+	  (cons revision (expand-file-name (match-string-no-properties 3)))
+	  revision)))))
 
 ;;; TAG SYSTEM
 

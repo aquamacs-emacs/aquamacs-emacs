@@ -30,6 +30,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include <config.h>
 #include <ctype.h>
+#include <setjmp.h>
 #include "lisp.h"
 #include "buffer.h"
 #include "character.h"
@@ -135,6 +136,8 @@ the current buffer's category table.  */)
 
   if (!NILP (CATEGORY_DOCSTRING (table, XFASTINT (category))))
     error ("Category `%c' is already defined", XFASTINT (category));
+  if (!NILP (Vpurify_flag))
+    docstring = Fpurecopy (docstring);
   CATEGORY_DOCSTRING (table, XFASTINT (category)) = docstring;
 
   return Qnil;
