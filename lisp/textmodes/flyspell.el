@@ -668,7 +668,6 @@ Turns off `flyspell-all-modes' if on."
 	(if textual
 	    (turn-on-flyspell)
 	  (if flyspell-mode (turn-off-flyspell))))))
-  (setq flyspell-by-mode "text")
   (message "Flyspell activated in Text modes"))
 
 ;;;###autoload
@@ -684,7 +683,6 @@ create. Turns off `flyspell-text-modes' if on."
 	  (remove-hook 'text-mode-hook 'turn-on-flyspell)
 	  (customize-mark-as-set 'text-mode-hook)))
     (global-flyspell-mode 1)
-    (setq flyspell-by-mode "all")
     (message "Flyspell activated in all modes")))
 
 ;;;###autoload
@@ -701,7 +699,6 @@ Also turns off flyspell-mode in all existing buffers."
     ;; this turns off flyspell everywhere, whether or not the global mode was
     ;; previously on:
     (global-flyspell-mode -1)
-    (setq flyspell-by-mode "none")
     (message "Flyspell deactivated in all modes")))
 
 ;;*---------------------------------------------------------------------*/
