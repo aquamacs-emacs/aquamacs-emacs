@@ -1795,14 +1795,18 @@ both existing buffers and buffers that you subsequently create."
 
       (define-key ispell-menu-map [flyspell-modes-submenu]
 	`(menu-item ,(purecopy "Check Spelling While Typing in Modes")
-		    ,flyspell-modes-submenu-map))
-
+		    ,flyspell-modes-submenu-map)) 
       (define-key ispell-menu-map [flyspell-mode]
 	`(menu-item ,(purecopy "Check Spelling While Typing (in this buffer)")
 		    flyspell-mode
 		    :help ,(purecopy "Check spelling while you edit the text")
 		    ;; allow toggling regardless of mode-related flyspell settings
 		    :button (:toggle . (bound-and-true-p flyspell-mode))))
+      (define-key ispell-menu-map [flyspell-buffer]
+	`(menu-item ,(purecopy "Mark All Misspellings")
+		    flyspell-buffer
+		    :help ,(purecopy "Scan full buffer for misspellings")))
+
       (define-key ispell-menu-map [ispell-complete-word]
 	`(menu-item ,(purecopy "Complete Word") ispell-complete-word 
 		    :visible (not (string= ispell-program-name "NSSpellChecker"))
