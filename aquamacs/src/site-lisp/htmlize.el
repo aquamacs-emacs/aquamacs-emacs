@@ -288,6 +288,13 @@ Otherwise, no pre-formatting is enforced.
 
 This may cause problems with printing very long lines in the buffer.")
 
+(defcustom htmlize-ignore-faces
+  (list 'flyspell-incorrect 'flyspell-duplicate)
+  "List of symbols, each a face to be ignored (left as
+default face) when generating html."
+  :group 'htmlize
+  :type '(repeat symbol))
+
 (defvar htmlize-before-hook nil
   "Hook run before htmlizing a buffer.
 The hook functions are run in the source buffer (not the resulting HTML
@@ -1106,7 +1113,7 @@ property and by buffer overlays that specify `face'."
 				 faces :test 'equal)
 			(adjoin (htmlize-unstringify-face face-prop)
 				faces :test 'equal))))))
-    faces))
+    (set-difference faces htmlize-ignore-faces)))
 
 ;; htmlize-faces-at-point returns the faces in use at point.  The
 ;; faces are sorted by increasing priority, i.e. the last face takes
@@ -1126,7 +1133,7 @@ property and by buffer overlays that specify `face'."
 			  (cons face-prop list))))
 	   ;; No need to reverse the list: PUSH has already
 	   ;; constructed it in the reverse display order.
-	   list)))
+	   (set-difference list htmlize-ignore-faces))))
       (t
        (defun htmlize-faces-at-point ()
 	 (let (all-faces)
@@ -1162,7 +1169,9 @@ property and by buffer overlays that specify `face'."
 						face-prop))
 				     list)
 			    (cons (htmlize-unstringify-face face-prop) list))))
-	     (setq all-faces (nconc all-faces list)))))))
+	     (setq all-faces 
+		   (set-difference (nconc all-faces list)
+				   htmlize-ignore-faces)))))))
 
 ;; htmlize supports generating HTML in two several fundamentally
 ;; different ways, one with the use of CSS and nested <span> tags, and
