@@ -1770,8 +1770,8 @@ Value is t if a query was formerly required."
     (or (not process)
         (not (memq (process-status process) '(run stop open listen)))
         (not (process-query-on-exit-flag process))
-        (aquamacs-ask-for-confirmation "Buffer has a running process; kill it? 
-Discarding the buffer will also stop the process." nil "Kill" "Don't Kill" t 'no-cancel))))
+        (not (aquamacs-ask-for-confirmation "Buffer has a running process; keep the buffer? 
+Discarding the buffer would also stop the process." nil "Keep" "Discard"  t 'no-cancel)))))
 
 (add-hook 'kill-buffer-query-functions 'process-kill-buffer-query-function)
 

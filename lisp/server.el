@@ -1287,8 +1287,10 @@ specifically for the clients and did not exist before their request for it."
           (when (and (memq proc server-clients)
                      (eq (process-status proc) 'open))
             (setq res nil))))
-      (yes-or-no-p (format "Buffer `%s' still has clients; kill it? "
-			   (buffer-name (current-buffer))))))
+      (not (aquamacs-ask-for-confirmation
+	    (format "Buffer `%s' still has clients; keep the buffer? "
+		    (buffer-name (current-buffer)))
+	    nil "Keep" "Discard" t 'no-cancel))))
 
 (defun server-kill-emacs-query-function ()
   "Ask before exiting Emacs if it has live clients."
