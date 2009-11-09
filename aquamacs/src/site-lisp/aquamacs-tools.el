@@ -491,7 +491,7 @@ show BUFFER in that frame."
 		   (or (buffer-name (window-buffer sel-win)) ""))))
       (unless dont-make-frame
 	  (setq sel-win (frame-first-window
-			 (with-current-buffer buffer
+			 (with-current-buffer (or buffer (current-buffer))
 			   ;; make sure we're not creating some "special" frame
 			   (make-frame))))))
     (if sel-win
