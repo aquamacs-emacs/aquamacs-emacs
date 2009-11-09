@@ -39,4 +39,6 @@
   (defun do-applescript (s)
     (message "Warning: do-applescript call not implemented yet.")))
 
+(defun turn-on-font-lock-if-enabled ())
+
 (provide 'cocoa-compatibility)
