@@ -5152,6 +5152,18 @@ for `auto-fill-function' when turning Auto Fill mode on."
 
 (custom-add-option 'text-mode-hook 'turn-on-auto-fill)
 
+(defun toggle-auto-fill ()
+  "Toggle whether to use Auto Fill Mode."
+  (interactive)
+  (unless auto-fill-function 
+    (visual-line-mode 0)
+    (and (boundp 'longlines-mode)
+	 (longlines-mode -1))) ;; turn this off first if it is on
+  (auto-fill-mode)
+  (message "Hard word wrap %s"
+	     (if auto-fill-function
+		 "enabled" "disabled")))
+
 (defun set-fill-column (arg)
   "Set `fill-column' to specified argument.
 Use \\[universal-argument] followed by a number to specify a column.
@@ -5198,12 +5210,16 @@ The variable `selective-display' has a separate value for each buffer."
 With prefix argument ARG, truncate long lines if ARG is positive,
 otherwise don't truncate them.  Note that in side-by-side windows,
 this command has no effect if `truncate-partial-width-windows'
-is non-nil."
+is non-nil.  This function disables `visual-line-mode' when enabling
+`truncate-lines'."
   (interactive "P")
-  (setq truncate-lines
+  (let ((t2 
 	(if (null arg)
 	    (not truncate-lines)
-	  (> (prefix-numeric-value arg) 0)))
+	  (> (prefix-numeric-value arg) 0))))
+    (if t2
+	(visual-line-mode 0))
+    (setq truncate-lines t2))
   (force-mode-line-update)
   (unless truncate-lines
     (let ((buffer (current-buffer)))
@@ -5214,20 +5230,49 @@ is non-nil."
   (message "Truncate long lines %s"
 	   (if truncate-lines "enabled" "disabled")))
 
-(defun toggle-word-wrap (&optional arg)
-  "Toggle whether to use word-wrapping for continuation lines.
-With prefix argument ARG, wrap continuation lines at word boundaries
-if ARG is positive, otherwise wrap them at the right screen edge.
-This command toggles the value of `word-wrap'.  It has no effect
-if long lines are truncated."
-  (interactive "P")
-  (setq word-wrap
-	(if (null arg)
-	    (not word-wrap)
-	  (> (prefix-numeric-value arg) 0)))
-  (force-mode-line-update)
-  (message "Word wrapping %s"
-	   (if word-wrap "enabled" "disabled")))
+
+;;  backward compatibility (in case users have it in their customizations)
+(defun turn-on-longlines ()
+  "Turn on Longlines mode.
+... unless buffer is read-only."
+  (unless buffer-read-only
+    (require 'longlines)
+    (longlines-mode 1)))
+
+(defun turn-off-longlines ()
+  "Unconditionally turn off Longlines mode."
+  (and (boundp 'longlines-mode)
+       (longlines-mode -1)))
+; (custom-add-option 'text-mode-hook 'turn-on-longlines)
+
+(defun toggle-longlines ()
+  "Toggle whether to use Longlines Mode."
+  (interactive)
+  (require 'longlines-mode)
+  (unless longlines-mode 
+    (auto-fill-mode -1))
+  (longlines-mode))
+
+(defun turn-on-word-wrap ()
+  "Turn on Word Wrap mode in current buffer."
+  (turn-off-longlines)
+  (turn-off-auto-fill)
+  (turn-on-visual-line-mode))
+
+(defun turn-off-word-wrap ()
+  "Turn off Word Wrap mode in current buffer."
+  (visual-line-mode 0))
+
+(defun toggle-word-wrap ()
+  "Toggle whether to use Word Wrap."
+  (interactive)
+  (if word-wrap
+      (turn-off-word-wrap)
+    (turn-on-word-wrap))
+  (when (interactive-p)
+    (force-mode-line-update)
+    (message "Word Wrap %sabled in this buffer." (if word-wrap "en" "dis"))))
+
 
 (defvar overwrite-mode-textual (purecopy " Ovwrt")
   "The string displayed in the mode line when in overwrite mode.")

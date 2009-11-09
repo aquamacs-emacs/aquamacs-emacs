@@ -541,85 +541,8 @@ left and right margin"))
 
 ;(require 'longlines) 
  
-;;  backward compatibility (in case users have it in their customizations)
-(defun turn-on-longlines ()
-  "Turn on Longlines mode.
-... unless buffer is read-only."
-  (unless buffer-read-only
-    (require 'longlines)
-    (longlines-mode 1)))
-
-(defun turn-off-longlines ()
-  "Unconditionally turn off Longlines mode."
-  (and (boundp 'longlines-mode)
-       (longlines-mode -1)))
-; (custom-add-option 'text-mode-hook 'turn-on-longlines)
-
-(defun toggle-longlines ()
-  "Toggle whether to use Longlines Mode."
-  (interactive)
-  (require 'longlines-mode)
-  (unless longlines-mode 
-    (auto-fill-mode -1))
-  (longlines-mode))
-
-(defun turn-on-word-wrap ()
-  "Turn on Word Wrap mode in current buffer."
-  (turn-off-longlines)
-  (turn-off-auto-fill)
-  (turn-on-visual-line-mode))
-
-(defun turn-off-word-wrap ()
-  "Turn off Word Wrap mode in current buffer."
-  (visual-line-mode 0))
-
-(defun toggle-word-wrap ()
-  "Toggle whether to use Word Wrap."
-  (interactive)
-  (if word-wrap
-      (turn-off-word-wrap)
-    (turn-on-word-wrap))
-  (when (interactive-p)
-    (redraw-modeline)
-    (message "Word Wrap %sabled in this buffer." (if word-wrap "en" "dis"))))
-
 (global-set-key "\C-xw" 'toggle-word-wrap)
-
-(defun toggle-auto-fill ()
-  "Toggle whether to use Auto Fill Mode."
-  (interactive)
-  (unless auto-fill-function 
-    (visual-line-mode 0)
-    (and (boundp 'longlines-mode)
-	 (longlines-mode -1))) ;; turn this off first if it is on
-  (auto-fill-mode)
-  (message "Hard word wrap %s"
-	     (if auto-fill-function
-		 "enabled" "disabled")))
   
-;; redefines function from simple.el
-(defun toggle-truncate-lines (&optional arg)
-  "Toggle whether to fold or truncate long lines for the current buffer.
-With prefix argument ARG, truncate long lines if ARG is positive,
-otherwise don't truncate them.  Note that in side-by-side
-windows, truncation is always enabled."
-  (interactive "P")
-  (setq truncate-lines
-	(if (null arg)
-	    (not truncate-lines)
-	  (> (prefix-numeric-value arg) 0)))
-  (if truncate-lines
-      (visual-line-mode 0))
-  (force-mode-line-update)
-  (unless truncate-lines
-    (let ((buffer (current-buffer)))
-      (walk-windows (lambda (window)
-		      (if (eq buffer (window-buffer window))
-			  (set-window-hscroll window 0)))
-		    nil t)))
-  (message "Truncate long lines %s"
-	   (if truncate-lines "enabled" "disabled")))
-
 (require 'aquamacs-editing)
 (custom-add-option 'text-mode-hook 'auto-detect-wrap)
 (defun toggle-auto-text-mode-wrap ()
@@ -658,10 +581,8 @@ subsequently create.  Upon entering text-mode, the function
   (toggle-auto-text-mode-wrap)
   (customize-mark-as-set 'text-mode-hook))
   
-
-(when (> emacs-major-version 22)
-  (define-key menu-bar-options-menu [highlight-separator] nil)
-  (define-key menu-bar-options-menu [line-wrapping] nil))
+(define-key menu-bar-options-menu [highlight-separator] nil)
+(define-key menu-bar-options-menu [line-wrapping] nil)
 
 (define-key menu-bar-options-menu [auto-fill-mode]
   '(menu-item "Hard Word Wrap"
@@ -693,7 +614,7 @@ subsequently create.  Upon entering text-mode, the function
 					 (member 'auto-detect-longlines text-mode-hook))
 				   (or (eq 'auto-detect-wrap text-mode-hook)
 				       (eq 'auto-detect-longlines text-mode-hook)))))
-  'word-wrap)
+  'truncate-lines)
  
 ;; (define-key-after menu-bar-options-menu [global-smart-spacing]
 ;;   (menu-bar-make-mm-toggle
