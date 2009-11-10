@@ -845,6 +845,7 @@ default."
     (define-key map `[(,osxkeys-command-key z)] 'aquamacs-undo)
     (define-key map `[(,osxkeys-command-key shift z)] 'aquamacs-redo)
     (define-key map `[(,osxkeys-command-key \`)] 'raise-next-frame)
+    (define-key map `[(,osxkeys-command-key \~)] 'raise-previous-frame)
     (define-key map `[(,osxkeys-command-key \<)] 'raise-next-frame)
     (define-key map `[(,osxkeys-command-key \>)] 'raise-previous-frame)
     (define-key map `[(,osxkeys-command-key \])] 'other-window)
