@@ -147,7 +147,7 @@ If nil, use the value of `vc-diff-switches'.  If t, use no switches."
   (when (vc-git-root file)
     (with-temp-buffer
       (let* (process-file-side-effects
-	     (dir (file-name-directory file))
+	     (dir (vc-git-root file))
              (name (file-relative-name file dir))
              (str (ignore-errors
                     (when dir (cd dir))
