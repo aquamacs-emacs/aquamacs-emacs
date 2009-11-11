@@ -645,8 +645,26 @@ but select the newly created window."
 Its content is specified in the keymap `aquamacs-context-menu-map'."
   (interactive "@e \nP")
   ;; Let the mode update its menus first.
+  (aquamacs-update-context-menus)
+  
+  ;; move popup menu a little so mouse pointer is over first entry
+  ;; not needed
+  ;; ((pos
+  ;; 	 (if (not (eq (event-basic-type event) 'mouse-3))
+  ;; 	     event
+  ;; 	   (list (lispost (- (car (nth 2 (car (cdr event)))) 0)
+  ;; 		       (- (cdr (nth 2 (car (cdr event)))) 0))
+  ;; 		 (car (car (cdr event)))))))
+  
+    (popup-menu aquamacs-context-menu-map event prefix))
+
+(defun aquamacs-update-context-menus (&optional force)
+  "Update the buffer- and mode-specific items in
+`aquamacs-context-menu-map' if frame or buffer has changed.
+Update unconditionally if optional argument FORCE is non-nil."
   ;; (run-hooks 'activate-menubar-hook 'menu-bar-update-hook)
-  (when (frame-or-buffer-changed-p 'aquamacs-popup-context-menu-buffers-state)
+  (when (or force
+	    (frame-or-buffer-changed-p 'aquamacs-popup-context-menu-buffers-state))
     (let ((mode-menu (aquamacs-get-mouse-major-mode-menu)))
       (if mode-menu
 	  ;; TO DO major mode might not work unless we switch buffer
@@ -662,18 +680,8 @@ Its content is specified in the keymap `aquamacs-context-menu-map'."
     (define-key aquamacs-context-menu-map [change-mode] 
       `(menu-item "Change Major Mode "   
 		  ,menu-bar-change-mode-menu
-		  :help "Show a different buffer in this frame")))
-  
-  ;; move popup menu a little so mouse pointer is over first entry
-  ;; not needed
-  ;; ((pos
-  ;; 	 (if (not (eq (event-basic-type event) 'mouse-3))
-  ;; 	     event
-  ;; 	   (list (lispost (- (car (nth 2 (car (cdr event)))) 0)
-  ;; 		       (- (cdr (nth 2 (car (cdr event)))) 0))
-  ;; 		 (car (car (cdr event)))))))
-  
-    (popup-menu aquamacs-context-menu-map event prefix))
+		  :help "Show a different buffer in this frame"))))
+
   
 (defcustom osx-key-mode-mouse-3-behavior #'aquamacs-popup-context-menu
   "Determine behavior of mouse-3 in osx-key-mode.
