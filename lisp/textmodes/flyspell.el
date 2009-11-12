@@ -2644,7 +2644,8 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 		     ,cursor-location
 		     ,start
 		     ,end
-		     ,save))))
+		     ,save))
+		  :help "Consider spelling as correct in this buffer"))
     (define-key flyspell-context-menu-map [session]
       `(menu-item "Accept (session)"
 		  (lambda () (interactive)
@@ -2655,7 +2656,8 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 		     ,cursor-location
 		     ,start
 		     ,end
-		     ,save))
+		     ,save)) 
+		  :help "Consider spelling correct for buffers in current session"
 		  :visible (not (string= ispell-program-name "NSSpellChecker"))))
     (define-key flyspell-context-menu-map [save]
       `(menu-item (if (string= ispell-program-name "NSSpellChecker")
@@ -2669,7 +2671,8 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 		     ,cursor-location
 		     ,start
 		     ,end
-		     ,save))));)
+		     ,save)) 
+		  :help "Save spelling to dictionary"))
     (define-key flyspell-context-menu-map [affix]
       ;; affix is nil for NSSpellChecker, so not visible
       `(menu-item (concat "Save affix: " ,(car affix))
@@ -2681,7 +2684,8 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 		     ,cursor-location
 		     ,start
 		     ,end
-		     ,save))
+		     ,save)) 
+		  :help "Save affix construction to dictionary"
 		  :visible (and ,(consp affix) ,show-affix-info)))
     (when (consp corrects)
       (define-key flyspell-context-menu-map [flyspell-corr-sep] '(menu-item "--"))
@@ -2701,7 +2705,8 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 				   ,cursor-location
 				   ,start
 				   ,end
-				   ,save)))))
+				   ,save))
+				:help "Replace word with guess")))
 		corrects)))
     (popup-menu flyspell-context-menu-map event nil)))
 
