@@ -37,12 +37,31 @@
 
 ;;; FONT DEFAULTS 
 
-;; commented out, doesn't work (e.g. unicode 2208, "element of", math)
+;; commented out, doesn't work 
 ;;(set-fontset-font
 ;; "fontset-default"
 ;; 'symbol
 ;; '("Lucida Grande" . "iso10646-1"))
 
+;; Define special characters in the default fontset
+;; because they would otherwise be taken from the Apple Symbols font
+;; which has more "symbol" class characters than Lucida Grande.
+;; we cannot use Lucida generally for the symbol class, because that
+;; would hide math characters like  2208, "element of", which
+;; aren't defined in Lucida and it would defeat the purpose of
+;; the underlying font selection algorithm
+
+(mapc (lambda (c)
+	(set-fontset-font
+	 "fontset-startup"
+	 (cons c c)  
+	 '("Lucida Grande" . "iso10646-1"))
+	)
+      '( ?\x2318 ;; command symbol 
+	 ?\x2325 ;; option key symbol
+	 ?\x2326 ;; erase to right
+	 ?\x232B ;; erase to left (backspace)
+	 ))
 
 (setq ignore-font-errors t)
 
