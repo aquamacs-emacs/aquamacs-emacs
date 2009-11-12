@@ -2621,7 +2621,9 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
     (setq flyspell-context-menu-map
 	  (make-sparse-keymap
 	   (if (string= ispell-program-name "NSSpellChecker")
-	       (format "%s" word)
+	       (if (not (car (cdr (cdr poss))))
+		   "No Guesses Found"
+		 (format "%s" word))
 	     (format "%s [%s]" word (or ispell-local-dictionary
 					ispell-dictionary)))))
     ;; update aquamacs-context-menu-keymap
