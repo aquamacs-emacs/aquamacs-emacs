@@ -2132,10 +2132,10 @@ FACE and MOUSE-FACE specify the `face' and `mouse-face' properties
 for the overlay."
   (let ((overlay (make-overlay beg end nil t nil)))
     (overlay-put overlay 'face face)
-    (overlay-put overlay 'mouse-face mouse-face)
+    ;; (overlay-put overlay 'mouse-face mouse-face)
     (overlay-put overlay 'flyspell-overlay t)
     (overlay-put overlay 'evaporate t)
-    (overlay-put overlay 'help-echo "mouse-2: correct word at point")
+    ;; (overlay-put overlay 'help-echo "mouse-2: correct word at point")
     (overlay-put overlay 'keymap flyspell-mouse-map)
     (when (eq face 'flyspell-incorrect)
       (and (stringp flyspell-before-incorrect-word-string)
