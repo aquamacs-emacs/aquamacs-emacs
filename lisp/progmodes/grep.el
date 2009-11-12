@@ -329,7 +329,7 @@ Notice that using \\[next-error] or \\[compile-goto-error] modifies
 `complation-last-buffer' rather than `grep-last-buffer'.")
 
 ;;;###autoload
-(defvar grep-regexp-alist
+(defconst grep-regexp-alist
   '(("^\\(.+?\\)\\(:[ \t]*\\)\\([0-9]+\\)\\2"
      1 3)
     ;; Rule to match column numbers is commented out since no known grep
@@ -404,17 +404,17 @@ Notice that using \\[next-error] or \\[compile-goto-error] modifies
 This gets tacked on the end of the generated expressions.")
 
 ;;;###autoload
-(defvar grep-program "grep"
+(defvar grep-program (purecopy "grep")
   "The default grep program for `grep-command' and `grep-find-command'.
 This variable's value takes effect when `grep-compute-defaults' is called.")
 
 ;;;###autoload
-(defvar find-program "find"
+(defvar find-program (purecopy "find")
   "The default find program for `grep-find-command'.
 This variable's value takes effect when `grep-compute-defaults' is called.")
 
 ;;;###autoload
-(defvar xargs-program "xargs"
+(defvar xargs-program (purecopy "xargs")
   "The default xargs program for `grep-find-command'.
 See `grep-find-use-xargs'.
 This variable's value takes effect when `grep-compute-defaults' is called.")

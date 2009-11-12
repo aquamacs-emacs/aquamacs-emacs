@@ -619,6 +619,7 @@ the same file name is found in the `doc-directory'.  */)
         if (len > 0)
           Vbuild_files = Fcons (make_string (beg, len), Vbuild_files);
       }
+    Vbuild_files = Fpurecopy (Vbuild_files);
   }
 
   fd = emacs_open (name, O_RDONLY, 0);
@@ -954,7 +955,7 @@ a new string, without any text properties, is returned.  */)
 void
 syms_of_doc ()
 {
-  Qfunction_documentation = intern ("function-documentation");
+  Qfunction_documentation = intern_c_string ("function-documentation");
   staticpro (&Qfunction_documentation);
 
   DEFVAR_LISP ("internal-doc-file-name", &Vdoc_file_name,

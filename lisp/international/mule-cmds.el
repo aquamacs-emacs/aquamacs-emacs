@@ -76,7 +76,7 @@
     (define-key-after map [universal-coding-system-argument]
       `(menu-item ,(purecopy "For Next Command") universal-coding-system-argument
         :help ,(purecopy "Coding system to be used by next command")))
-    (define-key-after map [separator-1] '("--"))
+    (define-key-after map [separator-1] menu-bar-separator)
     (define-key-after map [set-buffer-file-coding-system]
       `(menu-item ,(purecopy "For Saving This Buffer") set-buffer-file-coding-system
         :help ,(purecopy "How to encode this buffer when saved")))
@@ -88,7 +88,7 @@
     (define-key-after map [set-file-name-coding-system]
       `(menu-item ,(purecopy "For File Name") set-file-name-coding-system
         :help ,(purecopy "How to decode/encode file names")))
-    (define-key-after map [separator-2] '("--"))
+    (define-key-after map [separator-2] menu-bar-separator)
 
     (define-key-after map [set-keyboard-coding-system]
       `(menu-item ,(purecopy "For Keyboard") set-keyboard-coding-system
@@ -97,7 +97,7 @@
       `(menu-item ,(purecopy "For Terminal") set-terminal-coding-system
         :enable (null (memq initial-window-system '(x w32 ns)))
         :help ,(purecopy "How to encode terminal output")))
-    (define-key-after map [separator-3] '("--"))
+    (define-key-after map [separator-3] menu-bar-separator)
 
     (define-key-after map [set-selection-coding-system]
       `(menu-item ,(purecopy "For X Selections/Clipboard") set-selection-coding-system
@@ -118,7 +118,7 @@
   (let ((map (make-sparse-keymap "Mule (Multilingual Environment)")))
     (define-key-after map [set-language-environment]
       `(menu-item  ,(purecopy "Set Language Environment") ,setup-language-environment-map))
-    (define-key-after map [separator-mule] '("--"))
+    (define-key-after map [separator-mule] menu-bar-separator)
 
     (define-key-after map [toggle-input-method]
       `(menu-item ,(purecopy "Toggle Input Method") toggle-input-method))
@@ -126,7 +126,7 @@
       `(menu-item ,(purecopy "Select Input Method...") set-input-method))
     (define-key-after map [describe-input-method]
       `(menu-item ,(purecopy "Describe Input Method")  describe-input-method))
-    (define-key-after map [separator-input-method] '("--"))
+    (define-key-after map [separator-input-method] menu-bar-separator)
 
     (define-key-after map [set-various-coding-system]
       `(menu-item ,(purecopy "Set Coding Systems") ,set-coding-system-map
@@ -136,7 +136,7 @@
         :enable (file-readable-p
                  (expand-file-name "HELLO" data-directory))
         :help ,(purecopy "Display file which says HELLO in many languages")))
-    (define-key-after map [separator-coding-system] '("--"))
+    (define-key-after map [separator-coding-system] menu-bar-separator)
 
     (define-key-after map [describe-language-environment]
       `(menu-item ,(purecopy "Describe Language Environment")
@@ -1370,9 +1370,12 @@ these duplicated values to show some information about input methods
 without loading the relevant Quail packages.
 \n(fn INPUT-METHOD LANG-ENV ACTIVATE-FUNC TITLE DESCRIPTION &rest ARGS)"
   (if (symbolp lang-env)
-      (setq lang-env (symbol-name lang-env)))
+      (setq lang-env (symbol-name lang-env))
+    (setq lang-env (purecopy lang-env)))
   (if (symbolp input-method)
-      (setq input-method (symbol-name input-method)))
+      (setq input-method (symbol-name input-method))
+    (setq input-method (purecopy input-method)))
+  (setq args (mapcar 'purecopy args))
   (let ((info (cons lang-env args))
 	(slot (assoc input-method input-method-alist)))
     (if slot
@@ -1867,7 +1870,7 @@ specifies the character set for the major languages of Western Europe."
   (force-mode-line-update t))
 
 (define-widget 'charset 'symbol
-  (purecopy "An Emacs charset.")
+  "An Emacs charset."
   :tag "Charset"
   :complete-function (lambda ()
 		       (interactive)
@@ -2747,7 +2750,7 @@ See also the documentation of `get-char-code-property' and
 	  (error "Invalid char-table: %s" table))
     (or (stringp table)
 	(error "Not a char-table nor a file name: %s" table)))
-  (if (stringp table) (purecopy table))
+  (if (stringp table) (setq table (purecopy table)))
   (let ((slot (assq name char-code-property-alist)))
     (if slot
 	(setcdr slot table)
@@ -2813,7 +2816,7 @@ If there's no description string for VALUE, return nil."
 ;; Pretty description of encoded string
 
 ;; Alist of ISO 2022 control code vs the corresponding mnemonic string.
-(defvar iso-2022-control-alist
+(defconst iso-2022-control-alist
   '((?\x1b . "ESC")
     (?\x0e . "SO")
     (?\x0f . "SI")

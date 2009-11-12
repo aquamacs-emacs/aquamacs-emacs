@@ -50,7 +50,7 @@
 
 
 ;;;###autoload
-(defcustom dired-listing-switches "-al"
+(defcustom dired-listing-switches (purecopy "-al")
   "Switches passed to `ls' for Dired.  MUST contain the `l' option.
 May contain all other options that don't contradict `-l';
 may contain even `F', `b', `i' and `s'.  See also the variable
@@ -71,11 +71,12 @@ If nil, `dired-listing-switches' is used.")
 
 ;;;###autoload
 (defvar dired-chown-program
+  (purecopy
   (if (memq system-type '(hpux usg-unix-v irix linux gnu/linux cygwin))
       "chown"
     (if (file-exists-p "/usr/sbin/chown")
 	"/usr/sbin/chown"
-      "/etc/chown"))
+      "/etc/chown")))
   "Name of chown command (usually `chown' or `/etc/chown').")
 
 (defvar dired-use-ls-dired (not (not (string-match "gnu" system-configuration)))
@@ -104,7 +105,7 @@ always set this variable to t."
   :group 'dired-mark)
 
 ;;;###autoload
-(defcustom dired-trivial-filenames "^\\.\\.?$\\|^#"
+(defcustom dired-trivial-filenames (purecopy "^\\.\\.?$\\|^#")
   "Regexp of files to skip when finding first file of a directory.
 A value of nil means move to the subdir line.
 A value of t means move to first file."
@@ -1388,8 +1389,9 @@ Do so according to the former subdir alist OLD-SUBDIR-ALIST."
 		  :help "Move to previous directory-file line"))
     (define-key map [menu-bar subdir insert]
       '(menu-item "Insert This Subdir" dired-maybe-insert-subdir
-		  :help "Insert contents of subdirectory"))
-
+		  :help "Insert contents of subdirectory"
+		  :enable (let ((f (dired-get-filename nil t)))
+			    (and f (file-directory-p f)))))
     (define-key map [menu-bar immediate]
       (cons "Immediate" (make-sparse-keymap "Immediate")))
 
@@ -3310,7 +3312,7 @@ Anything else means ask for each directory."
   (message-box
    "Dired recursive copies are currently disabled.\nSee the variable `dired-recursive-copies'."))
 
-(declare-function x-popup-menu "xmenu.c" (position menu))
+(declare-function x-popup-menu "menu.c" (position menu))
 
 (defun dired-dnd-do-ask-action (uri)
   ;; No need to get actions and descriptions from the source,
@@ -3454,7 +3456,7 @@ Ask means pop up a menu for the user to select one of copy, move or link."
 ;;;;;;  dired-run-shell-command dired-do-shell-command dired-do-async-shell-command
 ;;;;;;  dired-clean-directory dired-do-print dired-do-touch dired-do-chown
 ;;;;;;  dired-do-chgrp dired-do-chmod dired-compare-directories dired-backup-diff
-;;;;;;  dired-diff) "dired-aux" "dired-aux.el" "6c7ccd455c2cd50d48164ebd5c52e216")
+;;;;;;  dired-diff) "dired-aux" "dired-aux.el" "e207e02ac395d10ee4a09e208081a0ce")
 ;;; Generated autoloads from dired-aux.el
 
 (autoload 'dired-diff "dired-aux" "\

@@ -2885,14 +2885,6 @@ x_icon (f, parms)
    background, border and mouse colors; also create the
    mouse cursor and the gray border tile.  */
 
-static char cursor_bits[] =
-  {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-  };
-
 static void
 x_make_gc (f)
      struct frame *f;
@@ -5786,17 +5778,17 @@ syms_of_xfns ()
   /* The section below is built by the lisp expression at the top of the file,
      just above where these variables are declared.  */
   /*&&& init symbols here &&&*/
-  Qnone = intern ("none");
+  Qnone = intern_c_string ("none");
   staticpro (&Qnone);
-  Qsuppress_icon = intern ("suppress-icon");
+  Qsuppress_icon = intern_c_string ("suppress-icon");
   staticpro (&Qsuppress_icon);
-  Qundefined_color = intern ("undefined-color");
+  Qundefined_color = intern_c_string ("undefined-color");
   staticpro (&Qundefined_color);
-  Qcompound_text = intern ("compound-text");
+  Qcompound_text = intern_c_string ("compound-text");
   staticpro (&Qcompound_text);
-  Qcancel_timer = intern ("cancel-timer");
+  Qcancel_timer = intern_c_string ("cancel-timer");
   staticpro (&Qcancel_timer);
-  Qfont_param = intern ("font-parameter");
+  Qfont_param = intern_c_string ("font-parameter");
   staticpro (&Qfont_param);
   /* This is the end of symbol initialization.  */
 
@@ -5806,9 +5798,9 @@ syms_of_xfns ()
 
 
   Fput (Qundefined_color, Qerror_conditions,
-	Fcons (Qundefined_color, Fcons (Qerror, Qnil)));
+	pure_cons (Qundefined_color, pure_cons (Qerror, Qnil)));
   Fput (Qundefined_color, Qerror_message,
-	build_string ("Undefined color"));
+	make_pure_c_string ("Undefined color"));
 
   DEFVAR_LISP ("x-pointer-shape", &Vx_pointer_shape,
     doc: /* The shape of the pointer when over text.
@@ -5905,12 +5897,12 @@ The default is to just show an arrow and pressing on that arrow shows
 the tool bar buttons.  */);
   x_gtk_whole_detached_tool_bar = 0;
 
-  Fprovide (intern ("x"), Qnil);
+  Fprovide (intern_c_string ("x"), Qnil);
 
 #ifdef USE_X_TOOLKIT
-  Fprovide (intern ("x-toolkit"), Qnil);
+  Fprovide (intern_c_string ("x-toolkit"), Qnil);
 #ifdef USE_MOTIF
-  Fprovide (intern ("motif"), Qnil);
+  Fprovide (intern_c_string ("motif"), Qnil);
 
   DEFVAR_LISP ("motif-version-string", &Vmotif_version_string,
 	       doc: /* Version info for LessTif/Motif.  */);
@@ -5923,8 +5915,8 @@ the tool bar buttons.  */);
      is not an X toolkit in that sense (USE_X_TOOLKIT is not defined).
      But for a user it is a toolkit for X, and indeed, configure
      accepts --with-x-toolkit=gtk.  */
-  Fprovide (intern ("x-toolkit"), Qnil);
-  Fprovide (intern ("gtk"), Qnil);
+  Fprovide (intern_c_string ("x-toolkit"), Qnil);
+  Fprovide (intern_c_string ("gtk"), Qnil);
 
   DEFVAR_LISP ("gtk-version-string", &Vgtk_version_string,
                doc: /* Version info for GTK+.  */);
@@ -5932,7 +5924,7 @@ the tool bar buttons.  */);
     char gtk_version[40];
     g_snprintf (gtk_version, sizeof (gtk_version), "%u.%u.%u",
                 GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION);
-    Vgtk_version_string = build_string (gtk_version);
+    Vgtk_version_string = make_pure_string (gtk_version, strlen (gtk_version), strlen (gtk_version), 0);
   }
 #endif /* USE_GTK */
 

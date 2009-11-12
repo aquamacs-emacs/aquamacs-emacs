@@ -48,6 +48,9 @@ were loaded.
 
 * Changes in Emacs 23.2
 
+** The maximum size of buffers (as well as the largest fixnum) is doubled.
+On typical 32bit systems, buffers can now be up to 512MB.
+
 ** Function arguments in *Help* buffers are now in uppercase by default.
 You can customize the new variable `help-downcase-arguments' to change it.
 
@@ -133,6 +136,8 @@ For instance, this can complete M-x lch to list-command-history.
 
 
 * Changes in Specialized Modes and Packages in Emacs 23.2
+
+** lucid.el and levents.el are now declared obsolete.
 
 ** pcomplete provides a new command `pcomplete-std-completion' which
 is similar to `pcomplete' but using the standard completion UI code.
@@ -256,6 +261,22 @@ Command*'.
 ** imap-hash.el is a new library to address IMAP mailboxes as hashtables.
 
 
+* Incompatible Lisp Changes in Emacs 23.2
+
+** Several obsolete functions removed.
+The functions have been obsolete since Emacs 19, and are unlikely to
+be in use:
+
+  time-stamp-month-dd-yyyy, time-stamp-dd/mm/yyyy, time-stamp-mon-dd-yyyy
+  time-stamp-dd-mon-yy, time-stamp-yy/mm/dd, time-stamp-yyyy/mm/dd,
+  time-stamp-yyyy-mm-dd, time-stamp-yymmdd, time-stamp-hh:mm:ss,
+  time-stamp-hhmm, baud-rate
+
+---
+** Support for generating Emacs 18 compatible bytecode (by setting
+the variable `byte-compile-compatibility') has been removed.
+
+
 * Lisp changes in Emacs 23.2
 
 ** The 4th arg to all-completions (aka hide-spaces) is declared obsolete.
@@ -324,15 +345,6 @@ Instead, customize byte-compile-dest-file-function.
 
 ---
 ** `byte-compile-warnings' can have a new member, `constants'.
-
-** Several obsolete functions removed.
-The functions have been obsolete since Emacs 19, and are unlikely to
-be in use:
-
-  time-stamp-month-dd-yyyy, time-stamp-dd/mm/yyyy, time-stamp-mon-dd-yyyy
-  time-stamp-dd-mon-yy, time-stamp-yy/mm/dd, time-stamp-yyyy/mm/dd,
-  time-stamp-yyyy-mm-dd, time-stamp-yymmdd, time-stamp-hh:mm:ss,
-  time-stamp-hhmm, baud-rate
 
 ** `delete-directory' has an optional parameter RECURSIVE.
 

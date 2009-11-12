@@ -79,14 +79,13 @@ struct table_entry
   int numeric;
   /* The first one is a valid name as a face attribute.
      The second one (if any) is a typical name in XLFD field.  */
-  char *names[5];
-  Lisp_Object *symbols;
+  const char *names[5];
 };
 
 /* Table of weight numeric values and their names.  This table must be
    sorted by numeric values in ascending order.  */
 
-static struct table_entry weight_table[] =
+static const struct table_entry weight_table[] =
 {
   { 0, { "thin" }},
   { 20, { "ultra-light", "ultralight" }},
@@ -103,7 +102,7 @@ static struct table_entry weight_table[] =
 /* Table of slant numeric values and their names.  This table must be
    sorted by numeric values in ascending order.  */
 
-static struct table_entry slant_table[] =
+static const struct table_entry slant_table[] =
 {
   { 0, { "reverse-oblique", "ro" }},
   { 10, { "reverse-italic", "ri" }},
@@ -115,7 +114,7 @@ static struct table_entry slant_table[] =
 /* Table of width numeric values and their names.  This table must be
    sorted by numeric values in ascending order.  */
 
-static struct table_entry width_table[] =
+static const struct table_entry width_table[] =
 {
   { 50, { "ultra-condensed", "ultracondensed" }},
   { 63, { "extra-condensed", "extracondensed" }},
@@ -5063,7 +5062,7 @@ build_style_table (entry, nelement)
       elt = Fmake_vector (make_number (j + 1), Qnil);
       ASET (elt, 0, make_number (entry[i].numeric));
       for (j = 0; entry[i].names[j]; j++)
-	ASET (elt, j + 1, intern (entry[i].names[j]));
+	ASET (elt, j + 1, intern_c_string (entry[i].names[j]));
       ASET (table, i, elt);
     }
   return table;

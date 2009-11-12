@@ -42,12 +42,6 @@ trailer starting with a FormFeed character.")
 ;;;###autoload
 (put 'generated-autoload-file 'safe-local-variable 'stringp)
 
-(defvar generated-autoload-feature nil
-  "Feature for `generated-autoload-file' to provide.
-If nil, this defaults to `generated-autoload-file', sans extension.")
-;;;###autoload
-(put 'generated-autoload-feature 'safe-local-variable 'symbolp)
-
 (defvar generated-autoload-load-name nil
   "Load name for `autoload' statements generated from autoload cookies.
 If nil, this defaults to the file name, sans extension.")
@@ -259,20 +253,22 @@ put the output in."
 	      (print-escape-nonascii t))
 	  (print form outbuf)))))))
 
-(defun autoload-rubric (file &optional type)
+(defun autoload-rubric (file &optional type feature)
   "Return a string giving the appropriate autoload rubric for FILE.
 TYPE (default \"autoloads\") is a string stating the type of
-information contained in FILE."
+information contained in FILE.  If FEATURE is non-nil, FILE
+will provide a feature.  FEATURE may be a string naming the
+feature, otherwise it will be based on FILE's name."
   (let ((basename (file-name-nondirectory file)))
     (concat ";;; " basename
 	    " --- automatically extracted " (or type "autoloads") "\n"
 	    ";;\n"
 	    ";;; Code:\n\n"
 	    "\n"
+	    ;; This is used outside of autoload.el.
 	    "(provide '"
-	    (if (and generated-autoload-feature
-		     (symbolp generated-autoload-feature))
-		(format "%s" generated-autoload-feature)
+	    (if (stringp feature)
+		feature
 	      (file-name-sans-extension basename))
 	    ")\n"
 	    ";; Local Variables:\n"

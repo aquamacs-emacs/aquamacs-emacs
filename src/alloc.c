@@ -31,8 +31,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #undef INLINE
 #endif
 
-/* Note that this declares bzero on OSF/1.  How dumb.  */
-
 #include <signal.h>
 
 #ifdef HAVE_GTK_AND_PTHREAD
@@ -4151,8 +4149,7 @@ mark_maybe_object (obj)
 	  mark_p = (live_misc_p (m, po) && !XMISCANY (obj)->gcmarkbit);
 	  break;
 
-	case Lisp_Int:
-	case Lisp_Type_Limit:
+	default:
 	  break;
 	}
 
@@ -4821,6 +4818,24 @@ make_pure_string (data, nchars, nbytes, multibyte)
   return string;
 }
 
+/* Return a string a string allocated in pure space.  Do not allocate
+   the string data, just point to DATA.  */
+
+Lisp_Object
+make_pure_c_string (const char *data)
+{
+  Lisp_Object string;
+  struct Lisp_String *s;
+  int nchars = strlen (data);
+
+  s = (struct Lisp_String *) pure_alloc (sizeof *s, Lisp_String);
+  s->size = nchars;
+  s->size_byte = -1;
+  s->data = (unsigned char *) data;
+  s->intervals = NULL_INTERVAL;
+  XSETSTRING (string, s);
+  return string;
+}
 
 /* Return a cons allocated from pure space.  Give it pure copies
    of CAR as car and CDR as cdr.  */
@@ -5697,7 +5712,7 @@ mark_object (arg)
       FLOAT_MARK (XFLOAT (obj));
       break;
 
-    case Lisp_Int:
+    case_Lisp_Int:
       break;
 
     default:
@@ -5783,7 +5798,7 @@ survives_gc_p (obj)
 
   switch (XTYPE (obj))
     {
-    case Lisp_Int:
+    case_Lisp_Int:
       survives_p = 1;
       break;
 
@@ -6378,7 +6393,7 @@ This means that certain objects should be allocated in shared (pure) space.  */)
   DEFVAR_LISP ("post-gc-hook", &Vpost_gc_hook,
 	       doc: /* Hook run after garbage collection has finished.  */);
   Vpost_gc_hook = Qnil;
-  Qpost_gc_hook = intern ("post-gc-hook");
+  Qpost_gc_hook = intern_c_string ("post-gc-hook");
   staticpro (&Qpost_gc_hook);
 
   DEFVAR_LISP ("memory-signal-data", &Vmemory_signal_data,
@@ -6386,18 +6401,18 @@ This means that certain objects should be allocated in shared (pure) space.  */)
   /* We build this in advance because if we wait until we need it, we might
      not be able to allocate the memory to hold it.  */
   Vmemory_signal_data
-    = list2 (Qerror,
-	     build_string ("Memory exhausted--use M-x save-some-buffers then exit and restart Emacs"));
+    = pure_cons (Qerror,
+		 pure_cons (make_pure_c_string ("Memory exhausted--use M-x save-some-buffers then exit and restart Emacs"), Qnil));
 
   DEFVAR_LISP ("memory-full", &Vmemory_full,
 	       doc: /* Non-nil means Emacs cannot get much more Lisp memory.  */);
   Vmemory_full = Qnil;
 
   staticpro (&Qgc_cons_threshold);
-  Qgc_cons_threshold = intern ("gc-cons-threshold");
+  Qgc_cons_threshold = intern_c_string ("gc-cons-threshold");
 
   staticpro (&Qchar_table_extra_slots);
-  Qchar_table_extra_slots = intern ("char-table-extra-slots");
+  Qchar_table_extra_slots = intern_c_string ("char-table-extra-slots");
 
   DEFVAR_LISP ("gc-elapsed", &Vgc_elapsed,
 	       doc: /* Accumulated time elapsed in garbage collections.

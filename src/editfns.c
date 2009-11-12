@@ -3275,12 +3275,26 @@ Lisp_Object
 save_restriction_restore (data)
      Lisp_Object data;
 {
+  struct buffer *cur = NULL;
+  struct buffer *buf = (CONSP (data)
+			? XMARKER (XCAR (data))->buffer
+			: XBUFFER (data));
+
+  if (buf && buf != current_buffer && !NILP (buf->pt_marker))
+    { /* If `buf' uses markers to keep track of PT, BEGV, and ZV (as
+	 is the case if it is or has an indirect buffer), then make
+	 sure it is current before we update BEGV, so
+	 set_buffer_internal takes care of managing those markers.  */
+      cur = current_buffer;
+      set_buffer_internal (buf);
+    }
+
   if (CONSP (data))
     /* A pair of marks bounding a saved restriction.  */
     {
       struct Lisp_Marker *beg = XMARKER (XCAR (data));
       struct Lisp_Marker *end = XMARKER (XCDR (data));
-      struct buffer *buf = beg->buffer; /* END should have the same buffer. */
+      eassert (buf == end->buffer);
 
       if (buf /* Verify marker still points to a buffer.  */
 	  && (beg->charpos != BUF_BEGV (buf) || end->charpos != BUF_ZV (buf)))
@@ -3305,8 +3319,6 @@ save_restriction_restore (data)
   else
     /* A buffer, which means that there was no old restriction.  */
     {
-      struct buffer *buf = XBUFFER (data);
-
       if (buf /* Verify marker still points to a buffer.  */
 	  && (BUF_BEGV (buf) != BUF_BEG (buf) || BUF_ZV (buf) != BUF_Z (buf)))
 	/* The buffer has been narrowed, get rid of the narrowing.  */
@@ -3317,6 +3329,9 @@ save_restriction_restore (data)
 	  buf->clip_changed = 1; /* Remember that the narrowing changed. */
 	}
     }
+
+  if (cur)
+    set_buffer_internal (cur);
 
   return Qnil;
 }
@@ -4611,7 +4626,7 @@ syms_of_editfns ()
   initial_tz = 0;
 
   Qbuffer_access_fontify_functions
-    = intern ("buffer-access-fontify-functions");
+    = intern_c_string ("buffer-access-fontify-functions");
   staticpro (&Qbuffer_access_fontify_functions);
 
   DEFVAR_LISP ("inhibit-field-text-motion", &Vinhibit_field_text_motion,
@@ -4632,7 +4647,7 @@ of the buffer being accessed.  */);
     /* Do this here, because init_buffer_once is too early--it won't work.  */
     Fset_buffer (Vprin1_to_string_buffer);
     /* Make sure buffer-access-fontify-functions is nil in this buffer.  */
-    Fset (Fmake_local_variable (intern ("buffer-access-fontify-functions")),
+    Fset (Fmake_local_variable (intern_c_string ("buffer-access-fontify-functions")),
 	  Qnil);
     Fset_buffer (obuf);
   }
@@ -4675,9 +4690,9 @@ functions if all the text being accessed has this property.  */);
   defsubr (&Sregion_end);
 
   staticpro (&Qfield);
-  Qfield = intern ("field");
+  Qfield = intern_c_string ("field");
   staticpro (&Qboundary);
-  Qboundary = intern ("boundary");
+  Qboundary = intern_c_string ("boundary");
   defsubr (&Sfield_beginning);
   defsubr (&Sfield_end);
   defsubr (&Sfield_string);

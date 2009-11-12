@@ -1,4 +1,500 @@
+2009-11-11  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* widget.el (define-widget): Purecopy the docstring.
+	* international/mule-cmds.el (charset): Do not purecopy the
+	docstring here, define-widget does it.
+
+	* textmodes/texinfo.el (texinfo-open-quote, texinfo-close-quote):
+	* textmodes/bibtex-style.el (auto-mode-alist):
+	* progmodes/inf-lisp.el (inferior-lisp-prompt):
+	* progmodes/compile.el (compile-command):
+	* language/korea-util.el (default-korean-keyboard):
+	* international/mule-conf.el (file-coding-system-alist):
+	* emacs-lisp/eldoc.el (eldoc-minor-mode-string):
+	* tooltip.el (tooltip-frame-parameters):
+	* newcomment.el (comment-end, comment-padding):
+	* dired.el (dired-trivial-filenames):
+	* comint.el (comint-file-name-prefix): Purecopy initial values.
+
+2009-11-11  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp.el (tramp-advice-minibuffer-electric-separator)
+	(tramp-advice-minibuffer-electric-tilde): Unload advices via
+	`tramp-unload'.
+	(tramp-advice-make-auto-save-file-name)
+	(tramp-advice-file-expand-wildcards): Apply also `ad-activate'
+	after removing the advice.
+
+2009-11-11  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* progmodes/grep.el (grep-regexp-alist):
+	* international/mule-cmds.el (iso-2022-control-alist):
+	* emacs-lisp/timer.el (timer-duration-words):
+	* subr.el (version-separator, version-regexp-alist):
+	* minibuffer.el (completion-styles-alist):
+	* faces.el (face-attribute-name-alist, list-faces-sample-text):
+	Change defvars to defconsts.
+
+	* Makefile.in (ELCFILES): Add international/mule-conf.elc.
+	* loadup.el ("international/mule-conf"): Load the byte compiled version.
+	* international/mule-conf.el: Allow to be byte compiled.
+
+	* international/mule.el (define-charset): Purecopy props.
+	(load-with-code-conversion): Purecopy doc string and file name.
+	(put-charset-property): Purecopy strings.
+	(auto-coding-alist, auto-coding-regexp-alist): Purecopy initial value.
+
+	* international/mule-cmds.el (register-input-method): Purecopy arguments.
+	(define-char-code-property): Correctly purecopy the table.
+
+	* international/ccl.el (define-ccl-program): Purecopy the docstring.
+
+	* emacs-lisp/easy-mmode.el (define-minor-mode): Purecopy :lighter.
+
+	* subr.el (add-hook): Purecopy strings.
+	(eval-after-load): Purecopy load-history-regexp and the form.
+
+	* custom.el (custom-declare-group): Purecopy load-file-name.
+
+	* subr.el (menu-bar-separator): New defconst.
+	* net/eudc.el (eudc-tools-menu):
+	* international/mule-cmds.el (set-coding-system-map)
+	(mule-menu-keymap):
+	* emacs-lisp/lisp-mode.el (emacs-lisp-mode-map):
+	* vc-hooks.el (vc-menu-map):
+	* replace.el (occur-mode-map):
+	* menu-bar.el (menu-bar-file-menu, menu-bar-search-menu)
+	(menu-bar-edit-menu, menu-bar-goto-menu)
+	(menu-bar-custom-menu, menu-bar-showhide-menu)
+	(menu-bar-options-menu, menu-bar-tools-menu)
+	(menu-bar-encryption-decryption-menu, menu-bar-describe-menu)
+	(menu-bar-search-documentation-menu, menu-bar-manuals-menu)
+	(menu-bar-help-menu):
+	* ediff-hook.el (menu-bar-ediff-menu, menu-bar-ediff-merge-menu):
+	* buff-menu.el (Buffer-menu-mode-map): Use menu-bar-separator.
+
+	* term/x-win.el (x-gtk-stock-map):
+	* progmodes/vera-mode.el (auto-mode-alist):
+	* progmodes/inf-lisp.el (inferior-lisp-filter-regexp)
+	(inferior-lisp-program, inferior-lisp-load-command):
+	* progmodes/hideshow.el (hs-special-modes-alist):
+	* progmodes/gud.el (same-window-regexps):
+	* progmodes/grep.el (grep-program, find-program, xargs-program):
+	* net/telnet.el (same-window-regexps):
+	* net/rlogin.el (same-window-regexps):
+	* language/ethiopic.el (font-ccl-encoder-alist):
+	* vc-sccs.el (vc-sccs-master-templates):
+	* vc-rcs.el (vc-rcs-master-templates):
+	* subr.el (cl-assertion-failed):
+	* simple.el (next-error-overlay-arrow-position):
+	* lpr.el (lpr-command):
+	* locate.el (locate-ls-subdir-switches):
+	* info.el (same-window-regexps, info)
+	(Info-goto-emacs-command-node, Info-goto-emacs-key-command-node):
+	* image-mode.el (image-mode, auto-mode-alist):
+	* hippie-exp.el (hippie-expand-ignore-buffers):
+	* format.el (format-alist):
+	* find-dired.el (find-ls-subdir-switches, find-grep-options)
+	(find-name-arg):
+	* facemenu.el (facemenu-keybindings):
+	* dired.el (dired-listing-switches, dired-chown-program):
+	* diff.el (diff-switches, diff-command):
+	* cus-edit.el (same-window-regexps):
+	* bindings.el (mode-line-mule-info)
+	(mode-line-buffer-identification): Purecopy strings.
+
+2009-11-11  Juri Linkov  <juri@jurta.org>
+
+	* simple.el (dired-get-filename)<declare-function>:
+	Tell the byte-compiler about dired-get-filename.
+	(shell-command): In Dired mode, get filename from the current line
+	as the default value.
+
+2009-11-10  Glenn Morris  <rgm@gnu.org>
+
+	* dired.el, hi-lock.el, calendar/cal-menu.el, calendar/calendar.el:
+	* calendar/holidays.el, progmodes/cperl-mode.el:
+	Update x-popup-menu declarations.
+
+	* emacs-lisp/shadow.el (find-emacs-lisp-shadows)
+	(list-load-path-shadows): Use dolist.
+	(list-load-path-shadows): Use with-current-buffer.
+
+2009-11-10  Juri Linkov  <juri@jurta.org>
+
+	* minibuffer.el (read-file-name): Support a list of default values
+	in `default-filename'.  Use the first file name where only one
+	element is required.  Doc fix.
+
+2009-11-09  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/dbus.el (dbus-unregister-object): Release service, if no
+	other method is registered for it.
+
+2009-11-08  Markus Rost  <rost@math.uni-bielefeld.de>
+
+	* bookmark.el (bookmark-completing-read): Sort bookmark names if
+	bookmark-sort-flag is non-nil (Bug#4653).
+
+2009-11-08  Chong Yidong  <cyd@stupidchicken.com>
+
+	* cedet/semantic/ctxt.el (semantic-get-local-variables): Disable
+	the progress reporter entirely.
+
+	* emulation/cua-base.el: Add CUA property to some CC mode commands
+	(Bug#4100).
+
+2009-11-08  Kevin Ryde  <user42@zip.com.au>
+
+	* emacs-lisp/checkdoc.el (checkdoc-proper-noun-regexp): Match noun
+	at end of sentence (Bug#4818).
+
+2009-11-08  Jared Finder  <jfinder@crypticstudios.com>
+
+	* progmodes/compile.el (compilation-error-regexp-alist-alist):
+	Handle "see declaration of" MSFT statements (Bug#4100).
+
+2009-11-08  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp.el (tramp-advice-make-auto-save-file-name)
+	(tramp-advice-file-expand-wildcards): Unload via
+	`ad-remove-advice'.
+
+	* net/trampver.el: Update release number.
+
+2009-11-08  Kevin Ryde  <user42@zip.com.au>
+
+	* net/tramp.el (tramp-advice-file-expand-wildcards): Don't rely on
+	`ad-do-it'.
+
+2009-11-08  Andr  <m00naticus@gmail.com>  (tiny change)
+
+	* net/tramp.el (tramp-handle-write-region): Copy but rename temp file,
+	in order to keep context in SELinux.
+
+2009-11-08  Chong Yidong  <cyd@stupidchicken.com>
+
+	* dired-aux.el (dired-query): Place cursor in echo area and allow
+	C-g.
+
+	* dired.el (dired-mode-map): Disable dired-maybe-insert-subdir
+	menu item if not on a directory (Bug#4701).
+
+2009-11-07  Michael Albinus  <michael.albinus@gmx.de>
+
+	Sync with Tramp 2.1.17.
+
+	* net/tramp.el (tramp-handle-copy-directory): Don't use
+	`file-remote-p' (due to compatibility).
+
+	* net/tramp-compat.el (tramp-compat-copy-directory)
+	(tramp-compat-delete-directory): New defuns.
+
+	* net/tramp-fish.el (tramp-fish-handle-delete-directory):
+	* net/tramp-gvfs.el (tramp-gvfs-handle-delete-directory): Use
+	`tramp-compat-delete-directory'.
+
+	* net/tramp-smb.el (tramp-smb-handle-copy-directory)
+	(tramp-smb-handle-delete-directory ): Use
+	`tramp-compat-copy-directory' and `tramp-compat-delete-directory'.
+
+	* net/trampver.el: Update release number.
+
+2009-11-07  Chong Yidong  <cyd@stupidchicken.com>
+
+	* tar-mode.el (tar-copy): Call write-region on the right buffer
+	(Bug#4857).
+
+	* mail/rmailsum.el (rmail-summary-rmail-update): Call linum-update
+	by hand, if necessary (Bug#4878).
+
+2009-11-06  Chong Yidong  <cyd@stupidchicken.com>
+
+	* buff-menu.el (Buffer-menu-buffer+size): Use display property to
+	align size column (Bug#4839).
+
+	* emacs-lisp/autoload.el (autoload-rubric): Always issue a provide
+	statement.
+
+2009-11-05  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* progmodes/ld-script.el (auto-mode-alist):
+	* vc-hooks.el (vc-directory-exclusion-list): Purecopy strings.
+
+	* cus-face.el (custom-declare-face): Purecopy face spec.
+
+2009-11-06  Kenichi Handa  <handa@m17n.org>
+
+	* international/uni-bidi.el: Re-generated.
+	* international/uni-category.el: Re-generated.
+	* international/uni-combining.el: Re-generated.
+	* international/uni-mirrored.el: Re-generated.
+
+2009-11-05  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* textmodes/tex-mode.el (tex-alt-dvi-print-command)
+	(tex-dvi-print-command, tex-bibtex-command, tex-start-commands)
+	(tex-start-options, slitex-run-command, latex-run-command)
+	(tex-run-command, tex-directory):
+	* textmodes/ispell.el (ispell-html-skip-alists)
+	(ispell-tex-skip-alists, ispell-tex-skip-alists):
+	* textmodes/fill.el (adaptive-fill-first-line-regexp):
+	(adaptive-fill-regexp):
+	* textmodes/dns-mode.el (auto-mode-alist):
+	* progmodes/python.el (interpreter-mode-alist):
+	* progmodes/etags.el (tags-compression-info-list):
+	* progmodes/etags.el (tags-file-name):
+	* net/browse-url.el (browse-url-galeon-program)
+	(browse-url-firefox-program):
+	* mail/sendmail.el (mail-signature-file)
+	(mail-citation-prefix-regexp):
+	* international/mule-conf.el (eight-bit):
+	* international/latexenc.el (latex-inputenc-coding-alist):
+	* international/fontset.el (x-pixel-size-width-font-regexp):
+	* emacs-lisp/warnings.el (warning-type-format):
+	* emacs-lisp/trace.el (trace-buffer):
+	* emacs-lisp/lisp-mode.el (lisp-interaction-mode-map)
+	(emacs-lisp-mode-map):
+	* calendar/holidays.el (holiday-solar-holidays)
+	(holiday-bahai-holidays, holiday-islamic-holidays)
+	(holiday-christian-holidays, holiday-hebrew-holidays)
+	(hebrew-holidays-4, hebrew-holidays-3, hebrew-holidays-2)
+	(hebrew-holidays-1, holiday-oriental-holidays)
+	(holiday-general-holidays):
+	* x-dnd.el (x-dnd-known-types):
+	* tool-bar.el (tool-bar):
+	* startup.el (site-run-file):
+	* shell.el (shell-dumb-shell-regexp):
+	* rfn-eshadow.el (file-name-shadow-tty-properties)
+	(file-name-shadow-properties):
+	* paths.el (remote-shell-program, news-directory):
+	* mouse.el ([C-down-mouse-3]):
+	* menu-bar.el (menu-bar-tools-menu):
+	* jka-cmpr-hook.el (jka-compr-load-suffixes)
+	(jka-compr-mode-alist-additions, jka-compr-compression-info-list)
+	(jka-compr-compression-info-list):
+	* isearch.el (search-whitespace-regexp):
+	* image-file.el (image-file-name-extensions):
+	* find-dired.el (find-ls-option):
+	* files.el (directory-listing-before-filename-regexp)
+	(directory-free-space-args, insert-directory-program)
+	(list-directory-brief-switches, magic-fallback-mode-alist)
+	(magic-fallback-mode-alist, auto-mode-interpreter-regexp)
+	(automount-dir-prefix):
+	* faces.el (face-x-resources, x-font-regexp, x-font-regexp-head)
+	(x-font-regexp-slant, x-font-regexp-weight, face-x-resources)
+	(face-font-registry-alternatives, face-font-registry-alternatives)
+	(face-font-family-alternatives):
+	* facemenu.el (facemenu-add-new-face, facemenu-background-menu)
+	(facemenu-foreground-menu, facemenu-face-menu):
+	* epa-hook.el (epa-file-name-regexp):
+	* dnd.el (dnd-protocol-alist):
+	* textmodes/rst.el (auto-mode-alist):
+	* button.el (default-button): Purecopy strings.
+
+2009-11-06  Glenn Morris  <rgm@gnu.org>
+
+	* Makefile.in (ELCFILES): Update.
+
+2009-11-05  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/lucid.el: Move to obsolete/lucid.el.
+	* emacs-lisp/levents.el: Move to obsolete/levents.el.
+
+	* nxml/xsd-regexp.el (xsdre-gen-categories):
+	* nxml/xmltok.el (xmltok-parse-entity):
+	* nxml/rng-parse.el (rng-parse-validate-file):
+	* nxml/rng-maint.el (rng-format-manual)
+	(rng-manual-output-force-new-line):
+	* nxml/rng-loc.el (rng-save-schema-location-1):
+	* nxml/rng-cmpct.el (rng-c-parse-file):
+	* nxml/nxml-maint.el (nxml-insert-target-repertoire-glyph-set):
+	* nxml/nxml-parse.el (nxml-parse-file): Use with-current-buffer.
+
+2009-11-05  Wilson Snyder  <wsnyder@wsnyder.org>
+
+	* verilog-mode.el (verilog-getopt-file, verilog-set-define):
+	Remove extra save-excursions and make-variable-buffer-local's.
+	Suggested by Stefan Monnier.
+
+	(verilog-getopt-file, verilog-module-inside-filename-p)
+	(verilog-set-define): Merge GNU 1.35 and repair changes from
+	switching to using with-current-buffer.
+
+	(verilog-read-always-signals-recurse): Fix "a == 2'b00 ? b : c"
+	being treated as a number and confusing AUTORESET.
+	Reported by Dan Dever.
+
+	(verilog-auto-ignore-concat, verilog-read-sub-decls-expr):
+	Add verilog-auto-ignore-concat to fix backward compatibility with
+	older verilog-modes.  Reported by Dan Katz.
+
+	(verilog-read-auto-template): Fix AUTO_TEMPLATEs with regexps
+	containing closing anchors "...$".
+
+	(verilog-read-decls): Fix AUTOREG not detecting "assign {a,b}".
+	Reported by Wade Smith.
+
+	(verilog-batch-execute-func) Comment on function usage.
+
+2009-11-05  Michael McNamara  <mac@mail.brushroad.com>
+
+	* verilog-mode.el (verilog-label-re): Fix regular expression for
+	labels.
+
+	(verilog-label-re, verilog-calc-1): Support proper indent of named
+	asserts.
+
+	(verilog-backward-token, verilog-basic-complete-re)
+	(verilog-beg-of-statement, verilog-indent-re): Support proper
+	indent of the assert statement at the beginning of a block of text.
+
+	(verilog-beg-block-re, verilog-ovm-begin-re): Support the
+	`ovm_object_param_utils_begin and `ovm_component_param_utils_begin
+	tokens as begins.
+
+2009-11-05  Glenn Morris  <rgm@gnu.org>
+
+	* emacs-lisp/bytecomp.el (byte-compile-insert-header): Drop test for
+	Emacs 19.  (Bug#1531)
+	(byte-compile-fix-header): Update for the above change.
+	Drop test for epoch::version.
+
+	* emacs-lisp/autoload.el (autoload-rubric): Add optional feature arg.
+	* cus-dep.el (custom-make-dependencies):
+	* finder.el (finder-compile-keywords):
+	Use autoload-rubric's feature argument.
+
+	* calendar/diary-lib.el (top-level): Make load behave more like require.
+
+	* vc-git.el (vc-git-stash-map): Move definition before use.
+
+2009-11-04  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* custom.el (custom-declare-group): Purecopy standard-value.
+	(custom-declare-group): Purecopy custom-prefix.
+
+	* international/mule.el (load-with-code-conversion): Call
+	do-after-load-evaluation unconditionally.
+
+	* emacs-lisp/bytecomp.el (byte-compile-output-file-form): Handle defvaralias.
+
+2009-11-04  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* descr-text.el: Require help-mode rather than help-fns (bug#4861).
+
+2009-11-04  Glenn Morris  <rgm@gnu.org>
+
+	* emacs-lisp/bytecomp.el (byte-compile-version-cond): Remove macro.
+	(byte-compile-compatibility): Remove option.
+	(byte-compile-close-variables, byte-compile-fix-header)
+	(byte-compile-insert-header, byte-compile-output-docform)
+	(byte-compile-file-form-defmumble, byte-compile-byte-code-maker)
+	(byte-compile-lambda, byte-compile-form, byte-defop-compiler19)
+	(byte-compile-list, byte-compile-concat, byte-compile-function-form)
+	(byte-compile-insert, byte-compile-defun):
+	Remove support for byte-compile-compatibility and Emacs 18.  (Bug#4571)
+	(byte-defop-compiler19): Remove.
+	Without byte-compile-compatibility, the 'emacs19-opcode property is not
+	used by anything.  Replace all calls with byte-defop-compiler.
+
+2009-11-04  Juri Linkov  <juri@jurta.org>
+
+	* menu-bar.el (menu-bar-make-mm-toggle): Quote each element of `props'.
+	(menu-bar-options-menu): Don't quote the `prop' arg of
+	`menu-bar-make-mm-toggle'.
+
+2009-11-04  Juanma Barranquero  <lekktu@gmail.com>
+
+	* calendar/calendar.el (cal-loaddefs):
+	* calendar/diary-lib.el (diary-loaddefs):
+	* calendar/holidays.el (hol-loaddefs):
+	* eshell/esh-module.el (esh-groups): Load rather than require.
+
 2009-11-03  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* calendar/todo-mode.el (todo-add-category): Don't hardcode point-min==1.
+	(todo-top-priorities): Only display-buffer when called interactively.
+	(todo-item-start): Don't save excursion point.
+	(todo-item-end): Be slightly more careful.  Add `include-sep' arg.
+	(todo-insert-item-here, todo-file-item, todo-remove-item):
+	Adjust uses of todo-item-start and todo-item-end.
+
+	* emacs-lisp/autoload.el (generated-autoload-feature): Remove.
+	(autoload-rubric): Don't use any more.
+	* cedet/semantic/fw.el (semantic/loaddefs):
+	* cedet/srecode.el (srecode/loaddefs):
+	* cedet/ede.el (ede/loaddefs): Load rather than require.
+	* cedet/ede/cpp-root.el:
+	* cedet/ede/emacs.el:
+	* cedet/ede/files.el:
+	* cedet/ede/linux.el:
+	* cedet/ede/locate.el:
+	* cedet/ede/make.el:
+	* cedet/ede/shell.el:
+	* cedet/ede/speedbar.el:
+	* cedet/ede/system.el:
+	* cedet/ede/util.el:
+	* cedet/semantic/analyze.el:
+	* cedet/semantic/bovine.el:
+	* cedet/semantic/complete.el:
+	* cedet/semantic/ctxt.el:
+	* cedet/semantic/db-file.el:
+	* cedet/semantic/db-find.el:
+	* cedet/semantic/db-global.el:
+	* cedet/semantic/db-mode.el:
+	* cedet/semantic/db-typecache.el:
+	* cedet/semantic/db.el:
+	* cedet/semantic/debug.el:
+	* cedet/semantic/dep.el:
+	* cedet/semantic/doc.el:
+	* cedet/semantic/edit.el:
+	* cedet/semantic/find.el:
+	* cedet/semantic/format.el:
+	* cedet/semantic/html.el:
+	* cedet/semantic/ia-sb.el:
+	* cedet/semantic/ia.el:
+	* cedet/semantic/idle.el:
+	* cedet/semantic/lex-spp.el:
+	* cedet/semantic/lex.el:
+	* cedet/semantic/mru-bookmark.el:
+	* cedet/semantic/scope.el:
+	* cedet/semantic/senator.el:
+	* cedet/semantic/sort.el:
+	* cedet/semantic/symref.el:
+	* cedet/semantic/tag-file.el:
+	* cedet/semantic/tag-ls.el:
+	* cedet/semantic/tag-write.el:
+	* cedet/semantic/tag.el:
+	* cedet/semantic/util-modes.el:
+	* cedet/semantic/analyze/complete.el:
+	* cedet/semantic/analyze/refs.el:
+	* cedet/semantic/bovine/c.el:
+	* cedet/semantic/bovine/gcc.el:
+	* cedet/semantic/bovine/make.el:
+	* cedet/semantic/bovine/scm.el:
+	* cedet/semantic/decorate/include.el:
+	* cedet/semantic/decorate/mode.el:
+	* cedet/semantic/symref/cscope.el:
+	* cedet/semantic/symref/global.el:
+	* cedet/semantic/symref/grep.el:
+	* cedet/semantic/symref/idutils.el:
+	* cedet/semantic/symref/list.el:
+	* cedet/semantic/wisent/java-tags.el:
+	* cedet/semantic/wisent/javascript.el:
+	* cedet/srecode/compile.el:
+	* cedet/srecode/cpp.el:
+	* cedet/srecode/document.el:
+	* cedet/srecode/el.el:
+	* cedet/srecode/expandproto.el:
+	* cedet/srecode/getset.el:
+	* cedet/srecode/insert.el:
+	* cedet/srecode/java.el:
+	* cedet/srecode/map.el:
+	* cedet/srecode/mode.el:
+	* cedet/srecode/template.el:
+	* cedet/srecode/texi.el: Remove the file-local setting of
+	generated-autoload-feature.
 
 	* emacs-lisp/byte-run.el (define-obsolete-variable-alias): Use dolist,
 	and only put a prop if it is non-nil.
@@ -271,9 +767,9 @@
 2009-10-31  Stephen Berman  <stephen.berman@gmx.net>
 
 	* calendar/todo-mode.el (todo-edit-item): Signal an error if there
-	is no item to edit. (Bug#4820)
+	is no item to edit.  (Bug#4820)
 	(todo-top-priorities): Restore point and restore narrowing in Todo
-	buffer. (Bug#4820)
+	buffer.  (Bug#4820)
 
 2009-10-31  Glenn Morris  <rgm@gnu.org>
 
@@ -690,7 +1186,7 @@
 2009-10-23  Dan Nicolaescu  <dann@ics.uci.edu>
 
 	* vc.el (vc-responsible-backend): Throw an error if not backend is
-	found.  Remove the REGISTER argument. Move the code dealing with
+	found.  Remove the REGISTER argument.  Move the code dealing with
 	REGISTER ...
 	(vc-get-backend-for-registration): ... here.  New function.
 	(vc-deduce-fileset): Call vc-get-backend-for-registration instead
@@ -1465,7 +1961,7 @@
 	* calendar/calendar.el (calendar-basic-setup): In the wide frame case,
 	show the original buffer rather than a random one.
 
-2009-10-07  Markus Rost <rost@math.uni-bielefeld.de>
+2009-10-07  Markus Rost  <rost@math.uni-bielefeld.de>
 
 	* help.el (describe-no-warranty): Place point in a slightly better
 	position in the GPLv3 text.
@@ -5247,7 +5743,7 @@
 	(gdb-locals-handler-custom, gdb-registers-handler-custom)
 	(gdb-changed-registers-handler): Rewritten without regexps.
 
-	* progmodes/gdb-mi.el Basic thread selection support.
+	* progmodes/gdb-mi.el: Basic thread selection support.
 	(gdb-thread-number): New variable.
 	(gdb-current-context-command): New macro which adds --thread
 	option to command.

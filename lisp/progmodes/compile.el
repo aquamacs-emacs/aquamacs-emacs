@@ -296,9 +296,11 @@ of[ \t]+\"?\\([a-zA-Z]?:?[^\":\n]+\\)\"?:" 3 2 nil (1))
      " in \\([^()\n ]+\\)(\\([0-9]+\\))$" 1 2)
 
     (msft
-     ;; AFAWK, The message may be a "warning", "error", or "fatal error".
-     "^\\([0-9]+>\\)?\\(\\(?:[a-zA-Z]:\\)?[^:(\t\n]+\\)(\\([0-9]+\\)) \
-: \\(?:warnin\\(g\\)\\|[a-z ]+\\) C[0-9]+:" 2 3 nil (4))
+     ;; The message may be a "warning", "error", or "fatal error" with
+     ;; an error code, or "see declaration of" without an error code.
+     "^ *\\([0-9]+>\\)?\\(\\(?:[a-zA-Z]:\\)?[^:(\t\n]+\\)(\\([0-9]+\\)) \
+: \\(?:see declaration\\|\\(?:warnin\\(g\\)\\|[a-z ]+\\) C[0-9]+:\\)"
+     2 3 nil (4))
 
     (omake
      ;; "omake -P" reports "file foo changed"
@@ -585,7 +587,7 @@ The value nil as an element means to try the default directory."
   :group 'compilation)
 
 ;;;###autoload
-(defcustom compile-command "make -k "
+(defcustom compile-command (purecopy "make -k ")
   "Last shell command used to do a compilation; default for next compilation.
 
 Sometimes it is useful for files to supply local values for this variable.
