@@ -771,7 +771,9 @@ name_is_separator (name)
 /* adds an empty submenu and returns it */
 - (EmacsMenu *)addSubmenuWithTitle: (char *)title forFrame: (struct frame *)f
 {
+  if (! title) return nil;
   NSString *titleStr = [NSString stringWithUTF8String: title];
+  if (! titleStr) return nil;
   NSMenuItem *item = [self addItemWithTitle: titleStr
                                      action: nil /*@selector (menuDown:) */
                               keyEquivalent: @""];
