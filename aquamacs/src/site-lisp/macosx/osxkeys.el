@@ -99,7 +99,7 @@ after updating this variable.")
 
 
 ;; support copy&paste at the right level
-(setq interprogram-cut-function 'x-select-text
+(setq interprogram-cut-function 'x-maybe-select-text
       interprogram-paste-function 'aquamacs-cut-buffer-or-selection-value)
 
 (defun aquamacs-cut-buffer-or-selection-value ()
@@ -119,22 +119,30 @@ after updating this variable.")
 	nil)
        (t (setq ns-last-selected-text text))))))
 
+(defun x-maybe-select-text (text &optional push)
+  "Maybe put TEXT, a string, on the pasteboard.
+Does not set the pasteboard unless the user has explicitly asked
+for this to happen via calling clipboard-kill-region or 
+clipboard-kill-ring-save, or the associated cua functions.
+PUSH is ignored."
+  (when (or (not cua-mode) 
+	    (memq this-original-command '(clipboard-kill-region clipboard-kill-ring-save)))
+    (ns-set-pasteboard text))
+  (setq ns-last-selected-text text))
+
 ;; overwrite x-select-text, which is called directly
 ;; (not via interprogram-cut-function) when dragging mouse
 ;; and elsewhere 
 (defun x-select-text (text &optional push)
-  "Maybe put TEXT, a string, on the pasteboard.
-PUSH is ignored."
+  "Put TEXT, a string, on the pasteboard.
+Ignored if text was selected by mouse. PUSH is ignored."
   ;; Don't send the pasteboard too much text.
   ;; It becomes slow, and if really big it causes errors.
   ;; (print this-original-command)
   (when (or (not cua-mode) 
-	    ;; (memq this-original-command '(clipboard-kill-region clipboard-kill-ring-save))
 	    ;; do not copy if just selected by mouse.
 	    (not (memq this-original-command '(mouse-extend mouse-drag-region))))
-    ;; do not do this if just selecting text with mouse, or 
     (ns-set-pasteboard text))
-  ;; 
   (setq ns-last-selected-text text))
 
 (defun aquamacs-backward-char ()
