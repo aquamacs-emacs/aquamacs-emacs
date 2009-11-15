@@ -684,8 +684,8 @@ Update unconditionally if optional argument FORCE is non-nil."
 
   
 (defcustom osx-key-mode-mouse-3-behavior #'aquamacs-popup-context-menu
-  "Determine behavior of mouse-3 in osx-key-mode.
-When set to `aquamacs-popup-context-menu' or nil,  mouse-3
+  "Determine behavior of (down-)mouse-3 in osx-key-mode.
+When set to `aquamacs-popup-context-menu' or nil,  down-mouse-3
 \(usually: clicking the right mouse button) will bring up a
 context menu.  When set to `mouse-save-then-kill', mouse-3 will
 extend the region with `mouse-save-then-kill' (traditional Emacs
@@ -696,22 +696,30 @@ behavior)."
 			 mouse-save-then-kill) 
 	  (function-item :tag "Show context menu" 
 			 aquamacs-popup-context-menu)))
- 
-(defun osx-key-mode-mouse-3 (event &optional  prefix)
-"Popup a context menu or extend the region.
- Behavior depends on setting of `osx-key-mode-mouse-3-behavior'." 
+
+(defun osx-key-mode-mouse-3 (event &optional prefix)
+  "Extend the region, only if `osx-key-mode-mouse-3-behavior' is
+set to `mouse-save-then-kill'."
   (interactive "@e \nP")
   ;; we need to bind last-command to the target command
   ;; so mouse-save-then-kill is not confused and recognizes
   ;; a double click.
-  (let* ((cmd (or osx-key-mode-mouse-3-behavior 
-	     (function aquamacs-popup-context-menu)))
-	(last-command (if (eq last-command this-command)
-			  cmd
-			last-command)))
-    
-  (apply cmd 
-	 event prefix)))
+  (let ((cmd #'mouse-save-then-kill))
+    (if (eq osx-key-mode-mouse-3-behavior cmd)
+      (let ((last-command (if (eq last-command this-command)
+			      cmd
+			    last-command)))
+	(apply cmd 
+	       event prefix))))) 
+
+(defun osx-key-mode-down-mouse-3 (event &optional prefix)
+  "Activate context menu, when `osx-key-mode-mouse-3-behavior' is
+set to `aquamacs-popup-context-menu' or nil"
+  (interactive "@e \nP")
+  (if (or
+	 (eq osx-key-mode-mouse-3-behavior #'aquamacs-popup-context-menu)
+	 (not osx-key-mode-mouse-3-behavior))
+    (aquamacs-popup-context-menu event prefix)))
 
 (defun make-osx-key-low-priority-map (&optional command-key)
 
@@ -776,7 +784,8 @@ default."
 
     ;; debug log
 
-    (define-key map [mouse-3] 'osx-key-mode-mouse-3)
+    (define-key map [mouse-3] 'osx-key-mode-mouse-3) 
+    (define-key map [down-mouse-3] 'osx-key-mode-down-mouse-3)
     (define-key map `[(,osxkeys-command-key \?)] 'aquamacs-user-help)
     (define-key map `[(,osxkeys-command-key shift \?)] 'aquamacs-emacs-manual)
 
