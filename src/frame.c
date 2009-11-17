@@ -1425,13 +1425,16 @@ delete_frame (frame, force)
 	   So the portion of THIS application interfacing with NS
 	   needs to know about it.  We call Fraise_frame, but the
 	   purpose is really to transfer focus.  */
+	BLOCK_INPUT;
 	Fraise_frame (frame1);
+	UNBLOCK_INPUT;
 #endif
 
       do_switch_frame (frame1, 0, 1, Qnil);
       sf = SELECTED_FRAME ();
     }
 
+  BLOCK_INPUT;
   /* Don't allow minibuf_window to remain on a deleted frame.  */
   if (EQ (f->minibuffer_window, minibuf_window))
     {
@@ -1444,6 +1447,7 @@ delete_frame (frame, force)
       if (minibuffer_selected)
 	Fselect_window (minibuf_window, Qnil);
     }
+  UNBLOCK_INPUT;
 
   /* Don't let echo_area_window to remain on a deleted frame.  */
   if (EQ (f->minibuffer_window, echo_area_window))
@@ -1466,6 +1470,7 @@ delete_frame (frame, force)
   font_update_drivers (f, Qnil);
 #endif
 
+  BLOCK_INPUT;
   /* Mark all the windows that used to be on FRAME as deleted, and then
      remove the reference to them.  */
   delete_all_subwindows (XWINDOW (f->root_window));
@@ -1473,6 +1478,7 @@ delete_frame (frame, force)
 
   Vframe_list = Fdelq (frame, Vframe_list);
   FRAME_SET_VISIBLE (f, 0);
+  UNBLOCK_INPUT;
 
   /* Allow the vector of menu bar contents to be freed in the next
      garbage collection.  The frame object itself may not be garbage
