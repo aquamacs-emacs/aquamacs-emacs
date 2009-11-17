@@ -2516,6 +2516,8 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 	     poss word cursor-location start end opoint))
 	   (t
 	    ;; The word is incorrect, we have to propose a replacement.
+	    ;; restore point now, in case user selects a non-flyspell option.
+	    (goto-char opoint)
 	    (flyspell-emacs-popup
 	     event poss word cursor-location start end opoint)))
 	  (ispell-pdict-save t)))))
@@ -2597,7 +2599,7 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 ;;*    flyspell-emacs-popup ...                                         */
 ;;*---------------------------------------------------------------------*/
 ;; flyspell-emacs-popup modified to define & use a keymap, so we can
-;; easily append another keymap (as "parent-keymap"
+;; easily append another keymap (as "parent-keymap")
 (defun flyspell-emacs-popup (event poss word cursor-location start end save)
   "The Emacs popup menu."
   (unless window-system
