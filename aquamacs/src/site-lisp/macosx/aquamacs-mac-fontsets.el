@@ -61,6 +61,7 @@
 	 ?\x2325 ;; option key symbol
 	 ?\x2326 ;; erase to right
 	 ?\x232B ;; erase to left (backspace)
+	 ?\x21e7 ;; shift
 	 ))
 
 (setq ignore-font-errors t)
