@@ -120,6 +120,10 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "composite.h"
 #include "atimer.h"
 
+#if defined (USE_GTK) || defined (HAVE_GCONF)
+#include "xgselect.h"
+#endif /* defined (USE_GTK) || defined (HAVE_GCONF) */
+
 Lisp_Object Qprocessp;
 Lisp_Object Qrun, Qstop, Qsignal;
 Lisp_Object Qopen, Qclosed, Qconnect, Qfailed, Qlisten;
@@ -477,7 +481,7 @@ status_message (p)
 	  if (! NILP (Vlocale_coding_system))
 	    string = (code_convert_string_norecord
 		      (string, Vlocale_coding_system, 0));
-	  c1 = STRING_CHAR ((char *) SDATA (string), 0);
+	  c1 = STRING_CHAR ((char *) SDATA (string));
 	  c2 = DOWNCASE (c1);
 	  if (c1 != c2)
 	    Faset (string, 0, make_number (c2));
@@ -4922,7 +4926,9 @@ wait_reading_process_output (time_limit, microsecs, read_kbd, do_display,
 	      process_output_skip = 0;
 	    }
 #endif
-#ifdef HAVE_NS
+#if defined (USE_GTK) || defined (HAVE_GCONF)
+          nfds = xg_select
+#elif defined (HAVE_NS)
 	  nfds = ns_select
 #else
 	  nfds = select

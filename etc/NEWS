@@ -77,6 +77,18 @@ frame parameter fullscreen makes the Emacs frame maximized.
 ** The pointer now becomes invisible when typing.
 Customize make-pointer-invisible to turn it off.
 
+** Emacs can use the system default monospaced font in Gnome.
+The use of the system default font can be turned on or off by customizing
+the variable 'font-use-system-font'.  It is off by default.
+If the system default is changed, Emacs changes also.
+This requires that gconf-support is built in.  If configure finds the
+gconf-libraries, that support is included. Gconf-support can be
+turned off with the configure option --without-gconf.
+
+** Emacs now reacts to Xft-changes made by configuration tools on X11.
+Changes to antialias, hinting, hintstyle, RGBA, DPI and lcdfilter are
+handeled.  The XSETTINGS mechanism is used to implement this.
+
 ** Killing a buffer with a running process now asks for confirmation.
 You can remove this query in two ways: either remove
 `process-kill-buffer-query-function' from `kill-buffer-query-functions',
@@ -134,8 +146,19 @@ kills are not duplicated in the `kill-ring'.
 ** The new completion-style `initials' is available.
 For instance, this can complete M-x lch to list-command-history.
 
+** Completions in the *Completions* buffer are sorted vertically
+when the value of the new variable `completions-format' is `vertical'.
+
+** M-r is bound to the new `move-to-window-line-top-bottom'
+to mirror the new behavior of C-l in Emacs-23.1.
+
 
 * Changes in Specialized Modes and Packages in Emacs 23.2
+
+** The bookmark menu has a narrowing search via bookmark-bmenu-search.
+
+** LaTeX mode now provides completion via latex-complete and
+latex-indent-or-complete.
 
 ** lucid.el and levents.el are now declared obsolete.
 
@@ -200,12 +223,21 @@ file.
 *** FIXME: add info about the new VC functions: vc-root-diff and
 vc-root-print-log once they stabilize.
 
+*** The log functions (C-x v l and C-x v L) do not show the full log
+by default anymore.  The number of entries shown can be chosen
+interactively with a prefix argument, by customizing
+vc-log-show-limit.  The log buffer display buttons that can be used
+to change the number of entries shown.
+RCS, SCCS, CVS and Git do not support this feature.
+
 *** vc-annotate supports annotations through file copies and renames,
 it displays the old names for the files and it can show logs/diffs for
 the corresponding lines.  Currently only Git and Mercurial take
 advantage of this feature.
 
 *** When a file is not found, VC will not try to check it out of RCS anymore.
+
+*** Diff and log operations can be used from dired buffers.
 
 *** vc-git changes
 
@@ -254,6 +286,8 @@ Command*'.
 
 * New Modes and Packages in Emacs 23.2
 
+** htmlfontify.el turns a fontified Emacs buffer into an HTML page.
+
 ** FIXME CEDET
 
 ** js.el is a new major mode for JavaScript files.
@@ -278,6 +312,9 @@ the variable `byte-compile-compatibility') has been removed.
 
 
 * Lisp changes in Emacs 23.2
+
+** New function `completion-in-region' to use the standard completion
+facilities on a particular region of text.
 
 ** The 4th arg to all-completions (aka hide-spaces) is declared obsolete.
 

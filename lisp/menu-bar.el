@@ -1,7 +1,7 @@
 ;;; menu-bar.el --- define a default menu bar
 
-;; Copyright (C) 1993, 1994, 1995, 2000, 2001, 2002, 2003, 2004,
-;;   2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
+;; Copyright (C) 1993, 1994, 1995, 2000, 2001, 2002, 2003, 2004, 2005,
+;;   2006, 2007, 2008, 2009  Free Software Foundation, Inc.
 
 ;; Author: RMS
 ;; Maintainer: FSF
@@ -651,6 +651,8 @@ by \"Save Options\" in Custom buffers.")
       (custom-push-theme 'theme-face 'default 'user 'set spec)
       (put 'default 'face-modified nil))))
 
+
+
 ;;; Assemble all the top-level items of the "Options" menu
 (define-key menu-bar-options-menu [customize]
   `(menu-item ,(purecopy "Customize Emacs") ,menu-bar-custom-menu))
@@ -673,7 +675,7 @@ by \"Save Options\" in Custom buffers.")
 		   tooltip-mode menu-bar-mode tool-bar-mode
 		   save-place fringe-mode
 		   indicate-empty-lines indicate-buffer-boundaries
-		   case-fold-search
+		   case-fold-search font-use-system-font
 		   current-language-environment default-input-method
 		   ;; Saving `text-mode-hook' is somewhat questionable,
 		   ;; as we might get more than we bargain for, if
@@ -1236,12 +1238,14 @@ mail status in mode line"))
 (define-key menu-bar-tools-menu [directory-search]
   `(menu-item ,(purecopy "Directory Search") eudc-tools-menu))
 (define-key menu-bar-tools-menu [compose-mail]
-  `(menu-item ,(purecopy (format "Send Mail (with %s)" (send-mail-item-name))) compose-mail
+  `(menu-item (format "Send Mail (with %s)" (send-mail-item-name)) compose-mail
 	      :visible (and mail-user-agent (not (eq mail-user-agent 'ignore)))
 	      :help ,(purecopy "Send a mail message")))
 (define-key menu-bar-tools-menu [rmail]
-  `(menu-item ,(purecopy (format "Read Mail (with %s)" (read-mail-item-name))) menu-bar-read-mail
-	      :visible (and read-mail-command (not (eq read-mail-command 'ignore)))
+  `(menu-item (format "Read Mail (with %s)" (read-mail-item-name))
+              menu-bar-read-mail
+	      :visible (and read-mail-command
+                            (not (eq read-mail-command 'ignore)))
 	      :help ,(purecopy "Read your mail and reply to it")))
 
 (defun menu-bar-read-mail ()
@@ -1788,8 +1792,7 @@ Buffers menu is regenerated."
 ;;nil means the buffer shouldn't be listed.  You can redefine this."
 ;;  (if (string-match "\\` " (buffer-name buffer))
 ;;      nil
-;;    (save-excursion
-;;     (set-buffer buffer)
+;;    (with-current-buffer buffer
 ;;     (let ((size (buffer-size)))
 ;;       (format "%s%s %-19s %6s %-15s %s"
 ;;	       (if (buffer-modified-p) "*" " ")

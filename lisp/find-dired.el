@@ -70,7 +70,7 @@ On other systems, the closest you can come is to use `-l'."
   :type 'string
   :group 'find-dired)
 
-;;;###autoload
+;; This used to be autoloaded (see bug#4387).
 (defcustom find-name-arg
   (purecopy (if read-file-name-completion-ignore-case
       "-iname"
@@ -291,8 +291,7 @@ Thus ARG can also contain additional grep options."
   (let ((buf (process-buffer proc))
 	(inhibit-read-only t))
     (if (buffer-name buf)
-	(save-excursion
-	  (set-buffer buf)
+	(with-current-buffer buf
 	  (let ((buffer-read-only nil))
 	    (save-excursion
 	      (goto-char (point-max))

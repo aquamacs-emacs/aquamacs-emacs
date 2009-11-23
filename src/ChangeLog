@@ -1,3 +1,228 @@
+2009-11-23  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* xfns.c (Fx_select_font): Try to convert Fontconfig name to Gtk name
+	because that is what Gtk+ font dialog understands.
+
+	* font.c (font_make_object, Fcopy_font_spec): Use Fcopy_alist instead
+	of Fcopy_sequence.
+	(font_open_by_name): Put name given into QCname for font-object returned.
+
+	* frame.c (x_set_font): Save original font name as frame parameter
+	font-parameter.
+
+	* xsettings.c (set_default_xft_settings): New function.
+	(init_xfd_settings): Call set_default_xft_settings if no XSETTINGS window
+	is found.
+
+2009-11-22  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* search.c (simple_search): Avoid CHAR_TO_BYTE in inner loop when
+	searching backwards through multibyte buffer.
+
+2009-11-21  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* xterm.c: #include xgselect.h.
+	(x_initialize): Call xgselect_initialize.
+
+	* xsettings.c (something_changedCB): C++ comments => C comments.
+	(init_gconf): Do not deal with any GLib file descriptors, xg_select
+	does that now.
+
+	* gtkutil.c (xg_timer, xg_process_timeouts, xg_start_timer)
+	(xg_stop_timer, menu_grab_callback_cnt, menu_grab_callback)
+	(scroll_bar_button_cb): Remove.
+	(create_menus): C++ comments => C comments. Don't bind grab-notify
+	event.
+	(xg_create_scroll_bar): Don't bind button-press-event and
+	button-release-event.
+
+	* process.c: Include xgselect.h if defined (USE_GTK) ||
+	defined (HAVE_GCONF).
+	(wait_reading_process_output): Call xg_select for the same condition.
+
+	* xgselect.c (xg_select): New function to better integrate with
+	GLib/Gtk event handling.  Needed if GConf daemon dies/restarts.
+
+	* xgselect.h: New file, declare xg_select, xgselect_initialize.
+
+	* Makefile.in (XOBJ): Add xgselect.o.
+
+2009-11-21  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* character.h (STRING_CHAR, STRING_CHAR_AND_LENGTH): Remove
+	ignored second argument.  All callers changed.
+	* regex.c (STRING_CHAR, STRING_CHAR_AND_LENGTH, RE_STRING_CHAR)
+	(RE_STRING_CHAR_AND_LENGTH): Likewise.
+	* xdisp.c (string_char_and_length): Likewise.
+
+2009-11-21  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* xterm.c (x_new_font):
+	* print.c (print_object):
+	* cmds.c (Fself_insert_command): Move declarations before statements.
+
+2009-11-20  Ken Brown  <kbrown@cornell.edu>  (tiny change)
+
+	* s/cygwin.h: Remove unneeded linker flags.
+
+2009-11-20  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* xfns.c (x_default_font_parameter): Call xsettings_get_system_font.
+
+	* xsettings.h: Declare xsettings_get_system_font.
+
+	* xsettings.c (xsettings_get_system_font): New function.
+	(init_gconf): No use initiating gconf unless we have Xft also.
+	(syms_of_xsettings): Only provide system-font-setting if HAVE_XFT and
+	HAVE_GCONF.
+
+	* gtkutil.c (xg_modify_menubar_widgets): If menubar is totally empty
+	add a blank entry so it doesn't collapse into nothing.
+
+2009-11-19  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* lread.c (Funintern): Comment out last change.
+
+2009-11-19  Richard Stallman  <rms@gnu.org>
+
+	* lread.c (Funintern): Error if symbol is t or nil.
+
+2009-11-19  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* insdel.c (make_gap_larger): Don't make as many assumptions about the
+	representation of Lisp integers.
+	Reported by MJ Chan <mjchan.inbox@gmail.com>.
+
+2009-11-17  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* lisp.h: Remove declaration of Ffont_get_system_font.
+	* xfns.c: Move include of "xsettings.h".
+	* xsettings.h: Use EXFUN to declare Ffont_get_system_font.
+
+2009-11-17  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* xsettings.c (something_changedCB, Ffont_get_system_font):
+	Check use_system_font.
+	(syms_of_xsettings): DEFVAR font-use-system-font.
+
+2009-11-17  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* xfns.c (x_default_font_parameter): Remove dead assignment.
+
+	* lisp.h (Fbyteorder, init_font, Ffont_get_system_font): Declare.
+
+2009-11-17  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* xftfont.c (xftfont_fix_match): Older versions of fontconfig do
+	not have FC_LCD_*.  #define them if not there.
+
+	* xsettings.c (parse_xft_settings, apply_xft_settings): Ditto.
+
+	* xterm.h (struct x_display_info): Add atoms and Window for xsettings.
+
+	* xterm.c (handle_one_xevent): Call xft_settings_event for
+	ClientMessage, PropertyNotify and DestroyNotify.
+	(x_term_init): If we have XFT, get DPI from Xft.dpi.
+	Call xsettings_initialize.
+
+	* xftfont.c (xftfont_fix_match): New function.
+	(xftfont_open): Call XftDefaultSubstitute before XftFontMatch.
+	Call xftfont_fix_match after XftFontMatch.
+
+	* xfont.c (xfont_driver): Initialize all members.
+
+	* xfns.c (x_default_font_parameter):
+	Try font from Ffont_get_system_font.
+	Do not get font from x_default_parameter if we got one from
+	Ffont_get_system_font.
+	(Fx_select_font): Get the defaut font name from :name of FRAME_FONT(f).
+
+	* w32font.c (w32font_driver): Initialize all members.
+
+	* termhooks.h (enum event_kind): CONFIG_CHANGED_EVENT is new.
+
+	* lisp.h: Declare syms_of_xsettings.
+
+	* keyboard.c (kbd_buffer_get_event, make_lispy_event):
+	Handle CONFIG_CHANGED_EVENT.
+
+	* ftfont.c (ftfont_filter_properties): New function.
+
+	* frame.c (x_set_font): Remove unused variable lval.
+
+	* font.h (struct font_driver): Add filter_properties.
+
+	* font.c (font_put_extra): Don't return if val is nil, it means
+	boolean option is off.
+	(font_parse_fcname): Collect all extra properties in extra_props
+	and call filter_properties for all drivers with extra_props and
+	font as parameter.
+	(font_open_entity): Do not use cache, it does not pick up new
+	fontconfig settings like hinting.
+	(font_load_for_lface): If spec had a name in it, store it in entity.
+
+	* emacs.c (main): Call syms_of_xsettings
+
+	* config.in: HAVE_GCONF is new.
+
+	* Makefile.in (GCONF_CFLAGS, GCONF_LIBS): New variables for HAVE_GCONF.
+	xsettings.o is new.
+
+2009-11-17  Kenichi Handa  <handa@m17n.org>
+
+	* xdisp.c (x_produce_glyphs): Consider face-remapping when falling
+	back to the default font in case that no suitable font is found.
+
+2009-11-17  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* menu.c (Fx_popup_menu) [HAVE_NS]: Use generic code for window edge.
+	Suggested by Chad Brown <yandros@mit.edu>.
+	(push_menu_item): Use MENU_ITEMS_ITEM_* names.
+
+2009-11-16  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* xmenu.c (x_menu_wait_for_event): Call XFlush before select.
+
+2009-11-14  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* Makefile.in: Ignore errors from mkdir when creating deps directory.
+
+2009-11-14  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* gtkutil.c (xg_update_frame_menubar): Do nothing if menubar already
+	has a parent.
+
+	* Makefile.in: If AUTO_DEPEND is defined, make gcc generate
+	dependency files in deps/. Include those files into Makefile.
+
+	* config.in: Generated (AUTO_DEPEND).
+
+2009-11-13  Michael Albinus  <michael.albinus@gmx.de>
+
+	* dbusbind.c (Vdbus_registered_objects_table): Rename from
+	Vdbus_registered_functions_table, because it contains also
+	properties.  Fix docstring.
+	(Fdbus_call_method, Fdbus_call_method_asynchronously): Fix docstring.
+
+2009-11-13  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* alloc.c (mark_object): Don't reprocess marked strings.
+	Check vector's markbit earlier.  Adjust calls to mark_vectorlike.
+	(mark_vectorlike, mark_char_table): Assume the object is unmarked.
+
+2009-11-13  Kenichi Handa  <handa@m17n.org>
+
+	* category.c (word_boundary_p): Adjust for the change of the
+	semantics of Vword_combining_categories.
+	(Vword_combining_categories): Describe the slight change of the
+	semantics.
+
+2009-11-13  Eli Zaretskii  <eliz@gnu.org>
+
+	* menu.c (Fx_popup_menu): Call Fx_hide_tip only if HAVE_WINDOW_SYSTEM.
+
+	* s/msdos.h (SYSTEM_PURESIZE_EXTRA): Revert last change.
+
 2009-11-12  Stefan Monnier  <monnier@iro.umontreal.ca>
 
 	* xdisp.c (syms_of_xdisp): Fix typo in last change.
@@ -53,7 +278,7 @@
 
 2009-11-10  Stefan Monnier  <monnier@iro.umontreal.ca>
 
-	* fns.c (Fplist_get): Merge the active and the uncommented code.
+	* fns.c (Fplist_get): Merge the active and the commented out code.
 
 2009-11-10  Jan Djärv  <jan.h.d@swipnet.se>
 

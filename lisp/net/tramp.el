@@ -3804,6 +3804,12 @@ The method used must be an out-of-band method."
 	  (tramp-error
 	   v 'file-error "Cannot find copy program: %s" copy-program))
 
+	;; Set variables for computing the prompt for reading
+	;; password.
+	(setq tramp-current-method (tramp-file-name-method v)
+	      tramp-current-user   (tramp-file-name-user v)
+	      tramp-current-host   (tramp-file-name-host v))
+
 	(unwind-protect
 	    (with-temp-buffer
 	      ;; The default directory must be remote.
@@ -8364,21 +8370,16 @@ Only works for Bourne-like shells."
   (defadvice file-expand-wildcards
     (around tramp-advice-file-expand-wildcards activate)
     (let ((name (ad-get-arg 0)))
-      (if (tramp-tramp-file-p name)
-	  ;; If it's a Tramp file, dissect it and look if wildcards
-	  ;; need to be expanded at all.
-	  (if (string-match
-	       "[[*?]"
-	       (tramp-file-name-localname (tramp-dissect-file-name name)))
-	      (progn
-		ad-do-it
-		(unless ad-return-value
-		  (setq ad-return-value (list name))))
-	    (setq ad-return-value (list name)))
-	;; If it is not a Tramp file, just run the original function.
-	ad-do-it
-	(unless ad-return-value
-	  (setq ad-return-value (list name))))))
+      ;; If it's a Tramp file, dissect it and look if wildcards need
+      ;; to be expanded at all.
+      (if (and
+	   (tramp-tramp-file-p name)
+	   (not	(string-match
+		 "[[*?]"
+		 (tramp-file-name-localname (tramp-dissect-file-name name)))))
+	  (setq ad-return-value (list name))
+	;; Otherwise, just run the original function.
+	ad-do-it)))
   (add-hook
    'tramp-unload-hook
    (lambda ()

@@ -129,6 +129,7 @@
 	      (calc-matrix-mode nil)
 	      (calc-angle-mode 'deg)
 	      (calc-number-radix 10)
+              (calc-twos-complement-mode nil)
 	      (calc-leading-zeros nil)
 	      (calc-group-digits nil)
 	      (calc-point-char ".")
@@ -748,7 +749,7 @@ in Calc algebraic input.")
 				   (1- math-exp-pos))))))
 	     (or (and (memq calc-language calc-lang-c-type-hex)
 		      (string-match "0[xX][0-9a-fA-F]+" math-exp-str math-exp-pos))
-		 (string-match "_?\\([0-9]+.?0*@ *\\)?\\([0-9]+.?0*' *\\)?\\(0*\\([2-9]\\|1[0-4]\\)\\(#\\|\\^\\^\\)[0-9a-dA-D.]+[eE][-+_]?[0-9]+\\|0*\\([2-9]\\|[0-2][0-9]\\|3[0-6]\\)\\(#\\|\\^\\^\\)[0-9a-zA-Z:.]+\\|[0-9]+:[0-9:]+\\|[0-9.]+\\([eE][-+_]?[0-9]+\\)?\"?\\)?"
+		 (string-match "_?\\([0-9]+.?0*@ *\\)?\\([0-9]+.?0*' *\\)?\\(0*\\([2-9]\\|1[0-4]\\)\\(#[#]?\\|\\^\\^\\)[0-9a-dA-D.]+[eE][-+_]?[0-9]+\\|0*\\([2-9]\\|[0-2][0-9]\\|3[0-6]\\)\\(#[#]?\\|\\^\\^\\)[0-9a-zA-Z:.]+\\|[0-9]+:[0-9:]+\\|[0-9.]+\\([eE][-+_]?[0-9]+\\)?\"?\\)?"
                                math-exp-str math-exp-pos))
 	     (setq math-exp-token 'number
 		   math-expr-data (math-match-substring math-exp-str 0)

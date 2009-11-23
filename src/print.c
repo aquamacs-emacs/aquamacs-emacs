@@ -401,7 +401,7 @@ strout (ptr, size, size_byte, printcharfun, multibyte)
 	  int len;
 	  for (i = 0; i < size_byte; i += len)
 	    {
-	      int ch = STRING_CHAR_AND_LENGTH (ptr + i, size_byte - i, len);
+	      int ch = STRING_CHAR_AND_LENGTH (ptr + i, len);
 	      insert_char (ch);
 	    }
 	}
@@ -427,7 +427,7 @@ strout (ptr, size, size_byte, printcharfun, multibyte)
 		 corresponding character code before handing it to
 		 PRINTCHAR.  */
 	      int len;
-	      int ch = STRING_CHAR_AND_LENGTH (ptr + i, size_byte - i, len);
+	      int ch = STRING_CHAR_AND_LENGTH (ptr + i, len);
 	      PRINTCHAR (ch);
 	      i += len;
 	    }
@@ -519,8 +519,7 @@ print_string (string, printcharfun)
 	    /* Here, we must convert each multi-byte form to the
 	       corresponding character code before handing it to PRINTCHAR.  */
 	    int len;
-	    int ch = STRING_CHAR_AND_LENGTH (SDATA (string) + i,
-					     size_byte - i, len);
+	    int ch = STRING_CHAR_AND_LENGTH (SDATA (string) + i, len);
 	    PRINTCHAR (ch);
 	    i += len;
 	  }
@@ -1645,8 +1644,7 @@ print_object (obj, printcharfun, escapeflag)
 
 	      if (multibyte)
 		{
-		  c = STRING_CHAR_AND_LENGTH (str + i_byte,
-					      size_byte - i_byte, len);
+		  c = STRING_CHAR_AND_LENGTH (str + i_byte, len);
 		  i_byte += len;
 		}
 	      else
@@ -2034,6 +2032,7 @@ print_object (obj, printcharfun, escapeflag)
       else if (HASH_TABLE_P (obj))
 	{
 	  struct Lisp_Hash_Table *h = XHASH_TABLE (obj);
+	  int i, real_size, size;
 #if 0
 	  strout ("#<hash-table", -1, -1, printcharfun, 0);
 	  if (SYMBOLP (h->test))
@@ -2086,10 +2085,8 @@ print_object (obj, printcharfun, escapeflag)
 	  strout (" data ", -1, -1, printcharfun, 0);
 
 	  /* Print the data here as a plist. */
-	  int i;
-
-	  int real_size = HASH_TABLE_SIZE (h);
-	  int size = real_size;
+	  real_size = HASH_TABLE_SIZE (h);
+	  size = real_size;
 
 	  /* Don't print more elements than the specified maximum.  */
 	  if (NATNUMP (Vprint_length)

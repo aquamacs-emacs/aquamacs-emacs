@@ -1639,8 +1639,7 @@ Useful commands:
     (cond ((ediff-buffer-live-p custom-diff-buf)
 	   ;; for live session buffers we do them first because the user may
 	   ;; have changed them with respect to the underlying files
-	   (save-excursion
-	     (set-buffer meta-diff-buff)
+	   (with-current-buffer meta-diff-buff
 	     (goto-char (point-max))
 	     (insert-buffer-substring custom-diff-buf)
 	     (insert "\n")))
@@ -1649,8 +1648,8 @@ Useful commands:
 			   ediff-merge-directories
 			   ediff-merge-directories-with-ancestor))
 	   ;; get diffs by calling shell command on ediff-custom-diff-program
-	   (save-excursion
-	     (set-buffer (setq tmp-buf (get-buffer-create ediff-tmp-buffer)))
+	   (with-current-buffer
+               (setq tmp-buf (get-buffer-create ediff-tmp-buffer))
 	     (erase-buffer)
 	     (shell-command
 	      (format
@@ -1662,8 +1661,7 @@ Useful commands:
 	       )
 	      t)
 	     )
-	   (save-excursion
-	     (set-buffer meta-diff-buff)
+	   (with-current-buffer meta-diff-buff
 	     (goto-char (point-max))
 	     (insert-buffer-substring tmp-buf)
 	     (insert "\n")))
@@ -2344,10 +2342,10 @@ If this is a session registry buffer then just bury it."
 This is used only for sessions that involve 2 or 3 files at the same time.
 ACTION is an optional argument that can be ?h, ?m, ?=, to mark for hiding, mark
 for operation, or simply indicate which are equal files.  If it is nil, then
-`last-command-event' is used to decide which action to take."
+`(ediff-last-command-char)' is used to decide which action to take."
   (interactive)
   (if (null action)
-      (setq action last-command-event))
+      (setq action (ediff-last-command-char)))
   (let ((list (cdr ediff-meta-list))
 	marked1 marked2 marked3
 	fileinfo1 fileinfo2 fileinfo3 elt)

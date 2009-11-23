@@ -4,7 +4,7 @@
 ;; Author: Carsten Dominik <carsten at orgmode dot org>
 ;; Keywords: outlines, hypermedia, calendar, wp
 ;; Homepage: http://orgmode.org
-;; Version: 6.31a
+;; Version: 6.33x
 ;;
 ;; This file is part of GNU Emacs.
 ;;
@@ -106,8 +106,8 @@ this variable can be set to nil to get rid of the timer."
   ;; Initialize the indentation and star vectors
   (setq org-indent-strings (make-vector (1+ org-indent-max) nil))
   (setq org-indent-stars (make-vector (1+ org-indent-max) nil))
-  (aset org-indent-strings 0 "")
-  (aset org-indent-stars 0 "")
+  (aset org-indent-strings 0 nil)
+  (aset org-indent-stars 0 nil)
   (loop for i from 1 to org-indent-max do
 	(aset org-indent-strings i
 	      (org-add-props
@@ -171,7 +171,7 @@ FIXME:  How to update when broken?"
   (org-compatible-face nil nil)
   "Face for outline indentation.
 The default is to make it look like whitespace.  But you may find it
-useful to make it evver so slightly different."
+useful to make it ever so slightly different."
   :group 'org-faces)
 
 (defun org-indent-indent-buffer ()

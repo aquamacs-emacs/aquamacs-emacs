@@ -303,7 +303,7 @@ readchar (readcharfun, multibyte)
 	  /* Fetch the character code from the buffer.  */
 	  unsigned char *p = BUF_BYTE_ADDRESS (inbuffer, pt_byte);
 	  BUF_INC_POS (inbuffer, pt_byte);
-	  c = STRING_CHAR (p, pt_byte - orig_pt_byte);
+	  c = STRING_CHAR (p);
 	  if (multibyte)
 	    *multibyte = 1;
 	}
@@ -332,7 +332,7 @@ readchar (readcharfun, multibyte)
 	  /* Fetch the character code from the buffer.  */
 	  unsigned char *p = BUF_BYTE_ADDRESS (inbuffer, bytepos);
 	  BUF_INC_POS (inbuffer, bytepos);
-	  c = STRING_CHAR (p, bytepos - orig_bytepos);
+	  c = STRING_CHAR (p);
 	  if (multibyte)
 	    *multibyte = 1;
 	}
@@ -439,7 +439,7 @@ readchar (readcharfun, multibyte)
 	}
       buf[i++] = c;
     }
-  return STRING_CHAR (buf, i);
+  return STRING_CHAR (buf);
 }
 
 /* Unread the character C in the way appropriate for the stream READCHARFUN.
@@ -3764,6 +3764,13 @@ OBARRAY defaults to the value of the variable `obarray'.  */)
   /* If arg was a symbol, don't delete anything but that symbol itself.  */
   if (SYMBOLP (name) && !EQ (name, tem))
     return Qnil;
+
+  /* There are plenty of other symbols which will screw up the Emacs
+     session if we unintern them, as well as even more ways to use
+     `setq' or `fset' or whatnot to make the Emacs session
+     unusable.  Let's not go down this silly road.  --Stef  */
+  /* if (EQ (tem, Qnil) || EQ (tem, Qt))
+       error ("Attempt to unintern t or nil"); */
 
   XSYMBOL (tem)->interned = SYMBOL_UNINTERNED;
   XSYMBOL (tem)->constant = 0;

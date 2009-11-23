@@ -433,6 +433,7 @@ x_menu_wait_for_event (void *data)
           int fd = ConnectionNumber (dpyinfo->display);
           FD_SET (fd, &read_fds);
           if (fd > n) n = fd;
+          XFlush (dpyinfo->display);
         }
 
       if (secs < 0 && usecs < 0)

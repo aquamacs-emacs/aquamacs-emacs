@@ -252,8 +252,19 @@ A typical error message is
 
 Emacs supplies its own malloc, but glib (part of Gtk+) calls memalign and on
 Cygwin, that becomes the Cygwin supplied memalign.  As malloc is not the
-Cygwin malloc, the Cygwin memalign always returns ENOSYS.  A fix for this
-problem would be welcome.
+Cygwin malloc, the Cygwin memalign always returns ENOSYS.
+
+One workaround is to set G_SLICE=always-malloc before starting emacs.
+For example, in bash,
+
+  G_SLICE=always-malloc emacs
+
+or put
+
+  export G_SLICE=always-malloc
+
+in one of the bash startup files.  This also has to be done before
+building emacs on Cygwin with Gtk+.
 
 * General runtime problems
 
@@ -2203,34 +2214,6 @@ Control Panel.  (The exact sequence of mouse clicks in the "Regional
 and Language Options" applet needed to find the key combination that
 changes the keyboard layout depends on your Windows version; for XP,
 in the Languages tab, click "Details" and then "Key Settings".)
-
-** Cygwin build of Emacs hangs after rebasing Cygwin DLLs
-
-Usually, on Cygwin, one needs to rebase the DLLs if an application
-aborts with a message like this:
-
-  C:\cygwin\bin\python.exe: *** unable to remap C:\cygwin\bin\cygssl.dll to
-  same address as parent(0xDF0000) != 0xE00000
-
-However, since Cygwin DLL 1.5.17 was released, after such rebasing,
-Emacs hangs.
-
-This was reported to happen for Emacs 21.2 and also for the pretest of
-Emacs 22.1 on Cygwin.
-
-To work around this, build Emacs like this:
-
-  LDFLAGS='-Wl,--enable-auto-import -Wl,--enable-auto-image-base' ./configure
-  make LD='$(CC)'
-  make LD='$(CC)' install
-
-This produces an Emacs binary that is independent of rebasing.
-
-Note that you _must_ use LD='$(CC)' in the last two commands above, to
-prevent GCC from passing the "--image-base 0x20000000" option to the
-linker, which is what it does by default.  That option produces an
-Emacs binary with the base address 0x20000000, which will cause Emacs
-to hang after Cygwin DLLs are rebased.
 
 ** Interrupting Cygwin port of Bash from Emacs doesn't work.
 

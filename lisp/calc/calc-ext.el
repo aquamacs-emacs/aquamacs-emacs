@@ -987,9 +987,9 @@ calc-find-root calc-poly-interp)
 calc-floor calc-idiv calc-increment calc-mant-part calc-max calc-min
 calc-round calc-scale-float calc-sign calc-trunc calc-xpon-part)
 
- ("calc-bin" calc-and calc-binary-radix calc-clip calc-decimal-radix
-calc-diff calc-hex-radix calc-leading-zeros calc-lshift-arith
-calc-lshift-binary calc-not calc-octal-radix calc-or calc-radix
+ ("calc-bin" calc-and calc-binary-radix calc-clip calc-twos-complement-mode
+calc-decimal-radix calc-diff calc-hex-radix calc-leading-zeros 
+calc-lshift-arith calc-lshift-binary calc-not calc-octal-radix calc-or calc-radix
 calc-rotate-binary calc-rshift-arith calc-rshift-binary calc-word-size
 calc-xor)
 
@@ -2994,9 +2994,19 @@ If X is not an error form, return 1."
 	     (math-add int (math-div frac (math-pow radix (length fracs))))))))
 
    ;; Integer with explicit radix
-   ((string-match "^\\([0-9]+\\)\\(#\\|\\^\\^\\)\\([0-9a-zA-Z]+\\)$" s)
+   ((string-match "^\\([0-9]+\\)\\(#&?\\|\\^\\^\\)\\([0-9a-zA-Z]+\\)$" s)
     (math-read-radix (math-match-substring s 3)
 		     (string-to-number (math-match-substring s 1))))
+
+   ;; Two's complement with explicit radix
+   ((string-match "^\\([0-9]+\\)\\(##\\)\\([0-9a-zA-Z]+\\)$" s)
+    (let ((num (math-read-radix (math-match-substring s 3)
+                                (string-to-number (math-match-substring s 1)))))
+      (if (and
+           (Math-lessp num math-2-word-size)
+           (<= (math-compare math-half-2-word-size num) 0))
+          (math-sub num math-2-word-size)
+        num)))
 
    ;; C language hexadecimal notation
    ((and (eq calc-language 'c)
@@ -3344,6 +3354,7 @@ If X is not an error form, return 1."
     (if (math-negp a)
 	(concat "-" (math-format-number (math-neg a)))
       (let ((calc-number-radix 10)
+            (calc-twos-complement-mode nil)
 	    (calc-leading-zeros nil)
 	    (calc-group-digits nil))
 	(format calc-hms-format

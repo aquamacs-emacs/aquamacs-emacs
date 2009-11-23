@@ -819,8 +819,7 @@ for a remote directory.  This feature is used by Auto Revert Mode."
     (while blist
       (if (null (buffer-name (cdr (car blist))))
 	  (setq blist (cdr blist))
-	(save-excursion
-	  (set-buffer (cdr (car blist)))
+	(with-current-buffer (cdr (car blist))
 	  (if (and (eq major-mode mode)
 		   dired-directory  ;; nil during find-alternate-file
 		   (equal dirname
@@ -1104,8 +1103,7 @@ Should not fail even on completely garbaged buffers.
 Preserves old cursor, marks/flags, hidden-p."
   (widen)				; just in case user narrowed
   (let ((modflag (buffer-modified-p))
-	(opoint (point))
-	(ofile (dired-get-filename nil t))
+	(positions (dired-save-positions))
 	(mark-alist nil)		; save marked files
 	(hidden-subdirs (dired-remember-hidden))
 	(old-subdir-alist (cdr (reverse dired-subdir-alist))) ; except pwd
@@ -1125,9 +1123,7 @@ Preserves old cursor, marks/flags, hidden-p."
     ;; ... run the hook for the whole buffer, and only after markers
     ;; have been reinserted (else omitting in dired-x would omit marked files)
     (run-hooks 'dired-after-readin-hook)	; no need to narrow
-    (or (and ofile (dired-goto-file ofile)) ; move cursor to where it
-	(goto-char opoint))		; was before
-    (dired-move-to-filename)
+    (dired-restore-positions positions)
     (save-excursion			; hide subdirs that were hidden
       (dolist (dir hidden-subdirs)
 	(if (dired-goto-subdir dir)
@@ -1140,6 +1136,25 @@ Preserves old cursor, marks/flags, hidden-p."
 
 ;; Subroutines of dired-revert
 ;; Some of these are also used when inserting subdirs.
+
+(defun dired-save-positions ()
+  "Return the current positions in all windows displaying this dired buffer.
+The positions have the form (WINDOW FILENAME POINT)."
+  (mapcar (lambda (w)
+	    (list w
+		  (with-selected-window w
+		    (dired-get-filename nil t))
+		  (window-point w)))
+	  (get-buffer-window-list nil 0 t)))
+
+(defun dired-restore-positions (positions)
+  "Restore POSITIONS saved with `dired-save-positions'."
+  (dolist (win-file-pos positions)
+    (with-selected-window (car win-file-pos)
+      (unless (and (nth 1 win-file-pos)
+		   (dired-goto-file (nth 1 win-file-pos)))
+	(goto-char (nth 2 win-file-pos))
+	(dired-move-to-filename)))))
 
 (defun dired-remember-marks (beg end)
   "Return alist of files and their marks, from BEG to END."
@@ -1396,29 +1411,6 @@ Do so according to the former subdir alist OLD-SUBDIR-ALIST."
       (cons "Immediate" (make-sparse-keymap "Immediate")))
 
     (define-key map
-      [menu-bar immediate epa-dired-do-decrypt]
-      '(menu-item "Decrypt" epa-dired-do-decrypt
-		  :help "Decrypt file at cursor"))
-
-    (define-key map
-      [menu-bar immediate epa-dired-do-verify]
-      '(menu-item "Verify" epa-dired-do-verify
-		  :help "Verify digital signature of file at cursor"))
-
-    (define-key map
-      [menu-bar immediate epa-dired-do-sign]
-      '(menu-item "Sign" epa-dired-do-sign
-		  :help "Create digital signature of file at cursor"))
-
-    (define-key map
-      [menu-bar immediate epa-dired-do-encrypt]
-      '(menu-item "Encrypt" epa-dired-do-encrypt
-		  :help "Encrypt file at cursor"))
-
-    (define-key map [menu-bar immediate dashes-4]
-      '("--"))
-
-    (define-key map
       [menu-bar immediate image-dired-dired-display-external]
       '(menu-item "Display Image Externally" image-dired-dired-display-external
                   :help "Display image in external viewer"))
@@ -1426,9 +1418,6 @@ Do so according to the former subdir alist OLD-SUBDIR-ALIST."
       [menu-bar immediate image-dired-dired-display-image]
       '(menu-item "Display Image" image-dired-dired-display-image
                   :help "Display sized image in a separate window"))
-
-    (define-key map [menu-bar immediate dashes-4]
-      '("--"))
 
     (define-key map [menu-bar immediate revert-buffer]
       '(menu-item "Refresh" revert-buffer
@@ -1587,6 +1576,29 @@ Do so according to the former subdir alist OLD-SUBDIR-ALIST."
       [menu-bar operate image-dired-display-thumbs]
       '(menu-item "Display image thumbnails" image-dired-display-thumbs
                   :help "Display image thumbnails for current or marked image files"))
+
+    (define-key map [menu-bar operate dashes-4]
+      '("--"))
+
+    (define-key map
+      [menu-bar operate epa-dired-do-decrypt]
+      '(menu-item "Decrypt" epa-dired-do-decrypt
+		  :help "Decrypt file at cursor"))
+
+    (define-key map
+      [menu-bar operate epa-dired-do-verify]
+      '(menu-item "Verify" epa-dired-do-verify
+		  :help "Verify digital signature of file at cursor"))
+
+    (define-key map
+      [menu-bar operate epa-dired-do-sign]
+      '(menu-item "Sign" epa-dired-do-sign
+		  :help "Create digital signature of file at cursor"))
+
+    (define-key map
+      [menu-bar operate epa-dired-do-encrypt]
+      '(menu-item "Encrypt" epa-dired-do-encrypt
+		  :help "Encrypt file at cursor"))
 
     (define-key map [menu-bar operate dashes-3]
       '("--"))
@@ -3456,7 +3468,7 @@ Ask means pop up a menu for the user to select one of copy, move or link."
 ;;;;;;  dired-run-shell-command dired-do-shell-command dired-do-async-shell-command
 ;;;;;;  dired-clean-directory dired-do-print dired-do-touch dired-do-chown
 ;;;;;;  dired-do-chgrp dired-do-chmod dired-compare-directories dired-backup-diff
-;;;;;;  dired-diff) "dired-aux" "dired-aux.el" "e207e02ac395d10ee4a09e208081a0ce")
+;;;;;;  dired-diff) "dired-aux" "dired-aux.el" "48cb6829b21b93a0f4d900535f6b2b80")
 ;;; Generated autoloads from dired-aux.el
 
 (autoload 'dired-diff "dired-aux" "\

@@ -2260,6 +2260,7 @@ extern Lisp_Object Qfont_spec, Qfont_entity, Qfont_object;
 
 extern void circular_list_error P_ ((Lisp_Object)) NO_RETURN;
 EXFUN (Finteractive_form, 1);
+EXFUN (Fbyteorder, 0);
 
 /* Defined in frame.c */
 extern Lisp_Object Qframep;
@@ -2642,6 +2643,9 @@ extern void init_xdisp P_ ((void));
 extern Lisp_Object safe_eval P_ ((Lisp_Object));
 extern int pos_visible_p P_ ((struct window *, int, int *,
 			      int *, int *, int *, int *, int *));
+
+/* Defined in xsettings.c */
+extern void syms_of_xsettings P_ ((void));
 
 /* Defined in vm-limit.c.  */
 extern void memory_warnings P_ ((POINTER_TYPE *, void (*warnfun) ()));
@@ -3400,6 +3404,7 @@ extern void syms_of_terminal P_ ((void));
 
 /* Defined in font.c */
 extern void syms_of_font P_ ((void));
+extern void init_font P_ ((void));
 
 #ifdef HAVE_WINDOW_SYSTEM
 /* Defined in fontset.c */

@@ -224,7 +224,7 @@ HISTORY is a symbol representing a variable to story the history in."
       (if (string-match ":" prompt)
 	  (setq prompt (concat
 			(substring prompt 0 (match-beginning 0))
-			" (" default-as-string ")"
+			" (default " default-as-string ")"
 			(substring prompt (match-beginning 0))))
 	(setq prompt (concat prompt " (" default-as-string "): "))))
     ;;
@@ -553,8 +553,7 @@ if INLINE, then completion is happening inline in a buffer."
       (lambda () (interactive)
 	(describe-variable 'semantic-complete-inline-map)))
     km)
-  "Keymap used while performing Semantic inline completion.
-\\{semantic-complete-inline-map}")
+  "Keymap used while performing Semantic inline completion.")
 
 (defface semantic-complete-inline-face
   '((((class color) (background dark))
@@ -1977,7 +1976,7 @@ completion works."
 (defun semantic-complete-jump-local ()
   "Jump to a semantic symbol."
   (interactive)
-  (let ((tag (semantic-complete-read-tag-buffer-deep "Symbol: ")))
+  (let ((tag (semantic-complete-read-tag-buffer-deep "Jump to symbol: ")))
     (when (semantic-tag-p tag)
       (push-mark)
       (goto-char (semantic-tag-start tag))
@@ -1990,7 +1989,7 @@ completion works."
 (defun semantic-complete-jump ()
   "Jump to a semantic symbol."
   (interactive)
-  (let* ((tag (semantic-complete-read-tag-project "Symbol: ")))
+  (let* ((tag (semantic-complete-read-tag-project "Jump to symbol: ")))
     (when (semantic-tag-p tag)
       (push-mark)
       (semantic-go-to-tag tag)
@@ -2031,13 +2030,12 @@ how completion options are displayed."
       (semantic-complete-inline-analyzer
        (semantic-analyze-current-context (point))))
   ;; Report a message if things didn't startup.
-  (if (and (interactive-p)
+  (if (and (called-interactively-p 'any)
 	   (not (semantic-completion-inline-active-p)))
       (message "Inline completion not needed.")
     ;; Since this is most likely bound to something, and not used
     ;; at idle time, throw in a TAB for good measure.
-    (semantic-complete-inline-TAB)
-    ))
+    (semantic-complete-inline-TAB)))
 
 ;;;###autoload
 (defun semantic-complete-analyze-inline-idle ()
@@ -2054,10 +2052,9 @@ to change how completion options are displayed."
       (semantic-complete-inline-analyzer-idle
        (semantic-analyze-current-context (point))))
   ;; Report a message if things didn't startup.
-  (if (and (interactive-p)
+  (if (and (called-interactively-p 'interactive)
 	   (not (semantic-completion-inline-active-p)))
-      (message "Inline completion not needed."))
-  )
+      (message "Inline completion not needed.")))
 
 ;;;###autoload
 (defun semantic-complete-self-insert (arg)

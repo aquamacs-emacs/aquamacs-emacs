@@ -46,6 +46,7 @@
 ;; For the semantic-find-tags-by-name macro.
 (eval-when-compile (require 'semantic/find))
 
+(defvar eldoc-last-message)
 (declare-function eldoc-message "eldoc")
 (declare-function semantic-analyze-interesting-tag "semantic/analyze")
 (declare-function semantic-complete-analyze-inline-idle "semantic/complete")
@@ -146,12 +147,18 @@ and then schedule other jobs setup with `semantic-idle-scheduler-add'.
 If ARG is positive, enable, if it is negative, disable.
 If ARG is nil, then toggle."
   (interactive "P")
+  ;; When turning off, disable other idle modes.
+  (when (or (and (numberp arg) (< arg 0))
+	    (and (null arg) global-semantic-idle-scheduler-mode))
+    (global-semantic-idle-summary-mode -1)
+    (global-semantic-idle-tag-highlight-mode -1)
+    (global-semantic-idle-completions-mode -1))
   (setq global-semantic-idle-scheduler-mode
         (semantic-toggle-minor-mode-globally
          'semantic-idle-scheduler-mode arg)))
 
 (defcustom semantic-idle-scheduler-mode-hook nil
-  "*Hook run at the end of function `semantic-idle-scheduler-mode'."
+  "Hook run at the end of the function `semantic-idle-scheduler-mode'."
   :group 'semantic
   :type 'hook)
 
@@ -217,7 +224,7 @@ minor mode is enabled."
           (not semantic-idle-scheduler-mode)))
   (semantic-idle-scheduler-mode-setup)
   (run-hooks 'semantic-idle-scheduler-mode-hook)
-  (if (interactive-p)
+  (if (called-interactively-p 'interactive)
       (message "idle-scheduler minor mode %sabled"
                (if semantic-idle-scheduler-mode "en" "dis")))
   (semantic-mode-line-update)
@@ -593,22 +600,22 @@ This routines creates the following functions and variables:"
 	(hook 	(intern (concat (symbol-name name) "-mode-hook")))
 	(map  	(intern (concat (symbol-name name) "-mode-map")))
 	(setup 	(intern (concat (symbol-name name) "-mode-setup")))
-	(func 	(intern (concat (symbol-name name) "-idle-function")))
-	)
+	(func 	(intern (concat (symbol-name name) "-idle-function"))))
 
     `(eval-and-compile
        (defun ,global (&optional arg)
-	 ,(concat "Toggle global use of `" (symbol-name mode) "'.
-If ARG is positive, enable, if it is negative, disable.
-If ARG is nil, then toggle.")
+	 ,(concat "Toggle " (symbol-name global) ".
+With ARG, turn the minor mode on if ARG is positive, off otherwise.
+
+When this minor mode is enabled, `" (symbol-name mode) "' is
+turned on in every Semantic-supported buffer.")
 	 (interactive "P")
 	 (setq ,global
 	       (semantic-toggle-minor-mode-globally
 		',mode arg)))
 
        (defcustom ,global nil
-	 (concat "*If non-nil, enable global use of `" (symbol-name ',mode) "'.
-" ,doc)
+	 ,(concat "Non-nil if `" (symbol-name mode) "' is enabled.")
 	 :group 'semantic
 	 :group 'semantic-modes
 	 :type 'boolean
@@ -618,24 +625,22 @@ If ARG is nil, then toggle.")
 		(,global (if val 1 -1))))
 
        (defcustom ,hook nil
-	 (concat "*Hook run at the end of function `" (symbol-name ',mode) "'.")
+	 ,(concat "Hook run at the end of function `" (symbol-name mode) "'.")
 	 :group 'semantic
 	 :type 'hook)
 
        (defvar ,map
 	 (let ((km (make-sparse-keymap)))
 	   km)
-	 (concat "Keymap for `" (symbol-name ',mode) "'."))
+	 ,(concat "Keymap for `" (symbol-name mode) "'."))
 
        (defvar ,mode nil
-	 (concat "Non-nil if summary minor mode is enabled.
-Use the command `" (symbol-name ',mode) "' to change this variable."))
+	 ,(concat "Non-nil if the minor mode `" (symbol-name mode) "' is enabled.
+Use the command `" (symbol-name mode) "' to change this variable."))
        (make-variable-buffer-local ',mode)
 
        (defun ,setup ()
-	 ,(concat "Setup option `" (symbol-name mode) "'.
-The minor mode can be turned on only if semantic feature is available
-and the idle scheduler is active.
+	 ,(concat "Set up `" (symbol-name mode) "'.
 Return non-nil if the minor mode is enabled.")
 	 (if ,mode
 	     (if (not (and (featurep 'semantic) (semantic-active-p)))
@@ -653,12 +658,7 @@ Return non-nil if the minor mode is enabled.")
 	 ,mode)
 
        (defun ,mode (&optional arg)
-	 ,(concat doc "
-This is a minor mode which performs actions during idle time.
-With prefix argument ARG, turn on if positive, otherwise off.  The
-minor mode can be turned on only if semantic feature is available and
-the current buffer was set up for parsing.  Return non-nil if the
-minor mode is enabled.")
+	 ,doc
 	 (interactive
 	  (list (or current-prefix-arg
 		    (if ,mode 0 1))))
@@ -670,7 +670,7 @@ minor mode is enabled.")
 		 (not ,mode)))
 	 (,setup)
 	 (run-hooks ,hook)
-	 (if (interactive-p)
+	 (if (called-interactively-p 'interactive)
 	     (message "%s %sabled"
 		      (symbol-name ',mode)
 		      (if ,mode "en" "dis")))
@@ -682,10 +682,9 @@ minor mode is enabled.")
 				,map)
 
        (defun ,func ()
-	 ,doc
-	 ,@forms)
-
-       )))
+	 ,(concat "Perform idle activity for the minor mode `"
+		  (symbol-name mode) "'.")
+	 ,@forms))))
 (put 'define-semantic-idle-service 'lisp-indent-function 1)
 
 
@@ -695,7 +694,9 @@ minor mode is enabled.")
 
 (defcustom semantic-idle-summary-function
   'semantic-format-tag-summarize-with-file
-  "*Function to use when displaying tag information during idle time.
+  "Function to call when displaying tag information during idle time.
+This function should take a single argument, a Semantic tag, and
+return a string to display.
 Some useful functions are found in `semantic-format-tag-functions'."
   :group 'semantic
   :type semantic-format-tag-custom-list)
@@ -797,7 +798,12 @@ specific to a major mode.  For example, in jde mode:
                         'semantic-idle-summary-current-symbol-info
                         "23.2")
 
-(define-semantic-idle-service semantic-idle-summary
+(defcustom semantic-idle-summary-mode-hook nil
+  "Hook run at the end of `semantic-idle-summary'."
+  :group 'semantic
+  :type 'hook)
+
+(defun semantic-idle-summary-idle-function ()
   "Display a tag summary of the lexical token under the cursor.
 Call `semantic-idle-summary-current-symbol-info' for getting the
 current tag to display information."
@@ -807,16 +813,71 @@ current tag to display information."
              (str (cond ((stringp found) found)
                         ((semantic-tag-p found)
                          (funcall semantic-idle-summary-function
-                                  found nil t))))
-	     )
+                                  found nil t)))))
 	;; Show the message with eldoc functions
-        (require 'eldoc)
         (unless (and str (boundp 'eldoc-echo-area-use-multiline-p)
                      eldoc-echo-area-use-multiline-p)
           (let ((w (1- (window-width (minibuffer-window)))))
             (if (> (length str) w)
                 (setq str (substring str 0 w)))))
         (eldoc-message str))))
+
+(define-minor-mode semantic-idle-summary-mode
+  "Toggle Semantic Idle Summary mode.
+With ARG, turn Semantic Idle Summary mode on if ARG is positive,
+off otherwise.
+
+When this minor mode is enabled, the echo area displays a summary
+of the lexical token at point whenever Emacs is idle."
+  :group 'semantic
+  :group 'semantic-modes
+  (semantic-idle-summary-mode-setup)
+  (semantic-mode-line-update))
+
+(defun semantic-idle-summary-refresh-echo-area ()
+  (and semantic-idle-summary-mode
+       eldoc-last-message
+       (if (and (not executing-kbd-macro)
+		(not (and (boundp 'edebug-active) edebug-active))
+		(not cursor-in-echo-area)
+		(not (eq (selected-window) (minibuffer-window))))
+           (eldoc-message eldoc-last-message)
+         (setq eldoc-last-message nil))))
+
+(defun semantic-idle-summary-mode-setup ()
+  "Set up `semantic-idle-summary-mode'."
+  (if semantic-idle-summary-mode
+      ;; Enable the mode
+      (progn
+	(unless (and (featurep 'semantic) (semantic-active-p))
+	  ;; Disable minor mode if semantic stuff not available
+	  (setq semantic-idle-summary-mode nil)
+	  (error "Buffer %s was not set up for parsing"
+		 (buffer-name)))
+	(require 'eldoc)
+	(semantic-idle-scheduler-add 'semantic-idle-summary-idle-function)
+	(add-hook 'pre-command-hook 'semantic-idle-summary-refresh-echo-area t))
+    ;; Disable the mode
+    (semantic-idle-scheduler-remove 'semantic-idle-summary-idle-function)
+    (remove-hook 'pre-command-hook 'semantic-idle-summary-refresh-echo-area t))
+  semantic-idle-summary-mode)
+
+(semantic-add-minor-mode 'semantic-idle-summary-mode "")
+
+(define-minor-mode global-semantic-idle-summary-mode
+  "Toggle Global Semantic Idle Summary mode.
+With ARG, turn Global Semantic Idle Summary mode on if ARG is
+positive, off otherwise.
+
+When this minor mode is enabled, `semantic-idle-summary-mode' is
+turned on in every Semantic-supported buffer."
+  :global t
+  :group 'semantic
+  :group 'semantic-modes
+  (semantic-toggle-minor-mode-globally
+   'semantic-idle-summary-mode
+   (if global-semantic-idle-summary-mode 1 -1)))
+
 
 ;;; Current symbol highlight
 ;;
@@ -941,7 +1002,25 @@ Call `semantic-symref-hits-in-region' to identify local references."
     ))
 
 (define-semantic-idle-service semantic-idle-completions
-  "Display a list of possible completions in a tooltip."
+  "Toggle Semantic Idle Completions mode.
+With ARG, turn Semantic Idle Completions mode on if ARG is
+positive, off otherwise.
+
+This minor mode only takes effect if Semantic is active and
+`semantic-idle-scheduler-mode' is enabled.
+
+When enabled, Emacs displays a list of possible completions at
+idle time.  The method for displaying completions is given by
+`semantic-complete-inline-analyzer-idle-displayor-class'; the
+default is to show completions inline.
+
+While a completion is displayed, RET accepts the completion; M-n
+and M-p cycle through completion alternatives; TAB attempts to
+complete as far as possible, and cycles if no additional
+completion is possible; and any other command cancels the
+completion.
+
+\\{semantic-complete-inline-map}"
   ;; Add the ability to override sometime.
   (semantic-idle-completion-list-default))
 

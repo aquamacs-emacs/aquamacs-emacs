@@ -5454,8 +5454,7 @@ and `list-directory-verbose-switches'."
       (princ "Directory ")
       (princ dirname)
       (terpri)
-      (save-excursion
-	(set-buffer "*Directory*")
+      (with-current-buffer "*Directory*"
 	(let ((wildcard (not (file-directory-p dirname))))
 	  (insert-directory dirname switches wildcard (not wildcard)))))
     ;; Finishing with-output-to-temp-buffer seems to clobber default-directory.
@@ -5988,7 +5987,7 @@ only these files will be asked to be saved."
 ;; so that magic file name handlers will not apply to it.
 
 (setq file-name-handler-alist
-      (cons '("\\`/:" . file-name-non-special)
+      (cons (cons (purecopy "\\`/:") 'file-name-non-special)
 	    file-name-handler-alist))
 
 ;; We depend on being the last handler on the list,

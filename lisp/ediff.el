@@ -977,8 +977,7 @@ lines.  For large regions, use `ediff-regions-linewise'."
 	(buffer-B
          (ediff-clone-buffer-for-region-comparison buffer-B "-Region.B-"))
         reg-A-beg reg-A-end reg-B-beg reg-B-end)
-    (save-excursion
-      (set-buffer buffer-A)
+    (with-current-buffer buffer-A
       (setq reg-A-beg (region-beginning)
 	    reg-A-end (region-end))
       (set-buffer buffer-B)
@@ -1018,8 +1017,7 @@ lines.  For small regions, use `ediff-regions-wordwise'."
 	(buffer-B
          (ediff-clone-buffer-for-region-comparison buffer-B "-Region.B-"))
         reg-A-beg reg-A-end reg-B-beg reg-B-end)
-    (save-excursion
-      (set-buffer buffer-A)
+    (with-current-buffer buffer-A
       (setq reg-A-beg (region-beginning)
 	    reg-A-end (region-end))
       ;; enlarge the region to hold full lines
@@ -1453,7 +1451,9 @@ Uses `vc.el' or `rcs.el' depending on `ediff-version-control-package'."
   "Return string describing the version of Ediff.
 When called interactively, displays the version."
   (interactive)
-  (if (called-interactively-p 'interactive)
+  ;; called-interactively-p - not in XEmacs
+  ;; (if (called-interactively-p 'interactive)
+  (if (interactive-p)
       (message "%s" (ediff-version))
     (format "Ediff %s of %s" ediff-version ediff-date)))
 

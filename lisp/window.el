@@ -1042,6 +1042,11 @@ Return WINDOW."
     (set-window-buffer window buffer)
     (window--display-buffer-1 window)))
 
+(defvar display-buffer-mark-dedicated nil
+  "If non-nil, `display-buffer' marks the windows it creates as dedicated.
+The actual non-nil value of this variable will be copied to the
+`window-dedicated-p' flag.")
+
 (defun display-buffer (buffer-or-name &optional not-this-window frame)
   "Make buffer BUFFER-OR-NAME appear in some window but don't select it.
 BUFFER-OR-NAME must be a buffer or the name of an existing
@@ -1133,8 +1138,10 @@ consider all visible or iconified frames."
 			buffer (if (listp pars) pars))))))
      ((or use-pop-up-frames (not frame-to-use))
       ;; We want or need a new frame.
-      (window--display-buffer-2
-       buffer (frame-selected-window (funcall pop-up-frame-function))))
+      (let ((win (frame-selected-window (funcall pop-up-frame-function))))
+        (when display-buffer-mark-dedicated
+          (set-window-dedicated-p win display-buffer-mark-dedicated))
+        (window--display-buffer-2 buffer win)))
      ((and pop-up-windows
 	   ;; Make a new window.
 	   (or (not (frame-parameter frame-to-use 'unsplittable))
@@ -1149,8 +1156,10 @@ consider all visible or iconified frames."
 		 (or (window--try-to-split-window
 		      (get-largest-window frame-to-use t))
 		     (window--try-to-split-window
-		      (get-lru-window frame-to-use t))))
-	   (window--display-buffer-2 buffer window-to-use)))
+		      (get-lru-window frame-to-use t)))))
+      (when display-buffer-mark-dedicated
+        (set-window-dedicated-p window-to-use display-buffer-mark-dedicated))
+      (window--display-buffer-2 buffer window-to-use))
      ((let ((window-to-undedicate
 	     ;; When NOT-THIS-WINDOW is non-nil, temporarily dedicate
 	     ;; the selected window to its buffer, to avoid that some of
@@ -1270,8 +1279,7 @@ window."
 	 (setq size (+ (window-height) size)))
     (setq new-window (split-window nil size))
     (unless split-window-keep-point
-      (save-excursion
-	(set-buffer (window-buffer))
+      (with-current-buffer (window-buffer)
 	(goto-char (window-start))
 	(setq moved (vertical-motion (window-height)))
 	(set-window-start new-window (point))
@@ -1647,6 +1655,35 @@ Top and bottom destinations are actually `scroll-margin' lines
 	     (recenter (- -1 this-scroll-margin))))))))
 
 (define-key global-map [?\C-l] 'recenter-top-bottom)
+
+(defun move-to-window-line-top-bottom (&optional arg)
+  "Position point relative to window.
+
+With a prefix argument ARG, acts like `move-to-window-line'.
+
+With no argument, positions point at center of window.
+Successive calls position point at the top, the bottom and again
+at the center of the window."
+  (interactive "P")
+  (cond
+   (arg (move-to-window-line arg)) ; Always respect ARG.
+   ((or (not (eq this-command last-command))
+	(eq recenter-last-op 'bottom))
+    (setq recenter-last-op 'middle)
+    (call-interactively 'move-to-window-line))
+   (t
+    (let ((this-scroll-margin
+	   (min (max 0 scroll-margin)
+		(truncate (/ (window-body-height) 4.0)))))
+      (cond ((eq recenter-last-op 'middle)
+	     (setq recenter-last-op 'top)
+	     (move-to-window-line this-scroll-margin))
+	    ((eq recenter-last-op 'top)
+	     (setq recenter-last-op 'bottom)
+	     (move-to-window-line (- -1 this-scroll-margin))))))))
+
+(define-key global-map [?\M-r] 'move-to-window-line-top-bottom)
+
 
 (defvar mouse-autoselect-window-timer nil
   "Timer used by delayed window autoselection.")

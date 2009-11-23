@@ -22,6 +22,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <stdio.h>
 #include <math.h>
 #include <setjmp.h>
+#include <ctype.h>
 
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
@@ -62,6 +63,8 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #else
 #include <X11/bitmaps/gray>
 #endif
+
+#include "xsettings.h"
 
 #ifdef USE_GTK
 #include "gtkutil.h"
@@ -194,7 +197,7 @@ Lisp_Object Qnone;
 Lisp_Object Qsuppress_icon;
 Lisp_Object Qundefined_color;
 Lisp_Object Qcompound_text, Qcancel_timer;
-static Lisp_Object Qfont_param;
+Lisp_Object Qfont_param;
 
 /* In dispnew.c */
 
@@ -3025,10 +3028,22 @@ x_default_font_parameter (f, parms)
 {
   struct x_display_info *dpyinfo = FRAME_X_DISPLAY_INFO (f);
   Lisp_Object font_param = x_get_arg (dpyinfo, parms, Qfont, NULL, NULL,
-				RES_TYPE_STRING);
+                                      RES_TYPE_STRING);
   Lisp_Object font;
+  int got_from_gconf = 0;
   if (EQ (font_param, Qunbound))
     font_param = Qnil;
+
+  if (NILP (font_param))
+    {
+      /* System font takes precedendce over X resources.  We must suggest this
+         regardless of font-use-system-font because .emacs may not have been
+         read yet.  */
+      const char *system_font = xsettings_get_system_font ();
+      if (system_font) font_param = make_string (system_font,
+                                                 strlen (system_font));
+    }
+  
   font = !NILP (font_param) ? font_param
     : x_get_arg (dpyinfo, parms, Qfont, "font", "Font", RES_TYPE_STRING);
 
@@ -3068,7 +3083,11 @@ x_default_font_parameter (f, parms)
 	 we've applied the `default' face settings.  */
       x_set_frame_parameters (f, Fcons (Fcons (Qfont_param, font_param), Qnil));
     }
-  x_default_parameter (f, parms, Qfont, font, "font", "Font", RES_TYPE_STRING);
+
+  x_default_parameter (f, parms, Qfont, font,
+                       got_from_gconf ? NULL : "font",
+                       got_from_gconf ? NULL : "Font",
+                       RES_TYPE_STRING);
 }
 
 
@@ -5569,10 +5588,10 @@ If FRAME is omitted or nil, it defaults to the selected frame. */)
 {
   FRAME_PTR f = check_x_frame (frame);
   char *name;
-  Lisp_Object default_font, font = Qnil;
+  Lisp_Object font;
   Lisp_Object font_param;
   char *default_name = NULL;
-  struct gcpro gcpro1;
+  struct gcpro gcpro1, gcpro2;
   int count = SPECPDL_INDEX ();
 
   check_x ();
@@ -5586,22 +5605,37 @@ If FRAME is omitted or nil, it defaults to the selected frame. */)
 
   BLOCK_INPUT;
 
-  GCPRO1(font_param);
-  font_param = Fframe_parameter (frame, Qfont_param);
+  GCPRO2(font_param, font);
 
-  if (x_last_font_name != NULL)
-    default_name = x_last_font_name;
-  else if (STRINGP (font_param))
-    default_name = SDATA (font_param);
-  else if (FONTP (default_font))
+  XSETFONT (font, FRAME_FONT (f));
+  font_param = Ffont_get (font, intern (":name"));
+  if (STRINGP (font_param))
+    default_name = xstrdup (SDATA (font_param));
+  else 
     {
-      XSETFONT (default_font, FRAME_FONT (f));
-      default_name = alloca (256);
-      if (font_unparse_gtkname (default_font, f, default_name, 256) < 0)
-	default_name = NULL;
+      font_param = Fframe_parameter (frame, Qfont_param);
+      if (STRINGP (font_param))
+        default_name = xstrdup (SDATA (font_param));
+    }
+
+  if (default_name == NULL && x_last_font_name != NULL)
+    default_name = xstrdup (x_last_font_name);
+
+  /* Convert fontconfig names to Gtk names, i.e. remove - before number */
+  if (default_name) 
+    {
+      char *p = strrchr (default_name, '-');
+      if (p)
+        {
+          char *ep = p+1;
+          while (isdigit (*ep))
+            ++ep;
+          if (*ep == '\0') *p = ' ';
+        }
     }
 
   name = xg_get_font_name (f, default_name);
+  xfree (default_name);
 
   if (name)
     {
