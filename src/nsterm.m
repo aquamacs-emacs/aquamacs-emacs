@@ -60,7 +60,7 @@ GNUstep port and post-20 update by Adrian Robert (arobert@cogsci.ucsd.edu)
 
 
 /* call tracing */
-#if 0
+#if 1
 int term_trace_num = 0;
 #define NSTRACE(x)        fprintf (stderr, "%s:%d: [%d] " #x "\n",         \
                                 __FILE__, __LINE__, ++term_trace_num)

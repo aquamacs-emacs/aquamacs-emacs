@@ -144,8 +144,8 @@ automatically choosing a major mode, use \\[find-file-literally]."
 	    (mapcar 'switch-to-buffer-in-tab (nreverse value))
 	  (switch-to-buffer-in-tab value))
       (if (listp value)
-	  (mapcar 'switch-to-buffer (nreverse value)))
-      (switch-to-buffer value))))
+	  (mapcar 'switch-to-buffer (nreverse value))
+	(switch-to-buffer value)))))
 
 
 (defun aquamacs-recentf-show-basenames (l &optional no-dir)
