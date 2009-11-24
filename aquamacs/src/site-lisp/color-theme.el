@@ -655,12 +655,14 @@ Only properties not in `color-theme-illegal-default-attributes'
 are included in the SPEC returned."
   (let ((props (cadar spec))
 	result prop val)
-    (while props
-      (setq prop (nth 0 props)
-	    val (nth 1 props)
-	    props (nthcdr 2 props))
-      (unless (memq prop color-theme-illegal-default-attributes)
-	(setq result (cons val (cons prop result)))))
+    (if (equal props '(nil))
+	(setq result props)
+      (while props
+	(setq prop (nth 0 props)
+	      val (nth 1 props)
+	      props (nthcdr 2 props))
+	(unless (memq prop color-theme-illegal-default-attributes)
+	  (setq result (cons val (cons prop result))))))
     `((t ,(nreverse result)))))
 
 ;; (color-theme-spec-filter '((t (:background "blue3"))))
