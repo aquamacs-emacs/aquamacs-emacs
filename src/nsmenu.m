@@ -1419,7 +1419,11 @@ Items in this list are always Lisp symbols.*/)
     {
       item = [[[NSToolbarItem alloc] initWithItemIdentifier: identifier]
                autorelease];
-      [item setImage: img];
+      /* we must make a copy of the image - otherwise the image data
+	 may be released  at inappropriate moments, creating havoc here
+	 or in Emacs' image cache. Use (clear-image-cache t) to reproduce. */
+      [item setImage: [[img copy] autorelease]];
+      //img->refCount++; /* maybe better to copy the image? */
       [item setToolTip: [NSString stringWithCString: help]];
       [item setLabel: [NSString stringWithCString: label]];
       [item setPaletteLabel: [NSString stringWithCString: label]];
