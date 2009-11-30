@@ -18072,7 +18072,7 @@ pint2str (buf, width, d)
    readable" representation of the nonnegative integer D to BUF using
    a minimal field width WIDTH.  D should be smaller than 999.5e24. */
 
-static const const char power_letter[] =
+static const char power_letter[] =
   {
     0,	 /* not used */
     'k', /* kilo */

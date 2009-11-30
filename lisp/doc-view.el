@@ -222,6 +222,15 @@ has finished."
   :type 'integer
   :group 'doc-view)
 
+(defcustom doc-view-continuous-mode nil
+  "In Continuous mode reaching the page edge advances to next/previous page.
+When non-nil, scrolling a line upward at the bottom edge of the page
+moves to the next page, and scrolling a line downward at the top edge
+of the page moves to the previous page."
+  :type 'boolean
+  :group 'doc-view
+  :version "23.2")
+
 ;;;; Internal Variables
 
 (defun doc-view-new-window-function (winprops)
@@ -286,6 +295,10 @@ Can be `dvi', `pdf', or `ps'.")
     (define-key map [remap backward-page] 'doc-view-previous-page)
     (define-key map (kbd "SPC")       'doc-view-scroll-up-or-next-page)
     (define-key map (kbd "DEL")       'doc-view-scroll-down-or-previous-page)
+    (define-key map (kbd "C-n")       'doc-view-next-line-or-next-page)
+    (define-key map (kbd "<down>")    'doc-view-next-line-or-next-page)
+    (define-key map (kbd "C-p")       'doc-view-previous-line-or-previous-page)
+    (define-key map (kbd "<up>")      'doc-view-previous-line-or-previous-page)
     (define-key map (kbd "M-<")       'doc-view-first-page)
     (define-key map (kbd "M->")       'doc-view-last-page)
     (define-key map [remap goto-line] 'doc-view-goto-page)
@@ -418,29 +431,71 @@ Can be `dvi', `pdf', or `ps'.")
   (interactive)
   (doc-view-goto-page (length doc-view-current-files)))
 
-(defun doc-view-scroll-up-or-next-page ()
-  "Scroll page up if possible, else goto next page."
-  (interactive)
-  (let ((hscroll (window-hscroll))
-	(cur-page (doc-view-current-page)))
-    (when (= (window-vscroll) (image-scroll-up nil))
-      (doc-view-next-page)
-      (when (/= cur-page (doc-view-current-page))
-	(image-bob)
-	(image-bol 1))
-      (set-window-hscroll (selected-window) hscroll))))
+(defun doc-view-scroll-up-or-next-page (&optional arg)
+  "Scroll page up ARG lines if possible, else goto next page.
+When `doc-view-continuous-mode' is non-nil, scrolling upward
+at the bottom edge of the page moves to the next page.
+Otherwise, goto next page only on typing SPC (ARG is nil)."
+  (interactive "P")
+  (if (or doc-view-continuous-mode (null arg))
+      (let ((hscroll (window-hscroll))
+	    (cur-page (doc-view-current-page)))
+	(when (= (window-vscroll) (image-scroll-up arg))
+	  (doc-view-next-page)
+	  (when (/= cur-page (doc-view-current-page))
+	    (image-bob)
+	    (image-bol 1))
+	  (set-window-hscroll (selected-window) hscroll)))
+    (image-scroll-up arg)))
 
-(defun doc-view-scroll-down-or-previous-page ()
-  "Scroll page down if possible, else goto previous page."
-  (interactive)
-  (let ((hscroll (window-hscroll))
-	(cur-page (doc-view-current-page)))
-    (when (= (window-vscroll) (image-scroll-down nil))
-      (doc-view-previous-page)
-      (when (/= cur-page (doc-view-current-page))
-	(image-eob)
-	(image-bol 1))
-      (set-window-hscroll (selected-window) hscroll))))
+(defun doc-view-scroll-down-or-previous-page (&optional arg)
+  "Scroll page down ARG lines if possible, else goto previous page.
+When `doc-view-continuous-mode' is non-nil, scrolling downward
+at the top edge of the page moves to the previous page.
+Otherwise, goto previous page only on typing DEL (ARG is nil)."
+  (interactive "P")
+  (if (or doc-view-continuous-mode (null arg))
+      (let ((hscroll (window-hscroll))
+	    (cur-page (doc-view-current-page)))
+	(when (= (window-vscroll) (image-scroll-down arg))
+	  (doc-view-previous-page)
+	  (when (/= cur-page (doc-view-current-page))
+	    (image-eob)
+	    (image-bol 1))
+	  (set-window-hscroll (selected-window) hscroll)))
+    (image-scroll-down arg)))
+
+(defun doc-view-next-line-or-next-page (&optional arg)
+  "Scroll upward by ARG lines if possible, else goto next page.
+When `doc-view-continuous-mode' is non-nil, scrolling a line upward
+at the bottom edge of the page moves to the next page."
+  (interactive "p")
+  (if doc-view-continuous-mode
+      (let ((hscroll (window-hscroll))
+	    (cur-page (doc-view-current-page)))
+	(when (= (window-vscroll) (image-next-line arg))
+	  (doc-view-next-page)
+	  (when (/= cur-page (doc-view-current-page))
+	    (image-bob)
+	    (image-bol 1))
+	  (set-window-hscroll (selected-window) hscroll)))
+    (image-next-line 1)))
+
+(defun doc-view-previous-line-or-previous-page (&optional arg)
+  "Scroll downward by ARG lines if possible, else goto previous page.
+When `doc-view-continuous-mode' is non-nil, scrolling a line downward
+at the top edge of the page moves to the previous page."
+  (interactive "p")
+  (if doc-view-continuous-mode
+      (let ((hscroll (window-hscroll))
+	    (cur-page (doc-view-current-page)))
+	(when (= (window-vscroll) (image-previous-line arg))
+	  (doc-view-previous-page)
+	  (when (/= cur-page (doc-view-current-page))
+	    (image-eob)
+	    (image-bol 1))
+	  (set-window-hscroll (selected-window) hscroll)))
+    (image-previous-line arg)))
 
 ;;;; Utility Functions
 
@@ -1200,6 +1255,10 @@ toggle between displaying the document or editing it as text.
 	   "/" (:eval (number-to-string (length doc-view-current-files)))))
     ;; Don't scroll unless the user specifically asked for it.
     (set (make-local-variable 'auto-hscroll-mode) nil)
+    (set (make-local-variable 'mwheel-scroll-up-function)
+	 'doc-view-scroll-up-or-next-page)
+    (set (make-local-variable 'mwheel-scroll-down-function)
+	 'doc-view-scroll-down-or-previous-page)
     (set (make-local-variable 'cursor-type) nil)
     (use-local-map doc-view-mode-map)
     (set (make-local-variable 'after-revert-hook) 'doc-view-reconvert-doc)
@@ -1209,6 +1268,11 @@ toggle between displaying the document or editing it as text.
 	  buffer-read-only t
 	  major-mode 'doc-view-mode)
     (doc-view-initiate-display)
+    ;; Switch off view-mode explicitly, because doc-view-mode is the
+    ;; canonical view mode for PDF/PS/DVI files.  This could be
+    ;; switched on automatically depending on the value of
+    ;; `view-read-only'.
+    (set (make-local-variable 'view-read-only) nil)
     (run-mode-hooks 'doc-view-mode-hook)))
 
 ;;;###autoload

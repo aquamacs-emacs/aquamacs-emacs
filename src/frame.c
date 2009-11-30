@@ -4383,7 +4383,11 @@ frame_make_pointer_invisible ()
 {
   if (! NILP (Vmake_pointer_invisible))
     {
-      struct frame *f = SELECTED_FRAME ();
+      struct frame *f;
+      if (!FRAMEP (selected_frame) || !FRAME_LIVE_P (XFRAME (selected_frame)))
+        return;
+
+      f = SELECTED_FRAME ();
       if (f && !f->pointer_invisible
           && FRAME_TERMINAL (f)->toggle_invisible_pointer_hook)
         {
@@ -4399,8 +4403,12 @@ frame_make_pointer_visible ()
 {
   /* We don't check Vmake_pointer_invisible here in case the
      pointer was invisible when Vmake_pointer_invisible was set to nil.  */
+  struct frame *f;
 
-  struct frame *f = SELECTED_FRAME ();
+  if (!FRAMEP (selected_frame) || !FRAME_LIVE_P (XFRAME (selected_frame)))
+    return;
+
+  f = SELECTED_FRAME ();
   if (f && f->pointer_invisible && f->mouse_moved
       && FRAME_TERMINAL (f)->toggle_invisible_pointer_hook)
     {
@@ -4648,7 +4656,7 @@ This variable is local to the current terminal and cannot be buffer-local.  */);
 	       doc: /* Non-nil if window system changes focus when you move the mouse.
 You should set this variable to tell Emacs how your window manager
 handles focus, since there is no way in general for Emacs to find out
-automatically.  */);
+automatically.  See also `mouse-autoselect-window'.  */);
 #ifdef HAVE_WINDOW_SYSTEM
 #if defined(HAVE_NTGUI) || defined(HAVE_NS)
   focus_follows_mouse = 0;

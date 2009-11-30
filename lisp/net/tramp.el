@@ -1030,7 +1030,7 @@ Sometimes the prompt is reported to look like \"login as:\"."
 (defcustom tramp-shell-prompt-pattern
   ;; Allow a prompt to start right after a ^M since it indeed would be
   ;; displayed at the beginning of the line (and Zsh uses it).
-  "\\(?:^\\|\\)[^#$%>\n]*[#$%>] *\\(\e\\[[0-9;]*[a-zA-Z] *\\)*"
+  "\\(?:^\\|\r\\)[^#$%>\n]*[#$%>] *\\(\e\\[[0-9;]*[a-zA-Z] *\\)*"
   "Regexp to match prompts from remote shell.
 Normally, Tramp expects you to configure `shell-prompt-pattern'
 correctly, but sometimes it happens that you are connecting to a
@@ -2383,6 +2383,35 @@ been set up by `rfn-eshadow-setup-minibuffer'."
 			   'tramp-rfn-eshadow-update-overlay))))
 
 
+;;; Integration of eshell.el:
+
+(eval-when-compile
+  (defvar eshell-path-env))
+
+;; eshell.el keeps the path in `eshell-path-env'.  We must change it
+;; when `default-directory' points to another host.
+(defun tramp-eshell-directory-change ()
+  "Set `eshell-path-env' to $PATH of the host related to `default-directory'."
+  (setq eshell-path-env
+	(if (file-remote-p default-directory)
+	    (with-parsed-tramp-file-name default-directory nil
+	      (mapconcat
+	       'identity
+	       (tramp-get-remote-path v)
+	       ":"))
+	  (getenv "PATH"))))
+
+(eval-after-load "esh-util"
+  '(progn
+     (tramp-eshell-directory-change)
+     (add-hook 'eshell-directory-change-hook
+	       'tramp-eshell-directory-change)
+     (add-hook 'tramp-unload-hook
+	       (lambda ()
+		 (remove-hook 'eshell-directory-change-hook
+			      'tramp-eshell-directory-change)))))
+
+
 ;;; File Name Handler Functions:
 
 (defun tramp-handle-make-symbolic-link
@@ -2429,7 +2458,14 @@ target of the symlink differ."
       ;; that FILENAME belongs to.
       (zerop
        (tramp-send-command-and-check
-	l (format "cd %s && %s -sf %s %s" cwd ln filename l-localname) t)))))
+	l
+	(format
+	 "cd %s && %s -sf %s %s"
+	 (tramp-shell-quote-argument cwd)
+	 ln
+	 (tramp-shell-quote-argument filename)
+	 (tramp-shell-quote-argument l-localname))
+	t)))))
 
 (defun tramp-handle-load (file &optional noerror nomessage nosuffix must-suffix)
   "Like `load' for Tramp files."
@@ -3957,7 +3993,8 @@ This is like `dired-recursive-delete-directory' for Tramp files."
 	       ;; We found an uncompression rule.
 	       (tramp-message v 0 "Uncompressing %s..." file)
 	       (when (zerop (tramp-send-command-and-check
-			     v (concat (nth 2 suffix) " " localname)))
+			     v (concat (nth 2 suffix) " "
+				       (tramp-shell-quote-argument localname))))
 		 (tramp-message v 0 "Uncompressing %s...done" file)
 		 ;; `dired-remove-file' is not defined in XEmacs
 		 (funcall (symbol-function 'dired-remove-file) file)
@@ -3968,7 +4005,8 @@ This is like `dired-recursive-delete-directory' for Tramp files."
 	       ;; Try gzip.
 	       (tramp-message v 0 "Compressing %s..." file)
 	       (when (zerop (tramp-send-command-and-check
-			     v (concat "gzip -f " localname)))
+			     v (concat "gzip -f "
+				       (tramp-shell-quote-argument localname))))
 		 (tramp-message v 0 "Compressing %s...done" file)
 		 ;; `dired-remove-file' is not defined in XEmacs
 		 (funcall (symbol-function 'dired-remove-file) file)
@@ -4126,11 +4164,13 @@ the result will be a local, non-Tramp, filename."
 		     (string-match "\\`su\\(do\\)?\\'" method))
 	    (setq uname (concat uname user)))
 	  (setq uname
-	    (with-connection-property v uname
-	      (tramp-send-command v (format "cd %s; pwd" uname))
-	      (with-current-buffer (tramp-get-buffer v)
-		(goto-char (point-min))
-		(buffer-substring (point) (tramp-compat-line-end-position)))))
+		(with-connection-property v uname
+		  (tramp-send-command
+		   v (format "cd %s; pwd" (tramp-shell-quote-argument uname)))
+		  (with-current-buffer (tramp-get-buffer v)
+		    (goto-char (point-min))
+		    (buffer-substring
+		     (point) (tramp-compat-line-end-position)))))
 	  (setq localname (concat uname fname))))
       ;; There might be a double slash, for example when "~/"
       ;; expands to "/".  Remove this.
@@ -4357,7 +4397,8 @@ beginning of local filename are not substituted."
                     (tramp-send-command-and-check
                      v (format "\\cd %s; %s"
                                (tramp-shell-quote-argument localname)
-                               command)))
+                               command)
+		     nil t))
 	    ;; We should show the output anyway.
 	    (when outbuf
 	      (with-current-buffer outbuf
@@ -6892,7 +6933,8 @@ Goes through the list `tramp-local-coding-commands' and
 		  (unless (zerop (tramp-send-command-and-check
 				  vec
 				  (format "echo %s | %s | %s"
-					  magic rem-enc rem-dec) t))
+					  magic rem-enc rem-dec)
+				  t))
 		    (throw 'wont-work-remote nil))
 
 		  (with-current-buffer (tramp-get-buffer vec)
@@ -7185,6 +7227,9 @@ connection if a previous connection has died for some reason."
 		      (?t . ,tmpfile))
 	       command
 	       (concat
+		;; We do not want to see the trailing local prompt in
+		;; `start-file-process'.
+		(unless (memq system-type '(windows-nt)) "exec ")
 		command " "
 		(mapconcat
 		 (lambda (x)
@@ -7194,7 +7239,7 @@ connection if a previous connection has died for some reason."
 		;; Local shell could be a Windows COMSPEC.  It doesn't
 		;; know the ";" syntax, but we must exit always for
 		;; `start-file-process'.  "exec" does not work either.
-		" && exit || exit"))
+		(if (memq system-type '(windows-nt)) " && exit || exit")))
 
 	      ;; Send the command.
 	      (tramp-message vec 3 "Sending command `%s'" command)
@@ -7250,20 +7295,22 @@ function waits for output unless NOOUTPUT is set."
       ;; Return value is whether end-of-output sentinel was found.
       found)))
 
-(defun tramp-send-command-and-check (vec command &optional subshell)
+(defun tramp-send-command-and-check
+  (vec command &optional subshell dont-suppress-err)
   "Run COMMAND and check its exit status.
 Sends `echo $?' along with the COMMAND for checking the exit status.  If
 COMMAND is nil, just sends `echo $?'.  Returns the exit status found.
 
-If the optional argument SUBSHELL is non-nil, the command is executed in
-a subshell, ie surrounded by parentheses."
+If the optional argument SUBSHELL is non-nil, the command is
+executed in a subshell, ie surrounded by parentheses.  If
+DONT-SUPPRESS-ERR is non-nil, stderr won't be sent to /dev/null."
   (tramp-send-command
    vec
    (concat (if subshell "( " "")
 	   command
-	   (if command " 2>/dev/null; " "")
+	   (if command (if dont-suppress-err "; " " 2>/dev/null; ") "")
 	   "echo tramp_exit_status $?"
-	   (if subshell " )" " ")))
+	   (if subshell " )" "")))
   (with-current-buffer (tramp-get-connection-buffer vec)
     (goto-char (point-max))
     (unless (re-search-backward "tramp_exit_status [0-9]+" nil t)

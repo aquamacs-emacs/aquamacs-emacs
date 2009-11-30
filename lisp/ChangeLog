@@ -1,3 +1,469 @@
+2009-11-30  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	Minor cleanup and simplification.
+	* filecache.el (file-cache-add-directory)
+	(file-cache-add-directory-recursively)
+	(file-cache-add-from-file-cache-buffer)
+	(file-cache-delete-file-regexp, file-cache-delete-directory)
+	(file-cache-files-matching-internal, file-cache-display): Use dolist.
+	(file-cache-temp-minibuffer-message): Delete function.
+	(file-cache-minibuffer-complete): Use minibuffer-message instead.
+
+	* progmodes/perl-mode.el (perl-font-lock-special-syntactic-constructs):
+	Don't signal an error when bumping into EOB in tr, s, or y.
+
+2009-11-29  Juri Linkov  <juri@jurta.org>
+
+	* startup.el (fancy-about-text): Fix wording of Guided Tour.
+	(Bug#4960)
+
+	* descr-text.el (describe-char-unidata-list): Use lowercase name
+	for "Unicode name" like in other tags.
+
+2009-11-29  Juri Linkov  <juri@jurta.org>
+
+	* ediff-util.el (ediff-minibuffer-with-setup-hook):
+	New compatibility macro.
+	(ediff-read-file-name): Use it instead of `minibuffer-with-setup-hook'.
+
+2009-11-29  Juri Linkov  <juri@jurta.org>
+
+	Add defcustom to define the cycling order of `recenter-top-bottom'.
+	(Bug#4981)
+
+	* window.el (recenter-last-op): Doc fix.
+	(recenter-positions): New defcustom.
+	(recenter-top-bottom): Rewrite to use `recenter-positions'.
+	(move-to-window-line-top-bottom): Rewrite to use `recenter-positions'.
+
+2009-11-29  Michael Albinus  <michael.albinus@gmx.de>
+
+	Improve integration of Tramp and ange-ftp in eshell.
+
+	* eshell/em-unix (eshell/whoami): Make it a defun but a defalias.
+	(eshell/su): Flatten args.  Apply better args parsing.  Use "cd".
+	(eshell/sudo): Flatten args.  Let-bind `default-directory'.
+
+	* eshell/esh-util.el (top): Require also Tramp when compiling.
+	(eshell-directory-files-and-attributes): Check for FTP remote
+	connection.
+	(eshell-parse-ange-ls): Let-bind `ange-ftp-name-format',
+	`ange-ftp-ftp-name-arg', `ange-ftp-ftp-name-res'.
+	(eshell-file-attributes): Handle ".".  Return `entry'.
+
+	* net/ange-ftp.el (ange-ftp-parse-filename): Use `save-match-data'.
+	(ange-ftp-directory-files-and-attributes)
+	(ange-ftp-real-directory-files-and-attributes): New defuns.
+
+	* net/tramp.el (tramp-maybe-open-connection): Open the remote
+	shell with "exec" when possible.  This prevents trailing prompts
+	in `start-file-process'.
+
+2009-11-28  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	Try and remove assumptions about point-min==1.
+	* nxml/rng-valid.el (rng-validate-mode): Don't hardcode point-min==1.
+	(rng-compute-mode-line-string): Show the validation percentage in
+	terms of the narrowed text, not the widened text.
+	(rng-do-some-validation): Don't catch internal errors when debugging.
+	(rng-first-error): Simplify.
+	(rng-after-change-function): Remove work around.  AFAIK the bug has
+	been fixed a while ago.
+
+	* image-mode.el (image-minor-mode): Exit more gracefully when the image
+	cannot be displayed (e.g. when doing C-x C-f some-new-file.svg RET).
+
+	* man.el (Man-completion-table): Make it easier to enter "<sec> <name>".
+
+	* eshell/em-prompt.el (eshell-prompt-function): Abbreviate pwd, since
+	`cd' doesn't always do it for us (bug#5067).
+
+	* pcomplete.el (pcomplete-entries): Revert change installed mistakenly
+	on 2009-10-25 as part of some other change (bug#5067).
+
+2009-11-27  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/bytecomp.el (byte-compile-warning-types): New type
+	`suspicious'.
+	(byte-compile-warnings): Use byte-compile-warning-types.
+	(byte-compile-save-excursion): Warn about use of set-buffer right
+	after save-excursion.
+
+	* progmodes/gud.el (gud-basic-call): Don't only save the buffer but
+	the excursion as well.
+
+2009-11-27  Michael Albinus  <michael.albinus@gmx.de>
+
+	* eshell/em-unix.el (eshell/su, eshell/sudo): New defuns,
+	providing a Tramp related implementation of "su" and "sudo".
+	(eshell-unix-initialize): Add "su" and "sudo".
+
+2009-11-27  Daiki Ueno  <ueno@unixuser.org>
+
+	* net/socks.el (socks-send-command): Convert binary request to
+	unibyte before sending.  This fixes mishandling of some port
+	numbers such as 129.
+
+2009-11-27  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* help.el (describe-bindings-internal): Remove `interactive'.
+
+	* man.el (Man-completion-table): Trim a terminating "(".
+	Remove the space between name page a section.
+	Add the command's description on the `help-echo' property.
+	Remove `process-connection-type' binding since it's unused by
+	call-process.
+	Provide completion for the "<section> <name>" format as well.
+	(Man-default-man-entry): Remove spurious var shadowing the argument.
+
+2009-11-26  Kevin Ryde  <user42@zip.com.au>
+
+	* log-view.el: Add "Keywords: tools", since its other keywords
+	aren't in finder-known-keywords, and following vc.el.
+
+	* sha1.el (sha1-string-external): default-directory "/" in case
+	otherwise non-existent.  process-connection-type pipe for touch of
+	efficiency recommended by elisp manual.  (An aside in Bug#3911.)
+
+2009-11-26  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	Misc coding convention cleanups.
+	* htmlfontify.el (hfy-init-kludge-hook): Rename from
+	hfy-init-kludge-hooks.
+	(hfy-etags-cmd, hfy-flatten-style, hfy-invisible-name, hfy-face-at)
+	(hfy-fontify-buffer, hfy-prepare-index-i, hfy-subtract-maps)
+	(hfy-save-kill-buffers, htmlfontify-copy-and-link-dir): Use dolist
+	and push.
+	(hfy-slant, hfy-weight): Use tables rather than code.
+	(hfy-box-to-border-assoc, hfy-box-to-style, hfy-decor)
+	(hfy-face-to-style-i, hfy-fontify-buffer): Use `case'.
+	(hfy-face-attr-for-class): Initialize `face-spec' directly.
+	(hfy-face-to-css): Remove `nconc' with single arg.
+	(hfy-p-to-face-lennart): Use `or'.
+	(hfy-face-at): Hoist common code.  Remove spurious quotes in `case'.
+	(hfy-overlay-props-at, hfy-mark-tag-hrefs): Eta-reduce.
+	(hfy-compile-stylesheet, hfy-merge-adjacent-spans)
+	(hfy-compile-face-map, hfy-parse-tags-buffer): Use push.
+	(hfy-force-fontification): Use run-hooks.
+
+2009-11-26  Vivek Dasmohapatra  <vivek@etla.org>
+
+	Various minor fixes.
+	* htmlfontify.el (hfy-default-header): Add toggle_invis since
+	Javascript belongs in the header, not the body.
+	(hfy-javascript): Remove.
+	(hfy-fontify-buffer): Don't insert it any more.
+	(hfy-face-at): Handle (face0 face1 face2) style face properties.
+	Fix bug in invis handling when there were no invis props in a chunk.
+
+2009-11-26  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* vc-bzr.el (vc-bzr-annotate-command): Make operation asynchronous.
+
+2009-11-26  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* finder.el (finder-mode-map): Add a menu.
+
+2009-11-26  Michael McNamara  <mac@mail.brushroad.com>
+
+	* verilog-mode.el (verilog-at-struct-p): Support "signed" and
+	"unsigned" structs.
+
+	(verilog-leap-to-head, verilog-backward-token): Handle "disable
+	fork" statement better.
+
+2009-11-26  Wilson Snyder  <wsnyder@wsnyder.org>
+
+	* verilog-mode.el (verilog-auto-insert-lisp, verilog-delete-auto)
+	(verilog-delete-empty-auto-pair, verilog-library-filenames):
+	Fix AUTOINSERTLISP to support insert-file.  Reported by Clay Douglass.
+
+	(verilog-auto-inst, verilog-auto-star-safe)
+	(verilog-delete-auto-star-implicit, verilog-read-sub-decls):
+	Fix removing "// Interfaces" when saving .* expansions.  Reported by
+	Pierre-David Pfister.
+
+2009-11-26  Glenn Morris  <rgm@gnu.org>
+
+	* eshell/em-dirs.el (eshell/cd): Don't throw to a tag outside
+	the scope.
+
+2009-11-25  Johan Bockgård  <bojohan@gnu.org>
+
+	* vc-annotate.el (vc-annotate-revision-previous-to-line):
+	Really use previous revision.
+
+2009-11-25  Kevin Ryde  <user42@zip.com.au>
+
+	* man.el (Man-completion-table): default-directory "/" in case
+	doesn't otherwise exist.  process-environment COLUMNS=999 so as
+	not to truncate long names.  process-connection-type pipe to avoid
+	any chance of hitting the pseudo-tty TIOCGWINSZ.
+	(man): completion-ignore-case t for friendliness and since man
+	itself is case-insensitive on the command line.
+	Further to Bug#3717.
+
+	* arc-mode.el: Add "Keywords: files", so the details in its
+	commentary can be reached from finder-by-keyword.
+	* textmodes/dns-mode.el: Add "Keywords: comm".  It's only an
+	editing mode, but it's comms related and sgml-mode.el has "comm"
+	on that basis too.
+	* textmodes/bibtex-style.el: Add "Keywords: tex".
+	* international/isearch-x.el, international/ja-dic-cnv.el:
+	* international/ja-dic-utl.el, international/kkc.el:
+	Add "Keywords: i18n", so they can be reached from finder-by-keyword.
+
+2009-11-25  Juri Linkov  <juri@jurta.org>
+
+	* man.el (Man-completion-table): Modify regexp to include
+	section names to completion strings.  (Bug#3717)
+
+2009-11-25  Juri Linkov  <juri@jurta.org>
+
+	Search recursively in gzipped files.  (Bug#4982)
+
+	* progmodes/grep.el (grep-highlight-matches): Add new options
+	`always' and `auto'.  Doc fix.
+	(grep-process-setup): Check `grep-highlight-matches' for
+	`auto-detect' to determine the need to compute grep defaults.
+	Move Windows/DOS specific --colors settings handling
+	to `grep-compute-defaults'.  Check `grep-highlight-matches'
+	to get the value of "--color=".
+	(grep-compute-defaults): Compute `grep-highlight-matches' when it
+	has the value `auto-detect'.  Move Windows/DOS specific settings
+	from `grep-process-setup'.
+	(zrgrep): New command with alias `rzgrep'.
+
+2009-11-25  Juri Linkov  <juri@jurta.org>
+
+	* doc-view.el (doc-view-mode): Set buffer-local `view-read-only'
+	to nil instead of switching off view-mode.  (Bug#4896)
+
+2009-11-25  Juri Linkov  <juri@jurta.org>
+
+	Mouse-wheel scrolling for DocView Continuous mode.  (Bug#4896)
+
+	* mwheel.el (mwheel-scroll-up-function)
+	(mwheel-scroll-down-function): New defvars.
+	(mwheel-scroll): Funcall `mwheel-scroll-up-function' instead of
+	`scroll-up', and `mwheel-scroll-down-function' instead of
+	`scroll-down'.
+
+	* doc-view.el (doc-view-scroll-up-or-next-page)
+	(doc-view-scroll-down-or-previous-page): Add optional ARG.
+	Use this ARG in the call to image-scroll-up/image-scroll-down.
+	Change `interactive' spec to "P".  Goto next/previous page only
+	when `doc-view-continuous-mode' is non-nil or ARG is nil (for the
+	SPC/DEL case).  Doc fix.
+	(doc-view-next-line-or-next-page)
+	(doc-view-previous-line-or-previous-page): Rename arg to ARG
+	for consistency.
+	(doc-view-mode): Set buffer-local `mwheel-scroll-up-function' to
+	`doc-view-scroll-up-or-next-page', and buffer-local
+	`mwheel-scroll-down-function' to
+	`doc-view-scroll-down-or-previous-page'.
+
+2009-11-25  Juri Linkov  <juri@jurta.org>
+
+	Provide additional default values (directories at other Dired
+	windows) via M-n in the minibuffer of some Dired commands.
+
+	* dired-aux.el (dired-diff, dired-compare-directories)
+	(dired-do-create-files): Use `dired-dwim-target-defaults' to set
+	`minibuffer-default' in `minibuffer-with-setup-hook'.
+	(dired-dwim-target-directory): Find a window that displays Dired
+	buffer instead of failing when the next window is not Dired.
+	Use `get-window-with-predicate' to find for the next Dired window.
+	(dired-dwim-target-defaults): New function.
+
+	* ediff-util.el (ediff-read-file-name):
+	Use `dired-dwim-target-defaults' to set `minibuffer-default'
+	in `minibuffer-with-setup-hook'.
+
+2009-11-25  Juri Linkov  <juri@jurta.org>
+
+	Provide additional default values (file name at point or at the
+	current Dired line) via M-n for file reading minibuffers.  (Bug#5010)
+
+	* minibuffer.el (read-file-name-defaults): New function.
+	(read-file-name): Reset `minibuffer-default' to nil when
+	it duplicates initial input `insdef'.
+	Bind `minibuffer-default-add-function' to lambda that
+	calls `read-file-name-defaults' in `minibuffer-selected-window'.
+	(minibuffer-insert-file-name-at-point): New command.
+
+	* files.el (file-name-at-point-functions): New defcustom.
+	(find-file-default): Remove defvar.
+	(find-file-read-args): Don't use `find-file-default'.
+	Move `minibuffer-with-setup-hook' that sets `minibuffer-default'
+	to `read-file-name'.
+	(find-file-literally): Use `read-file-name' with
+	`confirm-nonexistent-file-or-buffer'.
+
+	* ffap.el (ffap-guess-file-name-at-point): New autoloaded function.
+
+	* dired.el (dired-read-dir-and-switches):
+	Move `minibuffer-with-setup-hook' that sets `minibuffer-default'
+	to `read-file-name'.
+	(dired-file-name-at-point): New function.
+	(dired-mode): Add hook `dired-file-name-at-point' to
+	`file-name-at-point-functions'.
+
+2009-11-25  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	Really make the *Completions* window soft-dedicated (bug#5030).
+	* window.el (window--display-buffer-2): Add `dedicated' argument.
+	(display-buffer): Pass it when needed so the dedicated flag is set
+	after calling set-window-buffer, which would otherwise reset it.
+
+2009-11-25  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* progmodes/meta-mode.el (meta-complete-symbol):
+	* progmodes/etags.el (complete-tag):
+	* mail/mailabbrev.el (mail-abbrev-complete-alias):
+	Use completion-in-region.
+
+	* dabbrev.el (dabbrev--minibuffer-origin): Use minibuffer-selected-window.
+	(dabbrev-completion): Use completion-in-region.
+	(dabbrev--abbrev-at-point): Simplify regexp.
+
+	* abbrev.el (abbrev--before-point): Use word-motion functions
+	if :regexp is not specified (bug#5031).
+
+	* subr.el (string-prefix-p): New function.
+
+	* man.el (Man-completion-cache): New var.
+	(Man-completion-table): Use it.
+
+	* vc.el (vc-print-log-internal): Make `limit' optional for better
+	compatibility (e.g. with vc-annotate.el).
+
+2009-11-24  Kevin Ryde  <user42@zip.com.au>
+
+	* emacs-lisp/checkdoc.el (checkdoc-proper-noun-regexp):
+	Build value with regexp-opt instead of explicit joining loop.  (My
+	Bug#4927.)
+
+	* emacs-lisp/elint.el (elint-add-required-env): Better error message
+	when .el source file not found or other error.
+
+2009-11-24  Markus Triska  <markus.triska@gmx.at>
+
+	* linum.el (linum-update-window): Ignore intangible (bug#4996).
+
+2009-11-24  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	Handle the [back] button properly (bug#4979).
+	* descr-text.el (describe-text-properties): Add a `buffer' argument.
+	Use help-setup-xref, help-buffer, and with-help-window.
+	(describe-char): Add `buffer' argument.
+	Pass proper command to help-setup-xref.  Don't meddle with
+	help-xref-stack-item directly.
+	(describe-text-category): Use with-help-window and help-buffer.
+
+	* emacs-lisp/shadow.el (list-load-path-shadows): Setup a major mode
+	for the displayed buffer (bug#4887).
+
+	* man.el (Man-completion-table): New function.
+	(man): Use it.
+
+2009-11-24  David Reitter  <david.reitter@gmail.com>
+
+	* vc-git.el (vc-git-registered): Use checkout directory (where
+	.git is) rather than the file's directory and a relative path spec
+	to work around a bug in git.
+
+2009-11-24  Michael Albinus  <michael.albinus@gmx.de>
+
+	Improve handling of processes on remote hosts.
+
+	* eshell/esh-util.el (eshell-path-env): New defvar.
+	(eshell-parse-colon-path): New defun.
+	(eshell-file-attributes): Use `eshell-parse-colon-path'.
+
+	* eshell/esh-ext.el (eshell-search-path):
+	Use `eshell-parse-colon-path'.
+	(eshell-remote-command): Remove argument HANDLER.
+	(eshell-external-command): Check for FTP remote connection.
+
+	* eshell/esh-proc.el (eshell-gather-process-output):
+	Use `file-truename', in order to start also symlinked files.
+	Apply `start-file-process' instead of `start-process'.
+	Shorten `command' to the local file name part.
+
+	* eshell/em-cmpl.el (eshell-complete-commands-list):
+	Use `eshell-parse-colon-path'.
+
+	* eshell/em-unix.el (eshell/du): Check for FTP remote connection.
+
+	* net/tramp.el (tramp-eshell-directory-change): New defun.  Add it
+	to `eshell-directory-change-hook'.
+
+2009-11-24  Tassilo Horn  <tassilo@member.fsf.org>
+
+	* doc-view.el (doc-view-mode): Switch off view-mode explicitly,
+	because it could be enabled automatically if view-read-only is non-nil.
+
+2009-11-24  Michael Kifer  <kifer@cs.stonybrook.edu>
+
+	* ediff-vers.el (ediff-rcs-get-output-buffer): Revert the change
+	made on 2009-11-22.
+
+2009-11-24  Glenn Morris  <rgm@gnu.org>
+
+	* bookmark.el (bookmark-bmenu-hide-filenames): Remove assignment to
+	deleted variable bookmark-bmenu-bookmark-column.
+
+	* cedet/semantic/idle.el (global-semantic-idle-scheduler-mode):
+	Move after definition of global-semantic-idle-tag-highlight-mode.
+
+2009-11-24  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* bookmark.el (bookmark-bmenu-search): Clear echo area when exiting.
+
+2009-11-23  Ken Brown  <kbrown@cornell.edu>  (tiny change)
+
+	* net/browse-url.el (browse-url-filename-alist): On Windows, add
+	two slashes to the "file:" prefix.
+	(browse-url-file-url): De-munge Cygwin filenames before passing
+	them to Windows browser.
+	(browse-url-default-windows-browser): Use call-process.
+
+2009-11-23  Juri Linkov  <juri@jurta.org>
+
+	Implement DocView Continuous mode.  (Bug#4896)
+	* doc-view.el (doc-view-continuous-mode): New defcustom.
+	(doc-view-mode-map): Bind C-n/<down> to
+	`doc-view-next-line-or-next-page', C-p/<up> to
+	`doc-view-previous-line-or-previous-page'.
+	(doc-view-next-line-or-next-page)
+	(doc-view-previous-line-or-previous-page): New commands.
+
+2009-11-23  Juri Linkov  <juri@jurta.org>
+
+	Implement Isearch in comint input history.  (Bug#3746)
+	* comint.el (comint-mode): Add `comint-history-isearch-setup' to
+	`isearch-mode-hook'.
+	(comint-history-isearch): New defcustom.
+	(comint-history-isearch-backward)
+	(comint-history-isearch-backward-regexp): New commands.
+	(comint-history-isearch-message-overlay): New buffer-local variable.
+	(comint-history-isearch-setup, comint-history-isearch-end)
+	(comint-goto-input, comint-history-isearch-search)
+	(comint-history-isearch-message, comint-history-isearch-wrap)
+	(comint-history-isearch-push-state)
+	(comint-history-isearch-pop-state): New functions.
+
+2009-11-23  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp.el (tramp-shell-prompt-pattern): Use \r for carriage
+	return.
+	(tramp-handle-make-symbolic-link)
+	(tramp-handle-dired-compress-file, tramp-handle-expand-file-name):
+	Quote file names.
+	(tramp-send-command-and-check): New argument DONT-SUPPRESS-ERR.
+	(tramp-handle-process-file): Use it.
+
 2009-11-23  Stefan Monnier  <monnier@iro.umontreal.ca>
 
 	* window.el (move-to-window-line-last-op): Remove.
@@ -72,12 +538,13 @@
 	(viper-prefix-arg-value): Do correct conversion of event-char for
 	XEmacs.
 
-	* emulation/viper-util.el, emulation/viper.el: Use
-	viper-last-command-char instead of last-command-char/last-command-event.
+	* emulation/viper-util.el, emulation/viper.el:
+	Use viper-last-command-char instead of
+	last-command-char/last-command-event.
 
-	* ediff-init.el, ediff-mult.el, ediff-util.el: Replace
-	last-command-char and last-command-event with (ediff-last-command-char)
-	everywhere.
+	* ediff-init.el, ediff-mult.el, ediff-util.el:
+	Replace last-command-char and last-command-event
+	with (ediff-last-command-char) everywhere.
 
 	* ediff-vers.el (ediff-rcs-get-output-buffer): Make sure the buffer is
 	created in fundamental mode.
@@ -93,8 +560,8 @@
 2009-11-21  Chong Yidong  <cyd@stupidchicken.com>
 
 	* cedet/semantic/complete.el (semantic-complete-read-tag-engine)
-	(semantic-complete-jump-local, semantic-complete-jump): Improve
-	prompt string.
+	(semantic-complete-jump-local, semantic-complete-jump):
+	Improve prompt string.
 
 2009-11-21  Jan Djärv  <jan.h.d@swipnet.se>
 
@@ -102,13 +569,13 @@
 
 2009-11-21  Nathaniel Flath  <flat0103@gmail.com>
 
-	* progmodes/cc-menus.el (cc-imenu-java-generic-expression): A
-	corrected version of the patch from 2009-11-18.  (Bug#3910)
+	* progmodes/cc-menus.el (cc-imenu-java-generic-expression):
+	Correct the patch from 2009-11-18.  (Bug#3910)
 
 2009-11-21  Alan Mackenzie  <acm@muc.de>
 
-	* progmodes/cc-menus.el (cc-imenu-java-generic-expression): Update
-	to deal with modern Java constructs.
+	* progmodes/cc-menus.el (cc-imenu-java-generic-expression):
+	Update to deal with modern Java constructs.
 
 2009-11-21  Tassilo Horn  <tassilo@member.fsf.org>
 

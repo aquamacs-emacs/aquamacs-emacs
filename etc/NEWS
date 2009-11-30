@@ -149,8 +149,17 @@ For instance, this can complete M-x lch to list-command-history.
 ** Completions in the *Completions* buffer are sorted vertically
 when the value of the new variable `completions-format' is `vertical'.
 
+** M-n provides more default values in the minibuffer of commands that
+read a file and directory name: a file name at point (when ffap is loaded
+without ffap-bindings), a file name on the current line in the Dired buffer,
+a directory name of adjacent Dired windows for Dired commands that can
+operate on several directories (copy, rename, diff).
+
 ** M-r is bound to the new `move-to-window-line-top-bottom'
 to mirror the new behavior of C-l in Emacs-23.1.
+
+** `recenter-positions' can redefine the default cycling order
+of `recenter-top-bottom'.
 
 
 * Changes in Specialized Modes and Packages in Emacs 23.2
@@ -191,10 +200,19 @@ effective for buffers that have no associated file.  If you want to
 exempt buffers that do correspond to files, customize the value of
 `desktop-files-not-to-save' instead.
 
+** DocView
+
+*** When `doc-view-continuous-mode' is non-nil, scrolling a line
+on the page edge advances to the next/previous page.
+
 ** FIXME mail-user-agent change
 This probably affects a lot of documentation.
 
 ** FIXME gdb-mi
+
+** Grep
+
+A new command `zrgrep' searches recursively in gzipped files.
 
 ** Info
 
@@ -280,8 +298,18 @@ the command asynchronously without the need to manually add ampersand to
 the end of the command.  Its output appears in the buffer `*Async Shell
 Command*'.
 
+*** Isearch searches in the comint/shell input history when the new variable
+`comint-history-isearch' is non-nil.  New commands `comint-history-isearch-backward'
+and `comint-history-isearch-backward-regexp' start Isearch in the input history
+regardless of the value of `comint-history-isearch'.
+
 +++
-*** Autorevert Tail mode now works now for remote files.
+*** Autorevert Tail mode now works also for remote files.
+
+*** The new commands `eshell/su' and `eshell/sudo' support Tramp.
+That means, they change `default-directory' to the new users value,
+and let commands run under that user permissions.  It works even when
+`default-directory' is already remote.
 
 
 * New Modes and Packages in Emacs 23.2

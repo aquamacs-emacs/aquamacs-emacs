@@ -3091,6 +3091,12 @@ Hit \\[ediff-recenter] to reset the windows afterward."
   )
 
 
+;; for compatibility
+(defmacro ediff-minibuffer-with-setup-hook (fun &rest body)
+  `(if (fboundp 'minibuffer-with-setup-hook)
+       (minibuffer-with-setup-hook ,fun ,@body)
+     ,@body))
+
 ;; This is adapted from a similar function in `emerge.el'.
 ;; PROMPT should not have a trailing ': ', so that it can be modified
 ;; according to context.
@@ -3113,21 +3119,25 @@ Hit \\[ediff-recenter] to reset the windows afterward."
   (if (string= default-file "")
       (setq default-file nil))
 
-  (let (f)
-    (setq f (expand-file-name
-	     (read-file-name
-	      (format "%s%s "
-		      prompt
-		      (cond (default-file
-			      (concat " (default " default-file "):"))
-			    (t (concat " (default " default-dir "):"))))
-	      default-dir
-	      (or default-file default-dir)
-	      t  ; must match, no-confirm
-	      (if default-file (file-name-directory default-file))
-	      )
-	     default-dir
-	     ))
+  (let ((defaults (and (fboundp 'dired-dwim-target-defaults)
+		       (dired-dwim-target-defaults
+			(and default-file (list default-file))
+			default-dir)))
+	f)
+    (setq f (ediff-minibuffer-with-setup-hook
+		(lambda () (when defaults
+			     (setq minibuffer-default defaults)))
+	      (read-file-name
+	       (format "%s%s "
+		       prompt
+		       (cond (default-file
+			       (concat " (default " default-file "):"))
+			     (t (concat " (default " default-dir "):"))))
+	       default-dir
+	       (or default-file default-dir)
+	       t			; must match, no-confirm
+	       (if default-file (file-name-directory default-file)))))
+    (setq f (expand-file-name f default-dir))
     ;; If user entered a directory name, expand the default file in that
     ;; directory.  This allows the user to enter a directory name for the
     ;; B-file and diff against the default-file in that directory instead

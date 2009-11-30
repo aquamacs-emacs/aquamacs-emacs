@@ -1,4 +1,55 @@
+2009-11-29  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* frame.c (frame_make_pointer_invisible)
+	(frame_make_pointer_visible): Declare f before statements.
+
+2009-11-28  Eli Zaretskii  <eliz@gnu.org>
+
+	* Makefile.in [!AUTO_DEPEND]: Remove outdated comment about
+	omitted dependencies on lisp.h.
+
+2009-11-27  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* xftfont.c (xftfont_end_for_frame): Just return if dpyinfo->display
+	is NULL.
+
+	* xterm.c (x_delete_terminal): Set dpyinfo->display to NULL.
+
+	* frame.c (frame_make_pointer_invisible)
+	(frame_make_pointer_visible): Just return if there isn't any selected 
+	frame.
+
+	* search.c (simple_search): Remove warning by making *p const.
+
+2009-11-26  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* xdisp.c (power_letter): Remove duplicate const.
+
+2009-11-25  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* term.c (delete_tty): Remove check for last terminal (bug#4970).
+
+	* xsettings.c: Revert changes from 2009-11-23. Just use Xft
+	defaults (bug #5025).
+
+2009-11-24  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* insdel.c (adjust_markers_for_delete): Move it in the
+	right direction!  (bug#4803)
+
+2009-11-24  YAMAMOTO Mitsuharu  <mituharu@math.s.chiba-u.ac.jp>
+
+	* font.c (font_open_entity): Don't use ASET if font_object is Qnil.
+
+	* xterm.c (x_new_font): Update f->scroll_bar_actual_width.
+
+2009-11-24  Glenn Morris  <rgm@gnu.org>
+
+	* frame.c (focus-follows-mouse): Mention mouse-autoselect-window.
+
 2009-11-23  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* Makefile.in: Must create deps for ecrt0.o in its rule.
 
 	* xfns.c (Fx_select_font): Try to convert Fontconfig name to Gtk name
 	because that is what Gtk+ font dialog understands.

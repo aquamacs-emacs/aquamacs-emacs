@@ -1710,7 +1710,7 @@ mainly for debugging, and should not be necessary in normal use."
                       (goto-char (point-min))
                       (search-forward "Bookmark")
                       (backward-word 1)
-                      (setq bookmark-bmenu-bookmark-column (current-column)))))
+                      (current-column))))
         (while bookmark-bmenu-hidden-bookmarks
           (move-to-column column t)
           (bookmark-kill-line)
@@ -2097,6 +2097,7 @@ To carry out the deletions that you've marked, use \\<bookmark-bmenu-mode-map>\\
     (unwind-protect
         (bookmark-read-search-input)
       (cancel-timer timer)
+      (message nil)
       (when bookmark-quit-flag        ; C-g hit restore menu list.
         (bookmark-bmenu-list) (bookmark-bmenu-goto-bookmark bmk))
       (setq bookmark-quit-flag nil))))

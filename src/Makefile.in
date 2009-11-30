@@ -1055,14 +1055,13 @@ stamp-oldxmenu:
 	exit 1
 
 ecrt0.o: ecrt0.c $(config_h)
+#ifdef AUTO_DEPEND
+	@-test -d deps || mkdir deps
+#endif
 	CRT0_COMPILE ${srcdir}/ecrt0.c
 doc.o: buildobj.h
 
 #ifndef AUTO_DEPEND
-/* Nearly all the following files depend on lisp.h,
-   but it is not included as a dependency because
-   it is so often changed in ways that do not require any recompilation
-   and so rarely changed in ways that do require any.  */
 
 atimer.o: atimer.c atimer.h syssignal.h systime.h lisp.h $(config_h)
 buffer.o: buffer.c buffer.h region-cache.h commands.h window.h \
