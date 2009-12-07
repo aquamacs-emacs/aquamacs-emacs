@@ -1894,7 +1894,8 @@ Call from the source buffer."
 	   (concat (user-login-name) "@" (system-name)))
        " on " (current-time-string) "\n"
        ";;; from file " filename "\n"
-       ";;; in Emacs version " emacs-version ", with"
+       ";;; in Emacs version " emacs-version "\n"
+       ";;; with"
        (cond
 	((eq optimize 'source) " source-level optimization only")
 	((eq optimize 'byte) " byte-level optimization only")
@@ -3714,7 +3715,7 @@ that suppresses all warnings during execution of BODY."
 (defun byte-compile-save-excursion (form)
   (if (and (eq 'set-buffer (car-safe (car-safe (cdr form))))
            (byte-compile-warning-enabled-p 'suspicious))
-      (byte-compile-warn "`save-excursion' defeated by `set-buffer'."))
+      (byte-compile-warn "`save-excursion' defeated by `set-buffer'"))
   (byte-compile-out 'byte-save-excursion 0)
   (byte-compile-body-do-effect (cdr form))
   (byte-compile-out 'byte-unbind 1))

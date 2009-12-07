@@ -6217,8 +6217,8 @@ set_iterator_to_next (it, reseat_p)
    or `\003'.
 
    IT->dpvec holds the glyphs to return as characters.
-   IT->saved_face_id holds the face id before the display vector--
-   it is restored into IT->face_idin set_iterator_to_next.  */
+   IT->saved_face_id holds the face id before the display vector--it
+   is restored into IT->face_id in set_iterator_to_next.  */
 
 static int
 next_element_from_display_vector (it)
@@ -6415,7 +6415,7 @@ next_element_from_c_string (it)
 
 /* Set up IT to return characters from an ellipsis, if appropriate.
    The definition of the ellipsis glyphs may come from a display table
-   entry.  This function Fills IT with the first glyph from the
+   entry.  This function fills IT with the first glyph from the
    ellipsis if an ellipsis is to be displayed.  */
 
 static int
@@ -16380,22 +16380,20 @@ cursor_row_p (w, row)
 
 
 /* Push the display property PROP so that it will be rendered at the
-   current position in IT.  */
+   current position in IT.  Return 1 if PROP was successfully pushed,
+   0 otherwise.  */
 
-static void
+static int
 push_display_prop (struct it *it, Lisp_Object prop)
 {
   push_it (it);
-
-  /* Never display a cursor on the prefix.  */
-  it->avoid_cursor_p = 1;
 
   if (STRINGP (prop))
     {
       if (SCHARS (prop) == 0)
 	{
 	  pop_it (it);
-	  return;
+	  return 0;
 	}
 
       it->string = prop;
@@ -16422,8 +16420,10 @@ push_display_prop (struct it *it, Lisp_Object prop)
   else
     {
       pop_it (it);		/* bogus display property, give up */
-      return;
+      return 0;
     }
+
+  return 1;
 }
 
 /* Return the character-property PROP at the current position in IT.  */
@@ -16463,13 +16463,13 @@ handle_line_prefix (struct it *it)
       if (NILP (prefix))
 	prefix = Vline_prefix;
     }
-  if (! NILP (prefix))
+  if (! NILP (prefix) && push_display_prop (it, prefix))
     {
-      push_display_prop (it, prefix);
       /* If the prefix is wider than the window, and we try to wrap
 	 it, it would acquire its own wrap prefix, and so on till the
 	 iterator stack overflows.  So, don't wrap the prefix.  */
       it->line_wrap = TRUNCATE;
+      it->avoid_cursor_p = 1;
     }
 }
 

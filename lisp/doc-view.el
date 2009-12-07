@@ -222,7 +222,7 @@ has finished."
   :type 'integer
   :group 'doc-view)
 
-(defcustom doc-view-continuous-mode nil
+(defcustom doc-view-continuous nil
   "In Continuous mode reaching the page edge advances to next/previous page.
 When non-nil, scrolling a line upward at the bottom edge of the page
 moves to the next page, and scrolling a line downward at the top edge
@@ -332,13 +332,23 @@ Can be `dvi', `pdf', or `ps'.")
 (easy-menu-define doc-view-menu doc-view-mode-map
   "Menu for Doc View mode."
   '("DocView"
+    ["Toggle display"		doc-view-toggle-display]
+    ("Continuous"
+     ["Off"                     (setq doc-view-continuous nil)
+      :style radio :selected    (eq doc-view-continuous nil)]
+     ["On"		        (setq doc-view-continuous t)
+      :style radio :selected    (eq doc-view-continuous t)]
+     "---"
+     ["Save as Default"
+      (customize-save-variable 'doc-view-continuous doc-view-continuous) t]
+     )
+    "---"
     ["Set Slice"		doc-view-set-slice-using-mouse]
     ["Set Slice (manual)"	doc-view-set-slice]
     ["Reset Slice"		doc-view-reset-slice]
     "---"
     ["Search"			doc-view-search]
     ["Search Backwards"         doc-view-search-backward]
-    ["Toggle display"		doc-view-toggle-display]
     ))
 
 (defvar doc-view-minor-mode-map
@@ -433,11 +443,11 @@ Can be `dvi', `pdf', or `ps'.")
 
 (defun doc-view-scroll-up-or-next-page (&optional arg)
   "Scroll page up ARG lines if possible, else goto next page.
-When `doc-view-continuous-mode' is non-nil, scrolling upward
+When `doc-view-continuous' is non-nil, scrolling upward
 at the bottom edge of the page moves to the next page.
 Otherwise, goto next page only on typing SPC (ARG is nil)."
   (interactive "P")
-  (if (or doc-view-continuous-mode (null arg))
+  (if (or doc-view-continuous (null arg))
       (let ((hscroll (window-hscroll))
 	    (cur-page (doc-view-current-page)))
 	(when (= (window-vscroll) (image-scroll-up arg))
@@ -450,11 +460,11 @@ Otherwise, goto next page only on typing SPC (ARG is nil)."
 
 (defun doc-view-scroll-down-or-previous-page (&optional arg)
   "Scroll page down ARG lines if possible, else goto previous page.
-When `doc-view-continuous-mode' is non-nil, scrolling downward
+When `doc-view-continuous' is non-nil, scrolling downward
 at the top edge of the page moves to the previous page.
 Otherwise, goto previous page only on typing DEL (ARG is nil)."
   (interactive "P")
-  (if (or doc-view-continuous-mode (null arg))
+  (if (or doc-view-continuous (null arg))
       (let ((hscroll (window-hscroll))
 	    (cur-page (doc-view-current-page)))
 	(when (= (window-vscroll) (image-scroll-down arg))
@@ -467,10 +477,10 @@ Otherwise, goto previous page only on typing DEL (ARG is nil)."
 
 (defun doc-view-next-line-or-next-page (&optional arg)
   "Scroll upward by ARG lines if possible, else goto next page.
-When `doc-view-continuous-mode' is non-nil, scrolling a line upward
+When `doc-view-continuous' is non-nil, scrolling a line upward
 at the bottom edge of the page moves to the next page."
   (interactive "p")
-  (if doc-view-continuous-mode
+  (if doc-view-continuous
       (let ((hscroll (window-hscroll))
 	    (cur-page (doc-view-current-page)))
 	(when (= (window-vscroll) (image-next-line arg))
@@ -483,10 +493,10 @@ at the bottom edge of the page moves to the next page."
 
 (defun doc-view-previous-line-or-previous-page (&optional arg)
   "Scroll downward by ARG lines if possible, else goto previous page.
-When `doc-view-continuous-mode' is non-nil, scrolling a line downward
+When `doc-view-continuous' is non-nil, scrolling a line downward
 at the top edge of the page moves to the previous page."
   (interactive "p")
-  (if doc-view-continuous-mode
+  (if doc-view-continuous
       (let ((hscroll (window-hscroll))
 	    (cur-page (doc-view-current-page)))
 	(when (= (window-vscroll) (image-previous-line arg))
@@ -553,7 +563,7 @@ It's a subdirectory of `doc-view-cache-directory'."
     (setq doc-view-current-cache-dir
 	  (file-name-as-directory
 	   (expand-file-name
-	    (concat (file-name-nondirectory buffer-file-name)
+	    (concat (file-name-nondirectory doc-view-buffer-file-name)
 		    "-"
 		    (let ((file doc-view-buffer-file-name))
 		      (with-temp-buffer
@@ -1218,6 +1228,7 @@ toggle between displaying the document or editing it as text.
     (set (make-local-variable 'doc-view-buffer-file-name)
 	 (cond
 	  (jka-compr-really-do-compress
+           ;; FIXME: there's a risk of name conflicts here.
 	   (expand-file-name
 	    (file-name-nondirectory
 	     (file-name-sans-extension buffer-file-name))
@@ -1227,10 +1238,13 @@ toggle between displaying the document or editing it as text.
 	  ;; supposed to return nil for things like local files accessed via
 	  ;; `su' or via file://...
 	  ((let ((file-name-handler-alist nil))
-	     (not (file-readable-p buffer-file-name)))
+	     (not (and buffer-file-name (file-readable-p buffer-file-name))))
+           ;; FIXME: there's a risk of name conflicts here.
 	   (expand-file-name
-	    (file-name-nondirectory buffer-file-name)
-	    doc-view-cache-directory))
+	    (if buffer-file-name
+                (file-name-nondirectory buffer-file-name)
+              (buffer-name))
+            doc-view-cache-directory))
 	  (t buffer-file-name)))
     (when (not (string= doc-view-buffer-file-name buffer-file-name))
       (write-region nil nil doc-view-buffer-file-name))

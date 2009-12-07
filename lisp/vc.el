@@ -333,13 +333,16 @@
 ;;
 ;; HISTORY FUNCTIONS
 ;;
-;; * print-log (files buffer &optional shortlog limit)
+;; * print-log (files buffer &optional shortlog start-revision limit)
 ;;
 ;;   Insert the revision log for FILES into BUFFER.
 ;;   If SHORTLOG is true insert a short version of the log.
 ;;   If LIMIT is true insert only insert LIMIT log entries.  If the
 ;;   backend does not support limiting the number of entries to show
 ;;   it should return `limit-unsupported'.
+;;   If START-REVISION is given, then show the log starting from the
+;;   revision.  At this point START-REVISION is only required to work
+;;   in conjunction with LIMIT = 1.
 ;;
 ;; - log-view-mode ()
 ;;
@@ -1859,8 +1862,11 @@ If it contains `directory' then if the fileset contains a directory show a short
 If it contains `file' then show short logs for files.
 Not all VC backends support short logs!")
 
+(defvar log-view-vc-backend)
+(defvar log-view-vc-fileset)
+
 (defun vc-print-log-internal (backend files working-revision
-                                      &optional limit)
+                                      &optional is-start-revision limit)
   ;; Don't switch to the output buffer before running the command,
   ;; so that any buffer-local settings in the vc-controlled
   ;; buffer can be accessed by the command.
@@ -1875,29 +1881,33 @@ Not all VC backends support short logs!")
 			 (memq 'directory vc-log-short-style)
 		       (memq 'file vc-log-short-style)))))
 
-    (setq pl-return (vc-call-backend backend 'print-log files "*vc-change-log*"
-				     vc-short-log limit))
+    (setq pl-return (vc-call-backend
+		     backend 'print-log files "*vc-change-log*"
+		     vc-short-log (when is-start-revision working-revision) limit))
     (pop-to-buffer "*vc-change-log*")
-    (vc-exec-after
-     `(let ((inhibit-read-only t)
-	    (vc-short-log ,vc-short-log))
-	(vc-call-backend ',backend 'log-view-mode)
-	(set (make-local-variable 'log-view-vc-backend) ',backend)
-	(set (make-local-variable 'log-view-vc-fileset) ',files)
+    (let ((inhibit-read-only t))
+      ;; log-view-mode used to be called with inhibit-read-only bound
+      ;; to t, so let's keep doing it, just in case.
+      (vc-call-backend backend 'log-view-mode))
+    (set (make-local-variable 'log-view-vc-backend) backend)
+    (set (make-local-variable 'log-view-vc-fileset) files)
 
-	(when (and ,limit (not (eq 'limit-unsupported pl-return)))
+    (vc-exec-after
+     `(let ((inhibit-read-only t))
+	(when (and ,limit (not ,(eq 'limit-unsupported pl-return))
+		   (not ,is-start-revision))
 	  (goto-char (point-max))
 	  (widget-create 'push-button
 			 :notify (lambda (&rest ignore)
 				   (vc-print-log-internal
-				    ',backend ',files ',working-revision (* 2 ,limit)))
+				    ',backend ',files ',working-revision nil (* 2 ,limit)))
 			 :help-echo "Show the log again, and double the number of log entries shown"
 			 "Show 2X entries")
 	  (widget-insert "    ")
 	  (widget-create 'push-button
 			 :notify (lambda (&rest ignore)
 				   (vc-print-log-internal
-				    ',backend ',files ',working-revision nil))
+				    ',backend ',files ',working-revision nil nil))
 			 :help-echo "Show the log again, showing all entries"
 			 "Show unlimited entries")
 	  (widget-setup))
@@ -1926,12 +1936,12 @@ If WORKING-REVISION is non-nil, leave the point at that revision."
        (when (<= lim 0) (setq lim nil))
        (list rev lim)))
     (t
-     (list nil nil))))
+     (list nil (when (> vc-log-show-limit 0) vc-log-show-limit)))))
   (let* ((vc-fileset (vc-deduce-fileset t)) ;FIXME: Why t? --Stef
 	 (backend (car vc-fileset))
 	 (files (cadr vc-fileset))
 	 (working-revision (or working-revision (vc-working-revision (car files)))))
-    (vc-print-log-internal backend files working-revision limit)))
+    (vc-print-log-internal backend files working-revision nil limit)))
 
 ;;;###autoload
 (defun vc-print-root-log (&optional limit)
@@ -1947,7 +1957,7 @@ If WORKING-REVISION is non-nil, leave the point at that revision."
        (when (<= lim 0) (setq lim nil))
        (list lim)))
     (t
-     (list nil))))
+     (list (when (> vc-log-show-limit 0) vc-log-show-limit)))))
   (let ((backend
 	 (cond ((derived-mode-p 'vc-dir-mode)  vc-dir-backend)
 	       ((derived-mode-p 'dired-mode) (vc-responsible-backend default-directory))
@@ -1957,7 +1967,7 @@ If WORKING-REVISION is non-nil, leave the point at that revision."
       (error "Buffer is not version controlled"))
     (setq rootdir (vc-call-backend backend 'root default-directory))
     (setq working-revision (vc-working-revision rootdir))
-    (vc-print-log-internal backend (list rootdir) working-revision limit)))
+    (vc-print-log-internal backend (list rootdir) working-revision nil limit)))
 
 ;;;###autoload
 (defun vc-revert ()
@@ -1983,10 +1993,12 @@ to the working revision (except for keyword expansion)."
     (when (vc-diff-internal vc-allow-async-revert vc-fileset nil nil)
       (unless (yes-or-no-p
 	       (format "Discard changes in %s? "
-		       (let ((str (vc-delistify files)))
+		       (let ((str (vc-delistify files))
+			     (nfiles (length files)))
 			 (if (< (length str) 50)
 			     str
-			   (format "%d files" (length files))))))
+			   (format "%d file%s" nfiles
+				   (if (= nfiles 1) "" "s"))))))
 	(error "Revert canceled"))
       (delete-windows-on "*vc-diff*")
       (kill-buffer "*vc-diff*"))

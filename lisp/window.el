@@ -1,7 +1,8 @@
 ;;; window.el --- GNU Emacs window commands aside from those written in C
 
 ;; Copyright (C) 1985, 1989, 1992, 1993, 1994, 2000, 2001, 2002,
-;;   2003, 2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
+;;   2003, 2004, 2005, 2006, 2007, 2008, 2009
+;;   Free Software Foundation, Inc.
 
 ;; Maintainer: FSF
 ;; Keywords: internal
@@ -1042,7 +1043,7 @@ Return WINDOW."
   (when (and (buffer-live-p buffer) (window-live-p window))
     (set-window-buffer window buffer)
     (when dedicated
-      (set-window-dedicated-p window-to-use dedicated))
+      (set-window-dedicated-p window dedicated))
     (window--display-buffer-1 window)))
 
 (defvar display-buffer-mark-dedicated nil

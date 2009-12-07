@@ -124,9 +124,11 @@
 
 (easy-mmode-defmap log-view-mode-map
   '(("z" . kill-this-buffer)
+    ("q" . quit-window)
     ("m" . log-view-toggle-mark-entry)
     ("e" . log-view-modify-change-comment)
     ("d" . log-view-diff)
+    ("=" . log-view-diff)
     ("D" . log-view-diff-changeset)
     ("a" . log-view-annotate-version)
     ("f" . log-view-find-revision)
@@ -139,6 +141,7 @@
     ("\M-n" . log-view-file-next)
     ("\M-p" . log-view-file-prev))
   "Log-View's keymap."
+  :inherit widget-keymap
   :group 'log-view)
 
 (easy-menu-define log-view-mode-menu log-view-mode-map

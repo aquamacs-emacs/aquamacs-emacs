@@ -1,3 +1,746 @@
+2009-12-07  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* minibuffer.el (completion-at-point-functions): New var.
+	(completion-at-point): New command.
+	* indent.el (indent-for-tab-command): Handle the new `complete' behavior.
+	* progmodes/python.el (python-mode-map): Use completion-at-point.
+	(python-completion-at-point): Rename from python-partial-symbol and
+	adjust for use in completion-at-point-functions.
+	(python-mode): Setup completion-at-point for Python completion.
+	* emacs-lisp/lisp.el (lisp-completion-at-point): New function
+	extracted from lisp-complete-symbol.
+	(lisp-complete-symbol): Use it.
+	* emacs-lisp/lisp-mode.el (emacs-lisp-mode): Use define-derived-mode,
+	setup completion-at-point for Elisp completion.
+	(emacs-lisp-mode-map, lisp-interaction-mode-map): Use completion-at-point.
+	* ielm.el (ielm-map): Use completion-at-point.
+	(inferior-emacs-lisp-mode): Setup completion-at-point for Elisp completion.
+	* progmodes/sym-comp.el: Move to...
+	* obsolete/sym-comp.el: Move from progmodes.
+
+2009-12-07  Eli Zaretskii  <eliz@gnu.org>
+
+	Prevent save-buffer in Rmail buffers from using the coding-system
+	of the current message, and from clobbering the encoding mnemonics
+	in the mode line (Bug#4623).
+
+	* mail/rmail.el (rmail-swap-buffers): Swap encoding and modified
+	flag, too.
+	(rmail-message-encoding): New variable.
+	(rmail-write-region-annotate): Record the encoding of the current
+	message in rmail-message-encoding.
+	(rmail-after-save-hook): New function, restores the encoding of
+	the current message after the message collection is saved.
+
+2009-12-07  Juri Linkov  <juri@jurta.org>
+
+	* progmodes/grep.el (grep-read-files): Use `completing-read'
+	instead of `read-string'.  Set its `collection' arg to
+	`read-file-name-internal'.  (Bug#4301)
+
+2009-12-07  Juri Linkov  <juri@jurta.org>
+
+	Correctly restore original Isearch point.  (Bug#4994)
+
+	* isearch.el (isearch-mode): Move `isearch-push-state' after
+	`(run-hooks 'isearch-mode-hook)'.
+	(isearch-cancel): When `isearch-push-state-function' is defined,
+	let-bind `isearch-cmds' to the first state (the last element of
+	`isearch-cmds') and call `isearch-top-state' (it calls pop-state
+	function and restores the original point).  Otherwise, move point
+	to `isearch-opoint'.
+
+2009-12-07  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* international/mule-cmds.el (ucs-names): Weed out at compile-time the
+	chars that don't have names, so the table can be built much faster at
+	run-time.
+
+2009-12-07  Chong Yidong  <cyd@stupidchicken.com>
+
+	* vc-bzr.el (vc-bzr-annotate-command): More elegant form for last
+	change.  Suggested by David Kastrup.
+
+	* simple.el (compose-mail): Check for incompatibilities and warn.
+	(compose-mail-user-agent-warnings): New option.
+
+2009-12-07  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	Support showing a single log entry from vc-annotate.
+	* vc.el (print-log): Add a new argument: START-REVISION.
+	(vc-print-log-internal): Add a new optional argument and
+	pass it to the backend.
+	(vc-print-log, vc-print-root-log): Adjust callers.
+	* vc-annotate.el (vc-annotate-show-log-revision-at-line): If a
+	buffer already displays the requested log entry, use it.
+	Otherwise display only the log entry in question.
+	* vc-svn.el (vc-svn-print-log):
+	* vc-mtn.el (log-view-file-re):
+	* vc-hg.el (vc-hg-state):
+	* vc-git.el (vc-git-print-log): Add support for new argument START-REVISION.
+	(vc-git-show-log-entry): Return t on success.
+	* vc-bzr.el (vc-bzr-print-log): Add support new argument START-REVISION.
+	(vc-bzr-show-log-entry): Return t on success.
+	* vc-rcs.el (vc-rcs-print-log):
+	* vc-sccs.el (vc-sccs-print-log):
+	* vc-cvs.el (vc-cvs-print-log): Add new argument, ignore it.
+
+2009-12-07  Michael Kifer <kifer@cs.stonybrook.edu>
+
+	* ediff-init.el (ediff-event-key): Use event-to-character instead of
+	event-key.
+
+	* ediff-mult.el (ediff-setup-meta-map, ediff-prepare-meta-buffer): Add
+	menus to the meta mode. (Dan Nicolaescu's <dann@ics.uci.edu> patch.)
+
+	* ediff.el (ediff-buffers-internal): Add unwind-protect.
+
+2009-12-07  Michael Albinus  <michael.albinus@gmx.de>
+
+	Handle prompt rules of ksh in OpenBSD 4.5.  Reported by Raphaël
+	Berbain <raphael.berbain@gmail.com>.
+
+	* net/tramp.el (tramp-end-of-output): Move up.  Use `#' and `$'
+	characters.
+	(tramp-initial-end-of-output): New defconst.
+	(tramp-methods, tramp-find-shell)
+	(tramp-open-connection-setup-interactive-shell)
+	(tramp-maybe-open-connection): Use it.
+	(tramp-shell-prompt-pattern, tramp-wait-for-output): Handle
+	existence of `#' and `$'.
+
+	* net/tramp-fish.el (tramp-fish-maybe-open-connection): Use
+	`tramp-initial-end-of-output'.
+
+2009-12-07  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	Get the background mode from the terminal for xterm, and set
+	faces accordingly.
+	* term/xterm.el (xterm-set-background-mode): New function.
+	(terminal-init-xterm): Use it in case xterm supports background
+	color queries.  Recompute faces after getting the background
+	color.
+
+2009-12-07  Ulrich Mueller  <ulm@gentoo.org>
+
+	* emacs-lisp/bytecomp.el (byte-compile-insert-header): Put the version
+	number comment back on its own line, for easier parsing.
+
+2009-12-07  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	Make it work for non-file buffers (bug#5102).
+	* doc-view.el (doc-view-current-cache-dir):
+	Use doc-view-buffer-file-name rather than buffer-file-name.
+	(doc-view-mode): Use buffer-name when buffer-file-name is nil.
+
+2009-12-06  Óscar Fuentes  <ofv@wanadoo.es>
+
+	* vc-bzr.el (vc-bzr-annotate-command): Handle the case where the
+	author field is too short.
+
+2009-12-06  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* vc-git.el (vc-git-print-log): Handle a limit argument.
+	Display the short log in graph form and with labels.
+	(vc-git-log-view-mode): Handle labels.
+
+	Make vc-revert change VC state from 'added to 'unregistered.
+	* vc-git.el (vc-git-revert): Call git reset first.
+
+2009-12-06  Ulf Jasper  <ulf.jasper@web.de>
+
+	* net/newst-backend.el :
+	* net/newst-plainview.el:
+	* net/newst-reader.el:
+	* net/newst-ticker.el:
+	* net/newst-treeview.el:
+	* net/newsticker.el: Require/provide newst-... (instead of
+	newsticker-...). (Bug#5096)
+
+2009-12-06  Chong Yidong  <cyd@stupidchicken.com>
+
+	* log-view.el (log-view-mode-map): Bind "=" to log-view-diff too.
+
+	* vc-bzr.el (vc-bzr-annotate-command): Show author in annotation.
+	Handle empty author field (Bug#4144).  Suggested by Óscar Fuentes.
+	(vc-bzr-annotate-time, vc-bzr-annotate-extract-revision-at-line):
+	Update annotation regexp.
+
+	* simple.el (beginning-of-visual-line): Constrain to field
+	boundaries (Bug#5106).
+
+2009-12-06  Ulf Jasper  <ulf.jasper@web.de>
+
+	* xml.el (xml-substitute-numeric-entities): Moved
+	newsticker--decode-numeric-entities in newst-backend.el to
+	xml-substitute-numeric-entities in xml.el. (Bug#5008)
+
+	* net/newst-backend.el (newsticker--parse-generic-feed)
+	(newsticker--parse-generic-items)
+	(newsticker--decode-numeric-entities): Moved
+	newsticker--decode-numeric-entities in newst-backend.el to
+	xml-substitute-numeric-entities in xml.el. (Bug#5008)
+
+2009-12-06  Daniel Colascione  <dan.colascione@gmail.com>
+
+	* progmodes/js.el (js--js-not): Add null to the list of values.
+
+2009-12-06  Chong Yidong  <cyd@stupidchicken.com>
+
+	* ansi-color.el (ansi-color-for-comint-mode): Add :version
+	keyword.
+
+2009-12-06  Roland Winkler  <Roland.Winkler@physik.uni-erlangen.de>
+
+	* textmodes/bibtex.el (bibtex-enclosing-field): Exclude entry
+	delimiter if it is at the end of the current line.
+	(bibtex-generate-url-list): Fix docstring.
+
+2009-12-06  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* minibuffer.el (minibuffer-complete-and-exit): Don't replace the
+	minibuffer's content with itself.
+	Fold the confirm-after-completion case into the `confirm' case.
+	(completion-pcm-word-delimiters): Add : and / to the delimiters.
+
+2009-12-06  Kevin Ryde  <user42@zip.com.au>
+
+	* ffap.el (ffap-rfc-path): Make this a defcustom since
+	`ffap-rfc-directories' is also a defcustom.  (My Bug#4514.)
+
+	* info-look.el: Add setup for apropos-mode to use emacs-lisp-mode
+	manuals, similar to existing setup for help-mode.  (My bug#3913.)
+
+2009-12-05  Juri Linkov  <juri@jurta.org>
+
+	Save and restore dired buffer's point positions too.  (Bug#4880)
+
+	* dired.el (dired-save-positions): Return in the first element
+	buffer's position in format (BUFFER DIRED-FILENAME BUFFER-POINT).
+	Doc fix.
+	(dired-restore-positions): First restore buffer's position.
+	While restoring window's positions, check if window still displays
+	the original buffer.
+
+2009-12-05  Chong Yidong  <cyd@stupidchicken.com>
+
+	* bindings.el (complete-symbol): Call semantic-ia-complete-symbol
+	if possible.
+
+	* cedet/semantic/ia.el (semantic-ia-complete-symbol):
+	Make argument optional.
+
+	* shell.el (shell): Require ansi-color (Bug#5113).
+
+	* ansi-color.el (ansi-color-for-comint-mode): Default to t.
+
+	* hl-line.el (global-hl-line-highlight): Minor doc fix (Bug#4925).
+
+2009-12-05  Alan Mackenzie  <acm@muc.de>
+
+	* progmodes/cc-mode.el (c-before-hack-hook)
+	(c-postprocess-file-styles): Revert change 1.85 to permit
+	`c-file-style' to work again.  This reversion restores the current
+	software to its state in Emacs 23.1.  (Bug#4146)
+
+2009-12-05  Kevin Ryde  <user42@zip.com.au>
+
+	* textmodes/sgml-mode.el (sgml-lexical-context): Recognise
+	comment-start-skip to comment-end-skip as comment (Bug#4781).
+
+2009-12-05  Juri Linkov  <juri@jurta.org>
+
+	* info.el (Info-find-node-2): Set `Info-current-subfile' to nil
+	for virtual nodes.  (Bug#4147)
+	(Info-find-node-2): Set `Info-current-node-virtual' to nil
+	when moving from a virtual node.
+	(Info-mode-menu): Add `Info-virtual-index' to the menu.
+	(Info-mode): Add `Info-virtual-index' to the docstring.
+
+2009-12-05  Eric Ludlam  <zappo@gnu.org>
+
+	* cedet/semantic/bovine/c.el (semantic-c-describe-environment):
+	Describe project macro symbols.
+
+	* cedet/semantic/complete.el (semantic-complete-do-completion):
+	Don't call semantic-collector-current-exact-match.
+
+	* cedet/ede.el (ede-apply-preprocessor-map): Accept lists of
+	ede-objects as targets.
+
+	* cedet/ede/pmake.el (ede-proj-makefile-insert-variables): Output
+	a target's object list even if compiler vars are already in the
+	Makefile.
+
+	* cedet/ede/emacs.el (ede-preprocessor-map): Add config.h to the
+	list of headers producing necessary macros.
+
+2009-12-05  Roland Winkler  <Roland.Winkler@physik.uni-erlangen.de>
+
+	* textmodes/bibtex.el (bibtex-map-entries): Use marker to keep
+	track of the buffer position of the end of a BibTeX entry as this
+	position may change during reformatting.
+	(bibtex-format-entry): Remove whitespace before processing
+	numerical fields so that we recognize the latter properly.
+	(bibtex-reformat): Do not use push which changes the global value
+	of bibtex-entry-format.
+	(bibtex-field-braces-alist, bibtex-field-strings-alist)
+	(bibtex-field-re-init): Replace only space characters by regexp
+	for whitespace.
+	(bibtex-generate-url-list, bibtex-cite-matcher-alist): Fix docstring.
+	(bibtex-initialize): Also update bibtex-strings.
+	(bibtex-kill-field): Preserve white space at end of entry.
+	(bibtex-kill-entry, bibtex-yank-pop, bibtex-insert-kill):
+	Update bibtex-reference-keys.
+
+2009-12-05  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* minibuffer.el (completion-pcm--merge-try): Also consider placing
+	point after a star, if that's the only place where modifications can
+	make progress.
+
+2009-12-05  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* vc-dir.el (vc-dir): Use the correct markup for showing keymaps
+	in docstrings.
+
+2009-12-04  Juri Linkov  <juri@jurta.org>
+
+	* proced.el (proced): Call `(proced-update t)' to update process
+	information instead of only running proced-post-display-hook.
+	(proced-send-signal): Add a leading space to the buffer name
+	" *Marked Processes*" to make this buffer ephemeral.
+
+2009-12-04  Juri Linkov  <juri@jurta.org>
+
+	* dired.el (dired-auto-revert-buffer): New defcustom.
+	(dired-internal-noselect): Use it.
+
+2009-12-04  Juri Linkov  <juri@jurta.org>
+
+	Change roles of modes and functions in image-mode.el (Bug#5062).
+
+	* image-mode.el: Replace `image-mode-maybe' with `image-mode'
+	in `auto-mode-alist'.
+	(image-mode-previous-major-mode): New variable.
+	(image-minor-mode-map): Rename from `image-mode-text-map'.
+	(image-mode): Move graceful error-handling code from
+	`image-minor-mode' to here.  On errors call `image-mode-as-text'.
+	(image-minor-mode): Remove all image-handling code.
+	Replace `image-mode-text-map' with `image-minor-mode-map'.
+	Check for `image-type' in mode-line format string.
+	(image-mode-maybe): Make obsolete with an alias to `image-mode'.
+	(image-mode-as-text): New function with most code from
+	`image-mode-maybe'.
+	(image-toggle-display-text): Move code that removes image
+	properties from `image-toggle-display' to here.
+	(image-toggle-display-image): New function with code that adds
+	image properties copied from `image-toggle-display'.
+	(image-toggle-display): Remove most code with leaving only code
+	that toggles between `image-mode-as-text' and `image-mode'.
+
+2009-12-04  Ulf Jasper  <ulf.jasper@web.de>
+
+	* net/newst-treeview.el
+	(newsticker--treeview-list-highlight-start): Restored call to
+	save-excursion: Selected item was stuck.
+	(newsticker--treeview-list-select): New.
+	(newsticker--treeview-item-show-text)
+	(newsticker--treeview-item-show)
+	(newsticker--treeview-item-update): Use new
+	newsticker-treeview-item-mode.
+	(newsticker-treeview-update): Keep current item.
+	(newsticker-treeview-next-new-or-immortal-item): Doc change.
+	(newsticker--treeview-first-feed): Doc change.
+	(newsticker-treeview-list-menu)
+	(newsticker-treeview-item-menu): Added menu entries.
+	(newsticker-treeview-item-mode): New.
+
+	* net/newst-backend.el (newsticker-customize): delete other
+	windows.
+
+2009-12-04  Sam Steingold  <sds@gnu.org>
+
+	* log-view.el (log-view-mode-map): "q" calls quit-window,
+	like in all the other non-self-insert buffers.
+
+2009-12-04  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	Minor cleanup.
+	* term.el (term-send-raw, term-send-raw-meta): Use read-key-sequence's
+	key decoding rather than do it manually via last-input-event +
+	ascii-character.
+	(term-exec): Use delete-and-extract-region.
+	(term-handle-ansi-terminal-messages): Remove unused var `end'.
+	(term-process-pager): Remove unused var `i'.
+	(term-dynamic-simple-complete): Make obsolete.
+	(serial-update-config-menu): Remove unused vars `y' and `str'.
+	(term-update-mode-line): Remove unused var `temp'.
+
+2009-12-03  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	Limit the number of log entries displayed by default.
+	* vc.el (vc-print-log-internal): Fix check for limit-unsupported.
+	(vc-print-log, vc-print-root-log): Use vc-log-show-limit when not
+	using a prefix argument.
+
+2009-12-03  Glenn Morris  <rgm@gnu.org>
+
+	* progmodes/idlwave.el (class): Restore still useful declaration.
+
+2009-12-03  Alan Mackenzie  <acm@muc.de>
+
+	Enhance `c-parse-state' to run efficiently in "brace deserts".
+
+	* progmodes/cc-mode.el (c-basic-common-init):
+	Call c-state-cache-init.
+	(c-neutralize-syntax-in-and-mark-CPP):  Rename from
+	c-extend-and-neutralize-syntax-in-CPP.  Mark each CPP construct by
+	placing `category' properties value 'c-cpp-delimiter at its boundaries.
+
+	* progmodes/cc-langs.el (c-before-font-lock-function):
+	c-extend-and-neutralize-syntax-in-CPP has been renamed
+	c-neutralize-syntax-in-and-mark-CPP.
+
+	* progmodes/cc-fonts.el (c-cpp-matchers): Mark template brackets
+	with `category' properties now, not `syntax-table' ones.
+
+	* progmodes/cc-engine.el (c-syntactic-end-of-macro): A new
+	enhanced (but slower) version of c-end-of-macro that won't land
+	inside a literal or on another awkward character.
+	(c-state-cache-too-far, c-state-cache-start)
+	(c-state-nonlit-pos-interval, c-state-nonlit-pos-cache)
+	(c-state-nonlit-pos-cache-limit, c-state-point-min)
+	(c-state-point-min-lit-type, c-state-point-min-lit-start)
+	(c-state-min-scan-pos, c-state-brace-pair-desert)
+	(c-state-old-cpp-beg, c-state-old-cpp-end): New constants and
+	buffer local variables.
+	(c-state-literal-at, c-state-lit-beg)
+	(c-state-cache-non-literal-place, c-state-get-min-scan-pos)
+	(c-state-mark-point-min-literal, c-state-cache-top-lparen)
+	(c-state-cache-top-paren, c-state-cache-after-top-paren)
+	(c-get-cache-scan-pos, c-get-fallback-scan-pos)
+	(c-state-balance-parens-backwards, c-parse-state-get-strategy)
+	(c-renarrow-state-cache)
+	(c-append-lower-brace-pair-to-state-cache)
+	(c-state-push-any-brace-pair, c-append-to-state-cache)
+	(c-remove-stale-state-cache)
+	(c-remove-stale-state-cache-backwards, c-state-cache-init)
+	(c-invalidate-state-cache-1, c-parse-state-1)
+	(c-invalidate-state-cache): New defuns/defmacros/defsubsts.
+	(c-parse-state): Enhance and refactor.
+	(c-debug-parse-state): Amend to deal with all the new variables.
+
+	* progmodes/cc-defs.el (c-<-as-paren-syntax, c-mark-<-as-paren)
+	(c->-as-paren-syntax, c-mark->-as-paren, c-unmark-<->-as-paren):
+	modify to use category text properties rather than syntax-table ones.
+	(c-suppress-<->-as-parens, c-restore-<->-as-parens): New defsubsts
+	to switch off/on the syntactic paren property of C++ template
+	delimiters using the category property.
+	(c-with-<->-as-parens-suppressed): Macro to invoke code with
+	template delims suppressed.
+	(c-cpp-delimiter, c-set-cpp-delimiters, c-clear-cpp-delimiters):
+	New constant/macros which apply category properties to the start
+	and end of preprocessor constructs.
+	(c-comment-out-cpps, c-uncomment-out-cpps): Defsubsts which
+	"comment out" the syntactic value of characters in preprocessor
+	constructs.
+	(c-with-cpps-commented-out)
+	(c-with-all-but-one-cpps-commented-out): Macros to invoke code
+	with characters in all or all but one preprocessor constructs
+	"commented out".
+
+2009-12-03  Roland Winkler  <Roland.Winkler@physik.uni-erlangen.de>
+
+	* proced.el (proced-filter-alist): Use regexp-quote.
+
+2009-12-03  Michael Albinus  <michael.albinus@gmx.de>
+
+	Cleanup.
+	* eshell/em-unix.el (top): Require 'esh-opt and 'pcomplete.
+	(eshell/su, eshell/sudo): Require 'tramp.  Fix problems reading
+	arguments.  Expand `default-directory'.
+
+	* net/tramp.el (tramp-handle-file-remote-p): Expand FILENAME for
+	the benefit of returning an expanded localname.
+	(tramp-tramp-file-p): Handle the case NAME is not a string.
+
+2009-12-03  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	Add support for bzr shelve/unshelve.
+	* vc-bzr.el (vc-bzr-shelve-map, vc-bzr-shelve-menu-map)
+	(vc-bzr-extra-menu-map): New variables.
+	(vc-bzr-extra-menu, vc-bzr-extra-status-menu, vc-bzr-shelve)
+	(vc-bzr-shelve-apply, vc-bzr-shelve-list)
+	(vc-bzr-shelve-get-at-point, vc-bzr-shelve-delete-at-point)
+	(vc-bzr-shelve-apply-at-point, vc-bzr-shelve-menu): New functions.
+	(vc-bzr-dir-extra-headers): Display shelves.
+
+	* vc-bzr.el (vc-bzr-print-log): Deal with nil arguments better.
+
+2009-12-03  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* textmodes/bibtex.el (bibtex-complete-internal):
+	Use completion-in-region.
+	(bibtex-text-in-field-bounds): Remove unused var `opoint'.
+
+2009-12-03  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	Support applying stashes.  Improve UI.
+	* vc-git.el (vc-git-dir-extra-headers): Add tooltips.
+	(vc-git-stash-apply, vc-git-stash-pop)
+	(vc-git-stash-apply-at-point, vc-git-stash-pop-at-point)
+	(vc-git-stash-menu): New functions.
+	(vc-git-stash-menu-map): New variable.
+	(vc-git-stash-map): Add bindings to popup a menu and to apply stashes.
+
+2009-12-03  Glenn Morris  <rgm@gnu.org>
+
+	* vc.el (log-view-vc-backend, log-view-vc-fileset): Declare.
+	(vc-print-log-internal): Fix previous change.
+	(vc-revert): Correct pluralization.
+
+2009-12-03  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* progmodes/make-mode.el (makefile-special-targets-list): No need for
+	it to be an alist any more.
+	(makefile-complete): Use completion-in-region.
+
+	* progmodes/octave-mod.el (octave-complete-symbol):
+	Use completion-in-region.
+
+	Misc cleanup.
+	* progmodes/idlwave.el (idlwave-comment-hook): Simplify with `or'.
+	(idlwave-code-abbrev, idlwave-display-user-catalog-widget)
+	(idlwave-complete-class): Don't quote lambda.
+	(idlwave-find-symbol-syntax-table, idlwave-mode-syntax-table)
+	(idlwave-mode-map): Move initialization into declaration.
+	(idlwave-action-and-binding): Use backquotes.
+	(idlwave-in-quote, idlwave-reset-sintern, idlwave-complete-in-buffer):
+	Simplify.
+	(idlwave-is-pointer-dereference): Remove unused var `pos'.
+	(idlwave-xml-create-rinfo-list): Remove unused var `entry'.
+	(idlwave-convert-xml-clean-sysvar-aliases): Remove unused vars `new',
+	`parts', and `all-parts'.
+	(idlwave-xml-create-sysvar-alist): Remove unused var `fields'.
+	(idlwave-convert-xml-system-routine-info): Remove unused string
+	`version-string'.
+	(idlwave-display-user-catalog-widget): Use dolist.
+	(idlwave-scanning-lib): Declare dynamically-scoped var.
+	(idlwave-scan-library-catalogs): Remove unused var `flags'.
+	(completion-highlight-first-word-only): Declare to silence bytecomp.
+	(idlwave-popup-select): Tighten scope of `resp'.
+	(idlwave-find-struct-tag): Remove unused var `beg'.
+	(idlwave-after-load-rinfo-hook): Declare.
+	(idlwave-sintern-class-info): Remove unused var `taglist'.
+	(idlwave-find-class-definition): Remove unused var `list'.
+	(idlwave-complete-sysvar-tag-help): Remove unused var `main-base'.
+	(idlwave-what-module-find-class): Remove unused var `classes'.
+
+2009-12-03  Juanma Barranquero  <lekktu@gmail.com>
+
+	* progmodes/pascal.el: Require CL when compiling (for lexical-let).
+
+2009-12-03  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* hippie-exp.el (try-expand-dabbrev-visible): Preserve point in the
+	buffers visited.  Remove redundant current-buffer-saving.
+
+2009-12-02  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	Use completion-in-buffer and remove uses of dynamic scoping.
+	* progmodes/pascal.el (pascal-str, pascal-all, pascal-pred)
+	(pascal-buffer-to-use, pascal-flag): Don't declare.
+	(pascal-func-completion, pascal-type-completion, pascal-var-completion)
+	(pascal-get-completion-decl, pascal-keyword-completion):
+	Add `pascal-str' argument, save-excursion,
+	return the found completions, and don't filter with pascal-pred.
+	(pascal-completion-cache): New var.
+	(pascal-completion): Don't switch buffer any more (it was never
+	necessary).  Don't save-excursion any more (it's done by the called
+	subroutines).  Use a cache to avoid redundant computations.
+	Use complete-with-action rather than pascal-completion-response and
+	let it apply the predicate as well.
+	(pascal-complete-word): Use completion-in-buffer when
+	pascal-toggle-completions is nil.
+	(pascal-show-completions): Don't bind pascal-buffer-to-use since it's
+	not used any more.
+	(pascal-comp-defun): Don't change buffer any more.
+	Use complete-with-action rather than pascal-completion-response and
+	let it apply the predicate as well.
+	(pascal-goto-defun): Change buffer before calling pascal-comp-defun
+	when neded.
+
+2009-12-02  Kenichi Handa  <handa@m17n.org>
+
+	* language/indian.el: Include ZWJ and ZWNJ in the patterns to
+	shape for all Indic scripts.
+
+2009-12-02  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	Use completion-in-buffer.
+	* wid-edit.el (widget-field-text-end): New function.
+	(widget-field-value-get): Use it.
+	(widget-string-complete, widget-file-complete)
+	(widget-color-complete): Use it and completion-in-region.
+	(widget-complete): Don't narrow the buffer.
+
+2009-12-02  Glenn Morris  <rgm@gnu.org>
+
+	* mail/rmail.el (rmail-pop-to-buffer): New function.  (Bug#2282)
+	(rmail-select-summary): Use rmail-pop-to-buffer.
+	* mail/rmailsum.el: Replace all pop-to-buffer calls with
+	rmail-pop-to-buffer, to prevent horizontal splits.
+
+	* calendar/diary-lib.el (diary-list-entries): Replace superfluous
+	save-excursion with save-current-buffer.
+	Widen before searching.  (Bug#5093)
+	(diary-list-sexp-entries): Remove superfluous save-excursion.
+
+2009-12-02  Michael Welsh Duggan  <mwd@cert.org>
+
+	* woman.el (woman-make-bufname): Handle man-pages with "." in the
+	name.  (Bug#5038)
+
+2009-12-02  Andreas Politz  <politza@fh-trier.de>  (tiny change)
+
+	* ido.el (ido-file-internal): Handle filenames at point that do
+	not have a directory part.  (Bug#5049)
+
+2009-12-02  Juanma Barranquero  <lekktu@gmail.com>
+
+	* mpc.el (mpc-intersection, mpc-host, mpc-songs-playlist)
+	(mpc-songs-jump-to, mpc-resume): Doc fixes.
+
+2009-12-01  Rob Riepel  <riepel@networking.Stanford.EDU>
+
+	* emulation/tpu-extras.el (tpu-cursor-free-mode): Emit message.
+	(tpu-set-cursor-free, tpu-set-cursor-bound): Don't emit a message
+	any more.
+
+2009-12-01  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* comint.el (comint-insert-input): Ignore clicks to the right of
+	the field.  Reported by Bob Nnamtrop <bobnnamtrop@gmail.com>.
+
+	* vc.el (vc-print-log-internal): Don't wait for the process to
+	terminate before setting up the major mode.
+
+	* pcmpl-unix.el (pcomplete/cd): Complete more than one argument, just
+	in case.
+
+	* pcomplete.el (pcomplete-std-complete): Don't try to complete past
+	the last element.
+
+	* simple.el (normal-erase-is-backspace-mode): Fix thinko in message.
+
+2009-12-01  Glenn Morris  <rgm@gnu.org>
+
+	* window.el (window--display-buffer-2): Fix previous changes.
+
+2009-12-01  Chong Yidong  <cyd@stupidchicken.com>
+
+	* mail/sendmail.el (mail-setup-hook, mail-send-hook): Doc fixes.
+
+2009-12-01  Glenn Morris  <rgm@gnu.org>
+
+	* Makefile.in (ELCFILES): Add mpc.elc.
+
+2009-12-01  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* mpc.el: New file.
+
+2009-12-01  Glenn Morris  <rgm@gnu.org>
+
+	* window.el (window-to-use): Define for compiler.
+
+	* emacs-lisp/bytecomp.el (byte-compile-save-excursion): Make message
+	consistent with others (no final period).
+
+	* mail/rmailmm.el (rmail-mime-handle): Doc fix.
+	(rmail-mime-show): Downcase the encoding.  (Bug#5070)
+
+2009-12-01  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	Make vc-print-log buttons work.
+	* log-view.el (log-view-mode-map): Inherit from from widget-keymap.
+
+2009-11-30  Ryan C. Thompson  <rct@thompsonclan.org>  (tiny change)
+
+	* savehist.el (savehist-autosave-interval): Allow setting to nil
+	through customize.  (Bug#5056)
+
+2009-11-30  Juanma Barranquero  <lekktu@gmail.com>
+
+	Fix references to jit-lock properties.
+	* progmodes/perl-mode.el (perl-font-lock-syntactic-keywords):
+	Refer to jit-lock-defer-multiline, not jit-lock-multiline.
+	(perl-font-lock-special-syntactic-constructs):
+	Quote jit-lock-defer-multiline property.
+
+2009-11-30  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* vc-git.el (vc-git-registered): Call vc-git-root only once.
+
+2009-11-30  Juri Linkov  <juri@jurta.org>
+
+	* misearch.el (multi-isearch-search-fun): Always provide a non-nil
+	value `buffer' of `multi-isearch-next-buffer-current-function'.
+	Use `(current-buffer)' when `buffer' is nil.
+	(multi-isearch-next-buffer-from-list): Don't fallback to
+	`(current-buffer)' when `buffer' is nil.  (Bug#4947)
+
+2009-11-30  Juri Linkov  <juri@jurta.org>
+
+	* misearch.el (multi-isearch-read-buffers): Move canonicalization
+	of buffers with `get-buffer' to `multi-isearch-buffers'.
+	(multi-isearch-buffers, multi-isearch-buffers-regexp):
+	Canonicalize BUFFERS with `get-buffer'.  Doc fix.
+	(multi-isearch-files, multi-isearch-files-regexp): Canonicalize
+	FILES with `expand-file-name' converting relative file names
+	to absolute.  Doc fix.  (Bug#4727)
+
+2009-11-30  Juri Linkov  <juri@jurta.org>
+
+	* misearch.el (multi-isearch-read-buffers)
+	(multi-isearch-read-matching-buffers): New functions.
+	(multi-isearch-buffers, multi-isearch-buffers-regexp):
+	Use them in the `interactive' spec.  Doc fix.
+	(multi-isearch-read-files, multi-isearch-read-matching-files):
+	New functions.
+	(multi-isearch-files, multi-isearch-files-regexp):
+	Use them in the `interactive' spec.  Doc fix.  (Bug#4725)
+
+2009-11-30  Juri Linkov  <juri@jurta.org>
+
+	* doc-view.el (doc-view-continuous):
+	Rename from `doc-view-continuous-mode'.
+	(doc-view-menu): Move "Toggle display" to the top.
+	Add submenu "Continuous" with radio buttons "Off"/"On"
+	and "Save as Default".
+	(doc-view-scroll-up-or-next-page)
+	(doc-view-scroll-down-or-previous-page)
+	(doc-view-next-line-or-next-page)
+	(doc-view-previous-line-or-previous-page): Rename
+	`doc-view-continuous-mode' to `doc-view-continuous'.  (Bug#4896)
+
+2009-11-30  Juri Linkov  <juri@jurta.org>
+
+	* comint.el (comint-mode-map): Rebind `M-r' from
+	`comint-previous-matching-input' to
+	`comint-history-isearch-backward-regexp'.
+	Unbind `M-s' to allow global key binding `M-s'.
+	Add menu items for `comint-history-isearch-backward' and
+	`comint-history-isearch-backward-regexp'.  (Bug#3746)
+
+2009-11-30  Juri Linkov  <juri@jurta.org>
+
+	* replace.el (perform-replace): Let-bind recenter-last-op to nil.
+	For def=recenter, replace `recenter' with `recenter-top-bottom'
+	that is called with `this-command' and `last-command' let-bound
+	to `recenter-top-bottom'.  When the last `def' was not `recenter',
+	set `recenter-last-op' to nil.  (Bug#4981)
+
 2009-11-30  Stefan Monnier  <monnier@iro.umontreal.ca>
 
 	Minor cleanup and simplification.
@@ -572,11 +1315,6 @@
 	* progmodes/cc-menus.el (cc-imenu-java-generic-expression):
 	Correct the patch from 2009-11-18.  (Bug#3910)
 
-2009-11-21  Alan Mackenzie  <acm@muc.de>
-
-	* progmodes/cc-menus.el (cc-imenu-java-generic-expression):
-	Update to deal with modern Java constructs.
-
 2009-11-21  Tassilo Horn  <tassilo@member.fsf.org>
 
 	* progmodes/subword.el: Rename from lisp/subword.el.
@@ -909,13 +1647,13 @@
 	* calc/calc-menu.el (calc-arithmetic-menu): Remove `calc-symclip'.
 
 	* calc/calc-map.el (calc-get-operator, calc-b-oper-keys):
-	* calc/calc-help.el (calc-b-prefix-help):  Remove references to
+	* calc/calc-help.el (calc-b-prefix-help): Remove references to
 	`calc-symclip'.
 
 2009-11-16  Kevin Ryde  <user42@zip.com.au>
 
 	* textmodes/flyspell.el (sgml-mode-flyspell-verify):
-	Use `sgml-lexical-context' instead of own parse for tag	(Bug#4511).
+	Use `sgml-lexical-context' instead of own parse for tag (Bug#4511).
 
 	* emacs-lisp/lisp-mnt.el (lm-keywords): Allow multi-line keywords.
 	(lm-keywords-list): Allow comma-only separator like "foo,bar".
@@ -925,7 +1663,7 @@
 
 2009-11-16  Dan Nicolaescu  <dann@ics.uci.edu>
 
-	* vc.el	(vc-log-show-limit): Default to 2000.
+	* vc.el (vc-log-show-limit): Default to 2000.
 	(vc-print-log-internal): Insert buttons to request more entries
 	when limiting the output.
 
@@ -987,7 +1725,7 @@
 	`calc-symclip'.
 	(calc-modes-menu): Add item for twos complement mode.
 
-	* calc/calc-help.el (calc-b-prefix-help):  Add help for `calc-symclip'.
+	* calc/calc-help.el (calc-b-prefix-help): Add help for `calc-symclip'.
 
 2009-11-15  Chong Yidong  <cyd@stupidchicken.com>
 
@@ -1208,7 +1946,7 @@
 
 	* textmodes/artist.el (artist-mouse-choose-operation):
 	Call `tmm-prompt' instead of `x-popup-menu' if we cannot popup
-	menus. Bug noticed by Eli Zaretskii <eliz@gnu.org>.
+	menus.  Bug noticed by Eli Zaretskii <eliz@gnu.org>.
 	(artist-compute-up-event-key): New function.
 	(artist-mouse-choose-operation, artist-down-mouse-1): Call it.
 

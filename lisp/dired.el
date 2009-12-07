@@ -752,6 +752,24 @@ for a remote directory.  This feature is used by Auto Revert Mode."
 	 buffer-read-only
 	 (dired-directory-changed-p dirname))))
 
+;;;###autoload
+(defcustom dired-auto-revert-buffer nil
+  "Automatically revert dired buffer on revisiting.
+If t, revisiting an existing dired buffer automatically reverts it.
+If its value is a function, call this function with the directory
+name as single argument and revert the buffer if it returns non-nil.
+Otherwise, a message offering to revert the changed dired buffer
+is displayed.
+Note that this is not the same as `auto-revert-mode' that
+periodically reverts at specified time intervals."
+  :type '(choice
+          (const :tag "Don't revert" nil)
+          (const :tag "Always revert visited dired buffer" t)
+          (const :tag "Revert changed dired buffer" dired-directory-changed-p)
+          (function :tag "Predicate function"))
+  :group 'dired
+  :version "23.2")
+
 (defun dired-internal-noselect (dir-or-list &optional switches mode)
   ;; If there is an existing dired buffer for DIRNAME, just leave
   ;; buffer as it is (don't even call dired-revert).
@@ -779,6 +797,14 @@ for a remote directory.  This feature is used by Auto Revert Mode."
 	       (setq dired-directory dir-or-list)
 	       ;; this calls dired-revert
 	       (dired-sort-other switches))
+	      ;; Always revert regardless of whether it has changed or not.
+	      ((eq dired-auto-revert-buffer t)
+	       (revert-buffer))
+	      ;; Revert when predicate function returns non-nil.
+	      ((functionp dired-auto-revert-buffer)
+	       (when (funcall dired-auto-revert-buffer dirname)
+		 (revert-buffer)
+		 (message "Changed directory automatically updated")))
 	      ;; If directory has changed on disk, offer to revert.
 	      ((when (dired-directory-changed-p dirname)
 		 (message "%s"
@@ -1143,23 +1169,40 @@ Preserves old cursor, marks/flags, hidden-p."
 ;; Some of these are also used when inserting subdirs.
 
 (defun dired-save-positions ()
-  "Return the current positions in all windows displaying this dired buffer.
-The positions have the form (WINDOW FILENAME POINT)."
-  (mapcar (lambda (w)
-	    (list w
-		  (with-selected-window w
-		    (dired-get-filename nil t))
-		  (window-point w)))
-	  (get-buffer-window-list nil 0 t)))
+  "Return current positions in the buffer and all windows with this directory.
+The positions have the form (BUFFER-POSITION WINDOW-POSITIONS).
+
+BUFFER-POSITION is the point position in the current dired buffer.
+The buffer position have the form (BUFFER DIRED-FILENAME BUFFER-POINT).
+
+WINDOW-POSITIONS are current positions in all windows displaying
+this dired buffer.  The window positions have the form (WINDOW
+DIRED-FILENAME WINDOW-POINT)."
+  (list
+   (list (current-buffer) (dired-get-filename nil t) (point))
+   (mapcar (lambda (w)
+	     (list w
+		   (with-selected-window w
+		     (dired-get-filename nil t))
+		   (window-point w)))
+	   (get-buffer-window-list nil 0 t))))
 
 (defun dired-restore-positions (positions)
   "Restore POSITIONS saved with `dired-save-positions'."
-  (dolist (win-file-pos positions)
-    (with-selected-window (car win-file-pos)
-      (unless (and (nth 1 win-file-pos)
-		   (dired-goto-file (nth 1 win-file-pos)))
-	(goto-char (nth 2 win-file-pos))
-	(dired-move-to-filename)))))
+  (let* ((buf-file-pos (nth 0 positions))
+	 (buffer (nth 0 buf-file-pos)))
+    (unless (and (nth 1 buf-file-pos)
+		 (dired-goto-file (nth 1 buf-file-pos)))
+      (goto-char (nth 2 buf-file-pos))
+      (dired-move-to-filename))
+    (dolist (win-file-pos (nth 1 positions))
+      ;; Ensure that window still displays the original buffer.
+      (when (eq (window-buffer (nth 0 win-file-pos)) buffer)
+	(with-selected-window (nth 0 win-file-pos)
+	  (unless (and (nth 1 win-file-pos)
+		       (dired-goto-file (nth 1 win-file-pos)))
+	    (goto-char (nth 2 win-file-pos))
+	    (dired-move-to-filename)))))))
 
 (defun dired-remember-marks (beg end)
   "Return alist of files and their marks, from BEG to END."
@@ -3474,7 +3517,7 @@ Ask means pop up a menu for the user to select one of copy, move or link."
 ;;;;;;  dired-run-shell-command dired-do-shell-command dired-do-async-shell-command
 ;;;;;;  dired-clean-directory dired-do-print dired-do-touch dired-do-chown
 ;;;;;;  dired-do-chgrp dired-do-chmod dired-compare-directories dired-backup-diff
-;;;;;;  dired-diff) "dired-aux" "dired-aux.el" "48cb6829b21b93a0f4d900535f6b2b80")
+;;;;;;  dired-diff) "dired-aux" "dired-aux.el" "20e28554da832d93358ff94eca6aa687")
 ;;; Generated autoloads from dired-aux.el
 
 (autoload 'dired-diff "dired-aux" "\
@@ -3927,7 +3970,7 @@ true then the type of the file linked to by FILE is printed instead.
 ;;;***
 
 ;;;### (autoloads (dired-do-relsymlink dired-jump) "dired-x" "dired-x.el"
-;;;;;;  "7c58535b489f23d5503ef8219c7d1282")
+;;;;;;  "c1bb83404017aa89655222b2b50471ed")
 ;;; Generated autoloads from dired-x.el
 
 (autoload 'dired-jump "dired-x" "\

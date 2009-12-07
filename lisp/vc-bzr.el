@@ -481,7 +481,7 @@ REV non-nil gets an error."
 		    (2 'change-log-email))
 		   ("^ *timestamp: \\(.*\\)" (1 'change-log-date-face)))))))
 
-(defun vc-bzr-print-log (files buffer &optional shortlog limit)
+(defun vc-bzr-print-log (files buffer &optional shortlog start-revision limit)
   "Get bzr change log for FILES into specified BUFFER."
   ;; `vc-do-command' creates the buffer, but we need it before running
   ;; the command.
@@ -493,17 +493,20 @@ REV non-nil gets an error."
   ;; way of getting the above regexps working.
   (with-current-buffer buffer
     (apply 'vc-bzr-command "log" buffer 'async files
-	   (when shortlog "--short")
-	   (when limit (list "-l" (format "%s" limit)))
-	   (if (stringp vc-bzr-log-switches)
-	       (list vc-bzr-log-switches)
-	     vc-bzr-log-switches))))
+	   (append
+	    (when shortlog '("--short"))
+	    (when start-revision (list (format "-r..%s" start-revision)))
+	    (when limit (list "-l" (format "%s" limit)))
+	    (if (stringp vc-bzr-log-switches)
+		(list vc-bzr-log-switches)
+	      vc-bzr-log-switches)))))
 
 (defun vc-bzr-show-log-entry (revision)
   "Find entry for patch name REVISION in bzr change log buffer."
   (goto-char (point-min))
   (when revision
-    (let (case-fold-search)
+    (let (case-fold-search
+	  found)
       (if (re-search-forward
 	   ;; "revno:" can appear either at the beginning of a line,
 	   ;; or indented.
@@ -511,8 +514,11 @@ REV non-nil gets an error."
 		   ;; The revision can contain ".", quote it so that it
 		   ;; does not interfere with regexp matching.
 		   (regexp-quote revision) "$") nil t)
-	  (beginning-of-line 0)
-	(goto-char (point-min))))))
+	  (progn
+	    (beginning-of-line 0)
+	    (setq found t))
+	(goto-char (point-min)))
+      found)))
 
 (defun vc-bzr-diff (files &optional rev1 rev2 buffer)
   "VC bzr backend for diff."
@@ -570,10 +576,14 @@ property containing author and date information."
                     (tag (gethash key table))
                     (inhibit-read-only t))
                (setq string (substring string (match-end 0)))
-        (unless tag
-          (setq tag (propertize rev 'help-echo (concat "Author: " author
-                                                       ", date: " date)
-                                'mouse-face 'highlight))
+	       (unless tag
+		 (setq tag
+		       (propertize
+			(format "%s %-7.7s" rev author)
+			'help-echo (format "Revision: %d, author: %s, date: %s"
+					   (string-to-number rev)
+					   author date)
+			'mouse-face 'highlight))
                  (puthash key tag table))
                (goto-char (process-mark proc))
                (insert tag line)
@@ -583,7 +593,7 @@ property containing author and date information."
 (declare-function vc-annotate-convert-time "vc-annotate" (time))
 
 (defun vc-bzr-annotate-time ()
-  (when (re-search-forward "^ *[0-9.]+ +|" nil t)
+  (when (re-search-forward "^ *[0-9.]+ +[^\n ]* +|" nil t)
     (let ((prop (get-text-property (line-beginning-position) 'help-echo)))
       (string-match "[0-9]+\\'" prop)
       (let ((str (match-string-no-properties 0 prop)))
@@ -598,7 +608,7 @@ property containing author and date information."
 Return nil if current line isn't annotated."
   (save-excursion
     (beginning-of-line)
-    (if (looking-at " *\\([0-9.]+\\) *| ")
+    (if (looking-at "^ *\\([0-9.]+\\) +[^\n ]* +|")
         (match-string-no-properties 1))))
 
 (defun vc-bzr-command-discarding-stderr (command &rest args)
@@ -703,11 +713,49 @@ stream.  Standard error output is discarded."
   (vc-exec-after
    `(vc-bzr-after-dir-status (quote ,update-function))))
 
+(defvar vc-bzr-shelve-map
+  (let ((map (make-sparse-keymap)))
+    ;; Turn off vc-dir marking
+    (define-key map [mouse-2] 'ignore)
+
+    (define-key map [down-mouse-3] 'vc-bzr-shelve-menu)
+    (define-key map "\C-k" 'vc-bzr-shelve-delete-at-point)
+    ;; (define-key map "=" 'vc-bzr-shelve-show-at-point)
+    ;; (define-key map "\C-m" 'vc-bzr-shelve-show-at-point)
+    (define-key map "A" 'vc-bzr-shelve-apply-at-point)
+    map))
+
+(defvar vc-bzr-shelve-menu-map
+  (let ((map (make-sparse-keymap "Bzr Shelve")))
+    (define-key map [de]
+      '(menu-item "Delete shelf" vc-bzr-shelve-delete-at-point
+		  :help "Delete the current shelf"))
+    (define-key map [ap]
+      '(menu-item "Apply shelf" vc-bzr-shelve-apply-at-point
+		  :help "Apply the current shelf"))
+    ;; (define-key map [sh]
+    ;;   '(menu-item "Show shelve" vc-bzr-shelve-show-at-point
+    ;; 		  :help "Show the contents of the current shelve"))
+    map))
+
+(defvar vc-bzr-extra-menu-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map [bzr-sh]
+      '(menu-item "Shelve..." vc-bzr-shelve
+		  :help "Shelve changes"))
+    map))
+
+(defun vc-bzr-extra-menu () vc-bzr-extra-menu-map)
+
+(defun vc-bzr-extra-status-menu () vc-bzr-extra-menu-map)
+
 (defun vc-bzr-dir-extra-headers (dir)
   (let*
       ((str (with-temp-buffer
 	      (vc-bzr-command "info" t 0 dir)
 	      (buffer-string)))
+       (shelve (vc-bzr-shelve-list))
+       (shelve-help-echo "Use M-x vc-bzr-shelve to create shelves")
        (light-checkout
 	(when (string-match ".+light checkout root: \\(.+\\)$" str)
 	  (match-string 1 str)))
@@ -732,7 +780,86 @@ stream.  Standard error output is discarded."
 	(concat
 	 (propertize "Checkout of branch : " 'face 'font-lock-type-face)
 	 (propertize light-checkout-branch 'face 'font-lock-variable-name-face)
-	 "\n")))))
+	 "\n"))
+     (if shelve
+	 (concat
+	  (propertize "Shelves            :\n" 'face 'font-lock-type-face
+		      'help-echo shelve-help-echo)
+	  (mapconcat
+	   (lambda (x)
+	     (propertize x
+			 'face 'font-lock-variable-name-face
+			 'mouse-face 'highlight
+			 'help-echo "mouse-3: Show shelve menu\nA: Apply shelf\nC-k: Delete shelf"
+			 'keymap vc-bzr-shelve-map))
+	   shelve "\n"))
+       (concat
+	(propertize "Shelves            : " 'face 'font-lock-type-face
+		    'help-echo shelve-help-echo)
+	(propertize "No shelved changes"
+		    'help-echo shelve-help-echo
+		    'face 'font-lock-variable-name-face))))))
+
+(defun vc-bzr-shelve (name)
+  "Create a shelve."
+  (interactive "sShelf name: ")
+  (let ((root (vc-bzr-root default-directory)))
+    (when root
+      (vc-bzr-command "shelve" nil 0 nil "--all" "-m" name)
+      (vc-resynch-buffer root t t))))
+
+;; (defun vc-bzr-shelve-show (name)
+;;   "Show the contents of shelve NAME."
+;;   (interactive "sShelve name: ")
+;;   (vc-setup-buffer "*vc-bzr-shelve*")
+;;   ;; FIXME: how can you show the contents of a shelf?
+;;   (vc-bzr-command "shelve" "*vc-bzr-shelve*" 'async nil name)
+;;   (set-buffer "*vc-bzr-shelve*")
+;;   (diff-mode)
+;;   (setq buffer-read-only t)
+;;   (pop-to-buffer (current-buffer)))
+
+(defun vc-bzr-shelve-apply (name)
+  "Apply shelve NAME."
+  (interactive "sApply shelf: ")
+  (vc-bzr-command "unshelve" "*vc-bzr-shelve*" 0 nil "--apply" name)
+  (vc-resynch-buffer (vc-bzr-root default-directory) t t))
+
+(defun vc-bzr-shelve-list ()
+  (with-temp-buffer
+    (vc-bzr-command "shelve" (current-buffer) 1 nil "--list" "-q")
+    (delete
+     ""
+     (split-string
+      (buffer-substring (point-min) (point-max))
+      "\n"))))
+
+(defun vc-bzr-shelve-get-at-point (point)
+  (save-excursion
+    (goto-char point)
+    (beginning-of-line)
+    (if (looking-at "^ +\\([0-9]+\\):")
+	(match-string 1)
+      (error "Cannot find shelf at point"))))
+
+(defun vc-bzr-shelve-delete-at-point ()
+  (interactive)
+  (let ((shelve (vc-bzr-shelve-get-at-point (point))))
+    (when (y-or-n-p (format "Remove shelf %s ?" shelve))
+      (vc-bzr-command "unshelve" nil 0 nil "--delete-only" shelve)
+      (vc-dir-refresh))))
+
+;; (defun vc-bzr-shelve-show-at-point ()
+;;   (interactive)
+;;   (vc-bzr-shelve-show (vc-bzr-shelve-get-at-point (point))))
+
+(defun vc-bzr-shelve-apply-at-point ()
+  (interactive)
+  (vc-bzr-shelve-apply (vc-bzr-shelve-get-at-point (point))))
+
+(defun vc-bzr-shelve-menu (e)
+  (interactive "e")
+  (vc-dir-at-event e (popup-menu vc-bzr-shelve-menu-map e)))
 
 ;;; Revision completion
 

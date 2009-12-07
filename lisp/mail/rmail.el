@@ -792,6 +792,12 @@ that knows the exact ordering of the \\( \\) subexpressions.")
 	      . 'rmail-header-name))))
   "Additional expressions to highlight in Rmail mode.")
 
+;; Rmail does not expect horizontal splitting.  (Bug#2282)
+(defun rmail-pop-to-buffer (&rest args)
+  "Like `pop-to-buffer', but with `split-width-threshold' set to nil."
+  (let (split-width-threshold)
+    (apply 'pop-to-buffer args)))
+
 ;; Perform BODY in the summary buffer
 ;; in such a way that its cursor is properly updated in its own window.
 (defmacro rmail-select-summary (&rest body)
@@ -801,7 +807,7 @@ that knows the exact ordering of the \\( \\) subexpressions.")
 	   (save-excursion
 	     (unwind-protect
 		 (progn
-		   (pop-to-buffer rmail-summary-buffer)
+		   (rmail-pop-to-buffer rmail-summary-buffer)
 		   ;; rmail-total-messages is a buffer-local var
 		   ;; in the rmail buffer.
 		   ;; This way we make it available for the body
@@ -1310,13 +1316,19 @@ Create the buffer if necessary."
 This function preserves the current buffer's modified flag, and also
 sets the current buffer's `buffer-file-coding-system' to that of
 `rmail-view-buffer'."
-  (let ((modp (buffer-modified-p))
-	(coding
+  (let ((modp-this (buffer-modified-p))
+	(modp-that
+	 (with-current-buffer rmail-view-buffer (buffer-modified-p)))
+	(coding-this buffer-file-coding-system)
+	(coding-that
 	 (with-current-buffer rmail-view-buffer
 	   buffer-file-coding-system)))
     (buffer-swap-text rmail-view-buffer)
-    (setq buffer-file-coding-system coding)
-    (restore-buffer-modified-p modp)))
+    (setq buffer-file-coding-system coding-that)
+    (with-current-buffer rmail-view-buffer
+      (setq buffer-file-coding-system coding-this)
+      (restore-buffer-modified-p modp-that))
+    (restore-buffer-modified-p modp-this)))
 
 (defun rmail-buffers-swapped-p ()
   "Return non-nil if the message collection is in `rmail-view-buffer'."
@@ -4173,15 +4185,30 @@ encoded string (and the same mask) will decode the string."
 (add-to-list 'desktop-buffer-mode-handlers
 	     '(rmail-mode . rmail-restore-desktop-buffer))
 
+;; We use this to record the encoding of the current message before
+;; saving the message collection.
+(defvar rmail-message-encoding nil)
+
 ;; Used in `write-region-annotate-functions' to write rmail files.
 (defun rmail-write-region-annotate (start end)
   (when (and (null start) (rmail-buffers-swapped-p))
+    (setq rmail-message-encoding buffer-file-coding-system)
     (set-buffer rmail-view-buffer)
-    ;; Prevent viewing different messages from messing up the coding. (Bug#4623)
-    ;; FIXME is there a better solution?
-    (set (make-local-variable 'coding-system-for-write) 'no-conversion)
     (widen)
     nil))
+
+;; Used to restore the encoding of the buffer where we show the
+;; current message, after we save the message collection.  This is
+;; needed because rmail-write-region-annotate switches buffers behind
+;; save-file's back, with the side effect that last-coding-system-used
+;; is assigned to buffer-file-coding-system of the wrong buffer.
+(defun rmail-after-save-hook ()
+  (if (or (eq rmail-view-buffer (current-buffer))
+	  (eq rmail-buffer (current-buffer)))
+      (with-current-buffer
+	  (if (rmail-buffers-swapped-p) rmail-buffer rmail-view-buffer)
+	(setq buffer-file-coding-system rmail-message-encoding))))
+(add-hook 'after-save-hook 'rmail-after-save-hook)
 
 
 ;;; Start of automatically extracted autoloads.
@@ -4242,7 +4269,7 @@ With prefix argument N moves forward N messages with these labels.
 
 ;;;***
 
-;;;### (autoloads (rmail-mime) "rmailmm" "rmailmm.el" "4dc7bf7a567633b8e84a36607fc8f3ee")
+;;;### (autoloads (rmail-mime) "rmailmm" "rmailmm.el" "04becfcbd937ebfb3020515f84e79d0a")
 ;;; Generated autoloads from rmailmm.el
 
 (autoload 'rmail-mime "rmailmm" "\
@@ -4333,7 +4360,7 @@ If prefix argument REVERSE is non-nil, sorts in reverse order.
 
 ;;;### (autoloads (rmail-summary-by-senders rmail-summary-by-topic
 ;;;;;;  rmail-summary-by-regexp rmail-summary-by-recipients rmail-summary-by-labels
-;;;;;;  rmail-summary) "rmailsum" "rmailsum.el" "780e9edd3a0b343071aa13225746e5cd")
+;;;;;;  rmail-summary) "rmailsum" "rmailsum.el" "d7d82233836cae1295ffa85f7371f857")
 ;;; Generated autoloads from rmailsum.el
 
 (autoload 'rmail-summary "rmailsum" "\
