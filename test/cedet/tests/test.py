@@ -1,6 +1,5 @@
 # Test file for Python language.
 #
-# $Id$
 
 # Simle class compount statement with blank lines sprinkled.
 class Foo(Bar):
