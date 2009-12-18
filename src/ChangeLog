@@ -1,3 +1,122 @@
+2009-12-16  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* Makefile.in (prefix-args${EXEEXT}): Don't compile prefix-args.c
+	twice.
+
+2009-12-15  Chong Yidong  <cyd@stupidchicken.com>
+
+	* xdisp.c (decode_mode_spec): Inhibit garbage collection when
+	calling file-remote-p.  Reported by Jim Meyering.
+
+2009-12-15  Michael Albinus  <michael.albinus@gmx.de>
+
+	* dbusbind.c (xd_retrieve_arg): Reorder declarations in order to
+	avoid compiler warnings.  (Bug #5217).
+
+2009-12-14  Kenichi Handa  <handa@m17n.org>
+
+	* coding.c (decode_coding_iso_2022): Ignore ISO_CODE_SS2_7 (0x19)
+	in 8-bit encoding.
+
+2009-12-13  Pat Thoyts <patthoyts@users.sourceforge.net> (tiny change)
+
+	* xfns.c (x_create_tip_frame): Set the extended window manager hint for
+	tooltip windows.
+
+2009-12-13  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* xterm.h (struct x_display_info): Add Xatom_net_window_type_tooltip and
+	Xatom_net_window_type.
+
+	* xterm.c (x_term_init): Initialize Xatom_net_window_type_tooltip and
+	Xatom_net_window_type.
+
+	* xterm.c (my_log_handler): New function.
+	(x_term_init): Set my_log_handler as log handler during gtk_init
+	so we can filter out buggy messages. (bug #5120).
+
+	* xterm.c (xg_scroll_callback): Parameter list changed,
+	use parameter GtkScrollType to determine scroll/line/page.
+	Only allow dragging if a button < 4 is grabbed (bug #5177).
+	(xg_end_scroll_callback): New function.
+	(x_create_toolkit_scroll_bar): Pass xg_end_scroll_callback to
+	xg_create_scroll_bar.
+
+	* gtkutil.c (xg_gtk_scroll_destroy): Remove XG_LAST_SB_DATA handling.
+	(scroll_end_callback): Remove.
+	(xg_create_scroll_bar): Add parameter end_callback, bind it to
+	button-release-event.  Replace value-changed event with change-value,
+	bug #5177,
+	(xg_event_is_for_scrollbar): Only return true if button is less than 4,
+	bug #5177.
+
+	* gtkutil.h (XG_LAST_SB_DATA): Remove.
+	(xg_create_scroll_bar): Add GCallback end_callback.
+
+	* xftfont.c (QClcdfilter): New variable.
+	(xftfont_open): Parse constant names for RGBA, HINT_STYLE and LCDFILTER.
+	(syms_of_xftfont): Initialize QClcdfilter.
+
+2009-12-12  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* xsettings.c (struct xsettings): Add member seen.
+	(parse_xft_settings): Update member seen with what we have read.
+	Return non-zero if Xft-settings have been parsed, 0 otherwise.
+	(apply_xft_settings): Only update Xft settings with what member seen
+	indicates as new.
+
+2009-12-12  Eli Zaretskii  <eliz@gnu.org>
+
+	* dispextern.h (struct text_pos): Use EMACS_INT;
+	(struct glyph): Use EMACS_INT for charpos.
+	(struct it): Use EMACS_INT for stop_charpos, end_charpos,
+	region_beg_charpos, region_end_charpos,
+	redisplay_end_trigger_charpos, and also for
+	iterator_stack_entry.end_charpos and
+	iterator_stack_entry.stop_charpos.
+
+2009-12-12  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* gtkutil.c (scroll_end_callback): New function (bug #5177)
+	(xg_create_scroll_bar): Call scroll_end_callback on button release
+	event (bug #5177).
+	(xg_event_is_for_scrollbar): != replaced with ==.
+
+2009-12-12  Kenichi Handa  <handa@m17n.org>
+
+	* ftfont.c (struct ftfont_info): New member matrix.
+	(ftfont_open): Setup xftfont_info->matrix.
+	(MFLTFontFT): New member matrix.
+	(FLOOR, CEIL, ROUND): New macros.
+	(ftfont_get_metrics): Handle matrix transformation.
+	(ftfont_shape_by_flt): New arg matrix.  Callers changed.
+
+	* xftfont.c (struct xftfont_info): New member matrix.
+	(xftfont_open): Setup xftfont_info->matrix.
+
+2009-12-10  Kenichi Handa  <handa@m17n.org>
+
+	* xdisp.c (append_space_for_newline): Consider face-remapping.
+
+2009-12-09  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* xsettings.c: Include "keyboard.h".
+
+	* gtkutil.c (xg_tool_bar_proxy_help_callback): Fix missing return.
+
+	Fix implicit function declarations.
+	* cmds.c: Include "frame.h".
+	* frame.c: Include "font.h" also if !HAVE_WINDOW_SYSTEM.
+	* frame.h: Move declaration of delete_frame outside of
+	HAVE_WINDOW_SYSTEM.
+
+2009-12-09  Ken Brown  <kbrown@cornell.edu>  (tiny change)
+
+	* s/cygwin.h (G_SLICE_ALWAYS_MALLOC): New variable.
+
+	* emacs.c (main): Set the G_SLICE environment variable for Cygwin
+	GTK builds.
+
 2009-12-07  Andreas Schwab  <schwab@linux-m68k.org>
 
 	* unexelf.c (unexec): Don't search for .data twice.

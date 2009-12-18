@@ -3010,8 +3010,8 @@ DIR-NAME is a directory name if these settings come from
 		 (or (eq enable-local-eval t)
 		     (hack-one-local-variable-eval-safep (eval (quote val)))
 		     (push elt unsafe-vars))))
-	      ;; Ignore duplicates in the present list.
-	      ((assq var all-vars) nil)
+	      ;; Ignore duplicates (except `mode') in the present list.
+	      ((and (assq var all-vars) (not (eq var 'mode))) nil)
 	      ;; Accept known-safe variables.
 	      ((or (memq var '(mode unibyte coding))
 		   (safe-local-variable-p var val))
@@ -3031,7 +3031,7 @@ DIR-NAME is a directory name if these settings come from
 	     (hack-local-variables-confirm all-vars unsafe-vars
 					   risky-vars dir-name))
 	 (dolist (elt all-vars)
-	   (unless (eq (car elt) 'eval)
+	   (unless (memq (car elt) '(eval mode))
 	     (unless dir-name
 	       (setq dir-local-variables-alist
 		     (assq-delete-all (car elt) dir-local-variables-alist)))
@@ -3459,7 +3459,7 @@ and `file-local-variables-alist', without applying them."
 		(dir-locals-get-class-variables class) dir-name nil)))
 	  (when variables
 	    (dolist (elt variables)
-	      (unless (eq (car elt) 'eval)
+	      (unless (memq (car elt) '(eval mode))
 		(setq dir-local-variables-alist
 		      (assq-delete-all (car elt) dir-local-variables-alist)))
 	      (push elt dir-local-variables-alist))
@@ -5408,7 +5408,10 @@ default directory.  However, if FULL is non-nil, they are absolute."
 	   ;; A list of all dirs that DIRPART specifies.
 	   ;; This can be more than one dir
 	   ;; if DIRPART contains wildcards.
-	   (dirs (if (and dirpart (string-match "[[*?]" dirpart))
+	   (dirs (if (and dirpart
+			  (string-match "[[*?]"
+					(or (file-remote-p dirpart 'localname)
+					    dirpart)))
 		     (mapcar 'file-name-as-directory
 			     (file-expand-wildcards (directory-file-name dirpart)))
 		   (list dirpart)))
@@ -5434,6 +5437,9 @@ default directory.  However, if FULL is non-nil, they are absolute."
 		   contents))))
 	(setq dirs (cdr dirs)))
       contents)))
+
+;; Let Tramp know that `file-expand-wildcards' does not need an advice.
+(provide 'files '(remote-wildcards))
 
 (defun list-directory (dirname &optional verbose)
   "Display a list of files in or matching DIRNAME, a la `ls'.

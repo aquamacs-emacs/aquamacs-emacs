@@ -202,10 +202,14 @@ If nil, use the value of `vc-diff-switches'.  If t, use no switches."
               standard-output
             (setq status
                   (condition-case nil
-                      ;; Ignore all errors.
-                      (process-file
-                       "hg" nil t nil
-                       "log" "-l1" (file-relative-name file))
+		      (let ((process-environment
+			     ;; Avoid localization of messages so we can parse the output.
+			     (append (list "TERM=dumb" "LANGUAGE=C" "HGRC=")
+				     process-environment)))
+			;; Ignore all errors.
+			(process-file
+			 "hg" nil t nil
+			 "log" "-l1" (file-relative-name file)))
                     ;; Some problem happened.  E.g. We can't find an `hg'
                     ;; executable.
                     (error nil)))))))
@@ -223,7 +227,7 @@ If nil, use the value of `vc-diff-switches'.  If t, use no switches."
                  (repeat :tag "Argument List" :value ("") string))
   :group 'vc-hg)
 
-(defun vc-hg-print-log (files buffer &optional shortlog limit start-revision)
+(defun vc-hg-print-log (files buffer &optional shortlog start-revision limit)
   "Get change log associated with FILES."
   ;; `vc-do-command' creates the buffer, but we need it before running
   ;; the command.

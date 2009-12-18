@@ -948,7 +948,12 @@ the info pages.")
 (defconst tramp-echo-mark-marker "_echo"
   "String marker to surround echoed commands.")
 
-(defconst tramp-echo-mark "_echo\b\b\b\b\b"
+(defconst tramp-echo-mark-marker-length (length tramp-echo-mark-marker)
+  "String length of `tramp-echo-mark-marker'.")
+
+(defconst tramp-echo-mark
+  (concat tramp-echo-mark-marker
+	  (make-string tramp-echo-mark-marker-length ?\b))
   "String mark to be transmitted around shell commands.
 Used to separate their echo from the output they produce.  This
 will only be used if we cannot disable remote echo via stty.
@@ -958,7 +963,9 @@ producing some echo which can later be detected by
 followed by an equal number of backspaces to erase them will
 usually suffice.")
 
-(defconst tramp-echoed-echo-mark-regexp "_echo\\(\b\\( \b\\)?\\)\\{5\\}"
+(defconst tramp-echoed-echo-mark-regexp
+  (format "%s\\(\b\\( \b\\)?\\)\\{%d\\}"
+	  tramp-echo-mark-marker tramp-echo-mark-marker-length)
   "Regexp which matches `tramp-echo-mark' as it gets echoed by
 the remote shell.")
 
@@ -4077,7 +4084,7 @@ This is like `dired-recursive-delete-directory' for Tramp files."
       (if full-directory-p
 	  (tramp-send-command
 	   v
-	   (format "%s %s %s"
+	   (format "%s %s %s 2>/dev/null"
 		   (tramp-get-ls-command v)
 		   switches
 		   (if wildcard
@@ -4126,13 +4133,13 @@ This is like `dired-recursive-delete-directory' for Tramp files."
 		    (end (+ beg (read (current-buffer)))))
 		(if (memq (char-after end) '(?\n ?\ ))
 		    ;; End is followed by \n or by " -> ".
-		    (put-text-property start end 'dired-filename t)))))
-	  ;; Remove trailing lines.
-	  (goto-char (tramp-compat-line-beginning-position))
-	  (while (looking-at "//")
-	    (forward-line 1)
-	    (delete-region (match-beginning 0) (point)))))
-      (goto-char (point-max)))))
+		    (put-text-property start end 'dired-filename t))))))
+	;; Remove trailing lines.
+	(goto-char (tramp-compat-line-beginning-position))
+	(while (looking-at "//")
+	  (forward-line 1)
+	  (delete-region (match-beginning 0) (point)))
+	(goto-char (point-max))))))
 
 (defun tramp-handle-unhandled-file-name-directory (filename)
   "Like `unhandled-file-name-directory' for Tramp files."
@@ -4640,16 +4647,19 @@ Lisp error raised when PROGRAM is nil is trapped also, returning 1."
 (defun tramp-handle-file-remote-p (filename &optional identification connected)
   "Like `file-remote-p' for Tramp files."
   (when (tramp-tramp-file-p filename)
-    (with-parsed-tramp-file-name (expand-file-name filename) nil
-      (and (or (not connected)
-	       (let ((p (tramp-get-connection-process v)))
-		 (and p (processp p) (memq (process-status p) '(run open)))))
-	   (cond
-	    ((eq identification 'method) method)
-	    ((eq identification 'user) user)
-	    ((eq identification 'host) host)
-	    ((eq identification 'localname) localname)
-	    (t (tramp-make-tramp-file-name method user host "")))))))
+    (let* ((v (tramp-dissect-file-name filename))
+	   (p (tramp-get-connection-process v))
+	   (c (and p (processp p) (memq (process-status p) '(run open)))))
+      ;; We expand the file name only, if there is already a connection.
+      (with-parsed-tramp-file-name
+	  (if c (expand-file-name filename) filename) nil
+	(and (or (not connected) c)
+	     (cond
+	      ((eq identification 'method) method)
+	      ((eq identification 'user) user)
+	      ((eq identification 'host) host)
+	      ((eq identification 'localname) localname)
+	      (t (tramp-make-tramp-file-name method user host ""))))))))
 
 (defun tramp-find-file-name-coding-system-alist (filename tmpname)
   "Like `find-operation-coding-system' for Tramp filenames.
@@ -6562,7 +6572,14 @@ Erase echoed commands if exists."
 	  (delete-region begin (point))
 	  (goto-char (point-min)))))
 
-    (when (not (tramp-get-connection-property proc "check-remote-echo" nil))
+    (when (or (not (tramp-get-connection-property proc "check-remote-echo" nil))
+	      ;; Sometimes, the echo string is suppressed on the remote side.
+	      (not (string-equal
+		    (substring-no-properties
+		     tramp-echo-mark-marker
+		     0 (min tramp-echo-mark-marker-length (1- (point-max))))
+		    (buffer-substring-no-properties
+		     1 (min (1+ tramp-echo-mark-marker-length) (point-max))))))
       ;; No echo to be handled, now we can look for the regexp.
       (goto-char (point-min))
       (re-search-forward regexp nil t))))
@@ -8414,36 +8431,6 @@ Only works for Bourne-like shells."
 	  (setq result (replace-match (format "'%s'" tramp-rsh-end-of-line)
 				      t t result)))
 	result))))
-
-;; We currently (sometimes) use "[" and "]" in the filename format.
-;; This means that Emacs wants to expand wildcards if
-;; `find-file-wildcards' is non-nil, and then barfs because no
-;; expansion could be found.  We detect this situation and do
-;; something really awful: we have `file-expand-wildcards' return the
-;; original filename if it can't expand anything.  Let's just hope
-;; that this doesn't break anything else.
-;; CCC: This check is now also really awful; we should search all
-;; of the filename format, not just the prefix.
-(when (string-match "\\[" tramp-prefix-format)
-  (defadvice file-expand-wildcards
-    (around tramp-advice-file-expand-wildcards activate)
-    (let ((name (ad-get-arg 0)))
-      ;; If it's a Tramp file, dissect it and look if wildcards need
-      ;; to be expanded at all.
-      (if (and
-	   (tramp-tramp-file-p name)
-	   (not	(string-match
-		 "[[*?]"
-		 (tramp-file-name-localname (tramp-dissect-file-name name)))))
-	  (setq ad-return-value (list name))
-	;; Otherwise, just run the original function.
-	ad-do-it)))
-  (add-hook
-   'tramp-unload-hook
-   (lambda ()
-     (ad-remove-advice
-      'file-expand-wildcards 'around 'tramp-advice-file-expand-wildcards)
-     (ad-activate 'file-expand-wildcards))))
 
 ;; Checklist for `tramp-unload-hook'
 ;; - Unload all `tramp-*' packages

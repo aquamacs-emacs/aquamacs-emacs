@@ -3085,11 +3085,7 @@ xg_gtk_scroll_destroy (widget, data)
      GtkWidget *widget;
      gpointer data;
 {
-  gpointer p;
   int id = (int) (EMACS_INT) data; /* The EMACS_INT cast avoids a warning. */
-
-  p = g_object_get_data (G_OBJECT (widget), XG_LAST_SB_DATA);
-  xfree (p);
   xg_remove_widget_from_map (id);
 }
 
@@ -3097,14 +3093,15 @@ xg_gtk_scroll_destroy (widget, data)
    in BAR.
    SCROLL_CALLBACK is the callback to invoke when the value of the
    bar changes.
+   END_CALLBACK is the callback to invoke when scrolling ends.
    SCROLL_BAR_NAME is the name we use for the scroll bar.  Can be used
    to set resources for the widget.  */
 
 void
-xg_create_scroll_bar (f, bar, scroll_callback, scroll_bar_name)
+xg_create_scroll_bar (f, bar, scroll_callback, end_callback, scroll_bar_name)
      FRAME_PTR f;
      struct scroll_bar *bar;
-     GCallback scroll_callback;
+     GCallback scroll_callback, end_callback;
      char *scroll_bar_name;
 {
   GtkWidget *wscroll;
@@ -3121,19 +3118,24 @@ xg_create_scroll_bar (f, bar, scroll_callback, scroll_bar_name)
   webox = gtk_event_box_new ();
   gtk_widget_set_name (wscroll, scroll_bar_name);
   gtk_range_set_update_policy (GTK_RANGE (wscroll), GTK_UPDATE_CONTINUOUS);
+  g_object_set_data (G_OBJECT (wscroll), XG_FRAME_DATA, (gpointer)f);
 
   scroll_id = xg_store_widget_in_map (wscroll);
 
-  g_signal_connect (G_OBJECT (wscroll),
-                    "value-changed",
-                    scroll_callback,
-                    (gpointer) bar);
   /* The EMACS_INT cast avoids a warning. */
   g_signal_connect (G_OBJECT (wscroll),
                     "destroy",
                     G_CALLBACK (xg_gtk_scroll_destroy),
                     (gpointer) (EMACS_INT) scroll_id);
-
+  g_signal_connect (G_OBJECT (wscroll),
+                    "change-value",
+                    scroll_callback,
+                    (gpointer) bar);
+  g_signal_connect (G_OBJECT (wscroll),
+                    "button-release-event",
+                    end_callback,
+                    (gpointer) bar);
+  
   /* The scroll bar widget does not draw on a window of its own.  Instead
      it draws on the parent window, in this case the edit widget.  So
      whenever the edit widget is cleared, the scroll bar needs to redraw
@@ -3310,20 +3312,22 @@ xg_event_is_for_scrollbar (f, event)
 {
   int retval = 0;
 
-  if (f && event->type == ButtonPress)
+  if (f && event->type == ButtonPress && event->xbutton.button < 4)
     {
       /* Check if press occurred outside the edit widget.  */
       GdkDisplay *gdpy = gdk_x11_lookup_xdisplay (FRAME_X_DISPLAY (f));
       retval = gdk_display_get_window_at_pointer (gdpy, NULL, NULL)
         != f->output_data.x->edit_widget->window;
     }
-  else if (f && (event->type != ButtonRelease || event->type != MotionNotify))
+  else if (f
+           && ((event->type == ButtonRelease && event->xbutton.button < 4)
+               || event->type == MotionNotify))
     {
       /* If we are releasing or moving the scroll bar, it has the grab.  */
       retval = gtk_grab_get_current () != 0
         && gtk_grab_get_current () != f->output_data.x->edit_widget;
     }
-
+  
   return retval;
 }
 
@@ -3455,7 +3459,7 @@ xg_tool_bar_proxy_help_callback (w, event, client_data)
   GtkWidget *wbutton = GTK_WIDGET (g_object_get_data (G_OBJECT (w),
                                                       XG_TOOL_BAR_PROXY_BUTTON));
   
-  xg_tool_bar_help_callback (wbutton, event, client_data);
+  return xg_tool_bar_help_callback (wbutton, event, client_data);
 }
 
 
