@@ -6743,50 +6743,60 @@ syms_of_nsterm ()
   ns_input_spi_arg =Qnil;
 
   DEFVAR_LISP ("ns-alternate-modifier", &ns_alternate_modifier,
-               "This variable describes the behavior of the alternate or option key.\n\
-Set to control, meta, alt, super, or hyper means it is taken to be that key.\n\
-Set to none means that the alternate / option key is not interpreted by Emacs\n\
-at all, allowing it to be used at a lower level for accented character entry.");
+               doc: /* This variable describes the behavior of the
+alternate or option key.  Set to control, meta, alt, super, or hyper
+means it is taken to be that key.  Set to none means that the
+alternate / option key is not interpreted by Emacs at all, allowing it
+to be used at a lower level for accented character entry. */);
 
   DEFVAR_LISP ("ns-right-alternate-modifier", &ns_right_alternate_modifier,
-               "This variable describes the behavior of the right alternate or option key.\n\
-Set to control, meta, alt, super, or hyper means it is taken to be that key.\n\
-Set to nil means that the alternate / option key is not interpreted by Emacs\n\
-at all, allowing it to be used at a lower level for accented character entry.\n\
-Set to none means use ns-alternate-modifier value.");
+               doc: /* This variable describes the behavior of the
+right alternate or option key.  Set to control, meta, alt, super, or
+hyper means it is taken to be that key.  Set to nil means that the
+alternate / option key is not interpreted by Emacs at all, allowing it
+to be used at a lower level for accented character entry.  Set to none
+means use ns-alternate-modifier value. */);
 
   DEFVAR_LISP ("ns-command-modifier", &ns_command_modifier,
-               "This variable describes the behavior of the command key.\n\
-Set to control, meta, alt, super, or hyper means it is taken to be that key.");
+               doc: /* This variable describes the behavior of the
+command key.  Set to control, meta, alt, super, or hyper means it is
+taken to be that key. */);
 
   DEFVAR_LISP ("ns-right-command-modifier", &ns_right_command_modifier,
-               "This variable describes the behavior of the right command key.\n\
-Set to control, meta, alt, super, or hyper means it is taken to be that key.\n\
-Set to none means use ns-command-modifier value.");
+               doc: /* This variable describes the behavior of the
+right command key.  Set to control, meta, alt, super, or hyper means
+it is taken to be that key.  Set to none means use ns-command-modifier
+value.  */);
 
   DEFVAR_LISP ("ns-control-modifier", &ns_control_modifier,
-               "This variable describes the behavior of the control key.\n\
-Set to control, meta, alt, super, or hyper means it is taken to be that key.");
+               doc: /* This variable describes the behavior of the
+control key.  Set to control, meta, alt, super, or hyper means it is
+taken to be that key. */);
 
   DEFVAR_LISP ("ns-right-control-modifier", &ns_right_control_modifier,
-               "This variable describes the behavior of the right control key.\n\
-Set to control, meta, alt, super, or hyper means it is taken to be that key.\n\
-Set to none means use ns-command-modifier value.");
+               doc: /* This variable describes the behavior of the
+right control key.  Set to control, meta, alt, super, or hyper means
+it is taken to be that key.  Set to none means use ns-command-modifier
+value.  */);
 
   DEFVAR_LISP ("ns-function-modifier", &ns_function_modifier,
-               "This variable describes the behavior of the function key (on laptops).\n\
-Set to control, meta, alt, super, or hyper means it is taken to be that key.\n\
-Set to none means that the function key is not interpreted by Emacs at all,\n\
-allowing it to be used at a lower level for accented character entry.");
+               doc: /* This variable describes the behavior of the
+function key (on laptops).  Set to control, meta, alt, super, or hyper
+means it is taken to be that key.  Set to none means that the function
+key is not interpreted by Emacs at all, allowing it to be used at a
+lower level for accented character entry. */);
 
   DEFVAR_LISP ("ns-antialias-text", &ns_antialias_text,
-               "Non-nil (the default) means to render text antialiased. Only has an effect on OS X Panther and above.");
+               doc: /* Non-nil (the default) means to render text
+antialiased. Only has an effect on OS X Panther and above.  */);
 
   DEFVAR_LISP ("ns-confirm-quit", &ns_confirm_quit,
                "Whether to confirm application quit using dialog.");
 
   DEFVAR_LISP ("ns-emulate-three-button-mouse", &ns_emulate_three_button_mouse,
-               "Non-nil (the default) means to use control and command keys to emulate right and middle mouse buttons on a one-button mouse.");
+               doc: /* Non-nil (the default) means to use control and
+command keys to emulate right and middle mouse
+buttons on a one-button mouse.  */);
 
   staticpro (&ns_display_name_list);
   ns_display_name_list = Qnil;
