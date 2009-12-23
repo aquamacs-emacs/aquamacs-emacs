@@ -2396,8 +2396,10 @@ spaces are put between sequence elements, etc.  */)
 
 
 Lisp_Object Qalt, Qcontrol, Qhyper, Qmeta, Qsuper, Qmodifier_value;
-extern Lisp_Object ns_alternate_modifier, ns_command_modifier,
-  ns_control_modifier, ns_function_modifier;
+extern Lisp_Object ns_alternate_modifier, ns_right_alternate_modifier, 
+  ns_command_modifier, ns_right_command_modifier,
+  ns_control_modifier, ns_right_control_modifier, 
+  ns_function_modifier;
 
 
 /* ^ should be 0x2303 (0xe28c83 in UTF-8) 
@@ -2434,8 +2436,11 @@ push_key_description (c, p, force_multibyte)
   if (c & meta_modifier &&
       ! (NILP (Vns_use_mac_modifier_symbols) ||
 	 EQ (ns_command_modifier, Qmeta) ||
+	 EQ (ns_right_command_modifier, Qmeta) ||
 	 EQ (ns_control_modifier, Qmeta) ||
-	 EQ (ns_alternate_modifier, Qmeta)))
+	 EQ (ns_right_control_modifier, Qmeta) ||
+	 EQ (ns_alternate_modifier, Qmeta) ||
+	 EQ (ns_right_alternate_modifier, Qmeta)))
     {
       /* Meta is disabled, so prepend key description with Esc */
       *p++ = 'E';

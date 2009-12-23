@@ -254,18 +254,36 @@ Leaving \"Default\" unchecked is equivalent with specifying a default of
 		      (const control) (const meta)
 		      (const alt) (const hyper)
 		      (const super)) "23.1")
+	     (ns-right-control-modifier
+	      ns
+	      (choice (const :tag "No modifier override (work as ns-control-modifier)" none)
+		      (const control) (const meta)
+		      (const alt) (const hyper)
+		      (const super) (const none)) "23.1")
 	     (ns-command-modifier
 	      ns
 	      (choice (const :tag "No modifier" nil)
 		      (const control) (const meta)
 		      (const alt) (const hyper)
 		      (const super)) "23.1")
+	     (ns-right-command-modifier
+	      ns
+	      (choice (const :tag "No modifier override (work as ns-command-modifier)" none)
+		      (const control) (const meta)
+		      (const alt) (const hyper)
+		      (const super) (const none)) "23.1")
 	     (ns-alternate-modifier
 	      ns
 	      (choice (const :tag "No modifier (work as alternate/option)" none)
 		      (const control) (const meta)
 		      (const alt) (const hyper)
 		      (const super)) "23.1")
+	     (ns-right-alternate-modifier
+	      ns
+	      (choice (const :tag "No modifier override (work as ns-alternate-modifier)" none)
+		      (const control) (const meta)
+		      (const alt) (const hyper)
+		      (const super) (const none) (const nil)) "23.1")
 	     (ns-function-modifier
 	      ns
 	      (choice (const :tag "No modifier (work as function)" none)
