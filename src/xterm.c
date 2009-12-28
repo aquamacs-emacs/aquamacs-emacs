@@ -86,6 +86,8 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "keymap.h"
 #include "font.h"
 #include "fontset.h"
+#include "xsettings.h"
+#include "xgselect.h"
 #include "sysselect.h"
 
 #ifdef USE_X_TOOLKIT
@@ -4372,63 +4374,51 @@ xm_scroll_callback (widget, client_data, call_data)
 /* Scroll bar callback for GTK scroll bars.  WIDGET is the scroll
    bar widget.  DATA is a pointer to the scroll_bar structure. */
 
-static void
-xg_scroll_callback (widget, data)
-     GtkRange *widget;
-     gpointer data;
+static gboolean
+xg_scroll_callback (GtkRange     *range,
+                    GtkScrollType scroll,
+                    gdouble       value,
+                    gpointer      user_data)
 {
-  struct scroll_bar *bar = (struct scroll_bar *) data;
-  gdouble previous;
+  struct scroll_bar *bar = (struct scroll_bar *) user_data;
   gdouble position;
-  gdouble *p;
-  int diff;
-
   int part = -1, whole = 0, portion = 0;
-  GtkAdjustment *adj = GTK_ADJUSTMENT (gtk_range_get_adjustment (widget));
+  GtkAdjustment *adj = GTK_ADJUSTMENT (gtk_range_get_adjustment (range));
+  FRAME_PTR f = (FRAME_PTR) g_object_get_data (G_OBJECT (range), XG_FRAME_DATA);
 
+  if (xg_ignore_gtk_scrollbar) return FALSE;
   position = gtk_adjustment_get_value (adj);
 
-  p = g_object_get_data (G_OBJECT (widget), XG_LAST_SB_DATA);
-  if (! p)
+
+  switch (scroll)
     {
-      p = (gdouble*) xmalloc (sizeof (gdouble));
-      *p = XG_SB_MIN;
-      g_object_set_data (G_OBJECT (widget), XG_LAST_SB_DATA, p);
-    }
-
-  previous = *p;
-  *p = position;
-
-  if (xg_ignore_gtk_scrollbar) return;
-
-  diff = (int) (position - previous);
-
-  if (diff == (int) adj->step_increment)
-    {
-      part = scroll_bar_down_arrow;
-      bar->dragging = Qnil;
-    }
-  else if (-diff == (int) adj->step_increment)
-    {
+    case GTK_SCROLL_JUMP:
+      /* Buttons 1 2 or 3 must be grabbed.  */
+      if (FRAME_X_DISPLAY_INFO (f)->grabbed != 0
+          && FRAME_X_DISPLAY_INFO (f)->grabbed < (1 << 4))
+        {
+          part = scroll_bar_handle;
+          whole = adj->upper - adj->page_size;
+          portion = min ((int)position, whole);
+          bar->dragging = make_number ((int)portion);
+        }
+      break;
+    case GTK_SCROLL_STEP_BACKWARD:
       part = scroll_bar_up_arrow;
       bar->dragging = Qnil;
-    }
-  else if (diff == (int) adj->page_increment)
-    {
-      part = scroll_bar_below_handle;
+      break;
+    case GTK_SCROLL_STEP_FORWARD:
+      part = scroll_bar_down_arrow;
       bar->dragging = Qnil;
-    }
-  else if (-diff == (int) adj->page_increment)
-    {
+      break;
+    case GTK_SCROLL_PAGE_BACKWARD:
       part = scroll_bar_above_handle;
       bar->dragging = Qnil;
-    }
-  else
-    {
-      part = scroll_bar_handle;
-      whole = adj->upper - adj->page_size;
-      portion = min ((int)position, whole);
-      bar->dragging = make_number ((int)portion);
+      break;
+    case GTK_SCROLL_PAGE_FORWARD:
+      part = scroll_bar_below_handle;
+      bar->dragging = Qnil;
+      break;
     }
 
   if (part >= 0)
@@ -4437,7 +4427,29 @@ xg_scroll_callback (widget, data)
       last_scroll_bar_part = part;
       x_send_scroll_bar_event (bar->window, part, portion, whole);
     }
+
+  return FALSE;
 }
+
+/* Callback for button release. Sets dragging to Qnil when dragging is done.  */
+
+static gboolean
+xg_end_scroll_callback (GtkWidget *widget,
+                        GdkEventButton *event,
+                        gpointer user_data)
+{
+  struct scroll_bar *bar = (struct scroll_bar *) user_data;
+  bar->dragging = Qnil;
+  if (WINDOWP (window_being_scrolled))
+    {
+      x_send_scroll_bar_event (window_being_scrolled,
+                               scroll_bar_end_scroll, 0, 0);
+      window_being_scrolled = Qnil;
+    }
+
+  return FALSE;
+}
+
 
 #else /* not USE_GTK and not USE_MOTIF */
 
@@ -4539,6 +4551,7 @@ x_create_toolkit_scroll_bar (f, bar)
 
   BLOCK_INPUT;
   xg_create_scroll_bar (f, bar, G_CALLBACK (xg_scroll_callback),
+                        G_CALLBACK (xg_end_scroll_callback),
                         scroll_bar_name);
   UNBLOCK_INPUT;
 }
@@ -6026,6 +6039,8 @@ handle_one_xevent (dpyinfo, eventp, finish, hold_quit)
             goto done;
           }
 
+        xft_settings_event (dpyinfo, &event);
+
 	f = x_any_window_to_frame (dpyinfo, event.xclient.window);
 	if (!f)
 	  goto OTHER;
@@ -6088,6 +6103,7 @@ handle_one_xevent (dpyinfo, eventp, finish, hold_quit)
         x_handle_net_wm_state (f, &event.xproperty);
 
       x_handle_property_notify (&event.xproperty);
+      xft_settings_event (dpyinfo, &event);
       goto OTHER;
 
     case ReparentNotify:
@@ -6574,8 +6590,7 @@ handle_one_xevent (dpyinfo, eventp, finish, hold_quit)
 		if (nchars == nbytes)
 		  c = copy_bufptr[i], len = 1;
 		else
-		  c = STRING_CHAR_AND_LENGTH (copy_bufptr + i,
-					      nbytes - i, len);
+		  c = STRING_CHAR_AND_LENGTH (copy_bufptr + i, len);
 		inev.ie.kind = (SINGLE_BYTE_CHAR_P (c)
 				? ASCII_KEYSTROKE_EVENT
 				: MULTIBYTE_CHAR_KEYSTROKE_EVENT);
@@ -6688,6 +6703,10 @@ handle_one_xevent (dpyinfo, eventp, finish, hold_quit)
             clear_mouse_face (dpyinfo);
           }
 
+#ifdef USE_GTK
+        if (f && xg_event_is_for_scrollbar (f, &event))
+          f = 0;
+#endif
         if (f)
           {
 
@@ -6824,6 +6843,10 @@ handle_one_xevent (dpyinfo, eventp, finish, hold_quit)
         else
           f = x_window_to_frame (dpyinfo, event.xbutton.window);
 
+#ifdef USE_GTK
+        if (f && xg_event_is_for_scrollbar (f, &event))
+          f = 0;
+#endif
         if (f)
           {
             /* Is this in the tool-bar?  */
@@ -6982,6 +7005,10 @@ handle_one_xevent (dpyinfo, eventp, finish, hold_quit)
           XRefreshKeyboardMapping (&event.xmapping);
         }
       goto OTHER;
+
+    case DestroyNotify:
+      xft_settings_event (dpyinfo, &event);
+      break;
 
     default:
     OTHER:
@@ -8038,7 +8065,9 @@ x_new_font (f, font_object, fontset)
 	 problems because the tip frame has no widget.  */
       if (NILP (tip_frame) || XFRAME (tip_frame) != f)
         {
-          /* When the frame is maximized/fullscreen or running under for
+	  int rows, cols;
+	  
+	  /* When the frame is maximized/fullscreen or running under for
              example Xmonad, x_set_window_size will be a no-op.
              In that case, the right thing to do is extend rows/cols to
              the current frame size.  We do that first if x_set_window_size
@@ -8051,8 +8080,12 @@ x_new_font (f, font_object, fontset)
              is however.  */
           pixelh -= FRAME_MENUBAR_HEIGHT (f);
 #endif
-          int rows = FRAME_PIXEL_HEIGHT_TO_TEXT_LINES (f, pixelh);
-          int cols = FRAME_PIXEL_WIDTH_TO_TEXT_COLS (f, FRAME_PIXEL_WIDTH (f));
+          rows = FRAME_PIXEL_HEIGHT_TO_TEXT_LINES (f, pixelh);
+	  /* Update f->scroll_bar_actual_width because it is used in
+	     FRAME_PIXEL_WIDTH_TO_TEXT_COLS.  */
+	  f->scroll_bar_actual_width
+	    = FRAME_SCROLL_BAR_COLS (f) * FRAME_COLUMN_WIDTH (f);
+          cols = FRAME_PIXEL_WIDTH_TO_TEXT_COLS (f, FRAME_PIXEL_WIDTH (f));
           
           change_frame_size (f, rows, cols, 0, 1, 0);
           x_set_window_size (f, 0, FRAME_COLS (f), FRAME_LINES (f));
@@ -9987,6 +10020,19 @@ x_display_ok (display)
     return dpy_ok;
 }
 
+#ifdef USE_GTK
+static void
+my_log_handler (log_domain, log_level, message, user_data)
+     const gchar *log_domain;
+     GLogLevelFlags log_level;
+     const gchar *message;
+     gpointer user_data;
+{
+  if (!strstr (message, "g_set_prgname"))
+      fprintf (stderr, "%s-WARNING **: %s\n", log_domain, message);
+}
+#endif
+  
 /* Open a connection to X display DISPLAY_NAME, and return
    the structure that describes the open display.
    If we cannot contact the display, return null.  */
@@ -10021,7 +10067,7 @@ x_term_init (display_name, xrm_option, resource_name)
     char *argv[NUM_ARGV];
     char **argv2 = argv;
     GdkAtom atom;
-
+    guint id;
 #ifndef HAVE_GTK_MULTIDISPLAY
     if (!EQ (Vinitial_window_system, Qx))
       error ("Sorry, you cannot connect to X servers with the GTK toolkit");
@@ -10056,7 +10102,12 @@ x_term_init (display_name, xrm_option, resource_name)
 
         XSetLocaleModifiers ("");
 
+        /* Work around GLib bug that outputs a faulty warning. See
+           https://bugzilla.gnome.org/show_bug.cgi?id=563627.  */
+        id = g_log_set_handler ("GLib", G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL
+                                  | G_LOG_FLAG_RECURSION, my_log_handler, NULL);
         gtk_init (&argc, &argv2);
+        g_log_remove_handler ("GLib", id);
 
         /* gtk_init does set_locale.  We must fix locale after calling it.  */
         fixup_locale ();
@@ -10292,17 +10343,33 @@ x_term_init (display_name, xrm_option, resource_name)
     dpyinfo->cmap = XCreateColormap (dpyinfo->display, dpyinfo->root_window,
 				     dpyinfo->visual, AllocNone);
 
+#ifdef HAVE_XFT
   {
-    int screen_number = XScreenNumberOfScreen (dpyinfo->screen);
-    double pixels = DisplayHeight (dpyinfo->display, screen_number);
-    double mm = DisplayHeightMM (dpyinfo->display, screen_number);
-    /* Mac OS X 10.3's Xserver sometimes reports 0.0mm.  */
-    dpyinfo->resy = (mm < 1) ? 100 : pixels * 25.4 / mm;
-    pixels = DisplayWidth (dpyinfo->display, screen_number);
-    mm = DisplayWidthMM (dpyinfo->display, screen_number);
-    /* Mac OS X 10.3's Xserver sometimes reports 0.0mm.  */
-    dpyinfo->resx = (mm < 1) ? 100 : pixels * 25.4 / mm;
+    /* If we are using Xft, check dpi value in X resources.
+       It is better we use it as well, since Xft will use it, as will all
+       Gnome applications.  If our real DPI is smaller or larger than the
+       one Xft uses, our font will look smaller or larger than other
+       for other applications, even if it is the same font name (monospace-10
+       for example).  */
+    char *v = XGetDefault (dpyinfo->display, "Xft", "dpi");
+    double d;
+    if (v != NULL && sscanf (v, "%lf", &d) == 1)
+      dpyinfo->resy = dpyinfo->resx = d;
   }
+#endif
+
+  if (dpyinfo->resy < 1)
+    {
+      int screen_number = XScreenNumberOfScreen (dpyinfo->screen);
+      double pixels = DisplayHeight (dpyinfo->display, screen_number);
+      double mm = DisplayHeightMM (dpyinfo->display, screen_number);
+      /* Mac OS X 10.3's Xserver sometimes reports 0.0mm.  */
+      dpyinfo->resy = (mm < 1) ? 100 : pixels * 25.4 / mm;
+      pixels = DisplayWidth (dpyinfo->display, screen_number);
+      mm = DisplayWidthMM (dpyinfo->display, screen_number);
+      /* Mac OS X 10.3's Xserver sometimes reports 0.0mm.  */
+      dpyinfo->resx = (mm < 1) ? 100 : pixels * 25.4 / mm;
+    }
 
   dpyinfo->Xatom_wm_protocols
     = XInternAtom (dpyinfo->display, "WM_PROTOCOLS", False);
@@ -10378,7 +10445,11 @@ x_term_init (display_name, xrm_option, resource_name)
     = XInternAtom (dpyinfo->display, "_NET_WM_STATE_MAXIMIZED_VERT", False);
   dpyinfo->Xatom_net_wm_state_sticky
     = XInternAtom (dpyinfo->display, "_NET_WM_STATE_STICKY", False);
-
+  dpyinfo->Xatom_net_window_type
+    = XInternAtom (dpyinfo->display, "_NET_WM_WINDOW_TYPE", False);
+  dpyinfo->Xatom_net_window_type_tooltip
+    = XInternAtom (dpyinfo->display, "_NET_WM_WINDOW_TYPE_TOOLTIP", False);
+  
   dpyinfo->cut_buffers_initialized = 0;
 
   dpyinfo->x_dnd_atoms_size = 8;
@@ -10406,6 +10477,8 @@ x_term_init (display_name, xrm_option, resource_name)
 #ifdef HAVE_X_I18N
   xim_initialize (dpyinfo, resource_name);
 #endif
+
+  xsettings_initialize (dpyinfo);
 
 #ifdef subprocesses
   /* This is only needed for distinguishing keyboard and process input.  */
@@ -10707,6 +10780,8 @@ x_delete_terminal (struct terminal *terminal)
 #endif /* ! USE_GTK */
     }
 
+  /* Mark as dead. */
+  dpyinfo->display = NULL;
   x_delete_display (dpyinfo);
   UNBLOCK_INPUT;
 }
@@ -10815,6 +10890,8 @@ x_initialize ()
   XSetIOErrorHandler (x_io_error_quitter);
 
   signal (SIGPIPE, x_connection_signal);
+
+  xgselect_initialize ();
 }
 
 
@@ -10830,19 +10907,19 @@ syms_of_xterm ()
   last_mouse_scroll_bar = Qnil;
 
   staticpro (&Qvendor_specific_keysyms);
-  Qvendor_specific_keysyms = intern ("vendor-specific-keysyms");
+  Qvendor_specific_keysyms = intern_c_string ("vendor-specific-keysyms");
 
   staticpro (&Qlatin_1);
-  Qlatin_1 = intern ("latin-1");
+  Qlatin_1 = intern_c_string ("latin-1");
 
   staticpro (&last_mouse_press_frame);
   last_mouse_press_frame = Qnil;
 
 #ifdef USE_GTK
-  xg_default_icon_file = build_string ("icons/hicolor/scalable/apps/emacs.svg");
+  xg_default_icon_file = make_pure_c_string ("icons/hicolor/scalable/apps/emacs.svg");
   staticpro (&xg_default_icon_file);
 
-  Qx_gtk_map_stock = intern ("x-gtk-map-stock");
+  Qx_gtk_map_stock = intern_c_string ("x-gtk-map-stock");
   staticpro (&Qx_gtk_map_stock);
 #endif
 
@@ -10880,13 +10957,13 @@ A value of nil means Emacs doesn't use X toolkit scroll bars.
 Otherwise, value is a symbol describing the X toolkit.  */);
 #ifdef USE_TOOLKIT_SCROLL_BARS
 #ifdef USE_MOTIF
-  Vx_toolkit_scroll_bars = intern ("motif");
+  Vx_toolkit_scroll_bars = intern_c_string ("motif");
 #elif defined HAVE_XAW3D
-  Vx_toolkit_scroll_bars = intern ("xaw3d");
+  Vx_toolkit_scroll_bars = intern_c_string ("xaw3d");
 #elif USE_GTK
-  Vx_toolkit_scroll_bars = intern ("gtk");
+  Vx_toolkit_scroll_bars = intern_c_string ("gtk");
 #else
-  Vx_toolkit_scroll_bars = intern ("xaw");
+  Vx_toolkit_scroll_bars = intern_c_string ("xaw");
 #endif
 #else
   Vx_toolkit_scroll_bars = Qnil;
@@ -10895,14 +10972,14 @@ Otherwise, value is a symbol describing the X toolkit.  */);
   staticpro (&last_mouse_motion_frame);
   last_mouse_motion_frame = Qnil;
 
-  Qmodifier_value = intern ("modifier-value");
-  Qalt = intern ("alt");
+  Qmodifier_value = intern_c_string ("modifier-value");
+  Qalt = intern_c_string ("alt");
   Fput (Qalt, Qmodifier_value, make_number (alt_modifier));
-  Qhyper = intern ("hyper");
+  Qhyper = intern_c_string ("hyper");
   Fput (Qhyper, Qmodifier_value, make_number (hyper_modifier));
-  Qmeta = intern ("meta");
+  Qmeta = intern_c_string ("meta");
   Fput (Qmeta, Qmodifier_value, make_number (meta_modifier));
-  Qsuper = intern ("super");
+  Qsuper = intern_c_string ("super");
   Fput (Qsuper, Qmodifier_value, make_number (super_modifier));
 
   DEFVAR_LISP ("x-alt-keysym", &Vx_alt_keysym,

@@ -240,9 +240,9 @@ This function pushes tags onto the tag ring."
 ;; Tracking minor mode.
 
 (defcustom global-semantic-mru-bookmark-mode nil
-  "*If non-nil enable global use of variable `semantic-mru-bookmark-mode'.
-When this mode is enabled, changes made to a buffer are highlighted
-until the buffer is reparsed."
+  "If non-nil, enable `semantic-mru-bookmark-mode' globally.
+When this mode is enabled, Emacs keeps track of which tags have
+been edited, and you can re-visit them with \\[semantic-mrub-switch-tags]."
   :group 'semantic
   :group 'semantic-modes
   :type 'boolean
@@ -306,8 +306,8 @@ minor mode is enabled."
 
 (defun semantic-mru-bookmark-mode (&optional arg)
   "Minor mode for tracking tag-based bookmarks automatically.
-Tag based bookmarks a tracked based on editing and viewing habits
-and can then be navigated via the MRU bookmark keymap.
+When this mode is enabled, Emacs keeps track of which tags have
+been edited, and you can re-visit them with \\[semantic-mrub-switch-tags].
 
 \\{semantic-mru-bookmark-mode-map}
 
@@ -326,7 +326,7 @@ minor mode is enabled."
           (not semantic-mru-bookmark-mode)))
   (semantic-mru-bookmark-mode-setup)
   (run-hooks 'semantic-mru-bookmark-mode-hook)
-  (if (interactive-p)
+  (if (called-interactively-p 'interactive)
       (message "mru-bookmark minor mode %sabled"
                (if semantic-mru-bookmark-mode "en" "dis")))
   (semantic-mode-line-update)
@@ -429,7 +429,6 @@ Useful for debugging mrub problems."
 
 ;; Local variables:
 ;; generated-autoload-file: "loaddefs.el"
-;; generated-autoload-feature: semantic/loaddefs
 ;; generated-autoload-load-name: "semantic/mru-bookmark"
 ;; End:
 

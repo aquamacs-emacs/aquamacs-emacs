@@ -6,7 +6,7 @@
 ;; Author: Vinicius Jose Latorre <viniciusjl@ig.com.br>
 ;; Maintainer: Vinicius Jose Latorre <viniciusjl@ig.com.br>
 ;; Keywords: data, wp
-;; Version: 12.0
+;; Version: 12.1
 ;; X-URL: http://www.emacswiki.org/cgi-bin/wiki/ViniciusJoseLatorre
 
 ;; This file is part of GNU Emacs.
@@ -90,7 +90,7 @@
 ;;
 ;; To use whitespace, insert in your ~/.emacs:
 ;;
-;;    (require 'whitespace-mode)
+;;    (require 'whitespace)
 ;;
 ;; Or autoload at least one of the commands`whitespace-mode',
 ;; `whitespace-toggle-options', `global-whitespace-mode' or
@@ -1942,8 +1942,7 @@ cleaning up these problems."
   (unless (get-buffer whitespace-help-buffer-name)
     (delete-other-windows)
     (let ((buffer (get-buffer-create whitespace-help-buffer-name)))
-      (save-excursion
-	(set-buffer buffer)
+      (with-current-buffer buffer
 	(erase-buffer)
 	(insert whitespace-help-text)
 	(whitespace-insert-option-mark
@@ -2389,6 +2388,10 @@ Also refontify when necessary."
 	(setq whitespace-display-table-was-local t
 	      whitespace-display-table
 	      (copy-sequence buffer-display-table)))
+      ;; asure `buffer-display-table' is unique
+      ;; when two or more windows are visible.
+      (set (make-local-variable 'buffer-display-table)
+	   (copy-sequence buffer-display-table))
       (unless buffer-display-table
 	(setq buffer-display-table (make-display-table)))
       (dolist (entry whitespace-display-mappings)

@@ -1711,8 +1711,7 @@ to be sure of changing the value of `foo'.  */)
 	{
 	  if (STRING_MULTIBYTE (seq))
 	    {
-	      c = STRING_CHAR (SDATA (seq) + ibyte,
-			       SBYTES (seq) - ibyte);
+	      c = STRING_CHAR (SDATA (seq) + ibyte);
 	      cbytes = CHAR_BYTES (c);
 	    }
 	  else
@@ -1742,8 +1741,7 @@ to be sure of changing the value of `foo'.  */)
 	    {
 	      if (STRING_MULTIBYTE (seq))
 		{
-		  c = STRING_CHAR (SDATA (seq) + ibyte,
-				   SBYTES (seq) - ibyte);
+		  c = STRING_CHAR (SDATA (seq) + ibyte);
 		  cbytes = CHAR_BYTES (c);
 		}
 	      else
@@ -1927,38 +1925,6 @@ merge (org_l1, org_l2, pred)
 }
 
 
-#if 0 /* Unsafe version.  */
-DEFUN ("plist-get", Fplist_get, Splist_get, 2, 2, 0,
-       doc: /* Extract a value from a property list.
-PLIST is a property list, which is a list of the form
-\(PROP1 VALUE1 PROP2 VALUE2...).  This function returns the value
-corresponding to the given PROP, or nil if PROP is not
-one of the properties on the list.  */)
-     (plist, prop)
-     Lisp_Object plist;
-     Lisp_Object prop;
-{
-  Lisp_Object tail;
-
-  for (tail = plist;
-       CONSP (tail) && CONSP (XCDR (tail));
-       tail = XCDR (XCDR (tail)))
-    {
-      if (EQ (prop, XCAR (tail)))
-	return XCAR (XCDR (tail));
-
-      /* This function can be called asynchronously
-	 (setup_coding_system).  Don't QUIT in that case.  */
-      if (!interrupt_input_blocked)
-	QUIT;
-    }
-
-  CHECK_LIST_END (tail, prop);
-
-  return Qnil;
-}
-#endif
-
 /* This does not check for quits.  That is safe since it must terminate.  */
 
 DEFUN ("plist-get", Fplist_get, Splist_get, 2, 2, 0,
@@ -1984,6 +1950,13 @@ properties on the list.  This function never signals an error.  */)
       halftail = XCDR (halftail);
       if (EQ (tail, halftail))
 	break;
+
+#if 0 /* Unsafe version.  */
+      /* This function can be called asynchronously
+	 (setup_coding_system).  Don't QUIT in that case.  */
+      if (!interrupt_input_blocked)
+	QUIT;
+#endif
     }
 
   return Qnil;
@@ -2267,9 +2240,7 @@ internal_equal (o1, o2, depth, props)
 	return 0;
       return 1;
 
-    case Lisp_Int:
-    case Lisp_Symbol:
-    case Lisp_Type_Limit:
+    default:
       break;
     }
 
@@ -3216,7 +3187,7 @@ The data read from the system are decoded using `locale-coding-system'.  */)
   while (IS_BASE64_IGNORABLE (c))
 
 /* Table of characters coding the 64 values.  */
-static char base64_value_to_char[64] =
+static const char base64_value_to_char[64] =
 {
   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',	/*  0- 9 */
   'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',	/* 10-19 */
@@ -3228,7 +3199,7 @@ static char base64_value_to_char[64] =
 };
 
 /* Table of base64 values for first 128 characters.  */
-static short base64_char_to_value[128] =
+static const short base64_char_to_value[128] =
 {
   -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,	/*   0-  9 */
   -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,	/*  10- 19 */
@@ -3390,7 +3361,7 @@ base64_encode_1 (from, to, length, line_break, multibyte)
     {
       if (multibyte)
 	{
-	  c = STRING_CHAR_AND_LENGTH (from + i, length - i, bytes);
+	  c = STRING_CHAR_AND_LENGTH (from + i, bytes);
 	  if (CHAR_BYTE8_P (c))
 	    c = CHAR_TO_BYTE8 (c);
 	  else if (c >= 256)
@@ -3430,7 +3401,7 @@ base64_encode_1 (from, to, length, line_break, multibyte)
 
       if (multibyte)
 	{
-	  c = STRING_CHAR_AND_LENGTH (from + i, length - i, bytes);
+	  c = STRING_CHAR_AND_LENGTH (from + i, bytes);
 	  if (CHAR_BYTE8_P (c))
 	    c = CHAR_TO_BYTE8 (c);
 	  else if (c >= 256)
@@ -3454,7 +3425,7 @@ base64_encode_1 (from, to, length, line_break, multibyte)
 
       if (multibyte)
 	{
-	  c = STRING_CHAR_AND_LENGTH (from + i, length - i, bytes);
+	  c = STRING_CHAR_AND_LENGTH (from + i, bytes);
 	  if (CHAR_BYTE8_P (c))
 	    c = CHAR_TO_BYTE8 (c);
 	  else if (c >= 256)
@@ -4565,7 +4536,7 @@ sxhash (obj, depth)
 
   switch (XTYPE (obj))
     {
-    case Lisp_Int:
+    case_Lisp_Int:
       hash = XUINT (obj);
       break;
 
@@ -5153,33 +5124,33 @@ void
 syms_of_fns ()
 {
   /* Hash table stuff.  */
-  Qhash_table_p = intern ("hash-table-p");
+  Qhash_table_p = intern_c_string ("hash-table-p");
   staticpro (&Qhash_table_p);
-  Qeq = intern ("eq");
+  Qeq = intern_c_string ("eq");
   staticpro (&Qeq);
-  Qeql = intern ("eql");
+  Qeql = intern_c_string ("eql");
   staticpro (&Qeql);
-  Qequal = intern ("equal");
+  Qequal = intern_c_string ("equal");
   staticpro (&Qequal);
-  QCtest = intern (":test");
+  QCtest = intern_c_string (":test");
   staticpro (&QCtest);
-  QCsize = intern (":size");
+  QCsize = intern_c_string (":size");
   staticpro (&QCsize);
-  QCrehash_size = intern (":rehash-size");
+  QCrehash_size = intern_c_string (":rehash-size");
   staticpro (&QCrehash_size);
-  QCrehash_threshold = intern (":rehash-threshold");
+  QCrehash_threshold = intern_c_string (":rehash-threshold");
   staticpro (&QCrehash_threshold);
-  QCweakness = intern (":weakness");
+  QCweakness = intern_c_string (":weakness");
   staticpro (&QCweakness);
-  Qkey = intern ("key");
+  Qkey = intern_c_string ("key");
   staticpro (&Qkey);
-  Qvalue = intern ("value");
+  Qvalue = intern_c_string ("value");
   staticpro (&Qvalue);
-  Qhash_table_test = intern ("hash-table-test");
+  Qhash_table_test = intern_c_string ("hash-table-test");
   staticpro (&Qhash_table_test);
-  Qkey_or_value = intern ("key-or-value");
+  Qkey_or_value = intern_c_string ("key-or-value");
   staticpro (&Qkey_or_value);
-  Qkey_and_value = intern ("key-and-value");
+  Qkey_and_value = intern_c_string ("key-and-value");
   staticpro (&Qkey_and_value);
 
   defsubr (&Ssxhash);
@@ -5199,17 +5170,17 @@ syms_of_fns ()
   defsubr (&Smaphash);
   defsubr (&Sdefine_hash_table_test);
 
-  Qstring_lessp = intern ("string-lessp");
+  Qstring_lessp = intern_c_string ("string-lessp");
   staticpro (&Qstring_lessp);
-  Qprovide = intern ("provide");
+  Qprovide = intern_c_string ("provide");
   staticpro (&Qprovide);
-  Qrequire = intern ("require");
+  Qrequire = intern_c_string ("require");
   staticpro (&Qrequire);
-  Qyes_or_no_p_history = intern ("yes-or-no-p-history");
+  Qyes_or_no_p_history = intern_c_string ("yes-or-no-p-history");
   staticpro (&Qyes_or_no_p_history);
-  Qcursor_in_echo_area = intern ("cursor-in-echo-area");
+  Qcursor_in_echo_area = intern_c_string ("cursor-in-echo-area");
   staticpro (&Qcursor_in_echo_area);
-  Qwidget_type = intern ("widget-type");
+  Qwidget_type = intern_c_string ("widget-type");
   staticpro (&Qwidget_type);
 
   staticpro (&string_char_byte_cache_string);
@@ -5223,18 +5194,18 @@ syms_of_fns ()
   DEFVAR_LISP ("features", &Vfeatures,
     doc: /* A list of symbols which are the features of the executing Emacs.
 Used by `featurep' and `require', and altered by `provide'.  */);
-  Vfeatures = Fcons (intern ("emacs"), Qnil);
-  Qsubfeatures = intern ("subfeatures");
+  Vfeatures = Fcons (intern_c_string ("emacs"), Qnil);
+  Qsubfeatures = intern_c_string ("subfeatures");
   staticpro (&Qsubfeatures);
 
 #ifdef HAVE_LANGINFO_CODESET
-  Qcodeset = intern ("codeset");
+  Qcodeset = intern_c_string ("codeset");
   staticpro (&Qcodeset);
-  Qdays = intern ("days");
+  Qdays = intern_c_string ("days");
   staticpro (&Qdays);
-  Qmonths = intern ("months");
+  Qmonths = intern_c_string ("months");
   staticpro (&Qmonths);
-  Qpaper = intern ("paper");
+  Qpaper = intern_c_string ("paper");
   staticpro (&Qpaper);
 #endif	/* HAVE_LANGINFO_CODESET */
 

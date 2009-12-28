@@ -1218,6 +1218,8 @@ function, it is changed to a list of functions."
       (setq hook-value (list hook-value)))
     ;; Do the actual addition if necessary
     (unless (member function hook-value)
+      (when (stringp function)
+	(setq function (purecopy function)))
       (setq hook-value
 	    (if append
 		(append hook-value (list function))
@@ -1660,14 +1662,14 @@ This function makes or adds to an entry on `after-load-alist'."
   ;; Add this FORM into after-load-alist (regardless of whether we'll be
   ;; evaluating it now).
   (let* ((regexp-or-feature
-	  (if (stringp file) (load-history-regexp file) file))
+	  (if (stringp file) (setq file (purecopy (load-history-regexp file))) file))
 	 (elt (assoc regexp-or-feature after-load-alist)))
     (unless elt
       (setq elt (list regexp-or-feature))
       (push elt after-load-alist))
     ;; Add FORM to the element unless it's already there.
     (unless (member form (cdr elt))
-      (nconc elt (list form)))
+      (nconc elt (purecopy (list form))))
 
     ;; Is there an already loaded file whose name (or `provide' name)
     ;; matches FILE?
@@ -1770,8 +1772,8 @@ Value is t if a query was formerly required."
     (or (not process)
         (not (memq (process-status process) '(run stop open listen)))
         (not (process-query-on-exit-flag process))
-        (aquamacs-ask-for-confirmation "Buffer has a running process; kill it? 
-Discarding the buffer will also stop the process." nil "Kill" "Don't Kill" t 'no-cancel))))
+        (not (aquamacs-ask-for-confirmation "Buffer has a running process; keep the buffer? 
+Discarding the buffer would also stop the process." nil "Keep" "Discard"  t 'no-cancel)))))
 
 (add-hook 'kill-buffer-query-functions 'process-kill-buffer-query-function)
 
@@ -2296,7 +2298,7 @@ On other systems, this variable is normally always nil.")
 ;; The `assert' macro from the cl package signals
 ;; `cl-assertion-failed' at runtime so always define it.
 (put 'cl-assertion-failed 'error-conditions '(error))
-(put 'cl-assertion-failed 'error-message "Assertion failed")
+(put 'cl-assertion-failed 'error-message (purecopy "Assertion failed"))
 
 (defconst user-emacs-directory
   (if (eq system-type 'ms-dos)
@@ -3191,6 +3193,13 @@ and replace a sub-expression, e.g.
       (setq matches (cons (substring string start l) matches)) ; leftover
       (apply #'concat (nreverse matches)))))
 
+(defun string-prefix-p (str1 str2 &optional ignore-case)
+  "Return non-nil if STR1 is a prefix of STR2.
+If IGNORE-CASE is non-nil, the comparison is done without paying attention
+to case differences."
+  (eq t (compare-strings str1 nil nil
+                         str2 0 (length str1) ignore-case)))
+
 ;;;; invisibility specs
 
 (defun add-to-invisibility-spec (element)
@@ -3544,13 +3553,13 @@ convenience wrapper around `make-progress-reporter' and friends.
 
 ;;;; Comparing version strings.
 
-(defvar version-separator "."
+(defconst version-separator "."
   "*Specify the string used to separate the version elements.
 
 Usually the separator is \".\", but it can be any other string.")
 
 
-(defvar version-regexp-alist
+(defconst version-regexp-alist
   '(("^[-_+ ]?a\\(lpha\\)?$"   . -3)
     ("^[-_+]$"                 . -3) ; treat "1.2.3-20050920" and "1.2-3" as alpha releases
     ("^[-_+ ]cvs$"             . -3)	; treat "1.2.3-CVS" as alpha release
@@ -3759,6 +3768,8 @@ is greater than \"1pre\" which is greater than \"1beta\" which is greater than
 
 
 ;;; Misc.
+(defconst menu-bar-separator '("--")
+  "Separator for menus.")
 
 ;; The following statement ought to be in print.c, but `provide' can't
 ;; be used there.

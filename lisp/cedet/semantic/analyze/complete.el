@@ -91,7 +91,7 @@ in a buffer."
 		    (error "Nothing to complete")
 		  (:override))))
       ;; If interactive, display them.
-      (when (interactive-p)
+      (when (called-interactively-p 'any)
 	(with-output-to-temp-buffer "*Possible Completions*"
 	  (semantic-analyze-princ-sequence ans "" (current-buffer)))
 	(shrink-window-if-larger-than-buffer
@@ -256,7 +256,6 @@ Argument CONTEXT is an object specifying the locally derived context."
 
 ;; Local variables:
 ;; generated-autoload-file: "../loaddefs.el"
-;; generated-autoload-feature: semantic/loaddefs
 ;; generated-autoload-load-name: "semantic/analyze/complete"
 ;; End:
 

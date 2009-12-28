@@ -763,7 +763,7 @@ the regular parser."
 (defun semantic-c-debug-mode-init (mm)
   "Debug mode init for major mode MM after we're done parsing now."
   (interactive (list semantic-c-debug-mode-init-last-mode))
-  (if (interactive-p)
+  (if (called-interactively-p 'interactive)
       ;; Do the debug.
       (progn
 	(switch-to-buffer (get-buffer-create "*MODE HACK TEST*"))
@@ -1759,6 +1759,24 @@ DO NOT return the list of tags encompassing point."
 	  (princ "\n")
 	  ))
 
+      (when (arrayp semantic-lex-spp-project-macro-symbol-obarray)
+	(princ "\n  Project symbol map:\n")
+	(princ "      Your project symbol map is derived from the EDE object:\n      ")
+	(princ (object-print ede-object))
+	(princ "\n\n")
+	(let ((macros nil))
+	  (mapatoms
+	   #'(lambda (symbol)
+	       (setq macros (cons symbol macros)))
+	   semantic-lex-spp-project-macro-symbol-obarray)
+	  (dolist (S macros)
+	    (princ "    ")
+	    (princ (symbol-name S))
+	    (princ " = ")
+	    (princ (symbol-value S))
+	    (princ "\n")
+	    )))
+
       (princ "\n\n  Use: M-x semantic-lex-spp-describe RET\n")
       (princ "\n  to see the complete macro table.\n")
 
@@ -1770,7 +1788,6 @@ DO NOT return the list of tags encompassing point."
 
 ;; Local variables:
 ;; generated-autoload-file: "../loaddefs.el"
-;; generated-autoload-feature: semantic/loaddefs
 ;; generated-autoload-load-name: "semantic/bovine/c"
 ;; End:
 

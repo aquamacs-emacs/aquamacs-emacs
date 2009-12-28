@@ -1234,9 +1234,6 @@ that should be represented in the Aquamacs menus."
 	  (aquamacs-menu-bar-setup)))
     (error nil)))
 
-;; (define-key global-map [menu-bar buffer]
-;;   (cons "Window" global-buffers-menu-map))
-
 ;; to do after loading this file (at runtime)
 ;; (menu-bar-update-buffers) ;; update Buffers menu now
 ;; (aquamacs-update-menu t) ;; initial setup of the menu
@@ -1251,7 +1248,7 @@ that should be represented in the Aquamacs menus."
 
 (defun emacsosx-mailing-list-subscribe ()
   (interactive)
-  (browse-url "mailto:macosx-emacs-on@email.esm.psu.edu?subject=subscribe%20macosx-emacs&body=Send%20off%20this%20e-mail%20to%20subscrube%20to%20the%20Emacs-on-MacOSX%20mailing%20list."))
+  (browse-url "mailto:macosx-emacs-on@email.esm.psu.edu?subject=subscribe%20macosx-emacs&body=Send%20off%20this%20e-mail%20to%20subscribe%20to%20the%20Emacs-on-MacOSX%20mailing%20list."))
  
 (defun aquamacs-donate ()
   (interactive)
@@ -1260,7 +1257,6 @@ that should be represented in the Aquamacs menus."
 (defun emacs-user-wiki ()
   (interactive)
   (browse-url "http://www.emacswiki.org/")) 
-;;
 
 ;; insert menu showing reference cards
 

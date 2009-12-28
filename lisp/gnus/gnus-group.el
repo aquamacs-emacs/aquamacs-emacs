@@ -1372,7 +1372,8 @@ if it is a string, only list groups matching REGEXP."
 	  (setq not-in-list (delete group not-in-list)))
 	(when (gnus-group-prepare-logic
 	       group
-	       (and unread		; This group might be unchecked
+	       (and (or unread		; This group might be unchecked
+			predicate)	; Check if this group should be listed
 		    (or (not (stringp regexp))
 			(string-match regexp group))
 		    (<= (setq clevel (gnus-info-level info)) level)
@@ -1386,7 +1387,7 @@ if it is a string, only list groups matching REGEXP."
 		       (if (eq unread t) ; Unactivated?
 			   gnus-group-list-inactive-groups
 					; We list unactivated
-			 (> unread 0))
+			 (and (numberp unread) (> unread 0)))
 					; We list groups with unread articles
 		       (and gnus-list-groups-with-ticked-articles
 			    (cdr (assq 'tick (gnus-info-marks info))))
@@ -2425,15 +2426,14 @@ Valid input formats include:
     (gnus-read-ephemeral-gmane-group group start range)))
 
 (defcustom gnus-bug-group-download-format-alist
-  '((emacs ;; Only a test bed yet:
-     . "http://emacsbugs.donarmstrong.com/cgi-bin/bugreport.cgi?mbox=yes;bug=%s")
+  '((emacs . "http://debbugs.gnu.org/%s;mbox=yes")
     (debian
      . "http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=%s&mbox=yes"))
   "Alist of symbols for bug trackers and the corresponding URL format string.
 The URL format string must contain a single \"%s\", specifying
 the bug number, and browsing the URL must return mbox output."
   :group 'gnus-group-foreign
-  :version "23.1" ;; No Gnus
+  :version "23.2" ;; No Gnus
   :type '(repeat (cons (symbol) (string :tag "URL format string"))))
 
 (defun gnus-read-ephemeral-bug-group (number mbox-url)

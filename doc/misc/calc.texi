@@ -13173,6 +13173,44 @@ are displayed with at least enough digits to represent
 in the current radix.  (Larger integers will still be displayed in their
 entirety.) 
 
+@cindex Two's complements
+With the binary, octal and hexadecimal display modes, Calc can
+display @expr{w}-bit integers using two's complement notation.  This
+option is selected with the key sequences @kbd{C-u d 2}, @kbd{C-u d 8}
+and @kbd{C-u d 6}, respectively, and a negative word size might be
+appropriate (@pxref{Binary Functions}). In two's complement 
+notation, the integers in the (nearly) symmetric interval from
+@texline @math{-2^{w-1}}
+@infoline @expr{-2^(w-1)}
+to
+@texline @math{2^{w-1}-1}
+@infoline @expr{2^(w-1)-1}
+are represented by the integers from @expr{0} to @expr{2^w-1}:
+the integers from @expr{0} to
+@texline @math{2^{w-1}-1}
+@infoline @expr{2^(w-1)-1}
+are represented by themselves and the integers from
+@texline @math{-2^{w-1}}
+@infoline @expr{-2^(w-1)}
+to @expr{-1} are represented by the integers from 
+@texline @math{2^{w-1}}
+@infoline @expr{2^(w-1)}
+to @expr{2^w-1} (the integer @expr{k} is represented by @expr{k+2^w}).
+Calc will display a two's complement integer by the radix (either
+@expr{2}, @expr{8} or @expr{16}), two @kbd{#} symbols, and then its
+representation (including any leading zeros necessary to include all
+@expr{w} bits).  In a two's complement display mode, numbers that
+are not displayed in two's complement notation (i.e., that aren't
+integers from  
+@texline @math{-2^{w-1}}
+@infoline @expr{-2^(w-1)}
+to
+@c (
+@texline @math{2^{w-1}-1})
+@infoline @expr{2^(w-1)-1})
+will be represented using Calc's usual notation (in the appropriate
+radix).
+
 @node Grouping Digits, Float Formats, Radix Modes, Display Modes
 @subsection Grouping Digits
 
@@ -17969,7 +18007,7 @@ of the binary operations described here operate modulo @expr{2^w}.  In
 particular, negative arguments are converted to positive integers modulo
 @expr{2^w} by all binary functions.
 
-If the word size is negative, binary operations produce 2's complement
+If the word size is negative, binary operations produce twos-complement
 integers from 
 @texline @math{-2^{-w-1}}
 @infoline @expr{-(2^(-w-1))} 

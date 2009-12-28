@@ -313,7 +313,7 @@ Defaults to the value of `browse-url-mozilla-arguments' at the time
   :group 'browse-url)
 
 ;;;###autoload
-(defcustom browse-url-firefox-program "firefox"
+(defcustom browse-url-firefox-program (purecopy "firefox")
   "The name by which to invoke Firefox."
   :type 'string
   :group 'browse-url)
@@ -331,7 +331,7 @@ Defaults to the value of `browse-url-firefox-arguments' at the time
   :group 'browse-url)
 
 ;;;###autoload
-(defcustom browse-url-galeon-program "galeon"
+(defcustom browse-url-galeon-program (purecopy "galeon")
   "The name by which to invoke Galeon."
   :type 'string
   :group 'browse-url)
@@ -444,7 +444,7 @@ commands reverses the effect of this variable.  Requires Netscape version
     ;; applies.
     ("^/\\([^:@]+@\\)?\\([^:]+\\):/*" . "ftp://\\1\\2/")
     ,@(if (memq system-type '(windows-nt ms-dos cygwin))
-          '(("^\\([a-zA-Z]:\\)[\\/]" . "file:\\1/")
+          '(("^\\([a-zA-Z]:\\)[\\/]" . "file:///\\1/")
             ("^[\\/][\\/]+" . "file://")))
     ("^/+" . "file:///"))
   "An alist of (REGEXP . STRING) pairs used by `browse-url-of-file'.
@@ -699,6 +699,12 @@ interactively.  Turn the filename into a URL with function
 (defun browse-url-file-url (file)
   "Return the URL corresponding to FILE.
 Use variable `browse-url-filename-alist' to map filenames to URLs."
+  ;; De-munge Cygwin filenames before passing them to Windows browser.
+  (if (eq system-type 'cygwin)
+      (let ((winfile (with-output-to-string
+		       (call-process "cygpath" nil standard-output
+				     nil "-m" file))))
+	(setq file (substring winfile 0 -1))))
   (let ((coding (and (default-value 'enable-multibyte-characters)
 		     (or file-name-coding-system
 			 default-file-name-coding-system))))
@@ -830,11 +836,13 @@ to use."
 
 (defun browse-url-default-windows-browser (url &optional new-window)
   (interactive (browse-url-interactive-arg "URL: "))
-  (if (eq system-type 'ms-dos)
-      (if dos-windows-version
-	  (shell-command (concat "start " (shell-quote-argument url)))
-	(error "Browsing URLs is not supported on this system"))
-    (w32-shell-execute "open" url)))
+  (cond ((eq system-type 'ms-dos)
+	 (if dos-windows-version
+	     (shell-command (concat "start " (shell-quote-argument url)))
+	   (error "Browsing URLs is not supported on this system")))
+	((eq system-type 'cygwin)
+	 (call-process "cygstart" nil nil nil url))
+	(t (w32-shell-execute "open" url))))
 
 (defun browse-url-default-macosx-browser (url &optional new-window)
 "Launch the default browser specified in Mac OS X.

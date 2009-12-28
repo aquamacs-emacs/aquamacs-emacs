@@ -39,7 +39,8 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* Xft font driver.  */
 
 static Lisp_Object Qxft;
-static Lisp_Object QChinting , QCautohint, QChintstyle, QCrgba, QCembolden;
+static Lisp_Object QChinting, QCautohint, QChintstyle, QCrgba, QCembolden,
+  QClcdfilter;
 
 /* The actual structure for Xft font that can be casted to struct
    font.  */
@@ -47,7 +48,7 @@ static Lisp_Object QChinting , QCautohint, QChintstyle, QCrgba, QCembolden;
 struct xftfont_info
 {
   struct font font;
-  /* The following four members must be here in this order to be
+  /* The following five members must be here in this order to be
      compatible with struct ftfont_info (in ftfont.c).  */
 #ifdef HAVE_LIBOTF
   int maybe_otf;	  /* Flag to tell if this may be OTF or not.  */
@@ -55,6 +56,7 @@ struct xftfont_info
 #endif	/* HAVE_LIBOTF */
   FT_Size ft_size;
   int index;
+  FT_Matrix matrix;
   Display *display;
   int screen;
   XftFont *xftfont;
@@ -184,6 +186,57 @@ extern Lisp_Object QCantialias;
 
 static FcChar8 ascii_printable[95];
 
+static void
+xftfont_fix_match (pat, match)
+     FcPattern *pat, *match;
+{
+  /*  These values are not used for matching (except antialias), but for
+      rendering, so make sure they are carried over to the match.
+      We also put antialias here because most fonts are antialiased, so
+      the match will have antialias true.  */
+
+  FcBool b = FcTrue;
+  int i;
+  double dpi;
+
+  FcPatternGetBool (pat, FC_ANTIALIAS, 0, &b);
+  if (! b) 
+    {
+      FcPatternDel (match, FC_ANTIALIAS);
+      FcPatternAddBool (match, FC_ANTIALIAS, FcFalse);
+    }
+  FcPatternGetBool (pat, FC_HINTING, 0, &b);
+  if (! b) 
+    {
+      FcPatternDel (match, FC_HINTING);
+      FcPatternAddBool (match, FC_HINTING, FcFalse);
+    }
+  if (FcResultMatch == FcPatternGetInteger (pat, FC_HINT_STYLE, 0, &i))
+    {
+      FcPatternDel (match, FC_HINT_STYLE);
+      FcPatternAddInteger (match, FC_HINT_STYLE, i);
+    }
+#ifndef FC_LCD_FILTER
+  /* Older fontconfig versions don't have FC_LCD_FILTER. */
+#define FC_LCD_FILTER "lcdfilter"
+#endif
+  if (FcResultMatch == FcPatternGetInteger (pat, FC_LCD_FILTER, 0, &i))
+    {
+      FcPatternDel (match, FC_LCD_FILTER);
+      FcPatternAddInteger (match, FC_LCD_FILTER, i);
+    }
+  if (FcResultMatch == FcPatternGetInteger (pat, FC_RGBA, 0, &i))
+    {
+      FcPatternDel (match, FC_RGBA);
+      FcPatternAddInteger (match, FC_RGBA, i);
+    }
+  if (FcResultMatch == FcPatternGetDouble (pat, FC_DPI, 0, &dpi))
+    {
+      FcPatternDel (match, FC_DPI);
+      FcPatternAddDouble (match, FC_DPI, dpi);
+    }
+}
+
 static Lisp_Object
 xftfont_open (f, entity, pixel_size)
      FRAME_PTR f;
@@ -200,9 +253,10 @@ xftfont_open (f, entity, pixel_size)
   XftFont *xftfont = NULL;
   int spacing;
   char name[256];
-  int len, i;
+  int len, i, ival;
   XGlyphInfo extents;
   FT_Face ft_face;
+  FcMatrix *matrix;
 
   val = assq_no_quit (QCfont_entity, AREF (entity, FONT_EXTRA_INDEX));
   if (! CONSP (val))
@@ -249,7 +303,7 @@ xftfont_open (f, entity, pixel_size)
 
       key = XCAR (XCAR (tail)), val = XCDR (XCAR (tail));
       if (EQ (key, QCantialias))
-	FcPatternAddBool (pat, FC_ANTIALIAS, NILP (val) ? FcFalse : FcTrue);
+          FcPatternAddBool (pat, FC_ANTIALIAS, NILP (val) ? FcFalse : FcTrue);
       else if (EQ (key, QChinting))
 	FcPatternAddBool (pat, FC_HINTING, NILP (val) ? FcFalse : FcTrue);
       else if (EQ (key, QCautohint))
@@ -258,11 +312,25 @@ xftfont_open (f, entity, pixel_size)
 	{
 	  if (INTEGERP (val))
 	    FcPatternAddInteger (pat, FC_HINT_STYLE, XINT (val));
+          else if (SYMBOLP (val)
+                   && FcNameConstant (SDATA (SYMBOL_NAME (val)), &ival))
+	    FcPatternAddInteger (pat, FC_HINT_STYLE, ival);
 	}
       else if (EQ (key, QCrgba))
 	{
 	  if (INTEGERP (val))
 	    FcPatternAddInteger (pat, FC_RGBA, XINT (val));
+          else if (SYMBOLP (val)
+                   && FcNameConstant (SDATA (SYMBOL_NAME (val)), &ival))
+	    FcPatternAddInteger (pat, FC_RGBA, ival);
+	}
+      else if (EQ (key, QClcdfilter))
+	{
+	  if (INTEGERP (val))
+	    FcPatternAddInteger (pat, FC_LCD_FILTER, ival = XINT (val));
+          else if (SYMBOLP (val)
+                   && FcNameConstant (SDATA (SYMBOL_NAME (val)), &ival))
+	    FcPatternAddInteger (pat, FC_LCD_FILTER, ival);
 	}
 #ifdef FC_EMBOLDEN
       else if (EQ (key, QCembolden))
@@ -285,7 +353,12 @@ xftfont_open (f, entity, pixel_size)
     int event_base, error_base;
     XRenderQueryExtension (display, &event_base, &error_base);
   }
+
+  /* Substitute in values from X resources and XftDefaultSet.  */
+  XftDefaultSubstitute (display, FRAME_X_SCREEN_NUMBER (f), pat);
   match = XftFontMatch (display, FRAME_X_SCREEN_NUMBER (f), pat, &result);
+  xftfont_fix_match (pat, match);
+
   FcPatternDestroy (pat);
   xftfont = XftFontOpenPattern (display, match);
   if (!xftfont)
@@ -322,6 +395,16 @@ xftfont_open (f, entity, pixel_size)
   xftfont_info->display = display;
   xftfont_info->screen = FRAME_X_SCREEN_NUMBER (f);
   xftfont_info->xftfont = xftfont;
+  /* This means that there's no need of transformation.  */
+  xftfont_info->matrix.xx = 0;
+  if (FcPatternGetMatrix (xftfont->pattern, FC_MATRIX, 0, &matrix)
+      == FcResultMatch)
+    {
+      xftfont_info->matrix.xx = 0x10000L * matrix->xx;
+      xftfont_info->matrix.yy = 0x10000L * matrix->yy;
+      xftfont_info->matrix.xy = 0x10000L * matrix->xy;
+      xftfont_info->matrix.yx = 0x10000L * matrix->yx;
+    }
   font->pixel_size = size;
   font->driver = &xftfont_driver;
   if (INTEGERP (AREF (entity, FONT_SPACING_INDEX)))
@@ -612,7 +695,12 @@ static int
 xftfont_end_for_frame (f)
      FRAME_PTR f;
 {
-  XftDraw *xft_draw = font_get_frame_data (f, &xftfont_driver);
+  XftDraw *xft_draw;
+
+  /* Don't do anything if display is dead */
+  if (FRAME_X_DISPLAY (f) == NULL) return 0;
+
+  xft_draw = font_get_frame_data (f, &xftfont_driver);
 
   if (xft_draw)
     {
@@ -633,6 +721,7 @@ syms_of_xftfont ()
   DEFSYM (QChintstyle, ":hintstyle");
   DEFSYM (QCrgba, ":rgba");
   DEFSYM (QCembolden, ":embolden");
+  DEFSYM (QClcdfilter, ":lcdfilter");
 
   xftfont_driver = ftfont_driver;
   xftfont_driver.type = Qxft;

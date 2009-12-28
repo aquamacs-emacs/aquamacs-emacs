@@ -539,12 +539,10 @@ ELCFILES = \
 	$(lisp)/emacs-lisp/generic.elc \
 	$(lisp)/emacs-lisp/gulp.elc \
 	$(lisp)/emacs-lisp/helper.elc \
-	$(lisp)/emacs-lisp/levents.elc \
 	$(lisp)/emacs-lisp/lisp-mnt.elc \
 	$(lisp)/emacs-lisp/lisp-mode.elc \
 	$(lisp)/emacs-lisp/lisp.elc \
 	$(lisp)/emacs-lisp/lmenu.elc \
-	$(lisp)/emacs-lisp/lucid.elc \
 	$(lisp)/emacs-lisp/macroexp.elc \
 	$(lisp)/emacs-lisp/map-ynp.elc \
 	$(lisp)/emacs-lisp/pp.elc \
@@ -683,6 +681,7 @@ ELCFILES = \
 	$(lisp)/follow.elc \
 	$(lisp)/font-core.elc \
 	$(lisp)/font-lock.elc \
+	$(lisp)/font-setting.elc \
 	$(lisp)/format-spec.elc \
 	$(lisp)/format.elc \
 	$(lisp)/forms.elc \
@@ -829,10 +828,12 @@ ELCFILES = \
 	$(lisp)/help.elc \
 	$(lisp)/hex-util.elc \
 	$(lisp)/hexl.elc \
+	$(lisp)/hfy-cmap.elc \
 	$(lisp)/hi-lock.elc \
 	$(lisp)/hilit-chg.elc \
 	$(lisp)/hippie-exp.elc \
 	$(lisp)/hl-line.elc \
+	$(lisp)/htmlfontify.elc \
 	$(lisp)/ibuf-ext.elc \
 	$(lisp)/ibuf-macs.elc \
 	$(lisp)/ibuffer.elc \
@@ -864,6 +865,7 @@ ELCFILES = \
 	$(lisp)/international/latexenc.elc \
 	$(lisp)/international/latin1-disp.elc \
 	$(lisp)/international/mule-cmds.elc \
+	$(lisp)/international/mule-conf.elc \
 	$(lisp)/international/mule-diag.elc \
 	$(lisp)/international/mule-util.elc \
 	$(lisp)/international/mule.elc \
@@ -983,6 +985,7 @@ ELCFILES = \
 	$(lisp)/mouse-drag.elc \
 	$(lisp)/mouse-sel.elc \
 	$(lisp)/mouse.elc \
+	$(lisp)/mpc.elc \
 	$(lisp)/msb.elc \
 	$(lisp)/mwheel.elc \
 	$(lisp)/net/ange-ftp.elc \
@@ -1074,6 +1077,8 @@ ELCFILES = \
 	$(lisp)/obsolete/iso-insert.elc \
 	$(lisp)/obsolete/iso-swed.elc \
 	$(lisp)/obsolete/lazy-lock.elc \
+	$(lisp)/obsolete/levents.elc \
+	$(lisp)/obsolete/lucid.elc \
 	$(lisp)/obsolete/old-whitespace.elc \
 	$(lisp)/obsolete/options.elc \
 	$(lisp)/obsolete/resume.elc \
@@ -1082,6 +1087,7 @@ ELCFILES = \
 	$(lisp)/obsolete/sc.elc \
 	$(lisp)/obsolete/scribe.elc \
 	$(lisp)/obsolete/swedish.elc \
+	$(lisp)/obsolete/sym-comp.elc \
 	$(lisp)/obsolete/vc-mcvs.elc \
 	$(lisp)/obsolete/x-menu.elc \
 	$(lisp)/org/org-agenda.elc \
@@ -1094,13 +1100,16 @@ ELCFILES = \
 	$(lisp)/org/org-colview.elc \
 	$(lisp)/org/org-compat.elc \
 	$(lisp)/org/org-crypt.elc \
+	$(lisp)/org/org-datetree.elc \
 	$(lisp)/org/org-docbook.elc \
 	$(lisp)/org/org-exp-blocks.elc \
 	$(lisp)/org/org-exp.elc \
 	$(lisp)/org/org-faces.elc \
 	$(lisp)/org/org-feed.elc \
 	$(lisp)/org/org-footnote.elc \
+	$(lisp)/org/org-freemind.elc \
 	$(lisp)/org/org-gnus.elc \
+	$(lisp)/org/org-habit.elc \
 	$(lisp)/org/org-html.elc \
 	$(lisp)/org/org-icalendar.elc \
 	$(lisp)/org/org-id.elc \
@@ -1202,7 +1211,6 @@ ELCFILES = \
 	$(lisp)/progmodes/cc-menus.elc \
 	$(lisp)/progmodes/cc-mode.elc \
 	$(lisp)/progmodes/cc-styles.elc \
-	$(lisp)/progmodes/cc-subword.elc \
 	$(lisp)/progmodes/cc-vars.elc \
 	$(lisp)/progmodes/cfengine.elc \
 	$(lisp)/progmodes/cmacexp.elc \
@@ -1258,7 +1266,7 @@ ELCFILES = \
 	$(lisp)/progmodes/sh-script.elc \
 	$(lisp)/progmodes/simula.elc \
 	$(lisp)/progmodes/sql.elc \
-	$(lisp)/progmodes/sym-comp.elc \
+	$(lisp)/progmodes/subword.elc \
 	$(lisp)/progmodes/tcl.elc \
 	$(lisp)/progmodes/vera-mode.elc \
 	$(lisp)/progmodes/verilog-mode.elc \
@@ -1650,7 +1658,7 @@ $(lisp)/progmodes/cc-align.elc $(lisp)/progmodes/cc-awk.elc\
  $(lisp)/progmodes/cc-engine.elc $(lisp)/progmodes/cc-fonts.elc\
  $(lisp)/progmodes/cc-langs.elc $(lisp)/progmodes/cc-menus.elc\
  $(lisp)/progmodes/cc-mode.elc $(lisp)/progmodes/cc-styles.elc\
- $(lisp)/progmodes/cc-subword.elc $(lisp)/progmodes/cc-vars.elc: \
+ $(lisp)/progmodes/cc-vars.elc: \
    $(lisp)/progmodes/cc-bytecomp.elc $(lisp)/progmodes/cc-defs.elc
 
 $(lisp)/progmodes/cc-align.elc: \
@@ -1683,8 +1691,6 @@ $(lisp)/progmodes/cc-mode.elc: $(lisp)/progmodes/cc-langs.elc \
 
 $(lisp)/progmodes/cc-styles.elc: $(lisp)/progmodes/cc-vars.elc \
    $(lisp)/progmodes/cc-align.elc
-
-$(lisp)/progmodes/cc-subword.elc: $(lisp)/progmodes/cc-cmds.elc
 
 $(lisp)/progmodes/cc-vars.elc: $(lisp)/custom.elc $(lisp)/widget.elc
 

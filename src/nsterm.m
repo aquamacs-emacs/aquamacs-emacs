@@ -60,7 +60,7 @@ GNUstep port and post-20 update by Adrian Robert (arobert@cogsci.ucsd.edu)
 
 
 /* call tracing */
-#if 0
+#if 1
 int term_trace_num = 0;
 #define NSTRACE(x)        fprintf (stderr, "%s:%d: [%d] " #x "\n",         \
                                 __FILE__, __LINE__, ++term_trace_num)
@@ -155,12 +155,27 @@ extern Lisp_Object Qcursor_color, Qcursor_type, Qns;
 Lisp_Object ns_alternate_modifier;
 
 /* Specifies which emacs modifier should be generated when NS receives
+   the Right Alternate modifer. Any of the modifier lisp symbols can be
+   used; Qnone falls back to ns_alternate_modifier. */
+Lisp_Object ns_right_alternate_modifier;
+
+/* Specifies which emacs modifier should be generated when NS receives
    the Command modifer.  May be any of the modifier lisp symbols. */
 Lisp_Object ns_command_modifier;
 
 /* Specifies which emacs modifier should be generated when NS receives
+   the Right Command modifer. Any of the modifier lisp symbols can be
+   used; Qnone falls back to ns_command_modifier. */
+Lisp_Object ns_right_command_modifier;
+
+/* Specifies which emacs modifier should be generated when NS receives
    the Control modifer.  May be any of the modifier lisp symbols. */
 Lisp_Object ns_control_modifier;
+
+/* Specifies which emacs modifier should be generated when NS receives
+   the Right Control modifer.  May be any of the modifier lisp symbols. 
+   Qnone falls ack to ns_control_modifier. */
+Lisp_Object ns_right_control_modifier;
 
 /* Specifies which emacs modifier should be generated when NS receives
    the Function modifer (laptops).  May be any of the modifier lisp symbols. */
@@ -229,19 +244,34 @@ static BOOL inNsSelect = 0;
 
 /* Convert modifiers in a NeXTSTEP event to emacs style modifiers.  */
 #define NS_FUNCTION_KEY_MASK 0x800000
+#define NSLeftControlKeyMask    (0x000001 | NSControlKeyMask)
+#define NSRightControlKeyMask   (0x002000 | NSControlKeyMask)
+#define NSLeftCommandKeyMask    (0x000008 | NSCommandKeyMask)
+#define NSRightCommandKeyMask   (0x000010 | NSCommandKeyMask)
+#define NSLeftAlternateKeyMask  (0x000020 | NSAlternateKeyMask)
+#define NSRightAlternateKeyMask (0x000040 | NSAlternateKeyMask)
 #define EV_MODIFIERS(e)                               \
     ((([e modifierFlags] & NSHelpKeyMask) ?           \
            hyper_modifier : 0)                        \
      | (([e modifierFlags] & NSAlternateKeyMask) ?    \
-           parse_solitary_modifier (ns_alternate_modifier) : 0)   \
+	((!EQ(ns_right_alternate_modifier,Qnone)			\
+	  && ([e modifierFlags] & NSRightAlternateKeyMask) == NSRightAlternateKeyMask) ? \
+	 parse_solitary_modifier (ns_right_alternate_modifier)		\
+     : parse_solitary_modifier (ns_alternate_modifier)) : 0)		\
      | (([e modifierFlags] & NSShiftKeyMask) ?        \
            shift_modifier : 0)                        \
-     | (([e modifierFlags] & NSControlKeyMask) ?      \
-           parse_solitary_modifier (ns_control_modifier) : 0)     \
+     | (([e modifierFlags] & NSControlKeyMask) ?			\
+	((!EQ(ns_right_control_modifier,Qnone)			\
+	  && ([e modifierFlags] & NSRightControlKeyMask) == NSRightControlKeyMask) ? \
+	 parse_solitary_modifier (ns_right_control_modifier)		\
+	 : parse_solitary_modifier (ns_control_modifier)) : 0)	\
      | (([e modifierFlags] & NS_FUNCTION_KEY_MASK) ?  \
            parse_solitary_modifier (ns_function_modifier) : 0)    \
      | (([e modifierFlags] & NSCommandKeyMask) ?      \
-           parse_solitary_modifier (ns_command_modifier):0))
+	((!EQ(ns_right_command_modifier,Qnone)				\
+	  && ([e modifierFlags] & NSRightCommandKeyMask) == NSRightCommandKeyMask) ? \
+	 parse_solitary_modifier (ns_right_command_modifier)		\
+	 : parse_solitary_modifier (ns_command_modifier)) : 0))
 
 #define EV_UDMODIFIERS(e)                                      \
     ((([e type] == NSLeftMouseDown) ? down_modifier : 0)       \
@@ -3729,8 +3759,11 @@ ns_set_default_prefs ()
    -------------------------------------------------------------------------- */
 {
   ns_alternate_modifier = Qmeta;
+  ns_right_alternate_modifier = Qnone;
   ns_command_modifier = Qsuper;
+  ns_right_command_modifier = Qnone;
   ns_control_modifier = Qcontrol;
+  ns_right_control_modifier = Qnone;
   ns_function_modifier = Qnone;
   ns_emulate_three_button_mouse = Qt;
   ns_antialias_text = Qt;
@@ -4863,7 +4896,10 @@ extern void update_window_cursor (struct window *w, int on);
 
       if (flags & NSCommandKeyMask)
         {
-          emacs_event->modifiers |= parse_solitary_modifier (ns_command_modifier);
+          emacs_event->modifiers |= (!EQ (ns_right_command_modifier, Qnone) && \
+				     ((flags & NSRightCommandKeyMask) == NSRightCommandKeyMask)) ?
+	    parse_solitary_modifier (ns_right_command_modifier)	\
+	    : parse_solitary_modifier (ns_command_modifier);
           /* if super (default), take input manager's word so things like
              dvorak / qwerty layout work */
           if (EQ (ns_command_modifier, Qsuper)
@@ -4896,7 +4932,13 @@ extern void update_window_cursor (struct window *w, int on);
             }
         }
 
-      if (flags & NSControlKeyMask)
+      if (!EQ (ns_right_control_modifier, Qnone) && 
+	  ((flags & NSRightControlKeyMask) == NSRightControlKeyMask))
+	{
+	  emacs_event->modifiers |= 
+	    parse_solitary_modifier (ns_right_control_modifier);
+	}
+      else if (flags & NSControlKeyMask)
           emacs_event->modifiers |=
             parse_solitary_modifier (ns_control_modifier);
 
@@ -4904,21 +4946,32 @@ extern void update_window_cursor (struct window *w, int on);
           emacs_event->modifiers |=
             parse_solitary_modifier (ns_function_modifier);
 
-      if (flags & NSAlternateKeyMask) /* default = meta */
-        {
-          if ((NILP (ns_alternate_modifier) || EQ (ns_alternate_modifier, Qnone))
-              && !fnKeysym)
-            {   /* accept pre-interp alt comb */
-              if ([[theEvent characters] length] > 0)
-                code = [[theEvent characters] characterAtIndex: 0];
-              /*HACK: clear lone shift modifier to stop next if from firing */
-              if (emacs_event->modifiers == shift_modifier)
-                emacs_event->modifiers = 0;
-            }
-          else
-              emacs_event->modifiers |=
-                parse_solitary_modifier (ns_alternate_modifier);
-        }
+      if (!EQ (ns_right_alternate_modifier, Qnone) && 
+	  ((flags & NSRightAlternateKeyMask) == NSRightAlternateKeyMask)) 
+	{
+	  if (NILP (ns_right_alternate_modifier) && !fnKeysym)
+	    {   /* accept pre-interp alt comb */
+	      if ([[theEvent characters] length] > 0)
+		code = [[theEvent characters] characterAtIndex: 0];
+	    }
+	  emacs_event->modifiers |= 
+	    parse_solitary_modifier (ns_right_alternate_modifier);
+	}
+      else if (flags & NSAlternateKeyMask) /* default = meta */
+	{
+	  if ((NILP (ns_alternate_modifier) || EQ (ns_alternate_modifier, Qnone))
+	      && !fnKeysym)
+	    {   /* accept pre-interp alt comb */
+	      if ([[theEvent characters] length] > 0)
+		code = [[theEvent characters] characterAtIndex: 0];
+	      /*HACK: clear lone shift modifier to stop next if from firing */
+	      if (emacs_event->modifiers == shift_modifier)
+		emacs_event->modifiers = 0;
+	    }
+	  else
+	    emacs_event->modifiers |=
+	      parse_solitary_modifier (ns_alternate_modifier);
+	}
 
   if (NS_KEYLOG)
     fprintf (stderr, "keyDown: code =%x\tfnKey =%x\tflags = %x\tmods = %x\n",
@@ -6690,33 +6743,60 @@ syms_of_nsterm ()
   ns_input_spi_arg =Qnil;
 
   DEFVAR_LISP ("ns-alternate-modifier", &ns_alternate_modifier,
-               "This variable describes the behavior of the alternate or option key.\n\
-Set to control, meta, alt, super, or hyper means it is taken to be that key.\n\
-Set to none means that the alternate / option key is not interpreted by Emacs\n\
-at all, allowing it to be used at a lower level for accented character entry.");
+               doc: /* This variable describes the behavior of the
+alternate or option key.  Set to control, meta, alt, super, or hyper
+means it is taken to be that key.  Set to none means that the
+alternate / option key is not interpreted by Emacs at all, allowing it
+to be used at a lower level for accented character entry. */);
+
+  DEFVAR_LISP ("ns-right-alternate-modifier", &ns_right_alternate_modifier,
+               doc: /* This variable describes the behavior of the
+right alternate or option key.  Set to control, meta, alt, super, or
+hyper means it is taken to be that key.  Set to nil means that the
+alternate / option key is not interpreted by Emacs at all, allowing it
+to be used at a lower level for accented character entry.  Set to none
+means use ns-alternate-modifier value. */);
 
   DEFVAR_LISP ("ns-command-modifier", &ns_command_modifier,
-               "This variable describes the behavior of the command key.\n\
-Set to control, meta, alt, super, or hyper means it is taken to be that key.");
+               doc: /* This variable describes the behavior of the
+command key.  Set to control, meta, alt, super, or hyper means it is
+taken to be that key. */);
+
+  DEFVAR_LISP ("ns-right-command-modifier", &ns_right_command_modifier,
+               doc: /* This variable describes the behavior of the
+right command key.  Set to control, meta, alt, super, or hyper means
+it is taken to be that key.  Set to none means use ns-command-modifier
+value.  */);
 
   DEFVAR_LISP ("ns-control-modifier", &ns_control_modifier,
-               "This variable describes the behavior of the control key.\n\
-Set to control, meta, alt, super, or hyper means it is taken to be that key.");
+               doc: /* This variable describes the behavior of the
+control key.  Set to control, meta, alt, super, or hyper means it is
+taken to be that key. */);
+
+  DEFVAR_LISP ("ns-right-control-modifier", &ns_right_control_modifier,
+               doc: /* This variable describes the behavior of the
+right control key.  Set to control, meta, alt, super, or hyper means
+it is taken to be that key.  Set to none means use ns-command-modifier
+value.  */);
 
   DEFVAR_LISP ("ns-function-modifier", &ns_function_modifier,
-               "This variable describes the behavior of the function key (on laptops).\n\
-Set to control, meta, alt, super, or hyper means it is taken to be that key.\n\
-Set to none means that the function key is not interpreted by Emacs at all,\n\
-allowing it to be used at a lower level for accented character entry.");
+               doc: /* This variable describes the behavior of the
+function key (on laptops).  Set to control, meta, alt, super, or hyper
+means it is taken to be that key.  Set to none means that the function
+key is not interpreted by Emacs at all, allowing it to be used at a
+lower level for accented character entry. */);
 
   DEFVAR_LISP ("ns-antialias-text", &ns_antialias_text,
-               "Non-nil (the default) means to render text antialiased. Only has an effect on OS X Panther and above.");
+               doc: /* Non-nil (the default) means to render text
+antialiased. Only has an effect on OS X Panther and above.  */);
 
   DEFVAR_LISP ("ns-confirm-quit", &ns_confirm_quit,
                "Whether to confirm application quit using dialog.");
 
   DEFVAR_LISP ("ns-emulate-three-button-mouse", &ns_emulate_three_button_mouse,
-               "Non-nil (the default) means to use control and command keys to emulate right and middle mouse buttons on a one-button mouse.");
+               doc: /* Non-nil (the default) means to use control and
+command keys to emulate right and middle mouse
+buttons on a one-button mouse.  */);
 
   staticpro (&ns_display_name_list);
   ns_display_name_list = Qnil;

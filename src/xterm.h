@@ -355,15 +355,21 @@ struct x_display_info
   size_t x_dnd_atoms_size;
   size_t x_dnd_atoms_length;
 
-  /* Extended window manager hints, Atoms supported by the window manager  */
+  /* Extended window manager hints, Atoms supported by the window manager and
+     atoms for settig the window type.  */
   Atom *net_supported_atoms;
   int nr_net_supported_atoms;
   Window net_supported_window;
+  Atom Xatom_net_window_type, Xatom_net_window_type_tooltip;
 
   /* Atoms dealing with maximization and fullscreen */
   Atom Xatom_net_wm_state, Xatom_net_wm_state_fullscreen_atom,
     Xatom_net_wm_state_maximized_horz, Xatom_net_wm_state_maximized_vert,
     Xatom_net_wm_state_sticky;
+
+  /* XSettings atoms and windows.  */
+  Atom Xatom_xsettings_sel, Xatom_xsettings_prop, Xatom_xsettings_mgr;
+  Window xsettings_window;
 };
 
 #ifdef HAVE_X_I18N

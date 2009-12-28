@@ -2057,6 +2057,23 @@ for @value{tramp} files:
 @end lisp
 @end ifset
 
+@ifset emacs
+It is also possible to disable backups depending on the used method.
+The following code disables backups for the @option{su} and
+@option{sudo} methods:
+
+@lisp
+(setq backup-enable-predicate
+      (lambda (name)
+        (and (normal-backup-enable-predicate name)
+             (not
+              (let ((method (file-remote-p name 'method)))
+                (when (stringp method)
+                  (member method '("su" "sudo"))))))))
+@end lisp
+@end ifset
+
+
 Another possibility is to use the @value{tramp} variable
 @ifset emacs
 @code{tramp-backup-directory-alist}.
@@ -2566,6 +2583,28 @@ uid=0(root) gid=0(root) groups=0(root)
 #<buffer shadow>
 @b{@trampfn{sudo, root, host, /etc} $}
 @end example
+
+@ifset emacs
+Since @value{emacsname} 23.2, @code{eshell} has also an own
+implementation of the @code{su} and @code{sudo} commands.  Both
+commands change the default directory of the @file{*eshell*} buffer to
+the value related to the user the command has switched to.  This works
+even on remote hosts, adding silently a corresponding entry to the
+variable @code{tramp-default-proxies-alist} (@pxref{Multi-hops}):
+
+@example
+@b{~ $} cd @trampfn{ssh, user, remotehost, /etc} @key{RET}
+@b{@trampfn{ssh, user, remotehost, /etc} $} find-file shadow @key{RET}
+File is not readable: @trampfn{ssh, user, remotehost, /etc/shadow}
+@b{@trampfn{ssh, user, remotehost, /etc} $} sudo find-file shadow @key{RET}
+#<buffer shadow>
+
+@b{@trampfn{ssh, user, remotehost, /etc} $} su - @key{RET}
+@b{@trampfn{su, root, remotehost, /root} $} id @key{RET}
+uid=0(root) gid=0(root) groups=0(root)
+@b{@trampfn{su, root, remotehost, /root} $}
+@end example
+@end ifset
 
 
 @anchor{Running a debugger on a remote host}

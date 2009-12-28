@@ -405,7 +405,7 @@ c_string_width (const unsigned char *str, int len, int precision, int *nchars, i
     {
       int bytes, thiswidth;
       Lisp_Object val;
-      int c = STRING_CHAR_AND_LENGTH (str + i_byte, len - i_byte, bytes);
+      int c = STRING_CHAR_AND_LENGTH (str + i_byte, bytes);
 
       if (dp)
 	{
@@ -495,7 +495,7 @@ lisp_string_width (string, precision, nchars, nbytes)
 	  int c;
 
 	  if (multibyte)
-	    c = STRING_CHAR_AND_LENGTH (str + i_byte, len - i_byte, bytes);
+	    c = STRING_CHAR_AND_LENGTH (str + i_byte, bytes);
 	  else
 	    c = str[i_byte], bytes = 1;
 	  chars = 1;
@@ -1061,7 +1061,7 @@ character is not ASCII nor 8-bit character, an error is signalled.  */)
       if (! STRING_MULTIBYTE (string))
 	return make_number (*p);
     }
-  c = STRING_CHAR (p, 0);
+  c = STRING_CHAR (p);
   if (CHAR_BYTE8_P (c))
     c = CHAR_TO_BYTE8 (c);
   else if (! ASCII_CHAR_P (c))
@@ -1142,7 +1142,7 @@ It has one extra slot whose value is a list of script symbols.  */);
   /* Intern this now in case it isn't already done.
      Setting this variable twice is harmless.
      But don't staticpro it here--that is done in alloc.c.  */
-  Qchar_table_extra_slots = intern ("char-table-extra-slots");
+  Qchar_table_extra_slots = intern_c_string ("char-table-extra-slots");
   DEFSYM (Qchar_script_table, "char-script-table");
   Fput (Qchar_script_table, Qchar_table_extra_slots, make_number (1));
   Vchar_script_table = Fmake_char_table (Qchar_script_table, Qnil);

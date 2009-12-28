@@ -504,7 +504,7 @@ if a cached copy of the return object is found."
 					     'current-context
 					     'exit-cache-zone)))
 	  ;; Check for interactivity
-	  (when (interactive-p)
+	  (when (called-interactively-p 'any)
 	    (if answer
 		(semantic-analyze-pop-to-context answer)
 	      (message "No Context."))
@@ -791,7 +791,6 @@ CONTEXT's content is described in `semantic-analyze-current-context'."
 
 ;; Local variables:
 ;; generated-autoload-file: "loaddefs.el"
-;; generated-autoload-feature: semantic/loaddefs
 ;; generated-autoload-load-name: "semantic/analyze"
 ;; End:
 

@@ -29,7 +29,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "blockinput.h"
 #include "syssignal.h"
 #include "window.h"
-#include "atimer.h"
 #include "gtkutil.h"
 #include "termhooks.h"
 #include "keyboard.h"
@@ -181,11 +180,6 @@ xg_display_close (Display *dpy)
 /***********************************************************************
                       Utility functions
  ***********************************************************************/
-/* The timer for scroll bar repetition and menu bar timeouts.
-   NULL if no timer is started.  */
-static struct atimer *xg_timer;
-
-
 /* The next two variables and functions are taken from lwlib.  */
 static widget_value *widget_value_free_list;
 static int malloc_cpt;
@@ -424,58 +418,6 @@ xg_set_cursor (w, cursor)
 
   for ( ; children; children = g_list_next (children))
     gdk_window_set_cursor (GDK_WINDOW (children->data), cursor);
-}
-
-/*  Timer function called when a timeout occurs for xg_timer.
-    This function processes all GTK events in a recursive event loop.
-    This is done because GTK timer events are not seen by Emacs event
-    detection, Emacs only looks for X events.  When a scroll bar has the
-    pointer (detected by button press/release events below) an Emacs
-    timer is started, and this function can then check if the GTK timer
-    has expired by calling the GTK event loop.
-    Also, when a menu is active, it has a small timeout before it
-    pops down the sub menu under it.  */
-
-static void
-xg_process_timeouts (timer)
-     struct atimer *timer;
-{
-  BLOCK_INPUT;
-  /* Ideally we would like to just handle timer events, like the Xt version
-     of this does in xterm.c, but there is no such feature in GTK.  */
-  while (gtk_events_pending ())
-    gtk_main_iteration ();
-  UNBLOCK_INPUT;
-}
-
-/* Start the xg_timer with an interval of 0.1 seconds, if not already started.
-   xg_process_timeouts is called when the timer expires.  The timer
-   started is continuous, i.e. runs until xg_stop_timer is called.  */
-
-static void
-xg_start_timer ()
-{
-  if (! xg_timer)
-    {
-      EMACS_TIME interval;
-      EMACS_SET_SECS_USECS (interval, 0, 100000);
-      xg_timer = start_atimer (ATIMER_CONTINUOUS,
-                               interval,
-                               xg_process_timeouts,
-                               0);
-    }
-}
-
-/* Stop the xg_timer if started.  */
-
-static void
-xg_stop_timer ()
-{
-  if (xg_timer)
-    {
-      cancel_atimer (xg_timer);
-      xg_timer = 0;
-    }
 }
 
 /* Insert NODE into linked LIST.  */
@@ -1224,6 +1166,119 @@ create_dialog (wv, select_cb, deactivate_cb)
   return wdialog;
 }
 
+struct xg_dialog_data
+{
+  GMainLoop *loop;
+  int response;
+  GtkWidget *w;
+  guint timerid;
+};
+
+/* Function that is called when the file or font dialogs pop down.
+   W is the dialog widget, RESPONSE is the response code.
+   USER_DATA is what we passed in to g_signal_connect.  */
+
+static void
+xg_dialog_response_cb (w,
+                       response,
+                       user_data)
+     GtkDialog *w;
+     gint response;
+     gpointer user_data;
+{
+  struct xg_dialog_data *dd = (struct xg_dialog_data *)user_data;
+  dd->response = response;
+  g_main_loop_quit (dd->loop);
+}
+
+
+/*  Destroy the dialog.  This makes it pop down.  */
+
+static Lisp_Object
+pop_down_dialog (arg)
+     Lisp_Object arg;
+{
+  struct Lisp_Save_Value *p = XSAVE_VALUE (arg);
+  struct xg_dialog_data *dd = (struct xg_dialog_data *) p->pointer;
+
+  BLOCK_INPUT;
+  if (dd->w) gtk_widget_destroy (dd->w);
+  if (dd->timerid != 0) g_source_remove (dd->timerid);
+
+  g_main_loop_quit (dd->loop);
+  g_main_loop_unref (dd->loop);
+  
+  UNBLOCK_INPUT;
+
+  return Qnil;
+}
+
+/* If there are any emacs timers pending, add a timeout to main loop in DATA.
+    We pass in DATA as gpointer* so we can use this as a callback.  */
+
+static gboolean
+xg_maybe_add_timer (data)
+     gpointer data;
+{
+  struct xg_dialog_data *dd = (struct xg_dialog_data *) data;
+  EMACS_TIME next_time = timer_check (1);
+  long secs = EMACS_SECS (next_time);
+  long usecs = EMACS_USECS (next_time);
+
+  dd->timerid = 0;
+
+  if (secs >= 0 && usecs >= 0 && secs < ((guint)-1)/1000)
+    {
+      dd->timerid = g_timeout_add (secs * 1000 + usecs/1000,
+                                   xg_maybe_add_timer,
+                                   dd);
+    }
+  return FALSE;
+}
+
+     
+/* Pops up a modal dialog W and waits for response.
+   We don't use gtk_dialog_run because we want to process emacs timers.
+   The dialog W is not destroyed when this function returns.  */
+
+static int
+xg_dialog_run (f, w)
+     FRAME_PTR f;
+     GtkWidget *w;
+
+{
+  int count = SPECPDL_INDEX ();
+  struct xg_dialog_data dd;
+
+  xg_set_screen (w, f);
+  gtk_window_set_transient_for (GTK_WINDOW (w),
+                                GTK_WINDOW (FRAME_GTK_OUTER_WIDGET (f)));
+  gtk_window_set_destroy_with_parent (GTK_WINDOW (w), TRUE);
+  gtk_window_set_modal (GTK_WINDOW (w), TRUE);
+
+  dd.loop = g_main_loop_new (NULL, FALSE);
+  dd.response = GTK_RESPONSE_CANCEL;
+  dd.w = w;
+  dd.timerid = 0;
+
+  g_signal_connect (G_OBJECT (w),
+                    "response",
+                    G_CALLBACK (xg_dialog_response_cb),
+                    &dd);
+  /* Don't destroy the widget if closed by the window manager close button.  */
+  g_signal_connect (G_OBJECT (w), "delete-event", G_CALLBACK (gtk_true), NULL);
+  gtk_widget_show (w);
+
+  record_unwind_protect (pop_down_dialog, make_save_value (&dd, 0));
+
+  (void) xg_maybe_add_timer (&dd);
+  g_main_loop_run (dd.loop);
+  
+  dd.w = 0;
+  unbind_to (count, Qnil);
+
+  return dd.response;
+}
 
 
 /***********************************************************************
@@ -1249,36 +1304,6 @@ xg_uses_old_file_dialog ()
 #endif /* ! HAVE_GTK_FILE_BOTH */
 }
 
-
-/* Function that is called when the file or font dialogs pop down.
-   W is the dialog widget, RESPONSE is the response code.
-   USER_DATA is what we passed in to g_signal_connect (pointer to int).  */
-
-static void
-xg_dialog_response_cb (w,
-                     response,
-                     user_data)
-     GtkDialog *w;
-     gint response;
-     gpointer user_data;
-{
-  int *ptr = (int *) user_data;
-  *ptr = response;
-}
-
-
-/*  Destroy the dialog.  This makes it pop down.  */
-
-static Lisp_Object
-pop_down_dialog (arg)
-     Lisp_Object arg;
-{
-  struct Lisp_Save_Value *p = XSAVE_VALUE (arg);
-  BLOCK_INPUT;
-  gtk_widget_destroy (GTK_WIDGET (p->pointer));
-  UNBLOCK_INPUT;
-  return Qnil;
-}
 
 typedef char * (*xg_get_file_func) P_ ((GtkWidget *));
 
@@ -1537,7 +1562,6 @@ xg_get_file_name (f, prompt, default_filename, mustmatch_p, only_dir_p)
      int mustmatch_p, only_dir_p;
 {
   GtkWidget *w = 0;
-  int count = SPECPDL_INDEX ();
   char *fn = 0;
   int filesel_done = 0;
   xg_get_file_func func;
@@ -1571,29 +1595,9 @@ xg_get_file_name (f, prompt, default_filename, mustmatch_p, only_dir_p)
 
 #endif /* HAVE_GTK_FILE_BOTH */
 
-  xg_set_screen (w, f);
   gtk_widget_set_name (w, "emacs-filedialog");
-  gtk_window_set_transient_for (GTK_WINDOW (w),
-                                GTK_WINDOW (FRAME_GTK_OUTER_WIDGET (f)));
-  gtk_window_set_destroy_with_parent (GTK_WINDOW (w), TRUE);
-  gtk_window_set_modal (GTK_WINDOW (w), TRUE);
 
-  g_signal_connect (G_OBJECT (w),
-                    "response",
-                    G_CALLBACK (xg_dialog_response_cb),
-                    &filesel_done);
-
-  /* Don't destroy the widget if closed by the window manager close button.  */
-  g_signal_connect (G_OBJECT (w), "delete-event", G_CALLBACK (gtk_true), NULL);
-
-  gtk_widget_show (w);
-
-  record_unwind_protect (pop_down_dialog, make_save_value (w, 0));
-  while (! filesel_done)
-    {
-      x_menu_wait_for_event (0);
-      gtk_main_iteration ();
-    }
+  filesel_done = xg_dialog_run (f, w);
 
 #if defined (HAVE_GTK_AND_PTHREAD) && defined (__SIGRTMIN)
   sigunblock (sigmask (__SIGRTMIN));
@@ -1602,8 +1606,7 @@ xg_get_file_name (f, prompt, default_filename, mustmatch_p, only_dir_p)
   if (filesel_done == GTK_RESPONSE_OK)
     fn = (*func) (w);
 
-  unbind_to (count, Qnil);
-
+  gtk_widget_destroy (w);
   return fn;
 }
 
@@ -1622,8 +1625,7 @@ xg_get_font_name (f, default_name)
      FRAME_PTR f;
      char *default_name;
 {
-  GtkWidget *w = 0;
-  int count = SPECPDL_INDEX ();
+  GtkWidget *w;
   char *fontname = NULL;
   int done = 0;
 
@@ -1637,27 +1639,9 @@ xg_get_font_name (f, default_name)
   gtk_font_selection_dialog_set_font_name (GTK_FONT_SELECTION_DIALOG (w),
                                            default_name);
 
-  xg_set_screen (w, f);
   gtk_widget_set_name (w, "emacs-fontdialog");
-  gtk_window_set_transient_for (GTK_WINDOW (w),
-                                GTK_WINDOW (FRAME_GTK_OUTER_WIDGET (f)));
-  gtk_window_set_destroy_with_parent (GTK_WINDOW (w), TRUE);
-  gtk_window_set_modal (GTK_WINDOW (w), TRUE);
 
-  g_signal_connect (G_OBJECT (w), "response",
-		    G_CALLBACK (xg_dialog_response_cb), &done);
-
-  /* Don't destroy the widget if closed by the window manager close button.  */
-  g_signal_connect (G_OBJECT (w), "delete-event", G_CALLBACK (gtk_true), NULL);
-
-  gtk_widget_show (w);
-
-  record_unwind_protect (pop_down_dialog, make_save_value (w, 0));
-  while (!done)
-    {
-      x_menu_wait_for_event (0);
-      gtk_main_iteration ();
-    }
+  done = xg_dialog_run (f, w);
 
 #if defined (HAVE_GTK_AND_PTHREAD) && defined (__SIGRTMIN)
   sigunblock (sigmask (__SIGRTMIN));
@@ -1665,10 +1649,9 @@ xg_get_font_name (f, default_name)
 
   if (done == GTK_RESPONSE_OK)
     fontname = gtk_font_selection_dialog_get_font_name
-      ((GtkFontSelectionDialog *) w);
+      (GTK_FONT_SELECTION_DIALOG (w));
 
-  unbind_to (count, Qnil);
-
+  gtk_widget_destroy (w);
   return fontname;
 }
 #endif /* HAVE_FREETYPE */
@@ -1854,29 +1837,6 @@ menu_destroy_callback (w, client_data)
   unref_cl_data ((xg_menu_cb_data*) client_data);
 }
 
-/* Callback called when a menu does a grab or ungrab.  That means the
-   menu has been activated or deactivated.
-   Used to start a timer so the small timeout the menus in GTK uses before
-   popping down a menu is seen by Emacs (see xg_process_timeouts above).
-   W is the widget that does the grab (not used).
-   UNGRAB_P is TRUE if this is an ungrab, FALSE if it is a grab.
-   CLIENT_DATA is NULL (not used).  */
-
-/* Keep track of total number of grabs.  */
-static int menu_grab_callback_cnt;
-
-static void
-menu_grab_callback (GtkWidget *widget,
-                    gboolean ungrab_p,
-                    gpointer client_data)
-{
-  if (ungrab_p) menu_grab_callback_cnt--;
-  else menu_grab_callback_cnt++;
-
-  if (menu_grab_callback_cnt > 0 && ! xg_timer) xg_start_timer ();
-  else if (menu_grab_callback_cnt == 0 && xg_timer) xg_stop_timer ();
-}
-
 /* Make a GTK widget that contains both UTF8_LABEL and UTF8_KEY (both
    must be non-NULL) and can be inserted into a menu item.
 
@@ -1972,7 +1932,7 @@ make_menu_item (utf8_label, utf8_key, item, group)
 /* Return non-zero if LABEL specifies a separator (GTK only has one
    separator type)  */
 
-static char* separator_names[] = {
+static const char* separator_names[] = {
   "space",
   "no-line",
   "single-line",
@@ -2191,10 +2151,10 @@ create_menus (data, f, select_cb, deactivate_cb, highlight_cb,
       else
         {
           wmenu = gtk_menu_bar_new ();
-          // Set width of menu bar to a small value so it doesn't enlarge
-          // a small initial frame size.  The width will be set to the
-          // width of the frame later on when it is added to a container.
-          // height -1: Natural height.
+          /* Set width of menu bar to a small value so it doesn't enlarge
+             a small initial frame size.  The width will be set to the
+             width of the frame later on when it is added to a container.
+             height -1: Natural height.  */
           gtk_widget_set_size_request (wmenu, 1, -1);
         }
 
@@ -2210,9 +2170,6 @@ create_menus (data, f, select_cb, deactivate_cb, highlight_cb,
       if (deactivate_cb)
         g_signal_connect (G_OBJECT (wmenu),
                           "selection-done", deactivate_cb, 0);
-
-      g_signal_connect (G_OBJECT (wmenu),
-                        "grab-notify", G_CALLBACK (menu_grab_callback), 0);
     }
 
   if (! menu_bar_p && add_tearoff_p)
@@ -2436,6 +2393,10 @@ xg_update_menubar (menubar, f, list, iter, pos, val,
       /* Item(s) have been removed.  Remove all remaining items.  */
       xg_destroy_widgets (iter);
 
+      /* Add a blank entry so the menubar doesn't collapse to nothing. */
+      gtk_menu_shell_insert (GTK_MENU_SHELL (menubar),
+                             gtk_menu_item_new_with_label (""),
+                             0);
       /* All updated.  */
       val = 0;
       iter = 0;
@@ -2960,6 +2921,9 @@ xg_update_frame_menubar (f)
   if (!x->menubar_widget || GTK_WIDGET_MAPPED (x->menubar_widget))
     return 0;
 
+  if (x->menubar_widget && gtk_widget_get_parent (x->menubar_widget))
+    return 0; /* Already done this, happens for frames created invisible.  */
+
   BLOCK_INPUT;
 
   gtk_box_pack_start (GTK_BOX (x->vbox_widget), x->menubar_widget,
@@ -3121,54 +3085,23 @@ xg_gtk_scroll_destroy (widget, data)
      GtkWidget *widget;
      gpointer data;
 {
-  gpointer p;
   int id = (int) (EMACS_INT) data; /* The EMACS_INT cast avoids a warning. */
-
-  p = g_object_get_data (G_OBJECT (widget), XG_LAST_SB_DATA);
-  xfree (p);
   xg_remove_widget_from_map (id);
-}
-
-/* Callback for button press/release events.  Used to start timer so that
-   the scroll bar repetition timer in GTK gets handled.
-   Also, sets bar->dragging to Qnil when dragging (button release) is done.
-   WIDGET is the scroll bar widget the event is for (not used).
-   EVENT contains the event.
-   USER_DATA points to the struct scrollbar structure.
-
-   Returns FALSE to tell GTK that it shall continue propagate the event
-   to widgets.  */
-
-static gboolean
-scroll_bar_button_cb (widget, event, user_data)
-     GtkWidget *widget;
-     GdkEventButton *event;
-     gpointer user_data;
-{
-  if (event->type == GDK_BUTTON_PRESS && ! xg_timer)
-    xg_start_timer ();
-  else if (event->type == GDK_BUTTON_RELEASE)
-    {
-      struct scroll_bar *bar = (struct scroll_bar *) user_data;
-      if (xg_timer) xg_stop_timer ();
-      bar->dragging = Qnil;
-    }
-
-  return FALSE;
 }
 
 /* Create a scroll bar widget for frame F.  Store the scroll bar
    in BAR.
    SCROLL_CALLBACK is the callback to invoke when the value of the
    bar changes.
+   END_CALLBACK is the callback to invoke when scrolling ends.
    SCROLL_BAR_NAME is the name we use for the scroll bar.  Can be used
    to set resources for the widget.  */
 
 void
-xg_create_scroll_bar (f, bar, scroll_callback, scroll_bar_name)
+xg_create_scroll_bar (f, bar, scroll_callback, end_callback, scroll_bar_name)
      FRAME_PTR f;
      struct scroll_bar *bar;
-     GCallback scroll_callback;
+     GCallback scroll_callback, end_callback;
      char *scroll_bar_name;
 {
   GtkWidget *wscroll;
@@ -3185,30 +3118,24 @@ xg_create_scroll_bar (f, bar, scroll_callback, scroll_bar_name)
   webox = gtk_event_box_new ();
   gtk_widget_set_name (wscroll, scroll_bar_name);
   gtk_range_set_update_policy (GTK_RANGE (wscroll), GTK_UPDATE_CONTINUOUS);
+  g_object_set_data (G_OBJECT (wscroll), XG_FRAME_DATA, (gpointer)f);
 
   scroll_id = xg_store_widget_in_map (wscroll);
 
-  g_signal_connect (G_OBJECT (wscroll),
-                    "value-changed",
-                    scroll_callback,
-                    (gpointer) bar);
   /* The EMACS_INT cast avoids a warning. */
   g_signal_connect (G_OBJECT (wscroll),
                     "destroy",
                     G_CALLBACK (xg_gtk_scroll_destroy),
                     (gpointer) (EMACS_INT) scroll_id);
-
-  /* Connect to button press and button release to detect if any scroll bar
-     has the pointer.  */
   g_signal_connect (G_OBJECT (wscroll),
-                    "button-press-event",
-                    G_CALLBACK (scroll_bar_button_cb),
+                    "change-value",
+                    scroll_callback,
                     (gpointer) bar);
   g_signal_connect (G_OBJECT (wscroll),
                     "button-release-event",
-                    G_CALLBACK (scroll_bar_button_cb),
+                    end_callback,
                     (gpointer) bar);
-
+  
   /* The scroll bar widget does not draw on a window of its own.  Instead
      it draws on the parent window, in this case the edit widget.  So
      whenever the edit widget is cleared, the scroll bar needs to redraw
@@ -3371,6 +3298,40 @@ xg_set_toolkit_scroll_bar_thumb (bar, portion, position, whole)
     }
 }
 
+/* Return non-zero if EVENT is for a scroll bar in frame F.
+   When the same X window is used for several Gtk+ widgets, we cannot
+   say for sure based on the X window alone if an event is for the
+   frame.  This function does additional checks.
+
+   Return non-zero if the event is for a scroll bar, zero otherwise.  */
+
+int
+xg_event_is_for_scrollbar (f, event)
+     FRAME_PTR f;
+     XEvent *event;
+{
+  int retval = 0;
+
+  if (f && event->type == ButtonPress && event->xbutton.button < 4)
+    {
+      /* Check if press occurred outside the edit widget.  */
+      GdkDisplay *gdpy = gdk_x11_lookup_xdisplay (FRAME_X_DISPLAY (f));
+      retval = gdk_display_get_window_at_pointer (gdpy, NULL, NULL)
+        != f->output_data.x->edit_widget->window;
+    }
+  else if (f
+           && ((event->type == ButtonRelease && event->xbutton.button < 4)
+               || event->type == MotionNotify))
+    {
+      /* If we are releasing or moving the scroll bar, it has the grab.  */
+      retval = gtk_grab_get_current () != 0
+        && gtk_grab_get_current () != f->output_data.x->edit_widget;
+    }
+  
+  return retval;
+}
+
+
 
 /***********************************************************************
                       Tool bar functions
@@ -3498,7 +3459,7 @@ xg_tool_bar_proxy_help_callback (w, event, client_data)
   GtkWidget *wbutton = GTK_WIDGET (g_object_get_data (G_OBJECT (w),
                                                       XG_TOOL_BAR_PROXY_BUTTON));
   
-  xg_tool_bar_help_callback (wbutton, event, client_data);
+  return xg_tool_bar_help_callback (wbutton, event, client_data);
 }
 
 

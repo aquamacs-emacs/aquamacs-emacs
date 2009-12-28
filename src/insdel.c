@@ -370,14 +370,14 @@ adjust_markers_for_delete (EMACS_INT from, EMACS_INT from_byte,
 	       re-inserted text after undoing a deletion, and must be
 	       adjusted to move them to the correct place.  */
 	      XSETMISC (marker, m);
-	    record_marker_adjustment (marker, from - charpos);
+	      record_marker_adjustment (marker, from - charpos);
 	    }
 	  else if (charpos < to)
 	    { /* Before-insertion markers will automatically move forward
 	       upon re-inserting the deleted text, so we have to arrange
 	       for them to move backward to the correct position.  */
 	      XSETMISC (marker, m);
-	    record_marker_adjustment (marker, charpos - to);
+	      record_marker_adjustment (marker, to - charpos);
 	    }
 	  m->charpos = from;
 	  m->bytepos = from_byte;
@@ -512,16 +512,16 @@ make_gap_larger (EMACS_INT nbytes_added)
   /* If we have to get more space, get enough to last a while.  */
   nbytes_added += 2000;
 
-  /* Don't allow a buffer size that won't fit in an int
-     even if it will fit in a Lisp integer.
-     That won't work because so many places use `int'.
-
-     Make sure we don't introduce overflows in the calculation.  */
-
-  if (Z_BYTE - BEG_BYTE + GAP_SIZE
-      >= (((EMACS_INT) 1 << (min (VALBITS, BITS_PER_INT) - 1)) - 1
-	  - nbytes_added))
-    error ("Buffer exceeds maximum size");
+  { EMACS_INT total_size = Z_BYTE - BEG_BYTE + GAP_SIZE + nbytes_added;
+    if (total_size < 0
+	/* Don't allow a buffer size that won't fit in a Lisp integer.  */
+	|| total_size != XINT (make_number (total_size))
+	/* Don't allow a buffer size that won't fit in an int
+	   even if it will fit in a Lisp integer.
+	   That won't work because so many places still use `int'.  */
+	|| total_size != (EMACS_INT) (int) total_size)
+      error ("Buffer exceeds maximum size");
+  }
 
   enlarge_buffer_text (current_buffer, nbytes_added);
 
@@ -648,7 +648,7 @@ copy_text (const unsigned char *from_addr, unsigned char *to_addr,
       while (bytes_left > 0)
 	{
 	  int thislen, c;
-	  c = STRING_CHAR_AND_LENGTH (from_addr, bytes_left, thislen);
+	  c = STRING_CHAR_AND_LENGTH (from_addr, thislen);
 	  if (! ASCII_CHAR_P (c))
 	    c &= 0xFF;
 	  *to_addr++ = c;
@@ -2409,7 +2409,7 @@ syms_of_insdel ()
 This affects `before-change-functions' and `after-change-functions',
 as well as hooks attached to text properties and overlays.  */);
   inhibit_modification_hooks = 0;
-  Qinhibit_modification_hooks = intern ("inhibit-modification-hooks");
+  Qinhibit_modification_hooks = intern_c_string ("inhibit-modification-hooks");
   staticpro (&Qinhibit_modification_hooks);
 
   defsubr (&Scombine_after_change_execute);

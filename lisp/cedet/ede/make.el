@@ -91,7 +91,7 @@ If NOERROR is nil, then throw an error on failure.  Return t otherwise."
 	(setq ans (not (inversion-check-version rev nil ede-make-min-version))))
 
       ;; Answer reporting.
-      (when (and (interactive-p) ans)
+      (when (and (called-interactively-p 'interactive) ans)
 	(message "GNU Make version %s.  Good enough for CEDET." rev))
 
       (when (and (not noerror) (not ans))
@@ -103,7 +103,6 @@ If NOERROR is nil, then throw an error on failure.  Return t otherwise."
 
 ;; Local variables:
 ;; generated-autoload-file: "loaddefs.el"
-;; generated-autoload-feature: ede/loaddefs
 ;; generated-autoload-load-name: "ede/make"
 ;; End:
 

@@ -254,18 +254,36 @@ Leaving \"Default\" unchecked is equivalent with specifying a default of
 		      (const control) (const meta)
 		      (const alt) (const hyper)
 		      (const super)) "23.1")
+	     (ns-right-control-modifier
+	      ns
+	      (choice (const :tag "No modifier override (work as ns-control-modifier)" none)
+		      (const control) (const meta)
+		      (const alt) (const hyper)
+		      (const super) (const none)) "23.1")
 	     (ns-command-modifier
 	      ns
 	      (choice (const :tag "No modifier" nil)
 		      (const control) (const meta)
 		      (const alt) (const hyper)
 		      (const super)) "23.1")
+	     (ns-right-command-modifier
+	      ns
+	      (choice (const :tag "No modifier override (work as ns-command-modifier)" none)
+		      (const control) (const meta)
+		      (const alt) (const hyper)
+		      (const super) (const none)) "23.1")
 	     (ns-alternate-modifier
 	      ns
 	      (choice (const :tag "No modifier (work as alternate/option)" none)
 		      (const control) (const meta)
 		      (const alt) (const hyper)
 		      (const super)) "23.1")
+	     (ns-right-alternate-modifier
+	      ns
+	      (choice (const :tag "No modifier override (work as ns-alternate-modifier)" none)
+		      (const control) (const meta)
+		      (const alt) (const hyper)
+		      (const super) (const none) (const nil)) "23.1")
 	     (ns-function-modifier
 	      ns
 	      (choice (const :tag "No modifier (work as function)" none)
@@ -351,7 +369,9 @@ since it could result in memory overflow and make Emacs crash."
 	     ;; xterm.c
 	     (x-use-underline-position-properties display boolean "22.1")
 	     (x-underline-at-descent-line display boolean "22.1")
-	     (x-stretch-cursor display boolean "21.1")))
+	     (x-stretch-cursor display boolean "21.1")
+	     ;; xsettings.c
+	     (font-use-system-font font-selection boolean "23.2")))
       this symbol group type standard version native-p
       ;; This function turns a value
       ;; into an expression which produces that value.
@@ -395,6 +415,8 @@ since it could result in memory overflow and make Emacs crash."
 		       (fboundp 'x-selection-exists-p))
 		      ((string-match "fringe" (symbol-name symbol))
 		       (fboundp 'define-fringe-bitmap))
+		      ((equal "font-use-system-font" (symbol-name symbol))
+		       (featurep 'system-font-setting))
 		      (t t))))
     (if (not (boundp symbol))
 	;; If variables are removed from C code, give an error here!

@@ -311,7 +311,7 @@ looked for.
 Setting `init-file-user' does not prevent Emacs from loading
 `site-start.el'.  The only way to do that is to use `--no-site-file'.")
 
-(defcustom site-run-file "site-start"
+(defcustom site-run-file (purecopy "site-start")
   "File containing site-wide run-time initializations.
 This file is loaded at run-time before `~/.emacs'.  It contains inits
 that need to be in place for the entire site, but which, due to their
@@ -333,7 +333,7 @@ this variable usefully is to set it while building and dumping Emacs."
   :type '(choice (const :tag "none" nil) string)
   :group 'initialization
   :initialize 'custom-initialize-default
-  :set '(lambda (variable value)
+  :set (lambda (variable value)
 	  (error "Customizing `site-run-file' does not work")))
 
 (defcustom mail-host-address nil
@@ -1398,8 +1398,8 @@ Each element in the list should be a list of strings or pairs
      :link ("Emacs Guided Tour"
 	    (lambda (button) (browse-url "http://www.gnu.org/software/emacs/tour/"))
 	    "Browse http://www.gnu.org/software/emacs/tour/")
-     "\tSee an overview of the many facilities of GNU Emacs"
-     )) 
+     "\tSee an overview of Emacs features at gnu.org"
+     ))
   "A list of texts to show in the middle part of the About screen.
 Each element in the list should be a list of strings or pairs
 `:face FACE', like `fancy-splash-insert' accepts them.")

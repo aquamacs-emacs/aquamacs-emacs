@@ -133,7 +133,7 @@ casify_object (flag, obj)
 	      bcopy (old_dst, dst, o - old_dst);
 	      o = dst + (o - old_dst);
 	    }
-	  c = STRING_CHAR_AND_LENGTH (SDATA (obj) + i_byte, 0, len);
+	  c = STRING_CHAR_AND_LENGTH (SDATA (obj) + i_byte, len);
 	  if (inword && flag != CASE_CAPITALIZE_UP)
 	    c = DOWNCASE (c);
 	  else if (!UPPERCASEP (c)
@@ -429,7 +429,7 @@ With negative argument, capitalize previous words but do not move.  */)
 void
 syms_of_casefiddle ()
 {
-  Qidentity = intern ("identity");
+  Qidentity = intern_c_string ("identity");
   staticpro (&Qidentity);
   defsubr (&Supcase);
   defsubr (&Sdowncase);

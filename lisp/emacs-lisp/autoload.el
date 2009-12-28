@@ -42,12 +42,6 @@ trailer starting with a FormFeed character.")
 ;;;###autoload
 (put 'generated-autoload-file 'safe-local-variable 'stringp)
 
-(defvar generated-autoload-feature nil
-  "Feature for `generated-autoload-file' to provide.
-If nil, this defaults to `generated-autoload-file', sans extension.")
-;;;###autoload
-(put 'generated-autoload-feature 'safe-local-variable 'symbolp)
-
 (defvar generated-autoload-load-name nil
   "Load name for `autoload' statements generated from autoload cookies.
 If nil, this defaults to the file name, sans extension.")
@@ -259,20 +253,22 @@ put the output in."
 	      (print-escape-nonascii t))
 	  (print form outbuf)))))))
 
-(defun autoload-rubric (file &optional type)
+(defun autoload-rubric (file &optional type feature)
   "Return a string giving the appropriate autoload rubric for FILE.
 TYPE (default \"autoloads\") is a string stating the type of
-information contained in FILE."
+information contained in FILE.  If FEATURE is non-nil, FILE
+will provide a feature.  FEATURE may be a string naming the
+feature, otherwise it will be based on FILE's name."
   (let ((basename (file-name-nondirectory file)))
     (concat ";;; " basename
 	    " --- automatically extracted " (or type "autoloads") "\n"
 	    ";;\n"
 	    ";;; Code:\n\n"
 	    "\n"
+	    ;; This is used outside of autoload.el.
 	    "(provide '"
-	    (if (and generated-autoload-feature
-		     (symbolp generated-autoload-feature))
-		(format "%s" generated-autoload-feature)
+	    (if (stringp feature)
+		feature
 	      (file-name-sans-extension basename))
 	    ")\n"
 	    ";; Local Variables:\n"
@@ -376,8 +372,6 @@ Return non-nil if and only if FILE adds no autoloads to OUTFILE
           relfile
           ;; nil until we found a cookie.
           output-start)
-      (if (member absfile autoload-excludes)
-      	  (message "Generating autoloads for %s...skipped" file)
       (with-current-buffer (or visited
                                ;; It is faster to avoid visiting the file.
                                (autoload-find-file file))
@@ -486,7 +480,7 @@ Return non-nil if and only if FILE adds no autoloads to OUTFILE
           (message "Generating autoloads for %s...done" file))
         (or visited
             ;; We created this buffer, so we should kill it.
-            (kill-buffer (current-buffer)))))
+            (kill-buffer (current-buffer))))
       ;; If the entries were added to some other buffer, then the file
       ;; doesn't add entries to OUTFILE.
       (or (not output-start) otherbuf))))
@@ -642,7 +636,9 @@ directory or directories specified."
 		  ((not (stringp file)))
 		  ((or (not (file-exists-p file))
                        ;; Remove duplicates as well, just in case.
-                       (member file done))
+                       (member file done)
+                       ;; If the file is actually excluded.
+                       (member (expand-file-name file) autoload-excludes))
                    ;; Remove the obsolete section.
 		   (autoload-remove-section (match-beginning 0)))
 		  ((not (time-less-p (nth 4 form)
@@ -658,8 +654,10 @@ directory or directories specified."
 	    (setq files (delete file files)))))
       ;; Elements remaining in FILES have no existing autoload sections yet.
       (dolist (file files)
-        (if (autoload-generate-file-autoloads file nil buffer-file-name)
-            (push file no-autoloads)))
+        (cond
+         ((member (expand-file-name file) autoload-excludes) nil)
+         ((autoload-generate-file-autoloads file nil buffer-file-name)
+          (push file no-autoloads))))
 
       (when no-autoloads
 	;; Sort them for better readability.
@@ -725,9 +723,9 @@ Calls `update-directory-autoloads' on the command line arguments."
 		  (forward-line 1))))
 	  (with-temp-buffer
 	    (insert-file-contents mfile)
-	    (when (re-search-forward "^lisp= " nil t)
+	    (when (re-search-forward "^shortlisp= " nil t)
 	      (setq lim (line-end-position))
-	      (while (re-search-forward "\\${lispsource}\\([^ ]+\\.el\\)c?\\>"
+	      (while (re-search-forward "\\.\\./lisp/\\([^ ]+\\.el\\)c?\\>"
 					lim t)
 		(push (expand-file-name (match-string 1) ldir)
 		      autoload-excludes))))))))

@@ -50,7 +50,7 @@
 
 
 ;;;###autoload
-(defcustom dired-listing-switches "-al"
+(defcustom dired-listing-switches (purecopy "-al")
   "Switches passed to `ls' for Dired.  MUST contain the `l' option.
 May contain all other options that don't contradict `-l';
 may contain even `F', `b', `i' and `s'.  See also the variable
@@ -71,11 +71,12 @@ If nil, `dired-listing-switches' is used.")
 
 ;;;###autoload
 (defvar dired-chown-program
+  (purecopy
   (if (memq system-type '(hpux usg-unix-v irix linux gnu/linux cygwin))
       "chown"
     (if (file-exists-p "/usr/sbin/chown")
 	"/usr/sbin/chown"
-      "/etc/chown"))
+      "/etc/chown")))
   "Name of chown command (usually `chown' or `/etc/chown').")
 
 (defvar dired-use-ls-dired (not (not (string-match "gnu" system-configuration)))
@@ -104,7 +105,7 @@ always set this variable to t."
   :group 'dired-mark)
 
 ;;;###autoload
-(defcustom dired-trivial-filenames "^\\.\\.?$\\|^#"
+(defcustom dired-trivial-filenames (purecopy "^\\.\\.?$\\|^#")
   "Regexp of files to skip when finding first file of a directory.
 A value of nil means move to the subdir line.
 A value of t means move to first file."
@@ -598,12 +599,8 @@ Don't use that together with FILTER."
 	    (if (next-read-file-uses-dialog-p)
 		(read-directory-name (format "Dired %s(directory): " str)
 				     nil default-directory nil)
-	      (let ((default (and buffer-file-name
-				  (abbreviate-file-name buffer-file-name))))
-		(minibuffer-with-setup-hook
-		    (lambda () (setq minibuffer-default default))
-		  (read-file-name (format "Dired %s(directory): " str)
-				  nil default-directory nil)))))))
+	      (read-file-name (format "Dired %s(directory): " str)
+			      nil default-directory nil)))))
 
 ;; We want to switch to a more sophisticated version of
 ;; dired-read-dir-and-switches like the following, if there is a way
@@ -657,6 +654,15 @@ Don't use that together with FILTER."
 ;;                 (setq minibuffer-completion-table completion-table))
 ;;             (read-file-name (format "Dired %s(directory): " str)
 ;;                             nil default-directory nil))))))))
+
+(defun dired-file-name-at-point ()
+  "Try to get a file name at point in the current dired buffer.
+This hook is inteneded to be put in `file-name-at-point-functions'."
+  (let ((filename (dired-get-filename nil t)))
+    (when filename
+      (if (file-directory-p filename)
+	  (file-name-as-directory (abbreviate-file-name filename))
+	(abbreviate-file-name filename)))))
 
 ;;;###autoload (define-key ctl-x-map "d" 'dired)
 ;;;###autoload
@@ -746,6 +752,24 @@ for a remote directory.  This feature is used by Auto Revert Mode."
 	 buffer-read-only
 	 (dired-directory-changed-p dirname))))
 
+;;;###autoload
+(defcustom dired-auto-revert-buffer nil
+  "Automatically revert dired buffer on revisiting.
+If t, revisiting an existing dired buffer automatically reverts it.
+If its value is a function, call this function with the directory
+name as single argument and revert the buffer if it returns non-nil.
+Otherwise, a message offering to revert the changed dired buffer
+is displayed.
+Note that this is not the same as `auto-revert-mode' that
+periodically reverts at specified time intervals."
+  :type '(choice
+          (const :tag "Don't revert" nil)
+          (const :tag "Always revert visited dired buffer" t)
+          (const :tag "Revert changed dired buffer" dired-directory-changed-p)
+          (function :tag "Predicate function"))
+  :group 'dired
+  :version "23.2")
+
 (defun dired-internal-noselect (dir-or-list &optional switches mode)
   ;; If there is an existing dired buffer for DIRNAME, just leave
   ;; buffer as it is (don't even call dired-revert).
@@ -773,6 +797,14 @@ for a remote directory.  This feature is used by Auto Revert Mode."
 	       (setq dired-directory dir-or-list)
 	       ;; this calls dired-revert
 	       (dired-sort-other switches))
+	      ;; Always revert regardless of whether it has changed or not.
+	      ((eq dired-auto-revert-buffer t)
+	       (revert-buffer))
+	      ;; Revert when predicate function returns non-nil.
+	      ((functionp dired-auto-revert-buffer)
+	       (when (funcall dired-auto-revert-buffer dirname)
+		 (revert-buffer)
+		 (message "Changed directory automatically updated")))
 	      ;; If directory has changed on disk, offer to revert.
 	      ((when (dired-directory-changed-p dirname)
 		 (message "%s"
@@ -818,8 +850,7 @@ for a remote directory.  This feature is used by Auto Revert Mode."
     (while blist
       (if (null (buffer-name (cdr (car blist))))
 	  (setq blist (cdr blist))
-	(save-excursion
-	  (set-buffer (cdr (car blist)))
+	(with-current-buffer (cdr (car blist))
 	  (if (and (eq major-mode mode)
 		   dired-directory  ;; nil during find-alternate-file
 		   (equal dirname
@@ -1103,8 +1134,7 @@ Should not fail even on completely garbaged buffers.
 Preserves old cursor, marks/flags, hidden-p."
   (widen)				; just in case user narrowed
   (let ((modflag (buffer-modified-p))
-	(opoint (point))
-	(ofile (dired-get-filename nil t))
+	(positions (dired-save-positions))
 	(mark-alist nil)		; save marked files
 	(hidden-subdirs (dired-remember-hidden))
 	(old-subdir-alist (cdr (reverse dired-subdir-alist))) ; except pwd
@@ -1124,9 +1154,7 @@ Preserves old cursor, marks/flags, hidden-p."
     ;; ... run the hook for the whole buffer, and only after markers
     ;; have been reinserted (else omitting in dired-x would omit marked files)
     (run-hooks 'dired-after-readin-hook)	; no need to narrow
-    (or (and ofile (dired-goto-file ofile)) ; move cursor to where it
-	(goto-char opoint))		; was before
-    (dired-move-to-filename)
+    (dired-restore-positions positions)
     (save-excursion			; hide subdirs that were hidden
       (dolist (dir hidden-subdirs)
 	(if (dired-goto-subdir dir)
@@ -1139,6 +1167,42 @@ Preserves old cursor, marks/flags, hidden-p."
 
 ;; Subroutines of dired-revert
 ;; Some of these are also used when inserting subdirs.
+
+(defun dired-save-positions ()
+  "Return current positions in the buffer and all windows with this directory.
+The positions have the form (BUFFER-POSITION WINDOW-POSITIONS).
+
+BUFFER-POSITION is the point position in the current dired buffer.
+The buffer position have the form (BUFFER DIRED-FILENAME BUFFER-POINT).
+
+WINDOW-POSITIONS are current positions in all windows displaying
+this dired buffer.  The window positions have the form (WINDOW
+DIRED-FILENAME WINDOW-POINT)."
+  (list
+   (list (current-buffer) (dired-get-filename nil t) (point))
+   (mapcar (lambda (w)
+	     (list w
+		   (with-selected-window w
+		     (dired-get-filename nil t))
+		   (window-point w)))
+	   (get-buffer-window-list nil 0 t))))
+
+(defun dired-restore-positions (positions)
+  "Restore POSITIONS saved with `dired-save-positions'."
+  (let* ((buf-file-pos (nth 0 positions))
+	 (buffer (nth 0 buf-file-pos)))
+    (unless (and (nth 1 buf-file-pos)
+		 (dired-goto-file (nth 1 buf-file-pos)))
+      (goto-char (nth 2 buf-file-pos))
+      (dired-move-to-filename))
+    (dolist (win-file-pos (nth 1 positions))
+      ;; Ensure that window still displays the original buffer.
+      (when (eq (window-buffer (nth 0 win-file-pos)) buffer)
+	(with-selected-window (nth 0 win-file-pos)
+	  (unless (and (nth 1 win-file-pos)
+		       (dired-goto-file (nth 1 win-file-pos)))
+	    (goto-char (nth 2 win-file-pos))
+	    (dired-move-to-filename)))))))
 
 (defun dired-remember-marks (beg end)
   "Return alist of files and their marks, from BEG to END."
@@ -1388,33 +1452,11 @@ Do so according to the former subdir alist OLD-SUBDIR-ALIST."
 		  :help "Move to previous directory-file line"))
     (define-key map [menu-bar subdir insert]
       '(menu-item "Insert This Subdir" dired-maybe-insert-subdir
-		  :help "Insert contents of subdirectory"))
-
+		  :help "Insert contents of subdirectory"
+		  :enable (let ((f (dired-get-filename nil t)))
+			    (and f (file-directory-p f)))))
     (define-key map [menu-bar immediate]
       (cons "Immediate" (make-sparse-keymap "Immediate")))
-
-    (define-key map
-      [menu-bar immediate epa-dired-do-decrypt]
-      '(menu-item "Decrypt" epa-dired-do-decrypt
-		  :help "Decrypt file at cursor"))
-
-    (define-key map
-      [menu-bar immediate epa-dired-do-verify]
-      '(menu-item "Verify" epa-dired-do-verify
-		  :help "Verify digital signature of file at cursor"))
-
-    (define-key map
-      [menu-bar immediate epa-dired-do-sign]
-      '(menu-item "Sign" epa-dired-do-sign
-		  :help "Create digital signature of file at cursor"))
-
-    (define-key map
-      [menu-bar immediate epa-dired-do-encrypt]
-      '(menu-item "Encrypt" epa-dired-do-encrypt
-		  :help "Encrypt file at cursor"))
-
-    (define-key map [menu-bar immediate dashes-4]
-      '("--"))
 
     (define-key map
       [menu-bar immediate image-dired-dired-display-external]
@@ -1424,9 +1466,6 @@ Do so according to the former subdir alist OLD-SUBDIR-ALIST."
       [menu-bar immediate image-dired-dired-display-image]
       '(menu-item "Display Image" image-dired-dired-display-image
                   :help "Display sized image in a separate window"))
-
-    (define-key map [menu-bar immediate dashes-4]
-      '("--"))
 
     (define-key map [menu-bar immediate revert-buffer]
       '(menu-item "Refresh" revert-buffer
@@ -1585,6 +1624,29 @@ Do so according to the former subdir alist OLD-SUBDIR-ALIST."
       [menu-bar operate image-dired-display-thumbs]
       '(menu-item "Display image thumbnails" image-dired-display-thumbs
                   :help "Display image thumbnails for current or marked image files"))
+
+    (define-key map [menu-bar operate dashes-4]
+      '("--"))
+
+    (define-key map
+      [menu-bar operate epa-dired-do-decrypt]
+      '(menu-item "Decrypt" epa-dired-do-decrypt
+		  :help "Decrypt file at cursor"))
+
+    (define-key map
+      [menu-bar operate epa-dired-do-verify]
+      '(menu-item "Verify" epa-dired-do-verify
+		  :help "Verify digital signature of file at cursor"))
+
+    (define-key map
+      [menu-bar operate epa-dired-do-sign]
+      '(menu-item "Sign" epa-dired-do-sign
+		  :help "Create digital signature of file at cursor"))
+
+    (define-key map
+      [menu-bar operate epa-dired-do-encrypt]
+      '(menu-item "Encrypt" epa-dired-do-encrypt
+		  :help "Encrypt file at cursor"))
 
     (define-key map [menu-bar operate dashes-3]
       '("--"))
@@ -1758,6 +1820,7 @@ Keybindings:
   (when (featurep 'dnd)
     (set (make-local-variable 'dnd-protocol-alist)
 	 (append dired-dnd-protocol-alist dnd-protocol-alist)))
+  (add-hook 'file-name-at-point-functions 'dired-file-name-at-point nil t)
   (add-hook 'isearch-mode-hook 'dired-isearch-filenames-setup nil t)
   (run-mode-hooks 'dired-mode-hook))
 
@@ -3310,7 +3373,7 @@ Anything else means ask for each directory."
   (message-box
    "Dired recursive copies are currently disabled.\nSee the variable `dired-recursive-copies'."))
 
-(declare-function x-popup-menu "xmenu.c" (position menu))
+(declare-function x-popup-menu "menu.c" (position menu))
 
 (defun dired-dnd-do-ask-action (uri)
   ;; No need to get actions and descriptions from the source,
@@ -3454,7 +3517,7 @@ Ask means pop up a menu for the user to select one of copy, move or link."
 ;;;;;;  dired-run-shell-command dired-do-shell-command dired-do-async-shell-command
 ;;;;;;  dired-clean-directory dired-do-print dired-do-touch dired-do-chown
 ;;;;;;  dired-do-chgrp dired-do-chmod dired-compare-directories dired-backup-diff
-;;;;;;  dired-diff) "dired-aux" "dired-aux.el" "6c7ccd455c2cd50d48164ebd5c52e216")
+;;;;;;  dired-diff) "dired-aux" "dired-aux.el" "083026f814e1a734adb593f7034ecb7e")
 ;;; Generated autoloads from dired-aux.el
 
 (autoload 'dired-diff "dired-aux" "\
@@ -3907,7 +3970,7 @@ true then the type of the file linked to by FILE is printed instead.
 ;;;***
 
 ;;;### (autoloads (dired-do-relsymlink dired-jump) "dired-x" "dired-x.el"
-;;;;;;  "7c58535b489f23d5503ef8219c7d1282")
+;;;;;;  "c1bb83404017aa89655222b2b50471ed")
 ;;; Generated autoloads from dired-x.el
 
 (autoload 'dired-jump "dired-x" "\

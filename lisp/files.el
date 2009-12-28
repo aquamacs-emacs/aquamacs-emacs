@@ -56,7 +56,7 @@ when it has unsaved changes."
 A list of elements of the form (FROM . TO), each meaning to replace
 FROM with TO when it appears in a directory name.  This replacement is
 done when setting up the default directory of a newly visited file.
-*Every* FROM string should start with `^'.
+*Every* FROM string should start with \"\\\\`\".
 
 FROM and TO should be equivalent names, which refer to the
 same directory.  Do not use `~' in the TO strings;
@@ -409,6 +409,14 @@ To visit the directory, `find-file' runs `find-directory-functions'."
 Each function is called with the directory name as the sole argument
 and should return either a buffer or nil."
   :type '(hook :options (cvs-dired-noselect dired-noselect))
+  :group 'find-file)
+
+;; FIXME: also add a hook for `(thing-at-point 'filename)'
+(defcustom file-name-at-point-functions '(ffap-guess-file-name-at-point)
+  "List of functions to try in sequence to get a file name at point.
+Each function should return either nil or a file name found at the
+location of point in the current buffer."
+  :type '(hook :options (ffap-guess-file-name-at-point))
   :group 'find-file)
 
 ;;;It is not useful to make this a local variable.
@@ -1306,9 +1314,6 @@ its documentation for additional customization information."
     ;;(make-frame-visible (window-frame old-window))
     ))
 
-(defvar find-file-default nil
-  "Used within `find-file-read-args'.")
-
 (defmacro minibuffer-with-setup-hook (fun &rest body)
   "Add FUN to `minibuffer-setup-hook' while executing BODY.
 BODY should use the minibuffer at most once.
@@ -1329,12 +1334,7 @@ Recursive uses of the minibuffer will not be affected."
 	 (remove-hook 'minibuffer-setup-hook ,hook)))))
 
 (defun find-file-read-args (prompt mustmatch)
-  (list (let ((find-file-default
-	       (and buffer-file-name
-		    (abbreviate-file-name buffer-file-name))))
-	  (minibuffer-with-setup-hook
-	      (lambda () (setq minibuffer-default find-file-default))
-	    (read-file-name prompt nil default-directory mustmatch)))
+  (list (read-file-name prompt nil default-directory mustmatch)
 	t))
 
 (defun find-file (filename &optional wildcards)
@@ -1598,7 +1598,7 @@ Spaces at the start of FILENAME (sans directory) are removed."
 Choose the buffer's name using `generate-new-buffer-name'."
   (get-buffer-create (generate-new-buffer-name name)))
 
-(defcustom automount-dir-prefix "^/tmp_mnt/"
+(defcustom automount-dir-prefix (purecopy "^/tmp_mnt/")
   "Regexp to match the automounter prefix in a directory name."
   :group 'files
   :type 'regexp)
@@ -2051,7 +2051,10 @@ regardless of whether it was created literally or not.
 In a Lisp program, if you want to be sure of accessing a file's
 contents literally, you should create a temporary buffer and then read
 the file contents into it using `insert-file-contents-literally'."
-  (interactive "FFind file literally: ")
+  (interactive
+   (list (read-file-name
+  	  "Find file literally: " nil default-directory
+  	  (confirm-nonexistent-file-or-buffer))))
   (switch-to-buffer (find-file-noselect filename nil t)))
 
 (defvar after-find-file-from-revert-buffer nil)
@@ -2447,8 +2450,8 @@ When checking `inhibit-first-line-modes-regexps', we first discard
 from the end of the file name anything that matches one of these regexps.")
 
 (defvar auto-mode-interpreter-regexp
-  "#![ \t]?\\([^ \t\n]*\
-/bin/env[ \t]\\)?\\([^ \t\n]+\\)"
+  (purecopy "#![ \t]?\\([^ \t\n]*\
+/bin/env[ \t]\\)?\\([^ \t\n]+\\)")
   "Regexp matching interpreters, for file mode determination.
 This regular expression is matched against the first line of a file
 to determine the file's mode in `set-auto-mode'.  If it matches, the file
@@ -2469,6 +2472,7 @@ If FUNCTION is nil, then it is not called.  (That is a way of saying
 (put 'magic-mode-alist 'risky-local-variable t)
 
 (defvar magic-fallback-mode-alist
+  (purecopy
   `((image-type-auto-detected-p . image-mode)
     ("\\(PK00\\)?[P]K\003\004" . archive-mode) ; zip
     ;; The < comes before the groups (but the first) to reduce backtracking.
@@ -2489,7 +2493,7 @@ If FUNCTION is nil, then it is not called.  (That is a way of saying
 	(concat "[ \t\r\n]*<" comment-re "*!DOCTYPE "))
      . sgml-mode)
     ("%!PS" . ps-mode)
-    ("# xmcd " . conf-unix-mode))
+    ("# xmcd " . conf-unix-mode)))
   "Like `magic-mode-alist' but has lower priority than `auto-mode-alist'.
 Each element looks like (REGEXP . FUNCTION) or (MATCH-FUNCTION . FUNCTION).
 After visiting a file, if REGEXP matches the text at the beginning of the
@@ -3006,8 +3010,8 @@ DIR-NAME is a directory name if these settings come from
 		 (or (eq enable-local-eval t)
 		     (hack-one-local-variable-eval-safep (eval (quote val)))
 		     (push elt unsafe-vars))))
-	      ;; Ignore duplicates in the present list.
-	      ((assq var all-vars) nil)
+	      ;; Ignore duplicates (except `mode') in the present list.
+	      ((and (assq var all-vars) (not (eq var 'mode))) nil)
 	      ;; Accept known-safe variables.
 	      ((or (memq var '(mode unibyte coding))
 		   (safe-local-variable-p var val))
@@ -3027,7 +3031,7 @@ DIR-NAME is a directory name if these settings come from
 	     (hack-local-variables-confirm all-vars unsafe-vars
 					   risky-vars dir-name))
 	 (dolist (elt all-vars)
-	   (unless (eq (car elt) 'eval)
+	   (unless (memq (car elt) '(eval mode))
 	     (unless dir-name
 	       (setq dir-local-variables-alist
 		     (assq-delete-all (car elt) dir-local-variables-alist)))
@@ -3455,7 +3459,7 @@ and `file-local-variables-alist', without applying them."
 		(dir-locals-get-class-variables class) dir-name nil)))
 	  (when variables
 	    (dolist (elt variables)
-	      (unless (eq (car elt) 'eval)
+	      (unless (memq (car elt) '(eval mode))
 		(setq dir-local-variables-alist
 		      (assq-delete-all (car elt) dir-local-variables-alist)))
 	      (push elt dir-local-variables-alist))
@@ -5376,13 +5380,13 @@ by `sh' are supported."
     (concat "\\`" result "\\'")))
 
 (defcustom list-directory-brief-switches
-  "-CF"
+  (purecopy "-CF")
   "Switches for `list-directory' to pass to `ls' for brief listing."
   :type 'string
   :group 'dired)
 
 (defcustom list-directory-verbose-switches
-    "-l"
+    (purecopy "-l")
   "Switches for `list-directory' to pass to `ls' for verbose listing."
   :type 'string
   :group 'dired)
@@ -5404,7 +5408,10 @@ default directory.  However, if FULL is non-nil, they are absolute."
 	   ;; A list of all dirs that DIRPART specifies.
 	   ;; This can be more than one dir
 	   ;; if DIRPART contains wildcards.
-	   (dirs (if (and dirpart (string-match "[[*?]" dirpart))
+	   (dirs (if (and dirpart
+			  (string-match "[[*?]"
+					(or (file-remote-p dirpart 'localname)
+					    dirpart)))
 		     (mapcar 'file-name-as-directory
 			     (file-expand-wildcards (directory-file-name dirpart)))
 		   (list dirpart)))
@@ -5431,6 +5438,9 @@ default directory.  However, if FULL is non-nil, they are absolute."
 	(setq dirs (cdr dirs)))
       contents)))
 
+;; Let Tramp know that `file-expand-wildcards' does not need an advice.
+(provide 'files '(remote-wildcards))
+
 (defun list-directory (dirname &optional verbose)
   "Display a list of files in or matching DIRNAME, a la `ls'.
 DIRNAME is globbed by the shell if necessary.
@@ -5453,8 +5463,7 @@ and `list-directory-verbose-switches'."
       (princ "Directory ")
       (princ dirname)
       (terpri)
-      (save-excursion
-	(set-buffer "*Directory*")
+      (with-current-buffer "*Directory*"
 	(let ((wildcard (not (file-directory-p dirname))))
 	  (insert-directory dirname switches wildcard (not wildcard)))))
     ;; Finishing with-output-to-temp-buffer seems to clobber default-directory.
@@ -5512,10 +5521,10 @@ need to be passed verbatim to shell commands."
       pattern))))
 
 
-(defvar insert-directory-program "ls"
+(defvar insert-directory-program (purecopy "ls")
   "Absolute or relative name of the `ls' program used by `insert-directory'.")
 
-(defcustom directory-free-space-program "df"
+(defcustom directory-free-space-program (purecopy "df")
   "Program to get the amount of free space on a file system.
 We assume the output has the format of `df'.
 The value of this variable must be just a command name or file name;
@@ -5529,7 +5538,7 @@ preference to the program given by this variable."
   :group 'dired)
 
 (defcustom directory-free-space-args
-  (if (eq system-type 'darwin) "-k" "-Pk")
+  (purecopy (if (eq system-type 'darwin) "-k" "-Pk"))
   "Options to use when running `directory-free-space-program'."
   :type 'string
   :group 'dired)
@@ -5620,9 +5629,9 @@ program specified by `directory-free-space-program' if that is non-nil."
          ;; parantheses:
          ;; -rw-r--r-- (modified) 2005-10-22 21:25 files.el
          ;; This is not supported yet.
-    (concat ".*[0-9][BkKMGTPEZY]?" s
+    (purecopy (concat ".*[0-9][BkKMGTPEZY]?" s
 	    "\\(" western "\\|" western-comma "\\|" east-asian "\\|" iso "\\)"
-	    s "+"))
+	    s "+")))
   "Regular expression to match up to the file name in a directory listing.
 The default value is designed to recognize dates and times
 regardless of the language.")
@@ -5987,7 +5996,7 @@ only these files will be asked to be saved."
 ;; so that magic file name handlers will not apply to it.
 
 (setq file-name-handler-alist
-      (cons '("\\`/:" . file-name-non-special)
+      (cons (cons (purecopy "\\`/:") 'file-name-non-special)
 	    file-name-handler-alist))
 
 ;; We depend on being the last handler on the list,

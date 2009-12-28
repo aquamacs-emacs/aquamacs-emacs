@@ -11,11 +11,11 @@
 ;; Maintainer: Kenichi Handa <handa@m17n.org> (multi-byte characters)
 ;;	Vinicius Jose Latorre <viniciusjl@ig.com.br>
 ;; Keywords: wp, print, PostScript
-;; Version: 7.3.4
+;; Version: 7.3.5
 ;; X-URL: http://www.emacswiki.org/cgi-bin/wiki/ViniciusJoseLatorre
 
-(defconst ps-print-version "7.3.4"
-  "ps-print.el, v 7.3.4 <2009/01/24 vinicius>
+(defconst ps-print-version "7.3.5"
+  "ps-print.el, v 7.3.5 <2009/12/23 vinicius>
 
 Vinicius's last change version -- this file may have been edited as part of
 Emacs without changes to the version number.  When reporting bugs, please also
@@ -1494,7 +1494,7 @@ Please send all bug fixes and enhancements to
 ;;; Interface to the command system
 
 (defgroup postscript nil
-  "PostScript Group."
+  "Support for printing and PostScript."
   :tag "PostScript"
   :version "20"
   :group 'emacs)
@@ -4734,8 +4734,7 @@ page-height == ((floor print-height ((th + ls) * zh)) * ((th + ls) * zh)) - th
   (ps-output 'prologue (if (stringp args) (list args) args)))
 
 (defun ps-flush-output ()
-  (save-excursion
-    (set-buffer ps-spool-buffer)
+  (with-current-buffer ps-spool-buffer
     (goto-char (point-max))
     (while ps-output-head
       (let ((it (car ps-output-head)))
@@ -4756,8 +4755,7 @@ page-height == ((floor print-height ((th + ls) * zh)) * ((th + ls) * zh)) - th
 
 (defun ps-insert-file (fname)
   (ps-flush-output)
-  (save-excursion
-    (set-buffer ps-spool-buffer)
+  (with-current-buffer ps-spool-buffer
     (goto-char (point-max))
     (insert-file-contents fname)))
 
@@ -4840,8 +4838,7 @@ page-height == ((floor print-height ((th + ls) * zh)) * ((th + ls) * zh)) - th
 
 
 (defun ps-get-boundingbox ()
-  (save-excursion
-    (set-buffer ps-spool-buffer)
+  (with-current-buffer ps-spool-buffer
     (save-excursion
       (if (re-search-forward ps-boundingbox-re nil t)
 	  (vector (string-to-number	; lower x
@@ -4909,8 +4906,7 @@ page-height == ((floor print-height ((th + ls) * zh)) * ((th + ls) * zh)) - th
 	   ;; coordinate adjustment to center image
 	   ;; around x and y position
 	   (let ((box (ps-get-boundingbox)))
-	     (save-excursion
-	       (set-buffer ps-spool-buffer)
+	     (with-current-buffer ps-spool-buffer
 	       (save-excursion
 		 (if (re-search-backward "^--back--" nil t)
 		     (replace-match
@@ -5795,8 +5791,7 @@ XSTART YSTART are the relative position for the first page in a sheet.")
 					     ps-line-number-step
 					   ps-zebra-stripe-height))))
   ;; spooling buffer
-  (save-excursion
-    (set-buffer ps-spool-buffer)
+  (with-current-buffer ps-spool-buffer
     (goto-char (point-max))
     (and (re-search-backward "^%%Trailer$" nil t)
 	 (delete-region (match-beginning 0) (point-max))))
@@ -6254,6 +6249,7 @@ If FACE is not in `ps-print-face-extension-alist' or in
 return the attribute vector.
 
 If FACE is not a valid face name, use default face."
+  (and (stringp face) (facep face) (setq face (intern face)))
   (cond
    (ps-black-white-faces-alist
     (or (and (symbolp face)
@@ -6573,8 +6569,7 @@ If FACE is not a valid face name, use default face."
 	  (and ps-razzle-dazzle (message "Wrote %s" filename)))
       ;; Else, spool to the printer
       (and ps-razzle-dazzle (message "Printing..."))
-      (save-excursion
-	(set-buffer ps-spool-buffer)
+      (with-current-buffer ps-spool-buffer
 	(let* ((coding-system-for-write 'raw-text-unix)
 	       (ps-printer-name (or ps-printer-name
 				    (and (boundp 'printer-name)

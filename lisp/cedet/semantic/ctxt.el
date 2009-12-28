@@ -156,15 +156,11 @@ Return non-nil if there is no upper context."
   "Get the local variables based on POINT's context.
 Local variables are returned in Semantic tag format.
 This can be overriden with `get-local-variables'."
-  ;; The working status is to let the parser work properly
-  (let ((semantic--progress-reporter
-	 (make-progress-reporter (semantic-parser-working-message "Local")
-				 0 100)))
+  ;; Disable parsing messages
+  (let ((semantic--progress-reporter nil))
     (save-excursion
       (if point (goto-char point))
-      (let* ((semantic-working-type nil)
-	     ;; Disable parsing messages
-	     (case-fold-search semantic-case-fold))
+      (let* ((case-fold-search semantic-case-fold))
 	(:override-with-args ())))))
 
 (defun semantic-get-local-variables-default ()
@@ -614,7 +610,6 @@ overridden."
 
 ;; Local variables:
 ;; generated-autoload-file: "loaddefs.el"
-;; generated-autoload-feature: semantic/loaddefs
 ;; generated-autoload-load-name: "semantic/ctxt"
 ;; End:
 

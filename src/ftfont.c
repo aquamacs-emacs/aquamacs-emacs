@@ -70,6 +70,7 @@ struct ftfont_info
 #endif	/* HAVE_LIBOTF */
   FT_Size ft_size;
   int index;
+  FT_Matrix matrix;
 };
 
 enum ftfont_cache_for
@@ -86,6 +87,8 @@ static Lisp_Object ftfont_resolve_generic_family P_ ((Lisp_Object,
 static Lisp_Object ftfont_lookup_cache P_ ((Lisp_Object,
 					    enum ftfont_cache_for));
 
+static void ftfont_filter_properties P_ ((Lisp_Object font, Lisp_Object alist));
+                                                
 Lisp_Object ftfont_font_format P_ ((FcPattern *, Lisp_Object));
 
 #define SYMBOL_FcChar8(SYM) (FcChar8 *) SDATA (SYMBOL_NAME (SYM))
@@ -545,10 +548,12 @@ struct font_driver ftfont_driver =
     NULL,			/* check */
 
 #ifdef HAVE_OTF_GET_VARIATION_GLYPHS
-    ftfont_variation_glyphs
+    ftfont_variation_glyphs,
 #else
-    NULL
+    NULL,
 #endif
+
+    ftfont_filter_properties, /* filter_properties */
   };
 
 extern Lisp_Object QCname;
@@ -1232,6 +1237,8 @@ ftfont_open (f, entity, pixel_size)
   ftfont_info->maybe_otf = ft_face->face_flags & FT_FACE_FLAG_SFNT;
   ftfont_info->otf = NULL;
 #endif	/* HAVE_LIBOTF */
+  /* This means that there's no need of transformation.  */
+  ftfont_info->matrix.xx = 0;
   font->pixel_size = size;
   font->driver = &ftfont_driver;
   font->encoding_charset = font->repertory_charset = -1;
@@ -1577,6 +1584,7 @@ struct MFLTFontFT
   struct font *font;
   FT_Face ft_face;
   OTF *otf;
+  FT_Matrix *matrix;
 };
 
 static int
@@ -1600,6 +1608,12 @@ ftfont_get_glyph_id (font, gstring, from, to)
   return 0;
 }
 
+/* Operators for 26.6 fixed fractional pixel format */
+
+#define FLOOR(x)    ((x) & -64)
+#define CEIL(x)	    (((x)+63) & -64)
+#define ROUND(x)    (((x)+32) & -64)
+
 static int
 ftfont_get_metrics (font, gstring, from, to)
      MFLTFont *font;
@@ -1616,16 +1630,35 @@ ftfont_get_metrics (font, gstring, from, to)
 	if (g->code != FONT_INVALID_CODE)
 	  {
 	    FT_Glyph_Metrics *m;
+	    int lbearing, rbearing, ascent, descent, xadv;
 
 	    if (FT_Load_Glyph (ft_face, g->code, FT_LOAD_DEFAULT) != 0)
 	      abort ();
 	    m = &ft_face->glyph->metrics;
+	    if (flt_font_ft->matrix)
+	      {
+		FT_Vector v[4];
+		int i;
 
-	    g->lbearing = m->horiBearingX;
-	    g->rbearing = m->horiBearingX + m->width;
-	    g->ascent = m->horiBearingY;
-	    g->descent = m->height - m->horiBearingY;
-	    g->xadv = m->horiAdvance;
+		v[0].x = v[1].x = m->horiBearingX;
+		v[2].x = v[3].x = m->horiBearingX + m->width;
+		v[0].y = v[2].y = m->horiBearingY;
+		v[1].y = v[3].y = m->horiBearingY - m->height;
+		for (i = 0; i < 4; i++)
+		  FT_Vector_Transform (v + i, flt_font_ft->matrix);
+		g->lbearing = v[0].x < v[1].x ? FLOOR (v[0].x) : FLOOR (v[1].x);
+		g->rbearing = v[2].x > v[3].x ? CEIL (v[2].x) : CEIL (v[3].x);
+		g->ascent = v[0].y > v[2].y ? CEIL (v[0].y) : CEIL (v[2].y);
+		g->descent = v[1].y < v[3].y ? - FLOOR (v[1].y) : - FLOOR (v[3].y);
+	      }
+	    else
+	      {
+		g->lbearing = FLOOR (m->horiBearingX);
+		g->rbearing = CEIL (m->horiBearingX + m->width);
+		g->ascent = CEIL (m->horiBearingY);
+		g->descent = - FLOOR (m->horiBearingY - m->height);
+	      }
+	    g->xadv = ROUND (ft_face->glyph->advance.x);
 	  }
 	else
 	  {
@@ -1985,11 +2018,12 @@ static int m17n_flt_initialized;
 extern Lisp_Object QCfamily;
 
 static Lisp_Object
-ftfont_shape_by_flt (lgstring, font, ft_face, otf)
+ftfont_shape_by_flt (lgstring, font, ft_face, otf, matrix)
      Lisp_Object lgstring;
      struct font *font;
      FT_Face ft_face;
      OTF *otf;
+     FT_Matrix *matrix;
 {
   EMACS_UINT len = LGSTRING_GLYPH_LEN (lgstring);
   EMACS_UINT i;
@@ -2091,6 +2125,7 @@ ftfont_shape_by_flt (lgstring, font, ft_face, otf)
   flt_font_ft.font = font;
   flt_font_ft.ft_face = ft_face;
   flt_font_ft.otf = otf;
+  flt_font_ft.matrix = matrix->xx != 0 ? matrix : 0;
   if (len > 1
       && gstring.glyphs[1].c >= 0x300 && gstring.glyphs[1].c <= 0x36F)
     /* A little bit ad hoc.  Perhaps, shaper must get script and
@@ -2162,7 +2197,8 @@ ftfont_shape (lgstring)
   otf = ftfont_get_otf (ftfont_info);
   if (! otf)
     return make_number (0);
-  return ftfont_shape_by_flt (lgstring, font, ftfont_info->ft_size->face, otf);
+  return ftfont_shape_by_flt (lgstring, font, ftfont_info->ft_size->face, otf,
+			      &ftfont_info->matrix);
 }
 
 #endif	/* HAVE_M17N_FLT */
@@ -2226,7 +2262,94 @@ ftfont_font_format (FcPattern *pattern, Lisp_Object filename)
   return intern ("unknown");
 }
 
-
+static const char *ftfont_booleans [] = {
+  ":antialias",
+  ":hinting",
+  ":verticallayout",
+  ":autohint",
+  ":globaladvance",
+  ":outline",
+  ":scalable",
+  ":minspace",
+  ":embolden",
+  NULL,
+};
+
+static const char *ftfont_non_booleans [] = {
+  ":family",
+  ":familylang",
+  ":style",
+  ":stylelang",
+  ":fullname",
+  ":fullnamelang",
+  ":slant",
+  ":weight",
+  ":size",
+  ":width",
+  ":aspect",
+  ":pixelsize",
+  ":spacing",
+  ":foundry",
+  ":hintstyle",
+  ":file",
+  ":index",
+  ":ftface",
+  ":rasterizer",
+  ":scale",
+  ":dpi",
+  ":rgba",
+  ":lcdfilter",
+  ":charset",
+  ":lang",
+  ":fontversion",
+  ":capability",
+  NULL,
+};
+
+static void
+ftfont_filter_properties (font, alist)
+     Lisp_Object font;
+     Lisp_Object alist;
+{
+  Lisp_Object it;
+  int i;
+
+  /* Set boolean values to Qt or Qnil */
+  for (i = 0; ftfont_booleans[i] != NULL; ++i)
+    for (it = alist; ! NILP (it); it = XCDR (it))
+      {
+        Lisp_Object key = XCAR (XCAR (it));
+        Lisp_Object val = XCDR (XCAR (it));
+        char *keystr = SDATA (SYMBOL_NAME (key));
+
+        if (strcmp (ftfont_booleans[i], keystr) == 0)
+          {
+            char *str = SYMBOLP (val) ? SDATA (SYMBOL_NAME (val)) : NULL;
+            if (INTEGERP (val)) str = XINT (val) != 0 ? "true" : "false";
+            if (str == NULL) str = "true";
+
+            val = Qt;
+            if (strcmp ("false", str) == 0 || strcmp ("False", str) == 0
+                || strcmp ("FALSE", str) == 0 || strcmp ("FcFalse", str) == 0
+                || strcmp ("off", str) == 0 || strcmp ("OFF", str) == 0
+                || strcmp ("Off", str) == 0)
+              val = Qnil;
+            Ffont_put (font, key, val);
+          }
+      }
+
+  for (i = 0; ftfont_non_booleans[i] != NULL; ++i)
+    for (it = alist; ! NILP (it); it = XCDR (it))
+      {
+        Lisp_Object key = XCAR (XCAR (it));
+        Lisp_Object val = XCDR (XCAR (it));
+        char *keystr = SDATA (SYMBOL_NAME (key));
+        if (strcmp (ftfont_non_booleans[i], keystr) == 0)
+          Ffont_put (font, key, val);
+      }
+}
+
+
 void
 syms_of_ftfont ()
 {

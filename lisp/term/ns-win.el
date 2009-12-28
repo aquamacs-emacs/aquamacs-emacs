@@ -66,6 +66,9 @@
 ;; nsterm.m
 (defvar ns-version-string)
 (defvar ns-alternate-modifier)
+(defvar ns-right-alternate-modifier)
+(defvar ns-right-command-modifier)
+(defvar ns-right-control-modifier)
 
 ;;;; Command line argument handling.
 
@@ -229,8 +232,11 @@ The properties returned may include `top', `left', `height', and `width'."
 
 (defvaralias 'mac-allow-anti-aliasing 'ns-antialias-text)
 (defvaralias 'mac-command-modifier 'ns-command-modifier)
+(defvaralias 'mac-right-command-modifier 'ns-right-command-modifier)
 (defvaralias 'mac-control-modifier 'ns-control-modifier)
+(defvaralias 'mac-right-control-modifier 'ns-right-control-modifier)
 (defvaralias 'mac-option-modifier 'ns-option-modifier)
+(defvaralias 'mac-right-option-modifier 'ns-right-option-modifier)
 (defvaralias 'mac-function-modifier 'ns-function-modifier)
 (declare-function ns-do-applescript "nsfns.m" (script))
 (defalias 'do-applescript 'ns-do-applescript)
@@ -832,6 +838,7 @@ unless the current buffer is a scratch buffer."
 
 ;; You say tomAYto, I say tomAHto..
 (defvaralias 'ns-option-modifier 'ns-alternate-modifier)
+(defvaralias 'ns-right-option-modifier 'ns-right-alternate-modifier)
 
 (defun ns-do-hide-emacs ()
   (interactive)

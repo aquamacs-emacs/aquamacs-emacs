@@ -2449,7 +2449,7 @@ comint mode, which see."
 
 ;; Cause our buffers to be displayed, by default,
 ;; in the selected window.
-;;;###autoload (add-hook 'same-window-regexps "\\*gud-.*\\*\\(\\|<[0-9]+>\\)")
+;;;###autoload (add-hook 'same-window-regexps (purecopy "\\*gud-.*\\*\\(\\|<[0-9]+>\\)"))
 
 (defcustom gud-chdir-before-run t
   "Non-nil if GUD should `cd' to the debugged executable."
@@ -2833,18 +2833,19 @@ Obeying it means displaying in another window the specified file and line."
     (or proc (error "Current buffer has no process"))
     ;; Arrange for the current prompt to get deleted.
     (with-current-buffer gud-comint-buffer
-      (save-restriction
-	(widen)
-	(if (marker-position gud-delete-prompt-marker)
-	    ;; We get here when printing an expression.
-	    (goto-char gud-delete-prompt-marker)
-	  (goto-char (process-mark proc))
-	  (forward-line 0))
-	(if (looking-at comint-prompt-regexp)
-	    (set-marker gud-delete-prompt-marker (point)))
-	(if (memq gud-minor-mode '(gdbmi gdba))
-	    (apply comint-input-sender (list proc command))
-	  (process-send-string proc (concat command "\n")))))))
+      (save-excursion
+        (save-restriction
+          (widen)
+          (if (marker-position gud-delete-prompt-marker)
+              ;; We get here when printing an expression.
+              (goto-char gud-delete-prompt-marker)
+            (goto-char (process-mark proc))
+            (forward-line 0))
+          (if (looking-at comint-prompt-regexp)
+              (set-marker gud-delete-prompt-marker (point)))
+          (if (eq gud-minor-mode 'gdbmi)
+              (apply comint-input-sender (list proc command))
+            (process-send-string proc (concat command "\n"))))))))
 
 (defun gud-refresh (&optional arg)
   "Fix up a possibly garbled display, and redraw the arrow."
@@ -3221,7 +3222,7 @@ Treats actions as defuns."
 ;; .PROCESSORNAME-gdbinit so that the host and target gdbinit files
 ;; don't interfere with each other.
 ;;;###autoload
-(add-to-list 'auto-mode-alist '("/\\.[a-z0-9-]*gdbinit" . gdb-script-mode))
+(add-to-list 'auto-mode-alist (cons (purecopy "/\\.[a-z0-9-]*gdbinit") 'gdb-script-mode))
 
 ;;;###autoload
 (define-derived-mode gdb-script-mode nil "GDB-Script"

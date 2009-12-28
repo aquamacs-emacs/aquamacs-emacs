@@ -391,6 +391,8 @@ the current window is switched to the new buffer."
 (if (running-on-a-mac-p)
     (defadvice switch-to-buffer (around sw-force-other-frame (&rest args) 
 					activate compile)
+      (clear-image-cache t) ;; ugly workaround for image cache corruption problem 
+                            ;; (where a toolbar icon is shown in place of every image)
       (if one-buffer-one-frame  
 	  ;; technically, code below should work even without this
 	  ;; "if", because it does mostly the same things as switch-to-buffer.

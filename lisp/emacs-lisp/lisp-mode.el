@@ -280,7 +280,7 @@ font-lock keywords will not be case sensitive."
 	(prof-map (make-sparse-keymap))
 	(tracing-map (make-sparse-keymap)))
     (set-keymap-parent map lisp-mode-shared-map)
-    (define-key map "\e\t" 'lisp-complete-symbol)
+    (define-key map "\e\t" 'completion-at-point)
     (define-key map "\e\C-x" 'eval-defun)
     (define-key map "\e\C-q" 'indent-pp-sexp)
     (define-key map [menu-bar emacs-lisp] (cons (purecopy "Emacs-Lisp") menu-map))
@@ -296,17 +296,17 @@ font-lock keywords will not be case sensitive."
 		  :help ,(purecopy "Construct a regexp interactively")))
     (define-key menu-map [tracing] (cons (purecopy "Tracing") tracing-map))
     (define-key tracing-map [tr-a]
-      `(menu-item ,(purecopy "Untrace all") untrace-all
+      `(menu-item ,(purecopy "Untrace All") untrace-all
 		  :help ,(purecopy "Untrace all currently traced functions")))
     (define-key tracing-map [tr-uf]
       `(menu-item ,(purecopy "Untrace function...") untrace-function
 		  :help ,(purecopy "Untrace function, and possibly activate all remaining advice")))
-    (define-key tracing-map [tr-sep] '("--"))
+    (define-key tracing-map [tr-sep] menu-bar-separator)
     (define-key tracing-map [tr-q]
-      `(menu-item ,(purecopy "Trace function quietly...") trace-function-background
+      `(menu-item ,(purecopy "Trace Function Quietly...") trace-function-background
 		  :help ,(purecopy "Trace the function with trace output going quietly to a buffer")))
     (define-key tracing-map [tr-f]
-      `(menu-item ,(purecopy "Trace function...") trace-function
+      `(menu-item ,(purecopy "Trace Function...") trace-function
 		  :help ,(purecopy "Trace the function given as an argument")))
     (define-key menu-map [profiling] (cons (purecopy "Profiling") prof-map))
     (define-key prof-map [prof-restall]
@@ -316,7 +316,7 @@ font-lock keywords will not be case sensitive."
       `(menu-item ,(purecopy "Remove Instrumentation for Function...") elp-restore-function
 		  :help ,(purecopy "Restore an instrumented function to its original definition")))
 
-    (define-key prof-map [sep-rem] '("--"))
+    (define-key prof-map [sep-rem] menu-bar-separator)
     (define-key prof-map [prof-resall]
       `(menu-item ,(purecopy "Reset Counters for All Functions") elp-reset-all
 		  :help ,(purecopy "Reset the profiling information for all functions being profiled")))
@@ -348,21 +348,21 @@ font-lock keywords will not be case sensitive."
     (define-key menu-map [edebug-defun]
       `(menu-item ,(purecopy "Instrument Function for Debugging") edebug-defun
 		  :help ,(purecopy "Evaluate the top level form point is in, stepping through with Edebug")
-		  :keys "C-u C-M-x"))
-    (define-key menu-map [separator-byte] '("--"))
+		  :keys ,(purecopy "C-u C-M-x")))
+    (define-key menu-map [separator-byte] menu-bar-separator)
     (define-key menu-map [disas]
-      `(menu-item ,(purecopy "Disassemble byte compiled object...") disassemble
+      `(menu-item ,(purecopy "Disassemble Byte Compiled Object...") disassemble
 		  :help ,(purecopy "Print disassembled code for OBJECT in a buffer")))
     (define-key menu-map [byte-recompile]
       `(menu-item ,(purecopy "Byte-recompile Directory...") byte-recompile-directory
 		  :help ,(purecopy "Recompile every `.el' file in DIRECTORY that needs recompilation")))
     (define-key menu-map [emacs-byte-compile-and-load]
-      `(menu-item ,(purecopy "Byte-compile And Load") emacs-lisp-byte-compile-and-load
+      `(menu-item ,(purecopy "Byte-compile and Load") emacs-lisp-byte-compile-and-load
 		  :help ,(purecopy "Byte-compile the current file (if it has changed), then load compiled code")))
     (define-key menu-map [byte-compile]
-      `(menu-item ,(purecopy "Byte-compile This File") emacs-lisp-byte-compile
+      `(menu-item ,(purecopy "Byte-compile this File") emacs-lisp-byte-compile
 		  :help ,(purecopy "Byte compile the file containing the current buffer")))
-    (define-key menu-map [separator-eval] '("--"))
+    (define-key menu-map [separator-eval] menu-bar-separator)
     (define-key menu-map [ielm]
       `(menu-item ,(purecopy "Interactive Expression Evaluation") ielm
 		  :help ,(purecopy "Interactively evaluate Emacs Lisp expressions")))
@@ -376,7 +376,7 @@ font-lock keywords will not be case sensitive."
     (define-key menu-map [eval-sexp]
       `(menu-item ,(purecopy "Evaluate Last S-expression") eval-last-sexp
 		  :help ,(purecopy "Evaluate sexp before point; print value in minibuffer")))
-    (define-key menu-map [separator-format] '("--"))
+    (define-key menu-map [separator-format] menu-bar-separator)
     (define-key menu-map [comment-region]
       `(menu-item ,(purecopy "Comment Out Region") comment-region
 		  :help ,(purecopy "Comment or uncomment each line in the region")
@@ -385,7 +385,8 @@ font-lock keywords will not be case sensitive."
       `(menu-item ,(purecopy "Indent Region") indent-region
 		  :help ,(purecopy "Indent each nonblank line in the region")
 		  :enable mark-active))
-    (define-key menu-map [indent-line] '("Indent Line" . lisp-indent-line))
+    (define-key menu-map [indent-line]
+      `(menu-item ,(purecopy "Indent Line") lisp-indent-line))
     map)
   "Keymap for Emacs Lisp mode.
 All commands in `lisp-mode-shared-map' are inherited by this map.")
@@ -430,7 +431,7 @@ All commands in `lisp-mode-shared-map' are inherited by this map.")
   :type 'hook
   :group 'lisp)
 
-(defun emacs-lisp-mode ()
+(define-derived-mode emacs-lisp-mode nil "Emacs-Lisp"
   "Major mode for editing Lisp code to run in Emacs.
 Commands:
 Delete converts tabs to spaces as it moves back.
@@ -439,16 +440,11 @@ Blank lines separate paragraphs.  Semicolons start comments.
 \\{emacs-lisp-mode-map}
 Entry to this mode calls the value of `emacs-lisp-mode-hook'
 if that value is non-nil."
-  (interactive)
-  (kill-all-local-variables)
-  (use-local-map emacs-lisp-mode-map)
-  (set-syntax-table emacs-lisp-mode-syntax-table)
-  (setq major-mode 'emacs-lisp-mode)
-  (setq mode-name "Emacs-Lisp")
+  :group 'lisp
   (lisp-mode-variables)
   (setq imenu-case-fold-search nil)
-  (run-mode-hooks 'emacs-lisp-mode-hook))
-(put 'emacs-lisp-mode 'custom-mode-group 'lisp)
+  (add-hook 'completion-at-point-functions
+            'lisp-completion-at-point nil 'local))
 
 (defvar lisp-mode-map
   (let ((map (make-sparse-keymap))
@@ -518,7 +514,7 @@ if that value is non-nil."
     (set-keymap-parent map lisp-mode-shared-map)
     (define-key map "\e\C-x" 'eval-defun)
     (define-key map "\e\C-q" 'indent-pp-sexp)
-    (define-key map "\e\t" 'lisp-complete-symbol)
+    (define-key map "\e\t" 'completion-at-point)
     (define-key map "\n" 'eval-print-last-sexp)
     (define-key map [menu-bar lisp-interaction] (cons (purecopy "Lisp-Interaction") menu-map))
     (define-key menu-map [eval-defun]
@@ -530,12 +526,12 @@ if that value is non-nil."
     (define-key menu-map [edebug-defun-lisp-interaction]
       `(menu-item ,(purecopy "Instrument Function for Debugging") edebug-defun
 		  :help ,(purecopy "Evaluate the top level form point is in, stepping through with Edebug")
-		  :keys "C-u C-M-x"))
+		  :keys ,(purecopy "C-u C-M-x")))
     (define-key menu-map [indent-pp-sexp]
       `(menu-item ,(purecopy "Indent or Pretty-Print") indent-pp-sexp
 		  :help ,(purecopy "Indent each line of the list starting just after point, or prettyprint it")))
-    (define-key menu-map [lisp-complete-symbol]
-      `(menu-item ,(purecopy "Complete Lisp Symbol") lisp-complete-symbol
+    (define-key menu-map [complete-symbol]
+      `(menu-item ,(purecopy "Complete Lisp Symbol") completion-at-point
 		  :help ,(purecopy "Perform completion on Lisp symbol preceding point")))
     map)
   "Keymap for Lisp Interaction mode.

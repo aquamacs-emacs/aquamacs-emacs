@@ -1,8 +1,10 @@
 ;;; savehist.el --- Save minibuffer history.
 
-;; Copyright (C) 1997, 2005, 2006, 2007, 2008, 2009  Free Software Foundation, Inc.
+;; Copyright (C) 1997, 2005, 2006, 2007, 2008, 2009
+;;   Free Software Foundation, Inc.
 
 ;; Author: Hrvoje Niksic <hniksic@xemacs.org>
+;; Maintainer: FSF
 ;; Keywords: minibuffer
 ;; Version: 24
 
@@ -120,7 +122,8 @@ the user's privacy."
 (defcustom savehist-autosave-interval (* 5 60)
   "The interval between autosaves of minibuffer history.
 If set to nil, disables timer-based autosaving."
-  :type 'integer
+  :type '(choice (const :tag "Disabled" nil)
+                 (integer :tag "Seconds"))
   :group 'savehist)
 
 (defcustom savehist-mode-hook nil

@@ -911,8 +911,7 @@ text property.  */)
   if (*p)
     {
       int len;
-      int character = (STRING_CHAR_AND_LENGTH
-		       (p, SBYTES (string) - 1, len));
+      int character = STRING_CHAR_AND_LENGTH (p, len);
       XSETINT (match, character);
       if (XFASTINT (match) == ' ')
 	match = Qnil;
@@ -1588,12 +1587,12 @@ skip_chars (forwardp, string, lim, handle_iso_classes)
 	  unsigned char leading_code;
 
 	  leading_code = str[i_byte];
-	  c = STRING_CHAR_AND_LENGTH (str + i_byte, size_byte-i_byte, len);
+	  c = STRING_CHAR_AND_LENGTH (str + i_byte, len);
 	  i_byte += len;
 
 	  if (handle_iso_classes && c == '['
 	      && i_byte < size_byte
-	      && STRING_CHAR (str + i_byte, size_byte - i_byte) == ':')
+	      && STRING_CHAR (str + i_byte) == ':')
 	    {
 	      const unsigned char *class_beg = str + i_byte + 1;
 	      const unsigned char *class_end = class_beg;
@@ -1633,8 +1632,7 @@ skip_chars (forwardp, string, lim, handle_iso_classes)
 		break;
 
 	      leading_code = str[i_byte];
-	      c = STRING_CHAR_AND_LENGTH (str + i_byte,
-					  size_byte - i_byte, len);
+	      c = STRING_CHAR_AND_LENGTH (str + i_byte, len);
 	      i_byte += len;
 	    }
 	  /* Treat `-' as range character only if another character
@@ -1650,15 +1648,14 @@ skip_chars (forwardp, string, lim, handle_iso_classes)
 
 	      /* Get the end of the range.  */
 	      leading_code2 = str[i_byte];
-	      c2 = STRING_CHAR_AND_LENGTH (str + i_byte,
-					   size_byte - i_byte, len);
+	      c2 = STRING_CHAR_AND_LENGTH (str + i_byte, len);
 	      i_byte += len;
 
 	      if (c2 == '\\'
 		  && i_byte < size_byte)
 		{
 		  leading_code2 = str[i_byte];
-		  c2 =STRING_CHAR_AND_LENGTH (str + i_byte, size_byte-i_byte, len);
+		  c2 =STRING_CHAR_AND_LENGTH (str + i_byte, len);
 		  i_byte += len;
 		}
 
@@ -1764,7 +1761,7 @@ skip_chars (forwardp, string, lim, handle_iso_classes)
 		  p = GAP_END_ADDR;
 		  stop = endp;
 		}
-	      c = STRING_CHAR_AND_LENGTH (p, MAX_MULTIBYTE_LENGTH, nbytes);
+	      c = STRING_CHAR_AND_LENGTH (p, nbytes);
 	      if (! NILP (iso_classes) && in_classes (c, iso_classes))
 		{
 		  if (negate)
@@ -1835,7 +1832,7 @@ skip_chars (forwardp, string, lim, handle_iso_classes)
 		}
 	      prev_p = p;
 	      while (--p >= stop && ! CHAR_HEAD_P (*p));
-	      c = STRING_CHAR (p, MAX_MULTIBYTE_LENGTH);
+	      c = STRING_CHAR (p);
 
 	      if (! NILP (iso_classes) && in_classes (c, iso_classes))
 		{
@@ -1989,7 +1986,7 @@ skip_syntaxes (forwardp, string, lim)
 		    p = GAP_END_ADDR;
 		    stop = endp;
 		  }
-		c = STRING_CHAR_AND_LENGTH (p, MAX_MULTIBYTE_LENGTH, nbytes);
+		c = STRING_CHAR_AND_LENGTH (p, nbytes);
 		if (! fastmap[(int) SYNTAX (c)])
 		  break;
 		p += nbytes, pos++, pos_byte += nbytes;
@@ -2032,7 +2029,7 @@ skip_syntaxes (forwardp, string, lim)
 		UPDATE_SYNTAX_TABLE_BACKWARD (pos - 1);
 		prev_p = p;
 		while (--p >= stop && ! CHAR_HEAD_P (*p));
-		c = STRING_CHAR (p, MAX_MULTIBYTE_LENGTH);
+		c = STRING_CHAR (p);
 		if (! fastmap[(int) SYNTAX (c)])
 		  break;
 		pos--, pos_byte -= prev_p - p;
@@ -3332,13 +3329,13 @@ init_syntax_once ()
   Lisp_Object temp;
 
   /* This has to be done here, before we call Fmake_char_table.  */
-  Qsyntax_table = intern ("syntax-table");
+  Qsyntax_table = intern_c_string ("syntax-table");
   staticpro (&Qsyntax_table);
 
-  /* Intern this now in case it isn't already done.
+  /* Intern_C_String this now in case it isn't already done.
      Setting this variable twice is harmless.
      But don't staticpro it here--that is done in alloc.c.  */
-  Qchar_table_extra_slots = intern ("char-table-extra-slots");
+  Qchar_table_extra_slots = intern_c_string ("char-table-extra-slots");
 
   /* Create objects which can be shared among syntax tables.  */
   Vsyntax_code_object = Fmake_vector (make_number (Smax), Qnil);
@@ -3418,7 +3415,7 @@ init_syntax_once ()
 void
 syms_of_syntax ()
 {
-  Qsyntax_table_p = intern ("syntax-table-p");
+  Qsyntax_table_p = intern_c_string ("syntax-table-p");
   staticpro (&Qsyntax_table_p);
 
   staticpro (&Vsyntax_code_object);
@@ -3431,12 +3428,12 @@ syms_of_syntax ()
   /* Defined in regex.c */
   staticpro (&re_match_object);
 
-  Qscan_error = intern ("scan-error");
+  Qscan_error = intern_c_string ("scan-error");
   staticpro (&Qscan_error);
   Fput (Qscan_error, Qerror_conditions,
-	Fcons (Qscan_error, Fcons (Qerror, Qnil)));
+	pure_cons (Qscan_error, pure_cons (Qerror, Qnil)));
   Fput (Qscan_error, Qerror_message,
-	build_string ("Scan error"));
+	make_pure_c_string ("Scan error"));
 
   DEFVAR_BOOL ("parse-sexp-ignore-comments", &parse_sexp_ignore_comments,
 	       doc: /* Non-nil means `forward-sexp', etc., should treat comments as whitespace.  */);

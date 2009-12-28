@@ -68,7 +68,7 @@
 ;; - merge-news (file)                         NEEDED
 ;; - steal-lock (file &optional revision)      NOT NEEDED
 ;; HISTORY FUNCTIONS
-;; * print-log (files &optional buffer shortlog)OK
+;; * print-log (files buffer &optional shortlog start-revision limit) OK
 ;; - log-view-mode ()                          OK
 ;; - show-log-entry (revision)                 NOT NEEDED, DEFAULT IS GOOD
 ;; - comment-history (file)                    NOT NEEDED
@@ -167,9 +167,13 @@ If nil, use the value of `vc-diff-switches'.  If t, use no switches."
             (setq status
                   (condition-case nil
                       ;; Ignore all errors.
-                      (process-file
+		      (let ((process-environment
+			     ;; Avoid localization of messages so we can parse the output.
+			     (append (list "TERM=dumb" "LANGUAGE=C" "HGRC=") process-environment)))
+
+		      (process-file
                        "hg" nil t nil
-                       "status" "-A" (file-relative-name file))
+                       "status" "-A" (file-relative-name file)))
                     ;; Some problem happened.  E.g. We can't find an `hg'
                     ;; executable.
                     (error nil)))))))
@@ -198,10 +202,14 @@ If nil, use the value of `vc-diff-switches'.  If t, use no switches."
               standard-output
             (setq status
                   (condition-case nil
-                      ;; Ignore all errors.
-                      (process-file
-                       "hg" nil t nil
-                       "log" "-l1" (file-relative-name file))
+		      (let ((process-environment
+			     ;; Avoid localization of messages so we can parse the output.
+			     (append (list "TERM=dumb" "LANGUAGE=C" "HGRC=")
+				     process-environment)))
+			;; Ignore all errors.
+			(process-file
+			 "hg" nil t nil
+			 "log" "-l1" (file-relative-name file)))
                     ;; Some problem happened.  E.g. We can't find an `hg'
                     ;; executable.
                     (error nil)))))))
@@ -219,12 +227,8 @@ If nil, use the value of `vc-diff-switches'.  If t, use no switches."
                  (repeat :tag "Argument List" :value ("") string))
   :group 'vc-hg)
 
-(defun vc-hg-print-log (files &optional buffer shortlog)
+(defun vc-hg-print-log (files buffer &optional shortlog start-revision limit)
   "Get change log associated with FILES."
-  ;; `log-view-mode' needs to have the file names in order to function
-  ;; correctly. "hg log" does not print it, so we insert it here by
-  ;; hand.
-
   ;; `vc-do-command' creates the buffer, but we need it before running
   ;; the command.
   (vc-setup-buffer buffer)
@@ -234,9 +238,11 @@ If nil, use the value of `vc-diff-switches'.  If t, use no switches."
     (with-current-buffer
 	buffer
       (apply 'vc-hg-command buffer 0 files "log"
-	     (if shortlog
-                 (append '("--style" "compact") vc-hg-log-switches)
-                 vc-hg-log-switches)))))
+	     (append
+	      (when start-revision (list (format "-r%s:" start-revision)))
+	      (when limit (list "-l" (format "%s" limit)))
+	      (when shortlog '("--style" "compact"))
+	      vc-hg-log-switches)))))
 
 (defvar log-view-message-re)
 (defvar log-view-file-re)
@@ -279,16 +285,12 @@ If nil, use the value of `vc-diff-switches'.  If t, use no switches."
 (defun vc-hg-diff (files &optional oldvers newvers buffer)
   "Get a difference report using hg between two revisions of FILES."
   (let* ((firstfile (car files))
-         (cwd (if firstfile (file-name-directory firstfile)
-                (expand-file-name default-directory)))
          (working (and firstfile (vc-working-revision firstfile))))
     (when (and (equal oldvers working) (not newvers))
       (setq oldvers nil))
     (when (and (not oldvers) newvers)
       (setq oldvers working))
-    (apply #'vc-hg-command (or buffer "*vc-diff*") nil
-           (mapcar (lambda (file) (file-relative-name file cwd)) files)
-           "diff"
+    (apply #'vc-hg-command (or buffer "*vc-diff*") nil files "diff"
            (append
             (vc-switches 'hg 'diff)
             (when oldvers

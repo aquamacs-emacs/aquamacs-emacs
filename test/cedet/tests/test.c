@@ -1,8 +1,5 @@
 /* Test file for C language.
  * Attempt to include as many aspects of the C language as possible.
- *
- * $Id$
- *
  */
 /* types of include files */
 #include "includeme1.h"

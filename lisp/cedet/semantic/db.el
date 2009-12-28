@@ -450,7 +450,8 @@ See the file semantic-scope.el for an example."
   "Get a cache object on TABLE of class DESIRED-CLASS.
 This method will create one if none exists with no init arguments
 other than :table."
-  (assert (child-of-class-p desired-class 'semanticdb-abstract-cache))
+  (unless (child-of-class-p desired-class 'semanticdb-abstract-cache)
+    (error "Invalid SemanticDB cache"))
   (let ((cache (oref table cache))
 	(obj nil))
     (while (and (not obj) cache)
@@ -500,7 +501,8 @@ See the file semantic-scope.el for an example."
   "Get a cache object on DB of class DESIRED-CLASS.
 This method will create one if none exists with no init arguments
 other than :table."
-  (assert (child-of-class-p desired-class 'semanticdb-abstract-db-cache))
+  (unless (child-of-class-p desired-class 'semanticdb-abstract-cache)
+    (error "Invalid SemanticDB cache"))
   (let ((cache (oref db cache))
 	(obj nil))
     (while (and (not obj) cache)
@@ -1018,7 +1020,6 @@ If file does not have tags available, then load the file, and create them."
 
 ;; Local variables:
 ;; generated-autoload-file: "loaddefs.el"
-;; generated-autoload-feature: semantic/loaddefs
 ;; generated-autoload-load-name: "semantic/db"
 ;; End:
 

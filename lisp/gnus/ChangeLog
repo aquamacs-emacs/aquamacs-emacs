@@ -1,3 +1,68 @@
+2009-12-18  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* nntp.el (nntp-service-to-port): Work for service expressed with
+	numeric string; replace [:digit:] with [0-9] for XEmacs.
+
+2009-12-17  Glenn Morris  <rgm@gnu.org>
+
+	* gnus-group.el (gnus-bug-group-download-format-alist):
+	Change emacs entry to debbugs.gnu.org.  Bump :version.
+
+2009-12-13  Reiner Steib  <Reiner.Steib@gmx.de>
+
+	* mm-encode.el (mm-sign-option, mm-encrypt-option): Add :version tag.
+
+2009-12-12  Reiner Steib  <Reiner.Steib@gmx.de>
+
+	* message.el (message-info): Explain why we use `Info-goto-node'.
+
+2009-12-02  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* message.el (message-completion-in-region): New compatibility function.
+	(message-expand-group): Use it.
+
+2009-12-02  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* gnus-group.el (gnus-group-prepare-flat): Check also whether groups
+	with no unread article should be listed if the 2nd arg `predicate' is
+	given.
+
+2009-11-29  Juri Linkov  <juri@jurta.org>
+
+	* gnus-sum.el (gnus-recenter): Use `recenter-top-bottom'
+	when it is fboundp in GNU Emacs 23.1.  Put `isearch-scroll' property
+	on `gnus-recenter'. (Bug#4698, Bug#4981)
+
+2009-11-24  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* message.el (message-from-style, message-interactive)
+	(message-signature): Always set default values from the corresponding
+	mail-* variables.
+	(message-cite-prefix-regexp, message-sendmail-envelope-from)
+	(message-yank-prefix, message-indentation-spaces)
+	(message-signature-file, message-default-headers): Use boundp rather
+	than (featurep 'xemacs) to check if the corresponding mail-* variables
+	exist.
+
+2009-11-20  Chong Yidong  <cyd@stupidchicken.com>
+
+	* message.el (message-send-mail-with-sendmail): Revert last change.
+
+2009-11-19  Chong Yidong  <cyd@stupidchicken.com>
+
+	* message.el (message-from-style, message-interactive)
+	(message-cite-prefix-regexp, message-sendmail-envelope-from)
+	(message-yank-prefix, message-indentation-spaces, message-signature)
+	(message-signature-file, message-default-headers): For GNU Emacs, set
+	default values from the corresponding mail-* variables.
+	(message-send-mail-with-sendmail): Use envelope-from only if
+	mail-specify-envelope-from is non-nil.
+
+2009-11-17  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* rfc2047.el (rfc2047-decode-region): Don't quote decoded words
+	containing tspecial characters if they have been already quoted.
+
 2009-10-24  Glenn Morris  <rgm@gnu.org>
 
 	* gnus-art.el (help-xref-stack-item): Define for compiler.

@@ -919,7 +919,7 @@ static int display_echo_area P_ ((struct window *));
 static int display_echo_area_1 P_ ((EMACS_INT, Lisp_Object, EMACS_INT, EMACS_INT));
 static int resize_mini_window_1 P_ ((EMACS_INT, Lisp_Object, EMACS_INT, EMACS_INT));
 static Lisp_Object unwind_redisplay P_ ((Lisp_Object));
-static int string_char_and_length P_ ((const unsigned char *, int, int *));
+static int string_char_and_length P_ ((const unsigned char *, int *));
 static struct text_pos display_prop_end P_ ((struct it *, Lisp_Object,
 					     struct text_pos));
 static int compute_window_start_on_continuation_line P_ ((struct window *));
@@ -1485,13 +1485,13 @@ pos_visible_p (w, charpos, x, y, rtop, rbot, rowh, vpos)
    character.  */
 
 static INLINE int
-string_char_and_length (str, maxlen, len)
+string_char_and_length (str, len)
      const unsigned char *str;
-     int maxlen, *len;
+     int *len;
 {
   int c;
 
-  c = STRING_CHAR_AND_LENGTH (str, maxlen, *len);
+  c = STRING_CHAR_AND_LENGTH (str, *len);
   if (!CHAR_VALID_P (c, 1))
     /* We may not change the length here because other places in Emacs
        don't use this function, i.e. they silently accept invalid
@@ -1522,7 +1522,7 @@ string_pos_nchars_ahead (pos, string, nchars)
 
       while (nchars--)
 	{
-	  string_char_and_length (p, rest, &len);
+	  string_char_and_length (p, &len);
 	  p += len, rest -= len;
 	  xassert (rest >= 0);
 	  CHARPOS (pos) += 1;
@@ -1574,7 +1574,7 @@ c_string_pos (charpos, s, multibyte_p)
       SET_TEXT_POS (pos, 0, 0);
       while (charpos--)
 	{
-	  string_char_and_length (s, rest, &len);
+	  string_char_and_length (s, &len);
 	  s += len, rest -= len;
 	  xassert (rest >= 0);
 	  CHARPOS (pos) += 1;
@@ -1605,7 +1605,7 @@ number_of_chars (s, multibyte_p)
 
       for (nchars = 0; rest > 0; ++nchars)
 	{
-	  string_char_and_length (p, rest, &len);
+	  string_char_and_length (p, &len);
 	  rest -= len, p += len;
 	}
     }
@@ -3648,7 +3648,7 @@ face_before_or_after_it_pos (it, before_p)
 	  int c, len;
 	  struct face *face = FACE_FROM_ID (it->f, face_id);
 
-	  c = string_char_and_length (p, rest, &len);
+	  c = string_char_and_length (p, &len);
 	  face_id = FACE_FOR_CHAR (it->f, face, c, CHARPOS (pos), it->string);
 	}
     }
@@ -4650,7 +4650,7 @@ handle_composition_prop (it)
       pos_byte = IT_STRING_BYTEPOS (*it);
       string = it->string;
       s = SDATA (string) + pos_byte;
-      it->c = STRING_CHAR (s, 0);
+      it->c = STRING_CHAR (s);
     }
   else
     {
@@ -6217,8 +6217,8 @@ set_iterator_to_next (it, reseat_p)
    or `\003'.
 
    IT->dpvec holds the glyphs to return as characters.
-   IT->saved_face_id holds the face id before the display vector--
-   it is restored into IT->face_idin set_iterator_to_next.  */
+   IT->saved_face_id holds the face id before the display vector--it
+   is restored into IT->face_id in set_iterator_to_next.  */
 
 static int
 next_element_from_display_vector (it)
@@ -6312,7 +6312,7 @@ next_element_from_string (it)
 	  int remaining = SBYTES (it->string) - IT_STRING_BYTEPOS (*it);
 	  const unsigned char *s = (SDATA (it->string)
 				    + IT_STRING_BYTEPOS (*it));
-	  it->c = string_char_and_length (s, remaining, &it->len);
+	  it->c = string_char_and_length (s, &it->len);
 	}
       else
 	{
@@ -6348,7 +6348,7 @@ next_element_from_string (it)
 	  int maxlen = SBYTES (it->string) - IT_STRING_BYTEPOS (*it);
 	  const unsigned char *s = (SDATA (it->string)
 				    + IT_STRING_BYTEPOS (*it));
-	  it->c = string_char_and_length (s, maxlen, &it->len);
+	  it->c = string_char_and_length (s, &it->len);
 	}
       else
 	{
@@ -6404,8 +6404,7 @@ next_element_from_c_string (it)
 	 performance problem because there is no noticeable performance
 	 difference between Emacs running in unibyte or multibyte mode.  */
       int maxlen = strlen (it->s) - IT_BYTEPOS (*it);
-      it->c = string_char_and_length (it->s + IT_BYTEPOS (*it),
-				      maxlen, &it->len);
+      it->c = string_char_and_length (it->s + IT_BYTEPOS (*it), &it->len);
     }
   else
     it->c = it->s[IT_BYTEPOS (*it)], it->len = 1;
@@ -6416,7 +6415,7 @@ next_element_from_c_string (it)
 
 /* Set up IT to return characters from an ellipsis, if appropriate.
    The definition of the ellipsis glyphs may come from a display table
-   entry.  This function Fills IT with the first glyph from the
+   entry.  This function fills IT with the first glyph from the
    ellipsis if an ellipsis is to be displayed.  */
 
 static int
@@ -6535,7 +6534,7 @@ next_element_from_buffer (it)
       /* Get the next character, maybe multibyte.  */
       p = BYTE_POS_ADDR (IT_BYTEPOS (*it));
       if (it->multibyte_p && !ASCII_BYTE_P (*p))
-	it->c = STRING_CHAR_AND_LENGTH (p, 0, it->len);
+	it->c = STRING_CHAR_AND_LENGTH (p, it->len);
       else
 	it->c = *p, it->len = 1;
 
@@ -7756,7 +7755,7 @@ message_dolog (m, nbytes, nlflag, multibyte)
 	     for the *Message* buffer.  */
 	  for (i = 0; i < nbytes; i += char_bytes)
 	    {
-	      c = string_char_and_length (m + i, nbytes - i, &char_bytes);
+	      c = string_char_and_length (m + i, &char_bytes);
 	      work[0] = (ASCII_CHAR_P (c)
 			 ? c
 			 : multibyte_char_to_unibyte (c, Qnil));
@@ -9061,7 +9060,7 @@ set_message_1 (a1, a2, nbytes, multibyte_p)
 	  /* Convert a multibyte string to single-byte.  */
 	  for (i = 0; i < nbytes; i += n)
 	    {
-	      c = string_char_and_length (s + i, nbytes - i, &n);
+	      c = string_char_and_length (s + i, &n);
 	      work[0] = (ASCII_CHAR_P (c)
 			 ? c
 			 : multibyte_char_to_unibyte (c, Qnil));
@@ -15899,7 +15898,7 @@ get_overlay_arrow_glyph_row (w, overlay_arrow_string)
 
       /* Get the next character.  */
       if (multibyte_p)
-	it.c = string_char_and_length (p, arrow_len, &it.len);
+	it.c = string_char_and_length (p, &it.len);
       else
 	it.c = *p, it.len = 1;
       p += it.len;
@@ -16381,22 +16380,20 @@ cursor_row_p (w, row)
 
 
 /* Push the display property PROP so that it will be rendered at the
-   current position in IT.  */
+   current position in IT.  Return 1 if PROP was successfully pushed,
+   0 otherwise.  */
 
-static void
+static int
 push_display_prop (struct it *it, Lisp_Object prop)
 {
   push_it (it);
-
-  /* Never display a cursor on the prefix.  */
-  it->avoid_cursor_p = 1;
 
   if (STRINGP (prop))
     {
       if (SCHARS (prop) == 0)
 	{
 	  pop_it (it);
-	  return;
+	  return 0;
 	}
 
       it->string = prop;
@@ -16423,8 +16420,10 @@ push_display_prop (struct it *it, Lisp_Object prop)
   else
     {
       pop_it (it);		/* bogus display property, give up */
-      return;
+      return 0;
     }
+
+  return 1;
 }
 
 /* Return the character-property PROP at the current position in IT.  */
@@ -16464,13 +16463,13 @@ handle_line_prefix (struct it *it)
       if (NILP (prefix))
 	prefix = Vline_prefix;
     }
-  if (! NILP (prefix))
+  if (! NILP (prefix) && push_display_prop (it, prefix))
     {
-      push_display_prop (it, prefix);
       /* If the prefix is wider than the window, and we try to wrap
 	 it, it would acquire its own wrap prefix, and so on till the
 	 iterator stack overflows.  So, don't wrap the prefix.  */
       it->line_wrap = TRUNCATE;
+      it->avoid_cursor_p = 1;
     }
 }
 
@@ -18626,8 +18625,11 @@ decode_mode_spec (w, c, field_width, precision, multibyte)
 
     case '@':
       {
-	Lisp_Object val;
-	val = call1 (intern ("file-remote-p"), current_buffer->directory);
+	int count = inhibit_garbage_collection ();
+	Lisp_Object val = call1 (intern ("file-remote-p"),
+				 current_buffer->directory);
+	unbind_to (count, Qnil);
+
 	if (NILP (val))
 	  return "-";
 	else
@@ -20926,7 +20928,7 @@ produce_stretch_glyph (it)
 	{
 	  int maxlen = ((IT_BYTEPOS (*it) >= GPT ? ZV : GPT)
 			- IT_BYTEPOS (*it));
-	  it2.c = STRING_CHAR_AND_LENGTH (p, maxlen, it2.len);
+	  it2.c = STRING_CHAR_AND_LENGTH (p, it2.len);
 	}
       else
 	it2.c = *p, it2.len = 1;
@@ -21145,12 +21147,18 @@ x_produce_glyphs (it)
 				  &char2b, it->multibyte_p, 0);
       font = face->font;
 
-      /* When no suitable font found, use the default font.  */
       font_not_found_p = font == NULL;
       if (font_not_found_p)
 	{
-	  font = FRAME_FONT (it->f);
-	  boff = FRAME_BASELINE_OFFSET (it->f);
+	  /* When no suitable font found, display an empty box based
+	     on the metrics of the font of the default face (or what
+	     remapped).  */
+	  struct face *no_font_face
+	    = FACE_FROM_ID (it->f,
+			    NILP (Vface_remapping_alist) ? DEFAULT_FACE_ID
+			    : lookup_basic_face (it->f, DEFAULT_FACE_ID));
+	  font = no_font_face->font;
+	  boff = font->baseline_offset;
 	}
       else
 	{
@@ -21421,7 +21429,7 @@ x_produce_glyphs (it)
 		   at least one column.  */
 		char_width = 1;
 	      it->glyph_not_available_p = 1;
-	      it->pixel_width = FRAME_COLUMN_WIDTH (it->f) * char_width;
+	      it->pixel_width = font->space_width * char_width;
 	      it->phys_ascent = FONT_BASE (font) + boff;
 	      it->phys_descent = FONT_DESCENT (font) - boff;
 	    }
@@ -24616,7 +24624,7 @@ syms_of_xdisp ()
   Vmessage_stack = Qnil;
   staticpro (&Vmessage_stack);
 
-  Qinhibit_redisplay = intern ("inhibit-redisplay");
+  Qinhibit_redisplay = intern_c_string ("inhibit-redisplay");
   staticpro (&Qinhibit_redisplay);
 
   message_dolog_marker1 = Fmake_marker ();
@@ -24642,133 +24650,133 @@ syms_of_xdisp ()
   defsubr (&Sinvisible_p);
 
   staticpro (&Qmenu_bar_update_hook);
-  Qmenu_bar_update_hook = intern ("menu-bar-update-hook");
+  Qmenu_bar_update_hook = intern_c_string ("menu-bar-update-hook");
 
   staticpro (&Qoverriding_terminal_local_map);
-  Qoverriding_terminal_local_map = intern ("overriding-terminal-local-map");
+  Qoverriding_terminal_local_map = intern_c_string ("overriding-terminal-local-map");
 
   staticpro (&Qoverriding_local_map);
-  Qoverriding_local_map = intern ("overriding-local-map");
+  Qoverriding_local_map = intern_c_string ("overriding-local-map");
 
   staticpro (&Qwindow_scroll_functions);
-  Qwindow_scroll_functions = intern ("window-scroll-functions");
+  Qwindow_scroll_functions = intern_c_string ("window-scroll-functions");
 
   staticpro (&Qwindow_text_change_functions);
-  Qwindow_text_change_functions = intern ("window-text-change-functions");
+  Qwindow_text_change_functions = intern_c_string ("window-text-change-functions");
 
   staticpro (&Qredisplay_end_trigger_functions);
-  Qredisplay_end_trigger_functions = intern ("redisplay-end-trigger-functions");
+  Qredisplay_end_trigger_functions = intern_c_string ("redisplay-end-trigger-functions");
 
   staticpro (&Qinhibit_point_motion_hooks);
-  Qinhibit_point_motion_hooks = intern ("inhibit-point-motion-hooks");
+  Qinhibit_point_motion_hooks = intern_c_string ("inhibit-point-motion-hooks");
 
-  Qeval = intern ("eval");
+  Qeval = intern_c_string ("eval");
   staticpro (&Qeval);
 
-  QCdata = intern (":data");
+  QCdata = intern_c_string (":data");
   staticpro (&QCdata);
-  Qdisplay = intern ("display");
+  Qdisplay = intern_c_string ("display");
   staticpro (&Qdisplay);
-  Qspace_width = intern ("space-width");
+  Qspace_width = intern_c_string ("space-width");
   staticpro (&Qspace_width);
-  Qraise = intern ("raise");
+  Qraise = intern_c_string ("raise");
   staticpro (&Qraise);
-  Qslice = intern ("slice");
+  Qslice = intern_c_string ("slice");
   staticpro (&Qslice);
-  Qspace = intern ("space");
+  Qspace = intern_c_string ("space");
   staticpro (&Qspace);
-  Qmargin = intern ("margin");
+  Qmargin = intern_c_string ("margin");
   staticpro (&Qmargin);
-  Qpointer = intern ("pointer");
+  Qpointer = intern_c_string ("pointer");
   staticpro (&Qpointer);
-  Qleft_margin = intern ("left-margin");
+  Qleft_margin = intern_c_string ("left-margin");
   staticpro (&Qleft_margin);
-  Qright_margin = intern ("right-margin");
+  Qright_margin = intern_c_string ("right-margin");
   staticpro (&Qright_margin);
-  Qcenter = intern ("center");
+  Qcenter = intern_c_string ("center");
   staticpro (&Qcenter);
-  Qline_height = intern ("line-height");
+  Qline_height = intern_c_string ("line-height");
   staticpro (&Qline_height);
-  QCalign_to = intern (":align-to");
+  QCalign_to = intern_c_string (":align-to");
   staticpro (&QCalign_to);
-  QCrelative_width = intern (":relative-width");
+  QCrelative_width = intern_c_string (":relative-width");
   staticpro (&QCrelative_width);
-  QCrelative_height = intern (":relative-height");
+  QCrelative_height = intern_c_string (":relative-height");
   staticpro (&QCrelative_height);
-  QCeval = intern (":eval");
+  QCeval = intern_c_string (":eval");
   staticpro (&QCeval);
-  QCpropertize = intern (":propertize");
+  QCpropertize = intern_c_string (":propertize");
   staticpro (&QCpropertize);
-  QCfile = intern (":file");
+  QCfile = intern_c_string (":file");
   staticpro (&QCfile);
-  Qfontified = intern ("fontified");
+  Qfontified = intern_c_string ("fontified");
   staticpro (&Qfontified);
-  Qfontification_functions = intern ("fontification-functions");
+  Qfontification_functions = intern_c_string ("fontification-functions");
   staticpro (&Qfontification_functions);
-  Qtrailing_whitespace = intern ("trailing-whitespace");
+  Qtrailing_whitespace = intern_c_string ("trailing-whitespace");
   staticpro (&Qtrailing_whitespace);
-  Qescape_glyph = intern ("escape-glyph");
+  Qescape_glyph = intern_c_string ("escape-glyph");
   staticpro (&Qescape_glyph);
-  Qnobreak_space = intern ("nobreak-space");
+  Qnobreak_space = intern_c_string ("nobreak-space");
   staticpro (&Qnobreak_space);
-  Qimage = intern ("image");
+  Qimage = intern_c_string ("image");
   staticpro (&Qimage);
-  QCmap = intern (":map");
+  QCmap = intern_c_string (":map");
   staticpro (&QCmap);
-  QCpointer = intern (":pointer");
+  QCpointer = intern_c_string (":pointer");
   staticpro (&QCpointer);
-  Qrect = intern ("rect");
+  Qrect = intern_c_string ("rect");
   staticpro (&Qrect);
-  Qcircle = intern ("circle");
+  Qcircle = intern_c_string ("circle");
   staticpro (&Qcircle);
-  Qpoly = intern ("poly");
+  Qpoly = intern_c_string ("poly");
   staticpro (&Qpoly);
-  Qmessage_truncate_lines = intern ("message-truncate-lines");
+  Qmessage_truncate_lines = intern_c_string ("message-truncate-lines");
   staticpro (&Qmessage_truncate_lines);
-  Qgrow_only = intern ("grow-only");
+  Qgrow_only = intern_c_string ("grow-only");
   staticpro (&Qgrow_only);
-  Qinhibit_menubar_update = intern ("inhibit-menubar-update");
+  Qinhibit_menubar_update = intern_c_string ("inhibit-menubar-update");
   staticpro (&Qinhibit_menubar_update);
-  Qinhibit_eval_during_redisplay = intern ("inhibit-eval-during-redisplay");
+  Qinhibit_eval_during_redisplay = intern_c_string ("inhibit-eval-during-redisplay");
   staticpro (&Qinhibit_eval_during_redisplay);
-  Qposition = intern ("position");
+  Qposition = intern_c_string ("position");
   staticpro (&Qposition);
-  Qbuffer_position = intern ("buffer-position");
+  Qbuffer_position = intern_c_string ("buffer-position");
   staticpro (&Qbuffer_position);
-  Qobject = intern ("object");
+  Qobject = intern_c_string ("object");
   staticpro (&Qobject);
-  Qbar = intern ("bar");
+  Qbar = intern_c_string ("bar");
   staticpro (&Qbar);
-  Qhbar = intern ("hbar");
+  Qhbar = intern_c_string ("hbar");
   staticpro (&Qhbar);
-  Qbox = intern ("box");
+  Qbox = intern_c_string ("box");
   staticpro (&Qbox);
-  Qhollow = intern ("hollow");
+  Qhollow = intern_c_string ("hollow");
   staticpro (&Qhollow);
-  Qhand = intern ("hand");
+  Qhand = intern_c_string ("hand");
   staticpro (&Qhand);
-  Qarrow = intern ("arrow");
+  Qarrow = intern_c_string ("arrow");
   staticpro (&Qarrow);
-  Qtext = intern ("text");
+  Qtext = intern_c_string ("text");
   staticpro (&Qtext);
-  Qrisky_local_variable = intern ("risky-local-variable");
+  Qrisky_local_variable = intern_c_string ("risky-local-variable");
   staticpro (&Qrisky_local_variable);
-  Qinhibit_free_realized_faces = intern ("inhibit-free-realized-faces");
+  Qinhibit_free_realized_faces = intern_c_string ("inhibit-free-realized-faces");
   staticpro (&Qinhibit_free_realized_faces);
 
-  list_of_error = Fcons (Fcons (intern ("error"),
-				Fcons (intern ("void-variable"), Qnil)),
+  list_of_error = Fcons (Fcons (intern_c_string ("error"),
+				Fcons (intern_c_string ("void-variable"), Qnil)),
 			 Qnil);
   staticpro (&list_of_error);
 
-  Qlast_arrow_position = intern ("last-arrow-position");
+  Qlast_arrow_position = intern_c_string ("last-arrow-position");
   staticpro (&Qlast_arrow_position);
-  Qlast_arrow_string = intern ("last-arrow-string");
+  Qlast_arrow_string = intern_c_string ("last-arrow-string");
   staticpro (&Qlast_arrow_string);
 
-  Qoverlay_arrow_string = intern ("overlay-arrow-string");
+  Qoverlay_arrow_string = intern_c_string ("overlay-arrow-string");
   staticpro (&Qoverlay_arrow_string);
-  Qoverlay_arrow_bitmap = intern ("overlay-arrow-bitmap");
+  Qoverlay_arrow_bitmap = intern_c_string ("overlay-arrow-bitmap");
   staticpro (&Qoverlay_arrow_bitmap);
 
   echo_buffer[0] = echo_buffer[1] = Qnil;
@@ -24779,7 +24787,7 @@ syms_of_xdisp ()
   staticpro (&echo_area_buffer[0]);
   staticpro (&echo_area_buffer[1]);
 
-  Vmessages_buffer_name = build_string ("*Messages*");
+  Vmessages_buffer_name = make_pure_c_string ("*Messages*");
   staticpro (&Vmessages_buffer_name);
 
   mode_line_proptrans_alist = Qnil;
@@ -24849,14 +24857,14 @@ See also `overlay-arrow-string'.  */);
   DEFVAR_LISP ("overlay-arrow-string", &Voverlay_arrow_string,
     doc: /* String to display as an arrow in non-window frames.
 See also `overlay-arrow-position'.  */);
-  Voverlay_arrow_string = build_string ("=>");
+  Voverlay_arrow_string = make_pure_c_string ("=>");
 
   DEFVAR_LISP ("overlay-arrow-variable-list", &Voverlay_arrow_variable_list,
     doc: /* List of variables (symbols) which hold markers for overlay arrows.
 The symbols on this list are examined during redisplay to determine
 where to display overlay arrows.  */);
   Voverlay_arrow_variable_list
-    = Fcons (intern ("overlay-arrow-position"), Qnil);
+    = Fcons (intern_c_string ("overlay-arrow-position"), Qnil);
 
   DEFVAR_INT ("scroll-step", &scroll_step,
     doc: /* *The number of lines to try scrolling a window by when point moves out.
@@ -24950,14 +24958,14 @@ and is used only on frames for which no explicit name has been set
 \(see `modify-frame-parameters').  */);
   Vicon_title_format
     = Vframe_title_format
-    = Fcons (intern ("multiple-frames"),
-	     Fcons (build_string ("%b"),
-		    Fcons (Fcons (empty_unibyte_string,
-				  Fcons (intern ("invocation-name"),
-					 Fcons (build_string ("@"),
-						Fcons (intern ("system-name"),
-							       Qnil)))),
-			   Qnil)));
+    = pure_cons (intern_c_string ("multiple-frames"),
+		 pure_cons (make_pure_c_string ("%b"),
+			    pure_cons (pure_cons (empty_unibyte_string,
+						  pure_cons (intern_c_string ("invocation-name"),
+							     pure_cons (make_pure_c_string ("@"),
+									pure_cons (intern_c_string ("system-name"),
+										   Qnil)))),
+				       Qnil)));
 
   DEFVAR_LISP ("message-log-max", &Vmessage_log_max,
     doc: /* Maximum number of lines to keep in the message log buffer.
@@ -25098,7 +25106,7 @@ the frame's other specifications determine how to blink the cursor off.  */);
   DEFVAR_BOOL ("auto-hscroll-mode", &automatic_hscrolling_p,
     doc: /* *Non-nil means scroll the display automatically to make point visible.  */);
   automatic_hscrolling_p = 1;
-  Qauto_hscroll_mode = intern ("auto-hscroll-mode");
+  Qauto_hscroll_mode = intern_c_string ("auto-hscroll-mode");
   staticpro (&Qauto_hscroll_mode);
 
   DEFVAR_INT ("hscroll-margin", &hscroll_margin,
@@ -25156,7 +25164,7 @@ property.
 To add a prefix to non-continuation lines, use `line-prefix'.  */);
   Vwrap_prefix = Qnil;
   staticpro (&Qwrap_prefix);
-  Qwrap_prefix = intern ("wrap-prefix");
+  Qwrap_prefix = intern_c_string ("wrap-prefix");
   Fmake_variable_buffer_local (Qwrap_prefix);
 
   DEFVAR_LISP ("line-prefix", &Vline_prefix,
@@ -25170,7 +25178,7 @@ property.
 To add a prefix to continuation lines, use `wrap-prefix'.  */);
   Vline_prefix = Qnil;
   staticpro (&Qline_prefix);
-  Qline_prefix = intern ("line-prefix");
+  Qline_prefix = intern_c_string ("line-prefix");
   Fmake_variable_buffer_local (Qline_prefix);
 
   DEFVAR_BOOL ("inhibit-eval-during-redisplay", &inhibit_eval_during_redisplay,

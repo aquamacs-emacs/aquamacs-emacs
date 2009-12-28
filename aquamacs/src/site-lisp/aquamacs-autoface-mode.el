@@ -103,10 +103,10 @@ The faces are then to be used with `aquamacs-autoface-mode'."
 	 (when (assq 'font style)
 	   (set-face-font face (cdr (assq 'font style)) nil))
        mode))
-     aquamacs-default-styles)
+     aquamacs-default-styles))
     (if (and (fboundp 'aquamacs-styles) (boundp 'aquamacs-styles) aquamacs-styles)
 	;; this should ensure that styles is not kept `on' in custom-file.
-	(aquamacs-styles 0)))))
+	(aquamacs-styles 0))))
 
 (defun aquamacs-autoface-mark-face-to-save (face &optional dont-save)
   "Ensure FACE will be saved to `custom-file'."
@@ -333,8 +333,7 @@ modify them."))
   "Clear all autofaces."
   (interactive)
   (when (boundp 'aquamacs-default-styles)
-      (setq aquamacs-default-styles nil)
-      (setq aquamacs-buffer-default-styles nil))
+      (setq aquamacs-default-styles nil))
   (when aquamacs-styles-mode
     (aquamacs-styles-mode 0))
   ;; reset the face
@@ -770,7 +769,7 @@ modified, or in FRAME if given."
 		 aquamacs-autoface-set-for-mode
 		 (eq aquamacs-autoface-set-for-mode major-mode))
 
-	  (with-temp-message (unless (eq major-mode default-major-mode)
+	  (with-temp-message (unless (eq major-mode (default-value 'major-mode))
 			       (format "Warning: Bug in %s: it forgets to call `run-mode-hooks'" major-mode))
 			     (aquamacs-set-autoface buf)))))))
 

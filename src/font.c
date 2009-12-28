@@ -79,14 +79,13 @@ struct table_entry
   int numeric;
   /* The first one is a valid name as a face attribute.
      The second one (if any) is a typical name in XLFD field.  */
-  char *names[5];
-  Lisp_Object *symbols;
+  const char *names[5];
 };
 
 /* Table of weight numeric values and their names.  This table must be
    sorted by numeric values in ascending order.  */
 
-static struct table_entry weight_table[] =
+static const struct table_entry weight_table[] =
 {
   { 0, { "thin" }},
   { 20, { "ultra-light", "ultralight" }},
@@ -103,7 +102,7 @@ static struct table_entry weight_table[] =
 /* Table of slant numeric values and their names.  This table must be
    sorted by numeric values in ascending order.  */
 
-static struct table_entry slant_table[] =
+static const struct table_entry slant_table[] =
 {
   { 0, { "reverse-oblique", "ro" }},
   { 10, { "reverse-italic", "ri" }},
@@ -115,7 +114,7 @@ static struct table_entry slant_table[] =
 /* Table of width numeric values and their names.  This table must be
    sorted by numeric values in ascending order.  */
 
-static struct table_entry width_table[] =
+static const struct table_entry width_table[] =
 {
   { 50, { "ultra-condensed", "ultracondensed" }},
   { 63, { "extra-condensed", "extracondensed" }},
@@ -219,7 +218,7 @@ font_make_object (size, entity, pixelsize)
 	font->props[i] = AREF (entity, i);
       if (! NILP (AREF (entity, FONT_EXTRA_INDEX)))
 	font->props[FONT_EXTRA_INDEX]
-	  = Fcopy_sequence (AREF (entity, FONT_EXTRA_INDEX));
+	  = Fcopy_alist (AREF (entity, FONT_EXTRA_INDEX));
     }
   if (size > 0)
     font->props[FONT_SIZE_INDEX] = make_number (pixelsize);
@@ -719,15 +718,15 @@ font_put_extra (font, prop, val)
     {
       Lisp_Object prev = Qnil;
 
-      if (NILP (val))
-	return val;
       while (CONSP (extra)
 	     && NILP (Fstring_lessp (prop, XCAR (XCAR (extra)))))
 	prev = extra, extra = XCDR (extra);
+
       if (NILP (prev))
-	ASET (font, FONT_EXTRA_INDEX, Fcons (Fcons (prop, val), extra));
+        ASET (font, FONT_EXTRA_INDEX, Fcons (Fcons (prop, val), extra));
       else
-	XSETCDR (prev, Fcons (Fcons (prop, val), extra));
+        XSETCDR (prev, Fcons (Fcons (prop, val), extra));
+
       return val;
     }
   XSETCDR (slot, val);
@@ -1432,6 +1431,8 @@ font_parse_fcname (name, font)
 
   if (family_end)
     {
+      Lisp_Object extra_props = Qnil;
+
       /* A fontconfig name with size and/or property data.  */
       if (family_end > name)
 	{
@@ -1505,13 +1506,25 @@ font_parse_fcname (name, font)
 
 		  if (prop >= FONT_FOUNDRY_INDEX
 		      && prop < FONT_EXTRA_INDEX)
-		    ASET (font, prop, font_prop_validate (prop, Qnil, val));
+                    ASET (font, prop, font_prop_validate (prop, Qnil, val));
 		  else
-		    Ffont_put (font, key, val);
+                    {
+                      extra_props = nconc2 (extra_props,
+                                            Fcons (Fcons (key, val), Qnil));
+                    }
 		}
 	      p = q;
 	    }
 	}
+
+      if (! NILP (extra_props))
+        {
+          struct font_driver_list *driver_list = font_driver_list;
+          for ( ; driver_list; driver_list = driver_list->next)
+            if (driver_list->driver->filter_properties)
+              (*driver_list->driver->filter_properties) (font, extra_props);
+        }
+
     }
   else
     {
@@ -2390,7 +2403,7 @@ font_sort_entities (list, prefer, frame, best_only)
     {
       int font_driver_preference = 0;
       Lisp_Object current_font_driver;
-      
+
       if (best_only)
 	vec = XCAR (tail);
       len = ASIZE (vec);
@@ -2829,8 +2842,8 @@ font_delete_unmatched (vec, spec, size)
 
 
 /* Return a list of vectors of font-entities matching with SPEC on
-   FRAME.  The elements of the list are in the same of order of
-   font-drivers.  */
+   FRAME.  Each elements in the list is a vector of entities from the
+   same font-driver.  */
 
 Lisp_Object
 font_list_entities (frame, spec)
@@ -2976,11 +2989,15 @@ font_open_entity (f, entity, pixel_size)
   else if (CONSP (Vface_font_rescale_alist))
     scaled_pixel_size = pixel_size * font_rescale_ratio (entity);
 
+#if 0
+  /* This doesn't work if you have changed hinting or any other parameter.
+     We need to make a new object in every case to be sure. */
   for (objlist = AREF (entity, FONT_OBJLIST_INDEX); CONSP (objlist);
        objlist = XCDR (objlist))
     if (! NILP (AREF (XCAR (objlist), FONT_TYPE_INDEX))
 	&& XFONT_OBJECT (XCAR (objlist))->pixel_size == pixel_size)
       return  XCAR (objlist);
+#endif
 
   val = AREF (entity, FONT_TYPE_INDEX);
   for (driver_list = f->font_driver_list;
@@ -2990,7 +3007,8 @@ font_open_entity (f, entity, pixel_size)
     return Qnil;
 
   font_object = driver_list->driver->open (f, entity, scaled_pixel_size);
-  ASET (font_object, FONT_SIZE_INDEX, make_number (pixel_size));
+  if (!NILP (font_object))
+    ASET (font_object, FONT_SIZE_INDEX, make_number (pixel_size));
   FONT_ADD_LOG ("open", entity, font_object);
   if (NILP (font_object))
     return Qnil;
@@ -3156,12 +3174,14 @@ font_clear_prop (attrs, prop)
 
   if (! FONTP (font))
     return;
+#if 0
   if (! NILP (Ffont_get (font, QCname)))
     {
       font = Fcopy_font_spec (font);
       font_put_extra (font, QCname, Qnil);
     }
 
+#endif
   if (NILP (AREF (font, prop))
       && prop != FONT_FAMILY_INDEX
       && prop != FONT_FOUNDRY_INDEX
@@ -3439,7 +3459,7 @@ font_find_for_lface (f, attrs, spec, c)
 		      val = font_select_entity (frame, entities,
 						attrs, pixel_size, c);
 		      if (! NILP (val))
-			return val;
+                        return val;
 		    }
 		}
 	    }
@@ -3501,7 +3521,7 @@ font_load_for_lface (f, attrs, spec)
      FRAME_PTR f;
      Lisp_Object *attrs, spec;
 {
-  Lisp_Object entity;
+  Lisp_Object entity, name;
 
   entity = font_find_for_lface (f, attrs, spec, -1);
   if (NILP (entity))
@@ -3513,7 +3533,16 @@ font_load_for_lface (f, attrs, spec)
       if (NILP (entity))
 	return Qnil;
     }
-  return font_open_for_lface (f, entity, attrs, spec);
+  /* Don't loose the original name that was put in initially.  We need
+     it to re-apply the font when font parameters (like hinting or dpi) have
+     changed.  */
+  entity = font_open_for_lface (f, entity, attrs, spec);
+  if (!NILP (entity))
+    {
+      name = Ffont_get (spec, QCname);
+      if (STRINGP (name)) font_put_extra (entity, QCname, name);
+    }
+  return entity;
 }
 
 
@@ -3577,12 +3606,17 @@ font_open_by_name (f, name)
      char *name;
 {
   Lisp_Object args[2];
-  Lisp_Object spec;
+  Lisp_Object spec, ret;
 
   args[0] = QCname;
   args[1] = make_unibyte_string (name, strlen (name));
   spec = Ffont_spec (2, args);
-  return font_open_by_spec (f, spec);
+  ret = font_open_by_spec (f, spec);
+  /* Do not loose name originally put in.  */
+  if (!NILP (ret))
+    font_put_extra (ret, QCname, args[1]);
+
+  return ret;
 }
 
 
@@ -3840,7 +3874,7 @@ font_at (c, pos, face, w, string)
 	      EMACS_INT pos_byte = string_char_to_byte (string, pos);
 
 	      str = SDATA (string) + pos_byte;
-	      c = STRING_CHAR (str, 0);
+	      c = STRING_CHAR (str);
 	    }
 	  else
 	    c = SDATA (string)[pos];
@@ -4114,7 +4148,7 @@ DEFUN ("copy-font-spec", Fcopy_font_spec, Scopy_font_spec, 1, 1, 0,
   new_spec = font_make_spec ();
   for (i = 1; i < FONT_EXTRA_INDEX; i++)
     ASET (new_spec, i, AREF (font, i));
-  extra = Fcopy_sequence (AREF (font, FONT_EXTRA_INDEX));
+  extra = Fcopy_alist (AREF (font, FONT_EXTRA_INDEX));
   /* We must remove :font-entity property.  */
   for (prev = Qnil, tail = extra; CONSP (tail); prev = tail, tail = XCDR (tail))
     if (EQ (XCAR (XCAR (tail)), QCfont_entity))
@@ -4445,15 +4479,15 @@ DEFUN ("clear-font-cache", Fclear_font_cache, Sclear_font_cache, 0, 0, 0,
 	if (driver_list->on)
 	  {
 	    Lisp_Object cache = driver_list->driver->get_cache (f);
-	    Lisp_Object val;
+	    Lisp_Object val, tmp;
 
 	    val = XCDR (cache);
 	    while (! NILP (val)
 		   && ! EQ (XCAR (XCAR (val)), driver_list->driver->type))
 	      val = XCDR (val);
 	    font_assert (! NILP (val));
-	    val = XCDR (XCAR (val));
-	    if (XINT (XCAR (val)) == 0)
+	    tmp = XCDR (XCAR (val));
+	    if (XINT (XCAR (tmp)) == 0)
 	      {
 		font_clear_cache (f, XCAR (val), driver_list->driver);
 		XSETCDR (cache, XCDR (val));
@@ -5063,7 +5097,7 @@ build_style_table (entry, nelement)
       elt = Fmake_vector (make_number (j + 1), Qnil);
       ASET (elt, 0, make_number (entry[i].numeric));
       for (j = 0; entry[i].names[j]; j++)
-	ASET (elt, j + 1, intern (entry[i].names[j]));
+	ASET (elt, j + 1, intern_c_string (entry[i].names[j]));
       ASET (table, i, elt);
     }
   return table;
