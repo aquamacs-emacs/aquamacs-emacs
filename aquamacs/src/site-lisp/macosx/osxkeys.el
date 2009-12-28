@@ -640,23 +640,29 @@ but select the newly created window."
    map) "Keymap for the Aquamacs context menu.")
 
 (defvar aquamacs-popup-context-menu-buffers-state nil)
-(defun aquamacs-popup-context-menu  (event &optional  prefix)
+
+(defun aquamacs-popup-context-menu  (event beg end &optional  prefix)
   "Popup a context menu. 
 Its content is specified in the keymap `aquamacs-context-menu-map'."
-  (interactive "@e \nP")
+  (interactive "@e \nr \nP")
   ;; Let the mode update its menus first.
   (aquamacs-update-context-menus)
-  
-  ;; move popup menu a little so mouse pointer is over first entry
-  ;; not needed
-  ;; ((pos
-  ;; 	 (if (not (eq (event-basic-type event) 'mouse-3))
-  ;; 	     event
-  ;; 	   (list (lispost (- (car (nth 2 (car (cdr event)))) 0)
-  ;; 		       (- (cdr (nth 2 (car (cdr event)))) 0))
-  ;; 		 (car (car (cdr event)))))))
-  
-    (popup-menu aquamacs-context-menu-map event prefix))
+  ;; if mouse position is not within the active region, 
+  ;;   set region to word or whitespace at mouse position
+  (unless (and mark-active transient-mark-mode
+	       (> (posn-point (event-start event)) beg)
+	       (< (posn-point (event-start event)) end))
+    (mouse-set-point event)
+    (let* ((bounds (or (bounds-of-thing-at-point 'word)
+		       (bounds-of-thing-at-point 'whitespace)))
+	   (start-bound (car bounds))
+	   (end-bound (cdr bounds)))
+      (goto-char end-bound)
+      (push-mark start-bound 'no-msg 'activate))
+    ;; ensure that highlighting is updated before context menu display
+    (redisplay))
+  ;; popup the menu.
+  (popup-menu aquamacs-context-menu-map event prefix))
 
 (defun aquamacs-update-context-menus (&optional force)
   "Update the buffer- and mode-specific items in
@@ -712,14 +718,14 @@ set to `mouse-save-then-kill'."
 	(apply cmd 
 	       event prefix))))) 
 
-(defun osx-key-mode-down-mouse-3 (event &optional prefix)
+(defun osx-key-mode-down-mouse-3 (event beg end &optional prefix)
   "Activate context menu, when `osx-key-mode-mouse-3-behavior' is
 set to `aquamacs-popup-context-menu' or nil"
-  (interactive "@e \nP")
+  (interactive "@e \nr \nP")
   (if (or
 	 (eq osx-key-mode-mouse-3-behavior #'aquamacs-popup-context-menu)
 	 (not osx-key-mode-mouse-3-behavior))
-    (aquamacs-popup-context-menu event prefix)))
+    (aquamacs-popup-context-menu event beg end prefix)))
 
 (defun make-osx-key-low-priority-map (&optional command-key)
 
