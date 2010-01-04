@@ -2470,23 +2470,23 @@ But don't look beyond what's visible on the screen."
   "Pop up a menu of possible corrections for a misspelled word.
 The word checked is the word at the mouse position."
   (interactive "e \nr")
-  ;; if mouse position is not within the active region, 
-  ;;   set region to word or whitespace at mouse position
+  ;; If mouse position is not within the active region, 
+  ;;  set region to word at mouse position.
   (let (save)
     (if (and mark-active transient-mark-mode
-	     (> (posn-point (event-start event)) beg)
+	     (>= (posn-point (event-start event)) beg)
 	     (< (posn-point (event-start event)) end))
 	(progn (setq save (point))
 	       (mouse-set-point event))
       (mouse-set-point event)
-      (let* ((bounds (or (bounds-of-thing-at-point 'word)
-			 (bounds-of-thing-at-point 'whitespace)))
+      (let* ((bounds (bounds-of-thing-at-point 'word))
 	     (start-bound (car bounds))
 	     (end-bound (cdr bounds)))
+	;; set region
 	(goto-char end-bound)
 	(push-mark start-bound 'no-msg 'activate))
+      ;; ensure that highlighting is updated before context menu display
       (redisplay))
-    ;; ensure that highlighting is updated before context menu display
     (flyspell-correct-word-before-point event save)
     (setq deactivate-mark nil)))
 
