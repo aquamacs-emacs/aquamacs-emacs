@@ -60,7 +60,7 @@ GNUstep port and post-20 update by Adrian Robert (arobert@cogsci.ucsd.edu)
 
 
 /* call tracing */
-#if 1
+#if 0
 int term_trace_num = 0;
 #define NSTRACE(x)        fprintf (stderr, "%s:%d: [%d] " #x "\n",         \
                                 __FILE__, __LINE__, ++term_trace_num)
@@ -3548,15 +3548,19 @@ FRAME_PTR f;
 	      
 	      [view enterFullScreenMode:[[view window] screen]
 	      		    withOptions:opts];
-
+	      FRAME_NS_WINDOW (f) = [view window];
 	      // causes black screen.
 	      //[[view window] setLevel:[NSNumber numberWithInt:NSNormalWindowLevel]];
+
 	      fs = 1;
 	      [NSCursor setHiddenUntilMouseMoves:YES];
 
 	      break;
 	    default:
 	      [view exitFullScreenModeWithOptions: nil];
+	      FRAME_NS_WINDOW (f) = [view window];
+	      /* restore from fullscreen NSWindow: */
+	      [[view window] makeFirstResponder: view];
 	    }
 
 	  NSRect vr = [view frame];
@@ -3657,9 +3661,6 @@ FRAME_PTR f;
 	     Miniaturizing/de-m. removes flicker.  Why? */
 
 	  FRAME_NS_DISPLAY_INFO (f)->x_focus_frame = f;
-
-	  mark_window_cursors_off (XWINDOW (f->root_window));
-
 
 	  FRAME_PIXEL_WIDTH (f) = width;
 	  FRAME_PIXEL_HEIGHT (f) = height;

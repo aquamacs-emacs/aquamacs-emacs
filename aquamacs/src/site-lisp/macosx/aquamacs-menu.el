@@ -1193,8 +1193,11 @@ Unlike `mac-toggle-full-frame', this will do a better job at remembering
 the previous frame size."
   (interactive)
   (if (frame-parameter nil 'fullscreen)    ;(frame-full-screen-p)
-      (modify-frame-parameters 
-       nil (list (cons 'fullscreen nil)))
+      (progn (modify-frame-parameters 
+	      nil (list (cons 'fullscreen nil)))
+	     ;; workaround for scrollbar flicker problem:
+	     (make-frame-invisible) (sit-for 0)
+	     (make-frame-visible))
     ;; save small frame position
     (smart-move-frame-inside-screen)
     (modify-frame-parameters 
