@@ -5660,12 +5660,12 @@ extern void update_window_cursor (struct window *w, int on);
 
   tem = f->name;
   name = [NSString stringWithUTF8String:
-                   NILP (tem) ? (unsigned char *)"Emacs" : SDATA (tem)];
+                   NILP (tem) ? (unsigned char *)"Aquamacs" : SDATA (tem)];
   [win setTitle: name];
 
   /* toolbar support */
   toolbar = [[EmacsToolbar alloc] initForView: self withIdentifier:
-                         [NSString stringWithFormat: @"Emacs Frame %d",
+                         [NSString stringWithFormat: @"Aquamacs Frame %d",
                                    ns_window_num]];
   [win setToolbar: toolbar];
   [toolbar setVisible: NO];
