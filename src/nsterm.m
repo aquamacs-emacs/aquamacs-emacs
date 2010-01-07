@@ -154,6 +154,12 @@ extern Lisp_Object Qcursor_color, Qcursor_type, Qns;
    the Alternate modifer.  May be Qnone or any of the modifier lisp symbols. */
 Lisp_Object ns_alternate_modifier;
 
+/* List of key codes (numbers) identifying keys for which 
+ns_alternate_modifier and ns_right_alternate_modifier do not apply.
+If those keys are entered with the Alternate modifier, the modifier
+will be reported as Meta. */
+Lisp_Object ns_alternate_meta_special_codes;
+
 /* Specifies which emacs modifier should be generated when NS receives
    the Right Alternate modifer. Any of the modifier lisp symbols can be
    used; Qnone falls back to ns_alternate_modifier. */
@@ -4947,8 +4953,9 @@ extern void update_window_cursor (struct window *w, int on);
           emacs_event->modifiers |=
             parse_solitary_modifier (ns_function_modifier);
 
-      if (!EQ (ns_right_alternate_modifier, Qnone) && 
-	  ((flags & NSRightAlternateKeyMask) == NSRightAlternateKeyMask)) 
+      if (!EQ (ns_right_alternate_modifier, Qnone) 
+	  && NILP (Fmember (make_number (code), ns_alternate_meta_special_codes))
+	  && ((flags & NSRightAlternateKeyMask) == NSRightAlternateKeyMask)) 
 	{
 	  if (NILP (ns_right_alternate_modifier) && !fnKeysym)
 	    {   /* accept pre-interp alt comb */
@@ -4960,18 +4967,30 @@ extern void update_window_cursor (struct window *w, int on);
 	}
       else if (flags & NSAlternateKeyMask) /* default = meta */
 	{
-	  if ((NILP (ns_alternate_modifier) || EQ (ns_alternate_modifier, Qnone))
-	      && !fnKeysym)
-	    {   /* accept pre-interp alt comb */
-	      if ([[theEvent characters] length] > 0)
-		code = [[theEvent characters] characterAtIndex: 0];
-	      /*HACK: clear lone shift modifier to stop next if from firing */
-	      if (emacs_event->modifiers == shift_modifier)
-		emacs_event->modifiers = 0;
+	  /* The better way to do this would be to add Meta to every key for 
+	     which the Option modifier doesn't change the character code.
+	     However, we can't find out about this in pure Cocoa
+	     (UCKeyTranslate seems to be needed).
+	     Thus, we have to use the manual route via 
+	     ns_alternate_meta_special_codes. */
+	  if (NILP (Fmember (make_number (code), ns_alternate_meta_special_codes)))
+	    {
+	      if ((NILP (ns_alternate_modifier) || EQ (ns_alternate_modifier, Qnone))
+		  && !fnKeysym)
+		{
+		  /* accept pre-interp alt comb */
+		  if ([[theEvent characters] length] > 0)
+		    code = [[theEvent characters] characterAtIndex: 0];
+		  /*HACK: clear lone shift modifier to stop next if from firing */
+		  if (emacs_event->modifiers == shift_modifier)
+		    emacs_event->modifiers = 0;
+		}
+	      else
+		emacs_event->modifiers |=
+		  parse_solitary_modifier (ns_alternate_modifier);
 	    }
 	  else
-	    emacs_event->modifiers |=
-	      parse_solitary_modifier (ns_alternate_modifier);
+	    emacs_event->modifiers |= meta_modifier;
 	}
 
   if (NS_KEYLOG)
@@ -6749,6 +6768,12 @@ alternate or option key.  Set to control, meta, alt, super, or hyper
 means it is taken to be that key.  Set to none means that the
 alternate / option key is not interpreted by Emacs at all, allowing it
 to be used at a lower level for accented character entry. */);
+
+  DEFVAR_LISP ("ns-alternate-meta-special-codes", &ns_alternate_meta_special_codes,
+               doc: /* List of key codes (numbers) identifying special keys.
+For these special keys, ns_alternate_modifier and ns_right_alternate_modifier do not apply.
+If those keys are entered with the Alternate modifier, the modifier
+will be reported as Meta. */);
 
   DEFVAR_LISP ("ns-right-alternate-modifier", &ns_right_alternate_modifier,
                doc: /* This variable describes the behavior of the

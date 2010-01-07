@@ -38,19 +38,29 @@
 
 ;; Unit test  / check requirements
 (require 'aquamacs-tools)
-(aquamacs-require  '(boundp 'mac-command-modifier))
-(aquamacs-require  '(boundp 'mac-control-modifier))
-(aquamacs-require  '(boundp 'mac-option-modifier))
+(aquamacs-require  '(boundp 'ns-command-modifier))
+(aquamacs-require  '(boundp 'ns-control-modifier))
+(aquamacs-require  '(boundp 'ns-alternate-modifier))
 
 (require 'emulate-mac-keyboard-mode)
 
 ;; To do: this should only happen when the mode is switched on
 
-(aquamacs-set-defaults '(
-			 (mac-option-modifier meta) 
+(aquamacs-set-defaults '((ns-alternate-modifier meta) 
 ;;(setq mac-control-modifier nil) ;; use default
-			 (mac-command-modifier alt)
-			 (mac-pass-command-to-system t) 
+			 (ns-command-modifier alt)
+			 (ns-alternate-meta-special-codes 
+(
+ ?\xff51 ?\xff52 ?\xff53 ?\xff54 ;; arrow keys
+	 ?\xff08 ; backspace
+	 ?\xff9f ; delete
+	 ?\xff09 ; tab
+	 ?\xff0d ; return
+	 ?\xff50 ; home
+	 ?\xff57 ; end
+	 ?\xff55 ; page-up
+	 ?\xff56 ; page-down
+	 ))
 ;; let system handle Apple-H and the like
 ;; (this is default anyways)
 ))
@@ -60,9 +70,9 @@
 
 ;;; MacOS X specific stuff
 
-(defvar osxkeys-command-key mac-command-modifier
+(defvar osxkeys-command-key ns-command-modifier
 "Command key used for `osx-key-mode'.
-Defaults to the value of `mac-command-modifier'.
+Defaults to the value of `ns-command-modifier'.
 You will need to run
 
 \(setq  osx-key-mode-map (make-osx-key-mode-map))
@@ -717,8 +727,8 @@ behavior)."
 
   (if command-key
       (setq osxkeys-command-key command-key)
-    (if mac-command-modifier
-	(setq osxkeys-command-key mac-command-modifier)
+    (if ns-command-modifier
+	(setq osxkeys-command-key ns-command-modifier)
       )
     )
   (let ((map (make-sparse-keymap)))
@@ -766,12 +776,12 @@ turned on. Toggle mode in order to update the global map.")
 
 (defun make-osx-key-mode-map (&optional command-key)
   "Create a mode map for OSX key mode. COMMAND-KEY specifies
-which key is mapped to command. mac-command-modifier is the
-default."
+which key is mapped to command. The value of 
+`ns-command-modifier' is the default."
   (if command-key
       (setq osxkeys-command-key command-key)
-    (if mac-command-modifier
-	(setq osxkeys-command-key mac-command-modifier)))
+    (if ns-command-modifier
+	(setq osxkeys-command-key ns-command-modifier)))
   (let ((map (make-sparse-keymap)))
 
     ;; debug log
@@ -901,16 +911,16 @@ default."
 
 (defun osx-key-mode-command-key-warning ()
   (and osx-key-mode
-       (not (eq mac-command-modifier osxkeys-command-key))
+       (not (eq ns-command-modifier osxkeys-command-key))
        (message (format
-"Warning: You have set `mac-command-modifier' to %s in your 
+"Warning: You have set `ns-command-modifier' to %s in your 
 customizations or init file. The Mac-like keyboard shortcuts
 provided by `osx-key-mode' won't work with this setting.
 The mode uses `osxkeys-command-key' als Command, which is
 currently set to %s. You should change one of those two
 variables or turn off `osx-key-mode'.
 See the description of `osxkeys-command-key'." 
-mac-command-modifier osxkeys-command-key))))
+ns-command-modifier osxkeys-command-key))))
 
 (defun aquamacs-install-low-priority-global-key-map (keymap &optional target)
   "Install keys from keymap keymap into the target (or global) map."
