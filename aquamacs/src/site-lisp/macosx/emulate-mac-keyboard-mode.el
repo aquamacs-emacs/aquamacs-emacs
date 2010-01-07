@@ -305,7 +305,7 @@ to their equivalents used on Mac OS X."
 
 ;; Define entries for menu
 
-(defvar menu-bar-option-key-menu (make-sparse-keymap "Option Key"))
+(defvar menu-bar-option-key-menu (make-sparse-keymap "Option, Command, Meta keys"))
 
 
 (defvar mac-option-modifier-enabled-value 'meta)
@@ -331,17 +331,77 @@ to their equivalents used on Mac OS X."
 			      mac-option-modifier-enabled-value))))))
 
 (defvar menu-bar-option-key-menu (make-sparse-keymap "Modifier Keys"))
+ 
+(defun ns-modifier-setting-description (right general)
+  (if (or (not right)
+	  (and (eq right 'none) (eq ns-alternate-modifier 'none)))
+      "is system's key modifier"
+	(format "set to %s" 
+		(if (eq right 'none) 
+		    general right))))
+
+(defun toggle-mac-right-option-modifier (&optional interactively)
+  (interactive "p")
+  (setq ns-right-alternate-modifier
+	(if (eq 'meta
+		(or (if (eq ns-right-alternate-modifier 'none)
+			ns-alternate-modifier ns-right-alternate-modifier) 'none))
+	    nil
+	  'meta))
+  (if interactively (customize-mark-as-set 'ns-right-alternate-modifier))
+  (message "Right Option %s." 
+	   (ns-modifier-setting-description ns-right-alternate-modifier ns-alternate-modifier)))
+
+(defun toggle-mac-right-command-modifier (&optional interactively)
+  (interactive "p")
+  (setq ns-right-command-modifier
+	(if (eq 'meta
+		(or (if (eq ns-right-command-modifier 'none)
+			ns-command-modifier ns-right-command-modifier) 'none))
+	    nil
+	  'meta))
+  (if interactively (customize-mark-as-set 'ns-right-command-modifier))
+  (message "Right Command %s." (ns-modifier-setting-description ns-right-command-modifier ns-command-modifier)))
 
 
+(define-key menu-bar-option-key-menu [right-command]
+  `(menu-item "Right Command is Meta"
+    toggle-mac-right-command-modifier 
+    :visible (boundp 'mac-command-modifier)
+    :help "Toggle whether to let the Right Command key behave as Meta key, 
+do not let it produce special characters (passing the key to the system)."
+    :button (:toggle . 
+		     (eq 'meta
+			 (or (if (eq ns-right-command-modifier 'none)
+				 ns-command-modifier ns-right-command-modifier) 'none)))))
+		    
+(define-key menu-bar-option-key-menu [right-option]
+  `(menu-item "Right Option is Meta"
+    toggle-mac-right-option-modifier 
+    :visible (boundp 'mac-option-modifier)
+    :help "Toggle whether to let the Right Option key behave as Meta key, 
+do not let it produce special characters (passing the key to the system)."
+    :button (:toggle . 
+		     (eq 'meta
+			 (or (if (eq ns-right-alternate-modifier 'none)
+				 ns-alternate-modifier ns-right-alternate-modifier) 'none)))))
+		     
+(define-key menu-bar-option-key-menu [right-sep]
+  '(menu-item "--"))
 
 (define-emulate-mac-keyboard-modes)
+
+(defun ns-alternate-modifier-true-value ()
+  (if (eq mac-option-modifier 'none)
+      nil
+    mac-option-modifier))
 
 
 (define-key menu-bar-option-key-menu [option-is-meta]
   `(menu-item
     (format  "%s"
 	     (upcase-initials (symbol-name 
-			       (or mac-option-modifier 
+			       (or (ns-alternate-modifier-true-value) 
 				   mac-option-modifier-enabled-value))))
     toggle-mac-option-modifier 
 ;; not yet known.    :key-sequence [(,osxkeys-command-key \;)]
@@ -361,7 +421,7 @@ do not let it produce special characters (passing the key to the system)."
  
 
 (define-key-after menu-bar-options-menu [option-key-menu]
-  `(menu-item "Option Key" ,menu-bar-option-key-menu)
+  `(menu-item "Option, Command, Meta keys" ,menu-bar-option-key-menu)
   'mule-separator)
 
 

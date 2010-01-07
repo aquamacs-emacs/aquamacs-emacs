@@ -1429,7 +1429,9 @@ listed here."
 ;;;	     do not save initial-frame-alist - it is stored by smart-frame-positions
 ;;;  to do: frame-notice-user-settings should use default-frame-alist in addition to
 ;;; initial-frame-alist, so "adopt frame parameters as default" should work.
-	      ns-alternate-modifier)
+	      ns-alternate-modifier
+	      ns-right-alternate-modifier
+	      ns-right-command-modifier)
 	    (and (boundp 'aquamacs-additional-fontsets)
 		   '(aquamacs-additional-fontsets))
 		   ;; retain for backwards compatibility
