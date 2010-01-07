@@ -1186,19 +1186,25 @@ subsequently create.  Upon entering text-mode, the function
 ;; unless postfix is set up
 (easy-menu-remove-item global-map  '("menu-bar" "tools") 'compose-mail)
 
-
+(defvar aquamacs-toggle-full-frame-toolbar-state nil) ;; kludge
 (defun aquamacs-toggle-full-frame ()
   "Enlarge the selected frame to the full screen.
 Unlike `mac-toggle-full-frame', this will do a better job at remembering
 the previous frame size."
   (interactive)
   (if (frame-parameter nil 'fullscreen)    ;(frame-full-screen-p)
-      (progn (modify-frame-parameters 
-	      nil (list (cons 'fullscreen nil)))
+      (progn  
+	      (modify-frame-parameters 
+	      nil (list (cons 'fullscreen nil)
+			(cons 'tool-bar-lines aquamacs-toggle-full-frame-toolbar-state)))
 	     ;; workaround for scrollbar flicker problem:
-	     (make-frame-invisible) (sit-for 0)
-	     (make-frame-visible))
+	      (sit-for 0)
+	      (make-frame-invisible)
+	      (sit-for 0)
+	      (make-frame-visible))
     ;; save small frame position
+    (setq aquamacs-toggle-full-frame-toolbar-state 
+	  (frame-parameter nil 'tool-bar-lines))
     (smart-move-frame-inside-screen)
     (modify-frame-parameters 
      nil (list (cons 'fullscreen 'fullboth))))
