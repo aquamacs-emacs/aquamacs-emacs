@@ -1,3 +1,252 @@
+2010-01-06  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* font-setting.el (font-setting-change-default-font): Use user-spec
+	instead of name.
+
+2010-01-06  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* vc-bzr.el (vc-bzr-after-dir-status): Ignore pending merges.
+
+2010-01-05  Tom Tromey  <tromey@redhat.com>
+
+	* progmodes/python.el (python-font-lock-keywords): Handle
+	qualified decorators (Bug#881).
+
+2010-01-05  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* vc-bzr.el (vc-bzr-working-revision): Fix looking for a revision
+	in a lightweight checkout.
+
+2010-01-05  Kenichi Handa  <handa@m17n.org>
+
+	* language/indian.el (malayalam-composable-pattern): Fix ZWNJ and
+	ZWJ.
+
+2010-01-05  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* vc-bzr.el (vc-bzr-diff): Obey vc-disable-async-diff.
+
+2010-01-04  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* vc-bzr.el (vc-bzr-state-heuristic): Make it work for lightweight
+	checkouts.  (Bug#618)
+	(vc-bzr-log-view-mode): Also highlight the author.
+	(vc-bzr-shelve-map): Change binding for vc-bzr-shelve-apply-at-point.
+	(vc-bzr-shelve-menu-map):
+	(vc-bzr-dir-extra-headers): Improve menu and tooltip text.
+	(vc-bzr-shelve-apply): Make prompt more explicit.
+
+2010-01-02  Chong Yidong  <cyd@stupidchicken.com>
+
+	* net/browse-url.el (browse-url-encode-url): Don't escape commas.
+	They are valid characters in URL paths (rfc3986), and at least
+	Firefox does not understand the encoded version (Bug#3166).
+
+2010-01-02  Daniel Elliott  <danelliottster@gmail.com>  (tiny change)
+
+	* progmodes/octave-mod.el (octave-end-keywords)
+	(octave-block-begin-or-end-regexp, octave-block-match-alist): Add
+	"end" keyword (Bug#3061).
+	(octave-end-as-array-index-p): New function.
+	(calculate-octave-indent): Use it.
+
+2010-01-02  Karl Fogel  <kfogel@red-bean.com>
+
+	* bookmark.el: Consistently put the text property on the bookmark name.
+	(bookmark-bmenu-marks-width): Bump back to 2, to include
+	annotation marks.
+	(bookmark-bmenu-hide-filenames): Adjust for above, and put the text
+	property on the bookmark name, instead of not putting it at all.
+	(bookmark-bmenu-list): Fix where we put the text property.
+
+2010-01-02  Karl Fogel  <kfogel@red-bean.com>
+
+	* bookmark.el (bookmark-bmenu-save): Just depend on the new logic
+	for showing buffer modified state (as added in the previous change).
+
+2010-01-02  Karl Fogel  <kfogel@red-bean.com>
+
+	* bookmark.el: Show modified state of bookmark buffer more accurately.
+	(bookmark-bmenu-list): Initialize buffer-modified-p properly.
+	(bookmark-send-edited-annotation): Mark bookmark-alist as modified.
+	(with-buffer-modified-unmodified): New macro.
+	(bookmark-bmenu-show-filenames, bookmark-bmenu-hide-filenames)
+	(bookmark-bmenu-mark, bookmark-bmenu-unmark, bookmark-bmenu-delete):
+	Use new macro to preserve the buffer modified state.
+
+2010-01-02  Karl Fogel  <kfogel@red-bean.com>
+
+	* bookmark.el (bookmark-bmenu-select, bookmark-bmenu-1-window,
+	(bookmark-bmenu-2-window, bookmark-bmenu-this-window)
+	(bookmark-bmenu-other-window, bookmark-bmenu-switch-other-window)
+	(bookmark-bmenu-show-annotation, bookmark-bmenu-edit-annotation)
+	(bookmark-bmenu-rename, bookmark-bmenu-locate)
+	(bookmark-bmenu-relocate, bookmark-bmenu-goto-bookmark): Remove
+	unnecessary calls to `bookmark-bmenu-ensure-position'.
+
+2010-01-02  Eli Zaretskii  <eliz@gnu.org>
+
+	* emacs-lisp/easy-mmode.el (define-globalized-minor-mode): Make
+	the lines in the generated doc string shorter.  (Bug#4668)
+
+2010-01-02  Ryan Yeske  <rcyeske@gmail.com>
+
+	* net/rcirc.el: Add follow-link binding (Bug#4738).
+
+2010-01-02  Eli Zaretskii  <eliz@gnu.org>
+
+	* Makefile.in (bzr-update): Renamed from cvs-update.
+	(cvs-update): New target for backward compatibility.
+
+	* makefile.w32-in (bzr-update): Renamed from cvs-update.
+	(cvs-update): New target for backward compatibility.
+
+2010-01-02  Karl Fogel  <kfogel@red-bean.com>
+
+	* bookmark.el: Remove gratuitous gratitude.
+
+2010-01-02  Karl Fogel  <kfogel@red-bean.com>
+
+	* bookmark.el (bookmark-bmenu-any-marks): New function
+	(bookmark-bmenu-save): Clear buffer modification if no marks.
+
+2010-01-02  Karl Fogel  <kfogel@red-bean.com>
+
+	* bookmark.el (bookmark-bmenu-marks-width): Define to 1, not 2.
+	(bookmark-bmenu-list, bookmark-bmenu-bookmark): Calculate property
+	positions by using `bookmark-bmenu-marks-width', instead of hardcoding.
+	This fixes the `bookmark-bmenu-execute-deletions' bug reported here:
+
+	http://lists.gnu.org/archive/html/emacs-devel/2009-12/msg00819.html
+	From: Sun Yijiang <sunyijiang {_AT_} gmail.com>
+	To: emacs-devel {_AT_} gnu.org
+	Subject: bookmark.el bug report
+	Date: Mon, 28 Dec 2009 14:19:16 +0800
+	Message-ID: 5065e2900912272219y3734fc9fsdaee41167ef99ad7@mail.gmail.com
+
+2010-01-02  Karl Fogel  <kfogel@red-bean.com>
+
+	* bookmark.el: Improvements suggested by Drew Adams:
+	(bookmark-bmenu-ensure-position): New name for
+	`bookmark-bmenu-check-position'.  Just ensure the position,
+	don't return any meaningful value.
+	(bookmark-bmenu-header-height, bookmark-bmenu-marks-width):
+	New constants.
+
+2010-01-02  Juanma Barranquero  <lekktu@gmail.com>
+
+	* bookmark.el (bookmarks-already-loaded): Doc fix (don't use `iff').
+	(bookmark-yank-point, bookmark-bmenu-check-position):
+	Fix typos in docstrings.
+	(bookmark-save-flag, bookmark-bmenu-toggle-filenames)
+	(bookmark-name-from-full-record, bookmark-get-position)
+	(bookmark-set-position, bookmark-set, bookmark-handle-bookmark)
+	(bookmark-delete, bookmark-save, bookmark-save, bookmark-bmenu-mode):
+	Remove useless quoting of parenthesis, etc. in docstrings.
+
+	* ediff-mult.el (ediff-prepare-meta-buffer): Fix typo in help message.
+	(ediff-append-custom-diff): Fix typo in error message.
+	(ediff-meta-mark-equal-files): Fix typos in messages.
+
+	* mpc.el (mpc-playlist-delete): Fix typo in error messages.
+
+	* cedet/semantic/db-typecache.el (semanticdb-typecache-find-default):
+	Fix typo in docstring.
+
+	* net/imap-hash.el (imap-hash-make): Doc fix.
+	(imap-hash-test): Fix typo in error message; reflow docstring.
+	(imap-hash-p, imap-hash-get, imap-hash-put, imap-hash-make-message)
+	(imap-hash-count, imap-hash-server, imap-hash-port, imap-hash-ssl)
+	(imap-hash-mailbox, imap-hash-user, imap-hash-password):
+	Fix typos in docstrings.
+	(imap-hash-open-connection): Fix typo in error message.
+
+	* play/gomoku.el (gomoku): Fix typos in docstring.
+
+	* progmodes/gdb-ui.el (gdb-location-alist): Reflow docstring.
+	(gdb-jsonify-buffer): Fix typos in docstring.
+	(gdb-goto-breakpoint): Fix typo in error message.
+	("Display Other Windows"): Fix typo in help message.
+	(gdb-speedbar-expand-node): Fix typo in question.
+
+	* progmodes/idlw-help.el (idlwave-help-browse-url-available)
+	(idlwave-html-system-help-location, idlwave-html-help-location)
+	(idlwave-help-browser-function, idlwave-help-browser-generic-program)
+	(idlwave-help-browser-generic-args, idlwave-help-directory)
+	(idlwave-html-help-is-available, idlwave-help-mode-line-indicator)
+	(idlwave-help-mode-map, idlwave-help-mode, idlwave-do-context-help)
+	(idlwave-online-help, idlwave-help-html-link)
+	(idlwave-help-show-help-frame, idlwave-help-assistant-command):
+	Fix typos in docstrings.
+	(idlwave-help-with-source, idlwave-help-find-routine-definition):
+	Reflow docstrings.
+	(idlwave-help-assistant-start): Fix typo in error message.
+
+	* progmodes/octave-mod.el (octave-mode, octave-electric-semi)
+	(octave-electric-space): Fix typos in docstrings.
+
+2010-01-01  Chong Yidong  <cyd@stupidchicken.com>
+
+	* files.el (minibuffer-with-setup-hook): Doc fix (Bug#5149).
+
+2010-01-01  Juri Linkov  <juri@jurta.org>
+
+	* comint.el (comint-input-ring-size): Make it a defcustom and
+	increase the default to 500 (Bug#5148).
+
+2009-12-31  Nick Roberts  <nickrob@snap.net.nz>
+
+	Further changes from EMACS_23_1_RC branch (2009-12-29 contd).
+	* term/x-win.el (x-gtk-stock-map): Map some GUD buttons.
+	* progmodes/gud.el (gud-menu-map): Add reverse-execution commands.
+
+2009-12-30  Nick Roberts  <nickrob@snap.net.nz>
+
+	Show working revision correctly for mercurial.
+	* vc-hg.el (vc-hg-working-revision): Use hg parent instead of
+	hg log as suggested by Alex Harsanyi <alexharsanyi@gmail.com>.
+
+2009-12-29  Juanma Barranquero  <lekktu@gmail.com>
+
+	Declare some functions for the byte-compiler.
+	* progmodes/gdb-ui.el (speedbar-change-initial-expansion-list)
+	(speedbar-timer-fn, speedbar-change-expand-button-char)
+	(speedbar-delete-subblock, speedbar-center-buffer-smartly): Declare.
+
+2009-12-29  Nick Roberts  <nickrob@snap.net.nz>
+
+	This changeset reverts GDB Graphical Interface to use annotations.
+	* progmodes/gdb-ui.el, progmodes/gud.el: Import from EMACS_23_1_RC.
+
+2009-12-29  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	Make vc-dir work on subdirectories of the bzr root.
+	* vc-bzr.el (vc-bzr-after-dir-status): Add new argument.  Return
+	file names relative to it.
+	(vc-bzr-dir-status, vc-bzr-dir-status-files): Pass the bzr root
+	relative directory to vc-bzr-after-dir-status.
+
+2009-12-28  Tassilo Horn  <tassilo@member.fsf.org>
+
+	* font-lock.el (font-lock-refresh-defaults): New function, which
+	can be used to let font-lock react to external changes in
+	variables like font-lock-defaults and keywords.
+	See http://thread.gmane.org/gmane.emacs.devel/118777/focus=118802
+
+2009-12-28  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* vc-rcs.el (vc-rcs-register): Fix registering a specific version.
+
+	* vc-bzr.el (vc-bzr-log-view-mode): Fix short log regexp.
+
+2009-12-28  Juanma Barranquero  <lekktu@gmail.com>
+
+	Supersede color.diff settings in git log (bug#5211).
+
+	* vc-git.el (vc-git-print-log): Pass "--no-color" to log to avoid
+	escape chars in its output when the user has color.diff set to `always'.
+	This fix works on git 1.4.2 and newer (released on 2006-08-13).
+
 2009-12-26  Kevin Ryde  <user42@zip.com.au>
 
 	* info-look.el (sh-mode): Look for coreutils new "Concept Index"
@@ -8,13 +257,19 @@
 	been a secret.  (Further to bug#3717.)
 	(Man-bgproc-sentinel): When "-k foo" produces no output show error
 	"no matches" rather than "Can't find manpage", as the latter reads
-	like -k was interpreted as a page name, which is not so.  (My
-	bug#5431.)
+	like -k was interpreted as a page name, which is not so.  (Bug#5431)
 
 2009-12-26  Michael Albinus  <michael.albinus@gmx.de>
 
 	* net/tramp.el (tramp-handle-insert-directory): Quote "'" in the
 	switches.  Check also for //SUBDIRED// line.
+
+2009-12-25  Kenichi Handa  <handa@m17n.org>
+
+	* language/indian.el (devanagari-composable-pattern): Fixed to
+	handle ZWNJ and ZWJ.  Use it in composition-function-table for
+	Devanagari.
+	(malayalam-composable-pattern): Fix previous change.
 
 2009-12-23  Vinicius Jose Latorre  <viniciusjl@ig.com.br>
 
@@ -110,7 +365,7 @@
 2009-12-14  Nick Roberts  <nickrob@snap.net.nz>
 
 	* progmodes/gdb-mi.el (gdb-frame-handler): Only set gud-lat-frame
-	when there are values for both file and line. (Bug#5060)
+	when there are values for both file and line.  (Bug#5060)
 
 2009-12-14  Juri Linkov  <juri@jurta.org>
 
@@ -289,7 +544,7 @@
 
 2009-12-09  Kenichi Handa  <handa@m17n.org>
 
-	* international/mule-cmds.el (ucs-names): Supply a sufficiently
+	* international/mule-cmds.el (ucs-names): Supply sufficiently
 	fine ranges instead of pre-calculating accurate ranges.
 	Iterate with bigger gc-cons-threshold.
 
@@ -414,10 +669,10 @@
 
 2009-12-07  Dan Nicolaescu  <dann@ics.uci.edu>
 
-	* ediff-mult.el (ediff-setup-meta-map, ediff-prepare-meta-buffer): Add
-	menus to the meta mode.  (Bug#5043)
+	* ediff-mult.el (ediff-setup-meta-map, ediff-prepare-meta-buffer):
+	Add menus to the meta mode.  (Bug#5043)
 
-2009-12-07  Michael Kifer <kifer@cs.stonybrook.edu>
+2009-12-07  Michael Kifer  <kifer@cs.stonybrook.edu>
 
 	* ediff-init.el (ediff-event-key): Use event-to-character instead of
 	event-key.
@@ -680,7 +935,7 @@
 	(newsticker-treeview-item-menu): Added menu entries.
 	(newsticker-treeview-item-mode): New.
 
-	* net/newst-backend.el (newsticker-customize): delete other
+	* net/newst-backend.el (newsticker-customize): Delete other
 	windows.
 
 2009-12-04  Sam Steingold  <sds@gnu.org>
@@ -2175,7 +2430,7 @@
 	* type-break.el (type-break-force-mode-line-update):
 	* time-stamp.el (time-stamp-conv-warn):
 	* terminal.el (te-set-output-log, te-more-break, te-filter)
-	(te-sentinel,terminal-emulator):
+	(te-sentinel, terminal-emulator):
 	* term.el (make-term, term-exec, term-sentinel, term-read-input-ring)
 	(term-write-input-ring, term-check-source, term-start-output-log):
 	(term-display-buffer-line, term-dynamic-list-completions):
@@ -2427,7 +2682,7 @@
 
 2009-11-11  Juri Linkov  <juri@jurta.org>
 
-	* simple.el (dired-get-filename)<declare-function>:
+	* simple.el (dired-get-filename) <declare-function>:
 	Tell the byte-compiler about dired-get-filename.
 	(shell-command): In Dired mode, get filename from the current line
 	as the default value.
@@ -2517,7 +2772,7 @@
 	`tramp-compat-delete-directory'.
 
 	* net/tramp-smb.el (tramp-smb-handle-copy-directory)
-	(tramp-smb-handle-delete-directory ): Use
+	(tramp-smb-handle-delete-directory): Use
 	`tramp-compat-copy-directory' and `tramp-compat-delete-directory'.
 
 	* net/trampver.el: Update release number.
@@ -2857,7 +3112,7 @@
 	* play/fortune.el (fortune-in-buffer):
 	* play/dissociate.el (dissociated-press):
 	* play/decipher.el (decipher-adjacency-list, decipher-display-regexp)
-	(decipher-analyze-buffer, decipher-stats-buffer,decipher-stats-buffer):
+	(decipher-analyze-buffer, decipher-stats-buffer, decipher-stats-buffer):
 	* mail/supercite.el (sc-eref-show):
 	* mail/smtpmail.el (smtpmail-send-it):
 	* mail/rmailsum.el (rmail-summary-next-labeled-message)
@@ -3038,14 +3293,14 @@
 	(ada-find-any-references, ada-make-filename-from-adaname)
 	(ada-make-body-gnatstub):
 	* obsolete/rnews.el (news-list-news-groups):
-	* obsolete/resume.el (resume-suspend-hook,resume-write-buffer-to-file):
+	* obsolete/resume.el (resume-suspend-hook, resume-write-buffer-to-file):
 	* obsolete/iso-acc.el (iso-acc-minibuf-setup):
 	* net/rcirc.el (rcirc-debug):
 	* net/newst-treeview.el (newsticker--treeview-list-add-item)
 	(newsticker--treeview-list-clear, newsticker-treeview-browse-url)
 	(newsticker--treeview-list-update-faces, newsticker-treeview-save)
 	(newsticker--treeview-item-show-text, newsticker--treeview-item-show)
-	(newsticker--treeview-tree-update-tag,newsticker--treeview-buffer-init)
+	(newsticker--treeview-tree-update-tag, newsticker--treeview-buffer-init)
 	(newsticker-treeview-show-item, newsticker--treeview-unfold-node)
 	(newsticker--treeview-list-clear-highlight)
 	(newsticker--treeview-list-update-highlight)
@@ -4724,7 +4979,7 @@
 	* newcomment.el (comment-indent-new-line):
 	* pgg.el (pgg-save-coding-system, pgg-encrypt-region)
 	(pgg-encrypt-symmetric-region, pgg-encrypt-symmetric)
-	(pgg-encrypt, pgg-decrypt-region, pgg-decrypt, )
+	(pgg-encrypt, pgg-decrypt-region, pgg-decrypt)
 	(pgg-sign-region, pgg-sign, pgg-verify-region, pgg-verify):
 	* recentf.el (recentf-mode):
 	* savehist.el (savehist-mode, savehist-save):
@@ -4864,7 +5119,7 @@
 	* dired.el (dired-delete-file): Call `delete-directory' with
 	RECURSIVE parameter.
 
-	* net/ange-ftp.el (ange-ftp-delete-directory ): Add optional
+	* net/ange-ftp.el (ange-ftp-delete-directory): Add optional
 	parameter RECURSIVE.  Implementation is missing.
 
 	* net/tramp.el (tramp-handle-make-directory): Flush upper
@@ -8124,7 +8379,7 @@
 	(tramp-get-debug-buffer): Change `outline-regexp' according to new
 	format.
 
-	* net/tramp-cache.el (tramp-cache-inhibit-cache ): New defvar.
+	* net/tramp-cache.el (tramp-cache-inhibit-cache): New defvar.
 	(tramp-get-file-property): Use it.
 
 	* autorevert.el (auto-revert-handler): Allow
@@ -8445,7 +8700,7 @@
 	(hack-local-variables-filter): If variable is not dir-local,
 	i.e. `dir-name' is nil, then remove it from `dir-local-variables-alist',
 	because file-local overrides dir-local.
-	(c-postprocess-file-styles)<declare-function>:
+	(c-postprocess-file-styles) <declare-function>:
 	Remove obsolete declaration.
 	(hack-dir-local-variables): Add dir-local variable/value pair to
 	`dir-local-variables-alist' and remove duplicates.  Doc fix.
@@ -8476,7 +8731,7 @@
 2009-07-18  Juri Linkov  <juri@jurta.org>
 
 	* info.el: Virtual Info keyword finder.
-	(add-to-list)<Info-virtual-files>: Add "\\`\\*Finder.*\\*\\'".
+	(add-to-list) <Info-virtual-files>: Add "\\`\\*Finder.*\\*\\'".
 	(Info-finder-file): New variable.
 	(Info-finder-find-file): New function.
 	(finder-known-keywords, finder-package-info)
@@ -9279,7 +9534,7 @@
 2009-06-25  Agustín Martín  <agustin.martin@hispalinux.es>
 
 	* textmodes/ispell.el: Add `ispell-looking-back' XEmacs
-	  compatibility function for `looking-back'.
+	compatibility function for `looking-back'.
 
 	* textmodes/flyspell.el (sgml-mode-flyspell-verify):
 	Use `ispell-looking-back'.

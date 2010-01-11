@@ -1,17 +1,100 @@
+2010-01-06  David Reitter  <david.reitter@gmail.com>
+
+	* nsfns.m (ns_get_screen): Rewrite, returning NULL for non-NS.
+	(Fns_display_usable_bounds): Rewrite, computing bounds properly
+	(Bug#3233).
+
+2010-01-06  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* font.c (font_open_entity): Enable chache and call cached_font_ok
+	for the driver if defined.
+	(QCuser_spec): New symbol.
+	(font_spec_from_name): Save name as user-spec.
+	(font_load_for_lface): Keep user-spec instead of name.
+	(font_open_by_name): Save name as user-spec.
+	(syms_of_font): Initialize QCuser_spec.
+	(font_clear_prop): Clear name if it exists in font (bug#5157).
+
+	* xftfont.c (xftfont_open): Call xftfont_add_rendering_parameters.
+	(xftfont_add_rendering_parameters, xftfont_cached_font_ok): New.
+	(syms_of_xftfont): Initialize xftfont_driver.cached_font_ok.
+
+	* font.h (struct font_driver): Add cached_font_ok.
+
+	* xterm.c (x_clear_frame): Queue draw for scroll bars.
+
+2010-01-05  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* xterm.c (x_new_font): Move code for setting rows/cols before
+	resizing ...
+	(x_set_window_size): ... to here. bug #2568.
+
+	* gtkutil.c (xg_clear_under_internal_border): New function.
+	(xg_frame_resized, xg_frame_set_char_size): Call
+	xg_clear_under_internal_border.
+	(xg_update_scrollbar_pos): Clear under old scroll bar position.
+2010-01-05  Chong Yidong  <cyd@stupidchicken.com>
+
+	* keyboard.c (read_key_sequence): Catch keyboard switch after
+	making a new tty frame (Bug#5095).
+
+2010-01-05  Kenichi Handa  <handa@m17n.org>
+
+	* fontset.c (fontset_find_font): Fix getting the frame pointer.
+
+2010-01-04  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* dbusbind.c (xd_remove_watch): Avoid trying to convert a void* to
+	Lisp_Object, preferring to convert a lisp_Object to a void* instead.
+	(Fdbus_init_bus): Use XHASH to get a scalar value from a Lisp_Object.
+
+2010-01-03  Michael Albinus  <michael.albinus@gmx.de>
+
+	* dbusbind.c (xd_add_watch): Improve debug message.
+	(xd_remove_watch): Improve debug message.  If DATA is the session
+	bus, unset D-Bus session environment.
+	(Fdbus_init_bus): Pass the bus as argument to
+	dbus_connection_set_watch_functions.  (Bug#5283)
+
+2010-01-01  Chong Yidong  <cyd@stupidchicken.com>
+
+	* nsterm.m (ns_get_color): Fix buffer overflow (Bug#4763).
+
+	* lread.c (syms_of_lread): Make it clearer that these are the
+	names of loaded files (Bug#5068).
+
+	* eval.c (run_hook_with_args): Handle the case where the global
+	value has the obsolete single-function form (Bug#5026).
+
 2009-12-27  Chong Yidong  <cyd@stupidchicken.com>
 
 	* minibuf.c (Fall_completions): Minor optimization.
 
 2009-12-26  Eli Zaretskii  <eliz@gnu.org>
 
-	* .gdbinit (pgx): Fix display of composite glyphs.  Display
-	cmp.from and cmp.to as well.
-	(pitx) Fix last change.
+	* .gdbinit (pgx): Fix display of composite glyphs.
+	Display cmp.from and cmp.to as well.
+	(pitx): Fix last change.
+
+2009-12-25  Kenichi Handa  <handa@m17n.org>
+
+	* composite.h (composition_adjust_point): Update prototype.
+
+	* composite.c (composition_reseat_it): Don't make a composition
+	spanning over point.
+	(CHAR_COMPOSABLE_P): Treat U+200C (ZWNJ) and U+200D (ZWJ) as
+	composable characters.
+	(composition_adjust_point): New arg NEW_PT.  Callers changed.
+
+	* keyboard.c (command_loop_1): Force redisplay if the last point
+	was within a composition.
+	(adjust_point_for_property): Don't adjust point for automatic
+	composition when called after buffer modification.
 
 2009-12-19  Eli Zaretskii  <eliz@gnu.org>
 
-	* .gdbinit (pitx): Don't use enum names, use their values.  Remove
-	reference to non-existing value GET_FROM_COMPOSITION.
+	* .gdbinit (pitx): Don't use enum names, use their values.
+	Remove reference to non-existing value GET_FROM_COMPOSITION.
 	(pgx): Don't use enum names, use their values.
 	(pitmethod): New helper command.
 	(pitx): Use it to display iteration method.
@@ -119,14 +202,14 @@
 2009-12-15  Michael Albinus  <michael.albinus@gmx.de>
 
 	* dbusbind.c (xd_retrieve_arg): Reorder declarations in order to
-	avoid compiler warnings.  (Bug #5217).
+	avoid compiler warnings.  (Bug #5217)
 
 2009-12-14  Kenichi Handa  <handa@m17n.org>
 
 	* coding.c (decode_coding_iso_2022): Ignore ISO_CODE_SS2_7 (0x19)
 	in 8-bit encoding.
 
-2009-12-13  Pat Thoyts <patthoyts@users.sourceforge.net> (tiny change)
+2009-12-13  Pat Thoyts  <patthoyts@users.sourceforge.net>  (tiny change)
 
 	* xfns.c (x_create_tip_frame): Set the extended window manager hint for
 	tooltip windows.
@@ -141,7 +224,7 @@
 
 	* xterm.c (my_log_handler): New function.
 	(x_term_init): Set my_log_handler as log handler during gtk_init
-	so we can filter out buggy messages. (bug #5120).
+	so we can filter out buggy messages.  (Bug #5120).
 
 	* xterm.c (xg_scroll_callback): Parameter list changed,
 	use parameter GtkScrollType to determine scroll/line/page.
@@ -185,7 +268,7 @@
 
 2009-12-12  Jan Djärv  <jan.h.d@swipnet.se>
 
-	* gtkutil.c (scroll_end_callback): New function (bug #5177)
+	* gtkutil.c (scroll_end_callback): New function (bug #5177).
 	(xg_create_scroll_bar): Call scroll_end_callback on button release
 	event (bug #5177).
 	(xg_event_is_for_scrollbar): != replaced with ==.
@@ -312,7 +395,7 @@
 
 	* term.c (delete_tty): Remove check for last terminal (bug#4970).
 
-	* xsettings.c: Revert changes from 2009-11-23. Just use Xft
+	* xsettings.c: Revert changes from 2009-11-23.  Just use Xft
 	defaults (bug #5025).
 
 2009-11-24  Stefan Monnier  <monnier@iro.umontreal.ca>
@@ -365,7 +448,7 @@
 	* gtkutil.c (xg_timer, xg_process_timeouts, xg_start_timer)
 	(xg_stop_timer, menu_grab_callback_cnt, menu_grab_callback)
 	(scroll_bar_button_cb): Remove.
-	(create_menus): C++ comments => C comments. Don't bind grab-notify
+	(create_menus): C++ comments => C comments.  Don't bind grab-notify
 	event.
 	(xg_create_scroll_bar): Don't bind button-press-event and
 	button-release-event.
@@ -527,7 +610,7 @@
 	has a parent.
 
 	* Makefile.in: If AUTO_DEPEND is defined, make gcc generate
-	dependency files in deps/. Include those files into Makefile.
+	dependency files in deps/.  Include those files into Makefile.
 
 	* config.in: Generated (AUTO_DEPEND).
 
@@ -5294,7 +5377,7 @@
 	(XD_SIGNAL1, XD_SIGNAL2, XD_SIGNAL3): New macros.  Throw Qdbus_error.
 	(xd_read_queued_messages): Catch Qdbus_error from the macros.
 	(all): Replace xsignal1, xsignal2, xsignal3 by the respective
-	macro.  (Bug#1186).
+	macro.  (Bug#1186)
 
 2008-10-23  Ali Bahrami  <ali_gnu@emvision.com>  (tiny change)
 
@@ -21188,7 +21271,7 @@ See ChangeLog.10 for earlier changes.
 ;; add-log-time-zone-rule: t
 ;; End:
 
-    Copyright (C) 2007, 2008, 2009  Free Software Foundation, Inc.
+    Copyright (C) 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
 
   This file is part of GNU Emacs.
 

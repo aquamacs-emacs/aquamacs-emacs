@@ -43,6 +43,7 @@
 (require 'comint)
 
 (defvar gdb-active-process)
+(defvar gdb-recording)
 (defvar gdb-define-alist)
 (defvar gdb-macro-info)
 (defvar gdb-server-prefix)
@@ -134,22 +135,47 @@ Used to grey out relevant toolbar icons.")
 	   (and (memq gud-minor-mode '(gdbmi gdba))
 		(> (car (window-fringes)) 0)))))
 
-(declare-function gdb-gud-context-command "gdb-mi.el")
-
 (defun gud-stop-subjob ()
   (interactive)
   (with-current-buffer gud-comint-buffer
-    (cond ((string-equal gud-target-name "emacs")
-           (comint-stop-subjob))
-          ((eq gud-minor-mode 'jdb)
-           (gud-call "suspend"))
-          ((eq gud-minor-mode 'gdbmi)
-           (gud-call (gdb-gud-context-command "-exec-interrupt")))
-          (t 
-           (comint-interrupt-subjob)))))
+    (if (string-equal gud-target-name "emacs")
+	(comint-stop-subjob)
+      (if (eq gud-minor-mode 'jdb)
+	  (gud-call "suspend")
+	(comint-interrupt-subjob)))))
 
 (easy-mmode-defmap gud-menu-map
   '(([help]     "Info (debugger)" . gud-goto-info)
+    ([rfinish]	menu-item "Reverse Finish Function" gud-rfinish
+                  :enable (not gud-running)
+		  :visible (and gdb-recording
+				(eq gud-minor-mode 'gdba)))
+    ([rstepi]	menu-item "Reverse Step Instruction" gud-rstepi
+                  :enable (not gud-running)
+		  :visible (and gdb-recording
+				(eq gud-minor-mode 'gdba)))
+    ([rnexti]	menu-item "Reverse Next Instruction" gud-rnexti
+                  :enable (not gud-running)
+		  :visible (and gdb-recording
+				(eq gud-minor-mode 'gdba)))
+    ([rstep]	menu-item "Reverse Step Line" gud-rstep
+                  :enable (not gud-running)
+		  :visible (and gdb-recording
+				(eq gud-minor-mode 'gdba)))
+    ([rnext]	menu-item "Reverse Next Line" gud-rnext
+                  :enable (not gud-running)
+		  :visible (and gdb-recording
+				(eq gud-minor-mode 'gdba)))
+    ([rcont]	menu-item "Reverse Continue" gud-rcont
+                  :enable (not gud-running)
+		  :visible (and gdb-recording
+				(eq gud-minor-mode 'gdba)))
+    ([recstart] menu-item "Start Recording" gdb-toggle-recording-1
+		  :visible (and (not gdb-recording)
+				(eq gud-minor-mode 'gdba)))
+    ([recstop] menu-item "Stop Recording" gdb-toggle-recording
+		  :visible (and gdb-recording
+				(eq gud-minor-mode 'gdba)))
     ([tooltips] menu-item "Show GUD tooltips" gud-tooltip-mode
                   :enable (and (not emacs-basic-display)
 			       (display-graphic-p)
@@ -162,11 +188,12 @@ Used to grey out relevant toolbar icons.")
                   :enable (not gud-running)
 		  :visible (memq gud-minor-mode '(gdbmi gdb dbx jdb)))
     ([go]	menu-item (if gdb-active-process "Continue" "Run") gud-go
-		  :visible (and (eq gud-minor-mode 'gdbmi)
-                                (gdb-show-run-p)))
+		  :visible (and (not gud-running)
+				(eq gud-minor-mode 'gdba)))
     ([stop]	menu-item "Stop" gud-stop-subjob
-		  :visible (or (not (memq gud-minor-mode '(gdbmi pdb)))
-			       (gdb-show-stop-p)))
+		  :visible (or (not (memq gud-minor-mode '(gdba pdb)))
+			       (and gud-running
+				    (eq gud-minor-mode 'gdba))))
     ([until]	menu-item "Continue to selection" gud-until
                   :enable (not gud-running)
 		  :visible (and (memq gud-minor-mode '(gdbmi gdba gdb perldb))
@@ -195,12 +222,10 @@ Used to grey out relevant toolbar icons.")
 		  :visible (and (string-equal
 				 (buffer-local-value
 				  'gud-target-name gud-comint-buffer) "emacs")
-				(eq gud-minor-mode 'gdbmi)))
-    ([print*]	menu-item (if (eq gud-minor-mode 'jdb)
-			      "Dump object"
-			    "Print Dereference") gud-pstar
+				(eq gud-minor-mode 'gdba)))
+    ([print*]	menu-item "Print Dereference" gud-pstar
                   :enable (not gud-running)
-		  :visible (memq gud-minor-mode '(gdbmi gdb jdb)))
+		  :visible (memq gud-minor-mode '(gdbmi gdba gdb)))
     ([print]	menu-item "Print Expression" gud-print
                   :enable (not gud-running))
     ([watch]	menu-item "Watch Expression" gud-watch
@@ -253,13 +278,12 @@ Used to grey out relevant toolbar icons.")
 	:visible (memq gud-minor-mode '(gdbmi gdb dbx jdb)))
        ([menu-bar go] menu-item
 	,(propertize " go " 'face 'font-lock-doc-face) gud-go
-	:visible (and (eq gud-minor-mode 'gdbmi)
-                      (gdb-show-run-p)))
+	:visible (and (not gud-running)
+		      (eq gud-minor-mode 'gdba)))
        ([menu-bar stop] menu-item
 	,(propertize "stop" 'face 'font-lock-doc-face) gud-stop-subjob
-	:visible (or (and (eq gud-minor-mode 'gdbmi)
-                          (gdb-show-stop-p))
-		     (not (eq gud-minor-mode 'gdbmi))))
+	:visible (and gud-running
+		     (eq gud-minor-mode 'gdba)))
        ([menu-bar print]
 	. (,(propertize "print" 'face 'font-lock-doc-face) . gud-print))
        ([menu-bar tools] . undefined)
@@ -298,6 +322,14 @@ Used to grey out relevant toolbar icons.")
 		 (gud-stepi . "gud/stepi")
 		 (gud-up . "gud/up")
 		 (gud-down . "gud/down")
+		 (gdb-toggle-recording-1 . "gud/recstart")
+		 (gdb-toggle-recording . "gud/recstop")
+		 (gud-rcont . "gud/rcont")
+		 (gud-rnext . "gud/rnext")
+		 (gud-rstep . "gud/rstep")
+		 (gud-rfinish . "gud/rfinish")
+		 (gud-rnexti . "gud/rnexti")
+		 (gud-rstepi . "gud/rstepi")
 		 (gud-goto-info . "info"))
 	       map)
       (tool-bar-local-item-from-menu
@@ -2843,7 +2875,7 @@ Obeying it means displaying in another window the specified file and line."
             (forward-line 0))
           (if (looking-at comint-prompt-regexp)
               (set-marker gud-delete-prompt-marker (point)))
-          (if (eq gud-minor-mode 'gdbmi)
+          (if (memq gud-minor-mode '(gdbmi gdba))
               (apply comint-input-sender (list proc command))
             (process-send-string proc (concat command "\n"))))))))
 
@@ -3411,8 +3443,8 @@ With arg, dereference expr if ARG is positive, otherwise do not derereference."
 (defun gud-tooltip-print-command (expr)
   "Return a suitable command to print the expression EXPR."
   (case gud-minor-mode
-	(gdbmi (concat "-data-evaluate-expression " expr))
-	(dbx (concat "print " expr))
+	(gdba (concat "server print " expr))
+	((dbx gdbmi) (concat "print " expr))
 	((xdb pdb) (concat "p " expr))
 	(sdb (concat expr "/"))))
 

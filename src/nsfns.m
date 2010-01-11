@@ -207,31 +207,27 @@ static NSScreen *
 ns_get_screen (Lisp_Object screen)
 {
   struct frame *f;
+  struct terminal *terminal;
 
   if (EQ (Qt, screen)) /* not documented */
     return [NSScreen mainScreen];
 
-  struct terminal *terminal = get_terminal (screen, 1);
+  terminal = get_terminal (screen, 1);
   if (terminal->type != output_ns)
     return NULL;
+
+  if (NILP (screen))
+    f = SELECTED_FRAME ();
+  else if (FRAMEP (screen))
+    f = XFRAME (screen);
   else
     {
-      if (NILP (screen))
-	f = SELECTED_FRAME ();
-      else if (FRAMEP (screen))
-	f = XFRAME (screen);
-      else
-	{
-	  struct ns_display_info *dpyinfo = terminal->display_info.ns;
-	  f = dpyinfo->x_focus_frame;
-	  if (!f)
-	    f = dpyinfo->x_highlight_frame;
-	}
-      if (!f || !FRAME_NS_P (f))
-	return NULL;
-      else
-	return [[FRAME_NS_VIEW (f) window] screen];
+      struct ns_display_info *dpyinfo = terminal->display_info.ns;
+      f = (dpyinfo->x_focus_frame || dpyinfo->x_highlight_frame);
     }
+
+  return ((f && FRAME_NS_P (f)) ? [[FRAME_NS_VIEW (f) window] screen]
+	  : NULL);
 }
 
 
@@ -2944,7 +2940,6 @@ that stands for the selected frame's display. */)
   NSRect vScreen;
 
   check_ns ();
-
   screen = ns_get_screen (display);
   if (!screen)
     return Qnil;
@@ -2954,7 +2949,7 @@ that stands for the selected frame's display. */)
   /* NS coordinate system is upside-down.
      Transform to screen-specific coordinates. */
   return list4 (make_number ((int) vScreen.origin.x),
-                make_number ((int) [screen frame].size.height
+		make_number ((int) [screen frame].size.height
 			     - vScreen.size.height - vScreen.origin.y),
                 make_number ((int) vScreen.size.width),
                 make_number ((int) vScreen.size.height));
