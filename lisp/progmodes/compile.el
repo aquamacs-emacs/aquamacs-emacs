@@ -566,7 +566,12 @@ especially the TAB character."
 
 (defcustom compilation-read-command t
   "Non-nil means \\[compile] reads the compilation command to use.
-Otherwise, \\[compile] just uses the value of `compile-command'."
+Otherwise, \\[compile] just uses the value of `compile-command'.
+
+Note that changing this to nil may be a security risk, because a
+file might define a malicious `compile-command' as a file local
+variable, and you might not notice.  Therefore, `compile-command'
+is considered unsafe if this variable is nil."
   :type 'boolean
   :group 'compilation)
 
@@ -602,7 +607,7 @@ You might also use mode hooks to specify it in certain modes, like this:
 			(file-name-sans-extension buffer-file-name))))))"
   :type 'string
   :group 'compilation)
-;;;###autoload(put 'compile-command 'safe-local-variable 'stringp)
+;;;###autoload(put 'compile-command 'safe-local-variable (lambda (a) (and (stringp a) (or (not (boundp 'compilation-read-command)) compilation-read-command))))
 
 ;;;###autoload
 (defcustom compilation-disable-input nil

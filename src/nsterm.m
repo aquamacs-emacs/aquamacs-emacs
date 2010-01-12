@@ -3761,26 +3761,6 @@ static Lisp_Object ns_mod_to_lisp (int m)
 
 
 static void
-ns_set_default_prefs ()
-/* --------------------------------------------------------------------------
-      Initialize preference variables to defaults
-   -------------------------------------------------------------------------- */
-{
-  ns_alternate_modifier = Qmeta;
-  ns_right_alternate_modifier = Qnone;
-  ns_command_modifier = Qsuper;
-  ns_right_command_modifier = Qnone;
-  ns_control_modifier = Qcontrol;
-  ns_right_control_modifier = Qnone;
-  ns_function_modifier = Qnone;
-  ns_emulate_three_button_mouse = Qt;
-  ns_antialias_text = Qt;
-  ns_antialias_threshold = 10.0; /* not exposed to lisp side */
-  ns_confirm_quit = Qnil;
-}
-
-
-static void
 ns_default (const char *parameter, Lisp_Object *result,
            Lisp_Object yesval, Lisp_Object noval,
            BOOL is_float, BOOL is_modstring)
@@ -4042,8 +4022,6 @@ ns_term_init (Lisp_Object display_name)
 
   UNBLOCK_INPUT; 
 
-  /* Read various user defaults. */
-  ns_set_default_prefs ();
   if (!inhibit_x_resources)
     {
       ns_default ("GSFontAntiAlias", &ns_antialias_text,
@@ -6719,6 +6697,22 @@ void
 syms_of_nsterm ()
 {
   NSTRACE (syms_of_nsterm);
+
+  ns_antialias_threshold = 10.0;
+
+  /* from 23+ we need to tell emacs what modifiers there are.. */
+  DEFSYM (Qmodifier_value, "modifier-value");
+  DEFSYM (Qalt, "alt");
+  DEFSYM (Qhyper, "hyper");
+  DEFSYM (Qmeta, "meta");
+  DEFSYM (Qsuper, "super");
+  DEFSYM (Qcontrol, "control");
+  Fput (Qalt, Qmodifier_value, make_number (alt_modifier));
+  Fput (Qhyper, Qmodifier_value, make_number (hyper_modifier));
+  Fput (Qmeta, Qmodifier_value, make_number (meta_modifier));
+  Fput (Qsuper, Qmodifier_value, make_number (super_modifier));
+  Fput (Qcontrol, Qmodifier_value, make_number (ctrl_modifier));
+
   DEFVAR_LISP ("ns-input-file", &ns_input_file,
               "The file specified in the last NS event.");
   ns_input_file =Qnil;
@@ -6819,6 +6813,7 @@ antialiased. Only has an effect on OS X Panther and above.  */);
 
   DEFVAR_LISP ("ns-confirm-quit", &ns_confirm_quit,
                "Whether to confirm application quit using dialog.");
+  ns_confirm_quit = Qnil;
 
   DEFVAR_LISP ("ns-emulate-three-button-mouse", &ns_emulate_three_button_mouse,
                doc: /* Non-nil (the default) means to use control and
@@ -6830,19 +6825,6 @@ buttons on a one-button mouse.  */);
 
   staticpro (&last_mouse_motion_frame);
   last_mouse_motion_frame = Qnil;
-
-  /* from 23+ we need to tell emacs what modifiers there are.. */
-  Qmodifier_value = intern ("modifier-value");
-  Qalt = intern ("alt");
-  Fput (Qalt, Qmodifier_value, make_number (alt_modifier));
-  Qhyper = intern ("hyper");
-  Fput (Qhyper, Qmodifier_value, make_number (hyper_modifier));
-  Qmeta = intern ("meta");
-  Fput (Qmeta, Qmodifier_value, make_number (meta_modifier));
-  Qsuper = intern ("super");
-  Fput (Qsuper, Qmodifier_value, make_number (super_modifier));
-  Qcontrol = intern ("control");
-  Fput (Qcontrol, Qmodifier_value, make_number (ctrl_modifier));
 
   /* TODO: move to common code */
   DEFVAR_LISP ("x-toolkit-scroll-bars", &Vx_toolkit_scroll_bars,
