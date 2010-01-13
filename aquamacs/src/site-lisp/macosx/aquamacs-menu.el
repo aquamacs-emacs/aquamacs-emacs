@@ -1257,7 +1257,7 @@ that should be represented in the Aquamacs menus."
 
 (defun emacsosx-mailing-list-subscribe ()
   (interactive)
-  (browse-url "mailto:macosx-emacs-on@email.esm.psu.edu?subject=subscribe%20macosx-emacs&body=Send%20off%20this%20e-mail%20to%20subscribe%20to%20the%20Emacs-on-MacOSX%20mailing%20list."))
+  (browse-url "http://aquamacs.org/subscribe-to-support-mailing-list"))
  
 (defun aquamacs-donate ()
   (interactive)
