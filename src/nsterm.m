@@ -1,5 +1,5 @@
 /* NeXT/Open/GNUstep / MacOSX communication module.
-   Copyright (C) 1989, 1993, 1994, 2005, 2006, 2008, 2009
+   Copyright (C) 1989, 1993, 1994, 2005, 2006, 2008, 2009, 2010
      Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
@@ -6763,12 +6763,14 @@ alternate or option key.  Set to control, meta, alt, super, or hyper
 means it is taken to be that key.  Set to none means that the
 alternate / option key is not interpreted by Emacs at all, allowing it
 to be used at a lower level for accented character entry. */);
+  ns_alternate_modifier = Qmeta;
 
   DEFVAR_LISP ("ns-alternate-meta-special-codes", &ns_alternate_meta_special_codes,
                doc: /* List of key codes (numbers) identifying special keys.
 For these special keys, ns_alternate_modifier and ns_right_alternate_modifier do not apply.
 If those keys are entered with the Alternate modifier, the modifier
 will be reported as Meta. */);
+  ns_alternate_meta_special_codes = Qnil;
 
   DEFVAR_LISP ("ns-right-alternate-modifier", &ns_right_alternate_modifier,
                doc: /* This variable describes the behavior of the
@@ -6782,23 +6784,27 @@ means use ns-alternate-modifier value. */);
                doc: /* This variable describes the behavior of the
 command key.  Set to control, meta, alt, super, or hyper means it is
 taken to be that key. */);
+  ns_command_modifier = Qalt;
 
   DEFVAR_LISP ("ns-right-command-modifier", &ns_right_command_modifier,
                doc: /* This variable describes the behavior of the
 right command key.  Set to control, meta, alt, super, or hyper means
 it is taken to be that key.  Set to none means use ns-command-modifier
 value.  */);
+  ns_right_command_modifier = Qnone;
 
   DEFVAR_LISP ("ns-control-modifier", &ns_control_modifier,
                doc: /* This variable describes the behavior of the
 control key.  Set to control, meta, alt, super, or hyper means it is
 taken to be that key. */);
+  ns_control_modifier = Qcontrol;
 
   DEFVAR_LISP ("ns-right-control-modifier", &ns_right_control_modifier,
                doc: /* This variable describes the behavior of the
 right control key.  Set to control, meta, alt, super, or hyper means
 it is taken to be that key.  Set to none means use ns-command-modifier
 value.  */);
+  ns_right_control_modifier = Qcontrol;
 
   DEFVAR_LISP ("ns-function-modifier", &ns_function_modifier,
                doc: /* This variable describes the behavior of the
@@ -6806,10 +6812,12 @@ function key (on laptops).  Set to control, meta, alt, super, or hyper
 means it is taken to be that key.  Set to none means that the function
 key is not interpreted by Emacs at all, allowing it to be used at a
 lower level for accented character entry. */);
+  ns_function_modifier = Qnone;
 
   DEFVAR_LISP ("ns-antialias-text", &ns_antialias_text,
                doc: /* Non-nil (the default) means to render text
 antialiased. Only has an effect on OS X Panther and above.  */);
+  ns_antialias_text = Qt;
 
   DEFVAR_LISP ("ns-confirm-quit", &ns_confirm_quit,
                "Whether to confirm application quit using dialog.");
@@ -6819,6 +6827,7 @@ antialiased. Only has an effect on OS X Panther and above.  */);
                doc: /* Non-nil (the default) means to use control and
 command keys to emulate right and middle mouse
 buttons on a one-button mouse.  */);
+  ns_emulate_three_button_mouse = Qt;
 
   staticpro (&ns_display_name_list);
   ns_display_name_list = Qnil;
