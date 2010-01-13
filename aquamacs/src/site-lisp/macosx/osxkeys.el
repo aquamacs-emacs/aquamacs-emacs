@@ -129,13 +129,16 @@ after updating this variable.")
 	nil)
        (t (setq ns-last-selected-text text))))))
 
+(defvar x-select-text-force-pasteboard nil) ; use let-binding to set this
 (defun x-maybe-select-text (text &optional push)
   "Maybe put TEXT, a string, on the pasteboard.
 Does not set the pasteboard unless the user has explicitly asked
 for this to happen via calling clipboard-kill-region or 
-clipboard-kill-ring-save, or the associated cua functions.
+clipboard-kill-ring-save, or the associated cua functions, or
+if `x-select-text-force-pasteboard' is non-nil.
 PUSH is ignored."
   (when (or (not cua-mode) 
+	    x-select-text-force-pasteboard
 	    (memq this-original-command '(clipboard-kill-region clipboard-kill-ring-save)))
     (ns-set-pasteboard text))
   (setq ns-last-selected-text text))
@@ -150,6 +153,7 @@ Ignored if text was selected by mouse. PUSH is ignored."
   ;; It becomes slow, and if really big it causes errors.
   ;; (print this-original-command)
   (when (or (not cua-mode) 
+	    x-select-text-force-pasteboard
 	    ;; do not copy if just selected by mouse.
 	    (not (memq this-original-command '(mouse-extend mouse-drag-region))))
     (ns-set-pasteboard text))
