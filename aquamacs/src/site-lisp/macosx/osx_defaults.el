@@ -280,6 +280,7 @@ from earlier versions of the distribution."
      (recentf-menu-action aquamacs-find-file-2)
      (savehist-file "~/Library/Preferences/Aquamacs Emacs/minibuffer-history.el")
      (desktop-path ("~/Library/Preferences/Aquamacs Emacs" "." "~"))
+     (trash-directory "~/.Trash")
      (auto-save-file-name-transforms
       (("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'"
 	;; Don't put "\\2" inside expand-file-name, since it will be
