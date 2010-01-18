@@ -1,4 +1,3 @@
-
 ;; Aquamacs Emacs OS X defaults
 ;; these defaults attempt to turn Emacs into a nice application for 
 ;; Mac OS X that adheres to at least some of the user interface 
@@ -270,36 +269,43 @@ from earlier versions of the distribution."
 
 (ats "before recentf...")
 
-  (require 'recentf)
+(require 'recentf)
 (ats "recentf done")
 
-  ;; create temporary directory if necessary
-
-  (aquamacs-set-defaults 
-   `((mailclient-place-body-on-clipboard-flag ,(gmail-mailclient-p))
-     (recentf-menu-action aquamacs-find-file-2)
-     (savehist-file "~/Library/Preferences/Aquamacs Emacs/minibuffer-history.el")
-     (desktop-path ("~/Library/Preferences/Aquamacs Emacs" "." "~"))
-     (trash-directory "~/.Trash")
-     (auto-save-file-name-transforms
+  ;; create autosave directory if necessary
+(let ((autosave-directory (expand-file-name "~/Library/Caches/Aquamacs Emacs/AutoSave/")))
+  (protect
+   (make-directory autosave-directory t))
+ (aquamacs-set-defaults
+  `((auto-save-file-name-transforms
       (("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'"
 	;; Don't put "\\2" inside expand-file-name, since it will be
 	;; transformed to "/2" on DOS/Windows.
-	,(concat temporary-file-directory "\\2") t)
+	,(concat autosave-directory "\\2") t)
        ;; put all files into the tmp dir (it's user specific)
        ("\\`\\([^/]*/\\)*\\([^/]*\\)\\'"
-	,(concat temporary-file-directory "\\2") t)))
-     (auto-save-list-file-prefix 
-      "~/Library/Preferences/Aquamacs Emacs/auto-save-list/.saves-")
-     ( save-place-file "~/Library/Preferences/Aquamacs Emacs/places.el")
-     ( recentf-save-file "~/Library/Preferences/Aquamacs Emacs/Recent Files.el")
-     ( abbrev-file-name "~/Library/Preferences/Aquamacs Emacs/Abbreviations")
-     ( mail-default-directory 
-       "~/Library/Application Support/Aquamacs Emacs/Temporary Files")))
+	,(concat autosave-directory "\\2") t)))
+     (auto-save-file-name-prefix "")
+     (auto-save-file-name-postfix "")
+     ;; leave this there for historical reasons (todo: reconsider)
+     (auto-save-list-file-prefix  
+      "~/Library/Preferences/Aquamacs Emacs/auto-save-list/.saves-"))))
 
-    (when (and (boundp 'mac-apple-event-map) mac-apple-event-map)
-      (define-key mac-apple-event-map [core-event reopen-application]
-	'aquamacs-de-iconify-some-frame))
-  ) ;; aquamacs-osx-defaults-setup
+(aquamacs-set-defaults 
+ `((mailclient-place-body-on-clipboard-flag ,(gmail-mailclient-p))
+   (recentf-menu-action aquamacs-find-file-2)
+   (savehist-file "~/Library/Preferences/Aquamacs Emacs/minibuffer-history.el")
+   (desktop-path ("~/Library/Preferences/Aquamacs Emacs" "." "~"))
+   (trash-directory "~/.Trash")
+   (save-place-file "~/Library/Preferences/Aquamacs Emacs/places.el")
+   (recentf-save-file "~/Library/Preferences/Aquamacs Emacs/Recent Files.el")
+   (abbrev-file-name "~/Library/Preferences/Aquamacs Emacs/Abbreviations")
+   (mail-default-directory 
+    "~/Library/Application Support/Aquamacs Emacs/Temporary Files")))
+
+(when (and (boundp 'mac-apple-event-map) mac-apple-event-map)
+  (define-key mac-apple-event-map [core-event reopen-application]
+    'aquamacs-de-iconify-some-frame))
+) ;; aquamacs-osx-defaults-setup
 
 (provide 'osx_defaults)

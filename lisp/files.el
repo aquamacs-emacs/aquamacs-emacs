@@ -5196,6 +5196,10 @@ Also rename any existing auto save file, if it was made in this session."
 	     (recent-auto-save-p))
 	(rename-file osave buffer-auto-save-file-name t))))
 
+
+(defvar auto-save-file-name-prefix "#" "String prepended to auto save file names.")
+(defvar auto-save-file-name-postfix "#" "String appended to auto save file names.")
+
 (defun make-auto-save-file-name ()
   "Return file name to use for auto-saves of current buffer.
 Does not consider `auto-save-visited-file-name' as that variable is checked
@@ -5243,9 +5247,9 @@ See also `auto-save-file-name-p'."
 				"#" (match-string 1 fn)
 				"." (match-string 3 fn) "#"))
 		    (concat (file-name-directory filename)
-			    "#"
+			    auto-save-file-name-prefix
 			    (file-name-nondirectory filename)
-			    "#")))
+			    auto-save-file-name-postfix)))
 	    ;; Make sure auto-save file names don't contain characters
 	    ;; invalid for the underlying filesystem.
 	    (if (and (memq system-type '(ms-dos windows-nt cygwin))
@@ -5307,7 +5311,9 @@ See also `auto-save-file-name-p'."
 (defun auto-save-file-name-p (filename)
   "Return non-nil if FILENAME can be yielded by `make-auto-save-file-name'.
 FILENAME should lack slashes.  You can redefine this for customization."
-  (string-match "^#.*#$" filename))
+  (string-match (concat "^" (regexp-quote auto-save-file-name-prefix) ".*" 
+			(regexp-quote auto-save-file-name-postfix)
+			"$") filename))
 
 (defun wildcard-to-regexp (wildcard)
   "Given a shell file name pattern WILDCARD, return an equivalent regexp.
