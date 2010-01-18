@@ -1,3 +1,63 @@
+2010-01-16  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* xterm.c (event_handler_gdk): Block input (Bug#5037).
+
+2010-01-16  Chong Yidong  <cyd@stupidchicken.com>
+
+	* emacs.c (standard_args): Adjust arg priorities to reflect how
+	they are processed in startup.el.
+
+2010-01-16  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* Makefile.in (lisp, shortlisp): Update.
+
+2010-01-16  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* xterm.c (x_term_init): Instead of inhibiting GC while running Lisp
+	code, link the new kboard into all_kboard before running Lisp code,
+	and protect the new terminal with GCPRO (Bug#5365).
+	(x_term_init): Remove unused var `atom'.
+	(x_delete_display, x_delete_terminal): Remove unused var `i'.
+
+2010-01-15  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* xfns.c (x_get_current_desktop, x_get_desktop_workarea): New functions.
+	(Fx_create_frame): Call x_get_current_desktop and x_get_desktop_workarea
+	to find out usable size of the desktop.  Don't make frames larger than
+	this. Bug #3643.
+
+2010-01-15  Kenichi Handa  <handa@m17n.org>
+
+	* xdisp.c (CHAR_COMPOSED_P): New arg END_CHARPOS.  Callers changed.
+
+2010-01-15  Chong Yidong  <cyd@stupidchicken.com>
+
+	* nsterm.m (Qnone): Define.
+
+	* nsfns.m (Qnone): Move definition to nsterm.m.
+
+2010-01-14  Kenichi Handa  <handa@m17n.org>
+
+	* coding.c (detect_coding_iso_2022): Fix handling of euc-xx coding
+	systems.
+
+2010-01-14  Kenichi Handa  <handa@m17n.org>
+
+	Make auto-composition work on all buffers even if they are
+	fundamental mode.
+
+	* composite.c (Vauto_composition_mode): New variable.
+	(composition_compute_stop_pos): Check Vauto_composition_mode
+	instead of Vauto_composition_function.
+	(composition_adjust_point, Ffind_composition_internal): Likewise.
+	(syms_of_composite): Declare Lisp variable
+	"auto-composition-mode" here.
+
+2010-01-13  Chong Yidong  <cyd@stupidchicken.com>
+
+	* xterm.c (x_term_init): Avoid garbage-collecting the new terminal
+	during call to vendor-specific-keysyms (Bug#5365).
+
 2010-01-13  YAMAMOTO Mitsuharu  <mituharu@math.s.chiba-u.ac.jp>
 
 	* keyboard.c (input_available_signal) [SYNC_INPUT]:

@@ -146,8 +146,7 @@ Lisp_Object ns_input_color, ns_input_background_color, ns_input_text, ns_working
 Lisp_Object ns_input_spi_name, ns_input_spi_arg;
 Lisp_Object Vx_toolkit_scroll_bars;
 static Lisp_Object Qmodifier_value;
-/* TODO: unsure why these defined in term files, anyway we need in keymap.c */
-Lisp_Object Qalt, Qcontrol, Qhyper, Qmeta, Qsuper;
+Lisp_Object Qalt, Qcontrol, Qhyper, Qmeta, Qsuper, Qnone;
 extern Lisp_Object Qcursor_color, Qcursor_type, Qns;
 
 /* Specifies which emacs modifier should be generated when NS receives

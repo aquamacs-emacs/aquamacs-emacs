@@ -411,7 +411,7 @@ Always stores Fcc copy of message when nil."
   (if (memq system-type '(windows-nt ms-dos)) "-Ei" "-i")
   "String of options to use when running the program in `ispell-grep-command'.
 Should probably be \"-i\" or \"-e\".
-Some machines (like the NeXT) don't support \"-i\""
+Some machines (like the NeXT) don't support \"-i\"."
   :type 'string
   :group 'ispell)
 
@@ -737,7 +737,7 @@ can be encoded as \\\"a, a\\\", \"a, ...)  Defaults are ~tex and ~nroff
 in English.  This has the same effect as the command-line `-T' option.
 The buffer Major Mode controls Ispell's parsing in tex or nroff mode,
 but the dictionary can control the extended character mode.
-Both defaults can be overruled in a buffer-local fashion. See
+Both defaults can be overruled in a buffer-local fashion.  See
 `ispell-parsing-keyword' for details on this.
 
 CHARACTER-SET used for languages with multibyte characters.
@@ -752,7 +752,7 @@ LANGUAGE.aff file \(e.g., english.aff\).")
   "Command line option prefix to select UTF-8 if supported, nil otherwise.
 If UTF-8 if supported by spellchecker and is selectable from the command line
 this variable will contain \"--encoding=\" for aspell and \"-i \" for hunspell,
-so UTF-8 or other mime charsets can be selected. That will be set for hunspell
+so UTF-8 or other mime charsets can be selected.  That will be set for hunspell
 >=1.1.6 or aspell >= 0.60 in `ispell-check-version'.
 
 For aspell non-nil means to try to automatically find aspell dictionaries.
@@ -760,9 +760,9 @@ Earlier aspell versions do not consistently support UTF-8.  Handling
 this would require some extra guessing in `ispell-aspell-find-dictionary'.")
 
 (defvar ispell-aspell-supports-utf8 nil
-  "Non nil if aspell has consistent command line UTF-8 support. Obsolete.
+  "Non nil if aspell has consistent command line UTF-8 support.  Obsolete.
 ispell.el and flyspell.el will use for this purpose the more generic
-variable `ispell-encoding8-command' for both aspell and hunspell. Is left
+variable `ispell-encoding8-command' for both aspell and hunspell.  Is left
 here just for backwards compatibility.")
 
 (make-obsolete-variable 'ispell-aspell-supports-utf8
@@ -1572,7 +1572,7 @@ Return the new dictionary alist."
 ;; Set params according to the selected spellchecker
 
 (defvar ispell-last-program-name nil
-  "Last value of `ispell-program-name'. Internal use.")
+  "Last value of `ispell-program-name'.  Internal use.")
 
 (defvar ispell-initialize-spellchecker-hook nil
   "Normal hook run on spellchecker initialization.
@@ -2621,7 +2621,7 @@ Global `ispell-quit' set to start location to continue spell session."
 		    ;; If the user types C-g, or generates some other
 		    ;; non-character event (such as a frame switch
 		    ;; event), stop ispell.  As a special exception,
-		    ;; ignore mouse events occuring in the same frame.
+		    ;; ignore mouse events occurring in the same frame.
 		    (while (and input-valid (not (characterp char)))
 		      (setq char (read-event))
 		      ;; Convert kp-0 to ?0, etc.
@@ -2857,7 +2857,7 @@ SPC:   Accept word this time.
 `a':   Accept word for this session.
 `A':   Accept word and place in `buffer-local dictionary'.
 `r':   Replace word with typed-in value.  Rechecked.
-`R':   Replace word with typed-in value. Query-replaced in buffer. Rechecked.
+`R':   Replace word with typed-in value.  Query-replaced in buffer.  Rechecked.
 `?':   Show these commands.
 `x':   Exit spelling buffer.  Move cursor to original point.
 `X':   Exit spelling buffer.  Leaves cursor at the current point, and permits
@@ -2889,7 +2889,7 @@ SPC:   Accept word this time.
 `a':   Accept word for this session.
 `A':   Accept word and place in `buffer-local dictionary'.
 `r':   Replace word with typed-in value.  Rechecked.
-`R':   Replace word with typed-in value. Query-replaced in buffer. Rechecked.
+`R':   Replace word with typed-in value.  Query-replaced in buffer.  Rechecked.
 `?':   Show these commands.
 `x':   Exit spelling buffer.  Move cursor to original point.
 `X':   Exit spelling buffer.  Leaves cursor at the current point, and permits
