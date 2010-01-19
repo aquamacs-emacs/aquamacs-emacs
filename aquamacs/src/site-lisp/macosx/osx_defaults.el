@@ -285,11 +285,13 @@ from earlier versions of the distribution."
        ;; put all files into the tmp dir (it's user specific)
        ("\\`\\([^/]*/\\)*\\([^/]*\\)\\'"
 	,(concat autosave-directory "\\2") t)))
-     (auto-save-file-name-prefix "")
-     (auto-save-file-name-postfix "")
-     ;; leave this there for historical reasons (todo: reconsider)
-     (auto-save-list-file-prefix  
-      "~/Library/Preferences/Aquamacs Emacs/auto-save-list/.saves-"))))
+    ;; Auto save file names must look "unique"
+    ;; so that they can be reliably recognized as auto save files.
+    ;; (auto-save-file-name-prefix "")
+    ;; (auto-save-file-name-postfix "")
+    ;; leave this there for historical reasons (todo: reconsider)
+    (auto-save-list-file-prefix  
+     "~/Library/Preferences/Aquamacs Emacs/auto-save-list/.saves-"))))
 
 (aquamacs-set-defaults 
  `((mailclient-place-body-on-clipboard-flag ,(gmail-mailclient-p))
