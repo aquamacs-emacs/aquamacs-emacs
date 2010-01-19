@@ -3505,9 +3505,12 @@ x_wm_set_icon_position (struct frame *f, int icon_x, int icon_y)
 #define NSAppKitVersionNumber10_5 949
 #endif
 
-/* Allow for compilation with pre-10.6 SDKs */
+/* Hack to allow for compilation with pre-10.6 SDKs */
 #define _NSApplicationPresentationAutoHideDock  (1 <<  0)
 #define _NSApplicationPresentationAutoHideMenuBar  (1 <<  2)
+
+extern NSString * const NSFullScreenModeAllScreens  __attribute__((weak_import));    
+
 
 static void
 ns_fullscreen_hook  (f)
