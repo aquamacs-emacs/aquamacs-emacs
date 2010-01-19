@@ -273,25 +273,33 @@ from earlier versions of the distribution."
 (ats "recentf done")
 
   ;; create autosave directory if necessary
-(let ((autosave-directory (expand-file-name "~/Library/Caches/Aquamacs Emacs/AutoSave/")))
-  (protect
-   (make-directory autosave-directory t))
- (aquamacs-set-defaults
-  `((auto-save-file-name-transforms
-      (("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'"
-	;; Don't put "\\2" inside expand-file-name, since it will be
-	;; transformed to "/2" on DOS/Windows.
-	,(concat autosave-directory "\\2") t)
+(defvar aquamacs-autosave-directory "~/Library/Caches/Aquamacs Emacs/AutoSave/"
+  "Autosave directory.
+Setting this has no effect w.r.t. where autosave files are written. 
+Only used for purging.
+Set `auto-save-file-name-transforms' instead.")
+
+(protect
+ (make-directory aquamacs-autosave-directory t))
+(aquamacs-set-defaults
+ `((auto-save-file-name-transforms
+    (("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'"
+      ;; Don't put "\\2" inside expand-file-name, since it will be
+      ;; transformed to "/2" on DOS/Windows.
+      ,(concat aquamacs-autosave-directory "\\2") t)
        ;; put all files into the tmp dir (it's user specific)
-       ("\\`\\([^/]*/\\)*\\([^/]*\\)\\'"
-	,(concat autosave-directory "\\2") t)))
-    ;; Auto save file names must look "unique"
-    ;; so that they can be reliably recognized as auto save files.
-    ;; (auto-save-file-name-prefix "")
-    ;; (auto-save-file-name-postfix "")
-    ;; leave this there for historical reasons (todo: reconsider)
-    (auto-save-list-file-prefix  
-     "~/Library/Preferences/Aquamacs Emacs/auto-save-list/.saves-"))))
+     ("\\`\\([^/]*/\\)*\\([^/]*\\)\\'"
+      ,(concat aquamacs-autosave-directory "\\2") t)))
+   ;; Auto save file names must look "unique"
+   ;; so that they can be reliably recognized as auto save files.
+   ;; (auto-save-file-name-prefix "")
+   ;; (auto-save-file-name-postfix "")
+   ;; leave this there for historical reasons (todo: reconsider)
+   (auto-save-list-file-prefix  
+    "~/Library/Preferences/Aquamacs Emacs/auto-save-list/.saves-")))
+
+;; this is run at runtime - not during preloading
+(run-with-timer (* 60 60) (* 60 60 24 3) 'purge-session-and-auto-save-files)
 
 (aquamacs-set-defaults 
  `((mailclient-place-body-on-clipboard-flag ,(gmail-mailclient-p))

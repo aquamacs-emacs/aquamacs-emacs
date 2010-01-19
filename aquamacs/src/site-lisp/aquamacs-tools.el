@@ -528,6 +528,51 @@ show BUFFER in that frame."
     (set-buffer-modified-p nil)))
 
 (defalias  'new-frame-with-new-scratch 'new-empty-buffer)
+
+;; auto save purging
+
+(defun purge-session-and-auto-save-files (&optional days)
+  "Deletes old auto-save files and session files.
+If given, DAYS indicates the number of days to keep such files.
+Otherwise, a sensible default is assumed.
+Files may be moved to the trash or deleted.
+
+Aquamacs only.
+"
+  (interactive)
+
+  (let* ((days (or days 31))
+	 (count1
+	  (aquamacs-purge-directory (file-name-directory auto-save-list-file-prefix)
+			   (concat "\\`" (regexp-quote
+					  (file-name-nondirectory
+					   auto-save-list-file-prefix)))
+			   days))
+	 (count2
+	  (aquamacs-purge-directory (file-name-directory aquamacs-autosave-directory)
+			   ".*"
+			   days)))
+    (if (called-interactively-p) 
+	(message "%s Session and %s Auto save files older than %s days purged." count1 count2 days))))
+
+(defun aquamacs-purge-directory (directory regexp days)
+  "Delete old files from directory"
+  (condition-case nil
+      (let* ((count 0)
+	     (cutoff-time (- (car (current-time)) (/ (* days 24) 18)))) ; that's about a week
+	(mapc
+	 (lambda (file)
+	   (when (and (< (car (nth 5 (file-attributes file)))
+			 cutoff-time)
+		      (not (file-directory-p file)))
+	     (move-file-to-trash file)
+	     (setq count (1+ count))))
+	 (directory-files (expand-file-name directory) t
+			  regexp t))
+	count)
+    (error 0)))
+   
+
  
 
 (provide 'aquamacs-tools)
