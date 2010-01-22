@@ -70,6 +70,11 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #ifdef HAVE_SETRLIMIT
 #include <sys/time.h>
 #include <sys/resource.h>
+
+/* ensure weak linking, as it is provided elsewhere in 10.4 */
+getrlimit() __attribute__((weak_import)) ;
+setrlimit() __attribute__((weak_import)) ;
+
 #endif
 
 #ifdef HAVE_PERSONALITY_LINUX32
@@ -923,6 +928,8 @@ main (int argc, char **argv)
 #ifndef CANNOT_DUMP
       && (!noninteractive || initialized)
 #endif
+      && getrlimit != NULL  /* function pointer NULL if not dynamically loadable */
+      && setrlimit != NULL
       && !getrlimit (RLIMIT_STACK, &rlim))
     {
       long newlim;
