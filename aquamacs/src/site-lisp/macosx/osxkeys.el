@@ -99,8 +99,7 @@ after updating this variable.")
 
 
 ;; support copy&paste at the right level
-(setq interprogram-cut-function 'x-maybe-select-text
-      interprogram-paste-function 'aquamacs-cut-buffer-or-selection-value)
+(setq interprogram-paste-function 'aquamacs-cut-buffer-or-selection-value)
 
 (defun aquamacs-cut-buffer-or-selection-value ()
   (unless (and osx-key-mode 
@@ -119,29 +118,14 @@ after updating this variable.")
 	nil)
        (t (setq ns-last-selected-text text))))))
 
-(defun x-maybe-select-text (text &optional push)
-  "Maybe put TEXT, a string, on the pasteboard.
-Does not set the pasteboard unless the user has explicitly asked
-for this to happen via calling clipboard-kill-region or 
-clipboard-kill-ring-save, or the associated cua functions.
-PUSH is ignored."
-  (when (or (not cua-mode) 
-	    (memq this-original-command '(clipboard-kill-region clipboard-kill-ring-save)))
-    (ns-set-pasteboard text))
-  (setq ns-last-selected-text text))
-
-;; overwrite x-select-text, which is called directly
-;; (not via interprogram-cut-function) when dragging mouse
-;; and elsewhere 
+;; overwrite x-select-text, to allow mouse drag to place text in the
+;; kill-ring without copying it (in cua-mode)
 (defun x-select-text (text &optional push)
   "Put TEXT, a string, on the pasteboard.
 Ignored if text was selected by mouse. PUSH is ignored."
-  ;; Don't send the pasteboard too much text.
-  ;; It becomes slow, and if really big it causes errors.
-  ;; (print this-original-command)
-  (when (or (not cua-mode) 
-	    ;; do not copy if just selected by mouse.
-	    (not (memq this-original-command '(mouse-extend mouse-drag-region))))
+  ;; do not copy in cua-mode if just selected by mouse.
+  (unless (and cua-mode 
+		  (memq this-original-command '(mouse-extend mouse-drag-region)))
     (ns-set-pasteboard text))
   (setq ns-last-selected-text text))
 
@@ -242,7 +226,7 @@ With argument, do this that many times."
 	   (overlay-end mouse-secondary-overlay))
   (let ((x-select-enable-clipboard t)
 	(cua-keep-region-after-copy t))
-    (clipboard-kill-ring-save 
+    (kill-ring-save 
      (overlay-start mouse-secondary-overlay) 
      (overlay-end mouse-secondary-overlay) )
     (message "Secondary selection saved to clipboard and kill-ring.")
@@ -256,7 +240,7 @@ With argument, do this that many times."
    (interactive)
    (if mouse-secondary-overlay
        (let ((x-select-enable-clipboard t))
-	 (clipboard-kill-region 
+	 (kill-region 
 	  (overlay-start mouse-secondary-overlay)
 	  (overlay-end mouse-secondary-overlay))
 	 (message "Secondary selection saved to clipboard and kill-ring, then killed."))
