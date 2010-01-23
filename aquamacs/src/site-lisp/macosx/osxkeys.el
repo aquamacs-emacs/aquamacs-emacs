@@ -246,13 +246,6 @@ With argument, do this that many times."
 	 (message "Secondary selection saved to clipboard and kill-ring, then killed."))
      (message "The secondary selection is not set.")))
 
-(defun clipboard-yank ()
-  "Insert the clipboard contents, or the last stretch of killed text."
-  (interactive "*")
-  (let ((x-select-enable-clipboard t))
-    (yank)))
-
-
 
 (defcustom set-region-to-isearch-match t
   "Whether to set the region after searching.
