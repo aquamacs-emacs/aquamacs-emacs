@@ -640,8 +640,26 @@ but select the newly created window."
 Its content is specified in the keymap `aquamacs-context-menu-map'."
   (interactive "@e \nP")
   ;; Let the mode update its menus first.
+  (aquamacs-update-context-menus)
+  
+  ;; move popup menu a little so mouse pointer is over first entry
+  ;; not needed
+  ;; ((pos
+  ;; 	 (if (not (eq (event-basic-type event) 'mouse-3))
+  ;; 	     event
+  ;; 	   (list (lispost (- (car (nth 2 (car (cdr event)))) 0)
+  ;; 		       (- (cdr (nth 2 (car (cdr event)))) 0))
+  ;; 		 (car (car (cdr event)))))))
+  
+    (popup-menu aquamacs-context-menu-map event prefix))
+
+(defun aquamacs-update-context-menus (&optional force)
+  "Update the buffer- and mode-specific items in
+`aquamacs-context-menu-map' if frame or buffer has changed.
+Update unconditionally if optional argument FORCE is non-nil."
   ;; (run-hooks 'activate-menubar-hook 'menu-bar-update-hook)
-  (when (frame-or-buffer-changed-p 'aquamacs-popup-context-menu-buffers-state)
+  (when (or force
+	    (frame-or-buffer-changed-p 'aquamacs-popup-context-menu-buffers-state))
     (let ((mode-menu (aquamacs-get-mouse-major-mode-menu)))
       (if mode-menu
 	  ;; TO DO major mode might not work unless we switch buffer
@@ -657,22 +675,12 @@ Its content is specified in the keymap `aquamacs-context-menu-map'."
     (define-key aquamacs-context-menu-map [change-mode] 
       `(menu-item "Change Major Mode "   
 		  ,menu-bar-change-mode-menu
-		  :help "Show a different buffer in this frame")))
-  
-  ;; move popup menu a little so mouse pointer is over first entry
-  ;; not needed
-  ;; ((pos
-  ;; 	 (if (not (eq (event-basic-type event) 'mouse-3))
-  ;; 	     event
-  ;; 	   (list (lispost (- (car (nth 2 (car (cdr event)))) 0)
-  ;; 		       (- (cdr (nth 2 (car (cdr event)))) 0))
-  ;; 		 (car (car (cdr event)))))))
-  
-    (popup-menu aquamacs-context-menu-map event prefix))
+		  :help "Show a different buffer in this frame"))))
+
   
 (defcustom osx-key-mode-mouse-3-behavior #'aquamacs-popup-context-menu
-  "Determine behavior of mouse-3 in osx-key-mode.
-When set to `aquamacs-popup-context-menu' or nil,  mouse-3
+  "Determine behavior of (down-)mouse-3 in osx-key-mode.
+When set to `aquamacs-popup-context-menu' or nil,  down-mouse-3
 \(usually: clicking the right mouse button) will bring up a
 context menu.  When set to `mouse-save-then-kill', mouse-3 will
 extend the region with `mouse-save-then-kill' (traditional Emacs
@@ -683,22 +691,30 @@ behavior)."
 			 mouse-save-then-kill) 
 	  (function-item :tag "Show context menu" 
 			 aquamacs-popup-context-menu)))
- 
-(defun osx-key-mode-mouse-3 (event &optional  prefix)
-"Popup a context menu or extend the region.
- Behavior depends on setting of `osx-key-mode-mouse-3-behavior'." 
+
+(defun osx-key-mode-mouse-3 (event &optional prefix)
+  "Extend the region, only if `osx-key-mode-mouse-3-behavior' is
+set to `mouse-save-then-kill'."
   (interactive "@e \nP")
   ;; we need to bind last-command to the target command
   ;; so mouse-save-then-kill is not confused and recognizes
   ;; a double click.
-  (let* ((cmd (or osx-key-mode-mouse-3-behavior 
-	     (function aquamacs-popup-context-menu)))
-	(last-command (if (eq last-command this-command)
-			  cmd
-			last-command)))
-    
-  (apply cmd 
-	 event prefix)))
+  (let ((cmd #'mouse-save-then-kill))
+    (if (eq osx-key-mode-mouse-3-behavior cmd)
+      (let ((last-command (if (eq last-command this-command)
+			      cmd
+			    last-command)))
+	(apply cmd 
+	       event prefix))))) 
+
+(defun osx-key-mode-down-mouse-3 (event &optional prefix)
+  "Activate context menu, when `osx-key-mode-mouse-3-behavior' is
+set to `aquamacs-popup-context-menu' or nil"
+  (interactive "@e \nP")
+  (if (or
+	 (eq osx-key-mode-mouse-3-behavior #'aquamacs-popup-context-menu)
+	 (not osx-key-mode-mouse-3-behavior))
+    (aquamacs-popup-context-menu event prefix)))
 
 (defun make-osx-key-low-priority-map (&optional command-key)
 
@@ -763,7 +779,8 @@ which key is mapped to command. The value of
 
     ;; debug log
 
-    (define-key map [mouse-3] 'osx-key-mode-mouse-3)
+    (define-key map [mouse-3] 'osx-key-mode-mouse-3) 
+    (define-key map [down-mouse-3] 'osx-key-mode-down-mouse-3)
     (define-key map `[(,osxkeys-command-key \?)] 'aquamacs-user-help)
     (define-key map `[(,osxkeys-command-key shift \?)] 'aquamacs-emacs-manual)
 

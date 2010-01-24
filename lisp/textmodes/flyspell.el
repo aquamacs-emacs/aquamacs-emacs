@@ -2137,10 +2137,10 @@ FACE and MOUSE-FACE specify the `face' and `mouse-face' properties
 for the overlay."
   (let ((overlay (make-overlay beg end nil t nil)))
     (overlay-put overlay 'face face)
-    (overlay-put overlay 'mouse-face mouse-face)
+    ;; (overlay-put overlay 'mouse-face mouse-face)
     (overlay-put overlay 'flyspell-overlay t)
     (overlay-put overlay 'evaporate t)
-    (overlay-put overlay 'help-echo "mouse-2: correct word at point")
+    ;; (overlay-put overlay 'help-echo "mouse-2: correct word at point")
     (overlay-put overlay 'keymap flyspell-mouse-map)
     (when (eq face 'flyspell-incorrect)
       (and (stringp flyspell-before-incorrect-word-string)
@@ -2521,8 +2521,10 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 	     poss word cursor-location start end opoint))
 	   (t
 	    ;; The word is incorrect, we have to propose a replacement.
-	    (flyspell-do-correct (flyspell-emacs-popup event poss word)
-				 poss word cursor-location start end opoint)))
+	    ;; restore point now, in case user selects a non-flyspell option.
+	    (goto-char opoint)
+	    (flyspell-emacs-popup
+	     event poss word cursor-location start end opoint)))
 	  (ispell-pdict-save t)))))
 
 ;;*---------------------------------------------------------------------*/
@@ -2601,7 +2603,9 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 ;;*---------------------------------------------------------------------*/
 ;;*    flyspell-emacs-popup ...                                         */
 ;;*---------------------------------------------------------------------*/
-(defun flyspell-emacs-popup (event poss word)
+;; flyspell-emacs-popup modified to define & use a keymap, so we can
+;; easily append another keymap (as "parent-keymap")
+(defun flyspell-emacs-popup (event poss word cursor-location start end save)
   "The Emacs popup menu."
   (unless window-system
     (error "This command requires pop-up dialogs"))
@@ -2616,47 +2620,102 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 				(1+ (cdr (cdr mouse-pos))))
 			  (car mouse-pos)))))
   (let* ((corrects   (if flyspell-sort-corrections
-			 (sort (car (cdr (cdr poss))) 'string<)
-		       (car (cdr (cdr poss)))))
-	 (cor-menu   (if (consp corrects)
-			 (mapcar (lambda (correct)
-				   (list correct correct))
-				 corrects)
-		       '()))
-	 (affix      (car (cdr (cdr (cdr poss)))))
-	 show-affix-info
-	 (base-menu  (let ((save (if (and (consp affix) show-affix-info)
-				     ;; no affix guesses for NSSpellchecker
-				     (list
-				      (list (concat "Save affix: " (car affix))
-					    'save)
-				      '("Accept (session)" session)
-				      '("Accept (buffer)" buffer))
-				   (append
-				    ;; modify menu for NSSpellchecker --
-				    ;;   use usual Mac options
-				    (if (string= ispell-program-name
-						 "NSSpellChecker")
-					'(("Learn Spelling" save))
-				      '(("Save word" save)))
-				    (if (string= ispell-program-name
-						 "NSSpellChecker")
-					;; TODO: implement a session option
-					;;    for NSSpellchecker
-					'(("Ignore Spelling" buffer))
-				      (list '("Accept (session)" session)
-					    '("Accept (buffer)" buffer)))))))
-		       (if (consp cor-menu)
-			   (append cor-menu (cons "" save))
-			 save)))
-	 (menu       (cons "flyspell correction menu" base-menu)))
-    (car (x-popup-menu event
-		       (list (if (string= ispell-program-name "NSSpellChecker")
-				 (format "%s" word)
-			       (format "%s [%s]" word (or ispell-local-dictionary
-							  ispell-dictionary)))
-			     menu)
-		       ))))
+  	 		 (sort (car (cdr (cdr poss))) 'string<)
+  	 	       (car (cdr (cdr poss)))))
+  	 (affix      (car (cdr (cdr (cdr poss)))))
+  	 show-affix-info)
+    
+    (setq flyspell-context-menu-map
+	  (make-sparse-keymap
+	   (if (string= ispell-program-name "NSSpellChecker")
+	       (if (not (car (cdr (cdr poss))))
+		   "No Guesses Found"
+		 (format "%s" word))
+	     (format "%s [%s]" word (or ispell-local-dictionary
+					ispell-dictionary)))))
+    ;; update aquamacs-context-menu-keymap
+    (aquamacs-update-context-menus)
+    ;; add contents of aquamacs-context-menu-keymap to flyspell-context-menu-map
+    (set-keymap-parent flyspell-context-menu-map aquamacs-context-menu-map)
+    
+    (define-key flyspell-context-menu-map [flyspell-corr-sep2] '(menu-item "--"))
+    (define-key flyspell-context-menu-map [buffer]
+      `(menu-item (if (string= ispell-program-name "NSSpellChecker")
+		      "Ignore Spelling"
+		    "Accept (buffer)")
+		  (lambda () (interactive)
+		    (flyspell-do-correct
+		     'buffer
+		     ',poss
+		     ,word
+		     ,cursor-location
+		     ,start
+		     ,end
+		     ,save))
+		  :help "Consider spelling as correct in this buffer"))
+    (define-key flyspell-context-menu-map [session]
+      `(menu-item "Accept (session)"
+		  (lambda () (interactive)
+		    (flyspell-do-correct
+		     'session
+		     ',poss
+		     ,word
+		     ,cursor-location
+		     ,start
+		     ,end
+		     ,save)) 
+		  :help "Consider spelling correct for buffers in current session"
+		  :visible (not (string= ispell-program-name "NSSpellChecker"))))
+    (define-key flyspell-context-menu-map [save]
+      `(menu-item (if (string= ispell-program-name "NSSpellChecker")
+		      "Learn Spelling"
+		    "Save word")
+		  (lambda () (interactive)
+		    (flyspell-do-correct
+		     'save
+		     ',poss
+		     ,word
+		     ,cursor-location
+		     ,start
+		     ,end
+		     ,save)) 
+		  :help "Save spelling to dictionary"))
+    (define-key flyspell-context-menu-map [affix]
+      ;; affix is nil for NSSpellChecker, so not visible
+      `(menu-item (concat "Save affix: " ,(car affix))
+		  (lambda () (interactive)
+		    (flyspell-do-correct
+		     'save
+		     ',poss
+		     ,word
+		     ,cursor-location
+		     ,start
+		     ,end
+		     ,save)) 
+		  :help "Save affix construction to dictionary"
+		  :visible (and ,(consp affix) ,show-affix-info)))
+    (when (consp corrects)
+      (define-key flyspell-context-menu-map [flyspell-corr-sep] '(menu-item "--"))
+      (let ((count 0)
+	    cor-count-str)
+	(mapcar (lambda (correct)
+		  ;; generate custom symbol to serve as each key
+		  (setq count (1+ count)
+			cor-count-str (concat "correct" (number-to-string count)))
+		  (define-key flyspell-context-menu-map `[,(intern cor-count-str)]
+		    `(menu-item ,correct
+				(lambda () (interactive)
+				  (flyspell-do-correct
+				   ,correct
+				   ',poss
+				   ,word
+				   ,cursor-location
+				   ,start
+				   ,end
+				   ,save))
+				:help "Replace word with guess")))
+		corrects)))
+    (popup-menu flyspell-context-menu-map event nil)))
 
 ;;*---------------------------------------------------------------------*/
 ;;*    flyspell-xemacs-popup ...                                        */
