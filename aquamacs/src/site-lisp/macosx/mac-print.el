@@ -120,14 +120,14 @@ in HTML format."
   "Copies the region in HTML format into the clipboard."
   (interactive "r")
   (when (or (not transient-mark-mode) mark-active)
-    (let ((x-select-enable-clipboard t))
-      (let ((buf (aquamacs-convert-to-html-buffer beg end)))
-	;; this will reset the pasteboard types:
-	(copy-region-as-kill beg end)
-	;;(ns-store-cut-buffer-internal 'PRIMARY (buffer-substring beg end))
-	(with-current-buffer buf
-	  (ns-store-cut-buffer-internal 'PRIMARY (buffer-string) 'html))
-	(kill-buffer buf)))))
+    (let ((x-select-enable-clipboard t)
+	  (buf (aquamacs-convert-to-html-buffer beg end)))
+      (with-current-buffer buf
+	(copy-region-as-kill (point-min) (point-max)))
+      ;; ns-store-cut-buffer-internal with TYPE 'html doesn't seem to work
+      ;; (with-current-buffer buf
+      ;;   (ns-store-cut-buffer-internal 'PRIMARY (buffer-string) 'html))
+      (kill-buffer buf))))
 
 (defun aquamacs-convert-to-html-buffer (&optional beg end)
   "Creates a buffer containing an HTML rendering of the current buffer."
