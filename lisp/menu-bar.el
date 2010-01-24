@@ -499,21 +499,18 @@ for the definition of the menu frame."
   (let ((x-select-enable-clipboard t))
     (yank)))
 
-(defvar x-select-text-force-pasteboard nil)
 (defun clipboard-kill-ring-save (beg end)
   "Copy region to kill ring, and save in the X clipboard."
   (interactive "r")
   (when (or (not transient-mark-mode) mark-active)
-    (let ((x-select-text-force-pasteboard t)
-	  (x-select-enable-clipboard t))
+    (let ((x-select-enable-clipboard t))
       (kill-ring-save beg end))))
 
 (defun clipboard-kill-region (beg end)
   "Kill the region, and save it in the X clipboard."
   (interactive "r")
   (when (or (not transient-mark-mode) mark-active)
-    (let ((x-select-text-force-pasteboard t)
-	  (x-select-enable-clipboard t))
+    (let ((x-select-enable-clipboard t))
       (kill-region beg end))))
 
 (defun menu-bar-enable-clipboard ()
