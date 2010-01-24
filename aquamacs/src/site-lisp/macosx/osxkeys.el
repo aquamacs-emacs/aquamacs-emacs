@@ -655,43 +655,20 @@ Its content is specified in the keymap `aquamacs-context-menu-map'."
   (interactive "@e \nr \nP")
   ;; Let the mode update its menus first.
   (aquamacs-update-context-menus)
-  ;; If mouse position is not within the active region, 
-  ;;   set region to word or whitespace at mouse position.
-  ;;  If other character is clicked, select that character.
-  ;; But can't have a region in an empty buffer.
-  (unless (or (equal (point-max) 1)
-	      (and mark-active transient-mark-mode
-		   (>= (posn-point (event-start event)) beg)
-		   (< (posn-point (event-start event)) end)))
+  ;; if mouse position is not within the active region, 
+  ;;   set region to word or whitespace at mouse position
+  (unless (and mark-active transient-mark-mode
+	       (> (posn-point (event-start event)) beg)
+	       (< (posn-point (event-start event)) end))
     (mouse-set-point event)
-    (let* ((word-bounds (bounds-of-thing-at-point 'word))
-	   (white-bounds (bounds-of-thing-at-point 'whitespace))
-	   chars-moved
-	   word-bounds-after
-	   white-bounds-after
-	   bounds
-	   start-bound
-	   end-bound)
-      (setq chars-moved (forward-char-same-line 1)
-	    word-bounds-after (bounds-of-thing-at-point 'word)
-	    white-bounds-after (bounds-of-thing-at-point 'whitespace)
-	    bounds (cond
-		    ((equal word-bounds word-bounds-after)
-		     word-bounds)
-		    ((equal white-bounds white-bounds-after)
-		     white-bounds)))
-      (forward-char-same-line (or chars-moved -1))
-      (setq start-bound (or (car bounds) (point))
-	    end-bound (or (cdr bounds) (1+ start-bound)))
-      (when (equal start-bound (point-max))
-	;; If click was at end of buffer, select last visible character
-	(setq start-bound (1- start-bound))
-	(setq end-bound (point-max)))
-      ;; set region
+    (let* ((bounds (or (bounds-of-thing-at-point 'word)
+		       (bounds-of-thing-at-point 'whitespace)))
+	   (start-bound (car bounds))
+	   (end-bound (cdr bounds)))
       (goto-char end-bound)
-      (push-mark start-bound 'no-msg 'activate)
-      ;; ensure that highlighting is updated before context menu display
-      (redisplay)))
+      (push-mark start-bound 'no-msg 'activate))
+    ;; ensure that highlighting is updated before context menu display
+    (redisplay))
   ;; popup the menu.
   (popup-menu aquamacs-context-menu-map event prefix))
 
