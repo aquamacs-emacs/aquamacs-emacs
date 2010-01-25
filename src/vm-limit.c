@@ -72,16 +72,11 @@ get_lim_data ()
 {
   struct rlimit rlimit;
 
-  if (getrlimit == NULL)  /* could not be dynamically loaded (weak linking) */
+  getrlimit (RLIMIT_AS, &rlimit);
+  if (rlimit.rlim_cur == RLIM_INFINITY)
     lim_data = -1;
   else
-    {
-      getrlimit (RLIMIT_AS, &rlimit);
-      if (rlimit.rlim_cur == RLIM_INFINITY)
-	lim_data = -1;
-      else
-	lim_data = rlimit.rlim_cur;
-    }
+    lim_data = rlimit.rlim_cur;
 }
 
 #else /* not HAVE_GETRLIMIT */
