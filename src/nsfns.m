@@ -1963,6 +1963,8 @@ Optional arg INIT, if non-nil, provides a default file name to use.  */)
 
   [panel setTreatsFilePackagesAsDirectories: YES];
   [panel setDelegate: fileDelegate];
+  /* must provide - users will have a hard time switching this off otherwise */
+  [panel setCanSelectHiddenExtension:YES];
 
   panelOK = 0;
   BLOCK_INPUT;
