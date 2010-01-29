@@ -157,7 +157,7 @@ to be closed.  If no tab is specified, (tabbar-selected-tab) is used"
 
 
   ;; you may redefine these:
-(defvar tabbar-key-binding-modifier-list '(alt meta)
+(defvar tabbar-key-binding-modifier-list '(alt)
   "List of modifiers to be used for keys bound to tabs.
 Must call `tabbar-define-access-keys' or toggle `tabbar-mode' for
 changes to this variable to take effect.")
