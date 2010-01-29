@@ -128,14 +128,11 @@ after updating this variable.")
 	nil)
        (t (setq ns-last-selected-text text))))))
 
-;; overwrite x-select-text, to allow mouse drag to place text in the
-;; kill-ring without copying it (in cua-mode)
+;; overwrite x-select-text, to honor x-select-enable-clipboard
 (defun x-select-text (text &optional push)
   "Put TEXT, a string, on the pasteboard.
 Ignored if text was selected by mouse. PUSH is ignored."
-  ;; do not copy in cua-mode if just selected by mouse.
-  (unless (and cua-mode 
-		  (memq this-original-command '(mouse-extend mouse-drag-region)))
+  (when x-select-enable-clipboard
     (ns-set-pasteboard text))
   (setq ns-last-selected-text text))
 
