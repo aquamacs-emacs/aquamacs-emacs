@@ -227,31 +227,37 @@ With argument, do this that many times."
 
 (defun aquamacs-clipboard-kill-ring-save-secondary ()
   "Copy secondary selection to kill ring, and save in the X clipboard."
-(interactive)
+  (interactive)
   (if (and mouse-secondary-overlay
 	   (overlay-start mouse-secondary-overlay)
 	   (overlay-end mouse-secondary-overlay))
-  (let ((x-select-enable-clipboard t)
-	(cua-keep-region-after-copy t))
-    (kill-ring-save 
-     (overlay-start mouse-secondary-overlay) 
-     (overlay-end mouse-secondary-overlay) )
-    (message "Secondary selection saved to clipboard and kill-ring.")
-    )
-  ; else
-  (message "The secondary selection is not set.")
-  ))
+      (let ((x-select-enable-clipboard t)
+	    (mark-was-active mark-active))
+	(kill-ring-save 
+	 (overlay-start mouse-secondary-overlay) 
+	 (overlay-end mouse-secondary-overlay) )
+	(message "Secondary selection saved to clipboard and kill-ring.")
+	(setq mark-active mark-was-active
+	      deactivate-mark nil)
+	)
+					; else
+    (message "The secondary selection is not set.")
+    ))
 
 (defun aquamacs-clipboard-kill-secondary ()
   "Kill the secondary selection, and save it in the X clipboard."
-   (interactive)
-   (if mouse-secondary-overlay
-       (let ((x-select-enable-clipboard t))
-	 (kill-region 
-	  (overlay-start mouse-secondary-overlay)
-	  (overlay-end mouse-secondary-overlay))
-	 (message "Secondary selection saved to clipboard and kill-ring, then killed."))
-     (message "The secondary selection is not set.")))
+  (interactive)
+  (if mouse-secondary-overlay
+      (let ((x-select-enable-clipboard t)
+	    (mark-was-active mark-active))
+	(kill-region 
+	 (overlay-start mouse-secondary-overlay)
+	 (overlay-end mouse-secondary-overlay))
+	(message "Secondary selection saved to clipboard and kill-ring, then killed.")
+	(setq mark-active mark-was-active
+	      deactivate-mark nil)
+	)
+    (message "The secondary selection is not set.")))
 
 
 (defcustom set-region-to-isearch-match t
