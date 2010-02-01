@@ -2413,7 +2413,8 @@ ns_draw_window_cursor (struct window *w, struct glyph_row *glyph_row,
     r.size.width -= overspill;
 
   /* TODO: only needed in rare cases with last-resort font in HELLO..
-     should we do this more efficiently? */
+     should we do this more efficiently?
+  Also needed for CJK glyphs.*/
   ns_clip_to_row (w, glyph_row, -1, NO); /* do ns_focus(f, &r, 1); if remove */
   [FRAME_CURSOR_COLOR (f) set];
 
@@ -2425,7 +2426,6 @@ ns_draw_window_cursor (struct window *w, struct glyph_row *glyph_row,
   	   case, then move the ns_unfocus() here after that call. */
   NSDisableScreenUpdates ();
 #endif
-
   switch (cursor_type)
     {
     case NO_CURSOR:
@@ -2449,6 +2449,23 @@ ns_draw_window_cursor (struct window *w, struct glyph_row *glyph_row,
       s = r;
       s.size.width = min (cursor_width, 2); //FIXME(see above)
       NSRectFill (s);
+      
+      /* Workaround for Cocoa anti-aliasing issue.
+	 The presence of the cursor bar to the left causes
+	 the anti-aliasing algorithm to render the glyph's
+	 fringes darker, resulting in an undesirable 
+	 animation when the cursor is blinking or moving.
+      To Do: do this for HBAR_CURSOR as well.*/
+	 
+      [FRAME_BACKGROUND_COLOR (f) set];
+      r.origin.x += s.size.width;
+      r.size.width -= s.size.width;
+      r.origin.y -= 2;
+      r.size.height += 4;
+      
+      NSRectFill (r);
+      [FRAME_CURSOR_COLOR (f) set];
+
       break;
     }
   ns_unfocus (f);
