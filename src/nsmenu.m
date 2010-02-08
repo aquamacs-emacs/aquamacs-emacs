@@ -147,12 +147,6 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
   if (f != SELECTED_FRAME ())
       return;
 
-  if (! [[FRAME_NS_VIEW (f) window] isKindOfClass: [EmacsWindow class]])
-    {
-      [NSApp setMainMenu: panelMenu];
-      return; /* could be a panelMenu - do not override */
-    }
-
   XSETFRAME (Vmenu_updating_frame, f);
 /*fprintf (stderr, "ns_update_menubar: frame: %p\tdeep: %d\tsub: %p\n", f, deep_p, submenu); */
 
