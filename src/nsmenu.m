@@ -71,6 +71,7 @@ extern Lisp_Object Voverriding_local_map, Voverriding_local_map_menu_flag,
 
 extern long context_menu_value;
 EmacsMenu *mainMenu, *svcsMenu, *dockMenu;
+NSMenu *panelMenu;
 
 /* Nonzero means a menu is currently active.  */
 static int popup_activated_flag;
@@ -115,7 +116,6 @@ popup_activated ()
   return popup_activated_flag;
 }
 
-
 /* --------------------------------------------------------------------------
     Update menubar.  Three cases:
     1) deep_p = 0, submenu = nil: Fresh switch onto a frame -- either set up
@@ -146,6 +146,13 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
 
   if (f != SELECTED_FRAME ())
       return;
+
+  if (! [[FRAME_NS_VIEW (f) window] isKindOfClass: [EmacsWindow class]])
+    {
+      [NSApp setMainMenu: panelMenu];
+      return; /* could be a panelMenu - do not override */
+    }
+
   XSETFRAME (Vmenu_updating_frame, f);
 /*fprintf (stderr, "ns_update_menubar: frame: %p\tdeep: %d\tsub: %p\n", f, deep_p, submenu); */
 
@@ -591,12 +598,28 @@ name_is_separator (name)
   ns_update_menubar (frame, 1, self);
 }
 
+extern NSMenu *systemMenu;
 
-- (BOOL)performKeyEquivalent: (NSEvent *)theEvent
+- (BOOL)performKeyEquivalent: (NSEvent *)event
 {
+  // i
+  //   [FRAME_NS_VIEW (SELECTED_FRAME ()) keyDown: event];
+  // else
   if (SELECTED_FRAME () && FRAME_NS_P (SELECTED_FRAME ())
-      && FRAME_NS_VIEW (SELECTED_FRAME ()))
-    [FRAME_NS_VIEW (SELECTED_FRAME ()) keyDown: theEvent];
+      && FRAME_NS_VIEW (SELECTED_FRAME ())
+      /* must check if EmacsWindow.  Could be sheet/NSPanel */
+      && [[event window] isKindOfClass: [EmacsWindow class]])
+    [FRAME_NS_VIEW (SELECTED_FRAME ()) keyDown: event];
+  else
+    {
+      /* open panels (text fields, etc.) require a 
+	 menu with Edit submenu, containing Copy, Paste, Undo, etc. functions
+	 that send the correct actions to the first responders.
+	 Therefore, the panelMenu (which is the main menu normally when sheets
+	 are shown) is called. */
+      return NO;
+      // return [[NSApp mainMenu] performKeyEquivalent:event];
+    }
   return YES;
 }
 

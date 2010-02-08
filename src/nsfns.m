@@ -1834,6 +1834,9 @@ DEFUN ("ns-popup-page-setup-panel", Fns_popup_page_setup_panel, Sns_popup_page_s
 
   // [[FRAME_NS_VIEW (SELECTED_FRAME ()) window] makeKeyWindow];
   UNBLOCK_INPUT;
+
+  ns_update_menubar (SELECTED_FRAME (), 0, nil);
+
   return Qnil;
 }
 
@@ -1917,6 +1920,9 @@ DEFUN ("ns-popup-print-panel", Fns_popup_print_panel, Sns_popup_print_panel,
   [htmlPage setFrameLoadDelegate:FRAME_NS_VIEW (f)];
   
   UNBLOCK_INPUT;
+
+  ns_update_menubar (SELECTED_FRAME (), 0, nil);
+
   return Qnil;
 }
 
@@ -1944,9 +1950,6 @@ Optional arg INIT, if non-nil, provides a default file name to use.  */)
 
   check_ns ();
 
-  if (fileDelegate == nil)
-    fileDelegate = [EmacsFileDelegate new];
-
   [NSCursor setHiddenUntilMouseMoves: NO];
 
   if ([dirS characterAtIndex: 0] == '~')
@@ -1954,37 +1957,122 @@ Optional arg INIT, if non-nil, provides a default file name to use.  */)
 
   panel = NILP (isLoad) ?
     (id)[EmacsSavePanel savePanel] : (id)[EmacsOpenPanel openPanel];
-
   [panel setTitle: promptS];
 
+
   /* Puma (10.1) does not have */
-  if ([panel respondsToSelector: @selector (setAllowsOtherFileTypes:)])
-    [panel setAllowsOtherFileTypes: YES];
+  // if ([panel respondsToSelector: @selector (setAllowsOtherFileTypes:)])
+  //   [panel setAllowsOtherFileTypes: YES];
+  /* this seems to trigger a bug with the initial file name extension being deleted. */
+
+  [panel setAllowedFileTypes:nil]; // allow all
 
   [panel setTreatsFilePackagesAsDirectories: YES];
   [panel setDelegate: fileDelegate];
   /* must provide - users will have a hard time switching this off otherwise */
-  [panel setCanSelectHiddenExtension:YES];
+  [panel setCanSelectHiddenExtension:NO];
+  [panel setExtensionHidden:NO];
+
+  //  [panel setDirectoryURL: [NSURL fileURLWithPath: dirS isDirectory:YES]];
 
   panelOK = 0;
-  BLOCK_INPUT;
+ 
   if (NILP (isLoad))
     {
-      ret = [panel runModalForDirectory: dirS file: initS];
+      ret = 0;
+
+      NSModalSession popupSession;
+
+      int specpdl_count = SPECPDL_INDEX ();
+      ///record_unwind_protect (pop_down_menu, make_save_value (dialog, 0));
+      int popup_activated_flag = 1;
+
+      extern EMACS_TIME timer_check (int do_it_now);  
+
+      /* only in OSX 10.6:  
+	 __block int retCode = -1;
+  
+	 [panel setDirectoryURL:[NSURL fileURLWithPath:dirS isDirectory: YES]];
+	 [panel setNameFieldStringValue:initS];
+
+	 [panel beginSheetModalForWindow:[FRAME_NS_VIEW (SELECTED_FRAME ()) window] completionHandler:^(NSInteger returnCode)
+	 {
+	 retCode = returnCode;
+	 }];
+      */
+
+      // panelModeActive = 1;
+      // ns_update_menubar(SELECTED_FRAME (), 0 nil);
+      BLOCK_INPUT;
+      [NSApp setMainMenu: panelMenu];
+
+      int retCode = -1;
+      [panel beginSheetForDirectory:dirS file:initS modalForWindow:[FRAME_NS_VIEW (SELECTED_FRAME ()) window]
+		      modalDelegate:panel
+		     didEndSelector:@selector(savePanelDidEnd:returnCode:contextInfo:)
+			contextInfo:&retCode];
+
+  
+      /* initiate a session that will be ended by pop_down_menu */
+      [panel retain];  
+      popupSession = [NSApp beginModalSessionForWindow: [FRAME_NS_VIEW (SELECTED_FRAME ()) window]];
+      //[panel makeKeyWindow];
+      UNBLOCK_INPUT;
+
+      int ret2 = -1;
+      ret = -1;
+      retCode = -1;
+      while (popup_activated_flag
+	     //	 && ret == -1
+	     && retCode == -1
+	     && ((ret2 = [NSApp runModalSession: popupSession])
+		 == NSRunContinuesResponse))
+	{
+	  /* Run this for timers.el, indep of atimers; might not return.
+	     TODO: use return value to avoid calling every iteration. */
+	  timer_check (1);
+	  [NSThread sleepUntilDate: [NSDate dateWithTimeIntervalSinceNow: 0.1]];
+	}
+      if (retCode == -1 && ret2 != -1)
+	ret = ret2;
+      else
+	ret = retCode;
+      //unbind_to (specpdl_count, Qnil);  /* calls pop_down_menu */
+
+      if (ret>-1)
+	{ char *str = [[panel filename] UTF8String];
+	  if (str)
+	    fname = build_string (str);
+	}
+
+      BLOCK_INPUT;
+      [NSApp endModalSession: popupSession];
+      [NSApp endSheet:panel];
+      [panel release];
+      [[FRAME_NS_VIEW (SELECTED_FRAME ()) window] makeKeyWindow];
+      UNBLOCK_INPUT;
+
+      [NSApp setMainMenu: mainMenu];
     }
   else
     {
+      BLOCK_INPUT;
+      [NSApp setMainMenu: panelMenu];
       [panel setCanChooseDirectories: YES];
       ret = [panel runModalForDirectory: dirS file: initS types: nil];
+      ret = (ret == NSOKButton) || panelOK;
+      [NSApp setMainMenu: mainMenu];
+      UNBLOCK_INPUT;
+
+      if (ret)
+	fname = build_string ([[panel filename] UTF8String]);
+      else
+	fname = Qnil;
+
     }
 
-  ret = (ret == NSOKButton) || panelOK;
-
-  if (ret)
-    fname = build_string ([[panel filename] UTF8String]);
-
   [[FRAME_NS_VIEW (SELECTED_FRAME ()) window] makeKeyWindow];
-  UNBLOCK_INPUT;
+ 
 
   return ret ? fname : Qnil;
 }
@@ -3168,40 +3256,19 @@ DEFUN ("ns-open-help-anchor", Fns_open_help_anchor, Sns_open_help_anchor, 1, 2, 
 
 @implementation EmacsSavePanel
 #ifdef NS_IMPL_COCOA
-/* --------------------------------------------------------------------------
-   These are overridden to intercept on OS X: ending panel restarts NSApp
-   event loop if it is stopped.  Not sure if this is correct behavior,
-   perhaps should check if running and if so send an appdefined.
-   -------------------------------------------------------------------------- */
-- (void) ok: (id)sender
-{
-  [super ok: sender];
 
-  /* NSSavePanel would display a similar dialog, but it invokes ok:
-     before displaying it, so we would kill it by stopping the
-     event loop here.*/
-  if ([[NSFileManager defaultManager] fileExistsAtPath:[self.URL path]]) 
-    if (NSRunCriticalAlertPanel([NSString stringWithFormat:
-@"The file %@ already exists.  Do you want to replace it?", [self.URL lastPathComponent]],
-@"A file or folder with the same name already exists in this folder. Replacing it will overwrite its current contents.",
-                        @"Cancel", @"Replace", nil)
-	== NSAlertDefaultReturn)
-      return; /* do not discard panel */
-  
-  panelOK = 1;
-  [NSApp stop: self];
-}
-- (void) cancel: (id)sender
+// - (BOOL)performKeyEquivalent: (NSEvent*)anEvent
+// {
+//   if ([super performKeyEquivalent:anEvent] == NO)
+//     return [NSApp _handleKeyEquivalent:anEvent];
+//   return YES;
+// }
+
+- (void)savePanelDidEnd:(NSSavePanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 {
-  [super cancel: sender];
-  [NSApp stop: self];
+  * ((NSInteger*) contextInfo) = returnCode;
 }
-- (BOOL)_overwriteExistingFileCheck:(id)fp8
-{
-  /* hack: do not ask for confirmation when a file is about
-     to be overwritten.  We will ask ourselves in ok:*/
-  return YES;
-}
+
 #endif
 @end
 
@@ -3225,26 +3292,6 @@ DEFUN ("ns-open-help-anchor", Fns_open_help_anchor, Sns_open_help_anchor, 1, 2, 
   [NSApp stop: self];
 }
 #endif
-@end
-
-
-@implementation EmacsFileDelegate
-/* --------------------------------------------------------------------------
-   Delegate methods for Open/Save panels
-   -------------------------------------------------------------------------- */
-- (BOOL)panel: (id)sender isValidFilename: (NSString *)filename
-{
-  return YES;
-}
-- (BOOL)panel: (id)sender shouldShowFilename: (NSString *)filename
-{
-  return YES;
-}
-- (NSString *)panel: (id)sender userEnteredFilename: (NSString *)filename
-          confirmed: (BOOL)okFlag
-{
-  return filename;
-}
 @end
 
 #endif

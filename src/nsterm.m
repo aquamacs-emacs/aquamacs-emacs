@@ -4140,8 +4140,12 @@ ns_term_init (Lisp_Object display_name)
 /* Set up OS X app menu */
 #ifdef NS_IMPL_COCOA
   {
-    NSMenu *appMenu;
+    /* set up the panel menu (while panels are shown)
+       must provide Edit functions. */
+
     NSMenuItem *item;
+
+    NSMenu *appMenu;
     /* set up the application menu */
     svcsMenu = [[EmacsMenu alloc] initWithTitle: @"Services"];
     [svcsMenu setAutoenablesItems: NO];
@@ -4199,6 +4203,62 @@ ns_term_init (Lisp_Object display_name)
     [NSApp setMainMenu: mainMenu];
     [NSApp setAppleMenu: appMenu];
     [NSApp setServicesMenu: svcsMenu];
+
+
+    panelMenu = [[NSMenu alloc] initWithTitle: @"Aquamacs*"];
+      
+    NSMenu *panelAppMenu = [[EmacsMenu alloc] initWithTitle: @"Aquamacs"];
+    [panelAppMenu setAutoenablesItems: NO];
+    [panelAppMenu insertItemWithTitle: @"Hide Aquamacs Emacs"
+			       action: @selector (hide:)
+			keyEquivalent: @"h"
+			      atIndex: 0];
+    item =  [panelAppMenu insertItemWithTitle: @"Hide Others"
+				       action: @selector (hideOtherApplications:)
+				keyEquivalent: @"h"
+				      atIndex: 1];
+    [item setKeyEquivalentModifierMask: NSCommandKeyMask | NSAlternateKeyMask];
+    /* app menu is not available (except hide, really) */
+    item = [panelMenu insertItemWithTitle: ns_app_name                       
+                                  action: @selector (menuDown:)
+                           keyEquivalent: @""
+                                 atIndex: 0];
+    [panelMenu setSubmenu: panelAppMenu forItem: item];
+
+    NSMenu *submenu = [[NSMenu alloc] initWithTitle:NSLocalizedString(@"Edit", @"The Edit menu")];
+    [panelMenu setSubmenu:submenu forItem:[panelMenu addItemWithTitle:@"Edit" action:NULL keyEquivalent:@""]];
+    [submenu addItemWithTitle:NSLocalizedString(@"Undo", nil)
+		       action:@selector(undo:)
+		keyEquivalent:@"z"];
+
+    [submenu addItemWithTitle:NSLocalizedString(@"Redo", nil)
+				  action:@selector(redo:)
+			   keyEquivalent:@"Z"];
+
+    [submenu addItem:[NSMenuItem separatorItem]];
+
+    [submenu addItemWithTitle:NSLocalizedString(@"Cut", nil)
+				  action:@selector(cut:)
+			   keyEquivalent:@"x"];
+
+    [submenu addItemWithTitle:NSLocalizedString(@"Copy", nil)
+				  action:@selector(copy:)
+			   keyEquivalent:@"c"];
+
+    [submenu addItemWithTitle:NSLocalizedString(@"Paste", nil)
+				  action:@selector(paste:)
+			   keyEquivalent:@"v"];
+
+    [submenu addItemWithTitle:NSLocalizedString(@"Delete", nil)
+				  action:@selector(delete:)
+			   keyEquivalent:@""];
+
+    [submenu addItemWithTitle: NSLocalizedString(@"Select All", nil)
+				  action: @selector(selectAll:)
+			   keyEquivalent: @"a"];
+
+
+
     /* Needed at least on Cocoa, to get dock menu to show windows */
     [NSApp setWindowsMenu: [[NSMenu alloc] init]];
   }
