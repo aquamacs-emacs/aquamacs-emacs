@@ -4005,7 +4005,8 @@ and more reliable (no dependence on goal column, etc.)."
     (if (called-interactively-p 'interactive)
 	(condition-case nil
 	    (line-move arg nil nil try-vscroll)
-	  ((beginning-of-buffer end-of-buffer) (ding)))
+	  (beginning-of-buffer (goto-char (point-min)))
+	  (end-of-buffer (goto-char (point-max))))
       (line-move arg nil nil try-vscroll)))
   nil)
 
@@ -4035,7 +4036,8 @@ to use and more reliable (no dependence on goal column, etc.)."
   (if (called-interactively-p 'interactive)
       (condition-case nil
 	  (line-move (- arg) nil nil try-vscroll)
-	((beginning-of-buffer end-of-buffer) (ding)))
+	(beginning-of-buffer (goto-char (point-min)))
+	(end-of-buffer (goto-char (point-max))))
     (line-move (- arg) nil nil try-vscroll))
   nil)
 
