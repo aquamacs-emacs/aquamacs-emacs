@@ -2395,7 +2395,7 @@ spaces are put between sequence elements, etc.  */)
 }
 
 
-Lisp_Object Qalt, Qcontrol, Qhyper, Qmeta, Qsuper, Qmodifier_value;
+Lisp_Object Qalt, Qcontrol, Qhyper, Qmeta, Qsuper, Qmodifier_value, Qnone;
 extern Lisp_Object ns_alternate_modifier, ns_right_alternate_modifier, 
   ns_command_modifier, ns_right_command_modifier,
   ns_control_modifier, ns_right_control_modifier, 
@@ -2404,9 +2404,20 @@ extern Lisp_Object ns_alternate_modifier, ns_right_alternate_modifier,
 
 /* ^ should be 0x2303 (0xe28c83 in UTF-8) 
    http://macbiblioblog.blogspot.com/2005/05/special-key-symbols.html*/
-#define NS_KEYSYMBOL(x) (EQ (ns_command_modifier, x) ? "\xe2\x8c\x98" : \
-			 (EQ (ns_control_modifier, x) ? "^" : \
-			  (EQ (ns_alternate_modifier, x) ? "\xe2\x8c\xa5" : "???")))
+
+/* not used: */
+#define NS_KEYSYMBOL(x) (EQ (ns_command_modifier, x) ? \
+                                   ((EQ (ns_command_modifier, ns_right_command_modifier) || EQ (ns_right_command_modifier, Qnone)) \
+				    ? "\xe2\x8c\x98" : "\xe2\x8c\x98") : /* "\xe2\x87\xa0\xe2\x8c\x98" */ \
+			 (EQ (ns_control_modifier, x) ? \
+			  ((EQ (ns_control_modifier, ns_right_control_modifier) || EQ (ns_right_control_modifier, Qnone)) \
+			   ? "^" : "^" ) :	/* "\xe2\x87\xa0^" */		\
+			  (EQ (ns_alternate_modifier, x) ? \
+                                   ((EQ (ns_alternate_modifier, ns_right_alternate_modifier) || EQ (ns_right_alternate_modifier, Qnone)) \
+                                    ? "\xe2\x8c\xa5" : "\xe2\x8c\xa5") :  /* "\xe2\x87\xa0\xe2\x8c\xa5" */ \
+                           (EQ (ns_right_command_modifier, x) ? "\xe2\x87\xa2\xe2\x8c\x98" : \
+			    (EQ (ns_right_control_modifier, x) ? "\xe2\x87\xa2^" : \
+			     (EQ (ns_right_alternate_modifier, x) ? "\xe2\x87\xa2\xe2\x8c\xa5" : "???"))))))
 
 char *
 push_key_description (c, p, force_multibyte)

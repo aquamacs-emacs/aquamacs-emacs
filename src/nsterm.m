@@ -249,34 +249,33 @@ static BOOL inNsSelect = 0;
 
 /* Convert modifiers in a NeXTSTEP event to emacs style modifiers.  */
 #define NS_FUNCTION_KEY_MASK 0x800000
-#define NSLeftControlKeyMask    (0x000001 | NSControlKeyMask)
-#define NSRightControlKeyMask   (0x002000 | NSControlKeyMask)
-#define NSLeftCommandKeyMask    (0x000008 | NSCommandKeyMask)
-#define NSRightCommandKeyMask   (0x000010 | NSCommandKeyMask)
-#define NSLeftAlternateKeyMask  (0x000020 | NSAlternateKeyMask)
-#define NSRightAlternateKeyMask (0x000040 | NSAlternateKeyMask)
+#define NSLeftControlKeyMask    (0x000001 )
+#define NSRightControlKeyMask   (0x002000 )
+#define NSLeftCommandKeyMask    (0x000008 )
+#define NSRightCommandKeyMask   (0x000010 )
+#define NSLeftAlternateKeyMask  (0x000020 )
+#define NSRightAlternateKeyMask (0x000040 )
+
 #define EV_MODIFIERS(e)                               \
-    ((([e modifierFlags] & NSHelpKeyMask) ?           \
+  ((([e modifierFlags] & NSHelpKeyMask) ?	      \
            hyper_modifier : 0)                        \
-     | (([e modifierFlags] & NSAlternateKeyMask) ?    \
-	((!EQ(ns_right_alternate_modifier,Qnone)			\
-	  && ([e modifierFlags] & NSRightAlternateKeyMask) == NSRightAlternateKeyMask) ? \
-	 parse_solitary_modifier (ns_right_alternate_modifier)		\
-     : parse_solitary_modifier (ns_alternate_modifier)) : 0)		\
      | (([e modifierFlags] & NSShiftKeyMask) ?        \
            shift_modifier : 0)                        \
-     | (([e modifierFlags] & NSControlKeyMask) ?			\
-	((!EQ(ns_right_control_modifier,Qnone)			\
-	  && ([e modifierFlags] & NSRightControlKeyMask) == NSRightControlKeyMask) ? \
-	 parse_solitary_modifier (ns_right_control_modifier)		\
-	 : parse_solitary_modifier (ns_control_modifier)) : 0)	\
      | (([e modifierFlags] & NS_FUNCTION_KEY_MASK) ?  \
            parse_solitary_modifier (ns_function_modifier) : 0)    \
-     | (([e modifierFlags] & NSCommandKeyMask) ?      \
-	((!EQ(ns_right_command_modifier,Qnone)				\
-	  && ([e modifierFlags] & NSRightCommandKeyMask) == NSRightCommandKeyMask) ? \
-	 parse_solitary_modifier (ns_right_command_modifier)		\
-	 : parse_solitary_modifier (ns_command_modifier)) : 0))
+     | (([e modifierFlags] & NSLeftCommandKeyMask) ?		  \
+	 parse_solitary_modifier (ns_command_modifier) : 0)	  \
+     | (([e modifierFlags] & NSRightCommandKeyMask) ?			\
+	 parse_solitary_modifier ((EQ (ns_right_command_modifier, Qnone) ? ns_command_modifier : ns_right_command_modifier)) : 0) \
+     | (([e modifierFlags] & NSLeftAlternateKeyMask) ?			\
+	 parse_solitary_modifier (ns_alternate_modifier) : 0)		\
+     | (([e modifierFlags] & NSRightAlternateKeyMask) ?			\
+	 parse_solitary_modifier ((EQ (ns_right_alternate_modifier, Qnone) ? ns_alternate_modifier : ns_right_alternate_modifier)) : 0) \
+     | (([e modifierFlags] & NSLeftControlKeyMask) ?			\
+	 parse_solitary_modifier (ns_control_modifier) : 0)		\
+     | (([e modifierFlags] & NSRightControlKeyMask) ?			\
+	 parse_solitary_modifier ((EQ (ns_right_control_modifier, Qnone) ? ns_control_modifier : ns_right_control_modifier)) : 0))
+
 
 #define EV_UDMODIFIERS(e)                                      \
     ((([e type] == NSLeftMouseDown) ? down_modifier : 0)       \
@@ -4990,13 +4989,20 @@ extern void update_window_cursor (struct window *w, int on);
 
       if (flags & NSCommandKeyMask)
         {
-          emacs_event->modifiers |= (!EQ (ns_right_command_modifier, Qnone) && \
-				     ((flags & NSRightCommandKeyMask) == NSRightCommandKeyMask)) ?
-	    parse_solitary_modifier (ns_right_command_modifier)	\
-	    : parse_solitary_modifier (ns_command_modifier);
+	  if (flags & NSLeftCommandKeyMask)
+	    {
+	      emacs_event->modifiers |= parse_solitary_modifier (ns_command_modifier);
+	    }
+	  if (flags & NSRightCommandKeyMask)
+	    {
+	      emacs_event->modifiers |= 
+		parse_solitary_modifier ((EQ (ns_right_command_modifier, Qnone) ? 
+					  ns_command_modifier : ns_right_command_modifier));
+	    }
+
           /* if super (default), take input manager's word so things like
              dvorak / qwerty layout work */
-          if (EQ (ns_command_modifier, Qsuper)
+          if ((EQ (ns_command_modifier, Qsuper) || EQ (ns_command_modifier, Qalt))
               && !fnKeysym
               && [[theEvent characters] length] != 0)
             {
@@ -5052,7 +5058,7 @@ extern void update_window_cursor (struct window *w, int on);
 	  emacs_event->modifiers |= 
 	    parse_solitary_modifier (ns_right_alternate_modifier);
 	}
-      else if (flags & NSAlternateKeyMask) /* default = meta */
+      if (flags & NSLeftAlternateKeyMask) /* default = meta */
 	{
 	  /* The better way to do this would be to add Meta to every key for 
 	     which the Option modifier doesn't change the character code.
