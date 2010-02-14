@@ -2050,9 +2050,9 @@ Optional arg INIT, if non-nil, provides a default file name to use.  */)
       [NSApp endSheet:panel];
       [panel release];
       [[FRAME_NS_VIEW (SELECTED_FRAME ()) window] makeKeyWindow];
-      UNBLOCK_INPUT;
 
       [NSApp setMainMenu: mainMenu];
+      UNBLOCK_INPUT;
     }
   else
     {
@@ -3263,6 +3263,16 @@ DEFUN ("ns-open-help-anchor", Fns_open_help_anchor, Sns_open_help_anchor, 1, 2, 
 //     return [NSApp _handleKeyEquivalent:anEvent];
 //   return YES;
 // }
+- (void) ok: (id)sender
+{
+  [super ok: sender];
+  [NSApp stop: self];
+}
+- (void) cancel: (id)sender
+{
+  [super cancel: sender];
+  [NSApp stop: self];
+}
 
 - (void)savePanelDidEnd:(NSSavePanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 {
