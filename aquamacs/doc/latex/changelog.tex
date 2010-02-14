@@ -1,13 +1,13 @@
 % Choose C-x RET f Latin-1 to save this file in Emacs
 \section{Aquamacs Emacs: What's New in This Release}
-\subsection{Changes--- 2.0dev}
+\subsection{Changes--- 2.0 preview 4}
 
 \begin{rawhtml}
 <a name="changelog-top"></a>
 \end{rawhtml}
 \begin{itemize}
 
-\item \emph{Aquamacs is now based on Emacs 23 and the Cocoa (NextStep) port.  There are many changes under the hood associated with this.  A few functions don't work right just yet, and we recommend neither this preview of Aquamacs 2.0 nor the Emacs 23.1 for mission-critical production use.  Please help the Aquamacs team complete the transition by contributing code and fixes or, if that's not possible, a donation.  Here, we report the changes between Emacs 22 and Emacs 23 with respect to the Aquamacs distribution.  Further changes can be found in the NEWS file for Emacs 23.}
+\item \emph{Aquamacs is now based on Emacs 23 and the Cocoa (NextStep) port.  There are many changes under the hood associated with this.  Most functions should work correctly now, although we recommend regular saving or familiarity with the auto-save mode when using this preview Aquamacs 2.0.  Please help the Aquamacs team complete the transition by contributing code and fixes or, if that's not possible, a donation.  Here, we report the changes between Emacs 22 and Emacs 23 with respect to the Aquamacs distribution.  Further changes can be found in the NEWS file for Emacs 23.}
 
 \item Aquamacs has a new icon in the Dock, designed by graphic designer Jessica Walker (jekawacaneer@gmail.com).
 
@@ -16,11 +16,10 @@
 \item Spell-checking now uses the system-wide dictionaries in all the languages supported on OS X.  The standard spelling user interface is available as well as the traditional Emacs `ispell' interface (which also uses the system-wide spelling mechanism).  Configure the use of GNU `aspell' through the `ispell-program-name' variable if desired. 
 Code by Nathaniel Cunningham.
 
-\item Dialogs have been vastly improved: they appear as sheets over the frames where they belong, contain better UI elements (as in the case of the dialog displayed before quitting Aquamacs, which was once called ``dialog from hell'' before receiving a makeover).  The standard Enter, Space and Esc keys (and more) are supported.
+\item Dialogs have been vastly improved: they appear as sheets over the frames where they belong, contain better UI elements (as in the case of the dialog displayed before quitting Aquamacs, which was once called ``dialog from hell'' before receiving a makeover).  The standard Enter, Space and Esc keys (and more) are supported.  ``File Save'' panels also appear as sheets. 
 
 \item Toolbars can now be configured through the normal customization panel.  Right-click on the toolbar, use the Options/View menu item (or use M-x ns-tool-bar-customize).  The chosen icons are persistent; toolbar customizations are, however, tied to the toolbars set by modes.  That means that users can chose a different set of icons to display in latex-mode, for instance.  
-
-\item The `ns-tool-bar-display-mode' variable now supports label-only toolbars.  Right-click on the toolbar to change; or use M-x customize or {\tt Preferences.el} to set it to `labels' in order to only show labels.  The former meaning of this value (showing labels and icons) is now `both' (or, usually, nil, the default).
+The `ns-tool-bar-display-mode' variable now supports label-only toolbars.  Right-click on the toolbar to change; or use M-x customize or {\tt Preferences.el} to set it to `labels' in order to only show labels.  The former meaning of this value (showing labels and icons) is now `both' (or, usually, nil, the default).
 
 \item Fonts and colors of all (mode-specific) faces can now be configured using the standard font and color panels.  The Options / Appearance menu provides a function to show the font panel, which leads to buttons for foreground and background colors.   We also have a menu item for the color panel separately, from where colors can be dragged\&dropped directly onto any piece of text to customize its face.  Holding down the Option key will, instead, set the face's background color. 
 
@@ -29,13 +28,18 @@ Code by Nathaniel Cunningham.
 \item When printing, double spaces are formatted as such and can be used to align text.
 Reported by George Nurser.
 
-\item HTML and PDF export functions have changed: PDF export can be achieved as in any Mac application via the Print dialog.  Use the new \emph{Copy as HTML} function in the \emph{Edit} menu to copy formatted text including all the coloring into the clipboard in HTML format.  Many other applications, including presentation software, can then display the formatted text and keep it editable.
+
+\item It is now possible to customize behavior of right Option/Alternate, Command and Control modifiers independently of the left ones using new entries in the (renamed) ``Option, Command, Meta keys'' menu (in Options) or the new customization variables named `ns-right-alternate-modifier' (etc).  
+Patch by Marcin Koziej.
 
 \item Tabs are now available via the A-1..9 (Command-1..9) keybindings.  `Split-window-vertically' is now bound to A-M-2 (Command Option 2), `split-window-horizontally' is A-M-3 (Command Option 3).
 
+
+\item HTML and PDF export functions have changed: PDF export can be achieved as in any Mac application via the Print dialog.  Use the new \emph{Copy as HTML} function in the \emph{Edit} menu to copy formatted text including all the coloring into the clipboard in HTML format.  Many other applications, including presentation software, can then display the formatted text and keep it editable.
+
 \item Keyboard bindings are displayed more consistently in the menus now.  Throughout Aquamacs,  Mac standard key descriptions are used (this may be configured using the variable `ns-use-mac-modifier-symbols').  Users should be aware that manuals and tutorials will often refer to keys such as {\tt C-x} ({\tt \^X} or Control X), and that keys like {\tt M-q} correspond to the chosen Meta key modifier, normally the Option key. 
 
-\item Fullscreen mode works largely as before in 10.6; in older versions of OS X, it will unconditionally take over the full screen (Dock and menu are not visible).
+\item Fullscreen mode works largely as before in Mac OS X 10.6; in older versions of OS X, it will unconditionally take over the full screen (Dock and menu are not visible).
 
 \item `aquamacs-find-file' (C-x C-f) will ask for confirmation if you first complete partial filename input in the minibuffer, but then attempt to create a new file.
 \item Completion is, in many cases, more powerful by completing to the left \emph{and} the right of the input string.  Customize the option `completion-styles' to control this.
@@ -56,13 +60,9 @@ Code by Barry Warsaw.
 
 \item Ruby mode has been revised to match and track the latest version included with GNU Emacs.
 
-
 \item Many more improvements between Emacs 22 and Emacs 23. See etc/NEWS at \url{http://www.gnu.org/software/emacs/NEWS.23.1}.  NB, many of the items listed there do not apply to Mac OS X.
 
 \item DocView mode is no longer used to display PDF and other files (it didn't work well).
-
-\item It is now possible to customize behavior of right Option/Alternate, Command and Control modifiers independently of the left ones using new entries in the (renamed) ``Option, Command, Meta keys'' menu (in Options) or the new customization variables named `ns-right-alternate-modifier' (etc).  
-Patch by Marcin Koziej.
 
 \item Even when the Option modifier keys are set up to be handled by the system (rather than being Meta - see Options - Option Key menu), Option-Arrow and Option-Delete key combinations lead to wordwise operations (they are recognized as Meta).  (Set the new `ns-alternate-meta-special-codes'  to nil to disable.)
 
