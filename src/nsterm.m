@@ -2456,7 +2456,22 @@ ns_draw_window_cursor (struct window *w, struct glyph_row *glyph_row,
 	 animation when the cursor is blinking or moving.
       To Do: do this for HBAR_CURSOR as well.*/
 	 
-      [FRAME_BACKGROUND_COLOR (f) set];
+      struct face *face;
+      face = FACE_FROM_ID (f, phys_cursor_glyph->face_id);
+      if (face)
+	{
+	  if (!face->stipple)
+	    [(NS_FACE_BACKGROUND (face) != 0
+	      ? ns_lookup_indexed_color (NS_FACE_BACKGROUND (face), f)
+	      : FRAME_BACKGROUND_COLOR (f)) set];
+	  else
+	    {
+	      struct ns_display_info *dpyinfo = FRAME_NS_DISPLAY_INFO (f);
+	      [[dpyinfo->bitmaps[face->stipple-1].img stippleMask] set];
+	    }
+	}
+      else
+	[FRAME_BACKGROUND_COLOR (f) set];
       r.origin.x += s.size.width;
       r.size.width -= s.size.width;
       r.origin.y -= 2;
