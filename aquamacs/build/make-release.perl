@@ -86,7 +86,7 @@ if ($VOL =~ /\/Volumes\/Aquam/i)
 #&sys("hdiutil resize AquaMacsInstall.R.dmg -sectors 407568");
 
 &sys("hdiutil detach \"$VOL\"");
-&sys("hdiutil convert  \"$DMG\" -format UDZO -imagekey  zlib-level=9 -o $target");
+&sys("hdiutil convert  \"$DMG\" -format UDBZ -o $target");
 
 # format UDBZ would be smaller (bzip2), but incompatible with OS X 10.3
 
