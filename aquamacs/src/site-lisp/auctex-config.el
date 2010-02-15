@@ -67,6 +67,46 @@
 (autoload 'bib-cite-minor-mode "bib-cite")
 (autoload 'turn-on-bib-cite "bib-cite")
 ; only load if ghostscript is installed
+
+
+; (aquamacs-latex-find-style-file-paths)
+;; (defun aquamacs-latex-find-style-file-paths ()
+;;   "Find TeXLive distribution path."
+;;   (let ((latex-executable
+;; 	 ;; find out the selected TeXlive distribution
+;; 	 ;; or another distribution that has a texmf directory
+;; 	 (with-temp-buffer
+;; 	   (shell-command "which latex " t)
+;; 	   (if (string-match "^no " (buffer-string))
+;; 	       (message  
+;; 		"No latex binary found.")
+;; 	     (buffer-substring (point-min) (max 0 (- (point-max) (if (eq (char-before (point-max)) 10) 1 0))))))))
+
+;;     ;; how does one print the search path from tex?
+;;     (let ((path (file-name-directory (file-truename latex-executable)))
+;; 	  (count 0 ))
+;;       (while (and (file-exists-p path) 
+;; 		  (not (equal path "/"))
+;; 		  (< count 5)
+;; 		  (not (or (file-directory-p (concat path "/texmf" ))
+;; 			   (file-directory-p (concat path "/share/texmf" )))))
+;; 	(file-truename latex-executable)
+;; 	(setq count (1+ count))
+;; 	(setq path (file-truename (concat path "/.."))))
+;;       (apply #'nconc 
+;; 	     (mapcar
+;; 	      (lambda (file)
+;; 		(if (and (> (length file) 1) (file-exists-p file))
+;; 		    (list file)))
+;; 	      (append (list (concat path "/texmf/tex")
+;; 			    (concat path "/texmf-dist/tex")
+;; 			    (concat path "/share/texmf/tex") ; used in older teTeX
+;; 			    (concat path "/share/texmf.os/tex")
+;; 			    (concat path "/share/texmf.local/tex")
+;; 			    "/usr/local/texlive/texmf-local/tex"
+;; 			    "~/Library/texmf/tex/")
+;; 		      (split-string (getenv "TEXINPUTS") ":") 
+;; 		      ))))))
  
 (defvar aq-preview-latex-checked nil)
 (defun load-preview-if-ghostscript ()
@@ -267,12 +307,11 @@ Calls `aquamacs-tex-pdf-viewer' to display the PDF file THE-FILE."
 ;; This is duplicated from AUCTeX, unfortunately
 
 (aquamacs-set-defaults
- '((LaTeX-command "latex --file-line-error -synctex=1")
+ `((LaTeX-command "latex --file-line-error -synctex=1")
    ;; Directories containing the sites TeX macro files and style files
-   (TeX-macro-global ("/usr/local/teTeX/share/texmf/tex/"
-		      "/usr/local/teTeX/share/texmf.os/tex/"
-		      "/usr/local/teTeX/share/texmf.local/tex/"
-		      "~/Library/texmf/tex/"))
+   ;; AucTeX defines its own (TeX-macro-global), which serves the same function
+   ;; (TeX-macro-global ,(aquamacs-latex-find-style-file-paths))
+
 ;; for TeX-command-list
 ;; ("XɘLaTeX" "xelatex \"%(mode)\\input{%t}\""
 ;;      TeX-run-TeX nil (latex-mode context-mode))
