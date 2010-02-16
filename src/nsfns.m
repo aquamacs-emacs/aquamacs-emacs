@@ -1920,6 +1920,58 @@ DEFUN ("ns-popup-print-panel", Fns_popup_print_panel, Sns_popup_print_panel,
   return Qnil;
 }
 
+Lisp_Object save_panel_callback;
+DEFUN ("ns-popup-save-panel", Fns_popup_save_panel, Sns_popup_save_panel,
+       0, 3, "",
+       doc: /* Pop up the save panel as a sheet over the current buffer.  
+Upon completion, the event `ns-save-panel-closed' will be sent,
+with the variable `ns-save-panel-file' containing the selected file
+(nil if cancelled), and `ns-save-panel-buffer' the buffer current
+when `ns-popup-save-panel' was called.
+*/)
+     (prompt, dir, init)
+     Lisp_Object prompt, dir, init;
+{
+  NSSavePanel *panel;
+
+  check_ns ();
+  BLOCK_INPUT;
+
+  NSString *promptS = NILP (prompt) || !STRINGP (prompt) ? nil :
+    [NSString stringWithUTF8String: SDATA (prompt)];
+  NSString *dirS = NILP (dir) || !STRINGP (dir) ?
+    [NSString stringWithUTF8String: SDATA (current_buffer->directory)] :
+    [NSString stringWithUTF8String: SDATA (dir)];
+  NSString *initS = NILP (init) || !STRINGP (init) ? nil :
+    [NSString stringWithUTF8String: SDATA (init)];
+
+
+  if ([dirS characterAtIndex: 0] == '~')
+    dirS = [dirS stringByExpandingTildeInPath];
+
+  panel = [EmacsSavePanel savePanel];
+
+  [panel setTitle: promptS];
+
+  [panel setTreatsFilePackagesAsDirectories: YES];
+  [panel setCanSelectHiddenExtension:NO];
+  [panel setExtensionHidden:NO];
+
+  [panel beginSheetForDirectory:dirS file:initS modalForWindow:[FRAME_NS_VIEW (SELECTED_FRAME ()) window]
+		  modalDelegate:NSApp // it's EmacsApp
+		 didEndSelector:@selector(savePanelDidEnd2:returnCode:contextInfo:)
+		    contextInfo:current_buffer];
+  
+  ns_update_menubar (SELECTED_FRAME (), 0, nil);
+ 
+  /* make stick */
+  // [NSApp setMainMenu: panelMenu];
+
+  // [[FRAME_NS_VIEW (SELECTED_FRAME ()) window] makeKeyWindow];
+  UNBLOCK_INPUT;
+  return Qnil;
+}
+
 
 DEFUN ("ns-read-file-name", Fns_read_file_name, Sns_read_file_name, 1, 4, 0,
        doc: /* Use a graphical panel to read a file name, using prompt PROMPT.
@@ -1944,9 +1996,6 @@ Optional arg INIT, if non-nil, provides a default file name to use.  */)
 
   check_ns ();
 
-  if (fileDelegate == nil)
-    fileDelegate = [EmacsFileDelegate new];
-
   [NSCursor setHiddenUntilMouseMoves: NO];
 
   if ([dirS characterAtIndex: 0] == '~')
@@ -1962,7 +2011,6 @@ Optional arg INIT, if non-nil, provides a default file name to use.  */)
   //   [panel setAllowsOtherFileTypes: YES];
 
   [panel setTreatsFilePackagesAsDirectories: YES];
-  [panel setDelegate: fileDelegate];
   /* must provide - users will have a hard time switching this off otherwise */
   [panel setCanSelectHiddenExtension:NO];
   [panel setExtensionHidden:NO];
@@ -2013,7 +2061,6 @@ If OWNER is nil, Emacs is assumed.  */)
     return build_string (value);
   return Qnil;
 }
-
 
 DEFUN ("ns-set-resource", Fns_set_resource, Sns_set_resource, 3, 3, 0,
        doc: /* Set property NAME of OWNER to VALUE, from the defaults database.
@@ -3169,40 +3216,14 @@ DEFUN ("ns-open-help-anchor", Fns_open_help_anchor, Sns_open_help_anchor, 1, 2, 
 
 @implementation EmacsSavePanel
 #ifdef NS_IMPL_COCOA
-/* --------------------------------------------------------------------------
-   These are overridden to intercept on OS X: ending panel restarts NSApp
-   event loop if it is stopped.  Not sure if this is correct behavior,
-   perhaps should check if running and if so send an appdefined.
-   -------------------------------------------------------------------------- */
-- (void) ok: (id)sender
-{
-  [super ok: sender];
 
-  /* NSSavePanel would display a similar dialog, but it invokes ok:
-     before displaying it, so we would kill it by stopping the
-     event loop here.*/
-  if ([[NSFileManager defaultManager] fileExistsAtPath:[self.URL path]]) 
-    if (NSRunCriticalAlertPanel([NSString stringWithFormat:
-@"The file %@ already exists.  Do you want to replace it?", [self.URL lastPathComponent]],
-@"A file or folder with the same name already exists in this folder. Replacing it will overwrite its current contents.",
-                        @"Cancel", @"Replace", nil)
-	== NSAlertDefaultReturn)
-      return; /* do not discard panel */
-  
-  panelOK = 1;
-  [NSApp stop: self];
-}
-- (void) cancel: (id)sender
+- (void)becomeKeyWindow
 {
-  [super cancel: sender];
-  [NSApp stop: self];
+  [super becomeKeyWindow];
+  [NSApp setMainMenu: [panelMenu retain]];
+
 }
-- (BOOL)_overwriteExistingFileCheck:(id)fp8
-{
-  /* hack: do not ask for confirmation when a file is about
-     to be overwritten.  We will ask ourselves in ok:*/
-  return YES;
-}
+
 #endif
 @end
 
@@ -3229,24 +3250,6 @@ DEFUN ("ns-open-help-anchor", Fns_open_help_anchor, Sns_open_help_anchor, 1, 2, 
 @end
 
 
-@implementation EmacsFileDelegate
-/* --------------------------------------------------------------------------
-   Delegate methods for Open/Save panels
-   -------------------------------------------------------------------------- */
-- (BOOL)panel: (id)sender isValidFilename: (NSString *)filename
-{
-  return YES;
-}
-- (BOOL)panel: (id)sender shouldShowFilename: (NSString *)filename
-{
-  return YES;
-}
-- (NSString *)panel: (id)sender userEnteredFilename: (NSString *)filename
-          confirmed: (BOOL)okFlag
-{
-  return filename;
-}
-@end
 
 #endif
 
@@ -3348,6 +3351,7 @@ be used as the image of the icon representing the frame.  */);
   defsubr (&Sns_popup_color_panel);
   defsubr (&Sns_popup_print_panel);
   defsubr (&Sns_popup_page_setup_panel);
+  defsubr (&Sns_popup_save_panel);
 
   defsubr (&Sx_show_tip);
   defsubr (&Sx_hide_tip);

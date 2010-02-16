@@ -226,6 +226,7 @@ The properties returned may include `top', `left', `height', and `width'."
 (define-key global-map [ns-about] 'about-emacs)
 (define-key global-map [ns-toggle-toolbar] 'ns-toggle-toolbar)
 (define-key global-map [ns-show-prefs] 'customize)
+(define-key global-map [ns-save-panel-closed] 'ns-handle-save-panel-closed)
 
 ;; Set up a number of aliases and other layers to pretend we're using
 ;; the Choi/Mitsuharu Carbon port.
@@ -274,6 +275,7 @@ The properties returned may include `top', `left', `height', and `width'."
 	     (cons (logior (lsh 0 16)  130) 'ns-about) ;; Aquamacs only
 	     (cons (logior (lsh 0 16)  131) 'ns-check-for-updates) ;; Aquamacs only
 	     (cons (logior (lsh 0 16)  132) 'ns-tool-bar-customized) ;; Aquamacs only
+	     (cons (logior (lsh 0 16)  133) 'ns-save-panel-closed) ;; Aquamacs only
 	     (cons (logior (lsh 1 16)  32) 'f1)
              (cons (logior (lsh 1 16)  33) 'f2)
              (cons (logior (lsh 1 16)  34) 'f3)
@@ -671,8 +673,19 @@ See `ns-insert-working-text'."
       (set-file-name-coding-system 'utf-8-nfd)))
 
 
+(defun ns-handle-save-panel-closed ()
+  "Saves file after NS Save Panel has been closed."
+  (interactive)
+  (if (and ns-save-panel-file
+	   (buffer-live-p ns-save-panel-buffer))
+      (with-current-buffer ns-save-panel-buffer
+	(write-file ns-save-panel-file))
+    (message "File not saved.")))
+
+
 
 ;;;; Inter-app communications support.
+
 
 (defvar ns-input-text)			; nsterm.m
 

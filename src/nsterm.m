@@ -144,6 +144,7 @@ Lisp_Object ns_spelling_text;
 Lisp_Object ns_input_file, ns_input_font, ns_input_fontsize, ns_input_line;
 Lisp_Object ns_input_color, ns_input_background_color, ns_input_text, ns_working_text;
 Lisp_Object ns_input_spi_name, ns_input_spi_arg;
+Lisp_Object ns_save_panel_file, ns_save_panel_buffer;
 Lisp_Object Vx_toolkit_scroll_bars;
 static Lisp_Object Qmodifier_value;
 Lisp_Object Qalt, Qcontrol, Qhyper, Qmeta, Qsuper, Qnone;
@@ -4154,14 +4155,71 @@ ns_term_init (Lisp_Object display_name)
 /* Set up OS X app menu */
 #ifdef NS_IMPL_COCOA
   {
-    NSMenu *appMenu;
+    /* set up the panel menu (while panels are shown)
+       must provide Edit functions. */
     NSMenuItem *item;
+
+    NSMenu *appMenu;
+
+    panelMenu = [[[NSMenu alloc] initWithTitle: @"Aquamacs*"] retain];
+      
+    NSMenu *panelAppMenu = [[EmacsMenu alloc] initWithTitle: @"Aquamacs"];
+    [panelAppMenu setAutoenablesItems: NO];
+    [panelAppMenu insertItemWithTitle: @"Hide Aquamacs Emacs"
+                              action: @selector (hide:)
+                       keyEquivalent: @"h"
+                             atIndex: 0];
+    item =  [panelAppMenu insertItemWithTitle: @"Hide Others"
+                                      action: @selector (hideOtherApplications:)
+                               keyEquivalent: @"h"
+                                     atIndex: 1];
+    [item setKeyEquivalentModifierMask: NSCommandKeyMask | NSAlternateKeyMask];
+    /* app menu is not available (except hide, really) */
+    item = [panelMenu insertItemWithTitle: ns_app_name                       
+                                  action: @selector (menuDown:)
+                           keyEquivalent: @""
+                                 atIndex: 0];
+    [panelMenu setSubmenu: panelAppMenu forItem: item];
+
+    NSMenu *submenu = [[NSMenu alloc] initWithTitle:NSLocalizedString(@"Edit", @"The Edit menu")];
+    [panelMenu setSubmenu:submenu forItem:[panelMenu addItemWithTitle:@"Edit" action:NULL keyEquivalent:@""]];
+    [submenu addItemWithTitle:NSLocalizedString(@"Undo", nil)
+                      action:@selector(undo:)
+               keyEquivalent:@"z"];
+
+    [submenu addItemWithTitle:NSLocalizedString(@"Redo", nil)
+                                 action:@selector(redo:)
+                          keyEquivalent:@"Z"];
+
+    [submenu addItem:[NSMenuItem separatorItem]];
+
+    [submenu addItemWithTitle:NSLocalizedString(@"Cut", nil)
+                                 action:@selector(cut:)
+                          keyEquivalent:@"x"];
+
+    [submenu addItemWithTitle:NSLocalizedString(@"Copy", nil)
+                                 action:@selector(copy:)
+                          keyEquivalent:@"c"];
+
+    [submenu addItemWithTitle:NSLocalizedString(@"Paste", nil)
+                                 action:@selector(paste:)
+                          keyEquivalent:@"v"];
+
+    [submenu addItemWithTitle:NSLocalizedString(@"Delete", nil)
+                                 action:@selector(delete:)
+                          keyEquivalent:@""];
+
+    [submenu addItemWithTitle: NSLocalizedString(@"Select All", nil)
+                                 action: @selector(selectAll:)
+                          keyEquivalent: @"a"];
+
+
     /* set up the application menu */
     svcsMenu = [[EmacsMenu alloc] initWithTitle: @"Services"];
     [svcsMenu setAutoenablesItems: NO];
     appMenu = [[EmacsMenu alloc] initWithTitle: @"Aquamacs"];
     [appMenu setAutoenablesItems: NO];
-    mainMenu = [[EmacsMenu alloc] initWithTitle: @""];
+    mainMenu = [[[EmacsMenu alloc] initWithTitle: @""] retain];
     dockMenu = [[EmacsMenu alloc] initWithTitle: @""];
 
     [appMenu insertItemWithTitle: @"About Aquamacs Emacs"
@@ -4402,6 +4460,55 @@ ns_term_shutdown (int sig)
   EV_TRAILER (theEvent);
 
   return YES;
+}
+
+- (void)savePanelDidEnd2:(NSSavePanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
+{
+  // struct frame *emacsframe = XFRAME (sheet);
+  struct frame *emacsframe = SELECTED_FRAME ();  /* to do - should be sheet frame */
+
+  [sheet orderOut:self];
+  ns_update_menubar (SELECTED_FRAME (), 0, nil);
+ 
+  // if (! BUFFERP ((struct buffer *) contextInfo))
+  //   return;
+  // Lisp_Object *callback_p = ((Lisp_Object*) contextInfo);
+  // Lisp_Object args[2];
+
+  // if (! NILP (*callback_p) )
+  //   {
+  // BLOCK_INPUT;
+
+  // args[0] = *callback_p;
+
+  // if (returnCode && [[self filename] UTF8String])
+  //   args[1] = build_string ([[self filename] UTF8String]);
+  // else
+  //   args[1] = Qnil;
+
+  // Ffuncall (2, args);
+  //   }
+  // free(callback_p);
+
+  // UNBLOCK_INPUT;
+
+  NSEvent *theEvent = [NSApp currentEvent];
+
+  if (returnCode && [[sheet filename] UTF8String])
+    ns_save_panel_file = build_string ([[sheet filename] UTF8String]);
+  else
+    ns_save_panel_file = Qnil;
+
+  XSETBUFFER (ns_save_panel_buffer, ((struct buffer *) contextInfo));
+
+  if (!emacs_event)
+    return;
+  emacs_event->kind = NS_NONKEY_EVENT;
+  emacs_event->code = KEY_NS_SAVE_PANEL_CLOSED;
+  emacs_event->modifiers = 0;
+  emacs_event->arg = Qt; /* mark as non-key event */
+
+  EV_TRAILER (theEvent);
 }
 
 
@@ -5606,6 +5713,11 @@ extern void update_window_cursor (struct window *w, int on);
  
   if (emacsframe != old_focus)
     dpyinfo->x_focus_frame = emacsframe;
+
+  if ([[FRAME_NS_VIEW (emacsframe) window] attachedSheet])
+    [NSApp setMainMenu: panelMenu];
+  else
+    [NSApp setMainMenu: mainMenu];
 
   if (! FRAME_VISIBLE_P (emacsframe))
     {
@@ -6825,6 +6937,15 @@ syms_of_nsterm ()
   DEFVAR_LISP ("ns-input-spi-arg", &ns_input_spi_arg,
                "The service argument specified in the last NS event.");
   ns_input_spi_arg =Qnil;
+
+  DEFVAR_LISP ("ns-save-panel-file", &ns_save_panel_file,
+              "The file in the NS save panel.");
+  ns_save_panel_file =Qnil;
+
+  DEFVAR_LISP ("ns-save-panel-buffer", &ns_save_panel_buffer,
+              "The buffer related to the NS save panel.");
+  ns_save_panel_buffer =Qnil;
+
 
   DEFVAR_LISP ("ns-alternate-modifier", &ns_alternate_modifier,
                doc: /* This variable describes the behavior of the

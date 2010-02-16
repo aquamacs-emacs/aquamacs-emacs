@@ -88,14 +88,10 @@
  
  
 (defun mac-key-save-file-as (&optional filename)
-  "Save buffer to a file, selecting file by dialog"
+  "Save buffer to a file, selecting file by dialog.
+Displays sheet.  File is saved once user has dismissed sheet."
   (interactive)
-  (unless filename
-    (setq filename (ns-read-file-name
-		    "Select File to Save Buffer" 
-		    default-directory nil 
-		    (if buffer-file-name (file-name-nondirectory buffer-file-name) "Untitled"))))
-  (if filename (write-file filename)))
+  (ns-popup-save-panel "Select File to Save Buffer" default-directory (if buffer-file-name (file-name-nondirectory buffer-file-name) "Untitled")))
 
 
 ;; when saving a file, set its creator code

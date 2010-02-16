@@ -209,19 +209,11 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 @interface EmacsSavePanel : NSSavePanel
 {
 }
+- (Lisp_Object)runPanel;
 @end
 @interface EmacsOpenPanel : NSOpenPanel
 {
 }
-@end
-
-@interface EmacsFileDelegate : NSObject
-{
-}
-- (BOOL)panel: (id)sender isValidFilename: (NSString *)filename;
-- (BOOL)panel: (id)sender shouldShowFilename: (NSString *)filename;
-- (NSString *)panel: (id)sender userEnteredFilename: (NSString *)filename
-          confirmed: (BOOL)okFlag;
 @end
 
 
@@ -329,6 +321,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 extern NSArray *ns_send_types, *ns_return_types;
 extern NSString *ns_app_name;
 extern EmacsMenu *mainMenu, *svcsMenu, *dockMenu;
+extern NSMenu *panelMenu;
 
 /* Apple removed the declaration, but kept the implementation */
 #if defined (NS_IMPL_COCOA) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
@@ -382,6 +375,7 @@ typedef unsigned int NSUInteger;
 #define KEY_NS_ABOUT                   ((1<<28)|(0<<16)|130)
 #define KEY_NS_CHECK_FOR_UPDATES       ((1<<28)|(0<<16)|131)
 #define KEY_NS_TOOLBAR_CUSTOMIZED      ((1<<28)|(0<<16)|132)
+#define KEY_NS_SAVE_PANEL_CLOSED       ((1<<28)|(0<<16)|133)
 /* could use list to store these, but rest of emacs has a big infrastructure
    for managing a table of bitmap "records" */
 struct ns_bitmap_record

@@ -71,6 +71,7 @@ extern Lisp_Object Voverriding_local_map, Voverriding_local_map_menu_flag,
 
 extern long context_menu_value;
 EmacsMenu *mainMenu, *svcsMenu, *dockMenu;
+NSMenu *panelMenu;
 
 /* Nonzero means a menu is currently active.  */
 static int popup_activated_flag;
@@ -146,6 +147,23 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
 
   if (f != SELECTED_FRAME ())
       return;
+
+  if ([[FRAME_NS_VIEW (f) window] attachedSheet] &&
+      [[[FRAME_NS_VIEW (f) window] attachedSheet] isKindOfClass: [EmacsSavePanel class]])
+    {
+      //[mainMenu retain];
+      //[NSApp setMainMenu: [panelMenu retain]];
+      [NSApp setMainMenu: panelMenu];
+      return;  
+    } 
+  if (! [[FRAME_NS_VIEW (f) window] isKindOfClass: [EmacsWindow class]])
+    {
+      return;
+    }
+  
+  [NSApp setMainMenu: mainMenu];
+
+
   XSETFRAME (Vmenu_updating_frame, f);
 /*fprintf (stderr, "ns_update_menubar: frame: %p\tdeep: %d\tsub: %p\n", f, deep_p, submenu); */
 
@@ -153,9 +171,10 @@ ns_update_menubar (struct frame *f, int deep_p, EmacsMenu *submenu)
   pool = [[NSAutoreleasePool alloc] init];
 
   /* Menu may have been created automatically; if so, discard it. */
-  if ([menu isKindOfClass: [EmacsMenu class]] == NO)
+  if ([menu isKindOfClass: [EmacsMenu class]] == NO) // && menu != panelMenu)
     {
-      [menu release];
+      if (menu != panelMenu)
+	[menu release];
       menu = nil;
     }
 
@@ -592,13 +611,28 @@ name_is_separator (name)
 }
 
 
-- (BOOL)performKeyEquivalent: (NSEvent *)theEvent
-{
-  if (SELECTED_FRAME () && FRAME_NS_P (SELECTED_FRAME ())
-      && FRAME_NS_VIEW (SELECTED_FRAME ()))
-    [FRAME_NS_VIEW (SELECTED_FRAME ()) keyDown: theEvent];
-  return YES;
-}
+- (BOOL)performKeyEquivalent: (NSEvent *)event
+ {
+  // i
+  //   [FRAME_NS_VIEW (SELECTED_FRAME ()) keyDown: event];
+  // else
+   if (SELECTED_FRAME () && FRAME_NS_P (SELECTED_FRAME ())
+      && FRAME_NS_VIEW (SELECTED_FRAME ())
+      /* must check if EmacsWindow.  Could be sheet/NSPanel */
+      && [[event window] isKindOfClass: [EmacsWindow class]])
+    [FRAME_NS_VIEW (SELECTED_FRAME ()) keyDown: event];
+  else
+    {
+      /* open panels (text fields, etc.) require a 
+        menu with Edit submenu, containing Copy, Paste, Undo, etc. functions
+        that send the correct actions to the first responders.
+        Therefore, the panelMenu (which is the main menu normally when sheets
+        are shown) is called. */
+      return NO;
+      // return [[NSApp mainMenu] performKeyEquivalent:event];
+    }
+   return YES;
+ }
 
 
 /* Parse a widget_value's key rep (examples: 's-p', 's-S', '(C-x C-s)', '<f13>')
