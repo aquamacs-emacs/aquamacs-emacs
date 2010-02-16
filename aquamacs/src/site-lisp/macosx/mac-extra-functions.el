@@ -94,7 +94,7 @@
     (setq filename (ns-read-file-name
 		    "Select File to Save Buffer" 
 		    default-directory nil 
-		    (if buffer-file-name (file-name-nondirectory buffer-file-name) ""))))
+		    (if buffer-file-name (file-name-nondirectory buffer-file-name) "Untitled"))))
   (if filename (write-file filename)))
 
 
