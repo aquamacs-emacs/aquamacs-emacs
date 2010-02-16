@@ -1958,13 +1958,14 @@ Optional arg INIT, if non-nil, provides a default file name to use.  */)
   [panel setTitle: promptS];
 
   /* Puma (10.1) does not have */
-  if ([panel respondsToSelector: @selector (setAllowsOtherFileTypes:)])
-    [panel setAllowsOtherFileTypes: YES];
+  // if ([panel respondsToSelector: @selector (setAllowsOtherFileTypes:)])
+  //   [panel setAllowsOtherFileTypes: YES];
 
   [panel setTreatsFilePackagesAsDirectories: YES];
   [panel setDelegate: fileDelegate];
   /* must provide - users will have a hard time switching this off otherwise */
-  [panel setCanSelectHiddenExtension:YES];
+  [panel setCanSelectHiddenExtension:NO];
+  [panel setExtensionHidden:NO];
 
   panelOK = 0;
   BLOCK_INPUT;
