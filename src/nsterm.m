@@ -5094,15 +5094,16 @@ extern void update_window_cursor (struct window *w, int on);
             }
         }
 
-      if (!EQ (ns_right_control_modifier, Qnone) && 
-	  ((flags & NSRightControlKeyMask) == NSRightControlKeyMask))
+      if (flags & NSControlKeyMask)
 	{
-	  emacs_event->modifiers |= 
-	    parse_solitary_modifier (ns_right_control_modifier);
+	  if (flags & NSLeftControlKeyMask)
+	    emacs_event->modifiers |=
+	      parse_solitary_modifier (ns_control_modifier);
+	  if (flags & NSRightControlKeyMask)
+	    emacs_event->modifiers |=
+	      parse_solitary_modifier ((EQ (ns_right_control_modifier, Qnone) ? 
+					  ns_control_modifier : ns_right_control_modifier));
 	}
-      else if (flags & NSControlKeyMask)
-          emacs_event->modifiers |=
-            parse_solitary_modifier (ns_control_modifier);
 
       if (flags & NS_FUNCTION_KEY_MASK && !fnKeysym)
           emacs_event->modifiers |=
