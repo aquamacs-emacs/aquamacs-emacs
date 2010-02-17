@@ -5062,9 +5062,9 @@ extern void update_window_cursor (struct window *w, int on);
 					  ns_command_modifier : ns_right_command_modifier));
 	    }
 
-          /* if super (default), take input manager's word so things like
+          /* if super, take input manager's word so things like
              dvorak / qwerty layout work */
-          if ((EQ (ns_command_modifier, Qsuper) || EQ (ns_command_modifier, Qalt))
+          if (EQ (ns_command_modifier, Qsuper)  /* non-default, so users can set it as workaround. */
               && !fnKeysym
               && [[theEvent characters] length] != 0)
             {
