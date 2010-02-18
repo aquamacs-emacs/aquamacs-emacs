@@ -695,20 +695,22 @@ behavior)."
 	  (function-item :tag "Show context menu" 
 			 aquamacs-popup-context-menu)))
 
+
 (defun osx-key-mode-mouse-3 (event &optional prefix)
-  "Extend the region, only if `osx-key-mode-mouse-3-behavior' is
-set to `mouse-save-then-kill'."
+  "Run command specified in `osx-key-mode-mouse-3-behavior'."
   (interactive "@e \nP")
   ;; we need to bind last-command to the target command
   ;; so mouse-save-then-kill is not confused and recognizes
   ;; a double click.
   (let ((cmd #'mouse-save-then-kill))
-    (if (eq osx-key-mode-mouse-3-behavior cmd)
-      (let ((last-command (if (eq last-command this-command)
-			      cmd
+    (unless (or (null osx-key-mode-mouse-3-behavior)
+		(eq osx-key-mode-mouse-3-behavior 'aquamacs-popup-context-menu))
+      (let ((last-command (if (or (eq last-command 'osx-key-mode-mouse-3)
+				  (eq last-command 'osx-key-mode-down-mouse-3))
+			      osx-key-mode-mouse-3-behavior
 			    last-command)))
-	(apply cmd 
-	       event prefix))))) 
+	(apply osx-key-mode-mouse-3-behavior 
+	       event prefix)))))
 
 (defun osx-key-mode-down-mouse-3 (event &optional prefix)
   "Activate context menu, when `osx-key-mode-mouse-3-behavior' is
