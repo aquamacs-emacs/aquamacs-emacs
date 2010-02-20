@@ -154,7 +154,7 @@ Only checks once - subsequent calls will not result in any action."
 
 (defvar aquamacs-tex-pdf-viewer "Skim"
   "External viewer for `aquamacs-call-viewer' and `aquamacs-latex-crossref'.
-Aquamacs defines an AUCTeX command called `Jump To PDF', 
+Aquamacs defines an AUCTeX command called `Jump to PDF', 
 which calls this viewer.")
 
 (defun aquamacs-call-viewer (the-file line source)
@@ -190,7 +190,7 @@ Calls `aquamacs-tex-pdf-viewer' to display the PDF file THE-FILE."
       (let ((aquamacs-ring-bell-on-error-flag nil))
 	(reftex-view-crossref current-prefix-arg))
     (error 
-	   (TeX-command  "Jump To PDF" 'TeX-master-file))
+	   (TeX-command  "Jump to PDF" 'TeX-master-file))
      nil )))
 
 
@@ -208,6 +208,13 @@ Calls `aquamacs-tex-pdf-viewer' to display the PDF file THE-FILE."
 
 (defvar aquamacs-skim-show-info-message t)
 
+(defcustom aquamacs-always-use-skim nil
+  "If t, Aquamacs always uses Skim as viewer in AUCTeX.
+If nil Aquamacs uses Skim if and only if it has been running."
+  :group 'Aquamacs
+  :version "22.1"
+  :type 'boolean)
+
 (defun aquamacs-check-for-skim ()
 "Show help message if Skim.app is running."
   (and (equal major-mode 'latex-mode) (boundp 'TeX-PDF-mode) TeX-PDF-mode 
@@ -216,18 +223,21 @@ Calls `aquamacs-tex-pdf-viewer' to display the PDF file THE-FILE."
 			 (and buffer-file-name 
 			      (file-name-directory buffer-file-name))))
      ;; check for running 
-     (aquamacs-skim-running-p)
-     (if (not (equal (cdr-safe 
-		      (cdr-safe 
-		       (assq-string-equal "^pdf$" TeX-output-view-style)))
-		     "open %o"))
-	      ;; has not been changed by us or the user
-	 t
-       ;; this variable should not be automatically saved by "Save Options"
-       ;; (unless user customizes it explicitly)
-       (setq TeX-output-view-style 
-	     (cons '("^pdf$" "." "open -a Skim.app %o")
-		   TeX-output-view-style)))
+     (or aquamacs-always-use-skim (aquamacs-skim-running-p))
+     (if (not (equal TeX-command-Show "View"))
+	 t ;; customized by user
+       (set-default 'TeX-command-Show "Jump to PDF"))
+     ;; (if (not (equal (cdr-safe 
+     ;; 		      (cdr-safe 
+     ;; 		       (assq-string-equal "^pdf$" TeX-output-view-style)))
+     ;; 		     '("open %o")))
+     ;; 	      ;; has not been changed by us or the user
+     ;; 	 t
+     ;;   ;; this variable should not be automatically saved by "Save Options"
+     ;;   ;; (unless user customizes it explicitly)
+     ;;   (setq TeX-output-view-style 
+     ;; 	     (cons '("^pdf$" "." "open -a Skim.app %o")
+     ;; 		   TeX-output-view-style)))
      (cancel-timer aquamacs-skim-timer)
      aquamacs-skim-show-info-message
      (message 
@@ -241,7 +251,7 @@ Calls `aquamacs-tex-pdf-viewer' to display the PDF file THE-FILE."
 (defun aquamacs-latex-viewer-support ()
   "Support for Skim as LaTeX viewer if present."
   (add-to-list 'TeX-command-list
-	     '("Jump To PDF" 
+	     '("Jump to PDF" 
 	       "(aquamacs-call-viewer \"%o\" %n \"%b\")" 
 	       TeX-run-function nil t 
 	       :help "Jump here in Skim") 'append)
