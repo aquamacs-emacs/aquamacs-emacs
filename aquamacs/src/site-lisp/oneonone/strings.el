@@ -1,3 +1,8 @@
+;; Warning:
+;; Aquamacs needs `read-buffer' disabled. (02/2010 dr.)
+
+
+
 ;;; strings.el --- Miscellaneous string functions.
 ;;
 ;; Filename: strings.el
@@ -464,26 +469,26 @@ NOTE: For versions of Emacs that do not have faces, a list of
 ;; 1. Uses `completing-read'.
 ;; 2. Uses `another-buffer' or `other-buffer' if no default.
 ;;
-;;;###autoload
-(defun read-buffer (prompt &optional default existing)
-  "Read the name of a buffer and return it as a string.
-Prompts with first arg, PROMPT (a string).
+;; ;;;###autoload
+;; (defun read-buffer (prompt &optional default existing)
+;;   "Read the name of a buffer and return it as a string.
+;; Prompts with first arg, PROMPT (a string).
 
-Non-nil DEFAULT names the default buffer.
-Otherwise, `another-buffer' is used as the default.
-If `another-buffer' is undefined, then `other-buffer' is the default.
+;; Non-nil DEFAULT names the default buffer.
+;; Otherwise, `another-buffer' is used as the default.
+;; If `another-buffer' is undefined, then `other-buffer' is the default.
 
-Non-nil EXISTING means to allow only names of existing buffers."
-  (setq default (or default (if (fboundp 'another-buffer) ; Defined in `misc-fns.el'.
-                                (another-buffer nil t)
-                              (other-buffer (current-buffer)))))
-  ;; Need a string as default.
-  (when (bufferp default) (setq default (buffer-name default)))
-  (unless (stringp default)
-    (error "Function `read-buffer': DEFAULT arg is not a live buffer or a string"))
-  (completing-read
-   prompt (mapcar (lambda (b) (list (buffer-name b))) (buffer-list))
-   nil existing nil 'minibuffer-history default t))
+;; Non-nil EXISTING means to allow only names of existing buffers."
+;;   (setq default (or default (if (fboundp 'another-buffer) ; Defined in `misc-fns.el'.
+;;                                 (another-buffer nil t)
+;;                               (other-buffer (current-buffer)))))
+;;   ;; Need a string as default.
+;;   (when (bufferp default) (setq default (buffer-name default)))
+;;   (unless (stringp default)
+;;     (error "Function `read-buffer': DEFAULT arg is not a live buffer or a string"))
+;;   (completing-read
+;;    prompt (mapcar (lambda (b) (list (buffer-name b))) (buffer-list))
+;;    nil existing nil 'minibuffer-history default t))
 
 ;;;###autoload
 (defun buffer-alist (&optional nospacep)
