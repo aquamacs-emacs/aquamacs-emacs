@@ -532,7 +532,7 @@ Returns t."
 	     (if (eq aquamacs-save-options-on-quit 'ask)
 		 (progn 
 		   ;;		   (print changed)
-		   (aquamacs-ask-for-confirmation "Options have changed - save them?\nYour customizations will be lost if you don't save them." nil "Save" "Don't Save"))
+		   (aquamacs-ask-for-confirmation "Options have changed - save them? \nYour customizations will be lost if you don't save them." nil "Save" "Don't Save"))
 	       aquamacs-save-options-on-quit))
 	(aquamacs-menu-bar-options-save)))
     (error nil) ;; in case of quit
