@@ -519,7 +519,7 @@ install-arch-indep: mkdir info install-etc
 	  && (echo "Copying $${dir} to $${dest}..." ; \
 	      (cd $${dir}; tar -chf - . ) \
 		| (cd $${dest}; umask 022; \
-                   tar -xvf - && cat > /dev/null) || exit 1; \
+                   tar -xf - && cat > /dev/null) || exit 1; \
 	      find $${dest} -exec chown $${installuser} {} ';' ;\
 	      for subdir in `find $${dest} -type d ! -name RCS ! -name CVS -print` ; do \
 		chmod a+rx $${subdir} ; \
@@ -570,7 +570,7 @@ install-arch-indep: mkdir info install-etc
 	   fi; \
 	   echo "Copying etc/$${docfile} to $(DESTDIR)${docdir} ..." ; \
 	   (cd ./etc; tar -chf - $${docfile}) \
-	     |(cd $(DESTDIR)${docdir}; umask 022; tar -xvf - && cat > /dev/null) || exit 1; \
+	     |(cd $(DESTDIR)${docdir}; umask 022; tar -xf - && cat > /dev/null) || exit 1; \
 	   (cd $(DESTDIR)$(docdir); \
 	    $(set_installuser); \
 	    chown $${installuser} DOC*; chmod a+r DOC*; \
@@ -584,7 +584,7 @@ install-arch-indep: mkdir info install-etc
 	then \
 	   echo "Copying lisp/*.el and lisp/*.elc to $(DESTDIR)${lispdir} ..." ; \
 	   (cd lisp; tar -chf - *.el *.elc) \
-	     |(cd $(DESTDIR)${lispdir}; umask 022; tar -xvf - && cat > /dev/null) || exit 1; \
+	     |(cd $(DESTDIR)${lispdir}; umask 022; tar -xf - && cat > /dev/null) || exit 1; \
 	   (cd $(DESTDIR)${lispdir}; \
 	    $(set_installuser); \
 	    find . -exec chown $${installuser} {} ';') ; \
