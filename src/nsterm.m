@@ -6889,6 +6889,7 @@ syms_of_nsterm ()
   DEFSYM (Qmeta, "meta");
   DEFSYM (Qsuper, "super");
   DEFSYM (Qcontrol, "control");
+  DEFSYM (Qnone, "none");
   Fput (Qalt, Qmodifier_value, make_number (alt_modifier));
   Fput (Qhyper, Qmodifier_value, make_number (hyper_modifier));
   Fput (Qmeta, Qmodifier_value, make_number (meta_modifier));
