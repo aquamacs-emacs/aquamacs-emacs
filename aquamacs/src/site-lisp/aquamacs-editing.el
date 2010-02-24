@@ -177,18 +177,19 @@ default in case there is not enough text."
     (if cua-mode 
 	(cua-scroll-up dir)
       (scroll-up dir))
-   (let ((psp page-scrolling-points))
-      (while psp
-	(let ((mp (marker-position (caar psp))))
-	  (if (and (< mp (+ (point) 100))   ;; arbitrary range
-		   (> mp (- (point) 100)))
-	      (progn
-		(goto-char mp)
-		;; cannot set window start, it causes problems at edges of
-		;; buffer for no apparent reason.
-	;;	(set-window-start (selected-window) (cdr (car psp)))
-		(setq psp))
-	    (setq psp (cdr psp))))))
+    (unless (or (bobp) (eobp)) ;
+      (let ((psp page-scrolling-points))
+	(while psp
+	  (let ((mp (marker-position (caar psp))))
+	    (if (and (< mp (+ (point) 100))   ;; arbitrary range
+		     (> mp (- (point) 100)))
+		(progn
+		  (goto-char mp)
+		  ;; cannot set window start, it causes problems at edges of
+		  ;; buffer for no apparent reason.
+		  ;;	(set-window-start (selected-window) (cdr (car psp)))
+		  (setq psp))
+	      (setq psp (cdr psp)))))))
    
     (when (nthcdr 9 page-scrolling-points)
       (set-marker (car (nth 9 page-scrolling-points)) nil)
