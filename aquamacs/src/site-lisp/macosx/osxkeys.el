@@ -187,7 +187,7 @@ rather than by visual lines.  `line-move-visual' is set to nil
 for this command."
   (interactive "^p\np")
   (let ((line-move-visual nil)
-	(this-command 'previous-line))
+	(this-command 'next-line))
     (next-line arg try-vscroll)))
 
 (defun aquamacs-kill-word (&optional arg)
