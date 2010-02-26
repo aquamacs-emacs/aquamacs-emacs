@@ -838,10 +838,11 @@ or error messages, and inform user.
 Otherwise any failure is reported in a message back to
 the user from the mailer."
   (interactive)
-  (if (if buffer-file-name
-	  (y-or-n-p "Send buffer contents as mail message? ")
-	(or (buffer-modified-p)
-	    (y-or-n-p "Message already sent; resend? ")))
+  (if (or (eq send-mail-function 'mailclient-send-it)
+	  (if buffer-file-name
+	      (y-or-n-p "Send buffer contents as mail message? ")
+	    (or (buffer-modified-p)
+		(y-or-n-p "Message already sent; resend? "))))
       (let ((inhibit-read-only t)
 	    (opoint (point))
 	    (ml (when mail-mailing-lists
