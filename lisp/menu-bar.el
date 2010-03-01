@@ -1442,7 +1442,7 @@ key, a click, or a menu-item")))
 (define-key menu-bar-manuals-menu [emacs-lisp-reference]
   `(menu-item ,(purecopy "Emacs Lisp Reference") menu-bar-read-lispref
 	      :help ,(purecopy "Read the Emacs Lisp Reference manual")))
-(define-key menu-bar-manuals-menu [emac-lisp-intro]
+(define-key menu-bar-manuals-menu [emacs-lisp-intro]
   `(menu-item ,(purecopy "Introduction to Emacs Lisp") menu-bar-read-lispintro
 	      :help ,(purecopy "Read the Introduction to Emacs Lisp Programming")))
 (define-key menu-bar-manuals-menu [emacs-psychotherapist]
