@@ -107,13 +107,13 @@ after updating this variable.")
 
 (defvar cua--explicit-region-start) ;; in case CUA isn't loaded
 
+(aquamacs-set-defaults '((x-select-enable-clipboard t)))
 
 ;; support copy&paste at the right level
 (setq interprogram-paste-function 'aquamacs-cut-buffer-or-selection-value)
 
 (defun aquamacs-cut-buffer-or-selection-value ()
-  (unless (and osx-key-mode 
-	       (memq this-original-command '(yank mouse-yank-at-click)))
+  (when x-select-enable-clipboard
     (let (text)
       ;; Consult the selection, then the cut buffer.  Treat empty strings
       ;; as if they were unset.
@@ -951,7 +951,9 @@ ns-command-modifier osxkeys-command-key))))
  
 
 (defvar osx-key--saved-low-priority-map (make-sparse-keymap)
-"Bindings in the global map overwritten when osx-key-mode was turned on.")
+  "Bindings in the global map overwritten when `osx-key-mode' was turned on.")
+(defvar osx-key--saved-x-select-enable-clipboard 'unset
+  "Value of `x-select-enable-clipboard' when `osx-key-mode' was turned on.")
 
 (define-minor-mode osx-key-mode
   "Toggle Mac Key mode.
@@ -971,6 +973,16 @@ keymaps used by this mode. They may be modified where necessary."
   ;; use right mouse click as mouse-3
   (setq mac-wheel-button-is-mouse-2 osx-key-mode)
 
+  (let ((nv osx-key--saved-x-select-enable-clipboard)) 
+    (setq osx-key--saved-x-select-enable-clipboard
+	  (cons (not osx-key-mode)
+		x-select-enable-clipboard))
+    (setq x-select-enable-clipboard
+	  (if (and (consp nv) (eq (car nv) osx-key-mode))
+	      (cdr nv)
+	    ;; use default (in case of various errors)
+	    (if osx-key-mode nil t))))
+
   (if osx-key-mode
       ;; install low priority map
       (progn
@@ -988,8 +1000,6 @@ keymaps used by this mode. They may be modified where necessary."
     (remove-hook 'isearch-mode-end-hook 'aquamacs-set-region-to-search-match))
 
   (osx-key-mode-command-key-warning))
-
-
 
 
 ;; (osx-key-mode 1)
