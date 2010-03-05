@@ -622,13 +622,14 @@ even if it's the only visible frame."
 
 (defun delete-window-if-one-buffer-one-frame ()
   ;; only delete window when tabbar-mode is not on!
- (if (and one-buffer-one-frame (not (and (boundp 'tabbar-mode) tabbar-mode))
-	  (not (memq '(lambda ()
-			(condition-case nil
-			    (delete-window)
-			  (error nil))) kill-buffer-hook)))
-
-      (delete-window-if-created-for-buffer)))
+  (with-current-buffer (current-buffer)
+    (if (and one-buffer-one-frame (not (and (boundp 'tabbar-mode) tabbar-mode))
+	     (not (memq '(lambda ()
+			   (condition-case nil
+			       (delete-window)
+			     (error nil))) kill-buffer-hook)))
+	
+	(delete-window-if-created-for-buffer))))
 
 (defun aquamacs-delete-frame (&optional frame)
   (condition-case nil 
@@ -649,7 +650,8 @@ even if it's the only visible frame."
 ;; but only do so if aquamacs opened a new frame&window for
 ;; this buffer (e.g. during switch-to-buffer)
 (defun delete-window-if-created-for-buffer (&optional buffer whole-frame-only)
-  (let ((buf (or buffer (current-buffer))))
+  (with-current-buffer (current-buffer)
+    (let ((buf (or buffer (current-buffer))))
     (let ((winlist (find-all-windows-internal buf)))
       (mapc  
        (lambda (win)
@@ -660,7 +662,10 @@ even if it's the only visible frame."
 	     (delete-window-if-created-for-this-buffer win 
 						       (buffer-name buf) t)))
 					; (not (killable-buffer-p buf)))
-       winlist))))
+       winlist))
+    ;; some functions like find-alternate-file (via kill-buffer-hook)
+    ;; rely on the buffer still being current.  we're not killing it after all!
+   )))
      
 (defun delete-window-if-created-for-this-buffer (win buf-name skip-check)
   "Delete the window (sometimes)

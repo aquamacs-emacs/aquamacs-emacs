@@ -396,15 +396,16 @@ before deleting."
       ;; if this one is not one of the tabs, we select an existing tab.
       ;; we MUST select one actively here.
       (when sel
-	(if (assq (other-buffer buffer nil (window-frame wind)) buflist)
-	    (progn
-	      (let ((one-buffer-one-frame))
-		(switch-to-buffer (other-buffer)))
-	      ;; this avoids flicker
-	      (tabbar-display-update))
-	  (if (tabbar-tab-next tabset tab)
-	      (tabbar-click-on-tab (tabbar-tab-next tabset tab))
-	    (tabbar-click-on-tab (tabbar-tab-next tabset tab 'before)))))
+	(with-current-buffer (current-buffer)
+	  (if (assq (other-buffer buffer nil (window-frame wind)) buflist)
+	      (progn
+		(let ((one-buffer-one-frame))
+		  (switch-to-buffer (other-buffer)))
+		;; this avoids flicker
+		(tabbar-display-update))
+	    (if (tabbar-tab-next tabset tab)
+		(tabbar-click-on-tab (tabbar-tab-next tabset tab))
+	      (tabbar-click-on-tab (tabbar-tab-next tabset tab 'before))))))
 
       ;; put trimmed buffer list back into alist
       (setcdr window-elt buflist)
