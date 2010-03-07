@@ -2625,8 +2625,9 @@ If OPOINT is non-nil, restore point there after adjusting it for replacement."
 				(1+ (cdr (cdr mouse-pos))))
 			  (car mouse-pos)))))
   (let* ((corrects   (if flyspell-sort-corrections
-  	 		 (sort (car (cdr (cdr poss))) 'string<)
-  	 	       (car (cdr (cdr poss)))))
+			 ;; reverse word order for proper menu display
+  	 		 (reverse (sort (car (cdr (cdr poss))) 'string<))
+  	 	       (reverse (car (cdr (cdr poss))))))
   	 (affix      (car (cdr (cdr (cdr poss)))))
   	 show-affix-info)
     
