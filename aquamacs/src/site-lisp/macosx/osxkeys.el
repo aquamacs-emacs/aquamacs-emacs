@@ -757,6 +757,8 @@ set to `aquamacs-popup-context-menu' or nil"
     (define-key map '[(right)] 'aquamacs-forward-char)
     (define-key map `[(,osxkeys-command-key up)] 'beginning-of-buffer)
     (define-key map `[(,osxkeys-command-key down)] 'end-of-buffer)
+    (define-key map `[(,osxkeys-command-key prior)] 'beginning-of-buffer)  ; PageUp
+    (define-key map `[(,osxkeys-command-key next)] 'end-of-buffer)  ; PageDown
     (define-key map `[(,osxkeys-command-key left)] 'beginning-of-visual-line)
     (define-key map `[(,osxkeys-command-key right)] 'end-of-visual-line)
     (define-key map `[(control left)] 'beginning-of-visual-line)
