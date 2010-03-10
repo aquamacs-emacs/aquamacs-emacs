@@ -23,7 +23,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2006, 2007, 2008, 2009: David Reitter
+;; Copyright (C) 2006, 2007, 2008, 2009, 2010: David Reitter
  
 
 
@@ -37,12 +37,12 @@
 
 ;; Version information
 
-(defvar aquamacs-version "2.0preview4"
+(defvar aquamacs-version "2.0preview5"
 "A string with Aquamacs' version number.
 The format of the string is undefined. 
 For a reliable numerical representation, use `aquamacs-version-id'.")
 
-(defvar aquamacs-version-id 205
+(defvar aquamacs-version-id 206
 "A float indicating Aquamacs' version number.
 Full integers correspond to the third position of the public
 version number, e.g. version 0.9.7 is represented as `97.x'.
@@ -51,7 +51,7 @@ It is guaranteed that for any two Aquamacs releases A and B,
 if aquamacs-version-id for B is higher than aquamacs-version-id 
 for A, then B is newer than A.")
 
-(defvar aquamacs-minor-version "b"
+(defvar aquamacs-minor-version ""
 "Version code for minor maintenance releases.
 Changes in this code are ignored during the online version check.")
 
