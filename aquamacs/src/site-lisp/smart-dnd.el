@@ -1,10 +1,10 @@
 ;;; smart-dnd.el --- user-configurable drag-n-drop feature
 
-;; Copyright (C) 2003-2006  Seiji Zenitani <zenitani@mac.com>
+;; Copyright (C) 2003-2008  by Seiji Zenitani
 
 ;; Author: Seiji Zenitani <zenitani@mac.com>
 ;; Based on: mac-drag-N-drop.el by Seiji Zenitani
-;; Version: v20060108
+;; $Id$
 ;; Keywords: tools
 ;; Created: 2003-04-27
 ;; Compatibility: Emacs 22
@@ -50,7 +50,8 @@
 ;;
 ;; String elements will be formatted by `smart-dnd-string'.
 ;; You can also put elisp expression into the alist.
-;; A local variable 'f' will be replaced by the dropped filename.
+;; In the case of ".exe" in the above list, a local variable 'f'
+;; will be replaced by the dropped filename in the expression.
 ;;
 ;; Major-mode-hook would be good place to install your own configuration.
 ;; For example,
@@ -105,6 +106,24 @@
   "The functions to call when a file is dropped to the buffer.
 See `dnd-protocol-alist' for more information."
   )
+(put 'smart-dnd-protocol-alist 'risky-local-variable t)
+
+(defvar smart-dnd-replace-alist
+  '(
+    ("%F" . f)
+    ("%f" . (file-name-nondirectory f))
+    ("%r" . (if buffer-file-name
+		(file-relative-name
+		 f (file-name-directory buffer-file-name))
+	      f))
+    ("%R" . (if buffer-file-name
+		(file-relative-name
+		 f (file-name-directory buffer-file-name))
+	      (concat "file://" f)))
+    ("%n" . (file-name-sans-extension (file-name-nondirectory f)))
+    ("%e" . (or (file-name-extension f) ""))
+    ))
+(put 'smart-dnd-replace-alist 'risky-local-variable t)
 
 (defun smart-dnd-handle-local-file (uri action)
   "Open a local file. See also `dnd-open-local-file'."
@@ -152,6 +171,7 @@ depending on `smart-dnd-string-alist'."
         )
       succeed)))
 
+;;;###autoload
 (defun smart-dnd-setup (alist)
   "Install smart-dnd feature to the local buffer."
   (interactive)
@@ -170,25 +190,12 @@ You can use the following keywords in the format control STRING.
 When the target buffer hasn't been assigned a file name yet,
 %r returns the absolute pathname      [ /home/zenitani/public_html/index.html ]
 while %R returns the URL.             [ file:///home/zenitani/ .. /index.html ]
-%n means file name without extention. [ index ]
-%e means extention of file name.      [ html ]
+%n means file name without extension. [ index ]
+%e means extension of file name.      [ html ]
 "
   (interactive)
-  (let ((rlist
-         '(
-           ("%F" . f)
-           ("%f" . (file-name-nondirectory f))
-           ("%r" . (if buffer-file-name
-                       (file-relative-name
-                        f (file-name-directory buffer-file-name))
-                     f))
-           ("%R" . (if buffer-file-name
-                       (file-relative-name
-                        f (file-name-directory buffer-file-name))
-                     (concat "file://" f)))
-           ("%n" . (file-name-sans-extension (file-name-nondirectory f)))
-           ("%e" . (or (file-name-extension f) ""))
-           ))
+  (let ((rlist smart-dnd-replace-alist)
+        (case-fold-search nil)
         (f filename))
     (while rlist
       (while (string-match (caar rlist) string)
@@ -203,4 +210,3 @@ while %R returns the URL.             [ file:///home/zenitani/ .. /index.html ]
 (provide 'smart-dnd)
 
 ;; smart-dnd.el ends here
-
