@@ -5071,20 +5071,37 @@ extern void update_window_cursor (struct window *w, int on);
 	}
 
       if (flags & NS_FUNCTION_KEY_MASK && !fnKeysym)
-          emacs_event->modifiers |=
-            parse_solitary_modifier (ns_function_modifier);
+	emacs_event->modifiers |=
+	  parse_solitary_modifier (ns_function_modifier);
 
-      if (!EQ (ns_right_alternate_modifier, Qnone) 
-	  && NILP (Fmember (make_number (code), ns_alternate_meta_special_codes))
-	  && ((flags & NSRightAlternateKeyMask) == NSRightAlternateKeyMask)) 
+      if (flags & NSRightAlternateKeyMask) /* default = meta */
 	{
-	  if (NILP (ns_right_alternate_modifier) && !fnKeysym)
-	    {   /* accept pre-interp alt comb */
-	      if ([[theEvent characters] length] > 0)
-		code = [[theEvent characters] characterAtIndex: 0];
+	  if ((NILP (ns_right_alternate_modifier)
+	       || (EQ (ns_right_alternate_modifier, Qnone)
+		   && (NILP (ns_alternate_modifier) 
+		       || EQ (ns_alternate_modifier, Qnone)))))
+	    {
+
+	      if (NILP (Fmember (make_number (code), ns_alternate_meta_special_codes)))
+		{
+		   if (!fnKeysym)
+		    {
+		  /* accept pre-interp alt comb */
+		  if ([[theEvent characters] length] > 0)
+		    code = [[theEvent characters] characterAtIndex: 0];
+		  /*HACK: clear lone shift modifier to stop next if from firing */
+		  if (emacs_event->modifiers == shift_modifier)
+		    emacs_event->modifiers = 0;
+		    }
+		} 
+	      else
+		emacs_event->modifiers |= meta_modifier;
 	    }
-	  emacs_event->modifiers |= 
-	    parse_solitary_modifier (ns_right_alternate_modifier);
+	  else
+	    emacs_event->modifiers |=
+	      parse_solitary_modifier (EQ (ns_right_alternate_modifier, Qnone) ?
+				       ns_alternate_modifier
+				       : ns_right_alternate_modifier);
 	}
       if (flags & NSLeftAlternateKeyMask) /* default = meta */
 	{
@@ -5094,24 +5111,27 @@ extern void update_window_cursor (struct window *w, int on);
 	     (UCKeyTranslate seems to be needed).
 	     Thus, we have to use the manual route via 
 	     ns_alternate_meta_special_codes. */
-	  if (NILP (Fmember (make_number (code), ns_alternate_meta_special_codes)))
+	 
+	  if ((NILP (ns_alternate_modifier) || EQ (ns_alternate_modifier, Qnone)))
 	    {
-	      if ((NILP (ns_alternate_modifier) || EQ (ns_alternate_modifier, Qnone))
-		  && !fnKeysym)
+	      if (NILP (Fmember (make_number (code), ns_alternate_meta_special_codes)))
 		{
+		  if (!fnKeysym)
+		    {
 		  /* accept pre-interp alt comb */
 		  if ([[theEvent characters] length] > 0)
 		    code = [[theEvent characters] characterAtIndex: 0];
 		  /*HACK: clear lone shift modifier to stop next if from firing */
 		  if (emacs_event->modifiers == shift_modifier)
 		    emacs_event->modifiers = 0;
+		    }		    
 		}
 	      else
-		emacs_event->modifiers |=
-		  parse_solitary_modifier (ns_alternate_modifier);
+		emacs_event->modifiers |= meta_modifier;
 	    }
 	  else
-	    emacs_event->modifiers |= meta_modifier;
+	    emacs_event->modifiers |=
+	      parse_solitary_modifier (ns_alternate_modifier);
 	}
 
   if (NS_KEYLOG)
@@ -5132,6 +5152,8 @@ extern void update_window_cursor (struct window *w, int on);
             emacs_event->kind = code > 0xFF
               ? MULTIBYTE_CHAR_KEYSTROKE_EVENT : ASCII_KEYSTROKE_EVENT;
 
+	  if (NS_KEYLOG)
+	    fprintf (stderr, "creating Emacs event.\n");
           emacs_event->code = code;
           EV_TRAILER (theEvent);
           return;
@@ -6924,9 +6946,13 @@ to be used at a lower level for accented character entry. */);
 
   DEFVAR_LISP ("ns-alternate-meta-special-codes", &ns_alternate_meta_special_codes,
                doc: /* List of key codes (numbers) identifying special keys.
-For these special keys, ns_alternate_modifier and ns_right_alternate_modifier do not apply.
-If those keys are entered with the Alternate modifier, the modifier
-will be reported as Meta. */);
+For these special keys, the Option modifier will be interpreted as 
+Meta if `ns_alternate_modifier' and `ns_right_alternate_modifier' are
+configured such that the other keys with the Option modifier would
+be interpreted by the system (`none' or nil).
+
+If `ns_alternate_modifier' and `ns_right_alternate_modifier' are
+set to a specific Emacs modifier, this will be respected.*/);
   ns_alternate_meta_special_codes = Qnil;
 
   DEFVAR_LISP ("ns-right-alternate-modifier", &ns_right_alternate_modifier,
