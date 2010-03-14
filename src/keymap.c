@@ -2645,6 +2645,12 @@ around function keys and event symbols.  */)
     }
   else if (SYMBOLP (key))	/* Function key or event-symbol */
     {
+
+      /* To Do:
+	 Modifiers are included in the function key symbols - e.g., `M-down'.
+	 These are not correctly converted to NS specific keys for that
+	 reason. */
+
       if (NILP (no_angles))
 	{
 	  char *buffer
