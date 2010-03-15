@@ -275,7 +275,7 @@ by the function `define-emulate-mac-keyboard-modes'."
 	(define-key menu-bar-option-key-menu (vector (list language))
 	  (eval `(menu-bar-make-mm-toggle 
 		  ,(emkm-name language)
-		  ,(format "Meta & %s" 
+		  ,(format "...Meta & %s" 
 			   (let ((str (symbol-name language))) 
 			     (if (> (length str) 3)
 				 (capitalize str)
@@ -344,9 +344,9 @@ to their equivalents used on Mac OS X."
   (interactive "p")
   (setq ns-right-alternate-modifier
 	(if (eq 'meta
-		(or (if (eq ns-right-alternate-modifier 'none)
-			ns-alternate-modifier ns-right-alternate-modifier) 'none))
-	    nil
+		(if (eq ns-right-alternate-modifier 'none)
+		    ns-alternate-modifier ns-right-alternate-modifier))
+	    'none
 	  'meta))
   (if interactively (customize-mark-as-set 'ns-right-alternate-modifier))
   (message "Right Option %s." 
@@ -356,9 +356,9 @@ to their equivalents used on Mac OS X."
   (interactive "p")
   (setq ns-right-command-modifier
 	(if (eq 'meta
-		(or (if (eq ns-right-command-modifier 'none)
-			ns-command-modifier ns-right-command-modifier) 'none))
-	    nil
+		(if (eq ns-right-command-modifier 'none)
+		    ns-command-modifier ns-right-command-modifier))
+	    'none  ; same function as left command modifier
 	  'meta))
   (if interactively (customize-mark-as-set 'ns-right-command-modifier))
   (message "Right Command %s." (ns-modifier-setting-description ns-right-command-modifier ns-command-modifier)))
@@ -399,7 +399,7 @@ do not let it produce special characters (passing the key to the system)."
 
 (define-key menu-bar-option-key-menu [option-is-meta]
   `(menu-item
-    (format  "%s"
+    (format  "Option is %s"
 	     (upcase-initials (symbol-name 
 			       (or (ns-alternate-modifier-true-value) 
 				   mac-option-modifier-enabled-value))))
@@ -411,7 +411,7 @@ do not let it produce special characters (passing the key to the system)."
     :button (:toggle . (and mac-option-modifier  (not aquamacs-emkm-current-keymap)))))
  
 (define-key menu-bar-option-key-menu [option-to-system]
-  `(menu-item "Standard Mac characters   "
+  `(menu-item "Option for composed characters   "
     toggle-mac-option-modifier 
 ;; not yet known.    :key-sequence [(,osxkeys-command-key \;)]
     :visible (boundp 'mac-option-modifier)
