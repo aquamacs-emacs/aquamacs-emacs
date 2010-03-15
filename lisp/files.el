@@ -4522,7 +4522,7 @@ change the additional actions you can take on files."
 				  (if (> (length (buffer-file-name buffer)) 30)
 				      (concat "..." (substring (buffer-file-name buffer) -27))
 				    (buffer-file-name buffer)))
-                        (format "Save buffer %s?
+                        (format "Save buffer %s? 
 The buffer contains unsaved changes which may be lost if you don't save them."
                                 (buffer-name buffer))))))
              (lambda (buffer)
