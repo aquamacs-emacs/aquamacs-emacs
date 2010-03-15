@@ -4938,7 +4938,7 @@ extern void update_window_cursor (struct window *w, int on);
 
 /*****************************************************************************/
 /* Keyboard handling. */
-#define NS_KEYLOG 0
+#define NS_KEYLOG 01
 
 - (void)keyDown: (NSEvent *)theEvent
 {
@@ -5399,7 +5399,7 @@ extern void update_window_cursor (struct window *w, int on);
   NSTRACE (mouseDown);
 
   [self deleteWorkingText];
-
+Hk
   if (!emacs_event)
     return;
 
@@ -6962,6 +6962,7 @@ hyper means it is taken to be that key.  Set to nil means that the
 alternate / option key is not interpreted by Emacs at all, allowing it
 to be used at a lower level for accented character entry.  Set to none
 means use ns-alternate-modifier value. */);
+  ns_right_alternate_modifier = Qnone;
 
   DEFVAR_LISP ("ns-command-modifier", &ns_command_modifier,
                doc: /* This variable describes the behavior of the
