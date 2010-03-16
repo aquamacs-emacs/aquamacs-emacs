@@ -5399,7 +5399,6 @@ extern void update_window_cursor (struct window *w, int on);
   NSTRACE (mouseDown);
 
   [self deleteWorkingText];
-Hk
   if (!emacs_event)
     return;
 
