@@ -3538,6 +3538,8 @@ x_wm_set_icon_position (struct frame *f, int icon_x, int icon_y)
 #define _NSApplicationPresentationAutoHideDock  (1 <<  0)
 #define _NSApplicationPresentationAutoHideMenuBar  (1 <<  2)
 
+static Lisp_Object ns_fullscreen_vertical_scrollbar_state = NULL;
+
 static void
 ns_fullscreen_hook  (f)
 FRAME_PTR f;
@@ -3545,6 +3547,8 @@ FRAME_PTR f;
   int rows, cols;
   int fs =0;
   int width, height, ign;
+  Lisp_Object frame;
+  XSETFRAME (frame, f);
 
 #ifdef NS_IMPL_COCOA
   if (f->async_visible)
@@ -3553,9 +3557,10 @@ FRAME_PTR f;
 
       if ([view respondsToSelector:@selector(exitFullScreenModeWithOptions:)])
 	{
+	  NSDictionary *opts;
+
 	  BLOCK_INPUT;
 	  NSDisableScreenUpdates();
-	  NSDictionary *opts;
 
 	  switch (f->want_fullscreen)
 	    {
@@ -3675,6 +3680,9 @@ FRAME_PTR f;
 	  set_vertical_scroll_bar (XWINDOW (f->root_window)); 
 	  if (fs)
 	    {
+	      ns_fullscreen_vertical_scrollbar_state =
+		Fframe_parameter (frame, Qvertical_scroll_bars);
+
 	      // turn off scroll bars in full screen mode
 	      // we want to hide those scroll bars for now, as they are displayed
 	      // in the wrong position, and clicks aren't processed reliably 
@@ -3687,8 +3695,11 @@ FRAME_PTR f;
 	      XWINDOW (f->root_window) -> vertical_scroll_bar = Qnil;
 	    } else
 	    {
+	      if (! ns_fullscreen_vertical_scrollbar_state)
+		ns_fullscreen_vertical_scrollbar_state = Qnil;
 	      // Fixme: we don't know that they were Qright in the first place.
-	      x_set_frame_parameters (f, Fcons (Fcons (Qvertical_scroll_bars, Qright),
+	      x_set_frame_parameters (f, Fcons (Fcons (Qvertical_scroll_bars,
+						       ns_fullscreen_vertical_scrollbar_state),
 	      					Qnil));
 	    }
 	    
