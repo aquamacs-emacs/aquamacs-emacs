@@ -2189,8 +2189,8 @@ terminal type to a different value."
 
 (defface default
   '((((type ns))
-     :height 120 :family "Monaco" :weight 'normal :width 'normal
-     :slant 'normal :underline nil :strike-through nil)
+     :height 120 :family "Monaco" :weight normal :width normal
+     :slant normal :underline nil :strike-through nil)
     (t nil))
   "Basic default face."
   :group 'basic-faces)
