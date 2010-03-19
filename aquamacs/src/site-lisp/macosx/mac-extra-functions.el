@@ -369,9 +369,11 @@ specified in `shell-file-name'."
   (mac-add-local-directory-to-exec-path) ;; needed for CocoAspell
 
   ;; inferior workaround, until mac.c is fixed not to set INFOPATH any longer
+  ;; do we still need this?
+  ;; nsterm.m does set INFOPATH.
   (if (equal (concat (mac-resources-path)
-		       "info")
-	     (getenv "INFOPATH"))
+		     "info")
+  	     (getenv "INFOPATH"))
       (setenv "INFOPATH"))
   
 ;; when INFOPATH is set from outside, it will only load INFOPATH
@@ -380,7 +382,7 @@ specified in `shell-file-name'."
 		     "~/Library/Application Support/Emacs/info"
 		     "/Library/Application Support/Emacs/info"
 		     (concat (mac-resources-path)
-			     "site-lisp/edit-modes/info")
+			     "lisp/aquamacs/edit-modes/info")
 		     (concat (mac-resources-path)
 			     "info"))))
     
