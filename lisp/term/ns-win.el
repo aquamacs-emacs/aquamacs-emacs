@@ -709,11 +709,19 @@ prompting.  If file is a directory perform a `find-file' on it."
 (defun ns-handle-drag-file ()
   (interactive)
   (require 'dnd)
-  (while (car ns-input-file)
-    ;; quick and dirty hack
-    (dnd-open-local-file (concat "file://"
-			  (car ns-input-file)) nil)
-    (setq ns-input-file (cdr ns-input-file))))
+  (while (car ns-input-file) 
+    (let* ((event last-input-event)
+	   (window (or (posn-window (event-start event))
+		       (selected-window)))
+	   action)
+      ;; (if (memq 'option (mac-ae-keyboard-modifiers ae))
+      ;; 	(setq action 'copy))
+      (when (windowp window) (select-window window))
+      (unwind-protect
+	  (dnd-handle-one-url window action
+			      (concat "file://"
+				      (car ns-input-file)))
+	(setq ns-input-file (cdr ns-input-file))))))
 
 (defvar ns-select-overlay nil
   "Overlay used to highlight areas in files requested by Nextstep apps.")
@@ -1232,7 +1240,11 @@ the operating system.")
      ((consp window-pos)
       (with-current-buffer buffer
         (let ((p (car (compute-motion (window-start window)
-                                      (cons (nth 0 edges) (nth 1 edges))
+                                      (cons (nth 0 edges)
+					    ;; Workaround: compute-motion fails to 
+					    ;; take into account header line.
+					    ;; See bug #4893
+					    (+ (if header-line-format 1 0) (nth 1 edges)))
                                       (window-end window)
                                       frame-pos
                                       (- (window-width window) 1)

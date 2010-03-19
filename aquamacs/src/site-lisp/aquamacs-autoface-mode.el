@@ -508,8 +508,12 @@ Hold Meta while dragging to set background color for the face."
   (setq aquamacs-color-panel-target-face 'none
 	aquamacs-color-panel-target-frame nil
 	aquamacs-color-panel-target-prop nil)
+  ;; direct setting - prevents drag&drop
+  ;; (setq aquamacs-color-panel-target-face (aquamacs-default-face-in-effect)
+  ;; 	aquamacs-color-panel-target-frame (selected-frame)
+  ;; 	aquamacs-color-panel-target-prop :foreground)
   (ns-popup-color-panel)
-  (message "Drag and drop colors onto text to set the according face foreground. Hold Meta for background color."))
+  (message "Drag and drop colors onto text to set the according face foreground. Hold Option for background color."))
 
 (defun aquamacs-select-foreground-color (&optional frame)
   "Show color panel.
@@ -697,25 +701,25 @@ modified, or in FRAME if given."
 ;; 		      (not aquamacs-autoface-mode))
 ;; 	:help "Set this frame's face as default."))
 
-;; (define-key appearance-menu [background-color]
-;;   `(menu-item (if aquamacs-autoface-mode
-;; 		  (format "Background Color for %s..."
-;; 			  (aquamacs-face-or-frame-name "this Frame"))
-;; 		"Background Color...")
-;; 	      aquamacs-select-background-color
-;; 	      :visible ,(display-multi-font-p)
-;; 	      :enable (menu-bar-menu-frame-live-and-visible-p)
-;; 	      :help "Select a background color"))
+(define-key appearance-menu [background-color]
+  `(menu-item (if aquamacs-autoface-mode
+		  (format "Background Color for %s..."
+			  (aquamacs-face-or-frame-name "this Frame"))
+		"Background Color...")
+	      aquamacs-select-background-color
+	      :visible ,(display-multi-font-p)
+	      :enable (menu-bar-menu-frame-live-and-visible-p)
+	      :help "Select a background color"))
 
-;; (define-key appearance-menu [foreground-color]
-;;   `(menu-item  (if aquamacs-autoface-mode
-;; 		   (format "Foreground Color for %s..."
-;; 		      (aquamacs-face-or-frame-name "this Frame"))
-;; 		 "Foreground Color...")
-;; 	      aquamacs-select-foreground-color
-;; 	      :visible ,(display-multi-font-p)
-;; 	      :enable (menu-bar-menu-frame-live-and-visible-p)
-;; 	      :help "Select a foreground color"))
+(define-key appearance-menu [foreground-color]
+  `(menu-item  (if aquamacs-autoface-mode
+		   (format "Foreground Color for %s..."
+		      (aquamacs-face-or-frame-name "this Frame"))
+		 "Foreground Color...")
+	      aquamacs-select-foreground-color
+	      :visible ,(display-multi-font-p)
+	      :enable (menu-bar-menu-frame-live-and-visible-p)
+	      :help "Select a foreground color"))
 
 (defun aquamacs-autoface-setup-menu ()
 (define-key appearance-menu [color-panel]
@@ -824,7 +828,8 @@ modified, or in FRAME if given."
 			  :background ns-input-color))
 
 (defun aquamacs-set-face-prop (face frame prop value)
-  (unless (eq aquamacs-color-panel-target-face 'none) ;; general color picker used
+  (if (eq aquamacs-color-panel-target-face 'none) ;; general color picker used
+      (message "Drag&drop colors out of the panel onto text.")
     (apply 'set-face-attribute face
 	   frame (list prop value))
     (aquamacs-autoface-mark-face-to-save face)

@@ -4787,16 +4787,18 @@ extern void update_window_cursor (struct window *w, int on);
       EV_TRAILER (e);
     }
 }
-/* change font attributes */
-/*
-– (void)changeAttributes:(id)sender 
+/* change font attributes
+   This is currently only used for font colors.
+ */
+- (void)changeAttributes: (id)sender
 {
-    NSDictionary *oldAttributes = [self fontAttributes];
-    NSDictionary *newAttributes = [sender convertAttributes: oldAttributes];
-    [self setFontAttributes:newAttributes];
-    return; 
+  //NSDictionary *oldAttributes = [self fontAttributes];
+  //NSDictionary *newAttributes = [sender convertAttributes: oldAttributes];
+  //[self setFontAttributes:newAttributes];
+  //  if ([newAttributes objectForKey: NSFontColorAttribute])
+  [self changeColor: sender];
+  return; 
 }
-*/
 
 /* called on color panel selection */
 - (void)changeColor: (id)sender

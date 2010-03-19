@@ -1743,8 +1743,6 @@ DEFUN ("ns-popup-font-panel", Fns_popup_font_panel, Sns_popup_font_panel,
   check_ns ();
   BLOCK_INPUT;
 
-  /* must create instance to receive immediate events */
-  [NSColorPanel sharedColorPanel];
   fm = [NSFontManager sharedFontManager];
   if (NILP (frame))
     f = SELECTED_FRAME ();
