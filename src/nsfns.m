@@ -3050,6 +3050,7 @@ compute_tip_xy (f, parms, dx, dy, width, height, root_x, root_y)
   Lisp_Object left, top;
   EmacsView *view = FRAME_NS_VIEW (f);
   NSPoint pt;
+  NSRect vScreen;
 
   /* Start with user-specified or mouse position.  */
   left = Fcdr (Fassq (Qleft, parms));
@@ -3067,11 +3068,14 @@ compute_tip_xy (f, parms, dx, dy, width, height, root_x, root_y)
   pt = [view convertPoint: pt toView: nil];
   pt = [[view window] convertBaseToScreen: pt];
 
+  vScreen = [[[view window] screen] visibleFrame];
+
   /* Ensure in bounds.  (Note, screen origin = lower left.) */
-  if (pt.x + XINT (dx) <= 0)
-    *root_x = 0; /* Can happen for negative dx */
+  /* valid coordinates may be negative */
+  if (pt.x + XINT (dx) <= vScreen.origin.x)
+    *root_x = vScreen.origin.x; /* Can happen for negative dx */
   else if (pt.x + XINT (dx) + width
-	   <= x_display_pixel_width (FRAME_NS_DISPLAY_INFO (f)))
+	   <= vScreen.origin.x + vScreen.size.width) 
     /* It fits to the right of the pointer.  */
     *root_x = pt.x + XINT (dx);
   else if (width + XINT (dx) <= pt.x)
@@ -3081,16 +3085,16 @@ compute_tip_xy (f, parms, dx, dy, width, height, root_x, root_y)
     /* Put it left justified on the screen -- it ought to fit that way.  */
     *root_x = 0;
 
-  if (pt.y - XINT (dy) - height >= 0)
+  if (pt.y - XINT (dy) - height >= vScreen.origin.y)
     /* It fits below the pointer.  */
     *root_y = pt.y - height - XINT (dy);
   else if (pt.y + XINT (dy) + height
-	   <= x_display_pixel_height (FRAME_NS_DISPLAY_INFO (f)))
+	   <= vScreen.origin.y + vScreen.size.height )
     /* It fits above the pointer */
       *root_y = pt.y + XINT (dy);
   else
     /* Put it on the top.  */
-    *root_y = x_display_pixel_height (FRAME_NS_DISPLAY_INFO (f)) - height;
+    *root_y = vScreen.origin.y + vScreen.size.height - height;
 }
 
 
@@ -3149,11 +3153,12 @@ Text larger than the specified size is clipped.  */)
     CHECK_NUMBER (dy);
 
   BLOCK_INPUT;
-  if (ns_tooltip == nil)
-    ns_tooltip = [[EmacsTooltip alloc] init];
-  else
-    Fx_hide_tip ();
+  if (ns_tooltip)
+    Fx_hide_tip ();  /* closes and releases ns_tooltip */
 
+  /* must initialize every time in order to keep tooltip on
+     the screen with key focus. */
+  ns_tooltip = [[EmacsTooltip alloc] init];
   [ns_tooltip setText: str];
   size = [ns_tooltip frame].size;
 
@@ -3163,6 +3168,7 @@ Text larger than the specified size is clipped.  */)
 		  &root_x, &root_y);
 
   [ns_tooltip showAtX: root_x Y: root_y for: XINT (timeout)];
+
   UNBLOCK_INPUT;
 
   UNGCPRO;
@@ -3178,6 +3184,7 @@ Value is t if tooltip was open, nil otherwise.  */)
   if (ns_tooltip == nil || ![ns_tooltip isActive])
     return Qnil;
   [ns_tooltip hide];
+  ns_tooltip = nil;
   return Qt;
 }
 

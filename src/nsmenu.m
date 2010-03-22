@@ -1594,7 +1594,7 @@ a notification */
                       styleMask: 0
                         backing: NSBackingStoreBuffered
                           defer: YES];
-  [win setReleasedWhenClosed: NO];
+  //[win setReleasedWhenClosed: NO];
   [win setDelegate: self];
   [[win contentView] addSubview: textField];
 /*  [win setBackgroundColor: col]; */
