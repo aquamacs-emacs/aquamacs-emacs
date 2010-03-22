@@ -643,7 +643,8 @@ xg_frame_set_char_size (f, cols, rows)
      int rows;
 {
   int pixelheight = FRAME_TEXT_LINES_TO_PIXEL_HEIGHT (f, rows)
-    + FRAME_MENUBAR_HEIGHT (f) + FRAME_TOOLBAR_HEIGHT (f);
+    + FRAME_MENUBAR_HEIGHT (f) + FRAME_TOOLBAR_HEIGHT (f)
+    + FRAME_TABS_HEIGHT (f);
   int pixelwidth;
 
   if (FRAME_PIXEL_HEIGHT (f) == 0)
@@ -759,24 +760,63 @@ xg_pix_to_gcolor (w, pixel, c)
 #define XG_TAB_KEY "emacs-tab-key"
 static int xg_tab_nr;
 
+static void
+xg_check_show_tabs (FRAME_PTR f,
+                    GtkNotebook *wnote)
+{
+  gboolean shown = gtk_notebook_get_show_tabs (wnote);
+  int pages = gtk_notebook_get_n_pages (wnote);
+
+  if ((shown && pages == 1) || (!shown && pages > 1)) 
+    {
+      gtk_notebook_set_show_tabs (wnote, pages > 1);
+      GtkRequisition req;
+      int oldheight = FRAME_TABS_HEIGHT (f);
+      int row_add = 0;
+      gtk_widget_size_request (f->output_data.x->notebook_widget, &req);
+      if (req.height > FRAME_PIXEL_HEIGHT (f))
+        FRAME_TABS_HEIGHT (f) = req.height - FRAME_PIXEL_HEIGHT (f);
+      else
+        FRAME_TABS_HEIGHT (f) = 0;
+      x_wm_set_size_hint (f, 0, 0);
+
+      /* Try to minimize resize, when adding the tabs, subtract some text
+         lines, when removing tabs, add text lines.  Some resize will be
+         made when tab height isn't a multiple of the line height.  */
+      
+      if (oldheight > 0 && FRAME_LINE_HEIGHT (f) > 0)
+        {
+          row_add = oldheight/FRAME_LINE_HEIGHT (f);
+          if (row_add * FRAME_LINE_HEIGHT (f) != oldheight)
+            ++row_add;
+        }
+      else if (FRAME_TABS_HEIGHT (f) > 0 && FRAME_LINE_HEIGHT (f) > 0)
+        {
+          row_add = -(FRAME_TABS_HEIGHT (f)/FRAME_LINE_HEIGHT (f));
+          if (row_add * FRAME_LINE_HEIGHT (f) != FRAME_TABS_HEIGHT (f))
+              --row_add;
+        }
+
+      xg_frame_set_char_size (f, FRAME_COLS (f), FRAME_LINES (f) + row_add);
+    }
+}
+
 /* Callback called when the current tab changes.  */
 
 static void
-xg_switch_page_cb (GtkNotebook     *notebook,
+xg_switch_page_cb (GtkNotebook     *wnote,
                    GtkNotebookPage *page,
                    guint            page_num,
                    gpointer         user_data)
 {
   BLOCK_INPUT;
-  GtkWidget *w = gtk_notebook_get_nth_page (notebook, page_num);
+  GtkWidget *w = gtk_notebook_get_nth_page (wnote, page_num);
   FRAME_PTR f = (FRAME_PTR) user_data;
   if (w != FRAME_GTK_WIDGET (f)) 
     {
       GtkWidget *old = FRAME_GTK_WIDGET (f);
       GList *children = old ? GTK_FIXED (old)->children : NULL;
       GSList *todo = NULL, *iter;
-      struct input_event event;
-      Lisp_Object frame;
       char *key = g_object_get_data (G_OBJECT (w), XG_TAB_KEY);
 
       if (!w->window) gtk_widget_realize (w);
@@ -793,7 +833,7 @@ xg_switch_page_cb (GtkNotebook     *notebook,
             }
         }
 
-      for (iter = todo; iter; iter = iter->next) 
+      for (iter = todo; iter; iter = g_slist_next (iter)) 
         {
           GtkFixedChild *child = (GtkFixedChild*)iter->data;
           GtkWidget *wevbox = child->widget;
@@ -812,6 +852,9 @@ xg_switch_page_cb (GtkNotebook     *notebook,
       if (old) 
         {
           char *oldkey = g_object_get_data (G_OBJECT (old), XG_TAB_KEY);
+          struct input_event event;
+          Lisp_Object frame;
+
           XSETFRAME (frame, f);
           EVENT_INIT (event);
           event.kind = TAB_CHANGED_EVENT;
@@ -821,7 +864,7 @@ xg_switch_page_cb (GtkNotebook     *notebook,
           kbd_buffer_store_event (&event);
         }
     }
-
+  xg_check_show_tabs (f, wnote);
   UNBLOCK_INPUT;
 }
 
@@ -950,6 +993,7 @@ xg_delete_tab (FRAME_PTR f,
         }
       gtk_notebook_remove_page (wnote, page_to_remove);
     }
+  xg_check_show_tabs (f, wnote);
 }
 
 /* Delete all tabs except the current tab.  */
@@ -969,6 +1013,7 @@ xg_delete_all_tabs (FRAME_PTR f)
   /* Then delete the rest.  */
   for (i = 0; i < current_page; ++i)
     gtk_notebook_remove_page (wnote, 0);
+  xg_check_show_tabs (f, wnote);
 }
 
 /* Make the next tab current.  If there are no next tabs, wrap around to 0.  */
@@ -1092,9 +1137,17 @@ xg_create_frame_widgets (f)
   xg_set_geometry (f);
   f->win_gravity
     = gtk_window_get_gravity (GTK_WINDOW (FRAME_GTK_OUTER_WIDGET (f)));
-  xg_add_tab (f, NULL);
   gtk_notebook_popup_enable (GTK_NOTEBOOK (wnote));
   gtk_notebook_set_scrollable (GTK_NOTEBOOK (wnote), TRUE);
+  gtk_notebook_set_show_border (GTK_NOTEBOOK (wnote), FALSE);
+  gtk_container_set_border_width (GTK_CONTAINER (wnote), 0);
+  GtkRcStyle *style = gtk_widget_get_modifier_style (wnote);
+
+  /* Must use g_strdup because gtk_widget_modify_style does g_free.  */
+  style->xthickness = style->ythickness = 0;
+  gtk_widget_modify_style (wnote, style);
+  
+  xg_add_tab (f, NULL);
   GtkWidget *wfixed = gtk_notebook_get_nth_page (GTK_NOTEBOOK (wnote), 0);
 
   /* Must realize the windows so the X window gets created.  It is used
@@ -1153,7 +1206,8 @@ x_wm_set_size_hint (f, flags, user_position)
   hint_flags |= GDK_HINT_BASE_SIZE;
   base_width = FRAME_TEXT_COLS_TO_PIXEL_WIDTH (f, 0);
   base_height = FRAME_TEXT_LINES_TO_PIXEL_HEIGHT (f, 0)
-    + FRAME_MENUBAR_HEIGHT (f) + FRAME_TOOLBAR_HEIGHT (f);
+    + FRAME_MENUBAR_HEIGHT (f) + FRAME_TOOLBAR_HEIGHT (f)
+    + FRAME_TABS_HEIGHT (f);
 
   check_frame_size (f, &min_rows, &min_cols);
 

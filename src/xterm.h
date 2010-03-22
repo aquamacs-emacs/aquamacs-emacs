@@ -430,6 +430,7 @@ struct x_output
   /* Height of tool bar widget, in pixels.
      Zero if not using an external tool bar.  */
   int toolbar_height;
+  int tabs_height;
 
   /* The tiled border used when the mouse is out of the frame.  */
   Pixmap border_tile;
@@ -683,6 +684,8 @@ enum
 #define FRAME_FONTSET(f) ((f)->output_data.x->fontset)
 #define FRAME_MENUBAR_HEIGHT(f) ((f)->output_data.x->menubar_height)
 #define FRAME_TOOLBAR_HEIGHT(f) ((f)->output_data.x->toolbar_height)
+#define FRAME_TABS_HEIGHT(f) ((f)->output_data.x->tabs_height)
+
 #define FRAME_BASELINE_OFFSET(f) ((f)->output_data.x->baseline_offset)
 
 /* This gives the x_display_info structure for the display F is on.  */
@@ -711,7 +714,8 @@ enum
      ((f)->output_data.x->x_pixels_outer_diff)
 #define FRAME_OUTER_TO_INNER_DIFF_Y(f)          \
      ((f)->output_data.x->y_pixels_outer_diff   \
-      + FRAME_MENUBAR_HEIGHT (f) + FRAME_TOOLBAR_HEIGHT (f))
+      + FRAME_MENUBAR_HEIGHT (f) + FRAME_TOOLBAR_HEIGHT (f) \
+      + FRAME_TABS_HEIGHT (f))
 
 
 #define FRAME_XIC(f) ((f)->output_data.x->xic)
