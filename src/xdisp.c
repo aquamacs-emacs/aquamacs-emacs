@@ -25256,7 +25256,7 @@ init_xdisp ()
   current_header_line_height = current_mode_line_height = -1;
 
   CHARPOS (this_line_start_pos) = 0;
-
+  
   mini_w = XWINDOW (minibuf_window);
   root_window = FRAME_ROOT_WINDOW (XFRAME (WINDOW_FRAME (mini_w)));
 

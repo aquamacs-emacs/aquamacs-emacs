@@ -474,6 +474,8 @@ struct x_output
   GtkWidget *edit_widget;
   /* The widget used for laying out widgets vertically.  */
   GtkWidget *vbox_widget;
+  /* The notebook (i.e. tab) widget.  */
+  GtkWidget *notebook_widget;
   /* The menubar in this frame.  */
   GtkWidget *menubar_widget;
   /* The tool bar in this frame  */

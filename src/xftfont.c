@@ -672,6 +672,13 @@ xftfont_draw (s, from, to, x, y, with_background)
   int len = to - from;
   int i;
 
+  if (XftDrawDrawable (xft_draw) != s->window)
+    {
+      x_catch_errors (s->display);
+      XftDrawChange (xft_draw, s->window);
+      x_uncatch_errors ();
+    }
+
   if (s->font == face->font)
     xftface_info = (struct xftface_info *) face->extra;
   xftfont_get_colors (f, face, s->gc, xftface_info,

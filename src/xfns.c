@@ -5849,6 +5849,131 @@ frame_parm_handler x_frame_parm_handlers[] =
   x_set_sticky,
 };
 
+#ifdef USE_GTK
+DEFUN ("tab-new", Ftab_new,
+       Stab_new, 0, 2, "",
+       doc: /* Create a new tab with name NAME in frame FRAME.
+If NAME is nil, use a standard name (Page <n>).
+FRAME nil means use the selected frame.
+
+Returns the key for the tab, which can be passed to `tab-delete'.  */)
+     (name, frame)
+     Lisp_Object name, frame;
+{
+  FRAME_PTR f = check_x_frame (frame);
+  const char *key;
+
+  if (!NILP (name) && !STRINGP (name))
+    error ("Name is not string or nil");
+
+  BLOCK_INPUT;
+  key = xg_add_tab (f, NILP (name) ? NULL : SDATA (name));
+  UNBLOCK_INPUT;
+
+  return make_string (key, strlen (key));
+}
+
+DEFUN ("tab-delete", Ftab_delete,
+       Stab_delete, 0, 2, "",
+       doc: /* Remove tab KEY from frame FRAME.
+KEY is what `tab-new' returned or nil, which means the current tab.
+FRAME nil means use the selected frame.  */)
+     (name, frame)
+     Lisp_Object name, frame;
+{
+  FRAME_PTR f = check_x_frame (frame);
+  if (!NILP (name) && !STRINGP (name))
+    error ("Name is not string or nil");
+
+  BLOCK_INPUT;
+  xg_delete_tab (f, NILP (name) ? NULL : SDATA (name));
+  UNBLOCK_INPUT;
+
+  return Qnil;
+}
+
+DEFUN ("tab-delete-other", Ftab_delete_other,
+       Stab_delete_other, 0, 1, "",
+       doc: /* Remove all tabs from frame FRAME except the current one.
+FRAME nil means use the selected frame.  */)
+     (frame)
+     Lisp_Object frame;
+{
+  FRAME_PTR f = check_x_frame (frame);
+  BLOCK_INPUT;
+  xg_delete_all_tabs (f);
+  UNBLOCK_INPUT;
+
+  return Qnil;
+}
+
+DEFUN ("tab-next", Ftab_next,
+       Stab_next, 0, 1, "",
+       doc: /* Go to the next tab on frame FRAME.
+Wrap around to the beginning if current tab is last.
+FRAME nil means use the selected frame.  */)
+     (frame)
+     Lisp_Object frame;
+{
+  FRAME_PTR f = check_x_frame (frame);
+  BLOCK_INPUT;
+  xg_tab_next (f);
+  UNBLOCK_INPUT;
+
+  return Qnil;
+}
+
+DEFUN ("tab-previous", Ftab_previous,
+       Stab_previous, 0, 1, "",
+       doc: /* Go to the previous tab on frame FRAME.
+Wrap around to the end if current tab is first.
+FRAME nil means use the selected frame.  */)
+     (frame)
+     Lisp_Object frame;
+{
+  FRAME_PTR f = check_x_frame (frame);
+  BLOCK_INPUT;
+  xg_tab_previous (f);
+  UNBLOCK_INPUT;
+
+  return Qnil;
+}
+
+DEFUN ("tab-set-label", Ftab_set_label,
+       Stab_set_label, 1, 2, 0,
+       doc: /* Set label for the current tab in frame FRAME to LABEL.
+LABEL nil means use current buffer name.
+FRAME nil means use the selected frame.  */)
+     (label, frame)
+     Lisp_Object label, frame;
+{
+  FRAME_PTR f;
+
+  if (NILP (frame))
+    frame = selected_frame;
+  CHECK_LIVE_FRAME (frame);
+  f = XFRAME (frame);
+  if (! FRAME_X_P (f)) return;
+
+
+  if (NILP (label))
+    {
+      if (!NILP (Fminibufferp (Qnil))) return;
+      label = Fbuffer_name (Qnil);
+    }
+
+  if (!STRINGP (label))
+    error ("label is not a string");
+
+  BLOCK_INPUT;
+  xg_set_tab_label (f, SDATA (label));
+  UNBLOCK_INPUT;
+
+  return Qnil;
+}
+
+#endif
+
 void
 syms_of_xfns ()
 {
@@ -5997,6 +6122,7 @@ the tool bar buttons.  */);
      accepts --with-x-toolkit=gtk.  */
   Fprovide (intern_c_string ("x-toolkit"), Qnil);
   Fprovide (intern_c_string ("gtk"), Qnil);
+  Fprovide (intern_c_string ("tabs"), Qnil);
 
   DEFVAR_LISP ("gtk-version-string", &Vgtk_version_string,
                doc: /* Version info for GTK+.  */);
@@ -6006,6 +6132,14 @@ the tool bar buttons.  */);
                 GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION);
     Vgtk_version_string = make_pure_string (gtk_version, strlen (gtk_version), strlen (gtk_version), 0);
   }
+
+  defsubr (&Stab_new);
+  defsubr (&Stab_delete);
+  defsubr (&Stab_delete_other);
+  defsubr (&Stab_next);
+  defsubr (&Stab_previous);
+  defsubr (&Stab_set_label);
+
 #endif /* USE_GTK */
 
   /* X window properties.  */

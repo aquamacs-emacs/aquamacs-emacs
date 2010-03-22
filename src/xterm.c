@@ -6177,9 +6177,9 @@ handle_one_xevent (dpyinfo, eventp, finish, hold_quit)
               f->output_data.x->has_been_visible = 1;
               SET_FRAME_GARBAGED (f);
             }
-          else
+          else 
             expose_frame (f,
-			  event.xexpose.x, event.xexpose.y,
+                          event.xexpose.x, event.xexpose.y,
                           event.xexpose.width, event.xexpose.height);
         }
       else
@@ -7225,6 +7225,9 @@ XTread_socket (terminal, expected, hold_quit)
       if (current_finish == X_EVENT_GOTO_OUT)
         break;
     }
+
+  Ftab_set_label (Qnil, Qnil);
+
 #endif /* USE_GTK */
 
  out:;

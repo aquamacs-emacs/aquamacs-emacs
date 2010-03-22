@@ -490,6 +490,7 @@ Lisp_Object Qsave_session;
 Lisp_Object Qdbus_event;
 #endif
 Lisp_Object Qconfig_changed_event;
+Lisp_Object Qtab_changed_event;
 
 /* Lisp_Object Qmouse_movement; - also an event header */
 
@@ -4317,6 +4318,11 @@ kbd_buffer_get_event (kbp, used_mouse_menu, end_time)
 	  obj = make_lispy_event (event);
 	  kbd_fetch_ptr = event + 1;
 	}
+      else if (event->kind == TAB_CHANGED_EVENT)
+	{
+	  obj = make_lispy_event (event);
+	  kbd_fetch_ptr = event + 1;
+	}
       else
 	{
 	  /* If this event is on a different frame, return a switch-frame this
@@ -6234,6 +6240,12 @@ make_lispy_event (event)
 	return Fcons (Qconfig_changed_event,
                       Fcons (event->arg,
                              Fcons (event->frame_or_window, Qnil)));
+
+    case TAB_CHANGED_EVENT:
+	return Fcons (Qtab_changed_event,
+                      Fcons (event->arg,
+                             Fcons (event->frame_or_window, Qnil)));
+
 #ifdef HAVE_GPM
     case GPM_CLICK_EVENT:
       {
@@ -11852,6 +11864,8 @@ syms_of_keyboard ()
 
   Qconfig_changed_event = intern_c_string ("config-changed-event");
   staticpro (&Qconfig_changed_event);
+  Qtab_changed_event = intern_c_string ("tab-changed-event");
+  staticpro (&Qtab_changed_event);
 
   Qmenu_enable = intern_c_string ("menu-enable");
   staticpro (&Qmenu_enable);
@@ -12597,6 +12611,8 @@ keys_of_keyboard ()
 #endif
 
   initial_define_lispy_key (Vspecial_event_map, "config-changed-event",
+			    "ignore");
+  initial_define_lispy_key (Vspecial_event_map, "tab-changed-event",
 			    "ignore");
 }
 

@@ -753,6 +753,274 @@ xg_pix_to_gcolor (w, pixel, c)
   gdk_colormap_query_color (map, pixel, c);
 }
 
+/***********************************************************************
+                              Tab functions
+ ***********************************************************************/
+#define XG_TAB_KEY "emacs-tab-key"
+static int xg_tab_nr;
+
+/* Callback called when the current tab changes.  */
+
+static void
+xg_switch_page_cb (GtkNotebook     *notebook,
+                   GtkNotebookPage *page,
+                   guint            page_num,
+                   gpointer         user_data)
+{
+  BLOCK_INPUT;
+  GtkWidget *w = gtk_notebook_get_nth_page (notebook, page_num);
+  FRAME_PTR f = (FRAME_PTR) user_data;
+  if (w != FRAME_GTK_WIDGET (f)) 
+    {
+      GtkWidget *old = FRAME_GTK_WIDGET (f);
+      GList *children = old ? GTK_FIXED (old)->children : NULL;
+      GSList *todo = NULL, *iter;
+      struct input_event event;
+      Lisp_Object frame;
+      char *key = g_object_get_data (G_OBJECT (w), XG_TAB_KEY);
+
+      if (!w->window) gtk_widget_realize (w);
+      FRAME_GTK_WIDGET (f) = w;
+      FRAME_X_WINDOW (f) = GTK_WIDGET_TO_X_WIN (w);
+      for ( ; children; children = g_list_next (children)) 
+        {
+          GtkFixedChild *child = (GtkFixedChild*)children->data;
+          if (GTK_IS_EVENT_BOX (child->widget)) 
+            {
+              GtkFixedChild *node = xmalloc (sizeof(*node));
+              *node = *child;
+              todo = g_slist_prepend (todo, node);
+            }
+        }
+
+      for (iter = todo; iter; iter = iter->next) 
+        {
+          GtkFixedChild *child = (GtkFixedChild*)iter->data;
+          GtkWidget *wevbox = child->widget;
+          g_object_ref (G_OBJECT (wevbox));
+          gtk_container_remove (GTK_CONTAINER (old), wevbox);
+          gtk_fixed_put (GTK_FIXED (w), wevbox, child->x, child->y);
+          g_object_unref (G_OBJECT (wevbox));
+          xfree (child);
+          iter->data = NULL;
+        }
+      if (todo) g_slist_free (todo);
+
+      SET_FRAME_GARBAGED (f);
+      cancel_mouse_face (f);
+
+      if (old) 
+        {
+          char *oldkey = g_object_get_data (G_OBJECT (old), XG_TAB_KEY);
+          XSETFRAME (frame, f);
+          EVENT_INIT (event);
+          event.kind = TAB_CHANGED_EVENT;
+          event.frame_or_window = frame;
+          event.arg = Fcons (make_string (key, strlen (key)),
+                             make_string (oldkey, strlen (oldkey)));
+          kbd_buffer_store_event (&event);
+        }
+    }
+
+  UNBLOCK_INPUT;
+}
+
+static void
+xg_fixed_destroy_cb (GtkWidget *widget,
+                     gpointer client_data)
+{
+  char *key = g_object_get_data (G_OBJECT (widget), XG_TAB_KEY);
+  xfree (key);
+}
+
+/* Add a new tab and make it current.
+   Returns a unique identifier for this tab.  */
+
+const char *
+xg_add_tab (FRAME_PTR f,
+            const char *name)
+{
+  GtkNotebook *wnote = GTK_NOTEBOOK (f->output_data.x->notebook_widget);
+  GtkWidget *wfixed = gtk_fixed_new ();
+  GdkColor bg;
+  GtkRcStyle *style;
+  char buf[64];
+  char *key;
+  int n;
+
+  gtk_widget_set_name (wfixed, SSDATA (Vx_resource_name));
+  sprintf (buf, "Page %d", xg_tab_nr++);
+  key = xstrdup (buf);
+  g_object_set_data (G_OBJECT (wfixed), XG_TAB_KEY, key);
+
+  gtk_fixed_set_has_window (GTK_FIXED (wfixed), TRUE);
+  /* We don't want this widget double buffered, because we draw on it
+     with regular X drawing primitives, so from a GTK/GDK point of
+     view, the widget is totally blank.  When an expose comes, this
+     will make the widget blank, and then Emacs redraws it.  This flickers
+     a lot, so we turn off double buffering.  */
+  gtk_widget_set_double_buffered (wfixed, FALSE);
+  gtk_widget_add_events (wfixed,
+                         GDK_POINTER_MOTION_MASK
+                         | GDK_EXPOSURE_MASK
+                         | GDK_BUTTON_PRESS_MASK
+                         | GDK_BUTTON_RELEASE_MASK
+                         | GDK_KEY_PRESS_MASK
+                         | GDK_ENTER_NOTIFY_MASK
+                         | GDK_LEAVE_NOTIFY_MASK
+                         | GDK_FOCUS_CHANGE_MASK
+                         | GDK_STRUCTURE_MASK
+                         | GDK_VISIBILITY_NOTIFY_MASK);
+
+
+  /* Since GTK clears its window by filling with the background color,
+     we must keep X and GTK background in sync.  */
+  xg_pix_to_gcolor (wfixed, FRAME_BACKGROUND_PIXEL (f), &bg);
+  gtk_widget_modify_bg (wfixed, GTK_STATE_NORMAL, &bg);
+
+  /* Also, do not let any background pixmap to be set, this looks very
+     bad as Emacs overwrites the background pixmap with its own idea
+     of background color.  */
+  style = gtk_widget_get_modifier_style (wfixed);
+
+  /* Must use g_strdup because gtk_widget_modify_style does g_free.  */
+  style->bg_pixmap_name[GTK_STATE_NORMAL] = g_strdup ("<none>");
+  gtk_widget_modify_style (wfixed, style);
+  gtk_widget_show (wfixed);
+  n = gtk_notebook_append_page_menu (wnote,
+                                     wfixed,
+                                     name ? gtk_label_new (name) : NULL,
+                                     NULL);
+  gtk_notebook_set_tab_reorderable (wnote, wfixed, TRUE);
+
+  if (n > 0) 
+    {
+      gtk_notebook_set_current_page (wnote, n);
+      xg_switch_page_cb (wnote, NULL, n, f);
+    }
+  
+  g_signal_connect (G_OBJECT (wfixed),
+                    "destroy",
+                    G_CALLBACK (xg_fixed_destroy_cb), 0);
+
+  return key;
+}
+
+/* Delete a tab by its unique identifier KEY.
+   If no KEY is given, delete the current tab.  */
+
+void
+xg_delete_tab (FRAME_PTR f,
+               const char *key)
+{
+  GtkNotebook *wnote = GTK_NOTEBOOK (f->output_data.x->notebook_widget);
+  int i, pages = gtk_notebook_get_n_pages (wnote);
+  int page_to_remove = -1;
+  int current_page = gtk_notebook_get_current_page (wnote);
+  if (pages == 1) return;
+
+  if (!key) 
+    {
+      page_to_remove = current_page;
+    }
+  else
+    {
+      for (i = 0; i < pages; ++i) 
+        {
+          GtkWidget *w = gtk_notebook_get_nth_page (wnote, i);
+          char *k;
+          if (!w) continue;
+          k =  g_object_get_data (G_OBJECT (w), XG_TAB_KEY);
+          if (k && strcmp (k, key) == 0)
+            {
+              page_to_remove = i;
+              break;
+            }
+        }
+    }
+  
+  if (page_to_remove >= 0 && page_to_remove < pages)
+    {
+      if (page_to_remove == current_page)
+        {
+          int new_page = page_to_remove + 1;
+          if (new_page == pages) new_page = page_to_remove - 1;
+          gtk_notebook_set_current_page (wnote, new_page);
+          xg_switch_page_cb (wnote, NULL, new_page, f);
+        }
+      gtk_notebook_remove_page (wnote, page_to_remove);
+    }
+}
+
+/* Delete all tabs except the current tab.  */
+
+void
+xg_delete_all_tabs (FRAME_PTR f)
+{
+  GtkNotebook *wnote = GTK_NOTEBOOK (f->output_data.x->notebook_widget);
+  int i, pages = gtk_notebook_get_n_pages (wnote);
+  int current_page = gtk_notebook_get_current_page (wnote);
+  if (pages == 1) return;
+  
+  /* First delete tabs after current_page, so current_page becomes last.  */
+  for (i = current_page+1; i < pages; ++i)
+    gtk_notebook_remove_page (wnote, i);
+  
+  /* Then delete the rest.  */
+  for (i = 0; i < current_page; ++i)
+    gtk_notebook_remove_page (wnote, 0);
+}
+
+/* Make the next tab current.  If there are no next tabs, wrap around to 0.  */
+
+void
+xg_tab_next (FRAME_PTR f)
+{
+  GtkNotebook *wnote = GTK_NOTEBOOK (f->output_data.x->notebook_widget);
+  int current_page = gtk_notebook_get_current_page (wnote);
+  int pages = gtk_notebook_get_n_pages (wnote);
+  int switch_to;
+
+  if (pages == 1) return;
+  if (current_page == pages-1) 
+    switch_to = 0;
+  else
+    switch_to = current_page+1;
+  gtk_notebook_set_current_page (wnote, switch_to);
+
+}
+
+/* Make the previous tab current.  If current is first, wrap around to last.  */
+
+void
+xg_tab_previous (FRAME_PTR f)
+{
+  GtkNotebook *wnote = GTK_NOTEBOOK (f->output_data.x->notebook_widget);
+  int current_page = gtk_notebook_get_current_page (wnote);
+  int pages = gtk_notebook_get_n_pages (wnote);
+  int switch_to;
+
+  if (pages == 1) return;
+  if (current_page == 0) 
+    switch_to = pages-1;
+  else
+    switch_to = current_page-1;
+  gtk_notebook_set_current_page (wnote, switch_to);
+}
+
+
+void
+xg_set_tab_label (FRAME_PTR f,
+                  const char *label)
+{
+  GtkNotebook *wnote = GTK_NOTEBOOK (f->output_data.x->notebook_widget);
+  int current_page = gtk_notebook_get_current_page (wnote);
+  GtkWidget *w = gtk_notebook_get_nth_page (wnote, current_page);
+  const char *txt = gtk_notebook_get_tab_label_text (wnote, w);
+  if (txt == NULL || strcmp (txt, label) != 0)
+    gtk_notebook_set_tab_label_text (wnote, w, label);
+}
+
 /* Create and set up the GTK widgets for frame F.
    Return 0 if creation failed, non-zero otherwise.  */
 
@@ -762,9 +1030,7 @@ xg_create_frame_widgets (f)
 {
   GtkWidget *wtop;
   GtkWidget *wvbox;
-  GtkWidget *wfixed;
-  GdkColor bg;
-  GtkRcStyle *style;
+  GtkWidget *wnote;
   char *title = 0;
 
   BLOCK_INPUT;
@@ -777,13 +1043,13 @@ xg_create_frame_widgets (f)
   xg_set_screen (wtop, f);
 
   wvbox = gtk_vbox_new (FALSE, 0);
-  wfixed = gtk_fixed_new ();  /* Must have this to place scroll bars  */
+  wnote = gtk_notebook_new ();
 
-  if (! wtop || ! wvbox || ! wfixed)
+  if (! wtop || ! wvbox || ! wnote)
     {
       if (wtop) gtk_widget_destroy (wtop);
       if (wvbox) gtk_widget_destroy (wvbox);
-      if (wfixed) gtk_widget_destroy (wfixed);
+      if (wnote) gtk_widget_destroy (wnote);
 
       UNBLOCK_INPUT;
       return 0;
@@ -792,7 +1058,6 @@ xg_create_frame_widgets (f)
   /* Use same names as the Xt port does.  I.e. Emacs.pane.emacs by default */
   gtk_widget_set_name (wtop, EMACS_CLASS);
   gtk_widget_set_name (wvbox, "pane");
-  gtk_widget_set_name (wfixed, SSDATA (Vx_resource_name));
 
   /* If this frame has a title or name, set it in the title bar.  */
   if (! NILP (f->title)) title = SSDATA (ENCODE_UTF_8 (f->title));
@@ -801,23 +1066,16 @@ xg_create_frame_widgets (f)
   if (title) gtk_window_set_title (GTK_WINDOW (wtop), title);
 
   FRAME_GTK_OUTER_WIDGET (f) = wtop;
-  FRAME_GTK_WIDGET (f) = wfixed;
   f->output_data.x->vbox_widget = wvbox;
-
-  gtk_fixed_set_has_window (GTK_FIXED (wfixed), TRUE);
+  f->output_data.x->notebook_widget = wnote;
 
   gtk_container_add (GTK_CONTAINER (wtop), wvbox);
-  gtk_box_pack_end (GTK_BOX (wvbox), wfixed, TRUE, TRUE, 0);
-
+  gtk_box_pack_end (GTK_BOX (wvbox), wnote, TRUE, TRUE, 0);
+  g_signal_connect (G_OBJECT (wnote), "switch-page",
+                    G_CALLBACK (xg_switch_page_cb), f);
+                              
   if (FRAME_EXTERNAL_TOOL_BAR (f))
     update_frame_tool_bar (f);
-
-  /* We don't want this widget double buffered, because we draw on it
-     with regular X drawing primitives, so from a GTK/GDK point of
-     view, the widget is totally blank.  When an expose comes, this
-     will make the widget blank, and then Emacs redraws it.  This flickers
-     a lot, so we turn off double buffering.  */
-  gtk_widget_set_double_buffered (wfixed, FALSE);
 
   gtk_window_set_wmclass (GTK_WINDOW (wtop),
                           SSDATA (Vx_resource_name),
@@ -834,44 +1092,17 @@ xg_create_frame_widgets (f)
   xg_set_geometry (f);
   f->win_gravity
     = gtk_window_get_gravity (GTK_WINDOW (FRAME_GTK_OUTER_WIDGET (f)));
-
-  gtk_widget_add_events (wfixed,
-                         GDK_POINTER_MOTION_MASK
-                         | GDK_EXPOSURE_MASK
-                         | GDK_BUTTON_PRESS_MASK
-                         | GDK_BUTTON_RELEASE_MASK
-                         | GDK_KEY_PRESS_MASK
-                         | GDK_ENTER_NOTIFY_MASK
-                         | GDK_LEAVE_NOTIFY_MASK
-                         | GDK_FOCUS_CHANGE_MASK
-                         | GDK_STRUCTURE_MASK
-                         | GDK_VISIBILITY_NOTIFY_MASK);
+  xg_add_tab (f, NULL);
+  gtk_notebook_popup_enable (GTK_NOTEBOOK (wnote));
+  gtk_notebook_set_scrollable (GTK_NOTEBOOK (wnote), TRUE);
+  GtkWidget *wfixed = gtk_notebook_get_nth_page (GTK_NOTEBOOK (wnote), 0);
 
   /* Must realize the windows so the X window gets created.  It is used
      by callers of this function.  */
   gtk_widget_realize (wfixed);
+
   FRAME_X_WINDOW (f) = GTK_WIDGET_TO_X_WIN (wfixed);
-
-  /* Since GTK clears its window by filling with the background color,
-     we must keep X and GTK background in sync.  */
-  xg_pix_to_gcolor (wfixed, FRAME_BACKGROUND_PIXEL (f), &bg);
-  gtk_widget_modify_bg (wfixed, GTK_STATE_NORMAL, &bg);
-
-  /* Also, do not let any background pixmap to be set, this looks very
-     bad as Emacs overwrites the background pixmap with its own idea
-     of background color.  */
-  style = gtk_widget_get_modifier_style (wfixed);
-
-  /* Must use g_strdup because gtk_widget_modify_style does g_free.  */
-  style->bg_pixmap_name[GTK_STATE_NORMAL] = g_strdup ("<none>");
-  gtk_widget_modify_style (wfixed, style);
-
-  /* GTK does not set any border, and they look bad with GTK.  */
-  /* That they look bad is no excuse for imposing this here.  --Stef
-     It should be done by providing the proper default in Fx_create_Frame.
-  f->border_width = 0;
-  f->internal_border_width = 0; */
-
+  FRAME_GTK_WIDGET (f) = wfixed;
   UNBLOCK_INPUT;
 
   return 1;
@@ -4230,6 +4461,7 @@ xg_initialize ()
 
   id_to_widget.max_size = id_to_widget.used = 0;
   id_to_widget.widgets = 0;
+  xg_tab_nr = 1;
 
   /* Remove F10 as a menu accelerator, it does not mix well with Emacs key
      bindings.  It doesn't seem to be any way to remove properties,

@@ -135,6 +135,12 @@ extern char *xg_get_file_name P_ ((FRAME_PTR f,
                                    int only_dir_p));
 
 extern char *xg_get_font_name P_ ((FRAME_PTR f, char *));
+extern const char *xg_add_tab P_ ((FRAME_PTR f, const char *name));
+extern void xg_delete_tab P_ ((FRAME_PTR f, const char *name));
+extern void xg_delete_all_tabs P_ ((FRAME_PTR f));
+extern void xg_set_tab_label P_ ((FRAME_PTR f, const char *label));
+extern void xg_tab_next P_ ((FRAME_PTR f));
+extern void xg_tab_previous P_ ((FRAME_PTR f));
 
 extern GtkWidget *xg_create_widget P_ ((char *type,
                                         char *name,

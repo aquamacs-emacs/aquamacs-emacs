@@ -202,6 +202,9 @@
 (if (or (featurep 'system-font-setting) (featurep 'font-render-setting))
     (load "font-setting"))
 
+(if (featurep 'tabs)
+    (load "native-tabs"))
+
 (if (featurep 'x)
     (progn
       (load "x-dnd")
