@@ -148,18 +148,3 @@
 	      (setq aq-preloaded (cons e aq-preloaded))))
 	    features)
  
-;; correct paths in load-history
-(setq load-history
-      (mapcar
-       (lambda (e)
-	 (let ((case-fold-search nil))
-	   (if 
-	       (and (car-safe e)
-		    (string-match (concat "^" aq-compile-path 
-					  "\\(.*\\)$") 
-				  (car e)))
-	       (cons (concat "../site-lisp/"
-		      (match-string 1 (car e)))
-		     (cdr e))
-	     e)))
-       load-history))
