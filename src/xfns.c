@@ -5852,22 +5852,28 @@ frame_parm_handler x_frame_parm_handlers[] =
 #ifdef USE_GTK
 DEFUN ("tab-new", Ftab_new,
        Stab_new, 0, 2, "",
-       doc: /* Create a new tab with name NAME in frame FRAME.
-If NAME is nil, use a standard name (Page <n>).
+       doc: /* Create a new tab with label LABEL in frame FRAME.
+If LABEL is nil, use current buffer name.
 FRAME nil means use the selected frame.
 
 Returns the key for the tab, which can be passed to `tab-delete'.  */)
-     (name, frame)
-     Lisp_Object name, frame;
+     (label, frame)
+     Lisp_Object label, frame;
 {
   FRAME_PTR f = check_x_frame (frame);
   const char *key;
 
-  if (!NILP (name) && !STRINGP (name))
-    error ("Name is not string or nil");
+  if (NILP (label))
+    {
+      if (!NILP (Fminibufferp (Qnil))) return;
+      label = Fbuffer_name (Qnil);
+    }
+
+  if (!STRINGP (label))
+    error ("label is not a string");
 
   BLOCK_INPUT;
-  key = xg_add_tab (f, NILP (name) ? NULL : SDATA (name));
+  key = xg_add_tab (f, SDATA (label));
   UNBLOCK_INPUT;
 
   return make_string (key, strlen (key));
@@ -5878,15 +5884,15 @@ DEFUN ("tab-delete", Ftab_delete,
        doc: /* Remove tab KEY from frame FRAME.
 KEY is what `tab-new' returned or nil, which means the current tab.
 FRAME nil means use the selected frame.  */)
-     (name, frame)
-     Lisp_Object name, frame;
+     (key, frame)
+     Lisp_Object key, frame;
 {
   FRAME_PTR f = check_x_frame (frame);
-  if (!NILP (name) && !STRINGP (name))
-    error ("Name is not string or nil");
+  if (!NILP (key) && !STRINGP (key))
+    error ("Key is not string or nil");
 
   BLOCK_INPUT;
-  xg_delete_tab (f, NILP (name) ? NULL : SDATA (name));
+  xg_delete_tab (f, NILP (key) ? NULL : SDATA (key));
   UNBLOCK_INPUT;
 
   return Qnil;

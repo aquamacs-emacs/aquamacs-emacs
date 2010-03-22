@@ -876,6 +876,53 @@ xg_fixed_destroy_cb (GtkWidget *widget,
   xfree (key);
 }
 
+static void
+remove_tab_cb (GtkButton *widget,
+               gpointer   user_data)
+{
+  GtkWidget *wfixed = GTK_WIDGET (user_data);
+  const char *key = g_object_get_data (G_OBJECT (wfixed), XG_TAB_KEY);
+  FRAME_PTR f = g_object_get_data (G_OBJECT (wfixed), XG_FRAME_DATA);
+  xg_delete_tab (f, key);
+}
+
+
+static GtkWidget *
+xg_tab_label_widget (FRAME_PTR f,
+                     const char *name,
+                     GtkWidget* wfixed)
+{
+  char *utf8_label = get_utf8_string (name);
+  GtkWidget *wlbl = gtk_label_new (utf8_label);
+  GtkWidget *wimg = gtk_image_new_from_stock (GTK_STOCK_CLOSE,
+                                              GTK_ICON_SIZE_MENU);
+  GtkWidget *wbutt = gtk_button_new ();
+  GtkWidget *wbox = gtk_hbox_new (FALSE, 0);
+
+  gtk_container_set_border_width (GTK_CONTAINER (wbutt), 0);
+  gtk_container_set_border_width (GTK_CONTAINER (wbox), 0);
+  GtkRcStyle *style = gtk_widget_get_modifier_style (wbutt);
+  style->xthickness = style->ythickness = 0;
+  gtk_widget_modify_style (wbutt, style);
+  
+
+  gtk_button_set_image (GTK_BUTTON (wbutt), wimg);
+  gtk_button_set_relief (GTK_BUTTON (wbutt), GTK_RELIEF_NONE);
+  gtk_button_set_focus_on_click (GTK_BUTTON (wbutt), FALSE);
+
+  gtk_misc_set_alignment (GTK_MISC (wlbl), 0.0, 0.5);
+  gtk_misc_set_padding (GTK_MISC (wlbl), FRAME_COLUMN_WIDTH (f), 0);
+  gtk_box_pack_start (GTK_BOX (wbox), wlbl, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (wbox), wbutt, FALSE, FALSE, 0);
+  gtk_widget_show_all (wbox);
+  if (utf8_label && utf8_label != name) g_free (utf8_label);
+
+  g_signal_connect (G_OBJECT (wbutt), "clicked",
+                    G_CALLBACK (remove_tab_cb), wfixed);
+
+  return wbox;
+}
+
 /* Add a new tab and make it current.
    Returns a unique identifier for this tab.  */
 
@@ -890,11 +937,13 @@ xg_add_tab (FRAME_PTR f,
   char buf[64];
   char *key;
   int n;
+  GtkWidget *wlbl = xg_tab_label_widget (f, name, wfixed);
 
   gtk_widget_set_name (wfixed, SSDATA (Vx_resource_name));
   sprintf (buf, "Page %d", xg_tab_nr++);
   key = xstrdup (buf);
   g_object_set_data (G_OBJECT (wfixed), XG_TAB_KEY, key);
+  g_object_set_data (G_OBJECT (wfixed), XG_FRAME_DATA, (gpointer)f);
 
   gtk_fixed_set_has_window (GTK_FIXED (wfixed), TRUE);
   /* We don't want this widget double buffered, because we draw on it
@@ -930,13 +979,10 @@ xg_add_tab (FRAME_PTR f,
   style->bg_pixmap_name[GTK_STATE_NORMAL] = g_strdup ("<none>");
   gtk_widget_modify_style (wfixed, style);
   gtk_widget_show (wfixed);
-  n = gtk_notebook_append_page_menu (wnote,
-                                     wfixed,
-                                     name ? gtk_label_new (name) : NULL,
-                                     NULL);
+  n = gtk_notebook_append_page (wnote, wfixed, wlbl);
   gtk_notebook_set_tab_reorderable (wnote, wfixed, TRUE);
 
-  if (n > 0) 
+  if (n > 0)
     {
       gtk_notebook_set_current_page (wnote, n);
       xg_switch_page_cb (wnote, NULL, n, f);
@@ -1061,9 +1107,25 @@ xg_set_tab_label (FRAME_PTR f,
   GtkNotebook *wnote = GTK_NOTEBOOK (f->output_data.x->notebook_widget);
   int current_page = gtk_notebook_get_current_page (wnote);
   GtkWidget *w = gtk_notebook_get_nth_page (wnote, current_page);
-  const char *txt = gtk_notebook_get_tab_label_text (wnote, w);
-  if (txt == NULL || strcmp (txt, label) != 0)
-    gtk_notebook_set_tab_label_text (wnote, w, label);
+  GtkWidget *wvbox = gtk_notebook_get_tab_label (wnote, w); 
+  GtkLabel *wlbl = NULL;
+
+  GList *iter, *list = gtk_container_get_children (GTK_CONTAINER (wvbox));
+  for (iter = list; iter && ! wlbl; iter = g_list_next (iter))
+    {
+      if (GTK_IS_LABEL (GTK_WIDGET (iter->data)))
+        wlbl = GTK_LABEL (iter->data);
+    }
+  g_list_free (list);
+  if (wlbl)
+    {
+      char *utf8_label = get_utf8_string (label);
+      const char *txt = gtk_label_get_text (wlbl);
+      if (txt == NULL || strcmp (txt, utf8_label) != 0)
+        gtk_label_set_text (wlbl, utf8_label);
+      if (utf8_label && utf8_label != label)
+        g_free (utf8_label);
+    }
 }
 
 /* Create and set up the GTK widgets for frame F.
@@ -1137,17 +1199,16 @@ xg_create_frame_widgets (f)
   xg_set_geometry (f);
   f->win_gravity
     = gtk_window_get_gravity (GTK_WINDOW (FRAME_GTK_OUTER_WIDGET (f)));
-  gtk_notebook_popup_enable (GTK_NOTEBOOK (wnote));
+  gtk_notebook_popup_disable (GTK_NOTEBOOK (wnote));
   gtk_notebook_set_scrollable (GTK_NOTEBOOK (wnote), TRUE);
   gtk_notebook_set_show_border (GTK_NOTEBOOK (wnote), FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (wnote), 0);
-  GtkRcStyle *style = gtk_widget_get_modifier_style (wnote);
 
-  /* Must use g_strdup because gtk_widget_modify_style does g_free.  */
+  GtkRcStyle *style = gtk_widget_get_modifier_style (wnote);
   style->xthickness = style->ythickness = 0;
   gtk_widget_modify_style (wnote, style);
   
-  xg_add_tab (f, NULL);
+  xg_add_tab (f, "Page 1");
   GtkWidget *wfixed = gtk_notebook_get_nth_page (GTK_NOTEBOOK (wnote), 0);
 
   /* Must realize the windows so the X window gets created.  It is used
