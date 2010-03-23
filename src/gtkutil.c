@@ -758,7 +758,16 @@ xg_pix_to_gcolor (w, pixel, c)
                               Tab functions
  ***********************************************************************/
 #define XG_TAB_KEY "emacs-tab-key"
+#define XG_TAB_CONFIG_KEY "emacs-tab-config-key"
 static int xg_tab_nr;
+static xg_list_node tabs_gc_list;
+
+typedef struct tabs_gc_data_
+{
+  xg_list_node  ptrs;
+  Lisp_Object object;
+} tabs_gc_data;
+  
 
 static void
 xg_check_show_tabs (FRAME_PTR f,
@@ -816,6 +825,7 @@ xg_switch_page_cb (GtkNotebook     *wnote,
       GList *children = old ? GTK_FIXED (old)->children : NULL;
       GSList *todo = NULL, *iter;
       char *key = g_object_get_data (G_OBJECT (w), XG_TAB_KEY);
+      tabs_gc_data *conf = g_object_get_data (G_OBJECT (w), XG_TAB_CONFIG_KEY);
 
       if (!w->window) gtk_widget_realize (w);
       FRAME_GTK_WIDGET (f) = w;
@@ -849,11 +859,22 @@ xg_switch_page_cb (GtkNotebook     *wnote,
 
       if (old) 
         {
-          char *oldkey = g_object_get_data (G_OBJECT (old), XG_TAB_KEY);
           struct input_event event;
           Lisp_Object frame;
 
+          char *oldkey = g_object_get_data (G_OBJECT (old), XG_TAB_KEY);
+          tabs_gc_data *oconf = g_object_get_data (G_OBJECT (old),
+                                                   XG_TAB_CONFIG_KEY);
+          if (!oconf)
+            {
+              oconf = xmalloc (sizeof(*oconf));
+              g_object_set_data (G_OBJECT (old), XG_TAB_CONFIG_KEY, oconf);
+              xg_list_insert (&tabs_gc_list, &oconf->ptrs);
+            }
+
           XSETFRAME (frame, f);
+          oconf->object = Fcurrent_window_configuration (frame);
+
           EVENT_INIT (event);
           event.kind = TAB_CHANGED_EVENT;
           event.frame_or_window = frame;
@@ -861,6 +882,11 @@ xg_switch_page_cb (GtkNotebook     *wnote,
                              make_string (oldkey, strlen (oldkey)));
           kbd_buffer_store_event (&event);
         }
+
+      if (conf)
+        Fset_window_configuration (conf->object);
+      else
+        Fdelete_other_windows (Qnil);
     }
   xg_check_show_tabs (f, wnote);
   UNBLOCK_INPUT;
@@ -871,6 +897,12 @@ xg_fixed_destroy_cb (GtkWidget *widget,
                      gpointer client_data)
 {
   char *key = g_object_get_data (G_OBJECT (widget), XG_TAB_KEY);
+  tabs_gc_data *conf = g_object_get_data (G_OBJECT (widget), XG_TAB_CONFIG_KEY);
+  if (conf) 
+    {
+      xg_list_remove (&tabs_gc_list, &conf->ptrs);
+      xfree (conf);
+    }
   xfree (key);
 }
 
@@ -2143,6 +2175,8 @@ xg_mark_data ()
       if (! NILP (cb_data->help))
         mark_object (cb_data->help);
     }
+  for (iter = tabs_gc_list.next; iter; iter = iter->next)
+    mark_object (((tabs_gc_data *) iter)->object);
 }
 
 
@@ -4575,6 +4609,7 @@ xg_initialize ()
   id_to_widget.max_size = id_to_widget.used = 0;
   id_to_widget.widgets = 0;
   xg_tab_nr = 1;
+  tabs_gc_list.prev = tabs_gc_list.next = 0;
 
   /* Remove F10 as a menu accelerator, it does not mix well with Emacs key
      bindings.  It doesn't seem to be any way to remove properties,
