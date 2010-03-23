@@ -806,12 +806,12 @@ modified, or in FRAME if given."
 		 (t "color"))
 	   aquamacs-color-panel-target-face))
 
-(define-key global-map [ns-change-color] 'aqumacs-set-face)
-(define-key global-map [M-ns-change-color] 'aqumacs-set-face-background)
+(define-key global-map [ns-change-color] 'aquamacs-set-face)
+(define-key global-map [M-ns-change-color] 'aquamacs-set-face-background)
 (define-key global-map [ns-drag-color] 'ns-set-foreground-at-mouse)
 (define-key global-map [M-ns-drag-color] 'ns-set-background-at-mouse)
 
-(defun aqumacs-set-face ()
+(defun aquamacs-set-face ()
   "Respond to changeColor: event."
   (interactive)
   (aquamacs-set-face-prop (or aquamacs-color-panel-target-face 'default)
@@ -820,7 +820,7 @@ modified, or in FRAME if given."
 			      (if ns-input-color :foreground :background))
 			  (or ns-input-color ns-input-background-color)))
 
-(defun aqumacs-set-face-background ()
+(defun aquamacs-set-face-background ()
   "Respond to changeColor: event."
   (interactive)
   (aquamacs-set-face-prop (or aquamacs-color-panel-target-face 'default)
