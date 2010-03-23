@@ -138,11 +138,12 @@ usually do not have translators to read other languages for them.\n\n")
 		      reporting-address))
       ;; Nowadays all bug reports end up there.
 ;;;      (if pretest-p (insert ".\n\n")
-	(insert ",\nand to the gnu.emacs.bug news group.\n\n"))
+	(insert ",\nand may appear in other public locations.\n\n"))
 
     (insert "Please describe exactly what actions triggered the bug\n"
 	    "and the precise symptoms of the bug.  If you can, give\n"
-	    "a recipe starting from `emacs -Q':\n\n")
+	    "a recipe starting with an Aquamacs without customization\n")
+	    "for which see the Help / Diagnose and Report Bug menu.\n\n")
     ;; Stop message-mode stealing the properties we are about to add.
     (if (boundp 'message-strip-special-text-properties)
         (set (make-local-variable 'message-strip-special-text-properties) nil))
