@@ -627,7 +627,7 @@ xg_frame_resized (f, pixelwidth, pixelheight)
       FRAME_PIXEL_HEIGHT (f) = pixelheight;
 
       xg_clear_under_internal_border (f);
-      change_frame_size (f, rows, columns, 0, 1, 0);
+      change_frame_size (f, rows, columns, 0, 0, 1);
       SET_FRAME_GARBAGED (f);
       cancel_mouse_face (f);
     }
@@ -780,21 +780,19 @@ xg_check_show_tabs (FRAME_PTR f,
         FRAME_TABS_HEIGHT (f) = 0;
       x_wm_set_size_hint (f, 0, 0);
 
-      /* Try to minimize resize, when adding the tabs, subtract some text
-         lines, when removing tabs, add text lines.  Some resize will be
-         made when tab height isn't a multiple of the line height.  */
+      /* Try to minimize resize, when adding/removing the tabs, add some text
+         lines.  Some resize will be made when tab height isn't a multiple of
+         the line height.  */
       
       if (oldheight > 0 && FRAME_LINE_HEIGHT (f) > 0)
         {
           row_add = oldheight/FRAME_LINE_HEIGHT (f);
           if (row_add * FRAME_LINE_HEIGHT (f) != oldheight)
-            ++row_add;
+            --row_add;
         }
       else if (FRAME_TABS_HEIGHT (f) > 0 && FRAME_LINE_HEIGHT (f) > 0)
         {
           row_add = -(FRAME_TABS_HEIGHT (f)/FRAME_LINE_HEIGHT (f));
-          if (row_add * FRAME_LINE_HEIGHT (f) != FRAME_TABS_HEIGHT (f))
-              --row_add;
         }
 
       xg_frame_set_char_size (f, FRAME_COLS (f), FRAME_LINES (f) + row_add);

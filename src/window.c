@@ -5978,6 +5978,35 @@ DEFUN ("window-configuration-frame", Fwindow_configuration_frame, Swindow_config
   return XWINDOW (SAVED_WINDOW_N (saved_windows, 0)->window)->frame;
 }
 
+DEFUN ("change-window-configuration-frame", Fchange_window_configuration_frame,
+       Schange_window_configuration_frame, 2, 2, 0,
+       doc: /* Change the frame that CONFIG, a window-configuration object, is about.  */)
+     (config, frame)
+     Lisp_Object config, frame;
+{
+  register struct save_window_data *data;
+  struct Lisp_Vector *saved_windows;
+  Lisp_Object oldframe;
+  int k;
+  FRAME_PTR f;
+
+  CHECK_WINDOW_CONFIGURATION (config);
+
+  data = (struct save_window_data *) XVECTOR (config);
+  saved_windows = XVECTOR (data->saved_windows);
+  oldframe = XWINDOW (SAVED_WINDOW_N (saved_windows, 0)->window)->frame;
+  f = XFRAME (oldframe);
+  FRAME_TERMINAL (f)->condemn_scroll_bars_hook (f);
+  FRAME_TERMINAL (f)->judge_scroll_bars_hook (f);
+  
+  for (k = 0; k < saved_windows->size; k++)
+    {
+      struct window *w = XWINDOW (SAVED_WINDOW_N (saved_windows, k)->window);
+      w->vertical_scroll_bar = Qnil;
+      w->frame = frame;
+    }
+}
+
 DEFUN ("set-window-configuration", Fset_window_configuration,
        Sset_window_configuration, 1, 1, 0,
        doc: /* Set the configuration of windows and buffers as specified by CONFIGURATION.
@@ -7346,6 +7375,7 @@ frame to be redrawn only if it is a tty frame.  */);
   defsubr (&Smove_to_window_line);
   defsubr (&Swindow_configuration_p);
   defsubr (&Swindow_configuration_frame);
+  defsubr (&Schange_window_configuration_frame);
   defsubr (&Sset_window_configuration);
   defsubr (&Scurrent_window_configuration);
   defsubr (&Ssave_window_excursion);
