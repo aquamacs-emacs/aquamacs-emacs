@@ -144,7 +144,7 @@
 
 
 (defvar ess-etc-directory (concat  (mac-resources-path)
-				  "/site-lisp/edit-modes/ess-mode/etc"
+				  "lisp/aquamacs/edit-modes/ess-mode/etc"
 				  ))
 
 (aquamacs-set-defaults 
