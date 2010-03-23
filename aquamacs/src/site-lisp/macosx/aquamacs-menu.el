@@ -177,6 +177,7 @@ using `aquamacs-recent-major-modes' and `aquamacs-known-major-modes'."
 ;; must come after above definitions (setter function!)
 (defcustom aquamacs-known-major-modes
   '(text-mode 
+    org-mode
     change-log-mode
     (css-mode . "CSS")
     fortran-mode 
