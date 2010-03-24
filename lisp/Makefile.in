@@ -19,14 +19,19 @@
 
 SHELL = /bin/sh
 
-lisp=@srcdir@
-VPATH=@srcdir@
-srcdir=@srcdir@/..
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+abs_top_builddir = @abs_top_builddir@
+lisp = $(srcdir)
+VPATH = $(srcdir)
 
 # You can specify a different executable on the make command line,
 # e.g. "make EMACS=../src/emacs ...".
 
-EMACS = ../src/emacs
+# We sometimes change directory before running Emacs (typically when
+# building out-of-tree, we chdir to the source directory), so we need
+# to use an aboluste file name.
+EMACS = ${abs_top_builddir}/src/emacs
 
 # Command line flags for Emacs.  This must include --multibyte,
 # otherwise some files will not compile.
@@ -80,28 +85,28 @@ emacs = EMACSLOADPATH=$(lisp) LC_ALL=C $(EMACS) $(EMACSOPT)
 
 # Common command to find subdirectories
 
-setwins=subdirs=`(cd $$wd; find . -type d -print)`; \
+setwins=subdirs=`(find . -type d -print)`; \
 	for file in $$subdirs; do \
 	   case $$file in */Old | */RCS | */CVS | */CVS/* | */.* | */.*/* | */=* ) ;; \
-		*) wins="$$wins $$wd/$$file" ;; \
+		*) wins="$$wins $$file" ;; \
 	   esac; \
         done
 
 # Find all subdirectories except `obsolete' and `term'.
 
-setwins_almost=subdirs=`(cd $$wd; find . -type d -print)`; \
+setwins_almost=subdirs=`(find . -type d -print)`; \
 	for file in $$subdirs; do \
 	   case $$file in */Old | */RCS | */CVS | */CVS/* | */.* | */.*/* | */=* | */obsolete | */term ) ;; \
-		*) wins="$$wins $$wd/$$file" ;; \
+		*) wins="$$wins $$file" ;; \
 	   esac; \
         done
 
 # Find all subdirectories in which we might want to create subdirs.el
 
-setwins_for_subdirs=subdirs=`(cd $$wd; find . -type d -print)`; \
+setwins_for_subdirs=subdirs=`(find . -type d -print)`; \
 	for file in $$subdirs; do \
 	   case $$file in */Old | */RCS | */CVS | */CVS/* | */.* | */.*/* | */=* | */cedet* ) ;; \
-		*) wins="$$wins $$wd/$$file" ;; \
+		*) wins="$$wins $$file" ;; \
 	   esac; \
         done
 
@@ -132,14 +137,14 @@ doit:
 $(lisp)/cus-load.el:
 	$(MAKE) $(MFLAGS) custom-deps
 custom-deps: doit
-	wd=$(lisp); $(setwins_almost); \
+	cd $(lisp); $(setwins_almost); \
 	echo Directories: $$wins; \
 	$(emacs) -l cus-dep --eval '(setq generated-custom-dependencies-file "$(lisp)/cus-load.el")' -f custom-make-dependencies $$wins
 
 $(lisp)/finder-inf.el:
 	$(MAKE) $(MFLAGS) finder-data
 finder-data: doit
-	wd=$(lisp); $(setwins_almost); \
+	cd $(lisp); $(setwins_almost); \
 	echo Directories: $$wins; \
 	$(emacs) -l finder --eval '(setq generated-finder-keywords-file "$(lisp)/finder-inf.el")' -f finder-compile-keywords-make-dist $$wins
 
@@ -149,7 +154,7 @@ autoloads: $(LOADDEFS) doit
 	chmod +w $(lisp)/ps-print.el $(lisp)/emulation/tpu-edt.el \
 	  $(lisp)/emacs-lisp/cl-loaddefs.el $(lisp)/mail/rmail.el \
 	  $(lisp)/dired.el $(lisp)/ibuffer.el
-	wd=$(lisp); $(setwins_almost); \
+	cd $(lisp); $(setwins_almost); \
 	echo Directories: $$wins; \
 	$(emacs) -l autoload --eval '(setq generated-autoload-file "$(lisp)/loaddefs.el")' -f batch-update-autoloads $$wins
 
@@ -158,9 +163,9 @@ autoloads: $(LOADDEFS) doit
 $(lisp)/subdirs.el:
 	$(MAKE) $(MFLAGS) update-subdirs
 update-subdirs: doit
-	wd=$(lisp); $(setwins_for_subdirs); \
+	cd $(lisp); $(setwins_for_subdirs); \
 	for file in $$wins; do \
-	   $(srcdir)/update-subdirs $$file; \
+	   $(top_srcdir)/update-subdirs $$file; \
 	done;
 
 updates: update-subdirs autoloads finder-data custom-deps
@@ -174,7 +179,7 @@ cvs-update: bzr-update
 # Update the AUTHORS file.
 
 update-authors:
-	$(emacs) -l authors -f batch-update-authors $(srcdir)/etc/AUTHORS $(srcdir)
+	$(emacs) -l authors -f batch-update-authors $(top_srcdir)/etc/AUTHORS $(top_srcdir)
 
 TAGS TAGS-LISP: $(lisptagsfiles1) $(lisptagsfiles2) $(lisptagsfiles3) $(lisptagsfiles4)
 	els=`echo $(lisptagsfiles1) $(lisptagsfiles2) $(lisptagsfiles3) $(lisptagsfiles4) | sed -e "s,$(lisp)/[^ ]*loaddefs[^ ]*,," -e "s,$(lisp)/ldefs-boot[^ ]*,,"`; \
@@ -1032,6 +1037,7 @@ ELCFILES = \
 	$(lisp)/net/sasl-digest.elc \
 	$(lisp)/net/sasl-ntlm.elc \
 	$(lisp)/net/sasl.elc \
+	$(lisp)/net/secrets.elc \
 	$(lisp)/net/snmp-mode.elc \
 	$(lisp)/net/socks.elc \
 	$(lisp)/net/telnet.elc \
@@ -1092,6 +1098,7 @@ ELCFILES = \
 	$(lisp)/obsolete/rnewspost.elc \
 	$(lisp)/obsolete/sc.elc \
 	$(lisp)/obsolete/scribe.elc \
+	$(lisp)/obsolete/s-region.elc \
 	$(lisp)/obsolete/swedish.elc \
 	$(lisp)/obsolete/sym-comp.elc \
 	$(lisp)/obsolete/vc-mcvs.elc \
@@ -1294,7 +1301,6 @@ ELCFILES = \
 	$(lisp)/rfn-eshadow.elc \
 	$(lisp)/rot13.elc \
 	$(lisp)/ruler-mode.elc \
-	$(lisp)/s-region.elc \
 	$(lisp)/savehist.elc \
 	$(lisp)/saveplace.elc \
 	$(lisp)/sb-image.elc \
@@ -1520,7 +1526,7 @@ compile-always: doit
 
 ## In case any files are missing from ELCFILES.
 compile-last:
-	@wd=$(lisp); $(setwins); \
+	@cd $(lisp); $(setwins); \
 	els=`echo "$$wins " | sed -e 's|/\./|/|g' -e 's|/\. | |g' -e 's| |/*.el |g'`; \
 	for el in $$els; do \
 	  test -f $$el || continue; \
