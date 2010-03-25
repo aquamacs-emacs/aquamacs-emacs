@@ -4951,7 +4951,7 @@ extern void update_window_cursor (struct window *w, int on);
 
 /*****************************************************************************/
 /* Keyboard handling. */
-#define NS_KEYLOG 01
+#define NS_KEYLOG 0
 
 - (void)keyDown: (NSEvent *)theEvent
 {
