@@ -819,7 +819,8 @@ xg_switch_page_cb (GtkNotebook     *wnote,
   BLOCK_INPUT;
   GtkWidget *w = gtk_notebook_get_nth_page (wnote, page_num);
   FRAME_PTR f = (FRAME_PTR) user_data;
-  if (w != FRAME_GTK_WIDGET (f)) 
+
+  if (FRAME_GTK_WIDGET (f) && w != FRAME_GTK_WIDGET (f)) 
     {
       GtkWidget *old = FRAME_GTK_WIDGET (f);
       GList *children = old ? GTK_FIXED (old)->children : NULL;
@@ -885,7 +886,7 @@ xg_switch_page_cb (GtkNotebook     *wnote,
 
       if (conf)
         Fset_window_configuration (conf->object);
-      else
+      else 
         Fdelete_other_windows (Qnil);
     }
   xg_check_show_tabs (f, wnote);
