@@ -5918,6 +5918,8 @@ struct save_window_data
     Lisp_Object current_buffer;
     Lisp_Object minibuf_scroll_window;
     Lisp_Object minibuf_selected_window;
+    Lisp_Object minibuf_window;
+    Lisp_Object echo_area_window;
     Lisp_Object root_window;
     Lisp_Object focus_frame;
     /* A vector, each of whose elements is a struct saved_window
@@ -5986,25 +5988,84 @@ DEFUN ("change-window-configuration-frame", Fchange_window_configuration_frame,
 {
   register struct save_window_data *data;
   struct Lisp_Vector *saved_windows;
-  Lisp_Object oldframe;
   int k;
-  FRAME_PTR f;
+  Lisp_Object window_map = Qnil;
+  FRAME_PTR f = XFRAME (frame);
 
   CHECK_WINDOW_CONFIGURATION (config);
 
   data = (struct save_window_data *) XVECTOR (config);
   saved_windows = XVECTOR (data->saved_windows);
-  oldframe = XWINDOW (SAVED_WINDOW_N (saved_windows, 0)->window)->frame;
-  f = XFRAME (oldframe);
-  FRAME_TERMINAL (f)->condemn_scroll_bars_hook (f);
-  FRAME_TERMINAL (f)->judge_scroll_bars_hook (f);
   
   for (k = 0; k < saved_windows->size; k++)
     {
-      struct window *w = XWINDOW (SAVED_WINDOW_N (saved_windows, k)->window);
-      w->vertical_scroll_bar = Qnil;
-      w->frame = frame;
+      Lisp_Object ow = SAVED_WINDOW_N (saved_windows, k)->window;
+      struct window *w = XWINDOW (ow);
+      Lisp_Object nw = make_window ();
+      struct window *neww = XWINDOW (nw);
+
+      neww->frame = frame;
+      neww->vertical_scroll_bar = Qnil;
+      neww->current_matrix = 0;
+      neww->desired_matrix = 0;
+      neww->parent = w->parent;
+      neww->next = w->next;
+      neww->prev = w->prev;
+      neww->hchild = w->hchild;
+      neww->vchild = w->vchild;
+      neww->left_margin_cols = w->left_margin_cols;
+      neww->right_margin_cols = w->right_margin_cols;
+      neww->left_fringe_width = w->left_fringe_width;
+      neww->right_fringe_width = w->right_fringe_width;
+      neww->fringes_outside_margins = w->fringes_outside_margins;
+      neww->scroll_bar_width = w->scroll_bar_width;
+      neww->vertical_scroll_bar_type = w->vertical_scroll_bar_type;
+      neww->total_lines = w->total_lines;
+      neww->top_line = w->top_line;
+      neww->total_cols = w->total_cols;
+      neww->left_col = w->left_col;
+      neww->top_line = w->top_line;
+      neww->buffer = w->buffer;
+      neww->mini_p = w->mini_p;
+
+      SAVED_WINDOW_N (saved_windows, k)->window = nw;
+      window_map = Fcons (Fcons (ow, nw), window_map);
     }
+
+  for (k = 0; k < saved_windows->size; k++)
+    {
+      struct saved_window *sw = SAVED_WINDOW_N (saved_windows, k);
+  struct window *w  = XWINDOW (sw->window);
+#define MAP_WINDOW(win) do                                      \
+        {                                                       \
+        if (! NILP (win))                                       \
+          {                                                     \
+            Lisp_Object cc = Fassoc ((win), window_map);        \
+            if (CONSP (cc) && ! NILP (XCDR (cc)))               \
+              (win) = XCDR (cc);                                \
+            else                                                \
+              abort ();                                         \
+          }                                                     \
+        } while (0)
+      
+      MAP_WINDOW (w->next);
+      MAP_WINDOW (w->prev);
+      MAP_WINDOW (w->hchild);
+      MAP_WINDOW (w->vchild);
+      MAP_WINDOW (w->parent);
+    }
+
+  MAP_WINDOW (data->current_window);
+  MAP_WINDOW (data->root_window);
+  MAP_WINDOW (data->minibuf_selected_window);
+  MAP_WINDOW (data->minibuf_scroll_window);
+  MAP_WINDOW (data->minibuf_window);
+  MAP_WINDOW (data->echo_area_window);
+
+  adjust_glyphs (f);
+  Vwindow_list = Qnil;
+
+#undef MAP_WINDOW
 }
 
 DEFUN ("set-window-configuration", Fset_window_configuration,
@@ -6211,6 +6272,12 @@ the return value is nil.  Otherwise the value is t.  */)
 	  XSETFASTINT (w->last_modified, 0);
 	  XSETFASTINT (w->last_overlay_modified, 0);
 
+          if (!NILP (w->mini_p)
+              && ! EQ (p->window, f->minibuffer_window))
+            {
+              f->minibuffer_window = p->window;
+            }
+
 	  /* Reinstall the saved buffer and pointers into it.  */
 	  if (NILP (p->buffer))
 	    w->buffer = p->buffer;
@@ -6265,6 +6332,9 @@ the return value is nil.  Otherwise the value is t.  */)
 	 using the buffer that has been restored into it.
 	 We already swapped out point that from that window's old buffer.  */
       selected_window = Qnil;
+
+      minibuf_window = data->minibuf_window;
+      echo_area_window = data->echo_area_window;
 
       /* Arrange *not* to restore point in the buffer that was
 	 current when the window configuration was saved.  */
@@ -6558,6 +6628,8 @@ redirection (see `redirect-frame-focus').  */)
   XSETBUFFER (data->current_buffer, current_buffer);
   data->minibuf_scroll_window = minibuf_level > 0 ? Vminibuf_scroll_window : Qnil;
   data->minibuf_selected_window = minibuf_level > 0 ? minibuf_selected_window : Qnil;
+  data->minibuf_window = minibuf_level > 0 ? minibuf_window : Qnil;
+  data->echo_area_window = echo_area_window;
   data->root_window = FRAME_ROOT_WINDOW (f);
   data->focus_frame = FRAME_FOCUS_FRAME (f);
   tem = Fmake_vector (make_number (n_windows), Qnil);
