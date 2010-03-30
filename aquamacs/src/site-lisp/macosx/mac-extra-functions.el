@@ -372,7 +372,7 @@ specified in `shell-file-name'."
   ;; do we still need this?
   ;; nsterm.m does set INFOPATH.
   (if (equal (concat (mac-resources-path)
-		     "info")
+		     "info:")
   	     (getenv "INFOPATH"))
       (setenv "INFOPATH"))
   
@@ -389,6 +389,8 @@ specified in `shell-file-name'."
     (setq Info-default-directory-list (append extra-dirs
 				       Info-default-directory-list
 				       ))
+    (setq Info-directory-list nil) ; force reinitialization
+
     (when (getenv "INFOPATH")
       (setenv "INFOPATH" (apply 'concat (getenv "INFOPATH")
 				(mapcar (lambda (x) (concat ":" x))
