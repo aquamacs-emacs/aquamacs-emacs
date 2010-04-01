@@ -627,7 +627,7 @@ xg_frame_resized (f, pixelwidth, pixelheight)
       FRAME_PIXEL_HEIGHT (f) = pixelheight;
 
       xg_clear_under_internal_border (f);
-      change_frame_size (f, rows, columns, 0, 0, 1);
+      change_frame_size (f, rows, columns, 0, 1, 0);
       SET_FRAME_GARBAGED (f);
       cancel_mouse_face (f);
     }
@@ -808,6 +808,28 @@ xg_check_show_tabs (FRAME_PTR f,
     }
 }
 
+/* Callback called when a new tab has been added.
+   Handle the case when a page has been dropped from another frame.  */
+static void
+xg_page_added_cb (GtkNotebook *notebook,
+                  GtkWidget   *child,
+                  guint        page_num,
+                  gpointer     user_data)
+{
+  FRAME_PTR f = (FRAME_PTR) user_data;
+  tabs_gc_data *conf = g_object_get_data (G_OBJECT (child), XG_TAB_CONFIG_KEY);
+
+  /* Dropped from another frame?  */
+  if (conf
+      && Fwindow_configuration_p (conf->object) &&
+      XFRAME (Fwindow_configuration_frame (conf->object)) != f)
+    {
+      Lisp_Object frame;
+      XSETFRAME (frame, f);
+      Fchange_window_configuration_frame (conf->object, frame);
+    }
+}
+
 /* Callback called when the current tab changes.  */
 
 static void
@@ -877,14 +899,15 @@ xg_switch_page_cb (GtkNotebook     *wnote,
           oconf->object = Fcurrent_window_configuration (frame);
 
           EVENT_INIT (event);
-          event.kind = TAB_CHANGED_EVENT;
+          event.kind = TAB_EVENT;
           event.frame_or_window = frame;
-          event.arg = Fcons (make_string (key, strlen (key)),
-                             make_string (oldkey, strlen (oldkey)));
+          event.arg = Fcons (make_number (1),
+                             Fcons (make_string (key, strlen (key)),
+                                    make_string (oldkey, strlen (oldkey))));
           kbd_buffer_store_event (&event);
         }
 
-      if (conf)
+      if (conf) 
         Fset_window_configuration (conf->object);
       else 
         Fdelete_other_windows (Qnil);
@@ -911,10 +934,12 @@ static void
 remove_tab_cb (GtkButton *widget,
                gpointer   user_data)
 {
+  BLOCK_INPUT;
   GtkWidget *wfixed = GTK_WIDGET (user_data);
   const char *key = g_object_get_data (G_OBJECT (wfixed), XG_TAB_KEY);
   FRAME_PTR f = g_object_get_data (G_OBJECT (wfixed), XG_FRAME_DATA);
   xg_delete_tab (f, key);
+  UNBLOCK_INPUT;
 }
 
 
@@ -961,6 +986,7 @@ const char *
 xg_add_tab (FRAME_PTR f,
             const char *name)
 {
+  BLOCK_INPUT;
   GtkNotebook *wnote = GTK_NOTEBOOK (f->output_data.x->notebook_widget);
   GtkWidget *wfixed = gtk_fixed_new ();
   GdkColor bg;
@@ -1012,6 +1038,7 @@ xg_add_tab (FRAME_PTR f,
   gtk_widget_show (wfixed);
   n = gtk_notebook_append_page (wnote, wfixed, wlbl);
   gtk_notebook_set_tab_reorderable (wnote, wfixed, TRUE);
+  gtk_notebook_set_tab_detachable (wnote, wfixed, TRUE);
 
   if (n > 0)
     {
@@ -1023,6 +1050,7 @@ xg_add_tab (FRAME_PTR f,
                     "destroy",
                     G_CALLBACK (xg_fixed_destroy_cb), 0);
 
+  UNBLOCK_INPUT;
   return key;
 }
 
@@ -1033,6 +1061,7 @@ void
 xg_delete_tab (FRAME_PTR f,
                const char *key)
 {
+  BLOCK_INPUT;
   GtkNotebook *wnote = GTK_NOTEBOOK (f->output_data.x->notebook_widget);
   int i, pages = gtk_notebook_get_n_pages (wnote);
   int page_to_remove = -1;
@@ -1071,6 +1100,7 @@ xg_delete_tab (FRAME_PTR f,
       gtk_notebook_remove_page (wnote, page_to_remove);
     }
   xg_check_show_tabs (f, wnote);
+  UNBLOCK_INPUT;
 }
 
 /* Delete all tabs except the current tab.  */
@@ -1078,6 +1108,7 @@ xg_delete_tab (FRAME_PTR f,
 void
 xg_delete_all_tabs (FRAME_PTR f)
 {
+  BLOCK_INPUT;
   GtkNotebook *wnote = GTK_NOTEBOOK (f->output_data.x->notebook_widget);
   int i, pages = gtk_notebook_get_n_pages (wnote);
   int current_page = gtk_notebook_get_current_page (wnote);
@@ -1091,6 +1122,7 @@ xg_delete_all_tabs (FRAME_PTR f)
   for (i = 0; i < current_page; ++i)
     gtk_notebook_remove_page (wnote, 0);
   xg_check_show_tabs (f, wnote);
+  UNBLOCK_INPUT;
 }
 
 /* Make the next tab current.  If there are no next tabs, wrap around to 0.  */
@@ -1098,6 +1130,7 @@ xg_delete_all_tabs (FRAME_PTR f)
 void
 xg_tab_next (FRAME_PTR f)
 {
+  BLOCK_INPUT;
   GtkNotebook *wnote = GTK_NOTEBOOK (f->output_data.x->notebook_widget);
   int current_page = gtk_notebook_get_current_page (wnote);
   int pages = gtk_notebook_get_n_pages (wnote);
@@ -1109,7 +1142,7 @@ xg_tab_next (FRAME_PTR f)
   else
     switch_to = current_page+1;
   gtk_notebook_set_current_page (wnote, switch_to);
-
+  UNBLOCK_INPUT;
 }
 
 /* Make the previous tab current.  If current is first, wrap around to last.  */
@@ -1117,6 +1150,7 @@ xg_tab_next (FRAME_PTR f)
 void
 xg_tab_previous (FRAME_PTR f)
 {
+  BLOCK_INPUT;
   GtkNotebook *wnote = GTK_NOTEBOOK (f->output_data.x->notebook_widget);
   int current_page = gtk_notebook_get_current_page (wnote);
   int pages = gtk_notebook_get_n_pages (wnote);
@@ -1128,6 +1162,7 @@ xg_tab_previous (FRAME_PTR f)
   else
     switch_to = current_page-1;
   gtk_notebook_set_current_page (wnote, switch_to);
+  UNBLOCK_INPUT;
 }
 
 
@@ -1135,6 +1170,7 @@ void
 xg_set_tab_label (FRAME_PTR f,
                   const char *label)
 {
+  BLOCK_INPUT;
   GtkNotebook *wnote = GTK_NOTEBOOK (f->output_data.x->notebook_widget);
   int current_page = gtk_notebook_get_current_page (wnote);
   GtkWidget *w = gtk_notebook_get_nth_page (wnote, current_page);
@@ -1157,6 +1193,42 @@ xg_set_tab_label (FRAME_PTR f,
       if (utf8_label && utf8_label != label)
         g_free (utf8_label);
     }
+  UNBLOCK_INPUT;
+}
+
+static GtkNotebook* notebook_on_hold;
+
+
+GtkNotebook*
+xg_nb_window_create (GtkNotebook *source,
+                     GtkWidget *page,
+                     gint x,
+                     gint y,
+                     gpointer data)
+{
+  struct input_event event;
+  Lisp_Object frame;
+  FRAME_PTR f = g_object_get_data (G_OBJECT (page), XG_FRAME_DATA);
+  tabs_gc_data *oconf = g_object_get_data (G_OBJECT (page),
+                                           XG_TAB_CONFIG_KEY);
+  XSETFRAME (frame, f);
+  if (!oconf)
+    {
+      oconf = xmalloc (sizeof(*oconf));
+      g_object_set_data (G_OBJECT (page), XG_TAB_CONFIG_KEY, oconf);
+      xg_list_insert (&tabs_gc_list, &oconf->ptrs);
+      oconf->object = Fcurrent_window_configuration (frame);
+    }
+
+  EVENT_INIT (event);
+  event.kind = TAB_EVENT;
+  event.frame_or_window = frame;
+  event.arg = Fcons (make_number (2), Qnil);
+  event.x = make_number (x);
+  event.y = make_number (y);
+  kbd_buffer_store_event (&event);
+
+  return notebook_on_hold = GTK_NOTEBOOK (gtk_notebook_new ());
 }
 
 /* Create and set up the GTK widgets for frame F.
@@ -1181,7 +1253,10 @@ xg_create_frame_widgets (f)
   xg_set_screen (wtop, f);
 
   wvbox = gtk_vbox_new (FALSE, 0);
-  wnote = gtk_notebook_new ();
+  if (notebook_on_hold)
+    wnote = GTK_WIDGET (notebook_on_hold);
+  else
+    wnote = gtk_notebook_new ();
 
   if (! wtop || ! wvbox || ! wnote)
     {
@@ -1211,7 +1286,9 @@ xg_create_frame_widgets (f)
   gtk_box_pack_end (GTK_BOX (wvbox), wnote, TRUE, TRUE, 0);
   g_signal_connect (G_OBJECT (wnote), "switch-page",
                     G_CALLBACK (xg_switch_page_cb), f);
-                              
+  g_signal_connect (G_OBJECT (wnote), "page-added",
+                    G_CALLBACK (xg_page_added_cb), f);
+
   if (FRAME_EXTERNAL_TOOL_BAR (f))
     update_frame_tool_bar (f);
 
@@ -1234,12 +1311,23 @@ xg_create_frame_widgets (f)
   gtk_notebook_set_scrollable (GTK_NOTEBOOK (wnote), TRUE);
   gtk_notebook_set_show_border (GTK_NOTEBOOK (wnote), FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (wnote), 0);
+#if GTK_MAJOR_VERSION > 2 || GTK_MINOR_VERSION >= 12
+  gtk_notebook_set_group (GTK_NOTEBOOK (wnote), (gpointer)1);
+#else
+  gtk_notebook_set_group_id (GTK_NOTEBOOK (wnote), 1);
+#endif
+  gtk_notebook_set_show_tabs (GTK_NOTEBOOK (wnote), FALSE);
 
   GtkRcStyle *style = gtk_widget_get_modifier_style (wnote);
   style->xthickness = style->ythickness = 0;
   gtk_widget_modify_style (wnote, style);
-  
-  xg_add_tab (f, "Page 1");
+
+
+  if (!notebook_on_hold)
+    xg_add_tab (f, "Page 1");
+
+
+
   GtkWidget *wfixed = gtk_notebook_get_nth_page (GTK_NOTEBOOK (wnote), 0);
 
   /* Must realize the windows so the X window gets created.  It is used
@@ -1248,6 +1336,20 @@ xg_create_frame_widgets (f)
 
   FRAME_X_WINDOW (f) = GTK_WIDGET_TO_X_WIN (wfixed);
   FRAME_GTK_WIDGET (f) = wfixed;
+
+  tabs_gc_data *conf = g_object_get_data (G_OBJECT (wfixed), XG_TAB_CONFIG_KEY);
+  if (conf
+      && Fwindow_configuration_p (conf->object) &&
+      XFRAME (Fwindow_configuration_frame (conf->object)) != f)
+    {
+      Lisp_Object frame;
+      XSETFRAME (frame, f);
+      Fchange_window_configuration_frame (conf->object, frame);
+      Fset_window_configuration (conf->object);
+    }
+
+  notebook_on_hold = NULL;
+
   UNBLOCK_INPUT;
 
   return 1;
@@ -4601,6 +4703,7 @@ xg_initialize ()
   XftInit (0);
 #endif
 
+  notebook_on_hold = NULL;
   gdpy_def = NULL;
   xg_ignore_gtk_scrollbar = 0;
   xg_detached_menus = 0;
@@ -4638,6 +4741,8 @@ xg_initialize ()
                                           (GTK_TYPE_MENU_SHELL));
   gtk_binding_entry_add_signal (binding_set, GDK_g, GDK_CONTROL_MASK,
                                 "cancel", 0);
+
+  gtk_notebook_set_window_creation_hook (xg_nb_window_create, NULL, NULL);
 }
 
 #endif /* USE_GTK */

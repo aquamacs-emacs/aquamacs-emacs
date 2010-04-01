@@ -6044,7 +6044,7 @@ DEFUN ("change-window-configuration-frame", Fchange_window_configuration_frame,
             if (CONSP (cc) && ! NILP (XCDR (cc)))               \
               (win) = XCDR (cc);                                \
             else                                                \
-              abort ();                                         \
+              (win) = Qnil;                                     \
           }                                                     \
         } while (0)
       

@@ -59,8 +59,38 @@ expand wildcards (if any) and visit multiple files."
 		(mapcar 'switch-to-buffer (cdr value))))
       (switch-to-buffer value))))
 
+
+(defun handle-tab-event (event)
+  "Handle tab-event to change tabs on the frame in EVENT."
+  (interactive "e")
+  (let* ((n1 (nth 0 (cdr event)))
+	 (n2 (nth 1 (cdr event)))
+	 (type (car n2))
+	 (frame (car n1))
+	 (x (car (cdr n1)))
+	 (y (cdr (cdr n1))))
+    (if (eq type 2) 
+	(let ((top y)
+	      (left x)
+	      (width (frame-pixel-width frame))
+	      (height (frame-pixel-height frame))
+	      (dw (x-display-pixel-width frame))
+	      (dh (x-display-pixel-height frame)))
+	  (if (< dw (+ left width))
+	      (setq left (- dw width)))
+	  (if (< dh (+ top height))
+	      (setq top (- dh height)))
+	  (message "handle-tab-event, top/left %s/%s" top left)
+	  (make-frame 
+	   (list (cons 'width (frame-parameter frame 'width))
+		 (cons 'height(frame-parameter frame 'height))
+		 (cons 'top top)
+		 (cons 'left left)))))))
+
 (if (featurep 'tabs)
     (progn
+      (define-key special-event-map [tab-event]
+	'handle-tab-event)
       (global-set-key "\C-x7\C-f" 'find-file-new-tab)
       (global-set-key "\C-x70" 'tab-delete)
       (global-set-key "\C-x71" 'tab-delete-other)

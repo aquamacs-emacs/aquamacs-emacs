@@ -185,7 +185,7 @@ enum event_kind
 #endif
 
   , CONFIG_CHANGED_EVENT
-  , TAB_CHANGED_EVENT
+  , TAB_EVENT
 
 #ifdef WINDOWSNT
   /* Generated when an APPCOMMAND event is received, in response to

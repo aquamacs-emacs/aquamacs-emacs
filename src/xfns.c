@@ -5961,11 +5961,12 @@ FRAME nil means use the selected frame.  */)
   f = XFRAME (frame);
   if (! FRAME_X_P (f)) return;
 
-
   if (NILP (label))
     {
       if (!NILP (Fminibufferp (Qnil))) return;
-      label = Fbuffer_name (Qnil);
+      Lisp_Object buffer = XWINDOW (FRAME_SELECTED_WINDOW (f))->buffer;
+      if (NILP (buffer) || NILP (XBUFFER (buffer)->name)) return;
+      label = XBUFFER (buffer)->name;
     }
 
   if (!STRINGP (label))
