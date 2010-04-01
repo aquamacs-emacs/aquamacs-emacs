@@ -1,3 +1,77 @@
+2010-03-31  Chong Yidong  <cyd@stupidchicken.com>
+
+	* nsfns.m (ns_set_doc_edited): Remove unused arg OLDVAL.
+	* nsterm.h: Fix prototype.
+
+2010-03-31  Eli Zaretskii  <eliz@gnu.org>
+
+	* w32fns.c (x_create_tip_frame): Copy `parms' before we modify it
+	in this function.  (Bug#5703)
+
+2010-03-31  Chong Yidong  <cyd@stupidchicken.com>
+
+	* nsterm.h: Fix last change.
+
+2010-03-30  Bernhard Herzog  <bh@intevation.de>  (tiny change)
+
+	* menu.c (Fx_popup_menu): Use last_event_timestamp (Bug#4930).
+
+2010-03-30  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* xdisp.c (note_mouse_highlight): Don't do highlight if pointer is
+	invisible (Bug#5766).
+
+2010-03-29  Adrian Robert  <adrian.b.robert@gmail.com>
+
+	* xdisp.c (x_consider_frame_title, update_window_cursor): Remove
+	HAVE_NS conditionals.
+	(prepare_menu_bars)[HAVE_NS]: Call ns_set_doc_edited.
+
+	* nsfns.m (x_implicitly_set_name): If frame-title-format is t, use
+	filename for the title.
+	(ns_set_doc_edited): Do nothing if the selected window is a
+	minibuffer window.
+
+	* nsterm.h: Add prototypes for ns_set_name_as_filename and
+	ns_set_doc_edited.
+
+	* nsterm.m: Remove unneeded prototype.
+
+2010-03-28  Glenn Morris  <rgm@gnu.org>
+
+	* Makefile.in (SOME_MACHINE_OBJECTS): Ensure dbus stuff is always
+	in the DOC file.  (Bug#5336)
+
+2010-03-24  Chong Yidong  <cyd@stupidchicken.com>
+
+	* xdisp.c (pos_visible_p): Revert 2008-01-25 change (Bug#5730).
+
+2010-03-20  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* frame.c (x_get_arg): Handle RES_TYPE_BOOLEAN_NUMBER (bug #5736).
+
+	* xfns.c (Fx_create_frame): Make menuBar a RES_TYPE_BOOLEAN_NUMBER.
+
+	* dispextern.h (resource_types): RES_TYPE_BOOLEAN_NUMBER is new.
+
+2010-03-20  YAMAMOTO Mitsuharu  <mituharu@math.s.chiba-u.ac.jp>
+
+	* xfns.c (Fx_create_frame) [USE_LUCID]: Add BLOCK_INPUT around
+	XLoadQueryFont.
+
+2010-03-16  Kenichi Handa  <handa@m17n.org>
+
+	* coding.c (decode_coding_ccl): Fix previous change for the
+	multibyte case.
+	(encode_coding_ccl): Don't setup ccl program here.  Fix for the
+	case that the output buffer is fullfilled.
+	(encode_coding): Setup ccl program here.
+
+2010-03-15  Andreas Politz  <politza@fh-trier.de>  (tiny change)
+
+	* editfns.c (Fformat): Account for string precision when computing
+	field width (Bug#5710).
+
 2010-03-05  Stefan Monnier  <monnier@iro.umontreal.ca>
 
 	Make it possible to C-g in a tight bytecode loop again (bug#5680).

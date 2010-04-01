@@ -1,3 +1,137 @@
+2010-03-30  Tomas Abrahamsson  <tab@lysator.liu.se>
+
+	* textmodes/artist.el (artist-mode): Fix typo in docstring.
+	Reported by Alex Schröder <kensanata@gmail.com>.  (Bug#5807)
+
+2010-03-30  Kenichi Handa  <handa@m17n.org>
+
+	* language/sinhala.el (composition-function-table): Fix regexp for
+	the new Unicode specification.
+
+	* language/indian.el (devanagari-composable-pattern)
+	(tamil-composable-pattern, kannada-composable-pattern)
+	(malayalam-composable-pattern): Adjusted for the new Unicode
+	specification.
+	(bengali-composable-pattern, gurmukhi-composable-pattern)
+	(gujarati-composable-pattern, oriya-composable-pattern)
+	(telugu-composable-pattern): New variables to cope with the new
+	Unicode specification.  Use them in composition-function-table.
+
+2010-03-29  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	Make tmm-menubar work for the Buffers menu again.
+	* tmm.el (tmm-prompt): Also handle keymap entries in the form of
+	vectors rather than cons cells, as used in menu-bar-update-buffers.
+
+2010-03-28  Chong Yidong  <cyd@stupidchicken.com>
+
+	* progmodes/js.el (js-auto-indent-flag, js-mode-map)
+	(js-insert-and-indent): Revert 2009-08-15 change, restoring
+	electric punctuation for "{}();,:" (Bug#5586).
+
+	* mail/sendmail.el (mail-default-directory): Doc fix.
+
+2010-03-27  Chong Yidong  <cyd@stupidchicken.com>
+
+	* mail/sendmail.el (mail-default-directory): Doc fix.
+
+2010-03-27  Eli Zaretskii  <eliz@gnu.org>
+
+	* subr.el (version-regexp-alist, version-to-list)
+	(version-list-<, version-list-=, version-list-<=)
+	(version-list-not-zero, version<, version<=, version=): Doc fix.
+	(Bug#5744).
+
+2010-03-26  YAMAMOTO Mitsuharu  <mituharu@math.s.chiba-u.ac.jp>
+            Nick Roberts  <nickrob@snap.net.nz>
+
+	* progmodes/gdb-ui.el (gdb-apple-test): New function.
+	(gdb-init-1): Use it.
+
+2010-02-10  Dan Nicolaescu  <dann@ics.uci.edu>
+
+	* vc.el (vc-root-diff): Doc fix.
+
+2010-03-25  Chong Yidong  <cyd@stupidchicken.com>
+
+	* vc.el (vc-print-log, vc-print-root-log): Doc fix.
+
+	* simple.el (append-to-buffer): Fix last change.
+
+2010-03-24  Chong Yidong  <cyd@stupidchicken.com>
+
+	* simple.el (append-to-buffer): Ensure that point is preserved if
+	BUFFER is the current buffer.  Suggested by YAMAMOTO Mitsuharu.
+	(Bug#5749)
+
+2010-03-24  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* progmodes/make-mode.el (makefile-rule-action-regex): Backtrack less.
+	(makefile-make-font-lock-keywords): Adjust rule since submatch 1 may
+	not be present any more.
+
+2010-03-24  Juanma Barranquero  <lekktu@gmail.com>
+
+	* faces.el (set-face-attribute): Fix typo in docstring.
+	(face-valid-attribute-values): Reflow docstring.
+
+	* cedet/srecode/table.el (srecode-template-table): Fix docstring typo.
+
+2010-03-23  Glenn Morris  <rgm@gnu.org>
+
+	* textmodes/flyspell.el (sgml-lexical-context): Autoload it (Bug#5752).
+
+2010-03-21  Chong Yidong  <cyd@stupidchicken.com>
+
+	* indent.el (indent-for-tab-command): Doc fix.
+
+2010-03-22  Alan Mackenzie  <acm@muc.de>
+
+	* progmodes/cc-engine.el (c-remove-stale-state-cache):
+	Fix off-by-one error.  Fixes bug #5747.
+
+2010-03-22  Juanma Barranquero  <lekktu@gmail.com>
+
+	* image-dired.el (image-dired-display-thumbs): Fix typo in docstring.
+	(image-dired-read-comment): Doc fix.
+
+	* json.el (json-object-type, json-array-type, json-key-type)
+	(json-false, json-null, json-read-number):
+	* minibuffer.el (completion-in-region-functions):
+	* calendar/cal-tex.el (cal-tex-daily-end, cal-tex-number-weeks)
+	(cal-tex-cursor-week):
+	* emacs-lisp/trace.el (trace-function):
+	* eshell/em-basic.el (eshell/printnl):
+	* eshell/em-dirs.el (eshell-last-dir-ring, eshell-parse-drive-letter)
+	(eshell-read-last-dir-ring, eshell-write-last-dir-ring):
+	* obsolete/levents.el (allocate-event, event-key, event-object)
+	(event-point, event-process, event-timestamp, event-to-character)
+	(event-window, event-x, event-x-pixel, event-y, event-y-pixel):
+	* textmodes/reftex-vars.el (reftex-index-macros-builtin)
+	(reftex-section-levels, reftex-auto-recenter-toc, reftex-toc-mode-hook)
+	(reftex-cite-punctuation, reftex-search-unrecursed-path-first)
+	(reftex-highlight-selection): Fix typos in docstrings.
+
+2010-03-19  Juanma Barranquero  <lekktu@gmail.com>
+
+	* minibuffer.el (completion-in-region-functions): Fix docstring typos.
+
+2010-03-18  Glenn Morris  <rgm@gnu.org>
+
+	* mail/rmail.el (rmail-highlight-face): Restore option deleted
+	2008-02-13 without comment; mark it obsolete.
+	(rmail-highlight-headers): Use rmail-highlight-face once more.
+
+2010-03-16  Chong Yidong  <cyd@stupidchicken.com>
+
+	* woman.el (woman2-process-escapes): Only consume the newline if
+	the filler character is on a line by itself (Bug#5729).
+
+2010-03-16  Kenichi Handa  <handa@m17n.org>
+
+	* language/indian.el (devanagari-composable-pattern): Add more
+	consonants.
+
 2010-03-14  Michael Albinus  <michael.albinus@gmx.de>
 
 	* net/trampver.el: Update release number.
@@ -8,8 +142,8 @@
 
 2010-03-13  Michael Albinus  <michael.albinus@gmx.de>
 
-	* net/tramp.el (tramp-find-executable): Use
-	`tramp-get-connection-buffer'.  Make the regexp for checking
+	* net/tramp.el (tramp-find-executable):
+	Use `tramp-get-connection-buffer'.  Make the regexp for checking
 	output of "wc -l" more robust.
 	(tramp-find-shell): Use another shell but /bin/sh on OpenSolaris.
 	(tramp-open-connection-setup-interactive-shell): Remove workaround
