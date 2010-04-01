@@ -261,7 +261,7 @@
 ;;   Unregister FILE from this backend.  This is only needed if this
 ;;   backend may be used as a "more local" backend for temporary editing.
 ;;
-;; * checkin (files rev comment)
+;; * checkin (files rev comment &optional extra-args)
 ;;
 ;;   Commit changes in FILES to this backend.  If REV is non-nil, that
 ;;   should become the new revision number (not all backends do
@@ -269,6 +269,7 @@
 ;;   implementation should pass the value of vc-checkin-switches to
 ;;   the backend command.  (Note: in older versions of VC, this
 ;;   command took a single file argument and not a list.)
+;;   EXTRA-ARGS should be passed to the backend command.
 ;;
 ;; * find-revision (file rev buffer)
 ;;
@@ -476,6 +477,12 @@
 ;;
 ;;   Return the revision number that follows REV for FILE, or nil if no such
 ;;   revision exists.
+;;
+;; - log-edit-mode ()
+;;
+;;   Turn on the mode used for editing the check in log.  This
+;;   defaults to `log-edit-mode'.  If changed, it should use a mode
+;;   derived from`log-edit-mode'.
 ;;
 ;; - check-headers ()
 ;;
@@ -1358,7 +1365,9 @@ Runs the normal hooks `vc-before-checkin-hook' and `vc-checkin-hook'."
     files rev comment initial-contents
     "Enter a change comment."
     "*VC-log*"
-    (lambda (files rev comment)
+    (lambda ()
+      (vc-call-backend backend 'log-edit-mode))
+    (lambda (files rev comment extra-flags)
       (message "Checking in %s..." (vc-delistify files))
       ;; "This log message intentionally left almost blank".
       ;; RCS 5.7 gripes about white-space-only comments too.
@@ -1369,7 +1378,7 @@ Runs the normal hooks `vc-before-checkin-hook' and `vc-checkin-hook'."
        ;; We used to change buffers to get local value of vc-checkin-switches,
        ;; but 'the' local buffer is not a well-defined concept for filesets.
        (progn
-	 (vc-call-backend backend 'checkin files rev comment)
+	 (vc-call-backend backend 'checkin files rev comment extra-flags)
 	 (mapc 'vc-delete-automatic-version-backups files))
        `((vc-state . up-to-date)
 	 (vc-checkout-time . ,(nth 5 (file-attributes file)))
@@ -1609,9 +1618,10 @@ saving the buffer."
 
 ;;;###autoload
 (defun vc-root-diff (historic &optional not-urgent)
-  "Display diffs between file revisions.
-Normally this compares the currently selected fileset with their
-working revisions.  With a prefix argument HISTORIC, it reads two revision
+  "Display diffs between VC-controlled whole tree revisions.
+Normally, this compares the tree corresponding to the current
+fileset with the working revision.
+With a prefix argument HISTORIC, prompt for two revision
 designators specifying which revisions to compare.
 
 The optional argument NOT-URGENT non-nil means it is ok to say no to
@@ -1735,17 +1745,18 @@ The headers are reset to their non-expanded form."
 
 (defun vc-modify-change-comment (files rev oldcomment)
   "Edit the comment associated with the given files and revision."
-  (vc-start-logentry
-   files rev oldcomment t
-   "Enter a replacement change comment."
-   "*VC-log*"
-   (lambda (files rev comment)
-     (vc-call-backend
-      ;; Less of a kluge than it looks like; log-view mode only passes
-      ;; this function a singleton list.  Arguments left in this form in
-      ;; case the more general operation ever becomes meaningful.
-      (vc-responsible-backend (car files))
-      'modify-change-comment files rev comment))))
+  ;; Less of a kluge than it looks like; log-view mode only passes
+  ;; this function a singleton list.  Arguments left in this form in
+  ;; case the more general operation ever becomes meaningful.
+  (let ((backend (vc-responsible-backend (car files))))
+    (vc-start-logentry
+     files rev oldcomment t
+     "Enter a replacement change comment."
+     "*VC-log*"
+     (lambda () (vc-call-backend backend 'log-edit-mode))
+     (lambda (files rev comment ignored)
+       (vc-call-backend backend
+                        'modify-change-comment files rev comment)))))
 
 ;;;###autoload
 (defun vc-merge ()
@@ -1931,7 +1942,12 @@ Not all VC backends support short logs!")
 ;;;###autoload
 (defun vc-print-log (&optional working-revision limit)
   "List the change log of the current fileset in a window.
-If WORKING-REVISION is non-nil, leave the point at that revision."
+If WORKING-REVISION is non-nil, leave point at that revision.
+If LIMIT is non-nil, it should be a number specifying the maximum
+number of revisions to show; the default is `vc-log-show-limit'.
+
+When called interactively with a prefix argument, prompt for
+WORKING-REVISION and LIMIT."
   (interactive
    (cond
     (current-prefix-arg
@@ -1955,7 +1971,10 @@ If WORKING-REVISION is non-nil, leave the point at that revision."
 
 ;;;###autoload
 (defun vc-print-root-log (&optional limit)
-  "List the change log of for the current VC controlled tree in a window."
+  "List the change log for the current VC controlled tree in a window.
+If LIMIT is non-nil, it should be a number specifying the maximum
+number of revisions to show; the default is `vc-log-show-limit'.
+When called interactively with a prefix argument, prompt for LIMIT."
   (interactive
    (cond
     (current-prefix-arg
@@ -2423,6 +2442,10 @@ to provide the `find-revision' operation instead."
     (vc-register)))
 
 (defalias 'vc-default-check-headers 'ignore)
+
+(declare-function log-edit-mode "log-edit" ())
+
+(defun vc-default-log-edit-mode (backend) (log-edit-mode))
 
 (defun vc-default-log-view-mode (backend) (log-view-mode))
 
