@@ -505,16 +505,23 @@ show BUFFER in that frame."
   (interactive)
   (new-empty-buffer t mode))
 
+(defcustom aquamacs-default-major-mode 'text-mode
+  "Major mode in effect when new empty buffers are created.
+Specifies the major mode to be used for `new-empty-buffer' 
+and `new-empty-buffer-other-frame'."
+  :group 'Aquamacs)
+
 (defun new-empty-buffer  (&optional other-frame mode)
-  "Visits an empty buffer."
+  "Visits an empty buffer.
+The major mode is set to MODE, or, if that is nil,
+the value of `aquamacs-default-major-mode'."
   (interactive)			
   (let ((buf (generate-new-buffer (mac-new-buffer-name "untitled"))))
     ;; setting mode is done before showing the new frame
     ;; because otherwise, we get a nasty animation effect
     (save-excursion
       (set-buffer buf)
-      (if (or mode initial-major-mode)
-	  (funcall  (or mode initial-major-mode))))
+      (funcall (or mode aquamacs-default-major-mode initial-major-mode 'ignore)))
     (if other-frame
 	(switch-to-buffer-other-frame buf)
       (let ((one-buffer-one-frame-force one-buffer-one-frame-mode))

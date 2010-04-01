@@ -5738,7 +5738,10 @@ When a mode is used by default, `find-file' switches to it before it
 reads the contents into the buffer and before it finishes setting up
 the buffer.  Thus, the mode and its hooks should not expect certain
 variables such as `buffer-read-only' and `buffer-file-coding-system'
-to be set up.  */);
+to be set up.  
+
+To set the major mode of newly created buffers (`new-empty-buffer')
+in Aquamacs, set `aquamacs-default-major-mode' instead.  */);
 
   DEFVAR_PER_BUFFER ("mode-name", &current_buffer->mode_name,
                      Qnil,

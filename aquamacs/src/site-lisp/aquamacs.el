@@ -78,8 +78,7 @@ automatically choosing a major mode, use \\[find-file-literally]."
 	  (aquamacs-find-file-2 filename)
 	(call-interactively 'aquamacs-find-file-2))
     ;; open new frame with empty buffer
-    (let ((default-major-mode 'fundamental-mode))
-      (new-empty-buffer nil)) ;;  'fundamental-mode
+    (new-empty-buffer nil 'fundamental-mode) ;;  'fundamental-mode
     (let ((buf (current-buffer)))
       (unwind-protect 
 	  (progn 
