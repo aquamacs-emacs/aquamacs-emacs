@@ -118,6 +118,7 @@ Lisp_Object Qparent_id;
 Lisp_Object Qtitle, Qname;
 Lisp_Object Qexplicit_name;
 Lisp_Object Qunsplittable;
+Lisp_Object Qdisable_tabs;
 Lisp_Object Qmenu_bar_lines, Qtool_bar_lines;
 Lisp_Object Qleft_fringe, Qright_fringe;
 Lisp_Object Qbuffer_predicate, Qbuffer_list, Qburied_buffer_list;
@@ -307,6 +308,7 @@ make_frame (mini_p)
   f->auto_raise = 0;
   f->auto_lower = 0;
   f->no_split = 0;
+  f->no_tabs = 0;
   f->garbaged = 1;
   f->has_minibuffer = mini_p;
   f->focus_frame = Qnil;
@@ -2431,6 +2433,7 @@ If FRAME is omitted, return information on the currently selected frame.  */)
   store_in_alist (&alist, Qunsplittable, (FRAME_NO_SPLIT_P (f) ? Qt : Qnil));
   store_in_alist (&alist, Qbuffer_list, frame_buffer_list (frame));
   store_in_alist (&alist, Qburied_buffer_list, XFRAME (frame)->buried_buffer_list);
+  store_in_alist (&alist, Qdisable_tabs, (FRAME_NO_TABS_P (f) ? Qt : Qnil));
 
   /* I think this should be done with a hook.  */
 #ifdef HAVE_WINDOW_SYSTEM
@@ -2873,6 +2876,7 @@ static struct frame_parm_table frame_parms[] =
   {"font-backend",		&Qfont_backend},
   {"alpha",			&Qalpha},
   {"sticky",			&Qsticky},
+  {"disable-tabs",		&Qdisable_tabs},
 };
 
 #ifdef HAVE_WINDOW_SYSTEM
@@ -3320,6 +3324,17 @@ x_set_line_spacing (f, new_value, old_value)
     redraw_frame (f);
 }
 
+void
+x_set_notabs (f, new_value, old_value)
+     struct frame *f;
+     Lisp_Object new_value, old_value;
+{
+  Lisp_Object frame;
+
+  /* Only allow false => true at startup.  */
+  if (NILP (old_value) && !NILP (new_value))
+      f->no_tabs = 1;
+}
 
 /* Change the `screen-gamma' frame parameter of frame F.  OLD_VALUE is
    the previous value of that parameter, NEW_VALUE is the new value.  */

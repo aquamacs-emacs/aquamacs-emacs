@@ -50,15 +50,43 @@ expand wildcards (if any) and visit multiple files."
    (find-file-read-args "Find file in new tab: "
                         (confirm-nonexistent-file-or-buffer)))
   (let ((value (find-file-noselect filename nil nil wildcards)))
-    (tab-new)
-    (delete-other-windows)
-    (if (listp value)
+    (if (not (null (tab-new)))
 	(progn
-	  (setq value (nreverse value))
-	  (cons (switch-to-buffer (car value))
-		(mapcar 'switch-to-buffer (cdr value))))
-      (switch-to-buffer value))))
+	  (delete-other-windows)
+	  (if (listp value)
+	      (progn
+		(setq value (nreverse value))
+		(cons (switch-to-buffer (car value))
+		      (mapcar 'switch-to-buffer (cdr value))))
+	    (switch-to-buffer value))))))
 
+(defun switch-to-buffer-other-tab (buffer-or-name &optional norecord)
+  "Switch to buffer BUFFER-OR-NAME in another tab.
+BUFFER-OR-NAME may be a buffer, a string \(a buffer name), or
+nil.  Return the buffer switched to.
+
+If called interactively, prompt for the buffer name using the
+minibuffer.  The variable `confirm-nonexistent-file-or-buffer'
+determines whether to request confirmation before creating a new
+buffer.
+
+If BUFFER-OR-NAME is a string and does not identify an existing
+buffer, create a new buffer with that name.  If BUFFER-OR-NAME is
+nil, switch to the buffer returned by `other-buffer'.
+
+Optional second arg NORECORD non-nil means do not put this
+buffer at the front of the list of recently selected ones.
+
+This uses the function `display-buffer' as a subroutine; see its
+documentation for additional customization information."
+  (interactive
+   (list (read-buffer-to-switch "Switch to buffer in other tab: ")))
+  (let ((same-window-buffer-names same-window-regexps))
+    (if (not (null (tab-new)))
+	(progn
+	  (select-window (display-buffer buffer-or-name nil (selected-frame))
+			 norecord)
+	  (delete-other-windows)))))
 
 (defun handle-tab-event (event)
   "Handle tab-event to change tabs on the frame in EVENT."
@@ -80,7 +108,6 @@ expand wildcards (if any) and visit multiple files."
 	      (setq left (- dw width)))
 	  (if (< dh (+ top height))
 	      (setq top (- dh height)))
-	  (message "handle-tab-event, top/left %s/%s" top left)
 	  (make-frame 
 	   (list (cons 'width (frame-parameter frame 'width))
 		 (cons 'height(frame-parameter frame 'height))
@@ -95,6 +122,7 @@ expand wildcards (if any) and visit multiple files."
       (global-set-key "\C-x70" 'tab-delete)
       (global-set-key "\C-x71" 'tab-delete-other)
       (global-set-key "\C-x72" 'tab-new)
+      (global-set-key "\C-x7b" 'switch-to-buffer-other-tab)
       (global-set-key "\C-x7f" 'find-file-new-tab)
       (global-set-key "\C-x7o" 'tab-next)
       (global-set-key "\C-x7n" 'tab-next)

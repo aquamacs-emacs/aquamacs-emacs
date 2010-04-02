@@ -427,6 +427,9 @@ struct frame
   /* True if frame's root window can't be split.  */
   unsigned char no_split : 1;
 
+  /* True if frame doesn't use tabs  */
+  unsigned char no_tabs : 1;
+
   /* If this is set, then Emacs won't change the frame name to indicate
      the current buffer, etcetera.  If the user explicitly sets the frame
      name, this gets set.  If the user sets the name to Qnil, this is
@@ -618,6 +621,9 @@ typedef struct frame *FRAME_PTR;
 
 /* Nonzero means do not allow splitting this frame's window.  */
 #define FRAME_NO_SPLIT_P(f) (f)->no_split
+
+/* Nonzero means do not use tabs in this frame.  */
+#define FRAME_NO_TABS_P(f) (f)->no_tabs
 
 /* Not really implemented.  */
 #define FRAME_WANTS_MODELINE_P(f) (f)->wants_modeline
@@ -1048,7 +1054,7 @@ extern Lisp_Object Qmenu_bar_lines, Qtool_bar_lines;
 extern Lisp_Object Qmouse_color;
 extern Lisp_Object Qname, Qtitle;
 extern Lisp_Object Qparent_id;
-extern Lisp_Object Qunsplittable, Qvisibility;
+extern Lisp_Object Qunsplittable, Qvisibility, Qdisable_tabs;
 extern Lisp_Object Qscroll_bar_width, Qvertical_scroll_bars;
 extern Lisp_Object Qscroll_bar_foreground, Qscroll_bar_background;
 extern Lisp_Object Qscreen_gamma;
@@ -1114,6 +1120,7 @@ extern void x_set_visibility P_ ((struct frame *, Lisp_Object, Lisp_Object));
 extern void x_set_autoraise P_ ((struct frame *, Lisp_Object, Lisp_Object));
 extern void x_set_autolower P_ ((struct frame *, Lisp_Object, Lisp_Object));
 extern void x_set_unsplittable P_ ((struct frame *, Lisp_Object, Lisp_Object));
+extern void x_set_notabs P_ ((struct frame *, Lisp_Object, Lisp_Object));
 extern void x_set_vertical_scroll_bars P_ ((struct frame *, Lisp_Object,
 					    Lisp_Object));
 extern void x_set_scroll_bar_width P_ ((struct frame *, Lisp_Object,

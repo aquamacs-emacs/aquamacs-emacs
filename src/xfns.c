@@ -3442,6 +3442,9 @@ This function is an internal primitive--use `make-frame' instead.  */)
   tem = x_get_arg (dpyinfo, parms, Qunsplittable, 0, 0, RES_TYPE_BOOLEAN);
   f->no_split = minibuffer_only || EQ (tem, Qt);
 
+  tem = x_get_arg (dpyinfo, parms, Qdisable_tabs, 0, 0, RES_TYPE_BOOLEAN);
+  f->no_tabs = minibuffer_only || EQ (tem, Qt);
+
   x_icon_verify (f, parms);
 
   /* Create the X widget or window.  */
@@ -5849,6 +5852,7 @@ frame_parm_handler x_frame_parm_handlers[] =
   x_set_font_backend,
   x_set_alpha,
   x_set_sticky,
+  x_set_notabs,
 };
 
 #ifdef USE_GTK
@@ -5865,6 +5869,7 @@ Returns the key for the tab, which can be passed to `tab-delete'.  */)
   FRAME_PTR f = check_x_frame (frame);
   const char *key;
 
+  if (f->no_tabs) return Qnil;
   if (NILP (label))
     {
       if (!NILP (Fminibufferp (Qnil))) return;
@@ -5890,6 +5895,7 @@ FRAME nil means use the selected frame.  */)
      Lisp_Object key, frame;
 {
   FRAME_PTR f = check_x_frame (frame);
+  if (f->no_tabs) return Qnil;
   if (!NILP (key) && !STRINGP (key))
     error ("Key is not string or nil");
 
@@ -5908,6 +5914,7 @@ FRAME nil means use the selected frame.  */)
      Lisp_Object frame;
 {
   FRAME_PTR f = check_x_frame (frame);
+  if (f->no_tabs) return Qnil;
   BLOCK_INPUT;
   xg_delete_all_tabs (f);
   UNBLOCK_INPUT;
@@ -5924,6 +5931,7 @@ FRAME nil means use the selected frame.  */)
      Lisp_Object frame;
 {
   FRAME_PTR f = check_x_frame (frame);
+  if (f->no_tabs) return Qnil;
   BLOCK_INPUT;
   xg_tab_next (f);
   UNBLOCK_INPUT;
@@ -5940,6 +5948,7 @@ FRAME nil means use the selected frame.  */)
      Lisp_Object frame;
 {
   FRAME_PTR f = check_x_frame (frame);
+  if (f->no_tabs) return Qnil;
   BLOCK_INPUT;
   xg_tab_previous (f);
   UNBLOCK_INPUT;
@@ -5962,6 +5971,7 @@ FRAME nil means use the selected frame.  */)
   CHECK_LIVE_FRAME (frame);
   f = XFRAME (frame);
   if (! FRAME_X_P (f)) return;
+  if (f->no_tabs) return Qnil;
 
   if (NILP (label))
     {
