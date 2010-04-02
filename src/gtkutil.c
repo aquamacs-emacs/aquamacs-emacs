@@ -770,6 +770,21 @@ typedef struct tabs_gc_data_
 } tabs_gc_data;
   
 
+/* Store the current window configuration for frame F in widget W.  */
+
+static tabs_gc_data *
+xg_store_win_config (GtkWidget *w, FRAME_PTR f)
+{
+  Lisp_Object frame;
+  tabs_gc_data *conf = xmalloc (sizeof(*conf));
+  XSETFRAME (frame, f);
+  g_object_set_data (G_OBJECT (w), XG_TAB_CONFIG_KEY, conf);
+  xg_list_insert (&tabs_gc_list, &conf->ptrs);
+  conf->object = Fcurrent_window_configuration (frame);
+
+  return conf;
+}
+
 static void
 xg_check_show_tabs (FRAME_PTR f,
                     GtkNotebook *wnote)
@@ -893,14 +908,9 @@ xg_switch_page_cb (GtkNotebook     *wnote,
           tabs_gc_data *oconf = g_object_get_data (G_OBJECT (old),
                                                    XG_TAB_CONFIG_KEY);
           if (!oconf)
-            {
-              oconf = xmalloc (sizeof(*oconf));
-              g_object_set_data (G_OBJECT (old), XG_TAB_CONFIG_KEY, oconf);
-              xg_list_insert (&tabs_gc_list, &oconf->ptrs);
-            }
+            oconf = xg_store_win_config (old, f);
 
           XSETFRAME (frame, f);
-          oconf->object = Fcurrent_window_configuration (frame);
 
           EVENT_INIT (event);
           event.kind = TAB_EVENT;
@@ -1225,13 +1235,8 @@ xg_nb_window_create (GtkNotebook *source,
   tabs_gc_data *oconf = g_object_get_data (G_OBJECT (page),
                                            XG_TAB_CONFIG_KEY);
   XSETFRAME (frame, f);
-  if (!oconf)
-    {
-      oconf = xmalloc (sizeof(*oconf));
-      g_object_set_data (G_OBJECT (page), XG_TAB_CONFIG_KEY, oconf);
-      xg_list_insert (&tabs_gc_list, &oconf->ptrs);
-      oconf->object = Fcurrent_window_configuration (frame);
-    }
+  if (!oconf) oconf = xg_store_win_config (page, f);
+
 
   EVENT_INIT (event);
   event.kind = TAB_EVENT;
@@ -1243,6 +1248,88 @@ xg_nb_window_create (GtkNotebook *source,
 
   return notebook_on_hold = GTK_NOTEBOOK (gtk_notebook_new ());
 }
+
+int
+xg_tab_count (FRAME_PTR f)
+{
+  GtkNotebook *wnote = GTK_NOTEBOOK (f->output_data.x->notebook_widget);
+  return wnote ? gtk_notebook_get_n_pages (wnote) : 1;
+}
+
+int
+xg_current_tab (FRAME_PTR f)
+{
+  GtkNotebook *wnote = GTK_NOTEBOOK (f->output_data.x->notebook_widget);
+  return wnote ? gtk_notebook_get_current_page (wnote) : 0;
+}
+
+void
+xg_set_current_tab (FRAME_PTR f, const char *key)
+{
+  GtkNotebook *wnote = GTK_NOTEBOOK (f->output_data.x->notebook_widget);
+  int i, pages = gtk_notebook_get_n_pages (wnote);
+  int page = -1;
+  int current_page = gtk_notebook_get_current_page (wnote);
+  if (pages == 1 || !key) return;
+
+  for (i = 0; i < pages; ++i) 
+    {
+      GtkWidget *w = gtk_notebook_get_nth_page (wnote, i);
+      char *k;
+      if (!w) continue;
+      k =  g_object_get_data (G_OBJECT (w), XG_TAB_KEY);
+      if (k && strcmp (k, key) == 0)
+        {
+              page = i;
+              break;
+        }
+    }
+  
+  if (page >= 0 && page < pages && page != current_page)
+    {
+      gtk_notebook_set_current_page (wnote, page);
+      xg_switch_page_cb (wnote, NULL, page, f);
+    }
+}
+
+
+
+const char *
+xg_get_tab_key (FRAME_PTR f, int nr)
+{
+  GtkNotebook *wnote = GTK_NOTEBOOK (f->output_data.x->notebook_widget);
+  GtkWidget *w;
+
+  if (!wnote || nr >= gtk_notebook_get_n_pages (wnote)
+      || (w = gtk_notebook_get_nth_page (wnote, nr)) == NULL)
+    return NULL;
+
+  return (const char *)g_object_get_data (G_OBJECT (w), XG_TAB_KEY);
+}
+
+Lisp_Object
+xg_tab_get_win_config (FRAME_PTR f, int nr)
+{
+  GtkNotebook *wnote = GTK_NOTEBOOK (f->output_data.x->notebook_widget);
+  GtkWidget *w;
+  tabs_gc_data *conf;
+  
+  if (!wnote || nr >= gtk_notebook_get_n_pages (wnote)
+      || (w = gtk_notebook_get_nth_page (wnote, nr)) == NULL)
+    return Qnil;
+
+  conf = g_object_get_data (G_OBJECT (w), XG_TAB_CONFIG_KEY);
+  if (!conf) conf = xg_store_win_config (w, f);
+  else if (w == FRAME_GTK_WIDGET (f))
+    {
+      Lisp_Object frame;
+      XSETFRAME (frame, f);
+      conf->object = Fcurrent_window_configuration (frame);
+    }
+  return conf ? conf->object : Qnil;
+}
+
+
 
 /* Create and set up the GTK widgets for frame F.
    Return 0 if creation failed, non-zero otherwise.  */

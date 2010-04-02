@@ -6068,6 +6068,42 @@ DEFUN ("change-window-configuration-frame", Fchange_window_configuration_frame,
 #undef MAP_WINDOW
 }
 
+DEFUN ("buffers-in-window-configuration", Fbuffers_in_window_configuration,
+       Sbuffers_in_window_configuration, 1, 1, 0,
+       doc: /* Return a list of buffers that CONFIGURATION is showing.
+CONFIGURATION must be a value previously returned
+by `current-window-configuration' (which see).  */)
+     (configuration)
+     Lisp_Object configuration;
+{
+  struct save_window_data *data;
+  struct Lisp_Vector *saved_windows;
+  int k;
+  struct saved_window *p;
+  Lisp_Object buffers = Qnil, tail;
+
+  CHECK_WINDOW_CONFIGURATION (configuration);
+
+  data = (struct save_window_data *) XVECTOR (configuration);
+  saved_windows = XVECTOR (data->saved_windows);
+  for (k = 0; k < saved_windows->size; k++)
+    {
+      p = SAVED_WINDOW_N (saved_windows, k);
+      if (!NILP (p->buffer))
+        {
+          if (NILP (buffers))
+            tail = buffers = Fcons (p->buffer, Qnil);
+          else
+            {
+              XSETCDR (tail, Fcons (p->buffer, Qnil));
+              tail = XCDR (tail);
+            }
+        }
+    }
+
+  return buffers;
+}
+
 DEFUN ("set-window-configuration", Fset_window_configuration,
        Sset_window_configuration, 1, 1, 0,
        doc: /* Set the configuration of windows and buffers as specified by CONFIGURATION.
@@ -7448,6 +7484,7 @@ frame to be redrawn only if it is a tty frame.  */);
   defsubr (&Swindow_configuration_p);
   defsubr (&Swindow_configuration_frame);
   defsubr (&Schange_window_configuration_frame);
+  defsubr (&Sbuffers_in_window_configuration);
   defsubr (&Sset_window_configuration);
   defsubr (&Scurrent_window_configuration);
   defsubr (&Ssave_window_excursion);

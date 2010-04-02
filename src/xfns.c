@@ -5991,6 +5991,93 @@ FRAME nil means use the selected frame.  */)
   return Qnil;
 }
 
+DEFUN ("tab-nr-of-tabs", Ftab_nr_of_tabs,
+       Stab_nr_of_tabs, 0, 1, 0,
+       doc: /* Return the number of tabs on FRAME.
+FRAME nil means use the selected frame.  */)
+     (frame)
+     Lisp_Object frame;
+{
+  FRAME_PTR f = check_x_frame (frame);
+  int nr = 1;
+  Lisp_Object o;
+
+  
+  if (!f->no_tabs)
+    nr = xg_tab_count (f);
+  
+  XSETFASTINT (o, nr);
+  return o;
+}
+
+DEFUN ("tab-configuration", Ftab_configuration,
+       Stab_configuration, 0, 1, 0,
+       doc: /* Return the tab configuration on FRAME.
+FRAME nil means use the selected frame.
+Returns an alist where each element is of type (KEY  WINDOWCONFIG).
+KEY is the name of the tab as returned by `tab_new´.
+WINDOWCONFIG is the window configuration for the tab.
+
+If FRAME is a tab-less frame, returns nil.  */)
+     (frame)
+     Lisp_Object frame;
+{
+  FRAME_PTR f = check_x_frame (frame);
+  int nr, i;
+  Lisp_Object cc = Qnil;
+
+  if (f->no_tabs) return Qnil;
+  nr = xg_tab_count (f);
+  for (i = 0; i < nr; ++i) 
+    {
+      Lisp_Object wc = xg_tab_get_win_config (f, i);
+      const char *key = xg_get_tab_key (f, i);
+
+      cc = Fcons (Fcons (key ? make_string (key, strlen (key)) : Qnil,
+                         NILP (wc) ? wc : Fcons (wc, Qnil)),
+                  cc);
+    }
+
+  return cc;
+}
+
+DEFUN ("tab-current", Ftab_current,
+       Stab_current, 0, 1, 0,
+       doc: /* Return the key for the current tab on FRAME.
+FRAME nil means use the selected frame.
+If FRAME is a tab-less frame, returns nil.  */)
+     (frame)
+     Lisp_Object frame;
+{
+  FRAME_PTR f = check_x_frame (frame);
+  Lisp_Object cc = Qnil;
+  int nr;
+
+  if (f->no_tabs) return Qnil;
+  nr = xg_current_tab (f);
+  const char *key = xg_get_tab_key (f, nr);
+  return key ? make_string (key, strlen (key)) : Qnil;
+}
+
+DEFUN ("tab-show", Ftab_show,
+       Stab_show, 0, 2, 0,
+       doc: /* Make tab with key the current tab on FRAME.
+FRAME nil means use the selected frame.
+If FRAME is a tab-less frame or the key doesn't refer to a tab, do nothing.  */)
+     (key, frame)
+     Lisp_Object key, frame;
+{
+  FRAME_PTR f = check_x_frame (frame);
+  if (f->no_tabs) return Qnil;
+  CHECK_STRING (key);
+
+  BLOCK_INPUT;
+  xg_set_current_tab (f, SDATA (key));
+  UNBLOCK_INPUT;
+
+  return Qnil;
+}
+
 #endif
 
 void
@@ -6158,6 +6245,10 @@ the tool bar buttons.  */);
   defsubr (&Stab_next);
   defsubr (&Stab_previous);
   defsubr (&Stab_set_label);
+  defsubr (&Stab_nr_of_tabs);
+  defsubr (&Stab_configuration);
+  defsubr (&Stab_current);
+  defsubr (&Stab_show);
 
 #endif /* USE_GTK */
 

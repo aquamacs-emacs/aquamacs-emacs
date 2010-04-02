@@ -141,6 +141,12 @@ extern void xg_delete_all_tabs P_ ((FRAME_PTR f));
 extern void xg_set_tab_label P_ ((FRAME_PTR f, const char *label));
 extern void xg_tab_next P_ ((FRAME_PTR f));
 extern void xg_tab_previous P_ ((FRAME_PTR f));
+extern int xg_tab_count P_ ((FRAME_PTR f));
+extern int xg_current_tab P_ ((FRAME_PTR f));
+extern const char *xg_get_tab_key P_ ((FRAME_PTR f, int nr));
+extern void xg_set_current_tab P_ ((FRAME_PTR f, const char *key));
+
+extern Lisp_Object xg_tab_get_win_config P_ ((FRAME_PTR f, int nr));
 
 extern GtkWidget *xg_create_widget P_ ((char *type,
                                         char *name,

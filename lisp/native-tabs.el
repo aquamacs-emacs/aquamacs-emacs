@@ -88,6 +88,36 @@ documentation for additional customization information."
 			 norecord)
 	  (delete-other-windows)))))
 
+
+(defun display-existing-buffer-in-tab (buffer-or-name &optional frame)
+  "Switch to a tab that shows BUFFER-OR-NAME on FRAME.
+FRAME nil means selected frame.
+
+Returns the key for the tab switch to, or nil if no tab displays 
+BUFFER-OR-NAME."
+  (let* ((buffer (if (bufferp buffer-or-name)
+		     buffer-or-name
+		   (get-buffer buffer-or-name)))
+	 (tabs (if buffer (tab-configuration frame) nil))
+	 (tab-key))
+    (while (and tabs (null tab-key))
+      (let* ((elt (car tabs))
+	     (winconf (cadr elt))
+	     (buffers (buffers-in-window-configuration winconf)))
+	(if (memq buffer buffers)
+	    (setq tab-key (car elt))
+	  (setq tabs (cdr tabs)))))
+    (if (and tab-key (not (equal tab-key (tab-current frame))))
+	(progn
+	  (tab-show tab-key frame)
+	  tab-key)
+      nil)))
+
+(defun switch-to-buffer-tab (buffer-or-name &optional frame)
+  (interactive "BSwitch to buffer:\nP")
+  (if (not (display-existing-buffer-in-tab buffer-or-name frame))
+      (switch-to-buffer buffer-or-name)))
+
 (defun handle-tab-event (event)
   "Handle tab-event to change tabs on the frame in EVENT."
   (interactive "e")
@@ -122,6 +152,7 @@ documentation for additional customization information."
       (global-set-key "\C-x70" 'tab-delete)
       (global-set-key "\C-x71" 'tab-delete-other)
       (global-set-key "\C-x72" 'tab-new)
+      (global-set-key "\C-x73" 'switch-to-buffer-tab)
       (global-set-key "\C-x7b" 'switch-to-buffer-other-tab)
       (global-set-key "\C-x7f" 'find-file-new-tab)
       (global-set-key "\C-x7o" 'tab-next)
