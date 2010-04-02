@@ -1,0 +1,32 @@
+You can drag tabs to reorder them, drop them on another frame to move it there
+and drop on the root window to create a new frame.
+
+Lisp code is in native-tabs.el.  Keybindings are:
+
+      (global-set-key "\C-x7\C-f" 'find-file-new-tab)
+      (global-set-key "\C-x70" 'tab-delete)
+      (global-set-key "\C-x71" 'tab-delete-other)
+      (global-set-key "\C-x72" 'tab-new)
+      (global-set-key "\C-x73" 'switch-to-buffer-tab)
+      (global-set-key "\C-x7b" 'switch-to-buffer-other-tab)
+      (global-set-key "\C-x7f" 'find-file-new-tab)
+      (global-set-key "\C-x7o" 'tab-next)
+      (global-set-key "\C-x7n" 'tab<-next)
+      (global-set-key "\C-x7p" 'tab-previous)))
+
+
+The lisp interface is mostly in xfns.c:
+
+(find-file-new-tab FILENAME &optional WILDCARDS)
+(tab-new &optional LABEL FRAME)
+(tab-delete &optional KEY FRAME)
+(tab-delete-other &optional FRAME)
+(tab-set-label LABEL &optional FRAME)
+(tab-next &optional FRAME)
+(tab-previous &optional FRAME)
+(tab-nr-of-tabs &optional FRAME)
+(tab-configuration &optional FRAME)
+(tab-current &optional FRAME)
+(tab-show KEY FRAME)
+(switch-to-buffer-tab BUFFER-OR-NAME &optional FRAME)
+(switch-to-buffer-other-tab BUFFER-OR-NAME &optional NORECORD)

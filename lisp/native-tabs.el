@@ -34,6 +34,10 @@
 (declare-function tab-delete-other "xfns.c" ())
 (declare-function tab-next "xfns.c" ())
 (declare-function tab-previous "xfns.c" ())
+(declare-function tab-nr-of-tabs "xfns.c" ())
+(declare-function tab-configuration "xfns.c" ())
+(declare-function tab-current "xfns.c" ())
+(declare-function tab-show "xfns.c" ())
 
 (defun find-file-new-tab (filename &optional wildcards)
   "Edit file FILENAME, in a new tab.
