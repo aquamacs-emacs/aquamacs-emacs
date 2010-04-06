@@ -233,9 +233,9 @@ KEYS defines the elements to use for `tabbar-key-binding-keys'."
 	       (unless (eq pos (point))
 		 (if transient-mark-mode
 		     (deactivate-mark))
-		 (goto-char pos)))
-	     (set-marker new-pt nil) ;; delete marker 
-	     )))))
+		 (goto-char pos))
+	       (set-marker new-pt nil) ;; delete marker 
+	       ))))))
 
 
 ;; function for closing a tab via context menu.  Kills buffer if doesn't
