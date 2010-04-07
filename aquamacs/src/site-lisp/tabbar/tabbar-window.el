@@ -316,9 +316,9 @@ That is, a string used to represent it on the tab bar."
 		   (unless (eq pos (point))
 		     (if transient-mark-mode
 			 (deactivate-mark))
-		     (goto-char pos)))
-		 (set-marker new-pt nil) ;; delete marker 
-		 ))))
+		     (goto-char pos))
+		   (set-marker new-pt nil) ;; delete marker
+		   )))))
       ;; if there's no tab associated with clicked spot, use
       ;; special keymap for empty tab bar
       (cond ((eq mouse-button 'mouse-3)

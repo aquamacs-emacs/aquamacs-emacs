@@ -18,7 +18,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, 2006, 2007, 2008, 2009 David Reitter
+;; Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 David Reitter
 
 ;; Smart Frame Positioning Mode: In environments where many frames are
 ;;  opened, this mode shows them in useful positions on the screen so
@@ -738,7 +738,10 @@ on the main screen, i.e. where the menu is."
 	   ;; on OS X, e.g. display-available-pixel-bounds (patch!!) returns
 	   ;; available screen region, excluding the Dock.
 	   (rect (or (display-available-pixel-bounds frame)
-		     (display-available-pixel-bounds (selected-frame))))
+		     (display-available-pixel-bounds (selected-frame))
+		     ; may return nil (e.g. window is entirely off-screen)
+		     ; request main screen extent:
+		     (display-available-pixel-bounds t)))
 	   (min-x (nth 0 rect))
 	   (min-y (nth 1 rect))
 	   (max-x (+ min-x (nth 2 rect)))

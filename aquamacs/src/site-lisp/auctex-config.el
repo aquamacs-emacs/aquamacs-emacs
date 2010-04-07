@@ -251,6 +251,19 @@ If nil Aquamacs uses Skim if and only if it has been running."
 	(if (eq 'control mac-emulate-three-button-mouse) 
 	    " (Shift-Apple-Click)" ""))))))
   
+(defun aquamacs-check-emacsclient-version ()
+  (let ((emacsclient-min-version "23.0")
+	emacsclient-version)
+    (with-temp-buffer
+      (call-process "emacsclient" nil t nil "-v")
+      (goto-char (point-min))
+      (setq emacsclient-version
+	    (and (search-forward-regexp "\\([0-9]+\\.[0-9\\.]+\\)" nil t)
+		 (match-string 1))))
+    (if (version< emacsclient-version emacsclient-min-version)
+	(message "Warning - emacsclient version (%s) too low; must be >= %s for Skim support.
+Use Tools --> Install Command Line Tools to update."
+		 emacsclient-version emacsclient-min-version))))
 
 (defun aquamacs-latex-viewer-support ()
   "Support for Skim as LaTeX viewer if present."
@@ -269,6 +282,9 @@ If nil Aquamacs uses Skim if and only if it has been running."
   (unless aquamacs-skim-timer ;; just once per session
     (setq aquamacs-skim-timer 
 	  (run-with-idle-timer 30 t 'aquamacs-check-for-skim)))
+  ;; warn if emacsclient version is too low to work with Aquamacs"
+  ;; use idle timer to ensure that message can be seen in echo area
+  (run-with-idle-timer 1 nil 'aquamacs-check-emacsclient-version)
   (unless server-process
     (server-force-delete)
     ;; start server to make emacsclient work

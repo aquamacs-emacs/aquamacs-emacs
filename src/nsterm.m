@@ -4949,7 +4949,7 @@ ns_term_shutdown (int sig)
 
 /*****************************************************************************/
 /* Keyboard handling. */
-#define NS_KEYLOG 01
+#define NS_KEYLOG 0
 
 - (void)keyDown: (NSEvent *)theEvent
 {

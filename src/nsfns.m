@@ -2985,7 +2985,9 @@ reserved for the Mac menu, dock, and so forth.
 
 The screen queried corresponds to DISPLAY, which should be either a
 frame, a display name (a string), or terminal ID.  If omitted or nil,
-that stands for the selected frame's display. */)
+that stands for the selected frame's display.  If t, the main display is used.
+
+May return nil if a frame passed in DISPLAY is not on any available display.  */)
      (display)
      Lisp_Object display;
 {

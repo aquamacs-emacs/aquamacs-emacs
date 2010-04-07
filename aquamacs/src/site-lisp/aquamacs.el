@@ -49,35 +49,6 @@
 
 ;; various functions
 
-
-;; New documents
-(defun new-empty-buffer-other-frame (&optional mode)
-  "Opens a new frame containing an empty buffer."
-  (interactive)
-  (new-empty-buffer t mode))
-
-(defun new-empty-buffer  (&optional other-frame mode)
-  "Visits an empty buffer."
-  (interactive)			
-  (let ((buf (generate-new-buffer (mac-new-buffer-name "untitled"))))
-    ;; setting mode is done before showing the new frame
-    ;; because otherwise, we get a nasty animation effect
-    (save-excursion
-      (set-buffer buf)
-      (if (or mode initial-major-mode)
-	  (funcall  (or mode initial-major-mode)))
-      (setq buffer-offer-save t)
-      (put 'buffer-offer-save 'permanent-local t)
-      (set-buffer-modified-p nil))
-    (if other-frame
-	(switch-to-buffer-other-frame buf)
-      (let ((one-buffer-one-frame-force one-buffer-one-frame-mode))
-	;; force new frame
-	(switch-to-buffer buf)))))
-
-(defalias  'new-frame-with-new-scratch 'new-empty-buffer)
-
-
 (defun aquamacs-find-file (&optional filename)
   "Find an existing file or create a new buffer for it.  
 If `one-buffer-one-frame' is non-nil, a new frame is created to
@@ -107,8 +78,7 @@ automatically choosing a major mode, use \\[find-file-literally]."
 	  (aquamacs-find-file-2 filename)
 	(call-interactively 'aquamacs-find-file-2))
     ;; open new frame with empty buffer
-    (let ((default-major-mode 'fundamental-mode))
-      (new-empty-buffer nil)) ;;  'fundamental-mode
+    (new-empty-buffer nil 'fundamental-mode) ;;  'fundamental-mode
     (let ((buf (current-buffer)))
       (unwind-protect 
 	  (progn 
