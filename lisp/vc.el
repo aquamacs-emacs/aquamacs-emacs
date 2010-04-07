@@ -1618,9 +1618,10 @@ saving the buffer."
 
 ;;;###autoload
 (defun vc-root-diff (historic &optional not-urgent)
-  "Display diffs between file revisions.
-Normally this compares the currently selected fileset with their
-working revisions.  With a prefix argument HISTORIC, it reads two revision
+  "Display diffs between VC-controlled whole tree revisions.
+Normally, this compares the tree corresponding to the current
+fileset with the working revision.
+With a prefix argument HISTORIC, prompt for two revision
 designators specifying which revisions to compare.
 
 The optional argument NOT-URGENT non-nil means it is ok to say no to
@@ -1744,17 +1745,18 @@ The headers are reset to their non-expanded form."
 
 (defun vc-modify-change-comment (files rev oldcomment)
   "Edit the comment associated with the given files and revision."
-  (vc-start-logentry
-   files rev oldcomment t
-   "Enter a replacement change comment."
-   "*VC-log*"
-   (lambda (files rev comment ignored)
-     (vc-call-backend
-      ;; Less of a kluge than it looks like; log-view mode only passes
-      ;; this function a singleton list.  Arguments left in this form in
-      ;; case the more general operation ever becomes meaningful.
-      (vc-responsible-backend (car files))
-      'modify-change-comment files rev comment))))
+  ;; Less of a kluge than it looks like; log-view mode only passes
+  ;; this function a singleton list.  Arguments left in this form in
+  ;; case the more general operation ever becomes meaningful.
+  (let ((backend (vc-responsible-backend (car files))))
+    (vc-start-logentry
+     files rev oldcomment t
+     "Enter a replacement change comment."
+     "*VC-log*"
+     (lambda () (vc-call-backend backend 'log-edit-mode))
+     (lambda (files rev comment ignored)
+       (vc-call-backend backend
+                        'modify-change-comment files rev comment)))))
 
 ;;;###autoload
 (defun vc-merge ()
@@ -1940,7 +1942,12 @@ Not all VC backends support short logs!")
 ;;;###autoload
 (defun vc-print-log (&optional working-revision limit)
   "List the change log of the current fileset in a window.
-If WORKING-REVISION is non-nil, leave the point at that revision."
+If WORKING-REVISION is non-nil, leave point at that revision.
+If LIMIT is non-nil, it should be a number specifying the maximum
+number of revisions to show; the default is `vc-log-show-limit'.
+
+When called interactively with a prefix argument, prompt for
+WORKING-REVISION and LIMIT."
   (interactive
    (cond
     (current-prefix-arg
@@ -1964,7 +1971,10 @@ If WORKING-REVISION is non-nil, leave the point at that revision."
 
 ;;;###autoload
 (defun vc-print-root-log (&optional limit)
-  "List the change log of for the current VC controlled tree in a window."
+  "List the change log for the current VC controlled tree in a window.
+If LIMIT is non-nil, it should be a number specifying the maximum
+number of revisions to show; the default is `vc-log-show-limit'.
+When called interactively with a prefix argument, prompt for LIMIT."
   (interactive
    (cond
     (current-prefix-arg
@@ -2432,6 +2442,8 @@ to provide the `find-revision' operation instead."
     (vc-register)))
 
 (defalias 'vc-default-check-headers 'ignore)
+
+(declare-function log-edit-mode "log-edit" ())
 
 (defun vc-default-log-edit-mode (backend) (log-edit-mode))
 

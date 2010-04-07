@@ -26,11 +26,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #define PENDING_OUTPUT_COUNT(FILE) ((FILE)->_p - (FILE)->_bf._base)
 
-/* -lutil is not needed for NetBSD >0.9.  */
-/* #define LIBS_SYSTEM -lutil */
 #define LIBS_TERMCAP -ltermcap
-
-#define NEED_ERRNO
 
 #define START_FILES pre-crt0.o /usr/lib/crt0.o START_FILES_1 /usr/lib/crtbegin.o
 #define LIB_STANDARD -lgcc -lc -lgcc /usr/lib/crtend.o END_FILES_1
