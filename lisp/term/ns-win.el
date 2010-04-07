@@ -1223,82 +1223,68 @@ the operating system.")
     defined-colors))
 
 ;; Functions for color panel + drag
-(defun ns-face-at-pos (pos)
-  (let* ((frame (car pos))
-         (frame-pos (cons (cadr pos) (cddr pos)))
-         (window (window-at (car frame-pos) (cdr frame-pos) frame))
-         (window-pos (coordinates-in-window-p frame-pos window))
-         (buffer (window-buffer window))
-         (edges (window-edges window)))
+(defun ns-face-at-pos (position)
+  (let* ((p (posn-point position))
+	 (area (posn-area position))
+	 (window (posn-window position)))
     (cond
-     ((not window-pos)
-      nil)
-     ((eq window-pos 'mode-line)
-      'modeline)
-     ((eq window-pos 'vertical-line)
+     ((eq area 'mode-line)
+      (if (eq (frame-selected-window) window)
+	  'mode-line ; does not work yet - frame is always selected
+	  'mode-line-inactive))
+     ((eq area 'vertical-line)
       'default)
-     ((consp window-pos)
-      (with-current-buffer buffer
-        (let ((p (car (compute-motion (window-start window)
-                                      (cons (nth 0 edges)
-					    ;; Workaround: compute-motion fails to 
-					    ;; take into account header line.
-					    ;; See bug #4893
-					    (+ (if header-line-format 1 0) (nth 1 edges)))
-                                      (window-end window)
-                                      frame-pos
-                                      (- (window-width window) 1)
-                                      nil
-                                      window))))
-          (cond
-           ((eq p (window-point window))
-            'cursor)
-           ((and mark-active (< (region-beginning) p) (< p (region-end)))
-            'region)
-           (t
-	    (let* ((faces (or (get-char-property p 'face window) 'default))
-		   (face (if (consp faces) (car faces) faces)))
-	      (or (cdr-safe (assq face face-remapping-alist))
-		  face)))))))
-     (t
-      nil))))
+     ((and (not area) (eq p (window-point window)))
+      'cursor)
+     ((and (not area) mark-active (< (region-beginning) p) (< p (region-end)))
+      'region)
+     ((not area)
+      (let* ((faces (or (get-char-property p 'face window) 'default))
+	     (face (if (consp faces) (car faces) faces)))
+	(or (cdr-safe (assq face face-remapping-alist))
+	    face))))))
 
 (defvar ns-input-color)			; nsterm.m
 
-(defun ns-set-foreground-at-mouse ()
+(defun ns-set-foreground-at-mouse (event)
   "Set the foreground color at the mouse location to `ns-input-color'."
-  (interactive)
-  (let* ((pos (mouse-position))
-         (frame (car pos))
-         (face (ns-face-at-pos pos)))
-    (cond
-     ((eq face 'cursor)
-      (modify-frame-parameters frame (list (cons 'cursor-color
-                                                 ns-input-color))))
-     ((not face)
-      (modify-frame-parameters frame (list (cons 'foreground-color
-                                                 ns-input-color))))
-     (t
-      (set-face-foreground face ns-input-color frame)))
-    (message "Foreground color set for %s." face)))
+  (interactive "e")
+  (let ((position (event-end event)))
+    (if (not (windowp (posn-window position)))
+	(error "Position not in text area of window"))
+    (let* ((face (ns-face-at-pos position))
+	   (frame (window-frame (posn-window position))))
+      
+      (cond
+       ((eq face 'cursor)
+	(modify-frame-parameters frame (list (cons 'cursor-color
+						   ns-input-color))))
+       ((not face)
+	(modify-frame-parameters frame (list (cons 'foreground-color
+						   ns-input-color))))
+       (t
+	(set-face-foreground face ns-input-color frame)))
+      (message "Foreground color set for %s." face))))
 
-(defun ns-set-background-at-mouse ()
+(defun ns-set-background-at-mouse (event)
   "Set the background color at the mouse location to `ns-input-color'."
-  (interactive)
-  (let* ((pos (mouse-position))
-         (frame (car pos))
-         (face (ns-face-at-pos pos)))
-    (cond
-     ((eq face 'cursor)
-      (modify-frame-parameters frame (list (cons 'cursor-color
-                                                 ns-input-color))))
-     ((not face)
-      (modify-frame-parameters frame (list (cons 'background-color
-                                                 ns-input-color))))
-     (t
-      (set-face-background face ns-input-color frame)))
-    (message "Background color set for %s." face)))
-
+   (interactive "e")
+  (let ((position (event-end event)))
+    (if (not (windowp (posn-window position)))
+	(error "Position not in text area of window"))
+    (let* ((face (ns-face-at-pos position))
+	   (frame (window-frame (posn-window position))))
+      (cond
+       ((eq face 'cursor)
+	(modify-frame-parameters frame (list (cons 'cursor-color
+						   ns-input-color))))
+       ((not face)
+	(modify-frame-parameters frame (list (cons 'background-color
+						   ns-input-color))))
+       (t
+	(set-face-background face ns-input-color frame)))
+      (message "Background color set for %s." face))))
+ 
 ;; Set some options to be as Nextstep-like as possible.
 (setq frame-title-format t
       icon-title-format t)

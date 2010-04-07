@@ -207,6 +207,8 @@ enum event_kind
   , NS_TEXT_EVENT
   /* Non-key system events (e.g. application menu events) */
   , NS_NONKEY_EVENT
+  /* Some special drag events */
+  , NS_MOUSEDRAG_EVENT
 #endif
 
 };

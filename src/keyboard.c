@@ -5639,6 +5639,8 @@ make_lispy_event (event)
       /* NS_NONKEY_EVENTs are just like NON_ASCII_KEYSTROKE_EVENTs,
 	 except that they are non-key events (last-nonmenu-event is nil). */
     case NS_NONKEY_EVENT:
+      /* special drag events */
+    case NS_MOUSEDRAG_EVENT:
 #endif
 
       /* A function key.  The symbol may need to have modifier prefixes
@@ -5677,6 +5679,25 @@ make_lispy_event (event)
 				    (sizeof (iso_lispy_function_keys)
 				     / sizeof (iso_lispy_function_keys[0])));
 #endif
+
+      if (event->kind == NS_MOUSEDRAG_EVENT)
+	{
+            struct frame *f = XFRAME (event->frame_or_window);
+            Lisp_Object position;
+            Lisp_Object head;
+	    position = make_lispy_position (f, &event->x, &event->y,
+					    event->timestamp);
+	    head = modify_event_symbol (event->code,
+				        event->modifiers,
+	                                Qfunction_key,
+				        current_kboard->Vsystem_key_alist,
+				        0, &current_kboard->system_key_syms,
+			  	        (unsigned) -1);
+	    return Fcons (head,
+			  Fcons (Qnil,
+				 Fcons (position,
+					Qnil)));
+        }
 
       /* Handle system-specific or unknown keysyms.  */
       if (event->code & (1 << 28)

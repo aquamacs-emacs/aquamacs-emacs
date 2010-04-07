@@ -829,7 +829,7 @@ modified, or in FRAME if given."
 
 (defun aquamacs-set-face-prop (face frame prop value)
   (if (eq aquamacs-color-panel-target-face 'none) ;; general color picker used
-      (message "Drag&drop colors out of the panel onto text.")
+      (message "Drag and drop colors onto text to set the according face foreground. Hold Option for background color.")
     (apply 'set-face-attribute face
 	   frame (list prop value))
     (aquamacs-autoface-mark-face-to-save face)

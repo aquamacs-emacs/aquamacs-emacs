@@ -6211,7 +6211,7 @@ ns_term_shutdown (int sig)
   else if ([type isEqualToString: NSColorPboardType])
     {
       NSColor *c = [NSColor colorFromPasteboard: pb];
-      emacs_event->kind = NS_NONKEY_EVENT;
+      emacs_event->kind = NS_MOUSEDRAG_EVENT;
       emacs_event->code = KEY_NS_DRAG_COLOR;
       XSETINT (emacs_event->x, x);
       XSETINT (emacs_event->y, y);
