@@ -521,7 +521,7 @@ the value of `aquamacs-default-major-mode'."
     ;; because otherwise, we get a nasty animation effect
     (save-excursion
       (set-buffer buf)
-      (funcall (or mode aquamacs-default-major-mode initial-major-mode 'ignore)))
+      (funcall (or mode aquamacs-default-major-mode (default-value 'major-mode) 'ignore)))
     (if other-frame
 	(switch-to-buffer-other-frame buf)
       (let ((one-buffer-one-frame-force one-buffer-one-frame-mode))
