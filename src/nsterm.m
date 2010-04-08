@@ -4655,8 +4655,6 @@ ns_term_shutdown (int sig)
   ns_send_appdefined (-2);
 }
 
-extern void update_window_cursor (struct window *w, int on);
-
 - (void)fd_handler: (NSTimer *) fdEntry
 /* --------------------------------------------------------------------------
      Check data waiting on file descriptors and terminate if so
@@ -4951,7 +4949,7 @@ extern void update_window_cursor (struct window *w, int on);
 
 /*****************************************************************************/
 /* Keyboard handling. */
-#define NS_KEYLOG 01
+#define NS_KEYLOG 0
 
 - (void)keyDown: (NSEvent *)theEvent
 {

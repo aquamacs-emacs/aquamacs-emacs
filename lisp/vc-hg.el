@@ -235,10 +235,10 @@ If nil, use the value of `vc-diff-switches'.  If t, use no switches."
     (with-current-buffer
 	buffer
       (apply 'vc-hg-command buffer 0 files "log"
-	     (append
+	     (nconc
 	      (when start-revision (list (format "-r%s:" start-revision)))
 	      (when limit (list "-l" (format "%s" limit)))
-	      (when shortlog '("--style" "compact"))
+	      (when shortlog (list "--style" "compact"))
 	      vc-hg-log-switches)))))
 
 (defvar log-view-message-re)
@@ -279,6 +279,7 @@ If nil, use the value of `vc-diff-switches'.  If t, use no switches."
           ("^date: \\(.+\\)" (1 'change-log-date))
             ("^summary:[ \t]+\\(.+\\)" (1 'log-view-message)))))))
 
+(declare-function log-edit-mode "log-edit" ())
 (defvar log-edit-extra-flags)
 (defvar log-edit-before-checkin-process)
 
@@ -286,7 +287,7 @@ If nil, use the value of `vc-diff-switches'.  If t, use no switches."
   "Mode for editing Hg commit logs.
 If a line like:
 Author: NAME
-is present in the log, it is removed, and 
+is present in the log, it is removed, and
 --author NAME
 is passed to the hg commit command."
   (set (make-local-variable 'log-edit-extra-flags) nil)
@@ -418,7 +419,8 @@ COMMENT is ignored."
 (defun vc-hg-checkin (files rev comment &optional extra-args)
   "Hg-specific version of `vc-backend-checkin'.
 REV is ignored."
-  (apply 'vc-hg-command nil 0 files  (append (list "commit" "-m" comment) extra-args)))
+  (apply 'vc-hg-command nil 0 files
+         (nconc (list "commit" "-m" comment) extra-args)))
 
 (defun vc-hg-find-revision (file rev buffer)
   (let ((coding-system-for-read 'binary)
@@ -610,22 +612,22 @@ REV is the revision to check out into WORKFILE."
   (interactive)
   (let ((marked-list (log-view-get-marked)))
     (if marked-list
-        (vc-hg-command
-         nil 0 nil
-         (cons "push"
+        (apply #'vc-hg-command
+               nil 0 nil
+               "push"
                (apply 'nconc
-                      (mapcar (lambda (arg) (list "-r" arg)) marked-list))))
-         (error "No log entries selected for push"))))
+                      (mapcar (lambda (arg) (list "-r" arg)) marked-list)))
+      (error "No log entries selected for push"))))
 
 (defun vc-hg-pull ()
   (interactive)
   (let ((marked-list (log-view-get-marked)))
     (if marked-list
-        (vc-hg-command
-         nil 0 nil
-         (cons "pull"
+        (apply #'vc-hg-command
+               nil 0 nil
+               "pull"
                (apply 'nconc
-                      (mapcar (lambda (arg) (list "-r" arg)) marked-list))))
+                      (mapcar (lambda (arg) (list "-r" arg)) marked-list)))
       (error "No log entries selected for pull"))))
 
 ;;; Internal functions

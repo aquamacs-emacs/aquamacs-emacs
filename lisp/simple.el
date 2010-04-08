@@ -2867,8 +2867,8 @@ argument should still be a \"useful\" string for such uses."
       (setcar kill-ring string)
     (push string kill-ring)
     (if (> (length kill-ring) kill-ring-max)
-	(setcdr (nthcdr (1- kill-ring-max) kill-ring) nil))) 
-  (setq kill-ring-yank-pointer kill-ring) 
+	(setcdr (nthcdr (1- kill-ring-max) kill-ring) nil)))
+  (setq kill-ring-yank-pointer kill-ring)
   (if interprogram-cut-function
       (funcall interprogram-cut-function string (not replace))))
 
@@ -3469,17 +3469,18 @@ START and END specify the portion of the current buffer to be copied."
   (interactive
    (list (read-buffer "Append to buffer: " (other-buffer (current-buffer) t))
 	 (region-beginning) (region-end)))
-  (let ((oldbuf (current-buffer)))
-    (let* ((append-to (get-buffer-create buffer))
-           (windows (get-buffer-window-list append-to t t))
-           point)
+  (let* ((oldbuf (current-buffer))
+         (append-to (get-buffer-create buffer))
+         (windows (get-buffer-window-list append-to t t))
+         point)
+    (save-excursion
       (with-current-buffer append-to
-	(setq point (point))
-	(barf-if-buffer-read-only)
-	(insert-buffer-substring oldbuf start end)
-	(dolist (window windows)
-	  (when (= (window-point window) point)
-	    (set-window-point window (point))))))))
+        (setq point (point))
+        (barf-if-buffer-read-only)
+        (insert-buffer-substring oldbuf start end)
+        (dolist (window windows)
+          (when (= (window-point window) point)
+            (set-window-point window (point))))))))
 
 (defun prepend-to-buffer (buffer start end)
   "Prepend to specified buffer the text of the region.
@@ -4003,7 +4004,7 @@ and more reliable (no dependence on goal column, etc.)."
 	    (insert (if use-hard-newlines hard-newline "\n")))
 	(line-move arg nil nil try-vscroll))
     (if (called-interactively-p 'interactive)
-	(condition-case nil
+	(condition-case err
 	    (line-move arg nil nil try-vscroll)
 	  (beginning-of-buffer (goto-char (point-min)))
 	  (end-of-buffer (goto-char (point-max))))
@@ -4034,7 +4035,7 @@ to use and more reliable (no dependence on goal column, etc.)."
   (interactive "^p\np")
   (or arg (setq arg 1))
   (if (called-interactively-p 'interactive)
-      (condition-case nil
+      (condition-case err
 	  (line-move (- arg) nil nil try-vscroll)
 	(beginning-of-buffer (goto-char (point-min)))
 	(end-of-buffer (goto-char (point-max))))
@@ -4738,6 +4739,89 @@ This also turns on `word-wrap' in the buffer."
   visual-line-mode turn-on-visual-line-mode
   :lighter " vl")
 
+;;; Scrolling commands.
+
+;;; Scrolling commands which does not signal errors at top/bottom
+;;; of buffer at first key-press (instead moves to top/bottom
+;;; of buffer).
+
+(defun scroll-up-command (&optional arg)
+  "Scroll text of selected window upward ARG lines; or near full screen if no ARG.
+If `scroll-up' cannot scroll window further, move cursor to the bottom line.
+When point is already on that position, then signal an error.
+A near full screen is `next-screen-context-lines' less than a full screen.
+Negative ARG means scroll downward.
+If ARG is the atom `-', scroll downward by nearly full screen."
+  (interactive "^P")
+  (cond
+   ((eq arg '-) (scroll-down-command nil))
+   ((< (prefix-numeric-value arg) 0)
+    (scroll-down-command (- (prefix-numeric-value arg))))
+   ((eobp)
+    (scroll-up arg))  ; signal error
+   (t
+    (condition-case nil
+	(scroll-up arg)
+      (end-of-buffer
+       (if arg
+	   ;; When scrolling by ARG lines can't be done,
+	   ;; move by ARG lines instead.
+	   (forward-line arg)
+	 ;; When ARG is nil for full-screen scrolling,
+	 ;; move to the bottom of the buffer.
+	 (goto-char (point-max))))))))
+
+(put 'scroll-up-command 'isearch-scroll t)
+
+(defun scroll-down-command (&optional arg)
+  "Scroll text of selected window down ARG lines; or near full screen if no ARG.
+If `scroll-down' cannot scroll window further, move cursor to the top line.
+When point is already on that position, then signal an error.
+A near full screen is `next-screen-context-lines' less than a full screen.
+Negative ARG means scroll upward.
+If ARG is the atom `-', scroll upward by nearly full screen."
+  (interactive "^P")
+  (cond
+   ((eq arg '-) (scroll-up-command nil))
+   ((< (prefix-numeric-value arg) 0)
+    (scroll-up-command (- (prefix-numeric-value arg))))
+   ((bobp)
+    (scroll-down arg))  ; signal error
+   (t
+    (condition-case nil
+	(scroll-down arg)
+      (beginning-of-buffer
+       (if arg
+	   ;; When scrolling by ARG lines can't be done,
+	   ;; move by ARG lines instead.
+	   (forward-line (- arg))
+	 ;; When ARG is nil for full-screen scrolling,
+	 ;; move to the top of the buffer.
+	 (goto-char (point-min))))))))
+
+(put 'scroll-down-command 'isearch-scroll t)
+
+;;; Scrolling commands which scroll a line instead of full screen.
+
+(defun scroll-up-line (&optional arg)
+  "Scroll text of selected window upward ARG lines; or one line if no ARG.
+If ARG is omitted or nil, scroll upward by one line.
+This is different from `scroll-up-command' that scrolls a full screen."
+  (interactive "p")
+  (scroll-up (or arg 1)))
+
+(put 'scroll-up-line 'isearch-scroll t)
+
+(defun scroll-down-line (&optional arg)
+  "Scroll text of selected window down ARG lines; or one line if no ARG.
+If ARG is omitted or nil, scroll down by one line.
+This is different from `scroll-down-command' that scrolls a full screen."
+  (interactive "p")
+  (scroll-down (or arg 1)))
+
+(put 'scroll-down-line 'isearch-scroll t)
+
+
 (defun scroll-other-window-down (lines)
   "Scroll the \"other window\" down.
 For more details, see the documentation for `scroll-other-window'."
@@ -5295,7 +5379,7 @@ is non-nil.  This function disables `visual-line-mode' when enabling
       (turn-off-word-wrap)
     (turn-on-word-wrap))
   (when (interactive-p)
-    (force-mode-line-update)
+  (force-mode-line-update)
     (message "Word Wrap %sabled in this buffer." (if word-wrap "en" "dis"))))
 
 
@@ -5537,12 +5621,12 @@ cancel the use of the current buffer (for special-purpose buffers),
 or go back to just one window (by deleting all but the selected window)."
   (interactive)
   (cond ((eq last-command 'mode-exited) nil)
+	((region-active-p)
+	 (deactivate-mark))
 	((> (minibuffer-depth) 0)
 	 (abort-recursive-edit))
 	(current-prefix-arg
 	 nil)
-	((region-active-p)
-	 (deactivate-mark))
 	((> (recursion-depth) 0)
 	 (exit-recursive-edit))
 	(buffer-quit-function

@@ -440,7 +440,7 @@ whitespace)."
 ;; Default to the value of `mail-interactive', available in all Emacsen
 ;; that Gnus supports.
   "Non-nil means when sending a message wait for and display errors.
-nil means let mailer mail back a message to report errors."
+A value of nil means let mailer mail back a message to report errors."
   :version "23.2"
   :group 'message-sending
   :group 'message-mail
@@ -861,8 +861,8 @@ If this is nil, use `user-mail-address'.  If it is the symbol
 
 (defcustom message-qmail-inject-args nil
   "Arguments passed to qmail-inject programs.
-This should be a list of strings, one string for each argument.  It
-may also be a function.
+This should be a list of strings, one string for each argument.
+It may also be a function.
 
 For e.g., if you wish to set the envelope sender address so that bounces
 go to the right place or to deal with listserv's usage of that address, you
@@ -1167,11 +1167,7 @@ It is a vector of the following headers:
   :valid-regexp "^\\'"
   :error "All header lines must be newline terminated")
 
-(defcustom message-default-headers
-  ;; Default to the value of `mail-default-headers' if available.
-  ;; Note: as for Emacs 21, XEmacs 21.4 and 21.5, it is unavailable
-  ;; unless sendmail.el is loaded.
-  (if (boundp 'mail-default-headers) mail-default-headers "")
+(defcustom message-default-headers ""
   "*A string containing header lines to be inserted in outgoing messages.
 It is inserted before you edit the message, so you can edit or delete
 these lines."
@@ -1184,16 +1180,18 @@ these lines."
   ;; Ease the transition from mail-mode to message-mode.  See bugs#4431, 5555.
   (concat (if (and (boundp 'mail-default-reply-to)
 		   (stringp mail-default-reply-to))
-	      (format "Reply-to: %s\n" mail-default-reply-to)
-	    "")
+	      (format "Reply-to: %s\n" mail-default-reply-to))
 	  (if (and (boundp 'mail-self-blind)
 		   mail-self-blind)
-	      (format "BCC: %s\n" user-mail-address)
-	    "")
+	      (format "BCC: %s\n" user-mail-address))
 	  (if (and (boundp 'mail-archive-file-name)
 		   (stringp mail-archive-file-name))
-	      (format "FCC: %s\n" mail-archive-file-name)
-	    ""))
+	      (format "FCC: %s\n" mail-archive-file-name))
+	  ;; Use the value of `mail-default-headers' if available.
+	  ;; Note: as for Emacs 21, XEmacs 21.4 and 21.5, it is
+	  ;; unavailable unless sendmail.el is loaded.
+	  (if (boundp 'mail-default-headers)
+	      mail-default-headers))
   "*A string of header lines to be inserted in outgoing mails."
   :version "23.2"
   :group 'message-headers
@@ -2850,6 +2848,8 @@ See also `message-forbidden-properties'."
 	  (inhibit-read-only t))
       (remove-text-properties begin end message-forbidden-properties))))
 
+(autoload 'ecomplete-setup "ecomplete") ;; for Emacs <23.
+
 ;;;###autoload
 (define-derived-mode message-mode text-mode "Message"
   "Major mode for editing mail and news to be sent.
@@ -3252,7 +3252,7 @@ or in the synonym headers, defined by `message-header-synonyms'."
 
 (defun message-kill-to-signature (&optional arg)
   "Kill all text up to the signature.
-If a numberic argument or prefix arg is given, leave that number
+If a numeric argument or prefix arg is given, leave that number
 of lines before the signature intact."
   (interactive "P")
   (save-excursion

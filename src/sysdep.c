@@ -90,16 +90,8 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "msdos.h"
 #include <sys/param.h>
 
-#if __DJGPP__ > 1
 extern int etext;
 extern unsigned start __asm__ ("start");
-#endif
-#endif
-
-#ifndef USE_CRT_DLL
-#ifndef errno
-extern int errno;
-#endif
 #endif
 
 #include <sys/file.h>
@@ -384,11 +376,7 @@ set_exclusive_use (fd)
 
 wait_without_blocking ()
 {
-#ifdef BSD_SYSTEM
-  wait3 (0, WNOHANG | WUNTRACED, 0);
-#else
   croak ("wait_without_blocking");
-#endif
   synch_process_alive = 0;
 }
 
@@ -466,13 +454,7 @@ wait_for_termination (pid)
 #endif /* not POSIX_SIGNALS */
 #endif /* not BSD_SYSTEM, and not HPUX version >= 6 */
 #else /* not subprocesses */
-#if __DJGPP__ > 1
       break;
-#else /* not __DJGPP__ > 1 */
-      if (kill (pid, 0) < 0)
-	break;
-      wait (0);
-#endif /* not __DJGPP__ > 1*/
 #endif /* not subprocesses */
     }
 }
@@ -676,10 +658,8 @@ sys_subshell ()
 
 #ifdef DOS_NT
   pid = 0;
-#if __DJGPP__ > 1
   save_signal_handlers (saved_handlers);
   synch_process_alive = 1;
-#endif /* __DJGPP__ > 1 */
 #else
   pid = vfork ();
   if (pid == -1)
@@ -751,7 +731,7 @@ sys_subshell ()
     }
 
   /* Do this now if we did not do it before.  */
-#if !defined (MSDOS) || __DJGPP__ == 1
+#ifndef MSDOS
   save_signal_handlers (saved_handlers);
   synch_process_alive = 1;
 #endif
@@ -1401,9 +1381,8 @@ init_sys_modes (tty_out)
 
   if (tty_out->term_initted && no_redraw_on_reenter)
     {
-      /* XXX This seems wrong on multi-tty. */
-      if (display_completed)
-	direct_output_forward_char (0);
+      /* We used to call "direct_output_forward_char(0)" here,
+	 but it's not clear why, since it may not do anything anyway.  */
     }
   else
     {
